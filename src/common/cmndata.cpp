@@ -121,6 +121,7 @@ wxColourData::wxColourData()
 }
 
 wxColourData::wxColourData(const wxColourData& data)
+    : wxObject()
 {
     (*this) = data;
 }
@@ -264,6 +265,7 @@ wxPrintData::wxPrintData()
 }
 
 wxPrintData::wxPrintData(const wxPrintData& printData)
+    : wxObject()
 {
 #ifdef __WXMSW__
     m_devMode = (void*) NULL;
@@ -878,6 +880,7 @@ wxPrintDialogData::wxPrintDialogData()
 }
 
 wxPrintDialogData::wxPrintDialogData(const wxPrintDialogData& dialogData)
+    : wxObject()
 {
 #ifdef __WXMSW__
     m_printDlgData = NULL;
@@ -1172,6 +1175,7 @@ wxPageSetupDialogData::wxPageSetupDialogData()
 }
 
 wxPageSetupDialogData::wxPageSetupDialogData(const wxPageSetupDialogData& dialogData)
+    : wxObject()
 {
 #if defined(__WIN95__)
     m_pageSetupData = NULL;
@@ -1219,7 +1223,7 @@ wxPageSetupDialogData::~wxPageSetupDialogData()
 #endif
 }
 
-void wxPageSetupDialogData::operator=(const wxPageSetupDialogData& data)
+wxPageSetupDialogData& wxPageSetupDialogData::operator=(const wxPageSetupDialogData& data)
 {
     m_paperSize = data.m_paperSize;
     m_minMarginTopLeft = data.m_minMarginTopLeft;
@@ -1235,11 +1239,15 @@ void wxPageSetupDialogData::operator=(const wxPageSetupDialogData& data)
     m_enableHelp = data.m_enableHelp;
 
     m_printData = data.m_printData;
+
+    return *this;
 }
 
-void wxPageSetupDialogData::operator=(const wxPrintData& data)
+wxPageSetupDialogData& wxPageSetupDialogData::operator=(const wxPrintData& data)
 {
     m_printData = data;
+
+    return *this;
 }
 
 #if defined(__WIN95__)

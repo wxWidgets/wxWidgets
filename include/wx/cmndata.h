@@ -58,6 +58,27 @@ public:
     wxFontData();
     ~wxFontData();
 
+    wxFontData(const wxFontData& data)
+        : wxObject()
+        , fontColour(data.fontColour)
+        , showHelp(data.showHelp)
+        , allowSymbols(data.allowSymbols)
+        , enableEffects(data.enableEffects)
+        , initialFont(data.initialFont)
+        , chosenFont(data.chosenFont)
+        , minSize(data.minSize)
+        , maxSize(data.maxSize)
+        , m_encoding(data.m_encoding)
+        , m_encodingInfo(data.m_encodingInfo)
+    {
+    }
+
+    wxFontData& operator=(const wxFontData& data)
+    {
+        (*this) = data;
+        return *this;
+    }
+                          
     void SetAllowSymbols(bool flag) { allowSymbols = flag; }
     bool GetAllowSymbols() const { return allowSymbols; }
 
@@ -380,8 +401,8 @@ public:
     // Use paper id in wxPrintData to set this object's paper size
     void CalculatePaperSizeFromId();
 
-    void operator=(const wxPageSetupData& data);
-    void operator=(const wxPrintData& data);
+    wxPageSetupDialogData& operator=(const wxPageSetupData& data);
+    wxPageSetupDialogData& operator=(const wxPrintData& data);
 
     wxPrintData& GetPrintData() { return m_printData; }
     void SetPrintData(const wxPrintData& printData) { m_printData = printData; }
