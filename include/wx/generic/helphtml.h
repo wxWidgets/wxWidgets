@@ -18,6 +18,13 @@
 #include "wx/helpbase.h"
 #include "wx/frame.h"
 
+/// Path separator.
+#ifdef __WXMSW__
+#define WXEXTHELP_SEPARATOR _T('\\')
+#else
+#define WXEXTHELP_SEPARATOR _T('/')
+#endif
+
 class WXDLLEXPORT wxExtHelpMapList;
 
 

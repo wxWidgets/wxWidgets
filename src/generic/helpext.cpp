@@ -46,6 +46,11 @@
 
 IMPLEMENT_CLASS(wxExtHelpController, wxHTMLHelpControllerBase)
 
+/// Name of environment variable to set help browser.
+#define   WXEXTHELP_ENVVAR_BROWSER   "WX_HELPBROWSER"
+/// Is browser a netscape browser?
+#define   WXEXTHELP_ENVVAR_BROWSERISNETSCAPE "WX_HELPBROWSER_NS"
+
 /**
    This class implements help via an external browser.
    It requires the name of a directory containing the documentation
@@ -140,7 +145,7 @@ wxExtHelpController::DisplayHelp(const wxString &relativeURL)
       // cannot use wxFileExists, because it's a link pointing to a
       // non-existing location      if(wxFileExists(lockfile))
 #endif
-	{
+      {
          long success;
          command << m_BrowserName << wxT(" -remote openURL(")
                  << wxT("file://") << m_MapFile

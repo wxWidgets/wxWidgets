@@ -19,14 +19,10 @@
 
 #ifndef WXEXTHELP_DEFAULTBROWSER
 /// Default browser name.
-#   define WXEXTHELP_DEFAULTBROWSER "netscape"
+#   define WXEXTHELP_DEFAULTBROWSER _T("netscape")
 /// Is default browse a variant of netscape?
 #   define WXEXTHELP_DEFAULTBROWSER_IS_NETSCAPE TRUE
 #endif
-/// Name of environment variable to set help browser.
-#define   WXEXTHELP_ENVVAR_BROWSER   "WX_HELPBROWSER"
-/// Is browser a netscape browser?
-#define   WXEXTHELP_ENVVAR_BROWSERISNETSCAPE "WX_HELPBROWSER_NS"
 
 /**
    This class implements help via an external browser.
