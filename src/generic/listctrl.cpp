@@ -4622,11 +4622,15 @@ void wxGenericListCtrl::CalculateAndSetHeaderHeight()
 {
     if ( m_headerWin )
     {
+#ifdef __WXMAC__
+        SInt32 h ;
+        GetThemeMetric( kThemeMetricListHeaderHeight, &h );    
+#else
         // we use 'g' to get the descent, too
         int w, h, d;
         m_headerWin->GetTextExtent(wxT("Hg"), &w, &h, &d);
         h += d + 2 * HEADER_OFFSET_Y + EXTRA_HEIGHT;
-
+#endif
         // only update if changed
         if ( h != m_headerHeight )
         {
