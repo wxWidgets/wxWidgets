@@ -255,9 +255,12 @@ class TestListCtrlPanel(wxPanel, wxColumnSorterMixin):
         tPopupID3 = 2
         tPopupID4 = 3
         tPopupID5 = 5
-        #menu.Append(tPopupID1, "One")
+
+        # Show how to put an icon in the menu
         item = wxMenuItem(menu, tPopupID1,"One")
-        item.SetBitmap(images.getSmilesBitmap())
+        if wxPlatform == '__WXMSW__':
+            item.SetBitmap(images.getSmilesBitmap())
+
         menu.AppendItem(item)
         menu.Append(tPopupID2, "Two")
         menu.Append(tPopupID3, "Three")
