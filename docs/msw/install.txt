@@ -12,10 +12,15 @@ relevant section below for details.
 
 IMPORTANT NOTE: If you experience problems installing, please
 re-read this instructions and other related files (changes.txt,
-readme.txt, notes on the Web site) carefully before mailing
-wx-users or the author. Preferably, try to fix the problem first and
-then send a patch to the author. Please report bugs using the
-bug report form on the wxWindows web site.
+readme.txt, FAQ) carefully before mailing wx-users. Preferably,
+try to fix the problem first and then upload a patch to
+SourceForge:
+
+  http://sourceforge.net/patch/?group_id=9863
+
+Please report bugs using the SourceForge bug tracker:
+
+  http://sourceforge.net/bugs/?group_id=9863
 
 Unarchiving
 -----------
@@ -468,19 +473,26 @@ NOTE: some notes specific to old Cygwin ( < 1.1.x )
       and MinGW ( < 1.0 ) are at the end of this section
       ( see OLD VERSIONS )
 
-Here are the steps required:
 
-- Retrieve and install the latest version of Cygwin, or Mingw32, as per the
-  instructions with either of these packages.
+There are two methods of compiling wxWindows, by using the
+makefiles provided or by using 'configure'.
 
-- If using Mingw32, you need some extra files to use the wxWindows
-  makefiles. You can find these files in ports/mingw32 on the
-  wxWindows ftp site or CD-ROM, as extra.zip. 
+Retrieve and install the latest version of Cygwin, or Mingw32, as per the
+instructions with either of these packages.
 
-  ftp://ftp.remstar.com/pub/wxwin/ports/mingw32/extra.zip
+If using Mingw32, you need some extra files to use the wxWindows
+makefiles. You can find these files in ports/mingw32 on the
+wxWindows ftp site or CD-ROM, as extra.zip. 
+
+  ftp://biolp22.york.ac.uk/pub/ports/mingw32/extra.zip
   
-  These should be extracted to the Mingw32 directory. If you have 
-  already downloaded rm, cp, mv from elsewhere, you won't need this.
+These should be extracted to the Mingw32 directory. If you have 
+already downloaded rm, cp, mv from elsewhere, you won't need this.
+
+Using makefiles
+===============
+
+Here are the steps required using the provided makefiles:
 
 - Set your WXWIN variable to where wxWindows is installed.
   *** IMPORTANT: For Cygwin/Mingw32, use forward slashes in the path, not
@@ -525,6 +537,28 @@ Here are the steps required:
 All targets have 'clean' targets to allow removal of object files
 and other intermediate compiler files and 'cleanall' targets to
 allow removal of all object files and library files.
+
+Using configure
+===============
+
+Instead of using the makefiles, you can use the configure
+system to generate appropriate makefiles, as used on Unix
+and Mac OS X systems.
+
+Change directory to the root of the wxWindows distribution,
+make a build directory, and then run configure and make.
+
+For example:
+
+  cd $WXWIN
+  mkdir build-debug
+  cd build-debug
+  ../configure --with-msw --enable-debug --enable-debug_gdb --disable-shared
+  make
+  cd samples/minimal
+  make
+  ./minimal.exe
+
 
 Notes:
 
