@@ -6,8 +6,13 @@
 #
 # Created:
 # Version       0.75
-# Date:         Sept 18, 2001
+# Date:         May 15, 2002
 # Licence:      wxWindows license
+#----------------------------------------------------------------------------
+# Release Notes
+
+# fixed bug for string wider than print region
+# add index to data list after parsing total pages for paging
 #----------------------------------------------------------------------------
 
 import os, sys, string, copy
@@ -86,6 +91,13 @@ class PrintBase:
         split = string.split(ln_text)
         if len(split) == 1:
             return ln_text, ""
+
+        try:
+            w, h = self.DC.GetTextExtent(split[0])
+            if w >= width:
+                return ln_text, ""
+        except:
+            pass
 
         cnt = 0
         for word in split:
@@ -341,31 +353,22 @@ class PrintTableDraw(wxScrolledWindow, PrintBase):
         if self.total_pages == None:
             self.GetTotalPages()    # total pages for display/printing
 
-        self.data_cnt = 0
-
-        cnt = 1                 # get selected page
-        if cnt == self.page:
-            self.draw = TRUE
-        else:
-            self.draw = FALSE
-
-        while cnt < self.page:
-            self.OutPage()
-            cnt = cnt + 1
+        self.data_cnt = self.page_index[self.page-1]
 
         self.draw = TRUE
         self.PrintHeader()
         self.PrintFooter()
         self.OutPage()
 
-
     def GetTotalPages(self):
         self.data_cnt = 0
         self.draw = FALSE
+        self.page_index = [0]
 
         cnt = 0
         while 1:
             test = self.OutPage()
+            self.page_index.append(self.data_cnt)
             if  test == FALSE:
                 break
             cnt = cnt + 1
@@ -376,7 +379,7 @@ class PrintTableDraw(wxScrolledWindow, PrintBase):
         self.y = self.y_start
         self.end_x = self.column[-1]
 
-        if self.data_cnt < len(self.data)-1:  # if there data for display on the page
+        if self.data_cnt < len(self.data):  # if there data for display on the page
             if self.label != []:        # check if header defined
                 self.PrintLabel()
         else:
