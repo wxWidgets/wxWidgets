@@ -642,7 +642,10 @@ class _DeprecatedNonBool:
         return self.__val
     def __nonzero__(self):
         return self.__int__()
-
+    def __repr__(self):
+        if self.__val: text = "True"
+        else: text = "False"
+        return "_DeprecatedNonBool: %s" % text
 
 TRUE  = true  = _DeprecatedNonBool(True, 'True')
 FALSE = false = _DeprecatedNonBool(False, 'False')
