@@ -20,11 +20,11 @@
 #pragma hdrstop
 #endif
 
-#ifndef WX_PRECOMP
-#include "wx/setup.h"
-#endif
-
 #if wxUSE_COMBOBOX
+
+#ifndef WX_PRECOMP
+#include "wx/settings.h"
+#endif
 
 #include "wx/combobox.h"
 #include "wx/clipbrd.h"
