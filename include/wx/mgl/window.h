@@ -113,7 +113,6 @@ protected:
     // (see wxWindow::Refresh)
     bool                  m_frozen;
     bool                  m_refreshAfterThaw;
-    wxFont                m_font;
 
     // implement the base class pure virtuals
     virtual void DoClientToScreen( int *x, int *y ) const;
@@ -141,9 +140,6 @@ private:
     MGLDevCtx *m_paintMGLDC;
     friend class wxPaintDC;
 
-    void OnEraseBackground(wxEraseEvent& event);
-    void OnSetFocus(wxFocusEvent& event);
-
     DECLARE_DYNAMIC_CLASS(wxWindowMGL);
     DECLARE_NO_COPY_CLASS(wxWindowMGL);
     DECLARE_EVENT_TABLE()
@@ -151,6 +147,7 @@ private:
 public:
     void HandlePaint(MGLDevCtx *dc);
     // needed by wxWindowPainter
+    MGLDevCtx *GetPaintMGLDC() const { return m_paintMGLDC; }
 };
 
 

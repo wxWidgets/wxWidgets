@@ -47,16 +47,23 @@ void wxDisplaySize(int *width, int *height)
     if (height) *height = g_displayDC->sizey();
 }
 
-void wxGetMousePosition(int* x, int* y)
+void wxDisplaySizeMM(int *width, int *height)
 {
-    MS_getPos(x, y);
+    wxASSERT_MSG( g_displayDC, wxT("MGL display DC not created yet.") );
+    if (width) *width = g_displayDC->sizex() * 25/72;
+    if (height) *height = g_displayDC->sizey() * 25/72;
+    // FIXME_MGL -- what about returning *real* monitor dimensions?
 }
 
-wxPoint wxGetMousePosition()
+void wxClientDisplayRect(int *x, int *y, int *width, int *height)
 {
-    wxPoint pt;
-    wxGetMousePosition(&pt.x, &pt.y);
-    return pt;
+    // This is supposed to return desktop dimensions minus any window
+    // manager panels, menus, taskbars, etc.  If there is a way to do that
+    // for this platform please fix this function, otherwise it defaults
+    // to the entire desktop.
+    if (x) *x = 0;
+    if (y) *y = 0;
+    wxDisplaySize(width, height);
 }
 
 bool wxColourDisplay()
@@ -83,6 +90,20 @@ int wxGetOsVersion(int *majorVsn, int *minorVsn)
   return wxGTK;
 #endif
 }
+
+
+void wxGetMousePosition(int* x, int* y)
+{
+    MS_getPos(x, y);
+}
+
+wxPoint wxGetMousePosition()
+{
+    wxPoint pt;
+    wxGetMousePosition(&pt.x, &pt.y);
+    return pt;
+}
+
 
 
 #ifdef __UNIX__

@@ -45,6 +45,7 @@ class WXDLLEXPORT wxDC;
 
 // MGL fwd declarations:
 class MGLDevCtx;
+class MGLRegion;
 struct font_t;
 
 class WXDLLEXPORT wxDC : public wxDCBase
@@ -268,6 +269,8 @@ protected:
     wxPalette         m_oldPalette;
     
     wxRegion          m_currentClippingRegion;
+    // clipping region m_MGLDC had when it was attached:
+    MGLRegion        *m_globalClippingRegion;
 
     // wxDC::Blit handles memoryDCs as special cases :(
     bool              m_isMemDC;

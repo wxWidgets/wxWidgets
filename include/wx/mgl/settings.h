@@ -1,9 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        settings.h
-// Purpose:
-// Author:      Robert Roebling
+// Author:      Vaclav Slavik
 // Id:          $Id$
-// Copyright:   (c) 1998 Robert Roebling
+// Copyright:   (c) 2001 SciTech Software, Inc. (www.scitechsoft.com)
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -24,19 +23,19 @@
 class wxSystemSettings: public wxObject
 {
 public:
-    inline wxSystemSettings() {}
+    wxSystemSettings() {}
 
-    inline static void Init() {}
+    static void Init() {}
     static void Done() {}
 
     // Get a system colour
-    static wxColour    GetSystemColour(int index) {}
+    static wxColour GetSystemColour(int index);
 
     // Get a system font
-    static wxFont      GetSystemFont(int index) {}
+    static wxFont GetSystemFont(int index);
 
     // Get a system metric, e.g. scrollbar size
-    static int         GetSystemMetric(int index) {}
+    static int GetSystemMetric(int index);
 };
 
 #endif

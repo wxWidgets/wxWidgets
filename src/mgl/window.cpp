@@ -65,8 +65,11 @@ MGLDevCtx *g_displayDC = NULL;
 
 extern wxList WXDLLEXPORT wxPendingDelete;
  // FIXME_MGL -- ???
- 
-static wxWindowMGL *g_focusedWindow;
+
+// the window that has keyboard+joystick focus: 
+static wxWindowMGL *g_focusedWindow = NULL;
+// the window that is currently under mouse cursor:
+static wxWindowMGL *g_windowUnderMouse = NULL;
 
 // ---------------------------------------------------------------------------
 // constants
@@ -84,8 +87,6 @@ enum
 // ---------------------------------------------------------------------------
 // private functions
 // ---------------------------------------------------------------------------
-
-static void wxWindowPainter(window_t *wnd, MGLDC *dc);
 
 // wxCreateMGL_WM creates MGL display DC and associates it with winmng_t
 // structure. Dimensions and depth of the DC are fetched from wxSystemOptions
@@ -137,15 +138,31 @@ bool wxCreateMGL_WM()
 
 void wxDestroyMGL_WM()
 {
-    if (g_winMng)
+    if ( g_winMng )
     {
         MGL_wmDestroy(g_winMng);
         g_winMng = NULL;
     }
-    delete g_displayDC;
-    g_displayDC = NULL;
+    if ( g_displayDC )
+    {
+        delete g_displayDC;
+        g_displayDC = NULL;
+    }
 }
 
+// ---------------------------------------------------------------------------
+// MGL_WM hooks:
+// ---------------------------------------------------------------------------
+
+static void wxWindowPainter(window_t *wnd, MGLDC *dc)
+{
+    wxWindowMGL *w = (wxWindow*) wnd->userData;
+    if (w)
+    {
+        MGLDevCtx ctx(dc);
+        w->HandlePaint(&ctx);
+    }
+}
 
 // ---------------------------------------------------------------------------
 // event tables
@@ -156,8 +173,6 @@ void wxDestroyMGL_WM()
 IMPLEMENT_ABSTRACT_CLASS(wxWindowMGL, wxWindowBase)
 
 BEGIN_EVENT_TABLE(wxWindowMGL, wxWindowBase)
-    EVT_ERASE_BACKGROUND(wxWindowMGL::OnEraseBackground)
-    EVT_SET_FOCUS(wxWindowMGL::OnSetFocus)
 END_EVENT_TABLE()
 
 // ===========================================================================
@@ -191,7 +206,8 @@ wxWindowMGL::~wxWindowMGL()
     m_isBeingDeleted = TRUE;
 
     if ( g_focusedWindow == this )
-        g_focusedWindow = NULL;
+        KillFocus();
+
 #if 0 // -- fixme - do we need this?
     // VS: make sure there's no wxFrame with last focus set to us:
     for (wxWindow *win = GetParent(); win; win = win->GetParent())
@@ -226,12 +242,16 @@ bool wxWindowMGL::Create(wxWindow *parent,
                          long style,
                          const wxString& name)
 {
-    wxCHECK_MSG( parent, FALSE, wxT("can't create wxWindow without parent") );
+    // FIXME_MGL -- temporary!
+    //wxCHECK_MSG( parent, FALSE, wxT("can't create wxWindow without parent") );
 
     if ( !CreateBase(parent, id, pos, size, style, wxDefaultValidator, name) )
         return FALSE;
 
-    parent->AddChild(this);
+    if ( parent ) // FIXME_MGL temporary
+        parent->AddChild(this);
+    else
+        m_isShown=FALSE;// FIXME_MGL -- temporary, simulates wxTLW/wxFrame
 
     if ( style & wxPOPUP_WINDOW )
     {
@@ -260,10 +280,6 @@ void wxWindowMGL::SetFocus()
     
     MGL_wmCaptureEvents(GetHandle(), EVT_KEYEVT | EVT_JOYEVT, wxMGL_CAPTURE_KEYB);
 
-    wxPanel *panel = wxDynamicCast(GetParent(), wxPanel);
-    if (panel)
-        panel->SetLastFocus((wxWindow*)this);
-
 #if wxUSE_CARET
     // caret needs to be informed about focus change
     wxCaret *caret = GetCaret();
@@ -288,16 +304,18 @@ void wxWindowMGL::KillFocus()
     if ( g_focusedWindow != this ) return;
     g_focusedWindow = NULL;
 
+    if ( m_isBeingDeleted ) return;
+    
     MGL_wmUncaptureEvents(GetHandle(), wxMGL_CAPTURE_KEYB);
 
 #if wxUSE_CARET
     // caret needs to be informed about focus change
     wxCaret *caret = GetCaret();
-    if (caret)
+    if ( caret )
         caret->OnKillFocus();
 #endif // wxUSE_CARET
 
-    if (IsTopLevel())
+    if ( IsTopLevel() )
     {
         wxActivateEvent event(wxEVT_ACTIVATE, FALSE, GetId());
         event.SetEventObject(this);
@@ -658,35 +676,6 @@ void wxWindowMGL::GetCaretPos(int *x, int *y) const
 
 
 // ---------------------------------------------------------------------------
-// activation/focus
-// ---------------------------------------------------------------------------
-
-void wxWindowMGL::OnSetFocus(wxFocusEvent& event)
-{
-    // panel wants to track the window which was the last to have focus in it,
-    // so we want to set ourselves as the window which last had focus
-    //
-    // notice that it's also important to do it upwards the tree becaus
-    // otherwise when the top level panel gets focus, it won't set it back to
-    // us, but to some other sibling
-    wxWindow *win = (wxWindow *)this;
-    while ( win )
-    {
-        wxWindow *parent = win->GetParent();
-        wxPanel *panel = wxDynamicCast(parent, wxPanel);
-        if ( panel )
-        {
-            panel->SetLastFocus(win);
-        }
-
-        win = parent;
-    }
-
-    event.Skip();
-}
-
-
-// ---------------------------------------------------------------------------
 // painting
 // ---------------------------------------------------------------------------
 
@@ -731,16 +720,6 @@ void wxWindowMGL::Thaw()
         Refresh();
 }
 
-static void wxWindowPainter(window_t *wnd, MGLDC *dc)
-{
-    wxWindow *w = (wxWindow*) wnd->userData;
-    if (w)
-    {
-        MGLDevCtx ctx(dc);
-        w->HandlePaint(&ctx);
-    }
-}
-
 void wxWindowMGL::HandlePaint(MGLDevCtx *dc)
 {
     if ( m_frozen )
@@ -749,14 +728,17 @@ void wxWindowMGL::HandlePaint(MGLDevCtx *dc)
         return;
     }
 
-    region_t *clip = NULL;
-    MGL_getClipRegionDC(*dc, clip);
-    m_updateRegion = wxRegion(MGLRegion(clip));
+    region_t clip;
+    MGL_getClipRegionDC(*dc, &clip);
+    m_updateRegion = wxRegion(MGLRegion(&clip));
     m_paintMGLDC = dc;
 
-    wxEraseEvent eventEr(m_windowId, NULL);
+    {
+    wxWindowDC dc((wxWindow*)this);
+    wxEraseEvent eventEr(m_windowId, &dc);
     eventEr.SetEventObject(this);
     GetEventHandler()->ProcessEvent(eventEr);
+    }
 
     wxNcPaintEvent eventNc(GetId());
     eventNc.SetEventObject(this);
@@ -765,11 +747,8 @@ void wxWindowMGL::HandlePaint(MGLDevCtx *dc)
     wxPaintEvent eventPt(GetId());
     eventPt.SetEventObject(this);
     GetEventHandler()->ProcessEvent(eventPt);
-}
 
-void wxWindowMGL::OnEraseBackground(wxEraseEvent& event)
-{
-    Clear();
+    m_paintMGLDC = NULL;
 }
 
 

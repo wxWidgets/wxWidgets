@@ -16,8 +16,6 @@
 
 #include "wx/dc.h"
 
-class WXDLLEXPORT wxWindowMGL;
-
 //-----------------------------------------------------------------------------
 // classes
 //-----------------------------------------------------------------------------
@@ -25,6 +23,7 @@ class WXDLLEXPORT wxWindowMGL;
 class WXDLLEXPORT wxWindowDC;
 class WXDLLEXPORT wxPaintDC;
 class WXDLLEXPORT wxClientDC;
+class WXDLLEXPORT wxWindowMGL;
 
 //-----------------------------------------------------------------------------
 // wxWindowDC
@@ -39,6 +38,7 @@ public:
 
 protected:
     wxWindow *m_wnd;
+    bool      m_inPaintHandler;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxWindowDC)
@@ -55,7 +55,6 @@ public:
     wxClientDC(wxWindow *win);
 
 private:
-    wxWindowMGL *m_wnd;
     DECLARE_DYNAMIC_CLASS(wxClientDC)
 };
 
@@ -63,12 +62,11 @@ private:
 // wxPaintDC
 //-----------------------------------------------------------------------------
 
-// FIXME_MGL
 class WXDLLEXPORT wxPaintDC : public wxClientDC
 {
 public:
-    wxPaintDC() { }
-    wxPaintDC( wxWindow *win ) {}
+    wxPaintDC() : wxClientDC() {}
+    wxPaintDC(wxWindow *win) : wxClientDC(win) {}
 
 private:
     DECLARE_DYNAMIC_CLASS(wxPaintDC)

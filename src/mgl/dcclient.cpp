@@ -26,20 +26,41 @@
 #include <mgraph.hpp>
 
 IMPLEMENT_DYNAMIC_CLASS(wxWindowDC, wxDC)
-IMPLEMENT_DYNAMIC_CLASS(wxPaintDC, wxClientDC)
 IMPLEMENT_DYNAMIC_CLASS(wxClientDC,wxWindowDC)
+IMPLEMENT_DYNAMIC_CLASS(wxPaintDC, wxClientDC)
 
 wxWindowDC::wxWindowDC(wxWindow *win) : m_wnd(win)
 {
-    MGLDC *dc = MGL_wmBeginPaint(m_wnd->GetHandle());
-    SetMGLDC(new MGLDevCtx(dc), FALSE);
-    // FIXME_MGL -- correctly handle setting device origin and
-    //              clipping regions
+    MGLDevCtx *dc = win->GetPaintMGLDC();
+    if ( dc )
+    {
+        m_inPaintHandler = TRUE;
+        SetMGLDC(dc, FALSE);
+    }
+    else
+    {
+        m_inPaintHandler = FALSE;
+        SetMGLDC(new MGLDevCtx(MGL_wmBeginPaint(m_wnd->GetHandle())), TRUE);
+        // TRUE means that dtor will delete MGLDevCtx object
+        // but it won't destroy MGLDC returned by MGL_wmBeginPaint because
+        // ~MGLDevCtx() doesn't call destroy()
+    }
 }
 
 wxWindowDC::~wxWindowDC()
 {
-    MGL_wmEndPaint(m_wnd->GetHandle());
+    if ( m_inPaintHandler )
+    {
+        // This is neccessary so that subsequently created wxPaintDCs won't get
+        // confused about clipping. Another reason is that the same MGL dc is reused
+        // for wxEraseEvent, wxNcPaintEvent and wxPaintEvent
+        DestroyClippingRegion();
+    }
+    else
+    {
+        GetMGLDC()->setDC(NULL);
+        MGL_wmEndPaint(m_wnd->GetHandle());
+    }
 }
 
 wxClientDC::wxClientDC(wxWindow *win) : wxWindowDC(win)

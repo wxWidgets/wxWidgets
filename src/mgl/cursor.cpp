@@ -68,6 +68,9 @@ wxCursor::wxCursor(int cursorId)
 
     switch (cursorId)
     {
+        // FIXME_MGL -- what about storing these default cursors in executable
+        //              as XPMs so that wxMGL binary wouldn't depend on 
+        //              tons of files in $MGL_ROOT/cursors? I don't know yet...
         case wxCURSOR_ARROW:           cursorname = "arrow.cur"; break;
         case wxCURSOR_BULLSEYE:        cursorname = "bullseye.cur"; break;
         case wxCURSOR_CHAR:            cursorname = "char.cur"; break;
