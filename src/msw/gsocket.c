@@ -19,7 +19,7 @@
 #include "wx/msw/gsockmsw.h"
 #include "wx/gsocket.h"
 
-#define INSTANCE wxhInstance
+#define INSTANCE wxGetInstance()
 
 #else
 
