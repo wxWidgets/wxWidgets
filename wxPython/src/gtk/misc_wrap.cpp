@@ -1056,8 +1056,6 @@ public:
 };    
 
 
-
-
 IMP_PYCALLBACK_BOOL_DR(wxPyDropSource, wxDropSource, GiveFeedback);
 
 

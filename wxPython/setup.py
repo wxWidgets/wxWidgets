@@ -223,7 +223,10 @@ def Verify_WX_CONFIG():
         else:
             uf = ''
         ver2 = "%s.%s" % (VER_MAJOR, VER_MINOR)
-        WX_CONFIG = 'wx%s%s%s-%s-config' % (WXPORT, uf, df, ver2)
+        port = WXPORT
+        if port == "x11":
+            port = "x11univ"
+        WX_CONFIG = 'wx%s%s%s-%s-config' % (port, uf, df, ver2)
 
         searchpath = os.environ["PATH"]
         for p in searchpath.split(':'):

@@ -22,7 +22,7 @@ MAKE_CONST_WXSTRING2(ToggleButtonNameStr, _T("wxToggleButton"));
 
 
 %{
-#ifdef __WXMAC__
+#if defined(__WXMAC__) || defined(__WXX11__)
 // implement dummy classes and such for wxMac
 
 #define wxEVT_COMMAND_TOGGLEBUTTON_CLICKED 0
@@ -66,7 +66,7 @@ public:
                    const wxString& name = wxPyToggleButtonNameStr);
     %name(PreToggleButton)wxToggleButton();
 
-#ifndef __WXMAC__
+#if !defined(__WXMAC__) && !defined(__WXX11__)
     bool Create(wxWindow *parent,
                    wxWindowID id,
                    const wxString& label,

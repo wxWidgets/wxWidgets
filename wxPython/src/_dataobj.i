@@ -424,7 +424,7 @@ public:
 
 //---------------------------------------------------------------------------
 
-#ifndef __WXGTK__
+#if !defined(__WXGTK__) && !defined(__WXX11__)
 
 %{
 #include <wx/metafile.h>

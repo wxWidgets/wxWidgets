@@ -250,7 +250,9 @@ public:
     wxSizer *CreateButtonSizer( long flags );
 
 
-    void SetModal(bool flag);
+    //void SetModal(bool flag);
+
+    // is the dialog in modal state right now?
     virtual bool IsModal() const;
 
     // Shows the dialog and starts a nested event loop that returns when

@@ -660,7 +660,7 @@ public:
     wxString GetHelpText() const;
 
 
-
+#ifndef __WXX11__
     // tooltips
     // --------
 
@@ -673,9 +673,11 @@ public:
     // get the associated tooltip or NULL if none
     wxToolTip* GetToolTip() const;
     // LINK ERROR --> wxString GetToolTipText() const;
+#endif
 
 
-
+    
+#ifndef __WXX11__
     // drag and drop
     // -------------
 
@@ -688,7 +690,8 @@ public:
 #ifdef __WXMSW__  // TODO:  should I drop-kick this?
     void DragAcceptFiles(bool accept);
 #endif
-
+#endif
+    
 
     // constraints and sizers
     // ----------------------

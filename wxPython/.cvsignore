@@ -12,6 +12,7 @@ build-gtk2-dbg.unicode
 build-gtk2.unicode
 build-pkg
 build-pkg-debug
+build-x11
 build.local
 build.unicode
 dist

@@ -18,6 +18,7 @@
 %newgroup
 
 
+#ifndef __WXX11__
 class wxToolTip : public wxObject {
 public:
     wxToolTip(const wxString &tip);
@@ -30,6 +31,7 @@ public:
     static void Enable(bool flag);
     static void SetDelay(long milliseconds);
 };
+#endif
 
 //---------------------------------------------------------------------------
 

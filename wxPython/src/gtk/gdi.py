@@ -579,7 +579,7 @@ class Icon(GDIObject):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxIcon instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(String name, long flags, int desiredWidth=-1, int desiredHeight=-1) -> Icon"""
+        """__init__(String name, int type, int desiredWidth=-1, int desiredHeight=-1) -> Icon"""
         newobj = _gdi.new_Icon(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -591,7 +591,7 @@ class Icon(GDIObject):
         except: pass
 
     def LoadFile(*args, **kwargs):
-        """LoadFile(String name, long flags) -> bool"""
+        """LoadFile(String name, int type) -> bool"""
         return _gdi.Icon_LoadFile(*args, **kwargs)
 
     def Ok(*args, **kwargs):

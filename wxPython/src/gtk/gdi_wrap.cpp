@@ -2844,17 +2844,17 @@ static PyObject * Mask_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_new_Icon(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxString *arg1 = 0 ;
-    long arg2 ;
+    int arg2 ;
     int arg3 = (int) -1 ;
     int arg4 = (int) -1 ;
     wxIcon *result;
     bool temp1 = False ;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
-        (char *) "name",(char *) "flags",(char *) "desiredWidth",(char *) "desiredHeight", NULL 
+        (char *) "name",(char *) "type",(char *) "desiredWidth",(char *) "desiredHeight", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Ol|ii:new_Icon",kwnames,&obj0,&arg2,&arg3,&arg4)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi|ii:new_Icon",kwnames,&obj0,&arg2,&arg3,&arg4)) goto fail;
     {
         arg1 = wxString_in_helper(obj0);
         if (arg1 == NULL) SWIG_fail;
@@ -2862,7 +2862,7 @@ static PyObject *_wrap_new_Icon(PyObject *self, PyObject *args, PyObject *kwargs
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxIcon *)new wxIcon((wxString const &)*arg1,arg2,arg3,arg4);
+        result = (wxIcon *)new wxIcon((wxString const &)*arg1,(wxBitmapType )arg2,arg3,arg4);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -3013,16 +3013,16 @@ static PyObject *_wrap_Icon_LoadFile(PyObject *self, PyObject *args, PyObject *k
     PyObject *resultobj;
     wxIcon *arg1 = (wxIcon *) 0 ;
     wxString *arg2 = 0 ;
-    long arg3 ;
+    int arg3 ;
     bool result;
     bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "name",(char *) "flags", NULL 
+        (char *) "self",(char *) "name",(char *) "type", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOl:Icon_LoadFile",kwnames,&obj0,&obj1,&arg3)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOi:Icon_LoadFile",kwnames,&obj0,&obj1,&arg3)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxIcon,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
         arg2 = wxString_in_helper(obj1);
@@ -3031,7 +3031,7 @@ static PyObject *_wrap_Icon_LoadFile(PyObject *self, PyObject *args, PyObject *k
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (bool)(arg1)->LoadFile((wxString const &)*arg2,arg3);
+        result = (bool)(arg1)->LoadFile((wxString const &)*arg2,(wxBitmapType )arg3);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;

@@ -390,7 +390,7 @@ int wxRadioBox_GetNextItem(wxRadioBox const *self,int item,wxDirection dir,long 
  static const wxString wxPySliderNameStr(wxSliderNameStr); 
  static const wxString wxPyToggleButtonNameStr(_T("wxToggleButton")); 
 
-#ifdef __WXMAC__
+#if defined(__WXMAC__) || defined(__WXX11__)
 // implement dummy classes and such for wxMac
 
 #define wxEVT_COMMAND_TOGGLEBUTTON_CLICKED 0

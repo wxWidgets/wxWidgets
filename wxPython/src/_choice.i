@@ -44,8 +44,10 @@ public:
              const wxValidator& validator = wxDefaultValidator,
              const wxString& name = wxPyChoiceNameStr);
 
+#ifndef __WXX11__
     int GetColumns();
     void SetColumns(const int n = 1);
+#endif
     void SetSelection(const int n);
     void SetStringSelection(const wxString& string);
     void SetString(int n, const wxString& s);

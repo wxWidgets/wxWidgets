@@ -23,7 +23,7 @@
 class wxIcon : public wxGDIObject
 {
 public:
-    wxIcon(const wxString& name, long flags,
+    wxIcon(const wxString& name, wxBitmapType type,
            int desiredWidth = -1, int desiredHeight = -1);
     ~wxIcon();
 
@@ -51,7 +51,7 @@ public:
 
     
 #ifndef __WXMAC__
-    bool LoadFile(const wxString& name, long flags);
+    bool LoadFile(const wxString& name, wxBitmapType type);
 #endif
 
     // wxGDIImage methods
