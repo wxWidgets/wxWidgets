@@ -1277,10 +1277,8 @@ wxString wxFileName::GetPathTerminators(wxPathFormat format)
 bool wxFileName::IsPathSeparator(wxChar ch, wxPathFormat format)
 {
     // wxString::Find() doesn't work as expected with NUL - it will always find
-    // it, so it is almost surely a bug if this function is called with NUL arg
-    wxASSERT_MSG( ch != _T('\0'), _T("shouldn't be called with NUL") );
-
-    return GetPathSeparators(format).Find(ch) != wxNOT_FOUND;
+    // it, so test for it separately
+    return ch != _T('\0') && GetPathSeparators(format).Find(ch) != wxNOT_FOUND;
 }
 
 // ----------------------------------------------------------------------------
