@@ -141,14 +141,14 @@ class WXDLLEXPORT wxPropertyValidator: public wxEvtHandler
   inline void SetValidatorProperty(wxProperty *prop) { m_validatorProperty = prop; }
   inline wxProperty *GetValidatorProperty(void) const { return m_validatorProperty; }
 
-  virtual bool StringToFloat (char *s, float *number);
-  virtual bool StringToDouble (char *s, double *number);
-  virtual bool StringToInt (char *s, int *number);
-  virtual bool StringToLong (char *s, long *number);
-  virtual char *FloatToString (float number);
-  virtual char *DoubleToString (double number);
-  virtual char *IntToString (int number);
-  virtual char *LongToString (long number);
+  virtual bool StringToFloat (wxChar *s, float *number);
+  virtual bool StringToDouble (wxChar *s, double *number);
+  virtual bool StringToInt (wxChar *s, int *number);
+  virtual bool StringToLong (wxChar *s, long *number);
+  virtual wxChar *FloatToString (float number);
+  virtual wxChar *DoubleToString (double number);
+  virtual wxChar *IntToString (int number);
+  virtual wxChar *LongToString (long number);
 
  protected:
   long          m_validatorFlags;
@@ -193,7 +193,7 @@ class WXDLLEXPORT wxPropertyValue: public wxObject
 
   wxPropertyValue(void);                       // Unknown type
   wxPropertyValue(const wxPropertyValue& copyFrom);  // Copy constructor
-  wxPropertyValue(const char *val);
+  wxPropertyValue(const wxChar *val);
   wxPropertyValue(const wxString& val);
   wxPropertyValue(long val);
   wxPropertyValue(bool val);
@@ -202,7 +202,7 @@ class WXDLLEXPORT wxPropertyValue: public wxObject
   wxPropertyValue(wxList *val);
   wxPropertyValue(wxStringList *val);
   // Pointer versions
-  wxPropertyValue(char **val);
+  wxPropertyValue(wxChar **val);
   wxPropertyValue(long *val);
   wxPropertyValue(bool *val);
   wxPropertyValue(float *val);
@@ -214,11 +214,11 @@ class WXDLLEXPORT wxPropertyValue: public wxObject
   virtual long IntegerValue(void) const;
   virtual float RealValue(void) const;
   virtual bool BoolValue(void) const;
-  virtual char *StringValue(void) const;
+  virtual wxChar *StringValue(void) const;
   virtual long *IntegerValuePtr(void) const;
   virtual float *RealValuePtr(void) const;
   virtual bool *BoolValuePtr(void) const;
-  virtual char **StringValuePtr(void) const;
+  virtual wxChar **StringValuePtr(void) const;
 
   // Get nth arg of clause (starting from 1)
   virtual wxPropertyValue *Arg(wxPropertyValueType type, int arg) const;
@@ -272,7 +272,7 @@ class WXDLLEXPORT wxPropertyValue: public wxObject
   void operator=(const long val);
   void operator=(const bool val);
   void operator=(const float val);
-  void operator=(const char **val);
+  void operator=(const wxChar **val);
   void operator=(const long *val);
   void operator=(const bool *val);
   void operator=(const float *val);
@@ -284,11 +284,11 @@ class WXDLLEXPORT wxPropertyValue: public wxObject
 
   union {
     long integer; // Also doubles as bool
-    char *string;
+    wxChar *string;
     float real;
     long *integerPtr;
     bool *boolPtr;
-    char **stringPtr;
+    wxChar **stringPtr;
     float *realPtr;
     wxPropertyValue *first;  // If is a list expr, points to the first node
     } m_value;
