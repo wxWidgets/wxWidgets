@@ -204,13 +204,15 @@
         <set var="BUILDDIR">$(OBJS)</set>
     </if>
 
+    <set var="LIBTYPE_SUFFIX" make_var="1">
+        <if cond="FORMAT!='autoconf' and SHARED=='0'">lib</if>
+        <if cond="FORMAT!='autoconf' and SHARED=='1'">dll</if>
+    </set>
+
     <set var="LIBDIRNAME" make_var="1">
         <if cond="FORMAT=='autoconf'">$(top_builddir)lib</if>
-        <if cond="FORMAT!='autoconf' and SHARED=='0'">
-            $(nativePaths(TOP_SRCDIR))lib$(DIRSEP)$(COMPILER)$(DIR_SUFFIX_CPU)_lib$(CFG)
-        </if>
-        <if cond="FORMAT!='autoconf' and SHARED=='1'">
-            $(nativePaths(TOP_SRCDIR))lib$(DIRSEP)$(COMPILER)$(DIR_SUFFIX_CPU)_dll$(CFG)
+        <if cond="FORMAT!='autoconf'">
+            $(nativePaths(TOP_SRCDIR))lib$(DIRSEP)$(COMPILER)$(DIR_SUFFIX_CPU)_$(LIBTYPE_SUFFIX)$(CFG)
         </if>
     </set>
 
