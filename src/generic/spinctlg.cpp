@@ -160,7 +160,7 @@ bool wxSpinCtrl::Create(wxWindow *parent,
                         int initial,
                         const wxString& name)
 {
-    if ( !wxControl::Create(parent, id, pos, size, style,
+    if ( !wxControl::Create(parent, id, wxDefaultPosition, wxDefaultSize, style,
                             wxDefaultValidator, name) )
     {
         return FALSE;
