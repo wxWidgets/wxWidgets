@@ -396,6 +396,8 @@
                 #define  wxPuts      putws
                 #define  wxFputs     fputws
             #else
+                #define wxNEED_FPUTWC
+
                 #include <stdio.h>
 
                 int wxFputs(const wxChar *ch, FILE *stream);
