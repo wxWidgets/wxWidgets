@@ -222,21 +222,35 @@ void wxMacToolTip::Draw()
 		
 	if ( m_window == s_ToolTipWindowRef )
 	{
+  		m_shown = true ;
 #if TARGET_CARBON
-/*
 	  if ( HMDisplayTag != (void*) kUnresolvedCFragSymbolAddress )
 	  {
-	    HMDisplayTag( 
+	  	HMHelpContentRec tag ;
+		tag.version = kMacHelpVersion;
+		SetRect( &tag.absHotRect , m_position.x - 2 , m_position.y - 2 , m_position.x + 2 , m_position.y + 2 ) ;
+        GrafPtr port ;
+        GetPort( &port ) ;
+        SetPortWindowPort(m_window) ;
+		LocalToGlobal( (Point *) &tag.absHotRect.top );
+		LocalToGlobal( (Point *) &tag.absHotRect.bottom );
+		SetPort( port );
+		CFStringRef text = wxMacCreateCFString(m_label) ;
+		tag.content[kHMMinimumContentIndex].contentType = kHMCFStringContent ;
+		tag.content[kHMMinimumContentIndex].u.tagCFString = text ;
+		tag.content[kHMMaximumContentIndex].contentType = kHMCFStringContent ;
+		tag.content[kHMMaximumContentIndex].u.tagCFString = text ;
+		tag.tagSide = kHMDefaultSide;
+		HMDisplayTag( &tag );
+		CFRelease( text ) ;		
 	  }
 	  else
-*/
 #endif
 	  {
    		wxMacPortStateHelper help( (GrafPtr) GetWindowPort( m_window ) );
 #if TARGET_CARBON	
   		bool useDrawThemeText =  ( DrawThemeTextBox != (void*) kUnresolvedCFragSymbolAddress ) ;
 #endif		
-  		m_shown = true ;
 
         FontFamilyID fontId ;
         Str255 fontName ;
@@ -430,7 +444,9 @@ void wxMacToolTip::Clear()
 	}
 	if ( !m_shown )
 		return ;
-		 
+#if TARGET_CARBON
+	HMHideTag() ;
+#else		 
 	if ( m_window == s_ToolTipWindowRef && m_backpict )
 	{
 		wxMacPortStateHelper help( (GrafPtr) GetWindowPort(m_window) ) ;
@@ -443,6 +459,7 @@ void wxMacToolTip::Clear()
 		KillPicture(m_backpict);
 		m_backpict = NULL ;
 	}
+#endif
 }
 
 #endif
