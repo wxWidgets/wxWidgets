@@ -12,6 +12,7 @@
 #include "wx/setup.h"
 #include "wx/utils.h"
 #include "wx/app.h"
+#include "wx/apptrait.h"
 
 #include <ctype.h>
 
@@ -42,6 +43,15 @@ void wxClientDisplayRect(int *x,int *y,int *width,int *height)
         *width=1024;
     if(height)
         *height=768;
+}
+
+int wxGUIAppTraits::GetOSVersion(int *verMaj, int *verMin)
+{
+    if(verMaj)
+        *verMaj=0;
+    if(verMin)
+        *verMin=0;
+    return 0;
 }
 
 // Return TRUE if we have a colour display
