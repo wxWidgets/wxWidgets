@@ -229,7 +229,8 @@ wxPrintPaperType *wxPrintPaperDatabase::FindPaperType(const wxSize& sz)
     while (node)
     {
         wxPrintPaperType* paperType = (wxPrintPaperType*) node->GetData();
-        if (paperType->GetSize() == sz)
+        wxSize paperSize = paperType->GetSize() ;
+        if ( abs( paperSize.x - sz.x ) < 10 && abs( paperSize.y - sz.y ) < 10 )
             return paperType;
         node = node->GetNext();
     }
