@@ -468,6 +468,11 @@ void cbBarHintsPlugin::OnLeftDown( cbLeftDownEvent& event )
             int i;
             for ( i = 0; i != BOXES_IN_HINT; ++i )
             {
+                mBoxes[i]->mPressed = FALSE;
+                mBoxes[i]->mWasClicked = FALSE;
+            }
+            for ( i = 0; i != BOXES_IN_HINT; ++i )
+            {
                 mBoxes[i]->OnLeftDown( inFrame );
 
                 if ( mBoxes[i]->mPressed )

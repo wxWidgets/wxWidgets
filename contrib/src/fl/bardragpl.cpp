@@ -456,17 +456,6 @@ void cbBarDragPlugin::ShowHint( bool prevWasInClient )
 {
 	bool wasDocked = FALSE;
 
-	if ( mpDraggedBar->mState != wxCBAR_FLOATING && !mpCurPane )
-	{
-		mpLayout->SetBarState( mpDraggedBar, wxCBAR_FLOATING, TRUE );
-	}
-	else
-	if ( mpDraggedBar->mState == wxCBAR_FLOATING && mpCurPane )
-	{
-		mpLayout->SetBarState( mpDraggedBar, wxCBAR_DOCKED_HORIZONTALLY, FALSE );
-
-		wasDocked = TRUE;
-	}
 
 	if ( mpSrcPane->mProps.mRealTimeUpdatesOn == FALSE )
 	{
@@ -509,6 +498,18 @@ void cbBarDragPlugin::ShowHint( bool prevWasInClient )
 	else 
 	{
 		// otherwise, if real-time updates option is ON
+
+	    if ( mpDraggedBar->mState != wxCBAR_FLOATING && !mpCurPane )
+	    {
+		    mpLayout->SetBarState( mpDraggedBar, wxCBAR_FLOATING, TRUE );
+	    }
+         else
+	    if ( mpDraggedBar->mState == wxCBAR_FLOATING && mpCurPane )
+	    {
+		    mpLayout->SetBarState( mpDraggedBar, wxCBAR_DOCKED_HORIZONTALLY, FALSE );
+
+		    wasDocked = TRUE;
+	    }
 
 		if ( mpCurPane )
 		{
@@ -641,15 +642,24 @@ void cbBarDragPlugin::OnMouseMove( cbMotionEvent& event )
 	wxCursor* pPrevCurs = mpCurCursor;
 
 	if ( mpCurPane )
-	
-		mpCurCursor = mpLayout->mpDragCursor;
+    {
+		mpCurCursor = mpLayout->mpNormalCursor;
+    }
 	else
 	{
-		if ( mpLayout->mFloatingOn && mpSrcPane->mProps.mRealTimeUpdatesOn )
+        // if floating is off, and we are in the client
+        // area, the cursor will be invalid, otherwise
+        // it will be the normal cursor
 		
-			mpCurCursor = mpLayout->mpDragCursor;
+        if (mpLayout->mFloatingOn)
+        {
+			mpCurCursor = mpLayout->mpNormalCursor;
+        }
 		else
+        {
 			mpCurCursor = mpLayout->mpNECursor;
+	}
+
 	}
 	if ( pPrevCurs != mpCurCursor )
 		mpLayout->GetParentFrame().SetCursor( *mpCurCursor );
@@ -687,8 +697,25 @@ void cbBarDragPlugin::OnLButtonUp( cbLeftUpEvent& event )
 					mpLayout->GetUpdatesManager().UpdateNow();
 				}
 				else
+                {
+                    if (mpDraggedBar->mState == wxCBAR_FLOATING)
+                    {
+		                mpLayout->SetBarState( mpDraggedBar, wxCBAR_DOCKED_HORIZONTALLY, TRUE);
+                    }
+
 					mpLayout->RedockBar( mpDraggedBar, mHintRect, mpCurPane );
 			}
+		}
+             else
+            {
+                if (mpDraggedBar->mState != wxCBAR_FLOATING)
+                {
+                    mpLayout->SetBarState(mpDraggedBar, wxCBAR_FLOATING, true);
+                }
+
+				mpDraggedBar->mDimInfo.mBounds[ wxCBAR_FLOATING ] = mHintRect;
+				mpLayout->ApplyBarProperties( mpDraggedBar );
+            }
 		}
 	
 		mHintRect.width = -1;
@@ -753,7 +780,7 @@ void cbBarDragPlugin::OnStartBarDragging( cbStartBarDraggingEvent& event )
 	mpLayout->CaptureEventsForPane( event.mpPane );
 	mpLayout->CaptureEventsForPlugin( this );
 
-	mpLayout->GetParentFrame().SetCursor( *mpLayout->mpDragCursor );
+	mpLayout->GetParentFrame().SetCursor( *mpLayout->mpNormalCursor );
 
 	mBarDragStarted = TRUE;
 
