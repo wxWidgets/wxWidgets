@@ -13,7 +13,7 @@ import types
 d_new = globals()
 d_old = wx.__dict__
 
-for old, obj in d_old.iteritems():
+for old, obj in d_old.items():
     if type(obj) is types.ModuleType or old.startswith('_'):
         # Skip modules and private names.
         continue

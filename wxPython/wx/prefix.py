@@ -9,7 +9,7 @@ __revision__ = "$Revision$"[11:-2]
 import types
 
 def rename(d_new, d_old):
-    for old, obj in d_old.iteritems():
+    for old, obj in d_old.items():
         if type(obj) is types.ModuleType or old.startswith('_'):
             # Skip modules and private names.
             continue
