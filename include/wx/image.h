@@ -356,6 +356,7 @@ public:
 
   static void CleanUpHandlers();
   static void InitStandardHandlers();
+  static void InitAllHandlers();
 
 protected:
 

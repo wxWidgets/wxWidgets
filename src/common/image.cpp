@@ -610,6 +610,25 @@ void wxImage::InitStandardHandlers()
   AddHandler( new wxBMPHandler );
 }
 
+void wxImage::InitAllHandlers()
+{
+#if wxUSE_LIBPNG
+  AddHandler( new wxPNGHandler );
+#endif
+#if wxUSE_LIBJPEG
+  AddHandler( new wxJPEGHandler );
+#endif
+#if wxUSE_GIF
+  AddHandler( new wxGIFHandler );
+#endif
+#if wxUSE_PNM
+  AddHandler( new wxPNMHandler );
+#endif
+#if wxUSE_PCX
+  AddHandler( new wxPCXHandler );
+#endif
+}
+
 void wxImage::CleanUpHandlers()
 {
     wxNode *node = sm_handlers.First();

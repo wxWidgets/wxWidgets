@@ -274,19 +274,33 @@ Gets the width of the image in pixels.
 
 Returns TRUE if there is a mask active, FALSE otherwise.
 
-\membersection{wxImage::InitStandardHandlers}
+\membersection{wxImage::InitAllHandlers}\label{wximageinitallhandlers}
 
-\func{static void}{InitStandardHandlers}{\void}
+\func{static void}{InitAllHandlers}{\void}
 
-Adds the standard image format handlers, which, depending on wxWindows
-configuration, can be handlers for Windows BMP (loading), PNG
-(loading and saving) and JPEG (loading and saving) file formats.
-
-This function is called by wxWindows on startup.
+Adds some common image format handlers, which, depending on wxWindows
+configuration, can be handlers for BMP (loading) (always installed), GIF
+(loading and saving), PCX (loading and saving), PNM (loading and saving as raw
+rgb), PNG (loading and saving), JPEG (loading and saving), file formats.
 
 \wxheading{See also}
 
 \helpref{wxImageHandler}{wximagehandler}
+
+\membersection{wxImage::InitStandardHandlers}
+
+\func{static void}{InitStandardHandlers}{\void}
+
+Internal use only. Adds standard image format handlers. It only install BMP
+for the time being, which is use by wxBitmap.
+
+This function is called by wxWindows on startup, and shouldn't be called by
+the user.
+
+\wxheading{See also}
+
+\helpref{wxImageHandler}{wximagehandler}
+\helpref{wxImage::InitAllHandlers}{wximageinitallhandlers}
 
 \membersection{wxImage::InsertHandler}
 
@@ -303,11 +317,13 @@ of a given handler class in an application session.}
 
 \membersection{wxImage::LoadFile}\label{wximageloadfile}
 
-\func{bool}{LoadFile}{\param{const wxString\&}{ name}, \param{long}{ type}}
+\func{bool}{LoadFile}{\param{const wxString\&}{ name}, \param{long}{ type = wxBITMAP\_TYPE\_ANY}}
 
 \func{bool}{LoadFile}{\param{const wxString\&}{ name}, \param{const wxString\&}{ mimetype}}
 
-Loads an image from a file.
+Loads an image from a file. If no handler type is provided, the library will
+try to use wxBITMAP\_TYPE\_BMP or all known handlers previously installed
+through a call to \helpref{wxImage::InitAllHandlers}{wximageinitallhandlers}.
 
 \func{bool}{LoadFile}{\param{wxInputStream\&}{ stream}, \param{long}{ type}}
 
@@ -328,8 +344,11 @@ The meaning of {\it stream} data is determined by the {\it type} parameter.}
 \twocolwidtha{5cm}%
 \begin{twocollist}
 \twocolitem{{\bf wxBITMAP\_TYPE\_BMP}}{Load a Windows image file.}
-\twocolitem{{\bf wxBITMAP\_TYPE\_PNG}}{Load a PNG image file.}
+\twocolitem{{\bf wxBITMAP\_TYPE\_GIF}}{Load a GIF image file.}
 \twocolitem{{\bf wxBITMAP\_TYPE\_JPEG}}{Load a JPEG image file.}
+\twocolitem{{\bf wxBITMAP\_TYPE\_PCX}}{Load a PCX image file.}
+\twocolitem{{\bf wxBITMAP\_TYPE\_PNG}}{Load a PNG image file.}
+\twocolitem{{\bf wxBITMAP\_TYPE\_PNM}}{Load a PNM image file.}
 \end{twocollist}
 
 The validity of these flags depends on the platform and wxWindows configuration.}
