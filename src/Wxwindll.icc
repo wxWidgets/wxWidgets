@@ -1,13 +1,28 @@
-option link(debug, "yes"), link(linkwithmultithreadlib, "yes"),
-       link(linkwithsharedlib, "yes"), link(defaultlibsname, "..\\lib\\png.lib"),
-       link(defaultlibsname, "..\\lib\\xpm.lib"),
-       link(defaultlibsname, "..\\lib\\jpeg.lib"),
-       link(defaultlibsname, "..\\lib\\zlib.lib"),
-       link(defaultlibsname, "..\\lib\\tiff.lib"), link(extdictionary, "no"),
-       link(pmtype, "pm"), define("__VISAGECPP__", ), define("__WXPM__", ),
-       incl(searchpath, "..\\Include"), incl(searchpath, "..\\src\\jpeg"),
-       incl(searchpath, "..\\src\\zlib"), incl(searchpath, "..\\src\\tiff"),
-       incl(searchpath, "..\\src\\xpm"), incl(searchpath, "..\\src\\png")
+option ProjectOptions = lang(longlong, "yes"),  gen(manglelinkagekeywordonlyfuncs, "no"), lang(allowtypedefasclassname, "yes"),
+                        lang(templatedefimpls, "dontparse"), lang(compatmath, "yes"),
+                        lang(nokeyword, "const_cast"), lang(nokeyword, "explicit"), lang(nokeyword, "false"),
+                        lang(nokeyword, "mutable"), lang(nokeyword, "true"), lang(nokeyword, "typename"),
+                        lang(trailingenumcommas, "no"), lang(universalcharacternames, "no"),
+                        link(debug, "yes"), link(linkwithmultithreadlib, "yes"), link(exportAll, "yes"),
+                        link(linkwithsharedlib, "yes"), link(defaultlibs, "yes"), link(extdictionary, "no"),
+                        link(defaultlibsname, "..\\lib\\png.lib"),
+                        link(defaultlibsname, "..\\lib\\xpm.lib"),
+                        link(defaultlibsname, "..\\lib\\jpeg.lib"),
+                        link(defaultlibsname, "..\\lib\\zlib.lib"),
+                        link(defaultlibsname, "..\\lib\\tiff.lib"),
+                        link(defaultlibsname, "NETAPI32.LIB"),
+                        link(defaultlibsname, "UPM32.LIB"),
+                        link(defaultlibsname, "..\\..\\LIB\\dummy.obj"),
+                        link(extdictionary, "no"),link(pmtype, "pm"),
+                        define("__VISAGECPP__", ), define("__WXPM__", ),
+                        incl(searchpath, "..\\Include"), incl(searchpath, "..\\src\\jpeg"),
+                        incl(searchpath, "..\\src\\zlib"), incl(searchpath, "..\\src\\tiff"),
+                        incl(searchpath, "..\\src\\xpm"), incl(searchpath, "..\\src\\png"),
+                        macros(redefine, "yes"),
+                        file(usepch, "No"), debug(maxerrors, 100), info(cmp, "yes"), info(cnd, "yes"), info(cns, "yes"), info(cnv, "yes"),
+                        info(cpy, "yes"), info(dcl, "yes"), info(eff, "yes"), info(enu, "yes"), info(ext, "yes"), info(ini, "yes"),
+                        info(ord, "yes"), info(par, "yes"), info(rea, "yes"), info(trd, "yes"), info(tru, "yes"), info(uni, "yes"),
+                        info(use, "yes")
 {
    target type("dll") "..\\lib\\Wxwindll.dll"
    {
@@ -21,8 +36,6 @@ option link(debug, "yes"), link(linkwithmultithreadlib, "yes"),
       source type(cpp) "COMMON\\CTRLSUB.CPP"
       source type(cpp) "COMMON\\DATETIME.CPP"
       source type(cpp) "COMMON\\DATSTRM.CPP"
-      source type(cpp) "COMMON\\DB.CPP"
-      source type(cpp) "COMMON\\DBTABLE.CPP"
       source type(cpp) "COMMON\\DCBASE.CPP"
       source type(cpp) "COMMON\\DLGCMN.CPP"
       source type(cpp) "COMMON\\DNDCMN.CPP"
@@ -78,7 +91,6 @@ option link(debug, "yes"), link(linkwithmultithreadlib, "yes"),
       source type(cpp) "COMMON\\MSTREAM.CPP"
       source type(cpp) "COMMON\\OBJECT.CPP"
       source type(cpp) "COMMON\\OBJSTRM.CPP"
-      source type(cpp) "COMMON\\ODBC.CPP"
       source type(cpp) "COMMON\\PAPER.CPP"
       source type(cpp) "COMMON\\PRNTBASE.CPP"
       source type(cpp) "COMMON\\PROCESS.CPP"
@@ -126,10 +138,9 @@ option link(debug, "yes"), link(linkwithmultithreadlib, "yes"),
       source type(cpp) "GENERIC\\CHOICDGG.CPP"
       source type(cpp) "GENERIC\\COLRDLGG.CPP"
       source type(cpp) "GENERIC\\DCPSG.CPP"
-      source type(cpp) "GENERIC\\DIRDLGG.CPP"
-      source type(cpp) "GENERIC\\FILEDLGG.CPP"
+      source type(cpp) "GENERIC\\DRAGIMGG.CPP"
+      source type(cpp) "GENERIC\\FONTDLGG.CPP"
       source type(cpp) "GENERIC\\GRID.CPP"
-      source type(cpp) "GENERIC\\GRIDG.CPP"
       source type(cpp) "GENERIC\\GRIDSEL.CPP"
       source type(cpp) "GENERIC\\HELPEXT.CPP"
       source type(cpp) "GENERIC\\HELPHTML.CPP"
@@ -139,8 +150,6 @@ option link(debug, "yes"), link(linkwithmultithreadlib, "yes"),
       source type(cpp) "GENERIC\\LAYWIN.CPP"
       source type(cpp) "GENERIC\\LISTCTRL.CPP"
       source type(cpp) "GENERIC\\LOGG.CPP"
-      source type(cpp) "GENERIC\\MSGDLGG.CPP"
-      source type(cpp) "GENERIC\\NOTEBOOK.CPP"
       source type(cpp) "GENERIC\\NUMDLGG.CPP"
       source type(cpp) "GENERIC\\PANELG.CPP"
       source type(cpp) "GENERIC\\PLOT.CPP"
@@ -155,6 +164,7 @@ option link(debug, "yes"), link(linkwithmultithreadlib, "yes"),
       source type(cpp) "GENERIC\\SPLITTER.CPP"
       source type(cpp) "GENERIC\\STATUSBR.CPP"
       source type(cpp) "GENERIC\\TABG.CPP"
+      source type(cpp) "GENERIC\\TBARSMPL.CPP"
       source type(cpp) "GENERIC\\TEXTDLGG.CPP"
       source type(cpp) "GENERIC\\TIPDLG.CPP"
       source type(cpp) "GENERIC\\TREECTRL.CPP"
@@ -202,10 +212,8 @@ option link(debug, "yes"), link(linkwithmultithreadlib, "yes"),
       source type(cpp) "OS2\\DCPRINT.CPP"
       source type(cpp) "OS2\\DCSCREEN.CPP"
       source type(cpp) "OS2\\DIALOG.CPP"
-      source type(cpp) "OS2\\DIR.CPP"
       source type(cpp) "OS2\\DIRDLG.CPP"
       source type(cpp) "OS2\\DND.CPP"
-      source type(cpp) "OS2\\DUMMY.CPP"
       source type(cpp) "OS2\\DUMMYDLL.CPP"
       source type(cpp) "OS2\\FILEDLG.CPP"
       source type(cpp) "OS2\\FONT.CPP"
