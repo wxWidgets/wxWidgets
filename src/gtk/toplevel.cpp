@@ -32,6 +32,7 @@
 #include "wx/dcclient.h"
 #include "wx/gtk/private.h"
 #include "wx/timer.h"
+#include "wx/settings.h"
 
 #include <glib.h>
 #include <gdk/gdk.h>
@@ -365,8 +366,8 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     m_widget = gtk_window_new( win_type );
 
     if (m_parent && (((GTK_IS_WINDOW(m_parent->m_widget)) &&
-		      (GetExtraStyle() & wxTOPLEVEL_EX_DIALOG)) ||
-		     (style & wxFRAME_FLOAT_ON_PARENT)))
+              (GetExtraStyle() & wxTOPLEVEL_EX_DIALOG)) ||
+             (style & wxFRAME_FLOAT_ON_PARENT)))
     {
         gtk_window_set_transient_for( GTK_WINDOW(m_widget), GTK_WINDOW(m_parent->m_widget) );
     }
@@ -519,8 +520,8 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long style )
         int screen_width,screen_height;
         wxDisplaySize( &screen_width, &screen_height );
 
-		gint client_x, client_y, root_x, root_y;
-		gint width, height;
+        gint client_x, client_y, root_x, root_y;
+        gint width, height;
 
         if (method != wxX11_FS_WMSPEC)
         {
@@ -532,12 +533,12 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long style )
             gdk_window_set_functions(window, (GdkWMFunction)0);
         }
 
-		gdk_window_get_origin (m_widget->window, &root_x, &root_y);
-		gdk_window_get_geometry (m_widget->window, &client_x, &client_y,
-					 &width, &height, NULL);
+        gdk_window_get_origin (m_widget->window, &root_x, &root_y);
+        gdk_window_get_geometry (m_widget->window, &client_x, &client_y,
+                     &width, &height, NULL);
 
-		gdk_window_move_resize (m_widget->window, -client_x, -client_y,
-					screen_width + 1, screen_height + 1);
+        gdk_window_move_resize (m_widget->window, -client_x, -client_y,
+                    screen_width + 1, screen_height + 1);
 
         wxSetFullScreenStateX11((WXDisplay*)GDK_DISPLAY(),
                                 (WXWindow)GDK_ROOT_WINDOW(),
@@ -711,18 +712,29 @@ void wxTopLevelWindowGTK::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
     m_width = width;
     m_height = height;
 
-    /* wxMDIChildFrame derives from wxFrame but it _is_ a wxWindow as it uses
-       wxWindow::Create to create it's GTK equivalent. m_mainWidget is only
-       set in wxFrame::Create so it is used to check what kind of frame we
-       have here. if m_mainWidget is NULL it is a wxMDIChildFrame and so we
-       skip the part which handles m_frameMenuBar, m_frameToolBar and (most
-       importantly) m_mainWidget */
+    // wxMDIChildFrame derives from wxFrame but it _is_ a wxWindow as it uses
+    // wxWindow::Create to create it's GTK equivalent. m_mainWidget is only
+    // set in wxFrame::Create so it is used to check what kind of frame we
+    // have here. if m_mainWidget is NULL it is a wxMDIChildFrame and so we
+    // skip the part which handles m_frameMenuBar, m_frameToolBar and (most
+    // importantly) m_mainWidget
 
     int minWidth = GetMinWidth(),
         minHeight = GetMinHeight(),
         maxWidth = GetMaxWidth(),
         maxHeight = GetMaxHeight();
 
+    if (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA)
+    {
+        // GPE's window manager doesn't like size hints
+        // at all, esp. when the user has to use the
+        // virtual keyboard.
+        minWidth = -1;
+        minHeight = -1;
+        maxWidth = -1;
+        maxHeight = -1;
+    }
+    
     if ((minWidth != -1) && (m_width < minWidth)) m_width = minWidth;
     if ((minHeight != -1) && (m_height < minHeight)) m_height = minHeight;
     if ((maxWidth != -1) && (m_width > maxWidth)) m_width = maxWidth;
