@@ -198,7 +198,8 @@ wxFSFile* wxLocalFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString&
         return new wxFSFile(new wxFileInputStream(right),
                             right,
                             GetMimeTypeFromExt(location),
-                            GetAnchor(location));
+                            GetAnchor(location),
+                            wxDateTime(wxFileModificationTime(right)));
     else return (wxFSFile*) NULL;
 }
 

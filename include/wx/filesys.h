@@ -21,7 +21,7 @@
 #include "wx/stream.h"
 #include "wx/mimetype.h"
 #include "wx/url.h"
-
+#include "wx/datetime.h"
 
 class wxFSFile;
 class wxFileSystemHandler;
@@ -41,14 +41,18 @@ class WXDLLEXPORT wxFSFile : public wxObject
         wxString m_Location;
         wxString m_MimeType;
         wxString m_Anchor;
+        wxDateTime m_Modif;
 
     public:
-        wxFSFile(wxInputStream *stream, const wxString& loc, const wxString& mimetype, const wxString& anchor)
+        wxFSFile(wxInputStream *stream, const wxString& loc, 
+                 const wxString& mimetype, const wxString& anchor,
+                 wxDateTime modif)
             {
                 m_Stream = stream;
                 m_Location = loc;
                 m_MimeType = mimetype; m_MimeType.MakeLower();
                 m_Anchor = anchor;
+                m_Modif = modif;
             }
         virtual ~wxFSFile()
             {
@@ -66,6 +70,8 @@ class WXDLLEXPORT wxFSFile : public wxObject
                 // returns the original location (aka filename) of the file
 
         const wxString& GetAnchor() const {return m_Anchor;}
+        
+        wxDateTime GetModificationTime() const {return m_Modif;}
 };
 
 
