@@ -987,8 +987,6 @@ wxGenericFileDialog::wxGenericFileDialog(wxWindow *parent,
         mainsizer->Add( choicesizer, 0, wxEXPAND );
     }
 
-    // FIXME - memory leaks!!
-    
     m_choice->Append( firstWildText, (void*) new wxString( firstWild ) );
     while (tokens.HasMoreTokens())
     {
