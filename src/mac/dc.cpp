@@ -31,6 +31,7 @@ using namespace std ;
 #include "ATSUnicode.h"
 #include "TextCommon.h"
 #include "TextEncodingConverter.h"
+#include "FixMath.h"
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
 #endif
@@ -1279,6 +1280,8 @@ bool  wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
     return TRUE;
 }
 
+#ifndef FixedToInt
+// as macro in FixMath.h for 10.3
 inline Fixed    IntToFixed( int inInt )
 {
     return (((SInt32) inInt) << 16);
@@ -1288,6 +1291,7 @@ inline int    FixedToInt( Fixed inFixed )
 {
     return (((SInt32) inFixed) >> 16);
 }
+#endif
 
 void  wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
                               double angle)
