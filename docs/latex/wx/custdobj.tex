@@ -28,7 +28,7 @@ only the last one if you only allow reading/writing the data)
 
 \wxheading{Derived from}
 
-\helpref{wxDataObjectSimple}{wxdataobjectsimple}
+\helpref{wxDataObjectSimple}{wxdataobjectsimple}\\
 \helpref{wxDataObject}{wxdataobject}
 
 \wxheading{Include files}
@@ -76,7 +76,7 @@ nearly any object by pickling it first.}
 
 This function is called when the data is freed, you may override it to anything
 you want (or may be nothing at all). The default version calls operator
-delete\[\] on the data.
+delete$[]$ on the data.
 
 \membersection{wxCustomDataObject::GetSize}\label{wxcustomdataobjectgetsize}
 
@@ -93,18 +93,15 @@ Returns a pointer to the data.
 \membersection{wxCustomDataObject::SetData}\label{wxcustomdataobjectsetdata}
 
 \func{virtual void}{SetData}{
-    \param{size\_t }{size},
-    \param{const void }{*data}
-}
+ \param{size\_t }{size}, \param{const void }{*data}}
 
 Set the data. The data object will make an internal copy.
 
 \membersection{wxCustomDataObject::TakeData}\label{wxcustomdataobjecttakedata}
 
 \func{virtual void}{TakeData}{
-    \param{size\_t }{size},
-    \param{const void }{*data}
-}
+ \param{size\_t }{size}, \param{const void }{*data}}
 
 Like \helpref{SetData}{wxcustomdataobjectsetdata}, but doesn't copy the data -
 instead the object takes ownership of the pointer.
+
