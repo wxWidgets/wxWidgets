@@ -1121,7 +1121,15 @@ void wxThreadInternal::Wait()
     // if the thread we're waiting for is waiting for the GUI mutex, we will
     // deadlock so make sure we release it temporarily
     if ( wxThread::IsMain() )
-        wxMutexGuiLeave();
+    {
+        // give the thread we're waiting for chance to do the GUI call
+        // it might be in, we don't do this conditionally as the to be waited on 
+        // thread might have to acquire the mutex later but before terminating
+        if ( wxGuiOwnedByMainThread() )
+        {
+            wxMutexGuiLeave();
+        }
+    }
 
     {
         wxCriticalSectionLocker lock(m_csJoinFlag);
@@ -1150,10 +1158,6 @@ void wxThreadInternal::Wait()
             m_shouldBeJoined = FALSE;
         }
     }
-
-    // reacquire GUI mutex
-    if ( wxThread::IsMain() )
-        wxMutexGuiEnter();
 }
 
 void wxThreadInternal::Pause()
@@ -1197,7 +1201,7 @@ wxThread *wxThread::This()
 
 bool wxThread::IsMain()
 {
-	return GetCurrentId() == gs_idMainThread || gs_idMainThread == kNoThreadID;
+	return GetCurrentId() == gs_idMainThread || gs_idMainThread == kInvalidID ;
 }
 
 #ifdef Yield
@@ -1408,7 +1412,6 @@ wxThreadError wxThread::Delete(ExitCode *rc)
                     *rc = m_internal->GetExitCode();
                 }
             }
-            //else: can't wait for detached threads
     }
 
     return wxTHREAD_NO_ERROR;
