@@ -878,6 +878,7 @@ laywin.h	WXH
 list.h	WXH	Base
 listbox.h	WXH
 listctrl.h	WXH
+listbase.h	WXH
 log.h	WXH	Base
 longlong.h	WXH	Base
 matrix.h	WXH

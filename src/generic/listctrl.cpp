@@ -47,7 +47,16 @@
     #include "wx/textctrl.h"
 #endif
 
-#include "wx/listctrl.h"
+// Include wx/listctrl.h (with wxListView declaration)
+// only when wxGenericListCtrl is the only
+// implementation, and therefore wxListView needs
+// to be derived from the 'generic' version.
+
+#if defined(__WIN32__) && !defined(__WXUNIVERSAL__)
+    #include "wx/generic/listctrl.h"
+#else
+    #include "wx/listctrl.h"
+#endif
 
 #if defined(__WXGTK__)
     #include <gtk/gtk.h>

@@ -28,6 +28,7 @@
 #include "wx/dcclient.h"
 #include "wx/scrolwin.h"
 #include "wx/settings.h"
+#include "wx/listbase.h"
 
 #if wxUSE_DRAG_AND_DROP
 class WXDLLEXPORT wxDropTarget;
