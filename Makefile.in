@@ -291,6 +291,7 @@ ALL_BASE_HEADERS =  \
 	wx/snglinst.h \
 	wx/sstream.h \
 	wx/stack.h \
+	wx/stackwalk.h \
 	wx/stdpaths.h \
 	wx/stockitem.h \
 	wx/stopwatch.h \
@@ -406,12 +407,15 @@ ALL_BASE_SOURCES =  \
 	src/unix/threadpsx.cpp \
 	src/msw/basemsw.cpp \
 	src/msw/crashrpt.cpp \
+	src/msw/debughlp.cpp \
 	src/msw/dde.cpp \
 	src/msw/dir.cpp \
+	src/msw/dlmsw.cpp \
 	src/msw/mimetype.cpp \
 	src/msw/regconf.cpp \
 	src/msw/registry.cpp \
 	src/msw/snglinst.cpp \
+	src/msw/stackwalk.cpp \
 	src/msw/stdpaths.cpp \
 	src/msw/thread.cpp \
 	src/msw/utils.cpp \
@@ -1220,8 +1224,10 @@ COND_PLATFORM_WIN32_1_BASE_PLATFORM_HDR =  \
 	wx/msw/chkconf.h \
 	wx/msw/crashrpt.h \
 	wx/msw/dde.h \
+	wx/msw/debughlp.h \
 	wx/msw/gccpriv.h \
 	wx/msw/mimetype.h \
+	wx/msw/stackwalk.h \
 	wx/msw/winundef.h \
 	wx/msw/wrapcctl.h \
 	wx/msw/wrapwin.h \
@@ -2477,12 +2483,15 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS =  \
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_basemsw.o \
 	monodll_crashrpt.o \
+	monodll_debughlp.o \
 	monodll_dde.o \
 	monodll_dir.o \
+	monodll_dlmsw.o \
 	monodll_mimetype.o \
 	monodll_regconf.o \
 	monodll_registry.o \
 	monodll_snglinst.o \
+	monodll_stackwalk.o \
 	monodll_stdpaths.o \
 	monodll_thread.o \
 	monodll_utils.o \
@@ -3929,12 +3938,15 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_basemsw.o \
 	monolib_crashrpt.o \
+	monolib_debughlp.o \
 	monolib_dde.o \
 	monolib_dir.o \
+	monolib_dlmsw.o \
 	monolib_mimetype.o \
 	monolib_regconf.o \
 	monolib_registry.o \
 	monolib_snglinst.o \
+	monolib_stackwalk.o \
 	monolib_stdpaths.o \
 	monolib_thread.o \
 	monolib_utils.o \
@@ -5418,12 +5430,15 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_basemsw.o \
 	basedll_crashrpt.o \
+	basedll_debughlp.o \
 	basedll_dde.o \
 	basedll_dir.o \
+	basedll_dlmsw.o \
 	basedll_mimetype.o \
 	basedll_regconf.o \
 	basedll_registry.o \
 	basedll_snglinst.o \
+	basedll_stackwalk.o \
 	basedll_stdpaths.o \
 	basedll_thread.o \
 	basedll_utils.o \
@@ -5555,12 +5570,15 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_basemsw.o \
 	baselib_crashrpt.o \
+	baselib_debughlp.o \
 	baselib_dde.o \
 	baselib_dir.o \
+	baselib_dlmsw.o \
 	baselib_mimetype.o \
 	baselib_regconf.o \
 	baselib_registry.o \
 	baselib_snglinst.o \
+	baselib_stackwalk.o \
 	baselib_stdpaths.o \
 	baselib_thread.o \
 	baselib_utils.o \
@@ -9829,13 +9847,22 @@ monodll_basemsw.o: $(srcdir)/src/msw/basemsw.cpp $(MONODLL_ODEP)
 monodll_crashrpt.o: $(srcdir)/src/msw/crashrpt.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
+monodll_debughlp.o: $(srcdir)/src/msw/debughlp.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
 monodll_dde.o: $(srcdir)/src/msw/dde.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_dlmsw.o: $(srcdir)/src/msw/dlmsw.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 monodll_regconf.o: $(srcdir)/src/msw/regconf.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 monodll_registry.o: $(srcdir)/src/msw/registry.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+monodll_stackwalk.o: $(srcdir)/src/msw/stackwalk.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 monodll_time.o: $(srcdir)/src/msw/wince/time.cpp $(MONODLL_ODEP)
@@ -13183,13 +13210,22 @@ monolib_basemsw.o: $(srcdir)/src/msw/basemsw.cpp $(MONOLIB_ODEP)
 monolib_crashrpt.o: $(srcdir)/src/msw/crashrpt.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
+monolib_debughlp.o: $(srcdir)/src/msw/debughlp.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
 monolib_dde.o: $(srcdir)/src/msw/dde.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_dlmsw.o: $(srcdir)/src/msw/dlmsw.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 monolib_regconf.o: $(srcdir)/src/msw/regconf.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 monolib_registry.o: $(srcdir)/src/msw/registry.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_stackwalk.o: $(srcdir)/src/msw/stackwalk.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 monolib_time.o: $(srcdir)/src/msw/wince/time.cpp $(MONOLIB_ODEP)
@@ -16537,13 +16573,22 @@ basedll_basemsw.o: $(srcdir)/src/msw/basemsw.cpp $(BASEDLL_ODEP)
 basedll_crashrpt.o: $(srcdir)/src/msw/crashrpt.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
+basedll_debughlp.o: $(srcdir)/src/msw/debughlp.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
+
 basedll_dde.o: $(srcdir)/src/msw/dde.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
+
+basedll_dlmsw.o: $(srcdir)/src/msw/dlmsw.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
 basedll_regconf.o: $(srcdir)/src/msw/regconf.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
 basedll_registry.o: $(srcdir)/src/msw/registry.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
+
+basedll_stackwalk.o: $(srcdir)/src/msw/stackwalk.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
 basedll_time.o: $(srcdir)/src/msw/wince/time.cpp $(BASEDLL_ODEP)
@@ -17032,13 +17077,22 @@ baselib_basemsw.o: $(srcdir)/src/msw/basemsw.cpp $(BASELIB_ODEP)
 baselib_crashrpt.o: $(srcdir)/src/msw/crashrpt.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
+baselib_debughlp.o: $(srcdir)/src/msw/debughlp.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
+
 baselib_dde.o: $(srcdir)/src/msw/dde.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
+
+baselib_dlmsw.o: $(srcdir)/src/msw/dlmsw.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
 baselib_regconf.o: $(srcdir)/src/msw/regconf.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
 baselib_registry.o: $(srcdir)/src/msw/registry.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
+
+baselib_stackwalk.o: $(srcdir)/src/msw/stackwalk.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
 baselib_time.o: $(srcdir)/src/msw/wince/time.cpp $(BASELIB_ODEP)

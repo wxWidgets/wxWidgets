@@ -1230,6 +1230,10 @@ SOURCE=.\msw\dde.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\debughlp.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\dialog.cpp
 # End Source File
 # Begin Source File
@@ -1512,6 +1516,10 @@ SOURCE=.\msw\spinbutt.cpp
 # Begin Source File
 
 SOURCE=.\msw\spinctrl.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\stackwalk.cpp
 # End Source File
 # Begin Source File
 
@@ -2743,6 +2751,10 @@ SOURCE=..\include\wx\stack.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\stackwalk.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\statbmp.h
 # End Source File
 # Begin Source File
@@ -3263,6 +3275,10 @@ SOURCE=..\include\wx\msw\dde.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\msw\debughlp.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\msw\dialog.h
 # End Source File
 # Begin Source File
@@ -3508,6 +3524,10 @@ SOURCE=..\include\wx\msw\spinbutt.h
 # Begin Source File
 
 SOURCE=..\include\wx\msw\spinctrl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\stackwalk.h
 # End Source File
 # Begin Source File
 

@@ -705,6 +705,10 @@ SOURCE=..\..\src\msw\dde.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\msw\debughlp.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\msw\dir.cpp
 # End Source File
 # Begin Source File
@@ -740,6 +744,10 @@ SOURCE=..\..\src\msw\registry.cpp
 # Begin Source File
 
 SOURCE=..\..\src\msw\snglinst.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\msw\stackwalk.cpp
 # End Source File
 # Begin Source File
 
@@ -958,11 +966,19 @@ SOURCE=..\..\include\wx\msw\dde.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\msw\debughlp.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\msw\gccpriv.h
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\include\wx\msw\mimetype.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\msw\stackwalk.h
 # End Source File
 # Begin Source File
 
@@ -1259,6 +1275,10 @@ SOURCE=..\..\include\wx\sstream.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\stack.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\stackwalk.h
 # End Source File
 # Begin Source File
 

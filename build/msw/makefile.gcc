@@ -234,12 +234,15 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_zstream.o \
 	$(OBJS)\monodll_basemsw.o \
 	$(OBJS)\monodll_crashrpt.o \
+	$(OBJS)\monodll_debughlp.o \
 	$(OBJS)\monodll_dde.o \
 	$(OBJS)\monodll_dir.o \
+	$(OBJS)\monodll_dlmsw.o \
 	$(OBJS)\monodll_mimetype.o \
 	$(OBJS)\monodll_regconf.o \
 	$(OBJS)\monodll_registry.o \
 	$(OBJS)\monodll_snglinst.o \
+	$(OBJS)\monodll_stackwalk.o \
 	$(OBJS)\monodll_stdpaths.o \
 	$(OBJS)\monodll_thread.o \
 	$(OBJS)\monodll_utils.o \
@@ -336,12 +339,15 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_zstream.o \
 	$(OBJS)\monolib_basemsw.o \
 	$(OBJS)\monolib_crashrpt.o \
+	$(OBJS)\monolib_debughlp.o \
 	$(OBJS)\monolib_dde.o \
 	$(OBJS)\monolib_dir.o \
+	$(OBJS)\monolib_dlmsw.o \
 	$(OBJS)\monolib_mimetype.o \
 	$(OBJS)\monolib_regconf.o \
 	$(OBJS)\monolib_registry.o \
 	$(OBJS)\monolib_snglinst.o \
+	$(OBJS)\monolib_stackwalk.o \
 	$(OBJS)\monolib_stdpaths.o \
 	$(OBJS)\monolib_thread.o \
 	$(OBJS)\monolib_utils.o \
@@ -439,12 +445,15 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_zstream.o \
 	$(OBJS)\basedll_basemsw.o \
 	$(OBJS)\basedll_crashrpt.o \
+	$(OBJS)\basedll_debughlp.o \
 	$(OBJS)\basedll_dde.o \
 	$(OBJS)\basedll_dir.o \
+	$(OBJS)\basedll_dlmsw.o \
 	$(OBJS)\basedll_mimetype.o \
 	$(OBJS)\basedll_regconf.o \
 	$(OBJS)\basedll_registry.o \
 	$(OBJS)\basedll_snglinst.o \
+	$(OBJS)\basedll_stackwalk.o \
 	$(OBJS)\basedll_stdpaths.o \
 	$(OBJS)\basedll_thread.o \
 	$(OBJS)\basedll_utils.o \
@@ -526,12 +535,15 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_zstream.o \
 	$(OBJS)\baselib_basemsw.o \
 	$(OBJS)\baselib_crashrpt.o \
+	$(OBJS)\baselib_debughlp.o \
 	$(OBJS)\baselib_dde.o \
 	$(OBJS)\baselib_dir.o \
+	$(OBJS)\baselib_dlmsw.o \
 	$(OBJS)\baselib_mimetype.o \
 	$(OBJS)\baselib_regconf.o \
 	$(OBJS)\baselib_registry.o \
 	$(OBJS)\baselib_snglinst.o \
+	$(OBJS)\baselib_stackwalk.o \
 	$(OBJS)\baselib_stdpaths.o \
 	$(OBJS)\baselib_thread.o \
 	$(OBJS)\baselib_utils.o \
@@ -3883,10 +3895,16 @@ $(OBJS)\monodll_basemsw.o: ../../src/msw/basemsw.cpp
 $(OBJS)\monodll_crashrpt.o: ../../src/msw/crashrpt.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_debughlp.o: ../../src/msw/debughlp.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_dde.o: ../../src/msw/dde.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_dir.o: ../../src/msw/dir.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_dlmsw.o: ../../src/msw/dlmsw.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_mimetype.o: ../../src/msw/mimetype.cpp
@@ -3899,6 +3917,9 @@ $(OBJS)\monodll_registry.o: ../../src/msw/registry.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_snglinst.o: ../../src/msw/snglinst.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_stackwalk.o: ../../src/msw/stackwalk.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_stdpaths.o: ../../src/msw/stdpaths.cpp
@@ -5603,10 +5624,16 @@ $(OBJS)\monolib_basemsw.o: ../../src/msw/basemsw.cpp
 $(OBJS)\monolib_crashrpt.o: ../../src/msw/crashrpt.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_debughlp.o: ../../src/msw/debughlp.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_dde.o: ../../src/msw/dde.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_dir.o: ../../src/msw/dir.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_dlmsw.o: ../../src/msw/dlmsw.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_mimetype.o: ../../src/msw/mimetype.cpp
@@ -5619,6 +5646,9 @@ $(OBJS)\monolib_registry.o: ../../src/msw/registry.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_snglinst.o: ../../src/msw/snglinst.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_stackwalk.o: ../../src/msw/stackwalk.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_stdpaths.o: ../../src/msw/stdpaths.cpp
@@ -7323,10 +7353,16 @@ $(OBJS)\basedll_basemsw.o: ../../src/msw/basemsw.cpp
 $(OBJS)\basedll_crashrpt.o: ../../src/msw/crashrpt.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
+$(OBJS)\basedll_debughlp.o: ../../src/msw/debughlp.cpp
+	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $<
+
 $(OBJS)\basedll_dde.o: ../../src/msw/dde.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_dir.o: ../../src/msw/dir.cpp
+	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $<
+
+$(OBJS)\basedll_dlmsw.o: ../../src/msw/dlmsw.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_mimetype.o: ../../src/msw/mimetype.cpp
@@ -7339,6 +7375,9 @@ $(OBJS)\basedll_registry.o: ../../src/msw/registry.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_snglinst.o: ../../src/msw/snglinst.cpp
+	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $<
+
+$(OBJS)\basedll_stackwalk.o: ../../src/msw/stackwalk.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_stdpaths.o: ../../src/msw/stdpaths.cpp
@@ -7548,10 +7587,16 @@ $(OBJS)\baselib_basemsw.o: ../../src/msw/basemsw.cpp
 $(OBJS)\baselib_crashrpt.o: ../../src/msw/crashrpt.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
+$(OBJS)\baselib_debughlp.o: ../../src/msw/debughlp.cpp
+	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $<
+
 $(OBJS)\baselib_dde.o: ../../src/msw/dde.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_dir.o: ../../src/msw/dir.cpp
+	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $<
+
+$(OBJS)\baselib_dlmsw.o: ../../src/msw/dlmsw.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_mimetype.o: ../../src/msw/mimetype.cpp
@@ -7564,6 +7609,9 @@ $(OBJS)\baselib_registry.o: ../../src/msw/registry.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_snglinst.o: ../../src/msw/snglinst.cpp
+	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $<
+
+$(OBJS)\baselib_stackwalk.o: ../../src/msw/stackwalk.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_stdpaths.o: ../../src/msw/stdpaths.cpp

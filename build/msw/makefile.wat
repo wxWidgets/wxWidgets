@@ -2391,6 +2391,7 @@ MONODLL_OBJECTS =  &
 	$(OBJS)\monodll_zstream.obj &
 	$(OBJS)\monodll_basemsw.obj &
 	$(OBJS)\monodll_crashrpt.obj &
+	$(OBJS)\monodll_debughlp.obj &
 	$(OBJS)\monodll_dde.obj &
 	$(OBJS)\monodll_dir.obj &
 	$(OBJS)\monodll_dlmsw.obj &
@@ -2398,6 +2399,7 @@ MONODLL_OBJECTS =  &
 	$(OBJS)\monodll_regconf.obj &
 	$(OBJS)\monodll_registry.obj &
 	$(OBJS)\monodll_snglinst.obj &
+	$(OBJS)\monodll_stackwalk.obj &
 	$(OBJS)\monodll_stdpaths.obj &
 	$(OBJS)\monodll_thread.obj &
 	$(OBJS)\monodll_utils.obj &
@@ -2495,6 +2497,7 @@ MONOLIB_OBJECTS =  &
 	$(OBJS)\monolib_zstream.obj &
 	$(OBJS)\monolib_basemsw.obj &
 	$(OBJS)\monolib_crashrpt.obj &
+	$(OBJS)\monolib_debughlp.obj &
 	$(OBJS)\monolib_dde.obj &
 	$(OBJS)\monolib_dir.obj &
 	$(OBJS)\monolib_dlmsw.obj &
@@ -2502,6 +2505,7 @@ MONOLIB_OBJECTS =  &
 	$(OBJS)\monolib_regconf.obj &
 	$(OBJS)\monolib_registry.obj &
 	$(OBJS)\monolib_snglinst.obj &
+	$(OBJS)\monolib_stackwalk.obj &
 	$(OBJS)\monolib_stdpaths.obj &
 	$(OBJS)\monolib_thread.obj &
 	$(OBJS)\monolib_utils.obj &
@@ -2600,6 +2604,7 @@ BASEDLL_OBJECTS =  &
 	$(OBJS)\basedll_zstream.obj &
 	$(OBJS)\basedll_basemsw.obj &
 	$(OBJS)\basedll_crashrpt.obj &
+	$(OBJS)\basedll_debughlp.obj &
 	$(OBJS)\basedll_dde.obj &
 	$(OBJS)\basedll_dir.obj &
 	$(OBJS)\basedll_dlmsw.obj &
@@ -2607,6 +2612,7 @@ BASEDLL_OBJECTS =  &
 	$(OBJS)\basedll_regconf.obj &
 	$(OBJS)\basedll_registry.obj &
 	$(OBJS)\basedll_snglinst.obj &
+	$(OBJS)\basedll_stackwalk.obj &
 	$(OBJS)\basedll_stdpaths.obj &
 	$(OBJS)\basedll_thread.obj &
 	$(OBJS)\basedll_utils.obj &
@@ -2689,6 +2695,7 @@ BASELIB_OBJECTS =  &
 	$(OBJS)\baselib_zstream.obj &
 	$(OBJS)\baselib_basemsw.obj &
 	$(OBJS)\baselib_crashrpt.obj &
+	$(OBJS)\baselib_debughlp.obj &
 	$(OBJS)\baselib_dde.obj &
 	$(OBJS)\baselib_dir.obj &
 	$(OBJS)\baselib_dlmsw.obj &
@@ -2696,6 +2703,7 @@ BASELIB_OBJECTS =  &
 	$(OBJS)\baselib_regconf.obj &
 	$(OBJS)\baselib_registry.obj &
 	$(OBJS)\baselib_snglinst.obj &
+	$(OBJS)\baselib_stackwalk.obj &
 	$(OBJS)\baselib_stdpaths.obj &
 	$(OBJS)\baselib_thread.obj &
 	$(OBJS)\baselib_utils.obj &
@@ -4103,6 +4111,9 @@ $(OBJS)\monodll_basemsw.obj :  .AUTODEPEND ..\..\src\msw\basemsw.cpp
 $(OBJS)\monodll_crashrpt.obj :  .AUTODEPEND ..\..\src\msw\crashrpt.cpp
 	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_debughlp.obj :  .AUTODEPEND ..\..\src\msw\debughlp.cpp
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_dde.obj :  .AUTODEPEND ..\..\src\msw\dde.cpp
 	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -4122,6 +4133,9 @@ $(OBJS)\monodll_registry.obj :  .AUTODEPEND ..\..\src\msw\registry.cpp
 	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_snglinst.obj :  .AUTODEPEND ..\..\src\msw\snglinst.cpp
+	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_stackwalk.obj :  .AUTODEPEND ..\..\src\msw\stackwalk.cpp
 	$(CXX) -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_stdpaths.obj :  .AUTODEPEND ..\..\src\msw\stdpaths.cpp
@@ -5826,6 +5840,9 @@ $(OBJS)\monolib_basemsw.obj :  .AUTODEPEND ..\..\src\msw\basemsw.cpp
 $(OBJS)\monolib_crashrpt.obj :  .AUTODEPEND ..\..\src\msw\crashrpt.cpp
 	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_debughlp.obj :  .AUTODEPEND ..\..\src\msw\debughlp.cpp
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_dde.obj :  .AUTODEPEND ..\..\src\msw\dde.cpp
 	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
@@ -5845,6 +5862,9 @@ $(OBJS)\monolib_registry.obj :  .AUTODEPEND ..\..\src\msw\registry.cpp
 	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_snglinst.obj :  .AUTODEPEND ..\..\src\msw\snglinst.cpp
+	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_stackwalk.obj :  .AUTODEPEND ..\..\src\msw\stackwalk.cpp
 	$(CXX) -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_stdpaths.obj :  .AUTODEPEND ..\..\src\msw\stdpaths.cpp
@@ -7549,6 +7569,9 @@ $(OBJS)\basedll_basemsw.obj :  .AUTODEPEND ..\..\src\msw\basemsw.cpp
 $(OBJS)\basedll_crashrpt.obj :  .AUTODEPEND ..\..\src\msw\crashrpt.cpp
 	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
+$(OBJS)\basedll_debughlp.obj :  .AUTODEPEND ..\..\src\msw\debughlp.cpp
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+
 $(OBJS)\basedll_dde.obj :  .AUTODEPEND ..\..\src\msw\dde.cpp
 	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
@@ -7568,6 +7591,9 @@ $(OBJS)\basedll_registry.obj :  .AUTODEPEND ..\..\src\msw\registry.cpp
 	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_snglinst.obj :  .AUTODEPEND ..\..\src\msw\snglinst.cpp
+	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+
+$(OBJS)\basedll_stackwalk.obj :  .AUTODEPEND ..\..\src\msw\stackwalk.cpp
 	$(CXX) -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_stdpaths.obj :  .AUTODEPEND ..\..\src\msw\stdpaths.cpp
@@ -7777,6 +7803,9 @@ $(OBJS)\baselib_basemsw.obj :  .AUTODEPEND ..\..\src\msw\basemsw.cpp
 $(OBJS)\baselib_crashrpt.obj :  .AUTODEPEND ..\..\src\msw\crashrpt.cpp
 	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
+$(OBJS)\baselib_debughlp.obj :  .AUTODEPEND ..\..\src\msw\debughlp.cpp
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+
 $(OBJS)\baselib_dde.obj :  .AUTODEPEND ..\..\src\msw\dde.cpp
 	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
@@ -7796,6 +7825,9 @@ $(OBJS)\baselib_registry.obj :  .AUTODEPEND ..\..\src\msw\registry.cpp
 	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_snglinst.obj :  .AUTODEPEND ..\..\src\msw\snglinst.cpp
+	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+
+$(OBJS)\baselib_stackwalk.obj :  .AUTODEPEND ..\..\src\msw\stackwalk.cpp
 	$(CXX) -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_stdpaths.obj :  .AUTODEPEND ..\..\src\msw\stdpaths.cpp

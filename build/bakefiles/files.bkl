@@ -73,12 +73,15 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="BASE_WIN32_SRC" hints="files">
     src/msw/basemsw.cpp
     src/msw/crashrpt.cpp
+    src/msw/debughlp.cpp
     src/msw/dde.cpp
     src/msw/dir.cpp
+    src/msw/dlmsw.cpp
     src/msw/mimetype.cpp
     src/msw/regconf.cpp
     src/msw/registry.cpp
     src/msw/snglinst.cpp
+    src/msw/stackwalk.cpp
     src/msw/stdpaths.cpp
     src/msw/thread.cpp
     src/msw/utils.cpp
@@ -98,8 +101,10 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/chkconf.h
     wx/msw/crashrpt.h
     wx/msw/dde.h
+    wx/msw/debughlp.h
     wx/msw/gccpriv.h
     wx/msw/mimetype.h
+    wx/msw/stackwalk.h
     wx/msw/winundef.h
     wx/msw/wrapcctl.h
     wx/msw/wrapwin.h
@@ -346,6 +351,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/snglinst.h
     wx/sstream.h
     wx/stack.h
+    wx/stackwalk.h
     wx/stdpaths.h
     wx/stockitem.h
     wx/stopwatch.h

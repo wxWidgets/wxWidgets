@@ -162,6 +162,7 @@ wx/scopeguard.h
 wx/snglinst.h
 wx/sstream.h
 wx/stack.h
+wx/stackwalk.h
 wx/stdpaths.h
 wx/stockitem.h
 wx/stopwatch.h
@@ -196,8 +197,10 @@ wx/msw/apptbase.h
 wx/msw/chkconf.h
 wx/msw/crashrpt.h
 wx/msw/dde.h
+wx/msw/debughlp.h
 wx/msw/gccpriv.h
 wx/msw/mimetype.h
+wx/msw/stackwalk.h
 wx/msw/winundef.h
 wx/msw/wrapcctl.h
 wx/msw/wrapwin.h
