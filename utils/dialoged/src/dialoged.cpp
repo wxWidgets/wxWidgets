@@ -23,6 +23,10 @@
 #include "wx/wx.h"
 #endif
 
+#if !wxUSE_WX_RESOURCES 
+#error "Dialog editor requires wxUSE_WX_RESOURCES" 
+#endif // wxUSE_WX_RESOURCES 
+
 #include "dialoged.h"
 
 #if !wxUSE_PROPSHEET
