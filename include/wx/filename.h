@@ -359,7 +359,8 @@ public:
     const wxArrayString& GetDirs() const        { return m_dirs; }
 
     // flags are combination of wxPATH_GET_XXX flags
-    wxString GetPath(int flags = 0, wxPathFormat format = wxPATH_NATIVE) const;
+    wxString GetPath(int flags = wxPATH_GET_VOLUME,
+                     wxPathFormat format = wxPATH_NATIVE) const;
 
     // Replace current path with this one
     void SetPath( const wxString &path, wxPathFormat format = wxPATH_NATIVE );

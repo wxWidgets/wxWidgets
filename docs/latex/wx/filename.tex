@@ -378,7 +378,7 @@ Returns the name part of the filename.
 
 \membersection{wxFileName::GetPath}\label{wxfilenamegetpath}
 
-\constfunc{wxString}{GetPath}{\param{int }{flags = $0$}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
+\constfunc{wxString}{GetPath}{\param{int }{flags = {\tt wxPATH\_GET\_VOLUME}}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
 
 Returns the path part of the filename (without the name or extension). The
 possible flags values are:
@@ -386,7 +386,8 @@ possible flags values are:
 \twocolwidtha{5cm}
 \begin{twocollist}\itemsep=0pt
 \twocolitem{{\bf wxPATH\_GET\_VOLUME}}{Return the path with the volume (does
-nothing for the filename formats without volumes)}
+nothing for the filename formats without volumes), otherwise the path without
+volume part is returned.}
 \twocolitem{{\bf wxPATH\_GET\_SEPARATOR}}{Return the path with the trailing
 separator, if this flag is not given there will be no separator at the end of
 the path.}
