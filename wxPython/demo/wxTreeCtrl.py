@@ -83,8 +83,8 @@ class TestTreeCtrlPanel(wxPanel):
     def OnRightClick(self, event):
         pt = event.GetPosition();
         item, flags = self.tree.HitTest(pt)
-        self.log.WriteText("OnRightClick: %s, %s\n" % (self.tree.GetItemText(item),
-                                                       type(item)))
+        self.log.WriteText("OnRightClick: %s, %s, %s\n" %
+                           (self.tree.GetItemText(item), type(item), item.__class__))
         self.tree.SelectItem(item)
 
 
