@@ -305,6 +305,10 @@ void wxApp::MacNewFile()
 void wxApp::MacReopenApp()
 {
     // eventually check for open docs, if none, call MacNewFile
+    wxTopLevelWindowMac* topLevelWindow = wxDynamicCast(GetTopWindow(), wxTopLevelWindowMac);
+
+    if (topLevelWindow && topLevelWindow->IsIconized())
+        topLevelWindow->Iconize(false);
 }
 
 //----------------------------------------------------------------------
