@@ -276,11 +276,7 @@ static bool wxQueryWMspecSupport(Display *display, Window rootWnd, Atom feature)
     
     // Is the WM ICCCM supporting?
     XGetWindowProperty(display, rootWnd,
-#ifdef __VMS
                        _NET_SUPPORTING_WM_CHECK, 0, LONG_MAX,
-#else
-                       _NET_SUPPORTING_WM_CHECK, 0, UINT_MAX,
-#endif
                        False, XA_WINDOW, &type, &format, &nwins,
                        &after, (unsigned char **)&wins);
     if ( type != XA_WINDOW || nwins <= 0 || wins[0] == None )
@@ -289,11 +285,7 @@ static bool wxQueryWMspecSupport(Display *display, Window rootWnd, Atom feature)
 
     // Query for supported features:
     XGetWindowProperty(display, rootWnd,
-#ifdef __VMS
-		       _NET_SUPPORTED, 0, LONG_MAX,
-#else
-		       _NET_SUPPORTED, 0, UINT_MAX,
-#endif
+                       _NET_SUPPORTED, 0, LONG_MAX,
                        False, XA_ATOM, &type, &format, &natoms,
                        &after, (unsigned char **)&atoms);
     if ( type != XA_ATOM || atoms == NULL )
