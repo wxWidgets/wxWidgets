@@ -1478,7 +1478,7 @@ public:
     void SetCellBitmap(wxBitmap *WXUNUSED(bitmap), int WXUNUSED(row), int WXUNUSED(col))
     { }
     void SetDividerPen(const wxPen& WXUNUSED(pen)) { }
-    wxPen& GetDividerPen() const { return wxNullPen; }
+    wxPen& GetDividerPen() const;
     void OnActivate(bool WXUNUSED(active)) {}
 
     // ******** End of compatibility functions **********

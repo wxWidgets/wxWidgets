@@ -624,7 +624,7 @@ void wxGridCellTextEditor::HandleReturn( wxKeyEvent&
 {
 #if defined(__WXMOTIF__) || defined(__WXGTK__)
     // wxMotif needs a little extra help...
-    long pos = Text()->GetInsertionPoint();
+    size_t pos = (size_t)( Text()->GetInsertionPoint() );
     wxString s( Text()->GetValue() );
     s = s.Left(pos) + "\n" + s.Mid(pos);
     Text()->SetValue(s);
@@ -7604,6 +7604,12 @@ wxSize wxGrid::DoGetBestSize() const
 void wxGrid::Fit()
 {
     AutoSize();
+}
+
+
+wxPen& wxGrid::GetDividerPen() const
+{
+    return wxNullPen;
 }
 
 // ----------------------------------------------------------------------------
