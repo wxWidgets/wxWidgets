@@ -180,6 +180,23 @@ void csFrame::OnIdle(wxIdleEvent& event)
     {
         wxLayoutAlgorithm layout;
         layout.LayoutMDIFrame(this);
+
+#if defined(__WXMSW__) && defined(__WIN95__)
+        // Need to do something else to get it to refresh properly
+        // when a client frame is first displayed; moving the client
+        // window doesn't cause the proper refresh. Just refreshing the
+        // client doesn't work (presumably because it's clipping the
+        // children).
+        // TODO: how to put this fix in wxWindows, and not the app.
+        // How about at least having a wxWindow::RedrawWindow?
+        wxMDIChildFrame* childFrame = GetActiveChild();
+        if (childFrame)
+        {
+            HWND hWnd = (HWND) childFrame->GetHWND();
+            ::RedrawWindow(hWnd, NULL, NULL, RDW_FRAME|RDW_ALLCHILDREN|RDW_INVALIDATE );
+
+        }
+#endif
     }
 }
 

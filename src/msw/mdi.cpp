@@ -996,7 +996,7 @@ bool wxMDIChildFrame::HandleMDIActivate(long WXUNUSED(activate),
     }
     else
     {
-        // we have nothing to with it
+        // we have nothing to do with it
         return FALSE;
     }
 
@@ -1076,6 +1076,10 @@ void wxMDIChildFrame::MSWDestroyWindow()
     HWND oldHandle = (HWND)GetHWND();
     SendMessage(GetWinHwnd(parent->GetClientWindow()), WM_MDIDESTROY,
                 (WPARAM)oldHandle, 0);
+
+    if (parent->GetActiveChild() == (wxMDIChildFrame*) NULL)
+        ResetWindowStyle((void*) NULL);
+
     invalidHandle = 0;
 
     if (m_hMenu)
