@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        ffile.h
+// Name:        wx/ffile.h
 // Purpose:     wxFFile - encapsulates "FILE *" stream
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -15,6 +15,8 @@
 #ifdef __GNUG__
     #pragma interface "ffile.h"
 #endif
+
+#include "wx/defs.h"        // for wxUSE_FFILE
 
 #if wxUSE_FFILE
 
