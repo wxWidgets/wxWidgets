@@ -69,10 +69,15 @@ def runTest(frame, nb, log):
 
 
 overview = """\
-The wxTimer class allows you to execute code at specified intervals. To use it, derive a new class and override the Notify member to perform the required action. Start with Start, stop with Stop, it's as simple as that.
+The wxTimer class allows you to execute code at specified intervals.
 
-wxTimer()
-------------------
-
-Constructor.
 """
+
+
+
+
+
+
+
+
+
