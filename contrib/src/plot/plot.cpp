@@ -229,7 +229,7 @@ void wxPlotArea::OnMouse( wxMouseEvent &event )
     x += view_x;
     y += view_y;
     
-    wxNode *node = m_owner->m_curves.GetFirst();
+    wxList::compatibility_iterator node = m_owner->m_curves.GetFirst();
     while (node)
     {
         wxPlotCurve *curve = (wxPlotCurve*)node->GetData();
@@ -413,7 +413,7 @@ void wxPlotArea::OnPaint( wxPaintEvent &WXUNUSED(event) )
         }
 */
         
-        wxNode *node = m_owner->m_curves.GetFirst();
+        wxList::compatibility_iterator node = m_owner->m_curves.GetFirst();
         while (node)
         {
             wxPlotCurve *curve = (wxPlotCurve*) node->GetData();
@@ -810,7 +810,7 @@ size_t wxPlotWindow::GetCount()
 
 wxPlotCurve *wxPlotWindow::GetAt( size_t n )
 {
-    wxNode *node = m_curves.Item( n );
+    wxList::compatibility_iterator node = m_curves.Item( n );
     if (!node)
         return (wxPlotCurve*) NULL;
         
@@ -833,7 +833,7 @@ void wxPlotWindow::SetCurrent( wxPlotCurve* current )
 
 void wxPlotWindow::Delete( wxPlotCurve* curve )
 {
-    wxNode *node = m_curves.Find( curve );
+    wxList::compatibility_iterator node = m_curves.Find( curve );
     if (!node) return;
     
     m_curves.DeleteObject( curve );
@@ -856,7 +856,7 @@ void wxPlotWindow::Add( wxPlotOnOffCurve *curve )
 
 void wxPlotWindow::Delete( wxPlotOnOffCurve* curve )
 {
-    wxNode *node = m_onOffCurves.Find( curve );
+    wxList::compatibility_iterator node = m_onOffCurves.Find( curve );
     if (!node) return;
     
     m_onOffCurves.DeleteObject( curve );
@@ -869,7 +869,7 @@ size_t wxPlotWindow::GetOnOffCurveCount()
 
 wxPlotOnOffCurve *wxPlotWindow::GetOnOffCurveAt( size_t n )
 {
-    wxNode *node = m_onOffCurves.Item( n );
+    wxList::compatibility_iterator node = m_onOffCurves.Item( n );
     if (!node)
         return (wxPlotOnOffCurve*) NULL;
         
@@ -950,7 +950,7 @@ void wxPlotWindow::SetZoom( double zoom )
     GetViewStart( &view_x, &view_y );
     
     wxInt32 max = 0;
-    wxNode *node = m_curves.GetFirst();
+    wxList::compatibility_iterator node = m_curves.GetFirst();
     while (node)
     {
         wxPlotCurve *curve = (wxPlotCurve*) node->GetData();
@@ -970,7 +970,7 @@ void wxPlotWindow::SetZoom( double zoom )
 void wxPlotWindow::ResetScrollbar()
 {
     wxInt32 max = 0;
-    wxNode *node = m_curves.GetFirst();
+    wxList::compatibility_iterator node = m_curves.GetFirst();
     while (node)
     {
         wxPlotCurve *curve = (wxPlotCurve*) node->GetData();

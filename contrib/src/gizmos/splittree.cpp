@@ -717,7 +717,7 @@ void wxSplitterScrolledWindow::OnScroll(wxScrollWinEvent& event)
     }
 
     // Find targets in splitter window and send the event to them
-    wxWindowListNode* node = GetChildren().GetFirst();
+    wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
     while (node)
     {
         wxWindow* child = (wxWindow*) node->GetData();

@@ -186,7 +186,7 @@ wxMultiCellSizer::wxMultiCellSizer( int rows, int cols)
 //---------------------------------------------------------------------------
 wxMultiCellSizer::~wxMultiCellSizer()
 {
-	m_children.DeleteContents(TRUE);
+	WX_CLEAR_LIST(wxSizerItemList, m_children);
 
 	free(m_maxHeight);
 	free(m_maxWidth);
@@ -296,8 +296,8 @@ void wxMultiCellSizer::RecalcSizes()
 	wxPoint c_point;
 	wxSize  c_size;
 
-	wxSizerItemList::Node 	*current = m_children.GetFirst();
-	while (current != NULL)
+	wxSizerItemList::compatibility_iterator 	current = m_children.GetFirst();
+	while (current)
 	{
 		wxSizerItem 	*item = current->GetData();
 
@@ -400,7 +400,7 @@ void wxMultiCellSizer :: GetMinimums()
 		m_weights[x]->SetWidth(0);
 	}
 
-	wxSizerItemList::Node 	*node = m_children.GetFirst();
+	wxSizerItemList::compatibility_iterator 	node = m_children.GetFirst();
 	while (node)
 	{
 		wxSizerItem 	*item = node->GetData();

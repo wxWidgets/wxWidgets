@@ -292,13 +292,13 @@ bool wxAnimationPlayer::PlayFrame()
 // Clear the wxImage cache
 void wxAnimationPlayer::ClearCache()
 {
-    wxNode* node = m_frames.GetFirst();
+    wxList::compatibility_iterator node = m_frames.GetFirst();
     while (node)
     {
-        wxNode* next = node->GetNext();
+        wxList::compatibility_iterator next = node->GetNext();
         wxBitmap* bitmap = (wxBitmap*) node->GetData();
         delete bitmap;
-        delete node;
+        m_frames.Erase(node);
         node = next;
     }
 }
@@ -369,7 +369,7 @@ void wxAnimationPlayer::DrawFrame(int frame, wxDC& dc, const wxPoint& pos)
 {
     wxASSERT_MSG( (m_animation != NULL), _T("Animation not present in wxAnimationPlayer"));
     wxASSERT_MSG( (m_frames.GetCount() != 0), _T("Animation cache not present in wxAnimationPlayer"));
-    wxASSERT_MSG( (m_frames.Item(frame) != (wxNode*) NULL), _T("Image not present in wxAnimationPlayer::DrawFrame"));
+    wxASSERT_MSG( !!m_frames.Item(frame), _T("Image not present in wxAnimationPlayer::DrawFrame"));
 
     wxBitmap* bitmap = (wxBitmap*) m_frames.Item(frame)->GetData() ;
 
