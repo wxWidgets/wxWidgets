@@ -2428,10 +2428,12 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
 #else
             // this would be the preferred version for fast drawing controls
 
-            if( UMAGetSystemVersion() < 0x1030 || !m_peer->IsCompositing() )
-                Update() ;
-            else
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
+            if( UMAGetSystemVersion() >= 0x1030 && m_peer->IsCompositing() )
                 HIViewRender(m_peer->GetControlRef()) ;
+            else
+#endif
+                Update() ;
 #endif
         }
         // as the native control might be not a 0/0 wx window coordinates, we have to offset
@@ -2446,10 +2448,13 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
 #else
         // this would be the preferred version for fast drawing controls       
 
-        if( UMAGetSystemVersion() < 0x1030 || !m_peer->IsCompositing()  )
-            Update() ;
-        else
-            HIViewRender(m_peer->GetControlRef()) ;
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
+            if( UMAGetSystemVersion() >= 0x1030 && m_peer->IsCompositing() )
+                HIViewRender(m_peer->GetControlRef()) ;
+            else
+#endif
+                Update() ;
+
 #endif
 	}
 	else
