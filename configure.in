@@ -3071,10 +3071,12 @@ if test "$wxUSE_THREADS" = "yes" ; then
   dnl defined, we do it by directly assigned
   dnl PTHREAD_MUTEX_RECURSIVE_MUTEX_INITIALIZER_NP to attr
 
-  dnl we need to define _XOPEN_SOURCE=500 to get PTHREAD_MUTEX_RECURSIVE
-  dnl with glibc 2.1+, it probably shouldn't hurt elsewhere?
+  dnl we need _GNU_SOURCE to get PTHREAD_MUTEX_RECURSIVE with glibc 2.1+
+  dnl (strictly speaking we only need _XOPEN_SOURCE=500 but just defining
+  dnl this disables _BSD_SOURCE which breaks libtiff compilation, so it is
+  dnl simpler to just define _GNU_SOURCE to get everything)
   if test "x$wx_lib_glibc21" = "xyes"; then
-      CPPFLAGS="$CPPFLAGS -D_XOPEN_SOURCE=500"
+      CPPFLAGS="$CPPFLAGS -D_GNU_SOURCE"
   fi
 
   AC_CACHE_CHECK([for pthread_mutexattr_t], wx_cv_type_pthread_mutexattr_t,

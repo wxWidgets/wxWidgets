@@ -14809,8 +14809,8 @@ EOF
   fi
 
                 
-      if test "x$wx_lib_glibc21" = "xyes"; then
-      CPPFLAGS="$CPPFLAGS -D_XOPEN_SOURCE=500"
+          if test "x$wx_lib_glibc21" = "xyes"; then
+      CPPFLAGS="$CPPFLAGS -D_GNU_SOURCE"
   fi
 
   echo $ac_n "checking for pthread_mutexattr_t""... $ac_c" 1>&6
