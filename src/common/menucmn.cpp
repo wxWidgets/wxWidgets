@@ -501,7 +501,7 @@ bool wxMenuBarBase::Insert(size_t pos, wxMenu *menu,
 {
     if ( pos == m_menus.GetCount() )
     {
-        return Append(menu, title);
+        return wxMenuBarBase::Append(menu, title);
     }
     else
     {

@@ -317,6 +317,9 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
     if ( !GtkAppend(menu, title) )
         return FALSE;
 
+    if (pos+1 >= m_menus.GetCount())
+        return TRUE;
+
     GtkMenuShell *menu_shell = GTK_MENU_SHELL(m_factory->widget);
     gpointer data = g_list_last(menu_shell->children)->data;
     menu_shell->children = g_list_remove(menu_shell->children, data);
@@ -335,9 +338,6 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
 
 wxMenu *wxMenuBar::Replace(size_t pos, wxMenu *menu, const wxString& title)
 {
-    if ( !wxMenuBarBase::Replace(pos, menu, title) )
-        return (wxMenu*) NULL;
-
     // remove the old item and insert a new one
     wxMenu *menuOld = Remove(pos);
     if ( menuOld && !Insert(pos, menu, title) )

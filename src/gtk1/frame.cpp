@@ -899,33 +899,51 @@ void wxFrame::SetMenuBar( wxMenuBar *menuBar )
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
     wxASSERT_MSG( (m_wxwindow != NULL), wxT("invalid frame") );
 
+    if (menuBar == m_frameMenuBar)
+        return;
+
+    if (m_frameMenuBar)
+    {
+        m_frameMenuBar->UnsetInvokingWindow( this );
+
+        if (m_frameMenuBar->GetWindowStyle() & wxMB_DOCKABLE)
+        {
+            gtk_signal_disconnect_by_func( GTK_OBJECT(m_frameMenuBar->m_widget),
+                GTK_SIGNAL_FUNC(gtk_menu_attached_callback), (gpointer)this );
+
+            gtk_signal_disconnect_by_func( GTK_OBJECT(m_frameMenuBar->m_widget),
+                GTK_SIGNAL_FUNC(gtk_menu_detached_callback), (gpointer)this );
+        }
+        
+        gtk_container_remove( GTK_CONTAINER(m_mainWidget), m_frameMenuBar->m_widget );
+        gtk_widget_ref( m_frameMenuBar->m_widget );
+        gtk_widget_unparent( m_frameMenuBar->m_widget );
+    }
+
     m_frameMenuBar = menuBar;
 
     if (m_frameMenuBar)
     {
         m_frameMenuBar->SetInvokingWindow( this );
 
-        if (m_frameMenuBar->GetParent() != this)
-        {
-            m_frameMenuBar->SetParent(this);
-            gtk_pizza_put( GTK_PIZZA(m_mainWidget),
+        m_frameMenuBar->SetParent(this);
+        gtk_pizza_put( GTK_PIZZA(m_mainWidget),
                 m_frameMenuBar->m_widget,
                 m_frameMenuBar->m_x,
                 m_frameMenuBar->m_y,
                 m_frameMenuBar->m_width,
                 m_frameMenuBar->m_height );
 
-            if (menuBar->GetWindowStyle() & wxMB_DOCKABLE)
-            {
-                gtk_signal_connect( GTK_OBJECT(menuBar->m_widget), "child_attached",
-                    GTK_SIGNAL_FUNC(gtk_menu_attached_callback), (gpointer)this );
+        if (menuBar->GetWindowStyle() & wxMB_DOCKABLE)
+        {
+            gtk_signal_connect( GTK_OBJECT(menuBar->m_widget), "child_attached",
+                GTK_SIGNAL_FUNC(gtk_menu_attached_callback), (gpointer)this );
 
-                gtk_signal_connect( GTK_OBJECT(menuBar->m_widget), "child_detached",
-                    GTK_SIGNAL_FUNC(gtk_menu_detached_callback), (gpointer)this );
-            }
-
-            m_frameMenuBar->Show( TRUE );
+            gtk_signal_connect( GTK_OBJECT(menuBar->m_widget), "child_detached",
+                GTK_SIGNAL_FUNC(gtk_menu_detached_callback), (gpointer)this );
         }
+
+        m_frameMenuBar->Show( TRUE );
     }
 
     /* resize window in OnInternalIdle */
