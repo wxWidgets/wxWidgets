@@ -1931,7 +1931,7 @@ AC_SUBST(LIBS)
 
 dnl create the configuration header file from the template
 SETUPH_DIR=include/wx/${TOOLKIT_DIR}
-mkdir -p ${SETUPH_DIR}
+AC_SUBST(SETUPH_DIR)
 AM_CONFIG_HEADER(${SETUPH_DIR}/setup.h:include/wx/unix/setup.h.in)
 
 dnl MAKE_SET will be replaced with "MAKE=..." or nothing if make sets MAKE
@@ -2002,5 +2002,11 @@ AC_OUTPUT([
             samples/wxpoem/Makefile
             samples/wxsocket/Makefile
           ],
-          [chmod +x wx-config], [SETUPH_DIR=${SETUPH_DIR}])
+          [
+            chmod +x wx-config
+          ],
+          [
+            SETUPH_DIR=${SETUPH_DIR}
+          ]
+         )
 

@@ -8634,7 +8634,7 @@ LIBTOOL="$LIBTOOL --silent"
 
 
 SETUPH_DIR=include/wx/${TOOLKIT_DIR}
-mkdir -p ${SETUPH_DIR}
+
 
 
 
@@ -8921,6 +8921,7 @@ s%@DOCS_SUBDIRS@%$DOCS_SUBDIRS%g
 s%@SAMPLES_SUBDIRS@%$SAMPLES_SUBDIRS%g
 s%@USER_SUBDIRS@%$USER_SUBDIRS%g
 s%@EXTRA_LIBS@%$EXTRA_LIBS%g
+s%@SETUPH_DIR@%$SETUPH_DIR%g
 
 CEOF
 EOF
@@ -9189,11 +9190,16 @@ fi; done
 EOF
 cat >> $CONFIG_STATUS <<EOF
 
-SETUPH_DIR=${SETUPH_DIR}
+
+            SETUPH_DIR=${SETUPH_DIR}
+          
+         
 EOF
 cat >> $CONFIG_STATUS <<\EOF
 test -z "$CONFIG_HEADERS" || echo timestamp > ${SETUPH_DIR}/stamp-h
-chmod +x wx-config
+
+            chmod +x wx-config
+          
 exit 0
 EOF
 chmod +x $CONFIG_STATUS

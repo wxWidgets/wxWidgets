@@ -9,7 +9,7 @@ SUFFIXES = .cpp
 DEFS = $(TOOLKIT_DEF) $(WXDEBUG_DEFINE)
 LIBS = $(GUILIBS)
 
-VPATH = .:$(srcdir)/common:$(srcdir)/@TOOLKIT_DIR@:$(srcdir)/generic:$(EXTRA_VPATH)
+VPATH = .:${srcdir}:$(srcdir)/common:$(srcdir)/@TOOLKIT_DIR@:$(srcdir)/generic:$(EXTRA_VPATH)
 
 lib_LTLIBRARIES = libwx_@WX_LIBRARY@.la
 
