@@ -189,6 +189,9 @@ void Font::Create(const char *faceName, int characterSet, int size, bool bold, b
                     false,
                     stc2wx(faceName),
                     encoding);
+#ifdef __WXMAC__
+	 ((wxFont*)id)->SetNoAntiAliasing( true ) ;
+#endif
 }
 
 
