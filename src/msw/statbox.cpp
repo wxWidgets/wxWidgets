@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:       wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -113,23 +113,10 @@ wxSize wxStaticBox::DoGetBestSize()
     return wxSize(wBox, hBox);
 }
 
-void wxStaticBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
-{
-    wxControl::DoSetSize(x, y, width, height, sizeFlags);
-
-    return;
-
-    // the static box should always be on the bottom of the Z-order, otherwise
-    // it may hide controls which are positioned inside it
-    if ( !::SetWindowPos(GetHwnd(), HWND_TOP, 0, 0, 0, 0,
-                         SWP_NOMOVE | SWP_NOSIZE) )
-    {
-        wxLogLastError(_T("SetWindowPos"));
-    }
-}
-
 WXHBRUSH wxStaticBox::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-            WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
+                                 WXUINT message,
+                                 WXWPARAM wParam,
+                                 WXLPARAM lParam)
 {
 #if wxUSE_CTL3D
   if ( m_useCtl3D )
@@ -174,9 +161,9 @@ void wxStaticBox::OnEraseBackground(wxEraseEvent& event)
     // Alternatively, just make sure that wxStaticBox is always at the back! There are probably
     // few other circumstances where it matters about child clipping. But what about painting onto
     // to panel, inside a groupbox? Doesn't appear, because the box wipes it out.
-  wxWindow *parent = 0; //GetParent();
-  if ( parent && parent->GetHWND() && (::GetWindowLong((HWND) parent->GetHWND(), GWL_STYLE) & WS_CLIPCHILDREN) )
-  {
+    wxWindow *parent = GetParent();
+    if ( parent && parent->GetHWND() && (::GetWindowLong((HWND) parent->GetHWND(), GWL_STYLE) & WS_CLIPCHILDREN) )
+    {
         // TODO: May in fact need to generate a paint event for inside this
         // control's rectangle, otherwise all controls are going to be clipped -
         // ugh.
@@ -189,11 +176,11 @@ void wxStaticBox::OnEraseBackground(wxEraseEvent& event)
         ::FillRect ((HDC) event.GetDC()->GetHDC(), &rect, hBrush);
         ::DeleteObject(hBrush);
         ::SetMapMode((HDC) event.GetDC()->GetHDC(), mode);
-  }
-  else
-  {
-    event.Skip();
-  }
+    }
+    else
+    {
+        event.Skip();
+    }
 }
 
 long wxStaticBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)

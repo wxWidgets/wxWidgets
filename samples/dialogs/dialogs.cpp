@@ -78,6 +78,7 @@ bool MyApp::OnInit(void)
   file_menu->AppendSeparator();
   file_menu->Append(DIALOGS_MESSAGE_BOX, "&Message box");
   file_menu->Append(DIALOGS_TEXT_ENTRY,  "Text &entry");
+  file_menu->Append(DIALOGS_NUM_ENTRY, "&Numeric entry\tCtrl-N");
   file_menu->Append(DIALOGS_SINGLE_CHOICE,  "&Single choice");
   file_menu->Append(DIALOGS_EXT_DIALOG,  "&Extended dialog");
   file_menu->AppendSeparator();
@@ -237,6 +238,27 @@ void MyFrame::MessageBox(wxCommandEvent& WXUNUSED(event) )
   dialog.ShowModal();
 }
 
+void MyFrame::NumericEntry(wxCommandEvent& WXUNUSED(event) )
+{
+    long res = wxGetNumberFromUser("", "Enter a number:", "Numeric input test",
+                                   50, 0, 100, this);
+
+    wxString msg;
+    int icon;
+    if ( res == -1 )
+    {
+        msg = "Invalid number entered or dialog cancelled.";
+        icon = wxICON_HAND;
+    }
+    else
+    {
+        msg.Printf("You've entered %lu", res);
+        icon = wxICON_INFORMATION;
+    }
+
+    wxMessageBox(msg, "Numeric test result", wxOK | icon, this);
+}
+
 void MyFrame::TextEntry(wxCommandEvent& WXUNUSED(event) )
 {
   wxTextEntryDialog dialog(this, "This is a small sample\nA long, long string to test out the text entrybox",
@@ -362,6 +384,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(DIALOGS_CHOOSE_FONT,                MyFrame::ChooseFont)
     EVT_MENU(DIALOGS_MESSAGE_BOX,                MyFrame::MessageBox)
     EVT_MENU(DIALOGS_TEXT_ENTRY,                MyFrame::TextEntry)
+    EVT_MENU(DIALOGS_NUM_ENTRY,                MyFrame::NumericEntry)
     EVT_MENU(DIALOGS_SINGLE_CHOICE,                MyFrame::SingleChoice)
     EVT_MENU(DIALOGS_FILE_OPEN,                    MyFrame::FileOpen)
     EVT_MENU(DIALOGS_FILE_SAVE,                    MyFrame::FileSave)

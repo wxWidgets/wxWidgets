@@ -682,37 +682,6 @@ void wxRadioBox::Command (wxCommandEvent & event)
     ProcessCommand (event);
 }
 
-long wxRadioBox::MSWWindowProc(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam)
-{
-    long rc = 0;
-    bool processed = FALSE;
-
-    switch ( msg )
-    {
-        case WM_NCHITTEST:
-            {
-                int xPos = LOWORD(lParam);  // horizontal position of cursor
-                int yPos = HIWORD(lParam);  // vertical position of cursor
-
-                ScreenToClient(&xPos, &yPos);
-
-                // Make sure you can drag by the top of the groupbox, but let
-                // other (enclosed) controls get mouse events also
-                if ( yPos < 10 )
-                {
-                    rc = HTCLIENT;
-                    processed = TRUE;
-                }
-            }
-            break;
-    }
-
-    if ( !processed )
-        rc = wxControl::MSWWindowProc(msg, wParam, lParam);
-
-    return rc;
-}
-
 void wxRadioBox::SubclassRadioButton(WXHWND hWndBtn)
 {
 #ifdef __WIN32__

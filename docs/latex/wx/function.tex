@@ -472,6 +472,33 @@ if (s)
 
 <wx/filedlg.h>
 
+\membersection{::wxGetNumberFromUser}\label{wxgetnumberfromuser}
+
+\func{long}{wxGetNumberFromUser}{
+    \param{const wxString\& }{message},
+    \param{const wxString\& }{prompt},
+    \param{const wxString\& }{caption},
+    \param{long }{value},
+    \param{long }{min = 0},
+    \param{long }{max = 100},
+    \param{wxWindow *}{parent = NULL},
+    \param{const wxPoint\& }{pos = wxDefaultPosition}}
+
+Shows a dialog asking the user for numeric input. The dialogs title is set to 
+{\it caption}, it contains a (possibly) multiline {\it message} above the
+single line {\it prompt} and the zone for entering the number.
+
+The number entered must be in the range {\it min}..{\it max} (both of which
+should be positive) and {\it value} is the initial value of it. If the user
+enters an invalid value or cancels the dialog, the function will return -1.
+
+Dialog is centered on its {\it parent} unless an explicit position is given in 
+{\it pos}.
+
+\wxheading{Include files}
+
+<wx/textdlg.h>
+
 \membersection{::wxGetTextFromUser}\label{wxgettextfromuser}
 
 \func{wxString}{wxGetTextFromUser}{\param{const wxString\& }{message}, \param{const wxString\& }{caption = ``Input text"},\\

@@ -6,21 +6,20 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_RADIOBOX_H_
 #define _WX_RADIOBOX_H_
 
 #ifdef __GNUG__
-#pragma interface "radiobox.h"
+    #pragma interface "radiobox.h"
 #endif
 
 #include "wx/control.h"
 
 WXDLLEXPORT_DATA(extern const wxChar*) wxRadioBoxNameStr;
 
-// List box item
 class WXDLLEXPORT wxBitmap;
 
 class WXDLLEXPORT wxRadioBox : public wxControl
@@ -29,13 +28,6 @@ class WXDLLEXPORT wxRadioBox : public wxControl
 
 public:
     wxRadioBox();
-
-#if WXWIN_COMPATIBILITY
-    wxRadioBox(wxWindow *parent, wxFunction func, const char *title,
-            int x = -1, int y = -1, int width = -1, int height = -1,
-            int n = 0, char **choices = NULL,
-            int majorDim = 0, long style = wxRA_HORIZONTAL, const char *name = wxRadioBoxNameStr);
-#endif // WXWIN_COMPATIBILITY
 
     wxRadioBox(wxWindow *parent, wxWindowID id, const wxString& title,
             const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
@@ -85,16 +77,23 @@ public:
     int GetNumberOfRowsOrCols() const { return m_noRowsOrCols; }
     void SetNumberOfRowsOrCols(int n) { m_noRowsOrCols = n; }
 
-    // Implementation
+    // implementation only from now on
+    // -------------------------------
+
     WXHWND *GetRadioButtons() const { return m_radioButtons; }
     bool ContainsHWND(WXHWND hWnd) const;
     void SendNotificationEvent();
 
-    long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
-
     // get the number of buttons per column/row
-    inline int GetNumVer() const;
-    inline int GetNumHor() const;
+    int GetNumVer() const;
+    int GetNumHor() const;
+
+#if WXWIN_COMPATIBILITY
+    wxRadioBox(wxWindow *parent, wxFunction func, const char *title,
+            int x = -1, int y = -1, int width = -1, int height = -1,
+            int n = 0, char **choices = NULL,
+            int majorDim = 0, long style = wxRA_HORIZONTAL, const char *name = wxRadioBoxNameStr);
+#endif // WXWIN_COMPATIBILITY
 
 protected:
     void SubclassRadioButton(WXHWND hWndBtn);

@@ -59,6 +59,7 @@ wx_include_HEADERS = \
  event.h \
  expr.h \
  extdlg.h \
+ ffile.h \
  file.h \
  fileconf.h \
  filedlg.h \

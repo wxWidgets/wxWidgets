@@ -164,10 +164,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     const wxChar *windowClass = _T("EDIT");
 
 #if wxUSE_RICHEDIT
-    // multiline edit controls are RICHEDITs except for those which have a
-    // simple border (VZ: why??)
-    if ( (m_windowStyle & wxTE_MULTILINE) &&
-         !(m_windowStyle & wxSIMPLE_BORDER) )
+    if ( m_windowStyle & wxTE_RICH )
     {
         msStyle |= ES_AUTOVSCROLL;
         m_isRich = TRUE;

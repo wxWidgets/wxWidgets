@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __DIALOGSH__
@@ -14,8 +14,9 @@
 
 // Define a new application type
 class MyApp: public wxApp
-{ public:
-    bool OnInit(void);
+{
+public:
+    bool OnInit();
 
     wxFont       m_canvasFont;
     wxColour     m_canvasTextColour;
@@ -23,15 +24,17 @@ class MyApp: public wxApp
 
 // Define a new frame type
 class MyFrame: public wxFrame
-{ public:
-    MyFrame(wxWindow *parent, const wxString& title, const wxPoint& pos,
-		const wxSize& size);
+{
+public:
+    MyFrame(wxWindow *parent, const wxString& title,
+            const wxPoint& pos, const wxSize& size);
 
     void ChooseColour(wxCommandEvent& event);
     void ChooseFont(wxCommandEvent& event);
     void MessageBox(wxCommandEvent& event);
     void SingleChoice(wxCommandEvent& event);
     void TextEntry(wxCommandEvent& event);
+    void NumericEntry(wxCommandEvent& event);
     void FileOpen(wxCommandEvent& event);
     void FileSave(wxCommandEvent& event);
     void DirChoose(wxCommandEvent& event);
@@ -42,20 +45,20 @@ class MyFrame: public wxFrame
     void ChooseColourGeneric(wxCommandEvent& event);
     void ChooseFontGeneric(wxCommandEvent& event);
 #endif
+
     void OnExit(wxCommandEvent& event);
-	
+
   DECLARE_EVENT_TABLE()
 };
 
 class MyCanvas: public wxScrolledWindow
 {
- public:
-  MyCanvas(wxWindow *parent):
-      wxScrolledWindow(parent)
-    {
-    }
-  void OnPaint(wxPaintEvent& event);
-DECLARE_EVENT_TABLE()
+public:
+    MyCanvas(wxWindow *parent) : wxScrolledWindow(parent) { }
+
+    void OnPaint(wxPaintEvent& event);
+
+    DECLARE_EVENT_TABLE()
 };
 
 
@@ -72,6 +75,7 @@ DECLARE_EVENT_TABLE()
 #define DIALOGS_DIR_CHOOSE                  10
 #define DIALOGS_TIP                         11
 #define DIALOGS_EXT_DIALOG                  12
+#define DIALOGS_NUM_ENTRY                   13
 
 #endif
 

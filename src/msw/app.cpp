@@ -204,15 +204,19 @@ bool wxApp::Initialize()
 
 #endif // __WIN95__
 
+#if wxUSE_OLE
+
+#ifdef __WIN16__
     // for OLE, enlarge message queue to be as large as possible
     int iMsg = 96;
-    while (!SetMessageQueue(iMsg) && (iMsg -= 8));
+    while (!SetMessageQueue(iMsg) && (iMsg -= 8))
+        ;
+#endif // Win16
 
-#if wxUSE_OLE
     // we need to initialize OLE library
     if ( FAILED(::OleInitialize(NULL)) )
         wxLogError(_("Cannot initialize OLE"));
-#endif
+#endif // wxUSE_OLE
 
 #if wxUSE_CTL3D
     if (!Ctl3dRegister(wxhInstance))

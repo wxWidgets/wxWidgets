@@ -693,6 +693,9 @@ enum
 #define wxTE_READONLY       0x0010
 #define wxTE_MULTILINE      0x0020
 #define wxTE_PROCESS_TAB    0x0040
+// this style means to use RICHEDIT control and does something only under wxMSW
+// and Win32 and is silently ignored under all other platforms
+#define wxTE_RICH           0x0080
 
 /*
  * wxComboBox style flags

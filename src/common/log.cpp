@@ -323,7 +323,7 @@ void wxLog::TimeStamp(wxString *str)
         wxChar buf[256];
         time_t timeNow;
         (void)time(&timeNow);
-//        wxStrftime(buf, WXSIZEOF(buf), ms_timestamp, localtime(&timeNow));
+        wxStrftime(buf, WXSIZEOF(buf), ms_timestamp, localtime(&timeNow));
 
         str->Empty();
         *str << buf << _T(": ");
@@ -577,7 +577,6 @@ void wxLogGui::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
                 if ( !m_bErrors ) {
                     m_aMessages.Empty();
                     m_aTimes.Empty();
-                    m_bHasMessages = TRUE;
                     m_bErrors = TRUE;
                 }
                 // fall through
@@ -590,6 +589,7 @@ void wxLogGui::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
 
                 m_aMessages.Add(szString);
                 m_aTimes.Add((long)t);
+                m_bHasMessages = TRUE;
                 break;
     }
 }
