@@ -17,7 +17,7 @@ class TestPanel(wx.Panel):
 
         self.Bind(wx.calendar.EVT_CALENDAR, self.OnCalSelected, id=cal.GetId())
 
-        b = wx.Button(self, -1, "Destroy the Calendar", pos = (250, 50))
+        b = wx.Button(self, -1, "Destroy the Calendar", pos = (275, 50))
         self.Bind(wx.EVT_BUTTON, self.OnButton, id= b.GetId())
         self.cal = cal
 
