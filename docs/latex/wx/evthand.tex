@@ -262,7 +262,7 @@ recursively applied to the parent window's event handler. If this returns true, 
 
 \membersection{wxEvtHandler::SearchEventTable}\label{wxevthandlersearcheventtable}
 
-\func{bool}{SearchEventTable}{\param{wxEventTable\& }{table}, \param{wxEvent\& }{event}}
+\func{virtual bool}{SearchEventTable}{\param{wxEventTable\& }{table}, \param{wxEvent\& }{event}}
 
 Searches the event table, executing an event handler function if an appropriate one
 is found.
