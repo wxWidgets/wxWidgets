@@ -8,7 +8,7 @@
     the library.
     -->
 
-    <if cond="FORMAT!='autoconf' and TOOLKIT=='MSW' and FORMAT!='msvc6prj' and FORMAT!='msevc4prj' and FORMAT!='cbuilderx'">
+    <if cond="FORMAT!='autoconf' and TOOLKIT in ['MSW','MGL'] and FORMAT!='msvc6prj' and FORMAT!='msevc4prj' and FORMAT!='cbuilderx'">
 
         <set var="BUILD_CFG_FILE" make_var="1">
             $(SETUPHDIR)$(DIRSEP)build.cfg

@@ -244,7 +244,7 @@ it if SHARED=1 unless you know what you are doing.
         
         <set var="WXTOPDIR"/> <!-- to be overriden on bakefile cmd line -->
 
-        <set var="TOOLKIT">
+        <set var="TOOLKIT" overwrite="0">
             <if cond="FORMAT!='msevc4prj'">MSW</if>
             <if cond="FORMAT=='msevc4prj'">WINCE</if>
         </set>

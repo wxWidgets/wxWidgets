@@ -40,7 +40,7 @@
     <subproject id="samples">
         <installable>no</installable>
         <dir cond="FORMAT=='autoconf'">samples</dir>
-        <dir cond="FORMAT!='autoconf' and TOOLKIT=='MSW'">../../samples</dir>
+        <dir cond="FORMAT!='autoconf' and TOOLKIT in ['MSW','MGL']">../../samples</dir>
     </subproject>
 
     <if cond="FORMAT=='autoconf'">       
@@ -140,8 +140,8 @@
     </if>
 
 
-    <!-- copy setup.h on Windows: -->    
-    <if cond="FORMAT!='autoconf' and TOOLKIT=='MSW'">
+    <!-- copy setup.h on DOS/Windows: -->    
+    <if cond="FORMAT!='autoconf' and TOOLKIT in ['MSW','MGL']">
         <mkdir id="libdir">
             <dir>$(LIBDIRNAME)</dir>
         </mkdir>
@@ -157,7 +157,7 @@
 
         <set var="SETUP_H_SUBDIR">
             <if cond="WXUNIV=='1'">univ</if>
-            <if cond="WXUNIV=='0'">msw</if>
+            <if cond="WXUNIV=='0'">$(TOOLKIT_LOWERCASE)</if>
         </set>
         
         <copy-file-to-file-if-not-exist id="master_setup.h">
