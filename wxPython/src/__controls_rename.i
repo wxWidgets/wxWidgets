@@ -7,6 +7,7 @@
 %rename(BU_TOP)                             wxBU_TOP;
 %rename(BU_RIGHT)                           wxBU_RIGHT;
 %rename(BU_BOTTOM)                          wxBU_BOTTOM;
+%rename(BU_ALIGN_MASK)                      wxBU_ALIGN_MASK;
 %rename(BU_EXACTFIT)                        wxBU_EXACTFIT;
 %rename(BU_AUTODRAW)                        wxBU_AUTODRAW;
 %rename(Button)                             wxButton;

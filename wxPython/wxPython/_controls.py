@@ -24,6 +24,7 @@ wxBU_LEFT = wx._controls.BU_LEFT
 wxBU_TOP = wx._controls.BU_TOP
 wxBU_RIGHT = wx._controls.BU_RIGHT
 wxBU_BOTTOM = wx._controls.BU_BOTTOM
+wxBU_ALIGN_MASK = wx._controls.BU_ALIGN_MASK
 wxBU_EXACTFIT = wx._controls.BU_EXACTFIT
 wxBU_AUTODRAW = wx._controls.BU_AUTODRAW
 wxButton = wx._controls.Button

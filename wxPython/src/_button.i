@@ -24,6 +24,8 @@ enum {
     wxBU_RIGHT,
     wxBU_BOTTOM,
 
+    wxBU_ALIGN_MASK,
+
     wxBU_EXACTFIT,
     wxBU_AUTODRAW,
 };
