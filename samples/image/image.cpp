@@ -183,34 +183,28 @@ public:
             delete cmap;
         }
 
-        bool saved = FALSE;
-
+        bool loaded;
         wxString extension = savefilename.AfterLast('.').Lower();
 
-        if (extension == "bmp")
-            saved=image.SaveFile(savefilename, wxBITMAP_TYPE_BMP);
-        else if (extension == "png")
-            saved=image.SaveFile(savefilename, wxBITMAP_TYPE_PNG);
-        else if (extension == "pcx")
-            saved=image.SaveFile(savefilename, wxBITMAP_TYPE_PCX);
-        else if ((extension == "tif") || (extension == "tiff"))
-            saved=image.SaveFile(savefilename, wxBITMAP_TYPE_TIF);
-        else if (extension == "jpg")
-            saved=image.SaveFile(savefilename, wxBITMAP_TYPE_JPEG);
-        else if (extension == "pnm")
-            saved=image.SaveFile(savefilename, wxBITMAP_TYPE_PNM);
-        else if (extension == "ico")
-            saved=image.SaveFile(savefilename, wxBITMAP_TYPE_ICO);
-        else if (extension == "cur")
-            {
+        if (extension == "cur")
+        {
             image.Rescale(32,32);    
             image.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_X, 0);    
-            image.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_Y, 0);    
-            saved=image.SaveFile(savefilename, wxBITMAP_TYPE_CUR);
-            }
-        else
-            wxMessageBox("Unknown file type, see options in file selector.",
-                         "Unknown file type",
+            image.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_Y, 0);
+            // This shows how you can save an image with explicitly
+            // specified image format:
+            loaded = image.SaveFile(savefilename, wxBITMAP_TYPE_CUR);
+        }
+        else 
+        {
+            // This one guesses image format from filename extension
+            // (it may fail if the extension is not recognized):
+            loaded = image.SaveFile(savefilename);
+        }
+        
+        if ( !loaded )
+            wxMessageBox("No handler for this file type.",
+                         "File was not saved",
                          wxOK|wxCENTRE, this);
     }
 

@@ -187,6 +187,7 @@ public:
     virtual bool LoadFile( wxInputStream& stream, const wxString& mimetype, int index = -1 );
 #endif
 
+    virtual bool SaveFile( const wxString& name ) const;
     virtual bool SaveFile( const wxString& name, int type ) const;
     virtual bool SaveFile( const wxString& name, const wxString& mimetype ) const;
 

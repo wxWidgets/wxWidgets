@@ -118,6 +118,7 @@ All (GUI):
 - added wxGetFontFromUser() convenience function
 - added EVT_MENU_OPEN and EVT_MENU_CLOSE events
 - added Hungarian translations (Janos Vegh)
+- added wxImage::SaveFile(filename) method (Chris Elliott)
 
 wxMSW:
 
@@ -125,7 +126,7 @@ wxMSW:
 - refresh the buttons properly when the window is resized (Hans Van Leemputten)
 - huge (40*) speed up in wxMask::Create()
 - changing wxWindows styles also changes the underlying Windows window style
-- wxTreeCtrl supports wxTR_HIDE_ROOT stle (George Policello)
+- wxTreeCtrl supports wxTR_HIDE_ROOT style (George Policello)
 - fixed flicker in wxTreeCtrl::SetItemXXX()
 - fixed redraw problems in dynamically resized wxStaticText
 - improvements to wxWindows applications behaviour when the system colours

@@ -938,6 +938,24 @@ bool wxImage::LoadFile( const wxString& filename, const wxString& mimetype, int 
 #endif // wxUSE_STREAMS
 }
 
+
+
+bool wxImage::SaveFile( const wxString& filename ) const
+{
+    wxString ext = filename.AfterLast('.').Lower();
+    
+    wxImageHandler * pHandler = FindHandler(ext, -1);
+    if (pHandler)
+    {
+        SaveFile(filename, pHandler->GetType());
+        return TRUE;
+    }
+
+    wxLogError(_("Can't save image to file '%s': unknown extension."), filename.c_str());
+
+    return FALSE;
+}
+
 bool wxImage::SaveFile( const wxString& filename, int type ) const
 {
 #if wxUSE_STREAMS
