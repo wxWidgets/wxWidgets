@@ -96,8 +96,10 @@
     class WXDLLEXPORT wxLongLongWx;
 #if defined(__VISUALC__) && !defined(__WIN32__)
     #define wxLongLong wxLongLongWx
+    #define wxULongLong wxULongLongWx
 #else
     typedef wxLongLongWx wxLongLong;
+    typedef wxULongLongWx wxULongLong;
 #endif
 
 #else
@@ -110,7 +112,9 @@
 #ifndef wxUSE_LONGLONG_WX
     #define wxUSE_LONGLONG_WX 0
     class WXDLLEXPORT wxLongLongNative;
+    class WXDLLEXPORT wxULongLongNative;
     typedef wxLongLongNative wxLongLong;
+    typedef wxULongLongNative wxULongLong;
 #endif
 
 // NB: if both wxUSE_LONGLONG_WX and NATIVE are defined, the user code should
@@ -172,6 +176,11 @@ public:
 
         // convert to native long long
     wxLongLong_t GetValue() const { return m_ll; }
+
+        // implicit conversion for times when we want a native type
+        // or wxLongLong, NOT wxLongLongNative and without having
+        // to ifdef user code for each use.
+    operator wxLongLong_t() const { return m_ll; }
 
         // convert to long with range checking in the debug mode (only!)
     long ToLong() const
@@ -324,6 +333,193 @@ public:
 
 private:
     wxLongLong_t  m_ll;
+};
+
+
+class WXDLLEXPORT wxULongLongNative
+{
+public:
+    // ctors
+        // default ctor initializes to 0
+    wxULongLongNative() { m_ll = 0; }
+        // from long long
+    wxULongLongNative(unsigned wxLongLong_t ll) { m_ll = ll; }
+        // from 2 longs
+    wxULongLongNative(unsigned long hi, unsigned long lo)
+    {
+        // assign first to avoid precision loss!
+        m_ll = ((unsigned wxLongLong_t) hi) << 32;
+        m_ll |= (unsigned wxLongLong_t) lo;
+    }
+
+    // default copy ctor is ok
+
+    // no dtor
+
+    // assignment operators
+        // from native 64 bit integer
+    wxULongLongNative& operator=(unsigned wxLongLong_t ll)
+        { m_ll = ll; return *this; }
+
+    // assignment operators from wxULongLongNative is ok
+
+    // accessors
+        // get high part
+    unsigned long GetHi() const
+        { return (unsigned long)(m_ll >> 32); }
+        // get low part
+    unsigned long GetLo() const
+        { return (unsigned long)m_ll; }
+
+        // convert to native ulong long
+    unsigned wxLongLong_t GetValue() const { return m_ll; }
+
+        // convert to ulong with range checking in the debug mode (only!)
+    unsigned long ToULong() const
+    {
+        wxASSERT_MSG( (m_ll >= LONG_MIN) && (m_ll <= LONG_MAX),
+                      _T("wxULongLong to long conversion loss of precision") );
+
+        return (unsigned long)m_ll;
+    }
+
+    // don't provide implicit conversion to unsigned wxLongLong_t or we
+    // will have an ambiguity for all arithmetic operations
+    //operator wxULongLong_t() const { return m_ll; }
+
+    // operations
+        // addition
+    wxULongLongNative operator+(const wxULongLongNative& ll) const
+        { return wxULongLongNative(m_ll + ll.m_ll); }
+    wxULongLongNative& operator+=(const wxULongLongNative& ll)
+        { m_ll += ll.m_ll; return *this; }
+
+    wxULongLongNative operator+(const unsigned wxLongLong_t ll) const
+        { return wxULongLongNative(m_ll + ll); }
+    wxULongLongNative& operator+=(const unsigned wxLongLong_t ll)
+        { m_ll += ll; return *this; }
+
+        // pre increment
+    wxULongLongNative& operator++()
+        { m_ll++; return *this; }
+
+        // post increment
+    wxULongLongNative& operator++(int)
+        { m_ll++; return *this; }
+
+        // subtraction
+    wxULongLongNative operator-(const wxULongLongNative& ll) const
+        { return wxULongLongNative(m_ll - ll.m_ll); }
+    wxULongLongNative& operator-=(const wxULongLongNative& ll)
+        { m_ll -= ll.m_ll; return *this; }
+
+    wxULongLongNative operator-(const unsigned wxLongLong_t ll) const
+        { return wxULongLongNative(m_ll - ll); }
+    wxULongLongNative& operator-=(const unsigned wxLongLong_t ll)
+        { m_ll -= ll; return *this; }
+
+        // pre decrement
+    wxULongLongNative& operator--()
+        { m_ll--; return *this; }
+
+        // post decrement
+    wxULongLongNative& operator--(int)
+        { m_ll--; return *this; }
+
+    // shifts
+        // left shift
+    wxULongLongNative operator<<(int shift) const
+        { return wxULongLongNative(m_ll << shift);; }
+    wxULongLongNative& operator<<=(int shift)
+        { m_ll <<= shift; return *this; }
+
+        // right shift
+    wxULongLongNative operator>>(int shift) const
+        { return wxULongLongNative(m_ll >> shift);; }
+    wxULongLongNative& operator>>=(int shift)
+        { m_ll >>= shift; return *this; }
+
+    // bitwise operators
+    wxULongLongNative operator&(const wxULongLongNative& ll) const
+        { return wxULongLongNative(m_ll & ll.m_ll); }
+    wxULongLongNative& operator&=(const wxULongLongNative& ll)
+        { m_ll &= ll.m_ll; return *this; }
+
+    wxULongLongNative operator|(const wxULongLongNative& ll) const
+        { return wxULongLongNative(m_ll | ll.m_ll); }
+    wxULongLongNative& operator|=(const wxULongLongNative& ll)
+        { m_ll |= ll.m_ll; return *this; }
+
+    wxULongLongNative operator^(const wxULongLongNative& ll) const
+        { return wxULongLongNative(m_ll ^ ll.m_ll); }
+    wxULongLongNative& operator^=(const wxULongLongNative& ll)
+        { m_ll ^= ll.m_ll; return *this; }
+
+    // multiplication/division
+    wxULongLongNative operator*(const wxULongLongNative& ll) const
+        { return wxULongLongNative(m_ll * ll.m_ll); }
+    wxULongLongNative operator*(unsigned long l) const
+        { return wxULongLongNative(m_ll * l); }
+    wxULongLongNative& operator*=(const wxULongLongNative& ll)
+        { m_ll *= ll.m_ll; return *this; }
+    wxULongLongNative& operator*=(unsigned long l)
+        { m_ll *= l; return *this; }
+
+    wxULongLongNative operator/(const wxULongLongNative& ll) const
+        { return wxULongLongNative(m_ll / ll.m_ll); }
+    wxULongLongNative operator/(unsigned long l) const
+        { return wxULongLongNative(m_ll / l); }
+    wxULongLongNative& operator/=(const wxULongLongNative& ll)
+        { m_ll /= ll.m_ll; return *this; }
+    wxULongLongNative& operator/=(unsigned long l)
+        { m_ll /= l; return *this; }
+
+    wxULongLongNative operator%(const wxULongLongNative& ll) const
+        { return wxULongLongNative(m_ll % ll.m_ll); }
+    wxULongLongNative operator%(unsigned long l) const
+        { return wxULongLongNative(m_ll % l); }
+
+    // comparison
+    bool operator==(const wxULongLongNative& ll) const
+        { return m_ll == ll.m_ll; }
+    bool operator==(unsigned long l) const
+        { return m_ll == l; }
+    bool operator!=(const wxULongLongNative& ll) const
+        { return m_ll != ll.m_ll; }
+    bool operator!=(unsigned long l) const
+        { return m_ll != l; }
+    bool operator<(const wxULongLongNative& ll) const
+        { return m_ll < ll.m_ll; }
+    bool operator<(unsigned long l) const
+        { return m_ll < l; }
+    bool operator>(const wxULongLongNative& ll) const
+        { return m_ll > ll.m_ll; }
+    bool operator>(unsigned long l) const
+        { return m_ll > l; }
+    bool operator<=(const wxULongLongNative& ll) const
+        { return m_ll <= ll.m_ll; }
+    bool operator<=(unsigned long l) const
+        { return m_ll <= l; }
+    bool operator>=(const wxULongLongNative& ll) const
+        { return m_ll >= ll.m_ll; }
+    bool operator>=(unsigned long l) const
+        { return m_ll >= l; }
+
+    // miscellaneous
+
+        // return the string representation of this number
+    wxString ToString() const;
+
+        // conversion to byte array: returns a pointer to static buffer!
+    void *asArray() const;
+
+#if wxUSE_STD_IOSTREAM
+        // input/output
+    friend wxSTD ostream& operator<<(wxSTD ostream&, const wxULongLongNative&);
+#endif
+
+private:
+    unsigned wxLongLong_t  m_ll;
 };
 
 #endif // wxUSE_LONGLONG_NATIVE
@@ -526,6 +722,180 @@ private:
 #endif // wxLONGLONG_TEST_MODE
 };
 
+
+class WXDLLEXPORT wxULongLongWx
+{
+public:
+    // ctors
+        // default ctor initializes to 0
+    wxULongLongWx()
+    {
+        m_lo = m_hi = 0;
+
+#ifdef wxLONGLONG_TEST_MODE
+        m_ll = 0;
+
+        Check();
+#endif // wxLONGLONG_TEST_MODE
+    }
+        // from ulong
+    wxULongLongWx(unsigned long l) { *this = l; }
+        // from 2 ulongs
+    wxULongLongWx(unsigned long hi, unsigned long lo)
+    {
+        m_hi = hi;
+        m_lo = lo;
+
+#ifdef wxLONGLONG_TEST_MODE
+        m_ll = hi;
+        m_ll <<= 32;
+        m_ll |= lo;
+
+        Check();
+#endif // wxLONGLONG_TEST_MODE
+    }
+
+    // default copy ctor is ok in both cases
+
+    // no dtor
+
+    // assignment operators
+        // from long
+    wxULongLongWx& operator=(unsigned long l)
+    {
+        m_lo = l;
+        m_hi = 0;
+
+#ifdef wxLONGLONG_TEST_MODE
+        m_ll = l;
+
+        Check();
+#endif // wxLONGLONG_TEST_MODE
+
+        return *this;
+    }
+
+    // can't have assignment operator from 2 longs
+
+    // accessors
+        // get high part
+    unsigned long GetHi() const { return m_hi; }
+        // get low part
+    unsigned long GetLo() const { return m_lo; }
+
+        // convert to long with range checking in the debug mode (only!)
+    unsigned long ToULong() const
+    {
+        wxASSERT_MSG( (m_hi == 0l),
+                      _T("wxULongLong to long conversion loss of precision") );
+
+        return (unsigned long)m_lo;
+    }
+
+    // operations
+        // addition
+    wxULongLongWx operator+(const wxULongLongWx& ll) const;
+    wxULongLongWx& operator+=(const wxULongLongWx& ll);
+    wxULongLongWx operator+(unsigned long l) const;
+    wxULongLongWx& operator+=(unsigned long l);
+
+        // pre increment operator
+    wxULongLongWx& operator++();
+
+        // post increment operator
+    wxULongLongWx& operator++(int) { return ++(*this); }
+
+        // subraction
+    wxULongLongWx operator-(const wxULongLongWx& ll) const;
+    wxULongLongWx& operator-=(const wxULongLongWx& ll);
+
+        // pre decrement operator
+    wxULongLongWx& operator--();
+
+        // post decrement operator
+    wxULongLongWx& operator--(int) { return --(*this); }
+
+    // shifts
+        // left shift
+    wxULongLongWx operator<<(int shift) const;
+    wxULongLongWx& operator<<=(int shift);
+
+        // right shift
+    wxULongLongWx operator>>(int shift) const;
+    wxULongLongWx& operator>>=(int shift);
+
+    // bitwise operators
+    wxULongLongWx operator&(const wxULongLongWx& ll) const;
+    wxULongLongWx& operator&=(const wxULongLongWx& ll);
+    wxULongLongWx operator|(const wxULongLongWx& ll) const;
+    wxULongLongWx& operator|=(const wxULongLongWx& ll);
+    wxULongLongWx operator^(const wxULongLongWx& ll) const;
+    wxULongLongWx& operator^=(const wxULongLongWx& ll);
+    wxULongLongWx operator~() const;
+
+    // comparison
+    bool operator==(const wxULongLongWx& ll) const
+        { return m_lo == ll.m_lo && m_hi == ll.m_hi; }
+    bool operator!=(const wxULongLongWx& ll) const
+        { return !(*this == ll); }
+    bool operator<(const wxULongLongWx& ll) const;
+    bool operator>(const wxULongLongWx& ll) const;
+    bool operator<=(const wxULongLongWx& ll) const
+        { return *this < ll || *this == ll; }
+    bool operator>=(const wxULongLongWx& ll) const
+        { return *this > ll || *this == ll; }
+
+    bool operator<(unsigned long l) const { return *this < wxULongLongWx(l); }
+    bool operator>(unsigned long l) const { return *this > wxULongLongWx(l); }
+    bool operator==(unsigned long l) const
+    {
+        return (m_hi == 0 && m_lo == (unsigned long)l);
+    }
+
+    bool operator<=(unsigned long l) const { return *this < l || *this == l; }
+    bool operator>=(unsigned long l) const { return *this > l || *this == l; }
+
+    // multiplication
+    wxULongLongWx operator*(const wxULongLongWx& ll) const;
+    wxULongLongWx& operator*=(const wxULongLongWx& ll);
+
+    // division
+    wxULongLongWx operator/(const wxULongLongWx& ll) const;
+    wxULongLongWx& operator/=(const wxULongLongWx& ll);
+
+    wxULongLongWx operator%(const wxULongLongWx& ll) const;
+
+    void Divide(const wxULongLongWx& divisor,
+                wxULongLongWx& quotient,
+                wxULongLongWx& remainder) const;
+
+    // input/output
+
+    // return the string representation of this number
+    wxString ToString() const;
+
+    void *asArray() const;
+
+#if wxUSE_STD_IOSTREAM
+    friend wxSTD ostream& operator<<(wxSTD ostream&, const wxULongLongWx&);
+#endif // wxUSE_STD_IOSTREAM
+
+private:
+    // long is at least 32 bits, so represent our 64bit number as 2 longs
+
+    unsigned long m_hi
+    unsigned long m_lo;
+
+#ifdef wxLONGLONG_TEST_MODE
+    void Check()
+    {
+        wxASSERT( (m_ll >> 32) == m_hi && (unsigned long)m_ll == m_lo );
+    }
+
+    unsigned wxLongLong_t m_ll;
+#endif // wxLONGLONG_TEST_MODE
+};
+
 #endif // wxUSE_LONGLONG_WX
 
 // ----------------------------------------------------------------------------
@@ -541,5 +911,15 @@ inline bool operator!=(long l, const wxLongLong& ll) { return ll > l; }
 
 inline wxLongLong operator+(long l, const wxLongLong& ll) { return ll + l; }
 inline wxLongLong operator-(long l, const wxLongLong& ll) { return ll - l; }
+
+inline bool operator<(unsigned long l, const wxULongLong& ll) { return ll > l; }
+inline bool operator>(unsigned long l, const wxULongLong& ll) { return ll > l; }
+inline bool operator<=(unsigned long l, const wxULongLong& ll) { return ll > l; }
+inline bool operator>=(unsigned long l, const wxULongLong& ll) { return ll > l; }
+inline bool operator==(unsigned long l, const wxULongLong& ll) { return ll > l; }
+inline bool operator!=(unsigned long l, const wxULongLong& ll) { return ll > l; }
+
+inline wxULongLong operator+(unsigned long l, const wxULongLong& ll) { return ll + l; }
+inline wxULongLong operator-(unsigned long l, const wxULongLong& ll) { return ll - l; }
 
 #endif // _WX_LONGLONG_H

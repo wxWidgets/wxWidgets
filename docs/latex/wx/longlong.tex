@@ -24,7 +24,8 @@ also has operators for implicit construction from and conversion to the native
 {\it long long} type if it exists and {\it long}.
 
 You would usually use this type in exactly the same manner as any other
-(built-in) arithmetic type. Note that wxLongLong is a signed type.
+(built-in) arithmetic type. Note that wxLongLong is a signed type, if you
+want unsigned values use wxULongLong.
 
 If a native (i.e. supported directly by the compiler) 64 bit integer type was
 found a typedef {\it wxLongLong\_t} will be defined to correspond it.
@@ -71,7 +72,7 @@ Assignment operator from native long long (only for compilers supporting it).
 \func{wxLongLong\&}{Abs}{\void}
 
 Returns an absolute value of wxLongLong - either making a copy (const version)
-or modifying it in place (the second one).
+or modifying it in place (the second one).  Not in wxULongLong.
 
 \membersection{wxLongLong::Assign}\label{wxlonglongassign}
 
@@ -79,7 +80,7 @@ or modifying it in place (the second one).
 
 This allows to convert a double value to wxLongLong type. Such conversion is
 not always possible in which case the result will be silently truncated in a
-platform-dependent way.
+platform-dependent way.  Not in wxULongLong.
 
 \membersection{wxLongLong::GetHi}\label{wxlonglonggethi}
 
@@ -137,7 +138,7 @@ Pre/post increment operator.
 
 \constfunc{wxLongLong}{operator$-$}{\void}
 
-Returns the value of this wxLongLong with opposite sign.
+Returns the value of this wxLongLong with opposite sign.  Not in wxULongLong.
 
 \membersection{wxLongLong::operator$-$}\label{wxlonglongoperatorminus}
 

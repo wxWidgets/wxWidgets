@@ -62,6 +62,22 @@ void *wxLongLongNative::asArray() const
     return temp;
 }
 
+void *wxULongLongNative::asArray() const
+{
+    static unsigned char temp[8];
+
+    temp[0] = (m_ll >> 56) & 0xFF;
+    temp[1] = (m_ll >> 48) & 0xFF;
+    temp[2] = (m_ll >> 40) & 0xFF;
+    temp[3] = (m_ll >> 32) & 0xFF;
+    temp[4] = (m_ll >> 24) & 0xFF;
+    temp[5] = (m_ll >> 16) & 0xFF;
+    temp[6] = (m_ll >> 8)  & 0xFF;
+    temp[7] = (m_ll >> 0)  & 0xFF;
+
+    return temp;
+}
+
 #endif // wxUSE_LONGLONG_NATIVE
 
 // ============================================================================
@@ -106,7 +122,41 @@ wxLongLongWx wxLongLongWx::operator<<(int shift) const
     return ll;
 }
 
+wxULongLongWx wxULongLongWx::operator<<(int shift) const
+{
+    wxULongLongWx ll(*this);
+    ll <<= shift;
+
+    return ll;
+}
+
 wxLongLongWx& wxLongLongWx::operator<<=(int shift)
+{
+    if (shift != 0)
+    {
+        if (shift < 32)
+        {
+            m_hi <<= shift;
+            m_hi |= m_lo >> (32 - shift);
+            m_lo <<= shift;
+        }
+        else
+        {
+            m_hi = m_lo << (shift - 32);
+            m_lo = 0;
+        }
+    }
+
+#ifdef wxLONGLONG_TEST_MODE
+    m_ll <<= shift;
+
+    Check();
+#endif // wxLONGLONG_TEST_MODE
+
+    return *this;
+}
+
+wxULongLongWx& wxULongLongWx::operator<<=(int shift)
 {
     if (shift != 0)
     {
@@ -140,6 +190,14 @@ wxLongLongWx wxLongLongWx::operator>>(int shift) const
     return ll;
 }
 
+wxULongLongWx wxULongLongWx::operator>>(int shift) const
+{
+    wxULongLongWx ll(*this);
+    ll >>= shift;
+
+    return ll;
+}
+
 wxLongLongWx& wxLongLongWx::operator>>=(int shift)
 {
     if (shift != 0)
@@ -166,9 +224,43 @@ wxLongLongWx& wxLongLongWx::operator>>=(int shift)
     return *this;
 }
 
+wxULongLongWx& wxULongLongWx::operator>>=(int shift)
+{
+    if (shift != 0)
+    {
+        if (shift < 32)
+        {
+            m_lo >>= shift;
+            m_lo |= m_hi << (32 - shift);
+            m_hi >>= shift;
+        }
+        else
+        {
+            m_lo = m_hi >> (shift - 32);
+            m_hi = 0;
+        }
+    }
+
+#ifdef wxLONGLONG_TEST_MODE
+    m_ll >>= shift;
+
+    Check();
+#endif // wxLONGLONG_TEST_MODE
+
+    return *this;
+}
+
 wxLongLongWx wxLongLongWx::operator+(const wxLongLongWx& ll) const
 {
     wxLongLongWx res(*this);
+    res += ll;
+
+    return res;
+}
+
+wxULongLongWx wxULongLongWx::operator+(const wxULongLongWx& ll) const
+{
+    wxULongLongWx res(*this);
     res += ll;
 
     return res;
@@ -182,7 +274,34 @@ wxLongLongWx wxLongLongWx::operator+(long l) const
     return res;
 }
 
+wxULongLongWx wxULongLongWx::operator+(unsigned long l) const
+{
+    wxULongLongWx res(*this);
+    res += l;
+
+    return res;
+}
+
 wxLongLongWx& wxLongLongWx::operator+=(const wxLongLongWx& ll)
+{
+    unsigned long previous = m_lo;
+
+    m_lo += ll.m_lo;
+    m_hi += ll.m_hi;
+
+    if ((m_lo < previous) || (m_lo < ll.m_lo))
+        m_hi++;
+
+#ifdef wxLONGLONG_TEST_MODE
+    m_ll += ll.m_ll;
+
+    Check();
+#endif // wxLONGLONG_TEST_MODE
+
+    return *this;
+}
+
+wxULongLongWx& wxULongLongWx::operator+=(const wxULongLongWx& ll)
 {
     unsigned long previous = m_lo;
 
@@ -221,8 +340,41 @@ wxLongLongWx& wxLongLongWx::operator+=(long l)
     return *this;
 }
 
+wxULongLongWx& wxULongLongWx::operator+=(unsigned long l)
+{
+    unsigned long previous = m_lo;
+
+    m_lo += l;
+
+    if ((m_lo < previous) || (m_lo < l))
+        m_hi++;
+
+#ifdef wxLONGLONG_TEST_MODE
+    m_ll += l;
+
+    Check();
+#endif // wxLONGLONG_TEST_MODE
+
+    return *this;
+}
+
 // pre increment
 wxLongLongWx& wxLongLongWx::operator++()
+{
+    m_lo++;
+    if (m_lo == 0)
+        m_hi++;
+
+#ifdef wxLONGLONG_TEST_MODE
+    m_ll++;
+
+    Check();
+#endif // wxLONGLONG_TEST_MODE
+
+    return *this;
+}
+
+wxULongLongWx& wxULongLongWx::operator++()
 {
     m_lo++;
     if (m_lo == 0)
@@ -274,7 +426,34 @@ wxLongLongWx wxLongLongWx::operator-(const wxLongLongWx& ll) const
     return res;
 }
 
+wxULongLongWx wxULongLongWx::operator-(const wxULongLongWx& ll) const
+{
+    wxULongLongWx res(*this);
+    res -= ll;
+
+    return res;
+}
+
 wxLongLongWx& wxLongLongWx::operator-=(const wxLongLongWx& ll)
+{
+    unsigned long previous = m_lo;
+
+    m_lo -= ll.m_lo;
+    m_hi -= ll.m_hi;
+
+    if (previous < ll.m_lo)
+        m_hi--;
+
+#ifdef wxLONGLONG_TEST_MODE
+    m_ll -= ll.m_ll;
+
+    Check();
+#endif // wxLONGLONG_TEST_MODE
+
+    return *this;
+}
+
+wxULongLongWx& wxULongLongWx::operator-=(const wxULongLongWx& ll)
 {
     unsigned long previous = m_lo;
 
@@ -309,9 +488,34 @@ wxLongLongWx& wxLongLongWx::operator--()
     return *this;
 }
 
+wxULongLongWx& wxULongLongWx::operator--()
+{
+    m_lo--;
+    if (m_lo == 0xFFFFFFFF)
+        m_hi--;
+
+#ifdef wxLONGLONG_TEST_MODE
+    m_ll--;
+
+    Check();
+#endif // wxLONGLONG_TEST_MODE
+
+    return *this;
+}
+
 // comparison operators
 
 bool wxLongLongWx::operator<(const wxLongLongWx& ll) const
+{
+    if ( m_hi < ll.m_hi )
+        return TRUE;
+    else if ( m_hi == ll.m_hi )
+        return m_lo < ll.m_lo;
+    else
+        return FALSE;
+}
+
+bool wxULongLongWx::operator<(const wxULongLongWx& ll) const
 {
     if ( m_hi < ll.m_hi )
         return TRUE;
@@ -331,6 +535,16 @@ bool wxLongLongWx::operator>(const wxLongLongWx& ll) const
         return FALSE;
 }
 
+bool wxULongLongWx::operator>(const wxULongLongWx& ll) const
+{
+    if ( m_hi > ll.m_hi )
+        return TRUE;
+    else if ( m_hi == ll.m_hi )
+        return m_lo > ll.m_lo;
+    else
+        return FALSE;
+}
+
 // bitwise operators
 
 wxLongLongWx wxLongLongWx::operator&(const wxLongLongWx& ll) const
@@ -338,9 +552,19 @@ wxLongLongWx wxLongLongWx::operator&(const wxLongLongWx& ll) const
     return wxLongLongWx(m_hi & ll.m_hi, m_lo & ll.m_lo);
 }
 
+wxULongLongWx wxULongLongWx::operator&(const wxULongLongWx& ll) const
+{
+    return wxULongLongWx(m_hi & ll.m_hi, m_lo & ll.m_lo);
+}
+
 wxLongLongWx wxLongLongWx::operator|(const wxLongLongWx& ll) const
 {
     return wxLongLongWx(m_hi | ll.m_hi, m_lo | ll.m_lo);
+}
+
+wxULongLongWx wxULongLongWx::operator|(const wxULongLongWx& ll) const
+{
+    return wxULongLongWx(m_hi | ll.m_hi, m_lo | ll.m_lo);
 }
 
 wxLongLongWx wxLongLongWx::operator^(const wxLongLongWx& ll) const
@@ -348,7 +572,26 @@ wxLongLongWx wxLongLongWx::operator^(const wxLongLongWx& ll) const
     return wxLongLongWx(m_hi ^ ll.m_hi, m_lo ^ ll.m_lo);
 }
 
+wxULongLongWx wxULongLongWx::operator^(const wxULongLongWx& ll) const
+{
+    return wxULongLongWx(m_hi ^ ll.m_hi, m_lo ^ ll.m_lo);
+}
+
 wxLongLongWx& wxLongLongWx::operator&=(const wxLongLongWx& ll)
+{
+    m_lo &= ll.m_lo;
+    m_hi &= ll.m_hi;
+
+#ifdef wxLONGLONG_TEST_MODE
+    m_ll &= ll.m_ll;
+
+    Check();
+#endif // wxLONGLONG_TEST_MODE
+
+    return *this;
+}
+
+wxULongLongWx& wxULongLongWx::operator&=(const wxULongLongWx& ll)
 {
     m_lo &= ll.m_lo;
     m_hi &= ll.m_hi;
@@ -376,7 +619,35 @@ wxLongLongWx& wxLongLongWx::operator|=(const wxLongLongWx& ll)
     return *this;
 }
 
+wxULongLongWx& wxULongLongWx::operator|=(const wxULongLongWx& ll)
+{
+    m_lo |= ll.m_lo;
+    m_hi |= ll.m_hi;
+
+#ifdef wxLONGLONG_TEST_MODE
+    m_ll |= ll.m_ll;
+
+    Check();
+#endif // wxLONGLONG_TEST_MODE
+
+    return *this;
+}
+
 wxLongLongWx& wxLongLongWx::operator^=(const wxLongLongWx& ll)
+{
+    m_lo ^= ll.m_lo;
+    m_hi ^= ll.m_hi;
+
+#ifdef wxLONGLONG_TEST_MODE
+    m_ll ^= ll.m_ll;
+
+    Check();
+#endif // wxLONGLONG_TEST_MODE
+
+    return *this;
+}
+
+wxULongLongWx& wxULongLongWx::operator^=(const wxULongLongWx& ll)
 {
     m_lo ^= ll.m_lo;
     m_hi ^= ll.m_hi;
@@ -395,11 +666,24 @@ wxLongLongWx wxLongLongWx::operator~() const
     return wxLongLongWx(~m_hi, ~m_lo);
 }
 
+wxULongLongWx wxULongLongWx::operator~() const
+{
+    return wxULongLongWx(~m_hi, ~m_lo);
+}
+
 // multiplication
 
 wxLongLongWx wxLongLongWx::operator*(const wxLongLongWx& ll) const
 {
     wxLongLongWx res(*this);
+    res *= ll;
+
+    return res;
+}
+
+wxULongLongWx wxULongLongWx::operator*(const wxULongLongWx& ll) const
+{
+    wxULongLongWx res(*this);
     res *= ll;
 
     return res;
@@ -414,6 +698,38 @@ wxLongLongWx& wxLongLongWx::operator*=(const wxLongLongWx& ll)
 
 #ifdef wxLONGLONG_TEST_MODE
     wxLongLong_t llOld = m_ll;
+    m_ll = 0;
+#endif // wxLONGLONG_TEST_MODE
+
+    int counter = 0;
+    do
+    {
+        if ((q.m_lo & 1) != 0)
+            *this += t;
+        q >>= 1;
+        t <<= 1;
+        counter++;
+    }
+    while ((counter < 64) && ((q.m_hi != 0) || (q.m_lo != 0)));
+
+#ifdef wxLONGLONG_TEST_MODE
+    m_ll = llOld * ll.m_ll;
+
+    Check();
+#endif // wxLONGLONG_TEST_MODE
+
+    return *this;
+}
+
+wxULongLongWx& wxULongLongWx::operator*=(const wxULongLongWx& ll)
+{
+    wxULongLongWx t(m_hi, m_lo);
+    wxULongLongWx q(ll.m_hi, ll.m_lo);
+
+    m_hi = m_lo = 0;
+
+#ifdef wxLONGLONG_TEST_MODE
+    unsigned wxLongLong_t llOld = m_ll;
     m_ll = 0;
 #endif // wxLONGLONG_TEST_MODE
 
@@ -560,6 +876,95 @@ void wxLongLongWx::Divide(const wxLongLongWx& divisorIn,
     }
 }
 
+void wxULongLongWx::Divide(const wxULongLongWx& divisorIn,
+                           wxULongLongWx& quotient,
+                           wxULongLongWx& remainder) const
+{
+    if ((divisorIn.m_lo == 0) && (divisorIn.m_hi == 0))
+    {
+        // provoke division by zero error and silence the compilers warnings
+        // about an expression without effect and unused variable
+        unsigned long dummy = divisorIn.m_lo/divisorIn.m_hi;
+        dummy += 0;
+    }
+
+    // VZ: I'm writing this in a hurry and it's surely not the fastest way to
+    //     do this - any improvements are more than welcome
+    //
+    //     code inspired by the snippet at
+    //          http://www.bearcave.com/software/divide.htm
+    //
+    //     Copyright notice:
+    //
+    //     Use of this program, for any purpose, is granted the author, Ian
+    //     Kaplan, as long as this copyright notice is included in the source
+    //     code or any source code derived from this program. The user assumes
+    //     all responsibility for using this code.
+
+    // init everything
+    wxULongLongWx dividend = *this,
+                  divisor = divisorIn;
+
+    quotient = 0l;
+    remainder = 0l;
+
+    // check for some particular cases
+    if ( divisor > dividend )
+    {
+        remainder = dividend;
+    }
+    else if ( divisor == dividend )
+    {
+        quotient = 1l;
+    }
+    else
+    {
+        // here: dividend > divisor
+        size_t nBits = 64u;
+        wxULongLongWx d;
+
+        #define IS_MSB_SET(ll)  ((ll.m_hi) & (1 << (8*sizeof(long) - 1)))
+
+        while ( remainder < divisor )
+        {
+            remainder <<= 1;
+            if ( IS_MSB_SET(dividend) )
+            {
+                remainder |= 1;
+            }
+
+            d = dividend;
+            dividend <<= 1;
+
+            nBits--;
+        }
+
+        // undo the last loop iteration
+        dividend = d;
+        remainder >>= 1;
+        nBits++;
+
+        for ( size_t i = 0; i < nBits; i++ )
+        {
+            remainder <<= 1;
+            if ( IS_MSB_SET(dividend) )
+            {
+                remainder |= 1;
+            }
+
+            wxULongLongWx t = remainder - divisor;
+            dividend <<= 1;
+            quotient <<= 1;
+            if ( !IS_MSB_SET(t) )
+            {
+                quotient |= 1;
+
+                remainder = t;
+            }
+        }
+    }
+}
+
 wxLongLongWx wxLongLongWx::operator/(const wxLongLongWx& ll) const
 {
     wxLongLongWx quotient, remainder;
@@ -569,7 +974,27 @@ wxLongLongWx wxLongLongWx::operator/(const wxLongLongWx& ll) const
     return quotient;
 }
 
+wxULongLongWx wxULongLongWx::operator/(const wxULongLongWx& ll) const
+{
+    wxULongLongWx quotient, remainder;
+
+    Divide(ll, quotient, remainder);
+
+    return quotient;
+}
+
 wxLongLongWx& wxLongLongWx::operator/=(const wxLongLongWx& ll)
+{
+    wxLongLongWx quotient, remainder;
+
+    Divide(ll, quotient, remainder);
+
+    *this = quotient;
+
+    return *this;
+}
+
+wxULongLongWx& wxULongLongWx::operator/=(const wxULongLongWx& ll)
 {
     wxLongLongWx quotient, remainder;
 
@@ -589,12 +1014,37 @@ wxLongLongWx wxLongLongWx::operator%(const wxLongLongWx& ll) const
     return remainder;
 }
 
+wxULongLongWx wxULongLongWx::operator%(const wxULongLongWx& ll) const
+{
+    wxULongLongWx quotient, remainder;
+
+    Divide(ll, quotient, remainder);
+
+    return remainder;
+}
+
 // ----------------------------------------------------------------------------
 // misc
 // ----------------------------------------------------------------------------
 
 // temporary - just for testing
 void *wxLongLongWx::asArray(void) const
+{
+    static unsigned char temp[8];
+
+    temp[0] = (char)((m_hi >> 24) & 0xFF);
+    temp[1] = (char)((m_hi >> 16) & 0xFF);
+    temp[2] = (char)((m_hi >> 8)  & 0xFF);
+    temp[3] = (char)((m_hi >> 0)  & 0xFF);
+    temp[4] = (char)((m_lo >> 24) & 0xFF);
+    temp[5] = (char)((m_lo >> 16) & 0xFF);
+    temp[6] = (char)((m_lo >> 8)  & 0xFF);
+    temp[7] = (char)((m_lo >> 0)  & 0xFF);
+
+    return temp;
+}
+
+void *wxULongLongWx::asArray(void) const
 {
     static unsigned char temp[8];
 
@@ -649,10 +1099,39 @@ wxLongLongWx::ToString() const
     return result;
 }
 
+wxString
+#if wxUSE_LONGLONG_NATIVE
+wxULongLongNative::ToString() const
+#else
+wxULongLongWx::ToString() const
+#endif
+{
+    // TODO: this is awfully inefficient, anything better?
+    wxString result;
+
+    wxULongLong ll = *this;
+
+    while ( ll != 0 )
+    {
+        result.Prepend((wxChar)(_T('0') + (ll % 10).ToLong()));
+        ll /= 10;
+    }
+
+    if ( result.empty() )
+        result = _T('0');
+
+    return result;
+}
+
 #if wxUSE_STD_IOSTREAM
 
 // input/output
 wxSTD ostream& operator<< (wxSTD ostream& o, const wxLongLong& ll)
+{
+    return o << ll.ToString();
+}
+
+wxSTD ostream& operator<< (wxSTD ostream& o, const wxULongLong& ll)
 {
     return o << ll.ToString();
 }
