@@ -629,7 +629,7 @@ public:
   wxString  operator()(size_t start, size_t len) const
     { return Mid(start, len); }
 
-      // check that the tring starts with prefix and return the rest of the
+      // check that the string starts with prefix and return the rest of the
       // string in the provided pointer if it is not NULL, otherwise return
       // FALSE
   bool StartsWith(const wxChar *prefix, wxString *rest = NULL) const;
@@ -638,7 +638,7 @@ public:
   wxString Left(size_t nCount) const;
       // get last nCount characters
   wxString Right(size_t nCount) const;
-      // get all characters before the first occurence of ch
+      // get all characters before the first occurance of ch
       // (returns the whole string if ch not found)
   wxString BeforeFirst(wxChar ch) const;
       // get all characters before the last occurence of ch
