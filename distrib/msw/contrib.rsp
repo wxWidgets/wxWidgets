@@ -240,6 +240,7 @@ contrib/include/wx/animate/*.h
 
 contrib/src/fl/*.cpp
 contrib/src/fl/*.h
+contrib/src/fl/files.lst
 contrib/src/fl/make*
 contrib/src/fl/flVC.dsp
 contrib/src/fl/flVC.dsw

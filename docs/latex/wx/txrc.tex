@@ -81,11 +81,13 @@ To create an XRC file, use one of the following methods.
 
 \begin{itemize}\itemsep=0
 \item Create the file by hand;
-\item use \urlref{wxDesigner}{http://www.roebling.de};
-\item use wxWorkshop (not yet available);
-\item use wxrcedit (the status of this tool is unknown);
-\item convert WIN32 RC files with the tool in contrib/utils/convertrc (the status of this tool is
-unknown).
+\item use \urlref{wxDesigner}{http://www.roebling.de}, a commercial dialog designer/RAD tool;
+\item use \urlref{XRCed}{http://www.mema.ucl.ac.be/~rolinsky/xrced/}, a wxPython-based
+dialog editor that you can find in the {\tt wxPython/tools} subdirectory of the wxWindows
+CVS archive;
+\item use \urlref{wxWorkshop}{http://wxworkshop.sourceforge.net} (under development);
+\item use wxrcedit ({\tt utils/contrib/wxrcedit}) (under development);
+\item convert WIN32 RC files to XRC with the tool in {\tt contrib/utils/convertrc}.
 \end{itemize}
 
 It is highly recommended that you use a tool such as wxDesigner, since it's fiddly writing
@@ -459,10 +461,79 @@ This is the XML file (resource.xrc) for the XRC sample.
 
 \subsection{XRC file format}\label{xrcfileformat}
 
-This section to be written.
+\subsubsection{Introduction to the XRC file format}\label{xrcfileformatintro}
+
+This note describes the file format used for storing XRC resources that are
+used by wxXmlResource class. It is probably only useful for those implementing
+dialog editors with XRC support, or for those writing XRC files by hand.
+
+If you only want to use the resources, you can choose from a number of editors,
+as listed in \helpref{XRC concepts}{xrcconcepts}.
+
+The XRC format is based on XML 1.0 (please consult W3C's specification). There
+is no DTD available since it is not possible to fully describe the format with
+the limited expressive power of DTDs.
+
+\subsubsection{XRC terminology}\label{xrcterminology}
+
+The usual XML terminology applies. In particular, we shall use the terms 
+{\it node}, {\it property} and {\it value} in the XML sense:
+
+\begin{verbatim}
+    <node property1="value1" property2="value2">...</node>
+\end{verbatim}
+
+The term "attribute" is specific to XRC and refers to a property-less subnode 
+of an <object> or <object_ref> node. In the example bellow, <pos>, <label> and
+<style> are attributes, while neither <resource> nor either of <object>s is:
+
+\begin{verbatim}
+    <?xml version="1.0" encoding="utf-8">
+    <resource version="2.3.0.1">
+        <object class="wxPanel">
+            <style>wxSUNKEN_BORDER</style>
+            <object class="wxStaticText">
+                <label>A label</label>
+                <pos>10,10</pos>
+            </object>
+        </object>
+    </resource>
+\end{verbatim}
+
+\subsubsection{XRC format high-level description}
+
+An XRC resource file is a well-formed XML 1.0 document. 
+
+The root node of XRC document must be <resource>. The <resource> node has 
+optional {\it version} property. Default version  (in absence of the version 
+property) is "0.0.0.0". The version consists of four integers separated by 
+periods. Version of XRC format changes only if there was an incompatible 
+change introduced (i.e. either the library cannot understand old resource 
+files or older versions of the library wouldn't understand the new format).
+The first three integers are major, minor and release number of the wxWindows 
+release when the change was introduced, the last one is revision number and 
+is 0 for the first incompatible change in given wxWindows release, 1 for 
+the second, and so on.
+
+Differences between versions are described within this document in paragraphs
+entitled {\it Version Note}.
+
+The <resource> node is only allowed to have <object> and <object_ref>
+subnodes, all of which must have the "name" property.
+
+<object> - TODO (name, class, subclass)
+
+<object_ref> - TODO (name, ref, subclass)
+
+\subsubsection{Common XRC attributes}
+
+Coming soon.
+
+\subsubsection{Supported classes}
+
+Coming soon.
 
 \subsection{Adding new resource handlers}\label{newresourcehandlers}
 
-This section to be written.
-
+Coming soon.
 
