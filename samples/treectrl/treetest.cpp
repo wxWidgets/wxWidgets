@@ -43,6 +43,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
   EVT_MENU(TreeTest_Quit, MyFrame::OnQuit)
   EVT_MENU(TreeTest_About, MyFrame::OnAbout)
   EVT_MENU(TreeTest_Dump, MyFrame::OnDump)
+  EVT_MENU(TreeTest_Delete, MyFrame::OnDelete)
+  EVT_MENU(TreeTest_DeleteAll, MyFrame::OnDeleteAll)
+  EVT_MENU(TreeTest_Recreate, MyFrame::OnRecreate)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyTreeCtrl, wxTreeCtrl)
@@ -93,7 +96,10 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
   // Make a menubar
   wxMenu *file_menu = new wxMenu;
 
-  file_menu->Append(TreeTest_Dump, "&Dump tree items");
+  file_menu->Append(TreeTest_Dump, "D&ump tree items");
+  file_menu->Append(TreeTest_Delete, "&Delete this item");
+  file_menu->Append(TreeTest_DeleteAll, "Delete &all items");
+  file_menu->Append(TreeTest_Recreate, "&Recreate the tree");
   file_menu->AppendSeparator();
   file_menu->Append(TreeTest_About, "&About...");
   file_menu->AppendSeparator();
@@ -157,8 +163,25 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnDump(wxCommandEvent& WXUNUSED(event))
 {
-  wxTreeItemId root=m_treeCtrl->GetSelection();
+  wxTreeItemId root = m_treeCtrl->GetSelection();
   m_treeCtrl->GetItemsRecursively(root, -1);
+}
+
+void MyFrame::OnDelete(wxCommandEvent& WXUNUSED(event))
+{
+  wxTreeItemId item = m_treeCtrl->GetSelection();
+  m_treeCtrl->Delete(item);
+}
+
+void MyFrame::OnDeleteAll(wxCommandEvent& WXUNUSED(event))
+{
+  m_treeCtrl->DeleteAllItems();
+}
+
+void MyFrame::OnRecreate(wxCommandEvent& event)
+{
+  OnDeleteAll(event);
+  m_treeCtrl->AddTestItemsToTree(3, 2);
 }
 
 // MyTreeCtrl implementation

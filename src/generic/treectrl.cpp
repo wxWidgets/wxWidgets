@@ -51,7 +51,7 @@ public:
                      int image, int selImage,
                      wxTreeItemData *data );
 
-  inline ~wxGenericTreeItem();
+  ~wxGenericTreeItem();
 
   // trivial accessors
   wxArrayTreeItems& GetChildren() { return m_children; }
@@ -688,6 +688,12 @@ wxTreeItemId wxTreeCtrl::AppendItem(const wxTreeItemId& parentId,
 void wxTreeCtrl::Delete(const wxTreeItemId& itemId)
 {
   wxGenericTreeItem *item = itemId.m_pItem;
+  wxGenericTreeItem *parent = item->GetParent();
+
+  if ( parent )
+  {
+    parent->GetChildren().Remove(item);
+  }
 
   delete item;
 
