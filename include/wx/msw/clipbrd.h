@@ -23,6 +23,7 @@
 
 #include "wx/list.h"
 #include "wx/module.h"
+#include "wx/dataobj.h"     // for wxDataFormat
 
 // These functions superceded by wxClipboard, but retained in order to
 // implement wxClipboard, and for compatibility.

@@ -109,7 +109,7 @@
 // Currently Only MS-Windows/NT, XView and Motif are supported
 //
 #if defined(__HPUX__) && !defined(__WXGTK__)
-    #ifndef __WXMOTIF__  
+    #ifndef __WXMOTIF__
         #define __WXMOTIF__
     #endif // __WXMOTIF__
 #endif
@@ -408,7 +408,7 @@ typedef void (*wxFunction) (wxObject&, wxEvent&);
 #define wxMINIMIZE              wxICONIZE
 #define wxMAXIMIZE              0x2000
 #define wxTHICK_FRAME           0x1000
-#define wxSYSTEM_MENU           0x0800 
+#define wxSYSTEM_MENU           0x0800
 #define wxMINIMIZE_BOX          0x0400
 #define wxMAXIMIZE_BOX          0x0200
 #define wxTINY_CAPTION_HORIZ    0x0100
@@ -432,7 +432,7 @@ typedef void (*wxFunction) (wxObject&, wxEvent&);
 #else
 // Under Unix, the dialogs don't have a system menu. Specifying
 // wxSYSTEM_MENU here, will make a close button appear.
-#   define wxDEFAULT_DIALOG_STYLE  (wxCAPTION) 
+#   define wxDEFAULT_DIALOG_STYLE  (wxCAPTION)
 #endif
 
 
@@ -778,9 +778,7 @@ typedef enum
 // Don't do parent client adjustments (for implementation only)
 #define wxSIZE_NO_ADJUSTMENTS   0x0008
 
-#ifndef __WXGTK__
-
-enum wxDataFormat
+enum wxDataFormatId
 {
   wxDF_INVALID =          0,
   wxDF_TEXT =             1,  /* CF_TEXT */
@@ -799,10 +797,9 @@ enum wxDataFormat
   wxDF_ENHMETAFILE =      14,
   wxDF_FILENAME =         15, /* CF_HDROP */
   wxDF_LOCALE =           16,
-  wxDF_PRIVATE =          20
+  wxDF_PRIVATE =          20,
+  wxDF_MAX
 };
-
-#endif
 
 /* Virtual keycodes */
 
@@ -884,7 +881,7 @@ enum wxKeyCode
   WXK_SCROLL,
   WXK_PAGEUP,
   WXK_PAGEDOWN,
- 
+
   WXK_NUMPAD_SPACE,
   WXK_NUMPAD_TAB,
   WXK_NUMPAD_ENTER,

@@ -50,6 +50,7 @@
 #include "wx/log.h"
 #include "wx/clipbrd.h"
 
+#include <string.h>
 #include <windows.h>
 
 #include "wx/msw/private.h"
@@ -59,9 +60,13 @@
 // therefore so is wxClipboard :-(
 #if wxUSE_DRAG_AND_DROP
     #include "wx/dataobj.h"
+
+    static bool wxSetClipboardData(wxDataObject *data);
 #endif
 
-#include <string.h>
+#ifdef __WIN16__
+    #define memcpy hmemcpy
+#endif
 
 // ===========================================================================
 // implementation
@@ -133,6 +138,38 @@ bool wxIsClipboardFormatAvailable(wxDataFormat dataFormat)
     return ::IsClipboardFormatAvailable(dataFormat) != 0;
 }
 
+#if wxUSE_DRAG_AND_DROP
+static bool wxSetClipboardData(wxDataObject *data)
+{
+    size_t size = data->GetDataSize();
+    HANDLE hGlobal = ::GlobalAlloc(GMEM_MOVEABLE | GMEM_DDESHARE, size);
+    if ( !hGlobal )
+    {
+        wxLogSysError(_("Failed to allocate %dKb of memory for clipboard "
+                        "transfer."), size / 1024);
+
+        return FALSE;
+    }
+
+    LPVOID lpGlobalMemory = ::GlobalLock(hGlobal);
+
+    data->GetDataHere(lpGlobalMemory);
+
+    GlobalUnlock(hGlobal);
+
+    wxDataFormat format = data->GetPreferredFormat();
+    if ( !::SetClipboardData(format, hGlobal) )
+    {
+        wxLogSysError(_("Failed to set clipboard data in format %s"),
+                      wxDataObject::GetFormatName(format));
+
+        return FALSE;
+    }
+
+    return TRUE;
+}
+#endif // wxUSE_DRAG_AND_DROP
+
 bool wxSetClipboardData(wxDataFormat dataFormat,
                         const void *data,
                         int width, int height)
@@ -194,11 +231,7 @@ bool wxSetClipboardData(wxDataFormat dataFormat,
             {
                 wxMetafile *wxMF = (wxMetafile *)data;
                 HANDLE data = GlobalAlloc(GHND, sizeof(METAFILEPICT) + 1);
-#ifdef __WINDOWS_386__
-                METAFILEPICT *mf = (METAFILEPICT *)MK_FP32(GlobalLock(data));
-#else
                 METAFILEPICT *mf = (METAFILEPICT *)GlobalLock(data);
-#endif
 
                 mf->mm = wxMF->GetWindowsMappingMode();
                 mf->xExt = width;
@@ -235,19 +268,9 @@ bool wxSetClipboardData(wxDataFormat dataFormat,
                 HANDLE hGlobalMemory = GlobalAlloc(GHND, l);
                 if ( hGlobalMemory )
                 {
-#ifdef __WINDOWS_386__
-                    LPSTR lpGlobalMemory = (LPSTR)MK_FP32(GlobalLock(hGlobalMemory));
-#else
                     LPSTR lpGlobalMemory = (LPSTR)GlobalLock(hGlobalMemory);
-#endif
 
-#ifdef __WIN32__
                     memcpy(lpGlobalMemory, s, l);
-#elif defined(__WATCOMC__) && defined(__WINDOWS_386__)
-                    memcpy(lpGlobalMemory, s, l);
-#else
-                    hmemcpy(lpGlobalMemory, s, l);
-#endif
 
                     GlobalUnlock(hGlobalMemory);
                 }
@@ -325,7 +348,6 @@ void *wxGetClipboardData(wxDataFormat dataFormat, long *len)
         case CF_TIFF:
         case CF_PALETTE:
         case wxDF_DIB:
-        default:
             {
                 wxLogError(_("Unsupported clipboard format."));
                 return FALSE;
@@ -349,23 +371,37 @@ void *wxGetClipboardData(wxDataFormat dataFormat, long *len)
                 if (!s)
                     break;
 
-#ifdef __WINDOWS_386__
-                LPSTR lpGlobalMemory = (LPSTR)MK_FP32(GlobalLock(hGlobalMemory));
-#else
                 LPSTR lpGlobalMemory = (LPSTR)::GlobalLock(hGlobalMemory);
-#endif
 
-#ifdef __WIN32__
                 memcpy(s, lpGlobalMemory, hsize);
-#elif __WATCOMC__ && defined(__WINDOWS_386__)
-                memcpy(s, lpGlobalMemory, hsize);
-#else
-                hmemcpy(s, lpGlobalMemory, hsize);
-#endif
 
                 ::GlobalUnlock(hGlobalMemory);
 
                 retval = s;
+                break;
+            }
+
+        default:
+            {
+                HANDLE hGlobalMemory = ::GetClipboardData(dataFormat);
+                if ( !hGlobalMemory )
+                    break;
+
+                DWORD size = ::GlobalSize(hGlobalMemory);
+                if ( len )
+                    *len = size;
+
+                void *buf = malloc(size);
+                if ( !buf )
+                    break;
+
+                LPSTR lpGlobalMemory = (LPSTR)::GlobalLock(hGlobalMemory);
+
+                memcpy(buf, lpGlobalMemory, size);
+
+                ::GlobalUnlock(hGlobalMemory);
+
+                retval = buf;
                 break;
             }
     }
@@ -378,9 +414,9 @@ void *wxGetClipboardData(wxDataFormat dataFormat, long *len)
     return retval;
 }
 
-wxDataFormat  wxEnumClipboardFormats(wxDataFormat dataFormat)
+wxDataFormat wxEnumClipboardFormats(wxDataFormat dataFormat)
 {
-  return (wxDataFormat)::EnumClipboardFormats(dataFormat);
+  return ::EnumClipboardFormats(dataFormat);
 }
 
 int wxRegisterClipboardFormat(char *formatName)
@@ -471,16 +507,11 @@ bool wxClipboard::AddData( wxDataObject *data )
 #endif // wxUSE_METAFILE
 
         default:
-            wxLogError(_("Can not put data in format '%s' on clipboard."),
-                       wxDataObject::GetFormatName(format));
-
-            return FALSE;
+            return wxSetClipboardData(data);
     }
-
+#else // !wxUSE_DRAG_AND_DROP
     return FALSE;
-#else
-    return FALSE;
-#endif
+#endif // wxUSE_DRAG_AND_DROP/!wxUSE_DRAG_AND_DROP
 }
 
 void wxClipboard::Close()
@@ -546,8 +577,18 @@ bool wxClipboard::GetData( wxDataObject *data )
         }
 #endif
         default:
-            wxLogError(_("Can not get data in format '%s' from clipboard."),
-                       wxDataObject::GetFormatName(format));
+            {
+                long len;
+                void *buf = wxGetClipboardData(format, &len);
+                if ( buf )
+                {
+                    // FIXME this is for testing only!!
+                    ((wxPrivateDataObject *)data)->SetData(buf, len);
+                    free(buf);
+
+                    return TRUE;
+                }
+            }
 
             return FALSE;
     }

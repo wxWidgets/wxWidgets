@@ -2,8 +2,8 @@
 // Name:        ole/droptgt.cpp
 // Purpose:     wxDropTarget implementation
 // Author:      Vadim Zeitlin
-// Modified by: 
-// Created:     
+// Modified by:
+// Created:
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
 // Licence:     wxWindows license
@@ -28,28 +28,29 @@
 #pragma hdrstop
 #endif
 
-#include  <wx/setup.h>
+#include "wx/setup.h"
 
 #if wxUSE_DRAG_AND_DROP
 
-#include  <wx/log.h>
+#include "wx/log.h"
 
 #ifdef __WIN32__
-#ifndef __GNUWIN32__
-#include  <shlobj.h>            // for DROPFILES structure
-#endif
+    #ifndef __GNUWIN32__
+        #include <shlobj.h>            // for DROPFILES structure
+    #endif
 #else
-#include <shellapi.h>
+    #include <shellapi.h>
 #endif
 
-#include  <wx/msw/ole/droptgt.h>
+#include "wx/dataobj.h"
+#include "wx/msw/ole/droptgt.h"
 
 #ifndef __WIN32__
-#include <ole2.h>
-#include <olestd.h>
+    #include <ole2.h>
+    #include <olestd.h>
 #endif
 
-#include  <wx/msw/ole/oleutils.h>
+#include "wx/msw/ole/oleutils.h"
 
 // ----------------------------------------------------------------------------
 // IDropTarget interface: forward all interesting things to wxDropTarget
@@ -69,9 +70,9 @@ public:
   STDMETHODIMP DragLeave(void);
   STDMETHODIMP Drop(LPDATAOBJECT, DWORD, POINTL, LPDWORD);
 
-  // @@ we assume that if QueryGetData() returns S_OK, than we can really
-  //    get data in this format, so we remember here the format for which
-  //    QueryGetData() succeeded
+  // we assume that if QueryGetData() returns S_OK, than we can really get data
+  // in this format, so we remember here the format for which QueryGetData()
+  // succeeded
   void SetSupportedFormat(wxDataFormat cfFormat) { m_cfFormat = cfFormat; }
 
   DECLARE_IUNKNOWN_METHODS;
@@ -92,11 +93,11 @@ private:
 
 // Name    : static wxDropTarget::GetDropEffect
 // Purpose : determine the drop operation from keyboard/mouse state.
-// Returns : DWORD combined from DROPEFFECT_xxx constants 
+// Returns : DWORD combined from DROPEFFECT_xxx constants
 // Params  : [in] DWORD flags       kbd & mouse flags as passed to
 //                                  IDropTarget methods
 // Notes   : We do "move" normally and "copy" if <Ctrl> is pressed,
-//           which is the standard behaviour (currently there is no 
+//           which is the standard behaviour (currently there is no
 //           way to redefine it)
 DWORD wxIDropTarget::GetDropEffect(DWORD flags)
 {
@@ -104,15 +105,15 @@ DWORD wxIDropTarget::GetDropEffect(DWORD flags)
 }
 
 wxIDropTarget::wxIDropTarget(wxDropTarget *pTarget)
-{ 
-  m_cRef         = 0; 
+{
+  m_cRef         = 0;
   m_pTarget      = pTarget;
-  m_cfFormat     = (wxDataFormat) 0;
-  m_pIDataObject = NULL; 
+  m_cfFormat     = wxDF_INVALID;
+  m_pIDataObject = NULL;
 }
 
-wxIDropTarget::~wxIDropTarget() 
-{ 
+wxIDropTarget::~wxIDropTarget()
+{
 }
 
 BEGIN_IID_TABLE(wxIDropTarget)
@@ -129,7 +130,7 @@ IMPLEMENT_IUNKNOWN_METHODS(wxIDropTarget)
 //           [in] DWORD        grfKeyState  : kbd & mouse state
 //           [in] POINTL       pt           : mouse coordinates
 //           [out]DWORD       *pdwEffect    : effect flag
-// Notes   : 
+// Notes   :
 STDMETHODIMP wxIDropTarget::DragEnter(IDataObject *pIDataSource,
                                       DWORD        grfKeyState,
                                       POINTL       pt,
@@ -146,8 +147,8 @@ STDMETHODIMP wxIDropTarget::DragEnter(IDataObject *pIDataSource,
     return S_OK;
   }
 
-  // @@ should check the point also?
-  
+  // TODO should check the point also?
+
   *pdwEffect = GetDropEffect(grfKeyState);
 
   // get hold of the data object
@@ -167,7 +168,7 @@ STDMETHODIMP wxIDropTarget::DragEnter(IDataObject *pIDataSource,
 // Params  : [in] DWORD   grfKeyState     kbd & mouse state
 //           [in] POINTL  pt              mouse coordinates
 //           [out]LPDWORD pdwEffect       effect flag
-// Notes   : We're called on every WM_MOUSEMOVE, so this function should be 
+// Notes   : We're called on every WM_MOUSEMOVE, so this function should be
 //           very efficient.
 STDMETHODIMP wxIDropTarget::DragOver(DWORD   grfKeyState,
                                      POINTL  pt,
@@ -175,7 +176,7 @@ STDMETHODIMP wxIDropTarget::DragOver(DWORD   grfKeyState,
 {
   // there are too many of them... wxLogDebug("IDropTarget::DragOver");
 
-  *pdwEffect = m_pIDataObject == NULL ? DROPEFFECT_NONE 
+  *pdwEffect = m_pIDataObject == NULL ? DROPEFFECT_NONE
                                       : GetDropEffect(grfKeyState);
   return S_OK;
 }
@@ -193,42 +194,42 @@ STDMETHODIMP wxIDropTarget::DragLeave()
 
   // release the held object
   RELEASE_AND_NULL(m_pIDataObject);
-    
+
   return S_OK;
 }
 
 // Name    : wxIDropTarget::Drop
-// Purpose : Instructs the drop target to paste data that was just now 
+// Purpose : Instructs the drop target to paste data that was just now
 //           dropped on it.
 // Returns : S_OK
 // Params  : [in] IDataObject *pIDataSource     the data to paste
 //           [in] DWORD        grfKeyState      kbd & mouse state
 //           [in] POINTL       pt               where the drop occured?
 //           [ouy]DWORD       *pdwEffect        operation effect
-// Notes   : 
-STDMETHODIMP wxIDropTarget::Drop(IDataObject *pIDataSource, 
-                                 DWORD        grfKeyState, 
-                                 POINTL       pt, 
+// Notes   :
+STDMETHODIMP wxIDropTarget::Drop(IDataObject *pIDataSource,
+                                 DWORD        grfKeyState,
+                                 POINTL       pt,
                                  DWORD       *pdwEffect)
 {
   wxLogDebug("IDropTarget::Drop");
 
-  // @@ I don't know why there is this parameter, but so far I assume
-  //    that it's the same we've already got in DragEnter
+  // TODO I don't know why there is this parameter, but so far I assume
+  //      that it's the same we've already got in DragEnter
   wxASSERT( m_pIDataObject == pIDataSource );
 
   STGMEDIUM stm;
-  *pdwEffect = DROPEFFECT_NONE; 
-  
+  *pdwEffect = DROPEFFECT_NONE;
+
   // should be set by SetSupportedFormat() call
-  wxASSERT( m_cfFormat != 0 );
+  wxASSERT( m_cfFormat != wxDF_INVALID );
 
   FORMATETC fmtMemory;
   fmtMemory.cfFormat  = m_cfFormat;
-  fmtMemory.ptd       = NULL; 
+  fmtMemory.ptd       = NULL;
   fmtMemory.dwAspect  = DVASPECT_CONTENT;
   fmtMemory.lindex    = -1;
-  fmtMemory.tymed     = TYMED_HGLOBAL;  // @@@@ to add other media
+  fmtMemory.tymed     = TYMED_HGLOBAL;  // TODO to add other media
 
   HRESULT hr = pIDataSource->GetData(&fmtMemory, &stm);
   if ( SUCCEEDED(hr) ) {
@@ -262,7 +263,7 @@ STDMETHODIMP wxIDropTarget::Drop(IDataObject *pIDataSource,
 
 wxDropTarget::wxDropTarget()
 {
-  // create an IDropTarget implementation which will notify us about 
+  // create an IDropTarget implementation which will notify us about
   // d&d operations.
   m_pIDropTarget = new wxIDropTarget(this);
   m_pIDropTarget->AddRef();
@@ -314,22 +315,22 @@ bool wxDropTarget::IsAcceptedData(IDataObject *pIDataSource) const
 {
   // this strucutre describes a data of any type (first field will be
   // changing) being passed through global memory block.
-  static FORMATETC s_fmtMemory = { 
+  static FORMATETC s_fmtMemory = {
     0,
-    NULL, 
-    DVASPECT_CONTENT, 
-    -1, 
-    TYMED_HGLOBAL 
+    NULL,
+    DVASPECT_CONTENT,
+    -1,
+    TYMED_HGLOBAL
   };
 
   // cycle thorugh all supported formats
   for ( size_t n = 0; n < GetFormatCount(); n++ ) {
     s_fmtMemory.cfFormat = GetFormat(n);
-    // @ don't use SUCCEEDED macro here: QueryGetData returns 1 (whatever it
-    //   means) for file drag and drop
+    // NB: don't use SUCCEEDED macro here: QueryGetData returns 1 (whatever it
+    //     means) for file drag and drop
     if ( pIDataSource->QueryGetData(&s_fmtMemory) == S_OK ) {
       // remember this format: we'll later ask for data in it
-      m_pIDropTarget->SetSupportedFormat((wxDataFormat) s_fmtMemory.cfFormat);
+      m_pIDropTarget->SetSupportedFormat((unsigned int)s_fmtMemory.cfFormat);
       return TRUE;
     }
   }
@@ -363,16 +364,16 @@ wxDataFormat wxTextDropTarget::GetFormat(size_t WXUNUSED(n)) const
 bool wxFileDropTarget::OnDrop(long x, long y, const void *pData)
 {
   // the documentation states that the first member of DROPFILES structure
-  // is a "DWORD offset of double NUL terminated file list". What they mean by 
+  // is a "DWORD offset of double NUL terminated file list". What they mean by
   // this (I wonder if you see it immediately) is that the list starts at
   // ((char *)&(pDropFiles.pFiles)) + pDropFiles.pFiles. We're also advised to
   // use DragQueryFile to work with this structure, but not told where and how
   // to get HDROP.
-  HDROP hdrop = (HDROP)pData;   // @@ it works, but I'm not sure about it
+  HDROP hdrop = (HDROP)pData;   // NB: it works, but I'm not sure about it
 
   // get number of files (magic value -1)
   UINT nFiles = ::DragQueryFile(hdrop, (unsigned)-1, NULL, 0u);
-  
+
   // for each file get the length, allocate memory and then get the name
   char **aszFiles = new char *[nFiles];
   UINT len, n;

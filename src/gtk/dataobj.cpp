@@ -4,11 +4,11 @@
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation "dataobj.h"
+    #pragma implementation "dataobj.h"
 #endif
 
 #include "wx/dataobj.h"
@@ -38,7 +38,7 @@ wxDataFormat::wxDataFormat()
     m_atom = (GdkAtom) 0;
 }
 
-wxDataFormat::wxDataFormat( wxDataType type )
+wxDataFormat::wxDataFormat( wxDataFormatId type )
 {
     if (!g_textAtom) g_textAtom = gdk_atom_intern( "STRING", FALSE );
     SetType( type );
@@ -69,9 +69,9 @@ wxDataFormat::wxDataFormat( const GdkAtom atom )
 {
     if (!g_textAtom) g_textAtom = gdk_atom_intern( "STRING", FALSE );
     m_hasAtom = TRUE;
-    
+
     m_atom = atom;
-    
+
     if (m_atom == g_textAtom)
     {
         m_type = wxDF_TEXT;
@@ -83,7 +83,7 @@ wxDataFormat::wxDataFormat( const GdkAtom atom )
     {
         m_type = wxDF_PRIVATE;
 	m_id = gdk_atom_name( m_atom );
-	
+
 	if (m_id == _T("file:ALL"))
 	{
 	    m_type = wxDF_FILENAME;
@@ -91,19 +91,19 @@ wxDataFormat::wxDataFormat( const GdkAtom atom )
     }
 }
 
-void wxDataFormat::SetType( wxDataType type )
+void wxDataFormat::SetType( wxDataFormatId type )
 {
     m_type = type;
-    
+
     if (m_type == wxDF_TEXT)
     {
         m_id = _T("STRING");
-    } 
+    }
     else
     if (m_type == wxDF_BITMAP)
     {
         m_id = _T("BITMAP");
-    } 
+    }
     else
     if (m_type == wxDF_FILENAME)
     {
@@ -113,11 +113,11 @@ void wxDataFormat::SetType( wxDataType type )
     {
        wxFAIL_MSG( _T("invalid dataformat") );
     }
-    
+
     m_hasAtom = FALSE;
 }
-  
-wxDataType wxDataFormat::GetType() const
+
+wxDataFormatId wxDataFormat::GetType() const
 {
     return m_type;
 }
@@ -139,7 +139,7 @@ GdkAtom wxDataFormat::GetAtom()
     if (!m_hasAtom)
     {
         m_hasAtom = TRUE;
-	
+
 	if (m_type == wxDF_TEXT)
 	{
             m_atom = g_textAtom;
@@ -148,24 +148,24 @@ GdkAtom wxDataFormat::GetAtom()
         if (m_type == wxDF_BITMAP)
         {
             m_atom = GDK_TARGET_BITMAP;
-        } 
+        }
 	else
         if (m_type == wxDF_PRIVATE)
         {
             m_atom = gdk_atom_intern( MBSTRINGCAST m_id.mbc_str(), FALSE );
-        } 
+        }
 	else
 	if (m_type == wxDF_FILENAME)
 	{
 	    m_atom = gdk_atom_intern( "file:ALL", FALSE );
-	} 
+	}
 	else
 	{
 	    m_hasAtom = FALSE;
 	    m_atom = (GdkAtom) 0;
 	}
     }
-    
+
     return m_atom;
 }
 
@@ -175,93 +175,93 @@ GdkAtom wxDataFormat::GetAtom()
 
 IMPLEMENT_CLASS(wxDataBroker,wxObject)
 
-wxDataBroker::wxDataBroker() 
-{ 
+wxDataBroker::wxDataBroker()
+{
     m_dataObjects.DeleteContents(TRUE);
     m_preferred = 0;
 }
 
 void wxDataBroker::Add( wxDataObject *dataObject, bool preferred )
-{ 
+{
     if (preferred) m_preferred = m_dataObjects.GetCount();
     m_dataObjects.Append( dataObject );
-}  
-  
-size_t wxDataBroker::GetFormatCount() const
-{ 
-    return m_dataObjects.GetCount(); 
 }
-    
+
+size_t wxDataBroker::GetFormatCount() const
+{
+    return m_dataObjects.GetCount();
+}
+
 wxDataFormat &wxDataBroker::GetPreferredFormat() const
-{ 
+{
     wxNode *node = m_dataObjects.Nth( m_preferred );
-    
+
     wxASSERT( node );
-    
+
     wxDataObject* data_obj = (wxDataObject*)node->Data();
-    
+
     return data_obj->GetFormat();
 }
-    
+
 wxDataFormat &wxDataBroker::GetNthFormat( size_t nth ) const
-{ 
+{
     wxNode *node = m_dataObjects.Nth( nth );
 
     wxASSERT( node );
-    
+
     wxDataObject* data_obj = (wxDataObject*)node->Data();
-    
+
     return data_obj->GetFormat();
 }
-    
+
 bool wxDataBroker::IsSupportedFormat( wxDataFormat &format ) const
-{ 
+{
     wxNode *node = m_dataObjects.First();
     while (node)
     {
         wxDataObject *dobj = (wxDataObject*)node->Data();
-	
+
 	if (dobj->GetFormat().GetAtom() == format.GetAtom())
 	{
 	    return TRUE;
 	}
-    
+
         node = node->Next();
     }
-    
+
     return FALSE;
 }
-  
+
 size_t wxDataBroker::GetSize( wxDataFormat& format ) const
 {
     wxNode *node = m_dataObjects.First();
     while (node)
     {
         wxDataObject *dobj = (wxDataObject*)node->Data();
-	
+
 	if (dobj->GetFormat().GetAtom() == format.GetAtom())
 	{
 	    return dobj->GetSize();
 	}
-    
+
         node = node->Next();
     }
-    
+
     return 0;
 }
-    
+
 void wxDataBroker::WriteData( wxDataFormat& format, void *dest ) const
 {
     wxNode *node = m_dataObjects.First();
     while (node)
     {
         wxDataObject *dobj = (wxDataObject*)node->Data();
-	
+
 	if (dobj->GetFormat().GetAtom() == format.GetAtom())
 	{
 	    dobj->WriteData( dest );
 	}
-    
+
         node = node->Next();
     }
 }
@@ -275,7 +275,7 @@ IMPLEMENT_ABSTRACT_CLASS( wxDataObject, wxObject )
 wxDataObject::wxDataObject()
 {
 }
-  
+
 wxDataObject::~wxDataObject()
 {
 }
@@ -285,7 +285,7 @@ wxDataFormat &wxDataObject::GetFormat()
     return m_format;
 }
 
-wxDataType wxDataObject::GetFormatType() const
+wxDataFormatId wxDataObject::GetFormatType() const
 {
     return m_format.GetType();
 }
@@ -299,7 +299,7 @@ GdkAtom wxDataObject::GetFormatAtom() const
 {
     GdkAtom ret = ((wxDataObject*) this)->m_format.GetAtom();
     return ret;
-}  
+}
 
 // ----------------------------------------------------------------------------
 // wxTextDataObject
@@ -315,11 +315,11 @@ wxTextDataObject::wxTextDataObject()
 wxTextDataObject::wxTextDataObject( const wxString& data )
 {
     m_format.SetType( wxDF_TEXT );
-    
+
     m_data = data;
 }
 
-void wxTextDataObject::SetText( const wxString& data ) 
+void wxTextDataObject::SetText( const wxString& data )
 {
     m_data = data;
 }
@@ -343,7 +343,7 @@ void wxTextDataObject::WriteString( const wxString &str, void *dest ) const
 {
     memcpy( dest, str.mb_str(), str.Len()+1 );
 }
-    
+
 // ----------------------------------------------------------------------------
 // wxFileDataObject
 // ----------------------------------------------------------------------------
@@ -356,26 +356,26 @@ wxFileDataObject::wxFileDataObject()
 }
 
 void wxFileDataObject::AddFile( const wxString &file )
-{ 
-    m_files += file; 
-    m_files += (wxChar)0; 
+{
+    m_files += file;
+    m_files += (wxChar)0;
 }
-    
+
 wxString wxFileDataObject::GetFiles() const
-{ 
-    return m_files; 
+{
+    return m_files;
 }
-    
+
 void wxFileDataObject::WriteData( void *dest ) const
 {
     memcpy( dest, m_files.mbc_str(), GetSize() );
 }
- 
+
 size_t wxFileDataObject::GetSize() const
 {
     return m_files.Len() + 1;
 }
-  
+
 // ----------------------------------------------------------------------------
 // wxBitmapDataObject
 // ----------------------------------------------------------------------------
@@ -390,7 +390,7 @@ wxBitmapDataObject::wxBitmapDataObject()
 wxBitmapDataObject::wxBitmapDataObject( const wxBitmap& bitmap )
 {
     m_format.SetType( wxDF_BITMAP );
-    
+
     m_bitmap = bitmap;
 }
 
@@ -418,54 +418,38 @@ void wxBitmapDataObject::WriteBitmap( const wxBitmap &bitmap, void *dest ) const
 {
     memcpy( dest, m_bitmap.GetPixmap(), GetSize() );
 }
-    
+
 // ----------------------------------------------------------------------------
 // wxPrivateDataObject
 // ----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS( wxPrivateDataObject, wxDataObject )
 
-wxPrivateDataObject::wxPrivateDataObject() 
-{ 
-    m_id = _T("application/");
-    m_id += wxTheApp->GetAppName();
-    
-    m_format.SetId( m_id );
-    
-    m_size = 0; 
-    m_data = (char*) NULL; 
-}
-    
-wxPrivateDataObject::~wxPrivateDataObject()
-{ 
-    if (m_data) delete[] m_data; 
-}
-  
-void wxPrivateDataObject::SetId( const wxString& id )
-{ 
-    m_id = id;
-    m_format.SetId( m_id );
-}
-    
-wxString wxPrivateDataObject::GetId() const
-{ 
-    return m_id; 
+void wxPrivateDataObject::Free()
+{
+    if ( m_data )
+        free(m_data);
 }
 
-void wxPrivateDataObject::SetData( const char *data, size_t size )
+wxPrivateDataObject::wxPrivateDataObject()
 {
+    wxString id = _T("application/");
+    id += wxTheApp->GetAppName();
+
+    m_format.SetId( id );
+
+    m_size = 0;
+    m_data = (void *)NULL;
+}
+
+void wxPrivateDataObject::SetData( const void *data, size_t size )
+{
+    Free();
+
     m_size = size;
-    
-    if (m_data) delete[] m_data;
-    
-    m_data = new char[size];
+    m_data = malloc(size);
 
-    memcpy( m_data, data, size );  
-}
-
-char* wxPrivateDataObject::GetData() const
-{
-    return m_data;
+    memcpy( m_data, data, size );
 }
 
 void wxPrivateDataObject::WriteData( void *dest ) const
@@ -475,10 +459,10 @@ void wxPrivateDataObject::WriteData( void *dest ) const
 
 size_t wxPrivateDataObject::GetSize() const
 {
-   return m_size;
+    return m_size;
 }
 
-void wxPrivateDataObject::WriteData( const char *data, void *dest ) const
+void wxPrivateDataObject::WriteData( const void *data, void *dest ) const
 {
     memcpy( dest, data, GetSize() );
 }

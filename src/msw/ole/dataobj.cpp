@@ -28,12 +28,12 @@
   #pragma hdrstop
 #endif
 
-#include  <wx/defs.h>
+#include "wx/defs.h"
 
 #if defined(__WIN32__) && !defined(__GNUWIN32__)
 
-#include <wx/log.h>
-#include <wx/msw/ole/dataobj.h>
+#include "wx/log.h"
+#include "wx/dataobj.h"
 
 #include <windows.h>
 #include <oleauto.h>
@@ -43,7 +43,7 @@
   #include <olestd.h>
 #endif
 
-#include  <wx/msw/ole/oleutils.h>
+#include  "wx/msw/ole/oleutils.h"
 
 // ----------------------------------------------------------------------------
 // functions
@@ -100,6 +100,39 @@ private:
 // ============================================================================
 // implementation
 // ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxDataFormat
+// ----------------------------------------------------------------------------
+
+void wxDataFormat::SetId(const wxChar *format)
+{
+    m_format = ::RegisterClipboardFormat(format);
+    if ( !m_format )
+    {
+        wxLogError(_("Couldn't register clipboard format '%s'."), format);
+    }
+}
+
+wxString wxDataFormat::GetId() const
+{
+    static const int max = 256;
+
+    wxString s;
+
+    wxCHECK_MSG( !IsStandard(), s,
+                 _T("name of predefined format cannot be retrieved") );
+
+    int len = ::GetClipboardFormatName(m_format, s.GetWriteBuf(max), max);
+    s.UngetWriteBuf();
+
+    if ( !len )
+    {
+        wxLogError(_("The clipboard format '%d' doesn't exist."), m_format);
+    }
+
+    return s;
+}
 
 // ----------------------------------------------------------------------------
 // wxIEnumFORMATETC
@@ -284,14 +317,14 @@ STDMETHODIMP wxIDataObject::QueryGetData(FORMATETC *pformatetc)
   }
 
   // and now check the type of data requested
-  if ( m_pDataObject->IsSupportedFormat((wxDataFormat) pformatetc->cfFormat) ) {
+  if ( m_pDataObject->IsSupportedFormat((wxDataFormatId)pformatetc->cfFormat) ) {
     wxLogTrace("wxIDataObject::QueryGetData: %s ok",
-               wxDataObject::GetFormatName((wxDataFormat) pformatetc->cfFormat));
+               wxDataObject::GetFormatName((wxDataFormatId)pformatetc->cfFormat));
     return S_OK;
   }
   else {
     wxLogTrace("wxIDataObject::QueryGetData: %s unsupported",
-               wxDataObject::GetFormatName((wxDataFormat) pformatetc->cfFormat));
+               wxDataObject::GetFormatName((wxDataFormatId)pformatetc->cfFormat));
     return DV_E_FORMATETC;
   }
 }
@@ -397,6 +430,47 @@ const char *wxDataObject::GetFormatName(wxDataFormat format)
 #else // !Debug
   return "";
 #endif // Debug
+}
+
+// ----------------------------------------------------------------------------
+// wxPrivateDataObject
+// ----------------------------------------------------------------------------
+
+wxPrivateDataObject::wxPrivateDataObject()
+{
+    m_size = 0;
+    m_data = NULL;
+}
+
+void wxPrivateDataObject::Free()
+{
+    if ( m_data )
+        free(m_data);
+}
+
+void wxPrivateDataObject::SetData( const void *data, size_t size )
+{
+    Free();
+
+    m_size = size;
+    m_data = malloc(size);
+
+    memcpy( m_data, data, size );
+}
+
+void wxPrivateDataObject::WriteData( void *dest ) const
+{
+    WriteData( m_data, dest );
+}
+
+size_t wxPrivateDataObject::GetSize() const
+{
+    return m_size;
+}
+
+void wxPrivateDataObject::WriteData( const void *data, void *dest ) const
+{
+    memcpy( dest, data, GetSize() );
 }
 
 // ----------------------------------------------------------------------------

@@ -20,37 +20,14 @@ struct IDataObject;
 // ----------------------------------------------------------------------------
 // wxDataObject is a "smart" and polymorphic piece of data.
 //
-// @@@ it's currently "read-only" from COM point of view, i.e. we don't support
-//     SetData. We don't support all advise functions neither (but it's easy to
-//     do if we really want them)
+// TODO it's currently "read-only" from COM point of view, i.e. we don't support
+//      SetData. We don't support all advise functions neither (but it's easy to
+//      do if we really want them)
 // ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxDataObject
 {
 public:
-  // all data formats (values are the same as in windows.h, do not change!)
-  enum StdFormat
-  {
-    Invalid,
-    Text,
-    Bitmap,
-    MetafilePict,
-    Sylk,
-    Dif,
-    Tiff,
-    OemText,
-    Dib,
-    Palette,
-    Pendata,
-    Riff,
-    Wave,
-    UnicodeText,
-    EnhMetafile,
-    Hdrop,
-    Locale,
-    Max
-  };
-
   // function to return symbolic name of clipboard format (debug messages)
   static const char *GetFormatName(wxDataFormat format);
 
@@ -62,7 +39,7 @@ public:
     // get the best suited format for our data
   virtual wxDataFormat GetPreferredFormat() const = 0;
     // decide if we support this format (should be one of values of
-    // StdFormat enumerations or a user-defined format)
+    // wxDataFormatId enumerations or a user-defined format)
   virtual bool IsSupportedFormat(wxDataFormat format) const = 0;
     // get the (total) size of data
   virtual size_t GetDataSize() const = 0;
@@ -93,9 +70,9 @@ public:
 
   // implement base class pure virtuals
   virtual wxDataFormat GetPreferredFormat() const
-    { return (wxDataFormat) wxDataObject::Text; }
+    { return wxDF_TEXT; }
   virtual bool IsSupportedFormat(wxDataFormat format) const
-    { return format == wxDataObject::Text || format == wxDataObject::Locale; }
+    { return format == wxDF_TEXT || format == wxDF_LOCALE; }
   virtual size_t GetDataSize() const
     { return m_strText.Len() + 1; } // +1 for trailing '\0'of course
   virtual void GetDataHere(void *pBuf) const
@@ -133,9 +110,9 @@ public:
 
   // implement base class pure virtuals
   virtual wxDataFormat GetPreferredFormat() const
-    { return (wxDataFormat) wxDataObject::Bitmap; }
+    { return wxDF_BITMAP; }
   virtual bool IsSupportedFormat(wxDataFormat format) const
-    { return format == wxDataObject::Bitmap; }
+    { return format == wxDF_BITMAP; }
   virtual size_t GetDataSize() const
     { wxASSERT(false); return 0; } // BEMIMP
   virtual void GetDataHere(void *pBuf) const

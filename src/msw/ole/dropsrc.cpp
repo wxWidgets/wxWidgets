@@ -2,7 +2,7 @@
 // Name:        msw/ole/dropsrc.cpp
 // Purpose:     implementation of wxIDropSource and wxDropSource
 // Author:      Vadim Zeitlin
-// Modified by: 
+// Modified by:
 // Created:     10.05.98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
@@ -28,13 +28,13 @@
   #pragma hdrstop
 #endif
 
-#include  <wx/setup.h>
+#include "wx/setup.h"
 
 #if wxUSE_DRAG_AND_DROP
 
-#include  <wx/log.h>
-#include  <wx/msw/ole/dataobj.h>
-#include  <wx/msw/ole/dropsrc.h>
+#include "wx/log.h"
+#include "wx/dataobj.h"
+#include "wx/msw/ole/dropsrc.h"
 
 #include <windows.h>
 
@@ -45,7 +45,7 @@
 
 #include <oleauto.h>
 
-#include <wx/msw/ole/oleutils.h>
+#include "wx/msw/ole/oleutils.h"
 
 // ----------------------------------------------------------------------------
 // wxIDropSource implementation of IDropSource interface
@@ -121,7 +121,7 @@ STDMETHODIMP wxIDropSource::QueryContinueDrag(BOOL fEscapePressed,
 
 // Name    : wxIDropSource::GiveFeedback
 // Purpose : give UI feedback according to current state of operation
-// Returns : STDMETHODIMP 
+// Returns : STDMETHODIMP
 // Params  : [in] DWORD dwEffect - what would happen if we dropped now
 // Notes   : default implementation is ok in more than 99% of cases
 STDMETHODIMP wxIDropSource::GiveFeedback(DWORD dwEffect)
@@ -186,8 +186,8 @@ wxDragResult wxDropSource::DoDragDrop(bool bAllowMove)
   wxCHECK_MSG( m_pData != NULL, wxDragNone, "No data in wxDropSource!" );
 
   DWORD dwEffect;
-  HRESULT hr = ::DoDragDrop(m_pData->GetInterface(), 
-                            m_pIDropSource, 
+  HRESULT hr = ::DoDragDrop(m_pData->GetInterface(),
+                            m_pIDropSource,
                             bAllowMove ? DROPEFFECT_COPY | DROPEFFECT_MOVE
                                        : DROPEFFECT_COPY,
                             &dwEffect);
@@ -229,7 +229,7 @@ wxDragResult wxDropSource::DoDragDrop(bool bAllowMove)
 // Purpose : visually inform the user about d&d operation state
 // Returns : bool: true if we do all ourselves or false for default feedback
 // Params  : [in] DragResult effect - what would happen if we dropped now
-//           [in] bool bScrolling   - true if target is scrolling    
+//           [in] bool bScrolling   - true if target is scrolling
 // Notes   : here we just leave this stuff for default implementation
 bool wxDropSource::GiveFeedback(wxDragResult effect, bool bScrolling)
 {

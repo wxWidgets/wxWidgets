@@ -2,9 +2,9 @@
 #define _WX_DND_H_BASE_
 
 #if defined(__WXMSW__)
+#include "wx/dataobj.h"
 #include "wx/msw/ole/dropsrc.h"
 #include "wx/msw/ole/droptgt.h"
-#include "wx/msw/ole/dataobj.h"
 #elif defined(__WXMOTIF__)
 #include "wx/motif/dnd.h"
 #elif defined(__WXGTK__)
