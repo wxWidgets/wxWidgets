@@ -61,7 +61,7 @@
 #define wxHAVE_GLIBC2 0
 
 //------------------------------------------------------------------------
-// GUI control options (allways enabled in wxGTK)
+// GUI control options (always enabled in wxGTK)
 //------------------------------------------------------------------------
 
 /*
@@ -110,6 +110,10 @@
  * streams implementation.
  */
 #define wxUSE_STD_IOSTREAM  1
+/*
+ * Use constraints mechanism
+ */
+#define wxUSE_CONSTRAINTS 1
 
 //------------------------------------------------------------------------
 // PS options

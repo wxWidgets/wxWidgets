@@ -116,6 +116,13 @@ cd ..
 
 cd ..
 
+echo User dir..
+
+cd src
+mkdir ~/wxgtk_dist/wxGTK/user
+cp Makefile ~/wxgtk_dist/wxGTK/user
+cd ..
+
 echo Src dir..
 
 cd src
@@ -366,6 +373,7 @@ cp Makefile.in ~/wxgtk_dist/wxGTK/samples/forty
 cp *.cpp ~/wxgtk_dist/wxGTK/samples/forty
 cp *.h ~/wxgtk_dist/wxGTK/samples/forty
 cp *.xpm ~/wxgtk_dist/wxGTK/samples/forty
+cp *.xbm ~/wxgtk_dist/wxGTK/samples/forty
 cd ..
 
 echo Fractal sample..
@@ -631,6 +639,7 @@ mkdir ~/wxgtk_dist/wxGTK/samples/wxpoem
 cp Makefile ~/wxgtk_dist/wxGTK/samples/wxpoem
 cp Makefile.in ~/wxgtk_dist/wxGTK/samples/wxpoem
 cp *.cpp ~/wxgtk_dist/wxGTK/samples/wxpoem
+cp *.h ~/wxgtk_dist/wxGTK/samples/wxpoem
 cp *.xpm ~/wxgtk_dist/wxGTK/samples/wxpoem
 cp wxpoem.dat ~/wxgtk_dist/wxGTK/samples/wxpoem
 cp wxpoem.txt ~/wxgtk_dist/wxGTK/samples/wxpoem
