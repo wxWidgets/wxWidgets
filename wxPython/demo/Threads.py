@@ -108,7 +108,7 @@ class GraphWindow(wx.Window):
         dc.SetTextForeground(wx.BLUE)
         dc.SetBackground(wx.Brush(self.GetBackgroundColour()))
         dc.Clear()
-        dc.SetPen(wxPen(wxBLACK, 3, wxSOLID))
+        dc.SetPen(wx.Pen(wx.BLACK, 3, wx.SOLID))
         dc.DrawLine((self.linePos, 0), (self.linePos, size.height-10))
 
         bh = ypos = self.barHeight
@@ -118,8 +118,8 @@ class GraphWindow(wx.Window):
 
             if val:
                 color = self.colors[ x % len(self.colors) ]
-                dc.SetPen(wxPen(color))
-                dc.SetBrush(wxBrush(color))
+                dc.SetPen(wx.Pen(color))
+                dc.SetBrush(wx.Brush(color))
                 dc.DrawRectangle((self.linePos+3, ypos), (val, bh))
 
             ypos = ypos + 2*bh
@@ -128,13 +128,14 @@ class GraphWindow(wx.Window):
 
 
     def OnPaint(self, evt):
-        width, height = self.GetSize()
+        width, height = size =self.GetSize()
         bmp = wx.EmptyBitmap(width, height)
 
         dc = wx.MemoryDC()
         dc.SelectObject(bmp)
 
-        self.Draw(dc, (width, height))
+        
+        self.Draw(dc, size)
 
         wdc = wx.PaintDC(self)
         wdc.BeginDrawing()
