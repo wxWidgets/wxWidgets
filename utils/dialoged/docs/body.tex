@@ -41,12 +41,15 @@ all dialogs in a particular directory.
 \subsection{File menu}
 
 \begin{twocollist}\itemsep=0pt
-\twocolitem{New dialog}{Creates a new dialog resource.}
-\twocolitem{New project}{Creates a new project (clears index and resets project name).}
-\twocolitem{Open}{Opens an existing resource file.}
+\twocolitem{New Dialog}{Creates a new dialog resource.}
+\twocolitem{New Project}{Creates a new project (clears index and resets project name).}
+\twocolitem{Open...}{Opens an existing resource file.}
 \twocolitem{Save}{Saves the current resources.}
 \twocolitem{Save As...}{Saves the current resources in a named file.}
 \twocolitem{Clear}{Clears the current resources.}
+\twocolitem{Convert Old Resources...}{Takes a directory of wxWindows 1.68 dialog resources,
+and converts them to wxWindows 2 resources, in a separate directory. See 
+\helpref{Converting old files}{convertingoldfiles}.}
 \twocolitem{Exit}{Exits the program.}
 \end{twocollist}
 
@@ -63,7 +66,7 @@ item.}
 \subsection{Help menu}
 
 \begin{twocollist}\itemsep=0pt
-\twocolitem{Help topics}{Displays on-line help at the contents page.}
+\twocolitem{Help Topics}{Displays on-line help at the contents page.}
 \twocolitem{About}{Displays an dialog showing the Dialog Editor version and author.}
 \end{twocollist}
 
@@ -76,15 +79,21 @@ The command toolbar consists of the following tools:
 \twocolitem{\icon{new.eps}{New}}{Clears the project.}
 \twocolitem{\icon{open.eps}{Open}}{Opens an existing resource file.}
 \twocolitem{\icon{save.eps}{Save}}{Saves the current resources.}
-\twocolitem{\icon{vert.eps}{Horizontal align}}{Aligns the centre of the selected items horizontally.}
-\twocolitem{\icon{alignt.eps}{Horizontal top-align}}{Aligns the top sides of the selected items horizontally.}
-\twocolitem{\icon{alignb.eps}{Horizontal bottom-align}}{Aligns the bottom sides of the selected items horizontally.}
-\twocolitem{\icon{horiz.eps}{Vertical align}}{Aligns the centre of the selected items vertically.}
-\twocolitem{\icon{alignl.eps}{Vertical left-align}}{Aligns the left sides of the selected items vertically.}
-\twocolitem{\icon{alignr.eps}{Vertical right-align}}{Aligns the right sides of the selected items vertically.}
-\twocolitem{\icon{copysize.eps}{Copy size}}{Copies the size of the first selected item to the subsequently selected item(s).}
-\twocolitem{\icon{tofront.eps}{To front}}{Puts the selected item(s) to the front of the display list.}
-\twocolitem{\icon{toback.eps}{To back}}{Puts the selected item(s) to the back of the display list.}
+\twocolitem{\icon{vert.eps}{Horizontal align}}{Aligns the centre of the selected controls horizontally.}
+\twocolitem{\icon{alignt.eps}{Horizontal top-align}}{Aligns the top sides of the selected controls horizontally.}
+\twocolitem{\icon{alignb.eps}{Horizontal bottom-align}}{Aligns the bottom sides of the selected controls horizontally.}
+\twocolitem{\icon{horiz.eps}{Vertical align}}{Aligns the centre of the selected controls vertically.}
+\twocolitem{\icon{alignl.eps}{Vertical left-align}}{Aligns the left sides of the selected controls vertically.}
+\twocolitem{\icon{alignr.eps}{Vertical right-align}}{Aligns the right sides of the selected controls vertically.}
+\twocolitem{\icon{copysize.eps}{Copy size}}{Copies the size of the first selected control to the subsequently selected control(s).}
+\twocolitem{\icon{copywdth.eps}{Copy width}}{Copies the width of the first selected control to the subsequently selected control(s).}
+\twocolitem{\icon{copyhght.eps}{Copy height}}{Copies the height of the first selected control to the subsequently selected control(s).}
+\twocolitem{\icon{disthor.eps}{Distribute horizontally}}{Evenly distributes the space between the selected controls, horizontally. Note that the controls
+should be selected in order from left to right.}
+\twocolitem{\icon{distvert.eps}{Distribute vertically}}{Evenly distributes the space between the selected controls, vertically. Note that the controls
+should be selected in order from top to bottom.}
+\twocolitem{\icon{tofront.eps}{To front}}{Puts the selected control(s) to the front of the display list.}
+\twocolitem{\icon{toback.eps}{To back}}{Puts the selected control(s) to the back of the display list.}
 \twocolitem{\icon{help.eps}{Help}}{Invokes Dialog Editor help.}
 \end{twocollist}
 
@@ -197,4 +206,29 @@ platforms. It may be better to plan to conditionally include or load different
 resource files for different platforms, with spacing modified to suit each
 environment. The best thing is to try your dialog resource on several platforms
 and see whether tweaking is required for some platforms.
+
+\section{Converting old files}\label{convertingoldfiles}
+
+Dialog Editor can make an attempt at converting dialog resources created with Dialog Editor for wxWindows 1.68.
+The command is {\bf Convert Old Resources...} on the {\bf File} menu.
+
+You need to specify two directories, an input and an output directory. Dialog Editor will
+do the following conversions:
+
+\begin{enumerate}\itemsep=0pt
+\item wxMultiText becomes a wxTextCtrl with wxTE\_MULTILINE style.
+\item wxText becomes a wxTextCtrl.
+\item wxMessage becomes either a wxStaticText or wxStaticBitmap.
+\item wxButton becomes a wxBitmapButton if necessary.
+\item wxGroupBox becomes wxStaticBox.
+\item Controls that no longer have labels, such as wxTextCtrl and wxListBox,
+have a separate wxStaticText control created for them at approximately the correct
+position. The label's window name becomes ControlName_Label where ControlName is
+the name of the control that formerly had the label.
+\item Identifiers are allocated.
+\item Font sizes are reduced to counter the decreased font size now created by wxWindows
+for a given point size.
+\item The dialog height is reduced slightly to compensate for the fact that the dialog caption
+is no longer included in the size.
+\end{enumerate}
 

@@ -70,8 +70,8 @@ public:
     wxBitmap( const wxString &filename, int type = wxBITMAP_TYPE_XPM );
     ~wxBitmap();
     wxBitmap& operator = ( const wxBitmap& bmp );
-    bool operator == ( const wxBitmap& bmp );
-    bool operator != ( const wxBitmap& bmp );
+    bool operator == ( const wxBitmap& bmp ) const;
+    bool operator != ( const wxBitmap& bmp ) const;
     bool Ok() const;
 
     bool Create(int width, int height, int depth = -1);

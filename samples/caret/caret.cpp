@@ -61,6 +61,7 @@ public:
     // event handlers (these functions should _not_ be virtual)
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
+    void OnSetBlinkTime(wxCommandEvent& event);
 
 private:
     // any class wishing to process wxWindows events must use this macro
@@ -124,8 +125,7 @@ enum
     // menu items
     Caret_Quit = 1,
     Caret_About,
-    Caret_Test1,
-    Caret_Test2,
+    Caret_SetBlinkTime,
 
     // controls start here (the numbers are, of course, arbitrary)
     Caret_Text = 1000
@@ -141,6 +141,7 @@ enum
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Caret_Quit,  MyFrame::OnQuit)
     EVT_MENU(Caret_About, MyFrame::OnAbout)
+    EVT_MENU(Caret_SetBlinkTime, MyFrame::OnSetBlinkTime)
 END_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWindows to create
@@ -190,6 +191,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     // create a menu bar
     wxMenu *menuFile = new wxMenu;
 
+    menuFile->Append(Caret_SetBlinkTime, "&Blink time...\tCtrl-B");
+    menuFile->AppendSeparator();
     menuFile->Append(Caret_About, "&About...\tCtrl-A", "Show about dialog");
     menuFile->AppendSeparator();
     menuFile->Append(Caret_Quit, "E&xit\tAlt-X", "Quit this program");
@@ -219,9 +222,26 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageBox(_T("This is the about dialog of caret sample."), "About Caret", wxOK | wxICON_INFORMATION, this);
+    wxMessageBox(_T("The caret wxWindows sample.\n© 1999 Vadim Zeitlin"),
+                 _T("About Caret"), wxOK | wxICON_INFORMATION, this);
 }
 
+void MyFrame::OnSetBlinkTime(wxCommandEvent& WXUNUSED(event))
+{
+    long blinkTime = wxGetNumberFromUser
+                     (
+                      _T("The caret blink time is the time between two blinks"),
+                      _T("Time in milliseconds:"),
+                      _T("wxCaret sample"),
+                      wxCaret::GetBlinkTime(), 0, 10000,
+                      this
+                     );
+    if ( blinkTime != -1 )
+    {
+        wxCaret::SetBlinkTime((int)blinkTime);
+        wxLogStatus(this, _T("Blink time set to %ld milliseconds."), blinkTime);
+    }
+}
 
 // ----------------------------------------------------------------------------
 // MyCanvas
@@ -292,10 +312,15 @@ void MyCanvas::OnSize( wxSizeEvent &event )
     event.Skip();
 }
 
+// NB: this method is horrible inefficient especially because the caret
+//     needs to be redrawn often and in this case we only have to redraw
+//     the caret location and not the entire window - in a real program we
+//     would use GetUpdateRegion() and iterate over rectangles it contains
 void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
     wxPaintDC dc( this );
     PrepareDC( dc );
+    dc.Clear();
 
     dc.SetFont( m_font );
 

@@ -9,6 +9,20 @@ drawbacks: the LEAVE\_WINDOW event might be received some time after the mouse
 left the window and the state variables for it may have changed during this
 time.
 
+{\bf NB: } Note the difference between methods like 
+\helpref{LeftDown}{wxmouseeventleftdown} and 
+\helpref{LeftIsDown}{wxmouseeventleftisdown}: the formet returns {\tt TRUE}
+when the event corresponds to the left mouse button click while the latter
+returns {\tt TRUE} if the left mouse button is currently being pressed. For
+example, when the user is dragging the mouse you can use 
+\helpref{LeftIsDown}{wxmouseeventleftisdown} to test
+whether the left mouse button is (still) depressed. Also, by convention, if
+\helpref{LeftDown}{wxmouseeventleftdown} returns {\tt TRUE}, 
+\helpref{LeftIsDown}{wxmouseeventleftisdown} will also return {\tt TRUE} in
+wxWindows whatever the underlying GUI behaviour is (which is
+platform-dependent). The same applies, of course, to other mouse buttons as
+well.
+
 \wxheading{Derived from}
 
 \helpref{wxEvent}{wxevent}
@@ -242,7 +256,7 @@ Returns TRUE if the event was a left double click.
 
 Returns TRUE if the left mouse button changed to down.
 
-\membersection{wxMouseEvent::LeftIsDown}
+\membersection{wxMouseEvent::LeftIsDown}\label{wxmouseeventleftisdown}
 
 \constfunc{bool}{LeftIsDown}{\void}
 
@@ -281,7 +295,7 @@ Returns TRUE if the event was a middle double click.
 
 Returns TRUE if the middle mouse button changed to down.
 
-\membersection{wxMouseEvent::MiddleIsDown}
+\membersection{wxMouseEvent::MiddleIsDown}\label{wxmouseeventmiddleisdown}
 
 \constfunc{bool}{MiddleIsDown}{\void}
 
@@ -312,7 +326,7 @@ Returns TRUE if the event was a right double click.
 
 Returns TRUE if the right mouse button changed to down.
 
-\membersection{wxMouseEvent::RightIsDown}
+\membersection{wxMouseEvent::RightIsDown}\label{wxmouseeventrightisdown}
 
 \constfunc{bool}{RightIsDown}{\void}
 

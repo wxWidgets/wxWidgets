@@ -21,7 +21,7 @@ item: Set Variable
   Value=%GROUPDIR%\%GROUP%
 end
 item: Create Shortcut
-  Source=%MAINDIR%\Docs\Winhelp\Wx.hlp
+  Source=%MAINDIR%\Docs\htmlhelp\Wx.chm
   Destination=%GROUP%\wxWindows Manual.lnk
   Working Directory=%MAINDIR%
 end
@@ -31,17 +31,17 @@ item: Create Shortcut
   Working Directory=%MAINDIR%
 end
 item: Create Shortcut
-  Source=%MAINDIR%\docs\winhelp\dialoged.hlp
+  Source=%MAINDIR%\docs\htmlhelp\dialoged.chm
   Destination=%GROUP%\Dialog Editor Help.lnk
   Working Directory=%MAINDIR%
 end
 item: Create Shortcut
-  Source=%MAINDIR%\contrib\docs\winhelp\ogl.hlp
+  Source=%MAINDIR%\contrib\docs\htmlhelp\ogl.chm
   Destination=%GROUP%\Object Graphics Library Help.lnk
   Working Directory=%MAINDIR%
 end
 item: Create Shortcut
-  Source=%MAINDIR%\docs\winhelp\tex2rtf.hlp
+  Source=%MAINDIR%\docs\htmlhelp\tex2rtf.chm
   Destination=%GROUP%\Tex2RTF Help.lnk
   Working Directory=%MAINDIR%
 end
@@ -91,7 +91,7 @@ end
 item: Add ProgMan Icon
   Group=%GROUP%
   Icon Name=wxWindows Manual
-  Command Line=%MAINDIR%\Docs\Winhelp\Wx.hlp
+  Command Line=%MAINDIR%\Docs\htmlhelp\wx.chm
   Default Directory=%MAINDIR%
 end
 item: Add ProgMan Icon
@@ -115,19 +115,19 @@ end
 item: Add ProgMan Icon
   Group=%GROUP%
   Icon Name=Dialog Editor Help
-  Command Line=%MAINDIR%\docs\winhelp\dialoged.hlp
+  Command Line=%MAINDIR%\docs\htmlhelp\dialoged.chm
   Default Directory=%MAINDIR%
 end
 item: Add ProgMan Icon
   Group=%GROUP%
   Icon Name=Object Graphics Library Help
-  Command Line=%MAINDIR%\contrib\docs\winhelp\ogl.hlp
+  Command Line=%MAINDIR%\contrib\docs\htmlhelp\ogl.chm
   Default Directory=%MAINDIR%
 end
 item: Add ProgMan Icon
   Group=%GROUP%
   Icon Name=Tex2RTF Help
-  Command Line=%MAINDIR%\docs\winhelp\tex2rtf.hlp
+  Command Line=%MAINDIR%\docs\htmlhelp\tex2rtf.chm
   Default Directory=%MAINDIR%
 end
 item: Add ProgMan Icon

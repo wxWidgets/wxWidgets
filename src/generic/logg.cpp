@@ -33,6 +33,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/button.h"
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/menu.h"
@@ -42,10 +43,12 @@
     #include "wx/textctrl.h"
     #include "wx/sizer.h"
     #include "wx/statbmp.h"
+    #include "wx/button.h"
 #endif // WX_PRECOMP
 
 #include "wx/file.h"
 #include "wx/textfile.h"
+#include "wx/statline.h"
 
 #ifdef  __WXMSW__
   // for OutputDebugString()
@@ -85,9 +88,15 @@ public:
     // event handlers
     void OnOk(wxCommandEvent& event);
     void OnDetails(wxCommandEvent& event);
+#if wxUSE_FILE
+    void OnSave(wxCommandEvent& event);
+#endif // wxUSE_FILE
     void OnListSelect(wxListEvent& event);
 
 private:
+    // create controls needed for the details display
+    void CreateDetailsControls();
+
     // the data for the listctrl
     wxArrayString m_messages;
     wxArrayInt m_severity;
@@ -97,8 +106,15 @@ private:
     wxButton *m_btnDetails;
     bool      m_showingDetails;
 
-    // the listctrl (not shown initially)
+    // the controls which are not shown initially (but only when details
+    // button is pressed)
     wxListCtrl *m_listctrl;
+#if wxUSE_STATLINE
+    wxStaticLine *m_statline;
+#endif // wxUSE_STATLINE
+#if wxUSE_FILE
+    wxButton *m_btnSave;
+#endif // wxUSE_FILE
 
     // the translated "Details" string
     static wxString ms_details;
@@ -107,12 +123,29 @@ private:
 };
 
 BEGIN_EVENT_TABLE(wxLogDialog, wxDialog)
-    EVT_BUTTON(wxID_OK,     wxLogDialog::OnOk)
+    EVT_BUTTON(wxID_CANCEL, wxLogDialog::OnOk)
     EVT_BUTTON(wxID_MORE,   wxLogDialog::OnDetails)
+#if wxUSE_FILE
+    EVT_BUTTON(wxID_SAVE,   wxLogDialog::OnSave)
+#endif // wxUSE_FILE
     EVT_LIST_ITEM_SELECTED(-1, wxLogDialog::OnListSelect)
 END_EVENT_TABLE()
 
 #endif // wxUSE_LOG_DIALOG
+
+// ----------------------------------------------------------------------------
+// private functions
+// ----------------------------------------------------------------------------
+
+#if wxUSE_FILE
+
+// pass an uninitialized file object, the function will ask the user for the
+// filename and try to open it, returns TRUE on success (file was opened),
+// FALSE if file couldn't be opened/created and -1 if the file selection
+// dialog was cancelled
+static int OpenLogFile(wxFile& file, wxString *filename = NULL);
+
+#endif // wxUSE_FILE
 
 // ----------------------------------------------------------------------------
 // global variables
@@ -174,13 +207,6 @@ void wxLogTextCtrl::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
 
 wxLogGui::wxLogGui()
 {
-    // we must translate them here in the very beginning or we risk to have
-    // reentrancy problems when called from inside wxGetTranslation() leading
-    // to inifnite recursion
-    m_error = _("Error");
-    m_warning = _("Warning");
-    m_info = _("Information");
-
     Clear();
 }
 
@@ -203,26 +229,31 @@ void wxLogGui::Flush()
     // do it right now to block any new calls to Flush() while we're here
     m_bHasMessages = FALSE;
 
-    wxString title = wxTheApp->GetAppName();
-    if ( !!title )
-    {
-        title[0u] = wxToupper(title[0u]);
-        title += _T(' ');
-    }
+    wxString appName = wxTheApp->GetAppName();
+    
+#if 0
+    // This skrews up names likes "wxDesigner"
+    if ( !!appName )
+        appName[0u] = wxToupper(appName[0u]);
+#endif
 
     long style;
+    wxString titleFormat;
     if ( m_bErrors ) {
-        title += m_error;
+        titleFormat = _("%s Error");
         style = wxICON_STOP;
     }
     else if ( m_bWarnings ) {
-        title += m_warning;
+        titleFormat = _("%s Warning");
         style = wxICON_EXCLAMATION;
     }
     else {
-        title += m_info;
+        titleFormat = _("%s Information");
         style = wxICON_INFORMATION;
     }
+    
+    wxString title;
+    title.Printf(titleFormat, appName.c_str());
 
     // this is the best we can do here
     wxWindow *parent = wxTheApp->GetTopWindow();
@@ -404,8 +435,8 @@ private:
         Menu_Clear = wxID_CLEAR
     };
 
-    // instead of closing just hide the window to be able to Show() it later
-    void DoClose() { Show(FALSE); }
+    // common part of OnClose() and OnCloseWindow()
+    void DoClose();
 
     wxTextCtrl  *m_pTextCtrl;
     wxLogWindow *m_log;
@@ -455,6 +486,16 @@ wxLogFrame::wxLogFrame(wxFrame *pParent, wxLogWindow *log, const wxChar *szTitle
     m_log->OnFrameCreate(this);
 }
 
+void wxLogFrame::DoClose()
+{
+    if ( m_log->OnFrameClose(this) )
+    {
+        // instead of closing just hide the window to be able to Show() it
+        // later
+        Show(FALSE);
+    }
+}
+
 void wxLogFrame::OnClose(wxCommandEvent& WXUNUSED(event))
 {
     DoClose();
@@ -468,62 +509,23 @@ void wxLogFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 #if wxUSE_FILE
 void wxLogFrame::OnSave(wxCommandEvent& WXUNUSED(event))
 {
-    // get the file name
-    // -----------------
-    const wxChar *szFileName = wxSaveFileSelector(wxT("log"), wxT("txt"), wxT("log.txt"));
-    if ( szFileName == NULL ) {
+    wxString filename;
+    wxFile file;
+    int rc = OpenLogFile(file, &filename);
+    if ( rc == -1 )
+    {
         // cancelled
         return;
     }
 
-    // open file
-    // ---------
-    wxFile file;
-    bool bOk = FALSE;
-    if ( wxFile::Exists(szFileName) ) {
-        bool bAppend = FALSE;
-        wxString strMsg;
-        strMsg.Printf(_("Append log to file '%s' "
-                    "(choosing [No] will overwrite it)?"), szFileName);
-        switch ( wxMessageBox(strMsg, _("Question"), wxYES_NO | wxCANCEL) ) {
-            case wxYES:
-                bAppend = TRUE;
-                break;
-
-            case wxNO:
-                bAppend = FALSE;
-                break;
-
-            case wxCANCEL:
-                return;
-
-            default:
-                wxFAIL_MSG(_("invalid message box return value"));
-        }
-
-        if ( bAppend ) {
-            bOk = file.Open(szFileName, wxFile::write_append);
-        }
-        else {
-            bOk = file.Create(szFileName, TRUE /* overwrite */);
-        }
-    }
-    else {
-        bOk = file.Create(szFileName);
-    }
+    bool bOk = rc != 0;
 
     // retrieve text and save it
     // -------------------------
     int nLines = m_pTextCtrl->GetNumberOfLines();
     for ( int nLine = 0; bOk && nLine < nLines; nLine++ ) {
         bOk = file.Write(m_pTextCtrl->GetLineText(nLine) +
-                // we're not going to pull in the whole wxTextFile if all we need is this...
-#if wxUSE_TEXTFILE
-                wxTextFile::GetEOL()
-#else // !wxUSE_TEXTFILE
-                '\n'
-#endif // wxUSE_TEXTFILE
-                        );
+                         wxTextFile::GetEOL());
     }
 
     if ( bOk )
@@ -533,7 +535,7 @@ void wxLogFrame::OnSave(wxCommandEvent& WXUNUSED(event))
         wxLogError(_("Can't save log contents to file."));
     }
     else {
-        wxLogStatus(this, _("Log saved to the file '%s'."), szFileName);
+        wxLogStatus(this, _("Log saved to the file '%s'."), filename.c_str());
     }
 }
 #endif // wxUSE_FILE
@@ -643,6 +645,12 @@ void wxLogWindow::OnFrameCreate(wxFrame * WXUNUSED(frame))
 {
 }
 
+bool wxLogWindow::OnFrameClose(wxFrame * WXUNUSED(frame))
+{
+    // allow to close
+    return TRUE;
+}
+
 void wxLogWindow::OnFrameDelete(wxFrame * WXUNUSED(frame))
 {
     m_pLogFrame = (wxLogFrame *)NULL;
@@ -672,12 +680,13 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
                          const wxArrayLong& times,
                          const wxString& caption,
                          long style)
-           : wxDialog(parent, -1, caption )
+           : wxDialog(parent, -1, caption)
 {
     if ( ms_details.IsEmpty() )
     {
-        // ensure that we won't try to call wxGetTranslation() twice
-        ms_details = _T("&Details");
+        // ensure that we won't loop here if wxGetTranslation()
+        // happens to pop up a Log message while translating this :-)
+        ms_details = wxTRANSLATE("&Details");
         ms_details = wxGetTranslation(ms_details);
     }
 
@@ -703,6 +712,14 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
     m_showingDetails = FALSE; // not initially
     m_listctrl = (wxListCtrl *)NULL;
 
+#if wxUSE_STATLINE
+    m_statline = (wxStaticLine *)NULL;
+#endif // wxUSE_STATLINE
+
+#if wxUSE_FILE
+    m_btnSave = (wxButton *)NULL;
+#endif // wxUSE_FILE
+
     // create the controls which are always shown and layout them: we use
     // sizers even though our window is not resizeable to calculate the size of
     // the dialog properly
@@ -710,15 +727,18 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
     wxBoxSizer *sizerButtons = new wxBoxSizer(wxVERTICAL);
     wxBoxSizer *sizerAll = new wxBoxSizer(wxHORIZONTAL);
 
-    wxButton *btnOk = new wxButton(this, wxID_OK, _("OK"));
-    sizerButtons->Add(btnOk, 0, wxCENTRE|wxBOTTOM, MARGIN/2);
+    // this "Ok" button has wxID_CANCEL id - not very logical, but this allows
+    // to close the log dialog with <Esc> which wouldn't work otherwise (as it
+    // translates into click on cancel button)
+    wxButton *btnOk = new wxButton(this, wxID_CANCEL, _("OK"));
+    sizerButtons->Add(btnOk, 0, wxGROW|wxBOTTOM, MARGIN/2);
     m_btnDetails = new wxButton(this, wxID_MORE, ms_details + _T(" >>"));
-    sizerButtons->Add(m_btnDetails, 0, wxCENTRE|wxTOP, MARGIN/2 - 1);
+    sizerButtons->Add(m_btnDetails, 0, wxGROW|wxTOP, MARGIN/2 - 1);
 
 #ifndef __WIN16__
     wxIcon icon = wxTheApp->GetStdIcon((int)(style & wxICON_MASK));
     sizerAll->Add(new wxStaticBitmap(this, -1, icon), 0, wxCENTRE);
-#endif
+#endif // !Win16
 
     const wxString& message = messages.Last();
     sizerAll->Add(CreateTextSizer(message), 0, wxCENTRE|wxLEFT|wxRIGHT, MARGIN);
@@ -747,6 +767,118 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
     Centre();
 }
 
+void wxLogDialog::CreateDetailsControls()
+{
+    // create the save button and separator line if possible
+#if wxUSE_FILE
+    m_btnSave = new wxButton(this, wxID_SAVE, _("&Save..."));
+#endif // wxUSE_FILE
+
+#if wxUSE_STATLINE
+    m_statline = new wxStaticLine(this, -1);
+#endif // wxUSE_STATLINE
+
+    // create the list ctrl now
+    m_listctrl = new wxListCtrl(this, -1,
+                                wxDefaultPosition, wxDefaultSize,
+                                wxSUNKEN_BORDER |
+                                wxLC_REPORT |
+                                wxLC_NO_HEADER |
+                                wxLC_SINGLE_SEL);
+
+    // no need to translate these strings as they're not shown to the
+    // user anyhow (we use wxLC_NO_HEADER style)
+    m_listctrl->InsertColumn(0, _T("Message"));
+    m_listctrl->InsertColumn(1, _T("Time"));
+
+    // prepare the imagelist
+    static const int ICON_SIZE = 16;
+    wxImageList *imageList = new wxImageList(ICON_SIZE, ICON_SIZE);
+
+    // order should be the same as in the switch below!
+    static const int icons[] =
+    {
+        wxICON_ERROR,
+        wxICON_EXCLAMATION,
+        wxICON_INFORMATION
+    };
+
+    bool loadedIcons = TRUE;
+
+#ifndef __WIN16__
+    for ( size_t icon = 0; icon < WXSIZEOF(icons); icon++ )
+    {
+        wxBitmap bmp = wxTheApp->GetStdIcon(icons[icon]);
+
+        // This may very well fail if there are insufficient
+        // colours available. Degrade gracefully.
+
+        if (!bmp.Ok())
+            loadedIcons = FALSE;
+        else
+            imageList->Add(wxImage(bmp).
+                        Rescale(ICON_SIZE, ICON_SIZE).
+                         ConvertToBitmap());
+    }
+
+    m_listctrl->SetImageList(imageList, wxIMAGE_LIST_SMALL);
+#endif // !Win16
+
+    // and fill it
+    wxString fmt = wxLog::GetTimestamp();
+    if ( !fmt )
+    {
+        // default format
+        fmt = _T("%c");
+    }
+
+    size_t count = m_messages.GetCount();
+    for ( size_t n = 0; n < count; n++ )
+    {
+        int image = -1;
+#ifndef __WIN16__
+        switch ( m_severity[n] )
+        {
+            case wxLOG_Error:
+                image = 0;
+                break;
+
+            case wxLOG_Warning:
+                image = 1;
+                break;
+
+            default:
+                image = 2;
+        }
+#endif // !Win16
+
+        if (!loadedIcons)
+            image = -1;
+
+        if (image > -1)
+            m_listctrl->InsertItem(n, m_messages[n], image);
+        else
+            m_listctrl->InsertItem(n, m_messages[n]);
+
+        m_listctrl->SetItem(n, 1,
+                            wxDateTime((time_t)m_times[n]).Format(fmt));
+    }
+
+    // let the columns size themselves
+    m_listctrl->SetColumnWidth(0, wxLIST_AUTOSIZE);
+    m_listctrl->SetColumnWidth(1, wxLIST_AUTOSIZE);
+
+    // get the approx height of the listctrl
+    wxFont font = GetFont();
+    if ( !font.Ok() )
+        font = *wxSWISS_FONT;
+
+    int y;
+    GetTextExtent(_T("H"), (int*)NULL, &y, (int*)NULL, (int*)NULL, &font);
+    int height = wxMax(y*(count + 3), 100);
+    m_listctrl->SetSize(-1, height);
+}
+
 void wxLogDialog::OnListSelect(wxListEvent& event)
 {
     // we can't just disable the control because this looks ugly under Windows
@@ -760,6 +892,48 @@ void wxLogDialog::OnOk(wxCommandEvent& WXUNUSED(event))
     EndModal(wxID_OK);
 }
 
+#if wxUSE_FILE
+
+void wxLogDialog::OnSave(wxCommandEvent& WXUNUSED(event))
+{
+    wxFile file;
+    int rc = OpenLogFile(file);
+    if ( rc == -1 )
+    {
+        // cancelled
+        return;
+    }
+
+    bool ok = rc != 0;
+
+    wxString fmt = wxLog::GetTimestamp();
+    if ( !fmt )
+    {
+        // default format
+        fmt = _T("%c");
+    }
+
+    size_t count = m_messages.GetCount();
+    for ( size_t n = 0; ok && (n < count); n++ )
+    {
+        wxString line;
+        line << wxDateTime((time_t)m_times[n]).Format(fmt)
+             << _T(": ")
+             << m_messages[n]
+             << wxTextFile::GetEOL();
+
+        ok = file.Write(line);
+    }
+
+    if ( ok )
+        ok = file.Close();
+
+    if ( !ok )
+        wxLogError(_("Can't save log contents to file."));
+}
+
+#endif // wxUSE_FILE
+
 void wxLogDialog::OnDetails(wxCommandEvent& WXUNUSED(event))
 {
     wxSizer *sizer = GetSizer();
@@ -769,6 +943,14 @@ void wxLogDialog::OnDetails(wxCommandEvent& WXUNUSED(event))
         m_btnDetails->SetLabel(ms_details + _T(">>"));
 
         sizer->Remove(m_listctrl);
+
+#if wxUSE_STATLINE
+        sizer->Remove(m_statline);
+#endif // wxUSE_STATLINE
+
+#if wxUSE_FILE
+        sizer->Remove(m_btnSave);
+#endif // wxUSE_FILE
     }
     else // show details now
     {
@@ -776,91 +958,18 @@ void wxLogDialog::OnDetails(wxCommandEvent& WXUNUSED(event))
 
         if ( !m_listctrl )
         {
-            // create it now
-            m_listctrl = new wxListCtrl(this, -1,
-                                        wxDefaultPosition, wxDefaultSize,
-                                        wxSUNKEN_BORDER |
-                                        wxLC_REPORT |
-                                        wxLC_NO_HEADER |
-                                        wxLC_SINGLE_SEL);
-            // no need to translate these strings as they're not shown to the
-            // user anyhow (we use wxLC_NO_HEADER style)
-            m_listctrl->InsertColumn(0, _T("Message"));
-            m_listctrl->InsertColumn(1, _T("Time"));
-
-            // prepare the imagelist
-            static const int ICON_SIZE = 16;
-            wxImageList *imageList = new wxImageList(ICON_SIZE, ICON_SIZE);
-
-            // order should be the same as in the switch below!
-            static const int icons[] =
-            {
-                wxICON_ERROR,
-                wxICON_EXCLAMATION,
-                wxICON_INFORMATION
-            };
-
-#ifndef __WIN16__
-            for ( size_t icon = 0; icon < WXSIZEOF(icons); icon++ )
-            {
-                wxBitmap bmp = wxTheApp->GetStdIcon(icons[icon]);
-                imageList->Add(wxImage(bmp).
-                                Rescale(ICON_SIZE, ICON_SIZE).
-                                 ConvertToBitmap());
-            }
-
-            m_listctrl->SetImageList(imageList, wxIMAGE_LIST_SMALL);
-#endif
-
-            // and fill it
-            wxString fmt = wxLog::GetTimestamp();
-            if ( !fmt )
-            {
-                // default format
-                fmt = _T("%X");
-            }
-
-            size_t count = m_messages.GetCount();
-            for ( size_t n = 0; n < count; n++ )
-            {
-                int image = -1;
-#ifndef __WIN16__
-                switch ( m_severity[n] )
-                {
-                    case wxLOG_Error:
-                        image = 0;
-                        break;
-
-                    case wxLOG_Warning:
-                        image = 1;
-                        break;
-
-                    default:
-                        image = 2;
-                }
-#endif
-
-                m_listctrl->InsertItem(n, m_messages[n], image);
-                m_listctrl->SetItem(n, 1,
-                                    wxDateTime((time_t)m_times[n]).Format(fmt));
-            }
-
-            // let the columns size themselves
-            m_listctrl->SetColumnWidth(0, wxLIST_AUTOSIZE);
-            m_listctrl->SetColumnWidth(1, wxLIST_AUTOSIZE);
-
-            // get the approx height of the listctrl
-            wxFont font = GetFont();
-            if ( !font.Ok() )
-                font = *wxSWISS_FONT;
-
-            int y;
-            GetTextExtent(_T("H"), (int*)NULL, &y, (int*)NULL, (int*)NULL, &font);
-            int height = wxMin(y*(count + 3), 100);
-            m_listctrl->SetSize(-1, height);
+            CreateDetailsControls();
         }
 
-        sizer->Add(m_listctrl, 1, wxEXPAND|(wxALL & ~wxTOP), MARGIN);
+#if wxUSE_STATLINE
+        sizer->Add(m_statline, 0, wxEXPAND | (wxALL & ~wxTOP), MARGIN);
+#endif // wxUSE_STATLINE
+
+        sizer->Add(m_listctrl, 1, wxEXPAND | (wxALL & ~wxTOP), MARGIN);
+
+#if wxUSE_FILE
+        sizer->Add(m_btnSave, 0, wxALIGN_RIGHT | (wxALL & ~wxTOP), MARGIN);
+#endif // wxUSE_FILE
     }
 
     m_showingDetails = !m_showingDetails;
@@ -868,6 +977,13 @@ void wxLogDialog::OnDetails(wxCommandEvent& WXUNUSED(event))
     // in any case, our size changed - update
     sizer->SetSizeHints(this);
     sizer->Fit(this);
+
+#ifdef __WXGTK__
+    // VS: this is neccessary in order to force frame redraw under
+    // WindowMaker or fvwm2 (and probably other broken WMs).
+    // Otherwise, detailed list wouldn't be displayed.
+    Show(TRUE);
+#endif // wxGTK
 }
 
 wxLogDialog::~wxLogDialog()
@@ -879,3 +995,64 @@ wxLogDialog::~wxLogDialog()
 }
 
 #endif // wxUSE_LOG_DIALOG
+
+#if wxUSE_FILE
+
+// pass an uninitialized file object, the function will ask the user for the
+// filename and try to open it, returns TRUE on success (file was opened),
+// FALSE if file couldn't be opened/created and -1 if the file selection
+// dialog was cancelled
+static int OpenLogFile(wxFile& file, wxString *pFilename)
+{
+    // get the file name
+    // -----------------
+    wxString filename = wxSaveFileSelector(wxT("log"), wxT("txt"), wxT("log.txt"));
+    if ( !filename ) {
+        // cancelled
+        return -1;
+    }
+
+    // open file
+    // ---------
+    bool bOk = FALSE;
+    if ( wxFile::Exists(filename) ) {
+        bool bAppend = FALSE;
+        wxString strMsg;
+        strMsg.Printf(_("Append log to file '%s' (choosing [No] will overwrite it)?"),
+                      filename.c_str());
+        switch ( wxMessageBox(strMsg, _("Question"),
+                              wxICON_QUESTION | wxYES_NO | wxCANCEL) ) {
+            case wxYES:
+                bAppend = TRUE;
+                break;
+
+            case wxNO:
+                bAppend = FALSE;
+                break;
+
+            case wxCANCEL:
+                return -1;
+
+            default:
+                wxFAIL_MSG(_("invalid message box return value"));
+        }
+
+        if ( bAppend ) {
+            bOk = file.Open(filename, wxFile::write_append);
+        }
+        else {
+            bOk = file.Create(filename, TRUE /* overwrite */);
+        }
+    }
+    else {
+        bOk = file.Create(filename);
+    }
+
+    if ( pFilename )
+        *pFilename = filename;
+
+    return bOk;
+}
+
+#endif // wxUSE_FILE
+

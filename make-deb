@@ -12,11 +12,15 @@ cd .. && rm -r ${TEMPDIR}
 
 echo "done."
 echo " "
-echo "  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+echo "  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 echo "  If this is a new release version"
 echo "  remember to update the changelog"
 echo "  before building the package."
 echo " "
-echo "  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+echo "  Also remember to create debian/control"
+echo "  ( it needs to be in the source package"
+echo "    for NMU build deps to work )"
+echo " "
+echo "  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 echo " "
 

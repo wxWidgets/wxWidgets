@@ -40,8 +40,8 @@ public:
     wxBrush( const wxBrush &brush );
     ~wxBrush();
     wxBrush& operator = ( const wxBrush& brush );
-    bool operator == ( const wxBrush& brush );
-    bool operator != ( const wxBrush& brush );
+    bool operator == ( const wxBrush& brush ) const;
+    bool operator != ( const wxBrush& brush ) const;
     bool Ok() const;
 
     int GetStyle() const;

@@ -139,7 +139,8 @@ public:
     wxTreeItemId GetOldItem() const { return m_itemOld; }
 
         // the point where the mouse was when the drag operation started (for
-        // wxEVT_COMMAND_TREE_BEGIN_(R)DRAG events only)
+        // wxEVT_COMMAND_TREE_BEGIN_(R)DRAG events only) or the point where
+        // the mouse click event happened (wxEVT_COMMAND_TREE_ITEM_XXX_CLICK)
     wxPoint GetPoint() const { return m_pointDrag; }
 
         // keyboard code (for wxEVT_COMMAND_TREE_KEY_DOWN only)

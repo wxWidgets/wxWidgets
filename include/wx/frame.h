@@ -192,6 +192,10 @@ protected:
     // something changes
     virtual void PositionStatusBar() { }
 
+    // show the help string for this menu item in the given status bar: the
+    // status bar pointer can be NULL; return TRUE if help was shown
+    bool ShowMenuHelp(wxStatusBar *statbar, int id);
+
     wxStatusBar *m_frameStatusBar;
 #endif // wxUSE_STATUSBAR
 

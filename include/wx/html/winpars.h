@@ -66,6 +66,7 @@ class WXDLLEXPORT wxHtmlWinParser : public wxHtmlParser
 
         static void AddModule(wxHtmlTagsModule *module);
                 // Adds tags module. see wxHtmlTagsModule for details.
+        static void RemoveModule(wxHtmlTagsModule *module);
 
         // parsing-related methods. These methods are called by tag handlers:
         wxHtmlContainerCell *GetContainer() const {return m_Container;}

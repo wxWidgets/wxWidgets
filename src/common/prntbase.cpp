@@ -82,10 +82,12 @@ wxPrinterBase::wxPrinterBase(wxPrintDialogData *data)
     sm_abortIt = FALSE;
     if (data)
         m_printDialogData = (*data);
+    sm_lastError = wxPRINTER_NO_ERROR;
 }
 
 wxWindow *wxPrinterBase::sm_abortWindow = (wxWindow *) NULL;
 bool wxPrinterBase::sm_abortIt = FALSE;
+wxPrinterError wxPrinterBase::sm_lastError = wxPRINTER_NO_ERROR;
 
 wxPrinterBase::~wxPrinterBase()
 {
@@ -653,13 +655,13 @@ bool wxPrintPreviewBase::PaintPage(wxWindow *canvas, wxDC& dc)
 
 bool wxPrintPreviewBase::RenderPage(int pageNum)
 {
+    wxBusyCursor busy;
+
     int canvasWidth, canvasHeight;
 
     if (!m_previewCanvas)
     {
-        wxFAIL_MSG(_T("wxPrintPreviewBase::RenderPage: must use "
-                      "wxPrintPreviewBase::SetCanvas to let me "
-                      "know about the canvas!"));
+        wxFAIL_MSG(_T("wxPrintPreviewBase::RenderPage: must use wxPrintPreviewBase::SetCanvas to let me know about the canvas!"));
 
         return FALSE;
     }

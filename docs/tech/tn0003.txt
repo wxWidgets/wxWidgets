@@ -45,6 +45,15 @@ For Word RTF:
 
   tex2rtf manual.tex manual.rtf -rtf -twice
 
+If you wish to have a GUI display show the status of what is happening
+as the conversion is happening, use the '-interactive' command line
+parameter, and then choose FILE|GO from the menu.  For example:
+
+   tex2rtf manual.tex manual.rtf -rtf -twice -interactive
+
+NOTE: You must be using the latest tex2rtf which was released with
+v2.2.0 of wxWindowsto use the -interactive switch
+
 If you wish to generate documentation for wxHTML Help Viewer
 (or Windows HTML Help), set htmlWorkshopFiles to true in your
 tex2rtf.ini file. See also the wxHTML Notes section in the

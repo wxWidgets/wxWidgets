@@ -74,11 +74,14 @@ MyClient *my_client ;
 // main frame
 bool MyApp::OnInit()
 {
-    wxString server = "4242";
-    wxString hostName = wxGetHostName();
+    // service name (DDE classes) or port number (TCP/IP based classes)
+    wxString service = "4242";
+
+    // ignored under DDE, host name in TCP/IP based classes
+    wxString hostName = "localhost";
 
     if (argc > 1)
-        server = argv[1];
+        service = argv[1];
     if (argc > 2)
         hostName = argv[2];
 
@@ -88,7 +91,7 @@ bool MyApp::OnInit()
     // suppress the log messages from MakeConnection()
     {
         wxLogNull nolog;
-        the_connection = (MyConnection *)my_client->MakeConnection(hostName, server, "IPC TEST");
+        the_connection = (MyConnection *)my_client->MakeConnection(hostName, service, "IPC TEST");
 
         while ( !the_connection )
         {
@@ -100,7 +103,7 @@ bool MyApp::OnInit()
                 return FALSE;
             }
 
-            the_connection = (MyConnection *)my_client->MakeConnection(hostName, server, "IPC TEST");
+            the_connection = (MyConnection *)my_client->MakeConnection(hostName, service, "IPC TEST");
         }
     }
 

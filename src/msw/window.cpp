@@ -46,11 +46,12 @@
     #include "wx/listbox.h"
     #include "wx/button.h"
     #include "wx/msgdlg.h"
+    #include "wx/settings.h"
 
     #include <stdio.h>
 #endif
 
-#if     wxUSE_OWNER_DRAWN
+#if wxUSE_OWNER_DRAWN
     #include "wx/ownerdrw.h"
 #endif
 
@@ -98,6 +99,11 @@
     #endif
 #endif
 
+// This didn't appear in mingw until 2.95.2
+#ifndef SIF_TRACKPOS
+#define SIF_TRACKPOS 16
+#endif
+
 // ---------------------------------------------------------------------------
 // global variables
 // ---------------------------------------------------------------------------
@@ -128,6 +134,9 @@ wxWindow *wxFindWinFromHandle(WXHWND hWnd);
 // this magical function is used to translate VK_APPS key presses to right
 // mouse clicks
 static void TranslateKbdEventToMouse(wxWindow *win, int *x, int *y, WPARAM *flags);
+
+// get the text metrics for the current font
+static TEXTMETRIC wxGetTextMetrics(const wxWindow *win);
 
 // ---------------------------------------------------------------------------
 // event tables
@@ -274,7 +283,7 @@ wxWindow::~wxWindow()
         //if (::IsWindow(GetHwnd()))
         {
             if ( !::DestroyWindow(GetHwnd()) )
-                wxLogLastError("DestroyWindow");
+                wxLogLastError(wxT("DestroyWindow"));
         }
 
         // remove hWnd <-> wxWindow association
@@ -299,10 +308,12 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
     DWORD msflags = 0;
     if ( style & wxBORDER )
         msflags |= WS_BORDER;
+/* Not appropriate for non-frame/dialog windows, and
+   may clash with other window styles.
     if ( style & wxTHICK_FRAME )
         msflags |= WS_THICKFRAME;
-
-    //msflags |= WS_CHILD | WS_CLIPSIBLINGS | WS_VISIBLE;
+*/
+    //msflags |= WS_CHILD /* | WS_CLIPSIBLINGS */  | WS_VISIBLE;
     msflags |= WS_CHILD | WS_VISIBLE;
     if ( style & wxCLIP_CHILDREN )
         msflags |= WS_CLIPCHILDREN;
@@ -326,12 +337,10 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
                      DLGC_WANTTAB | DLGC_WANTMESSAGE;
     }
 
-    MSWCreate(m_windowId, parent, wxCanvasClassName, this, NULL,
-              pos.x, pos.y,
-              WidthDefault(size.x), HeightDefault(size.y),
-              msflags, NULL, exStyle);
-
-    return TRUE;
+    return MSWCreate(m_windowId, parent, wxCanvasClassName, this, NULL,
+                     pos.x, pos.y,
+                     WidthDefault(size.x), HeightDefault(size.y),
+                     msflags, NULL, exStyle);
 }
 
 // ---------------------------------------------------------------------------
@@ -855,7 +864,8 @@ WXDWORD wxWindow::MakeExtendedStyle(long style, bool eliminateBorders)
             exStyle |= WS_EX_DLGMODALFRAME;
 #if defined(__WIN95__)
         if ( style & wxRAISED_BORDER )
-            exStyle |= WS_EX_WINDOWEDGE;
+            // It seems that WS_EX_WINDOWEDGE doesn't work, but WS_EX_DLGMODALFRAME does
+            exStyle |= WS_EX_DLGMODALFRAME; /* WS_EX_WINDOWEDGE */;
         if ( style & wxSTATIC_BORDER )
             exStyle |= WS_EX_STATICEDGE;
 #endif
@@ -1087,8 +1097,14 @@ void wxWindow::DoGetSize(int *x, int *y) const
 {
     HWND hWnd = GetHwnd();
     RECT rect;
-    GetWindowRect(hWnd, &rect);
-
+#ifdef __WIN16__
+    ::GetWindowRect(hWnd, &rect);
+#else
+    if ( !::GetWindowRect(hWnd, &rect) )
+    {
+        wxLogLastError(_T("GetWindowRect"));
+    }
+#endif
     if ( x )
         *x = rect.right - rect.left;
     if ( y )
@@ -1122,11 +1138,14 @@ void wxWindow::DoGetPosition(int *x, int *y) const
             ::ScreenToClient(hParentWnd, &point);
         }
 
-        // We may be faking the client origin. So a window that's really at (0,
-        // 30) may appear (to wxWin apps) to be at (0, 0).
-        wxPoint pt(parent->GetClientAreaOrigin());
-        point.x -= pt.x;
-        point.y -= pt.y;
+        if ( parent )
+        {
+            // We may be faking the client origin. So a window that's really at (0,
+            // 30) may appear (to wxWin apps) to be at (0, 0).
+            wxPoint pt(parent->GetClientAreaOrigin());
+            point.x -= pt.x;
+            point.y -= pt.y;
+        }
     }
 
     if ( x )
@@ -1185,7 +1204,7 @@ void wxWindow::DoMoveWindow(int x, int y, int width, int height)
 {
     if ( !::MoveWindow(GetHwnd(), x, y, width, height, TRUE) )
     {
-        wxLogLastError("MoveWindow");
+        wxLogLastError(wxT("MoveWindow"));
     }
 }
 
@@ -1258,40 +1277,54 @@ void wxWindow::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 
 void wxWindow::DoSetClientSize(int width, int height)
 {
-    wxWindow *parent = GetParent();
-    HWND hWnd = GetHwnd();
-    HWND hParentWnd = (HWND) 0;
-    if ( parent )
-        hParentWnd = (HWND) parent->GetHWND();
-
-    RECT rect;
-    ::GetClientRect(hWnd, &rect);
-
-    RECT rect2;
-    GetWindowRect(hWnd, &rect2);
-
-    // Find the difference between the entire window (title bar and all)
-    // and the client area; add this to the new client size to move the
-    // window
-    int actual_width = rect2.right - rect2.left - rect.right + width;
-    int actual_height = rect2.bottom - rect2.top - rect.bottom + height;
-
-    // If there's a parent, must subtract the parent's top left corner
-    // since MoveWindow moves relative to the parent
-
-    POINT point;
-    point.x = rect2.left;
-    point.y = rect2.top;
-    if ( parent )
+    // normally this loop shouldn't take more than 2 iterations (usually 1 but
+    // if scrollbars [dis]appear as the result of the first call, then 2) but
+    // just to be on the safe side we check for it instead of making it an
+    // "infinite" loop (i.e. leaving break inside as the only way to get out)
+    for ( int i = 0; i < 3; i++ )
     {
-        ::ScreenToClient(hParentWnd, &point);
+        RECT rectClient;
+        ::GetClientRect(GetHwnd(), &rectClient);
+
+        // if the size is already ok, stop here (rectClient.left = top = 0)
+        if ( rectClient.right == width && rectClient.bottom == height )
+        {
+            break;
+        }
+
+        if ( i == 2 )
+        {
+            // how did it happen? maybe OnSize() handler does something really
+            // strange in this class?
+            wxFAIL_MSG( _T("logic error in DoSetClientSize") );
+
+            break;
+        }
+
+        // Find the difference between the entire window (title bar and all)
+        // and the client area; add this to the new client size to move the
+        // window
+        RECT rectWin;
+        ::GetWindowRect(GetHwnd(), &rectWin);
+
+        int widthClient = rectWin.right - rectWin.left - rectClient.right + width;
+        int heightClient = rectWin.bottom - rectWin.top - rectClient.bottom + height;
+
+        // If there's a parent, must subtract the parent's top left corner
+        // since MoveWindow moves relative to the parent
+
+        POINT point;
+        point.x = rectWin.left;
+        point.y = rectWin.top;
+
+        wxWindow *parent = GetParent();
+        if ( parent )
+        {
+            ::ScreenToClient(GetHwndOf(parent), &point);
+        }
+
+        DoMoveWindow(point.x, point.y, widthClient, heightClient);
     }
-
-    DoMoveWindow(point.x, point.y, actual_width, actual_height);
-
-    wxSizeEvent event(wxSize(width, height), m_windowId);
-    event.SetEventObject(this);
-    GetEventHandler()->ProcessEvent(event);
 }
 
 // For implementation purposes - sometimes decorations make the client area
@@ -1313,7 +1346,8 @@ void wxWindow::AdjustForParentClientOrigin(int& x, int& y, int sizeFlags)
         if ( !(sizeFlags & wxSIZE_NO_ADJUSTMENTS) && parent )
         {
             wxPoint pt(parent->GetClientAreaOrigin());
-            x += pt.x; y += pt.y;
+            x += pt.x;
+            y += pt.y;
         }
     }
 }
@@ -1324,26 +1358,18 @@ void wxWindow::AdjustForParentClientOrigin(int& x, int& y, int sizeFlags)
 
 int wxWindow::GetCharHeight() const
 {
-    TEXTMETRIC lpTextMetric;
-    HWND hWnd = GetHwnd();
-    HDC dc = ::GetDC(hWnd);
-
-    GetTextMetrics(dc, &lpTextMetric);
-    ::ReleaseDC(hWnd, dc);
-
-    return lpTextMetric.tmHeight;
+    return wxGetTextMetrics(this).tmHeight;
 }
 
 int wxWindow::GetCharWidth() const
 {
-    TEXTMETRIC lpTextMetric;
-    HWND hWnd = GetHwnd();
-    HDC dc = ::GetDC(hWnd);
-
-    GetTextMetrics(dc, &lpTextMetric);
-    ::ReleaseDC(hWnd, dc);
-
-    return lpTextMetric.tmAveCharWidth;
+    // +1 is needed because Windows apparently adds it when calculating the
+    // dialog units size in pixels
+#if wxDIALOG_UNIT_COMPATIBILITY
+    return wxGetTextMetrics(this).tmAveCharWidth ;
+#else
+    return wxGetTextMetrics(this).tmAveCharWidth + 1;
+#endif
 }
 
 void wxWindow::GetTextExtent(const wxString& string,
@@ -1433,6 +1459,18 @@ void wxWindow::GetCaretPos(int *x, int *y) const
 // popup menu
 // ---------------------------------------------------------------------------
 
+static void wxYieldForCommandsOnly()
+{
+    // peek all WM_COMMANDs (it will always return WM_QUIT too but we don't
+    // want to process it here)
+    MSG msg;
+    while ( ::PeekMessage(&msg, (HWND)0, WM_COMMAND, WM_COMMAND, PM_REMOVE)
+                && msg.message != WM_QUIT )
+    {
+        wxTheApp->DoMessage((WXMSG *)&msg);
+    }
+}
+
 bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
 {
     menu->SetInvokingWindow(this);
@@ -1446,7 +1484,9 @@ bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
     ::ClientToScreen(hWnd, &point);
     wxCurrentPopupMenu = menu;
     ::TrackPopupMenu(hMenu, TPM_RIGHTBUTTON, point.x, point.y, 0, hWnd, NULL);
-    wxYield();
+    
+    wxYieldForCommandsOnly();
+    
     wxCurrentPopupMenu = NULL;
 
     menu->SetInvokingWindow(NULL);
@@ -1541,7 +1581,18 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
                         }
                         else if ( lDlgCode & DLGC_BUTTON )
                         {
-                            // buttons want process Enter themselevs
+                            // let IsDialogMessage() handle this for all
+                            // buttons except the owner-drawn ones which it
+                            // just seems to ignore
+                            long style = ::GetWindowLong(msg->hwnd, GWL_STYLE);
+                            if ( (style & BS_OWNERDRAW) == BS_OWNERDRAW )
+                            {
+                                // emulate the button click
+                                wxWindow *btn = wxFindWinFromHandle((WXHWND)msg->hwnd);
+                                if ( btn )
+                                    btn->MSWCommand(BN_CLICKED, 0 /* unused */);
+                            }
+
                             bProcess = FALSE;
                         }
                         else
@@ -1624,7 +1675,10 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
 #endif // 0
 
         if ( ::IsDialogMessage(GetHwnd(), msg) )
+        {
+            // IsDialogMessage() did something...
             return TRUE;
+        }
     }
 
 #if wxUSE_TOOLTIPS
@@ -1758,12 +1812,6 @@ LRESULT WXDLLEXPORT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message, WPARAM w
     // it with wxWindow stored in wxWndHook
     if ( !wnd && wxWndHook )
     {
-#if 0 // def __WXDEBUG__
-        char buf[512];
-        ::GetClassNameA((HWND) hWnd, buf, 512);
-        wxString className(buf);
-#endif
-
         wxAssociateWinWithHandle(hWnd, wxWndHook);
         wnd = wxWndHook;
         wxWndHook = NULL;
@@ -1823,11 +1871,15 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
             break;
 
         case WM_DESTROY:
-            processed = HandleDestroy();
+            // never set processed to TRUE and *always* pass WM_DESTROY to
+            // DefWindowProc() as Windows may do some internal cleanup when
+            // processing it and failing to pass the message along may cause
+            // memory and resource leaks!
+            (void)HandleDestroy();
             break;
 
         case WM_MOVE:
-            processed = HandleMove(LOWORD(lParam), HIWORD(lParam));
+            processed = HandleMove(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
             break;
 
         case WM_SIZE:
@@ -1868,19 +1920,19 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
             break;
 
         case WM_MOUSEMOVE:
-           {
-                short x = LOWORD(lParam);
-                short y = HIWORD(lParam);
-
-                processed = HandleMouseMove(x, y, wParam);
-           }
-           break;
+            processed = HandleMouseMove(GET_X_LPARAM(lParam),
+                                        GET_Y_LPARAM(lParam),
+                                        wParam);
+            break;
 
         case WM_LBUTTONDOWN:
-           // set focus to this window
-           SetFocus();
+            // set focus to this window
+            if ( AcceptsFocus() )
+            {
+                SetFocus();
+            }
 
-           // fall through
+            // fall through
 
         case WM_LBUTTONUP:
         case WM_LBUTTONDBLCLK:
@@ -1890,12 +1942,10 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
         case WM_MBUTTONDOWN:
         case WM_MBUTTONUP:
         case WM_MBUTTONDBLCLK:
-            {
-                short x = LOWORD(lParam);
-                short y = HIWORD(lParam);
-
-                processed = HandleMouseEvent(message, x, y, wParam);
-            }
+            processed = HandleMouseEvent(message,
+                                         GET_X_LPARAM(lParam),
+                                         GET_Y_LPARAM(lParam),
+                                         wParam);
             break;
 
         case MM_JOY1MOVE:
@@ -1906,12 +1956,10 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
         case MM_JOY2BUTTONDOWN:
         case MM_JOY1BUTTONUP:
         case MM_JOY2BUTTONUP:
-            {
-                int x = LOWORD(lParam);
-                int y = HIWORD(lParam);
-
-                processed = HandleJoystickEvent(message, x, y, wParam);
-            }
+            processed = HandleJoystickEvent(message,
+                                            GET_X_LPARAM(lParam),
+                                            GET_Y_LPARAM(lParam),
+                                            wParam);
             break;
 
         case WM_SYSCOMMAND:
@@ -2243,24 +2291,25 @@ void wxWindow::MSWDetachWindowMenu()
 {
     if ( m_hMenu )
     {
+        wxChar buf[1024];
         HMENU hMenu = (HMENU)m_hMenu;
 
         int N = ::GetMenuItemCount(hMenu);
-        int i;
-        for (i = 0; i < N; i++)
+        for ( int i = 0; i < N; i++ )
         {
-            wxChar buf[100];
-            int chars = GetMenuString(hMenu, i, buf, 100, MF_BYPOSITION);
-            if ( !chars )
+            if ( !::GetMenuString(hMenu, i, buf, WXSIZEOF(buf), MF_BYPOSITION) )
             {
                 wxLogLastError(wxT("GetMenuString"));
 
                 continue;
             }
 
-            if ( wxStrcmp(buf, wxT("&Window")) == 0 )
+            if ( wxStrcmp(buf, _("&Window")) == 0 )
             {
-                RemoveMenu(hMenu, i, MF_BYPOSITION);
+                if ( !::RemoveMenu(hMenu, i, MF_BYPOSITION) )
+                {
+                    wxLogLastError(wxT("RemoveMenu"));
+                }
 
                 break;
             }
@@ -2302,16 +2351,19 @@ bool wxWindow::MSWCreate(int id,
     if ( width > -1 ) width1 = width;
     if ( height > -1 ) height1 = height;
 
-    // Unfortunately this won't work in WIN16. Unless perhaps
-    // we define WS_EX_CONTROLPARENT ourselves?
-#ifndef __WIN16__
+    // unfortunately, setting WS_EX_CONTROLPARENT only for some windows in the
+    // hierarchy with several embedded panels (and not all of them) causes the
+    // program to hang during the next call to IsDialogMessage() due to the bug
+    // in this function (at least in Windows NT 4.0, it seems to work ok in
+    // Win2K)
+#if 0
     // if we have wxTAB_TRAVERSAL style, we want WS_EX_CONTROLPARENT or
     // IsDialogMessage() won't work for us
     if ( GetWindowStyleFlag() & wxTAB_TRAVERSAL )
     {
         extendedStyle |= WS_EX_CONTROLPARENT;
     }
-#endif
+#endif // 0
 
     HWND hParent = (HWND)NULL;
     if ( parent )
@@ -2328,8 +2380,7 @@ bool wxWindow::MSWCreate(int id,
 
         if ( m_hWnd == 0 )
         {
-            wxLogError(_("Can't find dummy dialog template!\n"
-                         "Check resource include path for finding wx.rc."));
+            wxLogError(_("Can't find dummy dialog template!\nCheck resource include path for finding wx.rc."));
 
             return FALSE;
         }
@@ -2358,7 +2409,7 @@ bool wxWindow::MSWCreate(int id,
           {
             controlId = id;
             // all child windows should clip their siblings
-            // style |= WS_CLIPSIBLINGS;
+            // style |= /* WS_CLIPSIBLINGS */ ;
           }
 
         wxString className(wclass);
@@ -2379,8 +2430,7 @@ bool wxWindow::MSWCreate(int id,
 
         if ( !m_hWnd )
         {
-            wxLogError(_("Can't create window of class %s!\n"
-                         "Possible Windows 3.x compatibility problem?"),
+            wxLogError(_("Can't create window of class %s!\nPossible Windows 3.x compatibility problem?"),
                        wclass);
 
             return FALSE;
@@ -2400,6 +2450,8 @@ bool wxWindow::MSWCreate(int id,
     }
 #endif
     wxAssociateWinWithHandle((HWND) m_hWnd, this);
+
+    SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
 
     return TRUE;
 }
@@ -2434,8 +2486,6 @@ bool wxWindow::HandleNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
         if ( child->MSWOnNotify(idCtrl, lParam, result) )
         {
             return TRUE;
-
-            break;
         }
 
         node = node->GetNext();
@@ -2642,10 +2692,13 @@ bool wxWindow::HandleDropFiles(WXWPARAM wParam)
     DragQueryPoint(hFilesInfo, (LPPOINT) &dropPoint);
 
     // Get the total number of files dropped
-    WORD gwFilesDropped = (WORD)DragQueryFile ((HDROP)hFilesInfo,
-        (UINT)-1,
-        (LPSTR)0,
-        (UINT)0);
+    WORD gwFilesDropped = (WORD)::DragQueryFile
+                            (
+                                (HDROP)hFilesInfo,
+                                (UINT)-1,
+                                (LPTSTR)0,
+                                (UINT)0
+                            );
 
     wxString *files = new wxString[gwFilesDropped];
     int wIndex;
@@ -2692,7 +2745,7 @@ bool wxWindow::HandleSetCursor(WXHWND hWnd,
 #ifdef __WIN32__
     if ( !::GetCursorPos(&pt) )
     {
-        wxLogLastError("GetCursorPos");
+        wxLogLastError(wxT("GetCursorPos"));
     }
 #else
     // In WIN16 it doesn't return a value.
@@ -2747,11 +2800,9 @@ bool wxWindow::HandleSetCursor(WXHWND hWnd,
         // cursor set, stop here
         return TRUE;
     }
-    else
-    {
-        // pass up the window chain
-        return FALSE;
-    }
+
+    // pass up the window chain
+    return FALSE;
 }
 
 // ---------------------------------------------------------------------------
@@ -2913,9 +2964,9 @@ bool wxWindow::HandlePaint()
 #ifdef __WIN32__
     HRGN hRegion = ::CreateRectRgn(0, 0, 0, 0); // Dummy call to get a handle
     if ( !hRegion )
-        wxLogLastError("CreateRectRgn");
+        wxLogLastError(wxT("CreateRectRgn"));
     if ( ::GetUpdateRgn(GetHwnd(), hRegion, FALSE) == ERROR )
-        wxLogLastError("GetUpdateRgn");
+        wxLogLastError(wxT("GetUpdateRgn"));
 
     m_updateRegion = wxRegion((WXHRGN) hRegion);
 #else
@@ -2966,7 +3017,7 @@ void wxWindow::OnEraseBackground(wxEraseEvent& event)
                               m_backgroundColour.Blue());
     HBRUSH hBrush = ::CreateSolidBrush(ref);
     if ( !hBrush )
-        wxLogLastError("CreateSolidBrush");
+        wxLogLastError(wxT("CreateSolidBrush"));
 
     HDC hdc = (HDC)event.GetDC()->GetHDC();
 
@@ -3046,6 +3097,23 @@ bool wxWindow::HandleGetMinMaxInfo(void *mmInfo)
     return rc;
 }
 
+// generate an artificial resize event
+void wxWindow::SendSizeEvent()
+{
+    RECT r;
+#ifdef __WIN16__
+    ::GetWindowRect(GetHwnd(), &r);
+#else
+    if ( !::GetWindowRect(GetHwnd(), &r) )
+    {
+        wxLogLastError(_T("GetWindowRect"));
+    }
+#endif
+
+    (void)::PostMessage(GetHwnd(), WM_SIZE, SIZE_RESTORED,
+                        MAKELPARAM(r.right - r.left, r.bottom - r.top));
+}
+
 // ---------------------------------------------------------------------------
 // command messages
 // ---------------------------------------------------------------------------
@@ -3061,17 +3129,18 @@ bool wxWindow::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
     }
 
     wxWindow *win = (wxWindow*) NULL;
-    if ( cmd == 0 || cmd == 1 ) // menu or accel - use id
-    {
-        // must cast to a signed type before comparing with other ids!
-        win = FindItem((signed short)id);
-    }
 
-    if (!win && control)
+    if ( control )
     {
         // find it from HWND - this works even with the broken programs using
         // the same ids for different controls
         win = wxFindWinFromHandle(control);
+    }
+
+    if ( !win && (cmd == 0 || cmd == 1) ) // menu or accel - use id
+    {
+        // must cast to a signed type before comparing with other ids!
+        win = FindItem((signed short)id);
     }
 
     if ( win )
@@ -3122,11 +3191,12 @@ void wxWindow::InitMouseEvent(wxMouseEvent& event, int x, int y, WXUINT flags)
 {
     event.m_x = x;
     event.m_y = y;
-    event.m_shiftDown = ((flags & MK_SHIFT) != 0);
-    event.m_controlDown = ((flags & MK_CONTROL) != 0);
-    event.m_leftDown = ((flags & MK_LBUTTON) != 0);
-    event.m_middleDown = ((flags & MK_MBUTTON) != 0);
-    event.m_rightDown = ((flags & MK_RBUTTON) != 0);
+    event.m_shiftDown = (flags & MK_SHIFT) != 0;
+    event.m_controlDown = (flags & MK_CONTROL) != 0;
+    event.m_leftDown = (flags & MK_LBUTTON) != 0;
+    event.m_middleDown = (flags & MK_MBUTTON) != 0;
+    event.m_rightDown = (flags & MK_RBUTTON) != 0;
+    event.m_altDown = (::GetKeyState(VK_MENU) & 0x80000000) != 0;
     event.SetTimestamp(s_currentMsg.time);
     event.m_eventObject = this;
 
@@ -3184,7 +3254,7 @@ bool wxWindow::HandleMouseMove(int x, int y, WXUINT flags)
     if ( (m_lastMouseEvent == wxEVT_RIGHT_DOWN ||
           m_lastMouseEvent == wxEVT_LEFT_DOWN ||
           m_lastMouseEvent == wxEVT_MIDDLE_DOWN) &&
-         (m_lastMouseX == event.m_x && m_lastMouseY == event.m_y) )
+         (m_lastMouseX == x && m_lastMouseY == y) )
     {
         m_lastMouseEvent = wxEVT_MOTION;
 
@@ -3456,11 +3526,41 @@ bool wxWindow::MSWOnScroll(int orientation, WXWORD wParam,
         break;
 
     case SB_THUMBPOSITION:
-        event.m_eventType = wxEVT_SCROLLWIN_THUMBRELEASE;
-        break;
-
     case SB_THUMBTRACK:
-        event.m_eventType = wxEVT_SCROLLWIN_THUMBTRACK;
+#ifdef __WIN32__
+        // the up down controls send the WM_SCROLL events too but we can't call
+        // GetScrollInfo() for them as they don't have the scrollbars
+        //
+        // NB: this is an ugly fix for 2.2 branch only - a better one involves
+        //     modifying the headers and will be in 2.4 branch
+        if ( !wxDynamicCast(this, wxNotebook) )
+
+        // under Win32, the scrollbar range and position are 32 bit integers,
+        // but WM_[HV]SCROLL only carry the low 16 bits of them, so we must
+        // explicitly query the scrollbar for the correct position (this must
+        // be done only for these two SB_ events as they are the only one
+        // carrying the scrollbar position)
+        {
+            SCROLLINFO scrollInfo;
+            wxZeroMemory(scrollInfo);
+            scrollInfo.cbSize = sizeof(SCROLLINFO);
+            scrollInfo.fMask = SIF_TRACKPOS;
+
+            if ( !::GetScrollInfo(GetHwnd(),
+                                  orientation == wxHORIZONTAL ? SB_HORZ
+                                                              : SB_VERT,
+                                  &scrollInfo) )
+            {
+                wxLogLastError(_T("GetScrollInfo"));
+            }
+
+            event.SetPosition(scrollInfo.nTrackPos);
+        }
+#endif // Win32
+
+        event.m_eventType = wParam == SB_THUMBPOSITION
+                                ? wxEVT_SCROLLWIN_THUMBRELEASE
+                                : wxEVT_SCROLLWIN_THUMBTRACK;
         break;
 
     default:
@@ -3508,80 +3608,82 @@ void wxGetCharSize(WXHWND wnd, int *x, int *y, const wxFont *the_font)
 // the key should be ignored by WM_KEYDOWN and processed by WM_CHAR instead.
 int wxCharCodeMSWToWX(int keySym)
 {
-    int id = 0;
+    int id;
     switch (keySym)
     {
-    case VK_CANCEL:     id = WXK_CANCEL; break;
-    case VK_BACK:       id = WXK_BACK; break;
-    case VK_TAB:        id = WXK_TAB; break;
-    case VK_CLEAR:      id = WXK_CLEAR; break;
-    case VK_RETURN:     id = WXK_RETURN; break;
-    case VK_SHIFT:      id = WXK_SHIFT; break;
-    case VK_CONTROL:    id = WXK_CONTROL; break;
-    case VK_MENU :      id = WXK_MENU; break;
-    case VK_PAUSE:      id = WXK_PAUSE; break;
-    case VK_SPACE:      id = WXK_SPACE; break;
-    case VK_ESCAPE:     id = WXK_ESCAPE; break;
-    case VK_PRIOR:      id = WXK_PRIOR; break;
-    case VK_NEXT :      id = WXK_NEXT; break;
-    case VK_END:        id = WXK_END; break;
-    case VK_HOME :      id = WXK_HOME; break;
-    case VK_LEFT :      id = WXK_LEFT; break;
-    case VK_UP:         id = WXK_UP; break;
-    case VK_RIGHT:      id = WXK_RIGHT; break;
-    case VK_DOWN :      id = WXK_DOWN; break;
-    case VK_SELECT:     id = WXK_SELECT; break;
-    case VK_PRINT:      id = WXK_PRINT; break;
-    case VK_EXECUTE:    id = WXK_EXECUTE; break;
-    case VK_INSERT:     id = WXK_INSERT; break;
-    case VK_DELETE:     id = WXK_DELETE; break;
-    case VK_HELP :      id = WXK_HELP; break;
-    case VK_NUMPAD0:    id = WXK_NUMPAD0; break;
-    case VK_NUMPAD1:    id = WXK_NUMPAD1; break;
-    case VK_NUMPAD2:    id = WXK_NUMPAD2; break;
-    case VK_NUMPAD3:    id = WXK_NUMPAD3; break;
-    case VK_NUMPAD4:    id = WXK_NUMPAD4; break;
-    case VK_NUMPAD5:    id = WXK_NUMPAD5; break;
-    case VK_NUMPAD6:    id = WXK_NUMPAD6; break;
-    case VK_NUMPAD7:    id = WXK_NUMPAD7; break;
-    case VK_NUMPAD8:    id = WXK_NUMPAD8; break;
-    case VK_NUMPAD9:    id = WXK_NUMPAD9; break;
-    case VK_MULTIPLY:   id = WXK_MULTIPLY; break;
-    case VK_ADD:        id = WXK_ADD; break;
-    case VK_SUBTRACT:   id = WXK_SUBTRACT; break;
-    case VK_DECIMAL:    id = WXK_DECIMAL; break;
-    case VK_DIVIDE:     id = WXK_DIVIDE; break;
-    case VK_F1:         id = WXK_F1; break;
-    case VK_F2:         id = WXK_F2; break;
-    case VK_F3:         id = WXK_F3; break;
-    case VK_F4:         id = WXK_F4; break;
-    case VK_F5:         id = WXK_F5; break;
-    case VK_F6:         id = WXK_F6; break;
-    case VK_F7:         id = WXK_F7; break;
-    case VK_F8:         id = WXK_F8; break;
-    case VK_F9:         id = WXK_F9; break;
-    case VK_F10:        id = WXK_F10; break;
-    case VK_F11:        id = WXK_F11; break;
-    case VK_F12:        id = WXK_F12; break;
-    case VK_F13:        id = WXK_F13; break;
-    case VK_F14:        id = WXK_F14; break;
-    case VK_F15:        id = WXK_F15; break;
-    case VK_F16:        id = WXK_F16; break;
-    case VK_F17:        id = WXK_F17; break;
-    case VK_F18:        id = WXK_F18; break;
-    case VK_F19:        id = WXK_F19; break;
-    case VK_F20:        id = WXK_F20; break;
-    case VK_F21:        id = WXK_F21; break;
-    case VK_F22:        id = WXK_F22; break;
-    case VK_F23:        id = WXK_F23; break;
-    case VK_F24:        id = WXK_F24; break;
-    case VK_NUMLOCK:    id = WXK_NUMLOCK; break;
-    case VK_SCROLL:     id = WXK_SCROLL; break;
-    default:
-        {
-            return 0;
-        }
+        case VK_CANCEL:     id = WXK_CANCEL; break;
+        case VK_BACK:       id = WXK_BACK; break;
+        case VK_TAB:        id = WXK_TAB; break;
+        case VK_CLEAR:      id = WXK_CLEAR; break;
+        case VK_RETURN:     id = WXK_RETURN; break;
+        case VK_SHIFT:      id = WXK_SHIFT; break;
+        case VK_CONTROL:    id = WXK_CONTROL; break;
+        case VK_MENU :      id = WXK_MENU; break;
+        case VK_PAUSE:      id = WXK_PAUSE; break;
+        case VK_SPACE:      id = WXK_SPACE; break;
+        case VK_ESCAPE:     id = WXK_ESCAPE; break;
+        case VK_PRIOR:      id = WXK_PRIOR; break;
+        case VK_NEXT :      id = WXK_NEXT; break;
+        case VK_END:        id = WXK_END; break;
+        case VK_HOME :      id = WXK_HOME; break;
+        case VK_LEFT :      id = WXK_LEFT; break;
+        case VK_UP:         id = WXK_UP; break;
+        case VK_RIGHT:      id = WXK_RIGHT; break;
+        case VK_DOWN :      id = WXK_DOWN; break;
+        case VK_SELECT:     id = WXK_SELECT; break;
+        case VK_PRINT:      id = WXK_PRINT; break;
+        case VK_EXECUTE:    id = WXK_EXECUTE; break;
+        case VK_INSERT:     id = WXK_INSERT; break;
+        case VK_DELETE:     id = WXK_DELETE; break;
+        case VK_HELP :      id = WXK_HELP; break;
+        case VK_NUMPAD0:    id = WXK_NUMPAD0; break;
+        case VK_NUMPAD1:    id = WXK_NUMPAD1; break;
+        case VK_NUMPAD2:    id = WXK_NUMPAD2; break;
+        case VK_NUMPAD3:    id = WXK_NUMPAD3; break;
+        case VK_NUMPAD4:    id = WXK_NUMPAD4; break;
+        case VK_NUMPAD5:    id = WXK_NUMPAD5; break;
+        case VK_NUMPAD6:    id = WXK_NUMPAD6; break;
+        case VK_NUMPAD7:    id = WXK_NUMPAD7; break;
+        case VK_NUMPAD8:    id = WXK_NUMPAD8; break;
+        case VK_NUMPAD9:    id = WXK_NUMPAD9; break;
+        case VK_MULTIPLY:   id = WXK_MULTIPLY; break;
+        case 0xBB: // VK_OEM_PLUS
+        case VK_ADD:        id = WXK_ADD; break;
+        case 0xBD: // VK_OEM_MINUS
+        case VK_SUBTRACT:   id = WXK_SUBTRACT; break;
+        case 0xBE: // VK_OEM_PERIOD
+        case VK_DECIMAL:    id = WXK_DECIMAL; break;
+        case VK_DIVIDE:     id = WXK_DIVIDE; break;
+        case VK_F1:         id = WXK_F1; break;
+        case VK_F2:         id = WXK_F2; break;
+        case VK_F3:         id = WXK_F3; break;
+        case VK_F4:         id = WXK_F4; break;
+        case VK_F5:         id = WXK_F5; break;
+        case VK_F6:         id = WXK_F6; break;
+        case VK_F7:         id = WXK_F7; break;
+        case VK_F8:         id = WXK_F8; break;
+        case VK_F9:         id = WXK_F9; break;
+        case VK_F10:        id = WXK_F10; break;
+        case VK_F11:        id = WXK_F11; break;
+        case VK_F12:        id = WXK_F12; break;
+        case VK_F13:        id = WXK_F13; break;
+        case VK_F14:        id = WXK_F14; break;
+        case VK_F15:        id = WXK_F15; break;
+        case VK_F16:        id = WXK_F16; break;
+        case VK_F17:        id = WXK_F17; break;
+        case VK_F18:        id = WXK_F18; break;
+        case VK_F19:        id = WXK_F19; break;
+        case VK_F20:        id = WXK_F20; break;
+        case VK_F21:        id = WXK_F21; break;
+        case VK_F22:        id = WXK_F22; break;
+        case VK_F23:        id = WXK_F23; break;
+        case VK_F24:        id = WXK_F24; break;
+        case VK_NUMLOCK:    id = WXK_NUMLOCK; break;
+        case VK_SCROLL:     id = WXK_SCROLL; break;
+        default:
+            id = 0;
     }
+
     return id;
 }
 
@@ -4226,4 +4328,36 @@ static void TranslateKbdEventToMouse(wxWindow *win, int *x, int *y, WPARAM *flag
     *y = GET_Y_LPARAM(dwPos);
 
     win->ScreenToClient(x, y);
+}
+
+static TEXTMETRIC wxGetTextMetrics(const wxWindow *win)
+{
+    // prepare the DC
+    TEXTMETRIC tm;
+    HWND hwnd = GetHwndOf(win);
+    HDC hdc = ::GetDC(hwnd);
+
+#if !wxDIALOG_UNIT_COMPATIBILITY
+    // and select the current font into it
+    HFONT hfont = GetHfontOf(win->GetFont());
+    if ( hfont )
+    {
+        hfont = (HFONT)::SelectObject(hdc, hfont);
+    }
+#endif
+
+    // finally retrieve the text metrics from it
+    GetTextMetrics(hdc, &tm);
+
+#if !wxDIALOG_UNIT_COMPATIBILITY
+    // and clean up
+    if ( hfont )
+    {
+        (void)::SelectObject(hdc, hfont);
+    }
+#endif
+
+    ::ReleaseDC(hwnd, hdc);
+
+    return tm;
 }

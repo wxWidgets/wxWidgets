@@ -140,6 +140,10 @@ public:
     void   SetToolTipCtrl(WXHWND hHwndTT) { m_hWndToolTip = hHwndTT; }
 #endif // tooltips
 
+    void      SetClient(WXHWND    c_Hwnd);
+    void      SetClient(wxWindow* c_Window);
+    wxWindow *GetClient();
+
 protected:
     // common part of all ctors
     void         Init(void);
@@ -196,11 +200,33 @@ protected:
     int                             m_nFsToolBarHeight;
     bool                            m_bFsIsMaximized;
     bool                            m_bFsIsShowing;
+    bool                            m_bIsShown;
+    wxWindow*                       m_pWinLastFocused;
 
 private:
 #if wxUSE_TOOLTIPS
     WXHWND                          m_hWndToolTip;
 #endif // tooltips
+
+    //
+    // Handles to child windows of the Frame that we don't have child objects for
+    //
+    WXHWND                          m_hTitleBar;
+    WXHWND                          m_hHScroll;
+    WXHWND                          m_hVScroll;
+
+    //
+    // Swp structures for various client data
+    // DW: Better off in attached RefData?
+    //
+    SWP                             m_vSwp;
+    SWP                             m_vSwpClient;
+    SWP                             m_vSwpTitleBar;
+    SWP                             m_vSwpMenuBar;
+    SWP                             m_vSwpHScroll;
+    SWP                             m_vSwpVScroll;
+    SWP                             m_vSwpStatusBar;
+    SWP                             m_vSwpToolBar;
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxFrame)

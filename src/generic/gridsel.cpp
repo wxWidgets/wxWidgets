@@ -517,12 +517,14 @@ void wxGridSelection::SelectCell( int row, int col,
 {
     if ( m_selectionMode == wxGrid::wxGridSelectRows )
     {
-        SelectBlock(row, 0, row, m_grid->GetNumberCols() - 1 );
+        SelectBlock(row, 0, row, m_grid->GetNumberCols() - 1,
+                    ControlDown, ShiftDown, AltDown, MetaDown);
         return;
     }
     else if ( m_selectionMode == wxGrid::wxGridSelectColumns )
     {
-        SelectBlock(0, col, m_grid->GetNumberRows() - 1, col );
+        SelectBlock(0, col, m_grid->GetNumberRows() - 1, col,
+                    ControlDown, ShiftDown, AltDown, MetaDown);
         return;
     }
     else if ( IsInSelection ( row, col ) )
@@ -538,14 +540,14 @@ void wxGridSelection::SelectCell( int row, int col,
     // Send event
     if (sendEvent)
     {
-        wxGridEvent gridEvt( m_grid->GetId(),
-                             wxEVT_GRID_SELECT_CELL,
-                             m_grid,
-                             row, col,
-                             -1, -1,
-                             TRUE, 
-                             ControlDown, ShiftDown,
-                             AltDown, MetaDown);
+        wxGridRangeSelectEvent gridEvt( m_grid->GetId(),
+                                        wxEVT_GRID_RANGE_SELECT,
+                                        m_grid,
+                                        wxGridCellCoords( row, col ),
+                                        wxGridCellCoords( row, col ),
+                                        TRUE, 
+                                        ControlDown, ShiftDown,
+                                        AltDown, MetaDown);
         m_grid->GetEventHandler()->ProcessEvent(gridEvt);
     }
 }
@@ -588,12 +590,14 @@ void wxGridSelection::ToggleCellSelection( int row, int col,
                     ((wxWindow *)m_grid->m_gridWin)->Refresh( FALSE, &r );
 
                 // Send event
-                wxGridEvent gridEvt( m_grid->GetId(),
-                                     wxEVT_GRID_SELECT_CELL,
-                                     m_grid,
-                                     row, col, -1, -1, FALSE,
-                                     ControlDown, ShiftDown,
-                                     AltDown, MetaDown );
+                wxGridRangeSelectEvent gridEvt( m_grid->GetId(),
+                                                wxEVT_GRID_RANGE_SELECT,
+                                                m_grid,
+                                                wxGridCellCoords( row, col ),
+                                                wxGridCellCoords( row, col ),
+                                                FALSE,
+                                                ControlDown, ShiftDown,
+                                                AltDown, MetaDown );
                 m_grid->GetEventHandler()->ProcessEvent(gridEvt);
                 return;
             }
@@ -712,12 +716,14 @@ void wxGridSelection::ToggleCellSelection( int row, int col,
                                          wxGridCellCoords( row, col ) );
           if ( !m_grid->GetBatchCount() )
               ((wxWindow *)m_grid->m_gridWin)->Refresh( FALSE, &r );
-          wxGridEvent gridEvt( m_grid->GetId(),
-                               wxEVT_GRID_SELECT_CELL,
-                               m_grid,
-                               row, col, -1, -1, FALSE,
-                               ControlDown, ShiftDown,
-                               AltDown, MetaDown );
+          wxGridRangeSelectEvent gridEvt( m_grid->GetId(),
+                                          wxEVT_GRID_RANGE_SELECT,
+                                          m_grid,
+                                          wxGridCellCoords( row, col ),
+                                          wxGridCellCoords( row, col ),
+                                          FALSE,
+                                          ControlDown, ShiftDown,
+                                          AltDown, MetaDown );
           m_grid->GetEventHandler()->ProcessEvent(gridEvt);
           break;
       }
@@ -760,7 +766,6 @@ void wxGridSelection::ToggleCellSelection( int row, int col,
 
 void wxGridSelection::ClearSelection()
 {
-    // Should this send deselection events?
     size_t n;
 
     // deselect all invidiual cells and update the screen
@@ -823,6 +828,19 @@ void wxGridSelection::ClearSelection()
                 ((wxWindow *)m_grid->m_gridWin)->Refresh( FALSE, &r );   
         }
     }
+
+    // One deselection event, indicating deselection of _all_ cells.
+    // (No finer grained events for each of the smaller regions
+    //  deselected above!)
+    wxGridRangeSelectEvent gridEvt( m_grid->GetId(),
+                                    wxEVT_GRID_RANGE_SELECT,
+                                    m_grid,
+                                    wxGridCellCoords( 0, 0 ),
+                                    wxGridCellCoords( m_grid->GetNumberRows() - 1,
+                                                      m_grid->GetNumberCols() - 1 ),
+                                    FALSE );
+
+    m_grid->GetEventHandler()->ProcessEvent(gridEvt);
 }
 
 
@@ -926,6 +944,10 @@ void wxGridSelection::UpdateRows( size_t pos, int numRows )
             }
         }
     }
+    // No need to touch selected columns, unless we removed _all_
+    // rows, in this case, we remove all columns from the selection.
+    if ( !m_grid->GetNumberRows() )
+        m_colSelection.Clear();
 }
 
 void wxGridSelection::UpdateCols( size_t pos, int numCols )
@@ -1028,6 +1050,11 @@ void wxGridSelection::UpdateCols( size_t pos, int numCols )
             }
         }
     }
+
+    // No need to touch selected rows, unless we removed _all_
+    // columns, in this case, we remove all rows from the selection.
+    if ( !m_grid->GetNumberCols() )
+        m_rowSelection.Clear();
 }
 
 int wxGridSelection::BlockContain( int topRow1, int leftCol1,

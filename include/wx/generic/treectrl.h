@@ -312,6 +312,8 @@ public:
 
         // expand this item
     void Expand(const wxTreeItemId& item);
+        // expand this item and all subitems recursively
+    void ExpandAll(const wxTreeItemId& item);
         // collapse the item without removing its children
     void Collapse(const wxTreeItemId& item);
         // collapse the item and remove all children
@@ -408,6 +410,7 @@ protected:
 
     wxTimer             *m_renameTimer;
     bool                 m_renameAccept;
+    bool                 m_lastOnSame;  // last click on the same item as prev
     wxString             m_renameRes;
 
     // the common part of all ctors

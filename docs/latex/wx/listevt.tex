@@ -48,45 +48,76 @@ functions that take a wxListEvent argument.
 
 Constructor.
 
-\membersection{wxListEvent::m\_code}
+\membersection{wxListEvent::GetCode}\label{wxlisteventgetcode}
 
-\member{int}{m\_code}
+\constfunc{int}{GetCode}{\void}
 
 Key code if the event is a keypress event.
 
-\membersection{wxListEvent::m\_itemIndex}
+\membersection{wxListEvent::GetIndex}\label{wxlisteventgetindex}
 
-\member{long}{m\_itemIndex}
+\constfunc{long}{GetIndex}{\void}
 
 The item index.
 
-\membersection{wxListEvent::m\_oldItemIndex}
+\membersection{wxListEvent::GetOldIndex}\label{wxlisteventgetoldindex}
 
-\member{long}{m\_oldItemIndex}
+\constfunc{long}{GetOldIndex}{\void}
 
 The old item index.
 
-\membersection{wxListEvent::m\_col}
+\membersection{wxListEvent::GetColumn}\label{wxlisteventgetcolumn}
 
-\member{int}{m\_col}
+\constfunc{int}{GetColumn}{\void}
 
 The column position.
 
-\membersection{wxListEvent::m\_cancelled}
+\membersection{wxListEvent::Cancelled}\label{wxlisteventcancelled}
 
-\member{bool}{m\_cancelled}
+\constfunc{bool}{Cancelled}{\void}
 
 TRUE if this event is an end edit event and the user cancelled the edit.
 
-\membersection{wxListEvent::m\_pointDrag}
+\membersection{wxListEvent::GetPoint}\label{wxlisteventgetpoint}
 
-\member{wxPoint}{m\_pointDrag}
+\constfunc{wxPoint}{GetPoint}{\void}
 
 The position of the mouse pointer if the event is a drag event.
 
-\membersection{wxListEvent::m\_item}
 
-\member{wxListItem}{m\_item}
+\membersection{wxListEvent::GetLabel}\label{wxlisteventgetlabel}
+
+\constfunc{const wxString\&}{GetLabel}{\void}
+
+The label.
+
+\membersection{wxListEvent::GetText}\label{wxlisteventgettext}
+
+\constfunc{const wxString\&}{GetText}{\void}
+
+The text.
+
+\membersection{wxListEvent::GetImage}\label{wxlisteventgetimage}
+
+\constfunc{int}{GetImage}{\void}
+
+The image.
+
+\membersection{wxListEvent::GetData}\label{wxlisteventgetdata}
+
+\constfunc{long}{GetData}{\void}
+
+The data.
+
+\membersection{wxListEvent::GetMask}\label{wxlisteventgetmask}
+
+\constfunc{long}{GetMask}{\void}
+
+The mask.
+
+\membersection{wxListEvent::GetItem}\label{wxlisteventgetitem}
+
+\constfunc{const wxListItem\&}{GetItem}{\void}
 
 An item object, used by some events. See also \helpref{wxListCtrl::SetItem}{wxlistctrlsetitem}.
 

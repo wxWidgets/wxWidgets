@@ -55,7 +55,7 @@ static void XpmToBitmap(wxBitmap *bitmap,
     BITMAP bm;
     if ( !::GetObject(GetHbitmapOf(*bitmap), sizeof(bm), (LPSTR) & bm) )
     {
-        wxLogLastError("GetObject(bitmap)");
+        wxLogLastError(wxT("GetObject(bitmap)"));
     }
 
     refData->m_width     = bm.bmWidth;
@@ -67,7 +67,8 @@ static void XpmToBitmap(wxBitmap *bitmap,
     if (xmask)
     {
         wxMask *mask = new wxMask();
-        mask->SetMaskBitmap((WXHBITMAP) wxInvertMask(xmask->bitmap));
+        mask->SetMaskBitmap((WXHBITMAP) wxInvertMask(xmask->bitmap,
+                                                     bm.bmWidth, bm.bmHeight));
         bitmap->SetMask(mask);
     }
 }
@@ -101,8 +102,9 @@ bool wxXPMFileHandler::LoadFile(wxBitmap *bitmap,
         {
             XpmToBitmap(bitmap, ximage, xmask, xpmAttr);
 
-            XpmFree(xpmAttr.pixels);
             XpmFreeAttributes(&xpmAttr);
+            if (xpmAttr.pixels) // VS: should never happen
+                XpmFree(xpmAttr.pixels);
             XImageFree(ximage);
             if (xmask)
                 XDestroyImage(xmask);
@@ -199,8 +201,9 @@ bool wxXPMDataHandler::Create(wxBitmap *bitmap,
       {
           XpmToBitmap(bitmap, ximage, xmask, xpmAttr);
 
-          XpmFree(xpmAttr.pixels);
           XpmFreeAttributes(&xpmAttr);
+          if (xpmAttr.pixels) // VS: should never happen
+              XpmFree(xpmAttr.pixels);
           XImageFree(ximage); // releases the malloc, but does not destroy bitmap
           if (xmask)
               XDestroyImage(xmask);

@@ -22,7 +22,10 @@ like a frame in that program flow continues, and input on other windows is still
 You specify the type of dialog with the {\bf wxDIALOG\_MODAL} and {\bf wxDIALOG\_MODELESS} window
 styles.
 
-A dialog may be loaded from a wxWindows resource file (extension {\tt wxr}).
+A dialog may be loaded from a wxWindows resource file (extension {\tt wxr}), which may itself
+be created by Dialog Editor. For details,
+see \helpref{The wxWindows resource system}{resourceformats}, \helpref{wxWindows resource functions}{resourcefuncs} and
+the resource sample.
 
 An application can define an \helpref{OnCloseWindow}{wxwindowonclosewindow} handler for the
 dialog to respond to system close events.
@@ -31,9 +34,10 @@ dialog to respond to system close events.
 
 \twocolwidtha{5cm}
 \begin{twocollist}\itemsep=0pt
-\twocolitem{\windowstyle{wxCAPTION}}{Puts a caption on the dialog box (Motif only).}
+\twocolitem{\windowstyle{wxDIALOG\_MODAL}}{Specifies that the dialog box will be modal.}
+\twocolitem{\windowstyle{wxCAPTION}}{Puts a caption on the dialog box.}
 \twocolitem{\windowstyle{wxDEFAULT\_DIALOG\_STYLE}}{Equivalent to a combination of wxCAPTION, wxSYSTEM\_MENU and wxTHICK\_FRAME}
-\twocolitem{\windowstyle{wxRESIZE\_BORDER}}{Display a resizeable frame around the window (Unix only).}
+\twocolitem{\windowstyle{wxRESIZE\_BORDER}}{Display a resizeable frame around the window.}
 \twocolitem{\windowstyle{wxSYSTEM\_MENU}}{Display a system menu.}
 \twocolitem{\windowstyle{wxTHICK\_FRAME}}{Display a thick frame around the window.}
 \twocolitem{\windowstyle{wxSTAY\_ON\_TOP}}{The dialog stays on top of all other windows (Windows only).}
@@ -278,6 +282,9 @@ propagate the notification to child windows and controls.
 \membersection{wxDialog::SetModal}\label{wxdialogsetmodal}
 
 \func{void}{SetModal}{\param{const bool}{ flag}}
+
+{\bf NB:} This function is deprecated and doesn't work for all ports, just use 
+\helpref{ShowModal}{wxdialogshowmodal} to show a modal dialog instead.
 
 Allows the programmer to specify whether the dialog box is modal (wxDialog::Show blocks control
 until the dialog is hidden) or modeless (control returns immediately).

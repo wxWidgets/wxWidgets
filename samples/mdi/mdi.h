@@ -64,8 +64,15 @@ public:
     void OnActivate(wxActivateEvent& event);
 
     void OnRefresh(wxCommandEvent& event);
+    void OnChangeTitle(wxCommandEvent& event);
+    void OnChangePosition(wxCommandEvent& event);
+    void OnChangeSize(wxCommandEvent& event);
     void OnQuit(wxCommandEvent& event);
+    void OnSize(wxSizeEvent& event);
+    void OnMove(wxMoveEvent& event);
     void OnClose(wxCloseEvent& event);
+
+    void OnUpdateRefresh(wxUpdateUIEvent& event);
 
     DECLARE_EVENT_TABLE()
 };
@@ -76,6 +83,9 @@ enum
     MDI_QUIT = 100,
     MDI_NEW_WINDOW,
     MDI_REFRESH,
+    MDI_CHANGE_TITLE,
+    MDI_CHANGE_POSITION,
+    MDI_CHANGE_SIZE,
     MDI_CHILD_QUIT,
     MDI_ABOUT
 };

@@ -22,6 +22,10 @@
 // #  error "MBCS is not supported by wxChar"
 #endif
 
+// ----------------------------------------------------------------------------
+// first deal with Unicode setting
+// ----------------------------------------------------------------------------
+
 // set wxUSE_UNICODE to 1 if UNICODE or _UNICODE is defined
 #if defined(_UNICODE) || defined(UNICODE)
 #  undef wxUSE_UNICODE
@@ -30,7 +34,7 @@
 #  ifndef wxUSE_UNICODE
 #    define wxUSE_UNICODE 0
 #  endif
-#endif
+#endif // Unicode
 
 // and vice versa: define UNICODE and _UNICODE if wxUSE_UNICODE is 1...
 #if wxUSE_UNICODE
@@ -40,7 +44,13 @@
 #  ifndef UNICODE
 #    define UNICODE
 #  endif
-#endif
+#endif // Unicode
+
+// Unicode support requires wchar_t
+#if wxUSE_UNICODE
+#   undef wxUSE_WCHAR_T
+#   define wxUSE_WCHAR_T 1
+#endif // Unicode
 
 // ----------------------------------------------------------------------------
 // define wxHAVE_TCHAR_FUNCTIONS for the compilers which support the
@@ -98,9 +108,7 @@
     // time.h functions  -- none defined in tchar.h
     #define  wxAsctime   asctime
     #define  wxCtime     ctime
-
-
-#endif
+#endif // compilers with (good) TCHAR support
 
 #ifdef wxHAVE_TCHAR_FUNCTIONS
 #  define HAVE_WCSLEN 1
@@ -116,9 +124,11 @@ typedef  _TUCHAR     wxUChar;
 #    define wxSChar signed char
 #    define wxUChar unsigned char
 #  endif
-   // wchar_t is available
-#  undef wxUSE_WCHAR_T
-#  define wxUSE_WCHAR_T 1
+
+    // wchar_t is available
+    #ifndef wxUSE_WCHAR_T
+        #define wxUSE_WCHAR_T 1
+    #endif // !defined(wxUSE_WCHAR_T)
 
    // ctype.h functions
 #ifndef wxNO_TCHAR_CTYPE
@@ -239,14 +249,11 @@ typedef  _TUCHAR     wxUChar;
 #else // !TCHAR-aware compilers
 
 // check whether we should include wchar.h or equivalent
-#  if wxUSE_UNICODE
-#    undef wxUSE_WCHAR_T
-#    define wxUSE_WCHAR_T 1 // wchar_t *must* be available in Unicode mode
-#  elif !defined(wxUSE_WCHAR_T)
+#  if !defined(wxUSE_WCHAR_T)
 #    if defined(__VISUALC__) && (__VISUALC__ < 900)
 #      define wxUSE_WCHAR_T 0 // wchar_t is not available for MSVC++ 1.5
 #    elif defined(__UNIX__)
-#      if defined(HAVE_WCSTR_H) || defined(HAVE_WCHAR_H) || defined(__FreeBSD__)
+#      if defined(HAVE_WCSTR_H) || defined(HAVE_WCHAR_H) || defined(__FreeBSD__) || defined(__DARWIN__)
 #        define wxUSE_WCHAR_T 1
 #      else
 #        define wxUSE_WCHAR_T 0
@@ -263,13 +270,13 @@ typedef  _TUCHAR     wxUChar;
   // add additional compiler checks if this fails
 #      define wxUSE_WCHAR_T 1
 #    endif
-#  endif//wxUSE_UNICODE
+#  endif // !defined(wxUSE_WCHAR_T)
 
 #  if wxUSE_WCHAR_T
 #    ifdef HAVE_WCSTR_H
 #      include <wcstr.h>
 #    else
-#      ifndef __FreeBSD__
+#      if !defined(__FreeBSD__) && !defined(__DARWIN__)
 #        include <wchar.h>
 #      else
 #        include <stdlib.h>
@@ -359,7 +366,7 @@ typedef unsigned __WCHAR_TYPE__ wxUChar;
 #     define wxUChar unsigned char
 #   endif
 
-#   ifdef __FreeBSD__
+#   if defined(__FreeBSD__) || defined(__DARWIN__)
 #     undef _T
 #   endif
 
@@ -603,6 +610,8 @@ WXDLLEXPORT size_t   wxStrxfrm(wxChar *dest, const wxChar *src, size_t n);
 #  include <stdarg.h>
 WXDLLEXPORT FILE *   wxFopen(const wxChar *path, const wxChar *mode);
 WXDLLEXPORT FILE *   wxFreopen(const wxChar *path, const wxChar *mode, FILE *stream);
+WXDLLEXPORT int      wxRemove(const wxChar *path);
+WXDLLEXPORT int      wxRename(const wxChar *oldpath, const wxChar *newpath);
 WXDLLEXPORT int      wxPrintf(const wxChar *fmt, ...);
 WXDLLEXPORT int      wxVprintf(const wxChar *fmt, va_list argptr);
 WXDLLEXPORT int      wxFprintf(FILE *stream, const wxChar *fmt, ...);
@@ -627,6 +636,17 @@ WXDLLEXPORT int      wxSystem(const wxChar *psz);
 #ifdef wxNEED_WX_TIME_H
 WXDLLEXPORT size_t   wxStrftime(wxChar *s, size_t max, const wxChar *fmt, const struct tm *tm);
 #endif
+
+// under VC++ 6.0 isspace() returns 1 for 8 bit chars which completely breaks
+// the file parsing - this may be true for 5.0 as well, update #ifdef then
+#if defined(__VISUALC__) && (__VISUALC__ >= 1200) && !wxUSE_UNICODE
+    #undef wxIsspace
+    #define wxIsspace(c) ((((unsigned)c) < 128) && isspace(c))
+#endif // VC++
+
+// ----------------------------------------------------------------------------
+// common macros which are always defined
+// ----------------------------------------------------------------------------
 
 // although global macros with such names are really bad, we want to have
 // another name for _T() which should be used to avoid confusion between _T()

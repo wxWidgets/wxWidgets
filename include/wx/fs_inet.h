@@ -20,7 +20,7 @@ limitation)
 */
 
 #ifdef __GNUG__
-#pragma implementation
+#pragma interface "fs_inet.h"
 #endif
 
 #include "wx/wxprec.h"

@@ -42,6 +42,10 @@
 #include "cross.xbm"
 #define  num_hatches 6
 
+#define IS_15_PIX_HATCH(s) ((s)==wxCROSSDIAG_HATCH || (s)==wxHORIZONTAL_HATCH || (s)==wxVERTICAL_HATCH)
+#define IS_16_PIX_HATCH(s) ((s)!=wxCROSSDIAG_HATCH && (s)!=wxHORIZONTAL_HATCH && (s)!=wxVERTICAL_HATCH)
+
+
 static GdkPixmap  *hatches[num_hatches];
 static GdkPixmap **hatch_bitmap = (GdkPixmap **) NULL;
 
@@ -68,7 +72,7 @@ static inline double DegToRad(double deg) { return (deg * M_PI) / 180.0; }
 
 #include "gdk/gdkprivate.h"
 
-void gdk_draw_bitmap     (GdkDrawable  *drawable,
+void gdk_wx_draw_bitmap     (GdkDrawable  *drawable,
                           GdkGC               *gc,
                           GdkDrawable  *src,
                           gint                xsrc,
@@ -122,7 +126,11 @@ enum wxPoolGCType
    wxTEXT_COLOUR,
    wxBG_COLOUR,
    wxPEN_COLOUR,
-   wxBRUSH_COLOUR
+   wxBRUSH_COLOUR,
+   wxTEXT_SCREEN,
+   wxBG_SCREEN,
+   wxPEN_SCREEN,
+   wxBRUSH_SCREEN
 };
 
 struct wxGC
@@ -267,6 +275,14 @@ void wxWindowDC::SetUpDC()
 
     wxASSERT_MSG( !m_penGC, wxT("GCs already created") );
 
+    if (m_isScreenDC)
+    {
+        m_penGC = wxGetPoolGC( m_window, wxPEN_SCREEN );
+        m_brushGC = wxGetPoolGC( m_window, wxBRUSH_SCREEN );
+        m_textGC = wxGetPoolGC( m_window, wxTEXT_SCREEN );
+        m_bgGC = wxGetPoolGC( m_window, wxBG_SCREEN );
+    }
+    else
     if (m_isMemDC && (((wxMemoryDC*)this)->m_selected.GetDepth() == 1))
     {
         m_penGC = wxGetPoolGC( m_window, wxPEN_MONO );
@@ -445,6 +461,18 @@ void wxWindowDC::DoDrawArc( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2,
                 gdk_draw_arc( m_window, m_textGC, TRUE, xxc-r, yyc-r, 2*r,2*r, alpha1, alpha2 );
                 gdk_gc_set_ts_origin( m_textGC, 0, 0 );
             } else
+            if (IS_15_PIX_HATCH(m_brush.GetStyle()))
+            {
+                gdk_gc_set_ts_origin( m_brushGC, m_deviceOriginX % 15, m_deviceOriginY % 15 );
+                gdk_draw_arc( m_window, m_brushGC, TRUE, xxc-r, yyc-r, 2*r,2*r, alpha1, alpha2 );
+                gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
+            } else
+            if (IS_16_PIX_HATCH(m_brush.GetStyle()))
+            {
+                gdk_gc_set_ts_origin( m_brushGC, m_deviceOriginX % 16, m_deviceOriginY % 16 );
+                gdk_draw_arc( m_window, m_brushGC, TRUE, xxc-r, yyc-r, 2*r,2*r, alpha1, alpha2 );
+                gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
+            } else
             if (m_brush.GetStyle() == wxSTIPPLE)
             {
                 gdk_gc_set_ts_origin( m_brushGC,
@@ -460,7 +488,12 @@ void wxWindowDC::DoDrawArc( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2,
         }
 
         if (m_pen.GetStyle() != wxTRANSPARENT)
+        {
             gdk_draw_arc( m_window, m_penGC, FALSE, xxc-r, yyc-r, 2*r,2*r, alpha1, alpha2 );
+            
+            gdk_draw_line( m_window, m_penGC, xx1, yy1, xxc, yyc );
+            gdk_draw_line( m_window, m_penGC, xxc, yyc, xx2, yy2 );
+        }
     }
 
     CalcBoundingBox (x1, y1);
@@ -483,7 +516,7 @@ void wxWindowDC::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord width, wxCoord
     if (m_window)
     {
         wxCoord start = wxCoord(sa * 64.0);
-        wxCoord end = wxCoord(ea * 64.0);
+        wxCoord end = wxCoord((ea-sa) * 64.0);
 
         if (m_brush.GetStyle() != wxTRANSPARENT)
         {
@@ -494,6 +527,18 @@ void wxWindowDC::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord width, wxCoord
                                       m_deviceOriginY % m_brush.GetStipple()->GetHeight() );
                 gdk_draw_arc( m_window, m_textGC, TRUE, xx, yy, ww, hh, start, end );
                 gdk_gc_set_ts_origin( m_textGC, 0, 0 );
+            } else
+            if (IS_15_PIX_HATCH(m_brush.GetStyle()))
+            {
+                gdk_gc_set_ts_origin( m_brushGC, m_deviceOriginX % 15, m_deviceOriginY % 15 );
+                gdk_draw_arc( m_window, m_brushGC, TRUE, xx, yy, ww, hh, start, end );
+                gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
+            } else
+            if (IS_16_PIX_HATCH(m_brush.GetStyle()))
+            {
+                gdk_gc_set_ts_origin( m_brushGC, m_deviceOriginX % 16, m_deviceOriginY % 16 );
+                gdk_draw_arc( m_window, m_brushGC, TRUE, xx, yy, ww, hh, start, end );
+                gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
             } else
             if (m_brush.GetStyle() == wxSTIPPLE)
             {
@@ -578,6 +623,18 @@ void wxWindowDC::DoDrawPolygon( int n, wxPoint points[], wxCoord xoffset, wxCoor
                 gdk_draw_polygon( m_window, m_textGC, TRUE, gdkpoints, n );
                 gdk_gc_set_ts_origin( m_textGC, 0, 0 );
             } else
+            if (IS_15_PIX_HATCH(m_brush.GetStyle()))
+            {
+                gdk_gc_set_ts_origin( m_brushGC, m_deviceOriginX % 15, m_deviceOriginY % 15 );
+                gdk_draw_polygon( m_window, m_brushGC, TRUE, gdkpoints, n );
+                gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
+            } else
+            if (IS_16_PIX_HATCH(m_brush.GetStyle()))
+            {
+                gdk_gc_set_ts_origin( m_brushGC, m_deviceOriginX % 16, m_deviceOriginY % 16 );
+                gdk_draw_polygon( m_window, m_brushGC, TRUE, gdkpoints, n );
+                gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
+            } else
             if (m_brush.GetStyle() == wxSTIPPLE)
             {
                 gdk_gc_set_ts_origin( m_brushGC,
@@ -635,8 +692,20 @@ void wxWindowDC::DoDrawRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoord h
                                       m_deviceOriginY % m_brush.GetStipple()->GetHeight() );
                 gdk_draw_rectangle( m_window, m_textGC, TRUE, xx, yy, ww, hh );
                 gdk_gc_set_ts_origin( m_textGC, 0, 0 );
-            }
-            else if (m_brush.GetStyle() == wxSTIPPLE)
+            } else
+            if (IS_15_PIX_HATCH(m_brush.GetStyle()))
+            {
+                gdk_gc_set_ts_origin( m_brushGC, m_deviceOriginX % 15, m_deviceOriginY % 15 );
+                gdk_draw_rectangle( m_window, m_brushGC, TRUE, xx, yy, ww, hh );
+                gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
+            } else
+            if (IS_16_PIX_HATCH(m_brush.GetStyle()))
+            {
+                gdk_gc_set_ts_origin( m_brushGC, m_deviceOriginX % 16, m_deviceOriginY % 16 );
+                gdk_draw_rectangle( m_window, m_brushGC, TRUE, xx, yy, ww, hh );
+                gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
+            } else
+            if (m_brush.GetStyle() == wxSTIPPLE)
             {
                 gdk_gc_set_ts_origin( m_brushGC,
                                       m_deviceOriginX % m_brush.GetStipple()->GetWidth(),
@@ -716,8 +785,30 @@ void wxWindowDC::DoDrawRoundedRectangle( wxCoord x, wxCoord y, wxCoord width, wx
                 gdk_draw_arc( m_window, m_textGC, TRUE, xx+ww-dd, yy+hh-dd, dd, dd, 270*64, 90*64 );
                 gdk_draw_arc( m_window, m_textGC, TRUE, xx, yy+hh-dd, dd, dd, 180*64, 90*64 );
                 gdk_gc_set_ts_origin( m_textGC, 0, 0 );
-            }
-            else if (m_brush.GetStyle() == wxSTIPPLE)
+            } else
+            if (IS_15_PIX_HATCH(m_brush.GetStyle()))
+            {
+                gdk_gc_set_ts_origin( m_brushGC, m_deviceOriginX % 15, m_deviceOriginY % 15 );
+                gdk_draw_rectangle( m_window, m_brushGC, TRUE, xx+rr, yy, ww-dd+1, hh );
+                gdk_draw_rectangle( m_window, m_brushGC, TRUE, xx, yy+rr, ww, hh-dd+1 );
+                gdk_draw_arc( m_window, m_brushGC, TRUE, xx, yy, dd, dd, 90*64, 90*64 );
+                gdk_draw_arc( m_window, m_brushGC, TRUE, xx+ww-dd, yy, dd, dd, 0, 90*64 );
+                gdk_draw_arc( m_window, m_brushGC, TRUE, xx+ww-dd, yy+hh-dd, dd, dd, 270*64, 90*64 );
+                gdk_draw_arc( m_window, m_brushGC, TRUE, xx, yy+hh-dd, dd, dd, 180*64, 90*64 );
+                gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
+            } else
+            if (IS_16_PIX_HATCH(m_brush.GetStyle()))
+            {
+                gdk_gc_set_ts_origin( m_brushGC, m_deviceOriginX % 16, m_deviceOriginY % 16 );
+                gdk_draw_rectangle( m_window, m_brushGC, TRUE, xx+rr, yy, ww-dd+1, hh );
+                gdk_draw_rectangle( m_window, m_brushGC, TRUE, xx, yy+rr, ww, hh-dd+1 );
+                gdk_draw_arc( m_window, m_brushGC, TRUE, xx, yy, dd, dd, 90*64, 90*64 );
+                gdk_draw_arc( m_window, m_brushGC, TRUE, xx+ww-dd, yy, dd, dd, 0, 90*64 );
+                gdk_draw_arc( m_window, m_brushGC, TRUE, xx+ww-dd, yy+hh-dd, dd, dd, 270*64, 90*64 );
+                gdk_draw_arc( m_window, m_brushGC, TRUE, xx, yy+hh-dd, dd, dd, 180*64, 90*64 );
+                gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
+            } else
+            if (m_brush.GetStyle() == wxSTIPPLE)
             {
                 gdk_gc_set_ts_origin( m_brushGC,
                                       m_deviceOriginX % m_brush.GetStipple()->GetWidth(),
@@ -743,10 +834,10 @@ void wxWindowDC::DoDrawRoundedRectangle( wxCoord x, wxCoord y, wxCoord width, wx
 
         if (m_pen.GetStyle() != wxTRANSPARENT)
         {
-            gdk_draw_line( m_window, m_penGC, xx+rr, yy, xx+ww-rr, yy );
-            gdk_draw_line( m_window, m_penGC, xx+rr, yy+hh, xx+ww-rr, yy+hh );
-            gdk_draw_line( m_window, m_penGC, xx, yy+rr, xx, yy+hh-rr );
-            gdk_draw_line( m_window, m_penGC, xx+ww, yy+rr, xx+ww, yy+hh-rr );
+            gdk_draw_line( m_window, m_penGC, xx+rr+1, yy, xx+ww-rr, yy );
+            gdk_draw_line( m_window, m_penGC, xx+rr+1, yy+hh, xx+ww-rr, yy+hh );
+            gdk_draw_line( m_window, m_penGC, xx, yy+rr+1, xx, yy+hh-rr );
+            gdk_draw_line( m_window, m_penGC, xx+ww, yy+rr+1, xx+ww, yy+hh-rr );
             gdk_draw_arc( m_window, m_penGC, FALSE, xx, yy, dd, dd, 90*64, 90*64 );
             gdk_draw_arc( m_window, m_penGC, FALSE, xx+ww-dd, yy, dd, dd, 0, 90*64 );
             gdk_draw_arc( m_window, m_penGC, FALSE, xx+ww-dd, yy+hh-dd, dd, dd, 270*64, 90*64 );
@@ -783,8 +874,20 @@ void wxWindowDC::DoDrawEllipse( wxCoord x, wxCoord y, wxCoord width, wxCoord hei
                                       m_deviceOriginY % m_brush.GetStipple()->GetHeight() );
                 gdk_draw_arc( m_window, m_textGC, TRUE, xx, yy, ww, hh, 0, 360*64 );
                 gdk_gc_set_ts_origin( m_textGC, 0, 0 );
-            }
-            else if (m_brush.GetStyle() == wxSTIPPLE)
+            } else
+            if (IS_15_PIX_HATCH(m_brush.GetStyle()))
+            {
+                gdk_gc_set_ts_origin( m_brushGC, m_deviceOriginX % 15, m_deviceOriginY % 15 );
+                gdk_draw_arc( m_window, m_brushGC, TRUE, xx, yy, ww, hh, 0, 360*64 );
+                gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
+            } else
+            if (IS_16_PIX_HATCH(m_brush.GetStyle()))
+            {
+                gdk_gc_set_ts_origin( m_brushGC, m_deviceOriginX % 16, m_deviceOriginY % 16 );
+                gdk_draw_arc( m_window, m_brushGC, TRUE, xx, yy, ww, hh, 0, 360*64 );
+                gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
+            } else
+            if (m_brush.GetStyle() == wxSTIPPLE)
             {
                 gdk_gc_set_ts_origin( m_brushGC,
                                       m_deviceOriginX % m_brush.GetStipple()->GetWidth(),
@@ -912,7 +1015,7 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
     /* Draw XPixmap or XBitmap, depending on what the wxBitmap contains. For
        drawing a mono-bitmap (XBitmap) we use the current text GC */
     if (is_mono)
-        gdk_draw_bitmap( m_window, m_textGC, use_bitmap.GetBitmap(), 0, 0, xx, yy, -1, -1 );
+        gdk_wx_draw_bitmap( m_window, m_textGC, use_bitmap.GetBitmap(), 0, 0, xx, yy, -1, -1 );
     else
         gdk_draw_pixmap( m_window, m_penGC, use_bitmap.GetPixmap(), 0, 0, xx, yy, -1, -1 );
 
@@ -1098,7 +1201,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
            drawing a mono-bitmap (XBitmap) we use the current text GC */
 
         if (is_mono)
-            gdk_draw_bitmap( m_window, m_textGC, use_bitmap.GetBitmap(), xsrc, ysrc, xx, yy, ww, hh );
+            gdk_wx_draw_bitmap( m_window, m_textGC, use_bitmap.GetBitmap(), xsrc, ysrc, xx, yy, ww, hh );
         else
             gdk_draw_pixmap( m_window, m_penGC, use_bitmap.GetPixmap(), xsrc, ysrc, xx, yy, ww, hh );
 
@@ -1284,8 +1387,8 @@ void wxWindowDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y, 
         for ( wxCoord srcY = 0; srcY < h; srcY++ )
         {
             // transform source coords to dest coords
-            double r = sqrt(srcX*srcX + srcY*srcY);
-            double angleOrig = atan2(srcY, srcX) - rad;
+            double r = sqrt((double)srcX*srcX + srcY*srcY);
+            double angleOrig = atan2((double)srcY, (double)srcX) - rad;
             wxCoord dstX = (wxCoord)(r*cos(angleOrig) + 0.5),
                     dstY = (wxCoord)(r*sin(angleOrig) + 0.5);
 

@@ -38,8 +38,9 @@ a reference to your application object) to be visible to other files.
 
 Constructor. Called implicitly with a definition of a wxApp object.
 
-The argument is a language identifier; this is an experimental
-feature and will be expanded and documented in future versions.
+% VZ: there is no such feature so far...
+% The argument is a language identifier; this is an experimental
+% feature and will be expanded and documented in future versions.
 
 \membersection{wxApp::\destruct{wxApp}}
 
@@ -457,7 +458,7 @@ deleted. If FALSE, the application will continue to run.}
 
 Sets the `top' window. You can call this from within \helpref{wxApp::OnInit}{wxapponinit} to
 let wxWindows know which is the main window. You don't have to set the top window;
-it's only a convenience so that (for example) certain dialogs without parents can use a
+it is only a convenience so that (for example) certain dialogs without parents can use a
 specific window as the top window. If no top window is specified by the application,
 wxWindows just uses the first frame or dialog in its top-level window list, when it
 needs to use the top window.

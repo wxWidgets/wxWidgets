@@ -364,8 +364,6 @@ class WXDLLEXPORT wxDC: public wxObject
     
     bool         m_needComputeScaleX,m_needComputeScaleY;         // not yet used
     
-    float        m_scaleFactor;  // wxPSDC wants to have this. Will disappear.
-    
     long         m_clipX1,m_clipY1,m_clipX2,m_clipY2;
     long         m_minX,m_maxX,m_minY,m_maxY;
 };

@@ -67,7 +67,6 @@ void MyApp::InitTabView(wxNotebook* notebook, wxPanel* window)
   m_okButton->SetDefault();
 
   wxLayoutConstraints *c;
-
   c = new wxLayoutConstraints;
   c->right.SameAs(window, wxRight, 4);
   c->bottom.SameAs(window, wxBottom, 4);
@@ -242,9 +241,25 @@ void MyFrame::OnInsertPage(wxCommandEvent& WXUNUSED(event))
     m_notebook->SetSelection(0);
 }
 
+wxWindow *test = NULL;
+
 void MyFrame::OnDeletePage(wxCommandEvent& WXUNUSED(event))
 {
-    m_notebook->DeletePage( m_notebook->GetPageCount()-1 );
+    if (m_notebook->GetPageCount() > 0)
+        m_notebook->DeletePage( m_notebook->GetPageCount()-1 );
+
+/*
+    if (test)
+    {
+       m_notebook->AddPage( test, "Readded" );
+       test = NULL;
+    }
+    else
+    {
+       test = m_notebook->GetPage( m_notebook->GetPageCount()-1 );
+       m_notebook->RemovePage( m_notebook->GetPageCount()-1 );
+    }
+*/
 }
 
 void MyFrame::OnNextPage(wxCommandEvent& WXUNUSED(event))

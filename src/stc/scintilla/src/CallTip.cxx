@@ -8,6 +8,7 @@
 
 #include "Platform.h"
 
+#include "Scintilla.h"
 #include "CallTip.h"
 
 CallTip::CallTip() {
@@ -117,7 +118,7 @@ PRectangle CallTip::CallTipStart(int pos, Point pt, const char *defn,
 	Surface surfaceMeasure;
 	surfaceMeasure.Init();
 	int deviceHeight = (size * surfaceMeasure.LogPixelsY()) / 72;
-	font.Create(faceName, deviceHeight);
+	font.Create(faceName, SC_CHARSET_DEFAULT, deviceHeight, false, false);
 	if (val)
 		delete []val;
 	val = new char[strlen(defn) + 1];

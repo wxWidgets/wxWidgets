@@ -42,7 +42,7 @@ public:
 
 #ifdef __WXDEBUG__
     // function to return symbolic name of clipboard format (for debug messages)
-    static const char *GetFormatName(wxDataFormat format);
+    static const wxChar *GetFormatName(wxDataFormat format);
 
     #define wxGetFormatName(format) wxDataObject::GetFormatName(format)
 #else // !Debug

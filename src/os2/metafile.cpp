@@ -269,8 +269,8 @@ void wxMetafileDC::SetMapMode(int mode)
       break;
     }
   }
-  m_windowExtX = 100;
-  m_windowExtY = 100;
+  m_nWindowExtX = 100;
+  m_nWindowExtY = 100;
 }
 
 #ifdef __WIN32__

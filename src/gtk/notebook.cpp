@@ -521,7 +521,7 @@ bool wxNotebook::DeletePage( int page )
     if (!nb_page) return FALSE;
 
     /* GTK sets GtkNotebook.cur_page to NULL before sending
-       the switvh page event */
+       the switch page event */
     m_lastSelection = GetSelection();
 
     nb_page->m_client->Destroy();
@@ -536,8 +536,12 @@ bool wxNotebook::RemovePage( int page )
 {
     wxGtkNotebookPage* nb_page = GetNotebookPage(page);
 
-    if (!nb_page) return FALSE;
+    wxCHECK_MSG( nb_page, FALSE, _T("wxNotebook::RemovePage: invalid page") );
 
+    gtk_widget_ref( nb_page->m_client->m_widget );
+    gtk_widget_unrealize( nb_page->m_client->m_widget );
+    gtk_widget_unparent( nb_page->m_client->m_widget );
+        
     gtk_notebook_remove_page( GTK_NOTEBOOK(m_widget), page );
 
     m_pages.DeleteObject( nb_page );

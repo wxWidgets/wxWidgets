@@ -5,6 +5,8 @@ minimize the overhead of using it - in fact, there is hardly any overhead at
 all, but using it brings you automatic error checking and hides differences
 between platforms and compilers. wxFile also automatically closes the file in
 its destructor making it unnecessary to worry about forgetting to do it.
+wxFile is a wrapper around {\tt file descriptor.} - see also 
+\helpref{wxFFile}{wxffile} for a wrapper around {\tt FILE} structure.
 
 \wxheading{Derived from}
 
@@ -39,7 +41,7 @@ These constants define the file access rights and are used with
 \helpref{wxFile::Create}{wxfilecreate} and \helpref{wxFile::Open}{wxfileopen}.
 
 The {\it OpenMode} enumeration defines the different modes for opening a file,
-it's defined inside wxFile class so its members should be specified with {\it wxFile::} scope
+it is defined inside wxFile class so its members should be specified with {\it wxFile::} scope
 resolution prefix. It is also used with \helpref{wxFile::Access}{wxfileaccess} function.
 
 \twocolwidtha{7cm}
@@ -50,7 +52,8 @@ or test if it can be opened for writing with Access()}
 \twocolitem{{\bf wxFile::read\_write}}{Open file for reading and writing; can not be used with Access()}
 \twocolitem{{\bf wxFile::write\_append}}{Open file for appending: the file is opened for writing, but the old
 contents of the file is not erased and the file pointer is initially placed at the end of the file;
-can not be used with Access()}
+can not be used with Access(). This is the same as {\bf wxFile::write} if the
+file doesn't exist.}
 \end{twocollist}
 
 Other constants defined elsewhere but used by wxFile functions are wxInvalidOffset which represents an
@@ -158,7 +161,10 @@ in the file.
 
 Note also that this function doesn't work on unseekable file descriptors
 (examples include pipes, terminals and sockets under Unix) and an attempt to
-use it will result in an error message in such case.
+use it will result in an error message in such case. So, to read the entire
+file into memory, you should write a loop which uses 
+\helpref{Read}{wxfileread} repeatedly and tests its return condition instead
+of using Eof() as this will not work for special files under Unix.
 
 \membersection{wxFile::Exists}\label{wxfileexists}
 
@@ -252,11 +258,11 @@ The actual offset position achieved, or wxInvalidOffset on failure.
 \constfunc{off\_t}{Tell}{\void}
 
 Returns the current position or wxInvalidOffset if file is not opened or if another
-error occured.
+error occurred.
 
 \membersection{wxFile::Write}\label{wxfilewrite}
 
-\func{bool}{Write}{\param{const void*}{ buffer}, \param{off\_t}{ count}}
+\func{size\_t}{Write}{\param{const void*}{ buffer}, \param{off\_t}{ count}}
 
 Writes the specified number of bytes from a buffer.
 
@@ -268,7 +274,7 @@ Writes the specified number of bytes from a buffer.
 
 \wxheading{Return value}
 
-TRUE if the operation was successful.
+the number of bytes actually written
 
 \membersection{wxFile::Write}\label{wxfilewrites}
 
@@ -278,10 +284,11 @@ Writes the contents of the string to the file, returns TRUE on success.
 
 \section{\class{wxFFile}}\label{wxffile}
 
-A wxFFile performs raw file I/O. This is a very small class designed to
+wxFFile implements buffered file I/O. This is a very small class designed to
 minimize the overhead of using it - in fact, there is hardly any overhead at
 all, but using it brings you automatic error checking and hides differences
-between platforms and compilers.
+between platforms and compilers. It wraps inside it a {\tt FILE *} handle used
+by standard C IO library (also known as {\tt stdio}).
 
 \wxheading{Derived from}
 

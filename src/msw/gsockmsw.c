@@ -58,8 +58,14 @@
 #  pragma warning(default:4115) /* named type definition in parentheses */
 #endif
 
+/* VZ: I don't know if _T() macro is always defined here? */
+#ifdef _UNICODE
+#define CLASSNAME  L"_GSocket_Internal_Window_Class"
+#define WINDOWNAME L"_GSocket_Internal_Window_Name"
+#else /* !Unicode */
 #define CLASSNAME  "_GSocket_Internal_Window_Class"
 #define WINDOWNAME "_GSocket_Internal_Window_Name"
+#endif /* Unicode/!Unicode */
 
 /* Maximum number of different GSocket objects at a given time.
  * This value can be modified at will, but it CANNOT be greater
@@ -282,6 +288,7 @@ void _GSocket_Disable_Events(GSocket *socket)
  * Translation unit shouldn't be empty, so include this typedef to make the
  * compiler (VC++ 6.0, for example) happy
  */
-typedef (*wxDummy)();
+typedef void (*wxDummy)();
 
 #endif  /* wxUSE_SOCKETS || defined(__GSOCKET_STANDALONE__) */
+

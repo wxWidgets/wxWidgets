@@ -37,6 +37,22 @@ void Indicator::Draw(Surface *surface, PRectangle &rc) {
 			surface->MoveTo(x-3, ymid);
 			surface->LineTo(x-3, ymid+2);
 		}
+	} else if (style == INDIC_DIAGONAL) {
+		int x = rc.left;
+		while (x < rc.right) {
+			surface->MoveTo(x, rc.top+2);
+			int endX = x+3;
+			int endY = rc.top - 1;
+			if (endX > rc.right) {
+				endY += endX - rc.right;
+				endX = rc.right;
+			}
+			surface->LineTo(endX, endY);
+			x += 4;
+		}
+	} else if (style == INDIC_STRIKE) {
+		surface->MoveTo(rc.left, rc.top - 4);
+		surface->LineTo(rc.right, rc.top - 4);
 	} else {	// Either INDIC_PLAIN or unknown
 		surface->MoveTo(rc.left, ymid);
 		surface->LineTo(rc.right, ymid);

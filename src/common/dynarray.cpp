@@ -141,8 +141,6 @@ void wxBaseArray::Clear()
 // pre-allocates memory (frees the previous data!)
 void wxBaseArray::Alloc(size_t nSize)
 {
-  wxASSERT( nSize > 0 );
-
   // only if old buffer was not big enough
   if ( nSize > m_nSize ) {
     wxDELETEA(m_pItems);

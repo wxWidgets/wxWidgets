@@ -1,0 +1,7 @@
+Each of the leaf items in the tree is a separate demo.  Click and learn!
+Use the source Luke!
+Many of the demos have some helpful overview text associated with them.  Simply click on the first tab in the notebook control after selecting the demo.  You can switch back and forth to the demo page as often as you like.
+You can also view the source code for each demo by clicking on the second notebook tab.
+wxPython now has a company providing commercial support, consulting and training.  Go to http://wxpros.com for details.
+You shouldn't pee on an electric fence!
+Be sure to subscribe to the mail list.  Go to http://wxwindows.org/mailman/listinfo/wxpython-users today!

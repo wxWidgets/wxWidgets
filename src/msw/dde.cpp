@@ -398,8 +398,7 @@ wxConnectionBase *wxDDEClient::MakeConnection(const wxString& WXUNUSED(host),
                              (PCONVCONTEXT)NULL);
     if ( !hConv )
     {
-        DDELogError(wxString::Format(_("Failed to create connection to "
-                                       "server '%s' on topic '%s'"),
+        DDELogError(wxString::Format(_("Failed to create connection to server '%s' on topic '%s'"),
                                      server.c_str(), topic.c_str()));
     }
     else
@@ -519,15 +518,26 @@ bool wxDDEConnection::Disconnect()
 bool wxDDEConnection::Execute(const wxChar *data, int size, wxIPCFormat format)
 {
     DWORD result;
-    if (size < 0)
+    if ( size < 0 )
     {
         size = wxStrlen(data) + 1;
     }
 
-    bool ok = DdeClientTransaction((LPBYTE)data, size,
+    HDDEDATA hData = DdeCreateDataHandle(DDEIdInst, (LPBYTE)data, size,
+                                         0, 0, format, 0);
+    if ( !hData )
+    {
+        DDELogError(_T("Failed to create DDE data handle"));
+
+        return FALSE;
+    }
+
+    // size == -1 is special and means that we pass a DDE data handle
+    size = -1;
+    bool ok = DdeClientTransaction((LPBYTE)hData, size,
                                     GetHConv(),
                                     NULL,
-                                    format,
+                                    0, //format,
                                     XTYP_EXECUTE,
                                     DDE_TIMEOUT,
                                     &result) != 0;
@@ -761,7 +771,7 @@ _DDECallback(WORD wType,
                     if (data)
                     {
                         if (user_size < 0)
-                            user_size = wxStrlen(data) + 1;
+                            user_size = wxStrlen((wxChar*)data) + 1;
 
                         HDDEDATA handle = DdeCreateDataHandle(DDEIdInst,
                                                               (LPBYTE)data,
@@ -792,7 +802,7 @@ _DDECallback(WORD wType,
 
                     connection->OnPoke(connection->m_topicName,
                                        item_name,
-                                       connection->m_bufPtr,
+                                       (wxChar*)connection->m_bufPtr,
                                        (int)len,
                                        (wxIPCFormat) wFmt);
 
@@ -918,7 +928,7 @@ static HSZ DDEAtomFromString(const wxString& s)
 {
     wxASSERT_MSG( DDEIdInst, _T("DDE not initialized") );
 
-    HSZ hsz = DdeCreateStringHandle(DDEIdInst, (char*) s.c_str(), DDE_CP);
+    HSZ hsz = DdeCreateStringHandle(DDEIdInst, (wxChar*) s.c_str(), DDE_CP);
     if ( !hsz )
     {
         DDELogError(_("Failed to create DDE string"));

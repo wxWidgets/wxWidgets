@@ -6,13 +6,41 @@ exec_prefix_set=no
 CC="@CC@"
 CXX="@CXX@"
 LD="@SHARED_LD@"
+cross_compiling=@cross_compiling@
+target=@host_alias@
 
-usage="\
-Usage: wx-config [--prefix[=DIR]] [--exec-prefix[=DIR]] [--version] [--libs] [--cflags] [--cc] [--cxx] [--ld]"
+usage()
+{
+    cat <<EOF
+Usage: wx-config [--prefix[=DIR]] [--exec-prefix[=DIR]] [--version]
+                 [--libs] [--gl-libs] [--cppflags] [--cflags] [--cxxflags]
+                 [--cc] [--cxx] [--ld]
+
+wx-config returns configuration information about the installed
+version of wxWindows. It may be used to query its version and
+installation directories and also retrieve the C and C++ compilers
+and linker which were used for its building and the corresponding
+flags.
+EOF
+
+    exit $1
+}
+
+cppflags()
+{
+    if test "@includedir@" != "/usr/include" \
+            -a "@includedir@" != "/usr/include/c++" \
+            -a \( "${cross_compiling}" != "yes" \
+                  -o "@includedir@" != "/usr/${target}/include" \) ;
+    then
+        includes=-I@includedir@
+    fi
+    includes="-I@libdir@/wx/include/@TOOLCHAIN_NAME@ $includes"
+    echo $includes @WXDEBUG_DEFINE@ @TOOLCHAIN_DEFS@ @WXCONFIG_INCLUDE@
+}
 
 if test $# -eq 0; then
-      echo "${usage}" 1>&2
-      exit 1
+    usage 1 1>&2
 fi
 
 while test $# -gt 0; do
@@ -41,20 +69,26 @@ while test $# -gt 0; do
     --version)
       echo @WX_MAJOR_VERSION_NUMBER@.@WX_MINOR_VERSION_NUMBER@.@WX_RELEASE_NUMBER@
       ;;
+    --cppflags)
+      cppflags
+      ;;
     --cflags)
-      if test @includedir@ != /usr/include ; then
-        if test @includedir@ != /usr/include/c++ ; then
-          includes=-I@includedir@
-        fi
-      fi
-      includes="$includes -I@libdir@/wx/include"
-      echo $includes @CODE_GEN_FLAGS@ @WXDEBUG_DEFINE@ @TOOLKIT_DEF@ @TOOLKIT_INCLUDE@
+      echo `cppflags` @CODE_GEN_FLAGS@
+      ;;
+    --cxxflags)
+      echo `cppflags` @CODE_GEN_FLAGS@ @CODE_GEN_FLAGS_CXX@
       ;;
     --libs)
-      if test @libdir@ != /usr/lib ; then
-        libs="-L@libdir@"
+      if test "@libdir@" != "/usr/lib" \
+              -a \( "${cross_compiling}" != "yes" \
+                    -o "@libdir@" != "/usr/${target}/lib" \) ;
+      then
+          libs="-L@libdir@"
       fi
-      echo $libs -l@WX_LIBRARY@ @EXTRA_LIBS@
+      echo $libs @LDFLAGS@ @WXCONFIG_LIBS@ @EXTRA_LIBS@
+      ;;
+    --gl-libs)
+      echo @WXCONFIG_LIBS_GL@
       ;;
     --cc)
       echo $CC
@@ -66,8 +100,7 @@ while test $# -gt 0; do
       echo $LD
       ;;
     *)
-      echo "${usage}" 1>&2
-      exit 1
+      usage 1 1>&2
       ;;
   esac
   shift

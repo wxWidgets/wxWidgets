@@ -79,9 +79,11 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
                                  const wxString& label,
                                  WXDWORD exstyle)
 {
-    // VZ: if someone could put a comment here explaining what exactly this is
-    //     needed for, it would be nice...
-    bool want3D;
+    // want3D tells us whether or not the style specified a 3D border.
+    // If so, under WIN16 we can use Ctl3D to give it an appropriate style.
+    // Sometimes want3D is used to indicate that the non-extended style should have
+    // WS_BORDER.
+    bool want3D = TRUE;
 
     // if no extended style given, determine it ourselves
     if ( exstyle == (WXDWORD)-1 )
@@ -89,7 +91,7 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
         exstyle = GetExStyle(style, &want3D);
     }
 
-    // all controls have these childs (wxWindows creates all controls visible
+    // all controls have these styles (wxWindows creates all controls visible
     // by default)
     style |= WS_CHILD | WS_VISIBLE;
 
@@ -109,9 +111,8 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
 
     if ( !m_hWnd )
     {
-#ifdef __WXDEBUG__
-        wxLogError(wxT("Failed to create a control of class '%s'"), classname);
-#endif // DEBUG
+        wxLogDebug(wxT("Failed to create a control of class '%s'"), classname);
+        wxFAIL_MSG(_T("something is very wrong"));
 
         return FALSE;
     }
@@ -240,7 +241,8 @@ WXHBRUSH wxControl::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
     else
         SetBkMode(hdc, OPAQUE);
 
-    const wxColour& colBack = GetBackgroundColour();
+    wxColour colBack = GetBackgroundColour();
+
     ::SetBkColor(hdc, wxColourToRGB(colBack));
     ::SetTextColor(hdc, wxColourToRGB(GetForegroundColour()));
 

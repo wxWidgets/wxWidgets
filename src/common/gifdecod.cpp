@@ -476,7 +476,7 @@ int wxGIFDecoder::ReadGIF()
     int           ncolors, bits, interl, transparent, disposal, i;
     long          size;
     long          delay;
-    unsigned char type;
+    unsigned char type = 0;
     unsigned char pal[768];
     unsigned char buf[16];
     GIFImage      **ppimg, *pimg, *pprev;

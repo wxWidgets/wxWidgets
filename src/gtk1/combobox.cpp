@@ -111,7 +111,11 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     m_widget = gtk_combo_new();
 
     // make it more useable
-    gtk_combo_set_use_arrows_always(GTK_COMBO(m_widget), TRUE);
+    gtk_combo_set_use_arrows_always( GTK_COMBO(m_widget), TRUE );
+    
+    // and case-sensitive
+    gtk_combo_set_case_sensitive( GTK_COMBO(m_widget), TRUE );
+
 
     GtkWidget *list = GTK_COMBO(m_widget)->list;
 
@@ -157,7 +161,12 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     if (new_size.y > size_best.y)
         new_size.y = size_best.y;
     if ((new_size.x != size.x) || (new_size.y != size.y))
+    {
         SetSize( new_size.x, new_size.y );
+        
+        // This is required for tool bar support
+        gtk_widget_set_usize( m_widget, new_size.x, new_size.y );
+    }
 
     SetBackgroundColour( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_WINDOW ) );
     SetForegroundColour( parent->GetForegroundColour() );
@@ -577,6 +586,7 @@ void wxComboBox::OnChar( wxKeyEvent &event )
             if ( FindString(value) == wxNOT_FOUND )
             {
                 Append(value);
+                SetStringSelection(value);
 
                 // and generate the selected event for it
                 wxCommandEvent event( wxEVT_COMMAND_COMBOBOX_SELECTED, GetId() );

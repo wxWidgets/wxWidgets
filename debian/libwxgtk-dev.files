@@ -1,5 +1,4 @@
-usr/bin/wxgtk-config
-usr/include/wx/
-usr/lib/wx/include/wx/gtk/setup.h
+usr/bin/wxgtk-=V-config
+usr/lib/wx/include/gtk-=V/wx/setup.h
 usr/lib/libwx_gtk*.so
-usr/lib/libwx_gtk*.a
+

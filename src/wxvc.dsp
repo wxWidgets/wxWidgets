@@ -97,6 +97,10 @@ SOURCE=.\common\clipcmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\cmdline.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\cmndata.cpp
 # End Source File
 # Begin Source File
@@ -552,6 +556,10 @@ SOURCE=.\generic\panelg.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\generic\plot.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\generic\progdlgg.cpp
 # End Source File
 # Begin Source File
@@ -880,6 +888,10 @@ SOURCE=.\msw\gsocket.c
 
 SOURCE=.\msw\gsockmsw.c
 # SUBTRACT CPP /YX /Yc /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=.\msw\helpchm.cpp
 # End Source File
 # Begin Source File
 

@@ -16,15 +16,16 @@ A combobox permits a single selection only. Combobox items are numbered from zer
 
 \wxheading{Include files}
 
-<wx/combo.h>
+<wx/combobox.h>
 
 \wxheading{Window styles}
 
 \begin{twocollist}\itemsep=0pt
 \twocolitem{\windowstyle{wxCB\_SIMPLE}}{Creates a combobox with a permanently displayed list. Windows only. }
 \twocolitem{\windowstyle{wxCB\_DROPDOWN}}{Creates a combobox with a drop-down list.}
-\twocolitem{\windowstyle{wxCB\_READONLY}}{Creates a combo box consisting of a drop-down list and static text item
-displaying the current selection.}
+\twocolitem{\windowstyle{wxCB\_READONLY}}{Same as wxCB\_DROPDOWN but only the
+strings specified as the combobox choices can be selected, it is impossible to
+select (even from a program) a string which is not in the choices list.}
 \twocolitem{\windowstyle{wxCB\_SORT}}{Sorts the entries in the list alphabetically.}
 \end{twocollist}
 
@@ -318,6 +319,9 @@ wxPython.}
 \func{void}{SetValue}{\param{const wxString\& }{text}}
 
 Sets the text for the combobox text field.
+
+{\bf NB:} For a combobox with {\tt wxCB\_READONLY} style the string must be in
+the combobox choices list, otherwise the call to SetValue() is ignored.
 
 \wxheading{Parameters}
 

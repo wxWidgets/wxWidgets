@@ -1,4 +1,4 @@
 usr/bin
-usr/lib/wx/include/wx/gtk/
-usr/include/wx
+usr/lib/wx/include/gtk-=V/wx
 usr/share/man/man1
+

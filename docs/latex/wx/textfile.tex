@@ -17,10 +17,11 @@ which are well handled by wxTextFile.
 The typical things you may do with wxTextFile in order are:
 
 \begin{itemize}\itemsep=0pt
-\item Create and open it: this is done with \helpref{Open}{wxtextfileopen} 
-function which opens the file (name may be specified either as Open argument or
-in the constructor), reads its contents in memory and closes it. If all of these
-operations are successful, Open() will return TRUE and FALSE on error.
+\item Create and open it: this is done with either 
+\helpref{Create}{wxtextfilecreate} or \helpref{Open}{wxtextfileopen} 
+function which opens the file (name may be specified either as the argument to
+these functions or in the constructor), reads its contents in memory (in the
+case of {\tt Open()}) and closes it.
 \item Work with the lines in the file: this may be done either with "direct
 access" functions like \helpref{GetLineCount}{wxtextfilegetlinecount} and 
 \helpref{GetLine}{wxtextfilegetline} ({\it operator[]} does exactly the same
@@ -73,7 +74,8 @@ enum wxTextFileType
 
 \constfunc{}{wxTextFile}{\void}
 
-Default constructor, use Open(string) to initialize the object.
+Default constructor, use \helpref{Create}{wxtextfilecreate} or 
+\helpref{Open}{wxtextfileopen} with a file name parameter to initialize the object.
 
 \membersection{wxTextFile::wxTextFile}\label{wxtextfilector}
 
@@ -81,26 +83,17 @@ Default constructor, use Open(string) to initialize the object.
 
 Constructor does not load the file into memory, use Open() to do it. 
 
-\membersection{wxTextFile::Exists}\label{wxtextfileexists}
+\membersection{wxTextFile::\destruct{wxTextFile}}\label{wxtextfiledtor}
 
-\constfunc{bool}{Exists}{\void}
+\constfunc{}{\destruct{wxTextFile}}{\void}
 
-Return TRUE if file exists - the name of the file should have been specified
-in the constructor before calling Exists().
+Destructor does nothing.
 
-\membersection{wxTextFile::Open}\label{wxtextfileopen}
+\membersection{wxTextFile::AddLine}\label{wxtextfileaddline}
 
-\constfunc{bool}{Open}{\void}
+\constfunc{void}{AddLine}{\param{const wxString\& }{str}, \param{wxTextFileType }{type = typeDefault}}
 
-Open() opens the file with the name which was given in the \helpref{constructor}{wxtextfilector} 
-and also loads file in memory on success.
-
-\membersection{wxTextFile::Open}\label{wxtextfileopenname}
-
-\constfunc{bool}{Open}{\param{const wxString\& }{strFile}}
-
-Same as \helpref{Open()}{wxtextfileopen} but allows to specify the file name
-(must be used if the default constructor was used to create the object).
+Adds a line to the end of file.
 
 \membersection{wxTextFile::Close}\label{wxtextfileclose}
 
@@ -108,6 +101,26 @@ Same as \helpref{Open()}{wxtextfileopen} but allows to specify the file name
 
 Closes the file and frees memory, {\bf losing all changes}. Use \helpref{Write()}{wxtextfilewrite} 
 if you want to save them.
+
+\membersection{wxTextFile::Create}\label{wxtextfilecreate}
+
+\constfunc{bool}{Create}{\void}
+
+\constfunc{bool}{Create}{\param{const wxString\& }{strFile}}
+
+Creates the file with the given name or the name which was given in the
+\helpref{constructor}{wxtextfilector}. The array of file lines is initially
+empty.
+
+It will fail if the file already exists, \helpref{Open}{wxtextfileopen} should
+be used in this case.
+
+\membersection{wxTextFile::Exists}\label{wxtextfileexists}
+
+\constfunc{bool}{Exists}{\void}
+
+Return TRUE if file exists - the name of the file should have been specified
+in the constructor before calling Exists().
 
 \membersection{wxTextFile::IsOpened}\label{wxtextfileisopened}
 
@@ -158,6 +171,15 @@ and used by \helpref{GetFirstLine()}{wxtextfilegetfirstline}/\helpref{GetNextLin
 
 Returns TRUE if the current line is the last one.
 
+\membersection{wxTextFile::GetEOL}\label{wxtextfilegeteol}
+
+\constfunc{static const char*}{GetEOL}{\param{wxTextFileType }{type = typeDefault}}
+
+Get the line termination string corresponding to given constant. {\it typeDefault} is
+the value defined during the compilation and corresponds to the native format of the
+platform, i.e. it will be wxTextFileType\_Dos under Windows, wxTextFileType\_Unix under
+Unix and wxTextFileType\_Mac under Mac.
+
 \membersection{wxTextFile::GetFirstLine}\label{wxtextfilegetfirstline}
 
 \constfunc{wxString\&}{GetFirstLine}{\void}
@@ -167,10 +189,13 @@ allows more "iterator-like" traversal of the list of lines, i.e. you may
 write something like:
 
 \begin{verbatim}
-for ( str = GetFirstLine(); !Eof(); str = GetNextLine() )
+wxTextFile file;
+...
+for ( str = file.GetFirstLine(); !file.Eof(); str = file.GetNextLine() )
 {
     // do something with the current line in str
 }
+// do something with the last line in str
 \end{verbatim}
 
 \membersection{wxTextFile::GetNextLine}\label{wxtextfilegetnextline}
@@ -190,7 +215,21 @@ Gets the previous line in the file.
 
 \func{wxString\&}{GetLastLine}{\void}
 
-Gets the last line of the file.
+Gets the last line of the file. Together with 
+\helpref{GetPrevLine}{wxtextfilegetprevline} it allows to enumerate the lines
+in the file from the end to the beginning like this:
+
+\begin{verbatim}
+wxTextFile file;
+...
+for ( str = file.GetLastLine();
+      file.GetCurrentLine() > 0;
+      str = file.GetPrevLine() )
+{
+    // do something with the current line in str
+}
+// do something with the first line in str
+\end{verbatim}
 
 \membersection{wxTextFile::GetLineType}\label{wxtextfilegetlinetype}
 
@@ -212,17 +251,22 @@ be returned. If the detection mechanism fails wxTextFileType\_None is returned.
 
 Get the name of the file.
 
-\membersection{wxTextFile::AddLine}\label{wxtextfileaddline}
-
-\constfunc{void}{AddLine}{\param{const wxString\& }{str}, \param{wxTextFileType }{type = typeDefault}}
-
-Adds a line to the end of file.
-
 \membersection{wxTextFile::InsertLine}\label{wxtextfileinsertline}
 
 \constfunc{void}{InsertLine}{\param{const wxString\& }{str}, \param{size\_t }{n}, \param{wxTextFileType }{type = typeDefault}}
 
 Insert a line before the line number {\it n}.
+
+\membersection{wxTextFile::Open}\label{wxtextfileopen}
+
+\constfunc{bool}{Open}{\void}
+
+\constfunc{bool}{Open}{\param{const wxString\& }{strFile}}
+
+Open() opens the file with the given name or the name which was given in the
+\helpref{constructor}{wxtextfilector} and also loads file in memory on
+success. It will fail if the file does not exist, 
+\helpref{Create}{wxtextfilecreate} should be used in this case.
 
 \membersection{wxTextFile::RemoveLine}\label{wxtextfileremoveline}
 
@@ -239,19 +283,4 @@ file format (default argument means "don't change type") and may be used to
 convert, for example, DOS files to Unix.
 
 Returns TRUE if operation succeeded, FALSE if it failed.
-
-\membersection{wxTextFile::GetEOL}\label{wxtextfilegeteol}
-
-\constfunc{static const char*}{GetEOL}{\param{wxTextFileType }{type = typeDefault}}
-
-Get the line termination string corresponding to given constant. {\it typeDefault} is
-the value defined during the compilation and corresponds to the native format of the
-platform, i.e. it will be wxTextFileType\_Dos under Windows, wxTextFileType\_Unix under
-Unix and wxTextFileType\_Mac under Mac.
-
-\membersection{wxTextFile::\destruct{wxTextFile}}\label{wxtextfiledtor}
-
-\constfunc{}{\destruct{wxTextFile}}{\void}
-
-Destructor does nothing.
 

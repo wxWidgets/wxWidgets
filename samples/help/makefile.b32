@@ -10,6 +10,7 @@
 WXDIR = $(WXWIN)
 
 TARGET=demo
+#EXTRALIBS=htmlhelp.lib
 OBJECTS = $(TARGET).obj
 
 !include $(WXDIR)\src\makeprog.b32

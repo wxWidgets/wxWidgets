@@ -1,6 +1,6 @@
 \section{The wxWindows resource system}\label{resourceformats}
 
-From version 1.61, wxWindows has an optional {\it resource file} facility,
+wxWindows has an optional {\it resource file} facility,
 which allows separation of dialog, menu, bitmap and icon specifications
 from the application code.
 
@@ -11,49 +11,35 @@ the .WXR file does not {\it replace} the native Windows resource file,
 it merely supplements it. There is no existing native resource format in X
 (except for the defaults file, which has limited expressive power).
 
-Using wxWindows resources for panels and dialogs has an effect on how
-you deal with panel item callbacks: you can't specify a callback function in
-a resource file, so how do you achieve the same effect as with programmatic
-panel construction? The solution is similar to that adopted by Windows, which
-is to use the {\it parent} panel or dialog to intercept user events.
-
-From 1.61, wxWindows routes panel item events that do not have a callback
-to the \helpref{OnCommand}{wxwindowoncommand} member of the panel (or dialog). So, to use
-panel or dialog resources, you need to derive a new class and override the
-default (empty) OnCommand member. The first argument is a reference
-to a wxWindow, and the second is a reference to a wxCommandEvent. Check the
-name of the panel item that's generating an event by using the \helpref{wxWindow::GetName}{wxwindowgetname}\rtfsp
-function and a string comparison function such as \helpref{wxStringEq}{wxstringeq}.
-You may need to cast the reference to an appropriate specific type to perform
-some operations.
-
-To obtain a pointer to a panel item when you only have the name (for example,
-when you need to set a value of a text item from outside of the {\bf OnCommand} function),
-use the function \helpref{wxFindWindowByName}{wxfindwindowbyname}.
-
 For details of functions for manipulating resource files and loading
 user interface elements, see \helpref{wxWindows resource functions}{resourcefuncs}.
 
+You can use Dialog Editor to create resource files. Unfortunately neither
+Dialog Editor nor the .WXR format currently cover all wxWindows controls;
+some are missing, such as wxSpinCtrl, wxSpinButton, wxListCtrl, wxTreeCtrl and others.
+
+Note that in later versions of wxWindows, this resource format will be replaced
+by XML specifications that can also include sizers.
+
 \subsection{The format of a .WXR file}
 
-A wxWindows resource file may look a little odd at first. It's C++
+A wxWindows resource file may look a little odd at first. It is C++
 compatible, comprising mostly of static string variable declarations with
-PrologIO syntax within the string.
+wxExpr syntax within the string.
 
 Here's a sample .WXR file:
 
 \begin{verbatim}
 /*
  * wxWindows Resource File
- * Written by wxBuilder
  *
  */
 
 #include "noname.ids"
 
-static char *aiai_resource = "bitmap(name = 'aiai_resource',\
-  bitmap = ['aiai', wxBITMAP_TYPE_BMP_RESOURCE, 'WINDOWS'],\
-  bitmap = ['aiai.xpm', wxBITMAP_TYPE_XPM, 'X']).";
+static char *my_resource = "bitmap(name = 'my_resource',\
+  bitmap = ['myproject', wxBITMAP_TYPE_BMP_RESOURCE, 'WINDOWS'],\
+  bitmap = ['myproject.xpm', wxBITMAP_TYPE_XPM, 'X']).";
 
 static char *menuBar11 = "menu(name = 'menuBar11',\
   menu = \
@@ -79,9 +65,9 @@ static char *panel3 = "dialog(name = 'panel3',\
   button_font = [14, 'wxSWISS', 'wxNORMAL', 'wxBOLD', 0],\
   label_font = [10, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0],\
   x = 0, y = 37, width = 292, height = 164,\
-  control = [wxButton, 'OK', '', 'button5', 23, 34, -1, -1, 'aiai_resource'],\
-  control = [wxMessage, 'A Label', '', 'message7', 166, 61, -1, -1, 'aiai_resource'],\
-  control = [wxText, 'Text', 'wxVERTICAL_LABEL', 'text8', 24, 110, -1, -1]).";
+  control = [1000, wxButton, 'OK', '', 'button5', 23, 34, -1, -1, 'my_resource'],\
+  control = [1001, wxStaticText, 'A Label', '', 'message7', 166, 61, -1, -1, 'my_resource'],\
+  control = [1002, wxTextCtrl, 'Text', 'wxTE_MULTITEXT', 'text8', 24, 110, -1, -1]).";
 \end{verbatim}
 
 As you can see, C++-style comments are allowed, and apparently include files
@@ -89,15 +75,15 @@ are supported too: but this is a special case, where the included file
 is a file of defines shared by the C++ application code and resource file
 to relate identifiers (such as FILE\_OPEN) to integers.
 
-Each {\it resource object} is of standard PrologIO syntax, that is,
+Each {\it resource object} is of standard \helpref{wxExpr}{wxexpr} syntax, that is,
 an object name such as {\bf dialog} or {\bf icon}, then an open
 parenthesis, a list of comma-delimited attribute/value pairs, a closing
 parenthesis, and a full stop. Backslashes are required to escape newlines,
 for the benefit of C++ syntax. If double quotation marks are used to
 delimit strings, they need to be escaped with backslash within a C++ string
-(so it's easier to use single quotation marks instead).
+(so it is easier to use single quotation marks instead).
 
-\normalbox{{\it A note on PrologIO string syntax:} A string that begins with
+\normalbox{{\it A note on string syntax:} A string that begins with
 an alphabetic character, and contains only alphanumeric characters,
 hyphens and underscores, need not be quoted at all. Single quotes and double
 quotes may be used to delimit more complex strings. In fact, single-quoted
@@ -107,8 +93,8 @@ as strings for the purpose of the resource system.}
 A resource file like this is typically included in the application main file,
 as if it were a normal C++ file. This eliminates the need for a separate
 resource file to be distributed alongside the executable. However, the
-resource file can be dynamically loaded if desired (for example by a non-C++
-language such as CLIPS, Prolog or Python).
+resource file can be dynamically loaded if desired (useful for non-C++
+languages such as Python).
 
 Once included, the resources need to be `parsed' (interpreted), because
 so far the data is just a number of static string variables. The function\rtfsp
@@ -122,8 +108,8 @@ get all your resources into one variable if you want to.
 by functions such as {\bf ::wxResourceCreateBitmap} and {\bf wxPanel::LoadFromResource}.
 
 If a wxWindows resource object (such as a bitmap resource) refers to a
-C++ data structure, such as static XBM or XPM data, a further call ({\bf
-::wxResourceRegisterBitmapData}) needs to be made on initialization to tell
+C++ data structure, such as static XPM data, a further call ({\bf ::wxResourceRegisterBitmapData}) needs
+to be made on initialization to tell
 wxWindows about this data. The wxWindows resource object will refer to a
 string identifier, such as `project\_data' in the example file above.
 This identifier will be looked up in a table to get the C++ static data
@@ -137,37 +123,52 @@ use.
 
 \begin{verbatim}
 /*
- * File:    noname.cc
- * Purpose: main application module, generated by wxBuilder.
+ * File:    project.cpp
+ * Purpose: main application module
  */
 
-#include "wx.h"
-#include "wx_help.h"
-#include "noname.h"
+#include "wx/wx.h"
+#include "project.h"
 
 // Includes the dialog, menu etc. resources
-#include "noname.wxr"
+#include "project.wxr"
 
-// Includes XBM data
-#include "project.xbm"
+// Includes XPM data
+#include "project.xpm"
 
-// Declare an instance of the application: allows the program to start
-AppClass theApp;
+IMPLEMENT_APP(AppClass)
 
 // Called to initialize the program
-wxFrame *AppClass::OnInit(void)
+bool AppClass::OnInit()
 {
-#ifdef wx_x
   wxResourceRegisterBitmapData("project_data", project_bits, project_width, project_height);
-#endif
+
   wxResourceParseData(menuBar11);
-  wxResourceParseData(aiai_resource);
+  wxResourceParseData(my_resource);
   wxResourceParseData(project_resource);
   wxResourceParseData(panel3);
   ...
+
+  return TRUE;
 }
 \end{verbatim}
 
+The following code shows a dialog:
+
+\begin{verbatim}
+  // project.wxr contains dialog1
+  MyDialog *dialog = new MyDialog;
+  if (dialog->LoadFromResource(this, "dialog1"))
+  {
+    wxTextCtrl *text = (wxTextCtrl *)wxFindWindowByName("text3", dialog);
+    if (text)
+      text->SetValue("wxWindows resource demo");
+    dialog->ShowModal();
+  }
+  dialog->Destroy();
+\end{verbatim}
+
+Please see also the resource sample.
 
 \subsection{Dialog resource format}
 
@@ -177,52 +178,52 @@ is a list consisting of point size, family, style, weight, underlined, optional 
 
 \begin{twocollist}\itemsep=0pt
 \twocolitemruled{Attribute}{Value}
+\twocolitem{id}{The integer identifier of the resource.}
 \twocolitem{name}{The name of the resource.}
 \twocolitem{style}{Optional dialog box or panel window style.}
 \twocolitem{title}{The title of the dialog box (unused if a panel).}.
 \twocolitem{modal}{Whether modal: 1 if modal, 0 if modeless, absent if a panel resource.}
+\twocolitem{use_dialog_units}{If 1, use dialog units (dependent on the dialog font size) for control sizes and positions.}
+\twocolitem{use_system_defaults}{If 1, override colours and fonts to use system settings instead.}
 \twocolitem{button\_font}{The font used for control buttons: a list comprising point size (integer),
 family (string), font style (string), font weight (string) and underlining (0 or 1).}
 \twocolitem{label\_font}{The font used for control labels: a list comprising point size (integer),
-family (string), font style (string), font weight (string) and underlining (0 or 1).}
+family (string), font style (string), font weight (string) and underlining (0 or 1). Now obsolete; use button\_font instead.}
 \twocolitem{x}{The x position of the dialog or panel.}
 \twocolitem{y}{The y position of the dialog or panel.}
 \twocolitem{width}{The width of the dialog or panel.}
 \twocolitem{height}{The height of the dialog or panel.}
-\twocolitem{background\_colour}{The background colour of the dialog or panel. Only valid if the style includes wxUSER\_COLOURS.}
-\twocolitem{label\_colour}{The default label colour for the children of the dialog or panel. Only valid if the style includes wxUSER\_COLOURS.}
-\twocolitem{button\_colour}{The default button text colour for the children of the dialog or panel. Only valid if the style includes wxUSER\_COLOURS.}
-\twocolitem{label\_font}{Font spec}
-\twocolitem{button\_font}{Font spec}
+\twocolitem{background\_colour}{The background colour of the dialog or panel.}
+\twocolitem{label\_colour}{The default label colour for the children of the dialog or panel. Now obsolete; use button\_colour instead.}
+\twocolitem{button\_colour}{The default button text colour for the children of the dialog or panel.}
 \end{twocollist}
 
 Then comes zero or more attributes named `control' for each control
 (panel item) on the dialog or panel. The value is a list of further
 elements. In the table below, the names in the first column correspond to
 the first element of the value list, and the second column details the
-remaining elements of the list.
+remaining elements of the list. Note that titles for some controls are obsolete
+(they don't have titles), but the syntax is retained for backward compatibility.
 
 \begin{twocollist}\itemsep=0pt
 \twocolitemruled{Control}{Values}
-\twocolitem{wxButton}{title (string), window style (string), name (string), x, y, width, height, button bitmap resource (optional string), button font spec}
-\twocolitem{wxCheckBox}{title (string), window style (string), name (string), x, y, width, height, default value (optional integer, 1 or 0), label font spec}
-\twocolitem{wxChoice}{title (string), window style (string), name (string), x, y, width, height, values (optional list of strings), label font spec, button font spec}
-\twocolitem{wxComboBox}{title (string), window style (string), name (string), x, y, width, height, default text value, values (optional list of strings), label font spec, button font spec}
-\twocolitem{wxGauge}{title (string), window style (string), name (string), x, y, width, height, value (optional integer), range (optional integer), label font spec, button font spec}
-\twocolitem{wxGroupBox}{title (string), window style (string), name (string), x, y, width, height, label font spec}
-\twocolitem{wxListBox}{title (string), window style (string), name (string), x, y, width, height, values (optional list of strings), multiple (optional string, wxSINGLE or wxMULTIPLE),
+\twocolitem{wxButton}{id (integer), title (string), window style (string), name (string), x, y, width, height, button bitmap resource (optional string), button font spec}
+\twocolitem{wxCheckBox}{id (integer), title (string), window style (string), name (string), x, y, width, height, default value (optional integer, 1 or 0), label font spec}
+\twocolitem{wxChoice}{id (integer), title (string), window style (string), name (string), x, y, width, height, values (optional list of strings), label font spec, button font spec}
+\twocolitem{wxComboBox}{id (integer), title (string), window style (string), name (string), x, y, width, height, default text value, values (optional list of strings), label font spec, button font spec}
+\twocolitem{wxGauge}{id (integer), title (string), window style (string), name (string), x, y, width, height, value (optional integer), range (optional integer), label font spec, button font spec}
+\twocolitem{wxStaticBox}{id (integer), title (string), window style (string), name (string), x, y, width, height, label font spec}
+\twocolitem{wxListBox}{id (integer), title (string), window style (string), name (string), x, y, width, height, values (optional list of strings), multiple (optional string, wxSINGLE or wxMULTIPLE),
 label font spec, button font spec}
-\twocolitem{wxMessage}{title (string), window style (string), name (string), x, y, width, height, message bitmap resource (optional string), label font spec}
-\twocolitem{wxMultiText}{title (string), window style (string), name (string), x, y, width, height, default value (optional string),
+\twocolitem{wxStaticText}{id (integer), title (string), window style (string), name (string), x, y, width, height, message bitmap resource (optional string), label font spec}
+\twocolitem{wxRadioBox}{id (integer), title (string), window style (string), name (string), x, y, width, height, values (optional list of strings), number of rows or cols,
 label font spec, button font spec}
-\twocolitem{wxRadioBox}{title (string), window style (string), name (string), x, y, width, height, values (optional list of strings), number of rows or cols,
-label font spec, button font spec}
-\twocolitem{wxRadioButton}{title (string), window style (string), name (string), x, y, width, height, default value (optional integer, 1 or 0), label font spec}
-\twocolitem{wxScrollBar}{title (string), window style (string), name (string), x, y, width, height, value (optional integer),
+\twocolitem{wxRadioButton}{id (integer), title (string), window style (string), name (string), x, y, width, height, default value (optional integer, 1 or 0), label font spec}
+\twocolitem{wxScrollBar}{id (integer), title (string), window style (string), name (string), x, y, width, height, value (optional integer),
 page length (optional integer), object length (optional integer), view length (optional integer)}
-\twocolitem{wxSlider}{title (string), window style (string), name (string), x, y, width, height, value (optional integer), minimum (optional integer), maximum (optional integer),
+\twocolitem{wxSlider}{id (integer), title (string), window style (string), name (string), x, y, width, height, value (optional integer), minimum (optional integer), maximum (optional integer),
 label font spec, button font spec}
-\twocolitem{wxText}{title (string), window style (string), name (string), x, y, width, height, default value (optional string),
+\twocolitem{wxTextCtrl}{id (integer), title (string), window style (string), name (string), x, y, width, height, default value (optional string),
 label font spec, button font spec}
 \end{twocollist}
 
@@ -292,7 +293,6 @@ a full list).
 \item Y resolution (optional).
 \end{itemize}
 
-
 \subsection{Resource format design issues}
 
 The .WXR file format is a recent addition and subject to change.
@@ -309,8 +309,8 @@ for non-C++ programs that use wxWindows.
 parser and a binary format).
 \item It would be difficult to append a binary resource component onto an executable
 in a portable way.
-\item The file format is essentially the PrologIO object format, for which
-a parser already exists, so parsing is easy. For those programs that use PrologIO
+\item The file format is essentially the \helpref{wxExpr}{wxexpr} object format, for which
+a parser already exists, so parsing is easy. For those programs that use wxExpr
 anyway, the size overhead of the parser is minimal.
 \end{itemize}
 
@@ -329,5 +329,4 @@ object, in addition to providing \verb$#$defines for application code convenienc
 \subsection{Compiling the resource system}
 
 To enable the resource system, set {\bf wxUSE\_WX\_RESOURCES} to 1 in setup.h.
-If your wxWindows makefile supports it, set the same name in the makefile to 1.
 

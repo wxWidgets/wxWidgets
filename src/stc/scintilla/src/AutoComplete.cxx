@@ -10,11 +10,16 @@
 
 #include "AutoComplete.h"
 
-AutoComplete::AutoComplete() {
-	lb = 0;
-	active = false;
-	posStart = 0;
-	strcpy(stopChars, "");
+AutoComplete::AutoComplete() : 
+	active(false),
+	separator(' '),
+	ignoreCase(false),
+	chooseSingle(false),
+	posStart(0),
+	startLen(0),
+	cancelAtStartPos(true) {
+	stopChars[0] = '\0';
+	fillUpChars[0] = '\0';
 }
 
 AutoComplete::~AutoComplete() {
@@ -44,8 +49,24 @@ bool AutoComplete::IsStopChar(char ch) {
 	return ch && strchr(stopChars, ch);
 }
 
-int AutoComplete::SetList(const char *list) {
-	int maxStrLen = 12;
+void AutoComplete::SetFillUpChars(const char *fillUpChars_) {
+	strncpy(fillUpChars, fillUpChars_, sizeof(fillUpChars));
+	fillUpChars[sizeof(fillUpChars) - 1] = '\0';
+}
+
+bool AutoComplete::IsFillUpChar(char ch) {
+	return ch && strchr(fillUpChars, ch);
+}
+ 
+void AutoComplete::SetSeparator(char separator_) {
+	separator = separator_;
+}
+
+char AutoComplete::GetSeparator() {
+	return separator;
+}
+
+void AutoComplete::SetList(const char *list) {
 	lb.Clear();
 	char *words = new char[strlen(list) + 1];
 	if (words) {
@@ -53,21 +74,18 @@ int AutoComplete::SetList(const char *list) {
 		char *startword = words;
 		int i = 0;
 		for (; words && words[i]; i++) {
-			if (words[i] == ' ') {
+			if (words[i] == separator) {
 				words[i] = '\0';
 				lb.Append(startword);
-				maxStrLen = Platform::Maximum(maxStrLen, strlen(startword));
 				startword = words + i + 1;
 			}
 		}
 		if (startword) {
 			lb.Append(startword);
-			maxStrLen = Platform::Maximum(maxStrLen, strlen(startword));
 		}
 		delete []words;
 	}
 	lb.Sort();
-	return maxStrLen;
 }
 
 void AutoComplete::Show() {
@@ -78,7 +96,6 @@ void AutoComplete::Show() {
 void AutoComplete::Cancel() {
 	if (lb.Created()) {
 		lb.Destroy();
-		lb = 0;
 		active = false;
 	}
 }

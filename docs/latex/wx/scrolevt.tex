@@ -1,9 +1,11 @@
 \section{\class{wxScrollEvent}}\label{wxscrollevent}
 
-A scroll event holds information about events sent from stand-alone scrollbars,
-spin-buttons and sliders - starting from wxWindows 2.1, scrolled windows send the
-\helpref{wxScrollWinEvent}{wxscrollwinevent} which does not derive from
-wxCommandEvent, but from wxEvent directly.
+A scroll event holds information about events sent from stand-alone
+scrollbars, spin-buttons and sliders. Note that starting from wxWindows 2.1,
+scrolled windows send the \helpref{wxScrollWinEvent}{wxscrollwinevent} which
+does not derive from wxCommandEvent, but from wxEvent directly - don't confuse
+these two kinds of events and use the event table macros mentioned below only
+for the scrollbar-like controls.
 
 \wxheading{Derived from}
 
@@ -17,10 +19,12 @@ wxCommandEvent, but from wxEvent directly.
 
 \wxheading{Event table macros}
 
-To process a scroll event, use these event handler macros to direct input to member
-functions that take a wxScrollEvent argument. You can use EVT\_COMMAND\_SCROLL... macros
-with window IDs for when intercepting scroll events from controls, or EVT\_SCROLL... macros
-without window IDs for intercepting scroll events from the receiving window.
+To process a scroll event, use these event handler macros to direct input to
+member functions that take a wxScrollEvent argument. You can use
+{\tt EVT\_COMMAND\_SCROLL...} macros with window IDs for when intercepting
+scroll events from controls, or {\tt EVT\_SCROLL...} macros without window IDs
+for intercepting scroll events from the receiving window - except for this,
+the macros behave exactly the same
 
 \twocolwidtha{7cm}
 \begin{twocollist}\itemsep=0pt
@@ -43,6 +47,7 @@ sent as the user drags the thumtrack).}
 \twocolitem{{\bf EVT\_COMMAND\_SCROLL\_PAGEDOWN(id, func)}}{Process wxEVT\_SCROLL\_PAGEDOWN page down events.}
 \twocolitem{{\bf EVT\_COMMAND\_SCROLL\_THUMBTRACK(id, func)}}{Process wxEVT\_SCROLL\_THUMBTRACK thumbtrack events (frequent events
 sent as the user drags the thumtrack).}
+\twocolitem{{\bf EVT\_COMMAND\_SCROLL\_THUMBRELEASE(func)}}{Process wxEVT\_SCROLL\_THUMBRELEASE thumb release events.}
 \end{twocollist}%
 
 \wxheading{Remarks}

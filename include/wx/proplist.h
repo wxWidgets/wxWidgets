@@ -191,15 +191,22 @@ private:
 
 class WXDLLEXPORT wxPropertyTextEdit: public wxTextCtrl
 {
- DECLARE_CLASS(wxPropertyTextEdit)
- public:
-  wxPropertyTextEdit(wxPropertyListView *v, wxWindow *parent, const wxWindowID id,
-    const wxString& value, const wxPoint& pos = wxDefaultPosition,
-    const wxSize& size = wxDefaultSize, long style = 0, const wxString& name = "text");
-  void OnSetFocus(void);
-  void OnKillFocus(void);
+public:
+    wxPropertyTextEdit(wxPropertyListView *v = NULL,
+                       wxWindow *parent = NULL,
+                       const wxWindowID id = -1,
+                       const wxString& value = wxEmptyString,
+                       const wxPoint& pos = wxDefaultPosition,
+                       const wxSize& size = wxDefaultSize,
+                       long style = 0,
+                       const wxString& name = _T("text"));
 
-  wxPropertyListView*   m_view;
+    void OnSetFocus();
+    void OnKillFocus();
+
+    wxPropertyListView* m_view;
+
+    DECLARE_CLASS(wxPropertyTextEdit)
 };
 
 #define wxPROP_ALLOW_TEXT_EDITING           1
@@ -272,22 +279,27 @@ class WXDLLEXPORT wxPropertyListValidator: public wxPropertyValidator
 
 class WXDLLEXPORT wxPropertyListDialog: public wxDialog
 {
-  DECLARE_CLASS(wxPropertyListDialog)
- public:
-  wxPropertyListDialog(wxPropertyListView *v, wxWindow *parent, const wxString& title,
-    const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-    long style = wxDEFAULT_DIALOG_STYLE, const wxString& name = "dialogBox");
-  void OnCloseWindow(wxCloseEvent& event);
-  void OnDefaultAction(wxControl *item);
-  void OnCancel(wxCommandEvent& event);
+public:
+    wxPropertyListDialog(wxPropertyListView *v = NULL,
+                         wxWindow *parent = NULL,
+                         const wxString& title = wxEmptyString,
+                         const wxPoint& pos = wxDefaultPosition,
+                         const wxSize& size = wxDefaultSize,
+                         long style = wxDEFAULT_DIALOG_STYLE,
+                         const wxString& name = _T("dialogBox"));
 
-  // Extend event processing to search the view's event table
-  virtual bool ProcessEvent(wxEvent& event);
+    void OnCloseWindow(wxCloseEvent& event);
+    void OnDefaultAction(wxControl *item);
+    void OnCancel(wxCommandEvent& event);
 
- private:
-  wxPropertyListView*   m_view;
+    // Extend event processing to search the view's event table
+    virtual bool ProcessEvent(wxEvent& event);
 
-DECLARE_EVENT_TABLE()
+private:
+    wxPropertyListView*   m_view;
+
+    DECLARE_CLASS(wxPropertyListDialog)
+    DECLARE_EVENT_TABLE()
 };
 
 /*
@@ -296,31 +308,34 @@ DECLARE_EVENT_TABLE()
 
 class WXDLLEXPORT wxPropertyListPanel: public wxPanel
 {
-  DECLARE_CLASS(wxPropertyListPanel)
- public:
-  wxPropertyListPanel(wxPropertyListView *v, wxWindow *parent, const wxPoint& pos = wxDefaultPosition,
-    const wxSize& size = wxDefaultSize,
-    long style = 0, const wxString& name = "panel"):
-     wxPanel(parent, -1, pos, size, style, name)
-  {
-    m_view = v;
-  }
-  ~wxPropertyListPanel();
-  void OnDefaultAction(wxControl *item);
+public:
+    wxPropertyListPanel(wxPropertyListView *v = NULL,
+                        wxWindow *parent = NULL,
+                        const wxPoint& pos = wxDefaultPosition,
+                        const wxSize& size = wxDefaultSize,
+                        long style = 0,
+                        const wxString& name = _T("panel"))
+        : wxPanel(parent, -1, pos, size, style, name)
+        {
+            m_view = v;
+        }
+    ~wxPropertyListPanel();
+    void OnDefaultAction(wxControl *item);
 
-  inline void SetView(wxPropertyListView* v) { m_view = v; }
-  inline wxPropertyListView* GetView() const { return m_view; }
+    inline void SetView(wxPropertyListView* v) { m_view = v; }
+    inline wxPropertyListView* GetView() const { return m_view; }
 
-  // Extend event processing to search the view's event table
-  virtual bool ProcessEvent(wxEvent& event);
+    // Extend event processing to search the view's event table
+    virtual bool ProcessEvent(wxEvent& event);
 
-  // Call Layout()
-  void OnSize(wxSizeEvent& event);
+    // Call Layout()
+    void OnSize(wxSizeEvent& event);
 
- private:
-  wxPropertyListView*   m_view;
+private:
+    wxPropertyListView*   m_view;
 
-DECLARE_EVENT_TABLE()
+    DECLARE_EVENT_TABLE()
+    DECLARE_CLASS(wxPropertyListPanel)
 };
 
 /*
@@ -329,29 +344,33 @@ DECLARE_EVENT_TABLE()
 
 class WXDLLEXPORT wxPropertyListFrame: public wxFrame
 {
-  DECLARE_CLASS(wxPropertyListFrame)
- public:
-  wxPropertyListFrame(wxPropertyListView *v, wxFrame *parent, const wxString& title,
-    const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-    long style = wxDEFAULT_FRAME_STYLE, const wxString& name = "frame"):
-     wxFrame(parent, -1, title, pos, size, style, name)
-  {
-    m_view = v;
-    m_propertyPanel = NULL;
-  }
-  void OnCloseWindow(wxCloseEvent& event);
+public:
+    wxPropertyListFrame(wxPropertyListView *v = NULL,
+                        wxFrame *parent = NULL,
+                        const wxString& title = wxEmptyString,
+                        const wxPoint& pos = wxDefaultPosition,
+                        const wxSize& size = wxDefaultSize,
+                        long style = wxDEFAULT_FRAME_STYLE,
+                        const wxString& name = _T("frame"))
+        : wxFrame(parent, -1, title, pos, size, style, name)
+        {
+            m_view = v;
+            m_propertyPanel = NULL;
+        }
+    void OnCloseWindow(wxCloseEvent& event);
 
-  // Must call this to create panel and associate view
-  virtual bool Initialize(void);
-  virtual wxPropertyListPanel *OnCreatePanel(wxFrame *parent, wxPropertyListView *v);
-  inline virtual wxPropertyListPanel *GetPropertyPanel(void) const { return m_propertyPanel; }
-  inline wxPropertyListView* GetView() const { return m_view; }
+    // Must call this to create panel and associate view
+    virtual bool Initialize(void);
+    virtual wxPropertyListPanel *OnCreatePanel(wxFrame *parent, wxPropertyListView *v);
+    inline virtual wxPropertyListPanel *GetPropertyPanel(void) const { return m_propertyPanel; }
+    inline wxPropertyListView* GetView() const { return m_view; }
 
- private:
-  wxPropertyListView*       m_view;
-  wxPropertyListPanel*      m_propertyPanel;
+private:
+    wxPropertyListView*       m_view;
+    wxPropertyListPanel*      m_propertyPanel;
 
-DECLARE_EVENT_TABLE()
+    DECLARE_EVENT_TABLE()
+    DECLARE_CLASS(wxPropertyListFrame)
 };
 
 /*

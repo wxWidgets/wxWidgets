@@ -130,6 +130,12 @@ public:
 
   virtual int GetDepth() const { return 24; }
 
+  static void SetResolution(int ppi);
+  static int GetResolution();
+  
+private:  
+  static float ms_PSScaleFactor;
+
 protected:
 
   FILE*             m_pstream;    // PostScript output stream

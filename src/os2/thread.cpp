@@ -746,11 +746,15 @@ void wxThreadModule::OnExit()
     if (gs_pCritsectGui)
     {
         gs_pCritsectGui->Leave();
+#if (!(defined(__VISAGECPP__) && (__IBMCPP__ < 400 || __IBMC__ < 400 )))
         delete gs_pCritsectGui;
+#endif
         gs_pCritsectGui = NULL;
     }
 
+#if (!(defined(__VISAGECPP__) && (__IBMCPP__ < 400 || __IBMC__ < 400 )))
     wxDELETE(gs_pCritsectWaitingForGui);
+#endif
 }
 
 // ----------------------------------------------------------------------------

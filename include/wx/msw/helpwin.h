@@ -24,31 +24,33 @@
 
 class WXDLLEXPORT wxWinHelpController: public wxHelpControllerBase
 {
-  DECLARE_CLASS(wxWinHelpController)
+    DECLARE_CLASS(wxWinHelpController)
+        
+public:
+    wxWinHelpController() {};
+    ~wxWinHelpController() {};
 
- public:
-  wxWinHelpController(void);
-  ~wxWinHelpController(void);
+    // Must call this to set the filename
+    virtual bool Initialize(const wxString& file);
 
-  // Must call this to set the filename and server name
-  virtual bool Initialize(const wxString& file);
+    // If file is "", reloads file given in Initialize
+    virtual bool LoadFile(const wxString& file = wxEmptyString);
+    virtual bool DisplayContents();
+    virtual bool DisplaySection(int sectionNo);
+    virtual bool DisplayBlock(long blockNo);
+    virtual bool KeywordSearch(const wxString& k);
+    virtual bool Quit();
 
-  // If file is "", reloads file given  in Initialize
-  virtual bool LoadFile(const wxString& file = "");
-  virtual bool DisplayContents(void);
-  virtual bool DisplaySection(int sectionNo);
-  virtual bool DisplayBlock(long blockNo);
-  virtual bool KeywordSearch(const wxString& k);
-
-  virtual bool Quit(void);
-  virtual void OnQuit(void);
-
-  inline wxString GetHelpFile(void) const { return m_helpFile; }
+    inline wxString GetHelpFile() const { return m_helpFile; }
 
 protected:
-  wxString m_helpFile;
+    // Append extension if necessary.
+    wxString GetValidFilename(const wxString& file) const;
+    
+private:
+    wxString m_helpFile;
 };
 
 #endif // wxUSE_HELP
 #endif
-    // _WX_HELPWIN_H_
+// _WX_HELPWIN_H_

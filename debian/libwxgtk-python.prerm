@@ -2,8 +2,12 @@
 
 set -e
 
-WXPYTHONDIR="/usr/lib/python1.5/site-packages/wxPython"
-find ${WXPYTHONDIR} -name "*.py?" -exec rm -f {} \;
+PACKAGE="libwxgtk=V-python"
+
+dpkg --listfiles $PACKAGE |
+	awk '$0~/\.py$/ {print $0"c\n" $0"o"}' |
+	xargs rm -f >&2
+
 
 #DEBHELPER#
 

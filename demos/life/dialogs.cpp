@@ -93,16 +93,16 @@ LifeSamplesDialog::LifeSamplesDialog(wxWindow *parent)
         0, NULL,
         wxLB_SINGLE | wxLB_NEEDED_SB | wxLB_HSCROLL );
 
-    for (unsigned i = 0; i < (sizeof(g_shapes) / sizeof(LifeShape)); i++)
-        m_list->Append(g_shapes[i].m_name);
+    for (unsigned i = 0; i < (sizeof(g_patterns) / sizeof(LifePattern)); i++)
+        m_list->Append(g_patterns[i].m_name);
 
     // descriptions
     wxStaticBox *statbox = new wxStaticBox( this, -1, _("Description"));
     m_life   = new Life();
-    m_life->SetShape(g_shapes[0]);
+    m_life->SetPattern(g_patterns[0]);
     m_canvas = new LifeCanvas( this, m_life, FALSE );
     m_text   = new wxTextCtrl( this, -1,
-        g_shapes[0].m_desc,
+        g_patterns[0].m_description,
         wxDefaultPosition,
         wxSize(300, 60),
         wxTE_MULTILINE | wxTE_READONLY);
@@ -136,9 +136,9 @@ LifeSamplesDialog::~LifeSamplesDialog()
     m_canvas->Destroy();
 }
 
-const LifeShape& LifeSamplesDialog::GetShape()
+const LifePattern& LifeSamplesDialog::GetPattern()
 {
-    return g_shapes[m_value];
+    return g_patterns[m_value];
 }
 
 void LifeSamplesDialog::OnListBox(wxCommandEvent& event)
@@ -148,15 +148,14 @@ void LifeSamplesDialog::OnListBox(wxCommandEvent& event)
     if (sel != -1)
     {
         m_value = m_list->GetSelection();
-        m_text->SetValue(g_shapes[ sel ].m_desc);
-        m_life->SetShape(g_shapes[ sel ]);
+        m_text->SetValue(g_patterns[ sel ].m_description);
+        m_life->SetPattern(g_patterns[ sel ]);
 
-        // quick and dirty :-)
-        if ((g_shapes[ sel ].m_width > 36) ||
-            (g_shapes[ sel ].m_height > 22))
-            m_canvas->SetCellSize(2);
-        else
+        // these values shouldn't be hardcoded...
+        if ((size_t)sel < (sizeof(g_patterns) / sizeof(LifePattern)) - 3)
             m_canvas->SetCellSize(8);
+        else
+            m_canvas->SetCellSize(2);
     }
 }
 
@@ -182,7 +181,7 @@ LifeAboutDialog::LifeAboutDialog(wxWindow *parent)
     wxBoxSizer *sizer = new wxBoxSizer( wxVERTICAL );
     sizer->Add( sbmp, 0, wxCENTRE | wxALL, 10 );
     sizer->Add( new wxStaticLine(this, -1), 0, wxGROW | wxLEFT | wxRIGHT, 5 );
-    sizer->Add( CreateTextSizer(_("Life! version 2.1 for wxWindows\n\n"
+    sizer->Add( CreateTextSizer(_("Life! version 2.2 for wxWindows\n\n"
                                   "(c) 2000 Guillermo Rodriguez Garcia\n\n"
                                   "<guille@iies.es>\n\n"
                                   "Portions of the code are based in XLife;\n"

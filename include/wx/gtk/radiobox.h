@@ -43,24 +43,37 @@ extern const char *wxRadioBoxNameStr;
 class wxRadioBox: public wxControl
 {
 public:
-    wxRadioBox();
-    inline wxRadioBox( wxWindow *parent, wxWindowID id, const wxString& title,
-             const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-             int n = 0, const wxString choices[] = (const wxString *) NULL,
-             int majorDim = 1, long style = wxRA_HORIZONTAL,
-             const wxValidator& val = wxDefaultValidator, 
-             const wxString& name = wxRadioBoxNameStr )
+    wxRadioBox() { Init(); }
+    wxRadioBox(wxWindow *parent,
+               wxWindowID id,
+               const wxString& title,
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               int n = 0,
+               const wxString choices[] = (const wxString *) NULL,
+               int majorDim = 1,
+               long style = wxRA_HORIZONTAL,
+               const wxValidator& val = wxDefaultValidator, 
+               const wxString& name = wxRadioBoxNameStr)
     {
-      Create( parent, id, title, pos, size, n, choices, majorDim, style, val, name );
+        Init();
+
+        Create( parent, id, title, pos, size, n, choices, majorDim, style, val, name );
     }
-    ~wxRadioBox(void);
-    bool Create( wxWindow *parent, wxWindowID id, const wxString& title,
-             const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-             int n = 0, const wxString choices[] = (const wxString *) NULL,
-             int majorDim = 0, long style = wxRA_HORIZONTAL,
-             const wxValidator& val = wxDefaultValidator, 
-             const wxString& name = wxRadioBoxNameStr );
-	     
+
+    ~wxRadioBox();
+    bool Create(wxWindow *parent,
+                wxWindowID id,
+                const wxString& title,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                int n = 0,
+                const wxString choices[] = (const wxString *) NULL,
+                int majorDim = 0,
+                long style = wxRA_HORIZONTAL,
+                const wxValidator& val = wxDefaultValidator, 
+                const wxString& name = wxRadioBoxNameStr);
+
     int FindString( const wxString& s) const;
     void SetSelection( int n );
     int GetSelection() const;
@@ -100,12 +113,20 @@ public:
     void ApplyToolTip( GtkTooltips *tips, const wxChar *tip );
 #endif // wxUSE_TOOLTIPS
     wxSize LayoutItems();
-    void DoSetSize( int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO );
+
+    virtual void DoSetSize( int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO );
+    virtual void OnInternalIdle();
     
     bool             m_alreadySent;
+    bool             m_hasFocus,
+                     m_lostFocus;
     int              m_majorDim;
     wxList           m_boxes;
-    
+
+protected:
+    // common part of all ctors
+    void Init();
+
 private:
     DECLARE_DYNAMIC_CLASS(wxRadioBox)
 };

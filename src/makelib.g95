@@ -7,7 +7,7 @@
 #
 # Include file for Cygwin/Mingw32 libraries
 
-WXDIR = $(WXWIN)
+# WXDIR = $(WXWIN)
 
 # All common UNIX compiler flags and options are now in
 # this central makefile.
@@ -20,4 +20,7 @@ $(LIBTARGET): $(OBJECTS)
 	$(RANLIB) $@
 
 clean:
-	-$(RM) $(OBJECTS) $(LIBTARGET) core *.rsc *.res
+	-$(RM) $(OBJECTS) core *.rsc *.res
+
+cleanall: clean
+	-$(RM) $(LIBTARGET)

@@ -43,11 +43,18 @@ None.
 
 \membersection{wxThread::wxThread}\label{wxthreadctor}
 
-\func{}{wxThread}{\void}
+\func{}{wxThread}{\param{wxThreadKind }{kind = wxTHREAD\_DETACHED}}
 
 Constructor creates a new detached (default) or joinable C++ thread object. It
 does not create (or starts execution of) the real thread - for this you should
 use \helpref{Create}{wxthreadcreate} and \helpref{Run}{wxthreadrun} methods.
+
+The possible values for {\it kind} parameters are:
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf wxTHREAD\_DETACHED}}{Create a detached thread.}
+\twocolitem{{\bf wxTHREAD\_JOINABLE}}{Create a joinable thread}
+\end{twocollist}
 
 \membersection{wxThread::\destruct{wxThread}}
 
@@ -326,8 +333,7 @@ See also \helpref{Sleep()}{wxthreadsleep}.
 
 \constfunc{ExitCode}{Wait}{\void}
 
-Waits until the thread terminates and returns its exit code or {\tt
-(ExitCode)-1} on error.
+Waits until the thread terminates and returns its exit code or {\tt (ExitCode)-1} on error.
 
 You can only Wait() for joinable (not detached) threads.
 

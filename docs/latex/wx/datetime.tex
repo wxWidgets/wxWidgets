@@ -6,7 +6,7 @@
 %% Created:     07.03.00
 %% RCS-ID:      $Id$
 %% Copyright:   (c) Vadim Zeitlin
-%% Licence:     wxWindows licence
+%% License:     wxWindows license
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{\class{wxDateTime}}\label{wxdatetime}
@@ -88,13 +88,81 @@ Time zone symbolic names:
 \end{verbatim}
 
 Month names: Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec and
-Inv\_Month for an invalid.month value are the values of {\tt wxDateTime::Month} 
+Inv\_Month for an invalid.month value are the values of {\tt wxDateTime::Month}
 enum.
 
-Likely, Sun, Mon, Tue, Wed, Thu, Fri, Sat, and Inv\_WeekDay are the values in 
+Likewise, Sun, Mon, Tue, Wed, Thu, Fri, Sat, and Inv\_WeekDay are the values in
 {\tt wxDateTime::WeekDay} enum.
 
 Finally, Inv\_Year is defined to be an invalid value for year parameter.
+
+\helpref{GetMonthName()}{wxdatetimegetmonthname} and
+\helpref{GetWeekDayName}{wxdatetimegetweekdayname} functions use the followign
+flags:
+
+\begin{verbatim}
+    enum NameFlags
+    {
+        Name_Full = 0x01,       // return full name
+        Name_Abbr = 0x02        // return abbreviated name
+    };
+\end{verbatim}
+
+Several functions accept an extra parameter specifying the calendar to use
+(although most of them only support now the Gregorian calendar). This
+parameters is one of the following values:
+
+\begin{verbatim}
+    enum Calendar
+    {
+        Gregorian,  // calendar currently in use in Western countries
+        Julian      // calendar in use since -45 until the 1582 (or later)
+    };
+\end{verbatim}
+
+Date calculatiosn often depend on the country adn wxDateTime allows to set the
+country which conventions should be used using
+\helpref{SetCountry}{wxdatetimesetcountry}. It takes one of the following
+values as parameter:
+
+\begin{verbatim}
+    enum Country
+    {
+        Country_Unknown, // no special information for this country
+        Country_Default, // set the default country with SetCountry() method
+                         // or use the default country with any other
+
+        Country_WesternEurope_Start,
+        Country_EEC = Country_WesternEurope_Start,
+        France,
+        Germany,
+        UK,
+        Country_WesternEurope_End = UK,
+
+        Russia,
+
+        USA
+    };
+\end{verbatim}
+
+Differnet parst of the world use different conventions for the week start.
+In some countries, the week starts on Sunday, while in others - on Monday.
+The ISO standard doesn't address this issue, so we support both conventions in
+the functions whose result depends on it (
+\helpref{GetWeekOfYear}{wxdatetimegetweekofyear} and
+\helpref{GetWeekOfMonth}{wxdatetimegetweekofmonth}).
+
+The desired behvaiour may be specified by giving one of the following
+constants as argument to these functions:
+
+\begin{verbatim}
+    enum WeekFlags
+    {
+        Default_First,   // Sunday_First for US, Monday_First for the rest
+        Monday_First,    // week starts with a Monday
+        Sunday_First     // week starts with a Sunday
+    };
+\end{verbatim}
 
 \wxheading{Derived from}
 
@@ -106,7 +174,7 @@ No base class
 
 \wxheading{See also}
 
-%\helpref{Date classes overview}{wxdatetimeoverview},\rtfsp
+\helpref{Date classes overview}{wxdatetimeoverview},\rtfsp
 wxTimeSpan,\rtfsp
 wxDateSpan,\rtfsp
 \helpref{wxCalendarCtrl}{wxcalendarctrl}
@@ -119,6 +187,13 @@ For convenience, all static functions are collected here. These functions
 either set or return the static variables of wxDateSpan (the country), return
 the current moment, year, month or number of days in it, or do some general
 calendar-related actions.
+
+Please note that although several function accept an extra {\it Calendar}
+parameter, it is currently ignored as only the Gregorian calendar is
+supported. Future versions will support other calendars.
+
+\pythonnote{These methods are standalone functions named
+{\tt wxDateTime_<StaticMethodName>} in wxPython.}
 
 \helpref{SetCountry}{wxdatetimesetcountry}\\
 \helpref{GetCountry}{wxdatetimegetcountry}\\
@@ -137,29 +212,206 @@ calendar-related actions.
 \helpref{GetBeginDST}{wxdatetimegetbegindst}\\
 \helpref{GetEndDST}{wxdatetimegetenddst}\\
 \helpref{Now}{wxdatetimenow}\\
+\helpref{UNow}{wxdatetimeunow}\\
 \helpref{Today}{wxdatetimetoday}
 
 \membersection{Constructors, assignment operators and setters}
 
+Constructors and various {\tt Set()} methods are collected here. If you
+construct a date object from separate values for day, month and year, you
+should use \helpref{IsValid}{wxdatetimeisvalid} method to check that the
+values were correct as constructors can not return an error code.
+
+\helpref{wxDateTime()}{wxdatetimewxdatetimedef}\\
+\helpref{wxDateTime(time\_t)}{wxdatetimewxdatetimetimet}\\
+\helpref{wxDateTime(struct tm)}{wxdatetimewxdatetimetm}\\
+%\helpref{wxDateTime(struct Tm)}{wxdatetimewxdatetimetm} - Tm not documented yet\\
+\helpref{wxDateTime(double jdn)}{wxdatetimewxdatetimejdn}\\
+\helpref{wxDateTime(h, m, s, ms)}{wxdatetimewxdatetimetime}\\
+\helpref{wxDateTime(day, mon, year, h, m, s, ms)}{wxdatetimewxdatetimedate}\\
+\helpref{SetToCurrent}{wxdatetimesettocurrent}\\
+\helpref{Set(time\_t)}{wxdatetimesettimet}\\
+\helpref{Set(struct tm)}{wxdatetimesettm}\\
+%\helpref{Set(struct Tm)}{wxdatetimesettm} - Tm not documented yet\\
+\helpref{Set(double jdn)}{wxdatetimesetjdn}\\
+\helpref{Set(h, m, s, ms)}{wxdatetimesettime}\\
+\helpref{Set(day, mon, year, h, m, s, ms)}{wxdatetimesetdate}\\
+\helpref{ResetTime}{wxdatetimeresettime}\\
+\helpref{SetYear}{wxdatetimesetyear}\\
+\helpref{SetMonth}{wxdatetimesetmonth}\\
+\helpref{SetDay}{wxdatetimesetdate}\\
+\helpref{SetHour}{wxdatetimesethour}\\
+\helpref{SetMinute}{wxdatetimesetminute}\\
+\helpref{SetSecond}{wxdatetimesetsecond}\\
+\helpref{SetMillisecond}{wxdatetimesetmillisecond}\\
+\helpref{operator$=$(time\_t)}{wxdatetimeoperatoreqtimet}\\
+\helpref{operator$=$(struct tm)}{wxdatetimeoperatoreqtm}
+%\helpref{operator$=$(struct Tm)}{wxdatetimeoperatortm2}
+
 \membersection{Accessors}
+
+Here are the trivial accessors. Other functions, which might have to perform
+some more complicated calculations to find the answer are under
+\helpref{Calendar calculations}{wxdatetimecalculations} section.
+
+\helpref{IsValid}{wxdatetimeisvalid}\\
+\helpref{GetTicks}{wxdatetimegetticks}\\
+\helpref{GetYear}{wxdatetimegetyear}\\
+\helpref{GetMonth}{wxdatetimegetmonth}\\
+\helpref{GetDay}{wxdatetimegetday}\\
+\helpref{GetWeekDay}{wxdatetimegetweekday}\\
+\helpref{GetHour}{wxdatetimegethour}\\
+\helpref{GeTMinute}{wxdatetimegetminute}\\
+\helpref{GetSecond}{wxdatetimegetsecond}\\
+\helpref{GetMillisecond}{wxdatetimegetmillisecond}\\
+\helpref{GetDayOfYear}{wxdatetimegetdayofyear}\\
+\helpref{GetWeekOfYear}{wxdatetimegetweekofyear}\\
+\helpref{GetWeekOfMonth}{wxdatetimegetweekofmonth}\\
+\helpref{GetYearDay}{wxdatetimegetyearday}\\
+\helpref{IsWorkDay}{wxdatetimeisworkday}\\
+\helpref{IsGregorianDate}{wxdatetimeisgregoriandate}
 
 \membersection{Date comparison}
 
+There are several function to allow date comparison. To supplement them, a few
+global operators $>$, $<$ etc taking wxDateTime are defined.
+
+\helpref{IsEqualTo}{wxdatetimeisequalto}\\
+\helpref{IsEarlierThan}{wxdatetimeisearlierthan}\\
+\helpref{IsLaterThan}{wxdatetimeislaterthan}\\
+\helpref{IsStrictlyBetween}{wxdatetimeisstrictlybetween}\\
+\helpref{IsBetween}{wxdatetimeisbetween}\\
+\helpref{IsSameDate}{wxdatetimeissamedate}\\
+\helpref{IsSameTime}{wxdatetimeissametime}\\
+\helpref{IsEqualUpTo}{wxdatetimeisequalupto}
+
 \membersection{Date arithmetics}
+
+These functions carry out \helpref{arithmetics}{tdatearithm} on the wxDateTime
+objects. As explained in the overview, either wxTimeSpan or wxDateSpan may be
+added to wxDateTime, hence all functions are overloaded to accept both
+arguments.
+
+Also, both {\tt Add()} and {\tt Subtract()} have both const and non-const
+version. The first one returns a new obejct which represents the
+sum/difference of the original one with the argument while the second form
+modifies the object to which it is applied. The operators $-=$ and $+=$ are
+defined to be equivalent to the second forms of these functions.
+
+\helpref{Add(wxTimeSpan)}{wxdatetimeaddts}\\
+\helpref{Add(wxDateSpan)}{wxdatetimeaddds}\\
+\helpref{Subtract(wxTimeSpan)}{wxdatetimesubtractts}\\
+\helpref{Subtract(wxDateSpan)}{wxdatetimesubtractds}\\
+\helpref{Subtract(wxDateTime)}{wxdatetimesubtractdt}\\
+\helpref{oparator$+=$(wxTimeSpan)}{wxdatetimeaddts}\\
+\helpref{oparator$+=$(wxDateSpan)}{wxdatetimeaddds}\\
+\helpref{oparator$-=$(wxTimeSpan)}{wxdatetimesubtractts}\\
+\helpref{oparator$-=$(wxDateSpan)}{wxdatetimesubtractds}
 
 \membersection{Parsing and formatting dates}
 
-\membersection{Calendar calculations}
+These functions perform convert wxDateTime obejcts to and from text. The
+conversions to text are mostly trivial: you can either do it using the default
+date and time representations for the current locale (
+\helpref{FormatDate}{wxdatetimeformatdate} and
+\helpref{FormatTime}{wxdatetimeformattime}), using the international standard
+representation defined by ISO 8601 (
+\helpref{FormatISODate}{wxdatetimeformatisodate} and
+\helpref{FormatISOTime}{wxdatetimeformatisotime}) or by specifying any format
+at all and using \helpref{Format}{wxdatetimeformat} directly.
+
+The conversions from text are more interesting, as there are much more
+possibilities to care about. The simples cases can be taken care of with
+\helpref{ParseFormat}{wxdatetimeparseformat} which can parse any date in the
+given (rigid) format. \helpref{ParseRfc822Date}{wxdatetimeparserfc822date} is
+another function for parsing dates in predefined format - the one of RFC 822
+which (still...) defines the format of email messages on the Internet. This
+format can not be described with {\tt strptime(3)}-like format strings used by
+\helpref{Format}{wxdatetimeformat}, hence the need for a separate function.
+
+But the most interesting functions are
+\helpref{ParseDateTime}{wxdatetimeparsedatetime} and
+\helpref{ParseDate}{wxdatetimeparsedate} and
+\helpref{ParseTime}{wxdatetimeparsetime}. They try to parse the date ans time
+(or only one of them) in `free' format, i.e. allow them to be specified in any
+of possible ways. These functions will usually be used to parse the
+(interactive) user input which is not bound to be in any predefined format. As
+an example, \helpref{ParseDateTime}{wxdatetimeparsedatetime} can parse the
+strings such as {\tt "tomorrow"}, {\tt "March first"}, {\tt "next Sunday"}.
+
+\helpref{ParseRfc822Date}{wxdatetimeparserfc822date}\\
+\helpref{ParseFormat}{wxdatetimeparseformat}\\
+\helpref{ParseDateTime}{wxdatetimeparsedatetime}\\
+\helpref{ParseDate}{wxdatetimeparsedate}\\
+\helpref{ParseTime}{wxdatetimeparsetime}\\
+\helpref{Format}{wxdatetimeformat}\\
+\helpref{FormatDate}{wxdatetimeformatdate}\\
+\helpref{FormatTime}{wxdatetimeformattime}\\
+\helpref{FormatISODate}{wxdatetimeformatisodate}\\
+\helpref{FormatISOTime}{wxdatetimeformatisotime}
+
+\membersection{Calendar calculations}\label{wxdatetimecalculations}
+
+The functions in this section perform the basic calendar calculations, mostly
+related to the week days. They allow to find the given week day in the
+week with given number (either in the month or in the year) and so on.
+
+All (non-const) functions in this section don't modify the time part of the
+wxDateTime - they only work with the date part of it.
+
+\helpref{SetToWeekDayInSameWeek}{wxdatetimesettoweekdayinsameweek}\\
+\helpref{GetWeekDayInSameWeek}{wxdatetimegetweekdayinsameweek}\\
+\helpref{SetToNextWeekDay}{wxdatetimesettonextweekday}\\
+\helpref{GetNextWeekDay}{wxdatetimegetnextweekday}\\
+\helpref{SetToPrevWeekDay}{wxdatetimesettoprevweekday}\\
+\helpref{GetPrevWeekDay}{wxdatetimegetprevweekday}\\
+\helpref{SetToWeekDay}{wxdatetimesettoweekday}\\
+\helpref{GetWeekDay}{wxdatetimegetweekday2}\\
+\helpref{SetToLastWeekDay}{wxdatetimesettolastweekday}\\
+\helpref{GetLastWeekDay}{wxdatetimegetlastweekday}\\
+\helpref{SetToTheWeek}{wxdatetimesettotheweek}\\
+\helpref{GetWeek}{wxdatetimegetweek}\\
+\helpref{SetToLastMonthDay}{wxdatetimesettolastmonthday}\\
+\helpref{GetLastMonthDay}{wxdatetimegetlastmonthday}\\
+\helpref{SetToYearDay}{wxdatetimesettoyearday}\\
+\helpref{GetYearDay}{wxdatetimegetyearday}
 
 \membersection{Astronomical/historical functions}
 
-\membersection{Time zone support}
+Some degree of support for the date units used in astronomy and/or history is
+provided. You can construct a wxDateTime object from a
+\helpref{JDN}{wxdatetimesetjdn} and you may also get its JDN,
+\helpref{MJD}{wxdatetimegetmodifiedjuliandaynumber} or
+\helpref{Rata Die number}{wxdatetimegetratadie} from it.
+
+\helpref{wxDateTime(double jdn)}{wxdatetimewxdatetimejdn}\\
+\helpref{Set(double jdn)}{wxdatetimesetjdn}\\
+\helpref{GetJulianDayNumber}{wxdatetimegetjuliandaynumber}\\
+\helpref{GetJDN}{wxdatetimegetjdn}\\
+\helpref{GetModifiedJulianDayNumber}{wxdatetimegetmodifiedjuliandaynumber}\\
+\helpref{GetMJD}{wxdatetimegetmjd}\\
+\helpref{GetRataDie}{wxdatetimegetratadie}
+
+\membersection{Time zone and DST support}
+
+Please see the \helpref{time zone overview}{tdatetimezones} for more
+information about time zones. ormally, these functions should be rarely used.
+
+\helpref{ToTimezone}{wxdatetimetotimezone}\\
+\helpref{MakeTimezone}{wxdatetimemaketimezone}\\
+\helpref{ToGMT}{wxdatetimetogmt}\\
+\helpref{MakeGMT}{wxdatetimemakegmt}\\
+\helpref{GetBeginDST}{wxdatetimegetbegindst}\\
+\helpref{GetEndDST}{wxdatetimegetenddst}\\
+\helpref{IsDST}{wxdatetimeisdst}
 
 \helponly{\insertatlevel{2}{
 
 \wxheading{Members}
 
 }}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%% static functions %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \membersection{wxDateTime::ConvertYearToBC}\label{wxdatetimeconvertyeartobc}
 
@@ -182,33 +434,73 @@ This function should be used like this:
 
 \func{static void}{GetAmPmStrings}{\param{wxString *}{am}, \param{wxString *}{pm}}
 
+Returns the translations of the strings {\tt AM} and {\tt PM} used for time
+formatting for the current locale. Either of the pointers may be {\tt NULL} if
+the corresponding value is not needed.
+
 \membersection{wxDateTime::GetBeginDST}\label{wxdatetimegetbegindst}
 
 \func{static wxDateTime}{GetBeginDST}{\param{int }{year = Inv\_Year}, \param{Country }{country = Country\_Default}}
+
+Get the beginning of DST for the given country in the given year (current one
+by default). This function suffers from limitations described in
+\helpref{DST overview}{tdatedst}.
+
+\wxheading{See also}
+
+\helpref{GetEndDST}{wxdatetimegetenddst}
 
 \membersection{wxDateTime::GetCountry}\label{wxdatetimegetcountry}
 
 \func{static Country}{GetCountry}{\void}
 
+Returns the current default country. The default country is used for DST
+calculations, for example.
+
+\wxheading{See also}
+
+\helpref{SetCountry}{wxdatetimesetcountry}
+
 \membersection{wxDateTime::GetCurrentYear}\label{wxdatetimegetcurrentyear}
 
 \func{static int}{GetCurrentYear}{\param{Calendar }{cal = Gregorian}}
+
+Get the current year in given calendar (only Gregorian is currently supported).
 
 \membersection{wxDateTime::GetCurrentMonth}\label{wxdatetimegetcurrentmonth}
 
 \func{static Month}{GetCurrentMonth}{\param{Calendar }{cal = Gregorian}}
 
+Get the current month in given calendar (only Gregorian is currently supported).
+
 \membersection{wxDateTime::GetCentury}\label{wxdatetimegetcentury}
 
 \func{static int}{GetCentury}{\param{int }{year = Inv\_Year}}
+
+Get the current century, i.e. first two digits of the year, in given calendar
+(only Gregorian is currently supported).
 
 \membersection{wxDateTime::GetEndDST}\label{wxdatetimegetenddst}
 
 \func{static wxDateTime}{GetEndDST}{\param{int }{year = Inv\_Year}, \param{Country }{country = Country\_Default}}
 
+Returns the end of DST for the given country in the given year (current one by
+default).
+
+\wxheading{See also}
+
+\helpref{GetBeginDST}{wxdatetimegetbegindst}
+
 \membersection{wxDateTime::GetMonthName}\label{wxdatetimegetmonthname}
 
 \func{static wxString}{GetMonthName}{\param{Month }{month}, \param{NameFlags }{flags = Name\_Full}}
+
+Gets the full (default) or abbreviated (specify {\tt Name\_Abbr} name of the
+given month.
+
+\wxheading{See also}
+
+\helpref{GetWeekDayName}{wxdatetimegetweekdayname}
 
 \membersection{wxDateTime::GetNumberOfDays}\label{wxdatetimegetnumberofdays}
 
@@ -216,31 +508,853 @@ This function should be used like this:
 
 \func{static wxDateTime\_t}{GetNumberOfDays}{\param{Month }{month}, \param{int }{year = Inv\_Year}, \param{Calendar }{cal = Gregorian}}
 
+Returns the number of days in the given year or in the given month of the
+year.
+
+The only supported value for {\it cal} parameter is currently {\tt Gregorian}.
+
+\pythonnote{These two methods are named {\tt GetNumberOfDaysInYear}
+and {\tt GetNumberOfDaysInMonth} in wxPython.}
+
 \membersection{wxDateTime::GetWeekDayName}\label{wxdatetimegetweekdayname}
 
 \func{static wxString}{GetWeekDayName}{\param{WeekDay }{weekday}, \param{NameFlags }{flags = Name\_Full}}
+
+Gets the full (default) or abbreviated (specify {\tt Name\_Abbr} name of the
+given week day.
+
+\wxheading{See also}
+
+\helpref{GetMonthName}{wxdatetimegetmonthname}
 
 \membersection{wxDateTime::IsLeapYear}\label{wxdatetimeisleapyear}
 
 \func{static bool}{IsLeapYear}{\param{int }{year = Inv\_Year}, \param{Calendar }{cal = Gregorian}}
 
+Returns {\tt TRUE} if the {\it year} is a leap one in the specified calendar.
+
+This functions supports Gregorian and Julian calendars.
+
 \membersection{wxDateTime::IsWestEuropeanCountry}\label{wxdatetimeiswesteuropeancountry}
 
 \func{static bool}{IsWestEuropeanCountry}{\param{Country }{country = Country\_Default}}
+
+This function returns {\tt TRUE} if the specified (or default) country is one
+of Western European ones. It is used internally by wxDateTime to determine the
+DST convention and date and time formatting rules.
 
 \membersection{wxDateTime::IsDSTApplicable}\label{wxdatetimeisdstapplicable}
 
 \func{static bool}{IsDSTApplicable}{\param{int }{year = Inv\_Year}, \param{Country }{country = Country\_Default}}
 
+Returns {\tt TRUE} if DST was usedi n the given year (the current one by
+default) in the given country.
+
 \membersection{wxDateTime::Now}\label{wxdatetimenow}
 
 \func{static wxDateTime}{Now}{\void}
+
+Returns the object corresopnding to the current time.
+
+Example:
+
+\begin{verbatim}
+    wxDateTime now = wxDateTime::Now();
+    printf("Current time in Paris:\t%s\n", now.Format("%c", wxDateTime::CET).c_str());
+\end{verbatim}
+
+Note that this function is accurate up to second: 
+\helpref{wxDateTime::UNow}{wxdatetimeunow} should be used for better precision
+(but it is less efficient and might not be availabel on all platforms).
+
+\wxheading{See also}
+
+\helpref{Today}{wxdatetimetoday}
 
 \membersection{wxDateTime::SetCountry}\label{wxdatetimesetcountry}
 
 \func{static void}{SetCountry}{\param{Country }{country}}
 
+Sets the country to use by default. This setting influences the DST
+calculations, date formatting and other things.
+
+The possible values for {\it country} parameter are enumerated in
+\helpref{wxDateTime constants section}{wxdatetime}.
+
+\wxheading{See also}
+
+\helpref{GetCountry}{wxdatetimegetcountry}
+
 \membersection{wxDateTime::Today}\label{wxdatetimetoday}
 
 \func{static wxDateTime}{Today}{\void}
+
+Returns the object corresponding to the midnight of the current day (i.e. the
+same as \helpref{Now()}{wxdatetimenow}, but the time part is set to $0$).
+
+\wxheading{See also}
+
+\helpref{Now}{wxdatetimenow}
+
+\membersection{wxDateTime::UNow}\label{wxdatetimeunow}
+
+\func{static wxDateTime}{UNow}{\void}
+
+Returns the object corresopnding to the current time including the
+milliseconds if a function to get time with such precision is available on the
+current platform (supported under most Unices and Win32).
+
+\wxheading{See also}
+
+\helpref{Now}{wxdatetimenow}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%% constructors &c %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\membersection{wxDateTime::wxDateTime}\label{wxdatetimewxdatetimedef}
+
+\func{}{wxDateTime}{\void}
+
+Default constructor. Use one of {\tt Set()} functions to initialize the object
+later.
+
+\membersection{wxDateTime::wxDateTime}\label{wxdatetimewxdatetimetimet}
+
+\func{wxDateTime\&}{wxDateTime}{\param{time\_t }{timet}}
+
+Same as \helpref{Set}{wxdatetimewxdatetimetimet}.
+
+\pythonnote{This constructor is named {\tt wxDateTimeFromTimeT} in wxPython.}
+
+\membersection{wxDateTime::wxDateTime}\label{wxdatetimewxdatetimetm}
+
+\func{wxDateTime\&}{wxDateTime}{\param{const struct tm\& }{tm}}
+
+Same as \helpref{Set}{wxdatetimewxdatetimetm}
+
+\pythonnote{Unsupported.}
+
+\membersection{wxDateTime::wxDateTime}\label{wxdatetimewxdatetimejdn}
+
+\func{wxDateTime\&}{wxDateTime}{\param{double }{jdn}}
+
+Same as \helpref{Set}{wxdatetimewxdatetimejdn}
+
+\pythonnote{This constructor is named {\tt wxDateTimeFromJDN} in wxPython.}
+
+\membersection{wxDateTime::wxDateTime}\label{wxdatetimewxdatetimetime}
+
+\func{wxDateTime\&}{wxDateTime}{\param{wxDateTime\_t }{hour}, \param{wxDateTime\_t }{minute = 0}, \param{wxDateTime\_t }{second = 0}, \param{wxDateTime\_t }{millisec = 0}}
+
+Same as \helpref{Set}{wxdatetimewxdatetimetime}
+
+\pythonnote{This constructor is named {\tt wxDateTimeFromHMS} in wxPython.}
+
+\membersection{wxDateTime::wxDateTime}\label{wxdatetimewxdatetimedate}
+
+\func{wxDateTime\&}{wxDateTime}{\param{wxDateTime\_t }{day}, \param{Month        }{month = Inv\_Month}, \param{wxDateTime\_t }{hour = 0}, \param{wxDateTime\_t }{minute = 0}, \param{wxDateTime\_t }{second = 0}, \param{wxDateTime\_t }{millisec = 0}}
+
+Same as \helpref{Set}{wxdatetimesetdate}
+
+\pythonnote{This constructor is named {\tt wxDateTimeFromDMY} in wxPython.}
+
+\membersection{wxDateTime::SetToCurrent}\label{wxdatetimesettocurrent}
+
+\func{wxDateTime&}{SetToCurrent}{\void}
+
+Sets the date and time of to the current values. Same as assigning the result
+of \helpref{Now()}{wxdatetimenow} to this object.
+
+\membersection{wxDateTime::Set}\label{wxdatetimesettimet}
+
+\func{wxDateTime\&}{Set}{\param{time\_t }{timet}}
+
+Constructs the object from {\it timet} value holding the number of seconds
+since Jan 1, 1970.
+
+\pythonnote{This method is named {\tt SetTimeT} in wxPython.}
+
+\membersection{wxDateTime::Set}\label{wxdatetimesettm}
+
+\func{wxDateTime\&}{Set}{\param{const struct tm\& }{tm}}
+
+Sets the date and tiem from the broken down representation in the standard
+{\tt tm} structure.
+
+\pythonnote{Unsupported.}
+
+\membersection{wxDateTime::Set}\label{wxdatetimesetjdn}
+
+\func{wxDateTime\&}{Set}{\param{double }{jdn}}
+
+Sets the date from the so-called {\it Julian Day Number}.
+
+By definition, the Julian Day Number, usually abbreviated as JDN, of a
+particular instant is the fractional number of days since 12 hours Universal
+Coordinated Time (Greenwhich mean noon) on January 1 of the year -4712 in the
+Julian proleptic calendar.
+
+\pythonnote{This method is named {\tt SetJDN} in wxPython.}
+
+\membersection{wxDateTime::Set}\label{wxdatetimesettime}
+
+\func{wxDateTime\&}{Set}{\param{wxDateTime\_t }{hour}, \param{wxDateTime\_t }{minute = 0}, \param{wxDateTime\_t }{second = 0}, \param{wxDateTime\_t }{millisec = 0}}
+
+Sets the date to be equal to \helpref{Today}{wxdatetimetoday} and the time
+from supplied parameters.
+
+\pythonnote{This method is named {\tt SetHMS} in wxPython.}
+
+\membersection{wxDateTime::Set}\label{wxdatetimesetdate}
+
+\func{wxDateTime\&}{Set}{\param{wxDateTime\_t }{day}, \param{Month        }{month = Inv\_Month}, \param{wxDateTime\_t }{hour = 0}, \param{wxDateTime\_t }{minute = 0}, \param{wxDateTime\_t }{second = 0}, \param{wxDateTime\_t }{millisec = 0}}
+
+Sets the date and time from the parameters.
+
+\membersection{wxDateTime::ResetTime}\label{wxdatetimeresettime}
+
+\func{wxDateTime\&}{ResetTime}{\void}
+
+Reset time to midnight (00:00:00) without changing the date.
+
+\membersection{wxDateTime::SetYear}\label{wxdatetimesetyear}
+
+\func{wxDateTime\&}{SetYear}{\param{int }{year}}
+
+Sets the year without changing other date components.
+
+\membersection{wxDateTime::SetMonth}\label{wxdatetimesetmonth}
+
+\func{wxDateTime\&}{SetMonth}{\param{Month }{month}}
+
+Sets the month without changing other date components.
+
+\membersection{wxDateTime::SetDay}\label{wxdatetimesetday}
+
+\func{wxDateTime\&}{SetDay}{\param{wxDateTime\_t }{day}}
+
+Sets the day without changing other date components.
+
+\membersection{wxDateTime::SetHour}\label{wxdatetimesethour}
+
+\func{wxDateTime\&}{SetHour}{\param{wxDateTime\_t }{hour}}
+
+Sets the hour without changing other date components.
+
+\membersection{wxDateTime::SetMinute}\label{wxdatetimesetminute}
+
+\func{wxDateTime\&}{SetMinute}{\param{wxDateTime\_t }{minute}}
+
+Sets the minute without changing other date components.
+
+\membersection{wxDateTime::SetSecond}\label{wxdatetimesetsecond}
+
+\func{wxDateTime\&}{SetSecond}{\param{wxDateTime\_t }{second}}
+
+Sets the second without changing other date components.
+
+\membersection{wxDateTime::SetMillisecond}\label{wxdatetimesetmillisecond}
+
+\func{wxDateTime\&}{SetMillisecond}{\param{wxDateTime\_t }{millisecond}}
+
+Sets the millisecond without changing other date components.
+
+\membersection{wxDateTime::operator$=$}\label{wxdatetimeoperatoreqtimet}
+
+\func{wxDateTime\&}{operator}{\param{time\_t }{timet}}
+
+Same as \helpref{Set}{wxdatetimesettimet}.
+
+\membersection{wxDateTime::operator$=$}\label{wxdatetimeoperatoreqtm}
+
+\func{wxDateTime\&}{operator}{\param{const struct tm\& }{tm}}
+
+Same as \helpref{Set}{wxdatetimesettm}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%% accessors %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\membersection{wxDateTime::IsValid}\label{wxdatetimeisvalid}
+
+\constfunc{bool}{IsValid}{\void}
+
+Returns {\tt TRUE} if the object represents a valid time moment.
+
+\membersection{wxDateTime::GetTm}\label{wxdatetimegettm}
+
+\constfunc{Tm}{GetTm}{\param{const TimeZone\& }{tz = Local}}
+
+Returns broken down representation of the date and time.
+
+\membersection{wxDateTime::GetTicks}\label{wxdatetimegetticks}
+
+\constfunc{time\_t}{GetTicks}{\void}
+
+Returns the number of seconds since Jan 1, 1970. An assert failure will occur
+if the date is not in the range covered by {\tt time\_t} type.
+
+\membersection{wxDateTime::GetYear}\label{wxdatetimegetyear}
+
+\constfunc{int}{GetYear}{\param{const TimeZone\& }{tz = Local}}
+
+Returns the year in the given timezone (local one by default).
+
+\membersection{wxDateTime::GetMonth}\label{wxdatetimegetmonth}
+
+\constfunc{Month}{GetMonth}{\param{const TimeZone\& }{tz = Local}}
+
+Returns the month in the given timezone (local one by default).
+
+\membersection{wxDateTime::GetDay}\label{wxdatetimegetday}
+
+\constfunc{wxDateTime\_t}{GetDay}{\param{const TimeZone\& }{tz = Local}}
+
+Returns the day in the given timezone (local one by default).
+
+\membersection{wxDateTime::GetWeekDay}\label{wxdatetimegetweekday}
+
+\constfunc{WeekDay}{GetWeekDay}{\param{const TimeZone\& }{tz = Local}}
+
+Returns the week day in the given timezone (local one by default).
+
+\membersection{wxDateTime::GetHour}\label{wxdatetimegethour}
+
+\constfunc{wxDateTime\_t}{GetHour}{\param{const TimeZone\& }{tz = Local}}
+
+Returns the hour in the given timezone (local one by default).
+
+\membersection{wxDateTime::GetMinute}\label{wxdatetimegetminute}
+
+\constfunc{wxDateTime\_t}{GetMinute}{\param{const TimeZone\& }{tz = Local}}
+
+Returns the minute in the given timezone (local one by default).
+
+\membersection{wxDateTime::GetSecond}\label{wxdatetimegetsecond}
+
+\constfunc{wxDateTime\_t}{GetSecond}{\param{const TimeZone\& }{tz = Local}}
+
+Returns the seconds in the given timezone (local one by default).
+
+\membersection{wxDateTime::GetMillisecond}\label{wxdatetimegetmillisecond}
+
+\constfunc{wxDateTime\_t}{GetMillisecond}{\param{const TimeZone\& }{tz = Local}}
+
+Returns the milliseconds in the given timezone (local one by default).
+
+\membersection{wxDateTime::GetDayOfYear}\label{wxdatetimegetdayofyear}
+
+\constfunc{wxDateTime\_t}{GetDayOfYear}{\param{const TimeZone\& }{tz = Local}}
+
+Returns the day of the year (in $1\ldots366$ range) in the given timezone
+(local one by default).
+
+\membersection{wxDateTime::GetWeekOfYear}\label{wxdatetimegetweekofyear}
+
+\constfunc{wxDateTime\_t}{GetWeekOfYear}{\param{WeekFlags }{flags = Monday\_First}, \param{const TimeZone\& }{tz = Local}}
+
+Returns the number of the week of the year this date is in. The first week of
+the year is, according to international standards, the one containing Jan 4.
+The week number is in $1\ldots53$ range ($52$ for non leap years).
+
+The function depends on the \helpref{week start}{wxdatetime} convention
+specified by the {\it flags} argument.
+
+\membersection{wxDateTime::GetWeekOfMonth}\label{wxdatetimegetweekofmonth}
+
+\constfunc{wxDateTime\_t}{GetWeekOfMonth}{\param{WeekFlags }{flags = Monday\_First}, \param{const TimeZone\& }{tz = Local}}
+
+Returns the ordinal number of the week in the month (in $1\ldots5$  range).
+
+As \helpref{GetWeekOfYear}{wxdatetimegetweekofyear}, this function supports
+both conventions for the week start. See the description of these
+\helpref{week start}{wxdatetime} conventions.
+
+\membersection{wxDateTime::IsWorkDay}\label{wxdatetimeisworkday}
+
+\constfunc{bool}{IsWorkDay}{\param{Country }{country = Country\_Default}}
+
+Returns {\tt TRUE} is this day is not a holiday in the given country.
+
+\membersection{wxDateTime::IsGregorianDate}\label{wxdatetimeisgregoriandate}
+
+\constfunc{bool}{IsGregorianDate}{\param{GregorianAdoption }{country = Gr\_Standard}}
+
+Returns {\tt TRUE} if the given date os later than the date of adoption of the
+Gregorian calendar in the given country (and hence the Gregorian calendar
+calculations make sense for it).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%% comparison %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\membersection{wxDateTime::IsEqualTo}\label{wxdatetimeisequalto}
+
+\constfunc{bool}{IsEqualTo}{\param{const wxDateTime& }{datetime}}
+
+Returns {\tt TRUE} if the two dates are strictly identical.
+
+\membersection{wxDateTime::IsEarlierThan}\label{wxdatetimeisearlierthan}
+
+\constfunc{bool}{IsEarlierThan}{\param{const wxDateTime& }{datetime}}
+
+Returns {\tt TRUE} if this date precedes the given one.
+
+\membersection{wxDateTime::IsLaterThan}\label{wxdatetimeislaterthan}
+
+\constfunc{bool}{IsLaterThan}{\param{const wxDateTime& }{datetime}}
+
+Returns {\tt TRUE} if this date is later than the given one.
+
+\membersection{wxDateTime::IsStrictlyBetween}\label{wxdatetimeisstrictlybetween}
+
+\constfunc{bool}{IsStrictlyBetween}{\param{const wxDateTime& }{t1}, \param{const wxDateTime& }{t2}}
+
+Returns {\tt TRUE} if this date lies strictly between the two others,
+
+\wxheading{See also}
+
+\helpref{IsBetween}{wxdatetimeisbetween}
+
+\membersection{wxDateTime::IsBetween}\label{wxdatetimeisbetween}
+
+\constfunc{bool}{IsBetween}{\param{const wxDateTime& }{t1}, \param{const wxDateTime& }{t2}}
+
+Returns {\tt TRUE} if \helpref{IsStrictlyBetween}{wxdatetimeisstrictlybetween}
+is {\tt TRUE} or if the date is equal to one of the limi values.
+
+\wxheading{See also}
+
+\helpref{IsStrictlyBetween}{wxdatetimeisstrictlybetween}
+
+\membersection{wxDateTime::IsSameDate}\label{wxdatetimeissamedate}
+
+\constfunc{bool}{IsSameDate}{\param{const wxDateTime& }{dt}}
+
+Returns {\tt TRUE} if the date is the same without comparing the time parts.
+
+\membersection{wxDateTime::IsSameTime}\label{wxdatetimeissametime}
+
+\constfunc{bool}{IsSameTime}{\param{const wxDateTime& }{dt}}
+
+Returns {\tt TRUE} if the time is the same (although dates may differ).
+
+\membersection{wxDateTime::IsEqualUpTo}\label{wxdatetimeisequalupto}
+
+\constfunc{bool}{IsEqualUpTo}{\param{const wxDateTime\& }{dt}, \param{const wxTimeSpan\& }{ts}}
+
+Returns {\tt TRUE} if the date is equal to another one up to the given time
+interval, i.e. if the absolute difference between the two dates is less than
+this interval.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%% arithmetics %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\membersection{wxDateTime::Add}\label{wxdatetimeaddts}
+
+\constfunc{wxDateTime}{Add}{\param{const wxTimeSpan\& }{diff}}
+
+\func{wxDateTime\&}{Add}{\param{const wxTimeSpan\& }{diff}}
+
+\func{wxDateTime\&}{operator$+=$}{\param{const wxTimeSpan\& }{diff}}
+
+Adds the given time span to this object.
+
+\pythonnote{This method is named {\tt AddTS} in wxPython.}
+
+\membersection{wxDateTime::Subtract}\label{wxdatetimesubtractts}
+
+\constfunc{wxDateTime}{Subtract}{\param{const wxTimeSpan\& }{diff}}
+
+\func{wxDateTime\&}{Subtract}{\param{const wxTimeSpan\& }{diff}}
+
+\func{wxDateTime\&}{operator$-=$}{\param{const wxTimeSpan\& }{diff}}
+
+Subtracts the given time span from this object.
+
+\pythonnote{This method is named {\tt SubtractTS} in wxPython.}
+
+\membersection{wxDateTime::Add}\label{wxdatetimeaddds}
+
+\constfunc{wxDateTime}{Add}{\param{const wxDateSpan\& }{diff}}
+
+\func{wxDateTime\&}{Add}{\param{const wxDateSpan\& }{diff}}
+
+\func{wxDateTime\&}{operator$+=$}{\param{const wxDateSpan\& }{diff}}
+
+Adds the given date span to this object.
+
+\pythonnote{This method is named {\tt AddDS} in wxPython.}
+
+\membersection{wxDateTime::Subtract}\label{wxdatetimesubtractds}
+
+\constfunc{wxDateTime}{Subtract}{\param{const wxDateSpan\& }{diff}}
+
+\func{wxDateTime\&}{Subtract}{\param{const wxDateSpan\& }{diff}}
+
+\func{wxDateTime\&}{operator$-=$}{\param{const wxDateSpan\& }{diff}}
+
+Subtracts the given date span from this object.
+
+\pythonnote{This method is named {\tt SubtractDS} in wxPython.}
+
+\membersection{wxDateTime::Subtract}\label{wxdatetimesubtractdt}
+
+\constfunc{wxTimeSpan}{Subtract}{\param{const wxDateTime\& }{dt}}
+
+Subtracts another date from this one and returns the difference between them
+as wxTimeSpan.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%% parsing/formatting %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\membersection{wxDateTime::ParseRfc822Date}\label{wxdatetimeparserfc822date}
+
+\func{const wxChar *}{ParseRfc822Date}{\param{const wxChar* }{date}}
+
+Parses the string {\it date} looking for a date formatted according to the RFC
+822 in it. The exact description of this format may, of course, be found in
+the RFC (section $5$), but, briefly, this is the format used in the headers of
+Internet email messages and one of the most common strings expressing date in
+this format may be something like {\tt "Sat, 18 Dec 1999 00:48:30 +0100"}.
+
+Returns {\tt NULL} if the conversion failed, otherwise return the pointer to
+the character immediately following the part of the string which could be
+parsed. If the entire string contains only the date in RFC 822 format,
+the returned pointer will be pointing to a {\tt NUL} character.
+
+This function is intenionally strict, it will return an error for any string
+which is not RFC 822 compliant. If you need to parse date formatted in more
+free ways, you should use \helpref{ParseDateTime}{wxdatetimeparsedatetime} or
+\helpref{ParseDate}{wxdatetimeparsedate} instead.
+
+\membersection{wxDateTime::ParseFormat}\label{wxdatetimeparseformat}
+
+\func{const wxChar *}{ParseFormat}{\param{const wxChar *}{date}, \param{const wxChar *}{format = "\%c"}, \param{const wxDateTime\& }{dateDef = wxDefaultDateTime}}
+
+This function parses the string {\it date} according to the given
+{\it format}. The system {\tt strptime(3)} function is used whenever available,
+but even if it is not, this function is still implemented (although support
+for locale-dependent format specificators such as {\tt "\%c"}, {\tt "\%x"} or
+{\tt "\%X"} may be not perfect). This function does handle the month and
+weekday names in the current locale on all platforms, however.
+
+Please the description of ANSI C function {\tt strftime(3)} for the syntax of
+the format string.
+
+The {\it dateDef} parameter is used to fill in the fields which could not be
+determined from the format string. For example, if the format is {\tt "\%d"}
+(the day of the month), the month and the year are taken from {\it dateDef}.
+If it is not specified, \helpref{Today}{wxdatetimetoday} is used as the
+default date.
+
+Returns {\tt NULL} if the conversion failed, otherwise return the pointer to
+the character which stopped the scan.
+
+\membersection{wxDateTime::ParseDateTime}\label{wxdatetimeparsedatetime}
+
+\func{const wxChar *}{ParseDateTime}{\param{const wxChar *}{datetime}}
+
+Parses the string {\it datetime} containing the date and time in free format.
+This function tries as hard as it can to interpret the given string as date
+and time. Unlike \helpref{ParseRfc822Date}{wxdatetimeparserfc822date}, it
+will accept anything that may be accepted and will only reject strings which
+can not be parsed in any way at all.
+
+Returns {\tt NULL} if the conversion failed, otherwise return the pointer to
+the character which stopped the scan.
+
+\membersection{wxDateTime::ParseDate}\label{wxdatetimeparsedate}
+
+\func{const wxChar *}{ParseDate}{\param{const wxChar *}{date}}
+
+This function is like \helpref{ParseDateTime}{wxdatetimeparsedatetime}, but it
+only allows the date to be specified. It is thus flexible then
+\helpref{ParseDateTime}{wxdatetimeparsedatetime}, but also has less chances to
+misinterpret the user input.
+
+Returns {\tt NULL} if the conversion failed, otherwise return the pointer to
+the character which stopped the scan.
+
+\membersection{wxDateTime::ParseTime}\label{wxdatetimeparsetime}
+
+\func{const wxChar *}{ParseTime}{\param{const wxChar *}{time}}
+
+This functions is like \helpref{ParseDateTime}{wxdatetimeparsedatetime}, but
+only allows the time to be specified in the input string.
+
+Returns {\tt NULL} if the conversion failed, otherwise return the pointer to
+the character which stopped the scan.
+
+\membersection{wxDateTime::Format}\label{wxdatetimeformat}
+
+\constfunc{wxString }{Format}{\param{const wxChar *}{format = "\%c"}, \param{const TimeZone\& }{tz = Local}}
+
+This function does the same as the standard ANSI C {\tt strftime(3)} function.
+Please see its description for the meaning of {\it format} parameter.
+
+It also accepts a few wxWindows-specific extensions: you can optionally specify
+the width of the field to follow using {\tt printf(3)}-like syntax and the
+format specificator {\tt \%l} can be used to get the number of milliseconds.
+
+\wxheading{See also}
+
+\helpref{ParseFormat}{wxdatetimeparseformat}
+
+\membersection{wxDateTime::FormatDate}\label{wxdatetimeformatdate}
+
+\constfunc{wxString }{FormatDate}{\void}
+
+Identical to calling \helpref{Format()}{wxdatetimeformat} with {\tt "\%x"}
+argument (which means `preferred date representation for the current locale').
+
+\membersection{wxDateTime::FormatTime}\label{wxdatetimeformattime}
+
+\constfunc{wxString }{FormatTime}{\void}
+
+Identical to calling \helpref{Format()}{wxdatetimeformat} with {\tt "\%X"}
+argument (which means `preferred time representation for the current locale').
+
+\membersection{wxDateTime::FormatISODate}\label{wxdatetimeformatisodate}
+
+\constfunc{wxString }{FormatISODate}{\void}
+
+This function returns the date representation in the ISO 8601 format
+(YYYY-MM-DD).
+
+\membersection{wxDateTime::FormatISOTime}\label{wxdatetimeformatisotime}
+
+\constfunc{wxString }{FormatISOTime}{\void}
+
+This function returns the time representation in the ISO 8601 format
+(HH:MM:SS).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%% calendar calculations %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\membersection{wxDateTime::SetToWeekDayInSameWeek}\label{wxdatetimesettoweekdayinsameweek}
+
+\func{wxDateTime\&}{SetToWeekDayInSameWeek}{\param{WeekDay }{weekday}}
+
+Adjusts the date so that it will still lie in the same week as before, but its
+week day will be the given one.
+
+Returns the reference to the modified object itself.
+
+\membersection{wxDateTime::GetWeekDayInSameWeek}\label{wxdatetimegetweekdayinsameweek}
+
+\constfunc{wxDateTime}{GetWeekDayInSameWeek}{\param{WeekDay }{weekday}}
+
+Returns the copy of this object to which
+\helpref{SetToWeekDayInSameWeek}{wxdatetimesettoweekdayinsameweek} was
+applied.
+
+\membersection{wxDateTime::SetToNextWeekDay}\label{wxdatetimesettonextweekday}
+
+\func{wxDateTime\&}{SetToNextWeekDay}{\param{WeekDay }{weekday}}
+
+Sets the date so that it will be the first {\it weekday} following the current
+date.
+
+Returns the reference to the modified object itself.
+
+\membersection{wxDateTime::GetNextWeekDay}\label{wxdatetimegetnextweekday}
+
+\constfunc{wxDateTime}{GetNextWeekDay}{\param{WeekDay }{weekday}}
+
+Returns the copy of this object to which
+\helpref{SetToNextWeekDay}{wxdatetimesettonextweekday} was applied.
+
+\membersection{wxDateTime::SetToPrevWeekDay}\label{wxdatetimesettoprevweekday}
+
+\func{wxDateTime\&}{SetToPrevWeekDay}{\param{WeekDay }{weekday}}
+
+Sets the date so that it will be the last {\it weekday} before the current
+date.
+
+Returns the reference to the modified object itself.
+
+\membersection{wxDateTime::GetPrevWeekDay}\label{wxdatetimegetprevweekday}
+
+\constfunc{wxDateTime}{GetPrevWeekDay}{\param{WeekDay }{weekday}}
+
+Returns the copy of this object to which
+\helpref{SetToPrevWeekDay}{wxdatetimesettoprevweekday} was applied.
+
+\membersection{wxDateTime::SetToWeekDay}\label{wxdatetimesettoweekday}
+
+\func{bool}{SetToWeekDay}{\param{WeekDay }{weekday}, \param{int }{n = 1}, \param{Month }{month = Inv\_Month}, \param{int }{year = Inv\_Year}}
+
+Sets the date to the {\it n}-th {\it weekday} in the given month of the given
+year (the current month and year are used by default). The parameter {\it n}
+may be either opsitive (counting from the beginning of the month) or negative
+(counting from the end of it).
+
+For example, {\tt SetToWeekDay(2, wxDateTime::Wed)} will set the date to the
+second Wednesday in the current month and
+{\tt SetToWeekDay(-1, wxDateTime::Sun)} - to the last Sunday in it.
+
+Returns {\tt TRUE} if the date was modified successfully, {\tt FALSE}
+otherwise meaning that the specified date doesn't exist.
+
+\membersection{wxDateTime::GetWeekDay}\label{wxdatetimegetweekday2}
+
+\constfunc{wxDateTime}{GetWeekDay}{\param{WeekDay }{weekday}, \param{int }{n = 1}, \param{Month }{month = Inv\_Month}, \param{int }{year = Inv\_Year}}
+
+Returns the copy of this object to which
+\helpref{SetToWeekDay}{wxdatetimesettoweekday} was applied.
+
+\membersection{wxDateTime::SetToLastWeekDay}\label{wxdatetimesettolastweekday}
+
+\func{bool}{SetToLastWeekDay}{\param{WeekDay }{weekday}, \param{Month }{month = Inv\_Month}, \param{int }{year = Inv\_Year}}
+
+The effect of calling this function is the same as of calling
+{\tt SetToWeekDay(-1, weekday, month, year)}. The date will be set to the last
+{\it weekday} in the given month and year (the current ones by default).
+
+Always returns {\tt TRUE}.
+
+\membersection{wxDateTime::GetLastWeekDay}\label{wxdatetimegetlastweekday}
+
+\func{wxDateTime}{GetLastWeekDay}{\param{WeekDay }{weekday}, \param{Month }{month = Inv\_Month}, \param{int }{year = Inv\_Year}}
+
+Returns the copy of this object to which
+\helpref{SetToLastWeekDay}{wxdatetimesettolastweekday} was applied.
+
+\membersection{wxDateTime::SetToTheWeek}\label{wxdatetimesettotheweek}
+
+\func{bool}{SetToTheWeek}{\param{wxDateTime\_t }{numWeek}, \param{WeekDay }{weekday = Mon}}
+
+Set the date to the given {\it weekday} in the week with given number
+{\it numWeek}. The number should be in range $1\ldots53$ and {\tt FALSE} will
+be returned if the specified date doesn't exist. {\tt TRUE} is returned if the
+date was changed successfully.
+
+\membersection{wxDateTime::GetWeek}\label{wxdatetimegetweek}
+
+\constfunc{wxDateTime}{GetWeek}{\param{wxDateTime\_t }{numWeek}, \param{WeekDay }{weekday = Mon}}
+
+Returns the copy of this object to which
+\helpref{SetToTheWeek}{wxdatetimesettotheweek} was applied.
+
+\membersection{wxDateTime::SetToLastMonthDay}\label{wxdatetimesettolastmonthday}
+
+\func{wxDateTime\&}{SetToLastMonthDay}{\param{Month }{month = Inv\_Month}, \param{int }{year = Inv\_Year}}
+
+Sets the date to the last day in the specified month (the current one by
+default).
+
+Returns the reference to the modified object itself.
+
+\membersection{wxDateTime::GetLastMonthDay}\label{wxdatetimegetlastmonthday}
+
+\constfunc{wxDateTime}{GetLastMonthDay}{\param{Month }{month = Inv\_Month}, \param{int }{year = Inv\_Year}}
+
+Returns the copy of this object to which
+\helpref{SetToLastMonthDay}{wxdatetimesettolastmonthday} was applied.
+
+\membersection{wxDateTime::SetToYearDay}\label{wxdatetimesettoyearday}
+
+\func{wxDateTime\&}{SetToYearDay}{\param{wxDateTime\_t }{yday}}
+
+Sets the date to the day number {\it yday} in the same year (i.e., unlike the
+other functions, this one does not use the current year). The day number
+should be in the range $1\ldots366$ for the leap years and $1\ldots365$ for
+the other ones.
+
+Returns the reference to the modified object itself.
+
+\membersection{wxDateTime::GetYearDay}\label{wxdatetimegetyearday}
+
+\constfunc{wxDateTime}{GetYearDay}{\param{wxDateTime\_t }{yday}}
+
+Returns the copy of this object to which
+\helpref{SetToYearDay}{wxdatetimesettoyearday} was applied.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%% astronomical functions %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\membersection{wxDateTime::GetJulianDayNumber}\label{wxdatetimegetjuliandaynumber}
+
+\constfunc{double}{GetJulianDayNumber}{\void}
+
+Returns the \helpref{JDN}{wxdatetimesetjdn} corresponding to this date. Beware
+of rounding errors!
+
+\wxheading{See also}
+
+\helpref{GetModifiedJulianDayNumber}{wxdatetimegetmodifiedjuliandaynumber}
+
+\membersection{wxDateTime::GetJDN}\label{wxdatetimegetjdn}
+
+\constfunc{double}{GetJDN}{\void}
+
+Synonym for \helpref{GetJulianDayNumber}{wxdatetimegetjuliandaynumber}.
+
+\membersection{wxDateTime::GetModifiedJulianDayNumber}\label{wxdatetimegetmodifiedjuliandaynumber}
+
+\constfunc{double}{GetModifiedJulianDayNumber}{\void}
+
+Returns the {\it Modified Julian Day Number} (MJD) which is, by definition,
+equal to $JDN - 2400000.5$. The MJDs are simpler to work with as the integral
+MJDs correspond to midnights of the dates in the Gregorian calendar and not th
+noons like JDN. The MJD $0$ is Nov 17, 1858.
+
+\membersection{wxDateTime::GetMJD}\label{wxdatetimegetmjd}
+
+\constfunc{double}{GetMJD}{\void}
+
+Synonym for \helpref{GetModifiedJulianDayNumber}{wxdatetimegetmodifiedjuliandaynumber}.
+
+\membersection{wxDateTime::GetRataDie}\label{wxdatetimegetratadie}
+
+\constfunc{double}{GetRataDie}{\void}
+
+Return the {\it Rata Die number} of this date.
+
+By definition, the Rata Die number is a date specified as the number of days
+relative to a base date of December 31 of the year 0. Thus January 1 of the
+year 1 is Rata Die day 1.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%% timezone and DST %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\membersection{wxDateTime::ToTimezone}\label{wxdatetimetotimezone}
+
+\constfunc{wxDateTime}{ToTimezone}{\param{const TimeZone\& }{tz}, \param{bool }{noDST = FALSE}}
+
+Transform the date to the given time zone. If {\it noDST} is {\tt TRUE}, no
+DST adjustments will be made.
+
+Returns the date in the new time zone.
+
+\membersection{wxDateTime::MakeTimezone}\label{wxdatetimemaketimezone}
+
+\func{wxDateTime\&}{MakeTimezone}{\param{const TimeZone\& }{tz}, \param{bool }{noDST = FALSE}}
+
+Modifies the object in place to represent the date in another time zone. If
+{\it noDST} is {\tt TRUE}, no DST adjustments will be made.
+
+\membersection{wxDateTime::ToGMT}\label{wxdatetimetogmt}
+
+\constfunc{wxDateTime}{ToGMT}{\param{bool }{noDST = FALSE}}
+
+This is the same as calling \helpref{ToTimezone}{wxdatetimetotimezone} with
+the argument {\tt GMT0}.
+
+\membersection{wxDateTime::MakeGMT}\label{wxdatetimemakegmt}
+
+\func{wxDateTime\&}{MakeGMT}{\param{bool }{noDST = FALSE}}
+
+This is the same as calling \helpref{MakeTimezone}{wxdatetimemaketimezone} with
+the argument {\tt GMT0}.
+
+\membersection{wxDateTime::IsDST}\label{wxdatetimeisdst}
+
+\constfunc{int}{IsDST}{\param{Country }{country = Country\_Default}}
+
+Returns {\tt TRUE} if the DST is applied for this date in the given country.
+
+\wxheading{See also}
+
+\helpref{GetBeginDST}{wxdatetimegetbegindst} and
+\helpref{GetEndDST}{wxdatetimegetenddst}
+
+\section{\class{wxDateTimeHolidayAuthority}}\label{wxdatetimeholidayauthority}
+
+TODO
+
+\section{\class{wxDateTimeWorkDays}}\label{wxdatetimeworkdays}
+
+TODO
 

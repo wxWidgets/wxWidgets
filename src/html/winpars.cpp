@@ -15,7 +15,7 @@
 #include "wx/wxprec.h"
 
 #include "wx/defs.h"
-#if wxUSE_HTML
+#if wxUSE_HTML && wxUSE_STREAMS
 
 #ifdef __BORDLANDC__
 #pragma hdrstop
@@ -103,6 +103,13 @@ void wxHtmlWinParser::AddModule(wxHtmlTagsModule *module)
 
 
 
+void wxHtmlWinParser::RemoveModule(wxHtmlTagsModule *module)
+{
+    m_Modules.DeleteObject(module);
+}
+
+
+
 void wxHtmlWinParser::SetFonts(wxString normal_face, wxString fixed_face, const int *sizes)
 {
     int i, j, k, l, m;
@@ -178,14 +185,24 @@ wxObject* wxHtmlWinParser::GetProduct()
 }
 
 
+static char *gs_htmlBuf = NULL;
+static int gs_htmlBufLen = 0;
 
 void wxHtmlWinParser::AddText(const char* txt)
 {
     wxHtmlCell *c;
     int i = 0, x, lng = strlen(txt);
-    char temp[wxHTML_BUFLEN];
+    char *temp;
     register char d;
     int templen = 0;
+    
+    if (lng+1 > gs_htmlBufLen)
+    {
+        gs_htmlBufLen = wxMax(lng+1, wxHTML_BUFLEN);
+        delete gs_htmlBuf;
+        gs_htmlBuf = new char[gs_htmlBufLen];
+    }
+    temp = gs_htmlBuf;
 
     if (m_tmpLastWasSpace) {
         while ((i < lng) && ((txt[i] == '\n') || (txt[i] == '\r') || (txt[i] == ' ') || (txt[i] == '\t'))) i++;
@@ -355,7 +372,7 @@ void wxHtmlWinParser::SetInputEncoding(wxFontEncoding enc)
                            wxCONVERT_SUBSTITUTE))  
     { // total failture :-(
         wxLogError(_("Failed to display HTML document in %s encoding"), 
-	           wxFontMapper::GetEncodingName(enc).mb_str());
+	           wxFontMapper::GetEncodingName(enc).c_str());
         m_InputEnc = m_OutputEnc = wxFONTENCODING_DEFAULT;
         delete m_EncConv;
         m_EncConv = NULL;
@@ -392,6 +409,8 @@ bool wxHtmlTagsModule::OnInit()
 
 void wxHtmlTagsModule::OnExit()
 {
+    wxHtmlWinParser::RemoveModule(this);
+    delete gs_htmlBuf;
 }
 #endif
 

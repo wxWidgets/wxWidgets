@@ -70,6 +70,32 @@ static const int MARGIN_BETWEEN = 1;
 // ============================================================================
 
 // ----------------------------------------------------------------------------
+// wnd proc for the buddy text ctrl
+// ----------------------------------------------------------------------------
+
+LRESULT APIENTRY _EXPORT wxBuddyTextWndProc(HWND hwnd,
+                                            UINT message,
+                                            WPARAM wParam,
+                                            LPARAM lParam)
+{
+    wxSpinCtrl *spin = (wxSpinCtrl *)::GetWindowLong(hwnd, GWL_USERDATA);
+
+    // forward some messages (the key ones only so far) to the spin ctrl
+    switch ( message )
+    {
+        case WM_CHAR:
+        case WM_DEADCHAR:
+        case WM_KEYUP:
+        case WM_KEYDOWN:
+            spin->MSWWindowProc(message, wParam, lParam);
+            break;
+    }
+
+    return ::CallWindowProc(CASTWNDPROC spin->GetBuddyWndProc(),
+                            hwnd, message, wParam, lParam);
+}
+
+// ----------------------------------------------------------------------------
 // construction
 // ----------------------------------------------------------------------------
 
@@ -122,7 +148,7 @@ bool wxSpinCtrl::Create(wxWindow *parent,
                      WS_EX_CLIENTEDGE,       // sunken border
                      _T("EDIT"),             // window class
                      NULL,                   // no window title
-                     WS_CHILD | WS_BORDER,   // style (will be shown later)
+                     WS_CHILD | WS_BORDER /* | WS_CLIPSIBLINGS */,   // style (will be shown later)
                      pos.x, pos.y,           // position
                      0, 0,                   // size (will be set later)
                      GetHwndOf(parent),      // parent
@@ -133,10 +159,15 @@ bool wxSpinCtrl::Create(wxWindow *parent,
 
     if ( !m_hwndBuddy )
     {
-        wxLogLastError("CreateWindow(buddy text window)");
+        wxLogLastError(wxT("CreateWindow(buddy text window)"));
 
         return FALSE;
     }
+
+    // subclass the text ctrl to be able to intercept some events
+    m_oldBuddyWndProc = (WXFARPROC)::GetWindowLong((HWND)m_hwndBuddy, GWL_WNDPROC);
+    ::SetWindowLong((HWND)m_hwndBuddy, GWL_USERDATA, (LONG)this);
+    ::SetWindowLong((HWND)m_hwndBuddy, GWL_WNDPROC, (LONG)wxBuddyTextWndProc);
 
     // should have the same font as the other controls
     SetFont(GetParent()->GetFont());
@@ -167,6 +198,13 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     return TRUE;
 }
 
+wxSpinCtrl::~wxSpinCtrl()
+{
+    // destroy the buddy window because this pointer which wxBuddyTextWndProc
+    // uses will not soon be valid any more
+    ::DestroyWindow((HWND)m_hwndBuddy);
+}
+
 // ----------------------------------------------------------------------------
 // wxTextCtrl-like methods
 // ----------------------------------------------------------------------------
@@ -175,7 +213,7 @@ void wxSpinCtrl::SetValue(const wxString& text)
 {
     if ( !::SetWindowText((HWND)m_hwndBuddy, text.c_str()) )
     {
-        wxLogLastError("SetWindowText(buddy)");
+        wxLogLastError(wxT("SetWindowText(buddy)"));
     }
 }
 
@@ -288,14 +326,39 @@ void wxSpinCtrl::DoMoveWindow(int x, int y, int width, int height)
 
     if ( !::MoveWindow((HWND)m_hwndBuddy, x, y, widthText, height, TRUE) )
     {
-        wxLogLastError("MoveWindow(buddy)");
+        wxLogLastError(wxT("MoveWindow(buddy)"));
     }
 
     x += widthText + MARGIN_BETWEEN;
     if ( !::MoveWindow(GetHwnd(), x, y, widthBtn, height, TRUE) )
     {
-        wxLogLastError("MoveWindow");
+        wxLogLastError(wxT("MoveWindow"));
     }
+}
+
+// get total size of the control
+void wxSpinCtrl::DoGetSize(int *x, int *y) const
+{
+    RECT spinrect, textrect, ctrlrect;
+    GetWindowRect(GetHwnd(), &spinrect);
+    GetWindowRect((HWND)m_hwndBuddy, &textrect);
+    UnionRect(&ctrlrect,&textrect, &spinrect);
+
+    if ( x )
+        *x = ctrlrect.right - ctrlrect.left;
+    if ( y )
+        *y = ctrlrect.bottom - ctrlrect.top;
+}
+
+void wxSpinCtrl::DoGetPosition(int *x, int *y) const
+{
+    // hack: pretend that our HWND is the text control just for a moment
+    WXHWND hWnd = GetHWND();
+    wxConstCast(this, wxSpinCtrl)->m_hWnd = m_hwndBuddy;
+
+    wxSpinButton::DoGetPosition(x, y);
+
+    wxConstCast(this, wxSpinCtrl)->m_hWnd = hWnd;
 }
 
 #endif // __WIN95__

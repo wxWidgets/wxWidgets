@@ -1,7 +1,13 @@
 \section{\class{wxSpinButton}}\label{wxspinbutton}
 
-A wxSpinButton has two small up and down (or left and right) arrow buttons. It is often
-used next to a text control for increment and decrementing a value.
+A wxSpinButton has two small up and down (or left and right) arrow buttons. It
+is often used next to a text control for increment and decrementing a value.
+Portable programs should try to use \helpref{wxSpinCtrl}{wxspinctrl} instead
+as wxSpinButton is not implemented for all platforms (Win32 and GTK only
+currently).
+
+{\bf NB:} the range supported by this control (and wxSpinCtrl) depends on the
+platform but is at least {\tt SHRT\_MIN} to {\tt SHRT\_MAX}.
 
 \wxheading{Derived from}
 
@@ -9,6 +15,10 @@ used next to a text control for increment and decrementing a value.
 \helpref{wxWindow}{wxwindow}\\
 \helpref{wxEvtHandler}{wxevthandler}\\
 \helpref{wxObject}{wxobject}
+
+\wxheading{See also}
+
+\helpref{wxSpinCtrl}{wxspinctrl} 
 
 \wxheading{Include files}
 
@@ -18,7 +28,7 @@ used next to a text control for increment and decrementing a value.
 
 \twocolwidtha{5cm}
 \begin{twocollist}\itemsep=0pt
-\twocolitem{\windowstyle{wxSP\_HORIZONTAL}}{Specifies a horizontal spin button.}
+\twocolitem{\windowstyle{wxSP\_HORIZONTAL}}{Specifies a horizontal spin button (note that this style is not supported in wxGTK).}
 \twocolitem{\windowstyle{wxSP\_VERTICAL}}{Specifies a vertical spin button.}
 \twocolitem{\windowstyle{wxSP\_ARROW\_KEYS}}{The user can use arrow keys.}
 \twocolitem{\windowstyle{wxSP\_WRAP}}{The value wraps at the minimum and maximum.}
@@ -28,23 +38,15 @@ See also \helpref{window styles overview}{windowstyles}.
 
 \wxheading{Event handling}
 
-To process input from a spin button, use one of these event handler macros to direct input to member
-functions that take a \helpref{wxScrollEvent}{wxscrollevent} argument:
+To process input from a spin button, use one of these event handler macros to
+direct input to member functions that take a 
+\helpref{wxSpinEvent}{wxspinevent} argument:
 
 \twocolwidtha{7cm}
 \begin{twocollist}
-\twocolitem{{\bf EVT\_SPIN(id, func)}}{Catch all scroll commands.}
-\twocolitem{{\bf EVT\_SPIN\_UP(id, func)}}{Catch up (or left) commands. Win32 only. }
-\twocolitem{{\bf EVT\_SPIN\_DOWN(id, func)}}{Catch down (or right) commands. Win32 only. }
-\twocolitem{{\bf EVT\_COMMAND\_TOP(id, func)}}{Catch a command to put the scroll thumb at the maximum position.}
-\twocolitem{{\bf EVT\_COMMAND\_SCROLL(id, func)}}{Catch all scroll commands.}
-\twocolitem{{\bf EVT\_COMMAND\_TOP(id, func)}}{Catch a command to put the scroll thumb at the maximum position.}
-\twocolitem{{\bf EVT\_COMMAND\_BOTTOM(id, func)}}{Catch a command to put the scroll thumb at the maximum position.}
-\twocolitem{{\bf EVT\_COMMAND\_LINEUP(id, func)}}{Catch a line up command.}
-\twocolitem{{\bf EVT\_COMMAND\_LINEDOWN(id, func)}}{Catch a line down command.}
-\twocolitem{{\bf EVT\_COMMAND\_PAGEUP(id, func)}}{Catch a page up command.}
-\twocolitem{{\bf EVT\_COMMAND\_PAGEDOWN(id, func)}}{Catch a page down command.}
-\twocolitem{{\bf EVT\_COMMAND\_THUMBTRACK(id, func)}}{Catch a thumbtrack command (continuous movement of the scroll thumb).}
+\twocolitem{{\bf EVT\_SPIN(id, func)}}{Generated whenever an arros is pressed.}
+\twocolitem{{\bf EVT\_SPIN\_UP(id, func)}}{Generated when left/up arrow is pressed.}
+\twocolitem{{\bf EVT\_SPIN\_DOWN(id, func)}}{Generated when right/down arrow is pressed.}
 \end{twocollist}%
 
 \wxheading{See also}
@@ -106,7 +108,7 @@ See \helpref{wxSpinButton::wxSpinButton}{wxspinbuttonconstr} for details.
 
 \constfunc{int}{GetMax}{\void}
 
-Returns the maximum permissable value.
+Returns the maximum permissible value.
 
 \wxheading{See also}
 
@@ -116,7 +118,7 @@ Returns the maximum permissable value.
 
 \constfunc{int}{GetMin}{\void}
 
-Returns the minimum permissable value.
+Returns the minimum permissible value.
 
 \wxheading{See also}
 

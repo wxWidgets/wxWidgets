@@ -25,9 +25,9 @@ LIBTARGET=..\..\lib\zlib.lib
 OBJ1=adler32$(O) compress$(O) crc32$(O) gzio$(O) uncompr$(O) deflate$(O) 
 OBJ2=trees$(O) zutil$(O) inflate$(O) infblock$(O) inftrees$(O) infcodes$(O) 
 OBJ3=infutil$(O) inffast$(O)
-OBJP1=adler32$(O)+compress$(O)+crc32$(O)+gzio$(O)+uncompr$(O)+deflate$(O)
-OBJP2=trees$(O)+zutil$(O)+inflate$(O)+infblock$(O)+inftrees$(O)+infcodes$(O)
-OBJP3=infutil$(O)+inffast$(O)
+OBJP1=adler32$(O) +compress$(O) +crc32$(O) +gzio$(O) +uncompr$(O) +deflate$(O)
+OBJP2=trees$(O) +zutil$(O) +inflate$(O) +infblock$(O) +inftrees$(O) +infcodes$(O)
+OBJP3=infutil$(O) +inffast$(O)
 
 # all: test
 
@@ -85,7 +85,7 @@ minigzip.obj: minigzip.c zlib.h zconf.h
 
 # we must cut the command line to fit in the MS/DOS 128 byte limit:
 $(LIBTARGET): $(OBJ1) $(OBJ2) $(OBJ3) 
-	del $(LIBTARGET)
+	if exist $(LIBTARGET) del $(LIBTARGET)
 	$(LIB) $(LIBTARGET) +$(OBJP1)
 	$(LIB) $(LIBTARGET) +$(OBJP2)
 	$(LIB) $(LIBTARGET) +$(OBJP3)

@@ -123,7 +123,7 @@ docmdi.cpp	C
 docview.cpp	C
 dynarray.cpp	C	B
 dynlib.cpp	C	B
-encconv.cpp	C
+encconv.cpp	C	B
 event.cpp	C	B
 extended.c	C	B
 ffile.cpp	C	B
@@ -132,7 +132,7 @@ fileconf.cpp	C	B
 filefn.cpp	C	B
 filesys.cpp	C	B
 fontcmn.cpp	C
-fontmap.cpp	C
+fontmap.cpp	C	B
 framecmn.cpp	C
 fs_inet.cpp	C	B
 fs_zip.cpp	C	B
@@ -253,6 +253,7 @@ gaugemsw.cpp	M	16
 gdiimage.cpp	M
 gdiobj.cpp	M
 glcanvas.cpp	M
+helpchm.cpp	M	32
 helpwin.cpp	M
 icon.cpp	M
 imaglist.cpp	M	32
@@ -349,6 +350,7 @@ frame.cpp	R
 gauge.cpp	R
 gdiobj.cpp	R
 icon.cpp	R
+joystick.cpp	R
 listbox.cpp	R
 main.cpp	R
 mdi.cpp	R
@@ -407,6 +409,7 @@ gauge.cpp	X
 gdiobj.cpp	X
 glcanvas.cpp	X
 icon.cpp	X
+joystick.cpp	X
 listbox.cpp	X
 main.cpp	X
 mdi.cpp	X
@@ -585,7 +588,7 @@ docview.h	W
 dragimag.h	W
 dynarray.h	W	B
 dynlib.h	W	B
-encconv.h	W
+encconv.h	W	B
 event.h	W	B
 expr.h	W
 ffile.h	W	B
@@ -596,10 +599,11 @@ filefn.h	W	B
 filesys.h	W	B
 font.h	W
 fontdlg.h	W
+fontenc.h	W	B
 fontenum.h	W
-fontmap.h	W
+fontmap.h	W	B
 fontdlg.h	W
-fontutil.h	W
+fontutil.h	W	B
 frame.h	W
 fs_inet.h	W	B
 fs_zip.h	W	B
@@ -817,7 +821,6 @@ control.h	F
 cursor.h	F
 dataform.h	F
 dataobj.h	F
-dataobj2.h	F
 dc.h	F
 dcclient.h	F
 dcmemory.h	F
@@ -901,6 +904,7 @@ gaugemsw.h	9
 gdiimage.h	9
 gdiobj.h	9
 glcanvas.h	9
+helpchm.h	9
 helpwin.h	9
 icon.h	9
 imaglist.h	9
@@ -934,6 +938,7 @@ slider.h	9
 slider95.h	9
 slidrmsw.h	9
 spinbutt.h	9
+spinctrl.h	9
 statbmp.h	9
 statbox.h	9
 statbr95.h	9
@@ -976,6 +981,15 @@ xpmhand.h	9
 # watch1.cur	9
 # disable.bmp	9
 # wx.rc	9
+
+automtn.h	9	O
+dataform.h	9	O
+dataobj.h	9	O
+dataobj2.h	9	O
+dropsrc.h	9	O
+droptgt.h	9	O
+oleutils.h	9	O
+uuid.h	9	O
 
 accel.h	2
 dataobj.h	2

@@ -36,9 +36,13 @@
 // Extended styles: for resource usage only
 
 // Use dialog units instead of pixels
-#define wxRESOURCE_DIALOG_UNITS 1
+#define wxRESOURCE_DIALOG_UNITS     0x0001
 // Use default system colour and font
-#define wxRESOURCE_USE_DEFAULTS 2
+#define wxRESOURCE_USE_DEFAULTS     0x0002
+// Old-style vertical label
+#define wxRESOURCE_VERTICAL_LABEL   0x0004
+// Old-style horizontal label
+#define wxRESOURCE_HORIZONTAL_LABEL 0x0008
 
 // Macros to help use dialog units
 #define wxDLG_POINT(x, y, parent, useDlgUnits) (useDlgUnits ? parent->ConvertDialogToPixel(wxPoint(x, y)) : wxPoint(x, y))

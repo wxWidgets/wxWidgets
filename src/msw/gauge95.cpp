@@ -1,16 +1,24 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        gauge95.cpp
+// Name:        src/msw/gauge95.cpp
 // Purpose:     wxGauge95 class
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
 #ifdef __GNUG__
-#pragma implementation "gauge95.h"
+    #pragma implementation "gauge95.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
@@ -21,7 +29,7 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/defs.h"
+    #include "wx/defs.h"
 #endif
 
 #if wxUSE_GAUGE && defined(__WIN95__)
@@ -33,7 +41,36 @@
     #include <commctrl.h>
 #endif
 
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
+// old commctrl.h (< 4.71) don't have those
+#ifndef PBS_SMOOTH
+    #define PBS_SMOOTH 0x01
+#endif
+
+#ifndef PBS_VERTICAL
+    #define PBS_VERTICAL 0x04
+#endif
+
+#ifndef PBM_SETBARCOLOR
+    #define PBM_SETBARCOLOR         (WM_USER+9)
+#endif
+
+#ifndef PBM_SETBKCOLOR
+    #define PBM_SETBKCOLOR          0x2001
+#endif
+
+// ----------------------------------------------------------------------------
+// wxWin macros
+// ----------------------------------------------------------------------------
+
 IMPLEMENT_DYNAMIC_CLASS(wxGauge95, wxControl)
+
+// ============================================================================
+// implementation
+// ============================================================================
 
 bool wxGauge95::Create(wxWindow *parent, wxWindowID id,
            int range,
@@ -52,8 +89,8 @@ bool wxGauge95::Create(wxWindow *parent, wxWindowID id,
   m_rangeMax = range;
   m_gaugePos = 0;
 
-  SetBackgroundColour(parent->GetBackgroundColour()) ;
-  SetForegroundColour(parent->GetForegroundColour()) ;
+  SetBackgroundColour(parent->GetBackgroundColour());
+  SetForegroundColour(parent->GetForegroundColour());
 
   m_windowStyle = style;
 
@@ -67,18 +104,10 @@ bool wxGauge95::Create(wxWindow *parent, wxWindowID id,
   int width = size.x;
   int height = size.y;
 
-  long msFlags = WS_CHILD | WS_VISIBLE;
-
-#ifndef PBS_VERTICAL
-#define PBS_VERTICAL 0x04
-#endif
+  long msFlags = WS_CHILD | WS_VISIBLE /* | WS_CLIPSIBLINGS */;
 
   if (m_windowStyle & wxGA_VERTICAL)
     msFlags |= PBS_VERTICAL;
-
-#ifndef PBS_SMOOTH
-#define PBS_SMOOTH 0x01
-#endif
 
   if (m_windowStyle & wxGA_SMOOTH)
     msFlags |= PBS_SMOOTH;
@@ -130,22 +159,22 @@ void wxGauge95::SetValue(int pos)
   SendMessage((HWND) GetHWND(), PBM_SETPOS, pos, 0);
 }
 
-int wxGauge95::GetShadowWidth(void) const
+int wxGauge95::GetShadowWidth() const
 {
   return 0;
 }
 
-int wxGauge95::GetBezelFace(void) const
+int wxGauge95::GetBezelFace() const
 {
   return 0;
 }
 
-int wxGauge95::GetRange(void) const
+int wxGauge95::GetRange() const
 {
   return m_rangeMax;
 }
 
-int wxGauge95::GetValue(void) const
+int wxGauge95::GetValue() const
 {
   return m_gaugePos;
 }
@@ -155,7 +184,7 @@ bool wxGauge95::SetForegroundColour(const wxColour& col)
     if ( !wxControl::SetForegroundColour(col) )
         return FALSE;
 
-    m_foregroundColour = col ;
+    SendMessage(GetHwnd(), PBM_SETBARCOLOR, 0, (LPARAM)wxColourToRGB(col));
 
     return TRUE;
 }
@@ -165,7 +194,7 @@ bool wxGauge95::SetBackgroundColour(const wxColour& col)
     if ( !wxControl::SetBackgroundColour(col) )
         return FALSE;
 
-    m_backgroundColour = col ;
+    SendMessage(GetHwnd(), PBM_SETBKCOLOR, 0, (LPARAM)wxColourToRGB(col));
 
     return TRUE;
 }

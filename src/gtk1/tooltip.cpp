@@ -21,6 +21,8 @@
 #include "gtk/gtk.h"
 #include "gdk/gdk.h"
 
+extern GdkFont *GtkGetDefaultGuiFont();
+
 //-----------------------------------------------------------------------------
 // global data
 //-----------------------------------------------------------------------------
@@ -72,7 +74,9 @@ void wxToolTip::Apply( wxWindow *win )
 	    
         g_style->fg[GTK_STATE_NORMAL] = ss_fg;
         g_style->bg[GTK_STATE_NORMAL] = ss_bg;
-	
+        gdk_font_unref( g_style->font );
+	    g_style->font = gdk_font_ref( GtkGetDefaultGuiFont() );
+    
         gtk_widget_set_style( ss_tooltips->tip_window, g_style );
 #else
         gtk_tooltips_set_colors( ss_tooltips, &ss_bg, &ss_fg );

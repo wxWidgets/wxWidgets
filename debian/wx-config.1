@@ -8,7 +8,8 @@ wx-config - generate compile time info for wxWindows
 .B wxgtk-config
 .HP
 .B wx-config
-[\-\-version] [\-\-libs] [\-\-cflags] [\-\-cc] [\-\-cxx] [\-\-ld]
+[\-\-version] [\-\-libs] [\-\-gl\-libs] [\-\-cppflags]
+[\-\-cflags] [\-\-cxxflags] [\-\-cc] [\-\-cxx] [\-\-ld]
 [\-\-prefix\fI[=DIR]\fP] [\-\-exec\-prefix\fI[=DIR]\fP]
 .SH DESCRIPTION
 \fIwx-config\fP is a tool to determine the compiler and linker
@@ -35,10 +36,19 @@ include in a bug report.
 ( But of course you already knew that ... )
 .TP 8
 .B  \-\-libs
-Generate linker flags for a \fIwxWindows\fP program.
+Output linker flags for a \fIwxWindows\fP program.
+.TP 8
+.B  \-\-gl\-libs
+Output additional linker flags for apps using GLCanvas.
+.TP 8
+.B  \-\-cppflags
+Output build\-time preprocessor flags.
 .TP 8
 .B  \-\-cflags
-Generate compiler flags for the same.
+Output C compiler flags.
+.TP 8
+.B  \-\-cxxflags
+Output C++ compiler flags.
 .TP 8
 .B  \-\-cc
 Output the name of the C compiler \fB$(CC)\fP.

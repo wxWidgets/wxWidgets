@@ -35,7 +35,7 @@
 // global vars
 // ----------------------------------------------------------------------------
 
-wxApp * WXDLLEXPORT wxTheApp = NULL;
+WXDLLEXPORT wxApp *wxTheApp = NULL;
 
 wxAppInitializerFunction
     wxAppBase::m_appInitFn = (wxAppInitializerFunction)NULL;

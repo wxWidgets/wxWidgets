@@ -71,6 +71,8 @@ BEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_TOGGLEROWSIZING, GridFrame::ToggleRowSizing )
     EVT_MENU( ID_TOGGLECOLSIZING, GridFrame::ToggleColSizing )
     EVT_MENU( ID_TOGGLEGRIDSIZING, GridFrame::ToggleGridSizing )
+    EVT_MENU( ID_TOGGLEGRIDLINES, GridFrame::ToggleGridLines )
+    EVT_MENU( ID_AUTOSIZECOLS, GridFrame::AutoSizeCols )
     EVT_MENU( ID_SETLABELCOLOUR, GridFrame::SetLabelColour )
     EVT_MENU( ID_SETLABELTEXTCOLOUR, GridFrame::SetLabelTextColour )
     EVT_MENU( ID_ROWLABELHORIZALIGN, GridFrame::SetRowLabelHorizAlignment )
@@ -129,6 +131,8 @@ GridFrame::GridFrame()
     viewMenu->Append( ID_TOGGLEROWSIZING, "Ro&w drag-resize", "", TRUE );
     viewMenu->Append( ID_TOGGLECOLSIZING, "C&ol drag-resize", "", TRUE );
     viewMenu->Append( ID_TOGGLEGRIDSIZING, "&Grid drag-resize", "", TRUE );
+    viewMenu->Append( ID_TOGGLEGRIDLINES, "&Grid Lines", "", TRUE );
+    viewMenu->Append( ID_AUTOSIZECOLS, "&Auto-size cols" );
 
     wxMenu *rowLabelMenu = new wxMenu;
 
@@ -288,6 +292,7 @@ void GridFrame::SetDefaults()
     GetMenuBar()->Check( ID_TOGGLEROWSIZING, TRUE );
     GetMenuBar()->Check( ID_TOGGLECOLSIZING, TRUE );
     GetMenuBar()->Check( ID_TOGGLEGRIDSIZING, TRUE );
+    GetMenuBar()->Check( ID_TOGGLEGRIDLINES, TRUE );
 }
 
 
@@ -341,6 +346,20 @@ void GridFrame::ToggleGridSizing( wxCommandEvent& WXUNUSED(ev) )
 {
     grid->EnableDragGridSize(
         GetMenuBar()->IsChecked( ID_TOGGLEGRIDSIZING ) );
+}
+
+
+void GridFrame::ToggleGridLines( wxCommandEvent& WXUNUSED(ev) )
+{
+    grid->EnableGridLines(
+        GetMenuBar()->IsChecked( ID_TOGGLEGRIDLINES ) );
+}
+
+
+void GridFrame::AutoSizeCols( wxCommandEvent& WXUNUSED(ev) )
+{
+    grid->AutoSizeColumns();
+    grid->Refresh();
 }
 
 
@@ -497,9 +516,13 @@ void GridFrame::DeleteSelectedRows( wxCommandEvent& WXUNUSED(ev) )
 {
     if ( grid->IsSelection() )
     {
-        for ( int n = 0; n < grid->GetNumberRows(); n++ )
+        grid->BeginBatch();
+        for ( int n = 0; n < grid->GetNumberRows(); )
             if ( grid->IsInSelection( n , 0 ) )
                 grid->DeleteRows( n, 1 );
+	    else
+	        n++;
+        grid->EndBatch();
     }
 }
 
@@ -508,9 +531,13 @@ void GridFrame::DeleteSelectedCols( wxCommandEvent& WXUNUSED(ev) )
 {
     if ( grid->IsSelection() )
     {
-        for ( int n = 0; n < grid->GetNumberCols(); n++ )
+        grid->BeginBatch();
+        for ( int n = 0; n < grid->GetNumberCols(); )
             if ( grid->IsInSelection( 0 , n ) )
                 grid->DeleteCols( n, 1 );
+	    else
+	        n++;
+        grid->EndBatch();
     }
 }
 
@@ -847,7 +874,7 @@ enum Severity
     Sev_Max
 };
 
-static const wxChar* severities[] =
+static const wxString severities[] =
 {
     _T("wishlist"),
     _T("minor"),

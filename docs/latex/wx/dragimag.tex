@@ -7,6 +7,9 @@ On Windows, the WIN32 API is used to do achieve smooth dragging. On other platfo
 wxGenericDragImage is used. Applications may also prefer to use
 wxGenericDragImage on Windows, too.
 
+\pythonnote{wxPython uses wxGenericDragImage on all platforms, but
+uses the wxDragImage name.}
+
 To use this class, when you wish to start dragging an image, create a wxDragImage
 object and store it somewhere you can access it as the drag progresses.
 Call BeginDrag to start, and EndDrag to stop the drag. To move the image,
@@ -18,6 +21,10 @@ You can drag within one window, or you can use full-screen dragging
 either across the whole screen, or just restricted to one area
 of the screen to save resources. If you want the user to drag between
 two windows, then you will need to use full-screen dragging.
+
+If you wish to draw the image yourself, use wxGenericDragImage and
+override \helpref{wxDragImage::DoDrawImage}{wxdragimagedodrawimage} and 
+\helpref{wxDragImage::GetImageRect}{wxdragimagegetimagerect}.
 
 Please see {\tt samples/dragimag} for an example.
 
@@ -48,18 +55,33 @@ Constructs a drag image from a bitmap and optional cursor.
 
 Constructs a drag image from an icon and optional cursor.
 
+\pythonnote{This constructor is called wxDragIcon in wxPython.}
+
 \func{}{wxDragImage}{\param{const wxString\& }{text}, \param{const wxCursor\& }{cursor = wxNullCursor},
  \param{const wxPoint& }{hotspot = wxPoint(0, 0)}}
 
 Constructs a drag image from a text string and optional cursor.
 
+\pythonnote{This constructor is called wxDragString in wxPython.}
+
 \func{}{wxDragImage}{\param{const wxTreeCtrl\& }{treeCtrl}, \param{wxTreeItemId\& }{id}}
 
 Constructs a drag image from the text in the given tree control item, and optional cursor.
 
+\pythonnote{This constructor is called wxDragTreeItem in wxPython.}
+
 \func{}{wxDragImage}{\param{const wxListCtrl\& }{treeCtrl}, \param{long }{id}}
 
 Constructs a drag image from the text in the given tree control item, and optional cursor.
+
+\pythonnote{This constructor is called wxDragListItem in wxPython.}
+
+\func{}{wxDragImage}{\param{const wxCursor\& }{cursor = wxNullCursor},
+ \param{const wxPoint& }{hotspot = wxPoint(0, 0)}}
+
+Constructs a drag image an optional cursor. This constructor is only available for
+wxGenericDragImage, and can be used when the application
+supplies \helpref{wxDragImage::DoDrawImage}{wxdragimagedodrawimage} and \helpref{wxDragImage::GetImageRect}{wxdragimagegetimagerect}.
 
 \wxheading{Parameters}
 
@@ -117,6 +139,16 @@ bounds the dragging operation. Specifying this can make the operation more effic
 by cutting down on the area under consideration, and it can also make a visual difference
 since the drag is clipped to this area.}
 
+\membersection{wxDragImage::DoDrawImage}\label{wxdragimagedodrawimage}
+
+\func{virtual bool}{DoDrawImage}{\param{wxDC\&}{ dc}, \param{const wxPoint\&}{ pos}}
+
+Draws the image on the device context with top-left corner at the given position.
+
+This function is only available with wxGenericDragImage, to allow applications to
+draw their own image instead of using an actual bitmap. If you override this function,
+you must also override \helpref{wxDragImage::GetImageRect}{wxdragimagegetimagerect}.
+
 \membersection{wxDragImage::EndDrag}\label{wxdragimageenddrag}
 
 \func{bool}{EndDrag}{\void}
@@ -124,6 +156,16 @@ since the drag is clipped to this area.}
 Call this when the drag has finished.
 
 Note that this call automatically calls ReleaseMouse.
+
+\membersection{wxDragImage::GetImageRect}\label{wxdragimagegetimagerect}
+
+\constfunc{virtual wxRect}{GetImageRect}{\param{const wxPoint\&}{ pos}}
+
+Returns the rectangle enclosing the image, assuming that the image is drawn with its
+top-left corner at the given point.
+
+This function is available in wxGenericDragImage only, and may be overridden (together with 
+\helpref{wxDragImage::DoDrawImage}{wxdragimagedodrawimage}) to provide a virtual drawing capability.
 
 \membersection{wxDragImage::Hide}\label{wxdragimagehide}
 
@@ -152,4 +194,22 @@ will be smoother if you move the image when it is shown.
 \func{bool}{Show}{\void}
 
 Shows the image. Call this at least once when dragging.
+
+\membersection{wxDragImage::UpdateBackingFromWindow}\label{wxdragimageupdatebackingfromwindow}
+
+\constfunc{bool}{UpdateBackingFromWindow}{\param{wxDC\&}{ windowDC}, \param{wxMemoryDC\&}{ destDC},
+ \param{const wxRect\&}{ sourceRect}, \param{const wxRect\&}{ destRect}}
+
+Override this if you wish to draw the window contents to the backing bitmap
+yourself. This can be desirable if you wish to avoid flicker by not having to
+redraw the updated window itself just before dragging, which can cause a flicker just
+as the drag starts. Instead, paint the drag image's backing bitmap to show the appropriate
+graphic {\it minus the objects to be dragged}, and leave the window itself to be updated
+by the drag image. This can provide eerily smooth, flicker-free drag behaviour.
+
+The default implementation copies the window contents to the backing bitmap. A new
+implementation will normally copy information from another source, such as from its
+own backing bitmap if it has one, or directly from internal data structures.
+
+This function is available in wxGenericDragImage only.
 

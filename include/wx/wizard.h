@@ -133,6 +133,11 @@ public:
     // get the current page (NULL if RunWizard() isn't running)
     virtual wxWizardPage *GetCurrentPage() const = 0;
 
+    // set the min size which should be available for the pages: a
+    // wizard will take into account the size of the bitmap (if any)
+    // itself and will never be less than some predefined fixed size
+    virtual void SetPageSize(const wxSize& size) = 0;
+
     // get the size available for the page: the wizards are not resizeable, so
     // this size doesn't change
     virtual wxSize GetPageSize() const = 0;
