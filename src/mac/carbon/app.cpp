@@ -925,10 +925,7 @@ int wxEntry( int argc, char *argv[] , bool enterLoop )
     // application (otherwise applications would need to handle it)
 
     if (argc > 1) {
-        char theArg[6] = "";
-        strncpy(theArg, argv[1], 5);
-
-        if (strcmp(theArg, "-psn_") == 0) {
+        if (strncmp(argv[1], "-psn_", 5) == 0) {
             // assume the argument is always the only one and remove it
             --argc;
         }
