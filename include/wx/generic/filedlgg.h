@@ -148,10 +148,13 @@ public:
     };
 
     // Full copy constructor
-    wxFileData( const wxFileData& fileData );
+    wxFileData( const wxFileData& fileData ) { Copy(fileData); }
     // Create a filedata from this information
     wxFileData( const wxString &filePath, const wxString &fileName,
                 fileType type, int image_id );
+
+    // make a full copy of the other wxFileData
+    void Copy( const wxFileData &other );
 
     // (re)read the extra data about the file from the system
     void ReadData();
@@ -206,6 +209,9 @@ public:
     // initialize a wxListItem attributes
     void MakeItem( wxListItem &item );
 
+
+    wxFileData& operator = (const wxFileData& fd) { Copy(fd); return *this; }
+
 private:
     wxString m_fileName;
     wxString   m_filePath;
@@ -253,6 +259,7 @@ public:
     wxString GetDir() const { return m_dirName; }
 
     void OnListDeleteItem( wxListEvent &event );
+    void OnListDeleteAllItems( wxListEvent &event );
     void OnListEndLabelEdit( wxListEvent &event );
     void OnListColClick( wxListEvent &event );
 
@@ -261,7 +268,7 @@ public:
     wxFileData::fileListFieldType GetSortField() const { return m_sort_field; }
 
 protected:
-    void FreeItemData(const wxListItem& item);
+    void FreeItemData(wxListItem& item);
     void FreeAllItemsData();
 
     wxString      m_dirName;

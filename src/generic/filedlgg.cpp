@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 // Name:        filedlgg.cpp
 // Purpose:     wxGenericFileDialog
 // Author:      Robert Roebling
@@ -154,17 +154,6 @@ extern size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, w
 //  wxFileData
 //-----------------------------------------------------------------------------
 
-wxFileData::wxFileData( const wxFileData& fileData )
-{
-    m_fileName = fileData.GetFileName();
-    m_filePath = fileData.GetFilePath();
-    m_size = fileData.GetSize();
-    m_dateTime = fileData.GetDateTime();
-    m_permissions = fileData.GetPermissions();
-    m_type = fileData.GetType();
-    m_image = GetImageId();
-}
-
 wxFileData::wxFileData( const wxString &filePath, const wxString &fileName, fileType type, int image_id )
 {
     m_fileName = fileName;
@@ -173,6 +162,17 @@ wxFileData::wxFileData( const wxString &filePath, const wxString &fileName, file
     m_image = image_id;
 
     ReadData();
+}
+
+void wxFileData::Copy( const wxFileData& fileData )
+{
+    m_fileName = fileData.GetFileName();
+    m_filePath = fileData.GetFilePath();
+    m_size = fileData.GetSize();
+    m_dateTime = fileData.GetDateTime();
+    m_permissions = fileData.GetPermissions();
+    m_type = fileData.GetType();
+    m_image = GetImageId();
 }
 
 void wxFileData::ReadData()
@@ -358,6 +358,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxFileCtrl,wxListCtrl)
 
 BEGIN_EVENT_TABLE(wxFileCtrl,wxListCtrl)
     EVT_LIST_DELETE_ITEM(-1, wxFileCtrl::OnListDeleteItem)
+    EVT_LIST_DELETE_ALL_ITEMS(-1, wxFileCtrl::OnListDeleteAllItems)
     EVT_LIST_END_LABEL_EDIT(-1, wxFileCtrl::OnListEndLabelEdit)
     EVT_LIST_COL_CLICK(-1, wxFileCtrl::OnListColClick)
 END_EVENT_TABLE()
@@ -488,7 +489,6 @@ void wxFileCtrl::UpdateFiles()
 
     wxBusyCursor bcur; // this may take a while...
 
-    FreeAllItemsData();
     DeleteAllItems();
 
     wxListItem item;
@@ -505,8 +505,10 @@ void wxFileCtrl::UpdateFiles()
         for (n=0; n<count; n++)
             {
             wxFileData *fd = new wxFileData(paths[n], names[n], wxFileData::is_drive, icons[n]);
-                Add(fd, item);
+            if (Add(fd, item) != -1)
                 item.m_itemId++;
+            else
+                delete fd;
             }
         }
     else
@@ -520,8 +522,10 @@ void wxFileCtrl::UpdateFiles()
             if (p.IsEmpty()) p = wxT("/");
 #endif // __UNIX__
             wxFileData *fd = new wxFileData(p, wxT(".."), wxFileData::is_dir, wxFileIconsTable::folder);
-            Add(fd, item);
+            if (Add(fd, item) != -1)
             item.m_itemId++;
+            else
+                delete fd;
         }
 
         wxString dirname(m_dirName);
@@ -547,8 +551,11 @@ void wxFileCtrl::UpdateFiles()
             while (cont)
             {
                 wxFileData *fd = new wxFileData(dirPrefix + f, f, wxFileData::is_dir, wxFileIconsTable::folder);
-                Add(fd, item);
+                if (Add(fd, item) != -1)
                 item.m_itemId++;
+                else
+                    delete fd;
+
                 cont = dir.GetNext(&f);
             }
 
@@ -562,8 +569,11 @@ void wxFileCtrl::UpdateFiles()
                 while (cont)
                 {
                     wxFileData *fd = new wxFileData(dirPrefix + f, f, wxFileData::is_file, wxFileIconsTable::file);
-                    Add(fd, item);
+                    if (Add(fd, item) != -1)
                     item.m_itemId++;
+                    else
+                        delete fd;
+
                     cont = dir.GetNext(&f);
                 }
             }
@@ -626,6 +636,8 @@ void wxFileCtrl::MakeDir()
         EnsureVisible( id );
         EditLabel( id );
     }
+    else
+        delete fd;
 }
 
 void wxFileCtrl::GoToParentDir()
@@ -673,15 +685,25 @@ void wxFileCtrl::GoToDir( const wxString &dir )
     EnsureVisible( 0 );
 }
 
-void wxFileCtrl::FreeItemData(const wxListItem& item)
+void wxFileCtrl::FreeItemData(wxListItem& item)
 {
-    wxFileData *fd = (wxFileData*)item.m_data;
-    delete fd;
+    if ( item.m_data )
+    {
+        wxFileData *fd = (wxFileData*)item.m_data;
+        delete fd;
+
+        item.m_data = 0;
+    }
 }
 
 void wxFileCtrl::OnListDeleteItem( wxListEvent &event )
 {
     FreeItemData(event.m_item);
+}
+
+void wxFileCtrl::OnListDeleteAllItems( wxListEvent &event )
+{
+    FreeAllItemsData();
 }
 
 void wxFileCtrl::FreeAllItemsData()
@@ -797,7 +819,6 @@ void wxFileCtrl::SortItems(wxFileData::fileListFieldType field, bool foward)
 
 wxFileCtrl::~wxFileCtrl()
 {
-    FreeAllItemsData();
 }
 
 //-----------------------------------------------------------------------------
