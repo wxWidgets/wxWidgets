@@ -747,8 +747,24 @@ bool wxTextCtrl::CanCut() const
 
 bool wxTextCtrl::CanPaste() const
 {
-    int dataFormat = 0; // 0 == any format
-    return (::SendMessage( (HWND) GetHWND(), EM_CANPASTE, (WPARAM) (UINT) dataFormat, 0) != 0);
+#if wxUSE_RICHEDIT
+    if (m_isRich)
+    {
+        int dataFormat = 0; // 0 == any format
+        return (::SendMessage( (HWND) GetHWND(), EM_CANPASTE, (WPARAM) (UINT) dataFormat, 0) != 0);
+    }
+#endif
+    if (!IsEditable())
+        return FALSE;
+
+    // Standard edit control: check for straight text on clipboard
+    bool isTextAvailable = FALSE;
+    if (::OpenClipboard((HWND) wxTheApp->GetTopWindow()->GetHWND()))
+    {
+        isTextAvailable = (::IsClipboardFormatAvailable(CF_TEXT) != 0);
+        ::CloseClipboard();
+    }
+    return isTextAvailable;
 }
 
 // Undo/redo
@@ -796,8 +812,8 @@ void wxTextCtrl::GetSelection(long* from, long* to) const
     }
 #endif
     DWORD dwStart, dwEnd;
-    WPARAM wParam = (WPARAM) (DWORD*) dwStart; // receives starting position
-    LPARAM lParam = (LPARAM) (DWORD*) dwEnd;   // receives ending position
+    WPARAM wParam = (WPARAM) (DWORD*) & dwStart; // receives starting position
+    LPARAM lParam = (LPARAM) (DWORD*) & dwEnd;   // receives ending position
 
     ::SendMessage((HWND) GetHWND(), EM_GETSEL, wParam, lParam);
 
