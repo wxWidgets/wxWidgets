@@ -50,9 +50,6 @@ public:
 
     virtual long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 
-    virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-                                WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
-
     // overriden base class virtuals
     virtual bool AcceptsFocus() const { return FALSE; }
 

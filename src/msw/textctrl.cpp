@@ -764,30 +764,6 @@ void wxTextCtrl::OnDropFiles(wxDropFilesEvent& event)
     }
 }
 
-WXHBRUSH wxTextCtrl::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-                                WXUINT message, WXWPARAM wParam,
-                                WXLPARAM lParam)
-{
-#if wxUSE_CTL3D
-    if ( m_useCtl3D )
-    {
-        HBRUSH hbrush = Ctl3dCtlColorEx(message, wParam, lParam);
-        return (WXHBRUSH) hbrush;
-    }
-#endif
-
-    HDC hdc = (HDC)pDC;
-    SetBkMode(hdc, GetParent()->GetTransparentBackground() ? TRANSPARENT
-                                                           : OPAQUE);
-
-    ::SetBkColor(hdc, RGB(GetBackgroundColour().Red(), GetBackgroundColour().Green(), GetBackgroundColour().Blue()));
-    ::SetTextColor(hdc, RGB(GetForegroundColour().Red(), GetForegroundColour().Green(), GetForegroundColour().Blue()));
-
-    wxBrush *backgroundBrush = wxTheBrushList->FindOrCreateBrush(GetBackgroundColour(), wxSOLID);
-
-    return (WXHBRUSH) backgroundBrush->GetResourceHandle();
-}
-
 void wxTextCtrl::OnChar(wxKeyEvent& event)
 {
     switch ( event.KeyCode() )

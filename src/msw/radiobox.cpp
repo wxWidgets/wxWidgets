@@ -29,8 +29,6 @@
 #endif
 
 #ifndef WX_PRECOMP
-    #include <stdio.h>
-    #include "wx/setup.h"
     #include "wx/bitmap.h"
     #include "wx/brush.h"
     #include "wx/radiobox.h"
@@ -38,9 +36,24 @@
 
 #include "wx/msw/private.h"
 
+#if wxUSE_TOOLTIPS
+    #include <commctrl.h>
+
+    #include "wx/tooltip.h"
+#endif // wxUSE_TOOLTIPS
+
 #if !USE_SHARED_LIBRARY
     IMPLEMENT_DYNAMIC_CLASS(wxRadioBox, wxControl)
 #endif
+
+// VZ: the new behaviour is to create the radio buttons as children of the
+//     radiobox instead of creating them as children of the radiobox' parent.
+//
+//     This seems more logical, more consistent with what other frameworks do
+//     and allows tooltips to work with radioboxes, so there should be no
+//     reason to revert to the backward compatible behaviour - but I still
+//     leave this possibility just in case.
+#define RADIOBTN_PARENT_IS_RADIOBOX 1
 
 // ---------------------------------------------------------------------------
 // private functions
@@ -154,116 +167,101 @@ wxRadioBox::wxRadioBox()
     m_radioHeight = NULL;
 }
 
-bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
-        const wxPoint& pos, const wxSize& size,
-        int n, const wxString choices[],
-        int majorDim, long style,
-        const wxValidator& val, const wxString& name)
+bool wxRadioBox::Create(wxWindow *parent,
+                        wxWindowID id,
+                        const wxString& title,
+                        const wxPoint& pos,
+                        const wxSize& size,
+                        int n,
+                        const wxString choices[],
+                        int majorDim,
+                        long style,
+                        const wxValidator& val,
+                        const wxString& name)
 {
+    // initialize members
     m_selectedButton = -1;
     m_noItems = n;
 
-    SetName(name);
-    SetValidator(val);
-
-    parent->AddChild(this);
-    m_backgroundColour = parent->GetBackgroundColour();
-    m_foregroundColour = parent->GetForegroundColour();
-
-    m_windowStyle = (long&)style;
-
-    int x = pos.x;
-    int y = pos.y;
-    int width = size.x;
-    int height = size.y;
-
-    if (id == -1)
-        m_windowId = NewControlId();
-    else
-        m_windowId = id;
-
-    if ( majorDim == 0 )
-        m_majorDim = n;
-    else
-        m_majorDim = majorDim;
+    m_majorDim =  majorDim == 0 ? n : majorDim;
     m_noRowsOrCols = majorDim;
 
-    long msStyle = GROUP_FLAGS;
+    // common initialization
+    if ( !CreateControl(parent, id, pos, size, style, val, name) )
+        return FALSE;
 
-    bool want3D;
-    WXDWORD exStyle = Determine3DEffects(0, &want3D);
+    // create the static box
+    if ( !MSWCreateControl(wxT("BUTTON"), BS_GROUPBOX, pos, size, title, 0) )
+        return FALSE;
 
-    HWND hwndParent = (HWND)parent->GetHWND();
-
-    m_hWnd = (WXHWND)::CreateWindowEx
-                        (
-                         (DWORD)exStyle,
-                         GROUP_CLASS,
-                         title,
-                         msStyle,
-                         0, 0, 0, 0,
-                         hwndParent,
-                         (HMENU)m_windowId,
-                         wxGetInstance(),
-                         NULL
-                        );
-
-#if wxUSE_CTL3D
-    if (want3D)
-    {
-        Ctl3dSubclassCtl((HWND)m_hWnd);
-        m_useCtl3D = TRUE;
-    }
-#endif // wxUSE_CTL3D
-
-    SetFont(parent->GetFont());
-
-    SubclassWin(m_hWnd);
+    // and now create the buttons
+#if RADIOBTN_PARENT_IS_RADIOBOX
+    HWND hwndParent = GetHwnd();
+#else
+    HWND hwndParent = GetHwndOf(parent);
+#endif
 
     // Some radio boxes test consecutive id.
     (void)NewControlId();
     m_radioButtons = new WXHWND[n];
     m_radioWidth = new int[n];
     m_radioHeight = new int[n];
-    int i;
-    for (i = 0; i < n; i++)
-    {
-        m_radioWidth[i] = m_radioHeight[i] = -1;
-        long groupStyle = 0;
-        if ( i == 0 && style == 0 )
-            groupStyle = WS_GROUP;
-        long newId = NewControlId();
-        long msStyle = groupStyle | RADIO_FLAGS;
 
-        HWND hwndBtn = CreateWindowEx(exStyle, RADIO_CLASS,
-                                      choices[i], msStyle,
-                                      0,0,0,0,
+    WXHFONT hfont = 0;
+    wxFont& font = GetFont();
+    if ( font.Ok() )
+    {
+        hfont = font.GetResourceHandle();
+    }
+
+    for ( int i = 0; i < n; i++ )
+    {
+        m_radioWidth[i] =
+        m_radioHeight[i] = -1;
+        long styleBtn = BS_AUTORADIOBUTTON | WS_CHILD | WS_VISIBLE;
+        if ( i == 0 && style == 0 )
+            styleBtn |= WS_GROUP;
+
+        long newId = NewControlId();
+
+        HWND hwndBtn = ::CreateWindow(_T("BUTTON"),
+                                      choices[i],
+                                      styleBtn,
+                                      0, 0, 0, 0,   // will be set in SetSize()
                                       hwndParent,
-                                      (HMENU)newId, wxGetInstance(),
+                                      (HMENU)newId,
+                                      wxGetInstance(),
                                       NULL);
+
+        if ( !hwndBtn )
+        {
+            wxLogLastError("CreateWindow(radio btn)");
+
+            return FALSE;
+        }
 
         m_radioButtons[i] = (WXHWND)hwndBtn;
 
         SubclassRadioButton((WXHWND)hwndBtn);
 
-        wxFont& font = GetFont();
-        if ( font.Ok() )
+        if ( hfont )
         {
-            SendMessage(hwndBtn, WM_SETFONT,
-                        (WPARAM)font.GetResourceHandle(), 0L);
+            ::SendMessage(hwndBtn, WM_SETFONT, (WPARAM)hfont, 0L);
         }
 
-        m_subControls.Append((wxObject *)(WXDWORD)(WXWORD)newId);
+        m_subControls.Add(newId);
     }
 
     // Create a dummy radio control to end the group.
-    (void)CreateWindowEx(0, RADIO_CLASS, wxT(""), WS_GROUP | RADIO_FLAGS,
+    (void)::CreateWindow(_T("BUTTON"),
+                         _T(""),
+                         WS_GROUP | BS_AUTORADIOBUTTON | WS_CHILD,
                          0, 0, 0, 0, hwndParent,
                          (HMENU)NewControlId(), wxGetInstance(), NULL);
 
     SetSelection(0);
 
-    SetSize(x, y, width, height);
+    SetSize(pos.x, pos.y, size.x, size.y);
 
     return TRUE;
 }
@@ -364,10 +362,14 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     if (y == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
         yy = currentY;
 
-    wxString buf;
-
+#if RADIOBTN_PARENT_IS_RADIOBOX
+    int y_offset = 0;
+    int x_offset = 0;
+#else
     int y_offset = yy;
     int x_offset = xx;
+#endif
+
     int current_width, cyf;
 
     int cx1,cy1;
@@ -386,8 +388,8 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
         if (m_radioWidth[i]<0)
         {
             // It's a labelled toggle
-            buf = wxGetWindowText(m_radioButtons[i]);
-            GetTextExtent(buf, &current_width, &cyf);
+            GetTextExtent(wxGetWindowText(m_radioButtons[i]),
+                          &current_width, &cyf);
             eachWidth = (int)(current_width + RADIO_SIZE);
             eachHeight = (int)((3*cyf)/2);
         }
@@ -409,7 +411,7 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
         int totHeight;
 
         int nbHor = GetNumHor(),
-        nbVer = GetNumVer();
+            nbVer = GetNumVer();
 
         // this formula works, but I don't know why.
         // Please, be sure what you do if you modify it!!
@@ -444,7 +446,7 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
                 height = heightOld;
         }
 
-        MoveWindow(GetHwnd(), x_offset, y_offset, width, height, TRUE);
+        ::MoveWindow(GetHwnd(), xx, yy, width, height, TRUE);
 
         x_offset += cx1;
         y_offset += cy1;
@@ -480,8 +482,8 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
         if (m_radioWidth[i]<0)
         {
             // It's a labeled item
-            buf = wxGetWindowText(m_radioButtons[i]);
-            GetTextExtent(buf, &current_width, &cyf);
+            GetTextExtent(wxGetWindowText(m_radioButtons[i]),
+                          &current_width, &cyf);
 
             // How do we find out radio button bitmap size!!
             // By adjusting them carefully, manually :-)
@@ -494,9 +496,13 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
             eachHeight = m_radioHeight[i];
         }
 
-        MoveWindow((HWND)m_radioButtons[i], x_offset, y_offset,
-                   eachWidth, eachHeight,
-                   TRUE);
+        // VZ: make all buttons of the same, maximal size - like this they
+        //     cover the radiobox entirely and the radiobox tooltips are always
+        //     shown (otherwise they are not when the mouse pointer is in the
+        //     radiobox part not belonging to any radiobutton)
+        ::MoveWindow((HWND)m_radioButtons[i],
+                     x_offset, y_offset, maxWidth, maxHeight,
+                     TRUE);
 
         if (m_windowStyle & wxRA_SPECIFY_ROWS)
         {
@@ -528,8 +534,7 @@ void wxRadioBox::GetSize(int *width, int *height) const
 void wxRadioBox::GetPosition(int *x, int *y) const
 {
     wxWindow *parent = GetParent();
-    RECT rect;
-    rect.left = -1; rect.right = -1; rect.top = -1; rect.bottom = -1;
+    RECT rect = { -1, -1, -1, -1 };
 
     int i;
     for (i = 0; i < m_noItems; i++)
@@ -538,8 +543,8 @@ void wxRadioBox::GetPosition(int *x, int *y) const
     if (m_hWnd)
         wxFindMaxSize(m_hWnd, &rect);
 
-    // Since we now have the absolute screen coords,
-    // if there's a parent we must subtract its top left corner
+    // Since we now have the absolute screen coords, if there's a parent we
+    // must subtract its top left corner
     POINT point;
     point.x = rect.left;
     point.y = rect.top;
@@ -547,9 +552,9 @@ void wxRadioBox::GetPosition(int *x, int *y) const
     {
         ::ScreenToClient((HWND) parent->GetHWND(), &point);
     }
-    // We may be faking the client origin.
-    // So a window that's really at (0, 30) may appear
-    // (to wxWin apps) to be at (0, 0).
+
+    // We may be faking the client origin. So a window that's really at (0, 30)
+    // may appear (to wxWin apps) to be at (0, 0).
     if (GetParent())
     {
         wxPoint pt(GetParent()->GetClientAreaOrigin());
@@ -615,30 +620,6 @@ void wxRadioBox::Show(int item, bool show)
                  wxT("invalid item in wxRadioBox::Show()") );
 
     ::ShowWindow((HWND)m_radioButtons[item], show ? SW_SHOW : SW_HIDE);
-}
-
-WXHBRUSH wxRadioBox::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-        WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
-{
-#if wxUSE_CTL3D
-    if ( m_useCtl3D )
-    {
-        HBRUSH hbrush = Ctl3dCtlColorEx(message, wParam, lParam);
-        return (WXHBRUSH) hbrush;
-    }
-#endif
-
-    if (GetParent()->GetTransparentBackground())
-        SetBkMode((HDC) pDC, TRANSPARENT);
-    else
-        SetBkMode((HDC) pDC, OPAQUE);
-
-    ::SetBkColor((HDC) pDC, RGB(GetBackgroundColour().Red(), GetBackgroundColour().Green(), GetBackgroundColour().Blue()));
-    ::SetTextColor((HDC) pDC, RGB(GetForegroundColour().Red(), GetForegroundColour().Green(), GetForegroundColour().Blue()));
-
-    wxBrush *backgroundBrush = wxTheBrushList->FindOrCreateBrush(GetBackgroundColour(), wxSOLID);
-
-    return (WXHBRUSH) backgroundBrush->GetResourceHandle();
 }
 
 // For single selection items only
@@ -716,68 +697,91 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
                                            WPARAM wParam,
                                            LPARAM lParam)
 {
-    bool processed = TRUE;
-    if ( msg != WM_KEYDOWN )
-        processed = FALSE;
-
-    if ( processed )
+    bool processed = FALSE;
+    if ( msg == WM_KEYDOWN
+#if wxUSE_TOOLTIPS
+         || msg == WM_NOTIFY
+#endif // wxUSE_TOOLTIPS
+       )
     {
         wxRadioBox *radiobox = (wxRadioBox *)::GetWindowLong(hwnd, GWL_USERDATA);
 
         wxCHECK_MSG( radiobox, 0, wxT("radio button without radio box?") );
 
-        int sel = radiobox->GetSelection();
-
-        switch ( wParam )
+#if wxUSE_TOOLTIPS
+        if ( msg == WM_NOTIFY )
         {
-            case VK_UP:
-                sel--;
-                break;
-
-            case VK_LEFT:
-                sel -= radiobox->GetNumVer();
-                break;
-
-            case VK_DOWN:
-                sel++;
-                break;
-
-            case VK_RIGHT:
-                sel += radiobox->GetNumVer();
-                break;
-
-            case VK_TAB:
-                {
-                    wxNavigationKeyEvent event;
-                    event.SetDirection(!(::GetKeyState(VK_SHIFT) & 0x100));
-                    event.SetWindowChange(FALSE);
-                    event.SetEventObject(radiobox);
-
-                    if ( radiobox->GetEventHandler()->ProcessEvent(event) )
-                        return 0;
-                }
-                // fall through
-
-            default:
-                processed = FALSE;
-        }
-
-        if ( processed )
-        {
-            if ( sel >= 0 && sel < radiobox->Number() )
+            NMHDR* hdr = (NMHDR *)lParam;
+            if ( (int)hdr->code == TTN_NEEDTEXT )
             {
-                radiobox->SetSelection(sel);
+                wxToolTip *tt = radiobox->GetToolTip();
+                if ( tt )
+                {
+                    TOOLTIPTEXT *ttt = (TOOLTIPTEXT *)lParam;
+                    ttt->lpszText = (wxChar *)tt->GetTip().c_str();
 
-                // emulate the button click
-                radiobox->SendNotificationEvent();
+                    processed = TRUE;
+                }
+            }
+        }
+        else // msg == WM_KEYDOWN
+#endif // wxUSE_TOOLTIPS
+        {
+            processed = TRUE;
+
+            int sel = radiobox->GetSelection();
+
+            switch ( wParam )
+            {
+                case VK_UP:
+                    sel--;
+                    break;
+
+                case VK_LEFT:
+                    sel -= radiobox->GetNumVer();
+                    break;
+
+                case VK_DOWN:
+                    sel++;
+                    break;
+
+                case VK_RIGHT:
+                    sel += radiobox->GetNumVer();
+                    break;
+
+                case VK_TAB:
+                    {
+                        wxNavigationKeyEvent event;
+                        event.SetDirection(!(::GetKeyState(VK_SHIFT) & 0x100));
+                        event.SetWindowChange(FALSE);
+                        event.SetEventObject(radiobox);
+
+                        if ( radiobox->GetEventHandler()->ProcessEvent(event) )
+                            return 0;
+                    }
+                    // fall through
+
+                default:
+                    processed = FALSE;
+            }
+
+            if ( processed )
+            {
+                if ( sel >= 0 && sel < radiobox->Number() )
+                {
+                    radiobox->SetSelection(sel);
+
+                    // emulate the button click
+                    radiobox->SendNotificationEvent();
+                }
             }
         }
     }
 
-    if ( !processed )
-        return ::CallWindowProc(CASTWNDPROC s_wndprocRadioBtn, hwnd, msg, wParam, lParam);
-    else
+    if ( processed )
         return 0;
+
+    return ::CallWindowProc(CASTWNDPROC s_wndprocRadioBtn, hwnd, msg, wParam, lParam);
 }
 
 #endif // __WIN32__

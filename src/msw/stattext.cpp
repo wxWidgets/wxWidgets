@@ -150,39 +150,6 @@ void wxStaticText::SetLabel(const wxString& label)
     }
 }
 
-WXHBRUSH wxStaticText::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-      WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
-{
-/*
-#if wxUSE_CTL3D
-  if ( m_useCtl3D )
-  {
-    HBRUSH hbrush = Ctl3dCtlColorEx(message, wParam, lParam);
-
-    if (hbrush != (HBRUSH) 0)
-      return hbrush;
-    else
-      return (HBRUSH)MSWDefWindowProc(message, wParam, lParam);
-  }
-#endif
-*/
-
-  if (GetParent()->GetTransparentBackground())
-    SetBkMode((HDC) pDC, TRANSPARENT);
-  else
-    SetBkMode((HDC) pDC, OPAQUE);
-
-  ::SetBkColor((HDC) pDC, RGB(GetBackgroundColour().Red(), GetBackgroundColour().Green(), GetBackgroundColour().Blue()));
-  ::SetTextColor((HDC) pDC, RGB(GetForegroundColour().Red(), GetForegroundColour().Green(), GetForegroundColour().Blue()));
-
-  wxBrush *backgroundBrush = wxTheBrushList->FindOrCreateBrush(GetBackgroundColour(), wxSOLID);
-
-  // Note that this will be cleaned up in wxApp::OnIdle, if backgroundBrush
-  // has a zero usage count.
-//  backgroundBrush->RealizeResource();
-  return (WXHBRUSH) backgroundBrush->GetResourceHandle();
-}
-
 long wxStaticText::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
   // Ensure that static items get messages. Some controls don't like this

@@ -32,16 +32,32 @@
 #include "wx/tooltip.h"
 #include "wx/msw/private.h"
 
-#if (defined(__WIN95__) && !defined(__GNUWIN32__)) || defined(__TWIN32__) || defined(wxUSE_NORLANDER_HEADERS)
-#include <commctrl.h>
+#if defined(__WIN95__) && !defined(__GNUWIN32_OLD__)
+    #include <commctrl.h>
 #endif
+
+// VZ: normally, the trick with subclassing the tooltip control and processing
+//     TTM_WINDOWFROMPOINT should work but, somehow, it doesn't. I leave the
+//     code here for now (but it's not compiled) in case we need it later.
+//
+//     For now, instead of this, we just add all radiobox buttons to the
+//     tooltip control as well (see SetWindow) - this is probably less
+//     efficient, but it works.
+#define wxUSE_TTM_WINDOWFROMPOINT   0
 
 // ----------------------------------------------------------------------------
 // global variables
 // ----------------------------------------------------------------------------
 
 // the tooltip parent window
-WXHWND wxToolTip::hwndTT = (WXHWND)NULL;
+WXHWND wxToolTip::ms_hwndTT = (WXHWND)NULL;
+
+#if wxUSE_TTM_WINDOWFROMPOINT
+
+// the tooltip window proc
+static WNDPROC gs_wndprocToolTip = (WNDPROC)NULL;
+
+#endif // wxUSE_TTM_WINDOWFROMPOINT
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -54,14 +70,14 @@ WXHWND wxToolTip::hwndTT = (WXHWND)NULL;
 class wxToolInfo : public TOOLINFO
 {
 public:
-    wxToolInfo(wxWindow *win)
+    wxToolInfo(HWND hwnd)
     {
         // initialize all members
         ::ZeroMemory(this, sizeof(TOOLINFO));
 
         cbSize = sizeof(TOOLINFO);
         uFlags = TTF_IDISHWND;
-        uId = (UINT)win->GetHWND();
+        uId = (UINT)hwnd;
     }
 };
 #ifdef __VISUALC__
@@ -88,28 +104,68 @@ static void SendTooltipMessageToAll(WXHWND hwnd,
                                     WPARAM wParam,
                                     LPARAM lParam)
 {
-   if ( hwnd )
-     (void)SendTooltipMessage((WXHWND)hwnd, msg, wParam, (void *)lParam);
+    (void)SendTooltipMessage((WXHWND)hwnd, msg, wParam, (void *)lParam);
 }
 
 // ============================================================================
 // implementation
 // ============================================================================
 
+#if wxUSE_TTM_WINDOWFROMPOINT
+
+// ----------------------------------------------------------------------------
+// window proc for our tooltip control
+// ----------------------------------------------------------------------------
+
+LRESULT APIENTRY wxToolTipWndProc(HWND hwndTT,
+                                  UINT msg,
+                                  WPARAM wParam,
+                                  LPARAM lParam)
+{
+    if ( msg == TTM_WINDOWFROMPOINT )
+    {
+        LPPOINT ppt = (LPPOINT)lParam;
+        // is the window under control a wxWindow?
+        HWND hwnd = ::WindowFromPoint(*ppt);
+
+        // return a HWND correspondign to wxWindow because only wxWindows are
+        // associated with tooltips using TTM_ADDTOOL
+        while ( hwnd && !wxFindWinFromHandle((WXHWND)hwnd) )
+        {
+            hwnd = ::GetParent(hwnd);
+        }
+
+        if ( hwnd )
+        {
+            // modify the point too!
+            RECT rect;
+            GetWindowRect(hwnd, &rect);
+
+            ppt->x = rect.left;
+            ppt->y = rect.top;
+
+            return (LRESULT)hwnd;
+        }
+    }
+
+    return ::CallWindowProc(gs_wndprocToolTip, hwndTT, msg, wParam, lParam);
+}
+
+#endif // wxUSE_TTM_WINDOWFROMPOINT
+
 // ----------------------------------------------------------------------------
 // static functions
 // ----------------------------------------------------------------------------
 
-
-
 void wxToolTip::Enable(bool flag)
 {
-    SendTooltipMessageToAll((WXHWND)hwndTT,TTM_ACTIVATE, flag, 0);
+    SendTooltipMessageToAll(ms_hwndTT, TTM_ACTIVATE, flag, 0);
 }
 
 void wxToolTip::SetDelay(long milliseconds)
 {
-    SendTooltipMessageToAll((WXHWND)hwndTT,TTM_SETDELAYTIME, TTDT_INITIAL, milliseconds);
+    SendTooltipMessageToAll(ms_hwndTT, TTM_SETDELAYTIME,
+                            TTDT_INITIAL, milliseconds);
 }
 
 // ---------------------------------------------------------------------------
@@ -119,25 +175,31 @@ void wxToolTip::SetDelay(long milliseconds)
 // create the tooltip ctrl for our parent frame if it doesn't exist yet
 WXHWND wxToolTip::GetToolTipCtrl()
 {
-    if ( !hwndTT )
+    if ( !ms_hwndTT )
     {
-        hwndTT = (WXHWND)::CreateWindow(TOOLTIPS_CLASS,
-                                (LPSTR)NULL,
-                                TTS_ALWAYSTIP,
-                                CW_USEDEFAULT, CW_USEDEFAULT,
-                                CW_USEDEFAULT, CW_USEDEFAULT,
-                                NULL, (HMENU)NULL,
-                                wxGetInstance(),
-                                NULL);
-       if ( hwndTT )
+        ms_hwndTT = (WXHWND)::CreateWindow(TOOLTIPS_CLASS,
+                                           (LPSTR)NULL,
+                                           TTS_ALWAYSTIP,
+                                           CW_USEDEFAULT, CW_USEDEFAULT,
+                                           CW_USEDEFAULT, CW_USEDEFAULT,
+                                           NULL, (HMENU)NULL,
+                                           wxGetInstance(),
+                                           NULL);
+       if ( ms_hwndTT )
        {
-           SetWindowPos((HWND)hwndTT, HWND_TOPMOST, 0, 0, 0, 0,
+           HWND hwnd = (HWND)ms_hwndTT;
+           SetWindowPos(hwnd, HWND_TOPMOST, 0, 0, 0, 0,
                         SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
-       }
 
+#if wxUSE_TTM_WINDOWFROMPOINT
+           // subclass the newly created control
+           gs_wndprocToolTip = (WNDPROC)::GetWindowLong(hwnd, GWL_WNDPROC);
+           ::SetWindowLong(hwnd, GWL_WNDPROC, (long)wxToolTipWndProc);
+#endif // wxUSE_TTM_WINDOWFROMPOINT
+       }
     }
 
-    return (WXHWND)hwndTT;
+    return ms_hwndTT;
 }
 
 void wxToolTip::RelayEvent(WXMSG *msg)
@@ -170,8 +232,28 @@ void wxToolTip::Remove()
     // remove this tool from the tooltip control
     if ( m_window )
     {
-        wxToolInfo ti(m_window);
+        wxToolInfo ti(GetHwndOf(m_window));
         (void)SendTooltipMessage(GetToolTipCtrl(), TTM_DELTOOL, 0, &ti);
+    }
+}
+
+void wxToolTip::Add(WXHWND hWnd)
+{
+    HWND hwnd = (HWND)hWnd;
+
+    wxToolInfo ti(hwnd);
+
+    // as we store our text anyhow, it seems useless to waste system memory
+    // by asking the tooltip ctrl to remember it too - instead it will send
+    // us TTN_NEEDTEXT (via WM_NOTIFY) when it is about to be shown
+    ti.hwnd = hwnd;
+    ti.lpszText = LPSTR_TEXTCALLBACK;
+    // instead of: ti.lpszText = (char *)m_text.c_str();
+
+    if ( !SendTooltipMessage(GetToolTipCtrl(), TTM_ADDTOOL, 0, &ti) )
+    {
+        wxLogSysError(_("Failed to create the tooltip '%s'"),
+                      m_text.c_str());
     }
 }
 
@@ -181,21 +263,26 @@ void wxToolTip::SetWindow(wxWindow *win)
 
     m_window = win;
 
+    // add the window itself
     if ( m_window )
     {
-        wxToolInfo ti(m_window);
+        Add(m_window->GetHWND());
+    }
 
-        // as we store our text anyhow, it seems useless to waste system memory
-        // by asking the tooltip ctrl to remember it too - instead it will send
-        // us TTN_NEEDTEXT (via WM_NOTIFY) when it is about to be shown
-        ti.hwnd = (HWND)m_window->GetHWND();
-        ti.lpszText = LPSTR_TEXTCALLBACK;
-        // instead of: ti.lpszText = (char *)m_text.c_str();
-
-        if ( !SendTooltipMessage(GetToolTipCtrl(), TTM_ADDTOOL, 0, &ti) )
+    // and all of its subcontrols (e.g. radiobuttons in a radiobox) as well
+    wxControl *control = wxDynamicCast(m_window, wxControl);
+    if ( control )
+    {
+        size_t count = control->GetSubcontrols().GetCount();
+        for ( size_t n = 0; n < count; n++ )
         {
-            wxLogSysError(_("Failed to create the tooltip '%s'"),
-                          m_text.c_str());
+            wxWindowID id = control->GetSubcontrols()[n];
+            HWND hwnd = GetDlgItem(GetHwndOf(m_window), id);
+
+            if ( hwnd )
+            {
+                Add((WXHWND)hwnd);
+            }
         }
     }
 }
@@ -207,7 +294,7 @@ void wxToolTip::SetTip(const wxString& tip)
     if ( m_window )
     {
         // update it immediately
-        wxToolInfo ti(m_window);
+        wxToolInfo ti(GetHwndOf(m_window));
         ti.lpszText = (wxChar *)m_text.c_str();
 
         (void)SendTooltipMessage(GetToolTipCtrl(), TTM_UPDATETIPTEXT, 0, &ti);

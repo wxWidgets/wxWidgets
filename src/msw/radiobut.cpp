@@ -157,33 +157,6 @@ bool wxRadioButton::GetValue(void) const
   return (SendMessage((HWND) GetHWND(), BM_GETCHECK, 0, 0L) != 0);
 }
 
-WXHBRUSH wxRadioButton::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-      WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
-{
-#if wxUSE_CTL3D
-  if ( m_useCtl3D )
-  {
-    HBRUSH hbrush = Ctl3dCtlColorEx(message, wParam, lParam);
-    return (WXHBRUSH) hbrush;
-  }
-#endif
-
-  if (GetParent()->GetTransparentBackground())
-    SetBkMode((HDC) pDC, TRANSPARENT);
-  else
-    SetBkMode((HDC) pDC, OPAQUE);
-
-  ::SetBkColor((HDC) pDC, RGB(GetBackgroundColour().Red(), GetBackgroundColour().Green(), GetBackgroundColour().Blue()));
-  ::SetTextColor((HDC) pDC, RGB(GetForegroundColour().Red(), GetForegroundColour().Green(), GetForegroundColour().Blue()));
-
-  wxBrush *backgroundBrush = wxTheBrushList->FindOrCreateBrush(GetBackgroundColour(), wxSOLID);
-
-  // Note that this will be cleaned up in wxApp::OnIdle, if backgroundBrush
-  // has a zero usage count.
-//  backgroundBrush->RealizeResource();
-  return (WXHBRUSH) backgroundBrush->GetResourceHandle();
-}
-
 void wxRadioButton::Command (wxCommandEvent & event)
 {
   SetValue ( (event.m_commandInt != 0) );

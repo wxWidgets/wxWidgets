@@ -61,7 +61,7 @@ bool wxStaticBox::Create(wxWindow *parent,
                          long style,
                          const wxString& name)
 {
-    if ( !CreateControl(parent, id, pos, size, style, wxDefaultValidator, name) )
+    if ( !CreateControl(parent, id, pos, size, style, name) )
         return FALSE;
 
     if ( !MSWCreateControl(wxT("BUTTON"), BS_GROUPBOX, pos, size, label, 0) )
@@ -82,34 +82,6 @@ wxSize wxStaticBox::DoGetBestSize() const
     int hBox = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy);
 
     return wxSize(wBox, hBox);
-}
-
-WXHBRUSH wxStaticBox::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-                                 WXUINT message,
-                                 WXWPARAM wParam,
-                                 WXLPARAM lParam)
-{
-#if wxUSE_CTL3D
-    if ( m_useCtl3D )
-    {
-        HBRUSH hbrush = Ctl3dCtlColorEx(message, wParam, lParam);
-        return (WXHBRUSH) hbrush;
-    }
-#endif // wxUSE_CTL3D
-
-    HDC hdc = (HDC)pDC;
-    if (GetParent()->GetTransparentBackground())
-        SetBkMode(hdc, TRANSPARENT);
-    else
-        SetBkMode(hdc, OPAQUE);
-
-    const wxColour& colBack = GetBackgroundColour();
-    ::SetBkColor(hdc, wxColourToRGB(colBack));
-    ::SetTextColor(hdc, wxColourToRGB(GetForegroundColour()));
-
-    wxBrush *brush = wxTheBrushList->FindOrCreateBrush(colBack, wxSOLID);
-
-    return (WXHBRUSH)brush->GetResourceHandle();
 }
 
 long wxStaticBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)

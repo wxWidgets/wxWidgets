@@ -49,8 +49,6 @@ public:
     virtual bool MSWCommand(WXUINT param, WXWORD id);
     virtual void SetLabel(const wxString& label);
     virtual void Command(wxCommandEvent& event);
-    virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-            WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
 protected:
     virtual wxSize DoGetBestSize() const;

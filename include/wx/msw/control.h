@@ -43,9 +43,12 @@ public:
    virtual bool MSWOnDraw(WXDRAWITEMSTRUCT *WXUNUSED(item)) { return FALSE; };
    virtual bool MSWOnMeasure(WXMEASUREITEMSTRUCT *WXUNUSED(item)) { return FALSE; };
 
-   wxList& GetSubcontrols() { return m_subControls; }
+   wxArrayLong GetSubcontrols() { return m_subControls; }
 
    void OnEraseBackground(wxEraseEvent& event);
+
+   virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
+                               WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
 #if WXWIN_COMPATIBILITY
    virtual void SetButtonColour(const wxColour& WXUNUSED(col)) { }
@@ -66,8 +69,9 @@ protected:
 #endif // WXWIN_COMPATIBILITY
 
 protected:
-   // For controls like radiobuttons which are really composite
-   wxList m_subControls;
+   // for controls like radiobuttons which are really composite this array
+   // holds the ids (not HWNDs!) of the sub controls
+   wxArrayLong m_subControls;
 
    virtual wxSize DoGetBestSize() const;
 

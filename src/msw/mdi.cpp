@@ -213,6 +213,9 @@ wxMDIParentFrame::~wxMDIParentFrame()
 {
     DestroyChildren();
 
+    // already delete by DestroyChildren()
+    m_frameToolBar = NULL;
+
     ::DestroyMenu((HMENU)m_windowMenu);
     m_windowMenu = 0;
 

@@ -208,6 +208,34 @@ void wxControl::OnEraseBackground(wxEraseEvent& event)
     ::SetMapMode(hdc, mode);
 }
 
+WXHBRUSH wxControl::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
+                               WXUINT message,
+                               WXWPARAM wParam,
+                               WXLPARAM lParam)
+{
+#if wxUSE_CTL3D
+    if ( m_useCtl3D )
+    {
+        HBRUSH hbrush = Ctl3dCtlColorEx(message, wParam, lParam);
+        return (WXHBRUSH) hbrush;
+    }
+#endif // wxUSE_CTL3D
+
+    HDC hdc = (HDC)pDC;
+    if (GetParent()->GetTransparentBackground())
+        SetBkMode(hdc, TRANSPARENT);
+    else
+        SetBkMode(hdc, OPAQUE);
+
+    const wxColour& colBack = GetBackgroundColour();
+    ::SetBkColor(hdc, wxColourToRGB(colBack));
+    ::SetTextColor(hdc, wxColourToRGB(GetForegroundColour()));
+
+    wxBrush *brush = wxTheBrushList->FindOrCreateBrush(colBack, wxSOLID);
+
+    return (WXHBRUSH)brush->GetResourceHandle();
+}
+
 WXDWORD wxControl::GetExStyle(WXDWORD& style, bool *want3D) const
 {
     WXDWORD exStyle = Determine3DEffects(WS_EX_CLIENTEDGE, want3D);

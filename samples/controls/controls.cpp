@@ -61,11 +61,6 @@
 
 #include "wx/progdlg.h"
 
-// VZ: this is a temp. hack, will remove soon
-#ifndef wxUSE_SPINCTRL
-#define wxUSE_SPINCTRL 1
-#endif
-
 #if wxUSE_SPINCTRL
     #include "wx/spinctrl.h"
 #endif // wxUSE_SPINCTRL
@@ -167,6 +162,8 @@ public:
     void OnSize( wxSizeEvent& event );
     void OnMove( wxMoveEvent& event );
 
+    MyPanel *GetPanel() const { return m_panel; }
+
 private:
     void UpdateStatusBar(const wxPoint& pos, const wxSize& size)
     {
@@ -176,7 +173,7 @@ private:
         SetStatusText(msg, 1);
     }
 
-    wxPanel *m_panel;
+    MyPanel *m_panel;
 
     DECLARE_EVENT_TABLE()
 };
@@ -258,6 +255,8 @@ bool MyApp::OnInit()
 
     frame->Show(TRUE);
     frame->SetCursor(wxCursor(wxCURSOR_HAND));
+
+    frame->GetPanel()->m_notebook->SetSelection(3);
 
     SetTopWindow(frame);
 
@@ -504,7 +503,9 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_notebook->AddPage(panel, "wxChoice", FALSE, Image_Choice);
 
     panel = new wxPanel(m_notebook);
-    m_combo = new wxComboBox( panel, ID_COMBO, "This", wxPoint(10,10), wxSize(120,-1), 5, choices, wxCB_READONLY );
+    (void)new wxStaticBox( panel, -1, "Box around combobox",
+                           wxPoint(5, 5), wxSize(150, 100));
+    m_combo = new wxComboBox( panel, ID_COMBO, "This", wxPoint(20,20), wxSize(120,-1), 5, choices, wxCB_READONLY );
     (void)new wxButton( panel, ID_COMBO_SEL_NUM, "Select #2", wxPoint(180,30), wxSize(140,30) );
     (void)new wxButton( panel, ID_COMBO_SEL_STR, "Select 'This'", wxPoint(340,30), wxSize(140,30) );
     (void)new wxButton( panel, ID_COMBO_CLEAR, "Clear", wxPoint(180,80), wxSize(140,30) );
@@ -525,6 +526,11 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     panel = new wxPanel(m_notebook);
     (void)new wxRadioBox( panel, ID_RADIOBOX, "That", wxPoint(10,160), wxSize(-1,-1), WXSIZEOF(choices2), choices2, 1, wxRA_SPECIFY_ROWS );
     m_radio = new wxRadioBox( panel, ID_RADIOBOX, "This", wxPoint(10,10), wxSize(-1,-1), WXSIZEOF(choices), choices, 1, wxRA_SPECIFY_COLS );
+
+#if wxUSE_TOOLTIPS
+    m_radio->SetToolTip("Ever seen a radiobox?");
+#endif // wxUSE_TOOLTIPS
+
     (void)new wxButton( panel, ID_RADIOBOX_SEL_NUM, "Select #2", wxPoint(180,30), wxSize(140,30) );
     (void)new wxButton( panel, ID_RADIOBOX_SEL_STR, "Select 'This'", wxPoint(180,80), wxSize(140,30) );
     m_fontButton = new wxButton( panel, ID_SET_FONT, "Set more Italic font", wxPoint(340,30), wxSize(140,30) );
@@ -584,7 +590,8 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
 #ifndef __WXMOTIF__  // wxStaticBitmap not working under Motif yet. MB
     wxIcon icon = wxTheApp->GetStdIcon(wxICON_INFORMATION);
-    wxStaticBitmap *bmpStatic = new wxStaticBitmap(panel, -1, icon, wxPoint(10, 10));
+    wxStaticBitmap *bmpStatic = new wxStaticBitmap(panel, -1, icon,
+                                                   wxPoint(10, 10));
 
     bmpStatic = new wxStaticBitmap(panel, -1, wxNullIcon, wxPoint(50, 10));
     bmpStatic->SetIcon(wxTheApp->GetStdIcon(wxICON_QUESTION));
@@ -594,11 +601,25 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     wxMemoryDC dc;
     dc.SelectObject( bitmap );
     dc.SetPen(*wxGREEN_PEN);
+    dc.Clear();
     dc.DrawEllipse(5, 5, 90, 90);
-    dc.DrawText("Bitmap", 20, 20);
+    dc.DrawText("Bitmap", 30, 40);
     dc.SelectObject( wxNullBitmap );
 
     (void)new wxBitmapButton(panel, -1, bitmap, wxPoint(100, 20));
+
+    wxBitmap bmp1(wxTheApp->GetStdIcon(wxICON_INFORMATION)),
+             bmp2(wxTheApp->GetStdIcon(wxICON_WARNING)),
+             bmp3(wxTheApp->GetStdIcon(wxICON_QUESTION));
+    wxBitmapButton *bmpBtn = new wxBitmapButton
+                                 (
+                                  panel, -1,
+                                  bmp1,
+                                  wxPoint(30, 50)
+                                 );
+    bmpBtn->SetBitmapSelected(bmp2);
+    bmpBtn->SetBitmapFocus(bmp3);
+
     (void)new wxButton(panel, ID_BUTTON_LABEL, "Toggle label", wxPoint(250, 20));
     m_label = new wxStaticText(panel, -1, "Label with some long text",
                                wxPoint(250, 60), wxDefaultSize,

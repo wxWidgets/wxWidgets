@@ -108,10 +108,6 @@ public:
     virtual void SetHorizontalExtent(const wxString& s = wxEmptyString);
 
     // Windows callbacks
-    virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-                                WXUINT message,
-                                WXWPARAM wParam, WXLPARAM lParam);
-
     bool MSWCommand(WXUINT param, WXWORD id);
 
     virtual void SetupColours();

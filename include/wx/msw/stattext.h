@@ -51,8 +51,6 @@ public:
     virtual bool AcceptsFocus() const { return FALSE; }
 
     // callbacks
-    virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-                                WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
     virtual long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 
 protected:

@@ -55,12 +55,6 @@ public:
     virtual void Command(wxCommandEvent& event);
     virtual long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
     virtual bool MSWCommand(WXUINT param, WXWORD id);
-    virtual WXHBRUSH OnCtlColor(WXHDC pDC,
-                                WXHWND pWnd,
-                                WXUINT nCtlColor,
-                                WXUINT message,
-                                WXWPARAM wParam,
-                                WXLPARAM lParam);
 
 protected:
     // send a notification event, return TRUE if processed

@@ -35,13 +35,16 @@ public:
     void RelayEvent(WXMSG *msg);
 
 private:
-    static WXHWND hwndTT;
-    // create the tooltip ctrl for our parent frame if it doesn't exist yet
-    // and return its window handle
+    static WXHWND ms_hwndTT;
+
+    // create the tooltip ctrl if it doesn't exist yet and return its HWND
     WXHWND GetToolTipCtrl();
 
     // remove this tooltip from the tooltip control
     void Remove();
+
+    // add a window to the tooltip control
+    void Add(WXHWND hwnd);
 
     wxString  m_text;           // tooltip text
     wxWindow *m_window;         // window we're associated with

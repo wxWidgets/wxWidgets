@@ -163,6 +163,17 @@ END_EVENT_TABLE()
 // Find an item given the MS Windows id
 wxWindow *wxWindow::FindItem(long id) const
 {
+    wxControl *item = wxDynamicCast(this, wxControl);
+    if ( item )
+    {
+        // i it we or one of our "internal" children?
+        if ( item->GetId() == id ||
+             (item->GetSubcontrols().Index(id) != wxNOT_FOUND) )
+        {
+            return item;
+        }
+    }
+
     wxWindowList::Node *current = GetChildren().GetFirst();
     while (current)
     {
@@ -171,19 +182,6 @@ wxWindow *wxWindow::FindItem(long id) const
         wxWindow *wnd = childWin->FindItem(id);
         if ( wnd )
             return wnd;
-
-        if ( childWin->IsKindOf(CLASSINFO(wxControl)) )
-        {
-            wxControl *item = (wxControl *)childWin;
-            if ( item->GetId() == id )
-                return item;
-            else
-            {
-                // In case it's a 'virtual' control (e.g. radiobox)
-                if ( item->GetSubcontrols().Member((wxObject *)id) )
-                    return item;
-            }
-        }
 
         current = current->GetNext();
     }
@@ -2946,7 +2944,8 @@ bool wxWindow::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
         return popupMenu->MSWCommand(cmd, id);
     }
 
-    wxWindow *win = FindItem(id);
+    // must cast to a signed type before comparing with other ids!
+    wxWindow *win = FindItem((signed short)id);
     if ( !win )
     {
         win = wxFindWinFromHandle(control);

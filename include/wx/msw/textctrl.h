@@ -128,10 +128,6 @@ public:
     void SetRichEdit(bool isRich) { m_isRich = isRich; }
 #endif // wxUSE_RICHEDIT
 
-    virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-                                WXUINT message, WXWPARAM wParam,
-                                WXLPARAM lParam);
-
     virtual void AdoptAttributesFromHWND();
     virtual void SetupColours();
 

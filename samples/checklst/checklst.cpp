@@ -62,6 +62,8 @@ public:
 private:
     void OnButtonMove(bool up);
 
+    void AdjustColour(size_t index);
+
     wxCheckListBox *m_pListBox;
 
     DECLARE_EVENT_TABLE()
@@ -157,13 +159,10 @@ CheckListBoxFrame::CheckListBoxFrame(wxFrame *frame,
 
     delete [] astrChoices;
 
-    // not implemented in other ports yet
-#ifdef __WXMSW__
     // set grey background for every second entry
     for ( ui = 0; ui < WXSIZEOF(aszChoices); ui += 2 ) {
-        m_pListBox->GetItem(ui)->SetBackgroundColour(wxColor(200, 200, 200));
+        AdjustColour(ui);
     }
-#endif // wxGTK
 
     m_pListBox->Check(2);
 
@@ -252,7 +251,7 @@ void CheckListBoxFrame::OnButtonMove(bool up)
         wxString label = m_pListBox->GetString(selection);
 
         int positionNew = up ? selection - 1 : selection + 2;
-        if ( positionNew < 0 || positionNew > m_pListBox->Number() )
+        if ( positionNew < 0 || positionNew > m_pListBox->GetCount() )
         {
             wxLogStatus(this, _T("Can't move this item %s"), up ? _T("up") : _T("down"));
         }
@@ -272,6 +271,9 @@ void CheckListBoxFrame::OnButtonMove(bool up)
             m_pListBox->Check(selectionNew, wasChecked);
             m_pListBox->SetSelection(selectionNew);
 
+            AdjustColour(selection);
+            AdjustColour(selectionNew);
+
             wxLogStatus(this, _T("Item moved %s"), up ? _T("up") : _T("down"));
         }
     }
@@ -279,4 +281,14 @@ void CheckListBoxFrame::OnButtonMove(bool up)
     {
         wxLogStatus(this, _T("Please select an item"));
     }
+}
+
+void CheckListBoxFrame::AdjustColour(size_t index)
+{
+    // not implemented in other ports yet
+#ifdef __WXMSW__
+    // even items have grey backround, odd ones - white
+    unsigned char c = index % 2 ? 255 : 200;
+    m_pListBox->GetItem(index)->SetBackgroundColour(wxColor(c, c, c));
+#endif // wxMSW
 }

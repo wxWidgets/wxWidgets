@@ -481,17 +481,7 @@ WXHBRUSH wxSliderMSW::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
     return 0;
 
   // Otherwise, it's a static
-  if (GetParent()->GetTransparentBackground())
-    SetBkMode((HDC) pDC, TRANSPARENT);
-  else
-    SetBkMode((HDC) pDC, OPAQUE);
-
-  ::SetBkColor((HDC) pDC, RGB(GetBackgroundColour().Red(), GetBackgroundColour().Green(), GetBackgroundColour().Blue()));
-  ::SetTextColor((HDC) pDC, RGB(GetForegroundColour().Red(), GetForegroundColour().Green(), GetForegroundColour().Blue()));
-
-  wxBrush *backgroundBrush = wxTheBrushList->FindOrCreateBrush(GetBackgroundColour(), wxSOLID);
-
-  return (WXHBRUSH) backgroundBrush->GetResourceHandle();
+  return wxControl::OnCtlColor(pDC, pWnd, nCtlColor, message, wParam, lParam);
 }
 
 // For trackbars only

@@ -47,8 +47,6 @@ public:
             const wxValidator& val = wxDefaultValidator, const wxString& name = wxRadioBoxNameStr);
 
     virtual bool MSWCommand(WXUINT param, WXWORD id);
-    virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-                                WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
     int FindString(const wxString& s) const;
     void SetSelection(int N);
