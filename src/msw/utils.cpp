@@ -867,7 +867,7 @@ bool wxShell(const wxString& command)
         cmd.Printf(wxT("%s /c %s"), shell, command.c_str());
     }
 
-    return wxExecute(cmd, TRUE /* sync */) != 0;
+    return wxExecute(cmd, wxEXEC_SYNC) == 0;
 }
 
 // Shutdown or reboot the PC 
