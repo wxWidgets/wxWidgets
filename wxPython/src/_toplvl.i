@@ -128,6 +128,10 @@ public:
     // is successful.)
     virtual bool SetShape(const wxRegion& region);
 
+#ifdef __WXMAC__
+    void MacSetMetalAppearance( bool on ) ;
+    bool MacGetMetalAppearance() const ;
+#endif
 };
 
 
