@@ -57,6 +57,7 @@ extern void          wxAssociateWinWithHandle( HWND         hWnd
                                               ,wxWindowOS2* pWin
                                              );
 bool                 wxTopLevelWindowOS2::m_sbInitialized = FALSE;
+wxWindow*            wxTopLevelWindowOS2::m_spHiddenParent = NULL;
 
 // ============================================================================
 // wxTopLevelWindowMSW implementation
@@ -165,6 +166,46 @@ WXDWORD wxTopLevelWindowOS2::OS2GetStyle(
     }
     return lMsflags;
 } // end of wxTopLevelWindowOS2::OS2GetCreateWindowFlags
+
+WXHWND wxTopLevelWindowOS2::OS2GetParent() const
+{
+    //
+    // For the frames without wxFRAME_FLOAT_ON_PARENT style we should use NULL
+    // parent HWND or it would be always on top of its parent which is not what
+    // we usually want (in fact, we only want it for frames with the
+    // wxFRAME_FLOAT_ON_PARENT flag)
+    //
+    wxWindow*                           pParent;
+
+    if (HasFlag(wxFRAME_FLOAT_ON_PARENT) )
+    {
+        pParent = GetParent();
+
+        // this flag doesn't make sense then and will be ignored
+        wxASSERT_MSG( pParent,
+                      _T("wxFRAME_FLOAT_ON_PARENT but no parent?") );
+    }
+    else // don't float on parent, must not be owned
+    {
+        pParent = NULL;
+    }
+    if (HasFlag(wxFRAME_NO_TASKBAR) && !pParent)
+    {
+        if (!m_spHiddenParent)
+        {
+            m_spHiddenParent = new wxTopLevelWindowOS2(NULL, -1, _T(""));
+
+            //
+            // We shouldn't leave it in wxTopLevelWindows or we wouldn't
+            // terminate the app when the last user-created frame is deleted --
+            // see ~wxTopLevelWindowMSW
+            //
+            wxTopLevelWindows.DeleteObject(m_spHiddenParent);
+        }
+        pParent = m_spHiddenParent;
+    }
+    return pParent ? pParent->GetHWND() : NULL;
+} // end of wxTopLevelWindowOS2::OS2GetParent
 
 bool wxTopLevelWindowOS2::CreateDialog(
   ULONG                             ulDlgTemplate

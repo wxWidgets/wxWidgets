@@ -3097,6 +3097,11 @@ bool wxWindowOS2::OS2GetCreateWindowCoords(
     return bNonDefault;
 } // end of wxWindowOS2::OS2GetCreateWindowCoords
 
+WXHWND wxWindowOS2::OS2GetParent() const
+{
+    return m_parent ? m_parent->GetHWND() : NULL;
+}
+
 bool wxWindowOS2::OS2Create(
   PSZ                               zClass
 , const char*                       zTitle
@@ -3129,31 +3134,6 @@ bool wxWindowOS2::OS2Create(
                              ,nHeight
                             );
 
-    if (GetWindowStyleFlag() & wxPOPUP_WINDOW)
-        hParent = HWND_DESKTOP;
-    else
-    {
-        if ((bIsChild || HasFlag(wxFRAME_TOOL_WINDOW)) && pParent )
-        {
-            //
-            // This is either a normal child window or a top level window with
-            // wxFRAME_TOOL_WINDOW style (see below)
-            //
-            hParent = GetHwndOf(pParent);
-        }
-        else
-        {
-            //
-            // This is either a window for which no parent was specified (not
-            // much we can do then) or a frame without wxFRAME_TOOL_WINDOW
-            // style: we should use NULL parent HWND for it or it would be
-            // always on top of its parent which is not what we usually want
-            // (in fact, we only want it for frames with the special
-            // wxFRAME_TOOL_WINDOW as above)
-            //
-            hParent = NULL;
-        }
-    }
     if (bIsChild)
     {
         lControlId = GetId();
@@ -3171,20 +3151,20 @@ bool wxWindowOS2::OS2Create(
     {
         sClassName += wxT("NR");
     }
-    m_hWnd = (WXHWND)::WinCreateWindow( (HWND)hParent
-                                      ,(PSZ)sClassName.c_str()
-                                      ,(PSZ)zTitle ? zTitle : ""
-                                      ,(ULONG)dwStyle
-                                      ,(LONG)0L
-                                      ,(LONG)0L
-                                      ,(LONG)0L
-                                      ,(LONG)0L
-                                      ,NULLHANDLE
-                                      ,HWND_TOP
-                                      ,(ULONG)lControlId
-                                      ,pCtlData
-                                      ,NULL
-                                     );
+    m_hWnd = (WXHWND)::WinCreateWindow( (HWND)OS2GetParent()
+                                       ,(PSZ)sClassName.c_str()
+                                       ,(PSZ)zTitle ? zTitle : ""
+                                       ,(ULONG)dwStyle
+                                       ,(LONG)0L
+                                       ,(LONG)0L
+                                       ,(LONG)0L
+                                       ,(LONG)0L
+                                       ,NULLHANDLE
+                                       ,HWND_TOP
+                                       ,(ULONG)lControlId
+                                       ,pCtlData
+                                       ,NULL
+                                      );
     if (!m_hWnd)
     {
         vError = ::WinGetLastError(wxGetInstance());
@@ -3946,6 +3926,7 @@ void wxWindowOS2::InitMouseEvent(
     rEvent.m_rightDown   = ((uFlags & VK_BUTTON2) != 0);
     rEvent.SetTimestamp(s_currentMsg.time);
     rEvent.m_eventObject = this;
+    rEvent.SetId(GetId());
 
 #if wxUSE_MOUSEEVENT_HACK
     m_lastMouseX = nX;

@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  F:\DEV\WX2\WXWINDOWS\LIB\wx.lib
+;From library:  H:\Dev\Wx2\WxWindows\lib\WX.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -229,16 +229,16 @@ EXPORTS
       __ct__21wxPageSetupDialogDataFRC11wxPrintData
       ;wxPageSetupDialogData::operator=(const wxPageSetupDialogData&)
       __as__21wxPageSetupDialogDataFRC21wxPageSetupDialogData
-      ;wxPrintData::wxPrintData()
-      __ct__11wxPrintDataFv
+      ;wxFontDialogBase::~wxFontDialogBase()
+      __dt__16wxFontDialogBaseFv
       ;wxConstructorForwxPageSetupDialogData()
       wxConstructorForwxPageSetupDialogData__Fv
       ;wxPrintDialogData::~wxPrintDialogData()
       __dt__17wxPrintDialogDataFv
-      ;wxFontDialogBase::~wxFontDialogBase()
-      __dt__16wxFontDialogBaseFv
       ;wxColourData::wxColourData()
       __ct__12wxColourDataFv
+      ;wxPrintData::wxPrintData()
+      __ct__11wxPrintDataFv
       ;wxPageSetupDialogData::CalculatePaperSizeFromId()
       CalculatePaperSizeFromId__21wxPageSetupDialogDataFv
       ;wxPageSetupDialogData::CalculateIdFromPaperSize()
@@ -1798,8 +1798,8 @@ EXPORTS
       wxEVT_KILL_FOCUS
       wxEVT_COMMAND_RIGHT_DCLICK
       wxEVT_CLOSE_WINDOW
-      ;wxEvtHandler::ProcessEvent(wxEvent&)
-      ProcessEvent__12wxEvtHandlerFR7wxEvent
+      ;wxMouseEvent::Assign(const wxMouseEvent&)
+      Assign__12wxMouseEventFRC12wxMouseEvent
       wxEVT_SCROLL_LINEUP
       wxEVT_PAINT
       wxEVT_NULL
@@ -1827,6 +1827,8 @@ EXPORTS
       sm_classwxEraseEvent__12wxEraseEvent
       ;wxEvtHandler::SearchEventTable(wxEventTable&,wxEvent&)
       SearchEventTable__12wxEvtHandlerFR12wxEventTableR7wxEvent
+      ;wxEvtHandler::ProcessEvent(wxEvent&)
+      ProcessEvent__12wxEvtHandlerFR7wxEvent
       ;wxMouseEvent::wxMouseEvent(int)
       __ct__12wxMouseEventFi
       wxEVT_JOY_ZMOVE
@@ -1940,7 +1942,7 @@ EXPORTS
       wxEVT_NC_LEFT_DCLICK
       wxEVT_INIT_DIALOG
       wxEVT_COMMAND_SET_FOCUS
-  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\extended.c
+  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\extended.c
     ;PUBDEFs (Symbols available from object file):
       ConvertToIeeeExtended
       ConvertFromIeeeExtended
@@ -3149,8 +3151,8 @@ EXPORTS
       GetImageCount__7wxImageFR13wxInputStreaml
       ;wxImage::FindFirstUnusedColour(unsigned char*,unsigned char*,unsigned char*,unsigned char,unsigned char,unsigned char) const
       FindFirstUnusedColour__7wxImageCFPUcN21UcN24
-      ;wxImage::Scale(int,int) const
-      Scale__7wxImageCFiT1
+      ;wxImageHandler::CallDoCanRead(wxInputStream&)
+      CallDoCanRead__14wxImageHandlerFR13wxInputStream
       ;wxImage::sm_handlers
       sm_handlers__7wxImage
       ;wxImage::wxImage(const wxImage&)
@@ -3159,6 +3161,8 @@ EXPORTS
       __ct__7wxImageFR13wxInputStreamRC8wxStringi
       ;wxImage::SetPalette(const wxPalette&)
       SetPalette__7wxImageFRC9wxPalette
+      ;wxImage::Scale(int,int) const
+      Scale__7wxImageCFiT1
       ;wxImage::LoadFile(const wxString&,long,int)
       LoadFile__7wxImageFRC8wxStringli
       ;wxImageHandler::LoadFile(wxImage*,wxInputStream&,unsigned long,int)
@@ -6142,7 +6146,7 @@ EXPORTS
       Read32__17wxTextInputStreamFv
       ;wxTextInputStream::SkipIfEndOfLine(char)
       SkipIfEndOfLine__17wxTextInputStreamFc
-  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\unzip.c
+  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\unzip.c
     ;PUBDEFs (Symbols available from object file):
       unzReadCurrentFile
       unzGetCurrentFileInfo
@@ -7056,6 +7060,12 @@ EXPORTS
       GetHelpText__12wxWindowBaseCFv
       ;wxWindowBase::GetAncestorWithCustomPalette() const
       GetAncestorWithCustomPalette__12wxWindowBaseCFv
+      ;wxWindowBase::FindWindowByLabel(const wxString&,const wxWindow*)
+      FindWindowByLabel__12wxWindowBaseFRC8wxStringPC8wxWindow
+      ;wxWindowBase::FindWindowByName(const wxString&,const wxWindow*)
+      FindWindowByName__12wxWindowBaseFRC8wxStringPC8wxWindow
+      ;wxWindowBase::FindWindowById(long,const wxWindow*)
+      FindWindowById__12wxWindowBaseFlPC8wxWindow
       ;wxWindowBase::SetFont(const wxFont&)
       SetFont__12wxWindowBaseFRC6wxFont
       ;wxWindowBase::MakeModal(unsigned long)
@@ -7072,6 +7082,8 @@ EXPORTS
       InitBase__12wxWindowBaseFv
       ;wxWindowBase::SetCursor(const wxCursor&)
       SetCursor__12wxWindowBaseFRC8wxCursor
+      ;wxWindowBase::SatisfyConstraints()
+      SatisfyConstraints__12wxWindowBaseFv
       ;wxWindowBase::ResetConstraints()
       ResetConstraints__12wxWindowBaseFv
       ;wxWindowBase::GetDefaultBorder() const
@@ -10795,10 +10807,12 @@ EXPORTS
       WriteCustomization__15wxHtmlHelpFrameFP12wxConfigBaseRC8wxString
       ;wxHtmlHelpFrameOptionsDialog::sm_eventTable
       sm_eventTable__28wxHtmlHelpFrameOptionsDialog
-      ;wxHtmlHelpFrame::OnIndexAll(wxCommandEvent&)
-      OnIndexAll__15wxHtmlHelpFrameFR14wxCommandEvent
+      ;wxHtmlHelpFrame::OnActivate(wxActivateEvent&)
+      OnActivate__15wxHtmlHelpFrameFR15wxActivateEvent
       __vft28wxHtmlHelpFrameOptionsDialog8wxObject
       __vft15wxHtmlHelpFrame8wxObject
+      ;wxHtmlHelpFrame::OnIndexAll(wxCommandEvent&)
+      OnIndexAll__15wxHtmlHelpFrameFR14wxCommandEvent
       ;wxHtmlHelpFrame::wxHtmlHelpFrame(wxWindow*,int,const wxString&,int,wxHtmlHelpData*)
       __ct__15wxHtmlHelpFrameFP8wxWindowiRC8wxStringT2P14wxHtmlHelpData
       ;wxHtmlHelpFrame::DisplayContents()
@@ -13849,6 +13863,12 @@ EXPORTS
       __vft13wxPopupWindow8wxObject
       ;wxPopupWindow::DoGetPosition(int*,int*) const
       DoGetPosition__13wxPopupWindowCFPiT1
+      ;wxPopupWindow::FindPopupFor(wxWindow*)
+      FindPopupFor__13wxPopupWindowFP8wxWindow
+      ;wxPopupWindow::Show(unsigned long)
+      Show__13wxPopupWindowFUl
+      ;wxPopupWindow::m_svShownPopups
+      m_svShownPopups__13wxPopupWindow
       ;wxPopupWindow::OS2GetStyle(long,unsigned long*) const
       OS2GetStyle__13wxPopupWindowCFlPUl
       ;wxPopupWindow::Create(wxWindow*,int)
@@ -14818,12 +14838,16 @@ EXPORTS
       Init__19wxTopLevelWindowOS2Fv
       ;wxTopLevelWindowOS2::m_sbInitialized
       m_sbInitialized__19wxTopLevelWindowOS2
+      ;wxTopLevelWindowOS2::OS2GetParent() const
+      OS2GetParent__19wxTopLevelWindowOS2CFv
       ;wxTopLevelWindowOS2::Iconize(unsigned long)
       Iconize__19wxTopLevelWindowOS2FUl
       ;wxTopLevelWindowOS2::DoSetClientSize(int,int)
       DoSetClientSize__19wxTopLevelWindowOS2FiT1
       ;wxTopLevelWindowOS2::IsMaximized() const
       IsMaximized__19wxTopLevelWindowOS2CFv
+      ;wxTopLevelWindowOS2::m_spHiddenParent
+      m_spHiddenParent__19wxTopLevelWindowOS2
       ;wxTopLevelWindowOS2::SetIcon(const wxIcon&)
       SetIcon__19wxTopLevelWindowOS2FRC6wxIcon
       ;wxTopLevelWindowOS2::Restore()
@@ -14996,6 +15020,8 @@ EXPORTS
       UnsubclassWin__8wxWindowFv
       ;wxWindow::Raise()
       Raise__8wxWindowFv
+      ;wxWindow::OS2GetParent() const
+      OS2GetParent__8wxWindowCFv
       ;wxWindow::Lower()
       Lower__8wxWindowFv
       ;wxWindow::HandleMaximize()

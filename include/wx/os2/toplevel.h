@@ -131,6 +131,12 @@ protected:
     virtual WXDWORD OS2GetStyle( long     lFlag
                                 ,WXDWORD* pdwExstyle
                                ) const;
+
+    //
+    // Choose the right parent to use with CreateWindow()
+    //
+    virtual WXHWND  OS2GetParent(void) const;
+
     //
     // Is the frame currently iconized?
     //
@@ -155,6 +161,7 @@ protected:
     SWP                             m_vSwp;
     SWP                             m_vSwpClient;
     static bool                     m_sbInitialized;
+    static wxWindow*                m_spHiddenParent;
 }; // end of CLASS wxTopLevelWindowOS2
 
 //

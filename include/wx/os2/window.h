@@ -272,6 +272,9 @@ public:
         { return OS2GetStyle(GetWindowStyle(), pdwExflags); }
 
 
+    // get the HWND to be used as parent of this window with CreateWindow()
+    virtual WXHWND OS2GetParent(void) const;
+
     // returns TRUE if the window has been created
     bool         OS2Create( PSZ            zClass
                            ,const char*    zTitle

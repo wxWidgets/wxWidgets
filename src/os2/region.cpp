@@ -76,6 +76,7 @@ public:
 };
 
 #define M_REGION (((wxRegionRefData*)m_refData)->m_hRegion)
+#define M_REGION_OF(rgn) (((wxRegionRefData*)(rgn.m_refData))->m_hRegion)
 
 //-----------------------------------------------------------------------------
 // wxRegion
@@ -277,58 +278,7 @@ bool wxRegion::Combine(
 , wxRegionOp                        eOp
 )
 {
-    AllocExclusive();
-
-    //
-    // If ref count is 1, that means it's 'ours' anyway so no action.
-    //
-    RECTL                           vRect;
-
-    vRect.xLeft   = x;
-    vRect.xRight  = x + vWidth;
-    vRect.yBottom = y;
-    vRect.yTop    = y + vHeight;
-
-    HRGN                            hRgn = ::GpiCreateRegion( ((wxRegionRefData*)m_refData)->m_hPS
-                                                             ,1
-                                                             ,&vRect
-                                                            );
-    LONG                            lMode = 0L;
-
-    switch (eOp)
-    {
-        case wxRGN_AND:
-            lMode = CRGN_AND;
-            break;
-
-        case wxRGN_OR:
-            lMode = CRGN_OR;
-            break;
-
-        case wxRGN_XOR:
-            lMode = CRGN_XOR;
-            break;
-
-        case wxRGN_DIFF:
-            lMode = CRGN_DIFF;
-            break;
-
-        case wxRGN_COPY:
-        default:
-            lMode = CRGN_COPY;
-            break;
-    }
-    bool                            bSuccess = ::GpiCombineRegion( ((wxRegionRefData*)m_refData)->m_hPS
-                                                                  ,M_REGION
-                                                                  ,M_REGION
-                                                                  ,hRgn
-                                                                  ,lMode
-                                                                 );
-    ::GpiDestroyRegion ( ((wxRegionRefData*)m_refData)->m_hPS
-                        ,hRgn
-                       );
-
-    return bSuccess;
+    return Combine(wxRegion(x, y, vWidth, vHeight), eOp);
 } // end of wxRegion::Combine
 
 //
@@ -339,42 +289,67 @@ bool wxRegion::Combine(
 , wxRegionOp                        eOp
 )
 {
-    if (rRegion.Empty())
-        return FALSE;
-
-    AllocExclusive();
-
-    LONG                            lMode = 0;
-
-    switch (eOp)
+    //
+    // We can't use the API functions if we don't have a valid region handle
+    //
+    if (!m_refData)
     {
-        case wxRGN_AND:
-            lMode = CRGN_AND;
-            break;
+        // combining with an empty/invalid region works differently depending
+        // on the operation
+        switch (eOp)
+        {
+            case wxRGN_COPY:
+            case wxRGN_OR:
+            case wxRGN_XOR:
+                *this = rRegion;
+                break;
 
-        case wxRGN_OR:
-            lMode = CRGN_OR;
-            break;
+            default:
+                wxFAIL_MSG( _T("unknown region operation") );
+                // fall through
 
-        case wxRGN_XOR:
-            lMode = CRGN_XOR;
-            break;
-
-        case wxRGN_DIFF:
-            lMode = CRGN_DIFF;
-            break;
-
-        case wxRGN_COPY:
-        default:
-            lMode = CRGN_COPY;
-            break;
+            case wxRGN_AND:
+            case wxRGN_DIFF:
+                // leave empty/invalid
+                return FALSE;
+        }
     }
-    return (::GpiCombineRegion( ((wxRegionRefData*)rRegion.m_refData)->m_hPS
-                               ,M_REGION
-                               ,M_REGION
-                               ,((wxRegionRefData*)rRegion.m_refData)->m_hRegion
-                               ,lMode
-                              ) != RGN_ERROR);
+    else // we have a valid region
+    {
+
+        LONG                        lMode = 0;
+
+        switch (eOp)
+        {
+            case wxRGN_AND:
+                lMode = CRGN_AND;
+                break;
+
+            case wxRGN_OR:
+                lMode = CRGN_OR;
+                break;
+
+            case wxRGN_XOR:
+                lMode = CRGN_XOR;
+                break;
+
+            case wxRGN_DIFF:
+                lMode = CRGN_DIFF;
+                break;
+
+            case wxRGN_COPY:
+            default:
+                lMode = CRGN_COPY;
+                break;
+        }
+        return (::GpiCombineRegion( ((wxRegionRefData*)rRegion.m_refData)->m_hPS
+                                   ,M_REGION
+                                   ,M_REGION
+                                   ,((wxRegionRefData*)rRegion.m_refData)->m_hRegion
+                                   ,lMode
+                                  ) != RGN_ERROR);
+    }
+    return TRUE;
 } // end of wxRegion::Combine
 
 bool wxRegion::Combine(
