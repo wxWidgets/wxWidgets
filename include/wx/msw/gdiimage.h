@@ -21,6 +21,8 @@
 #endif
 
 #include "wx/gdiobj.h"          // base class
+#include "wx/gdicmn.h"          // wxBITMAP_TYPE_INVALID
+#include "wx/list.h"
 
 class WXDLLEXPORT wxGDIImageRefData;
 class WXDLLEXPORT wxGDIImageHandler;

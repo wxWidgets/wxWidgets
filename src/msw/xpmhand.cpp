@@ -10,40 +10,38 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation "xpmhand.h"
+    #pragma implementation "xpmhand.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-#include <stdio.h>
-#include "wx/setup.h"
-#include "wx/list.h"
-#include "wx/utils.h"
-#include "wx/app.h"
-#include "wx/palette.h"
-#include "wx/dcmemory.h"
-#include "wx/bitmap.h"
-#include "wx/icon.h"
+    #include "wx/list.h"
+    #include "wx/utils.h"
+    #include "wx/app.h"
+    #include "wx/palette.h"
+    #include "wx/dcmemory.h"
+    #include "wx/bitmap.h"
+    #include "wx/icon.h"
 #endif
 
 #include "wx/msw/private.h"
 #include "wx/log.h"
 
-#include "assert.h"
-
 #if wxUSE_XPM_IN_MSW
-#define FOR_MSW 1
-#include "../xpm/xpm34.h"
+    #define FOR_MSW 1
+    #include "../xpm/xpm34.h"
 #endif
 
 #include "wx/xpmhand.h"
 #include "wx/msw/dib.h"
+
+#if wxUSE_XPM_IN_MSW
 
 static void XpmToBitmap(wxBitmap *bitmap,
                         const XImage *ximage,
@@ -64,10 +62,14 @@ static void XpmToBitmap(wxBitmap *bitmap,
     refData->m_numColors = xpmAttr.npixels;
 }
 
+#endif // wxUSE_XPM_IN_MSW
+
 IMPLEMENT_DYNAMIC_CLASS(wxXPMFileHandler, wxBitmapHandler)
 
-bool wxXPMFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
-    int desiredWidth, int desiredHeight)
+bool wxXPMFileHandler::LoadFile(wxBitmap *bitmap,
+                                const wxString& name,
+                                long flags,
+                                int desiredWidth, int desiredHeight)
 {
 #if wxUSE_XPM_IN_MSW
     XImage *ximage;
@@ -99,7 +101,10 @@ bool wxXPMFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long fla
     return FALSE;
 }
 
-bool wxXPMFileHandler::SaveFile(wxBitmap *bitmap, const wxString& name, int type, const wxPalette *palette)
+bool wxXPMFileHandler::SaveFile(wxBitmap *bitmap,
+                                const wxString& name,
+                                int type,
+                                const wxPalette *palette)
 {
 #if wxUSE_XPM_IN_MSW
     HDC     dc = NULL;
@@ -138,7 +143,12 @@ bool wxXPMFileHandler::SaveFile(wxBitmap *bitmap, const wxString& name, int type
 
 IMPLEMENT_DYNAMIC_CLASS(wxXPMDataHandler, wxBitmapHandler)
 
-bool wxXPMDataHandler::Create(wxBitmap *bitmap, void *data, long flags, int width, int height, int depth)
+bool wxXPMDataHandler::Create(wxBitmap *bitmap,
+                              void *data,
+                              long flags,
+                              int width,
+                              int height,
+                              int depth)
 {
 #if wxUSE_XPM_IN_MSW
   XImage *ximage;

@@ -16,6 +16,8 @@
     #pragma interface "control.h"
 #endif
 
+#include "wx/dynarray.h"
+
 // General item class
 class WXDLLEXPORT wxControl : public wxControlBase
 {

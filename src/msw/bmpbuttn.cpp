@@ -21,7 +21,7 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/bmpbuttn.h"
+    #include "wx/bmpbuttn.h"
 #endif
 
 #include "wx/msw/private.h"
