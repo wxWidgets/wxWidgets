@@ -606,7 +606,7 @@ void wxProgressDialog::EnableAbort(bool enable)
     {
 #ifdef __SMARTPHONE__
         if(enable)
-            SetLeftMenu(wxID_CANCEL, _("Cancel"));
+            SetLeftMenu(wxID_CANCEL); // stock buttons makes Cancel label
         else
             SetLeftMenu();
 #else
