@@ -174,7 +174,7 @@ public:
 #elif defined(__WXMGL__)
     #define wxHAS_SS_NATIVE
 #elif defined(__WXMAC__)
-    #include "wx/mac/settings.h"
+    #define wxHAS_SS_NATIVE
 #elif defined(__WXPM__)
     #include "wx/os2/settings.h"
 #endif
