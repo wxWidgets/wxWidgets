@@ -2163,6 +2163,10 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
     }
 #endif // wxUSE_TOOLTIPS
 
+/* This code manages to disable character input completely. Nice one!
+ * Probably because the dialog is requesting all char input. Or,
+ * it gets called by non-dialog windows.
+
     // In case we don't have wxTAB_TRAVERSAL style on.
     // If we don't call this, we may never process Enter correctly.
     if ( m_hWnd != 0 && (GetWindowStyleFlag() & wxTAB_TRAVERSAL) == 0 )
@@ -2171,7 +2175,7 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
         if ( ::IsDialogMessage((HWND)GetHWND(), msg) )
             return TRUE;
     }
-
+*/
     return FALSE;
 }
 
