@@ -569,11 +569,13 @@ case "${host}" in
     AC_DEFINE(__GNUWIN32__)
     AC_DEFINE(STRICT)
     AC_DEFINE(WINVER, 0x0400)
+    PROGRAM_EXT=".exe"
     DEFAULT_DEFAULT_wxUSE_MSW=1
   ;;
 
   *-pc-os2_emx )
     AC_DEFINE(__EMX__)
+    PROGRAM_EXT=".exe"
     DEFAULT_DEFAULT_wxUSE_PM=1
   ;;
 
@@ -1202,7 +1204,6 @@ case "${host}" in
     NUM_TOOLKITS=`expr ${NUM_TOOLKITS} + ${wxUSE_PM:-0}`
     # PATH_IFS is autodetected by OS/2's configure (usually ';')
     LEX_STEM="lexyy"
-    PROGRAM_EXT=".exe"
   ;;
   *)
     PATH_IFS=':'
@@ -1239,6 +1240,7 @@ done
 
 dnl from "if wxUSE_GUI"
 else
+    PATH_IFS=':'
     AC_MSG_RESULT(base only)
 fi
 
@@ -1507,7 +1509,6 @@ if test "$wxUSE_CYGWIN" = 1 || test "$wxUSE_MINGW" = 1 ; then
     GENERICOBJS="\$(MSW_GENERICOBJS)"
     UNIXOBJS=
     GUIDIST=MSW_DIST
-    PROGRAM_EXT=.exe
 fi
 
 if test "$wxUSE_GTK" = 1; then
