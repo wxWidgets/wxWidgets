@@ -287,9 +287,6 @@ GSocketError GSocket_GetSockOpt(GSocket *socket, int level, int optname,
 GSocketError GSocket_SetSockOpt(GSocket *socket, int level, int optname, 
                                 const void *optval, int optlen);
 
-void GSocket_Streamed(GSocket *socket);
-void GSocket_Unstreamed(GSocket *socket);
-
 /* Attributes */
 
 /* GSocket_SetNonBlocking:

@@ -1156,16 +1156,6 @@ GSocketError GSocket_SetSockOpt(GSocket *socket, int level, int optname,
     return GSOCK_OPTERR;
 }
 
-void GSocket_Streamed(GSocket *socket)
-{
-    socket->m_stream = TRUE;
-}
-
-void GSocket_Unstreamed(GSocket *socket)
-{
-    socket->m_stream = FALSE;
-}
-
 #define CALL_CALLBACK(socket, event) {                                  \
   _GSocket_Disable(socket, event);                                      \
   if (socket->m_cbacks[event])                                          \
