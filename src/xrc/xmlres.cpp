@@ -1112,7 +1112,7 @@ public:
     }
     void OnExit()
     {
-        delete wxXmlResource::Get();
+        delete wxXmlResource::Set(NULL);
         CleanXMLID_Records();
     }
 };
