@@ -44,7 +44,7 @@ wxMenuBar::wxMenuBar( long style )
         !CreateBase( (wxWindow*) NULL, -1, wxDefaultPosition, wxDefaultSize, style, wxDefaultValidator, _T("menubar") ))
     {
         wxFAIL_MSG( _T("wxMenuBar creation failed") );
-	return;
+        return;
     }
 
     m_menus.DeleteContents( TRUE );
@@ -83,7 +83,7 @@ wxMenuBar::wxMenuBar()
         !CreateBase( (wxWindow*) NULL, -1, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("menubar") ))
     {
         wxFAIL_MSG( _T("wxMenuBar creation failed") );
-	return;
+        return;
     }
     
     m_menus.DeleteContents( TRUE );
@@ -208,14 +208,23 @@ void wxMenuBar::Append( wxMenu *menu, const wxString &title )
         {
 #if (GTK_MINOR_VERSION > 0) && (GTK_MICRO_VERSION > 0)
             str << _T('_');
-        } else
-        if (*pc == _T('/'))
+        }
+        else if (*pc == _T('/'))
         {
             str << _T('\\');
 #endif
         }
         else
-           str << *pc;
+        {
+            if ( *pc == _T('_') )
+            {
+                // underscores must be doubled to prevent them from being
+                // interpreted as accelerator character prefix by GTK
+                str << *pc;
+            }
+
+            str << *pc;
+        }
     }
 
     /* this doesn't have much effect right now */
@@ -243,7 +252,11 @@ void wxMenuBar::Append( wxMenu *menu, const wxString &title )
     wxString tmp = _T("<main>/");
     for ( pc = str; *pc != _T('\0'); pc++ )
     {
-       if (*pc == _T('_')) pc++; /* skip it */
+       // contrary to the common sense, we must throw out _all_ underscores,
+       // (i.e. "Hello__World" => "HelloWorld" and not "Hello_World" as we
+       // might naively think). IMHO it's a bug in GTK+ (VZ) 
+       while (*pc == _T('_'))
+           pc++;
        tmp << *pc;
     }
     menu->m_owner = gtk_item_factory_get_item( m_factory, tmp.mb_str() );
@@ -648,8 +661,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxMenu,wxEvtHandler)
 void
 wxMenu::Init( const wxString& title,
               long style,
-	      const wxFunction func
-	      )
+              const wxFunction func
+            )
 {
     m_title = title;
     m_items.DeleteContents( TRUE );
