@@ -73,6 +73,8 @@
     #include <wtime.h>
 #endif
 
+#include "wx/datetime.h"
+
 // the suffix we add to the button to show that the dialog can be expanded
 #define EXPAND_SUFFIX _T(" >>")
 
@@ -866,7 +868,7 @@ void wxLogDialog::CreateDetailsControls()
     if ( !fmt )
     {
         // default format
-        fmt = _T("%c");
+        fmt = wxDefaultDateTimeFormat;
     }
 
     size_t count = m_messages.GetCount();
@@ -952,7 +954,7 @@ void wxLogDialog::OnSave(wxCommandEvent& WXUNUSED(event))
     if ( !fmt )
     {
         // default format
-        fmt = _T("%c");
+        fmt = wxDefaultDateTimeFormat;
     }
 
     size_t count = m_messages.GetCount();

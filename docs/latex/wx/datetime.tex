@@ -121,7 +121,7 @@ parameters is one of the following values:
 \end{verbatim}
 
 Date calculations often depend on the country and wxDateTime allows to set the
-country whose conventions should be used using 
+country whose conventions should be used using
 \helpref{SetCountry}{wxdatetimesetcountry}. It takes one of the following
 values as parameter:
 
@@ -148,7 +148,7 @@ values as parameter:
 Different parts of the world use different conventions for the week start.
 In some countries, the week starts on Sunday, while in others -- on Monday.
 The ISO standard doesn't address this issue, so we support both conventions in
-the functions whose result depends on it (\helpref{GetWeekOfYear}{wxdatetimegetweekofyear} and 
+the functions whose result depends on it (\helpref{GetWeekOfYear}{wxdatetimegetweekofyear} and
 \helpref{GetWeekOfMonth}{wxdatetimegetweekofmonth}).
 
 The desired behvaiour may be specified by giving one of the following
@@ -192,7 +192,7 @@ Please note that although several function accept an extra {\it Calendar}
 parameter, it is currently ignored as only the Gregorian calendar is
 supported. Future versions will support other calendars.
 
-\pythonnote{These methods are standalone functions named 
+\pythonnote{These methods are standalone functions named
 {\tt wxDateTime\_<StaticMethodName>} in wxPython.}
 
 \helpref{SetCountry}{wxdatetimesetcountry}\\
@@ -253,7 +253,7 @@ values were correct as constructors can not return an error code.
 \membersection{Accessors}\label{datetimeaccessors}
 
 Here are the trivial accessors. Other functions, which might have to perform
-some more complicated calculations to find the answer are under the 
+some more complicated calculations to find the answer are under the
 \helpref{Calendar calculations}{datetimecalculations} section.
 
 \helpref{IsValid}{wxdatetimeisvalid}\\
@@ -318,32 +318,32 @@ defined to be equivalent to the second forms of these functions.
 
 These functions convert wxDateTime objects to and from text. The
 conversions to text are mostly trivial: you can either do it using the default
-date and time representations for the current locale ( 
-\helpref{FormatDate}{wxdatetimeformatdate} and 
+date and time representations for the current locale (
+\helpref{FormatDate}{wxdatetimeformatdate} and
 \helpref{FormatTime}{wxdatetimeformattime}), using the international standard
-representation defined by ISO 8601 ( 
-\helpref{FormatISODate}{wxdatetimeformatisodate} and 
+representation defined by ISO 8601 (
+\helpref{FormatISODate}{wxdatetimeformatisodate} and
 \helpref{FormatISOTime}{wxdatetimeformatisotime}) or by specifying any format
 at all and using \helpref{Format}{wxdatetimeformat} directly.
 
 The conversions from text are more interesting, as there are much more
-possibilities to care about. The simplest cases can be taken care of with 
+possibilities to care about. The simplest cases can be taken care of with
 \helpref{ParseFormat}{wxdatetimeparseformat} which can parse any date in the
 given (rigid) format. \helpref{ParseRfc822Date}{wxdatetimeparserfc822date} is
 another function for parsing dates in predefined format -- the one of RFC 822
 which (still...) defines the format of email messages on the Internet. This
-format can not be described with {\tt strptime(3)}-like format strings used by 
+format can not be described with {\tt strptime(3)}-like format strings used by
 \helpref{Format}{wxdatetimeformat}, hence the need for a separate function.
 
-But the most interesting functions are 
-\helpref{ParseTime}{wxdatetimeparsetime}, 
-\helpref{ParseDate}{wxdatetimeparsedate} and 
+But the most interesting functions are
+\helpref{ParseTime}{wxdatetimeparsetime},
+\helpref{ParseDate}{wxdatetimeparsedate} and
 \helpref{ParseDateTime}{wxdatetimeparsedatetime}. They try to parse the date
 ans time (or only one of them) in `free' format, i.e. allow them to be
 specified in any of possible ways. These functions will usually be used to
 parse the (interactive) user input which is not bound to be in any predefined
 format. As an example, \helpref{ParseDateTime}{wxdatetimeparsedatetime} can
-parse the strings such as {\tt "tomorrow"}, {\tt "March first"} and even 
+parse the strings such as {\tt "tomorrow"}, {\tt "March first"} and even
 {\tt "next Sunday"}.
 
 \helpref{ParseRfc822Date}{wxdatetimeparserfc822date}\\
@@ -601,7 +601,7 @@ Example:
     printf("Current time in Paris:\t%s\n", now.Format("%c", wxDateTime::CET).c_str());
 \end{verbatim}
 
-Note that this function is accurate up to second: 
+Note that this function is accurate up to second:
 \helpref{wxDateTime::UNow}{wxdatetimeunow} should be used for better precision
 (but it is less efficient and might not be available on all platforms).
 
@@ -698,7 +698,7 @@ Same as \helpref{Set}{wxdatetimewxdatetimetime}
 
 \membersection{wxDateTime::wxDateTime}\label{wxdatetimewxdatetimedate}
 
-\func{wxDateTime\&}{wxDateTime}{\param{wxDateTime\_t }{day}, \param{Month }{month = Inv\_Month}, \param{int}{ Inv\_Year}, 
+\func{wxDateTime\&}{wxDateTime}{\param{wxDateTime\_t }{day}, \param{Month }{month = Inv\_Month}, \param{int}{ Inv\_Year},
 \param{wxDateTime\_t }{hour = 0}, \param{wxDateTime\_t }{minute = 0}, \param{wxDateTime\_t }{second = 0}, \param{wxDateTime\_t }{millisec = 0}}
 
 Same as \helpref{Set}{wxdatetimesetdate}
@@ -935,7 +935,7 @@ more than half of its days in this year. Accordingly, the week number will
 always be in $1\ldots53$ range ($52$ for non leap years).
 
 The function depends on the \helpref{week start}{wxdatetime} convention
-specified by the {\it flags} argument but its results for 
+specified by the {\it flags} argument but its results for
 \texttt{Sunday\_First} are not well-defined as the ISO definition quoted above
 applies to the weeks starting on Monday only.
 
@@ -973,8 +973,8 @@ calculations make sense for it).
 
 \func{wxDateTime\&}{Set}{\param{unsigned long }{ddt}}
 
-Sets the date from the date and time in 
-\urlref{DOS}{http://developer.novell.com/ndk/doc/smscomp/index.html?page=/ndk/doc/smscomp/sms\_docs/data/hc2vlu5i.html} 
+Sets the date from the date and time in
+\urlref{DOS}{http://developer.novell.com/ndk/doc/smscomp/index.html?page=/ndk/doc/smscomp/sms\_docs/data/hc2vlu5i.html}
 format.
 
 
@@ -982,8 +982,8 @@ format.
 
 \constfunc{unsigned long}{GetAsDOS}{\void}
 
-Returns the date and time in 
-\urlref{DOS}{http://developer.novell.com/ndk/doc/smscomp/index.html?page=/ndk/doc/smscomp/sms\_docs/data/hc2vlu5i.html} 
+Returns the date and time in
+\urlref{DOS}{http://developer.novell.com/ndk/doc/smscomp/index.html?page=/ndk/doc/smscomp/sms\_docs/data/hc2vlu5i.html}
 format.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%% comparison %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1147,7 +1147,7 @@ free ways, you should use \helpref{ParseDateTime}{wxdatetimeparsedatetime} or
 
 \membersection{wxDateTime::ParseFormat}\label{wxdatetimeparseformat}
 
-\func{const wxChar *}{ParseFormat}{\param{const wxChar *}{date}, \param{const wxChar *}{format = "\%c"}, \param{const wxDateTime\& }{dateDef = wxDefaultDateTime}}
+\func{const wxChar *}{ParseFormat}{\param{const wxChar *}{date}, \param{const wxChar *}{format = wxDefaultDateTimeFormat}, \param{const wxDateTime\& }{dateDef = wxDefaultDateTime}}
 
 This function parses the string {\it date} according to the given
 {\it format}. The system {\tt strptime(3)} function is used whenever available,
@@ -1190,7 +1190,7 @@ implemented, so always returns NULL.
 \func{const wxChar *}{ParseDate}{\param{const wxChar *}{date}}
 
 This function is like \helpref{ParseDateTime}{wxdatetimeparsedatetime}, but it
-only allows the date to be specified. It is thus less flexible then 
+only allows the date to be specified. It is thus less flexible then
 \helpref{ParseDateTime}{wxdatetimeparsedatetime}, but also has less chances to
 misinterpret the user input.
 
@@ -1211,7 +1211,7 @@ the character which stopped the scan.
 
 \membersection{wxDateTime::Format}\label{wxdatetimeformat}
 
-\constfunc{wxString }{Format}{\param{const wxChar *}{format = "\%c"}, \param{const TimeZone\& }{tz = Local}}
+\constfunc{wxString }{Format}{\param{const wxChar *}{format = wxDefaultDateTimeFormat}, \param{const TimeZone\& }{tz = Local}}
 
 This function does the same as the standard ANSI C {\tt strftime(3)} function.
 Please see its description for the meaning of {\it format} parameter.
@@ -1273,7 +1273,7 @@ Returns the reference to the modified object itself.
 
 \constfunc{wxDateTime}{GetWeekDayInSameWeek}{\param{WeekDay }{weekday}, \param{WeekFlags}{flags = {\tt Monday\_First}}}
 
-Returns the copy of this object to which 
+Returns the copy of this object to which
 \helpref{SetToWeekDayInSameWeek}{wxdatetimesettoweekdayinsameweek} was
 applied.
 
@@ -1367,7 +1367,7 @@ given \arg{year} . The number should be in range $1\ldots53$.
 
 Note that the returned date may be in a different year than the one passed to
 this function because both the week $1$ and week $52$ or $53$ (for leap years)
-contain days from different years. See 
+contain days from different years. See
 \helpref{GetWeekOfYear}{wxdatetimegetweekofyear} for the explanation of how the
 year weeks are counted.
 

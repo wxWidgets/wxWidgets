@@ -32,8 +32,8 @@
 class WXDLLIMPEXP_ADV wxGridCellDateTimeRenderer : public wxGridCellStringRenderer
 {
 public:
-    wxGridCellDateTimeRenderer(wxString outformat =  _T("%c"),
-                               wxString informat =  _T("%c"));
+    wxGridCellDateTimeRenderer(wxString outformat = wxDefaultDateTimeFormat,
+                               wxString informat = wxDefaultDateTimeFormat);
 
     // draw the string right aligned
     virtual void Draw(wxGrid& grid,
