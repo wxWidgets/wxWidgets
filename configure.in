@@ -957,7 +957,7 @@ AC_ARG_WITH(gtk-exec-prefix, [  --with-gtk-exec-prefix=PFX  Exec prefix where GT
 
 WX_ARG_SYS_WITH(libpng,    [  --with-libpng           use libpng (PNG image format)], wxUSE_LIBPNG)
 WX_ARG_SYS_WITH(libjpeg,   [  --with-libjpeg          use libjpeg (JPEG file format)], wxUSE_LIBJPEG)
-WX_ARG_WITH(libtiff,       [  --with-libtiff          use libtiff (TIFF file format)], wxUSE_LIBTIFF)
+WX_ARG_SYS_WITH(libtiff,   [  --with-libtiff          use libtiff (TIFF file format)], wxUSE_LIBTIFF)
 WX_ARG_WITH(opengl,        [  --with-opengl           use OpenGL (or Mesa)], wxUSE_OPENGL)
 
 fi
@@ -2616,7 +2616,7 @@ if test "$wxUSE_LIBPNG" = "yes" -o "$wxUSE_LIBPNG" = "sys" ; then
                                  [-lz -lm])
                    )
     if test "x$PNG_LINK" = "x" ; then
-        AC_MSG_ERROR(system png library not found! Use --with-png=yes to use built-in libpng)
+        AC_MSG_ERROR(system png library not found! Use --with-libpng=yes to use the built-in libpng)
     fi
   fi
 
@@ -2632,15 +2632,26 @@ if test "$wxUSE_LIBJPEG" = "yes" -o "$wxUSE_LIBJPEG" = "sys" ; then
     JPEG_LINK=
     AC_CHECK_HEADER(jpeglib.h, AC_CHECK_LIB(jpeg, jpeg_read_header, JPEG_LINK="-ljpeg"))
     if test "x$JPEG_LINK" = "x" ; then
-        AC_MSG_ERROR(system jpeg library not found! Use --with-jpeg=yes to use built-in one)
+        AC_MSG_ERROR(system jpeg library not found! Use --with-libjpeg=yes to use the built-in one)
     fi
   fi
 fi
 
 TIFF_INCLUDE=
-if test "$wxUSE_LIBTIFF" = "yes" ; then
+if test "$wxUSE_LIBTIFF" = "yes" -o "$wxUSE_LIBTIFF" = "sys" ; then
   AC_DEFINE(wxUSE_LIBTIFF)
-  TIFF_INCLUDE="-I\${top_srcdir}/src/tiff"
+  if test "$wxUSE_LIBTIFF" = "yes" ; then  
+    TIFF_INCLUDE="-I\${top_srcdir}/src/tiff"
+  else
+    TIFF_LINK=
+    AC_CHECK_HEADER(tiffio.h, AC_CHECK_LIB(tiff, TIFFError,
+                                           TIFF_LINK="-ltiff",
+                                           ,
+                                           -lm))
+    if test "x$TIFF_LINK" = "x" ; then
+        AC_MSG_ERROR(system tiff library not found! Use --with-libtiff=yes to use the built-in one)
+    fi
+  fi
 fi
 
 if test "$wxUSE_OPENGL" = "yes"; then
@@ -3481,7 +3492,7 @@ GUILIBS="$GUI_TK_LIBRARY $OPENGL_LINK $TOOLKIT_LINK"
 dnl all additional libraries (except wxWindows itself) we link with
 EXTRA_LIBS="$LIBS $ZLIB_LINK $POSIX4_LINK $INET_LINK $WCHAR_LINK $THREADS_LINK $DMALLOC_LINK $DL_LINK"
 if test "$wxUSE_GUI" = "yes"; then
-    EXTRA_LIBS="$EXTRA_LIBS $GUILIBS $PNG_LINK $JPEG_LINK"
+    EXTRA_LIBS="$EXTRA_LIBS $GUILIBS $PNG_LINK $JPEG_LINK $TIFF_LINK"
 fi
 
 dnl all the libraries needed to link wxWindows programs when using the
