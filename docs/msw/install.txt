@@ -397,6 +397,17 @@ Notes:
 
   (a missing bracket).
 
+- If there's a problem with the copy command in
+  src/msw/makefile.g95, you may need to change the relevant
+  section to the following:
+
+  COPY = command /c copy
+  $(COMMDIR)/y_tab.c:     $(COMMDIR)/dosyacc.c
+      $(COPY) ..\\common\\dosyacc.c ..\\common\\y_tab.c
+
+  $(COMMDIR)/lex_yy.c:    $(COMMDIR)/doslex.c
+      $(COPY) ..\\common\\doslex.c ..\\common\\lex_yy.c
+
 References:
 
  - The GNU-WIN32 site is at

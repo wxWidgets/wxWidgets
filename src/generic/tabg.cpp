@@ -699,6 +699,7 @@ void wxTabView::ClearTabs(bool deleteTabs)
     layerNode = nextLayerNode;
   }
   m_noTabs = 0;
+  m_tabSelection = -1;
 }
 
 
@@ -1024,6 +1025,9 @@ void wxTabView::SetBackgroundColour(const wxColour& col)
 
 void wxTabView::SetTabSelection(int sel, bool activateTool)
 {
+  if ( sel==m_tabSelection )
+    return;
+
   int oldSel = m_tabSelection;
   wxTabControl *control = FindTabControlForId(sel);
   wxTabControl *oldControl = FindTabControlForId(m_tabSelection);

@@ -1,7 +1,5 @@
 src/wxvc.dsp
 src/wxvc.dsw
-src/wxvc6.dsp
-src/wxvc6.dsw
 src/wxvc_dll.dsp
 src/wxvc_dll.dsw
 

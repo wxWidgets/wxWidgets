@@ -1001,7 +1001,7 @@ bool wxFileDataObject::GetDataHere(void *pData) const
 #endif // Unicode/Ansi
 
     // set start of filenames list (null separated)
-    wxChar *pbuf = (BYTE *)pDrop + sizeof(DROPFILES);
+    wxChar *pbuf = (wxChar*) ((BYTE *)pDrop + sizeof(DROPFILES));
 
     size_t count = m_filenames.GetCount();
     for (size_t i = 0; i < count; i++ )
