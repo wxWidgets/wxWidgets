@@ -74,6 +74,20 @@ public:
     // wxNullBitmap from here - the default one will be used then.
     virtual wxBitmap GetBitmap() const { return m_bitmap; }
 
+    /// Override the base functions to allow a validator to be assigned to this page.
+    bool TransferDataToWindow()
+    {
+        return GetValidator() ? GetValidator()->TransferToWindow() : wxPanel::TransferDataToWindow();
+    }
+    bool TransferDataFromWindow()
+    {
+        return GetValidator() ? GetValidator()->TransferFromWindow() : wxPanel::TransferDataFromWindow();
+    }
+    bool Validate()
+    {
+        return GetValidator() ? GetValidator()->Validate(this) : wxPanel::Validate();
+    }
+
 protected:
     // common part of ctors:
     void Init();
@@ -221,6 +235,13 @@ public:
 
     virtual bool HasPrevPage(wxWizardPage *page)
         { return page->GetPrev() != NULL; }
+
+    /// Override these functions to stop InitDialog from calling TransferDataToWindow
+    /// for _all_ pages when the wizard starts. Instead 'ShowPage' will call 
+    /// TransferDataToWindow for the first page only.
+    bool TransferDataToWindow() { return true; }
+    bool TransferDataFromWindow() { return true; }
+    bool Validate() { return true; }
 
 private:
     DECLARE_NO_COPY_CLASS(wxWizardBase)
