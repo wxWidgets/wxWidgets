@@ -31,12 +31,11 @@ wxWindows 2 currently supports the following platforms:
 - Windows 3.1, Windows 95/98, Windows NT
 - Most Unix variants with Motif/Lesstif
 - Most Unix variants with GTK+
-- Mac (not covered here: please see the wxWindows web site
-  for details)
+- MacOS
 
 Most popular C++ compilers are supported; see the install.txt
 file for each platform (available via docs/html/index.htm) for details.
-See also http://www.lpthe.jussieu.fr/~zeitlin/wxWindows/platform.html.
+See also http://www.wxwindows.org/platform.htm.
 
 Files
 -----
@@ -76,6 +75,12 @@ wxMSW-x.y.z-setup.zip              Zip archive containing the
 wxMSW-x.y.z.zip                    Zip archive containing all the
                                    files that are in the setup
                                    distribution
+
+wxWindows for MacOS distribution
+--------------------------------
+
+wxMac-x.y.z.zip                    Zip archive containing all
+                                   source files (excludes documentation)
 
 As well as the core source, the wxMSW distribution contains:
 
@@ -129,6 +134,7 @@ in the individual directories:
   docs/msw
   docs/gtk
   docs/motif
+  docs/mac
 
 Licence information
 -------------------
@@ -201,10 +207,10 @@ The main wxWindows ftp site is at:
 
 A wxWindows CD-ROM with the latest distribution plus an HTML
 front-end and hundreds of MB of compilers, utilities and other
-material may be ordered from the CD-ROM page (see the wxWindows
-web site) or contact Julian Smart <julian.smart@ukonline.co.uk>.
+material may be ordered from the CD-ROM page: see the wxWindows
+web site.
 
 Good luck!
 
-The wxWindows Team, 9th July, 2000
+The wxWindows Team, 8th May, 2001
 

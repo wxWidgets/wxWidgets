@@ -1,3 +1,4 @@
 mondrian_icon ICON "mondrian.ico"
+wxDEFAULT_FRAME ICON "wx/msw/std.ico"
 #include "wx/msw/wx.rc"
 

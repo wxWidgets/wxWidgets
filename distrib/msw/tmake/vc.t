@@ -155,7 +155,7 @@ HTMLOBJS = #$ ExpandList("WXHTMLOBJS");
 OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS) $(HTMLOBJS)
 
 # Normal, static library
-all:    setuph dirs $(DUMMYOBJ) $(OBJECTS) $(PERIPH_TARGET) png zlib xpm jpeg tiff $(LIBTARGET)
+all:    setuph dirs $(DUMMYOBJ) $(OBJECTS) $(PERIPH_TARGET) png zlib jpeg tiff $(LIBTARGET)
 
 setuph:
     cd $(WXDIR)\include\wx\msw
@@ -247,7 +247,7 @@ $(WXDIR)\lib\$(WXLIBNAME).dll: $(DUMMYOBJ) $(OBJECTS)
     $(link) @<<
     $(LINKFLAGS)
     -out:$(WXDIR)\lib\$(WXLIBNAME).dll
-    $(DUMMYOBJ) $(OBJECTS) $(guilibsdll) shell32.lib comctl32.lib ctl3d32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib odbc32.lib advapi32.lib winmm.lib $(GL_LIBS) $(WXDIR)\lib\png$(LIBEXT).lib $(WXDIR)\lib\zlib$(LIBEXT).lib $(WXDIR)\lib\xpm$(LIBEXT).lib $(WXDIR)\lib\jpeg$(LIBEXT).lib $(WXDIR)\lib\tiff$(LIBEXT).lib
+    $(DUMMYOBJ) $(OBJECTS) $(guilibsdll) shell32.lib comctl32.lib ctl3d32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib odbc32.lib advapi32.lib winmm.lib $(GL_LIBS) $(WXDIR)\lib\png$(LIBEXT).lib $(WXDIR)\lib\zlib$(LIBEXT).lib $(WXDIR)\lib\jpeg$(LIBEXT).lib $(WXDIR)\lib\tiff$(LIBEXT).lib
 	delayimp.lib
 	/delayload:ws2_32.dll /delayload:advapi32.dll /delayload:user32.dll /delayload:gdi32.dll
 	/delayload:comdlg32.dll /delayload:shell32.dll /delayload:comctl32.dll /delayload:ole32.dll
@@ -394,22 +394,12 @@ clean_tiff:
     nmake -f makefile.vc clean
     cd $(WXDIR)\src\msw
 
-xpm:
-    cd $(WXDIR)\src\xpm
-    nmake -f makefile.vc FINAL=$(FINAL) DLL=$(DLL) WXMAKINGDLL=$(WXMAKINGDLL) CRTFLAG=$(CRTFLAG)
-    cd $(WXDIR)\src\msw
-
-clean_xpm:
-    cd $(WXDIR)\src\xpm
-    nmake -f makefile.vc clean
-    cd $(WXDIR)\src\msw
-
 rcparser:
     cd $(WXDIR)\utils\rcparser\src
     nmake -f makefile.vc FINAL=$(FINAL)
     cd $(WXDIR)\src\msw
 
-cleanall: clean clean_png clean_zlib clean_xpm clean_jpeg clean_tiff
+cleanall: clean clean_png clean_zlib clean_jpeg clean_tiff
         -erase ..\..\lib\wx$(WXVERSION)$(LIBEXT).dll
         -erase ..\..\lib\wx$(WXVERSION)$(LIBEXT).lib
         -erase ..\..\lib\wx$(WXVERSION)$(LIBEXT).exp
@@ -446,9 +436,8 @@ clean: $(PERIPH_CLEAN_TARGET)
         -rmdir ..\common\$(D)
         -rmdir ..\html\$(D)
 
-
 # Making documents
-docs:   allhlp allhtml allpdfrtf htb htmlhelp
+docs:   allhlp allhtml allpdfrtf allhtb allhtmlhelp
 alldocs: docs
 hlp:    wxhlp
 wxhlp:  $(DOCDIR)/winhelp/wx.hlp
@@ -467,20 +456,42 @@ referencps:	$(WXDIR)\docs\ps\referenc.ps
 allhlp: wxhlp
         cd $(WXDIR)\utils\dialoged\src
         nmake -f makefile.vc hlp
+        cd $(WXDIR)\utils\tex2rtf\src
+        nmake -f makefile.vc hlp
         cd $(THISDIR)
 
 allhtml: wxhtml
         cd $(WXDIR)\utils\dialoged\src
         nmake -f makefile.vc html
+        cd $(WXDIR)\utils\tex2rtf\src
+        nmake -f makefile.vc html
+        cd $(THISDIR)
+
+allhtmlhelp: htmlhelp
+        cd $(WXDIR)\utils\dialoged\src
+        nmake -f makefile.vc htmlhelp
+        cd $(WXDIR)\utils\tex2rtf\src
+        nmake -f makefile.vc htmlhelp
+        cd $(THISDIR)
+
+allhtb: htb
+        cd $(WXDIR)\utils\dialoged\src
+        nmake -f makefile.vc htb
+        cd $(WXDIR)\utils\tex2rtf\src
+        nmake -f makefile.vc htb
         cd $(THISDIR)
 
 allps: wxps referencps
         cd $(WXDIR)\utils\dialoged\src
         nmake -f makefile.vc ps
+        cd $(WXDIR)\utils\tex2rtf\src
+        nmake -f makefile.vc ps
         cd $(THISDIR)
 
 allpdfrtf: pdfrtf
         cd $(WXDIR)\utils\dialoged\src
+        nmake -f makefile.vc pdfrtf
+        cd $(WXDIR)\utils\tex2rtf\src
         nmake -f makefile.vc pdfrtf
         cd $(THISDIR)
 

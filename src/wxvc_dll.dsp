@@ -256,10 +256,6 @@ SOURCE=.\common\gifdecod.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\common\xpmdecod.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\common\hash.cpp
 # End Source File
 # Begin Source File
@@ -518,6 +514,10 @@ SOURCE=.\common\wxchar.cpp
 # Begin Source File
 
 SOURCE=.\common\wxexpr.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\xpmdecod.cpp
 # End Source File
 # Begin Source File
 
@@ -1270,105 +1270,6 @@ SOURCE=.\png\pngwtran.c
 
 SOURCE=.\png\pngwutil.c
 # ADD CPP /I "zlib"
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# End Group
-# Begin Group "XPM Files"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=.\xpm\attrib.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\xpm\crbuffri.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\xpm\crdatfri.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\xpm\create.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\xpm\crifrbuf.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\xpm\crifrdat.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\xpm\dataxpm.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\xpm\hashtab.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\xpm\imagexpm.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\xpm\info.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\xpm\misc.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\xpm\parse.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\xpm\rdftodat.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\xpm\rdftoi.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\xpm\rgb.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\xpm\scan.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\xpm\simx.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\xpm\wrffrdat.c
-# SUBTRACT CPP /YX /Yc /Yu
-# End Source File
-# Begin Source File
-
-SOURCE=.\xpm\wrffri.c
 # SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # End Group
