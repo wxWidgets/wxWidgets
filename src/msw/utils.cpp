@@ -34,6 +34,8 @@
 #include "wx/apptrait.h"
 #include "wx/dynload.h"
 
+#include "wx/confbase.h"        // for wxExpandEnvVars()
+
 #include "wx/msw/private.h"     // includes <windows.h>
 #include "wx/msw/missing.h"     // CHARSET_HANGUL
 
@@ -90,6 +92,11 @@
     #if !(defined(_MSC_VER) && (_MSC_VER > 800))
         #include <errno.h>
     #endif
+#endif
+
+// 260 was taken from windef.h
+#ifndef MAX_PATH
+    #define MAX_PATH  260
 #endif
 
 // ----------------------------------------------------------------------------
@@ -354,8 +361,9 @@ error:
 
 const wxChar* wxGetHomeDir(wxString *pstr)
 {
-  wxString& strDir = *pstr;
+    wxString& strDir = *pstr;
 
+    // first branch is for Cygwin
 #if defined(__UNIX__)
     const wxChar *szHome = wxGetenv("HOME");
     if ( szHome == NULL ) {
@@ -371,34 +379,33 @@ const wxChar* wxGetHomeDir(wxString *pstr)
       strDir << wxT('/');
 
     #ifdef __CYGWIN__
-      // Cygwin returns unix type path but that does not work well
-      static wxChar windowsPath[MAX_PATH];
-      cygwin_conv_to_full_win32_path(strDir, windowsPath);
-      strDir = windowsPath;
+        // Cygwin returns unix type path but that does not work well
+        static wxChar windowsPath[MAX_PATH];
+        cygwin_conv_to_full_win32_path(strDir, windowsPath);
+        strDir = windowsPath;
     #endif
 #elif defined(__WXWINCE__)
       // Nothing
 #else
-    #ifdef  __WIN32__
-      strDir.clear();
+    strDir.clear();
 
-      // If we have a valid HOME directory, as is used on many machines that
-      // have unix utilities on them, we should use that.
-      const wxChar *szHome = wxGetenv(wxT("HOME"));
+    // If we have a valid HOME directory, as is used on many machines that
+    // have unix utilities on them, we should use that.
+    const wxChar *szHome = wxGetenv(wxT("HOME"));
 
-      if ( szHome != NULL )
-      {
+    if ( szHome != NULL )
+    {
         strDir = szHome;
-      }
-      else // no HOME, try HOMEDRIVE/PATH
-      {
-          szHome = wxGetenv(wxT("HOMEDRIVE"));
-          if ( szHome != NULL )
+    }
+    else // no HOME, try HOMEDRIVE/PATH
+    {
+        szHome = wxGetenv(wxT("HOMEDRIVE"));
+        if ( szHome != NULL )
             strDir << szHome;
-          szHome = wxGetenv(wxT("HOMEPATH"));
+        szHome = wxGetenv(wxT("HOMEPATH"));
 
-          if ( szHome != NULL )
-          {
+        if ( szHome != NULL )
+        {
             strDir << szHome;
 
             // the idea is that under NT these variables have default values
@@ -408,44 +415,38 @@ const wxChar* wxGetHomeDir(wxString *pstr)
             // to set HOMEPATH to something other than "\\", we suppose that he
             // knows what he is doing and use the supplied value.
             if ( wxStrcmp(szHome, wxT("\\")) == 0 )
-              strDir.clear();
-          }
-      }
+                strDir.clear();
+        }
+    }
 
-      if ( strDir.empty() )
-      {
-          // If we have a valid USERPROFILE directory, as is the case in
-          // Windows NT, 2000 and XP, we should use that as our home directory.
-          szHome = wxGetenv(wxT("USERPROFILE"));
+    if ( strDir.empty() )
+    {
+        // If we have a valid USERPROFILE directory, as is the case in
+        // Windows NT, 2000 and XP, we should use that as our home directory.
+        szHome = wxGetenv(wxT("USERPROFILE"));
 
-          if ( szHome != NULL )
+        if ( szHome != NULL )
             strDir = szHome;
-      }
+    }
 
-      if ( !strDir.empty() )
-      {
-          return strDir.c_str();
-      }
-      //else: fall back to the prograrm directory
-    #else   // Win16
-      // Win16 has no idea about home, so use the executable directory instead
-    #endif  // WIN16/32
+    if ( !strDir.empty() )
+    {
+        // sometimes the value of HOME may be "%USERPROFILE%", so reexpand the
+        // value once again, it shouldn't hurt anyhow
+        strDir = wxExpandEnvVars(strDir);
+    }
+    else // fall back to the program directory
+    {
+        wxString strPath;
+        ::GetModuleFileName(::GetModuleHandle(NULL),
+                            wxStringBuffer(strPath, MAX_PATH), MAX_PATH);
 
-    // 260 was taken from windef.h
-    #ifndef MAX_PATH
-      #define MAX_PATH  260
-    #endif
-
-    wxString strPath;
-    ::GetModuleFileName(::GetModuleHandle(NULL),
-                        wxStringBuffer(strPath, MAX_PATH), MAX_PATH);
-
-    // extract the dir name
-    wxSplitPath(strPath, &strDir, NULL, NULL);
-
+        // extract the dir name
+        wxSplitPath(strPath, &strDir, NULL, NULL);
+    }
 #endif  // UNIX/Win
 
-  return strDir.c_str();
+    return strDir.c_str();
 }
 
 wxChar *wxGetUserHome(const wxString& WXUNUSED(user))
