@@ -106,7 +106,11 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     return target;
 }
 
-static char* wxStringErrorMsg = "string type is required for parameter";
+#if PYTHON_API_VERSION >= 1009
+    static char* wxStringErrorMsg = "String or Unicode type required";
+#else
+    static char* wxStringErrorMsg = "string type is required for parameter";
+#endif
   // An alternate constructor...
     wxDataFormat* wxCustomDataFormat(const wxString &id) {
         return new wxDataFormat(id);
@@ -347,7 +351,7 @@ static PyObject *_wrap_wxCustomDataFormat(PyObject *self, PyObject *args, PyObje
 #if PYTHON_API_VERSION >= 1009
     char* tmpPtr; int tmpSize;
     if (!PyString_Check(_obj0) && !PyUnicode_Check(_obj0)) {
-        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
     if (PyString_AsStringAndSize(_obj0, &tmpPtr, &tmpSize) == -1)
@@ -1184,7 +1188,7 @@ static PyObject *_wrap_new_wxTextDataObject(PyObject *self, PyObject *args, PyOb
 #if PYTHON_API_VERSION >= 1009
     char* tmpPtr; int tmpSize;
     if (!PyString_Check(_obj0) && !PyUnicode_Check(_obj0)) {
-        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
     if (PyString_AsStringAndSize(_obj0, &tmpPtr, &tmpSize) == -1)
@@ -1299,7 +1303,7 @@ static PyObject *_wrap_wxTextDataObject_SetText(PyObject *self, PyObject *args, 
 #if PYTHON_API_VERSION >= 1009
     char* tmpPtr; int tmpSize;
     if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
     if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
@@ -1368,7 +1372,7 @@ static PyObject *_wrap_new_wxPyTextDataObject(PyObject *self, PyObject *args, Py
 #if PYTHON_API_VERSION >= 1009
     char* tmpPtr; int tmpSize;
     if (!PyString_Check(_obj0) && !PyUnicode_Check(_obj0)) {
-        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
     if (PyString_AsStringAndSize(_obj0, &tmpPtr, &tmpSize) == -1)

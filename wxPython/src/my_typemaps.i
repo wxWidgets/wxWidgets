@@ -151,7 +151,11 @@
 //---------------------------------------------------------------------------
 
 %{
-static char* wxStringErrorMsg = "string type is required for parameter";
+#if PYTHON_API_VERSION >= 1009
+    static char* wxStringErrorMsg = "String or Unicode type required";
+#else
+    static char* wxStringErrorMsg = "string type is required for parameter";
+#endif
 %}
 
 // TODO:  Which works best???
@@ -185,7 +189,7 @@ static char* wxStringErrorMsg = "string type is required for parameter";
 #if PYTHON_API_VERSION >= 1009
     char* tmpPtr; int tmpSize;
     if (!PyString_Check($source) && !PyUnicode_Check($source)) {
-        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
     if (PyString_AsStringAndSize($source, &tmpPtr, &tmpSize) == -1)

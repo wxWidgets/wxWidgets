@@ -104,7 +104,11 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     return target;
 }
 
-static char* wxStringErrorMsg = "string type is required for parameter";
+#if PYTHON_API_VERSION >= 1009
+    static char* wxStringErrorMsg = "String or Unicode type required";
+#else
+    static char* wxStringErrorMsg = "string type is required for parameter";
+#endif
 
     wxImage* wxEmptyImage(int width=0, int height=0) {
         if (width == 0 && height == 0)
@@ -176,7 +180,7 @@ static PyObject *_wrap_wxImageFromMime(PyObject *self, PyObject *args, PyObject 
 #if PYTHON_API_VERSION >= 1009
     char* tmpPtr; int tmpSize;
     if (!PyString_Check(_obj0) && !PyUnicode_Check(_obj0)) {
-        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
     if (PyString_AsStringAndSize(_obj0, &tmpPtr, &tmpSize) == -1)
@@ -194,7 +198,7 @@ static PyObject *_wrap_wxImageFromMime(PyObject *self, PyObject *args, PyObject 
 #if PYTHON_API_VERSION >= 1009
     char* tmpPtr; int tmpSize;
     if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
     if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
@@ -476,7 +480,7 @@ static PyObject *_wrap_wxImageHandler_SetName(PyObject *self, PyObject *args, Py
 #if PYTHON_API_VERSION >= 1009
     char* tmpPtr; int tmpSize;
     if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
     if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
@@ -527,7 +531,7 @@ static PyObject *_wrap_wxImageHandler_SetExtension(PyObject *self, PyObject *arg
 #if PYTHON_API_VERSION >= 1009
     char* tmpPtr; int tmpSize;
     if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
     if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
@@ -606,7 +610,7 @@ static PyObject *_wrap_wxImageHandler_SetMimeType(PyObject *self, PyObject *args
 #if PYTHON_API_VERSION >= 1009
     char* tmpPtr; int tmpSize;
     if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
     if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
@@ -882,7 +886,7 @@ static PyObject *_wrap_new_wxImage(PyObject *self, PyObject *args, PyObject *kwa
 #if PYTHON_API_VERSION >= 1009
     char* tmpPtr; int tmpSize;
     if (!PyString_Check(_obj0) && !PyUnicode_Check(_obj0)) {
-        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
     if (PyString_AsStringAndSize(_obj0, &tmpPtr, &tmpSize) == -1)
@@ -1260,7 +1264,7 @@ static PyObject *_wrap_wxImage_CanRead(PyObject *self, PyObject *args, PyObject 
 #if PYTHON_API_VERSION >= 1009
     char* tmpPtr; int tmpSize;
     if (!PyString_Check(_obj0) && !PyUnicode_Check(_obj0)) {
-        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
     if (PyString_AsStringAndSize(_obj0, &tmpPtr, &tmpSize) == -1)
@@ -1312,7 +1316,7 @@ static PyObject *_wrap_wxImage_LoadFile(PyObject *self, PyObject *args, PyObject
 #if PYTHON_API_VERSION >= 1009
     char* tmpPtr; int tmpSize;
     if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
     if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
@@ -1365,7 +1369,7 @@ static PyObject *_wrap_wxImage_LoadMimeFile(PyObject *self, PyObject *args, PyOb
 #if PYTHON_API_VERSION >= 1009
     char* tmpPtr; int tmpSize;
     if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
     if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
@@ -1383,7 +1387,7 @@ static PyObject *_wrap_wxImage_LoadMimeFile(PyObject *self, PyObject *args, PyOb
 #if PYTHON_API_VERSION >= 1009
     char* tmpPtr; int tmpSize;
     if (!PyString_Check(_obj2) && !PyUnicode_Check(_obj2)) {
-        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
     if (PyString_AsStringAndSize(_obj2, &tmpPtr, &tmpSize) == -1)
@@ -1439,7 +1443,7 @@ static PyObject *_wrap_wxImage_SaveFile(PyObject *self, PyObject *args, PyObject
 #if PYTHON_API_VERSION >= 1009
     char* tmpPtr; int tmpSize;
     if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
     if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
@@ -1492,7 +1496,7 @@ static PyObject *_wrap_wxImage_SaveMimeFile(PyObject *self, PyObject *args, PyOb
 #if PYTHON_API_VERSION >= 1009
     char* tmpPtr; int tmpSize;
     if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
     if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
@@ -1510,7 +1514,7 @@ static PyObject *_wrap_wxImage_SaveMimeFile(PyObject *self, PyObject *args, PyOb
 #if PYTHON_API_VERSION >= 1009
     char* tmpPtr; int tmpSize;
     if (!PyString_Check(_obj2) && !PyUnicode_Check(_obj2)) {
-        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
     if (PyString_AsStringAndSize(_obj2, &tmpPtr, &tmpSize) == -1)
@@ -2212,7 +2216,7 @@ static PyObject *_wrap_wxImage_RemoveHandler(PyObject *self, PyObject *args, PyO
 #if PYTHON_API_VERSION >= 1009
     char* tmpPtr; int tmpSize;
     if (!PyString_Check(_obj0) && !PyUnicode_Check(_obj0)) {
-        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
     if (PyString_AsStringAndSize(_obj0, &tmpPtr, &tmpSize) == -1)

@@ -104,7 +104,11 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     return target;
 }
 
-static char* wxStringErrorMsg = "string type is required for parameter";
+#if PYTHON_API_VERSION >= 1009
+    static char* wxStringErrorMsg = "String or Unicode type required";
+#else
+    static char* wxStringErrorMsg = "string type is required for parameter";
+#endif
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -210,7 +214,7 @@ static PyObject *_wrap_wxStyledTextCtrl_AddText(PyObject *self, PyObject *args, 
 #if PYTHON_API_VERSION >= 1009
     char* tmpPtr; int tmpSize;
     if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
     if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
@@ -261,7 +265,7 @@ static PyObject *_wrap_wxStyledTextCtrl_AddStyledText(PyObject *self, PyObject *
 #if PYTHON_API_VERSION >= 1009
     char* tmpPtr; int tmpSize;
     if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
     if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
@@ -313,7 +317,7 @@ static PyObject *_wrap_wxStyledTextCtrl_InsertText(PyObject *self, PyObject *arg
 #if PYTHON_API_VERSION >= 1009
     char* tmpPtr; int tmpSize;
     if (!PyString_Check(_obj2) && !PyUnicode_Check(_obj2)) {
-        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
     if (PyString_AsStringAndSize(_obj2, &tmpPtr, &tmpSize) == -1)
@@ -2045,7 +2049,7 @@ static PyObject *_wrap_wxStyledTextCtrl_StyleSetFaceName(PyObject *self, PyObjec
 #if PYTHON_API_VERSION >= 1009
     char* tmpPtr; int tmpSize;
     if (!PyString_Check(_obj2) && !PyUnicode_Check(_obj2)) {
-        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
     if (PyString_AsStringAndSize(_obj2, &tmpPtr, &tmpSize) == -1)
@@ -2497,7 +2501,7 @@ static PyObject *_wrap_wxStyledTextCtrl_SetWordChars(PyObject *self, PyObject *a
 #if PYTHON_API_VERSION >= 1009
     char* tmpPtr; int tmpSize;
     if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
     if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
@@ -2865,7 +2869,7 @@ static PyObject *_wrap_wxStyledTextCtrl_AutoCompShow(PyObject *self, PyObject *a
 #if PYTHON_API_VERSION >= 1009
     char* tmpPtr; int tmpSize;
     if (!PyString_Check(_obj2) && !PyUnicode_Check(_obj2)) {
-        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
     if (PyString_AsStringAndSize(_obj2, &tmpPtr, &tmpSize) == -1)
@@ -3024,7 +3028,7 @@ static PyObject *_wrap_wxStyledTextCtrl_AutoCompStops(PyObject *self, PyObject *
 #if PYTHON_API_VERSION >= 1009
     char* tmpPtr; int tmpSize;
     if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
     if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
@@ -3130,7 +3134,7 @@ static PyObject *_wrap_wxStyledTextCtrl_AutoCompSelect(PyObject *self, PyObject 
 #if PYTHON_API_VERSION >= 1009
     char* tmpPtr; int tmpSize;
     if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
     if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
@@ -3238,7 +3242,7 @@ static PyObject *_wrap_wxStyledTextCtrl_AutoCompSetFillUps(PyObject *self, PyObj
 #if PYTHON_API_VERSION >= 1009
     char* tmpPtr; int tmpSize;
     if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
     if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
@@ -4163,7 +4167,7 @@ static PyObject *_wrap_wxStyledTextCtrl_FindText(PyObject *self, PyObject *args,
 #if PYTHON_API_VERSION >= 1009
     char* tmpPtr; int tmpSize;
     if (!PyString_Check(_obj3) && !PyUnicode_Check(_obj3)) {
-        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
     if (PyString_AsStringAndSize(_obj3, &tmpPtr, &tmpSize) == -1)
@@ -4742,7 +4746,7 @@ static PyObject *_wrap_wxStyledTextCtrl_ReplaceSelection(PyObject *self, PyObjec
 #if PYTHON_API_VERSION >= 1009
     char* tmpPtr; int tmpSize;
     if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
     if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
@@ -5039,7 +5043,7 @@ static PyObject *_wrap_wxStyledTextCtrl_SetText(PyObject *self, PyObject *args, 
 #if PYTHON_API_VERSION >= 1009
     char* tmpPtr; int tmpSize;
     if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
     if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
@@ -5207,7 +5211,7 @@ static PyObject *_wrap_wxStyledTextCtrl_CallTipShow(PyObject *self, PyObject *ar
 #if PYTHON_API_VERSION >= 1009
     char* tmpPtr; int tmpSize;
     if (!PyString_Check(_obj2) && !PyUnicode_Check(_obj2)) {
-        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
     if (PyString_AsStringAndSize(_obj2, &tmpPtr, &tmpSize) == -1)
@@ -6273,7 +6277,7 @@ static PyObject *_wrap_wxStyledTextCtrl_SearchNext(PyObject *self, PyObject *arg
 #if PYTHON_API_VERSION >= 1009
     char* tmpPtr; int tmpSize;
     if (!PyString_Check(_obj2) && !PyUnicode_Check(_obj2)) {
-        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
     if (PyString_AsStringAndSize(_obj2, &tmpPtr, &tmpSize) == -1)
@@ -6325,7 +6329,7 @@ static PyObject *_wrap_wxStyledTextCtrl_SearchPrev(PyObject *self, PyObject *arg
 #if PYTHON_API_VERSION >= 1009
     char* tmpPtr; int tmpSize;
     if (!PyString_Check(_obj2) && !PyUnicode_Check(_obj2)) {
-        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
     if (PyString_AsStringAndSize(_obj2, &tmpPtr, &tmpSize) == -1)
@@ -6816,7 +6820,7 @@ static PyObject *_wrap_wxStyledTextCtrl_SetProperty(PyObject *self, PyObject *ar
 #if PYTHON_API_VERSION >= 1009
     char* tmpPtr; int tmpSize;
     if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
     if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
@@ -6834,7 +6838,7 @@ static PyObject *_wrap_wxStyledTextCtrl_SetProperty(PyObject *self, PyObject *ar
 #if PYTHON_API_VERSION >= 1009
     char* tmpPtr; int tmpSize;
     if (!PyString_Check(_obj2) && !PyUnicode_Check(_obj2)) {
-        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
     if (PyString_AsStringAndSize(_obj2, &tmpPtr, &tmpSize) == -1)
@@ -6890,7 +6894,7 @@ static PyObject *_wrap_wxStyledTextCtrl_SetKeyWords(PyObject *self, PyObject *ar
 #if PYTHON_API_VERSION >= 1009
     char* tmpPtr; int tmpSize;
     if (!PyString_Check(_obj2) && !PyUnicode_Check(_obj2)) {
-        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
     if (PyString_AsStringAndSize(_obj2, &tmpPtr, &tmpSize) == -1)
@@ -6969,7 +6973,7 @@ static PyObject *_wrap_wxStyledTextCtrl_StyleSetSpec(PyObject *self, PyObject *a
 #if PYTHON_API_VERSION >= 1009
     char* tmpPtr; int tmpSize;
     if (!PyString_Check(_obj2) && !PyUnicode_Check(_obj2)) {
-        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
     if (PyString_AsStringAndSize(_obj2, &tmpPtr, &tmpSize) == -1)
@@ -7065,7 +7069,7 @@ static PyObject *_wrap_wxStyledTextCtrl_StyleSetFontAttr(PyObject *self, PyObjec
 #if PYTHON_API_VERSION >= 1009
     char* tmpPtr; int tmpSize;
     if (!PyString_Check(_obj3) && !PyUnicode_Check(_obj3)) {
-        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
     if (PyString_AsStringAndSize(_obj3, &tmpPtr, &tmpSize) == -1)
@@ -8630,13 +8634,13 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPNMHandler","_class_wxPNMHandler",0},
     { "_wxWindowCreateEvent","_class_wxWindowCreateEvent",0},
     { "_wxLogGui","_class_wxLogGui",0},
-    { "_wxPrinterDC","_class_wxPrinterDC",0},
     { "_class_wxMenuItem","_wxMenuItem",0},
     { "_class_wxPaintEvent","_wxPaintEvent",0},
     { "_wxSysColourChangedEvent","_class_wxSysColourChangedEvent",0},
     { "_class_wxStatusBar","_wxStatusBar",0},
     { "_class_wxGIFHandler","_wxGIFHandler",0},
     { "_class_wxPySizer","_wxPySizer",0},
+    { "_class_wxPostScriptDC","_wxPostScriptDC",0},
     { "_wxPanel","_class_wxPanel",0},
     { "_wxInitDialogEvent","_class_wxInitDialogEvent",0},
     { "_wxCheckBox","_class_wxCheckBox",0},
@@ -8705,7 +8709,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_char","_wxChar",0},
     { "_wxBitmap","_class_wxBitmap",0},
     { "_wxPenList","_class_wxPenList",0},
-    { "_wxTaskBarIcon","_class_wxTaskBarIcon",0},
     { "_wxPrintDialog","_class_wxPrintDialog",0},
     { "_wxWindowDC","_class_wxWindowDC",0},
     { "_wxTimerEvent","_class_wxTimerEvent",0},
@@ -8793,7 +8796,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxTextCtrl","_wxTextCtrl",0},
     { "_class_wxListItemAttr","_wxListItemAttr",0},
     { "_wxLayoutConstraints","_class_wxLayoutConstraints",0},
-    { "_wxMetaFileDC","_class_wxMetaFileDC",0},
     { "_class_wxTextDataObject","_wxTextDataObject",0},
     { "_wxMenu","_class_wxMenu",0},
     { "_class_wxMoveEvent","_wxMoveEvent",0},
@@ -8832,7 +8834,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxFontList","_class_wxFontList",0},
     { "_class_wxMenuEvent","_wxMenuEvent",0},
     { "_wxPaletteChangedEvent","_class_wxPaletteChangedEvent",0},
-    { "_wxJoystick","_class_wxJoystick",0},
     { "_class_wxPyBitmapDataObject","_wxPyBitmapDataObject",0},
     { "_wxClientDC","_class_wxClientDC",0},
     { "_wxMouseEvent","_class_wxMouseEvent",0},
@@ -8848,7 +8849,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_signed_short","_short",0},
     { "_wxMemoryDC","_class_wxMemoryDC",0},
     { "_wxPyTextDataObject","_class_wxPyTextDataObject",0},
-    { "_class_wxTaskBarIcon","_wxTaskBarIcon",0},
     { "_class_wxPrintDialog","_wxPrintDialog",0},
     { "_wxPyFileSystemHandler","_class_wxPyFileSystemHandler",0},
     { "_wxPaintDC","_class_wxPaintDC",0},
@@ -8858,6 +8858,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxStatusBar","_class_wxStatusBar",0},
     { "_class_wxAcceleratorEntry","_wxAcceleratorEntry",0},
     { "_class_wxCursor","_wxCursor",0},
+    { "_wxPostScriptDC","_class_wxPostScriptDC",0},
     { "_wxPyFileDropTarget","_class_wxPyFileDropTarget",0},
     { "_class_wxPyProcess","_wxPyProcess",0},
     { "_class_wxImageHandler","_wxImageHandler",0},
@@ -8865,7 +8866,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxLog","_wxLog",0},
     { "_wxTreeItemId","_class_wxTreeItemId",0},
     { "_unsigned_char","_byte",0},
-    { "_class_wxMetaFileDC","_wxMetaFileDC",0},
     { "_class_wxMenu","_wxMenu",0},
     { "_wxControl","_class_wxStyledTextCtrl",SwigwxStyledTextCtrlTowxControl},
     { "_wxControl","_wxStyledTextCtrl",SwigwxStyledTextCtrlTowxControl},
@@ -8958,7 +8958,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxLogGui","_wxLogGui",0},
     { "_class_wxMDIParentFrame","_wxMDIParentFrame",0},
     { "_wxPyTreeItemData","_class_wxPyTreeItemData",0},
-    { "_class_wxPrinterDC","_wxPrinterDC",0},
     { "_wxStaticBoxSizer","_class_wxStaticBoxSizer",0},
     { "_class_wxTimeSpan","_wxTimeSpan",0},
     { "_class_wxPyFileSystemHandler","_wxPyFileSystemHandler",0},
@@ -9018,7 +9017,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxCheckListBox","_wxCheckListBox",0},
     { "_class_wxBusyInfo","_wxBusyInfo",0},
     { "_class_wxFontList","_wxFontList",0},
-    { "_class_wxJoystick","_wxJoystick",0},
     { "_class_wxCommandEvent","_class_wxStyledTextEvent",SwigwxStyledTextEventTowxCommandEvent},
     { "_class_wxCommandEvent","_wxStyledTextEvent",SwigwxStyledTextEventTowxCommandEvent},
     { "_class_wxCommandEvent","_wxCommandEvent",0},

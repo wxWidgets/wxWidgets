@@ -103,7 +103,11 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     return target;
 }
 
-static char* wxStringErrorMsg = "string type is required for parameter";
+#if PYTHON_API_VERSION >= 1009
+    static char* wxStringErrorMsg = "String or Unicode type required";
+#else
+    static char* wxStringErrorMsg = "string type is required for parameter";
+#endif
 
 class wxPySizer : public wxSizer {
     DECLARE_DYNAMIC_CLASS(wxPySizer);
@@ -2914,6 +2918,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxDataObject","_wxDataObject",0},
     { "_wxStaticLine","_class_wxStaticLine",0},
     { "_wxBrush","_class_wxBrush",0},
+    { "_wxToggleButton","_class_wxToggleButton",0},
     { "_wxDataFormat","_class_wxDataFormat",0},
     { "_class_wxDataObjectSimple","_wxDataObjectSimple",0},
     { "_wxShowEvent","_class_wxShowEvent",0},
@@ -3131,6 +3136,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxEraseEvent","_class_wxEraseEvent",0},
     { "_wxDataObjectComposite","_class_wxDataObjectComposite",0},
     { "_class_wxJoystickEvent","_wxJoystickEvent",0},
+    { "_class_wxToggleButton","_wxToggleButton",0},
     { "_wxRegion","_class_wxRegion",0},
     { "_wxSizer","_class_wxFlexGridSizer",SwigwxFlexGridSizerTowxSizer},
     { "_wxSizer","_wxFlexGridSizer",SwigwxFlexGridSizerTowxSizer},

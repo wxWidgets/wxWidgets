@@ -82,6 +82,9 @@ public:
     wxString GetTarget();
     wxMouseEvent* GetEvent();
     wxHtmlCell* GetHtmlCell();
+
+    void SetEvent(const wxMouseEvent *e);
+    void SetHtmlCell(const wxHtmlCell * e);
 };
 
 //---------------------------------------------------------------------------
@@ -388,19 +391,6 @@ public:
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 
-// item of history list
-class HtmlHistoryItem {
-public:
-    HtmlHistoryItem(const char* p, const char* a);
-
-    int GetPos();
-    void SetPos(int p);
-    const wxString& GetPage();
-    const wxString& GetAnchor();
-};
-
-
-//---------------------------------------------------------------------------
 %{
 class wxPyHtmlWindow : public wxHtmlWindow {
 public:
@@ -453,9 +443,12 @@ public:
     %pragma(python) addtomethod = "__init__:#wx._StdOnScrollCallbacks(self)"
 
 
-    bool SetPage(const char* source);
-    bool LoadPage(const char* location);
+    bool SetPage(const wxString& source);
+    bool LoadPage(const wxString& location);
     wxString GetOpenedPage();
+    wxString GetOpenedAnchor();
+    wxString GetOpenedPageTitle();
+
     void SetRelatedFrame(wxFrame* frame, const char* format);
     wxFrame* GetRelatedFrame();
     void SetRelatedStatusBar(int bar);
@@ -471,12 +464,14 @@ public:
         }
     }
 
-    void SetTitle(const char* title);
+    void SetTitle(const wxString& title);
     void SetBorders(int b);
-    void ReadCustomization(wxConfigBase *cfg, char* path = "");
-    void WriteCustomization(wxConfigBase *cfg, char* path = "");
+    void ReadCustomization(wxConfigBase *cfg, wxString path = wxEmptyString);
+    void WriteCustomization(wxConfigBase *cfg, wxString path = wxEmptyString);
     bool HistoryBack();
     bool HistoryForward();
+    bool HistoryCanBack();
+    bool HistoryCanForward();
     void HistoryClear();
     wxHtmlContainerCell* GetInternalRepresentation();
     wxHtmlWinParser* GetParser();
@@ -583,4 +578,3 @@ public:
 %pragma(python) include="_htmlextras.py";
 
 //---------------------------------------------------------------------------
-

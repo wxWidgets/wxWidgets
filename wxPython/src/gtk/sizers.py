@@ -182,37 +182,37 @@ class wxSizerPtr :
     def __repr__(self):
         return "<C wxSizer instance at %s>" % (self.this,)
     
-    def Add(self, *args):
+    def Add(self, *args, **kw):
         if type(args[0]) == type(1):
-            apply(self.AddSpacer, args)
+            apply(self.AddSpacer, args, kw)
         elif string.find(args[0].this, 'Sizer') != -1:
-            apply(self.AddSizer, args)
+            apply(self.AddSizer, args, kw)
         else:
-            apply(self.AddWindow, args)
+            apply(self.AddWindow, args, kw)
 
-    def Insert(self, *args):
+    def Insert(self, *args, **kw):
         if type(args[1]) == type(1):
-            apply(self.InsertSpacer, args)
+            apply(self.InsertSpacer, args, kw)
         elif string.find(args[1].this, 'Sizer') != -1:
-            apply(self.InsertSizer, args)
+            apply(self.InsertSizer, args, kw)
         else:
-            apply(self.InsertWindow, args)
+            apply(self.InsertWindow, args, kw)
 
-    def Prepend(self, *args):
+    def Prepend(self, *args, **kw):
         if type(args[0]) == type(1):
-            apply(self.PrependSpacer, args)
+            apply(self.PrependSpacer, args, kw)
         elif string.find(args[0].this, 'Sizer') != -1:
-            apply(self.PrependSizer, args)
+            apply(self.PrependSizer, args, kw)
         else:
-            apply(self.PrependWindow, args)
+            apply(self.PrependWindow, args, kw)
 
-    def Remove(self, *args):
+    def Remove(self, *args, **kw):
         if type(args[0]) == type(1):
-            apply(self.RemovePos, args)
+            apply(self.RemovePos, args, kw)
         elif string.find(args[0].this, 'Sizer') != -1:
-            apply(self.RemoveSizer, args)
+            apply(self.RemoveSizer, args, kw)
         else:
-            apply(self.RemoveWindow, args)
+            apply(self.RemoveWindow, args, kw)
 
     def AddMany(self, widgets):
         for childinfo in widgets:

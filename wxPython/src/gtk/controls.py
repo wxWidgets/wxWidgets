@@ -831,6 +831,29 @@ class wxSpinCtrl(wxSpinCtrlPtr):
 
 
 
+class wxToggleButtonPtr(wxControlPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def SetValue(self, *_args, **_kwargs):
+        val = apply(controlsc.wxToggleButton_SetValue,(self,) + _args, _kwargs)
+        return val
+    def GetValue(self, *_args, **_kwargs):
+        val = apply(controlsc.wxToggleButton_GetValue,(self,) + _args, _kwargs)
+        return val
+    def SetLabel(self, *_args, **_kwargs):
+        val = apply(controlsc.wxToggleButton_SetLabel,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxToggleButton instance at %s>" % (self.this,)
+class wxToggleButton(wxToggleButtonPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(controlsc.new_wxToggleButton,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
 
 
 #-------------- FUNCTION WRAPPERS ------------------
@@ -846,3 +869,4 @@ def wxButton_GetDefaultSize(*_args, **_kwargs):
 
 cvar = controlsc.cvar
 wxDefaultValidator = wxValidatorPtr(controlsc.cvar.wxDefaultValidator)
+wxEVT_COMMAND_TOGGLEBUTTON_CLICKED = controlsc.wxEVT_COMMAND_TOGGLEBUTTON_CLICKED

@@ -103,7 +103,11 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     return target;
 }
 
-static char* wxStringErrorMsg = "string type is required for parameter";
+#if PYTHON_API_VERSION >= 1009
+    static char* wxStringErrorMsg = "String or Unicode type required";
+#else
+    static char* wxStringErrorMsg = "string type is required for parameter";
+#endif
 
 
 #include <ctype.h>
@@ -1396,7 +1400,7 @@ static PyObject *_wrap_wxPyApp_SetAppName(PyObject *self, PyObject *args, PyObje
 #if PYTHON_API_VERSION >= 1009
     char* tmpPtr; int tmpSize;
     if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
     if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
@@ -1447,7 +1451,7 @@ static PyObject *_wrap_wxPyApp_SetClassName(PyObject *self, PyObject *args, PyOb
 #if PYTHON_API_VERSION >= 1009
     char* tmpPtr; int tmpSize;
     if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
     if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
@@ -1592,7 +1596,7 @@ static PyObject *_wrap_wxPyApp_SetVendorName(PyObject *self, PyObject *args, PyO
 #if PYTHON_API_VERSION >= 1009
     char* tmpPtr; int tmpSize;
     if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, "String or Unicode type required");
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
         return NULL;
     }
     if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
@@ -1864,6 +1868,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxStaticLine","_class_wxStaticLine",0},
     { "_class_wxLayoutAlgorithm","_wxLayoutAlgorithm",0},
     { "_wxBrush","_class_wxBrush",0},
+    { "_wxToggleButton","_class_wxToggleButton",0},
     { "_wxMiniFrame","_class_wxMiniFrame",0},
     { "_class_wxNotebookEvent","_wxNotebookEvent",0},
     { "_class_wxPyPrintout","_wxPyPrintout",0},
@@ -2181,6 +2186,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxDataObjectComposite","_class_wxDataObjectComposite",0},
     { "_class_wxJoystickEvent","_wxJoystickEvent",0},
     { "_class_wxTipProvider","_wxTipProvider",0},
+    { "_class_wxToggleButton","_wxToggleButton",0},
     { "_class_wxMiniFrame","_wxMiniFrame",0},
     { "_wxFontDialog","_class_wxFontDialog",0},
     { "_wxMemoryFSHandler","_class_wxMemoryFSHandler",0},
@@ -2500,26 +2506,6 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxID_BACKWARD", PyInt_FromLong((long) wxID_BACKWARD));
 	 PyDict_SetItemString(d,"wxID_SETUP", PyInt_FromLong((long) wxID_SETUP));
 	 PyDict_SetItemString(d,"wxID_MORE", PyInt_FromLong((long) wxID_MORE));
-	 PyDict_SetItemString(d,"wxBITMAP_TYPE_BMP", PyInt_FromLong((long) wxBITMAP_TYPE_BMP));
-	 PyDict_SetItemString(d,"wxBITMAP_TYPE_BMP_RESOURCE", PyInt_FromLong((long) wxBITMAP_TYPE_BMP_RESOURCE));
-	 PyDict_SetItemString(d,"wxBITMAP_TYPE_ICO", PyInt_FromLong((long) wxBITMAP_TYPE_ICO));
-	 PyDict_SetItemString(d,"wxBITMAP_TYPE_ICO_RESOURCE", PyInt_FromLong((long) wxBITMAP_TYPE_ICO_RESOURCE));
-	 PyDict_SetItemString(d,"wxBITMAP_TYPE_CUR", PyInt_FromLong((long) wxBITMAP_TYPE_CUR));
-	 PyDict_SetItemString(d,"wxBITMAP_TYPE_CUR_RESOURCE", PyInt_FromLong((long) wxBITMAP_TYPE_CUR_RESOURCE));
-	 PyDict_SetItemString(d,"wxBITMAP_TYPE_XBM", PyInt_FromLong((long) wxBITMAP_TYPE_XBM));
-	 PyDict_SetItemString(d,"wxBITMAP_TYPE_XBM_DATA", PyInt_FromLong((long) wxBITMAP_TYPE_XBM_DATA));
-	 PyDict_SetItemString(d,"wxBITMAP_TYPE_XPM", PyInt_FromLong((long) wxBITMAP_TYPE_XPM));
-	 PyDict_SetItemString(d,"wxBITMAP_TYPE_XPM_DATA", PyInt_FromLong((long) wxBITMAP_TYPE_XPM_DATA));
-	 PyDict_SetItemString(d,"wxBITMAP_TYPE_TIF", PyInt_FromLong((long) wxBITMAP_TYPE_TIF));
-	 PyDict_SetItemString(d,"wxBITMAP_TYPE_TIF_RESOURCE", PyInt_FromLong((long) wxBITMAP_TYPE_TIF_RESOURCE));
-	 PyDict_SetItemString(d,"wxBITMAP_TYPE_GIF", PyInt_FromLong((long) wxBITMAP_TYPE_GIF));
-	 PyDict_SetItemString(d,"wxBITMAP_TYPE_GIF_RESOURCE", PyInt_FromLong((long) wxBITMAP_TYPE_GIF_RESOURCE));
-	 PyDict_SetItemString(d,"wxBITMAP_TYPE_PNG", PyInt_FromLong((long) wxBITMAP_TYPE_PNG));
-	 PyDict_SetItemString(d,"wxBITMAP_TYPE_PNG_RESOURCE", PyInt_FromLong((long) wxBITMAP_TYPE_PNG_RESOURCE));
-	 PyDict_SetItemString(d,"wxBITMAP_TYPE_ANY", PyInt_FromLong((long) wxBITMAP_TYPE_ANY));
-	 PyDict_SetItemString(d,"wxBITMAP_TYPE_RESOURCE", PyInt_FromLong((long) wxBITMAP_TYPE_RESOURCE));
-	 PyDict_SetItemString(d,"wxBITMAP_TYPE_JPEG", PyInt_FromLong((long) wxBITMAP_TYPE_JPEG));
-	 PyDict_SetItemString(d,"wxBITMAP_TYPE_PCX", PyInt_FromLong((long) wxBITMAP_TYPE_PCX));
 	 PyDict_SetItemString(d,"wxOPEN", PyInt_FromLong((long) wxOPEN));
 	 PyDict_SetItemString(d,"wxSAVE", PyInt_FromLong((long) wxSAVE));
 	 PyDict_SetItemString(d,"wxHIDE_READONLY", PyInt_FromLong((long) wxHIDE_READONLY));
@@ -2570,6 +2556,7 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxJOY_BUTTON3", PyInt_FromLong((long) wxJOY_BUTTON3));
 	 PyDict_SetItemString(d,"wxJOY_BUTTON4", PyInt_FromLong((long) wxJOY_BUTTON4));
 	 PyDict_SetItemString(d,"wxJOY_BUTTON_ANY", PyInt_FromLong((long) wxJOY_BUTTON_ANY));
+	 PyDict_SetItemString(d,"wxWS_EX_VALIDATE_RECURSIVELY", PyInt_FromLong((long) wxWS_EX_VALIDATE_RECURSIVELY));
 	 PyDict_SetItemString(d,"wxDEFAULT", PyInt_FromLong((long) wxDEFAULT));
 	 PyDict_SetItemString(d,"wxDECORATIVE", PyInt_FromLong((long) wxDECORATIVE));
 	 PyDict_SetItemString(d,"wxROMAN", PyInt_FromLong((long) wxROMAN));
@@ -2695,6 +2682,37 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"WXK_SCROLL", PyInt_FromLong((long) WXK_SCROLL));
 	 PyDict_SetItemString(d,"WXK_PAGEUP", PyInt_FromLong((long) WXK_PAGEUP));
 	 PyDict_SetItemString(d,"WXK_PAGEDOWN", PyInt_FromLong((long) WXK_PAGEDOWN));
+	 PyDict_SetItemString(d,"wxBITMAP_TYPE_INVALID", PyInt_FromLong((long) wxBITMAP_TYPE_INVALID));
+	 PyDict_SetItemString(d,"wxBITMAP_TYPE_BMP", PyInt_FromLong((long) wxBITMAP_TYPE_BMP));
+	 PyDict_SetItemString(d,"wxBITMAP_TYPE_BMP_RESOURCE", PyInt_FromLong((long) wxBITMAP_TYPE_BMP_RESOURCE));
+	 PyDict_SetItemString(d,"wxBITMAP_TYPE_RESOURCE", PyInt_FromLong((long) wxBITMAP_TYPE_RESOURCE));
+	 PyDict_SetItemString(d,"wxBITMAP_TYPE_ICO", PyInt_FromLong((long) wxBITMAP_TYPE_ICO));
+	 PyDict_SetItemString(d,"wxBITMAP_TYPE_ICO_RESOURCE", PyInt_FromLong((long) wxBITMAP_TYPE_ICO_RESOURCE));
+	 PyDict_SetItemString(d,"wxBITMAP_TYPE_CUR", PyInt_FromLong((long) wxBITMAP_TYPE_CUR));
+	 PyDict_SetItemString(d,"wxBITMAP_TYPE_CUR_RESOURCE", PyInt_FromLong((long) wxBITMAP_TYPE_CUR_RESOURCE));
+	 PyDict_SetItemString(d,"wxBITMAP_TYPE_XBM", PyInt_FromLong((long) wxBITMAP_TYPE_XBM));
+	 PyDict_SetItemString(d,"wxBITMAP_TYPE_XBM_DATA", PyInt_FromLong((long) wxBITMAP_TYPE_XBM_DATA));
+	 PyDict_SetItemString(d,"wxBITMAP_TYPE_XPM", PyInt_FromLong((long) wxBITMAP_TYPE_XPM));
+	 PyDict_SetItemString(d,"wxBITMAP_TYPE_XPM_DATA", PyInt_FromLong((long) wxBITMAP_TYPE_XPM_DATA));
+	 PyDict_SetItemString(d,"wxBITMAP_TYPE_TIF", PyInt_FromLong((long) wxBITMAP_TYPE_TIF));
+	 PyDict_SetItemString(d,"wxBITMAP_TYPE_TIF_RESOURCE", PyInt_FromLong((long) wxBITMAP_TYPE_TIF_RESOURCE));
+	 PyDict_SetItemString(d,"wxBITMAP_TYPE_GIF", PyInt_FromLong((long) wxBITMAP_TYPE_GIF));
+	 PyDict_SetItemString(d,"wxBITMAP_TYPE_GIF_RESOURCE", PyInt_FromLong((long) wxBITMAP_TYPE_GIF_RESOURCE));
+	 PyDict_SetItemString(d,"wxBITMAP_TYPE_PNG", PyInt_FromLong((long) wxBITMAP_TYPE_PNG));
+	 PyDict_SetItemString(d,"wxBITMAP_TYPE_PNG_RESOURCE", PyInt_FromLong((long) wxBITMAP_TYPE_PNG_RESOURCE));
+	 PyDict_SetItemString(d,"wxBITMAP_TYPE_JPEG", PyInt_FromLong((long) wxBITMAP_TYPE_JPEG));
+	 PyDict_SetItemString(d,"wxBITMAP_TYPE_JPEG_RESOURCE", PyInt_FromLong((long) wxBITMAP_TYPE_JPEG_RESOURCE));
+	 PyDict_SetItemString(d,"wxBITMAP_TYPE_PNM", PyInt_FromLong((long) wxBITMAP_TYPE_PNM));
+	 PyDict_SetItemString(d,"wxBITMAP_TYPE_PNM_RESOURCE", PyInt_FromLong((long) wxBITMAP_TYPE_PNM_RESOURCE));
+	 PyDict_SetItemString(d,"wxBITMAP_TYPE_PCX", PyInt_FromLong((long) wxBITMAP_TYPE_PCX));
+	 PyDict_SetItemString(d,"wxBITMAP_TYPE_PCX_RESOURCE", PyInt_FromLong((long) wxBITMAP_TYPE_PCX_RESOURCE));
+	 PyDict_SetItemString(d,"wxBITMAP_TYPE_PICT", PyInt_FromLong((long) wxBITMAP_TYPE_PICT));
+	 PyDict_SetItemString(d,"wxBITMAP_TYPE_PICT_RESOURCE", PyInt_FromLong((long) wxBITMAP_TYPE_PICT_RESOURCE));
+	 PyDict_SetItemString(d,"wxBITMAP_TYPE_ICON", PyInt_FromLong((long) wxBITMAP_TYPE_ICON));
+	 PyDict_SetItemString(d,"wxBITMAP_TYPE_ICON_RESOURCE", PyInt_FromLong((long) wxBITMAP_TYPE_ICON_RESOURCE));
+	 PyDict_SetItemString(d,"wxBITMAP_TYPE_MACCURSOR", PyInt_FromLong((long) wxBITMAP_TYPE_MACCURSOR));
+	 PyDict_SetItemString(d,"wxBITMAP_TYPE_MACCURSOR_RESOURCE", PyInt_FromLong((long) wxBITMAP_TYPE_MACCURSOR_RESOURCE));
+	 PyDict_SetItemString(d,"wxBITMAP_TYPE_ANY", PyInt_FromLong((long) wxBITMAP_TYPE_ANY));
 	 PyDict_SetItemString(d,"wxCURSOR_NONE", PyInt_FromLong((long) wxCURSOR_NONE));
 	 PyDict_SetItemString(d,"wxCURSOR_ARROW", PyInt_FromLong((long) wxCURSOR_ARROW));
 	 PyDict_SetItemString(d,"wxCURSOR_BULLSEYE", PyInt_FromLong((long) wxCURSOR_BULLSEYE));
@@ -2721,6 +2739,9 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxCURSOR_WAIT", PyInt_FromLong((long) wxCURSOR_WAIT));
 	 PyDict_SetItemString(d,"wxCURSOR_WATCH", PyInt_FromLong((long) wxCURSOR_WATCH));
 	 PyDict_SetItemString(d,"wxCURSOR_BLANK", PyInt_FromLong((long) wxCURSOR_BLANK));
+	 PyDict_SetItemString(d,"wxCURSOR_DEFAULT", PyInt_FromLong((long) wxCURSOR_DEFAULT));
+	 PyDict_SetItemString(d,"wxCURSOR_ARROWWAIT", PyInt_FromLong((long) wxCURSOR_ARROWWAIT));
+	 PyDict_SetItemString(d,"wxCURSOR_MAX", PyInt_FromLong((long) wxCURSOR_MAX));
 	 PyDict_SetItemString(d,"wxPAPER_NONE", PyInt_FromLong((long) wxPAPER_NONE));
 	 PyDict_SetItemString(d,"wxPAPER_LETTER", PyInt_FromLong((long) wxPAPER_LETTER));
 	 PyDict_SetItemString(d,"wxPAPER_LEGAL", PyInt_FromLong((long) wxPAPER_LEGAL));
@@ -2819,6 +2840,7 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_TOOL_ENTER", PyInt_FromLong((long) wxEVT_COMMAND_TOOL_ENTER));
 	 PyDict_SetItemString(d,"wxEVT_SET_FOCUS", PyInt_FromLong((long) wxEVT_SET_FOCUS));
 	 PyDict_SetItemString(d,"wxEVT_KILL_FOCUS", PyInt_FromLong((long) wxEVT_KILL_FOCUS));
+	 PyDict_SetItemString(d,"wxEVT_MOUSEWHEEL", PyInt_FromLong((long) wxEVT_MOUSEWHEEL));
 	 PyDict_SetItemString(d,"wxEVT_LEFT_DOWN", PyInt_FromLong((long) wxEVT_LEFT_DOWN));
 	 PyDict_SetItemString(d,"wxEVT_LEFT_UP", PyInt_FromLong((long) wxEVT_LEFT_UP));
 	 PyDict_SetItemString(d,"wxEVT_MIDDLE_DOWN", PyInt_FromLong((long) wxEVT_MIDDLE_DOWN));
@@ -2910,7 +2932,6 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_ENTER", PyInt_FromLong((long) wxEVT_COMMAND_ENTER));
 	 PyDict_SetItemString(d,"wxEVT_NAVIGATION_KEY", PyInt_FromLong((long) wxEVT_NAVIGATION_KEY));
 	 PyDict_SetItemString(d,"wxEVT_TIMER", PyInt_FromLong((long) wxEVT_TIMER));
-	 PyDict_SetItemString(d,"wxWS_EX_VALIDATE_RECURSIVELY", PyInt_FromLong((long) wxWS_EX_VALIDATE_RECURSIVELY));
 	 PyDict_SetItemString(d,"__version__", PyString_FromString("0.0.0"));
 	 PyDict_SetItemString(d,"cvar", SWIG_globals);
 	 SWIG_addvarlink(SWIG_globals,"wxDefaultPosition",_wrap_wxDefaultPosition_get, _wrap_wxDefaultPosition_set);

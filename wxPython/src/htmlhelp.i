@@ -42,25 +42,6 @@
 
 //---------------------------------------------------------------------------
 
-enum {
-    wxID_HTML_PANEL,
-    wxID_HTML_BACK,
-    wxID_HTML_FORWARD,
-    wxID_HTML_TREECTRL,
-    wxID_HTML_INDEXPAGE,
-    wxID_HTML_INDEXLIST,
-    wxID_HTML_NOTEBOOK,
-    wxID_HTML_SEARCHPAGE,
-    wxID_HTML_SEARCHTEXT,
-    wxID_HTML_SEARCHLIST,
-    wxID_HTML_SEARCHBUTTON,
-    wxID_HTML_SEARCHCHOICE,
-    wxID_HTML_HELPFRAME
-
-};
-
-//---------------------------------------------------------------------------
-
 class  wxHtmlHelpFrameCfg
 {
 public:
