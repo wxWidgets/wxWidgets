@@ -873,7 +873,7 @@ public:
 
 #if defined(__WXDEBUG__) && defined(__WXMSW__)
     // see comments in src/msw/dcclient.cpp where g_isPainting is defined
-    extern int g_isPainting;
+    extern WXDLLEXPORT int g_isPainting;
 #endif // debug
 
 class WXDLLEXPORT wxPaintEvent : public wxEvent
