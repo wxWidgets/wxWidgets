@@ -255,8 +255,12 @@ def runTest(frame, nb, log):
 
 
 overview = """\
+<html><body>
+Once again, no docs yet.  <b>Sorry.</b>  But <a href="data/stc.h">this</a>
+and <a href="http://www.scintilla.org/ScintillaDoc.html">this</a> should
+be helpful.
+</body><html>
 """
-
 
 
 if __name__ == '__main__':
@@ -274,36 +278,4 @@ if __name__ == '__main__':
 
 #----------------------------------------------------------------------
 #----------------------------------------------------------------------
-
-## TODO: Figure out folding!
-
-
-
-## Line folding is also supported.  Some of the language lexers support
-##     automatically setting the proper flags for fold-level, otherwise
-##     you can do it youself, as in this example.
-##         folded line
-##         folded line
-##         folded line
-##             another level
-##             another level
-##             another level
-##         folded line
-##         folded line
-##         folded line
-
-
-##     # setup folding and mark some lines as foldable
-##     ed.SetFoldFlags(16)  ###  WHAT IS THIS VALUE?  WAHT ARE THE OTHER FLAGS?
-##     ed.SetMarginType(2, wxSTC_MARGIN_SYMBOL)
-##     ed.SetMarginMask(2, wxSTC_MASK_FOLDERS)
-##     ed.SetMarginSensitive(2, true)
-##     ed.SetMarginWidth(2, 10)
-##     ed.MarkerDefine(wxSTC_MARKNUM_FOLDER, wxSTC_MARK_ARROW, "black", "black")
-##     ed.MarkerDefine(wxSTC_MARKNUM_FOLDEROPEN, wxSTC_MARK_ARROWDOWN, "black", "black")
-
-
-##     ed.SetFoldLevel(27, wxSTC_FOLDLEVELBASE + 1)
-##     ed.SetFoldLevel(28, wxSTC_FOLDLEVELBASE + 1)
-##     ed.ToggleFold(26)
 

@@ -111,6 +111,11 @@ def runTest(frame, nb, log):
 
 
 overview = """\
+<html><body>
+Once again, no docs yet.  <b>Sorry.</b>  But <a href="data/stc.h">this</a>
+and <a href="http://www.scintilla.org/ScintillaDoc.html">this</a> should
+be helpful.
+</body><html>
 """
 
 
