@@ -432,6 +432,8 @@ public:
 
 class wxFont : public wxGDIObject {
 public:
+    %pythonPrepend wxFont   "if kwargs.has_key('faceName'): kwargs['face'] = kwargs['faceName'];del kwargs['faceName']"
+
     wxFont( int pointSize, int family, int style, int weight,
             bool underline=False, const wxString& face = wxPyEmptyString,
             wxFontEncoding encoding=wxFONTENCODING_DEFAULT);
@@ -446,10 +448,10 @@ public:
         }
 
         %name(Font2) wxFont(int pointSize,
-                              wxFontFamily family,
-                              int flags = wxFONTFLAG_DEFAULT,
-                              const wxString& face = wxPyEmptyString,
-                              wxFontEncoding encoding = wxFONTENCODING_DEFAULT) {
+                            wxFontFamily family,
+                            int flags = wxFONTFLAG_DEFAULT,
+                            const wxString& face = wxPyEmptyString,
+                            wxFontEncoding encoding = wxFONTENCODING_DEFAULT) {
             return wxFont::New(pointSize, family, flags, face, encoding);
         }
     }
