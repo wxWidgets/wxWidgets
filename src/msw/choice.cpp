@@ -104,11 +104,25 @@ void wxChoice::Delete(int n)
 {
     wxCHECK_RET( n < GetCount(), wxT("invalid item index in wxChoice::Delete") );
 
+    if ( HasClientObjectData() )
+    {
+        delete GetClientObject(n);
+    }
+
     SendMessage(GetHwnd(), CB_DELETESTRING, n, 0);
 }
 
 void wxChoice::Clear()
 {
+    if ( HasClientObjectData() )
+    {
+        size_t count = GetCount();
+        for ( size_t n = 0; n < count; n++ )
+        {
+            delete GetClientObject(n);
+        }
+    }
+
     SendMessage(GetHwnd(), CB_RESETCONTENT, 0, 0);
 }
 
@@ -157,10 +171,20 @@ int wxChoice::FindString(const wxString& s) const
 #endif // Watcom/!Watcom
 }
 
+void wxChoice::SetString(int n, const wxString& s)
+{
+    wxFAIL_MSG(wxT("not implemented"));
+
+#if 0 // should do this, but no Insert() so far
+    Delete(n);
+    Insert(n + 1, s);
+#endif
+}
+
 wxString wxChoice::GetString(int n) const
 {
     size_t len = (size_t)::SendMessage(GetHwnd(), CB_GETLBTEXTLEN, n, 0);
-    wxString str = "";
+    wxString str;
     if (len) {
         if ( ::SendMessage(GetHwnd(), CB_GETLBTEXT, n,
                            (LPARAM)str.GetWriteBuf(len)) == CB_ERR ) {
@@ -176,7 +200,7 @@ wxString wxChoice::GetString(int n) const
 // client data
 // ----------------------------------------------------------------------------
 
-void wxChoice::DoSetClientData( int n, void* clientData )
+void wxChoice::DoSetItemClientData( int n, void* clientData )
 {
     if ( SendMessage(GetHwnd(), CB_SETITEMDATA, n, (LPARAM)clientData) == CB_ERR )
     {
@@ -184,7 +208,7 @@ void wxChoice::DoSetClientData( int n, void* clientData )
     }
 }
 
-void* wxChoice::DoGetClientData( int n ) const
+void* wxChoice::DoGetItemClientData( int n ) const
 {
     LPARAM rc = SendMessage(GetHwnd(), CB_GETITEMDATA, n, 0);
     if ( rc == CB_ERR )
@@ -198,14 +222,14 @@ void* wxChoice::DoGetClientData( int n ) const
     return (void *)rc;
 }
 
-void wxChoice::DoSetClientObject( int n, wxClientData* clientData )
+void wxChoice::DoSetItemClientObject( int n, wxClientData* clientData )
 {
-    DoSetClientData(n, clientData);
+    DoSetItemClientData(n, clientData);
 }
 
-wxClientData* wxChoice::DoGetClientObject( int n ) const
+wxClientData* wxChoice::DoGetItemClientObject( int n ) const
 {
-    return (wxClientData *)DoGetClientData(n);
+    return (wxClientData *)DoGetItemClientData(n);
 }
 
 // ----------------------------------------------------------------------------

@@ -51,8 +51,9 @@ public:
     void SetSelection( int n );
 
     virtual int GetCount() const;
-    int FindString( const wxString &string ) const;
+    int FindString( const wxString& string ) const;
     wxString GetString( int n ) const;
+    void SetString( int n, const wxString& string );
 
     // implementation
     wxList m_clientList;    // contains the client data for the items
@@ -65,20 +66,10 @@ public:
 protected:
     virtual int DoAppend(const wxString& item);
 
-    virtual void DoSetClientData( int n, void* clientData );
-    virtual void* DoGetClientData( int n ) const;
-    virtual void DoSetClientObject( int n, wxClientData* clientData );
-    virtual wxClientData* DoGetClientObject( int n ) const;
-
-    // the above virtuals hide these virtuals in wxChoiceBase
-    virtual void DoSetClientData(void* clientData )
-        { wxWindowBase::DoSetClientData(clientData); };
-    virtual void* DoGetClientData() const
-        { return(wxWindowBase::DoGetClientData()); };
-    virtual void DoSetClientObject( wxClientData* clientData )
-        { wxWindowBase::DoSetClientObject(clientData); };
-    virtual wxClientData* DoGetClientObject() const
-        { return(wxWindowBase::DoGetClientObject()); };
+    virtual void DoSetItemClientData( int n, void* clientData );
+    virtual void* DoGetItemClientData( int n ) const;
+    virtual void DoSetItemClientObject( int n, wxClientData* clientData );
+    virtual wxClientData* DoGetItemClientObject( int n ) const;
 
 private:
     // common part of Create() and DoAppend()

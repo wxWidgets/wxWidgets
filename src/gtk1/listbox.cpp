@@ -102,25 +102,28 @@ gtk_listbox_button_release_callback( GtkWidget * WXUNUSED(widget),
 
     if (!g_hasDoubleClicked) return FALSE;
 
-        wxCommandEvent event( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, listbox->GetId() );
-        event.SetEventObject( listbox );
+    wxCommandEvent event( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, listbox->GetId() );
+    event.SetEventObject( listbox );
 
-        wxArrayInt aSelections;
-        int count = listbox->GetSelections(aSelections);
-        if ( count > 0 )
-        {
-            event.m_commandInt = aSelections[0] ;
-            event.m_clientData = listbox->GetClientData( event.m_commandInt );
-            wxString str(listbox->GetString(event.m_commandInt));
-            if (!str.IsEmpty()) event.m_commandString = str;
-        }
-        else
-        {
-            event.m_commandInt = -1 ;
-            event.m_commandString.Empty();
-        }
+    wxArrayInt aSelections;
+    int n, count = listbox->GetSelections(aSelections);
+    if ( count > 0 )
+    {
+        n = aSelections[0];
+        if ( listbox->HasClientObjectData() )
+            event.SetClientObject( listbox->GetClientObject(n) );
+        else if ( listbox->HasClientUntypedData() )
+            event.SetClientData( listbox->GetClientData(n) );
+        event.SetString( listbox->GetString(n) );
+    }
+    else
+    {
+        n = -1;
+    }
 
-        listbox->GetEventHandler()->ProcessEvent( event );
+    event.m_commandInt = n;
+
+    listbox->GetEventHandler()->ProcessEvent( event );
 
     return FALSE;
 }
@@ -213,14 +216,18 @@ static void gtk_listitem_select_callback( GtkWidget *WXUNUSED(widget), wxListBox
     if (g_blockEventsOnDrag) return;
 
     wxCommandEvent event(wxEVT_COMMAND_LISTBOX_SELECTED, listbox->GetId() );
+    event.SetEventObject( listbox );
 
     wxArrayInt aSelections;
     int n, count = listbox->GetSelections(aSelections);
     if ( count > 0 )
     {
         n = aSelections[0];
-        event.m_clientData = listbox->m_clientData.Item(n);
-        event.m_commandString = listbox->GetString(n);
+        if ( listbox->HasClientObjectData() )
+            event.SetClientObject( listbox->GetClientObject(n) );
+        else if ( listbox->HasClientUntypedData() )
+            event.SetClientData( listbox->GetClientData(n) );
+        event.SetString( listbox->GetString(n) );
     }
     else
     {
@@ -228,8 +235,6 @@ static void gtk_listitem_select_callback( GtkWidget *WXUNUSED(widget), wxListBox
     }
 
     event.m_commandInt = n;
-
-    event.SetEventObject( listbox );
 
     listbox->GetEventHandler()->ProcessEvent( event );
 }
@@ -317,8 +322,6 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
 
     for (int i = 0; i < n; i++)
     {
-        m_clientData.Append((wxObject *)NULL);
-
         DoAppend(choices[i]);
 
 #if 0
@@ -431,7 +434,6 @@ void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
 
     // remove the old items
     wxArrayString deletedLabels;
-    wxArrayPtrVoid deletedData;
 #if wxUSE_CHECKLISTBOX
     wxArrayInt deletedChecks;
 #endif
@@ -446,9 +448,6 @@ void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
         wxString str(GET_REAL_LABEL(label->label),*wxConvCurrent);
         deletedLabels.Add(str);
 
-        // save data
-        deletedData.Add(m_clientData.Item(n));
-
 #if wxUSE_CHECKLISTBOX
         // save check state
         if ( m_hasCheckBoxes )
@@ -458,33 +457,28 @@ void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
 #endif // wxUSE_CHECKLISTBOX
     }
 
-    // don't delete contents, the data will be reappended soon
-    m_clientData.Clear();
-
     size_t nDeletedCount = n;
 
     gtk_list_clear_items( m_list, pos, length );
 
     // now append the new items
+    wxNode *node = m_clientData.Item(pos);
     for ( n = 0; n < nItems; n++ )
     {
         AppendWithoutSorting(items[n]);
 
-        m_clientData.Append((wxObject *)NULL);
+        // make sure we have the correct number of items in this list
+        m_clientData.Insert(node, (wxObject *)NULL);
     }
 
     // and append the old items too
-    pos += nItems;  // now the indices are shifter
+    pos += nItems;  // now the indices are shifted
     for ( n = 0; n < nDeletedCount; n++ )
     {
         AppendWithoutSorting(deletedLabels[n]);
 
-        m_clientData.Append((wxObject *)NULL);
-
-        if ( m_clientDataItemsType == ClientData_Object )
-            SetClientObject(n, (wxClientData *)deletedData[n]);
-        else if ( m_clientDataItemsType == ClientData_Void )
-            SetClientData(n, deletedData[n]);
+        // the data is already correct - the indices have been rearranged in
+        // such manner that we now correspond to the same node as before
 
 #if wxUSE_CHECKLISTBOX
         if ( m_hasCheckBoxes )
@@ -617,32 +611,32 @@ void wxListBox::DoSetItems( const wxArrayString& items,
 // client data
 // ----------------------------------------------------------------------------
 
-void wxListBox::DoSetClientData( int n, void* clientData )
+void wxListBox::DoSetItemClientData( int n, void* clientData )
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid listbox control") );
 
     wxNode *node = m_clientData.Nth( n );
-    wxCHECK_RET( node, wxT("invalid index in wxListBox::DoSetClientData") );
+    wxCHECK_RET( node, wxT("invalid index in wxListBox::DoSetItemClientData") );
 
     node->SetData( (wxObject*) clientData );
 }
 
-void* wxListBox::DoGetClientData( int n ) const
+void* wxListBox::DoGetItemClientData( int n ) const
 {
     wxCHECK_MSG( m_widget != NULL, NULL, wxT("invalid listbox control") );
 
     wxNode *node = m_clientData.Nth( n );
-    wxCHECK_MSG( node, NULL, wxT("invalid index in wxListBox::DoGetClientData") );
+    wxCHECK_MSG( node, NULL, wxT("invalid index in wxListBox::DoGetItemClientData") );
 
     return node->Data();
 }
 
-void wxListBox::DoSetClientObject( int n, wxClientData* clientData )
+void wxListBox::DoSetItemClientObject( int n, wxClientData* clientData )
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid listbox control") );
 
     wxNode *node = m_clientData.Nth( n );
-    wxCHECK_RET( node, wxT("invalid index in wxListBox::DoSetClientObject") );
+    wxCHECK_RET( node, wxT("invalid index in wxListBox::DoSetItemClientObject") );
 
     wxClientData *cd = (wxClientData*) node->Data();
     delete cd;
@@ -650,13 +644,13 @@ void wxListBox::DoSetClientObject( int n, wxClientData* clientData )
     node->SetData( (wxObject*) clientData );
 }
 
-wxClientData* wxListBox::DoGetClientObject( int n ) const
+wxClientData* wxListBox::DoGetItemClientObject( int n ) const
 {
     wxCHECK_MSG( m_widget != NULL, (wxClientData*) NULL, wxT("invalid listbox control") );
 
     wxNode *node = m_clientData.Nth( n );
     wxCHECK_MSG( node, (wxClientData *)NULL,
-                 wxT("invalid index in wxListBox::DoGetClientObject") );
+                 wxT("invalid index in wxListBox::DoGetItemClientObject") );
 
     return (wxClientData*) node->Data();
 }
@@ -667,8 +661,18 @@ void wxListBox::Clear()
 
     gtk_list_clear_items( m_list, 0, Number() );
 
-    if ( m_clientDataItemsType == ClientData_Object )
-        m_clientData.DeleteContents(TRUE);
+    if ( HasClientObjectData() )
+    {
+        // destroy the data (due to Robert's idea of using wxList<wxObject>
+        // and not wxList<wxClientData> we can't just say
+        // m_clientList.DeleteContents(TRUE) - this would crash!
+        wxNode *node = m_clientData.First();
+        while ( node )
+        {
+            delete (wxClientData *)node->Data();
+            node = node->Next();
+        }
+    }
     m_clientData.Clear();
 
     if ( m_strings )

@@ -98,6 +98,7 @@ cmndata.cpp	C
 clipcmn.cpp	C
 config.cpp	C	B
 ctrlcmn.cpp	C
+ctrlsub.cpp	C
 date.cpp	C	B
 datstrm.cpp	C
 db.cpp	C

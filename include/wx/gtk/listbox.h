@@ -69,10 +69,10 @@ public:
 
     virtual void DoSetFirstItem(int n);
 
-    virtual void DoSetClientData(int n, void* clientData);
-    virtual void* DoGetClientData(int n) const;
-    virtual void DoSetClientObject(int n, wxClientData* clientData);
-    virtual wxClientData* DoGetClientObject(int n) const;
+    virtual void DoSetItemClientData(int n, void* clientData);
+    virtual void* DoGetItemClientData(int n) const;
+    virtual void DoSetItemClientObject(int n, wxClientData* clientData);
+    virtual wxClientData* DoGetItemClientObject(int n) const;
 
     // implementation from now on
 

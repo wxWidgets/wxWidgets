@@ -6,7 +6,7 @@
 // Created:     22.10.99
 // RCS-ID:      $Id$
 // Copyright:   (c) wxWindows team
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_LISTBOX_H_BASE_
@@ -24,7 +24,7 @@
 
 #if wxUSE_LISTBOX
 
-#include "wx/control.h"         // base class
+#include "wx/ctrlsub.h"         // base class
 
 // forward declarations are enough here
 class WXDLLEXPORT wxArrayInt;
@@ -40,21 +40,11 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxListBoxNameStr;
 // wxListBox interface is defined by the class wxListBoxBase
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxListBoxBase : public wxControl
+class WXDLLEXPORT wxListBoxBase : public wxControlWithItems
 {
 public:
-    // ctor
-    wxListBoxBase() { m_clientDataItemsType = ClientData_None; }
-
-    // adding items
-    // ------------
-
-    void Append(const wxString& item)
-        { DoAppend(item); }
-    void Append(const wxString& item, void *clientData)
-        { int n = DoAppend(item); SetClientData(n, clientData); }
-    void Append(const wxString& item, wxClientData *clientData)
-        { int n = DoAppend(item); SetClientObject(n, clientData); }
+    // all generic methods are in wxControlWithItems, except for the following
+    // ones which are not yet implemented by wxChoice/wxCombobox
 
     void Insert(const wxString& item, int pos)
         { DoInsert(item, pos); }
@@ -71,57 +61,30 @@ public:
     void Set(const wxArrayString& items, void **clientData = NULL)
         { DoSetItems(items, clientData); }
 
-    // deleting items
-    // --------------
-
-    virtual void Clear() = 0;
-    virtual void Delete(int n) = 0;
-
-    // accessing strings
-    // -----------------
-
-    virtual int GetCount() const = 0;
-    virtual wxString GetString(int n) const = 0;
-    virtual void SetString(int n, const wxString& s) = 0;
-    virtual int FindString(const wxString& s) const = 0;
-
-    // selection
-    // ---------
-
+    // multiple selection logic
     virtual bool IsSelected(int n) const = 0;
     virtual void SetSelection(int n, bool select = TRUE) = 0;
-    void Select(int n) { SetSelection(n, TRUE); }
+    virtual void Select(int n) { SetSelection(n, TRUE); }
     void Deselect(int n) { SetSelection(n, FALSE); }
 
-    virtual int GetSelection() const = 0;
+    virtual bool SetStringSelection(const wxString& s, bool select = TRUE);
+
+    // works for single as well as multiple selection listboxes (unlike
+    // GetSelection which only works for listboxes with single selection)
     virtual int GetSelections(wxArrayInt& aSelections) const = 0;
-
-    bool SetStringSelection(const wxString& s, bool select = TRUE);
-    wxString GetStringSelection() const;
-
-    // misc
-    // ----
-
-    // client data stuff
-    void SetClientData( int n, void* clientData );
-    void* GetClientData( int n ) const;
-
-    void SetClientObject( int n, wxClientData* clientData );
-    wxClientData* GetClientObject( int n ) const;
 
     // Set the specified item at the first visible item or scroll to max
     // range.
     void SetFirstItem(int n) { DoSetFirstItem(n); }
     void SetFirstItem(const wxString& s);
 
-    // emulate selecting or deselecting (depending on event.GetExtraLong())
-    // the item event.GetInt() from the control
-    virtual void Command(wxCommandEvent &event);
+    // emulate selecting or deselecting the item event.GetInt() (depending on
+    // event.GetExtraLong())
+    void Command(wxCommandEvent& event);
 
     // compatibility - these functions are deprecated, use the new ones
     // instead
     bool Selected(int n) const { return IsSelected(n); }
-    int Number() const { return GetCount(); }
 
 protected:
     // NB: due to wxGTK implementation details, DoInsert() is implemented
@@ -130,29 +93,10 @@ protected:
         { InsertItems(1, &item, pos); }
 
     // to be implemented in derived classes
-    virtual int DoAppend(const wxString& item) = 0;
     virtual void DoInsertItems(const wxArrayString& items, int pos) = 0;
     virtual void DoSetItems(const wxArrayString& items, void **clientData) = 0;
 
     virtual void DoSetFirstItem(int n) = 0;
-
-    virtual void DoSetClientData(int n, void* clientData) = 0;
-    virtual void* DoGetClientData(int n) const = 0;
-    virtual void DoSetClientObject(int n, wxClientData* clientData) = 0;
-    virtual wxClientData* DoGetClientObject(int n) const = 0;
-
-    // the above pure virtuals hide these virtuals in wxWindowBase
-    virtual void DoSetClientData(void* clientData )
-        { wxWindowBase::DoSetClientData(clientData); };
-    virtual void* DoGetClientData() const
-        { return(wxWindowBase::DoGetClientData()); };
-    virtual void DoSetClientObject( wxClientData* clientData )
-        { wxWindowBase::DoSetClientObject(clientData); };
-    virtual wxClientData* DoGetClientObject() const
-        { return(wxWindowBase::DoGetClientObject()); };
-
-    // the type of the client data for the items
-    wxClientDataType m_clientDataItemsType;
 };
 
 // ----------------------------------------------------------------------------

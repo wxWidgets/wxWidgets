@@ -104,7 +104,8 @@ public:
     void OnShowProgress( wxCommandEvent &event );
 #endif // wxUSE_SPINBUTTON
 
-    wxListBox     *m_listbox;
+    wxListBox     *m_listbox,
+                  *m_listboxSorted;
     wxChoice      *m_choice,
                   *m_choiceSorted;
     wxComboBox    *m_combo;
@@ -152,8 +153,11 @@ private:
 };
 
 //----------------------------------------------------------------------
-// main()
+// other
 //----------------------------------------------------------------------
+
+static void SetControlClientData(const char *name,
+                                 wxControlWithItems *control);
 
 IMPLEMENT_APP(MyApp)
 
@@ -226,6 +230,7 @@ const int  ID_LISTBOX_APPEND    = 134;
 const int  ID_LISTBOX_DELETE    = 135;
 const int  ID_LISTBOX_FONT      = 136;
 const int  ID_LISTBOX_ENABLE    = 137;
+const int  ID_LISTBOX_SORTED    = 138;
 
 const int  ID_CHOICE            = 120;
 const int  ID_CHOICE_SEL_NUM    = 121;
@@ -268,6 +273,7 @@ EVT_SIZE      (                         MyPanel::OnSize)
 EVT_NOTEBOOK_PAGE_CHANGING(ID_NOTEBOOK, MyPanel::OnPageChanging)
 EVT_NOTEBOOK_PAGE_CHANGED(ID_NOTEBOOK,  MyPanel::OnPageChanged)
 EVT_LISTBOX   (ID_LISTBOX,              MyPanel::OnListBox)
+EVT_LISTBOX   (ID_LISTBOX_SORTED,       MyPanel::OnListBox)
 EVT_LISTBOX_DCLICK(ID_LISTBOX,          MyPanel::OnListBoxDoubleClick)
 EVT_BUTTON    (ID_LISTBOX_SEL_NUM,      MyPanel::OnListBoxButtons)
 EVT_BUTTON    (ID_LISTBOX_SEL_STR,      MyPanel::OnListBoxButtons)
@@ -385,11 +391,17 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
 #endif
 
-    wxButton *button = (wxButton*) NULL;  /* who did this ? */
-    wxPanel *panel = (wxPanel*) NULL;
+    wxPanel *panel = new wxPanel(m_notebook);
+    m_listbox = new wxListBox( panel, ID_LISTBOX,
+                               wxPoint(10,10), wxSize(120,70),
+                               5, choices, wxLB_ALWAYS_SB );
+    m_listboxSorted = new wxListBox( panel, ID_LISTBOX_SORTED,
+                                     wxPoint(10,90), wxSize(120,70),
+                                     5, choices, wxLB_SORT );
 
-    panel = new wxPanel(m_notebook);
-    m_listbox = new wxListBox( panel, ID_LISTBOX, wxPoint(10,10), wxSize(120,70), 5, choices, wxLB_ALWAYS_SB );
+    SetControlClientData("listbox", m_listbox);
+    SetControlClientData("listbox", m_listboxSorted);
+
     m_listbox->SetCursor(*wxCROSS_CURSOR);
 #if wxUSE_TOOLTIPS
     m_listbox->SetToolTip( "This is a list box" );
@@ -400,12 +412,12 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     (void)new wxButton( panel, ID_LISTBOX_CLEAR, "Clear", wxPoint(180,80), wxSize(140,30) );
     (void)new wxButton( panel, ID_LISTBOX_APPEND, "Append 'Hi!'", wxPoint(340,80), wxSize(140,30) );
     (void)new wxButton( panel, ID_LISTBOX_DELETE, "Delete selected item", wxPoint(180,130), wxSize(140,30) );
-    button = new wxButton( panel, ID_LISTBOX_FONT, "Set &Italic font", wxPoint(340,130), wxSize(140,30) );
+    wxButton *button = new wxButton( panel, ID_LISTBOX_FONT, "Set &Italic font", wxPoint(340,130), wxSize(140,30) );
 #if wxUSE_TOOLTIPS
     button->SetToolTip( "Press here to set italic font" );
 #endif // wxUSE_TOOLTIPS
 
-    m_checkbox = new wxCheckBox( panel, ID_LISTBOX_ENABLE, "&Disable", wxPoint(20,130) );
+    m_checkbox = new wxCheckBox( panel, ID_LISTBOX_ENABLE, "&Disable", wxPoint(20,170) );
     m_checkbox->SetValue(FALSE);
 #if wxUSE_TOOLTIPS
     m_checkbox->SetToolTip( "Click here to disable the listbox" );
@@ -416,6 +428,10 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_choice = new wxChoice( panel, ID_CHOICE, wxPoint(10,10), wxSize(120,-1), 5, choices );
     m_choiceSorted = new wxChoice( panel, ID_CHOICE_SORTED, wxPoint(10,70), wxSize(120,-1),
                                    5, choices, wxCB_SORT );
+
+    SetControlClientData("choice", m_choice);
+    SetControlClientData("choice", m_choiceSorted);
+
     m_choice->SetSelection(2);
     m_choice->SetBackgroundColour( "red" );
     (void)new wxButton( panel, ID_CHOICE_SEL_NUM, "Select #2", wxPoint(180,30), wxSize(140,30) );
@@ -603,12 +619,24 @@ void MyPanel::OnPageChanged( wxNotebookEvent &event )
 
 void MyPanel::OnListBox( wxCommandEvent &event )
 {
-    m_text->AppendText( "ListBox event selection string is: " );
+    wxListBox *listbox = event.GetId() == ID_LISTBOX ? m_listbox
+                                                     : m_listboxSorted;
+
+    m_text->AppendText( "ListBox event selection string is: '" );
     m_text->AppendText( event.GetString() );
-    m_text->AppendText( "\n" );
-    m_text->AppendText( "ListBox control selection string is: " );
-    m_text->AppendText( m_listbox->GetStringSelection() );
-    m_text->AppendText( "\n" );
+    m_text->AppendText( "'\n" );
+    m_text->AppendText( "ListBox control selection string is: '" );
+    m_text->AppendText( listbox->GetStringSelection() );
+    m_text->AppendText( "'\n" );
+
+    wxStringClientData *obj = ((wxStringClientData *)event.GetClientObject());
+    m_text->AppendText( "ListBox event client data string is: '" );
+    m_text->AppendText( obj ? obj->GetData() : wxString("none"));
+    m_text->AppendText( "'\n" );
+    m_text->AppendText( "ListBox control client data string is: '" );
+    obj = (wxStringClientData *)listbox->GetClientObject(listbox->GetSelection());
+    m_text->AppendText( obj ? obj->GetData() : wxString("none"));
+    m_text->AppendText( "'\n" );
 }
 
 void MyPanel::OnListBoxDoubleClick( wxCommandEvent &event )
@@ -633,39 +661,48 @@ void MyPanel::OnListBoxButtons( wxCommandEvent &event )
                     cb->SetToolTip( "Click to disable listbox" );
 #endif // wxUSE_TOOLTIPS
                 m_listbox->Enable( event.GetInt() == 0 );
+                m_listboxSorted->Enable( event.GetInt() == 0 );
                 break;
             }
         case ID_LISTBOX_SEL_NUM:
             {
                 m_listbox->SetSelection( 2 );
+                m_listboxSorted->SetSelection( 2 );
                 m_lbSelectThis->WarpPointer( 40, 14 );
                 break;
             }
         case ID_LISTBOX_SEL_STR:
             {
                 m_listbox->SetStringSelection( "This" );
+                m_listboxSorted->SetStringSelection( "This" );
                 m_lbSelectNum->WarpPointer( 40, 14 );
                 break;
             }
         case ID_LISTBOX_CLEAR:
             {
                 m_listbox->Clear();
+                m_listboxSorted->Clear();
                 break;
             }
         case ID_LISTBOX_APPEND:
             {
                 m_listbox->Append( "Hi!" );
+                m_listboxSorted->Append( "Hi!" );
                 break;
             }
         case ID_LISTBOX_DELETE:
             {
-                int idx = m_listbox->GetSelection();
+                int idx;
+                idx = m_listbox->GetSelection();
                 m_listbox->Delete( idx );
+                idx = m_listboxSorted->GetSelection();
+                m_listboxSorted->Delete( idx );
                 break;
             }
         case ID_LISTBOX_FONT:
             {
                 m_listbox->SetFont( *wxITALIC_FONT );
+                m_listboxSorted->SetFont( *wxITALIC_FONT );
                 m_checkbox->SetFont( *wxITALIC_FONT );
                 break;
             }
@@ -674,14 +711,24 @@ void MyPanel::OnListBoxButtons( wxCommandEvent &event )
 
 void MyPanel::OnChoice( wxCommandEvent &event )
 {
-    m_text->AppendText( "Choice event selection string is: " );
+    wxChoice *choice = event.GetId() == ID_CHOICE ? m_choice
+                                                  : m_choiceSorted;
+
+    m_text->AppendText( "Choice event selection string is: '" );
     m_text->AppendText( event.GetString() );
-    m_text->AppendText( "\n" );
+    m_text->AppendText( "'\n" );
     m_text->AppendText( "Choice control selection string is: '" );
-    m_text->AppendText( m_choice->GetStringSelection() );
-    m_text->AppendText( "' (for unsorted control)\nand '" );
-    m_text->AppendText( m_choiceSorted->GetStringSelection() );
-    m_text->AppendText( "' (for sorted control)\n" );
+    m_text->AppendText( choice->GetStringSelection() );
+    m_text->AppendText( "'\n" );
+
+    wxStringClientData *obj = ((wxStringClientData *)event.GetClientObject());
+    m_text->AppendText( "Choice event client data string is: '" );
+    m_text->AppendText( obj ? obj->GetData() : wxString("none"));
+    m_text->AppendText( "'\n" );
+    m_text->AppendText( "Choice control client data string is: '" );
+    obj = (wxStringClientData *)choice->GetClientObject(choice->GetSelection());
+    m_text->AppendText( obj ? obj->GetData() : wxString("none"));
+    m_text->AppendText( "'\n" );
 }
 
 void MyPanel::OnChoiceButtons( wxCommandEvent &event )
@@ -1037,5 +1084,19 @@ void MyFrame::OnIdle( wxIdleEvent& WXUNUSED(event) )
                   );
 
         SetStatusText(msg);
+    }
+}
+
+static void SetControlClientData(const char *name,
+                                 wxControlWithItems *control)
+{
+    size_t count = control->GetCount();
+    for ( size_t n = 0; n < count; n++ )
+    {
+        wxString s;
+        s.Printf("%s client data for '%s'",
+                 name, control->GetString(n).c_str());
+
+        control->SetClientObject(n, new wxStringClientData(s));
     }
 }

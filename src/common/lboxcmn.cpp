@@ -6,7 +6,7 @@
 // Created:     22.10.99
 // RCS-ID:      $Id$
 // Copyright:   (c) wxWindows team
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -67,21 +67,11 @@ void wxListBoxBase::Set(int nItems, const wxString* items, void **clientData)
 // selection
 // ----------------------------------------------------------------------------
 
-wxString wxListBoxBase::GetStringSelection () const
-{
-    wxString s;
-    int sel = GetSelection();
-    if ( sel != -1 )
-        s = GetString(sel);
-
-    return s;
-}
-
 bool wxListBoxBase::SetStringSelection(const wxString& s, bool select)
 {
     int sel = FindString(s);
     wxCHECK_MSG( sel != -1, FALSE,
-                 wxT("invalid string in wxListBox::SetStringSelection") );
+                 wxT("invalid string in SetStringSelection") );
 
     SetSelection(sel, select);
 
@@ -89,50 +79,14 @@ bool wxListBoxBase::SetStringSelection(const wxString& s, bool select)
 }
 
 // ----------------------------------------------------------------------------
-// client data
-// ----------------------------------------------------------------------------
-
-void wxListBoxBase::SetClientObject(int n, wxClientData *data)
-{
-    wxASSERT_MSG( m_clientDataItemsType != ClientData_Void,
-                  wxT("can't have both object and void client data") );
-
-    wxClientData *clientDataOld = DoGetClientObject(n);
-    if ( clientDataOld )
-        delete clientDataOld;
-
-    DoSetClientObject(n, data);
-    m_clientDataItemsType = ClientData_Object;
-}
-
-wxClientData *wxListBoxBase::GetClientObject(int n) const
-{
-    wxASSERT_MSG( m_clientDataItemsType == ClientData_Object,
-                  wxT("this window doesn't have object client data") );
-
-    return DoGetClientObject(n);
-}
-
-void wxListBoxBase::SetClientData(int n, void *data)
-{
-    wxASSERT_MSG( m_clientDataItemsType != ClientData_Object,
-                  wxT("can't have both object and void client data") );
-
-    DoSetClientData(n, data);
-    m_clientDataItemsType = ClientData_Void;
-}
-
-void *wxListBoxBase::GetClientData(int n) const
-{
-    wxASSERT_MSG( m_clientDataItemsType == ClientData_Void,
-                  wxT("this window doesn't have void client data") );
-
-    return DoGetClientData(n);
-}
-
-// ----------------------------------------------------------------------------
 // misc
 // ----------------------------------------------------------------------------
+
+void wxListBoxBase::Command(wxCommandEvent& event)
+{
+    SetSelection(event.m_commandInt, event.m_extraLong);
+    (void)ProcessEvent(event);
+}
 
 void wxListBoxBase::SetFirstItem(const wxString& s)
 {
@@ -142,10 +96,3 @@ void wxListBoxBase::SetFirstItem(const wxString& s)
 
     DoSetFirstItem(n);
 }
-
-void wxListBoxBase::Command(wxCommandEvent & event)
-{
-    SetSelection(event.m_commandInt, event.m_extraLong);
-    (void)ProcessEvent(event);
-}
-

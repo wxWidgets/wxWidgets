@@ -60,16 +60,17 @@ public:
 
     virtual int FindString(const wxString& s) const;
     virtual wxString GetString(int n) const;
+    virtual void SetString(int n, const wxString& s);
 
     // MSW only
     virtual bool MSWCommand(WXUINT param, WXWORD id);
     long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 
 protected:
-    virtual void DoSetClientData( int n, void* clientData );
-    virtual void* DoGetClientData( int n ) const;
-    virtual void DoSetClientObject( int n, wxClientData* clientData );
-    virtual wxClientData* DoGetClientObject( int n ) const;
+    virtual void DoSetItemClientData( int n, void* clientData );
+    virtual void* DoGetItemClientData( int n ) const;
+    virtual void DoSetItemClientObject( int n, wxClientData* clientData );
+    virtual wxClientData* DoGetItemClientObject( int n ) const;
 
     // MSW implementation
     virtual wxSize DoGetBestSize();

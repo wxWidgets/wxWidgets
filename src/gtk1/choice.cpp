@@ -46,9 +46,17 @@ static void gtk_choice_clicked_callback( GtkWidget *WXUNUSED(widget), wxChoice *
     if (g_blockEventsOnDrag) return;
 
     wxCommandEvent event(wxEVT_COMMAND_CHOICE_SELECTED, choice->GetId() );
-    event.SetInt( choice->GetSelection() );
+    int n = choice->GetSelection();
+
+    event.SetInt( n );
     event.SetString( choice->GetStringSelection() );
     event.SetEventObject(choice);
+
+    if ( choice->HasClientObjectData() )
+        event.SetClientObject( choice->GetClientObject(n) );
+    else if ( choice->HasClientUntypedData() )
+        event.SetClientData( choice->GetClientData(n) );
+
     choice->GetEventHandler()->ProcessEvent(event);
 }
 
@@ -134,32 +142,32 @@ int wxChoice::DoAppend( const wxString &item )
     return AppendHelper(menu, item);
 }
 
-void wxChoice::DoSetClientData( int n, void* clientData )
+void wxChoice::DoSetItemClientData( int n, void* clientData )
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid choice control") );
 
     wxNode *node = m_clientList.Nth( n );
-    wxCHECK_RET( node, wxT("invalid index in wxChoice::DoSetClientData") );
+    wxCHECK_RET( node, wxT("invalid index in wxChoice::DoSetItemClientData") );
 
     node->SetData( (wxObject*) clientData );
 }
 
-void* wxChoice::DoGetClientData( int n ) const
+void* wxChoice::DoGetItemClientData( int n ) const
 {
     wxCHECK_MSG( m_widget != NULL, NULL, wxT("invalid choice control") );
 
     wxNode *node = m_clientList.Nth( n );
-    wxCHECK_MSG( node, NULL, wxT("invalid index in wxChoice::DoGetClientData") );
+    wxCHECK_MSG( node, NULL, wxT("invalid index in wxChoice::DoGetItemClientData") );
 
     return node->Data();
 }
 
-void wxChoice::DoSetClientObject( int n, wxClientData* clientData )
+void wxChoice::DoSetItemClientObject( int n, wxClientData* clientData )
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid choice control") );
 
     wxNode *node = m_clientList.Nth( n );
-    wxCHECK_RET( node, wxT("invalid index in wxChoice::DoSetClientObject") );
+    wxCHECK_RET( node, wxT("invalid index in wxChoice::DoSetItemClientObject") );
 
     wxClientData *cd = (wxClientData*) node->Data();
     delete cd;
@@ -167,13 +175,13 @@ void wxChoice::DoSetClientObject( int n, wxClientData* clientData )
     node->SetData( (wxObject*) clientData );
 }
 
-wxClientData* wxChoice::DoGetClientObject( int n ) const
+wxClientData* wxChoice::DoGetItemClientObject( int n ) const
 {
     wxCHECK_MSG( m_widget != NULL, (wxClientData*) NULL, wxT("invalid choice control") );
 
     wxNode *node = m_clientList.Nth( n );
     wxCHECK_MSG( node, (wxClientData *)NULL,
-                 wxT("invalid index in wxChoice::DoGetClientObject") );
+                 wxT("invalid index in wxChoice::DoGetItemClientObject") );
 
     return (wxClientData*) node->Data();
 }
@@ -186,8 +194,18 @@ void wxChoice::Clear()
     GtkWidget *menu = gtk_menu_new();
     gtk_option_menu_set_menu( GTK_OPTION_MENU(m_widget), menu );
 
-    if ( m_clientDataItemsType == ClientData_Object )
-        m_clientList.DeleteContents(TRUE);
+    if ( HasClientObjectData() )
+    {
+        // destroy the data (due to Robert's idea of using wxList<wxObject>
+        // and not wxList<wxClientData> we can't just say
+        // m_clientList.DeleteContents(TRUE) - this would crash!
+        wxNode *node = m_clientList.First();
+        while ( node )
+        {
+            delete (wxClientData *)node->Data();
+            node = node->Next();
+        }
+    }
     m_clientList.Clear();
 
     if ( m_strings )
@@ -244,6 +262,13 @@ int wxChoice::GetSelection() const
     }
 
     return -1;
+}
+
+void wxChoice::SetString( int WXUNUSED(n), const wxString& WXUNUSED(string) )
+{
+    wxCHECK_RET( m_widget != NULL, wxT("invalid choice") );
+
+    wxFAIL_MSG(wxT("not implemented"));
 }
 
 wxString wxChoice::GetString( int n ) const
@@ -372,8 +397,7 @@ size_t wxChoice::AppendHelper(GtkWidget *menu, const wxString& item)
         }
         else
         {
-            // can't use Insert() :-(
-            m_clientList.Append( (wxObject*) NULL );
+            m_clientList.Insert( (wxObject*) NULL );
         }
     }
     else

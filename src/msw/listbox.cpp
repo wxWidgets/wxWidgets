@@ -261,6 +261,16 @@ void wxListBox::Delete(int N)
     wxCHECK_RET( N >= 0 && N < m_noItems,
                  wxT("invalid index in wxListBox::Delete") );
 
+#if wxUSE_OWNER_DRAWN
+    delete m_aItems[N];
+    m_aItems.Remove(N);
+#else // !wxUSE_OWNER_DRAWN
+    if ( HasClientObjectData() )
+    {
+        delete GetClientObject(N);
+    }
+#endif // wxUSE_OWNER_DRAWN/!wxUSE_OWNER_DRAWN
+
     SendMessage(GetHwnd(), LB_DELETESTRING, N, 0);
     m_noItems--;
 
@@ -343,8 +353,6 @@ int wxListBox::FindString(const wxString& s) const
 
 void wxListBox::Clear()
 {
-    ListBox_ResetContent(GetHwnd());
-
 #if wxUSE_OWNER_DRAWN
     size_t uiCount = m_aItems.Count();
     while ( uiCount-- != 0 ) {
@@ -352,7 +360,17 @@ void wxListBox::Clear()
     }
 
     m_aItems.Clear();
-#endif // wxUSE_OWNER_DRAWN
+#else // !wxUSE_OWNER_DRAWN
+    if ( HasClientObjectData() )
+    {
+        for ( size_t n = 0; n < (size_t)m_noItems; n++ )
+        {
+            delete GetClientObject(n);
+        }
+    }
+#endif // wxUSE_OWNER_DRAWN/!wxUSE_OWNER_DRAWN
+
+    ListBox_ResetContent(GetHwnd());
 
     m_noItems = 0;
     SetHorizontalExtent();
@@ -381,12 +399,12 @@ bool wxListBox::IsSelected(int N) const
     return SendMessage(GetHwnd(), LB_GETSEL, N, 0) == 0 ? FALSE : TRUE;
 }
 
-wxClientData* wxListBox::DoGetClientObject(int n) const
+wxClientData* wxListBox::DoGetItemClientObject(int n) const
 {
-    return (wxClientData *)DoGetClientData(n);
+    return (wxClientData *)DoGetItemClientData(n);
 }
 
-void *wxListBox::DoGetClientData(int n) const
+void *wxListBox::DoGetItemClientData(int n) const
 {
     wxCHECK_MSG( n >= 0 && n < m_noItems, NULL,
                  wxT("invalid index in wxListBox::GetClientData") );
@@ -394,12 +412,12 @@ void *wxListBox::DoGetClientData(int n) const
     return (void *)SendMessage(GetHwnd(), LB_GETITEMDATA, n, 0);
 }
 
-void wxListBox::DoSetClientObject(int n, wxClientData* clientData)
+void wxListBox::DoSetItemClientObject(int n, wxClientData* clientData)
 {
-    DoSetClientData(n, clientData);
+    DoSetItemClientData(n, clientData);
 }
 
-void wxListBox::DoSetClientData(int n, void *clientData)
+void wxListBox::DoSetItemClientData(int n, void *clientData)
 {
     wxCHECK_RET( n >= 0 && n < m_noItems,
                  wxT("invalid index in wxListBox::SetClientData") );

@@ -30,7 +30,6 @@
 
 #ifndef WX_PRECOMP
     #include "wx/choice.h"
-    #include "wx/log.h"
 #endif
 
 // ============================================================================
@@ -38,80 +37,26 @@
 // ============================================================================
 
 // ----------------------------------------------------------------------------
-// events
+// selection
 // ----------------------------------------------------------------------------
 
-void wxChoiceBase::Command(wxCommandEvent &event)
+bool wxChoiceBase::SetStringSelection(const wxString& s)
 {
-    SetSelection(event.GetInt());
-    (void)ProcessEvent(event);
-}
+    int sel = FindString(s);
+    wxCHECK_MSG( sel != -1, FALSE,
+                 wxT("invalid string in wxChoice::SetStringSelection") );
 
-// ----------------------------------------------------------------------------
-// string selection management
-// ----------------------------------------------------------------------------
-
-wxString wxChoiceBase::GetStringSelection() const
-{
-    int sel = GetSelection();
-    wxString str;
-    wxCHECK_MSG( sel != wxNOT_FOUND, str, wxT("no selection, hence no string") );
-
-    str = GetString(sel);
-    return str;
-}
-
-bool wxChoiceBase::SetStringSelection(const wxString& sel)
-{
-    int selIndex = FindString(sel);
-    wxCHECK_MSG( selIndex != wxNOT_FOUND, FALSE,
-                 wxT("can't set selection to string not in the control") );
-
-    SetSelection(selIndex);
+    Select(sel);
 
     return TRUE;
 }
 
 // ----------------------------------------------------------------------------
-// client data
+// misc
 // ----------------------------------------------------------------------------
 
-void wxChoiceBase::SetClientObject(int n, wxClientData *data)
+void wxChoiceBase::Command(wxCommandEvent& event)
 {
-    wxASSERT_MSG( m_clientDataItemsType != ClientData_Void,
-                  wxT("can't have both object and void client data") );
-
-    wxClientData *clientDataOld = DoGetClientObject(n);
-    if ( clientDataOld )
-        delete clientDataOld;
-
-    DoSetClientObject(n, data);
-    m_clientDataItemsType = ClientData_Object;
+    SetSelection(event.m_commandInt);
+    (void)ProcessEvent(event);
 }
-
-wxClientData *wxChoiceBase::GetClientObject(int n) const
-{
-    wxASSERT_MSG( m_clientDataItemsType == ClientData_Object,
-                  wxT("this window doesn't have object client data") );
-
-    return DoGetClientObject(n);
-}
-
-void wxChoiceBase::SetClientData(int n, void *data)
-{
-    wxASSERT_MSG( m_clientDataItemsType != ClientData_Object,
-                  wxT("can't have both object and void client data") );
-
-    DoSetClientData(n, data);
-    m_clientDataItemsType = ClientData_Void;
-}
-
-void *wxChoiceBase::GetClientData(int n) const
-{
-    wxASSERT_MSG( m_clientDataItemsType == ClientData_Void,
-                  wxT("this window doesn't have void client data") );
-
-    return DoGetClientData(n);
-}
-
-
