@@ -161,7 +161,7 @@ bool MyApp::OnInit()
 
   if (!InputFile || !OutputFile)
   {
-    wxSTD cout << "Tex2RTF: input or output file is missing.\n";
+    cout << "Tex2RTF: input or output file is missing.\n";
     ShowOptions();
     exit(1);
   }
@@ -859,16 +859,16 @@ bool Go(void)
 void OnError(char *msg)
 {
 #ifdef NO_GUI
-  wxSTD cerr << "Error: " << msg << "\n";
-  wxSTD cerr.flush();
+  cerr << "Error: " << msg << "\n";
+  cerr.flush();
 #else
   if (isInteractive && frame)
     (*frame->textWindow) << "Error: " << msg << "\n";
   else
 #ifdef __UNIX__
   {
-    wxSTD cerr << "Error: " << msg << "\n";
-    wxSTD cerr.flush();
+    cerr << "Error: " << msg << "\n";
+    cerr.flush();
   }
 #endif
 #ifdef __WXMSW__
@@ -881,16 +881,16 @@ void OnError(char *msg)
 void OnInform(char *msg)
 {
 #ifdef NO_GUI
-  wxSTD cout << msg << "\n";
-  wxSTD cout.flush();
+  cout << msg << "\n";
+  cout.flush();
 #else
   if (isInteractive && frame)
     (*frame->textWindow) << msg << "\n";
   else
 #ifdef __WXMSW__
   {
-    wxSTD cout << msg << "\n";
-    wxSTD cout.flush();
+    cout << msg << "\n";
+    cout.flush();
   }
 #endif
 #ifdef __WXMSW__
