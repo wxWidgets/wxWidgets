@@ -2698,22 +2698,18 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         }
     }
 
+#ifndef __WXMAC__
+    // Don't draw rect outline under Mac at all.
     if ( HasCurrent() )
     {
-        // don't draw rect outline under Max if we already have the background
-        // color but under other platforms only draw it if we do: it is a bit
-        // silly to draw "focus rect" if we don't have focus!
-#ifdef __WXMAC__
-        if ( !m_hasFocus )
-#else // !__WXMAC__
         if ( m_hasFocus )
-#endif // __WXMAC__/!__WXMAC__
         {
             dc.SetPen( *wxBLACK_PEN );
             dc.SetBrush( *wxTRANSPARENT_BRUSH );
             dc.DrawRectangle( GetLineHighlightRect(m_current) );
         }
     }
+#endif
 
     dc.EndDrawing();
 }
@@ -3069,9 +3065,9 @@ void wxListMainWindow::OnArrowChar(size_t newCurrent, const wxKeyEvent& event)
     {
         ChangeCurrent(newCurrent);
 
-	// refresh the old focus to remove it
-	RefreshLine( oldCurrent );
-	
+        // refresh the old focus to remove it
+        RefreshLine( oldCurrent );
+
         // select all the items between the old and the new one
         if ( oldCurrent > newCurrent )
         {
@@ -3088,16 +3084,15 @@ void wxListMainWindow::OnArrowChar(size_t newCurrent, const wxKeyEvent& event)
             HighlightAll(FALSE);
 
         ChangeCurrent(newCurrent);
-
-	// refresh the old focus to remove it
-	RefreshLine( oldCurrent );
+        
+        // refresh the old focus to remove it
+        RefreshLine( oldCurrent );
 
         if ( !event.ControlDown() )
         {
             HighlightLine( m_current, TRUE );
         }
     }
-
 	
     RefreshLine( m_current );
 
