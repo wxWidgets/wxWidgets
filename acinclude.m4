@@ -88,14 +88,11 @@ dnl WX_CPP_NEW_HEADERS checks whether the compiler has "new" <iostream> header
 dnl or only the old <iostream.h> one - it may be generally assumed that if
 dnl <iostream> exists, the other "new" headers (without .h) exist too.
 dnl
-dnl call WX_CPP_NEW_HEADERS(actiof-if-true, action-if-false-or-cross-compiling)
+dnl call WX_CPP_NEW_HEADERS(actiof-if-true, action-if-false)
 dnl ---------------------------------------------------------------------------
 
 AC_DEFUN([WX_CPP_NEW_HEADERS],
 [
-  if test "$cross_compiling" = "yes"; then
-    ifelse([$2], , :, [$2])
-  else
     AC_LANG_SAVE
     AC_LANG_CPLUSPLUS
 
@@ -108,7 +105,6 @@ AC_DEFUN([WX_CPP_NEW_HEADERS],
     fi
 
     AC_LANG_RESTORE
-  fi
 ])
 
 dnl ---------------------------------------------------------------------------
