@@ -481,12 +481,11 @@ void wxDC::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask)
     [transform concat];
     [flipTransform concat];
 
-    NSImage *nsimage = [[NSImage alloc]
-            initWithSize:NSMakeSize(bmp.GetWidth(), bmp.GetHeight())];
-    [nsimage addRepresentation: const_cast<wxBitmap&>(bmp).GetNSBitmapImageRep()];
+    NSImage *nsimage = [bmp.GetNSImage(useMask) retain];
+
     [nsimage drawAtPoint: NSMakePoint(0,0)
         fromRect: NSMakeRect(0.0,0.0,bmp.GetWidth(),bmp.GetHeight())
-        operation: NSCompositeCopy
+        operation: NSCompositeSourceOver
         fraction: 1.0];
         
     [nsimage release];
