@@ -60,7 +60,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /Z7 /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX /Z7 /Od /I "../include" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D DEBUG=1 /D "__WXDEBUG__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /Yu"wx/wxprec.h" /FD /c
+# ADD CPP /nologo /MDd /W3 /GX /Z7 /Od /I "../include" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D DEBUG=1 /D "__WXDEBUG__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /Yu"wx/wxprec.h" /FD /c
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -563,10 +563,6 @@ SOURCE=.\html\htmlwin.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\html\winpars.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\html\m_fonts.cpp
 # End Source File
 # Begin Source File
@@ -600,6 +596,10 @@ SOURCE=.\html\m_tables.cpp
 # Begin Source File
 
 SOURCE=.\html\search.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\html\winpars.cpp
 # End Source File
 # End Group
 # Begin Group "MSW Files"
