@@ -302,7 +302,7 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
     
     if ( tool->IsButton() )
     {
-        wxBitmap bitmap = tool->GetBitmap1();
+        wxBitmap bitmap = tool->GetNormalBitmap();
 
         wxCHECK_MSG( bitmap.Ok(), FALSE,
                      wxT("invalid bitmap for wxToolBar icon") );
