@@ -64,7 +64,7 @@ wxPageSetupData* g_pageSetupData = (wxPageSetupData*) NULL;
 IMPLEMENT_APP(MyApp)
 
 // Writes a header on a page. Margin units are in millimetres.
-bool WritePageHeader(wxPrintout *printout, wxDC *dc, char *text, float mmToLogical);
+bool WritePageHeader(wxPrintout *printout, wxDC *dc, wxChar *text, float mmToLogical);
 
 MyApp::MyApp()
 {
@@ -80,7 +80,7 @@ bool MyApp::OnInit(void)
     g_pageSetupData = new wxPageSetupDialogData;
     
     // Create the main frame window
-    frame = new MyFrame((wxFrame *) NULL, (char *) "wxWindows Printing Demo", wxPoint(0, 0), wxSize(400, 400));
+    frame = new MyFrame((wxFrame *) NULL, _T("wxWindows Printing Demo"), wxPoint(0, 0), wxSize(400, 400));
     
     // Give it a status line
     frame->CreateStatusBar(2);
@@ -91,10 +91,10 @@ bool MyApp::OnInit(void)
     // Make a menubar
     wxMenu *file_menu = new wxMenu;
     
-    file_menu->Append(WXPRINT_PRINT, "&Print...",              "Print");
-    file_menu->Append(WXPRINT_PRINT_SETUP, "Print &Setup...",              "Setup printer properties");
-    file_menu->Append(WXPRINT_PAGE_SETUP, "Page Set&up...",              "Page setup");
-    file_menu->Append(WXPRINT_PREVIEW, "Print Pre&view",              "Preview");
+    file_menu->Append(WXPRINT_PRINT, _T("&Print..."),              _T("Print"));
+    file_menu->Append(WXPRINT_PRINT_SETUP, _T("Print &Setup..."),              _T("Setup printer properties"));
+    file_menu->Append(WXPRINT_PAGE_SETUP, _T("Page Set&up..."),              _T("Page setup"));
+    file_menu->Append(WXPRINT_PREVIEW, _T("Print Pre&view"),              _T("Preview"));
     
 #if wxUSE_ACCEL
     // Accelerators
@@ -106,21 +106,21 @@ bool MyApp::OnInit(void)
 
 #if defined(__WXMSW__) && wxTEST_POSTSCRIPT_IN_MSW
     file_menu->AppendSeparator();
-    file_menu->Append(WXPRINT_PRINT_PS, "Print PostScript...",              "Print (PostScript)");
-    file_menu->Append(WXPRINT_PRINT_SETUP_PS, "Print Setup PostScript...",              "Setup printer properties (PostScript)");
-    file_menu->Append(WXPRINT_PAGE_SETUP_PS, "Page Setup PostScript...",              "Page setup (PostScript)");
-    file_menu->Append(WXPRINT_PREVIEW_PS, "Print Preview PostScript",              "Preview (PostScript)");
+    file_menu->Append(WXPRINT_PRINT_PS, _T("Print PostScript..."),              _T("Print (PostScript)"));
+    file_menu->Append(WXPRINT_PRINT_SETUP_PS, _T("Print Setup PostScript..."),              _T("Setup printer properties (PostScript)"));
+    file_menu->Append(WXPRINT_PAGE_SETUP_PS, _T("Page Setup PostScript..."),              _T("Page setup (PostScript)"));
+    file_menu->Append(WXPRINT_PREVIEW_PS, _T("Print Preview PostScript"),              _T("Preview (PostScript)"));
 #endif
     file_menu->AppendSeparator();
-    file_menu->Append(WXPRINT_QUIT, "E&xit",                "Exit program");
+    file_menu->Append(WXPRINT_QUIT, _T("E&xit"),                _T("Exit program"));
     
     wxMenu *help_menu = new wxMenu;
-    help_menu->Append(WXPRINT_ABOUT, "&About",              "About this demo");
+    help_menu->Append(WXPRINT_ABOUT, _T("&About"),              _T("About this demo"));
     
     wxMenuBar *menu_bar = new wxMenuBar;
     
-    menu_bar->Append(file_menu, "&File");
-    menu_bar->Append(help_menu, "&Help");
+    menu_bar->Append(file_menu, _T("&File"));
+    menu_bar->Append(help_menu, _T("&Help"));
     
     // Associate the menu bar with the frame
     frame->SetMenuBar(menu_bar);
@@ -135,7 +135,7 @@ bool MyApp::OnInit(void)
     frame->Centre(wxBOTH);
     frame->Show(TRUE);
     
-    frame->SetStatusText("Printing demo");
+    frame->SetStatusText(_T("Printing demo"));
     
     SetTopWindow(frame);
     
@@ -182,13 +182,13 @@ void MyFrame::OnPrint(wxCommandEvent& WXUNUSED(event))
     wxPrintDialogData printDialogData(* g_printData);
 
     wxPrinter printer(& printDialogData);
-    MyPrintout printout("My printout");
+    MyPrintout printout(_T("My printout"));
     if (!printer.Print(this, &printout, TRUE))
     {
         if (wxPrinter::GetLastError() == wxPRINTER_ERROR)
-            wxMessageBox("There was a problem printing.\nPerhaps your current printer is not set correctly?", "Printing", wxOK);
+            wxMessageBox(_T("There was a problem printing.\nPerhaps your current printer is not set correctly?"), _T("Printing"), wxOK);
         else
-            wxMessageBox("You canceled printing", "Printing", wxOK);
+            wxMessageBox(_T("You canceled printing"), _T("Printing"), wxOK);
     }
     else
     {
@@ -204,11 +204,11 @@ void MyFrame::OnPrintPreview(wxCommandEvent& WXUNUSED(event))
     if (!preview->Ok())
     {
         delete preview;
-        wxMessageBox("There was a problem previewing.\nPerhaps your current printer is not set correctly?", "Previewing", wxOK);
+        wxMessageBox(_T("There was a problem previewing.\nPerhaps your current printer is not set correctly?"), _T("Previewing"), wxOK);
         return;
     }
     
-    wxPreviewFrame *frame = new wxPreviewFrame(preview, this, "Demo Print Preview", wxPoint(100, 100), wxSize(600, 650));
+    wxPreviewFrame *frame = new wxPreviewFrame(preview, this, _T("Demo Print Preview"), wxPoint(100, 100), wxSize(600, 650));
     frame->Centre(wxBOTH);
     frame->Initialize();
     frame->Show(TRUE);
@@ -240,7 +240,7 @@ void MyFrame::OnPageSetup(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnPrintPS(wxCommandEvent& WXUNUSED(event))
 {
     wxPostScriptPrinter printer(g_printData);
-    MyPrintout printout("My printout");
+    MyPrintout printout(_T("My printout"));
     printer.Print(this, &printout, TRUE);
 
     (*g_printData) = printer.GetPrintData();
@@ -251,7 +251,7 @@ void MyFrame::OnPrintPreviewPS(wxCommandEvent& WXUNUSED(event))
     // Pass two printout objects: for preview, and possible printing.
     wxPrintDialogData printDialogData(* g_printData);
     wxPrintPreview *preview = new wxPrintPreview(new MyPrintout, new MyPrintout, & printDialogData);
-    wxPreviewFrame *frame = new wxPreviewFrame(preview, this, "Demo Print Preview", wxPoint(100, 100), wxSize(600, 650));
+    wxPreviewFrame *frame = new wxPreviewFrame(preview, this, _T("Demo Print Preview"), wxPoint(100, 100), wxSize(600, 650));
     frame->Centre(wxBOTH);
     frame->Initialize();
     frame->Show(TRUE);
@@ -283,8 +283,8 @@ void MyFrame::OnPageSetupPS(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnPrintAbout(wxCommandEvent& WXUNUSED(event))
 {
-    (void)wxMessageBox("wxWindows printing demo\nAuthor: Julian Smart",
-        "About wxWindows printing demo", wxOK|wxCENTRE);
+    (void)wxMessageBox(_T("wxWindows printing demo\nAuthor: Julian Smart"),
+        _T("About wxWindows printing demo"), wxOK|wxCENTRE);
 }
 
 void MyFrame::Draw(wxDC& dc)
@@ -488,7 +488,7 @@ void MyPrintout::DrawPageTwo(wxDC *dc)
     
     
     { // GetTextExtent demo:
-        wxString words[7] = {"This ", "is ", "GetTextExtent ", "testing ", "string. ", "Enjoy ", "it!"};
+        wxString words[7] = {_T("This "), _T("is "), _T("GetTextExtent "), _T("testing "), _T("string. "), _T("Enjoy "), _T("it!")};
         long w, h;
         long x = 200, y= 250;
         wxFont fnt(15, wxSWISS, wxNORMAL, wxNORMAL);
@@ -503,7 +503,7 @@ void MyPrintout::DrawPageTwo(wxDC *dc)
         dc->SetFont(* wxGetApp().m_testFont);
     }
     
-    dc->DrawText("Some test text", 200, 300 );
+    dc->DrawText(_T("Some test text"), 200, 300 );
 
     // TESTING
     
@@ -526,11 +526,11 @@ void MyPrintout::DrawPageTwo(wxDC *dc)
     dc->DrawLine( (long)leftMarginLogical, (long)bottomMarginLogical, 
         (long)rightMarginLogical,  (long)bottomMarginLogical);
     
-    WritePageHeader(this, dc, "A header", logUnitsFactor);
+    WritePageHeader(this, dc, _T("A header"), logUnitsFactor);
 }
 
 // Writes a header on a page. Margin units are in millimetres.
-bool WritePageHeader(wxPrintout *printout, wxDC *dc, char *text, float mmToLogical)
+bool WritePageHeader(wxPrintout *printout, wxDC *dc, wxChar *text, float mmToLogical)
 {
 /*
 static wxFont *headerFont = (wxFont *) NULL;
