@@ -207,10 +207,6 @@ public:
     virtual void SetTitle(const wxString& title) { m_title = title; }
     const wxString GetTitle() const { return m_title; }
 
-    // client data
-    void SetClientData(void* clientData) { m_clientData = clientData; }
-    void* GetClientData() const { return m_clientData; }
-
     // event handler
     void SetEventHandler(wxEvtHandler *handler) { m_eventHandler = handler; }
     wxEvtHandler *GetEventHandler() const { return m_eventHandler; }
@@ -302,7 +298,6 @@ protected:
     wxMenuItemList m_items;             // the list of menu items
 
     wxWindow      *m_invokingWindow;    // for popup menus
-    void          *m_clientData;        // associated with the menu
 
     long           m_style;             // combination of wxMENU_XXX flags
 
