@@ -45,9 +45,9 @@ IMPLEMENT_DYNAMIC_CLASS_XTI(wxChoice, wxControl,"wx/checkbox.h")
 
 WX_BEGIN_PROPERTIES_TABLE(wxChoice)
     // TODO DELEGATES
-	WX_PROPERTY( Font , wxFont , SetFont , GetFont  , )
-    WX_PROPERTY_COLLECTION( Choices , wxArrayString , wxString , AppendString , GetStrings )
-	WX_PROPERTY( Selection ,int, SetSelection, GetSelection, )
+	WX_PROPERTY( Font , wxFont , SetFont , GetFont  , , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+    WX_PROPERTY_COLLECTION( Choices , wxArrayString , wxString , AppendString , GetStrings , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+	WX_PROPERTY( Selection ,int, SetSelection, GetSelection, , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
 WX_END_PROPERTIES_TABLE()
 
 WX_BEGIN_HANDLERS_TABLE(wxChoice)

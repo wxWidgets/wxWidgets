@@ -60,9 +60,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxNotifyEvent)
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxSpinButton, wxControl,"wx/spinbut.h")
 
 WX_BEGIN_PROPERTIES_TABLE(wxSpinButton)
-	WX_PROPERTY( Value , int , SetValue, GetValue, 0 )
-	WX_PROPERTY( Min , int , SetMin, GetMin, 0 )
-	WX_PROPERTY( Max , int , SetMax, GetMax, 0 )
+	WX_PROPERTY( Value , int , SetValue, GetValue, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+	WX_PROPERTY( Min , int , SetMin, GetMin, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+	WX_PROPERTY( Max , int , SetMax, GetMax, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
 /*
 	TODO PROPERTIES
 		style wxSP_VERTICAL | wxSP_ARROW_KEYS

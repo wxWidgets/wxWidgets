@@ -36,7 +36,7 @@
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxStaticText, wxControl,"wx/stattext.h")
 
 WX_BEGIN_PROPERTIES_TABLE(wxStaticText)
-	WX_PROPERTY( Label,wxString, SetLabel, GetLabel, wxEmptyString )
+	WX_PROPERTY( Label,wxString, SetLabel, GetLabel, wxEmptyString , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
 WX_END_PROPERTIES_TABLE()
 
 WX_BEGIN_HANDLERS_TABLE(wxStaticText)

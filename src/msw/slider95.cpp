@@ -41,12 +41,12 @@
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxSlider95, wxControl,"wx/scrolbar.h")
 
 WX_BEGIN_PROPERTIES_TABLE(wxSlider95)
-	WX_PROPERTY( Value , int , SetValue, GetValue , 0)
-	WX_PROPERTY( Minimum , int , SetMin, GetMin, 0 )
-	WX_PROPERTY( Maximum , int , SetMax, GetMax, 0 )
-	WX_PROPERTY( PageSize , int , SetPageSize, GetLineSize, 1 )
-	WX_PROPERTY( LineSize , int , SetLineSize, GetLineSize, 1 )
-	WX_PROPERTY( ThumbLength , int , SetThumbLength, GetThumbLength, 1 )
+	WX_PROPERTY( Value , int , SetValue, GetValue , 0, 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+	WX_PROPERTY( Minimum , int , SetMin, GetMin, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+	WX_PROPERTY( Maximum , int , SetMax, GetMax, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+	WX_PROPERTY( PageSize , int , SetPageSize, GetLineSize, 1 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+	WX_PROPERTY( LineSize , int , SetLineSize, GetLineSize, 1 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+	WX_PROPERTY( ThumbLength , int , SetThumbLength, GetThumbLength, 1 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
 WX_END_PROPERTIES_TABLE()
 
 WX_BEGIN_HANDLERS_TABLE(wxSlider95)

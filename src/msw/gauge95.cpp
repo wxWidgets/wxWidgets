@@ -70,10 +70,10 @@
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxGauge, wxControl,"wx/gauge.h")
 
 WX_BEGIN_PROPERTIES_TABLE(wxGauge95)
-	WX_PROPERTY( Value , int , SetValue, GetValue, 0 )
-	WX_PROPERTY( Range , int , SetRange, GetRange, 0 )
-	WX_PROPERTY( ShadowWidth , int , SetShadowWidth, GetShadowWidth, 0 )
-	WX_PROPERTY( BezelFace , int , SetBezelFace, GetBezelFace, 0 )
+	WX_PROPERTY( Value , int , SetValue, GetValue, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+	WX_PROPERTY( Range , int , SetRange, GetRange, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+	WX_PROPERTY( ShadowWidth , int , SetShadowWidth, GetShadowWidth, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+	WX_PROPERTY( BezelFace , int , SetBezelFace, GetBezelFace, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
 /*
 	TODO PROPERTIES
 		style wxGA_HORIZONTAL

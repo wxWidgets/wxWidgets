@@ -83,7 +83,7 @@ END_EVENT_TABLE()
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxFrame, wxTopLevelWindow,"wx/frame.h")
 
 WX_BEGIN_PROPERTIES_TABLE(wxFrame)
-	WX_PROPERTY( Title,wxString, SetTitle, GetTitle, wxEmptyString )
+	WX_PROPERTY( Title,wxString, SetTitle, GetTitle, wxEmptyString , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
 /*
 	TODO PROPERTIES
 

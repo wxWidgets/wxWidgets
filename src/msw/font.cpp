@@ -71,13 +71,13 @@ WX_END_ENUM( wxFontWeight )
 IMPLEMENT_DYNAMIC_CLASS_WITH_COPY_XTI(wxFont, wxGDIObject,"wx/font.h")
 
 WX_BEGIN_PROPERTIES_TABLE(wxFont)
-	WX_PROPERTY( Size,int, SetPointSize, GetPointSize, 12 )
-	WX_PROPERTY( Family, int  , SetFamily, GetFamily, (int)wxDEFAULT ) // wxFontFamily
-	WX_PROPERTY( Style, int , SetStyle, GetStyle, (int)wxNORMAL ) // wxFontStyle
-	WX_PROPERTY( Weight, int , SetWeight, GetWeight, (int)wxNORMAL ) // wxFontWeight
-	WX_PROPERTY( Underlined, bool , SetUnderlined, GetUnderlined, false )
-	WX_PROPERTY( Face, wxString , SetFaceName, GetFaceName, )
-	WX_PROPERTY( Encoding, wxFontEncoding , SetEncoding, GetEncoding, wxFONTENCODING_DEFAULT )
+	WX_PROPERTY( Size,int, SetPointSize, GetPointSize, 12 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+	WX_PROPERTY( Family, int  , SetFamily, GetFamily, (int)wxDEFAULT , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // wxFontFamily
+	WX_PROPERTY( Style, int , SetStyle, GetStyle, (int)wxNORMAL , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // wxFontStyle
+	WX_PROPERTY( Weight, int , SetWeight, GetWeight, (int)wxNORMAL , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // wxFontWeight
+	WX_PROPERTY( Underlined, bool , SetUnderlined, GetUnderlined, false , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+	WX_PROPERTY( Face, wxString , SetFaceName, GetFaceName, , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+	WX_PROPERTY( Encoding, wxFontEncoding , SetEncoding, GetEncoding, wxFONTENCODING_DEFAULT , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
 WX_END_PROPERTIES_TABLE()
 
 WX_CONSTRUCTOR_6( wxFont , int , Size , int , Family , int , Style , int , Weight , bool , Underlined , wxString , Face )  

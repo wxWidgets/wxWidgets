@@ -53,9 +53,9 @@ IMPLEMENT_DYNAMIC_CLASS_XTI(wxCheckBox, wxControl,"wx/checkbox.h")
 WX_BEGIN_PROPERTIES_TABLE(wxCheckBox)
 	WX_DELEGATE( OnClick , wxEVT_COMMAND_CHECKBOX_CLICKED , wxCommandEvent )
 
-	WX_PROPERTY( Font , wxFont , SetFont , GetFont  , )
-	WX_PROPERTY( Label,wxString, SetLabel, GetLabel, wxEmptyString )
-	WX_PROPERTY( Value ,bool, SetValue, GetValue, )
+	WX_PROPERTY( Font , wxFont , SetFont , GetFont  , , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+	WX_PROPERTY( Label,wxString, SetLabel, GetLabel, wxEmptyString , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+	WX_PROPERTY( Value ,bool, SetValue, GetValue, , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
 WX_END_PROPERTIES_TABLE()
 
 WX_BEGIN_HANDLERS_TABLE(wxCheckBox)

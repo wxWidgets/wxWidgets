@@ -235,11 +235,7 @@ IMPLEMENT_DYNAMIC_CLASS_XTI(wxWindow, wxWindowBase,"wx/window.h")
 
 // make wxWindowList known before the property is used
 
-template<> const wxTypeInfo* wxGetTypeInfo( wxWindowList * )
-{
-    static wxCollectionTypeInfo s_typeInfo( (wxTypeInfo*) wxGetTypeInfo( (wxWindow **) NULL) ) ;
-    return &s_typeInfo ;
-}
+WX_COLLECTION_TYPE_INFO( wxWindow* , wxWindowList ) ;
 
 template<> void wxCollectionToVariantArray( wxWindowList const &theList, wxxVariantArray &value)
 {
@@ -249,23 +245,23 @@ template<> void wxCollectionToVariantArray( wxWindowList const &theList, wxxVari
 WX_BEGIN_PROPERTIES_TABLE(wxWindow)
     // Always constructor Properties first
 
-    WX_READONLY_PROPERTY( Parent,wxWindow*, GetParent,  )
-	WX_PROPERTY( Id,wxWindowID, SetId, GetId, -1 )
-	WX_PROPERTY( Position,wxPoint, SetPosition , GetPosition, wxPoint(-1,-1) ) // pos
-	WX_PROPERTY( Size,wxSize, SetSize, GetSize, wxSize(-1,-1) ) // size
-    WX_PROPERTY( WindowStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , ) // style
+    WX_READONLY_PROPERTY( Parent,wxWindow*, GetParent,  , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+	WX_PROPERTY( Id,wxWindowID, SetId, GetId, -1, 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
+	WX_PROPERTY( Position,wxPoint, SetPosition , GetPosition, wxPoint(-1,-1) , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // pos
+	WX_PROPERTY( Size,wxSize, SetSize, GetSize, wxSize(-1,-1) , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // size
+    WX_PROPERTY( WindowStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
 
     // Then all relations of the object graph
 
-    WX_READONLY_PROPERTY_COLLECTION( Children , wxWindowList , wxWindowBase* , GetWindowChildren )
+    WX_READONLY_PROPERTY_COLLECTION( Children , wxWindowList , wxWindowBase* , GetWindowChildren , wxPROP_OBJECT_GRAPH /*flags*/ , wxT("Helpstring") , wxT("group"))
 
    // and finally all other properties
 
-	WX_PROPERTY( ExtraStyle , long , SetExtraStyle , GetExtraStyle , ) // extstyle
-	WX_PROPERTY( BackgroundColour , wxColour , SetBackgroundColour , GetBackgroundColour , ) // bg
-	WX_PROPERTY( ForegroundColour , wxColour , SetForegroundColour , GetForegroundColour , ) // fg
-	WX_PROPERTY( Enabled , bool , Enable , IsEnabled , wxxVariant((bool)true) )
-	WX_PROPERTY( Shown , bool , Show , IsShown , wxxVariant((bool)true) )
+	WX_PROPERTY( ExtraStyle , long , SetExtraStyle , GetExtraStyle , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // extstyle
+	WX_PROPERTY( BackgroundColour , wxColour , SetBackgroundColour , GetBackgroundColour , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // bg
+	WX_PROPERTY( ForegroundColour , wxColour , SetForegroundColour , GetForegroundColour , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // fg
+	WX_PROPERTY( Enabled , bool , Enable , IsEnabled , wxxVariant((bool)true) , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+	WX_PROPERTY( Shown , bool , Show , IsShown , wxxVariant((bool)true) , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
 #if 0
     // possible property candidates (not in xrc) or not valid in all subclasses
 	WX_PROPERTY( Title,wxString, SetTitle, GetTitle, wxT("") )

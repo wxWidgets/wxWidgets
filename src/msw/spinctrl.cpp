@@ -54,10 +54,10 @@
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxSpinCtrl, wxControl,"wx/spinbut.h")
 
 WX_BEGIN_PROPERTIES_TABLE(wxSpinCtrl)
-    WX_PROPERTY( ValueString , wxString , SetValue , GetValue , ) ;
-	WX_PROPERTY( Value , int , SetValue, GetValue, 0 )
-	WX_PROPERTY( Min , int , SetMin, GetMin, 0 )
-	WX_PROPERTY( Max , int , SetMax, GetMax, 0 )
+    WX_PROPERTY( ValueString , wxString , SetValue , GetValue , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) ;
+	WX_PROPERTY( Value , int , SetValue, GetValue, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+	WX_PROPERTY( Min , int , SetMin, GetMin, 0, 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
+	WX_PROPERTY( Max , int , SetMax, GetMax, 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
 /*
 	TODO PROPERTIES
 		style wxSP_ARROW_KEYS

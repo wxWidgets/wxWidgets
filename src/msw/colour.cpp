@@ -26,12 +26,44 @@
 #include <string.h>
 
 #if wxUSE_EXTENDED_RTTI
+
+/*
+
+template<> void wxStringReadValue(const wxString &s , wxColour &data )
+{
+	// copied from VS xrc
+	unsigned long tmp = 0;
+
+    if (s.Length() != 7 || s[0u] != wxT('#') ||
+        wxSscanf(s.c_str(), wxT("#%lX"), &tmp) != 1)
+    {
+		wxLogError(_("String To Colour : Incorrect colour specification : %s"),
+                   s.c_str() );
+        data = wxNullColour;
+    }
+	else
+	{
+		data = wxColour((unsigned char) ((tmp & 0xFF0000) >> 16) ,
+                    (unsigned char) ((tmp & 0x00FF00) >> 8),
+                    (unsigned char) ((tmp & 0x0000FF)));
+	}
+}
+
+template<> void wxStringWriteValue(wxString &s , const wxColour &data )
+{
+	s = wxString::Format("#%2X%2X%2X", data.Red() , data.Green() , data.Blue() ) ;
+}
+
+WX_CUSTOM_TYPE_INFO(wxColour)
+
+*/
+
 IMPLEMENT_DYNAMIC_CLASS_WITH_COPY_XTI( wxColour , wxObject , "wx/colour.h" ) 
 
 WX_BEGIN_PROPERTIES_TABLE(wxColour)
-	WX_READONLY_PROPERTY( Red, unsigned char , Red , 0 )
-	WX_READONLY_PROPERTY( Green, unsigned char  , Green , 0 ) 
-	WX_READONLY_PROPERTY( Blue, unsigned char , Blue , 0 )
+	WX_READONLY_PROPERTY( Red, unsigned char , Red , 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+	WX_READONLY_PROPERTY( Green, unsigned char  , Green , 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) 
+	WX_READONLY_PROPERTY( Blue, unsigned char , Blue , 0 , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
 WX_END_PROPERTIES_TABLE()
 
 WX_CONSTRUCTOR_3( wxColour , unsigned char , Red , unsigned char , Green , unsigned char , Blue )  
