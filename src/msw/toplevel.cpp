@@ -170,8 +170,8 @@ long wxTopLevelWindowMSW::MSWGetCreateWindowFlags(long *exflags) const
             *exflags |= WS_EX_TOPMOST;
 
 #ifdef __WIN32__
-      if ( m_exStyle & wxFRAME_EX_CONTEXTHELP )
-        *exflags |= WS_EX_CONTEXTHELP;
+        if ( m_exStyle & wxFRAME_EX_CONTEXTHELP )
+            *exflags |= WS_EX_CONTEXTHELP;
 #endif // __WIN32__
     }
 
@@ -384,33 +384,6 @@ wxTopLevelWindowMSW::~wxTopLevelWindowMSW()
             ::PostQuitMessage(0);
         }
     }
-}
-
-// ----------------------------------------------------------------------------
-// wxTopLevelWindowMSW client size
-// ----------------------------------------------------------------------------
-
-void wxTopLevelWindowMSW::DoSetClientSize(int width, int height)
-{
-    // call GetClientAreaOrigin() to take the toolbar into account
-    wxPoint pt = GetClientAreaOrigin();
-    width += pt.x;
-    height += pt.y;
-
-    wxWindow::DoSetClientSize(width, height);
-}
-
-void wxTopLevelWindowMSW::DoGetClientSize(int *x, int *y) const
-{
-    wxWindow::DoGetClientSize(x, y);
-
-    wxPoint pt = GetClientAreaOrigin();
-
-    if ( x )
-        *x -= pt.x;
-
-    if ( y )
-        *y -= pt.y;
 }
 
 // ----------------------------------------------------------------------------

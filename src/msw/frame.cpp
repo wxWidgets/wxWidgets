@@ -157,6 +157,11 @@ void wxFrame::DoSetClientSize(int width, int height)
     }
 #endif // wxUSE_STATUSBAR
 
+    // call GetClientAreaOrigin() to take the toolbar into account
+    wxPoint pt = GetClientAreaOrigin();
+    width += pt.x;
+    height += pt.y;
+
     wxTopLevelWindow::DoSetClientSize(width, height);
 }
 
@@ -164,6 +169,14 @@ void wxFrame::DoSetClientSize(int width, int height)
 void wxFrame::DoGetClientSize(int *x, int *y) const
 {
     wxTopLevelWindow::DoGetClientSize(x, y);
+
+    // account for the possible toolbar
+    wxPoint pt = GetClientAreaOrigin();
+    if ( x )
+        *x -= pt.x;
+
+    if ( y )
+        *y -= pt.y;
 
 #if wxUSE_STATUSBAR
     // adjust client area height to take the status bar into account

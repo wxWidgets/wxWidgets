@@ -88,10 +88,6 @@ protected:
     // common part of Iconize(), Maximize() and Restore()
     void DoShowWindow(int nShowCmd);
 
-    // implement the geometry-related methods for a top level window
-    virtual void DoSetClientSize(int width, int height);
-    virtual void DoGetClientSize(int *width, int *height) const;
-
     // get the MSW window flags corresponding to wxWindows ones
     //
     // the functions returns the flags (WS_XXX) directly and puts the ext
