@@ -515,6 +515,11 @@ class wxShape: public wxShapeEvtHandler
   // Clears points from a list of wxRealPoints
   void ClearPointList(wxList& list);
 
+  // Return pen or brush of the right colour for the background
+  wxPen GetBackgroundPen();
+  wxBrush GetBackgroundBrush();
+
+
  private:
   wxObject*             m_clientData;
 

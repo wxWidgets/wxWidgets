@@ -53,20 +53,20 @@ void oglDrawFormattedText(wxDC& context, wxList *text_list,
 // Give it a list of points, finds the centre.
 void oglFindPolylineCentroid(wxList *points, double *x, double *y);
 
-void oglCheckLineIntersection(double x1, double y1, double x2, double y2, 
+void oglCheckLineIntersection(double x1, double y1, double x2, double y2,
                              double x3, double y3, double x4, double y4,
                              double *ratio1, double *ratio2);
 
-void oglFindEndForPolyline(double n, double xvec[], double yvec[], 
+void oglFindEndForPolyline(double n, double xvec[], double yvec[],
                            double x1, double y1, double x2, double y2, double *x3, double *y3);
 
 
-void oglFindEndForBox(double width, double height, 
+void oglFindEndForBox(double width, double height,
                       double x1, double y1,         // Centre of box (possibly)
                       double x2, double y2,         // other end of line
                       double *x3, double *y3);      // End on box edge
 
-void oglFindEndForCircle(double radius, 
+void oglFindEndForCircle(double radius,
                          double x1, double y1,  // Centre of circle
                          double x2, double y2,  // Other end of line
                          double *x3, double *y3);
@@ -83,7 +83,7 @@ void oglGetArrowPoints(double x1, double y1, double x2, double y2,
  * This function assumes that the centre of the ellipse is at x1, y1, and the
  * ellipse has a width of a1 and a height of b1. It also assumes you are
  * wanting to draw an arc FROM point x2, y2 TOWARDS point x3, y3.
- * This function calculates the x,y coordinates of the intersection point of 
+ * This function calculates the x,y coordinates of the intersection point of
  * the arc with the ellipse.
  * Author: Ian Harrison
  */
@@ -99,7 +99,6 @@ extern wxPen*           g_oglWhiteBackgroundPen;
 extern wxPen*           g_oglTransparentPen;
 extern wxBrush*         g_oglWhiteBackgroundBrush;
 extern wxPen*           g_oglBlackForegroundPen;
-extern wxCursor*        g_oglBullseyeCursor;
 
 extern wxFont*          oglMatchFont(int point_size);
 

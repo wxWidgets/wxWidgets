@@ -997,8 +997,9 @@ void wxShape::OnEraseContents(wxDC& dc)
     if (m_pen)
       penWidth = m_pen->GetWidth();
 
-    dc.SetPen(* g_oglWhiteBackgroundPen);
-    dc.SetBrush(* g_oglWhiteBackgroundBrush);
+    dc.SetPen(GetBackgroundPen());
+    dc.SetBrush(GetBackgroundBrush());
+
     dc.DrawRectangle(WXROUND(topLeftX - penWidth), WXROUND(topLeftY - penWidth),
                       WXROUND(maxX + penWidth*2.0 + 4.0), WXROUND(maxY + penWidth*2.0 + 4.0));
 }
@@ -3279,5 +3280,27 @@ void wxShape::Rotate(double WXUNUSED(x), double WXUNUSED(y), double theta)
     {
         m_rotation -= 2*pi;
     }
+}
+
+
+wxPen wxShape::GetBackgroundPen()
+{
+    if (GetCanvas())
+    {
+        wxColour c = GetCanvas()->GetBackgroundColour();
+        return wxPen(c, 1, wxSOLID);
+    }
+    return * g_oglWhiteBackgroundPen;
+}
+
+
+wxBrush wxShape::GetBackgroundBrush()
+{
+    if (GetCanvas())
+    {
+        wxColour c = GetCanvas()->GetBackgroundColour();
+        return wxBrush(c, wxSOLID);
+    }
+    return * g_oglWhiteBackgroundBrush;
 }
 

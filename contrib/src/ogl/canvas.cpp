@@ -61,8 +61,6 @@
 #define CONTROL_POINT_ENDPOINT_FROM 5
 #define CONTROL_POINT_LINE       6
 
-extern wxCursor *g_oglBullseyeCursor;
-
 IMPLEMENT_DYNAMIC_CLASS(wxShapeCanvas, wxScrolledWindow)
 
 BEGIN_EVENT_TABLE(wxShapeCanvas, wxScrolledWindow)

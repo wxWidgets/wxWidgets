@@ -49,11 +49,10 @@
 
 wxFont*         g_oglNormalFont;
 wxPen*          g_oglBlackPen;
-wxPen*          g_oglWhiteBackgroundPen;
 wxPen*          g_oglTransparentPen;
-wxBrush*        g_oglWhiteBackgroundBrush;
 wxPen*          g_oglBlackForegroundPen;
-wxCursor*       g_oglBullseyeCursor = NULL;
+wxPen*          g_oglWhiteBackgroundPen;
+wxBrush*        g_oglWhiteBackgroundBrush;
 
 char*           oglBuffer = NULL;
 
@@ -63,16 +62,12 @@ wxList          oglObjectCopyMapping(wxKEY_INTEGER);
 
 void wxOGLInitialize()
 {
-  g_oglBullseyeCursor = new wxCursor(wxCURSOR_BULLSEYE);
-
-  g_oglNormalFont = new wxFont(10, wxSWISS, wxNORMAL, wxNORMAL);
-
-  g_oglBlackPen = new wxPen("BLACK", 1, wxSOLID);
-
-  g_oglWhiteBackgroundPen = new wxPen("WHITE", 1, wxSOLID);
-  g_oglTransparentPen = new wxPen("WHITE", 1, wxTRANSPARENT);
-  g_oglWhiteBackgroundBrush = new wxBrush("WHITE", wxSOLID);
-  g_oglBlackForegroundPen = new wxPen("BLACK", 1, wxSOLID);
+  g_oglNormalFont = wxTheFontList->FindOrCreateFont(10, wxSWISS, wxNORMAL, wxNORMAL);
+  g_oglBlackPen = wxThePenList->FindOrCreatePen("BLACK", 1, wxSOLID);
+  g_oglTransparentPen = wxThePenList->FindOrCreatePen("WHITE", 1, wxTRANSPARENT);
+  g_oglBlackForegroundPen = wxThePenList->FindOrCreatePen("BLACK", 1, wxSOLID);
+  g_oglWhiteBackgroundPen = wxThePenList->FindOrCreatePen("WHITE", 1, wxSOLID);
+  g_oglWhiteBackgroundBrush = wxTheBrushList->FindOrCreateBrush("WHITE", wxSOLID);
 
   OGLInitializeConstraintTypes();
 
@@ -89,42 +84,13 @@ void wxOGLCleanUp()
         oglBuffer = NULL;
     }
     oglBuffer = NULL;
-    if (g_oglBullseyeCursor)
-    {
-        delete g_oglBullseyeCursor;
-        g_oglBullseyeCursor = NULL;
-    }
 
-    if (g_oglNormalFont)
-    {
-        delete g_oglNormalFont;
-        g_oglNormalFont = NULL;
-    }
-    if (g_oglBlackPen)
-    {
-        delete g_oglBlackPen;
-        g_oglBlackPen = NULL;
-    }
-    if (g_oglWhiteBackgroundPen)
-    {
-        delete g_oglWhiteBackgroundPen;
-        g_oglWhiteBackgroundPen = NULL;
-    }
-    if (g_oglTransparentPen)
-    {
-        delete g_oglTransparentPen;
-        g_oglTransparentPen = NULL;
-    }
-    if (g_oglWhiteBackgroundBrush)
-    {
-        delete g_oglWhiteBackgroundBrush;
-        g_oglWhiteBackgroundBrush = NULL;
-    }
-    if (g_oglBlackForegroundPen)
-    {
-        delete g_oglBlackForegroundPen;
-        g_oglBlackForegroundPen = NULL;
-    }
+    g_oglNormalFont = NULL;             // These will be cleaned up by their GDI list
+    g_oglBlackPen = NULL;
+    g_oglTransparentPen = NULL;
+    g_oglBlackForegroundPen = NULL;
+    g_oglWhiteBackgroundPen = NULL;
+    g_oglWhiteBackgroundBrush = NULL;
 
     OGLCleanUpConstraintTypes();
 }
