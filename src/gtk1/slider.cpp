@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        slider.cpp
+// Name:        gtk/slider.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:           wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -33,7 +33,7 @@ extern bool g_isIdle;
 // data
 //-----------------------------------------------------------------------------
 
-extern bool   g_blockEventsOnDrag;
+extern bool g_blockEventsOnDrag;
 
 static const float sensitivity = 0.02;
 
@@ -64,8 +64,8 @@ static void gtk_slider_callback( GtkAdjustment *adjust, wxSlider *win )
     int value = (int)ceil(adjust->value);
 
     int orient = wxHORIZONTAL;
-    if ( (win->GetWindowStyleFlag() & wxSB_VERTICAL) == wxSB_VERTICAL)
-        orient = wxVERTICAL;
+    int orient = win->GetWindowStyleFlag() & wxSL_VERTICAL ? wxVERTICAL
+                                                           : wxHORIZONTAL;
 
     wxScrollEvent event( command, win->GetId(), value, orient );
     event.SetEventObject( win );
@@ -95,7 +95,7 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
         !CreateBase( parent, id, pos, size, style, validator, name ))
     {
         wxFAIL_MSG( wxT("wxSlider creation failed") );
-	    return FALSE;
+        return FALSE;
     }
 
     m_oldPos = 0.0;
@@ -108,7 +108,7 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
     if (style & wxSL_LABELS)
     {
         gtk_scale_set_draw_value( GTK_SCALE( m_widget ), TRUE );
-	    gtk_scale_set_digits( GTK_SCALE( m_widget ), 0 );
+        gtk_scale_set_digits( GTK_SCALE( m_widget ), 0 );
 
         /* labels need more space and too small window will
            cause junk to appear on the dialog */
@@ -239,41 +239,6 @@ void wxSlider::SetLineSize( int WXUNUSED(lineSize) )
 int wxSlider::GetLineSize() const
 {
     return 0;
-}
-
-void wxSlider::SetTick( int WXUNUSED(tickPos) )
-{
-}
-
-void wxSlider::SetTickFreq( int WXUNUSED(n), int WXUNUSED(pos) )
-{
-}
-
-int wxSlider::GetTickFreq() const
-{
-    return 0;
-}
-
-void wxSlider::ClearTicks()
-{
-}
-
-void wxSlider::SetSelection( int WXUNUSED(minPos), int WXUNUSED(maxPos) )
-{
-}
-
-int wxSlider::GetSelEnd() const
-{
-    return 0;
-}
-
-int wxSlider::GetSelStart() const
-{
-    return 0;
-}
-
-void wxSlider::ClearSel()
-{
 }
 
 bool wxSlider::IsOwnGtkWindow( GdkWindow *window )

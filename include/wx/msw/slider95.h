@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        slider95.h
+// Name:        wx/msw/slider95.h
 // Purpose:     wxSlider95 class
 // Author:      Julian Smart
 // Modified by:
@@ -16,17 +16,9 @@
 #pragma interface "slider95.h"
 #endif
 
-#if wxUSE_SLIDER
-
-#include "wx/control.h"
-
-WXDLLEXPORT_DATA(extern const wxChar*) wxSliderNameStr;
-
 // Slider
-class WXDLLEXPORT wxSlider95 : public wxControl
+class WXDLLEXPORT wxSlider95 : public wxSliderBase
 {
-    DECLARE_DYNAMIC_CLASS(wxSlider95)
-
 public:
     wxSlider95();
 
@@ -105,9 +97,9 @@ protected:
     virtual void DoSetSize(int x, int y,
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
-};
 
-#endif // wxUSE_SLIDER
+    DECLARE_DYNAMIC_CLASS(wxSlider95)
+};
 
 #endif
     // _SLIDER95_H_
