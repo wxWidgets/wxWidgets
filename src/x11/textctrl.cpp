@@ -157,8 +157,6 @@ void wxTextCtrl::Init()
     m_editable = TRUE;
     m_modified = FALSE;
     
-    m_undos.DeleteContents( TRUE );
-    
     m_lang = wxSOURCE_LANG_NONE;
     
     m_capturing = FALSE;
@@ -200,6 +198,11 @@ wxTextCtrl::wxTextCtrl( wxWindow *parent,
     Init();
 
     Create( parent, id, value, pos, size, style, validator, name );
+}
+
+wxTextCtrl::~wxTextCtrl()
+{
+    WX_CLEAR_LIST(wxList, m_undos);
 }
 
 bool wxTextCtrl::Create( wxWindow *parent,
@@ -398,7 +401,7 @@ void wxTextCtrl::Clear()
     
     SetScrollbars( m_charWidth, m_lineHeight, 0, 0, 0, 0 );
     Refresh();
-    m_undos.Clear();
+    WX_CLEAR_LIST(wxList, m_undos);
 }
 
 void wxTextCtrl::Replace(long from, long to, const wxString& value)
@@ -795,12 +798,13 @@ void wxTextCtrl::Undo()
 {
     if (m_undos.GetCount() == 0) return;
     
-    wxList::Node *node = m_undos.Item( m_undos.GetCount()-1 );
+    wxList::compatibility_iterator node = m_undos.Item( m_undos.GetCount()-1 );
     wxSourceUndoStep *undo = (wxSourceUndoStep*) node->GetData();
     
     undo->Undo();
-    
-    delete node;
+
+    delete undo;
+    m_undos.Erase( node );
     
     m_modified = TRUE;
 }

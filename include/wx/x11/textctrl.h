@@ -24,7 +24,7 @@
 #endif
 
 #include "wx/scrolwin.h"
-#include "wx/dynarray.h"
+#include "wx/arrstr.h"
 #include "wx/datetime.h"
 
 //-----------------------------------------------------------------------------
@@ -101,6 +101,7 @@ public:
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
                const wxString &name = wxTextCtrlNameStr);
+    virtual ~wxTextCtrl();
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
