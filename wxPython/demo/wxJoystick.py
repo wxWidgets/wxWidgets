@@ -7,7 +7,7 @@ from joystick_wdr import *
 
 class JoystickTestPanel(wxPanel):
     def __init__(self, parent, id,
-        pos = wxPyDefaultPosition, size = wxPyDefaultSize,
+        pos = wxDefaultPosition, size = wxDefaultSize,
         style = wxTAB_TRAVERSAL ):
         wxPanel.__init__(self, parent, id, pos, size, style)
 

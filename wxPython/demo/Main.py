@@ -26,8 +26,8 @@ import images
 try:
     True
 except NameError:
-    True = 1==1
-    False = 1==0
+    __builtins__.True = 1==1
+    __builtins__.False = 1==0
 
 #---------------------------------------------------------------------------
 

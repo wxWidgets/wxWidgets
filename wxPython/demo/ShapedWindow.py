@@ -44,7 +44,7 @@ class TestFrame(wxFrame):
             self.SetWindowShape()
 
         dc = wxClientDC(self)
-        dc.DrawBitmap(self.bmp, 0,0, True)
+        dc.DrawBitmap(self.bmp, (0,0), True)
 
 
     def SetWindowShape(self, *evt):
@@ -63,7 +63,7 @@ class TestFrame(wxFrame):
 
     def OnPaint(self, evt):
         dc = wxPaintDC(self)
-        dc.DrawBitmap(self.bmp, 0,0, True)
+        dc.DrawBitmap(self.bmp, (0,0), True)
 
     def OnExit(self, evt):
         self.Close()

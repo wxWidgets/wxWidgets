@@ -46,7 +46,7 @@ class CustomDataTable(wxPyGridTableBase):
         try:
             return not self.data[row][col]
         except IndexError:
-            return true
+            return True
 
     # Get/Set values in the table.  The Python version of these
     # methods can handle any data-type, (as long as the Editor and
@@ -93,7 +93,7 @@ class CustomDataTable(wxPyGridTableBase):
     def CanGetValueAs(self, row, col, typeName):
         colType = self.dataTypes[col].split(':')[0]
         if typeName == colType:
-            return true
+            return True
         else:
             return False
 
@@ -117,7 +117,7 @@ class CustTableGrid(wxGrid):
         # The second parameter means that the grid is to take ownership of the
         # table and will destroy it when done.  Otherwise you would need to keep
         # a reference to it and call it's Destroy method later.
-        self.SetTable(table, true)
+        self.SetTable(table, True)
 
         self.SetRowLabelSize(0)
         self.SetMargins(0,0)
@@ -163,7 +163,7 @@ if __name__ == '__main__':
     import sys
     app = wxPySimpleApp()
     frame = TestFrame(None, sys.stdout)
-    frame.Show(true)
+    frame.Show(True)
     app.MainLoop()
 
 

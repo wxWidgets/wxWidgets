@@ -26,7 +26,7 @@ ID_PRINT_CMD_TXT = 10014
 ID_ALL_CMDS_TXT = 10015
 ID_LISTBOX = 10016
 
-def MakeMimeTypesTestPanel( parent, call_fit = true, set_sizer = true ):
+def MakeMimeTypesTestPanel( parent, call_fit = True, set_sizer = True ):
     item0 = wxBoxSizer( wxVERTICAL )
 
     item1 = wxBoxSizer( wxHORIZONTAL )
@@ -35,7 +35,7 @@ def MakeMimeTypesTestPanel( parent, call_fit = true, set_sizer = true ):
     item1.AddWindow( item2, 0, wxALIGN_CENTRE|wxALL, 5 )
 
     item3 = wxRadioButton( parent, ID_EXTENSION_Btn, "By extension", wxDefaultPosition, wxDefaultSize, wxRB_GROUP )
-    item3.SetValue( true )
+    item3.SetValue( True )
     item1.AddWindow( item3, 0, wxALIGN_CENTRE|wxALL, 5 )
 
     item4 = wxRadioButton( parent, ID_MIME_BTN, "By mime type", wxDefaultPosition, wxDefaultSize, 0 )
@@ -134,10 +134,10 @@ def MakeMimeTypesTestPanel( parent, call_fit = true, set_sizer = true ):
 
     item0.AddSizer( item7, 1, wxGROW|wxALIGN_CENTER_VERTICAL, 5 )
 
-    if set_sizer == true:
-        parent.SetAutoLayout( true )
+    if set_sizer == True:
+        parent.SetAutoLayout( True )
         parent.SetSizer( item0 )
-        if call_fit == true:
+        if call_fit == True:
             item0.Fit( parent )
             item0.SetSizeHints( parent )
 
