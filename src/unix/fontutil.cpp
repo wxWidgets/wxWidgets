@@ -235,10 +235,13 @@ static wxHashTable *g_fontHash = (wxHashTable*) NULL;
 #elif defined(__WXGTK__)
     wxNativeFont wxLoadFont(const wxString& fontSpec)
     {
-        // use gdk_fontset_load() instead of gdk_font_load() because otherwise
-        // we have problems with Japanese (not terribly precise, I know, but
-        // this is all the patch said)
-        return gdk_fontset_load( wxConvertWX2MB(fontSpec) );
+        // VZ: we should use gdk_fontset_load() instead of gdk_font_load()
+        //     here to be able to display Japanese fonts correctly (at least
+        //     this is what people report) but unfortunately doing it results
+        //     in tons of warnings when using GTK with "normal" European
+        //     languages and so we can't always do it and I don't know enough
+        //     to determine when should this be done... (FIXME)
+        return gdk_font_load( wxConvertWX2MB(fontSpec) );
     }
 
     inline void wxFreeFont(wxNativeFont font)
