@@ -150,7 +150,7 @@ void ResetTopicCounter(void)
 
 static char *forceTopicName = NULL;
 
-void ForceTopicName(char *name)
+void ForceTopicName(const char *name)
 {
   if (forceTopicName)
     delete[] forceTopicName;
@@ -1463,7 +1463,7 @@ char *ParseMultifieldString(char *allFields, int *pos)
  *
  */
  
-ColourTableEntry::ColourTableEntry(char *theName, unsigned int r,  unsigned int g,  unsigned int b)
+ColourTableEntry::ColourTableEntry(const char *theName, unsigned int r,  unsigned int g,  unsigned int b)
 {
   name = copystring(theName);
   red = r;
@@ -1476,7 +1476,7 @@ ColourTableEntry::~ColourTableEntry(void)
   delete[] name;
 }
 
-void AddColour(char *theName, unsigned int r,  unsigned int g,  unsigned int b)
+void AddColour(const char *theName, unsigned int r,  unsigned int g,  unsigned int b)
 {
   wxNode *node = ColourTable.Find(theName);
   if (node)

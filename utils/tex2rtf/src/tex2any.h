@@ -147,7 +147,7 @@ bool read_a_line(char *buf);
 bool TexLoadFile(char *filename);
 int ParseArg(TexChunk *thisArg, wxList& children, char *buffer, int pos,
            char *environment = NULL, bool parseArgToBrace = TRUE, TexChunk *customMacroArgs = NULL);
-int ParseMacroBody(char *macro_name, TexChunk *parent, int no_args,
+int ParseMacroBody(const char *macro_name, TexChunk *parent, int no_args,
            char *buffer, int pos, char *environment = NULL, bool parseArgToBrace = TRUE, TexChunk *customMacroArgs = NULL);
 void TraverseDocument(void);
 void TraverseFromChunk(TexChunk *chunk, wxNode *thisNode = NULL, bool childrenOnly = FALSE);
@@ -367,7 +367,7 @@ void Tex2RTFYield(bool force = FALSE);
 // make up a topic name otherwise.
 char *FindTopicName(TexChunk *chunk);
 // Force the current topic to be this (e.g. force 'references' label).
-void ForceTopicName(char *name);
+void ForceTopicName(const char *name);
 void ResetTopicCounter(void);
 
 // Parse unit eg. 14, 12pt, 34cm and return value in points.
@@ -396,7 +396,7 @@ class TexRef: public wxObject
   char *refFile;       // Reference filename (can be NULL)
   char *sectionNumber; // Section or figure number (as a string)
   char *sectionName; // name e.g. 'section'
-  TexRef(char *label, char *file, char *section, char *sectionN = NULL);
+  TexRef(const char *label, const char *file, const char *section, const char *sectionN = NULL);
   ~TexRef(void);
 };
 
@@ -530,12 +530,12 @@ class ColourTableEntry: public wxObject
   unsigned int green;
   unsigned int blue;
 
-  ColourTableEntry(char *theName, unsigned int r,  unsigned int g,  unsigned int b);
+  ColourTableEntry(const char *theName, unsigned int r,  unsigned int g,  unsigned int b);
   ~ColourTableEntry(void);
 };
 
 extern wxList ColourTable;
-extern void AddColour(char *theName, unsigned int r,  unsigned int g,  unsigned int b);
+extern void AddColour(const char *theName, unsigned int r,  unsigned int g,  unsigned int b);
 extern int FindColourPosition(char *theName);
 // Converts e.g. "red" -> "#FF0000"
 extern bool FindColourHTMLString(char *theName, char *buf);

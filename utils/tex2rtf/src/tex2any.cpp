@@ -218,7 +218,8 @@ TexMacroDef *VerbatimMacroDef = NULL;
 #define IncrementLineNumber() LineNumbers[CurrentInputIndex] ++
 
 
-TexRef::TexRef(char *label, char *file, char *section, char *sectionN)
+TexRef::TexRef(const char *label, const char *file,
+	       const char *section, const char *sectionN)
 {
     refLabel = copystring(label);
     refFile = file ? copystring(file) : (char*) NULL;
@@ -1551,7 +1552,7 @@ int ParseArg(TexChunk *thisArg, wxList& children, char *buffer, int pos, char *e
  *
  */
  
-int ParseMacroBody(char *macro_name, TexChunk *parent,
+int ParseMacroBody(const char *macro_name, TexChunk *parent,
                    int no_args, char *buffer, int pos,
                    char *environment, bool parseToBrace,
                    TexChunk *customMacroArgs)
