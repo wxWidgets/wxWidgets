@@ -1721,7 +1721,7 @@ long wxWindow::MSWOnNotify(WXWPARAM wParam, WXLPARAM lParam)
 #endif  // Win95
 
     // not processed
-    return FALSE;
+    return Default();
 }
 
 void wxWindow::MSWOnMenuHighlight(WXWORD WXUNUSED(item), WXWORD WXUNUSED(flags), WXHMENU WXUNUSED(sysmenu))
