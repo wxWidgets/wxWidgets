@@ -19,6 +19,7 @@
 IMPLEMENT_DYNAMIC_CLASS(wxIcon, wxBitmap)
 #endif
 
+#include "wx/image.h"
 #include "wx/mac/private.h"
 
 
@@ -61,14 +62,31 @@ bool wxIcon::LoadFile(const wxString& filename, wxBitmapType type,
 {
     UnRef();
     
-    m_refData = new wxBitmapRefData;
-    
-    wxBitmapHandler *handler = FindHandler((wxBitmapType)type);
-    
+    wxBitmapHandler *handler = FindHandler(type);
+
     if ( handler )
-        return handler->LoadFile(this, filename, type, desiredWidth, desiredHeight);
+    {
+        m_refData = new wxBitmapRefData;
+        return handler->LoadFile(this, filename, type, desiredWidth, desiredHeight );
+    }
     else
-        return FALSE;
+    {
+        wxImage loadimage(filename, type);
+        if (loadimage.Ok()) 
+        {
+            if ( desiredWidth == -1 )
+                desiredWidth = loadimage.GetWidth() ;
+            if ( desiredHeight == -1 )
+                desiredHeight = loadimage.GetHeight() ;
+            if ( desiredWidth != loadimage.GetWidth() || desiredHeight != loadimage.GetHeight() )
+                loadimage.Rescale( desiredWidth , desiredHeight ) ;
+            wxBitmap bmp( loadimage );
+            wxIcon *icon = (wxIcon*)(&bmp);
+            *this = *icon;
+            return true;
+        }
+    }
+    return false ;
 }
 
 void wxIcon::CopyFromBitmap(const wxBitmap& bmp)
