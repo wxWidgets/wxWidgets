@@ -17,6 +17,8 @@ First steps
 -----------
 
 - Download SciTech MGL library (version 5.0) from http://www.scitechsoft.com.
+  (You needed a version newer than Beta 5! Preferably the one from SciTech
+  Perforce repository.)
   Install it according to provided instructions. In particular, make sure that
   MGL_ROOT and NUCLEUS_PATH environment variables are set before attempting to
   build wxMGL.
