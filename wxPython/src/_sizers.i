@@ -1043,10 +1043,12 @@ public:
         "Constructor. It takes an associated static box and the orientation
 *orient* as parameters - orient can be either of ``wx.VERTICAL`` or
 ``wx.HORIZONTAL``.", "");
+
+    // TODO: wxStaticBoxSizer(int orient, wxWindow *win, const wxString& label = wxEmptyString);
     
-        DocDeclStr(
-            wxStaticBox *, GetStaticBox(),
-            "Returns the static box associated with this sizer.", "");
+    DocDeclStr(
+        wxStaticBox *, GetStaticBox(),
+        "Returns the static box associated with this sizer.", "");
         
 };
 

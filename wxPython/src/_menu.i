@@ -279,7 +279,8 @@ public:
     void Check(int id, bool check);
     bool IsChecked(int id) const;
     bool IsEnabled(int id) const;
-
+    // TODO: bool IsEnabled() const;
+     
     void SetLabel(int id, const wxString &label);
     wxString GetLabel(int id) const;
 
