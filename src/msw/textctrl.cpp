@@ -95,7 +95,6 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
                         const wxValidator& validator,
                         const wxString& name)
 {
-  m_fileName = "";
   SetName(name);
   SetValidator(validator);
   if (parent) parent->AddChild(this);
