@@ -1044,13 +1044,6 @@ wxRect wxListCtrl::GetViewRect() const
 
         wxZeroMemory(rc);
     }
-    else
-    {
-        // VZ: I have no idea why is this needed but without it the listbook
-        //     control shows a tiny vertical scrollbar, make sure that it works
-        //     correctly if you decide to change this
-        rc.bottom += 5;
-    }
 
     wxRect rect;
     wxCopyRECTToRect(rc, rect);
