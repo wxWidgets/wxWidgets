@@ -83,7 +83,13 @@ def Button_GetDefaultSize(*args, **kwargs):
     return _controls.Button_GetDefaultSize(*args, **kwargs)
 
 class BitmapButton(Button):
-    """A Buttont that contains a bitmap."""
+    """
+    A Button that contains a bitmap.  A bitmap button can be supplied with a
+    single bitmap, and wxWindows will draw all button states using this bitmap. If
+    the application needs more control, additional bitmaps for the selected state,
+    unpressed focused state, and greyed-out state may be supplied.
+
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxBitmapButton instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -93,7 +99,7 @@ class BitmapButton(Button):
             Validator validator=DefaultValidator, 
             String name=ButtonNameStr) -> BitmapButton
 
-        Create and show a button.
+        Create and show a button with a bitmap for the label.
         """
         newobj = _controls.new_BitmapButton(*args, **kwargs)
         self.this = newobj.this

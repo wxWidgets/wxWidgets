@@ -1165,72 +1165,6 @@ static PyObject *_wrap_Button_SetDefault(PyObject *self, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_Button_SetImageLabel(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxButton *arg1 = (wxButton *) 0 ;
-    wxBitmap *arg2 = 0 ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "bitmap", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Button_SetImageLabel",kwnames,&obj0,&obj1)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxButton,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxBitmap,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if (arg2 == NULL) {
-        PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
-    }
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->SetImageLabel((wxBitmap const &)*arg2);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_Button_SetImageMargins(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxButton *arg1 = (wxButton *) 0 ;
-    int arg2 ;
-    int arg3 ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    PyObject * obj2 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "x",(char *) "y", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:Button_SetImageMargins",kwnames,&obj0,&obj1,&obj2)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxButton,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    {
-        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    {
-        arg3 = (int) SWIG_PyObj_AsInt(obj2);  
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->SetImageMargins(arg2,arg3);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
 static PyObject *_wrap_Button_GetDefaultSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSize result;
@@ -29636,8 +29570,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_PreButton", (PyCFunction) _wrap_new_PreButton, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Button_Create", (PyCFunction) _wrap_Button_Create, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Button_SetDefault", (PyCFunction) _wrap_Button_SetDefault, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"Button_SetImageLabel", (PyCFunction) _wrap_Button_SetImageLabel, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"Button_SetImageMargins", (PyCFunction) _wrap_Button_SetImageMargins, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Button_GetDefaultSize", (PyCFunction) _wrap_Button_GetDefaultSize, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Button_swigregister", Button_swigregister, METH_VARARGS },
 	 { (char *)"new_BitmapButton", (PyCFunction) _wrap_new_BitmapButton, METH_VARARGS | METH_KEYWORDS },

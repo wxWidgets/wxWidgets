@@ -493,6 +493,7 @@ wxGetLocalTime = wx.misc.GetLocalTime
 wxGetUTCTime = wx.misc.GetUTCTime
 wxGetCurrentTime = wx.misc.GetCurrentTime
 wxGetLocalTimeMillis = wx.misc.GetLocalTimeMillis
+wxDefaultDateTime = wx.misc.DefaultDateTime
 wxDF_INVALID = wx.misc.DF_INVALID
 wxDF_TEXT = wx.misc.DF_TEXT
 wxDF_BITMAP = wx.misc.DF_BITMAP

@@ -3199,6 +3199,8 @@ class DateTime(object):
         """IsValid() -> bool"""
         return _misc.DateTime_IsValid(*args, **kwargs)
 
+    Ok = IsValid 
+    def __nonzero__(self): return self.Ok() 
     def GetTicks(*args, **kwargs):
         """GetTicks() -> time_t"""
         return _misc.DateTime_GetTicks(*args, **kwargs)
@@ -3361,7 +3363,7 @@ class DateTime(object):
         return _misc.DateTime_ParseRfc822Date(*args, **kwargs)
 
     def ParseFormat(*args, **kwargs):
-        """ParseFormat(String date, String format=DateFormatStr, DateTime dateDef=wxDefaultDateTime) -> int"""
+        """ParseFormat(String date, String format=DateFormatStr, DateTime dateDef=DefaultDateTime) -> int"""
         return _misc.DateTime_ParseFormat(*args, **kwargs)
 
     def ParseDateTime(*args, **kwargs):
@@ -4041,6 +4043,7 @@ class DataFormatPtr(DataFormat):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = DataFormat
 _misc.DataFormat_swigregister(DataFormatPtr)
+DefaultDateTime = cvar.DefaultDateTime
 
 def CustomDataFormat(*args, **kwargs):
     """CustomDataFormat(String format) -> DataFormat"""

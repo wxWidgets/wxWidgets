@@ -37,7 +37,6 @@ wxCAL_BORDER_SQUARE = wx.calendar.CAL_BORDER_SQUARE
 wxCAL_BORDER_ROUND = wx.calendar.CAL_BORDER_ROUND
 wxCalendarDateAttr = wx.calendar.CalendarDateAttr
 wxCalendarDateAttrPtr = wx.calendar.CalendarDateAttrPtr
-wxCalendarDateAttrBorder = wx.calendar.CalendarDateAttrBorder
 wxCalendarEvent = wx.calendar.CalendarEvent
 wxCalendarEventPtr = wx.calendar.CalendarEventPtr
 wxEVT_CALENDAR_DOUBLECLICKED = wx.calendar.wxEVT_CALENDAR_DOUBLECLICKED

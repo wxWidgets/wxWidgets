@@ -23361,6 +23361,20 @@ static PyObject *_wrap_GetLocalTimeMillis(PyObject *self, PyObject *args, PyObje
 }
 
 
+static int _wrap_DefaultDateTime_set(PyObject *) {
+    PyErr_SetString(PyExc_TypeError,"Variable DefaultDateTime is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_DefaultDateTime_get() {
+    PyObject *pyobj;
+    
+    pyobj = SWIG_NewPointerObj((void *) &wxDefaultDateTime, SWIGTYPE_p_wxDateTime, 0);
+    return pyobj;
+}
+
+
 static PyObject *_wrap_new_DataFormat(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 ;
@@ -28513,6 +28527,7 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d,"DateTime_Default_First", SWIG_PyObj_FromInt((int)wxDateTime::Default_First));
     PyDict_SetItemString(d,"DateTime_Monday_First", SWIG_PyObj_FromInt((int)wxDateTime::Monday_First));
     PyDict_SetItemString(d,"DateTime_Sunday_First", SWIG_PyObj_FromInt((int)wxDateTime::Sunday_First));
+    SWIG_addvarlink(SWIG_globals,(char*)"DefaultDateTime",_wrap_DefaultDateTime_get, _wrap_DefaultDateTime_set);
     PyDict_SetItemString(d,"DF_INVALID", SWIG_PyObj_FromInt((int)wxDF_INVALID));
     PyDict_SetItemString(d,"DF_TEXT", SWIG_PyObj_FromInt((int)wxDF_TEXT));
     PyDict_SetItemString(d,"DF_BITMAP", SWIG_PyObj_FromInt((int)wxDF_BITMAP));

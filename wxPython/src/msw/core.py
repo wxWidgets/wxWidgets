@@ -4457,7 +4457,11 @@ class PyApp(EvtHandler):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyApp instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__() -> PyApp"""
+        """
+        __init__() -> PyApp
+
+        Create a new application object, starting the bootstrap process.
+        """
         newobj = _core.new_PyApp(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1

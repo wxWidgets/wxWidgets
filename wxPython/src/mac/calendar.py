@@ -23,13 +23,19 @@ CAL_BORDER_NONE = _calendar.CAL_BORDER_NONE
 CAL_BORDER_SQUARE = _calendar.CAL_BORDER_SQUARE
 CAL_BORDER_ROUND = _calendar.CAL_BORDER_ROUND
 class CalendarDateAttr(object):
+    """
+    A set of customization attributes for a calendar date, which can be used to
+    control the look of the Calendar object.
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxCalendarDateAttr instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Colour colText, Colour colBack=wxNullColour, Colour colBorder=wxNullColour, 
-            Font font=wxNullFont, 
+        __init__(Colour colText=wxNullColour, Colour colBack=wxNullColour, 
+            Colour colBorder=wxNullColour, Font font=wxNullFont, 
             int border=CAL_BORDER_NONE) -> CalendarDateAttr
+
+        Create a CalendarDateAttr.
         """
         newobj = _calendar.new_CalendarDateAttr(*args, **kwargs)
         self.this = newobj.this
@@ -111,12 +117,6 @@ class CalendarDateAttrPtr(CalendarDateAttr):
         self.__class__ = CalendarDateAttr
 _calendar.CalendarDateAttr_swigregister(CalendarDateAttrPtr)
 
-def CalendarDateAttrBorder(*args, **kwargs):
-    """CalendarDateAttrBorder(int border, Colour colBorder=wxNullColour) -> CalendarDateAttr"""
-    val = _calendar.new_CalendarDateAttrBorder(*args, **kwargs)
-    val.thisown = 1
-    return val
-
 class CalendarEvent(core.CommandEvent):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxCalendarEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -164,14 +164,17 @@ EVT_CALENDAR_YEAR =            wx.PyEventBinder( wxEVT_CALENDAR_YEAR_CHANGED, 1)
 EVT_CALENDAR_WEEKDAY_CLICKED = wx.PyEventBinder( wxEVT_CALENDAR_WEEKDAY_CLICKED, 1)
 
 class CalendarCtrl(core.Control):
+    """The calendar control allows the user to pick a date interactively."""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxCalendarCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Window parent, int id, DateTime date=wxDefaultDateTime, 
+        __init__(Window parent, int id, DateTime date=DefaultDateTime, 
             Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=wxCAL_SHOW_HOLIDAYS|wxWANTS_CHARS, 
             String name=CalendarNameStr) -> CalendarCtrl
+
+        Create and show a calendar control.
         """
         newobj = _calendar.new_CalendarCtrl(*args, **kwargs)
         self.this = newobj.this
@@ -181,123 +184,235 @@ class CalendarCtrl(core.Control):
 
     def Create(*args, **kwargs):
         """
-        Create(Window parent, int id, DateTime date=wxDefaultDateTime, 
+        Create(Window parent, int id, DateTime date=DefaultDateTime, 
             Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=wxCAL_SHOW_HOLIDAYS|wxWANTS_CHARS, 
             String name=CalendarNameStr) -> bool
+
+        Acutally create the GUI portion of the CalendarCtrl for 2-phase creation.
         """
         return _calendar.CalendarCtrl_Create(*args, **kwargs)
 
     def SetDate(*args, **kwargs):
-        """SetDate(DateTime date)"""
+        """
+        SetDate(DateTime date)
+
+        Sets the current date.
+        """
         return _calendar.CalendarCtrl_SetDate(*args, **kwargs)
 
     def GetDate(*args, **kwargs):
-        """GetDate() -> DateTime"""
+        """
+        GetDate() -> DateTime
+
+        Gets the currently selected date.
+        """
         return _calendar.CalendarCtrl_GetDate(*args, **kwargs)
 
     def SetLowerDateLimit(*args, **kwargs):
-        """SetLowerDateLimit(DateTime date=wxDefaultDateTime) -> bool"""
+        """
+        SetLowerDateLimit(DateTime date=DefaultDateTime) -> bool
+
+        set the range in which selection can occur
+        """
         return _calendar.CalendarCtrl_SetLowerDateLimit(*args, **kwargs)
 
-    def GetLowerDateLimit(*args, **kwargs):
-        """GetLowerDateLimit() -> DateTime"""
-        return _calendar.CalendarCtrl_GetLowerDateLimit(*args, **kwargs)
-
     def SetUpperDateLimit(*args, **kwargs):
-        """SetUpperDateLimit(DateTime date=wxDefaultDateTime) -> bool"""
+        """
+        SetUpperDateLimit(DateTime date=DefaultDateTime) -> bool
+
+        set the range in which selection can occur
+        """
         return _calendar.CalendarCtrl_SetUpperDateLimit(*args, **kwargs)
 
+    def GetLowerDateLimit(*args, **kwargs):
+        """
+        GetLowerDateLimit() -> DateTime
+
+        get the range in which selection can occur
+        """
+        return _calendar.CalendarCtrl_GetLowerDateLimit(*args, **kwargs)
+
     def GetUpperDateLimit(*args, **kwargs):
-        """GetUpperDateLimit() -> DateTime"""
+        """
+        GetUpperDateLimit() -> DateTime
+
+        get the range in which selection can occur
+        """
         return _calendar.CalendarCtrl_GetUpperDateLimit(*args, **kwargs)
 
     def SetDateRange(*args, **kwargs):
-        """SetDateRange(DateTime lowerdate=wxDefaultDateTime, DateTime upperdate=wxDefaultDateTime) -> bool"""
+        """
+        SetDateRange(DateTime lowerdate=DefaultDateTime, DateTime upperdate=DefaultDateTime) -> bool
+
+        set the range in which selection can occur
+        """
         return _calendar.CalendarCtrl_SetDateRange(*args, **kwargs)
 
     def EnableYearChange(*args, **kwargs):
-        """EnableYearChange(bool enable=True)"""
+        """
+        EnableYearChange(bool enable=True)
+
+        This function should be used instead of changing CAL_NO_YEAR_CHANGE
+        style bit directly. It allows or disallows the user to change the year
+        interactively.
+        """
         return _calendar.CalendarCtrl_EnableYearChange(*args, **kwargs)
 
     def EnableMonthChange(*args, **kwargs):
-        """EnableMonthChange(bool enable=True)"""
+        """
+        EnableMonthChange(bool enable=True)
+
+        This function should be used instead of changing CAL_NO_MONTH_CHANGE style
+        bit. It allows or disallows the user to change the month interactively. Note
+        that if the month can not be changed, the year can not be changed either.
+        """
         return _calendar.CalendarCtrl_EnableMonthChange(*args, **kwargs)
 
     def EnableHolidayDisplay(*args, **kwargs):
-        """EnableHolidayDisplay(bool display=True)"""
+        """
+        EnableHolidayDisplay(bool display=True)
+
+        This function should be used instead of changing CAL_SHOW_HOLIDAYS style
+        bit directly. It enables or disables the special highlighting of the holidays.
+        """
         return _calendar.CalendarCtrl_EnableHolidayDisplay(*args, **kwargs)
 
     def SetHeaderColours(*args, **kwargs):
-        """SetHeaderColours(Colour colFg, Colour colBg)"""
+        """
+        SetHeaderColours(Colour colFg, Colour colBg)
+
+        header colours are used for painting the weekdays at the top
+        """
         return _calendar.CalendarCtrl_SetHeaderColours(*args, **kwargs)
 
     def GetHeaderColourFg(*args, **kwargs):
-        """GetHeaderColourFg() -> Colour"""
+        """
+        GetHeaderColourFg() -> Colour
+
+        header colours are used for painting the weekdays at the top
+        """
         return _calendar.CalendarCtrl_GetHeaderColourFg(*args, **kwargs)
 
     def GetHeaderColourBg(*args, **kwargs):
-        """GetHeaderColourBg() -> Colour"""
+        """
+        GetHeaderColourBg() -> Colour
+
+        header colours are used for painting the weekdays at the top
+        """
         return _calendar.CalendarCtrl_GetHeaderColourBg(*args, **kwargs)
 
     def SetHighlightColours(*args, **kwargs):
-        """SetHighlightColours(Colour colFg, Colour colBg)"""
+        """
+        SetHighlightColours(Colour colFg, Colour colBg)
+
+        highlight colour is used for the currently selected date
+        """
         return _calendar.CalendarCtrl_SetHighlightColours(*args, **kwargs)
 
     def GetHighlightColourFg(*args, **kwargs):
-        """GetHighlightColourFg() -> Colour"""
+        """
+        GetHighlightColourFg() -> Colour
+
+        highlight colour is used for the currently selected date
+        """
         return _calendar.CalendarCtrl_GetHighlightColourFg(*args, **kwargs)
 
     def GetHighlightColourBg(*args, **kwargs):
-        """GetHighlightColourBg() -> Colour"""
+        """
+        GetHighlightColourBg() -> Colour
+
+        highlight colour is used for the currently selected date
+        """
         return _calendar.CalendarCtrl_GetHighlightColourBg(*args, **kwargs)
 
     def SetHolidayColours(*args, **kwargs):
-        """SetHolidayColours(Colour colFg, Colour colBg)"""
+        """
+        SetHolidayColours(Colour colFg, Colour colBg)
+
+        holiday colour is used for the holidays (if CAL_SHOW_HOLIDAYS style is used)
+        """
         return _calendar.CalendarCtrl_SetHolidayColours(*args, **kwargs)
 
     def GetHolidayColourFg(*args, **kwargs):
-        """GetHolidayColourFg() -> Colour"""
+        """
+        GetHolidayColourFg() -> Colour
+
+        holiday colour is used for the holidays (if CAL_SHOW_HOLIDAYS style is used)
+        """
         return _calendar.CalendarCtrl_GetHolidayColourFg(*args, **kwargs)
 
     def GetHolidayColourBg(*args, **kwargs):
-        """GetHolidayColourBg() -> Colour"""
+        """
+        GetHolidayColourBg() -> Colour
+
+        holiday colour is used for the holidays (if CAL_SHOW_HOLIDAYS style is used)
+        """
         return _calendar.CalendarCtrl_GetHolidayColourBg(*args, **kwargs)
 
     def GetAttr(*args, **kwargs):
-        """GetAttr(size_t day) -> CalendarDateAttr"""
+        """
+        GetAttr(size_t day) -> CalendarDateAttr
+
+        Returns the attribute for the given date (should be in the range 1...31).
+        The returned value may be None
+        """
         return _calendar.CalendarCtrl_GetAttr(*args, **kwargs)
 
     def SetAttr(*args, **kwargs):
-        """SetAttr(size_t day, CalendarDateAttr attr)"""
+        """
+        SetAttr(size_t day, CalendarDateAttr attr)
+
+        Associates the attribute with the specified date (in the range 1...31).
+        If the attribute passed is None, the items attribute is cleared.
+        """
         return _calendar.CalendarCtrl_SetAttr(*args, **kwargs)
 
     def SetHoliday(*args, **kwargs):
-        """SetHoliday(size_t day)"""
+        """
+        SetHoliday(size_t day)
+
+        Marks the specified day as being a holiday in the current month.
+        """
         return _calendar.CalendarCtrl_SetHoliday(*args, **kwargs)
 
     def ResetAttr(*args, **kwargs):
-        """ResetAttr(size_t day)"""
+        """
+        ResetAttr(size_t day)
+
+        Clears any attributes associated with the given day (in the range 1...31).
+        """
         return _calendar.CalendarCtrl_ResetAttr(*args, **kwargs)
 
     def HitTest(*args, **kwargs):
-        """HitTest(Point pos, DateTime date=None, int wd=None) -> int"""
+        """
+        HitTest(Point pos) -> (result, date, weekday)
+
+        Returns 3-tuple with information about the given position on the calendar
+        control.  The first value of the tuple is a result code and determines the
+        validity of the remaining two values.  The result codes are:
+
+            CAL_HITTEST_NOWHERE:    hit outside of anything
+            CAL_HITTEST_HEADER:     hit on the header, weekday is valid
+            CAL_HITTEST_DAY:        hit on a day in the calendar, date is set.
+
+        """
         return _calendar.CalendarCtrl_HitTest(*args, **kwargs)
 
-    def Enable(*args, **kwargs):
-        """Enable(bool enable=True) -> bool"""
-        return _calendar.CalendarCtrl_Enable(*args, **kwargs)
-
-    def Show(*args, **kwargs):
-        """Show(bool show=True) -> bool"""
-        return _calendar.CalendarCtrl_Show(*args, **kwargs)
-
     def GetMonthControl(*args, **kwargs):
-        """GetMonthControl() -> Control"""
+        """
+        GetMonthControl() -> Control
+
+        get the currently shown control for month
+        """
         return _calendar.CalendarCtrl_GetMonthControl(*args, **kwargs)
 
     def GetYearControl(*args, **kwargs):
-        """GetYearControl() -> Control"""
+        """
+        GetYearControl() -> Control
+
+        get the currently shown control for year
+        """
         return _calendar.CalendarCtrl_GetYearControl(*args, **kwargs)
 
 
@@ -311,7 +426,11 @@ cvar = _calendar.cvar
 CalendarNameStr = cvar.CalendarNameStr
 
 def PreCalendarCtrl(*args, **kwargs):
-    """PreCalendarCtrl() -> CalendarCtrl"""
+    """
+    PreCalendarCtrl() -> CalendarCtrl
+
+    Precreate a CalendarCtrl for 2-phase creation.
+    """
     val = _calendar.new_PreCalendarCtrl(*args, **kwargs)
     val.thisown = 1
     return val
