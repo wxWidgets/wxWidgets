@@ -44,13 +44,13 @@ methods are called.
 :see: `wx.SizerItemSpacer`, `wx.SizerItemWindow`, `wx.SizerItemSizer`", "");
 
 
-    
+
     %extend {
         DocStr(
             wxSizerItem( wxWindow *window, int proportion, int flag,
                          int border, PyObject* userData=NULL ),
-            "Constructs a `wx.SizerItem` for tracking a window.", ""); 
-    
+            "Constructs a `wx.SizerItem` for tracking a window.", "");
+
         %RenameCtor(SizerItemWindow, wxSizerItem( wxWindow *window, int proportion, int flag,
                                                   int border, PyObject* userData=NULL ))
         {
@@ -63,12 +63,12 @@ methods are called.
             return new wxSizerItem(window, proportion, flag, border, data);
         }
 
-        
+
         DocStr(
             wxSizerItem( int width, int height, int proportion, int flag,
                          int border, PyObject* userData=NULL),
             "Constructs a `wx.SizerItem` for tracking a spacer.", "");
-        
+
         %RenameCtor(SizerItemSpacer,  wxSizerItem( int width, int height, int proportion, int flag,
                                                    int border, PyObject* userData=NULL))
         {
@@ -80,12 +80,12 @@ methods are called.
             }
             return new wxSizerItem(width, height, proportion, flag, border, data);
         }
-        
+
         DocStr(
             wxSizerItem( wxSizer *sizer, int proportion, int flag,
                          int border, PyObject* userData=NULL ),
             "Constructs a `wx.SizerItem` for tracking a subsizer", "");
-        
+
         %RenameCtor(SizerItemSizer,  wxSizerItem( wxSizer *sizer, int proportion, int flag,
                                                   int border, PyObject* userData=NULL ))
         {
@@ -100,38 +100,38 @@ methods are called.
     }
 
 
-    
+
     DocDeclStr(
         void , DeleteWindows(),
         "Destroy the window or the windows in a subsizer, depending on the type
 of item.", "");
-    
+
     DocDeclStr(
         void , DetachSizer(),
         "Enable deleting the SizerItem without destroying the contained sizer.", "");
-    
+
 
     DocDeclStr(
         wxSize , GetSize(),
         "Get the current size of the item, as set in the last Layout.", "");
-    
+
     DocDeclStr(
         wxSize , CalcMin(),
         "Calculates the minimum desired size for the item, including any space
 needed by borders.", "");
-    
+
     DocDeclStr(
         void , SetDimension( wxPoint pos, wxSize size ),
         "Set the position and size of the space allocated for this item by the
 sizer, and adjust the position and size of the item (window or
 subsizer) to be within that space taking alignment and borders into
 account.", "");
-    
+
 
     DocDeclStr(
         wxSize , GetMinSize(),
         "Get the minimum size needed for the item.", "");
-    
+
     DocDeclStr(
         wxSize , GetMinSizeWithBorder() const,
         "Get the minimum size needed for the item with space for the borders
@@ -140,14 +140,14 @@ added, if needed.", "");
     DocDeclStr(
         void , SetInitSize( int x, int y ),
         "", "");
-    
+
 
     DocStr(SetRatio,
            "Set the ratio item attribute.", "");
     %Rename(SetRatioWH, void, SetRatio( int width, int height ));
     %Rename(SetRatioSize, void, SetRatio( wxSize size ));
     void SetRatio( float ratio );
-    
+
     DocDeclStr(
         float , GetRatio(),
         "Set the ratio item attribute.", "");
@@ -155,94 +155,94 @@ added, if needed.", "");
     DocDeclStr(
         wxRect , GetRect(),
         "Returns the rectangle that the sizer item should occupy", "");
-    
+
 
     DocDeclStr(
         bool , IsWindow(),
         "Is this sizer item a window?", "");
-    
+
     DocDeclStr(
         bool , IsSizer(),
         "Is this sizer item a subsizer?", "");
-    
+
     DocDeclStr(
         bool , IsSpacer(),
         "Is this sizer item a spacer?", "");
-    
+
 
     DocDeclStr(
         void , SetProportion( int proportion ),
         "Set the proportion value for this item.", "");
-    
+
     DocDeclStr(
         int , GetProportion(),
         "Get the proportion value for this item.", "");
-    
+
     %pythoncode { SetOption = wx._deprecated(SetProportion, "Please use `SetProportion` instead.") }
     %pythoncode { GetOption = wx._deprecated(GetProportion, "Please use `GetProportion` instead.") }
 
-    
+
     DocDeclStr(
         void , SetFlag( int flag ),
         "Set the flag value for this item.", "");
-    
+
     DocDeclStr(
         int , GetFlag(),
         "Get the flag value for this item.", "");
-    
-    
+
+
     DocDeclStr(
         void , SetBorder( int border ),
         "Set the border value for this item.", "");
-    
+
     DocDeclStr(
         int , GetBorder(),
         "Get the border value for this item.", "");
-    
 
-    
+
+
     DocDeclStr(
         wxWindow *, GetWindow(),
         "Get the window (if any) that is managed by this sizer item.", "");
-    
+
     DocDeclStr(
         void , SetWindow( wxWindow *window ),
         "Set the window to be managed by this sizer item.", "");
-    
-    
+
+
     DocDeclStr(
         wxSizer *, GetSizer(),
         "Get the subsizer (if any) that is managed by this sizer item.", "");
-    
+
     DocDeclStr(
         void , SetSizer( wxSizer *sizer ),
         "Set the subsizer to be managed by this sizer item.", "");
-    
-    
+
+
     DocDeclStr(
         const wxSize& , GetSpacer(),
         "Get the size of the spacer managed by this sizer item.", "");
-    
+
     DocDeclStr(
         void , SetSpacer( const wxSize &size ),
         "Set the size of the spacer to be managed by this sizer item.", "");
-    
+
 
     DocDeclStr(
         void , Show( bool show ),
         "Set the show item attribute, which sizers use to determine if the item
 is to be made part of the layout or not. If the item is tracking a
 window then it is shown or hidden as needed.", "");
-    
+
     DocDeclStr(
         bool , IsShown(),
         "Is the item to be shown in the layout?", "");
-    
+
 
     DocDeclStr(
         wxPoint , GetPosition(),
         "Returns the current position of the item, as set in the last Layout.", "");
-    
+
 
     // wxObject* GetUserData();
     %extend {
@@ -275,7 +275,7 @@ struct wxPySizerItemInfo {
         : window(NULL), sizer(NULL), gotSize(false),
           size(wxDefaultSize), gotPos(false), pos(-1)
     {}
-    
+
     wxWindow* window;
     wxSizer*  sizer;
     bool      gotSize;
@@ -283,7 +283,7 @@ struct wxPySizerItemInfo {
     bool      gotPos;
     int       pos;
 };
- 
+
 static wxPySizerItemInfo wxPySizerItemTypeHelper(PyObject* item, bool checkSize, bool checkIdx ) {
 
     wxPySizerItemInfo info;
@@ -295,12 +295,12 @@ static wxPySizerItemInfo wxPySizerItemTypeHelper(PyObject* item, bool checkSize,
     if ( ! wxPyConvertSwigPtr(item, (void**)&info.window, wxT("wxWindow")) ) {
         PyErr_Clear();
         info.window = NULL;
-                
+
         // try wxSizer
         if ( ! wxPyConvertSwigPtr(item, (void**)&info.sizer, wxT("wxSizer")) ) {
             PyErr_Clear();
             info.sizer = NULL;
-            
+
             // try wxSize or (w,h)
             if ( checkSize && wxSize_helper(item, &sizePtr)) {
                 info.size = *sizePtr;
@@ -488,14 +488,14 @@ public:
 
         wxSizerItem*  Add(PyObject* item, int proportion=0, int flag=0, int border=0,
                           PyObject* userData=NULL) {
-            
+
             wxPyUserData* data = NULL;
             bool blocked = wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, true, false);
             if ( userData && (info.window || info.sizer || info.gotSize) )
                 data = new wxPyUserData(userData);
             wxPyEndBlockThreads(blocked);
-            
+
             // Now call the real Add method if a valid item type was found
             if ( info.window )
                 return self->Add(info.window, proportion, flag, border, data);
@@ -526,7 +526,7 @@ the item at index *before*.  See `Add` for a description of the parameters.", ""
             if ( userData && (info.window || info.sizer || info.gotSize) )
                 data = new wxPyUserData(userData);
             wxPyEndBlockThreads(blocked);
-            
+
             // Now call the real Insert method if a valid item type was found
             if ( info.window )
                 return self->Insert(before, info.window, proportion, flag, border, data);
@@ -542,7 +542,7 @@ the item at index *before*.  See `Add` for a description of the parameters.", ""
 
 //    virtual wxSizerItem* InsertSpacer(size_t index, int size);
 //    virtual wxSizerItem* InsertStretchSpacer(size_t index, int prop = 1);
-        
+
         DocAStr(Prepend,
                 "Prepend(self, item, int proportion=0, int flag=0, int border=0,
     PyObject userData=None) -> wx.SizerItem",
@@ -558,7 +558,7 @@ this sizer.  See `Add` for a description of the parameters.", "");
             if ( userData && (info.window || info.sizer || info.gotSize) )
                 data = new wxPyUserData(userData);
             wxPyEndBlockThreads(blocked);
-            
+
             // Now call the real Prepend method if a valid item type was found
             if ( info.window )
                 return self->Prepend(info.window, proportion, flag, border, data);
@@ -598,7 +598,7 @@ and removed.", "
                 return self->Remove(info.sizer);
             else if ( info.gotPos )
                 return self->Remove(info.pos);
-            else 
+            else
                 return false;
         }
 
@@ -620,11 +620,11 @@ was found and detached.", "");
                 return self->Detach(info.sizer);
             else if ( info.gotPos )
                 return self->Detach(info.pos);
-            else 
+            else
                 return false;
         }
 
-        
+
         DocAStr(GetItem,
                 "GetItem(self, item) -> wx.SizerItem",
                 "Returns the `wx.SizerItem` which holds the *item* given.  The *item*
@@ -644,7 +644,7 @@ the item to be detached.", "");
                 return NULL;
         }
 
-        
+
         void _SetItemMinSize(PyObject* item, const wxSize& size) {
             bool blocked = wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, false, true);
@@ -674,25 +674,25 @@ the item to be detached.", "");
         else:
             return self._SetItemMinSize(item, args[0])
     }
-    
+
     DocDeclAStrName(
         wxSizerItem* , Add( wxSizerItem *item ),
         "AddItem(self, SizerItem item)",
         "Adds a `wx.SizerItem` to the sizer.", "",
         AddItem);
-    
+
     DocDeclAStrName(
         wxSizerItem* , Insert( size_t index, wxSizerItem *item ),
         "InsertItem(self, int index, SizerItem item)",
         "Inserts a `wx.SizerItem` to the sizer at the position given by *index*.", "",
         InsertItem);
-    
+
     DocDeclAStrName(
         wxSizerItem* , Prepend( wxSizerItem *item ),
         "PrependItem(self, SizerItem item)",
         "Prepends a `wx.SizerItem` to the sizer.", "",
         PrependItem);
-    
+
 
 
     %pythoncode {
@@ -709,18 +709,45 @@ the item to be detached.", "");
             self.Add(*item)
 
     %# for backwards compatibility only, please do not use in new code
-    AddWindow     = wx._deprecated(Add, "AddWindow is deprecated, use `Add` instead.")
-    AddSizer      = wx._deprecated(Add, "AddSizer is deprecated, use `Add` instead.")
-    AddSpacer     = wx._deprecated(Add, "AddSpacer is deprecated, use `Add` instead.")
-    PrependWindow = wx._deprecated(Prepend, "PrependWindow is deprecated, use `Prepend` instead.")
-    PrependSizer  = wx._deprecated(Prepend, "PrependSizer is deprecated, use `Prepend` instead.")
-    PrependSpacer = wx._deprecated(Prepend, "PrependSpacer is deprecated, use `Prepend` instead.")
-    InsertWindow  = wx._deprecated(Insert, "InsertWindow is deprecated, use `Insert` instead.")
-    InsertSizer   = wx._deprecated(Insert, "InsertSizer is deprecated, use `Insert` instead.")
-    InsertSpacer  = wx._deprecated(Insert, "InsertSpacer is deprecated, use `Insert` instead.")
-    RemoveWindow  = wx._deprecated(Remove, "RemoveWindow is deprecated, use `Remove` instead.")
-    RemoveSizer   = wx._deprecated(Remove, "RemoveSizer is deprecated, use `Remove` instead.")
-    RemovePos     = wx._deprecated(Remove, "RemovePos is deprecated, use `Remove` instead.")
+    def AddWindow(self, *args, **kw):
+        """Compatibility alias for `Add`."""
+        return self.Add(*args, **kw)
+    def AddSizer(self, *args, **kw):
+        """Compatibility alias for `Add`."""
+        return self.Add(*args, **kw)
+    def AddSpacer(self, *args, **kw):
+        """Compatibility alias for `Add`."""
+        return self.Add(*args, **kw)
+
+    def PrependWindow(self, *args, **kw):
+        """Compatibility alias for `Prepend`."""
+        return self.Prepend(*args, **kw)
+    def PrependSizer(self, *args, **kw):
+        """Compatibility alias for `Prepend`."""
+        return self.Prepend(*args, **kw)
+    def PrependSpacer(self, *args, **kw):
+        """Compatibility alias for `Prepend`."""
+        return self.Prepend(*args, **kw)
+
+    def InsertWindow(self, *args, **kw):
+        """Compatibility alias for `Insert`."""
+        return self.Insert(*args, **kw)
+    def InsertSizer(self, *args, **kw):
+        """Compatibility alias for `Insert`."""
+        return self.Insert(*args, **kw)
+    def InsertSpacer(self, *args, **kw):
+        """Compatibility alias for `Insert`."""
+        return self.Insert(*args, **kw)
+
+    def RemoveWindow(self, *args, **kw):
+        """Compatibility alias for `Remove`."""
+        return self.Remove(*args, **kw)
+    def RemoveSizer(self, *args, **kw):
+        """Compatibility alias for `Remove`."""
+        return self.Remove(*args, **kw)
+    def RemovePos(self, *args, **kw):
+        """Compatibility alias for `Remove`."""
+        return self.Remove(*args, **kw)
 
     }
 
@@ -731,7 +758,7 @@ the item to be detached.", "");
 force the items owned by the sizer to resize themselves according to
 the rules defined by the parameter in the `Add`, `Insert` or `Prepend`
 methods.", "");
-    
+
     DocDeclStr(
         void , SetMinSize( const wxSize &size ),
         "Call this to give the sizer a minimal size. Normally, the sizer will
@@ -739,22 +766,22 @@ calculate its minimal size based purely on how much space its children
 need. After calling this method `GetMinSize` will return either the
 minimal size as requested by its children or the minimal size set
 here, depending on which is bigger.", "");
-    
+
 
     DocDeclStr(
         wxSize , GetSize(),
         "Returns the current size of the space managed by the sizer.", "");
-    
+
     DocDeclStr(
         wxPoint , GetPosition(),
         "Returns the current position of the sizer's managed space.", "");
-    
+
     DocDeclStr(
         wxSize , GetMinSize(),
         "Returns the minimal size of the sizer. This is either the combined
 minimal size of all the children and their borders or the minimal size
 set by SetMinSize, depending on which is bigger.", "");
-    
+
 
     %pythoncode {
     def GetSizeTuple(self):
@@ -770,13 +797,13 @@ set by SetMinSize, depending on which is bigger.", "");
         "Using the sizes calculated by `CalcMin` reposition and resize all the
 items managed by this sizer.  You should not need to call this directly as
 it is called by `Layout`.", "");
-    
+
     DocDeclStr(
         virtual wxSize , CalcMin(),
         "This method is where the sizer will do the actual calculation of its
 children's minimal sizes.  You should not need to call this directly as
 it is called by `Layout`.", "");
-    
+
 
     DocDeclStr(
         void , Layout(),
@@ -786,7 +813,7 @@ sizer.  Normally this is called automatically from the owning window's
 EVT_SIZE handler, but it is also useful to call it from user code when
 one of the items in a sizer change size, or items are added or
 removed.", "");
-    
+
 
     DocDeclStr(
         wxSize , Fit( wxWindow *window ),
@@ -796,7 +823,7 @@ order to set its initial size to match the needs of the children as
 determined by the sizer.  Returns the new size.
 
 For a top level window this is the total window size, not the client size.", "");
-    
+
     DocDeclStr(
         void , FitInside( wxWindow *window ),
         "Tell the sizer to resize the *virtual size* of the *window* to match the
@@ -806,7 +833,7 @@ required to view the virtual area in windows which manage it.
 
 :see: `wx.ScrolledWindow.SetScrollbars`, `SetVirtualSizeHints`
 ", "");
-    
+
 
     DocDeclStr(
         void , SetSizeHints( wxWindow *window ),
@@ -816,7 +843,7 @@ constructor of the window itself if the window is resizable (as are
 many dialogs under Unix and frames on probably all platforms) in order
 to prevent the window from being sized smaller than the minimal size
 required by the sizer.", "");
-    
+
     DocDeclStr(
         void , SetVirtualSizeHints( wxWindow *window ),
         "Tell the sizer to set the minimal size of the window virtual area to
@@ -825,17 +852,17 @@ this will set them appropriately.
 
 :see: `wx.ScrolledWindow.SetScrollbars`
 ", "");
-    
+
 
     DocDeclStr(
         void , Clear( bool deleteWindows=false ),
         "Clear all items from the sizer, optionally destroying the window items
 as well.", "");
-    
+
     DocDeclStr(
         void , DeleteWindows(),
         "Destroy all windows managed by the sizer.", "");
-    
+
 
 
     // wxList& GetChildren();
@@ -874,7 +901,7 @@ subsizer.  Returns True if the item was found.", "");
             else
                 return false;
         }
-       
+
         DocAStr(IsShown,
                 "IsShown(self, item)",
                 "Determines if the item is currently shown. sizer.  To make a sizer
@@ -885,9 +912,9 @@ the item.", "");
             bool blocked = wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, false, false);
             wxPyEndBlockThreads(blocked);
-            if ( info.window ) 
+            if ( info.window )
                 return self->IsShown(info.window);
-            else if ( info.sizer ) 
+            else if ( info.sizer )
                 return self->IsShown(info.sizer);
             else if ( info.gotPos )
                 return self->IsShown(info.pos);
@@ -904,18 +931,18 @@ the item.", "");
         return self.Show(item, False, recursive)
     }
 
-    
+
     DocDeclStr(
         void , ShowItems(bool show),
         "Recursively call `wx.SizerItem.Show` on all sizer items.", "");
-    
+
 };
 
 
 //---------------------------------------------------------------------------
 // Use this one for deriving Python classes from
 %{
-// See pyclasses.h    
+// See pyclasses.h
 IMP_PYCALLBACK___pure(wxPySizer, wxSizer, RecalcSizes);
 IMP_PYCALLBACK_wxSize__pure(wxPySizer, wxSizer, CalcMin);
 IMPLEMENT_DYNAMIC_CLASS(wxPySizer, wxSizer);
@@ -970,7 +997,7 @@ public:
         wxPySizer(),
         "Creates a wx.PySizer.  Must be called from the __init__ in the derived
 class.", "");
-    
+
     void _setCallbackInfo(PyObject* self, PyObject* _class);
 };
 
@@ -1013,15 +1040,15 @@ public:
 or ``wx.HORIZONTAL`` for creating either a column sizer or a row
 sizer.", "");
 
-    
+
     DocDeclStr(
         int , GetOrientation(),
         "Returns the current orientation of the sizer.", "");
-    
+
     DocDeclStr(
         void , SetOrientation(int orient),
         "Resets the orientation of the sizer.", "");
-    
+
 };
 
 //---------------------------------------------------------------------------
@@ -1045,11 +1072,11 @@ public:
 ``wx.HORIZONTAL``.", "");
 
     // TODO: wxStaticBoxSizer(int orient, wxWindow *win, const wxString& label = wxEmptyString);
-    
+
     DocDeclStr(
         wxStaticBox *, GetStaticBox(),
         "Returns the static box associated with this sizer.", "");
-        
+
 };
 
 //---------------------------------------------------------------------------
@@ -1088,35 +1115,35 @@ define extra space between all children.", "");
     DocDeclStr(
         void , SetCols( int cols ),
         "Sets the number of columns in the sizer.", "");
-    
+
     DocDeclStr(
         void , SetRows( int rows ),
         "Sets the number of rows in the sizer.", "");
-    
+
     DocDeclStr(
         void , SetVGap( int gap ),
         "Sets the vertical gap (in pixels) between the cells in the sizer.", "");
-    
+
     DocDeclStr(
         void , SetHGap( int gap ),
         "Sets the horizontal gap (in pixels) between cells in the sizer", "");
-    
+
     DocDeclStr(
         int , GetCols(),
         "Returns the number of columns in the sizer.", "");
-    
+
     DocDeclStr(
         int , GetRows(),
         "Returns the number of rows in the sizer.", "");
-    
+
     DocDeclStr(
         int , GetVGap(),
         "Returns the vertical gap (in pixels) between the cells in the sizer.", "");
-    
+
     DocDeclStr(
         int , GetHGap(),
         "Returns the horizontal gap (in pixels) between cells in the sizer.", "");
-    
+
 };
 
 //---------------------------------------------------------------------------
@@ -1166,7 +1193,7 @@ number of columns and rows in the sizer - if either of the parameters
 is zero, it will be calculated to from the total number of children in
 the sizer, thus making the sizer grow dynamically. *vgap* and *hgap*
 define extra space between all children.", "");
-    
+
 
     DocDeclStr(
         void , AddGrowableRow( size_t idx, int proportion = 0  ),
@@ -1176,11 +1203,11 @@ is extra space available to the sizer.
 The *proportion* parameter has the same meaning as the stretch factor
 for the box sizers except that if all proportions are 0, then all
 columns are resized equally (instead of not being resized at all).", "");
-    
+
     DocDeclStr(
         void , RemoveGrowableRow( size_t idx ),
         "Specifies that row *idx* is no longer growable.", "");
-    
+
     DocDeclStr(
         void , AddGrowableCol( size_t idx, int proportion = 0  ),
         "Specifies that column *idx* (starting from zero) should be grown if
@@ -1189,11 +1216,11 @@ there is extra space available to the sizer.
 The *proportion* parameter has the same meaning as the stretch factor
 for the box sizers except that if all proportions are 0, then all
 columns are resized equally (instead of not being resized at all).", "");
-    
+
     DocDeclStr(
         void , RemoveGrowableCol( size_t idx ),
         "Specifies that column *idx* is no longer growable.", "");
-    
+
 
     DocDeclStr(
         void , SetFlexibleDirection(int direction),
@@ -1210,7 +1237,7 @@ other value is ignored.
 
 Note that this method does not trigger relayout.
 ", "");
-    
+
     DocDeclStr(
         int , GetFlexibleDirection(),
         "Returns a value that specifies whether the sizer
@@ -1218,7 +1245,7 @@ flexibly resizes its columns, rows, or both (default).
 
 :see: `SetFlexibleDirection`", "");
 
-    
+
 
     DocDeclStr(
         void , SetNonFlexibleGrowMode(wxFlexSizerGrowMode mode),
@@ -1240,14 +1267,14 @@ previously). Argument *mode* can be one of the following values:
 Note that this method does not trigger relayout.
 
 ", "");
-    
+
     DocDeclStr(
         wxFlexSizerGrowMode , GetNonFlexibleGrowMode(),
         "Returns the value that specifies how the sizer grows in the
 non-flexible direction if there is one.
 
 :see: `SetNonFlexibleGrowMode`", "");
-    
+
 
     // Read-only access to the row heights and col widths arrays
     DocDeclAStr(
@@ -1255,13 +1282,13 @@ non-flexible direction if there is one.
         "GetRowHeights(self) -> list",
         "Returns a list of integers representing the heights of each of the
 rows in the sizer.", "");
-    
+
     DocDeclAStr(
         const wxArrayInt& , GetColWidths() const,
         "GetColWidths(self) -> list",
         "Returns a list of integers representing the widths of each of the
 columns in the sizer.", "");
-    
+
 };
 
 //---------------------------------------------------------------------------
@@ -1285,7 +1312,7 @@ public:
         void , AddButton(wxButton *button),
         "Use this to add the buttons to this sizer.  Do not use the `Add`
 method in the base class.", "");
-    
+
     DocDeclStr(
         void , Realize(),
         "This funciton needs to be called after all the buttons have been added
@@ -1295,7 +1322,7 @@ specifc manner.", "");
     void SetAffirmativeButton( wxButton *button );
     void SetNegativeButton( wxButton *button );
     void SetCancelButton( wxButton *button );
-    
+
     wxButton* GetAffirmativeButton() const;
     wxButton* GetApplyButton() const;
     wxButton* GetNegativeButton() const;
