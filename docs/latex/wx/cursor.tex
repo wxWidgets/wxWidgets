@@ -50,9 +50,12 @@ wxCROSS\_CURSOR}
 Default constructor.
 
 \func{}{wxCursor}{\param{const char}{ bits[]}, \param{int }{width},
- \param{int }{ height}, \param{int }{hotSpotX=-1}, \param{int }{hotSpotY=-1}, \param{const char }{maskBits[]=NULL}}
+ \param{int }{ height}, \param{int }{hotSpotX=-1}, \param{int }{hotSpotY=-1}, \param{const char }{maskBits[]=NULL},
+ \param{wxColour*}{ fg=NULL}, \param{wxColour*}{ bg=NULL}}
 
-Constructs a cursor by passing an array of bits (Motif and Xt only). {\it maskBits} is used only under Motif.
+Constructs a cursor by passing an array of bits (Motif and GTK+ only). {\it maskBits} is used only under
+Motif and GTK+. The parameters {\it fg} and {\bg } are only present on GTK+, and force the
+cursor to use particular background and foreground colours.
 
 If either {\it hotSpotX} or {\it hotSpotY} is -1, the hotspot will be the centre of the cursor image (Motif only).
 
@@ -173,6 +176,54 @@ hotSpotY=0)}}{Constructs a cursor from a filename}
 \item{Wx::Cursor->newData( bits, width, height, hotSpotX = -1, hotSpotY = -1, maskBits = 0 )}
 \end{itemize}
 }
+
+\wxheading{Example}
+
+The following is an example of creating a
+cursor from 32x32 bitmap data ({\tt down\_bits}) and a mask
+({\tt down\_mask}) where 1 is black and 0 is white for
+the bits, and 1 is opaque and 0 is transparent for
+the mask. It works on Windows and GTK+.
+
+\begin{verbatim}
+static char down_bits[] = { 255, 255, 255, 255, 31,
+  255, 255, 255, 31, 255, 255, 255, 31, 255, 255, 255,
+  31, 255, 255, 255, 31, 255, 255, 255, 31, 255, 255,
+  255, 31, 255, 255, 255, 31, 255, 255, 255, 25, 243,
+  255, 255, 19, 249, 255, 255, 7, 252, 255, 255, 15, 254,
+  255, 255, 31, 255, 255, 255, 191, 255, 255, 255, 255,
+  255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+  255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+  255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+  255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+  255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+  255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
+  255 };
+
+static char down_mask[] = { 240, 1, 0, 0, 240, 1,
+  0, 0, 240, 1, 0, 0, 240, 1, 0, 0, 240, 1, 0, 0, 240, 1,
+  0, 0, 240, 1, 0, 0, 240, 1, 0, 0, 255, 31, 0, 0, 255,
+  31, 0, 0, 254, 15, 0, 0, 252, 7, 0, 0, 248, 3, 0, 0,
+  240, 1, 0, 0, 224, 0, 0, 0, 64, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0 };
+
+#ifdef __WXMSW__
+wxBitmap down_bitmap(down_bits, 32, 32);
+wxBitmap down_mask_bitmap(down_mask, 32, 32);
+
+down_bitmap.SetMask(new wxMask(down_mask_bitmap));
+wxImage down_image = down_bitmap.ConvertToImage();
+down_image.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_X, 6);
+down_image.SetOption(wxIMAGE_OPTION_CUR_HOTSPOT_Y, 14);
+wxCursor down_cursor = wxCursor(down_image);
+#else
+wxCursor down_cursor = wxCursor(down_bits, 32, 32,
+  6, 14, down_mask, wxWHITE, wxBLACK);
+#endif
+\end{verbatim}
 
 \membersection{wxCursor::\destruct{wxCursor}}
 
