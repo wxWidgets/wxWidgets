@@ -214,6 +214,8 @@ bool wxWindowBase::CreateBase(wxWindowBase *parent,
 // common clean up
 wxWindowBase::~wxWindowBase()
 {
+    wxASSERT_MSG( GetCapture() != this, wxT("attempt to destroy window with mouse capture") );
+
     // FIXME if these 2 cases result from programming errors in the user code
     //       we should probably assert here instead of silently fixing them
 
@@ -1625,7 +1627,7 @@ struct WXDLLEXPORT wxWindowNext
 void wxWindowBase::CaptureMouse()
 {
     wxLogTrace(_T("mousecapture"), _T("CaptureMouse(0x%08x)"), this);
-
+    
     wxWindow *winOld = GetCapture();
     if ( winOld )
     {
@@ -1642,6 +1644,8 @@ void wxWindowBase::CaptureMouse()
 
 void wxWindowBase::ReleaseMouse()
 {
+    wxLogTrace(_T("mousecapture"), _T("ReleaseMouse(0x%08x)"), this);
+
     DoReleaseMouse();
 
     if ( ms_winCaptureNext )
