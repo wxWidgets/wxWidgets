@@ -1050,6 +1050,8 @@ class wxPythonDemo(wx.Frame):
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
         self.Bind(wx.EVT_ICONIZE, self.OnIconfiy)
         self.Bind(wx.EVT_MAXIMIZE, self.OnMaximize)
+        self.Bind(wx.EVT_ACTIVATE, self.OnActivate)
+        wx.GetApp().Bind(wx.EVT_ACTIVATE_APP, self.OnAppActivate)
 
         self.Centre(wx.BOTH)
         self.CreateStatusBar(1, wx.ST_SIZEGRIP)
@@ -1320,9 +1322,8 @@ class wxPythonDemo(wx.Frame):
         self.ShutdownDemoModule()
         overviewText = ""
         
-        # o If the demo returns a window it is placed in a tab.
-        # o Otherwise, a placeholder tab is created, informing the user that the
-        #   demo runs outside the main window, and allowing it to be reloaded.
+        # o The RunTest() for all samples must now return a window that can
+        #   be palced in a tab in the main notebook.
         # o If an error occurs (or has occured before) an error tab is created.
         
         if module is not None:
@@ -1560,7 +1561,7 @@ class wxPythonDemo(wx.Frame):
 
     #---------------------------------------------
     def OnIconfiy(self, evt):
-        wx.LogMessage("OnIconfiy: %d" % evt.Iconized())
+        wx.LogMessage("OnIconfiy: %s" % evt.Iconized())
         evt.Skip()
 
     #---------------------------------------------
@@ -1568,8 +1569,15 @@ class wxPythonDemo(wx.Frame):
         wx.LogMessage("OnMaximize")
         evt.Skip()
 
+    #---------------------------------------------
+    def OnActivate(self, evt):
+        wx.LogMessage("OnActivate: %s" % evt.GetActive())
+        evt.Skip()
 
-
+    #---------------------------------------------
+    def OnAppActivate(self, evt):
+        wx.LogMessage("OnAppActivate: %s" % evt.GetActive())
+        evt.Skip()
 
 #---------------------------------------------------------------------------
 #---------------------------------------------------------------------------
