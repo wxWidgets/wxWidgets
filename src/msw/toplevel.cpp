@@ -394,6 +394,15 @@ bool wxTopLevelWindowMSW::CreateDialog(const void *dlgTemplate,
     int x, y, w, h;
     (void)MSWGetCreateWindowCoords(pos, size, x, y, w, h);
 
+    if ( x == (int)CW_USEDEFAULT )
+    {
+        // centre it on the screen - what else can we do?
+        wxSize sizeDpy = wxGetDisplaySize();
+
+        x = (sizeDpy.x - w) / 2;
+        y = (sizeDpy.y - h) / 2;
+    }
+
     if ( !::MoveWindow(GetHwnd(), x, y, w, h, FALSE) )
     {
         wxLogLastError(wxT("MoveWindow"));
