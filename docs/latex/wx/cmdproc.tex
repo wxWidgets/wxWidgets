@@ -76,11 +76,23 @@ Returns the edit menu associated with the command processor.
 
 Returns the string that will be appended to the Redo menu item.
 
+\membersection{wxCommandProcessor::GetRedoMenuLabel}\label{wxcommandprocessorgetredomenulabel}
+
+\constfunc{wxString}{GetRedoMenuLabel}{\void}
+
+Returns the string that will be shown for the redo menu item.
+
 \membersection{wxCommandProcessor::GetUndoAccelerator}\label{wxcommandprocessorgetundoaccelerator}
 
 \constfunc{const wxString\&}{GetUndoAccelerator}{\void}
 
 Returns the string that will be appended to the Undo menu item.
+
+\membersection{wxCommandProcessor::GetUndoMenuLabel}\label{wxcommandprocessorgetundomenulabel}
+
+\constfunc{wxString}{GetUndoMenuLabel}{\void}
+
+Returns the string that will be shown for the undo menu item.
 
 \membersection{wxCommandProcessor::Initialize}
 
@@ -98,6 +110,13 @@ Tells the command processor to update the Undo and Redo items on this
 menu as appropriate. Set this to NULL if the menu is about to be
 destroyed and command operations may still be performed, or the command
 processor may try to access an invalid pointer.
+
+\membersection{wxCommandProcessor::SetMenuStrings}
+
+\func{void}{SetMenuStrings}{\void}
+
+Sets the menu labels according to the currently set menu and the current
+command state.
 
 \membersection{wxCommandProcessor::SetRedoAccelerator}\label{wxcommandprocessorsetredoaccelerator}
 

@@ -69,8 +69,17 @@ public:
     virtual bool CanUndo() const;
     virtual bool CanRedo() const;
 
+    // Initialises the current command and menu strings.
     virtual void Initialize();
+
+    // Sets the Undo/Redo menu strings for the current menu.
     virtual void SetMenuStrings();
+
+    // Gets the current Undo menu label.
+    wxString GetUndoMenuLabel() const;
+
+    // Gets the current Undo menu label.
+    wxString GetRedoMenuLabel() const;
 
 #if wxUSE_MENUS
     // Call this to manage an edit menu.
