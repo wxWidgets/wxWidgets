@@ -281,6 +281,12 @@ Checking in src/common/string.cpp;
 /pack/cvsroots/wxwindows/wxWindows/src/common/string.cpp,v  <--  string.cpp
 new revision: 1.194; previous revision: 1.193
 
+30. Fix infinite loop in IsDialoMessage when a panel is reparented after
+    creation (as happens with XRC)
+Checking in src/msw/window.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/msw/window.cpp,v  <--  window.cpp
+new revision: 1.432; previous revision: 1.431
+
 
 TODO for 2.4 (items that are not backports)
 ===========================================
