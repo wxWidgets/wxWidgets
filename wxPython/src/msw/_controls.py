@@ -664,6 +664,15 @@ class ComboBox(Choice):
         """
         return _controls_.ComboBox_SetMark(*args, **kwargs)
 
+    def GetMark(*args, **kwargs):
+        """
+        GetMark(self) -> (from, to)
+
+        Gets the positions of the begining and ending of the selection mark in
+        the combobox text field.
+        """
+        return _controls_.ComboBox_GetMark(*args, **kwargs)
+
     def SetStringSelection(*args, **kwargs):
         """
         SetStringSelection(self, String string) -> bool

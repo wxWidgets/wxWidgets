@@ -447,6 +447,14 @@ class Brush(GDIObject):
         """
         return _gdi_.Brush_GetStipple(*args, **kwargs)
 
+    def IsHatch(*args, **kwargs):
+        """
+        IsHatch(self) -> bool
+
+        Is the current style a hatch type?
+        """
+        return _gdi_.Brush_IsHatch(*args, **kwargs)
+
     def Ok(*args, **kwargs):
         """
         Ok(self) -> bool

@@ -296,6 +296,7 @@ static swig_type_info *swig_types[13];
 #include "wx/wxPython/pyclasses.h"
 
 #include <wx/mediactrl.h>
+#include <wx/uri.h>
 
 
 #if !wxUSE_MEDIACTRL
@@ -314,7 +315,7 @@ enum wxMediaTimeFormat
 class WXDLLIMPEXP_MEDIA wxMediaEvent : public wxNotifyEvent
 {
 public:
-    wxMediaEvent(wxEventTypL, int )    { wxPyRaiseNotImplemented(); }
+    wxMediaEvent(wxEventType, int )    { wxPyRaiseNotImplemented(); }
 };
 
 class wxMediaCtrl : public wxControl
@@ -335,7 +336,7 @@ public:
                 wxWindowID ,
                 const wxURI& ,
                 const wxPoint&,
-                const wxSize& .
+                const wxSize& ,
                 long style,
                 const wxString& ,
                 const wxValidator& ,
@@ -354,7 +355,7 @@ public:
                 wxWindowID ,
                 const wxURI& ,
                 const wxPoint&,
-                const wxSize& .
+                const wxSize& ,
                 long style,
                 const wxString& ,
                 const wxValidator& ,
@@ -379,11 +380,12 @@ public:
     wxLongLong GetPosition() { return 0; }
     wxLongLong GetDuration() { return 0; }
 };
+
+const wxEventType wxEVT_MEDIA_FINISHED = 0;
+const wxEventType wxEVT_MEDIA_STOP = 0;
+
 #endif
 
- static const wxString wxPyMEDIABACKEND_DIRECTSHOW(wxMEDIABACKEND_DIRECTSHOW); 
- static const wxString wxPyMEDIABACKEND_MCI(wxMEDIABACKEND_MCI); 
- static const wxString wxPyMEDIABACKEND_QUICKTIME(wxMEDIABACKEND_QUICKTIME); 
 
 #include <limits.h>
 
@@ -482,7 +484,7 @@ SWIG_Check_int(PyObject* obj)
 }
 
  static const wxString wxPyEmptyString(wxEmptyString); 
- static const wxString wxPyMediaCtrlNameStr("mediaCtrl"); 
+ static const wxString wxPyMediaCtrlNameStr(wxT("mediaCtrl")); 
 
 SWIGSTATICINLINE(long)
 SWIG_As_long(PyObject* obj)
@@ -608,66 +610,6 @@ SWIG_Check_double(PyObject* obj)
 #ifdef __cplusplus
 extern "C" {
 #endif
-static int _wrap_MEDIABACKEND_DIRECTSHOW_set(PyObject *) {
-    PyErr_SetString(PyExc_TypeError,"Variable MEDIABACKEND_DIRECTSHOW is read-only.");
-    return 1;
-}
-
-
-static PyObject *_wrap_MEDIABACKEND_DIRECTSHOW_get() {
-    PyObject *pyobj;
-    
-    {
-#if wxUSE_UNICODE
-        pyobj = PyUnicode_FromWideChar((&wxPyMEDIABACKEND_DIRECTSHOW)->c_str(), (&wxPyMEDIABACKEND_DIRECTSHOW)->Len());
-#else
-        pyobj = PyString_FromStringAndSize((&wxPyMEDIABACKEND_DIRECTSHOW)->c_str(), (&wxPyMEDIABACKEND_DIRECTSHOW)->Len());
-#endif
-    }
-    return pyobj;
-}
-
-
-static int _wrap_MEDIABACKEND_MCI_set(PyObject *) {
-    PyErr_SetString(PyExc_TypeError,"Variable MEDIABACKEND_MCI is read-only.");
-    return 1;
-}
-
-
-static PyObject *_wrap_MEDIABACKEND_MCI_get() {
-    PyObject *pyobj;
-    
-    {
-#if wxUSE_UNICODE
-        pyobj = PyUnicode_FromWideChar((&wxPyMEDIABACKEND_MCI)->c_str(), (&wxPyMEDIABACKEND_MCI)->Len());
-#else
-        pyobj = PyString_FromStringAndSize((&wxPyMEDIABACKEND_MCI)->c_str(), (&wxPyMEDIABACKEND_MCI)->Len());
-#endif
-    }
-    return pyobj;
-}
-
-
-static int _wrap_MEDIABACKEND_QUICKTIME_set(PyObject *) {
-    PyErr_SetString(PyExc_TypeError,"Variable MEDIABACKEND_QUICKTIME is read-only.");
-    return 1;
-}
-
-
-static PyObject *_wrap_MEDIABACKEND_QUICKTIME_get() {
-    PyObject *pyobj;
-    
-    {
-#if wxUSE_UNICODE
-        pyobj = PyUnicode_FromWideChar((&wxPyMEDIABACKEND_QUICKTIME)->c_str(), (&wxPyMEDIABACKEND_QUICKTIME)->Len());
-#else
-        pyobj = PyString_FromStringAndSize((&wxPyMEDIABACKEND_QUICKTIME)->c_str(), (&wxPyMEDIABACKEND_QUICKTIME)->Len());
-#endif
-    }
-    return pyobj;
-}
-
-
 static PyObject *_wrap_new_MediaEvent(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxEventType arg1 = (wxEventType) wxEVT_NULL ;
@@ -2188,9 +2130,6 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d,"MEDIASTATE_PLAYING", SWIG_From_int((int)wxMEDIASTATE_PLAYING));
     PyDict_SetItemString(d,"MEDIATIMEFORMAT_TIME", SWIG_From_int((int)wxMEDIATIMEFORMAT_TIME));
     PyDict_SetItemString(d,(char*)"cvar", SWIG_globals);
-    SWIG_addvarlink(SWIG_globals,(char*)"MEDIABACKEND_DIRECTSHOW",_wrap_MEDIABACKEND_DIRECTSHOW_get, _wrap_MEDIABACKEND_DIRECTSHOW_set);
-    SWIG_addvarlink(SWIG_globals,(char*)"MEDIABACKEND_MCI",_wrap_MEDIABACKEND_MCI_get, _wrap_MEDIABACKEND_MCI_set);
-    SWIG_addvarlink(SWIG_globals,(char*)"MEDIABACKEND_QUICKTIME",_wrap_MEDIABACKEND_QUICKTIME_get, _wrap_MEDIABACKEND_QUICKTIME_set);
     SWIG_addvarlink(SWIG_globals,(char*)"MediaCtrlNameStr",_wrap_MediaCtrlNameStr_get, _wrap_MediaCtrlNameStr_set);
     PyDict_SetItemString(d, "wxEVT_MEDIA_FINISHED", PyInt_FromLong(wxEVT_MEDIA_FINISHED));
     PyDict_SetItemString(d, "wxEVT_MEDIA_STOP", PyInt_FromLong(wxEVT_MEDIA_STOP));

@@ -1201,7 +1201,7 @@ class HtmlDCRenderer(_core.Object):
 
     def Render(*args, **kwargs):
         """
-        Render(self, int x, int y, int from=0, int dont_render=False, int to=INT_MAX, 
+        Render(self, int x, int y, int from=0, int dont_render=False, int maxHeight=INT_MAX, 
             int choices=None, int LCOUNT=0) -> int
         """
         return _html.HtmlDCRenderer_Render(*args, **kwargs)

@@ -2694,6 +2694,34 @@ static PyObject *_wrap_Brush_GetStipple(PyObject *, PyObject *args, PyObject *kw
 }
 
 
+static PyObject *_wrap_Brush_IsHatch(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxBrush *arg1 = (wxBrush *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Brush_IsHatch",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxBrush,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)((wxBrush const *)arg1)->IsHatch();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_Brush_Ok(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxBrush *arg1 = (wxBrush *) 0 ;
@@ -18790,6 +18818,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Brush_GetColour", (PyCFunction) _wrap_Brush_GetColour, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Brush_GetStyle", (PyCFunction) _wrap_Brush_GetStyle, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Brush_GetStipple", (PyCFunction) _wrap_Brush_GetStipple, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"Brush_IsHatch", (PyCFunction) _wrap_Brush_IsHatch, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Brush_Ok", (PyCFunction) _wrap_Brush_Ok, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Brush_MacGetTheme", (PyCFunction) _wrap_Brush_MacGetTheme, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"Brush_MacSetTheme", (PyCFunction) _wrap_Brush_MacSetTheme, METH_VARARGS | METH_KEYWORDS, NULL },

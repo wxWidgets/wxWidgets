@@ -30,10 +30,6 @@ class MediaEventPtr(MediaEvent):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = MediaEvent
 _media.MediaEvent_swigregister(MediaEventPtr)
-cvar = _media.cvar
-MEDIABACKEND_DIRECTSHOW = cvar.MEDIABACKEND_DIRECTSHOW
-MEDIABACKEND_MCI = cvar.MEDIABACKEND_MCI
-MEDIABACKEND_QUICKTIME = cvar.MEDIABACKEND_QUICKTIME
 
 class MediaCtrl(_core.Control):
     def __repr__(self):
@@ -135,6 +131,7 @@ class MediaCtrlPtr(MediaCtrl):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = MediaCtrl
 _media.MediaCtrl_swigregister(MediaCtrlPtr)
+cvar = _media.cvar
 MediaCtrlNameStr = cvar.MediaCtrlNameStr
 
 def PreMediaCtrl(*args, **kwargs):

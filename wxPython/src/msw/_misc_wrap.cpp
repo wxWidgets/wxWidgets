@@ -857,6 +857,99 @@ wxString Log_TimeStamp(){
             return msg;
         }
 void wxLog_Destroy(wxLog *self){ delete self; }
+// Make somce wrappers that double any % signs so they are 'escaped'
+    void wxPyLogFatalError(const wxString& msg)
+    {
+        wxString m(msg);
+        m.Replace(wxT("%"), wxT("%%"));
+        wxLogFatalError(m);
+    }
+    
+    void wxPyLogError(const wxString& msg)
+    {
+        wxString m(msg);
+        m.Replace(wxT("%"), wxT("%%"));
+        wxLogError(m);
+    }
+
+    void wxPyLogWarning(const wxString& msg)
+    {
+        wxString m(msg);
+        m.Replace(wxT("%"), wxT("%%"));
+        wxLogWarning(m);
+    }
+
+    void wxPyLogMessage(const wxString& msg)
+    {
+        wxString m(msg);
+        m.Replace(wxT("%"), wxT("%%"));
+        wxLogMessage(m);
+    }
+
+    void wxPyLogInfo(const wxString& msg)
+    {
+        wxString m(msg);
+        m.Replace(wxT("%"), wxT("%%"));
+        wxLogInfo(m);
+    }
+
+    void wxPyLogDebug(const wxString& msg)
+    {
+        wxString m(msg);
+        m.Replace(wxT("%"), wxT("%%"));
+        wxLogDebug(m);
+    }
+
+    void wxPyLogVerbose(const wxString& msg)
+    {
+        wxString m(msg);
+        m.Replace(wxT("%"), wxT("%%"));
+        wxLogVerbose(m);
+    }
+
+    void wxPyLogStatus(const wxString& msg)
+    {
+        wxString m(msg);
+        m.Replace(wxT("%"), wxT("%%"));
+        wxLogStatus(m);
+    }
+
+    void wxPyLogStatusFrame(wxFrame *pFrame, const wxString& msg)
+    {
+        wxString m(msg);
+        m.Replace(wxT("%"), wxT("%%"));
+        wxLogStatus(pFrame, m);
+    }
+
+    void wxPyLogSysError(const wxString& msg)
+    {
+        wxString m(msg);
+        m.Replace(wxT("%"), wxT("%%"));
+        wxLogSysError(m);
+    }
+
+    void wxPyLogGeneric(unsigned long level, const wxString& msg)
+    {
+        wxString m(msg);
+        m.Replace(wxT("%"), wxT("%%"));
+        wxLogGeneric(level, m);
+    }
+
+    void wxPyLogTrace(unsigned long mask, const wxString& msg)
+    {
+        wxString m(msg);
+        m.Replace(wxT("%"), wxT("%%"));
+        wxLogTrace(mask, m);
+    }
+        
+    void wxPyLogTrace(const wxString& mask, const wxString& msg)
+    {
+        wxString m(msg);
+        m.Replace(wxT("%"), wxT("%%"));
+        wxLogTrace(mask, m);
+    }
+    
+
 
 // A wxLog class that can be derived from in wxPython
 class wxPyLog : public wxLog {
@@ -1166,7 +1259,12 @@ PyObject *wxMimeTypesManager_EnumAllFileTypes(wxMimeTypesManager *self){
  static const wxString wxPyART_REPORT_VIEW(wxART_REPORT_VIEW); 
  static const wxString wxPyART_LIST_VIEW(wxART_LIST_VIEW); 
  static const wxString wxPyART_NEW_DIR(wxART_NEW_DIR); 
+ static const wxString wxPyART_HARDDISK(wxART_HARDDISK); 
+ static const wxString wxPyART_FLOPPY(wxART_FLOPPY); 
+ static const wxString wxPyART_CDROM(wxART_CDROM); 
+ static const wxString wxPyART_REMOVABLE(wxART_REMOVABLE); 
  static const wxString wxPyART_FOLDER(wxART_FOLDER); 
+ static const wxString wxPyART_FOLDER_OPEN(wxART_FOLDER_OPEN); 
  static const wxString wxPyART_GO_DIR_UP(wxART_GO_DIR_UP); 
  static const wxString wxPyART_EXECUTABLE_FILE(wxART_EXECUTABLE_FILE); 
  static const wxString wxPyART_NORMAL_FILE(wxART_NORMAL_FILE); 
@@ -8550,7 +8648,7 @@ static PyObject *_wrap_LogFatalError(PyObject *, PyObject *args, PyObject *kwarg
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxLogFatalError((wxString const &)*arg1);
+        wxPyLogFatalError((wxString const &)*arg1);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -8587,7 +8685,7 @@ static PyObject *_wrap_LogError(PyObject *, PyObject *args, PyObject *kwargs) {
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxLogError((wxString const &)*arg1);
+        wxPyLogError((wxString const &)*arg1);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -8624,7 +8722,7 @@ static PyObject *_wrap_LogWarning(PyObject *, PyObject *args, PyObject *kwargs) 
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxLogWarning((wxString const &)*arg1);
+        wxPyLogWarning((wxString const &)*arg1);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -8661,7 +8759,7 @@ static PyObject *_wrap_LogMessage(PyObject *, PyObject *args, PyObject *kwargs) 
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxLogMessage((wxString const &)*arg1);
+        wxPyLogMessage((wxString const &)*arg1);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -8698,7 +8796,7 @@ static PyObject *_wrap_LogInfo(PyObject *, PyObject *args, PyObject *kwargs) {
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxLogInfo((wxString const &)*arg1);
+        wxPyLogInfo((wxString const &)*arg1);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -8735,7 +8833,7 @@ static PyObject *_wrap_LogDebug(PyObject *, PyObject *args, PyObject *kwargs) {
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxLogDebug((wxString const &)*arg1);
+        wxPyLogDebug((wxString const &)*arg1);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -8772,7 +8870,7 @@ static PyObject *_wrap_LogVerbose(PyObject *, PyObject *args, PyObject *kwargs) 
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxLogVerbose((wxString const &)*arg1);
+        wxPyLogVerbose((wxString const &)*arg1);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -8809,7 +8907,7 @@ static PyObject *_wrap_LogStatus(PyObject *, PyObject *args, PyObject *kwargs) {
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxLogStatus((wxString const &)*arg1);
+        wxPyLogStatus((wxString const &)*arg1);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -8850,7 +8948,7 @@ static PyObject *_wrap_LogStatusFrame(PyObject *, PyObject *args, PyObject *kwar
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxLogStatus(arg1,(wxString const &)*arg2);
+        wxPyLogStatusFrame(arg1,(wxString const &)*arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -8887,7 +8985,7 @@ static PyObject *_wrap_LogSysError(PyObject *, PyObject *args, PyObject *kwargs)
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxLogSysError((wxString const &)*arg1);
+        wxPyLogSysError((wxString const &)*arg1);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -8902,6 +9000,47 @@ static PyObject *_wrap_LogSysError(PyObject *, PyObject *args, PyObject *kwargs)
     {
         if (temp1)
         delete arg1;
+    }
+    return NULL;
+}
+
+
+static PyObject *_wrap_LogGeneric(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    unsigned long arg1 ;
+    wxString *arg2 = 0 ;
+    bool temp2 = false ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "level",(char *) "msg", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:LogGeneric",kwnames,&obj0,&obj1)) goto fail;
+    arg1 = (unsigned long)SWIG_As_unsigned_SS_long(obj0); 
+    if (PyErr_Occurred()) SWIG_fail;
+    {
+        arg2 = wxString_in_helper(obj1);
+        if (arg2 == NULL) SWIG_fail;
+        temp2 = true;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxPyLogGeneric(arg1,(wxString const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    {
+        if (temp2)
+        delete arg2;
+    }
+    return resultobj;
+    fail:
+    {
+        if (temp2)
+        delete arg2;
     }
     return NULL;
 }
@@ -8925,7 +9064,7 @@ static PyObject *_wrap_LogTrace__SWIG_0(PyObject *, PyObject *args) {
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxLogTrace(arg1,(wxString const &)*arg2);
+        wxPyLogTrace(arg1,(wxString const &)*arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -8967,7 +9106,7 @@ static PyObject *_wrap_LogTrace__SWIG_1(PyObject *, PyObject *args) {
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxLogTrace((wxString const &)*arg1,(wxString const &)*arg2);
+        wxPyLogTrace((wxString const &)*arg1,(wxString const &)*arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -9032,47 +9171,6 @@ static PyObject *_wrap_LogTrace(PyObject *self, PyObject *args) {
     }
     
     PyErr_SetString(PyExc_TypeError,"No matching function for overloaded 'LogTrace'");
-    return NULL;
-}
-
-
-static PyObject *_wrap_LogGeneric(PyObject *, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    unsigned long arg1 ;
-    wxString *arg2 = 0 ;
-    bool temp2 = false ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    char *kwnames[] = {
-        (char *) "level",(char *) "msg", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:LogGeneric",kwnames,&obj0,&obj1)) goto fail;
-    arg1 = (unsigned long)SWIG_As_unsigned_SS_long(obj0); 
-    if (PyErr_Occurred()) SWIG_fail;
-    {
-        arg2 = wxString_in_helper(obj1);
-        if (arg2 == NULL) SWIG_fail;
-        temp2 = true;
-    }
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxLogGeneric(arg1,(wxString const &)*arg2);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
-    {
-        if (temp2)
-        delete arg2;
-    }
-    return resultobj;
-    fail:
-    {
-        if (temp2)
-        delete arg2;
-    }
     return NULL;
 }
 
@@ -14489,6 +14587,86 @@ static PyObject *_wrap_ART_NEW_DIR_get() {
 }
 
 
+static int _wrap_ART_HARDDISK_set(PyObject *) {
+    PyErr_SetString(PyExc_TypeError,"Variable ART_HARDDISK is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_ART_HARDDISK_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_HARDDISK)->c_str(), (&wxPyART_HARDDISK)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_HARDDISK)->c_str(), (&wxPyART_HARDDISK)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_ART_FLOPPY_set(PyObject *) {
+    PyErr_SetString(PyExc_TypeError,"Variable ART_FLOPPY is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_ART_FLOPPY_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_FLOPPY)->c_str(), (&wxPyART_FLOPPY)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_FLOPPY)->c_str(), (&wxPyART_FLOPPY)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_ART_CDROM_set(PyObject *) {
+    PyErr_SetString(PyExc_TypeError,"Variable ART_CDROM is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_ART_CDROM_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_CDROM)->c_str(), (&wxPyART_CDROM)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_CDROM)->c_str(), (&wxPyART_CDROM)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_ART_REMOVABLE_set(PyObject *) {
+    PyErr_SetString(PyExc_TypeError,"Variable ART_REMOVABLE is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_ART_REMOVABLE_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_REMOVABLE)->c_str(), (&wxPyART_REMOVABLE)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_REMOVABLE)->c_str(), (&wxPyART_REMOVABLE)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
 static int _wrap_ART_FOLDER_set(PyObject *) {
     PyErr_SetString(PyExc_TypeError,"Variable ART_FOLDER is read-only.");
     return 1;
@@ -14503,6 +14681,26 @@ static PyObject *_wrap_ART_FOLDER_get() {
         pyobj = PyUnicode_FromWideChar((&wxPyART_FOLDER)->c_str(), (&wxPyART_FOLDER)->Len());
 #else
         pyobj = PyString_FromStringAndSize((&wxPyART_FOLDER)->c_str(), (&wxPyART_FOLDER)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_ART_FOLDER_OPEN_set(PyObject *) {
+    PyErr_SetString(PyExc_TypeError,"Variable ART_FOLDER_OPEN is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_ART_FOLDER_OPEN_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_FOLDER_OPEN)->c_str(), (&wxPyART_FOLDER_OPEN)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_FOLDER_OPEN)->c_str(), (&wxPyART_FOLDER_OPEN)->Len());
 #endif
     }
     return pyobj;
@@ -29148,8 +29346,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"LogStatus", (PyCFunction) _wrap_LogStatus, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"LogStatusFrame", (PyCFunction) _wrap_LogStatusFrame, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"LogSysError", (PyCFunction) _wrap_LogSysError, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"LogTrace", _wrap_LogTrace, METH_VARARGS, NULL },
 	 { (char *)"LogGeneric", (PyCFunction) _wrap_LogGeneric, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"LogTrace", _wrap_LogTrace, METH_VARARGS, NULL },
 	 { (char *)"SafeShowMessage", (PyCFunction) _wrap_SafeShowMessage, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"new_LogNull", (PyCFunction) _wrap_new_LogNull, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"delete_LogNull", (PyCFunction) _wrap_delete_LogNull, METH_VARARGS | METH_KEYWORDS, NULL },
@@ -30658,7 +30856,12 @@ SWIGEXPORT(void) SWIG_init(void) {
     SWIG_addvarlink(SWIG_globals,(char*)"ART_REPORT_VIEW",_wrap_ART_REPORT_VIEW_get, _wrap_ART_REPORT_VIEW_set);
     SWIG_addvarlink(SWIG_globals,(char*)"ART_LIST_VIEW",_wrap_ART_LIST_VIEW_get, _wrap_ART_LIST_VIEW_set);
     SWIG_addvarlink(SWIG_globals,(char*)"ART_NEW_DIR",_wrap_ART_NEW_DIR_get, _wrap_ART_NEW_DIR_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"ART_HARDDISK",_wrap_ART_HARDDISK_get, _wrap_ART_HARDDISK_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"ART_FLOPPY",_wrap_ART_FLOPPY_get, _wrap_ART_FLOPPY_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"ART_CDROM",_wrap_ART_CDROM_get, _wrap_ART_CDROM_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"ART_REMOVABLE",_wrap_ART_REMOVABLE_get, _wrap_ART_REMOVABLE_set);
     SWIG_addvarlink(SWIG_globals,(char*)"ART_FOLDER",_wrap_ART_FOLDER_get, _wrap_ART_FOLDER_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"ART_FOLDER_OPEN",_wrap_ART_FOLDER_OPEN_get, _wrap_ART_FOLDER_OPEN_set);
     SWIG_addvarlink(SWIG_globals,(char*)"ART_GO_DIR_UP",_wrap_ART_GO_DIR_UP_get, _wrap_ART_GO_DIR_UP_set);
     SWIG_addvarlink(SWIG_globals,(char*)"ART_EXECUTABLE_FILE",_wrap_ART_EXECUTABLE_FILE_get, _wrap_ART_EXECUTABLE_FILE_set);
     SWIG_addvarlink(SWIG_globals,(char*)"ART_NORMAL_FILE",_wrap_ART_NORMAL_FILE_get, _wrap_ART_NORMAL_FILE_set);

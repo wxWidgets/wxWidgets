@@ -547,6 +547,34 @@ SWIG_Check_bool(PyObject* obj)
 
  static const wxString wxPyChoiceNameStr(wxChoiceNameStr); 
  static const wxString wxPyComboBoxNameStr(wxComboBoxNameStr); 
+
+  static PyObject* t_output_helper(PyObject* target, PyObject* o) {
+    PyObject*   o2;
+    PyObject*   o3;
+    
+    if (!target) {                   
+        target = o;
+    } else if (target == Py_None) {  
+        Py_DECREF(Py_None);
+        target = o;
+    } else {
+        if (!PyTuple_Check(target)) {
+            o2 = target;
+            target = PyTuple_New(1);
+            PyTuple_SetItem(target, 0, o2);
+        }            
+        o3 = PyTuple_New(1);            
+        PyTuple_SetItem(o3, 0, o);      
+
+        o2 = target;
+        target = PySequence_Concat(o2, o3); 
+        Py_DECREF(o2);                      
+        Py_DECREF(o3);
+    }
+    return target;
+  }
+
+
  static const wxString wxPyGaugeNameStr(wxGaugeNameStr); 
  static const wxString wxPyStaticBitmapNameStr(wxStaticBitmapNameStr); 
  static const wxString wxPyStaticBoxNameStr(wxStaticBoxNameStr); 
@@ -591,34 +619,6 @@ void wxListBox_SetItemFont(wxListBox *self,int item,wxFont const &f){
             #endif
         }
  static const wxString wxPyTextCtrlNameStr(wxTextCtrlNameStr); 
-
-  static PyObject* t_output_helper(PyObject* target, PyObject* o) {
-    PyObject*   o2;
-    PyObject*   o3;
-    
-    if (!target) {                   
-        target = o;
-    } else if (target == Py_None) {  
-        Py_DECREF(Py_None);
-        target = o;
-    } else {
-        if (!PyTuple_Check(target)) {
-            o2 = target;
-            target = PyTuple_New(1);
-            PyTuple_SetItem(target, 0, o2);
-        }            
-        o3 = PyTuple_New(1);            
-        PyTuple_SetItem(o3, 0, o);      
-
-        o2 = target;
-        target = PySequence_Concat(o2, o3); 
-        Py_DECREF(o2);                      
-        Py_DECREF(o3);
-    }
-    return target;
-  }
-
-
 
 // See my_fragments.i
 SWIGSTATICINLINE(int)
@@ -3715,6 +3715,43 @@ static PyObject *_wrap_ComboBox_SetMark(PyObject *, PyObject *args, PyObject *kw
         if (PyErr_Occurred()) SWIG_fail;
     }
     Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_ComboBox_GetMark(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxComboBox *arg1 = (wxComboBox *) 0 ;
+    long *arg2 = (long *) 0 ;
+    long *arg3 = (long *) 0 ;
+    long temp2 ;
+    int res2 = 0 ;
+    long temp3 ;
+    int res3 = 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    arg2 = &temp2; res2 = SWIG_NEWOBJ;
+    arg3 = &temp3; res3 = SWIG_NEWOBJ;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:ComboBox_GetMark",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxComboBox,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->GetSelection(arg2,arg3);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    resultobj = t_output_helper(resultobj, ((res2 == SWIG_NEWOBJ) ?
+    SWIG_From_long((*arg2)) : SWIG_NewPointerObj((void*)(arg2), SWIGTYPE_p_long, 0)));
+    resultobj = t_output_helper(resultobj, ((res3 == SWIG_NEWOBJ) ?
+    SWIG_From_long((*arg3)) : SWIG_NewPointerObj((void*)(arg3), SWIGTYPE_p_long, 0)));
     return resultobj;
     fail:
     return NULL;
@@ -31996,6 +32033,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ComboBox_Replace", (PyCFunction) _wrap_ComboBox_Replace, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"ComboBox_SetSelection", (PyCFunction) _wrap_ComboBox_SetSelection, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"ComboBox_SetMark", (PyCFunction) _wrap_ComboBox_SetMark, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"ComboBox_GetMark", (PyCFunction) _wrap_ComboBox_GetMark, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"ComboBox_SetStringSelection", (PyCFunction) _wrap_ComboBox_SetStringSelection, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"ComboBox_SetString", (PyCFunction) _wrap_ComboBox_SetString, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"ComboBox_SetEditable", (PyCFunction) _wrap_ComboBox_SetEditable, METH_VARARGS | METH_KEYWORDS, NULL },
