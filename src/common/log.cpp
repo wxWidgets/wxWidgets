@@ -47,11 +47,11 @@
 #include  <stdlib.h>
 #include  <time.h>
 
-// _WINDOWS_ is defined when windows.h is included,
-// __WINDOWS__ is defined for MS Windows compilation
-#if       defined(__WINDOWS__) && !defined(_WINDOWS_)
+#ifdef  __WINDOWS__
   #include  <windows.h>
-#endif  //windows.h
+#else   //Unix
+  #include  <signal.h>
+#endif  //Win/Unix
 
 // ----------------------------------------------------------------------------
 // non member functions
@@ -823,28 +823,28 @@ void wxOnAssert(const char *szFile, int nLine, const char *szMsg)
   // send it to the normal log destination
   wxLogDebug(szBuf);
 
-  #ifdef  __WINDOWS__
-    if ( !s_bNoAsserts ) {
-      strcat(szBuf, _("\nDo you want to stop the program?"
-                      "\nYou can also choose [Cancel] to suppress "
-                      "further warnings."));
+  if ( !s_bNoAsserts ) {
+    strcat(szBuf, _("\nDo you want to stop the program?"
+                    "\nYou can also choose [Cancel] to suppress "
+                    "further warnings."));
 
-      switch ( ::MessageBox(NULL, szBuf, _("Debug"), 
-                            MB_YESNOCANCEL | MB_ICONINFORMATION) ) {
-        case IDYES:
+    switch ( wxMessageBox(_("Debug"), szBuf, 
+                          wxYES_NO | wxCANCEL | wxICON_STOP ) ) {
+      case wxYES:
+        #ifdef __WINDOWS__
           DebugBreak();
-          break;
+        #else // Unix
+          raise(SIGTRAP);
+        #endif // Win/Unix
+        break;
 
-        case IDCANCEL:
-          s_bNoAsserts = TRUE;
-          break;
-      }
+      case wxCANCEL:
+        s_bNoAsserts = TRUE;
+        break;
+        
+      //case wxNO: nothing to do
     }
-  #else   // !Windows
-    // @@@@ don't know how to start the debugger under generic Unix
-    s_bNoAsserts = TRUE; // suppress 'unused var' warning
-    abort();
-  #endif  // Windows/!Windows
+  }
 }
 
 #endif  //DEBUG
