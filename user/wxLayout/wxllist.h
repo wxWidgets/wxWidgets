@@ -246,6 +246,9 @@ public:
    void Clear(int family = wxROMAN, int size=12, int style=wxNORMAL, int weight=wxNORMAL,
                     int underline=0, char const *fg="black", char const *bg="white");
 
+   /// return a pointer to the default settings:
+   wxLayoutObjectCmd const *GetDefaults(void) const { return m_DefaultSetting ; }
+
    //@}
 protected:
    /// font parameters:

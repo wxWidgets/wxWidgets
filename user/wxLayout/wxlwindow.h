@@ -16,6 +16,10 @@
 
 #include   "wxllist.h"
 
+#ifdef   BROKEN_COMPILER
+#   define   virtual
+#endif
+
 class wxLayoutWindow : public wxScrolledWindow
 {
 public:
@@ -23,10 +27,19 @@ public:
 
    wxLayoutList & GetLayoutList(void) { return m_llist; }
 
+   // clears the window and sets default parameters:
+   void Clear(int family = wxROMAN, int size=12, int style=wxNORMAL, int weight=wxNORMAL,
+              int underline=0, char const *fg="black", char const
+              *bg="white")
+      {
+         GetLayoutList().Clear(family,size,style,weight,underline,fg,bg);
+         SetBackgroundColour( *GetLayoutList().GetDefaults()->GetBGColour());
+      }
+
    //virtual void OnDraw(wxDC &dc);
    void OnPaint(wxPaintEvent &WXUNUSED(event));
-   /*virtual*/ void OnMouse(wxMouseEvent& event);
-   /*virtual*/ void OnChar(wxKeyEvent& event);
+   virtual void OnMouse(wxMouseEvent& event);
+   virtual void OnChar(wxKeyEvent& event);
    void UpdateScrollbars(void);
    void Print(void);
    void Erase(void)
@@ -34,6 +47,7 @@ public:
    void SetEventId(int id) { m_EventId = id; }
    wxPoint const &GetClickPosition(void) const { return
                                                     m_ClickPosition; }
+   virtual ~wxLayoutList() {} ;
 private:
    /// for sending events
    wxWindow *m_Parent;
@@ -48,5 +62,9 @@ private:
    wxPoint m_ClickPosition;
    DECLARE_EVENT_TABLE()
 };
+
+#ifdef   BROKEN_COMPILER
+#undef   virtual
+#endif
 
 #endif

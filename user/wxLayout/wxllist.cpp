@@ -329,17 +329,8 @@ wxLayoutList::Draw(wxDC &dc, bool findObject, wxPoint const &findCoords)
 
    //FIXME: who frees the brush, how long does it need to exist?
    if(m_DefaultSetting)
-   {
       m_DefaultSetting->Draw(dc,wxPoint(0,0),0,true);
-      dc.SetBackground( wxBrush(* m_DefaultSetting->GetBGColour(),wxSOLID));
-   }
-   else
-      dc.SetBackground( wxBrush(wxColour("White"), wxSOLID) ); 
 
-   dc.Clear();
-
-
-   
    // we calculate everything for drawing a line, then rewind to the
    // begin of line and actually draw it
    i = begin();

@@ -69,14 +69,13 @@ IMPLEMENT_DYNAMIC_CLASS( MyFrame, wxFrame )
    m_lwin = new wxLayoutWindow(this);
    m_lwin->SetEventId(ID_CLICK);
    m_lwin->GetLayoutList().SetEditable(true);
+   m_lwin->Clear(wxROMAN,16,wxNORMAL,wxNORMAL, false);
    m_lwin->SetFocus();
 };
 
 void
 MyFrame::AddSampleText(wxLayoutList &llist)
 {
-
-   llist.Clear(wxROMAN,16,wxNORMAL,wxNORMAL, false);
 
    llist.Insert("The quick brown fox jumps over the lazy dog.");
    llist.LineBreak();
@@ -114,8 +113,8 @@ MyFrame::AddSampleText(wxLayoutList &llist)
    llist.Insert("blue");
    llist.SetFont(-1,-1,-1,-1,-1,"black");
    llist.Insert(" and ");
-   llist.SetFont(-1,-1,-1,-1,-1,"red","black");
-   llist.Insert("red on black");
+   llist.SetFont(-1,-1,-1,-1,-1,"green","black");
+   llist.Insert("green on black");
    llist.SetFont(-1,-1,-1,-1,-1,"black","white");
    llist.Insert(" text.");
    llist.LineBreak();
