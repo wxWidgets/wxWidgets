@@ -240,8 +240,6 @@ wxWindow *wxWindowCocoa::sm_capturedWindow = NULL;
 // Constructor
 void wxWindowCocoa::Init()
 {
-    InitBase();
-
     m_cocoaNSView = NULL;
     m_cocoaHider = NULL;
     m_cocoaScroller = NULL;
