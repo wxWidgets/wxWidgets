@@ -261,60 +261,13 @@ class wxOleInit
 
 class wxActiveX : public wxWindow {
 public:
-    wxActiveX(wxWindow * parent, REFCLSID clsid, wxWindowID id = -1,
-        const wxPoint& pos = wxDefaultPosition,
-        const wxSize& size = wxDefaultSize,
-        long style = 0,
-        const wxString& name = wxPanelNameStr);
-    wxActiveX(wxWindow * parent, wxString progId, wxWindowID id = -1,
-        const wxPoint& pos = wxDefaultPosition,
-        const wxSize& size = wxDefaultSize,
-        long style = 0,
-        const wxString& name = wxPanelNameStr);
-	virtual ~wxActiveX();
-
-	void CreateActiveX(REFCLSID clsid);
-    void CreateActiveX(LPOLESTR progId);
-
-	void GetTypeInfo();
-	void GetTypeInfo(ITypeInfo *ti, bool defEventSink);
-
-	HRESULT ConnectAdvise(REFIID riid, IUnknown *eventSink);
-
-	void OnSize(wxSizeEvent&);
-	void OnSetFocus(wxFocusEvent&);
-    void OnKillFocus(wxFocusEvent&);
-
-	DECLARE_EVENT_TABLE();
-
-protected:
-    friend class FrameSite;
-    friend class wxActiveXEvents;
-
-	typedef wxAutoOleInterface<IConnectionPoint>	wxOleConnectionPoint;
-	typedef pair<wxOleConnectionPoint, DWORD>		wxOleConnection;
-	typedef vector<wxOleConnection>					wxOleConnectionArray;
-
-    wxAutoOleInterface<IOleClientSite>      m_clientSite;
-    wxAutoOleInterface<IUnknown>            m_ActiveX;
-	wxAutoOleInterface<IOleObject>			m_oleObject;
-	wxAutoOleInterface<IOleInPlaceObject>	m_oleInPlaceObject;
-    wxAutoOleInterface<IOleInPlaceActiveObject>
-
-                                            m_oleInPlaceActiveObject;
-    wxAutoOleInterface<IOleDocumentView>	m_docView;
-	HWND m_oleObjectHWND;
-    bool m_bAmbientUserMode;
-    DWORD m_docAdviseCookie;
-	wxOleConnectionArray					m_connections;
-
-    HRESULT AmbientPropertyChanged(DISPID dispid);
-
+    ////////////////////////////////////////
     // type stuff
 	class ParamX // refer to ELEMDESC, IDLDESC in MSDN
 	{
 	public:
 		USHORT	    flags;
+        bool isPtr, isSafeArray;
 		VARTYPE	    vt;
         wxString    name;
 
@@ -338,13 +291,72 @@ protected:
     typedef vector<FuncX> FuncXArray;
     typedef map<MEMBERID, int>  MemberIdList;
 
+    wxActiveX(wxWindow * parent, REFCLSID clsid, wxWindowID id = -1,
+        const wxPoint& pos = wxDefaultPosition,
+        const wxSize& size = wxDefaultSize,
+        long style = 0,
+        const wxString& name = wxPanelNameStr);
+    wxActiveX(wxWindow * parent, wxString progId, wxWindowID id = -1,
+        const wxPoint& pos = wxDefaultPosition,
+        const wxSize& size = wxDefaultSize,
+        long style = 0,
+        const wxString& name = wxPanelNameStr);
+	virtual ~wxActiveX();
+
+	void CreateActiveX(REFCLSID clsid);
+    void CreateActiveX(LPOLESTR progId);
+
+    // expose type info
+    inline int GetEventCount() const {return m_events.size();}
+    const FuncX& GetEvent(int idx) const;
+
+	HRESULT ConnectAdvise(REFIID riid, IUnknown *eventSink);
+
+	void OnSize(wxSizeEvent&);
+    void OnPaint(wxPaintEvent& event);
+    void OnMouse(wxMouseEvent& event);
+	void OnSetFocus(wxFocusEvent&);
+    void OnKillFocus(wxFocusEvent&);
+
+	DECLARE_EVENT_TABLE();
+
+protected:
+    friend class FrameSite;
+    friend class wxActiveXEvents;
+
+	typedef wxAutoOleInterface<IConnectionPoint>	wxOleConnectionPoint;
+	typedef pair<wxOleConnectionPoint, DWORD>		wxOleConnection;
+	typedef vector<wxOleConnection>					wxOleConnectionArray;
+
+    wxAutoOleInterface<IOleClientSite>      m_clientSite;
+    wxAutoOleInterface<IUnknown>            m_ActiveX;
+	wxAutoOleInterface<IOleObject>			m_oleObject;
+	wxAutoOleInterface<IOleInPlaceObject>	m_oleInPlaceObject;
+    wxAutoOleInterface<IOleInPlaceActiveObject>
+
+                                            m_oleInPlaceActiveObject;
+    wxAutoOleInterface<IOleDocumentView>	m_docView;
+    wxAutoOleInterface<IViewObject>	        m_viewObject;
+	HWND m_oleObjectHWND;
+    bool m_bAmbientUserMode;
+    DWORD m_docAdviseCookie;
+	wxOleConnectionArray					m_connections;
+
+    HRESULT AmbientPropertyChanged(DISPID dispid);
+
+	void GetTypeInfo();
+	void GetTypeInfo(ITypeInfo *ti, bool defEventSink);
+
+
     // events
     FuncXArray      m_events;
     MemberIdList    m_eventsIdx;
+
+    long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 };
 
 // events
-class wxActiveXEvent : public wxNotifyEvent
+class wxActiveXEvent : public wxCommandEvent
 {
 private:
     friend class wxActiveXEvents;
@@ -355,18 +367,23 @@ public:
 
     virtual wxEvent *Clone() const { return new wxActiveXEvent(*this); }
 
+    wxString EventName();
     int ParamCount() const;
+    wxString ParamType(int idx);
+    wxString ParamName(int idx);
     wxVariant  operator[] (int idx) const;
     wxVariant& operator[] (int idx);
     wxVariant  operator[] (wxString name) const;
     wxVariant& operator[] (wxString name);
 };
 
-const wxEventType& RegisterActiveXEvent(wxChar *eventName);
+const wxEventType& RegisterActiveXEvent(const wxChar *eventName);
+const wxEventType& RegisterActiveXEvent(DISPID event);
 
 typedef void (wxEvtHandler::*wxActiveXEventFunction)(wxActiveXEvent&);
 
 #define EVT_ACTIVEX(id, eventName, fn) DECLARE_EVENT_TABLE_ENTRY(RegisterActiveXEvent(wxT(eventName)), id, -1, (wxObjectEventFunction) (wxEventFunction) (wxActiveXEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_ACTIVEX_DISPID(id, eventDispId, fn) DECLARE_EVENT_TABLE_ENTRY(RegisterActiveXEvent(eventDispId), id, -1, (wxObjectEventFunction) (wxEventFunction) (wxActiveXEventFunction) & fn, (wxObject *) NULL ),
 
 //util
 bool MSWVariantToVariant(VARIANTARG& va, wxVariant& vx);

@@ -37,7 +37,7 @@ private:
 
 public:
     FS_DWebBrowserEvents2(wxIEHtmlWin *iewin) : m_iewin(iewin) {}
-	~FS_DWebBrowserEvents2() 
+	virtual ~FS_DWebBrowserEvents2() 
     {
     }
 

@@ -24,9 +24,11 @@ using namespace std;
 
 //////////////////////////////////////////////////////////////////////
 BEGIN_EVENT_TABLE(wxActiveX, wxWindow)
-	EVT_SIZE(OnSize)
-	EVT_SET_FOCUS(OnSetFocus)
-	EVT_KILL_FOCUS(OnKillFocus)
+    EVT_SIZE(wxActiveX::OnSize)
+    EVT_PAINT(wxActiveX::OnPaint)
+    EVT_MOUSE_EVENTS(wxActiveX::OnMouse)
+	EVT_SET_FOCUS(wxActiveX::OnSetFocus)
+	EVT_KILL_FOCUS(wxActiveX::OnKillFocus)
 END_EVENT_TABLE()
 
 class wxActiveX;
@@ -47,7 +49,7 @@ private:
 
 public:
 	FrameSite(wxActiveX * win);
-	~FrameSite();
+	virtual ~FrameSite();
 
 	//IOleWindow
 	STDMETHODIMP GetWindow(HWND*);
@@ -269,6 +271,10 @@ void wxActiveX::CreateActiveX(REFCLSID clsid)
 	hret = m_oleObject.QueryInterface(IID_IOleObject, m_ActiveX); 
 	wxASSERT(SUCCEEDED(hret));
 
+    // get IViewObject Interface
+    hret = m_viewObject.QueryInterface(IID_IViewObject, m_ActiveX); 
+	wxASSERT(SUCCEEDED(hret));
+
     // document advise
     m_docAdviseCookie = 0;
     hret = m_oleObject->Advise(adviseSink, &m_docAdviseCookie);
@@ -372,8 +378,49 @@ struct less_wxStringI
     };
 };
 
-typedef map<wxString, wxEventType *, less_wxStringI> ActiveXEventMap;
-static ActiveXEventMap sg_eventMap;
+typedef map<wxString, wxEventType *, less_wxStringI> ActiveXNamedEventMap;
+static ActiveXNamedEventMap sg_NamedEventMap;
+
+const wxEventType& RegisterActiveXEvent(const wxChar *eventName)
+{
+    wxString ev = eventName;
+    ActiveXNamedEventMap::iterator it = sg_NamedEventMap.find(ev);
+    if (it == sg_NamedEventMap.end())
+    {
+        wxEventType  *et = new wxEventType(wxNewEventType());
+        sg_NamedEventMap[ev] = et;
+
+        return *et;
+    };
+
+    return *(it->second);
+};
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Map of Event DISPID's to eventTypes
+// created dynamically at run time in:
+//      EVT_ACTIVEX(eventName, id, fn)
+// we map the pointer to them so that:
+//      const wxEventType& RegisterActiveXEvent(wxString eventName);
+// can return a const reference, which is neccessary for event tables
+
+typedef map<DISPID, wxEventType *> ActiveXDISPIDEventMap;
+static ActiveXDISPIDEventMap sg_dispIdEventMap;
+
+const wxEventType& RegisterActiveXEvent(DISPID event)
+{
+    ActiveXDISPIDEventMap::iterator it = sg_dispIdEventMap.find(event);
+    if (it == sg_dispIdEventMap.end())
+    {
+        wxEventType  *et = new wxEventType(wxNewEventType());
+        sg_dispIdEventMap[event] = et;
+
+        return *et;
+    };
+
+    return *(it->second);
+};
 
 // one off class for automatic freeing of activeX eventtypes
 class ActiveXEventMapFlusher
@@ -381,31 +428,26 @@ class ActiveXEventMapFlusher
 public:
     ~ActiveXEventMapFlusher()
     {
-        ActiveXEventMap::iterator it = sg_eventMap.end();
-        while (it != sg_eventMap.end())
+        // Named events
+        ActiveXNamedEventMap::iterator it = sg_NamedEventMap.end();
+        while (it != sg_NamedEventMap.end())
         {
             delete it->second;
             it++;
+        };
+
+        // DISPID events
+        ActiveXDISPIDEventMap::iterator dit = sg_dispIdEventMap.end();
+        while (dit != sg_dispIdEventMap.end())
+        {
+            delete dit->second;
+            dit++;
         };
     };
 };
 
 static ActiveXEventMapFlusher s_dummyActiveXEventMapFlusher;
 
-const wxEventType& RegisterActiveXEvent(wxChar *eventName)
-{
-    wxString ev = eventName;
-    ActiveXEventMap::iterator it = sg_eventMap.find(ev);
-    if (it == sg_eventMap.end())
-    {
-        wxEventType  *et = new wxEventType(wxNewEventType());
-        sg_eventMap[ev] = et;
-
-        return *et;
-    };
-
-    return *(it->second);
-};
 
 //////////////////////////////////////////////////////
 bool MSWVariantToVariant(VARIANTARG& va, wxVariant& vx)
@@ -487,7 +529,7 @@ private:
 
 public:
     wxActiveXEvents(wxActiveX *ax) : m_activeX(ax) {}
-	~wxActiveXEvents() 
+	virtual ~wxActiveXEvents() 
     {
     }
 
@@ -508,6 +550,56 @@ public:
     };
 
 
+    void DispatchEvent(int eventIdx, const wxEventType& eventType, DISPPARAMS * pDispParams)
+    {
+        wxASSERT(eventIdx >= 0 && eventIdx < int(m_activeX->m_events.size()));
+        wxActiveX::FuncX &func = m_activeX->m_events[eventIdx];
+
+		wxActiveXEvent  event;
+    	event.SetId(m_activeX->GetId());
+	    event.SetEventType(eventType);
+        event.m_params.NullList();
+        event.m_params.SetName(func.name);
+
+        // arguments
+        if (pDispParams)
+        {
+			// cdecl call
+            // sometimes the pDispParams does not match the param info for a activex control
+            int nArg = min(func.params.size(), pDispParams->cArgs);
+            for (int i = nArg - 1; i >= 0; i--)
+            {
+                VARIANTARG& va = pDispParams->rgvarg[i];
+				wxActiveX::ParamX &px = func.params[nArg - i - 1];
+                wxVariant vx;
+
+                vx.SetName(px.name);
+                MSWVariantToVariant(va, vx);
+                event.m_params.Append(vx);
+            };
+        };
+
+		if (func.hasOut)
+		{
+            int nArg = min(func.params.size(), pDispParams->cArgs);
+    		m_activeX->GetParent()->ProcessEvent(event);
+            for (int i = 0; i < nArg; i++)
+            {
+                VARIANTARG& va = pDispParams->rgvarg[i];
+				wxActiveX::ParamX &px = func.params[nArg - i - 1];
+
+				if (px.IsOut())
+				{
+					wxVariant& vx = event.m_params[nArg - i - 1];
+					
+					VariantToMSWVariant(vx, va);
+				};
+			};
+		}
+		else
+    		m_activeX->GetParent()->AddPendingEvent(event);
+
+    };
 
 	STDMETHODIMP Invoke(DISPID dispIdMember, REFIID riid, LCID lcid,
 						  WORD wFlags, DISPPARAMS * pDispParams,
@@ -517,60 +609,33 @@ public:
 	    if (wFlags & (DISPATCH_PROPERTYGET | DISPATCH_PROPERTYPUT | DISPATCH_PROPERTYPUTREF))
             return E_NOTIMPL;
 
-        // map dispid to name
+        wxASSERT(m_activeX);
+
+        // map dispid to m_eventsIdx
         wxActiveX::MemberIdList::iterator mid = m_activeX->m_eventsIdx.find((MEMBERID) dispIdMember);
         if (mid == m_activeX->m_eventsIdx.end())
             return S_OK;
 
-        int idx = mid->second;
+        int funcIdx = mid->second;      
+        wxActiveX::FuncX &func = m_activeX->m_events[funcIdx];
 
-        
-        wxActiveX::FuncX &func = m_activeX->m_events[idx];
 
-        ActiveXEventMap::iterator it = sg_eventMap.find(func.name);
-        if (it == sg_eventMap.end())
-            return S_OK;
-
-		wxActiveXEvent  event;
-    	event.SetId(m_activeX->GetId());
-	    event.SetEventType(*(it->second));
-        event.m_params.NullList();
-
-        // arguments
-        if (pDispParams)
+        // try to find dispid event
+        ActiveXDISPIDEventMap::iterator dit = sg_dispIdEventMap.find(dispIdMember);
+        if (dit != sg_dispIdEventMap.end())
         {
-			// cdecl call
-            for (int i = pDispParams->cArgs - 1; i >= 0; i--)
-            {
-                VARIANTARG& va = pDispParams->rgvarg[i];
-				wxActiveX::ParamX &px = func.params[pDispParams->cArgs - i - 1];
-                wxVariant vx;
-
-                MSWVariantToVariant(va, vx);
-                vx.SetName(px.name);
-                event.m_params.Append(vx);
-            };
+            // Dispatch Event
+            DispatchEvent(funcIdx, *(dit->second), pDispParams);
+        	return S_OK;
         };
 
-		if (func.hasOut)
-		{
-    		m_activeX->GetParent()->ProcessEvent(event);
-            for (unsigned int i = 0; i < pDispParams->cArgs; i++)
-            {
-                VARIANTARG& va = pDispParams->rgvarg[i];
-				wxActiveX::ParamX &px = func.params[pDispParams->cArgs - i - 1];
+        // try named event
+        ActiveXNamedEventMap::iterator nit = sg_NamedEventMap.find(func.name);
+        if (nit == sg_NamedEventMap.end())
+            return S_OK;
 
-				if (px.IsOut())
-				{
-					wxVariant& vx = event.m_params[pDispParams->cArgs - i - 1];
-					
-					VariantToMSWVariant(vx, va);
-				};
-			};
-		}
-		else
-    		m_activeX->GetParent()->AddPendingEvent(event);
-
+        // Dispatch Event
+        DispatchEvent(funcIdx, *(nit->second), pDispParams);
     	return S_OK;
     }
 };
@@ -581,10 +646,28 @@ DEFINE_OLE_TABLE(wxActiveXEvents)
 	OLE_INTERFACE(IID_IDispatch, IDispatch)
 END_OLE_TABLE;
 
+wxString wxActiveXEvent::EventName()
+{
+    return m_params.GetName();
+};
 
 int wxActiveXEvent::ParamCount() const
 {
     return m_params.GetCount();
+};
+
+wxString wxActiveXEvent::ParamType(int idx)
+{
+    wxASSERT(idx >= 0 && idx < m_params.GetCount());
+
+    return m_params[idx].GetType();
+};
+
+wxString wxActiveXEvent::ParamName(int idx)
+{
+    wxASSERT(idx >= 0 && idx < m_params.GetCount());
+
+    return m_params[idx].GetName();
 };
 
 static wxVariant nullVar;
@@ -764,18 +847,25 @@ void wxActiveX::GetTypeInfo(ITypeInfo *ti, bool defEventSink)
                     BSTR *pnames = new BSTR[maxPNames];
 
                     hret = typeInfo->GetNames(fd->memid, pnames, maxPNames, &nPNames);
+                    wxASSERT(int(nPNames) >= fd->cParams + 1);
 
                     SysFreeString(pnames[0]);
 					// params
 					for (int p = 0; p < fd->cParams; p++)
 					{
 						ParamX param;
+
 						param.flags = fd->lprgelemdescParam[p].idldesc.wIDLFlags;
 						param.vt = fd->lprgelemdescParam[p].tdesc.vt;
+                        param.isPtr = (param.vt == VT_PTR);
+                        param.isSafeArray = (param.vt == VT_SAFEARRAY);
+                        if (param.isPtr || param.isSafeArray)
+                            param.vt = fd->lprgelemdescParam[p].tdesc.lptdesc->vt;
+
                         param.name = pnames[p + 1];
                         SysFreeString(pnames[p + 1]);
 
-						func.hasOut |= param.IsOut();
+						func.hasOut |= (param.IsOut() || param.isPtr);
 						func.params.push_back(param);
 					};
                     delete [] pnames;
@@ -791,6 +881,17 @@ void wxActiveX::GetTypeInfo(ITypeInfo *ti, bool defEventSink)
 
 	typeInfo->ReleaseTypeAttr(ta);
 };
+
+///////////////////////////////////////////////
+// Type Info exposure
+const wxActiveX::FuncX& wxActiveX::GetEvent(int idx) const
+{
+    wxASSERT(idx >= 0 && idx < GetEventCount());
+
+    return m_events[idx];
+};
+
+///////////////////////////////////////////////
 
 HRESULT wxActiveX::ConnectAdvise(REFIID riid, IUnknown *events)
 {
@@ -865,9 +966,6 @@ void wxActiveX::OnSize(wxSizeEvent& event)
 	if (w <= 0 && h <= 0)
 		return;
 
-	if (m_oleInPlaceObject.Ok()) 
-		m_oleInPlaceObject->SetObjectRects(&posRect, &posRect);
-
 	// extents are in HIMETRIC units
     if (m_oleObject.Ok())
     {
@@ -880,7 +978,131 @@ void wxActiveX::OnSize(wxSizeEvent& event)
         if (sz2.cx !=  sz.cx || sz.cy != sz2.cy)
             m_oleObject->SetExtent(DVASPECT_CONTENT, &sz);
     };
+
+    if (m_oleInPlaceObject.Ok()) 
+		m_oleInPlaceObject->SetObjectRects(&posRect, &posRect);
 }
+
+void wxActiveX::OnPaint(wxPaintEvent& event)
+{
+	wxLogTrace(wxT("repainting activex win"));
+	wxPaintDC dc(this);
+	dc.BeginDrawing();
+	int w, h;
+	GetSize(&w, &h);
+	RECT posRect;
+	posRect.left = 0;
+	posRect.top = 0;
+	posRect.right = w;
+	posRect.bottom = h;
+
+	// Draw only when control is windowless or deactivated
+	if (m_viewObject)
+	{
+		::RedrawWindow(m_oleObjectHWND, NULL, NULL, RDW_INTERNALPAINT);
+		{
+			RECTL *prcBounds = (RECTL *) &posRect;
+			m_viewObject->Draw(DVASPECT_CONTENT, -1, NULL, NULL, NULL, 
+				(HDC)dc.GetHDC(), prcBounds, NULL, NULL, 0);
+		}
+	}
+	else
+	{
+		dc.SetBrush(*wxRED_BRUSH);
+		dc.DrawRectangle(0, 0, w, h);
+		dc.SetBrush(wxNullBrush);
+	}
+	dc.EndDrawing();
+}
+
+
+void wxActiveX::OnMouse(wxMouseEvent& event)
+{
+	if (m_oleObjectHWND == NULL) 
+    { 
+        wxLogTrace(wxT("no oleInPlaceObject")); 
+        event.Skip(); 
+        return; 
+    }
+
+	wxLogTrace(wxT("mouse event"));
+	UINT msg = 0;
+	WPARAM wParam = 0;
+	LPARAM lParam = 0;
+	LRESULT lResult = 0;
+
+	if (event.m_metaDown) 
+        wParam |= MK_CONTROL;
+	if (event.m_shiftDown) 
+        wParam |= MK_SHIFT;
+	if (event.m_leftDown) 
+        wParam |= MK_LBUTTON;
+	if (event.m_middleDown) 
+        wParam |= MK_MBUTTON;
+	if (event.m_rightDown) 
+        wParam |= MK_RBUTTON;
+	lParam = event.m_x << 16;
+	lParam |= event.m_y;
+
+	if (event.LeftDown()) 
+        msg = WM_LBUTTONDOWN;
+	else if (event.LeftDClick()) 
+        msg = WM_LBUTTONDBLCLK;
+	else if (event.LeftUp()) 
+        msg = WM_LBUTTONUP;
+	else if (event.MiddleDown()) 
+        msg = WM_MBUTTONDOWN;
+	else if (event.MiddleDClick()) 
+        msg = WM_MBUTTONDBLCLK;
+	else if (event.MiddleUp()) 
+        msg = WM_MBUTTONUP;
+	else if (event.RightDown()) 
+        msg = WM_RBUTTONDOWN;
+	else if (event.RightDClick()) 
+        msg = WM_RBUTTONDBLCLK;
+	else if (event.RightUp()) 
+        msg = WM_RBUTTONUP;
+	else if (event.Moving() || event.Dragging()) 
+        msg = WM_MOUSEMOVE;
+
+	wxString log;
+	if (msg == 0) 
+    { 
+        wxLogTrace(wxT("no message"));
+        event.Skip(); return; 
+    };
+
+	if (!::SendMessage(m_oleObjectHWND, msg, wParam, lParam)) 
+    { 
+        wxLogTrace(wxT("msg not delivered"));
+        event.Skip(); 
+        return; 
+    };
+
+	wxLogTrace(wxT("msg sent"));
+}
+
+long wxActiveX::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+{
+	if (m_oleObjectHWND == NULL)
+        return wxWindow::MSWWindowProc(nMsg, wParam, lParam);
+
+    switch(nMsg)
+    {
+    case WM_CHAR:
+    case WM_DEADCHAR:
+    case WM_KEYDOWN:
+    case WM_KEYUP:
+    case WM_SYSCHAR:
+    case WM_SYSDEADCHAR:
+    case WM_SYSKEYDOWN:
+    case WM_SYSKEYUP:
+        PostMessage(m_oleObjectHWND, nMsg, wParam, lParam);
+
+    default:
+        return wxWindow::MSWWindowProc(nMsg, wParam, lParam);
+    };
+};
 
 void wxActiveX::OnSetFocus(wxFocusEvent& event)
 {
