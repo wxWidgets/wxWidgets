@@ -297,6 +297,8 @@ class LineShape(Shape):
             point = wx.RealPoint(-999, -999)
             self._lineControlPoints.append(point)
 
+        self._initialised = False
+        
     def InsertLineControlPoint(self, dc = None):
         """Insert a control point at an arbitrary position."""
         if dc:
@@ -346,6 +348,7 @@ class LineShape(Shape):
                         y2 = first_point[1]
                         y1 = last_point[1]
                     self._lineControlPoints[i] = wx.RealPoint((x2 - x1) / 2.0 + x1, (y2 - y1) / 2.0 + y1)
+                    self._initialised = True
                     
     def FormatText(self, dc, s, i):
         """Format a text string according to the region size, adding
@@ -548,8 +551,8 @@ class LineShape(Shape):
             dy = point2[1] - point1[1]
 
             seg_len = math.sqrt(dx * dx + dy * dy)
-            if dy == 0 or dx == 0:
-                return False
+            if dy == 0 and dx == 0:
+                continue
             distance_from_seg = seg_len * float((x - point1[0]) * dy - (y - point1[1]) * dx) / (dy * dy + dx * dx)
             distance_from_prev = seg_len * float((y - point1[1]) * dy + (x - point1[0]) * dx) / (dy * dy + dx * dx)
 
@@ -904,9 +907,6 @@ class LineShape(Shape):
         if not self._from or not self._to:
             return
 
-        if len(self._lineControlPoints) > 2:
-            self.Initialise()
-
         # Do each end - nothing in the middle. User has to move other points
         # manually if necessary
         end_x, end_y, other_end_x, other_end_y = self.FindLineEndPoints()
@@ -914,6 +914,9 @@ class LineShape(Shape):
         oldX, oldY = self._xpos, self._ypos
 
         self.SetEnds(end_x, end_y, other_end_x, other_end_y)
+
+        if len(self._lineControlPoints) > 2:
+            self.Initialise()
 
         # Do a second time, because one may depend on the other
         end_x, end_y, other_end_x, other_end_y = self.FindLineEndPoints()
@@ -947,7 +950,7 @@ class LineShape(Shape):
         second_point = self._lineControlPoints[1]
         second_last_point = self._lineControlPoints[-2]
         
-        if len(self._lineControlPoints) > 2:
+        if len(self._lineControlPoints) > 2 and self._initialised:
             if self._from.GetAttachmentMode() != ATTACHMENT_MODE_NONE:
                 nth, no_arcs = self.FindNth(self._from, False) # Not incoming
                 end_x, end_y = self._from.GetAttachmentPosition(self._attachmentFrom, nth, no_arcs, self)
@@ -999,7 +1002,6 @@ class LineShape(Shape):
         for point in self._lineControlPoints:
             points.append(wx.Point(point[0], point[1]))
 
-        #print points
         if self._isSpline:
             dc.DrawSpline(points)
         else:
@@ -1088,7 +1090,7 @@ class LineShape(Shape):
             self._controlPoints.append(control)
 
     def ResetControlPoints(self):
-        if self._canvas and self._lineControlPoints:
+        if self._canvas and self._lineControlPoints and self._controlPoints:
             for i in range(min(len(self._controlPoints), len(self._lineControlPoints))):
                 point = self._lineControlPoints[i]
                 control = self._controlPoints[i]
@@ -1142,8 +1144,9 @@ class LineShape(Shape):
 
             pt.SetX(x)
             pt.SetY(y)
-            pt._point = x, y
-
+            pt._point[0] = x
+            pt._point[1] = y
+            
             old_pen = self.GetPen()
             old_brush = self.GetBrush()
 
@@ -1177,7 +1180,8 @@ class LineShape(Shape):
 
             pt._xpos = x
             pt._ypos = y
-            pt._point = x, y
+            pt._point[0] = x
+            pt._point[1] = y
 
             old_pen = self.GetPen()
             old_brush = self.GetBrush()
@@ -1213,7 +1217,8 @@ class LineShape(Shape):
             # as it changed shape.
             pt._xpos = pt._originalPos[0]
             pt._ypos = pt._originalPos[1]
-            pt._point = pt._originalPos[0], pt._originalPos[1]
+            pt._point[0] = pt._originalPos[0]
+            pt._point[1] = pt._originalPos[1]
 
             self.OnMoveMiddleControlPoint(dc, pt, rpt)
 
@@ -1221,22 +1226,23 @@ class LineShape(Shape):
             if pt._oldCursor:
                 self._canvas.SetCursor(pt._oldCursor)
 
-                if self.GetFrom():
-                    self.GetFrom().MoveLineToNewAttachment(dc, self, x, y)
+            if self.GetFrom():
+                self.GetFrom().MoveLineToNewAttachment(dc, self, x, y)
 
         if pt._type == CONTROL_POINT_ENDPOINT_TO:
             if pt._oldCursor:
                 self._canvas.SetCursor(pt._oldCursor)
 
-                if self.GetTo():
-                    self.GetTo().MoveLineToNewAttachment(dc, self, x, y)
+            if self.GetTo():
+                self.GetTo().MoveLineToNewAttachment(dc, self, x, y)
 
     # This is called only when a non-end control point is moved
     def OnMoveMiddleControlPoint(self, dc, lpt, pt):
         lpt._xpos = pt[0]
         lpt._ypos = pt[1]
 
-        lpt._point = pt[0], pt[1]
+        lpt._point[0] = pt[0]
+        lpt._point[1] = pt[1]
 
         self.GetEventHandler().OnMoveLink(dc)
 
