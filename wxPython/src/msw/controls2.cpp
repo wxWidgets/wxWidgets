@@ -7780,7 +7780,7 @@ static PyObject *_wrap_wxTreeCtrl_GetFirstChild(PyObject *self, PyObject *args, 
     wxTreeItemId * _result;
     wxPyTreeCtrl * _arg0;
     wxTreeItemId * _arg1;
-    long * _arg2;
+    long * _arg2 = (long *) &0;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
     long  temp;
@@ -7789,7 +7789,7 @@ static PyObject *_wrap_wxTreeCtrl_GetFirstChild(PyObject *self, PyObject *args, 
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxTreeCtrl_GetFirstChild",_kwnames,&_argo0,&_argo1,&_obj2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|O:wxTreeCtrl_GetFirstChild",_kwnames,&_argo0,&_argo1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -7805,6 +7805,7 @@ static PyObject *_wrap_wxTreeCtrl_GetFirstChild(PyObject *self, PyObject *args, 
         return NULL;
         }
     }
+    if (_obj2)
 {
   temp = (long) PyInt_AsLong(_obj2);
   _arg2 = &temp;

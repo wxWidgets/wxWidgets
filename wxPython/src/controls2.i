@@ -1213,7 +1213,7 @@ public:
 
     size_t GetChildrenCount(const wxTreeItemId& item, bool recursively = TRUE);
 
-    wxTreeItemId GetFirstChild(const wxTreeItemId& item, long& INOUT);
+    wxTreeItemId GetFirstChild(const wxTreeItemId& item, long& INOUT=0);
     wxTreeItemId GetNextChild(const wxTreeItemId& item, long& INOUT);
     wxTreeItemId GetNextSibling(const wxTreeItemId& item);
     wxTreeItemId GetPrevSibling(const wxTreeItemId& item);
