@@ -751,17 +751,22 @@ wxContractPath (const wxString& filename, const wxString& envname, const wxStrin
 #endif
 
   // Handle User's home (ignore root homes!)
-  size_t len = 0;
-  if ((val = wxGetUserHome (user)) != NULL &&
-      (len = wxStrlen(val)) > 2 &&
-      wxStrncmp(dest, val, len) == 0)
-    {
-      wxStrcpy(wxFileFunctionsBuffer, wxT("~"));
-      if (user != wxT(""))
-             wxStrcat(wxFileFunctionsBuffer, (const wxChar*) user);
-      wxStrcat(wxFileFunctionsBuffer, dest + len);
-      wxStrcpy (dest, wxFileFunctionsBuffer);
-    }
+  val = wxGetUserHome (user);
+  if (!val)
+    return dest;
+
+  const size_t len = wxStrlen(val);
+  if (len <= 2)
+    return dest;
+
+  if (wxStrncmp(dest, val, len) == 0)
+  {
+    wxStrcpy(wxFileFunctionsBuffer, wxT("~"));
+    if (user != wxT(""))
+           wxStrcat(wxFileFunctionsBuffer, (const wxChar*) user);
+    wxStrcat(wxFileFunctionsBuffer, dest + len);
+    wxStrcpy (dest, wxFileFunctionsBuffer);
+  }
 
   return dest;
 }
