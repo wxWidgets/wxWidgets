@@ -39,8 +39,16 @@
 
 #include "wx/msw/private.h"
 
+#ifndef BST_UNCHECKED
+    #define BST_UNCHECKED 0x0000
+#endif
+
 #ifndef BST_CHECKED
     #define BST_CHECKED 0x0001
+#endif
+
+#ifndef BST_INDETERMINATE
+    #define BST_INDETERMINATE 0x0002
 #endif
 
 // ============================================================================
@@ -66,14 +74,14 @@ wxBEGIN_FLAGS( wxCheckBoxStyle )
     wxFLAGS_MEMBER(wxDOUBLE_BORDER)
     wxFLAGS_MEMBER(wxRAISED_BORDER)
     wxFLAGS_MEMBER(wxSTATIC_BORDER)
-    wxFLAGS_MEMBER(wxBORDER)
+    wxFLAGS_MEMBER(wxNO_BORDER)
 
     // standard window styles
     wxFLAGS_MEMBER(wxTAB_TRAVERSAL)
     wxFLAGS_MEMBER(wxCLIP_CHILDREN)
     wxFLAGS_MEMBER(wxTRANSPARENT_WINDOW)
     wxFLAGS_MEMBER(wxWANTS_CHARS)
-    wxFLAGS_MEMBER(wxFULL_REPAINT_ON_RESIZE)
+    wxFLAGS_MEMBER(wxNO_FULL_REPAINT_ON_RESIZE)
     wxFLAGS_MEMBER(wxALWAYS_SHOW_SB )
     wxFLAGS_MEMBER(wxVSCROLL)
     wxFLAGS_MEMBER(wxHSCROLL)
@@ -107,9 +115,20 @@ IMPLEMENT_DYNAMIC_CLASS(wxCheckBox, wxControl)
 bool wxCheckBox::MSWCommand(WXUINT WXUNUSED(param), WXWORD WXUNUSED(id))
 {
     wxCommandEvent event(wxEVT_COMMAND_CHECKBOX_CLICKED, m_windowId);
-    event.SetInt(GetValue());
+    wxCheckBoxState state = Get3StateValue();
+
+    // If the style flag to allow the user setting the undetermined state
+    // is not set, then skip the undetermined state and set it to unchecked.
+    if ( state == wxCHK_UNDETERMINED && !Is3rdStateAllowedForUser() )
+    {
+        state = wxCHK_UNCHECKED;
+        Set3StateValue(state);
+    }
+
+    event.SetInt(state);
     event.SetEventObject(this);
     ProcessCommand(event);
+
     return TRUE;
 }
 
@@ -124,9 +143,26 @@ bool wxCheckBox::Create(wxWindow *parent,
     if ( !CreateControl(parent, id, pos, size, style, validator, name) )
         return FALSE;
 
-    long msStyle = BS_AUTOCHECKBOX | WS_TABSTOP;
+    m_style = style;
+
+    long msStyle = WS_TABSTOP;
+
+    if ( style & wxCHK_3STATE )
+    {
+        msStyle |= BS_AUTO3STATE;
+    }
+    else
+    {
+        wxASSERT_MSG( !Is3rdStateAllowedForUser(),
+            wxT("Using wxCH_ALLOW_3RD_STATE_FOR_USER")
+            wxT(" style flag for a 2-state checkbox is useless") );
+        msStyle |= BS_AUTOCHECKBOX;
+    }
+
     if ( style & wxALIGN_RIGHT )
+    {
         msStyle |= BS_LEFTTEXT;
+    }
 
     return MSWCreateControl(wxT("BUTTON"), msStyle, pos, size, label, 0);
 }
@@ -170,18 +206,50 @@ wxSize wxCheckBox::DoGetBestSize() const
 
 void wxCheckBox::SetValue(bool val)
 {
-    SendMessage(GetHwnd(), BM_SETCHECK, val, 0);
+    if (val)
+    {
+        Set3StateValue(wxCHK_CHECKED);
+    }
+    else
+    {
+        Set3StateValue(wxCHK_UNCHECKED);
+    }
 }
 
 bool wxCheckBox::GetValue() const
 {
-    return (SendMessage(GetHwnd(), BM_GETCHECK, 0, 0) & BST_CHECKED) != 0;
+    return (Get3StateValue() != 0);
 }
 
 void wxCheckBox::Command(wxCommandEvent& event)
 {
-    SetValue(event.GetInt() != 0);
+    int state = event.GetInt();
+    wxCHECK_RET( (state == wxCHK_UNCHECKED) || (state == wxCHK_CHECKED)
+        || (state == wxCHK_UNDETERMINED),
+        wxT("event.GetInt() returned an invalid checkbox state") );
+
+    Set3StateValue((wxCheckBoxState) state);
     ProcessCommand(event);
+}
+
+wxCOMPILE_TIME_ASSERT(wxCHK_UNCHECKED == BST_UNCHECKED
+    && wxCHK_CHECKED == BST_CHECKED
+    && wxCHK_UNDETERMINED == BST_INDETERMINATE, EnumValuesIncorrect);
+
+void wxCheckBox::DoSet3StateValue(wxCheckBoxState state)
+{
+    ::SendMessage(GetHwnd(), BM_SETCHECK, (WPARAM) state, 0);
+}
+
+wxCheckBoxState wxCheckBox::DoGet3StateValue() const
+{
+#ifdef __WIN32__
+    return (wxCheckBoxState) ::SendMessage(GetHwnd(), BM_GETCHECK, 0, 0);
+#else
+    return (wxCheckBoxState) ((::SendMessage(GetHwnd(), BM_GETCHECK, 0, 0)
+        & 0x001) == 0x001);
+#endif
+
 }
 
 #endif // wxUSE_CHECKBOX

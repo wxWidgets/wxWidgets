@@ -18,7 +18,38 @@
 
 #include "wx/control.h"
 
-WXDLLEXPORT_DATA(extern const wxChar*) wxCheckBoxNameStr;
+
+/*
+ * wxCheckBox style flags
+ * (Using wxCHK_* because wxCB_* is used by wxComboBox).
+ * Determine whether to use a 3-state or 2-state
+ * checkbox. 3-state enables to differentiate
+ * between 'unchecked', 'checked' and 'undetermined'.
+ */
+#define wxCHK_2STATE           0x0000
+#define wxCHK_3STATE           0x1000
+
+/*
+ * If this style is set the user can set the checkbox to the
+ * undetermined state. If not set the undetermined set can only
+ * be set programmatically.
+ * This style can only be used with 3 state checkboxes.
+ */
+#define wxCHK_ALLOW_3RD_STATE_FOR_USER 0x2000
+
+/*
+ * The possible states of a 3-state checkbox (Compatible
+ * with the 2-state checkbox).
+ */
+enum wxCheckBoxState
+{
+    wxCHK_UNCHECKED,
+    wxCHK_CHECKED,
+    wxCHK_UNDETERMINED /* 3-state checkbox only */
+};
+
+
+WXDLLEXPORT_DATA(extern const wxChar *) wxCheckBoxNameStr;
 
 // ----------------------------------------------------------------------------
 // wxCheckBox: a control which shows a label and a box which may be checked
@@ -30,10 +61,64 @@ public:
     wxCheckBoxBase() { }
 
     // set/get the checked status of the listbox
-    virtual void SetValue(bool value) = 0;
+    virtual void SetValue(const bool value) = 0;
     virtual bool GetValue() const = 0;
 
-    bool IsChecked() const { return GetValue(); }
+    bool IsChecked() const
+    {
+        wxASSERT_MSG( !Is3State(), wxT("Calling IsChecked() doesn't make sense for")
+            wxT(" a three state checkbox, Use Get3StateValue() instead") );
+
+        return GetValue();
+    }
+
+    wxCheckBoxState Get3StateValue() const
+    {
+        wxCheckBoxState state = DoGet3StateValue();
+
+        if ( state == wxCHK_UNDETERMINED && !Is3State() )
+        {
+            // Undetermined state with a 2-state checkbox??
+            wxFAIL_MSG( wxT("DoGet3StateValue() says the 2-state checkbox is ")
+                wxT("in an undetermined/third state") );
+
+            state = wxCHK_UNCHECKED;
+        }
+
+        return state;
+    }
+
+    void Set3StateValue(wxCheckBoxState state)
+    {
+        if ( state == wxCHK_UNDETERMINED && !Is3State() )
+        {
+            wxFAIL_MSG(wxT("Setting a 2-state checkbox to undetermined state"));
+            state = wxCHK_UNCHECKED;
+        }
+
+        DoSet3StateValue(state);
+    }
+
+    bool Is3State() const
+    {
+        return (m_style & wxCHK_3STATE) != 0;
+    }
+
+    bool Is3rdStateAllowedForUser() const
+    {
+        return (m_style & wxCHK_ALLOW_3RD_STATE_FOR_USER) != 0;
+    }
+
+protected:
+    int m_style;
+
+    virtual void DoSet3StateValue(wxCheckBoxState WXUNUSED(state)) { wxFAIL; }
+
+    virtual wxCheckBoxState DoGet3StateValue() const
+    {
+        wxFAIL;
+        return wxCHK_UNCHECKED;
+    }
 
 private:
     DECLARE_NO_COPY_CLASS(wxCheckBoxBase)

@@ -472,6 +472,10 @@ SOURCE=.\button.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\checkbox.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\combobox.cpp
 # End Source File
 # Begin Source File

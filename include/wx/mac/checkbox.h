@@ -37,6 +37,10 @@ public:
             const wxString& name = wxCheckBoxNameStr);
     virtual void SetValue(bool);
     virtual bool GetValue() const;
+
+    void DoSet3StateValue(wxCheckBoxState val);
+    virtual wxCheckBoxState DoGet3StateValue() const;
+
     virtual void MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool mouseStillDown );
     virtual void Command(wxCommandEvent& event);
 

@@ -30,6 +30,7 @@ WIDGETS_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS_6) -I$(BCCDIR)\include \
 	-I. $(__DLLFLAG_p) -I.\..\..\samples $(CXXFLAGS)
 WIDGETS_OBJECTS =  \
 	$(OBJS)\widgets_button.obj \
+	$(OBJS)\widgets_checkbox.obj \
 	$(OBJS)\widgets_combobox.obj \
 	$(OBJS)\widgets_gauge.obj \
 	$(OBJS)\widgets_listbox.obj \
@@ -164,6 +165,9 @@ $(OBJS):
 all: $(OBJS)\widgets.exe
 
 $(OBJS)\widgets_button.obj: .\button.cpp
+	$(CXX) -q -c -P -o$@ $(WIDGETS_CXXFLAGS) $**
+
+$(OBJS)\widgets_checkbox.obj: .\checkbox.cpp
 	$(CXX) -q -c -P -o$@ $(WIDGETS_CXXFLAGS) $**
 
 $(OBJS)\widgets_combobox.obj: .\combobox.cpp

@@ -41,6 +41,7 @@ WIDGETS_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(srcdir)/../../samples $(CXXFLAGS)
 WIDGETS_OBJECTS =  \
 	widgets_button.o \
+	widgets_checkbox.o \
 	widgets_combobox.o \
 	widgets_gauge.o \
 	widgets_listbox.o \
@@ -160,6 +161,9 @@ widgets.app/Contents/PkgInfo: widgets$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.
 @COND_PLATFORM_MACOSX_1@widgets_bundle: widgets.app/Contents/PkgInfo
 
 widgets_button.o: $(srcdir)/button.cpp
+	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $<
+
+widgets_checkbox.o: $(srcdir)/checkbox.cpp
 	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $<
 
 widgets_combobox.o: $(srcdir)/combobox.cpp

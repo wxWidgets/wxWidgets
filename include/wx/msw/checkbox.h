@@ -42,7 +42,7 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxCheckBoxNameStr);
 
-    virtual void SetValue(bool value);
+    virtual void SetValue(const bool value);
     virtual bool GetValue() const;
 
     virtual void SetLabel(const wxString& label);
@@ -52,6 +52,10 @@ public:
 
 protected:
     virtual wxSize DoGetBestSize() const;
+
+    virtual void DoSet3StateValue(wxCheckBoxState value);
+
+    virtual wxCheckBoxState DoGet3StateValue() const;
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxCheckBox)

@@ -177,6 +177,7 @@ WIDGETS_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm &
 	-i=.\..\..\samples $(CXXFLAGS) $(__EXCEPTIONSFLAG_7)
 WIDGETS_OBJECTS =  &
 	$(OBJS)\widgets_button.obj &
+	$(OBJS)\widgets_checkbox.obj &
 	$(OBJS)\widgets_combobox.obj &
 	$(OBJS)\widgets_gauge.obj &
 	$(OBJS)\widgets_listbox.obj &
@@ -198,6 +199,9 @@ $(OBJS) :
 all : .SYMBOLIC $(OBJS)\widgets.exe
 
 $(OBJS)\widgets_button.obj :  .AUTODEPEND .\button.cpp
+	$(CXX) -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+
+$(OBJS)\widgets_checkbox.obj :  .AUTODEPEND .\checkbox.cpp
 	$(CXX) -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_combobox.obj :  .AUTODEPEND .\combobox.cpp

@@ -34,12 +34,20 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
     if ( !wxCheckBoxBase::Create(parent, id, pos, size, style, validator, name) )
         return false;
 
+    m_style = style;
+
     Rect bounds ;
     Str255 title ;
     
     MacPreControlCreate( parent , id ,  label , pos , size ,style, validator , name , &bounds , title ) ;
 
-    m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , 0 , 1, 
+    SInt16 maxValue = 1 /* kControlCheckboxCheckedValue */;
+    if (style & wxCH_3STATE)
+    {
+        maxValue = 2 /* kControlCheckboxMixedValue */;
+    }
+
+    m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , 0 , maxValue, 
           kControlCheckBoxProc , (long) this ) ;
     
     MacPostControlCreate() ;
@@ -49,26 +57,75 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
 
 void wxCheckBox::SetValue(bool val)
 {
-   ::SetControl32BitValue( (ControlHandle) m_macControl , val ) ;
-   MacRedrawControl() ;
+    if (val)
+    {
+        Set3StateValue(wxCHK_CHECKED);
+    }
+    else
+    {
+        Set3StateValue(wxCHK_UNCHECKED);
+    }
 }
 
 bool wxCheckBox::GetValue() const
 {
-    return ::GetControl32BitValue( (ControlHandle) m_macControl ) ;
+    return (DoGet3StateValue() != 0);
 }
 
 void wxCheckBox::Command (wxCommandEvent & event)
 {
-    SetValue ((event.GetInt() != 0));
-    ProcessCommand (event);
+    int state = event.GetInt();
+
+    wxCHECK_RET( (state == wxCHK_UNCHECKED) || (state == wxCHK_CHECKED)
+        || (state == wxCHK_UNDETERMINED),
+        wxT("event.GetInt() returned an invalid checkbox state") );
+
+    Set3StateValue((wxCheckBoxState) state);
+
+    ProcessCommand(event);
+}
+
+wxCheckBoxState wxCheckBox::DoGet3StateValue() const
+{
+    return (wxCheckBoxState) ::GetControl32BitValue( (ControlHandle) m_macControl );
+}
+
+void wxCheckBox::DoSet3StateValue(wxCheckBoxState val)
+{
+    ::SetControl32BitValue( (ControlHandle) m_macControl , (int) val) ;
+    MacRedrawControl() ;
 }
 
 void wxCheckBox::MacHandleControlClick( WXWidget WXUNUSED(control), wxInt16 WXUNUSED(controlpart) , bool WXUNUSED(mouseStillDown) ) 
 {
-    SetValue( !GetValue() ) ;
     wxCommandEvent event(wxEVT_COMMAND_CHECKBOX_CLICKED, m_windowId );
-    event.SetInt(GetValue());
+    wxCheckBoxState state = Get3StateValue();
+
+    if (state == wxCHK_UNCHECKED)
+    {
+        state = wxCHK_CHECKED;
+    }
+    else if (state == wxCHK_CHECKED)
+    {
+        // If the style flag to allow the user setting the undetermined state
+        // is set, then set the state to undetermined. Otherwise set state to
+        // unchecked.
+        if ( Is3rdStateAllowedForUser() )
+        {
+            state = wxCHK_UNDETERMINED;
+        }
+        else
+        {
+            state = wxCHK_UNCHECKED;
+        }
+    }
+    else if (state == wxCHK_UNDETERMINED)
+    {
+        state = wxCHK_UNCHECKED;
+    }
+        Set3StateValue(state);
+
+    event.SetInt(state);
     event.SetEventObject(this);
     ProcessCommand(event);
 }

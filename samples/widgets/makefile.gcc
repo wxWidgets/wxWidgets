@@ -23,6 +23,7 @@ WIDGETS_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) $(GCCFLAGS) \
 	$(__EXCEPTIONSFLAG_5)
 WIDGETS_OBJECTS =  \
 	$(OBJS)\widgets_button.o \
+	$(OBJS)\widgets_checkbox.o \
 	$(OBJS)\widgets_combobox.o \
 	$(OBJS)\widgets_gauge.o \
 	$(OBJS)\widgets_listbox.o \
@@ -171,6 +172,9 @@ $(OBJS):
 all: $(OBJS)\widgets.exe
 
 $(OBJS)\widgets_button.o: ./button.cpp
+	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $<
+
+$(OBJS)\widgets_checkbox.o: ./checkbox.cpp
 	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_combobox.o: ./combobox.cpp

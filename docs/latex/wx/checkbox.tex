@@ -1,7 +1,8 @@
 \section{\class{wxCheckBox}}\label{wxcheckbox}
 
-A checkbox is a labelled box which is either on (checkmark is visible)
-or off (no checkmark).
+A checkbox is a labelled box which by default is either on (checkmark is visible)
+or off (no checkmark). Optionally (When the wxCHK_3STATE style flag is set) it can have
+a third state, called the mixed or undetermined state. Often this is used as a "Does Not Apply" state.
 
 \wxheading{Derived from}
 
@@ -16,8 +17,12 @@ or off (no checkmark).
 
 \wxheading{Window styles}
 
-\twocolwidtha{5cm}
+\twocolwidtha{7cm}
 \begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxCHK\_2STATE}}{Create a 2-state checkbox (This is the default).}
+\twocolitem{\windowstyle{wxCHK\_3STATE}}{Create a 3-state checkbox.}
+\twocolitem{\windowstyle{wxCHK\_ALLOW\_3RD\_STATE\_FOR\_USER}}{By default a user can't set a 3-state checkbox
+to the third state. It can only be done from code. Using this flags allows the user to set the checkbox to the third state by clicking. }
 \twocolitem{\windowstyle{wxALIGN\_RIGHT}}{Makes the text appear on the left of the checkbox.}
 \end{twocollist}
 
@@ -92,11 +97,44 @@ for details.
 
 \constfunc{bool}{GetValue}{\void}
 
-Gets the state of the checkbox.
+Gets the state of a 2-state checkbox.
 
 \wxheading{Return value}
 
-Returns {\tt true} if it is checked, {\tt false} otherwise.
+Returns \true if it is checked, \false otherwise.
+
+\membersection{wxCheckBox::Get3StateValue}\label{wxcheckboxgetthreestatevalue}
+
+\constfunc{wxCheckBoxState}{Get3StateValue}{\void}
+
+Gets the state of a 3-state checkbox.
+
+\wxheading{Return value}
+
+Returns wxCHK\_UNCHECKED when the checkbox is unchecked, wxCHK\_CHECKED
+ when it is checked and wxCHK\_UNDETERMINED when it's in the undetermined
+state. Asserts when the function is used with a 2-state checkbox.
+
+\membersection{wxCheckBox::Is3rdStateAllowedForUser}\label{wxcheckboxis3rdstateallowedforuser}
+
+\constfunc{bool}{Is3rdStateAllowedForUser}{\void}
+
+Returns whether or not the user can set the checkbox to the third state.
+
+\wxheading{Return value}
+
+Returns \true if the user can set the third state of this checkbox, \false if it can only be set
+programmatically or if it's a 2-state checkbox.
+
+\membersection{wxCheckBox::Is3State}\label{wxcheckboxis3state}
+
+\constfunc{bool}{Is3State}{\void}
+
+Returns whether or not the checkbox is a 3-state checkbox.
+
+\wxheading{Return value}
+
+Returns \true if this checkbox is a 3-state checkbox, \false if it's a 2-state checkbox.
 
 \membersection{wxCheckBox::IsChecked}\label{wxcheckboxischecked}
 
@@ -104,7 +142,7 @@ Returns {\tt true} if it is checked, {\tt false} otherwise.
 
 This is just a maybe more readable synonym for 
 \helpref{GetValue}{wxcheckboxgetvalue}: just as the latter, it returns 
-{\tt true} if the checkbox is checked and {\tt false} otherwise.
+\true if the checkbox is checked and \false otherwise.
 
 \membersection{wxCheckBox::SetValue}\label{wxcheckboxsetvalue}
 
@@ -115,5 +153,17 @@ wxEVT\_COMMAND\_CHECKBOX\_CLICKED event to get emitted.
 
 \wxheading{Parameters}
 
-\docparam{state}{If {\tt true}, the check is on, otherwise it is off.}
+\docparam{state}{If \true, the check is on, otherwise it is off.}
 
+\membersection{wxCheckBox::Set3StateValue}\label{wxcheckboxset3statevalue}
+
+\func{void}{Set3StateValue}{\param{const wxCheckBoxState}{ state}}
+
+Sets the checkbox to the given state. This does not cause a
+wxEVT\_COMMAND\_CHECKBOX\_CLICKED event to get emitted.
+
+\wxheading{Parameters}
+
+\docparam{state}{Can be one of: wxCHK\_UNCHECKED (Check is off), wxCHK\_CHECKED
+ (Check is on) or wxCHK\_UNDETERMINED (Check is mixed). Asserts when the checkbox
+ is a 2-state checkbox and setting the state to wxCHK\_UNDETERMINED.}

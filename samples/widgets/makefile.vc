@@ -24,6 +24,7 @@ WIDGETS_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS_7)$(__DEBUGRUNTIME_3) \
 	$(__EXCEPTIONSFLAG_8) $(__EXCEPTIONSFLAG_9)
 WIDGETS_OBJECTS =  \
 	$(OBJS)\widgets_button.obj \
+	$(OBJS)\widgets_checkbox.obj \
 	$(OBJS)\widgets_combobox.obj \
 	$(OBJS)\widgets_gauge.obj \
 	$(OBJS)\widgets_listbox.obj \
@@ -252,6 +253,9 @@ $(OBJS):
 all: $(OBJS)\widgets.exe
 
 $(OBJS)\widgets_button.obj: .\button.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(WIDGETS_CXXFLAGS) $**
+
+$(OBJS)\widgets_checkbox.obj: .\checkbox.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(WIDGETS_CXXFLAGS) $**
 
 $(OBJS)\widgets_combobox.obj: .\combobox.cpp
