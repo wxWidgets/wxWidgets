@@ -144,6 +144,7 @@ enum
     Font_wxSMALL_FONT,
     Font_wxITALIC_FONT,
     Font_wxSWISS_FONT,
+    Font_Standard,
 
     Font_Choose = 100,
     Font_EnumFamiliesForEncoding,
@@ -260,7 +261,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuStdFonts->Append(Font_wxSMALL_FONT,  wxT("wxSMALL_FONT"),  wxT("Small font used by wxWindows"));
     menuStdFonts->Append(Font_wxITALIC_FONT, wxT("wxITALIC_FONT"), wxT("Italic font used by wxWindows"));
     menuStdFonts->Append(Font_wxSWISS_FONT,  wxT("wxSWISS_FONT"),  wxT("Swiss font used by wxWindows"));
-    menuSelect->Append(-2, wxT("Standar&d fonts"), menuStdFonts);
+    menuSelect->Append(Font_Standard, wxT("Standar&d fonts"), menuStdFonts);
 
     menuSelect->AppendSeparator();
     menuSelect->Append(Font_EnumFamilies, wxT("Enumerate font &families\tCtrl-F"));
