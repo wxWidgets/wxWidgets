@@ -20,7 +20,7 @@ most of wxMSW is common to Win32 and Windows CE but there are
 some simplifications, enhancements, and differences in
 behaviour.
 
-For installation instructions, see docs/msw/wince in the
+For building instructions, see docs/msw/wince in the
 distribution. The rest of this section documents issues you
 need to be aware of when programming for Windows CE devices.
 
@@ -63,6 +63,13 @@ style of device.
 
 See the "Life!" example (demos/life) for an example of
 an application that has been tailored for PocketPC and Smartphone use.
+
+{\bf Note:} don't forget to have this line in your .rc file, as for
+desktop Windows applications:
+
+\begin{verbatim}
+#include "wx/msw/wx.rc"
+\end{verbatim}
 
 \subsubsection{Testing for WinCE SDKs}
 

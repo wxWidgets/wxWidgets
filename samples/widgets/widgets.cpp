@@ -310,7 +310,7 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
 
     int style = wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN|wxBC_DEFAULT;
     // Uncomment to suppress page theme (draw in solid colour)
-    // style |= wxNB_NOPAGETHEME;
+    //style |= wxNB_NOPAGETHEME;
 
     m_book = new wxBookCtrl(m_panel, wxID_ANY, wxDefaultPosition,
         wxDefaultSize, style);

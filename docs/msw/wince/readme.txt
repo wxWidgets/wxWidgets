@@ -1,9 +1,9 @@
 
   =================================================
-  Welcome to wxWidgets/CE 2.5.4
+  Welcome to wxWidgets/CE 2.5.5
   =================================================
 
-You have downloaded version 2.5.4 of the Windows CE port of
+You have downloaded version 2.5.5 of the Windows CE port of
 the wxWidgets GUI library. This runs on Pocket PC 2002/2003,
 Smartphone 2002/2003, and Windows CE .NET 4.x.
 
@@ -51,7 +51,16 @@ wxWidgets/CE Compilation
 
 NOTE: to generate targets not in the standard project files,
 you should rebuild the project files using Bakefile.
-See technote docs/tech/tn0016.txt for details.
+Also, if you are building from a CVS version of wxWidgets,
+you need to create eVC++ project files or get them from
+somewhere, such as the daily makefile builds here:
+
+http://biolpc22.york.ac.uk/pub/CVS_Makefiles/
+
+See technote docs/tech/tn0016.txt for details on using Bakefile,
+and you can get Bakefile from:
+
+http://bakefile.sf.net
 
 Open build/wince/wx.vcw, select an ARM or x86 target (or emulator
 target for eVC++ 4), and compile.
@@ -86,7 +95,7 @@ To compile using the emulator on eVC++4:
 - Open samples/minimal/minimal.vcw with eVC++, select the
   WIN32 (WCE emulator) Debug configuration, and compile.
 
-Note: compiles for the different SDKs (Smartphone, PPC, .Net)
+Note: builds for the different SDKs (Smartphone, PPC, .Net)
 use the same directory and library names, so for the moment
 these builds cannot co-exist simultaneously.
 

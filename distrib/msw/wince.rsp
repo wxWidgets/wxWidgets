@@ -274,6 +274,14 @@ demos/fractal/fractal.vcw
 
 demos/life/life.vcp
 demos/life/life.vcw
+demos/life/setup/wince/build.bat
+demos/life/setup/wince/register.bat
+demos/life/setup/wince/life.ico
+demos/life/setup/wince/life.inf
+demos/life/setup/wince/install.ini
+demos/life/setup/wince/readme.txt
+demos/life/setup/wince/Common/breeder.lif
+demos/life/setup/wince/Common/life.htp
 
 demos/poem/poem.vcp
 demos/poem/poem.vcw

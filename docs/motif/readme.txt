@@ -1,7 +1,7 @@
 
-  Welcome to wxWidgets/Motif 2.5.4
+  Welcome to wxWidgets/Motif 2.5.5
 
-You have downloaded version 2.5.4 of the Motif port of
+You have downloaded version 2.5.5 of the Motif port of
 the wxWidgets GUI library.
 
 More information about the wxWidgets project as a whole

@@ -1,5 +1,5 @@
 %define pref /usr
-%define ver 2.5.4
+%define ver 2.5.5
 %define ver2 2.5
 %define rel 1
 
