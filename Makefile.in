@@ -352,7 +352,7 @@ $(build_libdir)/@WX_LIBRARY_LINK1_GL@: $(build_libdir)/@WX_LIBRARY_NAME_SHARED_G
 $(OBJECTS):	$(WXDIR)/include/wx/defs.h $(WXDIR)/include/wx/object.h
 
 parser.o:    parser.c lexer.c
-	$(CCLEX) -c $(CFLAGS) $(PICFLAGS) -o $@ parser.c
+	$(CCLEX) -c $(CFLAGS) -I. $(PICFLAGS) -o $@ parser.c
 
 parser.c:	$(COMMDIR)/parser.y lexer.c
 	$(YACC) $(COMMDIR)/parser.y
