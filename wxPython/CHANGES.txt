@@ -174,6 +174,9 @@ Added wxXmlResourceHandler which allows you to create custom handlers
 for nonstandard class types in XRC resources.  See the demo for an
 example.
 
+Added wxPython.lib.mixins.rubberband module from Robb Shecter.
+
+
 
 
 
