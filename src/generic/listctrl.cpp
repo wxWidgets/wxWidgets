@@ -4378,36 +4378,35 @@ void wxListCtrl::SetWindowStyleFlag( long flag )
     {
         m_mainWin->DeleteEverything();
 
-        int width = 0;
-        int height = 0;
-        GetClientSize( &width, &height );
+        // has the header visibility changed?
+        bool hasHeader = HasFlag(wxLC_REPORT) && !HasFlag(wxLC_NO_HEADER),
+             willHaveHeader = (flag & wxLC_REPORT) && !(flag & wxLC_NO_HEADER);
 
-        if (flag & wxLC_REPORT)
+        if ( hasHeader != willHaveHeader )
         {
-            if (!HasFlag(wxLC_REPORT))
+            // toggle it
+            if ( hasHeader )
+            {
+                if ( m_headerWin )
+                {
+                    // don't delete, just hide, as we can reuse it later
+                    m_headerWin->Show(FALSE);
+                }
+                //else: nothing to do
+            }
+            else // must show header
             {
                 if (!m_headerWin)
                 {
                     CreateHeaderWindow();
-
-                    if (HasFlag(wxLC_NO_HEADER))
-                        m_headerWin->Show( FALSE );
                 }
-                else
+                else // already have it, just show
                 {
-                    if (flag & wxLC_NO_HEADER)
-                        m_headerWin->Show( FALSE );
-                    else
-                        m_headerWin->Show( TRUE );
+                    m_headerWin->Show( TRUE );
                 }
             }
-        }
-        else // !report
-        {
-            if ( m_mainWin->HasHeader() )
-            {
-                m_headerWin->Show( FALSE );
-            }
+
+            ResizeReportView(willHaveHeader);
         }
     }
 
@@ -4798,10 +4797,17 @@ void wxListCtrl::OnSize(wxSizeEvent& event)
     if ( !m_mainWin )
         return;
 
+    ResizeReportView(m_mainWin->HasHeader());
+
+    m_mainWin->RecalculatePositions();
+}
+
+void wxListCtrl::ResizeReportView(bool showHeader)
+{
     int cw, ch;
     GetClientSize( &cw, &ch );
 
-    if ( m_mainWin->HasHeader() )
+    if ( showHeader )
     {
         m_headerWin->SetSize( 0, 0, cw, HEADER_HEIGHT );
         m_mainWin->SetSize( 0, HEADER_HEIGHT + 1, cw, ch - HEADER_HEIGHT - 1 );
@@ -4810,8 +4816,6 @@ void wxListCtrl::OnSize(wxSizeEvent& event)
     {
         m_mainWin->SetSize( 0, 0, cw, ch );
     }
-
-    m_mainWin->RecalculatePositions();
 }
 
 void wxListCtrl::OnIdle( wxIdleEvent & event )
