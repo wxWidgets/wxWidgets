@@ -242,9 +242,9 @@ wxBitmap::wxBitmap(const char bits[], int width, int height, int depth)
         // we assume that it is in XBM format which is not quite the same as
         // the format CreateBitmap() wants because the order of bytes in the
         // line is inversed!
-        static const size_t bytesPerLine = (width + 7) / 8;
-        static const size_t padding = bytesPerLine % 2;
-        static const size_t len = height * ( padding + bytesPerLine );
+        const size_t bytesPerLine = (width + 7) / 8;
+        const size_t padding = bytesPerLine % 2;
+        const size_t len = height * ( padding + bytesPerLine );
         data = (char *)malloc(len);
         const char *src = bits;
         char *dst = data;
@@ -297,15 +297,15 @@ bool wxBitmap::CreateFromXpm(const char **data)
     Init();
 
     wxCHECK_MSG( data != NULL, FALSE, wxT("invalid bitmap data") )
-    
+
     wxXPMDecoder decoder;
     wxImage img = decoder.ReadData(data);
     wxCHECK_MSG( img.Ok(), FALSE, wxT("invalid bitmap data") )
-    
+
     *this = wxBitmap(img);
     return TRUE;
 #else
-	return FALSE;
+    return FALSE;
 #endif
 }
 
