@@ -2138,7 +2138,7 @@ void wxGridCellAttr::MergeWith(wxGridCellAttr *mergefrom)
         SetReadOnly(mergefrom->IsReadOnly());
 
     if (!HasOverflowMode()  && mergefrom->HasOverflowMode() )
-        SetReadOnly(mergefrom->GetOverflow());
+        SetOverflow(mergefrom->GetOverflow());
 
     SetDefAttr(mergefrom->m_defGridAttr);
 }
