@@ -180,6 +180,7 @@ Unix (Base/GUI):
 - wxWindows may be built as a dynamic shared library under Darwin / Mac OS X
   lazy linking issues have been solved by linking a single module (.o) into
   the shared library (two step link using distrib/mac/shared-ld-sh)
+- fixed thread priority setting under Linux
 
 All (GUI):
 
@@ -241,6 +242,11 @@ wxMSW:
 - fixed bugs in multiple selection wxCheckListBox
 - default button handling is now closer to expected
 - setting tooltips for wxSlider now works
+- multiple events avoided in wxComboBox
+- tooltip asserts avoided for read-only wxComboBox
+- fixed a race condition during a thread exit and a join
+- fixed a condition where a thread can hang during
+  message/event processing
 
 wxGTK:
 
@@ -255,6 +261,7 @@ wxGTK:
 - implemented wxIdleEvent::RequestMore() for simple background tasks
 - implemented wxChoice::Delete()
 - fixed bad memory leak in wxFileDialog (Chris Elliott)
+- made internal GC pool dynamically growable
 
 wxHTML:
 
