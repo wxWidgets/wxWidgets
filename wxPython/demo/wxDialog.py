@@ -1,6 +1,6 @@
 
 from wxPython.wx import *
-from wxPython.help import *
+##from wxPython.help import *
 
 #---------------------------------------------------------------------------
 # Create and set a help provider.  Normally you would do this in
@@ -28,10 +28,7 @@ class TestDialog(wxDialog):
         # This next step is the most important, it turns this Python
         # object into the real wrapper of the dialog (instead of pre)
         # as far as the wxPython extension is concerned.
-        self.this = pre.this
-        self.thisown = pre.thisown
-        pre.thisown = 0
-
+        self.PostCreate(pre)
 
         # Now continue with the normal construction of the dialog
         # contents

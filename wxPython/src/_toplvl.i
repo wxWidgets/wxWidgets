@@ -219,8 +219,8 @@ public:
 
 class wxDialog : public wxTopLevelWindow {
 public:
-    %addtofunc wxDialog         "self._setOORInfo(self)"
-    %addtofunc wxDialog()       "val._setOORInfo(self)"
+    %addtofunc wxDialog   "self._setOORInfo(self)"
+    %addtofunc wxDialog() ""
 
     wxDialog(wxWindow* parent,
              const wxWindowID id,

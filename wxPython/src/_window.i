@@ -697,6 +697,18 @@ public:
 
 
 
+    %pythoncode {
+    def PostCreate(self, pre):
+        """Phase 3 of the 2-phase create <wink!>
+           Call this method after precreating the window with the 2-phase create method."""
+        self.this = pre.this
+        self.thisown = pre.thisown
+        pre.thisown = 0
+        if hasattr(self, '_setOORInfo'):
+            self._setOORInfo(self)
+        if hasattr(self, '_setCallbackInfo'):
+            self._setCallbackInfo(self, self.__class__)
+    }
 };
 
 
