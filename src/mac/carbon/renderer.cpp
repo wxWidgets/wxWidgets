@@ -259,8 +259,8 @@ wxRendererMac::DrawSplitterSash(wxWindow *win,
 
         if ( dc.IsKindOf( CLASSINFO( wxPaintDC ) ) == false )
         {
-            Rect r = { splitterRect.origin.y , splitterRect.origin.x , 
-                splitterRect.origin.y + splitterRect.size.height , splitterRect.origin.x + splitterRect.size.width } ;
+            Rect r = { (short) splitterRect.origin.y , (short) splitterRect.origin.x , 
+                (short) (splitterRect.origin.y + splitterRect.size.height) , (short) (splitterRect.origin.x + splitterRect.size.width) } ;
             RgnHandle updateRgn = NewRgn() ;
             RectRgn( updateRgn , &r ) ;
             HIViewSetNeedsDisplayInRegion( (HIViewRef) win->GetHandle() , updateRgn , true ) ;
