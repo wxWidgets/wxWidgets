@@ -5,7 +5,7 @@
 // Created:     01/02/97
 // Id:
 // Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -30,15 +30,15 @@ class wxFileDialog: public wxDialog
 
   DECLARE_DYNAMIC_CLASS(wxFileDialog)
 
-	friend void gtk_filedialog_ok_callback( GtkWidget *widget, gpointer data );
-  
+  friend void gtk_filedialog_ok_callback( GtkWidget *widget, gpointer data );
+
   public:
 
     wxFileDialog() {};
-    
+
     wxFileDialog(wxWindow *parent, const wxString& message = wxFileSelectorPromptStr,
-        const wxString& defaultDir = "", const wxString& defaultFile = "", 
-	const wxString& wildCard = wxFileSelectorDefaultWildcardStr,
+        const wxString& defaultDir = "", const wxString& defaultFile = "",
+  const wxString& wildCard = wxFileSelectorDefaultWildcardStr,
         long style = 0, const wxPoint& pos = wxDefaultPosition);
 
     inline void SetMessage(const wxString& message) { m_message = message; }
@@ -58,9 +58,9 @@ class wxFileDialog: public wxDialog
     inline int GetFilterIndex(void) const { return m_filterIndex ; }
 
     int ShowModal(void);
-    
+
   protected:
-  
+
     wxString    m_message;
     long        m_dialogStyle;
     wxWindow *  m_parent;
@@ -75,6 +75,7 @@ class wxFileDialog: public wxDialog
 #define wxSAVE 2
 #define wxOVERWRITE_PROMPT 4
 #define wxHIDE_READONLY 8
+#define wxFILE_MUST_EXIST 16
 
 // File selector - backward compatibility
 
@@ -83,10 +84,10 @@ char* wxFileSelector(const char *message = wxFileSelectorPromptStr, const char *
          const char *wildcard = wxFileSelectorDefaultWildcardStr, int flags = 0,
          wxWindow *parent = NULL, int x = -1, int y = -1);
 
-char* wxLoadFileSelector(const char *what, const char *extension, const char *default_name = NULL, 
+char* wxLoadFileSelector(const char *what, const char *extension, const char *default_name = NULL,
          wxWindow *parent = NULL);
 
-char* wxSaveFileSelector(const char *what, const char *extension, const char *default_name = NULL, 
+char* wxSaveFileSelector(const char *what, const char *extension, const char *default_name = NULL,
          wxWindow *parent = NULL);
 
 
