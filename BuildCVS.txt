@@ -25,8 +25,10 @@ Edit ~/wxWindows/src/make.env as you wish.
 III) Windows using configure
 ----------------------------------------
 
-No idea..
-
+No idea.., but take a look at Unix->Windows cross compiling. With minor
+modifications, this should work in Windows if you've got the cygnus
+utilities (bash, GNU make, etc) and either mingw32 or cygwin32 installed. 
+See http://www.cygnus.com for these programs.
 
 IV) Unix using configure
 ----------------------------------------
@@ -65,6 +67,68 @@ or type: ../configure --with-wine
 V) MacOS
 ----------------------------------------
 
-V) OS/2
+VI) OS/2
 ----------------------------------------
 
+VII) Unix->Windows cross-compiling using configure
+--------------------------------------------------
+
+First you'll need a cross-compiler; linux glibc binaries of mingw32 and
+cygwin32 (both based on egcs) can be found at
+ftp://ftp.objsw.com/pub/crossgcc/linux-x-win32. Otherwise you can 
+compile one yourself. Check the relevant FAQs.
+
+[ A Note about cygwin32 and mingw32: the main difference is that cygwin32
+binaries are always linked against cygwin.dll. This dll encapsulates most
+standard Unix C extensions, which is very handy if you're porting unix
+software to windows. However, wxMSW doesn't need this, so mingw32 is
+preferable if you write portable C(++). ]
+
+You might want to build both Unix and Windows binaries in the same source
+tree; to do this make subdirs for each e.g. unix and win32. If you've
+already build wxWindows in the main dir, do a 'make distclean' there,
+otherwise configure will get confused. (In any case, read the section 'Unix
+using configure' and make sure you're able to build a native wxWindows
+library; cross-compiling errors can be pretty obscure and you'll want to be
+sure that your configure setup is basically sound.)
+
+To cross compile the windows library, do
+-> cd win32
+-> CC=i586-mingw32-gcc CXX=i586-mingw32-g++ RANLIB=i586-mingw32-ranlib \
+   DLLTOOL=i586-mingw32-dlltool LD=i586-mingw32-ld NM=i586-mingw32-nm \
+   ../configure --host=i586-mingw32 --with-mingw --enable-dnd=no
+
+(assuming you're using mingw32)
+
+The important thing to notice here is that we suply configure with the names
+of all the non-default binutils (make sure they're in the PATH!), and that 
+we tell configure to build for the host platform i586-mingw32. 
+Drag'n'drop is disabled because mingw32 lacks (AFAIK) OLE headers.
+
+Configure will conclude that shared libraries are out of the question and
+opt for a static one. I haven't looked into DLL creation yet.
+
+When configure is finished, examine setup.h in the win32 directory. Search for
+wxUSE_DYNLIB_CLASS, it will be defined twice. Remove the second define (0).
+If your cross-compiler is egcs-based, you might want to add #define __EGCS__
+in setup.h (only used by common/timercmn.cpp).
+
+Type 
+-> make -C src
+and wait, wait, wait. Don't leave the room, because the minute you do there
+will be a compile error :-)
+
+If this is successful, try building the minimal sample:
+-> cd samples/minimal
+-> make
+-> mv minimal minimal.exe
+
+and run it with wine, for example
+-> wine minimal.exe
+
+If all is well, do an install; from win32
+-> make install
+
+Native and cross-compiled installations can co-exist peacefully 
+(as long as their widget sets differ), except for wx-config. You might 
+want to rename the cross-compiled one to i586-mingw32-wx-config, or something.
