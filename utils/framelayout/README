@@ -38,7 +38,8 @@ Note that a fl has not been tested with wxMotif yet...
 
 for Windows systems:
 
-You're on your own for now :-/ I'll add makefiles later.
+The src directory contains a few untested makefiles. Pick one, and best of
+luck! 
 
 -----------------------------------------------------------------------------
 BUGS
