@@ -220,12 +220,12 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, wxChar *windowTitle, wxChar *tableName,
     while (lookup->GetNext())
         pLookUpSelectList->Append(lookup->lookupCol);
 
-    // Highlight the first list item
-    pLookUpSelectList->SetSelection(0);
-
     // Make the OK activate by pressing Enter
     if (pLookUpSelectList->GetCount())
+    {
+        pLookUpSelectList->SetSelection(0);
         pLookUpOkBtn->SetDefault();
+    }
     else
     {
         pLookUpCancelBtn->SetDefault();
@@ -380,12 +380,12 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, wxChar *windowTitle, wxChar *tableName,
         pLookUpSelectList->Append(s);
     }
 
-    // Highlight the first list item
-    pLookUpSelectList->SetSelection(0);
-
     // Make the OK activate by pressing Enter
     if (pLookUpSelectList->GetCount())
+    {
+        pLookUpSelectList->SetSelection(0);
         pLookUpOkBtn->SetDefault();
+    }
     else
     {
         pLookUpCancelBtn->SetDefault();
