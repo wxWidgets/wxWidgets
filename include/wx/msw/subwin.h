@@ -88,6 +88,15 @@ public:
         }
     }
 
+    // enable/disable everything
+    void Enable(bool enable)
+    {
+        for ( size_t n = 0; n < m_count; n++ )
+        {
+            ::EnableWindow(m_hwnds[n], enable);
+        }
+    }
+
     // set font for all windows
     void SetFont(const wxFont& font)
     {
