@@ -58,7 +58,7 @@ ScoreCanvas::ScoreCanvas(wxWindow* parent, ScoreFile* scoreFile) :
 
 	wxString os;
 
-	os << _T("Player\tWins\tGames\tScore\n");
+	os << wxT("Player\tWins\tGames\tScore\n");
 	for (unsigned int i = 0; i < players.Count(); i++)
 	{
 		int wins, games, score;
@@ -69,12 +69,12 @@ ScoreCanvas::ScoreCanvas(wxWindow* parent, ScoreFile* scoreFile) :
 			average = (2 * score + games) / (2 * games);
 		}
 
-		os << players[i] << _T('\t') 
-		   << wins  << _T('\t')
-		   << games << _T('\t')
-		   << average << _T('\n');
+		os << players[i] << wxT('\t') 
+		   << wins  << wxT('\t')
+		   << games << wxT('\t')
+		   << average << wxT('\n');
 	}
-	os << _T('\0');
+	os << wxT('\0');
 	m_text = os;
 }
 
@@ -86,7 +86,7 @@ void ScoreCanvas::OnDraw(wxDC& dc)
 {
 	dc.SetFont(* m_font);
 
-	const wxChar* str = m_text;
+	const char* str = m_text;
 	unsigned int tab = 0;
 	unsigned int tabstops[] = { 5, 100, 150, 200 };
 
@@ -94,29 +94,29 @@ void ScoreCanvas::OnDraw(wxDC& dc)
 	int lineSpacing;
 	{
 		long w, h;
-		dc.GetTextExtent(_T("Testing"), &w, &h);
+		dc.GetTextExtent("Testing", &w, &h);
 		lineSpacing = (int)h;
 	}
 
 	int y = 0;
 	while (*str)
 	{
-		wxChar text[256];
-		wxChar* dest = text;
+		char text[256];
+		char* dest = text;
 		
-		while (*str && *str >= _T(' ')) *dest++ = *str++;
-		*dest = _T('\0');
+		while (*str && *str >= ' ') *dest++ = *str++;
+		*dest = '\0';
 
 		dc.DrawText(text, tabstops[tab], y);
 
-		if (*str == _T('\t'))
+		if (*str == '\t')
 		{
 			if (tab < sizeof(tabstops) / sizeof(tabstops[0]) - 1)
 			{
 				tab++;
 			}
 		}
-		else if (*str == _T('\n'))
+		else if (*str == '\n')
 		{
 			tab = 0;
 			y += lineSpacing;
@@ -133,7 +133,7 @@ ScoreDialog::ScoreDialog(
 							wxWindow* parent,
 							ScoreFile* file
 							) :
-	wxDialog(parent, -1, _T("Scores"),
+	wxDialog(parent, -1, "Scores",
 			wxDefaultPosition, wxSize(310, 200),
 			wxDIALOG_MODAL | wxDEFAULT_DIALOG_STYLE),
 	m_scoreFile(file)
@@ -142,7 +142,7 @@ ScoreDialog::ScoreDialog(
 	SetAutoLayout (TRUE);
 
 	ScoreCanvas* list = new ScoreCanvas(this, m_scoreFile);
-	m_OK = new wxButton(this, wxID_OK, _T("OK"));
+	m_OK = new wxButton(this, wxID_OK, "OK");
 
 	wxLayoutConstraints* layout;
 
