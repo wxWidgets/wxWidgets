@@ -477,3 +477,77 @@ void wxChoice::ChangeForegroundColour()
     for (i = 0; i < m_noStrings; i++)
         DoChangeForegroundColour(m_widgetList[i], m_foregroundColour);
 }
+
+
+// These implement functions needed by wxControlWithItems.
+// Unfortunately, they're not all implemented yet.
+
+int wxChoice::GetCount() const
+{
+    return Number();
+}
+
+int wxChoice::DoAppend(const wxString& item)
+{
+    Append(item);
+    return GetCount() - 1;
+}
+
+// Just appends, doesn't yet insert
+void wxChoice::DoInsertItems(const wxArrayString& items, int WXUNUSED(pos))
+{
+    size_t nItems = items.GetCount();
+
+    for ( size_t n = 0; n < nItems; n++ )
+    {
+        Append( items[n]);
+    }
+}
+
+void wxChoice::DoSetItems(const wxArrayString& items, void **WXUNUSED(clientData))
+{
+    Clear();
+    size_t nItems = items.GetCount();
+
+    for ( size_t n = 0; n < nItems; n++ )
+    {
+        Append(items[n]);
+    }
+}
+
+void wxChoice::DoSetFirstItem(int WXUNUSED(n))
+{
+    wxFAIL_MSG( wxT("wxChoice::DoSetFirstItem not implemented") );
+}
+
+void wxChoice::DoSetItemClientData(int WXUNUSED(n), void* WXUNUSED(clientData))
+{
+    wxFAIL_MSG( wxT("wxChoice::DoSetItemClientData not implemented") );
+}
+
+void* wxChoice::DoGetItemClientData(int WXUNUSED(n)) const
+{
+    wxFAIL_MSG( wxT("wxChoice::DoGetItemClientData not implemented") );
+    return (void*) NULL;
+}
+
+void wxChoice::DoSetItemClientObject(int WXUNUSED(n), wxClientData* WXUNUSED(clientData))
+{
+    wxFAIL_MSG( wxT("wxChoice::DoSetItemClientObject not implemented") );
+}
+
+wxClientData* wxChoice::DoGetItemClientObject(int WXUNUSED(n)) const
+{
+    wxFAIL_MSG( wxT("wxChoice::DoGetItemClientObject not implemented") );
+    return (wxClientData*) NULL;
+}
+
+void wxChoice::Select(int n)
+{
+    SetSelection(n);
+}
+
+void wxChoice::SetString(int WXUNUSED(n), const wxString& WXUNUSED(s))
+{
+    wxFAIL_MSG( wxT("wxChoice::SetString not implemented") );
+}

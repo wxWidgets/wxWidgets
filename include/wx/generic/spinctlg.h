@@ -44,11 +44,12 @@ public:
                 int min = 0, int max = 100, int initial = 0,
                 const wxString& name = _T("wxSpinCtrl"))
     {
-        SetValue(initial);
         SetRange(min, max);
 
-        return wxTextCtrl::Create(parent, id, value, pos, size, style,
+        bool val = wxTextCtrl::Create(parent, id, value, pos, size, style,
                                   wxDefaultValidator, name);
+        SetValue(initial);
+        return value;
     }
 
     // accessors

@@ -663,6 +663,8 @@ samples/internat/*.bmp
 samples/internat/*.mo
 samples/internat/fr/*.mo
 samples/internat/fr/*.po
+samples/internat/de/*.mo
+samples/internat/de/*.po
 
 samples/checklst/*.cpp
 samples/checklst/*.h
@@ -729,6 +731,10 @@ samples/image/*.bmp
 samples/image/*.xpm
 samples/image/*.xbm
 samples/image/*.png
+samples/image/*.pnm
+samples/image/*.pcx
+samples/image/*.jpg
+samples/image/*.gif
 samples/image/*.ico
 samples/image/*.txt
 
@@ -1023,16 +1029,4 @@ samples/menu/*.xbm
 samples/menu/*.png
 samples/menu/*.ico
 samples/menu/*.txt
-
-samples/font/*.cpp
-samples/font/*.h
-samples/font/makefile*
-samples/font/*.rc
-samples/font/*.def
-samples/font/*.bmp
-samples/font/*.xpm
-samples/font/*.xbm
-samples/font/*.png
-samples/font/*.ico
-samples/font/*.txt
 

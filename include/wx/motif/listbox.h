@@ -16,7 +16,7 @@
 #pragma interface "listbox.h"
 #endif
 
-#include "wx/control.h"
+#include "wx/ctrlsub.h"
 
 WXDLLEXPORT_DATA(extern const char*) wxListBoxNameStr;
 
@@ -26,7 +26,7 @@ class WXDLLEXPORT wxArrayInt;
 WXDLLEXPORT_DATA(extern const char*) wxEmptyString;
 
 // List box item
-class WXDLLEXPORT wxListBox: public wxControl
+class WXDLLEXPORT wxListBox: public wxControlWithItems
 {
 DECLARE_DYNAMIC_CLASS(wxListBox)
 
@@ -53,6 +53,19 @@ public:
             const wxString& name = wxListBoxNameStr);
 
     ~wxListBox();
+
+    // Virtual functions required by wxControlWithItems.
+    // They are not all implemented yet :-(
+    virtual int GetCount() const;
+    virtual int DoAppend(const wxString& item);
+    virtual void DoInsertItems(const wxArrayString& items, int pos);
+    virtual void DoSetItems(const wxArrayString& items, void **clientData);
+    virtual void DoSetFirstItem(int n);
+    virtual void DoSetItemClientData(int n, void* clientData);
+    virtual void* DoGetItemClientData(int n) const;
+    virtual void DoSetItemClientObject(int n, wxClientData* clientData);
+    virtual wxClientData* DoGetItemClientObject(int n) const;
+    virtual void Select(int n);
 
     virtual void Append(const wxString& item);
     virtual void Append(const wxString& item, void *clientData);

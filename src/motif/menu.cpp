@@ -216,7 +216,8 @@ wxMenuBar::~wxMenuBar()
 
 void wxMenuBar::EnableTop(size_t WXUNUSED(pos), bool WXUNUSED(flag))
 {
-    wxFAIL_MSG("TODO");
+  //    wxFAIL_MSG("TODO");
+  wxLogWarning("wxMenuBar::EnableTop not yet implemented.");
 }
 
 void wxMenuBar::SetLabelTop(size_t pos, const wxString& label)
@@ -385,6 +386,9 @@ bool wxMenuBar::CreateMenuBar(wxFrame* parent)
             XtVaSetValues(GetWidget(menu),
                           XmNtearOffModel, XmTEAR_OFF_ENABLED,
                           NULL);
+            Widget tearOff = XmGetTearOffControl(GetWidget(menu));
+            wxDoChangeForegroundColour((Widget) tearOff, m_foregroundColour);
+            wxDoChangeBackgroundColour((Widget) tearOff, m_backgroundColour, TRUE);
 #endif
         }
     }

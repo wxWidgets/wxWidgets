@@ -221,7 +221,8 @@ bool MyApp::OnInit()
 
     frame->SetIcon( wxICON(mondrian) );
 
-    wxMenu *file_menu = new wxMenu("",  wxMENU_TEAROFF );
+    wxMenu *file_menu = new wxMenu("",  wxMENU_TEAROFF);
+
     file_menu->Append(MINIMAL_ABOUT, "&About\tF1");
     file_menu->AppendSeparator();
     file_menu->Append(MINIMAL_QUIT, "E&xit\tAlt-X", "Quit controls sample");
@@ -476,8 +477,10 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_choiceSorted = new wxChoice( panel, ID_CHOICE_SORTED, wxPoint(10,70), wxSize(120,-1),
                                    5, choices, wxCB_SORT );
 
+#ifndef __WXMOTIF__
     SetControlClientData("choice", m_choice);
     SetControlClientData("choice", m_choiceSorted);
+#endif
 
     m_choice->SetSelection(2);
     m_choice->SetBackgroundColour( "red" );

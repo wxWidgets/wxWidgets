@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        helpext.cpp
-// Purpose:     an external help controller for wxWindows
+// Name:        helpwxht.cpp
+// Purpose:     A help controller using the wxHTML classes
 // Author:      Karsten Ballueder
 // Modified by:
 // Created:     04/01/98

@@ -1,13 +1,13 @@
-/*
- * File:	printing.h
- * Purpose:	Printing demo for wxWindows class library
- * Author:	Julian Smart
- * Created:	1995
- * Updated:	
- * Copyright:   (c) 1995, AIAI, University of Edinburgh
- */
-
-/* sccsid[] = "%W% %G%" */
+/////////////////////////////////////////////////////////////////////////////
+// Name:        printing.h
+// Purpose:     Printing demo for wxWindows
+// Author:      Julian Smart
+// Modified by:
+// Created:     1995
+// RCS-ID:      $Id$
+// Copyright:   (c) Julian Smart
+// Licence:     wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
 #pragma interface

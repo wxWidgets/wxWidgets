@@ -786,4 +786,71 @@ void wxListBox::ChangeForegroundColour()
     */
 }
 
+// These implement functions needed by wxControlWithItems.
+// Unfortunately, they're not all implemented yet.
 
+int wxListBox::GetCount() const
+{
+    return Number();
+}
+
+int wxListBox::DoAppend(const wxString& item)
+{
+    Append(item, (void*) NULL);
+    return GetCount() - 1;
+}
+
+// Just appends, doesn't yet insert
+void wxListBox::DoInsertItems(const wxArrayString& items, int WXUNUSED(pos))
+{
+    size_t nItems = items.GetCount();
+
+    for ( size_t n = 0; n < nItems; n++ )
+    {
+        Append( items[n], (void*) NULL);
+    }
+}
+
+void wxListBox::DoSetItems(const wxArrayString& items, void **clientData)
+{
+    size_t nItems = items.GetCount();
+    wxString* strings = new wxString[nItems];
+
+    for ( size_t n = 0; n < nItems; n++ )
+    {
+        strings[n] = items[n];
+    }
+    Set(nItems, strings, clientData);
+
+    delete[] strings;
+}
+
+void wxListBox::DoSetFirstItem(int WXUNUSED(n))
+{
+    wxFAIL_MSG( wxT("wxListBox::DoSetFirstItem not implemented") );
+}
+
+void wxListBox::DoSetItemClientData(int n, void* clientData)
+{
+    SetClientData(n, clientData);
+}
+
+void* wxListBox::DoGetItemClientData(int n) const
+{
+    return GetClientData(n);
+}
+
+void wxListBox::DoSetItemClientObject(int n, wxClientData* clientData)
+{
+    DoSetItemClientData(n, (void*) clientData);
+}
+
+wxClientData* wxListBox::DoGetItemClientObject(int n) const
+{
+    return (wxClientData*) DoGetItemClientData(n);
+}
+
+void wxListBox::Select(int n)
+{
+    SetSelection(n, TRUE);
+}

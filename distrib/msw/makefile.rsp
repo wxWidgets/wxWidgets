@@ -34,6 +34,7 @@ samples/printing/Makefile.in
 samples/proplist/Makefile.in
 samples/sashtest/Makefile.in
 samples/scroll/Makefile.in
+samples/scrollsub/Makefile.in
 samples/splitter/Makefile.in
 samples/text/Makefile.in
 samples/thread/Makefile.in
@@ -46,6 +47,9 @@ samples/wxpoem/Makefile.in
 samples/wxsocket/Makefile.in
 samples/nettest/Makefile.in
 samples/scrollsub/Makefile.in
+samples/font/Makefile.in
+samples/menu/Makefile.in
+samples/console/Makefile.in
 utils/glcanvas/motif/Makefile.in
 utils/Makefile.in
 utils/wxMMedia2/Makefile.in
@@ -76,4 +80,13 @@ samples/resource/Makefile.am
 samples/richedit/Makefile.am
 samples/tab/Makefile.am
 samples/taskbar/Makefile.am
+samples/scrollsub/Makefile.am
+samples/font/Makefile.am
+samples/menu/Makefile.am
+samples/drawing/Makefile.am
+samples/scroll/Makefile.am
+samples/scrollsub/Makefile.am
+samples/console/Makefile.am
+samples/wizard/Makefile.am
+utils/glcanvas/motif/Makefile.am
 src/msw/Makefile.am

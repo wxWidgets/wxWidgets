@@ -32,13 +32,15 @@ wxWindows 2.1.11
   maintenance.
 - Ability to compile library in console (non-GUI) mode.
 - Integration of wxHTML widget and help controller into
-  wxWindows. wxHTML allows HTML viewing and printing.
+  wxWindows. wxHTML allows HTML viewing and printing (wxGTK
+  and wxMSW, partial support in wxMotif).
 - New classes wxChrono, wxDialUpManager, wxFontEnumerator,
   wxWizard, wxStaticLine, etc.
 - wxShowTip for showing 'startup tips' to the user.
 - wxSocket and wxThread classes rewritten.
 - New, consistent drag and drop API (not wxMotif).
-- Better-looking dialogs in wxGTK.
+- Better-looking dialogs in wxGTK; native message box used
+  in wxMotif.
 - wxSizers reimplemented and used to specify window layout
   for some generic dialogs.
 - New, more sophisticated wxGrid class (in beta). The old grid
@@ -167,8 +169,15 @@ commercial applications using wxWindows.
 Documentation
 -------------
 
-See docs/changes.txt for a detailed history of changes to wxWindows 2.
+See docs/release.txt for some notes about the current release.
+
+See docs/bugs.txt for a bug list: this file is new and will initially
+  be edited by hand, later generated from a web-based bug database.
+
 See docs/html/index.htm for an HTML index of the major documents.
+
+See docs/changes.txt for a detailed history of changes to wxWindows 2
+  (not up-to-date).
 
 The Windows help files are located in docs/winhelp.
 The PDF help files are located in docs/pdf.

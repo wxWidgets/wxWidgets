@@ -25,6 +25,7 @@
 #include <wx/image.h>
 #include <wx/wxhtml.h>
 #include <wx/fs_zip.h>
+#include <wx/log.h>
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -56,6 +57,10 @@ IMPLEMENT_APP(MyApp)
 
 bool MyApp::OnInit()
 {
+#ifdef __WXMOTIF__
+    delete wxLog::SetActiveTarget(new wxLogStderr); // So dialog boxes aren't used
+#endif
+
     wxInitAllImageHandlers();
     wxFileSystem::AddHandler(new wxZipFSHandler);
 
@@ -71,6 +76,10 @@ bool MyApp::OnInit()
 
     for (int i = 1; i < argc; i++)
         help -> AddBook(argv[i]);
+
+#ifdef __WXMOTIF__
+    delete wxLog::SetActiveTarget(new wxLogGui);
+#endif
 
     help -> DisplayContents();
 

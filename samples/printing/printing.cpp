@@ -1,13 +1,13 @@
-/*
-* File:	printing.cc
-* Purpose:	Printing demo for wxWindows class library
-* Author:	Julian Smart
-* Created:	1995
-* Updated:	
-* Copyright:   (c) 1995, AIAI, University of Edinburgh
-*/
-
-/* static const char sccsid[] = "%W% %G%"; */
+/////////////////////////////////////////////////////////////////////////////
+// Name:        printing.cpp
+// Purpose:     Printing demo for wxWindows
+// Author:      Julian Smart
+// Modified by:
+// Created:     1995
+// RCS-ID:      $Id$
+// Copyright:   (c) Julian Smart
+// Licence:     wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
 #pragma implementation
@@ -290,6 +290,8 @@ void MyFrame::OnPrintAbout(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::Draw(wxDC& dc)
 {
+    dc.SetBackground(*wxWHITE_BRUSH);
+    dc.Clear();
     dc.SetFont(* wxGetApp().m_testFont);
     
     dc.SetBackgroundMode(wxTRANSPARENT);
