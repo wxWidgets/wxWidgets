@@ -38,7 +38,7 @@ protected:
   int           m_cap ;
   wxBitmap      m_stipple ;
   int           m_nbDash ;
-  wxMSWDash *   m_dash ;
+  wxDash *      m_dash ;
   wxColour      m_colour;
   WXHPEN        m_hPen;
 };

@@ -41,7 +41,7 @@ wxPenRefData::wxPenRefData()
   m_join = wxJOIN_ROUND ;
   m_cap = wxCAP_ROUND ;
   m_nbDash = 0 ;
-  m_dash = (wxMSWDash*)NULL;
+  m_dash = (wxDash*)NULL;
   m_hPen = 0;
 }
 
@@ -89,7 +89,7 @@ wxPen::wxPen(const wxColour& col, int Width, int Style)
   M_PENDATA->m_join = wxJOIN_ROUND ;
   M_PENDATA->m_cap = wxCAP_ROUND ;
   M_PENDATA->m_nbDash = 0 ;
-  M_PENDATA->m_dash = (wxMSWDash*)NULL;
+  M_PENDATA->m_dash = (wxDash*)NULL;
   M_PENDATA->m_hPen = 0 ;
 
 #ifndef __WIN32__
@@ -132,7 +132,7 @@ wxPen::wxPen(const wxBitmap& stipple, int Width)
     M_PENDATA->m_join = wxJOIN_ROUND ;
     M_PENDATA->m_cap = wxCAP_ROUND ;
     M_PENDATA->m_nbDash = 0 ;
-    M_PENDATA->m_dash = (wxMSWDash*)NULL;
+    M_PENDATA->m_dash = (wxDash*)NULL;
     M_PENDATA->m_hPen = 0 ;
 
     RealizeResource();
@@ -240,7 +240,7 @@ bool wxPen::RealizeResource()
            if (M_PENDATA->m_style==wxUSER_DASH && M_PENDATA->m_nbDash && M_PENDATA->m_dash)
            {
                real_dash = new wxMSWDash[M_PENDATA->m_nbDash];
-               int i;
+               int i, dsh;
                for (i=0; i<M_PENDATA->m_nbDash; i++)
                    real_dash[i] = M_PENDATA->m_dash[i] * M_PENDATA->m_width;
            }
@@ -377,7 +377,7 @@ void wxPen::SetDashes(int nb_dashes, const wxDash *Dash)
     Unshare();
 
     M_PENDATA->m_nbDash = nb_dashes;
-    M_PENDATA->m_dash = (wxMSWDash *)Dash;
+    M_PENDATA->m_dash = (wxDash *)Dash;
 
     RealizeResource();
 }
