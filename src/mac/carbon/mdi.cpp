@@ -105,26 +105,10 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
 wxMDIParentFrame::~wxMDIParentFrame()
 {
     DestroyChildren();
-    // already delete by DestroyChildren()
-#if wxUSE_TOOLBAR
-    m_frameToolBar = NULL;
-#endif
-#if wxUSE_STATUSBAR
-    m_frameStatusBar = NULL;
-#endif    
+    // already deleted by DestroyChildren()
     m_clientWindow = NULL ;
     
-    if (m_windowMenu)
-    {
-        delete m_windowMenu;
-        m_windowMenu = (wxMenu*) NULL;
-    }
-    
-    if ( m_clientWindow )
-    {
-        delete m_clientWindow;
-        m_clientWindow = NULL ;
-    }
+    delete m_windowMenu;
 }
 
 
@@ -291,13 +275,6 @@ wxMDIChildFrame::~wxMDIChildFrame()
     if(mdiparent->m_currentChild == this)
         mdiparent->m_currentChild = NULL;
     DestroyChildren();
-    // already delete by DestroyChildren()
-#if wxUSE_TOOLBAR
-    m_frameToolBar = NULL;
-#endif
-#if wxUSE_STATUSBAR
-    m_frameStatusBar = NULL;
-#endif    
 }
 
 void wxMDIChildFrame::SetMenuBar(wxMenuBar *menu_bar)
