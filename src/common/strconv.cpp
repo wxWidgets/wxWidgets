@@ -65,16 +65,22 @@
 #define BSWAP_UTF32(str, len) BSWAP_UCS4(str, len)
 #define BSWAP_UTF16(str, len) BSWAP_UCS2(str, len)
 
+// under Unix SIZEOF_WCHAR_T is defined by configure, but under other platforms
+// it might be not defined - assume the most common value
+#ifndef SIZEOF_WCHAR_T
+    #define SIZEOF_WCHAR_T 2
+#endif // !defined(SIZEOF_WCHAR_T)
+
 #if SIZEOF_WCHAR_T == 4
-#define WC_NAME "UCS4"
-#define WC_BSWAP BSWAP_UCS4
+    #define WC_NAME "UCS4"
+    #define WC_BSWAP BSWAP_UCS4
 #elif SIZEOF_WCHAR_T == 2
-#define WC_NAME "UTF16"
-#define WC_BSWAP BSWAP_UTF16
-#define WC_UTF16
+    #define WC_NAME "UTF16"
+    #define WC_BSWAP BSWAP_UTF16
+    #define WC_UTF16
 #else // sizeof(wchar_t) != 2 nor 4
-// I don't know what to do about this
-#error "Please report your platform details to wx-users mailing list"
+    // I don't know what to do about this
+    #error "Weird sizeof(wchar_t): please report your platform details to wx-users mailing list"
 #endif
 
 // ----------------------------------------------------------------------------
