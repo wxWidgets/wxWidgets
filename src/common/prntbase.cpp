@@ -398,12 +398,12 @@ void wxPreviewControlBar::SetZoomControl(int zoom)
 
 int wxPreviewControlBar::GetZoomControl()
 {
-    char buf[20];
+    wxChar buf[20];
     if (m_zoomControl && (m_zoomControl->GetStringSelection() != ""))
     {
-        strcpy(buf, m_zoomControl->GetStringSelection());
-        buf[strlen(buf) - 1] = 0;
-        return (int)atoi(buf);
+        wxStrcpy(buf, m_zoomControl->GetStringSelection());
+        buf[wxStrlen(buf) - 1] = 0;
+        return (int)wxAtoi(buf);
     }
     else return 0;
 }
@@ -688,11 +688,11 @@ bool wxPrintPreviewBase::RenderPage(int pageNum)
 
     memoryDC.SelectObject(wxNullBitmap);
 
-    char buf[200];
+    wxChar buf[200];
     if (m_maxPage != 0)
-        sprintf(buf, _("Page %d of %d"), pageNum, m_maxPage);
+        wxSprintf(buf, _("Page %d of %d"), pageNum, m_maxPage);
     else
-        sprintf(buf, _("Page %d"), pageNum);
+        wxSprintf(buf, _("Page %d"), pageNum);
 
     if (m_previewFrame)
         m_previewFrame->SetStatusText(buf);

@@ -45,7 +45,7 @@
 #endif
 
 #if !USE_SHARED_LIBRARY
-wxClassInfo wxObject::sm_classwxObject((char *) "wxObject", (char *) NULL, (char *) NULL, (int ) sizeof(wxObject), (wxObjectConstructorFn) NULL);
+wxClassInfo wxObject::sm_classwxObject((wxChar *) _T("wxObject"), (wxChar *) NULL, (wxChar *) NULL, (int ) sizeof(wxObject), (wxObjectConstructorFn) NULL);
 wxClassInfo* wxClassInfo::sm_first = (wxClassInfo *) NULL;
 wxHashTable* wxClassInfo::sm_classTable = (wxHashTable*) NULL;
 #endif
@@ -140,7 +140,7 @@ void wxObject::operator delete[] (void * buf)
  * Class info: provides run-time class type information.
  */
 
-wxClassInfo::wxClassInfo(char *cName, char *baseName1, char *baseName2, int sz, wxObjectConstructorFn constr)
+wxClassInfo::wxClassInfo(wxChar *cName, wxChar *baseName1, wxChar *baseName2, int sz, wxObjectConstructorFn constr)
 {
     m_className = cName;
     m_baseClassName1 = baseName1;
@@ -164,12 +164,12 @@ wxObject *wxClassInfo::CreateObject()
         return (wxObject *) NULL;
 }
 
-wxClassInfo *wxClassInfo::FindClass(char *c)
+wxClassInfo *wxClassInfo::FindClass(wxChar *c)
 {
     wxClassInfo *p = sm_first;
     while (p)
     {
-        if (p && p->GetClassName() && strcmp(p->GetClassName(), c) == 0)
+        if (p && p->GetClassName() && wxStrcmp(p->GetClassName(), c) == 0)
             return p;
         p = p->m_next;
     }
@@ -238,7 +238,7 @@ void wxClassInfo::CleanUpClasses()
     wxClassInfo::sm_classTable = NULL;
 }
 
-wxObject *wxCreateDynamicObject(const char *name)
+wxObject *wxCreateDynamicObject(const wxChar *name)
 {
     if (wxClassInfo::sm_classTable)
     {
@@ -253,7 +253,7 @@ wxObject *wxCreateDynamicObject(const char *name)
         wxClassInfo *info = wxClassInfo::sm_first;
         while (info)
         {
-            if (info->m_className && strcmp(info->m_className, name) == 0)
+            if (info->m_className && wxStrcmp(info->m_className, name) == 0)
                 return info->CreateObject();
             info = info->m_next;
         }

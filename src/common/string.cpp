@@ -253,7 +253,7 @@ wxString::wxString(const void *pStart, const void *pEnd)
 #if wxUSE_UNICODE
 
 // from multibyte string
-wxString::wxString(const char *psz, wxMBConvv& conv, size_t nLength)
+wxString::wxString(const char *psz, wxMBConv& conv, size_t nLength)
 {
   // first get necessary size
 
@@ -1166,7 +1166,7 @@ int wxString::PrintfV(const wxChar* pszFormat, va_list argptr)
 	    char *val = va_arg(argptr, char *);
 #if wxUSE_UNICODE
 	    // ASCII->Unicode constructor handles max_width right
-	    wxString s(val, max_width);
+	    wxString s(val, wxConv_libc, max_width);
 #else
 	    size_t len = wxSTRING_MAXLEN;
 	    if (val) {
@@ -1667,7 +1667,7 @@ void wxArrayString::Insert(const wxString& str, size_t nIndex)
 {
   wxASSERT( str.GetStringData()->IsValid() );
 
-  wxCHECK_RET( nIndex <= m_nCount, ("bad index in wxArrayString::Insert") );
+  wxCHECK_RET( nIndex <= m_nCount, _("bad index in wxArrayString::Insert") );
 
   Grow();
 
