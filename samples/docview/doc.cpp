@@ -42,7 +42,7 @@ DrawingDocument::DrawingDocument(void)
 
 DrawingDocument::~DrawingDocument(void)
 {
-    doodleSegments.DeleteContents(TRUE);
+    WX_CLEAR_LIST(wxList, doodleSegments);
 }
 
 #if wxUSE_STD_IOSTREAM
@@ -53,7 +53,7 @@ wxSTD ostream& DrawingDocument::SaveObject(wxSTD ostream& stream)
     wxInt32 n = doodleSegments.GetCount();
     stream << n << '\n';
     
-    wxNode *node = doodleSegments.GetFirst();
+    wxList::compatibility_iterator node = doodleSegments.GetFirst();
     while (node)
     {
         DoodleSegment *segment = (DoodleSegment *)node->GetData();
@@ -75,7 +75,7 @@ wxOutputStream& DrawingDocument::SaveObject(wxOutputStream& stream)
     wxInt32 n = doodleSegments.GetCount();
     text_stream << n << '\n';
     
-    wxNode *node = doodleSegments.GetFirst();
+    wxList::compatibility_iterator node = doodleSegments.GetFirst();
     while (node)
     {
         DoodleSegment *segment = (DoodleSegment *)node->GetData();
@@ -133,7 +133,7 @@ DoodleSegment::DoodleSegment(void)
 
 DoodleSegment::DoodleSegment(DoodleSegment& seg)
 {
-    wxNode *node = seg.lines.GetFirst();
+    wxList::compatibility_iterator node = seg.lines.GetFirst();
     while (node)
     {
         DoodleLine *line = (DoodleLine *)node->GetData();
@@ -151,7 +151,7 @@ DoodleSegment::DoodleSegment(DoodleSegment& seg)
 
 DoodleSegment::~DoodleSegment(void)
 {
-    lines.DeleteContents(TRUE);
+    WX_CLEAR_LIST(wxList, lines);
 }
 
 #if wxUSE_STD_IOSTREAM
@@ -160,7 +160,7 @@ wxSTD ostream& DoodleSegment::SaveObject(wxSTD ostream& stream)
     wxInt32 n = lines.GetCount();
     stream << n << '\n';
     
-    wxNode *node = lines.GetFirst();
+    wxList::compatibility_iterator node = lines.GetFirst();
     while (node)
     {
         DoodleLine *line = (DoodleLine *)node->GetData();
@@ -181,7 +181,7 @@ wxOutputStream &DoodleSegment::SaveObject(wxOutputStream& stream)
     wxInt32 n = lines.GetCount();
     text_stream << n << _T('\n');
     
-    wxNode *node = lines.GetFirst();
+    wxList::compatibility_iterator node = lines.GetFirst();
     while (node)
     {
         DoodleLine *line = (DoodleLine *)node->GetData();
@@ -238,7 +238,7 @@ wxInputStream &DoodleSegment::LoadObject(wxInputStream& stream)
 
 void DoodleSegment::Draw(wxDC *dc)
 {
-    wxNode *node = lines.GetFirst();
+    wxList::compatibility_iterator node = lines.GetFirst();
     while (node)
     {
         DoodleLine *line = (DoodleLine *)node->GetData();
@@ -274,12 +274,12 @@ bool DrawingCommand::Do(void)
             // Cut the last segment
             if (doc->GetDoodleSegments().GetCount() > 0)
             {
-                wxNode *node = doc->GetDoodleSegments().GetLast();
+                wxList::compatibility_iterator node = doc->GetDoodleSegments().GetLast();
                 if (segment)
                     delete segment;
                 
                 segment = (DoodleSegment *)node->GetData();
-                delete node;
+                doc->GetDoodleSegments().Erase(node);
                 
                 doc->Modify(TRUE);
                 doc->UpdateAllViews();
@@ -320,10 +320,10 @@ bool DrawingCommand::Undo(void)
             // Cut the last segment
             if (doc->GetDoodleSegments().GetCount() > 0)
             {
-                wxNode *node = doc->GetDoodleSegments().GetLast();
+                wxList::compatibility_iterator node = doc->GetDoodleSegments().GetLast();
                 DoodleSegment *seg = (DoodleSegment *)node->GetData();
                 delete seg;
-                delete node;
+                doc->GetDoodleSegments().Erase(node);
                 
                 doc->Modify(TRUE);
                 doc->UpdateAllViews();

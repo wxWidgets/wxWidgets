@@ -90,7 +90,7 @@ void DrawingView::OnDraw(wxDC *dc)
     dc->SetFont(*wxNORMAL_FONT);
     dc->SetPen(*wxBLACK_PEN);
     
-    wxNode *node = ((DrawingDocument *)GetDocument())->GetDoodleSegments().GetFirst();
+    wxList::compatibility_iterator node = ((DrawingDocument *)GetDocument())->GetDoodleSegments().GetFirst();
     while (node)
     {
         DoodleSegment *seg = (DoodleSegment *)node->GetData();
