@@ -10867,13 +10867,13 @@ fi
 done
 
 
-    if test "x$HAVE_IOSTREAM" = x ; then
+    if test "$ac_cv_header_iostream" = "yes" ; then
+      :
+    else
       cat >> confdefs.h <<\EOF
 #define wxUSE_IOSTREAMH 1
 EOF
 
-    else
-      :
     fi
 
     ac_ext=c
@@ -15339,7 +15339,7 @@ fi
 done
 
 
-	        	        if test "$ac_cv_header_ole2_h" = "yes" ; then
+        if test "$ac_cv_header_ole2_h" = "yes" ; then
             if test "$GCC" = yes ; then
                 ALL_OBJECTS="$ALL_OBJECTS \$(OLEOBJS)"
                 ALL_DEPFILES="$ALL_DEPFILES \$(OLEDEPS)"

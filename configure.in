@@ -184,10 +184,10 @@ AC_DEFUN(WX_CPP_NEW_HEADERS,
 
     AC_CHECK_HEADERS(iostream)
 
-    if test "x$HAVE_IOSTREAM" = x ; then
-      ifelse([$2], , :, [$2])
-    else
+    if test "$ac_cv_header_iostream" = "yes" ; then
       ifelse([$1], , :, [$1])
+    else
+      ifelse([$2], , :, [$2])
     fi
 
     AC_LANG_RESTORE
@@ -3760,9 +3760,6 @@ if test "$wxUSE_DRAG_AND_DROP" = "yes" ; then
 
         AC_CHECK_HEADERS(ole2.h)
 
-	dnl for some reason this test always fails here??
-        dnl if test "x$HAVE_OLE2_H" != x ; then
-	dnl this one does the right thing though
         if test "$ac_cv_header_ole2_h" = "yes" ; then
             if test "$GCC" = yes ; then
                 ALL_OBJECTS="$ALL_OBJECTS \$(OLEOBJS)"
