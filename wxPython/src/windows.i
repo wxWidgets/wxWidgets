@@ -63,6 +63,14 @@ public:
                           (wxObjectEventFunction) &wxPyCallback::EventThunker,
                           new wxPyCallback(func));
             }
+            else if (func == Py_None) {
+                self->Disconnect(id, lastId, eventType,
+                                 (wxObjectEventFunction)
+                                 &wxPyCallback::EventThunker);
+            }
+            else {
+                PyErr_SetString(PyExc_TypeError, "Expected callable object or None.");
+            }
         }
 
         bool Disconnect(int id, int lastId = -1,
