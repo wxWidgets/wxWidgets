@@ -148,6 +148,10 @@ SOURCE=.\common\dcbase.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\dircmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\dlgcmn.cpp
 # End Source File
 # Begin Source File
