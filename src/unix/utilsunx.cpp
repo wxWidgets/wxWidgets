@@ -1063,8 +1063,10 @@ bool wxGetEnv(const wxString& var, wxString *value)
 bool wxSetEnv(const wxString& variable, const wxChar *value)
 {
 #if defined(HAVE_SETENV)
-    return setenv(variable.mb_str(), value ? wxString(value).mb_str().data()
-                                           : NULL, 1 /* overwrite */) == 0;
+    return setenv(variable.mb_str(),
+                  value ? (const char *)wxString(value).mb_str()
+                        : NULL,
+                  1 /* overwrite */) == 0;
 #elif defined(HAVE_PUTENV)
     wxString s = variable;
     if ( value )
