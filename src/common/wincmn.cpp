@@ -574,16 +574,7 @@ wxSize wxWindowBase::DoGetBestSize() const
     {
         // for a generic window there is no natural best size - just use the
         // current one
-        //return GetSize();
-
-        // Unfortunately, the above causes problems for code that expects
-        // BestSize to be the minimal unmangled size of the window. (eg.
-        // the window may grow, but BestSize will never suggest it could
-        // be smaller).  Return instead something more indicative of the
-        // fact there is no reasonable answer to be given.  Anything expecting
-        // the current size in that case should check for this and request
-        // it specifically.
-        return wxDefaultSize;
+        return GetSize();
     }
 }
 
