@@ -57,7 +57,8 @@ wxBitmapRefData::wxBitmapRefData()
     m_pSelectedInto = NULL;
     m_nNumColors    = 0;
     m_pBitmapMask   = NULL;
-}
+    m_hBitmap = (WXHBITMAP) NULL;
+} // end of wxBitmapRefData::wxBitmapRefData
 
 void wxBitmapRefData::Free()
 {
@@ -74,7 +75,7 @@ void wxBitmapRefData::Free()
 
     delete m_pBitmapMask;
     m_pBitmapMask = NULL;
-}
+} // end of wxBitmapRefData::Free
 
 // ----------------------------------------------------------------------------
 // wxBitmap creation

@@ -133,6 +133,9 @@ public:
 
     virtual ~wxBitmap();
 
+    // get the given part of bitmap
+    wxBitmap GetSubBitmap(const wxRect& rRect) const;
+
     // copies the contents and mask of the given (colour) icon to the bitmap
     bool CopyFromIcon(const wxIcon& rIcon);
 
@@ -222,11 +225,14 @@ protected:
     inline virtual wxGDIImageRefData* CreateData() const
         { return new wxBitmapRefData; }
 
+    // creates the bitmap from XPM data, supposed to be called from ctor
+    bool CreateFromXpm(const char **bits);
+
 private:
     bool CopyFromIconOrCursor(const wxGDIImage& rIcon);
 
     DECLARE_DYNAMIC_CLASS(wxBitmap)
-};
+}; // end of CLASS wxBitmap
 
 // ----------------------------------------------------------------------------
 // wxMask: a mono bitmap used for drawing bitmaps transparently.
@@ -278,7 +284,7 @@ protected:
 private:
     HDC                             m_hDc;
     HPS                             m_hPs;
-};
+}; // end of wxMask
 
 // ----------------------------------------------------------------------------
 // wxBitmapHandler is a class which knows how to load/save bitmaps to/from file
@@ -342,7 +348,7 @@ public:
                      );
 private:
     DECLARE_DYNAMIC_CLASS(wxBitmapHandler)
-};
+}; // end of wxBitmapHandler
 
 #endif
   // _WX_BITMAP_H_
