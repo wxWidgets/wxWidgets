@@ -20,6 +20,7 @@ DEREZ = @DEREZ@
 DLLPREFIX = @DLLPREFIX@
 EXTRALIBS = @EXTRALIBS@
 EXTRALIBS_GUI = @EXTRALIBS_GUI@
+EXTRALIBS_HTML = @EXTRALIBS_HTML@
 EXTRALIBS_ODBC = @EXTRALIBS_ODBC@
 EXTRALIBS_OPENGL = @EXTRALIBS_OPENGL@
 EXTRALIBS_XML = @EXTRALIBS_XML@
@@ -4749,9 +4750,17 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS_3 =  \
 	corelib_utilsgui.o \
 	corelib_window.o
 @COND_TOOLKIT_PM@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_PM___GUI_SRC_OBJECTS_3)
+@COND_PLATFORM_MACOSX_1@__HTML_SRC_PLATFORM_OBJECTS = monodll_chm.o
+@COND_PLATFORM_UNIX_1@__HTML_SRC_PLATFORM_OBJECTS = monodll_chm.o
 @COND_TOOLKIT_MSW@__HTML_SRC_PLATFORM_OBJECTS = monodll_helpbest.o
+@COND_PLATFORM_MACOSX_1@__HTML_SRC_PLATFORM_OBJECTS_1 = monolib_chm.o
+@COND_PLATFORM_UNIX_1@__HTML_SRC_PLATFORM_OBJECTS_1 = monolib_chm.o
 @COND_TOOLKIT_MSW@__HTML_SRC_PLATFORM_OBJECTS_1 = monolib_helpbest.o
+@COND_PLATFORM_MACOSX_1@__HTML_SRC_PLATFORM_OBJECTS_2 = htmldll_chm.o
+@COND_PLATFORM_UNIX_1@__HTML_SRC_PLATFORM_OBJECTS_2 = htmldll_chm.o
 @COND_TOOLKIT_MSW@__HTML_SRC_PLATFORM_OBJECTS_2 = htmldll_helpbest.o
+@COND_PLATFORM_MACOSX_1@__HTML_SRC_PLATFORM_OBJECTS_3 = htmllib_chm.o
+@COND_PLATFORM_UNIX_1@__HTML_SRC_PLATFORM_OBJECTS_3 = htmllib_chm.o
 @COND_TOOLKIT_MSW@__HTML_SRC_PLATFORM_OBJECTS_3 = htmllib_helpbest.o
 @COND_WXUSE_EXPAT_BUILTIN@__INC_EXPAT_p = -I$(top_srcdir)/src/expat/lib
 @COND_WXUSE_LIBJPEG_BUILTIN@__INC_JPEG_p = -I$(top_srcdir)/src/jpeg
@@ -11323,9 +11332,15 @@ distclean: clean
 @COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $<
 
 @COND_MONOLITHIC_0_SHARED_1_USE_HTML_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(__htmldll_PCH_DEP)  $(HTMLDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname) $(__coredll___depname) $(__basedll___depname)
-@COND_MONOLITHIC_0_SHARED_1_USE_HTML_1@	$(SHARED_LD_CXX) $@ $(HTMLDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__htmldll___macinstnamecmd) $(__htmldll___importlib) $(__htmldll___soname_flags) $(dll___macver)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(LIBDIRNAME)/$(LIBPREFIX)wx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
+@COND_MONOLITHIC_0_SHARED_1_USE_HTML_1@	$(SHARED_LD_CXX) $@ $(HTMLDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__htmldll___macinstnamecmd) $(__htmldll___importlib) $(__htmldll___soname_flags) $(dll___macver)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(LIBDIRNAME)/$(LIBPREFIX)wx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)$(DLLIMPEXT) $(EXTRALIBS_HTML)
 @COND_MONOLITHIC_0_SHARED_1_USE_HTML_1@	
 @COND_MONOLITHIC_0_SHARED_1_USE_HTML_1@	$(__htmldll___so_symlinks_cmd)
+
+@COND_PLATFORM_UNIX_1@htmldll_chm.o: $(srcdir)/src/html/chm.cpp
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(HTMLDLL_CXXFLAGS) $<
+
+@COND_PLATFORM_MACOSX_1@htmldll_chm.o: $(srcdir)/src/html/chm.cpp
+@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(HTMLDLL_CXXFLAGS) $<
 
 htmldll_helpbest.o: $(srcdir)/src/msw/helpbest.cpp
 	$(CXXC) -c -o $@ $(HTMLDLL_CXXFLAGS) $<
@@ -11397,6 +11412,12 @@ htmldll_winpars.o: $(srcdir)/src/html/winpars.cpp
 @COND_MONOLITHIC_0_SHARED_0_USE_HTML_1@	rm -f $@
 @COND_MONOLITHIC_0_SHARED_0_USE_HTML_1@	$(AR) rcu $@ $(HTMLLIB_OBJECTS)
 @COND_MONOLITHIC_0_SHARED_0_USE_HTML_1@	$(RANLIB) $@
+
+@COND_PLATFORM_UNIX_1@htmllib_chm.o: $(srcdir)/src/html/chm.cpp
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(HTMLLIB_CXXFLAGS) $<
+
+@COND_PLATFORM_MACOSX_1@htmllib_chm.o: $(srcdir)/src/html/chm.cpp
+@COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(HTMLLIB_CXXFLAGS) $<
 
 htmllib_helpbest.o: $(srcdir)/src/msw/helpbest.cpp
 	$(CXXC) -c -o $@ $(HTMLLIB_CXXFLAGS) $<
@@ -11664,7 +11685,7 @@ locale_install:
 @COND_TOOLKIT_MAC@	$(INSTALL_DATA) lib/libwx_$(TOOLCHAIN_NAME).1.rsrc $(libdir)
 
 @COND_MONOLITHIC_1_SHARED_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(dll___targetsuf3): $(__monodll_PCH_DEP)  $(MONODLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname)
-@COND_MONOLITHIC_1_SHARED_1@	$(SHARED_LD_CXX) $@ $(MONODLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__monodll___macinstnamecmd) $(__monodll___importlib) $(__monodll___soname_flags) $(dll___macver)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(EXTRALIBS_XML) $(EXTRALIBS_ODBC)
+@COND_MONOLITHIC_1_SHARED_1@	$(SHARED_LD_CXX) $@ $(MONODLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__monodll___macinstnamecmd) $(__monodll___importlib) $(__monodll___soname_flags) $(dll___macver)  $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(EXTRALIBS_XML) $(EXTRALIBS_HTML) $(EXTRALIBS_ODBC)
 @COND_MONOLITHIC_1_SHARED_1@	
 @COND_MONOLITHIC_1_SHARED_1@	$(__monodll___so_symlinks_cmd)
 
@@ -11952,6 +11973,12 @@ monodll_calctrl.o: $(srcdir)/src/generic/calctrl.cpp
 
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monodll_checklst.o: $(srcdir)/src/cocoa/checklst.mm
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+@COND_PLATFORM_UNIX_1_USE_GUI_1@monodll_chm.o: $(srcdir)/src/html/chm.cpp
+@COND_PLATFORM_UNIX_1_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@monodll_chm.o: $(srcdir)/src/html/chm.cpp
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 @COND_USE_GUI_1@monodll_choiccmn.o: $(srcdir)/src/common/choiccmn.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
@@ -14546,6 +14573,12 @@ monolib_calctrl.o: $(srcdir)/src/generic/calctrl.cpp
 
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monolib_checklst.o: $(srcdir)/src/cocoa/checklst.mm
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+@COND_PLATFORM_UNIX_1_USE_GUI_1@monolib_chm.o: $(srcdir)/src/html/chm.cpp
+@COND_PLATFORM_UNIX_1_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@monolib_chm.o: $(srcdir)/src/html/chm.cpp
+@COND_PLATFORM_MACOSX_1_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 @COND_USE_GUI_1@monolib_choiccmn.o: $(srcdir)/src/common/choiccmn.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<

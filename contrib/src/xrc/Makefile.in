@@ -17,6 +17,7 @@ CXXFLAGS = @CXXFLAGS@
 DLLPREFIX = @DLLPREFIX@
 EXTRALIBS = @EXTRALIBS@
 EXTRALIBS_GUI = @EXTRALIBS_GUI@
+EXTRALIBS_HTML = @EXTRALIBS_HTML@
 EXTRALIBS_XML = @EXTRALIBS_XML@
 HOST_SUFFIX = @HOST_SUFFIX@
 INSTALL_DATA = @INSTALL_DATA@
@@ -287,7 +288,7 @@ install-strip: install
 uninstall: 
 
 @COND_SHARED_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__xrcdll___targetsuf3): $(__xrcdll_PCH_DEP)  $(XRCDLL_OBJECTS)
-@COND_SHARED_1@	$(SHARED_LD_CXX) $@ $(XRCDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__xrcdll___macinstnamecmd) $(__xrcdll___importlib) $(__xrcdll___soname_flags) $(__xrcdll___macver)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(__WXLIB_HTML_p)  $(__WXLIB_ADV_p)  $(__WXLIB_CORE_p)  $(__WXLIB_XML_p) $(EXTRALIBS_XML) $(__WXLIB_BASE_p)
+@COND_SHARED_1@	$(SHARED_LD_CXX) $@ $(XRCDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__xrcdll___macinstnamecmd) $(__xrcdll___importlib) $(__xrcdll___soname_flags) $(__xrcdll___macver)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(__WXLIB_HTML_p) $(EXTRALIBS_HTML) $(__WXLIB_ADV_p)  $(__WXLIB_CORE_p)  $(__WXLIB_XML_p) $(EXTRALIBS_XML) $(__WXLIB_BASE_p)
 @COND_SHARED_1@	
 @COND_SHARED_1@	$(__xrcdll___so_symlinks_cmd)
 

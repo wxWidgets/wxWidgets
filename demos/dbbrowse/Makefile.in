@@ -16,6 +16,7 @@ CXXFLAGS = @CXXFLAGS@
 EXEEXT = @EXEEXT@
 EXTRALIBS = @EXTRALIBS@
 EXTRALIBS_GUI = @EXTRALIBS_GUI@
+EXTRALIBS_HTML = @EXTRALIBS_HTML@
 EXTRALIBS_ODBC = @EXTRALIBS_ODBC@
 HOST_SUFFIX = @HOST_SUFFIX@
 LDFLAGS = @LDFLAGS@
@@ -134,7 +135,7 @@ clean:
 	rm -rf dbbrowse.app
 
 dbbrowse$(EXEEXT): $(DBBROWSE_OBJECTS) $(__dbbrowse___win32rc)
-	$(CXX) -o $@ $(DBBROWSE_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  $(__WXLIB_DBGRID_p)  $(__WXLIB_ADV_p)  $(__WXLIB_ODBC_p) $(EXTRALIBS_ODBC) $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI)
+	$(CXX) -o $@ $(DBBROWSE_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  $(__WXLIB_DBGRID_p)  $(__WXLIB_ADV_p)  $(__WXLIB_ODBC_p) $(EXTRALIBS_ODBC) $(__WXLIB_HTML_p) $(EXTRALIBS_HTML) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI)
 	$(__dbbrowse___mac_rezcmd)
 	$(__dbbrowse___mac_setfilecmd)
 	$(__dbbrowse___os2_emxbindcmd)

@@ -202,6 +202,12 @@ dnl ### begin block 1_COND_PLATFORM_MACOSX_1_TOOLKIT_MAC ###
         COND_PLATFORM_MACOSX_1_TOOLKIT_MAC=""
     fi
     AC_SUBST(COND_PLATFORM_MACOSX_1_TOOLKIT_MAC)
+dnl ### begin block 1_COND_PLATFORM_MACOSX_1_USE_GUI_1 ###
+    COND_PLATFORM_MACOSX_1_USE_GUI_1="#"
+    if test "x$PLATFORM_MACOSX" = "x1" -a "x$USE_GUI" = "x1" ; then
+        COND_PLATFORM_MACOSX_1_USE_GUI_1=""
+    fi
+    AC_SUBST(COND_PLATFORM_MACOSX_1_USE_GUI_1)
 dnl ### begin block 1_COND_PLATFORM_MACOSX_1_USE_SOVERSION_1 ###
     COND_PLATFORM_MACOSX_1_USE_SOVERSION_1="#"
     if test "x$PLATFORM_MACOSX" = "x1" -a "x$USE_SOVERSION" = "x1" ; then
@@ -232,6 +238,12 @@ dnl ### begin block 1_COND_PLATFORM_UNIX_1 ###
         COND_PLATFORM_UNIX_1=""
     fi
     AC_SUBST(COND_PLATFORM_UNIX_1)
+dnl ### begin block 1_COND_PLATFORM_UNIX_1_USE_GUI_1 ###
+    COND_PLATFORM_UNIX_1_USE_GUI_1="#"
+    if test "x$PLATFORM_UNIX" = "x1" -a "x$USE_GUI" = "x1" ; then
+        COND_PLATFORM_UNIX_1_USE_GUI_1=""
+    fi
+    AC_SUBST(COND_PLATFORM_UNIX_1_USE_GUI_1)
 dnl ### begin block 1_COND_PLATFORM_WIN32_0 ###
     COND_PLATFORM_WIN32_0="#"
     if test "x$PLATFORM_WIN32" = "x0" ; then
