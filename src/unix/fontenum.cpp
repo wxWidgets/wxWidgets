@@ -106,7 +106,7 @@ static bool ProcessFamiliesFromFontList(wxFontEnumerator *This,
     {
         char *font = fonts[n];
 #if wxUSE_REGEX
-        if ( re.Matches(font) )
+        if ( !re.Matches(font) )
 #else // !wxUSE_REGEX
         if ( !wxString(font).Matches(wxT("-*-*-*-*-*-*-*-*-*-*-*-*-*-*")) )
 #endif // wxUSE_REGEX/!wxUSE_REGEX
