@@ -491,6 +491,25 @@ static rgbRecord theRGBRecords[] =
 };
 static int numTheRGBRecords = 234;
 
+static unsigned char ParseHexadecimal(char digit1, char digit2)
+{
+    unsigned char i1, i2;
+
+    if (digit1 >= 'a')
+        i1 = digit1 - 'a' + 0x0A;
+    else if (digit1 >= 'A')
+        i1 = digit1 - 'A' + 0x0A;
+    else
+        i1 = digit1 - '0';
+    if (digit2 >= 'a')
+        i2 = digit2 - 'a' + 0x0A;
+    else if (digit2 >= 'A')
+        i2 = digit2 - 'A' + 0x0A;
+    else
+        i2 = digit2 - '0';
+    return (0x10 * i1 + i2);
+}
+
 static bool GetRGBFromName(const char *inname, bool *isNone,
                            unsigned char *r, unsigned char*g, unsigned char *b)
 {
@@ -503,16 +522,10 @@ static bool GetRGBFromName(const char *inname, bool *isNone,
     // #rrggbb are not in database, we parse them directly
     if ( *inname == '#' && strlen(inname) == 7 )
     {
-        char buf[3];
-        buf[2] = 0;
-        buf[0] = inname[1]; buf[1] = inname[2];
-        *r = (unsigned char) wxHexToDec(buf);
-        buf[0] = inname[3]; buf[1] = inname[4];
-        *g = (unsigned char) wxHexToDec(buf);
-        buf[0] = inname[5]; buf[1] = inname[6];
-        *b = (unsigned char) wxHexToDec(buf);
+        *r = ParseHexadecimal(inname[1], inname[2]);
+        *g = ParseHexadecimal(inname[3], inname[4]);
+        *b = ParseHexadecimal(inname[5], inname[6]);
         *isNone = FALSE;
-
         return TRUE;
     }
 
@@ -634,6 +647,7 @@ wxImage wxXPMDecoder::ReadData(const char **xpm_data)
     /*
      *  Read hints and initialize structures:
      */
+     
     count = sscanf(xpm_data[0], "%u %u %u %u",
                    &width, &height, &colors_cnt, &chars_per_pixel);
     if ( count != 4 || width * height * colors_cnt == 0 )
