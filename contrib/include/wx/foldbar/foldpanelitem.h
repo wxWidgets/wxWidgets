@@ -51,10 +51,10 @@ public:
                      int leftSpacing = wxFPB_DEFAULT_LEFTSPACING, int rightSpacing = wxFPB_DEFAULT_RIGHTSPACING) 
         : _wnd(wnd)
         , _type(WINDOW)
-        , _ySpacing(ySpacing)
+        , _flags(flags)
         , _leftSpacing(leftSpacing)
         , _rightSpacing(rightSpacing)
-        , _flags(flags)
+        , _ySpacing(ySpacing)
         , _lineWidth(0)
         , _lineY(0)
     {
@@ -66,13 +66,13 @@ public:
                      int rightSpacing = wxFPB_DEFAULT_RIGHTLINESPACING) 
         : _wnd(0)
         , _type(SEPARATOR)
-        , _ySpacing(ySpacing)
+        , _flags(wxFPB_ALIGN_WIDTH)
         , _leftSpacing(leftSpacing)
         , _rightSpacing(rightSpacing)
-        , _flags(wxFPB_ALIGN_WIDTH)
-        , _sepLineColour(lineColor)
+        , _ySpacing(ySpacing)
         , _lineWidth(0)
         , _lineY(y)
+        , _sepLineColour(lineColor)
     {
     };
 

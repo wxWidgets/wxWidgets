@@ -235,7 +235,7 @@ void wxFoldPanelBar::RefreshPanelsFrom(wxFoldPanelItem *item)
 {
     wxASSERT(item);
 
-    size_t i = _panels.Index(item);
+    int i = _panels.Index(item);
     if(i != wxNOT_FOUND)
         RefreshPanelsFrom(i);
 }

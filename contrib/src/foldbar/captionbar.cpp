@@ -44,11 +44,11 @@ wxCaptionBar::wxCaptionBar(wxWindow* parent, const wxString &caption, wxImageLis
                            const wxCaptionBarStyle &cbstyle, const wxPoint& pos, const wxSize& size, long style)
     : wxWindow(parent, id, pos, size, style)
     , _caption(caption)
-    , _collapsed(false)
     , _foldIcons(images)
     , _rightIndent(wxFPB_BMP_RIGHTSPACE)
     , _iconWidth(16)
     , _iconHeight(16)
+    , _collapsed(false)
 {
     // do initialisy thingy stuff
 
@@ -239,7 +239,11 @@ void wxCaptionBar::DrawVerticalGradient(wxDC &dc, const wxRect &rect )
     wxColour currCol;
     for(int y = rect.y; y < rect.y + rect.height; y++)
     {
-        currCol.Set(col1.Red() + rf, col1.Green() + gf, col1.Blue() + bf);
+        currCol.Set(
+            (unsigned char)(col1.Red() + rf),
+            (unsigned char)(col1.Green() + gf), 
+            (unsigned char)(col1.Blue() + bf)
+        );
         dc.SetBrush( wxBrush( currCol, wxSOLID ) );
         dc.DrawRectangle( rect.x, rect.y + (y - rect.y), rect.width, rect.height );
         //currCol.Set(currCol.Red() + rstep, currCol.Green() + gstep, currCol.Blue() + bstep);
@@ -267,7 +271,11 @@ void wxCaptionBar::DrawHorizontalGradient(wxDC &dc, const wxRect &rect )
     wxColour currCol;
     for(int x = rect.x; x < rect.x + rect.width; x++)
     {
-        currCol.Set(col1.Red() + rf, col1.Green() + gf, col1.Blue() + bf);
+        currCol.Set(
+            (unsigned char)(col1.Red() + rf), 
+            (unsigned char)(col1.Green() + gf), 
+            (unsigned char)(col1.Blue() + bf)
+        );
         dc.SetBrush( wxBrush( currCol, wxSOLID ) );
         dc.DrawRectangle( rect.x + (x - rect.x), rect.y, 1, rect.height );
         rf += rstep; gf += gstep; bf += bstep;

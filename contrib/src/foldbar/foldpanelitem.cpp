@@ -38,9 +38,9 @@ wxFoldPanelItem::wxFoldPanelItem( wxWindow *parent, const wxString &caption, wxI
     : _controlCreated(false)
     , _yUserSize(0)
     , _yPanelSize(0)
+    , _yLastInsertPos(0)
     , _yPos(0)
     , _userSized(false)
-    , _yLastInsertPos(0)
 {
     wxCHECK2(parent, return);
 
