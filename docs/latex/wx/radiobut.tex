@@ -16,7 +16,10 @@ exclusive options. It has a text label next to a (usually) round button.
 
 \wxheading{Window styles}
 
-There are no specific styles for this class.
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxRB\_GROUP}}{Marks the beginning of a new group of radio buttons.}
+\end{twocollist}
 
 See also \helpref{window styles overview}{windowstyles}.
 
@@ -98,7 +101,8 @@ Returns TRUE if the radio button is depressed, FALSE otherwise.
 
 \func{void}{SetValue}{\param{const bool}{ value}}
 
-Sets the radio button to selected or deselected status.
+Sets the radio button to selected or deselected status. This does not cause a
+wxEVT\_COMMAND\_RADIOBUTTON\_SELECTED event to get emitted.
 
 \wxheading{Parameters}
 

@@ -42,12 +42,6 @@ static void gtk_checkbox_clicked_callback( GtkWidget *WXUNUSED(widget), wxCheckB
 
     if (!cb->m_hasVMT) return;
 
-    if (cb->m_blockFirstEvent)
-    {
-        cb->m_blockFirstEvent = FALSE;
-        return;
-    }
-
     if (g_blockEventsOnDrag) return;
 
     wxCommandEvent event(wxEVT_COMMAND_CHECKBOX_CLICKED, cb->GetId());
@@ -80,8 +74,6 @@ bool wxCheckBox::Create(wxWindow *parent,
 
     PreCreation( parent, id, pos, size, style, name );
 
-    m_blockFirstEvent = FALSE;
-
 #if wxUSE_VALIDATORS
     SetValidator( validator );
 #endif
@@ -102,7 +94,6 @@ bool wxCheckBox::Create(wxWindow *parent,
         gtk_box_pack_start(GTK_BOX(m_widget), m_widgetLabel, FALSE, FALSE, 3);
         gtk_box_pack_start(GTK_BOX(m_widget), m_widgetCheckbox, FALSE, FALSE, 3);
 
-        // VZ: why do I have to do this to make them appear?
         gtk_widget_show( m_widgetLabel );
         gtk_widget_show( m_widgetCheckbox );
     }
@@ -146,14 +137,19 @@ void wxCheckBox::SetValue( bool state )
 {
     wxCHECK_RET( m_widgetCheckbox != NULL, _T("invalid checkbox") );
 
-    if ( state == GetValue() )
+    if (state == GetValue())
         return;
 
-    // for compatibility with wxMSW don't send notification when the check box
-    // state is changed programmatically
-    m_blockFirstEvent = TRUE;
+    gtk_signal_disconnect_by_func( GTK_OBJECT(m_widgetCheckbox),
+                        GTK_SIGNAL_FUNC(gtk_checkbox_clicked_callback),
+                        (gpointer *)this );
 
     gtk_toggle_button_set_state( GTK_TOGGLE_BUTTON(m_widgetCheckbox), state );
+    
+    gtk_signal_connect( GTK_OBJECT(m_widgetCheckbox),
+                        "clicked",
+                        GTK_SIGNAL_FUNC(gtk_checkbox_clicked_callback),
+                        (gpointer *)this );
 }
 
 bool wxCheckBox::GetValue() const

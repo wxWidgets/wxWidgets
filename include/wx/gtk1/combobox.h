@@ -117,6 +117,8 @@ public:
   wxList   m_clientDataList;
   wxList   m_clientObjectList;
 
+  void DisableEvents();
+  void EnableEvents();
   void AppendCommon( const wxString &item );
   GtkWidget* GetConnectWidget();
   bool IsOwnGtkWindow( GdkWindow *window );

@@ -219,7 +219,8 @@ implements the following methods:\par
 
 \func{void}{SetSelection}{\param{int}{ n}}
 
-Sets a button by passing the desired string position.
+Sets a button by passing the desired string position. This does not cause
+a wxEVT\_COMMAND\_RADIOBOX\_SELECTED event to get emitted.
 
 \wxheading{Parameters}
 
@@ -229,7 +230,8 @@ Sets a button by passing the desired string position.
 
 \func{void}{SetStringSelection}{\param{const wxString\& }{string}}
 
-Sets a button by passing the desired string.
+Sets the selection to a button by passing the desired string. This does not cause
+a wxEVT\_COMMAND\_RADIOBOX\_SELECTED event to get emitted.
 
 \wxheading{Parameters}
 

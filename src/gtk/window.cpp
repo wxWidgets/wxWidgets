@@ -1799,6 +1799,7 @@ void wxWindow::Init()
     m_insertCallback = (wxInsertChildFunction) NULL;
 
     m_isStaticBox = FALSE;
+    m_isRadioButton = FALSE;
     m_acceptsFocus = FALSE;
 }
 

@@ -422,8 +422,12 @@ void wxComboBox::SetSelection( int n )
 {
     wxCHECK_RET( m_widget != NULL, _T("invalid combobox") );
 
+    DisableEvents();
+
     GtkWidget *list = GTK_COMBO(m_widget)->list;
     gtk_list_select_item( GTK_LIST(list), n );
+
+    EnableEvents();
 }
 
 void wxComboBox::SetStringSelection( const wxString &string )
@@ -584,6 +588,32 @@ void wxComboBox::OnChar( wxKeyEvent &event )
     }
 
     event.Skip();
+}
+
+void wxComboBox::DisableEvents()
+{
+    GtkList *list = GTK_LIST( GTK_COMBO(m_widget)->list );
+    GList *child = list->children;
+    while (child)
+    {
+        gtk_signal_disconnect_by_func( GTK_OBJECT(child->data), 
+          GTK_SIGNAL_FUNC(gtk_combo_clicked_callback), (gpointer)this );
+
+        child = child->next;
+    }
+}
+
+void wxComboBox::EnableEvents()
+{
+    GtkList *list = GTK_LIST( GTK_COMBO(m_widget)->list );
+    GList *child = list->children;
+    while (child)
+    {
+        gtk_signal_connect( GTK_OBJECT(child->data), "select",
+          GTK_SIGNAL_FUNC(gtk_combo_clicked_callback), (gpointer)this );
+
+        child = child->next;
+    }
 }
 
 void wxComboBox::OnSize( wxSizeEvent &event )

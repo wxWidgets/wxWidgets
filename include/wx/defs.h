@@ -1421,6 +1421,7 @@ typedef int            gint;
 typedef unsigned       guint;
 typedef unsigned long  gulong;
 typedef void*          gpointer;
+typedef struct _GSList GSList;
 
 /* Stand-ins for GDK types */
 typedef gulong                  GdkAtom;

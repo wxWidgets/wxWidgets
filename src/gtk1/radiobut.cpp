@@ -43,12 +43,6 @@ void gtk_radiobutton_clicked_callback( GtkWidget *WXUNUSED(widget), wxRadioButto
 
     if (!rb->m_hasVMT) return;
   
-    if (rb->m_blockFirstEvent)
-    {
-        rb->m_blockFirstEvent = FALSE;
-        return;
-    } 
-  
     if (g_blockEventsOnDrag) return;
   
     wxCommandEvent event( wxEVT_COMMAND_RADIOBUTTON_SELECTED, rb->GetId());
@@ -73,22 +67,50 @@ bool wxRadioButton::Create( wxWindow *parent, wxWindowID id, const wxString& lab
     wxSize newSize = size;
 
     PreCreation( parent, id, pos, newSize, style, name );
+    
+    m_isRadioButton = TRUE;
   
 #if wxUSE_VALIDATORS
     SetValidator( validator );
 #endif
 
-    m_widget = gtk_radio_button_new_with_label( (GSList *) NULL, label.mbc_str() );
+
+    if (HasFlag(wxRB_GROUP))
+    {
+        /* start a new group */
+        m_radioButtonGroup = (GSList*) NULL;
+    }
+    else
+    {
+        /* search backward for last group start */
+        wxRadioButton *chief = (wxRadioButton*) NULL;
+        wxWindowList::Node *node = parent->GetChildren().GetLast();
+        while (node)
+	{
+	    wxWindow *child = node->GetData();
+	    if (child->m_isRadioButton)
+	    {
+	         chief = (wxRadioButton*) child;
+		 if (child->HasFlag(wxRB_GROUP)) break;
+	    }
+	    if (chief)
+	    {
+                /* we are part of the group started by chief */
+	        m_radioButtonGroup = gtk_radio_button_group( GTK_RADIO_BUTTON(chief->m_widget) );
+	    }
+	    else
+	    {
+                /* start a new group */
+                m_radioButtonGroup = (GSList*) NULL;
+	    }
+	    node = node->GetPrevious();
+        }
+    }
+
+    m_widget = gtk_radio_button_new_with_label( m_radioButtonGroup, label.mbc_str() );
       
-    m_theOtherRadioButtton = 
-       gtk_radio_button_new_with_label(
-         gtk_radio_button_group( GTK_RADIO_BUTTON(m_widget) ),
-         "button2" );
-  
     SetLabel(label);
 
-    m_blockFirstEvent = FALSE;
-    
     if (newSize.x == -1) newSize.x = 22+gdk_string_measure( m_widget->style->font, label.mbc_str() );
     if (newSize.y == -1) newSize.y = 26;
     SetSize( newSize.x, newSize.y );
@@ -123,15 +145,23 @@ void wxRadioButton::SetValue( bool val )
 {
     wxCHECK_RET( m_widget != NULL, _T("invalid radiobutton") );
   
-    if ( val == GetValue() )
+    if (val == GetValue())
         return;
 
-    m_blockFirstEvent = TRUE;
-  
+    gtk_signal_disconnect_by_func( GTK_OBJECT(m_widget),
+      GTK_SIGNAL_FUNC(gtk_radiobutton_clicked_callback), (gpointer*)this );
+
     if (val)
+    {
         gtk_toggle_button_set_state( GTK_TOGGLE_BUTTON(m_widget), TRUE );
+    }
     else
-        gtk_toggle_button_set_state( GTK_TOGGLE_BUTTON(m_theOtherRadioButtton), TRUE );
+    {
+        // should give an assert
+    }
+	
+    gtk_signal_connect( GTK_OBJECT(m_widget), "clicked", 
+      GTK_SIGNAL_FUNC(gtk_radiobutton_clicked_callback), (gpointer*)this );
 }
 
 bool wxRadioButton::GetValue() const

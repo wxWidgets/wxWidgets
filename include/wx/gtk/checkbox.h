@@ -71,7 +71,6 @@ public:
     // implementation
     void ApplyWidgetStyle();
 
-    bool       m_blockFirstEvent;
     GtkWidget *m_widgetCheckbox;
     GtkWidget *m_widgetLabel;
 };

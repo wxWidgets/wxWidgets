@@ -338,7 +338,7 @@ Associates the given client data pointer with the given item.
 
 \func{void}{SetFirstItem}{\param{const wxString\& }{string}}
 
-Set the specified item to be the first visible item.
+Set the specified item to be the first visible item. Windows only.
 
 \wxheading{Parameters}
 
@@ -350,7 +350,8 @@ Set the specified item to be the first visible item.
 
 \func{void}{SetSelection}{\param{int}{ n}, \param{const bool }{select = TRUE}}
 
-Selects or deselects the given item.
+Selects or deselects the given item. This does not cause a
+wxEVT\_COMMAND\_LISTBOX\_SELECT event to get emitted.
 
 \wxheading{Parameters}
 
@@ -374,7 +375,8 @@ Sets the string value of an item.
 
 \func{void}{SetStringSelection}{\param{const wxString\& }{ string}, \param{const bool}{ select = TRUE}}
 
-Sets the current selection.
+Sets the current selection. This does not cause a
+wxEVT\_COMMAND\_LISTBOX\_SELECT event to get emitted.
 
 \wxheading{Parameters}
 

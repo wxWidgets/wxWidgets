@@ -96,6 +96,8 @@ public:
     
   // implementation    
     
+    void DisableEvents();
+    void EnableEvents();
     bool IsOwnGtkWindow( GdkWindow *window );
     void ApplyWidgetStyle();
     wxSize LayoutItems();

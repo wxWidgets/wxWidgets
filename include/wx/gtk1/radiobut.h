@@ -41,36 +41,34 @@ extern const char* wxRadioButtonNameStr;
 
 class wxRadioButton: public wxControl
 {
-  DECLARE_DYNAMIC_CLASS(wxRadioButton)
+DECLARE_DYNAMIC_CLASS(wxRadioButton)
   
-  public:
-    inline wxRadioButton() {}
-    inline wxRadioButton( wxWindow *parent, wxWindowID id,
+public:
+  inline wxRadioButton() {}
+  inline wxRadioButton( wxWindow *parent, wxWindowID id,
            const wxString& label,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize, long style = 0,
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxRadioButtonNameStr )
-    {
+  {
       Create( parent, id, label, pos, size, style, validator, name );
-    }
-    bool Create(wxWindow *parent, wxWindowID id,
+  }
+  bool Create(wxWindow *parent, wxWindowID id,
            const wxString& label,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize, long style = 0,
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxRadioButtonNameStr );
-    virtual void SetLabel(const wxString& label);
-    virtual void SetValue(bool val);
-    virtual bool GetValue() const;
-    bool Enable( bool enable );
+  virtual void SetLabel(const wxString& label);
+  virtual void SetValue(bool val);
+  virtual bool GetValue() const;
+  bool Enable( bool enable );
     
   // implementation
     
-    void ApplyWidgetStyle();
-    
-    bool        m_blockFirstEvent;
-    GtkWidget*  m_theOtherRadioButtton;
+  GSList *m_radioButtonGroup;
+  void ApplyWidgetStyle();
 };
 
 #endif

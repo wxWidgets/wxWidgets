@@ -640,7 +640,11 @@ void wxListBox::Deselect( int n )
 {
     wxCHECK_RET( m_list != NULL, _T("invalid listbox") );
 
+    DisableEvents();
+
     gtk_list_unselect_item( m_list, n );
+    
+    EnableEvents();
 }
 
 int wxListBox::FindString( const wxString &item ) const
@@ -799,10 +803,14 @@ void wxListBox::SetSelection( int n, bool select )
 {
     wxCHECK_RET( m_list != NULL, _T("invalid listbox") );
 
+    DisableEvents();
+
     if (select)
         gtk_list_select_item( m_list, n );
     else
         gtk_list_unselect_item( m_list, n );
+	
+    EnableEvents();
 }
 
 void wxListBox::SetString( int n, const wxString &string )
@@ -859,7 +867,7 @@ void wxListBox::ApplyToolTip( GtkTooltips *tips, const wxChar *tip )
     GList *child = m_list->children;
     while (child)
     {
-        gtk_tooltips_set_tip( tips, GTK_WIDGET( child->data ), wxConvLocal.cWX2MB(tip), (gchar*) NULL );
+        gtk_tooltips_set_tip( tips, GTK_WIDGET( child->data ), wxConvCurrent->cWX2MB(tip), (gchar*) NULL );
         child = child->next;
     }
 }
@@ -897,6 +905,38 @@ void wxListBox::SetDropTarget( wxDropTarget *dropTarget )
 #endif
 }
 #endif
+
+void wxListBox::DisableEvents()
+{
+    GList *child = m_list->children;
+    while (child)
+    {
+        gtk_signal_disconnect_by_func( GTK_OBJECT(child->data),
+          GTK_SIGNAL_FUNC(gtk_listitem_select_callback), (gpointer)this );
+
+        if (HasFlag(wxLB_MULTIPLE))
+            gtk_signal_disconnect_by_func( GTK_OBJECT(child->data),
+              GTK_SIGNAL_FUNC(gtk_listitem_select_callback), (gpointer)this );
+
+        child = child->next;
+    }
+}
+
+void wxListBox::EnableEvents()
+{
+    GList *child = m_list->children;
+    while (child)
+    {
+        gtk_signal_connect( GTK_OBJECT(child->data), "select",
+          GTK_SIGNAL_FUNC(gtk_listitem_select_callback), (gpointer)this );
+
+        if (HasFlag(wxLB_MULTIPLE))
+            gtk_signal_connect( GTK_OBJECT(child->data), "deselect",
+              GTK_SIGNAL_FUNC(gtk_listitem_select_callback), (gpointer)this );
+	  
+        child = child->next;
+    }
+}
 
 GtkWidget *wxListBox::GetConnectWidget()
 {

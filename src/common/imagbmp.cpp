@@ -341,7 +341,7 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
                         ptr[poffset + 1] = cmap[aByte].g;
                         ptr[poffset + 2] = cmap[aByte].b;
                         column++;
-                        linepos += size;
+                        // linepos += size;    seems to be wrong, RR
                     }
                 }
                }

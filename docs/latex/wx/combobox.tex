@@ -295,7 +295,8 @@ Sets the insertion point at the end of the combobox text field.
 
 \func{void}{SetSelection}{\param{int}{ n}}
 
-Selects the given item in the combobox list.
+Selects the given item in the combobox list. This does not cause a
+wxEVT\_COMMAND\_COMBOBOX\_SELECTED event to get emitted.
 
 \func{void}{SetSelection}{\param{long}{ from}, \param{long}{ to}}
 

@@ -355,8 +355,6 @@ void wxChoice::SetSelection( int n )
 
     int tmp = n;
     gtk_option_menu_set_history( GTK_OPTION_MENU(m_widget), (gint)tmp );
-
-    gtk_choice_clicked_callback( (GtkWidget *) NULL, this );
 }
 
 void wxChoice::SetStringSelection( const wxString &string )
@@ -365,6 +363,36 @@ void wxChoice::SetStringSelection( const wxString &string )
 
     int n = FindString( string );
     if (n != -1) SetSelection( n );
+}
+
+void wxChoice::DisableEvents()
+{
+/*
+    GtkMenuShell *menu_shell = GTK_MENU_SHELL( gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) ) );
+    GList *child = menu_shell->children;
+    while (child)
+    {
+        gtk_signal_disconnect_by_func( GTK_OBJECT( child->data ),
+          GTK_SIGNAL_FUNC(gtk_choice_clicked_callback), (gpointer*)this );
+
+        child = child->next;
+    }
+*/
+}
+
+void wxChoice::EnableEvents()
+{
+/*
+    GtkMenuShell *menu_shell = GTK_MENU_SHELL( gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) ) );
+    GList *child = menu_shell->children;
+    while (child)
+    {
+        gtk_signal_connect( GTK_OBJECT( child->data ), "activate",
+          GTK_SIGNAL_FUNC(gtk_choice_clicked_callback), (gpointer*)this );
+
+        child = child->next;
+    }
+*/
 }
 
 void wxChoice::ApplyWidgetStyle()

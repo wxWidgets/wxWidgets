@@ -939,6 +939,7 @@ void wxWindowDC::SetPen( const wxPen &pen )
 	}
     }
   
+#if (GTK_MINOR_VERSION > 0)
     if (req_dash && req_nb_dash)
     {
         char *real_req_dash = new char[req_nb_dash];
@@ -955,6 +956,7 @@ void wxWindowDC::SetPen( const wxPen &pen )
 	    gdk_gc_set_dashes( m_penGC, 0, (char*)req_dash, req_nb_dash );
         }
     }
+#endif
 	
     GdkCapStyle capStyle = GDK_CAP_ROUND;
     switch (m_pen.GetCap())

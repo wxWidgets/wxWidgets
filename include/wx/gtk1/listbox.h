@@ -109,6 +109,8 @@ public:
 
     // implementation
 
+    void DisableEvents();
+    void EnableEvents();
     void AppendCommon( const wxString &item );
     int GetIndex( GtkWidget *item ) const;
     GtkWidget *GetConnectWidget();

@@ -99,7 +99,8 @@ Returns TRUE if it is checked, FALSE otherwise.
 
 \func{void}{SetValue}{\param{const bool}{ state}}
 
-Sets the checkbox to the given state.
+Sets the checkbox to the given state. This does not cause a
+wxEVT\_COMMAND\_CHECKBOX\_CLICKED event to get emitted.
 
 \wxheading{Parameters}
 

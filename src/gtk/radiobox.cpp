@@ -328,7 +328,11 @@ void wxRadioBox::SetSelection( int n )
 
     GtkToggleButton *button = GTK_TOGGLE_BUTTON( node->Data() );
 
+    DisableEvents();
+    
     gtk_toggle_button_set_state( button, 1 );
+    
+    EnableEvents();
 }
 
 int wxRadioBox::GetSelection(void) const
@@ -492,6 +496,30 @@ int wxRadioBox::GetNumberOfRowsOrCols(void) const
 void wxRadioBox::SetNumberOfRowsOrCols( int WXUNUSED(n) )
 {
     wxFAIL_MSG(_T("wxRadioBox::SetNumberOfRowsOrCols not implemented."));
+}
+
+void wxRadioBox::DisableEvents()
+{
+    wxNode *node = m_boxes.First();
+    while (node)
+    {
+        gtk_signal_disconnect_by_func( GTK_OBJECT(node->Data()),
+           GTK_SIGNAL_FUNC(gtk_radiobutton_clicked_callback), (gpointer*)this );
+
+	node = node->Next();
+    }
+}
+
+void wxRadioBox::EnableEvents()
+{
+    wxNode *node = m_boxes.First();
+    while (node)
+    {
+        gtk_signal_connect( GTK_OBJECT(node->Data()), "clicked",
+           GTK_SIGNAL_FUNC(gtk_radiobutton_clicked_callback), (gpointer*)this );
+
+	node = node->Next();
+    }
 }
 
 void wxRadioBox::ApplyWidgetStyle()

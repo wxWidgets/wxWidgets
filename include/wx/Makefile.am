@@ -128,7 +128,6 @@ wx_include_HEADERS = \
  resource.h \
  sashwin.h \
  sckaddr.h \
- sckint.h \
  sckipc.h \
  sckstrm.h \
  scrolbar.h \

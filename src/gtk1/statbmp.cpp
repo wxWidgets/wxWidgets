@@ -44,6 +44,11 @@ void wxStaticBitmap::CreatePixmapWidget()
         mask = m_bitmap.GetMask()->GetBitmap();
     m_widget = gtk_pixmap_new( m_bitmap.GetPixmap(), mask );
 
+    /* insert GTK representation */
+    (*m_parent->m_insertCallback)(m_parent, this);
+    
+    gtk_widget_show( m_widget );
+
     PostCreation();
 }
 
@@ -61,7 +66,10 @@ bool wxStaticBitmap::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bi
 
     if (m_bitmap.Ok())
     {
-        CreatePixmapWidget();
+        GdkBitmap *mask = (GdkBitmap *) NULL;
+        if ( m_bitmap.GetMask() )
+            mask = m_bitmap.GetMask()->GetBitmap();
+        m_widget = gtk_pixmap_new( m_bitmap.GetPixmap(), mask );
 
         if (newSize.x == -1) newSize.x = m_bitmap.GetWidth();
         if (newSize.y == -1) newSize.y = m_bitmap.GetHeight();
@@ -70,9 +78,9 @@ bool wxStaticBitmap::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bi
     else
     {
         m_widget = gtk_label_new( "Bitmap" );
-    }
 
-    PostCreation();
+        PostCreation();
+    }
     
     m_parent->DoAddChild( this );
 
@@ -88,18 +96,22 @@ void wxStaticBitmap::SetBitmap( const wxBitmap &bitmap )
 
     if (m_bitmap.Ok())
     {
-        if ( !hasWidget )
+        if (!hasWidget)
         {
             gtk_widget_destroy( m_widget );
 
-            // recreate m_widget because we'd created a label and not a bitmap
-            // above
+            /* recreate m_widget because we've created a label 
+	       and not a bitmap above */
             CreatePixmapWidget();
         }
-
-        GdkBitmap *mask = (GdkBitmap *) NULL;
-        if (m_bitmap.GetMask()) mask = m_bitmap.GetMask()->GetBitmap();
-        gtk_pixmap_set( GTK_PIXMAP(m_widget), m_bitmap.GetPixmap(), mask );
+	else
+	{
+            GdkBitmap *mask = (GdkBitmap *) NULL;
+            if (m_bitmap.GetMask()) mask = m_bitmap.GetMask()->GetBitmap();
+            gtk_pixmap_set( GTK_PIXMAP(m_widget), m_bitmap.GetPixmap(), mask );
+	}
+    
+        SetSize( m_bitmap.GetWidth(), m_bitmap.GetHeight() );
     }
 }
 
