@@ -527,7 +527,7 @@ class Frame(wxFrame):
         else:
             self.toolsSizer.Remove(g.tools)
         self.toolsSizer.Layout()
-        
+
     def OnTest(self, evt):
         if not tree.selection: return   # key pressed event
         tree.ShowTestWindow(tree.selection)
@@ -826,6 +826,7 @@ class App(wxApp):
         global debug
         # Process comand-line
         try:
+            opts = args = []  #give empty values in case of exception
             opts, args = getopt.getopt(sys.argv[1:], 'dhiv')
         except getopt.GetoptError:
             if wxPlatform != '__WXMAC__': # macs have some extra parameters

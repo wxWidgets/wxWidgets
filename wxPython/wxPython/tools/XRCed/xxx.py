@@ -9,6 +9,8 @@ from globals import *
 from params import *
 
 currentEncoding = wxLocale_GetSystemEncodingName()
+if not currentEncoding:
+    currentEncoding = 'ascii'
 
 # Base class for interface parameter classes
 class xxxNode:
