@@ -1137,9 +1137,10 @@ public:
                                 buf ? n : 0     // size of output buffer
                              );
 
-        // note that it returns # of written chars for buf != NULL and *size*
-        // of the needed buffer for buf == NULL
-        return len ? (buf ? len : len - 1) : (size_t)-1;
+        // note that it returns count of written chars for buf != NULL and size
+        // of the needed buffer for buf == NULL so in either case the length of
+        // the string (which never includes the terminating NUL) is one less
+        return len ? len - 1 : (size_t)-1;
     }
 
     size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const
@@ -1156,8 +1157,8 @@ public:
                                 NULL            // [out] was it used?
                              );
 
-        // see the comment above!
-        return len ? (buf ? len : len - 1) : (size_t)-1;
+        // see the comment above for the reason of "len - 1"
+        return len ? len - 1 : (size_t)-1;
     }
 
     bool IsOk() const
