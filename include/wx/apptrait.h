@@ -24,7 +24,10 @@ class WXDLLIMPEXP_BASE wxMessageOutput;
 class WXDLLEXPORT wxRendererNative;
 class WXDLLIMPEXP_BASE wxString;
 
-extern "C" struct GSocketGUIFunctionsTable;
+extern "C"
+{
+    struct GSocketGUIFunctionsTable;
+}
 
 // ----------------------------------------------------------------------------
 // toolkit information
