@@ -82,6 +82,9 @@ Core
 - Properties/Member-Metadata, 2-Step Init with virtual create
     TODO: still unclear what do we need exactly
 
+- Tidy code and add comments to headers (preferably in
+  Doxygen/Javadoc style)
+
 
 Documentation
 =============
@@ -156,8 +159,12 @@ In addition to wxCOMPATIBILITY code:
 - contrib/src/applet?
 - utils/Install
 - wxDate, wxTime
-- Layout constraints code
 - Old wxODBC code
+- wxExpr (rewriting some OGL code or bundling wxExpr with OGL)
+- Old resource system
+- samples/resource
+- Dialog Editor
+- generic/src/htmlhelp.cpp
 
 
 wxMiscellaneous
@@ -173,6 +180,7 @@ wxMiscellaneous
   This is probably way too time-consuming to implement.
 - In headers, don't silently omit contents if the features for this
   header is switched off. Instead, emit an error message.
+- Implement native tree view and colour dialog in wxGTK.
 
 
 Version:      $Id$
