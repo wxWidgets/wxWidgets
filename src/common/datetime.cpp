@@ -16,6 +16,10 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
+// TODO: for $DEITY sake, someone please fix the #ifdef __WXWINCE__ everywhere,
+//       the proper way to do it is to implement (subset of) wxStrftime() for
+//       CE instead of this horror!!
+
 /*
  * Implementation notes:
  *
@@ -2834,11 +2838,16 @@ const wxChar *wxDateTime::ParseRfc822Date(const wxChar* date)
 }
 
 #ifdef __WINDOWS__
+
 // Get's current locale's date formatting string and stores it in fmt if
 // the locale is set; otherwise or in case of failure, leaves fmt unchanged
-void GetLocaleDateFormat(wxString *fmt)
+static void GetLocaleDateFormat(wxString *fmt)
 {
+    // there is no setlocale() under Windows CE with Standard SDK, so just
+    // always query the system there
+#ifndef WCE_PLATFORM_STANDARDSDK
     if ( strcmp(setlocale(LC_ALL, NULL), "C") != 0 )
+#endif
     {
         // The locale was programatically set to non-C. We assume that this was
         // done using wxLocale, in which case thread's current locale is also
@@ -2889,6 +2898,7 @@ void GetLocaleDateFormat(wxString *fmt)
         // try our luck with the default set above
     }
 }
+
 #endif // __WINDOWS__
 
 const wxChar *wxDateTime::ParseFormat(const wxChar *date,
