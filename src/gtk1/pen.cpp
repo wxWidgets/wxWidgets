@@ -24,6 +24,7 @@ class wxPenRefData: public wxObjectRefData
   public:
   
     wxPenRefData(void);
+    wxPenRefData(const wxPenRefData& data);
   
     int        m_width;
     int        m_style;
