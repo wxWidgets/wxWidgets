@@ -2255,8 +2255,6 @@ void wxTreeCtrl::OnMouse( wxMouseEvent &event )
 
             // highlight the current drop target if any
             DrawDropEffect(m_dropTarget);
-
-            wxYield();
         }
     }
     else if ( (event.LeftUp() || event.RightUp()) && m_isDragging )
@@ -2286,8 +2284,6 @@ void wxTreeCtrl::OnMouse( wxMouseEvent &event )
         ReleaseMouse();
 
         SetCursor(m_oldCursor);
-
-        wxYield();
     }
     else
     {
