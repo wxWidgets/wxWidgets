@@ -886,8 +886,14 @@ void wxWindowMac::MacUpdateControlFont()
         fontStyle.just = teJustRight ;
 
     
-    fontStyle.foreColor = MAC_WXCOLORREF(GetForegroundColour().GetPixel() ) ;
-    fontStyle.flags |= kControlUseForeColorMask ;
+    // we only should do this in case of a non-standard color, as otherwise 'disabled' controls
+    // won't get grayed out by the system anymore
+    
+    if ( GetForegroundColour() != *wxBLACK )
+    {
+        fontStyle.foreColor = MAC_WXCOLORREF(GetForegroundColour().GetPixel() ) ;
+        fontStyle.flags |= kControlUseForeColorMask ;
+    }
 	
 	::SetControlFontStyle( *m_peer , &fontStyle );
 	Refresh() ;
