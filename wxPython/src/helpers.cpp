@@ -123,7 +123,7 @@ void __wxPreStart()
 {
 
 #ifdef __WXMSW__
-    wxCrtSetDbgFlag(_CRTDBG_LEAK_CHECK_DF);
+//    wxCrtSetDbgFlag(_CRTDBG_LEAK_CHECK_DF);
 #endif
 
 #ifdef WXP_WITH_THREAD
