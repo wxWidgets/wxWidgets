@@ -18,44 +18,55 @@
 #include "wx/app.h"
 #include "wx/cursor.h"
 #include "wx/icon.h"
+#include "wx/image.h"
 #include "wx/mac/private.h"
 
 #if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxCursor, wxBitmap)
 #endif
 
-const short kwxCursorHandId = 9 ;
-const short kwxCursorSizeWEId = 10 ;
-const short kwxCursorSizeNSId = 11 ;
-#if !TARGET_CARBON
-Cursor*		MacArrowCursorPtr = &qd.arrow ;
-CursHandle	MacArrowCursor = &MacArrowCursorPtr ;
-#else
-bool		MacArrowInstalled = false ;
-Cursor 		MacArrow ;
-Cursor*		MacArrowCursorPtr = &MacArrow ;
-CursHandle	MacArrowCursor = &MacArrowCursorPtr ;
-#endif
-CursHandle	gMacCurrentCursor = NULL ;
+const short kwxCursorBullseye = 10 ;
+const short kwxCursorBlank = 11 ;
+const short kwxCursorPencil = 12 ;
+const short kwxCursorMagnifier = 13 ;
+const short kwxCursorNoEntry = 14 ;
+const short kwxCursorPaintBrush = 15 ;
+const short kwxCursorPointRight = 16 ;
+const short kwxCursorPointLeft = 17 ;
+const short kwxCursorQuestionArrow = 18 ;
+const short kwxCursorRightArrow = 19 ;
+const short kwxCursorSizeNS = 20 ;
+const short kwxCursorSize = 21 ;
+const short kwxCursorSizeNESW = 22 ;
+const short kwxCursorSizeNWSE = 23 ;
+const short kwxCursorRoller = 24 ;
+
+wxCursor	gMacCurrentCursor ;
 
 wxCursorRefData::wxCursorRefData()
 {
-#if TARGET_CARBON
-	if ( !MacArrowInstalled )
-	{
-		MacArrowCursorPtr = GetQDGlobalsArrow( &MacArrow ) ;
-		MacArrowInstalled = true ;
-	}
-#endif
-    m_width = 32; 
-    m_height = 32;
+    m_width = 16; 
+    m_height = 16;
     m_hCursor = NULL ;
+    m_disposeHandle = false ;
+    m_releaseHandle = false ;
+    m_isColorCursor = false ;
+    m_themeCursor = -1 ;
 }
 
 wxCursorRefData::~wxCursorRefData()
 {
-//	if ( m_hCursor && ( m_hCursor != MacArrowCursor ) )
-//		::ReleaseResource( (Handle) m_hCursor ) ;
+    if ( m_isColorCursor )
+    {
+        ::DisposeCCursor( (CCrsrHandle) m_hCursor ) ;
+    }
+	else if ( m_disposeHandle )
+	{
+		::DisposeHandle( (Handle ) m_hCursor ) ;
+	} else if ( m_releaseHandle )
+	{
+		::ReleaseResource( (Handle ) m_hCursor ) ;
+	}
 }
 
 // Cursors
@@ -68,163 +79,270 @@ wxCursor::wxCursor(const char WXUNUSED(bits)[], int WXUNUSED(width), int WXUNUSE
 {
 }
 
-wxCursor::wxCursor(const wxString& cursor_file, long flags, int hotSpotX, int hotSpotY)
+wxCursor::wxCursor( const wxImage &image )
+{
+    Create( image ) ;
+}
+
+void wxCursor::Create(const wxImage & image) 
 {
     m_refData = new wxCursorRefData;
 
-    // TODO: create cursor from a file
+    wxImage image16 = image.Scale(16,16) ;
+   	unsigned char * rgbBits = image16.GetData();
+ 
+	
+    int w = image16.GetWidth()  ;
+    int h = image16.GetHeight() ;
+    bool bHasMask = image16.HasMask() ;
+
+   	int hotSpotX = image16.GetOptionInt(wxCUR_HOTSPOT_X);
+    int hotSpotY = image16.GetOptionInt(wxCUR_HOTSPOT_Y);
+    if (hotSpotX < 0 || hotSpotX >= w)
+            hotSpotX = 0;
+    if (hotSpotY < 0 || hotSpotY >= h)
+            hotSpotY = 0;
+            
+    M_CURSORDATA->m_hCursor = NewHandle( sizeof( Cursor ) ) ;
+    M_CURSORDATA->m_disposeHandle = true ;
+    HLock( (Handle) M_CURSORDATA->m_hCursor ) ;
+    CursPtr cp = *(CursHandle)M_CURSORDATA->m_hCursor ;
+    memset( cp->data , 0 , sizeof( Bits16 ) ) ;
+    memset( cp->mask , 0 , sizeof( Bits16 ) ) ;
+    
+	unsigned char mr = image16.GetMaskRed() ;
+	unsigned char mg = image16.GetMaskGreen() ;
+	unsigned char mb = image16.GetMaskBlue() ;
+    for ( int y = 0 ; y < h ; ++y )
+    {
+    	short rowbits = 0 ;
+    	short maskbits = 0 ;
+    	
+    	for ( int x = 0 ; x < w ; ++x )
+    	{
+    		long pos = (y * w + x) * 3;
+
+    		unsigned char r = rgbBits[pos] ;
+    		unsigned char g = rgbBits[pos+1] ;
+    		unsigned char b = rgbBits[pos+2] ;
+    		if ( bHasMask && r==mr && g==mg && b==mb )
+    		{
+    			// masked area, does not appear anywhere
+    		}
+    		else
+    		{
+    			if ( (int)r + (int)g + (int)b < 0x60 )
+    			{
+    				rowbits |= ( 1 << (15-x) ) ;
+    			}
+    			maskbits |= ( 1 << (15-x) ) ;
+    		}
+    	}
+    	cp->data[y] = rowbits ;
+    	cp->mask[y] = maskbits ;
+    }
+    if ( !bHasMask )
+    {
+    	memcpy( cp->mask , cp->data , sizeof( Bits16) ) ;
+    }
+    
+    cp->hotSpot.h = hotSpotX ;
+    cp->hotSpot.v = hotSpotY ;
+    HUnlock( (Handle) M_CURSORDATA->m_hCursor ) ;
+}
+
+wxCursor::wxCursor(const wxString& cursor_file, long flags, int hotSpotX, int hotSpotY)
+{
+    m_refData = new wxCursorRefData;
+    if ( flags == wxBITMAP_TYPE_MACCURSOR_RESOURCE )
+    {
+    	Str255 theName ;
+
+    #if TARGET_CARBON
+    	c2pstrcpy( (StringPtr) theName , cursor_file ) ;
+    #else
+    	strcpy( (char *) theName , cursor_file ) ;
+    	c2pstr( (char *) theName ) ;
+    #endif
+    	
+        wxStAppResource resload ;
+    	M_CURSORDATA->m_hCursor = ::GetNamedResource( 'crsr' , theName ) ;
+    	if ( M_CURSORDATA->m_hCursor )
+    	{
+    		M_CURSORDATA->m_isColorCursor = true ;
+    	}
+    	else
+    	{   	
+        	M_CURSORDATA->m_hCursor = ::GetNamedResource( 'CURS' , theName ) ;
+        	if ( M_CURSORDATA->m_hCursor )
+        		M_CURSORDATA->m_releaseHandle = true ;
+        }
+    }
+    else
+    {
+        wxImage image ;
+        image.LoadFile( cursor_file , flags ) ;
+        if( image.Ok() )
+        {
+            image.SetOption(wxCUR_HOTSPOT_X,hotSpotX ) ;
+            image.SetOption(wxCUR_HOTSPOT_Y,hotSpotY ) ;
+            delete m_refData ;
+            Create(image) ;
+        }
+    }
 }
 
 // Cursors by stock number
 wxCursor::wxCursor(int cursor_type)
 {
   m_refData = new wxCursorRefData;
-  
-  
+
   switch (cursor_type)
   {
     case wxCURSOR_WAIT:
-      M_CURSORDATA->m_hCursor = ::GetCursor(watchCursor);
+      M_CURSORDATA->m_themeCursor = kThemeWatchCursor ;
       break;
     case wxCURSOR_IBEAM:
-      M_CURSORDATA->m_hCursor = ::GetCursor(iBeamCursor);
+      M_CURSORDATA->m_themeCursor = kThemeIBeamCursor ;
       break;
     case wxCURSOR_CROSS:
-      M_CURSORDATA->m_hCursor = ::GetCursor(crossCursor);
+      M_CURSORDATA->m_themeCursor = kThemeCrossCursor;
       break;
     case wxCURSOR_SIZENWSE:
       {
         wxStAppResource resload ;
-        M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorSizeWEId);
+        M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorSizeNWSE);
       }
       break;
     case wxCURSOR_SIZENESW:
       {
         wxStAppResource resload ;
-        M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorSizeWEId);
+        M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorSizeNESW);
       }
       break;
     case wxCURSOR_SIZEWE:
       {
-        wxStAppResource resload ;
-        M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorSizeWEId);
+      	M_CURSORDATA->m_themeCursor = kThemeResizeLeftRightCursor;
       }
       break;
     case wxCURSOR_SIZENS:
       {
         wxStAppResource resload ;
-        M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorSizeNSId);
+        M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorSizeNS);
       }
       break;
-    case wxCURSOR_CHAR:
-        {
-          M_CURSORDATA->m_hCursor = MacArrowCursor;
-          break;
-        }
+   case wxCURSOR_SIZING:
+      {
+        wxStAppResource resload ;
+        M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorSize);
+      }
+      break;
     case wxCURSOR_HAND:
-        {
-          wxStAppResource resload ;
-          M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorHandId);
-        }
-        break;
+      {
+        M_CURSORDATA->m_themeCursor = kThemePointingHandCursor;
+      }
+      break;
     case wxCURSOR_BULLSEYE:
         {
           wxStAppResource resload ;
-          M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorHandId);
+          M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorBullseye);
         }
         break;
     case wxCURSOR_PENCIL:
         {
           wxStAppResource resload ;
-          M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorHandId);
+          M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorPencil);
         }
         break;
     case wxCURSOR_MAGNIFIER:
         {
           wxStAppResource resload ;
-          M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorHandId);
+          M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorMagnifier);
         }
         break;
     case wxCURSOR_NO_ENTRY:
         {
           wxStAppResource resload ;
-          M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorHandId);
+          M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorNoEntry);
         }
         break;
-    case wxCURSOR_LEFT_BUTTON:
-    {
-      M_CURSORDATA->m_hCursor = MacArrowCursor;
-      break;
-    }
-    case wxCURSOR_RIGHT_BUTTON:
-    {
-      M_CURSORDATA->m_hCursor = MacArrowCursor;
-      break;
-    }
-    case wxCURSOR_MIDDLE_BUTTON:
-    {
-      M_CURSORDATA->m_hCursor = MacArrowCursor;
-      break;
-    }
-    case wxCURSOR_SIZING:
-    {
-      M_CURSORDATA->m_hCursor = MacArrowCursor;
-      break;
-    }
     case wxCURSOR_WATCH:
     {
-      M_CURSORDATA->m_hCursor = ::GetCursor(watchCursor);
-      break;
-    }
-    case wxCURSOR_SPRAYCAN:
-    {
-      M_CURSORDATA->m_hCursor = MacArrowCursor;
+      M_CURSORDATA->m_themeCursor = kThemeWatchCursor;
       break;
     }
     case wxCURSOR_PAINT_BRUSH:
     {
-      M_CURSORDATA->m_hCursor = MacArrowCursor;
+          wxStAppResource resload ;
+          M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorPaintBrush);
       break;
     }
     case wxCURSOR_POINT_LEFT:
     {
-      M_CURSORDATA->m_hCursor = MacArrowCursor;
+          wxStAppResource resload ;
+          M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorPointLeft);
       break;
     }
     case wxCURSOR_POINT_RIGHT:
     {
-      M_CURSORDATA->m_hCursor = MacArrowCursor;
+          wxStAppResource resload ;
+          M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorPointRight);
       break;
     }
     case wxCURSOR_QUESTION_ARROW:
     {
-      M_CURSORDATA->m_hCursor = MacArrowCursor;
+      wxStAppResource resload ;
+      M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorQuestionArrow);
       break;
     }
     case wxCURSOR_BLANK:
     {
-      M_CURSORDATA->m_hCursor = MacArrowCursor;
+      wxStAppResource resload ;
+      M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorBlank);
       break;
     }
-    default:
+    case wxCURSOR_RIGHT_ARROW:
+    {
+      wxStAppResource resload ;
+      M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorRightArrow);
+      break;
+    }
+    case wxCURSOR_SPRAYCAN:
+    {
+      wxStAppResource resload ;
+      M_CURSORDATA->m_hCursor = ::GetCursor(kwxCursorRoller);
+      break;
+    }
+    case wxCURSOR_CHAR:
     case wxCURSOR_ARROW:
-      M_CURSORDATA->m_hCursor = MacArrowCursor;
+    case wxCURSOR_LEFT_BUTTON:
+    case wxCURSOR_RIGHT_BUTTON:
+    case wxCURSOR_MIDDLE_BUTTON:
+     default:
+      M_CURSORDATA->m_themeCursor = kThemeArrowCursor ;
       break;
 	}
+	if ( M_CURSORDATA->m_themeCursor == -1 )
+		M_CURSORDATA->m_releaseHandle = true ;
 }
 
 void wxCursor::MacInstall() const 
 {
-	if ( m_refData && M_CURSORDATA->m_hCursor )
+	gMacCurrentCursor = *this ;
+	if ( m_refData && M_CURSORDATA->m_themeCursor != -1 )
 	{
-		CursHandle ch = ((CursHandle)M_CURSORDATA->m_hCursor) ;
-		::SetCursor(  *ch ) ;
-		gMacCurrentCursor = ch ;
+		SetThemeCursor( M_CURSORDATA->m_themeCursor ) ;
+	}
+	else if ( m_refData && M_CURSORDATA->m_hCursor )
+	{
+	    if ( M_CURSORDATA->m_isColorCursor )
+		    ::SetCCursor( (CCrsrHandle) M_CURSORDATA->m_hCursor ) ;
+	    else
+		    ::SetCursor( * (CursHandle) M_CURSORDATA->m_hCursor ) ;
 	}
 	else
 	{
-		::SetCursor( *MacArrowCursor ) ;
-		gMacCurrentCursor = NULL ;
+		SetThemeCursor( kThemeArrowCursor ) ;
 	}
 }
 
