@@ -260,6 +260,8 @@ public:
                          const wxSize& size = wxDefaultSize,
                          long style = wxNO_BORDER);
 
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+
     void SetBitmap(const wxBitmap& bitmap);
     wxBitmap& GetBitmap();
 };
@@ -272,6 +274,8 @@ public:
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    long style = wxSIMPLE_BORDER|wxFRAME_NO_TASKBAR|wxFRAME_FLOAT_ON_PARENT);
+
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 
     long GetSplashStyle() const;
     wxSplashScreenWindow* GetSplashWindow() const;
