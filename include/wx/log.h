@@ -496,7 +496,7 @@ DECLARE_LOG_FUNCTION(Status);
 
 #if wxUSE_GUI
     // this one is the same as previous except that it allows to explicitly
-    class wxFrame;
+    class WXDLLEXPORT wxFrame;
     // specify the frame to which the output should go
     DECLARE_LOG_FUNCTION2_EXP(Status, wxFrame *pFrame, WXDLLIMPEXP_CORE);
 #endif // wxUSE_GUI

@@ -17,6 +17,7 @@
 #endif
 
 #include "wx/list.h"
+#include "wx/arrstr.h"
 
 #ifndef __WXWINCE__
 #include <time.h>
