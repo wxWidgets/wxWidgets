@@ -479,6 +479,7 @@ public:
   // Get the underlying X window and display
   virtual WXWindow GetXWindow() const;
   virtual WXDisplay *GetXDisplay() const;
+  virtual WXPixmap GetBackingPixmap() const { return m_backingPixmap; }
 
   // Change properties
   virtual void ChangeColour(WXWidget widget);
@@ -546,6 +547,7 @@ public:
   long                  m_lastTS;      // last timestamp
   int                   m_lastButton;  // last pressed button
   wxList                m_updateRects;     // List of wxRectangles representing damaged region
+  bool                  m_isShown;
 protected:
   WXWidget              m_mainWidget;
   WXWidget              m_hScrollBar;
@@ -554,7 +556,6 @@ protected:
   WXWidget              m_scrolledWindow;
   WXWidget              m_drawingArea;
   bool                  m_winCaptured;
-  bool                  m_isShown;
   bool                  m_hScroll;
   bool                  m_vScroll;
   bool                  m_hScrollingEnabled;

@@ -61,9 +61,11 @@ public:
 
   virtual bool Destroy();
   void SetClientSize(int width, int height);
-  void GetPosition(int *x, int *y) const;
+  void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
   bool Show(bool show);
   void Iconize(bool iconize);
+  void Raise();
+  void Lower();
 
   virtual bool IsIconized() const;
   void Fit();
@@ -90,6 +92,16 @@ public:
 
   // Responds to colour changes
   void OnSysColourChanged(wxSysColourChangedEvent& event);
+
+  //// Motif-specific
+  inline WXWidget GetTopWidget() const { return m_mainWidget; }
+  inline WXWidget GetClientWidget() const { return m_mainWidget; }
+
+
+public:
+  //// Motif-specific
+  bool          m_modalShowing;
+  wxString      m_dialogTitle;
 
 DECLARE_EVENT_TABLE()
 };

@@ -325,11 +325,7 @@ class WXDLLEXPORT wxDC: public wxObject
     
     // not sure, what these mean
     bool         m_clipping;      // Is clipping on right now ?
-    bool         m_isInteractive; // Is GetPixel possible ?
-    bool         m_autoSetting;   // wxMSW only ?
-    bool         m_dontDelete;    // wxMSW only ?
     bool         m_optimize;      // wxMSW only ?
-    wxString     m_filename;      // Not sure where this belongs.
     
     wxPen        m_pen;
     wxBrush      m_brush;

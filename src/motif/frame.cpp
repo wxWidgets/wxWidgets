@@ -222,7 +222,7 @@ bool wxFrame::Create(wxWindow *parent,
   m_mainWidget = m_frameWidget;
 
   // This patch comes from Torsten Liermann lier@lier1.muc.de
-  if (XmIsMotifWMRunning( (Widget) wxTheApp->GetTopLevelWidget()))
+  if (XmIsMotifWMRunning( (Widget) m_frameShell ))
   {
     int decor = 0 ;
     if (style & wxRESIZE_BORDER)
@@ -248,7 +248,7 @@ bool wxFrame::Create(wxWindow *parent,
   else
   {
     if (style == 0)
-      XtVaSetValues((Widget) m_frameShell,XmNoverrideRedirect,TRUE,NULL);
+        XtVaSetValues((Widget) m_frameShell,XmNoverrideRedirect,TRUE,NULL);
   }
   XtRealizeWidget((Widget) m_frameShell);
 
@@ -329,7 +329,7 @@ wxFrame::~wxFrame()
 
     if (wxTheApp->GetExitOnFrameDelete())
     {
-       // TODO signal to the app that we're going to close
+       // Signal to the app that we're going to close
        wxTheApp->ExitMainLoop();
     }
   }

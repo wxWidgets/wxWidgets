@@ -45,6 +45,8 @@ static void
 wxTextWindowGainFocusProc (Widget w, XtPointer clientData, XmAnyCallbackStruct *cbs);
 static void 
 wxTextWindowLoseFocusProc (Widget w, XtPointer clientData, XmAnyCallbackStruct *cbs);
+static void wxTextWindowActivateProc(Widget w, XtPointer clientData,
+                      XmAnyCallbackStruct *ptr);
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl, wxControl)
@@ -64,6 +66,8 @@ wxTextCtrl::wxTextCtrl()
     m_fileName = "";
     m_tempCallbackStruct = (void*) NULL;
     m_modified = FALSE;
+    m_processedDefault = FALSE;
+    m_inSetValue = FALSE;
 }
 
 bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
@@ -75,7 +79,9 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 {
     m_tempCallbackStruct = (void*) NULL;
     m_modified = FALSE;
+    m_processedDefault = FALSE;
     m_fileName = "";
+    m_inSetValue = FALSE;
 
     SetName(name);
     SetValidator(validator);
@@ -131,7 +137,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 
     XtAddCallback((Widget) m_mainWidget, XmNmodifyVerifyCallback, (XtCallbackProc)wxTextWindowModifyProc, (XtPointer)this);
 
-//    XtAddCallback((Widget) m_mainWidget, XmNactivateCallback, (XtCallbackProc)wxTextWindowModifyProc, (XtPointer)this);
+    XtAddCallback((Widget) m_mainWidget, XmNactivateCallback, (XtCallbackProc)wxTextWindowActivateProc, (XtPointer)this);
 
     XtAddCallback((Widget) m_mainWidget, XmNfocusCallback, (XtCallbackProc)wxTextWindowGainFocusProc, (XtPointer)this);
 
@@ -148,44 +154,63 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 
 WXWidget wxTextCtrl::GetTopWidget() const
 {
-  return ((m_windowStyle & wxTE_MULTILINE) ? (WXWidget) XtParent((Widget) m_mainWidget) : m_mainWidget);
+    return ((m_windowStyle & wxTE_MULTILINE) ? (WXWidget) XtParent((Widget) m_mainWidget) : m_mainWidget);
 }
 
 wxString wxTextCtrl::GetValue() const
 {
-    // TODO
-    return wxString("");
+    if (m_windowStyle & wxTE_PASSWORD)
+        return m_value;
+    else
+    {
+        char *s = XmTextGetString ((Widget) m_mainWidget);
+        if (s)
+        {
+	    wxString str(s);
+            XtFree (s);
+	    return str;
+	}
+	else
+        {
+            return wxEmptyString;
+        }
+    }
 }
 
 void wxTextCtrl::SetValue(const wxString& value)
 {
-    // TODO
+    wxASSERT_MSG( (!value.IsNull()), "Must not pass a null string to wxTextCtrl::SetValue." ) ;
+    m_inSetValue = TRUE;
+
+    XmTextSetString ((Widget) m_mainWidget, (char*) (const char*) value);
+
+    m_inSetValue = FALSE;
 }
 
 // Clipboard operations
 void wxTextCtrl::Copy()
 {
-    // TODO
+    XmTextCopy((Widget) m_mainWidget, CurrentTime);
 }
 
 void wxTextCtrl::Cut()
 {
-    // TODO
+    XmTextCut((Widget) m_mainWidget, CurrentTime);
 }
 
 void wxTextCtrl::Paste()
 {
-    // TODO
+    XmTextPaste((Widget) m_mainWidget);
 }
 
 void wxTextCtrl::SetEditable(bool editable)
 {
-    // TODO
+    XmTextSetEditable((Widget) m_mainWidget, (Boolean) editable);
 }
 
 void wxTextCtrl::SetInsertionPoint(long pos)
 {
-    // TODO
+    XmTextSetInsertionPosition ((Widget) m_mainWidget, (XmTextPosition) pos);
 }
 
 void wxTextCtrl::SetInsertionPointEnd()
@@ -196,29 +221,31 @@ void wxTextCtrl::SetInsertionPointEnd()
 
 long wxTextCtrl::GetInsertionPoint() const
 {
-    // TODO
-    return 0;
+    return (long) XmTextGetInsertionPosition ((Widget) m_mainWidget);
 }
 
 long wxTextCtrl::GetLastPosition() const
 {
-    // TODO
-    return 0;
+    return (long) XmTextGetLastPosition ((Widget) m_mainWidget);
 }
 
 void wxTextCtrl::Replace(long from, long to, const wxString& value)
 {
-    // TODO
+    XmTextReplace ((Widget) m_mainWidget, (XmTextPosition) from, (XmTextPosition) to,
+		 (char*) (const char*) value);
 }
 
 void wxTextCtrl::Remove(long from, long to)
 {
-    // TODO
+    XmTextSetSelection ((Widget) m_mainWidget, (XmTextPosition) from, (XmTextPosition) to,
+		      (Time) 0);
+    XmTextRemove ((Widget) m_mainWidget);
 }
 
 void wxTextCtrl::SetSelection(long from, long to)
 {
-    // TODO
+    XmTextSetSelection ((Widget) m_mainWidget, (XmTextPosition) from, (XmTextPosition) to,
+		      (Time) 0);
 }
 
 bool wxTextCtrl::LoadFile(const wxString& file)
@@ -285,14 +312,17 @@ bool wxTextCtrl::SaveFile(const wxString& file)
 
 void wxTextCtrl::WriteText(const wxString& text)
 {
-    // TODO write text to control
+    long textPosition = GetInsertionPoint() + strlen (text);
+    XmTextInsert ((Widget) m_mainWidget, GetInsertionPoint(), (char*) (const char*) text);
+    XtVaSetValues ((Widget) m_mainWidget, XmNcursorPosition, textPosition, NULL);
+    SetInsertionPoint(textPosition);
+    XmTextShowPosition ((Widget) m_mainWidget, textPosition);
+    m_modified = TRUE;
 }
 
 void wxTextCtrl::Clear()
 {
     XmTextSetString ((Widget) m_mainWidget, "");
-    // TODO: do we need position flag?
-    //    m_textPosition = 0;
     m_modified = FALSE;
 }
 
@@ -304,41 +334,96 @@ bool wxTextCtrl::IsModified() const
 // Makes 'unmodified'
 void wxTextCtrl::DiscardEdits()
 {
-    // TODO
+    XmTextSetString ((Widget) m_mainWidget, "");
+    m_modified = FALSE;
 }
 
 int wxTextCtrl::GetNumberOfLines() const
 {
-    // TODO
+    // HIDEOUSLY inefficient, but we have no choice.
+    char *s = XmTextGetString ((Widget) m_mainWidget);
+    if (s)
+    {
+      long i = 0;
+      int currentLine = 0;
+      bool finished = FALSE;
+      while (!finished)
+	{
+	  int ch = s[i];
+	  if (ch == '\n')
+	    {
+	      currentLine++;
+	      i++;
+	    }
+	  else if (ch == 0)
+	    {
+	      finished = TRUE;
+	    }
+	  else
+	    i++;
+	}
+
+      XtFree (s);
+      return currentLine;
+    }
     return 0;
 }
 
 long wxTextCtrl::XYToPosition(long x, long y) const
 {
-    // TODO
-    return 0;
+/* It seems, that there is a bug in some versions of the Motif library,
+   so the original wxWin-Code doesn't work. */
+/*
+  Widget textWidget = (Widget) handle;
+  return (long) XmTextXYToPos (textWidget, (Position) x, (Position) y);
+*/
+    /* Now a little workaround: */
+    long r=0;
+    for (int i=0; i<y; i++) r+=(GetLineLength(i)+1);
+    return r+x; 
 }
 
 void wxTextCtrl::PositionToXY(long pos, long *x, long *y) const
 {
-    // TODO
+    Position xx, yy;
+    XmTextPosToXY((Widget) m_mainWidget, pos, &xx, &yy);
+    *x = xx; *y = yy;
 }
 
 void wxTextCtrl::ShowPosition(long pos)
 {
-    // TODO
+    XmTextShowPosition ((Widget) m_mainWidget, (XmTextPosition) pos);
 }
 
 int wxTextCtrl::GetLineLength(long lineNo) const
 {
-    // TODO
-    return 0;
+    wxString str = GetLineText (lineNo);
+    return (int) str.Length();
 }
 
 wxString wxTextCtrl::GetLineText(long lineNo) const
 {
-    // TODO
-    return wxString("");
+    // HIDEOUSLY inefficient, but we have no choice.
+    char *s = XmTextGetString ((Widget) m_mainWidget);
+
+    if (s)
+    {
+        wxString buf("");
+        long i;
+        int currentLine = 0;
+        for (i = 0; currentLine != lineNo && s[i]; i++ )
+        if (s[i] == '\n')
+          currentLine++;
+        // Now get the text
+        int j;
+        for (j = 0; s[i] && s[i] != '\n'; i++, j++ )
+            buf += s[i];
+    
+        XtFree(s);
+        return buf;
+  }
+  else
+    return wxEmptyString;
 }
 
 /*
@@ -517,6 +602,11 @@ wxTextCtrl& wxTextCtrl::operator<<(const char c)
 
 void wxTextCtrl::OnChar(wxKeyEvent& event)
 {
+  // Indicates that we should generate a normal command, because
+  // we're letting default behaviour happen (otherwise it's vetoed
+  // by virtue of overriding OnChar)
+  m_processedDefault = TRUE;
+
   if (m_tempCallbackStruct)
   {
     XmTextVerifyCallbackStruct *textStruct =
@@ -529,8 +619,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
   }
 }
 
-static void 
-wxTextWindowChangedProc (Widget w, XtPointer clientData, XtPointer ptr)
+static void wxTextWindowChangedProc (Widget w, XtPointer clientData, XtPointer ptr)
 {
   if (!wxGetWindowFromTable(w))
     // Widget has been deleted!
@@ -543,22 +632,121 @@ wxTextWindowChangedProc (Widget w, XtPointer clientData, XtPointer ptr)
 static void 
 wxTextWindowModifyProc (Widget w, XtPointer clientData, XmTextVerifyCallbackStruct *cbs)
 {
-  wxTextCtrl *tw = (wxTextCtrl *) clientData;
+    wxTextCtrl *tw = (wxTextCtrl *) clientData;
+    tw->m_processedDefault = FALSE;
 
-  // If we're already within an OnChar, return: probably
-  // a programmatic insertion.
-  if (tw->m_tempCallbackStruct)
-    return;
+    // First, do some stuff if it's a password control.
+    // (What does this do exactly?)
 
-  // Check for a backspace
-  if (cbs->startPos == (cbs->currInsert - 1))
-  {
+    if (tw->GetWindowStyleFlag() & wxTE_PASSWORD)
+    {
+      /* _sm_
+       * At least on my system (SunOS 4.1.3 + Motif 1.2), you need to think of
+       * every event as a replace event.  cbs->text->ptr gives the replacement
+       * text, cbs->startPos gives the index of the first char affected by the
+       * replace, and cbs->endPos gives the index one more than the last char
+       * affected by the replace (startPos == endPos implies an empty range).
+       * Hence, a deletion is represented by replacing all input text with a
+       * blank string ("", *not* NULL!).  A simple insertion that does not
+       * overwrite any text has startPos == endPos.
+       */
+
+        if (tw->m_value.IsNull())
+        {
+            tw->m_value = cbs->text->ptr;
+        }
+        else
+        {
+            char * passwd = (char*) (const char*) tw->m_value;  // Set up a more convenient alias.
+
+            int len = passwd ? strlen(passwd) : 0; // Enough room for old text
+            len += strlen(cbs->text->ptr) + 1;     // + new text (if any) + NUL
+            len -= cbs->endPos - cbs->startPos;    // - text from affected region.
+
+            char * newS = new char [len];
+            char * p = passwd, * dest = newS, * insert = cbs->text->ptr;
+
+            // Copy (old) text from passwd, up to the start posn of the change.
+            int i;
+            for (i = 0; i < cbs->startPos; ++i)
+                *dest++ = *p++;
+
+            // Copy the text to be inserted).
+            while (*insert)
+               *dest++ = *insert++;
+
+            // Finally, copy into newS any remaining text from passwd[endPos] on.
+            for (p = passwd + cbs->endPos; *p; )
+                *dest++ = *p++;
+            *dest = 0;
+
+            tw->m_value = newS;
+
+            delete[] newS;
+        }
+
+        if (cbs->text->length>0)
+        {
+            int i;
+            for (i = 0; i < cbs->text->length; ++i)
+                cbs->text->ptr[i] = '*';
+            cbs->text->ptr[i] = 0;
+        }
+    }
+
+    // If we're already within an OnChar, return: probably
+    // a programmatic insertion.
+    if (tw->m_tempCallbackStruct)
+        return;
+
+    // Check for a backspace
+    if (cbs->startPos == (cbs->currInsert - 1))
+    {
+        tw->m_tempCallbackStruct = (void*) cbs;
+
+        wxKeyEvent event (wxEVT_CHAR);
+        event.SetId(tw->GetId());
+        event.m_keyCode = WXK_DELETE;
+        event.SetEventObject(tw);
+
+        // Only if wxTextCtrl::OnChar is called
+        // will this be set to True (and the character
+        // passed through)
+        cbs->doit = False;
+
+        tw->GetEventHandler()->ProcessEvent(event);
+
+        tw->m_tempCallbackStruct = NULL;
+
+        if (tw->m_inSetValue)
+            return;
+    
+        if (tw->m_processedDefault)
+        {
+            // Can generate a command
+            wxCommandEvent commandEvent(wxEVT_COMMAND_TEXT_UPDATED, tw->GetId());
+	    commandEvent.SetEventObject(tw);
+            tw->ProcessCommand(commandEvent);
+	}
+
+        return;
+    }
+
+    // Pasting operation: let it through without
+    // calling OnChar
+    if (cbs->text->length > 1)
+        return;
+
+    // Something other than text
+    if (cbs->text->ptr == NULL)
+        return;
+
     tw->m_tempCallbackStruct = (void*) cbs;
 
     wxKeyEvent event (wxEVT_CHAR);
     event.SetId(tw->GetId());
-    event.m_keyCode = WXK_DELETE;
     event.SetEventObject(tw);
+    event.m_keyCode = (cbs->text->ptr[0] == 10 ? 13 : cbs->text->ptr[0]);
 
     // Only if wxTextCtrl::OnChar is called
     // will this be set to True (and the character
@@ -569,33 +757,16 @@ wxTextWindowModifyProc (Widget w, XtPointer clientData, XmTextVerifyCallbackStru
 
     tw->m_tempCallbackStruct = NULL;
 
-    return;
-  }
-
-  // Pasting operation: let it through without
-  // calling OnChar
-  if (cbs->text->length > 1)
-    return;
-
-  // Something other than text
-  if (cbs->text->ptr == NULL)
-    return;
-
-  tw->m_tempCallbackStruct = (void*) cbs;
-
-  wxKeyEvent event (wxEVT_CHAR);
-  event.SetId(tw->GetId());
-  event.SetEventObject(tw);
-  event.m_keyCode = (cbs->text->ptr[0] == 10 ? 13 : cbs->text->ptr[0]);
-
-  // Only if wxTextCtrl::OnChar is called
-  // will this be set to True (and the character
-  // passed through)
-  cbs->doit = False;
-
-  tw->GetEventHandler()->ProcessEvent(event);
-
-  tw->m_tempCallbackStruct = NULL;
+    if (tw->m_inSetValue)
+        return;
+    
+    if (tw->m_processedDefault)
+    {
+        // Can generate a command
+        wxCommandEvent commandEvent(wxEVT_COMMAND_TEXT_UPDATED, tw->GetId());
+        commandEvent.SetEventObject(tw);
+        tw->ProcessCommand(commandEvent);
+    }
 }
 
 static void 
@@ -620,4 +791,30 @@ wxTextWindowLoseFocusProc (Widget w, XtPointer clientData, XmAnyCallbackStruct *
   wxFocusEvent event(wxEVT_KILL_FOCUS, tw->GetId());
   event.SetEventObject(tw);
   tw->GetEventHandler()->ProcessEvent(event);
+}
+
+static void wxTextWindowActivateProc(Widget w, XtPointer clientData,
+                      XmAnyCallbackStruct *ptr)
+{
+  if (!wxGetWindowFromTable(w))
+    return;
+
+  wxTextCtrl *tw = (wxTextCtrl *) clientData;
+  /*
+  case XmCR_ACTIVATE:
+    type_event = wxEVENT_TYPE_TEXT_ENTER_COMMAND ;
+    break;
+  default:
+    type_event = wxEVENT_TYPE_TEXT_COMMAND ;
+    break;
+  }
+  */
+
+  if (tw->m_inSetValue)
+    return;
+    
+  wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER);
+  event.SetId(tw->GetId());
+  event.SetEventObject(tw);
+  tw->ProcessCommand(event);
 }

@@ -29,9 +29,6 @@ wxPenRefData::wxPenRefData()
     m_cap = wxCAP_ROUND ;
     m_nbDash = 0 ;
     m_dash = 0 ;
-/* TODO: null data
-    m_hPen = 0;
-*/
 }
 
 wxPenRefData::wxPenRefData(const wxPenRefData& data)
@@ -43,14 +40,10 @@ wxPenRefData::wxPenRefData(const wxPenRefData& data)
     m_nbDash = data.m_nbDash;
     m_dash = data.m_dash;
     m_colour = data.m_colour;
-/* TODO: null data
-    m_hPen = 0;
-*/
 }
 
 wxPenRefData::~wxPenRefData()
 {
-    // TODO: delete data
 }
 
 // Pens
@@ -222,8 +215,8 @@ void wxPen::SetCap(int Cap)
 
 bool wxPen::RealizeResource()
 {
-    // TODO: create actual pen
-    return FALSE;
+    // Nothing more to do
+    return TRUE;
 }
 
 

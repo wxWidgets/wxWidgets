@@ -14,6 +14,9 @@
 
 #include "wx/defs.h"
 
+class WXDLLEXPORT wxMouseEvent;
+class WXDLLEXPORT wxKeyEvent;
+
 /* Put any private declarations here.
  */
 
@@ -30,6 +33,7 @@ extern int wxCharCodeXToWX(KeySym keySym);
 extern KeySym wxCharCodeWXToX(int id);
 bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win, Widget widget, XEvent *xevent);
 bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win, Widget widget, XEvent *xevent);
+int wxGetBestMatchingPixel(Display *display, XColor *desiredColor, Colormap cmap);
 
 #define	wxNO_COLORS   0x00
 #define wxBACK_COLORS 0x01

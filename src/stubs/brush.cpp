@@ -155,8 +155,9 @@ void wxBrush::SetStipple(const wxBitmap& Stipple)
     RealizeResource();
 }
 
-void wxBrush::RealizeResource()
+bool wxBrush::RealizeResource()
 {
 // TODO: create the brush
+    return FALSE;
 }
 

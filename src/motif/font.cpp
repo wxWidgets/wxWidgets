@@ -17,42 +17,49 @@
 #include "wx/string.h"
 #include "wx/font.h"
 #include "wx/gdicmn.h"
+#include "wx/utils.h"
+
+#include <X11/Xlib.h>
 
 #if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)
 #endif
 
-wxFontRefData::wxFontRefData()
+wxFontRefData::wxFontRefData(): m_fontsByScale(wxKEY_INTEGER)
 {
-	m_style = 0;
-  	m_pointSize = 0;
-  	m_family = 0;
-  	m_style = 0;
-  	m_weight = 0;
-  	m_underlined = 0;
-  	m_faceName = "";
-/* TODO
-  	m_hFont = 0;
-*/
+    m_style = 0;
+    m_pointSize = 0;
+    m_family = 0;
+    m_style = 0;
+    m_weight = 0;
+    m_underlined = 0;
+    m_faceName = "";
 }
 
-wxFontRefData::wxFontRefData(const wxFontRefData& data)
+wxFontRefData::wxFontRefData(const wxFontRefData& data): m_fontsByScale(wxKEY_INTEGER)
 {
-	m_style = data.m_style;
-  	m_pointSize = data.m_pointSize;
-  	m_family = data.m_family;
-  	m_style = data.m_style;
-  	m_weight = data.m_weight;
-  	m_underlined = data.m_underlined;
-  	m_faceName = data.m_faceName;
-/* TODO
-  	m_hFont = 0;
-*/
+    m_style = data.m_style;
+    m_pointSize = data.m_pointSize;
+    m_family = data.m_family;
+    m_style = data.m_style;
+    m_weight = data.m_weight;
+    m_underlined = data.m_underlined;
+    m_faceName = data.m_faceName;
+
+    // Don't have to copy actual fonts, because they'll be created
+    // on demand.
 }
 
 wxFontRefData::~wxFontRefData()
 {
-    // TODO: delete font data
+    wxNode* node = m_fontsByScale.First();
+    while (node)
+    {
+        XFontStruct* fontStruct = (XFontStruct*) node->Data();
+        XFreeFont((Display*) wxGetDisplay, fontStruct);
+        node = node->Next();
+    }
+    m_fontsByScale.Clear();
 }
 
 wxFont::wxFont()
@@ -242,3 +249,102 @@ wxString wxFont::GetWeightString() const
     return w;
 }
 
+// Find an existing, or create a new, XFontStruct
+// based on this wxFont and the given scale. Append the
+// font to list in the private data for future reference.
+WXFontStructPtr wxFont::FindOrCreateFontStruct(double scale)
+{
+  if (!Ok())
+    return NULL;
+
+  long intScale = long(scale * 100.0 + 0.5); // key for fontlist
+  int pointSize = (M_FONTDATA->m_pointSize * 10 * intScale) / 100;
+
+  wxNode* node = M_FONTDATA->m_fontsByScale.Find(intScale);
+  if (node)
+  {
+    return (WXFontStructPtr) node->Data();
+  }
+
+  WXFontStructPtr font = LoadQueryFont(pointSize, M_FONTDATA->m_family,
+    M_FONTDATA->m_style, M_FONTDATA->m_weight, M_FONTDATA->m_underlined);
+
+  if (!font)
+  {
+	// search up and down by stepsize 10
+	int max_size = pointSize + 20 * (1 + (pointSize/180));
+	int min_size = pointSize - 20 * (1 + (pointSize/180));
+	int i;
+
+	// Search for smaller size (approx.)
+	for (i=pointSize-10; !font && i >= 10 && i >= min_size; i -= 10)
+	    font = LoadQueryFont(i, M_FONTDATA->m_family, M_FONTDATA->m_style, M_FONTDATA->m_weight, M_FONTDATA->m_underlined);
+	// Search for larger size (approx.)
+	for (i=pointSize+10; !font && i <= max_size; i += 10)
+	    font = LoadQueryFont(i, M_FONTDATA->m_family, M_FONTDATA->m_style, M_FONTDATA->m_weight, M_FONTDATA->m_underlined);
+	// Try default family
+	if (!font && M_FONTDATA->m_family != wxDEFAULT)
+	    font = LoadQueryFont(pointSize, wxDEFAULT, M_FONTDATA->m_style, 
+				   M_FONTDATA->m_weight, M_FONTDATA->m_underlined);
+	// Bogus font
+	if (!font)
+	    font = LoadQueryFont(120, wxDEFAULT, wxNORMAL, wxNORMAL,
+				    M_FONTDATA->m_underlined);
+  }
+  if (font)
+  {
+      M_FONTDATA->m_fontsByScale.Append(intScale, (wxObject*) font);
+      return (WXFontStructPtr) font;
+  }
+  return font;
+}
+
+WXFontStructPtr wxFont::LoadQueryFont(int pointSize, int family, int style,
+   int weight, bool underlined)
+{
+    char *xfamily;
+    char *xstyle;
+    char *xweight;
+    switch (family)
+    {
+      case wxDECORATIVE: xfamily = "lucida";
+                         break;
+      case wxROMAN:      xfamily = "times";
+                         break;
+      case wxMODERN:     xfamily = "courier";
+                         break;
+      case wxSWISS:      xfamily = "lucida";
+                         break;
+      case wxDEFAULT:
+        default:           xfamily = "*";
+    }
+    switch (style)
+    {
+      case wxITALIC:     xstyle = "i";
+                         break;
+      case wxSLANT:      xstyle = "o";
+                         break;
+      case wxNORMAL:     xstyle = "r";
+                         break;
+      default:           xstyle = "*";
+                         break;
+    }
+    switch (weight)
+    {
+      case wxBOLD:       xweight = "bold";
+                         break;
+      case wxLIGHT:
+      case wxNORMAL:     xweight = "medium";
+                         break;
+      default:           xweight = "*";
+                         break;
+    }
+
+    sprintf(wxBuffer, "-*-%s-%s-%s-normal-*-*-%d-*-*-*-*-*-*",
+            xfamily, xweight, xstyle, pointSize);
+
+    Display *dpy = (Display*) wxGetDisplay();
+    XFontStruct* font = XLoadQueryFont(dpy, wxBuffer);
+
+    return (WXFontStructPtr) font;
+}

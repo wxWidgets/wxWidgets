@@ -894,6 +894,9 @@ typedef void            WXDisplay;
 typedef void            WXEvent;
 typedef void*           WXCursor;
 typedef void*           WXPixmap;
+typedef void*           WXFontStructPtr;
+typedef void*           WXGC;
+typedef void*           WXRegion;
 #endif
 
 #endif

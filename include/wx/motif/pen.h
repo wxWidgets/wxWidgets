@@ -20,7 +20,7 @@
 #include "wx/colour.h"
 #include "wx/bitmap.h"
 
-typedef    long wxDash ;
+typedef    char wxDash ;
 
 class WXDLLEXPORT wxPen;
 
@@ -41,9 +41,6 @@ protected:
   int           m_nbDash ;
   wxDash *      m_dash ;
   wxColour      m_colour;
-/* TODO: implementation
-  WXHPEN        m_hPen;
-*/
 };
 
 #define M_PENDATA ((wxPenRefData *)m_refData)

@@ -38,7 +38,6 @@ wxDC::wxDC(void)
 {
   m_ok = FALSE;
   m_optimize = FALSE;
-  m_autoSetting = FALSE;
   m_colour = TRUE;
   m_clipping = FALSE;
   

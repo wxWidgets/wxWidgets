@@ -22,29 +22,29 @@
 // classes
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxPaintDC;
+class WXDLLEXPORT wxWindowDC;
 class WXDLLEXPORT wxWindow;
 
 // Under Windows, wxClientDC, wxPaintDC and wxWindowDC are implemented differently.
 // On many platforms, however, they will be the same.
 
-typedef wxPaintDC wxClientDC;
-typedef wxPaintDC wxWindowDC;
+typedef wxWindowDC wxClientDC;
+typedef wxWindowDC wxPaintDC;
 
 //-----------------------------------------------------------------------------
-// wxPaintDC
+// wxWindowDC
 //-----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxPaintDC: public wxDC
+class WXDLLEXPORT wxWindowDC: public wxDC
 {
-  DECLARE_DYNAMIC_CLASS(wxPaintDC)
+  DECLARE_DYNAMIC_CLASS(wxWindowDC)
 
   public:
 
-    wxPaintDC(void);
-    wxPaintDC( wxWindow *win );
+    wxWindowDC(void);
+    wxWindowDC( wxWindow *win );
     
-    ~wxPaintDC(void);
+    ~wxWindowDC(void);
     
     virtual void FloodFill( long x1, long y1, wxColour* col, int style=wxFLOOD_SURFACE );
     virtual bool GetPixel( long x1, long y1, wxColour *col ) const;
@@ -95,6 +95,26 @@ class WXDLLEXPORT wxPaintDC: public wxDC
     virtual void DestroyClippingRegion(void);
     
     virtual void DrawOpenSpline( wxList *points );
+
+protected:
+    WXGC         m_gc;
+    WXGC         m_gcBacking;
+    WXDisplay*   m_display;
+    wxWindow*    m_window;
+    WXRegion     m_clippingRegion;    
+
+    // Not sure if we'll need all of these
+    int          m_backgroundPixel;
+    wxColour     m_currentColour;
+    int          m_currentBkMode;
+    int          m_currentPenWidth ;
+    int          m_currentPenJoin ;
+    int          m_currentPenCap ;
+    int          m_currentPenDashCount ;
+    char*        m_currentPenDash ;
+    wxBitmap     m_currentStipple ;
+    int          m_currentStyle ;
+    int          m_currentFill ;
 };
 
 #endif

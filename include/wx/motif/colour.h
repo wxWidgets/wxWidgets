@@ -52,19 +52,27 @@ public:
 
   inline bool operator != (const wxColour& colour) { return (!(m_red == colour.m_red && m_green == colour.m_green && m_blue == colour.m_blue)); }
 
-/* TODO
-  WXCOLORREF GetPixel() const { return m_pixel; };
-*/
+  inline int GetPixel() const { return m_pixel; };
+  inline void SetPixel(int pixel) { m_pixel = pixel; };
+
+  // Allocate a colour, or nearest colour, using the given display.
+  // If realloc is TRUE, ignore the existing pixel, otherwise just return
+  // the existing one.
+  // Returns FALSE if an exact match was not found, TRUE otherwise.
+
+  // TODO: can this handle mono displays? If not, we should have an extra
+  // flag to specify whether this should be black or white by default.
+
+  bool AllocColour(WXDisplay* display, bool realloc);
 
  private:
-  bool 			m_isInit;
+  bool          m_isInit;
   unsigned char m_red;
   unsigned char m_blue;
   unsigned char m_green;
  public:
-/* TODO: implementation
-  WXCOLORREF m_pixel ;
-*/
+  int           m_pixel;
+
 };
 
 #define wxColor wxColour

@@ -17,6 +17,7 @@
 #endif
 
 #include "wx/gdiobj.h"
+#include "wx/list.h"
 
 class WXDLLEXPORT wxFont;
 
@@ -34,9 +35,9 @@ protected:
   int           m_weight;
   bool          m_underlined;
   wxString      m_faceName;
-/* TODO: implementation
-  WXHFONT       m_hFont;
-*/
+
+  // A list of XFontStructs indexed by scale (*100)
+  wxList        m_fontsByScale;
 };
 
 #define M_FONTDATA ((wxFontRefData *)m_refData)
@@ -80,7 +81,22 @@ public:
   inline bool operator == (const wxFont& font) { return m_refData == font.m_refData; }
   inline bool operator != (const wxFont& font) { return m_refData != font.m_refData; }
 
-  // Implementation
+// Implementation
+
+  // Find an existing, or create a new, XFontStruct
+  // based on this wxFont and the given scale. Append the
+  // font to list in the private data for future reference.
+
+  // TODO This is a very basic implementation, that doesn't
+  // allow for different facenames, and also doesn't do a mapping
+  // between 'standard' facenames (e.g. Arial, Helvetica, Times Roman etc.)
+  // and the fonts that are available on a particular system.
+  // Maybe we need to scan the user's machine to build up a profile
+  // of the fonts and a mapping file.
+
+  WXFontStructPtr FindOrCreateFontStruct(double scale = 1.0);
+  WXFontStructPtr LoadQueryFont(int pointSize, int family, int style,
+   int weight, bool underlined);
 protected:
   bool RealizeResource();
   void Unshare();

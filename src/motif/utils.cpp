@@ -257,21 +257,28 @@ void wxGetMousePosition( int* x, int* y )
 // Return TRUE if we have a colour display
 bool wxColourDisplay()
 {
-    // TODO
-    return TRUE;
+    Display *dpy = (Display*) wxGetDisplay();
+
+    if (DefaultDepth (dpy, DefaultScreen (dpy)) < 2)
+      return FALSE;
+    else
+      return TRUE;
 }
 
 // Returns depth of screen
 int wxDisplayDepth()
 {
-    // TODO
-    return 0;
+    Display *dpy = (Display*) wxGetDisplay();
+    return DefaultDepth (dpy, DefaultScreen (dpy));
 }
 
 // Get size of display
 void wxDisplaySize(int *width, int *height)
 {
-    // TODO
+  Display *dpy = (Display*) wxGetDisplay();
+  
+  *width = DisplayWidth (dpy, DefaultScreen (dpy));
+  *height = DisplayHeight (dpy, DefaultScreen (dpy));
 }
 
 /* Configurable display in Motif */

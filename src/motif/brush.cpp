@@ -24,7 +24,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxBrush, wxGDIObject)
 wxBrushRefData::wxBrushRefData()
 {
     m_style = wxSOLID;
-// TODO: null data
 }
 
 wxBrushRefData::wxBrushRefData(const wxBrushRefData& data)
@@ -32,14 +31,10 @@ wxBrushRefData::wxBrushRefData(const wxBrushRefData& data)
   m_style = data.m_style;
   m_stipple = data.m_stipple;
   m_colour = data.m_colour;
-/* TODO: null data
-  m_hBrush = 0;
-*/
 }
 
 wxBrushRefData::~wxBrushRefData()
 {
-// TODO: delete data
 }
 
 // Brushes
@@ -155,8 +150,9 @@ void wxBrush::SetStipple(const wxBitmap& Stipple)
     RealizeResource();
 }
 
-void wxBrush::RealizeResource()
+bool wxBrush::RealizeResource()
 {
-// TODO: create the brush
+    // Nothing more to do
+    return TRUE;
 }
 

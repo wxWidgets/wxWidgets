@@ -75,7 +75,7 @@ public:
 // Implementation
 
   // Useful helper: create the brush resource
-  void RealizeResource();
+  bool RealizeResource();
 
   // When setting properties, we must make sure we're not changing
   // another object

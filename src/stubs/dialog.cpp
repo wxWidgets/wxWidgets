@@ -164,20 +164,13 @@ void wxDialog::Centre(int direction)
   int x_offset,y_offset ;
   int display_width, display_height;
   int  width, height, x, y;
-  wxFrame *frame ;
-  if (direction & wxCENTER_FRAME)
+  wxWindow *parent = GetParent();
+  if ((direction & wxCENTER_FRAME) && parent)
   {
-    frame = (wxFrame*)GetParent() ;
-    if (frame)
-    {
-      frame->GetPosition(&x_offset,&y_offset) ;
-      frame->GetSize(&display_width,&display_height) ;
-    }
+      parent->GetPosition(&x_offset,&y_offset) ;
+      parent->GetSize(&display_width,&display_height) ;
   }
   else
-    frame = NULL ;
-
-  if (frame==NULL)
   {
     wxDisplaySize(&display_width, &display_height);
     x_offset = 0 ;

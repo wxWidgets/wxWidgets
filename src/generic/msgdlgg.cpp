@@ -54,15 +54,15 @@ void wxSplitMessage2(const char *message, wxList *messageList, wxWindow *parent,
     wxStaticText *mess = new wxStaticText(parent, -1, currentMessage);
 
 /*
-  	wxLayoutConstraints *c = new wxLayoutConstraints;
-  	c->left.SameAs       	(parent, wxLeft, 10);
-  	c->top.SameAs        	(lastWindow, wxBottom, 5);
-  	c->right.AsIs      		();
-  	c->height.AsIs			();
+    wxLayoutConstraints *c = new wxLayoutConstraints;
+    c->left.SameAs       	(parent, wxLeft, 10);
+    c->top.SameAs        	(lastWindow, wxBottom, 5);
+    c->right.AsIs      		();
+    c->height.AsIs			();
 
-  	mess->SetConstraints(c);
+    mess->SetConstraints(c);
 */
-	sizer->AddSizerChild(mess);
+    sizer->AddSizerChild(mess);
 
     messageList->Append(mess);
 
@@ -83,119 +83,124 @@ IMPLEMENT_CLASS(wxGenericMessageDialog, wxDialog)
 
 wxGenericMessageDialog::wxGenericMessageDialog(wxWindow *parent, const wxString& message, const wxString& caption,
         long style, const wxPoint& pos):
-	wxDialog(parent, -1, caption, pos, wxDefaultSize, wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL)
+	wxDialog(parent, -1, caption, pos,
+#ifdef __WXMOTIF_
+           wxSize(400, 300),
+#else
+           wxDefaultSize,
+#endif
+           wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL)
 {
-	m_dialogStyle = style;
+    m_dialogStyle = style;
 
-	wxBeginBusyCursor();
+    wxBeginBusyCursor();
 
-	wxSizer *topSizer = new wxSizer(this, wxSizerShrink);
-	topSizer->SetBorder(10, 10);
+    wxSizer *topSizer = new wxSizer(this, wxSizerShrink);
+    topSizer->SetBorder(10, 10);
 
-	wxRowColSizer *messageSizer = new wxRowColSizer(topSizer, wxSIZER_COLS, 100);
-	messageSizer->SetName("messageSizer");
+    wxRowColSizer *messageSizer = new wxRowColSizer(topSizer, wxSIZER_COLS, 100);
+    messageSizer->SetName("messageSizer");
 
 //    bool centre = ((style & wxCENTRE) == wxCENTRE);
 
-	wxList messageList;
-	wxSplitMessage2(message, &messageList, this, messageSizer);
+    wxList messageList;
+    wxSplitMessage2(message, &messageList, this, messageSizer);
 
-	// Insert a spacer
-	wxSpacingSizer *spacingSizer = new wxSpacingSizer(topSizer, wxBelow, messageSizer, 20);
+    // Insert a spacer
+    wxSpacingSizer *spacingSizer = new wxSpacingSizer(topSizer, wxBelow, messageSizer, 20);
 
-	wxRowColSizer *buttonSizer = new wxRowColSizer(topSizer, wxSIZER_ROWS);
-	buttonSizer->SetName("buttonSizer");
+    wxRowColSizer *buttonSizer = new wxRowColSizer(topSizer, wxSIZER_ROWS);
+    buttonSizer->SetName("buttonSizer");
 
-  	// Specify constraints for the button sizer
-  	wxLayoutConstraints *c = new wxLayoutConstraints;
-  	c->width.AsIs		();
-  	c->height.AsIs		();
-	c->top.Below		(spacingSizer);
-	c->centreX.SameAs	(spacingSizer, wxCentreX);
-  	buttonSizer->SetConstraints(c);
+    // Specify constraints for the button sizer
+    wxLayoutConstraints *c = new wxLayoutConstraints;
+    c->width.AsIs		();
+    c->height.AsIs		();
+    c->top.Below		(spacingSizer);
+    c->centreX.SameAs	(spacingSizer, wxCentreX);
+    buttonSizer->SetConstraints(c);
 
     wxButton *ok = (wxButton *) NULL;
-  	wxButton *cancel = (wxButton *) NULL;
-  	wxButton *yes = (wxButton *) NULL;
-  	wxButton *no = (wxButton *) NULL;
+    wxButton *cancel = (wxButton *) NULL;
+    wxButton *yes = (wxButton *) NULL;
+    wxButton *no = (wxButton *) NULL;
 
-  	if (style & wxYES_NO) {
-    yes = new wxButton(this, wxID_YES, _("Yes"));
-    no = new wxButton(this, wxID_NO, _("No"));
+    if (style & wxYES_NO) {
+       yes = new wxButton(this, wxID_YES, _("Yes"));
+       no = new wxButton(this, wxID_NO, _("No"));
 
-	buttonSizer->AddSizerChild(yes);
-	buttonSizer->AddSizerChild(no);
-  }
+       buttonSizer->AddSizerChild(yes);
+       buttonSizer->AddSizerChild(no);
+    }
 
-  if (style & wxOK) {
-    ok = new wxButton(this, wxID_OK, _("OK"));
-	buttonSizer->AddSizerChild(ok);
-  }
+    if (style & wxOK) {
+        ok = new wxButton(this, wxID_OK, _("OK"));
+        buttonSizer->AddSizerChild(ok);
+    }
 
-  if (style & wxCANCEL) {
-    cancel = new wxButton(this, wxID_CANCEL, _("Cancel"));
-	buttonSizer->AddSizerChild(cancel);
-  }
+    if (style & wxCANCEL) {
+        cancel = new wxButton(this, wxID_CANCEL, _("Cancel"));
+        buttonSizer->AddSizerChild(cancel);
+    }
 
-  if (ok)
-  {
-    ok->SetDefault();
-    ok->SetFocus();
-  }
-  else if (yes)
-  {
-    yes->SetDefault();
-    yes->SetFocus();
-  }
+    if (ok)
+    {
+      ok->SetDefault();
+      ok->SetFocus();
+    }
+    else if (yes)
+    {
+      yes->SetDefault();
+      yes->SetFocus();
+    }
 
-	Layout();
+    Layout();
     Centre(wxBOTH);
 
-	wxEndBusyCursor();
+    wxEndBusyCursor();
 }
 
 void wxGenericMessageDialog::OnYes(wxCommandEvent& WXUNUSED(event))
 {
-	EndModal(wxID_YES);
+    EndModal(wxID_YES);
 }
 
 void wxGenericMessageDialog::OnNo(wxCommandEvent& WXUNUSED(event))
 {
-	EndModal(wxID_NO);
+    EndModal(wxID_NO);
 }
 
 void wxGenericMessageDialog::OnCancel(wxCommandEvent& WXUNUSED(event))
 {
-	// Allow cancellation via ESC/Close button except if
-	// only YES and NO are specified.
-	if ( (m_dialogStyle & wxYES_NO) != wxYES_NO || (m_dialogStyle & wxCANCEL) )
-		EndModal(wxID_CANCEL);
+    // Allow cancellation via ESC/Close button except if
+    // only YES and NO are specified.
+    if ( (m_dialogStyle & wxYES_NO) != wxYES_NO || (m_dialogStyle & wxCANCEL) )
+        EndModal(wxID_CANCEL);
 }
 
 
 int wxMessageBox(const wxString& message, const wxString& caption, long style,
                  wxWindow *parent, int WXUNUSED(x), int WXUNUSED(y) )
 {
-	wxMessageDialog dialog(parent, message, caption, style);
+    wxMessageDialog dialog(parent, message, caption, style);
 
-	int ans = dialog.ShowModal();
-	switch ( ans )
-	{
-		case wxID_OK:
-			return wxOK;
-			break;
-		case wxID_YES:
-			return wxYES;
-			break;
-		case wxID_NO:
-			return wxNO;
-			break;
-		default:
-		case wxID_CANCEL:
-			return wxCANCEL;
-			break;
-	}
-
-	return ans;
+    int ans = dialog.ShowModal();
+    switch ( ans )
+    {
+        case wxID_OK:
+            return wxOK;
+            break;
+        case wxID_YES:
+            return wxYES;
+            break;
+        case wxID_NO:
+            return wxNO;
+            break;
+        default:
+        case wxID_CANCEL:
+            return wxCANCEL;
+            break;
+    }
+    return ans;
 }
 

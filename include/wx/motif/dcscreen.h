@@ -18,7 +18,7 @@
 
 #include "wx/dcclient.h"
 
-class WXDLLEXPORT wxScreenDC: public wxPaintDC
+class WXDLLEXPORT wxScreenDC: public wxWindowDC
 {
   DECLARE_DYNAMIC_CLASS(wxScreenDC)
 
@@ -29,9 +29,9 @@ class WXDLLEXPORT wxScreenDC: public wxPaintDC
 
   // Compatibility with X's requirements for
   // drawing on top of all windows
-  static bool StartDrawingOnTop(wxWindow* WXUNUSED(window)) { return TRUE; }
-  static bool StartDrawingOnTop(wxRectangle* WXUNUSED(rect) = NULL) { return TRUE; }
-  static bool EndDrawingOnTop() { return TRUE; }
+  static bool StartDrawingOnTop(wxWindow* window);
+  static bool StartDrawingOnTop(wxRect* rect = NULL);
+  static bool EndDrawingOnTop();
 };
 
 #endif

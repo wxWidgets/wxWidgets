@@ -16,7 +16,7 @@
 #include "wx/dcscreen.h"
 
 #if !USE_SHARED_LIBRARY
-IMPLEMENT_DYNAMIC_CLASS(wxScreenDC, wxPaintDC)
+IMPLEMENT_DYNAMIC_CLASS(wxScreenDC, wxWindowDC)
 #endif
 
 // Create a DC representing the whole screen
@@ -30,3 +30,20 @@ wxScreenDC::~wxScreenDC()
     // TODO
 }
 
+bool wxScreenDC::StartDrawingOnTop(wxWindow* window)
+{
+    // TODO
+    return FALSE;
+}
+
+bool wxScreenDC::StartDrawingOnTop(wxRect* rect = NULL)
+{
+    // TODO
+    return FALSE;
+}
+
+bool wxScreenDC::EndDrawingOnTop()
+{
+    // TODO
+    return TRUE;
+}
