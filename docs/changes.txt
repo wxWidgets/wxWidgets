@@ -175,6 +175,7 @@ wxMSW:
 - disable wxNB_RIGHT, wxNB_LEFT, wxNB_BOTTOM notebook styles under Windows XP
 - fixed release mode build with VC 7.x (Martin Ecker)
 - added support for wxALWAYS_SHOW_SB style
+- you don't need to add opengl32.lib when using VC++ now (David Falkinder)
 
 wxMotif:
 
