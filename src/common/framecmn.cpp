@@ -250,6 +250,8 @@ void wxFrameBase::OnMenuHighlight(wxMenuEvent& event)
 // Implement internal behaviour (menu updating on some platforms)
 void wxFrameBase::OnInternalIdle()
 {
+    wxTopLevelWindow::OnInternalIdle();
+    
 #if wxUSE_MENUS && wxUSE_IDLEMENUUPDATES
     if (wxUpdateUIEvent::CanUpdate(this))
         DoMenuUpdates();
