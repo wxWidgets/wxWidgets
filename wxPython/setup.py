@@ -216,7 +216,7 @@ if os.name == 'nt':
 
 
     if bcpp_compiling:  # overwrite it
-        cflags = ['-5', '-VF',  ### To supplort MSVC spurious semicolons in the class scope
+        cflags = ['-5', '-VF',  ### To support MSVC spurious semicolons in the class scope
                   ### else, all semicolons at the end of all DECLARE_...CALLBACK... macros must be eliminated
                   '-Hc', '-H=' + opj(WXDIR, '\src\msw\wx32.csm'),
                   '@' + opj(WXDIR, '\src\msw\wxwin32.cfg')
@@ -233,7 +233,7 @@ if os.name == 'nt':
 
 
 
-elif os.name == 'posix' and sys.platform == "darwin1":
+elif os.name == 'posix' and sys.platform[:6] == "darwin":
     # Flags and such for a Darwin (Max OS X) build of Python
 
     WXDIR = '..'              # assumes IN_CVS_TREE

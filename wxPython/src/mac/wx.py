@@ -15,6 +15,8 @@ from events import *
 
 from streams import *
 
+from utils import *
+
 from mdi import *
 
 from frames import *
@@ -38,8 +40,6 @@ from printfw import *
 from sizers import *
 
 from filesys import *
-
-from utils import *
 class wxPyAppPtr(wxEvtHandlerPtr):
     def __init__(self,this):
         self.this = this
@@ -167,7 +167,6 @@ wxRAISED_BORDER = wxc.wxRAISED_BORDER
 wxBORDER = wxc.wxBORDER
 wxSIMPLE_BORDER = wxc.wxSIMPLE_BORDER
 wxSTATIC_BORDER = wxc.wxSTATIC_BORDER
-wxBORDER_MASK = wxc.wxBORDER_MASK
 wxTRANSPARENT_WINDOW = wxc.wxTRANSPARENT_WINDOW
 wxNO_BORDER = wxc.wxNO_BORDER
 wxUSER_COLOURS = wxc.wxUSER_COLOURS
@@ -442,6 +441,14 @@ wxMM_ISOTROPIC = wxc.wxMM_ISOTROPIC
 wxMM_ANISOTROPIC = wxc.wxMM_ANISOTROPIC
 wxMM_POINTS = wxc.wxMM_POINTS
 wxMM_METRIC = wxc.wxMM_METRIC
+wxBORDER_DEFAULT = wxc.wxBORDER_DEFAULT
+wxBORDER_NONE = wxc.wxBORDER_NONE
+wxBORDER_STATIC = wxc.wxBORDER_STATIC
+wxBORDER_SIMPLE = wxc.wxBORDER_SIMPLE
+wxBORDER_RAISED = wxc.wxBORDER_RAISED
+wxBORDER_SUNKEN = wxc.wxBORDER_SUNKEN
+wxBORDER_DOUBLE = wxc.wxBORDER_DOUBLE
+wxBORDER_MASK = wxc.wxBORDER_MASK
 wxDEFAULT = wxc.wxDEFAULT
 wxDECORATIVE = wxc.wxDECORATIVE
 wxROMAN = wxc.wxROMAN

@@ -1849,7 +1849,6 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxBORDER", PyInt_FromLong((long) wxBORDER));
 	 PyDict_SetItemString(d,"wxSIMPLE_BORDER", PyInt_FromLong((long) wxSIMPLE_BORDER));
 	 PyDict_SetItemString(d,"wxSTATIC_BORDER", PyInt_FromLong((long) wxSTATIC_BORDER));
-	 PyDict_SetItemString(d,"wxBORDER_MASK", PyInt_FromLong((long) wxBORDER_MASK));
 	 PyDict_SetItemString(d,"wxTRANSPARENT_WINDOW", PyInt_FromLong((long) wxTRANSPARENT_WINDOW));
 	 PyDict_SetItemString(d,"wxNO_BORDER", PyInt_FromLong((long) wxNO_BORDER));
 	 PyDict_SetItemString(d,"wxUSER_COLOURS", PyInt_FromLong((long) wxUSER_COLOURS));
@@ -2124,6 +2123,14 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxMM_ANISOTROPIC", PyInt_FromLong((long) wxMM_ANISOTROPIC));
 	 PyDict_SetItemString(d,"wxMM_POINTS", PyInt_FromLong((long) wxMM_POINTS));
 	 PyDict_SetItemString(d,"wxMM_METRIC", PyInt_FromLong((long) wxMM_METRIC));
+	 PyDict_SetItemString(d,"wxBORDER_DEFAULT", PyInt_FromLong((long) wxBORDER_DEFAULT));
+	 PyDict_SetItemString(d,"wxBORDER_NONE", PyInt_FromLong((long) wxBORDER_NONE));
+	 PyDict_SetItemString(d,"wxBORDER_STATIC", PyInt_FromLong((long) wxBORDER_STATIC));
+	 PyDict_SetItemString(d,"wxBORDER_SIMPLE", PyInt_FromLong((long) wxBORDER_SIMPLE));
+	 PyDict_SetItemString(d,"wxBORDER_RAISED", PyInt_FromLong((long) wxBORDER_RAISED));
+	 PyDict_SetItemString(d,"wxBORDER_SUNKEN", PyInt_FromLong((long) wxBORDER_SUNKEN));
+	 PyDict_SetItemString(d,"wxBORDER_DOUBLE", PyInt_FromLong((long) wxBORDER_DOUBLE));
+	 PyDict_SetItemString(d,"wxBORDER_MASK", PyInt_FromLong((long) wxBORDER_MASK));
 	 PyDict_SetItemString(d,"wxDEFAULT", PyInt_FromLong((long) wxDEFAULT));
 	 PyDict_SetItemString(d,"wxDECORATIVE", PyInt_FromLong((long) wxDECORATIVE));
 	 PyDict_SetItemString(d,"wxROMAN", PyInt_FromLong((long) wxROMAN));

@@ -5896,6 +5896,53 @@ static PyObject *_wrap_wxTextAttr_IsDefault(PyObject *self, PyObject *args, PyOb
     return _resultobj;
 }
 
+static PyObject *_wrap_wxTextAttr_Combine(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTextAttr * _result;
+    wxTextAttr * _arg0;
+    wxTextAttr * _arg1;
+    wxTextCtrl * _arg2;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    PyObject * _argo2 = 0;
+    char *_kwnames[] = { "attr","attrDef","text", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxTextAttr_Combine",_kwnames,&_argo0,&_argo1,&_argo2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextAttr_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextAttr_Combine. Expected _wxTextAttr_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTextAttr_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTextAttr_Combine. Expected _wxTextAttr_p.");
+        return NULL;
+        }
+    }
+    if (_argo2) {
+        if (_argo2 == Py_None) { _arg2 = NULL; }
+        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxTextAttr_Combine. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxTextAttr (wxTextAttr::Combine(*_arg0,*_arg1,_arg2));
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxTextAttr_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
 static void *SwigwxTextCtrlTowxControl(void *ptr) {
     wxTextCtrl *src;
     wxControl *dest;
@@ -7535,6 +7582,43 @@ static PyObject *_wrap_wxTextCtrl_write(PyObject *self, PyObject *args, PyObject
     return _resultobj;
 }
 
+static wxString  wxTextCtrl_GetString(wxTextCtrl *self,long  from,long  to) {
+            return self->GetValue().Mid(from, to-from);
+        }
+static PyObject *_wrap_wxTextCtrl_GetString(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxTextCtrl * _arg0;
+    long  _arg1;
+    long  _arg2;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","from","to", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oll:wxTextCtrl_GetString",_kwnames,&_argo0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_GetString. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxTextCtrl_GetString(_arg0,_arg1,_arg2));
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
 static void *SwigwxScrollBarTowxControl(void *ptr) {
     wxScrollBar *src;
     wxControl *dest;
@@ -7830,6 +7914,34 @@ static PyObject *_wrap_wxScrollBar_GetThumbSize(PyObject *self, PyObject *args, 
 {
     wxPy_BEGIN_ALLOW_THREADS;
         _result = (int )wxScrollBar_GetThumbSize(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxScrollBar_IsVertical(_swigobj)  (_swigobj->IsVertical())
+static PyObject *_wrap_wxScrollBar_IsVertical(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxScrollBar * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxScrollBar_IsVertical",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxScrollBar_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxScrollBar_IsVertical. Expected _wxScrollBar_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxScrollBar_IsVertical(_arg0);
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
@@ -10725,6 +10837,7 @@ static PyMethodDef controlscMethods[] = {
 	 { "new_wxSpinButton", (PyCFunction) _wrap_new_wxSpinButton, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrollBar_SetScrollbar", (PyCFunction) _wrap_wxScrollBar_SetScrollbar, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrollBar_SetThumbPosition", (PyCFunction) _wrap_wxScrollBar_SetThumbPosition, METH_VARARGS | METH_KEYWORDS },
+	 { "wxScrollBar_IsVertical", (PyCFunction) _wrap_wxScrollBar_IsVertical, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrollBar_GetThumbLength", (PyCFunction) _wrap_wxScrollBar_GetThumbSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrollBar_GetThumbSize", (PyCFunction) _wrap_wxScrollBar_GetThumbSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxScrollBar_GetThumbPosition", (PyCFunction) _wrap_wxScrollBar_GetThumbPosition, METH_VARARGS | METH_KEYWORDS },
@@ -10733,6 +10846,7 @@ static PyMethodDef controlscMethods[] = {
 	 { "wxScrollBar_Create", (PyCFunction) _wrap_wxScrollBar_Create, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPreScrollBar", (PyCFunction) _wrap_new_wxPreScrollBar, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxScrollBar", (PyCFunction) _wrap_new_wxScrollBar, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextCtrl_GetString", (PyCFunction) _wrap_wxTextCtrl_GetString, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_write", (PyCFunction) _wrap_wxTextCtrl_write, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_SetEditable", (PyCFunction) _wrap_wxTextCtrl_SetEditable, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_SelectAll", (PyCFunction) _wrap_wxTextCtrl_SelectAll, METH_VARARGS | METH_KEYWORDS },
@@ -10778,6 +10892,7 @@ static PyMethodDef controlscMethods[] = {
 	 { "wxTextCtrl_Create", (PyCFunction) _wrap_wxTextCtrl_Create, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPreTextCtrl", (PyCFunction) _wrap_new_wxPreTextCtrl, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxTextCtrl", (PyCFunction) _wrap_new_wxTextCtrl, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextAttr_Combine", (PyCFunction) _wrap_wxTextAttr_Combine, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextAttr_IsDefault", (PyCFunction) _wrap_wxTextAttr_IsDefault, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextAttr_GetFont", (PyCFunction) _wrap_wxTextAttr_GetFont, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextAttr_GetBackgroundColour", (PyCFunction) _wrap_wxTextAttr_GetBackgroundColour, METH_VARARGS | METH_KEYWORDS },
