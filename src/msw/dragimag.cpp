@@ -28,7 +28,7 @@
 #pragma hdrstop
 #endif
 
-#if wxUSE_DRAGIMAG
+#if wxUSE_DRAGIMAGE
 
 #if defined(__WIN95__)
 
@@ -435,4 +435,4 @@ bool wxDragImage::Hide()
 #endif
     // __WIN95__
 
-#endif // wxUSE_DRAGIMAG
+#endif // wxUSE_DRAGIMAGE

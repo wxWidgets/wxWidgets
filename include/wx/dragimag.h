@@ -1,7 +1,7 @@
 #ifndef _WX_DRAGIMAG_H_BASE_
 #define _WX_DRAGIMAG_H_BASE_
 
-#if wxUSE_DRAGIMAG
+#if wxUSE_DRAGIMAGE
 
 #if defined(__WXMSW__)
 #ifdef __WIN16__
@@ -44,7 +44,7 @@
 
 #endif
 
-#endif // wxUSE_DRAGIMAG
+#endif // wxUSE_DRAGIMAGE
 
 #endif
     // _WX_DRAGIMAG_H_BASE_
