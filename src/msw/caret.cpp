@@ -154,10 +154,12 @@ void wxCaret::DoHide()
 
 void wxCaret::DoMove()
 {
-    wxASSERT_MSG( m_hasCaret, "cannot move non existent caret" );
-
-    if ( !::SetCaretPos(m_x, m_y) )
+    if ( m_hasCaret )
     {
-        wxLogLastError("SetCaretPos");
+        if ( !::SetCaretPos(m_x, m_y) )
+        {
+            wxLogLastError("SetCaretPos");
+        }
     }
+    //else: we don't have caret right now, nothing to do (this does happen)
 }

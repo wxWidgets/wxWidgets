@@ -265,6 +265,8 @@ MyCanvas::MyCanvas( wxWindow *parent )
                             wxDefaultPosition, wxDefaultSize,
                             wxSUNKEN_BORDER )
 {
+    m_text = (char *)NULL;
+
     SetBackgroundColour(* wxWHITE);
 
     m_font = *wxNORMAL_FONT;
@@ -282,8 +284,6 @@ MyCanvas::MyCanvas( wxWindow *parent )
     m_xMargin = m_yMargin = 5;
     m_caret.Move(m_xMargin, m_yMargin);
     m_caret.Show();
-
-    m_text = (char *)NULL;
 }
 
 MyCanvas::~MyCanvas()
