@@ -40,54 +40,6 @@ from sizers import *
 from filesys import *
 
 from utils import *
-class wxHtmlHelpFrameCfgPtr :
-    def __init__(self,this):
-        self.this = this
-        self.thisown = 0
-    def __setattr__(self,name,value):
-        if name == "x" :
-            htmlhelpc.wxHtmlHelpFrameCfg_x_set(self,value)
-            return
-        if name == "y" :
-            htmlhelpc.wxHtmlHelpFrameCfg_y_set(self,value)
-            return
-        if name == "w" :
-            htmlhelpc.wxHtmlHelpFrameCfg_w_set(self,value)
-            return
-        if name == "h" :
-            htmlhelpc.wxHtmlHelpFrameCfg_h_set(self,value)
-            return
-        if name == "sashpos" :
-            htmlhelpc.wxHtmlHelpFrameCfg_sashpos_set(self,value)
-            return
-        if name == "navig_on" :
-            htmlhelpc.wxHtmlHelpFrameCfg_navig_on_set(self,value)
-            return
-        self.__dict__[name] = value
-    def __getattr__(self,name):
-        if name == "x" : 
-            return htmlhelpc.wxHtmlHelpFrameCfg_x_get(self)
-        if name == "y" : 
-            return htmlhelpc.wxHtmlHelpFrameCfg_y_get(self)
-        if name == "w" : 
-            return htmlhelpc.wxHtmlHelpFrameCfg_w_get(self)
-        if name == "h" : 
-            return htmlhelpc.wxHtmlHelpFrameCfg_h_get(self)
-        if name == "sashpos" : 
-            return htmlhelpc.wxHtmlHelpFrameCfg_sashpos_get(self)
-        if name == "navig_on" : 
-            return htmlhelpc.wxHtmlHelpFrameCfg_navig_on_get(self)
-        raise AttributeError,name
-    def __repr__(self):
-        return "<C wxHtmlHelpFrameCfg instance at %s>" % (self.this,)
-class wxHtmlHelpFrameCfg(wxHtmlHelpFrameCfgPtr):
-    def __init__(self,*_args,**_kwargs):
-        self.this = apply(htmlhelpc.new_wxHtmlHelpFrameCfg,_args,_kwargs)
-        self.thisown = 1
-
-
-
-
 class wxHtmlBookRecordPtr :
     def __init__(self,this):
         self.this = this

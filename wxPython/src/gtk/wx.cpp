@@ -1878,6 +1878,7 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxRESIZE_BORDER", PyInt_FromLong((long) wxRESIZE_BORDER));
 	 PyDict_SetItemString(d,"wxDIALOG_MODAL", PyInt_FromLong((long) wxDIALOG_MODAL));
 	 PyDict_SetItemString(d,"wxDIALOG_MODELESS", PyInt_FromLong((long) wxDIALOG_MODELESS));
+	 PyDict_SetItemString(d,"wxDIALOG_NO_PARENT", PyInt_FromLong((long) wxDIALOG_NO_PARENT));
 	 PyDict_SetItemString(d,"wxDEFAULT_FRAME_STYLE", PyInt_FromLong((long) wxDEFAULT_FRAME_STYLE));
 	 PyDict_SetItemString(d,"wxDEFAULT_DIALOG_STYLE", PyInt_FromLong((long) wxDEFAULT_DIALOG_STYLE));
 	 PyDict_SetItemString(d,"wxFRAME_TOOL_WINDOW", PyInt_FromLong((long) wxFRAME_TOOL_WINDOW));
@@ -1891,6 +1892,7 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxED_STATIC_LINE", PyInt_FromLong((long) wxED_STATIC_LINE));
 	 PyDict_SetItemString(d,"wxEXT_DIALOG_STYLE", PyInt_FromLong((long) wxEXT_DIALOG_STYLE));
 	 PyDict_SetItemString(d,"wxCLIP_CHILDREN", PyInt_FromLong((long) wxCLIP_CHILDREN));
+	 PyDict_SetItemString(d,"wxCLIP_SIBLINGS", PyInt_FromLong((long) wxCLIP_SIBLINGS));
 	 PyDict_SetItemString(d,"wxRETAINED", PyInt_FromLong((long) wxRETAINED));
 	 PyDict_SetItemString(d,"wxBACKINGSTORE", PyInt_FromLong((long) wxBACKINGSTORE));
 	 PyDict_SetItemString(d,"wxTB_3DBUTTONS", PyInt_FromLong((long) wxTB_3DBUTTONS));
@@ -1965,25 +1967,6 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxTR_MULTIPLE", PyInt_FromLong((long) wxTR_MULTIPLE));
 	 PyDict_SetItemString(d,"wxTR_SINGLE", PyInt_FromLong((long) wxTR_SINGLE));
 	 PyDict_SetItemString(d,"wxTR_HAS_VARIABLE_ROW_HEIGHT", PyInt_FromLong((long) wxTR_HAS_VARIABLE_ROW_HEIGHT));
-	 PyDict_SetItemString(d,"wxLC_ICON", PyInt_FromLong((long) wxLC_ICON));
-	 PyDict_SetItemString(d,"wxLC_SMALL_ICON", PyInt_FromLong((long) wxLC_SMALL_ICON));
-	 PyDict_SetItemString(d,"wxLC_LIST", PyInt_FromLong((long) wxLC_LIST));
-	 PyDict_SetItemString(d,"wxLC_REPORT", PyInt_FromLong((long) wxLC_REPORT));
-	 PyDict_SetItemString(d,"wxLC_ALIGN_TOP", PyInt_FromLong((long) wxLC_ALIGN_TOP));
-	 PyDict_SetItemString(d,"wxLC_ALIGN_LEFT", PyInt_FromLong((long) wxLC_ALIGN_LEFT));
-	 PyDict_SetItemString(d,"wxLC_AUTOARRANGE", PyInt_FromLong((long) wxLC_AUTOARRANGE));
-	 PyDict_SetItemString(d,"wxLC_USER_TEXT", PyInt_FromLong((long) wxLC_USER_TEXT));
-	 PyDict_SetItemString(d,"wxLC_EDIT_LABELS", PyInt_FromLong((long) wxLC_EDIT_LABELS));
-	 PyDict_SetItemString(d,"wxLC_NO_HEADER", PyInt_FromLong((long) wxLC_NO_HEADER));
-	 PyDict_SetItemString(d,"wxLC_NO_SORT_HEADER", PyInt_FromLong((long) wxLC_NO_SORT_HEADER));
-	 PyDict_SetItemString(d,"wxLC_SINGLE_SEL", PyInt_FromLong((long) wxLC_SINGLE_SEL));
-	 PyDict_SetItemString(d,"wxLC_SORT_ASCENDING", PyInt_FromLong((long) wxLC_SORT_ASCENDING));
-	 PyDict_SetItemString(d,"wxLC_SORT_DESCENDING", PyInt_FromLong((long) wxLC_SORT_DESCENDING));
-	 PyDict_SetItemString(d,"wxLC_MASK_TYPE", PyInt_FromLong((long) wxLC_MASK_TYPE));
-	 PyDict_SetItemString(d,"wxLC_MASK_ALIGN", PyInt_FromLong((long) wxLC_MASK_ALIGN));
-	 PyDict_SetItemString(d,"wxLC_MASK_SORT", PyInt_FromLong((long) wxLC_MASK_SORT));
-	 PyDict_SetItemString(d,"wxLC_HRULES", PyInt_FromLong((long) wxLC_HRULES));
-	 PyDict_SetItemString(d,"wxLC_VRULES", PyInt_FromLong((long) wxLC_VRULES));
 	 PyDict_SetItemString(d,"wxSP_VERTICAL", PyInt_FromLong((long) wxSP_VERTICAL));
 	 PyDict_SetItemString(d,"wxSP_HORIZONTAL", PyInt_FromLong((long) wxSP_HORIZONTAL));
 	 PyDict_SetItemString(d,"wxSP_ARROW_KEYS", PyInt_FromLong((long) wxSP_ARROW_KEYS));
@@ -2062,6 +2045,8 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxID_PASTE", PyInt_FromLong((long) wxID_PASTE));
 	 PyDict_SetItemString(d,"wxID_CLEAR", PyInt_FromLong((long) wxID_CLEAR));
 	 PyDict_SetItemString(d,"wxID_FIND", PyInt_FromLong((long) wxID_FIND));
+	 PyDict_SetItemString(d,"wxID_DUPLICATE", PyInt_FromLong((long) wxID_DUPLICATE));
+	 PyDict_SetItemString(d,"wxID_SELECTALL", PyInt_FromLong((long) wxID_SELECTALL));
 	 PyDict_SetItemString(d,"wxID_FILE1", PyInt_FromLong((long) wxID_FILE1));
 	 PyDict_SetItemString(d,"wxID_FILE2", PyInt_FromLong((long) wxID_FILE2));
 	 PyDict_SetItemString(d,"wxID_FILE3", PyInt_FromLong((long) wxID_FILE3));
@@ -2121,6 +2106,7 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxNB_LEFT", PyInt_FromLong((long) wxNB_LEFT));
 	 PyDict_SetItemString(d,"wxNB_RIGHT", PyInt_FromLong((long) wxNB_RIGHT));
 	 PyDict_SetItemString(d,"wxNB_BOTTOM", PyInt_FromLong((long) wxNB_BOTTOM));
+	 PyDict_SetItemString(d,"wxNB_MULTILINE", PyInt_FromLong((long) wxNB_MULTILINE));
 	 PyDict_SetItemString(d,"wxLI_HORIZONTAL", PyInt_FromLong((long) wxLI_HORIZONTAL));
 	 PyDict_SetItemString(d,"wxLI_VERTICAL", PyInt_FromLong((long) wxLI_VERTICAL));
 	 PyDict_SetItemString(d,"wxHW_SCROLLBAR_NEVER", PyInt_FromLong((long) wxHW_SCROLLBAR_NEVER));

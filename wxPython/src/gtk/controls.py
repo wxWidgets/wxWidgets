@@ -142,6 +142,9 @@ class wxChoicePtr(wxControlPtr):
     def Clear(self, *_args, **_kwargs):
         val = apply(controlsc.wxChoice_Clear,(self,) + _args, _kwargs)
         return val
+    def Delete(self, *_args, **_kwargs):
+        val = apply(controlsc.wxChoice_Delete,(self,) + _args, _kwargs)
+        return val
     def FindString(self, *_args, **_kwargs):
         val = apply(controlsc.wxChoice_FindString,(self,) + _args, _kwargs)
         return val
@@ -157,8 +160,8 @@ class wxChoicePtr(wxControlPtr):
     def GetStringSelection(self, *_args, **_kwargs):
         val = apply(controlsc.wxChoice_GetStringSelection,(self,) + _args, _kwargs)
         return val
-    def Number(self, *_args, **_kwargs):
-        val = apply(controlsc.wxChoice_Number,(self,) + _args, _kwargs)
+    def GetCount(self, *_args, **_kwargs):
+        val = apply(controlsc.wxChoice_GetCount,(self,) + _args, _kwargs)
         return val
     def SetColumns(self, *_args, **_kwargs):
         val = apply(controlsc.wxChoice_SetColumns,(self,) + _args, _kwargs)
@@ -169,8 +172,15 @@ class wxChoicePtr(wxControlPtr):
     def SetStringSelection(self, *_args, **_kwargs):
         val = apply(controlsc.wxChoice_SetStringSelection,(self,) + _args, _kwargs)
         return val
+    def SetString(self, *_args, **_kwargs):
+        val = apply(controlsc.wxChoice_SetString,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxChoice instance at %s>" % (self.this,)
+    
+    Number = GetCount
+    Select = SetSelection
+    
 class wxChoice(wxChoicePtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(controlsc.new_wxChoice,_args,_kwargs)
@@ -220,9 +230,6 @@ class wxComboBoxPtr(wxChoicePtr):
     def GetValue(self, *_args, **_kwargs):
         val = apply(controlsc.wxComboBox_GetValue,(self,) + _args, _kwargs)
         return val
-    def Number(self, *_args, **_kwargs):
-        val = apply(controlsc.wxComboBox_Number,(self,) + _args, _kwargs)
-        return val
     def Paste(self, *_args, **_kwargs):
         val = apply(controlsc.wxComboBox_Paste,(self,) + _args, _kwargs)
         return val
@@ -246,6 +253,9 @@ class wxComboBoxPtr(wxChoicePtr):
         return val
     def SetValue(self, *_args, **_kwargs):
         val = apply(controlsc.wxComboBox_SetValue,(self,) + _args, _kwargs)
+        return val
+    def SetEditable(self, *_args, **_kwargs):
+        val = apply(controlsc.wxComboBox_SetEditable,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxComboBox instance at %s>" % (self.this,)
@@ -380,8 +390,11 @@ class wxListBoxPtr(wxControlPtr):
     def GetStringSelection(self, *_args, **_kwargs):
         val = apply(controlsc.wxListBox_GetStringSelection,(self,) + _args, _kwargs)
         return val
-    def Number(self, *_args, **_kwargs):
-        val = apply(controlsc.wxListBox_Number,(self,) + _args, _kwargs)
+    def GetCount(self, *_args, **_kwargs):
+        val = apply(controlsc.wxListBox_GetCount,(self,) + _args, _kwargs)
+        return val
+    def IsSelected(self, *_args, **_kwargs):
+        val = apply(controlsc.wxListBox_IsSelected,(self,) + _args, _kwargs)
         return val
     def Selected(self, *_args, **_kwargs):
         val = apply(controlsc.wxListBox_Selected,(self,) + _args, _kwargs)
@@ -406,6 +419,7 @@ class wxListBoxPtr(wxControlPtr):
         return val
     def __repr__(self):
         return "<C wxListBox instance at %s>" % (self.this,)
+    Number = GetCount
 class wxListBox(wxListBoxPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(controlsc.new_wxListBox,_args,_kwargs)
@@ -725,23 +739,23 @@ class wxRadioBoxPtr(wxControlPtr):
     def FindString(self, *_args, **_kwargs):
         val = apply(controlsc.wxRadioBox_FindString,(self,) + _args, _kwargs)
         return val
+    def GetString(self, *_args, **_kwargs):
+        val = apply(controlsc.wxRadioBox_GetString,(self,) + _args, _kwargs)
+        return val
     def GetItemLabel(self, *_args, **_kwargs):
         val = apply(controlsc.wxRadioBox_GetItemLabel,(self,) + _args, _kwargs)
+        return val
+    def SetItemLabel(self, *_args, **_kwargs):
+        val = apply(controlsc.wxRadioBox_SetItemLabel,(self,) + _args, _kwargs)
         return val
     def GetSelection(self, *_args, **_kwargs):
         val = apply(controlsc.wxRadioBox_GetSelection,(self,) + _args, _kwargs)
         return val
-    def GetString(self, *_args, **_kwargs):
-        val = apply(controlsc.wxRadioBox_GetString,(self,) + _args, _kwargs)
-        return val
     def GetStringSelection(self, *_args, **_kwargs):
         val = apply(controlsc.wxRadioBox_GetStringSelection,(self,) + _args, _kwargs)
         return val
-    def Number(self, *_args, **_kwargs):
-        val = apply(controlsc.wxRadioBox_Number,(self,) + _args, _kwargs)
-        return val
-    def SetItemLabel(self, *_args, **_kwargs):
-        val = apply(controlsc.wxRadioBox_SetItemLabel,(self,) + _args, _kwargs)
+    def GetCount(self, *_args, **_kwargs):
+        val = apply(controlsc.wxRadioBox_GetCount,(self,) + _args, _kwargs)
         return val
     def SetSelection(self, *_args, **_kwargs):
         val = apply(controlsc.wxRadioBox_SetSelection,(self,) + _args, _kwargs)
@@ -757,6 +771,7 @@ class wxRadioBoxPtr(wxControlPtr):
         return val
     def __repr__(self):
         return "<C wxRadioBox instance at %s>" % (self.this,)
+    Number = GetCount
 class wxRadioBox(wxRadioBoxPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(controlsc.new_wxRadioBox,_args,_kwargs)

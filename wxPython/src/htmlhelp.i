@@ -4,7 +4,7 @@
 //
 // Author:      Robin Dunn
 //
-// Created:     25-nov-1998
+// Created:     25-Nov-1998
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 by Total Control Software
 // Licence:     wxWindows license
@@ -38,19 +38,6 @@
 
 %extern utils.i
 %extern html.i
-
-
-//---------------------------------------------------------------------------
-
-class  wxHtmlHelpFrameCfg
-{
-public:
-    wxHtmlHelpFrameCfg();
-
-    long x, y, w, h;
-    long sashpos;
-    bool navig_on;
-};
 
 
 //---------------------------------------------------------------------------

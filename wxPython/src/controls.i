@@ -525,22 +525,25 @@ public:
     %name(EnableItem)void Enable(int n, bool enable);
     int FindString(const wxString& string);
 
-//***    wxString GetLabel();
-//***    void SetLabel(const wxString& label);
-
     wxString GetString(int n);
+
+#ifdef __WXMSW__
     void SetString(int n, const wxString& label);
     %pragma(python) addtoclass = "
     GetItemLabel = GetString
     SetItemLabel = SetString
     "
+    int GetColumnCount();
+    int GetRowCount();
+#else
+    %name(GetItemLabel)wxString GetLabel( int item );
+    %name(SetItemLabel)void SetLabel( int item, const wxString& label );
+#endif
+
     int GetSelection();
     wxString GetStringSelection();
     int GetCount();
     %pragma(python) addtoclass = "Number = GetCount"
-
-    int GetColumnCount();
-    int GetRowCount();
 
     void SetSelection(int n);
     void SetStringSelection(const wxString& string);

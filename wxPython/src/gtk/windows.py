@@ -644,9 +644,6 @@ class wxScrolledWindowPtr(wxPanelPtr):
     def GetViewStart(self, *_args, **_kwargs):
         val = apply(windowsc.wxScrolledWindow_GetViewStart,(self,) + _args, _kwargs)
         return val
-    def ViewStart(self, *_args, **_kwargs):
-        val = apply(windowsc.wxScrolledWindow_ViewStart,(self,) + _args, _kwargs)
-        return val
     def CalcScrolledPosition(self, *_args, **_kwargs):
         val = apply(windowsc.wxScrolledWindow_CalcScrolledPosition,(self,) + _args, _kwargs)
         return val
@@ -667,6 +664,7 @@ class wxScrolledWindowPtr(wxPanelPtr):
         return val
     def __repr__(self):
         return "<C wxScrolledWindow instance at %s>" % (self.this,)
+    ViewStart = GetViewStart
 class wxScrolledWindow(wxScrolledWindowPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(windowsc.new_wxScrolledWindow,_args,_kwargs)
