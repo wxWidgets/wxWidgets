@@ -66,7 +66,16 @@ wxSize wxStaticText::DoGetBestSize() const
     Point bounds ;
     SInt16 baseline ;
     wxMacCFStringHolder str(m_label ,  m_font.GetEncoding() ) ;
-    verify_noerr( GetThemeTextDimensions( (m_label.Length() > 0 ? ((CFStringRef) str ) : CFSTR(" ") ) , m_font.MacGetThemeFontID() , kThemeStateActive , false , &bounds , &baseline ) ) ;
+    if ( m_font.MacGetThemeFontID() != kThemeCurrentPortFont )
+        verify_noerr( GetThemeTextDimensions( (m_label.Length() > 0 ? ((CFStringRef) str ) : CFSTR(" ") ) , m_font.MacGetThemeFontID() , kThemeStateActive , false , &bounds , &baseline ) ) ;
+    else
+    {
+        wxMacWindowStateSaver sv( this ) ;
+        ::TextFont( m_font.MacGetFontNum() ) ;
+        ::TextSize( (short)( m_font.MacGetFontSize()) ) ;
+        ::TextFace( m_font.MacGetFontStyle() ) ;        
+        verify_noerr( GetThemeTextDimensions( (m_label.Length() > 0 ? ((CFStringRef) str ) : CFSTR(" ") ) , kThemeCurrentPortFont , kThemeStateActive , false , &bounds , &baseline ) ) ;
+    }
     if ( m_label.Length() == 0 )
         bounds.h = 0 ;
     return wxSize(bounds.h, bounds.v);
