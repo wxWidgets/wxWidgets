@@ -125,7 +125,7 @@ static const char *wxArtIDToStock(const wxArtID& id)
     #undef ART
 }
 
-static GtkIconSize wxArtClientToIconSize(const wxArtClient& client)
+GtkIconSize wxArtClientToIconSize(const wxArtClient& client)
 {
     if (client == wxART_TOOLBAR)
         return GTK_ICON_SIZE_LARGE_TOOLBAR;

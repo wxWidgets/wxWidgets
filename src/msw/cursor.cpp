@@ -180,19 +180,37 @@ wxCursor::wxCursor(const wxImage& image)
     const int w = wxCursorRefData::GetStandardWidth();
     const int h = wxCursorRefData::GetStandardHeight();
 
-    const int hotSpotX = image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_X);
-    const int hotSpotY = image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_Y);
+    int hotSpotX = image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_X);
+    int hotSpotY = image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_Y);
+    int image_w = image.GetWidth();
+    int image_h = image.GetHeight();
 
-    wxASSERT_MSG( hotSpotX >= 0 && hotSpotX < w &&
-                    hotSpotY >= 0 && hotSpotY < h,
+    wxASSERT_MSG( hotSpotX >= 0 && hotSpotX < image_w &&
+                  hotSpotY >= 0 && hotSpotY < image_h,
                   _T("invalid cursor hot spot coordinates") );
 
-    HCURSOR hcursor = wxBitmapToHCURSOR
-                      (
-                        wxBitmap(image.Scale(w, h)),
-                        hotSpotX,
-                        hotSpotY
-                      );
+    wxImage imageSized(image); // final image of correct size
+
+    // if image is too small then place it in the center, resize it if too big
+    if ((w > image_w) && (h > image_h))
+    {
+        wxPoint offset((w - image_w)/2, (h - image_h)/2);
+        hotSpotX = hotSpotX + offset.x;
+        hotSpotY = hotSpotY + offset.y;
+
+        imageSized = image.Size(wxSize(w, h), offset);
+    }
+    else if ((w != image_w) || (h != image_h))
+    {
+        hotSpotX = int(hotSpotX * double(w) / double(image_w)); 
+        hotSpotY = int(hotSpotY * double(h) / double(image_h)); 
+
+        imageSized = image.Scale(w, h);
+    }
+
+    HCURSOR hcursor = wxBitmapToHCURSOR( wxBitmap(imageSized), 
+                                         hotSpotX, hotSpotY );
+
     if ( !hcursor )
     {
         wxLogWarning(_("Failed to create cursor."));

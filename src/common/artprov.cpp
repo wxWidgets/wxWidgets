@@ -151,14 +151,16 @@ wxArtProviderCache *wxArtProvider::sm_cache = NULL;
 
 /*static*/ wxBitmap wxArtProvider::GetBitmap(const wxArtID& id,
                                              const wxArtClient& client,
-                                             const wxSize& size)
+                                             const wxSize& reqSize)
 {
     // safety-check against writing client,id,size instead of id,client,size:
     wxASSERT_MSG( client.Last() == _T('C'), _T("invalid 'client' parameter") );
 
     wxCHECK_MSG( sm_providers, wxNullBitmap, _T("no wxArtProvider exists") );
 
-    wxString hashId = wxArtProviderCache::ConstructHashID(id, client, size);
+    wxSize bestSize = (reqSize != wxDefaultSize) ? reqSize : GetSize(client);
+
+    wxString hashId = wxArtProviderCache::ConstructHashID(id, client, bestSize);
 
     wxBitmap bmp;
     if ( !sm_cache->GetBitmap(hashId, &bmp) )
@@ -166,15 +168,25 @@ wxArtProviderCache *wxArtProvider::sm_cache = NULL;
         for (wxArtProvidersList::compatibility_iterator node = sm_providers->GetFirst();
              node; node = node->GetNext())
         {
-            bmp = node->GetData()->CreateBitmap(id, client, size);
+            bmp = node->GetData()->CreateBitmap(id, client, bestSize);
             if ( bmp.Ok() )
             {
 #if wxUSE_IMAGE
-                if ( size != wxDefaultSize &&
-                     (bmp.GetWidth() != size.x || bmp.GetHeight() != size.y) )
+                int bmp_w = bmp.GetWidth();
+                int bmp_h = bmp.GetHeight();
+                // want default size but it's smaller, paste into transparent image
+                if ((reqSize == wxDefaultSize) && 
+                    (bmp_h < bestSize.x) && (bmp_w < bestSize.y))
+                {
+                     wxPoint offset((bestSize.x - bmp_w)/2, (bestSize.y - bmp_h)/2);
+                     wxImage img = bmp.ConvertToImage();
+                     img.Resize(bestSize, offset);
+                     bmp = wxBitmap(img);
+                }
+                else if ( (bmp_w != bestSize.x) || (bmp_h != bestSize.y) )
                 {
                     wxImage img = bmp.ConvertToImage();
-                    img.Rescale(size.x, size.y);
+                    img.Rescale(bestSize.x, bestSize.y);
                     bmp = wxBitmap(img);
                 }
 #endif
@@ -201,6 +213,42 @@ wxArtProviderCache *wxArtProvider::sm_cache = NULL;
     wxIcon icon;
     icon.CopyFromBitmap(bmp);
     return icon;
+}
+
+#ifdef __WXGTK__
+    #include <gtk/gtk.h>
+    extern GtkIconSize wxArtClientToIconSize(const wxArtClient& client);
+#endif // __WXGTK__
+
+/*static*/ wxSize wxArtProvider::GetSize(const wxArtClient& client, 
+                                         bool platform_dependent)
+{
+    if (!platform_dependent)
+    {
+        wxArtProvidersList::compatibility_iterator node = sm_providers->GetFirst();
+        if (node)
+            return node->GetData()->DoGetSize(client);
+            
+        // else return platform dependent size
+    }    
+    
+#ifdef __WXGTK__
+    GtkIconSize gtk_size = wxArtClientToIconSize(client);
+    gint width, height;
+    gtk_icon_size_lookup( gtk_size, &width, &height);
+    return wxSize(width, height);
+#else 
+    if (client == wxART_TOOLBAR)
+        return wxSize(32, 32);
+    else if (client == wxART_MENU)
+        return wxSize(16, 15);
+    else if (client == wxART_CMN_DIALOG || client == wxART_MESSAGE_BOX)
+        return wxSize(32, 32);
+    else if (client == wxART_BUTTON)
+        return wxSize(16, 15);
+    else
+        return wxSize(16, 15); // this is arbitrary    
+#endif 
 }
 
 

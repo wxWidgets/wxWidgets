@@ -130,20 +130,39 @@ void wxCursor::CreateFromImage(const wxImage & image)
 {
     m_refData = new wxCursorRefData;
 
-    wxImage image16 = image.Scale(16,16) ;
-       unsigned char * rgbBits = image16.GetData();
+    int w = 16;
+    int h = 16;
  
+    int hotSpotX = image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_X);
+    int hotSpotY = image.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_Y);
+    int image_w = image.GetWidth();
+    int image_h = image.GetHeight();
     
-    int w = image16.GetWidth()  ;
-    int h = image16.GetHeight() ;
-    bool bHasMask = image16.HasMask() ;
+    wxASSERT_MSG( hotSpotX >= 0 && hotSpotX < image_w &&
+                  hotSpotY >= 0 && hotSpotY < image_h,
+                  _T("invalid cursor hot spot coordinates") );
 
-       int hotSpotX = image16.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_X);
-    int hotSpotY = image16.GetOptionInt(wxIMAGE_OPTION_CUR_HOTSPOT_Y);
-    if (hotSpotX < 0 || hotSpotX >= w)
-            hotSpotX = 0;
-    if (hotSpotY < 0 || hotSpotY >= h)
-            hotSpotY = 0;
+    wxImage image16(image); // final image of correct size
+
+    // if image is too small then place it in the center, resize it if too big
+    if ((w > image_w) && (h > image_h))
+    {
+        wxPoint offset((w - image_w)/2, (h - image_h)/2);
+        hotSpotX = hotSpotX + offset.x;
+        hotSpotY = hotSpotY + offset.y;
+
+        image16 = image.Size(wxSize(w, h), offset);
+    }
+    else if ((w != image_w) || (h != image_h))
+    {
+        hotSpotX = int(hotSpotX * double(w) / double(image_w)); 
+        hotSpotY = int(hotSpotY * double(h) / double(image_h)); 
+
+        image16 = image.Scale(w, h);
+    }
+
+    unsigned char * rgbBits = image16.GetData();
+    bool bHasMask = image16.HasMask() ;
             
 #if 0
     // monochrome implementation

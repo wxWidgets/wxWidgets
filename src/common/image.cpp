@@ -603,6 +603,44 @@ wxImage wxImage::GetSubImage( const wxRect &rect ) const
     return image;
 }
 
+wxImage wxImage::Size( const wxSize& size, const wxPoint& pos, 
+                       int r_, int g_, int b_ ) const
+{
+    wxImage image;
+
+    wxCHECK_MSG( Ok(), image, wxT("invalid image") );
+    wxCHECK_MSG( (size.GetWidth() > 0) && (size.GetHeight() > 0), image, wxT("invalid size") );
+
+    int width = GetWidth(), height = GetHeight();
+    image.Create(size.GetWidth(), size.GetHeight(), false);
+
+    unsigned char r = (unsigned char)r_;
+    unsigned char g = (unsigned char)g_;
+    unsigned char b = (unsigned char)b_;
+    if ((r_ == -1) && (g_ == -1) && (b_ == -1))
+    {
+        GetOrFindMaskColour( &r, &g, &b );
+        image.SetMaskColour(r, g, b);
+    }
+
+    image.SetRGB(wxRect(), r, g, b);
+
+    wxRect subRect(pos.x, pos.y, width, height);
+    wxRect finalRect(0, 0, size.GetWidth(), size.GetHeight());
+
+    subRect.Intersect(finalRect);
+
+    if (!subRect.IsEmpty())
+    {
+        if ((subRect.GetWidth() == width) && (subRect.GetHeight() == height))
+            image.Paste(*this, pos.x, pos.y);
+        else
+            image.Paste(GetSubImage(subRect), pos.x, pos.y);
+    }
+
+    return image;
+}
+
 void wxImage::Paste( const wxImage &image, int x, int y )
 {
     wxCHECK_RET( Ok(), wxT("invalid image") );
@@ -633,6 +671,7 @@ void wxImage::Paste( const wxImage &image, int x, int y )
     if (height < 1) return;
 
     if ((!HasMask() && !image.HasMask()) ||
+        (HasMask() && !image.HasMask()) ||
        ((HasMask() && image.HasMask() &&
          (GetMaskRed()==image.GetMaskRed()) &&
          (GetMaskGreen()==image.GetMaskGreen()) &&
@@ -757,6 +796,42 @@ void wxImage::SetRGB( int x, int y, unsigned char r, unsigned char g, unsigned c
     M_IMGDATA->m_data[ pos   ] = r;
     M_IMGDATA->m_data[ pos+1 ] = g;
     M_IMGDATA->m_data[ pos+2 ] = b;
+}
+
+void wxImage::SetRGB( const wxRect& rect_, unsigned char r, unsigned char g, unsigned char b )
+{
+    wxCHECK_RET( Ok(), wxT("invalid image") );
+
+    wxRect rect(rect_);
+    wxRect imageRect(0, 0, GetWidth(), GetHeight());
+    if ( rect == wxRect() )
+    {
+        rect = imageRect;
+    }
+    else
+    {
+        wxCHECK_RET( imageRect.Inside(rect.GetTopLeft()) && 
+                     imageRect.Inside(rect.GetBottomRight()), 
+                     wxT("invalid bounding rectangle") );
+    }
+
+    int x1 = rect.GetLeft(),
+        y1 = rect.GetTop(),
+        x2 = rect.GetRight() + 1,
+        y2 = rect.GetBottom() + 1;
+
+    unsigned char *data = NULL;
+    int x, y, width = GetWidth();
+    for (y = y1; y < y2; y++)
+    {
+        data = M_IMGDATA->m_data + (y*width + x1)*3;
+        for (x = x1; x < x2; x++)
+        {
+            *data++ = r;
+            *data++ = g;
+            *data++ = b;
+        }
+    }
 }
 
 unsigned char wxImage::GetRed( int x, int y ) const
@@ -989,6 +1064,24 @@ void wxImage::SetMaskColour( unsigned char r, unsigned char g, unsigned char b )
     M_IMGDATA->m_maskGreen = g;
     M_IMGDATA->m_maskBlue = b;
     M_IMGDATA->m_hasMask = true;
+}
+
+bool wxImage::GetOrFindMaskColour( unsigned char *r, unsigned char *g, unsigned char *b ) const
+{
+    wxCHECK_MSG( Ok(), false, wxT("invalid image") );
+
+    if (M_IMGDATA->m_hasMask)
+    {
+        if (r) *r = M_IMGDATA->m_maskRed;
+        if (g) *g = M_IMGDATA->m_maskGreen;
+        if (b) *b = M_IMGDATA->m_maskBlue;
+        return true;
+    }
+    else
+    {
+        FindFirstUnusedColour(r, g, b);
+        return false;
+    }
 }
 
 unsigned char wxImage::GetMaskRed() const

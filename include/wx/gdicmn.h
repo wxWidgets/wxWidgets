@@ -346,6 +346,8 @@ public:
     wxSize GetSize() const { return wxSize(width, height); }
     void SetSize( const wxSize &s ) { width = s.GetWidth(); height = s.GetHeight(); }
 
+    bool IsEmpty() const { return (width <= 0) || (height <= 0); }
+
     wxPoint GetTopLeft() const { return GetPosition(); }
     wxPoint GetLeftTop() const { return GetTopLeft(); }
     void SetTopLeft(const wxPoint &p) { SetPosition(p); }

@@ -137,6 +137,10 @@ public:
                           const wxArtClient& client = wxART_OTHER,
                           const wxSize& size = wxDefaultSize);
 
+    // Get the size of an icon from a specific wxArtClient, queries 
+    // the topmost provider if platform_dependent = false
+    static wxSize GetSize(const wxArtClient& client, bool platform_dependent = false);
+
 protected:
     friend class wxArtProviderModule;
     // Initializes default provider
@@ -146,6 +150,12 @@ protected:
     // Destroy caches & all providers
     static void CleanUpProviders();
 
+    // Get the default size of an icon for a specific client
+    virtual wxSize DoGetSize(const wxArtClient& client) 
+    {
+        return GetSize(client, true);
+    }
+                             
     // Derived classes must override this method to create requested
     // art resource. This method is called only once per instance's
     // lifetime for each requested wxArtID.

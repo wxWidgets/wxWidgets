@@ -545,6 +545,14 @@ Gets the green value of the mask colour.
 Gets the red value of the mask colour.
 
 
+\membersection{wxImage::GetOrFindMaskColour}\label{wximagegetgetorsetmaskcolour}
+
+\constfunc{bool}{GetOrFindMaskColour}{\param{unsigned char}{ *r}, \param{unsigned char}{ *g}, \param{unsigned char}{ *b}}
+
+Get the current mask colour or find a suitable unused colour that could be 
+used as a mask colour. Returns {\tt true} if the image currently has a mask.
+
+
 \membersection{wxImage::GetPalette}\label{wximagegetpalette}
 
 \constfunc{const wxPalette\&}{GetPalette}{\void}
@@ -831,14 +839,32 @@ Replaces the colour specified by {\it r1,g1,b1} by the colour {\it r2,g2,b2}.
 
 \func{wxImage \&}{Rescale}{\param{int}{ width}, \param{int}{ height}}
 
-Changes the size of the image in-place: after a call to this function, the
-image will have the given width and height.
+Changes the size of the image in-place by scaling it: after a call to this function, 
+the image will have the given width and height.
 
 Returns the (modified) image itself.
 
 \wxheading{See also}
 
 \helpref{Scale}{wximagescale}
+
+
+\membersection{wxImage::Resize}\label{wximageresize}
+
+\func{wxImage \&}{Resize}{\param{const wxSize\&}{ size}, \param{const wxPoint&}{ pos}, \param{int}{ red = -1}, \param{int}{ green = -1}, \param{int}{ blue = -1}}
+
+Changes the size of the image in-place without scaling it by adding either a border 
+with the given colour or cropping as necessary. The image is pasted into a new 
+image with the given {\it size} and background colour at the position {\it pos} 
+relative to the upper left of the new image. If {\it red = green = blue = -1} 
+then use either the  current mask colour if set or find, use, and set a 
+suitable mask colour for any newly exposed areas.
+
+Returns the (modified) image itself.
+
+\wxheading{See also}
+
+\helpref{Size}{wximagesize}
 
 
 \membersection{wxImage::Rotate}\label{wximagerotate}
@@ -979,6 +1005,22 @@ Example:
 \helpref{Rescale}{wximagerescale}
 
 
+\membersection{wxImage::Size}\label{wximagesize}
+
+\constfunc{wxImage}{Size}{\param{const wxSize\&}{ size}, \param{const wxPoint&}{ pos}, \param{int}{ red = -1}, \param{int}{ green = -1}, \param{int}{ blue = -1}}
+
+Returns a resized version of this image without scaling it by adding either a border 
+with the given colour or cropping as necessary. The image is pasted into a new 
+image with the given {\it size} and background colour at the position {\it pos} 
+relative to the upper left of the new image. If {\it red = green = blue = -1} 
+then use either the current mask colour if set or find, use, and set a 
+suitable mask colour for any newly exposed areas.
+
+\wxheading{See also}
+
+\helpref{Resize}{wximageresize}
+
+
 \membersection{wxImage::SetAlpha}\label{wximagesetalpha}
 
 \func{void}{SetAlpha}{\param{unsigned char *}{alpha = {\tt NULL}}}
@@ -1091,6 +1133,15 @@ for the coordinate so it can be considered a safe way to manipulate the
 data, but in some cases this might be too slow so that the data will have to
 be set directly. In that case you will have to get access to the image data 
 using the \helpref{GetData}{wximagegetdata} method.
+
+
+\membersection{wxImage::SetRGB}\label{wximagesetrgbrect}
+
+\func{void}{SetRGB}{\param{wxRect \& }{rect}, \param{unsigned char }{red}, \param{unsigned char }{green}, \param{unsigned char }{blue}}
+
+Sets the colour of the pixels within the given rectangle. This routine performs
+bounds-checks for the coordinate so it can be considered a safe way to manipulate the
+data.
 
 
 \membersection{wxImage::operator $=$}\label{wximageassign}
