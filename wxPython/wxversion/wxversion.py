@@ -53,6 +53,9 @@ that and only use wxversion if needed.  For example, for py2exe::
         wxversion.select('2.5')
     import wx
 
+More documentation on wxversion and multi-version installs can be
+found at: http://wiki.wxpython.org/index.cgi/MultiVersionInstalls
+
 """
 
 import sys, os, glob, fnmatch
@@ -103,8 +106,8 @@ def select(versions):
         # otherwise, raise an exception
         raise VersionError("A previously selected wx version does not match the new request.")
 
-    # If we get here then this is the first time wxversion is used.
-    # Ensure that wxPython hasn't been imported yet.
+    # If we get here then this is the first time wxversion is used, 
+    # ensure that wxPython hasn't been imported yet.
     if sys.modules.has_key('wx') or sys.modules.has_key('wxPython'):
         raise VersionError("wxversion.require() must be called before wxPython is imported")
 
@@ -220,11 +223,12 @@ class _wxPackageInfo(object):
     def Score(self, other):
         score = 0
         
-        # whatever version components given in other must match exactly
+        # whatever number of version components given in other must
+        # match exactly
         minlen = min(len(self.version), len(other.version))
         if self.version[:minlen] != other.version[:minlen]:
             return 0        
-        score += 1  # todo: should it be +=minlen to reward longer matches?
+        score += 1
         
         for opt in other.options:
             if opt in self.options:
