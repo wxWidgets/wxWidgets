@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        socket.h
 // Purpose:     Socket handling classes
-// Author:      Guilhem Lavaux
+// Authors:     Guilhem Lavaux, Guillermo Rodriguez Garcia
 // Modified by:
 // Created:     April 1997
 // RCS-ID:      $Id$
@@ -82,13 +82,13 @@ public:
   // Type of request
 
   enum wxSockType { SOCK_CLIENT, SOCK_SERVER, SOCK_INTERNAL, SOCK_UNINIT };
-  typedef void (*wxSockCbk)(wxSocketBase& sock,wxSocketNotify evt,char *cdata);
+  typedef void (*wxSockCbk)(wxSocketBase& sock, wxSocketNotify evt, char *cdata);
 
 protected:
   GSocket *m_socket;			// wxSocket socket
   wxSockFlags m_flags;			// wxSocket flags
   wxSockType m_type;			// wxSocket type
-  wxSocketEventFlags m_neededreq;	// Specify which requet signals we need
+  wxSocketEventFlags m_neededreq;   // Which events we are interested in
   wxUint32 m_lcount;			// Last IO request size
   unsigned long m_timeout;		// IO timeout value
                      
@@ -167,7 +167,7 @@ public:
   // Setup event handler
   void SetEventHandler(wxEvtHandler& evt_hdlr, int id = -1);
 
-  // Method called when it happens something on the socket
+  // Method called when something happens in the socket
   void SetNotify(wxSocketEventFlags flags);
   virtual void OnRequest(wxSocketNotify req_evt);
 
@@ -201,11 +201,11 @@ public:
 protected:
 #endif
 
-  bool _Wait(long seconds, long milliseconds, int type);
+  bool _Wait(long seconds, long milliseconds, wxSocketEventFlags flags);
 
   int DeferRead(char *buffer, wxUint32 nbytes);
   int DeferWrite(const char *buffer, wxUint32 nbytes);
-  void DoDefer(wxSocketNotify evt);
+  void DoDefer();
 
   // Pushback library
   wxUint32 GetPushback(char *buffer, wxUint32 size, bool peek);
