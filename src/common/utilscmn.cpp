@@ -19,7 +19,7 @@
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA) && !defined(__EMX__)
 // Some older compilers (such as EMX) cannot handle
-// #pragma interface/implementation correctly, iff 
+// #pragma interface/implementation correctly, iff
 // #pragma implementation is used in _two_ translation
 // units (as created by e.g. event.cpp compiled for
 // libwx_base and event.cpp compiled for libwx_gui_core).
@@ -788,10 +788,18 @@ int wxMessageBox(const wxString& message, const wxString& caption, long style,
 
 wxString wxGetTextFromUser(const wxString& message, const wxString& caption,
                         const wxString& defaultValue, wxWindow *parent,
-                        int x, int y, bool WXUNUSED(centre) )
+                        wxCoord x, wxCoord y, bool centre )
 {
     wxString str;
-    wxTextEntryDialog dialog(parent, message, caption, defaultValue, wxOK|wxCANCEL, wxPoint(x, y));
+    long style = wxTextEntryDialogStyle;
+
+    if (centre)
+        style |= wxCENTRE;
+    else
+        style &= ~wxCENTRE;
+
+    wxTextEntryDialog dialog(parent, message, caption, defaultValue, style, wxPoint(x, y));
+
     if (dialog.ShowModal() == wxID_OK)
     {
         str = dialog.GetValue();

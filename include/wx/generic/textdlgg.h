@@ -78,8 +78,8 @@ wxGetTextFromUser(const wxString& message,
                   const wxString& caption = wxGetTextFromUserPromptStr,
                   const wxString& default_value = wxEmptyString,
                   wxWindow *parent = (wxWindow *) NULL,
-                  int x = wxDefaultCoord,
-                  int y = wxDefaultCoord,
+                  wxCoord x = wxDefaultCoord,
+                  wxCoord y = wxDefaultCoord,
                   bool centre = true);
 
 wxString WXDLLEXPORT
