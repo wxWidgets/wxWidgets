@@ -157,7 +157,27 @@ static void TranslateKbdEventToMouse(wxWindowMSW *win,
 static TEXTMETRIC wxGetTextMetrics(const wxWindowMSW *win);
 
 // check if the mouse is in the window or its child
-//static bool IsMouseInWindow(HWND hwnd);
+static bool IsMouseInWindow(HWND hwnd);
+
+// wrapper around BringWindowToTop() API
+static inline wxBringWindowToTop(HWND hwnd)
+{
+#ifdef __WXMICROWIN__
+    // It seems that MicroWindows brings the _parent_ of the window to the top,
+    // which can be the wrong one.
+
+    // activate (set focus to) specified window
+    ::SetFocus(hwnd);
+
+    // raise top level parent to top of z order
+    ::SetWindowPos(hwnd, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+#else // !__WXMICROWIN__
+    if ( !::BringWindowToTop(hwnd) )
+    {
+        wxLogLastError(_T("BringWindowToTop"));
+    }
+#endif // __WXMICROWIN__/!__WXMICROWIN__
+}
 
 // ---------------------------------------------------------------------------
 // event tables
@@ -503,19 +523,7 @@ bool wxWindowMSW::Show(bool show)
 
     if ( show )
     {
-#ifdef __WXMICROWIN__
-        // It seems that MicroWindows brings the _parent_ of the
-        // window to the top, which can be the wrong one.
-
-        // activate (set focus to) specified window
-        ::SetFocus(hWnd);
-
-        // raise top level parent to top of z order
-        ::SetWindowPos(hWnd, HWND_TOP, 0, 0, 0, 0,
-                SWP_NOMOVE|SWP_NOSIZE);
-#else
-        BringWindowToTop(hWnd);
-#endif
+        wxBringWindowToTop(hWnd);
     }
 
     return TRUE;
@@ -524,22 +532,7 @@ bool wxWindowMSW::Show(bool show)
 // Raise the window to the top of the Z order
 void wxWindowMSW::Raise()
 {
-#ifdef __WIN16__
-    ::BringWindowToTop(GetHwnd());
-#else // Win32
-#ifdef __WXMICROWIN__
-    // It seems that MicroWindows brings the _parent_ of the
-    // window to the top, which can be the wrong one.
-
-    // activate (set focus to) specified window
-    ::SetFocus(GetHwnd());
-
-    // raise top level parent to top of z order
-    ::SetWindowPos(GetHwnd(), HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE|SWP_NOSIZE);
-#else
-    ::SetForegroundWindow(GetHwnd());
-#endif
-#endif
+    wxBringWindowToTop(GetHwnd());
 }
 
 // Lower the window to the bottom of the Z order

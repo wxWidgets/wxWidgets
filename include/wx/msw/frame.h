@@ -45,6 +45,7 @@ public:
     virtual ~wxFrameMSW();
 
     // implement base class pure virtuals
+    virtual void Raise();
     virtual void Maximize(bool maximize = TRUE);
     virtual bool IsMaximized() const;
     virtual void Iconize(bool iconize = TRUE);

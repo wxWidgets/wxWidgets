@@ -347,6 +347,16 @@ bool wxFrameMSW::Show(bool show)
     return TRUE;
 }
 
+void wxFrameMSW::Raise()
+{
+#ifdef __WIN16__
+    // no SetForegroundWindow() in Win16
+    wxFrameBase::Raise();
+#else // Win32
+    ::SetForegroundWindow(GetHwnd());
+#endif // Win16/32
+}
+
 void wxFrameMSW::Iconize(bool iconize)
 {
     DoShowWindow(iconize ? SW_MINIMIZE : SW_RESTORE);
