@@ -1174,7 +1174,7 @@ dnl
 dnl this magic incantation is needed to prevent AC_PROG_CC from setting the
 dnl default CFLAGS (something like "-g -O2") - we don't need this as add
 dnl -g and -O flags ourselves below
-CFLAGS=${CFLAGS=}
+CFLAGS=${CFLAGS:=}
 AC_PROG_CC
 
 dnl is -traditional needed for correct compilations
@@ -1191,7 +1191,7 @@ dnl   defines GXX empty if not using gxx
 dnl   defines CXXFLAGS
 dnl
 dnl see CFLAGS line above
-CXXFLAGS=${CXXFLAGS=}
+CXXFLAGS=${CXXFLAGS:=}
 AC_PROG_CXX
 
 AC_LANG_RESTORE
