@@ -110,7 +110,7 @@ protected:
     void CreateMask(WXHDC hDC, int xoffset, int yoffset, int dx, int dy);
     void DrawBlankButton(WXHDC hdc, int x, int y, int dx, int dy, int state);
     void DrawButton(WXHDC hdc, int x, int y, int dx, int dy,
-                    wxToolBarTool *tool, int state);
+                    wxToolBarToolBase *tool, int state);
     WXHBITMAP CreateDitherBitmap();
     bool CreateDitherBrush();
     bool FreeDitherBrush();

@@ -747,8 +747,11 @@ void wxToolBar::DrawBlankButton(WXHDC hdc, int x, int y, int dx, int dy, int sta
     }
 }
 
-void wxToolBar::DrawButton(WXHDC hdc, int x, int y, int dx, int dy, wxToolBarTool *tool, int state)
+void wxToolBar::DrawButton(WXHDC hdc, int x, int y, int dx, int dy,
+                           wxToolBarToolBase *toolBase, int state)
 {
+    wxToolBarTool *tool = (wxToolBarTool *)toolBase;
+
     int yOffset;
     HBRUSH hbrOld, hbr;
     BOOL bMaskCreated = FALSE;
