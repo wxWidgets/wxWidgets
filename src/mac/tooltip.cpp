@@ -50,6 +50,9 @@ class wxMacToolTip
 		bool		m_shown ;
 		long		m_mark ;
 		wxMacToolTipTimer* m_timer ;
+#ifdef TARGET_CARBON
+		CFStringRef m_helpTextRef ;
+#endif
 } ;
 
 class wxMacToolTipTimer : public wxTimer
@@ -183,6 +186,7 @@ wxMacToolTip::wxMacToolTip()
 	m_mark = 0 ;
 	m_shown = false ;
     m_timer = NULL ;
+    m_helpTextRef = NULL ;
 }
 
 void wxMacToolTip::Setup( WindowRef win  , wxString text , wxPoint localPosition ) 
@@ -235,14 +239,15 @@ void wxMacToolTip::Draw()
 		LocalToGlobal( (Point *) &tag.absHotRect.top );
 		LocalToGlobal( (Point *) &tag.absHotRect.bottom );
 		SetPort( port );
-		CFStringRef text = wxMacCreateCFString(m_label) ;
+		if( m_helpTextRef )
+			CFRelease( m_helpTextRef )
+		m_helpTextRef = wxMacCreateCFString(m_label) ;
 		tag.content[kHMMinimumContentIndex].contentType = kHMCFStringContent ;
 		tag.content[kHMMinimumContentIndex].u.tagCFString = text ;
 		tag.content[kHMMaximumContentIndex].contentType = kHMCFStringContent ;
 		tag.content[kHMMaximumContentIndex].u.tagCFString = text ;
 		tag.tagSide = kHMDefaultSide;
 		HMDisplayTag( &tag );
-		CFRelease( text ) ;		
 	  }
 	  else
 #endif
@@ -446,6 +451,8 @@ void wxMacToolTip::Clear()
 		return ;
 #if TARGET_CARBON
 	HMHideTag() ;
+	if( m_helpTextRef )
+		CFRelease( m_helpTextRef )
 #else		 
 	if ( m_window == s_ToolTipWindowRef && m_backpict )
 	{
