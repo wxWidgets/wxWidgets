@@ -17,7 +17,7 @@ dnl ---------------------------------------------------------------------------
 dnl initialization
 dnl ---------------------------------------------------------------------------
 
-AC_INIT([wxWindows], [2.5.0], [wx-dev@lists.wxwindows.org])
+AC_INIT([wxWindows], [2.5.1], [wx-dev@lists.wxwindows.org])
 
 dnl the file passed to AC_CONFIG_SRCDIR should be specific to our package
 AC_CONFIG_SRCDIR([wx-config.in])
@@ -55,7 +55,7 @@ dnl   libwx_$(TOOLKIT)-$(WX_RELEASE).so.$(WX_CURRENT).$(WX_REVISION).$(WX_AGE)
 
 WX_MAJOR_VERSION_NUMBER=2
 WX_MINOR_VERSION_NUMBER=5
-WX_RELEASE_NUMBER=0
+WX_RELEASE_NUMBER=1
 
 WX_VERSION=$WX_MAJOR_VERSION_NUMBER.$WX_MINOR_VERSION_NUMBER.$WX_RELEASE_NUMBER
 WX_RELEASE=$WX_MAJOR_VERSION_NUMBER.$WX_MINOR_VERSION_NUMBER
@@ -2388,13 +2388,16 @@ equivalent variable and GTK+ is version 1.2.3 or above.
 
         AC_MSG_CHECKING(for libmgl location)
         dnl Find MGL library that we want
-        dnl FIXME_MGL - test for MGL variants for freebsd etc.
+        dnl FIXME_MGL - test for MGL variants for freebsd etc.;
+        dnl             and for non-x86 versions
         case "${host}" in
             *-*-linux* )
+              dnl glibc.so, glibc are for older versions of MGL,
+              dnl x86/a, x86/so are used by >= 5.0 R11
               if test "x$wxUSE_SHARED" = xyes ; then
-                  mgl_os_candidates="linux/gcc/glibc.so linux/gcc/glibc"
+                  mgl_os_candidates="linux/gcc/x86/so linux/gcc/x86/a linux/gcc/glibc.so linux/gcc/glibc"
               else
-                  mgl_os_candidates="linux/gcc/glibc linux/gcc/glibc.so"
+                  mgl_os_candidates="linux/gcc/x86/a linux/gcc/x86/so linux/gcc/glibc linux/gcc/glibc.so"
               fi
               ;;
             *-pc-msdosdjgpp )
