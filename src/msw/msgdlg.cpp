@@ -93,6 +93,9 @@ int wxMessageDialog::ShowModal()
     else if (m_dialogStyle & wxICON_QUESTION)
         msStyle |= MB_ICONQUESTION;
 
+    if ( m_dialogStyle & wxSTAY_ON_TOP )
+        msStyle |= MB_TOPMOST;
+
     if (hWnd)
         msStyle |= MB_APPLMODAL;
     else
