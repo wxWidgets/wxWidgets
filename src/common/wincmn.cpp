@@ -156,10 +156,6 @@ void wxWindowBase::InitBase()
     m_exStyle =
     m_windowStyle = 0;
 
-    // an optimization for the event processing: checking this flag is much
-    // faster than using IsKindOf(CLASSINFO(wxWindow))
-    m_isWindow = TRUE;
-
 #if wxUSE_CONSTRAINTS
     // no constraints whatsoever
     m_constraints = (wxLayoutConstraints *) NULL;
