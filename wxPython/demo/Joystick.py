@@ -114,8 +114,21 @@ class JoyGauge(wx.Panel):
             joyy =  float(self.stick.GetPosition().y)
 
             # Get the joystick range of motion
-            xrange = self.stick.GetXMax() - self.stick.GetXMin()
-            yrange = self.stick.GetYMax() - self.stick.GetYMin()
+            xmin = self.stick.GetXMin()
+            xmax = self.stick.GetXMax()
+            if xmin < 0:
+                xmax += abs(xmin)
+                joyx += abs(xmin)
+                xmin = 0
+            xrange = max(xmax - xmin, 1)
+
+            ymin = self.stick.GetYMin()
+            ymax = self.stick.GetYMax()
+            if ymin < 0:
+                ymax += abs(ymin)
+                joyy += abs(ymin)
+                ymin = 0
+            yrange = max(ymax - ymin, 1)
 
             # calc a ratio of our range versus the joystick range
             xratio = float(edgeSize) / xrange
@@ -123,7 +136,7 @@ class JoyGauge(wx.Panel):
 
             # calc the displayable value based on position times ratio
             xval = int(joyx * xratio)
-            yval = int(joyy * xratio)
+            yval = int(joyy * yratio)
 
             # and normalize the value from our brush's origin
             x = xval + xorigin
@@ -131,7 +144,7 @@ class JoyGauge(wx.Panel):
 
             # Now to draw it.
             dc.SetPen(wx.Pen(wx.RED, 2))
-            dc.CrossHair((x, y))
+            dc.CrossHair(x, y)
 
         # Turn off drawing optimization
         dc.EndDrawing()
@@ -758,10 +771,8 @@ class Axis(wx.Panel):
             self.GetMax = eval('stick.Get%sMax' % token)
 
             # Create our displays and set them up.
-            self.Min = wx.StaticText(self, -1, str(self.GetMin()),
-                                     size=(40,-1), style=wx.ALIGN_RIGHT | wx.ST_NO_AUTORESIZE)
-            self.Max = wx.StaticText(self, -1, str(self.GetMax()),
-                                     size=(40,-1), style=wx.ALIGN_LEFT | wx.ST_NO_AUTORESIZE)
+            self.Min = wx.StaticText(self, -1, str(self.GetMin()), style=wx.ALIGN_RIGHT)
+            self.Max = wx.StaticText(self, -1, str(self.GetMax()), style=wx.ALIGN_LEFT)
             self.bar = AxisBar(self)
 
             sizer.Add(self.Min, 0, wx.ALL | wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL, 1)
@@ -813,20 +824,25 @@ class Axis(wx.Panel):
         else:
             val = eval('self.stick.Get%sPosition()' % self.token)
 
+
         #
         # While we might be able to rely on a range of 0-FFFFFF on Win, that might
         # not be true of all drivers on all platforms. Thus, calc the actual full
         # range first.
         #
+        if min < 0:
+            max += abs(min)
+            val += abs(min)
+            min = 0        
         range = float(max - min)
-
+        
         #
         # The relative value is used by the derived wx.Gauge since it is a
         # positive-only control.
         #
         relative = 0
         if range:
-            relative = int(val / range * 1000)
+            relative = int( val / range * 1000)
 
         #
         # Pass both the raw and relative values to the derived Gauge
@@ -941,8 +957,8 @@ class JoystickDemoPanel(wx.Panel):
 
         # Capture Joystick events (if they happen)
         self.Bind(wx.EVT_JOYSTICK_EVENTS, self.OnJoystick)
-
         self.stick.SetMovementThreshold(10)
+
 
     def Calibrate(self, evt=None):
         # Do not try this without a stick
@@ -954,6 +970,7 @@ class JoystickDemoPanel(wx.Panel):
         self.pov.Calibrate()
         self.buttons.Calibrate()
 
+
     def OnJoystick(self, evt=None):
         if not self.stick:
             return
@@ -961,9 +978,15 @@ class JoystickDemoPanel(wx.Panel):
         self.axes.Update()
         self.joy.Update()
         self.pov.Update()
-        self.buttons.Update()
+        if evt is not None and evt.IsButton():
+            self.buttons.Update()
 
 
+    def ShutdownDemo(self):
+        if self.stick:
+            self.stick.ReleaseCapture()
+        self.stick = None
+        
 #----------------------------------------------------------------------------
 
 def runTest(frame, nb, log):
