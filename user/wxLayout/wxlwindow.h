@@ -81,6 +81,11 @@ public:
    
    void EnablePopup(bool enable = true) { m_DoPopupMenu = enable; }
 
+   /** Sets the wrap margin.
+       @param margin set this to 0 to disable it
+   */
+   void SetWrapMargin(CoordType margin) { m_WrapMargin = margin; }
+   
    /** Redraws the window.
        @param scrollToCursor if true, scroll the window so that the
        cursor becomes visible
@@ -154,6 +159,8 @@ private:
 
    /// Can user edit the window?
    bool m_Editable;
+   /// wrap margin
+   CoordType    m_WrapMargin;
    /// Is list dirty?
    bool         m_Dirty;
    wxMemoryDC  *m_memDC;

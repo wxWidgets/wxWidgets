@@ -33,9 +33,18 @@
 #   define   WXLAYOUT_DEBUG
 #endif
 
+#ifdef WXLAYOUT_DEBUG
+#   define WXLO_TRACE(x)   wxLogDebug(x)
+#else
+#   define WXLO_TRACE(x)   
+#endif
+
+
+
 #ifndef WXLO_DEFAULTFONTSIZE
 #   define WXLO_DEFAULTFONTSIZE 12
 #endif
+
 
 /// Types of currently supported layout objects.
 enum wxLayoutObjectType
@@ -105,6 +114,13 @@ public:
    virtual CoordType GetWidth(void) const { return 0; }
    /// returns the number of cursor positions occupied by this object
    virtual CoordType GetLength(void) const { return 1; }
+   /** Returns the cursor offset relating to the screen x position
+       relative to begin of object.
+       @param dc the wxDC to use for calculations
+       @param xpos relative x position from head of object
+       @return cursor coordinate offset
+   */
+   virtual CoordType GetOffsetScreen(wxDC &dc, CoordType xpos) const { return 0; }
 
    /// constructor
    wxLayoutObject() { m_UserData = NULL; }
@@ -158,6 +174,14 @@ public:
    virtual wxPoint GetSize(CoordType * top, CoordType *bottom) const;
    /// Return just the width of the object on the screen.
    virtual CoordType GetWidth(void) const { return m_Width; }
+   /** Returns the cursor offset relating to the screen x position
+       relative to begin of object.
+       @param dc the wxDC to use for calculations
+       @param xpos relative x position from head of object
+       @return cursor coordinate offset
+   */
+   virtual CoordType GetOffsetScreen(wxDC &dc, CoordType xpos) const;
+
 
 #ifdef WXLAYOUT_DEBUG
    virtual void Debug(void);
@@ -326,6 +350,13 @@ public:
        @return true if a word was deleted
    */
    bool DeleteWord(CoordType npos);
+
+   /** Finds a suitable position left to the given column to break the 
+       line.
+       @param column we want to break the line to the left of this
+       @return column for breaking line or -1 if no suitable location found
+   */
+   CoordType GetWrapPosition(CoordType column);
    
    /** Finds the object which covers the cursor position xpos in this
        line.
@@ -336,6 +367,18 @@ public:
    */
    wxLayoutObjectList::iterator FindObject(CoordType xpos, CoordType
                                            *offset) const ;
+
+   /** Finds the object which covers the screen position xpos in this
+       line.
+       @param dc the wxDC to use for calculations
+       @param xpos the screen x coordinate
+       @param offset where to store the difference between xpos and
+       the object's head
+       @return iterator to the object or NULLIT
+   */
+   wxLayoutObjectList::iterator FindObjectScreen(wxDC &dc,
+                                                 CoordType xpos,
+                                                 CoordType *offset) const ;
 
    /** Get the first object in the list. This is used by the wxlparser 
        functions to export the list.
@@ -384,10 +427,11 @@ public:
                int cx = 0);
    /** This function finds an object belonging to a given cursor
        position. It assumes that Layout() has been called before.
+       @param dc the wxDC to use for calculations
        @param xpos screen x position
        @return pointer to the object
    */
-   wxLayoutObject * FindObject(CoordType xpos);
+   wxLayoutObject * FindObjectScreen(wxDC &dc, CoordType xpos);
    //@}
 
    /**@name List traversal */
@@ -419,6 +463,8 @@ public:
        the list or until the coordinates no longer changed.
    */
    void RecalculatePositions(int recurse = 0);
+   /// Recalculates the position of this line on the canvas.
+   wxPoint RecalculatePosition(void);
 private:
    /// Destructor is private. Use DeleteLine() to remove it.
    ~wxLayoutLine();
@@ -431,8 +477,6 @@ private:
    */
    void SetHeight(CoordType height)
       { m_Height = height; RecalculatePositions(true); }
-   /// Recalculates the position of this line on the canvas.
-   wxPoint RecalculatePosition(void);
 
    /** Moves the linenumbers one on, because a line has been inserted
        or deleted.
@@ -539,6 +583,13 @@ public:
    bool Insert(wxLayoutObject *obj);
    /// Inserts a linebreak at current cursor position.
    bool LineBreak(void);
+   /** Wraps the current line. Searches to the left of the cursor to
+       break the line. Does nothing if the cursor position is before
+       the break position parameter.
+       @param column the break position for the line, maximum length
+       @return true if line got broken
+   */
+   bool WrapLine(CoordType column);
    /** This function deletes npos cursor positions.
        @param npos how many positions
        @return true if everything got deleted
@@ -637,6 +688,14 @@ public:
        @param bottom optional y coordinate where to stop calculating
    */
    void Layout(wxDC &dc, CoordType bottom = -1) const;
+
+   /** Calculates new sizes for everything in the list, like Layout()
+       but this is needed after the list got changed.
+       @param dc the wxDC to draw on
+       @param bottom optional y coordinate where to stop calculating
+   */
+   void Recalculate(wxDC &dc, CoordType bottom = -1) const;
+   
    /** Returns the size of the list in screen coordinates.
        The return value only makes sense after the list has been
        drawn.
@@ -660,12 +719,15 @@ public:
                    bool active = true,
                    const wxPoint & translate = wxPoint(0,0));
 
-   /** This function finds an object belonging to a given cursor
+   /** This function finds an object belonging to a given screen
        position. It assumes that Layout() has been called before.
        @param pos screen position
+       @param cursorPos if non NULL, store cursor position in there
        @return pointer to the object
    */
-   wxLayoutObject * FindObject(wxPoint const pos);
+   wxLayoutObject * FindObjectScreen(wxDC &dc,
+                                     wxPoint const pos,
+                                     wxPoint *cursorPos = NULL);
 
    //@}
 

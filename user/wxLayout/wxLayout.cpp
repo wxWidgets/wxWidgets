@@ -99,6 +99,7 @@ MyFrame::MyFrame(void) :
    m_lwin = new wxLayoutWindow(this);
    m_lwin->SetMouseTracking(true);
    m_lwin->SetEditable(true);
+   m_lwin->SetWrapMargin(40);
    m_lwin->Clear(wxROMAN,16,wxNORMAL,wxNORMAL, false);
    m_lwin->SetFocus();
 };
@@ -133,14 +134,13 @@ MyFrame::AddSampleText(wxLayoutList *llist)
    llist->Insert("italics ");
    llist->SetFont(-1,-1,wxNORMAL);
    llist->LineBreak();
-  
+   
    llist->Insert("and ");
    llist->SetFont(-1,-1,wxSLANT);
    llist->Insert("slanted");
    llist->SetFont(-1,-1,wxNORMAL);
    llist->Insert(" text.");
    llist->LineBreak();
-
    llist->Insert("and ");
    llist->SetFont(-1,-1,-1,-1,-1,"blue");
    llist->Insert("blue");
@@ -211,8 +211,7 @@ void MyFrame::OnCommand( wxCommandEvent &event )
    break;
    case ID_NOWRAP:
    case ID_WRAP:
-////      m_lwin->GetLayoutList()->SetWrapMargin(
-////         event.GetId() == ID_NOWRAP ? -1 : 40);
+      m_lwin->SetWrapMargin(event.GetId() == ID_NOWRAP ? 0 : 40);
       break;
    case ID_ADD_SAMPLE:
       AddSampleText(m_lwin->GetLayoutList());

@@ -102,6 +102,30 @@ wxLayoutObjectText::Draw(wxDC &dc, wxPoint const &coords)
    dc.DrawText(m_Text, coords.x, coords.y-m_Top);
 }
 
+CoordType
+wxLayoutObjectText::GetOffsetScreen(wxDC &dc, CoordType xpos) const
+{
+   CoordType
+      offs = 1,
+      maxlen = m_Text.Length();
+   long
+      width = 0,
+      height, descent = 0l;
+
+   if(xpos == 0) return 0; // easy
+   
+   while(width < xpos && offs < maxlen)
+   {
+      dc.GetTextExtent(m_Text.substr(0,offs),
+                       &width, &height, &descent);
+      offs++;
+   }
+   /* We have to substract 1 to compensate for the offs++, and another 
+      one because we don't want to position the cursor behind the
+      object what we clicked on, but before - otherwise it looks
+      funny. */
+   return (xpos > 2) ? offs-2 : 0;  
+}
 
 void
 wxLayoutObjectText::Layout(wxDC &dc)
@@ -202,8 +226,10 @@ wxLayoutObjectCmd::Draw(wxDC &dc, wxPoint const & /* coords */)
 {
    wxASSERT(m_font);
    dc.SetFont(*m_font);
-   if(m_ColourFG) dc.SetTextForeground(*m_ColourFG);
-   if(m_ColourBG) dc.SetTextBackground(*m_ColourBG);
+   if(m_ColourFG)
+      dc.SetTextForeground(*m_ColourFG);
+   if(m_ColourBG)
+      dc.SetTextBackground(*m_ColourBG);
 }
 
 void
@@ -253,7 +279,7 @@ wxPoint
 wxLayoutLine::RecalculatePosition(void)
 {
    if(m_Previous)
-      m_Position = m_Previous->RecalculatePosition() +
+      m_Position = m_Previous->GetPosition() +
          wxPoint(0,m_Previous->GetHeight());
    else
       m_Position = wxPoint(0,0);
@@ -263,20 +289,21 @@ wxLayoutLine::RecalculatePosition(void)
 void
 wxLayoutLine::RecalculatePositions(int recurse)
 {
-   wxPoint pos = RecalculatePosition();
-
-   if(pos != m_Position)
+   wxASSERT(recurse >= 0);
+   wxPoint pos = m_Position;
+   CoordType height = m_Height;
+   
+//   WXLO_TRACE("RecalculatePositions()");
+   RecalculatePosition();
+   if(m_Next)
    {
-      m_Position = pos;
-      if(m_Next) m_Next->RecalculatePositions(--recurse);
+      if(recurse > 0)
+      {
+         if(m_Next) m_Next->RecalculatePositions(--recurse);
+      }
+      else if(pos != m_Position || m_Height != height)
+         if(m_Next) m_Next->RecalculatePositions();         
    }
-   else
-   {
-      m_Position = pos;
-      if(recurse && m_Next)
-         m_Next->RecalculatePositions(--recurse);
-   }
-      
 }
 
 wxLayoutObjectList::iterator
@@ -287,6 +314,7 @@ wxLayoutLine::FindObject(CoordType xpos, CoordType *offset) const
    wxLayoutObjectList::iterator i;
    CoordType x = 0, len;
    
+
    for(i = m_ObjectList.begin(); i != NULLIT; i++)
    {
       len = (**i).GetLength();
@@ -298,6 +326,32 @@ wxLayoutLine::FindObject(CoordType xpos, CoordType *offset) const
       x += (**i).GetLength();
    }
    return NULLIT;
+}
+
+wxLayoutObjectList::iterator
+wxLayoutLine::FindObjectScreen(wxDC &dc, CoordType xpos, CoordType *cxpos) const
+{
+   wxASSERT(cxpos);
+   wxASSERT(xpos);
+   wxLayoutObjectList::iterator i;
+   CoordType x = 0, cx = 0, width;
+   
+   for(i = m_ObjectList.begin(); i != NULLIT; i++)
+   {
+      (**i).Layout(dc);
+      width = (**i).GetWidth();
+      if( x <= xpos && xpos <= x + width )
+      {
+         *cxpos = cx + (**i).GetOffsetScreen(dc, xpos-x);
+         wxLogDebug("wxLayoutLine::FindObjectScreen: cursor xpos = %ld", *cxpos);
+         return i;
+      }
+      x += (**i).GetWidth();
+      cx += (**i).GetLength();
+   }
+   // behind last object:
+   *cxpos = cx;
+   return m_ObjectList.tail();
 }
 
 bool
@@ -329,16 +383,13 @@ wxLayoutLine::Insert(CoordType xpos, wxLayoutObject *obj)
    if(offset == len )
    {
       if( i == m_ObjectList.tail()) // last object?
-      {
          m_ObjectList.push_back(obj);
-         m_Length += obj->GetLength();
-      }
       else
       {  // insert after current object
          i++;
          m_ObjectList.insert(i,obj);
-         m_Length += obj->GetLength();
       }
+         m_Length += obj->GetLength();
       return true;
    }
    /* Otherwise we need to split the current object.
@@ -379,22 +430,23 @@ wxLayoutLine::Insert(CoordType xpos, wxString text)
 CoordType
 wxLayoutLine::Delete(CoordType xpos, CoordType npos)
 {
-   CoordType offset;
+   CoordType offset, len;
 
    wxASSERT(xpos >= 0);
    wxASSERT(npos >= 0);
    wxLOiterator i = FindObject(xpos, &offset);
    while(npos > 0)
    {
-      if(i == NULLIT)  return false; // FIXME
+      if(i == NULLIT)  return npos;
       // now delete from that object:
       if((**i).GetType() != WXLO_TYPE_TEXT)
       {
          if(offset != 0) // at end of line after a non-text object
             return npos;
          // always len == 1:
-         m_Length -= (**i).GetLength();
-         npos -= m_Length;
+         len = (**i).GetLength();
+         m_Length -= len;
+         npos -= len;
          m_ObjectList.erase(i);
       }
       else
@@ -508,8 +560,8 @@ wxLayoutLine::Draw(wxDC &dc, const wxPoint & offset) const
 }
 
 void
-wxLayoutLine::Layout(wxDC &dc, wxPoint *cursorPos, wxPoint
-                     *cursorSize,
+wxLayoutLine::Layout(wxDC &dc, wxPoint *cursorPos,
+                     wxPoint *cursorSize,
                      int cx) 
 {
    wxLayoutObjectList::iterator i;
@@ -635,21 +687,6 @@ wxLayoutLine::Layout(wxDC &dc, wxPoint *cursorPos, wxPoint
    }
 }
 
-wxLayoutObject *
-wxLayoutLine::FindObject(CoordType xpos)
-{
-   wxASSERT(xpos >= 0);
-   if(xpos > GetWidth()) return NULL;
-
-   CoordType x = 0;
-   for(wxLOiterator i = m_ObjectList.begin(); i != NULLIT; i++)
-   {
-      x += (**i).GetWidth();
-      if(x > xpos) // we just crossed it
-         return *i;
-   }
-   return NULL;
-}
 
 wxLayoutLine *
 wxLayoutLine::Break(CoordType xpos)
@@ -690,7 +727,7 @@ wxLayoutLine::Break(CoordType xpos)
       // current text object gets set to left half
       tobj->GetText() = left; // set new text
       newLine->Append(new wxLayoutObjectText(right));
-      m_Length -= m_Length - offset;
+      m_Length -= right.Length();
       i++; // don't move this object to the new list
    }
    else
@@ -728,6 +765,38 @@ wxLayoutLine::MergeNextLine(void)
    RecalculatePositions(1);
 }
 
+CoordType
+wxLayoutLine::GetWrapPosition(CoordType column)
+{
+   CoordType offset;
+   wxLOiterator i = FindObject(column, &offset);
+   if(i == NULLIT) return -1; // cannot wrap
+
+   // go backwards through the list and look for space in text objects 
+   do
+   {
+      if((**i).GetType() == WXLO_TYPE_TEXT)
+      {
+         do
+         {
+            if( isspace(((wxLayoutObjectText*)*i)->GetText()[offset]))
+               return column;
+            else
+            {
+               offset--;
+               column--;
+            }
+         }while(offset != -1);
+      }
+      else
+         column -= (**i).GetLength();
+      // This is both "else" and what has to be done after checking
+      // all positions of the text object:
+      i--;
+      offset = (**i).GetLength();
+   }while(i != NULLIT);
+   return -1;
+}
    
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -978,6 +1047,26 @@ wxLayoutList::LineBreak(void)
 }
 
 bool
+wxLayoutList::WrapLine(CoordType column)
+{
+   if(m_CursorPos.x <= column || column < 1)
+      return false; // do nothing yet
+   else
+   {
+      CoordType xpos = m_CursorLine->GetWrapPosition(column);
+      if(xpos == -1)
+         return false; // cannot break line
+      //else:
+      CoordType newpos = m_CursorPos.x - xpos - 1;
+      m_CursorPos.x = xpos;
+      LineBreak();
+      Delete(1); // delete the space
+      m_CursorPos.x = newpos;
+      return true;
+   }
+}
+
+bool
 wxLayoutList::Delete(CoordType npos)
 {
    wxASSERT(m_CursorLine);
@@ -991,7 +1080,12 @@ wxLayoutList::Delete(CoordType npos)
       // First, check if line is empty:
       if(m_CursorLine->GetLength() == 0)
       {  // in this case, updating could probably be optimised
-         m_CursorLine = m_CursorLine->DeleteLine(true);
+#ifdef WXLO_DEBUG   
+         wxASSERT(DeleteLines(1) == 0);
+#else
+         DeleteLines(1);
+#endif
+         
          left--;
       }
       else 
@@ -1033,6 +1127,23 @@ wxLayoutList::DeleteLines(int n)
    }
    m_CursorLine->RecalculatePositions(2);
    return n;
+}
+
+void
+wxLayoutList::Recalculate(wxDC &dc, CoordType bottom) const
+{
+   wxLayoutLine *line = m_FirstLine;
+
+   // first, make sure everything is calculated - this might not be
+   // needed, optimise it later
+   m_DefaultSetting->Layout(dc);
+   while(line)
+   {
+      line->RecalculatePosition(); // so we don't need to do it all the time
+      // little condition to speed up redrawing:
+      if(bottom != -1 && line->GetPosition().y > bottom) break;
+      line = line->GetNextLine();
+   }
 }
 
 void
@@ -1083,22 +1194,27 @@ wxLayoutList::Draw(wxDC &dc, wxPoint const &offset,
 }
 
 wxLayoutObject *
-wxLayoutList::FindObject(wxPoint const pos)
+wxLayoutList::FindObjectScreen(wxDC &dc, wxPoint const pos, wxPoint *cursorPos)
 {
    // First, find the right line:
    wxLayoutLine *line = m_FirstLine;
    wxPoint p;
    
+   // we need to run a layout here to get font sizes right :-(
+   m_DefaultSetting->Layout(dc);
    while(line)
    {
       p = line->GetPosition();
       if(p.y <= pos.y && p.y+line->GetHeight() >= pos.y)
          break;
+      line->Layout(dc);
       line = line->GetNextLine();
    }
-   if(! line) return NULL; // not found
+   if(line == NULL) return NULL; // not found
+   if(cursorPos) cursorPos->y = line->GetLineNumber();
    // Now, find the object in the line:
-   return line->FindObject(pos.x);
+   wxLOiterator i = line->FindObjectScreen(dc, pos.x, & cursorPos->x);
+   return (i == NULLIT) ? NULL : *i;
    
 }
 
@@ -1142,11 +1258,16 @@ wxLayoutList::DrawCursor(wxDC &dc, bool active, wxPoint const &translate)
                (long)m_CursorLine->GetLength()));
 #endif
    
-   if(active)
-      dc.SetBrush(*wxBLACK_BRUSH);
+   dc.SetBrush(*wxBLACK_BRUSH);
+   dc.SetLogicalFunction(wxXOR);
    dc.SetPen(wxPen(*wxBLACK,1,wxSOLID));
    dc.SetLogicalFunction(wxXOR);
-   dc.DrawRectangle(coords.x, coords.y, m_CursorSize.x, m_CursorSize.y);
+   if(active)
+      dc.DrawRectangle(coords.x, coords.y, m_CursorSize.x,
+                       m_CursorSize.y);
+   else
+      dc.DrawLine(coords.x, coords.y+m_CursorSize.y-1,
+                  coords.x+m_CursorSize.x, coords.y+m_CursorSize.y-1);
    dc.SetLogicalFunction(wxCOPY);
    dc.SetBrush(wxNullBrush);
 }
