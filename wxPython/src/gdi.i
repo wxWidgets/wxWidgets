@@ -51,12 +51,12 @@ public:
 class wxBitmap : public wxGDIObject
 {
 public:
-    wxBitmap(const wxString& name, wxBitmapType type=wxBITMAP_TYPE_BMP);
+    wxBitmap(const wxString& name, wxBitmapType type=wxBITMAP_TYPE_ANY);
     ~wxBitmap();
 
     wxPalette* GetPalette();
     wxMask* GetMask();
-    bool LoadFile(const wxString& name, wxBitmapType type=wxBITMAP_TYPE_BMP);
+    bool LoadFile(const wxString& name, wxBitmapType type=wxBITMAP_TYPE_ANY);
     bool SaveFile(const wxString& name, wxBitmapType type, wxPalette* palette = NULL);
     void SetMask(wxMask* mask);
 #ifdef __WXMSW__

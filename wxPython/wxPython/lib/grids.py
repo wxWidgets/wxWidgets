@@ -12,7 +12,11 @@
 #----------------------------------------------------------------------
 
 """
-In this module you will find wxGridSizer and wxFlexGridSizer.
+In this module you will find wxGridSizer and wxFlexGridSizer.  Please
+note that these sizers have since been ported to C++ and those
+versions are now exposed in the regular wxPython wrappers.  However I
+am also leaving them here in the library so they can serve as an
+example of how to implement sizers in Python.
 
 wxGridSizer: Sizes and positions items such that all rows are the same
 height and all columns are the same width.  You can specify a gap in

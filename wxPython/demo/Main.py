@@ -23,6 +23,7 @@ import images
 _treeList = [
     ('New since last release', ['wxGenericDirCtrl',
                                 'wxImageFromStream',
+                                'RowColSizer',
                                 ]),
 
     ('Windows', ['wxFrame', 'wxDialog', 'wxMiniFrame',
@@ -50,7 +51,9 @@ _treeList = [
                   'wxEditableListBox', 'wxLEDNumberCtrl',
                   ]),
 
-    ('Window Layout', ['wxLayoutConstraints', 'LayoutAnchors', 'Sizers', 'XML_Resource']),
+    ('Window Layout', ['wxLayoutConstraints', 'LayoutAnchors', 'Sizers', 'XML_Resource',
+                       'RowColSizer',
+                       ]),
 
     ('Miscellaneous', [ 'DragAndDrop', 'CustomDragAndDrop', 'URLDragAndDrop',
                         'FontEnumerator',
