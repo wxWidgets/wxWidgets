@@ -125,6 +125,11 @@ public:
     virtual void SetLabelTop( size_t pos, const wxString& label );
     virtual wxString GetLabelTop( size_t pos ) const;
     virtual bool Enable( bool enable = TRUE );
+    // for virtual function hiding
+    virtual void Enable( int itemid, bool enable )
+    {
+        wxMenuBarBase::Enable( itemid, enable );
+    }
 
     // implementation from now on
     WXHMENU Create();
