@@ -400,7 +400,7 @@ wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
     }
 #endif
 
-    // if didn't find it there, try to reckognise it ourselves
+    // if didn't find it there, try to recognize it ourselves
     if ( encoding == wxFONTENCODING_SYSTEM )
     {
         // discard the optional quotes
@@ -415,9 +415,18 @@ wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
         cs.MakeUpper();
 
         if ( !cs || cs == wxT("US-ASCII") )
+        {
             encoding = wxFONTENCODING_DEFAULT;
-        else if ( cs == wxT("KOI8-R") || cs == wxT("KOI8-U") )
+        }
+        else if ( cs == wxT("KOI8-R") ||
+                  cs == wxT("KOI8-U") ||
+                  cs == wxT("KOI8-RU") )
+        {
+            // although koi8-ru is not strictly speaking the same as koi8-r,
+            // they are similar enough to make mapping it to koi8 better than
+            // not reckognizing it at all
             encoding = wxFONTENCODING_KOI8;
+        }
         else if ( cs.Left(3) == wxT("ISO") )
         {
             // the dash is optional (or, to be exact, it is not, but
@@ -438,24 +447,41 @@ wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
                 }
             }
         }
-        else if ( cs.Left(7) == wxT("WINDOWS") )
+        else // check for Windows charsets
         {
-            const wxChar *p = cs.c_str() + 7;
-            if ( *p == wxT('-') )
-                p++;
-
-            int value;
-            if ( wxSscanf(p, wxT("%u"), &value) == 1 )
+            size_t len;
+            if ( cs.Left(7) == wxT("WINDOWS") )
             {
-                if ( value >= 1250 )
+                len = 7;
+            }
+            else if ( cs.Left(2) == wxT("CP") )
+            {
+                len = 2;
+            }
+            else // not a Windows encoding
+            {
+                len = 0;
+            }
+
+            if ( len )
+            {
+                const wxChar *p = cs.c_str() + len;
+                if ( *p == wxT('-') )
+                    p++;
+
+                int value;
+                if ( wxSscanf(p, wxT("%u"), &value) == 1 )
                 {
-                    value -= 1250;
-                    if ( value < wxFONTENCODING_CP12_MAX -
-                                 wxFONTENCODING_CP1250 )
+                    if ( value >= 1250 )
                     {
-                        // a valid Windows code page
-                        value += wxFONTENCODING_CP1250;
-                        encoding = (wxFontEncoding)value;
+                        value -= 1250;
+                        if ( value < wxFONTENCODING_CP12_MAX -
+                                     wxFONTENCODING_CP1250 )
+                        {
+                            // a valid Windows code page
+                            value += wxFONTENCODING_CP1250;
+                            encoding = (wxFontEncoding)value;
+                        }
                     }
                 }
             }
