@@ -85,6 +85,8 @@ public:
     void SetSize(const wxSize& size) ;
     void SetPosition( const wxPoint& position ) ;
     
+    void ClearControl() { m_control = NULL ; }
+    
     wxSize GetSize() const
     {
         if ( IsControl() )
@@ -339,64 +341,6 @@ wxToolBarTool::wxToolBarTool(wxToolBar *tbar,
                             clientData, shortHelp, longHelp)
 {
     Init();
-    
-    WindowRef window = (WindowRef) tbar->MacGetTopLevelWindowRef() ;    
-    wxSize toolSize = tbar->GetToolSize() ;    
-    Rect toolrect = { 0, 0 , toolSize.y , toolSize.x } ;
- 
-    if ( id == wxID_SEPARATOR )
-    {
-        toolSize.x /= 4 ;
-        toolSize.y /= 4 ;
-        if ( GetToolBar()->GetWindowStyleFlag() & wxTB_VERTICAL )
-        {
-            toolrect.bottom = toolSize.y ;
-        }
-        else
-        {
-            toolrect.right = toolSize.x ;
-        }
-#ifdef __WXMAC_OSX__
-        // in flat style we need a visual separator
-        CreateSeparatorControl( window , &toolrect , &m_controlHandle ) ;
-#endif
-    }
-    else
-    {
-        ControlButtonContentInfo info ;
-        wxMacCreateBitmapButton( &info , GetNormalBitmap()  , kControlContentIconRef ) ;
-        
-#ifdef __WXMAC_OSX__
-        CreateIconControl( window , &toolrect , &info , false , &m_controlHandle ) ;
-#else        
-        SInt16 behaviour = kControlBehaviorOffsetContents ;
-        if ( CanBeToggled() )
-            behaviour += kControlBehaviorToggles ;
-        CreateBevelButtonControl( window , &toolrect , CFSTR("") , kControlBevelButtonNormalBevel , behaviour , &info , 
-            0 , 0 , 0 , &m_controlHandle ) ;
-#endif
-            
-        wxMacReleaseBitmapButton( &info ) ;
-        /*
-        SetBevelButtonTextPlacement( m_controlHandle , kControlBevelButtonPlaceBelowGraphic ) ;
-        UMASetControlTitle(  m_controlHandle , label , wxFont::GetDefaultEncoding() ) ;
-        */
-        
-        InstallControlEventHandler( (ControlRef) m_controlHandle, GetwxMacToolBarToolEventHandlerUPP(),
-            GetEventTypeCount(eventList), eventList, this,NULL);          
-
-    }
-    ControlRef container = (ControlRef) tbar->GetHandle() ;
-    wxASSERT_MSG( container != NULL , wxT("No valid mac container control") ) ;
-    if ( m_controlHandle )
-    {
-        UMAShowControl( m_controlHandle ) ;
-        ::EmbedControl( m_controlHandle , container ) ;
-    }
-    if ( CanBeToggled() && IsToggled() )
-    {
-        UpdateToggleImage( true ) ;
-    }
 }
 
 
@@ -632,8 +576,85 @@ void wxToolBar::DoToggleTool(wxToolBarToolBase *t, bool toggle)
 }
 
 bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos),
-                             wxToolBarToolBase *tool)
+                             wxToolBarToolBase *toolBase)
 {
+    wxToolBarTool* tool = wx_static_cast( wxToolBarTool* , toolBase ) ;
+    
+    WindowRef window = (WindowRef) MacGetTopLevelWindowRef() ;    
+    wxSize toolSize = GetToolSize() ;    
+    Rect toolrect = { 0, 0 , toolSize.y , toolSize.x } ;
+    ControlRef controlHandle = NULL ;
+
+    switch( tool->GetStyle() )
+    {
+        case wxTOOL_STYLE_SEPARATOR :
+            {
+                wxASSERT( tool->GetControlHandle() == NULL ) ;
+                toolSize.x /= 4 ;
+                toolSize.y /= 4 ;
+                if ( GetWindowStyleFlag() & wxTB_VERTICAL )
+                {
+                    toolrect.bottom = toolSize.y ;
+                }
+                else
+                {
+                    toolrect.right = toolSize.x ;
+                }
+        #ifdef __WXMAC_OSX__
+                // in flat style we need a visual separator
+                CreateSeparatorControl( window , &toolrect , &controlHandle ) ;
+                tool->SetControlHandle( controlHandle ) ;
+        #endif
+            }
+            break ;
+        case wxTOOL_STYLE_BUTTON :
+            {
+                wxASSERT( tool->GetControlHandle() == NULL ) ;
+                ControlButtonContentInfo info ;
+                wxMacCreateBitmapButton( &info , tool->GetNormalBitmap()  , kControlContentIconRef ) ;
+                
+        #ifdef __WXMAC_OSX__
+                CreateIconControl( window , &toolrect , &info , false , &controlHandle ) ;
+        #else        
+                SInt16 behaviour = kControlBehaviorOffsetContents ;
+                if ( CanBeToggled() )
+                    behaviour += kControlBehaviorToggles ;
+                CreateBevelButtonControl( window , &toolrect , CFSTR("") , kControlBevelButtonNormalBevel , behaviour , &info , 
+                    0 , 0 , 0 , &controlHandle ) ;
+        #endif
+                    
+                wxMacReleaseBitmapButton( &info ) ;
+                /*
+                SetBevelButtonTextPlacement( m_controlHandle , kControlBevelButtonPlaceBelowGraphic ) ;
+                UMASetControlTitle(  m_controlHandle , label , wxFont::GetDefaultEncoding() ) ;
+                */
+                
+                InstallControlEventHandler( (ControlRef) controlHandle, GetwxMacToolBarToolEventHandlerUPP(),
+                    GetEventTypeCount(eventList), eventList, tool,NULL);          
+
+                tool->SetControlHandle( controlHandle ) ;
+            }
+            break ;
+        case wxTOOL_STYLE_CONTROL :
+            wxASSERT( tool->GetControl() != NULL ) ;
+            // right now there's nothing to do here
+            break ;
+    }
+ 
+    if ( controlHandle )
+    {
+        ControlRef container = (ControlRef) GetHandle() ;
+        wxASSERT_MSG( container != NULL , wxT("No valid mac container control") ) ;
+
+        UMAShowControl( controlHandle ) ;
+        ::EmbedControl( controlHandle , container ) ;
+    }
+
+    if ( tool->CanBeToggled() && tool->IsToggled() )
+    {
+        tool->UpdateToggleImage( true ) ;
+    }
+
     // nothing special to do here - we relayout in Realize() later
     tool->Attach(this);
     InvalidateBestSize();
@@ -646,8 +667,9 @@ void wxToolBar::DoSetToggle(wxToolBarToolBase *WXUNUSED(tool), bool WXUNUSED(tog
     wxFAIL_MSG( _T("not implemented") );
 }
 
-bool wxToolBar::DoDeleteTool(size_t WXUNUSED(pos), wxToolBarToolBase *tool)
+bool wxToolBar::DoDeleteTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolbase)
 {
+    wxToolBarTool* tool = wx_static_cast( wxToolBarTool* , toolbase ) ;
     wxToolBarToolsList::compatibility_iterator node;
     for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
     {
@@ -665,19 +687,21 @@ bool wxToolBar::DoDeleteTool(size_t WXUNUSED(pos), wxToolBarToolBase *tool)
 
     tool->Detach();
 
-    wxToolBarTool* tl = wx_static_cast( wxToolBarTool* , tool ) ;
     switch ( tool->GetStyle() )
     {
         case wxTOOL_STYLE_CONTROL:
-            tool->GetControl()->Destroy();
+            {
+                tool->GetControl()->Destroy();
+                tool->ClearControl() ; 
+            }
             break;
 
         case wxTOOL_STYLE_BUTTON:
         case wxTOOL_STYLE_SEPARATOR:
-            if ( tl->GetControlHandle() )
+            if ( tool->GetControlHandle() )
             {
-                DisposeControl( (ControlRef) tl->GetControlHandle() ) ;
-                tl->SetControlHandle( (ControlRef) NULL ) ;
+                DisposeControl( (ControlRef) tool->GetControlHandle() ) ;
+                tool->SetControlHandle( (ControlRef) NULL ) ;
             }
             break;
     }
