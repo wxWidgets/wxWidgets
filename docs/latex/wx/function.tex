@@ -653,14 +653,14 @@ Returns time of last modification of given file.
 
 \func{wxString}{wxFileNameFromPath}{\param{const wxString\& }{path}}
 
-\func{char*}{wxFileNameFromPath}{\param{char* }{path}}
+\func{char *}{wxFileNameFromPath}{\param{char *}{path}}
 
 Returns the filename for a full path. The second form returns a pointer to
 temporary storage that should not be deallocated.
 
 \membersection{::wxFindFirstFile}\label{wxfindfirstfile}
 
-\func{wxString}{wxFindFirstFile}{\param{const char*}{spec}, \param{int}{ flags = 0}}
+\func{wxString}{wxFindFirstFile}{\param{const char *}{spec}, \param{int}{ flags = 0}}
 
 This function does directory searching; returns the first file
 that matches the path {\it spec}, or the empty string. Use \helpref{wxFindNextFile}{wxfindnextfile} to
@@ -762,7 +762,7 @@ Returns a string containing the current (or working) directory.
 
 \membersection{::wxGetWorkingDirectory}\label{wxgetworkingdirectory}
 
-\func{wxString}{wxGetWorkingDirectory}{\param{char*}{buf=NULL}, \param{int }{sz=1000}}
+\func{wxString}{wxGetWorkingDirectory}{\param{char *}{buf=NULL}, \param{int }{sz=1000}}
 
 This function is obsolete: use \helpref{wxGetCwd}{wxgetcwd} instead.
 
@@ -774,7 +774,7 @@ if the buffer is NULL.
 
 \membersection{::wxGetTempFileName}\label{wxgettempfilename}
 
-\func{char*}{wxGetTempFileName}{\param{const wxString\& }{prefix}, \param{char* }{buf=NULL}}
+\func{char *}{wxGetTempFileName}{\param{const wxString\& }{prefix}, \param{char *}{buf=NULL}}
 
 \func{bool}{wxGetTempFileName}{\param{const wxString\& }{prefix}, \param{wxString\& }{buf}}
 
@@ -1081,7 +1081,7 @@ if successful, {\tt FALSE} otherwise.
 
 \membersection{::copystring}\label{copystring}
 
-\func{char*}{copystring}{\param{const char* }{s}}
+\func{char *}{copystring}{\param{const char *}{s}}
 
 Makes a copy of the string {\it s} using the C++ new operator, so it can be
 deleted with the {\it delete} operator.
@@ -1188,7 +1188,7 @@ Converts the character to upper case. This is implemented as a macro for efficie
 
 \func{int}{wxVsnprintf}{\param{wxChar *}{buf}, \param{size\_t }{len}, \param{const wxChar *}{format}, \param{va\_list }{argPtr}}
 
-The same as \helpref{wxSnprintf}{wxsnprintf} but takes a {\tt va\_list}
+The same as \helpref{wxSnprintf}{wxsnprintf} but takes a {\tt va\_list }
 argument instead of arbitrary number of parameters.
 
 \wxheading{See also}
@@ -2270,7 +2270,7 @@ See also \helpref{wxGetDisplayName}{wxgetdisplayname}.
 
 \func{wxString}{wxStripMenuCodes}{\param{const wxString\& }{in}}
 
-\func{void}{wxStripMenuCodes}{\param{char* }{in}, \param{char* }{out}}
+\func{void}{wxStripMenuCodes}{\param{char *}{in}, \param{char *}{out}}
 
 This function is obsolete, please use 
 \helpref{wxMenuItem::GetLabelFromText}{wxmenuitemgetlabelfromtext} instead.
@@ -2845,7 +2845,7 @@ wxWindows resource data.
 
 \membersection{::wxResourceParseString}\label{wxresourceparsestring}
 
-\func{bool}{wxResourceParseString}{\param{char*}{ s}, \param{wxResourceTable *}{table = NULL}}
+\func{bool}{wxResourceParseString}{\param{char *}{s}, \param{wxResourceTable *}{table = NULL}}
 
 Parses a string containing one or more wxWindows resource objects. If
 the resource objects are global static data that are included into the
@@ -2873,10 +2873,10 @@ load an entire {\tt .wxr file} into a string.
 
 \membersection{::wxResourceRegisterBitmapData}\label{registerbitmapdata}
 
-\func{bool}{wxResourceRegisterBitmapData}{\param{const wxString\& }{name}, \param{char* }{xbm\_data}, \param{int }{width},
+\func{bool}{wxResourceRegisterBitmapData}{\param{const wxString\& }{name}, \param{char *}{xbm\_data}, \param{int }{width},
 \param{int }{height}, \param{wxResourceTable *}{table = NULL}}
 
-\func{bool}{wxResourceRegisterBitmapData}{\param{const wxString\& }{name}, \param{char** }{xpm\_data}}
+\func{bool}{wxResourceRegisterBitmapData}{\param{const wxString\& }{name}, \param{char **}{xpm\_data}}
 
 Makes \tt{#}included XBM or XPM bitmap data known to the wxWindows resource system.
 This is required if other resources will use the bitmap data, since otherwise there
@@ -2954,8 +2954,9 @@ wxWindows errors. See also \helpref{wxError}{wxerror}.
 
 \membersection{::wxLogError}\label{wxlogerror}
 
-\func{void}{wxLogError}{\param{const char*}{ formatString}, \param{...}{}}
-\func{void}{wxLogError}{\param{const char*}{ formatString}, \param{va_list}{argPtr}}
+\func{void}{wxLogError}{\param{const char *}{formatString}, \param{va\_list }{argPtr}}
+
+\func{void}{wxLogError}{\param{const char *}{formatString}, \param{...}{}}
 
 The functions to use for error messages, i.e. the messages that must be shown
 to the user. The default processing is to pop up a message box to inform the
@@ -2963,8 +2964,9 @@ user about it.
 
 \membersection{::wxLogFatalError}\label{wxlogfatalerror}
 
-\func{void}{wxLogFatalError}{\param{const char*}{ formatString}, \param{...}{}}
-\func{void}{wxLogFatalError}{\param{const char*}{ formatString}, \param{va_list}{argPtr}}
+\func{void}{wxLogFatalError}{\param{const char *}{formatString}, \param{va\_list }{argPtr}}
+
+\func{void}{wxLogFatalError}{\param{const char *}{formatString}, \param{...}{}}
 
 Like \helpref{wxLogError}{wxlogerror}, but also
 terminates the program with the exit code 3. Using {\it abort()} standard
@@ -2972,16 +2974,18 @@ function also terminates the program with this exit code.
 
 \membersection{::wxLogWarning}\label{wxlogwarning}
 
-\func{void}{wxLogWarning}{\param{const char*}{ formatString}, \param{...}{}}
-\func{void}{wxLogWarning}{\param{const char*}{ formatString}, \param{va_list}{argPtr}}
+\func{void}{wxLogWarning}{\param{const char *}{formatString}, \param{va\_list }{argPtr}}
+
+\func{void}{wxLogWarning}{\param{const char *}{formatString}, \param{...}{}}
 
 For warnings - they are also normally shown to the user, but don't interrupt
 the program work.
 
 \membersection{::wxLogMessage}\label{wxlogmessage}
 
-\func{void}{wxLogMessage}{\param{const char*}{ formatString}, \param{...}{}}
-\func{void}{wxLogMessage}{\param{const char*}{ formatString}, \param{va_list}{argPtr}}
+\func{void}{wxLogMessage}{\param{const char *}{formatString}, \param{va\_list }{argPtr}}
+
+\func{void}{wxLogMessage}{\param{const char *}{formatString}, \param{...}{}}
 
 For all normal, informational messages. They also appear in a message box by
 default (but it can be changed). Notice that the standard behaviour is to not
@@ -2991,8 +2995,9 @@ meaningless.
 
 \membersection{::wxLogVerbose}\label{wxlogverbose}
 
-\func{void}{wxLogVerbose}{\param{const char*}{ formatString}, \param{...}{}}
-\func{void}{wxLogVerbose}{\param{const char*}{ formatString}, \param{va_list}{argPtr}}
+\func{void}{wxLogVerbose}{\param{const char *}{formatString}, \param{...}{}}
+
+\func{void}{wxLogVerbose}{\param{const char *}{formatString}, \param{va\_list }{argPtr}}
 
 For verbose output. Normally, it is suppressed, but
 might be activated if the user wishes to know more details about the program
@@ -3000,11 +3005,13 @@ progress (another, but possibly confusing name for the same function is {\bf wxL
 
 \membersection{::wxLogStatus}\label{wxlogstatus}
 
-\func{void}{wxLogStatus}{\param{wxFrame *}{frame}, \param{const char*}{ formatString}, \param{...}{}}
-\func{void}{wxLogStatus}{\param{wxFrame *}{frame}, \param{const char*}{ formatString}, \param{va_list}{argPtr}}
+\func{void}{wxLogStatus}{\param{wxFrame *}{frame}, \param{const char *}{formatString}, \param{va\_list }{argPtr}}
 
-\func{void}{wxLogStatus}{\param{const char*}{ formatString}, \param{...}{}}
-\func{void}{wxLogStatus}{\param{const char*}{ formatString}, \param{va_list}{argPtr}}
+\func{void}{wxLogStatus}{\param{wxFrame *}{frame}, \param{const char *}{formatString}, \param{...}{}}
+
+\func{void}{wxLogStatus}{\param{const char *}{formatString}, \param{va\_list }{argPtr}}
+
+\func{void}{wxLogStatus}{\param{const char *}{formatString}, \param{...}{}}
 
 Messages logged by these functions will appear in the statusbar of the {\it
 frame} or of the top level application window by default (i.e. when using
@@ -3014,8 +3021,9 @@ If the target frame doesn't have a statusbar, the message will be lost.
 
 \membersection{::wxLogSysError}\label{wxlogsyserror}
 
-\func{void}{wxLogSysError}{\param{const char*}{ formatString}, \param{...}{}}
-\func{void}{wxLogSysError}{\param{const char*}{ formatString}, \param{va_list}{argPtr}}
+\func{void}{wxLogSysError}{\param{const char *}{formatString}, \param{...}{}}
+
+\func{void}{wxLogSysError}{\param{const char *}{formatString}, \param{va\_list }{argPtr}}
 
 Mostly used by wxWindows itself, but might be handy for logging errors after
 system call (API function) failure. It logs the specified message text as well
@@ -3030,8 +3038,9 @@ of this function takes the error code explicitly as the first argument.
 
 \membersection{::wxLogDebug}\label{wxlogdebug}
 
-\func{void}{wxLogDebug}{\param{const char*}{ formatString}, \param{...}{}}
-\func{void}{wxLogDebug}{\param{const char*}{ formatString}, \param{va_list}{argPtr}}
+\func{void}{wxLogDebug}{\param{const char *}{formatString}, \param{...}{}}
+
+\func{void}{wxLogDebug}{\param{const char *}{formatString}, \param{va\_list }{argPtr}}
 
 The right functions for debug output. They only do something in debug
 mode (when the preprocessor symbol \_\_WXDEBUG\_\_ is defined) and expand to
@@ -3039,14 +3048,16 @@ nothing in release mode (otherwise).
 
 \membersection{::wxLogTrace}\label{wxlogtrace}
 
-\func{void}{wxLogTrace}{\param{const char*}{ formatString}, \param{...}{}}
-\func{void}{wxLogTrace}{\param{const char*}{ formatString}, \param{va_list}{argPtr}}
+\func{void}{wxLogTrace}{\param{const char *}{formatString}, \param{...}{}}
+\func{void}{wxLogTrace}{\param{const char *}{formatString}, \param{va\_list }{argPtr}}
 
 \func{void}{wxLogTrace}{\param{const char *}{mask}, \param{const char *}{formatString}, \param{...}{}}
-\func{void}{wxLogTrace}{\param{const char *}{mask}, \param{const char *}{formatString}, \param{va_list}{argPtr}}
+
+\func{void}{wxLogTrace}{\param{const char *}{mask}, \param{const char *}{formatString}, \param{va\_list }{argPtr}}
 
 \func{void}{wxLogTrace}{\param{wxTraceMask}{ mask}, \param{const char *}{formatString}, \param{...}{}}
-\func{void}{wxLogTrace}{\param{wxTraceMask}{ mask}, \param{const char *}{formatString}, \param{va_list}{argPtr}}
+
+\func{void}{wxLogTrace}{\param{wxTraceMask}{ mask}, \param{const char *}{formatString}, \param{va\_list }{argPtr}}
 
 As {\bf wxLogDebug}, trace functions only do something in debug build and
 expand to nothing in the release one. The reason for making
@@ -3298,7 +3309,7 @@ builds.
 
 \membersection{::wxOnAssert}\label{wxonassert}
 
-\func{void}{wxOnAssert}{\param{const char*}{ fileName}, \param{int}{ lineNumber}, \param{const char*}{ msg = NULL}}
+\func{void}{wxOnAssert}{\param{const char *}{fileName}, \param{int}{ lineNumber}, \param{const char *}{msg = NULL}}
 
 This function may be redefined to do something non trivial and is called
 whenever one of debugging macros fails (i.e. condition is false in an
