@@ -51,6 +51,7 @@
 #if wxUSE_ZIPSTREAM
     #include "wx/wfstream.h"
     #include "wx/zipstrm.h"
+    #include "wx/ptr_scpd.h"
 #endif // wxUSE_ZIPSTREAM
 
 WX_CHECK_BUILD_OPTIONS("wxQA")
@@ -548,6 +549,8 @@ bool wxDebugReport::DoProcess()
 
 #if wxUSE_ZIPSTREAM
 
+wxDEFINE_SCOPED_PTR_TYPE(wxZipOutputStream)
+
 // ----------------------------------------------------------------------------
 // wxDebugReportCompress
 // ----------------------------------------------------------------------------
@@ -561,7 +564,7 @@ bool wxDebugReportCompress::DoProcess()
     // create the streams
     wxFileName fn(GetDirectory(), GetReportName(), _T("zip"));
     wxFFileOutputStream os(fn.GetFullPath(), _T("wb"));
-    wxZipOutputStream zos(os, 9);
+    wxZipOutputStreamPtr zos(new wxZipOutputStream(os, 9));
 
     // add all files to the ZIP one
     wxString name, desc;
@@ -572,16 +575,16 @@ bool wxDebugReportCompress::DoProcess()
         wxZipEntry *ze = new wxZipEntry(name);
         ze->SetComment(desc);
 
-        if ( !zos.PutNextEntry(ze) )
+        if ( !zos->PutNextEntry(ze) )
             return false;
 
         wxFileName filename(fn.GetPath(), name);
         wxFFileInputStream is(filename.GetFullPath());
-        if ( !is.IsOk() || !zos.Write(is).IsOk() )
+        if ( !is.IsOk() || !zos->Write(is).IsOk() )
             return false;
     }
 
-    if ( !zos.Close() )
+    if ( !zos->Close() )
         return false;
 
     m_zipfile = fn.GetFullPath();
