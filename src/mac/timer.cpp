@@ -72,7 +72,7 @@ bool wxTimer::Start(int milliseconds,bool mode)
     wxCHECK_MSG( m_info.m_task.tmAddr == NULL , FALSE, wxT("attempting to restart a timer") );
 
     m_milli = milliseconds;
-#ifdef __UNIX__
+#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0340)
     m_info.m_task.tmAddr = NewTimerUPP( MacTimerProc ) ;
 #else
     m_info.m_task.tmAddr = NewTimerProc( MacTimerProc ) ;

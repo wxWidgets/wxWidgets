@@ -70,7 +70,7 @@ wxControl::wxControl()
 
 	if ( wxMacLiveScrollbarActionUPP == NULL )
 	{
-#ifdef __UNIX__
+#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0340)
         wxMacLiveScrollbarActionUPP = NewControlActionUPP( wxMacLiveScrollbarActionProc );
 #else
 		wxMacLiveScrollbarActionUPP = NewControlActionProc( wxMacLiveScrollbarActionProc ) ;

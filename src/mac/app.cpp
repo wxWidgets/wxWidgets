@@ -353,14 +353,14 @@ bool wxApp::Initialize()
   SetEventMask( everyEvent ) ;
 	UMAShowWatchCursor() ;
 
-#ifdef __UNIX__
-    AEInstallEventHandler( kCoreEventClass , kAEOpenDocuments ,   AEHandleODoc ,
+#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0340)
+    AEInstallEventHandler( kCoreEventClass , kAEOpenDocuments ,   NewAEEventHandlerUPP(AEHandleODoc) ,
                            (long) wxTheApp , FALSE ) ;
-    AEInstallEventHandler( kCoreEventClass , kAEOpenApplication , AEHandleOApp ,
+    AEInstallEventHandler( kCoreEventClass , kAEOpenApplication , NewAEEventHandlerUPP(AEHandleOApp) ,
                            (long) wxTheApp , FALSE ) ;
-    AEInstallEventHandler( kCoreEventClass , kAEPrintDocuments ,  AEHandlePDoc ,
+    AEInstallEventHandler( kCoreEventClass , kAEPrintDocuments ,  NewAEEventHandlerUPP(AEHandlePDoc) ,
                            (long) wxTheApp , FALSE ) ;
-    AEInstallEventHandler( kCoreEventClass , kAEQuitApplication , AEHandleQuit ,
+    AEInstallEventHandler( kCoreEventClass , kAEQuitApplication , NewAEEventHandlerUPP(AEHandleQuit) ,
                            (long) wxTheApp , FALSE ) ;
 #else
 	AEInstallEventHandler( kCoreEventClass , kAEOpenDocuments ,   NewAEEventHandlerProc(AEHandleODoc) ,
