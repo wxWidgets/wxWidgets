@@ -18,7 +18,7 @@
 #include "wx/wx.h"
 #endif
 
-#if defined(__WINDOWS__) && !defined(__GNUWIN32__)
+#if defined(__WINDOWS__) && !defined(__GNUWIN32__) && !defined(__WATCOMC__)
 
 #ifdef __BORLANDC__
     #pragma hdrstop
