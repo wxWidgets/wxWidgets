@@ -1,21 +1,25 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        settings.cpp
+// Name:        src/cocoa/settings.mm
 // Purpose:     wxSettings
-// Author:      AUTHOR
+// Author:      David Elliott
 // Modified by:
-// Created:     ??/??/98
+// Created:     2005/01/11
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
+// Copyright:   (c) 2005 David Elliott
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "settings.h"
+#include <wx/wxprec.h>
+#ifndef WX_PRECOMP
 #endif
 
 #include "wx/settings.h"
 #include "wx/gdicmn.h"
 #include "wx/utils.h"
+
+#include "wx/cocoa/autorelease.h"
+
+#import <AppKit/NSColor.h>
 
 // ----------------------------------------------------------------------------
 // wxSystemSettingsNative
@@ -27,93 +31,72 @@
 
 wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
 {
-    return wxColour();
-#if 0
-    int major,minor;
-    wxGetOsVersion( &major, &minor );
-    
+    wxAutoNSAutoreleasePool pool;
     switch( index )
     {
     case wxSYS_COLOUR_SCROLLBAR:
-    case wxSYS_COLOUR_BACKGROUND:
-    case wxSYS_COLOUR_ACTIVECAPTION:
-    case wxSYS_COLOUR_INACTIVECAPTION:
+        return wxColour([NSColor scrollBarColor]); // color of slot
+    case wxSYS_COLOUR_BACKGROUND: // No idea how to get desktop background
+        break; // break so we return an invalid colour.
+    case wxSYS_COLOUR_ACTIVECAPTION: // No idea how to get this
+        // fall through, window background is reasonable
+    case wxSYS_COLOUR_INACTIVECAPTION: // No idea how to get this
+        // fall through, window background is reasonable
     case wxSYS_COLOUR_MENU:
+    case wxSYS_COLOUR_MENUBAR:
     case wxSYS_COLOUR_WINDOW:
     case wxSYS_COLOUR_WINDOWFRAME:
     case wxSYS_COLOUR_ACTIVEBORDER:
     case wxSYS_COLOUR_INACTIVEBORDER:
+        return wxColour([NSColor windowFrameColor]);
     case wxSYS_COLOUR_BTNFACE:
-    case wxSYS_COLOUR_MENUBAR:
-        return wxColor( 0xDD , 0xDD , 0xDD ) ;
-        break ;
-
+        return wxColour([NSColor knobColor]); // close enough?
     case wxSYS_COLOUR_LISTBOX:
-    {
-        if (major >= 10)
-            return *wxWHITE ;
-        else
-            return wxColor( 0xEE , 0xEE , 0xEE ) ;
-        break ;
-    }
+        return wxColour([NSColor controlBackgroundColor]);
     case wxSYS_COLOUR_BTNSHADOW:
-        return wxColor( 0x44 , 0x44 , 0x44 ) ;
-        break ;
-
+        return wxColour([NSColor controlShadowColor]);
     case wxSYS_COLOUR_BTNTEXT:
     case wxSYS_COLOUR_MENUTEXT:
     case wxSYS_COLOUR_WINDOWTEXT:
     case wxSYS_COLOUR_CAPTIONTEXT:
     case wxSYS_COLOUR_INFOTEXT:
     case wxSYS_COLOUR_INACTIVECAPTIONTEXT:
-        return *wxBLACK;
-        break ;
+        return wxColour([NSColor controlTextColor]);
     case wxSYS_COLOUR_HIGHLIGHT:
-        {
-            RGBColor hilite ;
-            LMGetHiliteRGB(&hilite) ;
-            return wxColor( hilite.red >> 8 , hilite.green >> 8  , hilite.blue >> 8  ) ;
-        }
-        break ;
+        return wxColour([NSColor selectedControlColor]);
     case wxSYS_COLOUR_BTNHIGHLIGHT:
+        return wxColour([NSColor controlHighlightColor]);
     case wxSYS_COLOUR_GRAYTEXT:
-        return wxColor( 0xCC , 0xCC , 0xCC ) ;
-        break ;
-
+        return wxColour([NSColor disabledControlTextColor]);
     case wxSYS_COLOUR_3DDKSHADOW:
-        return wxColor( 0x44 , 0x44 , 0x44 ) ;
-        break ;
+        return wxColour([NSColor controlShadowColor]);
     case wxSYS_COLOUR_3DLIGHT:
-        return wxColor( 0xCC , 0xCC , 0xCC ) ;
-        break ;
+        return wxColour([NSColor controlHighlightColor]);
     case wxSYS_COLOUR_HIGHLIGHTTEXT:
-        {
-            RGBColor hilite ;
-            LMGetHiliteRGB(&hilite) ;
-            if ( ( hilite.red + hilite.green + hilite.blue ) == 0 )
-                    return *wxWHITE ;
-            else
-                    return *wxBLACK ;
-        }
-        break ;
+        return wxColour([NSColor selectedControlTextColor]);
     case wxSYS_COLOUR_INFOBK:
+        // tooltip (bogus)
+        return wxColour([NSColor controlBackgroundColor]);
     case wxSYS_COLOUR_APPWORKSPACE:
-        return *wxWHITE ;
-        break ;
-
+        // MDI window color (bogus)
+        return wxColour([NSColor windowBackgroundColor]);
     case wxSYS_COLOUR_HOTLIGHT:
+        break; // what is this?
     case wxSYS_COLOUR_GRADIENTACTIVECAPTION:
     case wxSYS_COLOUR_GRADIENTINACTIVECAPTION:
+        break; // Doesn't really apply to Cocoa.
     case wxSYS_COLOUR_MENUHILIGHT:
-        // TODO
-        return *wxBLACK;
-     
+        return wxColour([NSColor selectedMenuItemColor]);
     case wxSYS_COLOUR_MAX:
-        wxFAIL_MSG( _T("unknown system colour index") );
-        break ;
+    default:
+        if(index>=wxSYS_COLOUR_MAX)
+        {
+            wxFAIL_MSG(wxT("Invalid system colour index"));
+            return wxColour();
+        }
     }
-    return *wxWHITE;
-#endif
+    wxFAIL_MSG(wxT("Unimplemented system colour index"));
+    return wxColour();
 }
 
 // ----------------------------------------------------------------------------
