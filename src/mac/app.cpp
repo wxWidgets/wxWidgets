@@ -1687,34 +1687,34 @@ long wxMacTranslateKey(unsigned char key, unsigned char code)
     long retval = key ;
     switch (key)
     {
-        case 0x01 :
+        case kHomeCharCode :
                  retval = WXK_HOME;
           break;
-        case 0x03 :
+        case kEnterCharCode :
                  retval = WXK_RETURN;
           break;
-        case 0x04 :
+        case kEndCharCode :
                  retval = WXK_END;
           break;
-        case 0x05 :
+        case kHelpCharCode :
                  retval = WXK_HELP;
           break;
-        case 0x08 :
+        case kBackspaceCharCode :
                  retval = WXK_BACK;
           break;
-        case 0x09 :
+        case kTabCharCode :
                  retval = WXK_TAB;
           break;
-        case 0x0b :
+        case kPageUpCharCode :
                  retval = WXK_PAGEUP;
           break;
-        case 0x0c :
+        case kPageDownCharCode :
                  retval = WXK_PAGEDOWN;
           break;
-        case 0x0d :
+        case kReturnCharCode :
                  retval = WXK_RETURN;
           break;
-            case 0x10 :
+            case kFunctionKeyCharCode :
             {
                 switch( code )
                 {
@@ -1766,22 +1766,22 @@ long wxMacTranslateKey(unsigned char key, unsigned char code)
                 }
             }
             break ;
-            case 0x1b :
+            case kEscapeCharCode :
                 retval = WXK_ESCAPE ;
             break ;
-            case 0x1c :
+            case kLeftArrowCharCode :
                 retval = WXK_LEFT ;
             break ;
-            case 0x1d :
+            case kRightArrowCharCode :
                 retval = WXK_RIGHT ;
             break ;
-            case 0x1e :
+            case kUpArrowCharCode :
                 retval = WXK_UP ;
             break ;
-            case 0x1f :
+            case kDownArrowCharCode :
                 retval = WXK_DOWN ;
             break ;
-            case 0x7F :
+            case kDeleteCharCode :
                 retval = WXK_DELETE ;
              default:
             break ;
@@ -1803,32 +1803,42 @@ void wxApp::MacHandleKeyDownEvent( WXEVENTREF evr )
     }
     else
     {
-        short keycode ;
-        short keychar ;
-        keychar = short(ev->message & charCodeMask);
-        keycode = short(ev->message & keyCodeMask) >> 8 ;
-        wxWindow* focus = wxWindow::FindFocus() ;
-        // it is wxWindows Convention to have Ctrl Key Combinations at ASCII char value
-        if ( (ev->modifiers & controlKey) && keychar >= 0 && keychar < 0x20 )
-        {
-            keychar += 0x40 ;
-        }
-        long keyval = wxMacTranslateKey(keychar, keycode) ;
-
-        if ( MacSendKeyDownEvent( focus , keyval , ev->modifiers , ev->when , ev->where.h , ev->where.v ) == false )
+         wxWindow* focus = wxWindow::FindFocus() ;
+ 
+        if ( MacSendKeyDownEvent( focus , ev->message , ev->modifiers , ev->when , ev->where.h , ev->where.v ) == false )
         {
             // has not been handled -> perform default
             wxControl* control = wxDynamicCast( focus , wxControl ) ;
             if ( control &&  control->GetMacControl() != NULL )
             {
+                short keycode ;
+                short keychar ;
+                keychar = short(ev->message & charCodeMask);
+                keycode = short(ev->message & keyCodeMask) >> 8 ;
                 ::HandleControlKey( (ControlHandle) control->GetMacControl() , keycode , keychar , ev->modifiers ) ;
             }
         }
     }
 }
 
-bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keyval , long modifiers , long when , short wherex , short wherey )
+bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keymessage , long modifiers , long when , short wherex , short wherey )
 {
+    short keycode ;
+    short keychar ;
+    keychar = short(keymessage & charCodeMask);
+    keycode = short(keymessage & keyCodeMask) >> 8 ;
+    
+    if ( (modifiers & controlKey) )
+    {
+        // control interferes with some built-in keys like pgdown, return etc. therefore we remove the controlKey modifier
+        // and look at the character after
+        UInt32 state = 0;
+        UInt32 keyInfo = KeyTranslate((Ptr)GetScriptManagerVariable(smKCHRCache), ( modifiers & (~controlKey)) | keycode, &state);
+        keychar = short(keyInfo & charCodeMask);
+        keycode = short(keyInfo & keyCodeMask) >> 8 ;
+    }
+    long keyval = wxMacTranslateKey(keychar, keycode) ;
+
     wxKeyEvent event(wxEVT_KEY_DOWN);
     bool handled = false ;
     event.m_shiftDown = modifiers & shiftKey;
@@ -1870,6 +1880,7 @@ bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keyval , long modifiers 
     {
         event.Skip( FALSE ) ;
         event.SetEventType( wxEVT_CHAR ) ;
+        // raw value again
         event.m_keyCode = keyval ;
 
         handled = focus->GetEventHandler()->ProcessEvent( event ) ;
@@ -1942,25 +1953,27 @@ void wxApp::MacHandleKeyUpEvent( WXEVENTREF evr )
     }
     else
     {
-        short keycode ;
-        short keychar ;
-        keychar = short(ev->message & charCodeMask);
-        keycode = short(ev->message & keyCodeMask) >> 8 ;
-        // it is wxWindows Convention to have Ctrl Key Combinations at ASCII char value
-        if ( (ev->modifiers & controlKey) && keychar >= 0 && keychar < 0x20 )
-        {
-            keychar += 0x40 ;
-        }
-        long keyval = wxMacTranslateKey(keychar, keycode) ;
-
-        wxWindow* focus = wxWindow::FindFocus() ;
-        MacSendKeyUpEvent( focus , keyval , ev->modifiers , ev->when , ev->where.h , ev->where.v ) ;
-        // we don't have to do anything under classic here
+        MacSendKeyUpEvent( wxWindow::FindFocus() , ev->message , ev->modifiers , ev->when , ev->where.h , ev->where.v ) ;
     }
 }
 
-bool wxApp::MacSendKeyUpEvent( wxWindow* focus , long keyval , long modifiers , long when , short wherex , short wherey )
+bool wxApp::MacSendKeyUpEvent( wxWindow* focus , long keymessage , long modifiers , long when , short wherex , short wherey )
 {
+    short keycode ;
+    short keychar ;
+    keychar = short(keymessage & charCodeMask);
+    keycode = short(keymessage & keyCodeMask) >> 8 ;
+    if ( (modifiers & controlKey) )
+    {
+        // control interferes with some built-in keys like pgdown, return etc. therefore we remove the controlKey modifier
+        // and look at the character after
+        UInt32 state = 0;
+        UInt32 keyInfo = KeyTranslate((Ptr)GetScriptManagerVariable(smKCHRCache), ( modifiers & (~controlKey)) | keycode, &state);
+        keychar = short(keyInfo & charCodeMask);
+        keycode = short(keyInfo & keyCodeMask) >> 8 ;
+    }
+    long keyval = wxMacTranslateKey(keychar, keycode) ;
+
     bool handled = false ;
     if ( focus )
     {
@@ -1969,6 +1982,9 @@ bool wxApp::MacSendKeyUpEvent( wxWindow* focus , long keyval , long modifiers , 
         event.m_controlDown = modifiers & controlKey;
         event.m_altDown = modifiers & optionKey;
         event.m_metaDown = modifiers & cmdKey;
+        if ( event.m_controlDown )
+        {
+        }
         event.m_keyCode = wxToupper(keyval );
 
         event.m_x = wherex;
@@ -2102,8 +2118,16 @@ void wxApp::MacHandleOSEvent( WXEVENTREF evr )
 
                 wxWindow* currentMouseWindow = NULL ;
 
-                wxWindow::MacGetWindowFromPoint( wxPoint( ev->where.h , ev->where.v ) ,
-                                                 &currentMouseWindow ) ;
+				if (s_captureWindow )
+				{
+					currentMouseWindow = s_captureWindow ;
+				}
+				else
+				{
+			    	wxWindow::MacGetWindowFromPoint( wxPoint( ev->where.h , ev->where.v ) ,
+			                                                 &currentMouseWindow ) ;
+			    }
+
                 if ( currentMouseWindow != wxWindow::s_lastMouseWindow )
                 {
                     wxMouseEvent event ;
@@ -2143,8 +2167,18 @@ void wxApp::MacHandleOSEvent( WXEVENTREF evr )
                     wxWindow::s_lastMouseWindow = currentMouseWindow ;
                 }
 
-                short windowPart = ::FindWindow(ev->where, &window);
+                short windowPart = inNoWindow ;
 
+				if ( s_captureWindow )
+				{
+					window = (WindowRef) s_captureWindow->MacGetRootWindow() ;
+					windowPart = inContent ;
+				}
+				else
+				{
+					windowPart = ::FindWindow(ev->where, &window); 
+				}
+				
                 switch (windowPart)
                 {
                     case inContent :
