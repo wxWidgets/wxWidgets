@@ -50,14 +50,14 @@
 #endif
 #endif
 
-    IMPLEMENT_CLASS(wxColourDatabase, wxList)
-    IMPLEMENT_DYNAMIC_CLASS(wxFontList, wxList)
-    IMPLEMENT_DYNAMIC_CLASS(wxPenList, wxList)
-    IMPLEMENT_DYNAMIC_CLASS(wxBrushList, wxList)
-    IMPLEMENT_DYNAMIC_CLASS(wxBitmapList, wxList)
-    IMPLEMENT_DYNAMIC_CLASS(wxResourceCache, wxList)
+IMPLEMENT_CLASS(wxColourDatabase, wxList)
+IMPLEMENT_DYNAMIC_CLASS(wxFontList, wxList)
+IMPLEMENT_DYNAMIC_CLASS(wxPenList, wxList)
+IMPLEMENT_DYNAMIC_CLASS(wxBrushList, wxList)
+IMPLEMENT_DYNAMIC_CLASS(wxBitmapList, wxList)
+IMPLEMENT_DYNAMIC_CLASS(wxResourceCache, wxList)
 
-    IMPLEMENT_ABSTRACT_CLASS(wxDCBase, wxObject)
+IMPLEMENT_ABSTRACT_CLASS(wxDCBase, wxObject)
 
 wxRect::wxRect(const wxPoint& topLeft, const wxPoint& bottomRight)
 {
@@ -93,27 +93,27 @@ bool wxRect::operator==(const wxRect& rect) const
           (height == rect.height));
 }
 
-const wxRect& wxRect::operator += (const wxRect& rect)
+wxRect& wxRect::operator += (const wxRect& rect)
 {
-	*this = (*this + rect);
-	return ( *this ) ;
+    *this = (*this + rect);
+    return ( *this ) ;
 }
 
 wxRect wxRect::operator + (const wxRect& rect) const
 {
-	int x1 = wxMin(this->x, rect.x);
-	int y1 = wxMin(this->y, rect.y);
-	int y2 = wxMax(y+height, rect.height+rect.y);
-	int x2 = wxMax(x+width, rect.width+rect.x);
-	return wxRect(x1, y1, x2-x1, y2-y1);
+    int x1 = wxMin(this->x, rect.x);
+    int y1 = wxMin(this->y, rect.y);
+    int y2 = wxMax(y+height, rect.height+rect.y);
+    int x2 = wxMax(x+width, rect.width+rect.x);
+    return wxRect(x1, y1, x2-x1, y2-y1);
 }
 
 bool wxRect::Inside(int cx, int cy) const
 {
-	return ( (cx >= x) && (cy >= y)
-		  && ((cy - y) < height)
-		  && ((cx - x) < width)
-		  );
+    return ( (cx >= x) && (cy >= y)
+          && ((cy - y) < height)
+          && ((cx - x) < width)
+          );
 }
 
 wxColourDatabase::wxColourDatabase (int type) : wxList (type)

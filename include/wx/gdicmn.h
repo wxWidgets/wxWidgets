@@ -285,8 +285,6 @@ public:
     wxPoint GetPosition() const { return wxPoint(x, y); }
     wxSize GetSize() const { return wxSize(width, height); }
 
-    // MFC-like functions
-
     int GetLeft()   const { return x; }
     int GetTop()    const { return y; }
     int GetBottom() const { return y + height - 1; }
@@ -297,12 +295,22 @@ public:
     void SetTop(int top) { y = top; }
     void SetBottom(int bottom) { height = bottom - y + 1; }
 
+    void Inflate(wxCoord dx, wxCoord dy)
+    {
+        x -= dx;
+        y -= dy;
+        width += 2*dx;
+        height += 2*dy;
+    }
+
+    void Inflate(wxCoord d) { Inflate(d, d); }
+
     bool operator==(const wxRect& rect) const;
     bool operator!=(const wxRect& rect) const { return !(*this == rect); }
 
     bool Inside(int cx, int cy) const;
-    wxRect operator + (const wxRect& rect) const;
-    const wxRect& operator += (const wxRect& rect);
+    wxRect operator+(const wxRect& rect) const;
+    wxRect& operator+=(const wxRect& rect);
 
 public:
     int x, y, width, height;

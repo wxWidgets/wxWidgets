@@ -118,6 +118,18 @@ Gets the x member.
 
 Gets the y member.
 
+\membersection{wxRect::Inflate}\label{wxrectinflate}
+
+\func{void}{Inflate}{\param{wxCoord }{dx}, \param{wxCoord }{dy}}
+
+\func{void}{Inflate}{\param{wxCoord }{diff}}
+
+Increase the rectangle size by {\it dx} in x direction and {\it dy} in y
+direction. Both (or one of) parameters may be negative to decrease the
+rectngle size.
+
+The second form uses the same {\it diff} for both {\it dx} and {\it dy}.
+
 \membersection{wxRect::SetHeight}\label{wxrectsetheight}
 
 \func{void}{SetHeight}{\param{int}{ height}}
