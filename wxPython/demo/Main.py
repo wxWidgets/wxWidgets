@@ -29,6 +29,7 @@ _treeList = [
         'wxIntCtrl',
         'wxPyColourChooser',
         'wxScrolledPanel',
+        'ShapedWindow',
         ]),
 
     # managed windows == things with a (optional) caption you can close
