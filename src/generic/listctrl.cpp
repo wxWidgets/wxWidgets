@@ -3139,8 +3139,6 @@ bool wxListCtrl::Create(wxWindow *parent,
         m_headerWin = (wxListHeaderWindow *) NULL;
     }
 
-    SetBackgroundColour( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_LISTBOX ) );
-
     return ret;
 }
 

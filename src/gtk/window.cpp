@@ -2057,6 +2057,9 @@ void wxWindow::Init()
 
     m_cursor = *wxSTANDARD_CURSOR;
 
+    m_delayedForegroundColour = FALSE;
+    m_delayedBackgroundColour = FALSE;
+        
 #ifdef HAVE_XIM
     m_ic = (GdkIC*) NULL;
     m_icattr = (GdkICAttr*) NULL;
