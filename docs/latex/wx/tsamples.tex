@@ -140,7 +140,7 @@ until the program terminates) or asynchronously (notification will come later).
 
 \subsection{Scroll subwindow sample}\label{samplescrollsub}
 
-This sample demonstrates the use of the \helpref{wxScrolledWindow}{wxscrolledwindow}
+This sample demonstrates the use of the \helpref{wxScrolledWindow}{wxscrolledwindow} 
 class including placing subwindows into it and drawing simple graphics. It uses the
 \helpref{SetTargetWindow}{wxscrolledwindowsettargetwindow} method and thus the effect
 of scrolling does not show in the scrolled window itself, but in one of its subwindows.
@@ -213,7 +213,7 @@ TODO.
 Eight HTML samples (you can find them in directory {\tt samples/html})
 cover all features of HTML sub-library.
 
-{\bf Test} demonstrates how to create \helpref{wxHtmlWindow}{wxhtmlwindow}
+{\bf Test} demonstrates how to create \helpref{wxHtmlWindow}{wxhtmlwindow} 
 and also shows most of supported HTML tags.
 
 {\bf Widget} shows how you can embed ordinary controls or windows within
@@ -229,7 +229,7 @@ in compressed archive as if they were ordinary files.
 {\bf Virtual} is yet another VFS demo. This one generates pages at run-time.
 You may find it useful if you need to display some reports in your application.
 
-{\bf Printing} explains use of \helpref{wxHtmlEasyPrinting}{wxhtmleasyprinting}
+{\bf Printing} explains use of \helpref{wxHtmlEasyPrinting}{wxhtmleasyprinting} 
 class which serves as as-simple-as-possible interface for printing HTML 
 documents without much work. In fact, only few function calls are sufficient.
 
@@ -263,14 +263,14 @@ The layout sample demonstrates the two different layout systems offered
 by wxWindows. When starting the program, you will see a frame with some
 controls and some graphics. The controls will change their size whenever
 you resize the entire frame and the exact behaviour of the size changes
-is determined using the \helpref{wxLayoutConstraints}{wxlayoutconstraints}
-class. See also the \helpref{overview}{constraintsoverview} and the
-\helpref{wxIndividualLayoutConstraint}{wxindividuallayoutconstraint}
+is determined using the \helpref{wxLayoutConstraints}{wxlayoutconstraints} 
+class. See also the \helpref{overview}{constraintsoverview} and the 
+\helpref{wxIndividualLayoutConstraint}{wxindividuallayoutconstraint} 
 class for further information.
 
 The menu in this sample offers two more tests, one showing how to use
 a \helpref{wxBoxSizer}{wxboxsizer} in a simple dialog and the other one
-showing how to use sizers in connection with a \helpref{wxNotebook}{wxnotebook}
+showing how to use sizers in connection with a \helpref{wxNotebook}{wxnotebook} 
 class. See also \helpref{wxNotebookSizer}{wxnotebooksizer} and 
 \helpref{wxSizer}{wxsizer}.
 
@@ -287,7 +287,7 @@ The sample also provides some timings for adding/deleting/sorting a lot of
 
 The sockets sample demonstrates how to use the communication facilities
 provided by \helpref{wxSocket}{wxsocketbase}. There are two different
-applications in this sample: a server, which is implemented using a
+applications in this sample: a server, which is implemented using a 
 \helpref{wxSocketServer}{wxsocketserver} object, and a client, which
 is implemented as a \helpref{wxSocketClient}{wxsocketclient}.
 
@@ -298,7 +298,7 @@ sets up an event handler to be notified of incoming connection requests
 a new \helpref{wxSocketBase}{wxsocketbase} object is created. These
 socket objects are independent from the server that created them, so
 they set up their own event handler, and then request to be notified
-of {\bf wxSOCKET\_INPUT} (incoming data) or {\bf wxSOCKET\_LOST}
+of {\bf wxSOCKET\_INPUT} (incoming data) or {\bf wxSOCKET\_LOST} 
 (connection closed at the remote end) events. In the sample, the event
 handler is the same for all connections; to find out which socket the
 event is addressed to, the \helpref{GetSocket}{wxsocketeventgetsocket}
@@ -315,7 +315,7 @@ to specify the address of the server you are going to connect to (the
 TCP port number is hard-coded as 3000). Once connected, a number of
 tests are possible. Currently, three tests are implemented. They show
 how to use the basic IO calls in \helpref{wxSocketBase}{wxsocketbase},
-such as \helpref{Read}{wxsocketbaseread}, \helpref{Write}{wxsocketbasewrite},
+such as \helpref{Read}{wxsocketbaseread}, \helpref{Write}{wxsocketbasewrite}, 
 \helpref{ReadMsg}{wxsocketbasereadmsg} and \helpref{WriteMsg}{wxsocketbasewritemsg},
 and how to set up the correct IO flags depending on what you are going to
 do. See the comments in the code for more information. Note that because
@@ -358,7 +358,7 @@ in a log window at the bottom of the main window. By pressing some of the functi
 keys, you can test some actions in the text ctrl as well as get statitics on the
 text ctrls, which is useful for testing if these statitics actually are correct.
 
-Thirdly, on platforms which support it, the sample will offer to copy text to the
+Thirdly, on platforms which support it, the sample will offer to copy text to the 
 \helpref{wxClipboard}{wxclipboard} and to paste text from it. The GTK version will
 use the so called PRIMARY SELECTION, which is the pseudo clipboard under X and
 best known from pasting text to the XTerm program. 
@@ -375,12 +375,12 @@ is not multi-threading safe, i.e. that it might crash if two threads try to
 access the GUI class simultaneously. One way to prevent that is have a normal
 GUI program in the main thread and some worker threads which work in the 
 background. In order to make communication between the main thread and the
-worker threads possible, wxWindows offers the \helpref{wxPostEvent}{wxpostevent}
+worker threads possible, wxWindows offers the \helpref{wxPostEvent}{wxpostevent} 
 function and this sample makes use of this function.
 
-The other way to use a so called Mutex (such as those offered in the \helpref{wxMutex}{wxmutex}
+The other way to use a so called Mutex (such as those offered in the \helpref{wxMutex}{wxmutex} 
 class) that prevent threads from accessing the GUI classes as long as any other
-thread accesses them. For this, wxWindows has the \helpref{wxMutexGuiEnter}{wxmutexguienter}
+thread accesses them. For this, wxWindows has the \helpref{wxMutexGuiEnter}{wxmutexguienter} 
 and \helpref{wxMutexGuiLeave}{wxmutexguileave} functions, both of which are
 used and tested in the sample as well.
 

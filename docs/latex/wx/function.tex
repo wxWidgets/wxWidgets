@@ -953,7 +953,7 @@ Sets the translation (from the top left corner) for PostScript output. The defau
 \section{Clipboard functions}\label{clipsboard}
 
 These clipboard functions are implemented for Windows only. The use of these functions
-is deprecated and the code is no longer maintained. Use the \helpref{wxClipboard}{wxclipboard}
+is deprecated and the code is no longer maintained. Use the \helpref{wxClipboard}{wxclipboard} 
 class instead.
 
 \wxheading{Include files}
@@ -1056,14 +1056,6 @@ Passes data to the clipboard.
 The clipboard must have previously been opened for this call to succeed.
 
 \section{Miscellaneous functions}\label{miscellany}
-
-\membersection{wxHandleFatalExcetions}\label{wxhandlefatalexcetions}
-
-\func{bool}{wxHandleFatalExcetions}{\param{bool }{doIt = TRUE}}
-
-Enables or disables handling of fatal program exceptions. If {\it doIt} is
-TRUE, \helpref{wxApp::OnFatalException}{wxapponfatalexception} will be called
-before the program crashes. Otherwise, the default behaviour will be restored.
 
 \membersection{::wxNewId}
 
@@ -1186,7 +1178,7 @@ Gets the physical size of the display in pixels.
 
 \func{void}{wxEnableTopLevelWindow}{\param{bool}{ enable = TRUE}}
 
-This function enables or disables all top level windows. It is used by
+This function enables or disables all top level windows. It is used by 
 \helpref{::wxSafeYield}{wxsafeyield}.
 
 \wxheading{Include files}
