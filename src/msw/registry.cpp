@@ -143,7 +143,7 @@ const wxChar *wxRegKey::GetStdKeyShortName(size_t key)
 
 wxRegKey::StdKey wxRegKey::ExtractKeyName(wxString& strKey)
 {
-  wxString strRoot = strKey.Left(REG_SEPARATOR);
+  wxString strRoot = strKey.BeforeFirst(REG_SEPARATOR);
 
   HKEY hRootKey = 0;
   size_t ui;
