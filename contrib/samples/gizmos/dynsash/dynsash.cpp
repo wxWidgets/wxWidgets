@@ -52,12 +52,12 @@ private:
 IMPLEMENT_APP(Demo)
 
 wxChar *HTML_content =
-wxT("<P><H1>wxDynamicSashWindow demo</H1>"
-"<P>Here is an example of how you can use <TT>wxDynamicSashWindow</TT> to allow your users to "
-"dynamically split and unify the views of your windows.  Try dragging out a few splits "
-"and then reunifying the window."
-"<P>Also, see the <TT>dynsash_switch</TT> sample for an example of an application which "
-"manages the scrollbars provided by <TT>wxDynamicSashWindow</TT> itself.");
+wxT("<P><H1>wxDynamicSashWindow demo</H1>")
+wxT("<P>Here is an example of how you can use <TT>wxDynamicSashWindow</TT> to allow your users to ")
+wxT("dynamically split and unify the views of your windows.  Try dragging out a few splits ")
+wxT("and then reunifying the window.")
+wxT("<P>Also, see the <TT>dynsash_switch</TT> sample for an example of an application which ")
+wxT("manages the scrollbars provided by <TT>wxDynamicSashWindow</TT> itself.");
 
 bool Demo::OnInit() {
     wxInitAllImageHandlers();
@@ -78,8 +78,9 @@ bool Demo::OnInit() {
 SashHtmlWindow::SashHtmlWindow(wxWindow *parent, wxWindowID id,
                                const wxPoint& pos, const wxSize& size, long style, const wxString& name) :
                                     wxHtmlWindow(parent, id, pos, size, style, name) {
-    Connect(-1, wxEVT_DYNAMIC_SASH_SPLIT,
-        (wxObjectEventFunction)(wxCommandEventFunction)(wxDynamicSashSplitEventFunction) &SashHtmlWindow::OnSplit);
+    Connect(-1, wxEVT_DYNAMIC_SASH_SPLIT, (wxObjectEventFunction)
+                                          (wxEventFunction)
+                                          (wxDynamicSashSplitEventFunction)&SashHtmlWindow::OnSplit);
 
     m_dyn_sash = parent;
 }
@@ -95,7 +96,7 @@ wxSize SashHtmlWindow::DoGetBestSize() const {
         return wxHtmlWindow::GetBestSize();
 }
 
-void SashHtmlWindow::OnSplit(wxDynamicSashSplitEvent& event) {
+void SashHtmlWindow::OnSplit(wxDynamicSashSplitEvent& WXUNUSED(event)) {
     wxHtmlWindow *html = new SashHtmlWindow(m_dyn_sash, -1);
     html->SetPage(HTML_content);
 }

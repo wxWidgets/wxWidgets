@@ -225,37 +225,37 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
     Close(TRUE);
 }
 
-void MyFrame::OnIncrement(wxCommandEvent& event)
+void MyFrame::OnIncrement(wxCommandEvent& WXUNUSED(event))
 {
     m_panel->OnIncrement();
 }
 
-void MyFrame::OnDecrement(wxCommandEvent& event)
+void MyFrame::OnDecrement(wxCommandEvent& WXUNUSED(event))
 {
     m_panel->OnDecrement();
 }
 
-void MyFrame::OnSetValue(wxCommandEvent& event)
+void MyFrame::OnSetValue(wxCommandEvent& WXUNUSED(event))
 {
     m_panel->OnSetValue();
 }
 
-void MyFrame::OnAlignLeft(wxCommandEvent& event)
+void MyFrame::OnAlignLeft(wxCommandEvent& WXUNUSED(event))
 {
     m_panel->OnAlignLeft();
 }
 
-void MyFrame::OnAlignCenter(wxCommandEvent& event)
+void MyFrame::OnAlignCenter(wxCommandEvent& WXUNUSED(event))
 {
     m_panel->OnAlignCenter();
 }
 
-void MyFrame::OnAlignRight(wxCommandEvent& event)
+void MyFrame::OnAlignRight(wxCommandEvent& WXUNUSED(event))
 {
     m_panel->OnAlignRight();
 }
 
-void MyFrame::OnDrawFaded(wxCommandEvent& event)
+void MyFrame::OnDrawFaded(wxCommandEvent& WXUNUSED(event))
 {
     m_panel->OnDrawFaded();
 }

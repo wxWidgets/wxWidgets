@@ -154,6 +154,16 @@ public:
 		m_minCellSize = size;
 	};
 
+  /* These are to hide Add() method of parents and to avoid Borland warning about hiding virtual functions */
+  void Add( wxWindow *window, int proportion = 0, int flag = 0, int border = 0, wxObject* userData = NULL )
+       { wxFlexGridSizer::Add( window, proportion, flag, border, userData); }
+  void Add( wxSizer *sizer, int proportion = 0, int flag = 0, int border = 0, wxObject* userData = NULL )
+       { wxFlexGridSizer::Add( sizer, proportion, flag, border, userData); }
+  void Add( int width, int height, int proportion = 0, int flag = 0, int border = 0, wxObject* userData = NULL )
+       { wxFlexGridSizer::Add( width, height, proportion, flag, border, userData); }
+  void Add( wxSizerItem *item )
+       { wxFlexGridSizer::Add( item); }
+
 private:
 	wxWindow            *m_parent;
 	unsigned int         m_maxRows, m_maxCols;

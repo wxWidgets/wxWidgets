@@ -380,12 +380,9 @@ wxSize wxMultiCellSizer::CalcMin()
 	if (m_children.GetCount() == 0)
 		return wxSize(10,10);
 
-	int m_minWidth = 0;
-	int m_minHeight = 0;
-
 	GetMinimums();
-	m_minWidth = Sum(m_maxWidth, m_cell_count.GetWidth());
-	m_minHeight = Sum(m_maxHeight, m_cell_count.GetHeight());
+	int m_minWidth = Sum(m_maxWidth, m_cell_count.GetWidth());
+	int m_minHeight = Sum(m_maxHeight, m_cell_count.GetHeight());
 	return wxSize( m_minWidth, m_minHeight );
 }
 //---------------------------------------------------------------------------

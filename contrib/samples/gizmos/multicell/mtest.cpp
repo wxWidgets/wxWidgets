@@ -208,7 +208,7 @@ void MyFrame::OnPaint(wxPaintEvent& WXUNUSED(event) )
 	}
 }
 
-void MyFrame::OnCloseWindow(wxCloseEvent& event)
+void MyFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 {
 	Destroy();
 }

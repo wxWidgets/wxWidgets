@@ -132,7 +132,7 @@ private:
 };
 
 typedef void (wxEvtHandler::*wxDynamicSashSplitEventFunction)(wxDynamicSashSplitEvent&);
-typedef void (wxEvtHandler::*wxDynamicSashUnifyEventFunction)(wxDynamicSashSplitEvent&);
+typedef void (wxEvtHandler::*wxDynamicSashUnifyEventFunction)(wxDynamicSashUnifyEvent&);
 
 /*
     wxDynamicSashWindow.  See above.
