@@ -40,12 +40,7 @@ MyApp::MyApp()
 
 bool MyApp::OnInit(void)
 {
-#ifdef __WXMSW__
-  wxBitmap::AddHandler(new wxPNGFileHandler);
-#endif
-#ifdef __WXGTK__
   wxImage::AddHandler(new wxPNGHandler);
-#endif
 
   // Create the main frame window
   frame = new MyFrame((wxFrame *) NULL, "wxPNGBitmap Demo", wxPoint(0, 0), wxSize(300, 300));

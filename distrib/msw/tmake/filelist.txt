@@ -255,7 +255,6 @@ ownerdrw.cpp	M
 palette.cpp	M
 pen.cpp	M
 penwin.cpp	M
-pnghand.cpp	M	32
 printdlg.cpp	M
 printwin.cpp	M
 radiobox.cpp	M
@@ -542,7 +541,6 @@ palette.h	W
 panel.h	W
 paper.h	W
 pen.h	W
-pnghand.h	W
 print.h	W
 printdlg.h	W
 prntbase.h	W
@@ -796,8 +794,6 @@ msvcrt.h	9
 notebook.h	9
 palette.h	9
 pen.h	9
-pnghand.h	9
-pngread.h	9
 printdlg.h	9
 printwin.h	9
 private.h	9

@@ -899,22 +899,6 @@ SOURCE=.\msw\penwin.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\msw\pnghand.cpp
-
-!IF  "$(CFG)" == "wxvc_dll - Win32 Release"
-
-# ADD CPP /I "..\include" /I "png" /I "zlib"
-# SUBTRACT CPP /I "../include"
-
-!ELSEIF  "$(CFG)" == "wxvc_dll - Win32 Debug"
-
-# ADD CPP /I "png" /I "zlib"
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\msw\printdlg.cpp
 # End Source File
 # Begin Source File

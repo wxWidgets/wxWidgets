@@ -49,7 +49,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"Release\wxvc.lib"
+# ADD LIB32 /nologo
 
 !ELSEIF  "$(CFG)" == "wxvc - Win32 Debug"
 
@@ -72,7 +72,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"Debug\wxvc.lib"
+# ADD LIB32 /nologo
 
 !ENDIF 
 
@@ -258,8 +258,16 @@ SOURCE=.\common\imagjpeg.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\imagpcx.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\imagpng.cpp
 # ADD CPP /I "png" /I "zlib"
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\imagpnm.cpp
 # End Source File
 # Begin Source File
 
@@ -898,21 +906,6 @@ SOURCE=.\msw\pen.cpp
 # Begin Source File
 
 SOURCE=.\msw\penwin.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\msw\pnghand.cpp
-
-!IF  "$(CFG)" == "wxvc - Win32 Release"
-
-# ADD CPP /I "png" /I "zlib"
-
-!ELSEIF  "$(CFG)" == "wxvc - Win32 Debug"
-
-# ADD CPP /I "zlib" /I "png"
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
