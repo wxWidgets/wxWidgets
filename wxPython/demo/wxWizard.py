@@ -170,6 +170,10 @@ wxWizardPageSimple class can easily be used for the pages."""))
 
     def OnRunDynamicWizard(self, evt):
         # Create the wizard and the pages
+        #wizard = wxPreWizard()
+        #wizard.SetExtraStyle(wxWIZARD_EX_HELPBUTTON)
+        #wizard.Create(self, self.ID_wiz, "Simple Wizard",
+        #              images.getWizTest1Bitmap())
         wizard = wxWizard(self, self.ID_wiz, "Simple Wizard",
                           images.getWizTest1Bitmap())
 

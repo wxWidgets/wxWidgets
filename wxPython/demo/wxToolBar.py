@@ -23,6 +23,8 @@ class TestToolBar(wxFrame):
         #               wxTB_HORIZONTAL | wxNO_BORDER | wxTB_FLAT)
         #self.SetToolBar(tb)
 
+        log.write("Default toolbar tool size: %s\n" % tb.GetToolBitmapSize())
+
         self.CreateStatusBar()
 
         tb.AddSimpleTool(10, images.getNewBitmap(), "New", "Long help for 'New'")
