@@ -331,7 +331,7 @@ bool wxControl::MSWOnNotify(int idCtrl,
 }
 #endif // Win95
 
-WXHBRUSH wxControl::MSWControlColorSolid(WXHDC pDC, wxColour colBg)
+WXHBRUSH wxControl::DoMSWControlColor(WXHDC pDC, wxColour colBg)
 {
     HDC hdc = (HDC)pDC;
     if ( m_hasFgCol )
@@ -358,18 +358,18 @@ WXHBRUSH wxControl::MSWControlColorSolid(WXHDC pDC, wxColour colBg)
 
 WXHBRUSH wxControl::MSWControlColor(WXHDC pDC)
 {
+    // by default consider that the controls text shouldn't erase the
+    // background under it (this is true for all static controls, check boxes,
+    // radio buttons, ...
     ::SetBkMode((HDC)pDC, TRANSPARENT);
 
-    return MSWControlColorSolid(pDC);
+    return DoMSWControlColor(pDC, wxNullColour);
 }
 
 WXHBRUSH wxControl::MSWControlColorDisabled(WXHDC pDC)
 {
-    return MSWControlColorSolid
-           (
-                pDC,
-                wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE)
-           );
+    return DoMSWControlColor(pDC,
+                             wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
 }
 
 // ---------------------------------------------------------------------------

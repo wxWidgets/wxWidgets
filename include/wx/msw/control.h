@@ -125,7 +125,15 @@ protected:
 
     // call this from the derived class MSWControlColor() if you want to always
     // paint the background (as all opaque controls do)
-    WXHBRUSH MSWControlColorSolid(WXHDC pDC, wxColour colBg = wxNullColour);
+    WXHBRUSH MSWControlColorSolid(WXHDC pDC)
+    {
+        return DoMSWControlColor(pDC, GetBackgroundColour());
+    }
+
+    // common part of the 3 functions above: pass wxNullColour to use the
+    // appropriate background colour (meaning ours or our parents) or a fixed
+    // one
+    WXHBRUSH DoMSWControlColor(WXHDC pDC, wxColour colBg);
 
     // another WM_CTLCOLOR-related function: override this to return the brush
     // which should be used to paint the control background by default
