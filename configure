@@ -9701,7 +9701,7 @@ echo "configure:9697: checking for GTK+ version" >&5
 else
   
                                                 gtk_version_cached=0
-                echo "$ac_t""""" 1>&6
+                echo "$ac_t""" 1>&6
 
                 wx_cv_lib_gtk=
                 if test "x$wxUSE_GTK2" = "xyes"; then

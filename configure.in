@@ -1951,7 +1951,7 @@ if test "$wxUSE_GUI" = "yes"; then
                 dnl stupid GTK+ AM macros produce their own messages, so we
                 dnl have to pass to the next line
                 gtk_version_cached=0
-                AC_MSG_RESULT("")
+                AC_MSG_RESULT()
 
                 wx_cv_lib_gtk=
                 if test "x$wxUSE_GTK2" = "xyes"; then
