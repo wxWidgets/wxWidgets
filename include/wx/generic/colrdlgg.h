@@ -114,10 +114,4 @@ protected:
     DECLARE_DYNAMIC_CLASS(wxGenericColourDialog)
 };
 
-/* This shouldn't be necessary, we have a #define in wx/colordlg.h.
-#ifdef __WXGTK__
-typedef wxGenericColourDialog wxColourDialog;
-#endif
-*/
-
 #endif
