@@ -258,6 +258,8 @@ void wxToolBar::Init()
     m_bg = (GdkColor *)NULL;
     m_toolbar = (GtkToolbar *)NULL;
     m_blockEvent = FALSE;
+    m_defaultWidth = 32;
+    m_defaultHeight = 32;
 }
 
 wxToolBar::~wxToolBar()
