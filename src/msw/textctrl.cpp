@@ -177,9 +177,9 @@ void wxTextCtrl::Init()
 {
 #if wxUSE_RICHEDIT
     m_verRichEdit = 0;
+#endif // wxUSE_RICHEDIT
 
     m_suppressNextUpdate = FALSE;
-#endif // wxUSE_RICHEDIT
 }
 
 bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
@@ -570,7 +570,7 @@ bool wxTextCtrl::StreamIn(const wxString& value,
 {
     return FALSE;
 }
-#else
+#else // !__WXWINE__
 
 #if wxUSE_UNICODE_MSLU
 bool wxTextCtrl::StreamIn(const wxString& value,
@@ -584,7 +584,7 @@ bool wxTextCtrl::StreamIn(const wxString& value,
                           bool selectionOnly)
 {
     // we have to use EM_STREAMIN to force richedit control 2.0+ to show any
-    // text in the non default charset - otherwise it thinks it knows better
+    // text in the non default charset -- otherwise it thinks it knows better
     // than we do and always shows it in the default one
 
     // first get the Windows code page for this encoding
@@ -620,6 +620,14 @@ bool wxTextCtrl::StreamIn(const wxString& value,
     // the cast below is needed for broken (very) old mingw32 headers
     eds.pfnCallback = (EDITSTREAMCALLBACK)wxRichEditStreamIn;
 
+    // we're going to receive 2 EN_CHANGE notifications if we got any selection
+    // (same problem as in DoWriteText())
+    if ( selectionOnly && HasSelection() )
+    {
+        // so suppress one of them
+        m_suppressNextUpdate = TRUE;
+    }
+
     if ( !::SendMessage(GetHwnd(), EM_STREAMIN,
                         SF_TEXT |
                         SF_UNICODE |
@@ -636,8 +644,7 @@ bool wxTextCtrl::StreamIn(const wxString& value,
     return TRUE;
 }
 
-#endif
-    // __WXWINE__
+#endif // __WXWINE__/!__WXWINE__
  
 #endif // wxUSE_RICHEDIT
 
@@ -700,18 +707,35 @@ void wxTextCtrl::DoWriteText(const wxString& value, bool selectionOnly)
     if ( !done )
 #endif // wxUSE_RICHEDIT
     {
+        // in some cases we get 2 EN_CHANGE notifications after the SendMessage
+        // call below which is confusing for the client code and so should be
+        // avoided
+        //
+        // these cases are: (a) plain EDIT controls if EM_REPLACESEL is used
+        // and there is a non empty selection currently and (b) rich text
+        // controls in any case
+        if (
 #if wxUSE_RICHEDIT
-        // rich edit text control sends us 2 EN_CHANGE events when we send
-        // WM_SETTEXT to it, we have to suppress one of them to make wxTextCtrl
-        // behaviour consistent
-        if ( IsRich() )
+            IsRich() ||
+#endif // wxUSE_RICHEDIT
+            (selectionOnly && HasSelection()) )
         {
             m_suppressNextUpdate = TRUE;
         }
-#endif // wxUSE_RICHEDIT
 
         ::SendMessage(GetHwnd(), selectionOnly ? EM_REPLACESEL : WM_SETTEXT,
                       0, (LPARAM)valueDos.c_str());
+
+        // OTOH, non rich text controls don't generate any events at all when
+        // we use WM_SETTEXT -- have to emulate them here
+        if ( !selectionOnly
+#if wxUSE_RICHEDIT
+                && !IsRich()
+#endif // wxUSE_RICHEDIT
+           )
+        {
+            SendUpdateEvent();
+        }
     }
 
     AdjustSpaceLimit();
@@ -795,12 +819,17 @@ void wxTextCtrl::Paste()
     }
 }
 
-bool wxTextCtrl::CanCopy() const
+bool wxTextCtrl::HasSelection() const
 {
-    // Can copy if there's a selection
     long from, to;
     GetSelection(&from, &to);
     return from != to;
+}
+
+bool wxTextCtrl::CanCopy() const
+{
+    // Can copy if there's a selection
+    return HasSelection();
 }
 
 bool wxTextCtrl::CanCut() const
