@@ -106,7 +106,7 @@ protected:
     friend class wxPopupFocusHandler;
 };
 
-#if wxUSE_COMBOBOX
+#if wxUSE_COMBOBOX && defined(__WXUNIVERSAL__)
 
 // ----------------------------------------------------------------------------
 // wxPopupComboWindow: wxPopupTransientWindow used by wxComboBox
@@ -133,7 +133,7 @@ protected:
     wxComboControl *m_combo;
 };
 
-#endif // wxUSE_COMBOBOX
+#endif // wxUSE_COMBOBOX && defined(__WXUNIVERSAL__)
 
 #endif // wxUSE_POPUPWIN
 
