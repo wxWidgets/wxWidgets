@@ -538,10 +538,10 @@ bool wxHtmlHelpData::AddBook(const wxString& book)
 
         fi = fsys.OpenFile(bookFull);
         if (fi == NULL) 
-	{
-	    wxLogError(_("Cannot open HTML help book: %s"), bookFull.c_str());
-	    return FALSE;
-	}
+        {
+            wxLogError(_("Cannot open HTML help book: %s"), bookFull.c_str());
+            return FALSE;
+        }
         fsys.ChangePathTo(bookFull);
         s = fi -> GetStream();
         sz = s -> GetSize();

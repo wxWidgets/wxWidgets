@@ -1534,6 +1534,11 @@ Note that the size passed is of
 the whole window: call \helpref{wxWindow::GetClientSize}{wxwindowgetclientsize} for the area which may be
 used by the application.
 
+When a window is resized, usually only a small part of the window is damaged and you
+may only need to repaint that area. However, if your drawing depends on the size of the window,
+you may need to clear the DC explicitly and repaint the whole window. In which case, you
+may need to call \helpref{wxWindow::Refresh}{wxwindowrefresh} to invalidate the entire window.
+
 \wxheading{See also}
 
 \helpref{wxSizeEvent}{wxsizeevent},\rtfsp
