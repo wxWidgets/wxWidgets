@@ -14,7 +14,7 @@ Python on Windows.
 Once you have installed Bakefile, you can easily regenerate the makefiles using
 the makefile in $(wx)/build/bakefiles directory. The makefile uses Unix make
 syntax and works on Unix or using either Borland Make or GNU Make (including
-native Win32 port called mingw32-make from http://www.mingw.org) on Windows.
+native Win32 port called mingw32-make from http://www.mingw.org/) on Windows.
 It is possible that other Windows make utilities work as well, but it wasn't
 tested. "make clean" only works on Unix or Cygwin or MSYS emulation layer on
 Windows.
@@ -128,7 +128,9 @@ Make sure to add <wx-lib> statements for all libraries from multilib build
 that are required by the sample.
 
 Run Python script regenMakefile.py in $(wx)/build/bakefiles to update Makefile
-and commit $(wx)/build/bakefiles/Makefile.
+then run "make" in $(wx)/build/bakefiles directories.
+
+Finally commit $(wx)/build/bakefiles/Makefile and all the other modified files.
 
 
 5. Adding contrib library
