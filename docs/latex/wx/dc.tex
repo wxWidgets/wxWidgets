@@ -440,8 +440,13 @@ printer page:
   dc.SetUserScale(min(scaleX,scaleY),min(scaleX,scaleY));
 \end{verbatim}
 
-\pythonnote{No arguments are required and the two values defining the
-size are returned as a tuple.}
+\pythonnote{In place of a single overloaded method name, wxPython
+implements the following methods:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{\bf{GetSize()}}{Returns a wxSize}
+\twocolitem{\bf{GetSizeTuple()}}{Returns a 2-tuple (width, height)}
+\end{twocollist}}
+}
 
 \membersection{wxDC::GetTextBackground}\label{wxdcgettextbackground}
 

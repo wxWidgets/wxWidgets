@@ -16,12 +16,12 @@ between the print dialogs and the application.
 
 \wxheading{See also}
 
-\helpref{wxPrintDialog}{wxprintdialog}, 
-\helpref{wxPageSetupDialog}{wxpagesetupdialog}, 
-\helpref{wxPrintDialogData}{wxprintdialogdata}, 
-\helpref{wxPageSetupDialogData}{wxpagesetupdialogdata}, 
-\helpref{wxPrintDialog Overview}{wxprintdialogoverview}, 
-\helpref{wxPrinterDC}{wxprinterdc}, 
+\helpref{wxPrintDialog}{wxprintdialog},
+\helpref{wxPageSetupDialog}{wxpagesetupdialog},
+\helpref{wxPrintDialogData}{wxprintdialogdata},
+\helpref{wxPageSetupDialogData}{wxpagesetupdialogdata},
+\helpref{wxPrintDialog Overview}{wxprintdialogoverview},
+\helpref{wxPrinterDC}{wxprinterdc},
 \helpref{wxPostScriptDC}{wxpostscriptdc}
 
 \wxheading{Remarks}
@@ -563,7 +563,7 @@ dialog data, which will be copied to the printer object's local data.
 
 \wxheading{See also}
 
-\helpref{wxPrintDialogData}{wxprintdialogdata}, 
+\helpref{wxPrintDialogData}{wxprintdialogdata},
 \helpref{wxPrintData}{wxprintdata}
 
 \membersection{wxPrinter::\destruct{wxPrinter}}
@@ -717,11 +717,18 @@ returns 1, 32000 for the page minimum and maximum values, and 1, 1 for the requi
 
 If {\it minPage} is zero, the page number controls in the print dialog will be disabled.
 
+\pythonnote{When this method is implemented in a derived Python class,
+it should be designed to take no parameters (other than the self
+reference) and to return a tuple of four integers.
+}
+
 \membersection{wxPrintout::GetPageSizeMM}\label{wxprintoutgetpagesizemm}
 
 \func{void}{GetPageSizeMM}{\param{int *}{w}, \param{int *}{h}}
 
 Returns the size of the printer page in millimetres.
+
+\pythonnote{This method returns the output-only parameters as a tuple.}
 
 \membersection{wxPrintout::GetPageSizePixels}\label{wxprintoutgetpagesizepixels}
 
@@ -734,6 +741,8 @@ memory device context is used, using a bitmap size reflecting the current
 preview zoom. The application must take this discrepancy into account if
 previewing is to be supported.
 
+\pythonnote{This method returns the output-only parameters as a tuple.}
+
 \membersection{wxPrintout::GetPPIPrinter}\label{wxprintoutgetppiprinter}
 
 \func{void}{GetPPIPrinter}{\param{int *}{w}, \param{int *}{h}}
@@ -743,6 +752,8 @@ Dividing the printer PPI by the screen PPI can give a suitable scaling
 factor for drawing text onto the printer. Remember to multiply
 this by a scaling factor to take the preview DC size into account.
 
+\pythonnote{This method returns the output-only parameters as a tuple.}
+
 \membersection{wxPrintout::GetPPIScreen}\label{wxprintoutgetppiscreen}
 
 \func{void}{GetPPIScreen}{\param{int *}{w}, \param{int *}{h}}
@@ -751,6 +762,8 @@ Returns the number of pixels per logical inch of the screen device context.
 Dividing the printer PPI by the screen PPI can give a suitable scaling
 factor for drawing text onto the printer. Remember to multiply
 this by a scaling factor to take the preview DC size into account.
+
+\pythonnote{This method returns the output-only parameters as a tuple.}
 
 \membersection{wxPrintout::HasPage}\label{wxprintouthaspage}
 
@@ -776,6 +789,10 @@ copy printed.
 
 The base wxPrintout::OnBeginDocument {\it must} be called (and the return value
 checked) from within the overriden function, since it calls wxDC::StartDoc.
+
+\pythonnote{If this method is overriden in a Python class then the
+base class version can be called by using the method
+\tt{base_OnBeginDocument(startPage, endPage)}. }
 
 \membersection{wxPrintout::OnEndDocument}\label{wxprintoutonenddocument}
 
