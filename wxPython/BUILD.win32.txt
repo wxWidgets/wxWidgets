@@ -105,8 +105,10 @@ D. Change to the wx2\include\wx\msw directory and copy setup0.h to
    the default setup0.h in my setup.h, but you can experiment with
    other settings if you like:
 
+
 	 WXWIN_COMPATIBILITY_2_2	0
          wxDIALOG_UNIT_COMPATIBILITY	0
+	 wxUSE_DEBUG_CONTEXT		1
 	 wxUSE_MEMORY_TRACING		1
          wxUSE_CMDLINE_PARSER		0
 	 wxUSE_FSVOLUME			0

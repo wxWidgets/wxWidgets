@@ -1,14 +1,8 @@
 Building wxPython on Mac OS X
 -----------------------------
 
-NOTE:  OS X support is EXPERIMENTAL at this time.  Most things are
-       working now, but a few still don't.  I know about most of them
-       and am addressing them as I have time.  If you have any ideas
-       about a fix for the stuff that's still broken then please
-       persue them and send the fixes to me.
 
-
-These are the steps I have used for building wxPython on Mac OS X 10.1
+These are the steps I have used for building wxPython on Mac OS X 10.x
 with the Apple Developer Tools, a.k.a the Darwin version.  I assume
 that you know your way around a command line and that you know how to
 get things from various CVS repositories as needed.

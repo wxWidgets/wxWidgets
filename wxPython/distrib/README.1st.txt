@@ -13,9 +13,10 @@ building your own copy of wxPython from the sources contained in this
 archive.  If you wish to use the released wxGTK binary as has been
 done in the past then you can still follow the old build directions in
 wxPython/BUILD.unix.txt.  If you are building for Windows or Mac OS X
-then you should look at BUILD.win32.txt or BUILD.osx.txt respectivly.
-In all these cases you should use the IN_CVS_TREE=1 flag since this
-archive is really just a modified CVS snapshot.
+then you should look at wxPython/BUILD.win32.txt or
+wxPython/BUILD.osx.txt respectivly.  In all these cases you should use
+the IN_CVS_TREE=1 flag since this archive is really just a modified
+CVS snapshot.
 
 If, on the other hand, you would like to build Linux/Unix binaries
 with a private copy of wxGTK like what I am now distributing then
@@ -42,15 +43,22 @@ Clear as mud?  Good.  Let's get started.
                      --prefix=$WXPREF \
                      --enable-rpath=$WXPREF/lib \
                      --with-opengl \
+		     --enable-geometry \
                      --enable-optimise \
                      --enable-debug_flag \
+
+   You may want to use --enable-debug instead of --enable-optimise if
+   you need to run though a debugger and want full debugging symbols.
+
+   if you want to use the image and zlib libraries included with
+   wxWindows instead of those already installed on your system, (for
+   example, to reduce dependencies on 3rd party libraries) then you
+   can add these flags to the configure command:
+
                      --with-libjpeg=builtin \
                      --with-libpng=builtin \
                      --with-libtiff=builtin \
                      --with-zlib=builtin
-
-   You may want to use --enable-debug instead of --enable-optimise if
-   you need to run though a debugger and want full debugging symbols.
 
 
 3. Build and install wxGTK.  (You may need to be root for the last
