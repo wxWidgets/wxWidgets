@@ -128,7 +128,7 @@ private:
 // wxDynamicLibrary
 // ---------------------------------------------------------------------------
 
-class wxDLManifestEntry
+class WXDLLEXPORT wxDLManifestEntry
 {
 public:
 

@@ -195,22 +195,15 @@ WXDLLEXPORT wxObject *wxCreateDynamicObject(const wxChar *name);
 
 #if wxUSE_NESTED_CLASSES
 
-#if 0
-#define _DECLARE_DL_SENTINEL(name)         \
- wxPluginSentinel m_pluginsentinel;
-
-#else
-
-#define _DECLARE_DL_SENTINEL(name)          \
-class  name##PluginSentinel {               \
-private:                                    \
-    static const wxString sm_className;     \
-public:                                     \
-    name##PluginSentinel();                 \
-    ~##name##PluginSentinel();              \
-};                                          \
+#define _DECLARE_DL_SENTINEL(name, exportdecl)  \
+class exportdecl name##PluginSentinel {         \
+private:                                        \
+    static const wxString sm_className;         \
+public:                                         \
+    name##PluginSentinel();                     \
+    ~##name##PluginSentinel();                  \
+};                                              \
 name##PluginSentinel  m_pluginsentinel;
-#endif
 
 #define _IMPLEMENT_DL_SENTINEL(name)                                \
  const wxString name::name##PluginSentinel::sm_className(#name);    \
@@ -230,20 +223,32 @@ name##PluginSentinel  m_pluginsentinel;
 #endif  // wxUSE_NESTED_CLASSES
 
 #define DECLARE_PLUGGABLE_CLASS(name) \
- DECLARE_DYNAMIC_CLASS(name) _DECLARE_DL_SENTINEL(name)
-
+ DECLARE_DYNAMIC_CLASS(name) _DECLARE_DL_SENTINEL(name, WXDLLEXPORT)
 #define DECLARE_ABSTRACT_PLUGGABLE_CLASS(name)  \
- DECLARE_ABSTRACT_CLASS(name) _DECLARE_DL_SENTINEL(name)
+ DECLARE_ABSTRACT_CLASS(name) _DECLARE_DL_SENTINEL(name, WXDLLEXPORT)
+
+#define DECLARE_USER_EXPORTED_PLUGGABLE_CLASS(name, usergoo) \
+ DECLARE_DYNAMIC_CLASS(name) _DECLARE_DL_SENTINEL(name, usergoo)
+#define DECLARE_USER_EXPORTED_ABSTRACT_PLUGGABLE_CLASS(name, usergoo)  \
+ DECLARE_ABSTRACT_CLASS(name) _DECLARE_DL_SENTINEL(name, usergoo)
 
 #define IMPLEMENT_PLUGGABLE_CLASS(name, basename) \
  IMPLEMENT_DYNAMIC_CLASS(name, basename) _IMPLEMENT_DL_SENTINEL(name)
 #define IMPLEMENT_PLUGGABLE_CLASS2(name, basename1, basename2)  \
  IMPLEMENT_DYNAMIC_CLASS2(name, basename1, basename2) _IMPLEMENT_DL_SENTINEL(name)
-
 #define IMPLEMENT_ABSTRACT_PLUGGABLE_CLASS(name, basename) \
  IMPLEMENT_ABSTRACT_CLASS(name, basename) _IMPLEMENT_DL_SENTINEL(name)
 #define IMPLEMENT_ABSTRACT_PLUGGABLE_CLASS2(name, basename1, basename2)  \
  IMPLEMENT_ABSTRACT_CLASS2(name, basename1, basename2) _IMPLEMENT_DL_SENTINEL(name)
+
+#define IMPLEMENT_USER_EXPORTED_PLUGGABLE_CLASS(name, basename) \
+ IMPLEMENT_PLUGGABLE_CLASS(name, basename)
+#define IMPLEMENT_USER_EXPORTED_PLUGGABLE_CLASS2(name, basename1, basename2)  \
+ IMPLEMENT_PLUGGABLE_CLASS2(name, basename1, basename2)
+#define IMPLEMENT_USER_EXPORTED_ABSTRACT_PLUGGABLE_CLASS(name, basename) \
+ IMPLEMENT_ABSTRACT_PLUGGABLE_CLASS(name, basename)
+#define IMPLEMENT_USER_EXPORTED_ABSTRACT_PLUGGABLE_CLASS2(name, basename1, basename2)  \
+ IMPLEMENT_ABSTRACT_PLUGGABLE_CLASS2(name, basename1, basename2)
 
 
 #define CLASSINFO(name) (&name::sm_class##name)
@@ -268,6 +273,13 @@ name##PluginSentinel  m_pluginsentinel;
 #define IMPLEMENT_PLUGGABLE_CLASS2(name, basename1, basename2)
 #define IMPLEMENT_ABSTRACT_PLUGGABLE_CLASS(name, basename)
 #define IMPLEMENT_ABSTRACT_PLUGGABLE_CLASS2(name, basename1, basename2)
+
+#define DECLARE_USER_EXPORTED_PLUGGABLE_CLASS(name, usergoo)
+#define DECLARE_USER_EXPORTED_ABSTRACT_PLUGGABLE_CLASS(name, usergoo)
+#define IMPLEMENT_USER_EXPORTED_PLUGGABLE_CLASS(name, basename)
+#define IMPLEMENT_USER_EXPORTED_PLUGGABLE_CLASS2(name, basename1, basename2)
+#define IMPLEMENT_USER_EXPORTED_ABSTRACT_PLUGGABLE_CLASS(name, basename)
+#define IMPLEMENT_USER_EXPORTED_ABSTRACT_PLUGGABLE_CLASS2(name, basename1, basename2)
 
 #endif // wxUSE_DYNAMIC_CLASSES
 
