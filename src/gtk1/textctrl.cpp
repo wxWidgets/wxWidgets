@@ -598,12 +598,15 @@ bool wxTextCtrl::Create( wxWindow *parent,
         gtk_container_add( GTK_CONTAINER(m_widget), m_text );
 
         // translate wx wrapping style to GTK+
+        GtkWrapMode wrap;
         if ( HasFlag( wxTE_DONTWRAP ) )
-            gtk_text_view_set_wrap_mode( GTK_TEXT_VIEW( m_text ), GTK_WRAP_NONE );
+            wrap = GTK_WRAP_NONE;
         else if ( HasFlag( wxTE_LINEWRAP ) )
-            gtk_text_view_set_wrap_mode( GTK_TEXT_VIEW( m_text ), GTK_WRAP_CHAR );
+            wrap = GTK_WRAP_CHAR;
         else // HasFlag(wxTE_WORDWRAP) always true as wxTE_WORDWRAP == 0
-            gtk_text_view_set_wrap_mode( GTK_TEXT_VIEW( m_text ), GTK_WRAP_WORD_CHAR );
+            wrap = GTK_WRAP_WORD;
+
+        gtk_text_view_set_wrap_mode( GTK_TEXT_VIEW( m_text ), wrap );
 
         if (!HasFlag(wxNO_BORDER))
             gtk_scrolled_window_set_shadow_type( GTK_SCROLLED_WINDOW(m_widget), GTK_SHADOW_IN );
