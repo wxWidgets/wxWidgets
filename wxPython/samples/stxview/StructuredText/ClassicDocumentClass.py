@@ -1,24 +1,24 @@
 ##############################################################################
-# 
+#
 # Zope Public License (ZPL) Version 1.0
 # -------------------------------------
-# 
+#
 # Copyright (c) Digital Creations.  All rights reserved.
-# 
+#
 # This license has been certified as Open Source(tm).
-# 
+#
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are
 # met:
-# 
+#
 # 1. Redistributions in source code must retain the above copyright
 #    notice, this list of conditions, and the following disclaimer.
-# 
+#
 # 2. Redistributions in binary form must reproduce the above copyright
 #    notice, this list of conditions, and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
-# 
+#
 # 3. Digital Creations requests that attribution be given to Zope
 #    in any manner possible. Zope includes a "Powered by Zope"
 #    button that is installed by default. While it is not a license
@@ -26,43 +26,43 @@
 #    attribution remain. A significant investment has been put
 #    into Zope, and this effort will continue if the Zope community
 #    continues to grow. This is one way to assure that growth.
-# 
+#
 # 4. All advertising materials and documentation mentioning
 #    features derived from or use of this software must display
 #    the following acknowledgement:
-# 
+#
 #       "This product includes software developed by Digital Creations
 #       for use in the Z Object Publishing Environment
 #       (http://www.zope.org/)."
-# 
+#
 #    In the event that the product being advertised includes an
 #    intact Zope distribution (with copyright and license included)
 #    then this clause is waived.
-# 
+#
 # 5. Names associated with Zope or Digital Creations must not be used to
 #    endorse or promote products derived from this software without
 #    prior written permission from Digital Creations.
-# 
+#
 # 6. Modified redistributions of any form whatsoever must retain
 #    the following acknowledgment:
-# 
+#
 #       "This product includes software developed by Digital Creations
 #       for use in the Z Object Publishing Environment
 #       (http://www.zope.org/)."
-# 
+#
 #    Intact (re-)distributions of any official Zope release do not
 #    require an external acknowledgement.
-# 
+#
 # 7. Modifications are encouraged but must be packaged separately as
 #    patches to official Zope releases.  Distributions that do not
 #    clearly separate the patches from the original work must be clearly
 #    labeled as unofficial distributions.  Modifications which do not
 #    carry the name Zope may be packaged in any form, as long as they
 #    conform to all of the clauses above.
-# 
-# 
+#
+#
 # Disclaimer
-# 
+#
 #    THIS SOFTWARE IS PROVIDED BY DIGITAL CREATIONS ``AS IS'' AND ANY
 #    EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 #    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
@@ -75,16 +75,17 @@
 #    OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
 #    OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 #    SUCH DAMAGE.
-# 
-# 
+#
+#
 # This software consists of contributions made by Digital Creations and
 # many individuals on behalf of Digital Creations.  Specific
 # attributions are listed in the accompanying credits file.
-# 
+#
 ##############################################################################
 
 import re, ST, STDOM
 from string import split, join, replace, expandtabs, strip, find
+from STletters import letters,lettpunc,punctuations
 
 StringType=type('')
 ListType=type([])
@@ -116,7 +117,7 @@ class StructuredTextDescriptionBody(ST.StructuredTextParagraph):
 
 class StructuredTextDescription(ST.StructuredTextParagraph):
     """Represents a section of a document with a title and a body"""
-    
+
     def __init__(self, title, src, subs, **kw):
        apply(ST.StructuredTextParagraph.__init__, (self, src, subs), kw)
        self._title=title
@@ -138,6 +139,12 @@ class StructuredTextSection(ST.StructuredTextParagraph):
              (self, StructuredTextSectionTitle(src), subs),
              kw)
 
+    def getColorizableTexts(self):
+        return self._src.getColorizableTexts()
+
+    def setColorizableTexts(self,src):
+        self._src.setColorizableTexts(src)
+
 # a StructuredTextTable holds StructuredTextRows
 class StructuredTextTable(ST.StructuredTextDocument):
     """
@@ -146,27 +153,27 @@ class StructuredTextTable(ST.StructuredTextDocument):
     EX
     rows = [[('row 1:column1',1)],[('row2:column1',1)]]
     """
-    
+
     def __init__(self, rows, src, subs, **kw):
         apply(ST.StructuredTextDocument.__init__,(self,subs),kw)
         self._rows = []
         for row in rows:
             if row:
                 self._rows.append(StructuredTextRow(row,kw))
-    
+
     def getRows(self):
         return [self._rows]
-    
+
     def _getRows(self):
         return self.getRows()
-    
+
     def getColorizableTexts(self):
         """
         return a tuple where each item is a column/cell's
         contents. The tuple, result, will be of this format.
         ("r1 col1", "r1=col2", "r2 col1", "r2 col2")
         """
-        
+
         #result = ()
         result = []
         for row in self._rows:
@@ -174,7 +181,7 @@ class StructuredTextTable(ST.StructuredTextDocument):
                 #result = result[:] + (column.getColorizableTexts(),)
                 result.append(column.getColorizableTexts()[0])
         return result
-    
+
     def setColorizableTexts(self,texts):
         """
         texts is going to a tuple where each item is the
@@ -186,35 +193,35 @@ class StructuredTextTable(ST.StructuredTextDocument):
             for column_index in range(len(self._rows[row_index]._columns)):
                 self._rows[row_index]._columns[column_index].setColorizableTexts((texts[0],))
                 texts = texts[1:]
-        
+
     def _getColorizableTexts(self):
         return self.getColorizableTexts()
-    
+
     def _setColorizableTexts(self):
         return self.setColorizableTexts()
-    
+
 # StructuredTextRow holds StructuredTextColumns
 class StructuredTextRow(ST.StructuredTextDocument):
-    
+
     def __init__(self,row,kw):
         """
         row is a list of tuples, where each tuple is
         the raw text for a cell/column and the span
-        of that cell/column". 
-        EX 
+        of that cell/column".
+        EX
         [('this is column one',1), ('this is column two',1)]
         """
-        
+
         apply(ST.StructuredTextDocument.__init__,(self,[]),kw)
         self._columns = []
-        for column in row:            
+        for column in row:
             self._columns.append(StructuredTextColumn(column[0],column[1],kw))
     def getColumns(self):
         return [self._columns]
 
     def _getColumns(self):
         return [self._columns]
-    
+
 # this holds the raw text of a table cell
 class StructuredTextColumn(ST.StructuredTextParagraph):
     """
@@ -223,19 +230,19 @@ class StructuredTextColumn(ST.StructuredTextParagraph):
     thus a StructuredTextParagraph. A StructuredTextColumn
     also holds the span of its column
     """
-    
+
     def __init__(self,text,span,kw):
         apply(ST.StructuredTextParagraph.__init__,(self,text,[]),kw)
         self._span = span
-    
+
     def getSpan(self):
         return self._span
-    
+
     def _getSpan(self):
         return self._span
-    
+
 class StructuredTextMarkup(STDOM.Element):
-    
+
     def __init__(self, v, **kw):
        self._value=v
        self._attributes=kw.keys()
@@ -269,7 +276,7 @@ class StructuredTextUnderline(StructuredTextMarkup): pass
 class StructuredTextLink(StructuredTextMarkup):
     "A simple hyperlink"
 
-class DocumentClass:    
+class DocumentClass:
     """
     Class instance calls [ex.=> x()] require a structured text
     structure. Doc will then parse each paragraph in the structure
@@ -316,10 +323,10 @@ class DocumentClass:
        """
        Parse accepts a raw_string, an expr to test the raw_string,
        and the raw_string's subparagraphs.
-       
-       Parse will continue to search through raw_string until 
-       all instances of expr in raw_string are found. 
-       
+
+       Parse will continue to search through raw_string until
+       all instances of expr in raw_string are found.
+
        If no instances of expr are found, raw_string is returned.
        Otherwise a list of substrings and instances is returned
        """
@@ -351,10 +358,10 @@ class DocumentClass:
              raw_string = raw_string[end:len(raw_string)]
 
        if not tmp: return raw_string # nothing found
-       
+
        if raw_string: append(raw_string)
        elif len(tmp)==1: return tmp[0]
-       
+
        return tmp
 
 
@@ -386,7 +393,7 @@ class DocumentClass:
              for s in str.getColorizableTexts():
                 color(s, (text_type,))
                 a(s)
-                
+
              str.setColorizableTexts(r)
 
        return str
@@ -396,11 +403,11 @@ class DocumentClass:
                            st=type('')):
        result=[]
        for paragraph in raw_paragraphs:
-          
+
           if paragraph.getNodeName() != 'StructuredTextParagraph':
              result.append(paragraph)
              continue
-          
+
           for pt in self.paragraph_types:
              if type(pt) is st:
                 # grab the corresponding function
@@ -428,19 +435,20 @@ class DocumentClass:
              result.append(paragraph)
 
        return result
-    
+
     def doc_table(self,paragraph, expr = re.compile('(\s*)([||]+)').match):
+        #print "paragraph=>", type(paragraph), paragraph, paragraph._src
         text    = paragraph.getColorizableTexts()[0]
         m       = expr(text)
-        
+
         if not (m):
             return None
         rows = []
-    
+
         # initial split
         for row in split(text,"\n"):
-            rows.append(row)    
-    
+            rows.append(row)
+
         # clean up the rows
         for index in range(len(rows)):
             tmp = []
@@ -458,30 +466,30 @@ class DocumentClass:
         for index in range(len(rows)):
             l = len(rows[index])-1
             rows[index] = rows[index][:l]
-        
+
         result = []
         for row in rows:
             cspan   = 0
             tmp     = []
             for item in row:
                 if item:
-                    tmp.append(item,cspan)
+                    tmp.append((item,cspan))
                     cspan = 0
                 else:
                     cspan = cspan + 1
             result.append(tmp)
-        
+
         subs = paragraph.getSubparagraphs()
         indent=paragraph.indent
         return StructuredTextTable(result,text,subs,indent=paragraph.indent)
-            
+
     def doc_bullet(self, paragraph, expr = re.compile('\s*[-*o]\s+').match):
         top=paragraph.getColorizableTexts()[0]
         m=expr(top)
 
         if not m:
             return None
-            
+
         subs=paragraph.getSubparagraphs()
         if top[-2:]=='::':
            subs=[StructuredTextExample(subs)]
@@ -493,17 +501,17 @@ class DocumentClass:
 
     def doc_numbered(
         self, paragraph,
-        expr = re.compile('(\s*[a-zA-Z]+\.)|(\s*[0-9]+\.)|(\s*[0-9]+\s+)').match):
-        
+        expr = re.compile('(\s*[%s]+\.)|(\s*[0-9]+\.)|(\s*[0-9]+\s+)' % letters).match):
+
         # This is the old expression. It had a nasty habit
         # of grabbing paragraphs that began with a single
         # letter word even if there was no following period.
-        
+
         #expr = re.compile('\s*'
         #                   '(([a-zA-Z]|[0-9]+|[ivxlcdmIVXLCDM]+)\.)*'
         #                   '([a-zA-Z]|[0-9]+|[ivxlcdmIVXLCDM]+)\.?'
         #                   '\s+').match):
-        
+
         top=paragraph.getColorizableTexts()[0]
         m=expr(top)
         if not m: return None
@@ -518,7 +526,7 @@ class DocumentClass:
     def doc_description(
         self, paragraph,
         delim = re.compile('\s+--\s+').search,
-        nb=re.compile(r'[^\0- ]').search,
+        nb=re.compile(r'[^\000- ]').search,
         ):
 
         top=paragraph.getColorizableTexts()[0]
@@ -542,7 +550,7 @@ class DocumentClass:
            delim=d)
 
     def doc_header(self, paragraph,
-                    expr    = re.compile('[ a-zA-Z0-9.:/,-_*<>\?\'\"]+').match
+                    expr    = re.compile('[ %s0-9.:/,-_*<>\?\'\"]+' % letters).match
                     ):
         subs=paragraph.getSubparagraphs()
         if not subs: return None
@@ -562,11 +570,11 @@ class DocumentClass:
     def doc_literal(
         self, s,
         expr=re.compile(
-          "(?:\s|^)'"                                                  # open
+          "(?:\s|^)'"                                               # open
           "([^ \t\n\r\f\v']|[^ \t\n\r\f\v'][^\n']*[^ \t\n\r\f\v'])" # contents
-          "'(?:\s|[,.;:!?]|$)"                                        # close
+          "'(?:\s|[,.;:!?]|$)"                                      # close
           ).search):
-        
+
         r=expr(s)
         if r:
            start, end = r.span(1)
@@ -576,7 +584,7 @@ class DocumentClass:
 
     def doc_emphasize(
         self, s,
-        expr = re.compile('\s*\*([ \na-zA-Z0-9.:/;,\'\"\?]+)\*(?!\*|-)').search
+        expr = re.compile('\s*\*([ \n%s0-9]+)\*(?!\*|-)' % lettpunc).search
         ):
 
         r=expr(s)
@@ -585,12 +593,12 @@ class DocumentClass:
            return (StructuredTextEmphasis(s[start:end]), start-1, end+1)
         else:
            return None
-    
+
     def doc_inner_link(self,
                        s,
                        expr1 = re.compile("\.\.\s*").search,
-                       expr2 = re.compile("\[[a-zA-Z0-9]+\]").search):
-        
+                       expr2 = re.compile("\[[%s0-9]+\]" % letters).search):
+
         # make sure we dont grab a named link
         if expr2(s) and expr1(s):
             start1,end1 = expr1(s).span()
@@ -600,17 +608,17 @@ class DocumentClass:
                 return None
             else:
                 # the .. is somewhere else, ignore it
-                return (StructuredTextInnerLink(s[start2+1,end2-1],start2,end2))
+                return (StructuredTextInnerLink(s[start2+1:end2-1]),start2,end2)
             return None
         elif expr2(s) and not expr1(s):
             start,end = expr2(s).span()
             return (StructuredTextInnerLink(s[start+1:end-1]),start,end)
         return None
-    
+
     def doc_named_link(self,
                        s,
-                       expr=re.compile("(\.\.\s)(\[[a-zA-Z0-9]+\])").search):
-        
+                       expr=re.compile("(\.\.\s)(\[[%s0-9]+\])" % letters).search):
+
         result = expr(s)
         if result:
             start,end   = result.span(2)
@@ -621,11 +629,11 @@ class DocumentClass:
             return (StructuredTextNamedLink(str),st,en)
             #return (StructuredTextNamedLink(s[st:en]),st,en)
         return None
-    
+
     def doc_underline(self,
                       s,
-                      expr=re.compile("\_([a-zA-Z0-9\s\.,\?\/]+)\_").search):
-        
+                      expr=re.compile("\s+\_([0-9%s ]+)\_" % lettpunc).search):
+
         result = expr(s)
         if result:
             start,end = result.span(1)
@@ -633,10 +641,10 @@ class DocumentClass:
             return (StructuredTextUnderline(s[start:end]),st,e)
         else:
             return None
-    
-    def doc_strong(self, 
+
+    def doc_strong(self,
                    s,
-        expr = re.compile('\s*\*\*([ \na-zA-Z0-9.:/;\-,!\?\'\"]+)\*\*').search
+        expr = re.compile('\s*\*\*([ \n%s0-9]+)\*\*' % lettpunc).search
         ):
 
         r=expr(s)
@@ -645,45 +653,32 @@ class DocumentClass:
            return (StructuredTextStrong(s[start:end]), start-2, end+2)
         else:
            return None
-    
+
     def doc_href(
-        
+
         self, s,
-        expr1 = re.compile("(\"[ a-zA-Z0-9\n\-\.\,\;\(\)\/\:\/]+\")(:)([a-zA-Z0-9\:\/\.\~\-]+)([,]*\s*)").search,
-        expr2 = re.compile('(\"[ a-zA-Z0-9\n\-\.\:\;\(\)\/]+\")([,]+\s+)([a-zA-Z0-9\@\.\,\?\!\/\:\;\-\#]+)(\s*)').search):
-        
-        #expr1=re.compile('\"([ a-zA-Z0-9.:/;,\n\~\(\)\-]+)\"'
-        #                  ':'
-        #                  '([a-zA-Z0-9.:/;,\n\~]+)(?=(\s+|\.|\!|\?))'
-        #                  ).search,
-        #expr2=re.compile('\"([ a-zA-Z0-9./:]+)\"'
-        #                  ',\s+'
-        #                  '([ a-zA-Z0-9@.:/;]+)(?=(\s+|\.|\!|\?))'
-        #                  ).search,
-        
-        punctuation = re.compile("[\,\.\?\!\;]+").match
+        expr1 = re.compile("(\"[ %s0-9\n\-\.\,\;\(\)\/\:\/\*\']+\")(:)([a-zA-Z0-9\@\.\,\?\!\/\:\;\-\#\~]+)([,]*\s*)" % letters).search,
+        expr2 = re.compile('(\"[ %s0-9\n\-\.\:\;\(\)\/\*\']+\")([,]+\s+)([a-zA-Z0-9\@\.\,\?\!\/\:\;\-\#\~]+)(\s*)' % letters).search):
+
         r=expr1(s) or expr2(s)
 
         if r:
             # need to grab the href part and the
             # beginning part
-                        
+
             start,e = r.span(1)
             name    = s[start:e]
             name    = replace(name,'"','',2)
-            #start   = start + 1
             st,end   = r.span(3)
-            if punctuation(s[end-1:end]):
-                end = end -1
+
+            if s[end-1:end] in punctuations: end-=1
             link    = s[st:end]
-            #end     = end - 1                        
-            
+
             # name is the href title, link is the target
             # of the href
             return (StructuredTextLink(name, href=link),
                     start, end)
-            
-            #return (StructuredTextLink(s[start:end], href=s[start:end]),
-            #        start, end)
+
+
         else:
             return None

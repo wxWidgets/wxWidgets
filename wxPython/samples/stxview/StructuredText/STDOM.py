@@ -178,7 +178,7 @@ class ParentNode:
       if not children:
          return None
          
-      n=chidren[0]
+      n=children[0]
 
       if type(n) is st:
          n=TextNode(n)
@@ -554,7 +554,7 @@ class Element(Node):
       return self.getNodeType()
       
    def _get_NodeValue(self, type=type, st=type('')):
-      return self.GetNodeValue(type,st)
+      return self.getNodeValue(type,st)
       
    def _get_ParentNode(self):
       return self.getParentNode()

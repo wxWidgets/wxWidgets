@@ -109,21 +109,16 @@ class HTMLWithImages(HTMLClass):
         output('</body>\n')
         output('</html>\n')
 
-
-    def image(self, doc, level, output):
-        output('<img src="%s" alt="%s">' % (doc.href, doc.getNodeValue()))
-
-
     def image(self, doc, level, output):
        if hasattr(doc, 'key'):
-          output('<a name="%s"></a>\n<img src="%s" alt="%s">' % (doc.key, doc.href, doc.getNodeValue()))
-       else:
-          output('<img src="%s" alt="%s">' % (doc.href, doc.getNodeValue()))
-
+          output('<a name="%s"></a>\n' % doc.key)
+       output('<img src="%s" alt="%s">\n' % (doc.href, doc.getNodeValue()))
+       if doc.getNodeValue() and hasattr(doc, 'key'):
+           output('<p><b>Figure %s</b> %s</p>\n' % (doc.key, doc.getNodeValue()))
 
     def xref(self, doc, level, output):
         val = doc.getNodeValue()
-        output('<a href="#%s">%s</a>' % (val, val) )
+        output('<a href="#%s">Figure %s</a>' % (val, val) )
 
 
 

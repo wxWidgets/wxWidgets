@@ -26,7 +26,9 @@ def insert(struct, top, level):
     """
     #print "struct", struct, top-1
     if not top-1 in range(len(struct)):
-        return None
+        if struct:
+            return struct[len(struct)-1].getSubparagraphs()
+        return struct
     run = struct[top-1]
     i    = 0
     while i+1 < level:
@@ -142,8 +144,11 @@ def StructuredText(paragraphs, paragraph_delimiter=re.compile('\n\s*\n')):
             if result > 0:
                 currentlevel = result
             currentindent  = indent
-            run = insert(struct,level,currentlevel)
-            run.append(StructuredTextParagraph(paragraph, indent=indent, level=currentlevel))
+            if not level:
+                struct.append(StructuredTextParagraph(paragraph, indent=indent, level=currentlevel))
+            else:
+                run = insert(struct,level,currentlevel)
+                run.append(StructuredTextParagraph(paragraph, indent=indent, level=currentlevel))
         else:
             if insert(struct,level,currentlevel):
                 run = insert(struct,level,currentlevel)

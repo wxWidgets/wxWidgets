@@ -104,7 +104,7 @@ Document=DocumentClass.DocumentClass()
 DocumentWithImages=DocumentWithImages.DocumentWithImages()
 HTMLWithImages=HTMLWithImages.HTMLWithImages()
 
-DocBookBook=DocBookClass.DocBookBook
+DocBookBook=DocBookClass.DocBookBook()
 DocBookChapter=DocBookClass.DocBookChapter()
 DocBookChapterWithFigures=DocBookClass.DocBookChapterWithFigures()
 DocBookArticle=DocBookClass.DocBookArticle()

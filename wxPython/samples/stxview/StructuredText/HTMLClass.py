@@ -84,6 +84,7 @@
 ##############################################################################
 
 from string import join, split, find
+from cgi import escape
 import re, sys, ST
 
 class HTMLClass:
@@ -172,34 +173,34 @@ class HTMLClass:
     def bullet(self, doc, level, output):
         p=doc.getPreviousSibling()
         if p is None or p.getNodeName() is not doc.getNodeName():
-            output('<ul>\n')
+            output('\n<ul>\n')
         output('<li>')
         for c in doc.getChildNodes():
             getattr(self, self.element_types[c.getNodeName()])(c, level, output)
         n=doc.getNextSibling()
         output('</li>\n')
         if n is None or n.getNodeName() is not doc.getNodeName():            
-            output('</ul>\n')
+            output('\n</ul>\n')
 
     def numbered(self, doc, level, output):
         p=doc.getPreviousSibling()
         if p is None or p.getNodeName() is not doc.getNodeName():            
-            output('<ol>\n')
+            output('\n<ol>\n')
         output('<li>')
         for c in doc.getChildNodes():
             getattr(self, self.element_types[c.getNodeName()])(c, level, output)
         n=doc.getNextSibling()
         output('</li>\n')
         if n is None or n.getNodeName() is not doc.getNodeName():
-            output('</ol>\n')
+            output('\n</ol>\n')
 
     def example(self, doc, level, output):
         i=0
         for c in doc.getChildNodes():
             if i==0:
-                output('<pre>')
-                output(html_quote(c.getNodeValue()))
-                output('</pre>\n')
+                output('\n<pre>\n')
+                output(escape(c.getNodeValue()))
+                output('\n</pre>\n')
             else:
                 getattr(self, self.element_types[c.getNodeName()])(
                     c, level, output)
@@ -214,7 +215,7 @@ class HTMLClass:
             else:
                 getattr(self, self.element_types[c.getNodeName()])(
                     c, level, output)
-        output('</p>')
+        output('</p>\n')
 
     def link(self, doc, level, output):
         output('<a href="%s">' % doc.href)
@@ -231,7 +232,7 @@ class HTMLClass:
     def literal(self, doc, level, output):
         output('<code>')
         for c in doc.getChildNodes():
-            output(html_quote(c.getNodeValue()))
+            output(escape(c.getNodeValue()))
         output('</code>')
 
     def strong(self, doc, level, output):
@@ -267,6 +268,10 @@ class HTMLClass:
     def sgml(self,doc,level,output):
         for c in doc.getChildNodes():
             getattr(self, self.element_types[c.getNodeName()])(c, level, output)
+
+    def xref(self, doc, level, output):
+        val = doc.getNodeValue()
+        output('<a href="#%s">[%s]</a>' % (val, val) )
     
     def table(self,doc,level,output):
         """
@@ -279,29 +284,23 @@ class HTMLClass:
         for row in doc.getRows()[0]:
             output("<tr>\n")
             for column in row.getColumns()[0]:
-                str = "<td colspan=%s>" % column.getSpan()
+                if hasattr(column,"getAlign"):
+                    str = "<%s colspan=%s align=%s valign=%s>" % (column.getType(),
+                                                                  column.getSpan(),
+                                                                  column.getAlign(),
+                                                                  column.getValign())
+                else:
+                    str = "<td colspan=%s>" % column.getSpan()
                 output(str)
-                #for c in doc.getChildNodes():
-                #    getattr(self, self.element_types[c.getNodeName()])(c, level, output)
                 for c in column.getChildNodes():
                     getattr(self, self.element_types[c.getNodeName()])(c, level, output)
-                output("</td>\n")
+                if hasattr(column,"getType"):
+                    output("</"+column.getType()+">\n")
+                else:
+                    output("</td>\n")
             output("</tr>\n")
         output("</table>\n")
           
-def html_quote(v, name='(Unknown name)', md={},
-                    character_entities=(
-                              (('&'),     '&amp;'),
-                              (('<'),     '&lt;' ),
-                              (('>'),     '&gt;' ),
-                              (('\213'), '&lt;' ),
-                              (('\233'), '&gt;' ),
-                              (('"'),     '&quot;'))): #"
-          text=str(v)
-          for re,name in character_entities:
-                if find(text, re) >= 0: text=join(split(text,re),name)
-          return text
-
 
 
 

@@ -18,7 +18,7 @@ Using Structured Text
     st=StructuredText.Basic(raw)
 
   The output of 'StructuredText.Basic' is simply a
-  StructuredTextDocumemt object containing StructuredTextParagraph
+  StructuredTextDocument object containing StructuredTextParagraph
   objects arranged in a hierarchy. Paragraphs are delimited by strings
   of two or more whitespace characters beginning and ending with
   newline characters. Hierarchy is indicated by indentation. The
