@@ -34,7 +34,7 @@ public:
     int Interval() const { return milli; };
     bool OneShot() const { return oneShot; }
 
-protected:
+public:
     bool oneShot ;
     int  milli ;
     int  lastMilli ;
