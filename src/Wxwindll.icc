@@ -56,6 +56,7 @@ option ProjectOptions = lang(longlong, "yes"),  gen(manglelinkagekeywordonlyfunc
       source type(cpp) "COMMON\\DOCVIEW.CPP"
       source type(cpp) "COMMON\\DYNARRAY.CPP"
       source type(cpp) "COMMON\\DYNLIB.CPP"
+      source type(cpp) "COMMON\\EFFECTS.CPP"
       source type(cpp) "COMMON\\ENCCONV.CPP"
       source type(cpp) "COMMON\\EVENT.CPP"
       option report(level, "W")
@@ -152,6 +153,7 @@ option ProjectOptions = lang(longlong, "yes"),  gen(manglelinkagekeywordonlyfunc
       source type(cpp) "GENERIC\\CHOICDGG.CPP"
       source type(cpp) "GENERIC\\COLRDLGG.CPP"
       source type(cpp) "GENERIC\\DCPSG.CPP"
+      source type(cpp) "GENERIC\\DIRCTRLG.CPP"
       source type(cpp) "GENERIC\\DRAGIMGG.CPP"
       source type(cpp) "GENERIC\\FONTDLGG.CPP"
       source type(cpp) "GENERIC\\GRID.CPP"
@@ -226,6 +228,7 @@ option ProjectOptions = lang(longlong, "yes"),  gen(manglelinkagekeywordonlyfunc
       source type(cpp) "OS2\\DCPRINT.CPP"
       source type(cpp) "OS2\\DCSCREEN.CPP"
       source type(cpp) "OS2\\DIALOG.CPP"
+      source type(cpp) "OS2\\DIR.CPP"
       source type(cpp) "OS2\\DIRDLG.CPP"
       source type(cpp) "OS2\\DND.CPP"
       source type(cpp) "OS2\\DUMMYDLL.CPP"
@@ -285,6 +288,7 @@ option ProjectOptions = lang(longlong, "yes"),  gen(manglelinkagekeywordonlyfunc
       source type(cpp) "OS2\\UTILSEXC.CPP"
       source type(cpp) "OS2\\WAVE.CPP"
       source type(cpp) "OS2\\WINDOW.CPP"
+      source type(cpp) "OS2\\XPMHAND.CPP"
    }
 //   target "..\\samples\\minimal\\dbgos240dll\\Minimal.exe"
 //   {
