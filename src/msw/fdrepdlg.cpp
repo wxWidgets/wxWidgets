@@ -345,7 +345,7 @@ wxFindReplaceDialog::~wxFindReplaceDialog()
     m_isShown = FALSE;
 
     // and from destroying our window
-    m_hWnd = NULL;
+    m_hWnd = (WXHWND)NULL;
 }
 
 bool wxFindReplaceDialog::Create(wxWindow *parent,

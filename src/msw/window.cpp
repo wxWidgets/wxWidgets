@@ -156,11 +156,8 @@ static void TranslateKbdEventToMouse(wxWindowMSW *win,
 // get the text metrics for the current font
 static TEXTMETRIC wxGetTextMetrics(const wxWindowMSW *win);
 
-// check if the mouse is in the window or its child
-static bool IsMouseInWindow(HWND hwnd);
-
 // wrapper around BringWindowToTop() API
-static inline wxBringWindowToTop(HWND hwnd)
+static inline void wxBringWindowToTop(HWND hwnd)
 {
 #ifdef __WXMICROWIN__
     // It seems that MicroWindows brings the _parent_ of the window to the top,
