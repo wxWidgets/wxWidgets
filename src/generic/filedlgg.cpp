@@ -879,7 +879,7 @@ void wxFileCtrl::GoToParentDir()
             EnsureVisible( id );
         }
 
-        m_labelDir->SetLabel(dir);
+        m_labelDir->SetLabel(m_dirName);
     }
 }
 
