@@ -100,6 +100,13 @@ Clear as mud?  Good.  Let's get started.
    setup.py command line to disable the building of the glcanvas
    module.
 
+   If you would like to install to someplace besides the Python
+   site-packages directory (such as to your home directory) then you
+   can add "--root=<path>" after the "install" command.  To use
+   wxPython like this you'll need to ensure that the directory
+   containing wxPyrthon is contained in in the PYTHONPATH environment
+   variable.
+
 
 5. That's all, except for the having fun part!
 

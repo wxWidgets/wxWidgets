@@ -2,6 +2,25 @@ CHANGES.txt for wxPython
 
 ----------------------------------------------------------------------
 
+2.4.0.7
+-------
+Gave up on generating a warning upon the use of the old true/false or
+TRUE/FALSE values.
+
+Fixed wxGenericTreeCtrl (used on wxGTK and wxMac for wxTreeCtrl) so
+that it can successfully handle lots of nodes instead of overflowing
+when the virtual height of the widget overflowed a 16-bit value.
+
+Fixed the typemap that converts strings to wxColours to also accept
+unicode.
+
+Fixed problem where the wrong class name could sometimes be used for
+OOR.
+
+
+
+
+
 2.4.0.6 (a.k.a. the I'm so stupid release)
 -------
 The new deprecation class for the old true/false symbols can now be

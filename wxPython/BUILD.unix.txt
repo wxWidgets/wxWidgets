@@ -237,6 +237,13 @@ D. To build and install wxPython you simply need to execute the
 
          python setup.py WXPORT=gtk2 UNICODE=1 build install
 
+   If you would like to install to someplace besides the Python
+   site-packages directory (such as to your home directory) then you
+   can add "--root=<path>" after the "install" command.  To use
+   wxPython like this you'll need to ensure that the directory
+   containing wxPyrthon is contained in in the PYTHONPATH environment
+   variable.
+
 
 E. At this point you should be able to change into the wxPython/demo
    directory and run the demo:
