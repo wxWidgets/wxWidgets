@@ -95,7 +95,7 @@ public:
         m_borderX = -1;
         m_borderY = -1;
     }
-    void Create(wxWindow *parent,
+    bool Create(wxWindow *parent,
                 wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
@@ -121,27 +121,30 @@ wxDropdownButton::wxDropdownButton(wxWindow *parent,
 }
 
 
-void wxDropdownButton::Create(wxWindow *parent,
+bool wxDropdownButton::Create(wxWindow *parent,
                               wxWindowID id,
                               const wxPoint& pos,
                               const wxSize& size,
-                              long style,
+                              long WXUNUSED(style),
                               const wxValidator& validator)
 {
     wxBitmap chkBmp(15,15);  // arbitrary
-    wxBitmapButton::Create(parent, id, chkBmp, pos, wxDefaultSize, wxBU_AUTODRAW, validator);
+    if ( !wxBitmapButton::Create(parent, id, chkBmp,
+                                 pos, wxDefaultSize, wxBU_AUTODRAW, validator) )
+        return false;
 
-    int w, h;
+    const wxSize sz = GetSize();
+    int w = chkBmp.GetWidth(),
+        h = chkBmp.GetHeight();
+    m_borderX = sz.x - m_marginX - w;
+    m_borderY = sz.y - m_marginY - h;
 
-    w=chkBmp.GetWidth();
-    h=chkBmp.GetHeight();
-    m_borderX = GetSize().x - m_marginX - w;
-    m_borderY = GetSize().y - m_marginY - h;
-
-    w = (size.x > 0 ? size.x : GetSize().x);
-    h = (size.y > 0 ? size.y : GetSize().y);
+    w = size.x > 0 ? size.x : sz.x;
+    h = size.y > 0 ? size.y : sz.y;
 
     DoMoveWindow(pos.x, pos.y, w, h);
+
+    return true;
 }
 
 
@@ -237,7 +240,7 @@ BEGIN_EVENT_TABLE(wxDatePickerCtrlGeneric, wxDatePickerCtrlBase)
 END_EVENT_TABLE()
 
 #ifndef wxHAS_NATIVE_DATEPICKCTRL
-    IMPLEMENT_DYNAMIC_CLASS(wxDatePickerCtrl, wxDatePickerCtrlBase)
+    IMPLEMENT_DYNAMIC_CLASS(wxDatePickerCtrl, wxControl)
 #endif
 
 // ----------------------------------------------------------------------------
