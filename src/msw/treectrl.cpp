@@ -723,7 +723,13 @@ bool wxTreeCtrl::IsVisible(const wxTreeItemId& item) const
 {
     // Bug in Gnu-Win32 headers, so don't use the macro TreeView_GetItemRect
     RECT rect;
-    return SendMessage(GetHwnd(), TVM_GETITEMRECT, FALSE, (LPARAM)&rect) != 0;
+
+    // this ugliness comes directly from MSDN - it *is* the correct way to pass
+    // the HTREEITEM with TVM_GETITEMRECT
+    *(WXHTREEITEM *)&rect = (WXHTREEITEM)item;
+
+    // FALSE means get item rect for the whole item, not only text
+    return SendMessage(GetHwnd(), TVM_GETITEMRECT, FALSE, &rect) != 0;
 
 }
 
