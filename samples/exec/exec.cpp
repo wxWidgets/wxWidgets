@@ -39,6 +39,7 @@
     #include "wx/msgdlg.h"
     #include "wx/textdlg.h"
     #include "wx/listbox.h"
+    #include "wx/filedlg.h"
 #endif
 
 #include "wx/txtstrm.h"
@@ -307,6 +308,10 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     // create the listbox in which we will show misc messages as they come
     m_lbox = new wxListBox(this, -1);
+    wxFont font(12, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL,
+                wxFONTWEIGHT_NORMAL);
+    if ( font.Ok() )
+        m_lbox->SetFont(font);
 
 #if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)
