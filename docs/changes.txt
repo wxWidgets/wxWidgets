@@ -232,7 +232,6 @@ wxMSW:
 
 - fixed enhanced metafiles loading from files (Andreas Goebel)
 - wxRadioButtons no longer have to be consecutive in a group
-- fixed wxBU_EXACTFIT handling in wxBitmapButton
 
 
 2.5.3

@@ -492,26 +492,14 @@ void wxBitmapButton::SetDefault()
 
 wxSize wxBitmapButton::DoGetBestSize() const
 {
-    wxSize best;
-    if (m_bmpNormal.Ok())
+    if ( m_bmpNormal.Ok() )
     {
-        best.x = m_bmpNormal.GetWidth() + 2*m_marginX;
-        best.y = m_bmpNormal.GetHeight() + 2*m_marginY;
+        return wxSize(m_bmpNormal.GetWidth() + 2*m_marginX,
+                      m_bmpNormal.GetHeight() + 2*m_marginY);
     }
 
-    // all buttons have at least the standard size unless the user explicitly
-    // wants them to be of smaller size and used wxBU_EXACTFIT style when
-    // creating the button
-    if ( !HasFlag(wxBU_EXACTFIT) )
-    {
-        wxSize sz = GetDefaultSize();
-        if ( best.x < sz.x )
-            best.x = sz.x;
-        if ( best.y < sz.y )
-            best.y = sz.y;
-    }
-
-    return best;
+    // no idea what our best size should be, defer to the base class
+    return wxBitmapButtonBase::DoGetBestSize();
 }
 
 #endif // wxUSE_BMPBUTTON
