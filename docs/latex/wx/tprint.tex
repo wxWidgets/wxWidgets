@@ -18,8 +18,8 @@ turning preview pages, calling the print dialog box, creating
 the printer device context, and so on: the application can concentrate
 on the rendering of the information onto a device context.
 
-The \helpref{document/view framework}{docviewoverview} creates a default wxPrintout
-object for every view, calling wxView::OnDraw to achieve a
+The \helpref{document/view framework}{docviewoverview} creates a default
+wxPrintout object for every view, calling wxView::OnDraw to achieve a
 prepackaged print/preview facility.
 
 A document's printing ability is represented in an application by a
@@ -51,12 +51,34 @@ please look at the printout sample code.
       frame->Show(true);
       break;
     }
-    case WXPRINT_PRINT_SETUP:
-    {
-      wxPrintDialog printerDialog(this);
-      printerDialog.GetPrintData().SetSetupDialog(true);
-      printerDialog.Show(true);
-      break;
-    }
 \end{verbatim}
 
+\section{Printing under Unix (GTK+)}\label{unixprinting}
+
+Printing under Unix has always been a cause of problems as Unix
+does not provide a standard way to display text and graphics
+on screen and print it to a printer using the same application
+programming interface - instead, displaying on screen is done
+via the X11 library while printing has to be done with using
+PostScript commands. This was particularly difficult to handle
+for the case of fonts with the result that only a selected
+number of application could offer WYSIWYG under Unix. Equally,
+wxWidgets offered its own printing implementation using PostScript
+which never really matched the screen display.
+
+Starting with version 2.8.X, the GNOME project provides printing
+support through the libgnomeprint and libgnomeprintui libraries
+by which especially the font problem is mostly solved. Beginning
+with version 2.5.4, the GTK+ port of wxWidgets can make use of
+these libraries if wxWidgets is configured accordingly and if the
+libraries are present. You need to configure wxWidgets with the
+{\it configure --with-gnomeprint} switch and you application will
+then search for the GNOME print libraries at runtime. If they
+are found, printing will be done through these, otherwise the
+application will fall back to the old PostScript printing code.
+Note that the application will not require the GNOME print libraries
+to be installed in order to run (there will be no dependency on
+these libraries).
+
+It is expected that the printing code that is currently implemented
+in the GNOME print libraries will be moved into GTK+ later.
