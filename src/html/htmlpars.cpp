@@ -432,11 +432,15 @@ wxHtmlEntitiesParser::~wxHtmlEntitiesParser()
 void wxHtmlEntitiesParser::SetEncoding(wxFontEncoding encoding)
 {
 #if wxUSE_WCHAR_T && !wxUSE_UNICODE
-    if (encoding == m_encoding) return;
+    if (encoding == m_encoding)
+        return;
+
     delete m_conv;
-    m_conv = NULL;
+
     m_encoding = encoding;
-    if (m_encoding != wxFONTENCODING_SYSTEM)
+    if (m_encoding == wxFONTENCODING_SYSTEM)
+        m_conv = NULL;
+    else
         m_conv = new wxCSConv(wxFontMapper::GetEncodingName(m_encoding));
 #else
     (void) encoding;
