@@ -69,7 +69,7 @@ bool wxGridSelection::IsInSelection ( int row, int col )
         {
             wxGridCellCoords& coords = m_cellSelection[n];
             if ( row == coords.GetRow() && col == coords.GetCol() )
-                return true;
+                return TRUE;
         }
     }
 
@@ -83,7 +83,7 @@ bool wxGridSelection::IsInSelection ( int row, int col )
         if ( BlockContainsCell(coords1.GetRow(), coords1.GetCol(),
                                coords2.GetRow(), coords2.GetCol(),
                                row, col ) )
-            return true;
+            return TRUE;
     }
 
     // Now check whether the given cell is
@@ -95,7 +95,7 @@ bool wxGridSelection::IsInSelection ( int row, int col )
         for ( size_t n = 0; n < count; n++ )
         {
             if ( row == m_rowSelection[n] )
-              return true;
+              return TRUE;
         }
     }
 
@@ -108,10 +108,10 @@ bool wxGridSelection::IsInSelection ( int row, int col )
         for ( size_t n = 0; n < count; n++ )
         {
             if ( col == m_colSelection[n] )
-              return true;
+              return TRUE;
         }
     }
-    return false;
+    return FALSE;
 }
 
 // Change the selection mode
@@ -208,7 +208,7 @@ void wxGridSelection::SelectRow( int row, bool addToSelected )
 
     // Simplify list of selected blocks (if possible)
     count = m_blockSelectionTopLeft.GetCount();
-    bool done = false;
+    bool done = FALSE;
     for ( n = 0; n < count; n++ )
     {
         wxGridCellCoords& coords1 = m_blockSelectionTopLeft[n];
@@ -231,12 +231,12 @@ void wxGridSelection::SelectRow( int row, bool addToSelected )
             else if ( coords1.GetRow() == row + 1)
             {
                 coords1.SetRow(row);
-                done = true;
+                done = TRUE;
             }
             else if ( coords2.GetRow() == row - 1)
             {
                 coords2.SetRow(row);
-                done = true;
+                done = TRUE;
             }           
         }
     }
@@ -296,7 +296,7 @@ void wxGridSelection::SelectCol( int col, bool addToSelected )
 
     // Simplify list of selected blocks (if possible)
     count = m_blockSelectionTopLeft.GetCount();
-    bool done = false;
+    bool done = FALSE;
     for ( n = 0; n < count; n++ )
     {
         wxGridCellCoords& coords1 = m_blockSelectionTopLeft[n];
@@ -319,12 +319,12 @@ void wxGridSelection::SelectCol( int col, bool addToSelected )
             else if ( coords1.GetCol() == col + 1)
             {
                 coords1.SetCol(col);
-                done = true;
+                done = TRUE;
             }
             else if ( coords2.GetCol() == col - 1)
             {
                 coords2.SetCol(col);
-                done = true;
+                done = TRUE;
             }           
         }
     }
