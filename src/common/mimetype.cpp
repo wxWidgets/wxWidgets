@@ -1339,7 +1339,11 @@ void wxGNOMEIconHandler::Init()
 {
     wxArrayString dirs;
     dirs.Add(_T("/usr/share"));
-    dirs.Add(wxGetHomeDir() + _T("/.gnome"));
+    
+    wxString gnomedir;
+    wxGetHomeDir( &gnomedir );
+    gnomedir += _T("/.gnome");
+    dirs.Add( gnomedir );
 
     size_t nDirs = dirs.GetCount();
     for ( size_t nDir = 0; nDir < nDirs; nDir++ )
@@ -1495,7 +1499,11 @@ void wxKDEIconHandler::Init()
 {
     wxArrayString dirs;
     dirs.Add(_T("/usr/share"));
-    dirs.Add(wxGetHomeDir() + _T("/.kde/share"));
+    
+    wxString kdedir;
+    wxGetHomeDir( &kdedir );
+    kdedir += _T("/.kde/share");
+    dirs.Add( kdedir );
 
     size_t nDirs = dirs.GetCount();
     for ( size_t nDir = 0; nDir < nDirs; nDir++ )
