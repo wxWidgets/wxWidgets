@@ -59,6 +59,7 @@ BEGIN_EVENT_TABLE(wxRemotelyScrolledTreeCtrl, wxGenericTreeCtrl)
 BEGIN_EVENT_TABLE(wxRemotelyScrolledTreeCtrl, wxTreeCtrl)
 #endif
 	EVT_SIZE(wxRemotelyScrolledTreeCtrl::OnSize)
+	EVT_PAINT(wxRemotelyScrolledTreeCtrl::OnPaint)
 	EVT_TREE_ITEM_EXPANDED(-1, wxRemotelyScrolledTreeCtrl::OnExpand)
 	EVT_TREE_ITEM_COLLAPSED(-1, wxRemotelyScrolledTreeCtrl::OnExpand)
 	EVT_SCROLLWIN(wxRemotelyScrolledTreeCtrl::OnScroll)
@@ -244,6 +245,43 @@ void wxRemotelyScrolledTreeCtrl::OnExpand(wxTreeEvent& event)
 	if (m_companionWindow)
 		m_companionWindow->GetEventHandler()->ProcessEvent(event);
 }
+
+void wxRemotelyScrolledTreeCtrl::OnPaint(wxPaintEvent& event)
+{
+	wxPaintDC dc(this);
+
+	wxTreeCtrl::OnPaint(event);
+
+    if ((GetWindowStyle() & wxTR_ROW_LINES) == 0)
+        return ;
+
+    // Reset the device origin since it may have been set
+    dc.SetDeviceOrigin(0, 0);
+
+	wxPen pen(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DLIGHT), 1, wxSOLID);
+	dc.SetPen(pen);
+	dc.SetBrush(* wxTRANSPARENT_BRUSH);
+
+    wxSize clientSize = GetClientSize();
+	wxRect itemRect;
+	int cy=0;
+	wxTreeItemId h, lastH;
+	for(h=GetFirstVisibleItem();h;h=GetNextVisible(h))
+	{
+		if (GetBoundingRect(h, itemRect))
+		{
+			cy = itemRect.GetTop();
+			dc.DrawLine(0, cy, clientSize.x, cy);
+			lastH = h;
+		}
+	}
+	if (GetBoundingRect(lastH, itemRect))
+	{
+		cy = itemRect.GetBottom();
+		dc.DrawLine(0, cy, clientSize.x, cy);
+	}
+}
+
 
 // Adjust the containing wxScrolledWindow's scrollbars appropriately
 void wxRemotelyScrolledTreeCtrl::AdjustRemoteScrollbars()

@@ -45,6 +45,7 @@ protected:
     wxRemotelyScrolledTreeCtrl*        m_tree;
     wxThinSplitterWindow*   m_splitter;
 	wxSplitterScrolledWindow* m_scrolledWindow;
+	//wxScrolledWindow* m_scrolledWindow;
     TestValueWindow*		m_valueWindow;
 
 private:
@@ -78,7 +79,6 @@ public:
         const wxSize& sz = wxDefaultSize, long style = wxTR_HAS_BUTTONS);
 	~TestTree();
 
-	void OnPaint(wxPaintEvent& event);
     DECLARE_EVENT_TABLE()
 protected:
 	wxImageList*	m_imageList;

@@ -169,8 +169,10 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     m_splitter = new wxThinSplitterWindow(m_scrolledWindow, idSPLITTER_WINDOW, wxDefaultPosition,
 		wxDefaultSize, wxSP_3DBORDER | wxCLIP_CHILDREN /* | wxSP_LIVE_UPDATE */);
 	m_splitter->SetSashSize(2);
-    m_tree = new TestTree(m_splitter, idTREE_CTRL, wxDefaultPosition,
-		wxDefaultSize, wxTR_HAS_BUTTONS | wxTR_NO_LINES | wxNO_BORDER );
+
+	/* Note the wxTR_ROW_LINES style: draws horizontal lines between items */
+    m_tree = new TestTree(m_splitter , idTREE_CTRL, wxDefaultPosition,
+		wxDefaultSize, wxTR_HAS_BUTTONS | wxTR_NO_LINES | wxNO_BORDER | wxTR_ROW_LINES );
     m_valueWindow = new TestValueWindow(m_splitter, idVALUE_WINDOW, wxDefaultPosition,
 		wxDefaultSize, wxNO_BORDER);
     m_splitter->SplitVertically(m_tree, m_valueWindow);
@@ -230,7 +232,6 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 IMPLEMENT_CLASS(TestTree, wxRemotelyScrolledTreeCtrl)
 
 BEGIN_EVENT_TABLE(TestTree, wxRemotelyScrolledTreeCtrl)
-	EVT_PAINT(TestTree::OnPaint)
 END_EVENT_TABLE()
 
 TestTree::TestTree(wxWindow* parent, wxWindowID id, const wxPoint& pt,
@@ -271,39 +272,6 @@ TestTree::~TestTree()
 {
 	SetImageList(NULL);
 	delete m_imageList;
-}
-
-void TestTree::OnPaint(wxPaintEvent& event)
-{
-	wxPaintDC dc(this);
-
-	wxTreeCtrl::OnPaint(event);
-
-    // Reset the device origin since it may have been set
-    dc.SetDeviceOrigin(0, 0);
-
-	wxPen pen(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DLIGHT), 1, wxSOLID);
-	dc.SetPen(pen);
-	dc.SetBrush(* wxTRANSPARENT_BRUSH);
-
-    wxSize clientSize = GetClientSize();
-	wxRect itemRect;
-	int cy=0;
-	wxTreeItemId h, lastH;
-	for(h=GetFirstVisibleItem();h;h=GetNextVisible(h))
-	{
-		if (GetBoundingRect(h, itemRect))
-		{
-			cy = itemRect.GetTop();
-			dc.DrawLine(0, cy, clientSize.x, cy);
-			lastH = h;
-		}
-	}
-	if (GetBoundingRect(lastH, itemRect))
-	{
-		cy = itemRect.GetBottom();
-		dc.DrawLine(0, cy, clientSize.x, cy);
-	}
 }
 
 /*

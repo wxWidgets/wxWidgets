@@ -64,6 +64,7 @@ public:
 	void OnSize(wxSizeEvent& event);
 	void OnExpand(wxTreeEvent& event);
     void OnScroll(wxScrollWinEvent& event);
+	void OnPaint(wxPaintEvent& event);
 
 //// Overrides
     // Override this in case we're using the generic tree control.
