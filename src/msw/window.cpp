@@ -4890,12 +4890,11 @@ void wxGetCharSize(WXHWND wnd, int *x, int *y, const wxFont& the_font)
 {
     TEXTMETRIC tm;
     HDC dc = ::GetDC((HWND) wnd);
-    HFONT fnt =0;
     HFONT was = 0;
         
     //    the_font.UseResource();
     //    the_font.RealizeResource();
-    fnt = (HFONT)the_font.GetResourceHandle(); // const_cast
+    HFONT fnt = (HFONT)the_font.GetResourceHandle(); // const_cast
     if ( fnt )
         was = (HFONT) SelectObject(dc,fnt);
     
