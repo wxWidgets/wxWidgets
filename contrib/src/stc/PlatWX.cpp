@@ -485,7 +485,12 @@ int ListBox::GetSelection() {
 }
 
 int ListBox::Find(const char *prefix) {
-    return ((wxListBox*)id)->FindString(prefix);
+    for (int x=0; x < ((wxListBox*)id)->Number(); x++) {
+        wxString text = ((wxListBox*)id)->GetString(x);
+        if (text.StartsWith(prefix))
+            return x;
+    }
+    return -1;
 }
 
 void ListBox::GetValue(int n, char *value, int len) {

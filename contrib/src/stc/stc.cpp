@@ -81,6 +81,7 @@ BEGIN_EVENT_TABLE(wxStyledTextCtrl, wxControl)
     EVT_SYS_COLOUR_CHANGED      (wxStyledTextCtrl::OnSysColourChanged)
     EVT_ERASE_BACKGROUND        (wxStyledTextCtrl::OnEraseBackground)
     EVT_MENU_RANGE              (-1, -1, wxStyledTextCtrl::OnMenu)
+    EVT_LISTBOX_DCLICK          (-1, wxStyledTextCtrl::OnListBox)
 END_EVENT_TABLE()
 
 
@@ -1449,6 +1450,11 @@ void wxStyledTextCtrl::OnEraseBackground(wxEraseEvent& evt) {
 
 void wxStyledTextCtrl::OnMenu(wxCommandEvent& evt) {
     m_swx->DoCommand(evt.GetId());
+}
+
+
+void wxStyledTextCtrl::OnListBox(wxCommandEvent& evt) {
+    m_swx->DoOnListBox();
 }
 
 
