@@ -1,12 +1,5 @@
 #!/usr/bin/python
-from wxPython.wx import *
-from httplib import HTTP
-from htmllib import HTMLParser
-import os
-import re
-import formatter
-
-__doc__ = """This is wxSlash 1.1
+"""This is wxSlash 1.1
 
     It's the obligatory Slashdot.org headlines reader that any modern
 widget set/library must have in order to be taken seriously :-)
@@ -33,6 +26,13 @@ the idea for this applet.
 
     Harm van der Heijden (H.v.d.Heijden@phys.tue.nl)
 """
+
+from wxPython.wx import *
+from httplib import HTTP
+from htmllib import HTMLParser
+import os
+import re
+import formatter
 
 class HTMLTextView(wxFrame):
     def __init__(self, parent, id, title='HTMLTextView', url=None):
@@ -214,7 +214,7 @@ class AppFrame(wxFrame):
 	    self.BrowserSettings = "xterm -e lynx %s &"
 	elif wxPlatform == '__WXMSW__':
 	    # netscape 4.x likes to hang out here...
-	    self.BrowserSettings = '\progra~1\Netscape\Communicator\Program\netscape.exe %s'
+	    self.BrowserSettings = '\\progra~1\\Netscape\\Communicator\\Program\\netscape.exe %s'
 	else:
 	    # a wild guess...
 	    self.BrowserSettings = 'netscape %s'
@@ -235,6 +235,7 @@ class AppFrame(wxFrame):
         self.list.SetColumnWidth(3, 100)
 
         EVT_LIST_ITEM_SELECTED(self, 1100, self.OnItemSelected)
+	EVT_LEFT_DCLICK(self.list, self.OnLeftDClick)
 
 	self.logprint("Connecting to slashdot... Please wait.")
 	# wxYield doesn't yet work here. That's why we use a timer
@@ -318,6 +319,22 @@ class AppFrame(wxFrame):
     def OnItemSelected(self, event):
         self.current = event.m_itemIndex
         self.logprint("URL: %s" % (self.url[self.current]))
+
+    def OnLeftDClick(self, event):
+	(x,y) = event.Position();
+	# Actually, we should convert x,y to logical coords using
+	# a dc, but only for a wxScrolledWindow widget.
+	# Now wxGTK derives wxListCtrl from wxScrolledWindow,
+	# and wxMSW from wxControl... So that doesn't work.
+	#dc = wxClientDC(self.list)
+	##self.list.PrepareDC(dc)
+	#x = dc.DeviceToLogicalX( event.GetX() )
+	#y = dc.DeviceToLogicalY( event.GetY() )
+	id = self.list.HitTest(wxPoint(x,y))
+	#print "Double click at %d %d" % (x,y), id
+	# Okay, we got a double click. Let's assume it's the current selection
+	wxYield()
+	self.OnViewArticle(event)
 
     def OnCloseWindow(self, event):
         self.Destroy()
