@@ -82,7 +82,7 @@
 // ----------------------------------------------------------------------------
 
 static
-int wxFileDataNameCompare( long data1, long data2, long data)
+int wxCALLBACK wxFileDataNameCompare( long data1, long data2, long data)
 {
      wxFileData *fd1 = (wxFileData*)data1;
      wxFileData *fd2 = (wxFileData*)data2;
@@ -94,7 +94,7 @@ int wxFileDataNameCompare( long data1, long data2, long data)
 }
 
 static
-int wxFileDataSizeCompare( long data1, long data2, long data)
+int wxCALLBACK wxFileDataSizeCompare( long data1, long data2, long data)
 {
      wxFileData *fd1 = (wxFileData*)data1;
      wxFileData *fd2 = (wxFileData*)data2;
@@ -108,7 +108,7 @@ int wxFileDataSizeCompare( long data1, long data2, long data)
 }
 
 static
-int wxFileDataTypeCompare( long data1, long data2, long data)
+int wxCALLBACK wxFileDataTypeCompare( long data1, long data2, long data)
 {
      wxFileData *fd1 = (wxFileData*)data1;
      wxFileData *fd2 = (wxFileData*)data2;
@@ -122,7 +122,7 @@ int wxFileDataTypeCompare( long data1, long data2, long data)
 }
 
 static
-int wxFileDataTimeCompare( long data1, long data2, long data)
+int wxCALLBACK wxFileDataTimeCompare( long data1, long data2, long data)
 {
      wxFileData *fd1 = (wxFileData*)data1;
      wxFileData *fd2 = (wxFileData*)data2;
