@@ -170,7 +170,7 @@ Change it like so::
 The second parameter is an integer in [0, 1, 2] that specifies the
 number of IDs that are needed to be passed to Connect.
 
-**[Changed in 2.5.1.6]** There is also an Unbind method added to
+**[Changed in 2.5.2.0]** There is also an Unbind method added to
 wx.EvtHandler that can be used to disconenct event handlers.  It looks
 like this::
 
@@ -251,7 +251,7 @@ just fine.
 New wx.DC Methods
 -----------------
 
-**[Changed in 2.5.1.6]** In wxPython 2.5.1.5 there was a new
+**[Changed in 2.5.2.0]** In wxPython 2.5.1.5 there was a new
 implementation of the wx.DC Draw and other methods that broke
 backwards compatibility in the name of consistency.  That change has
 been reverted and the wx.DC Draw methods with 2.4 compatible
@@ -417,23 +417,35 @@ be used from XRC.
 
 You should not use AddWindow, AddSizer, AddSpacer (and similar for
 Insert, Prepend, and etc.) methods any longer.  Just use Add and the
-wrappers will figure out what to do.  **[Changed in 2.5.1.6]**
+wrappers will figure out what to do.  **[Changed in 2.5.2.0]**
 AddWindow, AddSize, AddSpacer and etc. will now issue a
 DeprecationWarning. 
 
-**[Changed in 2.5.1.6]** wx.ADJUST_MINSIZE is now the default
+**[Changed in 2.5.2.0]** wx.ADJUST_MINSIZE is now the default
 behaviour for window items in sizers.  This means that the item's
 GetMinSize and/or GetBestSize will be called when calculating layout
-and the return value from that will be used for the minimum size.  The
-wx.FIXED_MINSIZE flag was added that will cause the sizer to *not*
-call window methods to determine the new best size, instead the
-minsize that the window had when added to the sizer (or the size the
-window was created with) will always be used.  When a window is added
-to a sizer it's initial size, if any, is set as the window's minimal
-size using SetSizeHints if there isn't already a minimal size.  If you
-would like the sizer to use something other than the window's initial
-size as the minimum then you can give it a new minimum by calling its
-SetSizeHints method.
+and the return value from that will be used for the minimum size used
+by the sizer.  The wx.FIXED_MINSIZE flag was added that will cause the
+sizer to use the old behaviour in that it will *not* call the window's
+methods to determine the new best size, instead the minsize that the
+window had when added to the sizer (or the size the window was created
+with) will always be used.
+
+Related to the above, when controls and some other window types are
+created either the size passed to the constructor, or their "best
+size" if an explicit size was not passed in, is set as the window's
+minimal size.  For non top-level windows that hasn't meant much in the
+past, but now the sizers are sensitive to the window's minimal size.
+The key point to understand here is that it is no longer the window's
+size it has when added to the sizer that matters, but its minimal
+size.  So you might have some issues to iron out if you create a
+control without a size and then set its size to something before
+adding it to the sizer.  Since it's minimal size is probably not the
+size you set then the sizer will appear to be misbehaving.  The fix is
+to either set the size when calling the window's constructor, or to
+reset the min size by calling SetSizeHints.  You can call SetSizeHints
+at anytime to change the minsize of a window, just call the sizer's
+Layout method to redistribute the controls as needed.
 
 
 
@@ -694,11 +706,11 @@ If the object is not already an integer then it will be asked to
 convert itself to one.  A similar conversion fragment is in place for
 parameters that expect floating point values.
 
-**[Changed in 2.5.1.6]**  The MaskedEditCtrl modules have been moved
+**[Changed in 2.5.2.0]**  The MaskedEditCtrl modules have been moved
 to their own sub-package, wx.lib.masked.  See the docstrings and demo
 for changes in capabilities, usage, etc.
 
-**[Changed in 2.5.1.6]** wx.MaskColour constructor has been deprecated
+**[Changed in 2.5.2.0]** wx.MaskColour constructor has been deprecated
 and will raise a DeprecationWarning if used.  The main wx.Mask
 constructor has been modified to be compatible with wx.MaskColour so
 you should use it instead.
