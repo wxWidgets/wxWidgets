@@ -608,6 +608,7 @@ void wxGridTextCtrl::OnKeyDown( wxKeyEvent& event )
         case WXK_RIGHT:
         case WXK_PRIOR:
         case WXK_NEXT:
+        case WXK_SPACE:
             if ( m_isCellControl )
             {
                 // send the event to the parent grid, skipping the
@@ -2436,6 +2437,16 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                     MoveCursorRight();
                 }
                 break;
+                
+            case WXK_SPACE:
+                if ( !IsEditable() )
+                {
+                    MoveCursorRight();
+                }
+                else
+                {
+                    event.Skip()
+                }
 
             case WXK_RETURN:
                 if ( event.ControlDown() )
