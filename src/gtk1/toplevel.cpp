@@ -430,10 +430,6 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     //     e.g. in wxTaskBarIconAreaGTK
     if (m_widget == NULL)
     {
-        GtkWindowType win_type = GTK_WINDOW_TOPLEVEL;
-        if (style & wxFRAME_TOOL_WINDOW)
-            win_type = GTK_WINDOW_POPUP;
-
         if (GetExtraStyle() & wxTOPLEVEL_EX_DIALOG)
         {
 #ifdef __WXGTK20__
@@ -450,7 +446,12 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
         }
         else
         {
-            m_widget = gtk_window_new(win_type);
+            m_widget = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+        
+            if (style & wxFRAME_TOOL_WINDOW)
+                gtk_window_set_type_hint(GTK_WINDOW(m_widget),
+                                         GDK_WINDOW_TYPE_HINT_UTILITY);
+
         }
     }
 
