@@ -1187,7 +1187,7 @@ bool wxFileTypeImpl::GetIcon(wxIconLocation *iconLoc) const
 
     if ( iconLoc )
     {
-        iconLoc->SetIconFile(sTmp);
+        iconLoc->SetFileName(sTmp);
     }
 
     return TRUE;
