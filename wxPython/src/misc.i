@@ -263,7 +263,6 @@ void wxSleep(int secs);
 void wxUsleep(unsigned long milliseconds);
 bool wxYield();
 bool wxSafeYield();
-void wxFlushEvents();
 void wxEnableTopLevelWindows(bool enable);
 
 %inline %{

@@ -605,8 +605,6 @@ wxDisplaySize = miscc.wxDisplaySize
 
 wxEndBusyCursor = miscc.wxEndBusyCursor
 
-wxExecute = miscc.wxExecute
-
 wxGetElapsedTime = miscc.wxGetElapsedTime
 
 wxGetMousePosition = miscc.wxGetMousePosition
@@ -621,7 +619,11 @@ wxStartTimer = miscc.wxStartTimer
 
 wxGetOsVersion = miscc.wxGetOsVersion
 
+wxGetOsDescription = miscc.wxGetOsDescription
+
 wxSleep = miscc.wxSleep
+
+wxUsleep = miscc.wxUsleep
 
 wxYield = miscc.wxYield
 
@@ -632,6 +634,23 @@ wxEnableTopLevelWindows = miscc.wxEnableTopLevelWindows
 wxGetResource = miscc.wxGetResource
 
 wxStripMenuCodes = miscc.wxStripMenuCodes
+
+wxGetEmailAddress = miscc.wxGetEmailAddress
+
+wxGetHostName = miscc.wxGetHostName
+
+wxGetFullHostName = miscc.wxGetFullHostName
+
+wxGetUserId = miscc.wxGetUserId
+
+wxGetUserName = miscc.wxGetUserName
+
+wxGetHomeDir = miscc.wxGetHomeDir
+
+def wxGetAccelFromString(*_args, **_kwargs):
+    val = apply(miscc.wxGetAccelFromString,_args,_kwargs)
+    if val: val = wxAcceleratorEntryPtr(val)
+    return val
 
 
 
