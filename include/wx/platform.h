@@ -131,12 +131,16 @@
 
 
 /*
-   some compilers don't support iostream.h any longer, so override the users
-   setting here in such case.
+   some compilers don't support iostream.h any longer, while some of theme
+   are not updated with <iostream> yet, so override the users setting here 
+   in such case.
  */
 #if defined(_MSC_VER) && (_MSC_VER >= 1310)
 #    undef wxUSE_IOSTREAMH
 #    define wxUSE_IOSTREAMH 0
+#elif defined(__DMC__)
+#    undef wxUSE_IOSTREAMH
+#    define wxUSE_IOSTREAMH 1 
 #endif /* compilers not supporting iostream.h */
 
 /*
