@@ -749,47 +749,36 @@ bool wxFrame::MSWProcessMessage(WXMSG* pMsg)
 // resize to client rectangle size
 void wxFrame::OnSize(wxSizeEvent& event)
 {
-  // Search for a child which is a subwindow, not another frame.
+  // if we're using constraints - do use them
+  #if USE_CONSTRAINTS
+    if ( GetAutoLayout() ) {
+      Layout();
+      return;
+    }
+  #endif
+
+  // do we have _exactly_ one child?
   wxWindow *child = NULL;
-  // Count the number of _subwindow_ children
-  int noChildren = 0;
-  for(wxNode *node = GetChildren()->First(); node; node = node->Next())
+  for ( wxNode *node = GetChildren()->First(); node; node = node->Next() )
   {
     wxWindow *win = (wxWindow *)node->Data();
-    if (!win->IsKindOf(CLASSINFO(wxFrame)) && !win->IsKindOf(CLASSINFO(wxDialog))
-      && (win != GetStatusBar()))
+    if ( !win->IsKindOf(CLASSINFO(wxFrame))  &&
+         !win->IsKindOf(CLASSINFO(wxDialog)) && 
+         (win != GetStatusBar()) )
     {
+      if ( child )
+        return;     // it's our second subwindow - nothing to do
       child = win;
-      noChildren ++;
     }
   }
 
-  // If not one child, call the Layout function if compiled in
-  if (!child || (noChildren > 1)
-#if USE_CONSTRAINTS
-   || GetAutoLayout()
-#endif
-   )
-  {
-#if USE_CONSTRAINTS
-    if (GetAutoLayout())
-      Layout();
-#endif
-    return;
-  }
-  
-  if (child)
-  {
+  if ( child ) {
+    // we have exactly one child - set it's size to fill the whole frame
     int client_x, client_y;
-
-#if WXDEBUG > 1
-    wxDebugMsg("wxFrame::OnSize: about to set the child's size.\n");
-#endif
 
     GetClientSize(&client_x, &client_y);
     child->SetSize(0, 0, client_x, client_y);
   }
-
 }
 
 // Default activation behaviour - set the focus for the first child
