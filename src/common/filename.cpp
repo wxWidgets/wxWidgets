@@ -666,7 +666,7 @@ wxString wxFileName::GetLongPath() const
         pathOut = wxEmptyString;
 
         wxArrayString dirs = GetDirs();
-        dirs.Add(GetName());
+        dirs.Add(GetFullName());
 
         size_t count = dirs.GetCount();
         size_t i;
