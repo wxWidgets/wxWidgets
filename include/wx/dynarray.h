@@ -510,6 +510,10 @@ WX_DECLARE_EXPORTED_BASEARRAY(double,       wxBaseArrayDouble);
 #define WX_DEFINE_USER_EXPORTED_ARRAY_DOUBLE(T, name, expmode)         \
     WX_DEFINE_USER_EXPORTED_TYPEARRAY(T, name, wxBaseArrayDouble, expmode)
 
+// allow to use WX_DEFINE_ARRAY_PTR in the code which has to be compiled with
+// both 2.4 and 2.5 for forward compatibility
+#define WX_DEFINE_ARRAY_PTR WX_DEFINE_ARRAY
+
 // ----------------------------------------------------------------------------
 // Convenience macros to define sorted arrays from base arrays
 // ----------------------------------------------------------------------------
