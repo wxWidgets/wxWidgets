@@ -18,22 +18,27 @@
 import  wx
 
 
-class ScrolledPanel( wx.ScrolledWindow ):
-    """\
-ScrolledPanel fills a "hole" in the implementation of wx.ScrolledWindow,
-providing automatic scrollbar and scrolling behavior and the tab traversal
-management that wxScrolledWindow lacks.  This code was based on the original
-demo code showing how to do this, but is now available for general use
-as a proper class (and the demo is now converted to just use it.)
-"""
-    def __init__(self, parent, id=-1,
-                 pos = wx.DefaultPosition, size = wx.DefaultSize,
-                 style = wx.TAB_TRAVERSAL, name = "scrolledpanel"):
+class ScrolledPanel( wx.PyScrolledWindow ):
 
-        wx.ScrolledWindow.__init__(self, parent, -1,
-                                  pos=pos, size=size,
-                                  style=style, name=name)
+    """ ScrolledPanel fills a "hole" in the implementation of
+    wx.ScrolledWindow, providing automatic scrollbar and scrolling
+    behavior and the tab traversal management that wxScrolledWindow
+    lacks.  This code was based on the original demo code showing how
+    to do this, but is now available for general use as a proper class
+    (and the demo is now converted to just use it.)
 
+    It is assumed that the ScrolledPanel will have a sizer, as it is
+    used to calculate the minimal virtual size of the panel and etc.
+    """
+    
+    def __init__(self, parent, id=-1, pos = wx.DefaultPosition,
+                 size = wx.DefaultSize, style = wx.TAB_TRAVERSAL,
+                 name = "scrolledpanel"):
+
+        wx.PyScrolledWindow.__init__(self, parent, -1,
+                                     pos=pos, size=size,
+                                     style=style, name=name)
+        self.SetBestSize(size)
         self.Bind(wx.EVT_CHILD_FOCUS, self.OnChildFocus)
 
 
@@ -74,30 +79,41 @@ as a proper class (and the demo is now converted to just use it.)
 
         sppu_x, sppu_y = self.GetScrollPixelsPerUnit()
         vs_x, vs_y   = self.GetViewStart()
-        cpos = child.GetPosition()
-        csz  = child.GetSize()
+        cr = child.GetRect()
+        clntsz = self.GetClientSize()
         new_vs_x, new_vs_y = -1, -1
 
         # is it before the left edge?
-        if cpos.x < 0 and sppu_x > 0:
-            new_vs_x = vs_x + (cpos.x / sppu_x)
+        if cr.x < 0 and sppu_x > 0:
+            new_vs_x = vs_x + (cr.x / sppu_x)
 
         # is it above the top?
-        if cpos.y < 0 and sppu_y > 0:
-            new_vs_y = vs_y + (cpos.y / sppu_y)
+        if cr.y < 0 and sppu_y > 0:
+            new_vs_y = vs_y + (cr.y / sppu_y)
 
-        clntsz = self.GetClientSize()
+
+        # For the right and bottom edges, scroll enough to show the
+        # whole control if possible, but if not just scroll such that
+        # the top/left edges are still visible
 
         # is it past the right edge ?
-        if cpos.x + csz.width > clntsz.width and sppu_x > 0:
-            diff = (cpos.x + csz.width - clntsz.width) / sppu_x
-            new_vs_x = vs_x + diff + 1
-
+        if cr.right > clntsz.width and sppu_x > 0:
+            diff = (cr.right - clntsz.width) / sppu_x
+            if cr.x - diff * sppu_x > 0:
+                new_vs_x = vs_x + diff + 1
+            else:
+                new_vs_x = vs_x + (cr.x / sppu_x)
+                
         # is it below the bottom ?
-        if cpos.y + csz.height > clntsz.height and sppu_y > 0:
-            diff = (cpos.y + csz.height - clntsz.height) / sppu_y
-            new_vs_y = vs_y + diff + 1
+        if cr.bottom > clntsz.height and sppu_y > 0:
+            diff = (cr.bottom - clntsz.height) / sppu_y
+            if cr.y - diff * sppu_y > 0:
+                new_vs_y = vs_y + diff + 1
+            else:
+                new_vs_y = vs_y + (cr.y / sppu_y)
+
 
         # if we need to adjust
         if new_vs_x != -1 or new_vs_y != -1:
+            #print "%s: (%s, %s)" % (self.GetName(), new_vs_x, new_vs_y)
             self.Scroll(new_vs_x, new_vs_y)

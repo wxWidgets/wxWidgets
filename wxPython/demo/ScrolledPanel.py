@@ -28,24 +28,27 @@ class TestPanel(scrolled.ScrolledPanel):
 
         words = text.split()
 
-        panel1 = scrolled.ScrolledPanel(self, -1, size=(120,300),
-                                 style = wx.TAB_TRAVERSAL|wx.SUNKEN_BORDER )
+        panel1 = scrolled.ScrolledPanel(self, -1, size=(140, 300),
+                                 style = wx.TAB_TRAVERSAL|wx.SUNKEN_BORDER, name="panel1" )
         fgs1 = wx.FlexGridSizer(cols=2, vgap=4, hgap=4)
 
         for word in words:
             label = wx.StaticText(panel1, -1, word+":")
-            tc = wx.TextCtrl(panel1, -1, word, size=(50,-1))
-            fgs1.Add(label, flag=wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL)
-            fgs1.Add(tc, flag=wx.EXPAND|wx.RIGHT, border=25)
+            if word == "three":
+                tc = wx.TextCtrl(panel1, -1, word, size=(150,-1))
+            else:
+                tc = wx.TextCtrl(panel1, -1, word, size=(50,-1))
+            fgs1.Add(label, flag=wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL | wx.LEFT, border=10)
+            fgs1.Add(tc, flag=wx.RIGHT, border=10)
 
         panel1.SetSizer( fgs1 )
         panel1.SetAutoLayout(1)
-        panel1.SetupScrolling( scroll_x=False )
+        panel1.SetupScrolling()
 
-        panel2 = scrolled.ScrolledPanel(self, -1, size=(350, 40),
-                                 style = wx.TAB_TRAVERSAL|wx.SUNKEN_BORDER)
+        panel2 = scrolled.ScrolledPanel(self, -1, size=(350, 50),
+                                 style = wx.TAB_TRAVERSAL|wx.SUNKEN_BORDER, name="panel2")
         panel3 = scrolled.ScrolledPanel(self, -1, size=(200,100),
-                                 style = wx.TAB_TRAVERSAL|wx.SUNKEN_BORDER)
+                                 style = wx.TAB_TRAVERSAL|wx.SUNKEN_BORDER, name="panel3")
 
         fgs2 = wx.FlexGridSizer(cols=25, vgap=4, hgap=4)
         fgs3 = wx.FlexGridSizer(cols=5, vgap=4, hgap=4)
