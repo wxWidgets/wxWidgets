@@ -42,8 +42,9 @@ class ScrolledPanel(wxScrolledWindow):
         self.EnableScrolling(false, true)
         self.SetScrollRate(0, 20)
         box.SetVirtualSizeHints(self)
-
         EVT_CHILD_FOCUS(self, self.OnChildFocus)
+
+        wxCallAfter(self.Scroll, 0, 0) # scroll back to top after initial events
 
 
     def OnChildFocus(self, evt):
