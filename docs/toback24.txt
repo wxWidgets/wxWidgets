@@ -1,52 +1,6 @@
-6 Improved X11 ShowFullScreen (later, maybe 2.4.2?)
-
-RCS file: /pack/cvsroots/wxwindows/wxWindows/src/gtk/toplevel.cpp,v
-retrieving revision 1.34
-retrieving revision 1.35
-RCS file: /pack/cvsroots/wxwindows/wxWindows/src/unix/utilsx11.cpp,v
-retrieving revision 1.5
-retrieving revision 1.6
-RCS file: /pack/cvsroots/wxwindows/wxWindows/include/wx/unix/utilsx11.h,v
-retrieving revision 1.1
-retrieving revision 1.2
-Checking in gtk/toplevel.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/gtk/toplevel.cpp,v  <--  toplevel.cpp
-new revision: 1.37; previous revision: 1.36
-Checking in unix/utilsx11.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/unix/utilsx11.cpp,v  <--  utilsx11.cpp
-new revision: 1.9; previous revision: 1.8
-
-
-
-7 Fixes to wxrc compiler
-
-wxWindows/contrib/utils/wxrc/wxrc.cpp revision 1.23
-Log: 1) fixed compilation of wxBitmap, wxIcon toplevel nodes
-     2) fixed wxrc when using -o dirname/filename
-
-
-
-8 wxFrame support in wxrcedit
+8. wxFrame support in wxrcedit
 
 http://sourceforge.net/tracker/index.php?func=detail&aid=648659&group_id=9863&atid=309863
-
-
-10. Fixes for compilation with OpenWatcom
-
-http://sf.net/tracker/index.php?func=detail&aid=665959&group_id=9863&atid=309863
-
-Checking in docs/changes.txt;
-/pack/cvsroots/wxwindows/wxWindows/docs/changes.txt,v  <--  changes.txt
-new revision: 1.230; previous revision: 1.229
-Checking in src/common/imagjpeg.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/common/imagjpeg.cpp,v  <--  imagjpeg.cpp
-new revision: 1.31; previous revision: 1.30
-Checking in include/wx/msw/missing.h;
-/pack/cvsroots/wxwindows/wxWindows/include/wx/msw/missing.h,v  <--  missing.h
-new revision: 1.8; previous revision: 1.7
-Checking in include/wx/msw/setup0.h;
-/pack/cvsroots/wxwindows/wxWindows/include/wx/msw/setup0.h,v  <--  setup0.h
-new revision: 1.128; previous revision: 1.127
 
 15. XRC fixes for <object_ref> and relative file names
 
@@ -63,7 +17,6 @@ Checking in xmlres.h;
 /pack/cvsroots/wxwindows/wxWindows/contrib/include/wx/xrc/xmlres.h,v  <--  xmlres.h
 new revision: 1.22; previous revision: 1.21
 
-
 17. XRC: better wxToolBar handler
 
 Note: This depends on our agreement on what should be backported. Either
@@ -73,7 +26,6 @@ patch (including new features not present in 2.4.0's handler).
 Checking in xh_toolb.cpp;
 /pack/cvsroots/wxwindows/wxWindows/contrib/src/xrc/xh_toolb.cpp,v  <--  xh_toolb.cpp
 new revision: 1.7; previous revision: 1.6
-
 
 22. "Remove" wxFont::GetInternalFont from wxGTK w/ GTK2
 
@@ -86,17 +38,12 @@ When applying, be careful to not pick later revision of font.cpp -- 2.5 doesn't
 have wxFont::GetInternalFont while 2.4 must have it because of binary
 compatibility!
 
-
-23. Use GNOME2's /usr/share/pixmaps/document-icons in wxMimeTypesManager
-
-Checking in mimetype.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/unix/mimetype.cpp,v  <--  mimetype.cpp
-new revision: 1.29; previous revision: 1.28
-
 26.  Fix Unicode + .wxr
 
 Using an #if wxUSE_UNICODE in include/wx/wxexpr.h, safer for
 binary compatibility.
+
+[Is this worth applying now this is deprecated? - JS]
 
 Checking in include/wx/resource.h;
 /pack/cvsroots/wxwindows/wxWindows/include/wx/resource.h,v  <--  resource.h
@@ -122,7 +69,6 @@ CVS: [VS] wxWindows/src/html htmlpars.cpp,1.29,1.30 htmltag.cpp,1.31,1.32
 CVS: [VS] wxWindows/src/html m_layout.cpp,1.17,1.18
 CVS: [VS] wxWindows/src/html htmltag.cpp,1.32,1.33
 
-
 32. Fix wxFileConfig behaviour in Unicode mode
 
 Note: this must be done a bit differently, w/o wxFileConfig::m_conv!
@@ -130,19 +76,6 @@ CVS: [VS] wxWindows/include/wx fileconf.h,1.39,1.40
 CVS: [VS] wxWindows/src/common fileconf.cpp,1.93,1.94
 CVS: [VS] wxWindows/include/wx strconv.h,1.12,1.13
 CVS: [VS] wxWindows/src/common strconv.cpp,1.71,1.72
-
-33. Add support for GTK2 label mnemonics (patch #689573)
-
-CVS: [VS] wxWindows/src/gtk button.cpp,1.53,1.54 checkbox.cpp,1.52,1.53 control.cpp,1.26,1.27 radiobut.cpp,1.42,1.43
-CVS: [VS] wxWindows/include/wx/gtk control.h,1.16,1.17
-CVS: [VS] wxWindows/docs changes.txt,1.255,1.256
-CVS: [VS] wxWindows/src/gtk control.cpp,1.27,1.28
-
-35. Fix wxFontEncoding values:
-
-make wxFONTENCODING_EUC_JP == wxFONTENCODING_UTF8 + 1 in wx/fontenc.h
-
-http://sf.net/tracker/index.php?func=detail&aid=703260&group_id=9863&atid=109863
 
 36. Add SetFonts to wxHTML printing classes; SetFonts(a,b,NULL) can be used
 to set default sizes now.
@@ -191,62 +124,5 @@ new revision: 1.8; previous revision: 1.7
 37. Backport wxLANGUAGE_CHINESE_TRADITIONAL fix in src/common/intl.cpp
     (replace zh_CN with zh_TW)
 
-38. Owner-drawn (coloures) buttons don't draw multiline labels correctly
-
-http://sf.net/tracker/index.php?func=detail&aid=672894&group_id=9863&atid=109863
-
-Checking in src/msw/button.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/msw/button.cpp,v  <--  button.cpp
-new revision: 1.59; previous revision: 1.58
-
-39. Alt-letter didn't switch focus to a spin ctrl following static control
-    with "&letter" accel
-
-http://sf.net/tracker/index.php?func=detail&aid=672974&group_id=9863&atid=109863
-
-Checking in src/msw/spinctrl.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/msw/spinctrl.cpp,v  <--  spinctrl.cpp
-new revision: 1.24; previous revision: 1.23
-Checking in include/wx/msw/spinctrl.h;
-/pack/cvsroots/wxwindows/wxWindows/include/wx/msw/spinctrl.h,v  <--  spinctrl.h
-new revision: 1.16; previous revision: 1.15
-
-40. calling SetValue(GetValue()) didn't reset the modified flag
-
-http://sf.net/tracker/index.php?func=detail&aid=678391&group_id=9863&atid=109863
-
-Checking in src/msw/textctrl.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/msw/textctrl.cpp,v  <--  textctrl.cpp
-new revision: 1.164; previous revision: 1.163
-
-41. Radio button consecutive groups bug
-
-http://sf.net/tracker/index.php?func=detail&aid=705441&group_id=9863&atid=109863
-
-Checking in src/msw/radiobut.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/msw/radiobut.cpp,v  <--  radiobut.cpp
-new revision: 1.32; previous revision: 1.31
-
-42. Implement wxTextCtrl::Remove/Replace() for GTK2
-
-http://sf.net/tracker/index.php?func=detail&aid=705051&group_id=9863&atid=309863
-
-Checking in src/gtk/textctrl.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/gtk/textctrl.cpp,v  <--  textctrl.cpp
-new revision: 1.154; previous revision: 1.153
-
-43. Implement wxExecute with proper callback on Mac OS X
-
-Checking in include/wx/unix/execute.h;
-/pack/cvsroots/wxwindows/wxWindows/include/wx/unix/execute.h,v  <--  execute.h
-new revision: 1.2; previous revision: 1.1
-done
-Checking in src/unix/utilsunx.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/unix/utilsunx.cpp,v  <--  utilsunx.cpp
-new revision: 1.91; previous revision: 1.90
-done
-Checking in src/mac/utilsexc.cpp;
-/pack/cvsroots/wxwindows/wxWindows/src/mac/utilsexc.cpp,v  <--  utilsexc.cpp
-new revision: 1.11; previous revision: 1.10
-done
+    I think this may already have been applied (JS)
 
