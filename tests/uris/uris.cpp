@@ -25,7 +25,7 @@
 #include "wx/url.h"
 
 // Test wxURL & wxURI compat?
-#define TEST_URL ( 0 && wxUSE_URL )
+#define TEST_URL ( 1 && wxUSE_URL )
 
 // ----------------------------------------------------------------------------
 // test class
@@ -50,6 +50,7 @@ private:
         CPPUNIT_TEST( Comparison );
 #if TEST_URL
         CPPUNIT_TEST( URLCompat );
+        CPPUNIT_TEST( URLProxy  );
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -66,6 +67,7 @@ private:
 
 #if TEST_URL
     void URLCompat();
+    void URLProxy();
 #endif
 
     DECLARE_NO_COPY_CLASS(URITestCase)
@@ -316,4 +318,10 @@ void URITestCase::URLCompat()
     CPPUNIT_ASSERT( test.GetPath() == wxT("%22myf%22ile.txt") );
 }
 
+void URITestCase::URLProxy()
+{
+    wxURL url("http://www.asite.com/index.html"); 
+    url.SetProxy("pserv:3122"); 
+}
 #endif
+
