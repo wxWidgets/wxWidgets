@@ -79,7 +79,7 @@ class wxGenStaticText(wxPyControl):
 
     def DoGetBestSize(self):
         """Overridden base class virtual.  Determines the best size of the
-        button based on the label and bezel size."""
+        button based on the label size."""
         label = self.GetLabel()
         maxWidth = totalHeight = 0
         for line in label.split('\n'):
