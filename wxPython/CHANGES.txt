@@ -66,6 +66,14 @@ always call them.  The functions are:
 Refactored, enhanced and added capabilites for the DrawXXXList
 functions, inspired by code from Chris Barker.
 
+The wxWindows .mo language catalog files are now installed in a
+subdirectory of the wxPython package dir on MSW since that platform
+doesn't have a standard place for them.
+
+Added missing deselect methods for wxGrid.
+
+Fixed typemaps for wxGridCellCoordsArray.
+
 
 
 
