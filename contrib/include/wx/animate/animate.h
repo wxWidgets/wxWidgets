@@ -214,7 +214,7 @@ public:
 
 //// Operations
 
-    virtual bool LoadFile(const wxString& filename) { return FALSE; }
+    virtual bool LoadFile(const wxString& WXUNUSED(filename)) { return FALSE; }
 };
 
 /* wxGIFAnimation

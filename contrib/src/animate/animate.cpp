@@ -109,7 +109,6 @@ bool wxAnimationPlayer::Build()
         int i;
         for (i = 0; i < n; i++)
         {
-            wxBitmap* bitmap = NULL;
             wxImage* image = GetFrame(i);
             if (image)
             {
@@ -120,7 +119,7 @@ bool wxAnimationPlayer::Build()
                 if (GetTransparentColour(transparentColour))
                     image->SetMaskColour(transparentColour.Red(), transparentColour.Green(), transparentColour.Blue());
 
-                bitmap = new wxBitmap(* image);
+                wxBitmap* bitmap = new wxBitmap(* image);
                 delete image;
                 if (bitmap)
                     m_frames.Append(bitmap);
