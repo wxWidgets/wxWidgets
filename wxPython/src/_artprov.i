@@ -30,6 +30,7 @@ MAKE_CONST_WXSTRING(ART_FRAME_ICON);
 MAKE_CONST_WXSTRING(ART_CMN_DIALOG);
 MAKE_CONST_WXSTRING(ART_HELP_BROWSER);
 MAKE_CONST_WXSTRING(ART_MESSAGE_BOX);
+MAKE_CONST_WXSTRING(ART_BUTTON);
 MAKE_CONST_WXSTRING(ART_OTHER);
 
 // Art IDs
@@ -128,8 +129,12 @@ Identifying art resources
 -------------------------
 
 Every bitmap is known to wx.ArtProvider under an unique ID that is
-used when requesting a resource from it. The IDs can have one of these
-predefined values:
+used when requesting a resource from it. The IDs can have one of the
+following predefined values.  Additionally, any string recognized by
+custom art providers registered using `PushProvider` may be used. When
+running under GTK+ 2, GTK+ stock item IDs (e.g. 'gtk-cdrom') may be
+used as well.
+
 
     * wx.ART_ADD_BOOKMARK
     * wx.ART_DEL_BOOKMARK
@@ -168,7 +173,7 @@ Clients
 -------
 
 The Client is the entity that calls wx.ArtProvider's `GetBitmap` or
-`GetIcon` function.  Client IDs server as a hint to wx.ArtProvider
+`GetIcon` function.  Client IDs serve as a hint to wx.ArtProvider
 that is supposed to help it to choose the best looking bitmap. For
 example it is often desirable to use slightly different icons in menus
 and toolbars even though they represent the same action (e.g.
@@ -182,6 +187,7 @@ identical bitmap for different client values!
     * wx.ART_CMN_DIALOG
     * wx.ART_HELP_BROWSER
     * wx.ART_MESSAGE_BOX
+    * wx.ART_BUTTON
     * wx.ART_OTHER (used for all requests that don't fit into any
       of the categories above)
 ");
