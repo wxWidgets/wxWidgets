@@ -21,7 +21,7 @@
 #if wxUSE_SOCKETS
 
 // ---------------------------------------------------------------------------
-// wxSocket headers (generic)
+// wxSocket headers
 // ---------------------------------------------------------------------------
 
 #ifdef WXPREC
@@ -35,7 +35,7 @@
 #include "wx/gsocket.h"
 
 // ------------------------------------------------------------------------
-// constants
+// Types and constants
 // ------------------------------------------------------------------------
 
 enum wxSocketNotify
@@ -67,8 +67,7 @@ enum wxSocketError
   wxSOCKET_INVPORT = GSOCK_INVPORT,
   wxSOCKET_WOULDBLOCK = GSOCK_WOULDBLOCK,
   wxSOCKET_TIMEDOUT = GSOCK_TIMEDOUT,
-  wxSOCKET_MEMERR = GSOCK_MEMERR,
-  wxSOCKET_BUSY
+  wxSOCKET_MEMERR = GSOCK_MEMERR
 };
 
 enum
@@ -80,29 +79,38 @@ enum
 };
 
 // Type of socket
-enum wxSockType
+enum wxSocketType
 {
-  SOCK_CLIENT,
-  SOCK_SERVER,
-  SOCK_DATAGRAM,
-  SOCK_INTERNAL,
-  SOCK_UNINIT
+  wxSOCKET_UNINIT,
+  wxSOCKET_CLIENT,
+  wxSOCKET_SERVER,
+  wxSOCKET_BASE,
+  wxSOCKET_DATAGRAM
 };
 
-typedef int wxSockFlags;
+typedef int wxSocketFlags;
 
-// ------------------------------------------------------------------------
-// wxSocket base
-// ------------------------------------------------------------------------
 
-class WXDLLEXPORT wxTimer;
-class WXDLLEXPORT wxSocketEvent;
+// old names
 
-class WXDLLEXPORT wxSocketBase : public wxEvtHandler
+#if WXWIN_COMPATIBILITY
+
+typedef wxSocketType wxSockType;
+typedef wxSocketFlags wxSockFlags;
+
+#endif // WXWIN_COMPATIBILITY
+
+// --------------------------------------------------------------------------
+// wxSocketBase
+// --------------------------------------------------------------------------
+
+class WXDLLEXPORT wxSocketBase : public wxObject
 {
   DECLARE_CLASS(wxSocketBase)
+
 public:
 
+#if WXWIN_COMPATIBILITY
   enum
   {
     NONE = wxSOCKET_NONE,
@@ -111,179 +119,178 @@ public:
     SPEED = wxSOCKET_BLOCK
   };
 
+  enum
+  {
+    SOCK_UNINIT = wxSOCKET_UNINIT,
+    SOCK_CLIENT = wxSOCKET_CLIENT,
+    SOCK_SERVER = wxSOCKET_SERVER,
+    SOCK_INTERNAL = wxSOCKET_BASE,
+    SOCK_DATAGRAM = wxSOCKET_DATAGRAM
+  };
+#endif // WXWIN_COMPATIBILITY
+
   typedef void (*wxSockCbk)(wxSocketBase& sock, wxSocketNotify evt, char *cdata);
 
-protected:
-  GSocket      *m_socket;           // GSocket
-  wxEvtHandler *m_evt_handler;      // event handler
-  int           m_id;               // Socket id (for event handler)
-
-  // Attributes
-  wxSockFlags   m_flags;            // wxSocket flags
-  wxSockType    m_type;             // wxSocket type
-  wxSocketEventFlags m_neededreq;   // Event mask
-  bool          m_notify_state;     // Notify events to users?
-
-  // State
-  bool          m_connected;        // Connected?
-  bool          m_establishing;     // Establishing connection?
-  bool          m_reading;          // Busy reading?
-  bool          m_writing;          // Busy writing?
-  bool          m_error;            // Did last IO call fail?
-  wxUint32      m_lcount;           // Last IO transaction size
-  unsigned long m_timeout;          // IO timeout value
-  wxList        m_states;           // Stack of states
-  bool          m_interrupt;        // Interrupt ongoing wait operations
-  bool          m_beingDeleted;     // Marked for delayed deletion
-
-  // Pushback buffer
-  char         *m_unread;           // Pushback buffer
-  wxUint32      m_unrd_size;        // Pushback buffer size
-  wxUint32      m_unrd_cur;         // Pushback pointer (index into buffer)
-
-  // Callback
-  wxSockCbk     m_cbk;              // C callback
-  char         *m_cdata;            // C callback data
-
 public:
+
+  // Public interface
+  // ----------------
+
+  // ctors and dtors
   wxSocketBase();
+  wxSocketBase(wxSocketFlags flags, wxSocketType type);
   virtual ~wxSocketBase();
-  virtual bool Destroy();
+  void Init();
+  bool Destroy();
 
-  // Base IO
-  virtual bool Close();
-  wxSocketBase& Peek(char* buffer, wxUint32 nbytes);
-  wxSocketBase& Read(char* buffer, wxUint32 nbytes);
-  wxSocketBase& Write(const char *buffer, wxUint32 nbytes);
-  wxSocketBase& Unread(const char *buffer, wxUint32 nbytes);
-  wxSocketBase& ReadMsg(char *buffer, wxUint32 nbytes);
-  wxSocketBase& WriteMsg(const char *buffer, wxUint32 nbytes);
-  wxSocketBase& Discard();
-
-  // Status
+  // state
   inline bool Ok() const { return (m_socket != NULL); };
   inline bool Error() const { return m_error; };
   inline bool IsConnected() const { return m_connected; };
-  inline bool IsDisconnected() const { return !IsConnected(); };
-  inline bool IsNoWait() const { return ((m_flags & NOWAIT) != 0); };
   inline bool IsData() { return WaitForRead(0, 0); };
+  inline bool IsDisconnected() const { return !IsConnected(); };
   inline wxUint32 LastCount() const { return m_lcount; }
   inline wxSocketError LastError() const { return (wxSocketError)GSocket_GetError(m_socket); }
-  inline wxSockType GetType() const { return m_type; }
+  void SaveState();
+  void RestoreState();
 
-  // Addresses
-  virtual bool GetPeer(wxSockAddress& addr_man) const;
+  // addresses
   virtual bool GetLocal(wxSockAddress& addr_man) const;
+  virtual bool GetPeer(wxSockAddress& addr_man) const;
 
-  // Set attributes and flags
-  void SetTimeout(long seconds);
-  void SetFlags(wxSockFlags flags);
-  inline wxSockFlags GetFlags() const { return m_flags; };
+  // base IO
+  virtual bool  Close();
+  wxSocketBase& Discard();
+  wxSocketBase& Peek(char* buffer, wxUint32 nbytes);
+  wxSocketBase& Read(char* buffer, wxUint32 nbytes);
+  wxSocketBase& ReadMsg(char *buffer, wxUint32 nbytes);
+  wxSocketBase& Unread(const char *buffer, wxUint32 nbytes);
+  wxSocketBase& Write(const char *buffer, wxUint32 nbytes);
+  wxSocketBase& WriteMsg(const char *buffer, wxUint32 nbytes);
 
-  /* Wait functions
-   *   seconds = -1 means default timeout (change with SetTimeout)
-   *   seconds, milliseconds = 0 means no wait
-   *   seconds, milliseconds > 0 means specified wait
-   */
+  void InterruptAllWaits() { m_interrupt = TRUE; };
   bool Wait(long seconds = -1, long milliseconds = 0);
   bool WaitForRead(long seconds = -1, long milliseconds = 0);
   bool WaitForWrite(long seconds = -1, long milliseconds = 0);
   bool WaitForLost(long seconds = -1, long milliseconds = 0);
 
-  /* This function interrupts all ongoing wait operations for this
-   * socket; use it only as an escape mechanism (for example to close
-   * an app or to abort an operation). Reception of LOST events and
-   * calls to Close() automatically call this.
-   */
-  void InterruptAllWaits() { m_interrupt = TRUE; };
+  inline wxSocketFlags GetFlags() const { return m_flags; };
+  void SetFlags(wxSocketFlags flags);
+  void SetTimeout(long seconds);
 
-  // Save the current state of Socket
-  void SaveState();
-  void RestoreState();
-
-  // Setup event handler
-  void SetEventHandler(wxEvtHandler& evt_hdlr, int id = -1);
-
-  // Tell wxSocket which events to notify
+  // event handling
+  void SetEventHandler(wxEvtHandler& handler, int id = -1);
   void SetNotify(wxSocketEventFlags flags);
   void Notify(bool notify);
-  static wxSocketEventFlags EventToNotify(wxSocketNotify evt);
-  inline wxSocketEventFlags NeededReq() const { return m_neededreq; }
 
-  // External callback
+  // callbacks - deprecated, avoid if possible
   wxSockCbk Callback(wxSockCbk cbk_);
   char *CallbackData(char *data);
 
-  // Public internal callback
-  virtual void OldOnNotify(wxSocketNotify WXUNUSED(evt));
 
-  // Do NOT use this function; it should be protected!
+  // Implementation from now on
+  // --------------------------
+
+  // do not use, this should be private
   void OnRequest(wxSocketNotify req_evt);
 
+  // do not use, not documented nor supported
+  inline bool IsNoWait() const { return ((m_flags & wxSOCKET_NOWAIT) != 0); };
+  inline wxSocketType GetType() const { return m_type; }
+
 protected:
-  friend class wxSocketServer;
-  friend class wxSocketClient;
-  friend class wxSocketHandler;
 
-#ifdef __SALFORDC__
-public:
-#endif
-
-  wxSocketBase(wxSockFlags flags, wxSockType type);
-
-#ifdef __SALFORDC__
-protected:
-#endif
-
-  // Low level IO
+  // low level IO
   wxUint32 _Read(char* buffer, wxUint32 nbytes);
   wxUint32 _Write(const char *buffer, wxUint32 nbytes);
   bool _Wait(long seconds, long milliseconds, wxSocketEventFlags flags);
 
-  // Pushbacks
+  // pushback buffer
   void Pushback(const char *buffer, wxUint32 size);
   wxUint32 GetPushback(char *buffer, wxUint32 size, bool peek);
+
+protected:
+
+  GSocket      *m_socket;           // GSocket
+  wxSocketType  m_type;             // wxSocket type
+
+  // state
+  wxSocketFlags m_flags;            // wxSocket flags
+  bool          m_connected;        // connected?
+  bool          m_establishing;     // establishing connection?
+  bool          m_reading;          // busy reading?
+  bool          m_writing;          // busy writing?
+  bool          m_error;            // did last IO call fail?
+  wxUint32      m_lcount;           // last IO transaction size
+  unsigned long m_timeout;          // IO timeout value
+  wxList        m_states;           // stack of states
+  bool          m_interrupt;        // interrupt ongoing wait operations?
+  bool          m_beingDeleted;     // marked for delayed deletion?
+
+  // pushback buffer
+  char         *m_unread;           // pushback buffer
+  wxUint32      m_unrd_size;        // pushback buffer size
+  wxUint32      m_unrd_cur;         // pushback pointer (index into buffer)
+
+  // events
+  wxEvtHandler *m_handler;          // event handler
+  int           m_id;               // socket id
+  bool          m_notify_state;     // notify events to users?
+  wxSocketEventFlags
+                m_neededreq;        // event mask
+  wxSockCbk     m_cbk;              // callback
+  char         *m_cdata;            // callback data
 };
 
-////////////////////////////////////////////////////////////////////////
+
+// --------------------------------------------------------------------------
+// wxSocketServer
+// --------------------------------------------------------------------------
 
 class WXDLLEXPORT wxSocketServer : public wxSocketBase
 {
   DECLARE_CLASS(wxSocketServer)
-public:
-  // 'service' can be a name or a port-number
 
-  wxSocketServer(wxSockAddress& addr_man, wxSockFlags flags = wxSOCKET_NONE);
+public:
+  wxSocketServer(wxSockAddress& addr, wxSocketFlags flags = wxSOCKET_NONE);
 
   wxSocketBase* Accept(bool wait = TRUE);
-  bool AcceptWith(wxSocketBase& sock, bool wait = TRUE);
+  bool AcceptWith(wxSocketBase& socket, bool wait = TRUE);
 
   bool WaitForAccept(long seconds = -1, long milliseconds = 0);
 };
 
-////////////////////////////////////////////////////////////////////////
+
+// --------------------------------------------------------------------------
+// wxSocketClient
+// --------------------------------------------------------------------------
 
 class WXDLLEXPORT wxSocketClient : public wxSocketBase
 {
   DECLARE_CLASS(wxSocketClient)
-public:
 
-  wxSocketClient(wxSockFlags flags = wxSOCKET_NONE);
+public:
+  wxSocketClient(wxSocketFlags flags = wxSOCKET_NONE);
   virtual ~wxSocketClient();
 
-  virtual bool Connect(wxSockAddress& addr_man, bool wait = TRUE);
+  virtual bool Connect(wxSockAddress& addr, bool wait = TRUE);
 
   bool WaitOnConnect(long seconds = -1, long milliseconds = 0);
 };
 
-////////////////////////////////////////////////////////////////////////
+
+// --------------------------------------------------------------------------
+// wxDatagramSocket
+// --------------------------------------------------------------------------
+
+// WARNING: still in alpha stage
 
 class wxDatagramSocket : public wxSocketBase
 {
   DECLARE_CLASS(wxDatagramSocket)
 
 public:
-  wxDatagramSocket( wxSockAddress& addr, wxSockFlags flags = wxSOCKET_NONE );
+  wxDatagramSocket(wxSockAddress& addr, wxSocketFlags flags = wxSOCKET_NONE);
 
   wxDatagramSocket& RecvFrom( wxSockAddress& addr,
                               char* buf,
@@ -293,28 +300,35 @@ public:
                             wxUint32 nBytes );
 };
 
-////////////////////////////////////////////////////////////////////////
 
-class WXDLLEXPORT wxSocketEvent : public wxEvent {
+// --------------------------------------------------------------------------
+// wxSocketEvent
+// --------------------------------------------------------------------------
+
+class WXDLLEXPORT wxSocketEvent : public wxEvent
+{
   DECLARE_DYNAMIC_CLASS(wxSocketEvent)
+
 public:
   wxSocketEvent(int id = 0);
 
-  wxSocketNotify SocketEvent() const { return m_skevt; }
-  wxSocketBase *Socket() const { return m_socket; }
+  wxSocketNotify SocketEvent() const { return m_event; }
+  wxSocketBase *Socket() const       { return m_socket; }
 
-  void CopyObject(wxObject& obj_d) const;
+  void CopyObject(wxObject& object_dest) const;
 
 public:
-  wxSocketNotify m_skevt;
-  wxSocketBase *m_socket;
+  wxSocketNotify  m_event;
+  wxSocketBase   *m_socket;
 };
+
 
 typedef void (wxEvtHandler::*wxSocketEventFunction)(wxSocketEvent&);
 
 #define EVT_SOCKET(id, func) { wxEVT_SOCKET, id, -1, \
   (wxObjectEventFunction) (wxEventFunction) (wxSocketEventFunction) & func, \
   (wxObject *) NULL  },
+
 
 #endif
   // wxUSE_SOCKETS

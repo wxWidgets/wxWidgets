@@ -37,6 +37,7 @@
 #include "wx/intl.h"
 
 #if wxUSE_GUI
+    #include "wx/event.h"
     #include "wx/gdicmn.h"      // for wxPendingDelete
 #endif // wxUSE_GUI
 
@@ -68,7 +69,7 @@ class wxSocketState : public wxObject
 public:
   bool                     m_notify_state;
   wxSocketEventFlags       m_neededreq;
-  wxSockFlags              m_flags;
+  wxSocketFlags            m_flags;
   wxSocketBase::wxSockCbk  m_cbk;
   char                    *m_cdata;
 
@@ -85,32 +86,44 @@ public:
 // Ctor and dtor
 // --------------------------------------------------------------------------
 
-wxSocketBase::wxSocketBase(wxSockFlags _flags, wxSockType _type) :
-  wxEvtHandler(),
-  m_socket(NULL), m_evt_handler(NULL), m_id(-1),
-  m_flags(_flags), m_type(_type),
-  m_neededreq(0), m_notify_state(FALSE),
-  m_connected(FALSE), m_establishing(FALSE),
-  m_reading(FALSE), m_writing(FALSE),
-  m_error(FALSE), m_lcount(0), m_timeout(600),
-  m_states(), m_beingDeleted(FALSE),
-  m_unread(NULL), m_unrd_size(0), m_unrd_cur(0),
-  m_cbk(NULL), m_cdata(NULL)
+void wxSocketBase::Init()
 {
+  m_socket       = NULL;
+  m_type         = wxSOCKET_UNINIT;
+
+  // state
+  m_flags        = 0;
+  m_connected    =
+  m_establishing =
+  m_reading      =
+  m_writing      =
+  m_error        = FALSE;
+  m_lcount       = 0;
+  m_timeout      = 600;
+  m_beingDeleted = FALSE;
+
+  // pushback buffer
+  m_unread       = NULL;
+  m_unrd_size    = 0;
+  m_unrd_cur     = 0;
+
+  // events
+  m_handler      = NULL;
+  m_id           = -1;
+  m_notify_state = FALSE;
+  m_neededreq    = 0;
+  m_cbk          = NULL;
+  m_cdata        = NULL;
 }
 
-wxSocketBase::wxSocketBase() :
-  wxEvtHandler(),
-  m_socket(NULL), m_evt_handler(NULL), m_id(-1),
-  m_flags(NONE), m_type(SOCK_UNINIT),
-  m_neededreq(0), m_notify_state(FALSE),
-  m_connected(FALSE), m_establishing(FALSE),
-  m_reading(FALSE), m_writing(FALSE),
-  m_error(FALSE), m_lcount(0), m_timeout(600),
-  m_states(), m_beingDeleted(FALSE),
-  m_unread(NULL), m_unrd_size(0), m_unrd_cur(0),
-  m_cbk(NULL), m_cdata(NULL)
+wxSocketBase::wxSocketBase() { Init(); }
+
+wxSocketBase::wxSocketBase(wxSocketFlags flags, wxSocketType type)
 {
+  Init();
+
+  m_flags = flags;
+  m_type  = type;
 }
 
 wxSocketBase::~wxSocketBase()
@@ -565,33 +578,11 @@ wxSocketBase& wxSocketBase::Discard()
 // timeout elapses. The polling loop calls PROCESS_EVENTS(), so
 // this won't block the GUI.
 
-#if wxUSE_GUI
-
-class _wxSocketInternalTimer: public wxTimer
-{
-public:
-  int *m_state;
-  unsigned long m_new_val;
-
-  void Notify()
-  {
-    *m_state = (int)m_new_val;      // Change the value
-  }
-};
-
-#endif // wxUSE_GUI
-
 bool wxSocketBase::_Wait(long seconds, long milliseconds,
                          wxSocketEventFlags flags)
 {
   GSocketEventFlags result;
-#if wxUSE_GUI
-  _wxSocketInternalTimer timer;
-  wxTimerRunner runTimer(timer);
-#endif // wxUSE_GUI
-
   long timeout;
-  int state = -1;
 
   // Set this to TRUE to interrupt ongoing waits
   m_interrupt = FALSE;
@@ -600,21 +591,11 @@ bool wxSocketBase::_Wait(long seconds, long milliseconds,
   if (!m_socket)
     return FALSE;
 
-  // Check for valid timeout value
+  // Check for valid timeout value.
   if (seconds != -1)
     timeout = seconds * 1000 + milliseconds;
   else
     timeout = m_timeout * 1000;
-
-  // Activate timer
-  if (timeout)
-  {
-#if wxUSE_GUI
-    timer.m_state = &state;
-    timer.m_new_val = 0;
-    runTimer.Start((int)timeout, TRUE);
-#endif // wxUSE_GUI
-  }
 
   // Active polling (without using events)
   //
@@ -628,7 +609,10 @@ bool wxSocketBase::_Wait(long seconds, long milliseconds,
   // Do this at least once (important if timeout == 0, when
   // we are just polling). Also, if just polling, do not yield.
 
-  while (state == -1)
+  wxStopWatch chrono;
+  bool done = FALSE;
+
+  while (!done)
   {
     result = GSocket_Select(m_socket, flags | GSOCK_LOST_FLAG);
 
@@ -655,8 +639,8 @@ bool wxSocketBase::_Wait(long seconds, long milliseconds,
     }
 
     // Wait more?
-    if ((timeout == 0) || (m_interrupt))
-      break;
+    if ((!timeout) || (chrono.Time() > timeout) || (m_interrupt))
+      done = TRUE;
     else
       PROCESS_EVENTS();
   }
@@ -785,9 +769,9 @@ void wxSocketBase::SetTimeout(long seconds)
     GSocket_SetTimeout(m_socket, m_timeout * 1000);
 }
 
-void wxSocketBase::SetFlags(wxSockFlags _flags)
+void wxSocketBase::SetFlags(wxSocketFlags flags)
 {
-  m_flags = _flags;
+  m_flags = flags;
 }
 
 // --------------------------------------------------------------------------
@@ -827,18 +811,6 @@ static void LINKAGEMODE wx_socket_callback(GSocket * WXUNUSED(socket),
   sckobj->OnRequest((wxSocketNotify)event);
 }
 
-wxSocketEventFlags wxSocketBase::EventToNotify(wxSocketNotify evt)
-{
-  switch (evt)
-  {
-    case GSOCK_INPUT:      return GSOCK_INPUT_FLAG;
-    case GSOCK_OUTPUT:     return GSOCK_OUTPUT_FLAG;
-    case GSOCK_CONNECTION: return GSOCK_CONNECTION_FLAG;
-    case GSOCK_LOST:       return GSOCK_LOST_FLAG;
-  }
-  return 0;
-}
-
 void wxSocketBase::SetNotify(wxSocketEventFlags flags)
 {
   m_neededreq = flags;
@@ -851,8 +823,15 @@ void wxSocketBase::Notify(bool notify)
 
 void wxSocketBase::OnRequest(wxSocketNotify req_evt)
 {
-  wxSocketEvent event(m_id);
-  wxSocketEventFlags flag = EventToNotify(req_evt);
+  wxSocketEventFlags flag = -1;
+
+  switch (req_evt)
+  {
+    case GSOCK_INPUT:      flag = GSOCK_INPUT_FLAG; break;
+    case GSOCK_OUTPUT:     flag = GSOCK_OUTPUT_FLAG; break;
+    case GSOCK_CONNECTION: flag = GSOCK_CONNECTION_FLAG; break;
+    case GSOCK_LOST:       flag = GSOCK_LOST_FLAG; break;
+  }
 
   // This duplicates some code in _Wait, but this doesn't
   // hurt. It has to be here because we don't know whether
@@ -891,34 +870,28 @@ void wxSocketBase::OnRequest(wxSocketNotify req_evt)
 
   if (((m_neededreq & flag) == flag) && m_notify_state)
   {
-    event.m_socket = this;
-    event.m_skevt  = req_evt;
-
-    if (m_evt_handler)
+    if (m_handler)
     {
+      wxSocketEvent event(m_id);
+      event.m_socket = this;
+      event.m_event  = req_evt;
+
 #if USE_DELAYED_EVENTS
-      wxPostEvent(m_evt_handler, event);
+      wxPostEvent(m_handler, event);
 #else
-      ProcessEvent(event);
+      m_handler->ProcessEvent(event);
 #endif
     }
 
-    OldOnNotify(req_evt);
     if (m_cbk)
       m_cbk(*this, req_evt, m_cdata);
   }
 }
 
-void wxSocketBase::OldOnNotify(wxSocketNotify WXUNUSED(evt))
+void wxSocketBase::SetEventHandler(wxEvtHandler& handler, int id)
 {
-}
-
-void wxSocketBase::SetEventHandler(wxEvtHandler& h_evt, int id)
-{
-  m_evt_handler = &h_evt;
-  m_id = id;
-
-  SetNextHandler(&h_evt);
+  m_handler = &handler;
+  m_id      = id;
 }
 
 // --------------------------------------------------------------------------
@@ -981,8 +954,8 @@ wxUint32 wxSocketBase::GetPushback(char *buffer, wxUint32 size, bool peek)
 // --------------------------------------------------------------------------
 
 wxSocketServer::wxSocketServer(wxSockAddress& addr_man,
-                               wxSockFlags flags)
-              : wxSocketBase(flags, SOCK_SERVER)
+                               wxSocketFlags flags)
+              : wxSocketBase(flags, wxSOCKET_SERVER)
 {
   // Create the socket
   m_socket = GSocket_new();
@@ -1032,7 +1005,7 @@ bool wxSocketServer::AcceptWith(wxSocketBase& sock, bool wait)
   if (!child_socket)
     return FALSE;
 
-  sock.m_type = SOCK_INTERNAL;
+  sock.m_type = wxSOCKET_BASE;
   sock.m_socket = child_socket;
   sock.m_connected = TRUE;
 
@@ -1048,7 +1021,7 @@ wxSocketBase *wxSocketServer::Accept(bool wait)
 {
   wxSocketBase* sock = new wxSocketBase();
 
-  sock->SetFlags((wxSockFlags)m_flags);
+  sock->SetFlags(m_flags);
 
   if (!AcceptWith(*sock, wait))
     return NULL;
@@ -1069,12 +1042,11 @@ bool wxSocketServer::WaitForAccept(long seconds, long milliseconds)
 // Ctor and dtor
 // --------------------------------------------------------------------------
 
-wxSocketClient::wxSocketClient(wxSockFlags _flags)
-              : wxSocketBase(_flags, SOCK_CLIENT)
+wxSocketClient::wxSocketClient(wxSocketFlags flags)
+              : wxSocketBase(flags, wxSOCKET_CLIENT)
 {
 }
 
-// XXX: What is this for ?
 wxSocketClient::~wxSocketClient()
 {
 }
@@ -1149,8 +1121,9 @@ bool wxSocketClient::WaitOnConnect(long seconds, long milliseconds)
 
 /* NOTE: experimental stuff - might change */
 
-wxDatagramSocket::wxDatagramSocket( wxSockAddress& addr, wxSockFlags flags )
-                : wxSocketBase( flags, SOCK_DATAGRAM )
+wxDatagramSocket::wxDatagramSocket( wxSockAddress& addr,
+                                    wxSocketFlags flags )
+                : wxSocketBase( flags, wxSOCKET_DATAGRAM )
 {
   // Create the socket
   m_socket = GSocket_new();
@@ -1199,25 +1172,21 @@ wxDatagramSocket& wxDatagramSocket::SendTo( wxSockAddress& addr,
 // wxSocketEvent
 // ==========================================================================
 
-// XXX: Should be moved to event.cpp ?
-
-wxSocketEvent::wxSocketEvent(int id)
-             : wxEvent(id)
+wxSocketEvent::wxSocketEvent(int id) : wxEvent(id)
 {
-  wxEventType type = (wxEventType)wxEVT_SOCKET;
-
-  SetEventType(type);
+  SetEventType( (wxEventType)wxEVT_SOCKET );
 }
 
-void wxSocketEvent::CopyObject(wxObject& obj_d) const
+void wxSocketEvent::CopyObject(wxObject& object_dest) const
 {
-  wxSocketEvent *event = (wxSocketEvent *)&obj_d;
+  wxSocketEvent *event = (wxSocketEvent *)&object_dest;
 
-  wxEvent::CopyObject(obj_d);
+  wxEvent::CopyObject(object_dest);
 
-  event->m_skevt = m_skevt;
+  event->m_event  = m_event;
   event->m_socket = m_socket;
 }
+
 
 // ==========================================================================
 // wxSocketModule
