@@ -1509,7 +1509,11 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     // is it a message from the header?
     if ( nmhdr->hwndFrom == hwndHdr )
     {
+#ifdef __WATCOMC__
+        HD_NOTIFY *nmHDR = (HD_NOTIFY *)nmhdr;
+#else
         NMHEADER *nmHDR = (NMHEADER *)nmhdr;
+#endif
         event.m_itemIndex = -1;
 
         switch ( nmhdr->code )
