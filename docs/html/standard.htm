@@ -71,6 +71,7 @@ C++ portability guide</A> by David Williams.
     <LI><A HREF="#no_carriagereturn">Avoid carriage returns in cross-platform code</A></LI>
     <LI><A HREF="#no_caps_in_filenames">Use only lower letter filenames</A></LI>
     <LI><A HREF="#no_incomplete_files">Terminate the files with a new-line</A></LI>
+    <LI><A HREF="#no_case_only_diff">Avoid globals differing by case only</A></LI>
   </OL>
   <BR>
   <LI>Style choices</LI>
@@ -104,8 +105,7 @@ C++ portability guide</A> by David Williams.
   <LI>More about naming conventions</LI>
   <OL>
     <LI><A HREF="#wx_prefix">Use wx or WX prefix for all public symbols</A></LI>
-    <LI><A HREF="#wxdllexport">Use WXDLLEXPORT with all classes/functions in
-                               wxMSW/common code</A></LI>
+    <LI><A HREF="#wxdllexport">Use WXDLLEXPORT with all classes/functions in wxMSW/common code</A></LI>
     <LI><A HREF="#set_get">Use Set/Get prefixes for accessors</A></LI>
     <LI><A HREF="#constants">wxNAMING_CONSTANTS</A></LI>
   </OL>
@@ -577,6 +577,13 @@ While DOS/Windows compilers don't seem to mind, their Unix counterparts don't
 like files without terminating new-line. Such files also give a warning message
 when loaded to vim (the Unix programmer's editor of choice :-)), so please think
 about terminating the last line.
+
+    <P><LI><A NAME="no_case_only_diff"></A><B>Avoid globals differing by case only</B></LI><P>
+The linker on VMS is case-insensitive. Therefore all external variables and
+functions which differ only in case are not recognized by the linker as
+different, so all externals should differ in more than the case only:
+i.e. <TT>GetId</TT> is the same as <TT><GetID</TT>. 
+
   </OL>
 
   <BR>
