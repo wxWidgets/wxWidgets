@@ -166,7 +166,7 @@ void wxDestroyMGL_WM()
 static void wxWindowPainter(window_t *wnd, MGLDC *dc)
 {
     wxWindowMGL *w = (wxWindow*) wnd->userData;
-    if (w && !(w->GetStyle() & wxTRANSPARENT_WINDOW))
+    if ( w && !(w->GetWindowStyle() & wxTRANSPARENT_WINDOW) )
     {
         MGLDevCtx ctx(dc);
         w->HandlePaint(&ctx);
@@ -377,6 +377,8 @@ static long wxScanToKeyCode(event_t *event)
             break;
     }
 
+    #undef KEY
+
     return key;
 }
 
@@ -387,7 +389,6 @@ static long wxAsciiToKeyCode(event_t *event)
 
 static ibool wxWindowKeybHandler(window_t *wnd, event_t *e)
 {
-    wxEventType type = wxEVT_NULL;
     wxWindowMGL *win = (wxWindowMGL*)MGL_wmGetWindowUserData(wnd);
 
     if ( !win->IsEnabled() ) return FALSE;
@@ -516,22 +517,11 @@ bool wxWindowMGL::Create(wxWindow *parent,
                          long style,
                          const wxString& name)
 {
-    // FIXME_MGL -- temporary!
-    //wxCHECK_MSG( parent, FALSE, wxT("can't create wxWindow without parent") );
-
     if ( !CreateBase(parent, id, pos, size, style, wxDefaultValidator, name) )
         return FALSE;
 
-    if ( parent ) // FIXME_MGL temporary
+    if ( parent )
         parent->AddChild(this);
-    else
-        m_isShown=FALSE;// FIXME_MGL -- temporary, simulates wxTLW/wxFrame
-
-    if ( style & wxPOPUP_WINDOW )
-    {
-        // it is created hidden as other top level windows
-        m_isShown = FALSE;
-    }
 
     int x, y, w, h;
     x = pos.x, y = pos.y;
@@ -543,10 +533,21 @@ bool wxWindowMGL::Create(wxWindow *parent,
     h = HeightDefault(size.y);
     
     long mgl_style = 0;
+
     if ( !(style & wxNO_FULL_REPAINT_ON_RESIZE) )
+    {
         mgl_style |= MGL_WM_FULL_REPAINT_ON_RESIZE;
+    }
     if ( style & wxSTAY_ON_TOP )
+    {
         mgl_style |= MGL_WM_ALWAYS_ON_TOP;
+    }
+    if ( style & wxPOPUP_WINDOW )
+    {
+        mgl_style |=  MGL_WM_ALWAYS_ON_TOP;
+        // it is created hidden as other top level windows
+        m_isShown = FALSE;
+    }
 
     m_wnd = MGL_wmCreateWindow(g_winMng,
                                parent ? parent->GetHandle() : NULL,
@@ -586,6 +587,7 @@ void wxWindowMGL::SetFocus()
 
     if ( IsTopLevel() )
     {
+        // FIXME_MGL - this is wrong, see wxGTK!
         wxActivateEvent event(wxEVT_ACTIVATE, TRUE, GetId());
         event.SetEventObject(this);
         GetEventHandler()->ProcessEvent(event);
@@ -614,6 +616,7 @@ void wxWindowMGL::KillFocus()
 
     if ( IsTopLevel() )
     {
+        // FIXME_MGL - this is wrong, see wxGTK!
         wxActivateEvent event(wxEVT_ACTIVATE, FALSE, GetId());
         event.SetEventObject(this);
         GetEventHandler()->ProcessEvent(event);
