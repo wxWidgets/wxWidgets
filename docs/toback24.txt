@@ -434,3 +434,9 @@ CVS: [VS] wxWindows/src/gtk control.cpp,1.27,1.28
 
 CVS: [VZ] wxWindows/src/common datetime.cpp,1.73,1.74
 
+35. Fix wxFontEncoding values:
+
+make wxFONTENCODING_EUC_JP == wxFONTENCODING_UTF8 + 1 in wx/fontenc.h
+
+http://sf.net/tracker/index.php?func=detail&aid=703260&group_id=9863&atid=109863
+
