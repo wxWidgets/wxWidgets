@@ -338,23 +338,26 @@ long wxGetFreeMemory()
     return FreeMem() ;
 }
 
-void wxUsleep(unsigned long milliseconds)
+#ifndef __DARWIN__
+
+void wxMicroSleep(unsigned long microseconds)
 {
-    // TODO remove if we don't encounter any other problemsy
-    /*
-    clock_t start = clock() ;
-    do
-    {
-        YieldToAnyThread() ;
-    } while( clock() - start < milliseconds /  1000.0 * CLOCKS_PER_SEC ) ;
-    */
-    wxThread::Sleep( milliseconds ) ;
+	AbsoluteTime wakeup = AddDurationToAbsolute( microseconds * durationMicrosecond , UpTime());
+	MPDelayUntil( & wakeup);
+}
+
+void wxMilliSleep(unsigned long milliseconds)
+{
+	AbsoluteTime wakeup = AddDurationToAbsolute( milliseconds, UpTime());
+	MPDelayUntil( & wakeup);
 }
 
 void wxSleep(int nSecs)
 {
-    wxUsleep(1000*nSecs);
+    wxMilliSleep(1000*nSecs);
 }
+
+#endif
 
 // Consume all events until no more left
 void wxFlushEvents()
@@ -1472,6 +1475,49 @@ void wxMacControl::Flash( ControlPartCode part , UInt32 ticks )
     unsigned long finalTicks ;
     Delay( ticks , &finalTicks ) ;
     HiliteControl( m_controlRef , kControlNoPart ) ;
+}
+
+SInt32 wxMacControl::GetValue() const
+{ 
+    return ::GetControl32BitValue( m_controlRef ) ; 
+}
+
+SInt32 wxMacControl::GetMaximum() const
+{ 
+    return ::GetControl32BitMaximum( m_controlRef ) ; 
+}
+
+SInt32 wxMacControl::GetMinimum() const
+{ 
+    return ::GetControl32BitMinimum( m_controlRef ) ; 
+}
+
+void wxMacControl::SetValue( SInt32 v ) 
+{ 
+    ::SetControl32BitValue( m_controlRef , v ) ; 
+}
+
+void wxMacControl::SetMinimum( SInt32 v ) 
+{ 
+    ::SetControl32BitMinimum( m_controlRef , v ) ; 
+}
+
+void wxMacControl::SetMaximum( SInt32 v ) 
+{ 
+    ::SetControl32BitMaximum( m_controlRef , v ) ;
+}
+
+void wxMacControl::SetValueAndRange( SInt32 value , SInt32 minimum , SInt32 maximum )
+{
+    ::SetControl32BitMinimum( m_controlRef , minimum ) ;
+    ::SetControl32BitMaximum( m_controlRef , maximum ) ; 
+    ::SetControl32BitValue( m_controlRef , value ) ;
+}
+
+void wxMacControl::SetRange( SInt32 minimum , SInt32 maximum )
+{
+    ::SetControl32BitMinimum( m_controlRef , minimum ) ;
+    ::SetControl32BitMaximum( m_controlRef , maximum ) ; 
 }
 
 #endif // wxUSE_GUI
