@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """PyShell is a python shell application."""
 
 # The next two lines, and the other code below that makes use of

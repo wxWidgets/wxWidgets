@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """PyFilling is a python namespace inspection application."""
 
 __author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"

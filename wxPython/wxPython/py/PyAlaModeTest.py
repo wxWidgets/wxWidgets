@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """PyAlaModeTest is a programmer's editor."""
 
 __author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"

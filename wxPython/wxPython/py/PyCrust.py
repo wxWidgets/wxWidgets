@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """PyCrust is a python shell and namespace browser application."""
 
 # The next two lines, and the other code below that makes use of
