@@ -46,9 +46,9 @@ force-update:
 stats: FORCE
 	@for i in $(WX_LINGUAS); do \
 		x=`$(MSGFMT) -o /dev/null "$$i.po" 2>&1 | sed -e 's/[,\.]//g' \
-			-e 's/\([0-9]\+\) translated messages/TR=\1/' \
-			-e 's/\([0-9]\+\) fuzzy translations/FZ=\1/' \
-			-e 's/\([0-9]\+\) untranslated messages/UT=\1/'`; \
+			-e 's/\([0-9]\+\) translated messages\?/TR=\1/' \
+			-e 's/\([0-9]\+\) fuzzy translations\?/FZ=\1/' \
+			-e 's/\([0-9]\+\) untranslated messages\?/UT=\1/'`; \
 		TR=0 FZ=0 UT=0; \
 		eval $$x; \
 		TOTAL=`expr $$TR + $$FZ + $$UT`; \
