@@ -1,5 +1,5 @@
 
-25th October '99: My birthday, wxWindows 2.1.10 released
+1st November '99: wxWindows 2.1.11 released
 
 There is still a unresolved problem with bitmap to image
 conversion on big-endian architectures (such as Solaris),
@@ -55,7 +55,8 @@ all relevant SQL databases (even DBase). For that reason
 I have reawakened the iODBC code from wxGTK 2.0 so you
 can now use wxODBC from wxMSW and wxGTK.
 
-Several printing things fixed.
+Several printing things fixed. More work needs to be done
+here..
 
 HTML widget and the wxWindows' help system based upon
 it have been reorganized and improved for easier use
@@ -106,6 +107,15 @@ A handler to read PCX file (in most variants) has been added.
 
 A number of problems with compressed and socket streams have
 been solved.
+
+Changed behavour of wxTextStream to make use of deliminators
+and default to space as the standard C++ stream do.
+
+Changes to tab traversal code to better reflect MSW code.
+
+Corrected problems with wxGenericValidator and certain controls.
+
+Made default button action work in more cases.
 
 28th August '99: Ninth wxGTK 2.1 snapshot released
 

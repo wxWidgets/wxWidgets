@@ -47,21 +47,51 @@ extern wxList wxPendingDelete;
 // "switch_page"
 //-----------------------------------------------------------------------------
 
-static void gtk_mdi_page_change_callback(GtkNotebook *WXUNUSED(widget),
-                                              GtkNotebookPage *WXUNUSED(page),
-                                              gint WXUNUSED(page),
-                                              wxMDIParentFrame *parent )
+static void 
+gtk_mdi_page_change_callback( GtkNotebook *widget,
+                              GtkNotebookPage *page,
+			      gint WXUNUSED(page_num),
+			      wxMDIParentFrame *parent )
 {
     if (g_isIdle) 
         wxapp_install_idle_handler();
 
-    wxMDIChildFrame *child = parent->GetActiveChild();
-    
-    if (!child) return;
+    // send deactivate event to old child
 
-    wxActivateEvent event( wxEVT_ACTIVATE, TRUE, child->GetId() );
-    event.SetEventObject( child);
-    child->GetEventHandler()->ProcessEvent( event );
+    wxMDIChildFrame *child = parent->GetActiveChild();
+    if (child)
+    {
+        wxActivateEvent event1( wxEVT_ACTIVATE, FALSE, child->GetId() );
+        event1.SetEventObject( child);
+        child->GetEventHandler()->ProcessEvent( event1 );
+    }
+    
+    // send activate event to new child
+    
+    wxMDIClientWindow *client_window = parent->GetClientWindow();
+    if (!client_window)
+        return;
+
+    child = (wxMDIChildFrame*) NULL;
+
+    wxNode *node = client_window->GetChildren().First();
+    while (node)
+    {
+        wxMDIChildFrame *child_frame = (wxMDIChildFrame *)node->Data();
+        if (child_frame->m_page == page)
+	{
+            child = child_frame;
+	    break;
+	}
+        node = node->Next();
+    }
+    
+    if (!child)
+         return;
+    
+    wxActivateEvent event2( wxEVT_ACTIVATE, TRUE, child->GetId() );
+    event2.SetEventObject( child);
+    child->GetEventHandler()->ProcessEvent( event2 );
 }
 
 //-----------------------------------------------------------------------------

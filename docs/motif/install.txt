@@ -315,7 +315,7 @@ are
 	
 	--without-libjpeg	Disables JPEG image format code.
 	
-{	--without-odbc          Disables ODBC code. Not yet. }
+	--without-odbc          Disables ODBC code.
 	
         --disable-resources     Disables the use of *.wxr type
 	                        resources.

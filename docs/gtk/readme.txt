@@ -1,10 +1,17 @@
 
-  Welcome to wxWindows/Gtk 2.1 snapshot 9,
+   Welcome to wxWindows/Gtk 2.1.11
 
 you have downloaded version 2.1 of the GTK+ 1.2 port of 
-the wxWindows GUI library. This is a developers release
-and is it not suited for production development. Beware
-that major changes can happen before a final release.
+the wxWindows GUI library. Although this is not yet the
+final stable release wxGTK 2.2, the current version has
+been tested carefully on many systems and has been found
+to work better than any other previous version.
+
+Nonetheless, beware that major changes can happen before 
+a final release.
+
+wxWindows no longer supports GTK 1.0 (as did some early
+snapshots) so that you will need GTK 1.2 when using it.
 
 Beginning with snapshot 9, wxWindows uses a completely
 new make file system on Unix which no longer uses the
@@ -15,18 +22,17 @@ More information is available from my homepage at:
 
   http://wesley.informatik.uni-freiburg.de/~wxxt
   
-and about the wxWindows project as a whole (and the
-Windows and Motif ports in particular) can be found
-at Julian Smart's homepage at:
+and about the wxWindows project as a whole (and the MSW
+and Motif ports in particular) can be found at Julian's 
+homepage at:
 
   http://web.ukonline.co.uk/julian.smart/wxwin
   
 Information on how to install can be found in the file 
 INSTALL.txt, but if you cannot wait, this should work on
-many systems (when using GTK 1.0 or when not using Linux
-read the INSTALL.txt):
+many systems:
 
-./configure
+./configure --with-gtk
 make
 su <type root password>
 make install
