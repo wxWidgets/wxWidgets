@@ -636,6 +636,14 @@ class HtmlCell(core.Object):
         """GetDescent() -> int"""
         return _html.HtmlCell_GetDescent(*args, **kwargs)
 
+    def GetId(*args, **kwargs):
+        """GetId() -> String"""
+        return _html.HtmlCell_GetId(*args, **kwargs)
+
+    def SetId(*args, **kwargs):
+        """SetId(String id)"""
+        return _html.HtmlCell_SetId(*args, **kwargs)
+
     def GetLink(*args, **kwargs):
         """GetLink(int x=0, int y=0) -> HtmlLinkInfo"""
         return _html.HtmlCell_GetLink(*args, **kwargs)

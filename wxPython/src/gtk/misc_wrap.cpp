@@ -343,7 +343,11 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 
 
     long wxGetFreeMemory()
-        { PyErr_SetNone(PyExc_NotImplementedError); return 0; }
+        { wxPyRaiseNotImplemented(); return 0; }
+
+
+    bool wxGetKeyState(wxKeyCode key)
+        {  wxPyRaiseNotImplemented(); return False; }
 
 
     void wxWakeUpMainThread() {}
@@ -527,7 +531,8 @@ class wxJoystick : public wxObject {
 public:
     wxJoystick(int joystick = wxJOYSTICK1) {
         wxPyBeginBlockThreads();
-        PyErr_SetString(PyExc_NotImplementedError, "wxJoystick is not available on this platform.");
+        PyErr_SetString(PyExc_NotImplementedError,
+                        "wxJoystick is not available on this platform.");
         wxPyEndBlockThreads();
     }
     wxPoint GetPosition() { return wxPoint(-1,-1); }
@@ -589,12 +594,14 @@ class wxWave : public wxObject
 public:
     wxWave(const wxString& fileName, bool isResource = False) {
         wxPyBeginBlockThreads();
-        PyErr_SetString(PyExc_NotImplementedError, "wxWave is not available on this platform.");
+        PyErr_SetString(PyExc_NotImplementedError,
+                        "wxWave is not available on this platform.");
         wxPyEndBlockThreads();
     }
     wxWave(int size, const wxByte* data) {
         wxPyBeginBlockThreads();
-        PyErr_SetString(PyExc_NotImplementedError, "wxWave is not available on this platform.");
+        PyErr_SetString(PyExc_NotImplementedError,
+                        "wxWave is not available on this platform.");
         wxPyEndBlockThreads();
     }
 
@@ -1045,7 +1052,7 @@ PyObject *wxCustomDataObject_GetData(wxCustomDataObject *self){
 class wxMetafileDataObject : public wxDataObjectSimple
 {
 public:
-    wxMetafileDataObject() { PyErr_SetNone(PyExc_NotImplementedError); }
+    wxMetafileDataObject() { wxPyRaiseNotImplemented(); }
 };    
 
 
@@ -3656,6 +3663,29 @@ static PyObject *_wrap_GetTopLevelParent(PyObject *self, PyObject *args, PyObjec
     {
         resultobj = wxPyMake_wxObject(result); 
     }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_GetKeyState(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    int arg1 ;
+    bool result;
+    char *kwnames[] = {
+        (char *) "key", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"i:GetKeyState",kwnames,&arg1)) goto fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)wxGetKeyState((wxKeyCode )arg1);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = PyInt_FromLong((long)result);
     return resultobj;
     fail:
     return NULL;
@@ -24597,6 +24627,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"GenericFindWindowAtPoint", (PyCFunction) _wrap_GenericFindWindowAtPoint, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"FindWindowAtPoint", (PyCFunction) _wrap_FindWindowAtPoint, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"GetTopLevelParent", (PyCFunction) _wrap_GetTopLevelParent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GetKeyState", (PyCFunction) _wrap_GetKeyState, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"WakeUpMainThread", (PyCFunction) _wrap_WakeUpMainThread, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"MutexGuiEnter", (PyCFunction) _wrap_MutexGuiEnter, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"MutexGuiLeave", (PyCFunction) _wrap_MutexGuiLeave, METH_VARARGS | METH_KEYWORDS },

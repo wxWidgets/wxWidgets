@@ -401,10 +401,10 @@ public:
     wxToggleButton(wxWindow *, wxWindowID, const wxString&,
                    const wxPoint&, const wxSize&, long,
                    const wxValidator&, const wxString&)
-        { PyErr_SetNone(PyExc_NotImplementedError); }
+        { wxPyRaiseNotImplemented(); }
     
     wxToggleButton()
-        { PyErr_SetNone(PyExc_NotImplementedError); }
+        { wxPyRaiseNotImplemented(); }
 };
 #endif
 

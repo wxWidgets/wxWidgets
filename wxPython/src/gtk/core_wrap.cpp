@@ -953,7 +953,7 @@ wxPyApp *new_wxPyApp(){
             wxPythonApp = new wxPyApp();
             return wxPythonApp;
         }
-int PyApp_GetComCtl32Version(){ PyErr_SetNone(PyExc_NotImplementedError); return 0; }
+int PyApp_GetComCtl32Version(){ wxPyRaiseNotImplemented(); return 0; }
 
     void wxApp_CleanUp() {
         __wxPyCleanup();
@@ -1011,7 +1011,7 @@ wxWindow* wxFindWindowByLabel( const wxString& label,
         win->SubclassWin(hWnd);
         return win;
 #else
-        PyErr_SetNone(PyExc_NotImplementedError);
+        wxPyRaiseNotImplemented();
         return NULL;
 #endif
     }

@@ -575,13 +575,13 @@ static void wxDC_GetBoundingBox(wxDC* dc, int* x1, int* y1, int* x2, int* y2) {
 class wxMetaFile : public wxObject {
 public:
     wxMetaFile(const wxString&)
-        { PyErr_SetNone(PyExc_NotImplementedError); }
+        { wxPyRaiseNotImplemented(); }
 };
 
 class wxMetaFileDC : public wxClientDC {
 public:
     wxMetaFileDC(const wxString&, int, int, const wxString&)
-        { PyErr_SetNone(PyExc_NotImplementedError); }
+        { wxPyRaiseNotImplemented(); }
 };
 
 
@@ -589,10 +589,10 @@ public:
 class  wxPrinterDC : public wxClientDC {
 public:
     wxPrinterDC(const wxPrintData&)
-        { PyErr_SetNone(PyExc_NotImplementedError); }
+        { wxPyRaiseNotImplemented(); }
     
 //     wxPrinterDC(const wxString&, const wxString&, const wxString&, bool, int)
-//         { PyErr_SetNone(PyExc_NotImplementedError); }
+//         { wxPyRaiseNotImplemented(); }
 };
 
 

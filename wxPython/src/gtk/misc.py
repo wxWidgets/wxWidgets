@@ -488,6 +488,10 @@ def GetTopLevelParent(*args, **kwargs):
     """GetTopLevelParent(Window win) -> Window"""
     return _misc.GetTopLevelParent(*args, **kwargs)
 
+def GetKeyState(*args, **kwargs):
+    """GetKeyState(int key) -> bool"""
+    return _misc.GetKeyState(*args, **kwargs)
+
 def WakeUpMainThread(*args, **kwargs):
     """WakeUpMainThread()"""
     return _misc.WakeUpMainThread(*args, **kwargs)
