@@ -207,9 +207,9 @@ public:
 #if WXWIN_COMPATIBILITY_2_2
         // deprecated:  Use GetItemParent instead.
     wxTreeItemId GetParent(const wxTreeItemId& item) const
-    	{ return GetItemParent( item ); }
+        { return GetItemParent( item ); }
 
-    	// Expose the base class method hidden by the one above.
+        // Expose the base class method hidden by the one above.
     wxWindow *GetParent() const { return wxScrolledWindow::GetParent(); }
 #endif  // WXWIN_COMPATIBILITY_2_2
 
