@@ -64,18 +64,27 @@ wxPoseAsInitializer *wxPoseAsInitializer::sm_first = NULL;
 {
     wxASSERT(wxTheApp);
     wxLogDebug("doIdle called");
-    NSRunLoop *rl = [NSRunLoop currentRunLoop];
-    // runMode: beforeDate returns YES if something was done
-    while(wxTheApp->ProcessIdle()) // FIXME: AND NO EVENTS ARE PENDING
+#ifdef __WXDEBUG__
+    if(wxTheApp->IsInAssert())
     {
-        wxLogDebug("Looping for idle events");
-        #if 1
-        if( [rl runMode:[rl currentMode] beforeDate:[NSDate distantPast]])
+        wxLogDebug("Idle events ignored durring assertion dialog");
+    }
+    else
+#endif
+    {
+        NSRunLoop *rl = [NSRunLoop currentRunLoop];
+        // runMode: beforeDate returns YES if something was done
+        while(wxTheApp->ProcessIdle()) // FIXME: AND NO EVENTS ARE PENDING
         {
-            wxLogDebug("Found actual work to do");
-            break;
+            wxLogDebug("Looping for idle events");
+            #if 1
+            if( [rl runMode:[rl currentMode] beforeDate:[NSDate distantPast]])
+            {
+                wxLogDebug("Found actual work to do");
+                break;
+            }
+            #endif
         }
-        #endif
     }
     wxLogDebug("Idle processing complete, requesting next idle event");
     // Add ourself back into the run loop (on next event) if necessary
@@ -175,6 +184,10 @@ wxApp::wxApp()
 #if WXWIN_COMPATIBILITY_2_2
     m_wantDebugOutput = TRUE;
 #endif
+#ifdef __WXDEBUG__
+    m_isInAssert = FALSE;
+#endif // __WXDEBUG__
+
 
     argc = 0;
     argv = NULL;
@@ -308,4 +321,13 @@ bool wxApp::Yield(bool onlyIfNeeded)
 
     return true;
 }
+
+#ifdef __WXDEBUG__
+void wxApp::OnAssert(const wxChar *file, int line, const wxChar* cond, const wxChar *msg)
+{
+    m_isInAssert = TRUE;
+    wxAppBase::OnAssert(file, line, cond, msg);
+    m_isInAssert = FALSE;
+}
+#endif // __WXDEBUG__
 

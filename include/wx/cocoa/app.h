@@ -61,6 +61,16 @@ public:
     
     virtual bool OnInit();
     virtual bool OnInitGui();
+
+#ifdef __WXDEBUG__
+    virtual void OnAssert(const wxChar *file, int line, const wxChar *cond, const wxChar *msg);
+    bool IsInAssert() const { return m_isInAssert; }
+#endif // __WXDEBUG__
+
+private:
+#ifdef __WXDEBUG__
+    bool m_isInAssert;
+#endif // __WXDEBUG__
 };
 
 #endif // _WX_COCOA_APP_H_
