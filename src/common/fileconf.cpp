@@ -626,9 +626,9 @@ bool wxFileConfig::Write(const wxString& key, const wxString& szValue)
 bool wxFileConfig::Write(const wxString& key, long lValue)
 {
   // ltoa() is not ANSI :-(
-  char szBuf[40];   // should be good for sizeof(long) <= 16 (128 bits)
-  sprintf(szBuf, "%ld", lValue);
-  return Write(key, szBuf);
+  wxString buf;
+  buf.Printf("%ld", lValue);
+  return Write(key, buf);
 }
 
 bool wxFileConfig::Flush(bool /* bCurrentOnly */)

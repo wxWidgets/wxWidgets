@@ -220,8 +220,8 @@ bool wxTable::Open(void)
 	// Verify that the table exists in the database
 	if (!pDb->TableExists(tableName))
 	{
-		char s[128];
-		sprintf(s, "Error opening '%s', table/view does not exist in the database.", tableName);
+        wxString s;
+		s.Printf("Error opening '%s', table/view does not exist in the database.", tableName);
 		pDb->LogError(s);
 		return(FALSE);
 	}
@@ -694,11 +694,11 @@ bool wxTable::CreateTable(void)
 		// For varchars, append the size of the string
 		if (colDefs[i].DbDataType == DB_DATA_TYPE_VARCHAR)
 		{
-			char s[10];
 			// strcat(sqlStmt, "(");
 			// strcat(sqlStmt, itoa(colDefs[i].SzDataObj, s, 10));
 			// strcat(sqlStmt, ")");
-			sprintf(s, "(%d)", colDefs[i].SzDataObj);
+            wxString s;
+			s.Printf("(%d)", colDefs[i].SzDataObj);
 			strcat(sqlStmt, s);
 		}
 		needComma = TRUE;
@@ -1064,7 +1064,7 @@ void wxTable::GetDeleteStmt(char *pSqlStmt, int typeOfDel, char *pWhereClause)
 void wxTable::GetWhereClause(char *pWhereClause, int typeOfWhere)
 {
 	bool moreThanOneColumn = FALSE;
-	char colValue[255];
+    wxString colValue;
 
 	// Loop through the columns building a where clause as you go
 	for (int i = 0; i < noCols; i++)
@@ -1087,25 +1087,25 @@ void wxTable::GetWhereClause(char *pWhereClause, int typeOfWhere)
 			switch(colDefs[i].SqlCtype)
 			{
 			case SQL_C_CHAR:
-				sprintf(colValue, "'%s'", (UCHAR FAR *) colDefs[i].PtrDataObj);
+				colValue.Printf("'%s'", (UCHAR FAR *) colDefs[i].PtrDataObj);
 				break;
 			case SQL_C_SSHORT:
-				sprintf(colValue, "%hi", *((SWORD *) colDefs[i].PtrDataObj));
+				colValue.Printf("%hi", *((SWORD *) colDefs[i].PtrDataObj));
 				break;
 			case SQL_C_USHORT:
-				sprintf(colValue, "%hu", *((UWORD *) colDefs[i].PtrDataObj));
+				colValue.Printf("%hu", *((UWORD *) colDefs[i].PtrDataObj));
 				break;
 			case SQL_C_SLONG:
-				sprintf(colValue, "%li", *((SDWORD *) colDefs[i].PtrDataObj));
+				colValue.Printf("%li", *((SDWORD *) colDefs[i].PtrDataObj));
 				break;
 			case SQL_C_ULONG:
-				sprintf(colValue, "%lu", *((UDWORD *) colDefs[i].PtrDataObj));
+				colValue.Printf("%lu", *((UDWORD *) colDefs[i].PtrDataObj));
 				break;
 			case SQL_C_FLOAT:
-				sprintf(colValue, "%.6f", *((SFLOAT *) colDefs[i].PtrDataObj));
+				colValue.Printf("%.6f", *((SFLOAT *) colDefs[i].PtrDataObj));
 				break;
 			case SQL_C_DOUBLE:
-				sprintf(colValue, "%.6f", *((SDOUBLE *) colDefs[i].PtrDataObj));
+				colValue.Printf("%.6f", *((SDOUBLE *) colDefs[i].PtrDataObj));
 				break;
 			}
 			strcat(pWhereClause, colValue);

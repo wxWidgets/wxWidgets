@@ -80,10 +80,6 @@
 
 #define _MAXPATHLEN 500
 
-#if !USE_SHARED_LIBRARY
-IMPLEMENT_DYNAMIC_CLASS(wxPathList, wxStringList)
-#endif
-
 extern char *wxBuffer;
 
 void wxPathList::Add (const wxString& path)
@@ -955,7 +951,7 @@ char *wxGetTempFileName(const wxString& prefix, char *buf)
 #else
   static short last_temp = 0;	// cache last to speed things a bit
   // At most 1000 temp files to a process! We use a ring count.
-  char tmp[100];
+  char tmp[100]; // FIXME static buffer
 
   for (short suffix = last_temp + 1; suffix != last_temp; ++suffix %= 1000)
     {
@@ -1029,7 +1025,7 @@ char *wxFindFirstFile(const char *spec, int flags)
 char *wxFindNextFile(void)
 {
 #ifndef __VMS__
-  static char buf[400];
+  static char buf[400]; // FIXME static buffer
 
   /* MATTHEW: [2] Don't crash if we read too many times */
   if (!wxDirStream)

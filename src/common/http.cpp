@@ -97,12 +97,14 @@ void wxHTTP::SendHeaders()
 {
   wxNode *head = m_headers.First();
 
-  while (head) {
+  while (head)
+  {
     wxString *str = (wxString *)head->Data();
-    char buf[100];
 
-    sprintf(buf, "%s: %s\n\r", head->GetKeyString(), str->GetData());
-    Write(buf, strlen(buf));
+    wxString buf;
+    buf.Printf("%s: %s\n\r", head->GetKeyString(), str->GetData());
+
+    Write(buf, buf.Len());
 
     head = head->Next();
   }

@@ -358,7 +358,6 @@ bool wxDocument::OnSaveModified(void)
 {
   if (IsModified())
   {
-    char buf[400];
     wxString title;
     GetPrintableName(title);
 
@@ -368,9 +367,12 @@ bool wxDocument::OnSaveModified(void)
     else
       msgTitle = wxString(_("Warning"));
 
-    sprintf(buf, _("Do you want to save changes to document %s?"), (const char *)title);
-    int res = wxMessageBox(buf, msgTitle, wxYES_NO|wxCANCEL|wxICON_QUESTION,
-      GetDocumentWindow());
+    wxString prompt;
+    prompt.Printf(_("Do you want to save changes to document %s?"),
+                  (const char *)title);
+    int res = wxMessageBox(prompt, msgTitle,
+                           wxYES_NO|wxCANCEL|wxICON_QUESTION,
+                           GetDocumentWindow());
     if (res == wxNO)
     {
       Modify(FALSE);
@@ -1003,10 +1005,9 @@ wxDocument *wxDocManager::GetCurrentDocument(void) const
 // Make a default document name
 bool wxDocManager::MakeDefaultName(wxString& name)
 {
-  char buf[256];
-  sprintf(buf, _("unnamed%d"), m_defaultDocumentNameCounter);
-  m_defaultDocumentNameCounter ++;
-  name = buf;
+  name.Printf(_("unnamed%d"), m_defaultDocumentNameCounter);
+  m_defaultDocumentNameCounter++;
+
   return TRUE;
 }
 
@@ -1141,7 +1142,7 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **WXUNUSED(templat
 {
   // We can only have multiple filters in Windows
 #ifdef __WXMSW__
-  char *descrBuf = new char[1000];
+  char *descrBuf = new char[1000];  // FIXME static buffer
   descrBuf[0] = 0;
   int i;
   for (i = 0; i < noTemplates; i++)
@@ -1788,8 +1789,8 @@ void wxFileHistory::AddFileToHistory(const wxString& file)
   for (i = 0; i < m_fileHistoryN; i++)
     if (m_fileHistory[i])
     {
-      char buf[400];
-      sprintf(buf, "&%d %s", i+1, m_fileHistory[i]);
+      wxString buf;
+      buf.Printf("&%d %s", i+1, m_fileHistory[i]);
       wxNode* node = m_fileMenus.First();
       while (node)
       {
@@ -1822,14 +1823,14 @@ void wxFileHistory::RemoveMenu(wxMenu *menu)
 void wxFileHistory::Load(wxConfigBase& config)
 {
   m_fileHistoryN = 0;
-  char buf[400];
-  sprintf(buf, "file%d", m_fileHistoryN+1);
-  wxString historyFile("");
+  wxString buf;
+  buf.Printf("file%d", m_fileHistoryN+1);
+  wxString historyFile;
   while ((m_fileHistoryN <= m_fileMaxFiles) && config.Read(buf, &historyFile) && (historyFile != ""))
   {
     m_fileHistory[m_fileHistoryN] = copystring((const char*) historyFile);
     m_fileHistoryN ++;
-    sprintf(buf, "file%d", m_fileHistoryN+1);
+    buf.Printf("file%d", m_fileHistoryN+1);
     historyFile = "";
   }
   AddFilesToMenu();

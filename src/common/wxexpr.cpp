@@ -45,8 +45,6 @@ extern "C" void LexFromString(char *buf);
 wxExprDatabase *thewxExprDatabase = NULL;
 wxExprErrorHandler currentwxExprErrorHandler;
 
-IMPLEMENT_DYNAMIC_CLASS(wxExprDatabase, wxList)
-
 wxExpr::wxExpr(const wxString& functor)
 {
   type = wxExprList;

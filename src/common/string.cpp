@@ -941,16 +941,6 @@ int wxString::Printf(const char *pszFormat, ...)
 
 int wxString::PrintfV(const char* pszFormat, va_list argptr)
 {
-#if defined(__BORLANDC__) || defined(__GNUWIN32__)
-  static char s_szScratch[1024];
-
-  int iLen = vsprintf(s_szScratch, pszFormat, argptr);
-  AllocBeforeWrite(iLen);
-  strcpy(m_pchData, s_szScratch);
-
-  return iLen;
-#else
-
   // static buffer to avoid dynamic memory allocation each time
   static char s_szScratch[1024];
 
@@ -986,7 +976,6 @@ int wxString::PrintfV(const char* pszFormat, va_list argptr)
       free(buffer);
 
   return iLen;
-#endif
 }
 
 // ----------------------------------------------------------------------------
