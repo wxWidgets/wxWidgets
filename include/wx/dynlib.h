@@ -16,13 +16,13 @@
 #   pragma interface
 #endif
 
-#include <wx/setup.h>
+#include "wx/setup.h"
 
 #if wxUSE_DYNLIB_CLASS
 
-#include <wx/string.h>
-#include <wx/list.h>
-#include <wx/hash.h>
+#include "wx/string.h"
+#include "wx/list.h"
+#include "wx/hash.h"
 
 // this is normally done by configure, but I leave it here for now...
 #if defined(__UNIX__) && !(defined(HAVE_DLOPEN) || defined(HAVE_SHL_LOAD))

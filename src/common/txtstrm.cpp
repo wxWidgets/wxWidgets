@@ -477,5 +477,10 @@ wxTextOutputStream& wxTextOutputStream::operator<<(float f)
     return *this;
 }
 
+wxTextOutputStream &endl( wxTextOutputStream &stream )
+{
+    return stream << _T('\n');
+}
+
 #endif
   // wxUSE_STREAMS

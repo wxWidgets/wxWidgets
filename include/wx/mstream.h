@@ -11,7 +11,7 @@
 #ifndef _WX_WXMMSTREAM_H__
 #define _WX_WXMMSTREAM_H__
 
-#include <wx/stream.h>
+#include "wx/stream.h"
 
 #if wxUSE_STREAMS
 

@@ -670,8 +670,11 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
     mainsizer->SetSizeHints( this );
     
     Centre( wxBOTH );
-    
-    m_list->SetFocus();
+
+    if (m_fileName.IsEmpty())
+        m_list->SetFocus();
+    else
+        m_text->SetFocus();
     
     wxEndBusyCursor();
 }
@@ -723,6 +726,24 @@ void wxFileDialog::OnListOk( wxCommandEvent &event )
 	return;
     }
 
+    if (filename == _T("~"))
+    {
+        m_list->GoToHomeDir();
+        m_list->SetFocus();
+        m_list->GetDir( dir );
+        m_static->SetLabel( dir );
+	return;
+    }
+    
+    if (filename[0] == _T('~'))
+    {
+        filename.Remove( 0, 1 );
+	wxString tmp( wxGetUserHome() );
+	tmp += _T('/');
+	tmp += filename;
+	filename = tmp;
+    }
+
     if ((filename.Find(_T('*')) != wxNOT_FOUND) ||
         (filename.Find(_T('?')) != wxNOT_FOUND))
     {
@@ -736,13 +757,19 @@ void wxFileDialog::OnListOk( wxCommandEvent &event )
     }
 
     if (dir != _T("/")) dir += _T("/");
-    dir += filename;
-    filename = dir;
+    if (filename[0] != _T('/'))
+    {
+        dir += filename;
+        filename = dir;
+    }
     
     if (wxDirExists(filename))
     {
         m_list->GoToDir( filename );
-	m_text->SetValue( _T("..") );
+	if (filename == _T("/"))
+	    m_text->SetValue( _T("") );
+	else
+	    m_text->SetValue( _T("..") );
         m_list->GetDir( dir );
         m_static->SetLabel( dir );
 	return;

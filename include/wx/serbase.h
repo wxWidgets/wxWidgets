@@ -11,8 +11,8 @@
 #ifndef _WX_WX_SERBASEH_H__
 #define _WX_WX_SERBASEH_H__
 
-#include <wx/setup.h>
-#include <wx/dynlib.h>
+#include "wx/setup.h"
+#include "wx/dynlib.h"
 
 #define WXSERIAL(classname) classname##_Serialize
 

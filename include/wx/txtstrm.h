@@ -16,7 +16,7 @@
 #pragma interface "txtstrm.h"
 #endif
 
-#include <wx/stream.h>
+#include "wx/stream.h"
 
 #if wxUSE_STREAMS
 
@@ -72,6 +72,8 @@ class WXDLLEXPORT wxTextOutputStream {
  protected:
   wxOutputStream *m_output;
 };
+
+wxTextOutputStream &endl( wxTextOutputStream &stream );
 
 #endif
   // wxUSE_STREAMS

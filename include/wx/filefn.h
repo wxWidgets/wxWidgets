@@ -16,7 +16,7 @@
     #pragma interface "filefn.h"
 #endif
 
-#include <wx/list.h>
+#include "wx/list.h"
 
 // ----------------------------------------------------------------------------
 // constants

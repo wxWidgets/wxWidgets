@@ -128,43 +128,6 @@ static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* 
 }
 
 //-----------------------------------------------------------------------------
-// "key_press_event"
-//-----------------------------------------------------------------------------
-
-static gint
-gtk_notebook_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxNotebook *notebook )
-{
-    if (g_isIdle) wxapp_install_idle_handler();
-
-    if (g_blockEventsOnDrag) return FALSE;
-
-    if (!notebook->m_hasVMT) return FALSE;
-
-    /* this code makes jumping down from the handles of the notebooks
-       to the actual items in the visible notebook page possible with
-       the down-arrow key */
-
-    if (gdk_event->keyval != GDK_Down) return FALSE;
-
-    if (notebook != notebook->FindFocus()) return FALSE;
-
-    if (notebook->m_pages.GetCount() == 0) return FALSE;
-
-    wxNode *node = notebook->m_pages.Nth( notebook->GetSelection() );
-
-    if (!node) return FALSE;
-
-    wxNotebookPage *page = (wxNotebookPage*) node->Data();
-
-    // don't let others the key event
-    gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "key_press_event" );
-
-    page->m_client->SetFocus();
-
-    return TRUE;
-}
-
-//-----------------------------------------------------------------------------
 // InsertChild callback for wxNotebook
 //-----------------------------------------------------------------------------
 
@@ -241,14 +204,24 @@ bool wxNotebook::Create(wxWindow *parent, wxWindowID id,
 
     m_parent->DoAddChild( this );
 
-    gtk_signal_connect( GTK_OBJECT(m_widget), "key_press_event",
-      GTK_SIGNAL_FUNC(gtk_notebook_key_press_callback), (gpointer)this );
-
     PostCreation();
 
     Show( TRUE );
 
     return TRUE;
+}
+
+void wxNotebook::SetFocus()
+{
+    if (m_pages.GetCount() == 0) return;
+
+    wxNode *node = m_pages.Nth( GetSelection() );
+
+    if (!node) return;
+
+    wxNotebookPage *page = (wxNotebookPage*) node->Data();
+
+    page->m_client->SetFocus();
 }
 
 int wxNotebook::GetSelection() const
@@ -284,7 +257,7 @@ wxString wxNotebook::GetPageText( int page ) const
     if (nb_page)
         return nb_page->m_text;
     else
-        return "";
+        return _T("");
 }
 
 int wxNotebook::GetPageImage( int page ) const

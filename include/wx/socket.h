@@ -24,13 +24,13 @@
 // wxSocket headers (generic)
 // ---------------------------------------------------------------------------
 #ifdef WXPREC
-#  include <wx/wxprec.h>
+#  include "wx/wxprec.h"
 #else
-#  include <wx/event.h>
-#  include <wx/string.h>
+#  include "wx/event.h"
+#  include "wx/string.h"
 #endif
 
-#include <wx/sckaddr.h>
+#include "wx/sckaddr.h"
 #include "wx/gsocket.h"
 
 class WXDLLEXPORT wxTimer;

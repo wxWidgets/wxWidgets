@@ -130,6 +130,9 @@ public:
 
   void OnNavigationKey(wxNavigationKeyEvent& event);
 
+    // overridden from wxWindow to make tabbing work  
+  void SetFocus();
+
   // implementation
 
   void SetConstraintSizes(bool recurse);

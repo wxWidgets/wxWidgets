@@ -98,7 +98,7 @@ bool wxStaticText::Create(wxWindow *parent,
     return TRUE;
 }
 
-wxString wxStaticText::GetLabel(void) const
+wxString wxStaticText::GetLabel() const
 {
     char *str = (char *) NULL;
     gtk_label_get( GTK_LABEL(m_widget), &str );

@@ -300,7 +300,20 @@ void wxImage::SetData( char unsigned *data )
 {
     wxCHECK_RET( Ok(), _T("invalid image") );
 
-    memcpy(M_IMGDATA->m_data, data, M_IMGDATA->m_width * M_IMGDATA->m_height * 3);
+    wxImageRefData *newRefData = new wxImageRefData();
+
+    newRefData->m_width = M_IMGDATA->m_width;
+    newRefData->m_height = M_IMGDATA->m_height;
+    newRefData->m_data = data;
+    newRefData->m_ok = TRUE;
+    newRefData->m_maskRed = M_IMGDATA->m_maskRed;
+    newRefData->m_maskGreen = M_IMGDATA->m_maskGreen;
+    newRefData->m_maskBlue = M_IMGDATA->m_maskBlue;
+    newRefData->m_hasMask = M_IMGDATA->m_hasMask;
+    
+    UnRef();
+    
+    m_refData = newRefData;
 }
 
 void wxImage::SetMaskColour( unsigned char r, unsigned char g, unsigned char b )

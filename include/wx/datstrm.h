@@ -16,7 +16,7 @@
 #pragma interface "datstrm.h"
 #endif
 
-#include <wx/stream.h>
+#include "wx/stream.h"
 
 #if wxUSE_STREAMS
 

@@ -19,7 +19,7 @@
 
 #if wxUSE_ZLIB && wxUSE_STREAMS
 
-#include <wx/stream.h>
+#include "wx/stream.h"
 
 class WXDLLEXPORT wxZlibInputStream: public wxFilterInputStream {
  public:

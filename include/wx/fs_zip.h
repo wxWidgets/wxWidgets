@@ -11,7 +11,7 @@
 #pragma implementation
 #endif
 
-#include <wx/wxprec.h>
+#include "wx/wxprec.h"
 
 #ifdef __BORDLANDC__
 #pragma hdrstop
@@ -21,12 +21,10 @@
 
 
 #ifndef WXPRECOMP
-#include <wx/wx.h>
+#include "wx/wx.h"
 #endif
 
-#include <wx/filesys.h>
-
-
+#include "wx/filesys.h"
 
 //--------------------------------------------------------------------------------
 // wxZipFSHandler

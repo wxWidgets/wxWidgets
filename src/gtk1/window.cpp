@@ -812,7 +812,6 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
         ret = (ret || win->GetEventHandler()->ProcessEvent( event2 ));
     }
 
-
     /* win is a control: tab can be propagated up */
     if ( (!ret) &&
          ((gdk_event->keyval == GDK_Tab) || (gdk_event->keyval == GDK_ISO_Left_Tab)) &&

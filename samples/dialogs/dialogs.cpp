@@ -271,7 +271,7 @@ void MyFrame::FileOpen(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::FileSave(wxCommandEvent& WXUNUSED(event) )
 {
-    wxFileDialog dialog(this, "Testing save file dialog", "", "",
+    wxFileDialog dialog(this, "Testing save file dialog", "", "myletter.txt",
         "Text files (*.txt)|*.txt|Document files (*.doc)|*.doc",
         wxSAVE|wxOVERWRITE_PROMPT);
 

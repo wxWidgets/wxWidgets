@@ -384,7 +384,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     button->SetToolTip( "Press here to set italic font" );
 #endif // wxUSE_TOOLTIPS
 
-    m_checkbox = new wxCheckBox( panel, ID_LISTBOX_ENABLE, "&Disable", wxPoint(20,130), wxSize(-1, -1), wxALIGN_RIGHT );
+    m_checkbox = new wxCheckBox( panel, ID_LISTBOX_ENABLE, "&Disable", wxPoint(20,130) );
     m_checkbox->SetValue(FALSE);
 #if wxUSE_TOOLTIPS
     m_checkbox->SetToolTip( "Click here to disable the listbox" );

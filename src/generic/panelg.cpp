@@ -101,7 +101,7 @@ void wxPanel::OnNavigationKey( wxNavigationKeyEvent& event )
     wxWindow *winFocus = event.GetCurrentFocus();
     if (!winFocus)
         winFocus = wxWindow::FindFocus();
-
+	
     if (!winFocus)
     {
         event.Skip();
@@ -126,14 +126,16 @@ void wxPanel::OnNavigationKey( wxNavigationKeyEvent& event )
             // so give them the chance to process it instead of looping inside
             // this panel (normally, the focus will go to the next/previous
             // item after this panel in the parent panel)
+	    wxWindow *focussed_child_of_p = this;
             for ( wxWindow *p = GetParent(); p; p = p->GetParent() )
             {
                 if ( wxDynamicCast(p, wxPanel) )
                 {
-                    event.Skip();
-
-                    return;
+		    event.SetCurrentFocus( focussed_child_of_p );
+		    if (p->GetEventHandler()->ProcessEvent( event ))
+                        return;
                 }
+		focussed_child_of_p = p;
             }
 
             // no, we are not inside another panel so process this ourself

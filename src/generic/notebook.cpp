@@ -27,12 +27,12 @@
 #pragma hdrstop
 #endif
 
-#include  <wx/string.h>
-#include  <wx/log.h>
-#include  <wx/settings.h>
-#include  <wx/generic/imaglist.h>
-#include  <wx/notebook.h>
-#include  <wx/dcclient.h>
+#include  "wx/string.h"
+#include  "wx/log.h"
+#include  "wx/settings.h"
+#include  "wx/generic/imaglist.h"
+#include  "wx/notebook.h"
+#include  "wx/dcclient.h"
 
 // ----------------------------------------------------------------------------
 // macros

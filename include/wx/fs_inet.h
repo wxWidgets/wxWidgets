@@ -23,7 +23,7 @@ limitation)
 #pragma implementation
 #endif
 
-#include <wx/wxprec.h>
+#include "wx/wxprec.h"
 
 #ifdef __BORDLANDC__
 #pragma hdrstop
@@ -32,11 +32,10 @@ limitation)
 #if wxUSE_FS_INET && wxUSE_STREAMS && wxUSE_SOCKETS
 
 #ifndef WXPRECOMP
-#include <wx/wx.h>
+#include "wx/wx.h"
 #endif
 
-#include <wx/filesys.h>
-
+#include "wx/filesys.h"
 
 
 //--------------------------------------------------------------------------------

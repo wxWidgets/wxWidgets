@@ -352,7 +352,7 @@ void WXDLLEXPORT wxMutexGuiLeave();
 
 #else // !wxUSE_THREADS
 
-#include <wx/defs.h> // for WXDLLEXPORT
+#include "wx/defs.h" // for WXDLLEXPORT
 
 // no thread support
 inline void WXDLLEXPORT wxMutexGuiEnter() { }

@@ -40,6 +40,7 @@
 #include "wx/intl.h"
 #include "wx/file.h"
 #include "wx/log.h"
+#include "wx/debug.h"
 #include "wx/utils.h"
 
 #include <stdlib.h>
@@ -337,20 +338,22 @@ bool wxMsgCatalog::Load(const wxChar *szDirPrefix, const wxChar *szName0)
   // not yet be loaded (and it's normal)
   //
   // (we're using an object because we have several return paths)
+
   NoTransErr noTransErr;
+//  Then why do you translate at all? Just use _T() and not _(). RR.
 
   wxLogVerbose(_("looking for catalog '%s' in path '%s'."),
-               szName, searchPath.c_str());
+               szName.c_str, searchPath.c_str());
 
   wxString strFullName;
   if ( !wxFindFileInPath(&strFullName, searchPath, strFile) ) {
-    wxLogWarning(_("catalog file for domain '%s' not found."), szName);
+    wxLogWarning(_("catalog file for domain '%s' not found."), szName.c_str());
     return FALSE;
   }
 
   // open file
   wxLogVerbose(_("using catalog '%s' from '%s'."),
-             szName, strFullName.c_str());
+             szName.c_str(), strFullName.c_str());
 
   wxFile fileMsg(strFullName);
   if ( !fileMsg.IsOpened() )

@@ -20,10 +20,10 @@
 
 #if wxUSE_STREAMS && wxUSE_FILE
 
-#include <wx/object.h>
-#include <wx/string.h>
-#include <wx/stream.h>
-#include <wx/file.h>
+#include "wx/object.h"
+#include "wx/string.h"
+#include "wx/stream.h"
+#include "wx/file.h"
 
 class wxFileInputStream: public wxInputStream {
  public:
