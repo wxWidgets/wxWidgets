@@ -487,7 +487,7 @@ GSocketError GSocket_SetServer(GSocket *sck)
      state after being previously closed.
    */
   if (sck->m_reusable)
-    setsockopt(socket->m_fd, SOL_SOCKET, SO_REUSEADDR, (const char*)&arg, sizeof(u_long));
+    setsockopt(sck->m_fd, SOL_SOCKET, SO_REUSEADDR, (const char*)&arg, sizeof(u_long));
 
   /* Bind to the local address,
    * retrieve the actual address bound,
