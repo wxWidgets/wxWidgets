@@ -122,8 +122,8 @@ public:
 
 #if WXWIN_COMPATIBILITY_2_2 && wxUSE_GUI
     // conversion to/from wxBitmap (deprecated, use wxBitmap's methods instead):
-    wxImage( const wxBitmap &bitmap );
-    wxBitmap ConvertToBitmap() const;
+    wxDEPRECATED( wxImage(const wxBitmap &bitmap) );
+    wxDEPRECATED( wxBitmap ConvertToBitmap() const );
 #ifdef __WXGTK__
     wxBitmap ConvertToMonoBitmap( unsigned char red, unsigned char green, unsigned char blue ) const;
 #endif
