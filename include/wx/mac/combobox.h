@@ -6,7 +6,7 @@
 // Created:     ??/??/98
 // RCS-ID:      $Id$
 // Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_COMBOBOX_H_
@@ -37,6 +37,7 @@ class WXDLLEXPORT wxComboBox: public wxChoice
     // forward these functions to all subcontrols
     virtual bool Enable(bool enable = TRUE);
     virtual bool Show(bool show = TRUE);
+    virtual void SetFocus();
 
     // callback functions
     virtual void DelegateTextChanged( const wxString& value );
