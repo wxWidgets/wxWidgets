@@ -102,7 +102,9 @@ public:
     // implementation from now on
     void Unshare();
 
+#ifndef __WXGTK20__
     GdkFont* GetInternalFont(float scale = 1.0) const;
+#endif
 
     // no data :-)
 

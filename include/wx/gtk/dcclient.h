@@ -122,6 +122,7 @@ public:
     // PangoContext stuff for GTK 2.0
 #ifdef __WXGTK20__
     PangoContext *m_context;
+    PangoLayout *m_layout;
     PangoFontDescription *m_fontdesc;
 #endif
 
