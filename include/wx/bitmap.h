@@ -23,13 +23,14 @@
 #include "wx/defs.h"
 #include "wx/object.h"
 #include "wx/string.h"
-#include "wx/palette.h"
 #include "wx/gdiobj.h"
+#include "wx/gdicmn.h"  // for wxBitmapType
 
-class WXDLLEXPORT wxImage;
-class WXDLLEXPORT wxMask;
 class WXDLLEXPORT wxBitmap;
 class WXDLLEXPORT wxBitmapHandler;
+class WXDLLEXPORT wxImage;
+class WXDLLEXPORT wxMask;
+class WXDLLEXPORT wxPalette;
 
 // ----------------------------------------------------------------------------
 // wxBitmapHandler: class which knows how to create/load/save bitmaps in

@@ -11,6 +11,9 @@
 #pragma implementation "bitmap.h"
 #endif
 
+#include "wx/defs.h"
+
+#include "wx/palette.h"
 #include "wx/bitmap.h"
 #include "wx/icon.h"
 #include "wx/filefn.h"
