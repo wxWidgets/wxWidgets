@@ -10,7 +10,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
-// declaration
+// declarations
 // ============================================================================
 
 // ----------------------------------------------------------------------------
@@ -28,17 +28,19 @@
 #pragma hdrstop
 #endif
 
-// standard headers
-#include  <locale.h>
-
 // wxWindows
-#include "wx/defs.h"
-#include "wx/string.h"
+#ifndef  WX_PRECOMP
+  #include "wx/defs.h"
+  #include "wx/string.h"
+#endif //WX_PRECOMP
+
 #include "wx/intl.h"
 #include "wx/file.h"
 #include "wx/log.h"
 #include "wx/utils.h"
 
+// standard headers
+#include <locale.h>
 #include <stdlib.h>
 
 // ----------------------------------------------------------------------------
@@ -53,23 +55,23 @@ const uint32 MSGCATALOG_MAGIC_SW = 0xde120495;
 #define MSGCATALOG_EXTENSION  ".mo"
 
 // ----------------------------------------------------------------------------
-// global functions
+// global functions (private to this module)
 // ----------------------------------------------------------------------------
 
 // suppress further error messages about missing translations
 // (if you don't have one catalog file, you wouldn't like to see the
 //  error message for each string in it, so normally it's given only
 //  once)
-void wxSuppressTransErrors();
+static void wxSuppressTransErrors();
 
 // restore the logging
-void wxRestoreTransErrors();
+static void wxRestoreTransErrors();
 
 // get the current state
-bool wxIsLoggingTransErrors();
+static bool wxIsLoggingTransErrors();
 
-// get the current locale object (## may be NULL!)
-extern wxLocale *wxSetLocale(wxLocale *pLocale);
+// get the current locale object (@@ may be NULL!)
+static wxLocale *wxSetLocale(wxLocale *pLocale);
 
 // ----------------------------------------------------------------------------
 // wxMsgCatalog corresponds to one disk-file message catalog.
@@ -197,6 +199,8 @@ wxMsgCatalog::~wxMsgCatalog()
   DELETEA(m_pszName); 
 }
 
+// a helper class which suppresses all translation error messages
+// from the moment of it's creation until it's destruction
 class NoTransErr
 {
   public:
@@ -207,15 +211,15 @@ class NoTransErr
 // open disk file and read in it's contents
 bool wxMsgCatalog::Load(const char *szDirPrefix, const char *szName)
 {
-  // search order (assume language 'foo') is
-  // 1) $LC_PATH/foo/LC_MESSAGES          (if LC_PATH set)
-  // 2) ./foo/LC_MESSAGES
-  // 3) ./foo
+  // search order (assume language 'lang') is
+  // 1) $LC_PATH/lang/LC_MESSAGES          (if LC_PATH set)
+  // 2) ./lang/LC_MESSAGES
+  // 3) ./lang
   // 4) . (Added by JACS)
   //
   // under UNIX we search also in:
-  // 5) /usr/share/locale/foo/LC_MESSAGES (Linux)
-  // 6) /usr/lib/locale/foo/LC_MESSAGES   (Solaris)
+  // 5) /usr/share/locale/lang/LC_MESSAGES (Linux)
+  // 6) /usr/lib/locale/lang/LC_MESSAGES   (Solaris)
   #define MSG_PATH FILE_SEP_PATH + "LC_MESSAGES" PATH_SEP
           
   wxString strPath("");
@@ -225,12 +229,12 @@ bool wxMsgCatalog::Load(const char *szDirPrefix, const char *szName)
   
   // NB: '<<' is unneeded between too literal strings: 
   //     they are concatenated at compile time
-  strPath += "./" + wxString(szDirPrefix) + MSG_PATH                  // (2)
-          + "./" + szDirPrefix + FILE_SEP_PATH + PATH_SEP // (3)
-		  + "." + PATH_SEP
+  strPath << "./" << wxString(szDirPrefix) + MSG_PATH                 // (2)
+          << "./" << szDirPrefix << FILE_SEP_PATH << PATH_SEP         // (3)
+		      << "." << PATH_SEP                                          // (4)
   #ifdef  __UNIX__
-             "/usr/share/locale/" + szDirPrefix + MSG_PATH  // (5)
-             "/usr/lib/locale/"  + szDirPrefix + MSG_PATH  // (6)
+             "/usr/share/locale/" << szDirPrefix << MSG_PATH          // (5)
+             "/usr/lib/locale/"  << szDirPrefix << MSG_PATH           // (6)
   #endif  //UNIX
           ;
   
@@ -243,38 +247,41 @@ bool wxMsgCatalog::Load(const char *szDirPrefix, const char *szName)
   // (we're using an object because we have several return paths)
   NoTransErr noTransErr;
 
-  wxLogVerbose("looking for catalog '%s' in path '%s'.",
-             szName, strPath.c_str());
+  wxLogVerbose(_("looking for catalog '%s' in path '%s'..."),
+               szName, strPath.c_str());
 
   wxString strFullName;
   if ( !wxFindFileInPath(&strFullName, strPath, strFile) ) {
-    wxLogWarning("catalog file for domain '%s' not found.", szName);
+    wxLogWarning(_("catalog file for domain '%s' not found."), szName);
     return FALSE;
   }
 
   // open file
-  wxLogVerbose("using catalog '%s' from '%s'.",
-             szName, strFullName.c_str());
+  wxLogVerbose(_("catalog '%s' found in '%s'."), szName, strFullName.c_str());
   
+  // declare these vars here because we're using goto further down
+  bool bValid;
+  off_t nSize;
+
   wxFile fileMsg(strFullName);
   if ( !fileMsg.IsOpened() )
-    return FALSE;
+    goto error;
 
   // get the file size
-  off_t nSize = fileMsg.Length();
+  nSize = fileMsg.Length();
   if ( nSize == ofsInvalid )
-    return FALSE;
+    goto error;
 
   // read the whole file in memory
   m_pData = new uint8[nSize];
   if ( fileMsg.Read(m_pData, nSize) != nSize ) {
     DELETEA(m_pData);
     m_pData = NULL;
-    return FALSE;
+    goto error;
   }
     
   // examine header
-  bool bValid = (size_t)nSize > sizeof(wxMsgCatalogHeader);
+  bValid = (size_t)nSize > sizeof(wxMsgCatalogHeader);
   
   wxMsgCatalogHeader *pHeader;
   if ( bValid ) {
@@ -289,7 +296,8 @@ bool wxMsgCatalog::Load(const char *szDirPrefix, const char *szName)
   
   if ( !bValid ) {
     // it's either too short or has incorrect magic number
-    wxLogWarning("'%s' is not a valid message catalog.", strFullName.c_str());
+    wxLogWarning(_("'%s' is not a valid message catalog."),
+                 strFullName.c_str());
     
     DELETEA(m_pData);
     m_pData = NULL;
@@ -298,10 +306,8 @@ bool wxMsgCatalog::Load(const char *szDirPrefix, const char *szName)
       
   // initialize
   m_numStrings  = Swap(pHeader->numStrings);
-  m_pOrigTable  = (wxMsgTableEntry *)(m_pData + 
-                   Swap(pHeader->ofsOrigTable));
-  m_pTransTable = (wxMsgTableEntry *)(m_pData + 
-                   Swap(pHeader->ofsTransTable));
+  m_pOrigTable  = (wxMsgTableEntry *)(m_pData + Swap(pHeader->ofsOrigTable));
+  m_pTransTable = (wxMsgTableEntry *)(m_pData + Swap(pHeader->ofsTransTable));
 
   m_nHashSize   = Swap(pHeader->nHashSize);
   m_pHashTable  = (uint32 *)(m_pData + Swap(pHeader->ofsHashTable));
@@ -311,6 +317,11 @@ bool wxMsgCatalog::Load(const char *szDirPrefix, const char *szName)
 
   // everything is fine
   return TRUE;
+
+error:
+  wxLogError(_("error opening message catalog '%s', not loaded."),
+             strFullName.c_str());
+  return FALSE;
 }
 
 // search for a string
@@ -375,12 +386,12 @@ wxLocale::wxLocale(const char *szName,
     szLocale = szName;
   m_pszOldLocale = setlocale(LC_ALL, szLocale);
   if ( m_pszOldLocale == NULL )
-    wxLogError("locale '%s' can not be set.", szLocale);
+    wxLogError(_("locale '%s' can not be set."), szLocale);
 
   // the short name will be used to look for catalog files as well,
   // so we need something here
   if ( m_strShort.IsEmpty() ) {
-    // #### I don't know how these 2 letter abbreviations are formed,
+    // @@@@ I don't know how these 2 letter abbreviations are formed,
     //      this wild guess is almost surely wrong
     m_strShort = wxToLower(szLocale[0]) + wxToLower(szLocale[1]);
   }
@@ -442,11 +453,12 @@ const char *wxLocale::GetString(const char *szOrigString,
       wxSuppressTransErrors();
       
       if ( szDomain != NULL )
-        wxLogWarning("string '%s' not found in domain '%s' for locale '%s'.",
-                    szOrigString, szDomain, m_strLocale.c_str());
+        wxLogWarning(_("string '%s' not found in domain '%s'"
+                       " for locale '%s'."),
+                     szOrigString, szDomain, m_strLocale.c_str());
       else
-        wxLogWarning("string '%s' not found in locale '%s'.",
-                   szOrigString, m_strLocale.c_str());
+        wxLogWarning(_("string '%s' not found in locale '%s'."),
+                     szOrigString, m_strLocale.c_str());
     }
 
     return szOrigString;
@@ -524,11 +536,6 @@ bool wxIsLoggingTransErrors()
 
 // the current locale object
 wxLocale *g_pLocale = NULL;
-
-wxLocale *wxGetLocale()
-{
-	return g_pLocale;
-}
 
 wxLocale *wxSetLocale(wxLocale *pLocale)
 {

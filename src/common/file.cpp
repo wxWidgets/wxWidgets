@@ -146,7 +146,7 @@ bool wxFile::Create(const char *szFileName, bool bOverwrite)
   int fd = open(szFileName, O_CREAT | (bOverwrite ? O_TRUNC : O_EXCL));
 
   if ( fd == -1 ) {
-    wxLogSysError("can't create file '%s'", szFileName);
+    wxLogSysError(_("can't create file '%s'"), szFileName);
     return FALSE;
   }
   else {
@@ -181,7 +181,7 @@ bool wxFile::Open(const char *szFileName, OpenMode mode)
   int fd = open(szFileName, flags, S_IREAD | S_IWRITE);
 
   if ( fd == -1 ) {
-    wxLogSysError("can't open file '%s'", szFileName);
+    wxLogSysError(_("can't open file '%s'"), szFileName);
     return FALSE;
   }
   else {
@@ -195,7 +195,7 @@ bool wxFile::Close()
 {
   if ( IsOpened() ) {
     if ( close(m_fd) == -1 ) {
-      wxLogSysError("can't close file descriptor %d", m_fd);
+      wxLogSysError(_("can't close file descriptor %d"), m_fd);
       m_fd = fd_invalid;
       return FALSE;
     }
@@ -217,7 +217,7 @@ off_t wxFile::Read(void *pBuf, off_t nCount)
 
   int iRc = ::read(m_fd, pBuf, nCount);
   if ( iRc == -1 ) {
-    wxLogSysError("can't read from file descriptor %d", m_fd);
+    wxLogSysError(_("can't read from file descriptor %d"), m_fd);
     return ofsInvalid;
   }
   else
@@ -231,22 +231,22 @@ uint wxFile::Write(const void *pBuf, uint nCount)
 
   int iRc = ::write(m_fd, pBuf, nCount);
   if ( iRc == -1 ) {
-    wxLogSysError("can't write to file descriptor %d", m_fd);
+    wxLogSysError(_("can't write to file descriptor %d"), m_fd);
     m_error = TRUE;
     return 0;
   }
   else
-    return iRc;
+    return (uint)iRc;
 }
 
 // flush
 bool wxFile::Flush()
 {
   if ( IsOpened() ) {
-		// @@@ fsync() is not ANSI (BSDish)
+// @@@ fsync() is not ANSI (BSDish)
 //    if ( fsync(m_fd) == -1 ) { // TODO
       if (TRUE) {
-      wxLogSysError("can't flush file descriptor %d", m_fd);
+      wxLogSysError(_("can't flush file descriptor %d"), m_fd);
       return FALSE;
     }
   }
@@ -283,7 +283,7 @@ off_t wxFile::Seek(off_t ofs, wxSeekMode mode)
 
   int iRc = lseek(m_fd, ofs, flag);
   if ( iRc == -1 ) {
-    wxLogSysError("can't seek on file descriptor %d", m_fd);
+    wxLogSysError(_("can't seek on file descriptor %d"), m_fd);
     return ofsInvalid;
   }
   else
@@ -297,7 +297,7 @@ off_t wxFile::Tell() const
 
   int iRc = tell(m_fd);
   if ( iRc == -1 ) {
-    wxLogSysError("can't get seek position on file descriptor %d", m_fd);
+    wxLogSysError(_("can't get seek position on file descriptor %d"), m_fd);
     return ofsInvalid;
   }
   else
@@ -330,7 +330,7 @@ off_t wxFile::Length() const
   #endif  //_MSC_VER
 
   if ( iRc == -1 ) {
-    wxLogSysError("can't find length of file on file descriptor %d", m_fd);
+    wxLogSysError(_("can't find length of file on file descriptor %d"), m_fd);
     return ofsInvalid;
   }
   else
@@ -364,8 +364,8 @@ bool wxFile::Eof() const
       return FALSE;
 
     case -1:
-      wxLogSysError("can't determine if the end of file is reached on "
-                    "descriptor %d", m_fd);
+      wxLogSysError(_("can't determine if the end of file is reached on "
+                      "descriptor %d"), m_fd);
       break;
 
     default:
@@ -427,12 +427,12 @@ bool wxTempFile::Commit()
   m_file.Close();
 
   if ( wxFile::Exists(m_strName) && remove(m_strName) != 0 ) {
-    wxLogSysError("can't remove file '%s'", m_strName.c_str());
+    wxLogSysError(_("can't remove file '%s'"), m_strName.c_str());
     return FALSE;
   }
 
   if ( rename(m_strTemp, m_strName) != 0 ) {
-    wxLogSysError("can't commit changes to file '%s'", m_strName.c_str());
+    wxLogSysError(_("can't commit changes to file '%s'"), m_strName.c_str());
     return FALSE;
   }
 
@@ -443,5 +443,5 @@ void wxTempFile::Discard()
 {
   m_file.Close();
   if ( remove(m_strTemp) != 0 )
-    wxLogSysError("can't remove temporary file '%s'", m_strTemp.c_str());
+    wxLogSysError(_("can't remove temporary file '%s'"), m_strTemp.c_str());
 }

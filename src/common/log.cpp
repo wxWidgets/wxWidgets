@@ -83,12 +83,12 @@
 static char s_szBuf[LOG_BUFFER_SIZE];
 
 // generic log function
-void wxLogGeneric(wxLogLevel level, wxTString strFormat, ...)
+void wxLogGeneric(wxLogLevel level, const char *szFormat, ...)
 {
   if ( wxLog::GetActiveTarget() != NULL ) {
     va_list argptr;
-    va_start(argptr, strFormat);
-    vsprintf(s_szBuf, strFormat, argptr);
+    va_start(argptr, szFormat);
+    vsprintf(s_szBuf, szFormat, argptr);
     va_end(argptr);
 
     wxLog::OnLog(level, s_szBuf);
@@ -96,12 +96,12 @@ void wxLogGeneric(wxLogLevel level, wxTString strFormat, ...)
 }
 
 #define IMPLEMENT_LOG_FUNCTION(level)                             \
-  void wxLog##level(wxTString strFormat, ...)                     \
+  void wxLog##level(const char *szFormat, ...)                    \
   {                                                               \
     if ( wxLog::GetActiveTarget() != NULL ) {                     \
       va_list argptr;                                             \
-      va_start(argptr, strFormat);                                \
-      vsprintf(s_szBuf, strFormat, argptr);                       \
+      va_start(argptr, szFormat);                                 \
+      vsprintf(s_szBuf, szFormat, argptr);                        \
       va_end(argptr);                                             \
                                                                   \
       wxLog::OnLog(wxLOG_##level, s_szBuf);                       \
@@ -116,13 +116,13 @@ IMPLEMENT_LOG_FUNCTION(Info)
 IMPLEMENT_LOG_FUNCTION(Status)
 
 // same as info, but only if 'verbose' mode is on
-void wxLogVerbose(wxTString strFormat, ...)
+void wxLogVerbose(const char *szFormat, ...)
 {
   wxLog *pLog = wxLog::GetActiveTarget();
   if ( pLog != NULL && pLog->GetVerbose() ) {
     va_list argptr;
-    va_start(argptr, strFormat);
-    vsprintf(s_szBuf, strFormat, argptr);
+    va_start(argptr, szFormat);
+    vsprintf(s_szBuf, szFormat, argptr);
     va_end(argptr);
 
     wxLog::OnLog(wxLOG_Info, s_szBuf);
@@ -181,21 +181,21 @@ void wxLogSysErrorHelper(long lErrCode)
   wxLog::OnLog(wxLOG_Error, s_szBuf);
 }
 
-void WXDLLEXPORT wxLogSysError(wxTString strFormat, ...)
+void WXDLLEXPORT wxLogSysError(const char *szFormat, ...)
 {
   va_list argptr;
-  va_start(argptr, strFormat);
-  vsprintf(s_szBuf, strFormat, argptr);
+  va_start(argptr, szFormat);
+  vsprintf(s_szBuf, szFormat, argptr);
   va_end(argptr);
 
   wxLogSysErrorHelper(wxSysErrorCode());
 }
 
-void WXDLLEXPORT wxLogSysError(long lErrCode, wxTString strFormat, ...)
+void WXDLLEXPORT wxLogSysError(long lErrCode, const char *szFormat, ...)
 {
   va_list argptr;
-  va_start(argptr, strFormat);
-  vsprintf(s_szBuf, strFormat, argptr);
+  va_start(argptr, szFormat);
+  vsprintf(s_szBuf, szFormat, argptr);
   va_end(argptr);
 
   wxLogSysErrorHelper(lErrCode);
@@ -297,7 +297,7 @@ void wxLog::DoLog(wxLogLevel level, const char *szString)
           // (don't prepend "Debug" here: it will go to debug window anyhow)
           ::OutputDebugString(str + szString + "\n\r");
         #endif  //Win32
-        DoLogString(str << (level == wxLOG_Trace ? "Trace" : "Debug")
+        DoLogString(str << (level == wxLOG_Trace ? _("Trace") : _("Debug"))
                         << ": " << szString);
       #endif
             
@@ -454,8 +454,8 @@ void wxLogGui::DoLog(wxLogLevel level, const char *szString)
           OutputDebugString("\n\r");
         #else   //!WIN32
           // send them to stderr
-          fprintf(stderr, level == wxLOG_Trace ? "Trace: %s\n" 
-                                               : "Debug: %s\n", szString);
+          fprintf(stderr, "%s: %s\n",
+                  level == wxLOG_Trace ? _("Trace") : _("Debug"), szString);
           fflush(stderr);
         #endif  // WIN32
       #endif
@@ -463,7 +463,7 @@ void wxLogGui::DoLog(wxLogLevel level, const char *szString)
 
     case wxLOG_FatalError:
       // show this one immediately
-      wxMessageBox(szString, "Fatal error", wxICON_HAND);
+      wxMessageBox(szString, _("Fatal error"), wxICON_HAND);
       break;
 
     case wxLOG_Error:
@@ -633,7 +633,7 @@ void wxLogFrame::OnSave(wxCommandEvent& event)
     bOk = file.Close();
 
   if ( !bOk ) {
-    wxLogError("Can't save log contents to file.");
+    wxLogError(_("Can't save log contents to file."));
     return;
   }
 }
@@ -643,10 +643,10 @@ void wxLogFrame::OnClear(wxCommandEvent& event)
   m_pTextCtrl->Clear();
 }
 
-wxLogWindow::wxLogWindow(const wxTString& strTitle, bool bShow)
+wxLogWindow::wxLogWindow(const char *szTitle, bool bShow)
 {
   m_pOldLog = wxLog::GetActiveTarget();
-  m_pLogFrame = new wxLogFrame(strTitle);
+  m_pLogFrame = new wxLogFrame(szTitle);
   
   if ( bShow )
     m_pLogFrame->Show(TRUE);
@@ -811,11 +811,28 @@ const char *wxSysErrorMsg(unsigned long nErrCode)
 
 #ifdef  __WXDEBUG__
 
+void Trap()
+{
+  #ifdef __WXMSW__
+    DebugBreak();
+  #else // Unix
+    raise(SIGTRAP);
+  #endif // Win/Unix
+}
+
 // this function is called when an assert fails
 void wxOnAssert(const char *szFile, int nLine, const char *szMsg)
 {
   // this variable can be set to true to suppress "assert failure" messages
-  static s_bNoAsserts = FALSE;
+  static bool s_bNoAsserts = FALSE;
+  static bool s_bInAssert = FALSE;
+
+  if ( s_bInAssert ) {
+    // He-e-e-e-elp!! we're trapped in endless loop
+    Trap();
+  }
+
+  s_bInAssert = TRUE;
 
   char szBuf[LOG_BUFFER_SIZE];
   sprintf(szBuf, _("Assert failed in file %s at line %d"), szFile, nLine);
@@ -838,11 +855,7 @@ void wxOnAssert(const char *szFile, int nLine, const char *szMsg)
     switch ( wxMessageBox(szBuf, _("Debug"),
                           wxYES_NO | wxCANCEL | wxICON_STOP ) ) {
       case wxYES:
-        #ifdef __WXMSW__
-          DebugBreak();
-        #else // Unix
-          raise(SIGTRAP);
-        #endif // Win/Unix
+        Trap();
         break;
 
       case wxCANCEL:
@@ -852,6 +865,8 @@ void wxOnAssert(const char *szFile, int nLine, const char *szMsg)
       //case wxNO: nothing to do
     }
   }
+
+  s_bInAssert = FALSE;
 }
 
 #endif  //WXDEBUG

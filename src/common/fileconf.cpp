@@ -107,7 +107,7 @@ wxString wxFileConfig::GetLocalFileName(const char *szFile)
     const char *szHome = getenv("HOME");
     if ( szHome == NULL ) {
       // we're homeless...
-      wxLogWarning("can't find user's HOME, using current directory.");
+      wxLogWarning(_("can't find user's HOME, using current directory."));
       szHome = ".";
     }
     str << szHome << "/." << szFile;
@@ -165,7 +165,7 @@ wxFileConfig::wxFileConfig(const wxString& strLocal, const wxString& strGlobal)
         SetRootPath();
       }
       else
-        wxLogWarning("Can't open global configuration file '%s'.",
+        wxLogWarning(_("can't open global configuration file '%s'."),
                      strGlobal.c_str());
     }
   }
@@ -178,7 +178,7 @@ wxFileConfig::wxFileConfig(const wxString& strLocal, const wxString& strGlobal)
       SetRootPath();
     }
     else
-      wxLogWarning("Can't open user configuration file '%s'.",
+      wxLogWarning(_("can't open user configuration file '%s'."),
                    strLocal.c_str());
   }
 }
@@ -227,7 +227,7 @@ void wxFileConfig::Parse(wxTextFile& file, bool bLocal)
       }
 
       if ( *pEnd != ']' ) {
-        wxLogError("file '%s': unexpected character %c at line %d.",
+        wxLogError(_("file '%s': unexpected character %c at line %d."),
                    file.GetName(), *pEnd, n + 1);
         continue; // skip this line
       }
@@ -258,7 +258,8 @@ void wxFileConfig::Parse(wxTextFile& file, bool bLocal)
             break;
 
           default:
-            wxLogWarning("file '%s', line %d: '%s' ignored after group header.",
+            wxLogWarning(_("file '%s', line %d: '%s' "
+                           "ignored after group header."),
                          file.GetName(), n + 1, pEnd);
             bCont = FALSE;
         }
@@ -276,7 +277,8 @@ void wxFileConfig::Parse(wxTextFile& file, bool bLocal)
         pEnd++;
 
       if ( *pEnd++ != '=' ) {
-        wxLogError("file '%s', line %d: '=' expected.", file.GetName(), n + 1);
+        wxLogError(_("file '%s', line %d: '=' expected."),
+                   file.GetName(), n + 1);
       }
       else {
         ConfigEntry *pEntry = m_pCurrentGroup->FindEntry(strKey);
@@ -291,7 +293,8 @@ void wxFileConfig::Parse(wxTextFile& file, bool bLocal)
         else {
           if ( bLocal && pEntry->IsImmutable() ) {
             // immutable keys can't be changed by user
-            wxLogWarning("file '%s', line %d: value for immutable key '%s' ignored.",
+            wxLogWarning(_("file '%s', line %d: value for "
+                           "immutable key '%s' ignored."),
                          file.GetName(), n + 1, strKey.c_str());
             continue;
           }
@@ -301,7 +304,8 @@ void wxFileConfig::Parse(wxTextFile& file, bool bLocal)
           //  (c) key from global file now found in local one
           // which is exactly what we want.
           else if ( !bLocal || pEntry->IsLocal() ) {
-            wxLogWarning("file '%s', line %d: key '%s' was first found at line %d.",
+            wxLogWarning(_("file '%s', line %d: key '%s' was first "
+                           "found at line %d."),
                          file.GetName(), n + 1, strKey.c_str(), pEntry->Line());
 
             if ( bLocal )
@@ -498,14 +502,14 @@ bool wxFileConfig::Flush(bool /* bCurrentOnly */)
   wxTempFile file(m_strLocalFile);
 
   if ( !file.IsOpened() ) {
-    wxLogError("Can't open user configuration file.");
+    wxLogError(_("can't open user configuration file."));
     return FALSE;
   }
 
   // write all strings to file
   for ( LineList *p = m_linesHead; p != NULL; p = p->Next() ) {
     if ( !file.Write(p->Text() + wxTextFile::GetEOL()) ) {
-      wxLogError("Can't write user configuration file.");
+      wxLogError(_("can't write user configuration file."));
       return FALSE;
     }
   }
@@ -550,11 +554,11 @@ bool wxFileConfig::DeleteAll()
   Init();
 
   if ( remove(szFile) == -1 )
-    wxLogSysError("Can't delete user configuration file '%s'", szFile);
+    wxLogSysError(_("can't delete user configuration file '%s'"), szFile);
 
   szFile = m_strGlobalFile;
   if ( remove(szFile) )
-    wxLogSysError("Can't delete system configuration file '%s'", szFile);
+    wxLogSysError(_("can't delete system configuration file '%s'"), szFile);
 
   return TRUE;
 }
@@ -935,7 +939,7 @@ wxFileConfig::ConfigEntry::ConfigEntry(wxFileConfig::ConfigGroup *pParent,
 void wxFileConfig::ConfigEntry::SetLine(LineList *pLine)
 {
   if ( m_pLine != NULL ) {
-    wxLogWarning("Entry '%s' appears more than once in group '%s'",
+    wxLogWarning(_("entry '%s' appears more than once in group '%s'"),
                  Name().c_str(), m_pParent->GetFullName().c_str());
   }
 
@@ -948,7 +952,7 @@ void wxFileConfig::ConfigEntry::SetLine(LineList *pLine)
 void wxFileConfig::ConfigEntry::SetValue(const wxString& strValue, bool bUser)
 {
   if ( bUser && IsImmutable() ) {
-    wxLogWarning("Attempt to change immutable key '%s' ignored.",
+    wxLogWarning(_("attempt to change immutable key '%s' ignored."),
                  Name().c_str());
     return;
   }
@@ -1034,6 +1038,10 @@ wxString FilterIn(const wxString& str)
           strResult += '\n';
           break;
 
+        case 'r':
+          strResult += '\r';
+          break;
+
         case 't':
           strResult += '\t';
           break;
@@ -1050,8 +1058,10 @@ wxString FilterIn(const wxString& str)
     else {
       if ( str[n] != '"' || !bQuoted )
         strResult += str[n];
-      else if ( n != str.Len() - 1 )
-        wxLogWarning("unexpected \" at position %d in '%s'.", n, str.c_str());
+      else if ( n != str.Len() - 1 ) {
+        wxLogWarning(_("unexpected \" at position %d in '%s'."),
+                     n, str.c_str());
+      }
       //else: it's the last quote of a quoted string, ok
     }
   }
@@ -1076,6 +1086,10 @@ wxString FilterOut(const wxString& str)
     switch ( str[n] ) {
       case '\n':
         c = 'n';
+        break;
+
+      case '\r':
+        c = 'r';
         break;
 
       case '\t':

@@ -200,7 +200,7 @@ wxString ExpandEnvVars(const wxString& str)
           // check the closing bracket
           if ( bracket != Bracket_None ) {
             if ( m == str.Len() || str[m] != (char)bracket ) {
-              wxLogWarning("missing '%c' at position %d in '%s'.",
+              wxLogWarning(_("missing '%c' at position %d in '%s'."),
                            (char)bracket, m + 1, str.c_str());
             }
             else {
@@ -238,7 +238,7 @@ void SplitPath(wxArrayString& aParts, const char *sz)
       else if ( strCurrent == ".." ) {
         // go up one level
         if ( aParts.IsEmpty() )
-          wxLogWarning("'%s' has extra '..', ignored.", sz);
+          wxLogWarning(_("'%s' has extra '..', ignored."), sz);
         else
           aParts.Remove(aParts.Count() - 1);
 
