@@ -2051,7 +2051,7 @@ typedef ControlHandle   WXWidget;
 #ifdef __WXCOCOA__
 
 // NOTE: This ought to work with other compilers too, but I'm being cautious
-#if defined(__GNUC__) && defined(__APPLE__)
+#if (defined(__GNUC__) && defined(__APPLE__)) || defined(__MWERKS__)
 /* It's desirable to have type safety for Objective-C(++) code as it does
 at least catch typos of method names among other things.  However, it
 is not possible to declare an Objective-C class from plain old C or C++
@@ -2071,7 +2071,7 @@ typedef klass *WX_##klass
 typedef struct klass *WX_##klass
 #endif // defined(__OBJC__)
 
-#else // not GNU
+#else // not Apple's GNU or CodeWarrior
 #warning "Objective-C types will not be checked by the compiler."
 // NOTE: typedef struct objc_object *id;
 // IOW, we're declaring these using the id type without using that name,
@@ -2081,7 +2081,7 @@ typedef struct klass *WX_##klass
 #define DECLARE_WXCOCOA_OBJC_CLASS(klass) \
 typedef struct objc_object *WX_##klass
 
-#endif // defined(__GNUC__) && defined(__APPLE__)
+#endif // (defined(__GNUC__) && defined(__APPLE__)) || defined(__MWERKS__)
 
 DECLARE_WXCOCOA_OBJC_CLASS(NSApplication);
 DECLARE_WXCOCOA_OBJC_CLASS(NSBitmapImageRep);
