@@ -129,7 +129,7 @@ void wxRadioButton::SetValue( bool val )
         gtk_toggle_button_set_state( GTK_TOGGLE_BUTTON(m_theOtherRadioButtton), TRUE );
 }
 
-bool wxRadioButton::GetValue(void) const
+bool wxRadioButton::GetValue() const
 {
     wxCHECK_MSG( m_widget != NULL, FALSE, _T("invalid radiobutton") );
   

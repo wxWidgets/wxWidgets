@@ -41,7 +41,7 @@ class wxRadioButton: public wxControl
   DECLARE_DYNAMIC_CLASS(wxRadioButton)
   
   public:
-    inline wxRadioButton(void) {}
+    inline wxRadioButton() {}
     inline wxRadioButton( wxWindow *parent, wxWindowID id,
            const wxString& label,
            const wxPoint& pos = wxDefaultPosition,
@@ -59,7 +59,7 @@ class wxRadioButton: public wxControl
            const wxString& name = wxRadioButtonNameStr );
     virtual void SetLabel(const wxString& label);
     virtual void SetValue(bool val);
-    virtual bool GetValue(void) const;
+    virtual bool GetValue() const;
     bool Enable( bool enable );
     
   // implementation

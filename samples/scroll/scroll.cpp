@@ -79,15 +79,6 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
                     const wxPoint &pos, const wxSize &size )
         : wxScrolledWindow( parent, id, pos, size, wxSUNKEN_BORDER | wxTAB_TRAVERSAL )
 {
-
-  SetBackgroundColour( *wxWHITE );
-
-  (void) new wxButton( this, -1, "wxButton", wxPoint(10,10) );
-  
-  (void) new wxTextCtrl( this, -1, "wxTextCtrl", wxPoint(10,50) );
-  
-  (void) new wxRadioButton( this, -1, "Disable", wxPoint(10,90) );
-  
     wxString choices[] =
     {
         "This",
@@ -97,9 +88,17 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
         "examples."
     };
   
-  (void) new wxComboBox( this, -1, "This", wxPoint(10,130), wxDefaultSize, 5, choices );
+//  (void) new wxButton( this, -1, "wxButton", wxPoint(10,10) );
+  
+//  (void) new wxTextCtrl( this, -1, "wxTextCtrl", wxPoint(10,50) );
+  
+  (void) new wxRadioButton( this, -1, "Disable", wxPoint(10,90) );
+  
+//  (void) new wxComboBox( this, -1, "This", wxPoint(10,130), wxDefaultSize, 5, choices );
   
   (void) new wxRadioBox( this, -1, "This", wxPoint(10,200), wxDefaultSize, 5, choices );
+  
+  SetBackgroundColour( *wxWHITE );
 }
 
 MyCanvas::~MyCanvas()
@@ -134,6 +133,7 @@ MyFrame::MyFrame()
        : wxFrame( (wxFrame *)NULL, -1, "wxScrolledWindow sample",
                   wxPoint(20,20), wxSize(470,360) )
 {
+/*
   wxMenu *file_menu = new wxMenu();
   file_menu->Append( ID_ABOUT, "&About..");
   file_menu->Append( ID_QUIT, "E&xit\tAlt-X");
@@ -147,6 +147,7 @@ MyFrame::MyFrame()
   int widths[] = { -1, 100 };
   SetStatusWidths( 2, widths );
 
+*/
   m_canvas = new MyCanvas( this, -1, wxPoint(0,0), wxSize(10,10) );
   m_canvas->SetScrollbars( 10, 10, 50, 100 );
 }

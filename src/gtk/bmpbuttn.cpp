@@ -164,9 +164,7 @@ bool wxBitmapButton::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bi
     gtk_signal_connect( GTK_OBJECT(m_widget), "released", 
       GTK_SIGNAL_FUNC(gtk_bmpbutton_release_callback), (gpointer*)this );
  
-    m_parent->AddChild( this );
-
-    m_parent->InsertChild( this );
+    m_parent->DoAddChild( this );
   
     PostCreation();
   

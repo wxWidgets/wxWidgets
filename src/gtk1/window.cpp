@@ -2676,15 +2676,10 @@ void wxWindow::SetScrollbar( int orient, int pos, int thumbVisible,
         m_vAdjust->page_size = fthumb;
     }
 
-    if (m_wxwindow->window)
-    {
-        if (orient == wxHORIZONTAL)
-            gtk_signal_emit_by_name( GTK_OBJECT(m_hAdjust), "changed" );
-        else
-            gtk_signal_emit_by_name( GTK_OBJECT(m_vAdjust), "changed" );
-
-        gtk_widget_set_usize( m_widget, m_width, m_height );
-    }
+    if (orient == wxHORIZONTAL)
+        gtk_signal_emit_by_name( GTK_OBJECT(m_hAdjust), "changed" );
+    else
+        gtk_signal_emit_by_name( GTK_OBJECT(m_vAdjust), "changed" );
 }
 
 void wxWindow::SetScrollPos( int orient, int pos, bool WXUNUSED(refresh) )
@@ -2714,7 +2709,7 @@ void wxWindow::SetScrollPos( int orient, int pos, bool WXUNUSED(refresh) )
         m_vAdjust->value = fpos;
     }
 
-    if (!m_isScrolling)
+    if (!m_isScrolling)  /* prevent recursion */
     {
         if (m_wxwindow->window)
         {

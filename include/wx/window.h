@@ -37,7 +37,7 @@
 class WXDLLEXPORT wxClientData;
 class WXDLLEXPORT wxControl;
 class WXDLLEXPORT wxCursor;
-class WXDLLEXPORT wxDc;
+class WXDLLEXPORT wxDC;
 class WXDLLEXPORT wxDropTarget;
 class WXDLLEXPORT wxItemResource;
 class WXDLLEXPORT wxLayoutConstraints;
