@@ -24,7 +24,6 @@
 #endif // wxUSE_GUI
 
 #include "wx/build.h"
-#include "wx/init.h"
 
 class WXDLLEXPORT wxApp;
 class WXDLLEXPORT wxAppTraits;
@@ -553,14 +552,9 @@ public:
 // be in your main program (e.g. hello.cpp). Now IMPLEMENT_APP should add this
 // code if required.
 
-#if !wxUSE_GUI || defined(__WXMOTIF__) || defined(__WXGTK__) || defined(__WXPM__) || defined(__WXMGL__) || defined(__WXCOCOA__)
-    #define IMPLEMENT_WXWIN_MAIN \
-        extern int wxEntry( int argc, char **argv ); \
-        int main(int argc, char **argv) { return wxEntry(argc, argv); }
-#elif defined(__WXMAC__)
-    // wxMac seems to have a specific wxEntry prototype
-    #define IMPLEMENT_WXWIN_MAIN \
-        extern int wxEntry( int argc, char **argv, bool enterLoop = TRUE ); \
+#if !wxUSE_GUI || !defined(__WXMSW__)
+    #define IMPLEMENT_WXWIN_MAIN                                              \
+        extern int wxEntry( int& argc, char **argv );                         \
         int main(int argc, char **argv) { return wxEntry(argc, argv); }
 #elif defined(__WXMSW__) && defined(WXUSINGDLL)
     #define IMPLEMENT_WXWIN_MAIN \

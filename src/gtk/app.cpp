@@ -671,11 +671,8 @@ void wxApp::Dispatch()
     gtk_main_iteration();
 }
 
-bool wxApp::Initialize(int argc, wxChar **argv)
+bool wxApp::Initialize(int& argc, wxChar **argv)
 {
-    if ( !wxAppBase::Initialize(argc, argv) )
-        return false;
-
 #if wxUSE_THREADS
     // GTK 1.2 up to version 1.2.3 has broken threads
     if ((gtk_major_version == 1) &&
@@ -751,6 +748,13 @@ bool wxApp::Initialize(int argc, wxChar **argv)
     // we can not enter threads before gtk_init is done
     gdk_threads_enter();
 
+    if ( !wxAppBase::Initialize(argc, argv) )
+    {
+        gdk_threads_leave();
+
+        return false;
+    }
+
     wxSetDetectableAutoRepeat( TRUE );
 
 #if wxUSE_INTL
@@ -764,9 +768,9 @@ bool wxApp::Initialize(int argc, wxChar **argv)
 
 void wxApp::CleanUp()
 {
-    wxAppBase::CleanUp();
-
     gdk_threads_leave();
+
+    wxAppBase::CleanUp();
 }
 
 #ifdef __WXDEBUG__

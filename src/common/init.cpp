@@ -31,6 +31,8 @@
     #include "wx/thread.h"
 #endif
 
+#include "wx/init.h"
+
 #include "wx/ptr_scpd.h"
 #include "wx/module.h"
 
@@ -409,7 +411,7 @@ int wxEntryReal(int& argc, wxChar **argv)
 
 extern unsigned long wxGlobalSEHandler();
 
-int wxEntry(int argc, wxChar **argv)
+int wxEntry(int& argc, wxChar **argv)
 {
     __try
     {
@@ -429,7 +431,7 @@ int wxEntry(int argc, wxChar **argv)
 #if wxUSE_UNICODE
 
 // as with wxEntryStart, we provide an ANSI wrapper
-int wxEntry(int argc, char **argv)
+int wxEntry(int& argc, char **argv)
 {
     ConvertArgsToUnicode(argc, argv);
 
