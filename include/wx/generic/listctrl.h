@@ -17,7 +17,12 @@
 
 #include "wx/defs.h"
 #include "wx/object.h"
+#if !defined(__WXMSW__) || defined(__WIN16__) || defined(__WXUNIVERSAL__)
+#include "wx/generic/imaglist.h"
+#else
 #include "wx/imaglist.h"
+#endif
+
 #include "wx/control.h"
 #include "wx/timer.h"
 #include "wx/dcclient.h"
@@ -114,9 +119,9 @@ public:
     void SetWindowStyleFlag( long style );
     void RecreateWindow() {}
     long GetNextItem( long item, int geometry = wxLIST_NEXT_ALL, int state = wxLIST_STATE_DONTCARE ) const;
-    wxImageList *GetImageList( int which ) const;
-    void SetImageList( wxImageList *imageList, int which );
-    void AssignImageList( wxImageList *imageList, int which );
+    wxGenericImageList *GetImageList( int which ) const;
+    void SetImageList( wxGenericImageList *imageList, int which );
+    void AssignImageList( wxGenericImageList *imageList, int which );
     bool Arrange( int flag = wxLIST_ALIGN_DEFAULT ); // always wxLIST_ALIGN_LEFT in wxGLC
 
     void ClearAll();
@@ -183,9 +188,9 @@ public:
     // implementation
     // --------------
 
-    wxImageList         *m_imageListNormal;
-    wxImageList         *m_imageListSmall;
-    wxImageList         *m_imageListState;  // what's that ?
+    wxGenericImageList         *m_imageListNormal;
+    wxGenericImageList         *m_imageListSmall;
+    wxGenericImageList         *m_imageListState;  // what's that ?
     bool                 m_ownsImageListNormal,
                          m_ownsImageListSmall,
                          m_ownsImageListState;
