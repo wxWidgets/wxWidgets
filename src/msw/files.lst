@@ -221,6 +221,7 @@ ALL_SOURCES = \
 		msw/mimetype.cpp \
 		msw/minifram.cpp \
 		msw/msgdlg.cpp \
+		msw/mslu.cpp \
 		msw/nativdlg.cpp \
 		msw/notebook.cpp \
 		msw/ole/oleutils.cpp \
@@ -572,6 +573,7 @@ ALL_HEADERS = \
 		msw/mimetype.h \
 		msw/minifram.h \
 		msw/msgdlg.h \
+		msw/mslu.h \
 		msw/msvcrt.h \
 		msw/notebook.h \
 		msw/palette.h \
@@ -899,6 +901,7 @@ GUIOBJS = \
 		mimetype.o \
 		minifram.o \
 		msgdlg.o \
+		mslu.o \
 		nativdlg.o \
 		notebook.o \
 		ownerdrw.o \

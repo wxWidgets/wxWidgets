@@ -326,6 +326,7 @@ MSWOBJS = $(MSWDIR)\$D\accel.obj \
 		$(MSWDIR)\$D\mimetype.obj \
 		$(MSWDIR)\$D\minifram.obj \
 		$(MSWDIR)\$D\msgdlg.obj \
+		$(MSWDIR)\$D\mslu.obj \
 		$(MSWDIR)\$D\nativdlg.obj \
 		$(MSWDIR)\$D\notebook.obj \
 		$(OLEDIR)\$D\oleutils.obj \

@@ -202,6 +202,13 @@ typedef  _TUCHAR     wxUChar;
 
    // stdio.h functions
 #ifndef wxNO_TCHAR_STDIO
+#  if wxUSE_UNICODE_MSLU
+#    define  wxRemove    wxMSLU__tremove
+#    define  wxRename    wxMSLU__trename
+#  else
+#    define  wxRemove    _tremove
+#    define  wxRename    _trename
+#  endif
 #  define  wxFgetc     _fgettc
 #  define  wxFgetchar  _fgettchar
 #  define  wxFgets     _fgetts
@@ -219,8 +226,6 @@ typedef  _TUCHAR     wxUChar;
 #  define  wxPutc      _puttc
 #  define  wxPutchar   _puttchar
 #  define  wxPuts      _putts
-#  define  wxRemove    _tremove
-#  define  wxRename    _trename
 #  define  wxScanf     _tscanf
 #  define  wxSprintf   _stprintf
 #  define  wxSscanf    _stscanf

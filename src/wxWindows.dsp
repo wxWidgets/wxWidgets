@@ -1217,6 +1217,10 @@ SOURCE=.\msw\msgdlg.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\mslu.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\nativdlg.cpp
 # End Source File
 # Begin Source File
@@ -2636,6 +2640,10 @@ SOURCE=..\include\wx\msw\minifram.h
 # Begin Source File
 
 SOURCE=..\include\wx\msw\msgdlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\mslu.h
 # End Source File
 # Begin Source File
 

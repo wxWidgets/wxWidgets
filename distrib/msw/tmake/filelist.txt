@@ -314,6 +314,7 @@ metafile.cpp	MSW
 mimetype.cpp	MSW	Win32Only,Base
 minifram.cpp	MSW
 msgdlg.cpp	MSW
+mslu.cpp	MSW
 nativdlg.cpp	MSW
 notebook.cpp	MSW	Win32Only
 oleutils.cpp	MSW	OLE
@@ -874,6 +875,7 @@ mimetype.h	WXH	Base
 minifram.h	WXH
 module.h	WXH	Base
 msgdlg.h	WXH
+mslu.cpp	MSW
 mstream.h	WXH	Base
 notebook.h	WXH
 object.h	WXH	Base
@@ -1264,6 +1266,7 @@ metafile.h	MSWH
 mimetype.h	MSWH	Win32Only,Base
 minifram.h	MSWH
 msgdlg.h	MSWH
+mslu.h	MSWH
 msvcrt.h	MSWH
 notebook.h	MSWH
 palette.h	MSWH

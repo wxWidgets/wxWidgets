@@ -254,6 +254,7 @@ MSWOBJS1 = $(MSWDIR)\accel.obj \
 		$(MSWDIR)\metafile.obj \
 		$(MSWDIR)\minifram.obj \
 		$(MSWDIR)\msgdlg.obj \
+		$(MSWDIR)\mslu.obj \
 		$(MSWDIR)\nativdlg.obj \
 		$(MSWDIR)\ownerdrw.obj
 
@@ -629,6 +630,11 @@ $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
 $(MSWDIR)/msgdlg.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(MSWDIR)/mslu.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<

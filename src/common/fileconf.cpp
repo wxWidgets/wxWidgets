@@ -50,10 +50,8 @@
   #include  "wx/mac/private.h"  // includes mac headers
 #endif
 
-// _WINDOWS_ is defined when windows.h is included,
-// __WXMSW__ is defined for MS Windows compilation
-#if       defined(__WXMSW__) && !defined(_WINDOWS_)
-  #include  <windows.h>
+#if defined(__WXMSW__)
+  #include "wx/msw/private.h"
 #endif  //windows.h
 #if defined(__WXPM__)
   #define INCL_DOS

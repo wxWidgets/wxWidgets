@@ -81,23 +81,23 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
 
     #if wxUSE_UNICODE
         #if wxUSE_UNICODE_MSLU
-            WXDLLEXPORT int wxOpen(const wxChar *name, int flags, int mode);
+            #define   wxOpen       wxMSLU__wopen
+            #define   wxAccess     wxMSLU__waccess
+            #define   wxMkDir      wxMSLU__wmkdir
+            #define   wxRmDir      wxMSLU__wrmdir
+            #define   wxStat       wxMSLU__wstat
         #else
             #define   wxOpen       _wopen
+            #define   wxAccess     _waccess
+            #define   wxMkDir      _wmkdir
+            #define   wxRmDir      _wrmdir
+            #define   wxStat       _wstat
         #endif
-        #define   wxAccess     _waccess
-
-        #define   wxMkDir      _wmkdir
-        #define   wxRmDir      _wrmdir
-
-        #define   wxStat       _wstat
     #else // !wxUSE_UNICODE
         #define   wxOpen       _open
         #define   wxAccess     _access
-
         #define   wxMkDir      _mkdir
         #define   wxRmDir      _rmdir
-
         #define   wxStat       _stat
     #endif
 

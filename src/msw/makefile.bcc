@@ -266,6 +266,7 @@ MSWOBJS = $(MSWDIR)\accel.obj \
 		$(MSWDIR)\metafile.obj \
 		$(MSWDIR)\minifram.obj \
 		$(MSWDIR)\msgdlg.obj \
+		$(MSWDIR)\mslu.obj \
 		$(MSWDIR)\nativdlg.obj \
 		$(MSWDIR)\ownerdrw.obj \
 		$(MSWDIR)\palette.obj \
@@ -439,6 +440,8 @@ $(MSWDIR)\metafile.obj: $(MSWDIR)\metafile.$(SRCSUFF)
 $(MSWDIR)\minifram.obj: $(MSWDIR)\minifram.$(SRCSUFF)
 
 $(MSWDIR)\msgdlg.obj: $(MSWDIR)\msgdlg.$(SRCSUFF)
+
+$(MSWDIR)\mslu.obj: $(MSWDIR)\mslu.$(SRCSUFF)
 
 $(MSWDIR)\nativdlg.obj: $(MSWDIR)\nativdlg.$(SRCSUFF)
 

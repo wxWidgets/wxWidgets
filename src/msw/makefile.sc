@@ -248,6 +248,7 @@ MSWOBJS = $(MSWDIR)\accel.obj \
 		$(MSWDIR)\mimetype.obj \
 		$(MSWDIR)\minifram.obj \
 		$(MSWDIR)\msgdlg.obj \
+		$(MSWDIR)\mslu.obj \
 		$(MSWDIR)\nativdlg.obj \
 		$(MSWDIR)\ole\oleutils.obj \
 		$(MSWDIR)\ownerdrw.obj \

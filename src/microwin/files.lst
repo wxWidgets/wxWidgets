@@ -514,6 +514,7 @@ ALL_HEADERS = \
 		msw/mimetype.h \
 		msw/minifram.h \
 		msw/msgdlg.h \
+		msw/mslu.h \
 		msw/msvcrt.h \
 		msw/notebook.h \
 		msw/palette.h \

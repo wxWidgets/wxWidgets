@@ -290,6 +290,7 @@ MSWOBJS = accel.obj &
 	mimetype.obj &
 	minifram.obj &
 	msgdlg.obj &
+	mslu.obj &
 	nativdlg.obj &
 	notebook.obj &
 	oleutils.obj &
@@ -593,6 +594,9 @@ minifram.obj:     $(MSWDIR)\minifram.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 msgdlg.obj:     $(MSWDIR)\msgdlg.cpp
+  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+
+mslu.obj:     $(MSWDIR)\mslu.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 nativdlg.obj:     $(MSWDIR)\nativdlg.cpp

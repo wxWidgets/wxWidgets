@@ -28,6 +28,9 @@
 // undefine conflicting symbols which were defined in windows.h
 #include "wx/msw/winundef.h"
 
+// Include fixes for MSLU:
+#include "wx/msw/mslu.h"
+
 #include "wx/log.h"
 
 class WXDLLEXPORT wxFont;

@@ -337,6 +337,7 @@ MSWOBJS     = \
 		$(MSWDIR)/metafile.$(OBJSUFF) \
 		$(MSWDIR)/minifram.$(OBJSUFF) \
 		$(MSWDIR)/msgdlg.$(OBJSUFF) \
+		$(MSWDIR)/mslu.$(OBJSUFF) \
 		$(MSWDIR)/nativdlg.$(OBJSUFF) \
 		$(MSWDIR)/notebook.$(OBJSUFF) \
 		$(MSWDIR)/ownerdrw.$(OBJSUFF) \
