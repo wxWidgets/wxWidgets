@@ -35,6 +35,8 @@
 
 #include "wx/msw/private.h"     // for WS_CHILD and WS_POPUP
 
+wxWindowList wxPopupWindow::ms_shownPopups;
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -74,5 +76,45 @@ WXDWORD wxPopupWindow::MSWGetStyle(long flags, WXDWORD *exstyle) const
     }
 
     return style;
+}
+
+bool wxPopupWindow::Show(bool show)
+{
+    // skip wxWindow::Show() which calls wxBringWindowToTop(): this results in
+    // activating the popup window and stealing the atcivation from our parent
+    // which means that the parent frame becomes deactivated when opening a
+    // combobox, for example -- definitely not what we want
+    if ( !wxWindowBase::Show(show) )
+        return FALSE;
+
+    if ( show )
+    {
+        ms_shownPopups.Append(this);
+    }
+    else // remove from the shown list
+    {
+        ms_shownPopups.DeleteObject(this);
+    }
+
+    ::ShowWindow(GetHwnd(), show ? SW_SHOWNOACTIVATE : SW_HIDE);
+
+    return TRUE;
+}
+
+/* static */
+wxPopupWindow *wxPopupWindow::FindPopupFor(wxWindow *winParent)
+{
+    // find a popup with the given parent in the linked list of all shown
+    // popups
+    for ( wxWindowList::Node *node = ms_shownPopups.GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        wxWindow *win = node->GetData();
+        if ( win->GetParent() == winParent )
+            return (wxPopupWindow *)win;
+    }
+
+    return NULL;
 }
 

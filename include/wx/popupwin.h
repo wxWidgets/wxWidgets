@@ -86,8 +86,10 @@ public:
 
     // hide the window
     virtual void Dismiss();
-    
 
+    // can the window be dismissed now?
+    //
+    // VZ: where is this used??
     virtual bool CanDismiss()
         { return TRUE; }
 

@@ -39,6 +39,8 @@
 
 #include "wx/msw/private.h"
 
+#include "wx/popupwin.h"
+
 #ifndef ICON_BIG
     #define ICON_BIG 1
 #endif
@@ -653,3 +655,41 @@ bool wxTopLevelWindowMSW::EnableCloseButton(bool enable)
     return TRUE;
 }
 
+// ----------------------------------------------------------------------------
+// wxTopLevelWindowMSW message processing
+// ----------------------------------------------------------------------------
+
+long wxTopLevelWindowMSW::HandleNcActivate(bool activate)
+{
+#if wxUSE_POPUPWIN
+    /*
+       Normally, when another top level (whether it is overlapped or popup)
+       window is shown, it is activated and the parent window (i.e. we) loses
+       the activation. This, however, looks very ugly when the child window is
+       a [custom] combobox which we implement using a popup window as surely
+       opening a combobox shouldn't result in deactivating the parent window.
+
+       So we don't redraw the title bar in this case, even if we still return
+       TRUE to let the change of activation to take place as otherwise the
+       controls inside the popup window wouldn't work properly.
+     */
+    if ( !activate && wxPopupWindow::FindPopupFor(this) )
+    {
+        return TRUE;
+    }
+#endif // wxUSE_POPUPWIN
+
+    return FALSE;
+}
+
+long
+wxTopLevelWindowMSW::MSWWindowProc(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam)
+{
+    if ( msg == WM_NCACTIVATE && HandleNcActivate(wParam != 0) )
+    {
+        // we processed WM_NCACTIVATE ourselves
+        return TRUE;
+    }
+
+    return wxTopLevelWindowBase::MSWWindowProc(msg, wParam, lParam);
+}

@@ -841,7 +841,7 @@ long wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
     }
 
     if ( !processed )
-        rc = wxWindow::MSWWindowProc(message, wParam, lParam);
+        rc = wxFrameBase::MSWWindowProc(message, wParam, lParam);
 
     return rc;
 }

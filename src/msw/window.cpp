@@ -2918,31 +2918,19 @@ bool wxWindowMSW::MSWCreate(const wxChar *wclass,
     wxWindow *parent = GetParent();
     bool isChild = (style & WS_CHILD) != 0;
     HWND hParent;
-    if ( GetWindowStyleFlag() & wxPOPUP_WINDOW )
+    if ( (isChild || HasFlag(wxPOPUP_WINDOW) || HasFlag(wxFRAME_TOOL_WINDOW)) )
     {
-        // popup windows should have desktop as parent because they shouldn't
-        // be limited to the parents client area as child windows usually are
-        hParent = ::GetDesktopWindow();
+        // this is either a normal child window, a popup window or a top level
+        // window with wxFRAME_TOOL_WINDOW style (see below)
+        hParent = parent ? GetHwndOf(parent) : NULL;
     }
-    else // !popup
+    else
     {
-        if ( (isChild || HasFlag(wxFRAME_TOOL_WINDOW)) && parent )
-        {
-            // this is either a normal child window or a top level window with
-            // wxFRAME_TOOL_WINDOW style (see below)
-            hParent = GetHwndOf(parent);
-        }
-        else
-        {
-            // this is either a window for which no parent was specified (not
-            // much we can do then) or a frame without wxFRAME_TOOL_WINDOW
-            // style: we should use NULL parent HWND for it or it would be
-            // always on top of its parent which is not what we usually want
-            // (in fact, we only want it for frames with the special
-            // wxFRAME_TOOL_WINDOW as above)
-            hParent = NULL;
-        }
-
+        // this is a frame without wxFRAME_TOOL_WINDOW style: we should use
+        // NULL parent HWND for it or it would be always on top of its parent
+        // which is not what we usually want (in fact, we only want it for
+        // frames with the special wxFRAME_TOOL_WINDOW as above)
+        hParent = NULL;
     }
 
     // controlId is menu handle for the top level windows, so set it to 0

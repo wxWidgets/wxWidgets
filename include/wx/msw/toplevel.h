@@ -89,10 +89,17 @@ protected:
     // common part of Iconize(), Maximize() and Restore()
     void DoShowWindow(int nShowCmd);
 
+    // prevent the window from being deactivated sometimes (see comments in the
+    // code)
+    long HandleNcActivate(bool activate);
+
     // translate wxWindows flags to Windows ones
     virtual WXDWORD MSWGetStyle(long flags, WXDWORD *exstyle) const;
 
-    // is the frame currently iconized?
+    // we handle WM_NCACTIVATE specially here
+    virtual long MSWWindowProc(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam);
+
+    // is the window currently iconized?
     bool m_iconized;
 
     // should the frame be maximized when it will be shown? set by Maximize()
