@@ -77,7 +77,7 @@
 #define wxUSE_LISTBOX      1
 #define wxUSE_LISTCTRL     0
 #define wxUSE_RADIOBOX     0
-#define wxUSE_RADIOBTN     0
+#define wxUSE_RADIOBTN     1
 #define wxUSE_SASH         0
 #define wxUSE_SCROLLBAR    1
 #define wxUSE_SLIDER       0

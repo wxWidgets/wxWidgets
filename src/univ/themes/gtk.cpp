@@ -304,9 +304,16 @@ class wxGTKColourScheme : public wxColourScheme
 public:
     virtual wxColour Get(StdColour col) const;
     virtual wxColour GetBackground(wxWindow *win) const;
+
 #if wxUSE_CHECKBOX
-    virtual wxBitmap Get(wxCheckBox::State state, wxCheckBox::Status status);
+    virtual wxBitmap GetCheckBitmap(wxCheckBox::State state,
+                                    wxCheckBox::Status status);
 #endif // wxUSE_CHECKBOX
+
+#if wxUSE_RADIOBTN
+    virtual wxBitmap GetRadioBitmap(wxCheckBox::State state,
+                                    wxCheckBox::Status status);
+#endif // wxUSE_RADIOBTN
 
 private:
     // the checkbox bitmaps: first row is for the normal, second for the
@@ -490,8 +497,8 @@ wxColour wxGTKColourScheme::Get(wxGTKColourScheme::StdColour col) const
 
 #if wxUSE_CHECKBOX
 
-wxBitmap wxGTKColourScheme::Get(wxCheckBox::State state,
-                                wxCheckBox::Status status)
+wxBitmap wxGTKColourScheme::GetCheckBitmap(wxCheckBox::State state,
+                                           wxCheckBox::Status status)
 {
     if ( !m_bitmapsCheckbox[0][0].Ok() )
     {
@@ -532,6 +539,16 @@ wxBitmap wxGTKColourScheme::Get(wxCheckBox::State state,
 }
 
 #endif // wxUSE_CHECKBOX
+
+#if wxUSE_RADIOBTN
+
+wxBitmap wxGTKColourScheme::GetRadioBitmap(wxCheckBox::State state,
+                                           wxCheckBox::Status status)
+{
+    return GetCheckBitmap(state, status);
+}
+
+#endif // wxUSE_RADIOBTN
 
 // ============================================================================
 // wxGTKRenderer

@@ -102,13 +102,18 @@ void wxCheckBox::SetValue(bool value)
 
 wxBitmap wxCheckBox::GetBitmap(State state, Status status) const
 {
-    wxBitmap bmp = m_bitmaps[state][m_status];
+    wxBitmap bmp = m_bitmaps[state][status];
     if ( !bmp.Ok() )
-        bmp = m_bitmaps[State_Normal][m_status];
+        bmp = m_bitmaps[State_Normal][status];
     if ( !bmp.Ok() )
-        bmp = wxTheme::Get()->GetColourScheme()->Get(state, m_status);
+        bmp = wxTheme::Get()->GetColourScheme()->GetCheckBitmap(state, status);
 
     return bmp;
+}
+
+void wxCheckBox::SetBitmap(const wxBitmap& bmp, State state, Status status)
+{
+    m_bitmaps[state][status] = bmp;
 }
 
 // ----------------------------------------------------------------------------
@@ -199,10 +204,10 @@ void wxCheckBox::ChangeValue(bool value)
 {
     SetValue(value);
 
-    Click();
+    SendEvent();
 }
 
-void wxCheckBox::Click()
+void wxCheckBox::SendEvent()
 {
     wxCommandEvent event(wxEVT_COMMAND_CHECKBOX_CLICKED, GetId());
     InitCommandEvent(event);
@@ -239,10 +244,6 @@ bool wxCheckBox::PerformAction(const wxControlAction& action,
     return TRUE;
 }
 
-#endif // wxUSE_CHECKBOX
-
-#if wxUSE_CHECKBOX || wxUSE_RADIOBTN
-
 // ----------------------------------------------------------------------------
 // wxStdCheckboxInputHandler
 // ----------------------------------------------------------------------------
@@ -264,4 +265,4 @@ bool wxStdCheckboxInputHandler::HandleMouseMove(wxControl *control,
     return wxStdButtonInputHandler::HandleMouseMove(control, event);
 }
 
-#endif // wxUSE_RADIOBTN || wxUSE_CHECKBOX
+#endif // wxUSE_CHECKBOX

@@ -83,13 +83,12 @@ public:
 
     // set/get the bitmaps to use for the checkbox indicator
     void SetBitmap(const wxBitmap& bmp, State state, Status status);
-    wxBitmap GetBitmap(State state, Status status) const;
+    virtual wxBitmap GetBitmap(State state, Status status) const;
 
     // wxCheckBox actions
     void Toggle();
     virtual void Press();
     virtual void Release();
-    virtual void Click();
     virtual void ChangeValue(bool value);
 
     // overridden base class virtuals
@@ -107,6 +106,14 @@ protected:
 
     // common part of all ctors
     void Init();
+
+    // send command event notifying about the checkbox state change
+    void SendEvent();
+
+    // directly access the bitmaps array without trying to find a valid bitmap
+    // to use as GetBitmap() does
+    wxBitmap DoGetBitmap(State state, Status status) const
+        { return m_bitmaps[state][status]; }
 
 private:
     // the current check status

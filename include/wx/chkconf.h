@@ -57,6 +57,17 @@
 #    endif
 #endif /* controls */
 
+#if wxUSE_RADIOBTN
+#   if defined(__WXUNIVERSAL__) && !wxUSE_CHECKBOX
+#        ifdef wxABORT_ON_CONFIG_ERROR
+#            error "wxUSE_RADIOBTN requires wxUSE_CHECKBOX in wxUniversal"
+#        else
+#            undef wxUSE_CHECKBOX
+#            define wxUSE_CHECKBOX 1
+#        endif
+#   endif
+#endif /* wxUSE_RADIOBTN */
+
 #if wxUSE_STOPWATCH
 #    if !wxUSE_LONGLONG
 #        ifdef wxABORT_ON_CONFIG_ERROR

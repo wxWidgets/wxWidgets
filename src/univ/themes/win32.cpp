@@ -285,9 +285,16 @@ class wxWin32ColourScheme : public wxColourScheme
 public:
     virtual wxColour Get(StdColour col) const;
     virtual wxColour GetBackground(wxWindow *win) const;
+
 #if wxUSE_CHECKBOX
-    virtual wxBitmap Get(wxCheckBox::State state, wxCheckBox::Status status);
+    virtual wxBitmap GetCheckBitmap(wxCheckBox::State state,
+                                    wxCheckBox::Status status);
 #endif // wxUSE_CHECKBOX
+
+#if wxUSE_RADIOBTN
+    virtual wxBitmap GetRadioBitmap(wxCheckBox::State state,
+                                    wxCheckBox::Status status);
+#endif // wxUSE_RADIOBTN
 };
 
 // ----------------------------------------------------------------------------
@@ -567,8 +574,8 @@ static char *pressed_unchecked_xpm[] = {
 "hhhhhhhhhhhhh"
 };
 
-wxBitmap wxWin32ColourScheme::Get(wxCheckBox::State state,
-                                  wxCheckBox::Status status)
+wxBitmap wxWin32ColourScheme::GetCheckBitmap(wxCheckBox::State state,
+                                             wxCheckBox::Status status)
 {
     char **xpm;
     if ( status == wxCheckBox::Status_Checked )
@@ -586,6 +593,16 @@ wxBitmap wxWin32ColourScheme::Get(wxCheckBox::State state,
 }
 
 #endif // wxUSE_CHECKBOX
+
+#if wxUSE_RADIOBTN
+
+wxBitmap wxWin32ColourScheme::GetRadioBitmap(wxCheckBox::State state,
+                                             wxCheckBox::Status status)
+{
+    return GetCheckBitmap(state, status);
+}
+
+#endif // wxUSE_RADIOBTN
 
 // ============================================================================
 // wxWin32Renderer
