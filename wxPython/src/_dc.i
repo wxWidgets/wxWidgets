@@ -585,10 +585,8 @@ enum
 class wxBufferedDC : public wxMemoryDC
 {
 public:
-    %pythonAppend wxBufferedDC( wxDC *dc, const wxBitmap &buffer )
+    %pythonAppend wxBufferedDC
         "self._dc = args[0] # save a ref so the other dc will not be deleted before self";
-    %pythonAppend wxBufferedDC( wxDC *dc, const wxSize &area, int flags = wxBUFFER_DC_DEFAULT )
-        "val._dc = args[0] # save a ref so the other dc will not be deleted before self";
 
     %nokwargs wxBufferedDC;
     
@@ -600,9 +598,13 @@ public:
     // being buffered)
     wxBufferedDC( wxDC *dc, const wxSize &area, int flags = wxBUFFER_DC_DEFAULT );
 
+    
     // TODO: Keep this one too?
+    %pythonAppend wxBufferedDC( wxDC *dc, const wxSize &area, int flags = wxBUFFER_DC_DEFAULT )
+        "val._dc = args[0] # save a ref so the other dc will not be deleted before self";
     %name(BufferedDCInternalBuffer) wxBufferedDC( wxDC *dc, const wxSize &area, int flags = wxBUFFER_DC_DEFAULT );
 
+    
     // Blits the buffer to the dc, and detaches the dc from
     // the buffer.  Usually called in the dtor or by the dtor
     // of derived classes if the BufferedDC must blit before
