@@ -23,7 +23,7 @@
 //---------------------------------------------------------------------------
 
 %{
-#if !wxUSE_WAVE
+#if !wxUSE_SOUND
 // A C++ stub class for wxWave for platforms that don't have it.
 class wxWave : public wxObject
 {
