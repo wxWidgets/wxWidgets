@@ -32,6 +32,10 @@ public:
         { return m_format == (NativeFormat)format; }
     bool operator!=(NativeFormat format) const
         { return m_format != (NativeFormat)format; }
+    bool operator==(wxDataFormatId format) const
+        { return m_type == (wxDataFormatId)format; }
+    bool operator!=(wxDataFormatId format) const
+        { return m_type != (wxDataFormatId)format; }
 
     // explicit and implicit conversions to NativeFormat which is one of
     // standard data types (implicit conversion is useful for preserving the

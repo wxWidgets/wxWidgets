@@ -102,11 +102,9 @@ targets_selection_received( GtkWidget *WXUNUSED(widget),
 
     for (unsigned int i=0; i<selection_data->length/sizeof(GdkAtom); i++)
     {
-/*
-        char *name = gdk_atom_name (atoms[i]);
-        if (name) printf( "Format available: %s.\n", name ); */
+        wxDataFormat format( atoms[i] );
       
-        if (atoms[i] == clipboard->m_targetRequested)
+        if (format == clipboard->m_targetRequested)
         {
             clipboard->m_waiting = FALSE;
             clipboard->m_formatSupported = TRUE;
@@ -161,60 +159,13 @@ selection_received( GtkWidget *WXUNUSED(widget),
 
     /* make sure we got the data in the correct form (selection type).
        if so, copy data to target object */
-    
-    switch (format.GetType())
+    if (selection_data->type != GDK_SELECTION_TYPE_STRING)
     {
-        case wxDF_TEXT:
-	{
-            if (selection_data->type != GDK_SELECTION_TYPE_STRING)
-            {
-                clipboard->m_waiting = FALSE;
-                return;
-            }
-	    
-	    wxTextDataObject *text_object = (wxTextDataObject *) data_object;
-	    
-	    wxString text = (const char*) selection_data->data;
-	    
-	    text_object->SetText( text );
-	    
-	    break;
-	}
-	
-	case wxDF_BITMAP:
-	{
-            if (selection_data->type != GDK_SELECTION_TYPE_STRING)
-            {
-                clipboard->m_waiting = FALSE;
-                return;
-            }
-	    
-	    wxBitmapDataObject *bitmap_object = (wxBitmapDataObject *) data_object;
-	    
-	    bitmap_object->SetData( (size_t) selection_data->length, (const void*) selection_data->data );
-	    
-	    break;
-	}
-	
-	case wxDF_PRIVATE:
-	{
-            if (selection_data->type != GDK_SELECTION_TYPE_STRING)
-            {
-                clipboard->m_waiting = FALSE;
-                return;
-            }
-	    
-	    data_object->SetData( format, (size_t) selection_data->length, (const char*) selection_data->data );
-	    
-	    break;
-	}
-	
-	default:
-	{
-            clipboard->m_waiting = FALSE;
-	    return;
-	}
+        clipboard->m_waiting = FALSE;
+        return;
     }
+	    
+    data_object->SetData( format, (size_t) selection_data->length, (const char*) selection_data->data );
     
     wxTheClipboard->m_formatSupported = TRUE;
     clipboard->m_waiting = FALSE;
@@ -276,6 +227,7 @@ selection_handler( GtkWidget *WXUNUSED(widget), GtkSelectionData *selection_data
 
     if (!data->IsSupportedFormat( format )) return;
   
+    /* this will fail for composite formats */
     if (format.GetType() == wxDF_TEXT)
     {
 	wxTextDataObject *text_object = (wxTextDataObject*) data;
@@ -295,22 +247,6 @@ selection_handler( GtkWidget *WXUNUSED(widget), GtkSelectionData *selection_data
 	    (unsigned char*) (const char*) s,
             len ); 
 		    
-	return;
-    }
-
-    if (format.GetType() == wxDF_BITMAP)
-    {
-	wxBitmapDataObject *bitmap_object = (wxBitmapDataObject*) data;
-	    
-	if (bitmap_object->GetDataSize() == 0) return;
-	    
-        gtk_selection_data_set( 
-            selection_data, 
-	    GDK_SELECTION_TYPE_STRING, 
-	    8*sizeof(gchar), 
-	    (unsigned char*) bitmap_object->GetPngData(), 
-	    (int) bitmap_object->GetDataSize() );
-	    
 	return;
     }
 
@@ -551,8 +487,10 @@ bool wxClipboard::IsOpened() const
 
 bool wxClipboard::IsSupported( const wxDataFormat& format )
 {
-    /* store requested format to be asked for by callbacks */
+    /* reentrance problems */
+    if (m_open) return TRUE;
     
+    /* store requested format to be asked for by callbacks */
     m_targetRequested = format;
   
     wxCHECK_MSG( m_targetRequested, FALSE, wxT("invalid clipboard format") );
@@ -591,15 +529,19 @@ bool wxClipboard::GetData( wxDataObject& data )
     
     for (size_t i = 0; i < data.GetFormatCount(); i++)
     {
+        wxDataFormat format( array[i] );
+    
+        wxLogDebug( wxT("wxClipboard::GetData: request format %s"), format.GetId().c_str() );
+    
         /* is data supported by clipboard ? */
-        if (!IsSupported( array[i] ))
+        if (!IsSupported( format ))
 	   continue;
     
         /* store pointer to data object to be filled up by callbacks */
         m_receivedData = &data;
     
         /* store requested format to be asked for by callbacks */
-        m_targetRequested = array[i];
+        m_targetRequested = format;
   
         wxCHECK_MSG( m_targetRequested, FALSE, wxT("invalid clipboard format") );
     
@@ -617,6 +559,8 @@ bool wxClipboard::GetData( wxDataObject& data )
 
         m_waiting = TRUE;
 
+        wxLogDebug( wxT("wxClipboard::GetData: format found, start convert") );
+    
         gtk_selection_convert( m_clipboardWidget,
 			   m_usePrimary ? GDK_SELECTION_PRIMARY : g_clipboardAtom, 
 			   m_targetRequested,

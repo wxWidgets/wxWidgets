@@ -32,8 +32,6 @@ public:
     // override base class virtual to update PNG data too
     virtual void SetBitmap(const wxBitmap& bitmap);
 
-    void *GetPngData() const { return m_pngData; }
-
     // implement base class pure virtuals
     // ----------------------------------
 
