@@ -194,21 +194,35 @@ void wxHtmlTableCell::ReallocRows(int rows)
 
 void wxHtmlTableCell::AddRow(const wxHtmlTag& tag)
 {
-    if (m_ActualRow + 1 > m_NumRows - 1)
-        ReallocRows(m_ActualRow + 2);
-    m_ActualRow++;
     m_ActualCol = -1;
+    // VS: real allocation of row entry is done in AddCell in order
+    //     to correctly handle empty rows (i.e. "<tr></tr>")
+    //     m_ActualCol == -1 indicates that AddCell has to allocate new row.
 
-    /* scan params: */
+    // scan params:
     m_rBkg = m_tBkg;
-    if (tag.HasParam(wxT("BGCOLOR"))) tag.ScanParam(wxT("BGCOLOR"), wxT("#%lX"), &m_rBkg);
-    if (tag.HasParam(wxT("VALIGN"))) m_rValign = tag.GetParam(wxT("VALIGN")); else m_rValign = m_tValign;
+    if (tag.HasParam(wxT("BGCOLOR"))) 
+        tag.ScanParam(wxT("BGCOLOR"), wxT("#%lX"), &m_rBkg);
+    if (tag.HasParam(wxT("VALIGN"))) 
+        m_rValign = tag.GetParam(wxT("VALIGN")); 
+    else 
+        m_rValign = m_tValign;
 }
 
 
 
 void wxHtmlTableCell::AddCell(wxHtmlContainerCell *cell, const wxHtmlTag& tag)
 {
+    // Is this cell in new row?
+    // VS: we can't do it in AddRow, see my comment there
+    if (m_ActualCol == -1)
+    {
+        if (m_ActualRow + 1 > m_NumRows - 1)
+            ReallocRows(m_ActualRow + 2);
+        m_ActualRow++;
+    }
+
+    // cells & columns:
     do 
     {
         m_ActualCol++;
