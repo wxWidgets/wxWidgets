@@ -754,9 +754,11 @@ bool wxWindow::Show(bool show)
 	}
 	MacSuperShown( show ) ;
 	Refresh() ;
+    /*
+    // this will be done by the activate event
 	if(m_macWindowData)
 		MacUpdateImmediately() ;
-
+    */
     return TRUE;
 }
 
@@ -1773,6 +1775,8 @@ void wxWindow::MacActivate( EventRecord *ev , bool inIsActivating )
 	GetEventHandler()->ProcessEvent(event);
 	
 	UMAHighlightAndActivateWindow( m_macWindowData->m_macWindow , inIsActivating ) ;
+	Refresh() ;
+	MacUpdateImmediately() ;
 }
 
 void wxWindow::MacRedraw( RgnHandle updatergn , long time)
