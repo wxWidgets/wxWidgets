@@ -171,10 +171,7 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
     SetFont(GetDefaultAttributes().font);
 
     // set the size now if no initial size specified
-    if ( w <= 0 || h <= 0 )
-    {
-        SetBestSize(size);
-    }
+    SetInitialBestSize(size);
 
     return TRUE;
 }
