@@ -1,14 +1,13 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        dcbuffer.cpp
+// Name:        generic/dcbuffer.cpp
 // Purpose:     wxBufferedDC class
 // Author:      Ron Lee <ron@debian.org>
-// Modified by:
+// Modified by: Vadim Zeitlin (refactored, added bg preservation)
 // Created:     16/03/02
 // RCS-ID:      $Id$
 // Copyright:   (c) Ron Lee
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
-
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
     #pragma implementation "dcbuffer.h"
@@ -21,36 +20,29 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/window.h"
+    #include "wx/window.h"
 #endif
 
 #include "wx/dcbuffer.h"
 
+// ----------------------------------------------------------------------------
+// Double buffering helper.
+// ----------------------------------------------------------------------------
 
-// ==============================================================
-//   Double buffering helper.
-// --------------------------------------------------------------
-
-wxBufferedDC::wxBufferedDC( wxDC *dc, const wxBitmap &buffer )
-    : m_dc( dc )
-    , m_buffer( buffer )
+wxBufferedDC::wxBufferedDC(wxDC *dc, const wxBitmap& buffer)
+            : m_dc( dc ),
+              m_buffer( buffer )
 {
-    SelectObject( m_buffer );
+    UseBuffer();
 }
 
-wxBufferedDC::wxBufferedDC( wxDC *dc, const wxSize &area )
-    : m_dc( dc )
-    , m_buffer( area.GetWidth(), area.GetHeight() )
+wxBufferedDC::wxBufferedDC(wxDC *dc, const wxSize& area, int flags)
+            : m_dc( dc ),
+              m_buffer( area.GetWidth(), area.GetHeight() )
 {
-    SelectObject( m_buffer );
-}
+    UseBuffer();
 
-wxBufferedDC::~wxBufferedDC()
-{
-    if( m_dc != 0 )
-    {
-        UnMask();
-    }
+    SaveBg(area, flags);
 }
 
 void wxBufferedDC::Init( wxDC *dc, const wxBitmap &buffer )
@@ -60,50 +52,23 @@ void wxBufferedDC::Init( wxDC *dc, const wxBitmap &buffer )
 
     m_dc = dc;
     m_buffer = buffer;
-    SelectObject( m_buffer );
+
+    UseBuffer();
 }
 
-void wxBufferedDC::Init( wxDC *dc, const wxSize &area )
+void wxBufferedDC::Init(wxDC *dc, const wxSize& area, int flags)
 {
-    wxASSERT_MSG( m_dc == 0 && m_buffer == wxNullBitmap,
-                  _T("wxBufferedDC already initialised") );
+    Init(dc, wxBitmap(area.GetWidth(), area.GetHeight()));
 
-    m_dc = dc;
-    m_buffer = wxBitmap( area.GetWidth(), area.GetHeight() );
-    SelectObject( m_buffer );
+    SaveBg(area, flags);
 }
 
 void wxBufferedDC::UnMask()
 {
-    wxASSERT_MSG( m_dc != 0, _T("No low level DC associated with buffer (anymore)") );
+    wxASSERT_MSG( m_dc != 0,
+                  _T("No underlying DC associated with wxBufferedDC (anymore)") );
 
     m_dc->Blit( 0, 0, m_buffer.GetWidth(), m_buffer.GetHeight(), this, 0, 0 );
-    m_dc = 0;
+    m_dc = NULL;
 }
 
-
-// ==============================================================
-//   Double buffered PaintDC.
-// --------------------------------------------------------------
-
-wxBufferedPaintDC::wxBufferedPaintDC( wxWindow *window, const wxBitmap &buffer )
-    : m_paintdc( window )
-{
-    window->PrepareDC( m_paintdc );
-
-    if( buffer != wxNullBitmap )
-        Init( &m_paintdc, buffer );
-    else
-        Init( &m_paintdc, window->GetClientSize() );
-}
-
-wxBufferedPaintDC::~wxBufferedPaintDC()
-{
-        // We must UnMask here, else by the time the base class
-        // does it, the PaintDC will have already been destroyed.
-
-    UnMask();
-}
-
-
-// vi:sts=4:sw=4:et
