@@ -631,6 +631,13 @@
 // Recommended setting: 1 (used in many places in the library itself)
 #define wxUSE_FILEDLG       1
 
+// Use find/replace dialogs.
+//
+// Default is 1
+//
+// Recommended setting: 1 (but may be safely set to 0)
+#define wxUSE_FINDREPLDLG       1
+
 // Use font picker dialog
 //
 // Default is 1
