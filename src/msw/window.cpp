@@ -3641,6 +3641,8 @@ extern wxWindow *wxGetWindowFromHWND(WXHWND hWnd)
         win = wxFindWinFromHandle((WXHWND)hwnd);
         if ( !win )
         {
+            // the radiobox pointer is stored in GWL_USERDATA only under Win32
+#ifdef __WIN32__
             // native radiobuttons return DLGC_RADIOBUTTON here and for any
             // wxWindow class which overrides WM_GETDLGCODE processing to
             // do it as well, win would be already non NULL
@@ -3650,6 +3652,7 @@ extern wxWindow *wxGetWindowFromHWND(WXHWND hWnd)
                 win = (wxWindow *)::GetWindowLong(hwnd, GWL_USERDATA);
             }
             else
+#endif // Win32
             {
                 // hwnd is not a wxWindow, try its parent next below
                 hwnd = ::GetParent(hwnd);
