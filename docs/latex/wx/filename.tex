@@ -432,14 +432,28 @@ Return the short form of the path (returns identity on non-Windows platforms)
 
 \constfunc{bool}{GetTimes}{\param{wxDateTime* }{dtAccess}, \param{wxDateTime* }{dtMod}, \param{wxDateTime* }{dtCreate}}
 
-return the last access, last modification and creation times
-(any of the pointers may be NULL)
+Return the last access, last modification and creation times. The last access
+time is updated whenever the file is read or written (or executed in the case
+of Windows), last modification time is only changed when the file is written
+to. Finally, the creation time is indeed the time when the file was created
+under Windows and the inode change time under Unix (as it is impossible to
+retrieve the real file creation time there anyhow) which can also be changed
+by many operations after the file creation.
 
+Aany of the pointers may be {\tt NULL} if the corresponding time is not
+needed.
+
+\wxheading{Return value}
+
+{\tt TRUE} on success, {\tt FALSE} if we failed to retrieve the times.
 
 \membersection{wxFileName::GetVolume}\label{wxfilenamegetvolume}
 
 \constfunc{wxString}{GetVolume}{\void}
 
+Returns the string containing the volume for this file name, mepty if it
+doesn't have one or if the file system doesn't support volumes at all (for
+example, Unix).
 
 \membersection{wxFileName::GetVolumeSeparator}\label{wxfilenamegetvolumeseparator}
 
