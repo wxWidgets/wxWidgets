@@ -1478,46 +1478,59 @@ bool wxReallocateResourceBuffer()
 
 static bool wxEatWhiteSpace(FILE *fd)
 {
-  int ch = getc(fd);
-  if ((ch != ' ') && (ch != '/') && (ch != ' ') && (ch != 10) && (ch != 13) && (ch != 9))
-  {
-    ungetc(ch, fd);
-    return TRUE;
-  }
+  int ch = 0;
 
-  // Eat whitespace
-  while (ch == ' ' || ch == 10 || ch == 13 || ch == 9)
-    ch = getc(fd);
-  // Check for comment
-  if (ch == '/')
-  {
-    ch = getc(fd);
-    if (ch == '*')
-    {
-      bool finished = FALSE;
-      while (!finished)
+   while ((ch = getc(fd)) != EOF)
       {
-        ch = getc(fd);
-        if (ch == EOF)
-          return FALSE;
-        if (ch == '*')
-        {
-          int newCh = getc(fd);
-          if (newCh == '/')
-            finished = TRUE;
-          else
-          {
-            ungetc(newCh, fd);
-          }
-        }
+      switch (ch)
+         {
+         case ' ':
+         case 0x0a:
+         case 0x0d:
+         case 0x09:
+            break;
+         case '/':
+            {
+            int prev_ch = ch;
+            ch = getc(fd);
+            if (ch == EOF)
+               {
+               ungetc(prev_ch, fd);
+               return TRUE;
+               }
+
+            if (ch == '*')
+               {
+               // Eat C comment
+               prev_ch = 0;
+               while ((ch = getc(fd)) != EOF)
+                  {
+                  if (ch == '/' && prev_ch == '*')
+                     break;
+                  prev_ch = ch;
+                  }
+               }
+            else if (ch == '/')
+               {
+               // Eat C++ comment
+               static char buffer[255];
+               fgets(buffer, 255, fd);
+               }
+            else
+               {
+               ungetc(prev_ch, fd);
+               ungetc(ch, fd);
+               return TRUE;
+               }
+            }
+            break;
+         default:
+            ungetc(ch, fd);
+            return TRUE;
+            
+         }
       }
-    }
-    else // False alarm
-      return FALSE;
-  }
-  else
-    ungetc(ch, fd);
-  return wxEatWhiteSpace(fd);
+   return FALSE;
 }
 
 bool wxGetResourceToken(FILE *fd)
@@ -2545,49 +2558,53 @@ static int ungetc_string()
 
 bool wxEatWhiteSpaceString(char *s)
 {
-  int ch = getc_string(s);
-  if (ch == EOF)
-    return TRUE;
+  int ch = 0;
 
-  if ((ch != ' ') && (ch != '/') && (ch != ' ') && (ch != 10) && (ch != 13) && (ch != 9))
-  {
-    ungetc_string();
-    return TRUE;
-  }
-
-  // Eat whitespace
-  while (ch == ' ' || ch == 10 || ch == 13 || ch == 9)
-    ch = getc_string(s);
-  // Check for comment
-  if (ch == '/')
-  {
-    ch = getc_string(s);
-    if (ch == '*')
-    {
-      bool finished = FALSE;
-      while (!finished)
+   while ((ch = getc_string(s)) != EOF)
       {
-        ch = getc_string(s);
-        if (ch == EOF)
-          return FALSE;
-        if (ch == '*')
-        {
-          int newCh = getc_string(s);
-          if (newCh == '/')
-            finished = TRUE;
-          else
-          {
+      switch (ch)
+         {
+         case ' ':
+         case 0x0a:
+         case 0x0d:
+         case 0x09:
+            break;
+         case '/':
+            {
+            int prev_ch = ch;
+            ch = getc_string(s);
+            if (ch == EOF)
+               {
+               ungetc_string();
+               return TRUE;
+               }
+
+            if (ch == '*')
+               {
+               // Eat C comment
+               prev_ch = 0;
+               while ((ch = getc_string(s)) != EOF)
+                  {
+                  if (ch == '/' && prev_ch == '*')
+                     break;
+                  prev_ch = ch;
+                  }
+               }
+            else
+               {
+               ungetc_string();
+               ungetc_string();
+               return TRUE;
+               }
+            }
+            break;
+         default:
             ungetc_string();
-          }
-        }
+            return TRUE;
+            
+         }
       }
-    }
-    else // False alarm
-      return FALSE;
-  }
-  else if (ch != EOF)
-    ungetc_string();
-  return wxEatWhiteSpaceString(s);
+   return FALSE;
 }
 
 bool wxGetResourceTokenString(char *s)
