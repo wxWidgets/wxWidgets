@@ -227,14 +227,16 @@ int wxSpinButton::GetValue() const
         // use the full 32 bit range if available
         n = ::SendMessage(GetHwnd(), UDM_GETPOS32, 0, 0);
     }
+    else
 #endif // UDM_GETPOS32
+    {
+        // we're limited to 16 bit
+        n = (short)LOWORD(::SendMessage(GetHwnd(), UDM_GETPOS, 0, 0));
+    }
 
-    // we're limited to 16 bit
-    n = (short)LOWORD(::SendMessage(GetHwnd(), UDM_GETPOS, 0, 0));
-    
     if (n < m_min) n = m_min;
     if (n > m_max) n = m_max;
-    
+
     return n;
 }
 
