@@ -44,11 +44,6 @@
    tests individually in the "#else" branch below.
  */
 
-//Sanity check
-#ifdef wxUSE_GUI
-#   undef wxUSE_GUI
-#endif
-
 // what to test (in alphabetic order)? uncomment the line below to do all tests
 //#define TEST_ALL
 #ifdef TEST_ALL
@@ -64,7 +59,7 @@
     #define TEST_FILECONF
     #define TEST_FILENAME
     #define TEST_FILETIME
-//    #define TEST_FTP
+ //   #define TEST_FTP  --FIXME! (RN)
     #define TEST_HASH
     #define TEST_HASHMAP
     #define TEST_HASHSET
@@ -82,7 +77,7 @@
     #define TEST_REGISTRY
     #define TEST_SCOPEGUARD
     #define TEST_SNGLINST
-//    #define TEST_SOCKETS
+//    #define TEST_SOCKETS  --FIXME! (RN)
     #define TEST_STREAMS
     #define TEST_STRINGS
     #define TEST_TEXTSTREAM
@@ -90,7 +85,7 @@
     #define TEST_TIMER
     #define TEST_UNICODE
     // #define TEST_VCARD            -- don't enable this (VZ)
-    #define TEST_VOLUME
+//    #define TEST_VOLUME   --FIXME! (RN)
     #define TEST_WCHAR
     #define TEST_ZIP
     #define TEST_ZLIB
