@@ -1,39 +1,49 @@
 C++ Features
 ============
 
-- Namespaces
-- STL containers compatibility
-- Exception Handling
+- Namespaces.
+- STL containers compatibility (including using STL-like
+  adapters for wxWindows containers).
+- Exception Handling: making the code exception-safe, and
+  also _using_ exceptions throughout the code.
 
 Core
 ====
 
-- use wxEventLoop in all builds
-- remove wxCOMPATIBILITY (1.X)
-- Modularization/Build System/Project File Generation
-- RTTI native Support, Properties/Member-Metadata, 2-Step Init with virtual create
+- Use wxEventLoop in all builds.
+- Remove wxCOMPATIBILITY (1.X).
+- Modularization/Build System/Project File Generation.
+- A configuration tool to generate setup.h and configure
+  commands.
+- RTTI native Support, Properties/Member-Metadata, 2-Step Init with
+  virtual create: e.g. Create(const wxArrayVariant&).
 
 Documentation
 =============
 
-- Possibilities moving doc into header files with tool support ? directions ?
+- The possibility of moving doc into header files with tool
+  support.
+- Detailed review of doc accuracy.
 - wxDC : Precise definition of default/initial state. 
-- wxDC : Pixelwise definition of operations.
+- wxDC : Pixelwise definition of operations (e.g. last point of a
+  line not drawn).
 
 wxEvents
 ========
 
 Change Idle Handling
 --------------------
-Current Implementation is using too many CPU cycles
+Current Implementation is using too many CPU cycles.
 
 Loose Coupling Event-Source Event-Sink
 --------------------------------------
-kind of the NextStep/C# very performant coupling, exposing events via Metadata
+Kind of the NextStep/C# very performant coupling, exposing
+events via metadata.
 
 Remove Lazy Init of Eventtables
 -------------------------------
-Was introduced as a bug-fix, not needed anymore, consumes considerably CPU
+Was introduced as a bug-fix, not needed anymore, consumes
+considerable CPU time.
 
 
 Modules/Plugins
@@ -42,34 +52,34 @@ Modules/Plugins
 Architecture
 ------------
 
-we aim to arrive at a lazy initializiation of modules only when they are first 
-needed. A dependency information about on which other modules this depends is 
-needed. Dynamic Plug-In loading and unloading must be compatible with that.
+We aim to arrive at a lazy initializiation of modules only when they are first 
+needed. Dependency information between modules is needed. Dynamic Plug-In
+loading and unloading must be compatible with that.
 
 wxUniversal
 ===========
 
-- Renderers within native ports
+- Renderers within native ports.
 
 wxPrinting
 ==========
 
-- Page preflighting capabilities in order to determine number of pages
-- Preview enhancement
+- Page preflighting capabilities in order to determine number
+  of pages.
+- Preview UI enhancement.
 
 wxStaticBox
 ===========
 
-hide the platform problems (GTK:'children' must be siblings) in encapsulation 
-in order to avoid problems on ports where the hierarchy must be 'correct'
+Hide the platform problems (GTK: 'children' must be siblings) in encapsulation 
+in order to avoid problems on ports where the hierarchy must be
+'correct'.
 
-wxMiscellaneous
-===============
+Miscellaneous
+=============
 
-- wxDC Support for point to char-position with text rendering
-- wxLocale Extension (eg Currency)
-- wxStreams review
-
-
+- wxDC Support for point to char-position with text rendering.
+- wxLocale Extension (eg currency).
+- wxStreams review.
 
 
