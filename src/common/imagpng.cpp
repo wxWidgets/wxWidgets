@@ -570,7 +570,7 @@ wxPNGHandler::LoadFile(wxImage *image,
         png_set_expand( png_ptr );
     png_set_filler( png_ptr, 0xff, PNG_FILLER_AFTER );
 
-    image->Create((int)width, (int)height, false /* no need to init pixels */);
+    image->Create((int)width, (int)height, (bool) false /* no need to init pixels */);
 
     if (!image->Ok())
         goto error;
