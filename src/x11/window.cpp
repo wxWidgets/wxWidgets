@@ -781,6 +781,14 @@ void wxWindowX11::DoSetClientSize(int width, int height)
 
     wxCHECK_RET( xwindow, wxT("invalid window") );
 
+    XWindowChanges windowChanges;
+    windowChanges.width = width;
+    windowChanges.height = height;
+    windowChanges.stack_mode = 0;
+    int valueMask = CWWidth | CWHeight;
+
+    XConfigureWindow( wxGlobalDisplay(), xwindow, valueMask, &windowChanges );
+#if 0
     XWindowAttributes attr;
     Status status = XGetWindowAttributes( wxGlobalDisplay(), xwindow, &attr );
     wxCHECK_RET( status, wxT("invalid window attributes") );
@@ -797,6 +805,7 @@ void wxWindowX11::DoSetClientSize(int width, int height)
         new_h = height;
     
     DoMoveWindow( new_x, new_y, new_w, new_h );
+#endif
 }
 
 // For implementation purposes - sometimes decorations make the client area

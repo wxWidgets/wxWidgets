@@ -838,6 +838,7 @@ void wxWindowDC::DoDrawEllipse( wxCoord x, wxCoord y, wxCoord width, wxCoord hei
 
 void wxWindowDC::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y)
 {
+    DoDrawBitmap(icon, x, y, TRUE);
 }
 
 #if wxUSE_NANOX

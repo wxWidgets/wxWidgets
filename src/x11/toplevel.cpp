@@ -619,9 +619,59 @@ void wxTopLevelWindowX11::DoSetClientSize(int width, int height)
 
 void wxTopLevelWindowX11::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
+#if 0
     // wxLogDebug( "Setting pos: %d, %d", x, y );
     wxWindowX11::DoSetSize(x, y, width, height, sizeFlags);
+#endif
+    XSync(wxGlobalDisplay(), False);
+    Window window = (Window) m_mainWidget;
+    if (!window)
+        return ;
 
+    Display *display = (Display*) GetXDisplay();
+    Window root = RootWindowOfScreen(DefaultScreenOfDisplay(display));
+    Window parent_window = window,
+        next_parent   = window;
+
+    // search for the parent that is child of ROOT, because the WM may
+    // reparent twice and notify only the next parent (like FVWM)
+    while (next_parent != root) {
+        Window *theChildren; unsigned int n;
+        parent_window = next_parent;
+        XQueryTree(display, parent_window, &root,
+            &next_parent, &theChildren, &n);
+        XFree(theChildren); // not needed
+    }
+
+    XWindowChanges windowChanges;
+    windowChanges.x = x;
+    windowChanges.y = y;
+    windowChanges.width = width;
+    windowChanges.height = height;
+    windowChanges.stack_mode = 0;
+    int valueMask = CWX | CWY | CWWidth | CWHeight;
+
+    if (x != -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+    {
+        valueMask |= CWX;
+    }
+    if (y != -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+    {
+        valueMask |= CWY;
+    }
+    if (width != -1)
+    {
+        windowChanges.width = wxMax(1, width);
+        valueMask |= CWWidth;
+    }
+    if (height != -1)
+    {
+        windowChanges.height = wxMax(1, height);
+        valueMask |= CWHeight;
+    }
+
+    XConfigureWindow( display, parent_window, valueMask, &windowChanges );
+    
     XSizeHints size_hints;
     size_hints.flags = 0;
     if (x > -1 && y > -1)
@@ -703,6 +753,30 @@ void wxTopLevelWindowX11::DoGetPosition(int *x, int *y) const
 {
     XSync(wxGlobalDisplay(), False);
     Window window = (Window) m_mainWidget;
+    if (!window)
+        return ;
+
+    Display *display = (Display*) GetXDisplay();
+    Window root = RootWindowOfScreen(DefaultScreenOfDisplay(display));
+    Window parent_window = window,
+        next_parent   = window;
+
+    // search for the parent that is child of ROOT, because the WM may
+    // reparent twice and notify only the next parent (like FVWM)
+    while (next_parent != root) {
+        Window *theChildren; unsigned int n;
+        parent_window = next_parent;
+        XQueryTree(display, parent_window, &root,
+            &next_parent, &theChildren, &n);
+        XFree(theChildren); // not needed
+    }
+    int xx, yy; unsigned int dummy;
+    XGetGeometry(display, parent_window, &root,
+        &xx, &yy, &dummy, &dummy, &dummy, &dummy);
+    if (x) *x = xx;
+    if (y) *y = yy;
+
+#if 0    
     if (window)
     {
         int offsetX = 0;
@@ -727,4 +801,5 @@ void wxTopLevelWindowX11::DoGetPosition(int *x, int *y) const
             *y = attr.y + offsetY;
         }
     }
+#endif
 }
