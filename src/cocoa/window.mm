@@ -25,6 +25,8 @@
 #import <AppKit/NSColor.h>
 #import <AppKit/NSClipView.h>
 #import <Foundation/NSException.h>
+#import <AppKit/NSApplication.h>
+#import <AppKit/NSWindow.h>
 
 // Turn this on to paint green over the dummy views for debugging
 #undef WXCOCOA_FILL_DUMMY_VIEW
@@ -706,14 +708,8 @@ void wxWindow::Refresh(bool eraseBack, const wxRect *rect)
 
 void wxWindow::SetFocus()
 {
-#ifdef __WXDEBUG__
-    bool bOK = 
-#endif
-        [GetNSView() lockFocusIfCanDraw];
-        
-    //Note that the normal lockFocus works on hidden and minimized windows
-    //and has no return value - which probably isn't what we want
-    wxASSERT(bOK);
+    if([GetNSView() acceptsFirstResponder])
+        [[GetNSView() window] makeFirstResponder: GetNSView()];
 }
 
 void wxWindow::DoCaptureMouse()
@@ -894,12 +890,30 @@ bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
 // Get the window with the focus
 wxWindow *wxWindowBase::DoFindFocus()
 {
-    wxCocoaNSView *win = wxCocoaNSView::GetFromCocoa([NSView focusView]);
-    
-    if (!win)
+    // Basically we are somewhat emulating the responder chain here except
+    // we are only loking for the first responder in the key window or
+    // upon failing to find one if the main window is different we look
+    // for the first responder in the main window.
+
+    // Note that the firstResponder doesn't necessarily have to be an
+    // NSView but wxCocoaNSView::GetFromCocoa() will simply return
+    // NULL unless it finds its argument in its hash map.
+
+    wxCocoaNSView *win;
+
+    NSWindow *keyWindow = [[NSApplication sharedApplication] keyWindow];
+    win = wxCocoaNSView::GetFromCocoa([keyWindow firstResponder]);
+    if(win)
+        return win->GetWxWindow();
+
+    NSWindow *mainWindow = [[NSApplication sharedApplication] keyWindow];
+    if(mainWindow == keyWindow)
         return NULL;
-        
-    return win->GetWxWindow();
+    win = wxCocoaNSView::GetFromCocoa([mainWindow firstResponder]);
+    if(win)
+        return win->GetWxWindow();
+
+    return NULL;
 }
 
 /* static */ wxWindow *wxWindowBase::GetCapture()
