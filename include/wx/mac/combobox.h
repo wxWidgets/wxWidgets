@@ -91,6 +91,7 @@ class WXDLLEXPORT wxComboBox: public wxChoice
   virtual void Remove(long from, long to);
   virtual void SetSelection(long from, long to);
   virtual void SetEditable(bool editable);
+  virtual int GetCount() const { return m_choice->GetCount() ; }
   void MacHandleControlClick( WXWidget control , wxInt16 controlpart ) ;
 protected:
     // the subcontrols
