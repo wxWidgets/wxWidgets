@@ -1213,7 +1213,7 @@ bool wxGenericScrolledWindow::Create(wxWindow *parent,
 {
     m_targetWindow = this;
 
-    bool ok = wxPanel::Create(parent, id, pos, size, style, name);
+    bool ok = wxPanel::Create(parent, id, pos, size, style|wxHSCROLL|wxVSCROLL, name);
 
     return ok;
 }
