@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/net.h
+// Name:        wx/dialup.h
 // Purpose:     Network related wxWindows classes and functions
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -15,6 +15,14 @@
 #if wxUSE_DIALUP_MANAGER
 
 // ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
+extern const wxChar *wxEmptyString;
+
+#define WXDIALUP_MANAGER_DEFAULT_BEACONHOST  _T("www.yahoo.com")
+
+// ----------------------------------------------------------------------------
 // A class which groups functions dealing with connecting to the network from a
 // workstation using dial-up access to the net. There is at most one instance
 // of this class in the program accessed via GetDialUpManager().
@@ -24,20 +32,14 @@
  *
  * 1. more configurability for Unix: i.e. how to initiate the connection, how
  *    to check for online status, &c.
- * 2. add a "long Dial(long connectionId = -1)" function which asks the user
- *    about which connection to dial (this may be done using native dialogs
- *    under NT, need generic dialogs for all others) and returns the identifier
- *    of the selected connection (it's opaque to the application) - it may be
- *    reused later to dial the same connection later (or use strings instead of
- *    longs may be?)
+ * 2. a function to enumerate all connections (ISPs) and show a dialog in
+ *    Dial() allowing to choose between them if no ISP given
  * 3. add an async version of dialing functions which notify the caller about
  *    the progress (or may be even start another thread to monitor it)
  * 4. the static creation/accessor functions are not MT-safe - but is this
  *    really crucial? I think we may suppose they're always called from the
  *    main thread?
  */
-
-#define WXDIALUP_MANAGER_DEFAULT_BEACONHOST  "www.yahoo.com"
 
 class WXDLLEXPORT wxDialUpManager
 {
@@ -59,13 +61,24 @@ public:
     // operations
     // ----------
 
-    // the simplest way to initiate a dial up: this function dials the given
-    // ISP (exact meaning of the parameter depends on the platform), returns
-    // TRUE on success or FALSE on failure and logs the appropriate error
-    // message in the latter case.
-    virtual bool Dial(const wxString& nameOfISP = "",
-                      const wxString& username = "",
-                      const wxString& password = "") = 0;
+    // dial the given ISP, use username and password to authentificate
+    //
+    // if async parameter is FALSE, the function waits until the end of dialing
+    // and returns TRUE upon successful completion.
+    // if async is TRUE, the function only initiates the connection and returns
+    // immediately - the result is reported via events (an event is sent
+    // anyhow, but if dialing failed it will be a DISCONNECTED one)
+    virtual bool Dial(const wxString& nameOfISP = wxEmptyString,
+                      const wxString& username = wxEmptyString,
+                      const wxString& password = wxEmptyString,
+                      bool async = TRUE) = 0;
+
+    // returns TRUE if (async) dialing is in progress
+    virtual bool IsDialing() const = 0;
+
+    // cancel dialing the number initiated with Dial(async = TRUE)
+    // NB: this won't result in DISCONNECTED event being sent
+    virtual bool CancelDialing() = 0;
 
     // hang up the currently active dial up connection
     virtual bool HangUp() = 0;
@@ -100,17 +113,20 @@ public:
     // wxEVT_DIALUP_XXX events won't be sent any more neither.
     virtual void DisableAutoCheckOnlineStatus() = 0;
 
+    // additional Unix-only configuration
+    // ----------------------------------
+
     // under Unix, the value of well-known host is used to check whether we're
     // connected to the internet. It's unused under Windows, but this function
     // is always safe to call. The default value is www.yahoo.com.
     virtual void SetWellKnownHost(const wxString& hostname,
                                   int portno = 80) = 0;
-    /** Sets the commands to start up the network and to hang up
-        again. Used by the Unix implementations only.
-    */
-    virtual void SetConnectCommand(const wxString &command = "/usr/bin/pon",
-                                   const wxString &hupcmd = "/usr/bin/poff")
-      { }
+
+    // Sets the commands to start up the network and to hang up again. Used by
+    // the Unix implementations only.
+    virtual void
+    SetConnectCommand(const wxString& commandDial = _T("/usr/bin/pon"),
+                      const wxString& commandHangup = _T("/usr/bin/poff")) = 0;
 };
 
 // ----------------------------------------------------------------------------
@@ -121,14 +137,20 @@ public:
 class WXDLLEXPORT wxDialUpEvent : public wxEvent
 {
 public:
-    wxDialUpEvent(bool isConnected) : wxEvent(isConnected)
+    wxDialUpEvent(bool isConnected, bool isOwnEvent) : wxEvent(isOwnEvent)
     {
         SetEventType(isConnected ? wxEVT_DIALUP_CONNECTED
                                  : wxEVT_DIALUP_DISCONNECTED);
     }
 
     // is this a CONNECTED or DISCONNECTED event?
-    bool IsConnectedEvent() const { return m_id != 0; }
+    bool IsConnectedEvent() const
+        { return GetEventType() == wxEVT_DIALUP_CONNECTED; }
+
+    // does this event come from wxDialUpManager::Dial() or from some extrenal
+    // process (i.e. does it result from our own attempt to establish the
+    // connection)?
+    bool IsOwnEvent() const { return m_id != 0; }
 };
 
 // the type of dialup event handler function

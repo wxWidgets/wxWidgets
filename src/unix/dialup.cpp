@@ -1,5 +1,5 @@
 // -*- c++ -*- ///////////////////////////////////////////////////////////////
-// Name:        unix/net.cpp
+// Name:        unix/dialup.cpp
 // Purpose:     Network related wxWindows classes and functions
 // Author:      Karsten Ballüder
 // Modified by:
@@ -89,11 +89,12 @@ public:
    */
    virtual bool Dial(const wxString& nameOfISP,
                      const wxString& WXUNUSED(username),
-                     const wxString& WXUNUSED(password));
+                     const wxString& WXUNUSED(password),
+                     bool async);
 
    /// Hang up the currently active dial up connection.
    virtual bool HangUp();
-   
+
    // returns TRUE if the computer is connected to the network: under Windows,
    // this just means that a RAS connection exists, under Unix we check that
    // the "well-known host" (as specified by SetWellKnownHost) is reachable
@@ -143,7 +144,7 @@ public:
 private:
    /// -1: don´t know, 0 = no, 1 = yes
    int m_IsOnline;
-   
+
    ///  Can we use ifconfig to list active devices?
    int m_CanUseIfconfig;
    /// The path to ifconfig
@@ -197,7 +198,8 @@ public:
 bool
 wxDialUpManagerImpl::Dial(const wxString &isp,
                           const wxString & WXUNUSED(username),
-                          const wxString & WXUNUSED(password))
+                          const wxString & WXUNUSED(password),
+                          bool async)
 {
    if(m_IsOnline == 1)
       return FALSE;
@@ -208,7 +210,15 @@ wxDialUpManagerImpl::Dial(const wxString &isp,
       cmd.Printf(m_ConnectCommand,m_ISPname.c_str());
    else
       cmd = m_ConnectCommand;
-   return wxExecute(cmd, /* sync */ TRUE) == 0;
+
+   if ( async )
+   {
+       wxFAIL_MSG(_T("TODO"));
+   }
+   else
+   {
+       return wxExecute(cmd, /* sync */ TRUE) == 0;
+   }
 }
 
 bool
@@ -297,7 +307,7 @@ wxDialUpManagerImpl::CheckStatus(void) const
   3. check /proc/net/dev on linux??
      This method should be preferred, if possible. Need to do more
      testing.
-    
+
 */
 
 void
@@ -319,7 +329,7 @@ wxDialUpManagerImpl::CheckStatusInternal(void)
    if(m_CanUseIfconfig != 0) // unknown or yes
    {
       wxASSERT(m_IfconfigPath.length());
-      
+
       wxString tmpfile = wxGetTempFileName("_wxdialuptest");
       wxString cmd = m_IfconfigPath;
       cmd << " >" << tmpfile;
@@ -345,22 +355,22 @@ wxDialUpManagerImpl::CheckStatusInternal(void)
    // second method: try to connect to well known host:
    struct hostent     *hp;
    struct sockaddr_in  serv_addr;
-   int	sockfd;
+   int    sockfd;
 
    m_IsOnline = 0; // assume false
    if((hp = gethostbyname(m_BeaconHost)) == NULL)
       return; // no DNS no net
-   
-   serv_addr.sin_family		= hp->h_addrtype;
+
+   serv_addr.sin_family        = hp->h_addrtype;
    memcpy(&serv_addr.sin_addr,hp->h_addr, hp->h_length);
-   serv_addr.sin_port		= htons(m_BeaconPort);
-   if( ( sockfd = socket(hp->h_addrtype, SOCK_STREAM, 0)) < 0) 
-   {	
+   serv_addr.sin_port        = htons(m_BeaconPort);
+   if( ( sockfd = socket(hp->h_addrtype, SOCK_STREAM, 0)) < 0)
+   {
       //  sys_error("cannot create socket for gw");
       return;
    }
    if( connect(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0)
-   {	
+   {
       //sys_error("cannot connect to server");
       return;
    }
