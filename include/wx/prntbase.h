@@ -267,13 +267,14 @@ public:
     virtual wxPrintPreviewBase *GetPrintPreview() const
         { return m_printPreview; }
 
-    void OnPrint(wxCommandEvent& event);
     void OnWindowClose(wxCommandEvent& event);
     void OnNext();
     void OnPrevious();
     void OnFirst();
     void OnLast();
     void OnGoto();
+    void OnPrint();
+    void OnPrint(wxCommandEvent& WXUNUSED(event)) { OnPrint(); }
     void OnNextButton(wxCommandEvent & WXUNUSED(event)) { OnNext(); }
     void OnPreviousButton(wxCommandEvent & WXUNUSED(event)) { OnPrevious(); }
     void OnFirstButton(wxCommandEvent & WXUNUSED(event)) { OnFirst(); }

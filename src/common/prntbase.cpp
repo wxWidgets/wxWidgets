@@ -242,34 +242,42 @@ void wxPreviewCanvas::OnSysColourChanged(wxSysColourChangedEvent& event)
 
 void wxPreviewCanvas::OnChar(wxKeyEvent &event)
 {
+    wxPreviewControlBar* controlBar = ((wxPreviewFrame*) GetParent())->GetControlBar();
     if (event.GetKeyCode() == WXK_ESCAPE)
     {
         ((wxPreviewFrame*) GetParent())->Close(TRUE);
         return;
+    }    
+    else if (event.GetKeyCode() == WXK_TAB)
+    {
+        controlBar->OnGoto();
+        return;
     }
-    
+    else if (event.GetKeyCode() == WXK_RETURN)
+    {
+        controlBar->OnPrint();
+        return;
+    }
+
     if (!event.ControlDown())
     {
         event.Skip();
         return;
     }
-
-    wxPreviewControlBar* controlBar = ((wxPreviewFrame*) GetParent())->GetControlBar();
-   switch(event.GetKeyCode())
-   {
-   case WXK_NEXT:
-      controlBar->OnNext(); break;
-   case WXK_PRIOR:
-      controlBar->OnPrevious(); break;
-   case WXK_HOME:
-      controlBar->OnFirst(); break;
-   case WXK_END:
-      controlBar->OnLast(); break;
-   case WXK_TAB:
-      controlBar->OnGoto(); break;
-   default:
-      event.Skip();
-   }
+    
+    switch(event.GetKeyCode())
+    {
+        case WXK_NEXT:
+            controlBar->OnNext(); break;
+        case WXK_PRIOR:
+            controlBar->OnPrevious(); break;
+        case WXK_HOME:
+            controlBar->OnFirst(); break;
+        case WXK_END:
+            controlBar->OnLast(); break;
+        default:
+            event.Skip();
+    }
 }
 
 /*
@@ -323,7 +331,7 @@ void wxPreviewControlBar::OnWindowClose(wxCommandEvent& WXUNUSED(event))
     frame->Close(TRUE);
 }
 
-void wxPreviewControlBar::OnPrint(wxCommandEvent& WXUNUSED(event))
+void wxPreviewControlBar::OnPrint(void)
 {
     wxPrintPreviewBase *preview = GetPrintPreview();
     preview->Print(TRUE);
