@@ -4662,7 +4662,7 @@ if test "$WXGTK20" = 1; then
                 PKG_CHECK_MODULES(LIBGNOMEPRINTUI, 
                                   [libgnomeprintui-2.2 >= 2.8],
                     [
-                        EXTRALIBS_GNOMEPRINT="$LIBGNOMEPRINTUI_LIBS"
+dnl                     EXTRALIBS_GNOMEPRINT="$LIBGNOMEPRINTUI_LIBS"
                         CXXFLAGS="$CXXFLAGS $LIBGNOMEPRINTUI_CFLAGS"
                         AC_DEFINE(wxUSE_LIBGNOMEPRINT)
                     ],
