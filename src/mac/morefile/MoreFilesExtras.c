@@ -45,6 +45,8 @@
 #include <Traps.h>
 #include <FSM.h>
 #include <Disks.h>
+#else
+#include <HFSVolumes.h>
 #endif
 #include <OSUtils.h>
 #include <MacErrors.h>
