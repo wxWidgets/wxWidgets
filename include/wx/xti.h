@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/xti.h
+// Name:        wx/xti.hG
 // Purpose:     runtime metadata information (extended class info)
 // Author:      Stefan Csomor
 // Modified by:
@@ -42,6 +42,30 @@
 #include "wx/string.h"
 #include "wx/arrstr.h"
 #include "wx/hashmap.h"
+
+// we will move this later to defs.h
+
+#if !wxCHECK_GCC_VERSION( 3 , 4 )
+#  define wxUSE_MEMBER_TEMPLATES 0
+#endif
+
+#ifdef _MSC_VER
+#  if _MSC_VER <= 1200
+#    define wxUSE_MEMBER_TEMPLATES 0
+#  endif
+#endif
+
+#ifndef wxUSE_MEMBER_TEMPLATES
+#define wxUSE_MEMBER_TEMPLATES 1
+#endif
+
+#if wxUSE_MEMBER_TEMPLATES
+#define WX_TEMPLATED_MEMBER_CALL( method , type ) method<type>()
+#define WX_TEMPLATED_MEMBER_FIX( type )
+#else
+#define WX_TEMPLATED_MEMBER_CALL( method , type ) method((type*)NULL)
+#define WX_TEMPLATED_MEMBER_FIX( type ) type* =NULL
+#endif
 
 class WXDLLIMPEXP_BASE wxObject;
 class WXDLLIMPEXP_BASE wxClassInfo;
@@ -217,10 +241,10 @@ void wxSetToString( wxString &s , const wxBitset<e> &data )
 } \
     void FromLong##SetName( long data , wxxVariant& result ) { result = wxxVariant(SetName((unsigned long)data)) ;} \
     void ToLong##SetName( const wxxVariant& data , long &result ) { result = (long) data.Get<SetName>().to_ulong() ;} \
-template<> const wxTypeInfo* wxGetTypeInfo( SetName * ) \
+    template<> const wxTypeInfo* wxGetTypeInfo( SetName * ) \
 { \
     static wxEnumTypeInfo s_typeInfo(wxT_SET , &s_enumData##e , &wxToStringConverter<SetName> , &wxFromStringConverter<SetName> , &ToLong##SetName , &FromLong##SetName, #SetName ) ; return &s_typeInfo ; \
-} 
+}
 
 template<typename e>
 void wxFlagsFromString(const wxString &s , e &data )
@@ -284,10 +308,10 @@ void wxFlagsToString( wxString &s , const e& data )
 } \
     void FromLong##e( long data , wxxVariant& result ) { result = wxxVariant(e(data)) ;} \
     void ToLong##e( const wxxVariant& data , long &result ) { result = (long) data.Get<e>().m_data ;} \
-template<> const wxTypeInfo* wxGetTypeInfo( e * ) \
+    template<> const wxTypeInfo* wxGetTypeInfo( e * ) \
 { \
     static wxEnumTypeInfo s_typeInfo(wxT_SET , &s_enumData##e , &wxToStringConverter<e> , &wxFromStringConverter<e> , &ToLong##e , &FromLong##e, #e ) ; return &s_typeInfo ; \
-} 
+}
 
 // ----------------------------------------------------------------------------
 // Type Information
@@ -336,48 +360,48 @@ WX_DECLARE_EXPORTED_STRING_HASH_MAP( wxTypeInfo* , wxTypeInfoMap ) ;
 class WXDLLIMPEXP_BASE wxTypeInfo
 {
 public :
-       typedef void (*converterToString_t)( const wxxVariant& data , wxString &result ) ;
-       typedef void (*converterFromString_t)( const wxString& data , wxxVariant &result ) ;
+    typedef void (*converterToString_t)( const wxxVariant& data , wxString &result ) ;
+    typedef void (*converterFromString_t)( const wxString& data , wxxVariant &result ) ;
 
-        wxTypeInfo(wxTypeKind kind , converterToString_t to = NULL , converterFromString_t from= NULL, const wxString &name = wxEmptyString ) : 
-            m_kind( kind) , m_toString(to) , m_fromString(from) , m_name(name) 
-        {
-           Register() ;
-        }
+    wxTypeInfo(wxTypeKind kind , converterToString_t to = NULL , converterFromString_t from= NULL, const wxString &name = wxEmptyString ) :
+    m_kind( kind) , m_toString(to) , m_fromString(from) , m_name(name)
+    {
+        Register() ;
+    }
 
-       virtual ~wxTypeInfo() 
-       {
-           Unregister() ;
-       }
+    virtual ~wxTypeInfo()
+    {
+        Unregister() ;
+    }
 
-       // return the kind of this type (wxT_... constants)
-       wxTypeKind GetKind() const { return m_kind ; }
+    // return the kind of this type (wxT_... constants)
+    wxTypeKind GetKind() const { return m_kind ; }
 
-       // returns the unique name of this type
-       const wxString& GetTypeName() const { return m_name ; }
+    // returns the unique name of this type
+    const wxString& GetTypeName() const { return m_name ; }
 
-       // is this type a delegate type
-       bool IsDelegateType() const { return m_kind == wxT_DELEGATE ; }
+    // is this type a delegate type
+    bool IsDelegateType() const { return m_kind == wxT_DELEGATE ; }
 
-       // is this type a custom type
-       bool IsCustomType() const { return m_kind == wxT_CUSTOM ; }
+    // is this type a custom type
+    bool IsCustomType() const { return m_kind == wxT_CUSTOM ; }
 
-       // is this type an object type 
-       bool IsObjectType() const { return m_kind == wxT_OBJECT || m_kind == wxT_OBJECT_PTR ; }
+    // is this type an object type
+    bool IsObjectType() const { return m_kind == wxT_OBJECT || m_kind == wxT_OBJECT_PTR ; }
 
-       // can the content of this type be converted to and from strings ?
-       bool HasStringConverters() const { return m_toString != NULL && m_fromString != NULL ; }
+    // can the content of this type be converted to and from strings ?
+    bool HasStringConverters() const { return m_toString != NULL && m_fromString != NULL ; }
 
-       // convert a wxxVariant holding data of this type into a string
-       void ConvertToString( const wxxVariant& data , wxString &result ) const
+    // convert a wxxVariant holding data of this type into a string
+    void ConvertToString( const wxxVariant& data , wxString &result ) const
 
-       { wxASSERT_MSG( m_toString , wxT("String conversions not supported") ) ; (*m_toString)( data , result ) ; }
+    { wxASSERT_MSG( m_toString , wxT("String conversions not supported") ) ; (*m_toString)( data , result ) ; }
 
-       // convert a string into a wxxVariant holding the corresponding data in this type
-       void ConvertFromString( const wxString& data , wxxVariant &result ) const
-       { wxASSERT_MSG( m_fromString , wxT("String conversions not supported") ) ; (*m_fromString)( data , result ) ; }
+    // convert a string into a wxxVariant holding the corresponding data in this type
+    void ConvertFromString( const wxString& data , wxxVariant &result ) const
+    { wxASSERT_MSG( m_fromString , wxT("String conversions not supported") ) ; (*m_fromString)( data , result ) ; }
 
-       static wxTypeInfo        *FindType(const wxChar *typeName);
+    static wxTypeInfo        *FindType(const wxChar *typeName);
 
 private :
 
@@ -415,20 +439,20 @@ public :
     typedef void (*converterToLong_t)( const wxxVariant& data , long &result ) ;
     typedef void (*converterFromLong_t)( long data , wxxVariant &result ) ;
 
-    wxEnumTypeInfo( wxTypeKind kind , wxEnumData* enumInfo , converterToString_t to , converterFromString_t from , 
+    wxEnumTypeInfo( wxTypeKind kind , wxEnumData* enumInfo , converterToString_t to , converterFromString_t from ,
         converterToLong_t toLong , converterFromLong_t fromLong , const wxString &name  ) :
-       wxTypeInfo( kind , to , from , name ) , m_toLong( toLong ) , m_fromLong( fromLong )
-       { wxASSERT_MSG( kind == wxT_ENUM || kind == wxT_SET , wxT("Illegal Kind for Enum Type")) ; m_enumInfo = enumInfo ;}
-       const wxEnumData* GetEnumData() const { return m_enumInfo ; }
+    wxTypeInfo( kind , to , from , name ) , m_toLong( toLong ) , m_fromLong( fromLong )
+    { wxASSERT_MSG( kind == wxT_ENUM || kind == wxT_SET , wxT("Illegal Kind for Enum Type")) ; m_enumInfo = enumInfo ;}
+    const wxEnumData* GetEnumData() const { return m_enumInfo ; }
 
-       // convert a wxxVariant holding data of this type into a long
-       void ConvertToLong( const wxxVariant& data , long &result ) const
+    // convert a wxxVariant holding data of this type into a long
+    void ConvertToLong( const wxxVariant& data , long &result ) const
 
-       { wxASSERT_MSG( m_toLong , wxT("Long conversions not supported") ) ; (*m_toLong)( data , result ) ; }
+    { wxASSERT_MSG( m_toLong , wxT("Long conversions not supported") ) ; (*m_toLong)( data , result ) ; }
 
-       // convert a long into a wxxVariant holding the corresponding data in this type
-       void ConvertFromLong( long data , wxxVariant &result ) const
-       { wxASSERT_MSG( m_fromLong , wxT("Long conversions not supported") ) ; (*m_fromLong)( data , result ) ; }
+    // convert a long into a wxxVariant holding the corresponding data in this type
+    void ConvertFromLong( long data , wxxVariant &result ) const
+    { wxASSERT_MSG( m_fromLong , wxT("Long conversions not supported") ) ; (*m_fromLong)( data , result ) ; }
 
 private :
     converterToLong_t m_toLong ;
@@ -441,7 +465,7 @@ class WXDLLIMPEXP_BASE wxClassTypeInfo : public wxTypeInfo
 {
 public :
     wxClassTypeInfo( wxTypeKind kind , wxClassInfo* classInfo , converterToString_t to = NULL , converterFromString_t from = NULL ) ;
-       const wxClassInfo *GetClassInfo() const { return m_classInfo ; }
+    const wxClassInfo *GetClassInfo() const { return m_classInfo ; }
 private :
     wxClassInfo *m_classInfo; // Kind == wxT_OBJECT - could be NULL
 } ;
@@ -479,26 +503,11 @@ template<typename T> const wxTypeInfo* wxGetTypeInfo( T * ) ;
     template<> const wxTypeInfo* wxGetTypeInfo( e * ){ static wxCustomTypeInfo s_typeInfo(#e, &wxToStringConverter<e> , &wxFromStringConverter<e>) ; return &s_typeInfo ; }
 
 #define WX_COLLECTION_TYPE_INFO( element , collection ) \
-template<> const wxTypeInfo* wxGetTypeInfo( collection * ) \
+    template<> const wxTypeInfo* wxGetTypeInfo( collection * ) \
 { \
     static wxCollectionTypeInfo s_typeInfo( (wxTypeInfo*) wxGetTypeInfo( (element *) NULL) , NULL , NULL , #collection ) ; \
     return &s_typeInfo ; \
 } \
-
-
-// templated streaming, every type must have their specialization for these methods
-
-template<typename T>
-void wxStringReadValue( const wxString &s , T &data );
-
-template<typename T>
-void wxStringWriteValue( wxString &s , const T &data);
-
-template<typename T>
-void wxToStringConverter( const wxxVariant &v, wxString &s) { wxStringWriteValue( s , v.Get<T>() ) ; }
-
-template<typename T>
-void wxFromStringConverter( const wxString &s, wxxVariant &v) { T d ; wxStringReadValue( s , d ) ; v = wxxVariant(d) ; } \
 
 // sometimes a compiler invents specializations that are nowhere called, use this macro to satisfy the refs
 
@@ -561,7 +570,7 @@ public :
     ~wxxVariant() { delete m_data ; }
 
     // get a ref to the stored data
-    template<typename T> T& Get()
+    template<typename T> T& Get(WX_TEMPLATED_MEMBER_FIX(T))
     {
         wxxVariantDataT<T> *dataptr = dynamic_cast<wxxVariantDataT<T>*> (m_data) ;
         wxASSERT_MSG( dataptr , wxT("Cast not possible") ) ;
@@ -569,7 +578,7 @@ public :
     }
 
     // get a ref to the stored data
-    template<typename T> const T& Get() const
+    template<typename T> const T& Get(WX_TEMPLATED_MEMBER_FIX(T)) const
     {
         const wxxVariantDataT<T> *dataptr = dynamic_cast<const wxxVariantDataT<T>*> (m_data) ;
         wxASSERT_MSG( dataptr , wxT("Cast not possible") ) ;
@@ -618,6 +627,20 @@ private :
 #include <wx/dynarray.h>
 
 WX_DECLARE_OBJARRAY_WITH_DECL(wxxVariant, wxxVariantArray, class WXDLLIMPEXP_BASE);
+
+// templated streaming, every type must have their specialization for these methods
+
+template<typename T>
+void wxStringReadValue( const wxString &s , T &data );
+
+template<typename T>
+void wxStringWriteValue( wxString &s , const T &data);
+
+template<typename T>
+void wxToStringConverter( const wxxVariant &v, wxString &s) { wxStringWriteValue( s , v.WX_TEMPLATED_MEMBER_CALL(Get , T) ) ; }
+
+template<typename T>
+void wxFromStringConverter( const wxString &s, wxxVariant &v) { T d ; wxStringReadValue( s , d ) ; v = wxxVariant(d) ; } \
 
 // ----------------------------------------------------------------------------
 // Property Support
@@ -1069,7 +1092,7 @@ struct wxConstructorBridge_1 : public wxConstructorBridge
     {
         Class *obj = dynamic_cast<Class*>(o);
         obj->Create(
-            args[0].Get<T0>()
+            args[0].WX_TEMPLATED_MEMBER_CALL(Get , T0)
             );
     }
 };
@@ -1090,8 +1113,8 @@ struct wxConstructorBridge_2 : public wxConstructorBridge
     {
         Class *obj = dynamic_cast<Class*>(o);
         obj->Create(
-            args[0].Get<T0>() ,
-            args[1].Get<T1>()
+            args[0].WX_TEMPLATED_MEMBER_CALL(Get , T0) ,
+            args[1].WX_TEMPLATED_MEMBER_CALL(Get , T1)
             );
     }
 };
@@ -1112,9 +1135,9 @@ struct wxConstructorBridge_3 : public wxConstructorBridge
     {
         Class *obj = dynamic_cast<Class*>(o);
         obj->Create(
-            args[0].Get<T0>() ,
-            args[1].Get<T1>() ,
-            args[2].Get<T2>()
+            args[0].WX_TEMPLATED_MEMBER_CALL(Get , T0) ,
+            args[1].WX_TEMPLATED_MEMBER_CALL(Get , T1) ,
+            args[2].WX_TEMPLATED_MEMBER_CALL(Get , T2)
             );
     }
 };
@@ -1135,10 +1158,10 @@ struct wxConstructorBridge_4 : public wxConstructorBridge
     {
         Class *obj = dynamic_cast<Class*>(o);
         obj->Create(
-            args[0].Get<T0>() ,
-            args[1].Get<T1>() ,
-            args[2].Get<T2>() ,
-            args[3].Get<T3>()
+            args[0].WX_TEMPLATED_MEMBER_CALL(Get , T0) ,
+            args[1].WX_TEMPLATED_MEMBER_CALL(Get , T1) ,
+            args[2].WX_TEMPLATED_MEMBER_CALL(Get , T2) ,
+            args[3].WX_TEMPLATED_MEMBER_CALL(Get , T3)
             );
     }
 };
@@ -1159,11 +1182,11 @@ struct wxConstructorBridge_5 : public wxConstructorBridge
     {
         Class *obj = dynamic_cast<Class*>(o);
         obj->Create(
-            args[0].Get<T0>() ,
-            args[1].Get<T1>() ,
-            args[2].Get<T2>() ,
-            args[3].Get<T3>() ,
-            args[4].Get<T4>()
+            args[0].WX_TEMPLATED_MEMBER_CALL(Get , T0) ,
+            args[1].WX_TEMPLATED_MEMBER_CALL(Get , T1) ,
+            args[2].WX_TEMPLATED_MEMBER_CALL(Get , T2) ,
+            args[3].WX_TEMPLATED_MEMBER_CALL(Get , T3) ,
+            args[4].WX_TEMPLATED_MEMBER_CALL(Get , T4)
             );
     }
 };
@@ -1184,15 +1207,38 @@ struct wxConstructorBridge_6 : public wxConstructorBridge
     {
         Class *obj = dynamic_cast<Class*>(o);
         obj->Create(
-            args[0].Get<T0>() ,
-            args[1].Get<T1>() ,
-            args[2].Get<T2>() ,
-            args[3].Get<T3>() ,
-            args[4].Get<T4>() ,
-            args[5].Get<T5>()
+            args[0].WX_TEMPLATED_MEMBER_CALL(Get , T0) ,
+            args[1].WX_TEMPLATED_MEMBER_CALL(Get , T1) ,
+            args[2].WX_TEMPLATED_MEMBER_CALL(Get , T2) ,
+            args[3].WX_TEMPLATED_MEMBER_CALL(Get , T3) ,
+            args[4].WX_TEMPLATED_MEMBER_CALL(Get , T4) ,
+            args[5].WX_TEMPLATED_MEMBER_CALL(Get , T5)
             );
     }
 };
+
+template<typename Class,
+typename T0, typename T1, typename T2, typename T3, typename T4, typename T5>
+struct wxDirectConstructorBridge_6 : public wxConstructorBridge
+{
+    void Create(wxObject *o, wxxVariant *args)
+    {
+        Class *obj = new Class(
+            args[0].WX_TEMPLATED_MEMBER_CALL(Get , T0) ,
+            args[1].WX_TEMPLATED_MEMBER_CALL(Get , T1) ,
+            args[2].WX_TEMPLATED_MEMBER_CALL(Get , T2) ,
+            args[3].WX_TEMPLATED_MEMBER_CALL(Get , T3) ,
+            args[4].WX_TEMPLATED_MEMBER_CALL(Get , T4) ,
+            args[5].WX_TEMPLATED_MEMBER_CALL(Get , T5)
+            );
+    }
+};
+
+#define WX_DIRECT_CONSTRUCTOR_6(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4,t5,v5) \
+    wxDirectConstructorBridge_6<klass,t0,t1,t2,t3,t4,t5> constructor##klass ; \
+    wxConstructorBridge* klass::sm_constructor##klass = &constructor##klass ; \
+    const wxChar *klass::sm_constructorProperties##klass[] = { #v0 , #v1 , #v2 , #v3 , #v4 , #v5 } ; \
+    const int klass::sm_constructorPropertiesCount##klass = 6;
 
 #define WX_CONSTRUCTOR_6(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4,t5,v5) \
     wxConstructorBridge_6<klass,t0,t1,t2,t3,t4,t5> constructor##klass ; \
@@ -1210,13 +1256,13 @@ struct wxConstructorBridge_7 : public wxConstructorBridge
     {
         Class *obj = dynamic_cast<Class*>(o);
         obj->Create(
-            args[0].Get<T0>() ,
-            args[1].Get<T1>() ,
-            args[2].Get<T2>() ,
-            args[3].Get<T3>() ,
-            args[4].Get<T4>() ,
-            args[5].Get<T5>() ,
-            args[6].Get<T6>()
+            args[0].WX_TEMPLATED_MEMBER_CALL(Get , T0) ,
+            args[1].WX_TEMPLATED_MEMBER_CALL(Get , T1) ,
+            args[2].WX_TEMPLATED_MEMBER_CALL(Get , T2) ,
+            args[3].WX_TEMPLATED_MEMBER_CALL(Get , T3) ,
+            args[4].WX_TEMPLATED_MEMBER_CALL(Get , T4) ,
+            args[5].WX_TEMPLATED_MEMBER_CALL(Get , T5) ,
+            args[6].WX_TEMPLATED_MEMBER_CALL(Get , T6)
             );
     }
 };
@@ -1237,14 +1283,14 @@ struct wxConstructorBridge_8 : public wxConstructorBridge
     {
         Class *obj = dynamic_cast<Class*>(o);
         obj->Create(
-            args[0].Get<T0>() ,
-            args[1].Get<T1>() ,
-            args[2].Get<T2>() ,
-            args[3].Get<T3>() ,
-            args[4].Get<T4>() ,
-            args[5].Get<T5>() ,
-            args[6].Get<T6>() ,
-            args[7].Get<T7>()
+            args[0].WX_TEMPLATED_MEMBER_CALL(Get , T0) ,
+            args[1].WX_TEMPLATED_MEMBER_CALL(Get , T1) ,
+            args[2].WX_TEMPLATED_MEMBER_CALL(Get , T2) ,
+            args[3].WX_TEMPLATED_MEMBER_CALL(Get , T3) ,
+            args[4].WX_TEMPLATED_MEMBER_CALL(Get , T4) ,
+            args[5].WX_TEMPLATED_MEMBER_CALL(Get , T5) ,
+            args[6].WX_TEMPLATED_MEMBER_CALL(Get , T6) ,
+            args[7].WX_TEMPLATED_MEMBER_CALL(Get , T7)
             );
     }
 };
@@ -1285,8 +1331,8 @@ public:
         ) : m_parents(_Parents) , m_unitName(_UnitName) ,m_className(_ClassName),
         m_objectSize(size), m_objectConstructor(ctor) , m_firstProperty(_Props ) , m_firstHandler(_Handlers ) , m_constructor( _Constructor ) ,
         m_constructorProperties(_ConstructorProperties) , m_constructorPropertiesCount(_ConstructorPropertiesCount),
-        m_variantOfPtrToObjectConverter( _PtrConverter1 ) , m_variantToObjectConverter( _Converter2 ) , m_objectToVariantConverter( _Converter3 ) , 
-        m_next(sm_first) , m_streamingCallback( _streamingCallback ) 
+        m_variantOfPtrToObjectConverter( _PtrConverter1 ) , m_variantToObjectConverter( _Converter2 ) , m_objectToVariantConverter( _Converter3 ) ,
+        m_next(sm_first) , m_streamingCallback( _streamingCallback )
     {
         sm_first = this;
         Register() ;
@@ -1294,7 +1340,7 @@ public:
 
     wxClassInfo(const wxChar *_UnitName, const wxChar *_ClassName, const wxClassInfo **_Parents) : m_parents(_Parents) , m_unitName(_UnitName) ,m_className(_ClassName),
         m_objectSize(0), m_objectConstructor(NULL) , m_firstProperty(NULL ) , m_firstHandler(NULL ) , m_constructor( NULL ) ,
-        m_constructorProperties(NULL) , m_constructorPropertiesCount(NULL),
+        m_constructorProperties(NULL) , m_constructorPropertiesCount(0),
         m_variantOfPtrToObjectConverter( NULL ) , m_variantToObjectConverter( NULL ) , m_objectToVariantConverter( NULL ) , m_next(sm_first) ,
         m_streamingCallback( NULL )
     {
@@ -1484,8 +1530,17 @@ public :
     virtual void SetProperty (wxObject *object, const wxChar *PropertyName, const wxxVariant &Value) const ;
     virtual wxxVariant GetProperty (wxObject *object, const wxChar *PropertyName) const ;
 
+    // adds a property to this class at runtime
     void AddProperty( const wxChar *propertyName , const wxTypeInfo* typeInfo ) ;
+
+    // removes an existing runtime-property
+    void RemoveProperty( const wxChar *propertyName ) ;
+
+    // as a handler to this class at runtime
     void AddHandler( const wxChar *handlerName , wxObjectEventFunction address , const wxClassInfo* eventClassInfo ) ;
+
+    // removes an existing runtime-handler
+    void RemoveHandler( const wxChar *handlerName ) ;
 } ;
 
 // ----------------------------------------------------------------------------
@@ -1500,7 +1555,7 @@ public :
  static wxHandlerInfo* GetHandlersStatic() ; \
  static wxClassInfo *GetClassInfoStatic()   \
 { return &name::sm_class##name; } \
- virtual wxClassInfo *GetClassInfo() const   \
+    virtual wxClassInfo *GetClassInfo() const   \
 { return &name::sm_class##name; }
 
 #define DECLARE_DYNAMIC_CLASS(name)           \
@@ -1698,9 +1753,9 @@ public :
 // Collection Support
 // --------------------------------------------------------------------------
 
-template<typename collection_t> void wxListCollectionToVariantArray( const collection_t& coll , wxxVariantArray &value )
+template<typename iter , typename collection_t > void wxListCollectionToVariantArray( const collection_t& coll , wxxVariantArray &value )
 {
-    collection_t::compatibility_iterator current = coll.GetFirst() ;
+    iter current = coll.GetFirst() ;
     while (current)
     {
         value.Add( new wxxVariant(current->GetData()) ) ;

@@ -1,8 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/common/xtistrm.cpp
-// Purpose:     streaming runtime metadata information 
+// Purpose:     streaming runtime metadata information
 // Author:      Stefan Csomor
-// Modified by: 
+// Modified by:
 // Created:     27/07/03
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003 Stefan Csomor
@@ -44,7 +44,7 @@ using namespace std ;
 
 //
 // XML Streaming
-// 
+//
 
 // convenience functions
 
@@ -80,19 +80,19 @@ struct wxXmlWriter::wxXmlWriterInternal
     }
 } ;
 
-wxXmlWriter::wxXmlWriter( wxXmlNode * rootnode ) 
+wxXmlWriter::wxXmlWriter( wxXmlNode * rootnode )
 {
     m_data = new wxXmlWriterInternal() ;
     m_data->m_root = rootnode ;
     m_data->m_current = rootnode ;
 }
 
-wxXmlWriter::~wxXmlWriter() 
+wxXmlWriter::~wxXmlWriter()
 {
     delete m_data ;
 }
 
-void wxXmlWriter::DoBeginWriteTopLevelEntry( const wxString &name ) 
+void wxXmlWriter::DoBeginWriteTopLevelEntry( const wxString &name )
 {
     wxXmlNode *pnode;
     pnode = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("entry"));
@@ -106,7 +106,7 @@ void wxXmlWriter::DoEndWriteTopLevelEntry( const wxString &WXUNUSED(name) )
     m_data->Pop() ;
 }
 
-void wxXmlWriter::DoBeginWriteObject(const wxObject *WXUNUSED(object), const wxClassInfo *classInfo, int objectID , wxxVariantArray &metadata   ) 
+void wxXmlWriter::DoBeginWriteObject(const wxObject *WXUNUSED(object), const wxClassInfo *classInfo, int objectID , wxxVariantArray &metadata   )
 {
     wxXmlNode *pnode;
     pnode = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("object"));
@@ -122,18 +122,18 @@ void wxXmlWriter::DoBeginWriteObject(const wxObject *WXUNUSED(object), const wxC
 }
 
 // end of writing the root object
-void wxXmlWriter::DoEndWriteObject(const wxObject *WXUNUSED(object), const wxClassInfo *WXUNUSED(classInfo), int WXUNUSED(objectID) ) 
+void wxXmlWriter::DoEndWriteObject(const wxObject *WXUNUSED(object), const wxClassInfo *WXUNUSED(classInfo), int WXUNUSED(objectID) )
 {
     m_data->Pop() ;
 }
 
 // writes a property in the stream format
-void wxXmlWriter::DoWriteSimpleType( wxxVariant &value ) 
+void wxXmlWriter::DoWriteSimpleType( wxxVariant &value )
 {
     wxXmlAddContentToNode( m_data->m_current ,value.GetAsString() ) ;
 }
 
-void wxXmlWriter::DoBeginWriteElement() 
+void wxXmlWriter::DoBeginWriteElement()
 {
     wxXmlNode *pnode;
     pnode = new wxXmlNode(wxXML_ELEMENT_NODE, "element" );
@@ -141,7 +141,7 @@ void wxXmlWriter::DoBeginWriteElement()
     m_data->Push( pnode ) ;
 }
 
-void wxXmlWriter::DoEndWriteElement() 
+void wxXmlWriter::DoEndWriteElement()
 {
     m_data->Pop() ;
 }
@@ -163,7 +163,7 @@ void wxXmlWriter::DoEndWriteProperty(const wxPropertyInfo *WXUNUSED(propInfo) )
 
 
 // insert an object reference to an already written object
-void wxXmlWriter::DoWriteRepeatedObject( int objectID ) 
+void wxXmlWriter::DoWriteRepeatedObject( int objectID )
 {
     wxXmlNode *pnode;
     pnode = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("object"));
@@ -172,7 +172,7 @@ void wxXmlWriter::DoWriteRepeatedObject( int objectID )
 }
 
 // insert a null reference
-void wxXmlWriter::DoWriteNullObject() 
+void wxXmlWriter::DoWriteNullObject()
 {
     wxXmlNode *pnode;
     pnode = new wxXmlNode(wxXML_ELEMENT_NODE, wxT("object"));
@@ -180,26 +180,26 @@ void wxXmlWriter::DoWriteNullObject()
 }
 
 // writes a delegate in the stream format
-void wxXmlWriter::DoWriteDelegate( const wxObject *WXUNUSED(object),  const wxClassInfo* WXUNUSED(classInfo) , const wxPropertyInfo *WXUNUSED(pi) , 
-                                  const wxObject *eventSink, int sinkObjectID , const wxClassInfo* WXUNUSED(eventSinkClassInfo) , const wxHandlerInfo* handlerInfo ) 
+void wxXmlWriter::DoWriteDelegate( const wxObject *WXUNUSED(object),  const wxClassInfo* WXUNUSED(classInfo) , const wxPropertyInfo *WXUNUSED(pi) ,
+                                  const wxObject *eventSink, int sinkObjectID , const wxClassInfo* WXUNUSED(eventSinkClassInfo) , const wxHandlerInfo* handlerInfo )
 {
     if ( eventSink != NULL && handlerInfo != NULL )
     {
-        wxXmlAddContentToNode( m_data->m_current ,wxString::Format(wxT("%d.%s"), sinkObjectID , handlerInfo->GetName()) ) ;
+        wxXmlAddContentToNode( m_data->m_current ,wxString::Format(wxT("%d.%s"), sinkObjectID , handlerInfo->GetName().c_str()) ) ;
     }
 }
 
 // ----------------------------------------------------------------------------
-// reading objects in 
+// reading objects in
 // ----------------------------------------------------------------------------
 
 
 
 // ----------------------------------------------------------------------------
-// reading xml in 
+// reading xml in
 // ----------------------------------------------------------------------------
 
-/* 
+/*
 Reading components has not to be extended for components
 as properties are always sought by typeinfo over all levels
 and create params are always toplevel class only
@@ -267,7 +267,7 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
     }
     callbacks->AllocateObject(objectID, classInfo, metadata);
 
-    // 
+    //
     // stream back the Create parameters first
     createParams = new wxxVariant[ classInfo->GetCreateParamCount() ] ;
     createParamOids = new int[classInfo->GetCreateParamCount() ] ;
@@ -368,7 +368,7 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
                                 {
                                     if ( pi->GetAccessor()->HasAdder() )
                                         callbacks->AddToPropertyCollectionAsObject( objectID , classInfo , pi , valueId ) ;
-                                    // TODO for collections we must have a notation on taking over ownership or not 
+                                    // TODO for collections we must have a notation on taking over ownership or not
                                     if ( elementType->GetKind() == wxT_OBJECT && valueId != wxNullObjectID )
                                         callbacks->DestroyObject( valueId , GetObjectClassInfo( valueId ) ) ;
                                 }

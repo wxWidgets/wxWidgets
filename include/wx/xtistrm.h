@@ -70,8 +70,8 @@ public :
     virtual bool BeforeWriteDelegate( wxWriter *WXUNUSED(writer) , const wxObject *WXUNUSED(object),  const wxClassInfo* WXUNUSED(classInfo) , const wxPropertyInfo *WXUNUSED(propInfo) , 
         const wxObject *&WXUNUSED(eventSink) , const wxHandlerInfo* &WXUNUSED(handlerInfo) ) { return true ; } 
 
-    virtual void AfterWriteDelegate( wxWriter *WXUNUSED(writer) , const wxObject *WXUNUSED(object),  const wxClassInfo* WXUNUSED(classInfo) , const wxPropertyInfo *WXUNUSED(propInfo) , 
-        const wxObject *&WXUNUSED(eventSink) , const wxHandlerInfo* &WXUNUSED(handlerInfo) ) { } 
+        virtual void AfterWriteDelegate( wxWriter *WXUNUSED(writer) , const wxObject *WXUNUSED(object),  const wxClassInfo* WXUNUSED(classInfo) , const wxPropertyInfo *WXUNUSED(propInfo) , 
+            const wxObject *&WXUNUSED(eventSink) , const wxHandlerInfo* &WXUNUSED(handlerInfo) ) { } 
 } ;
 
 class wxWriter : public wxObject
@@ -90,7 +90,7 @@ public :
     // made without wanting to have duplicate objects written, the object identity table will be reset manually
 
     virtual void ClearObjectContext() ;
-    
+
     // gets the object Id for a passed in object in the context
     int GetObjectID(const wxObject *obj) ;
 

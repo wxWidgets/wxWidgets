@@ -22,9 +22,9 @@
 #endif
 
 #ifndef WX_PRECOMP
-    #include "wx/hash.h"
-    #include "wx/object.h"
-    #include "wx/xti.h"
+#include "wx/hash.h"
+#include "wx/object.h"
+#include "wx/xti.h"
 #endif
 
 #include "wx/xml/xml.h"
@@ -47,36 +47,36 @@ using namespace std ;
 
 wxEnumData::wxEnumData( wxEnumMemberData* data )
 {
-	m_members = data ;
+    m_members = data ;
     for ( m_count = 0; m_members[m_count].m_name ; m_count++)
-		{} ;
+    {} ;
 }
 
 bool wxEnumData::HasEnumMemberValue(const wxChar *name, int *value)
 {
     int i;
     for (i = 0; m_members[i].m_name ; i++ )
-	{
-		if (!strcmp(name, m_members[i].m_name))
-		{
-			if ( value )
-				*value = m_members[i].m_value;
-			return true ;
-		}
-	}
-	return false ;
+    {
+        if (!strcmp(name, m_members[i].m_name))
+        {
+            if ( value )
+                *value = m_members[i].m_value;
+            return true ;
+        }
+    }
+    return false ;
 }
 
 int wxEnumData::GetEnumMemberValue(const wxChar *name)
 {
     int i;
     for (i = 0; m_members[i].m_name ; i++ )
-	{
-		if (!strcmp(name, m_members[i].m_name))
-		{
-			return m_members[i].m_value;
-		}
-	}
+    {
+        if (!strcmp(name, m_members[i].m_name))
+        {
+            return m_members[i].m_value;
+        }
+    }
     return 0 ;
 }
 
@@ -84,22 +84,22 @@ const wxChar *wxEnumData::GetEnumMemberName(int value)
 {
     int i;
     for (i = 0; m_members[i].m_name ; i++)
-		if (value == m_members[i].m_value)
-			return m_members[i].m_name;
+        if (value == m_members[i].m_value)
+            return m_members[i].m_name;
 
-	return wxT("") ;
+    return wxT("") ;
 }
 
 int wxEnumData::GetEnumMemberValueByIndex( int idx )
 {
-	// we should cache the count in order to avoid out-of-bounds errors
-	return m_members[idx].m_value ;
+    // we should cache the count in order to avoid out-of-bounds errors
+    return m_members[idx].m_value ;
 }
 
 const char * wxEnumData::GetEnumMemberNameByIndex( int idx )
 {
-	// we should cache the count in order to avoid out-of-bounds errors
-	return m_members[idx].m_name ;
+    // we should cache the count in order to avoid out-of-bounds errors
+    return m_members[idx].m_name ;
 }
 
 // ----------------------------------------------------------------------------
@@ -116,126 +116,126 @@ const char * wxEnumData::GetEnumMemberNameByIndex( int idx )
 
 template<> void wxStringReadValue(const wxString &s , bool &data )
 {
-	int intdata ;
-	wxSscanf(s, _T("%d"), &intdata ) ;
-	data = bool(intdata) ;
+    int intdata ;
+    wxSscanf(s, _T("%d"), &intdata ) ;
+    data = bool(intdata) ;
 }
 
 template<> void wxStringWriteValue(wxString &s , const bool &data )
 {
-	s = wxString::Format("%d", data ) ;
+    s = wxString::Format("%d", data ) ;
 }
 
 // char
 
 template<> void wxStringReadValue(const wxString &s , char &data )
 {
-	int intdata ;
-	wxSscanf(s, _T("%d"), &intdata ) ;
-	data = char(intdata) ;
+    int intdata ;
+    wxSscanf(s, _T("%d"), &intdata ) ;
+    data = char(intdata) ;
 }
 
 template<> void wxStringWriteValue(wxString &s , const char &data )
 {
-	s = wxString::Format("%d", data ) ;
+    s = wxString::Format("%d", data ) ;
 }
 
 // unsigned char
 
 template<> void wxStringReadValue(const wxString &s , unsigned char &data )
 {
-	int intdata ;
-	wxSscanf(s, _T("%d"), &intdata ) ;
-	data = (unsigned char)(intdata) ;
+    int intdata ;
+    wxSscanf(s, _T("%d"), &intdata ) ;
+    data = (unsigned char)(intdata) ;
 }
 
 template<> void wxStringWriteValue(wxString &s , const unsigned char &data )
 {
-	s = wxString::Format("%d", data ) ;
+    s = wxString::Format("%d", data ) ;
 }
 
 // int
 
 template<> void wxStringReadValue(const wxString &s , int &data )
 {
-	wxSscanf(s, _T("%d"), &data ) ;
+    wxSscanf(s, _T("%d"), &data ) ;
 }
 
 template<> void wxStringWriteValue(wxString &s , const int &data )
 {
-	s = wxString::Format("%d", data ) ;
+    s = wxString::Format("%d", data ) ;
 }
 
 // unsigned int
 
 template<> void wxStringReadValue(const wxString &s , unsigned int &data )
 {
-	wxSscanf(s, _T("%d"), &data ) ;
+    wxSscanf(s, _T("%d"), &data ) ;
 }
 
 template<> void wxStringWriteValue(wxString &s , const unsigned int &data )
 {
-	s = wxString::Format("%d", data ) ;
+    s = wxString::Format("%d", data ) ;
 }
 
 // long
 
 template<> void wxStringReadValue(const wxString &s , long &data )
 {
-	wxSscanf(s, _T("%ld"), &data ) ;
+    wxSscanf(s, _T("%ld"), &data ) ;
 }
 
 template<> void wxStringWriteValue(wxString &s , const long &data )
 {
-	s = wxString::Format("%ld", data ) ;
+    s = wxString::Format("%ld", data ) ;
 }
 
 // unsigned long
 
 template<> void wxStringReadValue(const wxString &s , unsigned long &data )
 {
-	wxSscanf(s, _T("%ld"), &data ) ;
+    wxSscanf(s, _T("%ld"), &data ) ;
 }
 
 template<> void wxStringWriteValue(wxString &s , const unsigned long &data )
 {
-	s = wxString::Format("%ld", data ) ;
+    s = wxString::Format("%ld", data ) ;
 }
 
 // float
 
 template<> void wxStringReadValue(const wxString &s , float &data )
 {
-	wxSscanf(s, _T("%f"), &data ) ;
+    wxSscanf(s, _T("%f"), &data ) ;
 }
 
 template<> void wxStringWriteValue(wxString &s , const float &data )
 {
-	s = wxString::Format("%f", data ) ;
+    s = wxString::Format("%f", data ) ;
 }
 
 // double
 
 template<> void wxStringReadValue(const wxString &s , double &data )
 {
-	wxSscanf(s, _T("%lf"), &data ) ;
+    wxSscanf(s, _T("%lf"), &data ) ;
 }
 
 template<> void wxStringWriteValue(wxString &s , const double &data )
 {
-	s = wxString::Format("%lf", data ) ;
+    s = wxString::Format("%lf", data ) ;
 }
 
 // wxString
 
 template<> void wxStringReadValue(const wxString &s , wxString &data )
 {
-	data = s ;
+    data = s ;
 }
 
 template<> void wxStringWriteValue(wxString &s , const wxString &data )
 {
-	s = data ;
+    s = data ;
 }
 
 // built-ins
@@ -243,68 +243,68 @@ template<> void wxStringWriteValue(wxString &s , const wxString &data )
 
 template<> const wxTypeInfo* wxGetTypeInfo( void * )
 {
-	static wxBuiltInTypeInfo s_typeInfo( wxT_VOID ) ;
-	return &s_typeInfo ;
+    static wxBuiltInTypeInfo s_typeInfo( wxT_VOID ) ;
+    return &s_typeInfo ;
 }
 
 template<> const wxTypeInfo* wxGetTypeInfo( bool * )
 {
-	static wxBuiltInTypeInfo s_typeInfo( wxT_BOOL , &wxToStringConverter<bool> , &wxFromStringConverter<bool>) ;
-	return &s_typeInfo ;
+    static wxBuiltInTypeInfo s_typeInfo( wxT_BOOL , &wxToStringConverter<bool> , &wxFromStringConverter<bool>) ;
+    return &s_typeInfo ;
 }
 
 template<> const wxTypeInfo* wxGetTypeInfo( char * )
 {
-	static wxBuiltInTypeInfo s_typeInfo( wxT_CHAR , &wxToStringConverter<char> , &wxFromStringConverter<char>) ;
-	return &s_typeInfo ;
+    static wxBuiltInTypeInfo s_typeInfo( wxT_CHAR , &wxToStringConverter<char> , &wxFromStringConverter<char>) ;
+    return &s_typeInfo ;
 }
 
 template<> const wxTypeInfo* wxGetTypeInfo( unsigned char * )
 {
-	static wxBuiltInTypeInfo s_typeInfo( wxT_UCHAR , &wxToStringConverter< unsigned char > , &wxFromStringConverter<unsigned char>) ;
-	return &s_typeInfo ;
+    static wxBuiltInTypeInfo s_typeInfo( wxT_UCHAR , &wxToStringConverter< unsigned char > , &wxFromStringConverter<unsigned char>) ;
+    return &s_typeInfo ;
 }
 
 template<> const wxTypeInfo* wxGetTypeInfo( int * )
 {
-	static wxBuiltInTypeInfo s_typeInfo( wxT_CHAR , &wxToStringConverter<int> , &wxFromStringConverter<int>) ;
-	return &s_typeInfo ;
+    static wxBuiltInTypeInfo s_typeInfo( wxT_CHAR , &wxToStringConverter<int> , &wxFromStringConverter<int>) ;
+    return &s_typeInfo ;
 }
 
 template<> const wxTypeInfo* wxGetTypeInfo( unsigned int * )
 {
-	static wxBuiltInTypeInfo s_typeInfo( wxT_UCHAR , &wxToStringConverter<unsigned int> , &wxFromStringConverter<unsigned int>) ;
-	return &s_typeInfo ;
+    static wxBuiltInTypeInfo s_typeInfo( wxT_UCHAR , &wxToStringConverter<unsigned int> , &wxFromStringConverter<unsigned int>) ;
+    return &s_typeInfo ;
 }
 
 template<> const wxTypeInfo* wxGetTypeInfo( long * )
 {
-	static wxBuiltInTypeInfo s_typeInfo( wxT_LONG , &wxToStringConverter<long> , &wxFromStringConverter<long>) ;
-	return &s_typeInfo ;
+    static wxBuiltInTypeInfo s_typeInfo( wxT_LONG , &wxToStringConverter<long> , &wxFromStringConverter<long>) ;
+    return &s_typeInfo ;
 }
 
 template<> const wxTypeInfo* wxGetTypeInfo( unsigned long * )
 {
-	static wxBuiltInTypeInfo s_typeInfo( wxT_ULONG , &wxToStringConverter<unsigned long> , &wxFromStringConverter<unsigned long>) ;
-	return &s_typeInfo ;
+    static wxBuiltInTypeInfo s_typeInfo( wxT_ULONG , &wxToStringConverter<unsigned long> , &wxFromStringConverter<unsigned long>) ;
+    return &s_typeInfo ;
 }
 
 template<> const wxTypeInfo* wxGetTypeInfo( float * )
 {
-	static wxBuiltInTypeInfo s_typeInfo( wxT_FLOAT , &wxToStringConverter<float> , &wxFromStringConverter<float>) ;
-	return &s_typeInfo ;
+    static wxBuiltInTypeInfo s_typeInfo( wxT_FLOAT , &wxToStringConverter<float> , &wxFromStringConverter<float>) ;
+    return &s_typeInfo ;
 }
 
 template<> const wxTypeInfo* wxGetTypeInfo( double * )
 {
-	static wxBuiltInTypeInfo s_typeInfo( wxT_DOUBLE , &wxToStringConverter<double> , &wxFromStringConverter<double>) ;
-	return &s_typeInfo ;
+    static wxBuiltInTypeInfo s_typeInfo( wxT_DOUBLE , &wxToStringConverter<double> , &wxFromStringConverter<double>) ;
+    return &s_typeInfo ;
 }
 
 template<> const wxTypeInfo* wxGetTypeInfo( wxString * )
 {
-	static wxBuiltInTypeInfo s_typeInfo( wxT_STRING , &wxToStringConverter<wxString> , &wxFromStringConverter<wxString>) ;
-	return &s_typeInfo ;
+    static wxBuiltInTypeInfo s_typeInfo( wxT_STRING , &wxToStringConverter<wxString> , &wxFromStringConverter<wxString>) ;
+    return &s_typeInfo ;
 }
 
 // this are compiler induced specialization which are never used anywhere
@@ -336,8 +336,8 @@ wxTypeInfo( kind , to , from , classInfo->GetClassName() )
 { wxASSERT_MSG( kind == wxT_OBJECT_PTR || kind == wxT_OBJECT , wxT("Illegal Kind for Enum Type")) ; m_classInfo = classInfo ;}
 
 wxDelegateTypeInfo::wxDelegateTypeInfo( int eventType , wxClassInfo* eventClass , converterToString_t to , converterFromString_t from ) :
-        wxTypeInfo ( wxT_DELEGATE , to , from , wxEmptyString )
-    { m_eventClass = eventClass ; m_eventType = eventType ;}
+wxTypeInfo ( wxT_DELEGATE , to , from , wxEmptyString )
+{ m_eventClass = eventClass ; m_eventType = eventType ;}
 
 void wxTypeInfo::Register()
 {    
@@ -352,7 +352,7 @@ void wxTypeInfo::Unregister()
 {
     if( !m_name.IsEmpty() )
         sm_typeTable->erase(m_name);
- }
+}
 
 // removing header dependancy on string tokenizer
 
@@ -360,11 +360,11 @@ void wxSetStringToArray( const wxString &s , wxArrayString &array )
 {
     wxStringTokenizer tokenizer(s, wxT("| \t\n"), wxTOKEN_STRTOK);
     wxString flag;
-	array.Clear() ;
+    array.Clear() ;
     while (tokenizer.HasMoreTokens())
     {
-		array.Add(tokenizer.GetNextToken()) ;
-	}
+        array.Add(tokenizer.GetNextToken()) ;
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -375,69 +375,69 @@ const wxPropertyAccessor *wxClassInfo::FindAccessor(const char *PropertyName) co
 {
     const wxPropertyInfo* info = FindPropertyInfo( PropertyName ) ;
 
-	if ( info )
-		return info->GetAccessor() ;
+    if ( info )
+        return info->GetAccessor() ;
 
-	return NULL ;
+    return NULL ;
 }
 
 const wxPropertyInfo *wxClassInfo::FindPropertyInfoInThisClass (const char *PropertyName) const
 {
-	const wxPropertyInfo* info = GetFirstProperty() ;
+    const wxPropertyInfo* info = GetFirstProperty() ;
 
-	while( info )
-	{
-		if ( strcmp( info->GetName() , PropertyName ) == 0 )
-			return info ;
-		info = info->GetNext() ;
-	}
+    while( info )
+    {
+        if ( strcmp( info->GetName() , PropertyName ) == 0 )
+            return info ;
+        info = info->GetNext() ;
+    }
 
     return 0;
 }
 
 const wxPropertyInfo *wxClassInfo::FindPropertyInfo (const char *PropertyName) const
 {
-	const wxPropertyInfo* info = FindPropertyInfoInThisClass( PropertyName ) ;
+    const wxPropertyInfo* info = FindPropertyInfoInThisClass( PropertyName ) ;
     if ( info )
         return info ;
 
-	const wxClassInfo** parents = GetParents() ;
-	for ( int i = 0 ; parents[i] ; ++ i )
-	{
-		if ( ( info = parents[i]->FindPropertyInfo( PropertyName ) ) != NULL )
-			return info ;
-	}
+    const wxClassInfo** parents = GetParents() ;
+    for ( int i = 0 ; parents[i] ; ++ i )
+    {
+        if ( ( info = parents[i]->FindPropertyInfo( PropertyName ) ) != NULL )
+            return info ;
+    }
 
     return 0;
 }
 
 const wxHandlerInfo *wxClassInfo::FindHandlerInfoInThisClass (const char *PropertyName) const
 {
-	const wxHandlerInfo* info = GetFirstHandler() ;
+    const wxHandlerInfo* info = GetFirstHandler() ;
 
-	while( info )
-	{
-		if ( strcmp( info->GetName() , PropertyName ) == 0 )
-			return info ;
-		info = info->GetNext() ;
-	}
+    while( info )
+    {
+        if ( strcmp( info->GetName() , PropertyName ) == 0 )
+            return info ;
+        info = info->GetNext() ;
+    }
 
     return 0;
 }
 
 const wxHandlerInfo *wxClassInfo::FindHandlerInfo (const char *PropertyName) const
 {
-	const wxHandlerInfo* info = FindHandlerInfoInThisClass( PropertyName ) ;
+    const wxHandlerInfo* info = FindHandlerInfoInThisClass( PropertyName ) ;
 
     if ( info )
         return info ;
 
-	const wxClassInfo** parents = GetParents() ;
-	for ( int i = 0 ; parents[i] ; ++ i )
-	{
-		if ( ( info = parents[i]->FindHandlerInfo( PropertyName ) ) != NULL )
-			return info ;
-	}
+    const wxClassInfo** parents = GetParents() ;
+    for ( int i = 0 ; parents[i] ; ++ i )
+    {
+        if ( ( info = parents[i]->FindHandlerInfo( PropertyName ) ) != NULL )
+            return info ;
+    }
 
     return 0;
 }
@@ -448,11 +448,11 @@ wxObjectStreamingCallback wxClassInfo::GetStreamingCallback() const
         return m_streamingCallback ;
 
     wxObjectStreamingCallback retval = NULL ;
-	const wxClassInfo** parents = GetParents() ;
+    const wxClassInfo** parents = GetParents() ;
     for ( int i = 0 ; parents[i] && retval == NULL ; ++ i )
-	{
+    {
         retval = parents[i]->GetStreamingCallback() ;
-	}
+    }
     return retval ;
 }
 
@@ -471,7 +471,7 @@ void wxClassInfo::SetProperty(wxObject *object, const char *propertyName, const 
 
     accessor = FindAccessor(propertyName);
     wxASSERT(accessor->HasSetter());
-	accessor->SetProperty( object , value ) ;
+    accessor->SetProperty( object , value ) ;
 }
 
 wxxVariant wxClassInfo::GetProperty(wxObject *object, const char *propertyName) const
@@ -529,11 +529,11 @@ VARIANT TO OBJECT
 
 wxObject* wxxVariant::GetAsObject()
 {
-	const wxClassTypeInfo *ti = dynamic_cast<const wxClassTypeInfo*>( m_data->GetTypeInfo() ) ;
-	if ( ti )
-		return ti->GetClassInfo()->VariantToInstance(*this) ;
-	else
-		return NULL ;
+    const wxClassTypeInfo *ti = dynamic_cast<const wxClassTypeInfo*>( m_data->GetTypeInfo() ) ;
+    if ( ti )
+        return ti->GetClassInfo()->VariantToInstance(*this) ;
+    else
+        return NULL ;
 }
 
 // ----------------------------------------------------------------------------
@@ -571,8 +571,8 @@ void wxDynamicObject::SetProperty (const wxChar *propertyName, const wxxVariant 
 
 wxxVariant wxDynamicObject::GetProperty (const wxChar *propertyName) const
 {
-   wxASSERT_MSG(m_classInfo->FindPropertyInfoInThisClass(propertyName),wxT("Accessing Unknown Property in a Dynamic Object") ) ;
-   return m_data->m_properties[propertyName] ;
+    wxASSERT_MSG(m_classInfo->FindPropertyInfoInThisClass(propertyName),wxT("Accessing Unknown Property in a Dynamic Object") ) ;
+    return m_data->m_properties[propertyName] ;
 }
 
 // ----------------------------------------------------------------------------
@@ -580,7 +580,7 @@ wxxVariant wxDynamicObject::GetProperty (const wxChar *propertyName) const
 // ----------------------------------------------------------------------------
 
 wxDynamicClassInfo::wxDynamicClassInfo( const wxChar *unitName, const wxChar *className , const wxClassInfo* superClass ) :
-    wxClassInfo( unitName, className , new const wxClassInfo*[2])
+wxClassInfo( unitName, className , new const wxClassInfo*[2])
 {
     GetParents()[0] = superClass ;
     GetParents()[1] = NULL ;
@@ -644,6 +644,16 @@ void wxDynamicClassInfo::AddProperty( const wxChar *propertyName , const wxTypeI
 void wxDynamicClassInfo::AddHandler( const wxChar *handlerName , wxObjectEventFunction address , const wxClassInfo* eventClassInfo )
 {
     new wxHandlerInfo( m_firstHandler , handlerName , address , eventClassInfo ) ;
+}
+
+// removes an existing runtime-property
+void wxDynamicClassInfo::RemoveProperty( const wxChar *propertyName ) 
+{
+}
+
+// removes an existing runtime-handler
+void wxDynamicClassInfo::RemoveHandler( const wxChar *handlerName ) 
+{
 }
 
 // ----------------------------------------------------------------------------
