@@ -728,19 +728,19 @@ bool wxHtmlWindow::IsSelectionEnabled() const
 
 
 #if wxUSE_CLIPBOARD
-wxString wxHtmlWindow::SelectionToText()
+wxString wxHtmlWindow::DoSelectionToText(wxHtmlSelection *sel)
 {
-    if ( !m_selection )
+    if ( !sel )
         return wxEmptyString;
 
     wxClientDC dc(this);
 
-    const wxHtmlCell *end = m_selection->GetToCell();
+    const wxHtmlCell *end = sel->GetToCell();
     wxString text;
-    wxHtmlTerminalCellsInterator i(m_selection->GetFromCell(), end);
+    wxHtmlTerminalCellsInterator i(sel->GetFromCell(), end);
     if ( i )
     {
-        text << i->ConvertToText(m_selection);
+        text << i->ConvertToText(sel);
         ++i;
     }
     const wxHtmlCell *prev = *i;
@@ -748,11 +748,23 @@ wxString wxHtmlWindow::SelectionToText()
     {
         if ( prev->GetParent() != i->GetParent() )
             text << _T('\n');
-        text << i->ConvertToText(*i == end ? m_selection : NULL);
+        text << i->ConvertToText(*i == end ? sel : NULL);
         prev = *i;
         ++i;
     }
     return text;
+}
+
+wxString wxHtmlWindow::ToText()
+{
+    if (m_Cell)
+    {
+        wxHtmlSelection sel;
+        sel.Set(m_Cell->GetFirstTerminal(), m_Cell->GetLastTerminal());
+        return DoSelectionToText(&sel);
+    }
+    else
+        return wxEmptyString;
 }
 
 #endif // wxUSE_CLIPBOARD

@@ -253,13 +253,18 @@ protected:
 
 #if wxUSE_CLIPBOARD
     // Convert selection to text:
-    wxString SelectionToText();
+    wxString SelectionToText() { return DoSelectionToText(m_selection); }
+
+    // Converts current page to text:
+    wxString ToText();
 
     // Automatic scrolling during selection:
     void StopAutoScrolling();
 #endif // wxUSE_CLIPBOARD
 
 protected:
+    wxString DoSelectionToText(wxHtmlSelection *sel);
+    
     // This is pointer to the first cell in parsed data.  (Note: the first cell
     // is usually top one = all other cells are sub-cells of this one)
     wxHtmlContainerCell *m_Cell;
