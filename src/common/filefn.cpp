@@ -51,7 +51,8 @@
 #endif
 
 #if defined(__WXMAC__)
-  #include  "wx/mac/private.h"  // includes mac headers
+    #include  "wx/mac/private.h"  // includes mac headers
+    #include  "wx/font.h"
 #endif
 
 #ifdef __WXWINCE__
