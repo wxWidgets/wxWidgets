@@ -795,8 +795,32 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
          node; node = node->GetNext())
     {
         wxWindow *child = node->GetData();
-        if ( child != m_scrollbarVert && child != m_scrollbarHorz &&      
-             (rect == NULL || rect->Intersects(child->GetRect())) )
+        if ( child == m_scrollbarVert || child == m_scrollbarHorz )
+            continue;
+
+        // VS: Scrolling children has non-trivial semantics. If rect=NULL then
+        //     it is easy: we scroll all children. Otherwise it gets 
+        //     complicated:
+        //       1. if scrolling in one direction only, scroll only
+        //          those children that intersect shaft defined by the rectangle
+        //          and scrolling direction
+        //       2. if scrolling in both axes, scroll all children
+        
+        if ( rect && (dx * dy == 0 /* moving in only one of x, y axis */) )
+        {
+            wxRect childRect = child->GetRect();
+            if ( dx == 0 && (childRect.GetLeft() <= rect->GetRight() ||
+                             childRect.GetRight() >= rect->GetLeft()) )
+            {
+                child->Move(child->GetPosition() + offset);
+            }
+            else if ( dy == 0 && (childRect.GetTop() <= rect->GetBottom() ||
+                                  childRect.GetBottom() >= rect->GetTop()) )
+            {
+                child->Move(child->GetPosition() + offset);
+            }
+        }
+        else
         {
             child->Move(child->GetPosition() + offset);
         }
