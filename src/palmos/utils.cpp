@@ -33,28 +33,12 @@
 
 #include "wx/apptrait.h"
 #include "wx/dynload.h"
-
-#include "wx/confbase.h"        // for wxExpandEnvVars()
-
+#include "wx/confbase.h"
 #include "wx/timer.h"
 
-// VZ: there is some code using NetXXX() functions to get the full user name:
-//     I don't think it's a good idea because they don't work under Win95 and
-//     seem to return the same as wxGetUserId() under NT. If you really want
-//     to use them, just #define USE_NET_API
-#undef USE_NET_API
-
-#ifdef USE_NET_API
-    #include <lm.h>
-#endif // USE_NET_API
-
-// ----------------------------------------------------------------------------
-// constants
-// ----------------------------------------------------------------------------
-
-// In the WIN.INI file
-static const wxChar WX_SECTION[] = wxT("wxWindows");
-static const wxChar eUSERNAME[]  = wxT("UserName");
+#include <MemoryMgr.h>
+#include <DLServer.h>
+#include <SoundMgr.h>
 
 // ============================================================================
 // implementation
@@ -79,13 +63,37 @@ bool wxGetFullHostName(wxChar *buf, int maxSize)
 // Get user ID e.g. jacs
 bool wxGetUserId(wxChar *buf, int maxSize)
 {
-    return false;
+    return wxGetUserName(buf, maxSize);
 }
 
 // Get user name e.g. Julian Smart
 bool wxGetUserName(wxChar *buf, int maxSize)
 {
-    return false;
+    *buf = wxT('\0');
+
+    // buffer allocation
+    MemHandle handle = MemHandleNew(maxSize-1);
+    if( handle == NULL )
+        return false;
+
+    // lock the buffer
+    char *id = (char *)MemHandleLock(handle);
+    if( id == NULL )
+        return false;
+
+    // get user's name
+    if( DlkGetSyncInfo(NULL, NULL, NULL, id, NULL, NULL) != errNone )
+    {
+        MemPtrUnlock(id);
+        return false;
+    }
+
+    wxStrncpy (buf, wxConvertMB2WX(id), maxSize - 1);
+
+    // free the buffer 
+    MemPtrUnlock(id);
+
+    return true;
 }
 
 const wxChar* wxGetHomeDir(wxString *pstr)
@@ -150,7 +158,20 @@ bool wxShutdown(wxShutdownFlags wFlags)
 // Get free memory in bytes, or -1 if cannot determine amount (e.g. on UNIX)
 long wxGetFreeMemory()
 {
-    return 0;
+    uint32_t freeTotal = 0;
+    uint32_t freeHeap;
+    uint32_t freeChunk;
+
+    // executed twice: for the dynamic heap, and for the non-secure RAM storage heap
+    for ( uint16_t i=0; i<MemNumRAMHeaps(); i++)
+    {
+        status_t err = MemHeapFreeBytes(i, &freeHeap, &freeChunk);
+        if( err != errNone )
+            return -1;
+        freeTotal+=freeHeap;
+    }
+
+    return freeTotal;
 }
 
 unsigned long wxGetProcessId()
@@ -161,6 +182,7 @@ unsigned long wxGetProcessId()
 // Emit a beeeeeep
 void wxBell()
 {
+    SndPlaySystemSound(sndWarning);
 }
 
 wxString wxGetOsDescription()
