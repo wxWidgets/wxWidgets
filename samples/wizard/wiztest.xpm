@@ -1,5 +1,5 @@
 /* XPM */
-static char *wizimage[] = {
+static char *wiztest_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "165 371 256 2",
 "   c Gray0",

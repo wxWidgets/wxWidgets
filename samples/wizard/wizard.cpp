@@ -39,6 +39,7 @@
 
 #ifndef __WXMSW__
     #include "wiztest.xpm"
+    #include "wiztest2.xpm"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -52,18 +53,6 @@ enum
     Wizard_Run,
     Wizard_About = 1000
 };
-
-// ----------------------------------------------------------------------------
-// ressources
-// ----------------------------------------------------------------------------
-
-#ifdef __WXMSW__
-    #define BMP_WIZARD_1 wxBitmap("wiztest.bmp", wxBITMAP_TYPE_BMP)
-    #define BMP_WIZARD_2 wxBitmap("wiztest2.bmp", wxBITMAP_TYPE_BMP)
-#else
-    #define BMP_WIZARD_1 wxBitmap(wizimage)
-    #define BMP_WIZARD_2 wxBitmap(wizimage)
-#endif
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -109,7 +98,7 @@ class wxValidationPage : public wxWizardPageSimple
 public:
     wxValidationPage(wxWizard *parent) : wxWizardPageSimple(parent)
     {
-        m_bitmap = BMP_WIZARD_2;
+        m_bitmap = wxBITMAP(wiztest2);
 
         m_checkbox = new wxCheckBox(this, -1, "&Check me");
     }
@@ -315,7 +304,7 @@ void MyFrame::OnRunWizard(wxCommandEvent& WXUNUSED(event))
 {
     wxWizard *wizard = new wxWizard(this, -1,
 					"Absolutely Useless Wizard",
-					BMP_WIZARD_1);
+					wxBITMAP(wiztest));
     
     // a wizard page may be either an object of predefined class
     wxWizardPageSimple *page1 = new wxWizardPageSimple(wizard);
