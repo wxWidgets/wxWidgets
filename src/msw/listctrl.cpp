@@ -1720,7 +1720,30 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
         NM_LISTVIEW *nmLV = (NM_LISTVIEW *)nmhdr;
 
         // this is true for almost all events
-        event.m_item.m_data = nmLV->lParam;
+        switch( nmLV->hdr.code )
+        {
+        case LVN_BEGINDRAG:
+        case LVN_BEGINRDRAG:
+        case LVN_COLUMNCLICK:
+#ifdef LVN_HOTTRACK
+        case LVN_HOTTRACK:
+#endif
+        case LVN_ITEMCHANGED:
+        case LVN_ITEMCHANGING:
+        {
+            wxListItemInternalData *internaldata =
+                (wxListItemInternalData *) nmLV->lParam;
+
+            // from PSDK: "This member is undefined for notification
+            // messages that do not use it."
+            // Now, which notifications do not use it?
+            if (nmLV->iItem != -1 && internaldata)
+                event.m_item.m_data = internaldata->lParam;
+        }
+        default:
+            // fall through
+            ;
+        }
 
         switch ( nmhdr->code )
         {
