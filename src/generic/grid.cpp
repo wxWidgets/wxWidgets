@@ -69,7 +69,7 @@
 // array classes
 // ----------------------------------------------------------------------------
 
-WX_DEFINE_EXPORTED_ARRAY(wxGridCellAttr *, wxArrayAttrs);
+WX_DEFINE_EXPORTED_ARRAY_NO_PTR(wxGridCellAttr *, wxArrayAttrs);
 
 struct wxGridCellWithAttr
 {
@@ -332,7 +332,7 @@ struct wxGridDataTypeInfo
 };
 
 
-WX_DEFINE_EXPORTED_ARRAY(wxGridDataTypeInfo*, wxGridDataTypeInfoArray);
+WX_DEFINE_EXPORTED_ARRAY_NO_PTR(wxGridDataTypeInfo*, wxGridDataTypeInfoArray);
 
 
 class WXDLLEXPORT wxGridTypeRegistry

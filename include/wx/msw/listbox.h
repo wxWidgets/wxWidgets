@@ -28,7 +28,7 @@
   // define the array of list box items
   #include  "wx/dynarray.h"
 
-  WX_DEFINE_EXPORTED_ARRAY(wxOwnerDrawn *, wxListBoxItemsArray);
+  WX_DEFINE_EXPORTED_ARRAY_NO_PTR(wxOwnerDrawn *, wxListBoxItemsArray);
 #endif // wxUSE_OWNER_DRAWN
 
 // forward decl for GetSelections()

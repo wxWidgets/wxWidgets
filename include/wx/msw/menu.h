@@ -20,7 +20,7 @@
     #include "wx/accel.h"
     #include "wx/dynarray.h"
 
-    WX_DEFINE_EXPORTED_ARRAY(wxAcceleratorEntry *, wxAcceleratorArray);
+    WX_DEFINE_EXPORTED_ARRAY_NO_PTR(wxAcceleratorEntry *, wxAcceleratorArray);
 #endif // wxUSE_ACCEL
 
 class WXDLLEXPORT wxFrame;

@@ -48,7 +48,7 @@ enum
 // array of notebook pages
 typedef wxWindow wxNotebookPage;  // so far, any window can be a page
 
-WX_DEFINE_EXPORTED_ARRAY(wxNotebookPage *, wxArrayPages);
+WX_DEFINE_EXPORTED_ARRAY_NO_PTR(wxNotebookPage *, wxArrayPages);
 
 #define wxNOTEBOOK_NAME _T("notebook")
 

@@ -21,7 +21,7 @@
 #include "wx/dynarray.h"
 
 class WXDLLEXPORT wxSpinCtrl;
-WX_DEFINE_EXPORTED_ARRAY(wxSpinCtrl *, wxArraySpins);
+WX_DEFINE_EXPORTED_ARRAY_NO_PTR(wxSpinCtrl *, wxArraySpins);
 
 // ----------------------------------------------------------------------------
 // Under Win32, wxSpinCtrl is a wxSpinButton with a buddy (as MSDN docs call
