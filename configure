@@ -10870,7 +10870,7 @@ if test "$wxUSE_SHARED" = "yes"; then
     case "${host}" in
       *-hp-hpux* )
         if test "$GCC" = yes ; then
-            SHARED_LD="${CC} -shared -fPIC -o"
+            SHARED_LD="${CXX} -shared -fPIC -o"
             PIC_FLAG="-fPIC"
         else
                         LDFLAGS="-L/usr/lib"
@@ -10889,7 +10889,7 @@ if test "$wxUSE_SHARED" = "yes"; then
       ;;
 
             *-*-linux* )
-        SHARED_LD="${CC} -shared -o"
+        SHARED_LD="${CXX} -shared -o"
         PIC_FLAG="-fPIC"
         if test "$wxUSE_BURNT_NAME" = "yes" ; then
             BURNT_LIBRARY_NAME="-Wl,-soname,${WX_LIBRARY_LINK1}"
@@ -10906,7 +10906,7 @@ if test "$wxUSE_SHARED" = "yes"; then
       ;;
       *-*-irix5* | *-*-irix6* )
         if test "$GCC" = yes ; then
-           SHARED_LD="${CC} -shared -o"
+           SHARED_LD="${CXX} -shared -o"
            PIC_FLAG="-fPIC"
         else
            SHARED_LD="${CXX} -shared -o"
@@ -10921,7 +10921,7 @@ if test "$wxUSE_SHARED" = "yes"; then
       ;;
       *-*-solaris2* )
         if test "$GCC" = yes ; then
-            SHARED_LD="${CC} -shared -o"
+            SHARED_LD="${CXX} -shared -o"
             PIC_FLAG="-fPIC"
 
                                     CPPFLAGS="$CPPFLAGS -isystem /usr/openwin/include"
@@ -10938,13 +10938,13 @@ if test "$wxUSE_SHARED" = "yes"; then
         fi
       ;;
       *-*-sunos4* )
-        SHARED_LD="${CC} -shared -o"
+        SHARED_LD="${CXX} -shared -o"
         PIC_FLAG="-fPIC"
         WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
         WX_ALL="CREATE_LINKS"
       ;;
       *-*-freebsd* | *-*-openbsd* | *-*-netbsd* )
-        SHARED_LD="${CC} -shared -o"
+        SHARED_LD="${CXX} -shared -o"
         PIC_FLAG="-fPIC"
         if test "$wxUSE_OPENGL" = "yes"; then
             WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS CREATE_INSTALLED_LINKS_GL"
@@ -10992,7 +10992,7 @@ if test "$wxUSE_SHARED" = "yes"; then
         WX_ALL="CREATE_LINKS"
       ;;
       *-*-sysv5* )
-        SHARED_LD="${CC} -shared -o"
+        SHARED_LD="${CXX} -shared -o"
         PIC_FLAG="-fPIC"
         WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
         WX_ALL="CREATE_LINKS"
