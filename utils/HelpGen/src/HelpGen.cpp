@@ -55,6 +55,7 @@
     #include <wx/string.h>
     #include <wx/log.h>
     #include <wx/dynarray.h>
+    #include <wx/wx.h>
 #endif // WX_PRECOMP
 
 #include <wx/file.h>
@@ -1929,7 +1930,11 @@ static const char *GetCurrentTime(const char *timeFormat)
 
 /*
    $Log$
+   Revision 1.9  2000/01/16 13:25:21  VS
+   compilation fixes (gcc)
+
    Revision 1.8  1999/09/13 14:29:39  JS
+
    Made HelpGen into a wxWin app (still uses command-line args); moved includes
    into src for simplicity; added VC++ 5 project file
 
