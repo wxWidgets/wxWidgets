@@ -100,18 +100,19 @@ static wxString ParseWildCard( const wxString& wild )
         _T("wildcard syntax");
 #endif
 
-    wxStringTokenizer tok( wild, _T("|") );
+    wxArrayString wildDescriptions, wildFilters;
+    const size_t count = wxParseCommonDialogsFilter(wild,
+                                                    wildDescriptions,
+                                                    wildFilters);
+    wxCHECK_MSG( count, _T("*.*"), wxT("wxFileDialog: bad wildcard string") );
+    wxCHECK_MSG( count == 1, _T("*.*"), msg );
 
-    wxCHECK_MSG( tok.CountTokens() <= 2, _T("*.*"), msg );
+    // check for *.txt;*.rtf
+    wxStringTokenizer tok2( wildFilters[0], _T(";") );
+    wxString wildcard = tok2.GetNextToken();
 
-    if( tok.CountTokens() == 1 ) return wild;
-
-    // CountTokens == 2
-    tok.GetNextToken();
-    wxStringTokenizer tok2( tok.GetNextToken(), _T(";") );
-
-    wxCHECK_MSG( tok2.CountTokens() == 1, tok2.GetNextToken(), msg );
-    return tok2.GetNextToken();
+    wxCHECK_MSG( tok2.CountTokens() <= 1, wildcard, msg );
+    return wildcard;
 }
 
 wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
