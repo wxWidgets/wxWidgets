@@ -237,7 +237,7 @@ FORWARD_DECLARE(wxColour,         Colour);
 FORWARD_DECLARE(wxFont,           Font);
 FORWARD_DECLARE(wxCaret,          Caret);
 FORWARD_DECLARE(wxToolTip,        ToolTip);
-FORWARD_DECLARE(wxPyDropTarget,   PyDropTarget);
+FORWARD_DECLARE(wxPyDropTarget,   DropTarget);
 FORWARD_DECLARE(wxImageList,      ImageList);
 FORWARD_DECLARE(wxMemoryDC,       MemoryDC);
 FORWARD_DECLARE(wxHtmlTagHandler, HtmlTagHandler);
