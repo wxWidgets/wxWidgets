@@ -135,6 +135,120 @@ typedef struct
 } wxDbTablePrivilegeInfo;
 
 
+/********** wxDbConnectInf Constructor - form 1 **********/
+wxDbConnectInf::wxDbConnectInf()
+{
+    Initialize();
+}  // Constructor
+
+
+/********** wxDbConnectInf Constructor - form 2 **********/
+wxDbConnectInf::wxDbConnectInf(HENV Henv, const wxString &Dsn, const wxString &UserID, 
+                       const wxString &Password, const wxString &DefaultDir,
+                       const wxString &FileType, const wxString &Description)
+{
+    wxASSERT(Dsn.Length());
+
+    Initialize();
+
+    if (Henv)
+        SetHenv(Henv);
+    else
+        AllocHenv();
+
+    SetDsn(Dsn);
+    SetUserID(UserID);
+    SetPassword(Password);
+    SetDescription(Description);
+    SetFileType(FileType);
+    SetDefaultDir(DefaultDir);
+}  // wxDbConnectInf Constructor
+
+
+wxDbConnectInf::~wxDbConnectInf()
+{
+    if (freeHenvOnDestroy)
+    {
+        FreeHenv();
+    }
+}  // wxDbConnectInf Destructor
+
+
+
+/********** wxDbConnectInf::Initialize() **********/
+bool wxDbConnectInf::Initialize()
+{
+    freeHenvOnDestroy = FALSE;
+
+    Henv = 0;
+    Dsn[0] = 0;
+    Uid[0] = 0;
+    AuthStr[0] = 0;
+    Description.Empty();
+    FileType.Empty();
+    DefaultDir.Empty();
+
+    return TRUE;
+}  // wxDbConnectInf::Initialize()
+
+
+/********** wxDbConnectInf::AllocHenv() **********/
+bool wxDbConnectInf::AllocHenv()
+{
+    // This is here to help trap if you are getting a new henv
+    // without releasing an existing henv
+    wxASSERT(!Henv);
+
+    // Initialize the ODBC Environment for Database Operations
+    if (SQLAllocEnv(&Henv) != SQL_SUCCESS)
+    {
+        wxLogDebug(wxT("A problem occured while trying to get a connection to the data source"));
+        return FALSE;
+    }
+
+    freeHenvOnDestroy = TRUE;
+
+    return TRUE;
+}  // wxDbConnectInf::AllocHenv()
+
+
+void wxDbConnectInf::FreeHenv()
+{
+    wxASSERT(Henv);
+
+    if (Henv)
+        SQLFreeEnv(Henv);
+
+    Henv = 0;
+    freeHenvOnDestroy = FALSE;
+
+}  // wxDbConnectInf::FreeHenv()
+
+
+void wxDbConnectInf::SetDsn(const wxString &dsn)
+{
+    wxASSERT(dsn.Length() < sizeof(Dsn));
+
+    wxStrcpy(Dsn,dsn);
+}  // wxDbConnectInf::SetDsn()
+
+
+void wxDbConnectInf::SetUserID(const wxString &uid)
+{
+    wxASSERT(uid.Length() < sizeof(Uid));
+    wxStrcpy(Uid,uid);
+}  // wxDbConnectInf::SetUserID()
+
+
+void wxDbConnectInf::SetPassword(const wxString &password)
+{
+    wxASSERT(password.Length() < sizeof(AuthStr));
+    
+    wxStrcpy(AuthStr,password);
+}  // wxDbConnectInf::SetPassword()
+
+
+
 /********** wxDbColFor Constructor **********/
 wxDbColFor::wxDbColFor()
 {
@@ -158,77 +272,7 @@ wxDbColFor::~wxDbColFor()
 }  // wxDbColFor::~wxDbColFor()
 
 
-/********** wxDbColInf Con / Destructor **********/
-wxDbColInf::wxDbColInf()
-{
-    catalog[0]      = 0;
-    schema[0]       = 0;
-    tableName[0]    = 0;
-    colName[0]      = 0;
-    sqlDataType     = 0;
-    typeName[0]     = 0;
-    columnSize      = 0;
-    bufferLength    = 0;
-    decimalDigits   = 0;
-    numPrecRadix    = 0;
-    nullable        = 0;
-    remarks[0]      = 0;
-    dbDataType      = 0;
-    PkCol           = 0;
-    PkTableName[0]  = 0;
-    FkCol           = 0;
-    FkTableName[0]  = 0;
-    pColFor         = NULL;
-}  // wxDbColInf::wxDbColFor()
-
-
-wxDbColInf::~wxDbColInf()
-{
-    if (pColFor)
-        delete pColFor;
-    pColFor = NULL;
-}  // wxDbColInf::~wxDbColInf()
-
-
-/********** wxDbTableInf Constructor ********/
-wxDbTableInf::wxDbTableInf()
-{
-    tableName[0]    = 0;
-    tableType[0]    = 0;
-    tableRemarks[0] = 0;
-    numCols         = 0;
-    pColInf         = NULL;
-}  // wxDbTableInf::wxDbTableFor()
-
-
-/********** wxDbTableInf Constructor ********/
-wxDbTableInf::~wxDbTableInf()
-{
-    if (pColInf)
-        delete [] pColInf;
-    pColInf = NULL;
-}  // wxDbTableInf::~wxDbTableInf()
-
-
-/********** wxDbInf Constructor *************/
-wxDbInf::wxDbInf()
-{
-    catalog[0]      = 0;
-    schema[0]       = 0;
-    numTables       = 0;
-    pTableInf       = NULL;
-}  // wxDbInf::wxDbFor()
-
-
-/********** wxDbInf Destructor *************/
-wxDbInf::~wxDbInf()
-{
-  if (pTableInf)
-    delete [] pTableInf;
-  pTableInf = NULL;
-}  // wxDbInf::~wxDbInf()
-
-
+/********** wxDbColFor::Format() **********/
 int wxDbColFor::Format(int Nation, int dbDataType, SWORD sqlDataType,
                        short columnSize, short decimalDigits)
 {
@@ -314,18 +358,90 @@ int wxDbColFor::Format(int Nation, int dbDataType, SWORD sqlDataType,
 }  // wxDbColFor::Format()
 
 
+/********** wxDbColInf Constructor **********/
+wxDbColInf::wxDbColInf()
+{
+    catalog[0]      = 0;
+    schema[0]       = 0;
+    tableName[0]    = 0;
+    colName[0]      = 0;
+    sqlDataType     = 0;
+    typeName[0]     = 0;
+    columnSize      = 0;
+    bufferLength    = 0;
+    decimalDigits   = 0;
+    numPrecRadix    = 0;
+    nullable        = 0;
+    remarks[0]      = 0;
+    dbDataType      = 0;
+    PkCol           = 0;
+    PkTableName[0]  = 0;
+    FkCol           = 0;
+    FkTableName[0]  = 0;
+    pColFor         = NULL;
+}  // wxDbColInf::wxDbColInf()
+
+
+/********** wxDbColInf Destructor ********/
+wxDbColInf::~wxDbColInf()
+{
+    if (pColFor)
+        delete pColFor;
+    pColFor = NULL;
+}  // wxDbColInf::~wxDbColInf()
+
+
+/********** wxDbTableInf Constructor ********/
+wxDbTableInf::wxDbTableInf()
+{
+    tableName[0]    = 0;
+    tableType[0]    = 0;
+    tableRemarks[0] = 0;
+    numCols         = 0;
+    pColInf         = NULL;
+}  // wxDbTableInf::wxDbTableInf()
+
+
+/********** wxDbTableInf Constructor ********/
+wxDbTableInf::~wxDbTableInf()
+{
+    if (pColInf)
+        delete [] pColInf;
+    pColInf = NULL;
+}  // wxDbTableInf::~wxDbTableInf()
+
+
+/********** wxDbInf Constructor *************/
+wxDbInf::wxDbInf()
+{
+    catalog[0]      = 0;
+    schema[0]       = 0;
+    numTables       = 0;
+    pTableInf       = NULL;
+}  // wxDbInf::wxDbFor()
+
+
+/********** wxDbInf Destructor *************/
+wxDbInf::~wxDbInf()
+{
+  if (pTableInf)
+    delete [] pTableInf;
+  pTableInf = NULL;
+}  // wxDbInf::~wxDbInf()
+
+
 /********** wxDb Constructors **********/
 wxDb::wxDb(HENV &aHenv, bool FwdOnlyCursors)
 {
     // Copy the HENV into the db class
     henv = aHenv;
     fwdOnlyCursors = FwdOnlyCursors;
-    initialize();
+    Initialize();
 } // wxDb::wxDb()
 
 
-/********** PRIVATE! wxDb::initialize PRIVATE! **********/
-void wxDb::initialize()
+/********** wxDb::Initialize() **********/
+void wxDb::Initialize()
 /*
  * Private member function that sets all wxDb member variables to
  * known values at creation of the wxDb
@@ -381,10 +497,10 @@ void wxDb::initialize()
 
     // Mark database as not open as of yet
     dbIsOpen = FALSE;
-}  // wxDb::initialize()
+}  // wxDb::Initialize()
 
 
-/********** PRIVATE! wxDb::initialize PRIVATE! **********/
+/********** PRIVATE! wxDb::convertUserID PRIVATE! **********/
 //
 // NOTE: Return value from this function MUST be copied
 //       immediately, as the value is not good after
@@ -1228,7 +1344,7 @@ void wxDb::Close(void)
     // Copy the error messages to a global variable
     int i;
     for (i = 0; i < DB_MAX_ERROR_HISTORY; i++)
-        wxStrcpy(DBerrorList[i],errorList[i]);
+        wxStrcpy(DBerrorList[i], errorList[i]);
 
     dbmsType	= dbmsUNIDENTIFIED;
     dbIsOpen = FALSE;
@@ -1659,7 +1775,7 @@ bool wxDb::DropView(const wxString &viewName)
  */
     wxString sqlStmt;
 
-    sqlStmt.Printf(wxT("DROP VIEW %s"), viewName);
+    sqlStmt.Printf(wxT("DROP VIEW %s"), viewName.c_str());
 
     WriteSqlLog(sqlStmt);
 
@@ -2894,9 +3010,9 @@ bool wxDb::TableExists(const wxString &tableName, const wxChar *userID, const wx
     {
         wxString dbName;
         if (tablePath.Length())
-            dbName.Printf(wxT("%s/%s.dbf"),tablePath,tableName);
+            dbName.Printf(wxT("%s/%s.dbf"), tablePath.c_str(), tableName.c_str());
         else
-            dbName.Printf(wxT("%s.dbf"),tableName);
+            dbName.Printf(wxT("%s.dbf"), tableName.c_str());
 
         bool exists;
         exists = wxFileExists(dbName);
@@ -3295,8 +3411,8 @@ bool wxDb::ModifyColumn(const wxString &tableName, const wxString &columnName,
 	}
 
 	// create the SQL statement
-	sqlStmt.Printf(wxT("ALTER TABLE %s %s %s %s"), tableName, alterSlashModify,
-			  columnName, dataTypeName);
+	sqlStmt.Printf(wxT("ALTER TABLE %s %s %s %s"), tableName.c_str(), alterSlashModify.c_str(),
+			  columnName.c_str(), dataTypeName.c_str());
 
     // For varchars only, append the size of the column
     if (dataType == DB_DATA_TYPE_VARCHAR)
@@ -3338,15 +3454,15 @@ wxDb WXDLLEXPORT *wxDbGetConnection(wxDbConnectInf *pDbConfig, bool FwdOnlyCurso
         // name and must currently not be in use.
         if (pList->Free &&
             (pList->PtrDb->FwdOnlyCursors() == FwdOnlyCursors) &&
-            (!wxStrcmp(pDbConfig->Dsn, pList->Dsn)))  // Found a free connection
+            (!wxStrcmp(pDbConfig->GetDsn(), pList->Dsn)))  // Found a free connection
         {
             pList->Free = FALSE;
             return(pList->PtrDb);
         }
 
-        if (!wxStrcmp(pDbConfig->Dsn, pList->Dsn) &&
-            !wxStrcmp(pDbConfig->Uid, pList->Uid) &&
-            !wxStrcmp(pDbConfig->AuthStr, pList->AuthStr))
+        if (!wxStrcmp(pDbConfig->GetDsn(), pList->Dsn) &&
+            !wxStrcmp(pDbConfig->GetUserID(), pList->Uid) &&
+            !wxStrcmp(pDbConfig->GetPassword(), pList->AuthStr))
             matchingDbConnection = pList->PtrDb;
     }
 
@@ -3371,16 +3487,16 @@ wxDb WXDLLEXPORT *wxDbGetConnection(wxDbConnectInf *pDbConfig, bool FwdOnlyCurso
     // Initialize new node in the linked list
     pList->PtrNext  = 0;
     pList->Free     = FALSE;
-    pList->Dsn      = pDbConfig->Dsn;
-    pList->Uid      = pDbConfig->Uid;
-    pList->AuthStr  = pDbConfig->AuthStr;
+    pList->Dsn      = pDbConfig->GetDsn();   //glt - will this assignment work?
+    pList->Uid      = pDbConfig->GetUserID();
+    pList->AuthStr  = pDbConfig->GetPassword();
 
-    pList->PtrDb = new wxDb(pDbConfig->Henv,FwdOnlyCursors);
+    pList->PtrDb = new wxDb((HENV)pDbConfig->GetHenvAddress(),FwdOnlyCursors);
 
     bool opened = FALSE;
 
     if (!matchingDbConnection)
-        opened = pList->PtrDb->Open(pDbConfig->Dsn, pDbConfig->Uid, pDbConfig->AuthStr);
+        opened = pList->PtrDb->Open(pDbConfig->GetDsn(), pDbConfig->GetUserID(), pDbConfig->GetPassword());
     else
         opened = pList->PtrDb->Open(matchingDbConnection);
 
