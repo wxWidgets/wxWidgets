@@ -325,17 +325,17 @@ void wxDbTable::cleanup()
         bool found = FALSE;
 
         wxNode *pNode;
-        pNode = TablesInUse.First();
+        pNode = TablesInUse.GetFirst();
         while (pNode && !found)
         {
-            if (((wxTablesInUse *)pNode->Data())->tableID == tableID)
+            if (((wxTablesInUse *)pNode->GetData())->tableID == tableID)
             {
                 found = TRUE;
                 if (!TablesInUse.DeleteNode(pNode))
                     wxLogDebug (s,wxT("Unable to delete node!"));
             }
             else
-                pNode = pNode->Next();
+                pNode = pNode->GetNext();
         }
         if (!found)
         {
@@ -1042,10 +1042,10 @@ void wxDbTable::BuildSelectStmt(wxString &pSqlStmt, int typeOfSelect, bool disti
 
     // Add the column list
     int i;
-	 wxString tStr;
+    wxString tStr;
     for (i = 0; i < noCols; i++)
     {
-		  tStr = colDefs[i].ColName;
+        tStr = colDefs[i].ColName;
         // If joining tables, the base table column names must be qualified to avoid ambiguity
         if ((appendFromClause || pDb->Dbms() == dbmsACCESS) && !tStr.Find(wxT('.')))
         {
@@ -1458,9 +1458,8 @@ bool wxDbTable::CreateTable(bool attemptDrop)
             break;
         }
     }
-    if (j && (pDb->Dbms() != dbmsDBASE) 
-		  && (pDb->Dbms() != dbmsXBASE_SEQUITER)
-	   )  // Found a keyfield
+    if ( j && (pDb->Dbms() != dbmsDBASE)
+        && (pDb->Dbms() != dbmsXBASE_SEQUITER) )  // Found a keyfield
     {
         switch (pDb->Dbms())
         {
@@ -1778,7 +1777,7 @@ bool wxDbTable::DropIndex(const wxString &idxName)
                        pDb->SQLTableName(tableName.c_str()).c_str());
     else if ((pDb->Dbms() == dbmsMS_SQL_SERVER) ||
              (pDb->Dbms() == dbmsSYBASE_ASE) ||
-			 (pDb->Dbms() == dbmsXBASE_SEQUITER))
+             (pDb->Dbms() == dbmsXBASE_SEQUITER))
         sqlStmt.Printf(wxT("DROP INDEX %s.%s"),
                        pDb->SQLTableName(tableName.c_str()).c_str(),
                        pDb->SQLTableName(idxName.c_str()).c_str());
