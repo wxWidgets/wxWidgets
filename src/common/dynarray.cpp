@@ -493,8 +493,20 @@ int wxSortedArrayString::Index(const wxChar* sz, bool bCase, bool WXUNUSED(bFrom
         it = std::lower_bound(begin(), end(), sz,
                               wxStringCompareLess(wxStricmpCppWrapper));
 
-    if (it == end() || (bCase ? wxStrcmp : wxStricmp)(it->c_str(), sz) != 0)
+    if (it == end())
         return wxNOT_FOUND;
+
+    if (bCase)
+    {
+        if (wxStrcmp(it->c_str(), sz) != 0)
+            return wxNOT_FOUND;
+    }
+    else
+    {
+        if (wxStricmp(it->c_str(), sz) != 0)
+            return wxNOT_FOUND;
+    }
+
     return it - begin();
 }
 
