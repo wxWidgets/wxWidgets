@@ -4,7 +4,7 @@
     <include file="../../build/bakefiles/common_samples.bkl"/>
 
     <exe id="help" template="wx_sample" template_append="wx_append">
-        <sources>help.cpp</sources>
+        <sources>demo.cpp</sources>
         <wx-lib>core</wx-lib>
         <win32-res>help.rc</win32-res>
     </exe>
