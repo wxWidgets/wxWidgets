@@ -154,7 +154,7 @@ class wxTimeCtrl(wxTextCtrl):
         EVT_CHAR(self, self.__OnChar)
 
         if spinButton:
-            self.BindSpinbutton(spinButton)     # bind spin button up/down events to this control
+            self.BindSpinButton(spinButton)     # bind spin button up/down events to this control
 
 
     def BindSpinButton(self, sb):
