@@ -391,10 +391,47 @@ static wxNativeFont wxLoadQueryFont(int pointSize,
     wxString xstyle;
     switch (style)
     {
-        case wxITALIC:     xstyle = wxT("i"); break;
-        case wxSLANT:      xstyle = wxT("o"); break;
-        case wxNORMAL:     xstyle = wxT("r"); break;
-        default:           xstyle = wxT("*"); break;
+        case wxSLANT:
+            fontSpec.Printf(wxT("-*-%s-*-o-*-*-*-*-*-*-*-*-*-*"),
+                    xfamily.c_str());
+            if ( wxTestFontSpec(fontSpec) )
+            {
+                xstyle = wxT("o");
+                break;
+            }
+            // fall through - try wxITALIC now
+
+        case wxITALIC:
+            fontSpec.Printf(wxT("-*-%s-*-i-*-*-*-*-*-*-*-*-*-*"),
+                    xfamily.c_str());
+            if ( wxTestFontSpec(fontSpec) )
+            {
+                xstyle = wxT("i");
+            }
+            else if ( style == wxITALIC ) // and not wxSLANT
+            {
+                // try wxSLANT
+                fontSpec.Printf(wxT("-*-%s-*-o-*-*-*-*-*-*-*-*-*-*"),
+                        xfamily.c_str());
+                if ( wxTestFontSpec(fontSpec) )
+                {
+                    xstyle = wxT("o");
+                }
+                else
+                {
+                    // no italic, no slant - leave default
+                    xstyle = wxT("*");
+                }
+            }
+            break;
+
+        default:
+            wxFAIL_MSG(_T("unknown font style"));
+            // fall back to normal
+
+        case wxNORMAL:
+            xstyle = wxT("r");
+            break;
     }
 
     wxString xweight;
