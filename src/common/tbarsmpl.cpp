@@ -113,7 +113,7 @@ void wxToolBarSimple::OnKillFocus (wxFocusEvent& WXUNUSED(event))
 
 void wxToolBarSimple::OnMouseEvent ( wxMouseEvent & event )
 {
-    long x, y;
+    wxCoord x, y;
     event.Position(&x, &y);
     wxToolBarTool *tool = FindToolForPosition(x, y);
 

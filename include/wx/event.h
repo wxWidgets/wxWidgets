@@ -613,12 +613,12 @@ public:
             *ypos = m_y;
     }
 
-    void GetPosition(int *xpos, int *ypos) const
+    void GetPosition(long *xpos, long *ypos) const
     {
         if (xpos)
-            *xpos = (int)m_x; 
+            *xpos = (long)m_x; 
         if (ypos)
-            *ypos = (int)m_y;
+            *ypos = (long)m_y;
     }
 
     // Find the position of the event
@@ -694,10 +694,10 @@ public:
         if (ypos) *ypos = m_y;
     }
 
-    void GetPosition(int *xpos, int *ypos) const
+    void GetPosition(long *xpos, long *ypos) const
     {
-        if (xpos) *xpos = (int)m_x; 
-        if (ypos) *ypos = (int)m_y;
+        if (xpos) *xpos = (long)m_x; 
+        if (ypos) *ypos = (long)m_y;
     }
 
     wxPoint GetPosition() const

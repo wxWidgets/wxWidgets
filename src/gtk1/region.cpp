@@ -31,8 +31,8 @@ class wxRegionRefData: public wxObjectRefData
 {
   public:
   
-    wxRegionRefData(void);
-    ~wxRegionRefData(void);
+    wxRegionRefData();
+    ~wxRegionRefData();
   
   public:    
 
@@ -40,12 +40,12 @@ class wxRegionRefData: public wxObjectRefData
     wxList      m_rects;
 };
 
-wxRegionRefData::wxRegionRefData(void)
+wxRegionRefData::wxRegionRefData()
 {
     m_region = (GdkRegion *) NULL;
 }
 
-wxRegionRefData::~wxRegionRefData(void)
+wxRegionRefData::~wxRegionRefData()
 {
     if (m_region) gdk_region_destroy( m_region );
   
@@ -113,13 +113,13 @@ wxRegion::wxRegion( const wxRect& rect )
     }
 }
 
-wxRegion::wxRegion(void)
+wxRegion::wxRegion()
 {
     m_refData = new wxRegionRefData();
     M_REGIONDATA->m_region = gdk_region_new();
 }
 
-wxRegion::~wxRegion(void)
+wxRegion::~wxRegion()
 {
 }
 
@@ -133,7 +133,7 @@ bool wxRegion::operator != ( const wxRegion& region )
     return m_refData != region.m_refData; 
 }
 
-void wxRegion::Clear(void)
+void wxRegion::Clear()
 {
     UnRef();
     m_refData = new wxRegionRefData();
@@ -302,7 +302,7 @@ void wxRegion::GetBox( long& x, long& y, long&w, long &h ) const
     }
 }
 
-wxRect wxRegion::GetBox(void) const
+wxRect wxRegion::GetBox() const
 {
     long x = 0;
     long y = 0;
@@ -312,7 +312,7 @@ wxRect wxRegion::GetBox(void) const
     return wxRect( x, y, w, h );
 }
 
-bool wxRegion::Empty(void) const
+bool wxRegion::Empty() const
 {
     return gdk_region_empty( M_REGIONDATA->m_region );
 }
@@ -352,7 +352,7 @@ wxRegionContain wxRegion::Contains(const wxRect& rect) const
     return Contains( rect.x, rect.y, rect.width, rect.height );
 }
 
-GdkRegion *wxRegion::GetRegion(void) const
+GdkRegion *wxRegion::GetRegion() const
 {
     return M_REGIONDATA->m_region;
 }
@@ -368,7 +368,7 @@ wxList *wxRegion::GetRectList() const
 
 IMPLEMENT_DYNAMIC_CLASS(wxRegionIterator,wxObject);
   
-wxRegionIterator::wxRegionIterator(void)
+wxRegionIterator::wxRegionIterator()
 {
     m_current = 0;
 }
@@ -385,17 +385,17 @@ void wxRegionIterator::Reset( const wxRegion& region )
     m_current = 0;
 }
 
-wxRegionIterator::operator bool (void) const 
+wxRegionIterator::operator bool () const 
 { 
     return m_current < m_region.GetRectList()->Number(); 
 }
 
-bool wxRegionIterator::HaveRects(void) const 
+bool wxRegionIterator::HaveRects() const 
 { 
     return m_current < m_region.GetRectList()->Number(); 
 }
 
-void wxRegionIterator::operator ++ (void)
+void wxRegionIterator::operator ++ ()
 {
     if (m_current < m_region.GetRectList()->Number()) ++m_current;
 }
@@ -405,7 +405,7 @@ void wxRegionIterator::operator ++ (int)
     if (m_current < m_region.GetRectList()->Number()) ++m_current;
 }
 
-long wxRegionIterator::GetX(void) const
+wxCoord wxRegionIterator::GetX() const
 {
     wxNode *node = m_region.GetRectList()->Nth( m_current );
     if (!node) return 0;
@@ -413,7 +413,7 @@ long wxRegionIterator::GetX(void) const
     return r->x;
 }
 
-long wxRegionIterator::GetY(void) const
+wxCoord wxRegionIterator::GetY() const
 {
     wxNode *node = m_region.GetRectList()->Nth( m_current );
     if (!node) return 0;
@@ -421,7 +421,7 @@ long wxRegionIterator::GetY(void) const
     return r->y;
 }
 
-long wxRegionIterator::GetW(void) const
+wxCoord wxRegionIterator::GetW() const
 {
     wxNode *node = m_region.GetRectList()->Nth( m_current );
     if (!node) return 0;
@@ -429,7 +429,7 @@ long wxRegionIterator::GetW(void) const
     return r->width;
 }
 
-long wxRegionIterator::GetH(void) const
+wxCoord wxRegionIterator::GetH() const
 {
     wxNode *node = m_region.GetRectList()->Nth( m_current );
     if (!node) return 0;
