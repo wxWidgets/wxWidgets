@@ -290,6 +290,28 @@ creation of objects given class names.
 
 {\large {\bf Debugging features}}
 
+\overview{Overview}{loggingoverview}
+
+wxWindows provides several classes and functions for the message logging.
+Please see the \helpref{wxLog overview}{wxlogoverview} for more details.
+
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\helpref{wxLog}{wxlog}}{The base log class}
+\twocolitem{\helpref{wxLogStderr}{wxlogstderr}}{Log messages to a C STDIO stream}
+\twocolitem{\helpref{wxLogStream}{wxlogstream}}{Log messages to a C++ iostream}
+\twocolitem{\helpref{wxLogTextCtrl}{wxlogtextctrl}}{Log messages to a \helpref{wxTextCtrl}{wxtextctrl}}
+\twocolitem{\helpref{wxLogWindow}{wxlogwindow}}{Log messages to a log frame}
+\twocolitem{\helpref{wxLogGui}{wxloggui}}{Default log target for GUI programs}
+\twocolitem{\helpref{wxLogNull}{wxlognull}}{Temporarily suppress message logging}
+\twocolitem{\helpref{wxLogChain}{wxlogchain}}{Allows to chain two log targets}
+\twocolitem{\helpref{wxLogPassThrough}{wxlogpassthrough}}{Allows to filter the log messages}
+\twocolitem{\helpref{wxStreamToTextRedirector}{wxstreamtotextredirector}}{Allows
+to redirect output sent to {\tt cout} to a \helpref{wxTextCtrl}{wxtextctrl}}
+\twocolitem{\helpref{Log functions}{logfunctions}}{Error and warning logging functions}
+\end{twocollist}
+
+{\large {\bf Debugging features}}
+
 \overview{Overview}{debuggingoverview}
 
 wxWindows supports some aspects of debugging an application through
@@ -298,11 +320,7 @@ classes, functions and macros.
 \begin{twocollist}\itemsep=0pt
 \twocolitem{\helpref{wxDebugContext}{wxdebugcontext}}{Provides memory-checking facilities}
 %\twocolitem{\helpref{wxDebugStreamBuf}{wxdebugstreambuf}}{A stream buffer writing to the debug stream}
-\twocolitem{\helpref{wxLog}{wxlog}}{Logging facility}
-\twocolitem{\helpref{Log functions}{logfunctions}}{Error and warning logging functions}
 \twocolitem{\helpref{Debugging macros}{debugmacros}}{Debug macros for assertion and checking}
-%\twocolitem{\helpref{wxTrace}{wxtrace}}{Tracing facility}
-%\twocolitem{\helpref{wxTraceLevel}{wxtracelevel}}{Tracing facility with levels}
 \twocolitem{\helpref{WXDEBUG\_NEW}{debugnew}}{Use this macro to give further debugging information}
 %\twocolitem{\helpref{WXTRACE}{trace}}{Trace macro}
 %\twocolitem{\helpref{WXTRACELEVEL}{tracelevel}}{Trace macro with levels}
