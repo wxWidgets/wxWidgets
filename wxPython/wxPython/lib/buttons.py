@@ -79,7 +79,8 @@ class wxGenButton(wxPyControl):
 
         EVT_LEFT_DOWN(self,        self.OnLeftDown)
         EVT_LEFT_UP(self,          self.OnLeftUp)
-        EVT_LEFT_DCLICK(self,      self.OnLeftDown)
+        if wxPlatform == '__WXMSW__':
+            EVT_LEFT_DCLICK(self,  self.OnLeftDown)
         EVT_MOTION(self,           self.OnMotion)
         EVT_SET_FOCUS(self,        self.OnGainFocus)
         EVT_KILL_FOCUS(self,       self.OnLoseFocus)
