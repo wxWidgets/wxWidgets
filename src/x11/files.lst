@@ -188,7 +188,7 @@ ALL_SOURCES = \
 		x11/dcclient.cpp \
 		x11/dcmemory.cpp \
 		x11/dcscreen.cpp \
-		x11/font.cpp \
+		x11/evtloop.cpp \
 		x11/gdiobj.cpp \
 		x11/glcanvas.cpp \
 		x11/gsockx11.c \
@@ -750,7 +750,7 @@ GUIOBJS = \
 		dcclient.o \
 		dcmemory.o \
 		dcscreen.o \
-		font.o \
+		evtloop.o \
 		gdiobj.o \
 		glcanvas.o \
 		gsockx11.o \

@@ -68,5 +68,6 @@ echo Generating for Unix and Configure...
 %tmakecmd% -t msw wxwin.pro -o %WXDIR%\src\msw\files.lst
 %tmakecmd% -t mac wxwin.pro -o %WXDIR%\src\mac\files.lst
 %tmakecmd% -t motif wxwin.pro -o %WXDIR%\src\motif\files.lst
+%tmakecmd% -t x11 wxwin.pro -o %WXDIR%\src\x11\files.lst
 %tmakecmd% -t os2 wxwin.pro -o %WXDIR%\src\os2\files.lst
 :end

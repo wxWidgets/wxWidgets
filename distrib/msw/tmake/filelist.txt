@@ -614,7 +614,8 @@ dc.cpp	X11
 dcclient.cpp	X11
 dcmemory.cpp	X11
 dcscreen.cpp	X11
-font.cpp	X11
+dcscreen.cpp	X11
+evtloop.cpp	X11
 gdiobj.cpp	X11
 glcanvas.cpp	X11
 icon.cpp	X11
