@@ -10196,7 +10196,7 @@ wxRect wxGrid::BlockToDeviceRect( const wxGridCellCoords &topLeft,
     }
     else
     {
-        rect = wxRect();
+        rect = wxRect(0,0,0,0);
     }
 
     cellRect = CellToRect( bottomRight );
@@ -10271,7 +10271,7 @@ wxRect wxGrid::BlockToDeviceRect( const wxGridCellCoords &topLeft,
     m_gridWin->GetClientSize( &cw, &ch );
 
     if (right < 0 || bottom < 0 || left > cw || top > ch)
-        return wxRect();
+        return wxRect(0,0,0,0);
 
     rect.SetLeft( wxMax(0, left) );
     rect.SetTop( wxMax(0, top) );

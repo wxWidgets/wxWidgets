@@ -2515,7 +2515,7 @@ bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
 
     // wxLogDebug( "Name of invoking window %s", menu->GetInvokingWindow()->GetName().c_str() );
 
-    menu->Popup(ClientToScreen(wxPoint(x, y)), wxSize());
+    menu->Popup(ClientToScreen(wxPoint(x, y)), wxSize(0,0));
 
     // this is not very useful if the menu was popped up because of the mouse
     // click but I think it is nice to do when it appears because of a key

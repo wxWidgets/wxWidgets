@@ -149,7 +149,7 @@ void wxGenericColourDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 bool wxGenericColourDialog::Create(wxWindow *parent, wxColourData *data)
 {
     if ( !wxDialog::Create(parent, wxID_ANY, _("Choose colour"),
-                           wxPoint(), wxSize(900, 900)) )
+                           wxPoint(0,0), wxSize(900, 900)) )
         return false;
 
     dialogParent = parent;

@@ -382,7 +382,7 @@ bool wxPopupComboWindow::Create(wxComboControl *parent)
 void wxPopupComboWindow::PositionNearCombo()
 {
     // the origin point must be in screen coords
-    wxPoint ptOrigin = m_combo->ClientToScreen(wxPoint());
+    wxPoint ptOrigin = m_combo->ClientToScreen(wxPoint(0,0));
 
 #if 0 //def __WXUNIVERSAL__
     // account for the fact that (0, 0) is not the top left corner of the

@@ -1112,12 +1112,12 @@ wxRect wxWindow::ScrollNoRefresh(int dx, int dy, const wxRect *rectTotal)
         wxMemoryDC dcMem;
         dcMem.SelectObject(bmp);
 
-        dcMem.Blit(wxPoint(), size, &dc, ptSource
+        dcMem.Blit(wxPoint(0,0), size, &dc, ptSource
 #if defined(__WXGTK__) && !defined(wxHAS_WORKING_GTK_DC_BLIT)
                 + GetClientAreaOrigin()
 #endif // broken wxGTK wxDC::Blit
                   );
-        dc.Blit(ptDest, size, &dcMem, wxPoint());
+        dc.Blit(ptDest, size, &dcMem, wxPoint(0,0));
 
         wxLogTrace(_T("scroll"),
                    _T("Blit: (%d, %d) of size %dx%d -> (%d, %d)"),

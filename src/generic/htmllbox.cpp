@@ -331,7 +331,7 @@ void wxHtmlListBox::OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const
     if ( IsSelected(n) )
     {
         wxHtmlSelection htmlSel;
-        htmlSel.Set(wxPoint(), cell, wxPoint(INT_MAX, INT_MAX), cell);
+        htmlSel.Set(wxPoint(0,0), cell, wxPoint(INT_MAX, INT_MAX), cell);
         htmlRendInfo.SetSelection(&htmlSel);
         if ( m_htmlRendStyle )
             htmlRendInfo.SetStyle(m_htmlRendStyle);

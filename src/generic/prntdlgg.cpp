@@ -136,7 +136,7 @@ END_EVENT_TABLE()
 wxGenericPrintDialog::wxGenericPrintDialog(wxWindow *parent,
                                            wxPrintDialogData* data)
                     : wxPrintDialogBase(parent, wxID_ANY, _("Print"),
-                               wxPoint(), wxSize(600, 600),
+                               wxPoint(0,0), wxSize(600, 600),
                                wxDEFAULT_DIALOG_STYLE |
                                wxTAB_TRAVERSAL)
 {
@@ -149,7 +149,7 @@ wxGenericPrintDialog::wxGenericPrintDialog(wxWindow *parent,
 wxGenericPrintDialog::wxGenericPrintDialog(wxWindow *parent,
                                            wxPrintData* data)
                     : wxPrintDialogBase(parent, wxID_ANY, _("Print"),
-                               wxPoint(), wxSize(600, 600),
+                               wxPoint(0,0), wxSize(600, 600),
                                wxDEFAULT_DIALOG_STYLE |
                                wxTAB_TRAVERSAL)
 {
@@ -161,7 +161,7 @@ wxGenericPrintDialog::wxGenericPrintDialog(wxWindow *parent,
 
 void wxGenericPrintDialog::Init(wxWindow * WXUNUSED(parent))
 {
-  //    wxDialog::Create(parent, wxID_ANY, _("Print"), wxPoint(), wxSize(600, 600),
+  //    wxDialog::Create(parent, wxID_ANY, _("Print"), wxPoint(0,0), wxSize(600, 600),
   //                     wxDEFAULT_DIALOG_STYLE | wxTAB_TRAVERSAL);
 
     wxBoxSizer *mainsizer = new wxBoxSizer( wxVERTICAL );
@@ -442,7 +442,7 @@ BEGIN_EVENT_TABLE(wxGenericPrintSetupDialog, wxDialog)
 END_EVENT_TABLE()
 
 wxGenericPrintSetupDialog::wxGenericPrintSetupDialog(wxWindow *parent, wxPrintData* data):
-wxDialog(parent, wxID_ANY, _("Print Setup"), wxPoint(), wxSize(600, 600), wxDEFAULT_DIALOG_STYLE|wxTAB_TRAVERSAL)
+wxDialog(parent, wxID_ANY, _("Print Setup"), wxPoint(0,0), wxSize(600, 600), wxDEFAULT_DIALOG_STYLE|wxTAB_TRAVERSAL)
 {
     Init(data);
 }
@@ -821,7 +821,7 @@ wxGenericPageSetupDialog::wxGenericPageSetupDialog( wxWindow *parent,
     : wxPageSetupDialogBase( parent,
                 wxID_ANY,
                 _("Page Setup"),
-                wxPoint(),
+                wxPoint(0,0),
                 wxSize(600, 600),
                 wxDEFAULT_DIALOG_STYLE|wxTAB_TRAVERSAL )
 {

@@ -87,7 +87,7 @@ wxPoint wxJoystick::GetPosition() const
     if (res == JOYERR_NOERROR )
         return wxPoint(joyInfo.wXpos, joyInfo.wYpos);
     else
-        return wxPoint();
+        return wxPoint(0,0);
 }
 
 int wxJoystick::GetZPosition() const

@@ -348,7 +348,7 @@ public:
      *  \param angle Rotating angle (counterclockwise, start at 3 o'clock, 360 is full circle).
      *  \param center Center of rotation.
      */
-    void Rotate( wxList* points, double angle, wxPoint center = wxPoint() );
+    void Rotate( wxList* points, double angle, wxPoint center = wxPoint(0,0) );
 
     // used by DrawEllipticArcRot
     // Careful: wxList gets filled with points you have to delete later.

@@ -99,7 +99,7 @@ void wxSizerItem::Init()
     m_sizer = NULL;
     m_show = true;
     m_userData = NULL;
-    m_zoneRect = wxRect();
+    m_zoneRect = wxRect(0,0,0,0);
 }
 
 void wxSizerItem::Init(const wxSizerFlags& flags)
@@ -1851,7 +1851,7 @@ void wxBookCtrlSizer::RecalcSizes()
 
 wxSize wxBookCtrlSizer::CalcMin()
 {
-    wxSize sizeBorder = m_bookctrl->CalcSizeFromPage(wxSize());
+    wxSize sizeBorder = m_bookctrl->CalcSizeFromPage(wxSize(0,0));
 
     sizeBorder.x += 5;
     sizeBorder.y += 5;

@@ -1176,7 +1176,7 @@ wxSize wxMCIMediaBackend::GetVideoSize() const
 
         return wxSize(whereParms.rc.right, whereParms.rc.bottom);
     }
-    return wxSize();
+    return wxSize(0,0);
 }
 
 //---------------------------------------------------------------------------

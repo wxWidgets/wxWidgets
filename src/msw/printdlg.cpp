@@ -215,7 +215,7 @@ bool wxWindowsPrintNativeData::TransferTo( wxPrintData &data )
                     // Shouldn't really get here
                     wxFAIL_MSG(wxT("Couldn't find paper size in paper database."));
                     data.SetPaperId( wxPAPER_NONE );
-                    data.SetPaperSize( wxSize() );
+                    data.SetPaperSize( wxSize(0,0) );
                 }
             }
             else
@@ -223,7 +223,7 @@ bool wxWindowsPrintNativeData::TransferTo( wxPrintData &data )
                 // Shouldn't really get here
                 wxFAIL_MSG(wxT("Paper database wasn't initialized in wxPrintData::ConvertFromNative."));
                 data.SetPaperId( wxPAPER_NONE );
-                data.SetPaperSize( wxSize() );
+                data.SetPaperSize( wxSize(0,0) );
             }
         }
         else if ((devMode->dmFields & DM_PAPERWIDTH) && (devMode->dmFields & DM_PAPERLENGTH))
@@ -237,7 +237,7 @@ bool wxWindowsPrintNativeData::TransferTo( wxPrintData &data )
             // Shouldn't really get here
             wxFAIL_MSG(wxT("Couldn't find paper size from DEVMODE."));
             data.SetPaperId( wxPAPER_NONE );
-            data.SetPaperSize( wxSize() );
+            data.SetPaperSize( wxSize(0,0) );
         }
 
         //// Duplex

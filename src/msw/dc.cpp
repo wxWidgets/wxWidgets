@@ -2227,7 +2227,7 @@ void wxDC::DoGetSizeMM(int *w, int *h) const
 
 wxSize wxDC::GetPPI() const
 {
-    WXMICROWIN_CHECK_HDC_RET(wxSize())
+    WXMICROWIN_CHECK_HDC_RET(wxSize(0,0))
 
     int x = ::GetDeviceCaps(GetHdc(), LOGPIXELSX);
     int y = ::GetDeviceCaps(GetHdc(), LOGPIXELSY);

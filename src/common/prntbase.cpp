@@ -1006,7 +1006,7 @@ void wxPreviewFrame::CreateControlBar()
     if (m_printPreview->GetPrintoutForPrinting())
         buttons |= wxPREVIEW_PRINT;
 
-    m_controlBar = new wxPreviewControlBar(m_printPreview, buttons, this, wxPoint(), wxSize(400, 40));
+    m_controlBar = new wxPreviewControlBar(m_printPreview, buttons, this, wxPoint(0,0), wxSize(400, 40));
     m_controlBar->CreateButtons();
 }
 

@@ -524,7 +524,7 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
         filterStyle |= wxBORDER_SUNKEN;
 
     m_treeCtrl = CreateTreeCtrl(this, wxID_TREECTRL,
-                                wxPoint(), GetClientSize(), treeStyle);
+                                wxPoint(0,0), GetClientSize(), treeStyle);
 
     if (!filter.empty() && (style & wxDIRCTRL_SHOW_FILTERS))
         m_filterListCtrl = new wxDirFilterListCtrl(this, wxID_FILTERLISTCTRL, wxDefaultPosition, wxDefaultSize, filterStyle);

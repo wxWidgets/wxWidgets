@@ -108,7 +108,7 @@ public:
     // constructors
     wxFontRefData()
     {
-        Init(-1, wxSize(), false, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL,
+        Init(-1, wxSize(0,0), false, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL,
              wxFONTWEIGHT_NORMAL, false, wxEmptyString,
              wxFONTENCODING_DEFAULT);
     }

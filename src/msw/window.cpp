@@ -2782,7 +2782,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                         wxHelpEvent helpEvent(wxEVT_HELP,
                                               subjectOfHelp->GetId(),
 #ifdef __WXWINCE__
-                                              wxPoint()
+                                              wxPoint(0,0)
 #else
                                               wxPoint(info->MousePos.x, info->MousePos.y)
 #endif

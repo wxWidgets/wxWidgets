@@ -53,7 +53,7 @@ END_EVENT_TABLE()
  */
 
 wxSplashScreen::wxSplashScreen(const wxBitmap& bitmap, long splashStyle, int milliseconds, wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style):
-    wxFrame(parent, id, wxEmptyString, wxPoint(), wxSize(100, 100), style)
+    wxFrame(parent, id, wxEmptyString, wxPoint(0,0), wxSize(100, 100), style)
 {
     // At least for GTK+ 2.0, this hint is not available.
 #if defined(__WXGTK20__)

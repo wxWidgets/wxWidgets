@@ -699,7 +699,7 @@ bool wxGenericMDIClientWindow::CreateClient( wxGenericMDIParentFrame *parent, lo
 {
     SetWindowStyleFlag(style);
 
-    bool success = wxNotebook::Create(parent, wxID_NOTEBOOK_CLIENT_AREA, wxPoint(), wxSize(100, 100), 0);
+    bool success = wxNotebook::Create(parent, wxID_NOTEBOOK_CLIENT_AREA, wxPoint(0,0), wxSize(100, 100), 0);
     if (success)
     {
         /*

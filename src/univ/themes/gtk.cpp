@@ -2326,7 +2326,7 @@ wxMenuGeometryInfo *wxGTKRenderer::GetMenuGeometry(wxWindow *win,
 wxSize
 wxGTKRenderer::GetStatusBarBorders(wxCoord * WXUNUSED(borderBetweenFields)) const
 {
-    return wxSize();
+    return wxSize(0,0);
 }
 
 void wxGTKRenderer::DrawStatusField(wxDC& WXUNUSED(dc),
@@ -2913,7 +2913,7 @@ wxGTKRenderer::GetFrameTotalSize(const wxSize& clientSize,
 
 wxSize wxGTKRenderer::GetFrameMinSize(int WXUNUSED(flags)) const
 {
-    return wxSize();
+    return wxSize(0,0);
 }
 
 wxSize wxGTKRenderer::GetFrameIconSize() const

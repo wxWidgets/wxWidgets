@@ -122,7 +122,7 @@ void wxSplitterWindow::Init()
     m_firstY = 0;
     m_sashPosition = m_requestedSashPosition = 0;
     m_sashGravity = 0.0;
-    m_lastSize = wxSize();
+    m_lastSize = wxSize(0,0);
     m_checkRequestedSashPosition = false;
     m_minimumPaneSize = 0;
     m_sashCursorWE = wxCursor(wxCURSOR_SIZEWE);
@@ -414,7 +414,7 @@ void wxSplitterWindow::OnSize(wxSizeEvent& event)
 
     if ( iconized )
     {
-        m_lastSize = wxSize();
+        m_lastSize = wxSize(0,0);
 
         event.Skip();
 

@@ -2903,7 +2903,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 wxASSERT_MSG( !m_dragImage, _T("starting to drag once again?") );
 
                 m_dragImage = new wxDragImage(*this, event.m_item);
-                m_dragImage->BeginDrag(wxPoint(), this);
+                m_dragImage->BeginDrag(wxPoint(0,0), this);
                 m_dragImage->Show();
             }
             break;

@@ -4645,7 +4645,7 @@ void wxGenericListCtrl::CreateHeaderWindow()
     m_headerWin = new wxListHeaderWindow
                       (
                         this, wxID_ANY, m_mainWin,
-                        wxPoint(),
+                        wxPoint(0,0),
                         wxSize(GetClientSize().x, m_headerHeight),
                         wxTAB_TRAVERSAL
                       );
@@ -4683,7 +4683,7 @@ bool wxGenericListCtrl::Create(wxWindow *parent,
     // don't create the inner window with the border
     style &= ~wxBORDER_MASK;
 
-    m_mainWin = new wxListMainWindow( this, wxID_ANY, wxPoint(), size, style );
+    m_mainWin = new wxListMainWindow( this, wxID_ANY, wxPoint(0,0), size, style );
 
 #ifdef  __WXMAC_CARBON__
     // Human Interface Guidelines ask us for a special font in this case
