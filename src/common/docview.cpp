@@ -1948,8 +1948,10 @@ void wxFileHistory::AddFileToHistory(const wxString& file)
         while (node)
         {
             wxMenu* menu = (wxMenu*) node->Data();
-            if (m_fileHistoryN == 0)
+            if ( m_fileHistoryN == 0 && menu->GetMenuItemCount() )
+            {
                 menu->AppendSeparator();
+            }
             menu->Append(wxID_FILE1+m_fileHistoryN, _("[EMPTY]"));
             node = node->Next();
         }
@@ -2115,7 +2117,10 @@ void wxFileHistory::AddFilesToMenu()
         while (node)
         {
             wxMenu* menu = (wxMenu*) node->Data();
-            menu->AppendSeparator();
+            if (menu->GetMenuItemCount())
+            {
+                menu->AppendSeparator();
+            }
             int i;
             for (i = 0; i < m_fileHistoryN; i++)
             {
@@ -2135,7 +2140,10 @@ void wxFileHistory::AddFilesToMenu(wxMenu* menu)
 {
     if (m_fileHistoryN > 0)
     {
-        menu->AppendSeparator();
+        if (menu->GetMenuItemCount())
+        {
+            menu->AppendSeparator();
+        }
         int i;
         for (i = 0; i < m_fileHistoryN; i++)
         {
