@@ -542,14 +542,15 @@ void ScintillaWX::DoPaint(wxDC* dc, wxRect rect) {
     dc->BeginDrawing();
     ClipChildren(*dc, rcPaint);
     Paint(surfaceWindow, rcPaint);
-    dc->EndDrawing();
 
     delete surfaceWindow;
     if (paintState == paintAbandoned) {
-        // Painting area was insufficient to cover new styling or brace highlight positions
+        // Painting area was insufficient to cover new styling or brace
+        // highlight positions
         FullPaint(dc);
     }
     paintState = notPainting;
+    dc->EndDrawing();
 }
 
 
@@ -860,22 +861,10 @@ void ScintillaWX::DoDragLeave() {
 #endif
 //----------------------------------------------------------------------
 
-// Redraw all of text area. This paint will not be abandoned.
+// Force the whole window to be repainted
 void ScintillaWX::FullPaint(wxDC *dc) {
-    wxCHECK_RET(dc != NULL, wxT("Invalid wxDC in ScintillaWX::FillPaint"));
-    paintState = painting;
-    rcPaint = GetClientRectangle();
-    paintingAllText = true;
-    Surface* surfaceWindow = Surface::Allocate();
-    surfaceWindow->Init(dc, wMain.GetID());
-
-    dc->BeginDrawing();
-    ClipChildren(*dc, rcPaint);
-    Paint(surfaceWindow, rcPaint);
-    dc->EndDrawing();
-
-    delete surfaceWindow;
-    paintState = notPainting;
+    stc->Refresh(false);
+    stc->Update();
 }
 
 
