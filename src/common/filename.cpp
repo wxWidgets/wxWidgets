@@ -971,8 +971,8 @@ bool wxFileName::MakeRelativeTo(const wxString& pathBase, wxPathFormat format)
 
     // get cwd only once - small time saving
     wxString cwd = wxGetCwd();
-    Normalize(wxPATH_NORM_ALL, cwd, format);
-    fnBase.Normalize(wxPATH_NORM_ALL, cwd, format);
+    Normalize(wxPATH_NORM_ALL & ~wxPATH_NORM_CASE, cwd, format);
+    fnBase.Normalize(wxPATH_NORM_ALL & ~wxPATH_NORM_CASE, cwd, format);
 
     bool withCase = IsCaseSensitive(format);
 
@@ -1029,8 +1029,8 @@ bool wxFileName::SameAs(const wxFileName &filepath, wxPathFormat format)
 
     // get cwd only once - small time saving
     wxString cwd = wxGetCwd();
-    fn1.Normalize(wxPATH_NORM_ALL, cwd, format);
-    fn2.Normalize(wxPATH_NORM_ALL, cwd, format);
+    fn1.Normalize(wxPATH_NORM_ALL & ~wxPATH_NORM_CASE, cwd, format);
+    fn2.Normalize(wxPATH_NORM_ALL & ~wxPATH_NORM_CASE, cwd, format);
 
     if ( fn1.GetFullPath() == fn2.GetFullPath() )
         return TRUE;
@@ -1362,7 +1362,13 @@ wxString wxFileName::GetLongPath() const
 
         WIN32_FIND_DATA findFileData;
         HANDLE hFind;
-        pathOut = wxEmptyString;
+
+        if ( HasVolume() )
+            pathOut = GetVolume() +
+                      GetVolumeSeparator(wxPATH_DOS) +
+                      GetPathSeparator(wxPATH_DOS);
+        else
+            pathOut = wxEmptyString;
 
         wxArrayString dirs = GetDirs();
         dirs.Add(GetFullName());
@@ -1380,7 +1386,8 @@ wxString wxFileName::GetLongPath() const
             if ( tmpPath.empty() )
                 continue;
 
-            if ( tmpPath.Last() == wxT(':') )
+            // can't see this being necessary? MF
+            if ( tmpPath.Last() == GetVolumeSeparator(wxPATH_DOS) )
             {
                 // Can't pass a drive and root dir to FindFirstFile,
                 // so continue to next dir
@@ -1392,8 +1399,12 @@ wxString wxFileName::GetLongPath() const
             hFind = ::FindFirstFile(tmpPath, &findFileData);
             if (hFind == INVALID_HANDLE_VALUE)
             {
-                // Error: return immediately with the original path
-                return path;
+                // Error: most likely reason is that path doesn't exist, so
+                // append any unprocessed parts and return
+                for ( i += 1; i < count; i++ )
+                    tmpPath += wxFILE_SEP_PATH + dirs[i];
+
+                return tmpPath;
             }
 
             pathOut += findFileData.cFileName;
