@@ -298,10 +298,10 @@ bool wxDocument::OnSaveDocument(const wxString& file)
         msgTitle = wxString(_("File error"));
 
 #if wxUSE_STD_IOSTREAM
-    wxSTD ofstream store(wxString(file.fn_str()).mb_str());   // ?????
+    wxSTD ofstream store(file.mb_str());
     if (store.fail() || store.bad())
 #else
-    wxFileOutputStream store( file );
+    wxFileOutputStream store(file);
     if (store.GetLastError() != wxSTREAM_NO_ERROR)
 #endif
     {
@@ -339,10 +339,10 @@ bool wxDocument::OnOpenDocument(const wxString& file)
         msgTitle = wxString(_("File error"));
 
 #if wxUSE_STD_IOSTREAM
-    wxSTD ifstream store(wxString(file.fn_str()).mb_str());  // ????
+    wxSTD ifstream store(file.mb_str());
     if (store.fail() || store.bad())
 #else
-    wxFileInputStream store( file );
+    wxFileInputStream store(file);
     if (store.GetLastError() != wxSTREAM_NO_ERROR)
 #endif
     {
