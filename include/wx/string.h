@@ -1005,9 +1005,13 @@ wxString WXDLLEXPORT operator+(const wxChar *psz, const wxString& string);
 #if wxUSE_UNICODE
 wxString WXDLLEXPORT operator+(const wxString& string, const wxWCharBuffer buf)
 { return string + (const wchar_t *)buf; }
+wxString WXDLLEXPORT operator+(const wxWCharBuffer buf, const wxString& string)
+{ return (const wchar_t *)buf + string; }
 #else
 wxString WXDLLEXPORT operator+(const wxString& string, const wxCharBuffer buf)
 { return string + (const char *)buf; }
+wxString WXDLLEXPORT operator+(const wxCharBuffer buf, const wxString& string)
+{ return (const char *)buf + string; }
 #endif
 
 // ---------------------------------------------------------------------------
