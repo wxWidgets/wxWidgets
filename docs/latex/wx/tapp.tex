@@ -54,3 +54,47 @@ construction time.
 You can also use DECLARE\_APP(appClass) in a header file to declare the wxGetApp function which returns
 a reference to the application object.
 
+\subsection{Application shutdown}
+
+\helpref{OnExit}{wxapponexit} is called when the application exits but {\it before}
+wxWindows cleans its internal structures. Your should delete all wxWindows object that
+your created by the time OnExit finishes. In particular, do {\bf not} destroy them
+from application class' destructor!
+
+For example, this code may crash:
+
+\begin{verbatim}
+class MyApp : public wxApp
+{
+ public:
+    wxCHMHelpController m_helpCtrl;
+    ...
+};
+\end{verbatim}
+
+The reason for that is that {\tt m\_helpCtrl} is a member object and is 
+thus destroyed from MyApp destructor. But MyApp object is deleted after 
+wxWindows structures that wxCHMHelpController depends on were 
+uninitialized! The solution is to destroy HelpCtrl in {\it OnExit}:
+
+\begin{verbatim}
+class MyApp : public wxApp
+{
+ public:
+    wxCHMHelpController *m_helpCtrl;
+    ...
+};
+
+bool MyApp::OnInit()
+{
+  ...
+  m_helpCtrl = new wxCHMHelpController;
+  ...
+}
+
+int MyApp::OnExit()
+{
+  delete m_helpCtrl;
+  return 0;
+}
+\end{verbatim}
