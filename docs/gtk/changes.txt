@@ -4,6 +4,8 @@ ports.
 
 *** next release ***
 
+Applied patch to allow using non-Latin keyboards.
+
 Added wxActivateEvent for top level windows.
 
 Corrected wxActiavteEvents for app (now wxEVT_ACTIAVTE_APP).

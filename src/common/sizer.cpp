@@ -715,7 +715,7 @@ void wxFlexGridSizer::RecalcSizes()
             {
                 wxNode *node = m_children.Nth( i );
                 wxASSERT( node );
-
+                
                 int w = wxMax( 0, wxMin( m_colWidths[c], sz.x - x ) );
                 int h = wxMax( 0, wxMin( m_rowHeights[r], sz.y - y ) );
 
@@ -755,6 +755,7 @@ wxSize wxFlexGridSizer::CalcMin()
         row = i / ncols;
         col = i % ncols;
         m_rowHeights[ row ] = wxMax( sz.y, m_rowHeights[ row ] );
+
         m_colWidths[ col ] = wxMax( sz.x, m_colWidths[ col ] );
 
         node = node->Next();
