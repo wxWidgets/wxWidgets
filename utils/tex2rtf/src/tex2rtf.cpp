@@ -29,7 +29,7 @@
 #include <wx/timer.h>
 #endif
 
-#ifdef NO_GUI
+#if defined(NO_GUI) || defined(__UNIX__)
 #if wxUSE_IOSTREAMH
 #include <iostream.h>
 #include <fstream.h>
@@ -59,7 +59,10 @@ bool OkToClose = TRUE;
 int passNumber = 1;
 
 #ifndef NO_GUI
+
+#if wxUSE_HELP
 wxHelpController *HelpInstance = NULL;
+#endif // wxUSE_HELP
 
 #ifdef __WXMSW__
 static char *ipc_buffer = NULL;
@@ -128,7 +131,7 @@ bool MyApp::OnInit()
   RefName = new char[300];
 
   int n = 1;
-  
+
   // Read input/output files
   if (argc > 1)
   {
@@ -328,16 +331,18 @@ bool MyApp::OnInit()
     frame->textWindow = new wxTextCtrl(frame, -1, "", wxPoint(-1, -1), wxSize(-1, -1), wxTE_READONLY|wxTE_MULTILINE);
 
     (*frame->textWindow) << "Welcome to Julian Smart's LaTeX to RTF converter.\n";
-//    ShowOptions();    
+//    ShowOptions();
 
+#if wxUSE_HELP
     HelpInstance = new wxHelpController();
     HelpInstance->Initialize("tex2rtf");
+#endif // wxUSE_HELP
 
     /*
      * Read macro/initialisation file
      *
      */
-   
+
     wxString path;
     if ((path = TexPathList.FindValidPath(MacroFile)) != "")
       ReadCustomMacros((char*) (const char*) path);
@@ -352,7 +357,7 @@ bool MyApp::OnInit()
     else if (convertMode == TEX_XLP) strcat(buf, "XLP");
       strcat(buf, " mode.");
     frame->SetStatusText(buf, 1);
-  
+
     frame->Show(TRUE);
     return TRUE;
   }
@@ -363,7 +368,7 @@ bool MyApp::OnInit()
      * Read macro/initialisation file
      *
      */
-   
+
     wxString path;
     if ((path = TexPathList.FindValidPath(MacroFile)) != "")
       ReadCustomMacros((char*) (const char*) path);
@@ -410,7 +415,10 @@ int MyApp::OnExit()
   delete TheTex2RTFServer;
   wxDDECleanUp();
 #endif
+
+#if wxUSE_HELP
   delete HelpInstance;
+#endif // wxUSE_HELP
 
   // TODO: this simulates zero-memory leaks!
   // Otherwise there are just too many...
@@ -610,8 +618,10 @@ void MyFrame::OnModeXLP(wxCommandEvent& event)
 
 void MyFrame::OnHelp(wxCommandEvent& event)
 {
+#if wxUSE_HELP
       HelpInstance->LoadFile();
       HelpInstance->DisplayContents();
+#endif // wxUSE_HELP
 }
 
 void MyFrame::OnAbout(wxCommandEvent& event)
@@ -661,7 +671,7 @@ void ChooseOutputFile(bool force)
     path = wxPathOnly(OutputFile);
   else if (InputFile)
     path = wxPathOnly(InputFile);
-    
+
   switch (convertMode)
   {
     case TEX_RTF:
@@ -736,7 +746,7 @@ bool Go(void)
       if(strlen( sName) > 5)
         sName[5] = '\0';  // that should do!
   }
-  
+
   sprintf(ContentsName, "%s.con", FileRoot);
   sprintf(TmpContentsName, "%s.cn1", FileRoot);
   sprintf(TmpFrameContentsName, "%s.frc", FileRoot);
@@ -756,7 +766,7 @@ bool Go(void)
 
   if (wxFileExists(RefName))
     ReadTexReferences(RefName);
-    
+
   bool success = FALSE;
 
   if (InputFile && OutputFile)
@@ -945,7 +955,7 @@ wxConnectionBase *Tex2RTFServer::OnAcceptConnection(const wxString& topic)
   {
     if (!ipc_buffer)
       ipc_buffer = new char[1000];
-      
+
     return new Tex2RTFConnection(ipc_buffer, 4000);
   }
   else
@@ -955,7 +965,7 @@ wxConnectionBase *Tex2RTFServer::OnAcceptConnection(const wxString& topic)
  /*
   * Connection
   */
-  
+
 Tex2RTFConnection::Tex2RTFConnection(char *buf, int size):wxDDEConnection(buf, size)
 {
 }
