@@ -409,7 +409,7 @@ void ReadTexReferences(char *filename)
   if (!wxFileExists(filename))
       return;
 
-  wxSTD ifstream istr(filename, ios::in);
+  wxSTD ifstream istr(filename, wxSTD ios::in);
 
   if (istr.bad()) return;
 
@@ -585,7 +585,7 @@ bool ReadBib(char *filename)
       return FALSE;
 
   char buf[300];
-  wxSTD ifstream istr(filename, ios::in);
+  wxSTD ifstream istr(filename, wxSTD ios::in);
   if (istr.bad()) return FALSE;
 
   BibLine = 1;
@@ -1314,7 +1314,7 @@ bool ReadCustomMacros(char *filename)
   if (!wxFileExists(filename))
       return FALSE;
 
-  wxSTD ifstream istr(filename, ios::in);
+  wxSTD ifstream istr(filename, wxSTD ios::in);
 
   if (istr.bad()) return FALSE;
 
