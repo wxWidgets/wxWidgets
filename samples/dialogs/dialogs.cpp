@@ -692,7 +692,12 @@ void MyFrame::FileOpen2(wxCommandEvent& WXUNUSED(event) )
                                     _T("Select the file to load"),
                                     wxEmptyString, wxEmptyString,
                                     s_extDef,
-                                    _T("Waveform (*.wav)|*.wav|Plain text (*.txt)|*.txt|All files (*.*)|*.*"),
+                                    wxString::Format
+                                    (
+                                        _T("Waveform (*.wav)|*.wav|Plain text (*.txt)|*.txt|All files (%s)|%s"),
+                                        wxFileSelectorDefaultWildcardStr,
+                                        wxFileSelectorDefaultWildcardStr
+                                    ),
                                     wxCHANGE_DIR,
                                     this
                                    );
@@ -713,7 +718,12 @@ void MyFrame::FilesOpen(wxCommandEvent& WXUNUSED(event) )
 #ifdef __WXMOTIF__
                     _T("C++ files (*.cpp)|*.cpp");
 #else
-                    _T("All files (*.*)|*.*|C++ files (*.cpp;*.h)|*.cpp;*.h");
+                    wxString::Format
+                    (
+                        _T("All files (%s)|%s|C++ files (*.cpp;*.h)|*.cpp;*.h"),
+                        wxFileSelectorDefaultWildcardStr,
+                        wxFileSelectorDefaultWildcardStr
+                    );
 #endif
     wxFileDialog dialog(this, _T("Testing open multiple file dialog"),
                         wxEmptyString, wxEmptyString, wildcards,
