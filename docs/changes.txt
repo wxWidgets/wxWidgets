@@ -137,6 +137,7 @@ wxGTK:
 - wxTreeCtrl::GetCount() counts root as well now (compatible with MSW)
 - added support for wxCHK_3STATE style (GTK2 only)
 - implemented text underlining under GTK2
+- implemented wxFRAME_NO_TASKBAR style (GTK >= 2.2)
 
 wxMotif:
 

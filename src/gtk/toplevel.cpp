@@ -380,6 +380,13 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
         gtk_window_set_transient_for( GTK_WINDOW(m_widget), GTK_WINDOW(m_parent->m_widget) );
     }
 
+#if GTK_CHECK_VERSION(2,2,0)
+    if (style & wxFRAME_NO_TASKBAR)
+    {
+        gtk_window_set_skip_taskbar_hint(GTK_WINDOW(m_widget), TRUE);
+    }
+#endif
+
     if (!name.IsEmpty())
         gtk_window_set_wmclass( GTK_WINDOW(m_widget), wxGTK_CONV( name ), wxGTK_CONV( name ) );
 
