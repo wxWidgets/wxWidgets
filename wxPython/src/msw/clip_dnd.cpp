@@ -1983,6 +1983,133 @@ static PyObject *_wrap_wxCustomDataObject_GetData(PyObject *self, PyObject *args
     return _resultobj;
 }
 
+static void *SwigwxURLDataObjectTowxDataObjectComposite(void *ptr) {
+    wxURLDataObject *src;
+    wxDataObjectComposite *dest;
+    src = (wxURLDataObject *) ptr;
+    dest = (wxDataObjectComposite *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxURLDataObjectTowxDataObject(void *ptr) {
+    wxURLDataObject *src;
+    wxDataObject *dest;
+    src = (wxURLDataObject *) ptr;
+    dest = (wxDataObject *) src;
+    return (void *) dest;
+}
+
+#define new_wxURLDataObject() (new wxURLDataObject())
+static PyObject *_wrap_new_wxURLDataObject(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxURLDataObject * _result;
+    char *_kwnames[] = {  NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxURLDataObject",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxURLDataObject *)new_wxURLDataObject();
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxURLDataObject_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxURLDataObject_GetURL(_swigobj)  (_swigobj->GetURL())
+static PyObject *_wrap_wxURLDataObject_GetURL(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxURLDataObject * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxURLDataObject_GetURL",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxURLDataObject_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxURLDataObject_GetURL. Expected _wxURLDataObject_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxURLDataObject_GetURL(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+#define wxURLDataObject_SetURL(_swigobj,_swigarg0)  (_swigobj->SetURL(_swigarg0))
+static PyObject *_wrap_wxURLDataObject_SetURL(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxURLDataObject * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","url", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxURLDataObject_SetURL",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxURLDataObject_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxURLDataObject_SetURL. Expected _wxURLDataObject_p.");
+        return NULL;
+        }
+    }
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxURLDataObject_SetURL(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
 static void *SwigwxClipboardTowxObject(void *ptr) {
     wxClipboard *src;
     wxObject *dest;
@@ -3466,6 +3593,9 @@ static PyMethodDef clip_dndcMethods[] = {
 	 { "wxClipboard_Close", (PyCFunction) _wrap_wxClipboard_Close, METH_VARARGS | METH_KEYWORDS },
 	 { "wxClipboard_Open", (PyCFunction) _wrap_wxClipboard_Open, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxClipboard", (PyCFunction) _wrap_new_wxClipboard, METH_VARARGS | METH_KEYWORDS },
+	 { "wxURLDataObject_SetURL", (PyCFunction) _wrap_wxURLDataObject_SetURL, METH_VARARGS | METH_KEYWORDS },
+	 { "wxURLDataObject_GetURL", (PyCFunction) _wrap_wxURLDataObject_GetURL, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxURLDataObject", (PyCFunction) _wrap_new_wxURLDataObject, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCustomDataObject_GetData", (PyCFunction) _wrap_wxCustomDataObject_GetData, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCustomDataObject_GetSize", (PyCFunction) _wrap_wxCustomDataObject_GetSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCustomDataObject_SetData", (PyCFunction) _wrap_wxCustomDataObject_SetData, METH_VARARGS | METH_KEYWORDS },
@@ -3529,6 +3659,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPrintQuality","_size_t",0},
     { "_wxPrintQuality","_time_t",0},
     { "_byte","_unsigned_char",0},
+    { "_wxDataObject","_wxURLDataObject",SwigwxURLDataObjectTowxDataObject},
     { "_wxDataObject","_wxCustomDataObject",SwigwxCustomDataObjectTowxDataObject},
     { "_wxDataObject","_wxFileDataObject",SwigwxFileDataObjectTowxDataObject},
     { "_wxDataObject","_wxPyBitmapDataObject",SwigwxPyBitmapDataObjectTowxDataObject},
@@ -3633,6 +3764,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxCoord","_size_t",0},
     { "_wxCoord","_time_t",0},
     { "_wxCoord","_wxPrintQuality",0},
+    { "_wxDataObjectComposite","_wxURLDataObject",SwigwxURLDataObjectTowxDataObjectComposite},
     { "_wxPyDropTarget","_wxPyFileDropTarget",SwigwxPyFileDropTargetTowxPyDropTarget},
     { "_wxPyDropTarget","_wxPyTextDropTarget",SwigwxPyTextDropTargetTowxPyDropTarget},
 {0,0,0}};
@@ -3672,6 +3804,7 @@ SWIGEXPORT(void) initclip_dndc() {
 	 PyDict_SetItemString(d,"wxDragNone", PyInt_FromLong((long) wxDragNone));
 	 PyDict_SetItemString(d,"wxDragCopy", PyInt_FromLong((long) wxDragCopy));
 	 PyDict_SetItemString(d,"wxDragMove", PyInt_FromLong((long) wxDragMove));
+	 PyDict_SetItemString(d,"wxDragLink", PyInt_FromLong((long) wxDragLink));
 	 PyDict_SetItemString(d,"wxDragCancel", PyInt_FromLong((long) wxDragCancel));
 
 

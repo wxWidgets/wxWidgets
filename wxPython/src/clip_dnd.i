@@ -358,6 +358,15 @@ public:
 };
 
 
+//----------------------------------------------------------------------
+
+class wxURLDataObject : public wxDataObjectComposite {
+public:
+    wxURLDataObject();
+
+    wxString GetURL();
+    void SetURL(const wxString& url);
+};
 
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------
@@ -400,6 +409,7 @@ enum wxDragResult
     wxDragNone,     // drag target didn't accept the data
     wxDragCopy,     // the data was successfully copied
     wxDragMove,     // the data was successfully moved (MSW only)
+    wxDragLink,     // operation is a drag-link
     wxDragCancel    // the operation was cancelled by user (not an error)
 };
 
