@@ -123,7 +123,7 @@ public:
         int family,                 // see wxFontFamily enum
         int style,                  // see wxFontStyle enum
         int weight,                 // see wxFontWeight enum
-        bool underlined = FALSE,    // not underlined by default
+        bool underlined = false,    // not underlined by default
         const wxString& face = wxEmptyString,              // facename
         wxFontEncoding encoding = wxFONTENCODING_DEFAULT); // ISO8859-X, ...
 
@@ -184,8 +184,8 @@ public:
     wxString GetWeightString() const;
 
     // Unofficial API, don't use
-    virtual void SetNoAntiAliasing( bool WXUNUSED(no) = TRUE ) {  }
-    virtual bool GetNoAntiAliasing() const { return FALSE; }
+    virtual void SetNoAntiAliasing( bool WXUNUSED(no) = true ) {  }
+    virtual bool GetNoAntiAliasing() const { return false; }
 
     // the default encoding is used for creating all fonts with default
     // encoding parameter

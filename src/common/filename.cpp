@@ -677,7 +677,7 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
     else // mkstemp() succeeded
     {
         path = wxConvFile.cMB2WX( (const char*) buf );
-        
+
         // avoid leaking the fd
         if ( fileTemp )
         {
@@ -794,12 +794,12 @@ bool wxFileName::Mkdir( const wxString& dir, int perm, int flags )
         size_t count = dirs.GetCount();
         for ( size_t i = 0; i < count; i++ )
         {
-            if ( i > 0 || 
+            if ( i > 0 ||
 #if defined(__WXMAC__) && !defined(__DARWIN__)
-			// relative pathnames are exactely the other way round under mac...
-            	!filename.IsAbsolute() 
+            // relative pathnames are exactely the other way round under mac...
+                !filename.IsAbsolute()
 #else
-            	filename.IsAbsolute() 
+                filename.IsAbsolute()
 #endif
             )
                 currPath += wxFILE_SEP_PATH;
@@ -951,7 +951,7 @@ bool wxFileName::Normalize(int flags,
 
         m_dirs.Add(dir);
     }
-    
+
 #if defined(__WIN32__) && !defined(__WXWINCE__) && wxUSE_OLE
     if ( (flags & wxPATH_NORM_SHORTCUT) )
     {
@@ -1021,49 +1021,49 @@ bool wxFileName::GetShortcutTarget(const wxString& shortcutPath, wxString& targe
 {
     wxString path, file, ext;
     wxSplitPath(shortcutPath, & path, & file, & ext);
-    
-	HRESULT hres;	
-	IShellLink* psl;
-    bool success = FALSE;
+
+    HRESULT hres;
+    IShellLink* psl;
+    bool success = false;
 
     // Assume it's not a shortcut if it doesn't end with lnk
     if (ext.Lower() != wxT("lnk"))
-        return FALSE;
-    
-	// create a ShellLink object
-	hres = CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER,
-				IID_IShellLink, (LPVOID*) &psl);
-	
-	if (SUCCEEDED(hres))
-	{
-		IPersistFile* ppf;
-		hres = psl->QueryInterface( IID_IPersistFile, (LPVOID *) &ppf);
-		if (SUCCEEDED(hres))
-		{
-			WCHAR wsz[MAX_PATH];
+        return false;
 
-			MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, shortcutPath.mb_str(), -1, wsz,
-                MAX_PATH);
-			
-			hres = ppf->Load(wsz, 0);			
-			if (SUCCEEDED(hres))
-			{
+    // create a ShellLink object
+    hres = CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER,
+                            IID_IShellLink, (LPVOID*) &psl);
+
+    if (SUCCEEDED(hres))
+    {
+        IPersistFile* ppf;
+        hres = psl->QueryInterface( IID_IPersistFile, (LPVOID *) &ppf);
+        if (SUCCEEDED(hres))
+        {
+            WCHAR wsz[MAX_PATH];
+
+            MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, shortcutPath.mb_str(), -1, wsz,
+                                MAX_PATH);
+
+            hres = ppf->Load(wsz, 0);
+            if (SUCCEEDED(hres))
+            {
                 wxChar buf[2048];
-				psl->GetPath(buf, 2048, NULL, SLGP_UNCPRIORITY);
-				targetFilename = wxString(buf);
+                psl->GetPath(buf, 2048, NULL, SLGP_UNCPRIORITY);
+                targetFilename = wxString(buf);
                 success = (shortcutPath != targetFilename);
 
-				psl->GetArguments(buf, 2048);
+                psl->GetArguments(buf, 2048);
                 wxString args(buf);
                 if (!args.IsEmpty() && arguments)
                 {
                     *arguments = args;
-                }                
-			}
-		}
-	}
-	psl->Release();
-	return success;
+                }
+            }
+        }
+    }
+    psl->Release();
+    return success;
 }
 #endif
 
@@ -2040,14 +2040,14 @@ bool wxFileName::MacSetTypeAndCreator( wxUint32 type , wxUint32 creator )
 
     if ( wxMacPathToFSRef( GetFullPath() , &fsRef ) == noErr )
     {
-	    if ( FSGetCatalogInfo (&fsRef, kFSCatInfoFinderInfo, &catInfo, NULL, NULL, NULL) == noErr )
-	    {
-	        finfo = (FileInfo*)&catInfo.finderInfo;
-  		    finfo->fileType = type ;
-  		    finfo->fileCreator = creator ;
-  		    FSSetCatalogInfo( &fsRef, kFSCatInfoFinderInfo, &catInfo ) ;
+        if ( FSGetCatalogInfo (&fsRef, kFSCatInfoFinderInfo, &catInfo, NULL, NULL, NULL) == noErr )
+        {
+            finfo = (FileInfo*)&catInfo.finderInfo;
+            finfo->fileType = type ;
+            finfo->fileCreator = creator ;
+            FSSetCatalogInfo( &fsRef, kFSCatInfoFinderInfo, &catInfo ) ;
             return true ;
-  	    }
+        }
     }
     return false ;
 }
@@ -2060,13 +2060,13 @@ bool wxFileName::MacGetTypeAndCreator( wxUint32 *type , wxUint32 *creator )
 
     if ( wxMacPathToFSRef( GetFullPath() , &fsRef ) == noErr )
     {
-	    if ( FSGetCatalogInfo (&fsRef, kFSCatInfoFinderInfo, &catInfo, NULL, NULL, NULL) == noErr )
-	    {
-	        finfo = (FileInfo*)&catInfo.finderInfo;
-  		    *type = finfo->fileType ;
-  		    *creator = finfo->fileCreator ;
+        if ( FSGetCatalogInfo (&fsRef, kFSCatInfoFinderInfo, &catInfo, NULL, NULL, NULL) == noErr )
+        {
+            finfo = (FileInfo*)&catInfo.finderInfo;
+            *type = finfo->fileType ;
+            *creator = finfo->fileCreator ;
             return true ;
-  	    }
+        }
     }
     return false ;
 }

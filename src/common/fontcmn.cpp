@@ -284,42 +284,42 @@ bool wxNativeFontInfo::FromString(const wxString& s)
 
     token = tokenizer.GetNextToken();
     if ( !token.ToLong(&l) )
-        return FALSE;
+        return false;
     pointSize = (int)l;
 
     token = tokenizer.GetNextToken();
     if ( !token.ToLong(&l) )
-        return FALSE;
+        return false;
     family = (wxFontFamily)l;
 
     token = tokenizer.GetNextToken();
     if ( !token.ToLong(&l) )
-        return FALSE;
+        return false;
     style = (wxFontStyle)l;
 
     token = tokenizer.GetNextToken();
     if ( !token.ToLong(&l) )
-        return FALSE;
+        return false;
     weight = (wxFontWeight)l;
 
     token = tokenizer.GetNextToken();
     if ( !token.ToLong(&l) )
-        return FALSE;
+        return false;
     underlined = l != 0;
 
     faceName = tokenizer.GetNextToken();
 
 #ifndef __WXMAC__
     if( !faceName )
-        return FALSE;
+        return false;
 #endif
 
     token = tokenizer.GetNextToken();
     if ( !token.ToLong(&l) )
-        return FALSE;
+        return false;
     encoding = (wxFontEncoding)l;
 
-    return TRUE;
+    return true;
 }
 
 wxString wxNativeFontInfo::ToString() const
@@ -345,7 +345,7 @@ void wxNativeFontInfo::Init()
     family = wxFONTFAMILY_DEFAULT;
     style = wxFONTSTYLE_NORMAL;
     weight = wxFONTWEIGHT_NORMAL;
-    underlined = FALSE;
+    underlined = false;
     faceName.clear();
     encoding = wxFONTENCODING_DEFAULT;
 }
@@ -519,12 +519,12 @@ bool wxNativeFontInfo::FromUserString(const wxString& s)
         wxString token = tokenizer.GetNextToken();
 
         // normalize it
-        token.Trim(TRUE).Trim(FALSE).MakeLower();
+        token.Trim(true).Trim(false).MakeLower();
 
         // look for the known tokens
         if ( token == _T("underlined") || token == _("underlined") )
         {
-            SetUnderlined(TRUE);
+            SetUnderlined(true);
         }
         else if ( token == _T("light") || token == _("light") )
         {
@@ -543,7 +543,7 @@ bool wxNativeFontInfo::FromUserString(const wxString& s)
             SetPointSize(size);
         }
 #if wxUSE_FONTMAP
-        else if ( (encoding = wxFontMapper::Get()->CharsetToEncoding(token, FALSE))
+        else if ( (encoding = wxFontMapper::Get()->CharsetToEncoding(token, false))
                     != wxFONTENCODING_DEFAULT )
         {
             SetEncoding(encoding);
@@ -578,7 +578,7 @@ bool wxNativeFontInfo::FromUserString(const wxString& s)
         SetFaceName(face);
     }
 
-    return TRUE;
+    return true;
 }
 
 #endif // generic or wxMSW or wxOS2

@@ -62,12 +62,12 @@ bool wxFFile::Open(const wxChar *filename, const wxChar *mode)
     {
         wxLogSysError(_("can't open file '%s'"), filename);
 
-        return FALSE;
+        return false;
     }
 
     m_name = filename;
 
-    return TRUE;
+    return true;
 }
 
 bool wxFFile::Close()
@@ -78,13 +78,13 @@ bool wxFFile::Close()
         {
             wxLogSysError(_("can't close file '%s'"), m_name.c_str());
 
-            return FALSE;
+            return false;
         }
 
         Detach();
     }
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -93,8 +93,8 @@ bool wxFFile::Close()
 
 bool wxFFile::ReadAll(wxString *str)
 {
-    wxCHECK_MSG( str, FALSE, wxT("invalid parameter") );
-    wxCHECK_MSG( IsOpened(), FALSE, wxT("can't read from closed file") );
+    wxCHECK_MSG( str, false, wxT("invalid parameter") );
+    wxCHECK_MSG( IsOpened(), false, wxT("can't read from closed file") );
 
     clearerr(m_fp);
 
@@ -110,7 +110,7 @@ bool wxFFile::ReadAll(wxString *str)
         {
             wxLogSysError(_("Read error on file '%s'"), m_name.c_str());
 
-            return FALSE;
+            return false;
         }
         //else: just EOF
 
@@ -118,7 +118,7 @@ bool wxFFile::ReadAll(wxString *str)
         *str += buf;
     }
 
-    return TRUE;
+    return true;
 }
 
 size_t wxFFile::Read(void *pBuf, size_t nCount)
@@ -159,11 +159,11 @@ bool wxFFile::Flush()
         {
             wxLogSysError(_("failed to flush the file '%s'"), m_name.c_str());
 
-            return FALSE;
+            return false;
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -172,7 +172,7 @@ bool wxFFile::Flush()
 
 bool wxFFile::Seek(long ofs, wxSeekMode mode)
 {
-    wxCHECK_MSG( IsOpened(), FALSE, wxT("can't seek on closed file") );
+    wxCHECK_MSG( IsOpened(), false, wxT("can't seek on closed file") );
 
     int origin;
     switch ( mode )
@@ -198,10 +198,10 @@ bool wxFFile::Seek(long ofs, wxSeekMode mode)
     {
         wxLogSysError(_("Seek error on file '%s'"), m_name.c_str());
 
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 size_t wxFFile::Tell() const

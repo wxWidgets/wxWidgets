@@ -92,7 +92,7 @@ enum wxSeekMode
     #if wxUSE_UNICODE
         #if wxUSE_UNICODE_MSLU
             #define   wxOpen       wxMSLU__wopen
- 
+
             #define   wxAccess     wxMSLU__waccess
             #define   wxMkDir      wxMSLU__wmkdir
             #define   wxRmDir      wxMSLU__wrmdir
@@ -157,11 +157,11 @@ enum wxSeekMode
     #define   wxTell(fd)   lseek(fd, 0, SEEK_CUR)
 
     #define   wxStructStat struct stat
-    
+
 #if wxUSE_UNICODE
 #   define wxNEED_WX_UNISTD_H
 #if defined(__MWERKS__) && defined(macintosh)
-	#include <sys/stat.h>
+    #include <sys/stat.h>
 #endif
 #if defined(__DMC__)
     typedef unsigned long mode_t;
@@ -237,16 +237,16 @@ WXDLLIMPEXP_BASE wxString wxFindNextFile();
 WXDLLIMPEXP_BASE bool wxIsWild(const wxString& pattern);
 
 // Does the pattern match the text (usually a filename)?
-// If dot_special is TRUE, doesn't match * against . (eliminating
+// If dot_special is true, doesn't match * against . (eliminating
 // `hidden' dot files)
-WXDLLIMPEXP_BASE bool wxMatchWild(const wxString& pattern,  const wxString& text, bool dot_special = TRUE);
+WXDLLIMPEXP_BASE bool wxMatchWild(const wxString& pattern,  const wxString& text, bool dot_special = true);
 
 // Concatenate two files to form third
 WXDLLIMPEXP_BASE bool wxConcatFiles(const wxString& file1, const wxString& file2, const wxString& file3);
 
 // Copy file1 to file2
 WXDLLIMPEXP_BASE bool wxCopyFile(const wxString& file1, const wxString& file2,
-                            bool overwrite = TRUE);
+                                 bool overwrite = true);
 
 // Remove file
 WXDLLIMPEXP_BASE bool wxRemoveFile(const wxString& file);
@@ -316,16 +316,16 @@ WXDLLIMPEXP_BASE bool wxRmdir(const wxString& dir, int flags = 0);
 // this is useful for wxString::IsSameAs(): to compare two file names use
 // filename1.IsSameAs(filename2, wxARE_FILENAMES_CASE_SENSITIVE)
 #if defined(__UNIX__) && !defined(__DARWIN__) && !defined(__OS2__)
-  #define wxARE_FILENAMES_CASE_SENSITIVE  TRUE
+  #define wxARE_FILENAMES_CASE_SENSITIVE  true
 #else   // Windows, Mac OS and OS/2
-  #define wxARE_FILENAMES_CASE_SENSITIVE  FALSE
+  #define wxARE_FILENAMES_CASE_SENSITIVE  false
 #endif  // Unix/Windows
 
 // is the char a path separator?
 inline bool wxIsPathSeparator(wxChar c)
 {
     // under DOS/Windows we should understand both Unix and DOS file separators
-#if ( defined(__UNIX__) && !defined(__OS2__) )|| defined(__MAC__) 
+#if ( defined(__UNIX__) && !defined(__OS2__) )|| defined(__MAC__)
     return c == wxFILE_SEP_PATH;
 #else
     return c == wxFILE_SEP_PATH_DOS || c == wxFILE_SEP_PATH_UNIX;
@@ -381,7 +381,7 @@ public:
     wxString FindAbsoluteValidPath(const wxString& filename);
     // Given full path and filename, add path to list
     void EnsureFileAccessible(const wxString& path);
-    // Returns TRUE if the path is in the list
+    // Returns true if the path is in the list
     bool Member(const wxString& path);
 
 private:

@@ -69,7 +69,7 @@ static const size_t LEN_CODE = 3;
 // ----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxFTP, wxProtocol)
-IMPLEMENT_PROTOCOL(wxFTP, wxT("ftp"), wxT("ftp"), TRUE)
+IMPLEMENT_PROTOCOL(wxFTP, wxT("ftp"), wxT("ftp"), true)
 
 // ============================================================================
 // implementation
@@ -82,7 +82,7 @@ IMPLEMENT_PROTOCOL(wxFTP, wxT("ftp"), wxT("ftp"), TRUE)
 wxFTP::wxFTP()
 {
     m_lastError = wxPROTO_NOERR;
-    m_streaming = FALSE;
+    m_streaming = false;
     m_currentTransfermode = NONE;
 
     m_user = wxT("anonymous");
@@ -111,20 +111,20 @@ bool wxFTP::Connect(wxSockAddress& addr, bool WXUNUSED(wait))
     if ( !wxProtocol::Connect(addr) )
     {
         m_lastError = wxPROTO_NETERR;
-        return FALSE;
+        return false;
     }
 
     if ( !m_user )
     {
         m_lastError = wxPROTO_CONNERR;
-        return FALSE;
+        return false;
     }
 
     // we should have 220 welcome message
     if ( !CheckResult('2') )
     {
         Close();
-        return FALSE;
+        return false;
     }
 
     wxString command;
@@ -133,23 +133,23 @@ bool wxFTP::Connect(wxSockAddress& addr, bool WXUNUSED(wait))
     if ( rc == '2' )
     {
         // 230 return: user accepted without password
-        return TRUE;
+        return true;
     }
 
     if ( rc != '3' )
     {
         Close();
-        return FALSE;
+        return false;
     }
 
     command.Printf(wxT("PASS %s"), m_passwd.c_str());
     if ( !CheckCommand(command, '2') )
     {
         Close();
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 bool wxFTP::Connect(const wxString& host)
@@ -166,7 +166,7 @@ bool wxFTP::Close()
     if ( m_streaming )
     {
         m_lastError = wxPROTO_STREAMING;
-        return FALSE;
+        return false;
     }
 
     if ( IsConnected() )
@@ -241,9 +241,9 @@ char wxFTP::GetResult()
     //      ...
     //      xyz ...
     // and the intermeidate lines may start with xyz or not
-    bool badReply = FALSE;
-    bool firstLine = TRUE;
-    bool endOfReply = FALSE;
+    bool badReply = false;
+    bool firstLine = true;
+    bool endOfReply = false;
     while ( !endOfReply && !badReply )
     {
         wxString line;
@@ -265,7 +265,7 @@ char wxFTP::GetResult()
         {
             if ( firstLine )
             {
-                badReply = TRUE;
+                badReply = true;
             }
             else
             {
@@ -287,16 +287,16 @@ char wxFTP::GetResult()
                 switch ( chMarker )
                 {
                     case _T(' '):
-                        endOfReply = TRUE;
+                        endOfReply = true;
                         break;
 
                     case _T('-'):
-                        firstLine = FALSE;
+                        firstLine = false;
                         break;
 
                     default:
                         // unexpected
-                        badReply = TRUE;
+                        badReply = true;
                 }
             }
             else // subsequent line of multiline reply
@@ -305,7 +305,7 @@ char wxFTP::GetResult()
                 {
                     if ( chMarker == _T(' ') )
                     {
-                        endOfReply = TRUE;
+                        endOfReply = true;
                     }
 
                     wxLogTrace(FTP_TRACE_MASK, _T("<== %s %s"),
@@ -344,7 +344,7 @@ bool wxFTP::SetTransferMode(TransferMode transferMode)
     if ( transferMode == m_currentTransfermode )
     {
         // nothing to do
-        return TRUE;
+        return true;
     }
 
     wxString mode;
@@ -368,14 +368,14 @@ bool wxFTP::SetTransferMode(TransferMode transferMode)
         wxLogError(_("Failed to set FTP transfer mode to %s."), (const wxChar*)
                    (transferMode == ASCII ? _("ASCII") : _("binary")));
 
-        return FALSE;
+        return false;
     }
 
     // If we get here the operation has been succesfully completed
     // Set the status-member
     m_currentTransfermode = transferMode;
 
-    return TRUE;
+    return true;
 }
 
 bool wxFTP::DoSimpleCommand(const wxChar *command, const wxString& arg)
@@ -390,10 +390,10 @@ bool wxFTP::DoSimpleCommand(const wxChar *command, const wxString& arg)
     {
         wxLogDebug(_T("FTP command '%s' failed."), fullcmd.c_str());
 
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 bool wxFTP::ChDir(const wxString& dir)
@@ -468,7 +468,7 @@ bool wxFTP::Rename(const wxString& src, const wxString& dst)
 
     str = wxT("RNFR ") + src;
     if ( !CheckCommand(str, '3') )
-        return FALSE;
+        return false;
 
     str = wxT("RNTO ") + dst;
 
@@ -512,7 +512,7 @@ public:
             // wait for "226 transfer completed"
             m_ftp->CheckResult('2');
 
-            m_ftp->m_streaming = FALSE;
+            m_ftp->m_streaming = false;
         }
         else
         {
@@ -547,7 +547,7 @@ public:
             // read this reply
             m_ftp->CheckResult('2');
 
-            m_ftp->m_streaming = FALSE;
+            m_ftp->m_streaming = false;
         }
         else
         {
@@ -613,7 +613,7 @@ wxSocketClient *wxFTP::GetPort()
         return NULL;
     }
 
-    client->Notify(FALSE);
+    client->Notify(false);
 
     return client;
 }
@@ -621,11 +621,11 @@ wxSocketClient *wxFTP::GetPort()
 bool wxFTP::Abort()
 {
     if ( !m_streaming )
-        return TRUE;
+        return true;
 
-    m_streaming = FALSE;
+    m_streaming = false;
     if ( !CheckCommand(wxT("ABOR"), '4') )
-        return FALSE;
+        return false;
 
     return CheckResult('2');
 }
@@ -650,7 +650,7 @@ wxInputStream *wxFTP::GetInputStream(const wxString& path)
     if ( !CheckCommand(tmp_str, '1') )
         return NULL;
 
-    m_streaming = TRUE;
+    m_streaming = true;
 
     in_stream = new wxInputFTPStream(this, sock);
 
@@ -678,7 +678,7 @@ wxOutputStream *wxFTP::GetOutputStream(const wxString& path)
     if ( !CheckCommand(tmp_str, '1') )
         return NULL;
 
-    m_streaming = TRUE;
+    m_streaming = true;
 
     return new wxOutputFTPStream(this, sock);
 }
@@ -693,7 +693,7 @@ bool wxFTP::GetList(wxArrayString& files,
 {
     wxSocketBase *sock = GetPort();
     if (!sock)
-        return FALSE;
+        return false;
 
     // NLST : List of Filenames (including Directory's !)
     // LIST : depending on BS of FTP-Server
@@ -701,14 +701,14 @@ bool wxFTP::GetList(wxArrayString& files,
     //        - Windows : like "dir" command
     //        - others  : ?
     wxString line(details ? _T("LIST") : _T("NLST"));
-    if ( !!wildcard )
+    if ( !wildcard.IsEmpty() )
     {
         line << _T(' ') << wildcard;
     }
 
     if (!CheckCommand(line, '1'))
     {
-        return FALSE;
+        return false;
     }
     files.Empty();
     while ( ReadLine(sock, line) == wxPROTO_NOERR )
@@ -719,9 +719,9 @@ bool wxFTP::GetList(wxArrayString& files,
 
     // the file list should be terminated by "226 Transfer complete""
     if ( !CheckResult('2') )
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 bool wxFTP::FileExists(const wxString& fileName)
@@ -730,10 +730,10 @@ bool wxFTP::FileExists(const wxString& fileName)
     // current dir. It does so by simply doing an NLST (via GetList).
     // If this succeeds (and the list is not empty) the file exists.
 
-    bool retval = FALSE;
+    bool retval = false;
     wxArrayString fileList;
 
-    if ( GetList(fileList, fileName, FALSE) )
+    if ( GetList(fileList, fileName, false) )
     {
         // Some ftp-servers (Ipswitch WS_FTP Server 1.0.5 does this)
         // displays this behaviour when queried on a non-existing file:
@@ -787,13 +787,13 @@ int wxFTP::GetFileSize(const wxString& fileName)
                           &statuscode, &filesize) == 2 )
             {
                 // We've gotten a good reply.
-                ok = TRUE;
+                ok = true;
             }
             else
             {
                 // Something bad happened.. A "2yz" reply with no size
                 // Fallback
-                ok = FALSE;
+                ok = false;
             }
         }
 
@@ -813,7 +813,7 @@ int wxFTP::GetFileSize(const wxString& fileName)
             // We now try to get details for the file with a "LIST"-command
             // and then parse the output from there..
             wxArrayString fileList;
-            if ( GetList(fileList, fileName, TRUE) )
+            if ( GetList(fileList, fileName, true) )
             {
                 if ( !fileList.IsEmpty() )
                 {
@@ -822,7 +822,7 @@ int wxFTP::GetFileSize(const wxString& fileName)
                     // substring containing the name we are looking for. We
                     // stop the iteration at the first occurrence of the
                     // filename. The search is not case-sensitive.
-                    bool foundIt = FALSE;
+                    bool foundIt = false;
 
                     size_t i;
                     for ( i = 0; !foundIt && i < fileList.Count(); i++ )

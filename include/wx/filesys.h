@@ -107,7 +107,7 @@ class WXDLLIMPEXP_BASE wxFileSystemHandler : public wxObject
 public:
     wxFileSystemHandler() : wxObject() {}
 
-    // returns TRUE if this handler is able to open given location
+    // returns true if this handler is able to open given location
     virtual bool CanOpen(const wxString& location) = 0;
 
     // opens given file and returns pointer to input stream.
@@ -165,10 +165,10 @@ public:
     // sets the current location. Every call to OpenFile is
     // relative to this location.
     // NOTE !!
-    // unless is_dir = TRUE 'location' is *not* the directory but
+    // unless is_dir = true 'location' is *not* the directory but
     // file contained in this directory
     // (so ChangePathTo("dir/subdir/xh.htm") sets m_Path to "dir/subdir/")
-    void ChangePathTo(const wxString& location, bool is_dir = FALSE);
+    void ChangePathTo(const wxString& location, bool is_dir = false);
 
     wxString GetPath() const {return m_Path;}
 

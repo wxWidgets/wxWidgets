@@ -42,7 +42,7 @@ class wxTemporaryFileInputStream : public wxFileInputStream
 public:
     wxTemporaryFileInputStream(const wxString& filename) :
         wxFileInputStream(filename), m_filename(filename) {}
-    
+
     ~wxTemporaryFileInputStream()
     {
         // NB: copied from wxFileInputStream dtor, we need to do it before
@@ -52,7 +52,7 @@ public:
             delete m_file;
             m_file_destroy = false;
         }
-        wxRemoveFile(m_filename);        
+        wxRemoveFile(m_filename);
     }
 
 protected:
@@ -91,7 +91,7 @@ bool wxInternetFSHandler::CanOpen(const wxString& location)
         return (url.GetError() == wxURL_NOERR);
     }
 
-    return FALSE;
+    return false;
 }
 
 
@@ -117,7 +117,7 @@ wxFSFile* wxInternetFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs),
                 s->Read(sout);
             }
             delete s;
-    
+
             return new wxFSFile(new wxTemporaryFileInputStream(tmpfile),
                                 right,
                                 content,
@@ -141,7 +141,7 @@ class wxFileSystemInternetModule : public wxModule
         virtual bool OnInit()
         {
             wxFileSystem::AddHandler(new wxInternetFSHandler);
-            return TRUE;
+            return true;
         }
         virtual void OnExit() {}
 };

@@ -202,7 +202,7 @@ bool wxFile::Access(const wxChar *name, OpenMode mode)
 
 #ifdef __WXWINCE__
     // FIXME: use CreateFile with 0 access to query the file
-    return TRUE;
+    return true;
 #else
     return wxAccess(name, how) == 0;
 #endif
@@ -216,7 +216,7 @@ bool wxFile::Access(const wxChar *name, OpenMode mode)
 wxFile::wxFile(const wxChar *szFileName, OpenMode mode)
 {
     m_fd = fd_invalid;
-    m_error = FALSE;
+    m_error = false;
 
     Open(szFileName, mode);
 }
@@ -250,12 +250,12 @@ bool wxFile::Create(const wxChar *szFileName, bool bOverwrite, int accessMode)
     if ( fd == -1 )
     {
         wxLogSysError(_("can't create file '%s'"), szFileName);
-        return FALSE;
+        return false;
     }
     else
     {
         Attach(fd);
-        return TRUE;
+        return true;
     }
 }
 
@@ -357,11 +357,11 @@ bool wxFile::Open(const wxChar *szFileName, OpenMode mode, int accessMode)
     if ( fd == -1 )
     {
         wxLogSysError(_("can't open file '%s'"), szFileName);
-        return FALSE;
+        return false;
     }
     else {
         Attach(fd);
-        return TRUE;
+        return true;
     }
 }
 
@@ -377,13 +377,13 @@ bool wxFile::Close()
         {
             wxLogSysError(_("can't close file descriptor %d"), m_fd);
             m_fd = fd_invalid;
-            return FALSE;
+            return false;
         }
         else
             m_fd = fd_invalid;
     }
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -438,7 +438,7 @@ size_t wxFile::Write(const void *pBuf, size_t nCount)
 #endif
     if ( iRc == -1 ) {
         wxLogSysError(_("can't write to file descriptor %d"), m_fd);
-        m_error = TRUE;
+        m_error = true;
         return 0;
     }
     else
@@ -455,14 +455,14 @@ bool wxFile::Flush()
         if ( wxFsync(m_fd) == -1 )
         {
             wxLogSysError(_("can't flush file descriptor %d"), m_fd);
-            return FALSE;
+            return false;
         }
 #else // no fsync
         // just do nothing
 #endif // fsync
     }
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -606,11 +606,11 @@ bool wxFile::Eof() const
     DWORD off0 = SetFilePointer((HANDLE) m_fd, 0, 0, FILE_CURRENT);
     DWORD off1 = SetFilePointer((HANDLE) m_fd, 0, 0, FILE_END);
     if (off0 == off1)
-        return TRUE;
+        return true;
     else
     {
         SetFilePointer((HANDLE) m_fd, off0, 0, FILE_BEGIN);
-        return FALSE;
+        return false;
     }
 #else
     int iRc;
@@ -632,7 +632,7 @@ bool wxFile::Eof() const
             break;
 
         case 0:
-            return FALSE;
+            return false;
 
         case -1:
             wxLogSysError(_("can't determine if the end of file is reached on descriptor %d"), m_fd);
@@ -642,7 +642,7 @@ bool wxFile::Eof() const
             wxFAIL_MSG(_("invalid eof() return value."));
     }
 
-    return TRUE;
+    return true;
 #endif
 }
 
@@ -681,13 +681,13 @@ bool wxTempFile::Open(const wxString& strName)
     if ( m_strTemp.empty() )
     {
         // CreateTempFileName() failed
-        return FALSE;
+        return false;
     }
 
 #ifdef __UNIX__
     // the temp file should have the same permissions as the original one
     mode_t mode;
-    
+
     wxStructStat st;
     if ( stat( (const char*) m_strName.fn_str(), &st) == 0 )
     {
@@ -710,7 +710,7 @@ bool wxTempFile::Open(const wxString& strName)
     }
 #endif // Unix
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -729,15 +729,15 @@ bool wxTempFile::Commit()
 
     if ( wxFile::Exists(m_strName) && wxRemove(m_strName) != 0 ) {
         wxLogSysError(_("can't remove file '%s'"), m_strName.c_str());
-        return FALSE;
+        return false;
     }
 
     if ( !wxRenameFile(m_strTemp, m_strName)  ) {
         wxLogSysError(_("can't commit changes to file '%s'"), m_strName.c_str());
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 void wxTempFile::Discard()

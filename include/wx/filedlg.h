@@ -124,7 +124,7 @@ wxFileSelector(const wxChar *message = wxFileSelectorPromptStr,
                const wxChar *wildcard = wxFileSelectorDefaultWildcardStr,
                int flags = 0,
                wxWindow *parent = NULL,
-               int x = -1, int y = -1);
+               int x = wxDefaultCoord, int y = wxDefaultCoord);
 
 // An extended version of wxFileSelector
 WXDLLEXPORT wxString
@@ -135,7 +135,7 @@ wxFileSelectorEx(const wxChar *message = wxFileSelectorPromptStr,
                  const wxChar *wildcard = wxFileSelectorDefaultWildcardStr,
                  int flags = 0,
                  wxWindow *parent = NULL,
-                 int x = -1, int y = -1);
+                 int x = wxDefaultCoord, int y = wxDefaultCoord);
 
 // Ask for filename to load
 WXDLLEXPORT wxString

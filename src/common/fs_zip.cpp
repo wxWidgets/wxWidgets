@@ -47,7 +47,7 @@ wxZipFSHandler::wxZipFSHandler() : wxFileSystemHandler()
 {
     m_Archive = NULL;
     m_ZipFile = m_Pattern = m_BaseDir = wxEmptyString;
-    m_AllowDirs = m_AllowFiles = TRUE;
+    m_AllowDirs = m_AllowFiles = true;
     m_DirsFound = NULL;
 }
 
@@ -92,7 +92,7 @@ wxFSFile* wxZipFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString& l
         rightPart.Normalize(wxPATH_NORM_DOTS, wxT("/"), wxPATH_UNIX);
         right = rightPart.GetFullPath(wxPATH_UNIX);
     }
-    
+
     if (right.GetChar(0) == wxT('/')) right = right.Mid(1);
 
     wxFileName leftFilename = wxFileSystem::URLToFileName(left);
@@ -138,11 +138,11 @@ wxString wxZipFSHandler::FindFirst(const wxString& spec, int flags)
     switch (flags)
     {
         case wxFILE:
-            m_AllowDirs = FALSE, m_AllowFiles = TRUE; break;
+            m_AllowDirs = false, m_AllowFiles = true; break;
         case wxDIR:
-            m_AllowDirs = TRUE, m_AllowFiles = FALSE; break;
+            m_AllowDirs = true, m_AllowFiles = false; break;
         default:
-            m_AllowDirs = m_AllowFiles = TRUE; break;
+            m_AllowDirs = m_AllowFiles = true; break;
     }
 
     m_ZipFile = left;
@@ -208,7 +208,7 @@ wxString wxZipFSHandler::DoFind()
                     filename = dir.AfterLast(wxT('/'));
                     dir = dir.BeforeLast(wxT('/'));
                     if (!filename.IsEmpty() && m_BaseDir == dir &&
-                                wxMatchWild(m_Pattern, filename, FALSE))
+                                wxMatchWild(m_Pattern, filename, false))
                         match = m_ZipFile + wxT("#zip:") + dir + wxT("/") + filename;
                 }
                 else
@@ -219,7 +219,7 @@ wxString wxZipFSHandler::DoFind()
         filename = namestr.AfterLast(wxT('/'));
         dir = namestr.BeforeLast(wxT('/'));
         if (m_AllowFiles && !filename.IsEmpty() && m_BaseDir == dir &&
-                            wxMatchWild(m_Pattern, filename, FALSE))
+                            wxMatchWild(m_Pattern, filename, false))
             match = m_ZipFile + wxT("#zip:") + namestr;
 
         if (unzGoToNextFile((unzFile)m_Archive) != UNZ_OK)

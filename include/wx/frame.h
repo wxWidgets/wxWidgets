@@ -91,7 +91,7 @@ public:
     virtual wxMenuBar *GetMenuBar() const { return m_frameMenuBar; }
 #endif // wxUSE_MENUS
 
-    // process menu command: returns TRUE if processed
+    // process menu command: returns true if processed
     bool ProcessCommand(int winid);
 
     // status bar functions
@@ -132,7 +132,7 @@ public:
 #if wxUSE_TOOLBAR
     // create main toolbar bycalling OnCreateToolBar()
     virtual wxToolBar* CreateToolBar(long style = -1,
-                                     wxWindowID winid = -1,
+                                     wxWindowID winid = wxID_ANY,
                                      const wxString& name = wxToolBarNameStr);
     // return a new toolbar
     virtual wxToolBar *OnCreateToolBar(long style,
@@ -172,13 +172,13 @@ public:
 #ifndef wxTopLevelWindowNative
     virtual bool ShowFullScreen(bool WXUNUSED(show),
                                 long WXUNUSED(style) = wxFULLSCREEN_ALL)
-        { return FALSE; }
+        { return false; }
     virtual bool IsFullScreen() const
-        { return FALSE; }
+        { return false; }
 #endif // no wxTopLevelWindowNative
 
-    // show help text (typically in the statusbar); show is FALSE
-    // if you are hiding the help, TRUE otherwise
+    // show help text (typically in the statusbar); show is false
+    // if you are hiding the help, true otherwise
     virtual void DoGiveHelp(const wxString& text, bool show);
 
 #if WXWIN_COMPATIBILITY_2_2
@@ -223,7 +223,7 @@ protected:
     virtual void PositionStatusBar() { }
 
     // show the help string for this menu item in the given status bar: the
-    // status bar pointer can be NULL; return TRUE if help was shown
+    // status bar pointer can be NULL; return true if help was shown
     bool ShowMenuHelp(wxStatusBar *statbar, int helpid);
 
     wxStatusBar *m_frameStatusBar;

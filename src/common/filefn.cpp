@@ -564,9 +564,9 @@ wxChar *wxExpandPath(wxChar *buf, const wxChar *name)
     trimchars[3] = 0;
 
 #ifdef __WXMSW__
-     const wxChar     SEP = wxT('\\');
+    const wxChar     SEP = wxT('\\');
 #else
-     const wxChar     SEP = wxT('/');
+    const wxChar     SEP = wxT('/');
 #endif
     buf[0] = wxT('\0');
     if (name == NULL || *name == wxT('\0'))
@@ -915,9 +915,9 @@ wxString wxPathOnly (const wxString& path)
 #define kDefaultPathStyle kCFURLHFSPathStyle
 #endif
 
-wxString wxMacFSRefToPath( const FSRef *fsRef , CFStringRef additionalPathComponent ) 
+wxString wxMacFSRefToPath( const FSRef *fsRef , CFStringRef additionalPathComponent )
 {
-	CFURLRef fullURLRef;
+    CFURLRef fullURLRef;
     fullURLRef = CFURLCreateFromFSRef(NULL, fsRef);
     if ( additionalPathComponent )
     {
@@ -926,19 +926,19 @@ wxString wxMacFSRefToPath( const FSRef *fsRef , CFStringRef additionalPathCompon
             additionalPathComponent,false);
         CFRelease( parentURLRef ) ;
     }
-	CFStringRef cfString = CFURLCopyFileSystemPath(fullURLRef, kDefaultPathStyle);
-	CFRelease( fullURLRef ) ;
-	return wxMacCFStringHolder(cfString).AsString(wxLocale::GetSystemEncoding());
+    CFStringRef cfString = CFURLCopyFileSystemPath(fullURLRef, kDefaultPathStyle);
+    CFRelease( fullURLRef ) ;
+    return wxMacCFStringHolder(cfString).AsString(wxLocale::GetSystemEncoding());
 }
 
-OSStatus wxMacPathToFSRef( const wxString&path , FSRef *fsRef ) 
+OSStatus wxMacPathToFSRef( const wxString&path , FSRef *fsRef )
 {
     OSStatus err = noErr ;
-	CFURLRef url = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, wxMacCFStringHolder(path ,wxLocale::GetSystemEncoding() ) , kDefaultPathStyle, false);
-	if ( NULL != url )
-	{
-	    if ( CFURLGetFSRef(url, fsRef) == false )
-	        err = fnfErr ;
+    CFURLRef url = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, wxMacCFStringHolder(path ,wxLocale::GetSystemEncoding() ) , kDefaultPathStyle, false);
+    if ( NULL != url )
+    {
+        if ( CFURLGetFSRef(url, fsRef) == false )
+            err = fnfErr ;
         CFRelease( url ) ;
     }
     else
@@ -948,7 +948,7 @@ OSStatus wxMacPathToFSRef( const wxString&path , FSRef *fsRef )
     return err ;
 }
 
-wxString wxMacHFSUniStrToString( ConstHFSUniStr255Param uniname ) 
+wxString wxMacHFSUniStrToString( ConstHFSUniStr255Param uniname )
 {
     CFStringRef cfname = CFStringCreateWithCharacters( kCFAllocatorDefault,
                                                       uniname->unicode,
@@ -1426,7 +1426,7 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
         if ( getcwd( lbuf , sizeof( lbuf ) ) )
         {
             wxString res( lbuf , *wxConvCurrent ) ;
-		    wxStrcpy( buf , res ) ;			
+            wxStrcpy( buf , res ) ;
             ok = true;
         }
         else
@@ -1435,12 +1435,12 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
         APIRET rc;
         ULONG ulDriveNum = 0;
         ULONG ulDriveMap = 0;
-	rc = ::DosQueryCurrentDisk(&ulDriveNum, &ulDriveMap);
+        rc = ::DosQueryCurrentDisk(&ulDriveNum, &ulDriveMap);
         ok = rc == 0;
-	if (ok)
-	{
-	    sz -= 3;
-	    rc = ::DosQueryCurrentDir( 0 // current drive
+        if (ok)
+        {
+            sz -= 3;
+            rc = ::DosQueryCurrentDir( 0 // current drive
                                       ,cbuf + 3
                                       ,(PULONG)&sz
                                      );
@@ -1517,7 +1517,7 @@ bool wxSetWorkingDirectory(const wxString& d)
 #elif defined(__UNIX__) || defined(__WXMAC__) || defined(__DOS__)
     return (chdir(wxFNSTRINGCAST d.fn_str()) == 0);
 #elif defined(__WINDOWS__)
-    
+
 #ifdef __WIN32__
 #ifdef __WXWINCE__
     // No equivalent in WinCE
@@ -1531,11 +1531,11 @@ bool wxSetWorkingDirectory(const wxString& d)
     if (isDriveSpec)
     {
         wxChar firstChar = d[0];
-        
+
         // To upper case
         if (firstChar > 90)
             firstChar = firstChar - 32;
-        
+
         // To a drive number
         unsigned int driveNo = firstChar - 64;
         if (driveNo > 0)
@@ -1545,10 +1545,10 @@ bool wxSetWorkingDirectory(const wxString& d)
         }
     }
     bool success = (chdir(WXSTRINGCAST d) == 0);
-    
+
     return success;
 #endif
-    
+
 #endif
 }
 
@@ -1649,13 +1649,13 @@ time_t WXDLLEXPORT wxFileModificationTime(const wxString& filename)
             {
                 wxLogLastError(_T("FileTimeToLocalFileTime"));
             }
-            
+
             SYSTEMTIME st;
             if ( !::FileTimeToSystemTime(&ftLocal, &st) )
             {
                 wxLogLastError(_T("FileTimeToSystemTime"));
             }
-            
+
             dateTime.Set(st.wDay, wxDateTime::Month(st.wMonth - 1), st.wYear,
                 st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
             return dateTime.GetTicks();

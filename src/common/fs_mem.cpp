@@ -9,7 +9,7 @@
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA) && !defined(__EMX__)
 // Some older compilers (such as EMX) cannot handle
-// #pragma interface/implementation correctly, iff 
+// #pragma interface/implementation correctly, iff
 // #pragma implementation is used in _two_ translation
 // units (as created by e.g. event.cpp compiled for
 // libwx_base and event.cpp compiled for libwx_gui_core).
@@ -79,7 +79,7 @@ class MemFSHashObj : public wxObject
         {
 #if wxUSE_DATETIME
             m_Time = wxDateTime::Now();
-#endif // wxUSE_DATETIME            
+#endif // wxUSE_DATETIME
         }
 };
 
@@ -137,7 +137,7 @@ wxFSFile* wxMemoryFSHandlerBase::OpenFile(wxFileSystem& WXUNUSED(fs), const wxSt
                             GetAnchor(location)
 #if wxUSE_DATETIME
                             , obj -> m_Time
-#endif // wxUSE_DATETIME                            
+#endif // wxUSE_DATETIME
                             );
     }
     else return NULL;
@@ -175,10 +175,10 @@ bool wxMemoryFSHandlerBase::CheckHash(const wxString& filename)
         wxString s;
         s.Printf(_("Memory VFS already contains file '%s'!"), filename.c_str());
         wxLogError(s);
-        return FALSE;
+        return false;
     }
     else
-        return TRUE;
+        return true;
 }
 
 

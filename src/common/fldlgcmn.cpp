@@ -99,7 +99,7 @@ wxString wxFileDialogBase::AppendExtension(const wxString &filePath,
     wxString fileName = filePath.AfterLast(wxFILE_SEP_PATH);
 
     // if fileName is of form "foo.bar" it's ok, return it
-    int idx_dot = fileName.Find(wxT('.'), TRUE);
+    int idx_dot = fileName.Find(wxT('.'), true);
     if ((idx_dot != wxNOT_FOUND) && (idx_dot < (int)fileName.Len() - 1))
         return filePath;
 
@@ -107,7 +107,7 @@ wxString wxFileDialogBase::AppendExtension(const wxString &filePath,
     wxString ext = extensionList.BeforeFirst(wxT(';'));
 
     // if ext == "foo" or "foo." there's no extension
-    int idx_ext_dot = ext.Find(wxT('.'), TRUE);
+    int idx_ext_dot = ext.Find(wxT('.'), true);
     if ((idx_ext_dot == wxNOT_FOUND) || (idx_ext_dot == (int)ext.Len() - 1))
         return filePath;
     else
@@ -277,7 +277,7 @@ WXDLLEXPORT wxString wxLoadFileSelector(const wxChar *what,
                                         const wxChar *default_name,
                                         wxWindow *parent)
 {
-    return wxDefaultFileSelector(TRUE, what, extension, default_name, parent);
+    return wxDefaultFileSelector(true, what, extension, default_name, parent);
 }
 
 //----------------------------------------------------------------------------
@@ -289,7 +289,7 @@ WXDLLEXPORT wxString wxSaveFileSelector(const wxChar *what,
                                         const wxChar *default_name,
                                         wxWindow *parent)
 {
-    return wxDefaultFileSelector(FALSE, what, extension, default_name, parent);
+    return wxDefaultFileSelector(false, what, extension, default_name, parent);
 }
 
 #endif // wxUSE_FILEDLG

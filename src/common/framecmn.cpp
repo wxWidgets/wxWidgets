@@ -218,7 +218,7 @@ bool wxFrameBase::ProcessCommand(int id)
 void wxFrameBase::UpdateWindowUI(long flags)
 {
     wxWindowBase::UpdateWindowUI(flags);
-    
+
 #if wxUSE_TOOLBAR
     if (GetToolBar())
         GetToolBar()->UpdateWindowUI(flags);
@@ -286,7 +286,7 @@ void wxFrameBase::OnMenuClose(wxMenuEvent& WXUNUSED(event))
 void wxFrameBase::OnInternalIdle()
 {
     wxTopLevelWindow::OnInternalIdle();
-    
+
 #if wxUSE_MENUS && wxUSE_IDLEMENUUPDATES
     if (wxUpdateUIEvent::CanUpdate(this))
         DoMenuUpdates();

@@ -89,7 +89,7 @@
   in the entries it reads: for example, if you have an entry
     score_file = $HOME/.score
   a call to Read(&str, "score_file") will return a complete path to .score file
-  unless the expansion was previousle disabled with SetExpandEnvVars(FALSE) call
+  unless the expansion was previousle disabled with SetExpandEnvVars(false) call
   (it's on by default, the current status can be retrieved with
    IsExpandingEnvVars function).
 */
@@ -150,18 +150,18 @@ public:
   virtual bool GetFirstEntry(wxString& str, long& lIndex) const;
   virtual bool GetNextEntry (wxString& str, long& lIndex) const;
 
-  virtual size_t GetNumberOfEntries(bool bRecursive = FALSE) const;
-  virtual size_t GetNumberOfGroups(bool bRecursive = FALSE) const;
+  virtual size_t GetNumberOfEntries(bool bRecursive = false) const;
+  virtual size_t GetNumberOfGroups(bool bRecursive = false) const;
 
   virtual bool HasGroup(const wxString& strName) const;
   virtual bool HasEntry(const wxString& strName) const;
 
-  virtual bool Flush(bool bCurrentOnly = FALSE);
+  virtual bool Flush(bool bCurrentOnly = false);
 
   virtual bool RenameEntry(const wxString& oldName, const wxString& newName);
   virtual bool RenameGroup(const wxString& oldName, const wxString& newName);
 
-  virtual bool DeleteEntry(const wxString& key, bool bGroupIfEmptyAlso = TRUE);
+  virtual bool DeleteEntry(const wxString& key, bool bGroupIfEmptyAlso = true);
   virtual bool DeleteGroup(const wxString& szKey);
   virtual bool DeleteAll();
 
@@ -211,7 +211,7 @@ private:
                     *m_pCurrentGroup;   // the current group
 
   wxMBConv   &m_conv;
-        
+
 #ifdef __UNIX__
   int m_umask;                    // the umask to use for file creation
 #endif // __UNIX__
@@ -222,6 +222,6 @@ private:
 #endif
   // wxUSE_CONFIG
 
-#endif  
+#endif
   //_FILECONF_H
 

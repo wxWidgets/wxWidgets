@@ -198,7 +198,7 @@ class wxFontMapperModule : public wxModule
 {
 public:
     wxFontMapperModule() : wxModule() { }
-    virtual bool OnInit() { return TRUE; }
+    virtual bool OnInit() { return true; }
     virtual void OnExit() { delete wxFontMapper::Set(NULL); }
 
     DECLARE_DYNAMIC_CLASS(wxFontMapperModule)
@@ -221,7 +221,7 @@ wxFontMapperBase::wxFontMapperBase()
 {
 #if wxUSE_CONFIG && wxUSE_FILECONFIG
     m_config = NULL;
-    m_configIsDummy = FALSE;
+    m_configIsDummy = false;
 #endif // wxUSE_CONFIG
 }
 
@@ -295,7 +295,7 @@ wxConfigBase *wxFontMapperBase::GetConfig()
     if ( !m_config )
     {
         // try the default
-        m_config = wxConfig::Get(FALSE /*don't create on demand*/ );
+        m_config = wxConfig::Get(false /*don't create on demand*/ );
 
         if ( !m_config )
         {
@@ -305,7 +305,7 @@ wxConfigBase *wxFontMapperBase::GetConfig()
             // but will allow us to remember the results of the questions at
             // least during this run
             m_config = new wxMemoryConfig;
-            m_configIsDummy = TRUE;
+            m_configIsDummy = true;
             // VS: we can't call wxConfig::Set(m_config) here because that would
             //     disable automatic wxConfig instance creation if this code was
             //     called before wxApp::OnInit (this happens in wxGTK -- it sets
@@ -313,13 +313,13 @@ wxConfigBase *wxFontMapperBase::GetConfig()
         }
     }
 
-    if ( m_configIsDummy && wxConfig::Get(FALSE) != NULL )
+    if ( m_configIsDummy && wxConfig::Get(false) != NULL )
     {
         // VS: in case we created dummy m_config (see above), we want to switch back
         //     to the real one as soon as one becomes available.
         delete m_config;
-        m_config = wxConfig::Get(FALSE);
-        m_configIsDummy = FALSE;
+        m_config = wxConfig::Get(false);
+        m_configIsDummy = false;
         // FIXME: ideally, we should add keys from dummy config to the real one now,
         //        but it is a low-priority task because typical wxWin application
         //        either doesn't use wxConfig at all or creates wxConfig object in
@@ -349,7 +349,7 @@ bool wxFontMapperBase::ChangePath(const wxString& pathNew, wxString *pathOld)
 {
     wxConfigBase *config = GetConfig();
     if ( !config )
-        return FALSE;
+        return false;
 
     *pathOld = config->GetPath();
 
@@ -366,7 +366,7 @@ bool wxFontMapperBase::ChangePath(const wxString& pathNew, wxString *pathOld)
 
     config->SetPath(path);
 
-    return TRUE;
+    return true;
 }
 
 void wxFontMapperBase::RestorePath(const wxString& pathOld)
@@ -437,7 +437,7 @@ wxFontMapperBase::NonInteractiveCharsetToEncoding(const wxString& charset)
             config->SetPath(FONTMAPPER_CHARSET_ALIAS_PATH);
 
             wxString alias = config->Read(charset);
-            if ( !!alias )
+            if ( !alias.IsEmpty() )
             {
                 // yes, we do - use it instead
                 cs = alias;
@@ -523,7 +523,7 @@ wxFontMapperBase::NonInteractiveCharsetToEncoding(const wxString& charset)
                   cs == wxT("EUC_KR") )
         {
             encoding = wxFONTENCODING_CP949;
-        } 
+        }
         else if ( cs == wxT("KOI8-R") ||
                   cs == wxT("KOI8-RU") )
         {
@@ -543,14 +543,14 @@ wxFontMapperBase::NonInteractiveCharsetToEncoding(const wxString& charset)
             const wxChar *p = cs.c_str() + 3;
             if ( *p == wxT('-') )
                 p++;
-                
+
             // printf( "iso %s\n", (const char*) cs.ToAscii() );
 
             unsigned int value;
             if ( wxSscanf(p, wxT("8859-%u"), &value) == 1 )
             {
                 // printf( "value %d\n", (int)value );
-   
+
                 // make it 0 based and check that it is strictly positive in
                 // the process (no such thing as iso8859-0 encoding)
                 if ( (value-- > 0) &&
@@ -566,12 +566,12 @@ wxFontMapperBase::NonInteractiveCharsetToEncoding(const wxString& charset)
         else if ( cs.Left(4) == wxT("8859") )
         {
             const wxChar *p = cs.c_str();
-            
+
             unsigned int value;
             if ( wxSscanf(p, wxT("8859-%u"), &value) == 1 )
             {
                 // printf( "value %d\n", (int)value );
-   
+
                 // make it 0 based and check that it is strictly positive in
                 // the process (no such thing as iso8859-0 encoding)
                 if ( (value-- > 0) &&

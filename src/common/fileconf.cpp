@@ -185,7 +185,7 @@ public:
                   GetLine()     const { return m_pLine;      }
 
   // modify entry attributes
-  void SetValue(const wxString& strValue, bool bUser = TRUE);
+  void SetValue(const wxString& strValue, bool bUser = true);
   void SetDirty();
   void SetLine(wxFileConfigLineList *pLine);
 
@@ -204,7 +204,7 @@ private:
   ArrayEntries  m_aEntries;         // entries in this group
   ArrayGroups   m_aSubgroups;       // subgroups
   wxString      m_strName;          // group's name
-  bool          m_bDirty;           // if FALSE => all subgroups are not dirty
+  bool          m_bDirty;           // if false => all subgroups are not dirty
   wxFileConfigLineList *m_pLine;    // pointer to our line in the linked list
   wxFileConfigEntry *m_pLastEntry;  // last entry/subgroup of this group in the
   wxFileConfigGroup *m_pLastGroup;  // local file (we insert new ones after it)
@@ -233,7 +233,7 @@ public:
   wxFileConfigGroup *FindSubgroup(const wxChar *szName) const;
   wxFileConfigEntry *FindEntry   (const wxChar *szName) const;
 
-  // delete entry/subgroup, return FALSE if doesn't exist
+  // delete entry/subgroup, return false if doesn't exist
   bool DeleteSubgroupByName(const wxChar *szName);
   bool DeleteEntry(const wxChar *szName);
 
@@ -293,7 +293,7 @@ wxString wxFileConfig::GetGlobalDir()
         strDir.Printf(wxT("%c:\\OS2\\"), 'A'+drive-1);
     }
 #elif defined(__WXSTUBS__)
-    wxASSERT_MSG( FALSE, wxT("TODO") ) ;
+    wxASSERT_MSG( false, wxT("TODO") ) ;
 #elif defined(__DOS__)
     // There's no such thing as global cfg dir in MS-DOS, let's return
     // current directory (FIXME_MGL?)
@@ -399,7 +399,7 @@ void wxFileConfig::Init()
 
         if ( fileGlobal.Open(m_conv/*ignored in ANSI build*/) )
         {
-            Parse(fileGlobal, FALSE /* global */);
+            Parse(fileGlobal, false /* global */);
             SetRootPath();
         }
         else
@@ -414,7 +414,7 @@ void wxFileConfig::Init()
         wxTextFile fileLocal(m_strLocalFile);
         if ( fileLocal.Open(m_conv/*ignored in ANSI build*/) )
         {
-            Parse(fileLocal, TRUE /* local */);
+            Parse(fileLocal, true /* local */);
             SetRootPath();
         }
         else
@@ -540,7 +540,7 @@ wxFileConfig::wxFileConfig(wxInputStream &inStream, wxMBConv& conv)
     memText.AddLine(strTrans);
 
     // Finally we can parse it all.
-    Parse(memText, TRUE /* local */);
+    Parse(memText, true /* local */);
 
     SetRootPath();
 }
@@ -641,12 +641,12 @@ void wxFileConfig::Parse(wxTextBuffer& buffer, bool bLocal)
       }
 
       // check that there is nothing except comments left on this line
-      bool bCont = TRUE;
+      bool bCont = true;
       while ( *++pEnd != wxT('\0') && bCont ) {
         switch ( *pEnd ) {
           case wxT('#'):
           case wxT(';'):
-            bCont = FALSE;
+            bCont = false;
             break;
 
           case wxT(' '):
@@ -657,7 +657,7 @@ void wxFileConfig::Parse(wxTextBuffer& buffer, bool bLocal)
           default:
             wxLogWarning(_("file '%s', line %d: '%s' ignored after group header."),
                          buffer.GetName(), n + 1, pEnd);
-            bCont = FALSE;
+            bCont = false;
         }
       }
     }
@@ -724,7 +724,7 @@ void wxFileConfig::Parse(wxTextBuffer& buffer, bool bLocal)
         if ( !(GetStyle() & wxCONFIG_USE_NO_ESCAPE_CHARACTERS) )
             value = FilterInValue(value);
 
-        pEntry->SetValue(value, FALSE);
+        pEntry->SetValue(value, false);
       }
     }
   }
@@ -791,10 +791,10 @@ bool wxFileConfig::GetNextGroup (wxString& str, long& lIndex) const
 {
   if ( size_t(lIndex) < m_pCurrentGroup->Groups().Count() ) {
     str = m_pCurrentGroup->Groups()[(size_t)lIndex++]->Name();
-    return TRUE;
+    return true;
   }
   else
-    return FALSE;
+    return false;
 }
 
 bool wxFileConfig::GetFirstEntry(wxString& str, long& lIndex) const
@@ -807,10 +807,10 @@ bool wxFileConfig::GetNextEntry (wxString& str, long& lIndex) const
 {
   if ( size_t(lIndex) < m_pCurrentGroup->Entries().Count() ) {
     str = m_pCurrentGroup->Entries()[(size_t)lIndex++]->Name();
-    return TRUE;
+    return true;
   }
   else
-    return FALSE;
+    return false;
 }
 
 size_t wxFileConfig::GetNumberOfEntries(bool bRecursive) const
@@ -821,7 +821,7 @@ size_t wxFileConfig::GetNumberOfEntries(bool bRecursive) const
     size_t nSubgroups = m_pCurrentGroup->Groups().Count();
     for ( size_t nGroup = 0; nGroup < nSubgroups; nGroup++ ) {
       CONST_CAST m_pCurrentGroup = m_pCurrentGroup->Groups()[nGroup];
-      n += GetNumberOfEntries(TRUE);
+      n += GetNumberOfEntries(true);
       CONST_CAST m_pCurrentGroup = pOldCurrentGroup;
     }
   }
@@ -837,7 +837,7 @@ size_t wxFileConfig::GetNumberOfGroups(bool bRecursive) const
     size_t nSubgroups = m_pCurrentGroup->Groups().Count();
     for ( size_t nGroup = 0; nGroup < nSubgroups; nGroup++ ) {
       CONST_CAST m_pCurrentGroup = m_pCurrentGroup->Groups()[nGroup];
-      n += GetNumberOfGroups(TRUE);
+      n += GetNumberOfGroups(true);
       CONST_CAST m_pCurrentGroup = pOldCurrentGroup;
     }
   }
@@ -875,19 +875,19 @@ bool wxFileConfig::DoReadString(const wxString& key, wxString* pStr) const
 
   wxFileConfigEntry *pEntry = m_pCurrentGroup->FindEntry(path.Name());
   if (pEntry == NULL) {
-    return FALSE;
+    return false;
   }
 
   *pStr = pEntry->Value();
 
-  return TRUE;
+  return true;
 }
 
 bool wxFileConfig::DoReadLong(const wxString& key, long *pl) const
 {
     wxString str;
     if ( !Read(key, &str) )
-        return FALSE;
+        return false;
 
     // extra spaces shouldn't prevent us from reading numeric values
     str.Trim();
@@ -933,7 +933,7 @@ bool wxFileConfig::DoWriteString(const wxString& key, const wxString& szValue)
         {
             wxLogError( _("Config entry name cannot start with '%c'."),
                         wxCONFIG_IMMUTABLE_PREFIX);
-            return FALSE;
+            return false;
         }
 
         wxFileConfigEntry   *pEntry = m_pCurrentGroup->FindEntry(strName);
@@ -952,7 +952,7 @@ bool wxFileConfig::DoWriteString(const wxString& key, const wxString& szValue)
         pEntry->SetValue(szValue);
     }
 
-    return TRUE;
+    return true;
 }
 
 bool wxFileConfig::DoWriteLong(const wxString& key, long lValue)
@@ -963,7 +963,7 @@ bool wxFileConfig::DoWriteLong(const wxString& key, long lValue)
 bool wxFileConfig::Flush(bool /* bCurrentOnly */)
 {
   if ( LineListIsEmpty() || !m_pRootGroup->IsDirty() || !m_strLocalFile )
-    return TRUE;
+    return true;
 
 #ifdef __UNIX__
   // set the umask if needed
@@ -979,7 +979,7 @@ bool wxFileConfig::Flush(bool /* bCurrentOnly */)
   if ( !file.IsOpened() )
   {
     wxLogError(_("can't open user configuration file."));
-    return FALSE;
+    return false;
   }
 
   // write all strings to file
@@ -990,7 +990,7 @@ bool wxFileConfig::Flush(bool /* bCurrentOnly */)
     if ( !file.Write(line, m_conv) )
     {
       wxLogError(_("can't write user configuration file."));
-      return FALSE;
+      return false;
     }
   }
 
@@ -1001,18 +1001,18 @@ bool wxFileConfig::Flush(bool /* bCurrentOnly */)
     {
         FSRef fsRef ;
         FSCatalogInfo catInfo;
-  	    FileInfo *finfo ;
-	
-	    if ( wxMacPathToFSRef( m_strLocalFile , &fsRef ) == noErr )
-	    {
-    	    if ( FSGetCatalogInfo (&fsRef, kFSCatInfoFinderInfo, &catInfo, NULL, NULL, NULL) == noErr )
-    	    {
-    	        finfo = (FileInfo*)&catInfo.finderInfo;
-      		    finfo->fileType = 'TEXT' ;
-      		    finfo->fileCreator = 'ttxt' ;
-      		    FSSetCatalogInfo( &fsRef, kFSCatInfoFinderInfo, &catInfo ) ;
-      	    }
-  	    }
+        FileInfo *finfo ;
+
+        if ( wxMacPathToFSRef( m_strLocalFile , &fsRef ) == noErr )
+        {
+            if ( FSGetCatalogInfo (&fsRef, kFSCatInfoFinderInfo, &catInfo, NULL, NULL, NULL) == noErr )
+            {
+                finfo = (FileInfo*)&catInfo.finderInfo;
+                finfo->fileType = 'TEXT' ;
+                finfo->fileCreator = 'ttxt' ;
+                FSSetCatalogInfo( &fsRef, kFSCatInfoFinderInfo, &catInfo ) ;
+            }
+        }
     }
 #endif // __WXMAC__
 
@@ -1037,21 +1037,21 @@ bool wxFileConfig::RenameEntry(const wxString& oldName,
     // check that the entry exists
     wxFileConfigEntry *oldEntry = m_pCurrentGroup->FindEntry(oldName);
     if ( !oldEntry )
-        return FALSE;
+        return false;
 
     // check that the new entry doesn't already exist
     if ( m_pCurrentGroup->FindEntry(newName) )
-        return FALSE;
+        return false;
 
     // delete the old entry, create the new one
     wxString value = oldEntry->Value();
     if ( !m_pCurrentGroup->DeleteEntry(oldName) )
-        return FALSE;
+        return false;
 
     wxFileConfigEntry *newEntry = m_pCurrentGroup->AddEntry(newName);
     newEntry->SetValue(value);
 
-    return TRUE;
+    return true;
 }
 
 bool wxFileConfig::RenameGroup(const wxString& oldName,
@@ -1060,15 +1060,15 @@ bool wxFileConfig::RenameGroup(const wxString& oldName,
     // check that the group exists
     wxFileConfigGroup *group = m_pCurrentGroup->FindSubgroup(oldName);
     if ( !group )
-        return FALSE;
+        return false;
 
     // check that the new group doesn't already exist
     if ( m_pCurrentGroup->FindSubgroup(newName) )
-        return FALSE;
+        return false;
 
     group->Rename(newName);
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -1080,7 +1080,7 @@ bool wxFileConfig::DeleteEntry(const wxString& key, bool bGroupIfEmptyAlso)
   wxConfigPathChanger path(this, key);
 
   if ( !m_pCurrentGroup->DeleteEntry(path.Name()) )
-    return FALSE;
+    return false;
 
   if ( bGroupIfEmptyAlso && m_pCurrentGroup->IsEmpty() ) {
     if ( m_pCurrentGroup != m_pRootGroup ) {
@@ -1091,7 +1091,7 @@ bool wxFileConfig::DeleteEntry(const wxString& key, bool bGroupIfEmptyAlso)
     //else: never delete the root group
   }
 
-  return TRUE;
+  return true;
 }
 
 bool wxFileConfig::DeleteGroup(const wxString& key)
@@ -1108,13 +1108,13 @@ bool wxFileConfig::DeleteAll()
   if ( wxFile::Exists(m_strLocalFile) && wxRemove(m_strLocalFile) == -1 )
   {
       wxLogSysError(_("can't delete user configuration file '%s'"), m_strLocalFile.c_str());
-      return FALSE;
+      return false;
   }
 
   m_strLocalFile = m_strGlobalFile = wxT("");
   Init();
 
-  return TRUE;
+  return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -1269,7 +1269,7 @@ wxFileConfigGroup::wxFileConfigGroup(wxFileConfigGroup *pParent,
 {
   m_pConfig = pConfig;
   m_pParent = pParent;
-  m_bDirty  = FALSE;
+  m_bDirty  = false;
   m_pLine   = NULL;
 
   m_pLastEntry = NULL;
@@ -1565,14 +1565,14 @@ bool wxFileConfigGroup::DeleteSubgroupByName(const wxChar *szName)
 {
     wxFileConfigGroup * const pGroup = FindSubgroup(szName);
 
-    return pGroup ? DeleteSubgroup(pGroup) : FALSE;
+    return pGroup ? DeleteSubgroup(pGroup) : false;
 }
 
 // Delete the subgroup and remove all references to it from
 // other data structures.
 bool wxFileConfigGroup::DeleteSubgroup(wxFileConfigGroup *pGroup)
 {
-    wxCHECK_MSG( pGroup, FALSE, _T("deleting non existing group?") );
+    wxCHECK_MSG( pGroup, false, _T("deleting non existing group?") );
 
     wxLogTrace( _T("wxFileConfig"),
                 _T("Deleting group '%s' from '%s'"),
@@ -1706,13 +1706,13 @@ bool wxFileConfigGroup::DeleteSubgroup(wxFileConfigGroup *pGroup)
     m_aSubgroups.Remove(pGroup);
     delete pGroup;
 
-    return TRUE;
+    return true;
 }
 
 bool wxFileConfigGroup::DeleteEntry(const wxChar *szName)
 {
   wxFileConfigEntry *pEntry = FindEntry(szName);
-  wxCHECK( pEntry != NULL, FALSE );  // deleting non existing item?
+  wxCHECK( pEntry != NULL, false );  // deleting non existing item?
 
   wxFileConfigLineList *pLine = pEntry->GetLine();
   if ( pLine != NULL ) {
@@ -1756,7 +1756,7 @@ bool wxFileConfigGroup::DeleteEntry(const wxChar *szName)
   m_aEntries.Remove(pEntry);
   delete pEntry;
 
-  return TRUE;
+  return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -1764,7 +1764,7 @@ bool wxFileConfigGroup::DeleteEntry(const wxChar *szName)
 // ----------------------------------------------------------------------------
 void wxFileConfigGroup::SetDirty()
 {
-  m_bDirty = TRUE;
+  m_bDirty = true;
   if ( Parent() != NULL )             // propagate upwards
     Parent()->SetDirty();
 }
@@ -1788,7 +1788,7 @@ wxFileConfigEntry::wxFileConfigEntry(wxFileConfigGroup *pParent,
   m_pLine   = NULL;
 
   m_bDirty =
-  m_bHasValue = FALSE;
+  m_bHasValue = false;
 
   m_bImmutable = strName[0] == wxCONFIG_IMMUTABLE_PREFIX;
   if ( m_bImmutable )
@@ -1810,7 +1810,7 @@ void wxFileConfigEntry::SetLine(wxFileConfigLineList *pLine)
   Group()->SetLastEntry(this);
 }
 
-// second parameter is FALSE if we read the value from file and prevents the
+// second parameter is false if we read the value from file and prevents the
 // entry from being marked as 'dirty'
 void wxFileConfigEntry::SetValue(const wxString& strValue, bool bUser)
 {
@@ -1828,7 +1828,7 @@ void wxFileConfigEntry::SetValue(const wxString& strValue, bool bUser)
     if ( m_bHasValue && strValue == m_strValue )
         return;
 
-    m_bHasValue = TRUE;
+    m_bHasValue = true;
     m_strValue = strValue;
 
     if ( bUser )
@@ -1866,7 +1866,7 @@ void wxFileConfigEntry::SetValue(const wxString& strValue, bool bUser)
 
 void wxFileConfigEntry::SetDirty()
 {
-  m_bDirty = TRUE;
+  m_bDirty = true;
   Group()->SetDirty();
 }
 
@@ -2033,7 +2033,7 @@ static wxString FilterOutEntryName(const wxString& str)
     //
     // NB: note that wxCONFIG_IMMUTABLE_PREFIX and wxCONFIG_PATH_SEPARATOR
     //     should *not* be quoted
-    if ( 
+    if (
 #if !wxUSE_UNICODE
             ((unsigned char)c < 127) &&
 #endif // ANSI

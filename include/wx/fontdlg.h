@@ -51,7 +51,7 @@ public:
         { InitFontData(data); return Create(parent); }
 
 protected:
-    virtual bool DoCreate(wxWindow *parent) { m_parent = parent; return TRUE; }
+    virtual bool DoCreate(wxWindow *parent) { m_parent = parent; return true; }
 
     void InitFontData(const wxFontData *data = NULL)
         { if ( data ) m_fontData = *data; }
