@@ -212,10 +212,9 @@ bool wxDynamicLibrary::Load(wxString libname, int flags)
                          &myMainAddr,
                          myErrName ) != noErr )
     {
-        p2cstr( myErrName );
         wxLogSysError( _("Failed to load shared library '%s' Error '%s'"),
                        libname.c_str(),
-                       (char*)myErrName );
+                       wxMacMakeStringFromPascal( myErrName ).c_str() );
         m_handle = 0;
     }
 
