@@ -13,7 +13,7 @@
     See the comments in beforestd.h.
  */
 
-#if defined(__WXMSW__) && defined(__MINGW32__)
+#if defined(__WXMSW__)
     #include "wx/msw/winundef.h"
 #endif
 // VC 7.x isn't as bad as VC6 and doesn't give these warnings
