@@ -37,13 +37,15 @@ class MVCTreeNode:
     screen placement, the actual data associated with it, and more. These are
     the nodes passed to all the other helper parts to do their work with.
     """
-    def __init__(self, data=None, parent = None, kids = [], x = 0, y = 0):
+    def __init__(self, data=None, parent = None, kids = None, x = 0, y = 0):
         self.x = 0
         self.y = 0
         self.projx = 0
         self.projy = 0
         self.parent = parent
         self.kids = kids
+        if self.kids is None:
+            self.kids = []
         self.data = data
         self.expanded = false
         self.selected = false
