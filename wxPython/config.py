@@ -96,6 +96,9 @@ class BuildRenamers:
 
         assert FOUND_LIBXML2, "The libxml2 module is required to use the BuildRenamers functionality."
             
+        if not os.path.exists(wxPythonDir):
+            os.mkdir(wxPythonDir)
+
         swigDest = os.path.join(destdir, "_"+modname+"_rename.i")
         pyDest = os.path.join(wxPythonDir, modname + '.py')
     
