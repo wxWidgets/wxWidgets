@@ -289,18 +289,6 @@ void wxFrameBase::PopStatusText(int number)
     m_frameStatusBar->PopStatusText(number);
 }
 
-void wxFrameBase::DoGiveHelp(const wxString& text, bool show)
-{
-#if wxUSE_STATUSBAR
-    if ( m_statusBarPane < 0 ) return;
-    wxStatusBar* statbar = GetStatusBar();
-    if ( !statbar ) return;
-
-    wxString help = show ? text : wxString();
-    statbar->SetStatusText( help, m_statusBarPane );
-#endif // wxUSE_STATUSBAR
-}
-
 bool wxFrameBase::ShowMenuHelp(wxStatusBar *WXUNUSED(statbar), int menuId)
 {
 #if wxUSE_MENUS
@@ -330,6 +318,19 @@ bool wxFrameBase::ShowMenuHelp(wxStatusBar *WXUNUSED(statbar), int menuId)
 }
 
 #endif // wxUSE_STATUSBAR
+
+void wxFrameBase::DoGiveHelp(const wxString& text, bool show)
+{
+#if wxUSE_STATUSBAR
+    if ( m_statusBarPane < 0 ) return;
+    wxStatusBar* statbar = GetStatusBar();
+    if ( !statbar ) return;
+
+    wxString help = show ? text : wxString();
+    statbar->SetStatusText( help, m_statusBarPane );
+#endif // wxUSE_STATUSBAR
+}
+
 
 // ----------------------------------------------------------------------------
 // toolbar stuff
