@@ -121,5 +121,6 @@ std.ico \
 tip.ico \
 warning.ico \
 watch1.cur \
+disable.bmp \
 wx.rc
 
