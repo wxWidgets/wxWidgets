@@ -680,7 +680,6 @@ trap 'rm -fr `echo "
             minimal/Makefile
             newgrid/Makefile
             notebook/Makefile
-            plot/Makefile
             png/Makefile
             printing/Makefile
             proplist/Makefile
@@ -825,7 +824,6 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
             minimal/Makefile
             newgrid/Makefile
             notebook/Makefile
-            plot/Makefile
             png/Makefile
             printing/Makefile
             proplist/Makefile
