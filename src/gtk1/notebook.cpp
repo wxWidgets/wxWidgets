@@ -373,7 +373,7 @@ int wxNotebook::SetSelection( int page )
 {
     wxCHECK_MSG( m_widget != NULL, -1, wxT("invalid notebook") );
 
-    wxCHECK_MSG( page < (int)m_pagesData.GetCount(), -1, wxT("invalid notebook index") );
+    wxCHECK_MSG( page >= 0 && page < (int)m_pagesData.GetCount(), -1, wxT("invalid notebook index") );
 
     int selOld = GetSelection();
 
