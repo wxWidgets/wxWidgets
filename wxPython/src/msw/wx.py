@@ -1941,6 +1941,15 @@ of your Mac."""
         if redirect:
             self.RedirectStdio(filename)
 
+        # Set the default handler for SIGINT.  This fixes a problem
+        # where if Ctrl-C is pressed in the console that started this
+        # app then it will not appear to do anything, (not even send
+        # KeyboardInterrupt???)  but will later segfault on exit.  By
+        # setting the default handler then the app will exit, as
+        # expected (depending on platform.)
+        import signal
+        signal.signal(signal.SIGINT, signal.SIG_DFL)
+
         # this initializes wxWindows and then calls our OnInit
         _wxStart(self.OnInit)
 
