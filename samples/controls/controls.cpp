@@ -308,7 +308,7 @@ bool MyApp::OnInit()
     // parse the cmd line
     int x = 50,
         y = 50;
-    if ( argc == 2 )
+    if ( argc == 3 )
     {
         wxSscanf(argv[1], "%d", &x);
         wxSscanf(argv[2], "%d", &y);
