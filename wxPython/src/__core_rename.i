@@ -508,6 +508,9 @@
 %rename(PNMHandler)                         wxPNMHandler;
 %rename(XPMHandler)                         wxXPMHandler;
 %rename(TIFFHandler)                        wxTIFFHandler;
+%rename(QUANTIZE_INCLUDE_WINDOWS_COLOURS)   wxQUANTIZE_INCLUDE_WINDOWS_COLOURS;
+%rename(QUANTIZE_FILL_DESTINATION_IMAGE)    wxQUANTIZE_FILL_DESTINATION_IMAGE;
+%rename(Quantize)                           wxQuantize;
 %rename(EvtHandler)                         wxEvtHandler;
 %rename(EVENT_PROPAGATE_NONE)               wxEVENT_PROPAGATE_NONE;
 %rename(EVENT_PROPAGATE_MAX)                wxEVENT_PROPAGATE_MAX;

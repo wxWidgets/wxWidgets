@@ -89,13 +89,13 @@ public:
                 return new wxImage(width, height, clear);
             else
                 return new wxImage;
-        }   
+        }
 
         MustHaveApp(wxImage(const wxBitmap &bitmap));
         %name(ImageFromBitmap) wxImage(const wxBitmap &bitmap) {
             return new wxImage(bitmap.ConvertToImage());
         }
-   
+
         %name(ImageFromData) wxImage(int width, int height, unsigned char* data) {
             // Copy the source data so the wxImage can clean it up later
             unsigned char* copy = (unsigned char*)malloc(width*height*3);
@@ -107,7 +107,7 @@ public:
             return new wxImage(width, height, copy, False);
         }
     }
-    
+
     void Create( int width, int height );
     void Destroy();
 
@@ -315,7 +315,7 @@ success flag and rgb values.", "");
 
 MustHaveApp(ConvertToBitmap);
 MustHaveApp(ConvertToMonoBitmap);
-    
+
     %extend {
         wxBitmap ConvertToBitmap() {
             wxBitmap bitmap(*self);
@@ -361,7 +361,7 @@ MAKE_CONST_WXSTRING(IMAGE_OPTION_BMP_FORMAT);
 MAKE_CONST_WXSTRING(IMAGE_OPTION_CUR_HOTSPOT_X);
 MAKE_CONST_WXSTRING(IMAGE_OPTION_CUR_HOTSPOT_Y);
 MAKE_CONST_WXSTRING(IMAGE_OPTION_RESOLUTION);
-MAKE_CONST_WXSTRING(IMAGE_OPTION_RESOLUTIONUNIT);   
+MAKE_CONST_WXSTRING(IMAGE_OPTION_RESOLUTIONUNIT);
 
 enum
 {
@@ -454,5 +454,46 @@ public:
     wxIFFHandler();
 };
 #endif
+
+//---------------------------------------------------------------------------
+
+%{
+#include <wx/quantize.h>
+%}
+
+enum {
+    wxQUANTIZE_INCLUDE_WINDOWS_COLOURS,
+//    wxQUANTIZE_RETURN_8BIT_DATA,
+    wxQUANTIZE_FILL_DESTINATION_IMAGE
+};
+
+
+DocStr(wxQuantize,
+       "Performs quantization, or colour reduction, on a wxImage.", "");
+
+class wxQuantize /*: public wxObject */
+{
+public:
+    
+    %extend {
+        DocStr(
+            Quantize,
+            "Reduce the colours in the source image and put the result into the
+destination image, setting the palette in the detination if
+needed. Both images may be the same, to overwrite the source image.", "
+:todo: Create a version that returns the wx.Palette used.");
+    
+        static bool Quantize(const wxImage& src, wxImage& dest, int desiredNoColours = 236,
+                             int flags = wxQUANTIZE_INCLUDE_WINDOWS_COLOURS|wxQUANTIZE_FILL_DESTINATION_IMAGE)
+        {
+                return wxQuantize::Quantize(src, dest, 
+                                            //NULL, // palette
+                                            desiredNoColours,
+                                            NULL, // eightBitData
+                                            flags);
+        }
+    }
+};
+
 
 //---------------------------------------------------------------------------
