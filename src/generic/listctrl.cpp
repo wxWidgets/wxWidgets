@@ -4636,7 +4636,7 @@ void wxListMainWindow::OnScroll(wxScrollWinEvent& event)
     ResetVisibleLinesRange();
 
     // FIXME
-#if defined(__WXGTK__) && !defined(__WXUNIVERSAL__)
+#if ( defined(__WXGTK__) || defined(__WXMAC__) ) && !defined(__WXUNIVERSAL__)
     wxScrolledWindow::OnScroll(event);
 #else
     HandleOnScroll( event );
