@@ -16,42 +16,7 @@
 #pragma interface "accel.h"
 #endif
 
-#include "wx/object.h"
 #include "wx/string.h"
-
-class WXDLLEXPORT wxAcceleratorTable;
-
-// Hold Ctrl key down
-#define wxACCEL_ALT     0x01
-
-// Hold Ctrl key down
-#define wxACCEL_CTRL    0x02
-
- // Hold Shift key down
-#define wxACCEL_SHIFT   0x04
-
- // Hold no key down
-#define wxACCEL_NORMAL  0x00
-
-class WXDLLEXPORT wxAcceleratorEntry
-{
-public:
-    wxAcceleratorEntry(int flags = 0, int keyCode = 0, int cmd = 0)
-    {
-        m_flags = flags; m_keyCode = keyCode; m_command = cmd;
-    }
-
-    inline void Set(int flags, int keyCode, int cmd)
-         { m_flags = flags; m_keyCode = keyCode; m_command = cmd; }
-
-    inline int GetFlags() const { return m_flags; }
-    inline int GetKeyCode() const { return m_keyCode; }
-    inline int GetCommand() const { return m_command; }
-
-    int             m_flags;
-    int			    m_keyCode; // ASCII or virtual keycode
-    int			    m_command; // Command id to generate
-};
 
 class WXDLLEXPORT wxAcceleratorTable: public wxObject
 {
