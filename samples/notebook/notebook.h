@@ -48,7 +48,7 @@ DECLARE_APP(MyApp)
 class MyNotebook : public wxNotebook
 {
 public:
-    MyNotebook(wxWindow *parent, wxWindowID id = -1,
+    MyNotebook(wxWindow *parent, wxWindowID id = wxID_ANY,
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize, long style = 0);
 
