@@ -93,7 +93,7 @@ initial accelerator table for a window.
   entries[0].Set(wxACCEL_CTRL,  (int) 'N',     ID_NEW_WINDOW);
   entries[1].Set(wxACCEL_CTRL,  (int) 'X',     wxID_EXIT);
   entries[2].Set(wxACCEL_SHIFT, (int) 'A',     ID_ABOUT);
-  entries[3].Set(wxACCEL_NONE,  WXK_DELETE,    wxID_CUT);
+  entries[3].Set(wxACCEL_NORMAL,  WXK_DELETE,    wxID_CUT);
   wxAcceleratorTable accel(4, entries);
   frame->SetAcceleratorTable(accel);
 \end{verbatim}
