@@ -38,6 +38,7 @@
 
 #include "wx/univ/renderer.h"
 
+#include "wx/frame.h"
 #include "wx/toolbar.h"
 #include "wx/image.h"
 #include "wx/log.h"
