@@ -1011,14 +1011,15 @@ inline size_t wxMbstr(char* szBuffer, const wchar_t* szString,
         //Get the length of the current (sub)string
         size_t nLen = conv.WC2MB(NULL, szPos, 0);
 
-        wxASSERT(nLen != (size_t)-1); //should not be true!  If it is system wctomb could be bad
+//        wxASSERT(nLen != (size_t)-1); //should not be true!  If it is system wctomb could be bad
 
         nActualLength += nLen + 1;
 
         wxASSERT(nActualLength <= (nStringLen<<1) + 1); //If this is true it means buffer overflow
 
         //Convert the current (sub)string
-        if ( conv.WC2MB(&szBuffer[szPos - szStart], szPos, nLen + 1) == (size_t)-1 )
+        if ( nLen == (size_t)-1 ||
+             conv.WC2MB(&szBuffer[szPos - szStart], szPos, nLen + 1) == (size_t)-1 )
         {
             //error - return empty buffer
             wxFAIL_MSG(wxT("Error converting wide-character string to a multi-byte string"));
@@ -1057,14 +1058,15 @@ inline size_t wxWcstr( wchar_t* szBuffer, const char* szString,
         //Get the length of the current (sub)string
         size_t nLen = conv.MB2WC(NULL, szPos, 0);
 
-        wxASSERT(nLen != (size_t)-1); //should not be true!  If it is system mbtowc could be bad
+//        wxASSERT(nLen != (size_t)-1); //If true, conversion was invalid, or system mbtowc could be bad
 
         nActualLength += nLen + 1;
 
         wxASSERT(nActualLength <= nStringLen + 1); //If this is true it means buffer overflow
 
         //Convert the current (sub)string
-        if ( conv.MB2WC(&szBuffer[szPos - szStart], szPos, nLen + 1) == (size_t)-1 )
+        if ( nLen == (size_t)-1 ||
+             conv.MB2WC(&szBuffer[szPos - szStart], szPos, nLen + 1) == (size_t)-1 )
         {
             //error - return empty buffer
             wxFAIL_MSG(wxT("Error converting multi-byte string to a wide-character string"));
@@ -1133,14 +1135,29 @@ wxString::wxString(const char *psz, wxMBConv& conv, size_t nLength)
         internalBuffer.SetLength(
                wxWcstr(internalBuffer, psz, nLen, conv)
                                 );
+/*
+wxWCharBuffer buffer(nLen + 1);
+    
+         //Convert the string           
+         size_t nActualLength = wxWcstr(buffer.data(), psz, nLen, conv);          
+         if ( !Alloc(nActualLength + 1) )                                  
+         {   
+             wxFAIL_MSG(wxT("Out of memory in wxString"));   
+         }   
+         else   
+         {   
+             //Copy the data   
+             assign(buffer.data(), nActualLength);   
+         } 
+*/                                
     }
 }
 
 //Convert wxString in Unicode mode to a multi-byte string
 const wxCharBuffer wxString::mb_str(wxMBConv& conv) const
 {
-    //*2 is the worst case - probably for UTF8
-    wxCharBuffer buffer((length() << 1) + 1);
+    //*4 is the worst case - for UTF8
+    wxCharBuffer buffer((length() << 2) + 1);
 
     //Do the actual conversion (will return a blank string on error)
     wxMbstr(buffer.data(), (*this).c_str(), length(), conv);
@@ -1473,7 +1490,7 @@ const wxCharBuffer wxString::ToAscii() const
     const wchar_t *pwc = c_str();
     for ( ;; )
     {
-        *dest++ = *pwc > SCHAR_MAX ? '_' : *pwc;
+        *dest++ = *pwc > SCHAR_MAX ? wxT('_') : *pwc;
 
         // the output string can't have embedded NULs anyhow, so we can safely
         // stop at first of them even if we do have any
@@ -1695,7 +1712,7 @@ bool wxString::IsNumber() const
 {
   const wxChar *s = (const wxChar*) *this;
   if (wxStrlen(s))
-     if ((s[0] == '-') || (s[0] == '+')) s++;
+     if ((s[0] == wxT('-')) || (s[0] == wxT('+'))) s++;
   while(*s){
     if(!wxIsdigit(*s)) return(false);
     s++;
