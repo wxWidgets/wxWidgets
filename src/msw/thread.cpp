@@ -965,30 +965,8 @@ wxThreadError wxThread::Delete(ExitCode *pRc)
 
     HANDLE hThread = m_internal->GetHandle();
 
-	// Check if thread is really still running.  There is a
-	// race condition in WinThreadStart between the time the
-	// m_internal->m_state is set to STATE_EXITED and the win32
-	// thread actually exits.  It can be flagged as STATE_EXITED
-	// and then we don't wait for it to exit.  This will cause
-	// GetExitCodeThread to return STILL_ACTIVE.
-	if ( !isRunning )
-	{
-		if ( !IsRunning() )
-		{
-			if ( ::GetExitCodeThread(hThread, (LPDWORD)&rc) )
-			{
-				if ((DWORD)rc == STILL_ACTIVE)
-					isRunning = TRUE;
-			}
-		}														
-		else
-		{
-			isRunning = TRUE;
-		}
-	}
-
-    // does it still run?
-    if ( isRunning )
+    // does is still run?
+    if ( isRunning || IsRunning() )
     {
         if ( IsMain() )
         {
@@ -1044,24 +1022,13 @@ wxThreadError wxThread::Delete(ExitCode *pRc)
                     break;
 
                 case WAIT_OBJECT_0 + 1:
+                    // new message arrived, process it
+                    if ( !wxTheApp->DoMessage() )
                     {
-                        MSG	peekMsg;
-                        // Check if a new message has really arrived.
-                        // MsgWaitForMultipleObjects can indicate that a message
-                        // is ready for processing, but this message may be sucked
-                        // up by GetMessage and then GetMessage will hang and not
-                        // allow us to process the actual thread exit event.
-                        if (::PeekMessage(&peekMsg, (HWND) NULL, 0, 0, PM_NOREMOVE))
-                        {
-                            // new message arrived, process it
-                            if ( !wxTheApp->DoMessage() )
-                            {
-                                // WM_QUIT received: kill the thread
-                                Kill();
-                                                            
-                                return wxTHREAD_KILLED;
-                            }
-                        }
+                        // WM_QUIT received: kill the thread
+                        Kill();
+
+                        return wxTHREAD_KILLED;
                     }
                     break;
 
