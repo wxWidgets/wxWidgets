@@ -264,11 +264,6 @@ class wxImage(wxImagePtr):
 
 #-------------- FUNCTION WRAPPERS ------------------
 
-def wxNullImage(*_args, **_kwargs):
-    val = apply(imagec.wxNullImage,_args,_kwargs)
-    if val: val = wxImagePtr(val); val.thisown = 1
-    return val
-
 def wxEmptyImage(*_args, **_kwargs):
     val = apply(imagec.wxEmptyImage,_args,_kwargs)
     if val: val = wxImagePtr(val); val.thisown = 1
@@ -298,3 +293,5 @@ wxImage_RemoveHandler = imagec.wxImage_RemoveHandler
 
 #-------------- VARIABLE WRAPPERS ------------------
 
+cvar = imagec.cvar
+wxNullImage = wxImagePtr(imagec.cvar.wxNullImage)
