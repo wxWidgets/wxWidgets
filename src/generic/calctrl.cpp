@@ -42,7 +42,12 @@
 
 #include "wx/spinctrl.h"
 
-#define _WX_DEFINE_DATE_EVENTS_
+// if wxDatePickerCtrl code doesn't define the date event, do it here as we
+// need it as well
+#if !wxUSE_DATEPICKCTRL
+    #define _WX_DEFINE_DATE_EVENTS_
+#endif
+
 #include "wx/calctrl.h"
 
 #define DEBUG_PAINT 0
