@@ -347,10 +347,15 @@ bool wxTextCtrlBase::CanPaste() const
 // emulating key presses
 // ----------------------------------------------------------------------------
 
+#ifdef __WIN32__
+// the generic version is unused in wxMSW
+bool wxTextCtrlBase::EmulateKeyPress(const wxKeyEvent& WXUNUSED(event))
+{
+    return FALSE;
+}
+#else // !__WIN32__
 bool wxTextCtrlBase::EmulateKeyPress(const wxKeyEvent& event)
 {
-    // the generic version is unused in wxMSW
-#ifndef __WIN32__
     wxChar ch = 0;
     int keycode = event.GetKeyCode();
     switch ( keycode )
@@ -436,12 +441,10 @@ bool wxTextCtrlBase::EmulateKeyPress(const wxKeyEvent& event)
 
         return TRUE;
     }
-#else
-    event;
-#endif // !__WIN32__
 
     return FALSE;
 }
+#endif // !__WIN32__
 
 // ----------------------------------------------------------------------------
 // selection and ranges
