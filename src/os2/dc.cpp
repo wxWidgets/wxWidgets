@@ -2648,25 +2648,25 @@ bool wxDC::DoBlit(
             hBufBitmap = ::GpiCreateBitmap(GetHPS(), &vBmpHdr, 0L, NULL, NULL);
         }
 
-        POINTL                          aPoint1[4] = { 0, 0
-                                                      ,vWidth, vHeight
-                                                      ,vXdest, vYdest
-                                                      ,vXdest + vWidth, vYdest + vHeight
+        POINTL                          aPoint1[4] = { {0, 0}
+						      ,{vWidth, vHeight}
+						      ,{vXdest, vYdest}
+						      ,{vXdest + vWidth, vYdest + vHeight}
                                                      };
-        POINTL                          aPoint2[4] = { 0, 0
-                                                      ,vWidth, vHeight
-                                                      ,vXsrc, vYsrc
-                                                      ,vXsrc + vWidth, vYsrc + vHeight
+        POINTL                          aPoint2[4] = { {0, 0}
+						      ,{vWidth, vHeight}
+						      ,{vXsrc, vYsrc}
+						      ,{vXsrc + vWidth, vYsrc + vHeight}
                                                      };
-        POINTL                          aPoint3[4] = { vXdest, vYdest
-                                                      ,vXdest + vWidth, vYdest + vHeight
-                                                      ,vXsrc, vYsrc
-                                                      ,vXsrc + vWidth, vYsrc + vHeight
+        POINTL                          aPoint3[4] = { {vXdest, vYdest}
+						      ,{vXdest + vWidth, vYdest + vHeight}
+						      ,{vXsrc, vYsrc}
+						      ,{vXsrc + vWidth, vYsrc + vHeight}
                                                      };
-        POINTL                          aPoint4[4] = { vXdest, vYdest
-                                                      ,vXdest + vWidth, vYdest + vHeight
-                                                      ,0, 0
-                                                      ,vWidth, vHeight
+        POINTL                          aPoint4[4] = { {vXdest, vYdest}
+						      ,{vXdest + vWidth, vYdest + vHeight}
+						      ,{0, 0}
+						      ,{vWidth, vHeight}
                                                      };
         ::GpiSetBitmap(hPSMask, (HBITMAP) pMask->GetMaskBitmap());
         ::GpiSetBitmap(hPSBuffer, (HBITMAP) hBufBitmap);
@@ -2777,10 +2777,10 @@ bool wxDC::DoBlit(
     }
     else // no mask, just BitBlt() it
     {
-        POINTL                          aPoint[4] = { vXdest, vYdest
-                                                     ,vXdest + vWidth, vYdest + vHeight
-                                                     ,vXsrc, vYsrc
-                                                     ,vXsrc + vWidth, vYsrc + vHeight
+      POINTL                          aPoint[4] = { {vXdest, vYdest}
+						   ,{vXdest + vWidth, vYdest + vHeight}
+						   ,{vXsrc, vYsrc}
+						   ,{vXsrc + vWidth, vYsrc + vHeight}
                                                     };
 
         bSuccess = (::GpiBitBlt( m_hPS

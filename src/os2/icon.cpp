@@ -135,11 +135,11 @@ void wxIcon::CopyFromBitmap(
     HDC                             hDCDst = ::DevOpenDC(vHabmain, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&vDop, NULLHANDLE);
     HPS                             hPSSrc = ::GpiCreatePS(vHabmain, hDCSrc, &vSize, PU_PELS | GPIA_ASSOC);
     HPS                             hPSDst = ::GpiCreatePS(vHabmain, hDCDst, &vSize, PU_PELS | GPIA_ASSOC);
-    POINTL                          vPoint[4] = { 0, 0, rBmp.GetWidth(), rBmp.GetHeight(),
-                                                  0, 0, rBmp.GetWidth(), rBmp.GetHeight()
+    POINTL                          vPoint[4] = { {0, 0}, {rBmp.GetWidth(), rBmp.GetHeight()},
+                                                  {0, 0}, {rBmp.GetWidth(), rBmp.GetHeight()}
                                                 };
-    POINTL                          vPointMask[4] = { 0, 0, rBmp.GetWidth(), rBmp.GetHeight() * 2,
-                                                      0, 0, rBmp.GetWidth(), rBmp.GetHeight()
+    POINTL                          vPointMask[4] = { {0, 0}, {rBmp.GetWidth(), rBmp.GetHeight() * 2},
+                                                      {0, 0}, {rBmp.GetWidth(), rBmp.GetHeight()}
                                                     };
 
     POINTERINFO                     vIconInfo;
