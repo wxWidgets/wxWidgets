@@ -81,7 +81,10 @@ BEGIN_EVENT_TABLE(wxFrameMSW, wxFrameBase)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxFrameMSW, wxWindow)
+
+#ifndef __WXUNIVERSAL__
 IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxFrameMSW)
+#endif
 
 // ============================================================================
 // implementation
