@@ -307,7 +307,7 @@ void MyFrame::Draw(wxDC& dc)
     dc.DrawText( wxT("Test message: this is in 10 point text"), 10, 180);
     
 #if wxUSE_UNICODE
-    char *test = "Greek (Ελληνικά) Γειά σας -- Hebrew    שלום -- Japanese (日本語)";
+    char *test = "Hebrew    שלום -- Japanese (日本語)";
     wxString tmp = wxConvUTF8.cMB2WC( test );
     dc.DrawText( tmp, 10, 200 ); 
 #endif
@@ -366,7 +366,7 @@ bool MyPrintout::OnPrintPage(int page)
         
         wxChar buf[200];
         wxSprintf(buf, wxT("PAGE %d"), page);
-        // dc->DrawText(buf, 10, 10);
+        dc->DrawText(buf, 10, 10);
         
         return TRUE;
     }
@@ -397,10 +397,8 @@ bool MyPrintout::HasPage(int pageNum)
 
 void MyPrintout::DrawPageOne(wxDC *dc)
 {
-/* You might use THIS code if you were scaling
-* graphics of known size to fit on the page.
-    */
-    int w, h;
+    // You might use THIS code if you were scaling
+    // graphics of known size to fit on the page.
     
     // We know the graphic is 200x200. If we didn't know this,
     // we'd need to calculate it.
@@ -416,6 +414,7 @@ void MyPrintout::DrawPageOne(wxDC *dc)
     maxY += (2*marginY);
     
     // Get the size of the DC in pixels
+    int w, h;
     dc->GetSize(&w, &h);
     
     // Calculate a suitable scaling factor
@@ -432,17 +431,16 @@ void MyPrintout::DrawPageOne(wxDC *dc)
     // Set the scale and origin
     dc->SetUserScale(actualScale, actualScale);
     dc->SetDeviceOrigin( (long)posX, (long)posY );
-    //dc->SetUserScale(1.0, 1.0);
     
     frame->Draw(*dc);
 }
 
 void MyPrintout::DrawPageTwo(wxDC *dc)
 {
-/* You might use THIS code to set the printer DC to ROUGHLY reflect
-* the screen text size. This page also draws lines of actual length 5cm
-* on the page.
-    */
+    // You might use THIS code to set the printer DC to ROUGHLY reflect
+    // the screen text size. This page also draws lines of actual length
+    // 5cm on the page.
+   
     // Get the logical pixels per inch of screen and printer
     int ppiScreenX, ppiScreenY;
     GetPPIScreen(&ppiScreenX, &ppiScreenY);
@@ -494,9 +492,13 @@ void MyPrintout::DrawPageTwo(wxDC *dc)
         wxFont fnt(15, wxSWISS, wxNORMAL, wxNORMAL);
         
         dc->SetFont(fnt);
-        for (int i = 0; i < 7; i++) {
-            dc->GetTextExtent(words[i], &w, &h);
+        for (int i = 0; i < 7; i++)
+        {
+            wxString word = words[i];
+            word.Remove( word.Len()-1, 1 );
+            dc->GetTextExtent(word, &w, &h);
             dc->DrawRectangle(x, y, w, h);
+            dc->GetTextExtent(words[i], &w, &h);
             dc->DrawText(words[i], x, y);
             x += w;
         }
