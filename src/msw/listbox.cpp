@@ -165,90 +165,26 @@ bool wxListBox::Create(wxWindow *parent,
                        const wxString& name)
 {
     m_noItems = 0;
-    m_hWnd = 0;
     m_selected = 0;
 
-    SetName(name);
-#if wxUSE_VALIDATORS
-    SetValidator(validator);
-#endif // wxUSE_VALIDATORS
+    // initialize base class fields
+    if ( !CreateControl(parent, id, pos, size, style, validator, name) )
+        return false;
 
-    if (parent)
-        parent->AddChild(this);
-
-    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
-    SetForegroundColour(parent->GetForegroundColour());
-
-    m_windowId = ( id == -1 ) ? (int)NewControlId() : id;
-
-    int x = pos.x;
-    int y = pos.y;
-    int width = size.x;
-    int height = size.y;
-    m_windowStyle = style;
-
-    DWORD wstyle = WS_VISIBLE | WS_CHILD | WS_VSCROLL | WS_TABSTOP |
-                   LBS_NOTIFY | LBS_HASSTRINGS ;
-
-    wxASSERT_MSG( !(style & wxLB_MULTIPLE) || !(style & wxLB_EXTENDED),
-                  _T("only one of listbox selection modes can be specified") );
-
-    if ( (m_windowStyle & wxBORDER_MASK) == wxBORDER_DEFAULT )
-        m_windowStyle |= wxBORDER_SUNKEN;
-
-    if ( m_windowStyle & wxCLIP_SIBLINGS )
-        wstyle |= WS_CLIPSIBLINGS;
-
-    if (m_windowStyle & wxLB_MULTIPLE)
-        wstyle |= LBS_MULTIPLESEL;
-    else if (m_windowStyle & wxLB_EXTENDED)
-        wstyle |= LBS_EXTENDEDSEL;
-
-    if (m_windowStyle & wxLB_ALWAYS_SB)
-        wstyle |= LBS_DISABLENOSCROLL;
-    if (m_windowStyle & wxLB_HSCROLL)
-        wstyle |= WS_HSCROLL;
-    if (m_windowStyle & wxLB_SORT)
-        wstyle |= LBS_SORT;
-
-#if wxUSE_OWNER_DRAWN && !defined(__WXWINCE__)
-    if ( m_windowStyle & wxLB_OWNERDRAW ) {
-        // we don't support LBS_OWNERDRAWVARIABLE yet
-        wstyle |= LBS_OWNERDRAWFIXED;
-    }
-#endif
-
-    // Without this style, you get unexpected heights, so e.g. constraint layout
-    // doesn't work properly
-    wstyle |= LBS_NOINTEGRALHEIGHT;
-
-    WXDWORD exStyle = 0;
-    (void) MSWGetStyle(m_windowStyle, & exStyle) ;
-
-    m_hWnd = (WXHWND)::CreateWindowEx(exStyle, wxT("LISTBOX"), NULL,
-            wstyle ,
-            0, 0, 0, 0,
-            (HWND)parent->GetHWND(), (HMENU)m_windowId,
-            wxGetInstance(), NULL);
-
-    wxCHECK_MSG( m_hWnd, FALSE, wxT("Failed to create listbox") );
-
-    // Subclass again to catch messages
-    SubclassWin(m_hWnd);
-
-    size_t ui;
-    for (ui = 0; ui < (size_t)n; ui++) {
-        Append(choices[ui]);
+    // create the native control
+    if ( !MSWCreateControl(_T("LISTBOX"), wxEmptyString, pos, size) )
+    {
+        // control creation failed
+        return false;
     }
 
-    if ( (m_windowStyle & wxLB_MULTIPLE) == 0 )
-        SendMessage(GetHwnd(), LB_SETCURSEL, 0, 0);
+    // initialize the contents
+    for ( int i = 0; i < n; i++ )
+    {
+        Append(choices[i]);
+    }
 
-    SetFont(parent->GetFont());
-
-    SetSize(x, y, width, height);
-
-    return TRUE;
+    return true;
 }
 
 bool wxListBox::Create(wxWindow *parent,
@@ -270,10 +206,43 @@ wxListBox::~wxListBox()
     Free();
 }
 
-void wxListBox::SetupColours()
+WXDWORD wxListBox::MSWGetStyle(long style, WXDWORD *exstyle) const
 {
-    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
-    SetForegroundColour(GetParent()->GetForegroundColour());
+    WXDWORD msStyle = wxControl::MSWGetStyle(style, exstyle);
+
+    // we always want to get the notifications
+    msStyle |= LBS_NOTIFY;
+
+    // without this style, you get unexpected heights, so e.g. constraint
+    // layout doesn't work properly
+    msStyle |= LBS_NOINTEGRALHEIGHT;
+
+    wxASSERT_MSG( !(style & wxLB_MULTIPLE) || !(style & wxLB_EXTENDED),
+                  _T("only one of listbox selection modes can be specified") );
+
+    if ( style & wxLB_MULTIPLE )
+        msStyle |= LBS_MULTIPLESEL;
+    else if ( style & wxLB_EXTENDED )
+        msStyle |= LBS_EXTENDEDSEL;
+
+    if ( m_windowStyle & wxLB_ALWAYS_SB )
+        msStyle |= LBS_DISABLENOSCROLL;
+    if ( m_windowStyle & wxLB_HSCROLL )
+        msStyle |= WS_HSCROLL;
+    if ( m_windowStyle & wxLB_SORT )
+        msStyle |= LBS_SORT;
+
+#if wxUSE_OWNER_DRAWN && !defined(__WXWINCE__)
+    if ( m_windowStyle & wxLB_OWNERDRAW )
+    {
+        // we don't support LBS_OWNERDRAWVARIABLE yet and we also always put
+        // the strings in the listbox for simplicity even though we could have
+        // avoided it in this case
+        msStyle |= LBS_OWNERDRAWFIXED | LBS_HASSTRINGS;
+    }
+#endif // wxUSE_OWNER_DRAWN
+
+    return msStyle;
 }
 
 // ----------------------------------------------------------------------------
