@@ -74,6 +74,7 @@ Added missing deselect methods for wxGrid.
 
 Fixed typemaps for wxGridCellCoordsArray.
 
+Updated to the 0.9a version of PyCrust
 
 
 
