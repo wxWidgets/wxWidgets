@@ -22,7 +22,7 @@ WXDLLEXPORT_DATA(extern const char*) wxCheckBoxNameStr;
 
 // Checkbox item (single checkbox)
 class WXDLLEXPORT wxBitmap;
-class WXDLLEXPORT wxCheckBox: public wxControl
+class WXDLLEXPORT wxCheckBox: public wxCheckBoxBase
 {
     DECLARE_DYNAMIC_CLASS(wxCheckBox)
         

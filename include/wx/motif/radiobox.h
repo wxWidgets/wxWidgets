@@ -23,7 +23,7 @@ WXDLLEXPORT_DATA(extern const char*) wxRadioBoxNameStr;
 // List box item
 class WXDLLEXPORT wxBitmap ;
 
-class WXDLLEXPORT wxRadioBox : public wxControl
+class WXDLLEXPORT wxRadioBox : public wxControl, public wxRadioBoxBase
 {
     DECLARE_DYNAMIC_CLASS(wxRadioBox)
 
@@ -50,12 +50,9 @@ public:
     int FindString(const wxString& s) const;
     void SetSelection(int N);
     int GetSelection() const;
-    wxString GetString(int N) const;
 
-    void SetLabel(const wxString& label) { wxControl::SetLabel(label); };
-    void SetLabel(int item, const wxString& label) ;
-    wxString GetLabel(int item) const;
-    wxString GetLabel() const { return wxControl::GetLabel(); };
+    void SetString(int item, const wxString& label) ;
+    wxString GetString(int item) const;
     virtual bool Enable(bool enable = TRUE);
     void Enable(int item, bool enable);
     void Show(int item, bool show) ;
@@ -65,6 +62,9 @@ public:
     virtual bool SetStringSelection(const wxString& s);
     virtual int GetCount() const { return m_noItems; } ;
     void Command(wxCommandEvent& event);
+
+    int GetColumnCount() const;
+    int GetRowCount() const;
 
     int GetNumberOfRowsOrCols() const { return m_noRowsOrCols; }
     void SetNumberOfRowsOrCols(int n) { m_noRowsOrCols = n; }

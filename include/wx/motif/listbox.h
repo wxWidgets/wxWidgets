@@ -70,6 +70,8 @@ public:
     virtual void Append(const wxString& item);
     virtual void Append(const wxString& item, void *clientData);
     virtual void Set(int n, const wxString* choices, void **clientData = NULL);
+            void Set(const wxArrayString& items, void **clientData = NULL)
+                { DoSetItems(items, clientData); }
     virtual int FindString(const wxString& s) const ;
     virtual void Clear();
     virtual void SetSelection(int n, bool select = TRUE);
@@ -96,7 +98,9 @@ public:
     virtual void SetFirstItem(const wxString& s) ;
     
     virtual void InsertItems(int nItems, const wxString items[], int pos);
-    
+            void InsertItems(const wxArrayString& items, int pos)
+                { DoInsertItems(items, pos); }
+
     virtual wxString GetStringSelection() const ;
     virtual bool SetStringSelection(const wxString& s, bool flag = TRUE);
     virtual int Number() const ;

@@ -215,34 +215,7 @@ wxRadioBox::~wxRadioBox()
     m_labelWidget = (WXWidget) 0;
 }
 
-wxString wxRadioBox::GetLabel(int item) const
-{
-    if (item < 0 || item >= m_noItems)
-        return wxEmptyString;
-
-    Widget widget = (Widget) m_radioButtons[item];
-    XmString text;
-    char *s;
-    XtVaGetValues (widget,
-                    XmNlabelString, &text,
-                    NULL);
-
-    if (XmStringGetLtoR (text, XmSTRING_DEFAULT_CHARSET, &s))
-    {
-        // Should we free 'text'???
-        XmStringFree(text);
-        wxString str(s);
-        XtFree (s);
-        return str;
-    }
-    else
-    {
-        XmStringFree(text);
-        return wxEmptyString;
-    }
-}
-
-void wxRadioBox::SetLabel(int item, const wxString& label)
+void wxRadioBox::SetString(int item, const wxString& label)
 {
     if (item < 0 || item >= m_noItems)
         return;
@@ -391,10 +364,10 @@ void wxRadioBox::Show(int n, bool show)
 
     // Please note that this is all we can do: removing the label
     // if switching to unshow state. However, when switching
-    // to the on state, it's the prog. resp. to call SetLabel(item,...)
+    // to the on state, it's the prog. resp. to call SetString(item,...)
     // after this call!!
     if (!show)
-        wxRadioBox::SetLabel (n, " ");
+        wxRadioBox::SetString (n, " ");
 }
 
 // For single selection items only
@@ -475,6 +448,23 @@ void wxRadioBox::ChangeForegroundColour()
 
         DoChangeForegroundColour(radioButton, m_foregroundColour);
     }
+}
+
+static int CalcOtherDim( int items, int dim )
+{
+    return items / dim + ( items % dim ? 1 : 0 );
+}
+
+int wxRadioBox::GetRowCount() const
+{
+    return m_windowStyle & wxRA_SPECIFY_ROWS ? m_noRowsOrCols
+        : CalcOtherDim( GetCount(), m_noRowsOrCols );
+}
+
+int wxRadioBox::GetColumnCount() const
+{
+    return m_windowStyle & wxRA_SPECIFY_COLS ? m_noRowsOrCols
+        : CalcOtherDim( GetCount(), m_noRowsOrCols );
 }
 
 void wxRadioBoxCallback (Widget w, XtPointer clientData,
