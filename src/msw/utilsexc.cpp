@@ -110,7 +110,7 @@ static DWORD wxExecuteThread(wxExecuteData *data)
 
     // send a message indicating process termination to the window
     SendMessage(data->hWnd, wxWM_PROC_TERMINATED, 0, (LPARAM)data);
-    
+
     return 0;
 }
 #endif
@@ -130,7 +130,7 @@ LRESULT APIENTRY _EXPORT wxExecuteWindowCbk(HWND hWnd, UINT message,
             data->handler->OnTerminate((int)data->dwProcessId,
                                        (int)data->dwExitCode);
         }
-        
+
         if ( data->state )
         {
             // we're executing synchronously, tell the waiting thread
@@ -203,7 +203,7 @@ long wxExecute(const wxString& command, bool sync, wxProcess *handler)
     result = ShellExecute(hwndTop, "open", commandName,
                           commandArgs, NULL, SW_SHOWNORMAL);
 #endif // GNUWIN32
-    
+
     if ( ((long)result) <= 32 )
         wxLogSysError(_("Can't execute command '%s'"), command.c_str());
 
@@ -248,19 +248,29 @@ long wxExecute(const wxString& command, bool sync, wxProcess *handler)
     HWND hwnd = ::CreateWindow(wxPanelClassName, NULL, 0, 0, 0, 0, 0, NULL,
                                (HMENU)NULL, wxGetInstance(), 0);
     wxASSERT_MSG( hwnd, "can't create a hidden window for wxExecute" );
-    
+
     FARPROC ExecuteWindowInstance = MakeProcInstance((FARPROC)wxExecuteWindowCbk,
                                                      wxGetInstance());
-    
+
     ::SetWindowLong(hwnd, GWL_WNDPROC, (LONG) ExecuteWindowInstance);
-    
+
     // Alloc data
     wxExecuteData *data = new wxExecuteData;
     data->hProcess    = pi.hProcess;
     data->dwProcessId = pi.dwProcessId;
     data->hWnd        = hwnd;
     data->state       = sync;
-    data->handler     = handler;
+    if ( sync )
+    {
+        wxASSERT_MSG( !handler, "wxProcess param ignored for sync execution" );
+
+        data->handler = NULL;
+    }
+    else
+    {
+        // may be NULL or not
+        data->handler = handler;
+    }
 
     DWORD tid;
     HANDLE hThread = ::CreateThread(NULL,
@@ -280,25 +290,29 @@ long wxExecute(const wxString& command, bool sync, wxProcess *handler)
         // the process still started up successfully...
         return pi.dwProcessId;
     }
-    
+
     if ( !sync )
     {
         // clean up will be done when the process terminates
+
+        // return the pid
         return pi.dwProcessId;
     }
-    
+
     // waiting until command executed
     while ( data->state )
         wxYield();
-    
+
+    DWORD dwExitCode = data->dwExitCode;
     delete data;
 
-    return pi.dwProcessId;
+    // return the exit code
+    return dwExitCode;
 #endif // 0/1
 #else // Win16
     long instanceID = WinExec((LPCSTR) WXSTRINGCAST command, SW_SHOW);
     if (instanceID < 32) return(0);
-    
+
     if (sync) {
         int running;
         do {
@@ -314,7 +328,7 @@ long wxExecute(const wxString& command, bool sync, wxProcess *handler)
 long wxExecute(char **argv, bool sync, wxProcess *handler)
 {
     wxString command;
-    
+
     while ( *argv != NULL )
     {
         command << *argv++ << ' ';

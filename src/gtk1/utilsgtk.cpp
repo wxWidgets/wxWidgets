@@ -252,10 +252,14 @@ bool wxDirExists( const wxString& dir )
 // subprocess routines
 //------------------------------------------------------------------------
 
+// if pid > 0, the execution is async and the data is freed in
+// GTK_EndProcessDetector, if pid < 0, the execution is synchronous and the
+// caller (wxExecute) frees the data
 struct wxEndProcessData
 {
     gint pid, tag;
     wxProcess *process;
+    int  exitcode;
 };
 
 static void GTK_EndProcessDetector(gpointer data, gint source,
@@ -274,7 +278,7 @@ static void GTK_EndProcessDetector(gpointer data, gint source,
     //     one)
     int status = -1;
 #if !defined(__sgi)
-    wait4(proc_data->pid, &status, 0, (rusage *) NULL);
+    wait4(pid, &status, 0, (rusage *) NULL);
 #else
     wait3(&status, 0, (rusage *) NULL);
 #endif
@@ -286,9 +290,16 @@ static void GTK_EndProcessDetector(gpointer data, gint source,
         proc_data->process->OnTerminate(proc_data->pid, status);
 
     if (proc_data->pid > 0)
+    {
         delete proc_data;
+    }
     else
+    {
+        // wxExecute() will know about it
+        proc_data->exitcode = status;
+
         proc_data->pid = 0;
+    }
 }
 
 long wxExecute( char **argv, bool sync, wxProcess *process )
@@ -356,25 +367,34 @@ long wxExecute( char **argv, bool sync, wxProcess *process )
         close(end_proc_detect[1]); // close writing side
         data->tag = gdk_input_add(end_proc_detect[0], GDK_INPUT_READ,
                                   GTK_EndProcessDetector, (gpointer)data);
-        data->pid = pid;
-        if (!sync)
+        if ( sync )
         {
-            data->process = process;
-        }
-        else
-        {
-            data->process = process;
-            data->pid = -(data->pid);
+            wxASSERT_MSG( !process, "wxProcess param ignored for sync exec" );
+            data->process = NULL;
 
+            // sync execution: indicate it by negating the pid
+            data->pid = -pid;
+
+            // it will be set to 0 from GTK_EndProcessDetector
             while (data->pid != 0)
                 wxYield();
 
-            delete data;
-        }
+            int exitcode = data->exitcode;
 
-        // @@@ our return value indicates success even if execvp() in the child
-        //     failed!
-        return pid;
+            delete data;
+
+            return exitcode;
+        }
+        else
+        {
+            // async execution, nothing special to do - caller will be
+            // notified about the process terminationif process != NULL, data
+            // will be deleted in GTK_EndProcessDetector
+            data->process = process;
+            data->pid = pid;
+
+            return pid;
+        }
     }
 }
 
