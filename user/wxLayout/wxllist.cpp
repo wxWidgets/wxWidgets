@@ -24,7 +24,7 @@
 
 #ifdef M_BASEDIR
 #   include "gui/wxllist.h"
-#   define  SHOW_SELECTIONS 0
+#   define  SHOW_SELECTIONS 1
 #else
 #   include "wxllist.h"
 #   define SHOW_SELECTIONS 1

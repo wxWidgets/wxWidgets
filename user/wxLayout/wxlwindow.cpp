@@ -260,11 +260,10 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
    case WXK_END:
       m_llist->MoveCursorToEndOfLine();
       break;
-   case 'c':
-      if(event.ControlDown())
+   default:
+      if(keyCode == 'c' && event.ControlDown())
          Copy();
       break;
-   default:
       if( IsEditable() )
       {
          /* First, handle control keys */
