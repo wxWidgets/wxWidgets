@@ -494,6 +494,12 @@ wxCrashReportImpl::FormatField(DWORD64 modBase,
 {
     wxString s;
 
+    // avoid infinite recursion
+    if ( level > 10 )
+    {
+        return s;
+    }
+
     const HANDLE hProcess = GetCurrentProcess();
 
     DWORD dwTag = 0;
