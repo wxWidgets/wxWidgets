@@ -47,69 +47,84 @@ FORCE_LINK_ME(m_tables)
 //-----------------------------------------------------------------------------
 
 
-typedef struct {
-        int width, units;
-                // universal
-        int leftpos, pixwidth, maxrealwidth;
-                // temporary (depends on width of table)
-    } colStruct;
+struct colStruct
+{
+    int width, units;
+            // width of the column either in pixels or percents
+            // ('width' is the number, 'units' determines its meaning)
+    int minWidth, maxWidth;
+            // minimal/maximal column width. This is needed by HTML 4.0
+            // layouting algorithm and can be determined by trying to
+            // layout table cells with width=1 and width=infinity
+    int leftpos, pixwidth, maxrealwidth;
+            // temporary (depends on actual width of table)
+};
 
-typedef enum {
-        cellSpan,
-        cellUsed,
-        cellFree
-    } cellState;
+enum cellState
+{
+    cellSpan,
+    cellUsed,
+    cellFree
+};
 
-typedef struct {
-        wxHtmlContainerCell *cont;
-        int colspan, rowspan;
-        int minheight, valign;
-        cellState flag;
-    } cellStruct;
+struct cellStruct
+{
+    wxHtmlContainerCell *cont;
+    int colspan, rowspan;
+    int minheight, valign;
+    cellState flag;
+};
 
 
 class wxHtmlTableCell : public wxHtmlContainerCell
 {
-    protected:
-        /* These are real attributes: */
-        bool m_HasBorders;
-                // should we draw borders or not?
-        int m_NumCols, m_NumRows;
-                // number of columns; rows
-        colStruct *m_ColsInfo;
-                // array of column information
-        cellStruct **m_CellInfo;
-                // 2D array of all cells in the table : m_CellInfo[row][column]
-        int m_Spacing;
-                // spaces between cells
-        int m_Padding;
-                // cells internal indentation
+protected:
+    /* These are real attributes: */
 
-    private:
-        /* ...and these are valid only during parsing of table: */
-        int m_ActualCol, m_ActualRow;
-                // number of actual column (ranging from 0..m_NumCols)
+    // should we draw borders or not?
+    bool m_HasBorders;
+    // number of columns; rows
+    int m_NumCols, m_NumRows;
+    // array of column information
+    colStruct *m_ColsInfo;
+    // 2D array of all cells in the table : m_CellInfo[row][column]
+    cellStruct **m_CellInfo;
+    // spaces between cells
+    int m_Spacing;
+    // cells internal indentation
+    int m_Padding;
 
-        // default values (for table and row):
-        wxColour m_tBkg, m_rBkg;
-        wxString m_tValign, m_rValign;
+private:
+    /* ...and these are valid only when parsing the table: */
 
-        double m_PixelScale;
+    // number of actual column (ranging from 0..m_NumCols)
+    int m_ActualCol, m_ActualRow;
+
+    // default values (for table and row):
+    wxColour m_tBkg, m_rBkg;
+    wxString m_tValign, m_rValign;
+
+    double m_PixelScale;
 
 
-    public:
-        wxHtmlTableCell(wxHtmlContainerCell *parent, const wxHtmlTag& tag, double pixel_scale = 1.0);
-        ~wxHtmlTableCell();
-        virtual void Layout(int w);
+public:
+    wxHtmlTableCell(wxHtmlContainerCell *parent, const wxHtmlTag& tag, double pixel_scale = 1.0);
+    ~wxHtmlTableCell();
+    virtual void Layout(int w);
 
-        void AddRow(const wxHtmlTag& tag);
-        void AddCell(wxHtmlContainerCell *cell, const wxHtmlTag& tag);
-    private:
-        void ReallocCols(int cols);
-        void ReallocRows(int rows);
-                // reallocates memory to given number of cols/rows
-                // and changes m_NumCols/m_NumRows value to reflect this change
-                // NOTE! You CAN'T change m_NumCols/m_NumRows before calling this!!
+    void AddRow(const wxHtmlTag& tag);
+    void AddCell(wxHtmlContainerCell *cell, const wxHtmlTag& tag);
+
+private:
+    // Reallocates memory to given number of cols/rows
+    // and changes m_NumCols/m_NumRows value to reflect this change
+    // NOTE! You CAN'T change m_NumCols/m_NumRows before calling this!!
+    void ReallocCols(int cols);
+    void ReallocRows(int rows);
+
+    // Computes minimal and maximal widths of columns. Needs to be called
+    // only once, before first Layout(). 
+    void ComputeMinMaxWidths();
 };
 
 
@@ -174,6 +189,7 @@ void wxHtmlTableCell::ReallocCols(int cols)
     {
            m_ColsInfo[j].width = 0;
            m_ColsInfo[j].units = wxHTML_UNITS_PERCENT;
+           m_ColsInfo[j].minWidth = m_ColsInfo[j].maxWidth = -1;
     }
 
     m_NumCols = cols;
@@ -321,10 +337,43 @@ void wxHtmlTableCell::AddCell(wxHtmlContainerCell *cell, const wxHtmlTag& tag)
 
 
 
+void wxHtmlTableCell::ComputeMinMaxWidths()
+{
+    if (m_NumCols == 0 || m_ColsInfo[0].minWidth != -1) return;
+    
+    int left, right, width;
+
+    m_ColsInfo[0].minWidth = 0; // avoid recursion
+    Layout(1);
+    for (int c = 0; c < m_NumCols; c++)
+    {
+        for (int r = 0; r < m_NumRows; r++)
+        {
+            cellStruct& cell = m_CellInfo[r][c];
+            if (cell.flag == cellUsed)
+            {
+                cell.cont->GetHorizontalConstraints(&left, &right);
+                width = right - left + 1;
+                // HTML 4.0 says it is acceptable to distribute min/max
+                // width of spanning cells evently
+                width /= cell.colspan;
+                width += m_Spacing + 2*m_Padding;
+                for (int j = 0; j < cell.colspan; j++)
+                    if (width > m_ColsInfo[c+j].minWidth)
+                        m_ColsInfo[c+j].minWidth = width;
+            }
+        }
+    }
+    
+    // FIXME -- compute maxWidth as well. Not needed yet, so there's no
+    //          point in computing it. 
+}
 
 
 void wxHtmlTableCell::Layout(int w)
 {
+    ComputeMinMaxWidths();
+
     /*
 
     WIDTH ADJUSTING :
@@ -353,17 +402,25 @@ void wxHtmlTableCell::Layout(int w)
     {
         int wpix = m_Width - (m_NumCols + 1) * m_Spacing;
         int i, j;
-        int wtemp = 0;
 
         // 1a. setup fixed-width columns:
         for (i = 0; i < m_NumCols; i++)
             if (m_ColsInfo[i].units == wxHTML_UNITS_PIXELS)
-                wpix -= (m_ColsInfo[i].pixwidth = m_ColsInfo[i].width);
+            {
+                m_ColsInfo[i].pixwidth = wxMax(m_ColsInfo[i].width, 
+                                               m_ColsInfo[i].minWidth);
+                wpix -= m_ColsInfo[i].pixwidth;
+            }
 
         // 1b. setup floating-width columns:
+        int wtemp = 0;
         for (i = 0; i < m_NumCols; i++)
             if ((m_ColsInfo[i].units == wxHTML_UNITS_PERCENT) && (m_ColsInfo[i].width != 0))
-                wtemp += (m_ColsInfo[i].pixwidth = m_ColsInfo[i].width * wpix / 100);
+            {
+                m_ColsInfo[i].pixwidth = wxMax(m_ColsInfo[i].width * wpix / 100,
+                                               m_ColsInfo[i].minWidth);
+                wtemp += m_ColsInfo[i].pixwidth;
+            }
         wpix -= wtemp;
 
         // 1c. setup defalut columns (no width specification supplied):

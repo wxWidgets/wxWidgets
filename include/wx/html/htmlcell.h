@@ -110,8 +110,13 @@ public:
 
     // Sets cell's behaviour on pagebreaks (see AdjustPagebreak). Default
     // is true - the cell can be split on two pages
-    void SetCanLiveOnPagebreak(bool can) {m_CanLiveOnPagebreak = can;}
+    void SetCanLiveOnPagebreak(bool can) { m_CanLiveOnPagebreak = can; }
 
+    // Returns y-coordinates that contraint the cell, i.e. left is highest 
+    // and right lowest coordinate such that the cell lays between then.
+    // Note: this method does not return meaningful values if you haven't
+    //       called Layout() before!
+    virtual void GetHorizontalConstraints(int *left, int *right) const;
 
 protected:
     wxHtmlCell *m_Next;
@@ -204,6 +209,7 @@ public:
     virtual wxHtmlLinkInfo* GetLink(int x = 0, int y = 0) const;
     virtual const wxHtmlCell* Find(int condition, const void* param) const;
     virtual void OnMouseClick(wxWindow *parent, int x, int y, const wxMouseEvent& event);
+    virtual void GetHorizontalConstraints(int *left, int *right) const;
 
     // returns pointer to the first cell in container or NULL
     wxHtmlCell* GetFirstCell() const {return m_Cells;}
