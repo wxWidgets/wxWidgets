@@ -383,7 +383,8 @@ public:
     #define IMPLEMENT_WXWIN_MAIN \
         extern "C" int WXAPIENTRY WinMain(WXHINSTANCE hInstance,\
                                           WXHINSTANCE hPrevInstance,\
-                                          char *m_lpCmdLine, int nCmdShow)\
+                                          char WXFAR *m_lpCmdLine,\
+                                          int nCmdShow)\
         {\
             return wxEntry(hInstance, hPrevInstance, m_lpCmdLine, nCmdShow);\
         }
