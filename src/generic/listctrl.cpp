@@ -1467,13 +1467,13 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         }
         else
         {
-            if (event.ShiftDown())
+            if (event.ControlDown())
             {
                 m_current = line;
                 m_current->ReverseHilight();
                 RefreshLine( m_current );
             }
-            else if (event.ControlDown())
+            else if (event.ShiftDown())
             {
                 m_current = line;
 

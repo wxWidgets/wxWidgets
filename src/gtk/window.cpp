@@ -3332,9 +3332,25 @@ void wxWindow::SetScrollbar( int orient, int pos, int thumbVisible,
     }
 
     if (orient == wxHORIZONTAL)
+    {
+        gtk_signal_disconnect_by_func( GTK_OBJECT(m_hAdjust),
+            (GtkSignalFunc) gtk_window_hscroll_change_callback, (gpointer) this );
+    
         gtk_signal_emit_by_name( GTK_OBJECT(m_hAdjust), "changed" );
+        
+        gtk_signal_connect( GTK_OBJECT(m_hAdjust), "changed",
+            (GtkSignalFunc) gtk_window_hscroll_change_callback, (gpointer) this );
+    }
     else
+    {
+        gtk_signal_disconnect_by_func( GTK_OBJECT(m_vAdjust),
+            (GtkSignalFunc) gtk_window_vscroll_change_callback, (gpointer) this );
+
         gtk_signal_emit_by_name( GTK_OBJECT(m_vAdjust), "changed" );
+        
+        gtk_signal_connect( GTK_OBJECT(m_vAdjust), "changed",
+            (GtkSignalFunc) gtk_window_vscroll_change_callback, (gpointer) this );
+    }
 }
 
 void wxWindow::SetScrollPos( int orient, int pos, bool WXUNUSED(refresh) )
@@ -3367,9 +3383,25 @@ void wxWindow::SetScrollPos( int orient, int pos, bool WXUNUSED(refresh) )
     if (m_wxwindow->window)
     {
         if (orient == wxHORIZONTAL)
+        {
+            gtk_signal_disconnect_by_func( GTK_OBJECT(m_hAdjust),
+                (GtkSignalFunc) gtk_window_hscroll_callback, (gpointer) this );
+                
             gtk_signal_emit_by_name( GTK_OBJECT(m_hAdjust), "value_changed" );
+            
+            gtk_signal_connect( GTK_OBJECT(m_hAdjust), "value_changed",
+                (GtkSignalFunc) gtk_window_hscroll_callback, (gpointer) this );
+        }
         else
+        {
+            gtk_signal_disconnect_by_func( GTK_OBJECT(m_vAdjust),
+                (GtkSignalFunc) gtk_window_vscroll_callback, (gpointer) this );
+        
             gtk_signal_emit_by_name( GTK_OBJECT(m_vAdjust), "value_changed" );
+
+            gtk_signal_connect( GTK_OBJECT(m_vAdjust), "value_changed",
+                (GtkSignalFunc) gtk_window_vscroll_callback, (gpointer) this );
+        }
     }
 }
 

@@ -65,25 +65,24 @@
 
 class wxFileIconEntry : public wxObject
 {
-    public:
-        wxFileIconEntry(int i) { id = i; }
+public:
+    wxFileIconEntry(int i) { id = i; }
 
-        int id;
+    int id;
 };
 
 
 class wxFileIconsTable
 {
-    public:
+public:
+    wxFileIconsTable();
 
-        wxFileIconsTable();
+    int GetIconID(const wxString& extension, const wxString& mime = wxEmptyString);
+    wxImageList *GetImageList() { return &m_ImageList; }
 
-        int GetIconID(const wxString& extension, const wxString& mime = wxEmptyString);
-        wxImageList *GetImageList() { return &m_ImageList; }
-
-    protected:
-        wxImageList m_ImageList;
-        wxHashTable m_HashTable;
+protected:
+    wxImageList m_ImageList;
+    wxHashTable m_HashTable;
 };
 
 static wxFileIconsTable *g_IconsTable = NULL;
