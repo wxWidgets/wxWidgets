@@ -79,7 +79,7 @@ public:
             m_green == colour.m_green && 
             m_blue == colour.m_blue);
   }
-  bool operator != (const wxColour& colour) { return !(*this == colour); }
+  bool operator != (const wxColour& colour) const { return !(*this == colour); }
 
   void InitFromName(const wxString& col);
 
