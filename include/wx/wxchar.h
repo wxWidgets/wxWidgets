@@ -76,6 +76,11 @@
         #define HAVE_WCHAR_H
     #endif
 #endif
+#if defined(__MWERKS__) && !defined(__MACH__)
+	#ifndef HAVE_WCSLEN
+		#define HAVE_WCSLEN
+	#endif
+#endif
 
 #if wxUSE_WCHAR_T
     #ifdef HAVE_WCHAR_H
