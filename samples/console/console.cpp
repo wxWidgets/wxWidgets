@@ -91,7 +91,7 @@
     #undef TEST_ALL
     static const bool TEST_ALL = TRUE;
 #else
-    #define TEST_ZLIB
+    #define TEST_DIR
 
     static const bool TEST_ALL = FALSE;
 #endif
@@ -307,7 +307,19 @@ static void TestDirEnum()
 {
     puts("*** Testing wxDir::GetFirst/GetNext ***");
 
-    wxDir dir(wxGetCwd());
+    wxString cwd = wxGetCwd();
+    if ( wxDir::Exists(cwd) )
+    {
+        printf("ERROR: current directory '%s' doesn't exist?\n", cwd.c_str());
+        return;
+    }
+
+    wxDir dir(cwd);
+    if ( !dir.IsOpened() )
+    {
+        printf("ERROR: failed to open current directory '%s'.\n", cwd.c_str());
+        return;
+    }
 
     puts("Enumerating everything in current directory:");
     TestDirEnumHelper(dir);
@@ -393,6 +405,38 @@ static void TestDirTraverse()
     wxDir dir(TESTDIR);
     DirPrintTraverser traverser;
     dir.Traverse(traverser, _T(""), wxDIR_DIRS | wxDIR_HIDDEN);
+}
+
+static void TestDirExists()
+{
+    wxPuts(_T("*** Testing wxDir::Exists() ***"));
+
+    static const char *dirnames[] =
+    {
+        _T("."),
+#if defined(__WXMSW__)
+        _T("c:"),
+        _T("c:\\"),
+        _T("\\\\share\\file"),
+        _T("c:\\dos"),
+        _T("c:\\dos\\"),
+        _T("c:\\dos\\\\"),
+        _T("c:\\autoexec.bat"),
+#elif defined(__UNIX__)
+        _T("/"),
+        _T("//"),
+        _T("/usr/bin"),
+        _T("/usr//bin"),
+        _T("/usr///bin"),
+#endif
+    };
+
+    for ( size_t n = 0; n < WXSIZEOF(dirnames); n++ )
+    {
+        printf(_T("%-40s: %s\n"),
+               dirnames[n],
+               wxDir::Exists(dirnames[n]) ? _T("exists") : _T("doesn't exist"));
+    }
 }
 
 #endif // TEST_DIR
@@ -5791,6 +5835,7 @@ int main(int argc, char **argv)
 #endif // TEST_ARRAYS
 
 #ifdef TEST_DIR
+    TestDirExists();
     if ( TEST_ALL )
     {
         TestDirEnum();
