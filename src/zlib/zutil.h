@@ -29,7 +29,7 @@
 #ifndef local
 #  define local static
 #endif
-/* compile with -Dlocal if your debugger can't find static symbols */
+/* compile with -Dlocal if your __WXDEBUG__ger can't find static symbols */
 
 typedef unsigned char  uch;
 typedef uch FAR uchf;
@@ -188,7 +188,7 @@ extern const char *z_errmsg[10]; /* indexed by 2-zlib_error */
 #endif
 
 /* Diagnostic functions */
-#ifdef WXDEBUG
+#ifdef __WXDEBUG__
 #  include <stdio.h>
    extern int z_verbose;
    extern void z_error    OF((char *m));

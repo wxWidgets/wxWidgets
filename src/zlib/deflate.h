@@ -234,7 +234,7 @@ typedef struct internal_state {
     uInt matches;       /* number of string matches in current block */
     int last_eob_len;   /* bit length of EOB code for last block */
 
-#ifdef WXDEBUG
+#ifdef DEBUG
     ulg bits_sent;      /* bit length of the compressed data */
 #endif
 
@@ -281,7 +281,7 @@ void _tr_stored_block OF((deflate_state *s, charf *buf, ulg stored_len,
  * used.
  */
 
-#ifndef WXDEBUG
+#ifndef DEBUG
 /* Inline versions of _tr_tally for speed: */
 
 #if defined(GEN_TREES_H) || !defined(STDC)

@@ -35,7 +35,7 @@
 
 #include "deflate.h"
 
-#ifdef DEBUG
+#ifdef __WXDEBUG__
 #  include <ctype.h>
 #endif
 
@@ -163,11 +163,11 @@ local void copy_block     OF((deflate_state *s, charf *buf, unsigned len,
 local void gen_trees_header OF((void));
 #endif
 
-#ifndef DEBUG
+#ifndef __WXDEBUG__
 #  define send_code(s, c, tree) send_bits(s, tree[c].Code, tree[c].Len)
    /* Send a code of the given tree. c and tree must not have side effects */
 
-#else /* DEBUG */
+#else /* __WXDEBUG__ */
 #  define send_code(s, c, tree) \
      { if (z_verbose>2) fprintf(stderr,"\ncd %3d ",(c)); \
        send_bits(s, tree[c].Code, tree[c].Len); }
@@ -186,7 +186,7 @@ local void gen_trees_header OF((void));
  * Send a value on a given number of bits.
  * IN assertion: length <= 16 and value fits in length bits.
  */
-#ifdef DEBUG
+#ifdef __WXDEBUG__
 local void send_bits      OF((deflate_state *s, int value, int length));
 
 local void send_bits(s, value, length)
@@ -212,7 +212,7 @@ local void send_bits(s, value, length)
         s->bi_valid += length;
     }
 }
-#else /* !DEBUG */
+#else /* !__WXDEBUG__ */
 
 #define send_bits(s, value, length) \
 { int len = length;\
@@ -227,7 +227,7 @@ local void send_bits(s, value, length)
     s->bi_valid += len;\
   }\
 }
-#endif /* DEBUG */
+#endif /* __WXDEBUG__ */
 
 
 #define MAX(a,b) (a >= b ? a : b)
@@ -313,7 +313,7 @@ local void tr_static_init()
  * Genererate the file trees.h describing the static trees.
  */
 #ifdef GEN_TREES_H
-#  ifndef DEBUG
+#  ifndef __WXDEBUG__
 #    include <stdio.h>
 #  endif
 
@@ -392,7 +392,7 @@ void _tr_init(s)
     s->bi_buf = 0;
     s->bi_valid = 0;
     s->last_eob_len = 8; /* enough lookahead for inflate */
-#ifdef DEBUG
+#ifdef __WXDEBUG__
     s->bits_sent = 0L;
 #endif
 
@@ -1182,7 +1182,7 @@ local void bi_windup(s)
     }
     s->bi_buf = 0;
     s->bi_valid = 0;
-#ifdef DEBUG
+#ifdef __WXDEBUG__
     s->bits_sent = (s->bits_sent+7) & ~7;
 #endif
 }
@@ -1203,11 +1203,11 @@ local void copy_block(s, buf, len, header)
     if (header) {
         put_short(s, (ush)len);   
         put_short(s, (ush)~len);
-#ifdef DEBUG
+#ifdef __WXDEBUG__
         s->bits_sent += 2*16;
 #endif
     }
-#ifdef DEBUG
+#ifdef __WXDEBUG__
     s->bits_sent += (ulg)len<<3;
 #endif
     while (len--) {
