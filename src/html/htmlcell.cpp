@@ -32,7 +32,10 @@
 //-----------------------------------------------------------------------------
 
 
-void wxHtmlCell::OnMouseClick(wxWindow *parent, int x, int y, bool left, bool middle, bool right)
+void wxHtmlCell::OnMouseClick(wxWindow *parent, int x, int y,
+                              bool WXUNUSED(left),
+                              bool WXUNUSED(middle),
+                              bool WXUNUSED(right))
 {
     wxString lnk = GetLink(x, y);
     if (lnk != wxEmptyString)
