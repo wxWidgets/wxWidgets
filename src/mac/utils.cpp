@@ -193,7 +193,11 @@ void wxBell()
     SysBeep(30);
 }
 
+#if defined(__WXMAC__) && !defined(__DARWIN__)
+int wxAppTraits::GetOSVersion(int *majorVsn, int *minorVsn)
+#else
 int wxGUIAppTraits::GetOSVersion(int *majorVsn, int *minorVsn)
+#endif
 {
     long theSystem ;
 
@@ -212,6 +216,7 @@ int wxGUIAppTraits::GetOSVersion(int *majorVsn, int *minorVsn)
     return wxMAC;
 #endif
 }
+
 
 // Reading and writing resources (eg WIN.INI, .Xdefaults)
 #if wxUSE_RESOURCES
@@ -861,8 +866,7 @@ void wxMacStringToPascal( const wxChar * from , StringPtr to , bool pc2macEncodi
 
     #include <CodeFragments.h>
 
-    EXTERN_API_C( long )
-    CallUniversalProc(UniversalProcPtr theProcPtr, ProcInfoType procInfo, ...);
+    extern "C" long CallUniversalProc(UniversalProcPtr theProcPtr, ProcInfoType procInfo, ...);
 
     ProcPtr gCallUniversalProc_Proc = NULL;
 
