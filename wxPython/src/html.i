@@ -901,6 +901,11 @@ public:
     void SelectLine(const wxPoint& pos);
     void SelectAll();
 
+    // Convert selection to text:
+    wxString SelectionToText();
+
+    // Converts current page to text:
+    wxString ToText();
     
     void base_OnLinkClicked(const wxHtmlLinkInfo& link);
     void base_OnSetTitle(const wxString& title);
