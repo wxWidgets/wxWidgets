@@ -33,13 +33,13 @@ class wxPaletteRefData: public wxObjectRefData
 
 wxPaletteRefData::wxPaletteRefData()
 {
-  m_colormap = (GdkColormap *) NULL;
-};
+    m_colormap = (GdkColormap *) NULL;
+}
 
 wxPaletteRefData::~wxPaletteRefData()
 {
-  if (m_colormap) gdk_colormap_unref( m_colormap );
-};
+    if (m_colormap) gdk_colormap_unref( m_colormap );
+}
 
 //-----------------------------------------------------------------------------
 
@@ -49,71 +49,71 @@ IMPLEMENT_DYNAMIC_CLASS(wxPalette,wxGDIObject)
 
 wxPalette::wxPalette()
 {
-};
+}
 
 wxPalette::wxPalette( int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue )
 {
-  m_refData = new wxPaletteRefData();
-  Create( n, red, green, blue );
-};
+    m_refData = new wxPaletteRefData();
+    Create( n, red, green, blue );
+}
 
 wxPalette::wxPalette( const wxPalette& palette )
 {
-  Ref( palette );
-};
+    Ref( palette );
+}
 
 wxPalette::~wxPalette()
 {
-};
+}
 
 wxPalette& wxPalette::operator = ( const wxPalette& palette )
 {
-  if (*this == palette) return (*this);
-  Ref( palette );
-  return *this;
-};
+    if (*this == palette) return (*this);
+    Ref( palette );
+    return *this;
+}
 
 bool wxPalette::operator == ( const wxPalette& palette )
 {
-  return m_refData == palette.m_refData;
-};
+    return m_refData == palette.m_refData;
+}
 
 bool wxPalette::operator != ( const wxPalette& palette )
 {
-  return m_refData != palette.m_refData;
-};
+    return m_refData != palette.m_refData;
+}
 
 bool wxPalette::Ok(void) const
 {
-  return (m_refData);
-};
+    return (m_refData != NULL);
+}
 
 bool wxPalette::Create( int WXUNUSED(n), 
                         const unsigned char *WXUNUSED(red), 
 			const unsigned char *WXUNUSED(green), 
 			const unsigned char *WXUNUSED(blue) )
 {
-  wxFAIL_MSG("not implemented");
+    wxFAIL_MSG("not implemented");
 
-  return FALSE;
-};
+    return FALSE;
+}
 
 int wxPalette::GetPixel( const unsigned char WXUNUSED(red), 
                          const unsigned char WXUNUSED(green), 
 			 const unsigned char WXUNUSED(blue) ) const
 {
-  wxFAIL_MSG("not implemented");
+    wxFAIL_MSG("not implemented");
 
-  return 0;
-};
+    return 0;
+}
 
 bool wxPalette::GetRGB( int WXUNUSED(pixel), 
                         unsigned char *WXUNUSED(red), 
 			unsigned char *WXUNUSED(green), 
 			unsigned char *WXUNUSED(blue) ) const
 {
-  wxFAIL_MSG("not implemented");
-
-  return 0;
-};
+    wxFAIL_MSG("not implemented");
+ 
+    return 0;
+}
 

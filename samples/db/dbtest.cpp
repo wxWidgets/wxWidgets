@@ -619,7 +619,8 @@ CeditorDlg::CeditorDlg(wxWindow *parent) : wxPanel (parent, 1, 1, 460, 455)
 	// The constructed where clause below has a sub-query within it "SELECT MIN(NAME) FROM %s" 
 	// to achieve a single row (in this case the first name in alphabetical order).
 	
-  	Contact->whereStr.Printf("NAME = (SELECT MIN(NAME) FROM %s)",Contact->tableName);
+	// commented out because PostgreSQL can't do this
+  	//Contact->whereStr.Printf("NAME = (SELECT MIN(NAME) FROM %s)",Contact->tableName);
 	
 	// NOTE: (const char*) returns a pointer which may not be valid later, so this is short term use only
 	Contact->where = (char*) (const char*) Contact->whereStr;
@@ -779,10 +780,13 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
 			}
 		}
 
+  	    // commented out because PostgreSQL can't do this
+		
 		// Previous record not available, retrieve first record in table
-		Contact->whereStr  = "NAME = (SELECT MIN(NAME) FROM ";
-		Contact->whereStr += Contact->tableName;
-		Contact->whereStr += ")";
+		//Contact->whereStr  = "NAME = (SELECT MIN(NAME) FROM ";
+		//Contact->whereStr += Contact->tableName;
+		//Contact->whereStr += ")";
+		
 		Contact->where = (char*) (const char*) Contact->whereStr;
 		if (!Contact->Query())
 		{
@@ -832,9 +836,12 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
 		// display it, if the query string has changed.
 		if (strcmp(qryWhere, (const char*) Contact->qryWhereStr))
 		{
-			Contact->orderBy		= "NAME";
-			Contact->whereStr		= "NAME = (SELECT MIN(NAME) FROM ";
-			Contact->whereStr		+= CONTACT_TABLE_NAME;
+ 
+ 	           // commented out because PostgreSQL can't do this
+		       Contact->whereStr = "";
+			//Contact->orderBy		= "NAME";
+			//Contact->whereStr		= "NAME = (SELECT MIN(NAME) FROM ";
+			//Contact->whereStr		+= CONTACT_TABLE_NAME;
 			
 			// Append the query where string (if there is one)
 			Contact->qryWhereStr	= qryWhere;
@@ -844,7 +851,7 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
 				Contact->whereStr		+= Contact->qryWhereStr;
 			}
 			// Close the expression with a right paren
-			Contact->whereStr += ")";
+			// Contact->whereStr += ")";
 			// Requery the table
 			Contact->where = (char*) (const char*) Contact->whereStr;
 			if (!Contact->Query())
@@ -876,9 +883,10 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
 		// Query the first record in the table
 		Contact->orderBy		= "NAME";
 
-		Contact->whereStr		= "NAME = (SELECT MIN(NAME) FROM ";
-		Contact->whereStr		+= CONTACT_TABLE_NAME;
-		Contact->whereStr		+= ")";
+	        // commented out because PostgreSQL can't do this
+		//Contact->whereStr		= "NAME = (SELECT MIN(NAME) FROM ";
+		//Contact->whereStr		+= CONTACT_TABLE_NAME;
+		//Contact->whereStr		+= ")";
 
 		Contact->where			= (char*) (const char*) Contact->whereStr;
 		if (!Contact->Query())
@@ -1199,10 +1207,11 @@ bool CeditorDlg::GetNextRec()
 {
 	wxString w;
 
-
-	w  = "NAME = (SELECT MIN(NAME) FROM ";
-	w += Contact->tableName;
-	w += " WHERE NAME > '";
+	// commented out because PostgreSQL can't do this
+	//w  = "NAME = (SELECT MIN(NAME) FROM ";
+	//w += Contact->tableName;
+	// w += " WHERE NAME > '";
+	w = "(NAME > '";
 	w += Contact->Name;
 	w += "'";
 
@@ -1229,9 +1238,11 @@ bool CeditorDlg::GetPrevRec()
 {
 	wxString w;
 
-	w  = "NAME = (SELECT MAX(NAME) FROM ";
-	w +=	Contact->tableName;
-	w += " WHERE NAME < '";
+	// commented out because PostgreSQL can't do this
+	//w  = "NAME = (SELECT MAX(NAME) FROM ";
+	//w +=	Contact->tableName;
+	//w += " WHERE NAME < '";
+	w = "(NAME < '";
 	w += Contact->Name;
 	w += "'";
 

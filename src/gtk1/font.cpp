@@ -108,8 +108,7 @@ wxFont::wxFont( char *xFontName )
     M_FONTDATA->m_font = gdk_font_load( xFontName );
 }
 
-wxFont::wxFont( int pointSize, int family, int style, int weight, bool underlined = FALSE, 
-                const wxString& face = wxEmptyString )
+wxFont::wxFont( int pointSize, int family, int style, int weight, bool underlined, const wxString& face )
 {
     m_refData = new wxFontRefData();
 
@@ -442,12 +441,14 @@ static GdkFont *wxLoadQueryNearestFont( int point_size, int family, int style, i
         int max_size = point_size + 20 * (1 + (point_size/180));
         int min_size = point_size - 20 * (1 + (point_size/180));
 
+        int i;
+
         /* Search for smaller size (approx.) */
-        for (int i=point_size-10; !font && i >= 10 && i >= min_size; i -= 10)
+        for (i=point_size-10; !font && i >= 10 && i >= min_size; i -= 10)
             font = wxLoadQueryFont(i, family, style, weight, underlined, facename );
 
         /* Search for larger size (approx.) */
-        for (int i=point_size+10; !font && i <= max_size; i += 10)
+        for (i=point_size+10; !font && i <= max_size; i += 10)
             font = wxLoadQueryFont( i, family, style, weight, underlined, facename );
 
         /* Try default family */

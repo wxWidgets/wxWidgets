@@ -163,7 +163,7 @@ wxSize wxRadioBox::LayoutItems()
 	    
             int max_len = 0;
             wxNode *node = m_boxes.Nth( j*num_per_major );
-	    for (int i = 0; i< num_per_major; i++)
+	    for (int i1 = 0; i1< num_per_major; i1++)
 	    {
                 GtkWidget *button = GTK_WIDGET( node->Data() );
                 GtkLabel *label = GTK_LABEL( GTK_BUTTON(button)->child );
@@ -181,7 +181,7 @@ wxSize wxRadioBox::LayoutItems()
 	    // we don't know the max_len before
 	    
             node = m_boxes.Nth( j*num_per_major );
-	    for (int i = 0; i< num_per_major; i++)
+	    for (int i2 = 0; i2< num_per_major; i2++)
 	    {
                 GtkWidget *button = GTK_WIDGET( node->Data() );
 		

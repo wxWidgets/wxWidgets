@@ -329,7 +329,7 @@ bool wxScreenDC::StartDrawingOnTop( wxRect *rect )
   
   if (sm_overlayWindow) gdk_window_show( sm_overlayWindow );
 
-  return (sm_overlayWindow);
+  return (sm_overlayWindow != NULL);
 }
 
 bool wxScreenDC::EndDrawingOnTop(void)

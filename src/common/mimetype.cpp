@@ -1031,8 +1031,8 @@ void wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName)
         } currentToken = Field_Type;
 
         // the flags and field values on the current line
-        bool needsterminal = false,
-             copiousoutput = false;
+        bool needsterminal = FALSE,
+             copiousoutput = FALSE;
         wxString strType,
                  strOpenCmd,
                  strPrintCmd,
