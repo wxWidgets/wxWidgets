@@ -29,7 +29,7 @@
 
 // taskbar is only implemented in wxMSW and X11 ports
 #if defined(__WXMSW__) || \
-        defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__X11__)
+        defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXX11__)
     #define wxHAS_TASK_BAR_ICON
 #else
     #undef wxHAS_TASK_BAR_ICON
