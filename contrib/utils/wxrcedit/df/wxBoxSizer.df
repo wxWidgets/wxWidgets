@@ -3,5 +3,5 @@ type sizer
 icon 0
 childtype sizer_item
 derived from panel_item
-var orient of flags wxHORIZONTAL,wxVERTICAL
+var orient of choice wxHORIZONTAL,wxVERTICAL
 var minsize of coord

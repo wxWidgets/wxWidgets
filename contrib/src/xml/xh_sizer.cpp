@@ -24,6 +24,7 @@
 #include "wx/log.h"
 #include "wx/statbox.h"
 #include "wx/notebook.h"
+#include "wx/tokenzr.h"
 
 bool wxSizerXmlHandler::IsSizerNode(wxXmlNode *node)
 {
@@ -152,13 +153,34 @@ wxObject *wxSizerXmlHandler::DoCreateResource()
                                     GetDimension(_T("vgap")), GetDimension(_T("hgap")));
                                     
         else if (m_Class == _T("wxFlexGridSizer"))
-            sizer = new wxFlexGridSizer(GetLong(_T("rows")), GetLong(_T("cols")),
-                                    GetDimension(_T("vgap")), GetDimension(_T("hgap")));
+        {
+            wxFlexGridSizer *fsizer = 
+                  new wxFlexGridSizer(GetLong(_T("rows")), GetLong(_T("cols")),
+                      GetDimension(_T("vgap")), GetDimension(_T("hgap")));
+            sizer = fsizer;
+            wxStringTokenizer tkn;
+            unsigned long l;
+            tkn.SetString(GetParamValue(_T("growablerows")), _T(","));
+            while (tkn.HasMoreTokens())
+            {
+                if (!tkn.GetNextToken().ToULong(&l))
+                    wxLogError(_T("growablerows must be comma-separated list of row numbers"));
+                else
+                    fsizer->AddGrowableRow(l);
+            }
+            tkn.SetString(GetParamValue(_T("growablecols")), _T(","));
+            while (tkn.HasMoreTokens())
+            {
+                if (!tkn.GetNextToken().ToULong(&l))
+                    wxLogError(_T("growablecols must be comma-separated list of column numbers"));
+                else
+                    fsizer->AddGrowableCol(l);
+            }
+        }
 
         wxSize minsize = GetSize(_T("minsize"));
         if (!(minsize == wxDefaultSize))
             sizer->SetMinSize(minsize);
-
 
         wxSizer *old_par = m_ParentSizer;
         m_ParentSizer = sizer;

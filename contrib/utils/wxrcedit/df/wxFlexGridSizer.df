@@ -8,3 +8,6 @@ var cols of integer
 var vgap of dimension
 var hgap of dimension
 var minsize of coord
+var growablecols of text
+var growablerows of text
+
