@@ -54,9 +54,6 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& label,
 
     Widget parentWidget = (Widget) parent->GetClientWidget();
 
-    XmFontList fontList =
-        (XmFontList)m_font.GetFontList(1.0, XtDisplay(parentWidget));
-
     /*
     * Patch Note (important)
     * There is no major reason to put a defaultButtonThickness here.
@@ -69,7 +66,7 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& label,
     m_mainWidget = (WXWidget) XtVaCreateManagedWidget ("button",
         xmPushButtonWidgetClass,
         parentWidget,
-        XmNfontList, fontList,
+        wxFont::GetFontTag(), m_font.GetFontType(XtDisplay(parentWidget)),
         XmNlabelString, text(),
         // See comment for wxButton::SetDefault
         // XmNdefaultButtonShadowThickness, 1, 

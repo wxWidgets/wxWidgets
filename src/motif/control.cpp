@@ -105,23 +105,11 @@ wxString wxControl::GetLabel() const
         return wxEmptyString;
 
     XmString text;
-    char *s;
     XtVaGetValues (widget,
         XmNlabelString, &text,
         NULL);
 
-    if (XmStringGetLtoR (text, XmSTRING_DEFAULT_CHARSET, &s))
-    {
-        wxString str(s);
-        XtFree (s);
-        XmStringFree(text);
-        return str;
-    }
-    else
-    {
-      //        XmStringFree(text);
-        return wxEmptyString;
-    }
+    return wxXmStringToString( text );
 }
 
 bool wxControl::ProcessCommand(wxCommandEvent & event)

@@ -244,33 +244,29 @@ void wxChoice::Clear()
 int wxChoice::GetSelection() const
 {
     XmString text;
-    char *s;
     Widget label = XmOptionButtonGadget ((Widget) m_buttonWidget);
     XtVaGetValues (label,
         XmNlabelString, &text,
         NULL);
+    wxXmString freeMe(text);
+    wxString s = wxXmStringToString( text );
 
-    if (XmStringGetLtoR (text, XmSTRING_DEFAULT_CHARSET, &s))
+    if (!s.IsEmpty())
     {
         int i = 0;
         for (wxStringListNode* node = m_stringList.GetFirst ();
              node; node = node->GetNext ())
         {
-            if (strcmp(node->GetData(), s) == 0)
+            if (wxStrcmp(node->GetData(), s.c_str()) == 0)
             {
-                XmStringFree(text) ;
-                XtFree (s);
                 return i;
             }
             else
                 i++;
         }            // for()
 
-        XmStringFree(text) ;
-        XtFree (s);
         return -1;
     }
-    XmStringFree(text) ;
     return -1;
 }
 
@@ -433,13 +429,16 @@ void wxChoice::ChangeFont(bool keepOriginalSize)
         int width, height, width1, height1;
         GetSize(& width, & height);
 
-        XmFontList fontList = (XmFontList) m_font.GetFontList(1.0, XtDisplay((Widget) m_mainWidget));
-        XtVaSetValues ((Widget) m_formWidget, XmNfontList, fontList, NULL);
-        XtVaSetValues ((Widget) m_buttonWidget, XmNfontList, fontList, NULL);
+        WXFontType fontType =
+            m_font.GetFontType(XtDisplay((Widget) m_mainWidget));
+        WXString fontTag = wxFont::GetFontTag();
+
+        XtVaSetValues ((Widget) m_formWidget, fontTag, fontType, NULL);
+        XtVaSetValues ((Widget) m_buttonWidget, fontTag, fontType, NULL);
 
         for( size_t i = 0; i < m_noStrings; ++i )
             XtVaSetValues( (Widget)m_widgetArray[i],
-                           XmNfontList, fontList,
+                           fontTag, fontType,
                            NULL );
         
         GetSize(& width1, & height1);

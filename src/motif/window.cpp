@@ -1997,7 +1997,8 @@ static void wxCanvasEnterLeave(Widget drawingArea,
 }
 
 // Fix to make it work under Motif 1.0 (!)
-static void wxCanvasMotionEvent (Widget WXUNUSED(drawingArea), XButtonEvent * WXUNUSED(event))
+static void wxCanvasMotionEvent (Widget WXUNUSED(drawingArea),
+                                 XButtonEvent *WXUNUSED(event))
 {
 #if XmVersion <= 1000
     XmDrawingAreaCallbackStruct cbs;

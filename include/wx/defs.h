@@ -2024,6 +2024,10 @@ typedef void*           WXRegion;
 typedef void*           WXFont;
 typedef void*           WXImage;
 typedef void*           WXFontList;
+typedef void*           WXRendition;
+typedef void*           WXRenderTable;
+typedef void*           WXFontType; /* either a XmFontList or XmRenderTable */
+typedef void*           WXString;
 
 typedef unsigned long   Atom;  /* this might fail on a few architectures */
 

@@ -2543,6 +2543,27 @@ equivalent variable and GTK+ is version 1.2.3 or above.
             AC_MSG_ERROR([can't link a simple motif program])
         fi
 
+        save_CFLAGS=$CFLAGS
+        CFLAGS="$CFLAGS $TOOLKIT_INCLUDE"
+        AC_MSG_CHECKING([for Motif 2])
+        AC_TRY_COMPILE([
+                        #include <Xm/Xm.h>
+                       ],
+                       [
+                        #if XmVersion < 2000
+                        #error "Not Motif 2"
+                        #endif
+                       ],
+                       [
+                        AC_DEFINE(__WXMOTIF20__,1)
+                        AC_MSG_RESULT([found])
+                       ],
+                       [
+                        AC_DEFINE(__WXMOTIF20__,0)
+                        AC_MSG_RESULT([not found])
+                       ])
+        CFLAGS=$save_CFLAGS
+
         GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXm$xpm_link${libp_link} -lXmu -lXext -lXt${libsm_ice_link} -lX11"
         TOOLKIT_VPATH="\${top_srcdir}/src/motif${PATH_IFS}\${top_srcdir}/src/motif/xmcombo${PATH_IFS}\${top_srcdir}/src/x11"
         TOOLKIT=MOTIF

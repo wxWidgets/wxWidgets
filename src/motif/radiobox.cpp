@@ -97,31 +97,33 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
 
     wxString label1(wxStripMenuCodes(title));
 
-    XmFontList fontList = (XmFontList) m_font.GetFontList(1.0, XtDisplay(parentWidget));
+    WXFontType fontType = m_font.GetFontType(XtDisplay(parentWidget));
 
     if (label1 != "")
     {
         wxXmString text(label1);
-        (void)XtVaCreateManagedWidget(label1.c_str(),
+        (void)XtVaCreateManagedWidget( label1.c_str(),
 #if wxUSE_GADGETS
-                                             style & wxCOLOURED ? xmLabelWidgetClass
-                                                                : xmLabelGadgetClass,
-                                             (Widget)m_mainWidget,
+                                       style & wxCOLOURED ? xmLabelWidgetClass
+                                                          : xmLabelGadgetClass,
+                                       (Widget)m_mainWidget,
 #else
-                                             xmLabelWidgetClass, (Widget)m_mainWidget,
+                                       xmLabelWidgetClass, 
+                                       (Widget)m_mainWidget,
 #endif
-                                             XmNfontList, fontList,
-                                             XmNlabelString, text(),
+                                       wxFont::GetFontTag(), fontType,
+                                       XmNlabelString, text(),
 // XmNframeChildType is not in Motif 1.2, nor in Lesstif,
 // if it was compiled with 1.2 compatibility
 // TODO: check this still looks OK for Motif 1.2.
 #if (XmVersion > 1200)
-                                             XmNframeChildType, XmFRAME_TITLE_CHILD,
+                                       XmNframeChildType, XmFRAME_TITLE_CHILD,
 #else
-                                             XmNchildType, XmFRAME_TITLE_CHILD,
+                                       XmNchildType, XmFRAME_TITLE_CHILD,
 #endif
-                                             XmNchildVerticalAlignment, XmALIGNMENT_CENTER,
-                                             NULL);
+                                       XmNchildVerticalAlignment, 
+                                           XmALIGNMENT_CENTER,
+                                       NULL);
     }
 
     Arg args[3];
@@ -148,9 +150,9 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
 #if wxUSE_GADGETS
                             xmToggleButtonGadgetClass, radioBoxWidget,
 #else
-                                    xmToggleButtonWidgetClass, radioBoxWidget,
+                            xmToggleButtonWidgetClass, radioBoxWidget,
 #endif
-                                    XmNfontList, fontList,
+                            wxFont::GetFontTag(), fontType,
                                                  NULL);
         XtAddCallback ((Widget) m_radioButtons[i], XmNvalueChangedCallback, (XtCallbackProc) wxRadioBoxCallback,
                      (XtPointer) this);
@@ -194,12 +196,11 @@ void wxRadioBox::SetString(int item, const wxString& label)
     if (label != "")
     {
         wxString label1(wxStripMenuCodes(label));
-        XmString text = XmStringCreateSimple ((char*) (const char*) label1);
+        wxXmString text( label1 );
         XtVaSetValues (widget,
-                        XmNlabelString, text,
+                        XmNlabelString, text(),
                         XmNlabelType, XmSTRING,
                         NULL);
-        XmStringFree (text);
     }
 }
 
@@ -358,7 +359,8 @@ void wxRadioBox::ChangeFont(bool keepOriginalSize)
 {
     wxWindow::ChangeFont(keepOriginalSize);
 
-    XmFontList fontList = (XmFontList) m_font.GetFontList(1.0, XtDisplay((Widget) GetTopWidget()));
+    WXFontType fontType =
+        m_font.GetFontType(XtDisplay((Widget) GetTopWidget()));
 
     int i;
     for (i = 0; i < m_noItems; i++)
@@ -366,7 +368,7 @@ void wxRadioBox::ChangeFont(bool keepOriginalSize)
         WXWidget radioButton = m_radioButtons[i];
 
         XtVaSetValues ((Widget) radioButton,
-                       XmNfontList, fontList,
+                       wxFont::GetFontTag(), fontType,
                        NULL);
     }
 }

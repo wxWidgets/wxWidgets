@@ -109,7 +109,10 @@ public:
         m_string = XmStringCreateLtoR((char *)str.c_str(),
             XmSTRING_DEFAULT_CHARSET);
     }
-    
+
+    // just to avoid calling XmStringFree()
+    wxXmString(const XmString& string) { m_string = string; }
+
     ~wxXmString() { XmStringFree(m_string); }
     
     // semi-implicit conversion to XmString (shouldn't rely on implicit

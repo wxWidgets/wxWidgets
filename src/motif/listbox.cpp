@@ -92,12 +92,11 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
 
     Widget parentWidget = (Widget) parent->GetClientWidget();
 
-    XmFontList fontList = (XmFontList)NULL;
+    WXFontType fontType = (WXFontType)NULL;
 
     if( m_font.Ok() )
     {
-        fontList = (XmFontList)m_font.GetFontList(1.0,
-                                                  XtDisplay(parentWidget));
+        fontType = m_font.GetFontType(XtDisplay(parentWidget));
     }
 
     Arg args[4];
@@ -108,9 +107,9 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
               ( m_windowStyle & wxLB_EXTENDED ) ? XmEXTENDED_SELECT :
                                                   XmBROWSE_SELECT );
     ++count;
-    if( fontList )
+    if( fontType )
     {
-        XtSetArg( args[count], XmNfontList, fontList );
+        XtSetArg( args[count], (String)wxFont::GetFontTag(), fontType );
         ++count;
     }
     if( m_windowStyle & wxLB_ALWAYS_SB )

@@ -247,8 +247,6 @@ void wxMenuBar::SetLabelTop(size_t pos, const wxString& label)
 
 wxString wxMenuBar::GetLabelTop(size_t pos) const
 {
-    wxString str;
-
     wxMenu *menu = GetMenu(pos);
     if ( menu )
     {
@@ -260,17 +258,11 @@ wxString wxMenuBar::GetLabelTop(size_t pos) const
                           XmNlabelString, &text,
                           NULL);
 
-            char *s;
-            if ( XmStringGetLtoR(text, XmSTRING_DEFAULT_CHARSET, &s) )
-            {
-                str = s;
-
-                XtFree(s);
-            }
+            return wxXmStringToString( text );
         }
     }
 
-    return str;
+    return wxEmptyString;
 }
 
 bool wxMenuBar::Append(wxMenu * menu, const wxString& title)
@@ -652,21 +644,21 @@ void wxMenu::SetForegroundColour(const wxColour& col)
 
 void wxMenu::ChangeFont(bool keepOriginalSize)
 {
-    // lesstif 0.87 hangs when setting XmNfontList
-#ifndef LESSTIF_VERSION
+    // Lesstif 0.87 hangs here, but 0.93 does not
+#if !wxCHECK_LESSTIF() || wxCHECK_LESSTIF_VERSION( 0, 93 )
     if (!m_font.Ok() || !m_menuWidget)
         return;
 
-    XmFontList fontList = (XmFontList) m_font.GetFontList(1.0, XtDisplay((Widget) m_menuWidget));
+    WXFontType fontType = m_font.GetFontType(XtDisplay((Widget) m_menuWidget));
 
     XtVaSetValues ((Widget) m_menuWidget,
-        XmNfontList, fontList,
-        NULL);
+                   wxFont::GetFontTag(), fontType,
+                   NULL);
     if (m_buttonWidget)
     {
         XtVaSetValues ((Widget) m_buttonWidget,
-            XmNfontList, fontList,
-            NULL);
+                       wxFont::GetFontTag(), fontType,
+                       NULL);
     }
 
     for ( wxMenuItemList::Node *node = GetMenuItems().GetFirst();
@@ -677,8 +669,8 @@ void wxMenu::ChangeFont(bool keepOriginalSize)
         if (m_menuWidget && item->GetButtonWidget() && m_font.Ok())
         {
             XtVaSetValues ((Widget) item->GetButtonWidget(),
-                XmNfontList, fontList,
-                NULL);
+                           wxFont::GetFontTag(), fontType,
+                           NULL);
         }
         if (item->GetSubMenu())
             item->GetSubMenu()->ChangeFont(keepOriginalSize);

@@ -72,9 +72,9 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
 
     wxString label1(wxStripMenuCodes(label));
 
-    XmString text = XmStringCreateSimple ((char*) (const char*) label1);
+    wxXmString text( label1 );
 
-    XmFontList fontList = (XmFontList) m_font.GetFontList(1.0, XtDisplay(parentWidget));
+    WXFontType fontType = m_font.GetFontType(XtDisplay(parentWidget));
 
     Widget radioButtonWidget = XtVaCreateManagedWidget ("toggle",
 #if wxUSE_GADGETS
@@ -82,12 +82,11 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
 #else
         xmToggleButtonWidgetClass, parentWidget,
 #endif
-        XmNfontList, fontList,
-        XmNlabelString, text,
+        wxFont::GetFontTag(), fontType,
+        XmNlabelString, text(),
         XmNfillOnSelect, True,
         XmNindicatorType, XmONE_OF_MANY, // diamond-shape
         NULL);
-    XmStringFree (text);
 
     XtAddCallback (radioButtonWidget, XmNvalueChangedCallback, (XtCallbackProc) wxRadioButtonCallback,
         (XtPointer) this);

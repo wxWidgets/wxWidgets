@@ -101,25 +101,23 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
     // Use XmStringCreateLtoR(), since XmStringCreateSimple
     // doesn't obey separators.
 //    XmString text = XmStringCreateSimple (label1);
-    XmString text = XmStringCreateLtoR (label1, XmSTRING_DEFAULT_CHARSET);
+    wxXmString text( label1 );
 #endif // 0
     
-    XmString text = XmStringCreateLtoR ((char *)(const char*)label, XmSTRING_DEFAULT_CHARSET);
+    wxXmString text( label );
     
-    XmFontList fontList = (XmFontList) m_font.GetFontList(1.0, XtDisplay(parentWidget));
+    WXFontType fontType = m_font.GetFontType(XtDisplay(parentWidget));
 
     m_labelWidget = XtVaCreateManagedWidget ((char*) (const char*) name,
                                          xmLabelWidgetClass,
                                          borderWidget ? borderWidget : parentWidget,
-                                         XmNfontList, fontList,
-                                         XmNlabelString, text,
+                                         wxFont::GetFontTag(), fontType,
+                                         XmNlabelString, text(),
                                          XmNalignment,
                      ((style & wxALIGN_RIGHT) ? XmALIGNMENT_END :
                      ((style & wxALIGN_CENTRE) ? XmALIGNMENT_CENTER :
                      XmALIGNMENT_BEGINNING)),
                                          NULL);
-
-    XmStringFree (text);
 
     m_mainWidget = borderWidget ? borderWidget : m_labelWidget;
 

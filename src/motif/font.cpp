@@ -39,6 +39,7 @@
 #include "wx/fontutil.h"    // for wxNativeFontInfo
 #include "wx/tokenzr.h"
 #include "wx/settings.h"
+#include "wx/motif/private.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)
 
@@ -56,6 +57,9 @@ public:
 
     WXFontStructPtr     m_fontStruct;   // XFontStruct
     WXFontList          m_fontList;     // Motif XmFontList
+#if wxCHECK_MOTIF_VERSION( 2, 0 )
+    WXRenderTable       m_renderTable;  // Motif XmRenderTable
+#endif
     WXDisplay*          m_display;      // XDisplay
     int                 m_scale;        // Scale * 100
 };
@@ -121,6 +125,9 @@ wxXFont::wxXFont()
 {
     m_fontStruct = (WXFontStructPtr) 0;
     m_fontList = (WXFontList) 0;
+#if wxCHECK_MOTIF_VERSION( 2, 0 )
+    m_renderTable = (WXRenderTable) 0;
+#endif
     m_display = (WXDisplay*) 0;
     m_scale = 100;
 }
@@ -128,8 +135,12 @@ wxXFont::wxXFont()
 wxXFont::~wxXFont()
 {
     XmFontList fontList = (XmFontList) m_fontList;
-
     XmFontListFree (fontList);
+
+#if wxCHECK_MOTIF_VERSION( 2, 0 )
+    XmRenderTable renderTable = (XmRenderTable) m_renderTable;
+    XmRenderTableFree (renderTable);
+#endif
 
     // TODO: why does freeing the font produce a segv???
     // Note that XFreeFont wasn't called in wxWin 1.68 either.
@@ -533,6 +544,24 @@ wxXFont* wxFont::GetInternalFont(double scale, WXDisplay* display) const
     f->m_fontList = XmFontListCreate ((XFontStruct*) font, XmSTRING_DEFAULT_CHARSET);
     M_FONTDATA->m_fonts.Append(f);
 
+#if wxCHECK_MOTIF_VERSION( 2, 0 ) && !wxCHECK_LESSTIF()
+    XmRendition rendition;
+    XmRenderTable renderTable;
+    Arg args[5];
+    int count = 0;
+
+    XtSetArg( args[count], XmNfont, font ); ++count;
+    XtSetArg( args[count], XmNunderlineType,
+              GetUnderlined() ? XmSINGLE_LINE : XmNO_LINE ); ++count;
+    rendition = XmRenditionCreate( XmGetXmDisplay( (Display*)f->m_display ),
+                                   (XmStringTag)"",
+                                   args, count );
+    renderTable = XmRenderTableAddRenditions( NULL, &rendition, 1,
+                                              XmMERGE_REPLACE );
+
+    f->m_renderTable = (WXRenderTable)renderTable;
+#endif
+
     return f;
 }
 
@@ -550,3 +579,31 @@ WXFontList wxFont::GetFontList(double scale, WXDisplay* display) const
     return (f ? f->m_fontList : (WXFontList) 0);
 }
 
+#if wxCHECK_MOTIF_VERSION( 2, 0 )
+
+WXRenderTable wxFont::GetRenderTable(WXDisplay* display) const
+{
+    wxXFont* f = GetInternalFont(1.0, display);
+
+    return (f ? f->m_renderTable : (WXFontList) 0);
+}
+
+#endif
+
+WXFontType wxFont::GetFontType(WXDisplay* display) const
+{
+#if wxCHECK_MOTIF_VERSION( 2, 0 ) && !wxCHECK_LESSTIF()
+    return Ok() ? GetRenderTable(display) : NULL;
+#else
+    return Ok() ? GetFontList(1.0, display) : NULL;
+#endif
+}
+
+/*static*/ WXString wxFont::GetFontTag()
+{
+#if wxCHECK_MOTIF_VERSION( 2, 0 ) && !wxCHECK_LESSTIF()
+    return (WXString)XmNrenderTable;
+#else
+    return (WXString)XmNfontList;
+#endif
+}

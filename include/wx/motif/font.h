@@ -99,7 +99,13 @@ public:
         WXDisplay* display = NULL) const;
     WXFontList GetFontList(double scale = 1.0,
         WXDisplay* display = NULL) const;
-
+#if __WXMOTIF20__
+    WXRenderTable GetRenderTable(WXDisplay* display) const;
+#endif
+    // returns either a XmFontList or XmRendition, depending
+    // on Motif version
+    WXFontType GetFontType(WXDisplay* display) const;
+    static WXString GetFontTag();
 protected:
     virtual void DoSetNativeFontInfo( const wxNativeFontInfo& info );
 
