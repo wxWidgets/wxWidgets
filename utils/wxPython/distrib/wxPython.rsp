@@ -18,6 +18,7 @@ wxPython/lib/sizers/*.txt
 wxPython/src/*.i
 wxPython/src/*.py
 wxPython/src/*.cpp
+wxPython/src/*.c
 wxPython/src/*.h
 wxPython/src/*.ico
 wxPython/src/*.def
