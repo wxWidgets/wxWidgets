@@ -8,12 +8,12 @@ This addendum is written by Robin Dunn, author of the wxPython wrapper
 %----------------------------------------------------------------------
 \section{What is wxPython?}\label{wxpwhat}
 
-wxPython is a blending of the wxWindows GUI classes and the 
+wxPython is a blending of the wxWindows GUI classes and the
 \urlref{Python}{http://www.python.org/} programming language.
 
 \wxheading{Python}
 
-So what is Python?  Go to 
+So what is Python?  Go to
 \urlref{http://www.python.org}{http://www.python.org}
 to learn more, but in a nutshell Python is an interpreted,
 interactive, object-oriented programming language. It is often
@@ -134,7 +134,7 @@ make won't attempt to build them from the .i files.
 I added a few minor features to SWIG to control some of the code
 generation.  If you want to play around with this the patches are in
 wxPython/SWIG.patches and they should be applied to the 1.1p5 version
-of SWIG.  These new patches are documented at 
+of SWIG.  These new patches are documented at
 \urlref{this site}{http://starship.skyport.net/crew/robind/python/\#swig},
 and they should also end up in the 1.2 version of SWIG.
 
@@ -145,7 +145,7 @@ should be named wxPython.)  You can control where the build process
 will dump wxPython by setting the \tt{TARGETDIR} makefile variable.
 The default is \tt{\$(WXWIN)/utils/wxPython}.  If you leave it here
 then you should add \tt{\$(WXWIN)/utils} to your \tt{PYTHONPATH}.
-However, you may prefer to use something that is already on your 
+However, you may prefer to use something that is already on your
 \tt{PYTHONPATH}, such as the \tt{site-packages} directory on Unix
 systems.
 
@@ -168,14 +168,14 @@ above.
 \item Run \tt{nmake -f makefile.vc}
 \item If it builds successfully, congratulations!  Move on to the next
 step.  If not then you can try mailing the wxwin-developers list for
-help.  Also, I will always have a pre-built win32 version of this extension module at 
+help.  Also, I will always have a pre-built win32 version of this extension module at
 \urlref{http://alldunn.com/wxPython}{http://alldunn.com/wxPython}.
-\item Change to the \tt{\$(WXWIN)/utils/wxPython/tests} directory.
-\item Try executing the test programs.  Note that some of these print
+\item Change to the \tt{\$(WXWIN)/utils/wxPython/demo} directory.
+\item Try executing the demo program.  Note that some of the demos print
 diagnositc or test info to standard output, so they will require the
 console version of python.  For example:
 
-\tt{python test1.py}
+\tt{python demo.py}
 
 To run them without requiring a console, you can use the \tt{pythonw.exe}
 version of Python either from the command line or from a shortcut.
@@ -184,7 +184,7 @@ version of Python either from the command line or from a shortcut.
 \wxheading{Unix}
 
 These directions assume that you have already successfully built
-wxWindows for GTK, and installed Python 1.5.1.  If you build Python
+wxWindows for GTK, and installed Python 1.5.1 or later.  If you build Python
 yourself, you will get everything installed that you need simply by
 doing \bftt{make install}.  If you get Python from an RPM or other
 pre-packaged source then there will probably be a separate package
@@ -201,12 +201,12 @@ few sample Setup.in.[platform] files provided.
 
 \tt{make -f Makefile.pre.in boot}
 
-\item Once you have the \tt{Makefile}, run \bftt{make} to build and then 
+\item Once you have the \tt{Makefile}, run \bftt{make} to build and then
 \bftt{make install} to install the wxPython extension module.
-\item Change to the \tt{\$(WXWIN)/utils/wxPython/tests} directory.
-\item Try executing the test programs.  For example:
+\item Change to the \tt{\$(WXWIN)/utils/wxPython/demo} directory.
+\item Try executing the demo program.  For example:
 
-\tt{python test1.py}
+\tt{python demo.py}
 \end{enumerate}
 
 
@@ -221,12 +221,12 @@ I'm also going to assume that you know a bit about wxWindows already,
 enough to notice the similarities in the classes used.
 
 Take a look at the following wxPython program.  You can find a similar
-program in the \tt{wxPython/tests} directory, named \tt{test7.py}.  If your
+program in the \tt{wxPython/demo} directory, named \tt{DialogUnits.py}.  If your
 Python and wxPython are properly installed, you should be able to run
 it by issuing this command:
 
 \begin{indented}{1cm}
-    \bftt{python test7.py}
+    \bftt{python DialogUnits.py}
 \end{indented}
 
 \hrule
@@ -329,7 +329,7 @@ the event table entry should be added to.
 to wxPython since Python can't do method overloading like C++.
 \item There is an \tt{OnCloseWindow} method at line 34 but no call to
 EVT\_CLOSE to attach the event to the method.  Does it really get
-called?  The answer is, yes it does.  This is because many of the 
+called?  The answer is, yes it does.  This is because many of the
 \em{standard} events are attached to windows that have the associated
 \em{standard} method names.  I have tried to follow the lead of the
 C++ classes in this area to determine what is \em{standard} but since
@@ -347,7 +347,7 @@ have a \_\_del\_\_ method that explicitly causes the C++ object to be
 deleted.  If you ever have the need to forcibly delete a window, use
 the Destroy() method as shown on line 36.
 \item Just like wxWindows in C++, wxPython apps need to create a class
-derived from \tt{wxApp} (line 56) that implements a method named 
+derived from \tt{wxApp} (line 56) that implements a method named
 \tt{OnInit}, (line 59.) This method should create the application's
 main window (line 62) and use \tt{wxApp.SetTopWindow()} (line 66) to
 inform wxWindows about it.
@@ -374,6 +374,7 @@ as possible to the C++ spec over time.
 \item \helpref{wxActivateEvent}{wxactivateevent}
 \item \helpref{wxBitmapButton}{wxbitmapbutton}
 \item \helpref{wxBitmap}{wxbitmap}
+\item wxBMPHandler
 \item \helpref{wxBrush}{wxbrush}
 \item \helpref{wxButton}{wxbutton}
 \item \helpref{wxCalculateLayoutEvent}{wxcalculatelayoutevent}
@@ -404,16 +405,21 @@ as possible to the C++ spec over time.
 \item \helpref{wxFont}{wxfont}
 \item \helpref{wxFrame}{wxframe}
 \item \helpref{wxGauge}{wxgauge}
+\item wxGIFHandler
+\item wxGLCanvas
 \item wxGridCell
 \item wxGridEvent
 \item \helpref{wxGrid}{wxgrid}
 \item wxIconizeEvent
 \item \helpref{wxIcon}{wxicon}
 \item \helpref{wxIdleEvent}{wxidleevent}
+\item \helpref{wxImage}{wximage}
+\item \helpref{wxImageHandler}{wximagehandler}
 \item \helpref{wxImageList}{wximagelist}
 \item \helpref{wxIndividualLayoutConstraint}{wxindividuallayoutconstraint}
 \item \helpref{wxInitDialogEvent}{wxinitdialogevent}
 \item \helpref{wxJoystickEvent}{wxjoystickevent}
+\item wxJPEGHandler
 \item \helpref{wxKeyEvent}{wxkeyevent}
 \item \helpref{wxLayoutAlgorithm}{wxlayoutalgorithm}
 \item \helpref{wxLayoutConstraints}{wxlayoutconstraints}
@@ -445,6 +451,7 @@ as possible to the C++ spec over time.
 \item \helpref{wxPalette}{wxpalette}
 \item \helpref{wxPanel}{wxpanel}
 \item \helpref{wxPen}{wxpen}
+\item wxPNGHandler
 \item \helpref{wxPoint}{wxpoint}
 \item \helpref{wxPostScriptDC}{wxpostscriptdc}
 \item \helpref{wxPrintData}{wxprintdata}
@@ -497,7 +504,7 @@ as possible to the C++ spec over time.
 \section{Where to go for help}\label{wxphelp}
 
 Since wxPython is a blending of multiple technologies, help comes from
-multiple sources. See 
+multiple sources. See
 \urlref{http://alldunn.com/wxPython}{http://alldunn.com/wxPython} for details on
 various sources of help, but probably the best source is the
 wxPython-users mail list.  You can view the archive or subscribe by

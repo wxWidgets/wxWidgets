@@ -237,6 +237,9 @@ Returns an invalid tree item if there are no further children.
 
 \helpref{wxTreeCtrl::GetNextChild}{wxtreectrlgetnextchild}
 
+\pythonnote{In wxPython the returned wxTreeItemId and the new cookie
+value are both returned as a tuple containing the two values.}
+
 \membersection{wxTreeCtrl::GetFirstVisibleItem}\label{wxtreectrlgetfirstvisibleitem}
 
 \constfunc{wxTreeItemId}{GetFirstVisibleItem}{\void}
@@ -272,6 +275,13 @@ Returns the tree item data associated with the item.
 
 \helpref{wxTreeItemData}{wxtreeitemdata}
 
+\pythonnote{wxPython provides the following shortcut method:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{\bf{GetPyData(item)}}{Returns the Python Object
+associated with the wxTreeItemData for the given item Id.}
+\end{twocollist}}
+}
+
 \membersection{wxTreeCtrl::GetItemImage}\label{wxtreectrlgetitemimage}
 
 \constfunc{int}{GetItemImage}{\param{const wxTreeItemId\& }{item}}
@@ -292,7 +302,7 @@ Returns the last child of the item (or an invalid tree item if this item has no 
 
 \wxheading{See also}
 
-\helpref{GetFirstChild}{wxtreectrlgetfirstchild}, 
+\helpref{GetFirstChild}{wxtreectrlgetfirstchild},
 \helpref{GetLastChild}{wxtreectrlgetlastchild}
 
 \membersection{wxTreeCtrl::GetNextChild}\label{wxtreectrlgetnextchild}
@@ -312,6 +322,9 @@ Returns an invalid tree item if there are no further children.
 \wxheading{See also}
 
 \helpref{wxTreeCtrl::GetFirstChild}{wxtreectrlgetfirstchild}
+
+\pythonnote{In wxPython the returned wxTreeItemId and the new cookie
+value are both returned as a tuple containing the two values.}
 
 \membersection{wxTreeCtrl::GetNextSibling}\label{wxtreectrlgetnextsibling}
 
@@ -500,6 +513,13 @@ See also: \helpref{IsBold}{wxtreectrlisbold}
 
 Sets the item client data.
 
+\pythonnote{wxPython provides the following shortcut method:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{\bf{SetPyData(item, obj)}}{Associate the given Python
+Object with the wxTreeItemData for the given item Id.}
+\end{twocollist}}
+}
+
 \membersection{wxTreeCtrl::SetItemHasChildren}\label{wxtreectrlsetitemhaschildren}
 
 \func{void}{SetItemHasChildren}{\param{const wxTreeItemId\&}{ item}, \param{bool }{hasChildren = TRUE}}
@@ -531,7 +551,7 @@ Sets the item label.
 
 \func{void}{SortChildren}{\param{const wxTreeItemId\&}{ item}}
 
-Sorts the children of the given item using 
+Sorts the children of the given item using
 \helpref{OnCompareItems}{wxtreectrloncompareitems} method of wxTreeCtrl. You
 should override that method to change the sort order (default is ascending
 alphabetical order).
@@ -585,6 +605,21 @@ wxTreeItemId
 \func{}{wxTreeItemData}{\void}
 
 Default constructor.
+
+\pythonnote{The wxPython version of this constructor optionally
+accepts any Python object as a parameter.  This object is then
+associated with the tree item using the wxTreeItemData as a
+container.
+
+In addition, the following methods are added in wxPython for accessing
+the object:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{\bf{GetData()}}{Returns a reference to the Python Object}
+\twocolitem{\bf{SetData(obj)}}{Associates a new Python Object with the
+wxTreeItemData}
+\end{twocollist}}
+}
+
 
 \membersection{wxTreeItemData::\destruct{wxTreeItemData}}
 
