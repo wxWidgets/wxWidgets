@@ -10,7 +10,7 @@
     #include "wx/msw/palette.h"
 #elif defined(__WXMOTIF__)
     #include "wx/motif/palette.h"
-#elif defined(__WXGTK__)
+#elif defined(__WXGTK__) || defined(__WXCOCOA__)
     #include "wx/generic/paletteg.h"
 #elif defined(__WXX11__)
     #include "wx/x11/palette.h"
