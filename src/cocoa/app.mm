@@ -195,6 +195,9 @@ wxApp::wxApp()
 
 void wxApp::CocoaInstallIdleHandler()
 {
+    // If we're supposed to be stopping, don't add more idle events
+    if(![m_cocoaApp isRunning])
+        return;
     wxLogDebug("wxApp::CocoaInstallIdleHandler");
     m_isIdle = false;
     // Call doIdle for EVERYTHING dammit
@@ -260,7 +263,7 @@ void wxApp::ExitMainLoop()
     if(!m_isIdle)
         [[ NSRunLoop currentRunLoop ] cancelPerformSelector:@selector(doIdle:) target:m_cocoaApp argument:NULL];
 #endif
-    [m_cocoaApp terminate: m_cocoaApp];
+    [m_cocoaApp stop: m_cocoaApp];
 }
 
 // Is a message/event pending?
