@@ -83,7 +83,7 @@ expr	:	WORD OPEN arglist CLOSE
 	;
 
 arglist	:
-			{$$ = NULL;}
+			{$$ = proio_cons(NULL, NULL);}
 	|	arg
 			{$$ = proio_cons($1, NULL);}
 	|
