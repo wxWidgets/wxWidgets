@@ -195,6 +195,12 @@ gtk_listbox_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxLis
         ret = listbox->GetEventHandler()->ProcessEvent( new_event );
     }
     
+    if ((gdk_event->keyval == GDK_Return) && listbox->HasFlag(wxLB_SINGLE) && (!ret))
+    {
+        // eat return in single mode
+        ret = TRUE;
+    }
+        
 #if wxUSE_CHECKLISTBOX
     if ((gdk_event->keyval == ' ') && (listbox->m_hasCheckBoxes) && (!ret))
     {
@@ -311,11 +317,21 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
 
     m_list = GTK_LIST( gtk_list_new() );
 
-    GtkSelectionMode mode = GTK_SELECTION_BROWSE;
+    GtkSelectionMode mode;
     if (style & wxLB_MULTIPLE)
+    {
         mode = GTK_SELECTION_MULTIPLE;
+    }
     else if (style & wxLB_EXTENDED)
+    {
         mode = GTK_SELECTION_EXTENDED;
+    }
+    else
+    {
+        // if style was 0 set single mode
+        m_windowStyle |= wxLB_SINGLE;
+        mode = GTK_SELECTION_BROWSE;
+    }
 
     gtk_list_set_selection_mode( GTK_LIST(m_list), mode );
 
