@@ -120,7 +120,7 @@ struct WXDLLEXPORT wxThemeInfo
     bool wxThemeUse##themename = TRUE;                                      \
     wxTheme *wxCtorFor##themename() { return new classname; }               \
     wxThemeInfo classname::ms_info##themename(wxCtorFor##themename,         \
-                                              #themename, themedesc)
+                                              wxT( #themename ), themedesc)
 
 #endif // _WX_UNIV_THEME_H_
 
