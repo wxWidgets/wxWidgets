@@ -90,7 +90,7 @@ prop.cpp	G
 propform.cpp	G
 proplist.cpp	G
 sashwin.cpp	G
-scrolwin.cpp	G	R
+scrolwin.cpp	G
 splash.cpp	G
 splitter.cpp	G
 statline.cpp	G	U,R,P
