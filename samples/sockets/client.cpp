@@ -182,7 +182,7 @@ MyFrame::MyFrame() : wxFrame((wxFrame *)NULL, -1,
   m_menuSocket->Append(CLIENT_CLOSE, _T("&Close session"), _T("Close connection"));
 
   m_menuDatagramSocket = new wxMenu();
-  m_menuDatagramSocket->Append(CLIENT_DGRAM, _T("Send Datagram"), _("Test UDP sockets"));
+  m_menuDatagramSocket->Append(CLIENT_DGRAM, _T("Send Datagram"), _T("Test UDP sockets"));
 
   // Append menus to the menubar
   m_menuBar = new wxMenuBar();
