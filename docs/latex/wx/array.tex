@@ -529,14 +529,14 @@ the array classes.
 
 \func{\void}{Remove}{\param{T }{item}}
 
-Removes the element from the array either by value: the first item of the
+Removes an element from the array by value: the first item of the
 array equal to {\it item} is removed, an assert failure will result from an
 attempt to remove an item which doesn't exist in the array.
 
 When an element is removed from wxObjArray it is deleted by the array - use 
 \helpref{Detach()}{wxobjarraydetach} if you don't want this to happen. On the
 other hand, when an object is removed from a wxArray nothing happens - you
-should delete the it manually if required:
+should delete it manually if required:
 
 \begin{verbatim}
 T *item = array[n];
@@ -551,11 +551,11 @@ elements of a wxArray (supposed to contain pointers).
 
 \func{\void}{RemoveAt}{\param{size\_t }{index}}
 
-Removes the element from the array either by index. When an element
+Removes an element from the array by index. When an element
 is removed from wxObjArray it is deleted by the array - use 
 \helpref{Detach()}{wxobjarraydetach} if you don't want this to happen. On the
 other hand, when an object is removed from a wxArray nothing happens - you
-should delete the it manually if required:
+should delete it manually if required:
 
 \begin{verbatim}
 T *item = array[n];
