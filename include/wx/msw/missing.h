@@ -197,8 +197,8 @@ typedef struct {
 
 #if (_WIN32_IE >= 0x0300)
 typedef struct tagINITCOMMONCONTROLSEX {
-	DWORD dwSize;
-	DWORD dwICC;
+    DWORD dwSize;
+    DWORD dwICC;
 } INITCOMMONCONTROLSEX,*LPINITCOMMONCONTROLSEX;
 
 #define GDTR_MIN 1
@@ -217,7 +217,7 @@ typedef struct tagINITCOMMONCONTROLSEX {
 #define DTS_APPCANPARSE 16
 #define DTS_RIGHTALIGN 32
 #if ( _WIN32_IE >= 0x500 )
-#define DTS_SHORTDATECENTURYFORMAT	0x000C
+#define DTS_SHORTDATECENTURYFORMAT 0x000C
 #endif /* _WIN32_IE >= 0x500 */
 #endif
 
@@ -236,7 +236,7 @@ typedef struct tagINITCOMMONCONTROLSEX {
 #define DTM_SETSYSTEMTIME 0x1002
 #define DTM_GETRANGE 0x1003
 #define DTM_SETRANGE 0x1004
-#define DTN_DATETIMECHANGE ((UINT)-759) 
+#define DTN_DATETIMECHANGE ((UINT)-759)
 
 #define DateTime_GetMonthCal(hwnd) SNDMSG(hwnd, DTM_GETMONTHCAL, 0, 0)
 #define DateTime_GetMonthCalColor(hwnd, icolor) SNDMSG(hwnd, DTM_GETMONTHCAL, (WPARAM)icolor,0)
@@ -479,6 +479,10 @@ typedef struct {
 } TBBUTTONINFO, *LPTBBUTTONINFO;
 
 #endif // !defined(TBIF_SIZE)
+
+#if !defined(TB_SETDISABLEDIMAGELIST)
+    #define TB_SETDISABLEDIMAGELIST (WM_USER + 54)
+#endif // !defined(TB_SETDISABLEDIMAGELIST)
 
 #endif // wxUSE_TOOLBAR
 
