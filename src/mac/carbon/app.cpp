@@ -1261,6 +1261,23 @@ bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keymessage , long modifi
     }
     if (!handled)
     {
+        wxTopLevelWindowMac *tlw = focus->MacGetTopLevelWindow() ;
+
+        if (tlw)
+        {
+            event.Skip( FALSE ) ;
+            event.SetEventType( wxEVT_CHAR_HOOK );
+            // raw value again
+            event.m_keyCode = realkeyval ;
+
+            handled = tlw->GetEventHandler()->ProcessEvent( event );
+            if ( handled && event.GetSkipped() )
+                handled = false ;
+        }
+    }
+    
+    if ( !handled )
+    {        
         event.Skip( FALSE ) ;
         event.SetEventType( wxEVT_CHAR ) ;
         // raw value again
