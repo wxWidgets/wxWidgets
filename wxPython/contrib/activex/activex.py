@@ -441,6 +441,8 @@ class IEHtmlWindowBase(ActiveXWindow):
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
+        self._setOORInfo(self)
+
     def SetCharset(*args, **kwargs): return _activex.IEHtmlWindowBase_SetCharset(*args, **kwargs)
     def LoadString(*args, **kwargs): return _activex.IEHtmlWindowBase_LoadString(*args, **kwargs)
     def LoadStream(*args, **kwargs): return _activex.IEHtmlWindowBase_LoadStream(*args, **kwargs)

@@ -240,6 +240,9 @@ class wxActiveXWindow : public wxActiveX
 {
 private:
     CLSID       m_CLSID;
+    
+    DECLARE_ABSTRACT_CLASS(wxActiveXWindow);
+
 public:
     wxActiveXWindow( wxWindow* parent, const CLSID& clsId, wxWindowID id = -1,
                      const wxPoint& pos = wxDefaultPosition,
@@ -497,6 +500,8 @@ public:
         return rval;
     }
 };
+
+IMPLEMENT_ABSTRACT_CLASS( wxActiveXWindow, wxWindow );
 %}
 
 
@@ -861,6 +866,8 @@ class wxIEHtmlWindowBase : public wxActiveXWindow {
 private:
     wxAutoOleInterface<IWebBrowser2>  m_webBrowser;
 
+    DECLARE_ABSTRACT_CLASS(wxIEHtmlWindowBase);
+
 public:
 
     wxIEHtmlWindowBase ( wxWindow* parent, const CLSID& clsId, wxWindowID id = -1,
@@ -1043,6 +1050,9 @@ public:
 //         return ! m_bAmbientUserMode;
 //     };
 };
+
+IMPLEMENT_ABSTRACT_CLASS( wxIEHtmlWindowBase, wxActiveXWindow );
+
 %}
 
 
@@ -1059,6 +1069,7 @@ MustHaveApp(wxIEHtmlWindowBase);
 
 class wxIEHtmlWindowBase : public wxActiveXWindow {
 public:
+    %pythonAppend wxIEHtmlWindowBase    "self._setOORInfo(self)"
 
     wxIEHtmlWindowBase ( wxWindow* parent, const CLSID& clsId, wxWindowID id = -1,
                          const wxPoint& pos = wxDefaultPosition,
