@@ -24,6 +24,10 @@ struct MacGSocketData
   CFRunLoopSourceRef source;
 };
 
+// Sockets must use the event loop on the main thread
+// We will store the main loop's reference when Initialize is called
+static CFRunLoopRef s_mainRunLoop = NULL;
+
 void Mac_Socket_Callback(CFSocketRef s, CFSocketCallBackType callbackType,
                          CFDataRef address, const void* data, void* info)
 {
@@ -81,11 +85,24 @@ bool GSocketGUIFunctionsTableConcrete::CanUseEventLoop()
 
 bool GSocketGUIFunctionsTableConcrete::OnInit(void)
 {
+    // No need to store the main loop again
+    if (s_mainRunLoop != NULL)
+        return true;
+
+    // Get the loop for the main thread so our events will actually fire.
+    // The common socket.cpp code will assert if initialize is called from a
+    // secondary thread, otherwise Mac would have the same problems as MSW
+    s_mainRunLoop = CFRunLoopGetCurrent();
+    CFRetain(s_mainRunLoop);
+
     return true;
 }
 
 void GSocketGUIFunctionsTableConcrete::OnExit(void)
 {
+    // Release the reference count, and set the reference back to NULL
+    CFRelease(s_mainRunLoop);
+    s_mainRunLoop = NULL;
 }
 
 bool GSocketGUIFunctionsTableConcrete::Init_Socket(GSocket *socket)
@@ -168,7 +185,7 @@ void GSocketGUIFunctionsTableConcrete::Enable_Events(GSocket *socket)
     struct MacGSocketData* data = _GSocket_Get_Mac_Socket(socket);
     if (!data) return;
 
-    CFRunLoopAddSource(CFRunLoopGetCurrent(), data->source, kCFRunLoopCommonModes);
+    CFRunLoopAddSource(s_mainRunLoop, data->source, kCFRunLoopCommonModes);
 }
 
 void GSocketGUIFunctionsTableConcrete::Disable_Events(GSocket *socket)
@@ -177,7 +194,7 @@ void GSocketGUIFunctionsTableConcrete::Disable_Events(GSocket *socket)
     if (!data) return;
 
     /* CFSocketInvalidate does CFRunLoopRemoveSource anyway */
-    CFRunLoopRemoveSource(CFRunLoopGetCurrent(), data->source, kCFRunLoopCommonModes);
+    CFRunLoopRemoveSource(s_mainRunLoop, data->source, kCFRunLoopCommonModes);
     CFSocketInvalidate(data->socket);
 }
 
