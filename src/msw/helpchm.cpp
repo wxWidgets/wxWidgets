@@ -58,7 +58,7 @@ static bool LoadHtmlHelpLibrary()
     if( !lib )
     {
         wxLogError(_("MS HTML Help functions are unavailable because the MS HTML Help library is not installed on this machine. Please install it."));
-        return FALSE;
+        return false;
     }
     else
     {
@@ -69,11 +69,11 @@ static bool LoadHtmlHelpLibrary()
             wxLogError(_("Failed to initialize MS HTML Help."));
 
             lib->UnrefLib();
-            return FALSE ;
+            return false ;
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 static void UnloadHtmlHelpLibrary()
@@ -99,60 +99,60 @@ bool wxCHMHelpController::Initialize(const wxString& filename)
 {
     // warn on failure
     if( !LoadHtmlHelpLibrary() )
-        return FALSE;
+        return false;
 
     m_helpFile = filename;
-    return TRUE;
+    return true;
 }
 
 bool wxCHMHelpController::LoadFile(const wxString& file)
 {
     if (!file.IsEmpty())
         m_helpFile = file;
-    return TRUE;
+    return true;
 }
 
 bool wxCHMHelpController::DisplayContents()
 {
-    if (m_helpFile.IsEmpty()) return FALSE;
+    if (m_helpFile.IsEmpty()) return false;
 
     wxString str = GetValidFilename(m_helpFile);
 
     gs_htmlHelp(GetSuitableHWND(), (const wxChar*) str, HH_DISPLAY_TOPIC, 0L);
-    return TRUE;
+    return true;
 }
 
 // Use topic or HTML filename
 bool wxCHMHelpController::DisplaySection(const wxString& section)
 {
-    if (m_helpFile.IsEmpty()) return FALSE;
+    if (m_helpFile.IsEmpty()) return false;
 
     wxString str = GetValidFilename(m_helpFile);
 
     // Is this an HTML file or a keyword?
-    bool isFilename = (section.Find(wxT(".htm")) != -1);
+    bool isFilename = (section.Find(wxT(".htm")) != wxNOT_FOUND);
 
     if (isFilename)
         gs_htmlHelp(GetSuitableHWND(), (const wxChar*) str, HH_DISPLAY_TOPIC, (DWORD) (const wxChar*) section);
     else
         KeywordSearch(section);
-    return TRUE;
+    return true;
 }
 
 // Use context number
 bool wxCHMHelpController::DisplaySection(int section)
 {
-    if (m_helpFile.IsEmpty()) return FALSE;
+    if (m_helpFile.IsEmpty()) return false;
 
     wxString str = GetValidFilename(m_helpFile);
 
     gs_htmlHelp(GetSuitableHWND(), (const wxChar*) str, HH_HELP_CONTEXT, (DWORD)section);
-    return TRUE;
+    return true;
 }
 
 bool wxCHMHelpController::DisplayContextPopup(int contextId)
 {
-    if (m_helpFile.IsEmpty()) return FALSE;
+    if (m_helpFile.IsEmpty()) return false;
 
     wxString str = GetValidFilename(m_helpFile);
 
@@ -172,7 +172,7 @@ bool wxCHMHelpController::DisplayContextPopup(int contextId)
     popup.pszText = NULL;
 
     gs_htmlHelp(GetSuitableHWND(), (const wxChar*) str, HH_DISPLAY_TEXT_POPUP, (DWORD) & popup);
-    return TRUE;
+    return true;
 }
 
 bool wxCHMHelpController::DisplayTextPopup(const wxString& text, const wxPoint& pos)
@@ -189,7 +189,7 @@ bool wxCHMHelpController::DisplayTextPopup(const wxString& text, const wxPoint& 
     popup.pszText = (const wxChar*) text;
 
     gs_htmlHelp(GetSuitableHWND(), NULL, HH_DISPLAY_TEXT_POPUP, (DWORD) & popup);
-    return TRUE;
+    return true;
 }
 
 bool wxCHMHelpController::DisplayBlock(long block)
@@ -200,7 +200,7 @@ bool wxCHMHelpController::DisplayBlock(long block)
 bool wxCHMHelpController::KeywordSearch(const wxString& k,
                                         wxHelpSearchMode WXUNUSED(mode))
 {
-    if (m_helpFile.IsEmpty()) return FALSE;
+    if (m_helpFile.IsEmpty()) return false;
 
     wxString str = GetValidFilename(m_helpFile);
 
@@ -215,14 +215,14 @@ bool wxCHMHelpController::KeywordSearch(const wxString& k,
     link.fIndexOnFail = TRUE ;
 
     gs_htmlHelp(GetSuitableHWND(), (const wxChar*) str, HH_KEYWORD_LOOKUP, (DWORD)& link);
-    return TRUE;
+    return true;
 }
 
 bool wxCHMHelpController::Quit()
 {
     gs_htmlHelp(GetSuitableHWND(), 0, HH_CLOSE_ALL, 0L);
 
-    return TRUE;
+    return true;
 }
 
 // Append extension if necessary.

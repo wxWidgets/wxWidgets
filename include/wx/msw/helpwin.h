@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_HELPWIN_H_
@@ -25,7 +25,7 @@
 class WXDLLEXPORT wxWinHelpController: public wxHelpControllerBase
 {
     DECLARE_CLASS(wxWinHelpController)
-        
+
 public:
     wxWinHelpController() {};
     ~wxWinHelpController() {};
@@ -50,7 +50,7 @@ public:
 protected:
     // Append extension if necessary.
     wxString GetValidFilename(const wxString& file) const;
-    
+
 private:
     wxString m_helpFile;
 };

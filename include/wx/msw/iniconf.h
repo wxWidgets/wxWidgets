@@ -2,7 +2,7 @@
 // Name:        include/wx/msw/iniconf.h
 // Purpose:     INI-file based wxConfigBase implementation
 // Author:      Vadim Zeitlin
-// Modified by: 
+// Modified by:
 // Created:     27.07.98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
@@ -56,21 +56,21 @@ public:
   virtual bool GetFirstEntry(wxString& str, long& lIndex) const;
   virtual bool GetNextEntry (wxString& str, long& lIndex) const;
 
-  virtual size_t GetNumberOfEntries(bool bRecursive = FALSE) const;
-  virtual size_t GetNumberOfGroups(bool bRecursive = FALSE) const;
+  virtual size_t GetNumberOfEntries(bool bRecursive = false) const;
+  virtual size_t GetNumberOfGroups(bool bRecursive = false) const;
 
   virtual bool HasGroup(const wxString& strName) const;
   virtual bool HasEntry(const wxString& strName) const;
 
-  // return TRUE if the current group is empty
+  // return true if the current group is empty
   bool IsEmpty() const;
 
-  virtual bool Flush(bool bCurrentOnly = FALSE);
+  virtual bool Flush(bool bCurrentOnly = false);
 
   virtual bool RenameEntry(const wxString& oldName, const wxString& newName);
   virtual bool RenameGroup(const wxString& oldName, const wxString& newName);
 
-  virtual bool DeleteEntry(const wxString& Key, bool bGroupIfEmptyAlso = TRUE);
+  virtual bool DeleteEntry(const wxString& Key, bool bGroupIfEmptyAlso = true);
   virtual bool DeleteGroup(const wxString& szKey);
   virtual bool DeleteAll();
 

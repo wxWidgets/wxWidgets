@@ -135,7 +135,7 @@ bool wxIcon::LoadFile(const wxString& filename,
     if ( !handler )
     {
         // say something?
-        return FALSE;
+        return false;
     }
 
     return handler->Load(this, filename, type, desiredWidth, desiredHeight);
