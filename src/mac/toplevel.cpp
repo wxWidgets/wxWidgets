@@ -137,7 +137,8 @@ static pascal OSStatus MouseEventHandler( EventHandlerCallRef handler , EventRef
 	
 	WindowRef window ;
     short windowPart = ::FindWindow(point, &window);
-    if ( windowPart == inContent )
+
+    if ( IsWindowActive(window) && windowPart == inContent )
     {
 		switch ( GetEventKind( event ) )
 		{
