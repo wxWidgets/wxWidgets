@@ -51,9 +51,6 @@ bool MyApp::OnInit(void)
 #ifdef __WXMSW__
   frame->SetIcon(wxIcon(_T("sashtest_icn")));
 #endif
-#ifdef __X__
-  frame->SetIcon(wxIcon(_T("sashtest.xbm")));
-#endif
 
   // Make a menubar
   wxMenu *file_menu = new wxMenu;
