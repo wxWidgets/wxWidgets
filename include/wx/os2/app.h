@@ -30,6 +30,12 @@ void WXDLLEXPORT wxExit(void);
 // Yield to other apps/messages
 bool WXDLLEXPORT wxYield(void);
 
+extern MRESULT EXPENTRY wxWndProc( HWND
+                                  ,ULONG
+                                  ,MPARAM
+                                  ,MPARAM
+                                 );
+
 // Represents the application. Derive OnInit and declare
 // a new App object to start application
 class WXDLLEXPORT wxApp : public wxAppBase

@@ -74,6 +74,7 @@ public:
 
     //
     // Accessors
+    //
     bool Ok(void) const {return m_bIsInit; }
 
     //

@@ -125,7 +125,8 @@ void wxWindowBase::InitBase()
     m_foregroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOWTEXT);
 
     // GRG, changed Mar/2000
-#if 0 // !defined(__WXMAC__) && !defined(__WXGTK__)
+#if defined(__VISAGECPP__) && __IBMCPP__ < 0x400
+    // For now VisualAge 3.0 needs it this way
     m_font = *wxSWISS_FONT;         //      and this?
 #else
     m_font = settings.GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
