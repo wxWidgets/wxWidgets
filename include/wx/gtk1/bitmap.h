@@ -80,6 +80,8 @@ public:
 
     wxMask *GetMask() const;
     void SetMask( wxMask *mask );
+    
+    wxBitmap GetSubBitmap( const wxRect& rect ) const;
 
     bool SaveFile( const wxString &name, int type, wxPalette *palette = (wxPalette *) NULL );
     bool LoadFile( const wxString &name, int type = wxBITMAP_TYPE_XPM );

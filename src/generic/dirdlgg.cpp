@@ -225,11 +225,12 @@ void wxDirCtrl::CreateItems(const wxTreeItemId &parent)
 
     for (unsigned int i=0; i<m_paths.Count(); i++)
     {
-  dir_item = new wxDirItemData(m_paths[i],m_names[i]);
+        dir_item = new wxDirItemData(m_paths[i],m_names[i]);
 #ifdef __WXMSW__
-  id = AppendItem( parent, m_names[i], -1, -1, dir_item);
+        id = AppendItem( parent, m_names[i], -1, -1, dir_item);
 #else
-  id = AppendItem( parent, m_names[i], 0, 1, dir_item);
+        id = AppendItem( parent, m_names[i], 0, -1, dir_item);
+	SetItemImage( id, 1, wxTreeItemIcon_Expanded );
 #endif
         if (dir_item->m_hasSubDirs) SetItemHasChildren(id);
     }

@@ -366,6 +366,45 @@ void wxBitmap::SetMask( wxMask *mask )
     M_BMPDATA->m_mask = mask;
 }
 
+wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect) const
+{
+    wxCHECK_MSG( Ok() &&
+                 (rect.x >= 0) && (rect.y >= 0) && 
+		 (rect.x+rect.width <= M_BMPDATA->m_width) && (rect.y+rect.height <= M_BMPDATA->m_height),
+                 wxNullBitmap, wxT("invalid bitmap or bitmap region") );
+    
+    wxBitmap ret( rect.width, rect.height, M_BMPDATA->m_bpp );
+    wxASSERT_MSG( ret.Ok(), wxT("GetSubBitmap error") );
+    
+    if (ret.GetPixmap())
+    {
+        GdkGC *gc = gdk_gc_new( ret.GetPixmap() );
+	gdk_draw_pixmap( ret.GetPixmap(), gc, GetPixmap(), rect.x, rect.y, 0, 0, rect.width, rect.height );
+	gdk_gc_destroy( gc );
+    }
+    else
+    {
+        GdkGC *gc = gdk_gc_new( ret.GetBitmap() );
+	gdk_draw_bitmap( ret.GetBitmap(), gc, GetBitmap(), rect.x, rect.y, 0, 0, rect.width, rect.height );
+	gdk_gc_destroy( gc );
+    }
+    
+    if (GetMask())
+    {
+        wxMask *mask = new wxMask;
+        GdkWindow *parent = (GdkWindow*) &gdk_root_parent;
+        mask->m_bitmap = gdk_pixmap_new( parent, rect.width, rect.height, 1 );
+	
+        GdkGC *gc = gdk_gc_new( mask->m_bitmap );
+	gdk_draw_bitmap( mask->m_bitmap, gc, M_BMPDATA->m_mask->m_bitmap, 0, 0, rect.x, rect.y, rect.width, rect.height );
+	gdk_gc_destroy( gc );
+	
+	ret.SetMask( mask );
+    }
+    
+    return ret;
+}
+
 bool wxBitmap::SaveFile( const wxString &name, int type, wxPalette *WXUNUSED(palette) )
 {
     wxCHECK_MSG( Ok(), FALSE, wxT("invalid bitmap") );

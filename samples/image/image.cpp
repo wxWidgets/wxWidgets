@@ -212,10 +212,17 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
   dc.SetPen( *wxWHITE_PEN );
   dc.DrawRectangle( 150, 30, 100, 100 );
 
-  if (my_anti && my_anti->Ok()) dc.DrawBitmap( *my_anti, 250, 140 );
+  if (my_anti && my_anti->Ok()) dc.DrawBitmap( *my_anti, 280, 30 );
 
   dc.DrawText( "PNG handler", 30, 135 );
-  if (my_horse_png && my_horse_png->Ok()) dc.DrawBitmap( *my_horse_png, 30, 150 );
+  if (my_horse_png && my_horse_png->Ok())
+  { 
+    dc.DrawBitmap( *my_horse_png, 30, 150 );
+    wxRect rect(0,0,100,100);
+    wxBitmap sub( my_horse_png->GetSubBitmap(rect) );
+    dc.DrawText( "GetSubBitmap()", 280, 190 );
+    dc.DrawBitmap( sub, 280, 210 );
+  }
 
   dc.DrawText( "JPEG handler", 30, 365 );
   if (my_horse_jpeg && my_horse_jpeg->Ok()) dc.DrawBitmap( *my_horse_jpeg, 30, 380 );
