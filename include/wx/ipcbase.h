@@ -135,7 +135,7 @@ class WXDLLIMPEXP_BASE wxServerBase: public wxObject
 
 public:
   inline wxServerBase(void) {}
-  inline ~wxServerBase(void) {};
+  inline ~wxServerBase(void) {}
 
   // Returns false on error (e.g. port number is already in use)
   virtual bool Create(const wxString& serverName) = 0;
@@ -149,8 +149,8 @@ class WXDLLIMPEXP_BASE wxClientBase: public wxObject
   DECLARE_CLASS(wxClientBase)
 
 public:
-  inline wxClientBase(void) {};
-  inline ~wxClientBase(void) {};
+  inline wxClientBase(void) {}
+  inline ~wxClientBase(void) {}
 
   virtual bool ValidHost(const wxString& host) = 0;
 

@@ -93,7 +93,7 @@ public:
     virtual bool Show(bool show = true);
     void SetFocus();
     virtual bool Enable(bool enable = true);
-    void SetLabelFont(const wxFont& WXUNUSED(font)) {};
+    void SetLabelFont(const wxFont& WXUNUSED(font)) {}
     void SetButtonFont(const wxFont& font) { SetFont(font); }
 
     void Command(wxCommandEvent& event);

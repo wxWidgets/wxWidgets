@@ -52,7 +52,7 @@ DECLARE_ABSTRACT_CLASS(wxVariantData)
 public:
 
 // Construction & destruction
-    wxVariantData() {};
+    wxVariantData() {}
 
 // Override these to provide common functionality
     // Copy to data

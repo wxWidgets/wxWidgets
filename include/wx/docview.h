@@ -193,7 +193,7 @@ public:
     virtual void OnDraw(wxDC *dc) = 0;
     virtual void OnPrint(wxDC *dc, wxObject *info);
     virtual void OnUpdate(wxView *sender, wxObject *hint = (wxObject *) NULL);
-    virtual void OnClosingDocument() {};
+    virtual void OnClosingDocument() {}
     virtual void OnChangeFilename();
 
     // Called by framework if created automatically by the default document

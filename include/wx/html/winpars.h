@@ -211,7 +211,7 @@ class WXDLLIMPEXP_HTML wxHtmlWinTagHandler : public wxHtmlTagHandler
     DECLARE_ABSTRACT_CLASS(wxHtmlWinTagHandler)
 
 public:
-    wxHtmlWinTagHandler() : wxHtmlTagHandler() {};
+    wxHtmlWinTagHandler() : wxHtmlTagHandler() {}
 
     virtual void SetParser(wxHtmlParser *parser) {wxHtmlTagHandler::SetParser(parser); m_WParser = (wxHtmlWinParser*) parser;};
 
@@ -239,7 +239,7 @@ class WXDLLIMPEXP_HTML wxHtmlTagsModule : public wxModule
     DECLARE_DYNAMIC_CLASS(wxHtmlTagsModule)
 
 public:
-    wxHtmlTagsModule() : wxModule() {};
+    wxHtmlTagsModule() : wxModule() {}
 
     virtual bool OnInit();
     virtual void OnExit();

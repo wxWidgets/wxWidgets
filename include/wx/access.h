@@ -233,8 +233,8 @@ class WXDLLEXPORT wxAccessibleBase : public wxObject
     DECLARE_NO_COPY_CLASS(wxAccessibleBase)
 
 public:
-    wxAccessibleBase(wxWindow* win): m_window(win) {};
-    virtual ~wxAccessibleBase() {};
+    wxAccessibleBase(wxWindow* win): m_window(win) {}
+    virtual ~wxAccessibleBase() {}
 
 // Overridables
 

@@ -44,7 +44,7 @@ class WXDLLIMPEXP_ADV wxSplashScreen: public wxFrame
 {
 public:
     // for RTTI macros only
-    wxSplashScreen() {};
+    wxSplashScreen() {}
     wxSplashScreen(const wxBitmap& bitmap, long splashStyle, int milliseconds,
                    wxWindow* parent, wxWindowID id,
                    const wxPoint& pos = wxDefaultPosition,

@@ -222,7 +222,7 @@ public:
 
     void Init();
 
-    ~wxDirFilterListCtrl() {};
+    ~wxDirFilterListCtrl() {}
 
     //// Operations
     void FillFilterList(const wxString& filter, int defaultFilter);

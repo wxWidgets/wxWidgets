@@ -24,7 +24,7 @@ class wxFontEnumerator: public wxObject
 {
 DECLARE_CLASS(wxFontEnumerator)
 public:
-    wxFontEnumerator() {};
+    wxFontEnumerator() {}
 
     // Enumerate the fonts.
     bool Enumerate();

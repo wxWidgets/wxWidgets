@@ -101,7 +101,7 @@ class WXDLLIMPEXP_ADV wxGridCellEnumEditor : public wxGridCellChoiceEditor
 {
 public:
     wxGridCellEnumEditor( const wxString& choices = wxEmptyString );
-    virtual ~wxGridCellEnumEditor() {};
+    virtual ~wxGridCellEnumEditor() {}
 
     virtual wxGridCellEditor*  Clone() const;
 

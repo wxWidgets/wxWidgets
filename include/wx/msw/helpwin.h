@@ -27,8 +27,8 @@ class WXDLLEXPORT wxWinHelpController: public wxHelpControllerBase
     DECLARE_CLASS(wxWinHelpController)
 
 public:
-    wxWinHelpController() {};
-    ~wxWinHelpController() {};
+    wxWinHelpController() {}
+    ~wxWinHelpController() {}
 
     // Must call this to set the filename
     virtual bool Initialize(const wxString& file);

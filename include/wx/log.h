@@ -123,7 +123,7 @@ class WXDLLIMPEXP_BASE wxLog
 {
 public:
     // ctor
-    wxLog(){};
+    wxLog(){}
 
     // Internal buffer.
 

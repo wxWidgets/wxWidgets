@@ -117,7 +117,7 @@ WX_DECLARE_VECTOR(wxClientDataDictionaryPair,wxClientDataDictionaryPairVector);
 class WXDLLIMPEXP_BASE wxClientDataDictionary
 {
 public:
-    wxClientDataDictionary() {};
+    wxClientDataDictionary() {}
 
     // deletes all the data
     void DestroyData()

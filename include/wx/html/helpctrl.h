@@ -79,7 +79,7 @@ public:
     wxHtmlHelpData *GetHelpData() { return &m_helpData; }
 
     virtual bool Quit() ;
-    virtual void OnQuit() {};
+    virtual void OnQuit() {}
 
     void OnCloseFrame(wxCloseEvent& evt);
 
