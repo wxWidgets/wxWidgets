@@ -158,7 +158,7 @@ wxString wxHtmlFilterHTML::ReadFile(const wxFSFile& file) const
     {
         wxString s(_T("<meta http-equiv=\"Content-Type\" content=\""));
         s << file.GetMimeType() <<  _T("\">");
-        return s;
+        return s+doc;
     }
 
     return doc;
