@@ -94,7 +94,8 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
 //
 // TODO: isn't there a GTK function to draw it?
 void
-wxRendererGTK::DrawTreeItemButton(wxDC& dc, const wxRect& rect, int flags)
+wxRendererGTK::DrawTreeItemButton(wxWindow* WXUNUSED(win),
+                                  wxDC& dc, const wxRect& rect, int flags)
 {
     dc.SetBrush(*m_hilightBrush);
     dc.SetPen(*wxBLACK_PEN);
