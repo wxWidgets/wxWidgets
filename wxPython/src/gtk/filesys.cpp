@@ -128,6 +128,11 @@ IMP_PYCALLBACK_FSF_FSSTRING_pure(wxPyFileSystemHandler, wxFileSystemHandler, Ope
 IMP_PYCALLBACK_STRING_STRINGINT_pure(wxPyFileSystemHandler, wxFileSystemHandler, FindFirst);
 IMP_PYCALLBACK_STRING__pure(wxPyFileSystemHandler, wxFileSystemHandler, FindNext);
 
+    wxString wxFileSystem_URLToFileName(const wxString& url) {
+        wxFileName fname = wxFileSystem::URLToFileName(url);
+        return fname.GetFullPath();
+    }
+
 void __wxMemoryFSHandler_AddFile_wxImage(const wxString& filename,
                                          wxImage& image,
                                          long type) {
@@ -151,6 +156,44 @@ void __wxMemoryFSHandler_AddFile_Data(const wxString& filename,
 #ifdef __cplusplus
 extern "C" {
 #endif
+static PyObject *_wrap_wxFileSystem_URLToFileName(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxString * _arg0;
+    PyObject * _obj0 = 0;
+    char *_kwnames[] = { "url", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFileSystem_URLToFileName",_kwnames,&_obj0)) 
+        return NULL;
+{
+    _arg0 = wxString_in_helper(_obj0);
+    if (_arg0 == NULL)
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxString (wxFileSystem_URLToFileName(*_arg0));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{
+#if wxUSE_UNICODE
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
+#else
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+#endif
+}
+{
+    if (_obj0)
+        delete _arg0;
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
 static PyObject *_wrap___wxMemoryFSHandler_AddFile_wxImage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxString * _arg0;
@@ -1311,6 +1354,44 @@ static PyObject *_wrap_wxFileSystem_CleanUpHandlers(PyObject *self, PyObject *ar
     return _resultobj;
 }
 
+static PyObject *_wrap_wxFileSystem_FileNameToURL(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxString * _arg0;
+    PyObject * _obj0 = 0;
+    char *_kwnames[] = { "filename", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFileSystem_FileNameToURL",_kwnames,&_obj0)) 
+        return NULL;
+{
+    _arg0 = wxString_in_helper(_obj0);
+    if (_arg0 == NULL)
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxString (wxFileSystem::FileNameToURL(*_arg0));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{
+#if wxUSE_UNICODE
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
+#else
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+#endif
+}
+{
+    if (_obj0)
+        delete _arg0;
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
 static void *SwigwxInternetFSHandlerTowxFileSystemHandler(void *ptr) {
     wxInternetFSHandler *src;
     wxFileSystemHandler *dest;
@@ -1911,6 +1992,7 @@ static PyMethodDef filesyscMethods[] = {
 	 { "wxInternetFSHandler_OpenFile", (PyCFunction) _wrap_wxInternetFSHandler_OpenFile, METH_VARARGS | METH_KEYWORDS },
 	 { "wxInternetFSHandler_CanOpen", (PyCFunction) _wrap_wxInternetFSHandler_CanOpen, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxInternetFSHandler", (PyCFunction) _wrap_new_wxInternetFSHandler, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileSystem_FileNameToURL", (PyCFunction) _wrap_wxFileSystem_FileNameToURL, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFileSystem_CleanUpHandlers", (PyCFunction) _wrap_wxFileSystem_CleanUpHandlers, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFileSystem_AddHandler", (PyCFunction) _wrap_wxFileSystem_AddHandler, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFileSystem_FindNext", (PyCFunction) _wrap_wxFileSystem_FindNext, METH_VARARGS | METH_KEYWORDS },
@@ -1939,6 +2021,7 @@ static PyMethodDef filesyscMethods[] = {
 	 { "__wxMemoryFSHandler_AddFile_Data", (PyCFunction) _wrap___wxMemoryFSHandler_AddFile_Data, METH_VARARGS | METH_KEYWORDS },
 	 { "__wxMemoryFSHandler_AddFile_wxBitmap", (PyCFunction) _wrap___wxMemoryFSHandler_AddFile_wxBitmap, METH_VARARGS | METH_KEYWORDS },
 	 { "__wxMemoryFSHandler_AddFile_wxImage", (PyCFunction) _wrap___wxMemoryFSHandler_AddFile_wxImage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFileSystem_URLToFileName", (PyCFunction) _wrap_wxFileSystem_URLToFileName, METH_VARARGS | METH_KEYWORDS },
 	 { NULL, NULL }
 };
 #ifdef __cplusplus
