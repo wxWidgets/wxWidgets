@@ -125,6 +125,20 @@ class wxPCXHandler(wxPCXHandlerPtr):
 
 
 
+class wxTIFFHandlerPtr(wxImageHandlerPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __repr__(self):
+        return "<C wxTIFFHandler instance at %s>" % (self.this,)
+class wxTIFFHandler(wxTIFFHandlerPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(imagec.new_wxTIFFHandler,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
 class wxImagePtr :
     def __init__(self,this):
         self.this = this

@@ -226,6 +226,9 @@ class wxColourPtr :
         return val
     def __repr__(self):
         return "<C wxColour instance at %s>" % (self.this,)
+    asTuple = Get
+    def __str__(self): return str(self.asTuple())
+    def __repr__(self): return str(self.asTuple())
 class wxColour(wxColourPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(gdic.new_wxColour,_args,_kwargs)

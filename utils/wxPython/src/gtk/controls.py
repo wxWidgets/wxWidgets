@@ -15,9 +15,6 @@ class wxControlPtr(wxWindowPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def CreateControl(self, *_args, **_kwargs):
-        val = apply(controlsc.wxControl_CreateControl,(self,) + _args, _kwargs)
-        return val
     def Command(self, *_args, **_kwargs):
         val = apply(controlsc.wxControl_Command,(self,) + _args, _kwargs)
         return val
@@ -44,6 +41,12 @@ class wxButtonPtr(wxControlPtr):
         self.thisown = 0
     def SetDefault(self, *_args, **_kwargs):
         val = apply(controlsc.wxButton_SetDefault,(self,) + _args, _kwargs)
+        return val
+    def SetBackgroundColour(self, *_args, **_kwargs):
+        val = apply(controlsc.wxButton_SetBackgroundColour,(self,) + _args, _kwargs)
+        return val
+    def SetForegroundColour(self, *_args, **_kwargs):
+        val = apply(controlsc.wxButton_SetForegroundColour,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxButton instance at %s>" % (self.this,)

@@ -772,6 +772,39 @@ static PyObject *_wrap_new_wxPCXHandler(PyObject *self, PyObject *args, PyObject
     return _resultobj;
 }
 
+static void *SwigwxTIFFHandlerTowxImageHandler(void *ptr) {
+    wxTIFFHandler *src;
+    wxImageHandler *dest;
+    src = (wxTIFFHandler *) ptr;
+    dest = (wxImageHandler *) src;
+    return (void *) dest;
+}
+
+#define new_wxTIFFHandler() (new wxTIFFHandler())
+static PyObject *_wrap_new_wxTIFFHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTIFFHandler * _result;
+    char *_kwnames[] = {  NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxTIFFHandler",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxTIFFHandler *)new_wxTIFFHandler();
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxTIFFHandler_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
 #define new_wxImage(_swigarg0,_swigarg1) (new wxImage(_swigarg0,_swigarg1))
 static PyObject *_wrap_new_wxImage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -1681,6 +1714,7 @@ static PyMethodDef imagecMethods[] = {
 	 { "wxImage_ConvertToBitmap", (PyCFunction) _wrap_wxImage_ConvertToBitmap, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxImage", (PyCFunction) _wrap_delete_wxImage, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxImage", (PyCFunction) _wrap_new_wxImage, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxTIFFHandler", (PyCFunction) _wrap_new_wxTIFFHandler, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPCXHandler", (PyCFunction) _wrap_new_wxPCXHandler, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPNMHandler", (PyCFunction) _wrap_new_wxPNMHandler, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxGIFHandler", (PyCFunction) _wrap_new_wxGIFHandler, METH_VARARGS | METH_KEYWORDS },
@@ -1727,6 +1761,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxGIFHandler","_class_wxGIFHandler",0},
     { "_wxIndividualLayoutConstraint","_class_wxIndividualLayoutConstraint",0},
     { "_wxCursor","_class_wxCursor",0},
+    { "_wxImageHandler","_class_wxTIFFHandler",SwigwxTIFFHandlerTowxImageHandler},
+    { "_wxImageHandler","_wxTIFFHandler",SwigwxTIFFHandlerTowxImageHandler},
     { "_wxImageHandler","_class_wxPCXHandler",SwigwxPCXHandlerTowxImageHandler},
     { "_wxImageHandler","_wxPCXHandler",SwigwxPCXHandlerTowxImageHandler},
     { "_wxImageHandler","_class_wxPNMHandler",SwigwxPNMHandlerTowxImageHandler},
@@ -1747,6 +1783,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_long","_unsigned_long",0},
     { "_long","_signed_long",0},
     { "_wxImageList","_class_wxImageList",0},
+    { "_class_wxTIFFHandler","_wxTIFFHandler",0},
     { "_class_wxAcceleratorTable","_wxAcceleratorTable",0},
     { "_wxDC","_class_wxDC",0},
     { "_class_wxBMPHandler","_wxBMPHandler",0},
@@ -1817,6 +1854,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxAcceleratorEntry","_wxAcceleratorEntry",0},
     { "_class_wxCursor","_wxCursor",0},
     { "_wxPostScriptDC","_class_wxPostScriptDC",0},
+    { "_class_wxImageHandler","_class_wxTIFFHandler",SwigwxTIFFHandlerTowxImageHandler},
+    { "_class_wxImageHandler","_wxTIFFHandler",SwigwxTIFFHandlerTowxImageHandler},
     { "_class_wxImageHandler","_class_wxPCXHandler",SwigwxPCXHandlerTowxImageHandler},
     { "_class_wxImageHandler","_wxPCXHandler",SwigwxPCXHandlerTowxImageHandler},
     { "_class_wxImageHandler","_class_wxPNMHandler",SwigwxPNMHandlerTowxImageHandler},
@@ -1879,6 +1918,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxCoord","_wxPrintQuality",0},
     { "_wxRegion","_class_wxRegion",0},
     { "_class_wxPCXHandler","_wxPCXHandler",0},
+    { "_wxTIFFHandler","_class_wxTIFFHandler",0},
     { "_class_wxBusyInfo","_wxBusyInfo",0},
     { "_class_wxClientDC","_wxClientDC",0},
     { "_class_wxSize","_wxSize",0},
