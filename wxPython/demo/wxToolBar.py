@@ -7,16 +7,18 @@ import images
 
 class TestToolBar(wxFrame):
     def __init__(self, parent, log):
-        wxFrame.__init__(self, parent, -1, 'Test ToolBar',
-                         wxPoint(0,0), wxSize(500, 300))
+        wxFrame.__init__(self, parent, -1, 'Test ToolBar', size=(500, 300))
         self.log = log
         self.timer = None
         EVT_CLOSE(self, self.OnCloseWindow)
 
         wxWindow(self, -1).SetBackgroundColour(wxNamedColour("WHITE"))
 
-        tb = self.CreateToolBar(wxTB_HORIZONTAL|wxNO_BORDER|wxTB_FLAT|wxTB_TEXT)
-        # wxTB_VERTICAL
+        tb = self.CreateToolBar( wxTB_HORIZONTAL
+                                 | wxNO_BORDER
+                                 | wxTB_FLAT
+                                 | wxTB_TEXT
+                                 )
         #tb = wxToolBarSimple(self, -1, wxDefaultPosition, wxDefaultSize,
         #               wxTB_HORIZONTAL | wxNO_BORDER | wxTB_FLAT)
         #self.SetToolBar(tb)
