@@ -39,6 +39,7 @@
 
 - (void)windowDidBecomeKey: (NSNotification *)notification;
 - (void)windowDidResignKey: (NSNotification *)notification;
+- (BOOL)windowShouldClose: (id)sender;
 @end //interface wxNSWindowDelegate
 
 @implementation wxNSWindowDelegate : NSObject
@@ -55,6 +56,19 @@
     wxCocoaNSWindow *win = wxCocoaNSWindow::GetFromCocoa([notification object]);
     wxCHECK_RET(win,"notificationDidResignKey received but no wxWindow exists");
     win->CocoaNotification_DidResignKey();
+}
+
+- (BOOL)windowShouldClose: (id)sender
+{
+    wxLogDebug("windowShouldClose");
+    wxCocoaNSWindow *tlw = wxCocoaNSWindow::GetFromCocoa(sender);
+    if(tlw && !tlw->Cocoa_windowShouldClose())
+    {
+        wxLogDebug("Window will not be closed");
+        return NO;
+    }
+    wxLogDebug("Window will be closed");
+    return YES;
 }
 
 @end //implementation wxNSWindowDelegate
@@ -94,8 +108,6 @@ void wxCocoaNSWindow::DisassociateNSWindow(WX_NSWindow cocoaNSWindow)
 }
 
 - (void)close;
-- (BOOL)windowShouldClose: (id)sender;
-
 @end // wxPoserNSwindow
 
 WX_IMPLEMENT_POSER(wxPoserNSWindow);
@@ -108,18 +120,6 @@ WX_IMPLEMENT_POSER(wxPoserNSWindow);
     if(tlw)
         tlw->Cocoa_close();
     [super close];
-}
-
-- (BOOL)windowShouldClose: (id)sender
-{
-    wxLogDebug("windowShouldClose");
-    wxCocoaNSWindow *tlw = wxCocoaNSWindow::GetFromCocoa(sender);
-    if(tlw && !tlw->Cocoa_windowShouldClose())
-        return NO;
-    wxLogDebug("Window will most likely be CLOSED");
-    if([[wxPoserNSWindow superclass] instancesRespondToSelector:@selector(windowShouldClose:)])
-        return [super windowShouldClose: sender];
-    return YES;
 }
 
 @end // implementation wxPoserNSWindow
