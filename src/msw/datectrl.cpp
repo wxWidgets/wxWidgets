@@ -26,8 +26,6 @@
 #ifndef WX_PRECOMP
 #endif
 
-#ifndef __WXUNIVERSAL__
-
 #include "wx/datectrl.h"
 
 #define _WX_DEFINE_DATE_EVENTS_
@@ -225,4 +223,3 @@ wxDatePickerCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     return wxDatePickerCtrlBase::MSWOnNotify(idCtrl, lParam, result);
 }
 
-#endif // !__WXUNIVERSAL__
