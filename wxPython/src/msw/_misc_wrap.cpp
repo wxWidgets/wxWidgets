@@ -646,6 +646,8 @@ IMP_PYCALLBACK_STRING_STRING(wxPyTipProvider, wxTipProvider, PreprocessTip);
 
 //IMP_PYCALLBACK__(wxPyTimer, wxTimer, Notify);
 
+IMPLEMENT_ABSTRACT_CLASS(wxPyTimer, wxTimer);
+    
 void wxPyTimer::Notify() {
     bool found;
     bool blocked = wxPyBeginBlockThreads();
@@ -6436,6 +6438,34 @@ static PyObject *_wrap_Timer_SetOwner(PyObject *self, PyObject *args, PyObject *
         if (PyErr_Occurred()) SWIG_fail;
     }
     Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Timer_GetOwner(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxPyTimer *arg1 = (wxPyTimer *) 0 ;
+    wxEvtHandler *result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Timer_GetOwner",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxPyTimer,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxEvtHandler *)(arg1)->GetOwner();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = wxPyMake_wxObject(result); 
+    }
     return resultobj;
     fail:
     return NULL;
@@ -28130,6 +28160,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_Timer", (PyCFunction) _wrap_delete_Timer, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Timer__setCallbackInfo", (PyCFunction) _wrap_Timer__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Timer_SetOwner", (PyCFunction) _wrap_Timer_SetOwner, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Timer_GetOwner", (PyCFunction) _wrap_Timer_GetOwner, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Timer_Start", (PyCFunction) _wrap_Timer_Start, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Timer_Stop", (PyCFunction) _wrap_Timer_Stop, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Timer_IsRunning", (PyCFunction) _wrap_Timer_IsRunning, METH_VARARGS | METH_KEYWORDS },
@@ -29590,6 +29621,9 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d,"TIMER_CONTINUOUS", SWIG_FromInt((int)wxTIMER_CONTINUOUS));
     PyDict_SetItemString(d,"TIMER_ONE_SHOT", SWIG_FromInt((int)wxTIMER_ONE_SHOT));
     PyDict_SetItemString(d, "wxEVT_TIMER", PyInt_FromLong(wxEVT_TIMER));
+    
+    wxPyPtrTypeMap_Add("wxTimer", "wxPyTimer");
+    
     PyDict_SetItemString(d,"LOG_FatalError", SWIG_FromInt((int)wxLOG_FatalError));
     PyDict_SetItemString(d,"LOG_Error", SWIG_FromInt((int)wxLOG_Error));
     PyDict_SetItemString(d,"LOG_Warning", SWIG_FromInt((int)wxLOG_Warning));

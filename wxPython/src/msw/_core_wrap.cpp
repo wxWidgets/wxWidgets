@@ -1645,6 +1645,19 @@ bool wxSizer_Remove(wxSizer *self,PyObject *item){
             else 
                 return False;
         }
+bool wxSizer_Detach(wxSizer *self,PyObject *item){
+            bool blocked = wxPyBeginBlockThreads();
+            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, False, True);
+            wxPyEndBlockThreads(blocked);
+            if ( info.window )
+                return self->Detach(info.window);
+            else if ( info.sizer )
+                return self->Detach(info.sizer);
+            else if ( info.gotPos )
+                return self->Detach(info.pos);
+            else 
+                return False;
+        }
 void wxSizer__SetItemMinSize(wxSizer *self,PyObject *item,wxSize const &size){
             bool blocked = wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, False, True);
@@ -35215,6 +35228,37 @@ static PyObject *_wrap_Sizer_Remove(PyObject *self, PyObject *args, PyObject *kw
 }
 
 
+static PyObject *_wrap_Sizer_Detach(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxSizer *arg1 = (wxSizer *) 0 ;
+    PyObject *arg2 = (PyObject *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "item", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Sizer_Detach",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxSizer,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    arg2 = obj1;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)wxSizer_Detach(arg1,arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_Sizer__SetItemMinSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizer *arg1 = (wxSizer *) 0 ;
@@ -41722,6 +41766,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Sizer_Insert", (PyCFunction) _wrap_Sizer_Insert, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Sizer_Prepend", (PyCFunction) _wrap_Sizer_Prepend, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Sizer_Remove", (PyCFunction) _wrap_Sizer_Remove, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Sizer_Detach", (PyCFunction) _wrap_Sizer_Detach, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Sizer__SetItemMinSize", (PyCFunction) _wrap_Sizer__SetItemMinSize, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Sizer_AddItem", (PyCFunction) _wrap_Sizer_AddItem, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Sizer_InsertItem", (PyCFunction) _wrap_Sizer_InsertItem, METH_VARARGS | METH_KEYWORDS },
