@@ -2167,21 +2167,24 @@ bool wxDb::ExecSql(const wxString &pSqlStmt)
 bool wxDb::ExecSql(const wxString &pSqlStmt, wxDbColInf** columns, short& numcols)
 {
     //execute the statement first
-    if (! ExecSql(pSqlStmt)) return false;
+    if (!ExecSql(pSqlStmt))
+        return false;
 
     SWORD noCols;
-    if (SQLNumResultCols (hstmt, &noCols) != SQL_SUCCESS)
+    if (SQLNumResultCols(hstmt, &noCols) != SQL_SUCCESS)
     {
         DispAllErrors(henv, hdbc, hstmt);
         return false;
     }
   
-    if (noCols == 0) return false;
-    else numcols = noCols;
+    if (noCols == 0)
+        return false;
+    else 
+        numcols = noCols;
       
     //  Get column information
     short colNum;
-    UCHAR name[DB_MAX_COLUMN_NAME_LEN+1];
+    wxChar name[DB_MAX_COLUMN_NAME_LEN+1];
     SWORD Sword;
     SDWORD Sdword;
     wxDbColInf* pColInf = new wxDbColInf[noCols];
@@ -2189,7 +2192,7 @@ bool wxDb::ExecSql(const wxString &pSqlStmt, wxDbColInf** columns, short& numcol
     //fill in column information (name, datatype)
     for (colNum = 0; colNum < noCols; colNum++) 
     {
-        if (SQLColAttributes(hstmt,colNum+1, SQL_COLUMN_NAME,
+        if (SQLColAttributes(hstmt, colNum+1, SQL_COLUMN_NAME,
             name, sizeof(name),
             &Sword, &Sdword) != SQL_SUCCESS)
         {
@@ -2198,9 +2201,9 @@ bool wxDb::ExecSql(const wxString &pSqlStmt, wxDbColInf** columns, short& numcol
             return false;
         }
   
-        wxStrncpy(pColInf[colNum].colName, (const char*) name, DB_MAX_COLUMN_NAME_LEN);
+        wxStrncpy(pColInf[colNum].colName, name, DB_MAX_COLUMN_NAME_LEN);
         
-        if (SQLColAttributes(hstmt,colNum+1, SQL_COLUMN_TYPE,
+        if (SQLColAttributes(hstmt, colNum+1, SQL_COLUMN_TYPE,
             NULL, 0, &Sword, &Sdword) != SQL_SUCCESS)
         {
             DispAllErrors(henv, hdbc, hstmt);
@@ -2210,43 +2213,42 @@ bool wxDb::ExecSql(const wxString &pSqlStmt, wxDbColInf** columns, short& numcol
         
         switch (Sdword)
         {
-        case SQL_VARCHAR:
-        case SQL_CHAR:
-            pColInf[colNum].dbDataType = DB_DATA_TYPE_VARCHAR;
-            break;
-  
-        case SQL_TINYINT:
-        case SQL_SMALLINT:
-        case SQL_INTEGER:
-        case SQL_BIT:
-            pColInf[colNum].dbDataType = DB_DATA_TYPE_INTEGER;
-            break;
-        case SQL_DOUBLE:
-        case SQL_DECIMAL:
-        case SQL_NUMERIC:
-        case SQL_FLOAT:
-        case SQL_REAL:
-            pColInf[colNum].dbDataType = DB_DATA_TYPE_FLOAT;
-            break;
-        case SQL_DATE:
-        case SQL_TIMESTAMP:
-            pColInf[colNum].dbDataType = DB_DATA_TYPE_DATE;
-            break;
-        case SQL_BINARY:
-            pColInf[colNum].dbDataType = DB_DATA_TYPE_BLOB;
-            break;
+            case SQL_VARCHAR:
+            case SQL_CHAR:
+                pColInf[colNum].dbDataType = DB_DATA_TYPE_VARCHAR;
+                break;
+            case SQL_TINYINT:
+            case SQL_SMALLINT:
+            case SQL_INTEGER:
+            case SQL_BIT:
+                pColInf[colNum].dbDataType = DB_DATA_TYPE_INTEGER;
+                break;
+            case SQL_DOUBLE:
+            case SQL_DECIMAL:
+            case SQL_NUMERIC:
+            case SQL_FLOAT:
+            case SQL_REAL:
+                pColInf[colNum].dbDataType = DB_DATA_TYPE_FLOAT;
+                break;
+            case SQL_DATE:
+            case SQL_TIMESTAMP:
+                pColInf[colNum].dbDataType = DB_DATA_TYPE_DATE;
+                break;
+            case SQL_BINARY:
+                pColInf[colNum].dbDataType = DB_DATA_TYPE_BLOB;
+                break;
 #ifdef __WXDEBUG__
-        default:
-            wxString errMsg;
-            errMsg.Printf(wxT("SQL Data type %d currently not supported by wxWindows"), Sdword);
-            wxLogDebug(errMsg,wxT("ODBC DEBUG MESSAGE"));
+            default:
+                wxString errMsg;
+                errMsg.Printf(wxT("SQL Data type %d currently not supported by wxWidgets"), Sdword);
+                wxLogDebug(errMsg,wxT("ODBC DEBUG MESSAGE"));
 #endif
         }
     }
  
     *columns = pColInf;
     return true;
-}  // wxDb::ExecSqlGetInf()
+}  // wxDb::ExecSql()
 
 /********** wxDb::GetNext()  **********/
 bool wxDb::GetNext(void)
@@ -2984,10 +2986,10 @@ wxDbColInf *wxDb::GetColumns(const wxString &tableName, int *numCols, const wxCh
                         case SQL_CHAR:
                             colInf[colNo].dbDataType = DB_DATA_TYPE_VARCHAR;
                         break;
-
                         case SQL_TINYINT:
                         case SQL_SMALLINT:
                         case SQL_INTEGER:
+                        case SQL_BIT:
                             colInf[colNo].dbDataType = DB_DATA_TYPE_INTEGER;
                             break;
                         case SQL_DOUBLE:
@@ -2998,6 +3000,7 @@ wxDbColInf *wxDb::GetColumns(const wxString &tableName, int *numCols, const wxCh
                             colInf[colNo].dbDataType = DB_DATA_TYPE_FLOAT;
                             break;
                         case SQL_DATE:
+                        case SQL_TIMESTAMP:
                             colInf[colNo].dbDataType = DB_DATA_TYPE_DATE;
                             break;
                         case SQL_BINARY:
