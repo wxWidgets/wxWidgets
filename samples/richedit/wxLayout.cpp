@@ -19,6 +19,7 @@
 #include "wxLayout.h"
 #include <wx/textfile.h>
 
+#include <iostream.h>
 
 #include   "Micon.xpm"
 
@@ -299,10 +300,12 @@ void MyFrame::OnCommand( wxCommandEvent &event )
       m_lwin->Cut();
       m_lwin->Refresh(FALSE);
       break;
+#ifdef M_BASEDIR
    case ID_FIND:
       m_lwin->Find("void");
       m_lwin->Refresh(FALSE);
       break;
+#endif
    case ID_HTML:
    {
       wxLayoutExportObject *export;

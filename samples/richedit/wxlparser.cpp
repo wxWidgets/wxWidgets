@@ -178,7 +178,7 @@ wxLayoutExportObject *wxLayoutExport(wxLayoutExportStatus *status,
                                      int mode, int flags)
 {
    wxASSERT(status);
-   wxLayoutExportObject * export;
+   wxLayoutExportObject * exp;
 
    if(status->m_iterator == NULLIT) // end of line
    {
@@ -186,29 +186,29 @@ wxLayoutExportObject *wxLayoutExport(wxLayoutExportStatus *status,
          // reached end of list
          return NULL;
    }
-   export = new wxLayoutExportObject();
+   exp = new wxLayoutExportObject();
    wxLayoutObjectType type;
    if(status->m_iterator != NULLIT)
    {
       type = (** status->m_iterator).GetType();
       if( mode == WXLO_EXPORT_AS_OBJECTS || ! WXLO_IS_TEXT(type)) // simple case
       {
-         export->type = WXLO_EXPORT_OBJECT;
-         export->content.object = *status->m_iterator;
+         exp->type = WXLO_EXPORT_OBJECT;
+         exp->content.object = *status->m_iterator;
          status->m_iterator++;
-         return export;
+         return exp;
       }
    }
    else
    {  // iterator == NULLIT
       if(mode == WXLO_EXPORT_AS_OBJECTS)
       {
-         export->type = WXLO_EXPORT_EMPTYLINE;
-         export->content.object = NULL; //empty line
+         exp->type = WXLO_EXPORT_EMPTYLINE;
+         exp->content.object = NULL; //empty line
          status->m_line = status->m_line->GetNextLine();
          if(status->m_line)
             status->m_iterator = status->m_line->GetFirstObject();
-         return export;
+         return exp;
       }
       else
          type = WXLO_TYPE_TEXT;
@@ -254,9 +254,9 @@ wxLayoutExportObject *wxLayoutExport(wxLayoutExportStatus *status,
       status->m_iterator++;
    }
 
-   export->type = (mode == WXLO_EXPORT_AS_HTML)
+   exp->type = (mode == WXLO_EXPORT_AS_HTML)
       ?  WXLO_EXPORT_HTML : WXLO_EXPORT_TEXT;
-   export->content.text = str;
-   return export;
+   exp->content.text = str;
+   return exp;
 }
 

@@ -472,36 +472,42 @@ wxDialUpManagerImpl::CheckStatusInternal(void)
    // This can be used under Win 9x, too!
    struct hostent     *hp;
    struct sockaddr_in  serv_addr;
-   int sockfd;
 
    m_IsOnline = 0; // assume false
    if((hp = gethostbyname(m_BeaconHost)) == NULL)
       return; // no DNS no net
-
-   serv_addr.sin_family = hp->h_addrtype;
+   
+   serv_addr.sin_family		= hp->h_addrtype;
    memcpy(&serv_addr.sin_addr,hp->h_addr, hp->h_length);
-   serv_addr.sin_port = htons(m_BeaconPort);
-   if( ( sockfd = socket(hp->h_addrtype, SOCK_STREAM, 0)) < 0)
-   {
+   serv_addr.sin_port		= htons(m_BeaconPort);
+
+      // PING method:
+
+   int	sockfd;
+   if( ( sockfd = socket(hp->h_addrtype, SOCK_STREAM, 0)) < 0) 
+   {	
       //  sys_error("cannot create socket for gw");
       return;
    }
-   // PING method:
-
-   if(sendto(sockfd, "hello", strlen("hello"), /* flags */ 0,
-             (struct sockaddr *)&serv_addr,
+   
+   if(sendto(sockfd, "hello",
+             strlen("hello"), /* flags */ 0,
+             (struct  sockaddr *) &serv_addr,
              sizeof(serv_addr)) == -1)
+   {
+      close(sockfd);
       return;
-#if 0
+   }
 
+#if 0
    if( connect(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0)
    {
       //sys_error("cannot connect to server");
       return;
    }
    //connected!
-   close(sockfd);
 #endif
+   close(sockfd);
    m_IsOnline = TRUE;
 }
 

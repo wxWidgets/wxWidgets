@@ -1,0 +1,21 @@
+#
+# File:		makefile.unx
+# Author:	Julian Smart
+# Created:	1998
+# Updated:	
+# Copyright:	(c) 1998 Julian Smart
+#
+# "%W% %G%"
+#
+# Makefile for richedit example (UNIX).
+
+top_srcdir = @top_srcdir@
+top_builddir = ../..
+program_dir = samples/richedit
+
+PROGRAM=wxLayout
+
+OBJECTS=$(PROGRAM).o kbList.o wxllist.o wxlparser.o wxlwindow.o
+
+include ../../src/makeprog.env
+

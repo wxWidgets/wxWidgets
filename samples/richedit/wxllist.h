@@ -1,7 +1,7 @@
 /*-*- c++ -*-********************************************************
  * wxLayoutList.h - a formatted text rendering engine for wxWindows *
  *                                                                  *
- * (C) 1999 by Karsten Ballüder (Ballueder@usa.net)                 *
+ * (C) 1999 by Karsten Ballüder (ballueder@gmx.net)                 *
  *                                                                  *
  * $Id$
  *******************************************************************/
@@ -28,6 +28,8 @@
 #   define WXMENU_LAYOUT_LCLICK     1111
 #   define WXMENU_LAYOUT_RCLICK     1112
 #   define WXMENU_LAYOUT_DBLCLICK   1113
+#else // for Mahogany only:
+#   include "MObject.h"
 #endif
 
 // use the wxWindows caret class instead of home grown cursor whenever possible
@@ -96,6 +98,9 @@ class WXDLLEXPORT wxFont;
     its size.
 */
 class wxLayoutObject
+#ifdef M_BASEDIR
+   : public MObject
+#endif
 {
 public:
    /** This structure can be used to contain data associated with the
@@ -210,6 +215,9 @@ public:
 protected:
    /// optional data for application's use
    UserData *m_UserData;
+#if defined (M_BASEDIR) && defined (DEBUG)
+   MOBJECT_NAME(wxLayoutObject)
+#endif
 };
 
 /// Define a list type of wxLayoutObject pointers.
@@ -640,15 +648,6 @@ public:
    CoordType GetHeight(void) const { return m_Height; }
    /// Returns the width of this line.
    CoordType GetWidth(void) const { return m_Width; }
-   /** This will recalculate the position and size of this line.
-       If called recursively it will abort if the position of an
-       object is unchanged, assuming that none of the following
-       objects need to move.
-       @param recurse if greater 0 then it will be used as the
-       minimum(!) recursion level, continue with all lines till the end of
-       the list or until the coordinates no longer changed.
-   */
-   void RecalculatePositions(int recurse, wxLayoutList *llist);
    /// Recalculates the position of this line on the canvas.
    wxPoint RecalculatePosition(wxLayoutList *llist);
 
@@ -681,10 +680,6 @@ public:
 
       m_Dirty = true;
    }
-   /** Marks the following lines as dirty.
-       @param recurse if -1 recurse to end of list, otherwise depth of recursion.
-   */
-   void MarkNextDirty(int recurse = 0);
    /// Reset the dirty flag
    void MarkClean() { m_Dirty = false; m_updateLeft = -1; }
 
@@ -699,17 +694,10 @@ private:
        @param height new height
    */
    void SetHeight(CoordType height, wxLayoutList *llist)
-      { m_Height = height; RecalculatePositions(true, llist); }
+      { m_Height = height; MarkDirty(); }
 
-   /** Moves the linenumbers one on, because a line has been inserted
-       or deleted.
-       @param delta either +1 or -1
-    */
-   void MoveLines(int delta)
-      {
-         m_LineNumber += delta;
-         if(m_Next) m_Next->MoveLines(delta);
-      }
+   /** Updates the line numbers. */
+   void ReNumber(void);
    //@}
 private:
    /// The line number.
@@ -776,6 +764,14 @@ public:
    /// Empty: clear the list but leave font settings.
    void Empty(void);
 
+   /** Enable or disable auto-formatting. Normally, while editing this 
+       should be enabled which is the default. While
+       inserting/deleting lots of text, it makes sense to temporarily
+       disable this.
+       @param enable TRUE to enable, FALSE to disable
+   */
+   void SetAutoFormatting(bool enable = TRUE)
+      { m_AutoFormat = enable; }
    /**@name Cursor Management */
    //@{
    /** Set new cursor position.
@@ -971,10 +967,13 @@ public:
        @param offset an optional offset to shift printout
        @param top optional y coordinate where to start drawing
        @param bottom optional y coordinate where to stop drawing
+       @param clipStrictly if set, do not draw objects which reach
+       beyond "bottom". Set this when printing.
    */
    void Draw(wxDC &dc,
              const wxPoint &offset = wxPoint(0,0),
-             CoordType top = -1, CoordType bottom = -1);
+             CoordType top = -1, CoordType bottom = -1,
+             bool clipStrictly = false);
 
    /** Calculates new layout for the list, like Draw() but does not
        actually draw it.
@@ -989,6 +988,13 @@ public:
                wxPoint *cpos = NULL,
                wxPoint *csize = NULL);
 
+   /** Ensure that the whole list will be recalculate on the next call 
+       to Layout() or Draw().
+       @param redrawAll TRUE or FALSE to reset it
+   */
+   void ForceTotalLayout(bool redrawAll = TRUE)
+      { m_ReLayoutAll = redrawAll; }
+   
    /** Returns the screen coordinates relating to a given cursor
        position and the size of the cursor at that position.
        @param dc for which to calculate it
@@ -1014,9 +1020,8 @@ public:
    wxPoint GetSize(void) const;
 
    /** Returns the cursor position on the screen.
-       @return cursor position in pixels
    */
-   wxPoint GetCursorScreenPos(wxDC &dc);
+   wxPoint GetCursorScreenPos(void) const;
 
    /** Draws the cursor.
        @param active If true, draw a bold cursor to mark window as
@@ -1134,25 +1139,7 @@ public:
    void DecNumLines() { m_numLines--; }
 
    /// get the line by number
-   wxLayoutLine *GetLine(CoordType index) const
-   {
-       wxASSERT_MSG( (0 <= index) && (index < (CoordType)m_numLines),
-                     "invalid index" );
-
-       wxLayoutLine *line;
-       CoordType n = index;
-       for ( line = m_FirstLine; line && n-- > 0; line = line->GetNextLine() )
-           ;
-
-       if ( line )
-       {
-          // should be the right one
-          wxASSERT( line->GetLineNumber() == index );
-       }
-
-       return line;
-   }
-
+   wxLayoutLine *GetLine(CoordType index) const;
 private:
    /// Clear the list.
    void InternalClear(void);
@@ -1167,6 +1154,10 @@ private:
    /// Is the update rectangle valid?
    bool    m_UpdateRectValid;
 
+   /// Shall we auto-format?
+   bool    m_AutoFormat;
+   /// Shall we re-layout everything?
+   bool    m_ReLayoutAll;
    /**@name Cursor Management */
    //@{
    /// Where the text cursor (column,line) is.

@@ -1,7 +1,7 @@
 /*-*- c++ -*-********************************************************
  * wxLwindow.h : a scrolled Window for displaying/entering rich text*
  *                                                                  *
- * (C) 1998, 1999 by Karsten Ballüder (Ballueder@usa.net)           *
+ * (C) 1998, 1999 by Karsten Ballüder (karsten@phy.hw.ac.uk)        *
  *                                                                  *
  * $Id$
  *******************************************************************/
@@ -34,6 +34,9 @@
 #   endif // USE_PCH
 #   include "gui/wxlwindow.h"
 #   include "gui/wxlparser.h"
+
+#   include "MDialogs.h"
+#   include "strutil.h"
 #else
 #   ifdef   __WXMSW__
 #       include <wx/msw/private.h>
@@ -57,7 +60,7 @@
 // macros
 // ----------------------------------------------------------------------------
 
-#ifdef WXLAYOUT_DEBUG
+#ifdef DEBUG
 #  define   WXLO_DEBUG(x)      wxLogDebug x
 #else
 #  define WXLO_DEBUG(x)
@@ -74,6 +77,10 @@
 /// offset to the right and bottom for when to redraw scrollbars
 #define   WXLO_ROFFSET   20
 #define   WXLO_BOFFSET   20
+
+/// scroll margins when selecting with the mouse
+#define WXLO_SCROLLMARGIN_X   10
+#define WXLO_SCROLLMARGIN_Y   10
 
 /// the size of one scrollbar page in pixels
 static const int X_SCROLL_PAGE = 10;
@@ -105,6 +112,8 @@ BEGIN_EVENT_TABLE(wxLayoutWindow,wxScrolledWindow)
 
    EVT_SET_FOCUS(wxLayoutWindow::OnSetFocus)
    EVT_KILL_FOCUS(wxLayoutWindow::OnKillFocus)
+
+//   EVT_IDLE(wxLayoutWindow::ResizeScrollbars)
 END_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
@@ -119,7 +128,7 @@ static bool IsDirectionKey(long keyCode);
 // ============================================================================
 
 #ifndef wxWANTS_CHARS
-   #define wxWANTS_CHARS 0
+#   define wxWANTS_CHARS 0
 #endif
 
 // ----------------------------------------------------------------------------
@@ -146,6 +155,9 @@ wxLayoutWindow::wxLayoutWindow(wxWindow *parent)
    m_llist = new wxLayoutList();
    m_BGbitmap = NULL;
    m_ScrollToCursor = false;
+#ifndef __WXMSW__
+   m_FocusFollowMode = false;
+#endif
    SetWrapMargin(0);
 
    // no scrollbars initially
@@ -194,8 +206,7 @@ wxLayoutWindow::Clear(int family,
    wxScrolledWindow::Clear();
    ResizeScrollbars(true);
    SetDirty();
-   SetModified(false);
-
+   SetModified(FALSE);
    if ( m_Editable )
       m_CursorVisibility = 1;
 
@@ -204,15 +215,12 @@ wxLayoutWindow::Clear(int family,
       GetCaret()->Show();
 #endif // WXLAYOUT_USE_CARET
 
-   DoPaint((wxRect *)NULL);
+   RequestUpdate((wxRect *)NULL);
 }
 
 void wxLayoutWindow::Refresh(bool eraseBackground, const wxRect *rect)
 {
    wxScrolledWindow::Refresh(eraseBackground, rect);
-
-   ResizeScrollbars();
-//FIXME is this needed? It causes problems...   ScrollToCursor();
 }
 
 void
@@ -220,15 +228,12 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
 {
    wxClientDC dc( this );
    PrepareDC( dc );
-#ifdef __WXMSW__
-   if ( eventId != WXLOWIN_MENU_MOUSEMOVE )
+   if ( eventId != WXLOWIN_MENU_MOUSEMOVE
+#ifndef __WXMSW__
+        || m_FocusFollowMode
 #endif
-   {
-      // moving the mouse in a window shouldn't give it the focus!
-      // Oh yes! wxGTK's focus handling is so broken, that this is the 
-      // only sensible way to go.
+      )
       SetFocus();
-   }
 
    wxPoint findPos;
    findPos.x = dc.DeviceToLogicalX(event.GetX());
@@ -238,11 +243,42 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
    findPos.y -= WXLO_YOFFSET;
 
    if(findPos.x < 0)
-       findPos.x = 0;
+      findPos.x = 0;
    if(findPos.y < 0)
-       findPos.y = 0;
+      findPos.y = 0;
 
    m_ClickPosition = wxPoint(event.GetX(), event.GetY());
+
+   // Scroll the window if the mouse is at the end of it:
+   if(m_Selecting && eventId == WXLOWIN_MENU_MOUSEMOVE)
+   {
+      //WXLO_DEBUG(("selecting at : %d/%d", (int) event.GetX(), (int)event.GetY()));
+      int left, top;
+      ViewStart(&left, &top);
+      wxSize size = GetClientSize();
+      int xdelta, ydelta;
+      
+      if(event.GetX() < WXLO_SCROLLMARGIN_X)
+         xdelta = -(WXLO_SCROLLMARGIN_X-event.GetX());
+      else if(event.GetX() > size.x-WXLO_SCROLLMARGIN_X)
+         xdelta = event.GetX()-size.x+WXLO_SCROLLMARGIN_X;
+      else
+         xdelta = 0;
+      if(event.GetY() < WXLO_SCROLLMARGIN_Y)
+         ydelta = -(WXLO_SCROLLMARGIN_Y-event.GetY());
+      else if(event.GetY() > size.y-WXLO_SCROLLMARGIN_Y)
+         ydelta = event.GetY()-size.y+WXLO_SCROLLMARGIN_Y;
+      else
+         ydelta = 0;
+
+      //WXLO_DEBUG(("xdelta: %d", (int) xdelta));
+      if(xdelta != 0 || ydelta != 0)
+      {
+         top  += ydelta; if(top < 0) top = 0;
+         left += xdelta; if(left < 0) left = 0;
+         Scroll(left, top);
+      }
+   }
 
    wxPoint cursorPos;
    bool found;
@@ -253,141 +289,132 @@ wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
    // has the mouse only been moved?
    switch ( eventId )
    {
-      case WXLOWIN_MENU_MOUSEMOVE:
-         {
-            // this variables is used to only erase the message in the status
-            // bar if we had put it there previously - otherwise empting status
-            // bar might be undesirable
-            static bool s_hasPutMessageInStatusBar = false;
+   case WXLOWIN_MENU_MOUSEMOVE:
+   {
+      // this variables is used to only erase the message in the status
+      // bar if we had put it there previously - otherwise empting status
+      // bar might be undesirable
+      static bool s_hasPutMessageInStatusBar = false;
 
-            // found is only true if we are really over an object, not just
-            // behind it
-            if(found && u && ! m_Selecting)
+      // found is only true if we are really over an object, not just
+      // behind it
+      if(found && u && ! m_Selecting)
+      {
+         if(!m_HandCursor)
+            SetCursor(wxCURSOR_HAND);
+         m_HandCursor = TRUE;
+         if(m_StatusBar && m_StatusFieldLabel != -1)
+         {
+            const wxString &label = u->GetLabel();
+            if(label.Length())
             {
-               if(!m_HandCursor)
-                  SetCursor(wxCURSOR_HAND);
-               m_HandCursor = TRUE;
-               if(m_StatusBar && m_StatusFieldLabel != -1)
-               {
-                  const wxString &label = u->GetLabel();
-                  if(label.Length())
-                  {
-                     m_StatusBar->SetStatusText(label,
-                                                m_StatusFieldLabel);
-                     s_hasPutMessageInStatusBar = true;
-                  }
-               }
-            }
-            else
-            {
-               if(m_HandCursor)
-                  SetCursor(wxCURSOR_IBEAM);
-               m_HandCursor = FALSE;
-               if( m_StatusBar && m_StatusFieldLabel != -1 &&
-                   s_hasPutMessageInStatusBar )
-               {
-                  m_StatusBar->SetStatusText("", m_StatusFieldLabel);
-               }
+               m_StatusBar->SetStatusText(label,
+                                          m_StatusFieldLabel);
+               s_hasPutMessageInStatusBar = true;
             }
          }
-
-         // selecting?
-         if ( event.LeftIsDown() )
+      }
+      else
+      {
+         if(m_HandCursor)
+            SetCursor(wxCURSOR_IBEAM);
+         m_HandCursor = FALSE;
+         if( m_StatusBar && m_StatusFieldLabel != -1 &&
+             s_hasPutMessageInStatusBar )
          {
-            // m_Selecting might not be set if the button got pressed
-            // outside this window, so check for it:
-            if( m_Selecting )
-            {
-               m_llist->ContinueSelection(cursorPos, m_ClickPosition);
-               DoPaint();  // TODO: we don't have to redraw everything!
-            }
+            m_StatusBar->SetStatusText("", m_StatusFieldLabel);
          }
+      }
+   }
 
-         if ( u )
-         {
-            u->DecRef();
-            u = NULL;
-         }
-         break;
+   // selecting?
+   if ( event.LeftIsDown() )
+   {
+      // m_Selecting might not be set if the button got pressed
+      // outside this window, so check for it:
+      if( m_Selecting )
+      {
+         m_llist->ContinueSelection(cursorPos, m_ClickPosition);
+         RequestUpdate();  // TODO: we don't have to redraw everything!
+      }
+   }
 
-      case WXLOWIN_MENU_LDOWN:
-         {
-             // always move cursor to mouse click:
-//             if ( obj )
-             {
-                // we have found the real position
-                m_llist->MoveCursorTo(cursorPos);
-             }
-//             else
-//             {
-//                // click beyond the end of the text
-//                m_llist->MoveCursorToEnd();
-//             }
+   if ( u )
+   {
+      u->DecRef();
+      u = NULL;
+   }
+   break;
 
-             // clicking a mouse removes the selection
-             if ( m_llist->HasSelection() )
-             {
-                m_llist->DiscardSelection();
-                m_Selecting = false;
-                DoPaint();     // TODO: we don't have to redraw everything!
-             }
+   case WXLOWIN_MENU_LDOWN:
+   {
+      // always move cursor to mouse click:
+      m_llist->MoveCursorTo(cursorPos);
 
-             // Calculate where the top of the visible area is:
-             int x0, y0;
-             ViewStart(&x0,&y0);
-             int dx, dy;
-             GetScrollPixelsPerUnit(&dx, &dy);
-             x0 *= dx; y0 *= dy;
+      // clicking a mouse removes the selection
+      if ( m_llist->HasSelection() )
+      {
+         m_llist->DiscardSelection();
+         m_Selecting = false;
+         RequestUpdate();     // TODO: we don't have to redraw everything!
+      }
+            
+      // Calculate where the top of the visible area is:
+      int x0, y0;
+      ViewStart(&x0,&y0);
+      int dx, dy;
+      GetScrollPixelsPerUnit(&dx, &dy);
+      x0 *= dx; y0 *= dy;
 
-             wxPoint offset(-x0+WXLO_XOFFSET, -y0+WXLO_YOFFSET);
+      wxPoint offset(-x0+WXLO_XOFFSET, -y0+WXLO_YOFFSET);
 
-             if(m_CursorVisibility == -1)
-                m_CursorVisibility = 1;
+      if(m_CursorVisibility == -1)
+         m_CursorVisibility = 1;
 #ifdef WXLAYOUT_USE_CARET
-             if ( m_CursorVisibility == 1 )
-                GetCaret()->Show();
+      if ( m_CursorVisibility == 1 )
+         GetCaret()->Show();
 #endif // WXLAYOUT_USE_CARET
 
-             if(m_CursorVisibility)
-             {
-                // draw a thick cursor for editable windows with focus
-                m_llist->DrawCursor(dc, m_HaveFocus && IsEditable(), offset);
-             }
+      if(m_CursorVisibility)
+      {
+         // draw a thick cursor for editable windows with focus
+         m_llist->DrawCursor(dc, m_HaveFocus && IsEditable(), offset);
+      }
 
 #ifdef __WXGTK__
-             DoPaint(); // DoPaint suppresses flicker under GTK
+      RequestUpdate(); // RequestUpdate suppresses flicker under GTK
 #endif // wxGTK
 
-             // start selection
-             m_llist->StartSelection(wxPoint(-1, -1), m_ClickPosition);
-             m_Selecting = true;
-         }
-         break;
+      // start selection
+      m_llist->StartSelection(wxPoint(-1, -1), m_ClickPosition);
+      m_Selecting = true;
+   }
+   break;
 
-      case WXLOWIN_MENU_LUP:
-         if ( m_Selecting )
-         {
-            m_llist->EndSelection();
-            m_Selecting = false;
-
-            DoPaint();     // TODO: we don't have to redraw everything!
-         }
-         break;
-
-      case WXLOWIN_MENU_MDOWN:
-         Paste(TRUE);
-         break;
-
-      case WXLOWIN_MENU_DBLCLICK:
-         // select a word under cursor
-         m_llist->MoveCursorTo(cursorPos);
-         m_llist->MoveCursorWord(-1);
-         m_llist->StartSelection();
-         m_llist->MoveCursorWord(1, false);
+   case WXLOWIN_MENU_LUP:
+      if ( m_Selecting )
+      {
          m_llist->EndSelection();
          m_Selecting = false;
-         DoPaint();     // TODO: we don't have to redraw everything!
-         break;
+
+         RequestUpdate();     // TODO: we don't have to redraw everything!
+      }
+      break;
+
+   case WXLOWIN_MENU_MDOWN:
+      Paste(TRUE);
+      break;
+
+   case WXLOWIN_MENU_DBLCLICK:
+      // select a word under cursor
+      m_llist->MoveCursorTo(cursorPos);
+      m_llist->MoveCursorWord(-1);
+      m_llist->StartSelection();
+      m_llist->MoveCursorWord(1, false);
+      m_llist->EndSelection();
+      m_Selecting = false;
+      RequestUpdate();     // TODO: we don't have to redraw everything!
+      break;
    }
 
    // notify about mouse events?
@@ -440,6 +467,7 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
    {
       m_Selecting = false;
       m_llist->EndSelection();
+      m_llist->DiscardSelection(); //FIXME: correct?
    }
    
    // If we deleted the selection here, we must not execute the
@@ -455,14 +483,15 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
    {
       m_llist->DeleteSelection();
       deletedSelection = true;
+      SetDirty();
    }
    
    // <Shift>+<arrow> starts selection
    if ( IsDirectionKey(keyCode) )
    {
+      // just continue the old selection
       if ( m_Selecting )
       {
-         // just continue the old selection
          if( event.ShiftDown() )
             m_llist->ContinueSelection();
          else
@@ -476,7 +505,6 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
          m_Selecting = true;
          m_llist->StartSelection();
       }
-      
    }
    
    // If needed, make cursor visible:
@@ -526,18 +554,33 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
       else
          m_llist->MoveCursorToEndOfLine();
       break;
-
    default:
-      if(keyCode == 'c' && ctrlDown)
-      {
-         // this should work even in read-only mode
-         Copy();
-      }
+      
+      if(ctrlDown && ! IsEditable())
+         switch(keyCode)
+         {
+         case 'c':
+            // this should work even in read-only mode
+            Copy();
+            break;
+#ifdef M_BASEDIR
+	 case 's': // search
+            Find("");
+            break;
+         case 't': // search again
+            FindAgain();
+            break;
+#endif
+	 default:
+            ;
+         }
       else if( IsEditable() )
       {
          /* First, handle control keys */
          if(ctrlDown && ! event.AltDown())
          {
+            if(keyCode >= 'A' && keyCode <= 'Z')
+               keyCode = tolower(keyCode);
             switch(keyCode)
             {
             case WXK_INSERT:
@@ -545,23 +588,44 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
                break;
             case WXK_DELETE :
                if(! deletedSelection)
+               {
                   m_llist->DeleteWord();
+                  SetDirty();
+               }
                break;
             case 'd':
                if(! deletedSelection) // already done
+               {
                   m_llist->Delete(1);
+                  SetDirty();
+               }
                break;
             case 'y':
                m_llist->DeleteLines(1);
+               SetDirty();
                break;
             case 'h': // like backspace
-               if(m_llist->MoveCursorHorizontally(-1)) m_llist->Delete(1);
+               if(m_llist->MoveCursorHorizontally(-1))
+               {
+                  m_llist->Delete(1);
+                  SetDirty();
+               }
                break;
-            case 'u':
+#ifdef M_BASEDIR
+            case 's': // search
+               Find("");
+               break;
+            case 't': // search again
+               FindAgain();
+               break;
+#endif
+	    case 'u':
                m_llist->DeleteToBeginOfLine();
+               SetDirty();
                break;
             case 'k':
                m_llist->DeleteToEndOfLine();
+               SetDirty();
                break;
             case 'v':
                Paste();
@@ -586,6 +650,7 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
             case WXK_DELETE:
             case 'd':
                m_llist->DeleteWord();
+               SetDirty();
                break;
             default:
                ;
@@ -605,45 +670,57 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
                   Cut();
                else
                   if(! deletedSelection)
+                  {
                      m_llist->Delete(1);
+                     SetDirty();
+                  }
                break;
             case WXK_BACK: // backspace
                if(! deletedSelection)
                   if(m_llist->MoveCursorHorizontally(-1))
+                  {
                      m_llist->Delete(1);
+                     SetDirty();
+                  }
                break;
             case WXK_RETURN:
                if(m_WrapMargin > 0)
                   m_llist->WrapLine(m_WrapMargin);
                m_llist->LineBreak();
+               SetDirty();
                break;
 
             case WXK_TAB:
                if ( !event.ShiftDown() )
                {
-                   // TODO should be configurable
-                   static const int tabSize = 8;
+                  // TODO should be configurable
+                  static const int tabSize = 8;
 
-                   CoordType x = m_llist->GetCursorPos().x;
-                   size_t numSpaces = tabSize - x % tabSize;
-                   m_llist->Insert(wxString(' ', numSpaces));
+                  CoordType x = m_llist->GetCursorPos().x;
+                  size_t numSpaces = tabSize - x % tabSize;
+                  m_llist->Insert(wxString(' ', numSpaces));
+                  SetDirty();
                }
                break;
 
             default:
-               if((!(event.ControlDown() || event.AltDown() || event.MetaDown()))
+               if((!(event.ControlDown() || event.AltDown()
+//#if 0
+                     ///FIXME: wxGTK reports MetaDown always
+                     || event.MetaDown()
+//#endif
+                  ))
                   && (keyCode < 256 && keyCode >= 32)
                   )
                {
                   if(m_WrapMargin > 0 && isspace(keyCode))
                      m_llist->WrapLine(m_WrapMargin);
                   m_llist->Insert((char)keyCode);
+                  SetDirty();
                }
                break;
             }
          }
-         SetDirty();
-         SetModified();
       }// if(IsEditable())
    }// first switch()
 
@@ -652,14 +729,9 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
       // continue selection to the current (new) cursor position
       m_llist->ContinueSelection();
    }
-
-   // we must call ResizeScrollbars() before ScrollToCursor(), otherwise the
-   // ne cursor position might be outside the current scrolllbar range
-   ResizeScrollbars();
    ScrollToCursor();
-
    // refresh the screen
-   DoPaint(m_llist->GetUpdateRect());
+   RequestUpdate(m_llist->GetUpdateRect());
 }
 
 void
@@ -678,8 +750,9 @@ wxLayoutWindow::OnKeyUp(wxKeyEvent& event)
 void
 wxLayoutWindow::ScrollToCursor(void)
 {
-   wxClientDC dc( this );
-   PrepareDC( dc );
+   //is always needed to make sure we know where the cursor is
+   //if(IsDirty())
+   RequestUpdate(m_llist->GetUpdateRect());
 
    int x0,y0,x1,y1, dx, dy;
 
@@ -693,13 +766,10 @@ wxLayoutWindow::ScrollToCursor(void)
    // Get the size of the visible window:
    GetClientSize(&x1, &y1);
 
-   // update the cursor screen position
-   m_llist->Layout(dc);
-
    // Make sure that the scrollbars are at a position so that the cursor is
    // visible if we are editing
    WXLO_DEBUG(("m_ScrollToCursor = %d", (int) m_ScrollToCursor));
-   wxPoint cc = m_llist->GetCursorScreenPos(dc);
+   wxPoint cc = m_llist->GetCursorScreenPos();
 
    // the cursor should be completely visible in both directions
    wxPoint cs(m_llist->GetCursorSize());
@@ -723,9 +793,9 @@ wxLayoutWindow::ScrollToCursor(void)
    {
       // set new view start
       Scroll(nx == -1 ? -1 : (nx+dx-1)/dx, ny == -1 ? -1 : (ny+dy-1)/dy);
-
       // avoid recursion
       m_ScrollToCursor = false;
+      RequestUpdate();
    }
 }
 
@@ -737,7 +807,7 @@ wxLayoutWindow::OnPaint( wxPaintEvent &WXUNUSED(event))
 }
 
 void
-wxLayoutWindow::DoPaint(const wxRect *updateRect)
+wxLayoutWindow::RequestUpdate(const wxRect *updateRect)
 {
 #ifdef __WXGTK__
    // Calling Refresh() causes bad flicker under wxGTK!!!
@@ -782,10 +852,18 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
    }
    if(IsDirty())
    {
+      WXLO_DEBUG(("InternalPaint, isdirty, list size: %ld,%ld",
+                  (unsigned long) m_llist->GetSize().x,
+                  (unsigned long) m_llist->GetSize().y));
+//      m_llist->ForceTotalLayout();
       m_llist->Layout(dc);
+      WXLO_DEBUG(("InternalPaint, isdirty, list size after layout: %ld,%ld",
+                  (unsigned long) m_llist->GetSize().x,
+                  (unsigned long) m_llist->GetSize().y));
       ResizeScrollbars();
+      ResetDirty();
    }
-
+   
    /* Check whether the window has grown, if so, we need to reallocate
       the bitmap to be larger. */
    if(x1 > m_bitmapSize.x || y1 > m_bitmapSize.y)
@@ -881,7 +959,6 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
 #endif // WXLAYOUT_USE_CARET
 
    ResetDirty();
-   m_ScrollToCursor = false;
 
    if ( m_StatusBar && m_StatusFieldCursor != -1 )
    {
@@ -905,9 +982,7 @@ void
 wxLayoutWindow::OnSize(wxSizeEvent &event)
 {
    if ( m_llist )
-   {
       ResizeScrollbars();
-   }
 
    event.Skip();
 }
@@ -916,6 +991,17 @@ wxLayoutWindow::OnSize(wxSizeEvent &event)
 void
 wxLayoutWindow::ResizeScrollbars(bool exact)
 {
+
+   if(IsDirty())
+   {
+      wxClientDC dc( this );
+      PrepareDC( dc );
+//      m_llist->ForceTotalLayout();
+      m_llist->Layout(dc);
+      ResetDirty();
+      RequestUpdate();
+   }
+   
    wxPoint max = m_llist->GetSize();
    wxSize size = GetClientSize();
 
@@ -1016,6 +1102,7 @@ wxLayoutWindow::Paste(bool primary)
             wxTheClipboard->GetData(&data);
             wxString text = data.GetText();
             wxLayoutImportText( m_llist, text);
+            SetDirty();
          }
       }
       wxTheClipboard->Close();
@@ -1039,13 +1126,13 @@ wxLayoutWindow::Copy(bool invalidate)
       return FALSE;
    // Export selection as text:
    wxString text;
-   wxLayoutExportObject *export;
+   wxLayoutExportObject *exp;
    wxLayoutExportStatus status(llist);
-   while((export = wxLayoutExport( &status, WXLO_EXPORT_AS_TEXT)) != NULL)
+   while((exp = wxLayoutExport( &status, WXLO_EXPORT_AS_TEXT)) != NULL)
    {
-      if(export->type == WXLO_EXPORT_TEXT)
-         text << *(export->content.text);
-      delete export;
+      if(exp->type == WXLO_EXPORT_TEXT)
+         text << *(exp->content.text);
+      delete exp;
    }
    delete llist;
 
@@ -1080,6 +1167,7 @@ wxLayoutWindow::Cut(void)
    if(Copy(false)) // do not invalidate selection after copy
    {
       m_llist->DeleteSelection();
+      SetDirty();
       return TRUE;
    }
    else
@@ -1090,16 +1178,31 @@ wxLayoutWindow::Cut(void)
 // searching
 // ----------------------------------------------------------------------------
 
+#ifdef M_BASEDIR
 bool
 wxLayoutWindow::Find(const wxString &needle,
-                     wxPoint * fromWhere)
+                     wxPoint * fromWhere,
+                     const wxString &configPath)
 {
    wxPoint found;
-
-   if(fromWhere == NULL)
-      found = m_llist->FindText(needle, m_llist->GetCursorPos());
+   
+   if(needle.Length() == 0)
+   {
+      if( ! MInputBox(&m_FindString,
+                      _("Find text"),
+                      _("   Find:"),
+                      this,
+                      configPath, "")
+          || strutil_isempty(m_FindString))
+         return true;
+   }
    else
-      found = m_llist->FindText(needle, *fromWhere);
+      m_FindString = needle;
+   
+   if(fromWhere == NULL)
+      found = m_llist->FindText(m_FindString, m_llist->GetCursorPos());
+   else
+      found = m_llist->FindText(m_FindString, *fromWhere);
    if(found.x != -1)
    {
       if(fromWhere)
@@ -1109,10 +1212,20 @@ wxLayoutWindow::Find(const wxString &needle,
       }
       m_llist->MoveCursorTo(found);
       ScrollToCursor();
+      RequestUpdate();
       return true;
    }
    return false;
 }
+
+
+bool
+wxLayoutWindow::FindAgain(void)
+{
+   bool rc = Find(m_FindString);
+   return rc;
+}
+#endif
 
 // ----------------------------------------------------------------------------
 // popup menu stuff
@@ -1157,21 +1270,21 @@ void wxLayoutWindow::OnMenu(wxCommandEvent& event)
    switch (event.GetId())
    {
    case WXLOWIN_MENU_LARGER:
-      m_llist->SetFontLarger(); DoPaint(); break;
+      m_llist->SetFontLarger(); RequestUpdate(); break;
    case WXLOWIN_MENU_SMALLER:
-      m_llist->SetFontSmaller(); DoPaint(); break;
+      m_llist->SetFontSmaller(); RequestUpdate(); break;
    case WXLOWIN_MENU_UNDERLINE:
-      m_llist->ToggleFontUnderline(); DoPaint(); break;
+      m_llist->ToggleFontUnderline(); RequestUpdate(); break;
    case WXLOWIN_MENU_BOLD:
-      m_llist->ToggleFontWeight(); DoPaint(); break;
+      m_llist->ToggleFontWeight(); RequestUpdate(); break;
    case WXLOWIN_MENU_ITALICS:
-      m_llist->ToggleFontItalics(); DoPaint(); break;
+      m_llist->ToggleFontItalics(); RequestUpdate(); break;
    case WXLOWIN_MENU_ROMAN:
-      m_llist->SetFontFamily(wxROMAN); DoPaint(); break;
+      m_llist->SetFontFamily(wxROMAN); RequestUpdate(); break;
    case WXLOWIN_MENU_TYPEWRITER:
-      m_llist->SetFontFamily(wxFIXED); DoPaint(); break;
+      m_llist->SetFontFamily(wxFIXED); RequestUpdate(); break;
    case WXLOWIN_MENU_SANSSERIF:
-      m_llist->SetFontFamily(wxSWISS); DoPaint(); break;
+      m_llist->SetFontFamily(wxSWISS); RequestUpdate(); break;
    }
 }
 
@@ -1184,7 +1297,7 @@ wxLayoutWindow::OnSetFocus(wxFocusEvent &ev)
 {
    m_HaveFocus = true;
    ev.Skip();
-   DoPaint(); // cursor must change
+   RequestUpdate(); // cursor must change
 }
 
 void
@@ -1192,7 +1305,7 @@ wxLayoutWindow::OnKillFocus(wxFocusEvent &ev)
 {
    m_HaveFocus = false;
    ev.Skip();
-   DoPaint();// cursor must change
+   RequestUpdate();// cursor must change
 }
 
 // ----------------------------------------------------------------------------

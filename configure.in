@@ -2947,11 +2947,13 @@ AC_OUTPUT([
             samples/listctrl/Makefile
             samples/mdi/Makefile
             samples/minifram/Makefile
-            samples/minimal/Makefile
+	    samples/minimal/Makefile
+            samples/nettest/Makefile
             samples/newgrid/Makefile
             samples/notebook/Makefile
             samples/printing/Makefile
-            samples/proplist/Makefile
+	    samples/proplist/Makefile
+            samples/richedit/Makefile
             samples/sashtest/Makefile
             samples/scroll/Makefile
             samples/splitter/Makefile

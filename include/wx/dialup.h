@@ -183,6 +183,7 @@ typedef void (wxObject::*wxDialUpEventFunction)(wxDialUpEvent&);
 #define EVT_DIALUP_CONNECTED(func) { wxEVT_DIALUP_CONNECTED, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxDialUpEventFunction) & func, NULL},
 #define EVT_DIALUP_DISCONNECTED(func) { wxEVT_DIALUP_DISCONNECTED, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxDialUpEventFunction) & func, NULL},
 
+
 #endif // wxUSE_DIALUP_MANAGER
 
 #endif // _WX_NET_H
