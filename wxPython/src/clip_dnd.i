@@ -13,6 +13,8 @@
 
 %module clip_dnd
 
+#ifndef __WXMAC__
+
 %{
 #include "helpers.h"
 #include <wx/dataobj.h>
@@ -645,4 +647,5 @@ public:
 %}
 
 //----------------------------------------------------------------------
+#endif
 

@@ -28,7 +28,7 @@ on.
 """
 
 
-BUILD_GLCANVAS = 1 # If true, build the contrib/glcanvas extension module
+BUILD_GLCANVAS = 0 # If true, build the contrib/glcanvas extension module
 BUILD_OGL = 1      # If true, build the contrib/ogl extension module
 BUILD_STC = 1      # If true, build the contrib/stc extension module
 BUILD_IEWIN = 0    # Internet Explorer wrapper (experimental)
@@ -232,6 +232,29 @@ if os.name == 'nt':
 
 
 
+elif os.name == 'posix' and sys.platform == "darwin1":
+    # Flags and such for a Darwin (Max OS X) build of Python
+
+    WXDIR = '..'              # assumes IN_CVS_TREE
+    WXPLAT = '__WXMAC__'
+    GENDIR = 'mac'
+
+    includes = ['src']
+    defines = [('SWIG_GLOBAL', None),
+               ('HAVE_CONFIG_H', None),
+               ('WXP_USE_THREAD', '1'),
+               ]
+    libdirs = []
+    libs = []
+
+    cflags = os.popen(WX_CONFIG + ' --cxxflags', 'r').read()[:-1]
+    cflags = string.split(cflags)
+
+    lflags = os.popen(WX_CONFIG + ' --libs', 'r').read()[:-1]
+    lflags = string.split(lflags)
+
+
+
 elif os.name == 'posix':
     # Set flags for Unix type platforms
 
@@ -277,7 +300,8 @@ swig_args = ['-c++', '-shadow', '-python', '-keyword',
              '-dnone',
              #'-dascii',
              #'-docstring', '-Sbefore',
-             '-I./src', '-D'+WXPLAT]
+             '-I./src', '-D'+WXPLAT,
+             ]
 swig_deps = ['src/my_typemaps.i']
 
 

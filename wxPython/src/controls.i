@@ -490,7 +490,9 @@ public:
     void  Check(int uiIndex, int bCheck = TRUE);
     void InsertItems(int LCOUNT, wxString* choices, int pos);
 
+#ifndef __WXMAC__
     int GetItemHeight();
+#endif
 };
 
 //----------------------------------------------------------------------
@@ -713,7 +715,10 @@ public:
 
     wxString GetString(int n);
 
-#ifdef __WXMSW__
+#ifdef __WXGTK__
+    %name(GetItemLabel)wxString GetLabel( int item );
+    %name(SetItemLabel)void SetLabel( int item, const wxString& label );
+#else
     void SetString(int n, const wxString& label);
     %pragma(python) addtoclass = "
     GetItemLabel = GetString
@@ -721,9 +726,6 @@ public:
     "
     int GetColumnCount();
     int GetRowCount();
-#else
-    %name(GetItemLabel)wxString GetLabel( int item );
-    %name(SetItemLabel)void SetLabel( int item, const wxString& label );
 #endif
 
     int GetSelection();
@@ -848,6 +850,7 @@ public:
 
 //----------------------------------------------------------------------
 
+#ifndef __WXMAC__
 enum { wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, };
 
 class wxToggleButton : public wxControl {
@@ -880,6 +883,7 @@ public:
 
 };
 
+#endif
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------

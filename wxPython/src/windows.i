@@ -353,9 +353,11 @@ public:
     wxValidator* GetValidator();
     void SetValidator(const wxValidator& validator);
 
+#ifndef __WXMAC__
     void SetDropTarget(wxDropTarget* target);
     wxDropTarget* GetDropTarget();
     %pragma(python) addtomethod = "SetDropTarget:_args[0].thisown = 0"
+#endif
 
     wxSize GetBestSize();
 

@@ -57,13 +57,13 @@ public:
 class wxBitmap : public wxGDIObject
 {
 public:
-    wxBitmap(const wxString& name, wxBitmapType type);
+    wxBitmap(const wxString& name, wxBitmapType type=wxBITMAP_TYPE_BMP);
     ~wxBitmap();
 
     wxPalette* GetPalette();
     wxMask* GetMask();
-    bool LoadFile(const wxString& name, long flags);
-    bool SaveFile(const wxString& name, int type, wxPalette* palette = NULL);
+    bool LoadFile(const wxString& name, wxBitmapType type=wxBITMAP_TYPE_BMP);
+    bool SaveFile(const wxString& name, wxBitmapType type, wxPalette* palette = NULL);
     void SetMask(wxMask* mask);
 #ifdef __WXMSW__
     void SetPalette(wxPalette& palette);

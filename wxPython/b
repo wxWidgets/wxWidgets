@@ -7,6 +7,8 @@ function getpyver {
 	PYVER=2.0
     elif [ "$1" = "21" ]; then
 	PYVER=2.1
+    elif [ "$1" = "22" ]; then
+	PYVER=2.2
     else
 	echo You must specify Python version as first parameter.
         exit
@@ -18,7 +20,7 @@ shift
 
 python$PYVER -c "import sys;print '\n', sys.version, '\n'"
 
-WXPYVER=`python$PYVER -c "import setup;print setup.VERSION"`
+##WXPYVER=`python$PYVER -c "import setup;print setup.VERSION"`
 SETUP="python$PYVER -u setup.py"
 FLAGS="USE_SWIG=1 IN_CVS_TREE=1"
 OTHERFLAGS=""

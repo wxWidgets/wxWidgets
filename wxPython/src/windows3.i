@@ -16,7 +16,9 @@
 #include "helpers.h"
 #include <wx/sashwin.h>
 #include <wx/laywin.h>
+#ifndef __WXMAC__
 #include <wx/popupwin.h>
+#endif
 %}
 
 //----------------------------------------------------------------------
@@ -203,6 +205,7 @@ public:
 
 
 //---------------------------------------------------------------------------
+#ifndef __WXMAC__
 
 // wxPopupWindow: a special kind of top level window used for popup menus,
 // combobox popups and such.
@@ -261,5 +264,6 @@ public:
     virtual void Dismiss();
 };
 
+#endif
 //---------------------------------------------------------------------------
 
