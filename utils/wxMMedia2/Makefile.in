@@ -1,0 +1,3 @@
+all:
+	cd lib; make
+	cd sample; make

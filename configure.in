@@ -2733,6 +2733,9 @@ AC_OUTPUT([
 	    samples/html/help/Makefile
 	    samples/html/printing/Makefile
 	    samples/html/test/Makefile
+	    utils/wxMMedia2/Makefile
+	    utils/wxMMedia2/lib/Makefile
+	    utils/wxMMedia2/sample/Makefile
           ],
           [
             chmod +x wx-config

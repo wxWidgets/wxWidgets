@@ -1,0 +1,8 @@
+To build Makefile with automake:
+  in the top source directory type:
+    automake utils/wxMMedia2/Makefile
+  in the top build directory type:
+    mkdir -p utils/wxMMedia2
+    CONFIG_FILES="utils/wxMMedia2/Makefile utils/wxMMedia2/lib/Makefile utils/wxMMedia2/sample/Makefile" CONFIG_HEADERS= ./config.status
+
+and then you can run make in utils/wxMMedia2.

@@ -264,6 +264,7 @@ xpmhand.cpp	M
 threadpsx.cpp	U
 utilsunx.cpp	U
 gsocket.c	U
+gsockunx.h	U
 
 gsockgtk.c	R
 win_gtk.c	R
@@ -294,6 +295,7 @@ font.cpp	R
 frame.cpp	R
 gauge.cpp	R
 gdiobj.cpp	R
+gsockgtk.c	R
 icon.cpp	R
 listbox.cpp	R
 main.cpp	R
@@ -455,6 +457,7 @@ gauge.h	W
 gdicmn.h	W
 gdiobj.h	W
 grid.h	W
+gsocket.h	W
 hash.h	W
 help.h	W
 helpbase.h	W
