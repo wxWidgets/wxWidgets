@@ -14,7 +14,7 @@ class CustomDataTable(wxPyGridTableBase):
         self.log = log
 
         self.colLabels = ['ID', 'Description', 'Severity', 'Priority', 'Platform',
-                          'Opened?', 'Fixed?', 'Tested?']
+                          'Opened?', 'Fixed?', 'Tested?', 'TestFloat']
 
         self.dataTypes = [wxGRID_VALUE_NUMBER,
                           wxGRID_VALUE_STRING,
@@ -23,12 +23,14 @@ class CustomDataTable(wxPyGridTableBase):
                           wxGRID_VALUE_CHOICE + ':all,MSW,GTK,other',
                           wxGRID_VALUE_BOOL,
                           wxGRID_VALUE_BOOL,
-                          wxGRID_VALUE_BOOL]
+                          wxGRID_VALUE_BOOL,
+                          wxGRID_VALUE_FLOAT + ':6,2',
+                          ]
 
         self.data = [
-            [1010, "The foo doesn't bar", "major", 1, 'MSW', 1, 1, 1],
-            [1011, "I've got a wicket in my wocket", "wish list", 2, 'other', 0, 0, 0],
-            [1012, "Rectangle() returns a triangle", "critical", 5, 'all', 0, 0, 0]
+            [1010, "The foo doesn't bar", "major", 1, 'MSW', 1, 1, 1, 1.12],
+            [1011, "I've got a wicket in my wocket", "wish list", 2, 'other', 0, 0, 0, 1.50],
+            [1012, "Rectangle() returns a triangle", "critical", 5, 'all', 0, 0, 0, 1.56]
 
             ]
 
