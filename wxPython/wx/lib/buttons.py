@@ -77,7 +77,7 @@ class GenButton(wx.PyControl):
 
         self.SetLabel(label)
         self.InheritAttributes()
-        self.SetBestSize(size)
+        self.SetBestFittingSize(size)
         self.InitColours()
 
         self.Bind(wx.EVT_LEFT_DOWN,        self.OnLeftDown)
@@ -100,7 +100,7 @@ class GenButton(wx.PyControl):
         """
         if size is None:
             size = wx.DefaultSize            
-        wx.PyControl.SetBestSize(self, size)
+        wx.PyControl.SetBestFittingSize(self, size)
 
 
     def DoGetBestSize(self):

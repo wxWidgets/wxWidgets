@@ -25,7 +25,7 @@ class GenStaticBitmap(wx.PyControl):
                              wx.DefaultValidator, name)
         self._bitmap = bitmap
         self.InheritAttributes()
-        self.SetBestSize(size)
+        self.SetBestFittingSize(size)
 
         self.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEraseBackground)
         self.Bind(wx.EVT_PAINT,            self.OnPaint)
@@ -33,7 +33,7 @@ class GenStaticBitmap(wx.PyControl):
 
     def SetBitmap(self, bitmap):
         self._bitmap = bitmap
-        self.SetBestSize( (bitmap.GetWidth(), bitmap.GetHeight()) )
+        self.SetBestFittingSize( (bitmap.GetWidth(), bitmap.GetHeight()) )
         self.Refresh()
 
 

@@ -235,8 +235,7 @@ class BaseMaskedTextCtrl( wx.TextCtrl, MaskedEditMixin ):
             width = self.GetSize().width
             height = self.GetBestSize().height
 ##            dbg('setting client size to:', (width, height))
-            self.SetSize((width, height))
-            self.SetSizeHints((width, height))
+            self.SetBestFittingSize((width, height))
 
 
     def Clear(self):

@@ -34,7 +34,7 @@ class GenStaticText(wx.PyControl):
         wx.PyControl.SetLabel(self, label) # don't check wx.ST_NO_AUTORESIZE yet
         self.defBackClr = self.GetBackgroundColour()
         self.InheritAttributes()
-        self.SetBestSize(size)
+        self.SetBestFittingSize(size)
 
         self.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEraseBackground)
         self.Bind(wx.EVT_PAINT,            self.OnPaint)
@@ -50,7 +50,7 @@ class GenStaticText(wx.PyControl):
         if not style & wx.ST_NO_AUTORESIZE:
             best = self.GetBestSize()
             self.SetSize(best)
-            self.SetSizeHints(best)
+            self.SetMinSize(best)
         self.Refresh()
 
 
@@ -64,7 +64,7 @@ class GenStaticText(wx.PyControl):
         if not style & wx.ST_NO_AUTORESIZE:
             best = self.GetBestSize()
             self.SetSize(best)
-            self.SetSizeHints(best)
+            self.SetMinSize(best)
         self.Refresh()
 
 
