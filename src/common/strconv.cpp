@@ -55,7 +55,10 @@
     WXDLLEXPORT_DATA(wxCSConv) wxConvISO8859_1(_T("iso-8859-1"));
 #else
     // stand-ins in absence of wchar_t
-    WXDLLEXPORT_DATA(wxMBConv) wxConvLibc, wxConvFile, wxConvLocal;
+    WXDLLEXPORT_DATA(wxMBConv) wxConvLibc,
+                               wxConvFile,
+                               wxConvISO8859_1,
+                               wxConvLocal;
 #endif // wxUSE_WCHAR_T
 
 WXDLLEXPORT_DATA(wxMBConv *) wxConvCurrent = &wxConvLibc;
