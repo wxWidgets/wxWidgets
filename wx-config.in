@@ -157,7 +157,7 @@ wxconfig_flag_options="$wxconfig_yesno_options no_rpath inplace"
 option_name()
 {
     _option_name_temp=${1%%=*}
-    echo "${_option_name_temp#--}" | tr '-' '_'
+    echo ${_option_name_temp#--} | tr '-' '_'
 }
 
 # option_value _string
