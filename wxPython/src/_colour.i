@@ -81,5 +81,9 @@ public:
         }
 };
 
+%pythoncode {
+    Color = Colour
+    NamedColor = NamedColour    
+}
 //---------------------------------------------------------------------------
 

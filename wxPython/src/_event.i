@@ -450,7 +450,8 @@ public:
 
     // Get checkbox value
     bool IsChecked() const;
-
+    %pythoncode { Checked = IsChecked }
+    
     // True if the listbox event was a selection.
     bool IsSelection() const;
 

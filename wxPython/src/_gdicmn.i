@@ -120,7 +120,8 @@ class wxSize
 public:
     %name(width) int x;
     %name(height)int y;
-
+    %pythoncode { x = width; y = height }
+    
     DocCtorStr(
         wxSize(int w=0, int h=0),
         "Creates a size object.");

@@ -3,7 +3,9 @@
 PyTimer
 PyDropTarget
 
-
+SystemSettings_GetSystemColour
+SystemSettings_GetSystemFont
+SystemSettings_GetSystemMetric
 
 
 # With the * on the end these will cause code to be added that 

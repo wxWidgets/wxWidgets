@@ -174,6 +174,15 @@ public:
 
 };
 
+
+%pythoncode {
+%# backwards compatibility aliasses
+SystemSettings_GetSystemColour = SystemSettings_GetColour
+SystemSettings_GetSystemFont   = SystemSettings_GetFont
+SystemSettings_GetSystemMetric = SystemSettings_GetMetric
+}    
+
+
 //---------------------------------------------------------------------------
 
 class wxSystemOptions : public wxObject
