@@ -706,5 +706,26 @@ wxString wxFontMapperBase::GetEncodingName(wxFontEncoding encoding)
     return str;
 }
 
+/* static */
+wxFontEncoding wxFontMapperBase::GetEncodingFromName(const wxString& name)
+{
+    const size_t count = WXSIZEOF(gs_encodingNames);
+
+    for ( size_t i = 0; i < count; i++ )
+    {
+        if ( gs_encodingNames[i] == name )
+        {
+            return gs_encodings[i];
+        }
+    }
+
+    if ( name == _("default") )
+    {
+        return wxFONTENCODING_DEFAULT;
+    }
+
+    return wxFONTENCODING_MAX;
+}
+
 #endif // wxUSE_FONTMAP
 

@@ -94,6 +94,12 @@ public:
     // NB: hard-coded now, but might change later (read it from config?)
     static wxString GetEncodingDescription(wxFontEncoding encoding);
 
+    // find the encoding corresponding to the given name, inverse of
+    // GetEncodingName() and less general than CharsetToEncoding()
+    //
+    // returns wxFONTENCODING_MAX if the name is not a supported encoding
+    static wxFontEncoding GetEncodingFromName(const wxString& name);
+
 
     // functions which allow to configure the config object used: by default,
     // the global one (from wxConfigBase::Get() will be used) and the default
@@ -206,7 +212,9 @@ public:
                            bool interactive = true);
 
     // checks whether given encoding is available in given face or not.
-    // If no facename is given, 
+    //
+    // if no facename is given (default), return true if it's available in any
+    // facename at alll.
     virtual bool IsEncodingAvailable(wxFontEncoding encoding,
                                      const wxString& facename = wxEmptyString);
 
