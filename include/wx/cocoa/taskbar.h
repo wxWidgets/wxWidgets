@@ -22,11 +22,10 @@ class WXDLLEXPORT wxIcon;
 class WXDLLEXPORT wxMenu;
 
 class wxTaskBarIconCocoaImpl;
-class wxTaskBarIconDockImpl;
 
 class WXDLLEXPORT wxTaskBarIcon : public wxTaskBarIconBase
 {
-    friend class wxTaskBarIconDockImpl;
+    friend class wxTaskBarIconCocoaImpl;
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxTaskBarIcon)
 public:
     //type of taskbar item to create (currently only DOCK is implemented)

@@ -61,6 +61,10 @@ public:
     virtual ~wxTaskBarIconCocoaImpl();
     inline wxTaskBarIcon* GetTaskBarIcon() { return m_taskBarIcon; }
 protected:
+    inline wxMenu* CreatePopupMenu()
+    {   wxASSERT(m_taskBarIcon);
+        m_taskBarIcon->CreatePopupMenu();
+    }
     wxTaskBarIcon *m_taskBarIcon;
     wxTaskBarIconWindow *m_iconWindow;
 private:
@@ -231,7 +235,7 @@ WX_NSMenu wxTaskBarIconDockImpl::CocoaGetDockNSMenu()
 
 WX_NSMenu wxTaskBarIconDockImpl::CocoaDoGetDockNSMenu()
 {
-    wxMenu *dockMenu = m_taskBarIcon->CreatePopupMenu();
+    wxMenu *dockMenu = CreatePopupMenu();
     if(!dockMenu)
         return nil;
     if(!m_iconWindow)
