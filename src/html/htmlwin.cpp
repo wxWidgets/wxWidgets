@@ -261,7 +261,7 @@ void wxHtmlWindow::CreateLayout()
     if (!m_Cell) return;
 
     if (m_Style == wxHW_SCROLLBAR_NEVER) {
-        SetScrollbars(1, 1, 0, 0); // always off
+        SetScrollbars(wxHTML_SCROLL_STEP, 1, m_Cell -> GetWidth() / wxHTML_SCROLL_STEP, 0); // always off
         GetClientSize(&ClientWidth, &ClientHeight);
         m_Cell -> Layout(ClientWidth);
     }
@@ -270,7 +270,7 @@ void wxHtmlWindow::CreateLayout()
         GetClientSize(&ClientWidth, &ClientHeight);
 #ifndef __WXMSW__
         // VS : this looks extremely ugly under windoze, better fix needed!
-        SetScrollbars(1, 1, 0, ClientHeight * 2); // always on
+        SetScrollbars(wxHTML_SCROLL_STEP, 1, m_Cell -> GetWidth() / wxHTML_SCROLL_STEP, ClientHeight * 2); // always on
 #endif
         GetClientSize(&ClientWidth, &ClientHeight);
         m_Cell -> Layout(ClientWidth);
@@ -281,7 +281,7 @@ void wxHtmlWindow::CreateLayout()
                           /*cheat: top-level frag is always container*/);
         }
         else { /* we fit into window, no need for scrollbars */
-            SetScrollbars(1, 1, 0, 0); // disable...
+            SetScrollbars(wxHTML_SCROLL_STEP, 1, m_Cell -> GetWidth() / wxHTML_SCROLL_STEP, 0); // disable...
             GetClientSize(&ClientWidth, &ClientHeight);
             m_Cell -> Layout(ClientWidth); // ...and relayout
         }
