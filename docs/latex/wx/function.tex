@@ -89,6 +89,7 @@ the corresponding topic.
 \helpref{wxGetElapsedTime}{wxgetelapsedtime}\\
 \helpref{wxGetEmailAddress}{wxgetemailaddress}\\
 \helpref{wxGetEnv}{wxgetenv}\\
+\helpref{wxGetFontFromUser}{wxgetfontfromuser}\\
 \helpref{wxGetFreeMemory}{wxgetfreememory}\\
 \helpref{wxGetFullHostName}{wxgetfullhostname}\\
 \helpref{wxGetHomeDir}{wxgethomedir}\\
@@ -1347,6 +1348,25 @@ is valid) if the dialog was cancelled.
 \wxheading{Include files}
 
 <wx/colordlg.h>
+
+\membersection{::wxGetFontFromUser}\label{wxgetfontfromuser}
+
+\func{wxFont}{wxGetFontFromUser}{\param{wxWindow *}{parent}, \param{const wxFont\& }{fontInit}}
+
+Shows the font selection dialog and returns the font selected by user or
+invalid font (use \helpref{wxFont::Ok}{wxfontok} to test whether a font
+is valid) if the dialog was cancelled.
+
+\wxheading{Parameters}
+
+\docparam{parent}{The parent window for the colour selection dialog}
+
+\docparam{fontInit}{If given, this will be the font initially selected in the dialog.}
+
+\wxheading{Include files}
+
+<wx/fontdlg.h>
+
 
 \membersection{::wxGetMultipleChoices}\label{wxgetmultiplechoices}
 
