@@ -1,0 +1,3 @@
+ICON     1   PRELOAD   "mondros2.ico"
+#include "..\\..\\include\wx\os2\wx.rc"
+
