@@ -169,6 +169,13 @@ wxWindowMac::~wxWindowMac()
     {
         s_lastMouseWindow = NULL ;
     }
+    
+    wxFrame* frame = wxDynamicCast( wxGetTopLevelParent( this ) , wxFrame ) ;
+    if ( frame )
+    {
+    	if ( frame->GetLastFocus() == this )
+    		frame->SetLastFocus( NULL ) ;
+    }
 
     if ( gFocusWindow == this )
     {
