@@ -974,12 +974,16 @@ void wxDocManager::OnUpdateUndo(wxUpdateUIEvent& event)
 {
     wxDocument *doc = GetCurrentDocument();
     event.Enable( (doc && doc->GetCommandProcessor() && doc->GetCommandProcessor()->CanUndo()) );
+    if (doc && doc->GetCommandProcessor())
+        doc->GetCommandProcessor()->SetMenuStrings();
 }
 
 void wxDocManager::OnUpdateRedo(wxUpdateUIEvent& event)
 {
     wxDocument *doc = GetCurrentDocument();
     event.Enable( (doc && doc->GetCommandProcessor() && doc->GetCommandProcessor()->CanRedo()) );
+    if (doc && doc->GetCommandProcessor())
+        doc->GetCommandProcessor()->SetMenuStrings();
 }
 
 void wxDocManager::OnUpdatePrint(wxUpdateUIEvent& event)
