@@ -29,6 +29,7 @@
     #include "wx/intl.h"
     #include "wx/msgdlg.h"
     #include "wx/choicdlg.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/helpbase.h"
