@@ -158,7 +158,7 @@ cd wxMac-${WXVER}
 if [ -f $WXDEST/extra/wxWindows-${WXVER}-CW-Mac.zip ]; then
   unzip -o $WXDEST/extra/wxWindows-${WXVER}-CW-Mac.zip
 else
-  echo "Warning - did not find $WXDEST/deliver/extra/wxWindows-${WXVER}-CW-Mac.zip"
+  echo "Warning - did not find $WXDEST/extra/wxWindows-${WXVER}-CW-Mac.zip"
 fi
 
 $TAR xf ../wxMac-${WXVER}.tar
@@ -208,7 +208,7 @@ cd wxWindows-${WXVER}
 if [ -f $WXDEST/extra/wxWindows-${WXVER}-VC.zip ]; then
   unzip -o $WXDEST/extra/wxWindows-${WXVER}-VC.zip
 else
-  echo "Warning - did not find $WXDEST/deliver/extra/wxWindows-${WXVER}-VC.zip"
+  echo "Warning - did not find $WXDEST/extra/wxWindows-${WXVER}-VC.zip"
 fi
 
 # If we have the full set of Mac CW project files,
@@ -216,7 +216,7 @@ fi
 if [ -f $WXDEST/extra/wxWindows-${WXVER}-CW-Mac.zip ]; then
   unzip -o $WXDEST/extra/wxWindows-${WXVER}-CW-Mac.zip
 else
-  echo "Warning - did not find $WXDEST/deliver/extra/wxWindows-${WXVER}-CW-Mac.zip"
+  echo "Warning - did not find $WXDEST/extra/wxWindows-${WXVER}-CW-Mac.zip"
 fi
 
 $TAR xf ../wxAll-${WXVER}.tar
