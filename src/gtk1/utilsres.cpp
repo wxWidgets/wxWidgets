@@ -249,20 +249,20 @@ bool wxGetResource(const wxString& section, const wxString& entry, char **value,
         wxXMergeDatabases();
 
     XrmDatabase database;
-    if (file) {
+    if ( !file.IsEmpty() ) {
         char buffer[500];
         // Is this right? Trying to get it to look in the user's
         // home directory instead of current directory -- JACS
         (void)GetIniFile(buffer, file);
 
         wxNode *node = (wxNode*) NULL;  /* suppress egcs warning */
-	node = wxTheResourceCache->Find(buffer);
+        node = wxTheResourceCache->Find(buffer);
         if (node)
-	{
+        {
             database = (XrmDatabase)node->Data();
-	}
-        else 
-	{
+        }
+        else
+        {
             database = XrmGetFileDatabase(buffer);
             wxLogTrace(wxTraceResAlloc, "Get: Number = %d", wxTheResourceCache->Number());
             wxTheResourceCache->Append(buffer, (wxObject *)database);
