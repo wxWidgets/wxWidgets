@@ -38,6 +38,7 @@
     #include "wx/menu.h"
     #include "wx/frame.h"
     #include "wx/filedlg.h"
+    #include "wx/msgdlg.h"
     #include "wx/textctrl.h"
     #include "wx/sizer.h"
     #include "wx/statbmp.h"
