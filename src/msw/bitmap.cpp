@@ -724,7 +724,7 @@ bool wxBitmapHandler::Create(wxGDIImage *image,
 {
     wxBitmap *bitmap = wxDynamicCast(image, wxBitmap);
 
-    return bitmap ? Create(bitmap, data, width, height, depth) : FALSE;
+    return bitmap ? Create(bitmap, data, flags, width, height, depth) : FALSE;
 }
 
 bool wxBitmapHandler::Load(wxGDIImage *image,
