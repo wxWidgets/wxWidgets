@@ -3494,6 +3494,13 @@ bool wxWindow::MSWOnScroll(int orientation, WXWORD wParam,
     case SB_THUMBPOSITION:
     case SB_THUMBTRACK:
 #ifdef __WIN32__
+        // the up down controls send the WM_SCROLL events too but we can't call
+        // GetScrollInfo() for them as they don't have the scrollbars
+        //
+        // NB: this is an ugly fix for 2.2 branch only - a better one involves
+        //     modifying the headers and will be in 2.4 branch
+        if ( !wxDynamicCast(this, wxNotebook) )
+
         // under Win32, the scrollbar range and position are 32 bit integers,
         // but WM_[HV]SCROLL only carry the low 16 bits of them, so we must
         // explicitly query the scrollbar for the correct position (this must

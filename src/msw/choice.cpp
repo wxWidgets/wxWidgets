@@ -287,9 +287,7 @@ wxSize wxChoice::DoGetBestSize() const
 
     wChoice += 5*cx;
 
-    // Choice drop-down list depends on number of items (limited to 10)
-    size_t nStrings = nItems == 0 ? 10 : wxMin(10, nItems) + 1;
-    int hChoice = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy)*nStrings;
+    int hChoice = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy);
 
     return wxSize(wChoice, hChoice);
 }
