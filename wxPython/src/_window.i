@@ -588,8 +588,8 @@ sizer, interior children, or other means)");
         virtual bool , Show( bool show = True ),
         "Shows or hides the window. You may need to call Raise for a top level
 window if you want to bring it to top, although this is not needed if
-Show() is called immediately after the frame creation.  Returns true
-if the window has been shown or hidden or false if nothing was done
+Show is called immediately after the frame creation.  Returns True if
+the window has been shown or hidden or False if nothing was done
 because it already was in the requested state.");
     
     DocDeclStr(
@@ -629,7 +629,8 @@ after changing the others for the change to take place immediately.");
     
     DocDeclStr(
         virtual long , GetWindowStyleFlag() const,
-        "Gets the window style that was passed to the constructor or Create method.");    
+        "Gets the window style that was passed to the constructor or Create
+method.");    
 
     %pythoncode { SetWindowStyle = SetWindowStyleFlag; GetWindowStyle = GetWindowStyleFlag }
     
@@ -723,8 +724,7 @@ or None.");
         virtual bool , AcceptsFocusFromKeyboard() const,
         "Can this window be given focus by keyboard navigation? if not, the
 only way to give it focus (provided it accepts it at all) is to click
-it.
-");
+it.");
     
 
 
@@ -732,8 +732,7 @@ it.
     DocDeclStr(
         virtual wxWindow *, GetDefaultItem() const,
         "Get the default child of this parent, i.e. the one which is activated
-by pressing <Enter> such as the OK button on a wx.Dialog.
-");
+by pressing <Enter> such as the OK button on a wx.Dialog.");
     
     DocDeclStr(
         virtual wxWindow *, SetDefaultItem(wxWindow * child),
@@ -946,8 +945,8 @@ hotkey was registered successfully.");
     // ---------------------------
 
     DocStr(ConvertDialogToPixels,
-           "Converts a point or size from dialog units to pixels.  Dialog units are
-used for maintaining a dialog's proportions even if the font
+           "Converts a point or size from dialog units to pixels.  Dialog units
+are used for maintaining a dialog's proportions even if the font
 changes. For the x dimension, the dialog units are multiplied by the
 average character width and then divided by 4. For the y dimension,
 the dialog units are multiplied by the average character height and
