@@ -1,0 +1,16 @@
+#
+# File:		makefile.b32
+# Author:	Julian Smart
+# Created:	1999
+# Updated:	
+# Copyright:
+#
+# Makefile : Builds sample for 32-bit BC++
+
+WXDIR = $(WXWIN)
+
+TARGET=dbbrowse
+OBJECTS = $(TARGET).obj browsedb.obj dbgrid.obj dbtree.obj dlguser.obj doc.obj pgmctrl.obj tabpgwin.obj
+
+!include $(WXDIR)\src\makeprog.b32
+
