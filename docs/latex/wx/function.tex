@@ -1753,6 +1753,54 @@ normal way which usually just means that the application will be terminated.
 Calling wxHandleFatalExceptions() with {\it doIt} equal to FALSE will restore
 this default behaviour.
 
+\membersection{::wxInitAllImageHandlers}\label{wxinitallimagehandlers}
+
+\func{void}{wxInitAllImageHandlers}{\void}
+
+Initializes all available image handlers. For a list of available handlers,
+see \helpref{wxImage}{wximage}.
+
+\wxheading{See also}
+
+\helpref{wxImage}{wximage}, \helpref{wxImageHandler}{wximagehandler}
+
+\wxheading{Include files}
+
+<wx/image.h>
+
+\membersection{::wxInitialize}\label{wxinitialize}
+
+\func{bool}{wxInitialize}{\void}
+
+This function is used in wxBase only and only if you don't create 
+\helpref{wxApp}{wxapp} object at all. In this case you must call it from your 
+{\tt main()} function before calling any other wxWindows functions.
+
+If the function returns {\tt FALSE} the initialization could not be performed,
+in this case the library cannot be used and 
+\helpref{wxUninitialize}{wxuninitialize} shouldn't be called neither.
+
+This function may be called several times but 
+\helpref{wxUninitialize}{wxuninitialize} must be called for each successful
+call to this function.
+
+\wxheading{Include files}
+
+<wx/app.h>
+
+\membersection{::wxIsBusy}\label{wxisbusy}
+
+\func{bool}{wxIsBusy}{\void}
+
+Returns TRUE if between two \helpref{wxBeginBusyCursor}{wxbeginbusycursor} and\rtfsp
+\helpref{wxEndBusyCursor}{wxendbusycursor} calls.
+
+See also \helpref{wxBusyCursor}{wxbusycursor}.
+
+\wxheading{Include files}
+
+<wx/utils.h>
+
 \membersection{::wxKill}\label{wxkill}
 
 \func{int}{wxKill}{\param{long}{ pid}, \param{int}{ sig = wxSIGTERM}, \param{wxKillError }{*rc = NULL}}
@@ -1805,30 +1853,6 @@ enum wxKillError
 \helpref{wxProcess::Kill}{wxprocesskill},\rtfsp
 \helpref{wxProcess::Exists}{wxprocessexists},\rtfsp
 \helpref{Exec sample}{sampleexec}
-
-\wxheading{Include files}
-
-<wx/utils.h>
-
-\membersection{::wxInitAllImageHandlers}\label{wxinitallimagehandlers}
-
-\func{void}{wxInitAllImageHandlers}{\void}
-
-Initializes all available image handlers. For a list of available handlers,
-see \helpref{wxImage}{wximage}.
-
-\wxheading{See also}
-
-\helpref{wxImage}{wximage}, \helpref{wxImageHandler}{wximagehandler}
-
-\membersection{::wxIsBusy}\label{wxisbusy}
-
-\func{bool}{wxIsBusy}{\void}
-
-Returns TRUE if between two \helpref{wxBeginBusyCursor}{wxbeginbusycursor} and\rtfsp
-\helpref{wxEndBusyCursor}{wxendbusycursor} calls.
-
-See also \helpref{wxBusyCursor}{wxbusycursor}.
 
 \wxheading{Include files}
 
@@ -2039,6 +2063,17 @@ In release mode this function does nothing.
 \wxheading{Include files}
 
 <wx/debug.h>
+
+\membersection{::wxUninitialize}\label{wxuninitialize}
+
+\func{void}{wxUninitialize}{\void}
+
+This function is for use in console (wxBase) programs only. It must be called
+once for each previous successful call to \helpref{wxInitialize}{wxinitialize}.
+
+\wxheading{Include files}
+
+<wx/app.h>
 
 \membersection{::wxUsleep}\label{wxusleep}
 
