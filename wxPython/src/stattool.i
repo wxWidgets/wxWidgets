@@ -196,7 +196,7 @@ public:
 
         // Insert the new tool at the given position, if pos == GetToolsCount(), it
         // is equivalent to DoAddTool()
-        wxToolBarToolBase *InsertTool(size_t pos,
+        wxToolBarToolBase *DoInsertTool(size_t pos,
                                       int id,
                                       const wxString& label,
                                       const wxBitmap& bitmap,
