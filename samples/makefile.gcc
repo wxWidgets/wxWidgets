@@ -21,7 +21,7 @@ MAKEARGS = GCC_VERSION=$(GCC_VERSION)
 
 ### Targets: ###
 
-all: access artprov calendar caret checklst config console controls db dialogs dialup display dnd docview docvwmdi dragimag drawing dynamic erase event exec font grid help htlbox html image internat ipc joytest keyboard layout listbox listctrl mdi memcheck menu mfc minifram minimal mobile multimon nativdlg newgrid notebook oleauto opengl ownerdrw png printing propsize regtest render richedit rotate sashtest scroll scrollsub shaped sockets splitter statbar tab taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard wxtest
+all: access artprov calendar caret checklst config console controls db dialogs dialup display dnd docview docvwmdi dragimag drawing dynamic erase event exec font grid help htlbox html image internat ipc joytest keyboard layout listbox listctrl mdi memcheck menu mfc minifram minimal mobile multimon nativdlg notebook oleauto opengl ownerdrw png printing propsize regtest render richedit rotate sashtest scroll scrollsub shaped sockets splitter statbar tab taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard wxtest
 
 access: 
 	$(MAKE) -C access -f makefile.gcc $(MAKEARGS) all
@@ -155,9 +155,6 @@ multimon:
 nativdlg: 
 	$(MAKE) -C nativdlg -f makefile.gcc $(MAKEARGS) all
 
-newgrid: 
-	$(MAKE) -C newgrid -f makefile.gcc $(MAKEARGS) all
-
 notebook: 
 	$(MAKE) -C notebook -f makefile.gcc $(MAKEARGS) all
 
@@ -248,4 +245,4 @@ wizard:
 wxtest: 
 	$(MAKE) -C wxtest -f makefile.gcc $(MAKEARGS) all
 
-.PHONY: all access artprov calendar caret checklst clean config console controls db dialogs dialup display dnd docview docvwmdi dragimag drawing dynamic erase event exec font grid help htlbox html image internat ipc joytest keyboard layout listbox listctrl mdi memcheck menu mfc minifram minimal mobile multimon nativdlg newgrid notebook oleauto opengl ownerdrw png printing propsize regtest render richedit rotate sashtest scroll scrollsub shaped sockets splitter statbar tab taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard wxtest
+.PHONY: all access artprov calendar caret checklst clean config console controls db dialogs dialup display dnd docview docvwmdi dragimag drawing dynamic erase event exec font grid help htlbox html image internat ipc joytest keyboard layout listbox listctrl mdi memcheck menu mfc minifram minimal mobile multimon nativdlg notebook oleauto opengl ownerdrw png printing propsize regtest render richedit rotate sashtest scroll scrollsub shaped sockets splitter statbar tab taskbar text thread toolbar treectrl typetest validate vscroll widgets wizard wxtest

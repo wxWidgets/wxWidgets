@@ -2,7 +2,7 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 # WARNING: DO NOT EDIT OR DELETE THIS WORKSPACE FILE!
 
 ###############################################################################
-Project: "vscroll"=vscroll.dsp - Package Owner=<4>
+Project: "vstest"=vscroll.dsp - Package Owner=<4>
 
 Package=<5>
 {{{

@@ -14,15 +14,15 @@
 
 LIBDIRNAME = \
 	.\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
-MFC_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS_7)$(__DEBUGRUNTIME_3) /DWIN32 \
-	$(__DEBUGINFO_0) /Fd$(OBJS)\mfc.pdb $(____DEBUGRUNTIME_2_p) \
+MFCTEST_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS_7)$(__DEBUGRUNTIME_3) \
+	/DWIN32 $(__DEBUGINFO_0) /Fd$(OBJS)\mfctest.pdb $(____DEBUGRUNTIME_2_p) \
 	$(__OPTIMIZEFLAG_4) /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) /I.\..\..\include /I$(LIBDIRNAME) /I.\..\..\src\tiff \
 	/I.\..\..\src\jpeg /I.\..\..\src\png /I.\..\..\src\zlib /I.\..\..\src\regex \
 	/I.\..\..\src\expat\lib /I. $(__DLLFLAG_p) /D_WINDOWS $(CXXFLAGS)
-MFC_OBJECTS =  \
-	$(OBJS)\mfc_mfc.obj \
-	$(OBJS)\mfc_mfc.res
+MFCTEST_OBJECTS =  \
+	$(OBJS)\mfctest_mfctest.obj \
+	$(OBJS)\mfctest_mfctest.res
 OBJS = \
 	vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 
@@ -206,20 +206,20 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\mfc.exe
+all: $(OBJS)\mfctest.exe
 
-$(OBJS)\mfc_mfc.obj: .\mfc.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(MFC_CXXFLAGS) $**
+$(OBJS)\mfctest_mfctest.obj: .\mfctest.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MFCTEST_CXXFLAGS) $**
 
-$(OBJS)\mfc_mfc.res: .\mfc.rc
+$(OBJS)\mfctest_mfctest.res: .\mfctest.rc
 	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_2_p_1) /d __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) /i .\..\..\include /i $(LIBDIRNAME) /i .\..\..\src\tiff /i .\..\..\src\jpeg /i .\..\..\src\png /i .\..\..\src\zlib  /i .\..\..\src\regex /i .\..\..\src\expat\lib /i . $(__DLLFLAG_p_1) /d _WINDOWS $**
 
 clean: 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
 	-if exist $(OBJS)\*.res del $(OBJS)\*.res
-	-if exist $(OBJS)\mfc.exe del $(OBJS)\mfc.exe
+	-if exist $(OBJS)\mfctest.exe del $(OBJS)\mfctest.exe
 
-$(OBJS)\mfc.exe: $(MFC_OBJECTS) $(OBJS)\mfc_mfc.res
+$(OBJS)\mfctest.exe: $(MFCTEST_OBJECTS) $(OBJS)\mfctest_mfctest.res
 	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_1)  /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:WINDOWS  @<<
-	$(MFC_OBJECTS)  $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib
+	$(MFCTEST_OBJECTS)  $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib
 <<

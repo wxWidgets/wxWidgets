@@ -3,11 +3,11 @@
 
     <include file="../../build/bakefiles/common_samples.bkl"/>
 
-    <exe id="mfc" template="wx_sample" template_append="wx_append">
-        <sources>mfc.cpp</sources>
+    <exe id="mfctest" template="wx_sample" template_append="wx_append">
+        <sources>mfctest.cpp</sources>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
-        <win32-res>mfc.rc</win32-res>
+        <win32-res>mfctest.rc</win32-res>
     </exe>
 
 </makefile>

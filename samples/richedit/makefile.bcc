@@ -30,7 +30,11 @@ RICHEDIT_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS_6) $(__DEBUGINFO) \
 	-I.\..\..\src\tiff -I.\..\..\src\jpeg -I.\..\..\src\png -I.\..\..\src\zlib \
 	-I.\..\..\src\regex -I.\..\..\src\expat\lib -I. $(__DLLFLAG_p) $(CXXFLAGS)
 RICHEDIT_OBJECTS =  \
-	$(OBJS)\richedit_richedit.obj
+	$(OBJS)\richedit_wxLayout.obj \
+	$(OBJS)\richedit_kbList.obj \
+	$(OBJS)\richedit_wxllist.obj \
+	$(OBJS)\richedit_wxlparser.obj \
+	$(OBJS)\richedit_wxlwindow.obj
 
 ### Conditionally set variables: ###
 
@@ -147,18 +151,30 @@ $(OBJS):
 
 all: $(OBJS)\richedit.exe
 
-$(OBJS)\richedit_richedit.obj: .\richedit.cpp
+$(OBJS)\richedit_kbList.obj: .\kbList.cpp
 	$(CXX) -q -c -P -o$@ $(RICHEDIT_CXXFLAGS) $**
 
-$(OBJS)\richedit_richedit.res: .\richedit.rc
+$(OBJS)\richedit_sample.res: .\..\..\samples\sample.rc
 	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include -d__WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) -i.\..\..\include -i$(LIBDIRNAME) -i.\..\..\src\tiff -i.\..\..\src\jpeg -i.\..\..\src\png -i.\..\..\src\zlib  -i.\..\..\src\regex -i.\..\..\src\expat\lib -i. $(__DLLFLAG_p_1) $**
+
+$(OBJS)\richedit_wxLayout.obj: .\wxLayout.cpp
+	$(CXX) -q -c -P -o$@ $(RICHEDIT_CXXFLAGS) $**
+
+$(OBJS)\richedit_wxllist.obj: .\wxllist.cpp
+	$(CXX) -q -c -P -o$@ $(RICHEDIT_CXXFLAGS) $**
+
+$(OBJS)\richedit_wxlparser.obj: .\wxlparser.cpp
+	$(CXX) -q -c -P -o$@ $(RICHEDIT_CXXFLAGS) $**
+
+$(OBJS)\richedit_wxlwindow.obj: .\wxlwindow.cpp
+	$(CXX) -q -c -P -o$@ $(RICHEDIT_CXXFLAGS) $**
 
 clean: 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
 	-if exist $(OBJS)\*.res del $(OBJS)\*.res
 	-if exist $(OBJS)\richedit.exe del $(OBJS)\richedit.exe
 
-$(OBJS)\richedit.exe: $(RICHEDIT_OBJECTS)  $(OBJS)\richedit_richedit.res
+$(OBJS)\richedit.exe: $(RICHEDIT_OBJECTS)  $(OBJS)\richedit_sample.res
 	ilink32 -Tpe -q $(LDFLAGS) $(__DEBUGINFO)  -L$(LIBDIRNAME) -aa  @&&|
-	c0w32.obj $(RICHEDIT_OBJECTS),$@,, $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  import32.lib ole2w32.lib  cw32mt$(__RUNTIME_LIBS_7).lib,, $(OBJS)\richedit_richedit.res
+	c0w32.obj $(RICHEDIT_OBJECTS),$@,, $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  import32.lib ole2w32.lib  cw32mt$(__RUNTIME_LIBS_7).lib,, $(OBJS)\richedit_sample.res
 |

@@ -196,8 +196,8 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\help.exe del $(OBJS)\help.exe
 
 data : .SYMBOLIC 
-	if not exist $(OBJS)/helpfiles mkdir $(OBJS)/helpfiles
-	for %f in (Index.hhk another.hhc another.hhp another.htm book1.htm book2.htm contents.hhc main.htm page2-b.htm testing.hhp) do if not exist $(OBJS)/helpfiles\%f copy ./helpfiles\%f $(OBJS)/helpfiles
+	if not exist $(OBJS)\helpfiles mkdir $(OBJS)\helpfiles
+	for %f in (Index.hhk another.hhc another.hhp another.htm book1.htm book2.htm contents.hhc main.htm page2-b.htm testing.hhp) do if not exist $(OBJS)\helpfiles\%f copy .\helpfiles\%f $(OBJS)\helpfiles
 
 $(OBJS)\help.exe :  $(HELP_OBJECTS) $(OBJS)\help_help.res
 	@%create $(OBJS)\help.lbc

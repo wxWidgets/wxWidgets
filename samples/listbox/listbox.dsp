@@ -468,11 +468,11 @@ LINK32=link.exe
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\lboxtest.cpp
+SOURCE=.\..\..\samples\sample.rc
 # End Source File
 # Begin Source File
 
-SOURCE=.\listbox.rc
+SOURCE=.\lboxtest.cpp
 # End Source File
 # End Group
 # End Target

@@ -38,8 +38,8 @@ LISTBOX_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
 	-I$(srcdir) $(__DLLFLAG_p) $(CXXFLAGS)
 LISTBOX_OBJECTS =  \
-	listbox_lboxtest.o \
-	$(__listbox___win32rc)
+	$(__listbox___win32rc) \
+	listbox_lboxtest.o
 
 ### Conditionally set variables: ###
 
@@ -121,7 +121,7 @@ COND_MONOLITHIC_1___WXLIB_MONO_p = \
 @COND_PLATFORM_MAC_1@__listbox___mac_rezcmd = $(__MACOSX_RESOURCES_p_1)
 @COND_PLATFORM_MAC_1@__listbox___mac_setfilecmd = \
 @COND_PLATFORM_MAC_1@	$(SETFILE) -a C listbox$(EXEEXT)
-@COND_PLATFORM_WIN32_1@__listbox___win32rc = listbox_listbox_rc.o
+@COND_PLATFORM_WIN32_1@__listbox___win32rc = listbox_sample_rc.o
 
 ### Targets: ###
 
@@ -148,7 +148,7 @@ listbox$(EXEEXT): $(LISTBOX_OBJECTS) $(__listbox___win32rc)
 listbox_lboxtest.o: $(srcdir)/lboxtest.cpp
 	$(CXXC) -c -o $@ $(LISTBOX_CXXFLAGS) $<
 
-listbox_listbox_rc.o: $(srcdir)/listbox.rc
+listbox_sample_rc.o: $(srcdir)/../../samples/sample.rc
 	$(RESCOMP) -i$< -o$@ --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)   --include-dir $(top_srcdir)/include $(__INC_TIFF_p_2) $(__INC_JPEG_p_2) $(__INC_PNG_p_2) $(__INC_ZLIB_p_2) $(__INC_ODBC_p_2) $(__INC_REGEX_p_2) $(__INC_EXPAT_p_2) --include-dir $(srcdir) $(__DLLFLAG_p_2)
 
 uninstall: 

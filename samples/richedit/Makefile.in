@@ -38,8 +38,12 @@ RICHEDIT_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
 	-I$(srcdir) $(__DLLFLAG_p) $(CXXFLAGS)
 RICHEDIT_OBJECTS =  \
-	richedit_richedit.o \
-	$(__richedit___win32rc)
+	$(__richedit___win32rc) \
+	richedit_wxLayout.o \
+	richedit_kbList.o \
+	richedit_wxllist.o \
+	richedit_wxlparser.o \
+	richedit_wxlwindow.o
 
 ### Conditionally set variables: ###
 
@@ -121,7 +125,7 @@ COND_MONOLITHIC_1___WXLIB_MONO_p = \
 @COND_PLATFORM_MAC_1@__richedit___mac_rezcmd = $(__MACOSX_RESOURCES_p_1)
 @COND_PLATFORM_MAC_1@__richedit___mac_setfilecmd = \
 @COND_PLATFORM_MAC_1@	$(SETFILE) -a C richedit$(EXEEXT)
-@COND_PLATFORM_WIN32_1@__richedit___win32rc = richedit_richedit_rc.o
+@COND_PLATFORM_WIN32_1@__richedit___win32rc = richedit_sample_rc.o
 
 ### Targets: ###
 
@@ -145,11 +149,23 @@ richedit$(EXEEXT): $(RICHEDIT_OBJECTS) $(__richedit___win32rc)
 	$(__richedit___mac_rezcmd)
 	$(__richedit___mac_setfilecmd)
 
-richedit_richedit.o: $(srcdir)/richedit.cpp
+richedit_kbList.o: $(srcdir)/kbList.cpp
 	$(CXXC) -c -o $@ $(RICHEDIT_CXXFLAGS) $<
 
-richedit_richedit_rc.o: $(srcdir)/richedit.rc
+richedit_sample_rc.o: $(srcdir)/../../samples/sample.rc
 	$(RESCOMP) -i$< -o$@ --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)   --include-dir $(top_srcdir)/include $(__INC_TIFF_p_2) $(__INC_JPEG_p_2) $(__INC_PNG_p_2) $(__INC_ZLIB_p_2) $(__INC_ODBC_p_2) $(__INC_REGEX_p_2) $(__INC_EXPAT_p_2) --include-dir $(srcdir) $(__DLLFLAG_p_2)
+
+richedit_wxLayout.o: $(srcdir)/wxLayout.cpp
+	$(CXXC) -c -o $@ $(RICHEDIT_CXXFLAGS) $<
+
+richedit_wxllist.o: $(srcdir)/wxllist.cpp
+	$(CXXC) -c -o $@ $(RICHEDIT_CXXFLAGS) $<
+
+richedit_wxlparser.o: $(srcdir)/wxlparser.cpp
+	$(CXXC) -c -o $@ $(RICHEDIT_CXXFLAGS) $<
+
+richedit_wxlwindow.o: $(srcdir)/wxlwindow.cpp
+	$(CXXC) -c -o $@ $(RICHEDIT_CXXFLAGS) $<
 
 uninstall: 
 

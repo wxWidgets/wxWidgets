@@ -12,18 +12,26 @@ include ../../build/msw/config.gcc
 
 ### Variables: ###
 
-IPC_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) $(GCCFLAGS) \
+CLIENT_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) -I.\..\..\include -I$(LIBDIRNAME) -I.\..\..\src\tiff \
 	-I.\..\..\src\jpeg -I.\..\..\src\png -I.\..\..\src\zlib -I.\..\..\src\regex \
 	-I.\..\..\src\expat\lib -I. $(__DLLFLAG_p) $(CXXFLAGS)
-IPC_OBJECTS =  \
-	$(OBJS)\ipc_ipc.o \
-	$(OBJS)\ipc_ipc_rc.o
+CLIENT_OBJECTS =  \
+	$(OBJS)\client_sample_rc.o \
+	$(OBJS)\client_client.o
 LIBDIRNAME = \
 	.\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = \
 	gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+SERVER_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(GCCFLAGS) \
+	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
+	$(__UNICODE_DEFINE_p) -I.\..\..\include -I$(LIBDIRNAME) -I.\..\..\src\tiff \
+	-I.\..\..\src\jpeg -I.\..\..\src\png -I.\..\..\src\zlib -I.\..\..\src\regex \
+	-I.\..\..\src\expat\lib -I. $(__DLLFLAG_p) $(CXXFLAGS)
+SERVER_OBJECTS =  \
+	$(OBJS)\server_sample_rc.o \
+	$(OBJS)\server_server.o
 
 ### Conditionally set variables: ###
 
@@ -79,17 +87,17 @@ __DEBUG_DEFINE_p = -D__WXDEBUG__
 endif
 ifeq ($(BUILD),debug)
 ifeq ($(DEBUG_FLAG),default)
-__DEBUG_DEFINE_p_1 = --define __WXDEBUG__
+__DEBUG_DEFINE_p_0 = --define __WXDEBUG__
 endif
 endif
 ifeq ($(DEBUG_FLAG),1)
-__DEBUG_DEFINE_p_1 = --define __WXDEBUG__
+__DEBUG_DEFINE_p_0 = --define __WXDEBUG__
 endif
 ifeq ($(SHARED),1)
 __DLLFLAG_p = -DWXUSINGDLL
 endif
 ifeq ($(SHARED),1)
-__DLLFLAG_p_1 = --define WXUSINGDLL
+__DLLFLAG_p_0 = --define WXUSINGDLL
 endif
 ifeq ($(USE_GUI),1)
 __LIB_JPEG_p = -lwxjpeg$(WXDEBUGFLAG)
@@ -101,16 +109,16 @@ ifeq ($(USE_GUI),1)
 __LIB_TIFF_p = -lwxtiff$(WXDEBUGFLAG)
 endif
 ifeq ($(BUILD),debug)
-__OPTIMIZEFLAG_2 = -O0
+__OPTIMIZEFLAG = -O0
 endif
 ifeq ($(BUILD),release)
-__OPTIMIZEFLAG_2 = -O2
+__OPTIMIZEFLAG = -O2
 endif
 ifeq ($(UNICODE),1)
 __UNICODE_DEFINE_p = -DwxUSE_UNICODE=1
 endif
 ifeq ($(UNICODE),1)
-__UNICODE_DEFINE_p_1 = --define wxUSE_UNICODE=1
+__UNICODE_DEFINE_p_0 = --define wxUSE_UNICODE=1
 endif
 ifeq ($(MONOLITHIC),0)
 __WXLIB_BASE_p = -lwxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)
@@ -123,11 +131,14 @@ ifeq ($(MONOLITHIC),1)
 __WXLIB_MONO_p = \
 	-lwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 endif
+ifeq ($(MONOLITHIC),0)
+__WXLIB_NET_p = -lwxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net
+endif
 ifeq ($(WXUNIV),1)
 __WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
 endif
 ifeq ($(WXUNIV),1)
-__WXUNIV_DEFINE_p_1 = --define __WXUNIVERSAL__
+__WXUNIV_DEFINE_p_0 = --define __WXUNIVERSAL__
 endif
 
 MAKEARGS = BUILD=$(BUILD) CFG=$(CFG) CPPFLAGS=$(CPPFLAGS) CXX=$(CXX) CXXFLAGS=$(CXXFLAGS) DEBUG_FLAG=$(DEBUG_FLAG) DEBUG_INFO=$(DEBUG_INFO) GCC_VERSION=$(GCC_VERSION) LDFLAGS=$(LDFLAGS) MONOLITHIC=$(MONOLITHIC) OFFICIAL_BUILD=$(OFFICIAL_BUILD) SHARED=$(SHARED) UNICODE=$(UNICODE) USE_GUI=$(USE_GUI) WXUNIV=$(WXUNIV)
@@ -139,19 +150,29 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\ipc.exe
+all: $(OBJS)\client.exe $(OBJS)\server.exe
 
-$(OBJS)\ipc_ipc.o: .\ipc.cpp
-	$(CXX) -c -o $@ $(IPC_CXXFLAGS) $<
+$(OBJS)\client_client.o: .\client.cpp
+	$(CXX) -c -o $@ $(CLIENT_CXXFLAGS) $<
 
-$(OBJS)\ipc_ipc_rc.o: .\ipc.rc
-	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../include --include-dir $(LIBDIRNAME) --include-dir ./../../src/tiff --include-dir ./../../src/jpeg --include-dir ./../../src/png --include-dir ./../../src/zlib  --include-dir ./../../src/regex --include-dir ./../../src/expat/lib --include-dir . $(__DLLFLAG_p_1)
+$(OBJS)\client_sample_rc.o: .\..\..\samples\sample.rc
+	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) --include-dir ./../../include --include-dir $(LIBDIRNAME) --include-dir ./../../src/tiff --include-dir ./../../src/jpeg --include-dir ./../../src/png --include-dir ./../../src/zlib  --include-dir ./../../src/regex --include-dir ./../../src/expat/lib --include-dir . $(__DLLFLAG_p_0)
+
+$(OBJS)\server_sample_rc.o: .\..\..\samples\sample.rc
+	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) --include-dir ./../../include --include-dir $(LIBDIRNAME) --include-dir ./../../src/tiff --include-dir ./../../src/jpeg --include-dir ./../../src/png --include-dir ./../../src/zlib  --include-dir ./../../src/regex --include-dir ./../../src/expat/lib --include-dir . $(__DLLFLAG_p_0)
+
+$(OBJS)\server_server.o: .\server.cpp
+	$(CXX) -c -o $@ $(SERVER_CXXFLAGS) $<
 
 clean: 
 	-if exist $(OBJS)\*.o del $(OBJS)\*.o
-	-if exist $(OBJS)\ipc.exe del $(OBJS)\ipc.exe
+	-if exist $(OBJS)\client.exe del $(OBJS)\client.exe
+	-if exist $(OBJS)\server.exe del $(OBJS)\server.exe
 
-$(OBJS)\ipc.exe: $(IPC_OBJECTS) $(OBJS)\ipc_ipc_rc.o
-	$(CXX) -o $@ $(IPC_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) -mthreads -L$(LIBDIRNAME) -Wl,--subsystem,windows -mwindows   $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG)  -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lodbc32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32
+$(OBJS)\client.exe: $(CLIENT_OBJECTS) $(OBJS)\client_sample_rc.o
+	$(CXX) -o $@ $(CLIENT_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) -mthreads -L$(LIBDIRNAME) -Wl,--subsystem,windows -mwindows   $(__WXLIB_CORE_p) $(__WXLIB_NET_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG)  -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lodbc32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32
+
+$(OBJS)\server.exe: $(SERVER_OBJECTS) $(OBJS)\server_sample_rc.o
+	$(CXX) -o $@ $(SERVER_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) -mthreads -L$(LIBDIRNAME) -Wl,--subsystem,windows -mwindows   $(__WXLIB_CORE_p) $(__WXLIB_NET_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG)  -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lodbc32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32
 
 .PHONY: all clean

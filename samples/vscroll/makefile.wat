@@ -157,14 +157,14 @@ LIBDIRNAME = &
 	.\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
-VSCROLL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm &
+VSTEST_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm &
 	$(__RUNTIME_LIBS_5) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(LIBDIRNAME) &
 	-i=.\..\..\src\tiff -i=.\..\..\src\jpeg -i=.\..\..\src\png &
 	-i=.\..\..\src\zlib -i=.\..\..\src\regex -i=.\..\..\src\expat\lib -i=. &
 	$(__DLLFLAG_p) $(CXXFLAGS)
-VSCROLL_OBJECTS =  &
-	$(OBJS)\vscroll_vstest.obj
+VSTEST_OBJECTS =  &
+	$(OBJS)\vstest_vstest.obj
 
 MAKEARGS = BUILD=$(BUILD) CFG=$(CFG) CPPFLAGS=$(CPPFLAGS) CXX=$(CXX) CXXFLAGS=$(CXXFLAGS) DEBUG_FLAG=$(DEBUG_FLAG) DEBUG_INFO=$(DEBUG_INFO) LDFLAGS=$(LDFLAGS) MONOLITHIC=$(MONOLITHIC) OFFICIAL_BUILD=$(OFFICIAL_BUILD) RUNTIME_LIBS=$(RUNTIME_LIBS) SHARED=$(SHARED) UNICODE=$(UNICODE) USE_GUI=$(USE_GUI) WXUNIV=$(WXUNIV)
 
@@ -175,28 +175,28 @@ $(OBJS) :
 
 ### Targets: ###
 
-all : .SYMBOLIC $(OBJS)\vscroll.exe
+all : .SYMBOLIC $(OBJS)\vstest.exe
 
-$(OBJS)\vscroll_vscroll.res :  .AUTODEPEND .\vscroll.rc
+$(OBJS)\vstest_sample.res :  .AUTODEPEND .\..\..\samples\sample.rc
 	wrc -q -ad -bt=nt -r -fo=$^@ -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(LIBDIRNAME) -i=.\..\..\src\tiff -i=.\..\..\src\jpeg -i=.\..\..\src\png -i=.\..\..\src\zlib  -i=.\..\..\src\regex -i=.\..\..\src\expat\lib -i=. $(__DLLFLAG_p) $<
 
-$(OBJS)\vscroll_vstest.obj :  .AUTODEPEND .\vstest.cpp
-	$(CXX) -zq -fo=$^@ $(VSCROLL_CXXFLAGS) $<
+$(OBJS)\vstest_vstest.obj :  .AUTODEPEND .\vstest.cpp
+	$(CXX) -zq -fo=$^@ $(VSTEST_CXXFLAGS) $<
 
 clean : .SYMBOLIC 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
 	-if exist $(OBJS)\*.res del $(OBJS)\*.res
 	-if exist $(OBJS)\*.lbc del $(OBJS)\*.lbc
 	-if exist $(OBJS)\*.ilk del $(OBJS)\*.ilk
-	-if exist $(OBJS)\vscroll.exe del $(OBJS)\vscroll.exe
+	-if exist $(OBJS)\vstest.exe del $(OBJS)\vstest.exe
 
-$(OBJS)\vscroll.exe :  $(VSCROLL_OBJECTS) $(OBJS)\vscroll_vscroll.res
-	@%create $(OBJS)\vscroll.lbc
-	@%append $(OBJS)\vscroll.lbc option quiet
-	@%append $(OBJS)\vscroll.lbc name $^@
-	@%append $(OBJS)\vscroll.lbc option incremental
-	@%append $(OBJS)\vscroll.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
-	@for %i in ($(VSCROLL_OBJECTS)) do @%append $(OBJS)\vscroll.lbc file %i
-	@for %i in ( $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\vscroll.lbc library %i
-	@%append $(OBJS)\vscroll.lbc option resource=$(OBJS)\vscroll_vscroll.res
-	wlink @$(OBJS)\vscroll.lbc
+$(OBJS)\vstest.exe :  $(VSTEST_OBJECTS) $(OBJS)\vstest_sample.res
+	@%create $(OBJS)\vstest.lbc
+	@%append $(OBJS)\vstest.lbc option quiet
+	@%append $(OBJS)\vstest.lbc name $^@
+	@%append $(OBJS)\vstest.lbc option incremental
+	@%append $(OBJS)\vstest.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
+	@for %i in ($(VSTEST_OBJECTS)) do @%append $(OBJS)\vstest.lbc file %i
+	@for %i in ( $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\vstest.lbc library %i
+	@%append $(OBJS)\vstest.lbc option resource=$(OBJS)\vstest_sample.res
+	wlink @$(OBJS)\vstest.lbc

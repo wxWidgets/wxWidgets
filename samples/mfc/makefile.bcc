@@ -22,13 +22,13 @@ BCCDIR = $(MAKEDIR)\..
 
 LIBDIRNAME = \
 	.\..\..\lib\bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
-MFC_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS_6) $(__DEBUGINFO) \
+MFCTEST_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS_6) $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG_2) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I.\..\..\include -I$(LIBDIRNAME) \
 	-I.\..\..\src\tiff -I.\..\..\src\jpeg -I.\..\..\src\png -I.\..\..\src\zlib \
 	-I.\..\..\src\regex -I.\..\..\src\expat\lib -I. $(__DLLFLAG_p) $(CXXFLAGS)
-MFC_OBJECTS =  \
-	$(OBJS)\mfc_mfc.obj
+MFCTEST_OBJECTS =  \
+	$(OBJS)\mfctest_mfctest.obj
 OBJS = \
 	bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 
@@ -145,20 +145,20 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\mfc.exe
+all: $(OBJS)\mfctest.exe
 
-$(OBJS)\mfc_mfc.obj: .\mfc.cpp
-	$(CXX) -q -c -P -o$@ $(MFC_CXXFLAGS) $**
+$(OBJS)\mfctest_mfctest.obj: .\mfctest.cpp
+	$(CXX) -q -c -P -o$@ $(MFCTEST_CXXFLAGS) $**
 
-$(OBJS)\mfc_mfc.res: .\mfc.rc
+$(OBJS)\mfctest_mfctest.res: .\mfctest.rc
 	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include -d__WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) -i.\..\..\include -i$(LIBDIRNAME) -i.\..\..\src\tiff -i.\..\..\src\jpeg -i.\..\..\src\png -i.\..\..\src\zlib  -i.\..\..\src\regex -i.\..\..\src\expat\lib -i. $(__DLLFLAG_p_1) $**
 
 clean: 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
 	-if exist $(OBJS)\*.res del $(OBJS)\*.res
-	-if exist $(OBJS)\mfc.exe del $(OBJS)\mfc.exe
+	-if exist $(OBJS)\mfctest.exe del $(OBJS)\mfctest.exe
 
-$(OBJS)\mfc.exe: $(MFC_OBJECTS)  $(OBJS)\mfc_mfc.res
+$(OBJS)\mfctest.exe: $(MFCTEST_OBJECTS)  $(OBJS)\mfctest_mfctest.res
 	ilink32 -Tpe -q $(LDFLAGS) $(__DEBUGINFO)  -L$(LIBDIRNAME) -aa  @&&|
-	c0w32.obj $(MFC_OBJECTS),$@,, $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  import32.lib ole2w32.lib  cw32mt$(__RUNTIME_LIBS_7).lib,, $(OBJS)\mfc_mfc.res
+	c0w32.obj $(MFCTEST_OBJECTS),$@,, $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  import32.lib ole2w32.lib  cw32mt$(__RUNTIME_LIBS_7).lib,, $(OBJS)\mfctest_mfctest.res
 |

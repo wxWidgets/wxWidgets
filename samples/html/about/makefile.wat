@@ -207,5 +207,5 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\about.exe del $(OBJS)\about.exe
 
 data : .SYMBOLIC 
-	if not exist $(OBJS)/data mkdir $(OBJS)/data
-	for %f in (about.htm logo.png) do if not exist $(OBJS)/data\%f copy ./data\%f $(OBJS)/data
+	if not exist $(OBJS)\data mkdir $(OBJS)\data
+	for %f in (about.htm logo.png) do if not exist $(OBJS)\data\%f copy .\data\%f $(OBJS)\data

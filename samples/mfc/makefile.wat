@@ -155,14 +155,14 @@ __WXUNIV_DEFINE_p = -d__WXUNIVERSAL__
 
 LIBDIRNAME = &
 	.\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
-MFC_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm &
+MFCTEST_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm &
 	$(__RUNTIME_LIBS_5) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(LIBDIRNAME) &
 	-i=.\..\..\src\tiff -i=.\..\..\src\jpeg -i=.\..\..\src\png &
 	-i=.\..\..\src\zlib -i=.\..\..\src\regex -i=.\..\..\src\expat\lib -i=. &
 	$(__DLLFLAG_p) $(CXXFLAGS)
-MFC_OBJECTS =  &
-	$(OBJS)\mfc_mfc.obj
+MFCTEST_OBJECTS =  &
+	$(OBJS)\mfctest_mfctest.obj
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 
@@ -175,12 +175,12 @@ $(OBJS) :
 
 ### Targets: ###
 
-all : .SYMBOLIC $(OBJS)\mfc.exe
+all : .SYMBOLIC $(OBJS)\mfctest.exe
 
-$(OBJS)\mfc_mfc.obj :  .AUTODEPEND .\mfc.cpp
-	$(CXX) -zq -fo=$^@ $(MFC_CXXFLAGS) $<
+$(OBJS)\mfctest_mfctest.obj :  .AUTODEPEND .\mfctest.cpp
+	$(CXX) -zq -fo=$^@ $(MFCTEST_CXXFLAGS) $<
 
-$(OBJS)\mfc_mfc.res :  .AUTODEPEND .\mfc.rc
+$(OBJS)\mfctest_mfctest.res :  .AUTODEPEND .\mfctest.rc
 	wrc -q -ad -bt=nt -r -fo=$^@ -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(LIBDIRNAME) -i=.\..\..\src\tiff -i=.\..\..\src\jpeg -i=.\..\..\src\png -i=.\..\..\src\zlib  -i=.\..\..\src\regex -i=.\..\..\src\expat\lib -i=. $(__DLLFLAG_p) $<
 
 clean : .SYMBOLIC 
@@ -188,15 +188,15 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\*.res del $(OBJS)\*.res
 	-if exist $(OBJS)\*.lbc del $(OBJS)\*.lbc
 	-if exist $(OBJS)\*.ilk del $(OBJS)\*.ilk
-	-if exist $(OBJS)\mfc.exe del $(OBJS)\mfc.exe
+	-if exist $(OBJS)\mfctest.exe del $(OBJS)\mfctest.exe
 
-$(OBJS)\mfc.exe :  $(MFC_OBJECTS) $(OBJS)\mfc_mfc.res
-	@%create $(OBJS)\mfc.lbc
-	@%append $(OBJS)\mfc.lbc option quiet
-	@%append $(OBJS)\mfc.lbc name $^@
-	@%append $(OBJS)\mfc.lbc option incremental
-	@%append $(OBJS)\mfc.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
-	@for %i in ($(MFC_OBJECTS)) do @%append $(OBJS)\mfc.lbc file %i
-	@for %i in ( $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\mfc.lbc library %i
-	@%append $(OBJS)\mfc.lbc option resource=$(OBJS)\mfc_mfc.res
-	wlink @$(OBJS)\mfc.lbc
+$(OBJS)\mfctest.exe :  $(MFCTEST_OBJECTS) $(OBJS)\mfctest_mfctest.res
+	@%create $(OBJS)\mfctest.lbc
+	@%append $(OBJS)\mfctest.lbc option quiet
+	@%append $(OBJS)\mfctest.lbc name $^@
+	@%append $(OBJS)\mfctest.lbc option incremental
+	@%append $(OBJS)\mfctest.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
+	@for %i in ($(MFCTEST_OBJECTS)) do @%append $(OBJS)\mfctest.lbc file %i
+	@for %i in ( $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\mfctest.lbc library %i
+	@%append $(OBJS)\mfctest.lbc option resource=$(OBJS)\mfctest_mfctest.res
+	wlink @$(OBJS)\mfctest.lbc

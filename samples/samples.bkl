@@ -52,7 +52,6 @@
     <subproject id="mobile" template="sub"/>
     <subproject id="multimon" template="sub"/>
     <subproject id="nativdlg" template="sub"/>
-    <subproject id="newgrid" template="sub"/>
     <subproject id="notebook" template="sub"/>
     <subproject id="oleauto" template="sub"/>
     <subproject id="opengl" template="sub"/>

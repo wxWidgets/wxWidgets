@@ -164,7 +164,11 @@ RICHEDIT_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm &
 	-i=.\..\..\src\zlib -i=.\..\..\src\regex -i=.\..\..\src\expat\lib -i=. &
 	$(__DLLFLAG_p) $(CXXFLAGS)
 RICHEDIT_OBJECTS =  &
-	$(OBJS)\richedit_richedit.obj
+	$(OBJS)\richedit_wxLayout.obj &
+	$(OBJS)\richedit_kbList.obj &
+	$(OBJS)\richedit_wxllist.obj &
+	$(OBJS)\richedit_wxlparser.obj &
+	$(OBJS)\richedit_wxlwindow.obj
 
 MAKEARGS = BUILD=$(BUILD) CFG=$(CFG) CPPFLAGS=$(CPPFLAGS) CXX=$(CXX) CXXFLAGS=$(CXXFLAGS) DEBUG_FLAG=$(DEBUG_FLAG) DEBUG_INFO=$(DEBUG_INFO) LDFLAGS=$(LDFLAGS) MONOLITHIC=$(MONOLITHIC) OFFICIAL_BUILD=$(OFFICIAL_BUILD) RUNTIME_LIBS=$(RUNTIME_LIBS) SHARED=$(SHARED) UNICODE=$(UNICODE) USE_GUI=$(USE_GUI) WXUNIV=$(WXUNIV)
 
@@ -177,11 +181,23 @@ $(OBJS) :
 
 all : .SYMBOLIC $(OBJS)\richedit.exe
 
-$(OBJS)\richedit_richedit.obj :  .AUTODEPEND .\richedit.cpp
+$(OBJS)\richedit_kbList.obj :  .AUTODEPEND .\kbList.cpp
 	$(CXX) -zq -fo=$^@ $(RICHEDIT_CXXFLAGS) $<
 
-$(OBJS)\richedit_richedit.res :  .AUTODEPEND .\richedit.rc
+$(OBJS)\richedit_sample.res :  .AUTODEPEND .\..\..\samples\sample.rc
 	wrc -q -ad -bt=nt -r -fo=$^@ -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(LIBDIRNAME) -i=.\..\..\src\tiff -i=.\..\..\src\jpeg -i=.\..\..\src\png -i=.\..\..\src\zlib  -i=.\..\..\src\regex -i=.\..\..\src\expat\lib -i=. $(__DLLFLAG_p) $<
+
+$(OBJS)\richedit_wxLayout.obj :  .AUTODEPEND .\wxLayout.cpp
+	$(CXX) -zq -fo=$^@ $(RICHEDIT_CXXFLAGS) $<
+
+$(OBJS)\richedit_wxllist.obj :  .AUTODEPEND .\wxllist.cpp
+	$(CXX) -zq -fo=$^@ $(RICHEDIT_CXXFLAGS) $<
+
+$(OBJS)\richedit_wxlparser.obj :  .AUTODEPEND .\wxlparser.cpp
+	$(CXX) -zq -fo=$^@ $(RICHEDIT_CXXFLAGS) $<
+
+$(OBJS)\richedit_wxlwindow.obj :  .AUTODEPEND .\wxlwindow.cpp
+	$(CXX) -zq -fo=$^@ $(RICHEDIT_CXXFLAGS) $<
 
 clean : .SYMBOLIC 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -190,7 +206,7 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\*.ilk del $(OBJS)\*.ilk
 	-if exist $(OBJS)\richedit.exe del $(OBJS)\richedit.exe
 
-$(OBJS)\richedit.exe :  $(RICHEDIT_OBJECTS) $(OBJS)\richedit_richedit.res
+$(OBJS)\richedit.exe :  $(RICHEDIT_OBJECTS) $(OBJS)\richedit_sample.res
 	@%create $(OBJS)\richedit.lbc
 	@%append $(OBJS)\richedit.lbc option quiet
 	@%append $(OBJS)\richedit.lbc name $^@
@@ -198,5 +214,5 @@ $(OBJS)\richedit.exe :  $(RICHEDIT_OBJECTS) $(OBJS)\richedit_richedit.res
 	@%append $(OBJS)\richedit.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
 	@for %i in ($(RICHEDIT_OBJECTS)) do @%append $(OBJS)\richedit.lbc file %i
 	@for %i in ( $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\richedit.lbc library %i
-	@%append $(OBJS)\richedit.lbc option resource=$(OBJS)\richedit_richedit.res
+	@%append $(OBJS)\richedit.lbc option resource=$(OBJS)\richedit_sample.res
 	wlink @$(OBJS)\richedit.lbc

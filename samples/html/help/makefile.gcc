@@ -157,8 +157,8 @@ clean:
 	-if exist $(OBJS)\help.exe del $(OBJS)\help.exe
 
 data: 
-	if not exist $(OBJS)/helpfiles mkdir $(OBJS)/helpfiles
-	for %%f in (Index.hhk another.hhc another.hhp another.htm book1.htm book2.htm contents.hhc main.htm page2-b.htm testing.hhp) do if not exist $(OBJS)/helpfiles\%%f copy ./helpfiles\%%f $(OBJS)/helpfiles
+	if not exist $(OBJS)\helpfiles mkdir $(OBJS)\helpfiles
+	for %%f in (Index.hhk another.hhc another.hhp another.htm book1.htm book2.htm contents.hhc main.htm page2-b.htm testing.hhp) do if not exist $(OBJS)\helpfiles\%%f copy .\helpfiles\%%f $(OBJS)\helpfiles
 
 $(OBJS)\help.exe: $(HELP_OBJECTS) $(OBJS)\help_help_rc.o
 	$(CXX) -o $@ $(HELP_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) -mthreads -L$(LIBDIRNAME) -Wl,--subsystem,windows -mwindows   $(__WXLIB_HTML_p) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG)  -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lodbc32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32

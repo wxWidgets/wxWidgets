@@ -38,8 +38,9 @@ WXTEST_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
 	-I$(srcdir) $(__DLLFLAG_p) $(CXXFLAGS)
 WXTEST_OBJECTS =  \
+	$(__wxtest___win32rc) \
 	wxtest_test.o \
-	$(__wxtest___win32rc)
+	wxtest_test_wdr.o
 
 ### Conditionally set variables: ###
 
@@ -121,7 +122,7 @@ COND_MONOLITHIC_1___WXLIB_MONO_p = \
 @COND_PLATFORM_MAC_1@__wxtest___mac_rezcmd = $(__MACOSX_RESOURCES_p_1)
 @COND_PLATFORM_MAC_1@__wxtest___mac_setfilecmd = \
 @COND_PLATFORM_MAC_1@	$(SETFILE) -a C wxtest$(EXEEXT)
-@COND_PLATFORM_WIN32_1@__wxtest___win32rc = wxtest_wxtest_rc.o
+@COND_PLATFORM_WIN32_1@__wxtest___win32rc = wxtest_sample_rc.o
 
 ### Targets: ###
 
@@ -147,11 +148,14 @@ wxtest$(EXEEXT): $(WXTEST_OBJECTS) $(__wxtest___win32rc)
 	$(__wxtest___mac_rezcmd)
 	$(__wxtest___mac_setfilecmd)
 
+wxtest_sample_rc.o: $(srcdir)/../../samples/sample.rc
+	$(RESCOMP) -i$< -o$@ --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)   --include-dir $(top_srcdir)/include $(__INC_TIFF_p_2) $(__INC_JPEG_p_2) $(__INC_PNG_p_2) $(__INC_ZLIB_p_2) $(__INC_ODBC_p_2) $(__INC_REGEX_p_2) $(__INC_EXPAT_p_2) --include-dir $(srcdir) $(__DLLFLAG_p_2)
+
 wxtest_test.o: $(srcdir)/test.cpp
 	$(CXXC) -c -o $@ $(WXTEST_CXXFLAGS) $<
 
-wxtest_wxtest_rc.o: $(srcdir)/wxtest.rc
-	$(RESCOMP) -i$< -o$@ --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)   --include-dir $(top_srcdir)/include $(__INC_TIFF_p_2) $(__INC_JPEG_p_2) $(__INC_PNG_p_2) $(__INC_ZLIB_p_2) $(__INC_ODBC_p_2) $(__INC_REGEX_p_2) $(__INC_EXPAT_p_2) --include-dir $(srcdir) $(__DLLFLAG_p_2)
+wxtest_test_wdr.o: $(srcdir)/test_wdr.cpp
+	$(CXXC) -c -o $@ $(WXTEST_CXXFLAGS) $<
 
 
 # Include dependency info, if present:

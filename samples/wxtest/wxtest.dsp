@@ -468,11 +468,15 @@ LINK32=link.exe
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\..\..\samples\sample.rc
+# End Source File
+# Begin Source File
+
 SOURCE=.\test.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\wxtest.rc
+SOURCE=.\test_wdr.cpp
 # End Source File
 # End Group
 # End Target

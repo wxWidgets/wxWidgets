@@ -468,11 +468,27 @@ LINK32=link.exe
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\richedit.cpp
+SOURCE=.\..\..\samples\sample.rc
 # End Source File
 # Begin Source File
 
-SOURCE=.\richedit.rc
+SOURCE=.\kbList.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\wxLayout.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\wxllist.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\wxlparser.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\wxlwindow.cpp
 # End Source File
 # End Group
 # End Target

@@ -14,14 +14,14 @@ include ../../build/msw/config.gcc
 
 LIBDIRNAME = \
 	.\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
-MULTIMON_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) $(GCCFLAGS) \
-	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I.\..\..\include -I$(LIBDIRNAME) -I.\..\..\src\tiff \
-	-I.\..\..\src\jpeg -I.\..\..\src\png -I.\..\..\src\zlib -I.\..\..\src\regex \
-	-I.\..\..\src\expat\lib -I. $(__DLLFLAG_p) $(CXXFLAGS)
-MULTIMON_OBJECTS =  \
-	$(OBJS)\multimon_multimon.o \
-	$(OBJS)\multimon_multimon_rc.o
+MULTIMON_TEST_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) \
+	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
+	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I.\..\..\include -I$(LIBDIRNAME) \
+	-I.\..\..\src\tiff -I.\..\..\src\jpeg -I.\..\..\src\png -I.\..\..\src\zlib \
+	-I.\..\..\src\regex -I.\..\..\src\expat\lib -I. $(__DLLFLAG_p) $(CXXFLAGS)
+MULTIMON_TEST_OBJECTS =  \
+	$(OBJS)\multimon_test_sample_rc.o \
+	$(OBJS)\multimon_test_multimon_test.o
 OBJS = \
 	gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 
@@ -139,19 +139,19 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\multimon.exe
+all: $(OBJS)\multimon_test.exe
 
-$(OBJS)\multimon_multimon.o: .\multimon.cpp
-	$(CXX) -c -o $@ $(MULTIMON_CXXFLAGS) $<
+$(OBJS)\multimon_test_multimon_test.o: .\multimon_test.cpp
+	$(CXX) -c -o $@ $(MULTIMON_TEST_CXXFLAGS) $<
 
-$(OBJS)\multimon_multimon_rc.o: .\multimon.rc
+$(OBJS)\multimon_test_sample_rc.o: .\..\..\samples\sample.rc
 	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../include --include-dir $(LIBDIRNAME) --include-dir ./../../src/tiff --include-dir ./../../src/jpeg --include-dir ./../../src/png --include-dir ./../../src/zlib  --include-dir ./../../src/regex --include-dir ./../../src/expat/lib --include-dir . $(__DLLFLAG_p_1)
 
 clean: 
 	-if exist $(OBJS)\*.o del $(OBJS)\*.o
-	-if exist $(OBJS)\multimon.exe del $(OBJS)\multimon.exe
+	-if exist $(OBJS)\multimon_test.exe del $(OBJS)\multimon_test.exe
 
-$(OBJS)\multimon.exe: $(MULTIMON_OBJECTS) $(OBJS)\multimon_multimon_rc.o
-	$(CXX) -o $@ $(MULTIMON_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) -mthreads -L$(LIBDIRNAME) -Wl,--subsystem,windows -mwindows   $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG)  -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lodbc32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32
+$(OBJS)\multimon_test.exe: $(MULTIMON_TEST_OBJECTS) $(OBJS)\multimon_test_sample_rc.o
+	$(CXX) -o $@ $(MULTIMON_TEST_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) -mthreads -L$(LIBDIRNAME) -Wl,--subsystem,windows -mwindows   $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG)  -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lodbc32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32
 
 .PHONY: all clean

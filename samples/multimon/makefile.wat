@@ -155,14 +155,14 @@ __WXUNIV_DEFINE_p = -d__WXUNIVERSAL__
 
 LIBDIRNAME = &
 	.\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
-MULTIMON_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm &
+MULTIMON_TEST_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm &
 	$(__RUNTIME_LIBS_5) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(LIBDIRNAME) &
 	-i=.\..\..\src\tiff -i=.\..\..\src\jpeg -i=.\..\..\src\png &
 	-i=.\..\..\src\zlib -i=.\..\..\src\regex -i=.\..\..\src\expat\lib -i=. &
 	$(__DLLFLAG_p) $(CXXFLAGS)
-MULTIMON_OBJECTS =  &
-	$(OBJS)\multimon_multimon.obj
+MULTIMON_TEST_OBJECTS =  &
+	$(OBJS)\multimon_test_multimon_test.obj
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 
@@ -175,12 +175,12 @@ $(OBJS) :
 
 ### Targets: ###
 
-all : .SYMBOLIC $(OBJS)\multimon.exe
+all : .SYMBOLIC $(OBJS)\multimon_test.exe
 
-$(OBJS)\multimon_multimon.obj :  .AUTODEPEND .\multimon.cpp
-	$(CXX) -zq -fo=$^@ $(MULTIMON_CXXFLAGS) $<
+$(OBJS)\multimon_test_multimon_test.obj :  .AUTODEPEND .\multimon_test.cpp
+	$(CXX) -zq -fo=$^@ $(MULTIMON_TEST_CXXFLAGS) $<
 
-$(OBJS)\multimon_multimon.res :  .AUTODEPEND .\multimon.rc
+$(OBJS)\multimon_test_sample.res :  .AUTODEPEND .\..\..\samples\sample.rc
 	wrc -q -ad -bt=nt -r -fo=$^@ -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(LIBDIRNAME) -i=.\..\..\src\tiff -i=.\..\..\src\jpeg -i=.\..\..\src\png -i=.\..\..\src\zlib  -i=.\..\..\src\regex -i=.\..\..\src\expat\lib -i=. $(__DLLFLAG_p) $<
 
 clean : .SYMBOLIC 
@@ -188,15 +188,15 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\*.res del $(OBJS)\*.res
 	-if exist $(OBJS)\*.lbc del $(OBJS)\*.lbc
 	-if exist $(OBJS)\*.ilk del $(OBJS)\*.ilk
-	-if exist $(OBJS)\multimon.exe del $(OBJS)\multimon.exe
+	-if exist $(OBJS)\multimon_test.exe del $(OBJS)\multimon_test.exe
 
-$(OBJS)\multimon.exe :  $(MULTIMON_OBJECTS) $(OBJS)\multimon_multimon.res
-	@%create $(OBJS)\multimon.lbc
-	@%append $(OBJS)\multimon.lbc option quiet
-	@%append $(OBJS)\multimon.lbc name $^@
-	@%append $(OBJS)\multimon.lbc option incremental
-	@%append $(OBJS)\multimon.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
-	@for %i in ($(MULTIMON_OBJECTS)) do @%append $(OBJS)\multimon.lbc file %i
-	@for %i in ( $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\multimon.lbc library %i
-	@%append $(OBJS)\multimon.lbc option resource=$(OBJS)\multimon_multimon.res
-	wlink @$(OBJS)\multimon.lbc
+$(OBJS)\multimon_test.exe :  $(MULTIMON_TEST_OBJECTS) $(OBJS)\multimon_test_sample.res
+	@%create $(OBJS)\multimon_test.lbc
+	@%append $(OBJS)\multimon_test.lbc option quiet
+	@%append $(OBJS)\multimon_test.lbc name $^@
+	@%append $(OBJS)\multimon_test.lbc option incremental
+	@%append $(OBJS)\multimon_test.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
+	@for %i in ($(MULTIMON_TEST_OBJECTS)) do @%append $(OBJS)\multimon_test.lbc file %i
+	@for %i in ( $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\multimon_test.lbc library %i
+	@%append $(OBJS)\multimon_test.lbc option resource=$(OBJS)\multimon_test_sample.res
+	wlink @$(OBJS)\multimon_test.lbc
