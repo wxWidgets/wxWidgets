@@ -278,7 +278,7 @@ dcclient.cpp	MSW	LowLevel
 dcmemory.cpp	MSW	LowLevel
 dcprint.cpp	MSW	LowLevel
 dcscreen.cpp	MSW	LowLevel
-dde.cpp	MSW	Base
+dde.cpp	MSW	LowLevel,Base
 dialog.cpp	MSW
 dialup.cpp	MSW
 dib.cpp	MSW	LowLevel
