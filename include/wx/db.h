@@ -474,7 +474,7 @@ enum wxDBMS
 // this variable.
 
 extern WXDLLIMPEXP_DATA_ODBC(wxChar)
-    DBerrorList[DB_MAX_ERROR_HISTORY][DB_MAX_ERROR_MSG_LEN];
+    DBerrorList[DB_MAX_ERROR_HISTORY][DB_MAX_ERROR_MSG_LEN+1];
 
 
 class WXDLLIMPEXP_ODBC wxDb
