@@ -48,15 +48,6 @@ public:
     // ----------------
 
     // TODO
-
-
-    // other miscellaneous helpers
-    // ---------------------------
-
-    // wxGetOsVersion() behaves differently in GUI and non-GUI builds udner
-    // Unix: in the former case it returns the information about the toolkit
-    // and in the latter -- about the OS, so we need to virtualize it
-    virtual int GetOSVersion(int *verMaj, int *verMin) = 0;
 };
 
 #endif // _WX_UNIX_APPTBASE_H_

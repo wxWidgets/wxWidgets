@@ -40,6 +40,13 @@ public:
     // process a message while waiting for a(nother) thread, should return
     // false if and only if we have to exit the application
     virtual bool DoMessageFromThreadWait() = 0;
+
+    // other miscellaneous helpers
+    // ---------------------------
+
+    // under MSW this function does the same thing for console and GUI
+    // applications so we can implement it directly in the base class
+    virtual int GetOSVersion(int *verMaj, int *verMin);
 };
 
 #endif // _WX_MSW_APPTBASE_H_

@@ -31,6 +31,8 @@
     #include "wx/log.h"
 #endif  //WX_PRECOMP
 
+#include "wx/apptrait.h"
+
 #include "wx/msw/private.h"     // includes <windows.h>
 
 #ifdef __GNUWIN32_OLD__
@@ -974,64 +976,51 @@ wxString wxGetOsDescription()
 #endif // Win32/16
 }
 
-int wxGetOsVersion(int *majorVsn, int *minorVsn)
+int wxAppTraits::GetOSVersion(int *verMaj, int *verMin)
 {
-#if defined(__WIN32__) 
-    static int ver = -1, major = -1, minor = -1;
+    // cache the version info, it's not going to change
+    //
+    // NB: this is MT-safe, we may use these static vars from different threads
+    //     but as they always have the same value it doesn't matter
+    static int s_ver = -1,
+               s_major = -1,
+               s_minor = -1;
 
-    if ( ver == -1 )
+    if ( s_ver == -1 )
     {
         OSVERSIONINFO info;
         wxZeroMemory(info);
 
-        ver = wxWINDOWS;
+        s_ver = wxWINDOWS;
         info.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
         if ( ::GetVersionEx(&info) )
         {
-            major = info.dwMajorVersion;
-            minor = info.dwMinorVersion;
+            s_major = info.dwMajorVersion;
+            s_minor = info.dwMinorVersion;
 
             switch ( info.dwPlatformId )
             {
                 case VER_PLATFORM_WIN32s:
-                    ver = wxWIN32S;
+                    s_ver = wxWIN32S;
                     break;
 
                 case VER_PLATFORM_WIN32_WINDOWS:
-                    ver = wxWIN95;
+                    s_ver = wxWIN95;
                     break;
 
                 case VER_PLATFORM_WIN32_NT:
-                    ver = wxWINDOWS_NT;
+                    s_ver = wxWINDOWS_NT;
                     break;
             }
         }
     }
 
-    if (majorVsn && major != -1)
-        *majorVsn = major;
-    if (minorVsn && minor != -1)
-        *minorVsn = minor;
+    if ( verMaj )
+        *verMaj = s_major;
+    if ( verMin )
+        *verMin = s_minor;
 
-    return ver;
-#else // Win16
-    int retValue = wxWINDOWS;
-    #ifdef __WINDOWS_386__
-        retValue = wxWIN386;
-    #else
-        #if !defined(__WATCOMC__) && !defined(GNUWIN32) && wxUSE_PENWINDOWS
-            extern HANDLE g_hPenWin;
-            retValue = g_hPenWin ? wxPENWINDOWS : wxWINDOWS;
-        #endif
-    #endif
-
-    if (majorVsn)
-        *majorVsn = 3;
-    if (minorVsn)
-        *minorVsn = 1;
-
-    return retValue;
-#endif
+    return s_ver;
 }
 
 // ----------------------------------------------------------------------------

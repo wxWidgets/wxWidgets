@@ -817,17 +817,6 @@ wxString wxGetOsDescription()
 
 #endif // !__WXMAC__
 
-int wxGetOsVersion(int *verMaj, int *verMin)
-{
-    // we want this function to work even if there is no wxApp
-    wxConsoleAppTraits traitsConsole;
-    wxAppTraits *traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
-    if ( ! traits )
-        traits = &traitsConsole;
-
-    return traits->GetOSVersion(verMaj, verMin);
-}
-
 unsigned long wxGetProcessId()
 {
     return (unsigned long)getpid();

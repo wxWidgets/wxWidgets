@@ -81,6 +81,15 @@ public:
     // remove this object from the pending delete list in GUI, do nothing in
     // wxBase
     virtual void RemoveFromPendingDelete(wxObject *object) = 0;
+
+
+    // other miscellaneous helpers
+    // ---------------------------
+
+    // wxGetOsVersion() behaves differently in GUI and non-GUI builds under
+    // Unix: in the former case it returns the information about the toolkit
+    // and in the latter -- about the OS, so we need to virtualize it
+    virtual int GetOSVersion(int *verMaj, int *verMin) = 0;
 };
 
 // ----------------------------------------------------------------------------

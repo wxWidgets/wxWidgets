@@ -36,7 +36,6 @@
     #include "wx/log.h"
 
     #if wxUSE_GUI
-        #include "wx/app.h"
         #include "wx/window.h"
         #include "wx/frame.h"
         #include "wx/menu.h"
@@ -50,10 +49,10 @@
     #endif // wxUSE_GUI
 #endif // WX_PRECOMP
 
-#ifndef __WIN16__
+#include "wx/apptrait.h"
+
 #include "wx/process.h"
 #include "wx/txtstrm.h"
-#endif
 
 #include <ctype.h>
 #include <stdio.h>
@@ -292,6 +291,16 @@ wxString wxGetDataDir()
     return dir;
 }
 
+int wxGetOsVersion(int *verMaj, int *verMin)
+{
+    // we want this function to work even if there is no wxApp
+    wxConsoleAppTraits traitsConsole;
+    wxAppTraits *traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
+    if ( ! traits )
+        traits = &traitsConsole;
+
+    return traits->GetOSVersion(verMaj, verMin);
+}
 
 // ----------------------------------------------------------------------------
 // network and user id functions
@@ -472,11 +481,6 @@ static long wxDoExecuteWithCapture(const wxString& command,
                                    wxArrayString& output,
                                    wxArrayString* error)
 {
-#ifdef __WIN16__
-    wxFAIL_MSG("Sorry, this version of wxExecute not implemented on WIN16.");
-
-    return 0;
-#else // !Win16
     // create a wxProcess which will capture the output
     wxProcess *process = new wxProcess;
     process->Redirect();
@@ -501,7 +505,6 @@ static long wxDoExecuteWithCapture(const wxString& command,
     delete process;
 
     return rc;
-#endif // IO redirection supported
 }
 
 long wxExecute(const wxString& command, wxArrayString& output)
