@@ -4544,6 +4544,10 @@ fi
 
 if test "$wxUSE_SYSTEM_OPTIONS" = "yes"; then
     AC_DEFINE(wxUSE_SYSTEM_OPTIONS)
+if test "$TOOLKIT" = "MSW"; then
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS taskbar"
+fi
+
 fi
 
 if test "$wxUSE_PROTOCOL" = "yes"; then
