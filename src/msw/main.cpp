@@ -70,7 +70,7 @@ extern int wxEntryReal(int& argc, wxChar **argv);
 
 #if wxUSE_BASE
 
-#ifdef __VISUALC__
+#if defined(__VISUALC__) && !defined(__WXWINCE__)
     // VC++ (at least from 4.0 up to version 7.1) is incredibly broken in that
     // a "catch ( ... )" will *always* catch SEH exceptions in it even though
     // it should have never been the case... to prevent such catches from
@@ -226,7 +226,7 @@ int wxEntry(int& argc, wxChar **argv)
 
 #else // !wxUSE_ON_FATAL_EXCEPTION
 
-#ifdef __VISUALC__
+#if defined(__VISUALC__) && !defined(__WXWINCE__)
 
 static void
 wxSETranslator(unsigned int WXUNUSED(code), EXCEPTION_POINTERS * WXUNUSED(ep))
@@ -239,9 +239,7 @@ wxSETranslator(unsigned int WXUNUSED(code), EXCEPTION_POINTERS * WXUNUSED(ep))
 
 int wxEntry(int& argc, wxChar **argv)
 {
-#ifndef __WXWINCE__
     DisableAutomaticSETranslator();
-#endif
 
     return wxEntryReal(argc, argv);
 }
