@@ -39,22 +39,20 @@
 // event table
 // ----------------------------------------------------------------------------
 
-#if !USE_SHARED_LIBRARIES
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING)
 
 BEGIN_EVENT_TABLE(wxNotebook, wxControl)
-EVT_NOTEBOOK_PAGE_CHANGED(-1, wxNotebook::OnSelChange)
-EVT_MOUSE_EVENTS(wxNotebook::OnMouse)
+    EVT_NOTEBOOK_PAGE_CHANGED(-1, wxNotebook::OnSelChange)
+    EVT_MOUSE_EVENTS(wxNotebook::OnMouse)
 
-EVT_SIZE(wxNotebook::OnSize)
-EVT_SET_FOCUS(wxNotebook::OnSetFocus)
-EVT_NAVIGATION_KEY(wxNotebook::OnNavigationKey)
+    EVT_SIZE(wxNotebook::OnSize)
+    EVT_SET_FOCUS(wxNotebook::OnSetFocus)
+    EVT_NAVIGATION_KEY(wxNotebook::OnNavigationKey)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxNotebook, wxControl)
 IMPLEMENT_DYNAMIC_CLASS(wxNotebookEvent, wxCommandEvent)
-#endif
 
 // ============================================================================
 // implementation
@@ -261,13 +259,24 @@ void wxNotebook::SetPageSize(const wxSize& size)
 
 int wxNotebook::SetSelection(size_t nPage)
 {
-    if( !IS_VALID_PAGE(nPage) )
-        return m_nSelection ;
+    wxCHECK_MSG( IS_VALID_PAGE(nPage), -1, wxT("notebook page out of range") );
 
-    ChangePage(m_nSelection, nPage);
-    SetControl32BitValue( (ControlHandle) m_macControl , m_nSelection + 1 ) ;
+    if ( int(nPage) != m_nSelection )
+    {
+        wxNotebookEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, m_windowId);
+        event.SetSelection(nPage);
+        event.SetOldSelection(m_nSelection);
+        event.SetEventObject(this);
+        if ( !GetEventHandler()->ProcessEvent(event) || event.IsAllowed() )
+        {
+            // program allows the page change
+            event.SetEventType(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED);
+            (void)GetEventHandler()->ProcessEvent(event);
 
-    Refresh();
+            ChangePage(m_nSelection, nPage);
+        }
+    }
+
     return m_nSelection;
 }
 
@@ -359,23 +368,17 @@ bool wxNotebook::InsertPage(size_t nPage,
     if ( !wxNotebookBase::InsertPage(nPage, pPage, strText, bSelect, imageId) )
         return false;
 
+    wxASSERT_MSG( pPage->GetParent() == this,
+                    _T("notebook pages must have notebook as parent") );
+
+    // don't show pages by default (we'll need to adjust their size first)
+    pPage->Show( false ) ;
+
     pPage->SetLabel(strText);
 
     m_images.Insert(imageId, nPage);
 
     MacSetupTabs();
-
-    if ( bSelect ) {
-        m_nSelection = nPage;
-    }
-    else if ( m_nSelection == -1 ) {
-        m_nSelection = 0;
-    }
-    else if ((size_t)m_nSelection >= nPage) {
-        m_nSelection++;
-    }
-    // don't show pages by default (we'll need to adjust their size first)
-    pPage->Show( false ) ;
 
     int h, w;
     GetSize(&w, &h);
@@ -386,6 +389,31 @@ bool wxNotebook::InsertPage(size_t nPage,
     if ( pPage->GetAutoLayout() ) {
         pPage->Layout();
     }
+
+
+    // now deal with the selection
+    // ---------------------------
+
+    // if the inserted page is before the selected one, we must update the
+    // index of the selected page
+
+    if ( int(nPage) <= m_nSelection ) 
+    {
+        m_nSelection++;
+        // while this still is the same page showing, we need to update the tabs
+        SetControl32BitValue( (ControlHandle) m_macControl , m_nSelection + 1 ) ;
+    }
+    
+    // some page should be selected: either this one or the first one if there
+    // is still no selection
+    int selNew = -1;
+    if ( bSelect )
+        selNew = nPage;
+    else if ( m_nSelection == -1 )
+        selNew = 0;
+
+    if ( selNew != -1 )
+        SetSelection(selNew);
 
     return true;
 }
@@ -466,9 +494,11 @@ void wxNotebook::OnSize(wxSizeEvent& event)
 {
     // emulate page change (it's esp. important to do it first time because
     // otherwise our page would stay invisible)
+    /*
     int nSel = m_nSelection;
     m_nSelection = -1;
     SetSelection(nSel);
+    */
 
     // fit the notebook page to the tab control's display area
     int w, h;
@@ -516,10 +546,50 @@ void wxNotebook::OnNavigationKey(wxNavigationKeyEvent& event)
         AdvanceSelection(event.GetDirection());
     }
     else {
-        // pass to the parent
-        if ( GetParent() ) {
-            event.SetCurrentFocus(this);
-            GetParent()->ProcessEvent(event);
+        // we get this event in 2 cases
+        //
+        // a) one of our pages might have generated it because the user TABbed
+        // out from it in which case we should propagate the event upwards and
+        // our parent will take care of setting the focus to prev/next sibling
+        //
+        // or
+        //
+        // b) the parent panel wants to give the focus to us so that we
+        // forward it to our selected page. We can't deal with this in
+        // OnSetFocus() because we don't know which direction the focus came
+        // from in this case and so can't choose between setting the focus to
+        // first or last panel child
+        wxWindow *parent = GetParent();
+        // the cast is here to fic a GCC ICE
+        if ( ((wxWindow*)event.GetEventObject()) == parent )
+        {
+            // no, it doesn't come from child, case (b): forward to a page
+            if ( m_nSelection != -1 )
+            {
+                // so that the page knows that the event comes from it's parent
+                // and is being propagated downwards
+                event.SetEventObject(this);
+
+                wxWindow *page = m_pages[m_nSelection];
+                if ( !page->GetEventHandler()->ProcessEvent(event) )
+                {
+                    page->SetFocus();
+                }
+                //else: page manages focus inside it itself
+            }
+            else
+            {
+                // we have no pages - still have to give focus to _something_
+                SetFocus();
+            }
+        }
+        else
+        {
+            // it comes from our child, case (a), pass to the parent
+            if ( parent ) {
+                event.SetCurrentFocus(this);
+                parent->GetEventHandler()->ProcessEvent(event);
+            }
         }
     }
 }
@@ -528,18 +598,22 @@ void wxNotebook::OnNavigationKey(wxNavigationKeyEvent& event)
 // wxNotebook base class virtuals
 // ----------------------------------------------------------------------------
 
+#if wxUSE_CONSTRAINTS
+
 // override these 2 functions to do nothing: everything is done in OnSize
 
-void wxNotebook::SetConstraintSizes(bool /* recurse */)
+void wxNotebook::SetConstraintSizes(bool WXUNUSED(recurse))
 {
-    // don't set the sizes of the pages - their correct size is not yet known
-    wxControl::SetConstraintSizes(FALSE);
+  // don't set the sizes of the pages - their correct size is not yet known
+  wxControl::SetConstraintSizes(FALSE);
 }
 
-bool wxNotebook::DoPhase(int /* nPhase */)
+bool wxNotebook::DoPhase(int WXUNUSED(nPhase))
 {
-    return TRUE;
+  return TRUE;
 }
+
+#endif // wxUSE_CONSTRAINTS
 
 void wxNotebook::Command(wxCommandEvent& event)
 {
@@ -553,27 +627,20 @@ void wxNotebook::Command(wxCommandEvent& event)
 // hide the currently active panel and show the new one
 void wxNotebook::ChangePage(int nOldSel, int nSel)
 {
-    // it's not an error (the message may be generated by the tab control itself)
-    // and it may happen - just do nothing
-    if ( nSel == nOldSel )
+    if ( nOldSel != -1 ) 
     {
-        wxNotebookPage *pPage = m_pages[nSel];
-        pPage->Show(FALSE);
-        pPage->Show(TRUE);
-        pPage->SetFocus();
-        return;
-    }
-
-    // Hide previous page
-    if ( nOldSel != -1 ) {
         m_pages[nOldSel]->Show(FALSE);
     }
 
-    wxNotebookPage *pPage = m_pages[nSel];
-    pPage->Show(TRUE);
-    pPage->SetFocus();
-
+    if ( nSel != -1 )
+    {
+        wxNotebookPage *pPage = m_pages[nSel];
+        pPage->Show(TRUE);
+        pPage->SetFocus();
+    }
+    
     m_nSelection = nSel;
+    SetControl32BitValue( (ControlHandle) m_macControl , m_nSelection + 1 ) ;
 }
 
 
