@@ -323,30 +323,14 @@ void wxApp::CommonInit(void)
 
   wxInitializeResourceSystem();
 
-  // For PostScript printing
-#if wxUSE_POSTSCRIPT
-/* Now done in wxPostScriptModule
-  wxInitializePrintSetupData();
-  wxThePrintPaperDatabase = new wxPrintPaperDatabase;
-  wxThePrintPaperDatabase->CreateDatabase();
- */
-#endif
-
-
-/*
-  wxBitmap::InitStandardHandlers();
-
-  g_globalCursor = new wxCursor;
-*/
+  wxImage::InitStandardHandlers();
+  
+//  g_globalCursor = new wxCursor;
 }
 
 void wxApp::CommonCleanUp(void)
 {
   wxDELETE(wxTheColourDatabase);
-/* Now done in wxPostScriptModule
-  wxDELETE(wxThePrintPaperDatabase);
-  wxDELETE(wxThePrintSetupData);
- */
   wxDELETE(wxTheFontNameDirectory);
   wxDeleteStockObjects();
 
@@ -357,6 +341,8 @@ void wxApp::CommonCleanUp(void)
   wxDeleteStockLists();
 
   wxCleanUpResourceSystem();
+  
+  wxImage::CleanUpHandlers();
 
   wxSystemSettings::Done();
 }

@@ -37,63 +37,71 @@ extern const char *wxListBoxNameStr;
 // wxListBox
 //-----------------------------------------------------------------------------
 
-class wxListBox: public wxControl
+class wxListBox : public wxControl
 {
   DECLARE_DYNAMIC_CLASS(wxListBox)
 
-  public:
+public:
 
-    wxListBox(void);
-    inline wxListBox( wxWindow *parent, wxWindowID id,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize,
-           int n = 0, const wxString choices[] = (const wxString *) NULL,
-           long style = 0,
-           const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxListBoxNameStr )
-    {
+  wxListBox();
+  inline wxListBox( wxWindow *parent, wxWindowID id,
+                    const wxPoint& pos = wxDefaultPosition,
+                    const wxSize& size = wxDefaultSize,
+                    int n = 0, const wxString choices[] = (const wxString *) NULL,
+                    long style = 0,
+                    const wxValidator& validator = wxDefaultValidator,
+                   const wxString& name = wxListBoxNameStr )
+  {
       Create(parent, id, pos, size, n, choices, style, validator, name);
-    }
-    bool Create( wxWindow *parent, wxWindowID id,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize,
-           int n = 0, const wxString choices[] = (const wxString *) NULL,
-           long style = 0,
-           const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxListBoxNameStr );
-    void Append( const wxString &item );
-    void Append( const wxString &item, char *clientData );
-    void Clear(void);
-    void Delete( int n );
-    void Deselect( int n );
-    int FindString( const wxString &item ) const;
-    char *GetClientData( int n ) const;
-    int GetSelection(void) const;
-    int GetSelections( class wxArrayInt &) const;
-    wxString GetString( int n ) const;
-    wxString GetStringSelection(void) const;
-    int Number(void);
-    bool Selected( int n );
-    void Set( int n, const wxString *choices );
-    void SetClientData( int n, char *clientData );
-    void SetFirstItem( int n );
-    void SetFirstItem( const wxString &item );
-    void SetSelection( int n, bool select = TRUE );
-    void SetString( int n, const wxString &string );
-    void SetStringSelection( const wxString &string, bool select = TRUE );
+  }
+  ~wxListBox();
+  bool Create( wxWindow *parent, wxWindowID id,
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               int n = 0, const wxString choices[] = (const wxString *) NULL,
+               long style = 0,
+               const wxValidator& validator = wxDefaultValidator,
+               const wxString& name = wxListBoxNameStr );
+	       
+  void Append( const wxString &item );
+  void Append( const wxString &item, void* clientData );
+  void Append( const wxString &item, wxClientData* clientData );
+  
+  void SetClientData( int n, void* clientData );
+  void* GetClientData( int n );
+  void SetClientObject( int n, wxClientData* clientData );
+  wxClientData* GetClientObject( int n );
+	       
+  void Clear();
+  void Delete( int n );
+  
+  void Deselect( int n );
+  int FindString( const wxString &item ) const;
+  int GetSelection(void) const;
+  int GetSelections( class wxArrayInt &) const;
+  wxString GetString( int n ) const;
+  wxString GetStringSelection(void) const;
+  int Number();
+  bool Selected( int n );
+  void Set( int n, const wxString *choices );
+  void SetFirstItem( int n );
+  void SetFirstItem( const wxString &item );
+  void SetSelection( int n, bool select = TRUE );
+  void SetString( int n, const wxString &string );
+  void SetStringSelection( const wxString &string, bool select = TRUE );
     
-    void SetDropTarget( wxDropTarget *dropTarget );
+  void SetDropTarget( wxDropTarget *dropTarget );
 
-  // implementation
+// implementation
     
-    int GetIndex( GtkWidget *item ) const;
-    GtkWidget *GetConnectWidget(void);
-    bool IsOwnGtkWindow( GdkWindow *window );
-    void ApplyWidgetStyle();
+  void AppendCommon( const wxString &item );
+  int GetIndex( GtkWidget *item ) const;
+  GtkWidget *GetConnectWidget();
+  bool IsOwnGtkWindow( GdkWindow *window );
+  void ApplyWidgetStyle();
     
-    GtkList   *m_list;
-    wxList     m_clientData;
-    
+  GtkList   *m_list;
+  wxList     m_clientDataList;
 };
 
 #endif // __GTKLISTBOXH__

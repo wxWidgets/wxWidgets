@@ -933,7 +933,7 @@ wxWindow::wxWindow()
   m_oldVerticalPos = 0.0;
   m_isShown = FALSE;
   m_isEnabled = TRUE;
-  m_pDropTarget = (wxDropTarget *) NULL;
+  m_dropTarget = (wxDropTarget *) NULL;
   m_resizing = FALSE;
   m_scrollGC = (GdkGC*) NULL;
   m_widgetStyle = (GtkStyle*) NULL;
@@ -1059,7 +1059,7 @@ wxWindow::~wxWindow()
 {
   m_hasVMT = FALSE;
 
-  if (m_pDropTarget) delete m_pDropTarget;
+  if (m_dropTarget) delete m_dropTarget;
 
   if (m_parent) m_parent->RemoveChild( this );
   if (m_widget) Show( FALSE );
@@ -1114,6 +1114,7 @@ void wxWindow::PreCreation( wxWindow *parent, wxWindowID id,
     wxFatalError( "Need complete parent.", name );
     
   m_widget = (GtkWidget *) NULL;
+  m_wxwindow = (GtkWidget *) NULL;
   m_hasVMT = FALSE;
   m_parent = parent;
   m_children.DeleteContents( FALSE );
@@ -1148,8 +1149,7 @@ void wxWindow::PreCreation( wxWindow *parent, wxWindowID id,
   m_eventHandler = this;
   m_windowId = id;
   m_sizeSet = FALSE;
-  if (m_cursor == NULL)
-    m_cursor = new wxCursor( wxCURSOR_ARROW );
+  m_cursor = new wxCursor( wxCURSOR_ARROW );
   m_font = *wxSWISS_FONT;
 //  m_backgroundColour = wxWHITE;
 //  m_foregroundColour = wxBLACK;
@@ -1162,7 +1162,13 @@ void wxWindow::PreCreation( wxWindow *parent, wxWindowID id,
   m_autoLayout = FALSE;
   m_hasScrolling = FALSE;
   m_isScrolling = FALSE;
-  m_pDropTarget = (wxDropTarget *) NULL;
+  m_hAdjust = (GtkAdjustment *) NULL;
+  m_vAdjust = (GtkAdjustment *) NULL;
+  m_oldHorizontalPos = 0.0;
+  m_oldVerticalPos = 0.0;
+  m_isShown = FALSE;
+  m_isEnabled = TRUE;
+  m_dropTarget = (wxDropTarget *) NULL;
   m_resizing = FALSE;
   m_windowValidator = (wxValidator *) NULL;
   m_scrollGC = (GdkGC*) NULL;
@@ -1839,6 +1845,36 @@ void wxWindow::SetValidator( const wxValidator& validator )
   if (m_windowValidator) m_windowValidator->SetWindow(this);
 }
 
+void wxWindow::SetClientObject( wxClientData *data )
+{
+  if (m_clientData) delete m_clientData;
+  m_clientData = data;
+}
+
+wxClientData *wxWindow::GetClientObject()
+{
+  return m_clientData;
+}
+
+void wxWindow::SetClientData( void *data )
+{
+  if (m_clientData) delete m_clientData;
+  
+  if (data)
+    m_clientData = new wxVoidClientData( data );
+  else
+    m_clientData = (wxClientData*) NULL;
+}
+
+void *wxWindow::GetClientData()
+{
+  if (!m_clientData) return NULL;
+  
+  wxVoidClientData *vd = (wxVoidClientData*) m_clientData;
+  
+  return vd->GetData();
+}
+
 bool wxWindow::IsBeingDeleted()
 {
   return FALSE;
@@ -2149,22 +2185,22 @@ void wxWindow::SetDropTarget( wxDropTarget *dropTarget )
 
   DisconnectDnDWidget( dnd_widget );
 
-  if (m_pDropTarget) delete m_pDropTarget;
-  m_pDropTarget = dropTarget;
+  if (m_dropTarget) delete m_dropTarget;
+  m_dropTarget = dropTarget;
 
   ConnectDnDWidget( dnd_widget );
 }
 
 wxDropTarget *wxWindow::GetDropTarget() const
 {
-  return m_pDropTarget;
+  return m_dropTarget;
 }
 
 void wxWindow::ConnectDnDWidget( GtkWidget *widget )
 {
-  if (!m_pDropTarget) return;
+  if (!m_dropTarget) return;
 
-  m_pDropTarget->RegisterWidget( widget );
+  m_dropTarget->RegisterWidget( widget );
 
   gtk_signal_connect( GTK_OBJECT(widget), "drop_data_available_event",
     GTK_SIGNAL_FUNC(gtk_window_drop_callback), (gpointer)this );
@@ -2172,12 +2208,12 @@ void wxWindow::ConnectDnDWidget( GtkWidget *widget )
 
 void wxWindow::DisconnectDnDWidget( GtkWidget *widget )
 {
-  if (!m_pDropTarget) return;
+  if (!m_dropTarget) return;
 
   gtk_signal_disconnect_by_func( GTK_OBJECT(widget),
     GTK_SIGNAL_FUNC(gtk_window_drop_callback), (gpointer)this );
 
-  m_pDropTarget->UnregisterWidget( widget );
+  m_dropTarget->UnregisterWidget( widget );
 }
 
 GtkWidget* wxWindow::GetConnectWidget()

@@ -309,8 +309,8 @@ class WXDLLEXPORT wxCommandEvent: public wxEvent
    */
 
   // Set/Get listbox/choice client data
-  inline void SetClientData(char* clientData) { m_clientData = clientData; }
-  inline char *GetClientData() const { return m_clientData; }
+  inline void SetClientData(void* clientData) { m_clientData = clientData; }
+  inline void *GetClientData() const { return m_clientData; }
 
   // Get listbox selection if single-choice
   inline int GetSelection() const { return m_commandInt; }
@@ -335,7 +335,7 @@ class WXDLLEXPORT wxCommandEvent: public wxEvent
   char*             m_commandString; // String event argument
   int               m_commandInt;
   long              m_extraLong;      // Additional information (e.g. select/deselect)
-  char*             m_clientData;    // Arbitrary client data
+  void*             m_clientData;    // Arbitrary client data
 };
 
 // Scroll event class

@@ -45,14 +45,20 @@ static void gtk_button_clicked_callback( GtkWidget *WXUNUSED(widget), wxButton *
 
 IMPLEMENT_DYNAMIC_CLASS(wxButton,wxControl)
 
-wxButton::wxButton(void)
+wxButton::wxButton()
 {
+}
+
+wxButton::~wxButton()
+{
+  if (m_clientData) delete m_clientData;
 }
 
 bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
       const wxPoint &pos, const wxSize &size,
       long style, const wxValidator& validator, const wxString &name )
 {
+  m_clientData = (wxClientData*) NULL;
   m_needParent = TRUE;
 
   wxSize newSize = size;
@@ -117,4 +123,5 @@ void wxButton::ApplyWidgetStyle()
   gtk_widget_set_style( m_widget, m_widgetStyle );
   gtk_widget_set_style( GTK_BUTTON(m_widget)->child, m_widgetStyle );
 }
+
 

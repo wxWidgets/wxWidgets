@@ -43,11 +43,12 @@ class wxSizer;
 class wxResourceTable;
 class wxItemResource;
 
+class wxClientData;
+class wxVoidClientData;
 class wxWindow;
-class wxCanvas;
 
 //-----------------------------------------------------------------------------
-// callback definition for inserting a window
+// callback definition for inserting a window (internal)
 //-----------------------------------------------------------------------------
 
 typedef void (*wxInsertChildFunction)( wxWindow*, wxWindow* );
@@ -59,6 +60,49 @@ typedef void (*wxInsertChildFunction)( wxWindow*, wxWindow* );
 extern const char *wxPanelNameStr;
 extern const wxSize wxDefaultSize;
 extern const wxPoint wxDefaultPosition;
+
+//-----------------------------------------------------------------------------
+// wxClientData
+//-----------------------------------------------------------------------------
+
+class wxClientData
+{
+public:
+    wxClientData() { }
+    virtual ~wxClientData() { }
+};
+
+//-----------------------------------------------------------------------------
+// wxVoidClientData
+//-----------------------------------------------------------------------------
+
+class wxVoidClientData : public wxClientData
+{
+public:
+    wxVoidClientData() { m_data = NULL; }
+    wxVoidClientData( void *data ) { m_data = data; }
+    void SetData( void* data ) { m_data = data; }
+    void *GetData() const { return m_data; }
+    
+private:
+    void  *m_data;
+};
+
+//-----------------------------------------------------------------------------
+// wxStringClientData
+//-----------------------------------------------------------------------------
+
+class wxStringClientData: public wxClientData
+{
+public:
+    wxStringClientData() { }
+    wxStringClientData( wxString &data ) { m_data = data; }
+    void SetData( wxString &data ) { m_data = data; }
+    wxString GetData() const { return m_data; }
+    
+private:
+    wxString  m_data;
+};
 
 //-----------------------------------------------------------------------------
 // wxWindow
@@ -122,7 +166,7 @@ public:
   virtual void Enable( bool enable );
   virtual void MakeModal( bool modal );
   virtual bool IsEnabled() const { return m_isEnabled; }
-  inline bool Enabled(void) const { return IsEnabled(); }
+  inline bool Enabled() const { return IsEnabled(); }
   virtual void SetFocus();
   virtual bool OnClose();
 
@@ -133,7 +177,7 @@ public:
   int GetReturnCode();
   wxWindow *GetParent() const
     { return m_parent; }
-  wxWindow *GetGrandParent(void) const
+  wxWindow *GetGrandParent() const
     { return (m_parent ? m_parent->m_parent : (wxWindow*)NULL); }
   void SetParent( wxWindow *p )
     { m_parent = p; }
@@ -146,6 +190,13 @@ public:
   virtual wxValidator *GetValidator();
   virtual void SetValidator( const wxValidator &validator );
 
+  virtual void SetClientObject( wxClientData *data );
+  virtual wxClientData *GetClientObject();
+    
+  virtual void SetClientData( void *data );
+  virtual void *GetClientData();
+
+  
   virtual void SetAcceleratorTable( const wxAcceleratorTable& accel );
   virtual wxAcceleratorTable *GetAcceleratorTable() { return &m_acceleratorTable; }
   
@@ -170,8 +221,8 @@ public:
   virtual wxColour GetForegroundColour() const;
   virtual void SetForegroundColour( const wxColour &colour );
 
-  virtual int GetCharHeight(void) const;
-  virtual int GetCharWidth(void) const;
+  virtual int GetCharHeight() const;
+  virtual int GetCharWidth() const;
   virtual void GetTextExtent( const wxString& string, int *x, int *y,
                              int *descent = (int *) NULL,
                              int *externalLeading = (int *) NULL,
@@ -179,15 +230,19 @@ public:
 
   virtual void SetFont( const wxFont &font );
   virtual wxFont *GetFont();
-  // For backward compatibility
+  
+    // For backward compatibility
   inline virtual void SetButtonFont(const wxFont& font) { SetFont(font); }
   inline virtual void SetLabelFont(const wxFont& font) { SetFont(font); }
   inline virtual wxFont *GetLabelFont() { return GetFont(); };
   inline virtual wxFont *GetButtonFont() { return GetFont(); };
+  
   virtual void SetWindowStyleFlag( long flag );
   virtual long GetWindowStyleFlag() const;
+  
   virtual void CaptureMouse();
   virtual void ReleaseMouse();
+  
   virtual void SetTitle( const wxString &title );
   virtual wxString GetTitle() const;
   virtual void SetName( const wxString &name );
@@ -198,14 +253,16 @@ public:
 
   virtual bool IsShown() const;
 
-  virtual void Raise(void);
-  virtual void Lower(void);
+  virtual void Raise();
+  virtual void Lower();
 
   virtual bool IsRetained();
   virtual wxWindow *FindWindow( long id );
   virtual wxWindow *FindWindow( const wxString& name );
+  
   void AllowDoubleClick( bool WXUNUSED(allow) ) {};
   void SetDoubleClick( bool WXUNUSED(allow) ) {};
+  
   virtual void ClientToScreen( int *x, int *y );
   virtual void ScreenToClient( int *x, int *y );
 
@@ -229,19 +286,20 @@ public:
   virtual void ScrollWindow( int dx, int dy, const wxRect* rect = (wxRect *) NULL );
 
   virtual bool AcceptsFocus() const;
+  
   void UpdateWindowUI();
 
   // implementation
   
-  virtual GtkWidget  *GetConnectWidget(void);
+          void        PreCreation( wxWindow *parent, wxWindowID id, const wxPoint &pos,
+                                   const wxSize &size, long style, const wxString &name );
+          void        PostCreation();
+  virtual GtkWidget  *GetConnectWidget();
   virtual bool        IsOwnGtkWindow( GdkWindow *window );
           void        ConnectWidget( GtkWidget *widget );
           void        ConnectDnDWidget( GtkWidget *widget );
           void        DisconnectDnDWidget( GtkWidget *widget );
   
-          void        PreCreation( wxWindow *parent, wxWindowID id, const wxPoint &pos,
-                                   const wxSize &size, long style, const wxString &name );
-          void        PostCreation();
           bool        HasVMT();
   
   virtual void        ImplementSetSize();
@@ -264,7 +322,7 @@ public:
   int                  m_retCode;
   wxEvtHandler        *m_eventHandler;
   wxValidator         *m_windowValidator;
-  wxDropTarget        *m_pDropTarget;
+  wxDropTarget        *m_dropTarget;
   wxWindowID           m_windowId;
   wxCursor            *m_cursor;
   wxFont               m_font;
@@ -276,6 +334,7 @@ public:
   bool                 m_isEnabled;
   wxString             m_windowName;
   wxAcceleratorTable   m_acceleratorTable;
+  wxClientData        *m_clientData;
 
   GtkWidget           *m_widget;
   GtkWidget           *m_wxwindow;

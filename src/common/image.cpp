@@ -30,34 +30,34 @@
 
 class wxImageRefData: public wxObjectRefData
 {
-  public:
+
+public:
+  wxImageRefData(void);
+  ~wxImageRefData(void);
   
-    wxImageRefData(void);
-    ~wxImageRefData(void);
-  
-    int             m_width;
-    int             m_height;
-    unsigned char  *m_data;
-    bool            m_hasMask;
-    unsigned char   m_maskRed,m_maskGreen,m_maskBlue;
-    bool            m_ok;
+  int             m_width;
+  int             m_height;
+  unsigned char  *m_data;
+  bool            m_hasMask;
+  unsigned char   m_maskRed,m_maskGreen,m_maskBlue;
+  bool            m_ok;
 };
 
 wxImageRefData::wxImageRefData(void)
 {
-  m_width = 0;
-  m_height = 0;
-  m_data = (unsigned char*) NULL;
-  m_ok = FALSE;
-  m_maskRed = 0;
-  m_maskGreen = 0;
-  m_maskBlue = 0;
-  m_hasMask = FALSE;
+    m_width = 0;
+    m_height = 0;
+    m_data = (unsigned char*) NULL;
+    m_ok = FALSE;
+    m_maskRed = 0;
+    m_maskGreen = 0;
+    m_maskBlue = 0;
+    m_hasMask = FALSE;
 }
 
 wxImageRefData::~wxImageRefData(void)
 {
-  if (m_data) free( m_data );
+    if (m_data) free( m_data );
 }
 
 wxList wxImage::sm_handlers;
@@ -76,58 +76,58 @@ wxImage::wxImage()
 
 wxImage::wxImage( int width, int height )
 {
-  Create( width, height );
+    Create( width, height );
 }
 
 wxImage::wxImage( const wxString& name, long type )
 {
-  LoadFile( name, type );
+    LoadFile( name, type );
 }
 
 wxImage::wxImage( const wxImage& image )  
 {  
-  Ref(image); 
+    Ref(image); 
 }
 
 wxImage::wxImage( const wxImage* image )  
 { 
-  if (image) Ref(*image); 
+    if (image) Ref(*image); 
 }
 
 void wxImage::Create( int width, int height )
 {
-  m_refData = new wxImageRefData();
+    m_refData = new wxImageRefData();
   
-  M_IMGDATA->m_data = (unsigned char *) malloc( width*height*3 );
-  if (M_IMGDATA->m_data)
-  {
-    for (int l = 0; l < width*height*3; l++) M_IMGDATA->m_data[l] = 0;
+    M_IMGDATA->m_data = (unsigned char *) malloc( width*height*3 );
+    if (M_IMGDATA->m_data)
+    {
+        for (int l = 0; l < width*height*3; l++) M_IMGDATA->m_data[l] = 0;
   
-    M_IMGDATA->m_width = width;
-    M_IMGDATA->m_height = height;
-    M_IMGDATA->m_ok = TRUE;
-  }
-  else
-  {
-    UnRef();
-  }
+        M_IMGDATA->m_width = width;
+        M_IMGDATA->m_height = height;
+        M_IMGDATA->m_ok = TRUE;
+    }
+    else
+    {
+        UnRef();
+    }
 }
 
 void wxImage::Destroy()
 {
-  UnRef();
+    UnRef();
 }
 
 bool wxImage::Ok() const 
 { 
-  return (M_IMGDATA && M_IMGDATA->m_ok); 
+    return (M_IMGDATA && M_IMGDATA->m_ok); 
 }
 
 char unsigned *wxImage::GetData() const
 {
-  if (!Ok()) return (char unsigned *)NULL;
+    if (!Ok()) return (char unsigned *)NULL;
   
-  return M_IMGDATA->m_data;
+    return M_IMGDATA->m_data;
 }
 
 void wxImage::SetData( char unsigned *WXUNUSED(data) )
@@ -136,96 +136,96 @@ void wxImage::SetData( char unsigned *WXUNUSED(data) )
 
 void wxImage::SetMaskColour( unsigned char r, unsigned char g, unsigned char b )
 {
-  if (!Ok()) return;
+    if (!Ok()) return;
   
-  M_IMGDATA->m_maskRed = r;
-  M_IMGDATA->m_maskGreen = g;
-  M_IMGDATA->m_maskBlue = b;
-  M_IMGDATA->m_hasMask = TRUE;
+    M_IMGDATA->m_maskRed = r;
+    M_IMGDATA->m_maskGreen = g;
+    M_IMGDATA->m_maskBlue = b;
+    M_IMGDATA->m_hasMask = TRUE;
 }
 
 unsigned char wxImage::GetMaskRed() const
 {
-  if (!Ok()) return 0;
+    if (!Ok()) return 0;
   
-  return M_IMGDATA->m_maskRed;
+    return M_IMGDATA->m_maskRed;
 }
 
 unsigned char wxImage::GetMaskGreen() const
 {
-  if (!Ok()) return 0;
-  
-  return M_IMGDATA->m_maskGreen;
+    if (!Ok()) return 0;
+   
+    return M_IMGDATA->m_maskGreen;
 }
 
 unsigned char wxImage::GetMaskBlue() const
 {
-  if (!Ok()) return 0;
+    if (!Ok()) return 0;
   
-  return M_IMGDATA->m_maskBlue;
+    return M_IMGDATA->m_maskBlue;
 }
   
 void wxImage::SetMask( bool mask )
 {
-  if (!Ok()) return;
+    if (!Ok()) return;
   
-  M_IMGDATA->m_hasMask = mask;
+    M_IMGDATA->m_hasMask = mask;
 }
 
 bool wxImage::HasMask() const
 {
-  if (!Ok()) return FALSE;
+    if (!Ok()) return FALSE;
   
-  return M_IMGDATA->m_hasMask;
+    return M_IMGDATA->m_hasMask;
 }
 
 int wxImage::GetWidth() const 
 { 
-  return (M_IMGDATA ? M_IMGDATA->m_width : 0); 
+    return (M_IMGDATA ? M_IMGDATA->m_width : 0); 
 }
 
 int wxImage::GetHeight() const 
 { 
-  return (M_IMGDATA ? M_IMGDATA->m_height : 0); 
+    return (M_IMGDATA ? M_IMGDATA->m_height : 0); 
 }
 
 bool wxImage::LoadFile( const wxString& filename, long type )
 {
-  UnRef();
+    UnRef();
   
-  if (!wxFileExists(filename))
-  {
-    wxLogWarning( "Image file does not exist." );
+    if (!wxFileExists(filename))
+    {
+        wxLogWarning( "Image file does not exist." );
 
-    return FALSE;
-  }
+        return FALSE;
+    }
 
-  m_refData = new wxImageRefData;
+    m_refData = new wxImageRefData;
 
-  wxImageHandler *handler = FindHandler(type);
+    wxImageHandler *handler = FindHandler(type);
 
-  if (handler == NULL) 
-  {
-    wxLogWarning( "No image handler for type %d defined.", type );
+    if (handler == NULL) 
+    {
+        wxLogWarning( "No image handler for type %d defined.", type );
 
-    return FALSE;
-  }
+        return FALSE;
+    }
 
-  return handler->LoadFile( this, filename );
+    return handler->LoadFile( this, filename );
 }
 
 bool wxImage::SaveFile( const wxString& filename, int type )
 {
-  wxImageHandler *handler = FindHandler(type);
+    wxImageHandler *handler = FindHandler(type);
 
-  if (handler == NULL) 
-  {
-    wxLogWarning( "No image handler for type %d defined.", type );
+    if (handler == NULL) 
+    {
+      wxLogWarning( "No image handler for type %d defined.", type );
 
-    return FALSE;
-  }
+      return FALSE;
+    }
 
-  return handler->SaveFile( this, filename );
+    return handler->SaveFile( this, filename );
 }
 
 void wxImage::AddHandler( wxImageHandler *handler )
@@ -240,65 +240,71 @@ void wxImage::InsertHandler( wxImageHandler *handler )
 
 bool wxImage::RemoveHandler( const wxString& name )
 {
-  wxImageHandler *handler = FindHandler(name);
-  if (handler)
-  {
-    sm_handlers.DeleteObject(handler);
-    return TRUE;
-  }
-  else
-    return FALSE;
+    wxImageHandler *handler = FindHandler(name);
+    if (handler)
+    {
+        sm_handlers.DeleteObject(handler);
+        return TRUE;
+    }
+    else
+        return FALSE;
 }
 
 wxImageHandler *wxImage::FindHandler( const wxString& name )
 {
-  wxNode *node = sm_handlers.First();
-  while (node)
-  {
-    wxImageHandler *handler = (wxImageHandler*)node->Data();
-    if (handler->GetName() == name) return handler;
-    node = node->Next();
-  }
-  return (wxImageHandler *)NULL;
+    wxNode *node = sm_handlers.First();
+    while (node)
+    {
+        wxImageHandler *handler = (wxImageHandler*)node->Data();
+        if (handler->GetName() == name) return handler;
+        node = node->Next();
+    }
+    return (wxImageHandler *)NULL;
 }
 
 wxImageHandler *wxImage::FindHandler( const wxString& extension, long bitmapType )
 {
-  wxNode *node = sm_handlers.First();
-  while (node)
-  {
-    wxImageHandler *handler = (wxImageHandler*)node->Data();
-    if ( handler->GetExtension() == extension &&
-        (bitmapType == -1 || handler->GetType() == bitmapType) )
-      return handler;
-    node = node->Next();
-  }
-  return (wxImageHandler*)NULL;
+    wxNode *node = sm_handlers.First();
+    while (node)
+    {
+        wxImageHandler *handler = (wxImageHandler*)node->Data();
+        if ( handler->GetExtension() == extension &&
+            (bitmapType == -1 || handler->GetType() == bitmapType) )
+        return handler;
+        node = node->Next();
+    }
+    return (wxImageHandler*)NULL;
 }
 
 wxImageHandler *wxImage::FindHandler( long bitmapType )
 {
-  wxNode *node = sm_handlers.First();
-  while (node)
-  {
-    wxImageHandler *handler = (wxImageHandler *)node->Data();
-    if (handler->GetType() == bitmapType) return handler;
-    node = node->Next();
-  }
-  return NULL;
+    wxNode *node = sm_handlers.First();
+    while (node)
+    {
+        wxImageHandler *handler = (wxImageHandler *)node->Data();
+        if (handler->GetType() == bitmapType) return handler;
+        node = node->Next();
+    }
+    return NULL;
+}
+
+void wxImage::InitStandardHandlers()
+{
+    AddHandler( new wxBMPHandler );
+    AddHandler( new wxPNGHandler );
 }
 
 void wxImage::CleanUpHandlers()
 {
-  wxNode *node = sm_handlers.First();
-  while (node)
-  {
-    wxImageHandler *handler = (wxImageHandler *)node->Data();
-    wxNode *next = node->Next();
-    delete handler;
-    delete node;
-    node = next;
-  }
+    wxNode *node = sm_handlers.First();
+    while (node)
+    {
+        wxImageHandler *handler = (wxImageHandler *)node->Data();
+        wxNode *next = node->Next();
+        delete handler;
+        delete node;
+        node = next;
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -311,12 +317,12 @@ IMPLEMENT_DYNAMIC_CLASS(wxImageHandler,wxObject)
 
 bool wxImageHandler::LoadFile( wxImage *WXUNUSED(image), const wxString& WXUNUSED(name) )
 {
-  return FALSE;
+    return FALSE;
 }
 
 bool wxImageHandler::SaveFile( wxImage *WXUNUSED(image), const wxString& WXUNUSED(name) )
 {
-  return FALSE;
+    return FALSE;
 }
 
 //-----------------------------------------------------------------------------

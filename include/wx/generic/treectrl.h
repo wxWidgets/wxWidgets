@@ -69,7 +69,7 @@ public:
 // Because the objects of this class are deleted by the tree, they should
 // always be allocated on the heap!
 // ----------------------------------------------------------------------------
-class WXDLLEXPORT wxTreeItemData
+class WXDLLEXPORT wxTreeItemData: public wxClientData
 {
 friend class wxTreeCtrl;
 public:
@@ -79,11 +79,6 @@ public:
     wxTreeItemData() { }
 
         // default copy ctor/assignment operator are ok
-
-        // dtor is virtual and all the items are deleted by the tree control
-        // when it's deleted, so you normally don't have to care about freeing
-        // memory allocated in your wxTreeItemData-derived class
-    virtual ~wxTreeItemData() { }
 
     // accessor: get the item associated with us
     const wxTreeItemId& GetId() const { return m_pItem; }

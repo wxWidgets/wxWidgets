@@ -42,7 +42,7 @@ class wxButton: public wxControl
 
   public:
 
-    wxButton(void);
+    wxButton();
     inline wxButton(wxWindow *parent, wxWindowID id, const wxString& label,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize, long style = 0,
@@ -51,19 +51,19 @@ class wxButton: public wxControl
     {
       Create(parent, id, label, pos, size, style, validator, name);
     }
+    ~wxButton();
     bool Create(wxWindow *parent, wxWindowID id, const wxString& label,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize, long style = 0,
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxButtonNameStr);
-    void SetDefault(void);
+    void SetDefault();
     void SetLabel( const wxString &label );
     void Enable( bool enable );
-
+    
   // implementation        
   
     void ApplyWidgetStyle();    
-    
 };
 
 #endif // __GTKBUTTONH__

@@ -43,200 +43,301 @@ static void gtk_choice_clicked_callback( GtkWidget *WXUNUSED(widget), wxChoice *
 
 IMPLEMENT_DYNAMIC_CLASS(wxChoice,wxControl)
 
-wxChoice::wxChoice(void)
+wxChoice::wxChoice()
 {
 }
 
 bool wxChoice::Create( wxWindow *parent, wxWindowID id,
-      const wxPoint &pos, const wxSize &size,
-      int n, const wxString choices[],
-      long style, const wxValidator& validator, const wxString &name )
+                       const wxPoint &pos, const wxSize &size,
+                       int n, const wxString choices[],
+                       long style, const wxValidator& validator, const wxString &name )
 {
-  m_needParent = TRUE;
+    m_needParent = TRUE;
   
-  PreCreation( parent, id, pos, size, style, name );
+    PreCreation( parent, id, pos, size, style, name );
   
-  SetValidator( validator );
+    SetValidator( validator );
 
-  m_widget = gtk_option_menu_new();
+    m_widget = gtk_option_menu_new();
   
-  wxSize newSize = size;
-  if (newSize.x == -1) newSize.x = 80;
-  if (newSize.y == -1) newSize.y = 26;
-  SetSize( newSize.x, newSize.y );
+    wxSize newSize = size;
+    if (newSize.x == -1) newSize.x = 80;
+    if (newSize.y == -1) newSize.y = 26;
+    SetSize( newSize.x, newSize.y );
   
-  GtkWidget *menu = gtk_menu_new();
+    GtkWidget *menu = gtk_menu_new();
   
-  for (int i = 0; i < n; i++)
-  {
-    GtkWidget *item = gtk_menu_item_new_with_label( choices[i] );
-    gtk_menu_append( GTK_MENU(menu), item );
+    for (int i = 0; i < n; i++)
+    {
+        m_clientDataList.Append( (wxObject*) NULL );
     
-    gtk_widget_realize( item );
-    gtk_widget_realize( GTK_BIN(item)->child );
+        GtkWidget *item = gtk_menu_item_new_with_label( choices[i] );
+        gtk_menu_append( GTK_MENU(menu), item );
     
-    gtk_widget_show( item );
+        gtk_widget_realize( item );
+        gtk_widget_realize( GTK_BIN(item)->child );
     
-    gtk_signal_connect( GTK_OBJECT( item ), "activate", 
-      GTK_SIGNAL_FUNC(gtk_choice_clicked_callback), (gpointer*)this );
-  }
-  gtk_option_menu_set_menu( GTK_OPTION_MENU(m_widget), menu );
+        gtk_widget_show( item );
+    
+        gtk_signal_connect( GTK_OBJECT( item ), "activate", 
+          GTK_SIGNAL_FUNC(gtk_choice_clicked_callback), (gpointer*)this );
+    }
+    gtk_option_menu_set_menu( GTK_OPTION_MENU(m_widget), menu );
   
-  m_parent->AddChild( this );
+    m_parent->AddChild( this );
 
-  (m_parent->m_insertCallback)( m_parent, this );
+    (m_parent->m_insertCallback)( m_parent, this );
   
-  PostCreation();
+    PostCreation();
   
-  SetBackgroundColour( parent->GetBackgroundColour() );
-  SetForegroundColour( parent->GetForegroundColour() );
+    SetBackgroundColour( parent->GetBackgroundColour() );
+    SetForegroundColour( parent->GetForegroundColour() );
 
-  Show( TRUE );
+    Show( TRUE );
     
-  return TRUE;
+    return TRUE;
 }
       
+wxChoice::~wxChoice()
+{
+    wxNode *node = m_clientDataList.First();
+    while (node)
+    {
+        wxClientData *cd = (wxClientData*)node->Data();
+        if (cd) delete cd;
+        node = node->Next();
+    }
+    m_clientDataList.Clear();
+}
+
+void wxChoice::AppendCommon( const wxString &item )
+{
+    wxCHECK_RET( m_widget != NULL, "invalid choice" );
+  
+    GtkWidget *menu = gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) );
+    GtkWidget *menu_item = gtk_menu_item_new_with_label( item );
+  
+    gtk_menu_append( GTK_MENU(menu), menu_item );
+  
+    gtk_widget_realize( menu_item );
+    gtk_widget_realize( GTK_BIN(menu_item)->child );
+  
+    if (m_widgetStyle) ApplyWidgetStyle();
+  
+    gtk_signal_connect( GTK_OBJECT( menu_item ), "activate", 
+      GTK_SIGNAL_FUNC(gtk_choice_clicked_callback), (gpointer*)this );
+    
+    gtk_widget_show( menu_item );
+}
+
 void wxChoice::Append( const wxString &item )
 {
-  wxCHECK_RET( m_widget != NULL, "invalid choice" );
-
-  GtkWidget *menu = gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) );
-  GtkWidget *menu_item = gtk_menu_item_new_with_label( item );
+    m_clientDataList.Append( (wxObject*)NULL );
   
-  gtk_menu_append( GTK_MENU(menu), menu_item );
-  
-  gtk_widget_realize( menu_item );
-  gtk_widget_realize( GTK_BIN(menu_item)->child );
-  
-  if (m_widgetStyle) ApplyWidgetStyle();
-  
-  gtk_signal_connect( GTK_OBJECT( menu_item ), "activate", 
-    GTK_SIGNAL_FUNC(gtk_choice_clicked_callback), (gpointer*)this );
-    
-  gtk_widget_show( menu_item );
+    AppendCommon( item );
 }
- 
-void wxChoice::Clear(void)
-{
-  wxCHECK_RET( m_widget != NULL, "invalid choice" );
 
-  gtk_option_menu_remove_menu( GTK_OPTION_MENU(m_widget) );
-  GtkWidget *menu = gtk_menu_new();
-  gtk_option_menu_set_menu( GTK_OPTION_MENU(m_widget), menu );
+void wxChoice::Append( const wxString &item, void *clientData )
+{
+    if (clientData)
+        m_clientDataList.Append( (wxObject*) new wxVoidClientData( clientData ) );
+    else
+        m_clientDataList.Append( (wxObject*)NULL );
+  
+    AppendCommon( item );
+}
+
+void wxChoice::Append( const wxString &item, wxClientData *clientData )
+{
+    m_clientDataList.Append( (wxObject*) clientData );
+  
+    AppendCommon( item );
+}
+
+void wxChoice::SetClientData( int n, void* clientData )
+{
+    wxCHECK_RET( m_widget != NULL, "invalid combobox" );
+  
+    wxNode *node = m_clientDataList.Nth( n );
+    if (!node) return;
+  
+    wxClientData *cd = (wxClientData*) node->Data();
+    if (cd) delete cd;
+  
+    if (clientData)
+        node->SetData( (wxObject*) new wxVoidClientData(clientData) );
+    else
+        node->SetData( (wxObject*) NULL );
+}
+
+void* wxChoice::GetClientData( int n )
+{
+    wxCHECK_MSG( m_widget != NULL, NULL, "invalid combobox" );
+  
+    wxNode *node = m_clientDataList.Nth( n );
+    if (!node) return NULL;
+    
+    wxVoidClientData *cd = (wxVoidClientData*) node->Data();
+    if (cd)
+        return cd->GetData();
+    else
+        return (void*) NULL;  
+}
+
+void wxChoice::SetClientObject( int n, wxClientData* clientData )
+{
+    wxCHECK_RET( m_widget != NULL, "invalid combobox" );
+    
+    wxNode *node = m_clientDataList.Nth( n );
+    if (!node) return;
+  
+    wxClientData *cd = (wxClientData*) node->Data();
+    if (cd) delete cd;
+  
+    node->SetData( (wxObject*) clientData );
+}
+
+wxClientData* wxChoice::GetClientObject( int n )
+{
+    wxCHECK_MSG( m_widget != NULL, (wxClientData*)NULL, "invalid combobox" );
+  
+    wxNode *node = m_clientDataList.Nth( n );
+    if (!node) return (wxClientData*) NULL;
+    
+    return (wxClientData*) node->Data();
+}
+
+ 
+void wxChoice::Clear()
+{
+    wxCHECK_RET( m_widget != NULL, "invalid choice" );
+
+    gtk_option_menu_remove_menu( GTK_OPTION_MENU(m_widget) );
+    GtkWidget *menu = gtk_menu_new();
+    gtk_option_menu_set_menu( GTK_OPTION_MENU(m_widget), menu );
+    
+    wxNode *node = m_clientDataList.First();
+    while (node)
+    {
+        wxClientData *cd = (wxClientData*)node->Data();
+        if (cd) delete cd;
+        node = node->Next();
+    }
+    m_clientDataList.Clear();
 }
 
 void wxChoice::Delete( int WXUNUSED(n) )
 {
-  wxFAIL_MSG( "wxChoice:Delete not implemented" );
+    wxFAIL_MSG( "wxChoice:Delete not implemented" );
 }
 
 int wxChoice::FindString( const wxString &string ) const
 {
-  wxCHECK_MSG( m_widget != NULL, -1, "invalid choice" );
+    wxCHECK_MSG( m_widget != NULL, -1, "invalid choice" );
 
-  // If you read this code once and you think you understand
-  // it, then you are very wrong. Robert Roebling.
+    // If you read this code once and you think you understand
+    // it, then you are very wrong. Robert Roebling.
   
-  GtkMenuShell *menu_shell = GTK_MENU_SHELL( gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) ) );
-  int count = 0;
-  GList *child = menu_shell->children;
-  while (child)
-  {
-    GtkBin *bin = GTK_BIN( child->data );
-    GtkLabel *label = (GtkLabel *) NULL;
-    if (bin->child) label = GTK_LABEL(bin->child);
-    if (!label) label = GTK_LABEL( GTK_BUTTON(m_widget)->child );
+    GtkMenuShell *menu_shell = GTK_MENU_SHELL( gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) ) );
+    int count = 0;
+    GList *child = menu_shell->children;
+    while (child)
+    {
+        GtkBin *bin = GTK_BIN( child->data );
+        GtkLabel *label = (GtkLabel *) NULL;
+        if (bin->child) label = GTK_LABEL(bin->child);
+        if (!label) label = GTK_LABEL( GTK_BUTTON(m_widget)->child );
     
-    wxASSERT_MSG( label != NULL , "wxChoice: invalid label" );
+        wxASSERT_MSG( label != NULL , "wxChoice: invalid label" );
     
-    if (string == label->label) return count;
-    child = child->next;
-    count++;
-  }
+       if (string == label->label) return count;
+       child = child->next;
+       count++;
+    }
   
-  wxFAIL_MSG( "wxChoice: string not found" );
+    wxFAIL_MSG( "wxChoice: string not found" );
   
-  return -1;
+    return -1;
 }
 
-int wxChoice::GetColumns(void) const
+int wxChoice::GetColumns() const
 {
-  return 1;
+    return 1;
 }
 
-int wxChoice::GetSelection(void)
+int wxChoice::GetSelection()
 {
-  wxCHECK_MSG( m_widget != NULL, -1, "invalid choice" );
+    wxCHECK_MSG( m_widget != NULL, -1, "invalid choice" );
 
-  GtkMenuShell *menu_shell = GTK_MENU_SHELL( gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) ) );
-  int count = 0;
-  GList *child = menu_shell->children;
-  while (child)
-  {
-    GtkBin *bin = GTK_BIN( child->data );
-    if (!bin->child) return count;
-    child = child->next;
-    count++;
-  }
+    GtkMenuShell *menu_shell = GTK_MENU_SHELL( gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) ) );
+    int count = 0;
+    GList *child = menu_shell->children;
+    while (child)
+    {
+        GtkBin *bin = GTK_BIN( child->data );
+        if (!bin->child) return count;
+        child = child->next;
+        count++;
+    }
   
-  wxFAIL_MSG( "wxChoice: no selection" );
+    wxFAIL_MSG( "wxChoice: no selection" );
   
-  return -1;
+    return -1;
 }
 
 wxString wxChoice::GetString( int n ) const
 {
-  wxCHECK_MSG( m_widget != NULL, "", "invalid choice" );
+    wxCHECK_MSG( m_widget != NULL, "", "invalid choice" );
 
-  GtkMenuShell *menu_shell = GTK_MENU_SHELL( gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) ) );
-  int count = 0;
-  GList *child = menu_shell->children;
-  while (child)
-  {
-    GtkBin *bin = GTK_BIN( child->data );
-    if (count == n)
+    GtkMenuShell *menu_shell = GTK_MENU_SHELL( gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) ) );
+    int count = 0;
+    GList *child = menu_shell->children;
+    while (child)
     {
-      GtkLabel *label = (GtkLabel *) NULL;
-      if (bin->child) label = GTK_LABEL(bin->child);
-      if (!label) label = GTK_LABEL( GTK_BUTTON(m_widget)->child );
+        GtkBin *bin = GTK_BIN( child->data );
+        if (count == n)
+        {
+            GtkLabel *label = (GtkLabel *) NULL;
+            if (bin->child) label = GTK_LABEL(bin->child);
+            if (!label) label = GTK_LABEL( GTK_BUTTON(m_widget)->child );
       
-      wxASSERT_MSG( label != NULL , "wxChoice: invalid label" );
+            wxASSERT_MSG( label != NULL , "wxChoice: invalid label" );
       
-      return label->label;
+            return label->label;
+        }
+        child = child->next;
+        count++;
     }
-    child = child->next;
-    count++;
-  }
   
-  wxFAIL_MSG( "wxChoice: string not found" );
+    wxFAIL_MSG( "wxChoice: string not found" );
   
-  return "";
+    return "";
 }
 
-wxString wxChoice::GetStringSelection(void) const
+wxString wxChoice::GetStringSelection() const
 {
-  wxCHECK_MSG( m_widget != NULL, "", "invalid choice" );
+    wxCHECK_MSG( m_widget != NULL, "", "invalid choice" );
 
-  GtkLabel *label = GTK_LABEL( GTK_BUTTON(m_widget)->child );
+    GtkLabel *label = GTK_LABEL( GTK_BUTTON(m_widget)->child );
   
-  wxASSERT_MSG( label != NULL , "wxChoice: invalid label" );
+    wxASSERT_MSG( label != NULL , "wxChoice: invalid label" );
   
-  return label->label;
+    return label->label;
 }
 
-int wxChoice::Number(void) const
+int wxChoice::Number() const
 {
-  wxCHECK_MSG( m_widget != NULL, 0, "invalid choice" );
+    wxCHECK_MSG( m_widget != NULL, 0, "invalid choice" );
 
-  GtkMenuShell *menu_shell = GTK_MENU_SHELL( gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) ) );
-  int count = 0;
-  GList *child = menu_shell->children;
-  while (child)
-  {
-    count++;
-    child = child->next;
-  }
-  return count;
+    GtkMenuShell *menu_shell = GTK_MENU_SHELL( gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) ) );
+    int count = 0;
+    GList *child = menu_shell->children;
+    while (child)
+    {
+        count++;
+        child = child->next;
+    }
+    return count;
 }
 
 void wxChoice::SetColumns( int WXUNUSED(n) )
@@ -245,44 +346,44 @@ void wxChoice::SetColumns( int WXUNUSED(n) )
 
 void wxChoice::SetSelection( int n )
 {
-  wxCHECK_RET( m_widget != NULL, "invalid choice" );
+    wxCHECK_RET( m_widget != NULL, "invalid choice" );
 
-  int tmp = n;
-  gtk_option_menu_set_history( GTK_OPTION_MENU(m_widget), (gint)tmp );
+    int tmp = n;
+    gtk_option_menu_set_history( GTK_OPTION_MENU(m_widget), (gint)tmp );
   
-  gtk_choice_clicked_callback( (GtkWidget *) NULL, this );
+    gtk_choice_clicked_callback( (GtkWidget *) NULL, this );
 }
 
 void wxChoice::SetStringSelection( const wxString &string )
 {
-  wxCHECK_RET( m_widget != NULL, "invalid choice" );
+    wxCHECK_RET( m_widget != NULL, "invalid choice" );
 
-  int n = FindString( string );
-  if (n != -1) SetSelection( n );
+    int n = FindString( string );
+    if (n != -1) SetSelection( n );
 }
 
 void wxChoice::ApplyWidgetStyle()
 {
-  SetWidgetStyle();
+    SetWidgetStyle();
   
-  GtkMenuShell *menu_shell = GTK_MENU_SHELL( gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) ) );
+    GtkMenuShell *menu_shell = GTK_MENU_SHELL( gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) ) );
   
-  gtk_widget_set_style( m_widget, m_widgetStyle );
-  gtk_widget_set_style( GTK_WIDGET( menu_shell ), m_widgetStyle );
+    gtk_widget_set_style( m_widget, m_widgetStyle );
+    gtk_widget_set_style( GTK_WIDGET( menu_shell ), m_widgetStyle );
   
-  GList *child = menu_shell->children;
-  while (child)
-  {
-    gtk_widget_set_style( GTK_WIDGET( child->data ), m_widgetStyle );
+    GList *child = menu_shell->children;
+    while (child)
+    {
+        gtk_widget_set_style( GTK_WIDGET( child->data ), m_widgetStyle );
     
-    GtkBin *bin = GTK_BIN( child->data );
-    GtkWidget *label = (GtkWidget *) NULL;
-    if (bin->child) label = bin->child;
-    if (!label) label = GTK_BUTTON(m_widget)->child;
+        GtkBin *bin = GTK_BIN( child->data );
+        GtkWidget *label = (GtkWidget *) NULL;
+        if (bin->child) label = bin->child;
+        if (!label) label = GTK_BUTTON(m_widget)->child;
     
-    gtk_widget_set_style( label, m_widgetStyle );
+        gtk_widget_set_style( label, m_widgetStyle );
     
-    child = child->next;
-  }
+        child = child->next;
+    }
 }
 

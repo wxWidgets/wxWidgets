@@ -66,15 +66,15 @@ class WXDLLEXPORT wxPNGHandler: public wxImageHandler
   
 public:
 
-    inline wxPNGHandler()
-    {
-        m_name = "PNG file";
-        m_extension = "png";
-        m_type = wxBITMAP_TYPE_PNG;
-    };
+  inline wxPNGHandler()
+  {
+      m_name = "PNG file";
+      m_extension = "png";
+      m_type = wxBITMAP_TYPE_PNG;
+  };
 
-    virtual bool LoadFile( wxImage *image, const wxString& name );
-    virtual bool SaveFile( wxImage *image, const wxString& name );
+  virtual bool LoadFile( wxImage *image, const wxString& name );
+  virtual bool SaveFile( wxImage *image, const wxString& name );
 };
 
 //-----------------------------------------------------------------------------
@@ -87,15 +87,16 @@ class WXDLLEXPORT wxBMPHandler: public wxImageHandler
   
 public:
 
-    inline wxBMPHandler()
-    {
-        m_name = "BMP file";
-        m_extension = "bmp";
-        m_type = wxBITMAP_TYPE_BMP;
-    };
+  inline wxBMPHandler()
+  {
+      m_name = "BMP file";
+      m_extension = "bmp";
+      m_type = wxBITMAP_TYPE_BMP;
+  };
 
-    virtual bool LoadFile( wxImage *image, const wxString& name );
+  virtual bool LoadFile( wxImage *image, const wxString& name );
 };
+
 //-----------------------------------------------------------------------------
 // wxImage
 //-----------------------------------------------------------------------------
@@ -151,6 +152,7 @@ public:
   static wxImageHandler *FindHandler( long imageType );
   
   static void CleanUpHandlers();
+  static void InitStandardHandlers();
 
 protected:
 
