@@ -1602,6 +1602,8 @@ class FloatCanvas(wx.Panel):
         
         """
         #print "In Draw"
+        if self.PanelSize < (1,1): 
+            return
         if self.Debug: start = clock()
         ScreenDC =  wx.ClientDC(self)
         ViewPortWorld = ( self.PixelToWorld((0,0)),
