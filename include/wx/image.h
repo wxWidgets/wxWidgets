@@ -241,8 +241,9 @@ public:
   virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE );
   virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
   virtual bool DoCanRead( wxInputStream& stream );
+#endif // wxUSE_STREAMS
 };
-#endif
+#endif // wxUSE_PCX
 
 //-----------------------------------------------------------------------------
 // wxImage
