@@ -25,6 +25,7 @@
     #include "wx/choice.h"
 #endif
 
+#include "wx/listctrl.h"
 #include "wx/sizer.h"
 #include "wx/imaglist.h"
 #include "wx/listctrl.h"
