@@ -340,6 +340,7 @@ MAKEARCHDIR:
 MAKELIBS:
       implib  /s $(LIBDIR)\$(SHELLLIB) $(LIBDIR)\$(SC_SUFFIX)\$(SHELLLIB).def
       implib  /s $(LIBDIR)\$(WINSOCKLIB) $(LIBDIR)\$(SC_SUFFIX)\$(WINSOCKLIB).def
+      implib  /s $(LIBDIR)\$(WINMMLIB) $(LIBDIR)\$(SC_SUFFIX)\$(WINMMLIB).def
 
 $(LIBTARGET): $(OBJECTS)
 	-del $(LIBTARGET)
