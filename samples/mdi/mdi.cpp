@@ -17,6 +17,11 @@
 // headers
 // ---------------------------------------------------------------------------
 
+#ifdef __VMS
+#define XtDisplay XTDISPLAY
+#define XtWindow XTWINDOW
+#endif
+
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
