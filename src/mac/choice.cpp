@@ -105,7 +105,7 @@ void wxChoice::Delete(int n)
         delete GetClientObject(n);
     }
     ::DeleteMenuItem( MAC_WXHMENU(m_macPopUpMenuHandle) , n + 1) ;
-    m_strings.Remove( n ) ;
+    m_strings.RemoveAt( n ) ;
     m_datas.RemoveAt( n ) ;
     SetControl32BitMaximum( (ControlHandle) m_macControl , GetCount()) ;
 }

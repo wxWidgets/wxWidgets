@@ -755,7 +755,7 @@ wxMenu *wxMenuBar::Remove(size_t pos)
         Refresh();
     }
 
-    m_titles.Remove(pos);
+    m_titles.RemoveAt(pos);
 
     return menu;
 }
