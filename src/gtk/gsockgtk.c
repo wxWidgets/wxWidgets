@@ -53,7 +53,7 @@ void _GSocket_GUI_Destroy(GSocket *socket)
   free(socket->m_gui_dependent);
 }
 
-void _GSocket_Install_Fallback(GSocket *socket, GSocketEvent event)
+void _GSocket_Install_Callback(GSocket *socket, GSocketEvent event)
 {
   GdkInputCondition flag;
   int c;
@@ -76,7 +76,7 @@ void _GSocket_Install_Fallback(GSocket *socket, GSocketEvent event)
                           _GSocket_GDK_Input, (gpointer)socket);
 }
 
-void _GSocket_Uninstall_Fallback(GSocket *socket, GSocketEvent event)
+void _GSocket_Uninstall_Callback(GSocket *socket, GSocketEvent event)
 {
   int c;
   gint *m_id;

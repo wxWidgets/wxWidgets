@@ -24,15 +24,16 @@
 // wxSocket headers (generic)
 // ---------------------------------------------------------------------------
 #ifdef WXPREC
-  #include "wx/wxprec.h"
+#  include <wx/wxprec.h>
 #else
-  #include "wx/event.h"
-  #include "wx/string.h"
+#  include <wx/event.h>
+#  include <wx/string.h>
 #endif
 
-#include "wx/sckaddr.h"
+#include <wx/sckaddr.h>
 #include "wx/gsocket.h"
 
+class WXDLLEXPORT wxTimer;
 class WXDLLEXPORT wxSocketEvent;
 class WXDLLEXPORT wxSocketBase : public wxEvtHandler
 {
@@ -65,11 +66,13 @@ protected:
   bool m_notify_state;			// Notify state
   int m_id;				// Socket id (for event handler)
 
+  // Defering variables
   enum {
     DEFER_READ, DEFER_WRITE, NO_DEFER
-  } m_defering;                        // Defering state
+  } m_defering;                         // Defering state
   char *m_defer_buffer;                 // Defering target buffer
   size_t m_defer_nbytes;                // Defering buffer size
+  wxTimer *m_defer_timer;		// Timer for defering mode
 
   wxList m_states;			// Stack of states
 

@@ -16,11 +16,11 @@ void _GSocket_GUI_Destroy(GSocket *socket)
 {
 }
 
-void _GSocket_Install_Fallback(GSocket *socket, GSocketEvent event)
+void _GSocket_Install_Callback(GSocket *socket, GSocketEvent event)
 {
 }
 
-void _GSocket_Uninstall_Fallback(GSocket *socket, GSocketEvent event)
+void _GSocket_Uninstall_Callback(GSocket *socket, GSocketEvent event)
 {
 }
 

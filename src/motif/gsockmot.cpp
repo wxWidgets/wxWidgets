@@ -59,7 +59,7 @@ void _GSocket_GUI_Destroy(GSocket *socket)
   free(socket->m_gui_dependent);
 }
 
-void _GSocket_Install_Fallback(GSocket *socket, GSocketEvent event)
+void _GSocket_Install_Callback(GSocket *socket, GSocketEvent event)
 {
   int *m_id;
 
@@ -88,7 +88,7 @@ void _GSocket_Install_Fallback(GSocket *socket, GSocketEvent event)
   }
 }
 
-void _GSocket_Uninstall_Fallback(GSocket *socket, GSocketEvent event)
+void _GSocket_Uninstall_Callback(GSocket *socket, GSocketEvent event)
 {
   int c;
   int *m_id;

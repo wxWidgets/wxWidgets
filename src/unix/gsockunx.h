@@ -17,9 +17,10 @@ struct _GSocket {
   GSocketError m_error;
 
   bool m_blocking, m_server, m_stream, m_oriented;
+  unsigned long m_timeout;
 
-  /* Fallbacks */
-  GSocketFallback m_fbacks[GSOCK_MAX_EVENT];
+  /* Callbacks */
+  GSocketCallback m_fbacks[GSOCK_MAX_EVENT];
   char *m_data[GSOCK_MAX_EVENT];
 
   /* IO calls associated */
@@ -45,8 +46,8 @@ int _GSocket_Recv_Stream(GSocket *socket, char *buffer, int size);
 int _GSocket_Recv_Dgram(GSocket *socket, char *buffer, int size);
 int _GSocket_Send_Stream(GSocket *socket, const char *buffer, int size);
 int _GSocket_Send_Dgram(GSocket *socket, const char *buffer, int size);
-void _GSocket_Install_Fallback(GSocket *socket, GSocketEvent count);
-void _GSocket_Uninstall_Fallback(GSocket *socket, GSocketEvent count);
+void _GSocket_Install_Callback(GSocket *socket, GSocketEvent count);
+void _GSocket_Uninstall_Callback(GSocket *socket, GSocketEvent count);
 void _GSocket_Detected_Read(GSocket *socket);
 void _GSocket_Detected_Write(GSocket *socket);
 void _GSocket_GUI_Init(GSocket *socket);

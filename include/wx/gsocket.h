@@ -66,7 +66,7 @@ enum {
 
 typedef int GSocketEventFlags;
 
-typedef void (*GSocketFallback)(GSocket *socket, GSocketEvent event,
+typedef void (*GSocketCallback)(GSocket *socket, GSocketEvent event,
                                 char *cdata);
 
 #ifdef __cplusplus
@@ -134,13 +134,19 @@ int GSocket_Write(GSocket *socket, const char *buffer,
                   int size);
 bool GSocket_DataAvailable(GSocket *socket);
 
-/* Flags */
+/* Flags/Parameters */
+
+/*
+  GSocket_SetTimeout() sets the timeout for reading and writing IO call. Time
+  is expressed in milliseconds.
+ */
+void GSocket_SetTimeout(GSocket *socket, unsigned long millisec);
 
 /*
   GSocket_SetBlocking() puts the socket in non-blocking mode. This is useful
   if we don't want to wait.
 */
-void GSocket_SetBlocking(GSocket *socket, bool block);
+void GSocket_SetNonBlocking(GSocket *socket, bool non_block);
 
 /*
   GSocket_GetError() returns the last error occured on the socket stream.
@@ -161,7 +167,7 @@ GSocketError GSocket_GetError(GSocket *socket);
              Server socket -> a client request a connection
    LOST: the connection is lost
 
-   SetFallback accepts a combination of these flags so a same callback can
+   SetCallback accepts a combination of these flags so a same callback can
    receive different events.
 
    An event is generated only once and its state is reseted when the relative
@@ -169,14 +175,14 @@ GSocketError GSocket_GetError(GSocket *socket);
    For example: INPUT -> GSocket_Read()
                 CONNECTION -> GSocket_Accept()
 */
-void GSocket_SetFallback(GSocket *socket, GSocketEventFlags event,
-                         GSocketFallback fallback, char *cdata);
+void GSocket_SetCallback(GSocket *socket, GSocketEventFlags event,
+                         GSocketCallback fallback, char *cdata);
 
 /*
-  UnsetFallback will disables all fallbacks specified by "event".
+  UnsetCallback will disables all fallbacks specified by "event".
   NOTE: event may be a combination of flags
 */
-void GSocket_UnsetFallback(GSocket *socket, GSocketEventFlags event);
+void GSocket_UnsetCallback(GSocket *socket, GSocketEventFlags event);
 
 /* GAddress */
 

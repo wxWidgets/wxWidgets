@@ -128,32 +128,62 @@ bool wxSocketBase::Close()
 // --------------------------------------------------------------
 // wxSocketBase base IO function
 // --------------------------------------------------------------
+class _wxSocketInternalTimer: public wxTimer {
+ public:
+  int *m_state;
+  int m_new_val;
+
+  void Notify()
+     {
+        *m_state = m_new_val;  // Change the value
+     }
+};
 
 int wxSocketBase::DeferRead(char *buffer, size_t nbytes)
 {
   GSocketEventFlags old_event_flags;
   bool old_notify_state;
+  // Timer for timeout
+  _wxSocketInternalTimer timer;
 
   wxASSERT(m_defering == NO_DEFER);
 
+  // Set the defering mode to READ.
   m_defering = DEFER_READ;
 
+  // Save the old state.
   old_event_flags = NeededReq();
   old_notify_state = m_notify_state;
 
+  // Set the new async flag.
   SetNotify(GSOCK_INPUT_FLAG | GSOCK_LOST_FLAG);
   Notify(TRUE);
 
+  // Set the current buffer.
   m_defer_buffer = buffer;
   m_defer_nbytes = nbytes;
+  m_defer_timer  = &timer;
+
+  timer.m_state = (int *)&m_defer_buffer;
+  timer.m_new_val = (int)NULL;
+
+  timer.Start(m_timeout * 1000, FALSE);
+
+  // Wait for buffer completion. 
   while (m_defer_buffer != NULL)
     wxYield();
 
+  timer.Stop();
+
+  // Restore the old state.
   Notify(old_notify_state);
   SetNotify(old_event_flags);
 
+  // Disable defering mode.
   m_defering = NO_DEFER;
+  m_defer_timer = NULL;
 
+  // Return the number of bytes read from the socket.
   return nbytes-m_defer_nbytes;
 }
 
@@ -272,22 +302,39 @@ int wxSocketBase::DeferWrite(const char *buffer, size_t nbytes)
 {
   GSocketEventFlags old_event_flags;
   bool old_notify_state;
+  // Timer for timeout
+  _wxSocketInternalTimer timer;
 
   wxASSERT(m_defering == NO_DEFER);
 
   m_defering = DEFER_WRITE;
 
+  // Save the old state
   old_event_flags = NeededReq();
   old_notify_state = m_notify_state;
 
   SetNotify(GSOCK_OUTPUT_FLAG | GSOCK_LOST_FLAG);
   Notify(TRUE);
 
+  // Set the current buffer
   m_defer_buffer = (char *)buffer;
   m_defer_nbytes = nbytes;
+
+  // Start timer
+  timer.m_state   = (int *)&m_defer_buffer;
+  timer.m_new_val = (int)NULL;
+
+  m_defer_timer   = &timer;
+  timer.Start(m_timeout * 1000, FALSE);
+
   while (m_defer_buffer != NULL)
     wxYield();
 
+  // Stop timer
+  m_defer_timer = NULL;
+  timer.Stop();
+
+  // Restore the old state
   Notify(old_notify_state);
   SetNotify(old_event_flags);
 
@@ -396,11 +443,15 @@ void wxSocketBase::DoDefer(GSocketEvent req_evt)
   if (ret < 0)
     m_defer_nbytes++;
 
+  // If we are waiting for all bytes to be acquired, keep the defering modei
+  // enabled.
   if ((m_flags & WAITALL) == 0 || m_defer_nbytes == 0 || ret < 0) {
     m_defer_buffer = NULL;
     Notify(FALSE);
-  } else
+  } else {
     m_defer_buffer += ret;
+    m_defer_timer->Start(m_timeout * 1000, FALSE);
+  }
 }
 
 // ---------------------------------------------------------------------
@@ -522,16 +573,6 @@ char *wxSocketBase::CallbackData(char *data)
 // --------- wxSocketBase wait functions ------------------------
 // --------------------------------------------------------------
 
-class _wxSocketInternalTimer: public wxTimer {
- public:
-  int *m_state;
-
-  void Notify()
-     {
-        *m_state = GSOCK_MAX_EVENT;  // Just to say it's a timeout.
-     }
-};
-
 static void wx_socket_wait(GSocket *socket, GSocketEvent event, char *cdata)
 {
   int *state = (int *)cdata;
@@ -542,25 +583,30 @@ static void wx_socket_wait(GSocket *socket, GSocketEvent event, char *cdata)
 bool wxSocketBase::_Wait(long seconds, long milliseconds, int type)
 {
   bool old_notify_state = m_notify_state;
-  int state = 0;
+  int state = -1;
   _wxSocketInternalTimer timer;
 
   if (!m_connected || !m_socket)
     return FALSE;
 
+  // Set the variable to change
   timer.m_state = &state;
+  timer.m_new_val = GSOCK_MAX_EVENT;
 
+  // Disable the previous handler
   Notify(FALSE);
 
+  // Set the timeout
   timer.Start(seconds * 1000 + milliseconds, TRUE);
-  GSocket_SetFallback(m_socket, type, wx_socket_wait, (char *)&state);
+  GSocket_SetCallback(m_socket, type, wx_socket_wait, (char *)&state);
 
-  while (state == 0)
+  while (state == -1)
     wxYield();
 
-  GSocket_UnsetFallback(m_socket, type);
+  GSocket_UnsetCallback(m_socket, type);
   timer.Stop();
 
+  // Notify will restore automatically the old GSocket flags
   Notify(old_notify_state);
 
   return (state != GSOCK_MAX_EVENT);
@@ -649,12 +695,12 @@ void wxSocketBase::Notify(bool notify)
   if (!m_socket)
     return;
 
-  GSocket_UnsetFallback(m_socket, GSOCK_INPUT_FLAG | GSOCK_OUTPUT_FLAG |
+  GSocket_UnsetCallback(m_socket, GSOCK_INPUT_FLAG | GSOCK_OUTPUT_FLAG |
                                   GSOCK_LOST_FLAG | GSOCK_CONNECTION_FLAG);
   if (!notify)
     return;
 
-  GSocket_SetFallback(m_socket, m_neededreq, wx_socket_fallback, (char *)this);
+  GSocket_SetCallback(m_socket, m_neededreq, wx_socket_fallback, (char *)this);
 }
 
 void wxSocketBase::OnRequest(GSocketEvent req_evt)

@@ -88,6 +88,8 @@ GSocket *GSocket_new()
   socket->m_stream		= TRUE;
   socket->m_gui_dependent	= NULL;
   socket->m_blocking		= FALSE;
+  socket->m_timeout             = 10*60*1000;
+                                      // 10 minutes * 60 sec * 1000 millisec
 
   /* We initialize the GUI specific entries here */
   _GSocket_GUI_Init(socket);
@@ -132,7 +134,7 @@ void GSocket_Shutdown(GSocket *socket)
 
   /* We also disable GUI callbacks */
   for (evt=0;evt<GSOCK_MAX_EVENT;evt++)
-    _GSocket_Uninstall_Fallback(socket, evt);
+    _GSocket_Uninstall_Callback(socket, evt);
 }
 
 /* Address handling */
@@ -267,6 +269,9 @@ GSocketError GSocket_SetServer(GSocket *sck)
     return GSOCK_IOERR;
   }
 
+  GSocket_SetNonBlocking(sck, sck->m_blocking);
+  GSocket_SetTimeout(sck, sck->m_timeout);
+
   return GSOCK_NOERROR;
 }
 
@@ -338,6 +343,9 @@ GSocketError GSocket_SetNonOriented(GSocket *sck)
     return GSOCK_IOERR;
   }
 
+  GSocket_SetBlocking(sck, sck->m_blocking);
+  GSocket_SetTimeout(sck, sck->m_timeout);
+
   return GSOCK_NOERROR;
 }
 
@@ -392,6 +400,9 @@ GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
   
   /* It is not a server */
   sck->m_server = FALSE;
+
+  GSocket_SetBlocking(sck, sck->m_blocking);
+  GSocket_SetTimeout(sck, sck->m_timeout);
 
   return GSOCK_NOERROR;
 }
@@ -461,10 +472,10 @@ bool GSocket_DataAvailable(GSocket *socket)
 /* Flags */
 
 /*
-  GSocket_SetBlocking() puts the socket in non-blocking mode. This is useful
+  GSocket_SetNonBlocking() puts the socket in non-blocking mode. This is useful
   if we don't want to wait.
 */
-void GSocket_SetBlocking(GSocket *socket, bool block)
+void GSocket_SetNonBlocking(GSocket *socket, bool block)
 {
   assert(socket != NULL);
 
@@ -472,6 +483,24 @@ void GSocket_SetBlocking(GSocket *socket, bool block)
 
   if (socket->m_fd != -1)
     ioctl(socket->m_fd, FIONBIO, &block);
+}
+
+/*
+ * GSocket_SetTimeout()
+ */
+void GSocket_SetTimeout(GSocket *socket, unsigned long millisec)
+{
+  assert(socket != NULL);
+
+  socket->m_timeout = millisec;
+  if (socket->m_fd != -1) {
+    struct timeval tval;
+
+    tval.tv_sec = millisec / 1000;
+    tval.tv_usec = (millisec % 1000) * 1000;
+    setsockopt(socket->m_fd, SOL_SOCKET, SO_SNDTIMEO, &tval, sizeof(tval));
+    setsockopt(socket->m_fd, SOL_SOCKET, SO_RCVTIMEO, &tval, sizeof(tval));
+  }
 }
 
 /*
@@ -498,7 +527,7 @@ GSocketError GSocket_GetError(GSocket *socket)
 	     Server socket -> a client request a connection
    LOST: the connection is lost
 
-   SetFallback accepts a combination of these flags so a same callback can
+   SetCallback accepts a combination of these flags so a same callback can
    receive different events.
 
    An event is generated only once and its state is reseted when the relative
@@ -506,8 +535,8 @@ GSocketError GSocket_GetError(GSocket *socket)
    For example: INPUT -> GSocket_Read()
                 CONNECTION -> GSocket_Accept()
 */
-void GSocket_SetFallback(GSocket *socket, GSocketEventFlags event,
-			 GSocketFallback fallback, char *cdata)
+void GSocket_SetCallback(GSocket *socket, GSocketEventFlags event,
+			 GSocketCallback fallback, char *cdata)
 {
   int count;
 
@@ -520,17 +549,17 @@ void GSocket_SetFallback(GSocket *socket, GSocketEventFlags event,
       socket->m_fbacks[count] = fallback;
       socket->m_data[count] = cdata;
 
-      _GSocket_Install_Fallback(socket, count);
+      _GSocket_Install_Callback(socket, count);
       _GSocket_Enable(socket, count);
     }
   }
 }
 
 /*
-  UnsetFallback will disables all fallbacks specified by "event".
+  UnsetCallback will disables all fallbacks specified by "event".
   NOTE: event may be a combination of flags
 */
-void GSocket_UnsetFallback(GSocket *socket, GSocketEventFlags event)
+void GSocket_UnsetCallback(GSocket *socket, GSocketEventFlags event)
 {
   int count = 0;
 
@@ -540,7 +569,7 @@ void GSocket_UnsetFallback(GSocket *socket, GSocketEventFlags event)
     if ((event & (1 << count)) != 0) {
       _GSocket_Disable(socket, count);
       socket->m_fbacks[count] = NULL;
-      _GSocket_Uninstall_Fallback(socket, count);
+      _GSocket_Uninstall_Callback(socket, count);
     }
   }
 }
@@ -567,14 +596,14 @@ void _GSocket_Enable(GSocket *socket, GSocketEvent event)
 {
   socket->m_iocalls[event] = TRUE;
   if (socket->m_fbacks[event])
-    _GSocket_Install_Fallback(socket, event);
+    _GSocket_Install_Callback(socket, event);
 }
 
 void _GSocket_Disable(GSocket *socket, GSocketEvent event)
 {
   socket->m_iocalls[event] = FALSE;
   if (socket->m_fbacks[event])
-    _GSocket_Uninstall_Fallback(socket, event);
+    _GSocket_Uninstall_Callback(socket, event);
 }
 
 int _GSocket_Recv_Stream(GSocket *socket, char *buffer, int size)
