@@ -2261,6 +2261,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
             (void)HandleDestroy();
             break;
 
+#ifndef __SMARTPHONE__ // or wxWinCE in general ?
         case WM_WINDOWPOSCHANGING:
             {
                 WINDOWPOS *wp = wx_reinterpret_cast(WINDOWPOS *, lParam);
@@ -2300,6 +2301,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                 m_hDWP = NULL;
             }
             break;
+#endif // __SMARTPHONE__
 
         case WM_SIZE:
             processed = HandleSize(LOWORD(lParam), HIWORD(lParam), wParam);

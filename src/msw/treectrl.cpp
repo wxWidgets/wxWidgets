@@ -2219,6 +2219,7 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
     WXLRESULT rc = 0;
     bool isMultiple = (GetWindowStyle() & wxTR_MULTIPLE) != 0;
 
+#ifndef __SMARTPHONE__
     if (nMsg == WM_CONTEXTMENU)
     {
         wxTreeEvent event( wxEVT_COMMAND_TREE_ITEM_MENU, GetId() );
@@ -2228,6 +2229,7 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
 
         return rc;
     }
+#endif // __SMARTPHONE__
 
     if ( (nMsg >= WM_MOUSEFIRST) && (nMsg <= WM_MOUSELAST) )
     {
