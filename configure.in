@@ -379,7 +379,6 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_NORMALIZED_PS_FONTS=no
   DEFAULT_wxUSE_POSTSCRIPT=no
 
-  DEFAULT_wxUSE_X_RESOURCES=no
   DEFAULT_wxUSE_CLIPBOARD=no
   DEFAULT_wxUSE_TOOLTIPS=no
   DEFAULT_wxUSE_DRAG_AND_DROP=no
@@ -552,7 +551,6 @@ else
   DEFAULT_wxUSE_NORMALIZED_PS_FONTS=yes
   DEFAULT_wxUSE_POSTSCRIPT=yes
 
-  DEFAULT_wxUSE_X_RESOURCES=no
   DEFAULT_wxUSE_CLIPBOARD=yes
   DEFAULT_wxUSE_TOOLTIPS=yes
   DEFAULT_wxUSE_DRAG_AND_DROP=yes
@@ -856,8 +854,6 @@ dnl ---------------------------------------------------------------------------
 
 WX_ARG_ENABLE(prologio,    [  --enable-prologio       not available; see contrib], wxUSE_PROLOGIO)
 WX_ARG_ENABLE(resources,   [  --enable-resources      not available; see contrib], wxUSE_RESOURCES)
-
-WX_ARG_ENABLE(xresources,  [  --enable-xresources     use X resources for save (default for gtk+)], wxUSE_X_RESOURCES)
 
 dnl ---------------------------------------------------------------------------
 dnl IPC &c
@@ -4764,10 +4760,6 @@ fi
 
 if test "$wxUSE_PROLOGIO" = "yes" -o test "$wxUSE_RESOURCES" = "yes"; then
     AC_MSG_ERROR([wxExpr and old-style resources are now available in contrib only])
-fi
-
-if test "$wxUSE_X_RESOURCES" = "yes"; then
-    AC_DEFINE(wxUSE_X_RESOURCES)
 fi
 
 dnl ---------------------------------------------------------------------------
