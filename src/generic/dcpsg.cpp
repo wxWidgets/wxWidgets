@@ -1935,7 +1935,7 @@ wxPostScriptPrintDialog::wxPostScriptPrintDialog (wxWindow *parent, const wxStri
    radio0->SetSelection((int)wxThePrintSetupData->GetPrinterOrientation() - 1);
 
   // @@@ Configuration hook
-   if (wxThePrintSetupData->GetPrintPreviewCommand() == NULL)
+   if ( !wxThePrintSetupData->GetPrintPreviewCommand() )
       wxThePrintSetupData->SetPrintPreviewCommand(PS_VIEWER_PROG);
 
    //   wxGetResource ("wxWindows", "PSView", &wxThePrintSetupData->m_previewCommand);

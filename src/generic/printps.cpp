@@ -6,28 +6,36 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
 #ifdef __GNUG__
-#pragma implementation "printps.h"
+    #pragma implementation "printps.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #include "wx/defs.h"
 
 #ifndef WX_PRECOMP
-#include "wx/utils.h"
-#include "wx/dc.h"
-#include "wx/app.h"
-#include "wx/msgdlg.h"
-#include <wx/intl.h>
+    #include "wx/utils.h"
+    #include "wx/dc.h"
+    #include "wx/app.h"
+    #include "wx/msgdlg.h"
+    #include <wx/intl.h>
 #endif
 
 #include "wx/generic/printps.h"
@@ -38,21 +46,29 @@
 
 #include <stdlib.h>
 
+// ----------------------------------------------------------------------------
+// wxWin macros
+// ----------------------------------------------------------------------------
+
 #if !USE_SHARED_LIBRARY
-IMPLEMENT_DYNAMIC_CLASS(wxPostScriptPrinter, wxPrinterBase)
-IMPLEMENT_CLASS(wxPostScriptPrintPreview, wxPrintPreviewBase)
+    IMPLEMENT_DYNAMIC_CLASS(wxPostScriptPrinter, wxPrinterBase)
+    IMPLEMENT_CLASS(wxPostScriptPrintPreview, wxPrintPreviewBase)
 #endif
 
-/*
-* Printer
-*/
+// ============================================================================
+// implementation
+// ============================================================================
 
-wxPostScriptPrinter::wxPostScriptPrinter(wxPrintDialogData *data):
-wxPrinterBase(data)
+// ----------------------------------------------------------------------------
+// Printer
+// ----------------------------------------------------------------------------
+
+wxPostScriptPrinter::wxPostScriptPrinter(wxPrintDialogData *data)
+                   : wxPrinterBase(data)
 {
 }
 
-wxPostScriptPrinter::~wxPostScriptPrinter(void)
+wxPostScriptPrinter::~wxPostScriptPrinter()
 {
 }
 
@@ -60,21 +76,21 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
 {
     sm_abortIt = FALSE;
     sm_abortWindow = (wxWindow *) NULL;
-    
+
     if (!printout)
         return FALSE;
-    
+
     printout->SetIsPreview(FALSE);
     printout->OnPreparePrinting();
-    
+
     // Get some parameters from the printout, if defined
     int fromPage, toPage;
     int minPage, maxPage;
     printout->GetPageInfo(&minPage, &maxPage, &fromPage, &toPage);
-    
+
     if (maxPage == 0)
         return FALSE;
-    
+
     m_printDialogData.SetMinPage(minPage);
     m_printDialogData.SetMaxPage(maxPage);
     if (fromPage != 0)
@@ -97,7 +113,7 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
     else
         m_printDialogData.EnablePageNumbers(FALSE);
 
-    // Create a suitable device context  
+    // Create a suitable device context
     wxDC *dc = (wxDC *) NULL;
     if (prompt)
     {
@@ -109,50 +125,50 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
     {
         dc = new wxPostScriptDC(wxThePrintSetupData->GetPrinterFile(), FALSE, (wxWindow *) NULL);
     }
-    
+
     // May have pressed cancel.
     if (!dc || !dc->Ok())
     {
         if (dc) delete dc;
         return FALSE;
     }
-    
+
     int logPPIScreenX = 0;
     int logPPIScreenY = 0;
     int logPPIPrinterX = 0;
     int logPPIPrinterY = 0;
-    
+
     logPPIScreenX = 100;
     logPPIScreenY = 100;
-    
+
     /*
     // Correct values for X/PostScript?
     logPPIPrinterX = 100;
     logPPIPrinterY = 100;
     */
-    
+
     logPPIPrinterX = 72;
     logPPIPrinterY = 72;
-    
+
     printout->SetPPIScreen(logPPIScreenX, logPPIScreenY);
     printout->SetPPIPrinter(logPPIPrinterX, logPPIPrinterY);
-    
-    // Set printout parameters  
+
+    // Set printout parameters
     printout->SetDC(dc);
-    
+
     int w, h;
     dc->GetSize(&w, &h);
     printout->SetPageSizePixels((int)w, (int)h);
     dc->GetSizeMM(&w, &h);
     printout->SetPageSizeMM((int)w, (int)h);
-    
+
     // Create an abort window
     wxBeginBusyCursor();
-    
+
     printout->OnBeginPrinting();
-    
+
     bool keepGoing = TRUE;
-    
+
     int copyCount;
     for (copyCount = 1; copyCount <= m_printDialogData.GetNoCopies(); copyCount ++)
     {
@@ -164,7 +180,7 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
         }
         if (sm_abortIt)
             break;
-        
+
         int pn;
         for (pn = m_printDialogData.GetFromPage(); keepGoing && (pn <= m_printDialogData.GetToPage()) && printout->HasPage(pn);
         pn++)
@@ -183,13 +199,13 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
         }
         printout->OnEndDocument();
     }
-    
+
     printout->OnEndPrinting();
-    
+
     wxEndBusyCursor();
-    
+
     delete dc;
-    
+
     return TRUE;
 }
 
@@ -225,18 +241,34 @@ bool wxPostScriptPrinter::Setup(wxWindow *parent)
     return (ret == wxID_OK);
 }
 
-/*
-* Print preview
-*/
+// ----------------------------------------------------------------------------
+// Print preview
+// ----------------------------------------------------------------------------
 
-wxPostScriptPrintPreview::wxPostScriptPrintPreview(wxPrintout *printout, wxPrintout *printoutForPrinting, wxPrintDialogData *data):
-wxPrintPreviewBase(printout, printoutForPrinting, data)
+void wxPostScriptPrintPreview::Init(wxPrintout * WXUNUSED(printout),
+                                    wxPrintout * WXUNUSED(printoutForPrinting))
 {
     // Have to call it here since base constructor can't call it
     DetermineScaling();
 }
 
-wxPostScriptPrintPreview::~wxPostScriptPrintPreview(void)
+wxPostScriptPrintPreview::wxPostScriptPrintPreview(wxPrintout *printout,
+                                                   wxPrintout *printoutForPrinting,
+                                                   wxPrintDialogData *data)
+                        : wxPrintPreviewBase(printout, printoutForPrinting, data)
+{
+    Init(printout, printoutForPrinting);
+}
+
+wxPostScriptPrintPreview::wxPostScriptPrintPreview(wxPrintout *printout,
+                                                   wxPrintout *printoutForPrinting,
+                                                   wxPrintData *data)
+                        : wxPrintPreviewBase(printout, printoutForPrinting, data)
+{
+    Init(printout, printoutForPrinting);
+}
+
+wxPostScriptPrintPreview::~wxPostScriptPrintPreview()
 {
 }
 
@@ -248,12 +280,12 @@ bool wxPostScriptPrintPreview::Print(bool interactive)
     return printer.Print(m_previewFrame, m_printPrintout, interactive);
 }
 
-void wxPostScriptPrintPreview::DetermineScaling(void)
+void wxPostScriptPrintPreview::DetermineScaling()
 {
     wxPaperSize paperType = m_printDialogData.GetPrintData().GetPaperId();
     if (paperType == wxPAPER_NONE)
         paperType = wxPAPER_NONE;
-    
+
     wxPrintPaperType *paper = wxThePrintPaperDatabase->FindPaperType(paperType);
     if (!paper)
         paper = wxThePrintPaperDatabase->FindPaperType(wxPAPER_A4);
@@ -263,7 +295,7 @@ void wxPostScriptPrintPreview::DetermineScaling(void)
         m_previewPrintout->SetPPIScreen(100, 100);
         //      m_previewPrintout->SetPPIPrinter(100, 100);
         m_previewPrintout->SetPPIPrinter(72, 72);
-        
+
         wxSize sizeDevUnits(paper->GetSizeDeviceUnits());
         wxSize sizeTenthsMM(paper->GetSize());
         wxSize sizeMM(sizeTenthsMM.x / 10, sizeTenthsMM.y / 10);
@@ -283,7 +315,7 @@ void wxPostScriptPrintPreview::DetermineScaling(void)
             m_previewPrintout->SetPageSizeMM(sizeMM.x, sizeMM.y);
             m_previewPrintout->SetPageSizePixels(m_pageWidth, m_pageHeight);
         }
-        
+
         // At 100%, the page should look about page-size on the screen.
         m_previewScale = (float)0.8;
     }

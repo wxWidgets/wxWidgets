@@ -9,66 +9,82 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
 #ifdef __GNUG__
-#pragma implementation "cmndata.h"
+    #pragma implementation "cmndata.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-#include <stdio.h>
-#include "wx/string.h"
-#include "wx/utils.h"
-#include "wx/app.h"
+    #include <stdio.h>
+    #include "wx/string.h"
+    #include "wx/utils.h"
+    #include "wx/app.h"
 #endif
 
 #include "wx/gdicmn.h"
 #include "wx/cmndata.h"
+
 #include "wx/paper.h"
 
 // For compatibility
 #if (defined(__WXMOTIF__) || defined(__WXGTK__)) && wxUSE_POSTSCRIPT
-#include "wx/generic/dcpsg.h"
+    #define wxCOMPATIBILITY_WITH_PRINTSETUPDATA 1
+#endif
+
+#if wxCOMPATIBILITY_WITH_PRINTSETUPDATA
+    #include "wx/generic/dcpsg.h"
 #endif
 
 #ifdef __WXMSW__
-#include <windows.h>
+    #include <windows.h>
 
-#if !defined(__WIN32__)
-#include <print.h>
-#include <commdlg.h>
-#endif
+    #if !defined(__WIN32__)
+        #include <print.h>
+        #include <commdlg.h>
+    #endif // Win16
 
-#if defined(__WATCOMC__) || defined(__SC__) || defined(__SALFORDC__)
-#include <windowsx.h>
-#include <commdlg.h>
-#endif
-
-#endif
+    #if defined(__WATCOMC__) || defined(__SC__) || defined(__SALFORDC__)
+        #include <windowsx.h>
+        #include <commdlg.h>
+    #endif
+#endif // MSW
 
 #if !USE_SHARED_LIBRARY
-IMPLEMENT_DYNAMIC_CLASS(wxPrintData, wxObject)
-IMPLEMENT_DYNAMIC_CLASS(wxPrintDialogData, wxObject)
-IMPLEMENT_DYNAMIC_CLASS(wxPageSetupDialogData, wxObject)
-IMPLEMENT_DYNAMIC_CLASS(wxFontData, wxObject)
-IMPLEMENT_DYNAMIC_CLASS(wxColourData, wxObject)
+    IMPLEMENT_DYNAMIC_CLASS(wxPrintData, wxObject)
+    IMPLEMENT_DYNAMIC_CLASS(wxPrintDialogData, wxObject)
+    IMPLEMENT_DYNAMIC_CLASS(wxPageSetupDialogData, wxObject)
+    IMPLEMENT_DYNAMIC_CLASS(wxFontData, wxObject)
+    IMPLEMENT_DYNAMIC_CLASS(wxColourData, wxObject)
 #endif
 
-/*
-* wxColourData
-*/
+// ============================================================================
+// implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxColourData
+// ----------------------------------------------------------------------------
 
 wxColourData::wxColourData()
 {
     int i;
     for (i = 0; i < 16; i++)
         custColours[i].Set(255, 255, 255);
-    
+
     chooseFull = FALSE;
     dataColour.Set(0,0,0);
 }
@@ -86,7 +102,7 @@ void wxColourData::SetCustomColour(int i, wxColour& colour)
 {
     if (i > 15 || i < 0)
         return;
-    
+
     custColours[i] = colour;
 }
 
@@ -94,7 +110,7 @@ wxColour wxColourData::GetCustomColour(int i)
 {
     if (i > 15 || i < 0)
         return wxColour(0,0,0);
-    
+
     return custColours[i];
 }
 
@@ -103,20 +119,20 @@ void wxColourData::operator=(const wxColourData& data)
     int i;
     for (i = 0; i < 16; i++)
         custColours[i] = data.custColours[i];
-    
+
     dataColour = (wxColour&)data.dataColour;
     chooseFull = data.chooseFull;
 }
 
-/*
-* Font data
-*/
+// ----------------------------------------------------------------------------
+// Font data
+// ----------------------------------------------------------------------------
 
 wxFontData::wxFontData()
 {
     // Intialize colour to black.
     fontColour.Set(0, 0, 0);
-    
+
     showHelp = FALSE;
     allowSymbols = TRUE;
     enableEffects = TRUE;
@@ -145,9 +161,9 @@ void wxFontData::operator=(const wxFontData& data)
     maxSize = data.maxSize;
 }
 
-/*
-* Print data
-*/
+// ----------------------------------------------------------------------------
+// Print data
+// ----------------------------------------------------------------------------
 
 wxPrintData::wxPrintData()
 {
@@ -157,7 +173,7 @@ wxPrintData::wxPrintData()
     m_printOrientation = wxPORTRAIT;
     m_printNoCopies = 1;
     m_printCollate = FALSE;
-    
+
     // New, 24/3/99
     m_printerName = "";
     m_colour = TRUE;
@@ -209,7 +225,7 @@ void wxPrintData::ConvertToNative()
     {
         // Use PRINTDLG as a way of creating a DEVMODE object
         PRINTDLG *pd = new PRINTDLG;
-        
+
         // GNU-WIN32 has the wrong size PRINTDLG - can't work out why.
 #ifdef __GNUWIN32__
         pd->lStructSize    = 66 ;
@@ -222,10 +238,10 @@ void wxPrintData::ConvertToNative()
         pd->hwndOwner      = (HWND)NULL;
         pd->hDevMode       = NULL; // Will be created by PrintDlg
         pd->hDevNames      = NULL; // Ditto
-        
+
         pd->Flags          = PD_RETURNDEFAULT;
         pd->nCopies        = 1;
-        
+
         // Fill out the DEVMODE structure
         // so we can use it as input in the 'real' PrintDlg
         if (!PrintDlg(pd))
@@ -250,28 +266,28 @@ void wxPrintData::ConvertToNative()
 
         delete pd;
     }
-    
+
     if ( hDevMode )
     {
         DEVMODE *devMode = (DEVMODE*) GlobalLock(hDevMode);
-        
+
         //// Orientation
-        
+
         devMode->dmOrientation = m_printOrientation;
         devMode->dmFields = DM_ORIENTATION;
-        
+
         //// Collation
-        
+
         devMode->dmCollate = (m_printCollate ? DMCOLLATE_TRUE : DMCOLLATE_FALSE);
         devMode->dmFields |= DM_COLLATE;
-        
+
         //// Number of copies
-        
+
         devMode->dmCopies = m_printNoCopies;
         devMode->dmFields |= DM_COPIES;
-        
+
         //// Printer name
-        
+
         if (m_printerName != "")
         {
             // TODO: make this Unicode compatible
@@ -281,18 +297,18 @@ void wxPrintData::ConvertToNative()
                 devMode->dmDeviceName[i] = m_printerName.GetChar(i);
             devMode->dmDeviceName[i] = 0;
         }
-        
+
         //// Colour
-        
+
         if (m_colour)
             devMode->dmColor = DMCOLOR_COLOR;
         else
             devMode->dmColor = DMCOLOR_MONOCHROME;
-        
+
         devMode->dmFields |= DM_COLOR;
-        
+
         //// Paper size
-        
+
         if (m_paperId == wxPAPER_NONE)
         {
             devMode->dmPaperWidth = m_paperSize.x * 10;
@@ -312,9 +328,9 @@ void wxPrintData::ConvertToNative()
                 }
             }
         }
-        
+
         //// Duplex
-        
+
         int duplex;
         switch (m_duplexMode)
         {
@@ -331,9 +347,9 @@ void wxPrintData::ConvertToNative()
         }
         devMode->dmDuplex = duplex;
         devMode->dmFields |= DM_DUPLEX;
-        
+
         //// Quality
-        
+
         int quality;
         switch (m_printQuality)
         {
@@ -355,7 +371,7 @@ void wxPrintData::ConvertToNative()
         }
         devMode->dmPrintQuality = quality;
         devMode->dmFields |= DM_PRINTQUALITY;
-        
+
         GlobalUnlock(hDevMode);
     }
 }
@@ -370,14 +386,14 @@ void wxPrintData::ConvertFromNative()
     if ( hDevMode )
     {
         DEVMODE *devMode = (DEVMODE*) GlobalLock(hDevMode);
-        
+
         //// Orientation
-        
+
         if (devMode->dmFields & DM_ORIENTATION)
             m_printOrientation = devMode->dmOrientation;
-        
+
         //// Collation
-        
+
         if (devMode->dmFields & DM_COLLATE)
         {
             if (devMode->dmCollate == DMCOLLATE_TRUE)
@@ -385,16 +401,16 @@ void wxPrintData::ConvertFromNative()
             else
                 m_printCollate = FALSE;
         }
-        
+
         //// Number of copies
-        
+
         if (devMode->dmFields & DM_COPIES)
         {
             m_printNoCopies = devMode->dmCopies;
         }
-        
+
         //// Printer name
-        
+
         if (devMode->dmDeviceName[0] != 0)
         {
             // TODO: make this Unicode compatible
@@ -406,12 +422,12 @@ void wxPrintData::ConvertFromNative()
                 i ++;
             }
             buf[i] = 0;
-            
+
             m_printerName = buf;
         }
-        
+
         //// Colour
-        
+
         if (devMode->dmFields & DM_COLOR)
         {
             if (devMode->dmColor == DMCOLOR_COLOR)
@@ -421,9 +437,9 @@ void wxPrintData::ConvertFromNative()
         }
         else
             m_colour = TRUE;
-        
+
         //// Paper size
-        
+
         if (devMode->dmFields & DM_PAPERSIZE)
         {
             if (wxThePrintPaperDatabase)
@@ -439,7 +455,7 @@ void wxPrintData::ConvertFromNative()
                 {
                     // Shouldn't really get here
                     wxFAIL_MSG("Couldn't find paper size in paper database.");
-                    
+
                     m_paperId = wxPAPER_NONE;
                     m_paperSize.x = 0;
                     m_paperSize.y = 0;
@@ -449,7 +465,7 @@ void wxPrintData::ConvertFromNative()
             {
                 // Shouldn't really get here
                 wxFAIL_MSG("Paper database wasn't initialized in wxPrintData::ConvertFromNative.");
-                
+
                 m_paperId = wxPAPER_NONE;
                 m_paperSize.x = 0;
                 m_paperSize.y = 0;
@@ -465,15 +481,15 @@ void wxPrintData::ConvertFromNative()
         {
             // Shouldn't really get here
             wxFAIL_MSG("Couldn't find paper size from DEVMODE.");
-            
+
             m_paperSize.x = 0;
             m_paperSize.y = 0;
             m_paperId = wxPAPER_NONE;
         }
-        
-        
+
+
         //// Duplex
-        
+
         if (devMode->dmFields & DM_DUPLEX)
         {
             switch (devMode->dmDuplex)
@@ -492,9 +508,9 @@ void wxPrintData::ConvertFromNative()
         }
         else
             m_duplexMode = wxDUPLEX_SIMPLEX;
-        
+
         //// Quality
-        
+
         if (devMode->dmFields & DM_PRINTQUALITY)
         {
             switch (devMode->dmPrintQuality)
@@ -517,13 +533,13 @@ void wxPrintData::ConvertFromNative()
                     // will the application know if it's high, low, draft etc.??
                     //                    wxFAIL_MSG("Warning: DM_PRINTQUALITY was not one of the standard values.");
                     m_printQuality = devMode->dmPrintQuality; break;
-                    
+
                 }
             }
         }
         else
             m_printQuality = wxPRINT_QUALITY_HIGH;
-        
+
         GlobalUnlock(hDevMode);
     }
 }
@@ -556,7 +572,7 @@ void wxPrintData::operator=(const wxPrintData& data)
 }
 
 // For compatibility
-#if (defined(__WXMOTIF__) || defined(__WXGTK__)) && wxUSE_POSTSCRIPT
+#if wxCOMPATIBILITY_WITH_PRINTSETUPDATA
 void wxPrintData::operator=(const wxPrintSetupData& setupData)
 {
     SetPrinterCommand(setupData.GetPrinterCommand());
@@ -579,12 +595,12 @@ void wxPrintData::operator=(const wxPrintSetupData& setupData)
     SetColour(setupData.GetColour());
     SetFilename(setupData.GetPrinterFile());
 }
-#endif
-    
+#endif // wxCOMPATIBILITY_WITH_PRINTSETUPDATA
 
-/*
- * Print dialog data
- */
+
+// ----------------------------------------------------------------------------
+// Print dialog data
+// ----------------------------------------------------------------------------
 
 wxPrintDialogData::wxPrintDialogData()
 {
@@ -689,7 +705,7 @@ void wxPrintDialogData::ConvertToNative()
     pd->nMinPage = (UINT)m_printMinPage;
     pd->nMaxPage = (UINT)m_printMaxPage;
     pd->nCopies = (UINT)m_printNoCopies;
-    
+
     pd->Flags = PD_RETURNDC ;
 
 #ifdef __GNUWIN32__
@@ -708,7 +724,7 @@ void wxPrintDialogData::ConvertToNative()
     pd->lpSetupTemplateName = NULL;
     pd->hPrintTemplate = (HGLOBAL) NULL;
     pd->hSetupTemplate = (HGLOBAL) NULL;
-    
+
     if ( m_printAllPages )
         pd->Flags |= PD_ALLPAGES;
     if ( m_printCollate )
@@ -754,7 +770,7 @@ void wxPrintDialogData::ConvertFromNative()
     m_printMinPage = pd->nMinPage ;
     m_printMaxPage = pd->nMaxPage ;
     m_printNoCopies = pd->nCopies ;
-    
+
     m_printAllPages = ((pd->Flags & PD_ALLPAGES) == PD_ALLPAGES);
     m_printCollate = ((pd->Flags & PD_COLLATE) == PD_COLLATE);
     m_printToFile = ((pd->Flags & PD_PRINTTOFILE) == PD_PRINTTOFILE);
@@ -773,7 +789,7 @@ void wxPrintDialogData::ConvertFromNative()
             m_printData.SetPortName((LPSTR)lpDevNames + lpDevNames->wDriverOffset);
             wxString devName = (LPSTR)lpDevNames + lpDevNames->wDeviceOffset;
             GlobalUnlock(pd->hDevNames);
-            
+
 //            wxASSERT_MSG( (m_printerName == "" || (devName == m_printerName)), "Printer name obtained from DEVMODE and DEVNAMES were different!");
         }
     }
@@ -784,14 +800,14 @@ void wxPrintDialogData::SetOwnerWindow(wxWindow* win)
 {
     if ( m_printDlgData == NULL )
         ConvertToNative();
-    
+
     if ( m_printDlgData != NULL && win != NULL)
     {
         PRINTDLG *pd = (PRINTDLG *) m_printDlgData ;
         pd->hwndOwner=(HWND) win->GetHWND();
     }
 }
-#endif
+#endif // MSW
 
 void wxPrintDialogData::operator=(const wxPrintDialogData& data)
 {
@@ -817,9 +833,9 @@ void wxPrintDialogData::operator=(const wxPrintData& data)
     m_printData = data;
 }
 
-/*
- * wxPageSetupDialogData
- */
+// ----------------------------------------------------------------------------
+// wxPageSetupDialogData
+// ----------------------------------------------------------------------------
 
 wxPageSetupDialogData::wxPageSetupDialogData()
 {
@@ -911,7 +927,7 @@ void wxPageSetupDialogData::operator=(const wxPrintData& data)
     m_printData = data;
 }
 
-#if defined(__WXMSW__) && defined(__WIN95__)
+#if defined(__WIN95__)
 void wxPageSetupDialogData::ConvertToNative()
 {
     m_printData.ConvertToNative();
@@ -945,7 +961,7 @@ void wxPageSetupDialogData::ConvertToNative()
 //        pd->hDevMode = GlobalAlloc(GMEM_MOVEABLE, sizeof(DEVMODE));
 
     pd->Flags = PSD_MARGINS|PSD_MINMARGINS;
-    
+
     if ( m_defaultMinMargins )
         pd->Flags |= PSD_DEFAULTMINMARGINS;
     if ( !m_enableMargins )
@@ -968,27 +984,27 @@ void wxPageSetupDialogData::ConvertToNative()
     pd->hwndOwner=(HWND)NULL;
     pd->hDevNames=(HWND)NULL;
     pd->hInstance=(HINSTANCE)NULL;
-    
+
     pd->ptPaperSize.x = m_paperSize.x * 100;
     pd->ptPaperSize.y = m_paperSize.y * 100;
-    
+
     pd->rtMinMargin.left = m_minMarginTopLeft.x * 100;
     pd->rtMinMargin.top = m_minMarginTopLeft.y * 100;
     pd->rtMinMargin.right = m_minMarginBottomRight.x * 100;
     pd->rtMinMargin.bottom = m_minMarginBottomRight.y * 100;
-    
+
     pd->rtMargin.left = m_marginTopLeft.x * 100;
     pd->rtMargin.top = m_marginTopLeft.y * 100;
     pd->rtMargin.right = m_marginBottomRight.x * 100;
     pd->rtMargin.bottom = m_marginBottomRight.y * 100;
-    
+
     pd->lCustData = 0;
     pd->lpfnPageSetupHook = NULL;
     pd->lpfnPagePaintHook = NULL;
     pd->hPageSetupTemplate = NULL;
     pd->lpPageSetupTemplateName = NULL;
 
-/*    
+/*
     if ( pd->hDevMode )
     {
         DEVMODE *devMode = (DEVMODE*) GlobalLock(pd->hDevMode);
@@ -1006,7 +1022,7 @@ void wxPageSetupDialogData::ConvertFromNative()
     PAGESETUPDLG *pd = (PAGESETUPDLG *) m_pageSetupData ;
     if ( !pd )
         return;
-    
+
     // Pass the devmode data back to the wxPrintData structure where it really belongs.
     if (pd->hDevMode)
     {
@@ -1022,7 +1038,7 @@ void wxPageSetupDialogData::ConvertFromNative()
     m_printData.ConvertFromNative();
 
     pd->Flags = PSD_MARGINS|PSD_MINMARGINS;
-    
+
     m_defaultMinMargins = ((pd->Flags & PSD_DEFAULTMINMARGINS) == PSD_DEFAULTMINMARGINS);
     m_enableMargins = ((pd->Flags & PSD_DISABLEMARGINS) != PSD_DISABLEMARGINS);
     m_enableOrientation = ((pd->Flags & PSD_DISABLEORIENTATION) != PSD_DISABLEORIENTATION);
@@ -1030,15 +1046,15 @@ void wxPageSetupDialogData::ConvertFromNative()
     m_enablePrinter = ((pd->Flags & PSD_DISABLEPRINTER) != PSD_DISABLEPRINTER);
     m_getDefaultInfo = ((pd->Flags & PSD_RETURNDEFAULT) == PSD_RETURNDEFAULT);
     m_enableHelp = ((pd->Flags & PSD_SHOWHELP) == PSD_SHOWHELP);
-    
+
     m_paperSize.x = pd->ptPaperSize.x / 100;
     m_paperSize.y = pd->ptPaperSize.y / 100;
-    
+
     m_minMarginTopLeft.x = pd->rtMinMargin.left / 100;
     m_minMarginTopLeft.y = pd->rtMinMargin.top / 100;
     m_minMarginBottomRight.x = pd->rtMinMargin.right / 100;
     m_minMarginBottomRight.y = pd->rtMinMargin.bottom / 100;
-    
+
     m_marginTopLeft.x = pd->rtMargin.left / 100 ;
     m_marginTopLeft.y = pd->rtMargin.top / 100 ;
     m_marginBottomRight.x = pd->rtMargin.right / 100 ;
@@ -1049,14 +1065,14 @@ void wxPageSetupDialogData::SetOwnerWindow(wxWindow* win)
 {
     if ( m_pageSetupData == NULL )
         ConvertToNative();
-    
+
     if ( m_pageSetupData != NULL && win != NULL)
     {
         PAGESETUPDLG *pd = (PAGESETUPDLG *) m_pageSetupData ;
         pd->hwndOwner=(HWND) win->GetHWND();
     }
 }
-#endif
+#endif // Win95
 
 // If a corresponding paper type is found in the paper database, will set the m_printData
 // paper size id member as well.
@@ -1079,7 +1095,9 @@ void wxPageSetupDialogData::SetPaperSize(wxPaperSize id)
 // paper id
 void wxPageSetupDialogData::CalculateIdFromPaperSize()
 {
-    wxASSERT_MSG( (wxThePrintPaperDatabase != (wxPrintPaperDatabase*) NULL), "wxThePrintPaperDatabase should not be NULL. Do not create global print dialog data objects." );
+    wxASSERT_MSG( (wxThePrintPaperDatabase != (wxPrintPaperDatabase*) NULL),
+                  "wxThePrintPaperDatabase should not be NULL. "
+                  "Do not create global print dialog data objects." );
 
     wxSize sz = GetPaperSize();
 
@@ -1089,11 +1107,13 @@ void wxPageSetupDialogData::CalculateIdFromPaperSize()
         m_printData.SetPaperId(id);
     }
 }
-    
+
 // Use paper id in wxPrintData to set this object's paper size
 void wxPageSetupDialogData::CalculatePaperSizeFromId()
 {
-    wxASSERT_MSG( (wxThePrintPaperDatabase != (wxPrintPaperDatabase*) NULL), "wxThePrintPaperDatabase should not be NULL. Do not create global print dialog data objects." );
+    wxASSERT_MSG( (wxThePrintPaperDatabase != (wxPrintPaperDatabase*) NULL),
+                  "wxThePrintPaperDatabase should not be NULL. "
+                  "Do not create global print dialog data objects." );
 
     wxSize sz = wxThePrintPaperDatabase->GetSize(m_printData.GetPaperId());
 
@@ -1104,3 +1124,4 @@ void wxPageSetupDialogData::CalculatePaperSizeFromId()
         m_paperSize.y = sz.y * 10;
     }
 }
+
