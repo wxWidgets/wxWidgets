@@ -4,7 +4,7 @@
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
-CFG=regex - Win32 Debug
+CFG=regex - Win32 Debug Unicode
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
@@ -13,13 +13,14 @@ CFG=regex - Win32 Debug
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "regex.mak" CFG="regex - Win32 Debug"
+!MESSAGE NMAKE /f "regex.mak" CFG="regex - Win32 Debug Unicode"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
 !MESSAGE "regex - Win32 Release" (based on "Win32 (x86) Static Library")
 !MESSAGE "regex - Win32 Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "regex - Win32 Release Unicode" (based on "Win32 (x86) Static Library")
+!MESSAGE "regex - Win32 Debug Unicode" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
@@ -90,7 +91,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MD /O1 /I "." /D "WIN32" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /FD /c
 # SUBTRACT BASE CPP /YX
-# ADD CPP /nologo /MD /O1 /I "." /D "WIN32" /D "_WINDOWS" /D "wxUSE_UNICODE" /D "__WINDOWS__" /D "__WXMSW__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /FD /c
+# ADD CPP /nologo /MD /O1 /I "." /D "WIN32" /D "_WINDOWS" /D "_UNICODE" /D "UNICODE" /D "wxUSE_UNICODE" /D "__WINDOWS__" /D "__WXMSW__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /FD /c
 # SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x809 /d "NDEBUG"
 # ADD RSC /l 0x809 /d "NDEBUG"
@@ -101,6 +102,29 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\regex.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\regex.lib"
 
+!ELSEIF  "$(CFG)" == "regex - Win32 Debug Unicode"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "regex___Win32_Debug_Unicode"
+# PROP BASE Intermediate_Dir "regex___Win32_Debug_Unicode"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "regex___Win32_Debug_Unicode"
+# PROP Intermediate_Dir "regex___Win32_Debug_Unicode"
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /MDd /Gm /Zi /Od /I "." /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D "__WXDEBUG__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /YX /FD /GZ /c
+# ADD CPP /nologo /MDd /Gm /Zi /Od /I "." /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "__WINDOWS__" /D "_UNICODE" /D "UNICODE" /D "wxUSE_UNICODE" /D "__WXMSW__" /D "__WXDEBUG__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /YX /FD /GZ /c
+# ADD BASE RSC /l 0x809 /d "_DEBUG"
+# ADD RSC /l 0x809 /d "_DEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo /out:"..\..\lib\regexd.lib"
+# ADD LIB32 /nologo /out:"..\..\lib\regexd.lib"
+
 !ENDIF 
 
 # Begin Target
@@ -108,6 +132,7 @@ LIB32=link.exe -lib
 # Name "regex - Win32 Release"
 # Name "regex - Win32 Debug"
 # Name "regex - Win32 Release Unicode"
+# Name "regex - Win32 Debug Unicode"
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
@@ -134,6 +159,18 @@ SOURCE=.\regfree.c
 # Begin Source File
 
 SOURCE=.\regcustom.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\regerrs.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\regex.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\regguts.h
 # End Source File
 # End Group
 # End Target
