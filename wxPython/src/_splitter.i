@@ -109,6 +109,11 @@ public:
     // parameter should be NULL)
     bool ReplaceWindow(wxWindow *winOld, wxWindow *winNew);
 
+    // Make sure the child window sizes are updated. This is useful
+    // for reducing flicker by updating the sizes before a
+    // window is shown, if you know the overall size is correct.
+    void UpdateSize();
+
     // Is the window split?
     bool IsSplit() const;
 
