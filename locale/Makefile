@@ -30,6 +30,8 @@ wxstd.po:
 	touch $@
 	find ../include -name "*.h" | $(XARGS) $(XGETTEXT) $(XGETTEXT_ARGS) -o wxstd.po
 	find ../src -name "*.cpp" | $(XARGS) $(XGETTEXT) $(XGETTEXT_ARGS) -o wxstd.po
+	find ../contrib/include -name "*.h" | $(XARGS) $(XGETTEXT) $(XGETTEXT_ARGS) -o wxstd.po
+	find ../contrib/src -name "*.cpp" | $(XARGS) $(XGETTEXT) $(XGETTEXT_ARGS) -o wxstd.po
 
 allpo: force-update
 	@-for t in $(WX_LINGUAS); do $(MAKE) $$t.po; done

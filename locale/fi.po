@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWindows-2.2.1\n"
-"POT-Creation-Date: 2001-11-20 21:24-0800\n"
+"POT-Creation-Date: 2001-11-24 12:43+0100\n"
 "PO-Revision-Date: 2000-10-22 13:38Finland Daylight Time\n"
 "Last-Translator: Kaj G Backas <kgb@compart.fi>\n"
 "Language-Team: wxWindows translators <wx-translators@wxwindows.org>\n"
@@ -347,7 +347,7 @@ msgstr ""
 msgid "A3 sheet, 297 x 420 mm"
 msgstr "A3 paperi 297 x 420 mm"
 
-#: ../src/common/paper.cpp:104 ../src/generic/dcpsg.cpp:2547
+#: ../src/common/paper.cpp:104 ../src/generic/dcpsg.cpp:2545
 msgid "A4 sheet, 210 x 297 mm"
 msgstr "A4 paperi, 210 x 297 mm"
 
@@ -624,7 +624,7 @@ msgstr "Avaimen '%s' arvoja ei voi luetella"
 msgid "Can't find current position in file '%s'"
 msgstr "Käyttäjän asetustiedoston '%s' avaus ei onnistu"
 
-#: ../src/common/object.cpp:346 ../src/common/object.cpp:371
+#: ../src/common/object.cpp:330 ../src/common/object.cpp:355
 #, c-format
 msgid "Can't find the serialization object '%s' for the object '%s'."
 msgstr "Järjestysoliota '%s' oliolle '%s' ei löydy."
@@ -639,7 +639,7 @@ msgstr "Tiedon saanti rekisteriavaimesta '%s' ei onnistu"
 msgid "Can't load image from file '%s': file does not exist."
 msgstr "Kuvaa ei löydy tiedostosta '%s': tiedosto ei ole olemassa."
 
-#: ../src/common/object.cpp:339
+#: ../src/common/object.cpp:323
 msgid "Can't load wxSerial dynamic library."
 msgstr "Ei voi ladata wxSerial dynaamista kirjastoa."
 
@@ -677,7 +677,7 @@ msgid "Can't set value of '%s'"
 msgstr "Ei voida asettaa arvoa '%s'"
 
 #: ../src/common/dlgcmn.cpp:189 ../src/common/prntbase.cpp:109
-#: ../src/generic/dcpsg.cpp:2271 ../src/generic/dirctrlg.cpp:1249
+#: ../src/generic/dcpsg.cpp:2269 ../src/generic/dirctrlg.cpp:1249
 #: ../src/generic/dirdlgg.cpp:418 ../src/generic/filedlgg.cpp:1012
 #: ../src/generic/fontdlgg.cpp:259 ../src/generic/prntdlgg.cpp:466
 #: ../src/generic/progdlgg.cpp:203 ../src/generic/proplist.cpp:525
@@ -686,10 +686,32 @@ msgstr "Ei voida asettaa arvoa '%s'"
 msgid "Cancel"
 msgstr "Peruuta"
 
+#: ../contrib/src/xrc/xmlres.cpp:726 ../contrib/src/xrc/xmlres.cpp:767
+msgid "Cannot convert dialog units: dialog unknown."
+msgstr ""
+
+#: ../contrib/src/xrc/xml.cpp:372
+msgid "Cannot find XML I/O handler capable of loading this format."
+msgstr ""
+
+#: ../contrib/src/xrc/xml.cpp:398
+msgid "Cannot find XML I/O handler capable of saving in this format."
+msgstr ""
+
 #: ../src/msw/dialup.cpp:525
 #, c-format
 msgid "Cannot find active dialup connection: %s"
 msgstr "Aktiivista puhelinsoittoyhteyttä %s ei löydy"
+
+#: ../contrib/src/xrc/xmlres.cpp:206
+#, fuzzy, c-format
+msgid "Cannot find container for unknown control '%s'."
+msgstr "Aktiivista puhelinsoittoyhteyttä %s ei löydy"
+
+#: ../contrib/src/xrc/xmlres.cpp:781
+#, fuzzy, c-format
+msgid "Cannot find font node '%s'."
+msgstr "URL:ää '%s' ei voitu avata"
 
 #: ../src/msw/dialup.cpp:839
 msgid "Cannot find the location of address book file"
@@ -716,6 +738,11 @@ msgstr "Puhelua ei voi lopettaa - ei aktiivista linjaa."
 msgid "Cannot initialize OLE"
 msgstr "OLE initialization epäonnistui"
 
+#: ../contrib/src/xrc/xmlres.cpp:308
+#, fuzzy, c-format
+msgid "Cannot load resources from file '%s'."
+msgstr "Resurssisisältötiedostoa %s ei löydy."
+
 #: ../src/html/htmlfilt.cpp:147
 #, c-format
 msgid "Cannot open HTML document: %s"
@@ -736,6 +763,11 @@ msgstr "URL:ää '%s' ei voitu avata"
 msgid "Cannot open contents file: %s"
 msgstr "Tiedostoa %s ei voi avata!"
 
+#: ../contrib/src/xrc/xmlres.cpp:282
+#, fuzzy, c-format
+msgid "Cannot open file '%s'."
+msgstr "Tiedostoa '%s' ei voi avata"
+
 #: ../src/generic/dcpsg.cpp:1584
 msgid "Cannot open file for PostScript printing!"
 msgstr "Tiedoston avaus PostScript-tulostusta varten epäonnistui!"
@@ -744,6 +776,16 @@ msgstr "Tiedoston avaus PostScript-tulostusta varten epäonnistui!"
 #, c-format
 msgid "Cannot open index file: %s"
 msgstr "Indeksitiedostoa %s ei voi avata!"
+
+#: ../contrib/src/xrc/xmlres.cpp:714
+#, fuzzy, c-format
+msgid "Cannot parse coordinates from '%s'."
+msgstr "Tiedostoa %s ei voi avata!"
+
+#: ../contrib/src/xrc/xmlres.cpp:755
+#, fuzzy, c-format
+msgid "Cannot parse dimension from '%s'."
+msgstr "Hakemiston '%s' tiedostojen luettelointi epäonnistui"
 
 #: ../src/html/helpfrm.cpp:1341
 msgid "Cannot print empty page."
@@ -1739,6 +1781,11 @@ msgstr "Intialainen (ISO-8859-12)"
 msgid "Invalid TIFF image index."
 msgstr "Väärä TIFF kuvaindeksi"
 
+#: ../contrib/src/xrc/xmlres.cpp:313
+#, c-format
+msgid "Invalid XRC resource '%s': doesn't have root node 'resource'."
+msgstr ""
+
 #: ../src/common/appcmn.cpp:282
 #, fuzzy, c-format
 msgid "Invalid display mode specification '%s'."
@@ -1766,7 +1813,7 @@ msgstr "Italialianen kirjekuori, 110 x 230 mm"
 msgid "JPEG: Couldn't load - file is probably corrupted."
 msgstr "JPEG-kuvan lataus ei onnistu - tiedosto ehkä korruptoitunut."
 
-#: ../src/common/imagjpeg.cpp:312
+#: ../src/common/imagjpeg.cpp:313
 msgid "JPEG: Couldn't save image."
 msgstr "JPEG: Ei voinut tallentaa kuvaa"
 
@@ -1774,7 +1821,7 @@ msgstr "JPEG: Ei voinut tallentaa kuvaa"
 msgid "KOI8-R"
 msgstr "KOI8-R"
 
-#: ../src/generic/dcpsg.cpp:2262 ../src/generic/prntdlgg.cpp:439
+#: ../src/generic/dcpsg.cpp:2260 ../src/generic/prntdlgg.cpp:439
 #: ../src/generic/prntdlgg.cpp:635
 msgid "Landscape"
 msgstr "Vaakaformaatti"
@@ -1941,6 +1988,11 @@ msgstr ""
 "Haluatko valita kirjasintyypin, jota käytetään tähän?\n"
 "(Muutoin tällä koodauksella olevaa teksitä ei näytetä oikein)"
 
+#: ../contrib/src/xrc/xmlres.cpp:396
+#, c-format
+msgid "No handler found for XML node '%s', class '%s'!"
+msgstr ""
+
 #: ../src/common/image.cpp:1009
 msgid "No handler found for image type."
 msgstr "Kuvatyypin käsittelyohjelmaa ei löytynyt."
@@ -1975,7 +2027,7 @@ msgstr "Tavallinen kirjasinleikkaus:"
 msgid "Note, 8 1/2 x 11 in"
 msgstr "Note, 8 1/2 x 11\" "
 
-#: ../src/common/dlgcmn.cpp:168 ../src/generic/dcpsg.cpp:2270
+#: ../src/common/dlgcmn.cpp:168 ../src/generic/dcpsg.cpp:2268
 #: ../src/generic/dirctrlg.cpp:1247 ../src/generic/dirdlgg.cpp:416
 #: ../src/generic/filedlgg.cpp:1003 ../src/generic/fontdlgg.cpp:258
 #: ../src/generic/logg.cpp:726 ../src/generic/prntdlgg.cpp:465
@@ -2113,7 +2165,7 @@ msgstr ""
 msgid "Please wait..."
 msgstr "Odota..."
 
-#: ../src/generic/dcpsg.cpp:2261 ../src/generic/prntdlgg.cpp:438
+#: ../src/generic/dcpsg.cpp:2259 ../src/generic/prntdlgg.cpp:438
 #: ../src/generic/prntdlgg.cpp:634
 msgid "Portrait"
 msgstr "Pystyformaatti"
@@ -2126,11 +2178,11 @@ msgstr "PostScript"
 msgid "PostScript file"
 msgstr "PostScript tiedosto"
 
-#: ../src/generic/dcpsg.cpp:2303
+#: ../src/generic/dcpsg.cpp:2301
 msgid "PostScript:"
 msgstr "PostScript:"
 
-#: ../src/generic/dcpsg.cpp:2266
+#: ../src/generic/dcpsg.cpp:2264
 msgid "Preview Only"
 msgstr "Vain esikatselu"
 
@@ -2174,7 +2226,7 @@ msgstr "Tulostuksen sivuajo"
 msgid "Print this page"
 msgstr "Tulosta tämä sivu"
 
-#: ../src/generic/dcpsg.cpp:2265 ../src/generic/prntdlgg.cpp:148
+#: ../src/generic/dcpsg.cpp:2263 ../src/generic/prntdlgg.cpp:148
 msgid "Print to File"
 msgstr "Tulosta tiedostoon"
 
@@ -2182,11 +2234,11 @@ msgstr "Tulosta tiedostoon"
 msgid "Print..."
 msgstr "Tulostaa..."
 
-#: ../src/generic/dcpsg.cpp:2276
+#: ../src/generic/dcpsg.cpp:2274
 msgid "Printer Command: "
 msgstr "Tulostinkomento: "
 
-#: ../src/generic/dcpsg.cpp:2281
+#: ../src/generic/dcpsg.cpp:2279
 msgid "Printer Options: "
 msgstr "Tulostimen valinnat: "
 
@@ -2296,6 +2348,10 @@ msgstr "Korvataanko tiedosto '%s'?"
 msgid "Replace with:"
 msgstr ""
 
+#: ../contrib/src/xrc/xmlres.cpp:330
+msgid "Resource files must have same version number!"
+msgstr ""
+
 #: ../src/generic/prntdlgg.cpp:659
 msgid "Right margin (mm):"
 msgstr "Oikea marginaali (mm):"
@@ -2373,7 +2429,7 @@ msgstr "Valitse dokumentin näkymä"
 msgid "Select a file"
 msgstr "Valitse tiedosto"
 
-#: ../src/generic/dcpsg.cpp:2264
+#: ../src/generic/dcpsg.cpp:2262
 msgid "Send to Printer"
 msgstr "Lähetä tulostimelle"
 
@@ -2613,7 +2669,7 @@ msgstr "Ylämarginaali (mm):"
 msgid "Trying to remove file '%s' from memory VFS, but it is not loaded!"
 msgstr "Tidosto '%s' pyritään poistamaan VFS-muistista, muta se ei ole ladattu"
 
-#: ../src/common/sckaddr.cpp:107
+#: ../src/common/sckaddr.cpp:108
 msgid "Trying to solve a NULL hostname: giving up"
 msgstr "Tyhjää isäntänimeä yritettiin selvittää, luovutaan"
 
@@ -2689,6 +2745,10 @@ msgstr "Tuntematon pitkä optio '%s'"
 #, c-format
 msgid "Unknown option '%s'"
 msgstr "Tuntematon optio '%s'"
+
+#: ../contrib/src/xrc/xmlres.cpp:488
+msgid "Unknown style flag "
+msgstr ""
 
 #: ../src/common/mimecmn.cpp:167
 #, c-format
@@ -2869,28 +2929,52 @@ msgstr "Windows/DOS OEM (CP 437)"
 msgid "Write error on file '%s'"
 msgstr "Tiedostoon '%s' ei voi kirjoittaa"
 
-#: ../src/generic/dcpsg.cpp:2321
+#: ../src/generic/dcpsg.cpp:2319
 msgid "X Scaling"
 msgstr "X skaalaus"
 
-#: ../src/generic/dcpsg.cpp:2330
+#: ../src/generic/dcpsg.cpp:2328
 msgid "X Translation"
 msgstr "X käännös"
 
-#: ../src/common/xpmdecod.cpp:754
+#: ../contrib/src/xrc/xmlexpat.cpp:185
+#, c-format
+msgid "XML parsing error: '%s' at line %d"
+msgstr ""
+
+#: ../src/common/xpmdecod.cpp:757
 msgid "XPM: Malformed pixel data!"
 msgstr ""
 
-#: ../src/common/xpmdecod.cpp:707 ../src/common/xpmdecod.cpp:716
+#: ../src/common/xpmdecod.cpp:710 ../src/common/xpmdecod.cpp:719
 #, c-format
 msgid "XPM: malformed colour definition '%s'!"
 msgstr ""
 
-#: ../src/generic/dcpsg.cpp:2325
+#: ../contrib/src/xrc/xmlres.cpp:371
+#, fuzzy, c-format
+msgid "XRC resource '%s' (class '%s') not found!"
+msgstr "Kuvakeresurssin määritelmää %s ei löydy."
+
+#: ../contrib/src/xrc/xmlres.cpp:624 ../contrib/src/xrc/xmlres.cpp:634
+#, c-format
+msgid "XRC resource: Cannot create bitmap from '%s'."
+msgstr ""
+
+#: ../contrib/src/xrc/xh_dlg.cpp:53 ../contrib/src/xrc/xh_frame.cpp:58
+msgid "XRC resource: Cannot create dialog without instance."
+msgstr ""
+
+#: ../contrib/src/xrc/xmlres.cpp:604
+#, c-format
+msgid "XRC resource: Incorrect colour specification '%s' for property '%s'."
+msgstr ""
+
+#: ../src/generic/dcpsg.cpp:2323
 msgid "Y Scaling"
 msgstr "Y skaalaus"
 
-#: ../src/generic/dcpsg.cpp:2334
+#: ../src/generic/dcpsg.cpp:2332
 msgid "Y Translation"
 msgstr "Y käännös"
 
@@ -3105,7 +3189,7 @@ msgstr "väliaikaistiedoston '%s' poisto ei onnistu"
 msgid "can't seek on file descriptor %d"
 msgstr "ei voida hakea kuvaustiedostoa %d"
 
-#: ../src/common/textfile.cpp:174
+#: ../src/common/textfile.cpp:176
 #, fuzzy, c-format
 msgid "can't write buffer '%s' to disk."
 msgstr "tiedostoa '%s' ei voida kirjottaa levylle."
@@ -3123,6 +3207,11 @@ msgstr "käyttäjän asetustiedoston kirjoitus epäonnistui."
 #, c-format
 msgid "catalog file for domain '%s' not found."
 msgstr "luettelotiedostoa varkkoalueelle '%s' ei löydy."
+
+#: ../contrib/src/xrc/xh_dlg.cpp:67 ../contrib/src/xrc/xh_frame.cpp:72
+#, fuzzy
+msgid "centered"
+msgstr "Jne. "
 
 #: ../src/common/menucmn.cpp:78
 msgid "ctrl"

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWindows-2.2.1\n"
-"POT-Creation-Date: 2001-11-20 21:24-0800\n"
+"POT-Creation-Date: 2001-11-24 12:43+0100\n"
 "PO-Revision-Date: 1999-10-23 12:30+0100\n"
 "Last-Translator: Leif Jensen <leif@danmos.dk>\n"
 "Language-Team: wxWindows translators <wx-translators@wxwindows.org>\n"
@@ -349,7 +349,7 @@ msgstr ""
 msgid "A3 sheet, 297 x 420 mm"
 msgstr "A3 297 x 420 mm"
 
-#: ../src/common/paper.cpp:104 ../src/generic/dcpsg.cpp:2547
+#: ../src/common/paper.cpp:104 ../src/generic/dcpsg.cpp:2545
 msgid "A4 sheet, 210 x 297 mm"
 msgstr "A4 papir, 210 x 297 mm"
 
@@ -633,7 +633,7 @@ msgstr "kan ikke nummerere værdi af nøgle '%s'"
 msgid "Can't find current position in file '%s'"
 msgstr "kan ikke åbge brugerkonfigurationsfil '%s'."
 
-#: ../src/common/object.cpp:346 ../src/common/object.cpp:371
+#: ../src/common/object.cpp:330 ../src/common/object.cpp:355
 #, c-format
 msgid "Can't find the serialization object '%s' for the object '%s'."
 msgstr "Kan ikke find serialisationsobjektet '%s' til objektet '%s'."
@@ -648,7 +648,7 @@ msgstr "kan ikke gå information om registry nøgle '%s'"
 msgid "Can't load image from file '%s': file does not exist."
 msgstr ""
 
-#: ../src/common/object.cpp:339
+#: ../src/common/object.cpp:323
 msgid "Can't load wxSerial dynamic library."
 msgstr "Kan ikke load'e wxSerial dynamisk bibliotek"
 
@@ -686,7 +686,7 @@ msgid "Can't set value of '%s'"
 msgstr "kan ikke sætte værdien af '%s'"
 
 #: ../src/common/dlgcmn.cpp:189 ../src/common/prntbase.cpp:109
-#: ../src/generic/dcpsg.cpp:2271 ../src/generic/dirctrlg.cpp:1249
+#: ../src/generic/dcpsg.cpp:2269 ../src/generic/dirctrlg.cpp:1249
 #: ../src/generic/dirdlgg.cpp:418 ../src/generic/filedlgg.cpp:1012
 #: ../src/generic/fontdlgg.cpp:259 ../src/generic/prntdlgg.cpp:466
 #: ../src/generic/progdlgg.cpp:203 ../src/generic/proplist.cpp:525
@@ -695,10 +695,32 @@ msgstr "kan ikke sætte værdien af '%s'"
 msgid "Cancel"
 msgstr "Afbryd"
 
+#: ../contrib/src/xrc/xmlres.cpp:726 ../contrib/src/xrc/xmlres.cpp:767
+msgid "Cannot convert dialog units: dialog unknown."
+msgstr ""
+
+#: ../contrib/src/xrc/xml.cpp:372
+msgid "Cannot find XML I/O handler capable of loading this format."
+msgstr ""
+
+#: ../contrib/src/xrc/xml.cpp:398
+msgid "Cannot find XML I/O handler capable of saving in this format."
+msgstr ""
+
 #: ../src/msw/dialup.cpp:525
 #, c-format
 msgid "Cannot find active dialup connection: %s"
 msgstr ""
+
+#: ../contrib/src/xrc/xmlres.cpp:206
+#, c-format
+msgid "Cannot find container for unknown control '%s'."
+msgstr ""
+
+#: ../contrib/src/xrc/xmlres.cpp:781
+#, fuzzy, c-format
+msgid "Cannot find font node '%s'."
+msgstr "Kan ikke åbne URL '%s'"
 
 #: ../src/msw/dialup.cpp:839
 msgid "Cannot find the location of address book file"
@@ -725,6 +747,11 @@ msgstr ""
 msgid "Cannot initialize OLE"
 msgstr "Kan ikke initialisere OLE"
 
+#: ../contrib/src/xrc/xmlres.cpp:308
+#, fuzzy, c-format
+msgid "Cannot load resources from file '%s'."
+msgstr "Kunne ikke finde resource include file %s."
+
 #: ../src/html/htmlfilt.cpp:147
 #, fuzzy, c-format
 msgid "Cannot open HTML document: %s"
@@ -745,6 +772,11 @@ msgstr "Kan ikke åbne URL '%s'"
 msgid "Cannot open contents file: %s"
 msgstr "Kan ikke åbne filen"
 
+#: ../contrib/src/xrc/xmlres.cpp:282
+#, fuzzy, c-format
+msgid "Cannot open file '%s'."
+msgstr "kan ikke åbne filen '%s'"
+
 #: ../src/generic/dcpsg.cpp:1584
 msgid "Cannot open file for PostScript printing!"
 msgstr "Kan ikke åbne fil til PostScript udskrivning!"
@@ -753,6 +785,16 @@ msgstr "Kan ikke åbne fil til PostScript udskrivning!"
 #, fuzzy, c-format
 msgid "Cannot open index file: %s"
 msgstr "Kan ikke åbne filen"
+
+#: ../contrib/src/xrc/xmlres.cpp:714
+#, fuzzy, c-format
+msgid "Cannot parse coordinates from '%s'."
+msgstr "Kan ikke åbne filen"
+
+#: ../contrib/src/xrc/xmlres.cpp:755
+#, fuzzy, c-format
+msgid "Cannot parse dimension from '%s'."
+msgstr "Kan ikke nummerere filer i bibliotek '%s'"
 
 #: ../src/html/helpfrm.cpp:1341
 #, fuzzy
@@ -1757,6 +1799,11 @@ msgstr ""
 msgid "Invalid TIFF image index."
 msgstr ""
 
+#: ../contrib/src/xrc/xmlres.cpp:313
+#, c-format
+msgid "Invalid XRC resource '%s': doesn't have root node 'resource'."
+msgstr ""
+
 #: ../src/common/appcmn.cpp:282
 #, c-format
 msgid "Invalid display mode specification '%s'."
@@ -1785,7 +1832,7 @@ msgstr ""
 msgid "JPEG: Couldn't load - file is probably corrupted."
 msgstr "Kunne ikke load'e et PNG billede - sandsynligvis er filen kurrupt."
 
-#: ../src/common/imagjpeg.cpp:312
+#: ../src/common/imagjpeg.cpp:313
 #, fuzzy
 msgid "JPEG: Couldn't save image."
 msgstr "Kunne ikke oprette en timer"
@@ -1794,7 +1841,7 @@ msgstr "Kunne ikke oprette en timer"
 msgid "KOI8-R"
 msgstr ""
 
-#: ../src/generic/dcpsg.cpp:2262 ../src/generic/prntdlgg.cpp:439
+#: ../src/generic/dcpsg.cpp:2260 ../src/generic/prntdlgg.cpp:439
 #: ../src/generic/prntdlgg.cpp:635
 msgid "Landscape"
 msgstr "Liggende"
@@ -1961,6 +2008,11 @@ msgid ""
 "(otherwise the text in this encoding will not be shown correctly)?"
 msgstr ""
 
+#: ../contrib/src/xrc/xmlres.cpp:396
+#, c-format
+msgid "No handler found for XML node '%s', class '%s'!"
+msgstr ""
+
 #: ../src/common/image.cpp:1009
 msgid "No handler found for image type."
 msgstr ""
@@ -1997,7 +2049,7 @@ msgstr "Normal"
 msgid "Note, 8 1/2 x 11 in"
 msgstr "Letter 8 1/2 x 11 in"
 
-#: ../src/common/dlgcmn.cpp:168 ../src/generic/dcpsg.cpp:2270
+#: ../src/common/dlgcmn.cpp:168 ../src/generic/dcpsg.cpp:2268
 #: ../src/generic/dirctrlg.cpp:1247 ../src/generic/dirdlgg.cpp:416
 #: ../src/generic/filedlgg.cpp:1003 ../src/generic/fontdlgg.cpp:258
 #: ../src/generic/logg.cpp:726 ../src/generic/prntdlgg.cpp:465
@@ -2140,7 +2192,7 @@ msgstr ""
 msgid "Please wait..."
 msgstr "Vent venligst..."
 
-#: ../src/generic/dcpsg.cpp:2261 ../src/generic/prntdlgg.cpp:438
+#: ../src/generic/dcpsg.cpp:2259 ../src/generic/prntdlgg.cpp:438
 #: ../src/generic/prntdlgg.cpp:634
 msgid "Portrait"
 msgstr "Opretstående"
@@ -2153,11 +2205,11 @@ msgstr "EfterSkrift ;-)"
 msgid "PostScript file"
 msgstr "PostScript fil"
 
-#: ../src/generic/dcpsg.cpp:2303
+#: ../src/generic/dcpsg.cpp:2301
 msgid "PostScript:"
 msgstr "PostScript fil:"
 
-#: ../src/generic/dcpsg.cpp:2266
+#: ../src/generic/dcpsg.cpp:2264
 msgid "Preview Only"
 msgstr "Bare smugkig"
 
@@ -2203,7 +2255,7 @@ msgstr "Udskriftsspuling"
 msgid "Print this page"
 msgstr "Udskriftsområde"
 
-#: ../src/generic/dcpsg.cpp:2265 ../src/generic/prntdlgg.cpp:148
+#: ../src/generic/dcpsg.cpp:2263 ../src/generic/prntdlgg.cpp:148
 msgid "Print to File"
 msgstr "Udskriv til fil"
 
@@ -2211,11 +2263,11 @@ msgstr "Udskriv til fil"
 msgid "Print..."
 msgstr "Udskriv..."
 
-#: ../src/generic/dcpsg.cpp:2276
+#: ../src/generic/dcpsg.cpp:2274
 msgid "Printer Command: "
 msgstr "Printer kommando: "
 
-#: ../src/generic/dcpsg.cpp:2281
+#: ../src/generic/dcpsg.cpp:2279
 msgid "Printer Options: "
 msgstr "Printer valgmuligheder: "
 
@@ -2326,6 +2378,10 @@ msgstr "Erstat fil '%s'?"
 msgid "Replace with:"
 msgstr ""
 
+#: ../contrib/src/xrc/xmlres.cpp:330
+msgid "Resource files must have same version number!"
+msgstr ""
+
 #: ../src/generic/prntdlgg.cpp:659
 msgid "Right margin (mm):"
 msgstr "Højre margin (mm):"
@@ -2403,7 +2459,7 @@ msgstr "Vælg et dokumentudseende"
 msgid "Select a file"
 msgstr "Vælg en file"
 
-#: ../src/generic/dcpsg.cpp:2264
+#: ../src/generic/dcpsg.cpp:2262
 msgid "Send to Printer"
 msgstr "Send til printer"
 
@@ -2641,7 +2697,7 @@ msgstr "Top margin (mm):"
 msgid "Trying to remove file '%s' from memory VFS, but it is not loaded!"
 msgstr ""
 
-#: ../src/common/sckaddr.cpp:107
+#: ../src/common/sckaddr.cpp:108
 msgid "Trying to solve a NULL hostname: giving up"
 msgstr ""
 
@@ -2717,6 +2773,10 @@ msgstr ""
 #, fuzzy, c-format
 msgid "Unknown option '%s'"
 msgstr "Kan ikke åbne URL '%s'"
+
+#: ../contrib/src/xrc/xmlres.cpp:488
+msgid "Unknown style flag "
+msgstr ""
 
 #: ../src/common/mimecmn.cpp:167
 #, c-format
@@ -2891,28 +2951,52 @@ msgstr ""
 msgid "Write error on file '%s'"
 msgstr "kan ikke åbne filen '%s'"
 
-#: ../src/generic/dcpsg.cpp:2321
+#: ../src/generic/dcpsg.cpp:2319
 msgid "X Scaling"
 msgstr "X scalering"
 
-#: ../src/generic/dcpsg.cpp:2330
+#: ../src/generic/dcpsg.cpp:2328
 msgid "X Translation"
 msgstr "X oversættelse"
 
-#: ../src/common/xpmdecod.cpp:754
+#: ../contrib/src/xrc/xmlexpat.cpp:185
+#, c-format
+msgid "XML parsing error: '%s' at line %d"
+msgstr ""
+
+#: ../src/common/xpmdecod.cpp:757
 msgid "XPM: Malformed pixel data!"
 msgstr ""
 
-#: ../src/common/xpmdecod.cpp:707 ../src/common/xpmdecod.cpp:716
+#: ../src/common/xpmdecod.cpp:710 ../src/common/xpmdecod.cpp:719
 #, c-format
 msgid "XPM: malformed colour definition '%s'!"
 msgstr ""
 
-#: ../src/generic/dcpsg.cpp:2325
+#: ../contrib/src/xrc/xmlres.cpp:371
+#, fuzzy, c-format
+msgid "XRC resource '%s' (class '%s') not found!"
+msgstr "Ikonresource specifikation %s blev ikke fundet."
+
+#: ../contrib/src/xrc/xmlres.cpp:624 ../contrib/src/xrc/xmlres.cpp:634
+#, c-format
+msgid "XRC resource: Cannot create bitmap from '%s'."
+msgstr ""
+
+#: ../contrib/src/xrc/xh_dlg.cpp:53 ../contrib/src/xrc/xh_frame.cpp:58
+msgid "XRC resource: Cannot create dialog without instance."
+msgstr ""
+
+#: ../contrib/src/xrc/xmlres.cpp:604
+#, c-format
+msgid "XRC resource: Incorrect colour specification '%s' for property '%s'."
+msgstr ""
+
+#: ../src/generic/dcpsg.cpp:2323
 msgid "Y Scaling"
 msgstr "Y scalering"
 
-#: ../src/generic/dcpsg.cpp:2334
+#: ../src/generic/dcpsg.cpp:2332
 msgid "Y Translation"
 msgstr "Y oversættelse"
 
@@ -3118,7 +3202,7 @@ msgstr "kan ikke fjerne midlertidig fil '%s'"
 msgid "can't seek on file descriptor %d"
 msgstr "kan ikke søge på fildeskriptor %d"
 
-#: ../src/common/textfile.cpp:174
+#: ../src/common/textfile.cpp:176
 #, fuzzy, c-format
 msgid "can't write buffer '%s' to disk."
 msgstr "kan ikke skrive fil '%s' til disk."
@@ -3136,6 +3220,11 @@ msgstr "kan ikke skrive brugerkonfigurationsfil."
 #, c-format
 msgid "catalog file for domain '%s' not found."
 msgstr "katalogfil for domæne '%s' blev ikke fundet."
+
+#: ../contrib/src/xrc/xh_dlg.cpp:67 ../contrib/src/xrc/xh_frame.cpp:72
+#, fuzzy
+msgid "centered"
+msgstr "og så videre"
 
 #: ../src/common/menucmn.cpp:78
 msgid "ctrl"

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWindows-2.2.2\n"
-"POT-Creation-Date: 2001-11-20 21:24-0800\n"
+"POT-Creation-Date: 2001-11-24 12:43+0100\n"
 "PO-Revision-Date: 2000-11-09 16:09中国标准时间\n"
 "Last-Translator: mrfx <mrfx@fm365.com>\n"
 "Language-Team: wxWindows tranlators <wx-translators@wxwindows.org>\n"
@@ -351,7 +351,7 @@ msgstr ""
 msgid "A3 sheet, 297 x 420 mm"
 msgstr "A3 纸张, 297 x 420 毫米"
 
-#: ../src/common/paper.cpp:104 ../src/generic/dcpsg.cpp:2547
+#: ../src/common/paper.cpp:104 ../src/generic/dcpsg.cpp:2545
 msgid "A4 sheet, 210 x 297 mm"
 msgstr "A4 纸张, 210 x 297 毫米"
 
@@ -625,7 +625,7 @@ msgstr "不能枚举键 '%s'的值"
 msgid "Can't find current position in file '%s'"
 msgstr "不能在文件'%s'中找到当前位置"
 
-#: ../src/common/object.cpp:346 ../src/common/object.cpp:371
+#: ../src/common/object.cpp:330 ../src/common/object.cpp:355
 #, c-format
 msgid "Can't find the serialization object '%s' for the object '%s'."
 msgstr "找不到序列化对象 '%s'，它用于对象 '%s'."
@@ -640,7 +640,7 @@ msgstr "不能获得注册键 '%s'的信息"
 msgid "Can't load image from file '%s': file does not exist."
 msgstr "不能从文件 '%s'中装入图像: 文件不存在."
 
-#: ../src/common/object.cpp:339
+#: ../src/common/object.cpp:323
 msgid "Can't load wxSerial dynamic library."
 msgstr "不能装载 wxSerial 动态库."
 
@@ -678,7 +678,7 @@ msgid "Can't set value of '%s'"
 msgstr "不能设置 '%s'的值"
 
 #: ../src/common/dlgcmn.cpp:189 ../src/common/prntbase.cpp:109
-#: ../src/generic/dcpsg.cpp:2271 ../src/generic/dirctrlg.cpp:1249
+#: ../src/generic/dcpsg.cpp:2269 ../src/generic/dirctrlg.cpp:1249
 #: ../src/generic/dirdlgg.cpp:418 ../src/generic/filedlgg.cpp:1012
 #: ../src/generic/fontdlgg.cpp:259 ../src/generic/prntdlgg.cpp:466
 #: ../src/generic/progdlgg.cpp:203 ../src/generic/proplist.cpp:525
@@ -687,10 +687,32 @@ msgstr "不能设置 '%s'的值"
 msgid "Cancel"
 msgstr "取消"
 
+#: ../contrib/src/xrc/xmlres.cpp:726 ../contrib/src/xrc/xmlres.cpp:767
+msgid "Cannot convert dialog units: dialog unknown."
+msgstr ""
+
+#: ../contrib/src/xrc/xml.cpp:372
+msgid "Cannot find XML I/O handler capable of loading this format."
+msgstr ""
+
+#: ../contrib/src/xrc/xml.cpp:398
+msgid "Cannot find XML I/O handler capable of saving in this format."
+msgstr ""
+
 #: ../src/msw/dialup.cpp:525
 #, c-format
 msgid "Cannot find active dialup connection: %s"
 msgstr "找不到活动的拨号连接: %s"
+
+#: ../contrib/src/xrc/xmlres.cpp:206
+#, fuzzy, c-format
+msgid "Cannot find container for unknown control '%s'."
+msgstr "找不到活动的拨号连接: %s"
+
+#: ../contrib/src/xrc/xmlres.cpp:781
+#, fuzzy, c-format
+msgid "Cannot find font node '%s'."
+msgstr "不能打开 URL '%s'"
 
 #: ../src/msw/dialup.cpp:839
 msgid "Cannot find the location of address book file"
@@ -717,6 +739,11 @@ msgstr "不能挂起 - 没有活动的拨号连接."
 msgid "Cannot initialize OLE"
 msgstr "不能初始化 OLE"
 
+#: ../contrib/src/xrc/xmlres.cpp:308
+#, fuzzy, c-format
+msgid "Cannot load resources from file '%s'."
+msgstr "找不到资源包含文件 %s."
+
 #: ../src/html/htmlfilt.cpp:147
 #, c-format
 msgid "Cannot open HTML document: %s"
@@ -737,6 +764,11 @@ msgstr "不能打开 URL '%s'"
 msgid "Cannot open contents file: %s"
 msgstr "不能打开目录文件: %s"
 
+#: ../contrib/src/xrc/xmlres.cpp:282
+#, fuzzy, c-format
+msgid "Cannot open file '%s'."
+msgstr "不能打开文件'%s'"
+
 #: ../src/generic/dcpsg.cpp:1584
 msgid "Cannot open file for PostScript printing!"
 msgstr "不能打开文件进行PostScript打印!"
@@ -745,6 +777,16 @@ msgstr "不能打开文件进行PostScript打印!"
 #, c-format
 msgid "Cannot open index file: %s"
 msgstr "不能打开索引文件: %s"
+
+#: ../contrib/src/xrc/xmlres.cpp:714
+#, fuzzy, c-format
+msgid "Cannot parse coordinates from '%s'."
+msgstr "不能打开目录文件: %s"
+
+#: ../contrib/src/xrc/xmlres.cpp:755
+#, fuzzy, c-format
+msgid "Cannot parse dimension from '%s'."
+msgstr "不能枚举目录 '%s'中的文件"
 
 #: ../src/html/helpfrm.cpp:1341
 msgid "Cannot print empty page."
@@ -1730,6 +1772,11 @@ msgstr "Nordic (ISO-8859-10)"
 msgid "Invalid TIFF image index."
 msgstr "无效TIFF图像索引."
 
+#: ../contrib/src/xrc/xmlres.cpp:313
+#, c-format
+msgid "Invalid XRC resource '%s': doesn't have root node 'resource'."
+msgstr ""
+
 #: ../src/common/appcmn.cpp:282
 #, fuzzy, c-format
 msgid "Invalid display mode specification '%s'."
@@ -1757,7 +1804,7 @@ msgstr "意大利信封, 110 x 230 mm"
 msgid "JPEG: Couldn't load - file is probably corrupted."
 msgstr "JPEG: 不能装入 - 文件也许已被破坏."
 
-#: ../src/common/imagjpeg.cpp:312
+#: ../src/common/imagjpeg.cpp:313
 msgid "JPEG: Couldn't save image."
 msgstr "JPEG: 不能保存图像."
 
@@ -1765,7 +1812,7 @@ msgstr "JPEG: 不能保存图像."
 msgid "KOI8-R"
 msgstr "KOI8-R"
 
-#: ../src/generic/dcpsg.cpp:2262 ../src/generic/prntdlgg.cpp:439
+#: ../src/generic/dcpsg.cpp:2260 ../src/generic/prntdlgg.cpp:439
 #: ../src/generic/prntdlgg.cpp:635
 msgid "Landscape"
 msgstr "横向"
@@ -1930,6 +1977,11 @@ msgstr ""
 "选择用于改编码的字体\n"
 "(否则该编码的文本将不能正确显示)?"
 
+#: ../contrib/src/xrc/xmlres.cpp:396
+#, c-format
+msgid "No handler found for XML node '%s', class '%s'!"
+msgstr ""
+
 #: ../src/common/image.cpp:1009
 msgid "No handler found for image type."
 msgstr "没有找到图像类型处理器."
@@ -1964,7 +2016,7 @@ msgstr "Normal font:"
 msgid "Note, 8 1/2 x 11 in"
 msgstr "笔记簿, 8 1/2 x 11 英寸"
 
-#: ../src/common/dlgcmn.cpp:168 ../src/generic/dcpsg.cpp:2270
+#: ../src/common/dlgcmn.cpp:168 ../src/generic/dcpsg.cpp:2268
 #: ../src/generic/dirctrlg.cpp:1247 ../src/generic/dirdlgg.cpp:416
 #: ../src/generic/filedlgg.cpp:1003 ../src/generic/fontdlgg.cpp:258
 #: ../src/generic/logg.cpp:726 ../src/generic/prntdlgg.cpp:465
@@ -2102,7 +2154,7 @@ msgstr ""
 msgid "Please wait..."
 msgstr "请等待..."
 
-#: ../src/generic/dcpsg.cpp:2261 ../src/generic/prntdlgg.cpp:438
+#: ../src/generic/dcpsg.cpp:2259 ../src/generic/prntdlgg.cpp:438
 #: ../src/generic/prntdlgg.cpp:634
 msgid "Portrait"
 msgstr "纵向"
@@ -2115,11 +2167,11 @@ msgstr "PostScript"
 msgid "PostScript file"
 msgstr "PostScript文件"
 
-#: ../src/generic/dcpsg.cpp:2303
+#: ../src/generic/dcpsg.cpp:2301
 msgid "PostScript:"
 msgstr "PostScript:"
 
-#: ../src/generic/dcpsg.cpp:2266
+#: ../src/generic/dcpsg.cpp:2264
 msgid "Preview Only"
 msgstr "仅预览"
 
@@ -2163,7 +2215,7 @@ msgstr "打印假脱机"
 msgid "Print this page"
 msgstr "打印本页"
 
-#: ../src/generic/dcpsg.cpp:2265 ../src/generic/prntdlgg.cpp:148
+#: ../src/generic/dcpsg.cpp:2263 ../src/generic/prntdlgg.cpp:148
 msgid "Print to File"
 msgstr "打印到文件"
 
@@ -2171,11 +2223,11 @@ msgstr "打印到文件"
 msgid "Print..."
 msgstr "打印..."
 
-#: ../src/generic/dcpsg.cpp:2276
+#: ../src/generic/dcpsg.cpp:2274
 msgid "Printer Command: "
 msgstr "打印机命令: "
 
-#: ../src/generic/dcpsg.cpp:2281
+#: ../src/generic/dcpsg.cpp:2279
 msgid "Printer Options: "
 msgstr "打印机选项:"
 
@@ -2285,6 +2337,10 @@ msgstr "替换文件 '%s'?"
 msgid "Replace with:"
 msgstr ""
 
+#: ../contrib/src/xrc/xmlres.cpp:330
+msgid "Resource files must have same version number!"
+msgstr ""
+
 #: ../src/generic/prntdlgg.cpp:659
 msgid "Right margin (mm):"
 msgstr "右边距 (毫米):"
@@ -2361,7 +2417,7 @@ msgstr "选择文档视图"
 msgid "Select a file"
 msgstr "选择文件"
 
-#: ../src/generic/dcpsg.cpp:2264
+#: ../src/generic/dcpsg.cpp:2262
 msgid "Send to Printer"
 msgstr "发到打印机"
 
@@ -2597,7 +2653,7 @@ msgstr "上页边距 (毫米):"
 msgid "Trying to remove file '%s' from memory VFS, but it is not loaded!"
 msgstr "试图从内存VFS中移去文件'%s', 但它并没有被装入内存!"
 
-#: ../src/common/sckaddr.cpp:107
+#: ../src/common/sckaddr.cpp:108
 msgid "Trying to solve a NULL hostname: giving up"
 msgstr "试图解决 NULL 主机名: 放弃"
 
@@ -2673,6 +2729,10 @@ msgstr "未知long选项 '%s'"
 #, c-format
 msgid "Unknown option '%s'"
 msgstr "未知选项 '%s'"
+
+#: ../contrib/src/xrc/xmlres.cpp:488
+msgid "Unknown style flag "
+msgstr ""
 
 #: ../src/common/mimecmn.cpp:167
 #, c-format
@@ -2854,28 +2914,52 @@ msgstr "Windows/DOS OEM (CP 437)"
 msgid "Write error on file '%s'"
 msgstr "写文件 '%s'错误"
 
-#: ../src/generic/dcpsg.cpp:2321
+#: ../src/generic/dcpsg.cpp:2319
 msgid "X Scaling"
 msgstr "X缩放"
 
-#: ../src/generic/dcpsg.cpp:2330
+#: ../src/generic/dcpsg.cpp:2328
 msgid "X Translation"
 msgstr "X平移"
 
-#: ../src/common/xpmdecod.cpp:754
+#: ../contrib/src/xrc/xmlexpat.cpp:185
+#, c-format
+msgid "XML parsing error: '%s' at line %d"
+msgstr ""
+
+#: ../src/common/xpmdecod.cpp:757
 msgid "XPM: Malformed pixel data!"
 msgstr ""
 
-#: ../src/common/xpmdecod.cpp:707 ../src/common/xpmdecod.cpp:716
+#: ../src/common/xpmdecod.cpp:710 ../src/common/xpmdecod.cpp:719
 #, c-format
 msgid "XPM: malformed colour definition '%s'!"
 msgstr ""
 
-#: ../src/generic/dcpsg.cpp:2325
+#: ../contrib/src/xrc/xmlres.cpp:371
+#, fuzzy, c-format
+msgid "XRC resource '%s' (class '%s') not found!"
+msgstr "没有找到图标资源规范 %s ."
+
+#: ../contrib/src/xrc/xmlres.cpp:624 ../contrib/src/xrc/xmlres.cpp:634
+#, c-format
+msgid "XRC resource: Cannot create bitmap from '%s'."
+msgstr ""
+
+#: ../contrib/src/xrc/xh_dlg.cpp:53 ../contrib/src/xrc/xh_frame.cpp:58
+msgid "XRC resource: Cannot create dialog without instance."
+msgstr ""
+
+#: ../contrib/src/xrc/xmlres.cpp:604
+#, c-format
+msgid "XRC resource: Incorrect colour specification '%s' for property '%s'."
+msgstr ""
+
+#: ../src/generic/dcpsg.cpp:2323
 msgid "Y Scaling"
 msgstr "Y缩放"
 
-#: ../src/generic/dcpsg.cpp:2334
+#: ../src/generic/dcpsg.cpp:2332
 msgid "Y Translation"
 msgstr "Y平移"
 
@@ -3092,7 +3176,7 @@ msgstr "不能删除临时文件 '%s'"
 msgid "can't seek on file descriptor %d"
 msgstr "不能定位文件描述子 %d"
 
-#: ../src/common/textfile.cpp:174
+#: ../src/common/textfile.cpp:176
 #, fuzzy, c-format
 msgid "can't write buffer '%s' to disk."
 msgstr "不能把文件 '%s'写到磁盘."
@@ -3110,6 +3194,11 @@ msgstr "不能写用户配置文件."
 #, c-format
 msgid "catalog file for domain '%s' not found."
 msgstr "找不到域 '%s'的目录文件."
+
+#: ../contrib/src/xrc/xh_dlg.cpp:67 ../contrib/src/xrc/xh_frame.cpp:72
+#, fuzzy
+msgid "centered"
+msgstr "其它"
 
 #: ../src/common/menucmn.cpp:78
 msgid "ctrl"

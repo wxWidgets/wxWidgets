@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWindows-2.2\n"
-"POT-Creation-Date: 2001-11-20 21:24-0800\n"
+"POT-Creation-Date: 2001-11-24 12:43+0100\n"
 "PO-Revision-Date: 2000-06-17 19:23+0200\n"
 "Last-Translator: Vaclav Slavik <v.slavik@volny.cz>\n"
 "Language-Team: wxWindows translators <wx-translators@wxwindows.org>\n"
@@ -352,7 +352,7 @@ msgstr ""
 msgid "A3 sheet, 297 x 420 mm"
 msgstr "stránka A3, 297 x 420 mm"
 
-#: ../src/common/paper.cpp:104 ../src/generic/dcpsg.cpp:2547
+#: ../src/common/paper.cpp:104 ../src/generic/dcpsg.cpp:2545
 msgid "A4 sheet, 210 x 297 mm"
 msgstr "stránka A4, 210 x 297 mm"
 
@@ -628,7 +628,7 @@ msgstr "Nemohu vyjmenovat hodnoty klíèe '%s'"
 msgid "Can't find current position in file '%s'"
 msgstr "Nemohu zjistit pozici v souboru '%s'"
 
-#: ../src/common/object.cpp:346 ../src/common/object.cpp:371
+#: ../src/common/object.cpp:330 ../src/common/object.cpp:355
 #, c-format
 msgid "Can't find the serialization object '%s' for the object '%s'."
 msgstr "Nemohu najít serializaèní objekt '%s' k objektu '%s'."
@@ -643,7 +643,7 @@ msgstr "Nemohu získat informace o registrovém klíèi '%s'"
 msgid "Can't load image from file '%s': file does not exist."
 msgstr "Nemohu naèíst obrázek ze souboru '%s': soubor neexistuje."
 
-#: ../src/common/object.cpp:339
+#: ../src/common/object.cpp:323
 msgid "Can't load wxSerial dynamic library."
 msgstr "Nemohu naèíst dynamickou knihovnu wxSerial."
 
@@ -681,7 +681,7 @@ msgid "Can't set value of '%s'"
 msgstr "Nemohu nastavit hodnotu '%s'"
 
 #: ../src/common/dlgcmn.cpp:189 ../src/common/prntbase.cpp:109
-#: ../src/generic/dcpsg.cpp:2271 ../src/generic/dirctrlg.cpp:1249
+#: ../src/generic/dcpsg.cpp:2269 ../src/generic/dirctrlg.cpp:1249
 #: ../src/generic/dirdlgg.cpp:418 ../src/generic/filedlgg.cpp:1012
 #: ../src/generic/fontdlgg.cpp:259 ../src/generic/prntdlgg.cpp:466
 #: ../src/generic/progdlgg.cpp:203 ../src/generic/proplist.cpp:525
@@ -690,10 +690,32 @@ msgstr "Nemohu nastavit hodnotu '%s'"
 msgid "Cancel"
 msgstr "Storno"
 
+#: ../contrib/src/xrc/xmlres.cpp:726 ../contrib/src/xrc/xmlres.cpp:767
+msgid "Cannot convert dialog units: dialog unknown."
+msgstr ""
+
+#: ../contrib/src/xrc/xml.cpp:372
+msgid "Cannot find XML I/O handler capable of loading this format."
+msgstr ""
+
+#: ../contrib/src/xrc/xml.cpp:398
+msgid "Cannot find XML I/O handler capable of saving in this format."
+msgstr ""
+
 #: ../src/msw/dialup.cpp:525
 #, c-format
 msgid "Cannot find active dialup connection: %s"
 msgstr "Nemohu nalézt aktivní vytáèené pøipojení: %s"
+
+#: ../contrib/src/xrc/xmlres.cpp:206
+#, fuzzy, c-format
+msgid "Cannot find container for unknown control '%s'."
+msgstr "Nemohu nalézt aktivní vytáèené pøipojení: %s"
+
+#: ../contrib/src/xrc/xmlres.cpp:781
+#, fuzzy, c-format
+msgid "Cannot find font node '%s'."
+msgstr "Nemohu otevøít URL '%s'"
 
 #: ../src/msw/dialup.cpp:839
 msgid "Cannot find the location of address book file"
@@ -720,6 +742,11 @@ msgstr "Nemohu zavìsit - ¾ádná aktivní vytáèená pøipojení."
 msgid "Cannot initialize OLE"
 msgstr "Nemohu inicializovat OLE"
 
+#: ../contrib/src/xrc/xmlres.cpp:308
+#, fuzzy, c-format
+msgid "Cannot load resources from file '%s'."
+msgstr "Nemohu nalézt resource include file %s."
+
 #: ../src/html/htmlfilt.cpp:147
 #, c-format
 msgid "Cannot open HTML document: %s"
@@ -740,6 +767,11 @@ msgstr "Nemohu otevøít URL '%s'"
 msgid "Cannot open contents file: %s"
 msgstr "Nelze otevøít soubor s obsahem: %s"
 
+#: ../contrib/src/xrc/xmlres.cpp:282
+#, fuzzy, c-format
+msgid "Cannot open file '%s'."
+msgstr "Nemohu otevøít soubor '%s'"
+
 #: ../src/generic/dcpsg.cpp:1584
 msgid "Cannot open file for PostScript printing!"
 msgstr "Nemohu otevøít soubor k PostScriptovému tisku!"
@@ -748,6 +780,16 @@ msgstr "Nemohu otevøít soubor k PostScriptovému tisku!"
 #, c-format
 msgid "Cannot open index file: %s"
 msgstr "Nelze otevøít soubor s rejstøíkem: %s"
+
+#: ../contrib/src/xrc/xmlres.cpp:714
+#, fuzzy, c-format
+msgid "Cannot parse coordinates from '%s'."
+msgstr "Nelze otevøít soubor s obsahem: %s"
+
+#: ../contrib/src/xrc/xmlres.cpp:755
+#, fuzzy, c-format
+msgid "Cannot parse dimension from '%s'."
+msgstr "Nemohu zjistit soubory v adresáøi '%s'"
 
 #: ../src/html/helpfrm.cpp:1341
 msgid "Cannot print empty page."
@@ -1748,6 +1790,11 @@ msgstr "Severské (ISO-8859-10)"
 msgid "Invalid TIFF image index."
 msgstr "Po¹kozený index v TIFF obrázku."
 
+#: ../contrib/src/xrc/xmlres.cpp:313
+#, c-format
+msgid "Invalid XRC resource '%s': doesn't have root node 'resource'."
+msgstr ""
+
 #: ../src/common/appcmn.cpp:282
 #, fuzzy, c-format
 msgid "Invalid display mode specification '%s'."
@@ -1775,7 +1822,7 @@ msgstr "Italská obálka, 110 x 230 mm"
 msgid "JPEG: Couldn't load - file is probably corrupted."
 msgstr "JPEG: Nemohu naèíst obrázek - soubor je nejspí¹ po¹kozen."
 
-#: ../src/common/imagjpeg.cpp:312
+#: ../src/common/imagjpeg.cpp:313
 msgid "JPEG: Couldn't save image."
 msgstr "JPEG: Nemohu ulo¾it obrázek."
 
@@ -1783,7 +1830,7 @@ msgstr "JPEG: Nemohu ulo¾it obrázek."
 msgid "KOI8-R"
 msgstr "KOI8-R"
 
-#: ../src/generic/dcpsg.cpp:2262 ../src/generic/prntdlgg.cpp:439
+#: ../src/generic/dcpsg.cpp:2260 ../src/generic/prntdlgg.cpp:439
 #: ../src/generic/prntdlgg.cpp:635
 msgid "Landscape"
 msgstr "Na ¹íøku"
@@ -1950,6 +1997,11 @@ msgstr ""
 "Pøejete si vybrat font, který se má s tímto kódováním pou¾ít\n"
 "(jinak se text v tomto kódování nezobrazí správnì)?"
 
+#: ../contrib/src/xrc/xmlres.cpp:396
+#, c-format
+msgid "No handler found for XML node '%s', class '%s'!"
+msgstr ""
+
 #: ../src/common/image.cpp:1009
 msgid "No handler found for image type."
 msgstr "Nenalezen ¾ádný ovladaè pro tento typ obrázkù."
@@ -1984,7 +2036,7 @@ msgstr "Normální písmo:"
 msgid "Note, 8 1/2 x 11 in"
 msgstr "Note, 8 1/2 x 11 palcù"
 
-#: ../src/common/dlgcmn.cpp:168 ../src/generic/dcpsg.cpp:2270
+#: ../src/common/dlgcmn.cpp:168 ../src/generic/dcpsg.cpp:2268
 #: ../src/generic/dirctrlg.cpp:1247 ../src/generic/dirdlgg.cpp:416
 #: ../src/generic/filedlgg.cpp:1003 ../src/generic/fontdlgg.cpp:258
 #: ../src/generic/logg.cpp:726 ../src/generic/prntdlgg.cpp:465
@@ -2122,7 +2174,7 @@ msgstr ""
 msgid "Please wait..."
 msgstr "Èekejte prosím..."
 
-#: ../src/generic/dcpsg.cpp:2261 ../src/generic/prntdlgg.cpp:438
+#: ../src/generic/dcpsg.cpp:2259 ../src/generic/prntdlgg.cpp:438
 #: ../src/generic/prntdlgg.cpp:634
 msgid "Portrait"
 msgstr "Na vý¹ku"
@@ -2135,11 +2187,11 @@ msgstr "PostScript"
 msgid "PostScript file"
 msgstr "soubor PostScript"
 
-#: ../src/generic/dcpsg.cpp:2303
+#: ../src/generic/dcpsg.cpp:2301
 msgid "PostScript:"
 msgstr "PostScript:"
 
-#: ../src/generic/dcpsg.cpp:2266
+#: ../src/generic/dcpsg.cpp:2264
 msgid "Preview Only"
 msgstr "Pouze náhled"
 
@@ -2183,7 +2235,7 @@ msgstr "Tisková fronta"
 msgid "Print this page"
 msgstr "Vytiskne tuto stránku"
 
-#: ../src/generic/dcpsg.cpp:2265 ../src/generic/prntdlgg.cpp:148
+#: ../src/generic/dcpsg.cpp:2263 ../src/generic/prntdlgg.cpp:148
 msgid "Print to File"
 msgstr "Tisknout do souboru"
 
@@ -2191,11 +2243,11 @@ msgstr "Tisknout do souboru"
 msgid "Print..."
 msgstr "Tisknout..."
 
-#: ../src/generic/dcpsg.cpp:2276
+#: ../src/generic/dcpsg.cpp:2274
 msgid "Printer Command: "
 msgstr "Pøíkaz tisku: "
 
-#: ../src/generic/dcpsg.cpp:2281
+#: ../src/generic/dcpsg.cpp:2279
 msgid "Printer Options: "
 msgstr "Nastavení tiskárny: "
 
@@ -2305,6 +2357,10 @@ msgstr "Nahradit soubor '%s'?"
 msgid "Replace with:"
 msgstr ""
 
+#: ../contrib/src/xrc/xmlres.cpp:330
+msgid "Resource files must have same version number!"
+msgstr ""
+
 #: ../src/generic/prntdlgg.cpp:659
 msgid "Right margin (mm):"
 msgstr "Pravý okraj (mm):"
@@ -2383,7 +2439,7 @@ msgstr "Vyberte zobrazení dokumentu"
 msgid "Select a file"
 msgstr "Vyberte soubor"
 
-#: ../src/generic/dcpsg.cpp:2264
+#: ../src/generic/dcpsg.cpp:2262
 msgid "Send to Printer"
 msgstr "Poslat na tiskárnu"
 
@@ -2626,7 +2682,7 @@ msgstr "Horní okraj (mm)"
 msgid "Trying to remove file '%s' from memory VFS, but it is not loaded!"
 msgstr "Soubor '%s' nelze odebrat z pamì»ového VFS, proto¾e nebyl naèten!"
 
-#: ../src/common/sckaddr.cpp:107
+#: ../src/common/sckaddr.cpp:108
 msgid "Trying to solve a NULL hostname: giving up"
 msgstr "Sna¾ím se zjistit NULLové jméno poèítaèe: vzdávám to"
 
@@ -2702,6 +2758,10 @@ msgstr "Neznámá 'dlouhá' volba '%s'"
 #, c-format
 msgid "Unknown option '%s'"
 msgstr "Neznámá volba '%s'"
+
+#: ../contrib/src/xrc/xmlres.cpp:488
+msgid "Unknown style flag "
+msgstr ""
 
 #: ../src/common/mimecmn.cpp:167
 #, c-format
@@ -2883,28 +2943,52 @@ msgstr "Windows/DOS OEM (CP 437)"
 msgid "Write error on file '%s'"
 msgstr "Chyba pøi zápisu do souboru '%s'"
 
-#: ../src/generic/dcpsg.cpp:2321
+#: ../src/generic/dcpsg.cpp:2319
 msgid "X Scaling"
 msgstr "Mìøítko v X"
 
-#: ../src/generic/dcpsg.cpp:2330
+#: ../src/generic/dcpsg.cpp:2328
 msgid "X Translation"
 msgstr "Posunutí v X"
 
-#: ../src/common/xpmdecod.cpp:754
+#: ../contrib/src/xrc/xmlexpat.cpp:185
+#, c-format
+msgid "XML parsing error: '%s' at line %d"
+msgstr ""
+
+#: ../src/common/xpmdecod.cpp:757
 msgid "XPM: Malformed pixel data!"
 msgstr ""
 
-#: ../src/common/xpmdecod.cpp:707 ../src/common/xpmdecod.cpp:716
+#: ../src/common/xpmdecod.cpp:710 ../src/common/xpmdecod.cpp:719
 #, c-format
 msgid "XPM: malformed colour definition '%s'!"
 msgstr ""
 
-#: ../src/generic/dcpsg.cpp:2325
+#: ../contrib/src/xrc/xmlres.cpp:371
+#, fuzzy, c-format
+msgid "XRC resource '%s' (class '%s') not found!"
+msgstr "Icon resource specification %s nenalezen."
+
+#: ../contrib/src/xrc/xmlres.cpp:624 ../contrib/src/xrc/xmlres.cpp:634
+#, c-format
+msgid "XRC resource: Cannot create bitmap from '%s'."
+msgstr ""
+
+#: ../contrib/src/xrc/xh_dlg.cpp:53 ../contrib/src/xrc/xh_frame.cpp:58
+msgid "XRC resource: Cannot create dialog without instance."
+msgstr ""
+
+#: ../contrib/src/xrc/xmlres.cpp:604
+#, c-format
+msgid "XRC resource: Incorrect colour specification '%s' for property '%s'."
+msgstr ""
+
+#: ../src/generic/dcpsg.cpp:2323
 msgid "Y Scaling"
 msgstr "Mìøítko v Y"
 
-#: ../src/generic/dcpsg.cpp:2334
+#: ../src/generic/dcpsg.cpp:2332
 msgid "Y Translation"
 msgstr "Posunutí v Y"
 
@@ -3121,7 +3205,7 @@ msgstr "nemohu odstranit doèasný soubor '%s'"
 msgid "can't seek on file descriptor %d"
 msgstr "nemohu seekovat v deskriptoru %d"
 
-#: ../src/common/textfile.cpp:174
+#: ../src/common/textfile.cpp:176
 #, fuzzy, c-format
 msgid "can't write buffer '%s' to disk."
 msgstr "nemohu zapsat soubor '%s' na disk."
@@ -3139,6 +3223,11 @@ msgstr "nemohu ulo¾it u¾ivatelskou konfiguraci"
 #, c-format
 msgid "catalog file for domain '%s' not found."
 msgstr "katalog pro doménu '%s' nenalezen."
+
+#: ../contrib/src/xrc/xh_dlg.cpp:67 ../contrib/src/xrc/xh_frame.cpp:72
+#, fuzzy
+msgid "centered"
+msgstr "Etcetera"
 
 #: ../src/common/menucmn.cpp:78
 msgid "ctrl"

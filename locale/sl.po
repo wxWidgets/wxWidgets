@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWindows 2.2\n"
-"POT-Creation-Date: 2001-11-20 21:24-0800\n"
+"POT-Creation-Date: 2001-11-24 12:43+0100\n"
 "PO-Revision-Date: 2001-06-28 12:48+0100\n"
 "Last-Translator: Roman Plevel <roman.plevel@iskratr.si>\n"
 "Language-Team: transmission <roman.plevel@iskratr.si>\n"
@@ -452,7 +452,7 @@ msgid "A3 sheet, 297 x 420 mm"
 msgstr "List A4 210 x 297 mm"
 
 # generic/dcpsg.cpp:2547
-#: ../src/common/paper.cpp:104 ../src/generic/dcpsg.cpp:2547
+#: ../src/common/paper.cpp:104 ../src/generic/dcpsg.cpp:2545
 msgid "A4 sheet, 210 x 297 mm"
 msgstr "List A4 210 x 297 mm"
 
@@ -823,7 +823,7 @@ msgstr "ne morem najti trenutne pozicije v datoteki '%s'"
 
 # common/object.cpp:314
 # common/object.cpp:335
-#: ../src/common/object.cpp:346 ../src/common/object.cpp:371
+#: ../src/common/object.cpp:330 ../src/common/object.cpp:355
 #, c-format
 msgid "Can't find the serialization object '%s' for the object '%s'."
 msgstr ""
@@ -842,7 +842,7 @@ msgid "Can't load image from file '%s': file does not exist."
 msgstr "Ne morem nalo¾iti slike iz datoteke '%s': datoteka ne obstaja"
 
 # common/object.cpp:307
-#: ../src/common/object.cpp:339
+#: ../src/common/object.cpp:323
 msgid "Can't load wxSerial dynamic library."
 msgstr ""
 
@@ -913,7 +913,7 @@ msgstr "ne morem nastaviti vrednosti kljuèa '%s'"
 # generic/wizard.cpp:192
 # html/helpfrm.cpp:910
 #: ../src/common/dlgcmn.cpp:189 ../src/common/prntbase.cpp:109
-#: ../src/generic/dcpsg.cpp:2271 ../src/generic/dirctrlg.cpp:1249
+#: ../src/generic/dcpsg.cpp:2269 ../src/generic/dirctrlg.cpp:1249
 #: ../src/generic/dirdlgg.cpp:418 ../src/generic/filedlgg.cpp:1012
 #: ../src/generic/fontdlgg.cpp:259 ../src/generic/prntdlgg.cpp:466
 #: ../src/generic/progdlgg.cpp:203 ../src/generic/proplist.cpp:525
@@ -922,11 +922,34 @@ msgstr "ne morem nastaviti vrednosti kljuèa '%s'"
 msgid "Cancel"
 msgstr "Preklièi"
 
+#: ../contrib/src/xrc/xmlres.cpp:726 ../contrib/src/xrc/xmlres.cpp:767
+msgid "Cannot convert dialog units: dialog unknown."
+msgstr ""
+
+#: ../contrib/src/xrc/xml.cpp:372
+msgid "Cannot find XML I/O handler capable of loading this format."
+msgstr ""
+
+#: ../contrib/src/xrc/xml.cpp:398
+msgid "Cannot find XML I/O handler capable of saving in this format."
+msgstr ""
+
 # msw/dialup.cpp:518
 #: ../src/msw/dialup.cpp:525
 #, c-format
 msgid "Cannot find active dialup connection: %s"
 msgstr ""
+
+#: ../contrib/src/xrc/xmlres.cpp:206
+#, c-format
+msgid "Cannot find container for unknown control '%s'."
+msgstr ""
+
+# generic/helpext.cpp:96
+#: ../contrib/src/xrc/xmlres.cpp:781
+#, fuzzy, c-format
+msgid "Cannot find font node '%s'."
+msgstr "ne morem odpreti URL '%s'"
 
 # msw/dialup.cpp:832
 #: ../src/msw/dialup.cpp:839
@@ -956,6 +979,12 @@ msgstr ""
 msgid "Cannot initialize OLE"
 msgstr ""
 
+# common/ffile.cpp:101
+#: ../contrib/src/xrc/xmlres.cpp:308
+#, fuzzy, c-format
+msgid "Cannot load resources from file '%s'."
+msgstr "ne morem zadpreti datoteke '%s'"
+
 # html/htmlfilt.cpp:146
 #: ../src/html/htmlfilt.cpp:147
 #, c-format
@@ -980,6 +1009,12 @@ msgstr "ne morem odpreti URL '%s'"
 msgid "Cannot open contents file: %s"
 msgstr "ne morem datoteke: '%s' z vsebino"
 
+# msw/dib.cpp:434
+#: ../contrib/src/xrc/xmlres.cpp:282
+#, fuzzy, c-format
+msgid "Cannot open file '%s'."
+msgstr "Ne morem odpreti datoteke '%s'"
+
 # generic/dcpsg.cpp:1584
 #: ../src/generic/dcpsg.cpp:1584
 msgid "Cannot open file for PostScript printing!"
@@ -990,6 +1025,19 @@ msgstr "Ne morem odpreti datoteke za tiskanje PostScript"
 #, c-format
 msgid "Cannot open index file: %s"
 msgstr "ne morem odpreti indeksne datoteke '%s'"
+
+# html/helpdata.cpp:353
+#: ../contrib/src/xrc/xmlres.cpp:714
+#, fuzzy, c-format
+msgid "Cannot parse coordinates from '%s'."
+msgstr "ne morem datoteke: '%s' z vsebino"
+
+# common/filefn.cpp:1287
+# msw/dir.cpp:294
+#: ../contrib/src/xrc/xmlres.cpp:755
+#, fuzzy, c-format
+msgid "Cannot parse dimension from '%s'."
+msgstr "Ne morem o¹tevilèiti datotek v imeniku '%s'"
 
 # html/helpfrm.cpp:1174
 #: ../src/html/helpfrm.cpp:1341
@@ -2202,6 +2250,11 @@ msgstr ""
 msgid "Invalid TIFF image index."
 msgstr ""
 
+#: ../contrib/src/xrc/xmlres.cpp:313
+#, c-format
+msgid "Invalid XRC resource '%s': doesn't have root node 'resource'."
+msgstr ""
+
 # generic/filedlgg.cpp:1043
 #: ../src/common/appcmn.cpp:282
 #, fuzzy, c-format
@@ -2234,7 +2287,7 @@ msgid "JPEG: Couldn't load - file is probably corrupted."
 msgstr ""
 
 # common/imagjpeg.cpp:315
-#: ../src/common/imagjpeg.cpp:312
+#: ../src/common/imagjpeg.cpp:313
 msgid "JPEG: Couldn't save image."
 msgstr ""
 
@@ -2245,7 +2298,7 @@ msgstr ""
 # generic/dcpsg.cpp:2262
 # generic/prntdlgg.cpp:441
 # generic/prntdlgg.cpp:637
-#: ../src/generic/dcpsg.cpp:2262 ../src/generic/prntdlgg.cpp:439
+#: ../src/generic/dcpsg.cpp:2260 ../src/generic/prntdlgg.cpp:439
 #: ../src/generic/prntdlgg.cpp:635
 msgid "Landscape"
 msgstr "Pokrajina"
@@ -2444,6 +2497,11 @@ msgstr ""
 "®elite izbrati drugo pisavo za prikaz tega kodiranja\n"
 "(secer besedilo ne bo prikazano pravilno)?"
 
+#: ../contrib/src/xrc/xmlres.cpp:396
+#, c-format
+msgid "No handler found for XML node '%s', class '%s'!"
+msgstr ""
+
 # common/image.cpp:758
 #: ../src/common/image.cpp:1009
 msgid "No handler found for image type."
@@ -2496,7 +2554,7 @@ msgstr ""
 # generic/prntdlgg.cpp:467
 # generic/proplist.cpp:511
 # html/helpfrm.cpp:909
-#: ../src/common/dlgcmn.cpp:168 ../src/generic/dcpsg.cpp:2270
+#: ../src/common/dlgcmn.cpp:168 ../src/generic/dcpsg.cpp:2268
 #: ../src/generic/dirctrlg.cpp:1247 ../src/generic/dirdlgg.cpp:416
 #: ../src/generic/filedlgg.cpp:1003 ../src/generic/fontdlgg.cpp:258
 #: ../src/generic/logg.cpp:726 ../src/generic/prntdlgg.cpp:465
@@ -2676,7 +2734,7 @@ msgstr "Poèakajte, prosim"
 # generic/dcpsg.cpp:2261
 # generic/prntdlgg.cpp:440
 # generic/prntdlgg.cpp:636
-#: ../src/generic/dcpsg.cpp:2261 ../src/generic/prntdlgg.cpp:438
+#: ../src/generic/dcpsg.cpp:2259 ../src/generic/prntdlgg.cpp:438
 #: ../src/generic/prntdlgg.cpp:634
 msgid "Portrait"
 msgstr "Portet"
@@ -2692,12 +2750,12 @@ msgid "PostScript file"
 msgstr "PostScript datoteka"
 
 # generic/dcpsg.cpp:2303
-#: ../src/generic/dcpsg.cpp:2303
+#: ../src/generic/dcpsg.cpp:2301
 msgid "PostScript:"
 msgstr ""
 
 # generic/dcpsg.cpp:2266
-#: ../src/generic/dcpsg.cpp:2266
+#: ../src/generic/dcpsg.cpp:2264
 msgid "Preview Only"
 msgstr "Samo predogled"
 
@@ -2756,7 +2814,7 @@ msgstr "Natisni to stran"
 
 # generic/dcpsg.cpp:2265
 # generic/prntdlgg.cpp:150
-#: ../src/generic/dcpsg.cpp:2265 ../src/generic/prntdlgg.cpp:148
+#: ../src/generic/dcpsg.cpp:2263 ../src/generic/prntdlgg.cpp:148
 msgid "Print to File"
 msgstr "Po¹li v datoteko"
 
@@ -2766,12 +2824,12 @@ msgid "Print..."
 msgstr "Tiskaj..."
 
 # generic/dcpsg.cpp:2276
-#: ../src/generic/dcpsg.cpp:2276
+#: ../src/generic/dcpsg.cpp:2274
 msgid "Printer Command: "
 msgstr "Tiskalni¹ke komande"
 
 # generic/dcpsg.cpp:2281
-#: ../src/generic/dcpsg.cpp:2281
+#: ../src/generic/dcpsg.cpp:2279
 msgid "Printer Options: "
 msgstr "Tiskalni¹ke mo¾nosti"
 
@@ -2911,6 +2969,10 @@ msgstr "Zamenjam datoteko '%s'?"
 msgid "Replace with:"
 msgstr ""
 
+#: ../contrib/src/xrc/xmlres.cpp:330
+msgid "Resource files must have same version number!"
+msgstr ""
+
 # generic/prntdlgg.cpp:661
 #: ../src/generic/prntdlgg.cpp:659
 msgid "Right margin (mm):"
@@ -3012,7 +3074,7 @@ msgid "Select a file"
 msgstr "Izberi datoteko"
 
 # generic/dcpsg.cpp:2264
-#: ../src/generic/dcpsg.cpp:2264
+#: ../src/generic/dcpsg.cpp:2262
 msgid "Send to Printer"
 msgstr "Po¹lji na tiskalnik"
 
@@ -3295,7 +3357,7 @@ msgstr ""
 "Posku¹am odstaniti datoteko '%s' iz spominskega VFS, ampak ni nalo¾ena!"
 
 # common/sckaddr.cpp:107
-#: ../src/common/sckaddr.cpp:107
+#: ../src/common/sckaddr.cpp:108
 msgid "Trying to solve a NULL hostname: giving up"
 msgstr ""
 
@@ -3399,6 +3461,10 @@ msgstr "Nepoznana dolga opcija '%s'"
 #, c-format
 msgid "Unknown option '%s'"
 msgstr "Nepoznana opcija '%s'"
+
+#: ../contrib/src/xrc/xmlres.cpp:488
+msgid "Unknown style flag "
+msgstr ""
 
 # common/mimecmn.cpp:161
 #: ../src/common/mimecmn.cpp:167
@@ -3601,31 +3667,55 @@ msgid "Write error on file '%s'"
 msgstr "napaka pri pisanju datoteke '%s'"
 
 # generic/dcpsg.cpp:2321
-#: ../src/generic/dcpsg.cpp:2321
+#: ../src/generic/dcpsg.cpp:2319
 msgid "X Scaling"
 msgstr "X poveèava"
 
 # generic/dcpsg.cpp:2330
-#: ../src/generic/dcpsg.cpp:2330
+#: ../src/generic/dcpsg.cpp:2328
 msgid "X Translation"
 msgstr "X Translacija"
 
-#: ../src/common/xpmdecod.cpp:754
+#: ../contrib/src/xrc/xmlexpat.cpp:185
+#, c-format
+msgid "XML parsing error: '%s' at line %d"
+msgstr ""
+
+#: ../src/common/xpmdecod.cpp:757
 msgid "XPM: Malformed pixel data!"
 msgstr ""
 
-#: ../src/common/xpmdecod.cpp:707 ../src/common/xpmdecod.cpp:716
+#: ../src/common/xpmdecod.cpp:710 ../src/common/xpmdecod.cpp:719
 #, c-format
 msgid "XPM: malformed colour definition '%s'!"
 msgstr ""
 
+#: ../contrib/src/xrc/xmlres.cpp:371
+#, c-format
+msgid "XRC resource '%s' (class '%s') not found!"
+msgstr ""
+
+#: ../contrib/src/xrc/xmlres.cpp:624 ../contrib/src/xrc/xmlres.cpp:634
+#, c-format
+msgid "XRC resource: Cannot create bitmap from '%s'."
+msgstr ""
+
+#: ../contrib/src/xrc/xh_dlg.cpp:53 ../contrib/src/xrc/xh_frame.cpp:58
+msgid "XRC resource: Cannot create dialog without instance."
+msgstr ""
+
+#: ../contrib/src/xrc/xmlres.cpp:604
+#, c-format
+msgid "XRC resource: Incorrect colour specification '%s' for property '%s'."
+msgstr ""
+
 # generic/dcpsg.cpp:2325
-#: ../src/generic/dcpsg.cpp:2325
+#: ../src/generic/dcpsg.cpp:2323
 msgid "Y Scaling"
 msgstr "Y Poveèava"
 
 # generic/dcpsg.cpp:2334
-#: ../src/generic/dcpsg.cpp:2334
+#: ../src/generic/dcpsg.cpp:2332
 msgid "Y Translation"
 msgstr "Y Translacija"
 
@@ -3900,7 +3990,7 @@ msgstr "ne morem iskati na datoteènem deskriptorju"
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # common/textfile.cpp:359
-#: ../src/common/textfile.cpp:174
+#: ../src/common/textfile.cpp:176
 #, fuzzy, c-format
 msgid "can't write buffer '%s' to disk."
 msgstr "ne morem zapisati datoteke '%s' na disk"
@@ -3921,6 +4011,12 @@ msgstr "ne morem zapisati uporabni¹ke konfiguracijske datoteke"
 #, c-format
 msgid "catalog file for domain '%s' not found."
 msgstr "ne najdem katalo¾ne datoteke za domeno '%s'."
+
+# generic/dirdlgg.cpp:217
+#: ../contrib/src/xrc/xh_dlg.cpp:67 ../contrib/src/xrc/xh_frame.cpp:72
+#, fuzzy
+msgid "centered"
+msgstr "Dodatno"
 
 # common/utilscmn.cpp:464
 #: ../src/common/menucmn.cpp:78

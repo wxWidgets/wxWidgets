@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWindows-2.2.1\n"
-"POT-Creation-Date: 2001-11-20 21:24-0800\n"
+"POT-Creation-Date: 2001-11-24 12:43+0100\n"
 "PO-Revision-Date: 2000-09-05 12:35Romaans (zomertijd)\n"
 "Last-Translator: Patrick Hubers <phubers@solve-i-t.com>\n"
 "Language-Team: wxWindows translators <wx-translators@wxwindows.org>\n"
@@ -352,7 +352,7 @@ msgstr ""
 msgid "A3 sheet, 297 x 420 mm"
 msgstr "A3, 297 x 420 mm"
 
-#: ../src/common/paper.cpp:104 ../src/generic/dcpsg.cpp:2547
+#: ../src/common/paper.cpp:104 ../src/generic/dcpsg.cpp:2545
 msgid "A4 sheet, 210 x 297 mm"
 msgstr "A4, 210 x 297 mm"
 
@@ -628,7 +628,7 @@ msgstr "Kan waarden van sleutel '%s' niet opsommen"
 msgid "Can't find current position in file '%s'"
 msgstr "Kan huidige positie in bestand '%s' niet vinden"
 
-#: ../src/common/object.cpp:346 ../src/common/object.cpp:371
+#: ../src/common/object.cpp:330 ../src/common/object.cpp:355
 #, c-format
 msgid "Can't find the serialization object '%s' for the object '%s'."
 msgstr "Kan serialisatie-object '%s' voor object '%s' niet vinden."
@@ -643,7 +643,7 @@ msgstr "Kan geen informatie krijgen over registersleutel '%s'"
 msgid "Can't load image from file '%s': file does not exist."
 msgstr "Kan geen afbeelding laden uit bestand '%s': bestand bestaat niet."
 
-#: ../src/common/object.cpp:339
+#: ../src/common/object.cpp:323
 msgid "Can't load wxSerial dynamic library."
 msgstr "Kan dynamische bibliotheek wxSerial niet laden."
 
@@ -681,7 +681,7 @@ msgid "Can't set value of '%s'"
 msgstr "Kan waarde van '%s' niet instellen"
 
 #: ../src/common/dlgcmn.cpp:189 ../src/common/prntbase.cpp:109
-#: ../src/generic/dcpsg.cpp:2271 ../src/generic/dirctrlg.cpp:1249
+#: ../src/generic/dcpsg.cpp:2269 ../src/generic/dirctrlg.cpp:1249
 #: ../src/generic/dirdlgg.cpp:418 ../src/generic/filedlgg.cpp:1012
 #: ../src/generic/fontdlgg.cpp:259 ../src/generic/prntdlgg.cpp:466
 #: ../src/generic/progdlgg.cpp:203 ../src/generic/proplist.cpp:525
@@ -690,10 +690,32 @@ msgstr "Kan waarde van '%s' niet instellen"
 msgid "Cancel"
 msgstr "Annuleer"
 
+#: ../contrib/src/xrc/xmlres.cpp:726 ../contrib/src/xrc/xmlres.cpp:767
+msgid "Cannot convert dialog units: dialog unknown."
+msgstr ""
+
+#: ../contrib/src/xrc/xml.cpp:372
+msgid "Cannot find XML I/O handler capable of loading this format."
+msgstr ""
+
+#: ../contrib/src/xrc/xml.cpp:398
+msgid "Cannot find XML I/O handler capable of saving in this format."
+msgstr ""
+
 #: ../src/msw/dialup.cpp:525
 #, c-format
 msgid "Cannot find active dialup connection: %s"
 msgstr "Kan geen actieve inbelverbinding vinden: %s"
+
+#: ../contrib/src/xrc/xmlres.cpp:206
+#, fuzzy, c-format
+msgid "Cannot find container for unknown control '%s'."
+msgstr "Kan geen actieve inbelverbinding vinden: %s"
+
+#: ../contrib/src/xrc/xmlres.cpp:781
+#, fuzzy, c-format
+msgid "Cannot find font node '%s'."
+msgstr "Kan URL '%s' niet openen"
 
 #: ../src/msw/dialup.cpp:839
 msgid "Cannot find the location of address book file"
@@ -720,6 +742,11 @@ msgstr "Kan niet ophangen - geen actieve inbelverbinding"
 msgid "Cannot initialize OLE"
 msgstr "Kan OLE niet initializeren"
 
+#: ../contrib/src/xrc/xmlres.cpp:308
+#, fuzzy, c-format
+msgid "Cannot load resources from file '%s'."
+msgstr "Kon in te voegen bronbestand %s niet vinden."
+
 #: ../src/html/htmlfilt.cpp:147
 #, c-format
 msgid "Cannot open HTML document: %s"
@@ -740,6 +767,11 @@ msgstr "Kan URL '%s' niet openen"
 msgid "Cannot open contents file: %s"
 msgstr "Kon inhoudsopgave-bestand niet openen: %s"
 
+#: ../contrib/src/xrc/xmlres.cpp:282
+#, fuzzy, c-format
+msgid "Cannot open file '%s'."
+msgstr "Kan bestand '%s' niet openen"
+
 #: ../src/generic/dcpsg.cpp:1584
 msgid "Cannot open file for PostScript printing!"
 msgstr "Kan bestand voor PostScript-afdrukken niet openen!"
@@ -748,6 +780,16 @@ msgstr "Kan bestand voor PostScript-afdrukken niet openen!"
 #, c-format
 msgid "Cannot open index file: %s"
 msgstr "Kan index-bestand niet openen: %s"
+
+#: ../contrib/src/xrc/xmlres.cpp:714
+#, fuzzy, c-format
+msgid "Cannot parse coordinates from '%s'."
+msgstr "Kon inhoudsopgave-bestand niet openen: %s"
+
+#: ../contrib/src/xrc/xmlres.cpp:755
+#, fuzzy, c-format
+msgid "Cannot parse dimension from '%s'."
+msgstr "Kan bestanden in map '%s' niet opsommen"
 
 #: ../src/html/helpfrm.cpp:1341
 msgid "Cannot print empty page."
@@ -1747,6 +1789,11 @@ msgstr "Noors (ISO-8859-10)"
 msgid "Invalid TIFF image index."
 msgstr "Ongeldige TIFF-afbeeldingsindex."
 
+#: ../contrib/src/xrc/xmlres.cpp:313
+#, c-format
+msgid "Invalid XRC resource '%s': doesn't have root node 'resource'."
+msgstr ""
+
 #: ../src/common/appcmn.cpp:282
 #, fuzzy, c-format
 msgid "Invalid display mode specification '%s'."
@@ -1774,7 +1821,7 @@ msgstr "Envelop 'Italy', 110 x 230 mm"
 msgid "JPEG: Couldn't load - file is probably corrupted."
 msgstr "JPEG: kon niet laden - bestand is waarschijnlijk corrupt."
 
-#: ../src/common/imagjpeg.cpp:312
+#: ../src/common/imagjpeg.cpp:313
 msgid "JPEG: Couldn't save image."
 msgstr "JPEG: kon afbeelding niet opslaan."
 
@@ -1782,7 +1829,7 @@ msgstr "JPEG: kon afbeelding niet opslaan."
 msgid "KOI8-R"
 msgstr "KOI8-R"
 
-#: ../src/generic/dcpsg.cpp:2262 ../src/generic/prntdlgg.cpp:439
+#: ../src/generic/dcpsg.cpp:2260 ../src/generic/prntdlgg.cpp:439
 #: ../src/generic/prntdlgg.cpp:635
 msgid "Landscape"
 msgstr "Liggend"
@@ -1952,6 +1999,11 @@ msgstr ""
 "Wilt u een lettertype selecteren voor deze codering\n"
 "(anders zal de tekst in deze codering niet correct weergegeven worden)?"
 
+#: ../contrib/src/xrc/xmlres.cpp:396
+#, c-format
+msgid "No handler found for XML node '%s', class '%s'!"
+msgstr ""
+
 #: ../src/common/image.cpp:1009
 msgid "No handler found for image type."
 msgstr "Geen handler gevonden voor afbeeldingstype."
@@ -1986,7 +2038,7 @@ msgstr "Normaal lettertype: "
 msgid "Note, 8 1/2 x 11 in"
 msgstr "Notitie, 8 1/2 x 11 inch"
 
-#: ../src/common/dlgcmn.cpp:168 ../src/generic/dcpsg.cpp:2270
+#: ../src/common/dlgcmn.cpp:168 ../src/generic/dcpsg.cpp:2268
 #: ../src/generic/dirctrlg.cpp:1247 ../src/generic/dirdlgg.cpp:416
 #: ../src/generic/filedlgg.cpp:1003 ../src/generic/fontdlgg.cpp:258
 #: ../src/generic/logg.cpp:726 ../src/generic/prntdlgg.cpp:465
@@ -2124,7 +2176,7 @@ msgstr ""
 msgid "Please wait..."
 msgstr "Even geduld a.u.b...."
 
-#: ../src/generic/dcpsg.cpp:2261 ../src/generic/prntdlgg.cpp:438
+#: ../src/generic/dcpsg.cpp:2259 ../src/generic/prntdlgg.cpp:438
 #: ../src/generic/prntdlgg.cpp:634
 msgid "Portrait"
 msgstr "Staand"
@@ -2137,11 +2189,11 @@ msgstr "PostScript"
 msgid "PostScript file"
 msgstr "PostScript-bestand"
 
-#: ../src/generic/dcpsg.cpp:2303
+#: ../src/generic/dcpsg.cpp:2301
 msgid "PostScript:"
 msgstr "PostScript:"
 
-#: ../src/generic/dcpsg.cpp:2266
+#: ../src/generic/dcpsg.cpp:2264
 msgid "Preview Only"
 msgstr "Alleen afdrukvoorbeeld"
 
@@ -2185,7 +2237,7 @@ msgstr "Afdruk-spoolen"
 msgid "Print this page"
 msgstr "Deze pagina afdrukken"
 
-#: ../src/generic/dcpsg.cpp:2265 ../src/generic/prntdlgg.cpp:148
+#: ../src/generic/dcpsg.cpp:2263 ../src/generic/prntdlgg.cpp:148
 msgid "Print to File"
 msgstr "Naar bestand afdrukken"
 
@@ -2193,11 +2245,11 @@ msgstr "Naar bestand afdrukken"
 msgid "Print..."
 msgstr "Afdrukken..."
 
-#: ../src/generic/dcpsg.cpp:2276
+#: ../src/generic/dcpsg.cpp:2274
 msgid "Printer Command: "
 msgstr "Printercommando: "
 
-#: ../src/generic/dcpsg.cpp:2281
+#: ../src/generic/dcpsg.cpp:2279
 msgid "Printer Options: "
 msgstr "Printer-opties: "
 
@@ -2307,6 +2359,10 @@ msgstr "Bestand '%s' vervangen?"
 msgid "Replace with:"
 msgstr ""
 
+#: ../contrib/src/xrc/xmlres.cpp:330
+msgid "Resource files must have same version number!"
+msgstr ""
+
 #: ../src/generic/prntdlgg.cpp:659
 msgid "Right margin (mm):"
 msgstr "Rechtermarge (mm):"
@@ -2385,7 +2441,7 @@ msgstr "Selecteer een documentweergave"
 msgid "Select a file"
 msgstr "Selecteer een bestand"
 
-#: ../src/generic/dcpsg.cpp:2264
+#: ../src/generic/dcpsg.cpp:2262
 msgid "Send to Printer"
 msgstr "Stuur naar printer"
 
@@ -2630,7 +2686,7 @@ msgstr ""
 "Bezig met poging om bestand '%s' uit geheugen VFS te verwijderen, maar het "
 "is niet geladen!"
 
-#: ../src/common/sckaddr.cpp:107
+#: ../src/common/sckaddr.cpp:108
 msgid "Trying to solve a NULL hostname: giving up"
 msgstr "Poging om een lege hostnaam te vinden: bezig op te geven"
 
@@ -2706,6 +2762,10 @@ msgstr "Onbekende lange optie '%s'"
 #, c-format
 msgid "Unknown option '%s'"
 msgstr "Onbekende optie '%s'"
+
+#: ../contrib/src/xrc/xmlres.cpp:488
+msgid "Unknown style flag "
+msgstr ""
 
 #: ../src/common/mimecmn.cpp:167
 #, c-format
@@ -2888,28 +2948,52 @@ msgstr "Windows/DOS OEM (CP 437)"
 msgid "Write error on file '%s'"
 msgstr "Schrijffout bij bestand '%s'"
 
-#: ../src/generic/dcpsg.cpp:2321
+#: ../src/generic/dcpsg.cpp:2319
 msgid "X Scaling"
 msgstr "X-vergroting"
 
-#: ../src/generic/dcpsg.cpp:2330
+#: ../src/generic/dcpsg.cpp:2328
 msgid "X Translation"
 msgstr "X-verplaatsing"
 
-#: ../src/common/xpmdecod.cpp:754
+#: ../contrib/src/xrc/xmlexpat.cpp:185
+#, c-format
+msgid "XML parsing error: '%s' at line %d"
+msgstr ""
+
+#: ../src/common/xpmdecod.cpp:757
 msgid "XPM: Malformed pixel data!"
 msgstr ""
 
-#: ../src/common/xpmdecod.cpp:707 ../src/common/xpmdecod.cpp:716
+#: ../src/common/xpmdecod.cpp:710 ../src/common/xpmdecod.cpp:719
 #, c-format
 msgid "XPM: malformed colour definition '%s'!"
 msgstr ""
 
-#: ../src/generic/dcpsg.cpp:2325
+#: ../contrib/src/xrc/xmlres.cpp:371
+#, fuzzy, c-format
+msgid "XRC resource '%s' (class '%s') not found!"
+msgstr "Pictogram-bronspecificatie niet gevonden."
+
+#: ../contrib/src/xrc/xmlres.cpp:624 ../contrib/src/xrc/xmlres.cpp:634
+#, c-format
+msgid "XRC resource: Cannot create bitmap from '%s'."
+msgstr ""
+
+#: ../contrib/src/xrc/xh_dlg.cpp:53 ../contrib/src/xrc/xh_frame.cpp:58
+msgid "XRC resource: Cannot create dialog without instance."
+msgstr ""
+
+#: ../contrib/src/xrc/xmlres.cpp:604
+#, c-format
+msgid "XRC resource: Incorrect colour specification '%s' for property '%s'."
+msgstr ""
+
+#: ../src/generic/dcpsg.cpp:2323
 msgid "Y Scaling"
 msgstr "Y-vergroting"
 
-#: ../src/generic/dcpsg.cpp:2334
+#: ../src/generic/dcpsg.cpp:2332
 msgid "Y Translation"
 msgstr "Y-verplaatsing"
 
@@ -3136,7 +3220,7 @@ msgstr "kan tijdelijk bestand '%s' niet verwijderen"
 msgid "can't seek on file descriptor %d"
 msgstr "kan niet zoeken bij bestandsbeschrijving %d"
 
-#: ../src/common/textfile.cpp:174
+#: ../src/common/textfile.cpp:176
 #, fuzzy, c-format
 msgid "can't write buffer '%s' to disk."
 msgstr "kan bestand '%s' niet naar schijf schrijven."
@@ -3154,6 +3238,11 @@ msgstr "kan gebruikers-configuratiebestand niet schrijven."
 #, c-format
 msgid "catalog file for domain '%s' not found."
 msgstr "catalogus-bestand voor domein '%s' niet gevonden."
+
+#: ../contrib/src/xrc/xh_dlg.cpp:67 ../contrib/src/xrc/xh_frame.cpp:72
+#, fuzzy
+msgid "centered"
+msgstr "Etcetera"
 
 #: ../src/common/menucmn.cpp:78
 msgid "ctrl"
