@@ -447,8 +447,16 @@ void wxListCtrl::UpdateStyle()
         // The new window view style
         DWORD dwStyleNew = MSWGetStyle(m_windowStyle, NULL);
 
+        // some styles are not returned by MSWGetStyle()
+        if ( IsShown() )
+            dwStyleNew |= WS_VISIBLE;
+
         // Get the current window style.
         DWORD dwStyleOld = ::GetWindowLong(GetHwnd(), GWL_STYLE);
+
+        // we don't have wxVSCROLL style, but the list control may have it,
+        // don't change it then
+        dwStyleNew |= dwStyleOld & (WS_HSCROLL | WS_VSCROLL);
 
         // Only set the window style if the view bits have changed.
         if ( dwStyleOld != dwStyleNew )
@@ -510,30 +518,25 @@ void wxListCtrl::SetSingleStyle(long style, bool add)
             flag = flag & ~wxLC_MASK_SORT;
     }
 
-    if ( flag & style )
-    {
-        if ( !add )
-            flag -= style;
-    }
+    if ( add )
+        flag |= style;
     else
-    {
-        if ( add )
-        {
-            flag |= style;
-        }
-    }
+        flag &= ~style;
 
-    m_windowStyle = flag;
-
-    UpdateStyle();
+    SetWindowStyleFlag(flag);
 }
 
 // Set the whole window style
 void wxListCtrl::SetWindowStyleFlag(long flag)
 {
-    m_windowStyle = flag;
+    if ( flag != m_windowStyle )
+    {
+        m_windowStyle = flag;
 
-    UpdateStyle();
+        UpdateStyle();
+
+        Refresh();
+    }
 }
 
 // ----------------------------------------------------------------------------

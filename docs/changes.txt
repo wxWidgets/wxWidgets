@@ -278,6 +278,7 @@ wxMSW:
 - fixed wxMaximizeEvent generation in wxFrame
 - don't send duplicate EVT_COMBOBOX events whenever selection changes any more
 - implemented support for selecting printer bin (Steven Van Ingelgem)
+- fixed wxListCtrl::SetSingleStyle() which was broken since a few releases
 
 wxUniv/X11:
 
