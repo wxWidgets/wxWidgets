@@ -127,6 +127,9 @@ wxGTK:
 wxMac:
 
 - use same average character width as other ports when calculating dialog units
+- implemented handling of mouse wheel
+- fix for long file names (longer than 32 characters) in file dialogs
+- use unix sockets for Mach-o builds
 
 wxHTML:
 
