@@ -75,7 +75,7 @@ public:
     virtual void ExitMainLoop(void);
     virtual bool Initialized(void);
     virtual bool Pending(void) ;
-    virtual void Dispatch(void);
+    virtual bool Dispatch(void);
 
     virtual void Exit();
 

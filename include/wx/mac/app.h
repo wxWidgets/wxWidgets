@@ -51,7 +51,7 @@ class WXDLLEXPORT wxApp: public wxAppBase
     virtual void ExitMainLoop();
     virtual bool Initialized();
     virtual bool Pending() ;
-    virtual void Dispatch() ;
+    virtual bool Dispatch() ;
 
     virtual void Exit();
 

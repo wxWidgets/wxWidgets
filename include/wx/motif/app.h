@@ -53,8 +53,6 @@ public:
     virtual int MainLoop();
     virtual void ExitMainLoop();
     virtual bool Initialized();
-    virtual bool Pending();
-    virtual void Dispatch();
 
     virtual void Exit();
 

@@ -89,7 +89,7 @@
 
 #if (!defined(__MINGW32__) || wxCHECK_W32API_VERSION( 2, 0 )) && \
     !defined(__CYGWIN__) && !defined(__DIGITALMARS__) && !defined(__WXWINCE__) && \
-    (!defined(_MSC_VER) || (_MSC_VER > 1100)) 
+    (!defined(_MSC_VER) || (_MSC_VER > 1100))
     #include <shlwapi.h>
 #endif
 
@@ -102,8 +102,6 @@ extern wxList WXDLLEXPORT wxPendingDelete;
 #if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
 extern void wxSetKeyboardHook(bool doIt);
 #endif
-
-MSG s_currentMsg;
 
 // NB: all "NoRedraw" classes must have the same names as the "normal" classes
 //     with NR suffix - wxWindow::MSWCreate() supposes this
@@ -200,12 +198,14 @@ void wxGUIAppTraits::AfterChildWaitLoop(void *dataOrig)
 
 bool wxGUIAppTraits::DoMessageFromThreadWait()
 {
-    return !wxTheApp || wxTheApp->DoMessage();
+    // we should return false only if the app should exit, i.e. only if
+    // Dispatch() determines that the main event loop should terminate
+    return !wxTheApp || wxTheApp->Dispatch();
 }
 
 wxToolkitInfo& wxGUIAppTraits::GetToolkitInfo()
 {
-    static wxToolkitInfo info;    
+    static wxToolkitInfo info;
     wxToolkitInfo& baseInfo = wxAppTraits::GetToolkitInfo();
     info.versionMajor = baseInfo.versionMajor;
     info.versionMinor = baseInfo.versionMinor;
@@ -568,219 +568,6 @@ bool wxApp::Initialized()
 #endif
 }
 
-/*
- * Get and process a message, returning FALSE if WM_QUIT
- * received (and also set the flag telling the app to exit the main loop)
- *
- */
-bool wxApp::DoMessage()
-{
-    BOOL rc = ::GetMessage(&s_currentMsg, (HWND) NULL, 0, 0);
-    if ( rc == 0 )
-    {
-        // got WM_QUIT
-        m_keepGoing = FALSE;
-
-        return FALSE;
-    }
-    else if ( rc == -1 )
-    {
-        // should never happen, but let's test for it nevertheless
-        wxLogLastError(wxT("GetMessage"));
-    }
-    else
-    {
-#if wxUSE_THREADS
-        wxASSERT_MSG( wxThread::IsMain(),
-                      wxT("only the main thread can process Windows messages") );
-
-        static bool s_hadGuiLock = TRUE;
-        static wxMsgArray s_aSavedMessages;
-
-        // if a secondary thread owns is doing GUI calls, save all messages for
-        // later processing - we can't process them right now because it will
-        // lead to recursive library calls (and we're not reentrant)
-        if ( !wxGuiOwnedByMainThread() )
-        {
-            s_hadGuiLock = FALSE;
-
-            // leave out WM_COMMAND messages: too dangerous, sometimes
-            // the message will be processed twice
-            if ( !wxIsWaitingForThread() ||
-                    s_currentMsg.message != WM_COMMAND )
-            {
-                s_aSavedMessages.Add(s_currentMsg);
-            }
-
-            return TRUE;
-        }
-        else
-        {
-            // have we just regained the GUI lock? if so, post all of the saved
-            // messages
-            //
-            // FIXME of course, it's not _exactly_ the same as processing the
-            //       messages normally - expect some things to break...
-            if ( !s_hadGuiLock )
-            {
-                s_hadGuiLock = TRUE;
-
-                size_t count = s_aSavedMessages.GetCount();
-                for ( size_t n = 0; n < count; n++ )
-                {
-                    MSG& msg = s_aSavedMessages[n];
-
-                    DoMessage((WXMSG *)&msg);
-                }
-
-                s_aSavedMessages.Empty();
-            }
-        }
-#endif // wxUSE_THREADS
-
-        // Process the message
-        DoMessage((WXMSG *)&s_currentMsg);
-    }
-
-    return TRUE;
-}
-
-void wxApp::DoMessage(WXMSG *pMsg)
-{
-    if ( !ProcessMessage(pMsg) )
-    {
-        ::TranslateMessage((MSG *)pMsg);
-        ::DispatchMessage((MSG *)pMsg);
-    }
-}
-
-/*
- * Keep trying to process messages until WM_QUIT
- * received.
- *
- * If there are messages to be processed, they will all be
- * processed and OnIdle will not be called.
- * When there are no more messages, OnIdle is called.
- * If OnIdle requests more time,
- * it will be repeatedly called so long as there are no pending messages.
- * A 'feature' of this is that once OnIdle has decided that no more processing
- * is required, then it won't get processing time until further messages
- * are processed (it'll sit in DoMessage).
- */
-
-int wxApp::MainLoop()
-{
-    m_keepGoing = TRUE;
-
-    while ( m_keepGoing )
-    {
-#if wxUSE_THREADS
-        wxMutexGuiLeaveOrEnter();
-#endif // wxUSE_THREADS
-
-        while ( !Pending() && ProcessIdle() )
-            ;
-
-        // a message came or no more idle processing to do
-        DoMessage();
-    }
-
-    return s_currentMsg.wParam;
-}
-
-void wxApp::ExitMainLoop()
-{
-    // this will set m_keepGoing to FALSE a bit later
-    ::PostQuitMessage(0);
-}
-
-bool wxApp::Pending()
-{
-    return ::PeekMessage(&s_currentMsg, 0, 0, 0, PM_NOREMOVE) != 0;
-}
-
-void wxApp::Dispatch()
-{
-    DoMessage();
-}
-
-/*
- * Give all windows a chance to preprocess
- * the message. Some may have accelerator tables, or have
- * MDI complications.
- */
-
-bool wxApp::ProcessMessage(WXMSG *wxmsg)
-{
-    MSG *msg = (MSG *)wxmsg;
-    HWND hwnd = msg->hwnd;
-    wxWindow *wndThis = wxGetWindowFromHWND((WXHWND)hwnd);
-
-    // this may happen if the event occured in a standard modeless dialog (the
-    // only example of which I know of is the find/replace dialog) - then call
-    // IsDialogMessage() to make TAB navigation in it work
-    if ( !wndThis )
-    {
-        // we need to find the dialog containing this control as
-        // IsDialogMessage() just eats all the messages (i.e. returns TRUE for
-        // them) if we call it for the control itself
-        while ( hwnd && ::GetWindowLong(hwnd, GWL_STYLE) & WS_CHILD )
-        {
-            hwnd = ::GetParent(hwnd);
-        }
-
-        return hwnd && ::IsDialogMessage(hwnd, msg) != 0;
-    }
-
-#if wxUSE_TOOLTIPS
-    // we must relay WM_MOUSEMOVE events to the tooltip ctrl if we want it to
-    // popup the tooltip bubbles
-    if ( (msg->message == WM_MOUSEMOVE) )
-    {
-        wxToolTip *tt = wndThis->GetToolTip();
-        if ( tt )
-        {
-            tt->RelayEvent(wxmsg);
-        }
-    }
-#endif // wxUSE_TOOLTIPS
-
-    // allow the window to prevent certain messages from being
-    // translated/processed (this is currently used by wxTextCtrl to always
-    // grab Ctrl-C/V/X, even if they are also accelerators in some parent)
-    if ( !wndThis->MSWShouldPreProcessMessage(wxmsg) )
-    {
-        return FALSE;
-    }
-
-    // try translations first: the accelerators override everything
-    wxWindow *wnd;
-
-    for ( wnd = wndThis; wnd; wnd = wnd->GetParent() )
-    {
-        if ( wnd->MSWTranslateMessage(wxmsg))
-            return TRUE;
-
-        // stop at first top level window, i.e. don't try to process the key
-        // strokes originating in a dialog using the accelerators of the parent
-        // frame - this doesn't make much sense
-        if ( wnd->IsTopLevel() )
-            break;
-    }
-
-    // now try the other hooks (kbd navigation is handled here): we start from
-    // wndThis->GetParent() because wndThis->MSWProcessMessage() was already
-    // called above
-    for ( wnd = wndThis->GetParent(); wnd; wnd = wnd->GetParent() )
-    {
-        if ( wnd->MSWProcessMessage(wxmsg) )
-            return TRUE;
-    }
-
-    // no special preprocessing for this message, dispatch it normally
-    return FALSE;
-}
-
 // this is a temporary hack and will be replaced by using wxEventLoop in the
 // future
 //
@@ -796,7 +583,7 @@ void wxApp::OnIdle(wxIdleEvent& event)
         return;
 
     wxIsInOnIdleFlag = TRUE;
-    
+
     wxAppBase::OnIdle(event);
 
 #if wxUSE_DC_CACHEING
@@ -965,7 +752,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
         wxMutexGuiLeaveOrEnter();
 #endif // wxUSE_THREADS
 
-        if ( !wxTheApp->DoMessage() )
+        if ( !wxTheApp->Dispatch() )
             break;
     }
 

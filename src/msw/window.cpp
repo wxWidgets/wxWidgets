@@ -162,9 +162,6 @@
 // global variables
 // ---------------------------------------------------------------------------
 
-// the last Windows message we got (FIXME-MT)
-extern MSG s_currentMsg;
-
 #if wxUSE_MENUS_NATIVE
 wxMenu *wxCurrentPopupMenu = NULL;
 #endif // wxUSE_MENUS_NATIVE
@@ -1750,15 +1747,21 @@ static void wxYieldForCommandsOnly()
     // peek all WM_COMMANDs (it will always return WM_QUIT too but we don't
     // want to process it here)
     MSG msg;
-    while ( ::PeekMessage(&msg, (HWND)0, WM_COMMAND, WM_COMMAND, PM_REMOVE)
-                && msg.message != WM_QUIT )
+    while ( ::PeekMessage(&msg, (HWND)0, WM_COMMAND, WM_COMMAND, PM_REMOVE) )
     {
-        wxTheApp->DoMessage((WXMSG *)&msg);
-    }
+        if ( msg.message != WM_QUIT )
+        {
+            // if we retrieved a WM_QUIT, insert back into the message queue.
+            ::PostQuitMessage(0);
+            break;
+        }
 
-    // If we retrieved a WM_QUIT, insert back into the message queue.
-    if (msg.message == WM_QUIT)
-        ::PostQuitMessage(0);
+        // luckily (as we don't have access to wxEventLoopImpl method from here
+        // anyhow...) we don't need to pre process WM_COMMANDs so dispatch it
+        // immediately
+        ::TranslateMessage(&msg);
+        ::DispatchMessage(&msg);
+    }
 }
 
 bool wxWindowMSW::DoPopupMenu(wxMenu *menu, int x, int y)
@@ -4220,7 +4223,7 @@ void wxWindowMSW::InitMouseEvent(wxMouseEvent& event,
     // so simply test for negative value.
     event.m_altDown = ::GetKeyState(VK_MENU) < 0;
 
-    event.SetTimestamp(s_currentMsg.time);
+    event.SetTimestamp(::GetMessageTime());
     event.m_eventObject = this;
     event.SetId(GetId());
 
@@ -4418,7 +4421,7 @@ wxKeyEvent wxWindowMSW::CreateKeyEvent(wxEventType evType,
     event.m_keyCode = id;
     event.m_rawCode = (wxUint32) wParam;
     event.m_rawFlags = (wxUint32) lParam;
-    event.SetTimestamp(s_currentMsg.time);
+    event.SetTimestamp(::GetMessageTime());
 
     // translate the position to client coords
     POINT pt;
@@ -5092,7 +5095,7 @@ wxKeyboardHook(int nCode, WORD wParam, DWORD lParam)
             event.m_keyCode = id;
             event.m_shiftDown = wxIsShiftDown();
             event.m_controlDown = wxIsCtrlDown();
-            event.SetTimestamp(s_currentMsg.time);
+            event.SetTimestamp(::GetMessageTime());
 
             wxWindow *win = wxGetActiveWindow();
             wxEvtHandler *handler;

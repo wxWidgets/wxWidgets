@@ -39,11 +39,7 @@ public:
     virtual bool Initialize(int& argc, wxChar **argv);
     virtual void CleanUp();
 
-    virtual int MainLoop();
-    virtual void ExitMainLoop();
     virtual bool Initialized();
-    virtual bool Pending();
-    virtual void Dispatch();
 
     virtual bool Yield(bool onlyIfNeeded = FALSE);
     virtual void WakeUpIdle();
@@ -67,18 +63,6 @@ public:
     static bool RegisterWindowClasses();
     static bool UnregisterWindowClasses();
 
-    // message processing
-    // ------------------
-
-    // process the given message
-    virtual void DoMessage(WXMSG *pMsg);
-
-    // retrieve the next message from the queue and process it
-    virtual bool DoMessage();
-
-    // preprocess the message
-    virtual bool ProcessMessage(WXMSG* pMsg);
-
     // idle processing
     // ---------------
 
@@ -98,9 +82,6 @@ public:
     static int m_nCmdShow;
 
 protected:
-    // we exit the main event loop when this flag becomes false
-    bool m_keepGoing;
-
     DECLARE_EVENT_TABLE()
     DECLARE_NO_COPY_CLASS(wxApp)
 };

@@ -1049,9 +1049,11 @@ bool wxApp::Pending()
 }
 
 // Dispatch a message.
-void wxApp::Dispatch()
+bool wxApp::Dispatch()
 {
     MacDoOneEvent() ;
+
+    return true;
 }
 
 void wxApp::OnIdle(wxIdleEvent& event)

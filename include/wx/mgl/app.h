@@ -42,11 +42,7 @@ public:
     virtual bool OnInitGui();
 
     // override base class (pure) virtuals
-    virtual int MainLoop();
-    virtual void ExitMainLoop();
     virtual bool Initialized();
-    virtual bool Pending();
-    virtual void Dispatch();
 
     virtual bool Initialize(int& argc, wxChar **argv);
     virtual void CleanUp();
@@ -59,8 +55,7 @@ public:
 private:
     DECLARE_DYNAMIC_CLASS(wxApp)
     DECLARE_EVENT_TABLE()
-    
-    wxEventLoop *m_mainLoop;
+
     wxDisplayModeInfo m_displayMode;
 };
 

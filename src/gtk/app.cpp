@@ -567,9 +567,11 @@ bool wxApp::Pending()
     return (gtk_events_pending() > 0);
 }
 
-void wxApp::Dispatch()
+bool wxApp::Dispatch()
 {
     gtk_main_iteration();
+
+    return true;
 }
 
 bool wxApp::Initialize(int& argc, wxChar **argv)

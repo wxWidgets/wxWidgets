@@ -273,8 +273,9 @@ bool wxApp::Pending()
 }
 
 // Dispatch a message.
-void wxApp::Dispatch()
+bool wxApp::Dispatch()
 {
+    return true;
 }
 
 // Yield to other processes

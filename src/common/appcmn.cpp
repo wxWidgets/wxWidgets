@@ -41,9 +41,11 @@
 
 #include "wx/apptrait.h"
 #include "wx/cmdline.h"
+#include "wx/evtloop.h"
 #include "wx/msgout.h"
 #include "wx/thread.h"
 #include "wx/utils.h"
+#include "wx/ptr_scpd.h"
 
 #if defined(__WXMSW__)
   #include  "wx/msw/private.h"  // includes windows.h for LOGFONT
@@ -56,6 +58,30 @@
 // DLL options compatibility check:
 #include "wx/build.h"
 WX_CHECK_BUILD_OPTIONS("wxCore")
+
+
+// ----------------------------------------------------------------------------
+// wxEventLoopPtr
+// ----------------------------------------------------------------------------
+
+// this defines wxEventLoopPtr
+wxDEFINE_SCOPED_PTR_TYPE(wxEventLoop);
+
+// but we need a smart pointer tied to wxAppBase::m_mainLoop, so we define
+// another helper class
+class wxTiedEventLoopPtr : public wxEventLoopPtr
+{
+public:
+    wxTiedEventLoopPtr(wxEventLoop **ppEvtLoop, wxEventLoop *pLoop)
+        : wxEventLoopPtr(*ppEvtLoop = pLoop), m_ppEvtLoop(ppEvtLoop)
+        {
+        }
+
+    ~wxTiedEventLoopPtr() { *m_ppEvtLoop = NULL; }
+
+private:
+    wxEventLoop **m_ppEvtLoop;
+};
 
 // ============================================================================
 // wxAppBase implementation
@@ -70,6 +96,8 @@ wxAppBase::wxAppBase()
     m_topWindow = (wxWindow *)NULL;
     m_useBestVisual = FALSE;
     m_isActive = TRUE;
+
+    m_mainLoop = NULL;
 
     // We don't want to exit the app if the user code shows a dialog from its
     // OnInit() -- but this is what would happen if we set m_exitOnFrameDelete
@@ -235,6 +263,45 @@ bool wxAppBase::OnCmdLineParsed(wxCmdLineParser& parser)
 }
 
 #endif // wxUSE_CMDLINE_PARSER
+
+// ----------------------------------------------------------------------------
+// main event loop implementation
+// ----------------------------------------------------------------------------
+
+int wxAppBase::MainLoop()
+{
+    wxTiedEventLoopPtr mainLoop(&m_mainLoop, new wxEventLoop);
+
+    return m_mainLoop->Run();
+}
+
+void wxAppBase::ExitMainLoop()
+{
+    // we should exit from the main event loop, not just any currently active
+    // (e.g. modal dialog) event loop
+    if ( m_mainLoop )
+    {
+        m_mainLoop->Exit(0);
+    }
+}
+
+bool wxAppBase::Pending()
+{
+    // use the currently active message loop here, not m_mainLoop, because if
+    // we're showing a modal dialog (with its own event loop) currently the
+    // main event loop is not running anyhow
+    wxEventLoop * const loop = wxEventLoop::GetActive();
+
+    return loop && loop->Pending();
+}
+
+bool wxAppBase::Dispatch()
+{
+    // see comment in Pending()
+    wxEventLoop * const loop = wxEventLoop::GetActive();
+
+    return loop ? loop->Dispatch() : true;
+}
 
 // ----------------------------------------------------------------------------
 // OnXXX() hooks

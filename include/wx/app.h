@@ -32,6 +32,8 @@ class WXDLLIMPEXP_BASE wxCmdLineParser;
 class WXDLLIMPEXP_BASE wxLog;
 class WXDLLIMPEXP_BASE wxMessageOutput;
 
+class WXDLLEXPORT wxEventLoop;
+
 // ----------------------------------------------------------------------------
 // typedefs
 // ----------------------------------------------------------------------------
@@ -367,24 +369,27 @@ public:
     // -----------------------------------------------------------------
 
         // execute the main GUI loop, the function returns when the loop ends
-    virtual int MainLoop() = 0;
+    virtual int MainLoop();
 
         // exit the main loop thus terminating the application
     virtual void Exit();
 
         // exit the main GUI loop during the next iteration (i.e. it does not
         // stop the program immediately!)
-    virtual void ExitMainLoop() = 0;
+    virtual void ExitMainLoop();
 
-        // returns TRUE if the program is initialized
+        // returns true if the program is initialized, i.e. OnInit() has been
+        // completed successfully
     virtual bool Initialized() = 0;
 
         // returns TRUE if there are unprocessed events in the event queue
-    virtual bool Pending() = 0;
+    virtual bool Pending();
 
         // process the first event in the event queue (blocks until an event
-        // apperas if there are none currently)
-    virtual void Dispatch() = 0;
+        // appears if there are none currently, use Pending() if this is not
+        // wanted), returns false if the event loop should stop and true
+        // otherwise
+    virtual bool Dispatch();
 
         // process all currently pending events right now
         //
@@ -402,7 +407,7 @@ public:
         // parties
         //
         // it should return TRUE if more idle events are needed, FALSE if not
-    virtual bool ProcessIdle() ;
+    virtual bool ProcessIdle();
 
         // Send idle event to window and all subwindows
         // Returns TRUE if more idle time is requested.
@@ -492,6 +497,10 @@ protected:
     // override base class method to use GUI traits
     virtual wxAppTraits *CreateTraits();
 
+
+    // the main event loop of the application (may be NULL if the loop hasn't
+    // been started yet or has already terminated)
+    wxEventLoop *m_mainLoop;
 
     // the main top level window (may be NULL)
     wxWindow *m_topWindow;

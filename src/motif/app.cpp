@@ -176,25 +176,6 @@ void wxApp::ExitMainLoop()
         m_eventLoop->Exit();
 }
 
-// Is a message/event pending?
-bool wxApp::Pending()
-{
-    return m_eventLoop->Pending();
-#if 0
-    XFlush(XtDisplay( (Widget) wxTheApp->GetTopLevelWidget() ));
-
-    // Fix by Doug from STI, to prevent a stall if non-X event
-    // is found.
-    return ((XtAppPending( (XtAppContext) GetAppContext() ) & XtIMXEvent) != 0) ;
-#endif
-}
-
-// Dispatch a message.
-void wxApp::Dispatch()
-{
-    m_eventLoop->Dispatch();
-}
-
 // This should be redefined in a derived class for
 // handling property change events for XAtom IPC.
 void wxApp::HandlePropertyChange(WXEvent *event)

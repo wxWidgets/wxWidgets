@@ -272,37 +272,9 @@ bool wxApp::OnInitGui()
     return TRUE;
 }
 
-int wxApp::MainLoop()
-{
-    int rt;
-    m_mainLoop = new wxEventLoop;
-
-    rt = m_mainLoop->Run();
-
-    delete m_mainLoop;
-    m_mainLoop = NULL;
-    return rt;
-}
-
-void wxApp::ExitMainLoop()
-{
-    if ( m_mainLoop )
-        m_mainLoop->Exit(0);
-}
-
 bool wxApp::Initialized()
 {
-    return (wxTopLevelWindows.GetCount() != 0);
-}
-
-bool wxApp::Pending()
-{
-    return wxEventLoop::GetActive()->Pending();
-}
-
-void wxApp::Dispatch()
-{
-    wxEventLoop::GetActive()->Dispatch();
+    return wxTopLevelWindows.GetCount() != 0;
 }
 
 bool wxApp::Initialize(int& argc, wxChar **argv)

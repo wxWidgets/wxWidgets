@@ -32,7 +32,6 @@ class WXDLLEXPORT wxWindow;
 class WXDLLEXPORT wxApp;
 class WXDLLEXPORT wxKeyEvent;
 class WXDLLEXPORT wxLog;
-class WXDLLEXPORT wxEventLoop;
 class WXDLLEXPORT wxXVisualInfo;
 
 // ----------------------------------------------------------------------------
@@ -42,14 +41,14 @@ class WXDLLEXPORT wxXVisualInfo;
 class WXDLLEXPORT wxApp : public wxAppBase
 {
     DECLARE_DYNAMIC_CLASS(wxApp)
-        
+
 public:
     wxApp();
     ~wxApp();
-    
+
     // override base class (pure) virtuals
     // -----------------------------------
-    
+
     virtual int MainLoop();
     virtual void ExitMainLoop();
     virtual bool Initialized();
@@ -60,45 +59,45 @@ public:
 
     virtual bool Yield(bool onlyIfNeeded = FALSE);
     virtual void WakeUpIdle();
-    
+
     virtual bool OnInitGui();
-    
+
     // implementation from now on
     // --------------------------
-    
+
     // Processes an X event.
     virtual bool ProcessXEvent(WXEvent* event);
-    
+
 #ifdef __WXDEBUG__
     virtual void OnAssert(const wxChar *file, int line, const wxChar* cond, const wxChar *msg);
 #endif // __WXDEBUG__
-    
+
 protected:
     bool                  m_showOnInit;
-    
+
 public:
     // Implementation
     virtual bool Initialize(int& argc, wxChar **argv);
     virtual void CleanUp();
-    
+
     WXWindow       GetTopLevelWidget() const { return m_topLevelWidget; }
     WXColormap     GetMainColormap(WXDisplay* display);
     long           GetMaxRequestSize() const { return m_maxRequestSize; }
-    
+
     // This handler is called when a property change event occurs
     virtual bool HandlePropertyChange(WXEvent *event);
-    
+
     // Values that can be passed on the command line.
     // Returns -1, -1 if none specified.
     const wxSize& GetInitialSize() const { return m_initialSize; }
     bool GetShowIconic() const { return m_showIconic; }
-    
+
 #if wxUSE_UNICODE
     // Global context for Pango layout. Either use X11
     // or use Xft rendering according to GDK_USE_XFT
     // environment variable
     PangoContext* GetPangoContext();
-#endif    
+#endif
 
     wxXVisualInfo* GetVisualInfo(WXDisplay* display)
     {
@@ -113,21 +112,20 @@ public:
 
 public:
     static long           sm_lastMessageTime;
-    bool                  m_showIconic;    
+    bool                  m_showIconic;
     wxSize                m_initialSize;
 
 #if !wxUSE_NANOX
     wxXVisualInfo*        m_visualInfo;
 #endif
-    
+
 protected:
     bool                  m_keepGoing;
-    
+
     WXWindow              m_topLevelWidget;
     WXColormap            m_mainColormap;
     long                  m_maxRequestSize;
-    wxEventLoop*          m_mainLoop;
-    
+
     DECLARE_EVENT_TABLE()
 };
 
