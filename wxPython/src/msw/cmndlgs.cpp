@@ -2568,8 +2568,7 @@ static PyObject *_wrap_wxFontData_SetChosenFont(PyObject *self, PyObject *args, 
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFont_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFont_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxFontData_SetChosenFont. Expected _wxFont_p.");
         return NULL;
         }
@@ -2641,8 +2640,7 @@ static PyObject *_wrap_wxFontData_SetInitialFont(PyObject *self, PyObject *args,
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFont_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFont_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxFontData_SetInitialFont. Expected _wxFont_p.");
         return NULL;
         }
@@ -2781,8 +2779,7 @@ static PyObject *_wrap_new_wxFontDialog(PyObject *self, PyObject *args, PyObject
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFontData_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFontData_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of new_wxFontDialog. Expected _wxFontData_p.");
         return NULL;
         }

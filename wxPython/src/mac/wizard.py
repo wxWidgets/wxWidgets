@@ -226,6 +226,12 @@ class wxWizardPtr(wxDialogPtr):
     def ShowPage(self, *_args, **_kwargs):
         val = apply(wizardc.wxWizard_ShowPage,(self,) + _args, _kwargs)
         return val
+    def HasNextPage(self, *_args, **_kwargs):
+        val = apply(wizardc.wxWizard_HasNextPage,(self,) + _args, _kwargs)
+        return val
+    def HasPrevPage(self, *_args, **_kwargs):
+        val = apply(wizardc.wxWizard_HasPrevPage,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxWizard instance at %s>" % (self.this,)
 class wxWizard(wxWizardPtr):

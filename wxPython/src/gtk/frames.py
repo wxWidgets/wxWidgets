@@ -95,9 +95,6 @@ class wxFramePtr(wxTopLevelWindowPtr):
     def GetMenuBar(self, *_args, **_kwargs):
         val = apply(framesc.wxFrame_GetMenuBar,(self,) + _args, _kwargs)
         return val
-    def Command(self, *_args, **_kwargs):
-        val = apply(framesc.wxFrame_Command,(self,) + _args, _kwargs)
-        return val
     def ProcessCommand(self, *_args, **_kwargs):
         val = apply(framesc.wxFrame_ProcessCommand,(self,) + _args, _kwargs)
         return val
@@ -145,6 +142,7 @@ class wxFramePtr(wxTopLevelWindowPtr):
         return val
     def __repr__(self):
         return "<C wxFrame instance at %s>" % (self.this,)
+    Command = ProcessCommand
 class wxFrame(wxFramePtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(framesc.new_wxFrame,_args,_kwargs)

@@ -46,6 +46,12 @@ class TestPanel(wxPanel):
         EVT_BUTTON(self, b.GetId(), self.OnButton)
         sizer.Add(b)
 
+        bmp = images.getTest2Bitmap()
+        b = wxGenBitmapButton(self, -1, bmp)
+        EVT_BUTTON(self, b.GetId(), self.OnButton)
+        sizer.Add(b)
+        b.Enable(FALSE)
+
         b = wxGenBitmapButton(self, -1, None)
         EVT_BUTTON(self, b.GetId(), self.OnButton)
         bmp = images.getBulb1Bitmap()
@@ -58,7 +64,6 @@ class TestPanel(wxPanel):
         b.SetBitmapSelected(bmp)
         b.SetBestSize()
         sizer.Add(b)
-        sizer.Add(10,10)
 
         b = wxGenToggleButton(self, -1, "Toggle Button")
         EVT_BUTTON(self, b.GetId(), self.OnToggleButton)
@@ -128,3 +133,11 @@ def runTest(frame, nb, log):
 
 import wxPython.lib.buttons
 overview = wxPython.lib.buttons.__doc__
+
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
+

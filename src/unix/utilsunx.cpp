@@ -44,7 +44,11 @@
     #include <sys/statvfs.h>
 
     #define statfs statvfs
+# ifdef __HPUX__
+    #define wxStatFs struct statvfs
+# else
     #define wxStatFs statvfs_t
+# endif
 #elif HAVE_STATFS
     #define wxStatFs struct statfs
 #endif // HAVE_STAT[V]FS
@@ -362,10 +366,10 @@ public:
     bool IsOpened() const { return !Eof(); }
 
     // return TRUE if we have anything to read, don't block
-    bool IsAvailable() const;
+    virtual bool CanRead() const;
 };
 
-bool wxPipeInputStream::IsAvailable() const
+bool wxPipeInputStream::CanRead() const
 {
     if ( m_lasterror == wxSTREAM_EOF )
         return FALSE;
@@ -800,7 +804,12 @@ char *wxGetUserHome( const wxString &user )
 
         if ((ptr = wxGetenv(wxT("HOME"))) != NULL)
         {
+#if wxUSE_UNICODE
+            wxWCharBuffer buffer( ptr );
+            return buffer;
+#else
             return ptr;
+#endif
         }
         if ((ptr = wxGetenv(wxT("USER"))) != NULL || (ptr = wxGetenv(wxT("LOGNAME"))) != NULL)
         {
@@ -947,7 +956,7 @@ wxString wxGetOsDescription()
 #ifndef WXWIN_OS_DESCRIPTION
     #error WXWIN_OS_DESCRIPTION should be defined in config.h by configure
 #else
-    return WXWIN_OS_DESCRIPTION;
+    return wxString::FromAscii( WXWIN_OS_DESCRIPTION );
 #endif
 }
 #endif

@@ -105,16 +105,34 @@ static pascal void wxMacListDefinition( short message, Boolean isSelected, Rect 
             ClipRect( drawRect );
             EraseRect( drawRect );
 
+			wxFontRefData * font = (wxFontRefData*) list->GetFont().GetRefData() ;
+
+			if ( font )
+			{
+				::TextFont( font->m_macFontNum ) ;
+				::TextSize( short(font->m_macFontSize) ) ;
+				::TextFace( font->m_macFontStyle ) ;
+			}
+			else
+			{
+		        ::TextFont( kFontIDMonaco ) ;
+		        ::TextSize( 9  );
+		        ::TextFace( 0 ) ;
+			}
+
 #if TARGET_CARBON
 	        bool useDrawThemeText = ( DrawThemeTextBox != (void*) kUnresolvedCFragSymbolAddress ) ;
 
            	if ( useDrawThemeText )
            	{
 	            Rect frame = { drawRect->top, drawRect->left + 4,
-	                           drawRect->top + kwxMacListItemHeight, drawRect->right} ;
-                CFStringRef mString = CFStringCreateWithBytes( NULL , (UInt8*) text.c_str(), text.Length(), CFStringGetSystemEncoding(), false ) ;
+	                           drawRect->top + kwxMacListItemHeight, drawRect->right + 10000 } ;
+                CFStringRef sString = CFStringCreateWithBytes( NULL , (UInt8*) text.c_str(), text.Length(), CFStringGetSystemEncoding(), false ) ;
+                CFMutableStringRef mString = CFStringCreateMutableCopy( NULL , 0 , sString ) ;
+        	    CFRelease( sString ) ;
+  				::TruncateThemeText( mString , kThemeCurrentPortFont, kThemeStateActive, drawRect->right - drawRect->left , truncEnd , NULL ) ;
         		::DrawThemeTextBox( mString,
-        							kThemeViewsFont,
+        							kThemeCurrentPortFont,
         							kThemeStateActive,
         							false,
         							&frame,
@@ -126,9 +144,6 @@ static pascal void wxMacListDefinition( short message, Boolean isSelected, Rect 
 #endif
    		    {
 		        MoveTo(drawRect->left + 4 , drawRect->top + 10 );
-		        ::TextFont( kFontIDMonaco ) ;
-		        ::TextSize( 9  );
-		        ::TextFace( 0 ) ;
         		DrawText(text, 0 , text.Length());
 		    }
 
@@ -206,6 +221,19 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
     }
         listDef.u.userProc = macListDefUPP ;
 
+    Str255 fontName ;
+    SInt16 fontSize ;
+    Style fontStyle ;
+	SInt16 fontNum ;
+#if TARGET_CARBON
+	GetThemeFont(kThemeViewsFont , GetApplicationScript() , fontName , &fontSize , &fontStyle ) ;
+#else
+	GetFontName( kFontIDMonaco , fontName ) ;
+	fontSize = 9 ;
+	fontStyle = normal ;
+#endif 
+    CopyPascalStringToC( fontName , (char*) fontName ) ;
+    SetFont( wxFont (fontSize, wxSWISS, wxNORMAL, wxNORMAL , false , fontName ) ) ;
 #if TARGET_CARBON
     Size asize;
 
@@ -255,16 +283,16 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
     }
     else
     {
-        options = lOnlyOne ;
+        options = (OptionBits) lOnlyOne ;
     }
     SetListSelectionFlags((ListHandle)m_macList, options);
-
-    MacPostControlCreate() ;
 
     for ( int i = 0 ; i < n ; i++ )
     {
         Append( choices[i] ) ;
     }
+
+    MacPostControlCreate() ;
 
     LSetDrawingMode( true , (ListHandle)m_macList ) ;
 
@@ -616,7 +644,49 @@ void wxListBox::SetString(int N, const wxString& s)
 
 wxSize wxListBox::DoGetBestSize() const
 {
-    return wxSize(100, 100);
+    int lbWidth = 100;  // some defaults
+    int lbHeight = 110;
+    int wLine;
+
+	{
+		wxMacPortStateHelper st( UMAGetWindowPort( (WindowRef) MacGetRootWindow() ) ) ; 
+ 		Rect drawRect ;
+
+		wxFontRefData * font = (wxFontRefData*) m_font.GetRefData() ;
+
+		if ( font )
+		{
+			::TextFont( font->m_macFontNum ) ;
+			::TextSize( short(font->m_macFontSize) ) ;
+			::TextFace( font->m_macFontStyle ) ;
+		}
+		else
+		{
+	        ::TextFont( kFontIDMonaco ) ;
+	        ::TextSize( 9  );
+	        ::TextFace( 0 ) ;
+		}
+
+	    // Find the widest line
+	    for(int i = 0; i < GetCount(); i++) {
+	        wxString str(GetString(i));
+	        wLine = ::TextWidth( str.c_str() , 0 , str.Length() ) ;
+	        lbWidth = wxMax(lbWidth, wLine);
+	    }
+
+	    // Add room for the scrollbar
+	    lbWidth += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
+
+	    // And just a bit more
+	    int cy = 12 ;
+	    int cx = ::TextWidth( "X" , 0 , 1 ) ;
+	    lbWidth += cx ;
+	    
+	    // don't make the listbox too tall (limit height to around 10 items) but don't
+	    // make it too small neither
+	    lbHeight = (cy+4) * wxMin(wxMax(GetCount(), 3), 10);
+	}
+    return wxSize(lbWidth, lbHeight);
 }
 
 int wxListBox::GetCount() const
@@ -661,6 +731,7 @@ wxOwnerDrawn *wxListBox::CreateItem(size_t n)
 // list box control implementation
 // ============================================================================
 
+/*
 void MacDrawStringCell(Rect *cellRect, Cell lCell, ListHandle theList, long refCon)
 {
     wxListBox*          list;
@@ -675,7 +746,7 @@ void MacDrawStringCell(Rect *cellRect, Cell lCell, ListHandle theList, long refC
     DrawText(text, 0 , text.Length());
 
 }
-
+*/
 void wxListBox::MacDelete( int N )
 {
     LDelRow( 1 , N , (ListHandle)m_macList) ;

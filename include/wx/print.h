@@ -1,7 +1,7 @@
 #ifndef _WX_PRINT_H_BASE_
 #define _WX_PRINT_H_BASE_
 
-#if defined(__WXMSW__)
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
 #include "wx/msw/printwin.h"
 
 #ifndef wxPrinter

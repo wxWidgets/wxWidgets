@@ -159,6 +159,19 @@ typedef struct tagNMLVDISPINFOW {
 #endif
 #endif
 
+#if defined(__GNUWIN32__) && !defined(HDN_GETDISPINFOW)
+#define HDN_GETDISPINFOW (HDN_FIRST-29)
+typedef struct {
+        NMHDR hdr;
+        int iItem;
+        UINT mask;
+        LPWSTR pszText;
+        int cchTextMax;
+        int iImage;
+        LPARAM lParam;
+} NMHDDISPINFOW, *LPNMHDDISPINFOW;
+#endif
+
 
 // ----------------------------------------------------------------------------
 // MS HTML Help

@@ -70,7 +70,7 @@ void ScintillaBase::AddCharUTF(char *s, unsigned int len, bool treatAsDBCS) {
 	}
 	if (ac.Active()) {
 		AutoCompleteCharacterAdded(s[0]);
-		// For fill ups add the character after the autocompletion has 
+		// For fill ups add the character after the autocompletion has
 		// triggered so containers see the key so can display a calltip.
 		if (isFillUp) {
 			Editor::AddCharUTF(s, len, treatAsDBCS);
@@ -317,6 +317,7 @@ void ScintillaBase::AutoCompleteCompleted() {
 		scn.nmhdr.code = SCN_USERLISTSELECTION;
 		scn.message = 0;
 		scn.wParam = listType;
+		scn.listType = listType;
 		scn.lParam = 0;
 		scn.text = userListSelected.c_str();
 		NotifyParent(scn);

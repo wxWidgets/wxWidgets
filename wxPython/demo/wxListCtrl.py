@@ -191,7 +191,9 @@ class TestListCtrlPanel(wxPanel, wxColumnSorterMixin):
         self.x = event.GetX()
         self.y = event.GetY()
         self.log.WriteText("x, y = %s\n" % str((self.x, self.y)))
-        print event.GetEventObject()
+        item, flags = self.list.HitTest((self.x, self.y))
+        if flags & wxLIST_HITTEST_ONITEM:
+            self.list.Select(item)
         event.Skip()
 
 
@@ -213,17 +215,19 @@ class TestListCtrlPanel(wxPanel, wxColumnSorterMixin):
             # this does
             self.list.SetItemState(10, 0, wxLIST_STATE_SELECTED)
 
-    # Show how to reselect something we don't want deselected
     def OnItemDeselected(self, evt):
         item = evt.GetItem()
-        print evt.m_itemIndex
+        self.log.WriteText("OnItemDeselected: %d" % evt.m_itemIndex)
+
+        # Show how to reselect something we don't want deselected
         if evt.m_itemIndex == 11:
             wxCallAfter(self.list.SetItemState, 11, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED)
 
 
     def OnItemActivated(self, event):
         self.currentItem = event.m_itemIndex
-        self.log.WriteText("OnItemActivated: %s\n" % self.list.GetItemText(self.currentItem))
+        self.log.WriteText("OnItemActivated: %s\nTopItem: %s" %
+                           (self.list.GetItemText(self.currentItem), self.list.GetTopItem()))
 
     def OnItemDelete(self, event):
         self.log.WriteText("OnItemDelete\n")

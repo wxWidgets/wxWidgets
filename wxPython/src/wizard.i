@@ -361,6 +361,9 @@ public:
     // page first and return FALSE without changing the page if
     // TransferDataFromWindow() returns FALSE - otherwise, returns TRUE
     bool ShowPage(wxWizardPage *page, bool goingForward = TRUE);
+
+    bool HasNextPage(wxWizardPage* page);
+    bool HasPrevPage(wxWizardPage* page);
 };
 
 

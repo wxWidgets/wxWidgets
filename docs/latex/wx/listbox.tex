@@ -284,7 +284,7 @@ it.
 
 \membersection{wxListBox::InsertItems}\label{wxlistboxinsertitems}
 
-\func{void}{InsertItems}{\param{int}{ nItems}, \param{const wxString}{ items}, \param{int}{ pos}}
+\func{void}{InsertItems}{\param{int}{ nItems}, \param{const wxString}{ *items}, \param{int}{ pos}}
 
 Insert the given number of strings before the specified position.
 
@@ -331,9 +331,11 @@ TRUE if the given item is selected, FALSE otherwise.
 
 \membersection{wxListBox::Set}\label{wxlistboxset}
 
-\func{void}{Set}{\param{int}{ n}, \param{const wxString*}{ choices}}
+\func{void}{Set}{\param{int}{ n}, \param{const wxString*}{ choices}, \param{void}{ **clientData = {\tt NULL}}}
 
-Clears the list box and adds the given strings. Not implemented for GTK.
+\func{void}{Set}{\param{const wxArrayString\&}{ choices}, \param{void}{ **clientData = {\tt NULL}}}
+
+Clears the list box and adds the given strings to it.
 
 \wxheading{Parameters}
 
@@ -341,10 +343,12 @@ Clears the list box and adds the given strings. Not implemented for GTK.
 
 \docparam{choices}{An array of strings to set.}
 
+\docparam{clientData}{Options array of client data pointers}
+
 \wxheading{Remarks}
 
-Deallocate the array from the calling program
-after this function has been called.
+You may free the array from the calling program after this function has been
+called.
 
 \membersection{wxListBox::SetClientData}\label{wxlistboxsetclientdata}
 

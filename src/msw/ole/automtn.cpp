@@ -833,12 +833,15 @@ static BSTR ConvertStringToOle(const wxString& str)
 
 static wxString ConvertStringFromOle(BSTR bStr)
 {
+#if wxUSE_UNICODE
+    wxString str(bStr);
+#else
 	int len = SysStringLen(bStr) + 1;
 	char    *buf = new char[len];
 	(void)wcstombs( buf, bStr, len);
-
-	wxString str(buf);
+	wxString str(buf); 
 	delete[] buf;
+#endif
 	return str;
 }
 

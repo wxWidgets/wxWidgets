@@ -16,7 +16,7 @@
 #pragma interface "wxexpr.h"
 #endif
 
-#include <stdio.h>
+#if wxUSE_PROLOGIO
 
 #include "wx/defs.h"
 #include "wx/string.h"
@@ -25,6 +25,8 @@
 #include "wx/hash.h"
 
 #include "wx/expr.h"
+
+#include <stdio.h>
 
 // Compatibility
 #define PrologExpr wxExpr
@@ -269,5 +271,7 @@ WXDLLEXPORT_DATA(extern wxExprDatabase*) thewxExprDatabase;
 // YACC/LEX can leave memory lying around...
 extern "C" WXDLLEXPORT int wxExprCleanUp();
 
-#endif
+#endif // wxUSE_PROLOGIO
+
+#endif // _WX_WXEXPRH__
 

@@ -12,7 +12,7 @@ WXDIR = ../../..
 LIBTARGET=$(WXDIR)/contrib/lib/libmmedia.a
 OBJECTS = cdbase.o cdwin.o g711.o g721.o g723_24.o \
   g723_40.o g72x.o sndaiff.o sndbase.o sndcodec.o \
-  sndcpcm.o sndfile.o sndg72x.o sndpcm.o sndulaw.o \
+  sndcpcm.o sndfile.o sndg72x.o sndmsad.o sndpcm.o sndulaw.o \
   sndwav.o sndwin.o vidbase.o vidwin.o
 
 include $(WXDIR)/src/makelib.g95

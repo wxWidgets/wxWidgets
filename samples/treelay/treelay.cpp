@@ -35,31 +35,31 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit()
 {
   // Create the main frame window
-  MyFrame* frame = new MyFrame(NULL, "Tree Test", wxPoint(-1, -1), wxSize(400, 550));
+  MyFrame* frame = new MyFrame(NULL, _T("Tree Test"), wxPoint(-1, -1), wxSize(400, 550));
 
   // Give it a status line
   frame->CreateStatusBar(2);
 
   // Give it an icon
 #ifdef __WINDOWS__
-  wxIcon icon("tree_icn");
+  wxIcon icon(_T("tree_icn"));
   frame->SetIcon(icon);
 #endif
 
   // Make a menubar
   wxMenu *file_menu = new wxMenu;
-  file_menu->Append(TEST_LEFT_RIGHT, "&Left to right",                "Redraw left to right");
-  file_menu->Append(TEST_TOP_BOTTOM, "&Top to bottom",                "Redraw top to bottom");
+  file_menu->Append(TEST_LEFT_RIGHT, _T("&Left to right"),                _T("Redraw left to right"));
+  file_menu->Append(TEST_TOP_BOTTOM, _T("&Top to bottom"),                _T("Redraw top to bottom"));
   file_menu->AppendSeparator();
-  file_menu->Append(TEST_QUIT, "E&xit",                "Quit program");
+  file_menu->Append(TEST_QUIT, _T("E&xit"),                _T("Quit program"));
 
   wxMenu *help_menu = new wxMenu;
-  help_menu->Append(TEST_ABOUT, "&About",              "About Tree Test");
+  help_menu->Append(TEST_ABOUT, _T("&About"),              _T("About Tree Test"));
 
   wxMenuBar* menu_bar = new wxMenuBar;
 
-  menu_bar->Append(file_menu, "&File");
-  menu_bar->Append(help_menu, "&Help");
+  menu_bar->Append(file_menu, _T("&File"));
+  menu_bar->Append(help_menu, _T("&Help"));
 
   // Associate the menu bar with the frame
   frame->SetMenuBar(menu_bar);
@@ -79,7 +79,7 @@ bool MyApp::OnInit()
 
   frame->Show(TRUE);
 
-  frame->SetStatusText("Hello, tree!");
+  frame->SetStatusText(_T("Hello, tree!"));
 
   // Return the main frame window
   return TRUE;
@@ -100,34 +100,34 @@ void MyApp::TreeTest(wxTreeLayoutStored& tree, wxDC& dc)
 {
   tree.Initialize(200);
   
-  tree.AddChild("animal");
-  tree.AddChild("mammal", "animal");
-  tree.AddChild("insect", "animal");
-  tree.AddChild("bird", "animal");
+  tree.AddChild(_T("animal"));
+  tree.AddChild(_T("mammal"), _T("animal"));
+  tree.AddChild(_T("insect"), _T("animal"));
+  tree.AddChild(_T("bird"), _T("animal"));
 
-  tree.AddChild("man", "mammal");
-  tree.AddChild("cat", "mammal");
-  tree.AddChild("dog", "mammal");
-  tree.AddChild("giraffe", "mammal");
-  tree.AddChild("elephant", "mammal");
-  tree.AddChild("donkey", "mammal");
-  tree.AddChild("horse", "mammal");
+  tree.AddChild(_T("man"), _T("mammal"));
+  tree.AddChild(_T("cat"), _T("mammal"));
+  tree.AddChild(_T("dog"), _T("mammal"));
+  tree.AddChild(_T("giraffe"), _T("mammal"));
+  tree.AddChild(_T("elephant"), _T("mammal"));
+  tree.AddChild(_T("donkey"), _T("mammal"));
+  tree.AddChild(_T("horse"), _T("mammal"));
 
-  tree.AddChild("fido", "dog");
-  tree.AddChild("domestic cat", "cat");
-  tree.AddChild("lion", "cat");
-  tree.AddChild("tiger", "cat");
-  tree.AddChild("felix", "domestic cat");
-  tree.AddChild("socks", "domestic cat");
+  tree.AddChild(_T("fido"), _T("dog"));
+  tree.AddChild(_T("domestic cat"), _T("cat"));
+  tree.AddChild(_T("lion"), _T("cat"));
+  tree.AddChild(_T("tiger"), _T("cat"));
+  tree.AddChild(_T("felix"), _T("domestic cat"));
+  tree.AddChild(_T("socks"), _T("domestic cat"));
 
-  tree.AddChild("beetle", "insect");
-  tree.AddChild("earwig", "insect");
-  tree.AddChild("eagle", "bird");
-  tree.AddChild("bluetit", "bird");
-  tree.AddChild("sparrow", "bird");
-  tree.AddChild("blackbird", "bird");
-  tree.AddChild("emu", "bird");
-  tree.AddChild("crow", "bird");
+  tree.AddChild(_T("beetle"), _T("insect"));
+  tree.AddChild(_T("earwig"), _T("insect"));
+  tree.AddChild(_T("eagle"), _T("bird"));
+  tree.AddChild(_T("bluetit"), _T("bird"));
+  tree.AddChild(_T("sparrow"), _T("bird"));
+  tree.AddChild(_T("blackbird"), _T("bird"));
+  tree.AddChild(_T("emu"), _T("bird"));
+  tree.AddChild(_T("crow"), _T("bird"));
 
   tree.DoLayout(dc);
 }
@@ -179,7 +179,7 @@ void MyFrame::OnTopBottom(wxCommandEvent& event)
 
 void MyFrame::OnAbout(wxCommandEvent& event)
 {
-      (void)wxMessageBox("wxWindows tree library demo Vsn 2.0\nAuthor: Julian Smart (c) 1998", "About tree test");
+      (void)wxMessageBox(_T("wxWindows tree library demo Vsn 2.0\nAuthor: Julian Smart (c) 1998"), _T("About tree test"));
 }
 
 void MyFrame::OnCloseWindow(wxCloseEvent& event)

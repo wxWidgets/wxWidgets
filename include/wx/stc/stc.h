@@ -24,6 +24,12 @@
 #include <wx/wx.h>
 #include <wx/dnd.h>
 
+#ifdef STCISDLL
+#define STCDLLEXPORT WXDLLEXPORT
+#else
+#define STCDLLEXPORT
+#endif
+
 //----------------------------------------------------------------------
 
 // Should a wxPopupWindow be used for the call tips and autocomplete windows?
@@ -43,12 +49,6 @@
 #define wxSTC_START 2000
 #define wxSTC_OPTIONAL_START 3000
 #define wxSTC_LEXER_START 4000
-
-// Redoes the next action on the undo history.
-#define wxSTC_CMD_REDO 2011
-
-// Select all the text in the document.
-#define wxSTC_CMD_SELECTALL 2013
 #define wxSTC_WS_INVISIBLE 0
 #define wxSTC_WS_VISIBLEALWAYS 1
 #define wxSTC_WS_VISIBLEAFTERINDENT 2
@@ -167,18 +167,6 @@
 #define wxSTC_FIND_MATCHCASE 4
 #define wxSTC_FIND_WORDSTART 0x00100000
 #define wxSTC_FIND_REGEXP 0x00200000
-
-// Undo one action in the undo history.
-#define wxSTC_CMD_UNDO 2176
-
-// Cut the selection to the clipboard.
-#define wxSTC_CMD_CUT 2177
-
-// Copy the selection to the clipboard.
-#define wxSTC_CMD_COPY 2178
-
-// Paste the contents of the clipboard into the document replacing the selection.
-#define wxSTC_CMD_PASTE 2179
 #define wxSTC_FOLDLEVELBASE 0x400
 #define wxSTC_FOLDLEVELWHITEFLAG 0x1000
 #define wxSTC_FOLDLEVELHEADERFLAG 0x2000
@@ -190,158 +178,6 @@
 #define wxSTC_CACHE_CARET 1
 #define wxSTC_CACHE_PAGE 2
 #define wxSTC_CACHE_DOCUMENT 3
-
-// Move caret down one line.
-#define wxSTC_CMD_LINEDOWN 2300
-
-// Move caret down one line extending selection to new caret position.
-#define wxSTC_CMD_LINEDOWNEXTEND 2301
-
-// Move caret up one line.
-#define wxSTC_CMD_LINEUP 2302
-
-// Move caret up one line extending selection to new caret position.
-#define wxSTC_CMD_LINEUPEXTEND 2303
-
-// Move caret left one character.
-#define wxSTC_CMD_CHARLEFT 2304
-
-// Move caret left one character extending selection to new caret position.
-#define wxSTC_CMD_CHARLEFTEXTEND 2305
-
-// Move caret right one character.
-#define wxSTC_CMD_CHARRIGHT 2306
-
-// Move caret right one character extending selection to new caret position.
-#define wxSTC_CMD_CHARRIGHTEXTEND 2307
-
-// Move caret left one word.
-#define wxSTC_CMD_WORDLEFT 2308
-
-// Move caret left one word extending selection to new caret position.
-#define wxSTC_CMD_WORDLEFTEXTEND 2309
-
-// Move caret right one word.
-#define wxSTC_CMD_WORDRIGHT 2310
-
-// Move caret right one word extending selection to new caret position.
-#define wxSTC_CMD_WORDRIGHTEXTEND 2311
-
-// Move caret to first position on line.
-#define wxSTC_CMD_HOME 2312
-
-// Move caret to first position on line extending selection to new caret position.
-#define wxSTC_CMD_HOMEEXTEND 2313
-
-// Move caret to last position on line.
-#define wxSTC_CMD_LINEEND 2314
-
-// Move caret to last position on line extending selection to new caret position.
-#define wxSTC_CMD_LINEENDEXTEND 2315
-
-// Move caret to first position in document.
-#define wxSTC_CMD_DOCUMENTSTART 2316
-
-// Move caret to first position in document extending selection to new caret position.
-#define wxSTC_CMD_DOCUMENTSTARTEXTEND 2317
-
-// Move caret to last position in document.
-#define wxSTC_CMD_DOCUMENTEND 2318
-
-// Move caret to last position in document extending selection to new caret position.
-#define wxSTC_CMD_DOCUMENTENDEXTEND 2319
-
-// Move caret one page up.
-#define wxSTC_CMD_PAGEUP 2320
-
-// Move caret one page up extending selection to new caret position.
-#define wxSTC_CMD_PAGEUPEXTEND 2321
-
-// Move caret one page down.
-#define wxSTC_CMD_PAGEDOWN 2322
-
-// Move caret one page down extending selection to new caret position.
-#define wxSTC_CMD_PAGEDOWNEXTEND 2323
-
-// Switch from insert to overtype mode or the reverse.
-#define wxSTC_CMD_EDITTOGGLEOVERTYPE 2324
-
-// Cancel any modes such as call tip or auto-completion list display.
-#define wxSTC_CMD_CANCEL 2325
-
-// Delete the selection or if no selection, the character before the caret.
-#define wxSTC_CMD_DELETEBACK 2326
-
-// If selection is empty or all on one line replace the selection with a tab character.
-// If more than one line selected, indent the lines.
-#define wxSTC_CMD_TAB 2327
-
-// Dedent the selected lines.
-#define wxSTC_CMD_BACKTAB 2328
-
-// Insert a new line, may use a CRLF, CR or LF depending on EOL mode.
-#define wxSTC_CMD_NEWLINE 2329
-
-// Insert a Form Feed character.
-#define wxSTC_CMD_FORMFEED 2330
-
-// Move caret to before first visible character on line.
-// If already there move to first character on line.
-#define wxSTC_CMD_VCHOME 2331
-
-// Like VCHome but extending selection to new caret position.
-#define wxSTC_CMD_VCHOMEEXTEND 2332
-
-// Magnify the displayed text by increasing the sizes by 1 point.
-#define wxSTC_CMD_ZOOMIN 2333
-
-// Make the displayed text smaller by decreasing the sizes by 1 point.
-#define wxSTC_CMD_ZOOMOUT 2334
-
-// Delete the word to the left of the caret.
-#define wxSTC_CMD_DELWORDLEFT 2335
-
-// Delete the word to the right of the caret.
-#define wxSTC_CMD_DELWORDRIGHT 2336
-
-// Cut the line containing the caret.
-#define wxSTC_CMD_LINECUT 2337
-
-// Delete the line containing the caret.
-#define wxSTC_CMD_LINEDELETE 2338
-
-// Switch the current line with the previous.
-#define wxSTC_CMD_LINETRANSPOSE 2339
-
-// Transform the selection to lower case.
-#define wxSTC_CMD_LOWERCASE 2340
-
-// Transform the selection to upper case.
-#define wxSTC_CMD_UPPERCASE 2341
-
-// Scroll the document down, keeping the caret visible.
-#define wxSTC_CMD_LINESCROLLDOWN 2342
-
-// Scroll the document up, keeping the caret visible.
-#define wxSTC_CMD_LINESCROLLUP 2343
-
-// Delete the selection or if no selection, the character before the caret.
-// Will not delete the character before at the start of a line.
-#define wxSTC_CMD_DELETEBACKNOTLINE 2344
-
-// Move caret to first position on display line.
-#define wxSTC_CMD_HOMEDISPLAY 2345
-
-// Move caret to first position on display line extending selection to 
-// new caret position.
-#define wxSTC_CMD_HOMEDISPLAYEXTEND 2346
-
-// Move caret to last position on display line.
-#define wxSTC_CMD_LINEENDDISPLAY 2347
-
-// Move caret to last position on display line extending selection to new 
-// caret position.
-#define wxSTC_CMD_LINEENDDISPLAYEXTEND 2348
 #define wxSTC_EDGE_NONE 0
 #define wxSTC_EDGE_LINE 1
 #define wxSTC_EDGE_BACKGROUND 2
@@ -866,6 +702,204 @@
 #define wxSTC_SCRIPTOL_COMMENTDOCKEYWORDERROR 18
 #define wxSTC_SCRIPTOL_COMMENTBASIC 19
 
+
+//-----------------------------------------
+// Commands that can be bound to keystrokes
+
+// Redoes the next action on the undo history.
+#define wxSTC_CMD_REDO 2011
+
+// Select all the text in the document.
+#define wxSTC_CMD_SELECTALL 2013
+
+// Undo one action in the undo history.
+#define wxSTC_CMD_UNDO 2176
+
+// Cut the selection to the clipboard.
+#define wxSTC_CMD_CUT 2177
+
+// Copy the selection to the clipboard.
+#define wxSTC_CMD_COPY 2178
+
+// Paste the contents of the clipboard into the document replacing the selection.
+#define wxSTC_CMD_PASTE 2179
+
+// Clear the selection.
+#define wxSTC_CMD_CLEAR 2180
+
+// Move caret down one line.
+#define wxSTC_CMD_LINEDOWN 2300
+
+// Move caret down one line extending selection to new caret position.
+#define wxSTC_CMD_LINEDOWNEXTEND 2301
+
+// Move caret up one line.
+#define wxSTC_CMD_LINEUP 2302
+
+// Move caret up one line extending selection to new caret position.
+#define wxSTC_CMD_LINEUPEXTEND 2303
+
+// Move caret left one character.
+#define wxSTC_CMD_CHARLEFT 2304
+
+// Move caret left one character extending selection to new caret position.
+#define wxSTC_CMD_CHARLEFTEXTEND 2305
+
+// Move caret right one character.
+#define wxSTC_CMD_CHARRIGHT 2306
+
+// Move caret right one character extending selection to new caret position.
+#define wxSTC_CMD_CHARRIGHTEXTEND 2307
+
+// Move caret left one word.
+#define wxSTC_CMD_WORDLEFT 2308
+
+// Move caret left one word extending selection to new caret position.
+#define wxSTC_CMD_WORDLEFTEXTEND 2309
+
+// Move caret right one word.
+#define wxSTC_CMD_WORDRIGHT 2310
+
+// Move caret right one word extending selection to new caret position.
+#define wxSTC_CMD_WORDRIGHTEXTEND 2311
+
+// Move caret to first position on line.
+#define wxSTC_CMD_HOME 2312
+
+// Move caret to first position on line extending selection to new caret position.
+#define wxSTC_CMD_HOMEEXTEND 2313
+
+// Move caret to last position on line.
+#define wxSTC_CMD_LINEEND 2314
+
+// Move caret to last position on line extending selection to new caret position.
+#define wxSTC_CMD_LINEENDEXTEND 2315
+
+// Move caret to first position in document.
+#define wxSTC_CMD_DOCUMENTSTART 2316
+
+// Move caret to first position in document extending selection to new caret position.
+#define wxSTC_CMD_DOCUMENTSTARTEXTEND 2317
+
+// Move caret to last position in document.
+#define wxSTC_CMD_DOCUMENTEND 2318
+
+// Move caret to last position in document extending selection to new caret position.
+#define wxSTC_CMD_DOCUMENTENDEXTEND 2319
+
+// Move caret one page up.
+#define wxSTC_CMD_PAGEUP 2320
+
+// Move caret one page up extending selection to new caret position.
+#define wxSTC_CMD_PAGEUPEXTEND 2321
+
+// Move caret one page down.
+#define wxSTC_CMD_PAGEDOWN 2322
+
+// Move caret one page down extending selection to new caret position.
+#define wxSTC_CMD_PAGEDOWNEXTEND 2323
+
+// Switch from insert to overtype mode or the reverse.
+#define wxSTC_CMD_EDITTOGGLEOVERTYPE 2324
+
+// Cancel any modes such as call tip or auto-completion list display.
+#define wxSTC_CMD_CANCEL 2325
+
+// Delete the selection or if no selection, the character before the caret.
+#define wxSTC_CMD_DELETEBACK 2326
+
+// If selection is empty or all on one line replace the selection with a tab character.
+// If more than one line selected, indent the lines.
+#define wxSTC_CMD_TAB 2327
+
+// Dedent the selected lines.
+#define wxSTC_CMD_BACKTAB 2328
+
+// Insert a new line, may use a CRLF, CR or LF depending on EOL mode.
+#define wxSTC_CMD_NEWLINE 2329
+
+// Insert a Form Feed character.
+#define wxSTC_CMD_FORMFEED 2330
+
+// Move caret to before first visible character on line.
+// If already there move to first character on line.
+#define wxSTC_CMD_VCHOME 2331
+
+// Like VCHome but extending selection to new caret position.
+#define wxSTC_CMD_VCHOMEEXTEND 2332
+
+// Magnify the displayed text by increasing the sizes by 1 point.
+#define wxSTC_CMD_ZOOMIN 2333
+
+// Make the displayed text smaller by decreasing the sizes by 1 point.
+#define wxSTC_CMD_ZOOMOUT 2334
+
+// Delete the word to the left of the caret.
+#define wxSTC_CMD_DELWORDLEFT 2335
+
+// Delete the word to the right of the caret.
+#define wxSTC_CMD_DELWORDRIGHT 2336
+
+// Cut the line containing the caret.
+#define wxSTC_CMD_LINECUT 2337
+
+// Delete the line containing the caret.
+#define wxSTC_CMD_LINEDELETE 2338
+
+// Switch the current line with the previous.
+#define wxSTC_CMD_LINETRANSPOSE 2339
+
+// Transform the selection to lower case.
+#define wxSTC_CMD_LOWERCASE 2340
+
+// Transform the selection to upper case.
+#define wxSTC_CMD_UPPERCASE 2341
+
+// Scroll the document down, keeping the caret visible.
+#define wxSTC_CMD_LINESCROLLDOWN 2342
+
+// Scroll the document up, keeping the caret visible.
+#define wxSTC_CMD_LINESCROLLUP 2343
+
+// Delete the selection or if no selection, the character before the caret.
+// Will not delete the character before at the start of a line.
+#define wxSTC_CMD_DELETEBACKNOTLINE 2344
+
+// Move caret to first position on display line.
+#define wxSTC_CMD_HOMEDISPLAY 2345
+
+// Move caret to first position on display line extending selection to
+// new caret position.
+#define wxSTC_CMD_HOMEDISPLAYEXTEND 2346
+
+// Move caret to last position on display line.
+#define wxSTC_CMD_LINEENDDISPLAY 2347
+
+// Move caret to last position on display line extending selection to new
+// caret position.
+#define wxSTC_CMD_LINEENDDISPLAYEXTEND 2348
+
+// Move to the previous change in capitalisation.
+#define wxSTC_CMD_WORDPARTLEFT 2390
+
+// Move to the previous change in capitalisation extending selection
+// to new caret position.
+#define wxSTC_CMD_WORDPARTLEFTEXTEND 2391
+
+// Move to the change next in capitalisation.
+#define wxSTC_CMD_WORDPARTRIGHT 2392
+
+// Move to the next change in capitalisation extending selection
+// to new caret position.
+#define wxSTC_CMD_WORDPARTRIGHTEXTEND 2393
+
+// Delete back from the current position to the start of the line.
+#define wxSTC_CMD_DELLINELEFT 2395
+
+// Delete forwards from the current position to the end of the line.
+#define wxSTC_CMD_DELLINERIGHT 2396
+
+
 // END of generated section
 //----------------------------------------------------------------------
 
@@ -873,8 +907,11 @@ class  ScintillaWX;                      // forward declare
 class  WordList;
 struct SCNotification;
 
-
-extern const wxChar* wxSTCNameStr;
+#ifndef SWIG
+extern STCDLLEXPORT const wxChar* wxSTCNameStr;
+class STCDLLEXPORT wxStyledTextCtrl;
+class STCDLLEXPORT wxStyledTextEvent;
+#endif
 
 //----------------------------------------------------------------------
 
@@ -1644,14 +1681,14 @@ public:
     // Move caret to first position on display line.
     void HomeDisplay();
 
-    // Move caret to first position on display line extending selection to 
+    // Move caret to first position on display line extending selection to
     // new caret position.
     void HomeDisplayExtend();
 
     // Move caret to last position on display line.
     void LineEndDisplay();
 
-    // Move caret to last position on display line extending selection to new 
+    // Move caret to last position on display line extending selection to new
     // caret position.
     void LineEndDisplayExtend();
 
@@ -1933,6 +1970,7 @@ private:
     void OnMouseMove(wxMouseEvent& evt);
     void OnMouseLeftUp(wxMouseEvent& evt);
     void OnMouseRightUp(wxMouseEvent& evt);
+    void OnMouseMiddleUp(wxMouseEvent& evt);
     void OnContextMenu(wxContextMenuEvent& evt);
     void OnMouseWheel(wxMouseEvent& evt);
     void OnChar(wxKeyEvent& evt);
@@ -1968,7 +2006,7 @@ private:
 
 //----------------------------------------------------------------------
 
-// SWIG can't handle "#if" type of conditionals, onlu "#ifdef"
+// SWIG can't handle "#if" type of conditionals, only "#ifdef"
 #ifdef SWIG
 #define STC_USE_DND 1
 #else

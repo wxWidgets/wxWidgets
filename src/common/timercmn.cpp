@@ -36,6 +36,7 @@
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/thread.h"
 #endif
 
 #include "wx/timer.h"
@@ -131,6 +132,13 @@ void wxTimerBase::Notify()
 
 bool wxTimerBase::Start(int milliseconds, bool oneShot)
 {
+    // under MSW timers only work when they're started from the main thread so
+    // let the caller know about it
+#if wxUSE_THREADS
+    wxASSERT_MSG( wxThread::IsMain(),
+                  _T("timer can only be started from the main thread") );
+#endif // wxUSE_THREADS
+
     if ( IsRunning() )
     {
         // not stopping the already running timer might work for some

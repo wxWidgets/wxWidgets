@@ -97,14 +97,14 @@ class MyEvtHandler(wxShapeEvtHandler):
         self.UpdateStatusBar(shape)
 
 
-    def OnSize(self, x, y):
-        self.base_OnSize(x, y)
+    def OnSizingEndDragLeft(self, pt, x, y, keys, attch):
+        self.base_OnSizingEndDragLeft(pt, x, y, keys, attch)
         self.UpdateStatusBar(self.GetShape())
 
 
-#    def OnMovePost(self, dc, x, y, oldX, oldY, display):
-#        self.base_OnMovePost(dc, x, y, oldX, oldY, display)
-#        self.UpdateStatusBar(self.GetShape())
+    def OnMovePost(self, dc, x, y, oldX, oldY, display):
+        self.base_OnMovePost(dc, x, y, oldX, oldY, display)
+        self.UpdateStatusBar(self.GetShape())
 
 
     def OnRightClick(self, *dontcare):
@@ -235,4 +235,10 @@ manipulation of simple and complex graphic images on a canvas.
 
 """
 
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
 

@@ -70,7 +70,7 @@ class TestPanel(wxPanel):
 
         self.process = wxProcess(self)
         self.process.Redirect();
-        pid = wxExecute(cmd, false, self.process)
+        pid = wxExecute(cmd, wxEXEC_ASYNC, self.process)
         self.log.write('OnExecuteBtn: "%s" pid: %s\n' % (cmd, pid))
 
         self.inp.Enable(true)
@@ -99,11 +99,7 @@ class TestPanel(wxPanel):
         if self.process is not None:
             stream = self.process.GetInputStream()
 
-            # Yes, this is weird.  For this particular stream, EOF
-            # simply means that there is no data available to be read,
-            # not truly the end of file.  Also, read() just reads all
-            # the currently available data, not until the real EOF...
-            if not stream.eof():
+            if stream.CanRead():
                 text = stream.read()
                 self.out.AppendText(text)
 
@@ -113,7 +109,7 @@ class TestPanel(wxPanel):
                        (evt.GetPid(), evt.GetExitCode()))
 
         stream = self.process.GetInputStream()
-        if not stream.eof():
+        if stream.CanRead():
             text = stream.read()
             self.out.AppendText(text)
 

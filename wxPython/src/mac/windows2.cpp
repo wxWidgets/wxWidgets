@@ -3254,8 +3254,7 @@ static PyObject *_wrap_new_wxPyControl(PyObject *self, PyObject *args, PyObject 
         return NULL;
 }
     if (_argo5) {
-        if (_argo5 == Py_None) { _arg5 = NULL; }
-        else if (SWIG_GetPtrObj(_argo5,(void **) &_arg5,"_wxValidator_p")) {
+        if (SWIG_GetPtrObj(_argo5,(void **) &_arg5,"_wxValidator_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 6 of new_wxPyControl. Expected _wxValidator_p.");
         return NULL;
         }

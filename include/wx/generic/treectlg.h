@@ -33,6 +33,7 @@ class WXDLLEXPORT wxTreeItemData;
 class WXDLLEXPORT wxTreeRenameTimer;
 class WXDLLEXPORT wxTreeFindTimer;
 class WXDLLEXPORT wxTreeTextCtrl;
+class WXDLLEXPORT wxTextCtrl;
 
 // -----------------------------------------------------------------------------
 // wxGenericTreeCtrl - the tree control
@@ -116,6 +117,15 @@ public:
                      wxTreeItemIcon which = wxTreeItemIcon_Normal) const;
         // get the data associated with the item
     wxTreeItemData *GetItemData(const wxTreeItemId& item) const;
+
+        // get the item's text colour
+    wxColour GetItemTextColour(const wxTreeItemId& item) const;
+
+        // get the item's background colour
+    wxColour GetItemBackgroundColour(const wxTreeItemId& item) const;
+
+        // get the item's font
+    wxFont GetItemFont(const wxTreeItemId& item) const;
 
     // modifiers
     // ---------
@@ -306,6 +316,10 @@ public:
         // been before.
     void EditLabel( const wxTreeItemId& item ) { Edit( item ); }
     void Edit( const wxTreeItemId& item );
+        // returns a pointer to the text edit control if the item is being
+        // edited, NULL otherwise (it's assumed that no more than one item may
+        // be edited simultaneously)
+    wxTextCtrl* GetEditControl() const;
 
     // sorting
         // this function is called to compare 2 items and should return -1, 0
@@ -376,6 +390,7 @@ protected:
     wxGenericTreeItem   *m_dropTarget;
     wxCursor             m_oldCursor;  // cursor is changed while dragging
     wxGenericTreeItem   *m_oldSelection;
+    wxTreeTextCtrl      *m_textCtrl;
 
     wxTimer             *m_renameTimer;
 
@@ -401,6 +416,9 @@ protected:
                               const wxString& text,
                               int image, int selectedImage,
                               wxTreeItemData *data);
+
+    // called by wxTextTreeCtrl when it marks itself for deletion
+    void ResetTextControl();
 
     // find the first item starting with the given prefix after the given item
     wxTreeItemId FindItem(const wxTreeItemId& id, const wxString& prefix) const;

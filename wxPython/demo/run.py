@@ -25,7 +25,9 @@ from wxPython.wx import *
 
 class Log:
     def WriteText(self, text):
-        sys.stdout.write(text)
+        if text[-1:] == '\n':
+            text = text[:-1]
+        wxLogMessage(text)
     write = WriteText
 
 
@@ -38,6 +40,8 @@ class RunDemoApp(wxApp):
 
     def OnInit(self):
         wxInitAllImageHandlers()
+        wxLog_SetActiveTarget(wxLogStderr())
+
         frame = wxFrame(None, -1, "RunDemo: " + self.name, size=(0,0),
                         style=wxNO_FULL_REPAINT_ON_RESIZE|wxDEFAULT_FRAME_STYLE)
         frame.CreateStatusBar()

@@ -261,16 +261,16 @@ wxString wxFileConfig::GetGlobalDir()
 {
   wxString strDir;
 
-  #ifdef __VMS__ // Note if __VMS is defined __UNIX is also defined
+#ifdef __VMS__ // Note if __VMS is defined __UNIX is also defined
     strDir = wxT("sys$manager:");
-  #elif defined(__WXMAC__)
+#elif defined(__WXMAC__)
     strDir = wxMacFindFolder(  (short) kOnSystemDisk, kPreferencesFolderType, kDontCreateFolder ) ;
-  #elif defined( __UNIX__ )
+#elif defined( __UNIX__ )
     strDir = wxT("/etc/");
-  #elif defined(__WXPM__)
-    ULONG                           aulSysInfo[QSV_MAX] = {0};
-    UINT                            drive;
-    APIRET                          rc;
+#elif defined(__WXPM__)
+    ULONG aulSysInfo[QSV_MAX] = {0};
+    UINT drive;
+    APIRET rc;
 
     rc = DosQuerySysInfo( 1L, QSV_MAX, (PVOID)aulSysInfo, sizeof(ULONG)*QSV_MAX);
     if (rc == 0)
@@ -278,88 +278,90 @@ wxString wxFileConfig::GetGlobalDir()
         drive = aulSysInfo[QSV_BOOT_DRIVE - 1];
         strDir.Printf(wxT("%c:\\OS2\\"), 'A'+drive-1);
     }
-  #elif defined(__WXSTUBS__)
+#elif defined(__WXSTUBS__)
     wxASSERT_MSG( FALSE, wxT("TODO") ) ;
-  #elif defined(__DOS__)
+#elif defined(__DOS__)
     // There's no such thing as global cfg dir in MS-DOS, let's return
     // current directory (FIXME_MGL?)
     return wxT(".\\");
-  #else // Windows
+#else // Windows
     wxChar szWinDir[MAX_PATH];
     ::GetWindowsDirectory(szWinDir, MAX_PATH);
 
     strDir = szWinDir;
     strDir << wxT('\\');
-  #endif // Unix/Windows
+#endif // Unix/Windows
 
-  return strDir;
+    return strDir;
 }
 
 wxString wxFileConfig::GetLocalDir()
 {
-  wxString strDir;
+    wxString strDir;
 
 #if defined(__WXMAC__) || defined(__DOS__)
-  // no local dir concept on Mac OS 9 or MS-DOS
-  return GetGlobalDir() ;
+    // no local dir concept on Mac OS 9 or MS-DOS
+    return GetGlobalDir() ;
 #else
-  wxGetHomeDir(&strDir);
+    wxGetHomeDir(&strDir);
 
-#  ifdef  __UNIX__
-#  ifdef __VMS
-  if (strDir.Last() != wxT(']'))
-#  endif
-      if (strDir.Last() != wxT('/')) strDir << wxT('/');
-#  else
-  if (strDir.Last() != wxT('\\')) strDir << wxT('\\');
-#  endif
+#ifdef  __UNIX__
+#ifdef __VMS
+    if (strDir.Last() != wxT(']'))
+#endif
+    if (strDir.Last() != wxT('/')) strDir << wxT('/');
+#else
+    if (strDir.Last() != wxT('\\')) strDir << wxT('\\');
+#endif
 #endif
 
-  return strDir;
+    return strDir;
 }
 
 wxString wxFileConfig::GetGlobalFileName(const wxChar *szFile)
 {
-  wxString str = GetGlobalDir();
-  str << szFile;
+    wxString str = GetGlobalDir();
+    str << szFile;
 
-  if ( wxStrchr(szFile, wxT('.')) == NULL )
-  #if defined( __WXMAC__ )
-     str << " Preferences";
-  #elif defined( __UNIX__ )
-    str << wxT(".conf");
-  #else   // Windows
-    str << wxT(".ini");
-  #endif  // UNIX/Win
+    if ( wxStrchr(szFile, wxT('.')) == NULL )
+#if defined( __WXMAC__ )
+        str << " Preferences";
+#elif defined( __UNIX__ )
+        str << wxT(".conf");
+#else   // Windows
+        str << wxT(".ini");
+#endif  // UNIX/Win
 
-  return str;
+    return str;
 }
 
 wxString wxFileConfig::GetLocalFileName(const wxChar *szFile)
 {
-#ifdef __VMS__ // On VMS I saw the problem that the home directory was appended
-   // twice for the configuration file. Does that also happen for other
-   // platforms?
-   wxString str = wxT( '.' );
+#ifdef __VMS__ 
+    // On VMS I saw the problem that the home directory was appended
+    // twice for the configuration file. Does that also happen for
+    // other platforms?
+    wxString str = wxT( '.' );
 #else
-   wxString str = GetLocalDir();
+    wxString str = GetLocalDir();
 #endif
 
-  #if defined( __UNIX__ ) && !defined( __VMS ) && !defined( __WXMAC__ )
+#if defined( __UNIX__ ) && !defined( __VMS ) && !defined( __WXMAC__ )
     str << wxT('.');
-  #endif
+#endif
 
-  str << szFile;
+    str << szFile;
 
-  #if defined(__WINDOWS__) || defined(__DOS__)
+#if defined(__WINDOWS__) || defined(__DOS__)
     if ( wxStrchr(szFile, wxT('.')) == NULL )
-      str << wxT(".ini");
-  #endif
+        str << wxT(".ini");
+#endif
 
-  #ifdef __WXMAC__
-     str << " Preferences";
-  #endif
-  return str;
+#ifdef __WXMAC__
+    str << " Preferences";
+#endif
+
+    return str;
 }
 
 // ----------------------------------------------------------------------------
@@ -368,38 +370,52 @@ wxString wxFileConfig::GetLocalFileName(const wxChar *szFile)
 
 void wxFileConfig::Init()
 {
-  m_pCurrentGroup =
-  m_pRootGroup    = new wxFileConfigGroup(NULL, "", this);
+    m_pCurrentGroup =
+    m_pRootGroup    = new wxFileConfigGroup(NULL, wxT(""), this);
 
-  m_linesHead =
-  m_linesTail = NULL;
+    m_linesHead =
+    m_linesTail = NULL;
 
-  // it's not an error if (one of the) file(s) doesn't exist
+    // It's not an error if (one of the) file(s) doesn't exist.
 
-  // parse the global file
-  if ( !m_strGlobalFile.IsEmpty() && wxFile::Exists(m_strGlobalFile) ) {
-    wxTextFile fileGlobal(m_strGlobalFile);
+    // parse the global file
+    if ( !m_strGlobalFile.IsEmpty() && wxFile::Exists(m_strGlobalFile) )
+    {
+        wxTextFile fileGlobal(m_strGlobalFile);
 
-    if ( fileGlobal.Open() ) {
-      Parse(fileGlobal, FALSE /* global */);
-      SetRootPath();
+#if defined(__WXGTK20__) && wxUSE_UNICODE
+        if ( fileGlobal.Open( wxConvUTF8 ) ) 
+#else
+        if ( fileGlobal.Open() ) 
+#endif
+        {
+            Parse(fileGlobal, FALSE /* global */);
+            SetRootPath();
+        }
+        else
+        {
+            wxLogWarning(_("can't open global configuration file '%s'."), m_strGlobalFile.c_str());
+        }
     }
-    else
-      wxLogWarning(_("can't open global configuration file '%s'."),
-                   m_strGlobalFile.c_str());
-  }
 
-  // parse the local file
-  if ( !m_strLocalFile.IsEmpty() && wxFile::Exists(m_strLocalFile) ) {
-    wxTextFile fileLocal(m_strLocalFile);
-    if ( fileLocal.Open() ) {
-      Parse(fileLocal, TRUE /* local */);
-      SetRootPath();
+    // parse the local file
+    if ( !m_strLocalFile.IsEmpty() && wxFile::Exists(m_strLocalFile) )
+    {
+        wxTextFile fileLocal(m_strLocalFile);
+#if defined(__WXGTK20__) && wxUSE_UNICODE
+        if ( fileLocal.Open( wxConvUTF8 ) ) 
+#else
+        if ( fileLocal.Open() ) 
+#endif
+        {
+            Parse(fileLocal, TRUE /* local */);
+            SetRootPath();
+        }
+        else
+        {
+            wxLogWarning(_("can't open user configuration file '%s'."),  m_strLocalFile.c_str() );
+        }
     }
-    else
-      wxLogWarning(_("can't open user configuration file '%s'."),
-                   m_strLocalFile.c_str());
-  }
 }
 
 // constructor supports creation of wxFileConfig objects of any type
@@ -411,47 +427,43 @@ wxFileConfig::wxFileConfig(const wxString& appName, const wxString& vendorName,
                            style),
               m_strLocalFile(strLocal), m_strGlobalFile(strGlobal)
 {
-  // Make up names for files if empty
-  if ( m_strLocalFile.IsEmpty() && (style & wxCONFIG_USE_LOCAL_FILE) )
-  {
-    m_strLocalFile = GetLocalFileName(GetAppName());
-  }
+    // Make up names for files if empty
+    if ( m_strLocalFile.IsEmpty() && (style & wxCONFIG_USE_LOCAL_FILE) )
+        m_strLocalFile = GetLocalFileName(GetAppName());
 
-  if ( m_strGlobalFile.IsEmpty() && (style & wxCONFIG_USE_GLOBAL_FILE) )
-  {
-    m_strGlobalFile = GetGlobalFileName(GetAppName());
-  }
+    if ( m_strGlobalFile.IsEmpty() && (style & wxCONFIG_USE_GLOBAL_FILE) )
+        m_strGlobalFile = GetGlobalFileName(GetAppName());
 
-  // Check if styles are not supplied, but filenames are, in which case
-  // add the correct styles.
-  if ( !m_strLocalFile.IsEmpty() )
-    SetStyle(GetStyle() | wxCONFIG_USE_LOCAL_FILE);
+    // Check if styles are not supplied, but filenames are, in which case
+    // add the correct styles.
+    if ( !m_strLocalFile.IsEmpty() )
+        SetStyle(GetStyle() | wxCONFIG_USE_LOCAL_FILE);
 
-  if ( !m_strGlobalFile.IsEmpty() )
-    SetStyle(GetStyle() | wxCONFIG_USE_GLOBAL_FILE);
+    if ( !m_strGlobalFile.IsEmpty() )
+        SetStyle(GetStyle() | wxCONFIG_USE_GLOBAL_FILE);
 
-  // if the path is not absolute, prepend the standard directory to it
-  // UNLESS wxCONFIG_USE_RELATIVE_PATH style is set
-  if ( !(style & wxCONFIG_USE_RELATIVE_PATH) )
-  {
-      if ( !m_strLocalFile.IsEmpty() && !wxIsAbsolutePath(m_strLocalFile) )
-      {
-          wxString strLocal = m_strLocalFile;
-          m_strLocalFile = GetLocalDir();
-          m_strLocalFile << strLocal;
-      }
+    // if the path is not absolute, prepend the standard directory to it
+    // UNLESS wxCONFIG_USE_RELATIVE_PATH style is set
+    if ( !(style & wxCONFIG_USE_RELATIVE_PATH) )
+    {
+        if ( !m_strLocalFile.IsEmpty() && !wxIsAbsolutePath(m_strLocalFile) )
+        {
+            wxString strLocal = m_strLocalFile;
+            m_strLocalFile = GetLocalDir();
+            m_strLocalFile << strLocal;
+        }
 
-      if ( !m_strGlobalFile.IsEmpty() && !wxIsAbsolutePath(m_strGlobalFile) )
-      {
-          wxString strGlobal = m_strGlobalFile;
-          m_strGlobalFile = GetGlobalDir();
-          m_strGlobalFile << strGlobal;
-      }
-  }
+        if ( !m_strGlobalFile.IsEmpty() && !wxIsAbsolutePath(m_strGlobalFile) )
+        {
+            wxString strGlobal = m_strGlobalFile;
+            m_strGlobalFile = GetGlobalDir();
+            m_strGlobalFile << strGlobal;
+        }
+    }
 
-  SetUmask(-1);
-
-  Init();
+    SetUmask(-1);
+    
+    Init();
 }
 
 #if wxUSE_STREAMS
@@ -462,7 +474,7 @@ wxFileConfig::wxFileConfig(wxInputStream &inStream)
     SetStyle(GetStyle() | wxCONFIG_USE_LOCAL_FILE);
 
     m_pCurrentGroup =
-    m_pRootGroup    = new wxFileConfigGroup(NULL, "", this);
+    m_pRootGroup    = new wxFileConfigGroup(NULL, wxT(""), this);
 
     m_linesHead =
     m_linesTail = NULL;
@@ -546,7 +558,9 @@ void wxFileConfig::Parse(wxTextBuffer& buffer, bool bLocal)
   wxString strLine;
 
   size_t nLineCount = buffer.GetLineCount();
-  for ( size_t n = 0; n < nLineCount; n++ ) {
+  
+  for ( size_t n = 0; n < nLineCount; n++ )
+  {
     strLine = buffer[n];
 
     // add the line to linked list
@@ -851,37 +865,62 @@ bool wxFileConfig::DoReadLong(const wxString& key, long *pl) const
 
 bool wxFileConfig::DoWriteString(const wxString& key, const wxString& szValue)
 {
-  wxConfigPathChanger path(this, key);
+    wxConfigPathChanger     path(this, key);
+    wxString                strName = path.Name();
+  
+    wxLogTrace( _T("wxFileConfig"),
+                _T("  Writing String '%s' = '%s' to Group '%s'"),
+                strName.c_str(),
+                szValue.c_str(),
+                GetPath().c_str() );
 
-  wxString strName = path.Name();
-  if ( strName.IsEmpty() ) {
-    // setting the value of a group is an error
-    wxASSERT_MSG( wxIsEmpty(szValue), wxT("can't set value of a group!") );
+    if ( strName.IsEmpty() )
+    {
+            // setting the value of a group is an error
 
-    // ... except if it's empty in which case it's a way to force it's creation
-    m_pCurrentGroup->SetDirty();
+        wxASSERT_MSG( wxIsEmpty(szValue), wxT("can't set value of a group!") );
 
-    // this will add a line for this group if it didn't have it before
-    (void)m_pCurrentGroup->GetGroupLine();
-  }
-  else {
-    // writing an entry
+            // ... except if it's empty in which case it's a way to force it's creation
 
-    // check that the name is reasonable
-    if ( strName[0u] == wxCONFIG_IMMUTABLE_PREFIX ) {
-      wxLogError(_("Config entry name cannot start with '%c'."),
-                 wxCONFIG_IMMUTABLE_PREFIX);
-      return FALSE;
+        wxLogTrace( _T("wxFileConfig"),
+                    _T("  Creating group %s"),
+                    m_pCurrentGroup->Name().c_str() );
+
+        m_pCurrentGroup->SetDirty();
+
+            // this will add a line for this group if it didn't have it before
+
+        (void)m_pCurrentGroup->GetGroupLine();
+    }
+    else
+    {
+            // writing an entry
+            // check that the name is reasonable
+
+        if ( strName[0u] == wxCONFIG_IMMUTABLE_PREFIX )
+        {
+            wxLogError( _("Config entry name cannot start with '%c'."),
+                        wxCONFIG_IMMUTABLE_PREFIX);
+            return FALSE;
+        }
+
+        wxFileConfigEntry   *pEntry = m_pCurrentGroup->FindEntry(strName);
+
+        if ( pEntry == 0 )
+        {
+            wxLogTrace( _T("wxFileConfig"),
+                        _T("  Adding Entry %s"),
+                        strName.c_str() );
+            pEntry = m_pCurrentGroup->AddEntry(strName);
+        }
+
+        wxLogTrace( _T("wxFileConfig"),
+                    _T("  Setting value %s"),
+                    szValue.c_str() );
+        pEntry->SetValue(szValue);
     }
 
-    wxFileConfigEntry *pEntry = m_pCurrentGroup->FindEntry(strName);
-    if ( pEntry == NULL )
-      pEntry = m_pCurrentGroup->AddEntry(strName);
-
-    pEntry->SetValue(szValue);
-  }
-
-  return TRUE;
+    return TRUE;
 }
 
 bool wxFileConfig::DoWriteLong(const wxString& key, long lValue)
@@ -1048,74 +1087,135 @@ bool wxFileConfig::DeleteAll()
 // linked list functions
 // ----------------------------------------------------------------------------
 
-// append a new line to the end of the list
+    // append a new line to the end of the list
+
 wxFileConfigLineList *wxFileConfig::LineListAppend(const wxString& str)
 {
-  wxFileConfigLineList *pLine = new wxFileConfigLineList(str);
+    wxLogTrace( _T("wxFileConfig"),
+                _T("    ** Adding Line '%s'"),
+                str.c_str() );
+    wxLogTrace( _T("wxFileConfig"),
+                _T("        head: %s"),
+                ((m_linesHead) ? m_linesHead->Text().c_str() : wxEmptyString) );
+    wxLogTrace( _T("wxFileConfig"),
+                _T("        tail: %s"),
+                ((m_linesTail) ? m_linesTail->Text().c_str() : wxEmptyString) );
 
-  if ( m_linesTail == NULL ) {
-    // list is empty
-    m_linesHead = pLine;
-  }
-  else {
-    // adjust pointers
-    m_linesTail->SetNext(pLine);
-    pLine->SetPrev(m_linesTail);
-  }
+    wxFileConfigLineList *pLine = new wxFileConfigLineList(str);
 
-  m_linesTail = pLine;
-  return m_linesTail;
+    if ( m_linesTail == NULL )
+    {
+        // list is empty
+        m_linesHead = pLine;
+    }
+    else
+    {
+        // adjust pointers
+        m_linesTail->SetNext(pLine);
+        pLine->SetPrev(m_linesTail);
+    }
+
+    m_linesTail = pLine;
+
+    wxLogTrace( _T("wxFileConfig"),
+                _T("        head: %s"),
+                ((m_linesHead) ? m_linesHead->Text().c_str() : wxEmptyString) );
+    wxLogTrace( _T("wxFileConfig"),
+                _T("        tail: %s"),
+                ((m_linesTail) ? m_linesTail->Text().c_str() : wxEmptyString) );
+
+    return m_linesTail;
 }
 
-// insert a new line after the given one or in the very beginning if !pLine
+    // insert a new line after the given one or in the very beginning if !pLine
+
 wxFileConfigLineList *wxFileConfig::LineListInsert(const wxString& str,
-                                                     wxFileConfigLineList *pLine)
+                                                   wxFileConfigLineList *pLine)
 {
-  if ( pLine == m_linesTail )
-    return LineListAppend(str);
+    wxLogTrace( _T("wxFileConfig"),
+                _T("    ** Inserting Line '%s' after '%s'"),
+                str.c_str(),
+                ((pLine) ? pLine->Text().c_str() : wxEmptyString) );
+    wxLogTrace( _T("wxFileConfig"),
+                _T("        head: %s"),
+                ((m_linesHead) ? m_linesHead->Text().c_str() : wxEmptyString) );
+    wxLogTrace( _T("wxFileConfig"),
+                _T("        tail: %s"),
+                ((m_linesTail) ? m_linesTail->Text().c_str() : wxEmptyString) );
 
-  wxFileConfigLineList *pNewLine = new wxFileConfigLineList(str);
-  if ( pLine == NULL ) {
-    // prepend to the list
-    pNewLine->SetNext(m_linesHead);
-    m_linesHead->SetPrev(pNewLine);
-    m_linesHead = pNewLine;
-  }
-  else {
-    // insert before pLine
-    wxFileConfigLineList *pNext = pLine->Next();
-    pNewLine->SetNext(pNext);
-    pNewLine->SetPrev(pLine);
-    pNext->SetPrev(pNewLine);
-    pLine->SetNext(pNewLine);
-  }
+    if ( pLine == m_linesTail )
+        return LineListAppend(str);
 
-  return pNewLine;
+    wxFileConfigLineList *pNewLine = new wxFileConfigLineList(str);
+    if ( pLine == NULL )
+    {
+        // prepend to the list
+        pNewLine->SetNext(m_linesHead);
+        m_linesHead->SetPrev(pNewLine);
+        m_linesHead = pNewLine;
+    }
+    else
+    {
+        // insert before pLine
+        wxFileConfigLineList *pNext = pLine->Next();
+        pNewLine->SetNext(pNext);
+        pNewLine->SetPrev(pLine);
+        pNext->SetPrev(pNewLine);
+        pLine->SetNext(pNewLine);
+    }
+
+    wxLogTrace( _T("wxFileConfig"),
+                _T("        head: %s"),
+                ((m_linesHead) ? m_linesHead->Text().c_str() : wxEmptyString) );
+    wxLogTrace( _T("wxFileConfig"),
+                _T("        tail: %s"),
+                ((m_linesTail) ? m_linesTail->Text().c_str() : wxEmptyString) );
+
+    return pNewLine;
 }
 
 void wxFileConfig::LineListRemove(wxFileConfigLineList *pLine)
 {
-  wxFileConfigLineList *pPrev = pLine->Prev(),
-           *pNext = pLine->Next();
+    wxLogTrace( _T("wxFileConfig"),
+                _T("    ** Removing Line '%s'"),
+                pLine->Text().c_str() );
+    wxLogTrace( _T("wxFileConfig"),
+                _T("        head: %s"),
+                ((m_linesHead) ? m_linesHead->Text().c_str() : wxEmptyString) );
+    wxLogTrace( _T("wxFileConfig"),
+                _T("        tail: %s"),
+                ((m_linesTail) ? m_linesTail->Text().c_str() : wxEmptyString) );
 
-  // first entry?
-  if ( pPrev == NULL )
-    m_linesHead = pNext;
-  else
-    pPrev->SetNext(pNext);
+    wxFileConfigLineList    *pPrev = pLine->Prev(),
+                            *pNext = pLine->Next();
 
-  // last entry?
-  if ( pNext == NULL )
-    m_linesTail = pPrev;
-  else
-    pNext->SetPrev(pPrev);
+        // first entry?
 
-  delete pLine;
+    if ( pPrev == NULL )
+        m_linesHead = pNext;
+    else
+        pPrev->SetNext(pNext);
+
+        // last entry?
+
+    if ( pNext == NULL )
+        m_linesTail = pPrev;
+    else
+        pNext->SetPrev(pPrev);
+
+    wxLogTrace( _T("wxFileConfig"),
+                _T("        head: %s"),
+                ((m_linesHead) ? m_linesHead->Text().c_str() : wxEmptyString) );
+    wxLogTrace( _T("wxFileConfig"),
+                _T("        tail: %s"),
+                ((m_linesTail) ? m_linesTail->Text().c_str() : wxEmptyString) );
+
+    delete pLine;
 }
 
 bool wxFileConfig::LineListIsEmpty()
 {
-  return m_linesHead == NULL;
+    return m_linesHead == NULL;
 }
 
 // ============================================================================
@@ -1163,9 +1263,8 @@ wxFileConfigGroup::~wxFileConfigGroup()
 
 void wxFileConfigGroup::SetLine(wxFileConfigLineList *pLine)
 {
-  wxASSERT( m_pLine == NULL ); // shouldn't be called twice
-
-  m_pLine = pLine;
+    wxASSERT( m_pLine == 0 ); // shouldn't be called twice
+    m_pLine = pLine;
 }
 
 /*
@@ -1204,27 +1303,42 @@ void wxFileConfigGroup::SetLine(wxFileConfigLineList *pLine)
 // have it or in the very beginning if we're the root group.
 wxFileConfigLineList *wxFileConfigGroup::GetGroupLine()
 {
-  if ( m_pLine == NULL ) {
-    wxFileConfigGroup *pParent = Parent();
+    wxLogTrace( _T("wxFileConfig"),
+                _T("  GetGroupLine() for Group '%s'"),
+                Name().c_str() );
 
-    // this group wasn't present in local config file, add it now
-    if ( pParent != NULL ) {
-      wxString strFullName;
-      strFullName << wxT("[")
-                  // +1: no '/'
-                  << FilterOutEntryName(GetFullName().c_str() + 1)
-                  << wxT("]");
-      m_pLine = m_pConfig->LineListInsert(strFullName,
-                                          pParent->GetLastGroupLine());
-      pParent->SetLastGroup(this);  // we're surely after all the others
-    }
-    else {
-      // we return NULL, so that LineListInsert() will insert us in the
-      // very beginning
-    }
-  }
+    if ( m_pLine == 0 )
+    {
+        wxLogTrace( _T("wxFileConfig"),
+                    _T("    Getting Line item pointer") );
 
-  return m_pLine;
+        wxFileConfigGroup   *pParent = Parent();
+
+            // this group wasn't present in local config file, add it now
+
+        if ( pParent != 0 )
+        {
+            wxLogTrace( _T("wxFileConfig"),
+                        _T("    checking parent '%s'"),
+                        pParent->Name().c_str() );
+
+            wxString    strFullName;
+
+            strFullName << wxT("[")         // +1: no '/'
+                        << FilterOutEntryName(GetFullName().c_str() + 1)
+                        << wxT("]");
+            m_pLine = m_pConfig->LineListInsert(strFullName,
+                                                pParent->GetLastGroupLine());
+            pParent->SetLastGroup(this);  // we're surely after all the others
+        }
+        else
+        {
+            // we return NULL, so that LineListInsert() will insert us in the
+            // very beginning
+        }
+    }
+
+    return m_pLine;
 }
 
 // Return the last line belonging to the subgroups of this group (after which
@@ -1232,17 +1346,20 @@ wxFileConfigLineList *wxFileConfigGroup::GetGroupLine()
 // last line is the group line (m_pLine) itself.
 wxFileConfigLineList *wxFileConfigGroup::GetLastGroupLine()
 {
-  // if we have any subgroups, our last line is the last line of the last
-  // subgroup
-  if ( m_pLastGroup != NULL ) {
-    wxFileConfigLineList *pLine = m_pLastGroup->GetLastGroupLine();
+        // if we have any subgroups, our last line is
+        // the last line of the last subgroup
 
-    wxASSERT( pLine != NULL );  // last group must have !NULL associated line
-    return pLine;
-  }
+    if ( m_pLastGroup != 0 )
+    {
+        wxFileConfigLineList *pLine = m_pLastGroup->GetLastGroupLine();
 
-  // no subgroups, so the last line is the line of thelast entry (if any)
-  return GetLastEntryLine();
+        wxASSERT( pLine != 0 );  // last group must have !NULL associated line
+        return pLine;
+    }
+
+        // no subgroups, so the last line is the line of thelast entry (if any)
+
+    return GetLastEntryLine();
 }
 
 // return the last line belonging to the entries of this group (after which
@@ -1250,15 +1367,21 @@ wxFileConfigLineList *wxFileConfigGroup::GetLastGroupLine()
 // one immediately after the group line itself.
 wxFileConfigLineList *wxFileConfigGroup::GetLastEntryLine()
 {
-  if ( m_pLastEntry != NULL ) {
-    wxFileConfigLineList *pLine = m_pLastEntry->GetLine();
+    wxLogTrace( _T("wxFileConfig"),
+                _T("  GetLastEntryLine() for Group '%s'"),
+                Name().c_str() );
 
-    wxASSERT( pLine != NULL );  // last entry must have !NULL associated line
-    return pLine;
-  }
+    if ( m_pLastEntry != 0 )
+    {
+        wxFileConfigLineList    *pLine = m_pLastEntry->GetLine();
 
-  // no entries: insert after the group header
-  return GetGroupLine();
+        wxASSERT( pLine != 0 );  // last entry must have !NULL associated line
+        return pLine;
+    }
+
+        // no entries: insert after the group header
+
+    return GetGroupLine();
 }
 
 // ----------------------------------------------------------------------------
@@ -1355,27 +1478,25 @@ wxFileConfigGroup::FindSubgroup(const wxChar *szName) const
 // ----------------------------------------------------------------------------
 
 // create a new entry and add it to the current group
-wxFileConfigEntry *
-wxFileConfigGroup::AddEntry(const wxString& strName, int nLine)
+wxFileConfigEntry *wxFileConfigGroup::AddEntry(const wxString& strName, int nLine)
 {
-  wxASSERT( FindEntry(strName) == NULL );
+    wxASSERT( FindEntry(strName) == 0 );
 
-  wxFileConfigEntry *pEntry = new wxFileConfigEntry(this, strName, nLine);
-  m_aEntries.Add(pEntry);
+    wxFileConfigEntry   *pEntry = new wxFileConfigEntry(this, strName, nLine);
 
-  return pEntry;
+    m_aEntries.Add(pEntry);
+    return pEntry;
 }
 
 // create a new group and add it to the current group
-wxFileConfigGroup *
-wxFileConfigGroup::AddSubgroup(const wxString& strName)
+wxFileConfigGroup *wxFileConfigGroup::AddSubgroup(const wxString& strName)
 {
-  wxASSERT( FindSubgroup(strName) == NULL );
+    wxASSERT( FindSubgroup(strName) == 0 );
 
-  wxFileConfigGroup *pGroup = new wxFileConfigGroup(this, strName, m_pConfig);
-  m_aSubgroups.Add(pGroup);
+    wxFileConfigGroup   *pGroup = new wxFileConfigGroup(this, strName, m_pConfig);
 
-  return pGroup;
+    m_aSubgroups.Add(pGroup);
+    return pGroup;
 }
 
 // ----------------------------------------------------------------------------
@@ -1394,71 +1515,146 @@ bool wxFileConfigGroup::DeleteSubgroupByName(const wxChar *szName)
   return DeleteSubgroup(FindSubgroup(szName));
 }
 
-// doesn't delete the subgroup itself, but does remove references to it from
-// all other data structures (and normally the returned pointer should be
-// deleted a.s.a.p. because there is nothing much to be done with it anyhow)
+// Delete the subgroup and remove all references to it from
+// other data structures.
 bool wxFileConfigGroup::DeleteSubgroup(wxFileConfigGroup *pGroup)
 {
-  wxCHECK( pGroup != NULL, FALSE ); // deleting non existing group?
+    wxLogTrace( _T("wxFileConfig"),
+                _T("Deleting group '%s' from '%s'"),
+                pGroup->Name().c_str(),
+                Name().c_str() );
 
-  // delete all entries
-  size_t nCount = pGroup->m_aEntries.Count();
-  for ( size_t nEntry = 0; nEntry < nCount; nEntry++ ) {
-    wxFileConfigLineList *pLine = pGroup->m_aEntries[nEntry]->GetLine();
-    if ( pLine != NULL )
-      m_pConfig->LineListRemove(pLine);
-  }
+    wxLogTrace( _T("wxFileConfig"),
+                _T("  (m_pLine) = prev: %p, this %p, next %p"),
+                ((m_pLine) ? m_pLine->Prev() : 0),
+                m_pLine,
+                ((m_pLine) ? m_pLine->Next() : 0) );
+    wxLogTrace( _T("wxFileConfig"),
+                _T("  text: '%s'"),
+                ((m_pLine) ? m_pLine->Text().c_str() : wxEmptyString) );
 
-  // and subgroups of this sungroup
-  nCount = pGroup->m_aSubgroups.Count();
-  for ( size_t nGroup = 0; nGroup < nCount; nGroup++ ) {
-    pGroup->DeleteSubgroup(pGroup->m_aSubgroups[0]);
-  }
+    wxCHECK_MSG( pGroup != 0, FALSE, _T("deleting non existing group?") );
 
-  wxFileConfigLineList *pLine = pGroup->m_pLine;
-  if ( pLine != NULL ) {
-    // notice that we may do this test inside the previous "if" because the
-    // last entry's line is surely !NULL
-    if ( pGroup == m_pLastGroup ) {
-      // our last entry is being deleted - find the last one which stays
-      wxASSERT( m_pLine != NULL );  // we have a subgroup with !NULL pLine...
+        // delete all entries
 
-      // go back until we find a subgroup or reach the group's line
-      wxFileConfigGroup *pNewLast = NULL;
-      size_t n, nSubgroups = m_aSubgroups.Count();
-      wxFileConfigLineList *pl;
-      for ( pl = pLine->Prev(); pl != m_pLine; pl = pl->Prev() ) {
-        // is it our subgroup?
-        for ( n = 0; (pNewLast == NULL) && (n < nSubgroups); n++ ) {
-          // do _not_ call GetGroupLine! we don't want to add it to the local
-          // file if it's not already there
-          if ( m_aSubgroups[n]->m_pLine == m_pLine )
-            pNewLast = m_aSubgroups[n];
+    size_t  nCount = pGroup->m_aEntries.Count();
+
+    wxLogTrace(_T("wxFileConfig"),
+               _T("Removing %lu Entries"),
+               (unsigned long)nCount );
+
+    for ( size_t nEntry = 0; nEntry < nCount; nEntry++ )
+    {
+        wxFileConfigLineList    *pLine = pGroup->m_aEntries[nEntry]->GetLine();
+
+        if ( pLine != 0 )
+        {
+            wxLogTrace( _T("wxFileConfig"),
+                        _T("    '%s'"),
+                        pLine->Text().c_str() );
+            m_pConfig->LineListRemove(pLine);
         }
-
-        if ( pNewLast != NULL ) // found?
-          break;
-      }
-
-      if ( pl == m_pLine ) {
-        wxASSERT( !pNewLast );  // how comes it has the same line as we?
-
-        // we've reached the group line without finding any subgroups
-        m_pLastGroup = NULL;
-      }
-      else
-        m_pLastGroup = pNewLast;
     }
 
-    m_pConfig->LineListRemove(pLine);
-  }
+        // and subgroups of this subgroup
 
-  SetDirty();
+    nCount = pGroup->m_aSubgroups.Count();
 
-  m_aSubgroups.Remove(pGroup);
-  delete pGroup;
+    wxLogTrace( _T("wxFileConfig"),
+                _T("Removing %lu SubGroups"),
+                (unsigned long)nCount );
 
-  return TRUE;
+    for ( size_t nGroup = 0; nGroup < nCount; nGroup++ )
+    {
+        pGroup->DeleteSubgroup(pGroup->m_aSubgroups[0]);
+    }
+
+        // finally the group itself
+
+    wxFileConfigLineList    *pLine = pGroup->m_pLine;
+
+    if ( pLine != 0 )
+    {
+        wxLogTrace( _T("wxFileConfig"),
+                    _T("  Removing line entry for Group '%s' : '%s'"),
+                    pGroup->Name().c_str(),
+                    pLine->Text().c_str() );
+        wxLogTrace( _T("wxFileConfig"),
+                    _T("  Removing from Group '%s' : '%s'"),
+                    Name().c_str(),
+                    ((m_pLine) ? m_pLine->Text().c_str() : wxEmptyString) );
+
+            // notice that we may do this test inside the previous "if"
+            // because the last entry's line is surely !NULL
+
+        if ( pGroup == m_pLastGroup )
+        {
+            wxLogTrace( _T("wxFileConfig"),
+                        _T("  ------- Removing last group -------") );
+
+                // our last entry is being deleted, so find the last one which stays.
+                // go back until we find a subgroup or reach the group's line, unless
+                // we are the root group, which we'll notice shortly.
+
+            wxFileConfigGroup       *pNewLast = 0;
+            size_t                   nSubgroups = m_aSubgroups.Count();
+            wxFileConfigLineList    *pl;
+
+            for ( pl = pLine->Prev(); pl != m_pLine; pl = pl->Prev() )
+            {
+                    // is it our subgroup?
+
+                for ( size_t n = 0; (pNewLast == 0) && (n < nSubgroups); n++ )
+                {
+                    // do _not_ call GetGroupLine! we don't want to add it to the local
+                    // file if it's not already there
+
+                    if ( m_aSubgroups[n]->m_pLine == m_pLine )
+                        pNewLast = m_aSubgroups[n];
+                }
+
+                if ( pNewLast != 0 ) // found?
+                    break;
+            }
+
+            if ( pl == m_pLine || m_pParent == 0 )
+            {
+                wxLogTrace( _T("wxFileConfig"),
+                            _T("  ------- No previous group found -------") );
+                
+                wxASSERT_MSG( !pNewLast || m_pLine == 0,
+                              _T("how comes it has the same line as we?") );
+
+                    // we've reached the group line without finding any subgroups,
+                    // or realised we removed the last group from the root.
+
+                m_pLastGroup = 0;
+            }
+            else
+            {
+                wxLogTrace( _T("wxFileConfig"),
+                            _T("  ------- Last Group set to '%s' -------"),
+                            pNewLast->Name().c_str() );
+
+                m_pLastGroup = pNewLast;
+            }
+        }
+
+        m_pConfig->LineListRemove(pLine);
+    }
+    else
+    {
+        wxLogTrace( _T("wxFileConfig"),
+                    _T("  No line entry for Group '%s'?"),
+                    pGroup->Name().c_str() );
+    }
+
+    SetDirty();
+
+    m_aSubgroups.Remove(pGroup);
+    delete pGroup;
+
+    return TRUE;
 }
 
 bool wxFileConfigGroup::DeleteEntry(const wxChar *szName)
@@ -1566,47 +1762,54 @@ void wxFileConfigEntry::SetLine(wxFileConfigLineList *pLine)
 // entry from being marked as 'dirty'
 void wxFileConfigEntry::SetValue(const wxString& strValue, bool bUser)
 {
-  if ( bUser && IsImmutable() ) {
-    wxLogWarning(_("attempt to change immutable key '%s' ignored."),
-                 Name().c_str());
-    return;
-  }
-
-  // do nothing if it's the same value: but don't test for it if m_bHasValue
-  // hadn't been set yet or we'd never write empty values to the file
-  if ( m_bHasValue && strValue == m_strValue )
-    return;
-
-  m_bHasValue = TRUE;
-  m_strValue = strValue;
-
-  if ( bUser ) {
-    wxString strValFiltered;
-    if ( Group()->Config()->GetStyle() & wxCONFIG_USE_NO_ESCAPE_CHARACTERS ) {
-        strValFiltered = strValue;
-    }
-    else {
-        strValFiltered = FilterOutValue(strValue);
+    if ( bUser && IsImmutable() )
+    {
+        wxLogWarning( _("attempt to change immutable key '%s' ignored."),
+                      Name().c_str());
+        return;
     }
 
-    wxString strLine;
-    strLine << FilterOutEntryName(m_strName) << wxT('=') << strValFiltered;
+        // do nothing if it's the same value: but don't test for it
+        // if m_bHasValue hadn't been set yet or we'd never write
+        // empty values to the file
 
-    if ( m_pLine != NULL ) {
-      // entry was read from the local config file, just modify the line
-      m_pLine->SetText(strLine);
+    if ( m_bHasValue && strValue == m_strValue )
+        return;
+
+    m_bHasValue = TRUE;
+    m_strValue = strValue;
+
+    if ( bUser )
+    {
+        wxString    strValFiltered;
+
+        if ( Group()->Config()->GetStyle() & wxCONFIG_USE_NO_ESCAPE_CHARACTERS )
+        {
+            strValFiltered = strValue;
+        }
+        else {
+            strValFiltered = FilterOutValue(strValue);
+        }
+
+        wxString    strLine;
+        strLine << FilterOutEntryName(m_strName) << wxT('=') << strValFiltered;
+
+        if ( m_pLine != 0 )
+        {
+            // entry was read from the local config file, just modify the line
+            m_pLine->SetText(strLine);
+        }
+        else {
+            // add a new line to the file
+            wxASSERT( m_nLine == wxNOT_FOUND );   // consistency check
+
+            m_pLine = Group()->Config()->LineListInsert(strLine,
+                                                        Group()->GetLastEntryLine());
+            Group()->SetLastEntry(this);
+        }
+
+        SetDirty();
     }
-    else {
-      // add a new line to the file
-      wxASSERT( m_nLine == wxNOT_FOUND );   // consistency check
-
-      m_pLine = Group()->Config()->LineListInsert(strLine,
-                                                  Group()->GetLastEntryLine());
-      Group()->SetLastEntry(this);
-    }
-
-    SetDirty();
-  }
 }
 
 void wxFileConfigEntry::SetDirty()
@@ -1797,3 +2000,5 @@ static wxString GetAppName(const wxString& appName)
 
 #endif // wxUSE_CONFIG
 
+
+// vi:sts=4:sw=4:et

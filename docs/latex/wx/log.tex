@@ -380,7 +380,9 @@ wxLogChain *logChain = new wxLogChain(new wxLogStderr);
 // all the log messages are sent to stderr and also processed as usually
 ...
 
-delete logChain;
+// don't delete logChain directly as this would leave a dangling
+// pointer as active log target, use SetActiveTarget() instead
+delete wxLog::SetActiveTarget(...something else or NULL...);
 
 \end{verbatim}
 

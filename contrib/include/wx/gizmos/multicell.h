@@ -40,7 +40,7 @@
 enum wxResizable
 {
 	wxNOT_RESIZABLE =           0x00,
-	wxHORIZENTAL_RESIZABLE =    0x01,
+	wxHORIZONTAL_RESIZABLE =    0x01,
 	wxVERTICAL_RESIZABLE =      0x10,
 	wxRESIZABLE =               0x11
 };

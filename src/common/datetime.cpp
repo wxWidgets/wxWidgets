@@ -1248,6 +1248,82 @@ wxDateTime& wxDateTime::ResetTime()
 }
 
 // ----------------------------------------------------------------------------
+// DOS Date and Time Format functions
+// ----------------------------------------------------------------------------
+// the dos date and time value is an unsigned 32 bit value in the format:
+// YYYYYYYMMMMDDDDDhhhhhmmmmmmsssss
+//
+// Y = year offset from 1980 (0-127)
+// M = month (1-12)
+// D = day of month (1-31)
+// h = hour (0-23)
+// m = minute (0-59)
+// s = bisecond (0-29) each bisecond indicates two seconds
+// ----------------------------------------------------------------------------
+
+wxDateTime& wxDateTime::SetFromDOS(unsigned long ddt)
+{
+    struct tm tm;
+
+    long year = ddt & 0xFE000000;
+    year >>= 25;
+    year += 80;
+    tm.tm_year = year;
+
+    long month = ddt & 0x1E00000;
+    month >>= 21;
+    month -= 1;
+    tm.tm_mon = month;
+
+    long day = ddt & 0x1F0000;
+    day >>= 16;
+    tm.tm_mday = day;
+
+    long hour = ddt & 0xF800;
+    hour >>= 11;
+    tm.tm_hour = hour;
+
+    long minute = ddt & 0x7E0;
+    minute >>= 5;
+    tm.tm_min = minute;
+
+    long second = ddt & 0x1F;
+    tm.tm_sec = second * 2;
+
+    return Set(mktime(&tm));
+}
+
+unsigned long wxDateTime::GetAsDOS() const
+{
+    unsigned long ddt;
+    time_t ticks = GetTicks();
+    struct tm *tm = localtime(&ticks);
+
+    long year = tm->tm_year;
+    year -= 80;
+    year <<= 25;
+
+    long month = tm->tm_mon;
+    month += 1;
+    month <<= 21;
+
+    long day = tm->tm_mday;
+    day <<= 16;
+
+    long hour = tm->tm_hour;
+    hour <<= 11;
+
+    long minute = tm->tm_min;
+    minute <<= 5;
+
+    long second = tm->tm_sec;
+    second /= 2;
+
+    ddt = year | month | day | hour | minute | second;
+    return ddt;
+}
+
+// ----------------------------------------------------------------------------
 // time_t <-> broken down time conversions
 // ----------------------------------------------------------------------------
 
@@ -1494,13 +1570,18 @@ wxDateTime& wxDateTime::Add(const wxDateSpan& diff)
 // Weekday and monthday stuff
 // ----------------------------------------------------------------------------
 
-bool wxDateTime::SetToTheWeek(wxDateTime_t numWeek, WeekDay weekday)
+bool wxDateTime::SetToTheWeek(wxDateTime_t numWeek,
+                              WeekDay weekday,
+                              WeekFlags flags)
 {
+    wxASSERT_MSG( numWeek > 0,
+                  _T("invalid week number: weeks are counted from 1") );
+
     int year = GetYear();
 
     // Jan 4 always lies in the 1st week of the year
     Set(4, Jan, year);
-    SetToWeekDayInSameWeek(weekday) += wxDateSpan::Weeks(numWeek);
+    SetToWeekDayInSameWeek(weekday, flags) += wxDateSpan::Weeks(numWeek - 1);
 
     if ( GetYear() != year )
     {
@@ -1523,17 +1604,34 @@ wxDateTime& wxDateTime::SetToLastMonthDay(Month month,
     return Set(GetNumOfDaysInMonth(year, month), month, year);
 }
 
-wxDateTime& wxDateTime::SetToWeekDayInSameWeek(WeekDay weekday)
+wxDateTime& wxDateTime::SetToWeekDayInSameWeek(WeekDay weekday, WeekFlags flags)
 {
     wxDATETIME_CHECK( weekday != Inv_WeekDay, _T("invalid weekday") );
 
-    WeekDay wdayThis = GetWeekDay();
+    int wdayThis = GetWeekDay();
     if ( weekday == wdayThis )
     {
         // nothing to do
         return *this;
     }
-    else if ( weekday < wdayThis )
+
+    if ( flags == Default_First )
+    {
+        flags = GetCountry() == USA ? Sunday_First : Monday_First;
+    }
+
+    // the logic below based on comparing weekday and wdayThis works if Sun (0)
+    // is the first day in the week, but breaks down for Monday_First case so
+    // we adjust the week days in this case
+    if( flags == Monday_First )
+    {
+        if ( wdayThis == Sun )
+            wdayThis += 7;
+    }
+    //else: Sunday_First, nothing to do
+
+    // go forward or back in time to the day we want
+    if ( weekday < wdayThis )
     {
         return Subtract(wxDateSpan::Days(wdayThis - weekday));
     }

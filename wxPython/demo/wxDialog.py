@@ -4,7 +4,10 @@ from wxPython.wx import *
 #---------------------------------------------------------------------------
 
 def runTest(frame, nb, log):
-    win = wxDialog(frame, -1, "This is a wxDialog", size=wxSize(350, 200), style=wxCAPTION)
+    win = wxDialog(frame, -1, "This is a wxDialog", size=wxSize(350, 200),
+                   style = wxCAPTION | wxSYSTEM_MENU | wxTHICK_FRAME
+                   #style = wxDEFAULT_DIALOG_STYLE
+                   )
 
     sizer = wxBoxSizer(wxVERTICAL)
 
@@ -63,10 +66,13 @@ def runTest(frame, nb, log):
 
 
 
-
-
-
-
-
 overview = """\
 """
+
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
+

@@ -5,11 +5,15 @@ __author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"
 __cvsid__ = "$Id$"
 __revision__ = "$Revision$"[11:-2]
 
+from __future__ import nested_scopes
+
+import cStringIO
 import inspect
 import string
+import tokenize
 import types
 
-def getAutoCompleteList(command='', locals=None, includeMagic=1, \
+def getAutoCompleteList(command='', locals=None, includeMagic=1, 
                         includeSingle=1, includeDouble=1):
     """Return list of auto-completion options for command.
     
@@ -25,7 +29,7 @@ def getAutoCompleteList(command='', locals=None, includeMagic=1, \
     except:
         pass
     else:
-        attributes = getAttributeNames(object, includeMagic, \
+        attributes = getAttributeNames(object, includeMagic, 
                                        includeSingle, includeDouble)
     return attributes
     
@@ -36,8 +40,8 @@ def getAttributeNames(object, includeMagic=1, includeSingle=1, includeDouble=1):
     if not hasattrAlwaysReturnsTrue(object):
         # Add some attributes that don't always get picked up.
         # If they don't apply, they'll get filtered out at the end.
-        attributes += ['__bases__', '__class__', '__dict__', '__name__', \
-                       'func_closure', 'func_code', 'func_defaults', \
+        attributes += ['__bases__', '__class__', '__dict__', '__name__', 
+                       'func_closure', 'func_code', 'func_defaults', 
                        'func_dict', 'func_doc', 'func_globals', 'func_name']
     if includeMagic:
         try: attributes += object._getAttributeNames()
@@ -182,37 +186,83 @@ def getRoot(command, terminator=None):
     Return only the root portion that can be eval()'d without side effects.
     The command would normally terminate with a "(" or ".". The terminator
     and anything after the terminator will be dropped."""
-    root = ''
-    validChars = "._" + string.uppercase + string.lowercase + string.digits
-    emptyTypes = ("''", '""', '""""""', "''''''", '[]', '()', '{}')
-    validSeparators = string.whitespace + ',+-*/=%<>&|^~:([{'
-    # Drop the final terminator and anything that follows.
     command = rtrimTerminus(command, terminator)
-    if len(command) == 0:
-        root = ''
-    elif command in emptyTypes and terminator in ('.', '', None):
-        # Let empty type delimiter pairs go through.
-        root = command
-    else:
-        # Go backward through the command until we hit an "invalid" character.
-        i = len(command)
-        while i and command[i-1] in validChars:
-            i -= 1
-        # Default to everything from the "invalid" character to the end.
-        root = command[i:]
-        # Override certain exceptions.
-        if i > 0 and command[i-1] in ("'", '"'):
-            # Detect situations where we are in the middle of a string.
-            # This code catches the simplest case, but needs to catch others.
-            root = ''
-        elif ((2 <= i < len(command) and command[i] == '.') \
-           or (2 <= i <= len(command) and terminator in ('.', '', None))) \
-        and command[i-2:i] in emptyTypes:
-            # Allow empty types to get through.
-            # Don't confuse an empty tupple with an argumentless callable.
-            if i == 2 or (i >= 3 and command[i-3] in validSeparators):
-                root = command[i-2:]
-    return root
+    command = command.rstrip()
+    tokens = getTokens(command)
+    tokens.reverse()
+    line = ''
+    start = None
+    prefix = ''
+    laststring = '.'
+    emptyTypes = ('[]', '()', '{}')
+    for token in tokens:
+        tokentype = token[0]
+        tokenstring = token[1]
+        line = token[4]
+        if tokentype is tokenize.ENDMARKER:
+            continue
+        if tokentype in (tokenize.NAME, tokenize.STRING, tokenize.NUMBER) \
+        and laststring != '.':
+            # We've reached something that's not part of the root.
+            if prefix and line[token[3][1]] != ' ':
+                # If it doesn't have a space after it, remove the prefix.
+                prefix = ''
+            break
+        if tokentype in (tokenize.NAME, tokenize.STRING, tokenize.NUMBER) \
+        or (tokentype is tokenize.OP and tokenstring == '.'):
+            if prefix:
+                # The prefix isn't valid because it comes after a dot.
+                prefix = ''
+                break
+            else:
+                # start represents the last known good point in the line.
+                start = token[2][1]
+        elif len(tokenstring) == 1 and tokenstring in ('[({])}'):
+            # Remember, we're working backwords.
+            # So prefix += tokenstring would be wrong.
+            if prefix in emptyTypes and tokenstring in ('[({'):
+                # We've already got an empty type identified so now we are in
+                # a nested situation and we can break out with what we've got.
+                break
+            else:
+                prefix = tokenstring + prefix
+        else:
+            # We've reached something that's not part of the root.
+            break
+        laststring = tokenstring
+    if start is None:
+        start = len(line)
+    root = line[start:]
+    if prefix in emptyTypes:
+        # Empty types are safe to be eval()'d and introspected.
+        root = prefix + root
+    return root    
+
+def getTokens(command):
+    """Return list of token tuples for command."""
+    command = str(command)  # In case the command is unicode, which won't work.
+    f = cStringIO.StringIO(command)
+    # tokens is a list of token tuples, each looking like: 
+    # (type, string, (srow, scol), (erow, ecol), line)
+    tokens = []
+    # Can't use list comprehension:
+    #   tokens = [token for token in tokenize.generate_tokens(f.readline)]
+    # because of need to append as much as possible before TokenError.
+    try:
+##        This code wasn't backward compatible with Python 2.1.3.
+##
+##        for token in tokenize.generate_tokens(f.readline):
+##            tokens.append(token)
+
+        # This works with Python 2.1.3 (with nested_scopes).
+        def eater(*args):
+            tokens.append(args)
+        tokenize.tokenize_loop(f.readline, eater)
+    except tokenize.TokenError:
+        # This is due to a premature EOF, which we expect since 
+        # we are feeding in fragments of Python code.
+        pass
+    return tokens    
 
 def rtrimTerminus(command, terminator=None):
     """Return command minus the final terminator and anything that follows."""

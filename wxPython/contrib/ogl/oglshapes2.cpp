@@ -210,8 +210,7 @@ static PyObject *_wrap_wxPyEllipseShape_base_OnDraw(PyObject *self, PyObject *ar
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyEllipseShape_base_OnDraw. Expected _wxDC_p.");
         return NULL;
         }
@@ -247,8 +246,7 @@ static PyObject *_wrap_wxPyEllipseShape_base_OnDrawContents(PyObject *self, PyOb
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyEllipseShape_base_OnDrawContents. Expected _wxDC_p.");
         return NULL;
         }
@@ -286,8 +284,7 @@ static PyObject *_wrap_wxPyEllipseShape_base_OnDrawBranches(PyObject *self, PyOb
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyEllipseShape_base_OnDrawBranches. Expected _wxDC_p.");
         return NULL;
         }
@@ -324,8 +321,7 @@ static PyObject *_wrap_wxPyEllipseShape_base_OnMoveLinks(PyObject *self, PyObjec
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyEllipseShape_base_OnMoveLinks. Expected _wxDC_p.");
         return NULL;
         }
@@ -361,8 +357,7 @@ static PyObject *_wrap_wxPyEllipseShape_base_OnErase(PyObject *self, PyObject *a
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyEllipseShape_base_OnErase. Expected _wxDC_p.");
         return NULL;
         }
@@ -398,8 +393,7 @@ static PyObject *_wrap_wxPyEllipseShape_base_OnEraseContents(PyObject *self, PyO
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyEllipseShape_base_OnEraseContents. Expected _wxDC_p.");
         return NULL;
         }
@@ -435,8 +429,7 @@ static PyObject *_wrap_wxPyEllipseShape_base_OnHighlight(PyObject *self, PyObjec
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyEllipseShape_base_OnHighlight. Expected _wxDC_p.");
         return NULL;
         }
@@ -605,8 +598,7 @@ static PyObject *_wrap_wxPyEllipseShape_base_OnMovePre(PyObject *self, PyObject 
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyEllipseShape_base_OnMovePre. Expected _wxDC_p.");
         return NULL;
         }
@@ -648,8 +640,7 @@ static PyObject *_wrap_wxPyEllipseShape_base_OnMovePost(PyObject *self, PyObject
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyEllipseShape_base_OnMovePost. Expected _wxDC_p.");
         return NULL;
         }
@@ -888,8 +879,7 @@ static PyObject *_wrap_wxPyEllipseShape_base_OnDrawOutline(PyObject *self, PyObj
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyEllipseShape_base_OnDrawOutline. Expected _wxDC_p.");
         return NULL;
         }
@@ -925,8 +915,7 @@ static PyObject *_wrap_wxPyEllipseShape_base_OnDrawControlPoints(PyObject *self,
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyEllipseShape_base_OnDrawControlPoints. Expected _wxDC_p.");
         return NULL;
         }
@@ -962,8 +951,7 @@ static PyObject *_wrap_wxPyEllipseShape_base_OnEraseControlPoints(PyObject *self
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyEllipseShape_base_OnEraseControlPoints. Expected _wxDC_p.");
         return NULL;
         }
@@ -1001,8 +989,7 @@ static PyObject *_wrap_wxPyEllipseShape_base_OnMoveLink(PyObject *self, PyObject
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyEllipseShape_base_OnMoveLink. Expected _wxDC_p.");
         return NULL;
         }
@@ -1322,8 +1309,7 @@ static PyObject *_wrap_wxPyCircleShape_base_OnDraw(PyObject *self, PyObject *arg
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyCircleShape_base_OnDraw. Expected _wxDC_p.");
         return NULL;
         }
@@ -1359,8 +1345,7 @@ static PyObject *_wrap_wxPyCircleShape_base_OnDrawContents(PyObject *self, PyObj
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyCircleShape_base_OnDrawContents. Expected _wxDC_p.");
         return NULL;
         }
@@ -1398,8 +1383,7 @@ static PyObject *_wrap_wxPyCircleShape_base_OnDrawBranches(PyObject *self, PyObj
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyCircleShape_base_OnDrawBranches. Expected _wxDC_p.");
         return NULL;
         }
@@ -1436,8 +1420,7 @@ static PyObject *_wrap_wxPyCircleShape_base_OnMoveLinks(PyObject *self, PyObject
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyCircleShape_base_OnMoveLinks. Expected _wxDC_p.");
         return NULL;
         }
@@ -1473,8 +1456,7 @@ static PyObject *_wrap_wxPyCircleShape_base_OnErase(PyObject *self, PyObject *ar
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyCircleShape_base_OnErase. Expected _wxDC_p.");
         return NULL;
         }
@@ -1510,8 +1492,7 @@ static PyObject *_wrap_wxPyCircleShape_base_OnEraseContents(PyObject *self, PyOb
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyCircleShape_base_OnEraseContents. Expected _wxDC_p.");
         return NULL;
         }
@@ -1547,8 +1528,7 @@ static PyObject *_wrap_wxPyCircleShape_base_OnHighlight(PyObject *self, PyObject
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyCircleShape_base_OnHighlight. Expected _wxDC_p.");
         return NULL;
         }
@@ -1717,8 +1697,7 @@ static PyObject *_wrap_wxPyCircleShape_base_OnMovePre(PyObject *self, PyObject *
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyCircleShape_base_OnMovePre. Expected _wxDC_p.");
         return NULL;
         }
@@ -1760,8 +1739,7 @@ static PyObject *_wrap_wxPyCircleShape_base_OnMovePost(PyObject *self, PyObject 
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyCircleShape_base_OnMovePost. Expected _wxDC_p.");
         return NULL;
         }
@@ -2000,8 +1978,7 @@ static PyObject *_wrap_wxPyCircleShape_base_OnDrawOutline(PyObject *self, PyObje
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyCircleShape_base_OnDrawOutline. Expected _wxDC_p.");
         return NULL;
         }
@@ -2037,8 +2014,7 @@ static PyObject *_wrap_wxPyCircleShape_base_OnDrawControlPoints(PyObject *self, 
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyCircleShape_base_OnDrawControlPoints. Expected _wxDC_p.");
         return NULL;
         }
@@ -2074,8 +2050,7 @@ static PyObject *_wrap_wxPyCircleShape_base_OnEraseControlPoints(PyObject *self,
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyCircleShape_base_OnEraseControlPoints. Expected _wxDC_p.");
         return NULL;
         }
@@ -2113,8 +2088,7 @@ static PyObject *_wrap_wxPyCircleShape_base_OnMoveLink(PyObject *self, PyObject 
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyCircleShape_base_OnMoveLink. Expected _wxDC_p.");
         return NULL;
         }
@@ -3149,8 +3123,7 @@ static PyObject *_wrap_wxPyLineShape_DrawArrow(PyObject *self, PyObject *args, P
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyLineShape_DrawArrow. Expected _wxDC_p.");
         return NULL;
         }
@@ -3291,8 +3264,7 @@ static PyObject *_wrap_wxPyLineShape_DrawArrows(PyObject *self, PyObject *args, 
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyLineShape_DrawArrows. Expected _wxDC_p.");
         return NULL;
         }
@@ -3332,8 +3304,7 @@ static PyObject *_wrap_wxPyLineShape_DrawRegion(PyObject *self, PyObject *args, 
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyLineShape_DrawRegion. Expected _wxDC_p.");
         return NULL;
         }
@@ -3380,8 +3351,7 @@ static PyObject *_wrap_wxPyLineShape_EraseRegion(PyObject *self, PyObject *args,
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyLineShape_EraseRegion. Expected _wxDC_p.");
         return NULL;
         }
@@ -4465,8 +4435,7 @@ static PyObject *_wrap_wxPyLineShape_base_OnDraw(PyObject *self, PyObject *args,
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyLineShape_base_OnDraw. Expected _wxDC_p.");
         return NULL;
         }
@@ -4502,8 +4471,7 @@ static PyObject *_wrap_wxPyLineShape_base_OnDrawContents(PyObject *self, PyObjec
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyLineShape_base_OnDrawContents. Expected _wxDC_p.");
         return NULL;
         }
@@ -4541,8 +4509,7 @@ static PyObject *_wrap_wxPyLineShape_base_OnDrawBranches(PyObject *self, PyObjec
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyLineShape_base_OnDrawBranches. Expected _wxDC_p.");
         return NULL;
         }
@@ -4579,8 +4546,7 @@ static PyObject *_wrap_wxPyLineShape_base_OnMoveLinks(PyObject *self, PyObject *
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyLineShape_base_OnMoveLinks. Expected _wxDC_p.");
         return NULL;
         }
@@ -4616,8 +4582,7 @@ static PyObject *_wrap_wxPyLineShape_base_OnErase(PyObject *self, PyObject *args
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyLineShape_base_OnErase. Expected _wxDC_p.");
         return NULL;
         }
@@ -4653,8 +4618,7 @@ static PyObject *_wrap_wxPyLineShape_base_OnEraseContents(PyObject *self, PyObje
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyLineShape_base_OnEraseContents. Expected _wxDC_p.");
         return NULL;
         }
@@ -4690,8 +4654,7 @@ static PyObject *_wrap_wxPyLineShape_base_OnHighlight(PyObject *self, PyObject *
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyLineShape_base_OnHighlight. Expected _wxDC_p.");
         return NULL;
         }
@@ -4860,8 +4823,7 @@ static PyObject *_wrap_wxPyLineShape_base_OnMovePre(PyObject *self, PyObject *ar
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyLineShape_base_OnMovePre. Expected _wxDC_p.");
         return NULL;
         }
@@ -4903,8 +4865,7 @@ static PyObject *_wrap_wxPyLineShape_base_OnMovePost(PyObject *self, PyObject *a
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyLineShape_base_OnMovePost. Expected _wxDC_p.");
         return NULL;
         }
@@ -5143,8 +5104,7 @@ static PyObject *_wrap_wxPyLineShape_base_OnDrawOutline(PyObject *self, PyObject
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyLineShape_base_OnDrawOutline. Expected _wxDC_p.");
         return NULL;
         }
@@ -5180,8 +5140,7 @@ static PyObject *_wrap_wxPyLineShape_base_OnDrawControlPoints(PyObject *self, Py
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyLineShape_base_OnDrawControlPoints. Expected _wxDC_p.");
         return NULL;
         }
@@ -5217,8 +5176,7 @@ static PyObject *_wrap_wxPyLineShape_base_OnEraseControlPoints(PyObject *self, P
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyLineShape_base_OnEraseControlPoints. Expected _wxDC_p.");
         return NULL;
         }
@@ -5256,8 +5214,7 @@ static PyObject *_wrap_wxPyLineShape_base_OnMoveLink(PyObject *self, PyObject *a
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyLineShape_base_OnMoveLink. Expected _wxDC_p.");
         return NULL;
         }
@@ -5758,8 +5715,7 @@ static PyObject *_wrap_wxPyPolygonShape_base_OnDraw(PyObject *self, PyObject *ar
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyPolygonShape_base_OnDraw. Expected _wxDC_p.");
         return NULL;
         }
@@ -5795,8 +5751,7 @@ static PyObject *_wrap_wxPyPolygonShape_base_OnDrawContents(PyObject *self, PyOb
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyPolygonShape_base_OnDrawContents. Expected _wxDC_p.");
         return NULL;
         }
@@ -5834,8 +5789,7 @@ static PyObject *_wrap_wxPyPolygonShape_base_OnDrawBranches(PyObject *self, PyOb
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyPolygonShape_base_OnDrawBranches. Expected _wxDC_p.");
         return NULL;
         }
@@ -5872,8 +5826,7 @@ static PyObject *_wrap_wxPyPolygonShape_base_OnMoveLinks(PyObject *self, PyObjec
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyPolygonShape_base_OnMoveLinks. Expected _wxDC_p.");
         return NULL;
         }
@@ -5909,8 +5862,7 @@ static PyObject *_wrap_wxPyPolygonShape_base_OnErase(PyObject *self, PyObject *a
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyPolygonShape_base_OnErase. Expected _wxDC_p.");
         return NULL;
         }
@@ -5946,8 +5898,7 @@ static PyObject *_wrap_wxPyPolygonShape_base_OnEraseContents(PyObject *self, PyO
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyPolygonShape_base_OnEraseContents. Expected _wxDC_p.");
         return NULL;
         }
@@ -5983,8 +5934,7 @@ static PyObject *_wrap_wxPyPolygonShape_base_OnHighlight(PyObject *self, PyObjec
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyPolygonShape_base_OnHighlight. Expected _wxDC_p.");
         return NULL;
         }
@@ -6153,8 +6103,7 @@ static PyObject *_wrap_wxPyPolygonShape_base_OnMovePre(PyObject *self, PyObject 
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyPolygonShape_base_OnMovePre. Expected _wxDC_p.");
         return NULL;
         }
@@ -6196,8 +6145,7 @@ static PyObject *_wrap_wxPyPolygonShape_base_OnMovePost(PyObject *self, PyObject
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyPolygonShape_base_OnMovePost. Expected _wxDC_p.");
         return NULL;
         }
@@ -6436,8 +6384,7 @@ static PyObject *_wrap_wxPyPolygonShape_base_OnDrawOutline(PyObject *self, PyObj
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyPolygonShape_base_OnDrawOutline. Expected _wxDC_p.");
         return NULL;
         }
@@ -6473,8 +6420,7 @@ static PyObject *_wrap_wxPyPolygonShape_base_OnDrawControlPoints(PyObject *self,
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyPolygonShape_base_OnDrawControlPoints. Expected _wxDC_p.");
         return NULL;
         }
@@ -6510,8 +6456,7 @@ static PyObject *_wrap_wxPyPolygonShape_base_OnEraseControlPoints(PyObject *self
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyPolygonShape_base_OnEraseControlPoints. Expected _wxDC_p.");
         return NULL;
         }
@@ -6549,8 +6494,7 @@ static PyObject *_wrap_wxPyPolygonShape_base_OnMoveLink(PyObject *self, PyObject
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyPolygonShape_base_OnMoveLink. Expected _wxDC_p.");
         return NULL;
         }
@@ -6899,8 +6843,7 @@ static PyObject *_wrap_wxPyTextShape_base_OnDraw(PyObject *self, PyObject *args,
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyTextShape_base_OnDraw. Expected _wxDC_p.");
         return NULL;
         }
@@ -6936,8 +6879,7 @@ static PyObject *_wrap_wxPyTextShape_base_OnDrawContents(PyObject *self, PyObjec
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyTextShape_base_OnDrawContents. Expected _wxDC_p.");
         return NULL;
         }
@@ -6975,8 +6917,7 @@ static PyObject *_wrap_wxPyTextShape_base_OnDrawBranches(PyObject *self, PyObjec
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyTextShape_base_OnDrawBranches. Expected _wxDC_p.");
         return NULL;
         }
@@ -7013,8 +6954,7 @@ static PyObject *_wrap_wxPyTextShape_base_OnMoveLinks(PyObject *self, PyObject *
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyTextShape_base_OnMoveLinks. Expected _wxDC_p.");
         return NULL;
         }
@@ -7050,8 +6990,7 @@ static PyObject *_wrap_wxPyTextShape_base_OnErase(PyObject *self, PyObject *args
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyTextShape_base_OnErase. Expected _wxDC_p.");
         return NULL;
         }
@@ -7087,8 +7026,7 @@ static PyObject *_wrap_wxPyTextShape_base_OnEraseContents(PyObject *self, PyObje
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyTextShape_base_OnEraseContents. Expected _wxDC_p.");
         return NULL;
         }
@@ -7124,8 +7062,7 @@ static PyObject *_wrap_wxPyTextShape_base_OnHighlight(PyObject *self, PyObject *
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyTextShape_base_OnHighlight. Expected _wxDC_p.");
         return NULL;
         }
@@ -7294,8 +7231,7 @@ static PyObject *_wrap_wxPyTextShape_base_OnMovePre(PyObject *self, PyObject *ar
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyTextShape_base_OnMovePre. Expected _wxDC_p.");
         return NULL;
         }
@@ -7337,8 +7273,7 @@ static PyObject *_wrap_wxPyTextShape_base_OnMovePost(PyObject *self, PyObject *a
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyTextShape_base_OnMovePost. Expected _wxDC_p.");
         return NULL;
         }
@@ -7577,8 +7512,7 @@ static PyObject *_wrap_wxPyTextShape_base_OnDrawOutline(PyObject *self, PyObject
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyTextShape_base_OnDrawOutline. Expected _wxDC_p.");
         return NULL;
         }
@@ -7614,8 +7548,7 @@ static PyObject *_wrap_wxPyTextShape_base_OnDrawControlPoints(PyObject *self, Py
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyTextShape_base_OnDrawControlPoints. Expected _wxDC_p.");
         return NULL;
         }
@@ -7651,8 +7584,7 @@ static PyObject *_wrap_wxPyTextShape_base_OnEraseControlPoints(PyObject *self, P
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyTextShape_base_OnEraseControlPoints. Expected _wxDC_p.");
         return NULL;
         }
@@ -7690,8 +7622,7 @@ static PyObject *_wrap_wxPyTextShape_base_OnMoveLink(PyObject *self, PyObject *a
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxDC_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPyTextShape_base_OnMoveLink. Expected _wxDC_p.");
         return NULL;
         }

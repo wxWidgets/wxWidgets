@@ -1,7 +1,8 @@
 \section{\class{wxTreeCtrl}}\label{wxtreectrl}
 
 A tree control presents information as a hierarchy, with items that may be expanded
-to show further items. Items in a tree control are referenced by wxTreeItemId handles.
+to show further items. Items in a tree control are referenced by wxTreeItemId handles,
+which may be tested for validity by calling wxTreeItemId::IsOk.
 
 To intercept events from a tree control, use the event table macros described in \helpref{wxTreeEvent}{wxtreeevent}.
 
@@ -233,13 +234,23 @@ Creates the tree control. See \helpref{wxTreeCtrl::wxTreeCtrl}{wxtreectrlconstr}
 
 \func{void}{Delete}{\param{const wxTreeItemId\&}{ item}}
 
-Deletes the specified item.
+Deletes the specified item. A {\tt EVT\_TREE\_DELETE\_ITEM} event will be
+generated.
 
 \membersection{wxTreeCtrl::DeleteAllItems}\label{wxtreectrldeleteallitems}
 
 \func{void}{DeleteAllItems}{\void}
 
-Deletes all the items in the control.
+Deletes all the items in the control. Note that this will {\bf not} generate
+any events unlike \helpref{Delete}{wxtreectrldelete} method.
+
+\membersection{wxTreeCtrl::DeleteChildren}\label{wxtreectrldeletechildren}
+
+\func{void}{DeleteChildren}{\param{const wxTreeItemId\& }{item}}
+
+Deletes all children of the given item (but not the item itself). Note that
+this will {\bf not} generate any events unlike 
+\helpref{Delete}{wxtreectrldelete} method.
 
 \membersection{wxTreeCtrl::EditLabel}\label{wxtreectrleditlabel}
 
@@ -338,13 +349,14 @@ For this enumeration function you must pass in a `cookie' parameter
 which is opaque for the application but is necessary for the library
 to make these functions reentrant (i.e. allow more than one
 enumeration on one and the same object simultaneously). The cookie passed to
-GetFirstChild and GetNextChild should be the same.
+GetFirstChild and GetNextChild should be the same variable.
 
 Returns an invalid tree item if there are no further children.
 
 \wxheading{See also}
 
-\helpref{wxTreeCtrl::GetNextChild}{wxtreectrlgetnextchild}
+\helpref{wxTreeCtrl::GetNextChild}{wxtreectrlgetnextchild},
+\helpref{wxTreeCtrl::GetNextSibling}{wxtreectrlgetnextsibling}
 
 \pythonnote{In wxPython the returned wxTreeItemId and the new cookie
 value are both returned as a tuple containing the two values.}
@@ -369,6 +381,12 @@ Returns the normal image list.
 \constfunc{int}{GetIndent}{\void}
 
 Returns the current tree control indentation.
+
+\membersection{wxTreeCtrl::GetItemBackgroundColour}\label{wxtreectrlgetitembackgroundcolour}
+
+\constfunc{wxColour}{GetItemBackgroundColour}{\param{const wxTreeItemId\&}{ item}}
+
+Returns the background colour of the item.
 
 \membersection{wxTreeCtrl::GetItemData}\label{wxtreectrlgetitemdata}
 
@@ -397,6 +415,12 @@ tree->GetItemData( item )->GetData(); ).}
 \end{twocollist}}
 }
 
+\membersection{wxTreeCtrl::GetItemFont}\label{wxtreectrlgetitemfont}
+
+\constfunc{wxFont}{GetItemFont}{\param{const wxTreeItemId\&}{ item}}
+
+Returns the font of the item label.
+
 \membersection{wxTreeCtrl::GetItemImage}\label{wxtreectrlgetitemimage}
 
 \constfunc{int}{GetItemImage}{\param{const wxTreeItemId\& }{item},
@@ -421,6 +445,12 @@ item is expanded and the normal image is shown when it is collapsed)
 
 Returns the item label.
 
+\membersection{wxTreeCtrl::GetItemTextColour}\label{wxtreectrlgetitemtextcolour}
+
+\constfunc{wxColour}{GetItemTextColour}{\param{const wxTreeItemId\&}{ item}}
+
+Returns the colour of the item label.
+
 \membersection{wxTreeCtrl::GetLastChild}\label{wxtreectrlgetlastchild}
 
 \constfunc{wxTreeItemId}{GetLastChild}{\param{const wxTreeItemId\&}{ item}}
@@ -430,6 +460,7 @@ Returns the last child of the item (or an invalid tree item if this item has no 
 \wxheading{See also}
 
 \helpref{GetFirstChild}{wxtreectrlgetfirstchild},
+\helpref{wxTreeCtrl::GetNextSibling}{wxtreectrlgetnextsibling},
 \helpref{GetLastChild}{wxtreectrlgetlastchild}
 
 \membersection{wxTreeCtrl::GetNextChild}\label{wxtreectrlgetnextchild}

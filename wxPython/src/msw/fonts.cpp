@@ -1388,8 +1388,7 @@ static PyObject *_wrap_new_wxFontFromNativeInfo(PyObject *self, PyObject *args, 
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:new_wxFontFromNativeInfo",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxNativeFontInfo_p")) {
+        if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxNativeFontInfo_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxFontFromNativeInfo. Expected _wxNativeFontInfo_p.");
         return NULL;
         }
@@ -2043,8 +2042,7 @@ static PyObject *_wrap_wxFont_SetNativeFontInfo(PyObject *self, PyObject *args, 
         }
     }
     if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxNativeFontInfo_p")) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxNativeFontInfo_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxFont_SetNativeFontInfo. Expected _wxNativeFontInfo_p.");
         return NULL;
         }
@@ -3358,8 +3356,7 @@ static PyObject *_wrap_wxLocale_AddLanguage(PyObject *self, PyObject *args, PyOb
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxLocale_AddLanguage",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxLanguageInfo_p")) {
+        if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxLanguageInfo_p")) {
             PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxLocale_AddLanguage. Expected _wxLanguageInfo_p.");
         return NULL;
         }
@@ -3948,6 +3945,10 @@ SWIGEXPORT(void) initfontsc() {
 	 PyDict_SetItemString(d,"wxFONTENCODING_CP12_MAX", PyInt_FromLong((long) wxFONTENCODING_CP12_MAX));
 	 PyDict_SetItemString(d,"wxFONTENCODING_UTF7", PyInt_FromLong((long) wxFONTENCODING_UTF7));
 	 PyDict_SetItemString(d,"wxFONTENCODING_UTF8", PyInt_FromLong((long) wxFONTENCODING_UTF8));
+	 PyDict_SetItemString(d,"wxFONTENCODING_GB2312", PyInt_FromLong((long) wxFONTENCODING_GB2312));
+	 PyDict_SetItemString(d,"wxFONTENCODING_BIG5", PyInt_FromLong((long) wxFONTENCODING_BIG5));
+	 PyDict_SetItemString(d,"wxFONTENCODING_SHIFT_JIS", PyInt_FromLong((long) wxFONTENCODING_SHIFT_JIS));
+	 PyDict_SetItemString(d,"wxFONTENCODING_EUC_JP", PyInt_FromLong((long) wxFONTENCODING_EUC_JP));
 	 PyDict_SetItemString(d,"wxFONTENCODING_UNICODE", PyInt_FromLong((long) wxFONTENCODING_UNICODE));
 	 PyDict_SetItemString(d,"wxFONTENCODING_MAX", PyInt_FromLong((long) wxFONTENCODING_MAX));
 	 PyDict_SetItemString(d,"wxLANGUAGE_DEFAULT", PyInt_FromLong((long) wxLANGUAGE_DEFAULT));

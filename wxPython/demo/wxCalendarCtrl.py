@@ -19,6 +19,11 @@ class TestPanel(wxPanel):
         EVT_BUTTON(self, b.GetId(), self.OnButton)
         self.cal = cal
 
+        # Set up control to display a set of holidays:
+        EVT_CALENDAR_MONTH(self, cal.GetId(), self.OnChangeMonth)
+        self.holidays = [(1,1), (10,31), (12,25) ]    # (these don't move around)
+        self.OnChangeMonth()
+
     def OnButton(self, evt):
         self.cal.Destroy()
         self.cal = None
@@ -26,6 +31,11 @@ class TestPanel(wxPanel):
     def OnCalSelected(self, evt):
         self.log.write('OnCalSelected: %s\n' % evt.GetDate())
 
+    def OnChangeMonth(self, evt=None):
+        cur_month = self.cal.GetDate().GetMonth() + 1   # convert wxDateTime 0-11 => 1-12
+        for month, day in self.holidays:
+            if month == cur_month:
+                self.cal.SetHoliday(day)
 
 #----------------------------------------------------------------------
 

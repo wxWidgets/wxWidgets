@@ -19,6 +19,7 @@
 
 #include "wx/settings.h"
 #include "wx/gdicmn.h"
+#include "wx/x11/private.h"
 
 wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
 {
@@ -49,7 +50,7 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
         case wxSYS_DEFAULT_GUI_FONT:
         default:
         {
-            return wxFont(12, wxSWISS, wxNORMAL, wxNORMAL, FALSE);
+            return wxFont(12, wxNORMAL, wxNORMAL, wxNORMAL, FALSE);
             break;
         }
     }
@@ -123,11 +124,11 @@ int wxSystemSettingsNative::GetMetric(wxSystemMetric index)
             // TODO
             return 0;
         case wxSYS_SCREEN_X:
-            // TODO
-            return 0;
+            return DisplayWidth( wxGlobalDisplay(), 0 );
+            
         case wxSYS_SCREEN_Y:
-            // TODO
-            return 0;
+            return DisplayHeight( wxGlobalDisplay(), 0 );
+            
         case wxSYS_FRAMESIZE_X:
             // TODO
             return 0;

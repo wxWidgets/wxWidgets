@@ -86,6 +86,7 @@ struct wxCmdLineOption
                 GetLongOptionName(lng).Len() == lng.Len(),
                 wxT("Long option contains invalid characters")
             );
+            
 
         kind = k;
 
@@ -561,7 +562,7 @@ int wxCmdLineParser::Parse(bool showUsage)
                     optInd = m_data->FindOptionByLongName(name);
                     if ( optInd == wxNOT_FOUND )
                     {
-                        errorMsg << wxString::Format(_("Unknown long option '%s'"), name.c_str()) << "\n";
+                        errorMsg << wxString::Format(_("Unknown long option '%s'"), name.c_str()) << wxT("\n");
                     }
                 }
                 else
@@ -570,7 +571,7 @@ int wxCmdLineParser::Parse(bool showUsage)
 
                     // Print the argument including leading "--"
                     name.Prepend( wxT("--") );
-                    errorMsg << wxString::Format(_("Unknown option '%s'"), name.c_str()) << "\n";
+                    errorMsg << wxString::Format(_("Unknown option '%s'"), name.c_str()) << wxT("\n");
                 }
 
             }
@@ -591,7 +592,7 @@ int wxCmdLineParser::Parse(bool showUsage)
                     {
                         // we couldn't find a valid option name in the
                         // beginning of this string
-                        errorMsg << wxString::Format(_("Unknown option '%s'"), name.c_str()) << "\n";
+                        errorMsg << wxString::Format(_("Unknown option '%s'"), name.c_str()) << wxT("\n");
 
                         break;
                     }
@@ -663,7 +664,7 @@ int wxCmdLineParser::Parse(bool showUsage)
 
                     if ( *p++ != _T('=') )
                     {
-                        errorMsg << wxString::Format(_("Option '%s' requires a value, '=' expected."), name.c_str()) << "\n";
+                        errorMsg << wxString::Format(_("Option '%s' requires a value, '=' expected."), name.c_str()) << wxT("\n");
 
                         ok = FALSE;
                     }
@@ -684,7 +685,7 @@ int wxCmdLineParser::Parse(bool showUsage)
                             {
                                 // ... but there is none
                                 errorMsg << wxString::Format(_("Option '%s' requires a value."),
-                                                             name.c_str()) << "\n";
+                                                             name.c_str()) << wxT("\n");
 
                                 ok = FALSE;
                             }
@@ -701,7 +702,7 @@ int wxCmdLineParser::Parse(bool showUsage)
                             if ( opt.flags & wxCMD_LINE_NEEDS_SEPARATOR )
                             {
                                 errorMsg << wxString::Format(_("Separator expected after the option '%s'."),
-                                                             name.c_str()) << "\n";
+                                                             name.c_str()) << wxT("\n");
 
                                 ok = FALSE;
                             }
@@ -731,7 +732,7 @@ int wxCmdLineParser::Parse(bool showUsage)
                                 else
                                 {
                                     errorMsg << wxString::Format(_("'%s' is not a correct numeric value for option '%s'."),
-                                                                 value.c_str(), name.c_str()) << "\n";
+                                                                 value.c_str(), name.c_str()) << wxT("\n");
 
                                     ok = FALSE;
                                 }
@@ -745,7 +746,7 @@ int wxCmdLineParser::Parse(bool showUsage)
                                 if ( !res || *res )
                                 {
                                     errorMsg << wxString::Format(_("Option '%s': '%s' cannot be converted to a date."),
-                                                                 name.c_str(), value.c_str()) << "\n";
+                                                                 name.c_str(), value.c_str()) << wxT("\n");
 
                                     ok = FALSE;
                                 }
@@ -785,7 +786,7 @@ int wxCmdLineParser::Parse(bool showUsage)
             }
             else
             {
-                errorMsg << wxString::Format(_("Unexpected parameter '%s'"), arg.c_str()) << "\n";
+                errorMsg << wxString::Format(_("Unexpected parameter '%s'"), arg.c_str()) << wxT("\n");
 
                 ok = FALSE;
             }
@@ -822,7 +823,7 @@ int wxCmdLineParser::Parse(bool showUsage)
                 }
 
                 errorMsg << wxString::Format(_("The value for the option '%s' must be specified."),
-                                             optName.c_str()) << "\n";
+                                             optName.c_str()) << wxT("\n");
 
                 ok = FALSE;
             }
@@ -843,7 +844,7 @@ int wxCmdLineParser::Parse(bool showUsage)
             if ( !(param.flags & wxCMD_LINE_PARAM_OPTIONAL) )
             {
                 errorMsg << wxString::Format(_("The required parameter '%s' was not specified."),
-                                             param.description.c_str()) << "\n";
+                                             param.description.c_str()) << wxT("\n");
 
                 ok = FALSE;
             }

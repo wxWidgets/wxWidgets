@@ -4,24 +4,30 @@
 </head>
 <body bgcolor="#00CCFF">
 <h2>Mixing wxPython and wxHTML</h2>
-The widgets on this page were created dynamically on the fly by a custom
-wxTagHandler found in wxPython.lib.wxpTag.  You can look at the sources
-and doc-string <a href="../../lib/wxpTag.py">here</a>.
+
+The widgets on this page were created dynamically on the fly by a
+custom wxTagHandler found in wxPython.lib.wxpTag.  You can look at the
+sources and doc-string <a href="../../lib/wxpTag.py">here</a>.
+
 <p>
 The button below is added to the page like this:
+
 <pre>
 &lt;center>&lt;wxp class="wxButton" width="50%">
     &lt;param name="label" value="It works!">
     &lt;param name="id"    value="wxID_OK">
 &lt;/wxp>&lt;/center>
 </pre>
+
 <hr>
+
 <center>
 <wxp class="wxButton" width="50%">
     <param name="label" value="It works!">
     <param name="id"    value="wxID_OK">
 </wxp>
 </center>
+
 <p>
 Notice that the <b>button click</b> event is actually caught by the panel
 that contains this window, which then logs it in the window below.

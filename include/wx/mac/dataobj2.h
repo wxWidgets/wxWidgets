@@ -20,7 +20,7 @@
 // wxBitmapDataObject is a specialization of wxDataObject for bitmaps
 // ----------------------------------------------------------------------------
 
-class wxBitmapDataObject : public wxBitmapDataObjectBase
+class WXDLLEXPORT wxBitmapDataObject : public wxBitmapDataObjectBase
 {
 public:
     // ctors
@@ -64,7 +64,7 @@ private:
 // wxFileDataObject is a specialization of wxDataObject for file names
 // ----------------------------------------------------------------------------
 
-class wxFileDataObject : public wxFileDataObjectBase
+class WXDLLEXPORT wxFileDataObject : public wxFileDataObjectBase
 {
 public:
     // implement base class pure virtuals

@@ -86,6 +86,10 @@ wxTextCtrl::wxTextCtrl()
 {
 }
 
+wxTextCtrl::~wxTextCtrl()
+{
+}
+
 bool wxTextCtrl::Create(
   wxWindow*                         pParent
 , wxWindowID                        vId
@@ -1171,9 +1175,11 @@ void wxTextCtrl::AdjustSpaceLimit()
 bool wxTextCtrl::AcceptsFocus() const
 {
     //
-    // We don't want focus if we can't be edited
+    // We don't want focus if we can't be edited unless we're a multiline
+    // control because then it might be still nice to get focus from keyboard
+    // to be able to scroll it without mouse
     //
-    return IsEditable() && wxControl::AcceptsFocus();
+    return (IsEditable() || IsMultiLine()) && wxControl::AcceptsFocus();
 } // end of wxTextCtrl::Command
 
 wxSize wxTextCtrl::DoGetBestSize() const
@@ -1233,6 +1239,29 @@ void wxTextCtrl::OnRedo(
     Redo();
 } // end of wxTextCtrl::OnRedo
 
+void wxTextCtrl::OnDelete(
+  wxCommandEvent&                   rEvent
+)
+{
+    long                            lFrom;
+    long                            lTo;
+
+    GetSelection( &lFrom
+                 ,&lTo
+                );
+    if (lFrom != -1 && lTo != -1)
+        Remove( lFrom
+               ,lTo
+              );
+} // end of wxTextCtrl::OnDelete
+
+void wxTextCtrl::OnSelectAll(
+  wxCommandEvent&                   rEvent
+)
+{
+    SetSelection(-1, -1);
+} // end of wxTextCtrl::OnSelectAll
+
 void wxTextCtrl::OnUpdateCut(
   wxUpdateUIEvent&                  rEvent
 )
@@ -1267,6 +1296,26 @@ void wxTextCtrl::OnUpdateRedo(
 {
     rEvent.Enable(CanRedo());
 } // end of wxTextCtrl::OnUpdateRedo
+
+void wxTextCtrl::OnUpdateDelete(
+  wxUpdateUIEvent&                  rEvent
+)
+{
+    long                            lFrom;
+    long                            lTo;
+
+    GetSelection( &lFrom
+                 ,&lTo
+                );
+    rEvent.Enable( lFrom != -1L && lTo != -1L && lFrom != lTo && IsEditable()) ;
+} // end of wxTextCtrl::OnUpdateDelete
+
+void wxTextCtrl::OnUpdateSelectAll(
+  wxUpdateUIEvent&                  rEvent
+)
+{
+    rEvent.Enable(GetLastPosition() > 0);
+} // end of wxTextCtrl::OnUpdateSelectAll
 
 bool wxTextCtrl::SetBackgroundColour(
   const wxColour&                   rColour
