@@ -1142,7 +1142,7 @@ void wxListMainWindow::DeleteLine( wxListLineData *line )
 void wxListMainWindow::Edit( long item )
 {
     wxNode *node = m_lines.Nth( item );
-    wxCHECK_RET( node, "wrong index in wxListCtrl::Edit() ");
+    wxCHECK_RET( node, _T("wrong index in wxListCtrl::Edit()") );
     
     m_currentEdit = (wxListLineData*) node->Data();
 
@@ -1174,7 +1174,7 @@ void wxListMainWindow::Edit( long item )
 
 void wxListMainWindow::OnRenameTimer()
 {
-    wxCHECK_RET( m_current, "invalid m_current" );
+    wxCHECK_RET( m_current, _T("invalid m_current") );
     
     Edit( m_lines.IndexOf( m_current ) );
 }
