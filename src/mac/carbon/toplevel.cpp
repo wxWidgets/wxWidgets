@@ -359,7 +359,7 @@ static void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEvent )
     }       
 }
 
-ControlRef wxMacFindSubControl( Point location , ControlRef superControl , ControlPartCode *outPart )
+ControlRef wxMacFindSubControl( wxTopLevelWindowMac* toplevelWindow, Point location , ControlRef superControl , ControlPartCode *outPart )
 {
     if ( superControl )
     {
@@ -383,16 +383,19 @@ ControlRef wxMacFindSubControl( Point location , ControlRef superControl , Contr
                 UMAGetControlBoundsInWindowCoords( sibling , &r ) ;
                 if ( MacPtInRect( location , &r ) )
                 {
-                    ControlHandle child = wxMacFindSubControl( location , sibling , outPart ) ;
+                    ControlHandle child = wxMacFindSubControl( toplevelWindow , location , sibling , outPart ) ;
                     if ( child )
                         return child ;
                     else
                     {
                         Point testLocation = location ;
-#if TARGET_API_MAC_OSX
-                        testLocation.h -= r.left ;
-                        testLocation.v -= r.top ;
-#endif
+
+                        if ( toplevelWindow && toplevelWindow->MacUsesCompositing() )
+                        {
+                            testLocation.h -= r.left ;
+                            testLocation.v -= r.top ;
+                        }
+                        
                         *outPart = TestControl( sibling , testLocation ) ;
                         return sibling ;
                     }
@@ -403,19 +406,20 @@ ControlRef wxMacFindSubControl( Point location , ControlRef superControl , Contr
     return NULL ;
 }
 
-ControlRef wxMacFindControlUnderMouse( Point location , WindowRef window , ControlPartCode *outPart )
+ControlRef wxMacFindControlUnderMouse( wxTopLevelWindowMac* toplevelWindow , Point location , WindowRef window , ControlPartCode *outPart )
 {
 #if TARGET_API_MAC_OSX
-    if ( UMAGetSystemVersion() >= 0x1030 )
+    if ( UMAGetSystemVersion() >= 0x1030 && ( toplevelWindow == 0 || toplevelWindow->MacUsesCompositing() ) )
         return FindControlUnderMouse( location , window , outPart ) ;
 #endif
     ControlRef rootControl = NULL ;
     verify_noerr( GetRootControl( window , &rootControl ) ) ;
-    return wxMacFindSubControl( location , rootControl , outPart ) ;
+    return wxMacFindSubControl( toplevelWindow , location , rootControl , outPart ) ;
 
 }
 pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
 {
+    wxTopLevelWindowMac* toplevelWindow = (wxTopLevelWindowMac*) data ;
     
     OSStatus result = eventNotHandledErr ;
 
@@ -441,7 +445,7 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
         else if ( (IsWindowActive(window) && windowPart == inContent) )
         {
             ControlPartCode part ;
-            control = wxMacFindControlUnderMouse( windowMouseLocation , window , &part ) ;
+            control = wxMacFindControlUnderMouse( toplevelWindow , windowMouseLocation , window , &part ) ;
             // if there is no control below the mouse position, send the event to the toplevel window itself
             if ( control == 0 )
                 currentMouseWindow = (wxWindow*) data ;
@@ -549,7 +553,7 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
 #ifdef __WXMAC_OSX__
                 && 
                 (FindControlUnderMouse(windowMouseLocation , window , &dummyPart) != 
-                wxMacFindControlUnderMouse( windowMouseLocation , window , &dummyPart ) ) 
+                wxMacFindControlUnderMouse( toplevelWindow , windowMouseLocation , window , &dummyPart ) ) 
 #endif
                 )
             {
@@ -557,9 +561,10 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
                 {
                     EventModifiers modifiers = cEvent.GetParameter<EventModifiers>(kEventParamKeyModifiers, typeUInt32) ;
                     Point clickLocation = windowMouseLocation ;
-    #if TARGET_API_MAC_OSX
-                    currentMouseWindow->MacRootWindowToWindow( &clickLocation.h , &clickLocation.v ) ;
-    #endif
+
+                    if ( toplevelWindow->MacUsesCompositing() )
+                        currentMouseWindow->MacRootWindowToWindow( &clickLocation.h , &clickLocation.v ) ;
+
                     HandleControlClick( (ControlRef) currentMouseWindow->GetHandle() , clickLocation ,
                         modifiers , (ControlActionUPP ) -1 ) ;
                         
@@ -594,19 +599,21 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
         // don't mess with controls we don't know about
         // for some reason returning eventNotHandledErr does not lead to the correct behaviour
         // so we try sending them the correct control directly
-        wxTopLevelWindowMac* toplevelWindow = (wxTopLevelWindowMac*) data ;
         if ( cEvent.GetKind() == kEventMouseDown && toplevelWindow && control )
         {
             EventModifiers modifiers = cEvent.GetParameter<EventModifiers>(kEventParamKeyModifiers, typeUInt32) ;
             Point clickLocation = windowMouseLocation ;
-#if TARGET_API_MAC_OSX
-            HIPoint hiPoint ;
-            hiPoint.x = clickLocation.h ;
-            hiPoint.y = clickLocation.v ;
-            HIViewConvertPoint( &hiPoint , (ControlRef) toplevelWindow->GetHandle() , control  ) ;
-            clickLocation.h = (int)hiPoint.x ;
-            clickLocation.v = (int)hiPoint.y ;
+            if ( toplevelWindow->MacUsesCompositing() )
+            {
+#ifdef __WXMAC_OSX__
+                HIPoint hiPoint ;
+                hiPoint.x = clickLocation.h ;
+                hiPoint.y = clickLocation.v ;
+                HIViewConvertPoint( &hiPoint , (ControlRef) toplevelWindow->GetHandle() , control  ) ;
+                clickLocation.h = (int)hiPoint.x ;
+                clickLocation.v = (int)hiPoint.y ;
 #endif
+            }
             HandleControlClick( control , clickLocation ,
                 modifiers , (ControlActionUPP ) -1 ) ;
             result = noErr ;
@@ -720,7 +727,7 @@ static pascal OSStatus wxMacTopLevelWindowEventHandler( EventHandlerCallRef hand
                     cEvent.SetParameter<Rect>( kEventParamCurrentBounds , &adjustedRect ) ;
             }
 
-            result = noErr ;
+            result = noErr ; 
             break ;
         }
         default :
@@ -843,10 +850,15 @@ void wxTopLevelWindowMac::Init()
     m_maximizeOnShow = FALSE;
     m_macWindow = NULL ;
 #if TARGET_API_MAC_OSX 
-    m_macUsesCompositing = TRUE;
-#else
-    m_macUsesCompositing = FALSE;
+    if ( UMAGetSystemVersion() >= 0x1030 )
+    { 
+        m_macUsesCompositing = TRUE;
+    }
+    else
 #endif
+    {
+        m_macUsesCompositing = FALSE;
+    }
     m_macEventHandler = NULL ;
     m_macFullScreenData = NULL ;
 }
@@ -1052,10 +1064,8 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
     else if ( HasFlag( wxFRAME_DRAWER ) )
     {
         wclass = kDrawerWindowClass;
-        // Should this be left for compositing check below?
-        // CreateNewWindow will fail without it, should wxDrawerWindow turn
-        // on compositing before calling MacCreateRealWindow?
-        attr |= kWindowCompositingAttribute;// | kWindowStandardHandlerAttribute;
+        // we must force compositing on a drawer
+        m_macUsesCompositing = TRUE ;
     }
 #endif  //10.2 and up
     else
@@ -1100,7 +1110,8 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
     }
 
 #if TARGET_API_MAC_OSX 
-    attr |= kWindowCompositingAttribute;
+    if ( m_macUsesCompositing )
+        attr |= kWindowCompositingAttribute;
 #endif
     
     if ( HasFlag(wxFRAME_SHAPED) )
@@ -1131,18 +1142,23 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
     UMASetWTitle( (WindowRef) m_macWindow , title , m_font.GetEncoding() ) ;
     m_peer = new wxMacControl(this) ;
 #if TARGET_API_MAC_OSX
-    // There is a bug in 10.2.X for ::GetRootControl returning the window view instead of 
-    // the content view, so we have to retrieve it explicitely
-    HIViewFindByID( HIViewGetRoot( (WindowRef) m_macWindow ) , kHIViewWindowContentID , 
-        m_peer->GetControlRefAddr() ) ;
-    if ( !m_peer->Ok() )
+    
+    if ( m_macUsesCompositing )
     {
-        // compatibility mode fallback
-        GetRootControl( (WindowRef) m_macWindow , m_peer->GetControlRefAddr() ) ;
+        // There is a bug in 10.2.X for ::GetRootControl returning the window view instead of 
+        // the content view, so we have to retrieve it explicitely
+        HIViewFindByID( HIViewGetRoot( (WindowRef) m_macWindow ) , kHIViewWindowContentID , 
+            m_peer->GetControlRefAddr() ) ;
+        if ( !m_peer->Ok() )
+        {
+            // compatibility mode fallback
+            GetRootControl( (WindowRef) m_macWindow , m_peer->GetControlRefAddr() ) ;
+        }
     }
-#else
-    ::CreateRootControl( (WindowRef)m_macWindow , m_peer->GetControlRefAddr() ) ;
 #endif
+    {
+        ::CreateRootControl( (WindowRef)m_macWindow , m_peer->GetControlRefAddr() ) ;
+    }
     // the root control level handleer
     MacInstallEventHandler( (WXWidget) m_peer->GetControlRef() ) ;
 
@@ -1361,9 +1377,7 @@ void wxTopLevelWindowMac::DoGetClientSize( int *width, int *height ) const
 void wxTopLevelWindowMac::MacSetMetalAppearance( bool set ) 
 {
 #if TARGET_API_MAC_OSX
-    UInt32 attr = 0 ;
-    GetWindowAttributes((WindowRef) m_macWindow , &attr ) ;
-    wxASSERT_MSG( attr & kWindowCompositingAttribute ,
+    wxASSERT_MSG( m_macUsesCompositing ,
         wxT("Cannot set metal appearance on a non-compositing window") ) ;
                 
     MacChangeWindowAttributes( set ? kWindowMetalAttribute : kWindowNoAttributes , 

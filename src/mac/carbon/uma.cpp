@@ -790,18 +790,18 @@ OSStatus UMAPutScrap( Size size , OSType type , void *data )
 
 Rect* UMAGetControlBoundsInWindowCoords(ControlRef theControl, Rect *bounds)
 {
-//    wxWindow* win = wxFindControlFromMacControl( theControl ) ;
-    
     GetControlBounds( theControl , bounds ) ;
 #if TARGET_API_MAC_OSX
     WindowRef tlwref = GetControlOwner( theControl ) ;
-    wxWindow* tlwwx = (wxWindow*) wxFindWinFromMacWindow( tlwref ) ;
-    ControlRef rootControl = tlwwx->GetPeer()->GetControlRef() ;
 
-    HIPoint hiPoint = CGPointMake(  0 , 0 ) ;
-
-    HIViewConvertPoint( &hiPoint , HIViewGetSuperview(theControl) , rootControl  ) ;
-    OffsetRect( bounds , (short) (hiPoint.x) , (short) (hiPoint.y) ) ;
+    wxTopLevelWindowMac* tlwwx = wxFindWinFromMacWindow( tlwref ) ;
+    if ( tlwwx->MacUsesCompositing() )
+    {
+        ControlRef rootControl = tlwwx->GetPeer()->GetControlRef() ;
+        HIPoint hiPoint = CGPointMake(  0 , 0 ) ;
+        HIViewConvertPoint( &hiPoint , HIViewGetSuperview(theControl) , rootControl  ) ;
+        OffsetRect( bounds , (short) hiPoint.x , (short) hiPoint.y ) ;
+    }
 #endif
     return bounds ;
 }

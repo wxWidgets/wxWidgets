@@ -240,20 +240,21 @@ void wxToolBarTool::SetPosition(const wxPoint& position)
     m_x = position.x;
     m_y = position.y;
 
-    if ( IsButton() )
+    int x , y ;
+    x = y = 0 ;
+    int mac_x = position.x ;
+    int mac_y = position.y ;
+
+    if ( ! GetToolBar()->MacGetTopLevelWindow()->MacUsesCompositing() )
     {
-        int x , y ;
-        x = y = 0 ;
-        int mac_x = position.x ;
-        int mac_y = position.y ;
-#ifdef __WXMAC_OSX__
-        // already correctly set up
-#else
         WindowRef rootwindow = (WindowRef) GetToolBar()->MacGetTopLevelWindowRef() ;    
         GetToolBar()->MacWindowToRootWindow( &x , &y ) ;
         mac_x += x;
         mac_y += y;
-#endif
+    }
+
+    if ( IsButton() )
+    {
         Rect contrlRect ;       
         GetControlBounds( m_controlHandle , &contrlRect ) ; 
         int former_mac_x = contrlRect.left ;
@@ -273,11 +274,6 @@ void wxToolBarTool::SetPosition(const wxPoint& position)
     {
         // separator 
 #ifdef __WXMAC_OSX__
-        int x , y ;
-        x = y = 0 ;
-        int mac_x = position.x ;
-        int mac_y = position.y ;
-
         Rect contrlRect ;       
         GetControlBounds( m_controlHandle , &contrlRect ) ; 
         int former_mac_x = contrlRect.left ;

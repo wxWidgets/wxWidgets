@@ -300,6 +300,12 @@ bool wxCheckListBox::Create(wxWindow *parent, wxWindowID id,
 #endif
     m_peer->SetCallbacks( &callbacks);
 
+#if 0
+    // shouldn't be necessary anymore under 10.2
+    m_peer->SetData( kControlNoPart, kControlDataBrowserIncludesFrameAndFocusTag, (Boolean) false ) ;
+    m_peer->SetNeedsFocusRect( true ) ;
+#endif
+
     MacPostControlCreate(pos,size) ;
 
     for ( int i = 0 ; i < n ; i++ )

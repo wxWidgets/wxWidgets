@@ -48,6 +48,10 @@ const short kTextColumnId = 1024 ;
 // we just introduce id s corresponding
 // to the line number
 
+DataBrowserItemDataUPP gDataBrowserItemDataUPP = NULL ;
+DataBrowserItemNotificationUPP gDataBrowserItemNotificationUPP = NULL ;
+DataBrowserDrawItemUPP gDataBrowserDrawItemUPP = NULL ;
+
 #if TARGET_API_MAC_OSX
 static pascal void DataBrowserItemNotificationProc(ControlRef browser, DataBrowserItemID itemID,
     DataBrowserItemNotification message, DataBrowserItemDataRef itemData)
@@ -137,6 +141,34 @@ static pascal OSStatus ListBoxGetSetItemData(ControlRef browser,
 	return err;
 }
 
+static pascal void ListBoxDrawProc( ControlRef browser , DataBrowserItemID item , DataBrowserPropertyID property ,
+    DataBrowserItemState itemState , const Rect *itemRect , SInt16 depth , Boolean isColorDevice )
+{
+
+    CFStringRef      cfString;
+    long        systemVersion;
+
+    cfString  = CFStringCreateWithFormat( NULL, NULL, CFSTR("Row %d"), item );
+  
+    ThemeDrawingState themeState ;
+    GetThemeDrawingState( &themeState ) ;
+  
+    if ( itemState == kDataBrowserItemIsSelected )      //  In this sample we handle the "selected" state, all others fall through to our "active" state
+    {
+        Gestalt( gestaltSystemVersion, &systemVersion );
+        if ( (systemVersion >= 0x00001030) && (IsControlActive( browser ) == false) )  //  Panther DB starts using kThemeBrushSecondaryHighlightColor for inactive browser hilighting
+            SetThemePen( kThemeBrushSecondaryHighlightColor, 32, true );
+        else
+            SetThemePen( kThemeBrushPrimaryHighlightColor, 32, true );
+
+        PaintRect( itemRect );                //  First paint the hilite rect, then the text on top
+        SetThemeDrawingState( themeState , false ) ;
+    }
+    DrawThemeTextBox( cfString, kThemeApplicationFont, kThemeStateActive, true, itemRect, teFlushDefault, NULL );
+    if ( cfString != NULL )  
+        CFRelease( cfString );
+    SetThemeDrawingState( themeState , true ) ;
+}
 
 // Listbox item
 wxListBox::wxListBox()
@@ -199,7 +231,33 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
         options += kDataBrowserSelectOnlyOne ;
     }
     verify_noerr(m_peer->SetSelectionFlags( options ) );
+    
+    if ( gDataBrowserItemDataUPP == NULL ) gDataBrowserItemDataUPP = NewDataBrowserItemDataUPP(ListBoxGetSetItemData) ;
+    if ( gDataBrowserItemNotificationUPP == NULL )
+    { 
+        gDataBrowserItemNotificationUPP = 
+#if TARGET_API_MAC_OSX
+	        (DataBrowserItemNotificationUPP) NewDataBrowserItemNotificationWithItemUPP(DataBrowserItemNotificationProc) ;
+#else
+	        NewDataBrowserItemNotificationUPP(DataBrowserItemNotificationProc) ;
+#endif
+    }    
+    if ( gDataBrowserDrawItemUPP == NULL ) gDataBrowserDrawItemUPP = NewDataBrowserDrawItemUPP(ListBoxDrawProc) ;
 
+    DataBrowserCallbacks callbacks ;
+    InitializeDataBrowserCallbacks( &callbacks , kDataBrowserLatestCallbacks ) ;
+
+    callbacks.u.v1.itemDataCallback = gDataBrowserItemDataUPP;
+	callbacks.u.v1.itemNotificationCallback = gDataBrowserItemNotificationUPP;
+    m_peer->SetCallbacks( &callbacks);
+
+    DataBrowserCustomCallbacks customCallbacks ;
+    InitializeDataBrowserCustomCallbacks( &customCallbacks , kDataBrowserLatestCustomCallbacks ) ; 
+   
+    customCallbacks.u.v1.drawItemCallback = gDataBrowserDrawItemUPP ;
+   
+    SetDataBrowserCustomCallbacks( m_peer->GetControlRef() , &customCallbacks ) ;    
+    
     DataBrowserListViewColumnDesc columnDesc ;
     columnDesc.headerBtnDesc.titleOffset = 0;
 	columnDesc.headerBtnDesc.version = kDataBrowserListViewLatestHeaderDesc;
@@ -208,7 +266,6 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
 		kControlUseFontMask | kControlUseJustMask;
 
 	columnDesc.headerBtnDesc.btnContentInfo.contentType = kControlNoContent;
-	columnDesc.propertyDesc.propertyType = kDataBrowserTextType;
 	columnDesc.headerBtnDesc.btnFontStyle.just = teFlushDefault;
 	columnDesc.headerBtnDesc.minimumWidth = 0;
 	columnDesc.headerBtnDesc.maximumWidth = 10000;
@@ -218,41 +275,25 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
 	columnDesc.headerBtnDesc.titleString = NULL ; // CFSTR( "" );
 
 	columnDesc.propertyDesc.propertyID = kTextColumnId;
-	columnDesc.propertyDesc.propertyType = kDataBrowserTextType;
+	columnDesc.propertyDesc.propertyType = kDataBrowserTextType ; // kDataBrowserCustomType;
 	columnDesc.propertyDesc.propertyFlags =
 #if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
 	 kDataBrowserListViewTypeSelectColumn |
 #endif
 	 kDataBrowserTableViewSelectionColumn ;
 
-
 	verify_noerr(m_peer->AddListViewColumn( &columnDesc, kDataBrowserListViewAppendColumn) ) ;
     verify_noerr(m_peer->AutoSizeListViewColumns() ) ;
     verify_noerr(m_peer->SetHasScrollBars(false , true ) ) ;
     verify_noerr(m_peer->SetTableViewHiliteStyle(kDataBrowserTableViewFillHilite  ) ) ;
     verify_noerr(m_peer->SetListViewHeaderBtnHeight( 0 ) ) ;
-    DataBrowserCallbacks callbacks ;
 
-    callbacks.version = kDataBrowserLatestCallbacks;
-
-    InitDataBrowserCallbacks(&callbacks);
-
-    callbacks.u.v1.itemDataCallback =
-        NewDataBrowserItemDataUPP(ListBoxGetSetItemData);
-
-	callbacks.u.v1.itemNotificationCallback =
-#if TARGET_API_MAC_OSX
-	    (DataBrowserItemNotificationUPP) NewDataBrowserItemNotificationWithItemUPP(DataBrowserItemNotificationProc) ;
-#else
-	    NewDataBrowserItemNotificationUPP(DataBrowserItemNotificationProc) ;
+#if 0
+    // shouldn't be necessary anymore under 10.2
+    m_peer->SetData( kControlNoPart, kControlDataBrowserIncludesFrameAndFocusTag, (Boolean) false ) ;
+    m_peer->SetNeedsFocusRect( true ) ;
 #endif
-    m_peer->SetCallbacks( &callbacks);
 
-#if TARGET_API_MAC_OSX
-    // there is a redraw bug in 10.2.X
-    if ( UMAGetSystemVersion() < 0x1030 )
-        m_peer->SetData( kControlNoPart, kControlDataBrowserIncludesFrameAndFocusTag, (Boolean) false ) ;
-#endif
     MacPostControlCreate(pos,size) ;
 
     for ( int i = 0 ; i < n ; i++ )

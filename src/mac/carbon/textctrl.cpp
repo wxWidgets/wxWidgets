@@ -214,7 +214,7 @@ public :
 class wxMacMLTEControl : public wxMacTextControl
 {
 public :
-    wxMacMLTEControl( wxTextCtrl *peer ) : wxMacTextControl( peer ) {}
+    wxMacMLTEControl( wxTextCtrl *peer ) ;
     virtual wxString GetStringValue() const ;
     virtual void SetStringValue( const wxString &str) ;
 
@@ -271,7 +271,6 @@ public :
                              const wxSize& size, long style ) ;
     virtual OSStatus SetFocus( ControlFocusPart focusPart ) ;
     virtual bool HasFocus() const ;
-    virtual bool NeedsFocusRect() const;
 protected :
     HIViewRef m_scrollView ;
     HIViewRef m_textView ;
@@ -318,7 +317,6 @@ public :
     ~wxMacMLTEClassicControl() ;
     virtual void VisibilityChanged(bool shown) ;
     virtual void SuperChangedPosition() ;
-    virtual bool NeedsFocusRect() const;
 
     virtual void            MacControlUserPaneDrawProc(wxInt16 part) ;
     virtual wxInt16         MacControlUserPaneHitTestProc(wxInt16 x, wxInt16 y) ;
@@ -1377,6 +1375,11 @@ public :
         TXNControlData m_data[1] ;
 } ;
 
+wxMacMLTEControl::wxMacMLTEControl( wxTextCtrl *peer ) : wxMacTextControl( peer ) 
+{
+    SetNeedsFocusRect( true ) ; 
+}
+
 wxString wxMacMLTEControl::GetStringValue() const
 {
     wxString result ;
@@ -2092,7 +2095,13 @@ void wxMacMLTEClassicControl::MacFocusPaneText(Boolean setFocus)
 
 void wxMacMLTEClassicControl::MacSetObjectVisibility(Boolean vis)
 {
-
+    ControlRef controlFocus = 0 ;
+    GetKeyboardFocus( m_txnWindow , &controlFocus ) ;
+    
+    if ( controlFocus == m_controlRef && vis == false )
+    {
+        SetKeyboardFocus( m_txnWindow , m_controlRef , kControlFocusNoPart ) ;
+    }
     // we right now are always clipping as partial visibility (overlapped) visibility
     // is also a problem, if we run into further problems we might set the FrameBounds to an empty
     // rect here
@@ -2117,6 +2126,7 @@ void wxMacMLTEClassicControl::MacUpdatePosition()
         wxMacWindowClipper cl(textctrl) ;
 
 #ifdef __WXMAC_OSX__
+        bool isCompositing = textctrl->MacGetTopLevelWindow()->MacUsesCompositing() ;
         if ( m_sbHorizontal || m_sbVertical )
         {
             int w = bounds.right - bounds.left ;
@@ -2130,6 +2140,10 @@ void wxMacMLTEClassicControl::MacUpdatePosition()
                 sbBounds.top = h - 14 ;
                 sbBounds.right = w + 1 ;
                 sbBounds.bottom = h + 1 ;
+                
+                if ( !isCompositing )
+                    OffsetRect( &sbBounds , m_txnControlBounds.left , m_txnControlBounds.top ) ;
+                
                 SetControlBounds( m_sbHorizontal , &sbBounds ) ;
                 SetControlViewSize( m_sbHorizontal , w ) ;
             }
@@ -2142,6 +2156,9 @@ void wxMacMLTEClassicControl::MacUpdatePosition()
                 sbBounds.right = w + 1 ;
                 sbBounds.bottom = m_sbHorizontal ? h - 14 : h + 1  ;
                 
+                if ( !isCompositing )
+                    OffsetRect( &sbBounds , m_txnControlBounds.left , m_txnControlBounds.top ) ;
+
                 SetControlBounds( m_sbVertical , &sbBounds ) ;
                 SetControlViewSize( m_sbVertical , h ) ;
             }
@@ -2390,11 +2407,6 @@ void wxMacMLTEClassicControl::SuperChangedPosition()
 {
     MacUpdatePosition() ;
     wxMacControl::SuperChangedPosition() ;
-}
-
-bool wxMacMLTEClassicControl::NeedsFocusRect() const
-{
-    return true;
 }
 
 #ifdef __WXMAC_OSX__
@@ -2648,11 +2660,6 @@ bool wxMacMLTEHIViewControl::HasFocus() const
     ControlRef control ;
     GetKeyboardFocus( GetUserFocusWindow() , &control ) ;
     return control == m_textView ;
-}
-
-bool wxMacMLTEHIViewControl::NeedsFocusRect() const
-{
-    return m_windowStyle & wxNO_BORDER ? false : true;
 }
 
 #endif // MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2

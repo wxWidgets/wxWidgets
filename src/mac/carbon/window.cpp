@@ -201,7 +201,7 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                 RgnHandle updateRgn = NULL ;
                 RgnHandle allocatedRgn = NULL ;
                 wxRegion visRegion = thisWindow->MacGetVisibleRegion() ;
-                if ( cEvent.GetParameter<RgnHandle>(kEventParamRgnHandle, &updateRgn) != noErr )
+                if ( thisWindow->MacGetTopLevelWindow()->MacUsesCompositing() == false || cEvent.GetParameter<RgnHandle>(kEventParamRgnHandle, &updateRgn) != noErr )
                 {
                     updateRgn = (RgnHandle) visRegion.GetWXHRGN() ;
                 }
@@ -1175,6 +1175,8 @@ bool wxWindowMac::MacGetBoundsForControl(const wxPoint& pos,
                                        int& x, int& y,
                                        int& w, int& h , bool adjustOrigin ) const
 {
+    bool isCompositing = MacGetTopLevelWindow()->MacUsesCompositing() ;
+    
     // the desired size, minus the border pixels gives the correct size of the control
 
     x = (int)pos.x;
@@ -1182,9 +1184,9 @@ bool wxWindowMac::MacGetBoundsForControl(const wxPoint& pos,
     // todo the default calls may be used as soon as PostCreateControl Is moved here
     w = wxMax(size.x,0) ; // WidthDefault( size.x );
     h = wxMax(size.y,0) ; // HeightDefault( size.y ) ;
-#if !TARGET_API_MAC_OSX
-    GetParent()->MacWindowToRootWindow( &x , &y ) ;
-#endif
+
+    if ( !isCompositing )
+        GetParent()->MacWindowToRootWindow( &x , &y ) ;
 
     x += MacGetLeftBorderSize() ;
     y += MacGetTopBorderSize() ;
@@ -1193,14 +1195,14 @@ bool wxWindowMac::MacGetBoundsForControl(const wxPoint& pos,
 
     if ( adjustOrigin )
         AdjustForParentClientOrigin( x , y ) ;
-#if TARGET_API_MAC_OSX
+
     // this is in window relative coordinate, as this parent may have a border, its physical position is offset by this border
-    if ( ! GetParent()->IsTopLevel() )
+    if ( !GetParent()->IsTopLevel() )
     {
         x -= GetParent()->MacGetLeftBorderSize() ;
         y -= GetParent()->MacGetTopBorderSize() ;
     }
-#endif
+
     return true ;
 }
 
@@ -1222,20 +1224,22 @@ void wxWindowMac::DoGetSize(int *x, int *y) const
 // get the position of the bounds of this window in client coordinates of its parent
 void wxWindowMac::DoGetPosition(int *x, int *y) const
 {
+    bool isCompositing = MacGetTopLevelWindow()->MacUsesCompositing() ;
+
     int x1 , y1 , w1 ,h1 ;
     MacGetPositionAndSizeFromControl( x1 , y1, w1 ,h1 ) ;
     x1 -= MacGetLeftBorderSize() ;
     y1 -= MacGetTopBorderSize() ;
     // to non-client
- #if !TARGET_API_MAC_OSX
-    if ( !GetParent()->IsTopLevel() )
+ 
+    if ( !isCompositing && !GetParent()->IsTopLevel() )
     {
         Rect bounds ;
         GetControlBounds( (ControlRef) GetParent()->GetHandle() , &bounds ) ;
         x1 -= bounds.left ;
         y1 -= bounds.top ;
     }
-#endif
+
     if ( !IsTopLevel() )
     {
         wxWindow *parent = GetParent();
@@ -1377,6 +1381,8 @@ void wxWindowMac::MacRootWindowToWindow( short *x , short *y ) const
 
 void wxWindowMac::MacGetContentAreaInset( int &left , int &top , int &right , int &bottom )
 {
+    bool isCompositing = MacGetTopLevelWindow()->MacUsesCompositing() ;
+
     RgnHandle rgn = NewRgn() ;
     Rect content ;
     if ( m_peer->GetRegion( kControlContentMetaPart , rgn ) == noErr )
@@ -1390,9 +1396,10 @@ void wxWindowMac::MacGetContentAreaInset( int &left , int &top , int &right , in
     DisposeRgn( rgn ) ;
     Rect structure ;
     m_peer->GetRect( &structure ) ;
-#if !TARGET_API_MAC_OSX
-    OffsetRect( &content , -structure.left , -structure.top ) ;
-#endif
+    
+    if ( !isCompositing )
+        OffsetRect( &content , -structure.left , -structure.top ) ;
+
     left = content.left - structure.left ;
     top = content.top  - structure.top ;
     right = structure.right - content.right ;
@@ -1401,6 +1408,7 @@ void wxWindowMac::MacGetContentAreaInset( int &left , int &top , int &right , in
 
 wxSize wxWindowMac::DoGetSizeFromClientSize( const wxSize & size )  const
 {
+    bool isCompositing = MacGetTopLevelWindow()->MacUsesCompositing() ;
     wxSize sizeTotal = size;
 
     RgnHandle rgn = NewRgn() ;
@@ -1418,9 +1426,9 @@ wxSize wxWindowMac::DoGetSizeFromClientSize( const wxSize & size )  const
     DisposeRgn( rgn ) ;
     Rect structure ;
     m_peer->GetRect( &structure ) ;
-#if !TARGET_API_MAC_OSX
-    OffsetRect( &content , -structure.left , -structure.top ) ;
-#endif
+
+    if ( !isCompositing )
+        OffsetRect( &content , -structure.left , -structure.top ) ;
 
     sizeTotal.x += (structure.right - structure.left) - (content.right - content.left) ;
     sizeTotal.y += (structure.bottom - structure.top) - (content.bottom - content.top ) ;
@@ -1435,6 +1443,7 @@ wxSize wxWindowMac::DoGetSizeFromClientSize( const wxSize & size )  const
 // Get size *available for subwindows* i.e. excluding menu bar etc.
 void wxWindowMac::DoGetClientSize(int *x, int *y) const
 {
+    bool isCompositing = MacGetTopLevelWindow()->MacUsesCompositing() ;
     int ww, hh;
 
     RgnHandle rgn = NewRgn() ;
@@ -1448,11 +1457,13 @@ void wxWindowMac::DoGetClientSize(int *x, int *y) const
         m_peer->GetRect( &content ) ;
     }
     DisposeRgn( rgn ) ;
-#if !TARGET_API_MAC_OSX
-    Rect structure ;
-    m_peer->GetRect( &structure ) ;
-    OffsetRect( &content , -structure.left , -structure.top ) ;
-#endif
+
+    if ( !isCompositing )
+    {
+        Rect structure ;
+        m_peer->GetRect( &structure ) ;
+        OffsetRect( &content , -structure.left , -structure.top ) ;
+    }
     ww = content.right - content.left ;
     hh = content.bottom - content.top ;
     /*
@@ -1538,7 +1549,8 @@ bool wxWindowMac::SetCursor(const wxCursor& cursor)
 
     wxWindowMac *mouseWin = 0 ;
     {
-        WindowRef window = (WindowRef) MacGetTopLevelWindowRef() ;
+        wxTopLevelWindowMac *tlw = MacGetTopLevelWindow() ;
+        WindowRef window = (WindowRef) ( tlw ? tlw->MacGetWindowRef() : 0 ) ;
         CGrafPtr savePort ;
         Boolean swapped = QDSwapPort( GetWindowPort( window ) , &savePort ) ;
 
@@ -1549,7 +1561,7 @@ bool wxWindowMac::SetCursor(const wxCursor& cursor)
         GetMouse( &pt ) ;
         ControlPartCode part ;
         ControlRef control ;
-        control = wxMacFindControlUnderMouse( pt , window , &part ) ;
+        control = wxMacFindControlUnderMouse( tlw , pt , window , &part ) ;
         if ( control )
             mouseWin = wxFindControlFromMacControl( control ) ;
 
@@ -1802,14 +1814,8 @@ void wxWindowMac::DoMoveWindow(int x, int y, int width, int height)
         bool vis = MacIsReallyShown() ;
 
         MacInvalidateBorders() ;
-
-        // the HIViewSetFrame call itself should invalidate the areas, but when testing with the UnicodeTextCtrl it does not !
-        if ( vis )
-            m_peer->SetVisibility( false , true ) ;
-
+        
         m_peer->SetRect( &r ) ;
-        if ( vis )
-            m_peer->SetVisibility( true , true ) ;
 
         if ( doMove )
             wxWindowMac::MacSuperChangedPosition() ; // like this only children will be notified
@@ -1948,21 +1954,24 @@ void wxWindowMac::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 
 wxPoint wxWindowMac::GetClientAreaOrigin() const
 {
+    bool isCompositing = MacGetTopLevelWindow()->MacUsesCompositing() ;
     RgnHandle rgn = NewRgn() ;
     Rect content ;
     m_peer->GetRegion( kControlContentMetaPart , rgn ) ;
     GetRegionBounds( rgn , &content ) ;
     DisposeRgn( rgn ) ;
-#if !TARGET_API_MAC_OSX
-    // if the content rgn is empty / not supported
-    // don't attempt to correct the coordinates to wxWindow relative ones
-    if (!::EmptyRect( &content ) )
+    
+    if ( !isCompositing )
     {
-        Rect structure ;
-        m_peer->GetRect( &structure ) ;
-        OffsetRect( &content , -structure.left , -structure.top ) ;
+        // if the content rgn is empty / not supported
+        // don't attempt to correct the coordinates to wxWindow relative ones
+        if (!::EmptyRect( &content ) )
+        {
+            Rect structure ;
+            m_peer->GetRect( &structure ) ;
+            OffsetRect( &content , -structure.left , -structure.top ) ;
+        }
     }
-#endif
 
     return wxPoint( content.left + MacGetLeftBorderSize(  ) , content.top + MacGetTopBorderSize(  ) );
 }
@@ -2187,83 +2196,62 @@ void wxWindowMac::Refresh(bool eraseBack, const wxRect *rect)
     if ( m_peer == NULL )
         return ;
 
-#if TARGET_API_MAC_OSX
-    if ( rect == NULL )
-        m_peer->SetNeedsDisplay( true ) ;
-    else
+
+    bool isCompositing = MacGetTopLevelWindow()->MacUsesCompositing() ;
+//    if ( isCompositing )
     {
-        RgnHandle update = NewRgn() ;
-        SetRectRgn( update , rect->x , rect->y , rect->x + rect->width , rect->y + rect->height ) ;
-        SectRgn( (RgnHandle) MacGetVisibleRegion().GetWXHRGN() , update , update ) ;
-        wxPoint origin = GetClientAreaOrigin() ;
-        OffsetRgn( update, origin.x , origin.y ) ;
-        // right now this is wx' window coordinates, as our native peer does not have borders, this is
-        // inset
-        OffsetRgn( update , -MacGetLeftBorderSize() , -MacGetTopBorderSize() ) ;
-        m_peer->SetNeedsDisplay( true , update) ;
-        DisposeRgn( update ) ;
-    }
-#else
-/*
-        RgnHandle updateRgn = NewRgn() ;
-        if ( rect == NULL )
-        {
-            CopyRgn( (RgnHandle) MacGetVisibleRegion().GetWXHRGN() , updateRgn ) ;
-        }
+        if ( rect == NULL && isCompositing )
+            m_peer->SetNeedsDisplay( true ) ;
         else
         {
-            SetRectRgn( updateRgn , rect->x , rect->y , rect->x + rect->width , rect->y + rect->height ) ;
-            SectRgn( (RgnHandle) MacGetVisibleRegion().GetWXHRGN() , updateRgn , updateRgn ) ;
+            
+            Rect controlBounds ; 
+            m_peer->GetRect( &controlBounds ) ;
+            InvalWindowRect( (WindowRef) MacGetTopLevelWindowRef() , &controlBounds ) ; 
+            /*
+            RgnHandle update = NewRgn() ;
+            if ( rect == NULL )
+            {
+                CopyRgn( (RgnHandle) MacGetVisibleRegion().GetWXHRGN() , update ) ;
+            }
+            else
+            {
+                SetRectRgn( update , rect->x , rect->y , rect->x + rect->width , rect->y + rect->height ) ;
+                SectRgn( (RgnHandle) MacGetVisibleRegion().GetWXHRGN() , update , update ) ;
+            }
+            
+            wxPoint origin = GetClientAreaOrigin() ;
+            OffsetRgn( update, origin.x , origin.y ) ;
+            // right now this is wx' window coordinates, as our native peer does not have borders, this is
+            // inset
+            if ( isCompositing )
+            {
+                OffsetRgn( update , -MacGetLeftBorderSize() , -MacGetTopBorderSize() ) ;
+                m_peer->SetNeedsDisplay( true , update) ;
+            }
+            else
+            {
+                int x = 0 ;
+                int y = 0 ;
+                MacWindowToRootWindow( &x , &y ) ;
+                OffsetRgn( update , x , y ) ;
+                InvalWindowRgn( (WindowRef) MacGetTopLevelWindowRef() , update ) ;
+            }
+            DisposeRgn( update ) ;
+            */
         }
-        InvalWindowRgn( (WindowRef) MacGetTopLevelWindowRef() , updateRgn ) ;
-        DisposeRgn(updateRgn) ;
-*/
-    if ( MacIsReallyShown() )
-    {
-        m_peer->SetVisibility( false , false ) ;
-        m_peer->SetVisibility( true , true ) ;
-    }
-    /*
-    if ( MacGetTopLevelWindow() == NULL )
-        return ;
-
-    if ( !m_peer->IsVisible())
-        return ;
-
-     wxPoint client = GetClientAreaOrigin();
-    int x1 = -client.x;
-    int y1 = -client.y;
-    int x2 = m_width - client.x;
-    int y2 = m_height - client.y;
-
-    if (IsKindOf( CLASSINFO(wxButton)))
-    {
-        // buttons have an "aura"
-        y1 -= 5;
-        x1 -= 5;
-        y2 += 5;
-        x2 += 5;
     }
 
-    Rect clientrect = { y1, x1, y2, x2 };
-
-    if ( rect )
+    if ( 0 )
     {
-        Rect r = { rect->y , rect->x , rect->y + rect->height , rect->x + rect->width } ;
-        SectRect( &clientrect , &r , &clientrect ) ;
+        if ( MacIsReallyShown() )
+        {
+        /*
+            m_peer->SetVisibility( false , false ) ;
+            m_peer->SetVisibility( true , true ) ;
+        */
+        }
     }
-
-    if ( !EmptyRect( &clientrect ) )
-    {
-      int top = 0 , left = 0 ;
-
-      MacClientToRootWindow( &left , &top ) ;
-      OffsetRect( &clientrect , left , top ) ;
-
-      MacGetTopLevelWindow()->MacInvalidate( &clientrect , eraseBack ) ;
-    }
-    */
-#endif
 }
 
 void wxWindowMac::Freeze()
@@ -2309,7 +2297,7 @@ void wxWindowMac::WarpPointer (int x_pos, int y_pos)
 void wxWindowMac::OnEraseBackground(wxEraseEvent& event)
 {
 #if TARGET_API_MAC_OSX
-    if ( m_macBackgroundBrush.Ok() == false || m_macBackgroundBrush.GetStyle() == wxTRANSPARENT )
+    if ( MacGetTopLevelWindow()->MacUsesCompositing() && (m_macBackgroundBrush.Ok() == false || m_macBackgroundBrush.GetStyle() == wxTRANSPARENT ) )
     {
         event.Skip() ;
     }
@@ -2470,10 +2458,9 @@ void wxWindowMac::MacPaintBorders( int leftOrigin , int rightOrigin )
     else
 #endif
     {
-#ifdef __WXMAC_OSX__
         // as the non OSX Version is already working in window relative coordinates, it's not needed
         wxTopLevelWindowMac* top = MacGetTopLevelWindow();
-        if (top)
+        if (top && top->MacUsesCompositing())
         {
             wxPoint pt(0,0) ;
             wxMacControl::Convert( &pt , GetParent()->m_peer , top->m_peer ) ;
@@ -2482,7 +2469,6 @@ void wxWindowMac::MacPaintBorders( int leftOrigin , int rightOrigin )
             rect.top += pt.y ;
             rect.bottom += pt.y ;
         }
-#endif 
 
         if (HasFlag(wxRAISED_BORDER) || HasFlag( wxSUNKEN_BORDER) || HasFlag(wxDOUBLE_BORDER) )
         {
@@ -2739,7 +2725,7 @@ void wxWindowMac::OnSetFocus(wxFocusEvent& event)
 #ifdef __WXMAC_OSX__
         // as the non OSX Version is already working in window relative coordinates, it's not needed
         wxTopLevelWindowMac* top = MacGetTopLevelWindow();
-        if (top)
+        if (top && top->MacUsesCompositing() )
         {
             wxPoint pt(0,0) ;
             wxMacControl::Convert( &pt , GetParent()->m_peer , top->m_peer ) ;
