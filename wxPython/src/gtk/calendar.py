@@ -282,3 +282,4 @@ wxEVT_CALENDAR_WEEKDAY_CLICKED = calendarc.wxEVT_CALENDAR_WEEKDAY_CLICKED
 # Stuff these names into the wx namespace so wxPyConstructObject can find them
 
 wx.wxCalendarEventPtr                  = wxCalendarEventPtr
+wx.wxCalendarCtrlPtr                   = wxCalendarCtrlPtr
