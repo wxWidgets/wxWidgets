@@ -30,7 +30,7 @@ wxStaticBitmapXmlHandler::wxStaticBitmapXmlHandler()
 
 wxObject *wxStaticBitmapXmlHandler::DoCreateResource()
 { 
-    wxStaticBitmap *bmp = new wxStaticBitmap(m_ParentAsWindow,
+    wxStaticBitmap *bmp = new wxStaticBitmap(m_parentAsWindow,
                                     GetID(),
                                     GetBitmap(wxT("bitmap"), GetSize()),
                                     GetPosition(), GetSize(),

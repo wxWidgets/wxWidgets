@@ -52,11 +52,11 @@ wxFrameXmlHandler::wxFrameXmlHandler() : wxXmlResourceHandler()
 
 wxObject *wxFrameXmlHandler::DoCreateResource()
 { 
-    wxFrame *frame = wxDynamicCast(m_Instance, wxFrame);
+    wxFrame *frame = wxDynamicCast(m_instance, wxFrame);
     
     wxASSERT_MSG(frame, _("XML resource: Cannot create dialog without instance."));
     
-    frame->Create(m_ParentAsWindow,
+    frame->Create(m_parentAsWindow,
                 GetID(),
                 GetText(_T("title")),
                 wxDefaultPosition, wxDefaultSize,

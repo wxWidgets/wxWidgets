@@ -23,7 +23,7 @@
 #include "wx/choice.h"
 
 wxChoiceXmlHandler::wxChoiceXmlHandler() 
-: wxXmlResourceHandler() , m_InsideBox(FALSE)
+: wxXmlResourceHandler() , m_insideBox(FALSE)
 {
     ADD_STYLE(wxCB_SORT);
     AddWindowStyles();
@@ -31,13 +31,13 @@ wxChoiceXmlHandler::wxChoiceXmlHandler()
 
 wxObject *wxChoiceXmlHandler::DoCreateResource()
 { 
-    if( m_Class == wxT("wxChoice"))
+    if( m_class == wxT("wxChoice"))
     {
         // find the selection
         long selection = GetLong( wxT("selection"), -1 );
 
         // need to build the list of strings from children
-        m_InsideBox = TRUE;
+        m_insideBox = TRUE;
         CreateChildrenPrivately( NULL, GetParamNode(wxT("content")));
         wxString *strings = (wxString *) NULL;
         if( strList.GetCount() > 0 )
@@ -49,7 +49,7 @@ wxObject *wxChoiceXmlHandler::DoCreateResource()
         }
 
 
-        wxChoice *control = new wxChoice(m_ParentAsWindow,
+        wxChoice *control = new wxChoice(m_parentAsWindow,
                                     GetID(),
                                     GetPosition(), GetSize(),
                                     strList.GetCount(),
@@ -76,7 +76,7 @@ wxObject *wxChoiceXmlHandler::DoCreateResource()
         // handle <item>Label</item>
         
         // add to the list
-        strList.Add( GetNodeContent(m_Node) );
+        strList.Add( GetNodeContent(m_node) );
 
         return NULL;
     }
@@ -88,7 +88,7 @@ wxObject *wxChoiceXmlHandler::DoCreateResource()
 bool wxChoiceXmlHandler::CanHandle(wxXmlNode *node)
 {
     return (IsOfClass(node, wxT("wxChoice")) ||
-           (m_InsideBox && node->GetName() == wxT("item"))
+           (m_insideBox && node->GetName() == wxT("item"))
            );
 }
 

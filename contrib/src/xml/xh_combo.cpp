@@ -25,7 +25,7 @@
 #if wxUSE_COMBOBOX
 
 wxComboBoxXmlHandler::wxComboBoxXmlHandler() 
-: wxXmlResourceHandler() , m_InsideBox(FALSE)
+: wxXmlResourceHandler() , m_insideBox(FALSE)
 {
     ADD_STYLE(wxCB_SIMPLE);
     ADD_STYLE(wxCB_SORT);
@@ -36,13 +36,13 @@ wxComboBoxXmlHandler::wxComboBoxXmlHandler()
 
 wxObject *wxComboBoxXmlHandler::DoCreateResource()
 { 
-    if( m_Class == wxT("wxComboBox"))
+    if( m_class == wxT("wxComboBox"))
     {
         // find the selection
         long selection = GetLong( wxT("selection"), -1 );
 
         // need to build the list of strings from children
-        m_InsideBox = TRUE;
+        m_insideBox = TRUE;
         CreateChildrenPrivately( NULL, GetParamNode(wxT("content")));
         wxString *strings = (wxString *) NULL;
         if( strList.GetCount() > 0 )
@@ -54,7 +54,7 @@ wxObject *wxComboBoxXmlHandler::DoCreateResource()
         }
 
 
-        wxComboBox *control = new wxComboBox(m_ParentAsWindow,
+        wxComboBox *control = new wxComboBox(m_parentAsWindow,
                                     GetID(),
                                     GetText(wxT("value")),
                                     GetPosition(), GetSize(),
@@ -82,7 +82,7 @@ wxObject *wxComboBoxXmlHandler::DoCreateResource()
         // handle <item>Label</item>
 
         // add to the list
-        strList.Add( GetNodeContent(m_Node) );
+        strList.Add( GetNodeContent(m_node) );
 
         return NULL;
     }
@@ -94,7 +94,7 @@ wxObject *wxComboBoxXmlHandler::DoCreateResource()
 bool wxComboBoxXmlHandler::CanHandle(wxXmlNode *node)
 {
     return (IsOfClass(node, wxT("wxComboBox")) ||
-           (m_InsideBox && node->GetName() == wxT("item"))
+           (m_insideBox && node->GetName() == wxT("item"))
            );
 }
 

@@ -42,7 +42,7 @@ wxSliderXmlHandler::wxSliderXmlHandler()
 
 wxObject *wxSliderXmlHandler::DoCreateResource()
 { 
-    wxSlider *control = new wxSlider(m_ParentAsWindow,
+    wxSlider *control = new wxSlider(m_parentAsWindow,
                                     GetID(),
                                     GetLong( wxT("value"), wxSL_DEFAULT_VALUE), 
                                     GetLong( wxT("min"), wxSL_DEFAULT_MIN),

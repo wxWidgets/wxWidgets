@@ -46,7 +46,7 @@ wxListCtrlXmlHandler::wxListCtrlXmlHandler()
 
 wxObject *wxListCtrlXmlHandler::DoCreateResource()
 { 
-    wxListCtrl *list = new wxListCtrl(m_ParentAsWindow,
+    wxListCtrl *list = new wxListCtrl(m_parentAsWindow,
                                     GetID(),
                                     GetPosition(), GetSize(),
                                     GetStyle(),

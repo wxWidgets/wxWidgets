@@ -35,19 +35,19 @@
 wxXmlNode::wxXmlNode(wxXmlNode *parent,wxXmlNodeType type, 
                      const wxString& name, const wxString& content,
                      wxXmlProperty *props, wxXmlNode *next)
-    : m_Type(type), m_Name(name), m_Content(content),
-      m_Properties(props), m_Parent(parent), 
-      m_Children(NULL), m_Next(next)
+    : m_type(type), m_name(name), m_content(content),
+      m_properties(props), m_parent(parent), 
+      m_children(NULL), m_next(next)
 {
-    if (m_Parent)
+    if (m_parent)
     { 
-        if (m_Parent->m_Children)
+        if (m_parent->m_children)
         {
-            m_Next = m_Parent->m_Children;
-            m_Parent->m_Children = this;
+            m_next = m_parent->m_children;
+            m_parent->m_children = this;
         }
         else
-            m_Parent->m_Children = this;
+            m_parent->m_children = this;
     }
 }
 
@@ -55,17 +55,17 @@ wxXmlNode::wxXmlNode(wxXmlNode *parent,wxXmlNodeType type,
 
 wxXmlNode::wxXmlNode(wxXmlNodeType type, const wxString& name, 
                      const wxString& content)
-    : m_Type(type), m_Name(name), m_Content(content),
-      m_Properties(NULL), m_Parent(NULL),
-      m_Children(NULL), m_Next(NULL)
+    : m_type(type), m_name(name), m_content(content),
+      m_properties(NULL), m_parent(NULL),
+      m_children(NULL), m_next(NULL)
 {}
 
 
 
 wxXmlNode::wxXmlNode(const wxXmlNode& node)
 {
-    m_Next = NULL;
-    m_Parent = NULL;
+    m_next = NULL;
+    m_parent = NULL;
     DoCopy(node);
 }
 
@@ -73,8 +73,8 @@ wxXmlNode::wxXmlNode(const wxXmlNode& node)
 
 wxXmlNode& wxXmlNode::operator=(const wxXmlNode& node)
 {
-    delete m_Properties;
-    delete m_Children;
+    delete m_properties;
+    delete m_children;
     DoCopy(node);
     return *this;
 }
@@ -83,20 +83,20 @@ wxXmlNode& wxXmlNode::operator=(const wxXmlNode& node)
 
 void wxXmlNode::DoCopy(const wxXmlNode& node)
 {
-    m_Type = node.m_Type;
-    m_Name = node.m_Name;
-    m_Content = node.m_Content;
-    m_Children = NULL;
+    m_type = node.m_type;
+    m_name = node.m_name;
+    m_content = node.m_content;
+    m_children = NULL;
 
-    wxXmlNode *n = node.m_Children;
+    wxXmlNode *n = node.m_children;
     while (n)
     {
         AddChild(new wxXmlNode(*n));
         n = n->GetNext();
     }
     
-    m_Properties = NULL;
-    wxXmlProperty *p = node.m_Properties;
+    m_properties = NULL;
+    wxXmlProperty *p = node.m_properties;
     while (p)
     {
        AddProperty(p->GetName(), p->GetValue());
@@ -152,16 +152,16 @@ wxString wxXmlNode::GetPropVal(const wxString& propName, const wxString& default
 
 void wxXmlNode::AddChild(wxXmlNode *child)
 {
-    if (m_Children == NULL)
-        m_Children = child;
+    if (m_children == NULL)
+        m_children = child;
     else
     {
-        wxXmlNode *ch = m_Children;
-        while (ch->m_Next) ch = ch->m_Next;
-        ch->m_Next = child;
+        wxXmlNode *ch = m_children;
+        while (ch->m_next) ch = ch->m_next;
+        ch->m_next = child;
     }
-    child->m_Next = NULL;
-    child->m_Parent = this;
+    child->m_next = NULL;
+    child->m_parent = this;
 }
 
 
@@ -170,45 +170,45 @@ void wxXmlNode::InsertChild(wxXmlNode *child, wxXmlNode *before_node)
 {
     wxASSERT_MSG(before_node->GetParent() == this, wxT("wxXmlNode::InsertChild - the node has incorrect parent"));
 
-    if (m_Children == before_node)
-       m_Children = child;
+    if (m_children == before_node)
+       m_children = child;
     else
     {
-        wxXmlNode *ch = m_Children;
-        while (ch->m_Next != before_node) ch = ch->m_Next;
-        ch->m_Next = child;
+        wxXmlNode *ch = m_children;
+        while (ch->m_next != before_node) ch = ch->m_next;
+        ch->m_next = child;
     }
 
-    child->m_Parent = this;
-    child->m_Next = before_node;
+    child->m_parent = this;
+    child->m_next = before_node;
 }
 
 
 
 bool wxXmlNode::RemoveChild(wxXmlNode *child)
 {
-    if (m_Children == NULL)
+    if (m_children == NULL)
         return FALSE;
-    else if (m_Children == child)
+    else if (m_children == child)
     {
-        m_Children = child->m_Next;
-        child->m_Parent = NULL;
-        child->m_Next = NULL;
+        m_children = child->m_next;
+        child->m_parent = NULL;
+        child->m_next = NULL;
         return TRUE;
     }
     else
     {
-        wxXmlNode *ch = m_Children;
-        while (ch->m_Next)
+        wxXmlNode *ch = m_children;
+        while (ch->m_next)
         {
-            if (ch->m_Next == child)
+            if (ch->m_next == child)
             {
-                ch->m_Next = child->m_Next;
-                child->m_Parent = NULL;
-                child->m_Next = NULL;
+                ch->m_next = child->m_next;
+                child->m_parent = NULL;
+                child->m_next = NULL;
                 return TRUE;
             }
-            ch = ch->m_Next;
+            ch = ch->m_next;
         }
         return FALSE;
     }
@@ -223,11 +223,11 @@ void wxXmlNode::AddProperty(const wxString& name, const wxString& value)
 
 void wxXmlNode::AddProperty(wxXmlProperty *prop)
 {
-    if (m_Properties == NULL)
-        m_Properties = prop;
+    if (m_properties == NULL)
+        m_properties = prop;
     else
     {
-        wxXmlProperty *p = m_Properties;
+        wxXmlProperty *p = m_properties;
         while (p->GetNext()) p = p->GetNext();
         p->SetNext(prop);
     }
@@ -237,13 +237,13 @@ void wxXmlNode::AddProperty(wxXmlProperty *prop)
 
 bool wxXmlNode::DeleteProperty(const wxString& name)
 {
-    if (m_Properties == NULL)
+    if (m_properties == NULL)
         return FALSE;
 
-    else if (m_Properties->GetName() == name)
+    else if (m_properties->GetName() == name)
     {
-        wxXmlProperty *prop = m_Properties;
-        m_Properties = prop->GetNext();
+        wxXmlProperty *prop = m_properties;
+        m_properties = prop->GetNext();
         prop->SetNext(NULL);
         delete prop;
         return TRUE;
@@ -251,7 +251,7 @@ bool wxXmlNode::DeleteProperty(const wxString& name)
 
     else
     {
-        wxXmlProperty *p = m_Properties;
+        wxXmlProperty *p = m_properties;
         while (p->GetNext())
         {
             if (p->GetNext()->GetName() == name)
@@ -275,29 +275,29 @@ bool wxXmlNode::DeleteProperty(const wxString& name)
 
 
 
-wxList *wxXmlDocument::sm_Handlers = NULL;
+wxList *wxXmlDocument::sm_handlers = NULL;
 
 
 
 wxXmlDocument::wxXmlDocument(const wxString& filename, wxXmlIOType io_type)
-                          : wxObject(), m_Root(NULL)
+                          : wxObject(), m_root(NULL)
 {
     if (!Load(filename, io_type)) 
     {
-        delete m_Root;
-        m_Root = NULL;
+        delete m_root;
+        m_root = NULL;
     }
 }
 
 
 
 wxXmlDocument::wxXmlDocument(wxInputStream& stream, wxXmlIOType io_type)
-                          : wxObject(), m_Root(NULL)
+                          : wxObject(), m_root(NULL)
 {
     if (!Load(stream, io_type)) 
     {
-        delete m_Root;
-        m_Root = NULL;
+        delete m_root;
+        m_root = NULL;
     }
 }
 
@@ -312,7 +312,7 @@ wxXmlDocument::wxXmlDocument(const wxXmlDocument& doc)
 
 wxXmlDocument& wxXmlDocument::operator=(const wxXmlDocument& doc)
 {
-    delete m_Root;
+    delete m_root;
     DoCopy(doc);
     return *this;
 }
@@ -321,9 +321,9 @@ wxXmlDocument& wxXmlDocument::operator=(const wxXmlDocument& doc)
 
 void wxXmlDocument::DoCopy(const wxXmlDocument& doc)
 {
-    m_Version = doc.m_Version;
-    m_Encoding = doc.m_Encoding;
-    m_Root = new wxXmlNode(*doc.m_Root);
+    m_version = doc.m_version;
+    m_encoding = doc.m_encoding;
+    m_root = new wxXmlNode(*doc.m_root);
 }
 
 
@@ -338,7 +338,7 @@ bool wxXmlDocument::Load(const wxString& filename, wxXmlIOType io_type)
 
 bool wxXmlDocument::Load(wxInputStream& stream, wxXmlIOType io_type)
 {
-    wxNode *n = sm_Handlers->GetFirst();
+    wxNode *n = sm_handlers->GetFirst();
     while (n)
     {
         wxXmlIOHandler *h = (wxXmlIOHandler*) n->GetData();
@@ -366,7 +366,7 @@ bool wxXmlDocument::Save(const wxString& filename, wxXmlIOType io_type) const
 
 bool wxXmlDocument::Save(wxOutputStream& stream, wxXmlIOType io_type) const
 {
-    wxNode *n = sm_Handlers->GetFirst();
+    wxNode *n = sm_handlers->GetFirst();
     while (n)
     {
         wxXmlIOHandler *h = (wxXmlIOHandler*) n->GetData();
@@ -387,19 +387,19 @@ bool wxXmlDocument::Save(wxOutputStream& stream, wxXmlIOType io_type) const
 
 void wxXmlDocument::AddHandler(wxXmlIOHandler *handler)
 {
-    if (sm_Handlers == NULL)
+    if (sm_handlers == NULL)
     {
-        sm_Handlers = new wxList;
-        sm_Handlers->DeleteContents(TRUE);
+        sm_handlers = new wxList;
+        sm_handlers->DeleteContents(TRUE);
     }
-    sm_Handlers->Append(handler);
+    sm_handlers->Append(handler);
 }
 
 
 void wxXmlDocument::CleanUpHandlers()
 {
-    delete sm_Handlers;
-    sm_Handlers = NULL;
+    delete sm_handlers;
+    sm_handlers = NULL;
 }
 
 
@@ -407,7 +407,8 @@ void wxXmlDocument::InitStandardHandlers()
 {
     AddHandler(new wxXmlIOHandlerBin);
     AddHandler(new wxXmlIOHandlerBinZ);
-    AddHandler(new wxXmlIOHandlerLibxml);
+    AddHandler(new wxXmlIOHandlerExpat);
+    AddHandler(new wxXmlIOHandlerWriter);
 }
 
 

@@ -35,7 +35,7 @@ wxTreeCtrlXmlHandler::wxTreeCtrlXmlHandler()
 
 wxObject *wxTreeCtrlXmlHandler::DoCreateResource()
 { 
-    wxTreeCtrl *tree = new wxTreeCtrl(m_ParentAsWindow,
+    wxTreeCtrl *tree = new wxTreeCtrl(m_parentAsWindow,
                                     GetID(),
                                     GetPosition(), GetSize(),
                                     GetStyle(),

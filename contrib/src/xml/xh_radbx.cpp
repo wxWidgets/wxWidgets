@@ -25,7 +25,7 @@
 #if wxUSE_RADIOBOX
 
 wxRadioBoxXmlHandler::wxRadioBoxXmlHandler() 
-: wxXmlResourceHandler() , m_InsideBox(FALSE)
+: wxXmlResourceHandler() , m_insideBox(FALSE)
 {
     ADD_STYLE(wxRA_SPECIFY_COLS);
     ADD_STYLE(wxRA_HORIZONTAL);
@@ -36,13 +36,13 @@ wxRadioBoxXmlHandler::wxRadioBoxXmlHandler()
 
 wxObject *wxRadioBoxXmlHandler::DoCreateResource()
 { 
-    if( m_Class == wxT("wxRadioBox"))
+    if( m_class == wxT("wxRadioBox"))
     {
         // find the selection
         long selection = GetLong( wxT("selection"), -1 );
 
         // need to build the list of strings from children
-        m_InsideBox = TRUE;
+        m_insideBox = TRUE;
         CreateChildrenPrivately( NULL, GetParamNode(wxT("content")));
         wxString *strings = (wxString *) NULL;
         if( strList.GetCount() > 0 )
@@ -54,7 +54,7 @@ wxObject *wxRadioBoxXmlHandler::DoCreateResource()
         }
 
 
-        wxRadioBox *control = new wxRadioBox(m_ParentAsWindow,
+        wxRadioBox *control = new wxRadioBox(m_parentAsWindow,
                                     GetID(),
                                     GetText(wxT("label")),
                                     GetPosition(), GetSize(),
@@ -83,7 +83,7 @@ wxObject *wxRadioBoxXmlHandler::DoCreateResource()
         // handle <item selected="boolean">Label</item>
 
         // add to the list
-        strList.Add( GetNodeContent(m_Node) );
+        strList.Add( GetNodeContent(m_node) );
 
         return NULL;
     }
@@ -95,7 +95,7 @@ wxObject *wxRadioBoxXmlHandler::DoCreateResource()
 bool wxRadioBoxXmlHandler::CanHandle(wxXmlNode *node)
 {
     return (IsOfClass(node, wxT("wxRadioBox")) ||
-           (m_InsideBox && node->GetName() == wxT("item"))
+           (m_insideBox && node->GetName() == wxT("item"))
            );
 }
 

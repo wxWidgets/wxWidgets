@@ -23,7 +23,7 @@
 #include "wx/listbox.h"
 
 wxListBoxXmlHandler::wxListBoxXmlHandler() 
-: wxXmlResourceHandler() , m_InsideBox(FALSE)
+: wxXmlResourceHandler() , m_insideBox(FALSE)
 {
     ADD_STYLE(wxLB_SINGLE);
     ADD_STYLE(wxLB_MULTIPLE);
@@ -37,13 +37,13 @@ wxListBoxXmlHandler::wxListBoxXmlHandler()
 
 wxObject *wxListBoxXmlHandler::DoCreateResource()
 { 
-    if( m_Class == wxT("wxListBox"))
+    if( m_class == wxT("wxListBox"))
     {
         // find the selection
         long selection = GetLong( wxT("selection"), -1 );
 
         // need to build the list of strings from children
-        m_InsideBox = TRUE;
+        m_insideBox = TRUE;
         CreateChildrenPrivately( NULL, GetParamNode(wxT("content")));
         wxString *strings = (wxString *) NULL;
         if( strList.GetCount() > 0 )
@@ -55,7 +55,7 @@ wxObject *wxListBoxXmlHandler::DoCreateResource()
         }
 
 
-        wxListBox *control = new wxListBox(m_ParentAsWindow,
+        wxListBox *control = new wxListBox(m_parentAsWindow,
                                     GetID(),
                                     GetPosition(), GetSize(),
                                     strList.GetCount(),
@@ -82,7 +82,7 @@ wxObject *wxListBoxXmlHandler::DoCreateResource()
         // handle <item>Label</item>
         
         // add to the list
-        strList.Add( GetNodeContent(m_Node) );
+        strList.Add( GetNodeContent(m_node) );
 
         return NULL;
     }
@@ -94,7 +94,7 @@ wxObject *wxListBoxXmlHandler::DoCreateResource()
 bool wxListBoxXmlHandler::CanHandle(wxXmlNode *node)
 {
     return (IsOfClass(node, wxT("wxListBox")) ||
-           (m_InsideBox && node->GetName() == wxT("item"))
+           (m_insideBox && node->GetName() == wxT("item"))
            );
 }
 

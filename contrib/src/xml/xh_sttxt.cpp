@@ -31,7 +31,7 @@ wxStaticTextXmlHandler::wxStaticTextXmlHandler()
 
 wxObject *wxStaticTextXmlHandler::DoCreateResource()
 { 
-    wxStaticText *text = new wxStaticText(m_ParentAsWindow,
+    wxStaticText *text = new wxStaticText(m_parentAsWindow,
                                     GetID(),
                                     GetText(wxT("label")),
                                     GetPosition(), GetSize(),

@@ -36,7 +36,7 @@ wxHtmlWindowXmlHandler::wxHtmlWindowXmlHandler()
 
 wxObject *wxHtmlWindowXmlHandler::DoCreateResource()
 { 
-    wxHtmlWindow *control = new wxHtmlWindow(m_ParentAsWindow,
+    wxHtmlWindow *control = new wxHtmlWindow(m_parentAsWindow,
                                     GetID(),
                                     GetPosition(), GetSize(),
                                     GetStyle( wxT("style" ), wxHW_SCROLLBAR_AUTO),

@@ -36,7 +36,7 @@ wxBitmapButtonXmlHandler::wxBitmapButtonXmlHandler()
 
 wxObject *wxBitmapButtonXmlHandler::DoCreateResource()
 { 
-    wxBitmapButton *button = new wxBitmapButton(m_ParentAsWindow,
+    wxBitmapButton *button = new wxBitmapButton(m_parentAsWindow,
                                     GetID(),
                                     GetBitmap(wxT("bitmap")),
                                     GetPosition(), GetSize(),

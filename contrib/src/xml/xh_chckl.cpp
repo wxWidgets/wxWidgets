@@ -23,7 +23,7 @@
 #include "wx/checklst.h"
 
 wxCheckListXmlHandler::wxCheckListXmlHandler() 
-: wxXmlResourceHandler(), m_InsideBox(FALSE)
+: wxXmlResourceHandler(), m_insideBox(FALSE)
 {
     // no styles
     AddWindowStyles();
@@ -31,10 +31,10 @@ wxCheckListXmlHandler::wxCheckListXmlHandler()
 
 wxObject *wxCheckListXmlHandler::DoCreateResource()
 { 
-    if (m_Class == wxT("wxCheckList"))
+    if (m_class == wxT("wxCheckList"))
     {
         // need to build the list of strings from children
-        m_InsideBox = TRUE;
+        m_insideBox = TRUE;
         CreateChildrenPrivately(NULL, GetParamNode(wxT("content")));
         wxString *strings = (wxString *) NULL;
         if( strList.GetCount() > 0 )
@@ -46,7 +46,7 @@ wxObject *wxCheckListXmlHandler::DoCreateResource()
         }
 
 
-        wxCheckListBox *control = new wxCheckListBox(m_ParentAsWindow,
+        wxCheckListBox *control = new wxCheckListBox(m_parentAsWindow,
                                     GetID(),
                                     GetPosition(), GetSize(),
                                     strList.GetCount(),
@@ -90,7 +90,7 @@ wxObject *wxCheckListXmlHandler::DoCreateResource()
         // handle <item checked="boolean">Label</item>
 
         // add to the list
-        strList.Add( GetNodeContent(m_Node) );
+        strList.Add( GetNodeContent(m_node) );
 
         return NULL;
     }
@@ -102,7 +102,7 @@ wxObject *wxCheckListXmlHandler::DoCreateResource()
 bool wxCheckListXmlHandler::CanHandle(wxXmlNode *node)
 {
     return (IsOfClass(node, wxT("wxCheckList")) ||
-           (m_InsideBox && node->GetName() == wxT("item"))
+           (m_insideBox && node->GetName() == wxT("item"))
            );
 }
 

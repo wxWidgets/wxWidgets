@@ -37,7 +37,7 @@ wxCalendarCtrlXmlHandler::wxCalendarCtrlXmlHandler()
 
 wxObject *wxCalendarCtrlXmlHandler::DoCreateResource()
 { 
-    wxCalendarCtrl *calendar = new wxCalendarCtrl(m_ParentAsWindow,
+    wxCalendarCtrl *calendar = new wxCalendarCtrl(m_parentAsWindow,
                                     GetID(),
                                     wxDefaultDateTime,
                                     /*TODO: take it from resource*/

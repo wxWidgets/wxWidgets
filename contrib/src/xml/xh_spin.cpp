@@ -36,7 +36,7 @@ wxSpinButtonXmlHandler::wxSpinButtonXmlHandler()
 
 wxObject *wxSpinButtonXmlHandler::DoCreateResource()
 { 
-    wxSpinButton *control = new wxSpinButton(m_ParentAsWindow,
+    wxSpinButton *control = new wxSpinButton(m_parentAsWindow,
                                     GetID(),
                                     GetPosition(), GetSize(),
                                     GetStyle( wxT("style"), wxSP_VERTICAL | wxSP_ARROW_KEYS ),
@@ -73,7 +73,7 @@ wxSpinCtrlXmlHandler::wxSpinCtrlXmlHandler()
 
 wxObject *wxSpinCtrlXmlHandler::DoCreateResource()
 { 
-    wxSpinCtrl *control = new wxSpinCtrl(m_ParentAsWindow,
+    wxSpinCtrl *control = new wxSpinCtrl(m_parentAsWindow,
                                     GetID(),
                                     GetText(wxT("value")),
                                     GetPosition(), GetSize(),

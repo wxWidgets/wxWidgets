@@ -36,7 +36,7 @@ wxGaugeXmlHandler::wxGaugeXmlHandler()
 
 wxObject *wxGaugeXmlHandler::DoCreateResource()
 { 
-    wxGauge *control = new wxGauge(m_ParentAsWindow,
+    wxGauge *control = new wxGauge(m_parentAsWindow,
                                     GetID(),
                                     GetLong( wxT("range"), wxGAUGE_DEFAULT_RANGE), 
                                     GetPosition(), GetSize(),

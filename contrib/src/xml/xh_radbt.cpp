@@ -40,7 +40,7 @@ wxObject *wxRadioButtonXmlHandler::DoCreateResource()
      * normal radio button.
      */ 
 
-    wxRadioButton *control = new wxRadioButton(m_ParentAsWindow,
+    wxRadioButton *control = new wxRadioButton(m_parentAsWindow,
                                     GetID(),
                                     GetText(wxT("label")),
                                     GetPosition(), GetSize(),

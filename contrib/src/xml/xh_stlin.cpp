@@ -34,7 +34,7 @@ wxStaticLineXmlHandler::wxStaticLineXmlHandler()
 
 wxObject *wxStaticLineXmlHandler::DoCreateResource()
 { 
-    wxStaticLine *line = new wxStaticLine(m_ParentAsWindow,
+    wxStaticLine *line = new wxStaticLine(m_parentAsWindow,
                                     GetID(),
                                     GetPosition(), GetSize(),
                                     GetStyle(wxT("style"), wxLI_HORIZONTAL),

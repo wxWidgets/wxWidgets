@@ -38,16 +38,16 @@ wxObject *wxUnknownWidgetXmlHandler::DoCreateResource()
     wxWindow *wnd = NULL;
     
     if (id != -1)
-        wnd = m_ParentAsWindow->FindWindow(id);
+        wnd = m_parentAsWindow->FindWindow(id);
     if (wnd == NULL && !name.IsEmpty())
-        wnd = m_ParentAsWindow->FindWindow(name);
+        wnd = m_parentAsWindow->FindWindow(name);
         
     if (wnd == NULL)
         wxLogError(wxT("Cannot find specified window for class 'unknown' (id=%li, name='%s')."), id, name.mb_str());
     else
     {
-        if (wnd->GetParent() != m_ParentAsWindow)
-            wnd->Reparent(m_ParentAsWindow);
+        if (wnd->GetParent() != m_parentAsWindow)
+            wnd->Reparent(m_parentAsWindow);
         SetupWindow(wnd);
     }
 

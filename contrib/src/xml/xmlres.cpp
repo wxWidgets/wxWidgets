@@ -42,14 +42,14 @@ WX_DEFINE_OBJARRAY(wxXmlResourceDataRecords);
 
 wxXmlResource::wxXmlResource(bool use_locale)
 {
-    m_Handlers.DeleteContents(TRUE);
-    m_UseLocale = use_locale;
+    m_handlers.DeleteContents(TRUE);
+    m_useLocale = use_locale;
 }
     
 wxXmlResource::wxXmlResource(const wxString& filemask, bool use_locale)
 {
-    m_UseLocale = use_locale;
-    m_Handlers.DeleteContents(TRUE);
+    m_useLocale = use_locale;
+    m_handlers.DeleteContents(TRUE);
     Load(filemask);
 }
 
@@ -91,7 +91,7 @@ bool wxXmlResource::Load(const wxString& filemask)
             {
                 drec = new wxXmlResourceDataRecord;
                 drec->File = fnd2;
-                m_Data.Add(drec);
+                m_data.Add(drec);
                 fnd2 = fs2.FindNext();
             }
         }
@@ -100,7 +100,7 @@ bool wxXmlResource::Load(const wxString& filemask)
         {
             drec = new wxXmlResourceDataRecord;
             drec->File = fnd;
-            m_Data.Add(drec);
+            m_data.Add(drec);
         }
 
         if (iswild)
@@ -117,7 +117,7 @@ bool wxXmlResource::Load(const wxString& filemask)
 
 void wxXmlResource::AddHandler(wxXmlResourceHandler *handler)
 {
-    m_Handlers.Append(handler);
+    m_handlers.Append(handler);
     handler->SetParentResource(this);
 }
 
@@ -125,7 +125,7 @@ void wxXmlResource::AddHandler(wxXmlResourceHandler *handler)
 
 void wxXmlResource::ClearHandlers()
 {
-    m_Handlers.Clear();
+    m_handlers.Clear();
 }
 
 
@@ -259,20 +259,20 @@ void wxXmlResource::UpdateResources()
     wxFileSystem fsys;
 #   endif
 
-    for (size_t i = 0; i < m_Data.GetCount(); i++)
+    for (size_t i = 0; i < m_data.GetCount(); i++)
     {
-        modif = (m_Data[i].Doc == NULL);
+        modif = (m_data[i].Doc == NULL);
 
         if (!modif)
         {
 #           if wxUSE_FILESYSTEM
-            file = fsys.OpenFile(m_Data[i].File);
-            modif = file && file->GetModificationTime() > m_Data[i].Time;
+            file = fsys.OpenFile(m_data[i].File);
+            modif = file && file->GetModificationTime() > m_data[i].Time;
             if (!file)
-                wxLogError(_("Cannot open file '%s'."), m_Data[i].File.c_str());
+                wxLogError(_("Cannot open file '%s'."), m_data[i].File.c_str());
             wxDELETE(file);
 #           else
-            modif = wxDateTime(wxFileModificationTime(m_Data[i].File)) > m_Data[i].Time;
+            modif = wxDateTime(wxFileModificationTime(m_data[i].File)) > m_data[i].Time;
 #           endif
         }
         
@@ -281,32 +281,32 @@ void wxXmlResource::UpdateResources()
 			wxInputStream *stream = NULL;
 
 #           if wxUSE_FILESYSTEM
-            file = fsys.OpenFile(m_Data[i].File);
+            file = fsys.OpenFile(m_data[i].File);
 			if (file)
 				stream = file->GetStream();
 #           else
-            stream = new wxFileInputStream(m_Data[i].File);
+            stream = new wxFileInputStream(m_data[i].File);
 #           endif
             
             if (stream) 
             {
-                delete m_Data[i].Doc;
-                m_Data[i].Doc = new wxXmlDocument;
+                delete m_data[i].Doc;
+                m_data[i].Doc = new wxXmlDocument;
             }
-            if (!stream || !m_Data[i].Doc->Load(*stream))
+            if (!stream || !m_data[i].Doc->Load(*stream))
             {
-                wxLogError(_("Cannot load resources from file '%s'."), m_Data[i].File.c_str());
-                wxDELETE(m_Data[i].Doc);
+                wxLogError(_("Cannot load resources from file '%s'."), m_data[i].File.c_str());
+                wxDELETE(m_data[i].Doc);
             }
-            else if (m_Data[i].Doc->GetRoot()->GetName() != wxT("resource")) 
+            else if (m_data[i].Doc->GetRoot()->GetName() != wxT("resource")) 
             {
-                wxLogError(_("Invalid XML resource '%s': doesn't have root node 'resource'."), m_Data[i].File.c_str());
-                wxDELETE(m_Data[i].Doc);
+                wxLogError(_("Invalid XML resource '%s': doesn't have root node 'resource'."), m_data[i].File.c_str());
+                wxDELETE(m_data[i].Doc);
             }
             else
 			{
-                ProcessPlatformProperty(m_Data[i].Doc->GetRoot());
-				m_Data[i].Time = file->GetModificationTime();
+                ProcessPlatformProperty(m_data[i].Doc->GetRoot());
+				m_data[i].Time = file->GetModificationTime();
 			}
 
 #           if wxUSE_FILESYSTEM
@@ -325,10 +325,10 @@ wxXmlNode *wxXmlResource::FindResource(const wxString& name, const wxString& cla
     UpdateResources(); //ensure everything is up-to-date
     
     wxString dummy;   
-    for (size_t f = 0; f < m_Data.GetCount(); f++)
+    for (size_t f = 0; f < m_data.GetCount(); f++)
     {
-        if (m_Data[f].Doc == NULL || m_Data[f].Doc->GetRoot() == NULL) continue;
-        for (wxXmlNode *node = m_Data[f].Doc->GetRoot()->GetChildren(); 
+        if (m_data[f].Doc == NULL || m_data[f].Doc->GetRoot() == NULL) continue;
+        for (wxXmlNode *node = m_data[f].Doc->GetRoot()->GetChildren(); 
                                       node; node = node->GetNext())
             if (node->GetType() == wxXML_ELEMENT_NODE &&
                 (!classname || 
@@ -338,7 +338,7 @@ wxXmlNode *wxXmlResource::FindResource(const wxString& name, const wxString& cla
                 dummy == name)
             {
 #if wxUSE_FILESYSTEM
-                m_CurFileSystem.ChangePathTo(m_Data[f].File);
+                m_curFileSystem.ChangePathTo(m_data[f].File);
 #endif
                 return node;
             }
@@ -357,7 +357,7 @@ wxObject *wxXmlResource::CreateResFromNode(wxXmlNode *node, wxObject *parent, wx
     
     wxXmlResourceHandler *handler;
     wxObject *ret;
-    wxNode * ND = m_Handlers.GetFirst();
+    wxNode * ND = m_handlers.GetFirst();
     while (ND)
     {
         handler = (wxXmlResourceHandler*)ND->GetData();
@@ -384,32 +384,32 @@ wxObject *wxXmlResource::CreateResFromNode(wxXmlNode *node, wxObject *parent, wx
 
 
 wxXmlResourceHandler::wxXmlResourceHandler()
-        : m_Node(NULL), m_Parent(NULL), m_Instance(NULL), 
-          m_ParentAsWindow(NULL), m_InstanceAsWindow(NULL)
+        : m_node(NULL), m_parent(NULL), m_instance(NULL), 
+          m_parentAsWindow(NULL), m_instanceAsWindow(NULL)
 {}
 
 
 
 wxObject *wxXmlResourceHandler::CreateResource(wxXmlNode *node, wxObject *parent, wxObject *instance)
 {
-    wxXmlNode *myNode = m_Node;
-    wxString myClass = m_Class;
-    wxObject *myParent = m_Parent, *myInstance = m_Instance;
-    wxWindow *myParentAW = m_ParentAsWindow, *myInstanceAW = m_InstanceAsWindow;
+    wxXmlNode *myNode = m_node;
+    wxString myClass = m_class;
+    wxObject *myParent = m_parent, *myInstance = m_instance;
+    wxWindow *myParentAW = m_parentAsWindow, *myInstanceAW = m_instanceAsWindow;
     
-    m_Node = node;
-    m_Class = node->GetPropVal(wxT("class"), wxEmptyString);
-    m_Parent = parent;
-    m_Instance = instance;
-    m_ParentAsWindow = wxDynamicCast(m_Parent, wxWindow);
-    m_InstanceAsWindow = wxDynamicCast(m_Instance, wxWindow);
+    m_node = node;
+    m_class = node->GetPropVal(wxT("class"), wxEmptyString);
+    m_parent = parent;
+    m_instance = instance;
+    m_parentAsWindow = wxDynamicCast(m_parent, wxWindow);
+    m_instanceAsWindow = wxDynamicCast(m_instance, wxWindow);
     
     wxObject *returned = DoCreateResource();
     
-    m_Node = myNode;
-    m_Class = myClass;
-    m_Parent = myParent; m_ParentAsWindow = myParentAW;
-    m_Instance = myInstance; m_InstanceAsWindow = myInstanceAW;
+    m_node = myNode;
+    m_class = myClass;
+    m_parent = myParent; m_parentAsWindow = myParentAW;
+    m_instance = myInstance; m_instanceAsWindow = myInstanceAW;
     
     return returned;
 }
@@ -417,8 +417,8 @@ wxObject *wxXmlResourceHandler::CreateResource(wxXmlNode *node, wxObject *parent
 
 void wxXmlResourceHandler::AddStyle(const wxString& name, int value)
 {
-    m_StyleNames.Add(name);
-    m_StyleValues.Add(value);
+    m_styleNames.Add(name);
+    m_styleValues.Add(value);
 }
 
 
@@ -456,9 +456,9 @@ int wxXmlResourceHandler::GetStyle(const wxString& param, int defaults)
     while (tkn.HasMoreTokens())
     {
         fl = tkn.GetNextToken();
-        index = m_StyleNames.Index(fl);
+        index = m_styleNames.Index(fl);
         if (index != wxNOT_FOUND)
-            style |= m_StyleValues[index];
+            style |= m_styleValues[index];
         else
             wxLogError(_("Unknown style flag ") + fl);
     }
@@ -495,7 +495,7 @@ wxString wxXmlResourceHandler::GetText(const wxString& param)
         else str2 << *dt;
     }
     
-    if (m_Resource->GetUseLocale())
+    if (m_resource->GetUseLocale())
         return wxGetTranslation(str2);
     else
         return str2;
@@ -543,7 +543,7 @@ int wxXmlResourceHandler::GetID()
 
 wxString wxXmlResourceHandler::GetName()
 {
-    return m_Node->GetPropVal(wxT("name"), wxT("-1"));
+    return m_node->GetPropVal(wxT("name"), wxT("-1"));
 }
 
 
@@ -623,7 +623,7 @@ wxIcon wxXmlResourceHandler::GetIcon(const wxString& param, wxSize size)
 
 wxXmlNode *wxXmlResourceHandler::GetParamNode(const wxString& param)
 {
-    wxXmlNode *n = m_Node->GetChildren();
+    wxXmlNode *n = m_node->GetChildren();
     
     while (n)
     {
@@ -656,7 +656,7 @@ wxString wxXmlResourceHandler::GetNodeContent(wxXmlNode *node)
 wxString wxXmlResourceHandler::GetParamValue(const wxString& param)
 {
     if (param.IsEmpty())
-        return GetNodeContent(m_Node);
+        return GetNodeContent(m_node);
     else
         return GetNodeContent(GetParamNode(param));
 }
@@ -682,10 +682,10 @@ wxSize wxXmlResourceHandler::GetSize(const wxString& param)
     
     if (is_dlg)
     {
-        if (m_InstanceAsWindow)
-            return wxDLG_UNIT(m_InstanceAsWindow, wxSize(sx, sy));
-        else if (m_ParentAsWindow)
-            return wxDLG_UNIT(m_ParentAsWindow, wxSize(sx, sy));
+        if (m_instanceAsWindow)
+            return wxDLG_UNIT(m_instanceAsWindow, wxSize(sx, sy));
+        else if (m_parentAsWindow)
+            return wxDLG_UNIT(m_parentAsWindow, wxSize(sx, sy));
         else
         {
             wxLogError(_("Cannot convert dialog units: dialog unknown."));
@@ -723,10 +723,10 @@ wxCoord wxXmlResourceHandler::GetDimension(const wxString& param, wxCoord defaul
     
     if (is_dlg)
     {
-        if (m_InstanceAsWindow)
-            return wxDLG_UNIT(m_InstanceAsWindow, wxSize(sx, 0)).x;
-        else if (m_ParentAsWindow)
-            return wxDLG_UNIT(m_ParentAsWindow, wxSize(sx, 0)).x;
+        if (m_instanceAsWindow)
+            return wxDLG_UNIT(m_instanceAsWindow, wxSize(sx, 0)).x;
+        else if (m_parentAsWindow)
+            return wxDLG_UNIT(m_parentAsWindow, wxSize(sx, 0)).x;
         else
         {
             wxLogError(_("Cannot convert dialog units: dialog unknown."));
@@ -747,8 +747,8 @@ wxFont wxXmlResourceHandler::GetFont(const wxString& param)
         return wxNullFont;
     }
     
-    wxXmlNode *oldnode = m_Node;
-    m_Node = font_node;
+    wxXmlNode *oldnode = m_node;
+    m_node = font_node;
 
     long size = GetLong(wxT("size"), 12);
 
@@ -791,7 +791,7 @@ wxFont wxXmlResourceHandler::GetFont(const wxString& param)
         }
     }
     
-    m_Node = oldnode;
+    m_node = oldnode;
     
     wxFont font(size, ifamily, istyle, iweight, underlined, facename, enc);
     return font;
@@ -825,7 +825,7 @@ void wxXmlResourceHandler::SetupWindow(wxWindow *wnd)
 
 void wxXmlResourceHandler::CreateChildren(wxObject *parent, bool this_hnd_only)
 {
-    wxXmlNode *n = m_Node->GetChildren();
+    wxXmlNode *n = m_node->GetChildren();
 
     while (n)
     {
@@ -835,7 +835,7 @@ void wxXmlResourceHandler::CreateChildren(wxObject *parent, bool this_hnd_only)
             if (this_hnd_only && CanHandle(n))
                 CreateResource(n, parent, NULL);
             else
-                m_Resource->CreateResFromNode(n, parent, NULL);
+                m_resource->CreateResFromNode(n, parent, NULL);
         }
         n = n->GetNext();
     }
@@ -845,7 +845,7 @@ void wxXmlResourceHandler::CreateChildren(wxObject *parent, bool this_hnd_only)
 void wxXmlResourceHandler::CreateChildrenPrivately(wxObject *parent, wxXmlNode *rootnode)
 {
     wxXmlNode *root;
-    if (rootnode == NULL) root = m_Node; else root = rootnode;
+    if (rootnode == NULL) root = m_node; else root = rootnode;
     wxXmlNode *n = root->GetChildren();
 
     while (n)

@@ -32,7 +32,7 @@ wxButtonXmlHandler::wxButtonXmlHandler()
 
 wxObject *wxButtonXmlHandler::DoCreateResource()
 { 
-    wxButton *button = new wxButton(m_ParentAsWindow,
+    wxButton *button = new wxButton(m_parentAsWindow,
                                     GetID(),
                                     GetText(wxT("label")),
                                     GetPosition(), GetSize(),

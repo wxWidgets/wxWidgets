@@ -33,7 +33,7 @@ wxScrollBarXmlHandler::wxScrollBarXmlHandler()
 
 wxObject *wxScrollBarXmlHandler::DoCreateResource()
 { 
-    wxScrollBar *control = new wxScrollBar(m_ParentAsWindow,
+    wxScrollBar *control = new wxScrollBar(m_parentAsWindow,
                                     GetID(),
                                     GetPosition(), GetSize(),
                                     GetStyle(),

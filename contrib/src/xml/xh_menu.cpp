@@ -24,7 +24,7 @@
 
 
 wxMenuXmlHandler::wxMenuXmlHandler() : 
-        wxXmlResourceHandler(), m_InsideMenu(FALSE)
+        wxXmlResourceHandler(), m_insideMenu(FALSE)
 {
     ADD_STYLE(wxMENU_TEAROFF);
 }
@@ -33,23 +33,23 @@ wxMenuXmlHandler::wxMenuXmlHandler() :
 
 wxObject *wxMenuXmlHandler::DoCreateResource()
 {
-    if (m_Class == wxT("wxMenu"))
+    if (m_class == wxT("wxMenu"))
     {
         wxMenu *menu = new wxMenu(GetStyle());
         wxString title = GetText(wxT("label"));
         wxString help = GetText(wxT("help"));
     
-        bool oldins = m_InsideMenu;
-        m_InsideMenu = TRUE;
+        bool oldins = m_insideMenu;
+        m_insideMenu = TRUE;
         CreateChildren(menu, TRUE/*only this handler*/);
-        m_InsideMenu = oldins;
+        m_insideMenu = oldins;
 
-        wxMenuBar *p_bar = wxDynamicCast(m_Parent, wxMenuBar);
+        wxMenuBar *p_bar = wxDynamicCast(m_parent, wxMenuBar);
         if (p_bar)
             p_bar->Append(menu, title);
         else
         {
-            wxMenu *p_menu = wxDynamicCast(m_Parent, wxMenu);
+            wxMenu *p_menu = wxDynamicCast(m_parent, wxMenu);
             if (p_menu)
                 p_menu->Append(GetID(), title, menu, help);
         }
@@ -59,11 +59,11 @@ wxObject *wxMenuXmlHandler::DoCreateResource()
 
     else
     {
-        wxMenu *p_menu = wxDynamicCast(m_Parent, wxMenu);
+        wxMenu *p_menu = wxDynamicCast(m_parent, wxMenu);
         
-        if (m_Class == wxT("separator"))
+        if (m_class == wxT("separator"))
             p_menu->AppendSeparator();
-        else if (m_Class == wxT("break"))
+        else if (m_class == wxT("break"))
             p_menu->Break();
         else /*wxMenuItem*/
         {
@@ -90,7 +90,7 @@ wxObject *wxMenuXmlHandler::DoCreateResource()
 bool wxMenuXmlHandler::CanHandle(wxXmlNode *node)
 {
     return IsOfClass(node, wxT("wxMenu")) ||
-           (m_InsideMenu && 
+           (m_insideMenu && 
                (IsOfClass(node, wxT("wxMenuItem")) ||
                 IsOfClass(node, wxT("break")) ||
                 IsOfClass(node, wxT("separator")))

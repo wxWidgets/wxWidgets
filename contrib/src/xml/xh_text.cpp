@@ -35,7 +35,7 @@ wxTextCtrlXmlHandler::wxTextCtrlXmlHandler() : wxXmlResourceHandler()
 
 wxObject *wxTextCtrlXmlHandler::DoCreateResource()
 { 
-    wxTextCtrl *text = new wxTextCtrl(m_ParentAsWindow,
+    wxTextCtrl *text = new wxTextCtrl(m_parentAsWindow,
                                     GetID(),
                                     GetText(wxT("value")),
                                     GetPosition(), GetSize(),
