@@ -125,9 +125,9 @@ wxTimer::~wxTimer()
 
 bool wxTimer::Start(int milliseconds, bool oneShot)
 {
-    wxCHECK_MSG( m_milli > 0, false, wxT("invalid value for timer timeour") );
-
     (void)wxTimerBase::Start(milliseconds, oneShot);
+
+    wxCHECK_MSG( m_milli > 0, false, wxT("invalid value for timer timeour") );
 
     // find a window for SetTimer(): it should be a valid HWND owned by this
     // thread (even if we had a non NULL m_hwnd before, reset it in case the
