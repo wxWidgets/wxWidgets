@@ -13,25 +13,26 @@
 #pragma implementation "configitemselector.h"
 #endif
 
+// For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-    #pragma hdrstop
+#pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-    #include "wx/wx.h"
+
+#include "wx/statline.h"
+#include "wx/splitter.h"
+#include "wx/scrolwin.h"
+#include "wx/spinctrl.h"
+#include "wx/spinbutt.h"
+
 #endif
 
-#include <wx/cshelp.h>
-#include <wx/statline.h>
-#include <wx/splitter.h>
-#include <wx/scrolwin.h>
-#include <wx/spinctrl.h>
-#include <wx/spinbutt.h>
-#include <wx/valgen.h>
-#include <wx/notebook.h>
-
+#include "wx/cshelp.h"
+#include "wx/notebook.h"
+#include "wx/valgen.h"
 #include "configitemselector.h"
 #include "configtooldoc.h"
 #include "configtoolview.h"
@@ -71,9 +72,9 @@ END_EVENT_TABLE()
  * ctConfigItemsSelector constructor
  */
 
-ctConfigItemsSelector::ctConfigItemsSelector( wxWindow* parent, wxWindowID id, const wxString& caption, const wxPoint& pos, const wxSize& size, long style )
+ctConfigItemsSelector::ctConfigItemsSelector( wxWindow* parent, wxWindowID id, const wxString& caption)
 {
-    wxDialog::Create( parent, id, caption, pos, size, style );
+    wxDialog::Create( parent, id, caption);
 
     CreateControls();
     InitSourceConfigList();
@@ -251,7 +252,7 @@ void ctConfigItemsSelector::InitSourceConfigList(ctConfigItem* item)
         masterList->Append(item->GetName());
     }
 
-    wxNode* node = item->GetChildren().GetFirst();
+    wxObjectList::compatibility_iterator node = item->GetChildren().GetFirst();
     while (node)
     {
         ctConfigItem* child = (ctConfigItem*) node->GetData();

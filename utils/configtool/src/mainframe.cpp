@@ -13,19 +13,24 @@
 #pragma implementation "mainframe.h"
 #endif
 
-#include "wx/wx.h"
+// For compilers that support precompilation, includes "wx/wx.h".
+#include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
 #pragma hdrstop
 #endif
 
+#ifndef WX_PRECOMP
+
+#include "wx/splitter.h"
+
+#endif
+
+#include "wx/cshelp.h"
 #include "wx/html/htmlwin.h"
 #include "wx/notebook.h"
-#include "wx/splitter.h"
-#include "wx/clipbrd.h"
 #include "wx/dataobj.h"
-#include "wx/cshelp.h"
-
+#include "wx/clipbrd.h"
 #include "wxconfigtool.h"
 #include "mainframe.h"
 #include "appsettings.h"

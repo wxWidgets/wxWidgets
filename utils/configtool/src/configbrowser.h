@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        configbrowser.h
-// Purpose:     
-// Author:      
+// Purpose:     Configuration browser
+// Author:      Julian Smart
 // Modified by: 
-// Created:     
-// RCS-ID:      
-// Copyright:   
+// Created:     2003-08-14
+// RCS-ID:      $Id$
+// Copyright:   (c) Julian Smart
 // Licence:     
 /////////////////////////////////////////////////////////////////////////////
 
@@ -88,7 +88,7 @@ class ctConfigurationBrowserControlPanel: public wxPanel
 
 public:
     /// Constructor
-    ctConfigurationBrowserControlPanel( wxWindow* parent, wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxNO_BORDER|wxTAB_TRAVERSAL );
+    ctConfigurationBrowserControlPanel( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxNO_BORDER|wxTAB_TRAVERSAL );
 
     /// Creates the controls and sizers
     void CreateControls();

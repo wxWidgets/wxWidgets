@@ -18,6 +18,7 @@
 
 #include "wx/imaglist.h"
 #include "wx/docview.h"
+#include "wx/notebook.h"
 
 // #define USE_CONFIG_BROWSER_PAGE
 

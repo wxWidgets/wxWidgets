@@ -13,23 +13,24 @@
 #pragma implementation "configtooldoc.h"
 #endif
 
-#include "wx/wx.h"
+// For compilers that support precompilation, includes "wx/wx.h".
+#include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
 #pragma hdrstop
 #endif
 
-#include "wx/config.h"
-#include "wx/textfile.h"
+#ifndef WX_PRECOMP
+
 #include "wx/process.h"
 #include "wx/mimetype.h"
 #include "wx/process.h"
-#include "wx/wfstream.h"
 
-#ifdef __BORLANDC__
-#pragma hdrstop
 #endif
 
+#include "wx/textfile.h"
+#include "wx/wfstream.h"
+#include "wx/config.h"
 #include "configtooldoc.h"
 #include "configtoolview.h"
 #include "configtree.h"
@@ -324,7 +325,7 @@ bool ctConfigToolDoc::DoSave(ctConfigItem* item, wxOutputStream& stream, int ind
         stream << wxT("<enabled>0</enabled>");
 
     // Output properties
-    wxNode* node = item->GetProperties().GetList().GetFirst();
+    wxObjectList::compatibility_iterator node = item->GetProperties().GetList().GetFirst();
     while (node)
     {
         ctProperty* prop = (ctProperty*) node->GetData();
@@ -551,7 +552,7 @@ void ctConfigToolDoc::ClearDependencies(ctConfigItem* item)
         item = GetTopItem();
 
     item->GetDependents().Clear();
-    for ( wxNode* node = item->GetChildren().GetFirst(); node; node = node->GetNext() )
+    for ( wxObjectList::compatibility_iterator node = item->GetChildren().GetFirst(); node; node = node->GetNext() )
     {
         ctConfigItem* child = (ctConfigItem*) node->GetData();
         ClearDependencies(child);
@@ -616,7 +617,7 @@ void ctConfigToolDoc::RefreshDependencies(ctConfigItem* item)
             otherItem->GetDependents().Append(item);
         }
     }
-    for ( wxNode* node = item->GetChildren().GetFirst(); node; node = node->GetNext() )
+    for ( wxObjectList::compatibility_iterator node = item->GetChildren().GetFirst(); node; node = node->GetNext() )
     {
         ctConfigItem* child = (ctConfigItem*) node->GetData();
         RefreshDependencies(child);
@@ -665,7 +666,7 @@ void ctConfigToolDoc::GenerateSetup(ctConfigItem* item, wxString& str)
         }
     }
 
-    for ( wxNode* node = item->GetChildren().GetFirst(); node; node = node->GetNext() )
+    for ( wxObjectList::compatibility_iterator node = item->GetChildren().GetFirst(); node; node = node->GetNext() )
     {
         ctConfigItem* child = (ctConfigItem*) node->GetData();
         GenerateSetup(child, str);
@@ -695,7 +696,7 @@ wxString ctConfigToolDoc::GenerateConfigureCommand()
     ctConfigItem* platformsFolder = GetTopItem()->FindItem(wxT("Target"));
     if (platformsFolder)
     {
-        for ( wxNode* node = platformsFolder->GetChildren().GetFirst(); node; node = node->GetNext() )
+        for ( wxObjectList::compatibility_iterator node = platformsFolder->GetChildren().GetFirst(); node; node = node->GetNext() )
         {
             ctConfigItem* child = (ctConfigItem*) node->GetData();
             if (child->GetType() == ctTypeBoolRadio && child->IsEnabled())
@@ -769,7 +770,7 @@ void ctConfigToolDoc::GenerateConfigureCommand(ctConfigItem* item, wxString& str
         }
     }
 
-    for ( wxNode* node = item->GetChildren().GetFirst(); node; node = node->GetNext() )
+    for ( wxObjectList::compatibility_iterator node = item->GetChildren().GetFirst(); node; node = node->GetNext() )
     {
         ctConfigItem* child = (ctConfigItem*) node->GetData();
         GenerateConfigureCommand(child, str);
@@ -784,7 +785,8 @@ wxString ctConfigToolDoc::GetFrameworkDir(bool makeUnix)
     {
         // Should probably allow other variables
         // to be used, and maybe expand variables within m_frameworkDir
-        path = wxGetenv(wxT("WXWIN"));
+        wxString pathEnv(wxGetenv(wxT("WXWIN")));
+        path = pathEnv;
 #ifdef __WXMSW__
         if (makeUnix)
             path.Replace(wxT("\\"), wxT("/"));
@@ -828,7 +830,7 @@ ctConfigItem* ctConfigToolDoc::FindNextSibling(ctConfigItem* item)
 {
     if (item->GetParent())
     {
-        wxNode* node = item->GetParent()->GetChildren().Member(item);
+        wxObjectList::compatibility_iterator node = item->GetParent()->GetChildren().Member(item);
         if (node && node->GetNext())
         {
             ctConfigItem* nextItem = (ctConfigItem*) node->GetNext()->GetData();
@@ -1010,7 +1012,7 @@ bool ctConfigCommand::DoAndUndo(bool doCmd)
 
                 // Apply only those that need applying
                 // (those properties in activeState that are not in propsTemp)
-                wxNode* node = m_activeState->GetProperties().GetList().GetFirst();
+                wxObjectList::compatibility_iterator node = m_activeState->GetProperties().GetList().GetFirst();
                 while (node)
                 {
                     ctProperty* prop = (ctProperty*) node->GetData();
@@ -1088,10 +1090,10 @@ void ctConfiguration::operator= (const ctConfiguration& configuration)
 /// Clear children
 void ctConfiguration::Clear()
 {
-    wxNode* node = m_children.GetFirst();
+    wxObjectList::compatibility_iterator node = m_children.GetFirst();
     while (node)
     {
-        wxNode* next = node->GetNext();
+        wxObjectList::compatibility_iterator next = node->GetNext();
         ctConfiguration* child = (ctConfiguration*) node->GetData();
 
         // This should delete 'node' too, assuming
@@ -1153,7 +1155,7 @@ ctConfiguration* ctConfiguration::FindConfiguration(const wxString& name)
     if (GetName() == name)
         return this;
 
-    for ( wxNode* node = GetChildren().GetFirst(); node; node = node->GetNext() )
+    for ( wxObjectList::compatibility_iterator node = GetChildren().GetFirst(); node; node = node->GetNext() )
     {
         ctConfiguration* child = (ctConfiguration*) node->GetData();
         ctConfiguration* found = child->FindConfiguration(name);
@@ -1168,7 +1170,7 @@ ctConfiguration* ctConfiguration::FindNextSibling()
 {
     if (!GetParent())
         return NULL;
-    wxNode* node = GetParent()->GetChildren().Member(this);
+    wxObjectList::compatibility_iterator node = GetParent()->GetChildren().Member(this);
     if (node && node->GetNext())
     {
         return (ctConfiguration*) node->GetNext()->GetData();
@@ -1181,7 +1183,7 @@ ctConfiguration* ctConfiguration::FindPreviousSibling()
 {
     if (!GetParent())
         return NULL;
-    wxNode* node = GetParent()->GetChildren().Member(this);
+    wxObjectList::compatibility_iterator node = GetParent()->GetChildren().Member(this);
     if (node && node->GetPrevious())
     {
         return (ctConfiguration*) node->GetPrevious()->GetData();
@@ -1194,7 +1196,7 @@ ctConfiguration* ctConfiguration::DeepClone()
 {
     ctConfiguration* newItem = Clone();
 
-    for ( wxNode* node = GetChildren().GetFirst(); node; node = node->GetNext() )
+    for ( wxObjectList::compatibility_iterator node = GetChildren().GetFirst(); node; node = node->GetNext() )
     {
         ctConfiguration* child = (ctConfiguration*) node->GetData();
         ctConfiguration* newChild = child->DeepClone();

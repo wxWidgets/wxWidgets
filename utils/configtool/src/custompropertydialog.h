@@ -36,13 +36,9 @@
 
 ////@begin control identifiers
 #define ID_CUSTOMPROPERTYDIALOG 10000
-#define ID_CUSTOMPROPERTYNAME 10003
-#define ID_CUSTOMPROPERTYTYPE 10002
-#define ID_CUSTOMPROPERTYEDITORTYPE 10008
 #define ID_PROPERTY_CHOICES 10001
 #define ID_PROPERTY_CHOICE_ADD 10005
 #define ID_PROPERTY_CHOICE_REMOVE 10006
-#define ID_CUSTOMPROPERTYDESCRIPTION 10004
 ////@end control identifiers
 
 /*!
@@ -53,7 +49,7 @@ class ctCustomPropertyDialog: public wxDialog
 {    
 public:
     /// Constructor
-    ctCustomPropertyDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& caption = _("Edit Custom Property"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU );
+    ctCustomPropertyDialog( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& caption = _("Edit Custom Property"));
 
     /// Creates the controls and sizers
     void CreateControls();
@@ -102,11 +98,19 @@ public:
     DECLARE_CLASS( ctCustomPropertyDialog )
     DECLARE_EVENT_TABLE()
 
-    wxString    m_name;
-    wxString    m_type;
-    wxString    m_description;
-    wxString    m_editorType;
+protected:
+    wxString      m_name;
+    wxString      m_type;
+    wxString      m_description;
+    wxString      m_editorType;
     wxArrayString m_choices;
+
+    // Dialog controls
+    wxTextCtrl*   m_customPropertyName;
+    wxTextCtrl*   m_customPropertyDescription;
+    wxChoice*     m_customPrototype;
+    wxChoice*     m_customPropertyEditorType;
+    wxListBox*    m_propertyChoices;
 };
 
 #endif

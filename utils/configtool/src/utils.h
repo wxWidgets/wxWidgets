@@ -21,6 +21,8 @@
 #ifndef _AP_UTILS_H_
 #define _AP_UTILS_H_
 
+#include "wx/imaglist.h"
+
 #ifndef DOXYGEN_SKIP
 
 /*!

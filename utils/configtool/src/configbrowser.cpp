@@ -1,19 +1,28 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        configbrowser.cpp
-// Purpose:     
-// Author:      
+// Purpose:     Configuration browser
+// Author:      Julian Smart
 // Modified by: 
-// Created:     
-// RCS-ID:      
-// Copyright:   
+// Created:     2003-08-14
+// RCS-ID:      $Id$
+// Copyright:   (c) Julian Smart
 // Licence:     
 /////////////////////////////////////////////////////////////////////////////
 
-////@begin includes
+// For compilers that support precompilation, includes "wx/wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+#pragma hdrstop
+#endif
+
+#ifndef WX_PRECOMP
+
 #include "wx/wx.h"
 #include "wx/splitter.h"
 #include "wx/treectrl.h"
-////@end includes
+
+#endif
 
 #include "configbrowser.h"
 

@@ -13,28 +13,29 @@
 #pragma implementation "appsettings.h"
 #endif
 
-#include "wx/wx.h"
+// For compilers that support precompilation, includes "wx/wx.h".
+#include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
 #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/wx.h"
-#endif
 
-#include "wx/wfstream.h"
 #include "wx/datstrm.h"
-#include "wx/config.h"
-#include "wx/fileconf.h"
 #include "wx/dir.h"
-#include "wx/valgen.h"
 #include "wx/colordlg.h"
 #include "wx/wxhtml.h"
 #include "wx/effects.h"
 #include "wx/spinctrl.h"
 #include "wx/tooltip.h"
 
+#endif
+
+#include "wx/wfstream.h"
+#include "wx/config.h"
+#include "wx/fileconf.h"
+#include "wx/valgen.h"
 #include "utils.h"
 #include "wxconfigtool.h"
 #include "appsettings.h"

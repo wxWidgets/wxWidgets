@@ -1,28 +1,38 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        settingsdialog.cpp
-// Purpose:     
-// Author:      
-// Modified by: 
-// Created:     
-// RCS-ID:      
-// Copyright:   
-// Licence:     
+// Purpose:     Settings dialog
+// Author:      Julian Smart
+// Modified by:
+// Created:     2003-06-12
+// RCS-ID:      $Id$
+// Copyright:   (c) Julian Smart
+// Licence:
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma implementation "settingsdialog.h"
 #endif
 
-#include "wx/wx.h"
-#include "wx/cshelp.h"
+// For compilers that support precompilation, includes "wx/wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+#pragma hdrstop
+#endif
+
+#ifndef WX_PRECOMP
+
 #include "wx/statline.h"
 #include "wx/splitter.h"
 #include "wx/scrolwin.h"
 #include "wx/spinctrl.h"
 #include "wx/spinbutt.h"
-#include "wx/valgen.h"
-#include "wx/notebook.h"
 
+#endif
+
+#include "wx/cshelp.h"
+#include "wx/notebook.h"
+#include "wx/valgen.h"
 #include "wxconfigtool.h"
 #include "settingsdialog.h"
 
@@ -56,11 +66,10 @@ END_EVENT_TABLE()
  * ctSettingsDialog constructor
  */
 
-ctSettingsDialog::ctSettingsDialog( wxWindow* parent, wxWindowID id, const wxString& caption, const wxPoint& pos, const wxSize& size, long style )
+ctSettingsDialog::ctSettingsDialog( wxWindow* parent )
 {
     SetExtraStyle(wxDIALOG_EX_CONTEXTHELP|wxWS_EX_VALIDATE_RECURSIVELY);
-    wxDialog::Create( parent, id, caption, pos, size, style );
-
+    wxDialog::Create( parent, wxID_ANY, _("Configuration Settings"));
     CreateControls();
 }
 
@@ -77,12 +86,12 @@ void ctSettingsDialog::CreateControls()
     wxBoxSizer* item2 = new wxBoxSizer(wxVERTICAL);
     item1->SetSizer(item2);
 
-    wxNotebook* item3 = new wxNotebook(item1, ID_NOTEBOOK, wxDefaultPosition, wxSize(200, 200), wxNB_TOP);
-    ctGeneralSettingsDialog* item4 = new ctGeneralSettingsDialog(item3, ID_GENERAL_SETTINGS_DIALOG, wxDefaultPosition, wxSize(100, 80), 0);
-    item3->AddPage(item4, _("General"));
-    ctLocationSettingsDialog* item11 = new ctLocationSettingsDialog(item3, ID_LOCATION_SETTINGS_DIALOG, wxDefaultPosition, wxSize(100, 80), 0);
-    item3->AddPage(item11, _("Locations"));
-    item2->Add(item3, 0, wxGROW|wxALL, 5);
+    m_notebook = new wxNotebook(item1, wxID_ANY, wxDefaultPosition, wxSize(200, 200), wxNB_TOP);
+    ctGeneralSettingsDialog* item4 = new ctGeneralSettingsDialog(m_notebook, ID_GENERAL_SETTINGS_DIALOG, wxDefaultPosition, wxSize(100, 80), 0);
+    m_notebook->AddPage(item4, _("General"));
+    ctLocationSettingsDialog* item11 = new ctLocationSettingsDialog(m_notebook, ID_LOCATION_SETTINGS_DIALOG, wxDefaultPosition, wxSize(100, 80), 0);
+    m_notebook->AddPage(item11, _("Locations"));
+    item2->Add(m_notebook, 0, wxGROW|wxALL, 5);
 
     wxBoxSizer* item21 = new wxBoxSizer(wxHORIZONTAL);
     item2->Add(item21, 0, wxGROW|wxALL, 5);
@@ -136,27 +145,28 @@ void ctSettingsDialog::OnCancel( wxCommandEvent& event )
 
 void ctSettingsDialog::OnHelp( wxCommandEvent& WXUNUSED(event) )
 {
-    wxNotebook* notebook = (wxNotebook*) FindWindow(ID_NOTEBOOK);
-
-    int sel = notebook->GetSelection();
-
-    wxASSERT_MSG( (sel != -1), wxT("A notebook tab should always be selected."));
-
-    wxWindow* page = (wxWindow*) notebook->GetPage(sel);
-
-    wxString helpTopic;
-    if (page->GetId() == ID_GENERAL_SETTINGS_DIALOG)
+    if(m_notebook)
     {
-        helpTopic = wxT("General settings dialog");
-    }
-    else if (page->GetId() == ID_LOCATION_SETTINGS_DIALOG)
-    {
-        helpTopic = wxT("Location settings dialog");
-    }
+        int sel = m_notebook->GetSelection();
 
-    if (!helpTopic.IsEmpty())
-    {
-        wxGetApp().GetHelpController().DisplaySection(helpTopic);
+        wxASSERT_MSG( (sel != -1), wxT("A notebook tab should always be selected."));
+
+        wxWindow* page = (wxWindow*) m_notebook->GetPage(sel);
+
+        wxString helpTopic;
+        if (page->GetId() == ID_GENERAL_SETTINGS_DIALOG)
+        {
+            helpTopic = wxT("General settings dialog");
+        }
+        else if (page->GetId() == ID_LOCATION_SETTINGS_DIALOG)
+        {
+            helpTopic = wxT("Location settings dialog");
+        }
+
+        if (!helpTopic.IsEmpty())
+        {
+            wxGetApp().GetHelpController().DisplaySection(helpTopic);
+        }
     }
 }
 
@@ -251,9 +261,9 @@ void ctGeneralSettingsDialog::CreateControls()
     GetSizer()->Fit(this);
 ////@end ctGeneralSettingsDialog content construction
 
-    FindWindow(ID_LOAD_LAST_DOCUMENT)->SetValidator(wxGenericValidator(& wxGetApp().GetSettings().m_loadLastDocument));
-    FindWindow(ID_SHOW_TOOLTIPS)->SetValidator(wxGenericValidator(& wxGetApp().GetSettings().m_useToolTips));
-    FindWindow(ID_DEFAULT_FILE_KIND)->SetValidator(wxGenericValidator(& wxGetApp().GetSettings().m_defaultFileKind));
+    item7->SetValidator(wxGenericValidator(& wxGetApp().GetSettings().m_loadLastDocument));
+    item8->SetValidator(wxGenericValidator(& wxGetApp().GetSettings().m_useToolTips));
+    item10->SetValidator(wxGenericValidator(& wxGetApp().GetSettings().m_defaultFileKind));
 }
 
 /*!
@@ -321,13 +331,13 @@ void ctLocationSettingsDialog::CreateControls()
     wxBoxSizer* item15 = new wxBoxSizer(wxHORIZONTAL);
     item13->Add(item15, 0, wxGROW, 5);
 
-    wxTextCtrl* item16 = new wxTextCtrl(item11, ID_WXWIN_HIERARCHY, wxEmptyString, wxDefaultPosition, wxSize(200, wxDefaultCoord), 0);
-    item16->SetHelpText(_("Enter the root path of the wxWidgets hierarchy"));
+    m_wxWinHierarchy = new wxTextCtrl(item11, ID_WXWIN_HIERARCHY, wxEmptyString, wxDefaultPosition, wxSize(200, wxDefaultCoord), 0);
+    m_wxWinHierarchy->SetHelpText(_("Enter the root path of the wxWidgets hierarchy"));
 #if wxUSE_TOOLTIPS
     if (ShowToolTips())
-        item16->SetToolTip(_("Enter the root path of the wxWidgets hierarchy"));
+        m_wxWinHierarchy->SetToolTip(_("Enter the root path of the wxWidgets hierarchy"));
 #endif
-    item15->Add(item16, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    item15->Add(m_wxWinHierarchy, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxButton* item17 = new wxButton(item11, ID_CHOOSE_WXWIN_HIERARCHY, _("&Choose..."), wxDefaultPosition, wxDefaultSize, 0);
     item17->SetHelpText(_("Click to choose the root path of the wxWidgets hierarchy\\n"));
@@ -342,20 +352,20 @@ void ctLocationSettingsDialog::CreateControls()
 
     item18->Add(60, 5, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
-    wxCheckBox* item20 = new wxCheckBox(item11, ID_USE_WXWIN, _("&Use WXWIN environment variable"), wxDefaultPosition, wxDefaultSize, 0);
-    item20->SetValue(false);
-    item20->SetHelpText(_("Check to use the value of WXWIN instead"));
+    m_wxWinUse = new wxCheckBox(item11, ID_USE_WXWIN, _("&Use WXWIN environment variable"));
+    m_wxWinUse->SetValue(false);
+    m_wxWinUse->SetHelpText(_("Check to use the value of WXWIN instead"));
 #if wxUSE_TOOLTIPS
     if (ShowToolTips())
-        item20->SetToolTip(_("Check to use the value of WXWIN instead"));
+        m_wxWinUse->SetToolTip(_("Check to use the value of WXWIN instead"));
 #endif
-    item18->Add(item20, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    item18->Add(m_wxWinUse, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     GetSizer()->Fit(this);
 ////@end ctLocationSettingsDialog content construction
 
-    FindWindow(ID_WXWIN_HIERARCHY)->SetValidator(wxGenericValidator(& wxGetApp().GetSettings().m_frameworkDir));
-    FindWindow(ID_USE_WXWIN)->SetValidator(wxGenericValidator(& wxGetApp().GetSettings().m_useEnvironmentVariable));
+    m_wxWinHierarchy->SetValidator(wxGenericValidator(& wxGetApp().GetSettings().m_frameworkDir));
+    m_wxWinUse->SetValidator(wxGenericValidator(& wxGetApp().GetSettings().m_useEnvironmentVariable));
 }
 
 /*!
@@ -364,8 +374,8 @@ void ctLocationSettingsDialog::CreateControls()
 
 void ctLocationSettingsDialog::OnUpdateWxwinHierarchy( wxUpdateUIEvent& event )
 {
-    wxCheckBox* checkbox = (wxCheckBox*) FindWindow(ID_USE_WXWIN);
-    event.Enable(!checkbox->GetValue());
+    if(m_wxWinUse)
+        event.Enable(!m_wxWinUse->GetValue());
 }
 
 /*!
@@ -374,15 +384,16 @@ void ctLocationSettingsDialog::OnUpdateWxwinHierarchy( wxUpdateUIEvent& event )
 
 void ctLocationSettingsDialog::OnChooseWxwinHierarchy( wxCommandEvent& WXUNUSED(event) )
 {
-    wxTextCtrl* textCtrl = (wxTextCtrl*) FindWindow( ID_WXWIN_HIERARCHY );
-    wxASSERT( textCtrl != NULL );
-    wxString defaultPath = textCtrl->GetValue();
-
-    wxDirDialog dialog(this, _("Choose the location of the wxWidgets hierarchy"),
-            defaultPath);
-    if (dialog.ShowModal() == wxID_OK)
+    if (m_wxWinHierarchy)
     {
-        textCtrl->SetValue(dialog.GetPath());
+        wxString defaultPath = m_wxWinHierarchy->GetValue();
+
+        wxDirDialog dialog(this, _("Choose the location of the wxWidgets hierarchy"),
+                defaultPath);
+        if (dialog.ShowModal() == wxID_OK)
+        {
+            m_wxWinHierarchy->SetValue(dialog.GetPath());
+        }
     }
 }
 
@@ -392,8 +403,8 @@ void ctLocationSettingsDialog::OnChooseWxwinHierarchy( wxCommandEvent& WXUNUSED(
 
 void ctLocationSettingsDialog::OnUpdateChooseWxwinHierarchy( wxUpdateUIEvent& event )
 {
-    wxCheckBox* checkbox = (wxCheckBox*) FindWindow(ID_USE_WXWIN);
-    event.Enable(!checkbox->GetValue());
+    if (m_wxWinUse)
+        event.Enable(!m_wxWinUse->GetValue());
 }
 
 /*!

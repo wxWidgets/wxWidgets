@@ -13,27 +13,32 @@
 #pragma implementation "wxconfigtool.h"
 #endif
 
-#include "wx/wx.h"
+// For compilers that support precompilation, includes "wx/wx.h".
+#include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
 #pragma hdrstop
 #endif
 
-#include "wx/config.h"
+#ifndef WX_PRECOMP
+
 #include "wx/laywin.h"
-#include "wx/image.h"
 #include "wx/menuitem.h"
 #include "wx/tooltip.h"
+#include "wx/variant.h"
+
+#endif
+
 #include "wx/cshelp.h"
 #include "wx/helphtml.h"
 #include "wx/html/htmprint.h"
 #include "wx/html/htmlwin.h"
+#include "wx/image.h"
 #include "wx/filesys.h"
 #include "wx/fs_mem.h"
 #include "wx/fs_zip.h"
 #include "wx/wfstream.h"
-#include "wx/variant.h"
-
+#include "wx/config.h"
 #include "wxconfigtool.h"
 #include "configtooldoc.h"
 #include "configtoolview.h"
@@ -58,6 +63,7 @@ ctApp::~ctApp()
 
 bool ctApp::OnInit(void)
 {
+
 #if wxUSE_LOG
     wxLog::SetTimestamp(NULL);
 #endif // wxUSE_LOG
@@ -92,7 +98,9 @@ bool ctApp::OnInit(void)
     wxString currentDir = wxGetCwd();
 
     // Use argv to get current app directory
-    m_appDir = apFindAppPath(argv[0], currentDir, wxT("WXCONFIGTOOLDIR"));
+    wxString argv0(argv[0]);
+    wxString appVariableName(wxT("WXCONFIGTOOLDIR"));
+    m_appDir = apFindAppPath(argv0, currentDir, appVariableName);
 
 #ifdef __WXMSW__
     // If the development version, go up a directory.

@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        settingsdialog.h
-// Purpose:     
-// Author:      
-// Modified by: 
-// Created:     
-// RCS-ID:      
-// Copyright:   
-// Licence:     
+// Purpose:     Settings dialog
+// Author:      Julian Smart
+// Modified by:
+// Created:     2002-09-04
+// RCS-ID:      $Id$
+// Copyright:   (c) Julian Smart
+// Licence:
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _SETTINGSDIALOG_H_
@@ -57,11 +57,7 @@ class ctSettingsDialog: public wxDialog
 {    
 public:
     /// Constructor
-    ctSettingsDialog( wxWindow* parent, wxWindowID id = wxID_ANY,
-        const wxString& caption = _("Configuration Settings"),
-        const wxPoint& pos = wxDefaultPosition,
-        const wxSize& size = wxDefaultSize,
-        long style = wxCAPTION|wxSYSTEM_MENU );
+    ctSettingsDialog( wxWindow* parent );
 
     /// Creates the controls and sizers
     void CreateControls();
@@ -88,6 +84,11 @@ public:
 
     DECLARE_CLASS( ctSettingsDialog )
     DECLARE_EVENT_TABLE()
+
+protected:
+
+    // Dialog controls.
+    wxNotebook* m_notebook;
 };
 
 /*!
@@ -153,6 +154,12 @@ public:
 
     DECLARE_CLASS( ctLocationSettingsDialog )
     DECLARE_EVENT_TABLE()
+
+protected:
+
+    // Dialog controls.
+    wxTextCtrl* m_wxWinHierarchy;
+    wxCheckBox* m_wxWinUse;
 };
 
 #endif

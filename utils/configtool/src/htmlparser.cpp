@@ -16,18 +16,16 @@
     #pragma implementation "htmlparser.h"
 #endif
 
-#include "wx/wx.h"
+// For compilers that support precompilation, includes "wx/wx.h".
+#include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
 #pragma hdrstop
 #endif
 
-#include "wx/textfile.h"
 #include "wx/wfstream.h"
+#include "wx/textfile.h"
 #include "wx/txtstrm.h"
-
-#include <ctype.h>
-
 #include "htmlparser.h"
 
 /// Useful insertion operators for wxOutputStream.

@@ -13,15 +13,14 @@
 #pragma implementation "configitem.h"
 #endif
 
-// Includes other headers for precompiled compilation
-#include "wx/wx.h"
+// For compilers that support precompilation, includes "wx/wx.h".
+#include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
 #pragma hdrstop
 #endif
 
 #include "wx/tokenzr.h"
-
 #include "configitem.h"
 #include "configtree.h"
 #include "configtooldoc.h"
@@ -439,12 +438,14 @@ void ctConfigItem::Attach(ctConfigItem* parent, ctConfigItem* insertBefore)
     if (parent)
     {
         SetParent(parent);
-        wxObjectList::compatibility_iterator node = (wxObjectList::compatibility_iterator)NULL;
         if (insertBefore)
-            node = parent->GetChildren().Member(insertBefore);
-
-        if (node)
-            parent->GetChildren().Insert(node, this);
+        {
+            wxObjectList::compatibility_iterator node = parent->GetChildren().Member(insertBefore);
+            if (node)
+                parent->GetChildren().Insert(node, this);
+            else
+                parent->GetChildren().Append(this);
+        }
         else
             parent->GetChildren().Append(this);
     }

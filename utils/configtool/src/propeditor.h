@@ -139,6 +139,8 @@ class ctPropertyEditor: public wxPanel
 DECLARE_EVENT_TABLE()
 
 protected:
+    // Dialog controls
+    wxButton*               m_attributeEditorEditDetails;
     ctPropertyEditorGrid*   m_attributeEditorGrid;
     wxHtmlWindow*           m_propertyDescriptionWindow;
     wxSplitterWindow*       m_splitterWindow;

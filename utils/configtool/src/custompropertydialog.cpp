@@ -13,15 +13,26 @@
 #pragma implementation "custompropertydialog.h"
 #endif
 
-#include <wx/wx.h>
-#include <wx/cshelp.h>
-#include <wx/statline.h>
-#include <wx/splitter.h>
-#include <wx/scrolwin.h>
-#include <wx/spinctrl.h>
-#include <wx/spinbutt.h>
-#include <wx/valgen.h>
+// For compilers that support precompilation, includes "wx/wx.h".
+#include "wx/wxprec.h"
 
+#ifdef __BORLANDC__
+#pragma hdrstop
+#endif
+
+#ifndef WX_PRECOMP
+
+#include "wx/wx.h"
+#include "wx/statline.h"
+#include "wx/splitter.h"
+#include "wx/scrolwin.h"
+#include "wx/spinctrl.h"
+#include "wx/spinbutt.h"
+
+#endif
+
+#include "wx/cshelp.h"
+#include "wx/valgen.h"
 #include "custompropertydialog.h"
 
 ////@begin XPM images
@@ -56,11 +67,11 @@ END_EVENT_TABLE()
  * ctCustomPropertyDialog constructor
  */
 
-ctCustomPropertyDialog::ctCustomPropertyDialog( wxWindow* parent, wxWindowID id, const wxString& caption, const wxPoint& pos, const wxSize& size, long style )
+ctCustomPropertyDialog::ctCustomPropertyDialog( wxWindow* parent, wxWindowID id, const wxString& caption)
 {
     m_type = wxT("string");
 
-    wxDialog::Create( parent, id, caption, pos, size, style );
+    wxDialog::Create( parent, id, caption);
 
     CreateControls();
 }
@@ -72,6 +83,8 @@ ctCustomPropertyDialog::ctCustomPropertyDialog( wxWindow* parent, wxWindowID id,
 void ctCustomPropertyDialog::CreateControls()
 {
 ////@begin ctCustomPropertyDialog content construction
+
+    wxArrayString items;
 
     ctCustomPropertyDialog* item1 = this;
 
@@ -87,8 +100,8 @@ void ctCustomPropertyDialog::CreateControls()
     wxStaticText* item5 = new wxStaticText(item1, wxID_STATIC, _("&Name:"), wxDefaultPosition, wxDefaultSize, 0);
     item3->Add(item5, 0, wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE, 5);
 
-    wxTextCtrl* item6 = new wxTextCtrl(item1, ID_CUSTOMPROPERTYNAME, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0);
-    item3->Add(item6, 0, wxGROW|wxALL, 5);
+    m_customPropertyName = new wxTextCtrl(item1, wxID_ANY);
+    item3->Add(m_customPropertyName, 0, wxGROW|wxALL, 5);
 
     wxBoxSizer* item7 = new wxBoxSizer(wxHORIZONTAL);
     item3->Add(item7, 0, wxGROW, 5);
@@ -99,15 +112,14 @@ void ctCustomPropertyDialog::CreateControls()
     wxStaticText* item9 = new wxStaticText(item1, wxID_STATIC, _("&Data type:"), wxDefaultPosition, wxDefaultSize, 0);
     item8->Add(item9, 0, wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE, 5);
 
-    wxString item10Strings[] = {
-        _("string"),
-        _("bool"),
-        _("double"),
-        _("long")
-    };
-    wxChoice* item10 = new wxChoice(item1, ID_CUSTOMPROPERTYTYPE, wxDefaultPosition, wxDefaultSize, 4, item10Strings, 0);
-    item10->SetStringSelection(_("string"));
-    item8->Add(item10, 1, wxGROW|wxALL, 5);
+    items.Empty();
+    items.Add(_("string"));
+    items.Add(_("bool"));
+    items.Add(_("double"));
+    items.Add(_("long"));
+    m_customPrototype = new wxChoice(item1, wxID_ANY, wxDefaultPosition, wxDefaultSize, items);
+    m_customPrototype->SetStringSelection(_("string"));
+    item8->Add(m_customPrototype, 1, wxGROW|wxALL, 5);
 
     wxBoxSizer* item11 = new wxBoxSizer(wxVERTICAL);
     item7->Add(item11, 0, wxALIGN_CENTER_VERTICAL, 5);
@@ -115,25 +127,24 @@ void ctCustomPropertyDialog::CreateControls()
     wxStaticText* item12 = new wxStaticText(item1, wxID_STATIC, _("&Editor type:"), wxDefaultPosition, wxDefaultSize, 0);
     item11->Add(item12, 0, wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE, 5);
 
-    wxString item13Strings[] = {
-        _("string"),
-        _("choice"),
-        _("bool"),
-        _("float"),
-        _("integer"),
-        _("configitems")
-    };
-    wxChoice* item13 = new wxChoice(item1, ID_CUSTOMPROPERTYEDITORTYPE, wxDefaultPosition, wxDefaultSize, 6, item13Strings, 0);
-    item13->SetStringSelection(_("string"));
-    item11->Add(item13, 1, wxGROW|wxALL, 5);
+    items.Empty();
+    items.Add(_("string"));
+    items.Add(_("choice"));
+    items.Add(_("bool"));
+    items.Add(_("float"));
+    items.Add(_("integer"));
+    items.Add(_("configitems"));
+    m_customPropertyEditorType = new wxChoice(item1, wxID_ANY, wxDefaultPosition, wxDefaultSize, items);
+    m_customPropertyEditorType->SetStringSelection(_("string"));
+    item11->Add(m_customPropertyEditorType, 1, wxGROW|wxALL, 5);
 
     wxStaticBox* item14Static = new wxStaticBox(item1, wxID_ANY, _("Choices"));
     wxStaticBoxSizer* item14 = new wxStaticBoxSizer(item14Static, wxHORIZONTAL);
     item3->Add(item14, 0, wxGROW|wxALL, 5);
 
     wxString* item15Strings = NULL;
-    wxListBox* item15 = new wxListBox(item1, ID_PROPERTY_CHOICES, wxDefaultPosition, wxDefaultSize, 0, item15Strings, wxLB_SINGLE);
-    item14->Add(item15, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
+    m_propertyChoices = new wxListBox(item1, ID_PROPERTY_CHOICES, wxDefaultPosition, wxDefaultSize, 0, item15Strings, wxLB_SINGLE);
+    item14->Add(m_propertyChoices, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxBoxSizer* item16 = new wxBoxSizer(wxVERTICAL);
     item14->Add(item16, 0, wxALIGN_CENTER_VERTICAL, 5);
@@ -147,8 +158,8 @@ void ctCustomPropertyDialog::CreateControls()
     wxStaticText* item19 = new wxStaticText(item1, wxID_STATIC, _("&Description:"), wxDefaultPosition, wxDefaultSize, 0);
     item3->Add(item19, 0, wxALIGN_LEFT|wxALL|wxADJUST_MINSIZE, 5);
 
-    wxTextCtrl* item20 = new wxTextCtrl(item1, ID_CUSTOMPROPERTYDESCRIPTION, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_RICH);
-    item3->Add(item20, 1, wxGROW|wxALL, 5);
+    m_customPropertyDescription = new wxTextCtrl(item1, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_RICH);
+    item3->Add(m_customPropertyDescription, 1, wxGROW|wxALL, 5);
 
     wxBoxSizer* item21 = new wxBoxSizer(wxHORIZONTAL);
     item3->Add(item21, 0, wxGROW|wxALL, 5);
@@ -170,10 +181,10 @@ void ctCustomPropertyDialog::CreateControls()
 ////@end ctCustomPropertyDialog content construction
 
     // Add validators
-    FindWindow(ID_CUSTOMPROPERTYNAME)->SetValidator(wxGenericValidator(& m_name));
-    FindWindow(ID_CUSTOMPROPERTYTYPE)->SetValidator(wxGenericValidator(& m_type));
-    FindWindow(ID_CUSTOMPROPERTYEDITORTYPE)->SetValidator(wxGenericValidator(& m_editorType));
-    FindWindow(ID_CUSTOMPROPERTYDESCRIPTION)->SetValidator(wxGenericValidator(& m_description));
+    m_customPropertyName->SetValidator(wxGenericValidator(& m_name));
+    m_customPrototype->SetValidator(wxGenericValidator(& m_type));
+    m_customPropertyEditorType->SetValidator(wxGenericValidator(& m_editorType));
+    m_customPropertyDescription->SetValidator(wxGenericValidator(& m_description));
 }
 
 /*!
@@ -191,8 +202,8 @@ bool ctCustomPropertyDialog::ShowToolTips()
 
 void ctCustomPropertyDialog::OnUpdatePropertyChoices( wxUpdateUIEvent& event )
 {
-    wxChoice* choice = (wxChoice* ) FindWindow(ID_CUSTOMPROPERTYTYPE);
-    event.Enable( choice->GetSelection() > -1 && choice->GetStringSelection() == wxT("choice") );
+    if(m_customPrototype)
+        event.Enable( m_customPrototype->GetSelection() > -1 && m_customPrototype->GetStringSelection() == wxT("choice") );
 }
 
 /*!
@@ -201,15 +212,16 @@ void ctCustomPropertyDialog::OnUpdatePropertyChoices( wxUpdateUIEvent& event )
 
 void ctCustomPropertyDialog::OnPropertyChoiceAdd( wxCommandEvent& WXUNUSED(event) )
 {
-    wxChoice* choice = (wxChoice* ) FindWindow(ID_CUSTOMPROPERTYTYPE);
-    if ( choice->GetSelection() > -1 && choice->GetStringSelection() == wxT("choice") )
+    if(m_customPrototype)
     {
-        wxString str = wxGetTextFromUser(_T("New choice"), _("Add choice"));
-        if (!str.IsEmpty())
+        if ( m_customPropertyEditorType->GetSelection() > -1 && m_customPropertyEditorType->GetStringSelection() == wxT("choice") )
         {
-            wxListBox* listBox = (wxListBox* ) FindWindow(ID_PROPERTY_CHOICES);
-            listBox->Append(str);
-            m_choices.Add(str);
+            wxString str = wxGetTextFromUser(_T("New choice"), _("Add choice"));
+            if (!str.IsEmpty() && m_propertyChoices)
+            {
+                m_propertyChoices->Append(str);
+                m_choices.Add(str);
+            }
         }
     }
 }
@@ -220,8 +232,9 @@ void ctCustomPropertyDialog::OnPropertyChoiceAdd( wxCommandEvent& WXUNUSED(event
 
 void ctCustomPropertyDialog::OnUpdatePropertyChoiceAdd( wxUpdateUIEvent& event )
 {
-    wxChoice* choice = (wxChoice* ) FindWindow(ID_CUSTOMPROPERTYEDITORTYPE);
-    event.Enable( choice->GetSelection() > -1 && choice->GetStringSelection() == wxT("choice") );
+    if(m_customPropertyEditorType)
+        event.Enable( m_customPropertyEditorType->GetSelection() > -1 && 
+                      m_customPropertyEditorType->GetStringSelection() == wxT("choice") );
 }
 
 /*!
@@ -230,12 +243,10 @@ void ctCustomPropertyDialog::OnUpdatePropertyChoiceAdd( wxUpdateUIEvent& event )
 
 void ctCustomPropertyDialog::OnPropertyChoiceRemove( wxCommandEvent& WXUNUSED(event) )
 {
-    /* wxChoice* choice = (wxChoice* ) */ FindWindow(ID_CUSTOMPROPERTYEDITORTYPE);
-    wxListBox* listBox = (wxListBox* ) FindWindow(ID_PROPERTY_CHOICES);
-    if (listBox->GetSelection() > -1)
+    if (m_propertyChoices && m_propertyChoices->GetSelection() > -1)
     {
-        listBox->Delete(listBox->GetSelection());
-        m_choices.RemoveAt(listBox->GetSelection());
+        m_propertyChoices->Delete(m_propertyChoices->GetSelection());
+        m_choices.RemoveAt(m_propertyChoices->GetSelection());
     }
 }
 
@@ -245,16 +256,16 @@ void ctCustomPropertyDialog::OnPropertyChoiceRemove( wxCommandEvent& WXUNUSED(ev
 
 void ctCustomPropertyDialog::OnUpdatePropertyChoiceRemove( wxUpdateUIEvent& event )
 {
-    wxChoice* choice = (wxChoice* ) FindWindow(ID_CUSTOMPROPERTYEDITORTYPE);
-    wxListBox* listBox = (wxListBox* ) FindWindow(ID_PROPERTY_CHOICES);
-    event.Enable( choice->GetSelection() > -1 && choice->GetStringSelection() == wxT("choice") &&
-                  listBox->GetSelection() > -1 );
+    if (m_customPropertyEditorType && m_propertyChoices)
+        event.Enable( m_customPropertyEditorType->GetSelection() > -1 && 
+                      m_customPropertyEditorType->GetStringSelection() == wxT("choice") &&
+                      m_propertyChoices->GetSelection() > -1 );
 }
 
 void ctCustomPropertyDialog::SetChoices(const wxArrayString& choices)
 {
-    wxListBox* listBox = (wxListBox* ) FindWindow(ID_PROPERTY_CHOICES);
     size_t i, len = choices.GetCount();
-    for (i = 0; i < len; i++)
-        listBox->Append(m_choices[i]);
+    if (m_propertyChoices)
+        for (i = 0; i < len; i++)
+            m_propertyChoices->Append(m_choices[i]);
 }

@@ -13,23 +13,29 @@
 #pragma implementation "propeditor.h"
 #endif
 
-#include <wx/wx.h>
+// For compilers that support precompilation, includes "wx/wx.h".
+#include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
 #pragma hdrstop
 #endif
 
-#include "wx/html/htmlwin.h"
+#ifndef WX_PRECOMP
+
 #include "wx/grid.h"
 #include "wx/filedlg.h"
+
+#endif
+
+#include "wx/html/htmlwin.h"
 #include "wx/tokenzr.h"
 #include "wx/valgen.h"
-
 #include "propeditor.h"
 #include "symbols.h"
 #include "utils.h"
 #include "configtooldoc.h"
 #include "configitemselector.h"
+
 #include "bitmaps/ellipsis.xpm"
 
 
@@ -75,8 +81,8 @@ void ctPropertyEditor::CreateControls(wxWindow* parent)
     wxTextCtrl *item2 = m_elementTitleTextCtrl;
     item1->Add( item2, 1, wxGROW|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-    wxButton *item3a = new wxButton( parent, ctID_ATTRIBUTE_EDITOR_EDIT_DETAILS, wxT("Edit..."));
-    item1->Add( item3a, 0, wxALIGN_CENTRE|wxRIGHT|wxTOP|wxBOTTOM, 5 );
+    m_attributeEditorEditDetails = new wxButton( parent, ctID_ATTRIBUTE_EDITOR_EDIT_DETAILS, wxT("Edit..."));
+    item1->Add( m_attributeEditorEditDetails, 0, wxALIGN_CENTRE|wxRIGHT|wxTOP|wxBOTTOM, 5 );
 
     item0->Add( item1, 0, wxGROW|wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -103,9 +109,9 @@ void ctPropertyEditor::CreateControls(wxWindow* parent)
 
     /// Add help text
     m_elementTitleTextCtrl->SetHelpText(_("The title of the property being edited."));
-    FindWindow(ctID_ATTRIBUTE_EDITOR_EDIT_DETAILS)->SetHelpText(_("Click to use an appropriate editor for the selected property (if any)."));
-    FindWindow(ctID_ATTRIBUTE_EDITOR_GRID)->SetHelpText(_("Shows the properties of the selected item."));
-    FindWindow(ctID_ATTRIBUTE_EDITOR_DESCRIPTION)->SetHelpText(_("Shows a description of the selected property, or a summary of the whole item."));
+    m_attributeEditorEditDetails->SetHelpText(_("Click to use an appropriate editor for the selected property (if any)."));
+    m_attributeEditorGrid->SetHelpText(_("Shows the properties of the selected item."));
+    m_propertyDescriptionWindow->SetHelpText(_("Shows a description of the selected property, or a summary of the whole item."));
 
     /// Set up the grid to display properties
     m_attributeEditorGrid->RegisterDataType(ctGRID_VALUE_STRING,
@@ -205,7 +211,7 @@ void ctPropertyEditor::ShowItem(ctConfigItem* item)
 
         m_attributeEditorGrid->AppendRows(m_item->GetProperties().GetCount());
 
-        wxNode* node = m_item->GetProperties().GetList().GetFirst();
+        wxObjectList::compatibility_iterator node = m_item->GetProperties().GetList().GetFirst();
         int i = 0;
         while (node)
         {
@@ -255,7 +261,7 @@ void ctPropertyEditor::UpdateItem()
     {
         UpdateTitle();
 
-        wxNode* node = m_item->GetProperties().GetList().GetFirst();
+        wxObjectList::compatibility_iterator node = m_item->GetProperties().GetList().GetFirst();
         int i = 0;
         while (node)
         {
@@ -808,7 +814,6 @@ bool ctMultiLineTextEditor::AddControls(wxWindow* parent, const wxString& msg)
     item4->Add( 5, 5, 1, wxALIGN_CENTRE|wxALL, 5 );
 
     wxButton *item5 = new wxButton( parent, wxID_OK, _("&OK"), wxDefaultPosition, wxDefaultSize, 0 );
-    item5->SetDefault();
     item4->Add( item5, 0, wxALIGN_CENTRE|wxALL, 5 );
 
     wxButton *item6 = new wxButton( parent, wxID_CANCEL, _("&Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -823,7 +828,7 @@ bool ctMultiLineTextEditor::AddControls(wxWindow* parent, const wxString& msg)
 
 
     item3->SetFocus();
-    ((wxButton*) FindWindow(wxID_OK))->SetDefault();
+    item5->SetDefault();
 
     parent->SetSizer(item0);
     item0->Fit(parent);

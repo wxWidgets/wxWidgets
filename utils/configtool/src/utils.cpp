@@ -13,29 +13,34 @@
 // #pragma implementation
 #endif
 
-#include "wx/wx.h"
-#include "wx/image.h"
-#include "wx/notebook.h"
-#include "wx/splitter.h"
-#include "wx/wfstream.h"
-#include "wx/datstrm.h"
-#include "wx/file.h"
-#include "wx/listctrl.h"
-#include "wx/tokenzr.h"
-#include "wx/process.h"
-#include "wx/mimetype.h"
-#include "wx/variant.h"
-#include "wx/cshelp.h"
-#include "wx/cmdline.h"
-#include "wx/imaglist.h"
+// For compilers that support precompilation, includes "wx/wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+#pragma hdrstop
+#endif
 
 #include <math.h>
 
-#ifdef __WXMSW__
-#include <windows.h>
-#include "wx/msw/winundef.h"
+#ifndef WX_PRECOMP
+
+#include "wx/splitter.h"
+#include "wx/datstrm.h"
+#include "wx/file.h"
+#include "wx/listctrl.h"
+#include "wx/process.h"
+#include "wx/variant.h"
+#include "wx/cmdline.h"
+
 #endif
 
+#include "wx/wfstream.h"
+#include "wx/cshelp.h"
+#include "wx/image.h"
+#include "wx/imaglist.h"
+#include "wx/tokenzr.h"
+#include "wx/notebook.h"
+#include "wx/mimetype.h"
 #include "utils.h"
 
 // Returns the image type, or -1, determined from the extension.
@@ -218,10 +223,12 @@ wxString wxGetTempDir()
 #if defined(__WXMAC__) && !defined(__DARWIN__)
     dir = wxMacFindFolder(  (short) kOnSystemDisk, kTemporaryFolderType, kCreateFolder ) ;
 #else // !Mac
-    dir = wxGetenv(_T("TMP"));
+    wxString dirEnv(wxGetenv(_T("TMP")));
+    dir = dirEnv;
     if ( dir.empty() )
     {
-        dir = wxGetenv(_T("TEMP"));
+        wxString envVar(wxGetenv(_T("TEMP")));
+        dir = envVar;
     }
     
     if ( dir.empty() )
@@ -269,14 +276,12 @@ bool apInvokeAppForFile(const wxString& filename)
 
 wxString apFindAppPath(const wxString& argv0, const wxString& cwd, const wxString& appVariableName)
 {
-    wxString str;
-
     // Try appVariableName
     if (!appVariableName.IsEmpty())
     {
-        str = wxGetenv(appVariableName);
-        if (!str.IsEmpty())
-            return str;
+        wxString strVar(wxGetenv(appVariableName.c_str()));
+        if (!strVar.IsEmpty())
+            return strVar;
     }
 
     if (wxIsAbsolutePath(argv0))
@@ -288,9 +293,9 @@ wxString apFindAppPath(const wxString& argv0, const wxString& cwd, const wxStrin
         if (currentDir.Last() != wxFILE_SEP_PATH)
             currentDir += wxFILE_SEP_PATH;
 
-        str = currentDir + argv0;
-        if (wxFileExists(str))
-            return wxPathOnly(str);
+        currentDir += argv0;
+        if (wxFileExists(currentDir))
+            return wxPathOnly(currentDir);
     }
 
     // OK, it's neither an absolute path nor a relative path.
@@ -298,9 +303,9 @@ wxString apFindAppPath(const wxString& argv0, const wxString& cwd, const wxStrin
 
     wxPathList pathList;
     pathList.AddEnvList(wxT("PATH"));
-    str = pathList.FindAbsoluteValidPath(argv0);
-    if (!str.IsEmpty())
-        return wxPathOnly(str);
+    wxString strPath = pathList.FindAbsoluteValidPath(argv0);
+    if (!strPath.IsEmpty())
+        return wxPathOnly(strPath);
 
     // Failed
     return wxEmptyString;
@@ -408,7 +413,7 @@ void wxIconInfo::SetIconId(int state, bool enabled, int iconId)
 wxIconTable::wxIconTable(wxImageList* imageList)
 {
     m_imageList = imageList;
-    DeleteContents(true);
+    WX_CLEAR_LIST(wxIconTable,*this);
 }
 
 void wxIconTable::AppendInfo(wxIconInfo* info)
@@ -434,7 +439,7 @@ bool wxIconTable::AddInfo(const wxString& name, const wxIcon& icon, int state, b
 
 wxIconInfo* wxIconTable::FindInfo(const wxString& name) const
 {
-    wxNode* node = GetFirst();
+    wxObjectList::compatibility_iterator node = GetFirst();
     while (node)
     {
         wxIconInfo* info = (wxIconInfo*) node->GetData();

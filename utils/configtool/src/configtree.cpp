@@ -13,15 +13,15 @@
 #pragma implementation "configtree.h"
 #endif
 
-// Includes other headers for precompiled compilation
-#include "wx/wx.h"
+// For compilers that support precompilation, includes "wx/wx.h".
+#include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
 #pragma hdrstop
 #endif
 
-#include "wx/imaglist.h"
 #include "wx/cshelp.h"
+#include "wx/imaglist.h"
 
 // Include XPM icons
 #include "bitmaps/closedfolder.xpm"

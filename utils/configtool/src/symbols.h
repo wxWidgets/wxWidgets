@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        symbols.h
 // Purpose:     Application symbols file
-// Author:      
+// Author:      Julian Smart
 // Modified by:
-// Created:     
+// Created:     2003-06-12
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:

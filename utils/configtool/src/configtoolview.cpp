@@ -13,15 +13,14 @@
     #pragma implementation "configtoolview.h"
 #endif
 
-// Includes other headers for precompiled compilation
-#include "wx/wx.h"
+// For compilers that support precompilation, includes "wx/wx.h".
+#include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-    #pragma hdrstop
+#pragma hdrstop
 #endif
 
 #include "wx/wfstream.h"
-
 #include "configtoolview.h"
 #include "configtooldoc.h"
 #include "configtree.h"

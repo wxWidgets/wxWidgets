@@ -14,7 +14,12 @@
 #pragma implementation "property.h"
 #endif
 
-#include "wx/wx.h"
+// For compilers that support precompilation, includes "wx/wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+#pragma hdrstop
+#endif
 
 #include "property.h"
 
@@ -27,19 +32,23 @@ void ctProperties::AddProperty(ctProperty* property, const wxString& insertAfter
     if (oldProp)
         m_list.DeleteObject(oldProp);
 
-    wxNode* insertBeforeNode = NULL;
     if (insertAfter)
     {
         ctProperty* insertAfterProp = FindProperty(insertAfter);
         if (insertAfterProp)
         {
-            wxNode* node = m_list.Member(insertAfterProp);
+            wxObjectList::compatibility_iterator node = m_list.Member(insertAfterProp);
             if (node)
-                insertBeforeNode = node->GetNext();
+            {
+                wxObjectList::compatibility_iterator insertBeforeNode = node->GetNext();
+                m_list.Insert(insertBeforeNode, property);
+            }
+            else
+                m_list.Append(property);
         }
+        else
+            m_list.Append(property);
     }
-    if (insertBeforeNode)
-        m_list.Insert(insertBeforeNode, property);
     else
         m_list.Append(property);
 
@@ -68,7 +77,7 @@ void ctProperties::DeleteProperty(const wxString& name)
 
 ctProperty* ctProperties::FindProperty(const wxString& name) const
 {
-    wxNode* node = m_list.GetFirst();
+    wxObjectList::compatibility_iterator node = m_list.GetFirst();
     while (node)
     {
         ctProperty* prop = (ctProperty*) node->GetData();
@@ -111,14 +120,12 @@ ctProperty* ctProperties::FindOrCreateProperty(const wxString& name)
 
 void ctProperties::Clear()
 {
-    m_list.DeleteContents(true);
-    m_list.Clear();
-    m_list.DeleteContents(false);
+    WX_CLEAR_LIST(wxObjectList,m_list);
 }
 
 void ctProperties::Copy(const ctProperties& properties)
 {
-    wxNode* node = properties.m_list.GetFirst();
+    wxObjectList::compatibility_iterator node = properties.m_list.GetFirst();
     while (node)
     {
         ctProperty* prop = (ctProperty*) node->GetData();
@@ -158,7 +165,7 @@ ctProperty* ctProperties::GetNth(int i) const
     wxASSERT( i < (int) GetCount() );
     if (i < (int) GetCount())
     {
-        wxNode* node = m_list.Item(i);
+        wxObjectList::compatibility_iterator node = m_list.Item(i);
         return (ctProperty*) node->GetData();
     }
     return NULL;
