@@ -47,6 +47,29 @@ static void gtk_choice_clicked_callback( GtkWidget *WXUNUSED(widget), wxChoice *
 
     if (g_blockEventsOnDrag) return;
 
+    int selection = wxNOT_FOUND;
+
+#ifdef __WXGTK20__
+    selection = gtk_option_menu_get_history( GTK_OPTION_MENU(choice->GetHandle()) );
+#else
+    GtkMenuShell *menu_shell = GTK_MENU_SHELL( gtk_option_menu_get_menu( GTK_OPTION_MENU(choice->GetHandle()) ) );
+    int count = 0;
+
+    GList *child = menu_shell->children;
+    while (child)
+    {
+        GtkBin *bin = GTK_BIN( child->data );
+        if (!bin->child)
+        {
+            selection = count:
+            break;
+        }
+        child = child->next;
+        count++;
+    }
+#endif
+    choice->m_selection_hack = selection;
+
     wxCommandEvent event(wxEVT_COMMAND_CHOICE_SELECTED, choice->GetId() );
     int n = choice->GetSelection();
 
@@ -354,30 +377,8 @@ int wxChoice::GetSelection() const
 {
     wxCHECK_MSG( m_widget != NULL, -1, wxT("invalid choice") );
 
-    // this has the same (if not better) behaviour as the following commented code
     return m_selection_hack;
 
-    /*
-#ifdef __WXGTK20__
-
-    return gtk_option_menu_get_history( GTK_OPTION_MENU(m_widget) );
-
-#else
-    GtkMenuShell *menu_shell = GTK_MENU_SHELL( gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) ) );
-    int count = 0;
-
-    GList *child = menu_shell->children;
-    while (child)
-    {
-        GtkBin *bin = GTK_BIN( child->data );
-        if (!bin->child) return count;
-        child = child->next;
-        count++;
-    }
-
-    return -1;
-#endif
-    */
 }
 
 void wxChoice::SetString( int n, const wxString& str )

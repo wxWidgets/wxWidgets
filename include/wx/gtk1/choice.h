@@ -104,10 +104,12 @@ private:
     // allocate it if it's needed (hence using pointer)
     wxSortedArrayString *m_strings;
 
+public:
     // this circumvents a GTK+ 2.0 bug so that the selection is 
     // invalidated properly 
     int m_selection_hack;
-    
+
+private:
     DECLARE_DYNAMIC_CLASS(wxChoice)
 };
 
