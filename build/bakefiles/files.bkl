@@ -186,6 +186,7 @@
     src/common/utilscmn.cpp
 </set>
 <set var="BASE_CMN_HDR">
+    wx/init.h
     wx/arrimpl.cpp
     wx/listimpl.cpp
     wx/app.h
@@ -1040,6 +1041,7 @@
     wx/msw/droptgt.h
     wx/msw/oleutils.h
     wx/msw/uuid.h
+    wx/msw/helpbest.h
 </set>
 
 
@@ -1700,7 +1702,13 @@
 <!--                               wxHTML                                   -->
 <!-- ====================================================================== -->
 
+<set var="HTML_SRC_PLATFORM">
+    <if cond="TOOLKIT=='MSW'">
+        src/msw/helpbest.cpp
+    </if>
+</set>
 <set var="HTML_SRC">
+    $(HTML_SRC_PLATFORM)
     src/html/helpdata.cpp
     src/html/helpfrm.cpp
     src/html/helpctrl.cpp
@@ -1722,7 +1730,6 @@
     src/html/m_style.cpp
     src/html/htmprint.cpp
     <!-- wxHTML users: -->
-    src/msw/helpbest.cpp
     src/generic/htmllbox.cpp
 </set>
 <set var="HTML_HDR">
@@ -1741,7 +1748,6 @@
     wx/html/m_templ.h
     wx/html/winpars.h
     <!-- wxHTML users: -->
-    wx/msw/helpbest.h
     wx/htmllbox.h
 </set>
 
