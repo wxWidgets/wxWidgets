@@ -39,8 +39,18 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& label,
     m_label = label ;
 
     Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
-    m_macControl = (WXWidget) ::NewControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , "\p" , true , 0 , 0 , 1, 
+    if ( label.Find('\n' ) == wxNOT_FOUND && label.Find('\r' ) == wxNOT_FOUND)
+    {
+        m_macControl = (WXWidget) ::NewControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , "\p" , true , 0 , 0 , 1, 
           kControlPushButtonProc , (long) this ) ;
+    }
+    else
+    {
+        ControlButtonContentInfo info ;
+        info.contentType = kControlNoContent ;
+        verify_noerr(CreateBevelButtonControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds,CFSTR(""),
+            kControlBevelButtonLargeBevel , kControlBehaviorPushbutton , &info , 0 , 0 , 0 , (ControlRef*) &m_macControl ) ) ;
+    }
     wxASSERT_MSG( (ControlRef) m_macControl != NULL , wxT("No valid mac control") ) ;
     
     MacPostControlCreate(pos,size) ;
