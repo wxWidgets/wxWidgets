@@ -120,12 +120,7 @@
 // Default is 1
 //
 // Recommended setting: 1 if your compiler supports it.
-#if defined(_MSC_VER) || \
-    (defined(__BORLANDC__) && __BORLANDC__ >= 0x0550)
-    #define wxUSE_ON_FATAL_EXCEPTION 1
-#else
-    #define wxUSE_ON_FATAL_EXCEPTION 0
-#endif
+#define wxUSE_ON_FATAL_EXCEPTION 1
 
 // Set this to 1 to be able to generate a human-readable (unlike
 // machine-readable minidumop created by wxCrashReport::Generate()) stack back
