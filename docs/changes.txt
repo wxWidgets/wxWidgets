@@ -178,6 +178,7 @@ All:
 - fixed wxLANGUAGE_CHINESE_TAIWAN to use zh_TW catalogs
 - added missing wx/quantize.h to install
 - improved wxScrolledWindow/sizer interaction
+- fixed assert (and crash in debug) in wxFileConfigGroup::DeleteSubgroupByName
 
 Unix (GUI):
 

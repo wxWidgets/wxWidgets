@@ -1512,13 +1512,17 @@ wxFileConfigGroup *wxFileConfigGroup::AddSubgroup(const wxString& strName)
 
 bool wxFileConfigGroup::DeleteSubgroupByName(const wxChar *szName)
 {
-  return DeleteSubgroup(FindSubgroup(szName));
+    wxFileConfigGroup * const pGroup = FindSubgroup(szName);
+
+    return pGroup ? DeleteSubgroup(pGroup) : FALSE;
 }
 
 // Delete the subgroup and remove all references to it from
 // other data structures.
 bool wxFileConfigGroup::DeleteSubgroup(wxFileConfigGroup *pGroup)
 {
+    wxCHECK_MSG( pGroup, FALSE, _T("deleting non existing group?") );
+
     wxLogTrace( _T("wxFileConfig"),
                 _T("Deleting group '%s' from '%s'"),
                 pGroup->Name().c_str(),
@@ -1533,10 +1537,7 @@ bool wxFileConfigGroup::DeleteSubgroup(wxFileConfigGroup *pGroup)
                 _T("  text: '%s'"),
                 ((m_pLine) ? m_pLine->Text().c_str() : wxEmptyString) );
 
-    wxCHECK_MSG( pGroup != 0, FALSE, _T("deleting non existing group?") );
-
         // delete all entries
-
     size_t  nCount = pGroup->m_aEntries.Count();
 
     wxLogTrace(_T("wxFileConfig"),
