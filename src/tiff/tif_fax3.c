@@ -443,7 +443,7 @@ CheckMalloc(TIFF* tif, size_t nmemb, size_t elem_size, const char* what)
 	char	*cp = NULL;
 	tsize_t	bytes = nmemb * elem_size;
 
-	if (elem_size && bytes / elem_size == nmemb)
+	if (nmemb && elem_size && bytes / elem_size == nmemb)
 		cp = (char*) _TIFFmalloc(bytes);
 
 	if (cp == NULL)
