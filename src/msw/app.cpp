@@ -331,6 +331,8 @@ void wxApp::CleanUp(void)
   if (wxWinHandleList)
     delete wxWinHandleList ;
     
+  // do it as the very last thing because everything else can log messages
+  delete wxLog::SetActiveTarget(NULL);
 }
 
 void wxApp::CommonInit(void)
@@ -815,6 +817,11 @@ void wxApp::OnIdle(wxIdleEvent& event)
 
   // 'Garbage' collection of windows deleted with Close().
   DeletePendingObjects();
+
+  // flush the logged messages if any
+  wxLog *pLog = wxLog::GetActiveTarget();
+  if ( pLog != NULL && pLog->HasPendingMessages() )
+    pLog->Flush();
 
   // Send OnIdle events to all windows
   bool needMore = SendIdleEvents();
