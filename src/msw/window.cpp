@@ -4303,7 +4303,9 @@ bool wxWindowMSW::HandleChar(WXWPARAM wParam, WXLPARAM lParam, bool isASCII)
     int id;
     if ( isASCII )
     {
-        // If 1 -> 26, translate to CTRL plus a letter.
+        // If 1 -> 26, translate to either special keycode or just set
+        // ctrlDown.  IOW, Ctrl-C should result in keycode == 3 and
+        // ControlDown() == TRUE.
         id = wParam;
         if ( (id > 0) && (id < 27) )
         {
@@ -4323,7 +4325,7 @@ bool wxWindowMSW::HandleChar(WXWPARAM wParam, WXLPARAM lParam, bool isASCII)
 
                 default:
                     ctrlDown = TRUE;
-                    id = id + 'a' - 1;
+                    break;
             }
         }
     }
