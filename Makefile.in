@@ -667,13 +667,11 @@ NETDLL_OBJECTS =  \
 NETLIB_CFLAGS = $(__netlib_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
 	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
-	$(__INC_REGEX_p) $(__INC_EXPAT_p) -DwxUSE_GUI=0 -DWXUSINGDLL \
-	-DWXMAKINGDLL_NET $(CFLAGS)
+	$(__INC_REGEX_p) $(__INC_EXPAT_p) -DwxUSE_GUI=0 $(CFLAGS)
 NETLIB_CXXFLAGS = $(__netlib_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
 	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
-	$(__INC_REGEX_p) $(__INC_EXPAT_p) -DwxUSE_GUI=0 -DWXUSINGDLL \
-	-DWXMAKINGDLL_NET $(CXXFLAGS)
+	$(__INC_REGEX_p) $(__INC_EXPAT_p) -DwxUSE_GUI=0 $(CXXFLAGS)
 NETLIB_OBJECTS =  \
 	netlib_fs_inet.o \
 	netlib_ftp.o \

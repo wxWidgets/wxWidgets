@@ -634,17 +634,15 @@ NETLIB_CFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_96) /DWIN32 \
 	$(____DEBUGRUNTIME_95_p) $(__OPTIMIZEFLAG) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I..\..\include /I$(LIBDIRNAME) \
 	/I..\..\src\tiff /I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib \
-	/I..\..\src\regex /I..\..\src\expat\lib /DwxUSE_GUI=0 /DWXUSINGDLL \
-	/DWXMAKINGDLL_NET $(CFLAGS)
+	/I..\..\src\regex /I..\..\src\expat\lib /DwxUSE_GUI=0 $(CFLAGS)
 NETLIB_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_96) /DWIN32 \
 	$(__DEBUGINFO_38) \
 	/Fd$(LIBDIRNAME)\wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net.pdb \
 	$(____DEBUGRUNTIME_95_p) $(__OPTIMIZEFLAG) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I..\..\include /I$(LIBDIRNAME) \
 	/I..\..\src\tiff /I..\..\src\jpeg /I..\..\src\png /I..\..\src\zlib \
-	/I..\..\src\regex /I..\..\src\expat\lib /DwxUSE_GUI=0 /DWXUSINGDLL \
-	/DWXMAKINGDLL_NET $(CXXFLAGS) /Yu"wx/wxprec.h" \
-	/Fp"$(OBJS)\wxprec_netlib.pch"
+	/I..\..\src\regex /I..\..\src\expat\lib /DwxUSE_GUI=0 $(CXXFLAGS) \
+	/Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_netlib.pch"
 NETLIB_OBJECTS =  \
 	$(OBJS)\netlib_dummy.obj \
 	$(OBJS)\netlib_fs_inet.obj \

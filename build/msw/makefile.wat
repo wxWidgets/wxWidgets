@@ -2540,14 +2540,13 @@ NETLIB_CFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=..\..\include -i=$(LIBDIRNAME) -i=..\..\src\tiff &
 	-i=..\..\src\jpeg -i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex &
-	-i=..\..\src\expat\lib -dwxUSE_GUI=0 -dWXUSINGDLL -dWXMAKINGDLL_NET &
-	$(CFLAGS)
+	-i=..\..\src\expat\lib -dwxUSE_GUI=0 $(CFLAGS)
 NETLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=..\..\include -i=$(LIBDIRNAME) -i=..\..\src\tiff &
 	-i=..\..\src\jpeg -i=..\..\src\png -i=..\..\src\zlib -i=..\..\src\regex &
-	-i=..\..\src\expat\lib -dwxUSE_GUI=0 -dWXUSINGDLL -dWXMAKINGDLL_NET &
-	$(CXXFLAGS) /fh=$(OBJS)\wxprec_netlib.pch
+	-i=..\..\src\expat\lib -dwxUSE_GUI=0 $(CXXFLAGS) &
+	/fh=$(OBJS)\wxprec_netlib.pch
 NETLIB_OBJECTS =  &
 	$(OBJS)\netlib_dummy.obj &
 	$(OBJS)\netlib_fs_inet.obj &
