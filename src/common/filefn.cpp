@@ -988,7 +988,7 @@ wxConcatFiles (const wxString& file1, const wxString& file2, const wxString& fil
 
   fclose (fp3);
   bool result = wxRenameFile(outfile, file3);
-  delete[] outfile;
+  delete outfile;
   return result;
 }
 
