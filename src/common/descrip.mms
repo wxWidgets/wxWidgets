@@ -85,7 +85,6 @@ OBJECTS1=fs_inet.obj,\
 		hash.obj,\
 		helpbase.obj,\
 		http.obj,\
-		iffdecod.obj,\
 		imagall.obj,\
 		imagbmp.obj,\
 		image.obj,\
@@ -201,7 +200,6 @@ SOURCES = \
 		hash.cpp,\
 		helpbase.cpp,\
 		http.cpp,\
-		iffdecod.cpp,\
 		imagall.cpp,\
 		imagbmp.cpp,\
 		image.cpp,\
@@ -349,7 +347,6 @@ gifdecod.obj : gifdecod.cpp
 hash.obj : hash.cpp
 helpbase.obj : helpbase.cpp
 http.obj : http.cpp
-iffdecod.obj : iffdecod.cpp
 imagall.obj : imagall.cpp
 imagbmp.obj : imagbmp.cpp
 image.obj : image.cpp
