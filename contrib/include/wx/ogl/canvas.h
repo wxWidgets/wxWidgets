@@ -23,6 +23,8 @@
 #define StartDraggingRight     3
 #define ContinueDraggingRight  4
 
+extern wxChar* wxShapeCanvasNameStr;
+
 // When drag_count reaches 0, process drag message
 
 class wxDiagram;
@@ -31,8 +33,11 @@ class wxShapeCanvas: public wxScrolledWindow
 {
  DECLARE_DYNAMIC_CLASS(wxShapeCanvas)
  public:
-  wxShapeCanvas(wxWindow *parent = NULL, wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-               long style = wxBORDER | wxRETAINED);
+  wxShapeCanvas(wxWindow *parent = NULL, wxWindowID id = -1,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxBORDER | wxRETAINED,
+                const wxString& name = wxShapeCanvasNameStr);
   ~wxShapeCanvas();
 
   inline void SetDiagram(wxDiagram *diag) { m_shapeDiagram = diag; }
@@ -54,7 +59,7 @@ class wxShapeCanvas: public wxScrolledWindow
   virtual wxShape *FindShape(double x, double y, int *attachment, wxClassInfo *info = NULL, wxShape *notImage = NULL);
   wxShape *FindFirstSensitiveShape(double x, double y, int *new_attachment, int op);
   wxShape *FindFirstSensitiveShape1(wxShape *image, int op);
-  
+
   // Redirect to wxDiagram object
   virtual void AddShape(wxShape *object, wxShape *addAfter = NULL);
   virtual void InsertShape(wxShape *object);

@@ -37,6 +37,11 @@
 %pragma(python) code = "import wx"
 
 //---------------------------------------------------------------------------
+%{
+    // Put some wx default wxChar* values into wxStrings.
+    DECLARE_DEF_STRING(ShapeCanvasNameStr);
+%}
+
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 
@@ -114,7 +119,8 @@ public:
     wxPyShapeCanvas(wxWindow* parent = NULL, wxWindowID id = -1,
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
-                    long style = wxBORDER);
+                    long style = wxBORDER,
+                    const wxString& name = wxPyShapeCanvasNameStr);
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
     %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxPyShapeCanvas)"

@@ -115,8 +115,9 @@ public:
     wxPyShapeCanvas(wxWindow* parent = NULL, wxWindowID id = -1,
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
-                    long style = wxBORDER)
-        : wxShapeCanvas(parent, id, pos, size, style) {}
+                    long style = wxBORDER,
+                    const wxString& name = wxT("shapeCanvas"))
+        : wxShapeCanvas(parent, id, pos, size, style, name) {}
 
     DEC_PYCALLBACK__2DBLINT(OnBeginDragLeft);
     DEC_PYCALLBACK__2DBLINT(OnBeginDragRight);

@@ -68,9 +68,15 @@ BEGIN_EVENT_TABLE(wxShapeCanvas, wxScrolledWindow)
     EVT_MOUSE_EVENTS(wxShapeCanvas::OnMouseEvent)
 END_EVENT_TABLE()
 
+wxChar* wxShapeCanvasNameStr = wxT("shapeCanvas");
+
 // Object canvas
-wxShapeCanvas::wxShapeCanvas(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style):
-  wxScrolledWindow(parent, id, pos, size, style)
+wxShapeCanvas::wxShapeCanvas(wxWindow *parent, wxWindowID id,
+                             const wxPoint& pos,
+                             const wxSize& size,
+                             long style,
+                             const wxString& name):
+  wxScrolledWindow(parent, id, pos, size, style, name)
 {
   m_shapeDiagram = NULL;
   m_dragState = NoDragging;

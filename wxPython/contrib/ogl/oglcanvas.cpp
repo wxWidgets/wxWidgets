@@ -85,6 +85,9 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     return target;
 }
 
+    // Put some wx default wxChar* values into wxStrings.
+    DECLARE_DEF_STRING(ShapeCanvasNameStr);
+
     IMP_PYCALLBACK__2DBLINT(wxPyShapeCanvas, wxShapeCanvas, OnBeginDragLeft);
     IMP_PYCALLBACK__2DBLINT(wxPyShapeCanvas, wxShapeCanvas, OnBeginDragRight);
     IMP_PYCALLBACK__2DBLINT(wxPyShapeCanvas, wxShapeCanvas, OnEndDragLeft);
@@ -1157,7 +1160,7 @@ static void *SwigwxPyShapeCanvasTowxObject(void *ptr) {
     return (void *) dest;
 }
 
-#define new_wxPyShapeCanvas(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4) (new wxPyShapeCanvas(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4))
+#define new_wxPyShapeCanvas(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5) (new wxPyShapeCanvas(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5))
 static PyObject *_wrap_new_wxPyShapeCanvas(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyShapeCanvas * _result;
@@ -1166,16 +1169,18 @@ static PyObject *_wrap_new_wxPyShapeCanvas(PyObject *self, PyObject *args, PyObj
     wxPoint * _arg2 = (wxPoint *) &wxDefaultPosition;
     wxSize * _arg3 = (wxSize *) &wxDefaultSize;
     long  _arg4 = (long ) wxBORDER;
+    wxString * _arg5 = (wxString *) &wxPyShapeCanvasNameStr;
     PyObject * _argo0 = 0;
     wxPoint  temp;
     PyObject * _obj2 = 0;
     wxSize  temp0;
     PyObject * _obj3 = 0;
-    char *_kwnames[] = { "parent","id","pos","size","style", NULL };
+    PyObject * _obj5 = 0;
+    char *_kwnames[] = { "parent","id","pos","size","style","name", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|OiOOl:new_wxPyShapeCanvas",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_arg4)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|OiOOlO:new_wxPyShapeCanvas",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_arg4,&_obj5)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1196,9 +1201,15 @@ static PyObject *_wrap_new_wxPyShapeCanvas(PyObject *self, PyObject *args, PyObj
     if (! wxSize_helper(_obj3, &_arg3))
         return NULL;
 }
+    if (_obj5)
+{
+    _arg5 = wxString_in_helper(_obj5);
+    if (_arg5 == NULL)
+        return NULL;
+}
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxPyShapeCanvas *)new_wxPyShapeCanvas(_arg0,_arg1,*_arg2,*_arg3,_arg4);
+    _result = (wxPyShapeCanvas *)new_wxPyShapeCanvas(_arg0,_arg1,*_arg2,*_arg3,_arg4,*_arg5);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -1209,6 +1220,10 @@ static PyObject *_wrap_new_wxPyShapeCanvas(PyObject *self, PyObject *args, PyObj
         Py_INCREF(Py_None);
         _resultobj = Py_None;
     }
+{
+    if (_obj5)
+        delete _arg5;
+}
     return _resultobj;
 }
 
