@@ -582,19 +582,17 @@ void wxDatePickerCtrlGeneric::OnKillFocus(wxFocusEvent &ev)
 
     wxDateTime dt;
     dt.ParseFormat(m_txt->GetValue(), m_format);
-    if (!dt.IsValid())
+    if ( !dt.IsValid() )
     {
         if ( !HasFlag(wxDP_ALLOWNONE) )
             dt = m_currentDate;
     }
 
-    if (!dt.IsValid())
-        m_txt->SetValue(wxEmptyString);
-    else
-        m_txt->SetValue(dt.Format(m_format));
+    m_txt->SetValue(dt.IsValid()? dt.Format(m_format) : wxString());
 
     // notify that we had to change the date after validation
-    if (m_currentDate != dt)
+    if ( (dt.IsValid() && m_currentDate != dt) ||
+            (!dt.IsValid() && m_currentDate.IsValid()) )
     {
         m_currentDate = dt;
         wxDateEvent event(this, dt, wxEVT_DATE_CHANGED);
