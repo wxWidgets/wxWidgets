@@ -39,7 +39,14 @@ deleted when the element is removed from the array. It should be noted that
 all of wxArray's functions are inline, so it costs strictly nothing to define as
 many array types as you want (either in terms of the executable size or the
 speed) as long as at least one of them is defined and this is always the case
-because wxArrays are used by wxWindows internally.
+because wxArrays are used by wxWindows internally. This class has one serious
+limitation: it can only be used for storing integral types (bool, char, short,
+int, long and their unsigned variants) or pointers (of any kind). An attempt
+to use with objects of sizeof() greater than sizeof(long) will provoke a
+runtime assertion failure, however declaring a wxArray of floats will not (on
+the machines where sizeof(float) <= sizeof(long)), yet it will {\bf not} work,
+please use wxObjArray for storing floats and doubles (NB: a more efficient
+wxArrayDouble class is scheduled for the next release of wxWindows).
 
 wxSortedArray is a wxArray variant which should be used when searching in the
 array is a frequently used operation. It requires you to define an additional
@@ -51,9 +58,8 @@ slower: it is $O(log(N))$ instead of constant time (neglecting time spent in
 memory allocation routine). However, in a usual situation elements are added to
 an array much less often than searched inside it, so wxSortedArray may lead to
 huge performance improvements compared to wxArray. Finally, it should be
-noticed that, as wxArray, wxSortedArray can not be used to store anything of
-sizeof() larger than max(sizeof(long), sizeof(void *)) - an assertion failure
-will be raised from the constructor otherwise.
+noticed that, as wxArray, wxSortedArray can be only used for storing integral
+types or pointers.
 
 wxObjArray class treats its elements like "objects". It may delete them when
 they are removed from the array (invoking the correct destructor) and copies
