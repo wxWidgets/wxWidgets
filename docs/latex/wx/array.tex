@@ -413,14 +413,14 @@ done by wxArray and wxSortedArray versions - you may use
 
 \membersection{wxArray::Add}\label{wxarrayadd}
 
-\func{void}{Add}{\param{T }{item}}
+\func{void}{Add}{\param{T }{item}, \param{size\_t}{ copies = $1$}}
 
 \func{void}{Add}{\param{T *}{item}}
 
-\func{void}{Add}{\param{T \&}{item}}
+\func{void}{Add}{\param{T \&}{item}, \param{size\_t}{ copies = $1$}}
 
-Appends a new element to the array (where {\it T} is the type of the array
-elements.)
+Appends the given number of {\it copies} of the {\it item} to the array
+consisting of the elements of type {\it T}.
 
 The first version is used with wxArray and wxSortedArray. The second and the
 third are used with wxObjArray. There is an important difference between
@@ -428,10 +428,14 @@ them: if you give a pointer to the array, it will take ownership of it, i.e.
 will delete it when the item is deleted from the array. If you give a reference
 to the array, however, the array will make a copy of the item and will not take
 ownership of the original item. Once again, it only makes sense for wxObjArrays
-because the other array types never take ownership of their elements.
+because the other array types never take ownership of their elements. Also note
+that you cannot append more than one pointer as reusing it would lead to
+deleting it twice (or more) and hence to a crash.
 
 You may also use \helpref{WX\_APPEND\_ARRAY}{wxappendarray} macro to append all
-elements of one array to another one.
+elements of one array to another one but it is more efficient to use 
+{\it copies} parameter and modify the elements in place later if you plan to
+append a lot of items.
 
 \membersection{wxArray::Alloc}\label{wxarrayalloc}
 
@@ -505,15 +509,15 @@ in the array.
 
 \membersection{wxArray::Insert}\label{wxarrayinsert}
 
-\func{void}{Insert}{\param{T }{item}, \param{size\_t }{n}}
+\func{void}{Insert}{\param{T }{item}, \param{size\_t }{n}, \param{size\_t }{copies = $1$}}
 
 \func{void}{Insert}{\param{T *}{item}, \param{size\_t }{n}}
 
-\func{void}{Insert}{\param{T \&}{item}, \param{size\_t }{n}}
+\func{void}{Insert}{\param{T \&}{item}, \param{size\_t }{n}, \param{size\_t }{copies = $1$}}
 
-Insert a new item into the array before the item {\it n} - thus, {\it Insert(something, 0u)} will
-insert an item in such way that it will become the
-first array element.
+Insert the given number of {\it copies} of the {\it item} into the array before
+the existing item {\it n} - thus, {\it Insert(something, 0u)} will insert an
+item in such way that it will become the first array element.
 
 Please see \helpref{Add()}{wxarrayadd} for explanation of the differences
 between the overloaded versions of this function.
@@ -569,13 +573,13 @@ elements of a wxArray (supposed to contain pointers).
 
 \membersection{wxArray::RemoveAt}\label{wxarrayremoveat}
 
-\func{\void}{RemoveAt}{\param{size\_t }{index}}
+\func{\void}{RemoveAt}{\param{size\_t }{index}, \param{size\_t }{count = $1$}
 
-Removes an element from the array by index. When an element
-is removed from wxObjArray it is deleted by the array - use 
-\helpref{Detach()}{wxobjarraydetach} if you don't want this to happen. On the
-other hand, when an object is removed from a wxArray nothing happens - you
-should delete it manually if required:
+Removes {\it count} elements starting at {\it index} from the array. When an
+element is removed from wxObjArray it is deleted by the array - use
+\helpref{Detach()}{wxobjarraydetach} if you don't want this to happen. On
+the other hand, when an object is removed from a wxArray nothing happens -
+you should delete it manually if required:
 
 \begin{verbatim}
 T *item = array[n];
