@@ -362,8 +362,8 @@ public:
     wxListEvent(wxEventType commandType = wxEVT_NULL, int id = 0);
 
     int           m_code;
+    long          m_oldItemIndex; // only for wxEVT_COMMAND_LIST_CACHE_HINT
     long          m_itemIndex;
-    long          m_oldItemIndex;
     int           m_col;
     bool          m_cancelled;
     wxPoint       m_pointDrag;
@@ -372,8 +372,6 @@ public:
 
     int GetCode() const { return m_code; }
     long GetIndex() const { return m_itemIndex; }
-    long GetOldIndex() const { return m_oldItemIndex; }
-    long GetOldItem() const { return m_oldItemIndex; }
     int GetColumn() const { return m_col; }
     bool Cancelled() const { return m_cancelled; }
     wxPoint GetPoint() const { return m_pointDrag; }
@@ -387,6 +385,12 @@ public:
     // for wxEVT_COMMAND_LIST_CACHE_HINT only
     long GetCacheFrom() const { return m_oldItemIndex; }
     long GetCacheTo() const { return m_itemIndex; }
+
+    // these methods don't do anything at all
+#if WXWIN_COMPATIBILITY_2_2
+    long GetOldIndex() const { return 0; }
+    long GetOldItem() const { return 0; }
+#endif // WXWIN_COMPATIBILITY_2_2
 
     void CopyObject(wxObject& object_dest) const;
 
