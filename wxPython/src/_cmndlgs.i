@@ -351,7 +351,7 @@ public:
         wxMultiChoiceDialog(wxWindow *parent,
                             const wxString& message,
                             const wxString& caption,
-                            int choices=0, wxString* choices_array,
+                            int choices=0, wxString* choices_array=NULL,
                             long style = wxCHOICEDLG_STYLE,
                             const wxPoint& pos = wxDefaultPosition),
         "__init__(Window parent, String message, String caption,

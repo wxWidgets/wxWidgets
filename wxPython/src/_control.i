@@ -37,7 +37,7 @@ public:
 
     DocCtorStr(
         wxControl(wxWindow *parent,
-              wxWindowID id,
+              wxWindowID id=-1,
               const wxPoint& pos=wxDefaultPosition,
               const wxSize& size=wxDefaultSize,
               long style=0,
@@ -53,7 +53,7 @@ __init__ as a plain old wx.Control is not very useful.", "");
 
     DocDeclStr(
         bool , Create(wxWindow *parent,
-                      wxWindowID id,
+                      wxWindowID id=-1,
                       const wxPoint& pos=wxDefaultPosition,
                       const wxSize& size=wxDefaultSize,
                       long style=0,

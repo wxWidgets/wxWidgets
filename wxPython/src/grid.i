@@ -1555,7 +1555,7 @@ public:
     %pythonAppend wxGrid "self._setOORInfo(self)"
 
     wxGrid( wxWindow *parent,
-            wxWindowID id,
+            wxWindowID id=-1,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
             long style = wxWANTS_CHARS,
@@ -1565,7 +1565,7 @@ public:
     
     
     bool Create( wxWindow *parent,
-                 wxWindowID id,
+                 wxWindowID id=-1,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = wxWANTS_CHARS,

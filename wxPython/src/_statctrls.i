@@ -30,14 +30,16 @@ public:
     %pythonAppend wxStaticBox         "self._setOORInfo(self)"
     %pythonAppend wxStaticBox()       ""
 
-    wxStaticBox(wxWindow* parent, wxWindowID id, const wxString& label,
+    wxStaticBox(wxWindow* parent, wxWindowID id=-1,
+                const wxString& label = wxPyEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxString& name = wxPyStaticBoxNameStr);
     %name(PreStaticBox)wxStaticBox();
 
-    bool Create(wxWindow* parent, wxWindowID id, const wxString& label,
+    bool Create(wxWindow* parent, wxWindowID id=-1,
+                const wxString& label = wxPyEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
@@ -59,14 +61,14 @@ public:
     %pythonAppend wxStaticLine         "self._setOORInfo(self)"
     %pythonAppend wxStaticLine()       ""
 
-    wxStaticLine( wxWindow *parent, wxWindowID id,
+    wxStaticLine( wxWindow *parent, wxWindowID id=-1,
                   const wxPoint &pos = wxDefaultPosition,
                   const wxSize &size = wxDefaultSize,
                   long style = wxLI_HORIZONTAL,
                   const wxString& name = wxPyStaticTextNameStr);
     %name(PreStaticLine)wxStaticLine();
 
-    bool Create( wxWindow *parent, wxWindowID id,
+    bool Create( wxWindow *parent, wxWindowID id=-1,
                   const wxPoint &pos = wxDefaultPosition,
                   const wxSize &size = wxDefaultSize,
                   long style = wxLI_HORIZONTAL,
@@ -93,14 +95,16 @@ public:
     %pythonAppend wxStaticText         "self._setOORInfo(self)"
     %pythonAppend wxStaticText()       ""
 
-    wxStaticText(wxWindow* parent, wxWindowID id, const wxString& label,
+    wxStaticText(wxWindow* parent, wxWindowID id=-1,
+                 const wxString& label = wxPyEmptyString,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = 0,
                  const wxString& name = wxPyStaticTextNameStr);
     %name(PreStaticText)wxStaticText();
 
-    bool Create(wxWindow* parent, wxWindowID id, const wxString& label,
+    bool Create(wxWindow* parent, wxWindowID id=-1,
+                const wxString& label = wxPyEmptyString,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = 0,
@@ -120,16 +124,16 @@ public:
     %pythonAppend wxStaticBitmap         "self._setOORInfo(self)"
     %pythonAppend wxStaticBitmap()       ""
 
-    wxStaticBitmap(wxWindow* parent, wxWindowID id,
-                   const wxBitmap& bitmap,
+    wxStaticBitmap(wxWindow* parent, wxWindowID id=-1,
+                   const wxBitmap& bitmap = wxNullBitmap,
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
                    const wxString& name = wxPyStaticBitmapNameStr);
     %name(PreStaticBitmap)wxStaticBitmap();
 
-    bool Create(wxWindow* parent, wxWindowID id,
-                   const wxBitmap& bitmap,
+    bool Create(wxWindow* parent, wxWindowID id=-1,
+                   const wxBitmap& bitmap = wxNullBitmap,
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    long style = 0,

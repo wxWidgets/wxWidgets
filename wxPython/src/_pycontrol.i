@@ -106,7 +106,7 @@ public:
     %pythonAppend wxPyControl         "self._setOORInfo(self); self._setCallbackInfo(self, PyControl)"
     %pythonAppend wxPyControl()       ""
 
-    wxPyControl(wxWindow* parent, const wxWindowID id,
+    wxPyControl(wxWindow* parent, const wxWindowID id=-1,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,

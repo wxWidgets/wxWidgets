@@ -168,7 +168,7 @@ public:
     %pythonAppend wxTextCtrl         "self._setOORInfo(self)"
     %pythonAppend wxTextCtrl()       ""
 
-    wxTextCtrl(wxWindow* parent, wxWindowID id,
+    wxTextCtrl(wxWindow* parent, wxWindowID id=-1,
                const wxString& value = wxPyEmptyString,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
@@ -177,7 +177,7 @@ public:
                const wxString& name = wxPyTextCtrlNameStr);
     %name(PreTextCtrl)wxTextCtrl();
 
-    bool Create(wxWindow* parent, wxWindowID id,
+    bool Create(wxWindow* parent, wxWindowID id=-1,
                const wxString& value = wxPyEmptyString,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,

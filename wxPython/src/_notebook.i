@@ -178,7 +178,7 @@ public:
     %name(PreNotebook)wxNotebook();
 
     bool Create(wxWindow *parent,
-               wxWindowID id,
+               wxWindowID id=-1,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = 0,
@@ -308,7 +308,7 @@ public:
     %name(PreListbook)wxListbook();
 
     bool Create(wxWindow *parent,
-                wxWindowID id,
+                wxWindowID id=-1,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,

@@ -34,7 +34,7 @@ public:
     %pythonAppend wxListBox         "self._setOORInfo(self)"
     %pythonAppend wxListBox()       ""
 
-    wxListBox(wxWindow* parent, wxWindowID id,
+    wxListBox(wxWindow* parent, wxWindowID id=-1,
               const wxPoint& pos = wxDefaultPosition,
               const wxSize& size = wxDefaultSize,
               //int choices=0, wxString* choices_array = NULL,
@@ -44,7 +44,7 @@ public:
               const wxString& name = wxPyListBoxNameStr);
     %name(PreListBox)wxListBox();
 
-    bool Create(wxWindow* parent, wxWindowID id,
+    bool Create(wxWindow* parent, wxWindowID id=-1,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 //int choices=0, wxString* choices_array = NULL,
@@ -148,7 +148,7 @@ public:
     %pythonAppend wxCheckListBox         "self._setOORInfo(self)"
     %pythonAppend wxCheckListBox()       ""
 
-    wxCheckListBox(wxWindow *parent, wxWindowID id,
+    wxCheckListBox(wxWindow *parent, wxWindowID id=-1,
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    //int choices = 0, wxString* choices_array = NULL,
@@ -158,7 +158,7 @@ public:
                    const wxString& name = wxPyListBoxNameStr);
     %name(PreCheckListBox)wxCheckListBox();
 
-    bool Create(wxWindow *parent, wxWindowID id,
+    bool Create(wxWindow *parent, wxWindowID id=-1,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 //int choices = 0, wxString* choices_array = NULL,

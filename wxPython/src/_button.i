@@ -68,7 +68,8 @@ public:
 
 
     DocCtorStr(
-        wxButton(wxWindow* parent, wxWindowID id, const wxString& label,
+        wxButton(wxWindow* parent, wxWindowID id=-1,
+                 const wxString& label=wxPyEmptyString,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = 0,
@@ -82,7 +83,8 @@ public:
         PreButton);
 
     DocDeclStr(
-        bool , Create(wxWindow* parent, wxWindowID id, const wxString& label,
+        bool , Create(wxWindow* parent, wxWindowID id=-1,
+                      const wxString& label=wxPyEmptyString,
                       const wxPoint& pos = wxDefaultPosition,
                       const wxSize& size = wxDefaultSize,
                       long style = 0,
@@ -154,7 +156,8 @@ public:
     %pythonAppend wxBitmapButton()       ""
 
     DocCtorStr(
-        wxBitmapButton(wxWindow* parent, wxWindowID id, const wxBitmap& bitmap,
+        wxBitmapButton(wxWindow* parent, wxWindowID id=-1,
+                       const wxBitmap& bitmap = wxNullBitmap,
                        const wxPoint& pos = wxDefaultPosition,
                        const wxSize& size = wxDefaultSize,
                        long style = wxBU_AUTODRAW,
@@ -168,11 +171,12 @@ public:
         PreBitmapButton);
 
     DocDeclStr(
-        bool , Create(wxWindow* parent, wxWindowID id, const wxBitmap& bitmap,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                long style = wxBU_AUTODRAW,
-                const wxValidator& validator = wxDefaultValidator,
+        bool , Create(wxWindow* parent, wxWindowID id=-1,
+                      const wxBitmap& bitmap = wxNullBitmap,
+                      const wxPoint& pos = wxDefaultPosition,
+                      const wxSize& size = wxDefaultSize,
+                      long style = wxBU_AUTODRAW,
+                      const wxValidator& validator = wxDefaultValidator,
                       const wxString& name = wxPyButtonNameStr),
         "Acutally create the GUI BitmapButton for 2-phase creation.", "");
     

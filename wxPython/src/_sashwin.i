@@ -56,14 +56,14 @@ public:
     %pythonAppend wxSashWindow         "self._setOORInfo(self)"
     %pythonAppend wxSashWindow()       ""
 
-    wxSashWindow(wxWindow* parent, wxWindowID id,
+    wxSashWindow(wxWindow* parent, wxWindowID id=-1,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = wxCLIP_CHILDREN | wxSW_3D,
                  const wxString& name = wxPySashNameStr);
     %name(PreSashWindow)wxSashWindow();
 
-    bool Create(wxWindow* parent, wxWindowID id,
+    bool Create(wxWindow* parent, wxWindowID id=-1,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = wxCLIP_CHILDREN | wxSW_3D,
@@ -244,14 +244,14 @@ public:
     %pythonAppend wxSashLayoutWindow         "self._setOORInfo(self)"
     %pythonAppend wxSashLayoutWindow()       ""
     
-    wxSashLayoutWindow(wxWindow* parent, wxWindowID id,
+    wxSashLayoutWindow(wxWindow* parent, wxWindowID id=-1,
                        const wxPoint& pos = wxDefaultPosition,
                        const wxSize& size = wxDefaultSize,
                        long style = wxCLIP_CHILDREN | wxSW_3D,
                        const wxString& name = wxPySashLayoutNameStr);
     %name(PreSashLayoutWindow)wxSashLayoutWindow();
 
-    bool Create(wxWindow* parent, wxWindowID id,
+    bool Create(wxWindow* parent, wxWindowID id=-1,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxCLIP_CHILDREN | wxSW_3D,

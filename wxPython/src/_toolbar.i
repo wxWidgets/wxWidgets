@@ -282,6 +282,7 @@ public:
 
     %# For consistency with the backwards compatible methods above, here are
     %# some non-'Label' versions of the Check and Radio methods
+
     def AddCheckTool(self, id, bitmap,
                      bmpDisabled = wx.NullBitmap,
                      shortHelp = '', longHelp = '',
@@ -392,7 +393,7 @@ public:
     %pythonAppend wxToolBar()       ""
     
     wxToolBar(wxWindow *parent,
-              wxWindowID id,
+              wxWindowID id=-1,
               const wxPoint& pos = wxDefaultPosition,
               const wxSize& size = wxDefaultSize,
               long style = wxNO_BORDER | wxTB_HORIZONTAL,
@@ -400,7 +401,7 @@ public:
     %name(PreToolBar)wxToolBar();
 
     bool Create(wxWindow *parent,
-              wxWindowID id,
+              wxWindowID id=-1,
               const wxPoint& pos = wxDefaultPosition,
               const wxSize& size = wxDefaultSize,
               long style = wxNO_BORDER | wxTB_HORIZONTAL,

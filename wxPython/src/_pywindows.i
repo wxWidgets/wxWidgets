@@ -136,7 +136,7 @@ public:
     %pythonAppend wxPyWindow         "self._setOORInfo(self); self._setCallbackInfo(self, PyWindow)"
     %pythonAppend wxPyWindow()       ""
 
-    wxPyWindow(wxWindow* parent, const wxWindowID id,
+    wxPyWindow(wxWindow* parent, const wxWindowID id=-1,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = 0,
@@ -281,7 +281,7 @@ public:
     %pythonAppend wxPyPanel         "self._setOORInfo(self); self._setCallbackInfo(self, PyPanel)"
     %pythonAppend wxPyPanel()       ""
 
-    wxPyPanel(wxWindow* parent, const wxWindowID id,
+    wxPyPanel(wxWindow* parent, const wxWindowID id=-1,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = 0,
@@ -418,7 +418,7 @@ public:
     %pythonAppend wxPyScrolledWindow         "self._setOORInfo(self); self._setCallbackInfo(self, PyPanel)"
     %pythonAppend wxPyScrolledWindow()       ""
 
-    wxPyScrolledWindow(wxWindow* parent, const wxWindowID id,
+    wxPyScrolledWindow(wxWindow* parent, const wxWindowID id=-1,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = 0,

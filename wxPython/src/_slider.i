@@ -34,8 +34,8 @@ public:
     %pythonAppend  wxSlider         "self._setOORInfo(self)"
     %pythonAppend  wxSlider()       ""
 
-    wxSlider(wxWindow* parent, wxWindowID id,
-             int value, int minValue, int maxValue,
+    wxSlider(wxWindow* parent, wxWindowID id=-1,
+             int value=0, int minValue=0, int maxValue=100,
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize,
              long style = wxSL_HORIZONTAL,
@@ -43,8 +43,8 @@ public:
              const wxString& name = wxPySliderNameStr);
     %name(PreSlider)wxSlider();
 
-    bool Create(wxWindow* parent, wxWindowID id,
-             int value, int minValue, int maxValue,
+    bool Create(wxWindow* parent, wxWindowID id=-1,
+             int value=0, int minValue=0, int maxValue=100,
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize,
              long style = wxSL_HORIZONTAL,

@@ -100,6 +100,11 @@ many toplevel functions and static methods will now check that a
 wx.App object has already been created and will raise a
 wx.PyNoAppError exception if not.
 
+Added more default args as needed to allow most window types to be
+constructed with only the parent window arg.  In some cases other args
+may be required for normal operation, but they can usually be set
+after construction.
+
 
 
 

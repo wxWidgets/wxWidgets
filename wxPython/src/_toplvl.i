@@ -152,14 +152,16 @@ public:
     %pythonAppend wxFrame         "self._setOORInfo(self)"
     %pythonAppend wxFrame()       ""
 
-    wxFrame(wxWindow* parent, const wxWindowID id, const wxString& title,
+    wxFrame(wxWindow* parent, const wxWindowID id=-1,
+            const wxString& title = wxPyEmptyString,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
             long style = wxDEFAULT_FRAME_STYLE,
             const wxString& name = wxPyFrameNameStr);
     %name(PreFrame)wxFrame();
 
-    bool Create(wxWindow* parent, const wxWindowID id, const wxString& title,
+    bool Create(wxWindow* parent, const wxWindowID id=-1,
+                const wxString& title = wxPyEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE,
@@ -265,8 +267,8 @@ public:
     %pythonAppend wxDialog() ""
 
     wxDialog(wxWindow* parent,
-             const wxWindowID id,
-             const wxString& title,
+             const wxWindowID id=-1,
+             const wxString& title = wxPyEmptyString,
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize,
              long style = wxDEFAULT_DIALOG_STYLE,
@@ -274,8 +276,8 @@ public:
     %name(PreDialog)wxDialog();
 
     bool Create(wxWindow* parent,
-                const wxWindowID id,
-                const wxString& title,
+                const wxWindowID id=-1,
+                const wxString& title = wxPyEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_DIALOG_STYLE,
@@ -322,14 +324,16 @@ public:
     %pythonAppend wxMiniFrame         "self._setOORInfo(self)"
     %pythonAppend wxMiniFrame()       ""
 
-    wxMiniFrame(wxWindow* parent, const wxWindowID id, const wxString& title,
+    wxMiniFrame(wxWindow* parent, const wxWindowID id=-1,
+                const wxString& title = wxPyEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE,
                 const wxString& name = wxPyFrameNameStr);
     %name(PreMiniFrame)wxMiniFrame();
 
-    bool Create(wxWindow* parent, const wxWindowID id, const wxString& title,
+    bool Create(wxWindow* parent, const wxWindowID id=-1,
+                const wxString& title = wxPyEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE,
@@ -376,7 +380,7 @@ public:
     %pythonAppend wxSplashScreen         "self._setOORInfo(self)"
 
     wxSplashScreen(const wxBitmap& bitmap, long splashStyle, int milliseconds,
-                   wxWindow* parent, wxWindowID id,
+                   wxWindow* parent, wxWindowID id=-1,
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    long style = wxSIMPLE_BORDER|wxFRAME_NO_TASKBAR|wxSTAY_ON_TOP);

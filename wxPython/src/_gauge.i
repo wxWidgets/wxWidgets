@@ -36,7 +36,7 @@ public:
     %pythonAppend wxGauge         "self._setOORInfo(self)"
     %pythonAppend wxGauge()       ""
 
-    wxGauge(wxWindow* parent, wxWindowID id, int range,
+    wxGauge(wxWindow* parent, wxWindowID id=-1, int range=100,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
             long style = wxGA_HORIZONTAL,
@@ -44,7 +44,7 @@ public:
             const wxString& name = wxPyGaugeNameStr);
     %name(PreGauge)wxGauge();
 
-    bool Create(wxWindow* parent, wxWindowID id, int range,
+    bool Create(wxWindow* parent, wxWindowID id=-1, int range=100,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
             long style = wxGA_HORIZONTAL,

@@ -41,8 +41,8 @@ public:
     %pythonAppend wxMDIParentFrame()       ""
 
     wxMDIParentFrame(wxWindow *parent,
-                     const wxWindowID id,
-                     const wxString& title,
+                     const wxWindowID id=-1,
+                     const wxString& title = wxPyEmptyString,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
@@ -50,8 +50,8 @@ public:
     %name(PreMDIParentFrame)wxMDIParentFrame();
 
     bool Create(wxWindow *parent,
-                     const wxWindowID id,
-                     const wxString& title,
+                     const wxWindowID id=-1,
+                     const wxString& title = wxPyEmptyString,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
@@ -88,8 +88,8 @@ public:
     %pythonAppend wxMDIChildFrame()       ""
 
     wxMDIChildFrame(wxMDIParentFrame* parent,
-                    const wxWindowID id,
-                    const wxString& title,
+                    const wxWindowID id=-1,
+                    const wxString& title = wxPyEmptyString,
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
                     long style = wxDEFAULT_FRAME_STYLE,
@@ -97,8 +97,8 @@ public:
     %name(PreMDIChildFrame)wxMDIChildFrame();
 
     bool Create(wxMDIParentFrame* parent,
-                    const wxWindowID id,
-                    const wxString& title,
+                    const wxWindowID id=-1,
+                    const wxString& title = wxPyEmptyString,
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
                     long style = wxDEFAULT_FRAME_STYLE,

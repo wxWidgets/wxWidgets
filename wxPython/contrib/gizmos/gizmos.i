@@ -146,13 +146,13 @@ public:
     %pythonAppend wxDynamicSashWindow         "self._setOORInfo(self)"
     %pythonAppend wxDynamicSashWindow()       ""
 
-    wxDynamicSashWindow(wxWindow *parent, wxWindowID id,
+    wxDynamicSashWindow(wxWindow *parent, wxWindowID id=-1,
                         const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
                         long style = wxCLIP_CHILDREN | wxDS_MANAGE_SCROLLBARS | wxDS_DRAG_CORNER,
                         const wxString& name = wxPyDynamicSashNameStr);
     %name(PreDynamicSashWindow)wxDynamicSashWindow();
 
-    bool Create(wxWindow *parent, wxWindowID id,
+    bool Create(wxWindow *parent, wxWindowID id=-1,
                 const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
                 long style = wxCLIP_CHILDREN | wxDS_MANAGE_SCROLLBARS | wxDS_DRAG_CORNER,
                 const wxString& name = wxPyDynamicSashNameStr);
@@ -186,8 +186,8 @@ public:
     %pythonAppend wxEditableListBox         "self._setOORInfo(self)"
     %pythonAppend wxEditableListBox()       ""
 
-    wxEditableListBox(wxWindow *parent, wxWindowID id,
-                      const wxString& label,
+    wxEditableListBox(wxWindow *parent, wxWindowID id=-1,
+                      const wxString& label = wxPyEmptyString,
                       const wxPoint& pos = wxDefaultPosition,
                       const wxSize& size = wxDefaultSize,
                       long style = wxEL_ALLOW_NEW | wxEL_ALLOW_EDIT | wxEL_ALLOW_DELETE,

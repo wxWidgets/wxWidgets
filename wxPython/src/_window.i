@@ -491,7 +491,7 @@ the borders, scrollbars, other decorations...)", "");
 
     
     DocStr(GetBestSize,
-           "This functions returns the best acceptable minimal size for the
+           "This function returns the best acceptable minimal size for the
 window, if applicable. For example, for a static text control, it will
 be the minimal size such that the control label is not truncated. For
 windows containing subwindows (suzh aswx.Panel), the size returned by

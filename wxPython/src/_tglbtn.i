@@ -59,8 +59,8 @@ public:
     %pythonAppend wxToggleButton()       ""
 
     wxToggleButton(wxWindow *parent,
-                   wxWindowID id,
-                   const wxString& label,
+                   wxWindowID id=-1,
+                   const wxString& label = wxPyEmptyString,
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
@@ -69,8 +69,8 @@ public:
     %name(PreToggleButton)wxToggleButton();
 
     bool Create(wxWindow *parent,
-                   wxWindowID id,
-                   const wxString& label,
+                   wxWindowID id=-1,
+                   const wxString& label = wxPyEmptyString,
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    long style = 0,

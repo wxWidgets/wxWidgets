@@ -36,7 +36,7 @@ public:
                 const wxString& name = wxPyStatusLineNameStr);
     %name(PreStatusBar)wxStatusBar();
 
-    bool Create(wxWindow* parent, wxWindowID id,
+    bool Create(wxWindow* parent, wxWindowID id=-1,
                 long style = wxST_SIZEGRIP,
                 const wxString& name = wxPyStatusLineNameStr);
 

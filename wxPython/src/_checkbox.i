@@ -87,7 +87,8 @@ public:
     %pythonAppend wxCheckBox()       ""
 
     DocCtorStr(
-        wxCheckBox(wxWindow* parent, wxWindowID id, const wxString& label,
+        wxCheckBox(wxWindow* parent, wxWindowID id=-1,
+                   const wxString& label = wxPyEmptyString,
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
@@ -102,7 +103,8 @@ public:
 
     
     DocDeclStr(
-        bool, Create(wxWindow* parent, wxWindowID id, const wxString& label,
+        bool, Create(wxWindow* parent, wxWindowID id=-1,
+                     const wxString& label = wxPyEmptyString,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      long style = 0,
