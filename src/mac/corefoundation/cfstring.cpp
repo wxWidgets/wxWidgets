@@ -635,27 +635,32 @@ void wxMacCFStringHolder::Assign( const wxString &st , wxFontEncoding encoding )
 {
     Release() ; 
     if (st.IsEmpty())
-        return ;
-
-    wxString str = st ;
-    wxMacConvertNewlines13To10( &str ) ;
+    {
+        m_cfs = CFSTR("") ;
+        CFRetain( m_cfs ) ;
+    }
+    else
+    {
+        wxString str = st ;
+        wxMacConvertNewlines13To10( &str ) ;
 #if wxUSE_UNICODE
 #if SIZEOF_WCHAR_T == 2
-    m_cfs = CFStringCreateWithCharacters( kCFAllocatorDefault,
-        (UniChar*)str.wc_str() , str.Len() );
+        m_cfs = CFStringCreateWithCharacters( kCFAllocatorDefault,
+            (UniChar*)str.wc_str() , str.Len() );
 #else
-    wxMBConvUTF16BE converter ;
-    size_t unicharlen = converter.WC2MB( NULL , str.wc_str() , 0 ) ;
-    UniChar *unibuf = new UniChar[ unicharlen / sizeof(UniChar) + 1 ] ;
-    converter.WC2MB( (char*)unibuf , str.wc_str() , unicharlen ) ;
-    m_cfs = CFStringCreateWithCharacters( kCFAllocatorDefault ,
-        unibuf , unicharlen / sizeof(UniChar) ) ;
-    delete[] unibuf ;
+        wxMBConvUTF16BE converter ;
+        size_t unicharlen = converter.WC2MB( NULL , str.wc_str() , 0 ) ;
+        UniChar *unibuf = new UniChar[ unicharlen / sizeof(UniChar) + 1 ] ;
+        converter.WC2MB( (char*)unibuf , str.wc_str() , unicharlen ) ;
+        m_cfs = CFStringCreateWithCharacters( kCFAllocatorDefault ,
+            unibuf , unicharlen / sizeof(UniChar) ) ;
+        delete[] unibuf ;
 #endif
 #else // not wxUSE_UNICODE
-    m_cfs = CFStringCreateWithCString( kCFAllocatorSystemDefault , str.c_str() ,
-        wxMacGetSystemEncFromFontEnc( encoding ) ) ;
+        m_cfs = CFStringCreateWithCString( kCFAllocatorSystemDefault , str.c_str() ,
+            wxMacGetSystemEncFromFontEnc( encoding ) ) ;
 #endif
+    }
     m_release = true ;
 }
 
