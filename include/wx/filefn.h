@@ -303,7 +303,14 @@ WXDLLEXPORT bool wxRmdir(const wxString& dir, int flags = 0);
 
 // is the char a path separator?
 inline bool wxIsPathSeparator(wxChar c)
-  { return c == wxFILE_SEP_PATH_DOS || c == wxFILE_SEP_PATH_UNIX; }
+{
+    // under DOS/Windows we should understand both Unix and DOS file separators
+#if defined(__UNIX__) || defined(__MAC__)
+    return c == wxFILE_SEP_PATH;
+#else
+    return c == wxFILE_SEP_PATH_DOS || c == wxFILE_SEP_PATH_UNIX;
+#endif
+}
 
 // does the string ends with path separator?
 WXDLLEXPORT bool wxEndsWithPathSeparator(const wxChar *pszFileName);

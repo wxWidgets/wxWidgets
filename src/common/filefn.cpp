@@ -1519,11 +1519,9 @@ wxString wxGetOSDirectory()
 
 bool wxEndsWithPathSeparator(const wxChar *pszFileName)
 {
-  size_t len = wxStrlen(pszFileName);
-  if ( len == 0 )
-    return FALSE;
-  else
-    return wxIsPathSeparator(pszFileName[len - 1]);
+    size_t len = wxStrlen(pszFileName);
+
+    return len && wxIsPathSeparator(pszFileName[len - 1]);
 }
 
 // find a file in a list of directories, returns false if not found

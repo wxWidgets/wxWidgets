@@ -550,9 +550,9 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
         {
             // default
             #ifdef __DOS__
-            dir = _T(".");
+                dir = _T(".");
             #else
-            dir = _T("/tmp");
+                dir = _T("/tmp");
             #endif
         }
 #endif
