@@ -1657,7 +1657,7 @@ void wxDocParentFrame::OnExit(wxCommandEvent& WXUNUSED(event))
 
 void wxDocParentFrame::OnMRUFile(wxCommandEvent& event)
 {
-    int n = event.GetSelection() - wxID_FILE1;  // the index in MRU list
+    int n = event.GetId() - wxID_FILE1;  // the index in MRU list
     wxString filename(m_docManager->GetHistoryFile(n));
     if ( !filename.IsEmpty() )
     {
