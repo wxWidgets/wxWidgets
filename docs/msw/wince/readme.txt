@@ -15,7 +15,7 @@ can be found at:
 Information about the Windows CE port in particular
 can be found here:
 
-http://wiki.wxwindows.org/wiki.pl?Windows_CE_Port
+http://wiki.wxwindows.org/wiki.pl?Developers_Notebook/WxWinCE
 
 Supported platforms
 ===================
@@ -84,6 +84,28 @@ Then open samples/minimal/minimalCE.vcp, select an
 ARM, x86 or emulator target, and compile. You can
 use the emulator or real hardware to run the
 sample.
+
+There may be long delays while VC++ computes dependencies, and expect
+to wait a long time for loading and saving the workspace. 
+
+To compile using the emulator on eVC++3:
+
+- Open src/msw/wince/wxWindowsCE.vcp, select the
+  WIN32 (WCE x86) Debug Unicode configuration, close the dialog,
+  then select Pocket PC 2002 and Pocket PC 2002 Emulation on the toolbar,
+  and compile.
+
+- Open samples/minimal/minimalCE.vcp, select the
+  WIN32 (WCE x86 Debug) configuration, select Pocket PC 2002 and
+  Pocket PC 2002 Emulation as before, and compile.
+
+To compile using the emulator on eVC++4:
+
+- Open src/msw/wince/wxWindowsCE.vcp, select the
+  WIN32 (WCE Emulator) Debug Unicode configuration, and compile.
+
+- Open samples/minimal/minimalCE.vcp with eCV 4.0, select the
+  WIN32 (WCE emulator) Debug configuration, and compile.
 
 Status
 ======
