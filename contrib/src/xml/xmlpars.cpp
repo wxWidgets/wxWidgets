@@ -26,6 +26,44 @@
 #include "wx/xml/xmlio.h"
 
 #include <libxml/parser.h>
+#include <libxml/SAX.h>
+
+
+// wxWindows SAX handlers for bugs reporting:
+
+static void wxXmlParserError(void *ctx, const char *msg, ...)
+{
+    wxString text;
+    xmlParserCtxtPtr ctxt = (xmlParserCtxtPtr) ctx;
+    if (ctxt->input)
+       text.Printf( _("XML parser error at line %d: "), ctxt->input->line );
+    va_list args;
+    wxString tmp;
+    va_start(args, msg);
+    tmp.PrintfV( msg, args );
+    va_end(args);
+    text += tmp;
+    wxLogError( text.c_str() );
+}
+
+static void wxXmlParserWarning(void *ctx, const char *msg, ...)
+{
+    wxString text;
+    xmlParserCtxtPtr ctxt = (xmlParserCtxtPtr) ctx;
+    if (ctxt->input)
+       text.Printf( _("XML parser warning at line %d: "), ctxt->input->line );
+    va_list args;
+    wxString tmp;
+    va_start(args, msg);
+    tmp.PrintfV( msg, args );
+    va_end(args);
+    text += tmp;
+    wxLogWarning( text.c_str() );
+}
+
+static xmlSAXHandler gs_wxXmlSAXHandler;
+
+
 
 // dynamically loaded functions from libxml:
 typedef xmlParserCtxtPtr (*type_xmlCreatePushParserCtxt)
@@ -45,6 +83,9 @@ typedef xmlNodePtr (*type_xmlDocGetRootElement)(xmlDocPtr);
 typedef xmlNodePtr (*type_xmlDocSetRootElement)(xmlDocPtr doc, xmlNodePtr root);
 typedef void (*(*type_xmlFree))(void *);
 typedef int (*type_xmlKeepBlanksDefault)(int);
+typedef void (*type_xmlInitParser)(void);
+typedef void (*type_xmlCleanupParser)(void);
+typedef xmlSAXHandler *type_xmlDefaultSAXHandler;
 
 static struct
 {
@@ -66,6 +107,9 @@ static struct
     type_xmlDocSetRootElement xmlDocSetRootElement;
     type_xmlFree xmlFree;
     type_xmlKeepBlanksDefault xmlKeepBlanksDefault;
+    type_xmlInitParser xmlInitParser;
+    type_xmlCleanupParser xmlCleanupParser;
+    type_xmlDefaultSAXHandler xmlDefaultSAXHandler;
 } gs_libxmlDLL;
 
 static bool gs_libxmlLoaded = FALSE;
@@ -77,6 +121,7 @@ static void ReleaseLibxml()
 {
     if (gs_libxmlLoaded)
     {
+        gs_libxmlDLL.xmlCleanupParser();
         wxDllLoader::UnloadLibrary(gs_libxmlDLL.Handle);
     }
     gs_libxmlLoaded = FALSE;
@@ -138,10 +183,20 @@ static bool LoadLibxml()
     LOAD_SYMBOL(xmlDocSetRootElement)
     LOAD_SYMBOL(xmlFree)
     LOAD_SYMBOL(xmlKeepBlanksDefault)
+    LOAD_SYMBOL(xmlInitParser)
+    LOAD_SYMBOL(xmlCleanupParser)
+    LOAD_SYMBOL(xmlDefaultSAXHandler)
 
 #undef LOAD_SYMBOL    
 
     gs_libxmlLoadFailed = FALSE;
+    
+    gs_libxmlDLL.xmlInitParser();
+    memcpy(&gs_wxXmlSAXHandler, gs_libxmlDLL.xmlDefaultSAXHandler,
+           sizeof(xmlSAXHandler));
+    gs_wxXmlSAXHandler.error = wxXmlParserError;
+    gs_wxXmlSAXHandler.fatalError = wxXmlParserError;
+    gs_wxXmlSAXHandler.warning = wxXmlParserWarning;
 
     return TRUE;
 }
@@ -211,8 +266,8 @@ bool wxXmlIOHandlerLibxml::Load(wxInputStream& stream, wxXmlDocument& doc)
     {
         bool okay = TRUE;
         gs_libxmlDLL.xmlKeepBlanksDefault(0);
-        ctxt = gs_libxmlDLL.xmlCreatePushParserCtxt(NULL, NULL, 
-                                               buffer, res, ""/*docname*/);
+        ctxt = gs_libxmlDLL.xmlCreatePushParserCtxt(&gs_wxXmlSAXHandler, 
+                                          NULL, buffer, res, ""/*docname*/);
         while ((res = stream.Read(buffer, 1024).LastRead()) > 0) 
             if (gs_libxmlDLL.xmlParseChunk(ctxt, buffer, res, 0) != 0) 
                okay = FALSE;
