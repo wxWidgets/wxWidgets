@@ -635,11 +635,6 @@ SOURCE=.\html\m_tables.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\html\search.cpp
-# End Source File
-# End Group
-# Begin Group "MSW Files"
-
 # PROP Default_Filter ""
 # Begin Source File
 

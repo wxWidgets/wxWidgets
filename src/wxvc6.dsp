@@ -638,10 +638,6 @@ SOURCE=.\html\m_tables.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\html\search.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\html\winpars.cpp
 # End Source File
 # End Group
