@@ -291,16 +291,6 @@ bool MyApp::LoadImages()
     wxMask *mask = new wxMask(*gs_bmpMask, *wxBLACK);
     gs_bmpWithMask->SetMask(mask);
 
-    {
-        wxStopWatch sw;
-        wxMask m;
-        for ( int i = 0; i < 1000; i++ )
-        {
-            m.Create(*gs_bmpWithColMask, *wxWHITE);
-        }
-        wxLogMessage("Total time: %ldms", sw.Time());
-    }
-
     mask = new wxMask(*gs_bmpWithColMask, *wxWHITE);
     gs_bmpWithColMask->SetMask(mask);
 
