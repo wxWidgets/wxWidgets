@@ -321,13 +321,27 @@ bool wxWindowBase::DestroyChildren()
 // centre the window with respect to its parent in either (or both) directions
 void wxWindowBase::Centre(int direction)
 {
+    // the position/size of the parent window or of the entire screen
+    wxPoint posParent;
     int widthParent, heightParent;
 
-    wxWindow *parent = GetParent();
-    if ( !parent )
+    wxWindow *parent = NULL;
+
+    if ( !(direction & wxCENTRE_ON_SCREEN) )
     {
-        // no other choice
-        direction |= wxCENTRE_ON_SCREEN;
+        // find the top level parent to centre this window on
+        parent = GetParent();
+        while ( parent && !parent->IsTopLevel() )
+        {
+            parent = parent->GetParent();
+        }
+
+        // did we find the parent?
+        if ( !parent )
+        {
+            // no other choice
+            direction |= wxCENTRE_ON_SCREEN;
+        }
     }
 
     if ( direction & wxCENTRE_ON_SCREEN )
@@ -337,10 +351,13 @@ void wxWindowBase::Centre(int direction)
     }
     else
     {
-        if (IsTopLevel())
+        if ( IsTopLevel() )
         {
             // centre on the parent
             parent->GetSize(&widthParent, &heightParent);
+
+            // adjust to the parents position
+            posParent = parent->GetPosition();
         }
         else
         {
@@ -361,29 +378,8 @@ void wxWindowBase::Centre(int direction)
     if ( direction & wxVERTICAL )
         yNew = (heightParent - height)/2;
 
-    // controls are always centered on their parent because it doesn't make
-    // sense to centre them on the screen
-    if ( !(direction & wxCENTRE_ON_SCREEN) || !IsTopLevel() )
-    {
-        // the only chance to get this is to have a not top level window
-        // without parent which shouldn't happen
-        wxCHECK_RET( parent, wxT("this window must have a parent") );
-
-        wxPoint posParent;
-        if (IsTopLevel())
-        {
-            // adjust to the parents position
-            posParent = parent->GetPosition();
-        }
-        else
-        {
-            // adjust to the parents client area origin
-            posParent = parent->ClientToScreen(wxPoint(0, 0));
-        }
-
-        xNew += posParent.x;
-        yNew += posParent.y;
-    }
+    xNew += posParent.x;
+    yNew += posParent.y;
 
     // move the centre of this window to this position
     Move(xNew, yNew);
