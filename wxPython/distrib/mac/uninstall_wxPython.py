@@ -13,18 +13,30 @@ yourself.
 """
 
 import sys, os, glob
+from fnmatch import fnmatchcase
 import cPickle, urllib
 
 RCPTDIR = "/Library/Receipts"
 RSRCDIR = "Contents/Resources"
 
-# only clean up dirs that have one of these as a prefix.  We do this
-# because the file list returned from lsbom will include /, /usr,
-# /usr/local, etc.
+# Only completly clean out dirs that have one of these as a prefix.
+# We do this because the file list returned from lsbom will include /,
+# /usr, /usr/local, etc.
 PREFIXES = [ '/Library/Python/2.3/',
              '/Library/Python/2.4/',
+             '/Library/Frameworks/Python.framework/Versions/2.3/lib/python2.3/site-pacakges/',
+             '/Library/Frameworks/Python.framework/Versions/2.4/lib/python2.4/site-pacakges/',
              '/usr/local/lib/',
              ]
+
+# The files that match one of the items in this list will only be
+# removed if the last installation of wxPython on the system is being
+# uninstalled.
+COMMON_FILES = [ '/usr/local/bin/*',
+                 'wx.pth',
+                 'wxversion.py',
+                 ]
+    
 
 
 class AccessError(Exception):
@@ -87,10 +99,18 @@ class InstalledReceipt(object):
             handleDir(dirpath)
 
 
+    def testCommon(self, name):
+        for cmn in COMMON_FILES:
+            if fnmatchcase(name, cmn) or fnmatchcase(os.path.basename(name), cmn):
+                return True
+        return False
+
 
     def showFiles(self):
         def show(name):
             if os.path.exists(name):
+                if not self.lastInstall and self.testCommon(name):
+                    return
                 print "Will remove:", name
         self.walkFiles(show, show)
 
@@ -98,6 +118,8 @@ class InstalledReceipt(object):
     def testUninstallAccess(self):
         def testFile(name):
             if os.path.exists(name):
+                if not self.lastInstall and self.testCommon(name):
+                    return
                 if not os.access(name, os.W_OK):
                     raise AccessError(name)
         self.walkFiles(testFile, testFile)
@@ -106,13 +128,15 @@ class InstalledReceipt(object):
     def doUninstall(self):
         def removeFile(name):
             if os.path.exists(name):
+                if not self.lastInstall and self.testCommon(name):
+                    return
                 print "Removing:", name
                 os.unlink(name)
         def removeDir(name):
             print "Removing:", name
             if os.path.exists(name):
                 hasFiles = os.listdir(name)
-                if hasFiles:  # perhaps some left over symlinks, or .pyc files
+                if hasFiles:  # perhaps some stale symlinks, or .pyc files
                     for file in hasFiles:
                         os.unlink(os.path.join(name, file))
                 os.rmdir(name)
@@ -167,6 +191,7 @@ def main():
     if ans in ['Q', 'q']:
         sys.exit()
     inst = installed[int(ans) - 1]
+    inst.lastInstall = len(installed) == 1
 
     while True:
         print
