@@ -11,7 +11,23 @@
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------
 
-import sys, os, time
+# FIXME List:
+# * Problems with flickering related to ERASE_BACKGROUND
+#     and the splitters. Might be a problem with this 2.5 beta...?
+#     UPDATE: can't see on 2.5.2 GTK - maybe just a faster machine :)
+# * Demo Code menu?
+# * Annoying switching between tabs and resulting flicker
+#     how to replace a page in the notebook without deleting/adding?
+#     Where is SetPage!? tried freeze...tried reparent of dummy panel....
+
+# TODO List:
+# * UI design more prefessional
+# * save file positions (new field in demoModules) (@ LoadDemoSource)
+# * Update main overview
+
+# * Why don't we move _treeList into a separate module
+
+import sys, os, time, traceback, types
 
 import wx                  # This module uses the new wx namespace
 import wx.html
@@ -244,6 +260,7 @@ class MyTP(wx.PyTipProvider):
     def GetTip(self):
         return "This is my tip"
 
+
 #---------------------------------------------------------------------------
 # A class to be used to display source code in the demo.  Try using the
 # wxSTC in the StyledTextCtrl_2 sample first, fall back to wxTextCtrl
@@ -254,30 +271,39 @@ try:
     ##raise ImportError     # for testing the alternate implementation
     from wx import stc
     from StyledTextCtrl_2 import PythonSTC
-    class DemoCodeViewer(PythonSTC):
-        def __init__(self, parent, ID):
-            PythonSTC.__init__(self, parent, ID, wx.BORDER_NONE)
+
+    class DemoCodeEditor(PythonSTC):
+        def __init__(self, parent):
+            PythonSTC.__init__(self, parent, -1, wx.BORDER_NONE)
             self.SetUpEditor()
 
         # Some methods to make it compatible with how the wxTextCtrl is used
         def SetValue(self, value):
             if wx.USE_UNICODE:
                 value = value.decode('iso8859_1')
-            self.SetReadOnly(False)
             self.SetText(value)
-            self.SetReadOnly(True)
+            self.EmptyUndoBuffer()
+            self.SetSavePoint()
+
+        def IsModified(self):
+            return self.GetModify()
 
         def Clear(self):
             self.ClearAll()
 
         def SetInsertionPoint(self, pos):
             self.SetCurrentPos(pos)
+            self.SetAnchor(pos)
 
         def ShowPosition(self, pos):
-            self.GotoPos(pos)
+            line = self.LineFromPosition(pos)
+            self.EnsureVisible(line)
 
         def GetLastPosition(self):
             return self.GetLength()
+
+        def GetPositionFromLine(self, line):
+            return self.PositionFromLine(line)
 
         def GetRange(self, start, end):
             return self.GetTextRange(start, end)
@@ -289,6 +315,11 @@ try:
             self.SetSelectionStart(start)
             self.SetSelectionEnd(end)
 
+        def SelectLine(self, line):
+            start = self.PositionFromLine(line)
+            end = self.GetLineEndPosition(line)
+            self.SetSelection(start, end)
+            
         def SetUpEditor(self):
             """
             This method carries out the work of setting up the demo editor.            
@@ -402,42 +433,560 @@ try:
             self.SetSelBackground(True, wx.SystemSettings_GetColour(wx.SYS_COLOUR_HIGHLIGHT))
             self.SetSelForeground(True, wx.SystemSettings_GetColour(wx.SYS_COLOUR_HIGHLIGHTTEXT))
 
+        def RegisterModifiedEvent(self, eventHandler):
+            self.Bind(wx.stc.EVT_STC_CHANGE, eventHandler)
+
 
 except ImportError:
-    class DemoCodeViewer(wx.TextCtrl):
-        def __init__(self, parent, ID):
-            wx.TextCtrl.__init__(self, parent, ID, style =
-                                 wx.TE_MULTILINE | wx.TE_READONLY |
+    class DemoCodeEditor(wx.TextCtrl):
+        def __init__(self, parent):
+            wx.TextCtrl.__init__(self, parent, -1, style = wx.TE_MULTILINE | 
                                  wx.HSCROLL | wx.TE_RICH2 | wx.TE_NOHIDESEL)
+
+        def RegisterModifiedEvent(self, eventHandler):
+            self.Bind(wx.EVT_TEXT, eventHandler)
+
+        def SetReadOnly(self, flag):
+            self.SetEditable(not flag)
+            # NOTE: STC already has this method
+    
+        def GetText(self):
+            return self.GetValue()
+
+        def GetPositionFromLine(line):
+            return self.XYToPosition(0,line)
+
+        def GotoLine(self, line):
+            pos = self.editor.GetPositionFromLine(line)
+            self.editor.SetInsertionPoint(pos)
+            self.editor.ShowPosition(pos)
+
+        def SelectLine(self, line):
+            start = self.GetPositionFromLine(line)
+            end = start + self.GetLineLength(line)
+            self.SetSelection(start, end)
+
+
+#---------------------------------------------------------------------------
+# Constants for module versions
+
+modOriginal = 0
+modModified = 1
+modDefault = modOriginal
+
+#---------------------------------------------------------------------------
+
+class DemoCodePanel(wx.Panel):
+    """Panel for the 'Demo Code' tab"""
+    def __init__(self, parent, mainFrame):
+        wx.Panel.__init__(self, parent)
+        self.mainFrame = mainFrame
+        self.editor = DemoCodeEditor(self)
+        self.editor.RegisterModifiedEvent(self.OnCodeModified)
+
+        self.btnSave = wx.Button(self, -1, "Save Changes")
+        self.btnRestore = wx.Button(self, -1, "Delete Modified")
+        self.btnSave.Enable(False)
+        self.btnSave.Bind(wx.EVT_BUTTON, self.OnSave)
+        self.btnRestore.Bind(wx.EVT_BUTTON, self.OnRestore)
+
+        self.radioButtons = { modOriginal: wx.RadioButton(self, -1, "Original", style = wx.RB_GROUP),
+                              modModified: wx.RadioButton(self, -1, "Modified") }
+
+        self.controlBox = wx.BoxSizer(wx.HORIZONTAL)
+        self.controlBox.Add(wx.StaticText(self, -1, "Active Version:"), 0,
+                            wx.RIGHT | wx.LEFT | wx.ALIGN_CENTER_VERTICAL, 5)
+        for modID, radioButton in self.radioButtons.items():
+            self.controlBox.Add(radioButton, 0, wx.EXPAND | wx.RIGHT, 5)
+            radioButton.modID = modID # makes it easier for the event handler
+            radioButton.Bind(wx.EVT_RADIOBUTTON, self.OnRadioButton)
+            
+        self.controlBox.Add(self.btnSave, 0, wx.RIGHT, 5)
+        self.controlBox.Add(self.btnRestore, 0)
+
+        self.box = wx.BoxSizer(wx.VERTICAL)
+        self.box.Add(self.controlBox, 0, wx.EXPAND)
+        self.box.Add(self.editor, 1, wx.EXPAND)
+        
+        self.box.Fit(self)
+        self.SetSizer(self.box)
+
+
+    # Loads a demo from a DemoModules object
+    def LoadDemo(self, demoModules):
+        self.demoModules = demoModules
+        if (modDefault == modModified) and demoModules.Exists(modModified):
+            demoModules.SetActive(modModified)
+        else:
+            demoModules.SetActive(modOriginal)
+        self.radioButtons[demoModules.GetActiveID()].Enable(True)
+        self.ActiveModuleChanged()
+
+
+    def ActiveModuleChanged(self):
+        self.LoadDemoSource(self.demoModules.GetSource())
+        self.UpdateControlState()
+        self.ReloadDemo()
+
+        
+    def LoadDemoSource(self, source):
+        self.editor.Clear()
+        self.editor.SetValue(source)
+        self.JumpToLine(0)
+        self.btnSave.Enable(False)
+
+
+    def JumpToLine(self, line, highlight=False):
+        self.editor.GotoLine(line)
+        self.editor.SetFocus()
+        if highlight:
+            self.editor.SelectLine(line)
+        
+       
+    def UpdateControlState(self):
+        active = self.demoModules.GetActiveID()
+        # Update the radio/restore buttons
+        for moduleID in self.radioButtons:
+            btn = self.radioButtons[moduleID]
+            if moduleID == active:
+                btn.SetValue(True)
+            else:
+                btn.SetValue(False)
+
+            if self.demoModules.Exists(moduleID):
+                btn.Enable(True)
+                if moduleID == modModified:
+                    self.btnRestore.Enable(True)
+            else:
+                btn.Enable(False)
+                if moduleID == modModified:
+                    self.btnRestore.Enable(False)
+
+                    
+    def OnRadioButton(self, event):
+        radioSelected = event.GetEventObject()
+        modSelected = radioSelected.modID
+        if modSelected != self.demoModules.GetActiveID():
+            busy = wx.BusyInfo("Reloading demo module...")
+            self.demoModules.SetActive(modSelected)
+            self.ActiveModuleChanged()
+
+
+    def ReloadDemo(self):
+        if self.demoModules.name != __name__:
+            self.mainFrame.RunModule()
+
+                
+    def OnCodeModified(self, event):
+        self.btnSave.Enable(self.editor.IsModified())
+
+        
+    def OnSave(self, event):
+        if self.demoModules.Exists(modModified):
+            if self.demoModules.GetActiveID() == modOriginal:
+                overwriteMsg = "You are about to overwrite an already existing modified copy\n" + \
+                               "Do you want to continue?"
+                dlg = wx.MessageDialog(self, overwriteMsg, "wxPython Demo",
+                                       wx.YES_NO | wx.NO_DEFAULT| wx.ICON_EXCLAMATION)
+                result = dlg.ShowModal()
+                if result == wx.ID_NO:
+                    return
+                dlg.Destroy()
+            
+        self.demoModules.SetActive(modModified)
+        modifiedFilename = GetModifiedFilename(self.demoModules.name)
+
+        # Create the demo directory if one doesn't already exist
+        if not os.path.exists(GetModifiedDirectory()):
+            try:
+                os.makedirs(GetModifiedDirectory())
+                if not os.path.exists(GetModifiedDirectory()):
+                    wx.LogMessage("BUG: Created demo directory but it still doesn't exit")
+                    raise AssetionError
+            except:
+                wx.LogMessage("Error creating demo directory: %s" % GetModifiedDirectory())
+                return
+            else:
+                wx.LogMessage("Created directory for modified demos: %s" % GetModifiedDirectory())
+            
+        # Save
+        f = open(modifiedFilename, "w")
+        source = self.editor.GetText()
+        try:
+            f.write(source)
+        finally:
+            f.close()
+            
+        busy = wx.BusyInfo("Reloading demo module...")
+        self.demoModules.LoadFromFile(modModified, modifiedFilename)
+        self.ActiveModuleChanged()
+
+
+    def OnRestore(self, event): # Handles the "Delete Modified" button
+        modifiedFilename = GetModifiedFilename(self.demoModules.name)
+        self.demoModules.Delete(modModified)
+        os.unlink(modifiedFilename) # Delete the modified copy
+        busy = wx.BusyInfo("Reloading demo module...")
+        self.ActiveModuleChanged()
 
 
 #---------------------------------------------------------------------------
 
 def opj(path):
     """Convert paths to the platform-specific separator"""
-    return apply(os.path.join, tuple(path.split('/')))
+    str = apply(os.path.join, tuple(path.split('/')))
+    # HACK: on Linux, a leading / gets lost...
+    if path.startswith('/'):
+        str = '/' + str
+    return str
 
+
+def GetModifiedDirectory():
+    """
+    Returns the directory where modified versions of the demo files
+    are stored
+    """
+    return opj(wx.GetHomeDir() + "/.wxPyDemo/modified/")
+
+
+def GetModifiedFilename(name):
+    """
+    Returns the filename of the modified version of the specified demo
+    """
+    if not name.endswith(".py"):
+        name = name + ".py"
+    return GetModifiedDirectory() + name
+
+
+def GetOriginalFilename(name):
+    """
+    Returns the filename of the original version of the specified demo
+    """
+    if not name.endswith(".py"):
+        name = name + ".py"
+    return name
+
+
+def DoesModifiedExist(name):
+    """Returns whether the specified demo has a modified copy"""
+    if os.path.exists(GetModifiedFilename(name)):
+        return True
+    else:
+        return False
+
+
+#---------------------------------------------------------------------------
+
+class ModuleDictWrapper:
+    """Emulates a module with a dynamically compiled __dict__"""
+    def __init__(self, dict):
+        self.dict = dict
+        
+    def __getattr__(self, name):
+        if name in self.dict:
+            return self.dict[name]
+        else:
+            raise AttributeError
+
+class DemoModules:
+    """
+    Dynamically manages the original/modified versions of a demo
+    module
+    """
+    def __init__(self, name):
+        self.modActive = -1
+        self.name = name
+        
+        #              (dict , source ,  filename , description   , error information )        
+        #              (  0  ,   1    ,     2     ,      3        ,          4        )        
+        self.modules = [[None,  ""    ,    ""     , "<original>"  ,        None],
+                        [None,  ""    ,    ""     , "<modified>"  ,        None]]
+        
+        # load original module
+        self.LoadFromFile(modOriginal, GetOriginalFilename(name))
+
+        # load modified module (if one exists)
+        if DoesModifiedExist(name):
+           self.LoadFromFile(modModified, GetModifiedFilename(name))
+
+
+    def LoadFromFile(self, modID, filename):
+        self.modules[modID][2] = filename
+        file = open(filename, "r")
+        self.LoadFromSource(modID, file.read())
+        file.close()
+
+
+    def LoadFromSource(self, modID, source):
+        self.modules[modID][1] = source
+        self.LoadDict(modID)
+
+
+    def LoadDict(self, modID):
+        if self.name != __name__:
+            source = self.modules[modID][1]
+            description = self.modules[modID][3]
+
+            try:
+                self.modules[modID][0] = {}
+                code = compile(source, description, "exec")        
+                exec code in self.modules[modID][0]
+            except:
+                self.modules[modID][4] = DemoError(sys.exc_info())
+                self.modules[modID][0] = None
+            else:
+                self.modules[modID][4] = None
+
+
+    def SetActive(self, modID):
+        if modID != modOriginal and modID != modModified:
+            raise LookupError
+        else:
+            self.modActive = modID
+
+
+    def GetActive(self):
+        dict = self.modules[self.modActive][0]
+        if dict is None:
+            return None
+        else:
+            return ModuleDictWrapper(dict)
+
+
+    def GetActiveID(self):
+        return self.modActive
+
+    
+    def GetSource(self, modID = None):
+        if modID is None:
+            modID = self.modActive
+        return self.modules[modID][1]
+
+
+    def GetFilename(self, modID = None):
+        if modID is None:
+            modID = self.modActive
+        return self.modules[self.modActive][2]
+
+
+    def GetErrorInfo(self, modID = None):
+        if modID is None:
+            modID = self.modActive
+        return self.modules[self.modActive][4]
+
+
+    def Exists(self, modID):
+        return self.modules[modID][1] != ""
+
+
+    def UpdateFile(self, modID = None):
+        """Updates the file from which a module was loaded
+        with (possibly updated) source"""
+        if modID is None:
+            modID = self.modActive
+
+        source = self.modules[modID][1]
+        filename = self.modules[modID][2]
+
+        try:        
+            file = open(filename, "w")
+            file.write(source)
+        finally:
+            file.close()
+
+
+    def Delete(self, modID):
+        if self.modActive == modID:
+            self.SetActive(0)
+
+        self.modules[modID][0] = None
+        self.modules[modID][1] = ""
+        self.modules[modID][2] = ""
+
+
+#---------------------------------------------------------------------------
+class ReloadDemoPanel(wx.Panel):
+    """
+    Panel put into the demo tab when the demo just shows some
+    top-level window.  Enables the demo to be reloaded after being
+    closed.
+    """
+
+    infoText = "This demo runs outside the main window"
+    
+    def __init__(self, parent, codePanel, log):
+        wx.Panel.__init__(self, parent, -1)
+        self.codePanel = codePanel
+        self.log = log
+
+        self.label = wx.StaticText(self, -1, self.infoText)
+        self.btnReload = wx.Button(self, -1, "Reload Demo")
+        self.btnReload.Bind(wx.EVT_BUTTON, self.OnReload)
+
+        self.box = wx.BoxSizer(wx.VERTICAL)
+        self.box.Add(self.label, 0, wx.ALIGN_CENTER | wx.ALL, 10)
+        self.box.Add(self.btnReload, 0, wx.ALIGN_CENTER | wx.ALL, 10)
+
+        self.box.Fit(self)
+        self.SetSizer(self.box)
+        
+    def OnReload(self, event):
+        self.codePanel.ReloadDemo()
+
+#---------------------------------------------------------------------------
+
+class DemoError:
+    """Wraps and stores information about the current exception"""
+    def __init__(self, exc_info):
+        import copy
+        
+        excType, excValue = exc_info[:2]
+        # traceback list entries: (filename, line number, function name, text)
+        self.traceback = traceback.extract_tb(exc_info[2])
+
+        # --Based on traceback.py::format_exception_only()--
+        if type(excType) == types.ClassType:
+            self.exception_type = excType.__name__
+        else:
+            self.exception_type = excType
+
+        # If it's a syntax error, extra information needs
+        # to be added to the traceback
+        if excType is SyntaxError:
+            try:
+                msg, (filename, lineno, self.offset, line) = excValue
+            except:
+                pass
+            else:
+                if not filename:
+                    filename = "<string>"
+                line = line.strip()
+                self.traceback.append( (filename, lineno, "", line) )
+                excValue = msg
+        try:
+            self.exception_details = str(excValue)
+        except:
+            self.exception_details = "<unprintable %s object>" & type(excValue).__name__
+
+        del exc_info
+        
+    def __str__(self):
+        ret = "Type %s \n \
+        Traceback: %s \n \
+        Details  : %s" % ( str(self.exception_type), str(self.traceback), self.exception_details )
+        return ret
+
+#---------------------------------------------------------------------------
+
+class DemoErrorPanel(wx.Panel):
+    """Panel put into the demo tab when the demo fails to run due  to errors"""
+
+    def __init__(self, parent, codePanel, demoError, log):
+        wx.Panel.__init__(self, parent, -1)#, style=wx.NO_FULL_REPAINT_ON_RESIZE)
+        self.codePanel = codePanel
+        self.nb = parent
+        self.log = log
+
+        self.box = wx.BoxSizer(wx.VERTICAL)
+
+        # Main Label
+        self.box.Add(wx.StaticText(self, -1, "An error has occured while trying to run the demo")
+                     , 0, wx.ALIGN_CENTER | wx.TOP, 10)
+
+        # Exception Information
+        boxInfo      = wx.StaticBox(self, -1, "Exception Info" )
+        boxInfoSizer = wx.StaticBoxSizer(boxInfo, wx.VERTICAL ) # Used to center the grid within the box
+        boxInfoGrid  = wx.FlexGridSizer(0, 2, 0, 0)
+        textFlags    = wx.ALIGN_RIGHT | wx.LEFT | wx.RIGHT | wx.TOP
+        boxInfoGrid.Add(wx.StaticText(self, -1, "Type: "), 0, textFlags, 5 )
+        boxInfoGrid.Add(wx.StaticText(self, -1, demoError.exception_type) , 0, textFlags, 5 )
+        boxInfoGrid.Add(wx.StaticText(self, -1, "Details: ") , 0, textFlags, 5 )
+        boxInfoGrid.Add(wx.StaticText(self, -1, demoError.exception_details) , 0, textFlags, 5 )
+        boxInfoSizer.Add(boxInfoGrid, 0, wx.ALIGN_CENTRE | wx.ALL, 5 )
+        self.box.Add(boxInfoSizer, 0, wx.ALIGN_CENTER | wx.ALL, 5)
+       
+        # Set up the traceback list
+        # This one automatically resizes last column to take up remaining space
+        from ListCtrl import TestListCtrl
+        self.list = TestListCtrl(self, -1, style=wx.LC_REPORT  | wx.SUNKEN_BORDER)
+        self.list.Bind(wx.EVT_LEFT_DCLICK, self.OnDoubleClick)
+        self.list.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemSelected)
+        self.list.InsertColumn(0, "Filename")
+        self.list.InsertColumn(1, "Line", wx.LIST_FORMAT_RIGHT)
+        self.list.InsertColumn(2, "Function")
+        self.list.InsertColumn(3, "Code")
+        self.InsertTraceback(self.list, demoError.traceback)
+        self.list.SetColumnWidth(0, wx.LIST_AUTOSIZE)
+        self.list.SetColumnWidth(2, wx.LIST_AUTOSIZE)
+        self.box.Add(wx.StaticText(self, -1, "Traceback:")
+                     , 0, wx.ALIGN_CENTER | wx.TOP, 5)
+        self.box.Add(self.list, 1, wx.GROW | wx.ALIGN_CENTER | wx.ALL, 5)
+        self.box.Add(wx.StaticText(self, -1, "Entries from the demo module are shown in blue\n"
+                                           + "Double-click on them to go to the offending line")
+                     , 0, wx.ALIGN_CENTER | wx.BOTTOM, 5)
+
+        self.box.Fit(self)
+        self.SetSizer(self.box)
+
+
+    def InsertTraceback(self, list, traceback):
+        #Add the traceback data
+        for x in range(len(traceback)):
+            data = traceback[x]
+            list.InsertStringItem(x, os.path.basename(data[0])) # Filename
+            list.SetStringItem(x, 1, str(data[1]))              # Line
+            list.SetStringItem(x, 2, str(data[2]))              # Function
+            list.SetStringItem(x, 3, str(data[3]))              # Code
+            
+            # Check whether this entry is from the demo module
+            if data[0] == "<original>" or data[0] == "<modified>": # FIXME: make more generalised
+                self.list.SetItemData(x, int(data[1]))   # Store line number for easy access
+                # Give it a blue colour
+                item = self.list.GetItem(x)
+                item.SetTextColour(wx.BLUE)
+                self.list.SetItem(item)
+            else:
+                self.list.SetItemData(x, -1)        # Editor can't jump into this one's code
+       
+
+    def OnItemSelected(self, event):
+        # This occurs before OnDoubleClick and can be used to set the
+        # currentItem. OnDoubleClick doesn't get a wxListEvent....
+        self.currentItem = event.m_itemIndex
+        event.Skip()
+
+        
+    def OnDoubleClick(self, event):
+        # If double-clicking on a demo's entry, jump to the line number
+        line = self.list.GetItemData(self.currentItem)
+        if line != -1:
+            self.nb.SetSelection(1) # Switch to the code viewer tab
+            wx.CallAfter(self.codePanel.JumpToLine, line-1, True)
+        event.Skip()
+        
 
 #---------------------------------------------------------------------------
 
 class wxPythonDemo(wx.Frame):
     overviewText = "wxPython Overview"
 
-    def __init__(self, parent, id, title):
-        wx.Frame.__init__(self, parent, -1, title, size = (800, 600),
-                          style=wx.DEFAULT_FRAME_STYLE|wx.NO_FULL_REPAINT_ON_RESIZE)
-        
+    def __init__(self, parent, title):
+        wx.Frame.__init__(self, parent, -1, title, size = (950, 750),
+                          style=wx.DEFAULT_FRAME_STYLE | wx.NO_FULL_REPAINT_ON_RESIZE)
 
+        self.loaded = False
         self.cwd = os.getcwd()
         self.curOverview = ""
-        self.window = None
+        self.demoPage = None
+        self.codePage = None
+        self.useModified = False
 
         icon = images.getMondrianIcon()
         self.SetIcon(icon)
 
         if wx.Platform != '__WXMAC__':
             # setup a taskbar icon, and catch some events from it
-            dim = 16  # (may want to use 22 on wxGTK, but 16b looks okay too)
+            dim = 16  # (may want to use 22 on wxGTK, but 16 looks okay too)
             icon = wx.IconFromBitmap(
                 images.getMondrianImage().Scale(dim,dim).ConvertToBitmap() )
             #icon = wx.Icon('bmp_source/mondrian.ico', wx.BITMAP_TYPE_ICO)
@@ -463,28 +1012,15 @@ class wxPythonDemo(wx.Frame):
         splitter = wx.SplitterWindow(self, -1, style=wx.CLIP_CHILDREN | wx.SP_LIVE_UPDATE | wx.SP_3D)
         splitter2 = wx.SplitterWindow(splitter, -1, style=wx.CLIP_CHILDREN | wx.SP_LIVE_UPDATE | wx.SP_3D)
 
-        # Set up a log on the View Log Notebook page
-        self.log = wx.TextCtrl(splitter2, -1,
-                              style = wx.TE_MULTILINE|wx.TE_READONLY|wx.HSCROLL)
-        
-        # Set the wxWindows log target to be this textctrl
-        #wx.Log_SetActiveTarget(wx.LogTextCtrl(self.log))
-
-        # But instead of the above we want to show how to use our own wx.Log class
-        wx.Log_SetActiveTarget(MyLog(self.log))
-
-        # for serious debugging
-        #wx.Log_SetActiveTarget(wx.LogStderr())
-        #wx.Log_SetTraceMask(wx.TraceMessages)
-
-
-
         def EmptyHandler(evt): pass
         #splitter.Bind(wx.EVT_ERASE_BACKGROUND, EmptyHandler)
         #splitter2.Bind(wx.EVT_ERASE_BACKGROUND, EmptyHandler)
 
         # Prevent TreeCtrl from displaying all items after destruction when True
         self.dying = False
+
+        # Create a Notebook
+        self.nb = wx.Notebook(splitter2, -1, style=wx.CLIP_CHILDREN)
 
         # Make a File menu
         self.mainmenu = wx.MenuBar()
@@ -493,11 +1029,10 @@ class wxPythonDemo(wx.Frame):
                            'Redirect print statements to a window',
                            wx.ITEM_CHECK)
         self.Bind(wx.EVT_MENU, self.OnToggleRedirect, item)
-        
+ 
         item = menu.Append(-1, 'E&xit\tAlt-X', 'Get the heck outta here!')
         self.Bind(wx.EVT_MENU, self.OnFileExit, item)
         wx.App_SetMacExitMenuItemId(item.GetId())
-
         self.mainmenu.Append(menu, '&File')
 
         # Make a Demo menu
@@ -510,6 +1045,22 @@ class wxPythonDemo(wx.Frame):
             menu.AppendMenu(wx.NewId(), item[0], submenu)
         self.mainmenu.Append(menu, '&Demo')
 
+        # Make a Demo Code menu
+        #TODO: Add new menu items
+        #       Like the option-enabled entries to select the
+        #       active module
+        #TODO: should we bother?
+
+        #menu = wx.Menu()
+        #saveID = wx.NewId()
+        #restoreID = wx.NewId()
+       # 
+        #menu.Append(saveID, '&Save\tCtrl-S', 'Save edited demo')
+        #menu.Append(restoreID, '&Delete Modified\tCtrl-R', 'Delete modified copy')
+        #self.Bind(wx.EVT_MENU, self.codePage.OnSave, id=saveID)
+        #self.Bind(wx.EVT_MENU, self.codePage.OnRestore, id=restoreID)
+        #self.mainmenu.Append(menu, 'Demo &Code')
+       # 
 
         # Make a Help menu
         helpID = wx.NewId()
@@ -566,9 +1117,6 @@ class wxPythonDemo(wx.Frame):
         self.tree.Bind(wx.EVT_TREE_SEL_CHANGED, self.OnSelChanged, id=tID)
         self.tree.Bind(wx.EVT_LEFT_DOWN, self.OnTreeLeftDown)
 
-        # Create a Notebook
-        self.nb = wx.Notebook(splitter2, -1, style=wx.CLIP_CHILDREN)
-
         # Set up a wx.html.HtmlWindow on the Overview Notebook page
         # we put it in a panel first because there seems to be a
         # refresh bug of some sort (wxGTK) when it is directly in
@@ -584,53 +1132,62 @@ class wxPythonDemo(wx.Frame):
 
             def OnOvrSize(evt, ovr=self.ovr):
                 ovr.SetSize(evt.GetSize())
-
             panel.Bind(wx.EVT_SIZE, OnOvrSize)
             panel.Bind(wx.EVT_ERASE_BACKGROUND, EmptyHandler)
 
+        if "gtk2" in wx.PlatformInfo:
+            self.ovr.NormalizeFontSizes()
+        self.SetOverview(self.overviewText, mainOverview)
 
-        self.SetOverview(self.overviewText, overview)
 
+        # Set up a log window
+        self.log = wx.TextCtrl(splitter2, -1,
+                              style = wx.TE_MULTILINE|wx.TE_READONLY|wx.HSCROLL)
 
-        # Set up a notebook page for viewing the source code of each sample
-        self.txt = DemoCodeViewer(self.nb, -1)
-        self.nb.AddPage(self.txt, "Demo Code")
-        self.LoadDemoSource('Main.py')
+        # Set the wxWindows log target to be this textctrl
+        #wx.Log_SetActiveTarget(wx.LogTextCtrl(self.log))
+
+        # But instead of the above we want to show how to use our own wx.Log class
+        wx.Log_SetActiveTarget(MyLog(self.log))
+        
+        # for serious debugging
+        #wx.Log_SetActiveTarget(wx.LogStderr())
+        #wx.Log_SetTraceMask(wx.TraceMessages)
 
 
         # add the windows to the splitter and split it.
-        splitter2.SplitHorizontally(self.nb, self.log, -120)
-        splitter.SplitVertically(self.tree, splitter2, 180)
+        splitter2.SplitHorizontally(self.nb, self.log, -160)
+        splitter.SplitVertically(self.tree, splitter2, 200)
 
         splitter.SetMinimumPaneSize(20)
         splitter2.SetMinimumPaneSize(20)
-
 
         # Make the splitter on the right expand the top window when resized
         def SplitterOnSize(evt):
             splitter = evt.GetEventObject()
             sz = splitter.GetSize()
-            splitter.SetSashPosition(sz.height - 120, False)
+            splitter.SetSashPosition(sz.height - 160, False)
             evt.Skip()
 
         splitter2.Bind(wx.EVT_SIZE, SplitterOnSize)
-
 
         # select initial items
         self.nb.SetSelection(0)
         self.tree.SelectItem(root)
 
-        if len(sys.argv) == 2:
-            try:
-                selectedDemo = self.treeMap[sys.argv[1]]
-            except:
-                selectedDemo = None
+        # Load 'Main' module
+        self.LoadDemo(self.overviewText)
+        self.loaded = True
+
+        # select some other initial module?
+        if len(sys.argv) > 1:
+            arg = sys.argv[1]
+            if arg.endswith('.py'):
+                arg = arg[:-3]
+            selectedDemo = self.treeMap.get(arg, None)
             if selectedDemo:
                 self.tree.SelectItem(selectedDemo)
                 self.tree.EnsureVisible(selectedDemo)
-
-
-##        wx.LogMessage('window handle: %s' % self.GetHandle())
 
 
     #---------------------------------------------
@@ -638,7 +1195,6 @@ class wxPythonDemo(wx.Frame):
         if text[-1:] == '\n':
             text = text[:-1]
         wx.LogMessage(text)
-
 
     def write(self, txt):
         self.WriteText(txt)
@@ -657,6 +1213,7 @@ class wxPythonDemo(wx.Frame):
 
     #---------------------------------------------
     def OnTreeLeftDown(self, event):
+        # reset the overview text if the tree item is clicked on again
         pt = event.GetPosition();
         item, flags = self.tree.HitTest(pt)
         if item == self.tree.GetSelection():
@@ -665,73 +1222,147 @@ class wxPythonDemo(wx.Frame):
 
     #---------------------------------------------
     def OnSelChanged(self, event):
-        if self.dying:
+        if self.dying or  not self.loaded:
             return
 
         item = event.GetItem()
         itemText = self.tree.GetItemText(item)
-        self.RunDemo(itemText)
-
-
-    #---------------------------------------------
-    def RunDemo(self, itemText):
-        os.chdir(self.cwd)
-        if self.nb.GetPageCount() == 3:
-            if self.nb.GetSelection() == 2:
-                self.nb.SetSelection(0)
-            # inform the window that it's time to quit if it cares
-            if self.window is not None:
-                if hasattr(self.window, "ShutdownDemo"):
-                    self.window.ShutdownDemo()
-            wx.SafeYield() # in case the page has pending events
-            self.nb.DeletePage(2)
-
-        if itemText == self.overviewText:
-            self.LoadDemoSource('Main.py')
-            self.SetOverview(self.overviewText, overview)
-            self.window = None
-
-        else:
-            if os.path.exists(itemText + '.py'):
-                wx.BeginBusyCursor()
-                wx.LogMessage("Running demo %s.py..." % itemText)
-                try:
-                    self.LoadDemoSource(itemText + '.py')
-
-                    if (sys.modules.has_key(itemText)):
-                       reload(sys.modules[itemText])
-                    
-                    module = __import__(itemText, globals())
-                    self.SetOverview(itemText + " Overview", module.overview)
-                finally:
-                    wx.EndBusyCursor()
-                self.tree.Refresh()
-
-                self.window = module.runTest(self, self.nb, self) ###
-                if self.window is not None:
-                    self.nb.AddPage(self.window, 'Demo')
-                    self.nb.SetSelection(2)
-
-            else:
-                self.ovr.SetPage("")
-                self.txt.Clear()
-                self.window = None
-
-        self.tree.SetFocus()
-
+        self.LoadDemo(itemText)
 
     #---------------------------------------------
-    # Get the Demo files
-    def LoadDemoSource(self, filename):
-        self.txt.Clear()
+    def LoadDemo(self, demoName):
         try:
-            self.txt.SetValue(open(filename).read())
-        except IOError:
-            self.txt.SetValue("Cannot open %s file." % filename)
+            wx.BeginBusyCursor()
+            
+            os.chdir(self.cwd)
+            self.ShutdownDemoModule()
 
-        self.txt.SetInsertionPoint(0)
-        self.txt.ShowPosition(0)
+            if demoName == self.overviewText:
+                # User selected the "wxPython Overview" node
+                # ie: _this_ module
+                # Changing the main window at runtime not yet supported...
+                self.demoModules = DemoModules(__name__)
+                self.SetOverview(self.overviewText, mainOverview)
+                self.LoadDemoSource()
+                self.UpdateNotebook(0)
+            else:
+                if os.path.exists(GetOriginalFilename(demoName)):
+                    wx.LogMessage("Loading demo %s.py..." % demoName)
+                    self.demoModules = DemoModules(demoName)
+                    self.LoadDemoSource()
+                    self.tree.Refresh()
+                else:
+                    self.SetOverview("wxPython", mainOverview)
+                    self.codePage = None
+                    self.UpdateNotebook(0)
+        finally:
+            wx.EndBusyCursor()
 
+    #---------------------------------------------
+    def LoadDemoSource(self):
+        self.codePage = None
+        self.codePage = DemoCodePanel(self.nb, self)
+        self.codePage.LoadDemo(self.demoModules)
+        
+    #---------------------------------------------
+    def RunModule(self):
+        """Runs the active module"""
+
+        module = self.demoModules.GetActive()
+        self.ShutdownDemoModule()
+        overviewText = ""
+        
+        # o If the demo returns a window it is placed in a tab.
+        # o Otherwise, a placeholder tab is created, informing the user that the
+        #   demo runs outside the main window, and allowing it to be reloaded.
+        # o If an error occurs (or has occured before) an error tab is created.
+        
+        if module is not None:
+            wx.LogMessage("Running demo module...")
+            if hasattr(module, "overview"):
+                overviewText = module.overview
+
+            # in case runTest is modal, make sure things look right...
+            wx.YieldIfNeeded()
+
+            try:
+                self.demoPage = module.runTest(self, self.nb, self)
+                if self.demoPage is None:
+                    self.demoPage = ReloadDemoPanel(self.nb, self.codePage, self)
+            except:
+                self.demoPage = DemoErrorPanel(self.nb, self.codePage, DemoError(sys.exc_info()), self)
+        else:
+            # There was a previous error in compiling or exec-ing
+            self.demoPage = DemoErrorPanel(self.nb, self.codePage, self.demoModules.GetErrorInfo(), self)
+        self.SetOverview(self.demoModules.name + " Overview", overviewText)
+        self.UpdateNotebook()
+
+    #---------------------------------------------
+    def ShutdownDemoModule(self):
+        if self.demoPage:
+            # inform the window that it's time to quit if it cares
+            if hasattr(self.demoPage, "ShutdownDemo"):
+                self.demoPage.ShutdownDemo()
+            wx.YieldIfNeeded() # in case the page has pending events
+            self.demoPage = None
+            
+    #---------------------------------------------
+    def UpdateNotebook(self, select = -1):
+        nb = self.nb
+        debug = False
+        
+        def UpdatePage(page, pageText):
+            pageExists = False
+            pagePos = -1
+            for i in range(nb.GetPageCount()):
+                if nb.GetPageText(i) == pageText:
+                    pageExists = True
+                    pagePos = i
+                    break
+                
+            if page:
+                if not pageExists:
+                    # Add a new page
+ 
+ #                   panel = wx.Panel(nb, -1)
+ #                   page.Reparent(panel)
+ #                   panel.page = page
+ #                   nb.AddPage(panel, pageText)
+                    nb.AddPage(page, pageText)
+                    if debug: wx.LogMessage("DBG: ADDED %s" % pageText)
+                else:
+ #                   if nb.GetPage(pagePos).page != page:
+                    if nb.GetPage(pagePos) != page:
+                        # Reload an existing page
+                        nb.Freeze()
+ 
+ #                       panel = nb.GetPage(pagePos)
+ #                       panel.page = page
+ #                       page.Reparent(panel)
+                        
+                        nb.DeletePage(pagePos)
+                        nb.InsertPage(pagePos, page, pageText)
+                        nb.Thaw()
+                        if debug: wx.LogMessage("DBG: RELOADED %s" % pageText)
+                    else:
+                        # Excellent! No redraw/flicker
+                        if debug: wx.LogMessage("DBG: SAVED from reloading %s" % pageText)
+            elif pageExists:
+                # Delete a page
+                nb.DeletePage(pagePos)
+                if debug: wx.LogMessage("DBG: DELETED %s" % pageText)
+            else:
+                if debug: wx.LogMessage("DBG: STILL GONE - %s" % pageText)
+                
+        if select == -1:
+            select = nb.GetSelection()
+
+        UpdatePage(self.codePage, "Demo Code")
+        UpdatePage(self.demoPage, "Demo")
+
+        if select >= 0:
+            nb.SetSelection(select)
+            
     #---------------------------------------------
     def SetOverview(self, name, text):
         self.curOverview = text
@@ -756,7 +1387,7 @@ class wxPythonDemo(wx.Frame):
         else:
             app.RestoreStdio()
             print "Print statements and other standard output will now be sent to the usual location."
-        
+ 
     def OnHelpAbout(self, event):
         from About import MyAboutBox
         about = MyAboutBox(self)
@@ -772,10 +1403,11 @@ class wxPythonDemo(wx.Frame):
         self.finddlg.Show(True)
 
     def OnFind(self, event):
+        editor = self.codePage.editor
         self.nb.SetSelection(1)
-        end = self.txt.GetLastPosition()
-        textstring = self.txt.GetRange(0, end).lower()
-        start = self.txt.GetSelection()[1]
+        end = editor.GetLastPosition()
+        textstring = editor.GetRange(0, end).lower()
+        start = editor.GetSelection()[1]
         findstring = self.finddata.GetFindString().lower()
         loc = textstring.find(findstring, start)
         if loc == -1 and start != 0:
@@ -794,8 +1426,8 @@ class wxPythonDemo(wx.Frame):
                 return
             else:
                 self.finddlg.Destroy()
-        self.txt.ShowPosition(loc)
-        self.txt.SetSelection(loc, loc + len(findstring))
+        editor.ShowPosition(loc)
+        editor.SetSelection(loc, loc + len(findstring))
 
 
 
@@ -812,7 +1444,8 @@ class wxPythonDemo(wx.Frame):
     #---------------------------------------------
     def OnCloseWindow(self, event):
         self.dying = True
-        self.window = None
+        self.demoPage = None
+        self.codePage = None
         self.mainmenu = None
         self.Destroy()
 
@@ -821,7 +1454,7 @@ class wxPythonDemo(wx.Frame):
     def OnIdle(self, event):
         if self.otherWin:
             self.otherWin.Raise()
-            self.window = self.otherWin
+            self.demoPage = self.otherWin
             self.otherWin = None
 
 
@@ -882,7 +1515,7 @@ class wxPythonDemo(wx.Frame):
 
     #---------------------------------------------
     def OnIconfiy(self, evt):
-        wx.LogMessage("OnIconfiy")
+        wx.LogMessage("OnIconfiy: %d" % evt.Iconized())
         evt.Skip()
 
     #---------------------------------------------
@@ -906,7 +1539,7 @@ class MySplashScreen(wx.SplashScreen):
 
     def OnClose(self, evt):
         self.Hide()
-        frame = wxPythonDemo(None, -1, "wxPython: (A Demonstration)")
+        frame = wxPythonDemo(None, "wxPython: (A Demonstration)")
         frame.Show()
         evt.Skip()  # Make sure the default handler runs too...
 
@@ -945,12 +1578,10 @@ def main():
     app = MyApp(0) ##wx.Platform == "__WXMAC__")
     app.MainLoop()
 
-
 #---------------------------------------------------------------------------
 
 
-
-overview = """<html><body>
+mainOverview = """<html><body>
 <h2>wxPython</h2>
 
 <p> wxPython is a <b>GUI toolkit</b> for the Python programming
@@ -986,6 +1617,7 @@ is loaded in another tab for you to browse and learn from.
 #----------------------------------------------------------------------------
 
 if __name__ == '__main__':
+    __name__ = 'Main'
     main()
 
 #----------------------------------------------------------------------------

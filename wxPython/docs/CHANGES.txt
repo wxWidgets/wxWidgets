@@ -100,7 +100,11 @@ It is now possible to change the tab traversal order of controls on a
 panel or dialog.  For details see the new MoveAfterInTabOrder and
 MoveBeforeInTabOrder methods of wx.Window.
 
-
+Applied (and heavily modified) a patch from Eugene
+<svip123@fastmail.fm> that allows the sample modules in the demo to be
+edited and reloaded, all from within the demo.  You can switch back
+and forth beteen the default and your edited version, and any errors
+ocurring upon the reload are reported on the Demo tab.
 
 
 
