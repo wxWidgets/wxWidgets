@@ -173,6 +173,21 @@ void wxFileDialog::SetPath(const wxString& path)
 // global functions
 // ----------------------------------------------------------------------------
 
+wxString
+wxFileSelectorEx(const wxChar *message,
+                 const wxChar *default_path,
+                 const wxChar *default_filename,
+                 int *indexDefaultExtension,
+                 const wxChar *wildcard,
+                 int flags,
+                 wxWindow *parent,
+                 int x, int y)
+{
+    // TODO: implement this somehow
+    return wxFileSelector(message, default_path, default_filename, _T(""),
+                          wildcard, flags, parent, x, y);
+}
+
 wxString wxFileSelector( const wxChar *title,
                       const wxChar *defaultDir, const wxChar *defaultFileName,
                       const wxChar *defaultExtension, const wxChar *filter, int flags,
