@@ -4956,6 +4956,13 @@ void wxListCtrl::ClearAll()
 bool wxListCtrl::DeleteColumn( int col )
 {
     m_mainWin->DeleteColumn( col );
+
+    // if we don't have the header any longer, we need to relayout the window
+    if ( !GetColumnCount() )
+    {
+        ResizeReportView(FALSE /* no header */);
+    }
+
     return TRUE;
 }
 
@@ -5027,8 +5034,17 @@ long wxListCtrl::InsertItem( long index, const wxString &label, int imageIndex )
 
 long wxListCtrl::InsertColumn( long col, wxListItem &item )
 {
-    wxASSERT( m_headerWin );
+    wxCHECK_MSG( m_headerWin, -1, _T("can't add column in non report mode") );
+
     m_mainWin->InsertColumn( col, item );
+
+    // if we hadn't had header before and have it now we need to relayout the
+    // window
+    if ( GetColumnCount() == 1 )
+    {
+        ResizeReportView(TRUE /* have header */);
+    }
+
     m_headerWin->Refresh();
 
     return 0;
