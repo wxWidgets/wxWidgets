@@ -379,6 +379,44 @@ WORKAROUND:
 visitor_email_address: jbarrett@box100.com
 wxWINDOWS+VERSION: 2.1.11
 
+DATE+FIXED:
+DATE+IDENTIFIED: 17.01.2000
+DETAILS: wxWindows 2 installer simply replaces msv(i)crt.dll. MUST ONLY overwrite if newer!!! Apart from that: the libraries provided are from VC6Sp1 and are known to be buggy!
+FIXED+BY: 
+IDENTIFIED+BY: Klaus Richter
+PLATFORMS: wxMSW
+SHORT+DESCRIPTION: Windows Installer problem
+Submit: Submit
+WORKAROUND: Dlls from at least Sp2 (better 3) are needed (read MSDN KB Q190536)!
+visitor_email_address: richter@secude.com
+wxWINDOWS+VERSION: 2.1.11
+
+DATE+FIXED:
+DATE+IDENTIFIED: 18/01/2000
+DETAILS: I tested wxWindows/GTK+ with a simple example which
+uses frame, menu, and statusbar. But when I selected
+a menu item which creates a simple 'about dialog'
+several times, the program crashed with segmentation fault.
+I traced it with gdb, and I got this message:
+
+Program received signal SIGSEGV, Segmentation fault
+0x408f1796 in match_theme_image ()
+  from /usr/lib/gtk/themes/engines/libpixmap.so
+
+I guessed from this message that the pixmap routine in
+GTK+ theme engine caused crash. So, I changed GTK+ theme
+to default which doesn't use any pixmaps and tested
+again. This time, the program didn't crash.
+
+I'm using Redhat 6.1 with egcs 1.1.2.
+FIXED+BY:
+IDENTIFIED+BY: Sangpil Yoon
+PLATFORMS: wxGTK
+SHORT+DESCRIPTION: Problem with GTK+ theme
+Submit: Submit
+WORKAROUND: Currently none.
+visitor_email_address: yphil99@yahoo.com
+wxWINDOWS+VERSION: 2.1.12
 
 ---------------------------END OF BUGLIST-------------------------
 
