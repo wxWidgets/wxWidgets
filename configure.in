@@ -1844,16 +1844,11 @@ equivalent variable and GTK+ is version 1.2.3 or above.
         TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WXWINE__"
     fi
 
-    dnl use standard macros to check for X headers/libs, this brings support
-    dnl for the standard configure options --x-includes and --x-libraries;
-    dnl the path to the X headers/libs is not only needed for motif, but also
-    dnl by the OpenGL and XKBlib.h checks further down
-
-    AC_PATH_XTRA
-    CPPFLAGS="$CPPFLAGS $X_CFLAGS"
-    LDFLAGS="$LDFLAGS $X_LIBS"
-
     if test "$wxUSE_MOTIF" = 1; then
+        dnl use standard macros to check for X headers/libs, this brings support
+        dnl for the standard configure options --x-includes and --x-libraries
+        AC_PATH_XTRA
+
         if test "$no_x" = "yes"; then
           AC_MSG_ERROR(X11 not found, please use --x-includes and/or --x-libraries options)
         fi
@@ -4467,7 +4462,7 @@ dnl makefile system without libtool
 LD_LIBS="\${top_builddir}/lib/${WX_LIBRARY_NAME_STATIC} $EXTRA_LIBS"
 
 dnl all -I options we must pass to the compiler
-INCLUDES="-I. -I\${top_builddir}/lib/wx/include/${TOOLCHAIN_NAME} -I\${top_srcdir}/include \
+INCLUDES="-I\${top_builddir}/lib/wx/include/${TOOLCHAIN_NAME} -I\${top_srcdir}/include \
 $REGEX_INCLUDE $ZLIB_INCLUDE $PNG_INCLUDE $JPEG_INCLUDE $TIFF_INCLUDE \
 $FREETYPE_INCLUDE $TOOLKIT_INCLUDE"
 
