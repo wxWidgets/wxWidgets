@@ -12,7 +12,7 @@
 #ifndef   _STATBR95_H
 #define   _STATBR95_H
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma interface "statbr95.h"
 #endif
 

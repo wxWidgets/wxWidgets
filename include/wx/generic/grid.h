@@ -14,7 +14,7 @@
 #ifndef __WXGRID_H__
 #define __WXGRID_H__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma interface "grid.h"
 #endif
 

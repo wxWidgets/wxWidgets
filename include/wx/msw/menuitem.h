@@ -12,7 +12,7 @@
 #ifndef   _MENUITEM_H
 #define   _MENUITEM_H
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
     #pragma interface "menuitem.h"
 #endif
 

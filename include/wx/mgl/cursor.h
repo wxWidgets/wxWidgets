@@ -11,7 +11,7 @@
 #ifndef __WX_CURSOR_H__
 #define __WX_CURSOR_H__
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma interface "cursor.h"
 #endif
 

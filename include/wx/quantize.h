@@ -17,7 +17,7 @@
  * For conditions of distribution and use, see the accompanying README file.
  */
 
-#if defined(__GNUG__) && !defined(__APPLE__)
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma interface "quantize.h"
 #endif
 

@@ -12,7 +12,7 @@
 #ifndef _WX_UNIV_STATUSBR_H_
 #define _WX_UNIV_STATUSBR_H_
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
     #pragma interface "univstatusbr.h"
 #endif
 

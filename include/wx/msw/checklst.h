@@ -12,7 +12,7 @@
 #ifndef   __CHECKLST__H_
 #define   __CHECKLST__H_
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma interface "checklst.h"
 #endif
 

@@ -13,7 +13,7 @@
 #ifndef _WX_LONGLONG_H
 #define _WX_LONGLONG_H
 
-#if defined(__GNUG__) && !defined(__APPLE__)
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
     #pragma interface "longlong.h"
 #endif
 

@@ -10,7 +10,7 @@
 #ifndef __WX_APP_H__
 #define __WX_APP_H__
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma interface "app.h"
 #endif
 

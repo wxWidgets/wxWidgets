@@ -12,7 +12,7 @@
 #ifndef _WX_MSW_POPUPWIN_H_
 #define _WX_MSW_POPUPWIN_H_
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
     #pragma interface "popup.h"
 #endif
 

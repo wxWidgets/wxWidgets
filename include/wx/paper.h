@@ -12,7 +12,7 @@
 #ifndef _WX_PAPERH__
 #define _WX_PAPERH__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma interface "paper.h"
 #endif
 

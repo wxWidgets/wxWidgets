@@ -16,7 +16,7 @@
 #ifndef __WXGRIDSEL_H__
 #define __WXGRIDSEL_H__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma interface "gridsel.h"
 #endif
 

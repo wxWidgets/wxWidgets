@@ -25,7 +25,7 @@
 #ifndef _WX_LISTH__
 #define _WX_LISTH__
 
-#if defined(__GNUG__) && !defined(__APPLE__) && \
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA) && \
     !(defined(__MINGW32__) && __GNUC__ == 3 && __GNUC_MINOR__ == 2)
 #pragma interface "list.h"
 #endif

@@ -12,7 +12,7 @@
 #ifndef __MSGDLGH_G__
 #define __MSGDLGH_G__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma interface "msgdlgg.h"
 #endif
 

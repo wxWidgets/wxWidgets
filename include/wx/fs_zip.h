@@ -10,7 +10,7 @@
 #ifndef _WX_FS_ZIP_H_
 #define _WX_FS_ZIP_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma interface "fs_zip.h"
 #endif
 

@@ -11,7 +11,7 @@
 #ifndef __WX_CLIPBOARD_H__
 #define __WX_CLIPBOARD_H__
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma interface "clipbrd.h"
 #endif
 

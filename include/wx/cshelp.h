@@ -12,7 +12,7 @@
 #ifndef _WX_CSHELPH__
 #define _WX_CSHELPH__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
     #pragma interface "cshelp.h"
 #endif
 

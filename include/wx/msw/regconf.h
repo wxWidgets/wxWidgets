@@ -12,7 +12,7 @@
 #ifndef   _REGCONF_H
 #define   _REGCONF_H
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma interface "regconf.h"
 #endif
 

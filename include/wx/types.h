@@ -12,7 +12,7 @@
 #ifndef _WX_TYPESH__
 #define _WX_TYPESH__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 // #pragma interface "types.h"
 #endif
 

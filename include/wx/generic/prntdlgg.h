@@ -13,7 +13,7 @@
 #ifndef __PRINTDLGH_G_
 #define __PRINTDLGH_G_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
     #pragma interface "prntdlgg.h"
 #endif
 

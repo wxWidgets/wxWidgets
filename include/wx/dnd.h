@@ -12,7 +12,7 @@
 #ifndef _WX_DND_H_BASE_
 #define _WX_DND_H_BASE_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
     #pragma interface "dndbase.h"
 #endif
 

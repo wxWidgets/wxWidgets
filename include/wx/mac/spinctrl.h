@@ -22,7 +22,7 @@
 
 #if wxUSE_SPINBTN 
 
-#if defined(__GNUG__) && !defined(__APPLE__)
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
     #pragma interface "spinctlg.h"
 #endif
 

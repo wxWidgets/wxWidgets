@@ -12,7 +12,7 @@
 #ifndef   _REGISTRY_H
 #define   _REGISTRY_H
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma interface "registry.h"
 #endif
 

@@ -11,7 +11,7 @@
 #ifndef _WX_MSW_STATLINE_H_
 #define _WX_MSW_STATLINE_H_
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
     #pragma interface
 #endif
 

@@ -12,7 +12,7 @@
 #ifndef _WX_WXSTRCONVH__
 #define _WX_WXSTRCONVH__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
   #pragma interface "strconv.h"
 #endif
 

@@ -10,7 +10,7 @@
 #ifndef _WX_GTK_REGION_H_
 #define _WX_GTK_REGION_H_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma interface
 #endif
 

@@ -12,7 +12,7 @@
 #ifndef _WX_TBAR95_H_
 #define _WX_TBAR95_H_
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
     #pragma interface "tbar95.h"
 #endif
 

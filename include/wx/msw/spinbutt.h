@@ -12,7 +12,7 @@
 #ifndef _WX_SPINBUTT_H_
 #define _WX_SPINBUTT_H_
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
     #pragma interface "spinbutt.h"
 #endif
 

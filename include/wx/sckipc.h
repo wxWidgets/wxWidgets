@@ -16,7 +16,7 @@
 #ifndef _WX_SCKIPC_H
 #define _WX_SCKIPC_H
 
-#if defined(__GNUG__) && !defined(__APPLE__)
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma interface "sckipc.h"
 #endif
 

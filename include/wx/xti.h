@@ -13,7 +13,7 @@
 #ifndef _WX_XTIH__
 #define _WX_XTIH__
 
-#if defined(__GNUG__) && !defined(__APPLE__)
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma interface "xti.h"
 #endif
 

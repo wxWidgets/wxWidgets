@@ -43,7 +43,7 @@
 
 #include "wx/version.h"
 
-#if defined(__GNUG__) && !defined(__APPLE__)
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
     #pragma interface "db.h"
 #endif
 

@@ -12,7 +12,7 @@
 #ifndef _SLIDER95_H_
 #define _SLIDER95_H_
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma interface "slider95.h"
 #endif
 
