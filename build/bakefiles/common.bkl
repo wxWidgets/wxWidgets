@@ -156,24 +156,24 @@
     <set var="UNICODE_DEFINE">
         <if cond="FORMAT!='autoconf' and UNICODE=='1'">wxUSE_UNICODE=1</if>
     </set>
+
+    <template id="anything">
+        <debug-info>$(DEBUGFLAG)</debug-info>
+        <optimize>$(OPTIMIZEFLAG)</optimize>
+        <threading>multi</threading>
+        <runtime-libs>dynamic</runtime-libs>
+        <if cond="FORMAT!='autoconf'">
+            <cppflags>$(EXTRACFLAGS)</cppflags>
+        </if>
+    </template>
     
     <template id="anylib">
         <depends cond="FORMAT!='autoconf' and BUILDING_LIB=='1'">setup.h</depends>
         <dirname>$(LIBDIRNAME)</dirname>
         <install-to>$(LIBDIR)</install-to>
-        
-        <debug-info>$(DEBUGFLAG)</debug-info>
-        <optimize>$(OPTIMIZEFLAG)</optimize>
-        <threading>multi</threading>
-        <runtime-libs>dynamic</runtime-libs>
-
         <if cond="FORMAT!='autoconf'">
-            <define>WINVER=0x0400</define>
-            <define>_WIN32_IE=0x0400</define>
-            <define>STRICT</define>
             <cppflags>$(EXTRACFLAGS)</cppflags>
         </if>
-
     </template>
 
     <template id="3rdparty_lib" template="anylib">
@@ -198,7 +198,7 @@
     <!--                  Templates for wxWindows libs:                  -->
     <!-- =============================================================== -->
 
-    <template id="wx">
+    <template id="wx" template="anything">
         <set var="wxid">$(wxwin.mk_wxid(id))</set>
         <define>__WX$(TOOLKIT)__</define>
         <define>$(WXUNIV_DEFINE)</define>
