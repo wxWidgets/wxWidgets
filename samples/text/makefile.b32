@@ -9,8 +9,17 @@
 
 WXDIR = $(WXWIN)
 
-TARGET=text
+TARGET=texttst
 OBJECTS = $(TARGET).obj
 
+# We have to copy to a different root name,
+# since BC++ doesn't seem to like the name 'text'
+# when linking
+all: copyfiles $(TARGET).exe $(EXTRATARGETS)
+
 !include $(WXDIR)\src\makeprog.b32
+
+copyfiles:
+    copy text.cpp texttst.cpp
+    copy text.rc texttst.rc
 
