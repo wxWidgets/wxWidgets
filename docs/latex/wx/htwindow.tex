@@ -33,6 +33,18 @@ Don't forget to initialize all image formats you need before loading any page!
 
 <wx/html/htmlwin.h>
 
+\wxheading{Window styles}
+
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxHW\_SCROLLBAR\_NEVER}}{Never display scrollbars, not
+even when the page is larger than the window.}
+\twocolitem{\windowstyle{wxHP\_SCROLLBAR\_AUTO}}{Display scrollbars only if
+page's size exceeds window's size.}
+\twocolitem{\windowstyle{wxHP\_NO\_SELECTION}}{Don't allow the user to select
+text.}
+\end{twocollist}
+
 \membersection{wxHtmlWindow::wxHtmlWindow}\label{wxhtmlwindowwxhtmlwindow}
 
 \func{}{wxHtmlWindow}{\void}
@@ -45,8 +57,7 @@ Constructor. The parameters are the same as for the \helpref{wxScrolledWindow}{w
 
 \wxheading{Parameters}
 
-\docparam{style}{wxHW\_SCROLLBAR\_NEVER,  or wxHW\_SCROLLBAR\_AUTO. 
-Affects the appearance of vertical scrollbar in the window.}
+\docparam{style}{Window style. See \helpref{wxHtmlWindow}{wxhtmlwindow}.}
 
 \membersection{wxHtmlWindow::AddFilter}\label{wxhtmlwindowaddfilter}
 
