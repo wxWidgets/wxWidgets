@@ -40,7 +40,7 @@
 // ----------------------------------------------------------------------------
 
 #if defined(HAVE_DLOPEN)
-#   define wxDllOpen(lib)                dlopen(lib.fn_str(), RTLD_LAZY)
+#   define wxDllOpen(lib)                dlopen(lib.fn_str(), RTLD_NOW/*RTLD_LAZY*/)
 #   define wxDllGetSymbol(handle, name)  dlsym(handle, name.mb_str())
 #   define wxDllClose                    dlclose
 #elif defined(HAVE_SHL_LOAD)
@@ -171,6 +171,19 @@ void *wxLibrary::GetSymbol(const wxString& symbname)
 // ---------------------------------------------------------------------------
 // wxDllLoader
 // ---------------------------------------------------------------------------
+
+/* static */
+wxDllType
+wxDllLoader::GetProgramHandle(void)
+{
+#ifdef __WXGTK__
+   return dlopen(NULL, RTLD_NOW/*RTLD_LAZY*/);
+#else
+#pragma warning "Not implemented, please fix!"
+   return 0;
+#endif   
+}
+
 
 /* static */
 wxDllType
