@@ -13,6 +13,13 @@ wxMSW:
 OTHER CHANGES
 -------------
 
+2.2.7
+-----
+
+wxMSW:
+
+- wxListCtrl attributes are handled correctly when inserting/deleting/sorting
+
 2.2.6
 -----
 
