@@ -266,6 +266,13 @@ void wxHtmlPrintout::SetHtmlFile(const wxString& htmlfile)
 {
     wxFileSystem fs;
     wxFSFile *ff = fs.OpenFile(htmlfile);
+    
+    if (ff == NULL)
+    {   
+        wxLogError(htmlfile + _(": file does not exist!"));
+        return;
+    }
+    
     wxInputStream *st = ff -> GetStream();
     char *t = new char[st -> GetSize() + 1];
     st -> Read(t, st -> GetSize());

@@ -92,6 +92,7 @@ class wxHtmlHelpHashData : public wxObject
     public:
         wxHtmlHelpHashData(int index, wxTreeItemId id) : wxObject()
             { m_Index = index; m_Id = id;}
+        ~wxHtmlHelpHashData() {}
         
         int m_Index;
         wxTreeItemId m_Id;
@@ -1147,7 +1148,10 @@ void wxHtmlHelpFrame::OnToolbar(wxCommandEvent& event)
             {
                 if (m_Printer == NULL) 
                     m_Printer = new wxHtmlEasyPrinting(_("Help Printing"), this);
-                m_Printer -> PrintFile(m_HtmlWin -> GetOpenedPage());
+                if (!m_HtmlWin -> GetOpenedPage())
+                    wxLogWarning(_("Cannot print empty page."));
+                else
+                    m_Printer -> PrintFile(m_HtmlWin -> GetOpenedPage());
             }
             break;
 #endif
