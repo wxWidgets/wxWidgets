@@ -85,6 +85,10 @@ wxMSW:
 - wxFontEnumerator now returns all fonts, not only TrueType ones
 - wxTextCtrl with wxTE_RICH flag scrolls to the end when text is appended to it
 
+wxGTK:
+
+- wxDirDialog now presents the file system in standard Unix way
+
 2.3.2
 -----
 
