@@ -194,12 +194,14 @@ WXDLLIMPEXP_BASE long wxExecute(const wxString& command, int flags = wxEXEC_ASYN
 // execute the command capturing its output into an array line by line, this is
 // always synchronous
 WXDLLIMPEXP_BASE long wxExecute(const wxString& command,
-                           wxArrayString& output);
+                                wxArrayString& output,
+                                int flags = 0);
 
 // also capture stderr (also synchronous)
 WXDLLIMPEXP_BASE long wxExecute(const wxString& command,
-                           wxArrayString& output,
-                           wxArrayString& error);
+                                wxArrayString& output,
+                                wxArrayString& error,
+                                int flags = 0);
 
 enum wxSignal
 {

@@ -479,13 +479,14 @@ static bool ReadAll(wxInputStream *is, wxArrayString& output)
 // public versions of wxExecute() below
 static long wxDoExecuteWithCapture(const wxString& command,
                                    wxArrayString& output,
-                                   wxArrayString* error)
+                                   wxArrayString* error,
+                                   int flags)
 {
     // create a wxProcess which will capture the output
     wxProcess *process = new wxProcess;
     process->Redirect();
 
-    long rc = wxExecute(command, wxEXEC_SYNC, process);
+    long rc = wxExecute(command, wxEXEC_SYNC | flags, process);
 
 #if wxUSE_STREAMS
     if ( rc != -1 )
@@ -510,16 +511,17 @@ static long wxDoExecuteWithCapture(const wxString& command,
     return rc;
 }
 
-long wxExecute(const wxString& command, wxArrayString& output)
+long wxExecute(const wxString& command, wxArrayString& output, int flags)
 {
-    return wxDoExecuteWithCapture(command, output, NULL);
+    return wxDoExecuteWithCapture(command, output, NULL, flags);
 }
 
 long wxExecute(const wxString& command,
                wxArrayString& output,
-               wxArrayString& error)
+               wxArrayString& error,
+               int flags)
 {
-    return wxDoExecuteWithCapture(command, output, &error);
+    return wxDoExecuteWithCapture(command, output, &error, flags);
 }
 
 // ----------------------------------------------------------------------------

@@ -521,14 +521,14 @@ processes.
 
 \perlnote{In wxPerl this function is called \texttt{Wx::ExecuteArgs}}
 
-\func{long}{wxExecute}{\param{const wxString\& }{command}, \param{wxArrayString\& }{output}}
+\func{long}{wxExecute}{\param{const wxString\& }{command}, \param{wxArrayString\& }{output}, \param{int }{flags = 0}}
 
 \perlnote{In wxPerl this function is called \texttt{Wx::ExecuteStdout} and it
 only takes the {\tt command} argument,
 and returns a 2-element list {\tt ( status, output )}, where {\tt output} is
 an array reference.}
 
-\func{long}{wxExecute}{\param{const wxString\& }{command}, \param{wxArrayString\& }{output}, \param{wxArrayString\& }{errors}}
+\func{long}{wxExecute}{\param{const wxString\& }{command}, \param{wxArrayString\& }{output}, \param{wxArrayString\& }{errors}, \param{int }{flags = 0}}
 
 \perlnote{In wxPerl this function is called \texttt{Wx::ExecuteStdoutStderr} 
 and it only takes the {\tt command} argument,
@@ -585,9 +585,10 @@ will kill this process as well as all of its children (except those which have
 started their own session).
 
 Finally, you may use the third overloaded version of this function to execute
-a process (always synchronously) and capture its output in the array
-{\it output}. The fourth version adds the possibility to additionally capture
-the messages from standard error output in the {\it errors} array.
+a process (always synchronously, the contents of \arg{flags} is or'd with 
+\textt{wxEXEC\_SYNC}) and capture its output in the array \arg{output}. The
+fourth version adds the possibility to additionally capture the messages from
+standard error output in the \arg{errors} array.
 
 {\bf NB:} Currently wxExecute() can only be used from the main thread, calling
 this function from another thread will result in an assert failure in debug
