@@ -225,6 +225,8 @@ bool wxArrowButton::Create( wxSpinButton* parent, wxWindowID id,
     AttachWidget( parent, m_mainWidget, (WXWidget) NULL,
                   pos.x, pos.y, size.x, size.y );
 
+    SetForegroundColour( parent->GetBackgroundColour() );
+
     return TRUE;
 }
 
