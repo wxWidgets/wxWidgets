@@ -78,9 +78,9 @@ wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
             tg = m_CacheSize++;
             m_Cache[tg].Key = stpos = pos++;
 
-            size_t i;
+            int i;
             for ( i = 0;
-                  pos < lng && i < WXSIZEOF(tagBuffer) - 1 &&
+                  pos < lng && i < (int)WXSIZEOF(tagBuffer) - 1 &&
                   src[pos] != wxT('>') && !wxIsspace(src[pos]);
                   i++, pos++ )
             {
