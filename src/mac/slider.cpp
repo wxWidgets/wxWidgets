@@ -238,13 +238,20 @@ void wxSlider::Command (wxCommandEvent & event)
     ProcessCommand (event);
 }
 
-void wxSlider::MacHandleControlClick( WXWidget control , wxInt16 controlpart, bool WXUNUSED(mouseStillDown) ) 
+void wxSlider::MacHandleControlClick( WXWidget control , wxInt16 controlpart, bool mouseStillDown ) 
 {
     SInt16 value = ::GetControl32BitValue( (ControlHandle) m_macControl ) ;
     
     SetValue( value ) ;        
     
-    wxScrollEvent event(wxEVT_SCROLL_THUMBTRACK, m_windowId);
+    wxEventType scrollEvent = wxEVT_NULL ;
+    
+   if ( mouseStillDown )
+        scrollEvent = wxEVT_SCROLL_THUMBTRACK;
+    else
+        scrollEvent = wxEVT_SCROLL_THUMBRELEASE;
+    
+    wxScrollEvent event(scrollEvent, m_windowId);
     event.SetPosition(value);
     event.SetEventObject( this );
     GetEventHandler()->ProcessEvent(event);
