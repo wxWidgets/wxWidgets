@@ -266,7 +266,7 @@ bool wxGenericValidator::TransferToWindow(void)
         else if (m_pInt)
         {
             wxString str;
-            str.Printf("%d", *m_pInt);
+            str.Printf(wxT("%d"), *m_pInt);
             pControl->SetValue(str);
             return TRUE;
         }
@@ -483,7 +483,7 @@ bool wxGenericValidator::TransferFromWindow(void)
     }
     else if (m_pInt)
     {
-        *m_pInt = atoi(pControl->GetValue());
+        *m_pInt = wxAtoi(pControl->GetValue());
         return TRUE;
     }
   } else

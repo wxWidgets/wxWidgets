@@ -1057,7 +1057,7 @@ wxRenameFile (const wxString& file1, const wxString& file2)
 bool wxRemoveFile(const wxString& file)
 {
 #if defined(__VISUALC__) || defined(__BORLANDC__) || defined(__WATCOMC__)
-  int flag = wxRemove(wxFNSTRINGCAST file.fn_str());
+  int flag = wxRemove(file);
 #elif defined( __WXMAC__ )
   int flag = unlink(wxUnix2MacFilename( file ));
 #else
