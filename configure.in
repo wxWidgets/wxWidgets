@@ -3235,6 +3235,10 @@ if test "$TOOLKIT" != "MSW"; then
           wxUSE_THREADS=no
           AC_MSG_WARN([No thread support on this system... disabled])
       else
+          dnl yes, these special compiler flags should be used with the
+          dnl linker as well
+          LIBS="$THREADS_LINK $THREADS_CFLAGS $LIBS"
+
           AC_MSG_CHECKING([if more special flags are required for pthreads])
           flag=no
           case "${host}" in
@@ -3250,18 +3254,10 @@ if test "$TOOLKIT" != "MSW"; then
               THREADS_CFLAGS="$THREADS_CFLAGS $flag"
           fi
 
-          if test "x$THREADS_LINK" != "x"; then
-            LIBS="$THREADS_LINK $LIBS"
-          fi
-
           if test "x$THREADS_CFLAGS" != "x"; then
-            dnl don't add this to CPPFLAGS as cpp might not recognize them
+            dnl don't add these options to CPPFLAGS as cpp might not know them
             CFLAGS="$CFLAGS $THREADS_CFLAGS"
             CXXFLAGS="$CXXFLAGS $THREADS_CFLAGS"
-
-            dnl yes, these special compiler flags should be used with the
-            dnl linker as well
-            LIBS="$LIBS $THREADS_CFLAGS"
           fi
       fi
     fi
@@ -4791,10 +4787,12 @@ fi
 
 EXTRA_CFLAGS="$WXDEBUG $WXODBCFLAG $PROFILE $OPTIMISE $INCLUDES"
 
+dnl remove the extra white space from the cc/c++/ld options
 CFLAGS=`echo $CFLAGS $EXTRA_CFLAGS $CXXWARNINGS | sed 's/ \\+/ /g'`
 CXXFLAGS=`echo $CXXFLAGS $EXTRA_CFLAGS $CXXWARNINGS | sed 's/ \+/ /g'`
+LIBS=`echo $LIBS | sed 's/ \+/ /g'`
 
-LDFLAGS="$LDFLAGS$PROFILE"
+LDFLAGS="$LDFLAGS $PROFILE"
 
 dnl for convenience, sort the samples in alphabetical order
 dnl
