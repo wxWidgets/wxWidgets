@@ -353,7 +353,7 @@ void NotebookWidgetsPage::CreateNotebook()
     switch ( m_radioOrient->GetSelection() )
     {
         default:
-            wxFAIL_MSG( _T("unknown notebok orientation") );
+            wxFAIL_MSG( _T("unknown notebook orientation") );
             // fall through
 
         case Orient_Top:
@@ -373,7 +373,7 @@ void NotebookWidgetsPage::CreateNotebook()
             break;
     }
 
-    wxNotebook *notebook = m_notebook;
+    wxNotebook *old_note = m_notebook;
 
     m_notebook = new wxNotebook(this, NotebookPage_Notebook,
                                 wxDefaultPosition, wxDefaultSize,
@@ -381,23 +381,24 @@ void NotebookWidgetsPage::CreateNotebook()
 
     CreateImageList();
 
-    if ( notebook )
+    if ( old_note )
     {
-        const int sel = notebook->GetSelection();
+        const int sel = old_note->GetSelection();
 
-        const int count = notebook->GetPageCount();
+        const int count = old_note->GetPageCount();
 
         // recreate the pages
         for ( int n = 0; n < count; n++ )
         {
             m_notebook->AddPage(CreateNewPage(),
-                                notebook->GetPageText(n),
+                                old_note->GetPageText(n),
                                 false,
-                                notebook->GetPageImage(n));
+																m_chkImages->GetValue() ?
+                                GetIconIndex() : -1);
         }
 
-        m_sizerNotebook->Detach( notebook );
-        delete notebook;
+        m_sizerNotebook->Detach( old_note );
+        delete old_note;
 
         // restore selection
         if ( sel != -1 )
