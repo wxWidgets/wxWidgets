@@ -46,7 +46,58 @@ wxMessageDialog::wxMessageDialog(wxWindow *parent, const wxString& message, cons
 
 int wxMessageDialog::ShowModal()
 {
-    // TODO
-    return wxID_CANCEL;
+    HWND hWnd = 0;
+    if (m_parent) hWnd = (HWND) m_parent->GetHWND();
+    unsigned int msStyle = MB_OK;
+    if (m_dialogStyle & wxYES_NO)
+    {
+        if (m_dialogStyle & wxCANCEL)
+            msStyle = MB_YESNOCANCEL;
+        else
+            msStyle = MB_YESNO;
+
+        if (m_dialogStyle & wxNO_DEFAULT)
+            msStyle |= MB_DEFBUTTON2;
+    }
+
+    if (m_dialogStyle & wxOK)
+    {
+        if (m_dialogStyle & wxCANCEL)
+            msStyle = MB_OKCANCEL;
+        else
+            msStyle = MB_OK;
+    }
+    if (m_dialogStyle & wxICON_EXCLAMATION)
+        msStyle |= MB_ICONEXCLAMATION;
+    else if (m_dialogStyle & wxICON_HAND)
+        msStyle |= MB_ICONHAND;
+    else if (m_dialogStyle & wxICON_INFORMATION)
+        msStyle |= MB_INFORMATION;
+    else if (m_dialogStyle & wxICON_QUESTION)
+        msStyle |= MB_ICONQUESTION;
+
+    if (hWnd)
+        msStyle |= MB_APPLMODAL;
+    else
+        msStyle |= MB_SYSTEMMODAL;
+
+	int msAns = WinMessageBox(HWND_DESKTOP, hWnd, m_message.c_str(), m_caption.c_str(), 0, msStyle | MB_MOVEABLE);
+    int ans = wxOK;
+    switch (msAns)
+    {
+        case MBID_CANCEL:
+            ans = wxID_CANCEL;
+            break;
+        case MBID_OK:
+            ans = wxID_OK;
+            break;
+        case MBID_YES:
+            ans = wxID_YES;
+            break;
+        case MBID_NO:
+            ans = wxID_NO;
+            break;
+    }
+    return ans;
 }
 
