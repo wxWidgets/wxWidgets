@@ -54,8 +54,8 @@ motif : setup.h
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
 	set default [-.dialogs]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
-#	set default [-.image]
-#	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
+	set default [-.image]
+	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
 	set default [-.menu]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
 	set default [-.minimal]
