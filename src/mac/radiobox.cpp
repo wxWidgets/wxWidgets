@@ -112,27 +112,27 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
         m_majorDim = majorDim ;
 
 
-	Rect bounds ;
-	Str255 title ;
-	
-	MacPreControlCreate( parent , id ,  wxStripMenuCodes(label) , pos , size ,style, val , name , &bounds , title ) ;
-
-	m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , 0 , 1, 
-	  	kControlGroupBoxTextTitleProc , (long) this ) ;
-	
+    Rect bounds ;
+    Str255 title ;
+    
+    MacPreControlCreate( parent , id ,  wxStripMenuCodes(label) , pos , size ,style, val , name , &bounds , title ) ;
+    
+    m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , 0 , 1, 
+                                 kControlGroupBoxTextTitleProc , (long) this ) ;
+    
     for (i = 0; i < n; i++)
     {
         wxRadioButton *radBtn = new wxRadioButton(this, NewControlId(), wxStripMenuCodes(choices[i]),wxPoint(5,20*i+10),
-          wxDefaultSize , i == 0 ? wxRB_GROUP : 0 ) ;
+                                                  wxDefaultSize , i == 0 ? wxRB_GROUP : 0 ) ;
         if ( i == 0 )
           m_radioButtonCycle = radBtn ;
 //        m_radioButtonCycle=radBtn->AddInCycle(m_radioButtonCycle);
     }
 
-	SetSelection(0);
-	MacPostControlCreate() ;
+    SetSelection(0);
+    MacPostControlCreate() ;
 
-  return TRUE;
+    return TRUE;
 }
 
 
@@ -146,18 +146,18 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
 
 bool wxRadioBox::Enable(bool enable)
 {
-   	int i;
+    int i;
     wxRadioButton *current;
     
     if (!wxControl::Enable(enable))
-    	return (false);
-
-    current=m_radioButtonCycle;
-   	for (i=0;i<m_noItems;i++) {
+    	return false;
+    
+    current = m_radioButtonCycle;
+    for (i = 0; i < m_noItems; i++) {
     	current->Enable(enable);
-    	current=current->NextInCycle();
-    	}
-    return (true);
+    	current = current->NextInCycle();
+    }
+    return true;
 }
 
 //-------------------------------------------------------------------------------------
@@ -167,17 +167,19 @@ bool wxRadioBox::Enable(bool enable)
 
 void wxRadioBox::Enable(int item, bool enable)
 {
-   	int i;
+    int i;
     wxRadioButton *current;
     
     if ((item < 0) || (item >= m_noItems))
         return;
-    i=0;
-    current=m_radioButtonCycle;
-    while (i!=item) {
+    
+    i = 0;
+    current = m_radioButtonCycle;
+    while (i != item) {
     	i++;
-    	current=current->NextInCycle();
-    	}
+    	current = current->NextInCycle();
+    }
+    current->Enable(enable);
 }
 
 //-------------------------------------------------------------------------------------
@@ -197,17 +199,18 @@ wxString wxRadioBox::GetLabel() const
 
 wxString wxRadioBox::GetString(int item) const
 {
-   	int i;
+    int i;
     wxRadioButton *current;
     
     if ((item < 0) || (item >= m_noItems))
         return wxString("");
-    i=0;
-    current=m_radioButtonCycle;
-    while (i!=item) {
+    
+    i = 0;
+    current = m_radioButtonCycle;
+    while (i != item) {
     	i++;
-    	current=current->NextInCycle();
-    	}
+    	current = current->NextInCycle();
+    }
     return current->GetLabel();
 }
 
