@@ -1,0 +1,15 @@
+
+# Top dir of wxWindows
+top_builddir = /gtm/bart/wxGTK
+
+PROGRAM=dbbrowser_gtk
+
+
+OBJECTS= dbbrowse.o doc.o pgmctrl.o tabpgwin.o\
+         browsedb.o dbtree.o dbgrid.o  dlguser.o
+	
+
+
+
+include $(top_builddir)/src/makeprog.env
+
