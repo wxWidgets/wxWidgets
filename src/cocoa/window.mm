@@ -279,7 +279,10 @@ wxWindow::~wxWindow()
     wxAutoNSAutoreleasePool pool;
     DestroyChildren();
 
-    CocoaRemoveFromParent();
+    // Make sure our parent (in the wxWindows sense) is our superview
+    // before we go removing from it.
+    if(m_parent && m_parent->GetNSView()==[GetNSViewForSuperview() superview])
+        CocoaRemoveFromParent();
     delete m_cocoaHider;
     delete m_cocoaScroller;
     SetNSView(NULL);
