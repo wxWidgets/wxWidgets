@@ -216,9 +216,11 @@ public:
     void DragAcceptFiles(bool accept);
 #endif
     void Enable(bool enable);
-    //bool FakePopupMenu(wxMenu* menu, int x, int y);
+
+    // Find child window by ID or name
     %name(FindWindowById) wxWindow* FindWindow(long id);
     %name(FindWindowByName) wxWindow* FindWindow(const wxString& name);
+
     void Fit();
     wxColour GetBackgroundColour();
     wxBorder GetBorder() const;
@@ -312,6 +314,7 @@ public:
     void Refresh(bool eraseBackground = TRUE, const wxRect* rect = NULL);
     void RefreshRect(const wxRect& rect);
 
+    void AddChild(wxWindow* child);
     void RemoveChild(wxWindow* child);
     bool Reparent( wxWindow* newParent );
 
@@ -365,7 +368,8 @@ public:
     %name(SetClientSizeWH)void SetClientSize(int width, int height);
     void SetClientSize(const wxSize& size);
     //void SetPalette(wxPalette* palette);
-    void SetCursor(const wxCursor& cursor);
+    bool SetCursor(const wxCursor& cursor);
+    wxCursor& GetCursor();
     void SetEventHandler(wxEvtHandler* handler);
     void SetExtraStyle(long exStyle);
     void SetTitle(const wxString& title);
@@ -493,6 +497,27 @@ wxWindow* wxWindow_FromHWND(unsigned long hWnd) {
 }
 %}
 #endif
+
+
+// Unfortunatly the names of these new static methods clash with the
+// names wxPython has been using forever for the overloaded
+// wxWindow::FindWindow, so instead of swigging them as statics create
+// standalone functions for them.
+%inline %{
+wxWindow* wxFindWindowById( long id, const wxWindow *parent = NULL ) {
+    return wxWindow::FindWindowById(id, parent);
+}
+
+wxWindow* wxFindWindowByName( const wxString& name,
+                              const wxWindow *parent = NULL ) {
+     return wxWindow::FindWindowByName(name, parent);
+}
+
+wxWindow* wxFindWindowByLabel( const wxString& label,
+                               const wxWindow *parent = NULL ) {
+    return wxWindow::FindWindowByLabel(label, parent);
+}
+%}
 
 
 //---------------------------------------------------------------------------

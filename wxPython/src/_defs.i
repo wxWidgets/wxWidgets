@@ -312,8 +312,15 @@ enum {
     wxSB_VERTICAL,
     wxST_SIZEGRIP,
     wxST_NO_AUTORESIZE,
-    wxBU_AUTODRAW,
+
     wxBU_NOAUTODRAW,
+    wxBU_AUTODRAW,
+    wxBU_LEFT,
+    wxBU_TOP,
+    wxBU_RIGHT,
+    wxBU_BOTTOM,
+    wxBU_EXACTFIT,
+
     wxSP_VERTICAL,
     wxSP_HORIZONTAL,
     wxSP_ARROW_KEYS,
@@ -326,7 +333,6 @@ enum {
     wxSP_BORDER,
     wxSP_LIVE_UPDATE,
     wxSP_PERMIT_UNSPLIT,
-    //wxSP_SASH_AQUA,
     wxFLOOD_SURFACE,
     wxFLOOD_BORDER,
     wxODDEVEN_RULE,
@@ -972,6 +978,8 @@ enum wxEventType {
  wxEVT_NC_LEFT_DCLICK,
  wxEVT_NC_MIDDLE_DCLICK,
  wxEVT_NC_RIGHT_DCLICK,
+
+ wxEVT_SET_CURSOR,
 
 /* Character input event type  */
  wxEVT_CHAR,

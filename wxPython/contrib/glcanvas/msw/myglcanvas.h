@@ -25,7 +25,7 @@
 
 #include <windows.h>
 
-#include "gl/gl.h"
+#include <GL/gl.h>
 
 //---------------------------------------------------------------------------
 // Constants for attriblist

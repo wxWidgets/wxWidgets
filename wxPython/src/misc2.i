@@ -162,9 +162,6 @@ void wxSetCursor(wxCursor& cursor);
 //----------------------------------------------------------------------
 // Miscellaneous functions
 
-wxWindow * wxFindWindowByLabel(const wxString& label, wxWindow *parent=NULL);
-wxWindow * wxFindWindowByName(const wxString& name, wxWindow *parent=NULL);
-
 void wxBeginBusyCursor(wxCursor *cursor = wxHOURGLASS_CURSOR);
 wxWindow * wxGetActiveWindow();
 

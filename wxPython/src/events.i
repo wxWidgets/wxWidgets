@@ -202,6 +202,21 @@ public:
 
 //---------------------------------------------------------------------------
 
+class wxSetCursorEvent : public wxEvent
+{
+public:
+    wxSetCursorEvent(wxCoord x = 0, wxCoord y = 0);
+
+    wxCoord GetX() const;
+    wxCoord GetY() const;
+
+    void SetCursor(const wxCursor& cursor);
+    const wxCursor& GetCursor() const;
+    bool HasCursor() const;
+};
+
+//---------------------------------------------------------------------------
+
 class wxKeyEvent: public wxEvent {
 public:
     wxKeyEvent(int keyEventType);
