@@ -519,6 +519,12 @@ public:
         // clear the window entirely
     virtual void Clear() = 0;
 
+        // freeze the window: don't redraw it until it is thawed
+    virtual void Freeze() { }
+
+        // thaw the window: redraw it after it had been frozen
+    virtual void Thaw() { }
+
         // adjust DC for drawing on this window
     virtual void PrepareDC( wxDC & WXUNUSED(dc) ) { }
 

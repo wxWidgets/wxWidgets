@@ -1290,3 +1290,19 @@ wxSize wxTextCtrl::DoGetBestSize() const
     wxSize ret( wxControl::DoGetBestSize() );
     return wxSize(80, ret.y);
 }
+
+void wxTextCtrl::Freeze()
+{
+    if ( HasFlag(wxTE_MULTILINE) )
+    {
+        gtk_text_freeze(GTK_TEXT(m_text));
+    }
+}
+
+void wxTextCtrl::Thaw()
+{
+    if ( HasFlag(wxTE_MULTILINE) )
+    {
+        gtk_text_thaw(GTK_TEXT(m_text));
+    }
+}

@@ -466,6 +466,20 @@ implements the following methods:\par
 Sizes the window so that it fits around its subwindows. This function won't do
 anything if there are no subwindows.
 
+\membersection{wxWindow::Freeze}\label{wxwindowfreeze}
+
+\func{virtual void}{Freeze}{\void}
+
+Freezes the window or, in other words, prevents any updates from taking place
+on screen, the window is not redrawn at all. \helpref{Thaw}{wxwindowthaw} must
+be called to reenable window redrawing.
+
+This method is useful for visual appearance optimization (for example, it
+is a good idea to use it before inserting large amount of text into a
+wxTextCtrl under wxGTK) but is not implemented on all platforms nor for all
+controls so it is mostly just a hint to wxWindows and not a mandatory
+directive.
+
 \membersection{wxWindow::GetBackgroundColour}\label{wxwindowgetbackgroundcolour}
 
 \constfunc{virtual wxColour}{GetBackgroundColour}{\void}
@@ -2440,6 +2454,13 @@ needed if Show() is called immediately after the frame creation.
 \wxheading{See also}
 
 \helpref{wxWindow::IsShown}{wxwindowisshown}
+
+\membersection{wxWindow::Thaw}\label{wxwindowthaw}
+
+\func{virtual void}{Thaw}{\void}
+
+Reenables window updating after a previous call to 
+\helpref{Freeze}{wxwindowfreeze}.
 
 \membersection{wxWindow::TransferDataFromWindow}\label{wxwindowtransferdatafromwindow}
 

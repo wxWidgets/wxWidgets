@@ -143,6 +143,11 @@ public:
 
     void SetModified() { m_modified = TRUE; }
 
+    // GTK+ textctrl is so dumb that you need to freeze/thaw it manually to
+    // avoid horrible flicker/scrolling back and forth
+    virtual void Freeze();
+    virtual void Thaw();
+
     // wxGTK-specific: called recursively by Enable,
     // to give widgets an oppprtunity to correct their colours after they
     // have been changed by Enable
