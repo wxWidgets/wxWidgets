@@ -229,13 +229,13 @@ void wxSVGFileDC::DoDrawRotatedText(const wxString& sText, wxCoord x, wxCoord y,
 
     // wxT("upper left") and wxT("upper right")
     CalcBoundingBox(x, y);
-    CalcBoundingBox(x + w*cos(rad), y - h*sin(rad));
+    CalcBoundingBox((wxCoord)(x + w*cos(rad)), (wxCoord)(y - h*sin(rad)));
 
     // wxT("bottom left") and wxT("bottom right")
     x += (wxCoord)(h*sin(rad));
     y += (wxCoord)(h*cos(rad));
     CalcBoundingBox(x, y);
-    CalcBoundingBox(x + h*sin(rad), y + h*cos(rad));
+    CalcBoundingBox((wxCoord)(x + h*sin(rad)), (wxCoord)(y + h*cos(rad)));
 
     if (m_backgroundMode == wxSOLID)
     {

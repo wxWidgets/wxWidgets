@@ -217,7 +217,7 @@ void MyFrame::OnClose(wxCloseEvent& event)
         event.Skip();
         return ;
     }
-    if ( m_children.Number () < 1 )
+    if ( m_children.GetCount () < 1 )
     {
         event.Skip();
         return ;
@@ -229,7 +229,7 @@ void MyFrame::OnClose(wxCloseEvent& event)
     while ( pNode )
     {
         pNext = pNode -> GetNext ();
-        pChild = (MyChild*) pNode -> Data ();
+        pChild = (MyChild*) pNode -> GetData ();
         if (pChild -> Close ())
         {
             delete pNode ;
@@ -268,7 +268,7 @@ void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event) )
         wxPoint(-1, -1), wxSize(-1, -1),
         wxDEFAULT_FRAME_STYLE )   ) ;
 
-    subframe = (MyChild *) m_children.GetLast() -> Data ();
+    subframe = (MyChild *) m_children.GetLast() -> GetData ();
     wxString title;
     title.Printf(wxT("SVG Test Window %d"), nWinCreated );
     // counts number of children previously, even if now closed
@@ -466,16 +466,16 @@ void MyCanvas::OnDraw(wxDC& dc)
         case 3 :
             // four arcs start and end points, center
             dc.SetBrush(*wxGREEN_BRUSH);
-            dc.DrawArc ( 200,300, 370,230, 300.0,300.0 );
+            dc.DrawArc ( 200,300, 370,230, 300,300 );
             dc.SetBrush(*wxBLUE_BRUSH);
-            dc.DrawArc ( 270-50, 270-86, 270-86, 270-50, 270.0,270.0 );
+            dc.DrawArc ( 270-50, 270-86, 270-86, 270-50, 270,270 );
             dc.SetDeviceOrigin(-10,-10);
-            dc.DrawArc ( 270-50, 270-86, 270-86, 270-50, 270.0,270.0 );
+            dc.DrawArc ( 270-50, 270-86, 270-86, 270-50, 270,270 );
             dc.SetDeviceOrigin(0,0);
 
             wP.SetColour (_T("CADET BLUE"));
             dc.SetPen(wP);
-            dc.DrawArc ( 75,125, 110, 40, 75.0, 75.0 );
+            dc.DrawArc ( 75,125, 110, 40, 75, 75 );
 
             wP.SetColour (_T("SALMON"));
             dc.SetPen(wP);
