@@ -1,9 +1,9 @@
-#ifndef __DCPRINTH_BASE__
-#define __DCPRINTH_BASE__
+#ifndef _WX_DCPRINT_H_BASE_
+#define _WX_DCPRINT_H_BASE_
 
 #if defined(__WXMSW__)
 #include "wx/msw/dcprint.h"
 #endif
 
 #endif
-    // __DCPRINTH_BASE__
+    // _WX_DCPRINT_H_BASE_

@@ -9,8 +9,8 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GDICMNH__
-#define __GDICMNH__
+#ifndef _WX_GDICMNH__
+#define _WX_GDICMNH__
 
 #ifdef __GNUG__
 #pragma interface "gdicmn.h"
@@ -19,17 +19,9 @@
 #include "wx/object.h"
 #include "wx/list.h"
 #include "wx/hash.h"
+#include "wx/string.h"
 #include "wx/setup.h"
-
-#ifdef __WXMSW__
-#include "wx/msw/colour.h"
-#elif defined(__WXMOTIF__)
-#include "wx/xt/colour.h"
-#elif defined(__WXGTK__)
-#include "wx/gtk/colour.h"
-#elif defined(__WXQT__)
-#include "wx/qt/colour.h"
-#endif
+#include "wx/colour.h"
 
 // Standard cursors
 typedef enum {
@@ -192,6 +184,8 @@ class WXDLLEXPORT wxPalette;
 class WXDLLEXPORT wxBitmap;
 class WXDLLEXPORT wxCursor;
 class WXDLLEXPORT wxIcon;
+class WXDLLEXPORT wxColour;
+class WXDLLEXPORT wxString;
 
 // Management of pens, brushes and fonts
 class WXDLLEXPORT wxPenList: public wxList
@@ -359,4 +353,4 @@ class WXDLLEXPORT wxResourceCache: public wxList
 };
 
 #endif
-    // __GDICMNH__
+    // _WX_GDICMNH__

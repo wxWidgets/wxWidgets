@@ -1,7 +1,7 @@
-#ifndef __TEXTDLGH_BASE__
-#define __TEXTDLGH_BASE__
+#ifndef _WX_TEXTDLG_H_BASE_
+#define _WX_TEXTDLG_H_BASE_
 
 #include "wx/generic/textdlgg.h"
 
 #endif
-    // __TEXTDLGH_BASE__
+    // _WX_TEXTDLG_H_BASE_

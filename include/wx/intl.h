@@ -125,4 +125,4 @@ inline WXDLLEXPORT const char *wxGetTranslation(const char *sz)
 }
 
 #endif
-	// __INTLH__
+	// _WX_INTLH__

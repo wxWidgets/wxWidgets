@@ -57,6 +57,7 @@ public:
 
   void OnSize(wxSizeEvent& event);
   void OnActivate(wxActivateEvent& event);
+  void OnSysColourChanged(wxSysColourChangedEvent& event);
 
   void SetMenuBar(wxMenuBar *menu_bar);
 
@@ -83,6 +84,9 @@ public:
   virtual void ActivatePrevious();
 
 protected:
+
+  // TODO maybe have this member
+  wxMDIClientWindow     *m_clientWindow;
 
 DECLARE_EVENT_TABLE()
 };

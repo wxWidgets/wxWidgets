@@ -9,8 +9,8 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __WXSTREAM_H__
-#define __WXSTREAM_H__
+#ifndef _WX_WXSTREAM_H__
+#define _WX_WXSTREAM_H__
 
 #ifdef __GNUG__
 #pragma interface

@@ -9,8 +9,8 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __WXHASHH__
-#define __WXHASHH__
+#ifndef _WX_WXHASHH__
+#define _WX_WXHASHH__
 
 #ifdef __GNUG__
 #pragma interface "hash.h"
@@ -95,4 +95,4 @@ class WXDLLEXPORT wxHashTable: public wxObject
 };
 
 #endif
-    // __WXHASHH__
+    // _WX_WXHASHH__

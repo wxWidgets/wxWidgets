@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __THREADH__
-#define __THREADH__
+#ifndef _WX_THREADH__
+#define _WX_THREADH__
 
 #ifdef __GNUG__
 #pragma interface "thread.h"

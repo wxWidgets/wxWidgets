@@ -14,7 +14,7 @@
 #endif
 
 #include "wx/listbox.h"
-
+#include "wx/settings.h"
 #include "wx/dynarray.h"
 #include "wx/log.h"
 
@@ -61,11 +61,6 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
 
 wxListBox::~wxListBox()
 {
-}
-
-void wxListBox::SetupColours()
-{
-  SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW));
 }
 
 void wxListBox::SetFirstItem(int N)

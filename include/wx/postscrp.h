@@ -9,8 +9,8 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __POSTSCRPH__
-#define __POSTSCRPH__
+#ifndef _WX_POSTSCRPH__
+#define _WX_POSTSCRPH__
 
 #ifdef __GNUG__
 #pragma interface "postscrp.h"
@@ -295,4 +295,4 @@ WXDLLEXPORT_DATA(extern wxPrintPaperDatabase*) wxThePrintPaperDatabase;
 
 #endif // USE_POSTSCRIPT
 #endif
-        // __POSTSCRPH__
+        // _WX_POSTSCRPH__

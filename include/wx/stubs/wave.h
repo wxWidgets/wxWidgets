@@ -35,7 +35,7 @@ protected:
   bool  Free();
 
 private:
-  byte* m_waveData;
+  char* m_waveData;
   int   m_waveLength;
   bool  m_isResource;
 };

@@ -103,5 +103,11 @@ extern wxCursor *GraphicsBullseyeCursor;
 
 extern wxFont *MatchFont(int point_size);
 
+extern wxString oglColourToHex(const wxColour& colour);
+extern wxColour oglHexToColour(const wxString& hex);
+extern void oglDecToHex(unsigned int dec, char *buf);
+extern unsigned int oglHexToDec(char* buf);
+
+
 #endif
  // _OGL_MISC_H_

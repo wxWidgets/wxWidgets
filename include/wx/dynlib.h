@@ -1,5 +1,5 @@
-#ifndef __DYNLIB_H__
-#define __DYNLIB_H__
+#ifndef _WX_DYNLIB_H__
+#define _WX_DYNLIB_H__
 
 #ifdef __GNUG__
 #pragma interface

@@ -9,8 +9,8 @@
 // Licence:   	wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __HELPBASEH__
-#define __HELPBASEH__
+#ifndef _WX_HELPBASEH__
+#define _WX_HELPBASEH__
 
 #ifdef __GNUG__
 #pragma interface "helpbase.h"
@@ -48,4 +48,4 @@ class WXDLLEXPORT wxHelpControllerBase: public wxObject
 
 #endif // USE_HELP
 #endif
-    // __HELPBASEH__
+    // _WX_HELPBASEH__

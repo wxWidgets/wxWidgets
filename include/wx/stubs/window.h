@@ -401,6 +401,8 @@ public:
                                        // (but doesn't delete the child object)
   virtual void DestroyChildren();  // Removes and destroys all children
 
+  inline bool IsBeingDeleted() const { return FALSE; } // TODO: Should probably eliminate this
+
   // Constraint implementation
   void UnsetConstraints(wxLayoutConstraints *c);
   inline wxList *GetConstraintsInvolvedIn() const ;
@@ -432,9 +434,8 @@ public:
 
   wxObject *GetChild(int number) const ;
 
-  inline void SetShowing(bool show);
-  inline bool IsUserEnabled() const;
-  inline bool GetTransparentBackground() const ;
+  // Generates a new id for controls
+  static int NewControlId();
 
   // Responds to colour changes: passes event on to children.
   void OnSysColourChanged(wxSysColourChangedEvent& event);
@@ -507,8 +508,6 @@ inline wxString wxWindow::GetName() const { return m_windowName; }
 inline void wxWindow::SetName(const wxString& name) { m_windowName = name; }
 inline long wxWindow::GetWindowStyleFlag() const { return m_windowStyle; }
 inline void wxWindow::SetWindowStyleFlag(long flag) { m_windowStyle = flag; }
-inline void wxWindow::SetDoubleClick(bool flag) { m_doubleClickAllowed = flag; }
-inline bool wxWindow::GetDoubleClick() const { return m_doubleClickAllowed; }
 inline void wxWindow::SetEventHandler(wxEvtHandler *handler) { m_windowEventHandler = handler; }
 inline wxEvtHandler *wxWindow::GetEventHandler() const { return m_windowEventHandler; }
 inline void wxWindow::SetAutoLayout(bool a) { m_autoLayout = a; }
@@ -527,14 +526,11 @@ inline wxButton *wxWindow::GetDefaultItem() const { return m_defaultItem; }
 inline void wxWindow::SetDefaultItem(wxButton *but) { m_defaultItem = but; }
 inline bool wxWindow::IsRetained() const { return ((m_windowStyle & wxRETAINED) == wxRETAINED); }
 
-inline void wxWindow::SetShowing(bool show) { m_isShown = show; }
 inline wxList *wxWindow::GetConstraintsInvolvedIn() const { return m_constraintsInvolvedIn; }
 inline wxSizer *wxWindow::GetSizer() const { return m_windowSizer; }
 inline wxWindow *wxWindow::GetSizerParent() const { return m_sizerParent; }
 inline void wxWindow::SetSizerParent(wxWindow *win) { m_sizerParent = win; }
 inline wxValidator *wxWindow::GetValidator() const { return m_windowValidator; }
-inline bool wxWindow::IsUserEnabled() const { return m_winEnabled; }
-inline bool wxWindow::GetTransparentBackground() const { return m_backgroundTransparent; }
 inline void wxWindow::SetReturnCode(int retCode) { m_returnCode = retCode; }
 inline int wxWindow::GetReturnCode() { return m_returnCode; }
 

@@ -1,5 +1,5 @@
-#ifndef __LISTCTRLH_BASE__
-#define __LISTCTRLH_BASE__
+#ifndef _WX_LISTCTRL_H_BASE_
+#define _WX_LISTCTRL_H_BASE_
 
 #if defined(__WXMSW__)
 #include "wx/msw/listctrl.h"
@@ -9,7 +9,11 @@
 #include "wx/generic/listctrl.h"
 #elif defined(__WXQT__)
 #include "wx/generic/listctrl.h"
+#elif defined(__WXMAC__)
+#include "wx/generic/listctrl.h"
+#elif defined(__WXSTUBS__)
+#include "wx/generic/listctrl.h"
 #endif
 
 #endif
-    // __LISTCTRLH_BASE__
+    // _WX_LISTCTRL_H_BASE_

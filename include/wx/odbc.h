@@ -17,8 +17,8 @@
 #pragma interface "odbc.h"
 #endif
 
-#ifndef __ODBCH__
-#define __ODBCH__
+#ifndef _WX_ODBCH__
+#define _WX_ODBCH__
 
 #ifdef __WXMSW__
 #include <windows.h>

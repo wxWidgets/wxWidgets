@@ -9,8 +9,8 @@
 // Licence:   	wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __VERSIONH__
-#define __VERSIONH__
+#ifndef _WX_VERSIONH__
+#define _WX_VERSIONH__
 
 /* Bump-up with each new version */
 #define wxMAJOR_VERSION    2
@@ -22,4 +22,4 @@
 #define wxVERSION_FLOAT float(wxMAJOR_VERSION + (wxMINOR_VERSION/10.0) + (wxRELEASE_NUMBER/100.0) + (wxBETA_NUMBER/10000.0))
 
 #endif
-	// __VERSIONH__
+	// _WX_VERSIONH__

@@ -860,8 +860,8 @@ void wxShape::FindRegionNames(wxStringList& list)
 
 void wxShape::AssignNewIds()
 {
-  if (m_id == 0)
-    m_id = NewId();
+//  if (m_id == 0)
+  m_id = NewId();
   wxNode *node = m_children.First();
   while (node)
   {
@@ -1535,7 +1535,13 @@ void wxShape::WritePrologAttributes(wxExpr *clause)
       clause->AddAttributeValue("pen_style", (long)penStyle);
 
     wxString penColour = wxTheColourDatabase->FindName(m_pen->GetColour());
-    if ((penColour != "") && (penColour != "BLACK"))
+    if (penColour == "")
+    {
+      wxString hex(oglColourToHex(m_pen->GetColour()));
+      hex = wxString("#") + hex;
+      clause->AddAttributeValueString("pen_colour", hex);
+    }
+    else if (penColour != "BLACK")
       clause->AddAttributeValueString("pen_colour", penColour);
   }
 
@@ -1543,7 +1549,13 @@ void wxShape::WritePrologAttributes(wxExpr *clause)
   {
     wxString brushColour = wxTheColourDatabase->FindName(m_brush->GetColour());
 
-    if ((brushColour != "") && (brushColour != "WHITE"))
+    if (brushColour == "")
+    {
+      wxString hex(oglColourToHex(m_brush->GetColour()));
+      hex = wxString("#") + hex;
+      clause->AddAttributeValueString("brush_colour", hex);
+    }
+    else if (brushColour != "WHITE")
       clause->AddAttributeValueString("brush_colour", brushColour);
     
     if (m_brush->GetStyle() != wxSOLID)
@@ -1795,11 +1807,25 @@ void wxShape::ReadPrologAttributes(wxExpr *clause)
   if (brush_string == "")
     brush_string = "WHITE";
 
-  m_pen = wxThePenList->FindOrCreatePen(pen_string, pen_width, pen_style);
+  if (pen_string[0] == '#')
+  {
+    wxColour col(oglHexToColour(pen_string.After('#')));
+    m_pen = wxThePenList->FindOrCreatePen(col, pen_width, pen_style);
+  }
+  else
+    m_pen = wxThePenList->FindOrCreatePen(pen_string, pen_width, pen_style);
+
   if (!m_pen)
     m_pen = wxBLACK_PEN;
 
-  m_brush = wxTheBrushList->FindOrCreateBrush(brush_string, brush_style);
+  if (brush_string[0] == '#')
+  {
+    wxColour col(oglHexToColour(brush_string.After('#')));
+    m_brush = wxTheBrushList->FindOrCreateBrush(col, brush_style);
+  }
+  else
+    m_brush = wxTheBrushList->FindOrCreateBrush(brush_string, brush_style);
+
   if (!m_brush)
     m_brush = wxWHITE_BRUSH;
 

@@ -26,6 +26,7 @@
 #include "wx/button.h"
 #include "wx/settings.h"
 #include "wx/msgdlg.h"
+#include "wx/frame.h"
 
 #include "wx/menuitem.h"
 #include "wx/log.h"
@@ -254,13 +255,14 @@ wxEvtHandler *wxWindow::PopEventHandler(bool deleteHandler)
 void wxWindow::SetDropTarget(wxDropTarget *pDropTarget)
 {
   if ( m_pDropTarget != 0 ) {
-    m_pDropTarget->Revoke(m_hWnd);
     delete m_pDropTarget;
   }
 
   m_pDropTarget = pDropTarget;
   if ( m_pDropTarget != 0 )
-    m_pDropTarget->Register(m_hWnd);
+  {
+    // TODO
+  }
 }
 
 #endif
@@ -523,7 +525,7 @@ int wxWindow::GetScrollThumb(int orient) const
 void wxWindow::SetScrollPos(int orient, int pos, bool refresh)
 {
     // TODO
-    return 0;
+    return;
 }
 
 // New function that will replace some of the above.
@@ -537,7 +539,7 @@ void wxWindow::SetScrollbar(int orient, int pos, int thumbVisible,
 void wxWindow::ScrollWindow(int dx, int dy, const wxRectangle *rect)
 {
     // TODO
-    return 0;
+    return;
 }
 
 void wxWindow::SetFont(const wxFont& font)
@@ -683,17 +685,6 @@ void wxWindow::MakeModal(bool modal)
       node = node->Next();
     }
   }
-}
-
-// If nothing defined for this, try the parent.
-// E.g. we may be a button loaded from a resource, with no callback function
-// defined.
-void wxWindow::OnCommand(wxWindow& win, wxCommandEvent& event)
-{
-  if (GetEventHandler()->ProcessEvent(event) )
-	return;
-  if (m_windowParent)
-    m_windowParent->GetEventHandler()->OnCommand(win, event);
 }
 
 void wxWindow::SetConstraints(wxLayoutConstraints *c)
@@ -1276,6 +1267,17 @@ bool wxWindow::IsExposed(const wxPoint& pt) const
 bool wxWindow::IsExposed(const wxRect& rect) const
 {
     return (m_updateRegion.Contains(rect) != wxOutRegion);
+}
+
+/*
+ * Allocates control IDs
+ */
+
+int wxWindow::NewControlId()
+{
+    static int s_controlId = 0;
+    s_controlId ++;
+    return s_controlId;
 }
 
 

@@ -1,6 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        fontdlg.cpp
-// Purpose:     wxFontDialog class
+// Purpose:     wxFontDialog class. NOTE: you can use the generic class
+//              if you wish, instead of implementing this.
 // Author:      AUTHOR
 // Modified by:
 // Created:     ??/??/98
@@ -13,7 +14,7 @@
 #pragma implementation "fontdlg.h"
 #endif
 
-#include "wx/fontdlg.h"
+#include "wx/stubs/fontdlg.h"
 #include "wx/cmndata.h"
 
 #if !USE_SHARED_LIBRARY

@@ -25,6 +25,7 @@
 #include "wx/menu.h"
 #include "wx/menuitem.h"
 #include "wx/log.h"
+#include "wx/utils.h"
 
 // other standard headers
 // ----------------------
@@ -293,11 +294,12 @@ void wxMenu::ProcessCommand(wxCommandEvent & event)
     {
             processed = GetEventHandler()->ProcessEvent(event);
     }
-
+/* TODO
     // Try the window the menu was popped up from (and up
     // through the hierarchy)
     if ( !processed && GetInvokingWindow())
         processed = GetInvokingWindow()->ProcessEvent(event);
+*/
 }
 
 bool wxWindow::PopupMenu(wxMenu *menu, int x, int y)
@@ -318,7 +320,7 @@ wxMenuBar::wxMenuBar()
     // TODO
 }
 
-wxMenuBar::wxMenuBar(int n, wxMenu *Mmnus[], const wxString titles[])
+wxMenuBar::wxMenuBar(int n, wxMenu *menus[], const wxString titles[])
 {
     m_eventHandler = this;
     m_menuCount = n;
@@ -560,7 +562,7 @@ wxString wxMenuBar::GetHelpString (int Id) const
     for (i = 0; i < m_menuCount; i++)
     {
         if (m_menus[i]->FindItemForId (Id))
-            eturn wxString(m_menus[i]->GetHelpString (Id));
+            return wxString(m_menus[i]->GetHelpString (Id));
     }
     return wxString("");
 }

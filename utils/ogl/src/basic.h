@@ -555,6 +555,8 @@ class wxRectangleShape: public wxShape
 
   inline float GetWidth() const { return m_width; }
   inline float GetHeight() const { return m_height; }
+  inline void SetWidth(float w) { m_width = w; }
+  inline void SetHeight(float h) { m_height = h; }
 
 protected:
   float m_width;

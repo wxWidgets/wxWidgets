@@ -107,10 +107,8 @@ wxDialog::~wxDialog()
 // By default, pressing escape cancels the dialog
 void wxDialog::OnCharHook(wxKeyEvent& event)
 {
-  if (GetHWND())
+  if (event.m_keyCode == WXK_ESCAPE)
   {
-    if (event.m_keyCode == WXK_ESCAPE)
-    {
 		// Behaviour changed in 2.0: we'll send a Cancel message
 		// to the dialog instead of Close.
 		wxCommandEvent cancelEvent(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
@@ -118,7 +116,6 @@ void wxDialog::OnCharHook(wxKeyEvent& event)
 		GetEventHandler()->ProcessEvent(cancelEvent);
 
 		return;
-    }
   }
   // We didn't process this event.
   event.Skip();

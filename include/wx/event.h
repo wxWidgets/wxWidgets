@@ -9,8 +9,8 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __EVENTH__
-#define __EVENTH__
+#ifndef _WX_EVENTH__
+#define _WX_EVENTH__
 
 #ifdef __GNUG__
 #pragma interface "event.h"
@@ -395,6 +395,7 @@ class WXDLLEXPORT wxScrollEvent: public wxCommandEvent
  wxEVT_NC_RIGHT_DCLICK,
 */
 
+class WXDLLEXPORT wxDC;
 class WXDLLEXPORT wxMouseEvent: public wxEvent
 {
   DECLARE_DYNAMIC_CLASS(wxMouseEvent)
@@ -1268,4 +1269,4 @@ const wxEventTableEntry theClass::sm_eventTableEntries[] = { \
  { wxEVT_UPDATE_UI, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxUpdateUIEventFunction) & func, NULL },\
 
 #endif
-	// __EVENTH__
+	// _WX_EVENTH__

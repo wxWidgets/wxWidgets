@@ -1,7 +1,7 @@
-#ifndef __TABH_BASE__
-#define __TABH_BASE__
+#ifndef _WX_TAB_H_BASE_
+#define _WX_TAB_H_BASE_
 
 #include "wx/generic/tabg.h"
 
 #endif
-    // __TABH_BASE__
+    // _WX_TAB_H_BASE_

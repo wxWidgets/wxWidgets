@@ -18,6 +18,8 @@
 
 #include "wx/defs.h"
 #include "wx/object.h"
+#include "wx/gdicmn.h"
+#include "wx/event.h"
 
 class WXDLLEXPORT wxFrame;
 class WXDLLEXPORT wxWindow;

@@ -58,6 +58,7 @@ class wxArrowHead: public wxObject
 
   inline WXTYPE _GetType() const { return m_arrowType; }
   inline int GetPosition() const { return m_arrowEnd; }
+  inline void SetPosition(int pos) { m_arrowEnd = pos; }
   inline float GetXOffset() const { return m_xOffset; }
   inline float GetYOffset() const { return m_yOffset; }
   inline float GetSpacing() const { return m_spacing; }
@@ -200,7 +201,7 @@ class wxLineShape: public wxShape
   // Does the copying for this object
   void Copy(wxShape& copy);
 
-  // New OGL stuff
+  // Add an arrowhead.
   wxArrowHead *AddArrow(WXTYPE type, int end = ARROW_POSITION_END,
                 float arrowSize = 10.0, float xOffset = 0.0, const wxString& name = "",
                 wxPseudoMetaFile *mf = NULL, long arrowId = -1);
@@ -226,6 +227,7 @@ class wxLineShape: public wxShape
   bool DeleteArrowHead(long arrowId);
   void DrawArrow(wxDC& dc, wxArrowHead *arrow, float xOffset, bool proportionalOffset);
   inline void SetIgnoreOffsets(bool ignore) { m_ignoreArrowOffsets = ignore; }
+  inline wxList& GetArrows() const { return (wxList&) m_arcArrows; }
 
   // Find horizontal width for drawing a line with
   // arrows in minimum space. Assume arrows at

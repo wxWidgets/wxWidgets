@@ -34,8 +34,6 @@ IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
 // wxDC
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxDC,wxObject)
-
 wxDC::wxDC(void)
 {
   m_ok = FALSE;

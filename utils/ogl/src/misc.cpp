@@ -62,7 +62,7 @@ void wxOGLInitialize()
 {
   GraphicsBullseyeCursor = new wxCursor(wxCURSOR_BULLSEYE);
 
-  g_oglNormalFont = new wxFont(12, wxMODERN, wxNORMAL, wxNORMAL);
+  g_oglNormalFont = new wxFont(10, wxSWISS, wxNORMAL, wxNORMAL);
 
   black_pen = new wxPen("BLACK", 1, wxSOLID);
 
@@ -832,6 +832,73 @@ void UpdateListBox(wxListBox *item, wxList *list)
     item->Append(s);
     node = node->Next();
   }
+}
+
+/*
+ * Hex<->Dec conversion
+ */
+
+// Array used in DecToHex conversion routine.
+static char sg_HexArray[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B',
+  'C', 'D', 'E', 'F' };
+
+// Convert 2-digit hex number to decimal
+unsigned int oglHexToDec(char* buf)
+{
+  int firstDigit, secondDigit;
+  
+  if (buf[0] >= 'A')
+    firstDigit = buf[0] - 'A' + 10;
+  else
+    firstDigit = buf[0] - '0';
+
+  if (buf[1] >= 'A')
+    secondDigit = buf[1] - 'A' + 10;
+  else
+    secondDigit = buf[1] - '0';
+    
+  return firstDigit * 16 + secondDigit;
+}
+
+// Convert decimal integer to 2-character hex string
+void oglDecToHex(unsigned int dec, char *buf)
+{
+    int firstDigit = (int)(dec/16.0);
+    int secondDigit = (int)(dec - (firstDigit*16.0));
+    buf[0] = sg_HexArray[firstDigit];
+    buf[1] = sg_HexArray[secondDigit];
+    buf[2] = 0;
+}
+
+// 3-digit hex to wxColour
+wxColour oglHexToColour(const wxString& hex)
+{
+    if (hex.Length() == 6)
+	{
+        char buf[7];
+        strncpy(buf, hex, 7);
+        unsigned int r = oglHexToDec((char *)buf);
+        unsigned int g = oglHexToDec((char *)(buf+2));
+        unsigned int b = oglHexToDec((char *)(buf+4));
+        return wxColour(r, g, b);
+	}
+	else
+	    return wxColour(0,0,0);
+}
+
+// RGB to 3-digit hex
+wxString oglColourToHex(const wxColour& colour)
+{
+    char buf[7];
+    unsigned int red = colour.Red();
+    unsigned int green = colour.Green();
+    unsigned int blue = colour.Blue();
+
+    oglDecToHex(red, buf);
+    oglDecToHex(green, buf+2);
+    oglDecToHex(blue, buf+4);
+
+    return wxString(buf);
 }
 
 

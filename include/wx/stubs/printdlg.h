@@ -45,10 +45,6 @@ class WXDLLEXPORT wxPrintDialog: public wxDialog
  private:
   wxPrintData       m_printData;
   wxDC*             m_printerDC;
-  bool              m_destroyDC;
-  char*             m_deviceName;
-  char*             m_driverName;
-  char*             m_portName;
   wxWindow*         m_dialogParent;
 };
 

@@ -8,8 +8,8 @@
 // Copyright:   (c) Guilhem Lavaux
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
-#ifndef __WX_SERBASEH_H__
-#define __WX_SERBASEH_H__
+#ifndef _WX_WX_SERBASEH_H__
+#define _WX_WX_SERBASEH_H__
 
 #include <wx/dynlib.h>
 

@@ -26,6 +26,7 @@
 // constants
 //-----------------------------------------------------------------------------
 
+#ifndef MM_TEXT
 #define MM_TEXT			0
 #define MM_ISOTROPIC	1
 #define MM_ANISOTROPIC	2
@@ -34,6 +35,7 @@
 #define MM_TWIPS		5
 #define MM_POINTS		6
 #define MM_METRIC		7
+#endif
 
 //-----------------------------------------------------------------------------
 // global variables
@@ -59,11 +61,12 @@ class WXDLLEXPORT wxDC: public wxObject
     
     virtual bool Ok(void) const { return m_ok; };
 
-    virtual void FloodFill( long x1, long y1, wxColour *col, int style=wxFLOOD_SURFACE ) = 0;
+    virtual void FloodFill( long x1, long y1, wxColour* col, int style=wxFLOOD_SURFACE ) = 0;
     inline void FloodFill(const wxPoint& pt, const wxColour& col, int style=wxFLOOD_SURFACE)
     {
-        FloodFill(pt.x, pt.y, col, style);
+        FloodFill(pt.x, pt.y, (wxColour*) & col, style);
     }
+
     virtual bool GetPixel( long x1, long y1, wxColour *col ) const = 0;
     inline bool GetPixel(const wxPoint& pt, wxColour *col) const
     {
@@ -82,10 +85,10 @@ class WXDLLEXPORT wxDC: public wxObject
         CrossHair(pt.x, pt.y);
     }
 
-    virtual void DrawArc( long x1, long y1, long x2, long y2, double xc, double yc ) = 0;
-    inline void DrawArc(const wxPoint& pt1, const wxPoint& pt2, double xc, double yc)
+    virtual void DrawArc( long x1, long y1, long x2, long y2, long xc, long yc ) = 0;
+    inline void DrawArc(const wxPoint& pt1, const wxPoint& pt2, const wxPoint& centre)
     {
-        DrawArc(pt1.x, pt1.y, pt2.x, pt2.y, xc, yc);
+        DrawArc(pt1.x, pt1.y, pt2.x, pt2.y, centre.x, centre.y);
     }
 
     virtual void DrawEllipticArc( long x, long y, long width, long height, double sa, double ea ) = 0;
@@ -133,8 +136,6 @@ class WXDLLEXPORT wxDC: public wxObject
         DrawEllipse(rect.x, rect.y, rect.width, rect.height);
     }
 
-    virtual void DrawIcon(const wxIcon& icon, long x, long y) = 0;
-
     virtual void DrawSpline( long x1, long y1, long x2, long y2, long x3, long y3 );
     virtual void DrawSpline( wxList *points );
     virtual void DrawSpline( int n, wxPoint points[] );
@@ -176,16 +177,16 @@ class WXDLLEXPORT wxDC: public wxObject
     virtual void Clear(void) = 0;
             
     virtual void SetFont( const wxFont &font ) = 0;
-    virtual wxFont *GetFont(void) const { return &m_font; };
+    virtual wxFont *GetFont(void) const { return (wxFont*) &m_font; };
     
     virtual void SetPen( const wxPen &pen ) = 0;
-    virtual wxPen *GetPen(void) const { return &m_pen; };
+    virtual wxPen *GetPen(void) const { return (wxPen*) &m_pen; };
     
     virtual void SetBrush( const wxBrush &brush ) = 0;
-    virtual wxBrush *GetBrush(void) const { return &m_brush; };
+    virtual wxBrush *GetBrush(void) const { return (wxBrush*) &m_brush; };
 
     virtual void SetBackground( const wxBrush &brush ) = 0;
-    virtual wxBrush *GetBackground(void) const { return &m_backgroundBrush; };
+    virtual wxBrush *GetBackground(void) const { return (wxBrush*) &m_backgroundBrush; };
 
     virtual void SetLogicalFunction( int function ) = 0;
     virtual int GetLogicalFunction(void) const { return m_logicalFunction; };

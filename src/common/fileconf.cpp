@@ -85,6 +85,9 @@ wxString wxFileConfig::GetGlobalDir()
 
   #ifdef __UNIX__
     strDir = "/etc/";
+  #elif defined(__WXSTUBS__)
+    // TODO
+    wxASSERT( TRUE ) ;
   #else // Windows
     #ifndef _MAX_PATH
       #define _MAX_PATH 512

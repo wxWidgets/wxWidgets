@@ -44,6 +44,10 @@ public:
   void OnSize(wxSizeEvent& event);
 
   DECLARE_EVENT_TABLE()
+
+protected:
+  void CopyFieldsWidth(const int widths[]);
+  void SetFieldsWidth();
 };
 
 #endif

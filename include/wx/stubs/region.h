@@ -42,11 +42,6 @@ public:
     wxRegion(long x, long y, long w, long h);
     wxRegion(const wxPoint& topLeft, const wxPoint& bottomRight);
     wxRegion(const wxRect& rect);
-
-/* TODO: implementation
-    wxRegion(WXHRGN hRegion); // Hangs on to this region
-*/
-
 	wxRegion();
 	~wxRegion();
 

@@ -9,8 +9,8 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __DOCH__
-#define __DOCH__
+#ifndef _WX_DOCH__
+#define _WX_DOCH__
 
 #ifdef __GNUG__
 #pragma interface "docview.h"

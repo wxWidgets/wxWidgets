@@ -102,10 +102,17 @@ class wxPolygonControlPoint: public wxControlPoint
   void OnBeginDragLeft(float x, float y, int keys=0, int attachment = 0);
   void OnEndDragLeft(float x, float y, int keys=0, int attachment = 0);
 
+  // Calculate what new size would be, at end of resize
+  virtual void CalculateNewSize(float x, float y);
+
+  // Get new size
+  inline wxRealPoint GetNewSize() const { return m_newSize; };
+
 public:
   wxRealPoint*      m_polygonVertex;
   wxRealPoint       m_originalSize;
   float             m_originalDistance;
+  wxRealPoint       m_newSize;
 };
 
 /*

@@ -10,8 +10,8 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __WXDATEH__
-#define __WXDATEH__
+#ifndef _WX_DATE_H_
+#define _WX_DATE_H_
 
 #ifdef __GNUG__
 #pragma interface "date.h"
@@ -128,4 +128,4 @@ class WXDLLEXPORT wxDate: public wxObject
 
 #endif
 #endif
-    // __WXDATEH__
+    // _WX_DATE_H_

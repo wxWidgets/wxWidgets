@@ -9,8 +9,8 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __SETTINGSH_BASE__
-#define __SETTINGSH_BASE__
+#ifndef _WX_SETTINGS_H_BASE_
+#define _WX_SETTINGS_H_BASE_
 
 #define wxSYS_WHITE_BRUSH         0
 #define wxSYS_LTGRAY_BRUSH        1
@@ -107,13 +107,17 @@
 #if defined(__WXMSW__)
 #include "wx/msw/settings.h"
 #elif defined(__WXMOTIF__)
-#include "wx/xt/settings.h"
+#include "wx/motif/settings.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/settings.h"
 #elif defined(__WXQT__)
 #include "wx/qt/settings.h"
+#elif defined(__WXMAC__)
+#include "wx/mac/settings.h"
+#elif defined(__WXSTUBS__)
+#include "wx/stubs/settings.h"
 #endif
 
 #endif
-    // __SETTINGSH_BASE__
+    // _WX_SETTINGS_H_BASE_
 

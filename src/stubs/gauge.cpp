@@ -93,13 +93,3 @@ int wxGauge::GetValue() const
     return m_gaugePos;
 }
 
-void wxGauge::SetForegroundColour(const wxColour& col)
-{
-    m_foregroundColour = col ;
-}
-
-void wxGauge::SetBackgroundColour(const wxColour& col)
-{
-    m_backgroundColour = col ;
-}
-

@@ -9,8 +9,8 @@
 // Licence:   	wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __IPCBASEH__
-#define __IPCBASEH__
+#ifndef _WX_IPCBASEH__
+#define _WX_IPCBASEH__
 
 #ifdef __GNUG__
 #pragma interface "ipcbase.h"
@@ -94,4 +94,4 @@ class WXDLLEXPORT wxClientBase: public wxObject
 };
 
 #endif
-    // __IPCBASEH__
+    // _WX_IPCBASEH__

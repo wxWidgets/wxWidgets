@@ -9,8 +9,8 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef   __FILEFNH__
-#define   __FILEFNH__
+#ifndef   _FILEFN_H_
+#define   _FILEFN_H_
 
 #ifdef __GNUG__
 #pragma interface "filefn.h"
@@ -204,5 +204,5 @@ class WXDLLEXPORT wxPathList: public wxStringList
 };
 
 #endif
-  // __FILEFNH__
+  // _WX_FILEFN_H_
 

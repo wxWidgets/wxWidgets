@@ -9,8 +9,8 @@
 // Licence:   	wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __MEMORYH__
-#define __MEMORYH__
+#ifndef _WX_MEMORYH__
+#define _WX_MEMORYH__
 
 #ifdef __GNUG__
 #pragma interface "memory.h"
@@ -275,5 +275,5 @@ inline void wxTraceLevel(int WXUNUSED(level), const char *WXUNUSED(fmt)) {}
 #endif // WXDEBUG
 
 #endif
-    // __MEMORYH__
+    // _WX_MEMORYH__
 

@@ -59,21 +59,6 @@ bool wxStatusBarXX::Create(wxWindow *parent, wxWindowID id, long style)
     return FALSE;
 }
 
-void wxStatusBarXX::CopyFieldsWidth(const int widths[])
-{
-  if (widths && !m_statusWidths)
-    m_statusWidths = new int[m_nFields];
-
-  if ( widths != NULL ) {
-    for ( int i = 0; i < m_nFields; i++ )
-      m_statusWidths[i] = widths[i];
-  }
-  else {
-    delete [] m_statusWidths;
-    m_statusWidths = NULL;
-  }
-}
-
 void wxStatusBarXX::SetFieldsCount(int nFields, const int widths[])
 {
   wxASSERT( (nFields > 0) && (nFields < 255) );
@@ -90,6 +75,21 @@ void wxStatusBarXX::SetStatusWidths(int n, const int widths[])
 
   CopyFieldsWidth(widths);
   SetFieldsWidth();
+}
+
+void wxStatusBarXX::CopyFieldsWidth(const int widths[])
+{
+  if (widths && !m_statusWidths)
+    m_statusWidths = new int[m_nFields];
+
+  if ( widths != NULL ) {
+    for ( int i = 0; i < m_nFields; i++ )
+      m_statusWidths[i] = widths[i];
+  }
+  else {
+    delete [] m_statusWidths;
+    m_statusWidths = NULL;
+  }
 }
 
 void wxStatusBarXX::SetFieldsWidth()

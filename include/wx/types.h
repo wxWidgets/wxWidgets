@@ -9,8 +9,8 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __TYPESH__
-#define __TYPESH__
+#ifndef _WX_TYPESH__
+#define _WX_TYPESH__
 
 #ifdef __GNUG__
 // #pragma interface "types.h"
@@ -93,5 +93,5 @@
 #define wxTYPE_USER            500
 
 #endif
-    // __TYPESH__
+    // _WX_TYPESH__
 

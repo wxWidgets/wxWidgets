@@ -27,6 +27,7 @@
 #if USE_DOC_VIEW_ARCHITECTURE
 
 #ifndef WX_PRECOMP
+#include "wx/string.h"
 #include "wx/utils.h"
 #include "wx/app.h"
 #include "wx/dc.h"

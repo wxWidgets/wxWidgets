@@ -17,7 +17,6 @@
 #include "wx/utils.h"
 #include "wx/dialog.h"
 #include "wx/dirdlg.h"
-#endif
 
 #include "wx/cmndata.h"
 

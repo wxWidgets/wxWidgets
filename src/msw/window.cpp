@@ -2061,7 +2061,7 @@ void wxWindow::MSWOnWindowPosChanging(void *WXUNUSED(lpPos))
 }
 
 // Deal with child commands from buttons etc.
-bool wxWindow::MSWOnCommand(WXWORD id, WXWORD cmd, WXHWND WXUNUSED(control))
+bool wxWindow::MSWOnCommand(WXWORD id, WXWORD cmd, WXHWND control)
 {
 #if WXDEBUG > 1
   wxDebugMsg("wxWindow::MSWOnCommand\n");
@@ -2093,27 +2093,11 @@ bool wxWindow::MSWOnCommand(WXWORD id, WXWORD cmd, WXHWND WXUNUSED(control))
   }
   else
   {
-#if WXDEBUG > 1
-    wxDebugMsg("Could not find item!\n");
-    char buf[100];
-    wxDebugMsg("Item ids for this panel:\n");
-
-    wxNode *current = GetChildren()->First();
-    while (current)
-    {
-      wxObject *obj = (wxObject *)current->Data() ;
-      if (obj->IsKindOf(CLASSINFO(wxControl)))
-      {
-        wxControl *item = (wxControl *)current->Data();
-        sprintf(buf, "  %d\n", (int)item->m_windowId);
-        wxDebugMsg(buf);
-      }
-      current = current->Next();  
-    }
-    wxYield();
-#endif
-    return FALSE;
+    wxWindow *win = wxFindWinFromHandle(control);
+    if (win)
+      return win->MSWCommand(cmd, id);
   }
+  return FALSE;
 }
 
 long wxWindow::MSWOnSysCommand(WXWPARAM wParam, WXLPARAM lParam)

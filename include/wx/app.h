@@ -9,8 +9,8 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __APPH_BASE__
-#define __APPH_BASE__
+#ifndef _WX_APP_H_BASE_
+#define _WX_APP_H_BASE_
 
 #ifdef __WXMSW__
 class WXDLLEXPORT wxApp;
@@ -26,13 +26,16 @@ typedef wxObject* (*wxAppInitializerFunction) (void);  // returning wxApp* won't
 #if defined(__WXMSW__)
 #include "wx/msw/app.h"
 #elif defined(__WXMOTIF__)
-#include "wx/xt/app.h"
+#include "wx/motif/app.h"
 #elif defined(__WXQT__)
 #include "wx/qt/app.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/app.h"
+#elif defined(__WXMAC__)
+#include "wx/mac/app.h"
+#elif defined(__WXSTUBS__)
+#include "wx/stubs/app.h"
 #endif
-
 
 // Having a global instance of this class allows
 // wxApp to be aware of the app creator function.
@@ -72,4 +75,4 @@ int main(int argc, char *argv[]) { return wxEntry(argc, argv); }
 
 
 #endif
-    // __APPH_BASE__
+    // _WX_APP_H_BASE_

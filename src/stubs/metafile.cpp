@@ -13,7 +13,10 @@
 #pragma implementation "metafile.h"
 #endif
 
-#include "wx/metafile.h"
+#include "wx/object.h"
+#include "wx/string.h"
+#include "wx/dc.h"
+#include "wx/stubs/metafile.h"
 #include "wx/clipbrd.h"
 
 extern bool wxClipboardIsOpen;

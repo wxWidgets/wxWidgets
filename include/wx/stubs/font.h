@@ -25,6 +25,7 @@ class WXDLLEXPORT wxFontRefData: public wxGDIRefData
     friend class WXDLLEXPORT wxFont;
 public:
     wxFontRefData();
+    wxFontRefData(const wxFontRefData& data);
     ~wxFontRefData();
 protected:
   int           m_pointSize;
@@ -81,6 +82,7 @@ public:
 
   // Implementation
 protected:
+  bool RealizeResource();
   void Unshare();
 };
 

@@ -16,6 +16,9 @@
 #pragma interface "colour.h"
 #endif
 
+#include "wx/object.h"
+#include "wx/string.h"
+
 // Colour
 class WXDLLEXPORT wxColour: public wxObject
 {
@@ -49,7 +52,9 @@ public:
 
   inline bool operator != (const wxColour& colour) { return (!(m_red == colour.m_red && m_green == colour.m_green && m_blue == colour.m_blue)); }
 
+/* TODO
   WXCOLORREF GetPixel() const { return m_pixel; };
+*/
 
  private:
   bool 			m_isInit;

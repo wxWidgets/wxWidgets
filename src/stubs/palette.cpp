@@ -47,15 +47,6 @@ wxPalette::~wxPalette()
 {
 }
 
-bool wxPalette::FreeResource(bool force)
-{
-	if ( M_PALETTEDATA && M_PALETTEDATA->m_hPalette)
-	{
-      DeleteObject((HPALETTE)M_PALETTEDATA->m_hPalette);
-	}
-	return TRUE;
-}
-
 bool wxPalette::Create(int n, const unsigned char *red, const unsigned char *green, const unsigned char *blue)
 {
   UnRef();

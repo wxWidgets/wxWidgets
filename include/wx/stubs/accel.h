@@ -17,6 +17,7 @@
 #endif
 
 #include "wx/object.h"
+#include "wx/string.h"
 
 class WXDLLEXPORT wxAcceleratorTable;
 

@@ -39,7 +39,8 @@ class WXDLLEXPORT wxMetaFile: public wxObject
   virtual bool SetClipboard(int width = 0, int height = 0);
 
   virtual bool Play(wxDC *dc);
-  inline bool Ok() { return m_metaFile != 0; };
+  // TODO
+  inline bool Ok() { return FALSE; };
 
 /* TODO: Implementation
   inline WXHANDLE GetHMETAFILE() { return m_metaFile; }

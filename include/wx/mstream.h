@@ -8,8 +8,8 @@
 // Copyright:   (c) Guilhem Lavaux
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
-#ifndef __WXMMSTREAM_H__
-#define __WXMMSTREAM_H__
+#ifndef _WX_WXMMSTREAM_H__
+#define _WX_WXMMSTREAM_H__
 
 #include <wx/stream.h>
 

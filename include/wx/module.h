@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __MODULEH__
-#define __MODULEH__
+#ifndef _WX_MODULEH__
+#define _WX_MODULEH__
 
 #ifdef __GNUG__
 #pragma interface "module.h"

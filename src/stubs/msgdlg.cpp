@@ -13,7 +13,7 @@
 #pragma implementation "msgdlg.h"
 #endif
 
-#include "wx/msgdlg.h"
+#include "wx/stubs/msgdlg.h"
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_CLASS(wxMessageDialog, wxDialog)

@@ -19,6 +19,8 @@
 
 #include "wx/textctrl.h"
 #include "wx/settings.h"
+#include "wx/filefn.h"
+#include "wx/utils.h"
 
 #if defined(__BORLANDC__) && !defined(__WIN32__)
 #include <alloc.h>
@@ -132,7 +134,6 @@ long wxTextCtrl::GetLastPosition() const
 void wxTextCtrl::Replace(long from, long to, const wxString& value)
 {
     // TODO
-    return 0;
 }
 
 void wxTextCtrl::Remove(long from, long to)

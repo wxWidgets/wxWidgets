@@ -13,7 +13,7 @@
 #pragma implementation "slider.h"
 #endif
 
-#include "wx/msw/slider.h"
+#include "wx/slider.h"
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxSlider, wxControl)

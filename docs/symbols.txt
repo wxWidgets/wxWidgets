@@ -4,17 +4,18 @@ GUIs:
 -----
 
 __X__           any X, but not GTK
-__WXMOTIF__       Motif
-__XT__          Xt; mutually exclusive with WX_MOTIF (?)
-__WXGTK__         GTK
-__XVIEW__       Obsolete!
-__WXMSW__     Any Windows
-__MAC__         MacOS
+__WXMOTIF__     Motif
+__WXXT__        Xt; mutually exclusive with WX_MOTIF (?)
+__WXGTK__       GTK
+__WXMSW__       Any Windows
+__WXMAC__       MacOS
 __UNIX__        any Unix
+__WINDOWS__     any Windows
 __WIN95__       GUI for Windows 95 and above; NT 4.0 and above.
 __WIN32__       WIN32 API
 __NT__          Windows NT
-__CURSES__      CURSES
+__WXCURSES__    CURSES
+__WXSTUBS__     Stubbed version ('template' wxWin implementation)
 
 In fact, they should better all start with __WX instead of __ only. 
 The only GUIs implemented for 2.0 are __WXGTK__, __WXMSW__ and __WXMOTIF__

@@ -1,9 +1,9 @@
-#ifndef __METAFILEH_BASE__
-#define __METAFILEH_BASE__
+#ifndef _WX_METAFILE_H_BASE_
+#define _WX_METAFILE_H_BASE_
 
 #if defined(__WXMSW__)
 #include "wx/msw/metafile.h"
 #endif
 
 #endif
-    // __METAFILEH_BASE__
+    // _WX_METAFILE_H_BASE_

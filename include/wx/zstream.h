@@ -8,8 +8,8 @@
 // Copyright:   (c) Guilhem Lavaux
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
-#ifndef __WXZSTREAM_H__
-#define __WXZSTREAM_H__
+#ifndef _WX_WXZSTREAM_H__
+#define _WX_WXZSTREAM_H__
 
 #ifdef __GNUG__
 #pragma interface

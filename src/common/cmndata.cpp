@@ -22,6 +22,7 @@
 
 #ifndef WX_PRECOMP
 #include <stdio.h>
+#include "wx/string.h"
 #include "wx/utils.h"
 #include "wx/app.h"
 #endif
@@ -331,7 +332,7 @@ wxPageSetupData::wxPageSetupData(void)
 
 wxPageSetupData::~wxPageSetupData(void)
 {
-#if defined(__WIN95__)
+#if defined(__WIN95__) && defined(__WXMSW__)
     PAGESETUPDLG *pd = (PAGESETUPDLG *)m_pageSetupData;
     if ( pd && pd->hDevMode )
         GlobalFree(pd->hDevMode);
@@ -358,7 +359,7 @@ void wxPageSetupData::operator=(const wxPageSetupData& data)
   m_enableHelp = data.m_enableHelp;
 }
 
-#if defined(__WIN95__)
+#if defined(__WXMSW__) && defined(__WIN95__)
 void wxPageSetupData::ConvertToNative(void)
 {
     PAGESETUPDLG *pd = (PAGESETUPDLG*) m_pageSetupData;

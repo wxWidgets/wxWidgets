@@ -306,17 +306,25 @@ bool wxGenericGrid::CreateGrid(int nRows, int nCols, wxString **cellValues, shor
   int objectSizeX = m_totalCols;
   int pageSizeX = 1;
   int viewLengthX = m_totalCols;
+
+/*
   m_hScrollBar->SetViewLength(viewLengthX);
   m_hScrollBar->SetObjectLength(objectSizeX);
   m_hScrollBar->SetPageSize(pageSizeX);
+*/
+  m_hScrollBar->SetScrollbar(m_hScrollBar->GetPosition(), pageSizeX, objectSizeX, viewLengthX);
 
   int objectSizeY = m_totalRows;
   int pageSizeY = 1;
   int viewLengthY = m_totalRows;
 
+/*
   m_vScrollBar->SetViewLength(viewLengthY);
   m_vScrollBar->SetObjectLength(objectSizeY);
   m_vScrollBar->SetPageSize(pageSizeY);
+*/
+
+  m_vScrollBar->SetScrollbar(m_vScrollBar->GetPosition(), pageSizeY, objectSizeY, viewLengthY);
 
   AdjustScrollbars();
 
@@ -842,7 +850,7 @@ void wxGenericGrid::DrawCellBackground(wxDC *dc, wxRectangle *rect, int row, int
     dc->SetBrush(*cell->GetBackgroundBrush());
     dc->SetPen(*wxTRANSPARENT_PEN);
     
-#ifdef 0    // In wxWin 2.0 the dc code is exact. RR.
+#if 0    // In wxWin 2.0 the dc code is exact. RR.
 #ifdef __WXMOTIF__
     dc->DrawRectangle(rect->x+1, rect->y+1, rect->width-1, rect->height-1);
 #else

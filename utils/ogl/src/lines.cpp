@@ -1650,7 +1650,7 @@ void wxLineShape::Copy(wxShape& copy)
 // Override select, to create/delete temporary label-moving objects
 void wxLineShape::Select(bool select, wxDC* dc)
 {
-  wxShape::Select(select);
+  wxShape::Select(select, dc);
   if (select)
   {
     for (int i = 0; i < 3; i++)

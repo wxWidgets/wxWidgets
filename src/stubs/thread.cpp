@@ -15,6 +15,7 @@
 
 #include "wx/module.h"
 #include "wx/thread.h"
+#include "wx/utils.h"
 
 enum thread_state {
   STATE_IDLE = 0,
@@ -183,6 +184,7 @@ unsigned long wxThread::GetID() const
 bool wxThread::IsMain()
 {
     // TODO
+    return FALSE;
 }
 
 wxThread::wxThread()

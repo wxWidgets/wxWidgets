@@ -39,11 +39,11 @@
 
 // default type is the native one
 const wxTextFile::Type wxTextFile::typeDefault = wxTextFile::
-#if   defined(__WXMSW__)
+#if   defined(__WINDOWS__)
   Type_Dos;
 #elif defined(__UNIX__)
   Type_Unix;
-#elif defined(__MAC__)
+#elif defined(__WXMAC__)
   Type_Mac;
   // if you feel brave, remove the next line
   #error  "wxTextFile: code for Mac files is untested."

@@ -9,8 +9,8 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __WXH__
-#define __WXH__
+#ifndef _WX_WXH__
+#define _WX_WXH__
 
 #include "wx/setup.h"           // Which features to include - user editable
 #include "wx/defs.h"
@@ -67,4 +67,4 @@
 #include "wx/intl.h"
 
 #endif
-    // __WXH__
+    // _WX_WXH__

@@ -22,7 +22,6 @@ IMPLEMENT_ABSTRACT_CLASS(wxTimer, wxObject)
 wxTimer::wxTimer()
 {
     m_milli = 0 ;
-    m_lastMilli = -1 ;
     m_id = 0;
     m_oneShot = FALSE;
 }
@@ -35,13 +34,10 @@ wxTimer::~wxTimer()
 bool wxTimer::Start(int milliseconds,bool mode)
 {
     m_oneShot = mode ;
-    if (m_milliseconds < 0)
-        m_milliseconds = lastMilli;
-
-    if (m_milliseconds <= 0)
+    if (milliseconds <= 0)
         return FALSE;
 
-    m_lastMilli = m_milli = m_milliseconds;
+    m_milli = milliseconds;
 
     // TODO: set the timer going.
     return FALSE;

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        imaglist.cpp
-// Purpose:     wxImageList
+// Purpose:     wxImageList. You may wish to use the generic version.
 // Author:      AUTHOR
 // Modified by:
 // Created:     ??/??/98
@@ -13,7 +13,7 @@
 #pragma implementation "imaglist.h"
 #endif
 
-#include "wx/msw/imaglist.h"
+#include "wx/stubs/imaglist.h"
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxImageList, wxObject)

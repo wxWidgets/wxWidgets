@@ -9,8 +9,8 @@
 // Licence:   	wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __LISTH__
-#define __LISTH__
+#ifndef _WX_LISTH__
+#define _WX_LISTH__
 
 #ifdef __GNUG__
 #pragma interface "list.h"
@@ -140,4 +140,4 @@ class WXDLLEXPORT wxStringList: public wxList
 };
 
 #endif
-    // __LISTH__
+    // _WX_LISTH__

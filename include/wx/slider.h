@@ -1,15 +1,19 @@
-#ifndef __SLIDERH_BASE__
-#define __SLIDERH_BASE__
+#ifndef _WX_SLIDER_H_BASE_
+#define _WX_SLIDER_H_BASE_
 
 #if defined(__WXMSW__)
 #include "wx/msw/slider.h"
 #elif defined(__WXMOTIF__)
-#include "wx/xt/slider.h"
+#include "wx/motif/slider.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/slider.h"
 #elif defined(__WXQT__)
 #include "wx/qt/slider.h"
+#elif defined(__WXMAC__)
+#include "wx/mac/slider.h"
+#elif defined(__WXSTUBS__)
+#include "wx/stubs/slider.h"
 #endif
 
 #endif
-    // __SLIDERH_BASE__
+    // _WX_SLIDER_H_BASE_

@@ -168,6 +168,8 @@ bool wxGetLocalTime(long *timeZone, int *dstObserved)
   *timeZone = tp->tm_gmtoff; // ???
   *dstObserved = tp->tm_isdst;
 #endif
+#elif defined(__WXSTUBS__)
+  return FALSE;
 #else
 // #error wxGetLocalTime not implemented.
   struct timeval tp;

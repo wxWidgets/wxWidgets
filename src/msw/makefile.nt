@@ -92,8 +92,8 @@ COMMONOBJS = \
   $(COMMDIR)\log.obj \
   $(COMMDIR)\memory.obj \
   $(COMMDIR)\module.obj \
-  $(COMMDIR)\object.obj \
   $(COMMDIR)\odbc.obj \
+  $(COMMDIR)\object.obj \
   $(COMMDIR)\postscrp.obj \
   $(COMMDIR)\prntbase.obj \
   $(COMMDIR)\resource.obj \
@@ -119,7 +119,6 @@ COMMONOBJS = \
   $(COMMDIR)\stream.obj \
   $(COMMDIR)\datstrm.obj \
   $(COMMDIR)\wincmn.obj
-
 
 MSWOBJS = \
   $(MSWDIR)\accel.obj \

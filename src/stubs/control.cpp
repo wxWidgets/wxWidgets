@@ -37,7 +37,7 @@ wxControl::~wxControl()
     wxWindow *parent = (wxWindow *)GetParent();
     if (parent)
     {
-        if (parent->GetDefaultItem() == this)
+        if (parent->GetDefaultItem() == (wxButton*) this)
             parent->SetDefaultItem(NULL);
     }
 }
@@ -51,17 +51,6 @@ wxString wxControl::GetLabel() const
 {
     // TODO
     return wxString("");
-}
-
-/*
- * Allocates control IDs within the appropriate range
- */
-
-int NewControlId()
-{
-    static int s_controlId = 0;
-    s_controlId ++;
-    return s_controlId;
 }
 
 void wxControl::ProcessCommand (wxCommandEvent & event)
@@ -78,11 +67,6 @@ void wxControl::ProcessCommand (wxCommandEvent & event)
     {
       GetEventHandler()->OnCommand(*this, event);
     }
-}
-
-void wxControl::SetClientSize (int width, int height)
-{
-  SetSize (-1, -1, width, height);
 }
 
 void wxControl::Centre (int direction)

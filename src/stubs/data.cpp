@@ -131,6 +131,7 @@ const char *wxDoubleToStringStr = "%.2f";
 wxPrintPaperDatabase* wxThePrintPaperDatabase = NULL;
 #endif
 
+#if USE_SHARED_LIBRARY
 ///// Event tables (also must be in one, statically-linked file for shared libraries)
 
 // This is the base, wxEvtHandler 'bootstrap' code which is expanded manually here
@@ -140,6 +141,7 @@ const wxEventTable wxEvtHandler::sm_eventTable =
 	{ NULL, &wxEvtHandler::sm_eventTableEntries[0] };
 
 const wxEventTableEntry wxEvtHandler::sm_eventTableEntries[] = { { 0, 0, 0, NULL } };
+#endif
 
 const wxSize wxDefaultSize(-1, -1);
 const wxPoint wxDefaultPosition(-1, -1);

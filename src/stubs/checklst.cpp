@@ -34,8 +34,6 @@
 // define event table
 // ------------------
 BEGIN_EVENT_TABLE(wxCheckListBox, wxListBox)
-  EVT_CHAR(wxCheckListBox::OnChar)
-  EVT_LEFT_DOWN(wxCheckListBox::OnLeftClick)
 END_EVENT_TABLE()
 
 // control creation
@@ -71,7 +69,6 @@ bool wxCheckListBox::IsChecked(uint uiIndex) const
 void wxCheckListBox::Check(uint uiIndex, bool bCheck)
 {
     // TODO
-    return FALSE;
 }
 
 

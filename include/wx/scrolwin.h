@@ -1,7 +1,7 @@
-#ifndef __SCROLWINH_BASE__
-#define __SCROLWINH_BASE__
+#ifndef _WX_SCROLWIN_H_BASE_
+#define _WX_SCROLWIN_H_BASE_
 
 #include "wx/generic/scrolwin.h"
 
 #endif
-    // __SCROLWINH_BASE__
+    // _WX_SCROLWIN_H_BASE_

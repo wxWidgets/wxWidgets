@@ -11,8 +11,8 @@
 // Licence:     wxWindows license
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef   _wxCONFIG_H
-#define   _wxCONFIG_H
+#ifndef   _WX_CONFIG_H_
+#define   _WX_CONFIG_H_
 
 #ifdef __GNUG__
 #pragma interface "config.h"
@@ -237,5 +237,5 @@ private:
   #define wxConfig  wxFileConfig
 #endif
 
-#endif  //_wxCONFIG_H
+#endif  // _WX_CONFIG_H_
 

@@ -9,8 +9,8 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __WXSTRINGH__
-#define __WXSTRINGH__
+#ifndef _WX_WXSTRINGH__
+#define _WX_WXSTRINGH__
 
 #ifdef __GNUG__
 #pragma interface "string.h"
@@ -925,6 +925,6 @@ istream& WXDLLEXPORT operator>>(istream& is, wxString& str);
 
 #endif  //std::string compatibility
 
-#endif  // __WXSTRINGH__
+#endif  // _WX_WXSTRINGH__
 
 //@}

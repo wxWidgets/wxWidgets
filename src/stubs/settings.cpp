@@ -18,13 +18,13 @@
 wxColour wxSystemSettings::GetSystemColour(int index)
 {
     // TODO
-	return col;
+	return wxColour();
 }
 
 wxFont wxSystemSettings::GetSystemFont(int index)
 {
     // TODO
-    return wxFont;
+    return wxFont();
 }
 
 // Get a system metric, e.g. scrollbar size

@@ -9,8 +9,8 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __TBARSMPLH__
-#define __TBARSMPLH__
+#ifndef _WX_TBARSMPLH__
+#define _WX_TBARSMPLH__
 
 #ifdef __GNUG__
 #pragma interface "tbarsmpl.h"
@@ -75,5 +75,5 @@ DECLARE_EVENT_TABLE()
 
 #endif // USE_TOOLBAR
 #endif
-    // __TBARSMPLH__
+    // _WX_TBARSMPLH__
 

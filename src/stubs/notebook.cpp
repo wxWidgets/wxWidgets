@@ -97,10 +97,6 @@ bool wxNotebook::Create(wxWindow *parent,
 
     m_windowId = id == -1 ? NewControlId() : id;
 
-    // colors and font
-    m_backgroundColour = wxColour(GetSysColor(COLOR_BTNFACE));
-    m_foregroundColour = *wxBLACK ;
-
     // style
     m_windowStyle = style;
 
@@ -278,7 +274,7 @@ void wxNotebook::OnSize(wxSizeEvent& event)
     SetSelection(nSel);
 
     // fit the notebook page to the tab control's display area
-    int w, hl
+    int w, h;
     GetSize(&w, &h);
 
     uint nCount = m_aPages.Count();

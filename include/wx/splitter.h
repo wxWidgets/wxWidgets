@@ -1,7 +1,7 @@
-#ifndef __SPLITTERH_BASE__
-#define __SPLITTERH_BASE__
+#ifndef _WX_SPLITTER_H_BASE_
+#define _WX_SPLITTER_H_BASE_
 
 #include "wx/generic/splitter.h"
 
 #endif
-    // __SPLITTERH_BASE__
+    // _WX_SPLITTER_H_BASE_

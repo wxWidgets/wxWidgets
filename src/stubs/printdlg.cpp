@@ -13,7 +13,8 @@
 #pragma implementation "printdlg.h"
 #endif
 
-#include "wx/printdlg.h"
+#include "wx/object.h"
+#include "wx/stubs/printdlg.h"
 #include "wx/dcprint.h"
 
 // Use generic page setup dialog: use your own native one if one exists.
@@ -27,12 +28,8 @@ IMPLEMENT_CLASS(wxPageSetupDialog, wxDialog)
 wxPrintDialog::wxPrintDialog():
  wxDialog()
 {
-    dialogParent = NULL;
-    printerDC = NULL;
-    destroyDC = TRUE;
-    deviceName = NULL;
-    driverName = NULL;
-    portName = NULL;
+    m_dialogParent = NULL;
+    m_printerDC = NULL;
 }
 
 wxPrintDialog::wxPrintDialog(wxWindow *p, wxPrintData* data):
@@ -43,26 +40,19 @@ wxPrintDialog::wxPrintDialog(wxWindow *p, wxPrintData* data):
 
 bool wxPrintDialog::Create(wxWindow *p, wxPrintData* data)
 {
-    dialogParent = p;
-    printerDC = NULL;
-    destroyDC = TRUE;
-    deviceName = NULL;
-    driverName = NULL;
-    portName = NULL;
+    m_dialogParent = p;
+    m_printerDC = NULL;
 
     if ( data )
-        printData = *data;
+        m_printData = *data;
 
     return TRUE;
 }
 
 wxPrintDialog::~wxPrintDialog()
 {
-    if (destroyDC && printerDC)
-        delete printerDC;
-    if (deviceName) delete[] deviceName;
-    if (driverName) delete[] driverName;
-    if (portName) delete[] portName;
+    if (m_printerDC)
+        delete m_printerDC;
 }
 
 int wxPrintDialog::ShowModal()
@@ -73,10 +63,11 @@ int wxPrintDialog::ShowModal()
 
 wxDC *wxPrintDialog::GetPrintDC()
 {
-  if (printerDC)
+  if (m_printerDC)
   {
-    destroyDC = FALSE;
-    return printerDC;
+    wxDC* dc = m_printerDC;
+    m_printerDC = NULL;
+    return dc;
   }
   else
     return NULL;

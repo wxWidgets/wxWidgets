@@ -9,12 +9,15 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __CMNDATAH_BASE__
-#define __CMNDATAH_BASE__
+#ifndef _WX_CMNDATA_H_BASE_
+#define _WX_CMNDATA_H_BASE_
 
 #ifdef __GNUG__
 #pragma interface "cmndata.h"
 #endif
+
+#include "wx/font.h"
+#include "wx/colour.h"
 
 class WXDLLEXPORT wxColourData: public wxObject
 {
@@ -220,4 +223,4 @@ class WXDLLEXPORT wxPageSetupData: public wxObject
 
 
 #endif
-    // __CMNDATAH_BASE__
+    // _WX_CMNDATA_H_BASE_

@@ -532,15 +532,18 @@ void wxPolygonShape::OnDraw(wxDC& dc)
 void wxPolygonShape::OnDrawOutline(wxDC& dc, float x, float y, float w, float h)
 {
   dc.SetBrush(wxTRANSPARENT_BRUSH);
+  // Multiply all points by proportion of new size to old size
+  float x_proportion = (float)(fabs(w/m_originalWidth));
+  float y_proportion = (float)(fabs(h/m_originalHeight));
 
-  int n = m_points->Number();
+  int n = m_originalPoints->Number();
   wxPoint *intPoints = new wxPoint[n];
   int i;
   for (i = 0; i < n; i++)
   {
-    wxRealPoint* point = (wxRealPoint*) m_points->Nth(i)->Data();
-    intPoints[i].x = (int) point->x;
-    intPoints[i].y = (int) point->y;
+    wxRealPoint* point = (wxRealPoint*) m_originalPoints->Nth(i)->Data();
+    intPoints[i].x = (int) (x_proportion * point->x);
+    intPoints[i].y = (int) (y_proportion * point->y);
   }
   dc.DrawPolygon(n, intPoints, x, y);
   delete[] intPoints;
@@ -1699,6 +1702,21 @@ wxPolygonControlPoint::~wxPolygonControlPoint()
 {
 }
 
+// Calculate what new size would be, at end of resize
+void wxPolygonControlPoint::CalculateNewSize(float x, float y)
+{
+  float bound_x;
+  float bound_y;
+  GetShape()->GetBoundingBoxMin(&bound_x, &bound_y);
+
+  float dist = (float)sqrt((x - m_shape->GetX())*(x - m_shape->GetX()) +
+                    (y - m_shape->GetY())*(y - m_shape->GetY()));
+
+  m_newSize.x = (float)(dist/this->m_originalDistance)*this->m_originalSize.x;
+  m_newSize.y = (float)(dist/this->m_originalDistance)*this->m_originalSize.y;
+}
+
+
 // Implement resizing polygon or moving the vertex.
 void wxPolygonControlPoint::OnDragLeft(bool draw, float x, float y, int keys, int attachment)
 {
@@ -1730,18 +1748,11 @@ void wxPolygonShape::OnSizingDragLeft(wxControlPoint* pt, bool draw, float x, fl
   dc.SetPen(dottedPen);
   dc.SetBrush((* wxTRANSPARENT_BRUSH));
 
-  float bound_x;
-  float bound_y;
-  this->GetBoundingBoxMin(&bound_x, &bound_y);
-/*
-  float new_width = (float)(2.0*fabs(x - this->GetX()));
-  float new_height = (float)(2.0*fabs(y - this->GetY()));
-*/
-  float dist = (float)sqrt((x - this->GetX())*(x - this->GetX()) +
-                    (y - this->GetY())*(y - this->GetY()));
-
-  if (keys & KEY_CTRL)
+  if (0) // keys & KEY_CTRL)
   {
+    // TODO: mend this code. Currently we rely on altering the
+    // actual points, but we should assume we're not, as per
+    // the normal sizing case.
     m_canvas->Snap(&x, &y);
 
     // Move point
@@ -1754,15 +1765,11 @@ void wxPolygonShape::OnSizingDragLeft(wxControlPoint* pt, bool draw, float x, fl
   }
   else
   {
-    float new_width = (float)(dist/ppt->m_originalDistance)*ppt->m_originalSize.x;
-    float new_height = (float)(dist/ppt->m_originalDistance)*ppt->m_originalSize.y;
-
-    // Non-recursive SetSize for speed
-    this->SetSize(new_width, new_height, FALSE);
+    ppt->CalculateNewSize(x, y);
   }
-  float w, h;
-  this->GetBoundingBoxMax(&w, &h);
-  this->GetEventHandler()->OnDrawOutline(dc, this->GetX(), this->GetY(), w, h);
+
+  this->GetEventHandler()->OnDrawOutline(dc, this->GetX(), this->GetY(),
+       ppt->GetNewSize().x, ppt->GetNewSize().y);
 }
 
 void wxPolygonShape::OnSizingBeginDragLeft(wxControlPoint* pt, float x, float y, int keys, int attachment)
@@ -1782,7 +1789,6 @@ void wxPolygonShape::OnSizingBeginDragLeft(wxControlPoint* pt, float x, float y,
 
   float dist = (float)sqrt((x - this->GetX())*(x - this->GetX()) +
                     (y - this->GetY())*(y - this->GetY()));
-
   ppt->m_originalDistance = dist;
   ppt->m_originalSize.x = bound_x;
   ppt->m_originalSize.y = bound_y;
@@ -1793,8 +1799,11 @@ void wxPolygonShape::OnSizingBeginDragLeft(wxControlPoint* pt, float x, float y,
   dc.SetPen(dottedPen);
   dc.SetBrush((* wxTRANSPARENT_BRUSH));
 
-  if (keys & KEY_CTRL)
+  if (0) // keys & KEY_CTRL)
   {
+    // TODO: mend this code. Currently we rely on altering the
+    // actual points, but we should assume we're not, as per
+    // the normal sizing case.
     m_canvas->Snap(&x, &y);
 
     // Move point
@@ -1807,22 +1816,19 @@ void wxPolygonShape::OnSizingBeginDragLeft(wxControlPoint* pt, float x, float y,
   }
   else
   {
-    float new_width = (float)(dist/ppt->m_originalDistance)*ppt->m_originalSize.x;
-    float new_height = (float)(dist/ppt->m_originalDistance)*ppt->m_originalSize.y;
-
-    // Non-recursive SetSize for speed
-    this->SetSize(new_width, new_height, FALSE);
+    ppt->CalculateNewSize(x, y);
   }
 
-  float w, h;
-  this->GetBoundingBoxMax(&w, &h);
-  this->GetEventHandler()->OnDrawOutline(dc, this->GetX(), this->GetY(), w, h);
+  this->GetEventHandler()->OnDrawOutline(dc, this->GetX(), this->GetY(),
+       ppt->GetNewSize().x, ppt->GetNewSize().y);
 
   m_canvas->CaptureMouse();
 }
 
 void wxPolygonShape::OnSizingEndDragLeft(wxControlPoint* pt, float x, float y, int keys, int attachment)
 {
+  wxPolygonControlPoint* ppt = (wxPolygonControlPoint*) pt;
+
   wxClientDC dc(GetCanvas());
   GetCanvas()->PrepareDC(dc);
 
@@ -1834,6 +1840,10 @@ void wxPolygonShape::OnSizingEndDragLeft(wxControlPoint* pt, float x, float y, i
   {
     ((wxPolygonShape *)this)->CalculateBoundingBox();
     ((wxPolygonShape *)this)->UpdateOriginalPoints();
+  }
+  else
+  {
+    SetSize(ppt->GetNewSize().x, ppt->GetNewSize().y);
   }
 
   ((wxPolygonShape *)this)->CalculateBoundingBox();

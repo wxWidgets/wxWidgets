@@ -1,6 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        colordlg.cpp
-// Purpose:     wxColourDialog class
+// Purpose:     wxColourDialog class. NOTE: you can use the generic class
+//              if you wish, instead of implementing this.
 // Author:      AUTHOR
 // Modified by:
 // Created:     ??/??/98
@@ -13,7 +14,7 @@
 #pragma implementation "colordlg.h"
 #endif
 
-#include "wx/colordlg.h"
+#include "wx/stubs/colordlg.h"
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxColourDialog, wxDialog)

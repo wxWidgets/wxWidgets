@@ -9,8 +9,8 @@
 // Licence:   	wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __VALIDATEH__
-#define __VALIDATEH__
+#ifndef _WX_VALIDATEH__
+#define _WX_VALIDATEH__
 
 #ifdef __GNUG__
 #pragma interface "validate.h"
@@ -67,4 +67,4 @@ protected:
 WXDLLEXPORT_DATA(extern const wxValidator) wxDefaultValidator;
 
 #endif
-    // __VALIDATEH__
+    // _WX_VALIDATEH__

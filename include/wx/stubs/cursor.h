@@ -57,7 +57,8 @@ public:
   wxCursor(int cursor_type);
   ~wxCursor();
 
-  virtual bool Ok() const { return (m_refData != NULL && M_CURSORDATA->m_hCursor) ; }
+  // TODO: also verify the internal cursor handle
+  virtual bool Ok() const { return (m_refData != NULL) ; }
 
   inline wxCursor& operator = (const wxCursor& cursor) { if (*this == cursor) return (*this); Ref(cursor); return *this; }
   inline bool operator == (const wxCursor& cursor) { return m_refData == cursor.m_refData; }

@@ -27,14 +27,18 @@
 #include "wx/msgdlg.h"
 #include "wx/log.h"
 #include "wx/module.h"
+#include "wx/memory.h"
 
 #if USE_WX_RESOURCES
 #include "wx/resource.h"
 #endif
 
+#if USE_POSTSCRIPT
+#include "wx/postscrp.h"
+#endif
+
 #include <string.h>
 
-#if defined(__WIN95__) && !defined(__GNUWIN32__)
 extern char *wxBuffer;
 extern wxList wxPendingDelete;
 
@@ -145,7 +149,7 @@ int wxEntry( int argc, char *argv[] )
       return 0;
     };
     
-  	wxTheApp = (* wxApp::GetInitializerFunction()) ();
+  	wxTheApp = (wxApp*) (* wxApp::GetInitializerFunction()) ();
   };
   
   if (!wxTheApp) 
@@ -170,8 +174,6 @@ int wxEntry( int argc, char *argv[] )
   
   if (!wxTheApp->OnInit()) return 0;
 
-  wxTheApp->m_initialized = (wxTopLevelWindows.Number() > 0);
-  
   int retValue = 0;
   
   if (wxTheApp->Initialized()) retValue = wxTheApp->OnRun();

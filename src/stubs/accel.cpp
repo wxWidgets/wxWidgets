@@ -15,6 +15,7 @@
 
 #include "wx/setup.h"
 #include "wx/accel.h"
+#include "wx/string.h"
 
 #if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxAcceleratorTable, wxObject)

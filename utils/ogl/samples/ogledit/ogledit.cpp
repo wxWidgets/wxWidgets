@@ -37,9 +37,6 @@
 // in the application itself.
 IMPLEMENT_APP(MyApp)
 
-// This statement initialises the whole application
-MyApp myApp;
-
 MyApp::MyApp(void)
 {
   frame = NULL;
@@ -116,7 +113,7 @@ bool MyApp::OnInit(void)
   menu_bar->Append(help_menu, "&Help");
 
   frame->canvas = frame->CreateCanvas(NULL, frame);
-  frame->palette = myApp.CreatePalette(frame);
+  frame->palette = wxGetApp().CreatePalette(frame);
   myDocManager->CreateDocument("", wxDOC_NEW);
 
   //// Associate the menu bar with the frame
@@ -206,6 +203,6 @@ MyCanvas *MyFrame::CreateCanvas(wxView *view, wxFrame *parent)
 
 MyFrame *GetMainFrame(void)
 {
-  return myApp.frame;
+  return wxGetApp().frame;
 }
 

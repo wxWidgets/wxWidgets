@@ -9,8 +9,8 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __MATRIXH__
-#define __MATRIXH__
+#ifndef _WX_MATRIXH__
+#define _WX_MATRIXH__
 
 #ifdef __GNUG__
 #pragma interface "matrix.h"
@@ -141,4 +141,4 @@ inline double wxCalculateDet(double a11, double a21, double a12, double a22)
 }
 
 #endif
-	// __MATRIXH__
+	// _WX_MATRIXH__

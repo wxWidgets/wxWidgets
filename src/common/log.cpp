@@ -33,6 +33,7 @@
   #include  <wx/string.h>
   #include  <wx/intl.h>
   #include  <wx/menu.h>
+  #include  <wx/frame.h>
 
   #include  <wx/generic/msgdlgg.h>
   #include  <wx/filedlg.h>
@@ -489,7 +490,7 @@ void wxLogGui::DoLog(wxLogLevel level, const char *szString)
         {
           wxString strTime = TimeStamp();
 
-          #ifdef  __WIN32__
+          #if defined(__WIN32__) && !defined(__WXSTUBS__)
               // don't prepend debug/trace here: it goes to the debug window
               // anyhow, but do put a timestamp
               OutputDebugString(strTime + szString + "\n\r");
@@ -905,6 +906,8 @@ void Trap()
 {
   #ifdef __WXMSW__
     DebugBreak();
+  #elif defined(__WXSTUBS__)
+    // TODO
   #else // Unix
     raise(SIGTRAP);
   #endif // Win/Unix

@@ -9,8 +9,8 @@
 // Licence:   	wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __DATSTREAMH__
-#define __DATSTREAMH__
+#ifndef _WX_DATSTREAM_H_
+#define _WX_DATSTREAM_H_
 
 #ifdef __GNUG__
 #pragma interface "datstrm.h"
@@ -45,4 +45,4 @@ class wxDataOutputStream: public wxFilterOutputStream {
 };
 
 #endif
-    // __DATSTREAMH__
+    // _WX_DATSTREAM_H_

@@ -13,17 +13,7 @@
 #pragma implementation "toolbar.h"
 #endif
 
-// For compilers that support precompilation, includes "wx.h".
-#include "wx/wxprec.h"
-
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
-#ifndef WX_PRECOMP
-#include "wx.h"
-#endif
-
+#include "wx/wx.h"
 #include "wx/toolbar.h"
 
 #if !USE_SHARED_LIBRARY
@@ -105,7 +95,6 @@ void wxToolBar::EnableTool(int toolIndex, bool enable)
         tool->m_enabled = enable;
         // TODO enable button
     }
-  }
 }
 
 void wxToolBar::ToggleTool(int toolIndex, bool toggle)

@@ -9,8 +9,8 @@
 // Licence:   	wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __PROCESSH__
-#define __PROCESSH__
+#ifndef _WX_PROCESSH__
+#define _WX_PROCESSH__
 
 #ifdef __GNUG__
 #pragma interface "process.h"
@@ -55,4 +55,4 @@ typedef void (wxObject::*wxProcessEventFunction)(wxProcessEvent&);
 #define EVT_END_PROCESS(id, func) { wxEVT_END_TERMINATE, id, -1, (wxObjectEvent) (wxEventFunction) (wxProcessEventFunction) & fn, NULL},
 
 #endif
-    // __PROCESSH__
+    // _WX_PROCESSH__

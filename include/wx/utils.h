@@ -9,8 +9,8 @@
 // Licence:   	wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __UTILSH__
-#define __UTILSH__
+#ifndef _WX_UTILSH__
+#define _WX_UTILSH__
 
 #ifdef __GNUG__
 #pragma interface "utils.h"
@@ -309,4 +309,4 @@ void wxAllocColor(Display *display,Colormap colormap,XColor *xcolor);
 #endif //__X__
 
 #endif
-    // __UTILSH__
+    // _WX_UTILSH__

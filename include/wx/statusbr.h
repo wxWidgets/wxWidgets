@@ -1,7 +1,7 @@
-#ifndef __STATUSBRH_BASE__
-#define __STATUSBRH_BASE__
+#ifndef _WX_STATUSBR_H_BASE_
+#define _WX_STATUSBR_H_BASE_
 
 #include "wx/generic/statusbr.h"
 
 #endif
-    // __STATUSBRH_BASE__
+    // _WX_STATUSBR_H_BASE_

@@ -9,16 +9,15 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __TBARBASEH__
-#define __TBARBASEH__
+#ifndef _WX_TBARBASE_H_
+#define _WX_TBARBASE_H_
 
 #ifdef __GNUG__
 #pragma interface "tbarbase.h"
 #endif
 
+#include "wx/setup.h"
 #include "wx/defs.h"
-
-#if USE_TOOLBAR
 
 #include "wx/bitmap.h"
 #include "wx/list.h"
@@ -239,7 +238,6 @@ public:
     DECLARE_EVENT_TABLE()
 };
 
-#endif // USE_TOOLBAR
 #endif
-    // __TBARBASEH__
+    // _WX_TBARBASE_H_
 

@@ -53,7 +53,7 @@
 #endif
 
 // use debug CRT functions for memory leak detections in VC++
-/* THIS CRAPS OUT in VC++ 5.
+/* Doesn't work when using the makefiles, for some reason.
 #if defined(__WXDEBUG__) && defined(_MSC_VER)
   #include <crtdbg.h>
 #endif
@@ -423,8 +423,7 @@ int wxEntry(WXHINSTANCE hInstance, WXHINSTANCE WXUNUSED(hPrevInstance), char *m_
 {
   wxhInstance = (HINSTANCE) hInstance;
 
-/* No, sorry, whatever this is, forget it. Doesn't work with VC++ 5.
-
+/* Doesn't work when using the makefiles, for some reason.
   #if defined(__WXDEBUG__) && defined(_MSC_VER)
     // do check for memory leaks on program exit
     // (another useful flag is _CRTDBG_DELAY_FREE_MEM_DF which doesn't free

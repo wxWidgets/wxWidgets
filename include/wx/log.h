@@ -9,8 +9,8 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef   __LOGH__
-#define   __LOGH__
+#ifndef   _WX_LOG_H_
+#define   _WX_LOG_H_
 
 #ifdef    __GNUG__
 #pragma interface "log.h"
@@ -159,6 +159,7 @@ private:
 };
 
 // log everything to an "ostream", cerr by default
+class ostream;
 class WXDLLEXPORT wxLogStream : public wxLog
 {
 public:
@@ -376,4 +377,4 @@ const char* WXDLLEXPORT wxSysErrorMsg(unsigned long nErrCode = 0);
   inline void wxLogLastError(const char *) { }
 #endif  //debug/!debug
 
-#endif  //__LOGH__
+#endif  // _WX_LOG_H_

@@ -9,8 +9,8 @@
 // Licence:   	wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __LAYOUTH__
-#define __LAYOUTH__
+#ifndef _WX_LAYOUTH__
+#define _WX_LAYOUTH__
 
 #ifdef __GNUG__
 #pragma interface "layout.h"
@@ -306,4 +306,4 @@ class WXDLLEXPORT wxSpacingSizer: public wxSizer
 };
 
 #endif
-    // __LAYOUTH__
+    // _WX_LAYOUTH__

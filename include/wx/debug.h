@@ -9,8 +9,8 @@
 // Licence:   	wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef   __WXDEBUGH__
-#define   __WXDEBUGH__
+#ifndef   _WX_DEBUG_H_
+#define   _WX_DEBUG_H_
 
 #include  <assert.h>
 
@@ -99,5 +99,5 @@
 
 //@}
 
-#endif  // __WXDEBUGH__
+#endif  // _WX_DEBUG_H_
 

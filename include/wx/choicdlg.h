@@ -1,7 +1,7 @@
-#ifndef __CHOICDLGH_BASE__
-#define __CHOICDLGH_BASE__
+#ifndef _WX_CHOICDLG_H_BASE_
+#define _WX_CHOICDLG_H_BASE_
 
 #include "wx/generic/choicdgg.h"
 
 #endif
-    // __CHOICDLGH_BASE__
+    // _WX_CHOICDLG_H_BASE_

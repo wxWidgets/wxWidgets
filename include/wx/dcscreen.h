@@ -1,15 +1,19 @@
-#ifndef __DCSCREENH_BASE__
-#define __DCSCREENH_BASE__
+#ifndef _WX_DCSCREEN_H_BASE_
+#define _WX_DCSCREEN_H_BASE_
 
 #if defined(__WXMSW__)
 #include "wx/msw/dcscreen.h"
 #elif defined(__WXMOTIF__)
-#include "wx/xt/dcscreen.h"
+#include "wx/motif/dcscreen.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/dcscreen.h"
 #elif defined(__WXQT__)
 #include "wx/qt/dcscreen.h"
+#elif defined(__WXMAC__)
+#include "wx/mac/dcscreen.h"
+#elif defined(__WXSTUBS__)
+#include "wx/stubs/dcscreen.h"
 #endif
 
 #endif
-    // __DCSCREENH_BASE__
+    // _WX_DCSCREEN_H_BASE_

@@ -17,6 +17,7 @@
 #include "wx/utils.h"
 #include "wx/dialog.h"
 #include "wx/filedlg.h"
+#include "wx/intl.h"
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_CLASS(wxFileDialog, wxDialog)
@@ -100,7 +101,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
 int wxFileDialog::ShowModal()
 {
     // TODO
-    wxID_CANCEL;
+    return wxID_CANCEL;
 }
 
 // Generic file load/save dialog

@@ -13,6 +13,8 @@
 #pragma implementation "wave.h"
 #endif
 
+#include "wx/object.h"
+#include "wx/string.h"
 #include "wx/stubs/wave.h"
 
 wxWave::wxWave()

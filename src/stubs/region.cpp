@@ -12,16 +12,8 @@
 #pragma implementation "region.h"
 #endif
 
-#include "wx/wxprec.h"
-
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
-#include "wx/msw/region.h"
+#include "wx/region.h"
 #include "wx/gdicmn.h"
-
-#include <windows.h>
 
 #if !USE_SHARED_LIBRARY
 	IMPLEMENT_DYNAMIC_CLASS(wxRegion, wxGDIObject)
@@ -47,8 +39,6 @@ public:
 	{
         // TODO
 	}
-
-	HRGN m_region;
 };
 
 

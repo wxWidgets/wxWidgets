@@ -9,8 +9,8 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __OBJECTH__
-#define __OBJECTH__
+#ifndef _WX_OBJECTH__
+#define _WX_OBJECTH__
 
 #ifdef __GNUG__
 #pragma interface "object.h"
@@ -221,6 +221,6 @@ private:
 #endif
 
 #endif
-    // __OBJECTH__
+    // _WX_OBJECTH__
 
 

@@ -47,7 +47,7 @@ wxPaintDC::~wxPaintDC(void)
 };
 
 void wxPaintDC::FloodFill( long WXUNUSED(x1), long WXUNUSED(y1), 
-  wxColour *WXUNUSED(col), int WXUNUSED(style) )
+  wxColour* WXUNUSED(col), int WXUNUSED(style) )
 {
 };
 
@@ -68,7 +68,7 @@ void wxPaintDC::CrossHair( long x, long y )
   
 };
 
-void wxPaintDC::DrawArc( long x1, long y1, long x2, long y2, double xc, double yc )
+void wxPaintDC::DrawArc( long x1, long y1, long x2, long y2, long xc, long yc )
 {
   if (!Ok()) return;
   
@@ -347,13 +347,13 @@ void wxPaintDC::GetTextExtent( const wxString &string, long *width, long *height
 long wxPaintDC::GetCharWidth(void)
 {
   if (!Ok()) return 0;
-  
+  return 0;
 };
 
 long wxPaintDC::GetCharHeight(void)
 {
   if (!Ok()) return 0;
-  
+  return 0;
 };
 
 void wxPaintDC::Clear(void)

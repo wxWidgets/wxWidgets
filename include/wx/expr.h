@@ -9,8 +9,8 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __EXPRH__
-#define __EXPRH__
+#ifndef _WX_EXPRH__
+#define _WX_EXPRH__
 
 #include <math.h>
 #include <stdlib.h>
@@ -126,4 +126,4 @@ void syntax_error();
 #endif
 
 #endif
-	// __EXPRH__
+	// _WX_EXPRH__

@@ -1,5 +1,5 @@
-#ifndef __GRIDH_BASE__
-#define __GRIDH_BASE__
+#ifndef _WX_GRID_H_BASE_
+#define _WX_GRID_H_BASE_
 
 #include "wx/generic/gridg.h"
 
@@ -8,4 +8,4 @@
 #endif
 
 #endif
-    // __GRIDH_BASE__
+    // _WX_GRID_H_BASE_

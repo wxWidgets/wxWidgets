@@ -8,8 +8,8 @@
 // Copyright:   (c) 1998 Guilhem Lavaux
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
-#ifndef __WXOBJSTRM_H__
-#define __WXOBJSTRM_H__
+#ifndef _WX_WXOBJSTRM_H__
+#define _WX_WXOBJSTRM_H__
 
 #ifdef __GNUG__
 #pragma interface

@@ -14,6 +14,8 @@
 #endif
 
 #include "wx/mdi.h"
+#include "wx/menu.h"
+#include "wx/settings.h"
 
 extern wxList wxModelessWindows;
 

@@ -21,7 +21,7 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx.h"
+#include "wx/wx.h"
 #endif
 
 #if USE_TOOLBAR
@@ -212,8 +212,8 @@ void wxToolBarSimple::DrawTool(wxDC& dc, wxMemoryDC& memDC, wxToolBarTool *tool)
 
   if (bitmap && bitmap->Ok())
   {
-    if (bitmap->GetColourMap())
-      memDC.SetPalette(*bitmap->GetColourMap());
+    if (bitmap->GetPalette())
+      memDC.SetPalette(*bitmap->GetPalette());
 
     int ax = (int)tool->m_x,
         ay = (int)tool->m_y,

@@ -109,7 +109,7 @@ int strncasecmp(const char *str_1, const char *str_2, size_t maxchar)
 }
 #endif
 
-#ifdef __WXMSW__
+#ifdef __WINDOWS__
 
 #ifndef __GNUWIN32__
 #define strcasecmp stricmp

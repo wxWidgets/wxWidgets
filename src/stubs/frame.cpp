@@ -17,6 +17,11 @@
 #include "wx/statusbr.h"
 #include "wx/toolbar.h"
 #include "wx/menuitem.h"
+#include "wx/menu.h"
+#include "wx/dcclient.h"
+#include "wx/dialog.h"
+#include "wx/settings.h"
+#include "wx/app.h"
 
 extern wxList wxModelessWindows;
 extern wxList wxPendingDelete;
@@ -511,9 +516,6 @@ void wxFrame::PositionToolBar()
     // TODO: we actually need to use the low-level client size, before
     // the toolbar/status bar were added.
     // So DEFINITELY replace the line below with something appropriate.
-
-    wxCHECK_MSG( TRUE, FALSE,
-               "PositionToolBar not implemented properly, see frame.cpp" );
 
     GetClientSize(& cw, &ch);
 

@@ -1,5 +1,5 @@
-#ifndef __DNDH_BASE__
-#define __DNDH_BASE__
+#ifndef _WX_DND_H_BASE_
+#define _WX_DND_H_BASE_
 
 #if defined(__WXMSW__)
 #include "wx/msw/ole/dropsrc.h"
@@ -10,7 +10,11 @@
 #include "wx/gtk/dnd.h"
 #elif defined(__WXQT__)
 #include "wx/qt/dnd.h"
+#elif defined(__WXMAC__)
+#include "wx/mac/dnd.h"
+#elif defined(__WXSTUBS__)
+#include "wx/stubs/dnd.h"
 #endif
 
 #endif
-    // __DNDH_BASE__
+    // _WX_DND_H_BASE_

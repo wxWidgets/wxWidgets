@@ -9,8 +9,8 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __DEFSH__
-#define __DEFSH__
+#ifndef _WX_DEFS_H_
+#define _WX_DEFS_H_
 
 #ifdef __GNUG__
 #pragma interface "defs.h"
@@ -48,14 +48,10 @@
 #endif
 #if defined(__WXMOTIF__)
 # define __X__
-#elif defined(__WXMSW__) || defined(__WINDOWS_386__) || defined(__NT__) || defined(__MSDOS__) 
-# ifndef __WXMSW__
-#  define __WXMSW__
-# endif
 #endif
 
 // wxWindows checks for WIN32, not __WIN32__
-#if ((defined(WIN32) || defined(__NT__)) && !defined(__WIN32__))
+#if ((defined(WIN32) || defined(__NT__)) && !defined(__WIN32__) && !defined(__WXSTUBS__))
 #define __WIN32__
 #endif
 
@@ -71,11 +67,11 @@
 #if defined(__WXMSW__) && defined(__X__)
 # error "Target can't be both X and Windows"
 #elif !defined(__WXMOTIF__) && !defined(__WXMSW__) && !defined(__WXGTK__) && \
-      !defined(__MAC__) && !defined(__X__) && !defined(__WXQT__)
-#error "No Target! Use -D[__WXMOTIF__|__WXGTK__|__WXMSW__|__MAC__|__QT__]"
+      !defined(__WXMAC__) && !defined(__X__) && !defined(__WXQT__) && !defined(__WXSTUBS__)
+#error "No Target! Use -D[__WXMOTIF__|__WXGTK__|__WXMSW__|__WXMAC__|__WXQT__|__WXSTUBS__]"
 #endif
 
-#if defined(__WXMOTIF__) || defined(__WXGTK__) || defined(__WXQT__)
+#if defined(__WXMOTIF__) || defined(__WXGTK__) || defined(__WXQT__) || defined(__WXSTUBS__)
 
 // Bool is now obsolete, use bool instead
 // typedef int Bool;
@@ -236,10 +232,6 @@ enum  ErrCode
 #endif
 
 #ifndef __UNIX__                     // Windows
-  #ifndef __WXMSW__
-    #define __WXMSW__
-  #endif
-
   #if   defined(_MSC_VER)
     #define __VISUALC__
   #elif defined(__BCPLUSPLUS__) && !defined(__BORLANDC__)
@@ -257,7 +249,7 @@ enum  ErrCode
 #elif   defined(__WXMSW__)
   #define FILE_PATH_SEPARATOR   ('\\')
 #else
-  #error "don't know path separator for this platform"
+  #define FILE_PATH_SEPARATOR   ('/')
 #endif
 
 // ----------------------------------------------------------------------------
@@ -776,20 +768,23 @@ enum _Virtual_keycodes {
 // OS mnemonics -- Identify the running OS (useful for Windows)
 // [Not all platforms are currently available or supported]
 enum {
-  wxCURSES,
+  wxUNKNOWN_PLATFORM,
+  wxCURSES,     // Text-only CURSES
   wxXVIEW_X,	// Sun's XView OpenLOOK toolkit
   wxMOTIF_X,	// OSF Motif 1.x.x
-  wxCOSE_X,	// OSF Common Desktop Environment
+  wxCOSE_X,	    // OSF Common Desktop Environment
   wxNEXTSTEP,	// NeXTStep
   wxMACINTOSH,	// Apple System 7
-  wxGEOS,	// GEOS
-  wxOS2_PM,	// OS/2 Workplace
+  wxGTK,	    // GTK
+  wxQT,	        // Qt
+  wxGEOS,	    // GEOS
+  wxOS2_PM,	    // OS/2 Workplace
   wxWINDOWS,	// Windows or WfW
   wxPENWINDOWS,	// Windows for Pen Computing
   wxWINDOWS_NT,	// Windows NT
-  wxWIN32S,	// Windows 32S API
-  wxWIN95,	// Windows 95
-  wxWIN386	// Watcom 32-bit supervisor modus
+  wxWIN32S,	    // Windows 32S API
+  wxWIN95,	    // Windows 95
+  wxWIN386	    // Watcom 32-bit supervisor modus
 };
 
 // Printing
@@ -882,4 +877,4 @@ typedef int (__stdcall *WXFARPROC)();
 #endif
 
 #endif
-    // __WXDEFSH__
+    // _WX_DEFS_H_

@@ -13,11 +13,12 @@
 #pragma implementation "print.h"
 #endif
 
-#include "wx/print.h"
+#include "wx/stubs/print.h"
+#include "wx/stubs/printdlg.h"
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxPrinter, wxPrinterBase)
-IMPLEMENT_CLASS(wxWindowsPrintPreview, wxPrintPreviewBase)
+IMPLEMENT_CLASS(wxPrintPreview, wxPrintPreviewBase)
 #endif
 
 /*
@@ -56,17 +57,17 @@ bool wxPrinter::Setup(wxWindow *parent)
  * Print preview
  */
 
-wxWindowsPrintPreview::wxWindowsPrintPreview(wxPrintout *printout, wxPrintout *printoutForPrinting, wxPrintData *data):
+wxPrintPreview::wxPrintPreview(wxPrintout *printout, wxPrintout *printoutForPrinting, wxPrintData *data):
   wxPrintPreviewBase(printout, printoutForPrinting, data)
 {
     DetermineScaling();
 }
 
-wxWindowsPrintPreview::~wxWindowsPrintPreview()
+wxPrintPreview::~wxPrintPreview()
 {
 }
 
-bool wxWindowsPrintPreview::Print(bool interactive)
+bool wxPrintPreview::Print(bool interactive)
 {
     if (!printPrintout)
         return FALSE;
@@ -74,7 +75,7 @@ bool wxWindowsPrintPreview::Print(bool interactive)
     return printer.Print(previewFrame, printPrintout, interactive);
 }
 
-void wxWindowsPrintPreview::DetermineScaling()
+void wxPrintPreview::DetermineScaling()
 {
     // TODO
 }

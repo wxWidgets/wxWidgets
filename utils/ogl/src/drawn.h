@@ -18,6 +18,7 @@
 
 #include "basic.h"
 
+class wxDrawnShape;
 class wxPseudoMetaFile: public wxObject
 {
  DECLARE_DYNAMIC_CLASS(wxPseudoMetaFile)
@@ -48,10 +49,46 @@ class wxPseudoMetaFile: public wxObject
 
   void GetBounds(float *minX, float *minY, float *maxX, float *maxY);
 
+  // Calculate size from current operations
+  void CalculateSize(wxDrawnShape* shape);
+
   inline wxList& GetOutlineColours() const { return (wxList&) m_outlineColours; }
   inline wxList& GetFillColours() const { return (wxList&) m_fillColours; }
   inline void SetRotateable(bool rot) { m_rotateable = rot; }
   inline bool GetRotateable() const { return m_rotateable; }
+
+  inline void SetSize(float w, float h) { m_width = w; m_height = h; }
+
+  inline void SetFillBrush(wxBrush* brush) { m_fillBrush = brush; }
+  inline wxBrush* GetFillBrush() const { return m_fillBrush; }
+
+  inline void SetOutlinePen(wxPen* pen) { m_outlinePen = pen; }
+  inline wxPen* GetOutlinePen() const { return m_outlinePen; }
+
+public:
+  /// Set of functions for drawing into a pseudo metafile.
+  /// They use integers, but doubles are used internally for accuracy
+  /// when scaling.
+
+  virtual void DrawLine(const wxPoint& pt1, const wxPoint& pt2);
+  virtual void DrawRectangle(const wxRect& rect);
+  virtual void DrawRoundedRectangle(const wxRect& rect, double radius);
+  virtual void DrawEllipse(const wxRect& rect);
+  virtual void DrawPoint(const wxPoint& pt);
+  virtual void DrawText(const wxString& text, const wxPoint& pt);
+  virtual void DrawLines(int n, wxPoint pts[]);
+  virtual void DrawPolygon(int n, wxPoint pts[]);
+  virtual void DrawSpline(int n, wxPoint pts[]);
+
+  virtual void SetClippingRect(const wxRect& rect);
+  virtual void DestroyClippingRect();
+
+  virtual void SetPen(wxPen* pen, bool isOutline = FALSE);     // TODO: eventually, just store GDI object attributes, not actual
+  virtual void SetBrush(wxBrush* brush, bool isFill = FALSE);  // pens/brushes etc.
+  virtual void SetFont(wxFont* font);
+  virtual void SetTextColour(const wxColour& colour);
+  virtual void SetBackgroundColour(const wxColour& colour);
+  virtual void SetBackgroundMode(int mode);
 
 public:
   bool              m_rotateable;
@@ -102,13 +139,40 @@ class wxDrawnShape: public wxRectangleShape
   inline void SetSaveToFile(bool save) { m_saveToFile = save; }
   inline wxPseudoMetaFile& GetMetaFile() const { return (wxPseudoMetaFile&) m_metafile; }
 
+  /// Set of functions for drawing into a pseudo metafile.
+  /// They use integers, but doubles are used internally for accuracy
+  /// when scaling.
+
+  virtual void DrawLine(const wxPoint& pt1, const wxPoint& pt2);
+  virtual void DrawRectangle(const wxRect& rect);
+  virtual void DrawRoundedRectangle(const wxRect& rect, double radius);
+  virtual void DrawEllipse(const wxRect& rect);
+  virtual void DrawPoint(const wxPoint& pt);
+  virtual void DrawText(const wxString& text, const wxPoint& pt);
+  virtual void DrawLines(int n, wxPoint pts[]);
+  virtual void DrawPolygon(int n, wxPoint pts[]);
+  virtual void DrawSpline(int n, wxPoint pts[]);
+
+  virtual void SetClippingRect(const wxRect& rect);
+  virtual void DestroyClippingRect();
+
+  virtual void SetPen(wxPen* pen, bool isOutline = FALSE);     // TODO: eventually, just store GDI object attributes, not actual
+  virtual void SetBrush(wxBrush* brush, bool isFill = FALSE);  // pens/brushes etc.
+  virtual void SetFont(wxFont* font);
+  virtual void SetTextColour(const wxColour& colour);
+  virtual void SetBackgroundColour(const wxColour& colour);
+  virtual void SetBackgroundMode(int mode);
+
+  // Set the width/height according to the shapes in the metafile.
+  // Call this after drawing into the shape.
+  inline void CalculateSize() { m_metafile.CalculateSize(this); }
+
 private:
   wxPseudoMetaFile      m_metafile;
 
   // Don't save all wxDrawnShape metafiles to file: sometimes
   // we take the metafile data from a symbol library.
   bool                  m_saveToFile;
-
 };
 
 #endif

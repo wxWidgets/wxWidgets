@@ -23,6 +23,7 @@
 //-----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxPaintDC;
+class WXDLLEXPORT wxWindow;
 
 // Under Windows, wxClientDC, wxPaintDC and wxWindowDC are implemented differently.
 // On many platforms, however, they will be the same.
@@ -45,12 +46,12 @@ class WXDLLEXPORT wxPaintDC: public wxDC
     
     ~wxPaintDC(void);
     
-    virtual void FloodFill( long x1, long y1, wxColour *col, int style=wxFLOOD_SURFACE );
+    virtual void FloodFill( long x1, long y1, wxColour* col, int style=wxFLOOD_SURFACE );
     virtual bool GetPixel( long x1, long y1, wxColour *col ) const;
 
     virtual void DrawLine( long x1, long y1, long x2, long y2 );
     virtual void CrossHair( long x, long y );
-    virtual void DrawArc( long x1, long y1, long x2, long y2, double xc, double yc );
+    virtual void DrawArc( long x1, long y1, long x2, long y2, long xc, long yc );
     virtual void DrawEllipticArc( long x, long y, long width, long height, double sa, double ea );
     virtual void DrawPoint( long x, long y );
     

@@ -1,5 +1,5 @@
-#ifndef __PRINTDLGH_BASE__
-#define __PRINTDLGH_BASE__
+#ifndef _WX_PRINTDLG_H_BASE_
+#define _WX_PRINTDLG_H_BASE_
 
 #if defined(__WXMSW__)
 #include "wx/msw/printdlg.h"
@@ -7,7 +7,13 @@
 #include "wx/generic/prntdlgg.h"
 #elif defined(__WXGTK__)
 #include "wx/generic/prntdlgg.h"
+#elif defined(__WXQT__)
+#include "wx/generic/prntdlgg.h"
+#elif defined(__WXMAC__)
+#include "wx/generic/prntdlgg.h"
+#elif defined(__WXSRUBS__)
+#include "wx/generic/prntdlgg.h"
 #endif
 
 #endif
-    // __PRINTDLGH_BASE__
+    // _WX_PRINTDLG_H_BASE_

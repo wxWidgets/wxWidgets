@@ -13,17 +13,13 @@
 #pragma implementation "tabctrl.h"
 #endif
 
+#include "wx/control.h"
 #include "wx/tabctrl.h"
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxTabCtrl, wxControl)
 
 BEGIN_EVENT_TABLE(wxTabCtrl, wxControl)
-	EVT_SIZE(wxTabCtrl::OnSize)
-	EVT_PAINT(wxTabCtrl::OnPaint)
-	EVT_KILL_FOCUS(wxTabCtrl::OnKillFocus)
-	EVT_MOUSE_EVENTS(wxTabCtrl::OnMouseEvent)
-    EVT_SYS_COLOUR_CHANGED(wxTabCtrl::OnSysColourChanged)
 END_EVENT_TABLE()
 #endif
 

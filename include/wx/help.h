@@ -1,5 +1,5 @@
-#ifndef __HELPH_BASE__
-#define __HELPH_BASE__
+#ifndef _WX_HELP_H_BASE_
+#define _WX_HELP_H_BASE_
 
 #ifdef __WXMSW__
 #include "wx/msw/helpwin.h"
@@ -21,4 +21,4 @@
 #endif
 
 #endif
-    // __HELPH_BASE__
+    // _WX_HELP_H_BASE_

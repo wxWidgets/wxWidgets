@@ -1,7 +1,7 @@
-#ifndef __HELPHTMLH_BASE__
-#define __HELPHTMLH_BASE__
+#ifndef _WX_HELPHTML_H_BASE_
+#define _WX_HELPHTML_H_BASE_
 
 #include "wx/generic/helphtml.h"
 
 #endif
-    // __HELPHTMLH_BASE__
+    // _WX_HELPHTML_H_BASE_

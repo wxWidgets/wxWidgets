@@ -9,8 +9,8 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __WXEXPRH__
-#define __WXEXPRH__
+#ifndef _WX_WXEXPRH__
+#define _WX_WXEXPRH__
 
 #ifdef __GNUG__
 #pragma interface "wxexpr.h"

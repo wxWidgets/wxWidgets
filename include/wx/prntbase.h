@@ -9,8 +9,8 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __PRNTBASEH__
-#define __PRNTBASEH__
+#ifndef _WX_PRNTBASEH__
+#define _WX_PRNTBASEH__
 
 #ifdef __GNUG__
 #pragma interface "prntbase.h"
@@ -22,6 +22,7 @@
 #include "wx/panel.h"
 #include "wx/scrolwin.h"
 #include "wx/dialog.h"
+#include "wx/frame.h"
 
 class WXDLLEXPORT wxDC;
 class WXDLLEXPORT wxButton;
@@ -332,4 +333,4 @@ public:
 };
 
 #endif
-    // __PRNTBASEH__
+    // _WX_PRNTBASEH__

@@ -9,8 +9,8 @@
 // Licence:   	wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __VALTEXTH__
-#define __VALTEXTH__
+#ifndef _WX_VALTEXTH__
+#define _WX_VALTEXTH__
 
 #ifdef __GNUG__
 #pragma interface "valtext.h"

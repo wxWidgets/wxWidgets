@@ -9,8 +9,8 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __TIMEH__
-#define __TIMEH__
+#ifndef _WX_TIMEH__
+#define _WX_TIMEH__
 
 #include "wx/object.h"
 
@@ -93,5 +93,5 @@ public:
 #endif
   // USE_TIMEDATE
 #endif
-    // __TIMEH__
+    // _WX_TIMEH__
 

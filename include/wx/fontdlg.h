@@ -1,5 +1,5 @@
-#ifndef __FONTDLGH_BASE__
-#define __FONTDLGH_BASE__
+#ifndef _WX_FONTDLG_H_BASE_
+#define _WX_FONTDLG_H_BASE_
 
 #if defined(__WXMSW__)
 #include "wx/msw/fontdlg.h"
@@ -15,7 +15,15 @@
 #include "wx/generic/fontdlgg.h"
 #   define wxFontDialog wxGenericFontDialog
 #   define classwxFontDialog classwxGenericFontDialog
+#elif defined(__WXMAC__)
+#include "wx/generic/fontdlgg.h"
+#   define wxFontDialog wxGenericFontDialog
+#   define classwxFontDialog classwxGenericFontDialog
+#elif defined(__WXSTUBS__)
+#include "wx/generic/fontdlgg.h"
+#   define wxFontDialog wxGenericFontDialog
+#   define classwxFontDialog classwxGenericFontDialog
 #endif
 
 #endif
-    // __FONTDLGH_BASE__
+    // _WX_FONTDLG_H_BASE_

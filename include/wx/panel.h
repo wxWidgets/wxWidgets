@@ -1,7 +1,7 @@
-#ifndef __PANELH_BASE__
-#define __PANELH_BASE__
+#ifndef _WX_PANEL_H_BASE_
+#define _WX_PANEL_H_BASE_
 
 #include "wx/generic/panelg.h"
 
 #endif
-    // __PANELH_BASE_
+    // _WX_PANELH_BASE_

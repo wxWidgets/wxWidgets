@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        treectrl.cpp
-// Purpose:     wxTreeCtrl
+// Purpose:     wxTreeCtrl. See also Robert's generic wxTreeCtrl.
 // Author:      AUTHOR
 // Modified by:
 // Created:     ??/??/98
@@ -13,7 +13,8 @@
 #pragma implementation "treectrl.h"
 #endif
 
-#include "wx/treectrl.h"
+#include "wx/stubs/textctrl.h"
+#include "wx/stubs/treectrl.h"
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxTreeCtrl, wxControl)
@@ -281,11 +282,9 @@ bool wxTreeCtrl::ExpandItem(long item, int action)
       break;
 
     case wxTREE_EXPAND_COLLAPSE_RESET:
-      mswAction = TVE_COLLAPSERESET;
       break;
 
     case wxTREE_EXPAND_TOGGLE:
-      mswAction = TVE_TOGGLE;
       break;
 
     default:

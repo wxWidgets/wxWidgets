@@ -1,7 +1,7 @@
-#ifndef __HELPWINH_BASE__
-#define __HELPWINH_BASE__
+#ifndef _WX_HELPWIN_H_BASE_
+#define _WX_HELPWIN_H_BASE_
 
 #include "wx/msw/helpwin.h"
 
 #endif
-    // __HELPWINH_BASE__
+    // _WX_HELPWIN_H_BASE_

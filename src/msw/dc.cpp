@@ -386,7 +386,7 @@ void wxDC::DrawLine(long x1, long y1, long x2, long y2)
   CalcBoundingBox(x2, y2);
 }
 
-void wxDC::DrawArc(long x1,long y1,long x2,long y2,double xc,double yc)
+void wxDC::DrawArc(long x1,long y1,long x2,long y2, long xc, long yc)
 {
   double dx = xc-x1 ;
   double dy = yc-y1 ;

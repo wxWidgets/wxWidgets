@@ -112,8 +112,6 @@ wxSplitterWindow::wxSplitterWindow(wxWindow *parent, wxWindowID id, const wxPoin
     // Eventually, we'll respond to colour change messages
     InitColours();
 
-    SetDoubleClick(TRUE);
-
     // For debugging purposes, to see the background.
 //    SetBackground(wxBLUE_BRUSH);
 }

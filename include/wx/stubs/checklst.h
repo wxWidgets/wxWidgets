@@ -17,6 +17,8 @@
 #pragma interface "checklst.h"
 #endif
 
+#include "wx/listbox.h"
+
 typedef   unsigned int  uint;
 
 class wxCheckListBox : public wxListBox
@@ -37,9 +39,6 @@ public:
   // items may be checked
   bool  IsChecked(uint uiIndex) const;
   void  Check(uint uiIndex, bool bCheck = TRUE);
-
-  // accessors
-  uint  GetItemHeight() const { return m_nItemHeight; }
 
   DECLARE_EVENT_TABLE()
 };

@@ -576,11 +576,12 @@ $(CFG): makefile.b32
 -WE
 
 -I$(WXINC);$(BCCDIR)\include;$(WXDIR)/src/png;$(WXDIR)/src/zlib
--I$(WXDIR)\include\msw\gnuwin32
+-I$(WXDIR)\include\wx\msw\gnuwin32
 
 -L$(BCCDIR)\lib
 -D__WXWIN__
 -D__WXMSW__
+-D__WINDOWS__
 -DWIN32
 $(OPT)
 $(DEBUG_FLAGS)

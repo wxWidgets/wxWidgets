@@ -1,15 +1,19 @@
-#ifndef __BUTTONH_BASE__
-#define __BUTTONH_BASE__
+#ifndef _WX_BUTTON_H_BASE_
+#define _WX_BUTTON_H_BASE_
 
 #if defined(__WXMSW__)
 #include "wx/msw/button.h"
 #elif defined(__WXMOTIF__)
-#include "wx/xt/button.h"
+#include "wx/motif/button.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/button.h"
 #elif defined(__WXQT__)
 #include "wx/qt/button.h"
+#elif defined(__WXMAC__)
+#include "wx/mac/button.h"
+#elif defined(__WXSTUBS__)
+#include "wx/stubs/button.h"
 #endif
 
 #endif
-    // __BUTTONH_BASE__
+    // _WX_BUTTON_H_BASE_

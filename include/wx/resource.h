@@ -9,8 +9,8 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __RESOURCEH__
-#define __RESOURCEH__
+#ifndef _WX_RESOURCEH__
+#define _WX_RESOURCEH__
 
 #ifdef __GNUG__
 #pragma interface "resource.h"
@@ -171,4 +171,4 @@ extern int WXDLLEXPORT wxResourceGetIdentifier(char *name, wxResourceTable *tabl
 
 #endif
 #endif
-    // __RESOURCEH__
+    // _WX_RESOURCEH__

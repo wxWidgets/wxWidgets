@@ -175,4 +175,4 @@ private:
 };
 
 #endif
-        // __FILEH__
+        // _WX_FILEH__

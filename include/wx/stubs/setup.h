@@ -47,7 +47,10 @@
 #define USE_XFIG_SPLINE_CODE  1
                            	// 1 for XFIG spline code, 0 for AIAI spline code.
 // AIAI spline code is slower, but freer of copyright issues.
+                            	// 0 for no splines
 
+#define USE_TOOLBAR     1
+                            // Use toolbars
 #define USE_DRAG_AND_DROP 1
                         	// 0 for no drag and drop
 
@@ -78,7 +81,7 @@
                                   // since you may well need to output
                                   // an error log in a production
                                   // version (or non-debugging beta)
-#define USE_GLOBAL_MEMORY_OPERATORS 1
+#define USE_GLOBAL_MEMORY_OPERATORS 0
                                   // In debug mode, cause new and delete to be redefined globally.
                                   // If this causes problems (e.g. link errors), set this to 0.
 

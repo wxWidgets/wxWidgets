@@ -56,18 +56,22 @@
  
 class wxDrawOp: public wxObject
 {
- public:
-  int op;
-
-  inline wxDrawOp(int theOp) { op = theOp; }
+public:
+  inline wxDrawOp(int theOp) { m_op = theOp; }
   inline ~wxDrawOp() {}
   inline virtual void Scale(float xScale, float yScale) {};
   inline virtual void Translate(float x, float y) {};
   inline virtual void Rotate(float x, float y, float sinTheta, float cosTheta) {};
   virtual void Do(wxDC& dc, float xoffset, float yoffset) = 0;
   virtual wxDrawOp *Copy(wxPseudoMetaFile *newImage) = 0;
-  virtual wxExpr *WritewxExpr(wxPseudoMetaFile *image) = 0;
-  virtual void ReadwxExpr(wxPseudoMetaFile *image, wxExpr *expr) = 0;
+  virtual wxExpr *WriteExpr(wxPseudoMetaFile *image) = 0;
+  virtual void ReadExpr(wxPseudoMetaFile *image, wxExpr *expr) = 0;
+
+  int GetOp() const { return m_op; }
+
+protected:
+  int m_op;
+
 };
 
 /*
@@ -78,17 +82,19 @@ class wxDrawOp: public wxObject
 class wxOpSetGDI: public wxDrawOp
 {
  public:
-  int mode;
-  int gdiIndex;
-  wxPseudoMetaFile *image;
-  unsigned char r;
-  unsigned char g;
-  unsigned char b;
   wxOpSetGDI(int theOp, wxPseudoMetaFile *theImage, int theGdiIndex, int theMode = 0);
   void Do(wxDC& dc, float xoffset, float yoffset);
   wxDrawOp *Copy(wxPseudoMetaFile *newImage);
-  wxExpr *WritewxExpr(wxPseudoMetaFile *image);
-  void ReadwxExpr(wxPseudoMetaFile *image, wxExpr *expr);
+  wxExpr *WriteExpr(wxPseudoMetaFile *image);
+  void ReadExpr(wxPseudoMetaFile *image, wxExpr *expr);
+
+public:
+  int               m_mode;
+  int               m_gdiIndex;
+  wxPseudoMetaFile* m_image;
+  unsigned char     m_r;
+  unsigned char     m_g;
+  unsigned char     m_b;
 };
 
 /*
@@ -98,18 +104,20 @@ class wxOpSetGDI: public wxDrawOp
  
 class wxOpSetClipping: public wxDrawOp
 {
- public:
-  float x1;
-  float y1;
-  float x2;
-  float y2;
+public:
   wxOpSetClipping(int theOp, float theX1, float theY1, float theX2, float theY2);
   void Do(wxDC& dc, float xoffset, float yoffset);
   void Scale(float xScale, float yScale);
   void Translate(float x, float y);
   wxDrawOp *Copy(wxPseudoMetaFile *newImage);
-  wxExpr *WritewxExpr(wxPseudoMetaFile *image);
-  void ReadwxExpr(wxPseudoMetaFile *image, wxExpr *expr);
+  wxExpr *WriteExpr(wxPseudoMetaFile *image);
+  void ReadExpr(wxPseudoMetaFile *image, wxExpr *expr);
+
+public:
+  float     m_x1;
+  float     m_y1;
+  float     m_x2;
+  float     m_y2;
 };
 
 /*
@@ -120,14 +128,6 @@ class wxOpSetClipping: public wxDrawOp
 class wxOpDraw: public wxDrawOp
 {
  public:
-  float x1;
-  float y1;
-  float x2;
-  float y2;
-  float x3;
-  float radius;
-  char *textString;
-
   wxOpDraw(int theOp, float theX1, float theY1, float theX2, float theY2,
          float radius = 0.0, char *s = NULL);
   ~wxOpDraw();
@@ -136,8 +136,18 @@ class wxOpDraw: public wxDrawOp
   void Translate(float x, float y);
   void Rotate(float x, float y, float sinTheta, float cosTheta);
   wxDrawOp *Copy(wxPseudoMetaFile *newImage);
-  wxExpr *WritewxExpr(wxPseudoMetaFile *image);
-  void ReadwxExpr(wxPseudoMetaFile *image, wxExpr *expr);
+  wxExpr *WriteExpr(wxPseudoMetaFile *image);
+  void ReadExpr(wxPseudoMetaFile *image, wxExpr *expr);
+
+public:
+  float     m_x1;
+  float     m_y1;
+  float     m_x2;
+  float     m_y2;
+  float     m_x3;
+  float     m_radius;
+  char*     m_textString;
+
 };
 
 /*
@@ -147,10 +157,7 @@ class wxOpDraw: public wxDrawOp
 
 class wxOpPolyDraw: public wxDrawOp
 {
- public:
-  wxRealPoint *points;
-  int noPoints;
-  
+public:
   wxOpPolyDraw(int theOp, int n, wxRealPoint *thePoints);
   ~wxOpPolyDraw();
   void Do(wxDC& dc, float xoffset, float yoffset);
@@ -158,8 +165,13 @@ class wxOpPolyDraw: public wxDrawOp
   void Translate(float x, float y);
   void Rotate(float x, float y, float sinTheta, float cosTheta);
   wxDrawOp *Copy(wxPseudoMetaFile *newImage);
-  wxExpr *WritewxExpr(wxPseudoMetaFile *image);
-  void ReadwxExpr(wxPseudoMetaFile *image, wxExpr *expr);
+  wxExpr *WriteExpr(wxPseudoMetaFile *image);
+  void ReadExpr(wxPseudoMetaFile *image, wxExpr *expr);
+
+public:
+  wxRealPoint*  m_points;
+  int           m_noPoints;
+  
 };
 
 #endif

@@ -13,7 +13,8 @@
 #pragma implementation "listctrl.h"
 #endif
 
-#include "wx/listctrl.h"
+#include "wx/stubs/textctrl.h"
+#include "wx/stubs/listctrl.h"
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxListCtrl, wxControl)
@@ -365,17 +366,14 @@ void wxListCtrl::SetImageList(wxImageList *imageList, int which)
 	int flags = 0;
 	if ( which == wxIMAGE_LIST_NORMAL )
     {
-		flags = LVSIL_NORMAL;
 		m_imageListNormal = imageList;
 	}
 	else if ( which == wxIMAGE_LIST_SMALL )
     {
-		flags = LVSIL_SMALL;
 		m_imageListSmall = imageList;
 	}
 	else if ( which == wxIMAGE_LIST_STATE )
     {
-		flags = LVSIL_STATE;
 		m_imageListState = imageList;
 	}
 	// TODO set image list

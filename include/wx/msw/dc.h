@@ -57,10 +57,10 @@ public:
     CrossHair(pt.x, pt.y);
   }
 
-  virtual void DrawArc(long x1,long y1,long x2,long y2,double xc, double yc);
-  inline void DrawArc(const wxPoint& pt1, const wxPoint& pt2, double xc, double yc)
+  virtual void DrawArc(long x1,long y1,long x2,long y2,long xc, long yc);
+  inline void DrawArc(const wxPoint& pt1, const wxPoint& pt2, const wxPoint& centre)
   {
-    DrawArc(pt1.x, pt1.y, pt2.x, pt2.y, xc, yc);
+    DrawArc(pt1.x, pt1.y, pt2.x, pt2.y, centre.x, centre.y);
   }
 
   virtual void DrawEllipticArc (long x, long y, long w, long h, double sa, double ea);
