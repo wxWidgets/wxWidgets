@@ -82,6 +82,9 @@ public:
     // Returns TRUE if a key down event has been processed
     virtual bool CheckForKeyDown(WXEvent* event);
 
+    // Returns TRUE if a key up event has been processed
+    virtual bool CheckForKeyUp(WXEvent* event);
+
 protected:
     bool                  m_showOnInit;
 
