@@ -891,6 +891,7 @@ MEDIADLL_CXXFLAGS = $(__mediadll_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
 	-DWXUSINGDLL -DWXMAKINGDLL_MEDIA $(PIC_FLAG) $(CPPFLAGS) $(CXXFLAGS)
 MEDIADLL_OBJECTS =  \
+	mediadll_emptydmy.o \
 	$(__MEDIA_PLATFORM_SRC_OBJECTS_2)
 MEDIADLL_ODEP =  $(___pch_wxprec_mediadll_wx_wxprec_h_gch___depname)
 MEDIALIB_CXXFLAGS = $(__medialib_PCH_INC) -D__WX$(TOOLKIT)__ \
@@ -898,6 +899,7 @@ MEDIALIB_CXXFLAGS = $(__medialib_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
 	$(CPPFLAGS) $(CXXFLAGS)
 MEDIALIB_OBJECTS =  \
+	medialib_emptydmy.o \
 	$(__MEDIA_PLATFORM_SRC_OBJECTS_3)
 MEDIALIB_ODEP =  $(___pch_wxprec_medialib_wx_wxprec_h_gch___depname)
 ODBCDLL_CXXFLAGS = $(__odbcdll_PCH_INC) -D__WX$(TOOLKIT)__ \
@@ -2558,6 +2560,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	monodll_tipdlg.o \
 	monodll_wizard.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS) \
+	monodll_emptydmy.o \
 	$(__MEDIA_PLATFORM_SRC_OBJECTS) \
 	$(__HTML_SRC_PLATFORM_OBJECTS) \
 	monodll_helpctrl.o \
@@ -3544,6 +3547,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_tipdlg.o \
 	monolib_wizard.o \
 	$(__ADVANCED_PLATFORM_SRC_OBJECTS_1) \
+	monolib_emptydmy.o \
 	$(__MEDIA_PLATFORM_SRC_OBJECTS_1) \
 	$(__HTML_SRC_PLATFORM_OBJECTS_1) \
 	monolib_helpctrl.o \
@@ -9120,6 +9124,9 @@ monodll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(MONODLL_ODEP)
 monodll_eggtrayicon.o: $(srcdir)/src/gtk/eggtrayicon.c $(MONODLL_ODEP)
 	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $<
 
+monodll_emptydmy.o: $(srcdir)/src/common/emptydmy.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
 monodll_helpbest.o: $(srcdir)/src/msw/helpbest.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
@@ -12407,6 +12414,9 @@ monolib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(MONOLIB_ODEP)
 
 monolib_eggtrayicon.o: $(srcdir)/src/gtk/eggtrayicon.c $(MONOLIB_ODEP)
 	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $<
+
+monolib_emptydmy.o: $(srcdir)/src/common/emptydmy.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 monolib_helpbest.o: $(srcdir)/src/msw/helpbest.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
@@ -21450,6 +21460,9 @@ advlib_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_X11@advlib_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $<
 
+mediadll_emptydmy.o: $(srcdir)/src/common/emptydmy.cpp $(MEDIADLL_ODEP)
+	$(CXXC) -c -o $@ $(MEDIADLL_CXXFLAGS) $<
+
 @COND_TOOLKIT_MSW@mediadll_mediactrl.o: $(srcdir)/src/msw/mediactrl.cpp $(MEDIADLL_ODEP)
 @COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(MEDIADLL_CXXFLAGS) $<
 
@@ -21458,6 +21471,9 @@ advlib_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(ADVLIB_ODEP)
 
 @COND_TOOLKIT_MAC@mediadll_mediactrl.o: $(srcdir)/src/mac/carbon/mediactrl.cpp $(MEDIADLL_ODEP)
 @COND_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(MEDIADLL_CXXFLAGS) $<
+
+medialib_emptydmy.o: $(srcdir)/src/common/emptydmy.cpp $(MEDIALIB_ODEP)
+	$(CXXC) -c -o $@ $(MEDIALIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_MSW@medialib_mediactrl.o: $(srcdir)/src/msw/mediactrl.cpp $(MEDIALIB_ODEP)
 @COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(MEDIALIB_CXXFLAGS) $<

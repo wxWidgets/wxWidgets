@@ -2302,14 +2302,15 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!-- ====================================================================== -->
 
 <set var="MEDIA_CMN_SRC" hints="files">
+    src/common/emptydmy.cpp
 </set>
 
 <set var="MEDIA_CMN_HDR" hints="files">
-	wx/mediactrl.h
+    wx/mediactrl.h
 </set>
 
 <set var="MEDIA_MSW_SRC" hints="files">
-	src/msw/mediactrl.cpp
+    src/msw/mediactrl.cpp
 </set>
 <set var="MEDIA_MSW_HDR" hints="files">
     wx/msw/mediactrl.h
@@ -2321,7 +2322,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="MEDIA_MAC_SRC" hints="files">
-	src/mac/carbon/mediactrl.cpp
+    src/mac/carbon/mediactrl.cpp
 </set>
 <set var="MEDIA_MAC_HDR" hints="files">
     wx/mac/carbon/mediactrl.h
