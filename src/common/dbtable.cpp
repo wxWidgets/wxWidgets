@@ -134,6 +134,8 @@ wxDbTable::wxDbTable(wxDb *pwxDb, const char *tblName, const int nCols,
     wxStrcpy(tableName, tblName);               // Table Name
     if (tblPath)
         wxStrcpy(tablePath, tblPath);           // Table Path - used for dBase files
+    else
+        tablePath[0] = 0;
     
     if (qryTblName)                             // Name of the table/view to query
         wxStrcpy(queryTableName, qryTblName);
@@ -366,13 +368,19 @@ bool wxDbTable::bindInsertParams(void)
                 fSqlType = pDb->GetTypeInfVarchar().FsqlType;      
                 precision = colDefs[i].SzDataObj;
                 scale = 0;
-                colDefs[i].CbValue = SQL_NTS;
+                if (colDefs[i].Null)
+                    colDefs[i].CbValue = SQL_NULL_DATA;
+                else
+                    colDefs[i].CbValue = SQL_NTS;
                 break;
             case DB_DATA_TYPE_INTEGER:
                 fSqlType = pDb->GetTypeInfInteger().FsqlType;
                 precision = pDb->GetTypeInfInteger().Precision;
                 scale = 0;
-                colDefs[i].CbValue = 0;
+                if (colDefs[i].Null)
+                    colDefs[i].CbValue = SQL_NULL_DATA;
+                else
+                    colDefs[i].CbValue = 0;
                 break;
             case DB_DATA_TYPE_FLOAT:
                 fSqlType = pDb->GetTypeInfFloat().FsqlType;
@@ -383,21 +391,28 @@ bool wxDbTable::bindInsertParams(void)
                 // I check for this here and set the scale = precision.
                 //if (scale < 0)
                 //  scale = (short) precision;
-                colDefs[i].CbValue = 0;
+                if (colDefs[i].Null)
+                    colDefs[i].CbValue = SQL_NULL_DATA;
+                else
+                    colDefs[i].CbValue = 0;
                 break;
             case DB_DATA_TYPE_DATE:
                 fSqlType = pDb->GetTypeInfDate().FsqlType;
                 precision = pDb->GetTypeInfDate().Precision;
                 scale = 0;
-                colDefs[i].CbValue = 0;
+                if (colDefs[i].Null)
+                    colDefs[i].CbValue = SQL_NULL_DATA;
+                else
+                    colDefs[i].CbValue = 0;
                 break;
         }
         // Null values
-        if (colDefs[i].Null)
-        {
-            colDefs[i].CbValue = SQL_NULL_DATA;
-            colDefs[i].Null = FALSE;
-        }
+//RG-NULL
+//RG-NULL        if (colDefs[i].Null)
+//RG-NULL        {
+//RG-NULL            colDefs[i].CbValue = SQL_NULL_DATA;
+//RG-NULL            colDefs[i].Null = FALSE;
+//RG-NULL        }
 
         if (SQLBindParameter(hstmtInsert, colNo++, SQL_PARAM_INPUT, colDefs[i].SqlCtype,
                              fSqlType, precision, scale, (UCHAR*) colDefs[i].PtrDataObj, 
@@ -436,13 +451,19 @@ bool wxDbTable::bindUpdateParams(void)
                 fSqlType = pDb->GetTypeInfVarchar().FsqlType;
                 precision = colDefs[i].SzDataObj;
                 scale = 0;
-                colDefs[i].CbValue = SQL_NTS;
+                if (colDefs[i].Null)
+                    colDefs[i].CbValue = SQL_NULL_DATA;
+                else
+                    colDefs[i].CbValue = SQL_NTS;
                 break;
             case DB_DATA_TYPE_INTEGER:
                 fSqlType = pDb->GetTypeInfInteger().FsqlType;
                 precision = pDb->GetTypeInfInteger().Precision;
                 scale = 0;
-                colDefs[i].CbValue = 0;
+                if (colDefs[i].Null)
+                    colDefs[i].CbValue = SQL_NULL_DATA;
+                else
+                    colDefs[i].CbValue = 0;
                 break;
             case DB_DATA_TYPE_FLOAT:
                 fSqlType = pDb->GetTypeInfFloat().FsqlType;
@@ -453,13 +474,19 @@ bool wxDbTable::bindUpdateParams(void)
                 // I check for this here and set the scale = precision.
                 //if (scale < 0)
                 // scale = (short) precision;
-                colDefs[i].CbValue = 0;
+                if (colDefs[i].Null)
+                    colDefs[i].CbValue = SQL_NULL_DATA;
+                else
+                    colDefs[i].CbValue = 0;
                 break;
             case DB_DATA_TYPE_DATE:
                 fSqlType = pDb->GetTypeInfDate().FsqlType;
                 precision = pDb->GetTypeInfDate().Precision;
                 scale = 0;
-                colDefs[i].CbValue = 0;
+                if (colDefs[i].Null)
+                    colDefs[i].CbValue = SQL_NULL_DATA;
+                else
+                    colDefs[i].CbValue = 0;
                 break;
         }
         
@@ -480,14 +507,15 @@ bool wxDbTable::bindUpdateParams(void)
 /********** wxDbTable::bindCols() **********/
 bool wxDbTable::bindCols(HSTMT cursor)
 {
-    static SDWORD  cb;
+//RG-NULL    static SDWORD  cb;
     
     // Bind each column of the table to a memory address for fetching data
     int i;
     for (i = 0; i < noCols; i++)
     {
         if (SQLBindCol(cursor, i+1, colDefs[i].SqlCtype, (UCHAR*) colDefs[i].PtrDataObj,
-                       colDefs[i].SzDataObj, &cb) != SQL_SUCCESS)     
+//RG-NULL                       colDefs[i].SzDataObj, &cb) != SQL_SUCCESS)     
+                       colDefs[i].SzDataObj, &colDefs[i].CbValue ) != SQL_SUCCESS)
         {
           return (pDb->DispAllErrors(henv, hdbc, cursor));
         }
@@ -518,6 +546,14 @@ bool wxDbTable::getRec(UWORD fetchType)
             else
                 return(pDb->DispAllErrors(henv, hdbc, hstmt));
         }
+        else
+        {
+            // Set the Null member variable to indicate the Null state
+            // of each column just read in.
+            int i;
+            for (i = 0; i < noCols; i++)
+                colDefs[i].Null = (colDefs[i].CbValue == SQL_NULL_DATA);
+        }
     }
     else
     {
@@ -529,6 +565,14 @@ bool wxDbTable::getRec(UWORD fetchType)
                 return(FALSE);
             else
                 return(pDb->DispAllErrors(henv, hdbc, hstmt));
+        }
+        else
+        {
+            // Set the Null member variable to indicate the Null state
+            // of each column just read in.
+            int i;
+            for (i = 0; i < noCols; i++)
+                colDefs[i].Null = (colDefs[i].CbValue == SQL_NULL_DATA);
         }
     }
 
@@ -569,7 +613,6 @@ bool wxDbTable::query(int queryType, bool forUpdate, bool distinct, const char *
 {
     char sqlStmt[DB_MAX_STATEMENT_LEN];
 
-    // Set the selectForUpdate member variable
     if (forUpdate)
         // The user may wish to select for update, but the DBMS may not be capable
         selectForUpdate = CanSelectForUpdate();
@@ -618,27 +661,50 @@ bool wxDbTable::query(int queryType, bool forUpdate, bool distinct, const char *
 
 
 /********** wxDbTable::Open() **********/
-bool wxDbTable::Open(void)
+bool wxDbTable::Open(bool checkPrivileges)
 {
     if (!pDb)
         return FALSE;   
 
     int i;
     wxString sqlStmt;
+    wxString s;
 
+    s = "";
     // Verify that the table exists in the database
-    if (!pDb->TableExists(tableName,pDb->GetUsername(),tablePath))
+    if (!pDb->TableExists(tableName,/*pDb->GetUsername()*/NULL,tablePath))
     {
-        wxString s;
+        s = "Table/view does not exist in the database";
+        if ( *(pDb->dbInf.accessibleTables) == 'Y')
+            s += ", or you have no permissions.\n";
+        else
+            s += ".\n";
+    }
+    else if (checkPrivileges)
+    {
+        // Verify the user has rights to access the table.
+        // Shortcut boolean evaluation to optimize out call to 
+        // TablePrivileges
+        //
+        // Unfortunately this optimization doesn't seem to be
+        // reliable!
+        if (// *(pDb->dbInf.accessibleTables) == 'N' && 
+            !pDb->TablePrivileges(tableName,"SELECT",NULL,pDb->GetUsername(),tablePath))
+            s = "Current logged in user does not have sufficient privileges to access this table.\n";
+    }
+
+    if (!s.IsEmpty())
+    {
+        wxString p;
+
         if (wxStrcmp(tablePath,""))
-            s.sprintf(wxT("Error opening '%s/%s'.\n"),tablePath,tableName);
+            p.sprintf("Error opening '%s/%s'.\n",tablePath,tableName);
         else
-            s.sprintf(wxT("Error opening '%s'.\n"), tableName);
-        if (!pDb->TableExists(tableName,NULL,tablePath))
-            s += wxT("Table/view does not exist in the database.\n");
-        else
-            s += wxT("Current logged in user does not have sufficient privileges to access this table.\n");
-        pDb->LogError(s.c_str());
+            p.sprintf("Error opening '%s'.\n", tableName);
+
+        p += s;
+        pDb->LogError(p.GetData());
+
         return(FALSE);
     }
 
@@ -658,8 +724,8 @@ bool wxDbTable::Open(void)
     
     if (!bindCols(hstmtInternal))                   // Internal use only
         return(FALSE);
-    
-    /*
+
+     /*
      * Do NOT bind the hstmtCount cursor!!!
      */
 
@@ -1672,7 +1738,7 @@ void wxDbTable::BuildWhereClause(char *pWhereClause, int typeOfWhere,
     {
         // Determine if this column should be included in the WHERE clause
         if ((typeOfWhere == DB_WHERE_KEYFIELDS && colDefs[i].KeyField) ||
-             (typeOfWhere == DB_WHERE_MATCHING  && (! IsColNull(i))))
+             (typeOfWhere == DB_WHERE_MATCHING  && (!IsColNull(i))))
         {
             // Skip over timestamp columns
             if (colDefs[i].SqlCtype == SQL_C_TIMESTAMP)
@@ -1726,6 +1792,10 @@ void wxDbTable::BuildWhereClause(char *pWhereClause, int typeOfWhere,
 /********** wxDbTable::IsColNull() **********/
 bool wxDbTable::IsColNull(int colNo)
 {
+/*
+    This logic is just not right.  It would indicate TRUE
+    if a numeric field were set to a value of 0.
+
     switch(colDefs[colNo].SqlCtype)
     {
         case SQL_C_CHAR:
@@ -1752,6 +1822,8 @@ bool wxDbTable::IsColNull(int colNo)
         default:
             return(TRUE);
     }
+*/
+    return (colDefs[colNo].Null);
 }  // wxDbTable::IsColNull()
 
 
@@ -1798,49 +1870,61 @@ bool wxDbTable::IsCursorClosedOnCommit(void)
 }  // wxDbTable::IsCursorClosedOnCommit()
 
 
-/********** wxDbTable::ClearMemberVars() **********/
-void wxDbTable::ClearMemberVars(void)
+
+/********** wxDbTable::ClearMemberVar() **********/
+void wxDbTable::ClearMemberVar(int colNo, bool setToNull)
 {
-    // Loop through the columns setting each member variable to zero
-    int i;
-    for (i = 0; i < noCols; i++)
+    assert(colNo < noCols);
+
+    switch(colDefs[colNo].SqlCtype)
     {
-        switch(colDefs[i].SqlCtype)
-        {
-            case SQL_C_CHAR:
-                ((UCHAR FAR *) colDefs[i].PtrDataObj)[0]    = 0;
-                break;
-            case SQL_C_SSHORT:
-                *((SWORD *) colDefs[i].PtrDataObj)          = 0;
-                break;
-            case SQL_C_USHORT:
-                *((UWORD*) colDefs[i].PtrDataObj)           = 0;
-                break;
-            case SQL_C_SLONG:
-                *((SDWORD *) colDefs[i].PtrDataObj)         = 0;
-                break;
-            case SQL_C_ULONG:
-                *((UDWORD *) colDefs[i].PtrDataObj)         = 0;
-                break;
-            case SQL_C_FLOAT:
-                *((SFLOAT *) colDefs[i].PtrDataObj)         = 0.0f;
-                break;
-            case SQL_C_DOUBLE:
-                *((SDOUBLE *) colDefs[i].PtrDataObj)        = 0.0f;
-                break;
-            case SQL_C_TIMESTAMP:
-                TIMESTAMP_STRUCT *pDt;
-                pDt = (TIMESTAMP_STRUCT *) colDefs[i].PtrDataObj;
-                pDt->year = 0;
-                pDt->month = 0;
-                pDt->day = 0;
-                pDt->hour = 0;
-                pDt->minute = 0;
-                pDt->second = 0;
-                pDt->fraction = 0;
-                break;
-        }
+        case SQL_C_CHAR:
+            ((UCHAR FAR *) colDefs[colNo].PtrDataObj)[0]    = 0;
+            break;
+        case SQL_C_SSHORT:
+            *((SWORD *) colDefs[colNo].PtrDataObj)          = 0;
+            break;
+        case SQL_C_USHORT:
+            *((UWORD*) colDefs[colNo].PtrDataObj)           = 0;
+            break;
+        case SQL_C_SLONG:
+            *((SDWORD *) colDefs[colNo].PtrDataObj)         = 0;
+            break;
+        case SQL_C_ULONG:
+            *((UDWORD *) colDefs[colNo].PtrDataObj)         = 0;
+            break;
+        case SQL_C_FLOAT:
+            *((SFLOAT *) colDefs[colNo].PtrDataObj)         = 0.0f;
+            break;
+        case SQL_C_DOUBLE:
+            *((SDOUBLE *) colDefs[colNo].PtrDataObj)        = 0.0f;
+            break;
+        case SQL_C_TIMESTAMP:
+            TIMESTAMP_STRUCT *pDt;
+            pDt = (TIMESTAMP_STRUCT *) colDefs[colNo].PtrDataObj;
+            pDt->year = 0;
+            pDt->month = 0;
+            pDt->day = 0;
+            pDt->hour = 0;
+            pDt->minute = 0;
+            pDt->second = 0;
+            pDt->fraction = 0;
+            break;
     }
+
+    if (setToNull)
+        SetColNull(colNo);
+}  // wxDbTable::ClearMemberVar()
+
+
+/********** wxDbTable::ClearMemberVars() **********/
+void wxDbTable::ClearMemberVars(bool setToNull)
+{
+    int i;
+
+    // Loop through the columns setting each member variable to zero
+    for (i=0; i < noCols; i++)
+        ClearMemberVar(i,setToNull);
 
 }  // wxDbTable::ClearMemberVars()
 
@@ -2118,19 +2202,24 @@ bool wxDbTable::Refresh(void)
 }  // wxDbTable::Refresh()
 
 
-/********** wxDbTable::SetNull(int colNo) **********/
-bool wxDbTable::SetNull(int colNo)
+/********** wxDbTable::SetColNull(int colNo, bool set) **********/
+bool wxDbTable::SetColNull(int colNo, bool set)
 {
     if (colNo < noCols)
-        return(colDefs[colNo].Null = TRUE);
+    {
+        colDefs[colNo].Null = set;
+        if (set)  // Blank out the values in the member variable
+            ClearMemberVar(colNo,FALSE);  // Must call with FALSE, or infinite recursion will happen
+        return(TRUE);
+    }
     else
         return(FALSE);
 
-}  // wxDbTable::SetNull(int colNo)
+}  // wxDbTable::SetColNull(int colNo)
 
 
-/********** wxDbTable::SetNull(char *colName) **********/
-bool wxDbTable::SetNull(const char *colName)
+/********** wxDbTable::SetColNull(char *colName, bool set) **********/
+bool wxDbTable::SetColNull(const char *colName, bool set)
 {
     int i;
     for (i = 0; i < noCols; i++)
@@ -2140,11 +2229,16 @@ bool wxDbTable::SetNull(const char *colName)
     }
 
     if (i < noCols)
-        return(colDefs[i].Null = TRUE);
+    {
+        colDefs[i].Null = set;
+        if (set)  // Blank out the values in the member variable
+            ClearMemberVar(i,FALSE);  // Must call with FALSE, or infinite recursion will happen
+        return(TRUE);
+    }
     else
         return(FALSE);
 
-}  // wxDbTable::SetNull(char *colName)
+}  // wxDbTable::SetColNull(char *colName)
 
 
 /********** wxDbTable::GetNewCursor() **********/

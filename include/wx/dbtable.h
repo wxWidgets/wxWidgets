@@ -184,7 +184,7 @@ public:
               const char *qryTblName = 0, bool qryOnly = !wxDB_QUERY_ONLY, const char *tblPath="");
     virtual ~wxDbTable();
 
-    bool            Open(void);
+    bool            Open(bool checkPrivileges=FALSE);
     bool            CreateTable(bool attemptDrop=TRUE);
     bool            DropTable(void);
     bool            CreateIndex(const char * idxName, bool unique, int noIdxCols, wxDbIdxDef *pIdxDefs, bool attemptDrop=TRUE);
@@ -266,7 +266,8 @@ public:
 #endif
     bool            CanSelectForUpdate(void);
     bool            CanUpdByROWID(void);
-    void            ClearMemberVars(void);
+    void            ClearMemberVar(int colNo, bool setToNull=FALSE);
+    void            ClearMemberVars(bool setToNull=FALSE);
     bool            SetQueryTimeout(UDWORD nSeconds);
 
     wxDbColDef     *GetColDefs() { return colDefs; }
@@ -289,9 +290,13 @@ public:
     int             DB_STATUS(void) { return(pDb->DB_STATUS); }
 
     bool            IsColNull(int colNo);
-    bool            SetNull(int colNo);
-    bool            SetNull(const char *colName);
-
+    bool            SetColNull(int colNo, bool set=TRUE);
+    bool            SetColNull(const char *colName, bool set=TRUE);
+#if wxODBC_BACKWARD_COMPATABILITY
+// The following member functions are deprecated.  You should use the SetColNull()
+    bool            SetNull(int colNo, bool set=TRUE) { return (SetNull(colNo,set)); }
+    bool            SetNull(const char *colName, bool set=TRUE) { return (SetNull(colName,set)); }
+#endif
 #ifdef __WXDEBUG__
     ULONG           GetTableID() { return tableID; }
 #endif
