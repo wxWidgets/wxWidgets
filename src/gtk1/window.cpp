@@ -1304,6 +1304,13 @@ static gint gtk_window_key_release_callback( GtkWidget *widget,
     event.m_leftDown = (gdk_event->state & GDK_BUTTON1_MASK);                 \
     event.m_middleDown = (gdk_event->state & GDK_BUTTON2_MASK);               \
     event.m_rightDown = (gdk_event->state & GDK_BUTTON3_MASK);                \
+    if (event.GetEventType()==wxEVT_MOUSEWHEEL)                               \
+    {                                                                         \
+       if (((GdkEventButton*)gdk_event)->button == 4)                         \
+           event.m_wheelRotation = 120;                                       \
+       else if (((GdkEventButton*)gdk_event)->button == 5)                    \
+           event.m_wheelRotation = -120;                                      \
+    }                                                                         \
                                                                               \
     wxPoint pt = win->GetClientAreaOrigin();                                  \
     event.m_x = (wxCoord)gdk_event->x - pt.x;                                 \
@@ -1497,7 +1504,22 @@ static gint gtk_window_button_press_callback( GtkWidget *widget,
             default:  break;
         }
     }
-    
+    else if (gdk_event->button == 4)
+    {
+        switch (gdk_event->type)
+        {
+            case GDK_BUTTON_PRESS: event_type = wxEVT_MOUSEWHEEL; break;
+            default:  break;
+        }
+    }
+    else if (gdk_event->button == 5)
+    {
+        switch (gdk_event->type)
+        {
+            case GDK_BUTTON_PRESS: event_type = wxEVT_MOUSEWHEEL; break;
+            default:  break;
+        }
+    }
 
     if ( event_type == wxEVT_NULL )
     {
