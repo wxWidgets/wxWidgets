@@ -235,6 +235,7 @@ bool wxPen::RealizeResource()
       wxDash *real_dash ;
       if (M_PENDATA->m_style==wxUSER_DASH && M_PENDATA->m_nbDash && M_PENDATA->m_dash)
       {
+	wxBell();
         real_dash = new wxDash[M_PENDATA->m_nbDash] ;
         int i;
         for (i=0;i<M_PENDATA->m_nbDash;i++)
@@ -270,7 +271,7 @@ WXHANDLE wxPen::GetResourceHandle()
 	if ( !M_PENDATA )
 		return 0;
 	else
-  		return (WXHANDLE)M_PENDATA->m_hPen;
+		return (WXHANDLE)M_PENDATA->m_hPen;
 }
 
 bool wxPen::FreeResource(bool force)

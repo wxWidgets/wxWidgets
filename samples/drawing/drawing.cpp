@@ -102,8 +102,8 @@ class MyCanvas: public wxScrolledWindow
 {
 public:
     MyCanvas( MyFrame *parent );
-    
-    void DoDrawTests( int x, int y, wxDC &dc );
+
+    void DrawTestLines( int x, int y, int width, wxDC &dc );    
     void OnPaint(wxPaintEvent &event);
     
 protected:
@@ -207,106 +207,51 @@ MyCanvas::MyCanvas( MyFrame *parent )
   m_owner = parent;
 }
 
-void MyCanvas::DoDrawTests( int x, int y, wxDC &dc )
+void MyCanvas::DrawTestLines( int x, int y, int width, wxDC &dc )
 {
-   wxRect rect;
-   rect.x = dc.LogicalToDeviceX( x-20 );
-   rect.y = dc.LogicalToDeviceY( y-20 );
-   rect.width = dc.LogicalToDeviceXRel( 500 );
-   rect.height = dc.LogicalToDeviceYRel( 200 );
-   if (!IsExposed(rect)) return;
+    dc.SetPen( wxPen( "black", width, wxSOLID) );
+    dc.SetBrush( *wxRED_BRUSH );
+    dc.DrawRectangle( x+10, y+10, 400, 190 );
+    
+    dc.SetPen( wxPen( "black", width, wxSOLID) );
+    dc.DrawLine( x+20, y+20, 390, y+20 );
+    dc.SetPen( wxPen( "black", width, wxDOT) );
+    dc.DrawLine( x+20, y+30, 390, y+30 );
+    dc.SetPen( wxPen( "black", width, wxSHORT_DASH) );
+    dc.DrawLine( x+20, y+40, 390, y+40 );
+    dc.SetPen( wxPen( "black", width, wxLONG_DASH) );
+    dc.DrawLine( x+20, y+50, 390, y+50 );
+    dc.SetPen( wxPen( "black", width, wxDOT_DASH) );
+    dc.DrawLine( x+20, y+60, 390, y+60 );
 
-   dc.DrawLine( x    , y, x    , y    );
-   dc.DrawLine( x+ 20, y, x+ 20, y+ 1 );
-   dc.DrawLine( x+ 40, y, x+ 40, y+ 2 );
-   dc.DrawLine( x+ 60, y, x+ 60, y+ 3 );
-   dc.DrawLine( x+ 80, y, x+ 80, y+ 4 );
-   dc.DrawLine( x+100, y, x+100, y+ 5 );
-   dc.DrawLine( x+120, y, x+120, y+ 6 );
-   dc.DrawLine( x+140, y, x+140, y+10 );
-   dc.DrawLine( x+160, y, x+160, y+20 );
-   dc.DrawLine( x+180, y, x+180, y+30 );
-   
-   dc.DrawLine( x+200, y, x+200   , y    );
-   dc.DrawLine( x+220, y, x+220+ 1, y+ 1 );
-   dc.DrawLine( x+240, y, x+240+ 2, y+ 2 );
-   dc.DrawLine( x+260, y, x+260+ 3, y+ 3 );
-   dc.DrawLine( x+280, y, x+280+ 4, y+ 4 );
-   dc.DrawLine( x+300, y, x+300+ 5, y+ 5 );
-   dc.DrawLine( x+320, y, x+320+ 6, y+ 6 );
-   dc.DrawLine( x+340, y, x+340+10, y+10 );
-   dc.DrawLine( x+360, y, x+360+20, y+20 );
-   dc.DrawLine( x+380, y, x+380+30, y+30 );
-   
-   dc.DrawLine( x+420, y   , x+420  ,  y    );
-   dc.DrawLine( x+420, y+10, x+420+1,  y+10 );
-   dc.DrawLine( x+420, y+20, x+420+2,  y+20 );
-   dc.DrawLine( x+420, y+30, x+420+3,  y+30 );
-   dc.DrawLine( x+420, y+40, x+420+4,  y+40 );
-   dc.DrawLine( x+420, y+50, x+420+5,  y+50 );
-   dc.DrawLine( x+420, y+60, x+420+6,  y+60 );
-   dc.DrawLine( x+420, y+70, x+420+10, y+70 );
-   dc.DrawLine( x+420, y+80, x+420+20, y+80 );
-   dc.DrawLine( x+420, y+90, x+420+30, y+90 );
-   
-   y -= 40;
-   
-   dc.DrawCircle( x, y+100, 1);
-   dc.DrawCircle( x, y+110, 2);
-   dc.DrawCircle( x, y+120, 3);
-   dc.DrawCircle( x, y+130, 4);
-   dc.DrawCircle( x, y+140, 5);
-   dc.DrawCircle( x, y+160, 7);
-   dc.DrawCircle( x, y+180, 8);
-   
-   dc.DrawRectangle( x+50, y+100, 1, 1);
-   dc.DrawRectangle( x+50, y+110, 2, 2);
-   dc.DrawRectangle( x+50, y+120, 3, 3);
-   dc.DrawRectangle( x+50, y+130, 4, 4);
-   dc.DrawRectangle( x+50, y+140, 5, 5);
-   dc.DrawRectangle( x+50, y+160, 10, 10);
-   dc.DrawRectangle( x+50, y+180, 20, 20);
-   
-   dc.DrawRoundedRectangle( x+100, y+100, 1, 1, 1);
-   dc.DrawRoundedRectangle( x+100, y+110, 2, 2, 1);
-   dc.DrawRoundedRectangle( x+100, y+120, 3, 3, 1);
-   dc.DrawRoundedRectangle( x+100, y+130, 4, 4, 1);
-   dc.DrawRoundedRectangle( x+100, y+140, 5, 5, 1);
-   dc.DrawRoundedRectangle( x+100, y+160, 10, 10, 1);
-   dc.DrawRoundedRectangle( x+100, y+180, 20, 20, 1);
-   
-   dc.DrawRoundedRectangle( x+150, y+100, 1, 1, 2);
-   dc.DrawRoundedRectangle( x+150, y+110, 2, 2, 2);
-   dc.DrawRoundedRectangle( x+150, y+120, 3, 3, 2);
-   dc.DrawRoundedRectangle( x+150, y+130, 4, 4, 2);
-   dc.DrawRoundedRectangle( x+150, y+140, 5, 5, 2);
-   dc.DrawRoundedRectangle( x+150, y+160, 10, 10, 2);
-   dc.DrawRoundedRectangle( x+150, y+180, 20, 20, 2);
-   
-   dc.DrawRoundedRectangle( x+200, y+100, 1, 1, 3);
-   dc.DrawRoundedRectangle( x+200, y+110, 2, 2, 3);
-   dc.DrawRoundedRectangle( x+200, y+120, 3, 3, 3);
-   dc.DrawRoundedRectangle( x+200, y+130, 4, 4, 3);
-   dc.DrawRoundedRectangle( x+200, y+140, 5, 5, 3);
-   dc.DrawRoundedRectangle( x+200, y+160, 10, 10, 3);
-   dc.DrawRoundedRectangle( x+200, y+180, 20, 20, 3);
-   
-   dc.DrawRoundedRectangle( x+250, y+100, 1, 1, 5);
-   dc.DrawRoundedRectangle( x+250, y+110, 2, 2, 5);
-   dc.DrawRoundedRectangle( x+250, y+120, 3, 3, 5);
-   dc.DrawRoundedRectangle( x+250, y+130, 4, 4, 5);
-   dc.DrawRoundedRectangle( x+250, y+140, 5, 5, 5);
-   dc.DrawRoundedRectangle( x+250, y+160, 10, 10, 5);
-   dc.DrawRoundedRectangle( x+250, y+180, 20, 20, 5);
-   
-   dc.DrawRoundedRectangle( x+300, y+100, 1, 1, 10);
-   dc.DrawRoundedRectangle( x+300, y+110, 2, 2, 10);
-   dc.DrawRoundedRectangle( x+300, y+120, 3, 3, 10);
-   dc.DrawRoundedRectangle( x+300, y+130, 4, 4, 10);
-   dc.DrawRoundedRectangle( x+300, y+140, 5, 5, 10);
-   dc.DrawRoundedRectangle( x+300, y+160, 10, 10, 10);
-   dc.DrawRoundedRectangle( x+300, y+180, 20, 20, 10);
-   
+    dc.SetPen( wxPen( "black", width, wxBDIAGONAL_HATCH) );
+    dc.DrawLine( x+20, y+70, 390, y+70 );
+    dc.SetPen( wxPen( "black", width, wxCROSSDIAG_HATCH) );
+    dc.DrawLine( x+20, y+80, 390, y+80 );
+    dc.SetPen( wxPen( "black", width, wxFDIAGONAL_HATCH) );
+    dc.DrawLine( x+20, y+90, 390, y+90 );
+    dc.SetPen( wxPen( "black", width, wxCROSS_HATCH) );
+    dc.DrawLine( x+20, y+100, 390, y+100 );
+    dc.SetPen( wxPen( "black", width, wxHORIZONTAL_HATCH) );
+    dc.DrawLine( x+20, y+110, 390, y+110 );
+    dc.SetPen( wxPen( "black", width, wxVERTICAL_HATCH) );
+    dc.DrawLine( x+20, y+120, 390, y+120 );
+
+    wxPen ud( "black", width, wxUSER_DASH );
+    wxDash dash1[1];
+    dash1[0] = 0;
+    ud.SetDashes( 1, dash1 );
+    dc.DrawLine( x+20, y+140, 390, y+140 );
+    dash1[0] = 1;
+    ud.SetDashes( 1, dash1 );
+    dc.DrawLine( x+20, y+150, 390, y+150 );
+    dash1[0] = 2;
+    ud.SetDashes( 1, dash1 );
+    dc.DrawLine( x+20, y+160, 390, y+160 );
+    dash1[0] = 0xFF;
+    ud.SetDashes( 1, dash1 );
+    dc.DrawLine( x+20, y+170, 390, y+170 );
+
 }
 
 void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
@@ -333,34 +278,14 @@ void MyCanvas::OnPaint(wxPaintEvent &WXUNUSED(event))
 
     dc.DrawIcon( wxICON(mondrian), 110, 40 );
     
-    dc.SetBrush( *wxRED_BRUSH );
-    
-    int x = 20;
-    int y = 80;
-    int step = 200;
-    
-    dc.SetPen( wxPen( "black", 1, 0) );
-    DoDrawTests( x, y, dc );
-       
-    y += step;
-    
-    dc.SetPen( wxPen( "black", 1, wxDOT) );
-    DoDrawTests( x, y, dc );
-    
-    y += step;
-    
-    dc.SetPen( wxPen( "black", 1, wxSHORT_DASH) );
-    DoDrawTests( x, y, dc );
-    
-    y += step;
-    
-    dc.SetPen( wxPen( "black", 1, wxLONG_DASH) );
-    DoDrawTests( x, y, dc );
-    
-    y += step;
-    
-    dc.SetPen( wxPen( "black", 1, wxDOT_DASH) );
-    DoDrawTests( x, y, dc );
+    DrawTestLines( 0, 20, 0, dc );
+
+    DrawTestLines( 0, 220, 1, dc );
+
+    DrawTestLines( 0, 420, 2, dc );
+
+    DrawTestLines( 0, 620, 6, dc );
+
 }
 
 // ----------------------------------------------------------------------------
@@ -549,7 +474,7 @@ void MyFrame::OnOption(wxCommandEvent &event)
             return;
     }
 
-    Refresh();
+    m_canvas->Refresh();
 }
 
 void MyFrame::PrepareDC(wxDC& dc)
