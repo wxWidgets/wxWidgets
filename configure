@@ -14343,6 +14343,12 @@ LD_LIBS="\${top_builddir}/lib/${WX_LIBRARY_NAME_STATIC} $EXTRA_LIBS"
 
 INCLUDES="-I. -I\${top_builddir}/include -I\${top_srcdir}/include $ZLIB_INCLUDE $PNG_INCLUDE $JPEG_INCLUDE $TIFF_INCLUDE $TOOLKIT_INCLUDE"
 
+if test "$wxUSE_GTK" = 1; then
+    WXCONFIG_INCLUDE=""
+else
+    WXCONFIG_INCLUDE="$TOOLKIT_INCLUDE"
+fi
+
 if test "$GXX" = yes ; then
         CXXWARNINGS="-Wall"
         fi
@@ -14458,8 +14464,9 @@ SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq 
 
 
 
+
 echo $ac_n "checking whether ${MAKE-make} sets \${MAKE}""... $ac_c" 1>&6
-echo "configure:14463: checking whether ${MAKE-make} sets \${MAKE}" >&5
+echo "configure:14470: checking whether ${MAKE-make} sets \${MAKE}" >&5
 set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_prog_make_${ac_make}_set'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -14723,6 +14730,7 @@ s%@TOOLKIT_DEF@%$TOOLKIT_DEF%g
 s%@TOOLKIT_DIR@%$TOOLKIT_DIR%g
 s%@TOOLKIT_NAME@%$TOOLKIT_NAME%g
 s%@TOOLKIT_INCLUDE@%$TOOLKIT_INCLUDE%g
+s%@WXCONFIG_INCLUDE@%$WXCONFIG_INCLUDE%g
 s%@GUIHEADERS@%$GUIHEADERS%g
 s%@GUIOBJS@%$GUIOBJS%g
 s%@COMMONOBJS@%$COMMONOBJS%g

@@ -3723,6 +3723,13 @@ LD_LIBS="\${top_builddir}/lib/${WX_LIBRARY_NAME_STATIC} $EXTRA_LIBS"
 dnl all -I options we must pass to the compiler
 INCLUDES="-I. -I\${top_builddir}/include -I\${top_srcdir}/include $ZLIB_INCLUDE $PNG_INCLUDE $JPEG_INCLUDE $TIFF_INCLUDE $TOOLKIT_INCLUDE"
 
+dnl wxGTK does not need TOOLKIT includes in wx-config
+if test "$wxUSE_GTK" = 1; then
+    WXCONFIG_INCLUDE=""
+else
+    WXCONFIG_INCLUDE="$TOOLKIT_INCLUDE"
+fi
+
 dnl C/C++ compiler options used to compile wxWindows
 if test "$GXX" = yes ; then
     dnl CXXWARNINGS="-Wall -W -Wcast-qual -Werror"
@@ -3814,6 +3821,7 @@ AC_SUBST(TOOLKIT_DEF)
 AC_SUBST(TOOLKIT_DIR)
 AC_SUBST(TOOLKIT_NAME)
 AC_SUBST(TOOLKIT_INCLUDE)
+AC_SUBST(WXCONFIG_INCLUDE)
 
 dnl what to compile
 AC_SUBST(GUIHEADERS)
