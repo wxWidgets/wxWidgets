@@ -72,6 +72,9 @@ public:
     virtual void InitParser(const wxString& source);
     // This must be called after Parse().
     virtual void DoneParser();
+    
+    // May be called during parsing to immediately return from Parse().
+    virtual void StopParsing() { m_stopParsing = TRUE; }
 
     // Parses the m_Source from begin_pos to end_pos-1.
     // (in noparams version it parses whole m_Source)
@@ -178,6 +181,9 @@ protected:
     
     // entity parse
     wxHtmlEntitiesParser *m_entitiesParser;
+    
+    // flag indicating that the parser should stop
+    bool m_stopParsing;
 };
 
 
