@@ -2089,15 +2089,16 @@ size_t wxCSConv::MB2WC(wchar_t *buf, const char *psz, size_t n) const
   ((wxCSConv *)this)->LoadNow(); // discard constness
   if (buf) {
     if (m_cset) {
-      for (size_t c=0; c<=n; c++)
+      for (size_t c=0; c<n; c++)
 	buf[c] = m_cset->data[psz[c]];
     } else {
       // latin-1 (direct)
-      for (size_t c=0; c<=n; c++)
+      for (size_t c=0; c<n; c++)
 	buf[c] = psz[c];
     }
+    return n;
   }
-  return n;
+  return strlen(psz);
 }
 
 size_t wxCSConv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
@@ -2105,17 +2106,17 @@ size_t wxCSConv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
   ((wxCSConv *)this)->LoadNow(); // discard constness
   if (buf) {
     if (m_cset) {
-      for (size_t c=0; c<=n; c++) {
+      for (size_t c=0; c<n; c++) {
 	size_t n;
 	for (n=0; (n<256) && (m_cset->data[n] != psz[c]); n++);
 	buf[c] = (n>0xff) ? '?' : n;
       }
     } else {
       // latin-1 (direct)
-      for (size_t c=0; c<=n; c++)
+      for (size_t c=0; c<n; c++)
 	buf[c] = (psz[c]>0xff) ? '?' : psz[c];
     }
+    return n;
   }
-  return n;
+  return wcslen(psz);
 }
-
