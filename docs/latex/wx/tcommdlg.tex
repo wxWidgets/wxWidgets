@@ -142,14 +142,15 @@ an excerpt from this example.
 
 Classes: \helpref{wxFileDialog}{wxfiledialog}
 
-Pops up a file selector box. In Windows, this is the common file selector
-dialog. In X, this is a file selector box with somewhat less functionality.
-The path and filename are distinct elements of a full file pathname.
+Pops up a file selector box. In Windows and GTK2.4+, this is the common
+file selector dialog. In X, this is a file selector box with somewhat less
+functionality. The path and filename are distinct elements of a full file pathname.
 If path is ``", the current directory will be used. If filename is ``",
 no default filename will be supplied. The wildcard determines what files
 are displayed in the file selector, and file extension supplies a type
 extension for the required filename. Flags may be a combination of wxOPEN,
-wxSAVE, wxOVERWRITE\_PROMPT, wxHIDE\_READONLY, wxFILE\_MUST\_EXIST or 0. 
+wxSAVE, wxOVERWRITE\_PROMPT, wxHIDE\_READONLY, wxFILE\_MUST\_EXIST,
+wxMULTIPLE, wxCHANGE\_DIR or 0.
 
 Both the X and Windows versions implement a wildcard filter. Typing a
 filename containing wildcards (*, ?) in the filename text item, and

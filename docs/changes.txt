@@ -51,6 +51,8 @@ wxGTK:
 - Corrected splitter sash size and look for different themes.
 - Fixed keyboard input for dead-keys.
 - Added support for more wrapping styles (Mart Raudsepp).
+- GTK2.4+ wxFileDialog reimplemented to support non-modal usage better,
+  and fix all known bugs (Mart Raudsepp).
 
 wxMac:
 

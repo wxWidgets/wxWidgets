@@ -33,33 +33,33 @@ public:
                  const wxString& wildCard = wxFileSelectorDefaultWildcardStr,
                  long style = 0,
                  const wxPoint& pos = wxDefaultPosition);
-                 
-    ~wxFileDialog();
-    
+
+    virtual ~wxFileDialog();
+
+    virtual wxString GetPath() const;
     virtual void GetPaths(wxArrayString& paths) const;
+    virtual wxString GetDirectory() const;
+    virtual wxString GetFilename() const;
     virtual void GetFilenames(wxArrayString& files) const;
-    
+    virtual int GetFilterIndex() const;
+
     virtual void SetMessage(const wxString& message);
     virtual void SetPath(const wxString& path);
     virtual void SetDirectory(const wxString& dir);
     virtual void SetFilename(const wxString& name);
     virtual void SetWildcard(const wxString& wildCard);
     virtual void SetFilterIndex(int filterIndex);
-            
+
     virtual int ShowModal();
     virtual bool Show( bool show = true );
 
-    void OnFakeOk( wxCommandEvent &event );
-
 //private:
     bool m_destroyed_by_delete;
-    
-    void UpdateFromDialog();
-    void UpdateDialog();
 
-private:    
+private:
     DECLARE_DYNAMIC_CLASS(wxFileDialog)
     DECLARE_EVENT_TABLE()
+    void OnFakeOk( wxCommandEvent &event );
 };
 
 #endif // __GTKFILEDLGH__
