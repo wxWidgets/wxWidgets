@@ -51,6 +51,6 @@ __XLC__         ?? compiler
 wxWindows modes:
 ----------------
 
-__DEBUG__       usage: #ifdef __DEBUG__ (=> debug mode, else => release)
+__WXDEBUG__       usage: #ifdef __DEBUG__ (=> debug mode, else => release)
 WXDEBUG         usage: #if DEBUG (0: release, 1: minimal debug code, ...)
 
