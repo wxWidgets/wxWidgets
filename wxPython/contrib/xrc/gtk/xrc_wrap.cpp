@@ -1227,7 +1227,9 @@ static PyObject *_wrap_XmlResource_LoadDialog(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxDialog, 0);
+    {
+        resultobj = wxPyMake_wxObject(result); 
+    }
     {
         if (temp3)
         delete arg3;
@@ -1325,7 +1327,9 @@ static PyObject *_wrap_XmlResource_LoadPanel(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxPanel, 0);
+    {
+        resultobj = wxPyMake_wxObject(result); 
+    }
     {
         if (temp3)
         delete arg3;

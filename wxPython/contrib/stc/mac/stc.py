@@ -1985,11 +1985,7 @@ class StyledTextCtrl(_core.Control):
         return _stc.StyledTextCtrl_DocumentEndExtend(*args, **kwargs)
 
     def PageUp(*args, **kwargs):
-        """
-        PageUp(self)
-
-        This is just a wrapper for ScrollPages(-1).
-        """
+        """PageUp(self)"""
         return _stc.StyledTextCtrl_PageUp(*args, **kwargs)
 
     def PageUpExtend(*args, **kwargs):

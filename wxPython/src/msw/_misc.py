@@ -914,6 +914,8 @@ class PyTipProvider(TipProvider):
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
+        self._setCallbackInfo(self, PyTipProvider)
+
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
         return _misc_.PyTipProvider__setCallbackInfo(*args, **kwargs)
@@ -4837,6 +4839,8 @@ class DropSource(object):
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
+        self._setCallbackInfo(self, DropSource, 0)
+
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class, int incref)"""
         return _misc_.DropSource__setCallbackInfo(*args, **kwargs)

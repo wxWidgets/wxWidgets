@@ -1993,11 +1993,7 @@ class StyledTextCtrl(_core.Control):
         return _stc.StyledTextCtrl_PageUpExtend(*args, **kwargs)
 
     def PageDown(*args, **kwargs):
-        """
-        PageDown(self)
-
-        This is just a wrapper for ScrollPages(1).
-        """
+        """PageDown(self)"""
         return _stc.StyledTextCtrl_PageDown(*args, **kwargs)
 
     def PageDownExtend(*args, **kwargs):
