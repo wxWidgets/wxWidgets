@@ -6,7 +6,7 @@
 
 \wxheading{Include files}
 
-<wx/ftp.h>
+<wx/protocol/ftp.h>
 
 \wxheading{See also}
 
@@ -84,6 +84,68 @@ Delete the file specified by \it{path}. Returns TRUE if successful.
 
 % ----------------------------------------------------------------------------
 
+\membersection{wxFTP::SetUser}
+\func{void}{SetUser}{\param{const wxString\&}{ user}}
+
+Sets the user name to be sent to the FTP server to be allowed to log in.
+
+\wxheading{Default value}
+
+The default value of the user name is "anonymous".
+
+\wxheading{Remark}
+
+This parameter can be included in a URL if you want to use the URL manager.
+For example, you can use: "ftp://a_user:a_password@a.host:service/a_directory/a_file"
+to specify a user and a password.
+
+\membersection{wxFTP::SetPassword}
+\func{void}{SetPassword}{\param{const wxString\&}{ passwd}}
+
+Sets the password to be sent to the FTP server to be allowed to log in.
+
+\wxheading{Default value}
+
+The default value of the user name is your email address. For example, it could
+be "username@userhost.domain". This password is built by getting the current
+user name and the host name of the local machine from the system.
+
+\wxheading{Remark}
+
+This parameter can be included in a URL if you want to use the URL manager.
+For example, you can use: "ftp://a_user:a_password@a.host:service/a_directory/a_
+file"
+to specify a user and a password.
+
+% ----------------------------------------------------------------------------
+\membersection{wxFTP::GetList}
+\func{wxList *}{GetList}{\param{const wxString\&}{ wildcard}}
+
+The GetList function is quite low-level. It returns the list of the files in
+the current directory. The list can be filtered using the \it{wildcard} string.
+If \it{wildcard} is a NULL string, it will return all files in directory.
+
+The form of the list can change from one peer system to another. For example,
+for a UNIX peer system, it will look like this:
+\begin{verbatim}
+-r--r--r--   1 guilhem  lavaux      12738 Jan 16 20:17 cmndata.cpp
+-r--r--r--   1 guilhem  lavaux      10866 Jan 24 16:41 config.cpp
+-rw-rw-rw-   1 guilhem  lavaux      29967 Dec 21 19:17 cwlex_yy.c
+-rw-rw-rw-   1 guilhem  lavaux      14342 Jan 22 19:51 cwy_tab.c
+-r--r--r--   1 guilhem  lavaux      13890 Jan 29 19:18 date.cpp
+-r--r--r--   1 guilhem  lavaux       3989 Feb  8 19:18 datstrm.cpp
+\end{verbatim}
+
+But on Windows system, it will look like this:
+\begin{verbatim}
+winamp~1 exe    520196 02-25-1999  19:28  winamp204.exe
+        1 file(s)           520 196 bytes
+\end{verbatim}
+
+The list is a string list and one node corresponds to a line sent by the peer.
+
+% ----------------------------------------------------------------------------
+
 \membersection{wxFTP::GetOutputStream}
 
 \func{wxOutputStream *}{GetOutputStream}{\param{const wxString\&}{ file}}
@@ -100,3 +162,51 @@ An initialized write-only stream.
 
 \helpref{wxOutputStream}{wxoutputstream}
 
+% ----------------------------------------------------------------------------
+
+\membersection{wxFTP::GetInputStream}\label{wxftpgetinput}
+
+\func{wxInputStream *}{GetInputStream}{\param{const wxString\&}{ path}}
+
+Creates a new input stream on the the specified path. You can use all but seek
+functionnality of wxStream. Seek isn't available on all stream. For example,
+http or ftp streams doesn't deal with it. Other functions like Tell
+aren't available for the moment for this sort of stream.
+You will be notified when the EOF is reached by an error.
+
+\wxheading{Return value}
+
+Returns NULL if an error occured (it could be a network failure or the fact
+that the file doesn't exist).
+
+Returns the initialized stream. You will have to delete it yourself once you
+don't use it anymore. The destructor close the DATA stream connection but
+will leave the COMMAND stream connection opened. It means that you still
+can send new commands without reconnecting.
+
+\wxheading{Example of a standalone connection (without wxURL)}
+
+\begin{verbatim}
+  wxFTP ftp;
+  wxInputStream *in\_stream;
+  char *data;
+
+  ftp.Connect("a.host.domain");
+  ftp.ChDir("a\_directory");
+  in\_stream = ftp.GetInputStream("a\_file\_to\_get");
+
+  data = new char[in\_stream->StreamSize()];
+
+  in\_stream->Read(data, in\_stream->StreamSize());
+  if (in\_stream->LastError() != wxStream\_NOERROR) {
+    // Do something.
+  }
+
+  delete in\_stream; /* Close the DATA connection */
+
+  ftp.Close(); /* Close the COMMAND connection */
+\end{verbatim}
+
+\wxheading{See also}
+
+\helpref{wxInputStream}{wxinputstream}

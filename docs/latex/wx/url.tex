@@ -12,6 +12,16 @@
 
 \helpref{wxSocketBase}{wxsocketbase}, \helpref{wxProtocol}{wxprotocol}
 
+\wxheading{Example}
+
+\begin{verbatim}
+  wxURL url("http://a.host/a.dir/a.file");
+  wxInputStream *in\_stream;
+
+  in\_stream = url.GetInputStream();
+  /* Then, you can use all IO calls of in\_stream (See wxStream) */
+\end{verbatim}
+
 % ----------------------------------------------------------------------------
 % Members
 % ----------------------------------------------------------------------------

@@ -249,9 +249,11 @@ bool wxFTP::RmFile(const wxString& path)
 class wxInputFTPStream : public wxSocketInputStream {
 public:
   wxFTP *m_ftp;
+  size_t m_ftpsize;
 
   wxInputFTPStream(wxFTP *ftp_clt, wxSocketBase *sock)
     : wxSocketInputStream(*sock), m_ftp(ftp_clt) {}
+  size_t StreamSize() { return m_ftpsize; }
   virtual ~wxInputFTPStream(void)
   { 
      if (LastError() != wxStream_NOERROR)
@@ -328,6 +330,8 @@ bool wxFTP::Abort(void)
 wxInputStream *wxFTP::GetInputStream(const wxString& path)
 {
   wxString tmp_str;
+  int pos_size;
+  wxInputFTPStream *in_stream;
 
   if (!SendCommand("TYPE I", '2'))
     return NULL;
@@ -343,7 +347,16 @@ wxInputStream *wxFTP::GetInputStream(const wxString& path)
   if (!SendCommand(tmp_str, '1'))
     return NULL;
 
-  return new wxInputFTPStream(this, sock);
+  in_stream = new wxInputFTPStream(this, sock);
+
+  pos_size = m_lastResult.Index('(');
+  if (pos_size != wxNOT_FOUND) {
+    wxString str_size = m_lastResult(pos_size, m_lastResult.Index(')'));
+
+    in_stream->m_ftpsize = atoi(WXSTRINGCAST str_size);
+  }
+
+  return in_stream;
 }
 
 wxOutputStream *wxFTP::GetOutputStream(const wxString& path)

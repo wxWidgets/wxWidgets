@@ -231,7 +231,10 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
 class wxHTTPStream : public wxSocketInputStream {
 public:
   wxHTTP *m_http;
+  size_t m_httpsize;
+
   wxHTTPStream(wxHTTP *http) : wxSocketInputStream(*http), m_http(http) {}
+  size_t StreamSize() { return m_httpsize; }
   virtual ~wxHTTPStream(void) { m_http->Abort(); }
 };
 
@@ -254,6 +257,9 @@ wxInputStream *wxHTTP::GetInputStream(const wxString& path)
 
   if (!BuildRequest(path, wxHTTP_GET))
     return NULL;
+
+  if (GetHeader("Content-Length").IsEmpty())
+    inp_stream->m_httpsize = atoi(WXSTRINGCAST GetHeader("Content-Length"));
 
   return inp_stream;
 }

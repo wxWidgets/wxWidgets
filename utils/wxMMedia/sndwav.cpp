@@ -140,13 +140,12 @@ bool wxSndWavCodec::PrepareToRecord(wxUint32 m_fsize)
   if (!riff_codec.CreateChunk("fmt ", sizeof(wav_hdr)))
     return FALSE;
 
-  wav_hdr.format = 1; // PCM_WAV_FORMAT
+  wav_hdr.format = m_sndformat.GetCodecNo(); // PCM_WAV_FORMAT
   wav_hdr.channels = m_sndformat.GetChannels();
   wav_hdr.sample_fq = m_sndformat.GetSampleRate();
   wav_hdr.byte_p_spl = (m_sndformat.GetBps() / 8) * wav_hdr.channels;
   wav_hdr.byte_p_sec = m_sndformat.GetCodec()->GetByteRate();
   wav_hdr.bits_p_spl = m_sndformat.GetBps();
-  ChangeCodec(WXSOUND_PCM);
 
   if (wav_hdr.format == WXSOUND_PCM) {
     m_sndformat.SetSign(wxSND_SAMPLE_SIGNED);

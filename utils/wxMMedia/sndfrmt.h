@@ -36,6 +36,7 @@ class wxSoundDataFormat {
   void SetChannels(int channels);
   void SetStereo(bool on);
   void SetCodecNo(int no);
+  int GetCodecNo() { return m_codno; }
   void SetCodecCreate(bool create) { m_codcreate = create; }
 
   int GetSampleRate() const { return m_srate; }
