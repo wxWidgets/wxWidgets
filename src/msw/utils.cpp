@@ -41,7 +41,7 @@
 // #include "wx/msw/private.h" which itself includes <windows.h>, as this 
 // one in turn includes <winsock.h> unless we define WIN32_LEAN_AND_MEAN.
 //
-#if defined(__WIN32__) && !defined(__TWIN32__)
+#if defined(__WIN32__) && !defined(__TWIN32__) && ! (defined(__GNUWIN32__) && !defined(__MINGW32__))
 extern "C" {
     #include <winsock.h>    // we use socket functions in wxGetFullHostName()
 }
@@ -185,7 +185,7 @@ bool wxGetHostName(wxChar *buf, int maxSize)
 // get full hostname (with domain name if possible)
 bool wxGetFullHostName(wxChar *buf, int maxSize)
 {
-#if defined(__WIN32__) && !defined(__TWIN32__)
+#if defined(__WIN32__) && !defined(__TWIN32__) && ! (defined(__GNUWIN32__) && !defined(__MINGW32__))
     // TODO should use GetComputerNameEx() when available
     WSADATA wsa;
     if ( WSAStartup(MAKEWORD(1, 1), &wsa) == 0 )
