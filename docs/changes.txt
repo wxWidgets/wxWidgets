@@ -97,6 +97,8 @@ wxBase:
 - fixes to AM_PATH_WXCONFIG autoconf macro
 - added wxHashMap class that replaces type-unsafe wxHashTable and is modelled
   after STL hash_map
+- wxLocale now works in Unicode mode
+- wxLocale can now load message catalogs in arbitrary encoding
 
 Unix (Base/GUI):
 
