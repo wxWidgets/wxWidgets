@@ -673,8 +673,10 @@ void wxKDEIconHandler::LoadLinksForMimeSubtype(const wxString& dirbase,
     wxString mime_extension, mime_desc;
 
     pos = wxNOT_FOUND;
+#if wxUSE_INTL
     if (wxGetLocale() != NULL)
         mime_desc = _T("Comment[") + wxGetLocale()->GetName() + _T("]=");
+#endif // wxUSE_INTL
     if (pos == wxNOT_FOUND) mime_desc = _T("Comment=");
     pos = text.Find(mime_desc);
     if (pos == wxNOT_FOUND) mime_desc = wxEmptyString;
