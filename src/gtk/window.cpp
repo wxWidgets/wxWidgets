@@ -452,8 +452,9 @@ static void gtk_window_own_draw_callback( GtkWidget *widget, GdkRectangle *WXUNU
 // key code mapping routines
 //-----------------------------------------------------------------------------
 
-static long map_to_unmodified_wx_keysym( KeySym keysym )
+static long map_to_unmodified_wx_keysym( GdkEventKey *event )
 {
+    KeySym keysym = event->keyval;
     guint key_code = 0;
 
     switch (keysym)
@@ -549,7 +550,11 @@ static long map_to_unmodified_wx_keysym( KeySym keysym )
         case GDK_F12:           key_code = WXK_F12;         break;
         default:
         {
-            if ((keysym & 0xF000) == 0)
+	    if (event->length == 1)
+	    {
+	        key_code = toupper( (unsigned char)*event->string );
+	    }
+	    else if ((keysym & 0xFF) == keysym)
             {
                 guint upper = gdk_keyval_to_upper( (guint)keysym );
                 keysym = (upper != 0 ? upper : keysym ); /* to be MSW compatible */
@@ -561,8 +566,9 @@ static long map_to_unmodified_wx_keysym( KeySym keysym )
     return (key_code);
 }
 
-static long map_to_wx_keysym( KeySym keysym )
+static long map_to_wx_keysym( GdkEventKey *event )
 {
+    KeySym keysym = event->keyval;
     guint key_code = 0;
 
     switch (keysym)
@@ -648,7 +654,11 @@ static long map_to_wx_keysym( KeySym keysym )
         case GDK_F12:           key_code = WXK_F12;         break;
         default:
         {
-            if ((keysym & 0xF000) == 0)
+	    if (event->length == 1)
+	    {
+	        key_code = (unsigned char)*event->string;
+	    }
+	    else if ((keysym & 0xFF) == keysym)
             {
                 key_code = (guint)keysym;
             }
@@ -897,7 +907,7 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
 
     bool ret = FALSE;
 
-    long key_code = map_to_unmodified_wx_keysym( gdk_event->keyval );
+    long key_code = map_to_unmodified_wx_keysym( gdk_event );
     /* sending unknown key events doesn't really make sense */
     if (key_code == 0) return FALSE;
 
@@ -937,7 +947,7 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
     /* wxMSW doesn't send char events with Alt pressed */
     /* Only send wxEVT_CHAR event if not processed yet. Thus, ALT-x
        will only be sent if it is not in an accelerator table. */
-    key_code = map_to_wx_keysym( gdk_event->keyval );
+    key_code = map_to_wx_keysym( gdk_event );
 
     if ( (!ret) &&
          (key_code != 0))
@@ -1055,7 +1065,7 @@ static gint gtk_window_key_release_callback( GtkWidget *widget, GdkEventKey *gdk
     printf( "\n" );
 */
 
-    long key_code = map_to_unmodified_wx_keysym( gdk_event->keyval );
+    long key_code = map_to_unmodified_wx_keysym( gdk_event );
 
     /* sending unknown key events doesn't really make sense */
     if (key_code == 0) return FALSE;
