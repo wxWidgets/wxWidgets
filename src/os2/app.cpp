@@ -92,11 +92,11 @@ HICON wxDEFAULT_MDIPARENTFRAME_ICON  = (HICON) NULL;
 
 HBRUSH wxDisableButtonBrush = (HBRUSH) 0;
 
-MRESULT wxWndProc( HWND
-                  ,ULONG
-                  ,MPARAM
-                  ,MPARAM
-                 );
+MRESULT EXPENTRY wxWndProc( HWND
+                           ,ULONG
+                           ,MPARAM
+                           ,MPARAM
+                          );
 
 // ===========================================================================
 // implementation
@@ -201,12 +201,12 @@ bool wxApp::RegisterWindowClasses(
     ERRORID                         vError = 0L;
     wxString                        sError;
 
-    if ((rc = ::WinRegisterClass( vHab
-                                 ,wxFrameClassName
-                                 ,(PFNWP)wxWndProc
-                                 ,CS_SIZEREDRAW | CS_SYNCPAINT | CS_FRAME
-                                 ,0
-                                )) != 0)
+    if (!::WinRegisterClass( vHab
+                            ,wxFrameClassName
+                            ,(PFNWP)wxWndProc
+                            ,CS_SIZEREDRAW | CS_SYNCPAINT
+                            ,0
+                           ))
     {
         vError = ::WinGetLastError(vHab);
         sError = wxPMErrorToStr(vError);
@@ -214,12 +214,12 @@ bool wxApp::RegisterWindowClasses(
         return FALSE;
     }
 
-    if ((rc = ::WinRegisterClass( vHab
-                                 ,wxFrameClassNameNoRedraw
-                                 ,(PFNWP)wxWndProc
-                                 ,CS_FRAME
-                                 ,0
-                                )) != 0)
+    if (!::WinRegisterClass( vHab
+                            ,wxFrameClassNameNoRedraw
+                            ,(PFNWP)wxWndProc
+                            ,0
+                            ,0
+                           ))
     {
         vError = ::WinGetLastError(vHab);
         sError = wxPMErrorToStr(vError);
@@ -227,12 +227,12 @@ bool wxApp::RegisterWindowClasses(
         return FALSE;
     }
 
-    if ((rc = ::WinRegisterClass( vHab
-                                 ,wxMDIFrameClassName
-                                 ,(PFNWP)wxWndProc
-                                 ,CS_SIZEREDRAW | CS_SYNCPAINT | CS_FRAME
-                                 ,0
-                                )) != 0)
+    if (!::WinRegisterClass( vHab
+                            ,wxMDIFrameClassName
+                            ,(PFNWP)wxWndProc
+                            ,CS_SIZEREDRAW | CS_SYNCPAINT
+                            ,0
+                           ))
     {
         vError = ::WinGetLastError(vHab);
         sError = wxPMErrorToStr(vError);
@@ -240,12 +240,12 @@ bool wxApp::RegisterWindowClasses(
         return FALSE;
     }
 
-    if ((rc = ::WinRegisterClass( vHab
-                                 ,wxMDIFrameClassNameNoRedraw
-                                 ,(PFNWP)wxWndProc
-                                 ,CS_FRAME
-                                 ,0
-                                )) != 0)
+    if (!::WinRegisterClass( vHab
+                            ,wxMDIFrameClassNameNoRedraw
+                            ,(PFNWP)wxWndProc
+                            ,0
+                            ,0
+                           ))
     {
         vError = ::WinGetLastError(vHab);
         sError = wxPMErrorToStr(vError);
@@ -253,12 +253,12 @@ bool wxApp::RegisterWindowClasses(
         return FALSE;
     }
 
-    if ((rc = ::WinRegisterClass( vHab
-                                 ,wxMDIChildFrameClassName
-                                 ,(PFNWP)wxWndProc
-                                 ,CS_MOVENOTIFY | CS_SIZEREDRAW | CS_SYNCPAINT | CS_HITTEST | CS_FRAME
-                                 ,0
-                                )) != 0)
+    if (!::WinRegisterClass( vHab
+                            ,wxMDIChildFrameClassName
+                            ,(PFNWP)wxWndProc
+                            ,CS_MOVENOTIFY | CS_SIZEREDRAW | CS_SYNCPAINT | CS_HITTEST
+                            ,0
+                           ))
     {
         vError = ::WinGetLastError(vHab);
         sError = wxPMErrorToStr(vError);
@@ -266,12 +266,12 @@ bool wxApp::RegisterWindowClasses(
         return FALSE;
     }
 
-    if ((rc = ::WinRegisterClass( vHab
-                                 ,wxMDIChildFrameClassNameNoRedraw
-                                 ,(PFNWP)wxWndProc
-                                 ,CS_HITTEST | CS_FRAME
-                                 ,0
-                                )) != 0)
+    if (!::WinRegisterClass( vHab
+                            ,wxMDIChildFrameClassNameNoRedraw
+                            ,(PFNWP)wxWndProc
+                            ,CS_HITTEST
+                            ,0
+                           ))
     {
         vError = ::WinGetLastError(vHab);
         sError = wxPMErrorToStr(vError);
@@ -279,12 +279,12 @@ bool wxApp::RegisterWindowClasses(
         return FALSE;
     }
 
-    if ((rc = ::WinRegisterClass( vHab
-                                 ,wxPanelClassName
-                                 ,(PFNWP)wxWndProc
-                                 ,CS_MOVENOTIFY | CS_SIZEREDRAW | CS_HITTEST | CS_SAVEBITS | CS_SYNCPAINT
-                                 ,0
-                                )) != 0)
+    if (!::WinRegisterClass( vHab
+                            ,wxPanelClassName
+                            ,(PFNWP)wxWndProc
+                            ,CS_MOVENOTIFY | CS_SIZEREDRAW | CS_HITTEST | CS_SAVEBITS | CS_SYNCPAINT
+                            ,0
+                           ))
     {
         vError = ::WinGetLastError(vHab);
         sError = wxPMErrorToStr(vError);
@@ -292,12 +292,12 @@ bool wxApp::RegisterWindowClasses(
         return FALSE;
     }
 
-    if ((rc = ::WinRegisterClass( vHab
-                                 ,wxCanvasClassName
-                                 ,(PFNWP)wxWndProc
-                                 ,CS_MOVENOTIFY | CS_SIZEREDRAW | CS_HITTEST | CS_SAVEBITS | CS_SYNCPAINT
-                                 ,0
-                                )) != 0)
+    if (!::WinRegisterClass( vHab
+                            ,wxCanvasClassName
+                            ,(PFNWP)wxWndProc
+                            ,CS_MOVENOTIFY | CS_SIZEREDRAW | CS_HITTEST | CS_SAVEBITS | CS_SYNCPAINT
+                            ,0
+                           ))
     {
         vError = ::WinGetLastError(vHab);
         sError = wxPMErrorToStr(vError);
@@ -506,7 +506,7 @@ bool wxApp::OnInitGui()
     ERRORID                         vError;
     wxString                        sError;
 
-    m_hMq    = WinCreateMsgQueue(vHabmain, 0);
+    m_hMq = ::WinCreateMsgQueue(vHabmain, 0);
     if (!m_hMq)
     {
         vError = ::WinGetLastError(vHabmain);

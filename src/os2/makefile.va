@@ -945,16 +945,16 @@ $(WXDIR)\lib\wx.lib: \
 !else
 
 # Update the import library
-$(WXDIR)\lib\wx210.lib: $(OBJECTS)
-    implib $(WXDIR)\lib\wx210.lib $(WXDIR)\lib\wx210.def
+$(WXDIR)\lib\wx214.lib: $(OBJECTS)
+    implib $(WXDIR)\lib\wx214.lib $(WXDIR)\lib\wx214.def
 
 # Update the dynamic link library
-$(WXDIR)\lib\wx200.dll: $(OBJECTS) $(WXDIR)\lib\wx210.lib
+$(WXDIR)\lib\wx214.dll: $(OBJECTS) $(WXDIR)\lib\wx214.lib
     icc @<<
     /B" $(LINKFLAGS)" /Fe$@
     $(LIBS)
     $(OBJECTS)
-    $(WXDIR)\lib\wx210.def
+    $(WXDIR)\lib\wx214.def
 <<
 
 !endif
@@ -1040,7 +1040,7 @@ clean_tiff:
 clean: $(PERIPH_CLEAN_TARGET) clean_png clean_zlib clean_jpeg clean_xpm clean_tiff
         del      $(LIBTARGET)
 !if "$(WXMAKINGDLL)" == "1"
-        erase /N ..\..\lib\wx200.lib
+        erase /N ..\..\lib\wx214.lib
 !endif
         erase /N $(GENDIR)\$D\*.obj
         erase /N $(COMMDIR)\$D\*.obj

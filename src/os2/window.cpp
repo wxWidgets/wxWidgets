@@ -111,11 +111,11 @@ wxList*                   wxWinHandleList = NULL;
 //
 // the window proc for all our windows; most gui's have something similar
 //
-MRESULT wxWndProc( HWND hWnd
-                  ,ULONG message
-                  ,MPARAM mp1
-                  ,MPARAM mp2
-                 );
+MRESULT EXPENTRY wxWndProc( HWND hWnd
+                           ,ULONG message
+                           ,MPARAM mp1
+                           ,MPARAM mp2
+                          );
 
 #ifdef  __WXDEBUG__
     const char *wxGetMessageName(int message);
@@ -326,6 +326,8 @@ bool wxWindow::Create(
 , const wxString&                   rName
 )
 {
+    HWND                            hParent = NULLHANDLE;
+
     wxCHECK_MSG(pParent, FALSE, wxT("can't create wxWindow without parent"));
 
     if ( !CreateBase( pParent
@@ -338,53 +340,47 @@ bool wxWindow::Create(
                     ))
         return(FALSE);
 
-    pParent->AddChild(this);
+    if (pParent)
+    {
+        pParent->AddChild(this);
+        hParent = GetWinHwnd(pParent);
+    }
+    else
+       hParent = HWND_DESKTOP;
 
-    ULONG                           ulFlags = 0L;
+    ULONG                           ulCreateFlags = 0L;
+
 
     //
-    // Frame windows and their derivatives only
+    // Most wxSTYLES are really PM Class specific styles and will be
+    // set in those class create procs.  PM's basic windows styles are
+    // very limited.
     //
-    if (lStyle & wxBORDER)
-        ulFlags |= FCF_BORDER;
-    if (lStyle & wxTHICK_FRAME )
-        ulFlags |= FCF_SIZEBORDER;
-
-    //
-    // Some generic window styles
-    //
-    ulFlags |= WS_VISIBLE;
     if (lStyle & wxCLIP_CHILDREN )
-        ulFlags |= WS_CLIPCHILDREN;
+        ulCreateFlags |= WS_CLIPCHILDREN;
 
+    //
+    // Empty stuff for now since PM has no custome 3D effects
+    // Doesn't mean someone cannot make some up though
+    //
     bool                            bWant3D;
     WXDWORD                         dwExStyle = Determine3DEffects(WS_EX_CLIENTEDGE, &bWant3D);
 
     //
-    // OS/2 PM doesn't have "extended" styles but if the library specifies
-    // them and we are creating a frame window then at least give it a border
+    // Generic OS/2 Windows are created with no owner, no Z Order, no Control data,
+    // and no presentation parameters
     //
-    if ( bWant3D ||
-        (m_windowStyle & wxSIMPLE_BORDER) ||
-        (m_windowStyle & wxRAISED_BORDER ) ||
-        (m_windowStyle & wxSUNKEN_BORDER) ||
-        (m_windowStyle & wxDOUBLE_BORDER)
-       )
-    {
-        ulFlags |= FCF_BORDER;
-    }
-    OS2Create( m_windowId
-              ,pParent
-              ,wxCanvasClassName
-              ,this
-              ,NULL
+    OS2Create( hParent
+              ,(PSZ)wxCanvasClassName
+              ,rName.c_str()
+              ,ulCreateFlags
               ,rPos.x
               ,rPos.y
               ,WidthDefault(rSize.x)
               ,HeightDefault(rSize.y)
-              ,ulFlags
-              ,NULL
-              ,dwExStyle
+              ,NULLHANDLE
+              ,NULLHANDLE
+              ,m_windowId
              );
     return(TRUE);
 } // end of wxWindow::Create
@@ -1773,7 +1769,7 @@ wxWindow*                           wxWndHook = NULL;
 //
 // Main window proc
 //
-MRESULT wxWndProc(
+MRESULT EXPENTRY wxWndProc(
   HWND                              hWnd
 , ULONG                             ulMsg
 , MPARAM                            wParam
@@ -2313,26 +2309,28 @@ void wxWindow::OS2DetachWindowMenu()
 } // end of wxWindow::OS2DetachWindowMenu
 
 bool wxWindow::OS2Create(
-  int                               vId
-, wxWindow*                         pParent
-, const wxChar*                     zWclass
-, wxWindow*                         pWxWin
+  WXHWND                            hParent
+, PSZ                               zClass
 , const wxChar*                     zTitle
-, int                               nX
-, int                               nY
-, int                               nWidth
-, int                               nHeight
 , WXDWORD                           dwStyle
-, const wxChar*                     zDialogTemplate
-, WXDWORD                           dwExtendedStyle // Port compatability only
+, long                              lX
+, long                              lY
+, long                              lWidth
+, long                              lHeight
+, WXHWND                            hOwner
+, WXHWND                            hZOrder
+, unsigned long                     ulId
+, void*                             pCtlData
+, void*                             pPresParams
 )
 {
     ERRORID                         vError;
     wxString                        sError;
-    int                             nX1      = CW_USEDEFAULT;
-    int                             nY1      = 0;
-    int                             nWidth1  = CW_USEDEFAULT;
-    int                             nHeight1 = 100;
+    long                            lX1      = (long)CW_USEDEFAULT;
+    long                            lY1      = 0L;
+    long                            lWidth1  = (long)CW_USEDEFAULT;
+    long                            lHeight1 = 100L;
+    int                             nControlId = 0;
 
     //
     // Find parent's size, if it exists, to set up a possible default
@@ -2341,126 +2339,60 @@ bool wxWindow::OS2Create(
     RECTL                           vParentRect;
     HWND                            hWndClient;
 
-    HWND                            hParent = (HWND)NULL;
-
-    if (pParent)
-    {
-        hParent = (HWND)pParent->GetHWND();
-        hWndClient = ::WinWindowFromID(hParent, FID_CLIENT);
-        ::WinQueryWindowRect(hWndClient, &vParentRect);
-
-        nWidth1  = vParentRect.xRight - vParentRect.xLeft;
-        nHeight1 = vParentRect.yTop - vParentRect.yBottom;
-    }
-    else
-        hParent = HWND_DESKTOP;
-
-    if (nX > -1)
-        nX1 = nX;
-    if (nY > -1)
-        nY1 = nY;
-    if (nWidth > -1)
-        nWidth1   = nWidth;
-    if (nHeight > -1)
-        nHeight1 = nHeight;
+    if (lX > -1L)
+        lX1 = lX;
+    if (lY > -1L)
+        lY1 = lY;
+    if (lWidth > -1L)
+        lWidth1 = lWidth;
+    if (lHeight > -1L)
+        lHeight1 = lHeight;
 
     wxWndHook = this;
 
-    if (zDialogTemplate)
+    //
+    // check to see if the new window is a standard control
+    //
+    if ((ULONG)zClass == (ULONG)WC_BUTTON ||
+        (ULONG)zClass == (ULONG)WC_COMBOBOX ||
+        (ULONG)zClass == (ULONG)WC_CONTAINER ||
+        (ULONG)zClass == (ULONG)WC_ENTRYFIELD ||
+        (ULONG)zClass == (ULONG)WC_LISTBOX ||
+        (ULONG)zClass == (ULONG)WC_MENU ||
+        (ULONG)zClass == (ULONG)WC_NOTEBOOK ||
+        (ULONG)zClass == (ULONG)WC_SCROLLBAR ||
+        (ULONG)zClass == (ULONG)WC_SPINBUTTON ||
+        (ULONG)zClass == (ULONG)WC_STATIC ||
+        (ULONG)zClass == (ULONG)WC_TITLEBAR ||
+        (ULONG)zClass == (ULONG)WC_VALUESET
+       )
     {
-        //
-        // We can use extended styles for custom default user config params
-        // These can be processed in the dialog proc's WM_INITDLG
-        // Dialog template is defined by vId and should be loaded from the
-        // resource file in the current .exe
-        //
-        PDLGTEMPLATE                 pDlgt;
-
-        ::DosGetResource(0L, RT_DIALOG, vId, (PPVOID)&pDlgt);
-        m_hWnd = (WXHWND)::WinCreateDlg( hParent
-                                        ,NULLHANDLE
-                                        ,(PFNWP)wxDlgProc
-                                        ,pDlgt
-                                        ,(PVOID)&dwExtendedStyle
-                                       );
-        if (m_hWnd == 0)
-        {
-            vError = ::WinGetLastError(vHabmain);
-            sError = wxPMErrorToStr(vError);
-            wxLogError("Can't find dummy dialog template!\n"
-                       "Check resource include path for finding wx.rc.\n"
-                       "Error: %s\n", sError);
-            return FALSE;
-        }
-
-        //
-        // Move the dialog to its initial position without forcing repainting
-        //
-        if (!::WinSetWindowPos( m_hWnd
-                               ,HWND_TOP
-                               ,nX1
-                               ,nY1
-                               ,nWidth1
-                               ,nHeight1
-                               ,SWP_MOVE | SWP_SIZE | SWP_NOREDRAW
-                              ));
-        {
-            vError = ::WinGetLastError(vHabmain);
-            sError = wxPMErrorToStr(vError);
-            wxLogError("MoveWindow, error: %s\n", sError);
-        }
+            nControlId = ulId;
     }
-    else
+
+    //
+    // We will either have a registered class via string name or a standard PM Class via a long
+    //
+    m_hWnd = (WXHWND)::WinCreateWindow( (HWND)hParent
+                                       ,zClass
+                                       ,(PSZ)zTitle ? zTitle : wxT("")
+                                       ,(ULONG)dwStyle
+                                       ,(LONG)lX1
+                                       ,(LONG)lY1
+                                       ,(LONG)lWidth
+                                       ,(LONG)lHeight
+                                       ,NULLHANDLE
+                                       ,HWND_TOP
+                                       ,(ULONG)ulId
+                                       ,pCtlData
+                                       ,pPresParams
+                                      );
+    if (!m_hWnd)
     {
-        int                         nControlId = 0;
-        WXDWORD                     dwClass = dwStyle | 0xffff0000;
-
-        //
-        // check to see if the new window is a standard control
-        //
-        if (dwClass & (ULONG)WC_BUTTON ||
-            dwClass & (ULONG)WC_COMBOBOX ||
-            dwClass & (ULONG)WC_CONTAINER ||
-            dwClass & (ULONG)WC_ENTRYFIELD ||
-            dwClass & (ULONG)WC_LISTBOX ||
-            dwClass & (ULONG)WC_MENU ||
-            dwClass & (ULONG)WC_NOTEBOOK ||
-            dwClass & (ULONG)WC_SCROLLBAR ||
-            dwClass & (ULONG)WC_SPINBUTTON ||
-            dwClass & (ULONG)WC_STATIC ||
-            dwClass & (ULONG)WC_TITLEBAR ||
-            dwClass & (ULONG)WC_VALUESET
-           )
-            nControlId = vId;
-
-        wxString                    sClassName(zWclass);
-
-        if (GetWindowStyleFlag() & wxNO_FULL_REPAINT_ON_RESIZE )
-        {
-            sClassName += wxT("NR");
-        }
-
-        m_hWnd = (WXHWND)::WinCreateWindow( hParent
-                                           ,(PSZ)sClassName.c_str()
-                                           ,zTitle ? zTitle : wxT("")
-                                           ,dwStyle
-                                           ,nX1
-                                           ,nY1
-                                           ,nWidth
-                                           ,nHeight
-                                           ,NULLHANDLE
-                                           ,HWND_TOP
-                                           ,vId
-                                           ,NULL
-                                           ,NULL
-                                          );
-        if (!m_hWnd)
-        {
-            vError = ::WinGetLastError(vHabmain);
-            sError = wxPMErrorToStr(vError);
-            wxLogError("Can't create window of class %s!. Error: %s\n", zWclass, sError);
-            return FALSE;
-        }
+        vError = ::WinGetLastError(vHabmain);
+        sError = wxPMErrorToStr(vError);
+        wxLogError("Can't create window of class %s!. Error: %s\n", zClass, sError);
+        return FALSE;
     }
     wxWndHook = NULL;
 

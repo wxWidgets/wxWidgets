@@ -125,12 +125,6 @@ bool wxFrame::Create(
 
     m_bIconized = FALSE;
 
-    //
-    // We pass NULL as parent to MSWCreate because frames with parents behave
-    // very strangely under Win95 shell.
-    // Alteration by JACS: keep normal Windows behaviour (float on top of parent)
-    // with this ulStyle.
-    //
     if ((m_windowStyle & wxFRAME_FLOAT_ON_PARENT) == 0)
         pParent = NULL;
 
@@ -446,11 +440,16 @@ void wxFrame::SetIcon(
 
     if (m_icon.Ok())
     {
-        WinSendMsg( GetHwnd()
-                   ,WM_SETICON
-                   ,(MPARAM)((HICON)m_icon.GetHICON())
-                   ,NULL
-                  );
+        ::WinSendMsg( GetHwnd()
+                     ,WM_SETICON
+                     ,(MPARAM)((HICON)m_icon.GetHICON())
+                     ,NULL
+                    );
+        ::WinSendMsg( GetHwnd()
+                     ,WM_UPDATEFRAME
+                     ,(MPARAM)FCF_ICON
+                     ,(MPARAM)0
+                    );
     }
 } // end of wxFrame::SetIcon
 
@@ -555,12 +554,7 @@ void wxFrame::SetMenuBar(
 
 void wxFrame::InternalSetMenuBar()
 {
-
-    ::WinPostMsg( GetHwnd()
-                 ,WM_UPDATEFRAME
-                 ,(MPARAM)FCF_MENU
-                 ,NULL
-                );
+    WinSendMsg((HWND)GetHwnd(), WM_UPDATEFRAME, (MPARAM)FCF_MENU, (MPARAM)0);
 } // end of wxFrame::InternalSetMenuBar
 
 //
@@ -727,83 +721,166 @@ bool wxFrame::OS2Create(
 , long                              ulStyle
 )
 {
-    ULONG                           ulPmFlags = 0L;
+    ULONG                           ulCreateFlags = 0L;
+    ULONG                           ulStyleFlags = 0L;
     ULONG                           ulExtraFlags = 0L;
-    ULONG                           ulTempFlags = FCF_STANDARD;
+    FRAMECDATA                      vFrameCtlData;
+    HWND                            hParent = NULLHANDLE;
+    HWND                            hClient = NULLHANDLE;
+    HWND                            hTitlebar = NULLHANDLE;
+    HWND                            hHScroll = NULLHANDLE;
+    HWND                            hVScroll = NULLHANDLE;
+    SWP                             vSwp;
+    SWP                             vSwpTitlebar;
+    SWP                             vSwpVScroll;
+    SWP                             vSwpHScroll;
 
     m_hDefaultIcon = (WXHICON) (wxSTD_FRAME_ICON ? wxSTD_FRAME_ICON : wxDEFAULT_FRAME_ICON);
+    memset(&vSwp, '\0', sizeof(SWP));
+    memset(&vSwpTitlebar, '\0', sizeof(SWP));
+    memset(&vSwpVScroll, '\0', sizeof(SWP));
+    memset(&vSwpHScroll, '\0', sizeof(SWP));
+    if (pParent)
+        hParent = GetWinHwnd(pParent);
+    else
+        hParent = HWND_DESKTOP;
 
     if (ulStyle == wxDEFAULT_FRAME_STYLE)
-        ulPmFlags = FCF_STANDARD;
+        ulCreateFlags = FCF_SIZEBORDER | FCF_TITLEBAR | FCF_SYSMENU |
+                        FCF_MINMAX | FCF_VERTSCROLL | FCF_HORZSCROLL | FCF_TASKLIST;
     else
     {
         if ((ulStyle & wxCAPTION) == wxCAPTION)
-            ulPmFlags = FCF_TASKLIST;
+            ulCreateFlags = FCF_TASKLIST;
         else
-            ulPmFlags = FCF_NOMOVEWITHOWNER;
+            ulCreateFlags = FCF_NOMOVEWITHOWNER;
 
         if (ulStyle & wxMINIMIZE_BOX)
-            ulPmFlags |= FCF_MINBUTTON;
+            ulCreateFlags |= FCF_MINBUTTON;
         if (ulStyle & wxMAXIMIZE_BOX)
-            ulPmFlags |= FCF_MAXBUTTON;
+            ulCreateFlags |= FCF_MAXBUTTON;
         if (ulStyle & wxTHICK_FRAME)
-            ulPmFlags |= FCF_DLGBORDER;
+            ulCreateFlags |= FCF_DLGBORDER;
         if (ulStyle & wxSYSTEM_MENU)
-            ulPmFlags |= FCF_SYSMENU;
-        if ((ulStyle & wxMINIMIZE) || (ulStyle & wxICONIZE))
-            ulPmFlags |= WS_MINIMIZED;
-        if (ulStyle & wxMAXIMIZE)
-            ulPmFlags |= WS_MAXIMIZED;
+            ulCreateFlags |= FCF_SYSMENU;
         if (ulStyle & wxCAPTION)
-            ulPmFlags |= FCF_TASKLIST;
+            ulCreateFlags |= FCF_TASKLIST;
         if (ulStyle & wxCLIP_CHILDREN)
         {
             // Invalid for frame windows under PM
         }
 
-        //
-        // Keep this in wxFrame because it saves recoding this function
-        // in wxTinyFrame
-        //
-#if wxUSE_ITSY_BITSY
         if (ulStyle & wxTINY_CAPTION_VERT)
-            ulExtraFlags |= kVertCaption;
+            ulCreateFlags |= FCF_TASKLIST;
         if (ulStyle & wxTINY_CAPTION_HORIZ)
-            ulExtraFlags |= kHorzCaption;
-#else
-        if (ulStyle & wxTINY_CAPTION_VERT)
-            ulPmFlags |= FCF_TASKLIST;
-        if (ulStyle & wxTINY_CAPTION_HORIZ)
-            ulPmFlags |= FCF_TASKLIST;
-#endif
+            ulCreateFlags |= FCF_TASKLIST;
+
         if ((ulStyle & wxTHICK_FRAME) == 0)
-            ulPmFlags |= FCF_BORDER;
+            ulCreateFlags |= FCF_BORDER;
         if (ulStyle & wxFRAME_TOOL_WINDOW)
             ulExtraFlags = kFrameToolWindow;
 
         if (ulStyle & wxSTAY_ON_TOP)
-            ulPmFlags |= FCF_SYSMODAL;
+            ulCreateFlags |= FCF_SYSMODAL;
     }
+    if ((ulStyle & wxMINIMIZE) || (ulStyle & wxICONIZE))
+        ulStyleFlags |= WS_MINIMIZED;
+    if (ulStyle & wxMAXIMIZE)
+        ulStyleFlags |= WS_MAXIMIZED;
+
     //
     // Clear the visible flag, we always call show
     //
-    ulPmFlags &= (unsigned long)~WS_VISIBLE;
+    ulStyleFlags &= (unsigned long)~WS_VISIBLE;
     m_bIconized = FALSE;
-    if ( !wxWindow::OS2Create( nId
-                              ,pParent
-                              ,zWclass
-                              ,pWxWin
-                              ,zTitle
-                              ,nX
-                              ,nY
-                              ,nWidth
-                              ,nHeight
-                              ,ulPmFlags
-                              ,NULL
-                              ,ulExtraFlags))
+
+    //
+    // Set the frame control block
+    //
+    vFrameCtlData.cb            = sizeof(vFrameCtlData);
+    vFrameCtlData.flCreateFlags = ulCreateFlags;
+    vFrameCtlData.hmodResources = 0L;
+    vFrameCtlData.idResources   = 0;
+
+    //
+    // Create the frame window
+    //
+    if (!wxWindow::OS2Create( hParent
+                             ,WC_FRAME
+                             ,zTitle
+                             ,ulStyleFlags
+                             ,(long)nX
+                             ,(long)nY
+                             ,(long)nWidth
+                             ,(long)nHeight
+                             ,NULLHANDLE
+                             ,HWND_TOP
+                             ,(long)nId
+                             ,(void*)&vFrameCtlData
+                             ,NULL
+                            ))
     {
         return FALSE;
     }
+
+    //
+    // Create the client window.  We must call the API from here rather than
+    // the static base class create because we need a separate handle
+    //
+    if ((hClient = ::WinCreateWindow( GetHwnd()   // Frame is parent
+                                     ,zWclass     // Custom client class
+                                     ,NULL        // Window title
+                                     ,0           // No styles
+                                     ,0, 0, 0, 0  // Window position
+                                     ,NULLHANDLE  // Owner
+                                     ,HWND_TOP    // Sibling
+                                     ,FID_CLIENT  // standard client ID
+                                     ,NULL        // Creation data
+                                     ,NULL        // Window Pres Params
+                                     )) == 0L)
+    {
+        return FALSE;
+    }
+
+    //
+    // Now size everything.  If adding a menu the client will need to be resized.
+    //
+    if (!::WinSetWindowPos( GetHwnd()
+                           ,HWND_TOP
+                           ,nX
+                           ,nY
+                           ,nWidth
+                           ,nHeight
+                           ,SWP_SIZE | SWP_MOVE | SWP_ACTIVATE
+                          ))
+        return FALSE;
+
+    WinQueryWindowPos(GetHwnd(), &vSwp);
+
+    if (ulCreateFlags & FCF_TITLEBAR)
+    {
+        hTitlebar = WinWindowFromID(GetHwnd(), FID_TITLEBAR);
+        WinQueryWindowPos(hTitlebar, &vSwpTitlebar);
+    }
+    if (ulCreateFlags & FCF_HORZSCROLL)
+    {
+        hHScroll = WinWindowFromID(GetHwnd(), FID_HORZSCROLL);
+        WinQueryWindowPos(hHScroll, &vSwpHScroll);
+    }
+    if (ulCreateFlags & FCF_VERTSCROLL)
+    {
+        hVScroll = WinWindowFromID(GetHwnd(), FID_VERTSCROLL);
+        WinQueryWindowPos(hVScroll, &vSwpVScroll);
+    }
+    if (!::WinSetWindowPos( hClient
+                           ,HWND_TOP
+                           ,SV_CXSIZEBORDER
+                           ,(SV_CYSIZEBORDER - 1) + vSwpHScroll.cy
+                           ,vSwp.cx - ((SV_CXSIZEBORDER * 2) + vSwpVScroll.cx)
+                           ,vSwp.cy - ((SV_CYSIZEBORDER * 2) + 1 + vSwpTitlebar.cy + vSwpHScroll.cy)
+                           ,SWP_SIZE | SWP_MOVE
+                          ))
+        return FALSE;
     return TRUE;
 } // end of wxFrame::OS2Create
 
