@@ -160,6 +160,7 @@ wxMac:
 wxMSW:
 
 - possibility to use DIBs for wxBitmap implementation (Derry Bryson)
+- added wxCrashReport
 - wxStaticBitmap doesn't stretch its bitmap any longer (like other ports)
 - support for accelerator keys in the owner drawn menus (Derry Bryson)
 - wxCaret::SetSize() doesn't hide the caret any longer as it used to
