@@ -55,14 +55,18 @@ public:
 
     void OnExit(wxCommandEvent& event);
     
+#if wxUSE_GLCANVAS
     void SetCanvas( TestGLCanvas *canvas )    { m_canvas = canvas; }
     TestGLCanvas *GetCanvas()                 { return m_canvas; }
     
 private:
     TestGLCanvas*    m_canvas;
+#endif
 
     DECLARE_EVENT_TABLE()
 };
+
+#if wxUSE_GLCANVAS
 
 class TestGLCanvas: public wxGLCanvas
 {
@@ -84,6 +88,8 @@ public:
 private:
     DECLARE_EVENT_TABLE()
 };
+
+#endif
 
 #endif
 

@@ -25,10 +25,6 @@
 #include "wx/wx.h"
 #endif
 
-#if !wxUSE_GLCANVAS
-#error Please set wxUSE_GLCANVAS to 1 in setup.h.
-#endif
-
 #include "wx/timer.h"
 #include "wx/glcanvas.h"
 
@@ -76,13 +72,13 @@ static GLfloat xrot;
 static GLfloat yrot;
 
 
-static void read_surface( char *filename )
+static void read_surface( wxChar *filename )
 {
    FILE *f;
 
-   f = fopen(filename,"r");
+   f = wxFopen(filename,_T("r"));
    if (!f) {
-      wxString msg("Couldn't read ");
+      wxString msg(_T("Couldn't read "));
       msg += filename;
       wxMessageBox(msg);
       return;
@@ -97,7 +93,7 @@ static void read_surface( char *filename )
    }
    numverts--;
 
-   printf("%d vertices, %d triangles\n", numverts, numverts-2);
+   wxPrintf(_T("%d vertices, %d triangles\n"), numverts, numverts-2);
    fclose(f);
 }
 
@@ -203,26 +199,26 @@ static void Init(void)
 #endif
 }
 
-static GLenum Args(int argc, char **argv)
+static GLenum Args(int argc, wxChar **argv)
 {
    GLint i;
 
    for (i = 1; i < argc; i++) {
-      if (strcmp(argv[i], "-sb") == 0) {
+      if (wxStrcmp(argv[i], _T("-sb")) == 0) {
          doubleBuffer = GL_FALSE;
       }
-      else if (strcmp(argv[i], "-db") == 0) {
+      else if (wxStrcmp(argv[i], _T("-db")) == 0) {
          doubleBuffer = GL_TRUE;
       }
-      else if (strcmp(argv[i], "-speed") == 0) {
+      else if (wxStrcmp(argv[i], _T("-speed")) == 0) {
          speed_test = GL_TRUE;
          doubleBuffer = GL_TRUE;
       }
-      else if (strcmp(argv[i], "-va") == 0) {
+      else if (wxStrcmp(argv[i], _T("-va")) == 0) {
          use_vertex_arrays = GL_TRUE;
       }
       else {
-         wxString msg("Bad option: ");
+         wxString msg(_T("Bad option: "));
          msg += argv[i];
          wxMessageBox(msg);
          return GL_FALSE;
@@ -243,17 +239,17 @@ bool MyApp::OnInit(void)
   Args(argc, argv);
 
   // Create the main frame window
-  frame = new MyFrame(NULL, "Isosurf GL Sample", wxPoint(50, 50), wxSize(200, 200));
+  frame = new MyFrame(NULL, _T("Isosurf GL Sample"), wxPoint(50, 50), wxSize(200, 200));
 
   // Give it an icon
-  frame->SetIcon(wxIcon("mondrian"));
+  frame->SetIcon(wxIcon(_T("mondrian")));
 
   // Make a menubar
   wxMenu *fileMenu = new wxMenu;
 
-  fileMenu->Append(wxID_EXIT, "E&xit");
+  fileMenu->Append(wxID_EXIT, _T("E&xit"));
   wxMenuBar *menuBar = new wxMenuBar;
-  menuBar->Append(fileMenu, "&File");
+  menuBar->Append(fileMenu, _T("&File"));
   frame->SetMenuBar(menuBar);
 
   // Make a TestGLCanvas
@@ -281,18 +277,27 @@ bool MyApp::OnInit(void)
       doubleBuffer = GL_FALSE;
   }
  
+#if wxUSE_GLCANVAS
+
   frame->m_canvas = new TestGLCanvas(frame, -1, wxDefaultPosition, wxDefaultSize,
-                                     0, "TestGLCanvas", gl_attrib );
+                                     0, _T("TestGLCanvas"), gl_attrib );
 
   // Show the frame
   frame->Show(TRUE);
 
   frame->m_canvas->SetCurrent();
-  read_surface( "isosurf.dat" );
+  read_surface( _T("isosurf.dat") );
 
   Init();
 
   return TRUE;
+
+#else
+
+  wxMessageBox( _T("This sample has to be compiled with wxUSE_GLCANVAS"), _T("Building error"), wxOK);
+
+  return FALSE;
+#endif
 }
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
@@ -304,11 +309,13 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos,
     const wxSize& size, long style):
   wxFrame(frame, -1, title, pos, size, style)
 {
+#if wxUSE_GLCANVAS
     m_canvas = NULL;
+#endif
 }
 
 // Intercept menu commands
-void MyFrame::OnExit(wxCommandEvent& event)
+void MyFrame::OnExit(wxCommandEvent& WXUNUSED(event))
 {
     Destroy();
 }
@@ -316,6 +323,8 @@ void MyFrame::OnExit(wxCommandEvent& event)
 /*
  * TestGLCanvas implementation
  */
+
+#if wxUSE_GLCANVAS
 
 BEGIN_EVENT_TABLE(TestGLCanvas, wxGLCanvas)
     EVT_SIZE(TestGLCanvas::OnSize)
@@ -344,7 +353,7 @@ TestGLCanvas::~TestGLCanvas(void)
 {
 }
 
-void TestGLCanvas::OnPaint( wxPaintEvent& event )
+void TestGLCanvas::OnPaint( wxPaintEvent& WXUNUSED(event) )
 {
     // This is a dummy, to avoid an endless succession of paint messages.
     // OnPaint handlers must always create a wxPaintDC.
@@ -440,8 +449,9 @@ void TestGLCanvas::OnMouseEvent(wxMouseEvent& event)
     dragging = 0;
 }
 
-void TestGLCanvas::OnEraseBackground(wxEraseEvent& event)
+void TestGLCanvas::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
 {
     // Do nothing, to avoid flashing.
 }
 
+#endif

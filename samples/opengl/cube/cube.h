@@ -40,17 +40,19 @@ public:
 DECLARE_EVENT_TABLE()
 };
 
+#if wxUSE_GLCANVAS
+
 class TestGLCanvas: public wxGLCanvas
 {
   friend class MyFrame;
 public:
  TestGLCanvas(wxWindow *parent, const wxWindowID id = -1, 
     const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-    long style = 0, const wxString& name = "TestGLCanvas");
+    long style = 0, const wxString& name = _T("TestGLCanvas"));
  TestGLCanvas(wxWindow *parent, const TestGLCanvas &other,
           const wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition,
           const wxSize& size = wxDefaultSize, long style = 0,
-          const wxString& name = "TestGLCanvas" );
+          const wxString& name = _T("TestGLCanvas") );
    
  ~TestGLCanvas(void);
 
@@ -88,6 +90,8 @@ private:
 
 DECLARE_EVENT_TABLE()
 };
+
+#endif
 
 #endif
 

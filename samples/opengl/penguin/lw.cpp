@@ -36,6 +36,8 @@
 #include <stdio.h>
 #include <math.h>
 
+#if wxUSE_GLCANVAS
+
 #define MK_ID(a,b,c,d) ((((wxUint32)(a))<<24)| \
             (((wxUint32)(b))<<16)| \
             (((wxUint32)(c))<< 8)| \
@@ -435,4 +437,5 @@ void lw_object_scale(lwObject *lwo, GLfloat scale)
   }
 }
 
+#endif
 

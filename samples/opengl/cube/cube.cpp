@@ -27,10 +27,6 @@
 
 #include "wx/log.h"
 
-#if !wxUSE_GLCANVAS
-#error Please set wxUSE_GLCANVAS to 1 in setup.h.
-#endif
-
 #include "cube.h"
 
 #ifndef __WXMSW__     // for wxStopWatch, see remark below
@@ -70,15 +66,16 @@ END_EVENT_TABLE()
 
 ScanCodeCtrl::ScanCodeCtrl( wxWindow* parent, wxWindowID id, int code,
                              const wxPoint& pos, const wxSize& size )
-                  : wxTextCtrl( parent, id, "", pos, size )
+                  : wxTextCtrl( parent, id, wxEmptyString, pos, size )
 { wxString buf;
-  buf.Printf( "0x%04x", code );
+  buf.Printf( _T("0x%04x"), code );
   SetValue( buf );
 }
 
 void ScanCodeCtrl::OnKeyDown( wxKeyEvent& event )
-{ wxString buf;
-  buf.Printf( "0x%04x", event.GetKeyCode() );
+{
+  wxString buf;
+  buf.Printf( _T("0x%04x"), event.GetKeyCode() );
   SetValue( buf );
 }
 
@@ -101,18 +98,18 @@ ScanCodeDialog::ScanCodeDialog( wxWindow* parent, wxWindowID id,
                const int code, const wxString &descr, const wxString& title )
           : wxDialog( parent, id, title, wxPoint(-1, -1), wxSize(96*2,76*2) )
 {
-  new wxStaticText( this, -1, "Scancode", wxPoint(4*2,3*2),
+  new wxStaticText( this, -1, _T("Scancode"), wxPoint(4*2,3*2),
                     wxSize(31*2,12*2) );
   m_ScanCode = new ScanCodeCtrl( this, -1, code, wxPoint(37*2,6*2),
                                  wxSize(53*2,14*2) );
 
-  new wxStaticText( this, -1, "Description", wxPoint(4*2,24*2),
+  new wxStaticText( this, -1, _T("Description"), wxPoint(4*2,24*2),
                     wxSize(32*2,12*2) );
   m_Description = new wxTextCtrl( this, -1, descr, wxPoint(37*2,27*2),
                                   wxSize(53*2,14*2) );
 
-  new wxButton( this, wxID_OK, "Ok", wxPoint(20*2,50*2), wxSize(20*2,13*2) );
-  new wxButton( this, wxID_CANCEL, "Cancel", wxPoint(44*2,50*2),
+  new wxButton( this, wxID_OK, _T("Ok"), wxPoint(20*2,50*2), wxSize(20*2,13*2) );
+  new wxButton( this, wxID_CANCEL, _T("Cancel"), wxPoint(44*2,50*2),
                 wxSize(25*2,13*2) );
 }
 
@@ -120,7 +117,7 @@ int ScanCodeDialog::GetValue()
 {
   int code;
   wxString buf = m_ScanCode->GetValue();
-  sscanf( buf.c_str(), "%i", &code );
+  wxSscanf( buf.c_str(), _T("%i"), &code );
   return( code );
 }
 
@@ -159,6 +156,8 @@ unsigned long wxStopWatch( unsigned long *sec_base )
 /*----------------------------------------------------------------
   Implementation of Test-GLCanvas
 -----------------------------------------------------------------*/
+
+#if wxUSE_GLCANVAS
 
 BEGIN_EVENT_TABLE(TestGLCanvas, wxGLCanvas)
   EVT_SIZE(TestGLCanvas::OnSize)
@@ -263,12 +262,12 @@ void TestGLCanvas::Render()
   SwapBuffers();
 }
 
-void TestGLCanvas::OnEnterWindow( wxMouseEvent& event )
+void TestGLCanvas::OnEnterWindow( wxMouseEvent& WXUNUSED(event) )
 {
     SetFocus();
 }
 
-void TestGLCanvas::OnPaint( wxPaintEvent& event )
+void TestGLCanvas::OnPaint( wxPaintEvent& WXUNUSED(event) )
 {
     Render();
 }
@@ -290,7 +289,7 @@ void TestGLCanvas::OnSize(wxSizeEvent& event)
     }
 }
 
-void TestGLCanvas::OnEraseBackground(wxEraseEvent& event)
+void TestGLCanvas::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
 {
   // Do nothing, to avoid flashing.
 }
@@ -415,6 +414,8 @@ void TestGLCanvas::Rotate( GLfloat deg )
 }
 
 
+#endif // wxUSE_GLCANVAS
+
 /* -----------------------------------------------------------------------
   Main Window
 -------------------------------------------------------------------------*/
@@ -435,57 +436,64 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos,
 }
 
 // Intercept menu commands
-void MyFrame::OnExit(wxCommandEvent& event)
+void MyFrame::OnExit(wxCommandEvent& WXUNUSED(event))
 {
     Destroy();
 }
 
-void MyFrame::OnNewWindow(wxCommandEvent& event)
+void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event))
 {
-  MyFrame *frame = new MyFrame(NULL, "Cube OpenGL Demo Clone",
+  MyFrame *frame = new MyFrame(NULL, _T("Cube OpenGL Demo Clone"),
                                wxPoint(50, 50), wxSize(400, 300));
   // Give it an icon
 #ifdef __WXMSW__
-  frame->SetIcon(wxIcon("mondrian"));
+  frame->SetIcon(wxIcon(_T("mondrian")));
 #endif
 
   // Make a menubar
   wxMenu *winMenu = new wxMenu;
 
-  winMenu->Append(wxID_EXIT, "&Close");
-  winMenu->Append(ID_NEW_WINDOW, "&New" );
+  winMenu->Append(wxID_EXIT, _T("&Close"));
+  winMenu->Append(ID_NEW_WINDOW, _T("&New") );
   wxMenuBar *menuBar = new wxMenuBar;
-  menuBar->Append(winMenu, "&Window");
+  menuBar->Append(winMenu, _T("&Window"));
 
   winMenu = new wxMenu;
-  winMenu->Append(ID_DEF_ROTATE_LEFT_KEY, "Rotate &left");
-  winMenu->Append(ID_DEF_ROTATE_RIGHT_KEY, "Rotate &right");
-  menuBar->Append(winMenu, "&Key");
+  winMenu->Append(ID_DEF_ROTATE_LEFT_KEY, _T("Rotate &left"));
+  winMenu->Append(ID_DEF_ROTATE_RIGHT_KEY, _T("Rotate &right"));
+  menuBar->Append(winMenu, _T("&Key"));
 
   frame->SetMenuBar(menuBar);
 
+#if wxUSE_GLCANVAS
   frame->m_canvas = new TestGLCanvas( frame, *m_canvas, -1,
                wxDefaultPosition, wxDefaultSize );
+#endif
 
   // Show the frame
   frame->Show(TRUE);
 }
 
-void MyFrame::OnDefRotateLeftKey(wxCommandEvent& event)
+void MyFrame::OnDefRotateLeftKey(wxCommandEvent& WXUNUSED(event))
 {
+#if wxUSE_GLCANVAS
   ScanCodeDialog dial( this, -1, m_canvas->m_rleft,
-                       wxString("Left"), "Define key" );
+                       wxString(_T("Left")), _T("Define key") );
   int result = dial.ShowModal();
   if( result == wxID_OK )
     m_canvas->m_rleft = dial.GetValue();
+#endif
 }
-void MyFrame::OnDefRotateRightKey(wxCommandEvent& event)
+
+void MyFrame::OnDefRotateRightKey(wxCommandEvent& WXUNUSED(event))
 {
+#if wxUSE_GLCANVAS
   ScanCodeDialog dial( this, -1, m_canvas->m_rright,
-                       wxString("Right"), "Define key" );
+                       wxString(_T("Right")), _T("Define key") );
   int result = dial.ShowModal();
   if( result == wxID_OK )
     m_canvas->m_rright = dial.GetValue();
+#endif
 }
 
 /*------------------------------------------------------------------
@@ -499,7 +507,7 @@ bool MyApp::OnInit(void)
   wxLog::SetTraceMask(wxTraceMessages);
 
   // Create the main frame window
-  MyFrame *frame = new MyFrame(NULL, "Cube OpenGL Demo", wxPoint(50, 50),
+  MyFrame *frame = new MyFrame(NULL, _T("Cube OpenGL Demo"), wxPoint(50, 50),
                                wxSize(400, 300));
   // Give it an icon
 #ifdef wx_msw
@@ -509,17 +517,19 @@ bool MyApp::OnInit(void)
   // Make a menubar
   wxMenu *winMenu = new wxMenu;
 
-  winMenu->Append(wxID_EXIT, "&Close");
-  winMenu->Append(ID_NEW_WINDOW, "&New" );
+  winMenu->Append(wxID_EXIT, _T("&Close"));
+  winMenu->Append(ID_NEW_WINDOW, _T("&New") );
   wxMenuBar *menuBar = new wxMenuBar;
-  menuBar->Append(winMenu, "&Window");
+  menuBar->Append(winMenu, _T("&Window"));
 
   winMenu = new wxMenu;
-  winMenu->Append(ID_DEF_ROTATE_LEFT_KEY, "Rotate &left");
-  winMenu->Append(ID_DEF_ROTATE_RIGHT_KEY, "Rotate &right");
-  menuBar->Append(winMenu, "&Key");
+  winMenu->Append(ID_DEF_ROTATE_LEFT_KEY, _T("Rotate &left"));
+  winMenu->Append(ID_DEF_ROTATE_RIGHT_KEY, _T("Rotate &right"));
+  menuBar->Append(winMenu, _T("&Key"));
 
   frame->SetMenuBar(menuBar);
+
+#if wxUSE_GLCANVAS
 
   frame->m_canvas = new TestGLCanvas(frame, -1, wxDefaultPosition, wxDefaultSize);
 
@@ -527,4 +537,13 @@ bool MyApp::OnInit(void)
   frame->Show(TRUE);
 
   return TRUE;
+
+#else
+
+  wxMessageBox( _T("This sample has to be compiled with wxUSE_GLCANVAS"), _T("Building error"), wxOK);
+
+  return FALSE;
+
+#endif
+
 }

@@ -25,10 +25,6 @@
 #include "wx/wx.h"
 #endif
 
-#if !wxUSE_GLCANVAS
-#error Please set wxUSE_GLCANVAS to 1 in setup.h.
-#endif
-
 #include "penguin.h"
 #ifdef __WXMAC__
 #  ifdef __DARWIN__
@@ -57,6 +53,7 @@ bool MyApp::OnInit()
   menuBar->Append(fileMenu, wxT("&File"));
   frame->SetMenuBar(menuBar);
 
+#if wxUSE_GLCANVAS
   frame->SetCanvas( new TestGLCanvas(frame, -1, wxPoint(0, 0), wxSize(200, 200), wxSUNKEN_BORDER) );
 
   /* Load file wiht mesh data */
@@ -66,6 +63,13 @@ bool MyApp::OnInit()
   frame->Show(TRUE);
   
   return TRUE;
+#else
+
+  wxMessageBox( _T("This sample has to be compiled with wxUSE_GLCANVAS"), _T("Building error"), wxOK);
+
+  return FALSE;
+
+#endif
 }
 
 IMPLEMENT_APP(MyApp)
@@ -79,14 +83,18 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos,
     const wxSize& size, long style):
   wxFrame(frame, -1, title, pos, size, style)
 {
+#if wxUSE_GLCANVAS
     m_canvas = NULL;
+#endif
 }
 
 /* Intercept menu commands */
-void MyFrame::OnExit(wxCommandEvent& event)
+void MyFrame::OnExit(wxCommandEvent& WXUNUSED(event))
 {
     Destroy();
 }
+
+#if wxUSE_GLCANVAS
 
 BEGIN_EVENT_TABLE(TestGLCanvas, wxGLCanvas)
     EVT_SIZE(TestGLCanvas::OnSize)
@@ -108,7 +116,7 @@ TestGLCanvas::~TestGLCanvas(void)
     lw_object_free(info.lwobject);
 }
 
-void TestGLCanvas::OnPaint( wxPaintEvent& event )
+void TestGLCanvas::OnPaint( wxPaintEvent& WXUNUSED(event) )
 {
     /* must always be here */
     wxPaintDC dc(this);
@@ -170,7 +178,7 @@ void TestGLCanvas::OnSize(wxSizeEvent& event)
     }
 }
 
-void TestGLCanvas::OnEraseBackground(wxEraseEvent& event)
+void TestGLCanvas::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
 {
     /* Do nothing, to avoid flashing on MSW */
 }
@@ -249,3 +257,4 @@ void TestGLCanvas::InitGL(void)
 }
 
 
+#endif
