@@ -1,4 +1,73 @@
-19th March '2000: wxWindows 2.1.14 released
+
+22nd July 2000: wxWindows 2.2.1 released
+
+Minor build fixes.
+
+Corrected guffow-scrolling so that no surplus expose
+events are generated.
+
+Corrected bug in wxMask creation on 16-bit displays.
+
+Minor correction to wxDC::DrawRoundedRectangle.
+
+Added support for <INSERT> and <DELETE> menu accelerators.
+
+Use the wxCommmandEvent::IsChecked() function for checkable
+menu items.
+
+Made wxComboBox case-sensitive.
+
+Minor correction to doc-view architecture.
+
+10th July 2000: wxWindows 2.2.0 released
+
+Added code for writing BMP images.
+
+Added code for writing TIFF images.
+
+Fixed problem with best visuals (on SGI)
+   
+Applied a number of compile fixes for various Unix variants.
+
+Fixed wrong background colours appearing sometimes and fix
+for resetting the default font in controls.
+   
+Speed-up to wxListCtrl.
+
+Fixed bug wxTextStream::ReadLine()
+   
+Various improvements commandline parser.
+ 
+Changed wxColour unequal operator to compare colours.
+   
+Fixed wxMenuBar::Replace bug.
+
+Added new position to slider update event.
+   
+Minor fix to idle handling (now wxGTK events come after all GTK events).
+
+Various fixes to the new wxGrid class.
+   
+Bug-fixes.
+
+4th June 2000: wxWindows pre-2.2 release
+
+Complete freeze now. Only vital bug-fixes allowed.
+
+Various enhancements to wxSizer.
+
+Added wxGridSizer and wxFlexGridSizer.
+
+Reworked wxURL.
+
+MANY bugfixes.
+
+22th March 2000: wxWindows 2.1.15 released
+
+Build fix. RPMs no loner require GTK's include files.
+
+An extra library for the OpenGl class now gets builts
+19th March 2000: wxWindows 2.1.14 released
 
 An extra library for the OpenGl class now gets builts
 and installed. There is also an extra RPM for this 

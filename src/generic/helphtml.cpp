@@ -166,7 +166,7 @@ wxHTMLHelpControllerBase::LoadFile(const wxString& ifile)
    m_MapList = new wxList;
    m_NumOfEntries = 0;
 
-   FILE *input = fopen(mapFile.fn_str(),"rt");
+   FILE *input = wxFopen(mapFile,wxT("rt"));
    if(! input)
       return FALSE;
    do
@@ -249,6 +249,16 @@ wxHTMLHelpControllerBase::DisplaySection(int sectionNo)
       node = node->Next();
    }
    return FALSE;
+}
+
+bool wxHTMLHelpControllerBase::DisplaySection(const wxString& section)
+{
+    bool isFilename = (section.Find(wxT(".htm")) != -1);
+
+    if (isFilename)
+        return DisplayHelp(section);
+    else
+        return KeywordSearch(section);
 }
 
 bool

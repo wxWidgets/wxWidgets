@@ -39,13 +39,13 @@ wxZipInputStream::wxZipInputStream(const wxString& archive, const wxString& file
 
     m_Pos = 0;
     m_Size = 0;
-    m_Archive = (void*) unzOpen(archive.fn_str());
+    m_Archive = (void*) unzOpen(archive.mb_str());
     if (m_Archive == NULL)
     {
         m_lasterror = wxStream_READ_ERR;
         return;
     }
-    if (unzLocateFile((unzFile)m_Archive, file.fn_str(), 0) != UNZ_OK)
+    if (unzLocateFile((unzFile)m_Archive, file.mb_str(), 0) != UNZ_OK)
     {
         m_lasterror = wxStream_READ_ERR;
         return;
@@ -73,13 +73,32 @@ wxZipInputStream::~wxZipInputStream()
     }
 }
 
+bool wxZipInputStream::Eof() const
+{
+    wxASSERT_MSG( m_Pos <= (off_t)m_Size,
+                  _T("wxZipInputStream: invalid current position") );
+
+    return m_Pos >= (off_t)m_Size;
+}
 
 
 size_t wxZipInputStream::OnSysRead(void *buffer, size_t bufsize)
 {
-    if (m_Pos + bufsize > m_Size) bufsize = m_Size - m_Pos;
+    wxASSERT_MSG( m_Pos <= (off_t)m_Size,
+                  _T("wxZipInputStream: invalid current position") );
+
+    if ( m_Pos >= (off_t)m_Size )
+    {
+        m_lasterror = wxStream_EOF;
+        return 0;
+    }
+
+    if (m_Pos + bufsize > m_Size)
+        bufsize = m_Size - m_Pos;
+
     unzReadCurrentFile((unzFile)m_Archive, buffer, bufsize);
     m_Pos += bufsize;
+
     return bufsize;
 }
 

@@ -15,21 +15,30 @@ NOPCH=1
 !include $(WXDIR)\src\makevc.env
 
 OBJECTS = \
-	$(D)\Accessor.obj	\
 	$(D)\AutoComplete.obj	\
 	$(D)\CallTip.obj	\
 	$(D)\CellBuffer.obj	\
 	$(D)\ContractionState.obj\
 	$(D)\Document.obj	\
+	$(D)\DocumentAccessor.obj\
 	$(D)\Editor.obj		\
 	$(D)\Indicator.obj	\
 	$(D)\KeyMap.obj		\
 	$(D)\KeyWords.obj	\
+	$(D)\LexCPP.obj		\
+	$(D)\LexHTML.obj	\
+	$(D)\LexOthers.obj	\
+	$(D)\LexPerl.obj	\
+	$(D)\LexPython.obj	\
+	$(D)\LexSQL.obj		\
+	$(D)\LexVB.obj		\
 	$(D)\LineMarker.obj	\
 	$(D)\PropSet.obj	\
 	$(D)\ScintillaBase.obj	\
 	$(D)\Style.obj		\
+	$(D)\UniConversion.obj	\
 	$(D)\ViewStyle.obj	\
+	$(D)\WindowAccessor.obj	\
 				\
 	$(D)\PlatWX.obj		\
 	$(D)\ScintillaWX.obj	\

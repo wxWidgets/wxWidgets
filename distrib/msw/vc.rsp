@@ -3,20 +3,20 @@ src/wxvc.dsw
 src/wxvc_dll.dsp
 src/wxvc_dll.dsw
 
-src/jpeg/jpeg.dsp
-src/jpeg/jpeg.dsw
+src/jpeg/JpegVC.dsp
+src/jpeg/JpegVC.dsw
 
-src/tiff/tiff.dsp
-src/tiff/tiff.dsw
+src/tiff/TiffVC.dsp
+src/tiff/TiffVC.dsw
 
-src/zlib/zlib.dsp
-src/zlib/zlib.dsw
+src/zlib/ZlibVC.dsp
+src/zlib/ZlibVC.dsw
 
-src/png/png.dsp
-src/png/png.dsw
+src/png/PngVC.dsp
+src/png/PngVC.dsw
 
-src/xpm/xpm.dsp
-src/xpm/xpm.dsw
+src/xpm/XpmVC.dsp
+src/xpm/XpmVC.dsw
 
 samples/SamplesVC.dsw
 

@@ -57,6 +57,10 @@ HELPTOOL        BITMAP "bitmaps/help.bmp"
 COPYSIZETOOL    BITMAP "bitmaps/copysize.bmp"
 TOFRONTTOOL     BITMAP "bitmaps/tofront.bmp"
 TOBACKTOOL      BITMAP "bitmaps/toback.bmp"
+COPYWIDTHTOOL   BITMAP "bitmaps/copywdth.bmp"
+COPYHEIGHTTOOL  BITMAP "bitmaps/copyhght.bmp"
+DISTHORIZTOOL   BITMAP "bitmaps/disthor.bmp"
+DISTVERTTOOL    BITMAP "bitmaps/distvert.bmp"
 
 WXWINBMP        BITMAP "bitmaps/wxwin.bmp"
 

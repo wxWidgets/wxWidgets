@@ -35,6 +35,8 @@
     #include "wx/dcmemory.h"
 #endif
 
+#if wxUSE_PRINTING_ARCHITECTURE
+
 #include "wx/msw/private.h"
 #include "wx/dcprint.h"
 #include "math.h"
@@ -456,7 +458,7 @@ void wxPrinterDC::DoDrawBitmap(const wxBitmap &bmp,
                                  bits, info,
                                  DIB_RGB_COLORS, SRCCOPY) == GDI_ERROR )
             {
-                wxLogLastError("StretchDIBits");
+                wxLogLastError(wxT("StretchDIBits"));
             }
         }
 
@@ -538,7 +540,7 @@ bool wxPrinterDC::DoBlit(wxCoord xdest, wxCoord ydest,
             if ( !::GetDIBits(display, GetHbitmapOf(bmp), 0,
                               height, bits, info, DIB_RGB_COLORS) )
             {
-                wxLogLastError("GetDIBits");
+                wxLogLastError(wxT("GetDIBits"));
 
                 success = FALSE;
             }
@@ -554,7 +556,7 @@ bool wxPrinterDC::DoBlit(wxCoord xdest, wxCoord ydest,
                                           SRCCOPY) != GDI_ERROR;
                 if ( !success )
                 {
-                    wxLogLastError("StretchDIBits");
+                    wxLogLastError(wxT("StretchDIBits"));
                 }
             }
 
@@ -593,3 +595,6 @@ bool wxPrinterDC::DoBlit(wxCoord xdest, wxCoord ydest,
 
     return success;
 }
+
+#endif
+    // wxUSE_PRINTING_ARCHITECTURE

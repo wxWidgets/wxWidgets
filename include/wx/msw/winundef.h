@@ -177,27 +177,33 @@
 
 #ifdef LoadLibrary
     #undef LoadLibrary
-    inline HINSTANCE LoadLibrary(LPCTSTR lpLibFileName)
-    {
     #ifdef _UNICODE
+    inline HINSTANCE LoadLibrary(LPCWSTR lpLibFileName)
+    {
         return LoadLibraryW(lpLibFileName);
-    #else
-        return LoadLibraryA(lpLibFileName);
-    #endif
     }
+    #else
+    inline HINSTANCE LoadLibrary(LPCSTR lpLibFileName)
+    {
+        return LoadLibraryA(lpLibFileName);
+    }
+    #endif
 #endif
 
 // FindResource
 #ifdef FindResource
     #undef FindResource
-    inline HRSRC FindResource(HMODULE hModule, LPCTSTR lpName, LPCTSTR lpType)
-    {
     #ifdef _UNICODE
+    inline HRSRC FindResource(HMODULE hModule, LPCWSTR lpName, LPCWSTR lpType)
+    {
         return FindResourceW(hModule, lpName, lpType);
-    #else
-        return FindResourceA(hModule, lpName, lpType);
-    #endif
     }
+    #else
+    inline HRSRC FindResource(HMODULE hModule, LPCSTR lpName, LPCSTR lpType)
+    {
+        return FindResourceA(hModule, lpName, lpType);
+    }
+    #endif
 #endif
 
 // IsMaximized

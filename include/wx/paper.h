@@ -19,6 +19,7 @@
 #include "wx/defs.h"
 #include "wx/event.h"
 #include "wx/cmndata.h"
+#include "wx/intl.h"
 
 /*
  * Paper type: see defs.h for wxPaperSize enum.
@@ -40,7 +41,7 @@ public:
     // platformId is a platform-specific id, such as in Windows, DMPAPER_...
     wxPrintPaperType(wxPaperSize paperId, int platformId, const wxString& name, int w, int h);
 
-    inline const wxString& GetName() const { return m_paperName; }
+    inline wxString GetName() const { return wxGetTranslation(m_paperName); }
     inline wxPaperSize GetId() const { return m_paperId; }
     inline int GetPlatformId() const { return m_platformId; }
 

@@ -98,7 +98,7 @@ static bool wxIsAlpha(const wxString& val)
     int i;
     for ( i = 0; i < (int)val.Length(); i++)
     {
-        if (!isalpha(val[i]))
+        if (!wxIsalpha(val[i]))
             return FALSE;
     }
     return TRUE;
@@ -109,7 +109,7 @@ static bool wxIsAlphaNumeric(const wxString& val)
     int i;
     for ( i = 0; i < (int)val.Length(); i++)
     {
-        if (!isalnum(val[i]))
+        if (!wxIsalnum(val[i]))
             return FALSE;
     }
     return TRUE;
@@ -276,9 +276,9 @@ void wxTextValidator::OnChar(wxKeyEvent& event)
              !(keyCode < WXK_SPACE || keyCode == WXK_DELETE || keyCode > WXK_START) &&
              (
               ((m_validatorStyle & wxFILTER_ASCII) && !isascii(keyCode)) ||
-              ((m_validatorStyle & wxFILTER_ALPHA) && !isalpha(keyCode)) ||
-              ((m_validatorStyle & wxFILTER_ALPHANUMERIC) && !isalnum(keyCode)) ||
-              ((m_validatorStyle & wxFILTER_NUMERIC) && !isdigit(keyCode)
+              ((m_validatorStyle & wxFILTER_ALPHA) && !wxIsalpha(keyCode)) ||
+              ((m_validatorStyle & wxFILTER_ALPHANUMERIC) && !wxIsalnum(keyCode)) ||
+              ((m_validatorStyle & wxFILTER_NUMERIC) && !wxIsdigit(keyCode)
                                 && keyCode != '.' && keyCode != ',' && keyCode != '-')
              )
            )

@@ -6,6 +6,7 @@ top_builddir = ../..
 program_dir = samples/dragimag
 
 PROGRAM=dragimag
+DATAFILES=backgrnd.png shape01.png shape02.png shape03.png
 
 OBJECTS=$(PROGRAM).o
 

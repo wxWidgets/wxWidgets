@@ -89,6 +89,7 @@ class WXDLLEXPORT wxImage: public wxObject
 public:
     wxImage();
     wxImage( int width, int height );
+    wxImage( int width, int height, unsigned char* data, bool static_data = FALSE );
     wxImage( const wxString& name, long type = wxBITMAP_TYPE_ANY );
     wxImage( wxInputStream& stream, long type = wxBITMAP_TYPE_ANY );
     wxImage( const wxString& name, const wxString& mimetype );
@@ -97,7 +98,6 @@ public:
     wxImage( const wxImage& image );
     wxImage( const wxImage* image );
 
-    // these functions get implemented in /src/(platform)/bitmap.cpp
     wxImage( const wxBitmap &bitmap );
     operator wxBitmap() const { return ConvertToBitmap(); }
     wxBitmap ConvertToBitmap() const;
@@ -106,10 +106,19 @@ public:
 #endif
 
     void Create( int width, int height );
+    void Create( int width, int height, unsigned char* data, bool static_data = FALSE );
     void Destroy();
 
+    // creates an identical copy of the image (the = operator
+    // just raises the ref count)
+    wxImage Copy() const;
+    
     // return the new image with size width*height
     wxImage GetSubImage( const wxRect& ) const;
+    
+    // pastes image into this instance and takes care of
+    // the mask colour and out of bounds problems
+    void Paste( const wxImage &image, int x, int y );    
 
     // return the new image with size width*height
     wxImage Scale( int width, int height ) const;
@@ -120,7 +129,10 @@ public:
     // Rotates the image about the given point, 'angle' radians.
     // Returns the rotated image, leaving this image intact.
     wxImage Rotate(double angle, const wxPoint & centre_of_rotation,
-                   bool interpolating = TRUE, wxPoint * offset_after_rotation = (wxPoint*) NULL) const ;
+                   bool interpolating = TRUE, wxPoint * offset_after_rotation = (wxPoint*) NULL) const;
+
+    wxImage Rotate90( bool clockwise = TRUE ) const;
+    wxImage Mirror( bool horizontally = TRUE ) const;
 
     // replace one colour with another
     void Replace( unsigned char r1, unsigned char g1, unsigned char b1,
@@ -128,9 +140,9 @@ public:
 
     // these routines are slow but safe
     void SetRGB( int x, int y, unsigned char r, unsigned char g, unsigned char b );
-    unsigned char GetRed( int x, int y );
-    unsigned char GetGreen( int x, int y );
-    unsigned char GetBlue( int x, int y );
+    unsigned char GetRed( int x, int y ) const;
+    unsigned char GetGreen( int x, int y ) const;
+    unsigned char GetBlue( int x, int y ) const;
 
     static bool CanRead( const wxString& name );
     virtual bool LoadFile( const wxString& name, long type = wxBITMAP_TYPE_ANY );
@@ -156,7 +168,8 @@ public:
 
     char unsigned *GetData() const;
     void SetData( char unsigned *data );
-
+    void SetData( char unsigned *data, int new_width, int new_height );
+    
     void SetMaskColour( unsigned char r, unsigned char g, unsigned char b );
     unsigned char GetMaskRed() const;
     unsigned char GetMaskGreen() const;

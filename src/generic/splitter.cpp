@@ -53,42 +53,36 @@ BEGIN_EVENT_TABLE(wxSplitterWindow, wxWindow)
     EVT_SPLITTER_UNSPLIT(-1,          wxSplitterWindow::OnUnsplitEvent)
 END_EVENT_TABLE()
 
-wxSplitterWindow::wxSplitterWindow()
-{
-    m_splitMode = wxSPLIT_VERTICAL;
-    m_permitUnsplitAlways = FALSE;
-    m_windowOne = (wxWindow *) NULL;
-    m_windowTwo = (wxWindow *) NULL;
-    m_dragMode = wxSPLIT_DRAG_NONE;
-    m_oldX = 0;
-    m_oldY = 0;
-    m_firstX = 0;
-    m_firstY = 0;
-    m_sashSize = 7;
-    m_borderSize = 2;
-    m_sashPosition = 0;
-    m_sashCursorWE = (wxCursor *) NULL;
-    m_sashCursorNS = (wxCursor *) NULL;
-    m_sashTrackerPen = (wxPen *) NULL;
-    m_lightShadowPen = (wxPen *) NULL;
-    m_mediumShadowPen = (wxPen *) NULL;
-    m_darkShadowPen = (wxPen *) NULL;
-    m_faceBrush = (wxBrush *) NULL;
-    m_facePen = (wxPen *) NULL;
-    m_hilightPen = (wxPen *) NULL;
-    m_minimumPaneSize = 0;
-    m_needUpdating = FALSE;
-}
-
-wxSplitterWindow::wxSplitterWindow(wxWindow *parent, wxWindowID id,
+bool wxSplitterWindow::Create(wxWindow *parent, wxWindowID id,
                                    const wxPoint& pos,
                                    const wxSize& size,
                                    long style,
                                    const wxString& name)
-                : wxWindow(parent, id, pos, size, style, name)
+{
+    if (!wxWindow::Create(parent, id, pos, size, style, name))
+        return FALSE;
+
+    m_permitUnsplitAlways = (style & wxSP_PERMIT_UNSPLIT) != 0;
+
+    if ( style & wxSP_3DSASH )
+        m_sashSize = 7;
+    else
+        m_sashSize = 3;
+
+    if ( style & wxSP_3DBORDER )
+        m_borderSize = 2;
+    else if ( style & wxSP_BORDER )
+        m_borderSize = 1;
+    else
+        m_borderSize = 0;
+
+    return TRUE;
+}
+
+void wxSplitterWindow::Init()
 {
     m_splitMode = wxSPLIT_VERTICAL;
-    m_permitUnsplitAlways = (style & wxSP_PERMIT_UNSPLIT) != 0;
+    m_permitUnsplitAlways = TRUE;
     m_windowOne = (wxWindow *) NULL;
     m_windowTwo = (wxWindow *) NULL;
     m_dragMode = wxSPLIT_DRAG_NONE;
@@ -110,27 +104,10 @@ wxSplitterWindow::wxSplitterWindow(wxWindow *parent, wxWindowID id,
     m_facePen = (wxPen *) NULL;
     m_hilightPen = (wxPen *) NULL;
 
-    if ( style & wxSP_3D )
-    {
-        m_borderSize = 2;
-        m_sashSize = 7;
-    }
-    else if ( style & wxSP_BORDER )
-    {
-        m_borderSize = 1;
-        m_sashSize = 3;
-    }
-    else
-    {
-        m_borderSize = 0;
-        m_sashSize = 3;
-    }
+    m_borderSize = 0;
+    m_sashSize = 3;
 
-    // Eventually, we'll respond to colour change messages
     InitColours();
-
-    // For debugging purposes, to see the background.
-//    SetBackground(wxBLUE_BRUSH);
 
     m_needUpdating = FALSE;
 }
@@ -176,6 +153,8 @@ void wxSplitterWindow::OnMouseEvent(wxMouseEvent& event)
     SetCursor(wxCursor());
 #endif
 
+    if (GetWindowStyle() & wxSP_NOSASH)
+        return;
 
     if (event.LeftDown())
     {
@@ -459,7 +438,7 @@ void wxSplitterWindow::DrawBorders(wxDC& dc)
     int w, h;
     GetClientSize(&w, &h);
 
-    if ( GetWindowStyleFlag() & wxSP_3D )
+    if ( GetWindowStyleFlag() & wxSP_3DBORDER )
     {
 
         dc.SetPen(*m_facePen);
@@ -502,11 +481,13 @@ void wxSplitterWindow::DrawSash(wxDC& dc)
 {
     if ( m_sashPosition == 0 || !m_windowTwo)
         return;
+    if (GetWindowStyle() & wxSP_NOSASH)
+        return;
 
     int w, h;
     GetClientSize(&w, &h);
 
-    if ( GetWindowStyleFlag() & wxSP_3D )
+    if ( GetWindowStyleFlag() & wxSP_3DSASH )
     {
         if ( m_splitMode == wxSPLIT_VERTICAL )
         {
@@ -517,7 +498,7 @@ void wxSplitterWindow::DrawSash(wxDC& dc)
             dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
             dc.SetPen(*m_lightShadowPen);
-                        int xShadow = m_borderSize ? m_borderSize - 1 : 0 ;
+            int xShadow = m_borderSize ? m_borderSize - 1 : 0 ;
             dc.DrawLine(m_sashPosition, xShadow , m_sashPosition, h-m_borderSize);
 
             dc.SetPen(*m_hilightPen);
@@ -529,6 +510,18 @@ void wxSplitterWindow::DrawSash(wxDC& dc)
 
             dc.SetPen(*m_darkShadowPen);
             dc.DrawLine(m_sashPosition+m_sashSize-1, m_borderSize, m_sashPosition+m_sashSize-1, h-m_borderSize );
+
+            // Draw the top and bottom edges of the sash, if requested
+            if (GetWindowStyle() & wxSP_FULLSASH)
+            {
+                // Top
+                dc.SetPen(*m_hilightPen);
+                dc.DrawLine(m_sashPosition+1, m_borderSize, m_sashPosition+m_sashSize-1, m_borderSize);
+
+                // Bottom
+                dc.SetPen(*m_darkShadowPen);
+                dc.DrawLine(m_sashPosition+1, h-m_borderSize-1, m_sashPosition+m_sashSize-1, h-m_borderSize-1);
+            }
         }
         else
         {
@@ -549,6 +542,18 @@ void wxSplitterWindow::DrawSash(wxDC& dc)
 
             dc.SetPen(*m_darkShadowPen);
             dc.DrawLine(m_borderSize, m_sashPosition+m_sashSize-1, w-m_borderSize, m_sashPosition+m_sashSize-1);
+
+            // Draw the left and right edges of the sash, if requested
+            if (GetWindowStyle() & wxSP_FULLSASH)
+            {
+                // Left
+                dc.SetPen(*m_hilightPen);
+                dc.DrawLine(m_borderSize, m_sashPosition, m_borderSize, m_sashPosition+m_sashSize);
+
+                // Right
+                dc.SetPen(*m_darkShadowPen);
+                dc.DrawLine(w-m_borderSize-1, m_sashPosition+1, w-m_borderSize-1, m_sashPosition+m_sashSize-1);
+            }
         }
     }
     else
@@ -558,19 +563,28 @@ void wxSplitterWindow::DrawSash(wxDC& dc)
             dc.SetPen(*wxBLACK_PEN);
             dc.SetBrush(*wxBLACK_BRUSH);
             int h1 = h-1;
-            if ( (GetWindowStyleFlag() & wxSP_BORDER) != wxSP_BORDER )
+            int y1 = 0;
+            if ( (GetWindowStyleFlag() & wxSP_BORDER) != wxSP_BORDER && (GetWindowStyleFlag() & wxSP_3DBORDER) != wxSP_3DBORDER )
                 h1 += 1; // Not sure why this is necessary...
-            dc.DrawRectangle(m_sashPosition, 0, m_sashSize, h1);
+            if ( (GetWindowStyleFlag() & wxSP_3DBORDER) == wxSP_3DBORDER)
+            {
+                y1 = 2; h1 -= 3;
+            }
+            dc.DrawRectangle(m_sashPosition, y1, m_sashSize, h1);
         }
         else
         {
             dc.SetPen(*wxBLACK_PEN);
             dc.SetBrush(*wxBLACK_BRUSH);
             int w1 = w-1;
-            if ( (GetWindowStyleFlag() & wxSP_BORDER) != wxSP_BORDER )
+            int x1 = 0;
+            if ( (GetWindowStyleFlag() & wxSP_BORDER) != wxSP_BORDER && (GetWindowStyleFlag() & wxSP_3DBORDER) != wxSP_3DBORDER )
                 w1 ++;
-
-            dc.DrawRectangle(0, m_sashPosition, w1, m_sashSize);
+            if ( (GetWindowStyleFlag() & wxSP_3DBORDER) == wxSP_3DBORDER)
+            {
+                x1 = 2; w1 -= 3;
+            }
+            dc.DrawRectangle(x1, m_sashPosition, w1, m_sashSize);
         }
 
     }
@@ -643,44 +657,42 @@ void wxSplitterWindow::SizeWindows()
     int w, h;
     GetClientSize(&w, &h);
 
-    if ( m_windowOne && !m_windowTwo )
+    if ( GetWindow1() && !GetWindow2() )
     {
-        m_windowOne->SetSize(m_borderSize, m_borderSize, w - 2*m_borderSize, h - 2*m_borderSize);
+        GetWindow1()->SetSize(GetBorderSize(), GetBorderSize(), w - 2*GetBorderSize(), h - 2*GetBorderSize());
 
     }
-    else if ( m_windowOne && m_windowTwo )
+    else if ( GetWindow1() && GetWindow2() )
     {
-        if (m_splitMode == wxSPLIT_VERTICAL)
+        if (GetSplitMode() == wxSPLIT_VERTICAL)
         {
-            int x1 = m_borderSize;
-            int y1 = m_borderSize;
-            int w1 = m_sashPosition - m_borderSize;
-            int h1 = h - 2*m_borderSize;
+            int x1 = GetBorderSize();
+            int y1 = GetBorderSize();
+            int w1 = GetSashPosition() - GetBorderSize();
+            int h1 = h - 2*GetBorderSize();
 
-            int x2 = m_sashPosition + m_sashSize;
-            int y2 = m_borderSize;
-            int w2 = w - 2*m_borderSize - m_sashSize - w1;
-            int h2 = h - 2*m_borderSize;
+            int x2 = GetSashPosition() + GetSashSize();
+            int y2 = GetBorderSize();
+            int w2 = w - 2*GetBorderSize() - GetSashSize() - w1;
+            int h2 = h - 2*GetBorderSize();
 
-            m_windowOne->SetSize(x1, y1, w1, h1);
-            m_windowTwo->SetSize(x2, y2, w2, h2);
-
+            GetWindow1()->SetSize(x1, y1, w1, h1);
+            GetWindow2()->SetSize(x2, y2, w2, h2);
         }
         else
         {
-            m_windowOne->SetSize(m_borderSize, m_borderSize,
-                w - 2*m_borderSize, m_sashPosition - m_borderSize);
-            m_windowTwo->SetSize(m_borderSize, m_sashPosition + m_sashSize,
-                w - 2*m_borderSize, h - 2*m_borderSize - m_sashSize - (m_sashPosition - m_borderSize));
-
+            GetWindow1()->SetSize(GetBorderSize(), GetBorderSize(),
+                w - 2*GetBorderSize(), GetSashPosition() - GetBorderSize());
+            GetWindow2()->SetSize(GetBorderSize(), GetSashPosition() + GetSashSize(),
+                w - 2*GetBorderSize(), h - 2*GetBorderSize() - GetSashSize() - (GetSashPosition() - GetBorderSize()));
         }
     }
     wxClientDC dc(this);
-    if ( m_borderSize > 0 )
+    if ( GetBorderSize() > 0 )
         DrawBorders(dc);
     DrawSash(dc);
     
-    m_needUpdating = FALSE;
+    SetNeedUpdating(FALSE);
 }
 
 // Set pane for unsplit window

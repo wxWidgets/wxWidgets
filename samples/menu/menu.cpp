@@ -47,7 +47,9 @@ class MyFrame: public wxFrame
 public:
     MyFrame();
 
-    virtual ~MyFrame() { delete m_menu; }
+    virtual ~MyFrame();
+
+    void LogMenuEvent(const wxCommandEvent& event);
 
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
@@ -84,6 +86,25 @@ private:
     wxMenu     *m_menu;
 
     size_t m_countDummy;
+
+    DECLARE_EVENT_TABLE()
+};
+
+// A small helper class which intercepts all menu events and logs them
+class MyEvtHandler : public wxEvtHandler
+{
+public:
+    MyEvtHandler(MyFrame *frame) { m_frame = frame; }
+
+    void OnMenuEvent(wxCommandEvent& event)
+    {
+        m_frame->LogMenuEvent(event);
+
+        event.Skip();
+    }
+
+private:
+    MyFrame *m_frame;
 
     DECLARE_EVENT_TABLE()
 };
@@ -164,6 +185,10 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_RIGHT_DOWN(MyFrame::OnRightDown)
 END_EVENT_TABLE()
 
+BEGIN_EVENT_TABLE(MyEvtHandler, wxEvtHandler)
+    EVT_MENU(-1, MyEvtHandler::OnMenuEvent)
+END_EVENT_TABLE()
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -202,7 +227,7 @@ MyFrame::MyFrame()
     m_menu = NULL;
     m_countDummy = 0;
 
-    CreateStatusBar();
+    CreateStatusBar(2);
 
     // create the menubar
     wxMenu *fileMenu = new wxMenu;
@@ -267,6 +292,17 @@ MyFrame::MyFrame()
 
     // associate the menu bar with the frame
     SetMenuBar(menuBar);
+
+    // intercept all menu events and log them in this custom event handler
+    PushEventHandler(new MyEvtHandler(this));
+}
+
+MyFrame::~MyFrame()
+{
+    delete m_menu;
+
+    // delete the event handler installed in ctor
+    PopEventHandler(TRUE);
 }
 
 wxMenu *MyFrame::CreateDummyMenu(wxString *title)
@@ -301,6 +337,23 @@ wxMenuItem *MyFrame::GetLastMenuItem() const
         return node->GetData();
     }
 }
+
+void MyFrame::LogMenuEvent(const wxCommandEvent& event)
+{
+    int id = event.GetId();
+    wxString msg = wxString::Format("Menu command %d", id);
+    if ( GetMenuBar()->FindItem(id)->IsCheckable() )
+    {
+        msg += wxString::Format(" (the item is currently %schecked)",
+                                event.IsChecked() ? "" : "not ");
+    }
+
+    SetStatusText(msg, 1);
+}
+
+// ----------------------------------------------------------------------------
+// menu callbacks
+// ----------------------------------------------------------------------------
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
@@ -408,11 +461,11 @@ void MyFrame::OnAppendMenuItem(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnAppendSubMenu(wxCommandEvent& WXUNUSED(event))
 {
     wxMenuBar *menubar = GetMenuBar();
-    
+
     wxMenu *menu = menubar->GetMenu(menubar->GetMenuCount() - 1);
-    
-    menu->Append(Menu_Dummy_Last, "Dummy sub menu\tCtrl-F2",
-                 CreateDummyMenu(NULL));
+
+    menu->Append(Menu_Dummy_Last, "Dummy sub menu",
+                 CreateDummyMenu(NULL), "Dummy sub menu help");
 }
 
 void MyFrame::OnDeleteMenuItem(wxCommandEvent& WXUNUSED(event))
@@ -498,7 +551,7 @@ void MyFrame::OnGetMenuItemInfo(wxCommandEvent& WXUNUSED(event))
         msg << "The item is " << (item->IsEnabled() ? "enabled"
                                                     : "disabled")
             << '\n';
-                                            
+
         if ( item->IsCheckable() )
         {
             msg << "It is checkable and " << (item->IsChecked() ? "" : "un")
@@ -575,9 +628,16 @@ void MyFrame::OnRightDown(wxMouseEvent &event )
     menu.AppendSeparator();
     menu.Append(Menu_File_Quit, "E&xit");
 
-    //menu.Delete(Menu_Popup_ToBeDeleted);
+    menu.Delete(Menu_Popup_ToBeDeleted);
     menu.Check(Menu_Popup_ToBeChecked, TRUE);
     menu.Enable(Menu_Popup_ToBeGreyed, FALSE);
 
     PopupMenu( &menu, event.GetX(), event.GetY() );
+
+    // test for destroying items in popup menus
+#if 0
+    menu.Destroy(Menu_Popup_Submenu);
+
+    PopupMenu( &menu, event.GetX(), event.GetY() );
+#endif // 0
 }

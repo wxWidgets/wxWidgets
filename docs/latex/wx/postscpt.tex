@@ -36,4 +36,16 @@ This constructor and the global printer settings are now deprecated;
 use the wxPrintData constructor instead.
 
 
+\membersection{wxPostScriptDC::SetResolution}\label{wxpostscriptdcsetresolution}
 
+\func{static void}{SetResolution}{\param{int}{ ppi}}
+
+Set resolution (in pixels per inch) that will be used in PostScript
+output. Default is 720ppi.
+
+\membersection{wxPostScriptDC::GetResolution}\label{wxpostscriptdcgetresolution}
+
+\func{static int}{GetResolution}{\void}
+
+Return resolution used in PostScript output. See 
+\helpref{SetResolution}{wxpostscriptdcsetresolution}.

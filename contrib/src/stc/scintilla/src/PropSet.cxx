@@ -27,6 +27,7 @@ bool EqualCaseInsensitive(const char *a, const char *b) {
 // Get a line of input. If end of line escaped with '\\' then continue reading.
 static bool GetFullLine(const char *&fpc, int &lenData, char *s, int len) {
 	bool continuation = true;
+	s[0] = '\0';
 	while ((len > 1) && lenData > 0) {
 		char ch = *fpc;
 		fpc++;
@@ -38,7 +39,7 @@ static bool GetFullLine(const char *&fpc, int &lenData, char *s, int len) {
 					fpc++;
 					lenData--;
 				}
-				*s++ = '\0';
+				*s = '\0';
 				return true;
 			}
 		} else if ((ch == '\\') && (lenData > 0) && ((*fpc == '\r') || (*fpc == '\n'))) {
@@ -46,6 +47,7 @@ static bool GetFullLine(const char *&fpc, int &lenData, char *s, int len) {
 		} else {
 			continuation = false;
 			*s++ = ch;
+			*s = '\0';
 			len--;
 		}
 	}
@@ -120,7 +122,7 @@ SString PropSet::Get(const char *key) {
 int PropSet::GetInt(const char *key, int defaultValue) {
 	SString val = Get(key);
 	if (val.length())
-		return Get(key).value();
+		return val.value();
 	else
 		return defaultValue;
 }
@@ -253,6 +255,9 @@ void PropSet::ReadFromMemory(const char *data, int len) {
 			if (isalpha(linebuf[0]))
 				Set(linebuf);
 		}
+		// If there is a final line:
+		if (isalpha(linebuf[0]))
+			Set(linebuf);
 	}
 }
 
@@ -371,7 +376,7 @@ bool WordList::InList(const char *s) {
 		for (int i = 0; words[i][0]; i++)
 			len++;
 		SortWordList(words, len);
-		for (int k = 0; k < (sizeof(starts) / sizeof(starts[0])); k++)
+		for (unsigned int k = 0; k < (sizeof(starts) / sizeof(starts[0])); k++)
 			starts[k] = -1;
 		for (int l = len - 1; l >= 0; l--) {
 			unsigned char indexChar = words[l][0];

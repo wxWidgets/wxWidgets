@@ -108,6 +108,18 @@ See \helpref{wxMemoryDC}{wxmemorydc} for typical usage.
 
 \helpref{wxMemoryDC}{wxmemorydc}, \helpref{wxBitmap}{wxbitmap}, \helpref{wxMask}{wxmask}
 
+\membersection{wxDC::CalcBoundingBox}\label{wxdccalcboundingbox}
+
+\func{void}{CalcBoundingBox}{\param{wxCoord }{x}, \param{wxCoord }{y}}
+
+Adds the specified point to the bounding box which can be retrieved with 
+\helpref{MinX}{wxdcminx}, \helpref{MaxX}{wxdcmaxx} and 
+\helpref{MinY}{wxdcminy}, \helpref{MaxY}{wxdcmaxy} functions.
+
+\wxheading{See also}
+
+\helpref{ResetBoundingBox}{wxdcresetboundingbox}
+
 \membersection{wxDC::Clear}\label{wxdcclear}
 
 \func{void}{Clear}{\void}
@@ -336,6 +348,11 @@ the string. See \helpref{wxDC::GetTextExtent}{wxdcgettextextent} for how
 to get the dimensions of a text string, which can be used to position the
 text more precisely.
 
+{\bf NB:} under wxGTK the current 
+\helpref{logical function}{wxdcgetlogicalfunction} is used by this function
+but it is ignored by wxMSW. Thus, you should avoid using logical functions
+with this function in portable programs.
+
 \membersection{wxDC::EndDoc}\label{wxdcenddoc}
 
 \func{void}{EndDoc}{\void}
@@ -358,7 +375,7 @@ Ends a document page (only relevant when outputting to a printer).
 
 \membersection{wxDC::FloodFill}\label{wxdcfloodfill}
 
-\func{void}{FloodFill}{\param{wxCoord}{ x}, \param{wxCoord}{ y}, \param{wxColour *}{colour}, \param{int}{ style=wxFLOOD\_SURFACE}}
+\func{void}{FloodFill}{\param{wxCoord}{ x}, \param{wxCoord}{ y}, \param{const wxColour\&}{ colour}, \param{int}{ style=wxFLOOD\_SURFACE}}
 
 Flood fills the device context starting from the given point, in the given colour,
 and using a style:
@@ -374,11 +391,25 @@ and using a style:
 
 \func{wxBrush\&}{GetBackground}{\void}
 
+\constfunc{const wxBrush\&}{GetBackground}{\void}
+
 Gets the brush used for painting the background (see \helpref{wxDC::SetBackground}{wxdcsetbackground}).
+
+\membersection{wxDC::GetBackgroundMode}\label{wxdcgetbackgroundmode}
+
+\constfunc{int}{GetBackgroundMode}{\void}
+
+Returns the current background mode: {\tt wxSOLID} or {\tt wxTRANSPARENT}.
+
+\wxheading{See also}
+
+\helpref{SetBackgroundMode}{wxdcsetbackgroundmode}
 
 \membersection{wxDC::GetBrush}\label{wxdcgetbrush}
 
 \func{wxBrush\&}{GetBrush}{\void}
+
+\constfunc{const wxBrush\&}{GetBrush}{\void}
 
 Gets the current brush (see \helpref{wxDC::SetBrush}{wxdcsetbrush}).
 
@@ -407,6 +438,8 @@ rectangle are returned as a tuple.}
 
 \func{wxFont\&}{GetFont}{\void}
 
+\constfunc{const wxFont\&}{GetFont}{\void}
+
 Gets the current font (see \helpref{wxDC::SetFont}{wxdcsetfont}).
 
 \membersection{wxDC::GetLogicalFunction}\label{wxdcgetlogicalfunction}
@@ -431,6 +464,8 @@ See \helpref{wxDC::SetOptimization}{wxsetoptimization} for details.
 \membersection{wxDC::GetPen}\label{wxdcgetpen}
 
 \func{wxPen\&}{GetPen}{\void}
+
+\constfunc{const wxPen\&}{GetPen}{\void}
 
 Gets the current pen (see \helpref{wxDC::SetPen}{wxdcsetpen}).
 
@@ -478,6 +513,8 @@ implements the following methods:\par
 
 \func{wxColour\&}{GetTextBackground}{\void}
 
+\constfunc{const wxColour\&}{GetTextBackground}{\void}
+
 Gets the current text background colour (see \helpref{wxDC::SetTextBackground}{wxdcsettextbackground}).
 
 \membersection{wxDC::GetTextExtent}\label{wxdcgettextextent}
@@ -510,6 +547,8 @@ See also \helpref{wxFont}{wxfont}, \helpref{wxDC::SetFont}{wxdcsetfont}.
 \membersection{wxDC::GetTextForeground}\label{wxdcgettextforeground}
 
 \func{wxColour\&}{GetTextForeground}{\void}
+
+\constfunc{const wxColour\&}{GetTextForeground}{\void}
 
 Gets the current text foreground colour (see \helpref{wxDC::SetTextForeground}{wxdcsettextforeground}).
 
@@ -578,6 +617,17 @@ Gets the minimum vertical extent used in drawing commands so far.
 \func{bool}{Ok}{\void}
 
 Returns TRUE if the DC is ok to use.
+
+\membersection{wxDC::ResetBoundingBox}\label{wxdcresetboundingbox}
+
+\func{void}{ResetBoundingBox}{\void}
+
+Resets the bounding box: after a call to this function, the bounding box
+doesn't contain anything.
+
+\wxheading{See also}
+
+\helpref{CalcBoundingBox}{wxdccalcboundingbox}
 
 \membersection{wxDC::SetDeviceOrigin}\label{wxdcsetdeviceorigin}
 

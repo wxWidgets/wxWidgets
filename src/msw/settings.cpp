@@ -171,6 +171,5 @@ int wxSystemSettings::GetSystemMetric(int index)
         default:
             return 0;
     }
-    return 0;
 }
 

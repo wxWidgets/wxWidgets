@@ -61,6 +61,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(DIALOGS_FILES_OPEN,                    MyFrame::FilesOpen)
     EVT_MENU(DIALOGS_FILE_SAVE,                     MyFrame::FileSave)
     EVT_MENU(DIALOGS_DIR_CHOOSE,                    MyFrame::DirChoose)
+    EVT_MENU(DIALOGS_MODAL,                         MyFrame::ModalDlg)
     EVT_MENU(DIALOGS_MODELESS,                      MyFrame::ModelessDlg)
     EVT_MENU(DIALOGS_TIP,                           MyFrame::ShowTip)
 #if defined(__WXMSW__) && wxTEST_GENERIC_DIALOGS_IN_MSW
@@ -73,6 +74,10 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(wxID_EXIT,                             MyFrame::OnExit)
 
     EVT_BUTTON(DIALOGS_MODELESS_BTN,                MyFrame::OnButton)
+END_EVENT_TABLE()
+
+BEGIN_EVENT_TABLE(MyModalDialog, wxDialog)
+    EVT_BUTTON(-1, MyModalDialog::OnButton)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyModelessDialog, wxDialog)
@@ -124,10 +129,11 @@ bool MyApp::OnInit()
   file_menu->Append(DIALOGS_FILES_OPEN,  "Open &files\tCtrl-Q");
   file_menu->Append(DIALOGS_FILE_SAVE,  "Sa&ve file\tCtrl-S");
   file_menu->Append(DIALOGS_DIR_CHOOSE,  "&Choose a directory\tCtrl-D");
-  file_menu->AppendSeparator();
 #if wxUSE_PROGRESSDLG
   file_menu->Append(DIALOGS_PROGRESS, "Pro&gress dialog\tCtrl-G");
 #endif // wxUSE_PROGRESSDLG
+  file_menu->AppendSeparator();
+  file_menu->Append(DIALOGS_MODAL, "Mo&dal dialog\tCtrl-F");
   file_menu->Append(DIALOGS_MODELESS, "Modeless &dialog\tCtrl-Z", "", TRUE);
   file_menu->AppendSeparator();
   file_menu->Append(wxID_EXIT, "E&xit\tAlt-X");
@@ -160,25 +166,25 @@ MyFrame::MyFrame(wxWindow *parent,
 
 void MyFrame::ChooseColour(wxCommandEvent& WXUNUSED(event) )
 {
-      wxColourData data;
-      data.SetChooseFull(TRUE);
-      for (int i = 0; i < 16; i++)
-      {
+    wxColourData data;
+    data.SetChooseFull(TRUE);
+    for (int i = 0; i < 16; i++)
+    {
         wxColour colour(i*16, i*16, i*16);
         data.SetCustomColour(i, colour);
-      }
+    }
 
-      wxColourDialog *dialog = new wxColourDialog(this, &data);
-      if (dialog->ShowModal() == wxID_OK)
-      {
+    wxColourDialog *dialog = new wxColourDialog(this, &data);
+    dialog->SetTitle("Choose the background colour");
+    if (dialog->ShowModal() == wxID_OK)
+    {
         wxColourData retData = dialog->GetColourData();
         wxColour col = retData.GetColour();
-//        wxBrush *brush = wxTheBrushList->FindOrCreateBrush(&col, wxSOLID);
         myCanvas->SetBackgroundColour(col);
         myCanvas->Clear();
         myCanvas->Refresh();
-      }
-      dialog->Destroy();
+    }
+    dialog->Destroy();
 }
 
 void MyFrame::ChooseFont(wxCommandEvent& WXUNUSED(event) )
@@ -261,7 +267,7 @@ void MyFrame::LogDialog(wxCommandEvent& event)
 
 void MyFrame::MessageBox(wxCommandEvent& WXUNUSED(event) )
 {
-  wxMessageDialog dialog( this, "This is a message box\nA long, long string to test out the message box properly",
+  wxMessageDialog dialog( NULL, "This is a message box\nA long, long string to test out the message box properly",
       "Message box text", wxYES_NO|wxCANCEL|wxICON_INFORMATION);
 
   dialog.ShowModal();
@@ -293,7 +299,7 @@ void MyFrame::NumericEntry(wxCommandEvent& WXUNUSED(event) )
 void MyFrame::PasswordEntry(wxCommandEvent& WXUNUSED(event))
 {
     wxString pwd = wxGetPasswordFromUser("Enter password:",
-                                         "Passowrd entry dialog",
+                                         "Password entry dialog",
                                          "",
                                          this);
     if ( !!pwd )
@@ -410,6 +416,12 @@ void MyFrame::DirChoose(wxCommandEvent& WXUNUSED(event) )
         wxMessageDialog dialog2(this, dialog.GetPath(), "Selected path");
         dialog2.ShowModal();
     }
+}
+
+void MyFrame::ModalDlg(wxCommandEvent& WXUNUSED(event))
+{
+    MyModalDialog dlg(this);
+    dlg.ShowModal();
 }
 
 void MyFrame::ModelessDlg(wxCommandEvent& event)
@@ -565,3 +577,46 @@ void MyModelessDialog::OnClose(wxCloseEvent& event)
     }
 }
 
+// ----------------------------------------------------------------------------
+// MyModalDialog
+// ----------------------------------------------------------------------------
+
+MyModalDialog::MyModalDialog(wxWindow *parent)
+             : wxDialog(parent, -1, wxString("Modal dialog"))
+{
+    wxBoxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
+
+    m_btnFocused = new wxButton(this, -1, "Default button");
+    m_btnDelete = new wxButton(this, -1, "&Delete button");
+    sizerTop->Add(m_btnFocused, 0, wxALIGN_CENTER | wxALL, 5);
+    sizerTop->Add(m_btnDelete, 0, wxALIGN_CENTER | wxALL, 5);
+
+    SetAutoLayout(TRUE);
+    SetSizer(sizerTop);
+
+    sizerTop->SetSizeHints(this);
+    sizerTop->Fit(this);
+
+    m_btnFocused->SetFocus();
+    m_btnFocused->SetDefault();
+}
+
+void MyModalDialog::OnButton(wxCommandEvent& event)
+{
+    if ( event.GetEventObject() == m_btnDelete )
+    {
+        delete m_btnFocused;
+        m_btnFocused = NULL;
+
+        m_btnDelete->Disable();
+    }
+    else if ( event.GetEventObject() == m_btnFocused )
+    {
+        wxGetTextFromUser("Dummy prompt", "Modal dialog called from dialog",
+                          "", this);
+    }
+    else
+    {
+        event.Skip();
+    }
+}

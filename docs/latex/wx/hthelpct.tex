@@ -61,6 +61,7 @@ Constructor.
 
 \begin{twocollist}\itemsep=0pt
 \twocolitem{\windowstyle{wxHF\_TOOLBAR}}{Help frame has toolbar.}
+\twocolitem{\windowstyle{wxHF\_FLATTOOLBAR}}{Help frame has toolbar with flat buttons (aka coolbar).}
 \twocolitem{\windowstyle{wxHF\_CONTENTS}}{Help frame has contents panel.}
 \twocolitem{\windowstyle{wxHF\_INDEX}}{Help frame has index panel.}
 \twocolitem{\windowstyle{wxHF\_SEARCH}}{Help frame has search panel.}
@@ -89,7 +90,7 @@ If {\it show\_wait\_msg} is TRUE then a decorationless window with progress mess
 
 \func{virtual wxHtmlHelpFrame*}{CreateHelpFrame}{\param{wxHtmlHelpData * }{data}}
 
-This protected virtual method may be overriden so that the controller
+This protected virtual method may be overridden so that the controller
 uses slightly different frame. See {\it samples/html/helpview} sample for
 an example.
 \membersection{wxHtmlHelpController::Display}\label{wxhtmlhelpcontrollerdisplay}
@@ -144,7 +145,7 @@ Displays help window and focuses index panel.
 Displays help window, focuses search panel and starts searching.
 Returns TRUE if the keyword was found.
 
-{\bf Important:} KeywordSearch searches only pages listed in .htc file(s).
+{\bf Important:} KeywordSearch searches only pages listed in .hhc file(s).
 You should list all pages in the contents file.
 
 \membersection{wxHtmlHelpController::ReadCustomization}\label{wxhtmlhelpcontrollerreadcustomization}

@@ -34,7 +34,6 @@
 // -----------------------------------------------------------------------------
 
 #include "wx/defs.h"
-#include "wx/debug.h"
 #include "wx/object.h"
 #include "wx/string.h"
 
@@ -353,10 +352,10 @@ private:
 //     wxWindowBase pointers are put into the list, but wxWindow pointers are
 //     retrieved from it.
 
-#define WX_DECLARE_LIST_3(T, Tbase, name, nodetype)                         \
+#define WX_DECLARE_LIST_3(T, Tbase, name, nodetype, classexp)               \
     typedef int (*wxSortFuncFor_##name)(const T **, const T **);            \
                                                                             \
-    class WXDLLEXPORT nodetype : public wxNodeBase                          \
+    classexp nodetype : public wxNodeBase                                   \
     {                                                                       \
     public:                                                                 \
         nodetype(wxListBase *list = (wxListBase *)NULL,                     \
@@ -379,7 +378,7 @@ private:
         virtual void DeleteData();                                          \
     };                                                                      \
                                                                             \
-    class WXDLLEXPORT name : public wxListBase                              \
+    classexp name : public wxListBase                                       \
     {                                                                       \
     public:                                                                 \
         typedef nodetype Node;                                              \
@@ -388,6 +387,9 @@ private:
             { }                                                             \
         name(size_t count, T *elements[])                                   \
             : wxListBase(count, (void **)elements) { }                      \
+                                                                            \
+        name& operator=(const name& list)                                   \
+            { return (name&)wxListBase::operator=(list); }                  \
                                                                             \
         nodetype *GetFirst() const                                          \
             { return (nodetype *)wxListBase::GetFirst(); }                  \
@@ -447,12 +449,16 @@ private:
             }                                                               \
     }
 
-#define WX_DECLARE_LIST_2(elementtype, listname, nodename)                  \
-    WX_DECLARE_LIST_3(elementtype, elementtype, listname, nodename)
+#define WX_DECLARE_LIST_2(elementtype, listname, nodename, classexp)        \
+    WX_DECLARE_LIST_3(elementtype, elementtype, listname, nodename, classexp)
 
 #define WX_DECLARE_LIST(elementtype, listname)                              \
     typedef elementtype _WX_LIST_ITEM_TYPE_##listname;                      \
-    WX_DECLARE_LIST_2(elementtype, listname, wx##listname##Node)
+    WX_DECLARE_LIST_2(elementtype, listname, wx##listname##Node, class)
+
+#define WX_DECLARE_EXPORTED_LIST(elementtype, listname)                     \
+    typedef elementtype _WX_LIST_ITEM_TYPE_##listname;                      \
+    WX_DECLARE_LIST_2(elementtype, listname, wx##listname##Node, class WXDLLEXPORT)
 
 // this macro must be inserted in your program after
 //      #include <wx/listimpl.cpp>
@@ -472,12 +478,15 @@ private:
 // wxList compatibility class: in fact, it's a list of wxObjects
 // -----------------------------------------------------------------------------
 
-WX_DECLARE_LIST_2(wxObject, wxObjectList, wxObjectListNode);
+WX_DECLARE_LIST_2(wxObject, wxObjectList, wxObjectListNode, class WXDLLEXPORT);
 
 class WXDLLEXPORT wxList : public wxObjectList
 {
 public:
     wxList(int key_type = wxKEY_NONE) : wxObjectList((wxKeyType)key_type) { }
+
+    wxList& operator=(const wxList& list)
+        { return (wxList&)wxListBase::operator=(list); }
 
     // compatibility methods
     void Sort(wxSortCompareFunction compfunc) { wxListBase::Sort(compfunc); }
@@ -489,7 +498,7 @@ public:
 // wxStringList class for compatibility with the old code
 // -----------------------------------------------------------------------------
 
-WX_DECLARE_LIST_2(wxChar, wxStringListBase, wxStringListNode);
+WX_DECLARE_LIST_2(wxChar, wxStringListBase, wxStringListNode, class WXDLLEXPORT);
 
 class WXDLLEXPORT wxStringList : public wxStringListBase
 {

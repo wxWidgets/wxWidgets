@@ -180,15 +180,15 @@ void wxLogVerbose(const wxChar *szFormat, ...)
 
       wxChar *p = s_szBuf;
       size_t len = WXSIZEOF(s_szBuf);
-      strncpy(s_szBuf, _T("("), len);
+      wxStrncpy(s_szBuf, _T("("), len);
       len -= 1; // strlen("(")
       p += 1;
-      strncat(p, mask, len);
+      wxStrncat(p, mask, len);
       size_t lenMask = wxStrlen(mask);
       len -= lenMask;
       p += lenMask;
 
-      strncat(p, _T(") "), len);
+      wxStrncat(p, _T(") "), len);
       len -= 2;
       p += 2;
 
@@ -415,7 +415,8 @@ void wxLogStderr::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
     // under Windows, programs usually don't have stderr at all, so show the
     // messages also under debugger - unless it's a console program
 #if defined(__WXMSW__) && wxUSE_GUI
-    OutputDebugString(str + wxT("\r\n"));
+    str += wxT("\r\n") ;
+    OutputDebugString(str.c_str());
 #endif // MSW
 #if defined(__WXMAC__) && wxUSE_GUI
     debugstr(str + wxT("\r\n"));
@@ -638,12 +639,10 @@ void wxOnAssert(const wxChar *szFile, int nLine, const wxChar *szMsg)
 #if wxUSE_GUI || defined(__WXMSW__)
         // this message is intentionally not translated - it is for
         // developpers only
-        wxStrcat(szBuf, wxT("\nDo you want to stop the program?"
-                            "\nYou can also choose [Cancel] to suppress "
-                            "further warnings."));
+        wxStrcat(szBuf, wxT("\nDo you want to stop the program?\nYou can also choose [Cancel] to suppress further warnings."));
 
 #if wxUSE_GUI
-        switch ( wxMessageBox(szBuf, "Debug",
+        switch ( wxMessageBox(szBuf, wxT("Debug"),
                               wxYES_NO | wxCANCEL | wxICON_STOP ) ) {
             case wxYES:
                 Trap();
@@ -656,7 +655,7 @@ void wxOnAssert(const wxChar *szFile, int nLine, const wxChar *szMsg)
             //case wxNO: nothing to do
         }
 #else // !GUI, but MSW
-        switch ( ::MessageBox(NULL, szBuf, "Debug",
+        switch ( ::MessageBox(NULL, szBuf, _T("Debug"),
                               MB_YESNOCANCEL | MB_ICONSTOP ) ) {
             case IDYES:
                 Trap();

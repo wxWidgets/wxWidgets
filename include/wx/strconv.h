@@ -46,7 +46,7 @@ public:
     const wxWCharBuffer cMB2WX(const char *psz) const { return cMB2WC(psz); }
     const wxCharBuffer cWX2MB(const wchar_t *psz) const { return cWC2MB(psz); }
     const wchar_t* cWC2WX(const wchar_t *psz) const { return psz; }
-    const wchar_t* cMB2WC(const wchar_t *psz) const { return psz; }
+    const wchar_t* cWX2WC(const wchar_t *psz) const { return psz; }
 #else // ANSI
     const char* cMB2WX(const char *psz) const { return psz; }
     const char* cWX2MB(const char *psz) const { return psz; }

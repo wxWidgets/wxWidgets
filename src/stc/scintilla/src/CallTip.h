@@ -6,13 +6,14 @@
 #ifndef CALLTIP_H
 #define CALLTIP_H
 
-const char callClassName[] = "CallTip";
-
 class CallTip {
 	int startHighlight;
 	int endHighlight;
 	char *val;
 	Font font;
+	// Private so CallTip objects can not be copied
+	CallTip(const CallTip &) {}
+	CallTip &operator=(const CallTip &) { return *this; }
 public:
 	Window wCallTip;
 	Window wDraw;

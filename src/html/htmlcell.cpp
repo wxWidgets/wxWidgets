@@ -14,7 +14,8 @@
 #include "wx/wxprec.h"
 
 #include "wx/defs.h"
-#if wxUSE_HTML
+
+#if wxUSE_HTML && wxUSE_STREAMS
 
 #ifdef __BORDLANDC__
 #pragma hdrstop
@@ -132,7 +133,7 @@ wxHtmlWordCell::wxHtmlWordCell(const wxString& word, wxDC& dc) : wxHtmlCell()
     if (m_Word.Find(wxT('&')) != -1) 
     {
 #define ESCSEQ(escape, subst)  \
-                  { wxT("&"escape";"), wxT("&"escape" "), wxT(subst) } 
+                  { _T("&") _T(escape) _T(";"), _T("&") _T(escape) _T(" "), _T(subst) } 
         static wxChar* substitutions[][3] = 
                 {
                 ESCSEQ("quot", "\""),

@@ -97,7 +97,7 @@ GSocket *GSocket_new(void)
   if (!success)
   {
     free(socket);
-    return NULL;
+    socket = NULL;
   }
 
   return socket;

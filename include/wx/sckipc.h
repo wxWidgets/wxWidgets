@@ -59,6 +59,7 @@ class WXDLLEXPORT wxTCPClient;
 class WXDLLEXPORT wxTCPConnection: public wxConnectionBase
 {
   DECLARE_DYNAMIC_CLASS(wxTCPConnection)
+
 public:
   wxTCPConnection(char *buffer, int size);
   wxTCPConnection();
@@ -77,18 +78,19 @@ public:
   // Calls that both can make
   virtual bool Disconnect(void);
 
+  // Callbacks to BOTH - override at will
   // Default behaviour is to delete connection and return TRUE
   virtual bool OnDisconnect(void) { delete this; return TRUE; }
 
-  // To enable the compressor
+  // To enable the compressor (NOTE: not implemented!)
   void Compress(bool on);
 
 protected:
-  wxSocketBase *m_sock;
-  wxSocketStream *m_sockstrm;
-  wxDataInputStream *m_codeci;
+  wxSocketBase       *m_sock;
+  wxSocketStream     *m_sockstrm;
+  wxDataInputStream  *m_codeci;
   wxDataOutputStream *m_codeco;
-  wxString m_topic;
+  wxString            m_topic;
 
   friend class wxTCPServer;
   friend class wxTCPClient;
@@ -112,9 +114,14 @@ public:
   wxTCPServer();
   virtual ~wxTCPServer();
 
-  // Returns FALSE if can't create server (e.g. port number is already in use)
-  virtual bool Create(const wxString& server_name);
+  // Returns FALSE on error (e.g. port number is already in use)
+  virtual bool Create(const wxString& serverName);
+
+  // Callbacks to SERVER - override at will
   virtual wxConnectionBase *OnAcceptConnection(const wxString& topic);
+
+protected:
+  wxSocketServer *m_server;
 };
 
 class wxTCPClient: public wxClientBase
@@ -126,13 +133,13 @@ public:
   virtual ~wxTCPClient();
 
   virtual bool ValidHost(const wxString& host);
-  // Call this to make a connection.
-  // Returns NULL if cannot.
+
+  // Call this to make a connection. Returns NULL if cannot.
   virtual wxConnectionBase *MakeConnection(const wxString& host,
                                            const wxString& server,
                                            const wxString& topic);
 
-  // Tailor this to return own connection.
+  // Callbacks to CLIENT - override at will
   virtual wxConnectionBase *OnMakeConnection();
 };
 
