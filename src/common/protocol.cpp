@@ -82,6 +82,56 @@ bool wxProtocol::Reconnect()
   return TRUE;
 }
 
+// ----------------------------------------------------------------------------
+// Read a line from socket
+// ----------------------------------------------------------------------------
+
+// TODO ReadLine() should use buffers private to wxProtocol for efficiency!
+
+// static
+wxProtocolError wxProtocol::ReadLine(wxSocketBase *socket, wxString& result)
+{
+    result.Empty();
+    char ch, chLast = '\0';
+    while ( !socket->Read(&ch, sizeof(ch)).Error() )
+    {
+        switch ( ch )
+        {
+            case '\r':
+                // remember it, if the following is '\n', we're done
+                chLast = '\r';
+                break;
+
+            case '\n':
+                // only ends line if the previous character was '\r'
+                if ( chLast == '\r' )
+                {
+                    // EOL found
+                    return wxPROTO_NOERR;
+                }
+                //else: fall through
+
+            default:
+                // normal char
+                if ( chLast )
+                {
+                    result += chLast;
+                    chLast = '\0';
+                }
+
+                result += ch;
+        }
+    }
+
+    return wxPROTO_NETERR;
+}
+
+wxProtocolError wxProtocol::ReadLine(wxString& result)
+{
+    return ReadLine(this, result);
+}
+
+// old function which only chops '\n' and not '\r\n'
 wxProtocolError GetLine(wxSocketBase *sock, wxString& result) {
 #define PROTO_BSIZE 2048
   size_t avail, size;

@@ -38,10 +38,14 @@
 #include "wx/sckstrm.h"
 #include "wx/protocol/protocol.h"
 #include "wx/protocol/ftp.h"
+#include "wx/log.h"
 
 #ifdef __BORLANDC__
 #pragma hdrstop
 #endif
+
+// the length of FTP status code (3 digits)
+static const size_t LEN_CODE = 3;
 
 #define FTP_BSIZE 1024
 
@@ -53,23 +57,21 @@ IMPLEMENT_PROTOCOL(wxFTP, wxT("ftp"), wxT("ftp"), TRUE)
 ////////////////////////////////////////////////////////////////
 
 wxFTP::wxFTP()
-  : wxProtocol()
+     : wxProtocol()
 {
-  m_lastError = wxPROTO_NOERR;
-  m_streaming = FALSE;
+    m_lastError = wxPROTO_NOERR;
+    m_streaming = FALSE;
 
-  m_user = wxT("anonymous");
-  m_passwd = wxGetUserId();
-  m_passwd += wxT('@');
-  m_passwd += wxGetHostName();
+    m_user = wxT("anonymous");
+    m_passwd << wxGetUserId() << wxT('@') << wxGetFullHostName();
 
-  SetNotify(0);
-  SetFlags(wxSOCKET_NONE);
+    SetNotify(0);
+    SetFlags(wxSOCKET_NONE);
 }
 
 wxFTP::~wxFTP()
 {
-  SendCommand("QUIT", '2');
+    Close();
 }
 
 ////////////////////////////////////////////////////////////////
@@ -120,60 +122,160 @@ bool wxFTP::Connect(const wxString& host)
   return Connect(addr);
 }
 
-bool wxFTP::Close()
+bool wxFTP::Close(bool force)
 {
-  if (m_streaming) {
-    m_lastError = wxPROTO_STREAMING;
-    return FALSE;
-  }
-  if (IsConnected())
-    SendCommand(wxString(wxT("QUIT")), '2');
+    if ( m_streaming )
+    {
+        if ( !force )
+        {
+            m_lastError = wxPROTO_STREAMING;
+            return FALSE;
+        }
 
-  return wxSocketClient::Close();
+        (void)Abort();
+    }
+
+    if ( IsConnected() )
+        SendCommand(wxT("QUIT"), '2');
+
+    return wxSocketClient::Close();
 }
 
-////////////////////////////////////////////////////////////////
-////// wxFTP low-level methods /////////////////////////////////
-////////////////////////////////////////////////////////////////
+// ============================================================================
+// low level methods
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// Send command to FTP server
+// ----------------------------------------------------------------------------
+
 bool wxFTP::SendCommand(const wxString& command, char exp_ret)
 {
-  wxString tmp_str;
+    wxString tmp_str;
 
-  if (m_streaming) {
-    m_lastError = wxPROTO_STREAMING;
-    return FALSE;
-  }
-  tmp_str = command + wxT("\r\n");
-  const wxWX2MBbuf tmp_buf = tmp_str.mb_str();
-  if (Write(wxMBSTRINGCAST tmp_buf, strlen(tmp_buf)).Error()) {
-    m_lastError = wxPROTO_NETERR;
-    return FALSE;
-  }
-  return GetResult(exp_ret);
+    if (m_streaming)
+    {
+        m_lastError = wxPROTO_STREAMING;
+        return FALSE;
+    }
+
+    tmp_str = command + wxT("\r\n");
+    const wxWX2MBbuf tmp_buf = tmp_str.mb_str();
+    if ( Write(wxMBSTRINGCAST tmp_buf, strlen(tmp_buf)).Error())
+    {
+        m_lastError = wxPROTO_NETERR;
+        return FALSE;
+    }
+
+    wxLogTrace(_T("ftp"), _T("==> %s"), command.c_str());
+
+    return GetResult(exp_ret);
 }
+
+// ----------------------------------------------------------------------------
+// Recieve servers reply
+// ----------------------------------------------------------------------------
 
 bool wxFTP::GetResult(char exp)
 {
-  m_lastError = GetLine(this, m_lastResult);
-  if ( m_lastError )
-    return FALSE;
-  if (m_lastResult.GetChar(0) != exp) {
-    m_lastError = wxPROTO_PROTERR;
-    return FALSE;
-  }
+    wxString code;
 
-  if (m_lastResult.GetChar(3) == '-') {
-    wxString key = m_lastResult.Left((size_t)3);
+    // we handle multiline replies here according to RFC 959: it says that a
+    // reply may either be on 1 line of the form "xyz ..." or on several lines
+    // in whuch case it looks like
+    //      xyz-...
+    //      ...
+    //      xyz ...
+    // and the intermeidate lines may start with xyz or not
+    bool badReply = FALSE;
+    bool firstLine = TRUE;
+    bool endOfReply = FALSE;
+    while ( !endOfReply && !badReply )
+    {
+        m_lastError = ReadLine(m_lastResult);
+        if ( m_lastError )
+            return FALSE;
 
-    key += wxT(' ');
+        // unless this is an intermediate line of a multiline reply, it must
+        // contain the code in the beginning and '-' or ' ' following it
+        if ( m_lastResult.Len() < LEN_CODE + 1 )
+        {
+            if ( firstLine )
+            {
+                badReply = TRUE;
+            }
+            else
+            {
+                wxLogTrace(_T("ftp"), _T("<== %s %s"),
+                           code.c_str(), m_lastResult.c_str());
+            }
+        }
+        else // line has at least 4 chars
+        {
+            // this is the char which tells us what we're dealing with
+            wxChar chMarker = m_lastResult.GetChar(LEN_CODE);
 
-    while (m_lastResult.Index(key) != 0) {
-      m_lastError = GetLine(this, m_lastResult);
-      if ( m_lastError )
+            if ( firstLine )
+            {
+                code = wxString(m_lastResult, LEN_CODE);
+                wxLogTrace(_T("ftp"), _T("<== %s %s"),
+                           code.c_str(), m_lastResult.c_str() + LEN_CODE + 1);
+
+                switch ( chMarker )
+                {
+                    case _T(' '):
+                        endOfReply = TRUE;
+                        break;
+
+                    case _T('-'):
+                        firstLine = FALSE;
+                        break;
+
+                    default:
+                        // unexpected
+                        badReply = TRUE;
+                }
+            }
+            else // subsequent line of multiline reply
+            {
+                if ( wxStrncmp(m_lastResult, code, LEN_CODE) == 0 )
+                {
+                    if ( chMarker == _T(' ') )
+                    {
+                        endOfReply = TRUE;
+                    }
+
+                    wxLogTrace(_T("ftp"), _T("<== %s %s"),
+                               code.c_str(), m_lastResult.c_str() + LEN_CODE + 1);
+                }
+                else
+                {
+                    // just part of reply
+                    wxLogTrace(_T("ftp"), _T("<== %s %s"),
+                               code.c_str(), m_lastResult.c_str());
+                }
+            }
+        }
+    }
+
+    if ( badReply )
+    {
+        wxLogDebug(_T("Broken FTP server: '%s' is not a valid reply."),
+                   m_lastResult.c_str());
+
+        m_lastError = wxPROTO_PROTERR;
+
         return FALSE;
     }
-  }
-  return TRUE;
+
+    if ( code.GetChar(0) != exp )
+    {
+        m_lastError = wxPROTO_PROTERR;
+
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -204,15 +306,45 @@ bool wxFTP::RmDir(const wxString& dir)
 
 wxString wxFTP::Pwd()
 {
-  int beg, end;
+    wxString path;
 
-  if (!SendCommand(wxT("PWD"), '2'))
-    return wxString((char *)NULL);
-  
-  beg = m_lastResult.Find(wxT('\"'),FALSE);
-  end = m_lastResult.Find(wxT('\"'),TRUE);
+    if ( SendCommand(wxT("PWD"), '2') )
+    {
+        // the result is at least that long if SendCommand() succeeded
+        const wxChar *p = m_lastResult.c_str() + LEN_CODE + 1;
+        if ( *p != _T('"') )
+        {
+            wxLogDebug(_T("Missing starting quote in reply for PWD: %s"), p);
+        }
+        else
+        {
+            for ( p++; *p; p++ )
+            {
+                if ( *p == _T('"') )
+                {
+                    // check if the quote is doubled
+                    p++;
+                    if ( !*p || *p != _T('"') )
+                    {
+                        // no, this is the end
+                        break;
+                    }
+                    //else: yes, it is: this is an embedded quote in the
+                    //      filename, treat as normal char
+                }
 
-  return wxString(beg+1, end);
+                path += *p;
+            }
+
+            if ( !*p )
+            {
+                wxLogDebug(_T("Missing ending quote in reply for PWD: %s"),
+                           m_lastResult.c_str() + LEN_CODE + 1);
+            }
+        }
+    }
+
+    return path;
 }
 
 bool wxFTP::Rename(const wxString& src, const wxString& dst)
@@ -312,12 +444,16 @@ wxSocketClient *wxFTP::GetPort()
   return client;
 }
 
-bool wxFTP::Abort(void)
+bool wxFTP::Abort()
 {
-  m_streaming = FALSE;
-  if (!SendCommand(wxT("ABOR"), '4'))
-    return FALSE;
-  return GetResult('2');
+    if ( !m_streaming )
+        return TRUE;
+        
+    m_streaming = FALSE;
+    if ( !SendCommand(wxT("ABOR"), '4') )
+        return FALSE;
+
+    return GetResult('2');
 }
 
 wxInputStream *wxFTP::GetInputStream(const wxString& path)
@@ -367,6 +503,42 @@ wxOutputStream *wxFTP::GetOutputStream(const wxString& path)
     return FALSE;
 
   return new wxOutputFTPStream(this, sock);
+}
+
+bool wxFTP::GetList(wxArrayString& files, const wxString& wildcard)
+{
+    wxSocketBase *sock = GetPort();
+    if ( !sock )
+    {
+        return FALSE;
+    }
+
+    wxString line = _T("NLST");
+    if ( !!wildcard )
+    {
+        // notice that there is no space here
+        line += wildcard;
+    }
+
+    if ( !SendCommand(line, '1') )
+    {
+        return FALSE;
+    }
+
+    files.Empty();
+
+    while ( ReadLine(sock, line) == wxPROTO_NOERR )
+    {
+        files.Add(line);
+    }
+
+    delete sock;
+
+    // the file list should be terminated by "226 Transfer complete""
+    if ( !GetResult('2') )
+        return FALSE;
+
+    return TRUE;
 }
 
 wxList *wxFTP::GetList(const wxString& wildcard)

@@ -90,26 +90,29 @@ struct sockaddr_un {
 
 
 #ifndef __GSOCKET_STANDALONE__
-
-#include "wx/unix/gsockunx.h"
-#include "wx/gsocket.h"
-
+#  include "wx/unix/gsockunx.h"
+#  include "wx/gsocket.h"
 #else
-
-#include "gsockunx.h"
-#include "gsocket.h"
-
+#  include "gsockunx.h"
+#  include "gsocket.h"
 #endif /* __GSOCKET_STANDALONE__ */
 
 /* redefine some GUI-only functions to do nothing in console mode */
 #if defined(wxUSE_GUI) && !wxUSE_GUI
-    #define _GSocket_GUI_Init(socket)
-    #define _GSocket_GUI_Destroy(socket)
-    #define _GSocket_Enable_Events(socket)
-    #define _GSocket_Disable_Events(socket)
-    #define _GSocket_Install_Callback(socket, event)
-    #define _GSocket_Uninstall_Callback(socket, event)
+#  define _GSocket_GUI_Init(socket) (1)
+#  define _GSocket_GUI_Destroy(socket)
+#  define _GSocket_Enable_Events(socket)
+#  define _GSocket_Disable_Events(socket)
+#  define _GSocket_Install_Callback(socket, event)
+#  define _GSocket_Uninstall_Callback(socket, event)
 #endif /* wxUSE_GUI */
+
+/* debugging helpers */
+#ifdef __GSOCKET_DEBUG__
+    #define GSocket_Debug(args)       printf args
+#else
+    #define GSocket_Debug(args)
+#endif // __GSOCKET_DEBUG__
 
 /* Global initialisers */
 
@@ -126,7 +129,7 @@ void GSocket_Cleanup(void)
 
 GSocket *GSocket_new(void)
 {
-  int i;
+  int i, success;
   GSocket *socket;
 
   socket = (GSocket *)malloc(sizeof(GSocket));
@@ -152,7 +155,8 @@ GSocket *GSocket_new(void)
   socket->m_establishing        = FALSE;
 
   /* Per-socket GUI-specific initialization */
-  if (!_GSocket_GUI_Init(socket))
+  success = _GSocket_GUI_Init(socket);
+  if (!success)
   {
     free(socket);
     return NULL;
@@ -719,7 +723,7 @@ int GSocket_Write(GSocket *socket, const char *buffer, int size)
 
   assert(socket != NULL);
   
-  printf( "GSocket_Write #1, size %d\n", size );
+  GSocket_Debug(( "GSocket_Write #1, size %d\n", size ));
 
   if (socket->m_fd == -1 || socket->m_server)
   {
@@ -727,13 +731,13 @@ int GSocket_Write(GSocket *socket, const char *buffer, int size)
     return -1;
   }
 
-  printf( "GSocket_Write #2, size %d\n", size );
+  GSocket_Debug(( "GSocket_Write #2, size %d\n", size ));
 
   /* If the socket is blocking, wait for writability (with a timeout) */
   if (_GSocket_Output_Timeout(socket) == GSOCK_TIMEDOUT)
     return -1;
 
-  printf( "GSocket_Write #3, size %d\n", size );
+  GSocket_Debug(( "GSocket_Write #3, size %d\n", size ));
 
   /* Write the data */
   if (socket->m_stream)
@@ -741,19 +745,19 @@ int GSocket_Write(GSocket *socket, const char *buffer, int size)
   else
     ret = _GSocket_Send_Dgram(socket, buffer, size);
     
-  printf( "GSocket_Write #4, size %d\n", size );
+  GSocket_Debug(( "GSocket_Write #4, size %d\n", size ));
 
   if (ret == -1)
   {
     if (errno == EWOULDBLOCK)
     {
       socket->m_error = GSOCK_WOULDBLOCK;
-      printf( "GSocket_Write error WOULDBLOCK\n" );
+      GSocket_Debug(( "GSocket_Write error WOULDBLOCK\n" ));
     }
     else
     {
       socket->m_error = GSOCK_IOERR;
-      printf( "GSocket_Write error IOERR\n" );
+      GSocket_Debug(( "GSocket_Write error IOERR\n" ));
     }
 
     /* Only reenable OUTPUT events after an error (just like WSAAsyncSelect
@@ -765,7 +769,7 @@ int GSocket_Write(GSocket *socket, const char *buffer, int size)
     return -1;
   }
   
-  printf( "GSocket_Write #5, size %d ret %d\n", size, ret );
+  GSocket_Debug(( "GSocket_Write #5, size %d ret %d\n", size, ret ));
 
   return ret;
 }
@@ -779,9 +783,104 @@ int GSocket_Write(GSocket *socket, const char *buffer, int size)
  */
 GSocketEventFlags GSocket_Select(GSocket *socket, GSocketEventFlags flags)
 {
+#if defined(wxUSE_GUI) && !wxUSE_GUI
+
+  GSocketEventFlags result = 0;
+  fd_set readfds;
+  fd_set writefds;
+  fd_set exceptfds;
+  struct timeval tv;
+
+  /* Do not use a static struct, Linux can garble it */
+  tv.tv_sec = 0;
+  tv.tv_usec = 0;
+
   assert(socket != NULL);
 
+  FD_ZERO(&readfds);
+  FD_ZERO(&writefds);
+  FD_ZERO(&exceptfds);
+  FD_SET(socket->m_fd, &readfds);
+  FD_SET(socket->m_fd, &writefds);
+  FD_SET(socket->m_fd, &exceptfds);
+
+  /* Check known state first */
+  result |= (GSOCK_CONNECTION_FLAG & socket->m_detected & flags);
+  result |= (GSOCK_LOST_FLAG       & socket->m_detected & flags);
+
+  /* Try select now */
+  if (select(socket->m_fd + 1, &readfds, &writefds, &exceptfds, &tv) <= 0)
+    return result;
+
+  /* Check for readability */
+  if (FD_ISSET(socket->m_fd, &readfds))
+  {
+    char c;
+
+    if (recv(socket->m_fd, &c, 1, MSG_PEEK) > 0)
+    {
+      result |= (GSOCK_INPUT_FLAG & flags);
+    }
+    else
+    {
+      if (socket->m_server && socket->m_stream)
+      {
+        result |= (GSOCK_CONNECTION_FLAG & flags);
+        socket->m_detected |= GSOCK_CONNECTION_FLAG;
+      }
+      else
+      {
+        result |= (GSOCK_LOST_FLAG & flags);
+        socket->m_detected = GSOCK_LOST_FLAG;
+      }
+    }
+  }
+
+  /* Check for writability */
+  if (FD_ISSET(socket->m_fd, &writefds))
+  {
+    if (socket->m_establishing && !socket->m_server)
+    {
+      int error;
+      SOCKLEN_T len = sizeof(error);
+
+      socket->m_establishing = FALSE;
+
+      getsockopt(socket->m_fd, SOL_SOCKET, SO_ERROR, (void*)&error, &len);
+
+      if (error)
+      {
+        result |= (GSOCK_LOST_FLAG & flags);
+        socket->m_detected = GSOCK_LOST_FLAG;
+      }
+      else
+      {
+        result |= (GSOCK_CONNECTION_FLAG & flags);
+        socket->m_detected |= GSOCK_CONNECTION_FLAG;
+      }
+    }
+    else
+    {
+      result |= (GSOCK_OUTPUT_FLAG & flags);
+    }
+  }
+
+  /* Check for exceptions and errors (is this useful in Unices?) */
+  if (FD_ISSET(socket->m_fd, &exceptfds))
+  {
+    result |= (GSOCK_LOST_FLAG & flags);
+    socket->m_establishing = FALSE;
+    socket->m_detected = GSOCK_LOST_FLAG;
+  }
+
+  return result;
+
+#else 
+
+  assert(socket != NULL);
   return flags & socket->m_detected;
+
+#endif /* !wxUSE_GUI */
 }
 
 /* Flags */
@@ -928,17 +1027,17 @@ GSocketError _GSocket_Input_Timeout(GSocket *socket)
     ret = select(socket->m_fd + 1, &readfds, NULL, NULL, &tv);
     if (ret == 0)
     {
-      printf( "GSocket_Input_Timeout, select returned 0\n" );
+      GSocket_Debug(( "GSocket_Input_Timeout, select returned 0\n" ));
       socket->m_error = GSOCK_TIMEDOUT;
       return GSOCK_TIMEDOUT;
     }
     if (ret == -1)
     {
-      printf( "GSocket_Input_Timeout, select returned -1\n" );
-      if (errno == EBADF) printf( "Invalid file descriptor\n" );
-      if (errno == EINTR) printf( "A non blocked signal was caught\n" );
-      if (errno == EINVAL) printf( "The highest number descriptor is negative\n" );
-      if (errno == ENOMEM) printf( "Not enough memory\n" );
+      GSocket_Debug(( "GSocket_Input_Timeout, select returned -1\n" ));
+      if (errno == EBADF) GSocket_Debug(( "Invalid file descriptor\n" ));
+      if (errno == EINTR) GSocket_Debug(( "A non blocked signal was caught\n" ));
+      if (errno == EINVAL) GSocket_Debug(( "The highest number descriptor is negative\n" ));
+      if (errno == ENOMEM) GSocket_Debug(( "Not enough memory\n" ));
       socket->m_error = GSOCK_TIMEDOUT;
       return GSOCK_TIMEDOUT;
     }
@@ -967,17 +1066,17 @@ GSocketError _GSocket_Output_Timeout(GSocket *socket)
     ret = select(socket->m_fd + 1, NULL, &writefds, NULL, &tv);
     if (ret == 0)
     {
-      printf( "GSocket_Output_Timeout, select returned 0\n" );
+      GSocket_Debug(( "GSocket_Output_Timeout, select returned 0\n" ));
       socket->m_error = GSOCK_TIMEDOUT;
       return GSOCK_TIMEDOUT;
     }
     if (ret == -1)
     {
-      printf( "GSocket_Output_Timeout, select returned -1\n" );
-      if (errno == EBADF) printf( "Invalid file descriptor\n" );
-      if (errno == EINTR) printf( "A non blocked signal was caught\n" );
-      if (errno == EINVAL) printf( "The highest number descriptor is negative\n" );
-      if (errno == ENOMEM) printf( "Not enough memory\n" );
+      GSocket_Debug(( "GSocket_Output_Timeout, select returned -1\n" ));
+      if (errno == EBADF) GSocket_Debug(( "Invalid file descriptor\n" ));
+      if (errno == EINTR) GSocket_Debug(( "A non blocked signal was caught\n" ));
+      if (errno == EINVAL) GSocket_Debug(( "The highest number descriptor is negative\n" ));
+      if (errno == ENOMEM) GSocket_Debug(( "Not enough memory\n" ));
       socket->m_error = GSOCK_TIMEDOUT;
       return GSOCK_TIMEDOUT;
     }
@@ -1069,26 +1168,21 @@ int _GSocket_Send_Dgram(GSocket *socket, const char *buffer, int size)
 void _GSocket_Detected_Read(GSocket *socket)
 {
   char c;
-  int ret;
 
-  ret = recv(socket->m_fd, &c, 1, MSG_PEEK);
-
-  if (socket->m_stream)
-  {
-    if (ret < 0 && socket->m_server)
-    {
-      CALL_CALLBACK(socket, GSOCK_CONNECTION);
-      return;
-    }
-  }
-
-  if (ret > 0)
+  if (recv(socket->m_fd, &c, 1, MSG_PEEK) > 0)
   {
     CALL_CALLBACK(socket, GSOCK_INPUT);
   }
   else
   {
-    CALL_CALLBACK(socket, GSOCK_LOST);
+    if (socket->m_server && socket->m_stream)
+    {
+      CALL_CALLBACK(socket, GSOCK_CONNECTION);
+    }
+    else
+    {
+      CALL_CALLBACK(socket, GSOCK_LOST);
+    }
   }
 }
 
@@ -1101,7 +1195,7 @@ void _GSocket_Detected_Write(GSocket *socket)
 
     socket->m_establishing = FALSE;
 
-    getsockopt(socket->m_fd, SOL_SOCKET, SO_ERROR, (void*) &error, &len);
+    getsockopt(socket->m_fd, SOL_SOCKET, SO_ERROR, (void*)&error, &len);
 
     if (error)
     {

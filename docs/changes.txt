@@ -15,6 +15,7 @@ File hierarchy:
 
 wxBase:
 
+- wxSocket support
 - wxDateTime replaces and extends old wxDate and wxTime classes (still
   available but strongly deprecated) with many new features
 - wxLongLong class provides support for (signed) 64 bit integers

@@ -45,14 +45,33 @@
 //#define TEST_LOG
 //#define TEST_LONGLONG
 //#define TEST_MIME
-//#define TEST_SOCKETS
+#define TEST_SOCKETS
 //#define TEST_STRINGS
 //#define TEST_THREADS
-#define TEST_TIMER
+//#define TEST_TIMER
 
 // ============================================================================
 // implementation
 // ============================================================================
+
+// ----------------------------------------------------------------------------
+// helper functions
+// ----------------------------------------------------------------------------
+
+#if defined(TEST_STRINGS) || defined(TEST_SOCKETS)
+
+// replace TABs with \t and CRs with \n
+static wxString MakePrintable(const wxChar *s)
+{
+    wxString str(s);
+    (void)str.Replace(_T("\t"), _T("\\t"));
+    (void)str.Replace(_T("\n"), _T("\\n"));
+    (void)str.Replace(_T("\r"), _T("\\r"));
+
+    return str;
+}
+
+#endif // MakePrintable() is used
 
 // ----------------------------------------------------------------------------
 // wxCmdLineParser
@@ -696,27 +715,129 @@ static void TestBitOperations()
 #ifdef TEST_SOCKETS
 
 #include <wx/socket.h>
+#include <wx/protocol/protocol.h>
+#include <wx/protocol/ftp.h>
+#include <wx/protocol/http.h>
+
+static void TestSocketServer()
+{
+    puts("*** Testing wxSocketServer ***\n");
+
+    // we want to launch a server
+    wxIPV4address addr;
+    addr.Service(3000);
+
+    wxSocketServer *server = new wxSocketServer(addr);
+    if ( !server->Ok() )
+    {
+        puts("ERROR: failed to bind");
+    }
+}
 
 static void TestSocketClient()
 {
     puts("*** Testing wxSocketClient ***\n");
 
-    wxIPV4address addrDst;
-    addrDst.Hostname("www.wxwindows.org");
-    addrDst.Service(80);
+    static const char *hostname = "www.wxwindows.org";
+
+    wxIPV4address addr;
+    addr.Hostname(hostname);
+    addr.Service(80);
+
+    printf("--- Attempting to connect to %s:80...\n", hostname);
 
     wxSocketClient client;
-    if ( !client.Connect(addrDst) )
+    if ( !client.Connect(addr) )
     {
-        printf("ERROR: failed to connect to %s\n", addrDst.Hostname().c_str());
+        printf("ERROR: failed to connect to %s\n", hostname);
     }
     else
     {
+        printf("--- Connected to %s:%u...\n",
+               addr.Hostname().c_str(), addr.Service());
+
         char buf[8192];
 
-        client.Write("get /front.htm\n", 17);
+        // could use simply "GET" here I suppose
+        wxString cmdGet =
+            wxString::Format("GET http://%s/\r\n", hostname);
+        client.Write(cmdGet, cmdGet.length());
+        printf("--- Sent command '%s' to the server\n",
+               MakePrintable(cmdGet).c_str());
         client.Read(buf, WXSIZEOF(buf));
-        printf("Server replied:\n%s", buf);
+        printf("--- Server replied:\n%s", buf);
+    }
+}
+
+static void TestProtocolFtp()
+{
+    puts("*** Testing wxFTP ***\n");
+
+    wxLog::AddTraceMask(_T("ftp"));
+
+    static const char *hostname = "ftp.wxwindows.org";
+
+    printf("--- Attempting to connect to %s:21...\n", hostname);
+
+    wxFTP ftp;
+    if ( !ftp.Connect(hostname) )
+    {
+        printf("ERROR: failed to connect to %s\n", hostname);
+    }
+    else
+    {
+        printf("--- Connected to %s, current directory is '%s'\n",
+               hostname, ftp.Pwd().c_str());
+        if ( !ftp.ChDir(_T("pub")) )
+        {
+            puts("ERROR: failed to cd to pub");
+        }
+
+        wxArrayString files;
+        if ( !ftp.GetList(files) )
+        {
+            puts("ERROR: failed to get list of files");
+        }
+        else
+        {
+            printf("List of files under '%s':\n", ftp.Pwd().c_str());
+            size_t count = files.GetCount();
+            for ( size_t n = 0; n < count; n++ )
+            {
+                printf("\t%s\n", files[n].c_str());
+            }
+            puts("End of the file list");
+        }
+
+        if ( !ftp.ChDir(_T("..")) )
+        {
+            puts("ERROR: failed to cd to ..");
+        }
+
+        static const char *filename = "welcome.msg";
+        wxInputStream *in = ftp.GetInputStream(filename);
+        if ( !in )
+        {
+            puts("ERROR: couldn't get input stream");
+        }
+        else
+        {
+            size_t size = in->StreamSize();
+            printf("Reading file %s (%u bytes)...", filename, size);
+
+            char *data = new char[size];
+            if ( !in->Read(data, size) )
+            {
+                puts("ERROR: read error");
+            }
+            else
+            {
+                printf("\nContents of %s:\n%s\n", filename, data);
+            }
+
+            delete [] data;
+            delete in;
+        }
     }
 }
 
@@ -2139,17 +2260,6 @@ static void TestStringFind()
     puts("");
 }
 
-// replace TABs with \t and CRs with \n
-static wxString MakePrintable(const wxChar *s)
-{
-    wxString str(s);
-    (void)str.Replace(_T("\t"), _T("\\t"));
-    (void)str.Replace(_T("\n"), _T("\\n"));
-    (void)str.Replace(_T("\r"), _T("\\r"));
-
-    return str;
-}
-
 static void TestStringTokenizer()
 {
     puts("*** Testing wxStringTokenizer ***");
@@ -2443,7 +2553,12 @@ int main(int argc, char **argv)
 #endif // TEST_MIME
 
 #ifdef TEST_SOCKETS
-    TestSocketClient();
+    if ( 0 )
+    {
+        TestSocketServer();
+        TestSocketClient();
+    }
+        TestProtocolFtp();
 #endif // TEST_SOCKETS
 
 #ifdef TEST_TIMER

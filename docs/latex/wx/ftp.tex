@@ -121,11 +121,11 @@ to specify a user and a password.
 % ----------------------------------------------------------------------------
 \membersection{wxFTP::GetList}
 
-\func{wxList *}{GetList}{\param{const wxString\&}{ wildcard}}
+\func{bool}{GetList}{\param{wxArrayString\& }{files}, \param{const wxString\&}{ wildcard = ""}}
 
 The GetList function is quite low-level. It returns the list of the files in
 the current directory. The list can be filtered using the {\it wildcard} string.
-If {\it wildcard} is a NULL string, it will return all files in directory.
+If {\it wildcard} is empty (default), it will return all files in directory.
 
 The form of the list can change from one peer system to another. For example,
 for a UNIX peer system, it will look like this:
@@ -146,7 +146,8 @@ winamp~1 exe    520196 02-25-1999  19:28  winamp204.exe
         1 file(s)           520 196 bytes
 \end{verbatim}
 
-The list is a string list and one node corresponds to a line sent by the peer.
+Return value: TRUE if the file list was successfully retrieved, FALSE
+otherwise.
 
 % ----------------------------------------------------------------------------
 

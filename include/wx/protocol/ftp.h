@@ -8,6 +8,7 @@
 // Copyright:   (c) 1997, 1998 Guilhem Lavaux
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
+
 #ifndef __WX_FTP_H__
 #define __WX_FTP_H__
 
@@ -20,27 +21,22 @@
 #include "wx/protocol/protocol.h"
 #include "wx/url.h"
 
-class WXDLLEXPORT wxFTP : public wxProtocol {
-  DECLARE_DYNAMIC_CLASS(wxFTP)
-  DECLARE_PROTOCOL(wxFTP)
+class WXDLLEXPORT wxFTP : public wxProtocol
+{
 public:
   typedef enum { ASCII, BINARY } wxFTPmode;
 
   wxFTP();
-  ~wxFTP();
+  virtual ~wxFTP();
 
-  bool Close();
   bool Connect(wxSockAddress& addr, bool wait = TRUE);
   bool Connect(const wxString& host);
 
+  // [forcibly] close the connection
+  bool Close(bool force = FALSE);
+
   void SetUser(const wxString& user) { m_user = user; }
   void SetPassword(const wxString& passwd) { m_passwd = passwd; }
-
-  // Low-level methods
-  bool SendCommand(const wxString& command, char exp_ret);
-  inline virtual wxProtocolError GetError()
-      { return m_lastError; }
-  const wxString& GetLastResult();		// Get the complete return 
 
   // Filesystem commands
   bool ChDir(const wxString& dir);
@@ -56,6 +52,14 @@ public:
   wxOutputStream *GetOutputStream(const wxString& path);
 
   // List method
+  bool GetList(wxArrayString& files, const wxString& wildcard = wxEmptyString);
+
+  // Low-level methods
+  bool SendCommand(const wxString& command, char exp_ret);
+  virtual wxProtocolError GetError() { return m_lastError; }
+  const wxString& GetLastResult();		// Get the complete return 
+
+  // deprecated
   wxList *GetList(const wxString& wildcard);
 
 protected:
@@ -69,6 +73,9 @@ protected:
 
   wxSocketClient *GetPort();
   bool GetResult(char exp);
+
+  DECLARE_DYNAMIC_CLASS(wxFTP)
+  DECLARE_PROTOCOL(wxFTP)
 };
 
-#endif
+#endif // __WX_FTP_H__

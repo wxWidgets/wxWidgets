@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        protocol.h
+// Name:        wx/protocol/protocol.h
 // Purpose:     Protocol base class
 // Author:      Guilhem Lavaux
 // Modified by:
@@ -8,6 +8,7 @@
 // Copyright:   (c) 1997, 1998 Guilhem Lavaux
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
+
 #ifndef _WX_PROTOCOL_PROTOCOL_H
 #define _WX_PROTOCOL_PROTOCOL_H
 
@@ -17,29 +18,79 @@
 
 #include "wx/defs.h"
 
-
 #include "wx/object.h"
 #include "wx/string.h"
 #include "wx/stream.h"
 
 #if wxUSE_SOCKETS
-#include "wx/socket.h"
+    #include "wx/socket.h"
 #endif
 
-typedef enum {
- wxPROTO_NOERR = 0,
- wxPROTO_NETERR,
- wxPROTO_PROTERR,
- wxPROTO_CONNERR,
- wxPROTO_INVVAL,
- wxPROTO_NOHNDLR,
- wxPROTO_NOFILE,
- wxPROTO_ABRT,
- wxPROTO_RCNCT,
- wxPROTO_STREAMING
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
+typedef enum
+{
+    wxPROTO_NOERR = 0,
+    wxPROTO_NETERR,
+    wxPROTO_PROTERR,
+    wxPROTO_CONNERR,
+    wxPROTO_INVVAL,
+    wxPROTO_NOHNDLR,
+    wxPROTO_NOFILE,
+    wxPROTO_ABRT,
+    wxPROTO_RCNCT,
+    wxPROTO_STREAMING
 } wxProtocolError;
 
-// For protocols
+// ----------------------------------------------------------------------------
+// wxProtocol: abstract base class for all protocols
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxProtocol
+#if wxUSE_SOCKETS
+ : public wxSocketClient
+#else
+ : public wxObject
+#endif
+{
+public:
+    wxProtocol();
+
+#if wxUSE_SOCKETS
+    bool Reconnect();
+    virtual bool Connect( const wxString& WXUNUSED(host) ) { return FALSE; }
+    virtual bool Connect( wxSockAddress& addr, bool WXUNUSED(wait) = TRUE) { return wxSocketClient::Connect(addr); }
+
+    // read a '\r\n' terminated line from the given socket and put it in
+    // result (without the terminators)
+    static wxProtocolError ReadLine(wxSocketBase *socket, wxString& result);
+
+    // read a line from this socket - this one can be overridden in the
+    // derived classes if different line termination convention is to be used
+    virtual wxProtocolError ReadLine(wxString& result);
+#endif // wxUSE_SOCKETS
+
+    virtual bool Abort() = 0;
+    virtual wxInputStream *GetInputStream(const wxString& path) = 0;
+    virtual wxProtocolError GetError() = 0;
+    virtual wxString GetContentType() { return wxEmptyString; }
+    virtual void SetUser(const wxString& WXUNUSED(user)) {}
+    virtual void SetPassword(const wxString& WXUNUSED(passwd) ) {}
+
+private:
+    DECLARE_ABSTRACT_CLASS(wxProtocol)
+};
+
+#if wxUSE_SOCKETS
+wxProtocolError WXDLLEXPORT GetLine(wxSocketBase *sock, wxString& result);
+#endif
+
+// ----------------------------------------------------------------------------
+// macros for protocol classes
+// ----------------------------------------------------------------------------
+
 #define DECLARE_PROTOCOL(class) \
 public: \
   static wxProtoInfo g_proto_##class;
@@ -47,48 +98,25 @@ public: \
 #define IMPLEMENT_PROTOCOL(class, name, serv, host) \
 wxProtoInfo class::g_proto_##class(name, serv, host, CLASSINFO(class));
 
-class WXDLLEXPORT wxProtoInfo : public wxObject {
-  DECLARE_DYNAMIC_CLASS(wxProtoInfo)
+class WXDLLEXPORT wxProtoInfo : public wxObject
+{
+public:
+    wxProtoInfo(const wxChar *name,
+                const wxChar *serv_name,
+                const bool need_host1,
+                wxClassInfo *info);
+
 protected:
-  wxProtoInfo *next;
-  wxString m_protoname;
-  wxString prefix;
-  wxString m_servname;
-  wxClassInfo *m_cinfo;
-  bool m_needhost;
+    wxProtoInfo *next;
+    wxString m_protoname;
+    wxString prefix;
+    wxString m_servname;
+    wxClassInfo *m_cinfo;
+    bool m_needhost;
 
-  friend class wxURL;
-public:
-  wxProtoInfo(const wxChar *name, const wxChar *serv_name, const bool need_host1,
-              wxClassInfo *info);
+    friend class wxURL;
+
+    DECLARE_DYNAMIC_CLASS(wxProtoInfo)
 };
-
-class WXDLLEXPORT wxProtocol
-#if wxUSE_SOCKETS
- : public wxSocketClient {
-#else
- : public wxObject {
-#endif
-  DECLARE_ABSTRACT_CLASS(wxProtocol)
-public:
-  wxProtocol();
-
-#if wxUSE_SOCKETS
-  bool Reconnect();
-  virtual bool Connect( const wxString& WXUNUSED(host) ) { return FALSE; }
-  virtual bool Connect( wxSockAddress& addr, bool WXUNUSED(wait) = TRUE) { return wxSocketClient::Connect(addr); }
-#endif
-
-  virtual bool Abort() = 0;
-  virtual wxInputStream *GetInputStream(const wxString& path) = 0;
-  virtual wxProtocolError GetError() = 0;
-  virtual wxString GetContentType() { return wxEmptyString; }
-  virtual void SetUser(const wxString& WXUNUSED(user)) {}
-  virtual void SetPassword(const wxString& WXUNUSED(passwd) ) {}
-};
-
-#if wxUSE_SOCKETS
-wxProtocolError WXDLLEXPORT GetLine(wxSocketBase *sock, wxString& result);
-#endif
 
 #endif // _WX_PROTOCOL_PROTOCOL_H
