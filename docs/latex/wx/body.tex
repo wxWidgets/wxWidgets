@@ -3,7 +3,7 @@
 \setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
 \setfooter{\thepage}{}{}{}{}{\thepage}%
 
-\section{What is wxWidgets?}
+\section{What is wxWidgets?}\label{whatis}
 
 wxWidgets is a C++ framework providing GUI (Graphical User
 Interface) and other facilities on more than one platform.  Version 2 currently
@@ -23,7 +23,7 @@ Please note that in the following, ``MS Windows" often refers to all
 platforms related to Microsoft Windows, including 16-bit and 32-bit
 variants, unless otherwise stated. All trademarks are acknowledged.
 
-\section{Why another cross-platform development tool?}
+\section{Why another cross-platform development tool?}\label{why}
 
 wxWidgets was developed to provide a cheap and flexible way to maximize
 investment in GUI application development.  While a number of commercial
@@ -166,7 +166,7 @@ If using the wxX11 port, no such widget set is required.
 \item At least 60 MB of disk space.
 \end{enumerate}
 
-\section{Availability and location of wxWidgets}
+\section{Availability and location of wxWidgets}\label{where}
 
 \winhelponly{wxWidgets is available by anonymous FTP and World Wide Web
 from ftp://biolpc22.york.ac.uk/pub and/or http://www.wxwidgets.org.}
@@ -176,7 +176,7 @@ and/or \urlref{http://www.wxwidgets.org}{http://www.wxwidgets.org}.}
 
 You can also buy a CD-ROM using the form on the Web site.
 
-\section{Acknowledgements}
+\section{Acknowledgements}\label{acknowledgements}
 
 Thanks are due to AIAI for being willing to release the original version of
 wxWidgets into the public domain, and to our patient partners.
@@ -232,7 +232,7 @@ This chapter describes the practical details of using wxWidgets. Please
 see the file install.txt for up-to-date installation instructions, and
 changes.txt for differences between versions.
 
-\section{Include files}
+\section{Include files}\label{includefiles}
 
 The main include file is {\tt "wx/wx.h"}; this includes the most commonly
 used modules of wxWidgets.
@@ -270,14 +270,14 @@ Therefore, the wxWidgets Watcom C++ makefiles go through hoops deleting and recr
 a single precompiled header file for each module, thus preventing an accumulation of many
 multi-megabyte .pch files.
 
-\section{Libraries}
+\section{Libraries}\label{libraries}
 
 Most ports of wxWidgets can create either a static library or a shared
 library. wxWidgets can also be built in multilib and monolithic variants.
 See the \helpref{libraries list}{librarieslist} for more
 information on these.
 
-\section{Configuration}
+\section{Configuration}\label{configuration}
 
 When using project files and makefiles directly to build wxWidgets,
 options are configurable in the file
@@ -292,7 +292,7 @@ along with suitable makefiles. When using the RPM packages
 for installing wxWidgets on Linux, a correct setup.h is shipped in the package and
 this must not be changed.
 
-\section{Makefiles}
+\section{Makefiles}\label{makefiles}
 
 On Microsoft Windows, wxWidgets has a different set of makefiles for each
 compiler, because each compiler's 'make' tool is slightly different.
@@ -323,7 +323,7 @@ For details on using makefiles, configure, and project files,
 please see docs/xxx/install.txt in your distribution, where
 xxx is the platform of interest, such as msw, gtk, x11, mac.
 
-\section{Windows-specific files}
+\section{Windows-specific files}\label{windowsfiles}
 
 wxWidgets application compilation under MS Windows requires at least two
 extra files, resource and module definition files.
@@ -351,7 +351,7 @@ the MS Windows SDK documentation.
 so programs that search your executable for icons (such
 as the Program Manager) find your application icon first.}
 
-\section{Allocating and deleting wxWidgets objects}
+\section{Allocating and deleting wxWidgets objects}\label{allocatingobjects}
 
 In general, classes derived from wxWindow must dynamically allocated
 with {\it new} and deleted with {\it delete}. If you delete a window,
@@ -381,7 +381,7 @@ make calls like wxDC::SetPen(wxNullPen) or wxDC::SelectObject(wxNullBitmap) befo
 a drawing object that may be in use. Code that doesn't do this will probably work
 fine on some platforms, and then fail under Windows.
 
-\section{Architecture dependency}
+\section{Architecture dependency}\label{architecturedependency}
 
 A problem which sometimes arises from writing multi-platform programs is that
 the basic C types are not defined the same on all platforms. This holds true
@@ -401,7 +401,7 @@ as well).
 The macros handling bit-swapping with respect to the applications endianness
 are described in the \helpref{Byte order macros}{byteordermacros} section.
 
-\section{Conditional compilation}
+\section{Conditional compilation}\label{conditionalcompilation}
 
 One of the purposes of wxWidgets is to reduce the need for conditional
 compilation in source code, which can be messy and confusing to follow.
@@ -410,7 +410,7 @@ features (such as metafile use under MS Windows). The symbols
 listed in the file {\tt symbols.txt} may be used for this purpose,
 along with any user-supplied ones.
 
-\section{C++ issues}
+\section{C++ issues}\label{cpp}
 
 The following documents some miscellaneous C++ issues.
 
@@ -466,7 +466,7 @@ the optimal compilation for each compiler, although it is
 biased towards the precompiled headers facility available
 in Microsoft C++.
 
-\section{File handling}
+\section{File handling}\label{filehandling}
 
 When building an application which may be used under different
 environments, one difficulty is coping with documents which may be
@@ -587,7 +587,7 @@ This chapter is intended to list strategies that may be useful when
 writing and debugging wxWidgets programs. If you have any good tips,
 please submit them for inclusion here.
 
-\section{Strategies for reducing programming errors}
+\section{Strategies for reducing programming errors}\label{reducingerrors}
 
 \subsection{Use ASSERT}
 
@@ -610,7 +610,7 @@ manipulation (which means less code).
 
 The same goes for other data types: use classes wherever possible.
 
-\section{Strategies for portability}
+\section{Strategies for portability}\label{portability}
 
 \subsection{Use relative positioning or constraints}
 
