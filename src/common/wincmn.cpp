@@ -1062,9 +1062,6 @@ wxFont& wxWindowBase::DoGetFont() const
 
 bool wxWindowBase::SetFont(const wxFont& font)
 {
-    if ( !font.Ok() )
-        return false;
-
     if ( font == m_font )
     {
         // no change
@@ -1072,8 +1069,7 @@ bool wxWindowBase::SetFont(const wxFont& font)
     }
 
     m_font = font;
-
-    m_hasFont = true;
+    m_hasFont = font.Ok();
 
     return true;
 }
