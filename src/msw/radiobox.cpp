@@ -345,6 +345,13 @@ bool wxRadioBox::Create(wxWindow *parent,
                          0, 0, 0, 0, hwndParent,
                          (HMENU)NewControlId(), wxGetInstance(), NULL);
 
+#ifdef __WXWINCE__
+    // Set the z-order correctly
+    RECT rect;
+    GetWindowRect(GetHwnd(), & rect);
+    SetWindowPos(GetHwnd(), HWND_BOTTOM, rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top, 0);
+#endif
+
     SetSelection(0);
     SetSize(pos.x, pos.y, size.x, size.y);
 
