@@ -59,14 +59,22 @@ wxMicroWindows:
 - Copy include/wx/msw/setup_microwin.h to include/wx/setup.h if
   include/wx/setup.h doesn't exist
 
-- change the TOP variable at the top of src/msw/makefile.mic
-  to reflect where MicroWindows is installed
+- EITHER:
+
+  o set the MICROWINDOWS environment variable, e.g.:
+
+    % export MICROWINDOWS=/home/julians/local/microwindows/microwindows-0.89pre8/src
+
+  OR:
+
+  o change the TOP variable at the top of src/msw/makefile.mic
+    to reflect where MicroWindows is installed
 
 - type 'make -f makefile.mic all' from src/msw. To clean, use
   cleanwx and NOT clean since that will clean MicroWindows itself
 
-- to make the sample, cd into samples/minimal, edit the TOP variable,
-  and type 'make -f makefile.mic all'
+- to make the sample, cd into samples/minimal, edit the TOP variable
+  (or set MICROWINDOWS) as before, and type 'make -f makefile.mic all'
 
 Running 'minimal' runs the virtual MicroWindows desktop
 and the minimal sample, since in a MicroWindows WIN32 application

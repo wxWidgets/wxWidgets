@@ -315,10 +315,11 @@ wxCursor::wxCursor(int cursor_type)
       refData->m_hCursor = (WXHCURSOR) LoadCursor((HINSTANCE) NULL, IDC_ARROW);
       break;
   }
-#endif
 
   // no need to destroy the stock cursors
-  refData->m_destroyCursor = FALSE;
+  // TODO: check this
+  //m_refData->m_destroyCursor = FALSE;
+#endif
 }
 
 wxCursor::~wxCursor()

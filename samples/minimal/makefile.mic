@@ -3,7 +3,11 @@
 # Copyright (c) 2000 Martin Jolicoeur, Greg Haerr
 ##############################################################################
 
-TOP=/home/julians/microwindows/microwindows-0.89pre8/src
+TOP=$(MICROWINDOWS)
+ifeq "$(MICROWINDOWS)" ""
+TOP=/home/julians/local/microwindows/microwindows-0.89pre8/src
+endif
+
 CONFIG = $(TOP)/config
 WXDIR = ../..
 OBJSUFF = o

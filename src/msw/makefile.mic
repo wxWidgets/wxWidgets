@@ -3,7 +3,10 @@
 # Copyright (c) 2000 Martin Jolicoeur, Greg Haerr
 ##############################################################################
 
-TOP=/home/julians/microwindows/microwindows-0.89pre8/src
+TOP=$(MICROWINDOWS)
+ifeq "$(MICROWINDOWS)" ""
+TOP=/home/julians/local/microwindows/microwindows-0.89pre8/src
+endif
 
 CONFIG = $(TOP)/config
 WXDIR = ../..
@@ -131,7 +134,6 @@ COMMONOBJS  = \
 		$(COMMDIR)/mstream.$(OBJSUFF) \
 		$(COMMDIR)/nbkbase.$(OBJSUFF) \
 		$(COMMDIR)/object.$(OBJSUFF) \
-		$(COMMDIR)/objstrm.$(OBJSUFF) \
 		$(COMMDIR)/paper.$(OBJSUFF) \
 		$(COMMDIR)/popupcmn.$(OBJSUFF) \
 		$(COMMDIR)/prntbase.$(OBJSUFF) \
