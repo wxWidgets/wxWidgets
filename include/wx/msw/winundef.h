@@ -43,6 +43,30 @@
     }
 #endif
 
+// CreateWindow
+
+#if defined(CreateWindow)
+    #undef CreateWindow
+
+    inline HWND CreateWindow(LPCTSTR lpClassName,
+                             LPCTSTR lpWndClass,
+                             DWORD dwStyle,
+                             int x, int y, int w, int h,
+                             HWND hWndParent,
+                             HMENU hMenu,
+                             HINSTANCE hInstance,
+                             LPVOID lpParam)
+    {
+        #ifdef _UNICODE
+            return CreateWindowW(lpClassName, lpWndClass, dwStyle, x, y, w, h,
+                                 hWndParent, hMenu, hInstance, lpParam);
+        #else
+            return CreateWindowA(lpClassName, lpWndClass, dwStyle, x, y, w, h,
+                                 hWndParent, hMenu, hInstance, lpParam);
+        #endif
+    }
+#endif
+
 // LoadMenu
 
 #ifdef LoadMenu
