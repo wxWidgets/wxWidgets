@@ -492,11 +492,12 @@ void MyTextCtrl::OnKeyDown(wxKeyEvent& event)
                         "Current line, column: (%ld, %ld)\n"
                         "Number of lines: %ld\n"
                         "Current line length: %ld\n"
-                        "Total text length: %ld"),
+                        "Total text length: %u (%ld)"),
                         pos,
                         line, column,
                         GetNumberOfLines(),
                         GetLineLength(line),
+                        GetValue().length(),
                         GetLastPosition());
             }
             break;
