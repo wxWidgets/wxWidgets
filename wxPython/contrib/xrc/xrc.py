@@ -131,11 +131,27 @@ def wxXmlResource(*_args,**_kwargs):
 
 wxXmlResource_GetXMLID = xrcc.wxXmlResource_GetXMLID
 
+def wxXmlResource_Get(*_args, **_kwargs):
+    val = apply(xrcc.wxXmlResource_Get,_args,_kwargs)
+    if val: val = wxXmlResourcePtr(val)
+    return val
+
+def wxXmlResource_Set(*_args, **_kwargs):
+    val = apply(xrcc.wxXmlResource_Set,_args,_kwargs)
+    if val: val = wxXmlResourcePtr(val)
+    return val
+
 
 
 #-------------- VARIABLE WRAPPERS ------------------
 
 wxXRC_USE_LOCALE = xrcc.wxXRC_USE_LOCALE
 wxXRC_NO_SUBCLASSING = xrcc.wxXRC_NO_SUBCLASSING
-cvar = xrcc.cvar
-wxTheXmlResource = wxXmlResourcePtr(xrcc.cvar.wxTheXmlResource)
+
+
+#-------------- USER INCLUDE -----------------------
+
+
+# The global was removed  in favor of static accessor functions.  This is for
+# backwards compatibility:
+wxTheXmlResource = wxXmlResource_Get()

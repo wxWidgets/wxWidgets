@@ -131,14 +131,13 @@ public:
     // is less than the argument, +1 if greater and 0 if they equal.
     int CompareVersion(int major, int minor, int release, int revision) const;
 
+
+    // Gets global resources object or create one if none exists
+    static wxXmlResource *Get();
+    // Sets global resources object and returns pointer to previous one (may be NULL).
+    static wxXmlResource *Set(wxXmlResource *res);
+
 };
-
-//----------------------------------------------------------------------
-
-%readonly
-// Global instance of resource class. For your convenience.
-wxXmlResource *wxTheXmlResource;
-%readwrite
 
 //----------------------------------------------------------------------
 
@@ -153,7 +152,7 @@ def XMLCTRL(window, str_id, *args):
 
 //----------------------------------------------------------------------
 
-// TODO:  Add wxXmlResourceHandler and etc.
+// TODO:  Add wxXmlResourceHandler and allow it to be derived from.
 
 //----------------------------------------------------------------------
 
@@ -164,8 +163,14 @@ def XMLCTRL(window, str_id, *args):
 
     wxXmlInitXmlModule();
     wxXmlInitResourceModule();
-    wxTheXmlResource->InitAllHandlers();
+    wxXmlResource::Get()->InitAllHandlers();
 
 %}
 
-//---------------------------------------------------------------------------
+//----------------------------------------------------------------------
+// This file gets appended to the shadow class file.
+//----------------------------------------------------------------------
+
+%pragma(python) include="_xrcextras.py";
+
+

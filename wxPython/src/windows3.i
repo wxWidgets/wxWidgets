@@ -272,11 +272,25 @@ public:
 class wxTipWindow : public wxPyPopupTransientWindow
 {
 public:
-    wxTipWindow(wxWindow *parent,
-                const wxString& text,
-                wxCoord maxLength = 100);
+    %addmethods {
+        wxTipWindow(wxWindow *parent,
+                    const wxString* text,
+                    wxCoord maxLength = 100,
+                    wxRect* rectBound = NULL) {
+            wxString tmp = *text;
+            return new wxTipWindow(parent, tmp, maxLength, NULL, rectBound);
+        }
+    }
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+
+    // If rectBound is not NULL, the window will disappear automatically when
+    // the mouse leave the specified rect: note that rectBound should be in the
+    // screen coordinates!
+    void SetBoundingRect(const wxRect& rectBound);
+
+    // Hide and destroy the window
+    void Close();
 };
 
 

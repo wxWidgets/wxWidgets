@@ -328,6 +328,12 @@ class wxTipWindowPtr(wxPopupTransientWindowPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def SetBoundingRect(self, *_args, **_kwargs):
+        val = apply(windows3c.wxTipWindow_SetBoundingRect,(self,) + _args, _kwargs)
+        return val
+    def Close(self, *_args, **_kwargs):
+        val = apply(windows3c.wxTipWindow_Close,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxTipWindow instance at %s>" % (self.this,)
 class wxTipWindow(wxTipWindowPtr):

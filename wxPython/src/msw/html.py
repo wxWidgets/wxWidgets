@@ -145,6 +145,9 @@ class wxHtmlParserPtr(wxObjectPtr):
     def PopTagHandler(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlParser_PopTagHandler,(self,) + _args, _kwargs)
         return val
+    def CanOpenURL(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlParser_CanOpenURL,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxHtmlParser instance at %s>" % (self.this,)
 class wxHtmlParser(wxHtmlParserPtr):

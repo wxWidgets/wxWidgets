@@ -2432,20 +2432,27 @@ static void *SwigwxTipWindowTowxObject(void *ptr) {
     return (void *) dest;
 }
 
-#define new_wxTipWindow(_swigarg0,_swigarg1,_swigarg2) (new wxTipWindow(_swigarg0,_swigarg1,_swigarg2))
+static wxTipWindow *new_wxTipWindow(wxWindow *parent,const wxString *text,wxCoord maxLength,wxRect *rectBound) {
+            wxString tmp = *text;
+            return new wxTipWindow(parent, tmp, maxLength, NULL, rectBound);
+        }
+
 static PyObject *_wrap_new_wxTipWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxTipWindow * _result;
     wxWindow * _arg0;
     wxString * _arg1;
     wxCoord  _arg2 = (wxCoord ) 100;
+    wxRect * _arg3 = (wxRect *) NULL;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
-    char *_kwnames[] = { "parent","text","maxLength", NULL };
+    wxRect  temp;
+    PyObject * _obj3 = 0;
+    char *_kwnames[] = { "parent","text","maxLength","rectBound", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|i:new_wxTipWindow",_kwnames,&_argo0,&_obj1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|iO:new_wxTipWindow",_kwnames,&_argo0,&_obj1,&_arg2,&_obj3)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2472,9 +2479,15 @@ static PyObject *_wrap_new_wxTipWindow(PyObject *self, PyObject *args, PyObject 
     _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
 #endif
 }
+    if (_obj3)
+{
+    _arg3 = &temp;
+    if (! wxRect_helper(_obj3, &_arg3))
+        return NULL;
+}
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (wxTipWindow *)new_wxTipWindow(_arg0,*_arg1,_arg2);
+        _result = (wxTipWindow *)new_wxTipWindow(_arg0,_arg1,_arg2,_arg3);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -2492,7 +2505,73 @@ static PyObject *_wrap_new_wxTipWindow(PyObject *self, PyObject *args, PyObject 
     return _resultobj;
 }
 
+#define wxTipWindow_SetBoundingRect(_swigobj,_swigarg0)  (_swigobj->SetBoundingRect(_swigarg0))
+static PyObject *_wrap_wxTipWindow_SetBoundingRect(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTipWindow * _arg0;
+    wxRect * _arg1;
+    PyObject * _argo0 = 0;
+    wxRect  temp;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","rectBound", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxTipWindow_SetBoundingRect",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTipWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTipWindow_SetBoundingRect. Expected _wxTipWindow_p.");
+        return NULL;
+        }
+    }
+{
+    _arg1 = &temp;
+    if (! wxRect_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxTipWindow_SetBoundingRect(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxTipWindow_Close(_swigobj)  (_swigobj->Close())
+static PyObject *_wrap_wxTipWindow_Close(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxTipWindow * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTipWindow_Close",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTipWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTipWindow_Close. Expected _wxTipWindow_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxTipWindow_Close(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 static PyMethodDef windows3cMethods[] = {
+	 { "wxTipWindow_Close", (PyCFunction) _wrap_wxTipWindow_Close, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTipWindow_SetBoundingRect", (PyCFunction) _wrap_wxTipWindow_SetBoundingRect, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxTipWindow", (PyCFunction) _wrap_new_wxTipWindow, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPopupTransientWindow_Dismiss", (PyCFunction) _wrap_wxPopupTransientWindow_Dismiss, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPopupTransientWindow_Popup", (PyCFunction) _wrap_wxPopupTransientWindow_Popup, METH_VARARGS | METH_KEYWORDS },

@@ -302,7 +302,8 @@ enum wxFontFamily
     wxFONTFAMILY_SWISS = wxSWISS,
     wxFONTFAMILY_MODERN = wxMODERN,
     wxFONTFAMILY_TELETYPE = wxTELETYPE,
-    wxFONTFAMILY_MAX
+    wxFONTFAMILY_MAX,
+    wxFONTFAMILY_UNKNOWN
 };
 
 // font styles
@@ -400,8 +401,14 @@ struct wxNativeFontInfo
     // init the elements from an XLFD, return TRUE if ok
     bool FromXFontName(const wxString& xFontName);
 
+    // return false if we were never initialized with a valid XLFD
+    bool IsDefault() const;
+
     // generate an XLFD using the fontElements
     wxString GetXFontName() const;
+
+    // set the XFLD
+    void SetXFontName(const wxString& xFontName);
 #endif
 
     wxNativeFontInfo() { Init(); }

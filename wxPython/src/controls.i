@@ -168,6 +168,9 @@ public:
         }
     }
 
+    // append several items at once to the control
+    %name(AppendItems)void Append(const wxArrayString& strings);
+
 };
 
 //----------------------------------------------------------------------

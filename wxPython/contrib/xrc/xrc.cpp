@@ -93,21 +93,6 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 #ifdef __cplusplus
 extern "C" {
 #endif
-static int _wrap_wxTheXmlResource_set(PyObject *val) {
-
-    PyErr_SetString(PyExc_TypeError,"Variable wxTheXmlResource is read-only.");
-    return 1;
-}
-
-static PyObject *_wrap_wxTheXmlResource_get() {
-    PyObject * pyobj;
-    char ptemp[128];
-
-    SWIG_MakePtr(ptemp, (char *) wxTheXmlResource,"_wxXmlResource_p");
-    pyobj = PyString_FromString(ptemp);
-    return pyobj;
-}
-
 static void *SwigwxXmlResourceTowxObject(void *ptr) {
     wxXmlResource *src;
     wxObject *dest;
@@ -1140,7 +1125,68 @@ static PyObject *_wrap_wxXmlResource_CompareVersion(PyObject *self, PyObject *ar
     return _resultobj;
 }
 
+static PyObject *_wrap_wxXmlResource_Get(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxXmlResource * _result;
+    char *_kwnames[] = {  NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxXmlResource_Get",_kwnames)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (wxXmlResource *)wxXmlResource::Get();
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxXmlResource_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxXmlResource_Set(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxXmlResource * _result;
+    wxXmlResource * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "res", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxXmlResource_Set",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxXmlResource_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxXmlResource_Set. Expected _wxXmlResource_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (wxXmlResource *)wxXmlResource::Set(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxXmlResource_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
 static PyMethodDef xrccMethods[] = {
+	 { "wxXmlResource_Set", (PyCFunction) _wrap_wxXmlResource_Set, METH_VARARGS | METH_KEYWORDS },
+	 { "wxXmlResource_Get", (PyCFunction) _wrap_wxXmlResource_Get, METH_VARARGS | METH_KEYWORDS },
 	 { "wxXmlResource_CompareVersion", (PyCFunction) _wrap_wxXmlResource_CompareVersion, METH_VARARGS | METH_KEYWORDS },
 	 { "wxXmlResource_GetVersion", (PyCFunction) _wrap_wxXmlResource_GetVersion, METH_VARARGS | METH_KEYWORDS },
 	 { "wxXmlResource_GetXMLID", (PyCFunction) _wrap_wxXmlResource_GetXMLID, METH_VARARGS | METH_KEYWORDS },
@@ -1285,8 +1331,6 @@ SWIGEXPORT(void) initxrcc() {
 	 d = PyModule_GetDict(m);
 	 PyDict_SetItemString(d,"wxXRC_USE_LOCALE", PyInt_FromLong((long) wxXRC_USE_LOCALE));
 	 PyDict_SetItemString(d,"wxXRC_NO_SUBCLASSING", PyInt_FromLong((long) wxXRC_NO_SUBCLASSING));
-	 PyDict_SetItemString(d,"cvar", SWIG_globals);
-	 SWIG_addvarlink(SWIG_globals,"wxTheXmlResource",_wrap_wxTheXmlResource_get, _wrap_wxTheXmlResource_set);
 
 
     wxClassInfo::CleanUpClasses();
@@ -1294,7 +1338,7 @@ SWIGEXPORT(void) initxrcc() {
 
     wxXmlInitXmlModule();
     wxXmlInitResourceModule();
-    wxTheXmlResource->InitAllHandlers();
+    wxXmlResource::Get()->InitAllHandlers();
 
 {
    int i;

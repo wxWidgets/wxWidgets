@@ -886,6 +886,55 @@ static PyObject *_wrap_wxControlWithItems_SetClientData(PyObject *self, PyObject
     return _resultobj;
 }
 
+#define wxControlWithItems_AppendItems(_swigobj,_swigarg0)  (_swigobj->Append(_swigarg0))
+static PyObject *_wrap_wxControlWithItems_AppendItems(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxControlWithItems * _arg0;
+    wxArrayString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","strings", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxControlWithItems_AppendItems",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxControlWithItems_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxControlWithItems_AppendItems. Expected _wxControlWithItems_p.");
+        return NULL;
+        }
+    }
+{
+    if (! PySequence_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, "Sequence of strings expected.");
+        return NULL;
+    }
+    _arg1 = new wxArrayString;
+    int i, len=PySequence_Length(_obj1);
+    for (i=0; i<len; i++) {
+        PyObject* item = PySequence_GetItem(_obj1, i);
+        PyObject* str  = PyObject_Str(item);
+        _arg1->Add(PyString_AsString(str));
+        Py_DECREF(item);
+        Py_DECREF(str);
+    }
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxControlWithItems_AppendItems(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
 static void *SwigwxButtonTowxControl(void *ptr) {
     wxButton *src;
     wxControl *dest;
@@ -11440,6 +11489,7 @@ static PyMethodDef controlscMethods[] = {
 	 { "wxButton_Create", (PyCFunction) _wrap_wxButton_Create, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPreButton", (PyCFunction) _wrap_new_wxPreButton, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxButton", (PyCFunction) _wrap_new_wxButton, METH_VARARGS | METH_KEYWORDS },
+	 { "wxControlWithItems_AppendItems", (PyCFunction) _wrap_wxControlWithItems_AppendItems, METH_VARARGS | METH_KEYWORDS },
 	 { "wxControlWithItems_SetClientData", (PyCFunction) _wrap_wxControlWithItems_SetClientData, METH_VARARGS | METH_KEYWORDS },
 	 { "wxControlWithItems_GetClientData", (PyCFunction) _wrap_wxControlWithItems_GetClientData, METH_VARARGS | METH_KEYWORDS },
 	 { "wxControlWithItems_Append", (PyCFunction) _wrap_wxControlWithItems_Append, METH_VARARGS | METH_KEYWORDS },

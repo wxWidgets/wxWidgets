@@ -127,6 +127,9 @@ public:
     void PushTagHandler(wxHtmlTagHandler* handler, wxString tags);
     void PopTagHandler();
 
+    // Returns TRUE if the parser is allowed to open given URL (may be forbidden
+    // for security reasons)
+    virtual bool CanOpenURL(const wxString& url) const { return TRUE; }
 
     // void AddText(const char* txt) = 0;
     // void AddTag(const wxHtmlTag& tag);
@@ -137,7 +140,7 @@ public:
 
 class wxHtmlWinParser : public wxHtmlParser {
 public:
-    wxHtmlWinParser(wxWindow *wnd);
+    wxHtmlWinParser(wxHtmlWindow *wnd = NULL);
 
     void SetDC(wxDC *dc);
     wxDC* GetDC();
@@ -427,6 +430,7 @@ public:
     DEC_PYCALLBACK__STRING(OnSetTitle);
     DEC_PYCALLBACK__CELLINTINT(OnCellMouseHover);
     DEC_PYCALLBACK__CELLINTINTME(OnCellClicked);
+    DEC_PYCALLBACK_BOOL_STRING(OnOpeningURL);
     PYPRIVATE;
 };
 
@@ -434,6 +438,7 @@ IMPLEMENT_ABSTRACT_CLASS( wxPyHtmlWindow, wxHtmlWindow );
 IMP_PYCALLBACK__STRING(wxPyHtmlWindow, wxHtmlWindow, OnSetTitle);
 IMP_PYCALLBACK__CELLINTINT(wxPyHtmlWindow, wxHtmlWindow, OnCellMouseHover);
 IMP_PYCALLBACK__CELLINTINTME(wxPyHtmlWindow, wxHtmlWindow, OnCellClicked);
+IMP_PYCALLBACK_BOOL_STRING(wxPyHtmlWindow, wxHtmlWindow, OnOpeningURL);
 
 
 void wxPyHtmlWindow::OnLinkClicked(const wxHtmlLinkInfo& link) {

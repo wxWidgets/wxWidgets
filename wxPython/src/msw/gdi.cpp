@@ -13428,6 +13428,7 @@ SWIGEXPORT(void) initgdic() {
 	 PyDict_SetItemString(d,"wxFONTFAMILY_MODERN", PyInt_FromLong((long) wxFONTFAMILY_MODERN));
 	 PyDict_SetItemString(d,"wxFONTFAMILY_TELETYPE", PyInt_FromLong((long) wxFONTFAMILY_TELETYPE));
 	 PyDict_SetItemString(d,"wxFONTFAMILY_MAX", PyInt_FromLong((long) wxFONTFAMILY_MAX));
+	 PyDict_SetItemString(d,"wxFONTFAMILY_UNKNOWN", PyInt_FromLong((long) wxFONTFAMILY_UNKNOWN));
 	 PyDict_SetItemString(d,"wxFONTSTYLE_NORMAL", PyInt_FromLong((long) wxFONTSTYLE_NORMAL));
 	 PyDict_SetItemString(d,"wxFONTSTYLE_ITALIC", PyInt_FromLong((long) wxFONTSTYLE_ITALIC));
 	 PyDict_SetItemString(d,"wxFONTSTYLE_SLANT", PyInt_FromLong((long) wxFONTSTYLE_SLANT));

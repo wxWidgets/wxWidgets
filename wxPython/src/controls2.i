@@ -1314,7 +1314,7 @@ public:
                      long style = wxDIRCTRL_3D_INTERNAL|wxSUNKEN_BORDER,
                      const wxString& filter = wxEmptyString,
                      int defaultFilter = 0,
-                     const wxString& name = "dirCtrl" );
+                     const char* name = "dirCtrl" );
     %name(wxPreGenericDirCtrl)wxGenericDirCtrl();
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
@@ -1327,7 +1327,7 @@ public:
                 long style = wxDIRCTRL_3D_INTERNAL|wxSUNKEN_BORDER,
                 const wxString& filter = wxEmptyString,
                 int defaultFilter = 0,
-                const wxString& name = "treeCtrl" );
+                const char* name = "dirCtrl" );
 
 
     // Try to expand as much of the given path as possible.
