@@ -61,7 +61,8 @@ int wxColourDialog::ShowModal()
     ColourDataToDialog();
     
     gint result = gtk_dialog_run(GTK_DIALOG(m_widget));
-   
+    gtk_widget_hide(m_widget);
+    
     switch (result)
     {
         default:
