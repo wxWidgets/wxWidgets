@@ -910,19 +910,47 @@ private:
     bool m_locked;
 };
 
-MemoryCriticalSection &GetMemLocker()
-{
     static MemoryCriticalSection memLocker;
-    return memLocker;
+
+#endif
+
+void * operator new (size_t size, wxChar * fileName, int lineNum)
+{
+    return wxDebugAlloc(size, fileName, lineNum, false, false);
 }
 
+void * operator new (size_t size)
+{
+    return wxDebugAlloc(size, NULL, 0, false);
+}
+
+void operator delete (void * buf)
+{
+    wxDebugFree(buf, false);
+}
+
+#if wxUSE_ARRAY_MEMORY_OPERATORS
+void * operator new[] (size_t size)
+{
+    return wxDebugAlloc(size, NULL, 0, false, true);
+}
+
+void * operator new[] (size_t size, wxChar * fileName, int lineNum)
+{
+    return wxDebugAlloc(size, fileName, lineNum, false, true);
+}
+
+void operator delete[] (void * buf)
+{
+  wxDebugFree(buf, true);
+}
 #endif
 
 // TODO: store whether this is a vector or not.
 void * wxDebugAlloc(size_t size, wxChar * fileName, int lineNum, bool isObject, bool WXUNUSED(isVect) )
 {
 #if USE_THREADSAFE_MEMORY_ALLOCATION
-  MemoryCriticalSectionLocker lock(GetMemLocker());
+  MemoryCriticalSectionLocker lock(memLocker);
 #endif
 
   // If not in debugging allocation mode, do the normal thing
@@ -982,7 +1010,7 @@ void * wxDebugAlloc(size_t size, wxChar * fileName, int lineNum, bool isObject, 
 void wxDebugFree(void * buf, bool WXUNUSED(isVect) )
 {
 #if USE_THREADSAFE_MEMORY_ALLOCATION
-  MemoryCriticalSectionLocker lock(GetMemLocker());
+  MemoryCriticalSectionLocker lock(memLocker);
 #endif
 
   if (!buf)

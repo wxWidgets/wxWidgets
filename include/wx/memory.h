@@ -70,36 +70,18 @@ WXDLLIMPEXP_BASE void wxDebugFree(void * buf, bool isVect = false);
     #define wxUSE_ARRAY_MEMORY_OPERATORS 0
 #endif
 
-inline void * operator new (size_t size, wxChar * fileName, int lineNum)
-{
-    return wxDebugAlloc(size, fileName, lineNum, false, false);
-}
+void * operator new (size_t size, wxChar * fileName, int lineNum);
 
-inline void * operator new (size_t size)
-{
-    return wxDebugAlloc(size, NULL, 0, false);
-}
+void * operator new (size_t size);
 
-inline void operator delete (void * buf)
-{
-    wxDebugFree(buf, false);
-}
+void operator delete (void * buf);
 
 #if wxUSE_ARRAY_MEMORY_OPERATORS
-inline void * operator new[] (size_t size)
-{
-    return wxDebugAlloc(size, NULL, 0, false, true);
-}
+void * operator new[] (size_t size);
 
-inline void * operator new[] (size_t size, wxChar * fileName, int lineNum)
-{
-    return wxDebugAlloc(size, fileName, lineNum, false, true);
-}
+void * operator new[] (size_t size, wxChar * fileName, int lineNum);
 
-inline void operator delete[] (void * buf)
-{
-  wxDebugFree(buf, true);
-}
+void operator delete[] (void * buf);
 #endif
 
 // VC++ 6.0 and MWERKS
