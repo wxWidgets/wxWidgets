@@ -396,9 +396,11 @@ bool wxTextCtrl::Create( wxWindow *parent,
         // a single-line text control: no need for scrollbars
         m_widget =
         m_text = gtk_entry_new();
-        
+
+#ifdef __WXGTK20__        
         if (style & wxNO_BORDER)
             g_object_set( GTK_ENTRY(m_text), "has-frame", FALSE, NULL );
+#endif
     }
 
     m_parent->DoAddChild( this );
