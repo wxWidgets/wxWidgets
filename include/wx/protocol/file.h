@@ -23,7 +23,7 @@
 #include "wx/protocol/protocol.h"
 #include "wx/url.h"
 
-class WXDLLEXPORT wxFileProto: public wxProtocol {
+class WXDLLIMPEXP_BASE wxFileProto: public wxProtocol {
   DECLARE_DYNAMIC_CLASS(wxFileProto)
   DECLARE_PROTOCOL(wxFileProto)
 protected:
