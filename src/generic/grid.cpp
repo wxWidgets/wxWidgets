@@ -1189,7 +1189,10 @@ void wxGridCellBoolEditor::BeginEdit(int row, int col, wxGrid* grid)
     if (grid->GetTable()->CanGetValueAs(row, col, wxGRID_VALUE_BOOL))
         m_startValue = grid->GetTable()->GetValueAsBool(row, col);
     else
-        m_startValue = !!grid->GetTable()->GetValue(row, col);
+    {
+        wxString cellval( grid->GetTable()->GetValue(row, col) );
+        m_startValue = !( !cellval || (cellval == "0") );
+    }
     CBox()->SetValue(m_startValue);
     CBox()->SetFocus();
 }
@@ -1795,7 +1798,10 @@ void wxGridCellBoolRenderer::Draw(wxGrid& grid,
     if ( grid.GetTable()->CanGetValueAs(row, col, wxGRID_VALUE_BOOL) )
         value = grid.GetTable()->GetValueAsBool(row, col);
     else
-        value = !!grid.GetTable()->GetValue(row, col);
+    {
+        wxString cellval( grid.GetTable()->GetValue(row, col) );
+        value = !( !cellval || (cellval == "0") );
+    }
 
     if ( value )
     {

@@ -402,7 +402,11 @@ void wxGridSelection::SelectBlock( int topRow, int leftCol,
     }
 
     // Handle single cell selection in SelectCell.
-    if ( topRow == bottomRow && leftCol == rightCol )
+    // (MB: added check for selection mode here to prevent
+    //  crashes if, for example, we are select rows and the
+    //  grid only has 1 col)
+    if ( m_selectionMode == wxGrid::wxGridSelectCells &&
+         topRow == bottomRow && leftCol == rightCol )
         SelectCell( topRow, leftCol, ControlDown,  ShiftDown,
                     AltDown, MetaDown, sendEvent );
 
