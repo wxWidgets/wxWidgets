@@ -1756,16 +1756,11 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
         // set the data event field for all messages for which the system gives
         // us a valid NM_LISTVIEW::lParam
-        switch( nmLV->hdr.code )
+        switch ( nmLV->hdr.code )
         {
             case LVN_BEGINDRAG:
             case LVN_BEGINRDRAG:
             case LVN_COLUMNCLICK:
-#ifdef LVN_HOTTRACK
-            // Under XP, this does _not_ give us a valid lParam,
-            // so we get a crash.
-//            case LVN_HOTTRACK:
-#endif
             case LVN_ITEMCHANGED:
             case LVN_ITEMCHANGING:
                 if ( iItem != -1 )
