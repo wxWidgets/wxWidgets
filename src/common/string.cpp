@@ -985,14 +985,17 @@ int wxString::Printf(const wxChar *pszFormat, ...)
 int wxString::PrintfV(const wxChar* pszFormat, va_list argptr)
 {
   // static buffer to avoid dynamic memory allocation each time
-  static char s_szScratch[1024];
+  char s_szScratch[1024]; // using static buffer causes internal compiler err
+#if 0
 #if wxUSE_THREADS
   // protect the static buffer
   static wxCriticalSection critsect;
   wxCriticalSectionLocker lock(critsect);
 #endif
+#endif
 
-#if 1 // the new implementation
+#if wxUSE_EXPERIMENTAL_PRINTF
+// the new implementation
 
   Reinit();
   for (size_t n = 0; pszFormat[n]; n++)
