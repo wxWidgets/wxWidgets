@@ -90,8 +90,9 @@ class WXDLLIMPEXP_BASE wxDynamicClassInfo;
 class WXDLLIMPEXP_BASE wxHashTable;
 class WXDLLIMPEXP_BASE wxObjectRefData;
 class WXDLLIMPEXP_BASE wxEvent;
+class WXDLLIMPEXP_BASE wxEvtHandler;
 
-typedef void (wxObject::*wxObjectEventFunction)(wxEvent&);
+typedef void (wxEvtHandler::*wxObjectEventFunction)(wxEvent&);
 
 #if wxUSE_FUNC_TEMPLATE_POINTER
 #  define wxTO_STRING(type) wxToStringConverter<type>
@@ -243,7 +244,7 @@ void wxSetToString( wxString &s , const wxBitset<e> &data )
         if ( data.test( value ) )
         {
             // this could also be done by the templated calls
-            if ( !s.IsEmpty() )
+            if ( !s.empty() )
                 s +=wxT("|") ;
             s += edata->GetEnumMemberNameByIndex(i) ;
         }
@@ -303,7 +304,7 @@ void wxFlagsToString( wxString &s , const e& data )
             // clear the flags we just set
             dataValue &= ~value ;
             // this could also be done by the templated calls
-            if ( !s.IsEmpty() )
+            if ( !s.empty() )
                 s +=wxT("|") ;
             s += edata->GetEnumMemberNameByIndex(i) ;
         }
@@ -1974,7 +1975,7 @@ private :
 
 #define IMPLEMENT_DYNAMIC_CLASS_NO_WXOBJECT_NO_BASE_XTI( name , unit ) \
     const wxClassInfo* name::ms_classParents[] = { NULL } ; \
-    wxClassInfo name::ms_classInfo(name::ms_classParents , wxT("") , wxT(#name),   \
+    wxClassInfo name::ms_classInfo(name::ms_classParents , wxEmptyString , wxT(#name),   \
     (int) sizeof(name),                              \
     (wxObjectConstructorFn) 0   ,   \
     name::GetPropertiesStatic(),name::GetHandlersStatic(),0 , 0 ,     \
@@ -1985,7 +1986,7 @@ private :
 
 #define IMPLEMENT_DYNAMIC_CLASS_NO_WXOBJECT_XTI( name , basename, unit ) \
     const wxClassInfo* name::ms_classParents[] = { &basename::ms_classInfo ,NULL } ; \
-    wxClassInfo name::ms_classInfo(name::ms_classParents , wxT("") , wxT(#name),   \
+    wxClassInfo name::ms_classInfo(name::ms_classParents , wxEmptyString , wxT(#name),   \
     (int) sizeof(name),                              \
     (wxObjectConstructorFn) 0   ,   \
     name::GetPropertiesStatic(),name::GetHandlersStatic(),0 , 0 ,     \
@@ -2030,7 +2031,7 @@ private :
     wxObject* wxVariantToObjectConverter##name ( wxxVariant &data ) { return data.wxTEMPLATED_MEMBER_CALL(Get , name*) ; } \
     wxObject* wxVariantOfPtrToObjectConverter##name ( wxxVariant &data ) { return data.wxTEMPLATED_MEMBER_CALL(Get , name*) ; } \
     wxxVariant wxObjectToVariantConverter##name ( wxObject *data ) { return wxxVariant( dynamic_cast<name*> (data)  ) ; } \
-    wxClassInfo name::ms_classInfo(name::ms_classParents , wxT("") , wxT(#name),   \
+    wxClassInfo name::ms_classInfo(name::ms_classParents , wxEmptyString , wxT(#name),   \
     (int) sizeof(name),                              \
     (wxObjectConstructorFn) 0   ,   \
     name::GetPropertiesStatic(),name::GetHandlersStatic(),0 , 0 ,     \

@@ -49,6 +49,8 @@ class WXDLLIMPEXP_BASE wxList;
     class WXDLLIMPEXP_CORE wxWindowBase;
 #endif // wxUSE_GUI
 
+class WXDLLIMPEXP_BASE wxEvtHandler;
+
 // ----------------------------------------------------------------------------
 // Event types
 // ----------------------------------------------------------------------------
@@ -2095,7 +2097,7 @@ private:
 // event handler and related classes
 // ============================================================================
 
-typedef void (wxObject::*wxObjectEventFunction)(wxEvent&);
+typedef void (wxEvtHandler::*wxObjectEventFunction)(wxEvent&);
 
 // we can't have ctors nor base struct in backwards compatibility mode or
 // otherwise we won't be able to initialize the objects with an agregate, so
