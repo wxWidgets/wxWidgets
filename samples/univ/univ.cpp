@@ -224,7 +224,14 @@ bool MyUnivApp::OnInit()
 // ----------------------------------------------------------------------------
 
 MyUnivFrame::MyUnivFrame(const wxString& title)
-           : wxFrame(NULL, -1, title, wxDefaultPosition, wxSize(700, 700))
+           : wxFrame(NULL, -1, title,
+                     wxDefaultPosition,
+#if 0
+                     wxSize(700, 700)
+#else
+                     wxSize(240, 150)
+#endif
+                    )
 {
     SetBackgroundColour(wxGetApp().GetBgColour());
 

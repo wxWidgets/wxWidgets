@@ -57,6 +57,17 @@ class WXDLLEXPORT wxCaret;
 #define wxACTION_TEXT_SEL_LINE      _T("linesel")
 
 // ----------------------------------------------------------------------------
+// wxTextCtrl::HitTest return values
+// ----------------------------------------------------------------------------
+
+enum wxTextCtrlHitTestResult
+{
+    wxTE_HT_BEFORE = -1,
+    wxTE_HT_ON_TEXT,
+    wxTE_HT_AFTER
+};
+
+// ----------------------------------------------------------------------------
 // wxTextCtrl
 // ----------------------------------------------------------------------------
 
@@ -170,13 +181,31 @@ public:
     void RemoveSelection();
     wxString GetSelectionText() const;
 
-    // find the character at this position, return TRUE if the character is
-    // really there or FALSE if it the position is beyond the end of line/text
-    // and the returned character is the last one
-    bool HitTest(const wxPoint& pt, long *col, long *row) const;
+    // find the character at this position, return 0 if the character is
+    // really there, -1 if the point is before the beginning of the text/line
+    // and the returned character is the first one to follow it or +1 if it the
+    // position is beyond the end of line/text and the returned character is
+    // the last one
+    //
+    // NB: pt is in device coords (not adjusted for the client area origin nor
+    //     for the scrolling)
+    wxTextCtrlHitTestResult HitTest(const wxPoint& pt,
+                                    long *col, long *row) const;
 
-    // scroll the window horizontally
-    void ScrollText(wxCoord x);
+    // find the character at this position in the given line, return value as
+    // for HitTest()
+    //
+    // NB: x is the logical coord (client and unscrolled)
+    wxTextCtrlHitTestResult HitTestLine(const wxString& line,
+                                        wxCoord x,
+                                        long *colOut) const;
+
+    // bring the given position into view
+    void ShowHorzPosition(wxCoord pos);
+
+    // scroll the window horizontally so that the first character shown is in
+    // position pos
+    void ScrollText(long col);
 
     // adjust the DC for horz text control scrolling too
     virtual void DoPrepareDC(wxDC& dc);
@@ -220,8 +249,8 @@ protected:
     // get the extent (width) of the text
     wxCoord GetTextWidth(const wxString& text) const;
 
-    // refresh the text in the given range (in client coords) of this line
-    void RefreshLine(long line, wxCoord from, wxCoord to);
+    // refresh the text in the given range (in text coords) of this line
+    void RefreshLine(long line, long from, long to);
 
     // get the text to show: either the text itself or the text replaced with
     // starts for wxTE_PASSWORD control
@@ -261,7 +290,8 @@ private:
     wxRect m_rectText;
 
     // for the controls without horz scrollbar: the offset by which the window
-    // is scrolled to the right
+    // is scrolled to the right and the first visible position
+    long m_colStart;
     wxCoord m_ofsHorz;
 
     DECLARE_EVENT_TABLE()

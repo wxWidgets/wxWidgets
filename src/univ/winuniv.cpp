@@ -204,8 +204,13 @@ void wxWindow::OnPaint(wxPaintEvent& event)
 
 bool wxWindow::DoDrawBackground(wxDC& dc)
 {
-    wxRect rect = GetUpdateRegion().GetBox();
+    // FIXME: leaving this code in leads to partial bg redraws sometimes under
+    //        MSW
+    wxRect rect;
+#ifndef __WXMSW__
+    rect = GetUpdateRegion().GetBox();
     if ( !rect.width && !rect.height )
+#endif
     {
         wxSize size = GetSize();
         rect.width = size.x;
@@ -584,9 +589,15 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
     wxLogTrace(_T("scroll"), _T("rect is %dx%d, scroll by %d, %d"),
                sizeTotal.x, sizeTotal.y, dx, dy);
 
+    // the initial and end point of the region we move in client coords
     wxPoint ptSource, ptDest;
     if ( rect )
+    {
+        ptSource = rect->GetPosition();
         ptDest = rect->GetPosition();
+    }
+
+    // the size of this region
     wxSize size;
     size.x = sizeTotal.x - abs(dx);
     size.y = sizeTotal.y - abs(dy);
@@ -600,8 +611,6 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
     else // move the part which doesn't change to the new location
     {
         wxPoint ptOrigin = GetClientAreaOrigin();
-        if ( rect )
-            ptOrigin += rect->GetPosition();
 
         // note that when we scroll the canvas in some direction we move the
         // block which doesn't need to be refreshed in the opposite direction
@@ -653,8 +662,8 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
         //        it bad?
 
         wxRect rect;
-        rect.x = ptOrigin.x;
-        rect.y = ptOrigin.y;
+        rect.x = ptOrigin.x + ptSource.x;
+        rect.y = ptOrigin.y + ptSource.y;
 
         if ( dx )
         {
