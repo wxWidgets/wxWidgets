@@ -249,11 +249,9 @@ bool WXDLLEXPORT wxGetResource(const wxString& section, const wxString& entry, l
 bool WXDLLEXPORT wxGetResource(const wxString& section, const wxString& entry, int *value, const wxString& file = "");
 #endif // USE_RESOURCES
 
-#ifdef __UNIX__
-// 'X' Only, will soon vanish....
-// Get current Home dir and copy to dest
-char* WXDLLEXPORT wxGetHomeDir( char *dest );
-#endif
+// Get current Home dir and copy to dest (returns pstr->c_str())
+const char* WXDLLEXPORT wxGetHomeDir(wxString *pstr);
+
 // Get the user's home dir (caller must copy--- volatile)
 // returns NULL is no HOME dir is known
 char* WXDLLEXPORT wxGetUserHome(const wxString& user = "");
