@@ -572,6 +572,7 @@ void GridFrame::OnLabelLeftClick( wxGridEvent& ev )
     }
 
     if ( ev.ShiftDown() ) logBuf << " (shift down)";
+    if ( ev.ControlDown() ) logBuf << " (control down)";
     wxLogMessage( "%s", logBuf.c_str() );
 
     // you must call event skip if you want default grid processing
@@ -911,12 +912,12 @@ wxString BugsGridTable::GetTypeName(int WXUNUSED(row), int col)
     return wxEmptyString;
 }
 
-long BugsGridTable::GetNumberRows()
+int BugsGridTable::GetNumberRows()
 {
     return WXSIZEOF(gs_dataBugsGrid);
 }
 
-long BugsGridTable::GetNumberCols()
+int BugsGridTable::GetNumberCols()
 {
     return Col_Max;
 }

@@ -141,8 +141,8 @@ class BigGridTable : public wxGridTableBase
 public:
     BigGridTable(long sizeGrid) { m_sizeGrid = sizeGrid; }
 
-    long GetNumberRows() { return m_sizeGrid; }
-    long GetNumberCols() { return m_sizeGrid; }
+    int GetNumberRows() { return m_sizeGrid; }
+    int GetNumberCols() { return m_sizeGrid; }
     wxString GetValue( int row, int col )
     {
         return wxString::Format("(%d, %d)", row, col);
@@ -190,8 +190,8 @@ class BugsGridTable : public wxGridTableBase
 public:
     BugsGridTable();
 
-    virtual long GetNumberRows();
-    virtual long GetNumberCols();
+    virtual int GetNumberRows();
+    virtual int GetNumberCols();
     virtual bool IsEmptyCell( int row, int col );
     virtual wxString GetValue( int row, int col );
     virtual void SetValue( int row, int col, const wxString& value );

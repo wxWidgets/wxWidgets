@@ -699,8 +699,8 @@ public:
 
     // You must override these functions in a derived table class
     //
-    virtual long GetNumberRows() = 0;
-    virtual long GetNumberCols() = 0;
+    virtual int GetNumberRows() = 0;
+    virtual int GetNumberCols() = 0;
     virtual bool IsEmptyCell( int row, int col ) = 0;
     virtual wxString GetValue( int row, int col ) = 0;
     virtual void SetValue( int row, int col, const wxString& value ) = 0;
@@ -843,8 +843,8 @@ public:
 
     // these are pure virtual in wxGridTableBase
     //
-    long GetNumberRows();
-    long GetNumberCols();
+    int GetNumberRows();
+    int GetNumberCols();
     wxString GetValue( int row, int col );
     void SetValue( int row, int col, const wxString& s );
     bool IsEmptyCell( int row, int col );
@@ -894,11 +894,11 @@ public:
 
     // default copy ctor is ok
 
-    long GetRow() const { return m_row; }
-    void SetRow( long n ) { m_row = n; }
-    long GetCol() const { return m_col; }
-    void SetCol( long n ) { m_col = n; }
-    void Set( long row, long col ) { m_row = row; m_col = col; }
+    int GetRow() const { return m_row; }
+    void SetRow( int n ) { m_row = n; }
+    int GetCol() const { return m_col; }
+    void SetCol( int n ) { m_col = n; }
+    void Set( int row, int col ) { m_row = row; m_col = col; }
 
     wxGridCellCoords& operator=( const wxGridCellCoords& other )
     {
@@ -926,8 +926,8 @@ public:
     }
 
 private:
-    long m_row;
-    long m_col;
+    int m_row;
+    int m_col;
 };
 
 

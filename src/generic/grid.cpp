@@ -2456,12 +2456,12 @@ wxGridStringTable::~wxGridStringTable()
 {
 }
 
-long wxGridStringTable::GetNumberRows()
+int wxGridStringTable::GetNumberRows()
 {
     return m_data.GetCount();
 }
 
-long wxGridStringTable::GetNumberCols()
+int wxGridStringTable::GetNumberCols()
 {
     if ( m_data.GetCount() > 0 )
         return m_data[0].GetCount();
@@ -3803,10 +3803,13 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
                 break;
 
                 case WXGRID_CURSOR_SELECT_ROW:
-                    if ( (row = YToRow( y )) >= 0  &&
-                         !IsInSelection( row, 0 ) )
-                    {
-                        SelectRow( row, TRUE );
+                    if ( (row = YToRow( y )) >= 0 )
+		    {
+		        m_selection->SelectRow( row,
+						event.ControlDown(),
+						event.ShiftDown(),
+						event.AltDown(),
+						event.MetaDown() );
                     }
 
                 // default label to suppress warnings about "enumeration value
@@ -3843,7 +3846,23 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
             if ( row >= 0  &&
                  !SendEvent( wxEVT_GRID_LABEL_LEFT_CLICK, row, -1, event ) )
             {
-                SelectRow( row, event.ShiftDown() );
+	        if ( !event.ShiftDown() && !event.ControlDown() )
+		    ClearSelection();
+		if ( event.ShiftDown() )
+		    m_selection->SelectBlock( m_currentCellCoords.GetRow(),
+					      0,
+					      row,
+					      GetNumberCols() - 1,
+					      event.ControlDown(),
+					      event.ShiftDown(),
+					      event.AltDown(),
+					      event.MetaDown() );
+		else
+		    m_selection->SelectRow( row,
+					    event.ControlDown(),
+					    event.ShiftDown(),
+					    event.AltDown(),
+					    event.MetaDown() );
                 ChangeCursorMode(WXGRID_CURSOR_SELECT_ROW, m_rowLabelWin);
             }
         }
@@ -3970,10 +3989,13 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
                 break;
 
                 case WXGRID_CURSOR_SELECT_COL:
-                    if ( (col = XToCol( x )) >= 0  &&
-                         !IsInSelection( 0, col ) )
-                    {
-                        SelectCol( col, TRUE );
+                    if ( (col = XToCol( x )) >= 0 )
+		    {
+		        m_selection->SelectCol( col,
+						event.ControlDown(),
+						event.ShiftDown(),
+						event.AltDown(),
+						event.MetaDown() );
                     }
 
                 // default label to suppress warnings about "enumeration value
@@ -4010,7 +4032,22 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
             if ( col >= 0  &&
                  !SendEvent( wxEVT_GRID_LABEL_LEFT_CLICK, -1, col, event ) )
             {
-                SelectCol( col, event.ShiftDown() );
+	        if ( !event.ShiftDown() && !event.ControlDown() )
+		    ClearSelection();
+		if ( event.ShiftDown() )
+		    m_selection->SelectBlock( 0,
+					      m_currentCellCoords.GetCol(),
+					      GetNumberRows() - 1, col,
+					      event.ControlDown(),
+					      event.ShiftDown(),
+					      event.AltDown(),
+					      event.MetaDown() );
+		else
+		    m_selection->SelectCol( col,
+					    event.ControlDown(),
+					    event.ShiftDown(),
+					    event.AltDown(),
+					    event.MetaDown() );
                 ChangeCursorMode(WXGRID_CURSOR_SELECT_COL, m_colLabelWin);
             }
         }
@@ -4268,7 +4305,7 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                 {
                     MakeCellVisible(coords);
                     // TODO: need to introduce a delay or something here.  The
-                    // scrolling is way to fast, at least on MSW.
+                    // scrolling is way to fast, at least on MSW - also on GTK.
                 }
             }
         }
@@ -5105,7 +5142,7 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                 break;
 
             case WXK_ESCAPE:
-                m_selection->ClearSelection();
+                ClearSelection();
                 break;
 
             case WXK_TAB:
@@ -7585,7 +7622,7 @@ void wxGrid::SetCellValue( int row, int col, const wxString& s )
 void wxGrid::SelectRow( int row, bool addToSelected )
 {
     if ( IsSelection() && !addToSelected )
-        m_selection->ClearSelection();
+        ClearSelection();
 
     m_selection->SelectRow( row );
 }
@@ -7594,7 +7631,7 @@ void wxGrid::SelectRow( int row, bool addToSelected )
 void wxGrid::SelectCol( int col, bool addToSelected )
 {
     if ( IsSelection() && !addToSelected )
-        m_selection->ClearSelection();
+        ClearSelection();
 
     m_selection->SelectCol( col );
 }
