@@ -511,7 +511,7 @@ bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
         return FALSE;
 
     wxString p = path ;
-    if (p[0] == ':' ) {
+    if (p[0u] == ':' ) {
       p = wxGetCwd() + p ;
     }
 
@@ -648,17 +648,26 @@ void wxMacSetupConverters()
                                 kEncoding,
                                 kTextEncodingUnicodeDefault);
 
-
     status = TECCreateConverter(&s_TECUnicodeToNativeC,
                                 kTextEncodingUnicodeDefault,
                                 kEncoding);
+
+#if (wxUSE_UNICODE == 1) && (SIZEOF_WCHAR_T == 4)
+	TextEncoding kUnicode32 = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicode32BitFormat) ;
+    
+    status = TECCreateConverter(&s_TECUnicode16To32,
+                                kTextEncodingUnicodeDefault,
+                                kUnicode32);
+    status = TECCreateConverter(&s_TECUnicode32To16,
+                                kUnicode32,
+                                kTextEncodingUnicodeDefault);
+#endif
 }
 
 void wxMacCleanupConverters()
 {
     OSStatus status = noErr ;
     status = TECDisposeConverter(s_TECNativeCToUnicode);
-
     status = TECDisposeConverter(s_TECUnicodeToNativeC);
 }
 
@@ -670,11 +679,11 @@ wxWCharBuffer wxMacStringToWString( const wxString &from )
     OSStatus status = noErr ;
     ByteCount byteOutLen ;
     ByteCount byteInLen = from.Length() ;
-    ByteCount byteBufferLen = byteInLen *2 ;
+    ByteCount byteBufferLen = byteInLen * SIZEOF_WCHAR_T ;
     wxWCharBuffer result( from.Length() ) ;
     status = TECConvertText(s_TECNativeCToUnicode, (ConstTextPtr)from.c_str() , byteInLen, &byteInLen,
         (TextPtr)result.data(), byteBufferLen, &byteOutLen);
-    result.data()[byteOutLen/2] = 0 ;
+    result.data()[byteOutLen/SIZEOF_WCHAR_T] = 0 ;
 #endif
     return result ;
 }
@@ -688,7 +697,7 @@ wxString wxMacMakeStringFromCString( const char * from , int len )
 #if wxUSE_UNICODE
     ByteCount byteOutLen ;
     ByteCount byteInLen = len ;
-    ByteCount byteBufferLen = len *2 ;
+    ByteCount byteBufferLen = len * SIZEOF_WCHAR_T;
 
     status = TECConvertText(s_TECNativeCToUnicode, (ConstTextPtr)from , byteInLen, &byteInLen,
         (TextPtr)buf, byteBufferLen, &byteOutLen);
@@ -710,7 +719,7 @@ wxCharBuffer wxMacStringToCString( const wxString &from )
 #if wxUSE_UNICODE
     OSStatus status = noErr ;
     ByteCount byteOutLen ;
-    ByteCount byteInLen = from.Length() * 2 ;
+    ByteCount byteInLen = from.Length() * SIZEOF_WCHAR_T ;
     ByteCount byteBufferLen = from.Length() ;
     wxCharBuffer result( from.Length() ) ;
     status = TECConvertText(s_TECUnicodeToNativeC , (ConstTextPtr)from.wc_str() , byteInLen, &byteInLen,
@@ -748,15 +757,70 @@ wxString wxMacMakeStringFromPascal( ConstStringPtr from )
 //
 
 #if TARGET_CARBON
+
+#if (wxUSE_UNICODE == 1) && (SIZEOF_WCHAR_T == 4)
+
+TECObjectRef s_TECUnicode32To16 = NULL ;
+TECObjectRef s_TECUnicode16To32 = NULL ;
+
+class wxMacUnicodeConverters
+{
+public :
+	wxMacUnicodeConverters() ;
+	~wxMacUnicodeConverters() ;
+} ;
+
+wxMacUnicodeConverters guard ;
+
+wxMacUnicodeConverters::wxMacUnicodeConverters()
+{
+    OSStatus status = noErr ;
+	TextEncoding kUnicode32 = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicode32BitFormat) ;
+	TextEncoding kUnicode16 = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicode16BitFormat) ;
+	
+	status = TECCreateConverter(&s_TECUnicode16To32,
+								kUnicode16,
+								kUnicode32);
+	status = TECCreateConverter(&s_TECUnicode32To16,
+								kUnicode32,
+								kUnicode16);
+}
+
+wxMacUnicodeConverters::~wxMacUnicodeConverters()
+{
+    OSStatus status = noErr ;
+	status = TECDisposeConverter(s_TECUnicode32To16);
+	status = TECDisposeConverter(s_TECUnicode16To32);
+}
+#endif
 // converts this string into a carbon foundation string with optional pc 2 mac encoding
 void wxMacCFStringHolder::Assign( const wxString &st )
 {
-    wxString str = st ;
+	wxString str = st ;
     wxMacConvertNewlines13To10( &str ) ;
+	size_t len = str.Len() ;
 #if wxUSE_UNICODE
-  	m_cfs = CFStringCreateWithCharacters( kCFAllocatorDefault,
-  		(const unsigned short*)str.wc_str(), str.Len() );
+	UniChar *unibuf ;
+#if SIZEOF_WCHAR_T == 2
+	unibuf = (UniChar*)str.wc_str() ;
 #else
+    OSStatus status = noErr ;
+    ByteCount byteOutLen ;
+    ByteCount byteInLen = len * SIZEOF_WCHAR_T ;
+    ByteCount byteBufferLen = len * sizeof( UniChar ) ;
+	unibuf = (UniChar*) malloc(byteBufferLen) ;
+    status = TECConvertText( s_TECUnicode32To16 , (ConstTextPtr)str.wc_str() , byteInLen, &byteInLen,
+        (TextPtr)unibuf, byteBufferLen, &byteOutLen);
+#endif
+  	m_cfs = CFStringCreateWithCharacters( kCFAllocatorDefault,
+	 unibuf , len );
+#if SIZEOF_WCHAR_T == 2
+	// as long as UniChar is the same as wchar_t nothing to do here
+#else
+	free( unibuf ) ;
+#endif
+
+#else // not wxUSE_UNICODE
     m_cfs = CFStringCreateWithCString( kCFAllocatorSystemDefault , str.c_str() ,
         CFStringGetSystemEncoding() ) ;
 #endif
