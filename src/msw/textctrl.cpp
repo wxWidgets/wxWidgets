@@ -65,6 +65,10 @@
     #define CFM_CHARSET 0x08000000
 #endif // CFM_CHARSET
 
+#ifndef CFM_BACKCOLOR
+    #define CFM_BACKCOLOR 0x04000000
+#endif
+
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
@@ -1267,7 +1271,8 @@ bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
 
     if ( style.HasFont() )
     {
-        cf.dwMask |= CFM_FACE | CFM_SIZE | CFM_CHARSET;
+        cf.dwMask |= CFM_FACE | CFM_SIZE | CFM_CHARSET |
+                     CFM_ITALIC | CFM_BOLD | CFM_UNDERLINE;
 
         // fill in data from LOGFONT but recalculate lfHeight because we need
         // the real height in twips and not the negative number which
@@ -1280,22 +1285,21 @@ bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
         cf.bPitchAndFamily = lf.lfPitchAndFamily;
         wxStrncpy( cf.szFaceName, lf.lfFaceName, WXSIZEOF(cf.szFaceName) );
 
-        // also deal with underline/italic/bold attributes
+        // also deal with underline/italic/bold attributes: note that we must
+        // always set CFM_ITALIC &c bits in dwMask, even if we don't set the
+        // style to allow clearing it
         if ( lf.lfItalic )
         {
-            cf.dwMask |= CFM_ITALIC;
             cf.dwEffects |= CFE_ITALIC;
         }
 
         if ( lf.lfWeight == FW_BOLD )
         {
-            cf.dwMask |= CFM_BOLD;
             cf.dwEffects |= CFE_BOLD;
         }
 
         if ( lf.lfUnderline )
         {
-            cf.dwMask |= CFM_UNDERLINE;
             cf.dwEffects |= CFE_UNDERLINE;
         }
 
@@ -1309,16 +1313,13 @@ bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
     }
 
 #if wxUSE_RICHEDIT2
-#ifndef CFM_BACKCOLOR
-#define CFM_BACKCOLOR 0x04000000
-#endif
-
     if ( wxRichEditModule::GetLoadedVersion() > 1 && style.HasBackgroundColour() )
     {
         cf.dwMask |= CFM_BACKCOLOR;
         cf.crBackColor = wxColourToRGB(style.GetBackgroundColour());
     }
-#endif
+#endif // wxUSE_RICHEDIT2
+
     // do format the selection
     bool ok = ::SendMessage(GetHwnd(), EM_SETCHARFORMAT,
                             SCF_SELECTION, (LPARAM)&cf) != 0;
