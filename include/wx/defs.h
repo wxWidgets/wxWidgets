@@ -211,7 +211,7 @@ typedef short int WXTYPE;
 
 /*  special care should be taken with this type under Windows where the real */
 /*  window id is unsigned, so we must always do the cast before comparing them */
-/*  (or else they would be always different!). Usign wxGetWindowId() which does */
+/*  (or else they would be always different!). Using wxGetWindowId() which does */
 /*  the cast itself is recommended. Note that this type can't be unsigned */
 /*  because wxID_ANY == -1 is a valid (and largely used) value for window id. */
 typedef int wxWindowID;
@@ -569,6 +569,7 @@ enum
         typedef int wxCoord;
 #endif /*  wxUSE_COMPATIBLE_COORD_TYPES/!wxUSE_COMPATIBLE_COORD_TYPES */
 
+enum {  wxDefaultCoord = -1 };
 
 /*  ---------------------------------------------------------------------------- */
 /*  define fixed length types */
