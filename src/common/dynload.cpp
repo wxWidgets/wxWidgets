@@ -87,7 +87,6 @@ wxPluginLibrary::wxPluginLibrary(const wxString &libname, int flags)
 
     if( m_handle != 0 )
     {
-        UpdateClassInfo();
         RegisterModules();
     }
     else
@@ -102,7 +101,6 @@ wxPluginLibrary::~wxPluginLibrary()
     if( m_handle != 0 )
     {
         UnregisterModules();
-        RestoreClassInfo();
     }
 }
 
@@ -132,57 +130,6 @@ bool wxPluginLibrary::UnrefLib()
 // ------------------------
 // Private methods
 // ------------------------
-
-void wxPluginLibrary::UpdateClassInfo()
-{
-    wxClassInfo     *info;
-    wxHashTable     *t = wxClassInfo::sm_classTable;
-
-        // FIXME: Below is simply a cut and paste specialisation of
-        //        wxClassInfo::InitializeClasses.  Once this stabilises,
-        //        the two should probably be merged.
-        //
-        //        Actually it's becoming questionable whether we should merge
-        //        this info with the main ClassInfo tables since we can nearly
-        //        handle this completely internally now and it does expose
-        //        certain (minimal % user_stupidy) risks.
-
-    for(info = m_after; info != m_before; info = info->m_next)
-    {
-        if( info->m_className )
-        {
-            if( t->Get(info->m_className) == 0 )
-                t->Put(info->m_className, (wxObject *)info);
-
-            // Hash all the class names into a local table too so
-            // we can quickly find the entry they correspond to.
-            (*ms_classes)[info->m_className] = this;
-        }
-    }
-}
-
-void wxPluginLibrary::RestoreClassInfo()
-{
-    wxClassInfo *info;
-
-    for(info = m_after; info != m_before; info = info->m_next)
-    {
-        wxClassInfo::sm_classTable->Delete(info->m_className);
-        ms_classes->erase(ms_classes->find(info->m_className));
-    }
-
-    if( wxClassInfo::sm_first == m_after )
-        wxClassInfo::sm_first = m_before;
-    else
-    {
-        info = wxClassInfo::sm_first;
-        while( info->m_next && info->m_next != m_after ) info = info->m_next;
-
-        wxASSERT_MSG( info, _T("ClassInfo from wxPluginLibrary not found on purge"));
-
-        info->m_next = m_before;
-    }
-}
 
 void wxPluginLibrary::RegisterModules()
 {

@@ -93,8 +93,6 @@ private:
     size_t          m_objcount;     // ..and (pluggable) object instantiations.
     wxModuleList    m_wxmodules;    // any wxModules that we initialised.
 
-    void    UpdateClassInfo();      // Update the wxClassInfo table
-    void    RestoreClassInfo();     // Restore the original wxClassInfo state.
     void    RegisterModules();      // Init any wxModules in the lib.
     void    UnregisterModules();    // Cleanup any wxModules we installed.
 
