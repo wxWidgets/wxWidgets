@@ -122,8 +122,8 @@ void wxMessageOutputLog::Printf(const wxChar* format, ...)
     out.PrintfV(format, args);
     va_end(args);
 
-    out.Replace("\t","        ");
+    out.Replace(wxT("\t"),wxT("        "));
     // under Motif, wxMessageDialog needs a parent window, so we use
     // wxLog, which is better than nothing
-    ::wxLogMessage("%s", out.c_str());
+    ::wxLogMessage(wxT("%s"), out.c_str());
 }
