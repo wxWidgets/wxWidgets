@@ -248,13 +248,15 @@ bool wxRegConfig::GetNextEntry(wxString& str, long& lIndex) const
   // are we already enumerating local entries?
   if ( m_keyGlobal.IsOpened() && !IS_LOCAL_INDEX(lIndex) ) {
     // try to find a global entry which doesn't appear locally
-    do {
-      if ( !m_keyGlobal.GetNextValue(str, lIndex) ) {
-        // no more global entries
-        lIndex |= LOCAL_MASK;
-        break;
+    while ( m_keyGlobal.GetNextValue(str, lIndex) ) {
+      if ( !m_keyLocal.HasValue(str) ) {
+        // ok, found one - return it
+        return TRUE;
       }
-    } while( m_keyLocal.HasValue(str) );
+    }
+
+    // no more global entries
+    lIndex |= LOCAL_MASK;
   }
 
   // much easier with local entries: get the next one we find
