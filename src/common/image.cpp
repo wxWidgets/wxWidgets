@@ -189,6 +189,43 @@ wxImage wxImage::Scale( int width, int height ) const
     return image;
 }
 
+wxImage wxImage::GetSubImage( const wxRect &rect ) const
+{
+    wxImage image;
+
+    wxCHECK_MSG( Ok(), image, _T("invalid image") );
+
+    wxCHECK_MSG( (rect.GetLeft()>=0) && (rect.GetTop()>=0) && (rect.GetRight()<=GetWidth()) && (rect.GetBottom()<=GetHeight())
+		 , image, _T("invalid subimage size") );
+
+    int subwidth=rect.GetWidth();
+    const int subheight=rect.GetHeight();
+
+    image.Create( subwidth, subheight );
+
+    char unsigned *subdata = image.GetData(), *data=GetData();
+
+    wxCHECK_MSG( subdata, image, _T("unable to create image") );
+
+    if (M_IMGDATA->m_hasMask)
+        image.SetMaskColour( M_IMGDATA->m_maskRed, M_IMGDATA->m_maskGreen, M_IMGDATA->m_maskBlue );
+
+    const int subleft=3*rect.GetLeft();
+    const int width=3*GetWidth();
+    subwidth*=3;
+    
+    data+=rect.GetTop()*width+subleft;
+
+    for (long j = 0; j < subheight; ++j)
+    {
+        memcpy( subdata, data, subwidth);
+        subdata+=subwidth;
+	data+=width;
+    }
+
+    return image;
+}
+
 void wxImage::SetRGB( int x, int y, unsigned char r, unsigned char g, unsigned char b )
 {
     wxCHECK_RET( Ok(), _T("invalid image") );
@@ -388,7 +425,6 @@ bool wxImage::SaveFile( const wxString& filename, const wxString& mimetype )
 }
 
 #if wxUSE_STREAMS
-//#include <stream.h>
 
 bool wxImage::LoadFile( wxInputStream& stream, long type )
 {
@@ -403,8 +439,8 @@ bool wxImage::LoadFile( wxInputStream& stream, long type )
       // here we can try to guess the handler according the extension,
       // but we lose the stream name !?
       // Probably we should write methods such as 
-      // bool wxImageHandler::IsAppropriate(wxString&)
-      // bool wxImageHandler::IsAppropriate(sxInputStream&&)
+      // bool wxImageHandler::CanRead(wxString&)
+      // bool wxImageHandler::CanRead(sxInputStream&&)
       // for png : see example.c
 	wxList &list=GetHandlers();
 	off_t pos=stream.TellI();
@@ -412,13 +448,14 @@ bool wxImage::LoadFile( wxInputStream& stream, long type )
 	 wxLogNull prevent_log;
 
 	for ( wxList::Node *node = list.GetFirst(); node; node = node->GetNext() )
-	{
-	    handler=(wxImageHandler*)node->GetData();
-	    //cout << handler->GetExtension() << endl;
+	{  
+ 	    handler=(wxImageHandler*)node->GetData();
 	    if (handler->LoadFile( this, stream, FALSE )) return TRUE;
+
 	    stream.SeekI(pos);
 	}
 
+	wxLogWarning( _T("No handler found for this image.") );
 	return FALSE;
     }
 
