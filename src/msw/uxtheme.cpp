@@ -39,10 +39,7 @@
 
 #include "wx/module.h"
 
-#include "wx/msw/wrapwin.h"
-
 #include "wx/msw/uxtheme.h"
-#include "wx/msw/private.h"
 
 // ============================================================================
 // wxUxThemeModule
@@ -111,6 +108,9 @@ wxUxThemeEngine* wxUxThemeEngine::Get()
 
 bool wxUxThemeEngine::Initialize()
 {
+    // we're prepared to handle the errors
+    wxLogNull noLog;
+
     if ( !m_dllUxTheme.Load(_T("uxtheme.dll")) )
         return false;
 
