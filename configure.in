@@ -2750,9 +2750,6 @@ if test "$wxUSE_THREADS" = "yes" ; then
   dnl defined, we do it by directly assigned
   dnl PTHREAD_MUTEX_RECURSIVE_MUTEX_INITIALIZER_NP to attr
 
-#ifdef HAVE_PTHREAD_MUTEXATTR_T
-#elif defined(HAVE_PTHREAD_RECURSIVE_MUTEX_INITIALIZER)
-
   AC_CACHE_CHECK([for pthread_mutexattr_t], wx_cv_type_pthread_mutexattr_t,
   [
     AC_TRY_COMPILE([#include <pthread.h>],
