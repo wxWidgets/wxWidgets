@@ -19,7 +19,7 @@
         <if cond="PLATFORM_WIN32=='1'">src/tiff/tif_win32.c</if>
     </set>
     
-    <lib id="wxtiff" template="anylib"
+    <lib id="wxtiff" template="3rdparty_lib"
          cond="wxUSE_LIBTIFF=='builtin' and BUILDING_LIB=='1'">
         <dirname>$(LIBDIRNAME)</dirname>
         <sources>

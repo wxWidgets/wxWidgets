@@ -128,6 +128,10 @@
         <threading>multi</threading>        
     </template>
 
+    <template id="3rdparty_lib" template="anylib">
+        <libname>$(id)$(WXDEBUGFLAG)</libname>
+    </template>
+
 
     <!-- =============================================================== -->
     <!--                         3rd party libs:                         -->

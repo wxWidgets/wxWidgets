@@ -17,7 +17,7 @@
         <if cond="wxUSE_ODBC=='builtin'">$(SRCDIR)/src/odbc</if>
     </set>
 
-    <lib id="wxodbc" template="anylib"
+    <lib id="wxodbc" template="3rdparty_lib"
          cond="wxUSE_ODBC=='builtin' and BUILDING_LIB=='1'">
         <dirname>$(LIBDIRNAME)</dirname>
         <sources>

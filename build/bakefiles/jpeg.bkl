@@ -14,7 +14,7 @@
         <if cond="wxUSE_LIBJPEG=='builtin'">$(SRCDIR)/src/jpeg</if>
     </set>
 
-    <lib id="wxjpeg" template="anylib"
+    <lib id="wxjpeg" template="3rdparty_lib"
          cond="wxUSE_LIBJPEG=='builtin' and BUILDING_LIB=='1'">
         <dirname>$(LIBDIRNAME)</dirname>
         <sources>
