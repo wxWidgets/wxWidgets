@@ -110,9 +110,7 @@ extern char** string_LIST_helper(PyObject* source);
 extern wxPoint* wxPoint_LIST_helper(PyObject* source);
 extern wxBitmap** wxBitmap_LIST_helper(PyObject* source);
 extern wxString* wxString_LIST_helper(PyObject* source);
-#ifdef __WXMSW__
 extern wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source);
-#endif
 
 
 static char* wxStringErrorMsg = "string type is required for parameter";
@@ -2509,7 +2507,149 @@ static PyObject *_wrap_wxLayoutConstraints_width_get(PyObject *self, PyObject *a
     return _resultobj;
 }
 
+#define new_wxAcceleratorEntry(_swigarg0,_swigarg1,_swigarg2) (new wxAcceleratorEntry(_swigarg0,_swigarg1,_swigarg2))
+static PyObject *_wrap_new_wxAcceleratorEntry(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxAcceleratorEntry * _result;
+    int  _arg0 = 0;
+    int  _arg1 = 0;
+    int  _arg2 = 0;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"|iii:new_wxAcceleratorEntry",&_arg0,&_arg1,&_arg2)) 
+        return NULL;
+    _result = (wxAcceleratorEntry *)new_wxAcceleratorEntry(_arg0,_arg1,_arg2);
+    SWIG_MakePtr(_ptemp, (char *) _result,"_wxAcceleratorEntry_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxAcceleratorEntry_Set(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->Set(_swigarg0,_swigarg1,_swigarg2))
+static PyObject *_wrap_wxAcceleratorEntry_Set(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxAcceleratorEntry * _arg0;
+    int  _arg1;
+    int  _arg2;
+    int  _arg3;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"siii:wxAcceleratorEntry_Set",&_argc0,&_arg1,&_arg2,&_arg3)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxAcceleratorEntry_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxAcceleratorEntry_Set. Expected _wxAcceleratorEntry_p.");
+        return NULL;
+        }
+    }
+    wxAcceleratorEntry_Set(_arg0,_arg1,_arg2,_arg3);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxAcceleratorEntry_GetFlags(_swigobj)  (_swigobj->GetFlags())
+static PyObject *_wrap_wxAcceleratorEntry_GetFlags(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    int  _result;
+    wxAcceleratorEntry * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxAcceleratorEntry_GetFlags",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxAcceleratorEntry_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxAcceleratorEntry_GetFlags. Expected _wxAcceleratorEntry_p.");
+        return NULL;
+        }
+    }
+    _result = (int )wxAcceleratorEntry_GetFlags(_arg0);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxAcceleratorEntry_GetKeyCode(_swigobj)  (_swigobj->GetKeyCode())
+static PyObject *_wrap_wxAcceleratorEntry_GetKeyCode(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    int  _result;
+    wxAcceleratorEntry * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxAcceleratorEntry_GetKeyCode",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxAcceleratorEntry_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxAcceleratorEntry_GetKeyCode. Expected _wxAcceleratorEntry_p.");
+        return NULL;
+        }
+    }
+    _result = (int )wxAcceleratorEntry_GetKeyCode(_arg0);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxAcceleratorEntry_GetCommand(_swigobj)  (_swigobj->GetCommand())
+static PyObject *_wrap_wxAcceleratorEntry_GetCommand(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    int  _result;
+    wxAcceleratorEntry * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxAcceleratorEntry_GetCommand",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxAcceleratorEntry_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxAcceleratorEntry_GetCommand. Expected _wxAcceleratorEntry_p.");
+        return NULL;
+        }
+    }
+    _result = (int )wxAcceleratorEntry_GetCommand(_arg0);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define new_wxAcceleratorTable(_swigarg0,_swigarg1) (new wxAcceleratorTable(_swigarg0,_swigarg1))
+static PyObject *_wrap_new_wxAcceleratorTable(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxAcceleratorTable * _result;
+    int  _arg0;
+    wxAcceleratorEntry * _arg1;
+    PyObject * _obj1 = 0;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"O:new_wxAcceleratorTable",&_obj1)) 
+        return NULL;
+    if (_obj1)
+{
+    _arg1 = wxAcceleratorEntry_LIST_helper(_obj1);
+    if (_arg1 == NULL) {
+        return NULL;
+    }
+}
+{
+    _arg0 = PyList_Size(_obj1);
+}
+    _result = (wxAcceleratorTable *)new_wxAcceleratorTable(_arg0,_arg1);
+    SWIG_MakePtr(_ptemp, (char *) _result,"_wxAcceleratorTable_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+{
+    delete [] _arg1;
+}
+    return _resultobj;
+}
+
 static PyMethodDef misccMethods[] = {
+	 { "new_wxAcceleratorTable", _wrap_new_wxAcceleratorTable, 1 },
+	 { "wxAcceleratorEntry_GetCommand", _wrap_wxAcceleratorEntry_GetCommand, 1 },
+	 { "wxAcceleratorEntry_GetKeyCode", _wrap_wxAcceleratorEntry_GetKeyCode, 1 },
+	 { "wxAcceleratorEntry_GetFlags", _wrap_wxAcceleratorEntry_GetFlags, 1 },
+	 { "wxAcceleratorEntry_Set", _wrap_wxAcceleratorEntry_Set, 1 },
+	 { "new_wxAcceleratorEntry", _wrap_new_wxAcceleratorEntry, 1 },
 	 { "wxLayoutConstraints_width_get", _wrap_wxLayoutConstraints_width_get, 1 },
 	 { "wxLayoutConstraints_top_get", _wrap_wxLayoutConstraints_top_get, 1 },
 	 { "wxLayoutConstraints_right_get", _wrap_wxLayoutConstraints_right_get, 1 },
@@ -2647,11 +2787,13 @@ SWIGEXPORT(void,initmiscc)() {
  * These are the pointer type-equivalency mappings. 
  * (Used by the SWIG pointer type-checker).
  */
+	 SWIG_RegisterMapping("_wxAcceleratorTable","_class_wxAcceleratorTable",0);
 	 SWIG_RegisterMapping("_signed_long","_long",0);
 	 SWIG_RegisterMapping("_wxIndividualLayoutConstraint","_class_wxIndividualLayoutConstraint",0);
 	 SWIG_RegisterMapping("_byte","_unsigned_char",0);
 	 SWIG_RegisterMapping("_long","_unsigned_long",0);
 	 SWIG_RegisterMapping("_long","_signed_long",0);
+	 SWIG_RegisterMapping("_class_wxAcceleratorTable","_wxAcceleratorTable",0);
 	 SWIG_RegisterMapping("_class_wxRealPoint","_wxRealPoint",0);
 	 SWIG_RegisterMapping("_uint","_unsigned_int",0);
 	 SWIG_RegisterMapping("_uint","_int",0);
@@ -2666,6 +2808,7 @@ SWIGEXPORT(void,initmiscc)() {
 	 SWIG_RegisterMapping("_unsigned_long","_long",0);
 	 SWIG_RegisterMapping("_class_wxRect","_wxRect",0);
 	 SWIG_RegisterMapping("_class_wxPyTimer","_wxPyTimer",0);
+	 SWIG_RegisterMapping("_wxAcceleratorEntry","_class_wxAcceleratorEntry",0);
 	 SWIG_RegisterMapping("_signed_int","_EBool",0);
 	 SWIG_RegisterMapping("_signed_int","_wxWindowID",0);
 	 SWIG_RegisterMapping("_signed_int","_int",0);
@@ -2679,6 +2822,7 @@ SWIGEXPORT(void,initmiscc)() {
 	 SWIG_RegisterMapping("_wxRealPoint","_class_wxRealPoint",0);
 	 SWIG_RegisterMapping("_signed_short","_WXTYPE",0);
 	 SWIG_RegisterMapping("_signed_short","_short",0);
+	 SWIG_RegisterMapping("_class_wxAcceleratorEntry","_wxAcceleratorEntry",0);
 	 SWIG_RegisterMapping("_unsigned_char","_byte",0);
 	 SWIG_RegisterMapping("_unsigned_int","_uint",0);
 	 SWIG_RegisterMapping("_unsigned_int","_wxWindowID",0);

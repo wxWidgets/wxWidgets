@@ -33,9 +33,8 @@
  * and things like that.
  *
  * $Log$
- * Revision 1.7  1998/11/11 04:40:51  RD
- * wxTreeCtrl now works (sort of) for wxPython-GTK.  This is the new
- * TreeCtrl in src/gtk/treectrl.cpp not the old generic one.
+ * Revision 1.8  1998/11/15 23:04:56  RD
+ * Removing some ifdef's for wxGTK
  *
  ************************************************************************/
 
@@ -613,9 +612,7 @@ extern char** string_LIST_helper(PyObject* source);
 extern wxPoint* wxPoint_LIST_helper(PyObject* source);
 extern wxBitmap** wxBitmap_LIST_helper(PyObject* source);
 extern wxString* wxString_LIST_helper(PyObject* source);
-#ifdef __WXMSW__
 extern wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source);
-#endif
 
 
 static char* wxStringErrorMsg = "string type is required for parameter";
@@ -1381,6 +1378,9 @@ SWIGEXPORT(void,initwxpc)() {
 	 PyDict_SetItemString(d,"wxSAVE", PyInt_FromLong((long) wxSAVE));
 	 PyDict_SetItemString(d,"wxHIDE_READONLY", PyInt_FromLong((long) wxHIDE_READONLY));
 	 PyDict_SetItemString(d,"wxOVERWRITE_PROMPT", PyInt_FromLong((long) wxOVERWRITE_PROMPT));
+	 PyDict_SetItemString(d,"wxACCEL_ALT", PyInt_FromLong((long) wxACCEL_ALT));
+	 PyDict_SetItemString(d,"wxACCEL_CTRL", PyInt_FromLong((long) wxACCEL_CTRL));
+	 PyDict_SetItemString(d,"wxACCEL_SHIFT", PyInt_FromLong((long) wxACCEL_SHIFT));
 	 PyDict_SetItemString(d,"ERR_PARAM", PyInt_FromLong((long) ERR_PARAM));
 	 PyDict_SetItemString(d,"ERR_NODATA", PyInt_FromLong((long) ERR_NODATA));
 	 PyDict_SetItemString(d,"ERR_CANCEL", PyInt_FromLong((long) ERR_CANCEL));
@@ -1703,6 +1703,7 @@ SWIGEXPORT(void,initwxpc)() {
  * These are the pointer type-equivalency mappings. 
  * (Used by the SWIG pointer type-checker).
  */
+	 SWIG_RegisterMapping("_wxAcceleratorTable","_class_wxAcceleratorTable",0);
 	 SWIG_RegisterMapping("_wxEvent","_class_wxEvent",0);
 	 SWIG_RegisterMapping("_class_wxActivateEvent","_wxActivateEvent",0);
 	 SWIG_RegisterMapping("_signed_long","_long",0);
@@ -1732,6 +1733,7 @@ SWIGEXPORT(void,initwxpc)() {
 	 SWIG_RegisterMapping("_long","_signed_long",0);
 	 SWIG_RegisterMapping("_wxDropFilesEvent","_class_wxDropFilesEvent",0);
 	 SWIG_RegisterMapping("_wxBitmapButton","_class_wxBitmapButton",0);
+	 SWIG_RegisterMapping("_class_wxAcceleratorTable","_wxAcceleratorTable",0);
 	 SWIG_RegisterMapping("_class_wxGauge","_wxGauge",0);
 	 SWIG_RegisterMapping("_wxDC","_class_wxDC",0);
 	 SWIG_RegisterMapping("_wxListEvent","_class_wxListEvent",0);
@@ -1801,6 +1803,7 @@ SWIGEXPORT(void,initwxpc)() {
 	 SWIG_RegisterMapping("_class_wxPyTimer","_wxPyTimer",0);
 	 SWIG_RegisterMapping("_wxFocusEvent","_class_wxFocusEvent",0);
 	 SWIG_RegisterMapping("_wxMaximizeEvent","_class_wxMaximizeEvent",0);
+	 SWIG_RegisterMapping("_wxAcceleratorEntry","_class_wxAcceleratorEntry",0);
 	 SWIG_RegisterMapping("_class_wxPanel","_wxPanel",0);
 	 SWIG_RegisterMapping("_class_wxCheckBox","_wxCheckBox",0);
 	 SWIG_RegisterMapping("_wxComboBox","_class_wxComboBox",0);
@@ -1846,6 +1849,7 @@ SWIGEXPORT(void,initwxpc)() {
 	 SWIG_RegisterMapping("_class_wxMaximizeEvent","_wxMaximizeEvent",0);
 	 SWIG_RegisterMapping("_wxStatusBar","_class_wxStatusBar",0);
 	 SWIG_RegisterMapping("_class_wxToolBarTool","_wxToolBarTool",0);
+	 SWIG_RegisterMapping("_class_wxAcceleratorEntry","_wxAcceleratorEntry",0);
 	 SWIG_RegisterMapping("_class_wxCursor","_wxCursor",0);
 	 SWIG_RegisterMapping("_wxPostScriptDC","_class_wxPostScriptDC",0);
 	 SWIG_RegisterMapping("_wxScrolledWindow","_class_wxScrolledWindow",0);

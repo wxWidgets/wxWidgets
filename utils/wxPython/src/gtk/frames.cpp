@@ -113,9 +113,7 @@ extern char** string_LIST_helper(PyObject* source);
 extern wxPoint* wxPoint_LIST_helper(PyObject* source);
 extern wxBitmap** wxBitmap_LIST_helper(PyObject* source);
 extern wxString* wxString_LIST_helper(PyObject* source);
-#ifdef __WXMSW__
 extern wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source);
-#endif
 
 
 static char* wxStringErrorMsg = "string type is required for parameter";
@@ -429,6 +427,35 @@ static PyObject *_wrap_wxFrame_Maximize(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
+#define wxFrame_SetAcceleratorTable(_swigobj,_swigarg0)  (_swigobj->SetAcceleratorTable(_swigarg0))
+static PyObject *_wrap_wxFrame_SetAcceleratorTable(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxFrame * _arg0;
+    wxAcceleratorTable * _arg1;
+    char * _argc0 = 0;
+    char * _argc1 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"ss:wxFrame_SetAcceleratorTable",&_argc0,&_argc1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxFrame_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFrame_SetAcceleratorTable. Expected _wxFrame_p.");
+        return NULL;
+        }
+    }
+    if (_argc1) {
+        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_wxAcceleratorTable_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxFrame_SetAcceleratorTable. Expected _wxAcceleratorTable_p.");
+        return NULL;
+        }
+    }
+    wxFrame_SetAcceleratorTable(_arg0,*_arg1);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxFrame_SetIcon(_swigobj,_swigarg0)  (_swigobj->SetIcon(_swigarg0))
 static PyObject *_wrap_wxFrame_SetIcon(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -659,6 +686,7 @@ static PyMethodDef framescMethods[] = {
 	 { "wxFrame_SetStatusBar", _wrap_wxFrame_SetStatusBar, 1 },
 	 { "wxFrame_SetMenuBar", _wrap_wxFrame_SetMenuBar, 1 },
 	 { "wxFrame_SetIcon", _wrap_wxFrame_SetIcon, 1 },
+	 { "wxFrame_SetAcceleratorTable", _wrap_wxFrame_SetAcceleratorTable, 1 },
 	 { "wxFrame_Maximize", _wrap_wxFrame_Maximize, 1 },
 	 { "wxFrame_IsIconized", _wrap_wxFrame_IsIconized, 1 },
 	 { "wxFrame_Iconize", _wrap_wxFrame_Iconize, 1 },
@@ -685,6 +713,7 @@ SWIGEXPORT(void,initframesc)() {
  * These are the pointer type-equivalency mappings. 
  * (Used by the SWIG pointer type-checker).
  */
+	 SWIG_RegisterMapping("_wxAcceleratorTable","_class_wxAcceleratorTable",0);
 	 SWIG_RegisterMapping("_wxEvent","_class_wxEvent",0);
 	 SWIG_RegisterMapping("_class_wxActivateEvent","_wxActivateEvent",0);
 	 SWIG_RegisterMapping("_signed_long","_long",0);
@@ -709,6 +738,7 @@ SWIGEXPORT(void,initframesc)() {
 	 SWIG_RegisterMapping("_long","_signed_long",0);
 	 SWIG_RegisterMapping("_wxDropFilesEvent","_class_wxDropFilesEvent",0);
 	 SWIG_RegisterMapping("_wxBitmapButton","_class_wxBitmapButton",0);
+	 SWIG_RegisterMapping("_class_wxAcceleratorTable","_wxAcceleratorTable",0);
 	 SWIG_RegisterMapping("_class_wxGauge","_wxGauge",0);
 	 SWIG_RegisterMapping("_wxDC","_class_wxDC",0);
 	 SWIG_RegisterMapping("_class_wxRealPoint","_wxRealPoint",0);
@@ -763,6 +793,7 @@ SWIGEXPORT(void,initframesc)() {
 	 SWIG_RegisterMapping("_class_wxPyTimer","_wxPyTimer",0);
 	 SWIG_RegisterMapping("_wxFocusEvent","_class_wxFocusEvent",0);
 	 SWIG_RegisterMapping("_wxMaximizeEvent","_class_wxMaximizeEvent",0);
+	 SWIG_RegisterMapping("_wxAcceleratorEntry","_class_wxAcceleratorEntry",0);
 	 SWIG_RegisterMapping("_class_wxPanel","_wxPanel",0);
 	 SWIG_RegisterMapping("_class_wxCheckBox","_wxCheckBox",0);
 	 SWIG_RegisterMapping("_wxComboBox","_class_wxComboBox",0);
@@ -802,6 +833,7 @@ SWIGEXPORT(void,initframesc)() {
 	 SWIG_RegisterMapping("_class_wxMaximizeEvent","_wxMaximizeEvent",0);
 	 SWIG_RegisterMapping("_wxStatusBar","_class_wxStatusBar",0);
 	 SWIG_RegisterMapping("_class_wxToolBarTool","_wxToolBarTool",0);
+	 SWIG_RegisterMapping("_class_wxAcceleratorEntry","_wxAcceleratorEntry",0);
 	 SWIG_RegisterMapping("_class_wxCursor","_wxCursor",0);
 	 SWIG_RegisterMapping("_wxPostScriptDC","_class_wxPostScriptDC",0);
 	 SWIG_RegisterMapping("_wxScrolledWindow","_class_wxScrolledWindow",0);

@@ -316,6 +316,9 @@ wxOPEN = wxpc.wxOPEN
 wxSAVE = wxpc.wxSAVE
 wxHIDE_READONLY = wxpc.wxHIDE_READONLY
 wxOVERWRITE_PROMPT = wxpc.wxOVERWRITE_PROMPT
+wxACCEL_ALT = wxpc.wxACCEL_ALT
+wxACCEL_CTRL = wxpc.wxACCEL_CTRL
+wxACCEL_SHIFT = wxpc.wxACCEL_SHIFT
 ERR_PARAM = wxpc.ERR_PARAM
 ERR_NODATA = wxpc.ERR_NODATA
 ERR_CANCEL = wxpc.ERR_CANCEL
@@ -1106,9 +1109,8 @@ class wxApp(wxPyApp):
 #----------------------------------------------------------------------------
 #
 # $Log$
-# Revision 1.7  1998/11/11 04:40:53  RD
-# wxTreeCtrl now works (sort of) for wxPython-GTK.  This is the new
-# TreeCtrl in src/gtk/treectrl.cpp not the old generic one.
+# Revision 1.8  1998/11/15 23:04:59  RD
+# Removing some ifdef's for wxGTK
 #
 # Revision 1.5  1998/10/20 07:38:02  RD
 # bug fix

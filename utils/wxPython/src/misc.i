@@ -282,7 +282,6 @@ public:
 //---------------------------------------------------------------------------
 // Accelerator Entry and Table
 
-#ifdef __WXMSW__
 class wxAcceleratorEntry {
 public:
     wxAcceleratorEntry(int flags = 0, int keyCode = 0, int cmd = 0);
@@ -302,11 +301,14 @@ public:
     // ~wxAcceleratorEntry(); *** ?
 
 };
-#endif
+
 //---------------------------------------------------------------------------
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.6  1998/11/15 23:03:46  RD
+// Removing some ifdef's for wxGTK
+//
 // Revision 1.5  1998/10/20 06:43:59  RD
 // New wxTreeCtrl wrappers (untested)
 // some changes in helpers

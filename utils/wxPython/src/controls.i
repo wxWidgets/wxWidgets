@@ -310,18 +310,14 @@ public:
     void DiscardEdits();
     long GetInsertionPoint();
     long GetLastPosition();
-#ifdef __WXMSW__
     int GetLineLength(long lineNo);
     wxString GetLineText(long lineNo);
     int GetNumberOfLines();
-#endif
     wxString GetValue();
     bool IsModified();
     bool LoadFile(const wxString& filename);
     void Paste();
-#ifdef __WXMSW__
     void PositionToXY(long pos, long *OUTPUT, long *OUTPUT);
-#endif
     void Remove(long from, long to);
     void Replace(long from, long to, const wxString& value);
     bool SaveFile(const wxString& filename);
@@ -332,9 +328,7 @@ public:
     void SetValue(const wxString& value);
     void ShowPosition(long pos);
     void WriteText(const wxString& text);
-#ifdef __WXMSW__
     long XYToPosition(long x, long y);
-#endif
 };
 
 //----------------------------------------------------------------------
@@ -491,6 +485,9 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.6  1998/11/15 23:03:43  RD
+// Removing some ifdef's for wxGTK
+//
 // Revision 1.5  1998/10/07 07:34:32  RD
 // Version 0.4.1 for wxGTK
 //

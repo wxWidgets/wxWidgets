@@ -431,6 +431,15 @@ class wxTextCtrlPtr(wxControlPtr):
     def GetLastPosition(self):
         val = controlsc.wxTextCtrl_GetLastPosition(self.this)
         return val
+    def GetLineLength(self,arg0):
+        val = controlsc.wxTextCtrl_GetLineLength(self.this,arg0)
+        return val
+    def GetLineText(self,arg0):
+        val = controlsc.wxTextCtrl_GetLineText(self.this,arg0)
+        return val
+    def GetNumberOfLines(self):
+        val = controlsc.wxTextCtrl_GetNumberOfLines(self.this)
+        return val
     def GetValue(self):
         val = controlsc.wxTextCtrl_GetValue(self.this)
         return val
@@ -442,6 +451,9 @@ class wxTextCtrlPtr(wxControlPtr):
         return val
     def Paste(self):
         val = controlsc.wxTextCtrl_Paste(self.this)
+        return val
+    def PositionToXY(self,arg0):
+        val = controlsc.wxTextCtrl_PositionToXY(self.this,arg0)
         return val
     def Remove(self,arg0,arg1):
         val = controlsc.wxTextCtrl_Remove(self.this,arg0,arg1)
@@ -472,6 +484,9 @@ class wxTextCtrlPtr(wxControlPtr):
         return val
     def WriteText(self,arg0):
         val = controlsc.wxTextCtrl_WriteText(self.this,arg0)
+        return val
+    def XYToPosition(self,arg0,arg1):
+        val = controlsc.wxTextCtrl_XYToPosition(self.this,arg0,arg1)
         return val
     def __repr__(self):
         return "<C wxTextCtrl instance>"

@@ -117,9 +117,7 @@ extern char** string_LIST_helper(PyObject* source);
 extern wxPoint* wxPoint_LIST_helper(PyObject* source);
 extern wxBitmap** wxBitmap_LIST_helper(PyObject* source);
 extern wxString* wxString_LIST_helper(PyObject* source);
-#ifdef __WXMSW__
 extern wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source);
-#endif
 
 
 static char* wxStringErrorMsg = "string type is required for parameter";
@@ -2794,6 +2792,76 @@ static PyObject *_wrap_wxTextCtrl_GetLastPosition(PyObject *self, PyObject *args
     return _resultobj;
 }
 
+#define wxTextCtrl_GetLineLength(_swigobj,_swigarg0)  (_swigobj->GetLineLength(_swigarg0))
+static PyObject *_wrap_wxTextCtrl_GetLineLength(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    int  _result;
+    wxTextCtrl * _arg0;
+    long  _arg1;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"sl:wxTextCtrl_GetLineLength",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_GetLineLength. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+    _result = (int )wxTextCtrl_GetLineLength(_arg0,_arg1);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxTextCtrl_GetLineText(_swigobj,_swigarg0)  (_swigobj->GetLineText(_swigarg0))
+static PyObject *_wrap_wxTextCtrl_GetLineText(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxTextCtrl * _arg0;
+    long  _arg1;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"sl:wxTextCtrl_GetLineText",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_GetLineText. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+    _result = new wxString (wxTextCtrl_GetLineText(_arg0,_arg1));
+{
+    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+#define wxTextCtrl_GetNumberOfLines(_swigobj)  (_swigobj->GetNumberOfLines())
+static PyObject *_wrap_wxTextCtrl_GetNumberOfLines(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    int  _result;
+    wxTextCtrl * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxTextCtrl_GetNumberOfLines",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_GetNumberOfLines. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+    _result = (int )wxTextCtrl_GetNumberOfLines(_arg0);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxTextCtrl_GetValue(_swigobj)  (_swigobj->GetValue())
 static PyObject *_wrap_wxTextCtrl_GetValue(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -2893,6 +2961,48 @@ static PyObject *_wrap_wxTextCtrl_Paste(PyObject *self, PyObject *args) {
     wxTextCtrl_Paste(_arg0);
     Py_INCREF(Py_None);
     _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxTextCtrl_PositionToXY(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->PositionToXY(_swigarg0,_swigarg1,_swigarg2))
+static PyObject *_wrap_wxTextCtrl_PositionToXY(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxTextCtrl * _arg0;
+    long  _arg1;
+    long * _arg2;
+    long  temp;
+    long * _arg3;
+    long  temp0;
+    char * _argc0 = 0;
+
+    self = self;
+{
+  _arg2 = &temp;
+}
+{
+  _arg3 = &temp0;
+}
+    if(!PyArg_ParseTuple(args,"sl:wxTextCtrl_PositionToXY",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_PositionToXY. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+    wxTextCtrl_PositionToXY(_arg0,_arg1,_arg2,_arg3);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg2));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg3));
+    _resultobj = t_output_helper(_resultobj, o);
+}
     return _resultobj;
 }
 
@@ -3166,6 +3276,29 @@ static PyObject *_wrap_wxTextCtrl_WriteText(PyObject *self, PyObject *args) {
     if (_obj1)
         delete _arg1;
 }
+    return _resultobj;
+}
+
+#define wxTextCtrl_XYToPosition(_swigobj,_swigarg0,_swigarg1)  (_swigobj->XYToPosition(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxTextCtrl_XYToPosition(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    long  _result;
+    wxTextCtrl * _arg0;
+    long  _arg1;
+    long  _arg2;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"sll:wxTextCtrl_XYToPosition",&_argc0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_XYToPosition. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+    _result = (long )wxTextCtrl_XYToPosition(_arg0,_arg1,_arg2);
+    _resultobj = Py_BuildValue("l",_result);
     return _resultobj;
 }
 
@@ -4655,6 +4788,7 @@ static PyMethodDef controlscMethods[] = {
 	 { "wxScrollBar_GetPageSize", _wrap_wxScrollBar_GetPageSize, 1 },
 	 { "wxScrollBar_GetRange", _wrap_wxScrollBar_GetRange, 1 },
 	 { "new_wxScrollBar", _wrap_new_wxScrollBar, 1 },
+	 { "wxTextCtrl_XYToPosition", _wrap_wxTextCtrl_XYToPosition, 1 },
 	 { "wxTextCtrl_WriteText", _wrap_wxTextCtrl_WriteText, 1 },
 	 { "wxTextCtrl_ShowPosition", _wrap_wxTextCtrl_ShowPosition, 1 },
 	 { "wxTextCtrl_SetValue", _wrap_wxTextCtrl_SetValue, 1 },
@@ -4665,10 +4799,14 @@ static PyMethodDef controlscMethods[] = {
 	 { "wxTextCtrl_SaveFile", _wrap_wxTextCtrl_SaveFile, 1 },
 	 { "wxTextCtrl_Replace", _wrap_wxTextCtrl_Replace, 1 },
 	 { "wxTextCtrl_Remove", _wrap_wxTextCtrl_Remove, 1 },
+	 { "wxTextCtrl_PositionToXY", _wrap_wxTextCtrl_PositionToXY, 1 },
 	 { "wxTextCtrl_Paste", _wrap_wxTextCtrl_Paste, 1 },
 	 { "wxTextCtrl_LoadFile", _wrap_wxTextCtrl_LoadFile, 1 },
 	 { "wxTextCtrl_IsModified", _wrap_wxTextCtrl_IsModified, 1 },
 	 { "wxTextCtrl_GetValue", _wrap_wxTextCtrl_GetValue, 1 },
+	 { "wxTextCtrl_GetNumberOfLines", _wrap_wxTextCtrl_GetNumberOfLines, 1 },
+	 { "wxTextCtrl_GetLineText", _wrap_wxTextCtrl_GetLineText, 1 },
+	 { "wxTextCtrl_GetLineLength", _wrap_wxTextCtrl_GetLineLength, 1 },
 	 { "wxTextCtrl_GetLastPosition", _wrap_wxTextCtrl_GetLastPosition, 1 },
 	 { "wxTextCtrl_GetInsertionPoint", _wrap_wxTextCtrl_GetInsertionPoint, 1 },
 	 { "wxTextCtrl_DiscardEdits", _wrap_wxTextCtrl_DiscardEdits, 1 },
@@ -4766,6 +4904,7 @@ SWIGEXPORT(void,initcontrolsc)() {
  * These are the pointer type-equivalency mappings. 
  * (Used by the SWIG pointer type-checker).
  */
+	 SWIG_RegisterMapping("_wxAcceleratorTable","_class_wxAcceleratorTable",0);
 	 SWIG_RegisterMapping("_wxEvent","_class_wxEvent",0);
 	 SWIG_RegisterMapping("_class_wxActivateEvent","_wxActivateEvent",0);
 	 SWIG_RegisterMapping("_signed_long","_long",0);
@@ -4820,6 +4959,7 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_long","_signed_long",0);
 	 SWIG_RegisterMapping("_wxDropFilesEvent","_class_wxDropFilesEvent",0);
 	 SWIG_RegisterMapping("_wxBitmapButton","_class_wxBitmapButton",0);
+	 SWIG_RegisterMapping("_class_wxAcceleratorTable","_wxAcceleratorTable",0);
 	 SWIG_RegisterMapping("_class_wxGauge","_wxGauge",0);
 	 SWIG_RegisterMapping("_wxDC","_class_wxDC",0);
 	 SWIG_RegisterMapping("_class_wxRealPoint","_wxRealPoint",0);
@@ -4872,6 +5012,7 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_class_wxPyTimer","_wxPyTimer",0);
 	 SWIG_RegisterMapping("_wxFocusEvent","_class_wxFocusEvent",0);
 	 SWIG_RegisterMapping("_wxMaximizeEvent","_class_wxMaximizeEvent",0);
+	 SWIG_RegisterMapping("_wxAcceleratorEntry","_class_wxAcceleratorEntry",0);
 	 SWIG_RegisterMapping("_class_wxPanel","_wxPanel",0);
 	 SWIG_RegisterMapping("_class_wxCheckBox","_wxCheckBox",0);
 	 SWIG_RegisterMapping("_wxComboBox","_class_wxComboBox",0);
@@ -4939,6 +5080,7 @@ SWIGEXPORT(void,initcontrolsc)() {
 	 SWIG_RegisterMapping("_wxPaintDC","_class_wxPaintDC",0);
 	 SWIG_RegisterMapping("_class_wxFocusEvent","_wxFocusEvent",0);
 	 SWIG_RegisterMapping("_class_wxMaximizeEvent","_wxMaximizeEvent",0);
+	 SWIG_RegisterMapping("_class_wxAcceleratorEntry","_wxAcceleratorEntry",0);
 	 SWIG_RegisterMapping("_class_wxCursor","_wxCursor",0);
 	 SWIG_RegisterMapping("_wxPostScriptDC","_class_wxPostScriptDC",0);
 	 SWIG_RegisterMapping("_wxScrolledWindow","_class_wxScrolledWindow",0);

@@ -533,7 +533,6 @@ wxString* wxString_LIST_helper(PyObject* source) {
 }
 
 
-#ifdef __WXMSW__
 wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source) {
     if (!PyList_Check(source)) {
         PyErr_SetString(PyExc_TypeError, "Expected a list object.");
@@ -573,83 +572,16 @@ wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source) {
     return temp;
 }
 
-#endif
-
 //----------------------------------------------------------------------
-// A WinMain for when wxWindows and Python are linked together in a single
-// application, instead of as a dynamic module
 
 
-//#if !defined(WIN_PYD) && defined(WIN32)
-
-//extern "C" int Py_Main(int argc, char** argv);
-
-//int APIENTRY WinMain(HANDLE hInstance, HANDLE hPrevInstance, LPSTR m_lpCmdLine,
-//                    int nCmdShow )
-//{
-
-//    wxpCreateApp();
-
-//        // Initialize wxWindows, but don't start the main loop
-//    wxEntry(hInstance, hPrevInstance, m_lpCmdLine, nCmdShow, FALSE);
-
-//    Py_Initialize();
-//    PyObject *argvList = PyList_New(0);
-
-//    char*   stderrfilename = "wxpstderr.log";
-//    int     pyargc = 1;
-//    char*   script = NULL;
-//    int     argc = wxPythonApp->argc;
-//    char**  argv = wxPythonApp->argv;
-
-//    for (int i = 1; i < argc; i++) {
-//        if (strncmp(argv[i], "wxpstderr=", 10) == 0)
-//            stderrfilename = argv[i]+10;
-//        else {
-//            PyList_Append(argvList, PyString_FromString(argv[i]));
-//            if (!script)
-//                script = argv[i];
-//            pyargc++;
-//        }
-//    }
-
-//    PySys_SetObject("argv", argvList);
-
-//#if 1
-//    char buf[256];
-////    //PyRun_SimpleString("import sys; sys.stdout=open('wxpstdout.log','w')");
-//    sprintf(buf, "import sys; sys.stdout=sys.stderr=open('%s','w')", stderrfilename);
-//    PyRun_SimpleString(buf);
-//#endif
-
-//    initwxPythonc();
-
-//    if (script) {
-//        FILE *fp = fopen(script, "r");
-//        if (fp) {
-//            PyRun_SimpleFile(fp, script);// This returns after wxpApp constructor
-//            fclose(fp);
-//        }
-//        else {
-//            char msg[256];
-//            sprintf(msg, "Cannot open %s", script);
-//            wxMessageBox(msg);
-//        }
-//    }
-//    else
-//        PyRun_SimpleString("import wxpide");
-
-//    return 0;
-//}
-
-
-//#endif
-
-//----------------------------------------------------------------------
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.13  1998/11/15 23:03:45  RD
+// Removing some ifdef's for wxGTK
+//
 // Revision 1.12  1998/11/03 09:21:08  RD
 // fixed a typo
 //

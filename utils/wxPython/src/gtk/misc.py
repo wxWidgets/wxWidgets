@@ -325,6 +325,46 @@ class wxLayoutConstraints(wxLayoutConstraintsPtr):
 
 
 
+class wxAcceleratorEntryPtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def Set(self,arg0,arg1,arg2):
+        val = miscc.wxAcceleratorEntry_Set(self.this,arg0,arg1,arg2)
+        return val
+    def GetFlags(self):
+        val = miscc.wxAcceleratorEntry_GetFlags(self.this)
+        return val
+    def GetKeyCode(self):
+        val = miscc.wxAcceleratorEntry_GetKeyCode(self.this)
+        return val
+    def GetCommand(self):
+        val = miscc.wxAcceleratorEntry_GetCommand(self.this)
+        return val
+    def __repr__(self):
+        return "<C wxAcceleratorEntry instance>"
+class wxAcceleratorEntry(wxAcceleratorEntryPtr):
+    def __init__(self,*args) :
+        self.this = apply(miscc.new_wxAcceleratorEntry,()+args)
+        self.thisown = 1
+
+
+
+
+class wxAcceleratorTablePtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __repr__(self):
+        return "<C wxAcceleratorTable instance>"
+class wxAcceleratorTable(wxAcceleratorTablePtr):
+    def __init__(self,arg0) :
+        self.this = miscc.new_wxAcceleratorTable(arg0.this)
+        self.thisown = 1
+
+
+
+
 
 
 #-------------- FUNCTION WRAPPERS ------------------

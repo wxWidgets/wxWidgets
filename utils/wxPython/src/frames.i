@@ -66,9 +66,7 @@ public:
     void Iconize(bool iconize);
     bool IsIconized();
     void Maximize(bool maximize);
-#ifdef __WXMSW__
     void SetAcceleratorTable(const wxAcceleratorTable& accel);
-#endif
     void SetIcon(const wxIcon& icon);
     void SetMenuBar(wxMenuBar* menuBar);
     void SetStatusBar(wxStatusBar *statusBar);

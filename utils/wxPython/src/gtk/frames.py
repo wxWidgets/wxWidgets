@@ -52,6 +52,9 @@ class wxFramePtr(wxWindowPtr):
     def Maximize(self,arg0):
         val = framesc.wxFrame_Maximize(self.this,arg0)
         return val
+    def SetAcceleratorTable(self,arg0):
+        val = framesc.wxFrame_SetAcceleratorTable(self.this,arg0.this)
+        return val
     def SetIcon(self,arg0):
         val = framesc.wxFrame_SetIcon(self.this,arg0.this)
         return val

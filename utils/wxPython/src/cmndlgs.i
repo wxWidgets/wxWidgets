@@ -203,7 +203,6 @@ public:
 
 //----------------------------------------------------------------------
 
-#ifdef __WXMSW__
 class wxPageSetupData {
 public:
     wxPageSetupData();
@@ -247,11 +246,9 @@ public:
     wxPageSetupData& GetPageSetupData();
     int ShowModal();
 };
-#endif
 
 //----------------------------------------------------------------------
 
-#ifdef __WXMSW__
 class wxPrintData {
 public:
     wxPrintData();
@@ -291,7 +288,6 @@ public:
     wxDC* GetPrintDC();
     int ShowModal();
 };
-#endif
 
 //----------------------------------------------------------------------
 
@@ -314,7 +310,11 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.5  1998/11/15 23:03:43  RD
+// Removing some ifdef's for wxGTK
+//
 // Revision 1.4  1998/10/02 06:40:34  RD
+//
 // Version 0.4 of wxPython for MSW.
 //
 // Revision 1.3  1998/08/18 19:48:13  RD

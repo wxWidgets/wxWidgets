@@ -330,11 +330,9 @@ enum {
     wxHIDE_READONLY,
     wxOVERWRITE_PROMPT,
 
-#ifdef __WXMSW__
     wxACCEL_ALT,
     wxACCEL_CTRL,
     wxACCEL_SHIFT,
-#endif
 
 };
 
@@ -701,7 +699,11 @@ enum wxEventType {
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.8  1998/11/15 23:03:42  RD
+// Removing some ifdef's for wxGTK
+//
 // Revision 1.7  1998/11/11 03:12:24  RD
+//
 // Additions for wxTreeCtrl
 //
 // Revision 1.6  1998/10/20 06:43:53  RD
