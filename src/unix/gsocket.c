@@ -11,8 +11,9 @@
 #if wxUSE_SOCKETS
 
 #include <assert.h>
-#include <sys/ioctl.h>
 #include <sys/types.h>
+#include <netdb.h>
+#include <sys/ioctl.h>
 #ifdef vms
 #include <socket.h>
 #else
@@ -22,7 +23,6 @@
 #include <sys/time.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include <netdb.h>
 #include <errno.h>
 
 #include <string.h>
