@@ -57,7 +57,7 @@ regerror(int errcode,		/* error code, or REG_ATOI or REG_ITOA */
 			const regex_t *preg,	/* associated regex_t (unused at present) */
 			char *errbuf,		/* result buffer (unless errbuf_size==0) */
 			size_t errbuf_size) /* available space in errbuf, can be 0 */
-            { return regerror(errcode, preg, errbuf, errbuf_size); }
+            { return wx_regerror(errcode, preg, errbuf, errbuf_size); }
 /*
  * pg_regerror - the interface to error numbers
  */
