@@ -875,7 +875,7 @@ typedef enum {
 // menu and toolbar item kinds
 enum wxItemKind
 {
-    wxITEM_SEPARATOR = -1,
+    wxITEM_SEPARATOR,
     wxITEM_NORMAL,
     wxITEM_CHECK,
     wxITEM_RADIO,
