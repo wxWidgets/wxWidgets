@@ -1220,6 +1220,10 @@ bool wxYield()
     while ( PeekMessage(&msg, (HWND)0, 0, 0, PM_NOREMOVE) &&
             msg.message != WM_QUIT )
     {
+#if wxUSE_THREADS
+        wxMutexGuiLeaveOrEnter();
+#endif // wxUSE_THREADS
+
         if ( !wxTheApp->DoMessage() )
             break;
     }
