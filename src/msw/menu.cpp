@@ -51,7 +51,7 @@
 #include <ole2.h>
 #include <shellapi.h>
 #include <commctrl.h>
-#if _WIN32_WCE < 400
+#if (_WIN32_WCE < 400) && !defined(__HANDHELDPC__)
 #include <aygshell.h>
 #endif
 
@@ -763,7 +763,8 @@ WXHMENU wxMenuBar::Create()
     // since you have to use resources.
     // We'll have to find another way to add a menu
     // by changing/adding menu items to an existing menu.
-#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || defined(__POCKETPC__) || defined(__SMARTPHONE__))
+#if defined(__WXWINCE__) && !defined(__HANDHELDPC__) \
+  (_WIN32_WCE < 400 || defined(__POCKETPC__) || defined(__SMARTPHONE__))
     if ( m_hMenu != 0 )
         return m_hMenu;
 

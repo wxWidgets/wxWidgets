@@ -45,7 +45,7 @@
 
 #include "wx/msw/private.h"
 
-#if defined(__WXWINCE__)
+#if defined(__WXWINCE__) && !defined(__HANDHELDPC__)
   #include <ole2.h>
   #include <shellapi.h>
   #if _WIN32_WCE < 400
@@ -1720,7 +1720,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 event.m_col = nmHDR->iItem;
                 break;
 
-#if defined(__WXWINCE__) && _WIN32_WCE < 400
+#if defined(__WXWINCE__) && !defined(__HANDHELDPC__) && _WIN32_WCE < 400
             case GN_CONTEXTMENU:
 #endif //__WXWINCE__
             case NM_RCLICK:
@@ -1734,7 +1734,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
                     // where did the click occur?
                     POINT ptClick;
-#if defined(__WXWINCE__) && _WIN32_WCE < 400
+#if defined(__WXWINCE__) && !defined(__HANDHELDPC__) && _WIN32_WCE < 400
                   if(nmhdr->code == GN_CONTEXTMENU) {
                       ptClick = ((NMRGINFO*)nmhdr)->ptAction;
                   } else 
@@ -2054,7 +2054,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 event.m_item.m_data = GetItemData(iItem);
                 break;
 
-#if defined(__WXWINCE__) && _WIN32_WCE < 400
+#if defined(__WXWINCE__) && !defined(__HANDHELDPC__) && _WIN32_WCE < 400
             case GN_CONTEXTMENU:
 #endif //__WXWINCE__
             case NM_RCLICK:
@@ -2069,7 +2069,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 LV_HITTESTINFO lvhti;
                 wxZeroMemory(lvhti);
 
-#if defined(__WXWINCE__) && _WIN32_WCE < 400
+#if defined(__WXWINCE__) && !defined(__HANDHELDPC__) && _WIN32_WCE < 400
               if(nmhdr->code == GN_CONTEXTMENU) {
                   lvhti.pt = ((NMRGINFO*)nmhdr)->ptAction;
               } else 

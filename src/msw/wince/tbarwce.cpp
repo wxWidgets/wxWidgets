@@ -56,7 +56,7 @@
 #include <ole2.h>
 #include <shellapi.h>
 #include <commctrl.h>
-#if _WIN32_WCE < 400 || defined(__POCKETPC__) || defined(__SMARTPHONE__)
+#if !defined(__HANDHELDPC__) && ((_WIN32_WCE < 400) || defined(__POCKETPC__) || defined(__SMARTPHONE__))
   #include <aygshell.h>
 #endif
 #include "wx/msw/wince/missing.h"
@@ -249,7 +249,7 @@ bool wxToolBar::MSWCreateToolbar(const wxPoint& pos, const wxSize& size, wxMenuB
     if (m_menuBar)
         m_menuBar->SetToolBar(this);
 
-#if _WIN32_WCE < 400 || defined(__POCKETPC__) || defined(__SMARTPHONE__)
+#if !defined(__HANDHELDPC__) && (_WIN32_WCE < 400 || defined(__POCKETPC__) || defined(__SMARTPHONE__))
     // Create the menubar.
     SHMENUBARINFO mbi;
     
@@ -368,12 +368,17 @@ wxSize wxToolBar::DoGetBestSize() const
 // Return HMENU for the menu associated with the commandbar
 WXHMENU wxToolBar::GetHMenu()
 {
+#if defined(__HANDHELDPC__)
+    // TODO ???
+    return 0;
+#else
     if (GetHWND())
     {
         return (WXHMENU) (HMENU)::SendMessage((HWND) GetHWND(), SHCMBM_GETMENU, (WPARAM)0, (LPARAM)0);
     }
     else
         return 0;
+#endif
 }
 
 
