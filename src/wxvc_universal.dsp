@@ -1091,7 +1091,7 @@ SOURCE=.\msw\ole\uuid.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\include\wx\msw\setup.h
+SOURCE=..\include\wx\univ\setup.h
 # End Source File
 # End Group
 # Begin Group "Univ Files"

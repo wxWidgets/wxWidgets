@@ -372,6 +372,10 @@ SOURCE=.\common\mstream.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\nbkbase.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\object.cpp
 # End Source File
 # Begin Source File
