@@ -1,13 +1,13 @@
-/* /////////////////////////////////////////////////////////////////////////// */
-/*  Name:        wx/wxchar.h */
-/*  Purpose:     Declarations common to wx char/wchar_t usage (wide chars) */
-/*  Author:      Joel Farley, Ove Kåven */
-/*  Modified by: Vadim Zeitlin, Robert Roebling */
-/*  Created:     1998/06/12 */
-/*  RCS-ID:      $Id$ */
-/*  Copyright:   (c) 1998-2002 wxWindows dev team */
-/*  Licence:     wxWindows licence */
-/* /////////////////////////////////////////////////////////////////////////// */
+/**
+*  Name:        wx/wxchar.h 
+*  Purpose:     Declarations common to wx char/wchar_t usage (wide chars) 
+*  Author:      Joel Farley, Ove Kåven 
+*  Modified by: Vadim Zeitlin, Robert Roebling 
+*  Created:     1998/06/12 
+*  RCS-ID:      $Id$ 
+*  Copyright:   (c) 1998-2002 wxWindows dev team 
+*  Licence:     wxWindows licence 
+*/
 
 /* THIS IS A C FILE, DON'T USE C++ FEATURES (IN PARTICULAR COMMENTS) IN IT */
 
@@ -651,14 +651,13 @@
     #endif
 #endif /*  wxUSE_WCHAR_T */
 
-        /*  checks whether the passed in pointer is NULL and if the string is empty */
 #ifdef __cplusplus
+/*  checks whether the passed in pointer is NULL and if the string is empty */
 inline bool wxIsEmpty(const wxChar *p) { return !p || !*p; }
 
 /*  safe version of strlen() (returns 0 if passed NULL pointer) */
 inline size_t wxStrlen(const wxChar *psz) { return psz ? wxStrlen_(psz) : 0; }
 #endif
-
 
 /*  each of strdup() and wcsdup() may or may not be available but we need both */
 /*  of them anyhow for wx/buffer.h so we define the missing one(s) in */
