@@ -29,7 +29,6 @@
 #endif
 
 #ifndef WX_PRECOMP
-    #include "wx/list.h"
     #include "wx/utils.h"
     #include "wx/app.h"
     #include "wx/bitmap.h"
@@ -38,20 +37,9 @@
     #include "wx/settings.h"
 #endif
 
-#include "wx/ptr_scpd.h"
-
 #include "wx/module.h"
 #include "wx/image.h"
 #include "wx/msw/private.h"
-
-#ifndef __WXMICROWIN__
-    #include "wx/msw/dib.h"
-#endif
-
-#if wxUSE_RESOURCE_LOADING_IN_MSW
-    #include "wx/msw/curico.h"
-    #include "wx/msw/curicop.h"
-#endif
 
 // define functions missing in MicroWin
 #ifdef __WXMICROWIN__
@@ -123,13 +111,6 @@ public:
     }
 };
 
-// ----------------------------------------------------------------------------
-// other types
-// ----------------------------------------------------------------------------
-
-wxDECLARE_SCOPED_ARRAY(unsigned char, ByteArray);
-wxDEFINE_SCOPED_ARRAY(unsigned char, ByteArray);
-
 // ============================================================================
 // implementation
 // ============================================================================
@@ -195,96 +176,26 @@ wxCursor::wxCursor(const wxImage& image)
     const int w = wxCursorRefData::GetStandardWidth();
     const int h = wxCursorRefData::GetStandardHeight();
 
-    wxImage image32 = image.Scale(w, h);
+    const int hotSpotX = image.GetOptionInt(wxCUR_HOTSPOT_X);
+    const int hotSpotY = image.GetOptionInt(wxCUR_HOTSPOT_Y);
 
-    const int imagebitcount = (w*h)/8;
+    wxASSERT_MSG( hotSpotX >= 0 && hotSpotX < w &&
+                    hotSpotY >= 0 && hotSpotY < h,
+                  _T("invalid cursor hot spot coordinates") );
 
-    ByteArray bits(new unsigned char [imagebitcount]),
-              maskBits(new unsigned char [imagebitcount]);
-
-    int i, j, i8;
-    unsigned char c, cMask;
-
-    const unsigned char * const rgbBits = image32.GetData();
-
-    // first create the XOR mask
-    for ( i = 0; i < imagebitcount; i++ )
-    {
-        bits[i] = 0;
-        i8 = i * 8;
-        // unlike gtk, the pixels go in the opposite order in the bytes
-        cMask = 128;
-        for ( j = 0; j < 8; j++ )
-        {
-            // possible overflow if we do the summation first ?
-            c = rgbBits[(i8+j)*3]/3 +
-                rgbBits[(i8+j)*3+1]/3 +
-                rgbBits[(i8+j)*3+2]/3;
-
-            // if average value is > mid grey
-            if ( c > 127 )
-                bits[i] = bits[i] | cMask;
-            cMask = cMask / 2;
-        }
-    }
-
-    // now the AND one
-    if ( image32.HasMask() )
-    {
-        unsigned char r = image32.GetMaskRed(),
-                      g = image32.GetMaskGreen(),
-                      b = image32.GetMaskBlue();
-
-        for ( i = 0; i < imagebitcount; i++ )
-        {
-            maskBits[i] = 0x0;
-            i8 = i * 8;
-
-            cMask = 128;
-            for ( j = 0; j < 8; j++ )
-            {
-                if ( rgbBits[(i8+j)*3] == r &&
-                        rgbBits[(i8+j)*3+1] == g &&
-                            rgbBits[(i8+j)*3+2] == b )
-                {
-                    maskBits[i] = maskBits[i] | cMask;
-                }
-
-                cMask = cMask / 2;
-            }
-        }
-    }
-    else // no mask in the image
-    {
-        memset(maskBits.get(), 0, sizeof(unsigned char)*imagebitcount);
-    }
-
-    // determine where should the cursors hot spot be
-    int hotSpotX = image32.GetOptionInt(wxCUR_HOTSPOT_X);
-    int hotSpotY = image32.GetOptionInt(wxCUR_HOTSPOT_Y);
-    if (hotSpotX < 0 || hotSpotX >= w)
-        hotSpotX = 0;
-    if (hotSpotY < 0 || hotSpotY >= h)
-        hotSpotY = 0;
-
-    // do create cursor now
-    HCURSOR hcursor = ::CreateCursor
-                        (
-                            wxGetInstance(),
-                            hotSpotX, hotSpotY,
-                            w, h,
-                            /* AND */ maskBits.get(),
-                            /* XOR */ bits.get()
-                        );
-
+    HCURSOR hcursor = wxBitmapToHCURSOR
+                      (
+                        wxBitmap(image.Scale(w, h)),
+                        hotSpotX,
+                        hotSpotY
+                      );
     if ( !hcursor )
     {
-        wxLogLastError(_T("CreateCursor"));
+        wxLogWarning(_("Failed to create cursor."));
+        return;
     }
-    else
-    {
-        m_refData = new wxCursorRefData(hcursor, true /* delete it */);
-    }
+
+    m_refData = new wxCursorRefData(hcursor, true /* delete it later */);
 }
 
 wxCursor::wxCursor(const char WXUNUSED(bits)[],
@@ -327,36 +238,23 @@ wxCursor::wxCursor(const wxString& filename,
             hcursor = ::LoadCursorFromFile(filename);
             break;
 
-#if wxUSE_RESOURCE_LOADING_IN_MSW
         case wxBITMAP_TYPE_ICO:
-            hcursor = IconToCursor((wxChar *)filename.c_str(),
-                                   wxGetInstance(),
-                                   hotSpotX, hotSpotY,
-                                   NULL, NULL);
+            hcursor = wxBitmapToHCURSOR
+                      (
+                       wxIcon(filename, wxBITMAP_TYPE_ICO),
+                       hotSpotX,
+                       hotSpotY
+                      );
             break;
 
         case wxBITMAP_TYPE_BMP:
-            {
-                HBITMAP hBitmap = 0;
-                HPALETTE hPalette = 0;
-                if ( wxReadDIB((wxChar *)filename.c_str(), &hBitmap, &hPalette) )
-                {
-                    if (hPalette)
-                        DeleteObject(hPalette);
-
-                    POINT pt;
-                    pt.x = hotSpotX;
-                    pt.y = hotSpotY;
-                    hcursor = MakeCursorFromBitmap(wxGetInstance(), hBitmap, &pt);
-                    DeleteObject(hBitmap);
-                }
-                else
-                {
-                    hcursor = NULL;
-                }
-            }
+            hcursor = wxBitmapToHCURSOR
+                      (
+                       wxBitmap(filename, wxBITMAP_TYPE_BMP),
+                       hotSpotX,
+                       hotSpotY
+                      );
             break;
-#endif // wxUSE_RESOURCE_LOADING_IN_MSW
 
         default:
             wxFAIL_MSG( _T("unknown cursor resource type") );
