@@ -3,4 +3,6 @@
 
 import wx.lib.stattext
 
+__doc__ =  wx.lib.stattext.__doc__
+
 wxGenStaticText = wx.lib.stattext.GenStaticText
