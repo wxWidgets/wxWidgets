@@ -86,10 +86,10 @@ static const struct
 } g_strEmpty = { {-1, 0, 0}, wxT('\0') };
 
 #if defined(__VISAGECPP__) && __IBMCPP__ >= 400
-// must define this static for VA or else you get multiply defined symbols everywhere
+// must define this static for VA or else you get multiply defined symbols
+// everywhere
 const unsigned int wxSTRING_MAXLEN = UINT_MAX - 100;
-
-#endif
+#endif // Visual Age
 
 // empty C style string: points to 'string data' byte of g_strEmpty
 extern const wxChar WXDLLEXPORT *wxEmptyString = &g_strEmpty.dummy;
@@ -1870,8 +1870,14 @@ void wxArrayString::Copy(const wxArrayString& src)
 void wxArrayString::Grow()
 {
   // only do it if no more place
-  if( m_nCount == m_nSize ) {
-    if( m_nSize == 0 ) {
+  if ( m_nCount == m_nSize ) {
+    // if ARRAY_DEFAULT_INITIAL_SIZE were set to 0, the initially empty would
+    // be never resized!
+    #if ARRAY_DEFAULT_INITIAL_SIZE == 0
+      #error "ARRAY_DEFAULT_INITIAL_SIZE must be > 0!"
+    #endif
+
+    if ( m_nSize == 0 ) {
       // was empty, alloc some memory
       m_nSize = ARRAY_DEFAULT_INITIAL_SIZE;
       m_pItems = new wxChar *[m_nSize];

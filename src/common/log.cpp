@@ -705,8 +705,14 @@ const wxChar *wxSysErrorMsg(unsigned long nErrCode)
 
 #ifdef  __WXDEBUG__
 
+// wxASSERT() helper
+bool wxAssertIsEqual(int x, int y)
+{
+    return x == y;
+}
+
 // break into the debugger
-void Trap()
+void wxTrap()
 {
 #ifdef __WXMSW__
     DebugBreak();
@@ -732,7 +738,7 @@ void wxOnAssert(const wxChar *szFile, int nLine, const wxChar *szMsg)
 
     if ( s_bInAssert ) {
         // He-e-e-e-elp!! we're trapped in endless loop
-        Trap();
+        wxTrap();
 
         s_bInAssert = FALSE;
 
@@ -777,7 +783,7 @@ void wxOnAssert(const wxChar *szFile, int nLine, const wxChar *szMsg)
         switch ( ::MessageBox(NULL, szBuf, _T("Debug"),
                               MB_YESNOCANCEL | MB_ICONSTOP ) ) {
             case IDYES:
-                Trap();
+                wxTrap();
                 break;
 
             case IDCANCEL:
@@ -790,7 +796,7 @@ void wxOnAssert(const wxChar *szFile, int nLine, const wxChar *szMsg)
         switch ( wxMessageBox(szBuf, wxT("Debug"),
                               wxYES_NO | wxCANCEL | wxICON_STOP ) ) {
             case wxYES:
-                Trap();
+                wxTrap();
                 break;
 
             case wxCANCEL:
@@ -802,7 +808,7 @@ void wxOnAssert(const wxChar *szFile, int nLine, const wxChar *szMsg)
 #endif // GUI or MSW
 
 #else // !GUI
-        Trap();
+        wxTrap();
 #endif // GUI/!GUI
     }
 
