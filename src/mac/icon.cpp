@@ -84,7 +84,7 @@ bool  wxICONResourceHandler::LoadFile(wxBitmap *bitmap, const wxString& name, lo
           int desiredWidth, int desiredHeight)
 {
 	short theId = -1 ;
-    if ( name == "wxICON_INFO" )
+    if ( name == "wxICON_INFORMATION" )
     {
         theId = kNoteIcon ;
     }

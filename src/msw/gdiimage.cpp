@@ -539,7 +539,7 @@ bool wxICOResourceHandler::LoadIcon(wxIcon *icon,
             { wxT("wxICON_QUESTION"),   IDI_QUESTION    },
             { wxT("wxICON_WARNING"),    IDI_EXCLAMATION },
             { wxT("wxICON_ERROR"),      IDI_HAND        },
-            { wxT("wxICON_INFO"),       IDI_ASTERISK    },
+            { wxT("wxICON_INFORMATION"),       IDI_ASTERISK    },
         };
 
         for ( size_t nIcon = 0; !hicon && nIcon < WXSIZEOF(stdIcons); nIcon++ )
