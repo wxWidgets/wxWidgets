@@ -15,6 +15,7 @@
 
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
+#include "wx/module.h"
 
 #ifdef __BORLANDC__
   #pragma hdrstop
@@ -339,6 +340,29 @@ static wxMimeTypesManager gs_mimeTypesManager;
 
 // and public pointer
 wxMimeTypesManager * wxTheMimeTypesManager = &gs_mimeTypesManager;
+
+
+
+
+
+class wxMimeTypeCmnModule: public wxModule
+{
+DECLARE_DYNAMIC_CLASS(wxMimeTypeCmnModule)
+public:
+    wxMimeTypeCmnModule() : wxModule() {}
+    bool OnInit() { return TRUE; }
+    void OnExit() 
+    {   // this avoids false memory leak allerts:
+        if (gs_mimeTypesManager.m_impl != NULL)
+	{
+	    delete gs_mimeTypesManager.m_impl;
+	    gs_mimeTypesManager.m_impl = NULL;
+	}
+    }
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxMimeTypeCmnModule, wxModule)
+
 
 
 #endif

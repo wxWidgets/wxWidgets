@@ -419,6 +419,8 @@ void wxHtmlWindow::HistoryClear()
 
 wxList wxHtmlWindow::m_Filters;
 wxHtmlFilter *wxHtmlWindow::m_DefaultFilter = NULL;
+wxCursor *wxHtmlWindow::s_cur_hand = NULL;
+wxCursor *wxHtmlWindow::s_cur_arrow = NULL;
 
 void wxHtmlWindow::CleanUpStatics()
 {
@@ -426,7 +428,8 @@ void wxHtmlWindow::CleanUpStatics()
     m_DefaultFilter = NULL;
     m_Filters.DeleteContents(TRUE);
     m_Filters.Clear();
-
+    if (s_cur_hand) delete s_cur_hand;
+    if (s_cur_arrow) delete s_cur_arrow;
 }
 
 
@@ -504,7 +507,11 @@ void wxHtmlWindow::OnMouseEvent(wxMouseEvent& event)
 
 void wxHtmlWindow::OnIdle(wxIdleEvent& event)
 {
-    static wxCursor cur_hand(wxCURSOR_HAND), cur_arrow(wxCURSOR_ARROW);
+    if (s_cur_hand == NULL) 
+    {
+        s_cur_hand = new wxCursor(wxCURSOR_HAND);
+        s_cur_arrow = new wxCursor(wxCURSOR_ARROW);
+    }
 
     if (m_tmpMouseMoved && (m_Cell != NULL)) {
         int sx, sy;
@@ -518,11 +525,11 @@ void wxHtmlWindow::OnIdle(wxIdleEvent& event)
 
         if (lnk != m_tmpLastLink) {
             if (lnk == NULL) {
-                SetCursor(cur_arrow);
+                SetCursor(*s_cur_arrow);
                 if (m_RelatedStatusBar != -1) m_RelatedFrame -> SetStatusText(wxEmptyString, m_RelatedStatusBar);
             }
             else {
-                SetCursor(cur_hand);
+                SetCursor(*s_cur_hand);
                 if (m_RelatedStatusBar != -1) 
                     m_RelatedFrame -> SetStatusText(lnk -> GetHref(), m_RelatedStatusBar);
             }

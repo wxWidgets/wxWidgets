@@ -30,6 +30,8 @@ class wxMimeTypesManagerImpl;
 #include "wx/string.h"
 #include "wx/dynarray.h"
 
+class wxMimeTypeCmnModule;
+
 // This class holds information about a given "file type". File type is the
 // same as MIME type under Unix, but under Windows it corresponds more to an
 // extension than to MIME type (in fact, several extensions may correspond to a
@@ -228,6 +230,8 @@ private:
     
     // if m_impl is NULL, create one
     void EnsureImpl();
+    
+    friend class wxMimeTypeCmnModule;
 };
 
 

@@ -59,11 +59,13 @@ class WXDLLEXPORT HtmlHistoryItem : public wxObject
 
 WX_DECLARE_EXPORTED_OBJARRAY(HtmlHistoryItem, HtmlHistoryArray);
 
-
+class wxHtmlWinModule;
 
 class WXDLLEXPORT wxHtmlWindow : public wxScrolledWindow
 {
     DECLARE_DYNAMIC_CLASS(wxHtmlWindow)
+    
+    friend class wxHtmlWinModule;
 
     public:
         wxHtmlWindow() : wxScrolledWindow() {};
@@ -141,9 +143,6 @@ class WXDLLEXPORT wxHtmlWindow : public wxScrolledWindow
                 // called when users clicked on hypertext link. Default behavior is to
                 // call LoadPage(loc)
 
-        static void CleanUpStatics();
-	        // cleans static variables
-
         wxHtmlWinParser *GetParser() const { return m_Parser; }
                 // return a pointer to the parser.
 
@@ -165,6 +164,9 @@ class WXDLLEXPORT wxHtmlWindow : public wxScrolledWindow
 
         virtual wxHtmlFilter *GetDefaultFilter() {return new wxHtmlFilterPlainText;}
 	        // returns new filter (will be stored into m_DefaultFilter variable)
+
+        static void CleanUpStatics();
+	        // cleans static variables
 
 
     protected:
@@ -204,12 +206,15 @@ class WXDLLEXPORT wxHtmlWindow : public wxScrolledWindow
                 // contains last link name
         int m_tmpCanDrawLocks;
                 // if >0 contents of the window is not redrawn
-                // (in order to avoid ugly bliking)
+                // (in order to avoid ugly blinking)
 
         static wxList m_Filters;
                 // list of HTML filters
         static wxHtmlFilter *m_DefaultFilter;
                 // this filter is used when no filter is able to read some file
+
+        static wxCursor *s_cur_hand;
+        static wxCursor *s_cur_arrow;
 
         HtmlHistoryArray m_History;
         int m_HistoryPos;
