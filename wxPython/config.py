@@ -101,6 +101,11 @@ SWIG = "swig"      # The swig executable to use.
 
 BUILD_RENAMERS = 1 # Should we build the renamer modules too?
 
+FULL_DOCS = 0      # Some docstrings are split into a basic docstring and a
+                   # details string.  Setting this flag to 1 will
+                   # cause the two strings to be combined and output
+                   # as the full docstring.
+
 UNICODE = 0        # This will pass the 'wxUSE_UNICODE' flag to SWIG and
                    # will ensure that the right headers are found and the
                    # right libs are linked.
@@ -211,6 +216,7 @@ for flag in ['BUILD_GLCANVAS', 'BUILD_OGL', 'BUILD_STC', 'BUILD_XRC',
              'BUILD_GIZMOS', 'BUILD_DLLWIDGET', 'BUILD_IEWIN', 'BUILD_ACTIVEX',
              'CORE_ONLY', 'PREP_ONLY', 'USE_SWIG', 'UNICODE',
              'UNDEF_NDEBUG', 'NO_SCRIPTS', 'NO_HEADERS', 'BUILD_RENAMERS',
+             'FULL_DOCS', 
              'FINAL', 'HYBRID', ]:
     for x in range(len(sys.argv)):
         if sys.argv[x].find(flag) == 0:
@@ -740,6 +746,10 @@ swig_args = ['-c++',
              ]
 if UNICODE:
     swig_args.append('-DwxUSE_UNICODE')
+
+if FULL_DOCS:
+    swig_args.append('-D_DO_FULL_DOCS')
+    
 
 swig_deps = [ 'src/my_typemaps.i',
               'src/common.swg',

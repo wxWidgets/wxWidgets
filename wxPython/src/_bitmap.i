@@ -49,7 +49,7 @@ bitmap.  It can be either monochrome or colour, and either loaded from
 a file or created dynamically.  A bitmap can be selected into a memory
 device context (instance of `wx.MemoryDC`). This enables the bitmap to
 be copied to a window or memory device context using `wx.DC.Blit`, or
-to be used as a drawing surface.
+to be used as a drawing surface.", "
 
 The BMP and XMP image file formats are supported on all platforms by
 wx.Bitmap.  Other formats are automatically loaded by `wx.Image` and
@@ -70,12 +70,12 @@ class wxBitmap : public wxGDIObject
 public:
     DocCtorStr(
         wxBitmap(const wxString& name, wxBitmapType type=wxBITMAP_TYPE_ANY),
-        "Loads a bitmap from a file.
-
-:param name:  Name of the file to load the bitmap from.
-:param type: The type of image to expect.  Can be one of the following
-    constants (assuming that the neccessary `wx.Image` handlers are
-    loaded):
+        "Loads a bitmap from a file.",
+        "
+    :param name:  Name of the file to load the bitmap from.
+    :param type: The type of image to expect.  Can be one of the following
+        constants (assuming that the neccessary `wx.Image` handlers are
+        loaded):
 
         * wx.BITMAP_TYPE_ANY
         * wx.BITMAP_TYPE_BMP
@@ -105,12 +105,12 @@ public:
         wxBitmap(int width, int height, int depth=-1),
         "Creates a new bitmap of the given size.  A depth of -1 indicates the
 depth of the current screen or visual. Some platforms only support 1
-for monochrome and -1 for the current colour setting.",
+for monochrome and -1 for the current colour setting.", "",
         EmptyBitmap);
 
     DocCtorStrName(
         wxBitmap(const wxIcon& icon),
-        "Create a new bitmap from a `wx.Icon` object.",
+        "Create a new bitmap from a `wx.Icon` object.", "",
         BitmapFromIcon);
 
     DocCtorStrName(
@@ -119,13 +119,13 @@ for monochrome and -1 for the current colour setting.",
 actually display a `wx.Image` as you cannot draw an image directly on
 a window. The resulting bitmap will use the provided colour depth (or
 that of the current screen colour depth if depth is -1) which entails
-that a colour reduction may have to take place.",
+that a colour reduction may have to take place.", "",
         BitmapFromImage);
 
     
     %extend {
         DocStr(wxBitmap(PyObject* listOfStrings),
-               "Construct a Bitmap from a list of strings formatted as XPM data.");
+               "Construct a Bitmap from a list of strings formatted as XPM data.", "");
         %name(BitmapFromXPMData) wxBitmap(PyObject* listOfStrings) {
             char**    cArray = NULL;
             wxBitmap* bmp;
@@ -142,7 +142,7 @@ that a colour reduction may have to take place.",
                "Creates a bitmap from an array of bits.  You should only use this
 function for monochrome bitmaps (depth 1) in portable programs: in
 this case the bits parameter should contain an XBM image.  For other
-bit depths, the behaviour is platform dependent.");
+bit depths, the behaviour is platform dependent.", "");
         %name(BitmapFromBits) wxBitmap(PyObject* bits, int width, int height, int depth=1 ) {
             char* buf;
             int   length;
@@ -168,23 +168,23 @@ bit depths, the behaviour is platform dependent.");
     
     DocDeclStr(
         int , GetWidth(),
-        "Gets the width of the bitmap in pixels.");
+        "Gets the width of the bitmap in pixels.", "");
     
 
     DocDeclStr(
         int , GetHeight(),
-        "Gets the height of the bitmap in pixels.");
+        "Gets the height of the bitmap in pixels.", "");
     
 
     DocDeclStr(
         int , GetDepth(),
         "Gets the colour depth of the bitmap. A value of 1 indicates a
-monochrome bitmap.");
+monochrome bitmap.", "");
     
 
 
     %extend {
-        DocStr(GetSize, "Get the size of the bitmap.");
+        DocStr(GetSize, "Get the size of the bitmap.", "");
         wxSize GetSize() {
             wxSize size(self->GetWidth(), self->GetHeight());
             return size;
@@ -196,7 +196,7 @@ monochrome bitmap.");
         virtual wxImage , ConvertToImage() const,
         "Creates a platform-independent image from a platform-dependent
 bitmap. This preserves mask information so that bitmaps and images can
-be converted back and forth without loss in that respect.");
+be converted back and forth without loss in that respect.", "");
     
 
     DocDeclStr(
@@ -205,7 +205,7 @@ be converted back and forth without loss in that respect.");
 file or explpicitly set for the bitmap.
 
 :see: `SetMask`, `wx.Mask`
-");
+", "");
     
 
     DocDeclStr(
@@ -213,12 +213,12 @@ file or explpicitly set for the bitmap.
         "Sets the mask for this bitmap.
 
 :see: `GetMask`, `wx.Mask`
-");
+", "");
     
     
     %extend {
         DocStr(SetMaskColour,
-               "Create a Mask based on a specified colour in the Bitmap.");
+               "Create a Mask based on a specified colour in the Bitmap.", "");
         void SetMaskColour(const wxColour& colour) {
             wxMask *mask = new wxMask(*self, colour);
             self->SetMask(mask);
@@ -230,20 +230,20 @@ file or explpicitly set for the bitmap.
         virtual wxBitmap , GetSubBitmap(const wxRect& rect) const,
         "Returns a sub-bitmap of the current one as long as the rect belongs
 entirely to the bitmap. This function preserves bit depth and mask
-information.");
+information.", "");
     
 
     DocDeclStr(
         virtual bool , SaveFile(const wxString &name, wxBitmapType type,
                                 wxPalette *palette = NULL),
         "Saves a bitmap in the named file.  See `__init__` for a description of
-the ``type`` parameter.");
+the ``type`` parameter.", "");
     
 
     DocDeclStr(
         virtual bool , LoadFile(const wxString &name, wxBitmapType type),
         "Loads a bitmap from a file.  See `__init__` for a description of the
-``type`` parameter.");
+``type`` parameter.", "");
     
 
     
@@ -257,21 +257,21 @@ the ``type`` parameter.");
 
     DocDeclStr(
         virtual void , SetHeight(int height),
-        "Set the height property (does not affect the existing bitmap data).");
+        "Set the height property (does not affect the existing bitmap data).", "");
     
     
     DocDeclStr(
         virtual void , SetWidth(int width),
-        "Set the width property (does not affect the existing bitmap data).");
+        "Set the width property (does not affect the existing bitmap data).", "");
     
 
     DocDeclStr(
         virtual void , SetDepth(int depth),
-        "Set the depth property (does not affect the existing bitmap data).");
+        "Set the depth property (does not affect the existing bitmap data).", "");
     
 
     %extend {
-        DocStr(SetSize, "Set the bitmap size (does not affect the existing bitmap data).");
+        DocStr(SetSize, "Set the bitmap size (does not affect the existing bitmap data).", "");
         void SetSize(const wxSize& size) {
             self->SetWidth(size.x);
             self->SetHeight(size.y);
@@ -304,8 +304,7 @@ will be drawn, and the masked area will not be drawn.
 A mask may be associated with a `wx.Bitmap`. It is used in
 `wx.DC.DrawBitmap` or `wx.DC.Blit` when the source device context is a
 `wx.MemoryDC` with a `wx.Bitmap` selected into it that contains a
-mask.
-");
+mask.", "");
 
 class wxMask : public wxObject {
 public:
@@ -317,7 +316,7 @@ the pixels in ``bitmap`` that match ``colour`` will be the transparent
 portions of the mask.  If no ``colour`` or an invalid ``colour`` is
 passed then BLACK is used.
 
-:see: `wx.Bitmap`, `wx.Colour`");
+:see: `wx.Bitmap`, `wx.Colour`", "");
     
     %extend {
         wxMask(const wxBitmap& bitmap, const wxColour& colour = wxNullColour) {

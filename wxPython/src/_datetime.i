@@ -366,7 +366,7 @@ public:
     DocDeclAStr(
         static void, GetAmPmStrings(wxString *OUTPUT, wxString *OUTPUT),
         "GetAmPmStrings() -> (am, pm)",
-        "Get the AM and PM strings in the current locale (may be empty)");
+        "Get the AM and PM strings in the current locale (may be empty)", "");
 
         // return True if the given country uses DST for this year
     static bool IsDSTApplicable(int year = Inv_Year,

@@ -204,7 +204,7 @@ public:
     DocDeclAStr(
         virtual void, GetSelection(long* OUTPUT, long* OUTPUT) const,
         "GetSelection() -> (from, to)",
-        "If the return values from and to are the same, there is no selection.");
+        "If the return values from and to are the same, there is no selection.", "");
 
     virtual wxString GetStringSelection() const;
 
@@ -258,9 +258,8 @@ public:
         virtual wxTextCtrlHitTestResult, HitTest(const wxPoint& pt,
                                                  long* OUTPUT, long* OUTPUT) const,
         "HitTest(Point pt) -> (result, row, col)",
-        "Find the character at position given in pixels.\n"
-        "NB: pt is in device coords (not adjusted for the client area\n"
-        "origin nor scrolling)");
+        "Find the character at position given in pixels. NB: pt is in device
+coords but is not adjusted for the client area origin nor scrolling", "");
 
 
     // Clipboard operations

@@ -36,19 +36,19 @@ programs can choose to use wx.AcceleratorEntry objects, but using a
 list of 3-tuple of integers (flags, keyCode, cmdID) usually works just
 as well.  See `__init__` for details of the tuple values.
 
-:see: `wx.AcceleratorTable`");
+:see: `wx.AcceleratorTable`", "");
 
 class wxAcceleratorEntry {
 public:
     DocCtorStr(
         wxAcceleratorEntry(int flags = 0, int keyCode = 0, int cmdID = 0/*, wxMenuItem *menuitem = NULL*/),
-        "Construct a wx.AcceleratorEntry.
-
-  :param flags: A bitmask of wx.ACCEL_ALT, wx.ACCEL_SHIFT,
+        "Construct a wx.AcceleratorEntry.",
+        "
+    :param flags: A bitmask of wx.ACCEL_ALT, wx.ACCEL_SHIFT,
                 wx.ACCEL_CTRL or wx.ACCEL_NORMAL used to specify
                 which modifier keys are held down.
-  :param keyCode: The keycode to be detected
-  :param cmdID: The menu or control command ID to use for the
+    :param keyCode: The keycode to be detected
+    :param cmdID: The menu or control command ID to use for the
                 accellerator event.
 ");
     ~wxAcceleratorEntry();
@@ -56,7 +56,7 @@ public:
     DocDeclStr(
         void , Set(int flags, int keyCode, int cmd/*, wxMenuItem *menuItem = NULL*/),
         "(Re)set the attributes of a wx.AcceleratorEntry.
-:see `__init__`");
+:see `__init__`", "");
     
 
 //     void SetMenuItem(wxMenuItem *item);
@@ -64,15 +64,15 @@ public:
 
     DocDeclStr(
         int , GetFlags(),
-        "Get the AcceleratorEntry's flags.");
+        "Get the AcceleratorEntry's flags.", "");
     
     DocDeclStr(
         int , GetKeyCode(),
-        "Get the AcceleratorEntry's keycode.");
+        "Get the AcceleratorEntry's keycode.", "");
     
     DocDeclStr(
         int , GetCommand(),
-        "Get the AcceleratorEntry's command ID.");
+        "Get the AcceleratorEntry's command ID.", "");
 };
 
 
@@ -83,7 +83,7 @@ DocStr(wxAcceleratorTable,
 "An accelerator table allows the application to specify a table of
 keyboard shortcuts for menus or other commands. On Windows, menu or
 button commands are supported; on GTK, only menu commands are
-supported.
+supported.", "
 
 The object ``wx.NullAcceleratorTable`` is defined to be a table with
 no data, and is the initial accelerator table for a window.
@@ -113,7 +113,7 @@ public:
             "Construct an AcceleratorTable from a list of `wx.AcceleratorEntry`
 items or or of 3-tuples (flags, keyCode, cmdID)
 
-:see: `wx.AcceleratorEntry`");
+:see: `wx.AcceleratorEntry`", "");
     wxAcceleratorTable(int n, const wxAcceleratorEntry* entries);
     ~wxAcceleratorTable();
 

@@ -122,7 +122,7 @@ method and register the provider with wx.ArtProvider.PushProvider::
         def CreateBitmap(self, artid, client, size):
             ...
             return bmp
-
+", "
 
 Identifying art resources
 -------------------------
@@ -197,18 +197,18 @@ public:
 
     DocDeclStr(
         static void , PushProvider(wxPyArtProvider *provider),
-        "Add new provider to the top of providers stack.");
+        "Add new provider to the top of providers stack.", "");
     
 
     DocDeclStr(
         static bool , PopProvider(),
-        "Remove latest added provider and delete it.");
+        "Remove latest added provider and delete it.", "");
     
 
     DocDeclStr(
         static bool , RemoveProvider(wxPyArtProvider *provider),
         "Remove provider. The provider must have been added previously!  The
-provider is _not_ deleted.");
+provider is _not_ deleted.", "");
     
 
     DocDeclStr(
@@ -216,7 +216,7 @@ provider is _not_ deleted.");
                                     const wxString& client = wxPyART_OTHER,
                                     const wxSize& size = wxDefaultSize),
         "Query the providers for bitmap with given ID and return it. Return
-wx.NullBitmap if no provider provides it.");
+wx.NullBitmap if no provider provides it.", "");
     
 
     DocDeclStr(
@@ -224,7 +224,7 @@ wx.NullBitmap if no provider provides it.");
                           const wxString& client = wxPyART_OTHER,
                                 const wxSize& size = wxDefaultSize),
         "Query the providers for icon with given ID and return it.  Return
-wx.NullIcon if no provider provides it.");
+wx.NullIcon if no provider provides it.", "");
     
 
     %extend { void Destroy() { delete self; }}

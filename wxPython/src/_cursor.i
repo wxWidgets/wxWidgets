@@ -17,21 +17,19 @@
 
 
 DocStr(wxCursor,
-"A cursor is a small bitmap usually used for denoting where the
-mouse pointer is, with a picture that might indicate the
-interpretation of a mouse click.
+"A cursor is a small bitmap usually used for denoting where the mouse
+pointer is, with a picture that might indicate the interpretation of a
+mouse click.
 
 A single cursor object may be used in many windows (any subwindow
-type). The wxWindows convention is to set the cursor for a
-window, as in X, rather than to set it globally as in MS Windows,
-although a global wx.SetCursor function is also available for use
-on MS Windows.");
+type). The wxWindows convention is to set the cursor for a window, as
+in X, rather than to set it globally as in MS Windows, although a
+global `wx.SetCursor` function is also available for use on MS Windows.
+","
 
-
-RefDoc(wxCursor::wxCursor(int id),
-"
-  Stock Cursor IDs
-
+Stock Cursor IDs
+-----------------
+    ========================    ======================================
     wx.CURSOR_ARROW             A standard arrow cursor.
     wx.CURSOR_RIGHT_ARROW       A standard arrow cursor pointing to the right.
     wx.CURSOR_BLANK             Transparent cursor.
@@ -59,6 +57,7 @@ RefDoc(wxCursor::wxCursor(int id),
     wx.CURSOR_WAIT              A wait cursor.
     wx.CURSOR_WATCH             A watch cursor.
     wx.CURSOR_ARROWWAIT         A cursor with both an arrow and an hourglass, (windows.)
+    ========================    ======================================
 
 ");
 
@@ -66,16 +65,14 @@ class wxCursor : public wxGDIObject
 {
 public:
     
-    RefDoc(wxCursor, ""); // turn it off for the ctors
-    
     %extend {
         DocStr(wxCursor,
-               "Construct a Cursor from a file.  Specify the type of file using\n"
-               "wx.BITAMP_TYPE* constants, and specify the hotspot if not using a\n"
-               ".cur file.\n"
-               "\n"
-               "This cursor is not available on wxGTK, use wx.StockCursor,\n"
-               "wx.CursorFromImage, or wx.CursorFromBits instead.");
+               "Construct a Cursor from a file.  Specify the type of file using
+wx.BITAMP_TYPE* constants, and specify the hotspot if not using a cur
+file.
+
+This constructor is not available on wxGTK, use ``wx.StockCursor``,
+``wx.CursorFromImage``, or ``wx.CursorFromBits`` instead.", "");
         wxCursor(const wxString* cursorName, long type, int hotSpotX=0, int hotSpotY=0) {
 %#ifdef __WXGTK__
             wxCHECK_MSG(False, NULL,
@@ -90,24 +87,26 @@ public:
 
     DocCtorStrName(
         wxCursor(int id),
-        "Create a cursor using one of the stock cursors.  Note that not\n"
-        "all cursors are available on all platforms.",
+        "Create a cursor using one of the stock cursors.  Note that not all
+cursors are available on all platforms.", "",
         StockCursor);
 
     
     DocCtorStrName(
         wxCursor(const wxImage& image),
-        "Constructs a cursor from a wxImage. The cursor is monochrome,\n"
-        "colors with the RGB elements all greater than 127 will be\n"
-        "foreground, colors less than this background. The mask (if any)\n"
-        "will be used as transparent.\n"
-        "\n"
-        "In MSW the foreground will be white and the background black. The\n"
-        "cursor is resized to 32x32 In GTK, the two most frequent colors\n"
-        "will be used for foreground and background. The cursor will be\n"
-        "displayed at the size of the image. On MacOS the cursor is\n"
-        "resized to 16x16 and currently only shown as black/white (mask\n"
-        "respected).",
+        "Constructs a cursor from a wxImage. The cursor is monochrome, colors
+with the RGB elements all greater than 127 will be foreground, colors
+less than this background. The mask (if any) will be used as
+transparent.",
+"
+In MSW the foreground will be white and the background
+black. The cursor is resized to 32x32.
+
+In GTK, the two most frequent colors will be used for foreground and
+background. The cursor will be displayed at the size of the image.
+
+On MacOS the cursor is resized to 16x16 and currently only shown as
+black/white (mask respected).",
         CursorFromImage);
     
     
@@ -132,11 +131,11 @@ public:
 #ifdef __WXMSW__
     DocDeclStr(
         long , GetHandle(),
-        "Get the MS Windows handle for the cursor");
+        "Get the MS Windows handle for the cursor", "");
     
     %extend {
     DocStr(SetHandle,
-        "Set the MS Windows handle to use for the cursor");
+        "Set the MS Windows handle to use for the cursor", "");
         void SetHandle(long handle) { self->SetHandle((WXHANDLE)handle); }
     }
     
@@ -144,7 +143,7 @@ public:
     
     DocDeclStr(
         bool , Ok(),
-        "");
+        "", "");
 
     %pythoncode { def __nonzero__(self): return self.Ok() }
 
@@ -152,31 +151,31 @@ public:
 #ifdef __WXMSW__
     DocDeclStr(
         int , GetWidth(),
-        "");
+        "", "");
     
     DocDeclStr(
         int , GetHeight(),
-        "");
+        "", "");
     
     DocDeclStr(
         int , GetDepth(),
-        "");
+        "", "");
     
     DocDeclStr(
         void , SetWidth(int w),
-        "");
+        "", "");
     
     DocDeclStr(
         void , SetHeight(int h),
-        "");
+        "", "");
     
     DocDeclStr(
         void , SetDepth(int d),
-        "");
+        "", "");
     
     DocDeclStr(
         void , SetSize(const wxSize& size),
-        "");
+        "", "");
     
 #endif
     

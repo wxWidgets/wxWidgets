@@ -98,7 +98,7 @@ public:
     DocDeclAStr(
         virtual void, GetScrollPixelsPerUnit(int *OUTPUT, int *OUTPUT) const,
         "GetScrollPixelsPerUnit() -> (xUnit, yUnit)",
-        "Get the size of one logical unit in physical units.");
+        "Get the size of one logical unit in physical units.", "");
 
     // Enable/disable Windows scrolling in either direction. If True, wxWindows
     // scrolls the canvas and only a bit of the canvas is invalidated; no
@@ -111,7 +111,7 @@ public:
     DocDeclAStr( 
         virtual void, GetViewStart(int *OUTPUT, int *OUTPUT) const,
         "GetViewStart() -> (x,y)",
-        "Get the view start");
+        "Get the view start", "");
     
     // Set the scale factor, used in PrepareDC
     void SetScale(double xs, double ys);
@@ -122,14 +122,14 @@ public:
     %nokwargs CalcScrolledPosition;
     %nokwargs CalcUnscrolledPosition;
     
-    DocStr(CalcScrolledPosition, "Translate between scrolled and unscrolled coordinates.");
+    DocStr(CalcScrolledPosition, "Translate between scrolled and unscrolled coordinates.", "");
     wxPoint CalcScrolledPosition(const wxPoint& pt) const;
     DocDeclA(
         void, CalcScrolledPosition(int x, int y, int *OUTPUT, int *OUTPUT) const,
         "CalcScrolledPosition(int x, int y) -> (sx, sy)");
 
     
-    DocStr(CalcUnscrolledPosition, "Translate between scrolled and unscrolled coordinates.");
+    DocStr(CalcUnscrolledPosition, "Translate between scrolled and unscrolled coordinates.", "");
     wxPoint CalcUnscrolledPosition(const wxPoint& pt) const;
     DocDeclA(
         void, CalcUnscrolledPosition(int x, int y, int *OUTPUT, int *OUTPUT) const,

@@ -112,10 +112,10 @@ enum wxStockCursor
 %newgroup
 
 DocStr( wxSize,
-"wx.Size is a useful data structure used to represent the size of something.
-It simply contians integer width and height proprtites.  In most places in
-wxPython where a wx.Size is expected a (width,height) tuple can be used
-instead.");
+"wx.Size is a useful data structure used to represent the size of
+something.  It simply contians integer width and height proprtites.
+In most places in wxPython where a wx.Size is expected a
+(width,height) tuple can be used instead.", "");
 
 class wxSize
 {
@@ -126,7 +126,7 @@ public:
     
     DocCtorStr(
         wxSize(int w=0, int h=0),
-        "Creates a size object.");
+        "Creates a size object.", "");
 
     ~wxSize();
 
@@ -138,33 +138,33 @@ public:
 
     DocDeclStr(
         bool, operator==(const wxSize& sz),
-        "Test for equality of wx.Size objects.");
+        "Test for equality of wx.Size objects.", "");
 
     DocDeclStr(
         bool, operator!=(const wxSize& sz),
-        "Test for inequality.");
+        "Test for inequality.", "");
 
     DocDeclStr(
         wxSize, operator+(const wxSize& sz),
-        "Add sz's proprties to this and return the result.");
+        "Add sz's proprties to this and return the result.", "");
 
     DocDeclStr(
         wxSize, operator-(const wxSize& sz),
-        "Subtract sz's properties from this and return the result.");
+        "Subtract sz's properties from this and return the result.", "");
 
     DocDeclStr(
         void, IncTo(const wxSize& sz),
-        "Increments this object so that both of its dimensions are not less\n"
-        "than the corresponding dimensions of the size.");
+        "Increments this object so that both of its dimensions are not less
+than the corresponding dimensions of the size.", "");
 
     DocDeclStr(
         void, DecTo(const wxSize& sz),
-        "Decrements this object so that both of its dimensions are not greater\n"
-        "than the corresponding dimensions of the size.");
+        "Decrements this object so that both of its dimensions are not greater
+than the corresponding dimensions of the size.", "");
 
     DocDeclStr(
         void, Set(int w, int h),
-        "Set both width and height.");
+        "Set both width and height.", "");
     
     void SetWidth(int w);
     void SetHeight(int h);
@@ -174,14 +174,13 @@ public:
     
     DocDeclStr(
         bool , IsFullySpecified() const,
-        "Returns True if both components of the size are non-default values.");
+        "Returns True if both components of the size are non-default values.", "");
     
 
     DocDeclStr(
         void , SetDefaults(const wxSize& size),
-        "Combine this size with the other one replacing the default
-components of this object (i.e. equal to -1) with those of the
-other.");
+        "Combine this size with the other one replacing the default components
+of this object (i.e. equal to -1) with those of the other.", "");
     
    
     //int GetX() const;
@@ -190,7 +189,7 @@ other.");
     %extend {
         DocAStr(Get,
                "Get() -> (width,height)",
-               "Returns the width and height properties as a tuple.");
+               "Returns the width and height properties as a tuple.", "");
         PyObject* Get() {
             bool blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
@@ -201,7 +200,7 @@ other.");
         }
     }
     %pythoncode {
-    asTuple = Get
+    asTuple = wx._deprecated(Get, "asTuple is deprecated, use `Get` instead")
     def __str__(self):                   return str(self.Get())
     def __repr__(self):                  return 'wx.Size'+str(self.Get())
     def __len__(self):                   return len(self.Get())
@@ -221,9 +220,9 @@ other.");
 %newgroup
 
 DocStr( wxRealPoint,
-"A data structure for representing a point or position with floating point x
-and y properties.  In wxPython most places that expect a wx.RealPoint can also
-accept a (x,y) tuple.");
+"A data structure for representing a point or position with floating
+point x and y properties.  In wxPython most places that expect a
+wx.RealPoint can also accept a (x,y) tuple.", "");
 class wxRealPoint
 {
 public:
@@ -232,30 +231,30 @@ public:
 
     DocCtorStr(
         wxRealPoint(double x=0.0, double y=0.0),
-        "Create a wx.RealPoint object");
+        "Create a wx.RealPoint object", "");
     
     ~wxRealPoint();
 
     DocDeclStr(
         bool, operator==(const wxRealPoint& pt),
-        "Test for equality of wx.RealPoint objects.");
+        "Test for equality of wx.RealPoint objects.", "");
 
     DocDeclStr(
         bool, operator!=(const wxRealPoint& pt),
-        "Test for inequality of wx.RealPoint objects.");
+        "Test for inequality of wx.RealPoint objects.", "");
 
     
     DocDeclStr(
         wxRealPoint, operator+(const wxRealPoint& pt),
-        "Add pt's proprties to this and return the result.");
+        "Add pt's proprties to this and return the result.", "");
 
     DocDeclStr(
         wxRealPoint, operator-(const wxRealPoint& pt),
-        "Subtract pt's proprties from this and return the result");
+        "Subtract pt's proprties from this and return the result", "");
 
 
     %extend {
-        DocStr(Set, "Set both the x and y properties");
+        DocStr(Set, "Set both the x and y properties", "");
         void Set(double x, double y) {
             self->x = x;
             self->y = y;
@@ -263,7 +262,7 @@ public:
 
         DocAStr(Get,
                "Get() -> (x,y)",
-               "Return the x and y properties as a tuple. ");
+               "Return the x and y properties as a tuple. ", "");
         PyObject* Get() {
             bool blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
@@ -275,7 +274,7 @@ public:
     }
 
     %pythoncode {
-    asTuple = Get
+    asTuple = wx._deprecated(Get, "asTuple is deprecated, use `Get` instead")
     def __str__(self):                   return str(self.Get())
     def __repr__(self):                  return 'wx.RealPoint'+str(self.Get())
     def __len__(self):                   return len(self.Get())
@@ -296,9 +295,9 @@ public:
 
 
 DocStr(wxPoint,
-"A data structure for representing a point or position with integer x and y
-properties.  Most places in wxPython that expect a wx.Point can also accept a
-(x,y) tuple.");
+"A data structure for representing a point or position with integer x
+and y properties.  Most places in wxPython that expect a wx.Point can
+also accept a (x,y) tuple.", "");
 
 class wxPoint
 {
@@ -307,18 +306,18 @@ public:
 
     DocCtorStr(
         wxPoint(int x=0, int y=0),
-        "Create a wx.Point object");
+        "Create a wx.Point object", "");
 
     ~wxPoint();
 
     
     DocDeclStr(
         bool, operator==(const wxPoint& pt),
-        "Test for equality of wx.Point objects.");
+        "Test for equality of wx.Point objects.", "");
 
     DocDeclStr(
         bool, operator!=(const wxPoint& pt),
-        "Test for inequality of wx.Point objects.");
+        "Test for inequality of wx.Point objects.", "");
 
 
 
@@ -329,46 +328,46 @@ public:
     
     DocDeclStr(
         wxPoint, operator+(const wxPoint& pt),
-        "Add pt's proprties to this and return the result.");
+        "Add pt's proprties to this and return the result.", "");
 
    
     DocDeclStr(
         wxPoint, operator-(const wxPoint& pt),
-        "Subtract pt's proprties from this and return the result");
+        "Subtract pt's proprties from this and return the result", "");
 
 
     DocDeclStr(
         wxPoint&, operator+=(const wxPoint& pt),
-        "Add pt to this object.");
+        "Add pt to this object.", "");
 
     DocDeclStr(
         wxPoint&, operator-=(const wxPoint& pt),
-        "Subtract pt from this object.");
+        "Subtract pt from this object.", "");
 
 
     
 //     DocDeclStr(
 //         wxPoint, operator+(const wxSize& sz),
-//         "Add sz to this Point and return the result.");
+//         "Add sz to this Point and return the result.", "");
 
 //     DocDeclStr(
 //         wxPoint, operator-(const wxSize& sz),
-//         "Subtract sz from this Point and return the result");
+//         "Subtract sz from this Point and return the result", "");
 
 
 //     DocDeclStr(
 //         wxPoint&, operator+=(const wxSize& sz),
-//         "Add sz to this object.");
+//         "Add sz to this object.", "");
 
 //     DocDeclStr(
 //         wxPoint&, operator-=(const wxSize& sz),
-//         "Subtract sz from this object.");
+//         "Subtract sz from this object.", "");
 
 
     
     
     %extend {
-        DocStr(Set, "Set both the x and y properties");
+        DocStr(Set, "Set both the x and y properties", "");
         void Set(long x, long y) {
             self->x = x;
             self->y = y;
@@ -376,7 +375,7 @@ public:
 
         DocAStr(Get,
                "Get() -> (x,y)",
-               "Return the x and y properties as a tuple. ");
+               "Return the x and y properties as a tuple. ", "");
         PyObject* Get() {
             bool blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
@@ -388,7 +387,7 @@ public:
     }
 
     %pythoncode {
-    asTuple = Get
+    asTuple = wx._deprecated(Get, "asTuple is deprecated, use `Get` instead")
     def __str__(self):                   return str(self.Get())
     def __repr__(self):                  return 'wx.Point'+str(self.Get())
     def __len__(self):                   return len(self.Get())
@@ -408,25 +407,25 @@ public:
 
 
 DocStr(wxRect,
-"A class for representing and manipulating rectangles.  It has x, y, width and
-height properties.  In wxPython most palces that expect a wx.Rect can also
-accept a (x,y,width,height) tuple.");
+"A class for representing and manipulating rectangles.  It has x, y,
+width and height properties.  In wxPython most palces that expect a
+wx.Rect can also accept a (x,y,width,height) tuple.", "");
 
 class wxRect
 {
 public:
     DocCtorStr(
         wxRect(int x=0, int y=0, int width=0, int height=0),
-        "Create a new Rect object.");          
+        "Create a new Rect object.", "");          
 
     DocCtorStrName(
         wxRect(const wxPoint& topLeft, const wxPoint& bottomRight),
-        "Create a new Rect object from Points representing two corners.",
+        "Create a new Rect object from Points representing two corners.", "",
         RectPP);
 
     DocCtorStrName(
         wxRect(const wxPoint& pos, const wxSize& size),
-        "Create a new Rect from a position and size.",
+        "Create a new Rect from a position and size.", "",
          RectPS);
     
     ~wxRect();
@@ -480,61 +479,62 @@ public:
 
     DocDeclStr(
         wxRect&, Inflate(wxCoord dx, wxCoord dy),
-        "Increase the rectangle size by dx in x direction and dy in y direction. Both\n"
-        "(or one of) parameters may be negative to decrease the rectangle size.");
+        "Increase the rectangle size by dx in x direction and dy in y
+direction. Both or one of) parameters may be negative to decrease the
+rectangle size.", "");
 
     DocDeclStr(
         wxRect&, Deflate(wxCoord dx, wxCoord dy),
-        "Decrease the rectangle size by dx in x direction and dy in y direction. Both\n"
-        "(or one of) parameters may be negative to increase the rectngle size. This\n"
-        "method is the opposite of Inflate.");
+        "Decrease the rectangle size by dx in x direction and dy in y
+direction. Both or one of) parameters may be negative to increase the
+rectngle size. This method is the opposite of Inflate.", "");
 
     DocDeclStrName(
         void, Offset(wxCoord dx, wxCoord dy),
-        "Moves the rectangle by the specified offset. If dx is positive, the rectangle\n"
-        "is moved to the right, if dy is positive, it is moved to the bottom, otherwise\n"
-        "it is moved to the left or top respectively.",
+        "Moves the rectangle by the specified offset. If dx is positive, the
+rectangle is moved to the right, if dy is positive, it is moved to the
+bottom, otherwise it is moved to the left or top respectively.", "",
         OffsetXY);
     
     DocDeclStr(
         void, Offset(const wxPoint& pt),
-        "Same as OffsetXY but uses dx,dy from Point");
+        "Same as OffsetXY but uses dx,dy from Point", "");
 
     DocDeclStr(
         wxRect&, Intersect(const wxRect& rect),
-        "Return the intersectsion of this rectangle and rect.");
+        "Return the intersectsion of this rectangle and rect.", "");
 
     DocDeclStr(
         wxRect, operator+(const wxRect& rect) const,
-        "Add the properties of rect to this rectangle and return the result.");
+        "Add the properties of rect to this rectangle and return the result.", "");
 
     DocDeclStr(
         wxRect&, operator+=(const wxRect& rect),
-        "Add the properties of rect to this rectangle, updating this rectangle.");
+        "Add the properties of rect to this rectangle, updating this rectangle.", "");
 
     DocDeclStr(
         bool, operator==(const wxRect& rect) const,
-        "Test for equality.");
+        "Test for equality.", "");
 
     DocDeclStr(
         bool, operator!=(const wxRect& rect) const,
-        "Test for inequality.");
+        "Test for inequality.", "");
 
     
-    DocStr( Inside, "Return True if the point is (not strcitly) inside the rect.");
+    DocStr( Inside, "Return True if the point is (not strcitly) inside the rect.", "");
     %name(InsideXY)bool Inside(int x, int y) const;
     bool Inside(const wxPoint& pt) const;
 
     DocDeclStr(    
         bool, Intersects(const wxRect& rect) const,
-        "Returns True if the rectangles have a non empty intersection.");
+        "Returns True if the rectangles have a non empty intersection.", "");
 
     
     int x, y, width, height;
 
 
     %extend {
-       DocStr(Set, "Set all rectangle properties.");
+       DocStr(Set, "Set all rectangle properties.", "");
         void Set(int x=0, int y=0, int width=0, int height=0) {
             self->x = x;
             self->y = y;
@@ -544,7 +544,7 @@ public:
 
         DocAStr(Get,
                "Get() -> (x,y,width,height)",
-               "Return the rectangle properties as a tuple.");
+               "Return the rectangle properties as a tuple.", "");
         PyObject* Get() {
             bool blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(4);
@@ -558,7 +558,7 @@ public:
     }
 
     %pythoncode {
-    asTuple = Get
+    asTuple = wx._deprecated(Get, "asTuple is deprecated, use `Get` instead")
     def __str__(self):                   return str(self.Get())
     def __repr__(self):                  return 'wx.Rect'+str(self.Get())
     def __len__(self):                   return len(self.Get())
@@ -578,7 +578,7 @@ public:
 
 DocAStr(wxIntersectRect,
        "IntersectRect(Rect r1, Rect r2) -> Rect",
-       "Calculate and return the intersection of r1 and r2.");
+       "Calculate and return the intersection of r1 and r2.", "");
 %inline %{
     PyObject* wxIntersectRect(wxRect* r1, wxRect* r2) {
         wxRegion  reg1(*r1);
@@ -606,12 +606,13 @@ DocAStr(wxIntersectRect,
 
 
 DocStr(wxPoint2D,
-      "wx.Point2Ds represent a point or a vector in a 2d coordinate system with floating point values.");
+      "wx.Point2Ds represent a point or a vector in a 2d coordinate system
+with floating point values.", "");
 
 class wxPoint2D
 {
 public:
-    DocStr(wxPoint2D, "Create a w.Point2D object.");
+    DocStr(wxPoint2D, "Create a w.Point2D object.", "");
     wxPoint2D( double x=0.0 , double y=0.0 );
     %name(Point2DCopy) wxPoint2D( const wxPoint2D &pt );
     %name(Point2DFromPoint) wxPoint2D( const wxPoint &pt );
@@ -619,12 +620,12 @@ public:
     DocDeclAStr(
         void, GetFloor( int *OUTPUT , int *OUTPUT ) const,
         "GetFloor() -> (x,y)",
-        "Convert to integer");
+        "Convert to integer", "");
     
     DocDeclAStr(
         void, GetRounded( int *OUTPUT , int *OUTPUT ) const,
         "GetRounded() -> (x,y)",
-        "Convert to integer");
+        "Convert to integer", "");
 
     double GetVectorLength() const;
     double GetVectorAngle() const ;
@@ -648,7 +649,7 @@ public:
 
     DocDeclStr(
         wxPoint2D, operator-(),
-        "the reflection of this point");
+        "the reflection of this point", "");
 
     wxPoint2D& operator+=(const wxPoint2D& pt);
     wxPoint2D& operator-=(const wxPoint2D& pt);
@@ -658,11 +659,11 @@ public:
 
     DocDeclStr(
         bool, operator==(const wxPoint2D& pt) const,
-        "Test for equality");
+        "Test for equality", "");
     
     DocDeclStr(
         bool, operator!=(const wxPoint2D& pt) const,
-        "Test for inequality");
+        "Test for inequality", "");
 
     %name(x)double m_x;
     %name(y)double m_y;
@@ -675,7 +676,7 @@ public:
 
         DocAStr(Get,
                "Get() -> (x,y)",
-               "Return x and y properties as a tuple.");               
+               "Return x and y properties as a tuple.", "");               
         PyObject* Get() {
             bool blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
@@ -687,7 +688,7 @@ public:
     }
 
     %pythoncode {
-    asTuple = Get
+    asTuple = wx._deprecated(Get, "asTuple is deprecated, use `Get` instead")
     def __str__(self):                   return str(self.Get())
     def __repr__(self):                  return 'wx.Point2D'+str(self.Get())
     def __len__(self):                   return len(self.Get())

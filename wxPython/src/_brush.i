@@ -19,7 +19,7 @@
 DocStr(wxBrush,
 "A brush is a drawing tool for filling in areas. It is used for
 painting the background of rectangles, ellipses, etc. when drawing on
-a `wx.DC`.  It has a colour and a style.
+a `wx.DC`.  It has a colour and a style.", "
 
 :warning: Do not create instances of wx.Brush before the `wx.App`
     object has been created because, depending on the platform,
@@ -37,8 +37,8 @@ class wxBrush : public wxGDIObject {
 public:
     DocCtorStr(
         wxBrush(const wxColour& colour, int style=wxSOLID),
-        "Constructs a brush from a `wx.Colour` object and a style.  The style
-parameter may be one of the following:
+        "Constructs a brush from a `wx.Colour` object and a style.",
+        "The style parameter may be one of the following:
 
     ===================   =============================
     Style                 Meaning
@@ -61,36 +61,36 @@ parameter may be one of the following:
 
     DocDeclStr(
         virtual void , SetColour(const wxColour& col),
-        "Set the brush's `wx.Colour`.");
+        "Set the brush's `wx.Colour`.", "");
 
     DocDeclStr(
         virtual void , SetStyle(int style),
-        "Sets the style of the brush. See `__init__` for a listing of styles.");
+        "Sets the style of the brush. See `__init__` for a listing of styles.", "");
 
     DocDeclStr(
         virtual void , SetStipple(const wxBitmap& stipple),
-        "Sets the stipple `wx.Bitmap`.");
+        "Sets the stipple `wx.Bitmap`.", "");
 
 
     DocDeclStr(
         wxColour , GetColour() const,
-        "Returns the `wx.Colour` of the brush.");
+        "Returns the `wx.Colour` of the brush.", "");
 
     DocDeclStr(
         int , GetStyle() const,
         "Returns the style of the brush.  See `__init__` for a listing of
-styles.");
+styles.", "");
 
     DocDeclStr(
         wxBitmap *, GetStipple() const,
         "Returns the stiple `wx.Bitmap` of the brush.  If the brush does not
 have a wx.STIPPLE style, then the return value may be non-None but an
-uninitialised bitmap (`wx.Bitmap.Ok` returns False).");
+uninitialised bitmap (`wx.Bitmap.Ok` returns False).", "");
 
 
     DocDeclStr(
         bool , Ok(),
-        "Returns True if the brush is initialised and valid.");
+        "Returns True if the brush is initialised and valid.", "");
 
 
 #ifdef __WXMAC__

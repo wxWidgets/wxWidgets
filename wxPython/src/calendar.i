@@ -63,13 +63,13 @@ enum wxCalendarDateBorder
 
 DocStr(wxCalendarDateAttr,
 "A set of customization attributes for a calendar date, which can be
-used to control the look of the Calendar object.");
+used to control the look of the Calendar object.", "");
 
 class wxCalendarDateAttr
 {
 public:
     DocStr(wxCalendarDateAttr,
-            "Create a CalendarDateAttr.");
+            "Create a CalendarDateAttr.", "");
     wxCalendarDateAttr(const wxColour& colText = wxNullColour,
                        const wxColour& colBack = wxNullColour,
                        const wxColour& colBorder = wxNullColour,
@@ -165,7 +165,7 @@ recognized as one by wx.DateTime) by using the SetHoliday method.
 
 As the attributes are specified for each day, they may change when the
 month is changed, so you will often want to update them in an
-EVT_CALENDAR_MONTH event handler.
+EVT_CALENDAR_MONTH event handler.", "
 
 Window Styles
 -------------
@@ -212,8 +212,6 @@ public:
     %pythonAppend wxCalendarCtrl      "self._setOORInfo(self)"
     %pythonAppend wxCalendarCtrl()    ""
 
-    RefDoc(wxCalendarCtrl, ""); // turn it off for the ctors
-
     DocCtorStr(
         wxCalendarCtrl(wxWindow *parent,
                        wxWindowID id=-1,
@@ -222,11 +220,11 @@ public:
                        const wxSize& size = wxDefaultSize,
                        long style = wxCAL_SHOW_HOLIDAYS | wxWANTS_CHARS,
                        const wxString& name = wxPyCalendarNameStr),
-        "Create and show a calendar control.");
+        "Create and show a calendar control.", "");
 
     DocCtorStrName(
         wxCalendarCtrl(),
-        "Precreate a CalendarCtrl for 2-phase creation.",
+        "Precreate a CalendarCtrl for 2-phase creation.", "",
         PreCalendarCtrl);
 
     DocDeclStr(
@@ -238,40 +236,40 @@ public:
                       long style = wxCAL_SHOW_HOLIDAYS | wxWANTS_CHARS,
                       const wxString& name = wxPyCalendarNameStr),
         "Acutally create the GUI portion of the CalendarCtrl for 2-phase
-creation.");
+creation.", "");
     
 
 
     DocDeclStr(
         void, SetDate(const wxDateTime& date),
-        "Sets the current date.");
+        "Sets the current date.", "");
 
     DocDeclStr(
         const wxDateTime&, GetDate() const,
-        "Gets the currently selected date.");
+        "Gets the currently selected date.", "");
     
 
 
     DocDeclStr(
         bool, SetLowerDateLimit(const wxDateTime& date = wxDefaultDateTime),
-        "set the range in which selection can occur");
+        "set the range in which selection can occur", "");
     
     DocDeclStr(
         bool, SetUpperDateLimit(const wxDateTime& date = wxDefaultDateTime),
-        "set the range in which selection can occur");
+        "set the range in which selection can occur", "");
     
     DocDeclStr(
         const wxDateTime&, GetLowerDateLimit() const,
-        "get the range in which selection can occur");
+        "get the range in which selection can occur", "");
     
     DocDeclStr(
         const wxDateTime&, GetUpperDateLimit() const,
-        "get the range in which selection can occur");
+        "get the range in which selection can occur", "");
 
     DocDeclStr(
         bool, SetDateRange(const wxDateTime& lowerdate = wxDefaultDateTime,
                            const wxDateTime& upperdate = wxDefaultDateTime),
-        "set the range in which selection can occur");
+        "set the range in which selection can occur", "");
 
 
     
@@ -280,87 +278,87 @@ creation.");
         void, EnableYearChange(bool enable = True),
         "This function should be used instead of changing CAL_NO_YEAR_CHANGE
 style bit directly. It allows or disallows the user to change the year
-interactively.");
+interactively.", "");
     
     DocDeclStr(
         void, EnableMonthChange(bool enable = True),
         "This function should be used instead of changing CAL_NO_MONTH_CHANGE
 style bit. It allows or disallows the user to change the month
 interactively. Note that if the month can not be changed, the year can
-not be changed either.");
+not be changed either.", "");
 
     DocDeclStr(
         void, EnableHolidayDisplay(bool display = True),
         "This function should be used instead of changing CAL_SHOW_HOLIDAYS
 style bit directly. It enables or disables the special highlighting of
-the holidays.");
+the holidays.", "");
 
 
     
     DocDeclStr(
         void, SetHeaderColours(const wxColour& colFg, const wxColour& colBg),
-        "Header colours are used for painting the weekdays at the top.");
+        "Header colours are used for painting the weekdays at the top.", "");
 
     DocDeclStr(
         wxColour, GetHeaderColourFg() const,
-        "Header colours are used for painting the weekdays at the top.");
+        "Header colours are used for painting the weekdays at the top.", "");
     
     DocDeclStr(
         wxColour, GetHeaderColourBg() const,
-        "Header colours are used for painting the weekdays at the top.");
+        "Header colours are used for painting the weekdays at the top.", "");
 
 
     
     DocDeclStr(
         void, SetHighlightColours(const wxColour& colFg, const wxColour& colBg),
-        "Highlight colour is used for the currently selected date.");
+        "Highlight colour is used for the currently selected date.", "");
     
     DocDeclStr(
         wxColour, GetHighlightColourFg() const,
-        "Highlight colour is used for the currently selected date.");
+        "Highlight colour is used for the currently selected date.", "");
     
     DocDeclStr(
         wxColour, GetHighlightColourBg() const,
-        "Highlight colour is used for the currently selected date.");
+        "Highlight colour is used for the currently selected date.", "");
 
     
      
     DocDeclStr(
         void, SetHolidayColours(const wxColour& colFg, const wxColour& colBg),
         "Holiday colour is used for the holidays (if CAL_SHOW_HOLIDAYS style is
-used).");
+used).", "");
     
     DocDeclStr(
         wxColour, GetHolidayColourFg() const,
         "Holiday colour is used for the holidays (if CAL_SHOW_HOLIDAYS style is
-used).");
+used).", "");
     
     DocDeclStr(
         wxColour, GetHolidayColourBg() const,
         "Holiday colour is used for the holidays (if CAL_SHOW_HOLIDAYS style is
-used).");
+used).", "");
 
 
     
     DocDeclStr(
         wxCalendarDateAttr*, GetAttr(size_t day) const,
         "Returns the attribute for the given date (should be in the range
-1...31).  The returned value may be None");
+1...31).  The returned value may be None", "");
     
     DocDeclStr(
         void, SetAttr(size_t day, wxCalendarDateAttr *attr),
         "Associates the attribute with the specified date (in the range
 1...31).  If the attribute passed is None, the items attribute is
-cleared.");
+cleared.", "");
 
     DocDeclStr(
         void, SetHoliday(size_t day),
-        "Marks the specified day as being a holiday in the current month.");
+        "Marks the specified day as being a holiday in the current month.", "");
 
     DocDeclStr(
         void, ResetAttr(size_t day),
         "Clears any attributes associated with the given day (in the range
-1...31).");
+1...31).", "");
     
 
 
@@ -368,8 +366,9 @@ cleared.");
             "HitTest(Point pos) -> (result, date, weekday)",
 "Returns 3-tuple with information about the given position on the
 calendar control.  The first value of the tuple is a result code and
-determines the validity of the remaining two values.  The result codes
-are:
+determines the validity of the remaining two values.",
+"
+The result codes are:
 
     ===================    ============================================
     CAL_HITTEST_NOWHERE    hit outside of anything
@@ -394,11 +393,11 @@ are:
 
     DocDeclStr(
         wxControl*, GetMonthControl() const,
-        "Get the currently shown control for month.");
+        "Get the currently shown control for month.", "");
     
     DocDeclStr(
         wxControl*, GetYearControl() const,
-        "Get the currently shown control for year.");
+        "Get the currently shown control for year.", "");
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);

@@ -49,7 +49,7 @@ DocStr(wxCheckBox,
 checkmark is visible) or off (no checkmark). Optionally (When the
 wx.CHK_3STATE style flag is set) it can have a third state, called the
 mixed or undetermined state. Often this is used as a \"Does Not
-Apply\" state.
+Apply\" state.", "
 
 Window Styles
 -------------
@@ -84,8 +84,6 @@ public:
     %pythonAppend wxCheckBox         "self._setOORInfo(self)"
     %pythonAppend wxCheckBox()       ""
 
-    RefDoc(wxCheckBox, ""); // turn it off for the ctors
-    
     DocCtorStr(
         wxCheckBox(wxWindow* parent, wxWindowID id, const wxString& label,
                    const wxPoint& pos = wxDefaultPosition,
@@ -93,11 +91,11 @@ public:
                    long style = 0,
                    const wxValidator& validator = wxDefaultValidator,
                    const wxString& name = wxPyCheckBoxNameStr),
-        "Creates and shows a CheckBox control");
+        "Creates and shows a CheckBox control", "");
 
     DocCtorStrName(
         wxCheckBox(),
-        "Precreate a CheckBox for 2-phase creation.",
+        "Precreate a CheckBox for 2-phase creation.", "",
         PreCheckBox);
 
     
@@ -108,30 +106,30 @@ public:
                      long style = 0,
                      const wxValidator& validator = wxDefaultValidator,
                      const wxString& name = wxPyCheckBoxNameStr),
-        "Actually create the GUI CheckBox for 2-phase creation.");
+        "Actually create the GUI CheckBox for 2-phase creation.", "");
 
     
     DocDeclStr(
         bool, GetValue(),
         "Gets the state of a 2-state CheckBox.  Returns True if it is checked,
-False otherwise.");
+False otherwise.", "");
     
     DocDeclStr(
         bool, IsChecked(),
         "Similar to GetValue, but raises an exception if it is not a 2-state
-CheckBox.");
+CheckBox.", "");
     
     DocDeclStr(
         void, SetValue(const bool state),
         "Set the state of a 2-state CheckBox.  Pass True for checked, False for
-unchecked.");
+unchecked.", "");
     
     DocDeclStr(
         wxCheckBoxState, Get3StateValue() const,
         "Returns wx.CHK_UNCHECKED when the CheckBox is unchecked,
 wx.CHK_CHECKED when it is checked and wx.CHK_UNDETERMINED when it's in
 the undetermined state.  Raises an exceptiion when the function is
-used with a 2-state CheckBox.");
+used with a 2-state CheckBox.", "");
     
     DocDeclStr(
         void, Set3StateValue(wxCheckBoxState state),
@@ -139,16 +137,16 @@ used with a 2-state CheckBox.");
 of the following: wx.CHK_UNCHECKED (Check is off), wx.CHK_CHECKED (the
 Check is on) or wx.CHK_UNDETERMINED (Check is mixed). Raises an
 exception when the CheckBox is a 2-state checkbox and setting the
-state to wx.CHK_UNDETERMINED.");
+state to wx.CHK_UNDETERMINED.", "");
     
     DocDeclStr(
         bool, Is3State() const,
-        "Returns whether or not the CheckBox is a 3-state CheckBox.");
+        "Returns whether or not the CheckBox is a 3-state CheckBox.", "");
     
     DocDeclStr(
         bool, Is3rdStateAllowedForUser() const,
         "Returns whether or not the user can set the CheckBox to the third
-state.");
+state.", "");
     
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);

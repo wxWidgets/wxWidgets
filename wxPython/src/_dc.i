@@ -302,15 +302,16 @@ public:
     DocDeclAStr(
         void, GetTextExtent(const wxString& string, wxCoord *OUTPUT, wxCoord *OUTPUT),
         "GetTextExtent(wxString string) -> (width, height)",
-        "Get the width and height of the text using the current font.\n"
-        "Only works for single line strings.");
+        "Get the width and height of the text using the current font. Only
+works for single line strings.", "");
+
     DocDeclAStrName(
         void, GetTextExtent(const wxString& string,
                             wxCoord *OUTPUT, wxCoord *OUTPUT, wxCoord *OUTPUT, wxCoord* OUTPUT,
                             wxFont* font = NULL),
         "GetFullTextExtent(wxString string, Font font=None) ->\n   (width, height, descent, externalLeading)",
-        "Get the width, height, decent and leading of the text using the current or specified font.\n"
-        "Only works for single line strings.",
+        "Get the width, height, decent and leading of the text using the
+current or specified font. Only works for single line strings.", "",
         GetFullTextExtent);
 
 
@@ -320,8 +321,9 @@ public:
                                      wxCoord *OUTPUT, wxCoord *OUTPUT, wxCoord *OUTPUT,
                                      wxFont *font = NULL),
         "GetMultiLineTextExtent(wxString string, Font font=None) ->\n   (width, height, descent, externalLeading)",
-        "Get the width, height, decent and leading of the text using the current or specified font.\n"
-        "Works for single as well as multi-line strings.");
+        "Get the width, height, decent and leading of the text using the
+current or specified font. Works for single as well as multi-line
+strings.", "");
 
     
     %extend {
@@ -336,7 +338,7 @@ public:
     // size and resolution
     // -------------------
 
-    DocStr(GetSize, "Get the DC size in device units.");
+    DocStr(GetSize, "Get the DC size in device units.", "");
     wxSize GetSize();
     DocDeclAName(
         void, GetSize( int *OUTPUT, int *OUTPUT ),
@@ -344,7 +346,7 @@ public:
         GetSizeTuple);
 
 
-    DocStr(GetSizeMM, "Get the DC size in milimeters.");
+    DocStr(GetSizeMM, "Get the DC size in milimeters.", "");
     wxSize GetSizeMM() const;
     DocDeclAName(
         void, GetSizeMM( int *OUTPUT, int *OUTPUT ) const,

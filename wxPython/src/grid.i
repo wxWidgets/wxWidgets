@@ -1505,7 +1505,7 @@ public:
     bool operator!=( const wxGridCellCoords& other ) const;
 
     %extend {
-        PyObject* asTuple() {
+        PyObject* Get() {
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->GetRow()));
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->GetCol()));
@@ -1513,9 +1513,10 @@ public:
         }
     }
     %pythoncode {
-    def __str__(self):                   return str(self.asTuple())
-    def __repr__(self):                  return 'wxGridCellCoords'+str(self.asTuple())
-    def __len__(self):                   return len(self.asTuple())
+    asTuple = wx._deprecated(Get, "asTuple is deprecated, use `Get` instead")
+    def __str__(self):                   return str(self.Get())
+    def __repr__(self):                  return 'wxGridCellCoords'+str(self.Get())
+    def __len__(self):                   return len(self.Get())
     def __getitem__(self, index):        return self.asTuple()[index]
     def __setitem__(self, index, val):
         if index == 0: self.SetRow(val)

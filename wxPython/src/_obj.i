@@ -18,20 +18,20 @@
 
 DocStr(wxObject,
 "The base class for most wx objects, although in wxPython not
-much functionality is needed nor exposed.");
+much functionality is needed nor exposed.", "");
 
 class wxObject {
 public:
 
     %extend {
         DocStr(GetClassName,
-               "Returns the class name of the C++ class using wxRTTI.");
+               "Returns the class name of the C++ class using wxRTTI.", "");
         wxString GetClassName() {
             return self->GetClassInfo()->GetClassName();
         }
 
         DocStr(Destroy,
-               "Deletes the C++ object this Python object is a proxy for.");
+               "Deletes the C++ object this Python object is a proxy for.", "");
         void Destroy() {
             delete self;
         }

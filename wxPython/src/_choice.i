@@ -24,7 +24,7 @@ MAKE_CONST_WXSTRING(ChoiceNameStr);
 DocStr(wxChoice,       
 "A Choice control is used to select one of a list of strings.
 Unlike a `wx.ListBox`, only the selection is visible until the
-user pulls down the menu of choices.
+user pulls down the menu of choices.", "
 
 Events
 ------
@@ -40,8 +40,6 @@ public:
     %pythonAppend wxChoice         "self._setOORInfo(self)"
     %pythonAppend wxChoice()       ""
 
-    RefDoc(wxChoice, ""); // turn it off for the ctors
-    
     DocCtorAStr(
         wxChoice(wxWindow *parent, wxWindowID id=-1,
                  const wxPoint& pos = wxDefaultPosition,
@@ -53,11 +51,11 @@ public:
         "__init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize,
     List choices=[], long style=0, Validator validator=DefaultValidator,
     String name=ChoiceNameStr) -> Choice",
-        "Create and show a Choice control");
+        "Create and show a Choice control", "");
 
     DocCtorStrName(
         wxChoice(),
-        "Precreate a Choice control for 2-phase creation.",
+        "Precreate a Choice control for 2-phase creation.", "",
         PreChoice);
                 
 
@@ -72,7 +70,7 @@ public:
         "Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize,
     List choices=[], long style=0, Validator validator=DefaultValidator,
     String name=ChoiceNameStr) -> bool",
-        "Actually create the GUI Choice control for 2-phase creation");
+        "Actually create the GUI Choice control for 2-phase creation", "");
     
 
 //     // These are only meaningful on wxMotif...
@@ -82,15 +80,15 @@ public:
 
     DocDeclStr(
         void , SetSelection(const int n),
-        "Select the n'th item (zero based) in the list.");
+        "Select the n'th item (zero based) in the list.", "");
     
     DocDeclStr(
         bool , SetStringSelection(const wxString& string),
-        "Select the item with the specifed string");
+        "Select the item with the specifed string", "");
     
     DocDeclStr(
         void , SetString(int n, const wxString& string),
-        "Set the label for the n'th item (zero based) in the list.");
+        "Set the label for the n'th item (zero based) in the list.", "");
     
 
     %pythoncode { Select = SetSelection }

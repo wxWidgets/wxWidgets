@@ -52,7 +52,7 @@ class wxImageHistogram /* : public wxImageHistogramBase */
 public:
     wxImageHistogram();
 
-    DocStr(MakeKey, "Get the key in the histogram for the given RGB values");
+    DocStr(MakeKey, "Get the key in the histogram for the given RGB values", "");
     static unsigned long MakeKey(unsigned char r,
                                  unsigned char g,
                                  unsigned char b);
@@ -65,9 +65,9 @@ public:
                                     unsigned char startG = 0,
                                     unsigned char startB = 0 ) const,
         "FindFirstUnusedColour(int startR=1, int startG=0, int startB=0) -> (success, r, g, b)",
-        "Find first colour that is not used in the image and has higher RGB values than\n"
-        "startR, startG, startB.  Returns a tuple consisting of a success flag and rgb\n"
-        "values.");
+        "Find first colour that is not used in the image and has higher RGB
+values than startR, startG, startB.  Returns a tuple consisting of a
+success flag and rgb values.", "");
 };
 
 
@@ -129,9 +129,9 @@ public:
         bool, FindFirstUnusedColour( byte *OUTPUT, byte *OUTPUT, byte *OUTPUT,
                                      byte startR = 0, byte startG = 0, byte startB = 0 ) const,
         "FindFirstUnusedColour(int startR=1, int startG=0, int startB=0) -> (success, r, g, b)",
-        "Find first colour that is not used in the image and has higher RGB values than\n"
-        "startR, startG, startB.  Returns a tuple consisting of a success flag and rgb\n"
-        "values.");
+        "Find first colour that is not used in the image and has higher RGB
+values than startR, startG, startB.  Returns a tuple consisting of a
+success flag and rgb values.", "");
 
 
     // Set image's mask to the area of 'mask' that has <mr,mg,mb> colour

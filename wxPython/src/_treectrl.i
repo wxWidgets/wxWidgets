@@ -685,10 +685,10 @@ public:
     DocDeclAStr(
         wxTreeItemId, HitTest(const wxPoint& point, int& OUTPUT),
         "HitTest(Point point) -> (item, where)",
-        "Determine which item (if any) belongs the given point.  The\n"
-        "coordinates specified are relative to the client area of tree ctrl\n"
-        "and the where return value is set to a bitmask of wxTREE_HITTEST_xxx\n"
-        "constants.\n");
+        "Determine which item (if any) belongs the given point.  The coordinates
+specified are relative to the client area of tree ctrl and the where return
+value is set to a bitmask of wxTREE_HITTEST_xxx constants.
+", "");
     
 
     %extend {

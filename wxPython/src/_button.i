@@ -33,7 +33,7 @@ enum {
 DocStr(wxButton,
 "A button is a control that contains a text string, and is one of the most
 common elements of a GUI.  It may be placed on a dialog box or panel, or
-indeed almost any other window.
+indeed almost any other window.", "
 
 Window Styles
 -------------
@@ -65,7 +65,6 @@ public:
     %pythonAppend wxButton()       ""
 
 
-    RefDoc(wxButton, "");
     DocCtorStr(
         wxButton(wxWindow* parent, wxWindowID id, const wxString& label,
                  const wxPoint& pos = wxDefaultPosition,
@@ -73,11 +72,11 @@ public:
                  long style = 0,
                  const wxValidator& validator = wxDefaultValidator,
                  const wxString& name = wxPyButtonNameStr),
-        "Create and show a button.");
+        "Create and show a button.", "");
 
     DocCtorStrName(
         wxButton(),
-        "Precreate a Button for 2-phase creation.",
+        "Precreate a Button for 2-phase creation.", "",
         PreButton);
 
     DocDeclStr(
@@ -87,18 +86,18 @@ public:
                       long style = 0,
                       const wxValidator& validator = wxDefaultValidator,
                       const wxString& name = wxPyButtonNameStr),
-        "Acutally create the GUI Button for 2-phase creation.");
+        "Acutally create the GUI Button for 2-phase creation.", "");
     
 
 
     DocDeclStr(
         void , SetDefault(),
-        "This sets the button to be the default item for the panel or dialog box.");
+        "This sets the button to be the default item for the panel or dialog box.", "");
     
 
     DocDeclStr(
         static wxSize , GetDefaultSize(),
-        "Returns the default button size for this platform.");   
+        "Returns the default button size for this platform.", "");   
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
@@ -113,7 +112,7 @@ DocStr(wxBitmapButton,
 "A Button that contains a bitmap.  A bitmap button can be supplied with a
 single bitmap, and wxWidgets will draw all button states using this bitmap. If
 the application needs more control, additional bitmaps for the selected state,
-unpressed focused state, and greyed-out state may be supplied.
+unpressed focused state, and greyed-out state may be supplied.", "       
 
 Window Styles
 -------------
@@ -150,8 +149,6 @@ public:
     %pythonAppend wxBitmapButton         "self._setOORInfo(self)"
     %pythonAppend wxBitmapButton()       ""
 
-    RefDoc(wxBitmapButton, ""); // turn it off for the ctors
-
     DocCtorStr(
         wxBitmapButton(wxWindow* parent, wxWindowID id, const wxBitmap& bitmap,
                        const wxPoint& pos = wxDefaultPosition,
@@ -159,11 +156,11 @@ public:
                        long style = wxBU_AUTODRAW,
                        const wxValidator& validator = wxDefaultValidator,
                        const wxString& name = wxPyButtonNameStr),
-        "Create and show a button with a bitmap for the label.");
+        "Create and show a button with a bitmap for the label.", "");
 
     DocCtorStrName(
         wxBitmapButton(),
-        "Precreate a BitmapButton for 2-phase creation.",
+        "Precreate a BitmapButton for 2-phase creation.", "",
         PreBitmapButton);
 
     DocDeclStr(
@@ -173,46 +170,46 @@ public:
                 long style = wxBU_AUTODRAW,
                 const wxValidator& validator = wxDefaultValidator,
                       const wxString& name = wxPyButtonNameStr),
-        "Acutally create the GUI BitmapButton for 2-phase creation.");
+        "Acutally create the GUI BitmapButton for 2-phase creation.", "");
     
 
     DocDeclStr(
         wxBitmap , GetBitmapLabel(),
-        "Returns the label bitmap (the one passed to the constructor).");
+        "Returns the label bitmap (the one passed to the constructor).", "");
     
     DocDeclStr(
         wxBitmap , GetBitmapDisabled(),
-        "Returns the bitmap for the disabled state.");
+        "Returns the bitmap for the disabled state.", "");
     
     DocDeclStr(
         wxBitmap , GetBitmapFocus(),
-        "Returns the bitmap for the focused state.");
+        "Returns the bitmap for the focused state.", "");
     
 
     DocDeclStr(
         wxBitmap , GetBitmapSelected(),
-        "Returns the bitmap for the selected state.");
+        "Returns the bitmap for the selected state.", "");
     
 
     DocDeclStr(
         void , SetBitmapDisabled(const wxBitmap& bitmap),
-        "Sets the bitmap for the disabled button appearance.");
+        "Sets the bitmap for the disabled button appearance.", "");
     
 
     DocDeclStr(
         void , SetBitmapFocus(const wxBitmap& bitmap),
-        "Sets the bitmap for the button appearance when it has the keyboard focus.");
+        "Sets the bitmap for the button appearance when it has the keyboard focus.", "");
     
 
     DocDeclStr(
         void , SetBitmapSelected(const wxBitmap& bitmap),
-        "Sets the bitmap for the selected (depressed) button appearance.");
+        "Sets the bitmap for the selected (depressed) button appearance.", "");
     
 
     DocDeclStr(
         void , SetBitmapLabel(const wxBitmap& bitmap),
         "Sets the bitmap label for the button.  This is the bitmap used for the
-unselected state, and for all other states if no other bitmaps are provided.");
+unselected state, and for all other states if no other bitmaps are provided.", "");
     
 
     void SetMargins(int x, int y);

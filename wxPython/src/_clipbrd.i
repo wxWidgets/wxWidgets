@@ -33,7 +33,7 @@ clipboard and relinquish ownership. You should keep the clipboard open
 only momentarily.
 
 :see: `wx.DataObject`
-");
+", "");
 
 
 
@@ -41,7 +41,7 @@ class wxClipboard : public wxObject {
 public:
     DocCtorStr(
         wxClipboard(),
-        "");
+        "", "");
     
     ~wxClipboard();
 
@@ -51,17 +51,17 @@ public:
         "Call this function to open the clipboard before calling SetData and
 GetData.  Call Close when you have finished with the clipboard.  You
 should keep the clipboard open for only a very short time.  Returns
-True on success.");
+True on success.", "");
     
 
     DocDeclStr(
         virtual void , Close(),
-        "Closes the clipboard.");
+        "Closes the clipboard.", "");
     
 
     DocDeclStr(
         virtual bool , IsOpened() const,
-        "Query whether the clipboard is opened");
+        "Query whether the clipboard is opened", "");
     
 
 
@@ -74,7 +74,7 @@ call this function repeatedly after having cleared the clipboard.
 After this function has been called, the clipboard owns the data, so
 do not delete the data explicitly.
 
-:see: `wx.DataObject`");
+:see: `wx.DataObject`", "");
     
 
     DocDeclStr(
@@ -82,7 +82,7 @@ do not delete the data explicitly.
         "Set the clipboard data, this is the same as `Clear` followed by
 `AddData`.
 
-:see: `wx.DataObject`");
+:see: `wx.DataObject`", "");
     
 
     %clear wxDataObject *data;
@@ -90,18 +90,18 @@ do not delete the data explicitly.
     DocDeclStr(
         virtual bool , IsSupported( const wxDataFormat& format ),
         "Returns True if the given format is available in the data object(s) on
-the clipboard.");
+the clipboard.", "");
 
     DocDeclStr(
         virtual bool , GetData( wxDataObject& data ),
         "Call this function to fill data with data on the clipboard, if
-available in the required format. Returns true on success.");
+available in the required format. Returns true on success.", "");
     
     
     DocDeclStr(
         virtual void , Clear(),
         "Clears data from the clipboard object and also the system's clipboard
-if possible.");
+if possible.", "");
     
 
     DocDeclStr(
@@ -109,14 +109,14 @@ if possible.");
         "Flushes the clipboard: this means that the data which is currently on
 clipboard will stay available even after the application exits,
 possibly eating memory, otherwise the clipboard will be emptied on
-exit.  Returns False if the operation is unsuccesful for any reason.");
+exit.  Returns False if the operation is unsuccesful for any reason.", "");
     
 
     DocDeclStr(
         virtual void , UsePrimarySelection( bool primary = True ),
         "On platforms supporting it (the X11 based platforms), selects the
 so called PRIMARY SELECTION as the clipboard as opposed to the
-normal clipboard, if primary is True.");
+normal clipboard, if primary is True.", "");
 };
 
 
@@ -131,7 +131,7 @@ wxClipboard* const wxTheClipboard;
 
 DocStr(wxClipboardLocker,
 "A helpful class for opening the clipboard and automatically
-closing it when the locker is destroyed.");
+closing it when the locker is destroyed.", "");
 
 class wxClipboardLocker
 {
@@ -141,7 +141,7 @@ public:
 
     DocStr(__nonzero__,
            "A ClipboardLocker instance evaluates to True if the clipboard was
-successfully opened.")
+successfully opened.", "");
     %extend {
         bool __nonzero__()   { return !!(*self); }
     }

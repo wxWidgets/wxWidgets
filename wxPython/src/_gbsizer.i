@@ -97,7 +97,7 @@ public:
         }
     }
     %pythoncode {
-    asTuple = Get
+    asTuple = wx._deprecated(Get, "asTuple is deprecated, use `Get` instead")
     def __str__(self):                   return str(self.Get())
     def __repr__(self):                  return 'wx.GBPosition'+str(self.Get())
     def __len__(self):                   return len(self.Get())
@@ -154,7 +154,7 @@ public:
         }
     }
     %pythoncode {
-    asTuple = Get
+    asTuple = wx._deprecated(Get, "asTuple is deprecated, use `Get` instead")
     def __str__(self):                   return str(self.Get())
     def __repr__(self):                  return 'wx.GBSpan'+str(self.Get())
     def __len__(self):                   return len(self.Get())

@@ -196,7 +196,8 @@ public:
     DocDeclAStr(
         virtual int, HitTest(const wxPoint& pt, long* OUTPUT) const,
         "HitTest(Point pt) -> (tab, where)",
-        "Returns the tab which is hit, and flags indicating where using wx.NB_HITTEST_ flags.");
+        "Returns the tab which is hit, and flags indicating where using
+wx.NB_HITTEST flags.", "");
 
     // implement some base class functions
     virtual wxSize CalcSizeFromPage(const wxSize& sizePage) const;

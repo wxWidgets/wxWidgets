@@ -25,7 +25,7 @@ MAKE_CONST_WXSTRING(PanelNameStr);
 
 
 DocStr(wxVisualAttributes,
-    "struct containing all the visual attributes of a control");
+    "struct containing all the visual attributes of a control", "");
 
 struct wxVisualAttributes
 {
@@ -59,91 +59,93 @@ enum wxWindowVariant
 
 
 DocStr(wxWindow,
-"
-wx.Window is the base class for all windows and represents any visible
+"wx.Window is the base class for all windows and represents any visible
 object on the screen. All controls, top level windows and so on are
 wx.Windows. Sizers and device contexts are not however, as they don't
 appear on screen themselves.
-");
+",
+"      
+Styles
+-------
+    =============================  =====================================
+    wx.SIMPLE_BORDER               Displays a thin border around the window.
+                                   
+    wx.DOUBLE_BORDER               Displays a double border. Windows and Mac only.
+                                   
+    wx.SUNKEN_BORDER               Displays a sunken border.
+                                   
+    wx.RAISED_BORDER               Displays a raised border.
+                                   
+    wx.STATIC_BORDER               Displays a border suitable for a static
+                                   control. Windows only.
+                                   
+    wx.NO_BORDER                   Displays no border, overriding the default
+                                   border style for the window.
+                                   
+    wx.TRANSPARENT_WINDOW          The window is transparent, that is, it
+                                   will not receive paint events. Windows only.
+                                   
+    wx.TAB_TRAVERSAL               Use this to enable tab traversal for
+                                   non-dialog windows.
+                                   
+    wx.WANTS_CHARS                 Use this to indicate that the window
+                                   wants to get all char/key events for
+                                   all keys - even for keys like TAB or
+                                   ENTER which are usually used for
+                                   dialog navigation and which wouldn't
+                                   be generated without this style. If
+                                   you need to use this style in order to
+                                   get the arrows or etc., but would
+                                   still like to have normal keyboard
+                                   navigation take place, you should
+                                   create and send a wxNavigationKeyEvent
+                                   in response to the key events for Tab
+                                   and Shift-Tab.
+                                   
+    wx.NO_FULL_REPAINT_ON_RESIZE   Disables repainting the window
+                                   completely when its size is changed.
+                                   You will have to repaint the new
+                                   window area manually if you use this
+                                   style. As of version 2.5.1 this
+                                   style is on by default.  Use
+                                   wx.FULL_REPAINT_ON_RESIZE to
+                                   deactivate it.
+                                   
+    wx.VSCROLL                     Use this style to enable a vertical scrollbar.
+                                   
+    wx.HSCROLL                     Use this style to enable a horizontal scrollbar.
+                                   
+    wx.ALWAYS_SHOW_SB              If a window has scrollbars, disable them
+                                   instead of hiding them when they are
+                                   not needed (i.e. when the size of the
+                                   window is big enough to not require
+                                   the scrollbars to navigate it). This
+                                   style is currently only implemented
+                                   for wxMSW and wxUniversal and does
+                                   nothing on the other platforms.
+                                   
+    wx.CLIP_CHILDREN               Use this style to eliminate flicker caused by
+                                   the background being repainted, then
+                                   children being painted over
+                                   them. Windows only.
+                                   
+    wx.FULL_REPAINT_ON_RESIZE      Use this style to force a complete
+                                   redraw of the window whenever it is
+                                   resized instead of redrawing just the
+                                   part of the window affected by
+                                   resizing. Note that this was the
+                                   behaviour by default before 2.5.1
+                                   release and that if you experience
+                                   redraw problems with the code which
+                                   previously used to work you may want
+                                   to try this.
+    =============================  =====================================
 
-RefDoc(wxWindow, "
-  Styles
 
-    wx.SIMPLE_BORDER: 	        Displays a thin border around the window.
-
-    wx.DOUBLE_BORDER: 	        Displays a double border. Windows and Mac only.
-
-    wx.SUNKEN_BORDER: 	        Displays a sunken border.
-
-    wx.RAISED_BORDER: 	        Displays a raised border.
-
-    wx.STATIC_BORDER:           Displays a border suitable for a static
-                                control. Windows only.
-
-    wx.NO_BORDER:               Displays no border, overriding the default
-                                border style for the window.
-
-    wx.TRANSPARENT_WINDOW:      The window is transparent, that is, it
-                                will not receive paint events. Windows only.
-
-    wx.TAB_TRAVERSAL:           Use this to enable tab traversal for
-                                non-dialog windows.
-
-    wx.WANTS_CHARS:             Use this to indicate that the window
-                                wants to get all char/key events for
-                                all keys - even for keys like TAB or
-                                ENTER which are usually used for
-                                dialog navigation and which wouldn't
-                                be generated without this style. If
-                                you need to use this style in order to
-                                get the arrows or etc., but would
-                                still like to have normal keyboard
-                                navigation take place, you should
-                                create and send a wxNavigationKeyEvent
-                                in response to the key events for Tab
-                                and Shift-Tab.
-
-    wx.NO_FULL_REPAINT_ON_RESIZE: Disables repainting the window
-                                  completely when its size is changed
-                                  - you will have to repaint the new
-                                  window area manually if you use this
-                                  style. As of version 2.5.1 this
-                                  style is on by default.  Use
-                                  wx.FULL_REPAINT_ON_RESIZE to
-                                  deactivate it.
-
-    wx.VSCROLL: 	        Use this style to enable a vertical scrollbar.
-
-    wx.HSCROLL: 	        Use this style to enable a horizontal scrollbar.
-
-    wx.ALWAYS_SHOW_SB:          If a window has scrollbars, disable them
-                                instead of hiding them when they are
-                                not needed (i.e. when the size of the
-                                window is big enough to not require
-                                the scrollbars to navigate it). This
-                                style is currently only implemented
-                                for wxMSW and wxUniversal and does
-                                nothing on the other platforms.
-
-    wx.CLIP_CHILDREN:           Use this style to eliminate flicker caused by
-                                the background being repainted, then
-                                children being painted over
-                                them. Windows only.
-
-    wx.FULL_REPAINT_ON_RESIZE:  Use this style to force a complete
-                                redraw of the window whenever it is
-                                resized instead of redrawing just the
-                                part of the window affected by
-                                resizing. Note that this was the
-                                behaviour by default before 2.5.1
-                                release and that if you experience
-                                redraw problems with the code which
-                                previously used to work you may want
-                                to try this.
-
-  Extra Styles
-
-    wx.WS_EX_VALIDATE_RECURSIVELY:  By default,
+Extra Styles
+------------
+    =============================   =====================================
+    wx.WS_EX_VALIDATE_RECURSIVELY   By default,
                                     Validate/TransferDataTo/FromWindow()
                                     only work on direct children of
                                     the window (compatible
@@ -151,7 +153,7 @@ RefDoc(wxWindow, "
                                     them recursively descend into all
                                     subwindows.
 
-    wx.WS_EX_BLOCK_EVENTS:          wx.CommandEvents and the objects of the
+    wx.WS_EX_BLOCK_EVENTS           wx.CommandEvents and the objects of the
                                     derived classes are forwarded to
                                     the parent window and so on
                                     recursively by default. Using this
@@ -171,7 +173,7 @@ RefDoc(wxWindow, "
                                     lead to a crash if the parent is
                                     destroyed before the child.
 
-    wx.WS_EX_PROCESS_IDLE:          This window should always process idle
+    wx.WS_EX_PROCESS_IDLE           This window should always process idle
                                     events, even if the mode set by
                                     wx.IdleEvent.SetMode is
                                     wx.IDLE_PROCESS_SPECIFIED.
@@ -180,6 +182,7 @@ RefDoc(wxWindow, "
                                     update events, even if the mode
                                     set by wxUpdateUIEvent::SetMode is
                                     wxUPDATE_UI_PROCESS_SPECIFIED.
+    =============================   =====================================
 
 ");
 
@@ -191,19 +194,17 @@ public:
     %pythonAppend wxWindow         "self._setOORInfo(self)"
     %pythonAppend wxWindow()       ""
 
-    RefDoc(wxWindow, ""); // turn it off for the ctors
-    
     DocCtorStr(
         wxWindow(wxWindow* parent, const wxWindowID id=-1,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = 0,
                  const wxString& name = wxPyPanelNameStr),
-        "Construct and show a generic Window.");
+        "Construct and show a generic Window.", "");
 
     DocCtorStrName(
         wxWindow(),
-        "Precreate a Window for 2-phase creation.",
+        "Precreate a Window for 2-phase creation.", "",
         PreWindow);
     
 
@@ -213,7 +214,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                       const wxString& name = wxPyPanelNameStr),
-        "Create the GUI part of the Window for 2-phase creation mode.");
+        "Create the GUI part of the Window for 2-phase creation mode.", "");
     
 
     // deleting the window
@@ -225,8 +226,8 @@ public:
         "This function simply generates a EVT_CLOSE event whose handler usually
 tries to close the window. It doesn't close the window itself,
 however.  If force is False (the default) then the window's close
-handler will be allowed to veto the destruction of the window.
-
+handler will be allowed to veto the destruction of the window.",
+"
 Usually Close is only used with the top level windows (wx.Frame and
 wx.Dialog classes) as the others are not supposed to have any special
 EVT_CLOSE logic.
@@ -257,17 +258,18 @@ have been processed. This prevents problems with events being sent to
 non-existent windows.
 
 Returns True if the window has either been successfully deleted, or it
-has been added to the list of windows pending real deletion.");
+has been added to the list of windows pending real deletion.", "");
     
 
     DocDeclStr(
         bool , DestroyChildren(),
-        "Destroys all children of a window. Called automatically by the destructor.");
+        "Destroys all children of a window. Called automatically by the
+destructor.", "");
     
 
     DocDeclStr(
         bool , IsBeingDeleted() const,
-        "Is the window in the process of being deleted?");
+        "Is the window in the process of being deleted?", "");
     
 
     
@@ -276,54 +278,57 @@ has been added to the list of windows pending real deletion.");
 
     DocDeclStr(
         virtual void , SetTitle( const wxString& title),
-        "Sets the window's title. Applicable only to frames and dialogs.");
+        "Sets the window's title. Applicable only to frames and dialogs.", "");
     
     DocDeclStr(
         virtual wxString , GetTitle() const,
-        "Gets the window's title. Applicable only to frames and dialogs.");
+        "Gets the window's title. Applicable only to frames and dialogs.", "");
     
 
     DocDeclStr(
         virtual void , SetLabel(const wxString& label),
-        "Set the text which the window shows in its label if applicable.");
+        "Set the text which the window shows in its label if applicable.", "");
     
     DocDeclStr(
         virtual wxString , GetLabel() const,
-        "Generic way of getting a label from any window, for
-identification purposes.  The interpretation of this function
-differs from class to class. For frames and dialogs, the value
-returned is the title. For buttons or static text controls, it is
-the button text. This function can be useful for meta-programs
-such as testing tools or special-needs access programs)which
-need to identify windows by name.");
+        "Generic way of getting a label from any window, for identification
+purposes.  The interpretation of this function differs from class to
+class. For frames and dialogs, the value returned is the title. For
+buttons or static text controls, it is the button text. This function
+can be useful for meta-programs such as testing tools or special-needs
+access programs)which need to identify windows by name.", "");
     
 
     DocDeclStr(
         virtual void , SetName( const wxString &name ),
-        "Sets the window's name.  The window name is used for ressource
-setting in X, it is not the same as the window title/label");
+        "Sets the window's name.  The window name is used for ressource setting
+in X, it is not the same as the window title/label", "");
     
     DocDeclStr(
         virtual wxString , GetName() const,
-        "Returns the windows name.  This name is not guaranteed to be
-unique; it is up to the programmer to supply an appropriate name
-in the window constructor or via wx.Window.SetName.");
+        "Returns the windows name.  This name is not guaranteed to be unique;
+it is up to the programmer to supply an appropriate name in the window
+constructor or via wx.Window.SetName.", "");
     
     
     DocDeclStr(
         void , SetWindowVariant( wxWindowVariant variant ),
-        "Sets the variant of the window/font size to use for this window,
-if the platform supports variants, for example, wxMac.  Variant values are:
+        "Sets the variant of the window/font size to use for this window, if
+the platform supports variants, for example, wxMac.",
+        "
+Variant values are:
 
+    ========================    =======================================
     wx.WINDOW_VARIANT_NORMAL    Normal size
     wx.WINDOW_VARIANT_SMALL     Smaller size (about 25 % smaller than normal)
     wx.WINDOW_VARIANT_MINI      Mini size (about 33 % smaller than normal)
     wx.WINDOW_VARIANT_LARGE     Large size (about 25 % larger than normal)
+    ========================    =======================================
 ");
     
     DocDeclStr(
         wxWindowVariant , GetWindowVariant() const,
-        "");
+        "", "");
     
 
     DocDeclStr(
@@ -331,31 +336,31 @@ if the platform supports variants, for example, wxMac.  Variant values are:
         "Sets the identifier of the window.  Each window has an integer
 identifier. If the application has not provided one, an identifier
 will be generated. Normally, the identifier should be provided on
-creation and should not be modified subsequently.");
+creation and should not be modified subsequently.", "");
     
     DocDeclStr(
         wxWindowID , GetId() const,
         "Returns the identifier of the window.  Each window has an integer
 identifier. If the application has not provided one (or the default Id
 -1 is used) then an unique identifier with a negative value will be
-generated.");
+generated.", "");
     
 
     DocDeclStr(
         static int , NewControlId(),
-        "Generate a control id for the controls which were not given one.");
+        "Generate a control id for the controls which were not given one.", "");
     
 
     DocDeclStr(
         static int , NextControlId(int winid),
-        "Get the id of the control following the one with the given\n"
-        "(autogenerated) id");
+        "Get the id of the control following the one with the given
+autogenerated) id", "");
     
 
     DocDeclStr(
         static int , PrevControlId(int winid),
-        "Get the id of the control preceding the one with the given\n"
-        "(autogenerated) id");
+        "Get the id of the control preceding the one with the given
+autogenerated) id", "");
     
 
 
@@ -366,7 +371,7 @@ generated.");
 
     DocDeclStr(
         void , SetSize( const wxSize& size ),
-        "Sets the size of the window in pixels.");
+        "Sets the size of the window in pixels.", "");
 
 
     DocDeclStrName(
@@ -378,32 +383,32 @@ parameter indicates the interpretation of the other params if they are
 shoudl be used.  wx.SIZE_USE_EXISTING: existing dimensions should be
 used if -1 values are supplied.  wxSIZE_ALLOW_MINUS_ONE: allow
 dimensions of -1 and less to be interpreted as real dimensions, not
-default values.",
+default values.", "",
         SetDimensions);
     
 
     DocDeclStrName(
         void , SetSize(const wxRect& rect, int sizeFlags = wxSIZE_AUTO),
-        "Sets the position and size of the window in pixels using a wx.Rect.",
+        "Sets the position and size of the window in pixels using a wx.Rect.", "",
         SetRect);
     
 
     DocDeclStrName(
         void , SetSize( int width, int height ),
-        "Sets the size of the window in pixels.",
+        "Sets the size of the window in pixels.", "",
         SetSizeWH);
     
 
     DocDeclStr(
         void , Move(const wxPoint& pt, int flags = wxSIZE_USE_EXISTING),
-        "Moves the window to the given position.");
+        "Moves the window to the given position.", "");
     
     %pythoncode { SetPosition = Move }
 
 
     DocDeclStrName(
         void , Move(int x, int y, int flags = wxSIZE_USE_EXISTING),
-        "Moves the window to the given position.",
+        "Moves the window to the given position.", "",
         MoveXY);
     
 
@@ -411,12 +416,12 @@ default values.",
     DocDeclStr(
         virtual void , Raise(),
         "Raises the window to the top of the window hierarchy if it is a
-managed window (dialog or frame).");
+managed window (dialog or frame).", "");
     
     DocDeclStr(
         virtual void , Lower(),
         "Lowers the window to the bottom of the window hierarchy if it is a
-managed window (dialog or frame).");
+managed window (dialog or frame).", "");
     
 
     
@@ -426,14 +431,14 @@ managed window (dialog or frame).");
 function to size a window tends to be more device-independent than
 wx.Window.SetSize, since the application need not worry about what
 dimensions the border or title bar have when trying to fit the window
-around panel items, for example.");
+around panel items, for example.", "");
     void SetClientSize( const wxSize& size );
     %name(SetClientSizeWH) void SetClientSize( int width, int height );
     %name(SetClientRect) void SetClientSize(const wxRect& rect);
 
 
     DocStr(GetPosition,   // sets the docstring for both
-           "Get the window's position.");
+           "Get the window's position.", "");
     wxPoint GetPosition();
 
     DocDeclAName(
@@ -442,7 +447,7 @@ around panel items, for example.");
         GetPositionTuple);
 
    
-    DocStr(GetSize, "Get the window size.");
+    DocStr(GetSize, "Get the window size.", "");
     wxSize GetSize() const;
     DocDeclAName(
         void, GetSize( int *OUTPUT, int *OUTPUT ) const,
@@ -453,13 +458,13 @@ around panel items, for example.");
 
     DocDeclStr(
         wxRect , GetRect() const,
-        "Returns the size and position of the window as a wx.Rect object.");
+        "Returns the size and position of the window as a wx.Rect object.", "");
     
 
     DocStr(GetClientSize,
            "This gets the size of the window's 'client area' in pixels. The client
 area is the area which may be drawn on by the programmer, excluding
-title bar, border, scrollbars, etc.");
+title bar, border, scrollbars, etc.", "");
     wxSize GetClientSize() const;
     DocDeclAName(
         void, GetClientSize( int *OUTPUT, int *OUTPUT ) const,
@@ -472,22 +477,22 @@ title bar, border, scrollbars, etc.");
         virtual wxPoint , GetClientAreaOrigin() const,
         "Get the origin of the client area of the window relative to the
 window's top left corner (the client area may be shifted because of
-the borders, scrollbars, other decorations...)");
+the borders, scrollbars, other decorations...)", "");
     
 
     DocDeclStr(
         wxRect , GetClientRect() const,
-        "Get the client area position and size as a wx.Rect object.");
+        "Get the client area position and size as a wx.Rect object.", "");
     
 
     
     DocStr(GetBestSize,
            "This functions returns the best acceptable minimal size for the
-window, if applicable. For example, for a static text control, it will be
-the minimal size such that the control label is not truncated. For
-windows containing subwindows (suzh aswx.Panel), the size returned
-by this function will be the same as the size the window would have
-had after calling Fit.");
+window, if applicable. For example, for a static text control, it will
+be the minimal size such that the control label is not truncated. For
+windows containing subwindows (suzh aswx.Panel), the size returned by
+this function will be the same as the size the window would have had
+after calling Fit.", "");
     wxSize GetBestSize() const;
     DocDeclAName(
         void, GetBestSize(int *OUTPUT, int *OUTPUT) const,
@@ -502,7 +507,7 @@ thing. GetBestSize should return the minimum untruncated size of the
 window, while this method will return the largest of BestSize and any
 user specified minimum size. ie. it is the minimum size the window
 should currently be drawn at, not the minimal size it can possibly
-tolerate.");
+tolerate.", "");
     
 
 
@@ -514,20 +519,20 @@ cetering, and may be wx.HORIZONTAL, wx.VERTICAL or wx.BOTH. It may
 also include wx.CENTER_ON_SCREEN flag if you want to center the window
 on the entire screen and not on its parent window.  If it is a
 top-level window and has no parent then it will always be centered
-relative to the screen.");
+relative to the screen.", "");
     
     %pythoncode { Centre = Center }
 
     
     DocDeclStr(
         void , CenterOnScreen(int dir = wxBOTH),
-        "Center on screen (only works for top level windows)");
+        "Center on screen (only works for top level windows)", "");
     %pythoncode { CentreOnScreen = CenterOnScreen }
 
 
     DocDeclStr(
         void , CenterOnParent(int dir = wxBOTH),
-        "Center with respect to the the parent window");
+        "Center with respect to the the parent window", "");
     %pythoncode { CentreOnParent = CenterOnParent }
 
     
@@ -540,7 +545,7 @@ correctly if sizers are used for the subwindows layout. Also, if the
 window has exactly one subwindow it is better (faster and the result
 is more precise as Fit adds some margin to account for fuzziness of
 its calculations) to call window.SetClientSize(child.GetSize())
-instead of calling Fit.");
+instead of calling Fit.", "");
     
 
     DocDeclStr(
@@ -549,7 +554,7 @@ instead of calling Fit.");
 window. Mainly useful with scrolled windows to reset scrollbars after
 sizing changes that do not trigger a size event, and/or scrolled
 windows without an interior sizer. This function similarly won't do
-anything if there are no subwindows.");
+anything if there are no subwindows.", "");
     
 
     
@@ -559,7 +564,7 @@ anything if there are no subwindows.");
 size increments. If a pair of values is not set (or set to -1), the
 default values will be used.  If this function is called, the user
 will not be able to size the window outside the given bounds. The
-resizing increments are only significant under Motif or Xt.");
+resizing increments are only significant under Motif or Xt.", "");
     virtual void SetSizeHints( int minW, int minH,
                                int maxW = -1, int maxH = -1,
                                int incW = -1, int incH = -1 );
@@ -573,7 +578,7 @@ resizing increments are only significant under Motif or Xt.");
         "Allows specification of minimum and maximum virtual window sizes. If a
 pair of values is not set (or set to -1), the default values will be
 used.  If this function is called, the user will not be able to size
-the virtual area of the window outside the given bounds.");
+the virtual area of the window outside the given bounds.", "");
     virtual void SetVirtualSizeHints( int minW, int minH,
                                       int maxW = -1, int maxH = -1 );
     void SetVirtualSizeHints( const wxSize& minSize,
@@ -581,35 +586,35 @@ the virtual area of the window outside the given bounds.");
     
     DocDeclStr(
         virtual int , GetMinWidth() const,
-        "");
+        "", "");
     
     DocDeclStr(
         virtual int , GetMinHeight() const,
-        "");
+        "", "");
     
     DocDeclStr(
         int , GetMaxWidth() const,
-        "");
+        "", "");
     
     DocDeclStr(
         int , GetMaxHeight() const,
-        "");
+        "", "");
     
 
     DocDeclStr(
         virtual wxSize , GetMaxSize() const,
-        "");
+        "", "");
     
 
     DocDeclStr(
         virtual wxSize , GetMinSize() const,
-        "");
+        "", "");
     
     
     DocStr(SetVirtualSize,
            "Set the the virtual size of a window in pixels.  For most windows this
 is just the client area of the window, but for some like scrolled
-windows it is more or less independent of the screen window size.");
+windows it is more or less independent of the screen window size.", "");
     void SetVirtualSize(const wxSize& size );
     %name(SetVirtualSizeWH) void SetVirtualSize( int w, int h );
 
@@ -617,7 +622,7 @@ windows it is more or less independent of the screen window size.");
     DocStr(GetVirtualSize,
            "Get the the virtual size of the window in pixels.  For most windows
 this is just the client area of the window, but for some like scrolled
-windows it is more or less independent of the screen window size.");           
+windows it is more or less independent of the screen window size.", "");           
     wxSize GetVirtualSize() const;
     DocDeclAName(
         void, GetVirtualSize( int *OUTPUT, int *OUTPUT ) const,
@@ -636,7 +641,7 @@ windows it is more or less independent of the screen window size.");
     DocDeclStr(
         virtual wxSize , GetBestVirtualSize() const,
         "Return the largest of ClientSize and BestSize (as determined by a
-sizer, interior children, or other means)");
+sizer, interior children, or other means)", "");
     
 
 
@@ -649,11 +654,11 @@ sizer, interior children, or other means)");
 window if you want to bring it to top, although this is not needed if
 Show is called immediately after the frame creation.  Returns True if
 the window has been shown or hidden or False if nothing was done
-because it already was in the requested state.");
+because it already was in the requested state.", "");
     
     DocDeclStr(
         bool , Hide(),
-        "Equivalent to calling Show(False).");
+        "Equivalent to calling Show(False).", "");
     
 
     DocDeclStr(
@@ -662,48 +667,48 @@ because it already was in the requested state.");
 window is disabled, all of its children are disabled as well and they
 are reenabled again when the parent is.  Returns true if the window
 has been enabled or disabled, false if nothing was done, i.e. if the
-window had already been in the specified state.");
+window had already been in the specified state.", "");
     
     DocDeclStr(
         bool , Disable(),
-        "Disables the window, same as Enable(false).");
+        "Disables the window, same as Enable(false).", "");
     
 
     DocDeclStr(
         bool , IsShown() const,
-        "Returns true if the window is shown, false if it has been hidden.");
+        "Returns true if the window is shown, false if it has been hidden.", "");
     
     DocDeclStr(
         bool , IsEnabled() const,
-        "Returns true if the window is enabled for input, false otherwise.");
+        "Returns true if the window is enabled for input, false otherwise.", "");
 
     
 
 
     DocDeclStr(
         virtual void , SetWindowStyleFlag( long style ),
-        "Sets the style of the window. Please note that some styles cannot
-be changed after the window creation and that Refresh() might
-need to be called after changing the others for the change to
-take place immediately.");
+        "Sets the style of the window. Please note that some styles cannot be
+changed after the window creation and that Refresh() might need to be
+called after changing the others for the change to take place
+immediately.", "");
     
     DocDeclStr(
         virtual long , GetWindowStyleFlag() const,
         "Gets the window style that was passed to the constructor or Create
-method.");    
+method.", "");    
 
     %pythoncode { SetWindowStyle = SetWindowStyleFlag; GetWindowStyle = GetWindowStyleFlag }
     
   
     DocDeclStr(
         bool , HasFlag(int flag) const,
-        "Test if the given style is set for this window.");
+        "Test if the given style is set for this window.", "");
     
 
     DocDeclStr(
         virtual bool , IsRetained() const,
         "Returns true if the window is retained, false otherwise.  Retained
-windows are only available on X platforms.");
+windows are only available on X platforms.", "");
     
 
 
@@ -711,11 +716,11 @@ windows are only available on X platforms.");
         virtual void , SetExtraStyle(long exStyle),
         "Sets the extra style bits for the window.  Extra styles are the less
 often used style bits which can't be set with the constructor or with
-SetWindowStyleFlag()");
+SetWindowStyleFlag()", "");
     
     DocDeclStr(
         long , GetExtraStyle() const,
-        "Returns the extra style bits for the window.");
+        "Returns the extra style bits for the window.", "");
     
 
     
@@ -723,7 +728,7 @@ SetWindowStyleFlag()");
         virtual void , MakeModal(bool modal = True),
         "Disables all other windows in the application so that the user can
 only interact with this window.  Passing False will reverse this
-effect.");
+effect.", "");
     
 
     
@@ -737,11 +742,11 @@ effect.");
  user's selected theme.
 
 Dialogs, notebook pages and the status bar have this flag set to true
-by default so that the default look and feel is simulated best.");
+by default so that the default look and feel is simulated best.", "");
     
     DocDeclStr(
         virtual bool , GetThemeEnabled() const,
-        "Return the themeEnabled flag.");
+        "Return the themeEnabled flag.", "");
     
 
 // TODO with directors    
@@ -760,31 +765,31 @@ by default so that the default look and feel is simulated best.");
     
     DocDeclStr(
         virtual void , SetFocus(),
-        "Set's the focus to this window, allowing it to receive keyboard input.");
+        "Set's the focus to this window, allowing it to receive keyboard input.", "");
     
     DocDeclStr(
         virtual void , SetFocusFromKbd(),
         "Set focus to this window as the result of a keyboard action.  Normally
-only called internally.");
+only called internally.", "");
     
 
     
     DocDeclStr(
         static wxWindow *, FindFocus(),
         "Returns the window or control that currently has the keyboard focus,
-or None.");
+or None.", "");
     
 
     DocDeclStr(
         virtual bool , AcceptsFocus() const,
-        "Can this window have focus?");
+        "Can this window have focus?", "");
     
 
     DocDeclStr(
         virtual bool , AcceptsFocusFromKeyboard() const,
         "Can this window be given focus by keyboard navigation? if not, the
 only way to give it focus (provided it accepts it at all) is to click
-it.");
+it.", "");
     
 
 
@@ -792,15 +797,15 @@ it.");
     DocDeclStr(
         virtual wxWindow *, GetDefaultItem() const,
         "Get the default child of this parent, i.e. the one which is activated
-by pressing <Enter> such as the OK button on a wx.Dialog.");
+by pressing <Enter> such as the OK button on a wx.Dialog.", "");
     
     DocDeclStr(
         virtual wxWindow *, SetDefaultItem(wxWindow * child),
-        "Set this child as default, return the old default.");
+        "Set this child as default, return the old default.", "");
     
     DocDeclStr(
         virtual void , SetTmpDefaultItem(wxWindow * win),
-        "Set this child as temporary default");
+        "Set this child as temporary default", "");
     
 
     
@@ -816,7 +821,7 @@ by pressing <Enter> such as the OK button on a wx.Dialog.");
                "Returns a list of the window's children.  NOTE: Currently this is a
 copy of the child window list maintained by the window, so the return
 value of this function is only valid as long as the window's children
-do not change.");
+do not change.", "");
         PyObject* GetChildren() {
             wxWindowList& list = self->GetChildren();
             return wxPy_ConvertList(&list);
@@ -825,11 +830,12 @@ do not change.");
 
     DocDeclStr(
         wxWindow *, GetParent() const,
-        "Returns the parent window of this window, or None if there isn't one.");
+        "Returns the parent window of this window, or None if there isn't one.", "");
     
     DocDeclStr(
         wxWindow *, GetGrandParent() const,
-        "Returns the parent of the parent of this window, or None if there isn't one.");
+        "Returns the parent of the parent of this window, or None if there
+isn't one.", "");
     
 
 
@@ -837,7 +843,7 @@ do not change.");
         virtual bool , IsTopLevel() const,
         "Returns true if the given window is a top-level one. Currently all
 frames and dialogs are always considered to be top-level windows (even
-if they have a parent window).");
+if they have a parent window).", "");
     
 
     // change the real parent of this window, return True if the parent
@@ -848,19 +854,19 @@ if they have a parent window).");
 parent window (e.g. a non-standard toolbar in a wxFrame) and then
 re-inserted into another. Available on Windows and GTK.  Returns True
 if the parent was changed, False otherwise (error or newParent ==
-oldParent)");
+oldParent)", "");
     
 
     DocDeclStr(
         virtual void , AddChild( wxWindow *child ),
         "Adds a child window. This is called automatically by window creation
-functions so should not be required by the application programmer.");
+functions so should not be required by the application programmer.", "");
     
     DocDeclStr(
         virtual void , RemoveChild( wxWindow *child ),
         "Removes a child window. This is called automatically by window
 deletion functions so should not be required by the application
-programmer.");
+programmer.", "");
     
 
 
@@ -870,12 +876,12 @@ programmer.");
 
     DocDeclStrName(
         wxWindow *, FindWindow( long winid ),
-        "Find a chld of this window by window ID",
+        "Find a chld of this window by window ID", "",
         FindWindowById);
     
     DocDeclStrName(
         wxWindow *, FindWindow( const wxString& name ),
-        "Find a child of this window by name",
+        "Find a child of this window by name", "",
         FindWindowByName);
     
 
@@ -886,7 +892,7 @@ programmer.");
     DocDeclStr(
         wxEvtHandler *, GetEventHandler() const,
         "Returns the event handler for this window. By default, the window is
-its own event handler.");
+its own event handler.", "");
     
 
     DocDeclStr(
@@ -897,9 +903,9 @@ the window is its own event handler, but an application may wish to
 substitute another, for example to allow central implementation of
 event-handling for a variety of different window classes.
 
-It is usually better to use wx.Window.PushEventHandler since this sets
+It is usually better to use `wx.Window.PushEventHandler` since this sets
 up a chain of event handlers, where an event not handled by one event
-handler is handed to the next one in the chain.");
+handler is handed to the next one in the chain.", "");
     
 
     DocDeclStr(
@@ -913,24 +919,24 @@ window classes.
 
 wx.Window.PushEventHandler allows an application to set up a chain of
 event handlers, where an event not handled by one event handler is
-handed to the next one in the chain. Use wx.Window.PopEventHandler to
-remove the event handler.");
+handed to the next one in the chain. Use `wx.Window.PopEventHandler` to
+remove the event handler.", "");
 
     
     DocDeclStr(
         wxEvtHandler *, PopEventHandler( bool deleteHandler = False ),
         "Removes and returns the top-most event handler on the event handler
 stack.  If deleteHandler is True then the wx.EvtHandler object will be
-destroyed after it is popped.");
+destroyed after it is popped.", "");
     
 
     DocDeclStr(
         bool , RemoveEventHandler(wxEvtHandler *handler),
-        "Find the given handler in the event handler chain and remove (but
-not delete) it from the event handler chain, return True if it was
-found and False otherwise (this also results in an assert failure so
-this function should only be called when the handler is supposed to
-be there.)");
+        "Find the given handler in the event handler chain and remove (but not
+delete) it from the event handler chain, return True if it was found
+and False otherwise (this also results in an assert failure so this
+function should only be called when the handler is supposed to be
+there.)", "");
     
 
 
@@ -944,42 +950,41 @@ be there.)");
         virtual void , SetValidator( const wxValidator &validator ),
         "Deletes the current validator (if any) and sets the window validator,
 having called wx.Validator.Clone to create a new validator of this
-type.");
+type.", "");
     
     DocDeclStr(
         virtual wxValidator *, GetValidator(),
         "Returns a pointer to the current validator for the window, or None if
-there is none.");
+there is none.", "");
 
 
     DocDeclStr(
         virtual bool , Validate(),
         "Validates the current values of the child controls using their
-validators.  If the window has wx.WS_EX_VALIDATE_RECURSIVELY
-extra style flag set, the method will also call Validate() of all
-child windows.  Returns false if any of the validations failed.");
+validators.  If the window has wx.WS_EX_VALIDATE_RECURSIVELY extra
+style flag set, the method will also call Validate() of all child
+windows.  Returns false if any of the validations failed.", "");
     
 
     DocDeclStr(
         virtual bool , TransferDataToWindow(),
-        "Transfers values to child controls from data areas specified by
-their validators.  If the window has wx.WS_EX_VALIDATE_RECURSIVELY
-extra style flag set, the method will also call
-TransferDataToWindow() of all child windows.");
+        "Transfers values to child controls from data areas specified by their
+validators.  If the window has wx.WS_EX_VALIDATE_RECURSIVELY extra
+style flag set, the method will also call TransferDataToWindow() of
+all child windows.", "");
     
     DocDeclStr(
         virtual bool , TransferDataFromWindow(),
-        "Transfers values from child controls to data areas specified by
-their validators. Returns false if a transfer failed.  If the
-window has wx.WS_EX_VALIDATE_RECURSIVELY extra style flag set, the
-method will also call TransferDataFromWindow() of all child
-windows.");
+        "Transfers values from child controls to data areas specified by their
+validators. Returns false if a transfer failed.  If the window has
+wx.WS_EX_VALIDATE_RECURSIVELY extra style flag set, the method will
+also call TransferDataFromWindow() of all child windows.", "");
     
 
     DocDeclStr(
         virtual void , InitDialog(),
-        "Sends an EVT_INIT_DIALOG event, whose handler usually transfers
-data to the dialog via validators.");
+        "Sends an EVT_INIT_DIALOG event, whose handler usually transfers data
+to the dialog via validators.", "");
     
     
 
@@ -989,11 +994,11 @@ data to the dialog via validators.");
 
     DocDeclStr(
         virtual void , SetAcceleratorTable( const wxAcceleratorTable& accel ),
-        "Sets the accelerator table for this window.");
+        "Sets the accelerator table for this window.", "");
     
     DocDeclStr(
         wxAcceleratorTable *, GetAcceleratorTable(),
-        "Gets the accelerator table for this window.");
+        "Gets the accelerator table for this window.", "");
     
 
 
@@ -1009,7 +1014,7 @@ receive the event even if the application is in the background and
 does not have the input focus because the user is working with some
 other application.  To bind an event handler function to this hotkey
 use EVT_HOTKEY with an id equal to hotkeyId.  Returns True if the
-hotkey was registered successfully.");
+hotkey was registered successfully.", "");
         bool RegisterHotKey(int hotkeyId, int modifiers, int keycode) {
         %#if wxUSE_HOTKEY
             return self->RegisterHotKey(hotkeyId, modifiers, keycode);
@@ -1020,7 +1025,7 @@ hotkey was registered successfully.");
 
         
         DocStr(UnregisterHotKey,
-               "Unregisters a system wide hotkey.");
+               "Unregisters a system wide hotkey.", "");
         bool UnregisterHotKey(int hotkeyId) {
         #if wxUSE_HOTKEY
             return self->UnregisterHotKey(hotkeyId);
@@ -1041,7 +1046,7 @@ are used for maintaining a dialog's proportions even if the font
 changes. For the x dimension, the dialog units are multiplied by the
 average character width and then divided by 4. For the y dimension,
 the dialog units are multiplied by the average character height and
-then divided by 8.");
+then divided by 8.", "");
     %name(ConvertDialogPointToPixels) wxPoint ConvertDialogToPixels(const wxPoint& pt);
     %name(ConvertDialogSizeToPixels)  wxSize  ConvertDialogToPixels(const wxSize& sz);
     %name(DLG_PNT) wxPoint ConvertDialogToPixels(const wxPoint& pt);
@@ -1054,7 +1059,7 @@ are used for maintaining a dialog's proportions even if the font
 changes. For the x dimension, the dialog units are multiplied by the
 average character width and then divided by 4. For the y dimension,
 the dialog units are multiplied by the average character height and
-then divided by 8.");
+then divided by 8.", "");
     %name(ConvertPixelPointToDialog) wxPoint ConvertPixelsToDialog(const wxPoint& pt);
     %name(ConvertPixelSizeToDialog)  wxSize  ConvertPixelsToDialog(const wxSize& sz);
 
@@ -1068,7 +1073,7 @@ then divided by 8.");
         "Moves the pointer to the given position on the window.
 
 NOTE: This function is not supported under Mac because Apple Human
-Interface Guidelines forbid moving the mouse cursor programmatically.");
+Interface Guidelines forbid moving the mouse cursor programmatically.", "");
     
 
     DocDeclStr(
@@ -1080,21 +1085,21 @@ Note that wxWindows maintains the stack of windows having captured the
 mouse and when the mouse is released the capture returns to the window
 which had had captured it previously and it is only really released if
 there were no previous window. In particular, this means that you must
-release the mouse as many times as you capture it.");
+release the mouse as many times as you capture it.", "");
     
     DocDeclStr(
         void , ReleaseMouse(),
-        "Releases mouse input captured with wx.Window.CaptureMouse.");
+        "Releases mouse input captured with wx.Window.CaptureMouse.", "");
     
 
     DocDeclStr(
         static wxWindow *, GetCapture(),
-        "Returns the window which currently captures the mouse or None");
+        "Returns the window which currently captures the mouse or None", "");
     
 
     DocDeclStr(
         virtual bool , HasCapture() const,
-        "Returns true if this window has the current mouse capture.");
+        "Returns true if this window has the current mouse capture.", "");
     
 
 
@@ -1108,13 +1113,13 @@ release the mouse as many times as you capture it.");
                                 const wxRect *rect = NULL ),
         "Mark the specified rectangle (or the whole window) as \"dirty\" so it
 will be repainted.  Causes an EVT_PAINT event to be generated and sent
-to the window.");
+to the window.", "");
     
 
     DocDeclStr(
         void , RefreshRect(const wxRect& rect),
         "Redraws the contents of the given rectangle: the area inside it will
-be repainted.  This is the same as Refresh but has a nicer syntax.");
+be repainted.  This is the same as Refresh but has a nicer syntax.", "");
     
 
     DocDeclStr(
@@ -1125,60 +1130,61 @@ this would usually only happen when the flow of control returns to the
 event loop.)  Notice that this function doesn't refresh the window and
 does nothing if the window has been already repainted.  Use Refresh
 first if you want to immediately redraw the window (or some portion of
-it) unconditionally.");
+it) unconditionally.", "");
     
 
     DocDeclStr(
         virtual void , ClearBackground(),
         "Clears the window by filling it with the current background
-colour. Does not cause an erase background event to be generated.");
+colour. Does not cause an erase background event to be generated.", "");
     
 
 
     DocDeclStr(
         virtual void , Freeze(),
-        "Freezes the window or, in other words, prevents any updates from taking place
-on screen, the window is not redrawn at all. Thaw must be called to reenable
-window redrawing.  Calls to Freeze/Thaw may be nested, with the actual Thaw
-being delayed until all the nesting has been undone.
+        "Freezes the window or, in other words, prevents any updates from
+taking place on screen, the window is not redrawn at all. Thaw must be
+called to reenable window redrawing.  Calls to Freeze/Thaw may be
+nested, with the actual Thaw being delayed until all the nesting has
+been undone.
 
 This method is useful for visual appearance optimization (for example,
 it is a good idea to use it before inserting large amount of text into
 a wxTextCtrl under wxGTK) but is not implemented on all platforms nor
 for all controls so it is mostly just a hint to wxWindows and not a
-mandatory directive.");
+mandatory directive.", "");
     
 
     DocDeclStr(
         virtual void , Thaw(),
         "Reenables window updating after a previous call to Freeze.  Calls to
-Freeze/Thaw may be nested, so Thaw must be called the same number of times
-that Freeze was before the window will be updated.");
+Freeze/Thaw may be nested, so Thaw must be called the same number of
+times that Freeze was before the window will be updated.", "");
     
 
     DocDeclStr(
         virtual void , PrepareDC( wxDC & dc ),
         "Call this function to prepare the device context for drawing a
 scrolled image. It sets the device origin according to the current
-scroll position.");
+scroll position.", "");
     
 
     DocDeclStr(
         wxRegion& , GetUpdateRegion(),
         "Returns the region specifying which parts of the window have been
-damaged. Should only be called within an EVT_PAINT handler.");
+damaged. Should only be called within an EVT_PAINT handler.", "");
     
 
     DocDeclStr(
         wxRect , GetUpdateClientRect() const,
-        "Get the update rectangle region bounding box in client coords.");
+        "Get the update rectangle region bounding box in client coords.", "");
     
 
     DocStr(IsExposed,
            "Returns true if the given point or rectangle area has been exposed
 since the last repaint. Call this in an paint event handler to
 optimize redrawing by only redrawing those areas, which have been
-exposed.");
+exposed.", "");
     bool IsExposed( int x, int y, int w=1, int h=1 ) const;
     %name(IsExposedPoint) bool IsExposed( const wxPoint& pt ) const;
     %name(IsExposedRect)  bool IsExposed( const wxRect& rect ) const;
@@ -1191,26 +1197,25 @@ exposed.");
 
     DocDeclStr(
         virtual wxVisualAttributes , GetDefaultAttributes() const,
-        "Get the default attributes for an instance of this class.  This
-is useful if you want to use the same font or colour in your own
-control as in a standard control -- which is a much better idea
-than hard coding specific colours or fonts which might look
-completely out of place on the users system, especially if it
-uses themes.");
+        "Get the default attributes for an instance of this class.  This is
+useful if you want to use the same font or colour in your own control
+as in a standard control -- which is a much better idea than hard
+coding specific colours or fonts which might look completely out of
+place on the users system, especially if it uses themes.", "");
     
 
     DocDeclStr(
         static wxVisualAttributes ,
         GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL),
-        "Get the default attributes for this class.  This is useful if
-you want to use the same font or colour in your own control as
-in a standard control -- which is a much better idea than hard
-coding specific colours or fonts which might look completely out
-of place on the users system, especially if it uses themes.
+        "Get the default attributes for this class.  This is useful if you want
+to use the same font or colour in your own control as in a standard
+control -- which is a much better idea than hard coding specific
+colours or fonts which might look completely out of place on the users
+system, especially if it uses themes.
 
 The variant parameter is only relevant under Mac currently and is
-ignore under other platforms. Under Mac, it will change the size of the
-returned font. See SetWindowVariant for more about this.");
+ignore under other platforms. Under Mac, it will change the size of
+the returned font. See SetWindowVariant for more about this.", "");
     
     
     DocDeclStr(
@@ -1227,11 +1232,11 @@ calling this function.
 Use this function with care under GTK+ as the new appearance of the
 window might not look equally well when used with themes, i.e GTK+'s
 ability to change its look as the user wishes with run-time loadable
-modules.");
+modules.", "");
 
     DocDeclStr(
         void , SetDefaultBackgroundColour(const wxColour& colour),
-        "");
+        "", "");
     
 
     
@@ -1240,23 +1245,23 @@ modules.");
         "Sets the foreground colour of the window.  Returns True is the colour
 was changed.  The interpretation of foreground colour is dependent on
 the window class; it may be the text colour or other colour, or it may
-not be used at all.");
+not be used at all.", "");
 
     DocDeclStr(
         void , SetDefaultForegroundColour(const wxColour& colour),
-        "");
+        "", "");
     
 
     
     DocDeclStr(
         wxColour , GetBackgroundColour() const,
-        "Returns the background colour of the window.");
+        "Returns the background colour of the window.", "");
     
     DocDeclStr(
         wxColour , GetForegroundColour() const,
         "Returns the foreground colour of the window.  The interpretation of
 foreground colour is dependent on the window class; it may be the text
-colour or other colour, or it may not be used at all.");
+colour or other colour, or it may not be used at all.", "");
     
 
 
@@ -1267,61 +1272,61 @@ colour or other colour, or it may not be used at all.");
 for the children of the window implicitly.
 
 The cursor may be wx.NullCursor in which case the window cursor will
-be reset back to default.");
+be reset back to default.", "");
     
     DocDeclStr(
         wxCursor& , GetCursor(),
-        "Return the cursor associated with this window.");
+        "Return the cursor associated with this window.", "");
     
 
 
     DocDeclStr(
         virtual bool , SetFont( const wxFont &font ),
-        "Sets the font for this window.");
+        "Sets the font for this window.", "");
     
     DocDeclStr(
         void , SetDefaultFont(const wxFont& font),
-        "");
+        "", "");
     
 
     
     DocDeclStr(
         wxFont& , GetFont(),
-        "Returns the default font used for this window.");
+        "Returns the default font used for this window.", "");
 
     
 
     DocDeclStr(
         void , SetCaret(wxCaret *caret),
-        "Sets the caret associated with the window.");
+        "Sets the caret associated with the window.", "");
     
     DocDeclStr(
         wxCaret *, GetCaret() const,
-        "Returns the caret associated with the window.");
+        "Returns the caret associated with the window.", "");
     
 
 
     DocDeclStr(
         virtual int , GetCharHeight() const,
-        "Get the (average) character size for the current font.");
+        "Get the (average) character size for the current font.", "");
     
     DocDeclStr(
         virtual int , GetCharWidth() const,
-        "Get the (average) character size for the current font.");
+        "Get the (average) character size for the current font.", "");
     
 
 
     DocDeclAStr(
         void, GetTextExtent(const wxString& string, int *OUTPUT, int *OUTPUT),
         "GetTextExtent(String string) -> (width, height)",
-        "Get the width and height of the text using the current font.");
+        "Get the width and height of the text using the current font.", "");
     DocDeclAStrName(
         void, GetTextExtent(const wxString& string,
                             int *OUTPUT, int *OUTPUT, int *OUTPUT, int* OUTPUT, 
                             const wxFont* font = NULL),
         "GetFullTextExtent(String string, Font font=None) ->\n   (width, height, descent, externalLeading)",
         "Get the width, height, decent and leading of the text using the
-current or specified font.",
+current or specified font.", "",
         GetFullTextExtent);
 
 
@@ -1335,34 +1340,34 @@ current or specified font.",
     DocDeclAStrName(
         void , ClientToScreen( int *x, int *y ) const,
         "ClientToScreenXY(int x, int y) -> (x,y)",
-        "Converts to screen coordinates from coordinates relative to this window.",
+        "Converts to screen coordinates from coordinates relative to this window.", "",
         ClientToScreenXY);
     
     DocDeclAStrName(
         void , ScreenToClient( int *x, int *y ) const,
         "ScreenToClientXY(int x, int y) -> (x,y)",
-        "Converts from screen to client window coordinates.",
+        "Converts from screen to client window coordinates.", "",
         ScreenToClientXY);
     
 
     DocDeclStr(
         wxPoint , ClientToScreen(const wxPoint& pt) const,
-        "Converts to screen coordinates from coordinates relative to this window.");
+        "Converts to screen coordinates from coordinates relative to this window.", "");
     
     DocDeclStr(
         wxPoint , ScreenToClient(const wxPoint& pt) const,
-        "Converts from screen to client window coordinates.");
+        "Converts from screen to client window coordinates.", "");
     
 
 
     DocDeclStrName(
         wxHitTest , HitTest(wxCoord x, wxCoord y) const,
-        "Test where the given (in client coords) point lies",
+        "Test where the given (in client coords) point lies", "",
         HitTestXY);
     
     DocDeclStr(
         wxHitTest , HitTest(const wxPoint& pt) const,
-        "Test where the given (in client coords) point lies");
+        "Test where the given (in client coords) point lies", "");
     
 
 
@@ -1377,11 +1382,11 @@ current or specified font.",
 from simply doing flags & wxBORDER_MASK because it uses
 GetDefaultBorder() to translate wxBORDER_DEFAULT to something
 reasonable.
-");
+", "");
     
     DocDeclStr(
         wxBorder , GetBorder() const,
-        "Get border for the flags of this window");
+        "Get border for the flags of this window", "");
     
 
     
@@ -1397,20 +1402,22 @@ a particular point in time (as far as your EVT_UPDATE_UI handlers are
 concerned). This may be necessary if you have called
 wx.UpdateUIEvent.SetMode or wx.UpdateUIEvent.SetUpdateInterval to
 limit the overhead that wxWindows incurs by sending update UI events
-in idle time.
-
+in idle time.",
+"
 The flags should be a bitlist of one or more of the following values:
 
+    =====================      ==============================
     wx.UPDATE_UI_NONE          No particular value
     wx.UPDATE_UI_RECURSE       Call the function for descendants
     wx.UPDATE_UI_FROMIDLE      Invoked from OnIdle
+    =====================      ==============================
 
 If you are calling this function from an OnIdle function, make sure
-you pass the wx.UPDATE_UI_FROMIDLE flag, since this tells the window to
-only update the UI elements that need to be updated in idle time. Some
-windows update their elements only when necessary, for example when a
-menu is about to be shown. The following is an example of how to call
-UpdateWindowUI from an idle function.
+you pass the wx.UPDATE_UI_FROMIDLE flag, since this tells the window
+to only update the UI elements that need to be updated in idle
+time. Some windows update their elements only when necessary, for
+example when a menu is about to be shown. The following is an example
+of how to call UpdateWindowUI from an idle function::
 
     def OnIdle(self, evt):
         if wx.UpdateUIEvent.CanUpdate(self):
@@ -1427,7 +1434,7 @@ UpdateWindowUI from an idle function.
            "Pops up the given menu at the specified coordinates, relative to this
 window, and returns control when the user has dismissed the menu. If a
 menu item is selected, the corresponding menu event is generated and
-will be processed as usual.");
+will be processed as usual.", "");
     %name(PopupMenuXY) bool PopupMenu(wxMenu *menu, int x, int y);
     bool PopupMenu(wxMenu *menu, const wxPoint& pos);
 
@@ -1438,7 +1445,7 @@ will be processed as usual.");
         DocStr(GetHandle,
                "Returns the platform-specific handle (as a long integer) of the
 physical window.  Currently on wxMac it returns the handle of the
-toplevel parent of the window.");
+toplevel parent of the window.", "");
         long GetHandle() {
             return wxPyGetWinHandle(self);
         }
@@ -1459,45 +1466,46 @@ toplevel parent of the window.");
     
     DocDeclStr(
         bool , HasScrollbar(int orient) const,
-        "Does the window have the scrollbar for this orientation?");
+        "Does the window have the scrollbar for this orientation?", "");
     
 
     // configure the window scrollbars
     DocDeclStr(
         virtual void , SetScrollbar( int orientation,
-                                     int pos,
-                                     int thumbvisible,
+                                     int position,
+                                     int thumbSize,
                                      int range,
                                      bool refresh = True ),
-        "Sets the scrollbar properties of a built-in scrollbar.
+        "Sets the scrollbar properties of a built-in scrollbar.",
+        "
+    :param orientation: Determines the scrollbar whose page size is to
+                 be set. May be wx.HORIZONTAL or wx.VERTICAL.
 
-    orientation: Determines the scrollbar whose page size is to be
-                 set. May be wx.HORIZONTAL or wx.VERTICAL.
+    :param position: The position of the scrollbar in scroll units.
 
-    position:    The position of the scrollbar in scroll units.
-
-    thumbSize:   The size of the thumb, or visible portion of the
+    :param thumbSize: The size of the thumb, or visible portion of the
                  scrollbar, in scroll units.
 
-    range:       The maximum position of the scrollbar.
+    :param range: The maximum position of the scrollbar.
 
-    refresh:     True to redraw the scrollbar, false otherwise.");
+    :param refresh: True to redraw the scrollbar, false otherwise.
+");
     
     DocDeclStr(
         virtual void , SetScrollPos( int orientation, int pos, bool refresh = True ),
-        "Sets the position of one of the built-in scrollbars.");
+        "Sets the position of one of the built-in scrollbars.", "");
     
     DocDeclStr(
         virtual int , GetScrollPos( int orientation ) const,
-        "Returns the built-in scrollbar position.");
+        "Returns the built-in scrollbar position.", "");
     
     DocDeclStr(
         virtual int , GetScrollThumb( int orientation ) const,
-        "Returns the built-in scrollbar thumb size.");
+        "Returns the built-in scrollbar thumb size.", "");
     
     DocDeclStr(
         virtual int , GetScrollRange( int orientation ) const,
-        "Returns the built-in scrollbar range.");
+        "Returns the built-in scrollbar range.", "");
     
 
     
@@ -1508,16 +1516,16 @@ toplevel parent of the window.");
         "Physically scrolls the pixels in the window and move child windows
 accordingly.  Use this function to optimise your scrolling
 implementations, to minimise the area that must be redrawn. Note that
-it is rarely required to call this function from a user program.
+it is rarely required to call this function from a user program.",
+"
+    :param dx:   Amount to scroll horizontally.
 
-    dx:   Amount to scroll horizontally.
+    :param dy:   Amount to scroll vertically.
 
-    dy:   Amount to scroll vertically.
-
-    rect: Rectangle to invalidate. If this is None, the whole window
-          is invalidated. If you pass a rectangle corresponding to the
-          area of the window exposed by the scroll, your painting
-          handler can optimize painting by checking for the
+    :param rect: Rectangle to invalidate. If this is None, the whole
+          window is invalidated. If you pass a rectangle corresponding
+          to the area of the window exposed by the scroll, your
+          painting handler can optimize painting by checking for the
           invalidated region.");
     
 
@@ -1526,31 +1534,31 @@ it is rarely required to call this function from a user program.
         "If the platform and window class supports it, scrolls the window by
 the given number of lines down, if lines is positive, or up if lines
 is negative.  Returns True if the window was scrolled, False if it was
-already on top/bottom and nothing was done.");
+already on top/bottom and nothing was done.", "");
     
     DocDeclStr(
         virtual bool , ScrollPages(int pages),
-        "If the platform and window class supports it,  scrolls the window by
+        "If the platform and window class supports it, scrolls the window by
 the given number of pages down, if pages is positive, or up if pages
 is negative.  Returns True if the window was scrolled, False if it was
-already on top/bottom and nothing was done.");
+already on top/bottom and nothing was done.", "");
     
 
     DocDeclStr(
         bool , LineUp(),
-        "This is just a wrapper for ScrollLines(-1).");
+        "This is just a wrapper for ScrollLines(-1).", "");
     
     DocDeclStr(
         bool , LineDown(),
-        "This is just a wrapper for ScrollLines(1).");
+        "This is just a wrapper for ScrollLines(1).", "");
     
     DocDeclStr(
         bool , PageUp(),
-        "This is just a wrapper for ScrollPages(-1).");
+        "This is just a wrapper for ScrollPages(-1).", "");
     
     DocDeclStr(
         bool , PageDown(),
-        "This is just a wrapper for ScrollPages(1).");
+        "This is just a wrapper for ScrollPages(1).", "");
     
 
 
@@ -1562,20 +1570,20 @@ already on top/bottom and nothing was done.");
         void , SetHelpText(const wxString& text),
         "Sets the help text to be used as context-sensitive help for this
 window.  Note that the text is actually stored by the current
-wxHelpProvider implementation, and not in the window object itself.");
+wxHelpProvider implementation, and not in the window object itself.", "");
     
 
     DocDeclStr(
         void , SetHelpTextForId(const wxString& text),
         "Associate this help text with all windows with the same id as this
-one.");
+one.", "");
     
 
     DocDeclStr(
         wxString , GetHelpText() const,
         "Gets the help text to be used as context-sensitive help for this
 window.  Note that the text is actually stored by the current
-wxHelpProvider implementation, and not in the window object itself.");
+wxHelpProvider implementation, and not in the window object itself.", "");
     
 
 
@@ -1584,13 +1592,13 @@ wxHelpProvider implementation, and not in the window object itself.");
     // --------
 
     DocStr(SetToolTip,
-           "Attach a tooltip to the window.");
+           "Attach a tooltip to the window.", "");
     %name(SetToolTipString) void SetToolTip( const wxString &tip );
     void SetToolTip( wxToolTip *tip );
 
     DocDeclStr(
         wxToolTip* , GetToolTip() const,
-        "get the associated tooltip or None if none");
+        "get the associated tooltip or None if none", "");
     
     // LINK ERROR --> wxString GetToolTipText() const;
 #endif
@@ -1608,21 +1616,21 @@ wxHelpProvider implementation, and not in the window object itself.");
     DocDeclStr(
         virtual void , SetDropTarget( wxPyDropTarget *dropTarget ),
         "Associates a drop target with this window.  If the window already has
-a drop target, it is deleted.");   
+a drop target, it is deleted.", "");   
 
     %clear wxPyDropTarget *dropTarget;
 
     
     DocDeclStr(
         virtual wxPyDropTarget *, GetDropTarget() const,
-        "Returns the associated drop target, which may be None.");
+        "Returns the associated drop target, which may be None.", "");
     
 
 #ifdef __WXMSW__  // TODO:  should I drop-kick this?
     DocDeclStr(
         void , DragAcceptFiles(bool accept),
         "Enables or disables eligibility for drop file events, EVT_DROP_FILES.
-Only available on Windows.");    
+Only available on Windows.", "");    
 #endif
 #endif
     
@@ -1642,12 +1650,12 @@ You must call SetAutoLayout to tell a window to use the constraints
 automatically in its default EVT_SIZE handler; otherwise, you must
 handle EVT_SIZE yourself and call Layout() explicitly. When setting
 both a wx.LayoutConstraints and a wx.Sizer, only the sizer will have
-effect.");
+effect.", "");
     
     DocDeclStr(
         wxLayoutConstraints *, GetConstraints() const,
         "Returns a pointer to the window's layout constraints, or None if there
-are none.");
+are none.", "");
     
 
     DocDeclStr(
@@ -1655,11 +1663,11 @@ are none.");
         "Determines whether the Layout function will be called automatically
 when the window is resized.  It is called implicitly by SetSizer but
 if you use SetConstraints you should call it manually or otherwise the
-window layout won't be correctly updated when its size changes.");
+window layout won't be correctly updated when its size changes.", "");
     
     DocDeclStr(
         bool , GetAutoLayout() const,
-        "Returns the current autoLayout setting");
+        "Returns the current autoLayout setting", "");
     
 
     DocDeclStr(
@@ -1667,7 +1675,7 @@ window layout won't be correctly updated when its size changes.");
         "Invokes the constraint-based layout algorithm or the sizer-based
 algorithm for this window.  See SetAutoLayout: when auto layout is on,
 this function gets called automatically by the default EVT_SIZE
-handler when the window is resized.");
+handler when the window is resized.", "");
     
 
     DocDeclStr(
@@ -1677,18 +1685,18 @@ own the object, and will take care of its deletion. If an existing
 layout sizer object is already owned by the window, it will be deleted
 if the deleteOld parameter is true. Note that this function will also
 call SetAutoLayout implicitly with a True parameter if the sizer is
-non-NoneL and False otherwise.");
+non-NoneL and False otherwise.", "");
     
     DocDeclStr(
         void , SetSizerAndFit( wxSizer *sizer, bool deleteOld = True ),
         "The same as SetSizer, except it also sets the size hints for the
-window based on the sizer's minimum size.");
+window based on the sizer's minimum size.", "");
     
 
     DocDeclStr(
         wxSizer *, GetSizer() const,
         "Return the sizer associated with the window by a previous call to
-SetSizer or None if there isn't one.");
+SetSizer or None if there isn't one.", "");
     
 
     // Track if this window is a member of a sizer
@@ -1696,11 +1704,11 @@ SetSizer or None if there isn't one.");
         void , SetContainingSizer(wxSizer* sizer),
         "This normally does not need to be called by application code. It is
 called internally when a window is added to a sizer, and is used so
-the window can remove itself from the sizer when it is destroyed.");
+the window can remove itself from the sizer when it is destroyed.", "");
     
     DocDeclStr(
         wxSizer *, GetContainingSizer() const,
-        "Return the sizer that this window is a member of, if any, otherwise None.");
+        "Return the sizer that this window is a member of, if any, otherwise None.", "");
     
 
 
@@ -1726,41 +1734,41 @@ the window can remove itself from the sizer when it is destroyed.");
 
     DocDeclStr(
         virtual void , InheritAttributes(),
-        "This function is (or should be, in case of custom controls)
-called during window creation to intelligently set up the window
-visual attributes, that is the font and the foreground and
-background colours.
+        "This function is (or should be, in case of custom controls) called
+during window creation to intelligently set up the window visual
+attributes, that is the font and the foreground and background
+colours.
 
-By 'intelligently' the following is meant: by default, all
-windows use their own default attributes. However if some of the
-parent's attributes are explicitly changed (that is, using
-SetFont and not SetDefaultFont) and if the corresponding
-attribute hadn't been explicitly set for this window itself, then
-this window takes the same value as used by the parent. In
-addition, if the window overrides ShouldInheritColours to return
-false, the colours will not be changed no matter what and only
-the font might.
+By 'intelligently' the following is meant: by default, all windows use
+their own default attributes. However if some of the parent's
+attributes are explicitly changed (that is, using SetFont and not
+SetDefaultFont) and if the corresponding attribute hadn't been
+explicitly set for this window itself, then this window takes the same
+value as used by the parent. In addition, if the window overrides
+ShouldInheritColours to return false, the colours will not be changed
+no matter what and only the font might.
 
-This rather complicated logic is necessary in order to accomodate
-the different usage scenarius. The most common one is when all
-default attributes are used and in this case, nothing should be
-inherited as in modern GUIs different controls use different
-fonts (and colours) than their siblings so they can't inherit the
-same value from the parent. However it was also deemed desirable
-to allow to simply change the attributes of all children at once
-by just changing the font or colour of their common parent, hence
-in this case we do inherit the parents attributes.");
+This rather complicated logic is necessary in order to accomodate the
+different usage scenarius. The most common one is when all default
+attributes are used and in this case, nothing should be inherited as
+in modern GUIs different controls use different fonts (and colours)
+than their siblings so they can't inherit the same value from the
+parent. However it was also deemed desirable to allow to simply change
+the attributes of all children at once by just changing the font or
+colour of their common parent, hence in this case we do inherit the
+parents attributes.
+", "");
 
     
 // TODO:  Virtualize this with directors    
     DocDeclStr(
         virtual bool , ShouldInheritColours() const,
         "Return true from here to allow the colours of this window to be
-changed by InheritAttributes, returning false forbids inheriting
-them from the parent window.
+changed by InheritAttributes, returning false forbids inheriting them
+from the parent window.
 
-The base class version returns false, but this method is
-overridden in wxControl where it returns true.");
+The base class version returns false, but this method is overridden in
+wxControl where it returns true.", "");
     
     
 
@@ -1822,7 +1830,7 @@ DocStr(wxFindWindowById,
 "Find the first window in the application with the given id. If parent
 is None, the search will start from all top-level frames and dialog
 boxes; if non-None, the search will be limited to the given window
-hierarchy. The search is recursive in both cases.");
+hierarchy. The search is recursive in both cases.", "");
 
 DocStr(wxFindWindowByName,
 "Find a window by its name (as given in a window constructor or Create
@@ -1831,14 +1839,14 @@ top-level frames and dialog boxes; if non-None, the search will be
 limited to the given window hierarchy. The search is recursive in both
 cases.
 
-If no window with such name is found, wx.FindWindowByLabel is called.");
+If no window with such name is found, wx.FindWindowByLabel is called.", "");
 
 DocStr(wxFindWindowByLabel,
 "Find a window by its label. Depending on the type of window, the label
 may be a window title or panel item label. If parent is None, the
 search will start from all top-level frames and dialog boxes; if
 non-None, the search will be limited to the given window
-hierarchy. The search is recursive in both cases.");
+hierarchy. The search is recursive in both cases.", "");
 
 
 %inline %{

@@ -86,7 +86,7 @@ class App(wx.PyApp):
     ``self.SetTopWindow(frame)``.
 
     :see: `wx.PySimpleApp` for a simpler app class that can be used
-    directly.
+           directly.
     """
     
     outputWindowClass = PyOnDemandOutputWindow

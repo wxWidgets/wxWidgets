@@ -597,7 +597,8 @@ public:
 
 
     DocStr(GetPosition,   // sets the docstring for both
-           "Returns the position of the mouse in window coordinates when the event happened.");
+           "Returns the position of the mouse in window coordinates when the event
+happened.", "");
     wxPoint GetPosition();
 
     DocDeclAName(
@@ -712,7 +713,7 @@ public:
 
     
     DocStr(GetPosition,   // sets the docstring for both
-           "Find the position of the event.");
+           "Find the position of the event.", "");
     wxPoint GetPosition();
 
     DocDeclAName(

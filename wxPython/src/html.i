@@ -858,7 +858,7 @@ public:
 
     DocDeclStr(
         void, SetTitle(const wxString& title),
-        "");
+        "", "");
 
     // Sets space between text and window borders.
     void SetBorders(int b);
