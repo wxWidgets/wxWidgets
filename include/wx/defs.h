@@ -162,6 +162,8 @@
     #elif defined(__VISAGECPP__)
         #if __IBMCPP__ < 400
             typedef unsigned long bool;
+            #define true ((bool)1)
+            #define false ((bool)0)
         #endif
         #define HAVE_BOOL
     #endif // compilers
@@ -231,7 +233,7 @@ typedef int wxWindowID;
 
 // check for explicit keyword support
 #ifndef HAVE_EXPLICIT
-    #if defined(__VISUALC__) && (__VISUALC__ > 1200)
+    #if defined(__VISUALC__) && (__VISUALC__ >= 1200)
         // VC++ 6.0 has explicit (what about the earlier versions?)
         #define HAVE_EXPLICIT
     #elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x0520)
@@ -321,7 +323,7 @@ typedef int wxWindowID;
         #define WXEXPORT _Export
         #define WXIMPORT _Export
     #endif
-#elif defined(__WXMAC__)    
+#elif defined(__WXMAC__)
     #ifdef __MWERKS__
         #define WXEXPORT __declspec(export)
         #define WXIMPORT __declspec(import)
@@ -988,6 +990,7 @@ enum wxBorder
 #define wxFRAME_NO_TASKBAR      0x0002  // No taskbar button (MSW only)
 #define wxFRAME_TOOL_WINDOW     0x0004  // No taskbar button, no system menu
 #define wxFRAME_FLOAT_ON_PARENT 0x0008  // Always above its parent
+#define wxFRAME_SHAPED          0x0010  // Create a window that is able to be shaped
 
 // deprecated versions defined for compatibility reasons
 #define wxRESIZE_BOX            wxMAXIMIZE_BOX
@@ -1099,6 +1102,7 @@ enum wxBorder
  * wxRadioButton style flag
  */
 #define wxRB_GROUP          0x0004
+#define wxRB_SINGLE         0x0008
 
 /*
  * wxGauge flags
@@ -1172,8 +1176,12 @@ enum wxBorder
  */
 #define wxTC_RIGHTJUSTIFY     0x0010
 #define wxTC_FIXEDWIDTH       0x0020
-#define wxTC_OWNERDRAW        0x0040
+#define wxTC_TOP              0x0000    // default
+#define wxTC_LEFT             0x0020
+#define wxTC_RIGHT            0x0040
+#define wxTC_BOTTOM           0x0080
 #define wxTC_MULTILINE        wxNB_MULTILINE
+#define wxTC_OWNERDRAW        0x0200
 
 // wxToolBar style flags
 #define wxTB_HORIZONTAL     wxHORIZONTAL    // == 0x0004
@@ -1794,10 +1802,10 @@ enum wxPrintMode
 
 // macro to specify "All Files" on different platforms
 #if defined(__WXMSW__) || defined(__WXPM__)
-#   define wxALL_FILES_PATTERN   "*.*"
+#   define wxALL_FILES_PATTERN   wxT("*.*")
 #   define wxALL_FILES           gettext_noop("All files (*.*)|*.*")
 #else
-#   define wxALL_FILES_PATTERN   "*"
+#   define wxALL_FILES_PATTERN   wxT("*")
 #   define wxALL_FILES           gettext_noop("All files (*)|*")
 #endif
 
@@ -2083,13 +2091,24 @@ typedef GtkWidget *WXWidget;
 #endif
 
 #ifdef __WXGTK20__
+/* Input method thing */
+typedef struct _GtkIMMulticontext    GtkIMMulticontext;
+#endif // __WXGTK20__
+
+#endif // __WXGTK__
+
+#if defined(__WXGTK20__) || (defined(__WXX11__) && wxUSE_UNICODE)
+#define wxUSE_PANGO 1
+#else
+#define wxUSE_PANGO 0
+#endif
+
+#if wxUSE_PANGO
 /* Stand-ins for Pango types */
 typedef struct _PangoContext         PangoContext;
 typedef struct _PangoLayout          PangoLayout;
 typedef struct _PangoFontDescription PangoFontDescription;
-#endif // GTK+ 2.0
-
-#endif // GTK
+#endif
 
 #ifdef __WXMGL__
 typedef struct window_t *WXWidget;

@@ -22,6 +22,7 @@
 
 class WXDLLEXPORT wxArtProvidersList;
 class WXDLLEXPORT wxArtProviderCache;
+class wxArtProviderModule;
 
 // ----------------------------------------------------------------------------
 // Types
@@ -113,10 +114,13 @@ public:
                           const wxArtClient& client = wxART_OTHER,
                           const wxSize& size = wxDefaultSize);
 
+protected:
+    friend class wxArtProviderModule;
+    // Initializes default provider
+    static void InitStdProvider();
     // Destroy caches & all providers
     static void CleanUpProviders();
 
-protected:
     // Derived classes must override this method to create requested 
     // art resource. This method is called only once per instance's
     // lifetime for each requested wxArtID.

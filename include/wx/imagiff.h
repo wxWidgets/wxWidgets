@@ -24,8 +24,6 @@
 
 class WXDLLEXPORT wxIFFHandler : public wxImageHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxIFFHandler)
-
 public:
     wxIFFHandler()
     {
@@ -33,13 +31,16 @@ public:
         m_extension = wxT("iff");
         m_type = wxBITMAP_TYPE_IFF;
         m_mime = wxT("image/x-iff");
-    };
+    }
 
 #if wxUSE_STREAMS
     virtual bool LoadFile(wxImage *image, wxInputStream& stream, bool verbose=TRUE, int index=-1);
     virtual bool SaveFile(wxImage *image, wxOutputStream& stream, bool verbose=TRUE);
     virtual bool DoCanRead(wxInputStream& stream);
 #endif
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxIFFHandler)
 };
 
 #endif // wxUSE_IMAGE && wxUSE_IFF

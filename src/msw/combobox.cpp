@@ -33,6 +33,8 @@
 #ifndef WX_PRECOMP
     #include "wx/settings.h"
     #include "wx/log.h"
+    // for wxEVT_COMMAND_TEXT_ENTER
+    #include "wx/textctrl.h"
 #endif
 
 #include "wx/combobox.h"
@@ -133,7 +135,7 @@ LRESULT APIENTRY _EXPORT wxComboEditWndProc(HWND hWnd,
                 wxCHECK_MSG( win, 0, _T("should have a parent") );
 
                 NMHDR* hdr = (NMHDR *)lParam;
-                if ( (int)hdr->code == TTN_NEEDTEXT )
+                if ( hdr->code == TTN_NEEDTEXT )
                 {
                     wxToolTip *tooltip = win->GetToolTip();
                     if ( tooltip )
@@ -201,6 +203,17 @@ bool wxComboBox::MSWProcessEditMsg(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam)
     switch ( msg )
     {
         case WM_CHAR:
+            // for compatibility with wxTextCtrl, generate a special message
+            // when Enter is pressed
+            if ( wParam == VK_RETURN )
+            {
+                wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
+                InitCommandEvent(event);
+                event.SetString(GetValue());
+                event.SetInt(GetSelection());
+                ProcessCommand(event);
+            }
+
             return HandleChar(wParam, lParam, TRUE /* isASCII */);
 
         case WM_KEYDOWN:
@@ -371,63 +384,28 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
     return TRUE;
 }
 
-// TODO: update and clear all this horrible mess (VZ)
-
 void wxComboBox::SetValue(const wxString& value)
 {
-  // If newlines are denoted by just 10, must stick 13 in front.
-  size_t singletons = 0;
-  size_t len = value.Length();
-  size_t i;
-  for (i = 0; i < len; i ++)
-  {
-    if ((i > 0) && (value[i] == 10) && (value[i-1] != 13))
-      singletons ++;
-  }
-  if (singletons > 0)
-  {
-    wxString tmp;
-    tmp.Alloc(len + singletons);
-    size_t j = 0;
-    for (i = 0; i < len; i ++)
-    {
-      if ((i > 0) && (value[i] == 10) && (value[i-1] != 13))
-      {
-        tmp[j] = 13;
-        j ++;
-      }
-      tmp[j] = value[i];
-      j ++;
-    }
-    if (GetWindowStyle() & wxCB_READONLY)
-        SetStringSelection(tmp);
+    if ( HasFlag(wxCB_READONLY) )
+        SetStringSelection(value);
     else
-        SetWindowText(GetHwnd(), tmp.c_str());
-  }
-  else
-    if (GetWindowStyle() & wxCB_READONLY)
-      SetStringSelection(value);
-    else
-      SetWindowText(GetHwnd(), value.c_str());
+        SetWindowText(GetHwnd(), value.c_str());
 }
 
 // Clipboard operations
 void wxComboBox::Copy()
 {
-  HWND hWnd = GetHwnd();
-  SendMessage(hWnd, WM_COPY, 0, 0L);
+  SendMessage(GetHwnd(), WM_COPY, 0, 0L);
 }
 
 void wxComboBox::Cut()
 {
-  HWND hWnd = GetHwnd();
-  SendMessage(hWnd, WM_CUT, 0, 0L);
+  SendMessage(GetHwnd(), WM_CUT, 0, 0L);
 }
 
 void wxComboBox::Paste()
 {
-  HWND hWnd = GetHwnd();
-  SendMessage(hWnd, WM_PASTE, 0, 0L);
+  SendMessage(GetHwnd(), WM_PASTE, 0, 0L);
 }
 
 void wxComboBox::SetEditable(bool WXUNUSED(editable))

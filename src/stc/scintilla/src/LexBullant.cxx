@@ -30,18 +30,6 @@ static int classifyWordBullant(unsigned int start, unsigned int end, WordList &k
 	else {
 		if (keywords.InList(s)) {
 			chAttr = SCE_C_WORD;
-/*			if (strcmp(s, "end method") == 0 ||
-				strcmp(s, "end case") == 0 ||
-				strcmp(s, "end class") == 0 ||
-				strcmp(s, "end debug") == 0 ||
-				strcmp(s, "end test") == 0 ||
-				strcmp(s, "end if") == 0 ||
-				strcmp(s, "end lock") == 0 ||
-				strcmp(s, "end transaction") == 0 ||
-				strcmp(s, "end trap") == 0 ||
-				strcmp(s, "end until") == 0 ||
-				strcmp(s, "end while") == 0)
-				lev = -1;*/
 			if (strcmp(s, "end") == 0)
 				lev = -1;
 			else if (strcmp(s, "method") == 0 ||
@@ -80,7 +68,6 @@ static void ColouriseBullantDoc(unsigned int startPos, int length, int initStyle
 	char chNext = styler[startPos];
 	unsigned int lengthDoc = startPos + length;
 	int visibleChars = 0;
-	// int blockChange = 0;
 	styler.StartSegment(startPos);
 	int endFoundThisLine = 0;
 	for (unsigned int i = startPos; i < lengthDoc; i++) {
@@ -230,4 +217,9 @@ static void ColouriseBullantDoc(unsigned int startPos, int length, int initStyle
 	}
 }
 
-LexerModule lmBullant(SCLEX_BULLANT, ColouriseBullantDoc, "bullant");
+static const char * const bullantWordListDesc[] = {
+	"Keywords",
+	0
+};
+
+LexerModule lmBullant(SCLEX_BULLANT, ColouriseBullantDoc, "bullant", 0, bullantWordListDesc);

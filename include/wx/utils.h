@@ -65,8 +65,10 @@ WXDLLEXPORT_DATA(extern wxChar*) wxBuffer;
 // Make a copy of this string using 'new'
 WXDLLEXPORT wxChar* copystring(const wxChar *s);
 
+#if WXWIN_COMPATIBILITY_2
 // Matches string one within string two regardless of case
 WXDLLEXPORT bool StringMatch(const wxChar *one, const wxChar *two, bool subString = TRUE, bool exact = FALSE);
+#endif
 
 // A shorter way of using strcmp
 #define wxStringEq(s1, s2) (s1 && s2 && (wxStrcmp(s1, s2) == 0))
@@ -368,7 +370,7 @@ WXDLLEXPORT bool wxYield();
 WXDLLEXPORT bool wxYieldIfNeeded();
 
 // Yield to other apps/messages and disable user input
-WXDLLEXPORT bool wxSafeYield(wxWindow *win = NULL);
+WXDLLEXPORT bool wxSafeYield(wxWindow *win = NULL, bool onlyIfNeeded = FALSE);
 
 // Enable or disable input to all top level windows
 WXDLLEXPORT void wxEnableTopLevelWindows(bool enable = TRUE);

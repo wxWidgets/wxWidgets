@@ -31,11 +31,12 @@
 #ifndef WX_PRECOMP
     #include "wx/panel.h"
     #include "wx/menu.h"
+    #include "wx/intl.h"
 #endif //WX_PRECOMP
 
 #include "wx/generic/mdig.h"
 
-enum MDI_MENU_ID 
+enum MDI_MENU_ID
 {
     wxWINDOWCLOSE = 4001,
     wxWINDOWCLOSEALL,
@@ -53,9 +54,9 @@ BEGIN_EVENT_TABLE(wxGenericMDIParentFrame, wxFrame)
     EVT_MENU (-1, wxGenericMDIParentFrame::DoHandleMenu)
 END_EVENT_TABLE()
 
-wxGenericMDIParentFrame::wxGenericMDIParentFrame() 
-{ 
-    Init(); 
+wxGenericMDIParentFrame::wxGenericMDIParentFrame()
+{
+    Init();
 }
 
 wxGenericMDIParentFrame::wxGenericMDIParentFrame(wxWindow *parent,
@@ -67,22 +68,22 @@ wxGenericMDIParentFrame::wxGenericMDIParentFrame(wxWindow *parent,
                                    const wxString& name)
 {
     Init();
-    
+
     (void)Create(parent, id, title, pos, size, style, name);
 }
 
 wxGenericMDIParentFrame::~wxGenericMDIParentFrame()
-{    
+{
     // Make sure the client window is destructed before the menu bars are!
     wxDELETE(m_pClientWindow);
 
-#if wxUSE_MENUS  
+#if wxUSE_MENUS
     if (m_pMyMenuBar)
     {
         delete m_pMyMenuBar;
         m_pMyMenuBar = (wxMenuBar *) NULL;
     }
-    
+
     RemoveWindowMenu(GetMenuBar());
 
     if (m_pWindowMenu)
@@ -108,11 +109,11 @@ bool wxGenericMDIParentFrame::Create(wxWindow *parent,
 #if wxUSE_MENUS
       m_pWindowMenu = new wxMenu;
 
-      m_pWindowMenu->Append(wxWINDOWCLOSE,    _T("Cl&ose"));
-      m_pWindowMenu->Append(wxWINDOWCLOSEALL, _T("Close Al&l"));
+      m_pWindowMenu->Append(wxWINDOWCLOSE,    _("Cl&ose"));
+      m_pWindowMenu->Append(wxWINDOWCLOSEALL, _("Close All"));
       m_pWindowMenu->AppendSeparator();
-      m_pWindowMenu->Append(wxWINDOWNEXT,     _T("&Next"));
-      m_pWindowMenu->Append(wxWINDOWPREV,     _T("&Previouse"));
+      m_pWindowMenu->Append(wxWINDOWNEXT,     _("&Next"));
+      m_pWindowMenu->Append(wxWINDOWPREV,     _("&Previous"));
 #endif // wxUSE_MENUS
   }
 
@@ -162,7 +163,7 @@ void wxGenericMDIParentFrame::SetChildMenuBar(wxGenericMDIChildFrame *pChild)
     {
         // No Child, set Our menu bar back.
         SetMenuBar(m_pMyMenuBar);
-        
+
         // Make sure we know our menu bar is in use
         m_pMyMenuBar = (wxMenuBar*) NULL;
     }
@@ -195,11 +196,11 @@ bool wxGenericMDIParentFrame::ProcessEvent(wxEvent& event)
 
     // Let the active child (if any) process the event first.
     bool res = FALSE;
-    if (m_pActiveChild && event.IsKindOf(CLASSINFO(wxCommandEvent)) 
+    if (m_pActiveChild && event.IsKindOf(CLASSINFO(wxCommandEvent))
 #if 0
         /* This is sure to not give problems... */
         && (event.GetEventType() == wxEVT_COMMAND_MENU_SELECTED ||
-            event.GetEventType() == wxEVT_UPDATE_UI ))
+            event.GetEventType() == wxEVT_UPDATE_UI )
 #else
         /* This was tested on wxMSW and worked... */
         && event.GetEventObject() != m_pClientWindow
@@ -208,8 +209,9 @@ bool wxGenericMDIParentFrame::ProcessEvent(wxEvent& event)
              event.GetEventType() == wxEVT_KILL_FOCUS ||
              event.GetEventType() == wxEVT_CHILD_FOCUS ||
              event.GetEventType() == wxEVT_COMMAND_SET_FOCUS ||
-             event.GetEventType() == wxEVT_COMMAND_KILL_FOCUS ))
+             event.GetEventType() == wxEVT_COMMAND_KILL_FOCUS )
 #endif
+       )
     {
         res = m_pActiveChild->GetEventHandler()->ProcessEvent(event);
     }
@@ -290,7 +292,7 @@ void wxGenericMDIParentFrame::RemoveWindowMenu(wxMenuBar *pMenuBar)
     if (pMenuBar && m_pWindowMenu)
     {
         // Remove old window menu
-        int pos = pMenuBar->FindMenu(_T("&Window"));
+        int pos = pMenuBar->FindMenu(_("&Window"));
         if (pos != wxNOT_FOUND)
         {
             wxASSERT(m_pWindowMenu == pMenuBar->GetMenu(pos)); // DBG:: We're going to delete the wrong menu!!!
@@ -302,15 +304,15 @@ void wxGenericMDIParentFrame::RemoveWindowMenu(wxMenuBar *pMenuBar)
 void wxGenericMDIParentFrame::AddWindowMenu(wxMenuBar *pMenuBar)
 {
     if (pMenuBar && m_pWindowMenu)
-    {           
-        int pos = pMenuBar->FindMenu(_T("Help"));            
+    {
+        int pos = pMenuBar->FindMenu(_("Help"));
         if (pos == wxNOT_FOUND)
         {
-            pMenuBar->Append(m_pWindowMenu, _T("&Window"));
+            pMenuBar->Append(m_pWindowMenu, _("&Window"));
         }
         else
         {
-            pMenuBar->Insert(pos, m_pWindowMenu, _T("&Window"));
+            pMenuBar->Insert(pos, m_pWindowMenu, _("&Window"));
         }
     }
 }
@@ -319,7 +321,7 @@ void wxGenericMDIParentFrame::DoHandleMenu(wxCommandEvent &event)
 {
     switch (event.GetId())
     {
-    case wxWINDOWCLOSE:     
+    case wxWINDOWCLOSE:
         if (m_pActiveChild)
         {
             m_pActiveChild->Close();
@@ -327,7 +329,7 @@ void wxGenericMDIParentFrame::DoHandleMenu(wxCommandEvent &event)
         break;
     case wxWINDOWCLOSEALL:
         {
-#if 0   // code is only needed if next #if is set to 0!        
+#if 0   // code is only needed if next #if is set to 0!
             wxGenericMDIChildFrame *pFirstActiveChild = m_pActiveChild;
 #endif
             while (m_pActiveChild)
@@ -340,7 +342,7 @@ void wxGenericMDIParentFrame::DoHandleMenu(wxCommandEvent &event)
                 {
 #if 1   // What's best? Delayed deleting or immediate deleting?
                     delete m_pActiveChild;
-#else                    
+#else
                     ActivateNext();
 
                     if (pFirstActiveChild == m_pActiveChild)
@@ -425,7 +427,7 @@ wxGenericMDIChildFrame::~wxGenericMDIChildFrame()
                 break;
             }
         }
-        
+
         if (bActive)
         {
             // Set the new selection to the a remaining page
@@ -453,10 +455,10 @@ bool wxGenericMDIChildFrame::Create( wxGenericMDIParentFrame *parent,
 {
     wxGenericMDIClientWindow* pClientWindow = parent->GetClientWindow();
 
-    wxASSERT_MSG((pClientWindow != (wxWindow*) NULL), "Missing MDI client window.");
+    wxASSERT_MSG((pClientWindow != (wxWindow*) NULL), wxT("Missing MDI client window.") );
 
     wxPanel::Create(pClientWindow, id, wxDefaultPosition, size, style, name);
-    
+
     SetMDIParentFrame(parent);
 
     // This is the currently active child
@@ -471,7 +473,7 @@ bool wxGenericMDIChildFrame::Create( wxGenericMDIParentFrame *parent,
     return TRUE;
 }
 
-#if wxUSE_MENUS  
+#if wxUSE_MENUS
 void wxGenericMDIChildFrame::SetMenuBar( wxMenuBar *menu_bar )
 {
     wxMenuBar *pOldMenuBar = m_pMenuBar;
@@ -480,7 +482,7 @@ void wxGenericMDIChildFrame::SetMenuBar( wxMenuBar *menu_bar )
     if (m_pMenuBar)
     {
         wxGenericMDIParentFrame *pParentFrame = GetMDIParentFrame();
-        
+
         if (pParentFrame != NULL)
         {
             m_pMenuBar->SetParent(pParentFrame);
@@ -500,20 +502,20 @@ wxMenuBar *wxGenericMDIChildFrame::GetMenuBar() const
 {
     return m_pMenuBar;
 }
-#endif // wxUSE_MENUS  
+#endif // wxUSE_MENUS
 
 void wxGenericMDIChildFrame::SetTitle(const wxString& title)
 {
     m_Title = title;
 
     wxGenericMDIParentFrame *pParentFrame = GetMDIParentFrame();
-    
+
     if (pParentFrame != NULL)
     {
         wxGenericMDIClientWindow * pClientWindow = pParentFrame->GetClientWindow();
-        
+
         if (pClientWindow != NULL)
-        {    
+        {
             int pos;
             for (pos = 0; pos < pClientWindow->GetPageCount(); pos++)
             {
@@ -522,12 +524,12 @@ void wxGenericMDIChildFrame::SetTitle(const wxString& title)
                     pClientWindow->SetPageText(pos, m_Title);
                     break;
                 }
-            }    
+            }
         }
     }
 }
 
-wxString wxGenericMDIChildFrame::GetTitle()
+wxString wxGenericMDIChildFrame::GetTitle() const
 {
     return m_Title;
 }
@@ -560,7 +562,7 @@ void wxGenericMDIChildFrame::OnMenuHighlight(wxMenuEvent& event)
 #if wxUSE_STATUSBAR
     if ( m_pMDIParentFrame)
     {
-        // we don't have any help text for this item, 
+        // we don't have any help text for this item,
         // but may be the MDI frame does?
         m_pMDIParentFrame->OnMenuHighlight(event);
     }
@@ -633,14 +635,14 @@ void wxGenericMDIChildFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
     Destroy();
 }
 
-void wxGenericMDIChildFrame::SetMDIParentFrame(wxGenericMDIParentFrame* parentFrame) 
-{ 
-    m_pMDIParentFrame = parentFrame; 
+void wxGenericMDIChildFrame::SetMDIParentFrame(wxGenericMDIParentFrame* parentFrame)
+{
+    m_pMDIParentFrame = parentFrame;
 }
 
-wxGenericMDIParentFrame* wxGenericMDIChildFrame::GetMDIParentFrame() const 
-{ 
-    return m_pMDIParentFrame; 
+wxGenericMDIParentFrame* wxGenericMDIChildFrame::GetMDIParentFrame() const
+{
+    return m_pMDIParentFrame;
 }
 
 void wxGenericMDIChildFrame::Init()
@@ -648,11 +650,11 @@ void wxGenericMDIChildFrame::Init()
     m_pMDIParentFrame = (wxGenericMDIParentFrame *) NULL;
 #if wxUSE_MENUS
     m_pMenuBar = (wxMenuBar *) NULL;
-#endif // wxUSE_MENUS  
+#endif // wxUSE_MENUS
 }
 
 void wxGenericMDIChildFrame::DoMoveWindow(int x, int y, int width, int height)
-{ 
+{
     m_MDIRect = wxRect(x, y, width, height);
 }
 
@@ -714,7 +716,7 @@ int wxGenericMDIClientWindow::SetSelection(int nPage)
 {
     int oldSelection = wxNotebook::SetSelection(nPage);
 
-#if !defined(__WXMSW__) // No need to do this for wxMSW as wxNotebook::SetSelection() 
+#if !defined(__WXMSW__) // No need to do this for wxMSW as wxNotebook::SetSelection()
                         // will already cause this to be done!
     // Handle the page change.
     PageChanged(oldSelection, nPage);
@@ -792,6 +794,16 @@ void wxGenericMDIClientWindow::OnSize(wxSizeEvent& event)
  */
 
 #if wxUSE_GENERIC_MDI_AS_NATIVE
+
+wxMDIChildFrame * wxMDIParentFrame::GetActiveChild() const
+    {
+        wxGenericMDIChildFrame *pGFrame = wxGenericMDIParentFrame::GetActiveChild();
+        wxMDIChildFrame *pFrame = wxDynamicCast(pGFrame, wxMDIChildFrame);
+
+        wxASSERT_MSG(!(pFrame == NULL && pGFrame != NULL), wxT("Active frame is class not derived from wxMDIChildFrame!"));
+
+        return pFrame;
+    }
 
 IMPLEMENT_DYNAMIC_CLASS(wxMDIParentFrame, wxGenericMDIParentFrame)
 IMPLEMENT_DYNAMIC_CLASS(wxMDIChildFrame, wxGenericMDIChildFrame)

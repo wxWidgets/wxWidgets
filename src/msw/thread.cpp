@@ -243,7 +243,7 @@ wxMutexError wxMutexInternal::Unlock()
 {
     if ( !::ReleaseMutex(m_mutex) )
     {
-        wxLogLastError(_("ReleaseMutex()"));
+        wxLogLastError(_T("ReleaseMutex()"));
 
         return wxMUTEX_MISC_ERROR;
     }

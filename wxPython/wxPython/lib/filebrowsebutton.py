@@ -64,7 +64,7 @@ class FileBrowseButton(wxPanel):
         self.fileMask = fileMask
         self.fileMode = fileMode
         self.changeCallback = changeCallback
-        self.callCallback = true
+        self.callCallback = True
 
 
         # get background to match it
@@ -99,14 +99,14 @@ class FileBrowseButton(wxPanel):
         box.Add( self.textControl, 1, wxLEFT|wxCENTER, 5)
 
         self.browseButton = self.createBrowseButton()
-        box.Add( self.browseButton, 0, wxCENTER)
+        box.Add( self.browseButton, 0, wxLEFT|wxCENTER, 5)
 
         # add a border around the whole thing and resize the panel to fit
         outsidebox = wxBoxSizer(wxVERTICAL)
         outsidebox.Add(box, 1, wxEXPAND|wxALL, 3)
         outsidebox.Fit(self)
 
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         self.SetSizer( outsidebox )
         self.Layout()
         if type( size ) == types.TupleType:
@@ -195,7 +195,7 @@ class FileBrowseButton(wxPanel):
     def SetLabel( self, value ):
         """ Set the label's current text """
         rvalue = self.label.SetLabel( value )
-        self.Refresh( true )
+        self.Refresh( True )
         return rvalue
 
 
@@ -404,7 +404,7 @@ if __name__ == "__main__":
             ID = wxNewId()
             innerbox.Add( wxButton( panel, ID,"Change Value",  ), 1, wxEXPAND)
             EVT_BUTTON( self, ID, self.OnChangeValue )
-            panel.SetAutoLayout(true)
+            panel.SetAutoLayout(True)
             panel.SetSizer( innerbox )
             self.history={"c:\\temp":1, "c:\\tmp":1, "r:\\temp":1,"z:\\temp":1}
 
@@ -417,7 +417,7 @@ if __name__ == "__main__":
             self.history[event.GetString ()]=1
 
         def OnCloseMe(self, event):
-            self.Close(true)
+            self.Close(True)
         def OnChangeLabel( self, event ):
             self.bottomcontrol.SetLabel( "Label Updated" )
         def OnChangeValue( self, event ):
@@ -433,9 +433,9 @@ if __name__ == "__main__":
             wxImage_AddHandler(wxGIFHandler())
             frame = DemoFrame(NULL)
             #frame = RulesPanel(NULL )
-            frame.Show(true)
+            frame.Show(True)
             self.SetTopWindow(frame)
-            return true
+            return True
 
     def test( ):
         app = DemoApp(0)

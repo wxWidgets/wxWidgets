@@ -37,7 +37,7 @@ class TestPanel(wxPanel):
         box.Add(t, 0, wxCENTER|wxALL, 5)
 
         self.SetSizer(box)
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
 
         # Make a menu
         self.menu = m = wxMenu()
@@ -46,10 +46,10 @@ class TestPanel(wxPanel):
         m.Append(wxID_CLOSE,   "&Close")
         m.Append(wxID_SAVE,    "&Save")
         m.Append(wxID_SAVEAS,  "Save &as...")
-        m.Enable(wxID_NEW, false)
-        m.Enable(wxID_CLOSE, false)
-        m.Enable(wxID_SAVE, false)
-        m.Enable(wxID_SAVEAS, false)
+        m.Enable(wxID_NEW, False)
+        m.Enable(wxID_CLOSE, False)
+        m.Enable(wxID_SAVE, False)
+        m.Enable(wxID_SAVEAS, False)
 
         # and a file history
         self.filehistory = wxFileHistory()

@@ -89,6 +89,10 @@ void wxFontRefData::MacFindFont()
 				::GetFNum( "\pMonaco" , &m_macFontNum) ;
 				break ;
 		}
+		Str255 name ;
+		GetFontName( m_macFontNum , name ) ;
+		CopyPascalStringToC( name , (char*) name ) ;
+		m_faceName = (char*) name ;
 	}
 	else
 	{

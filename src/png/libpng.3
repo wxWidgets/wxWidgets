@@ -1,6 +1,6 @@
-.TH LIBPNG 3 "July 8, 2002"
+.TH LIBPNG 3 "September 18, 2002"
 .SH NAME
-libpng \- Portable Network Graphics (PNG) Reference Library 1.2.4
+libpng \- Portable Network Graphics (PNG) Reference Library 1.2.5rc3
 .SH SYNOPSIS
 \fI\fB
 
@@ -791,7 +791,7 @@ Following is a copy of the libpng.txt file that accompanies libpng.
 .SH LIBPNG.TXT
 libpng.txt - A description on how to use and modify libpng
 
- libpng version 1.2.4 - July 8, 2002
+ libpng version 1.2.5rc3 - September 18, 2002
  Updated and distributed by Glenn Randers-Pehrson
  <randeg@alum.rpi.edu>
  Copyright (c) 1998-2002 Glenn Randers-Pehrson
@@ -1774,7 +1774,7 @@ histogram, it may not do as good a job.
       if (png_get_valid(png_ptr, info_ptr,
          PNG_INFO_PLTE))
       {
-         png_uint_16p histogram;
+         png_uint_16p histogram = NULL;
 
          png_get_hIST(png_ptr, info_ptr,
             &histogram);
@@ -3641,13 +3641,13 @@ application:
 
 .SH IX. Y2K Compliance in libpng
 
-July 8, 2002
+September 18, 2002
 
 Since the PNG Development group is an ad-hoc body, we can't make
 an official declaration.
 
 This is your unofficial assurance that libpng from version 0.71 and
-upward through 1.2.4 are Y2K compliant.  It is my belief that earlier
+upward through 1.2.5rc3 are Y2K compliant.  It is my belief that earlier
 versions were also Y2K compliant.
 
 Libpng only has three year fields.  One is a 2-byte unsigned integer that
@@ -3782,6 +3782,9 @@ the first widely used release:
  1.2.4rc1            13    10204  12.so.0.1.2.4rc1
  1.0.14              10    10014  10.so.0.1.0.14
  1.2.4               13    10204  12.so.0.1.2.4
+ 1.2.5beta1,2        13    10205  12.so.0.1.2.5beta1,2
+ 1.2.5rc1,3          13    10205  12.so.0.1.2.5rc1,3
+ 1.0.15rc1,3         10    10015  10.so.0.1.0.15rc1,3
 
 Henceforth the source version will match the shared-library minor
 and patch numbers; the shared-library major version number will be
@@ -3839,7 +3842,7 @@ possible without all of you.
 
 Thanks to Frank J. T. Wojcik for helping with the documentation.
 
-Libpng version 1.2.4 - July 8, 2002:
+Libpng version 1.2.5rc3 - September 18, 2002:
 Initially created in 1995 by Guy Eric Schalnat, then of Group 42, Inc.
 Currently maintained by Glenn Randers-Pehrson (randeg@alum.rpi.edu).
 
@@ -3856,7 +3859,7 @@ included in the libpng distribution, the latter shall prevail.)
 If you modify libpng you may insert additional notices immediately following
 this sentence.
 
-libpng versions 1.0.7, July 1, 2000, through 1.2.4, July 8, 2002, are
+libpng versions 1.0.7, July 1, 2000, through 1.2.5rc3, September 18, 2002, are
 Copyright (c) 2000-2002 Glenn Randers-Pehrson, and are
 distributed according to the same disclaimer and license as libpng-1.0.6
 with the following individuals added to the list of Contributing Authors
@@ -3948,7 +3951,7 @@ certification mark of the Open Source Initiative.
 
 Glenn Randers-Pehrson
 randeg@alum.rpi.edu
-July 8, 2002
+September 18, 2002
 
 .\" end of man page
 

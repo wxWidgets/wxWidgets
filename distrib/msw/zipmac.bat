@@ -5,7 +5,7 @@ set src=%wxwin%
 set dest=%src%\deliver
 
 Rem Set this to the required version
-set version=2.3.1
+set version=2.3.4
 
 if "%src%" == "" goto usage
 if "%dest%" == "" goto usage

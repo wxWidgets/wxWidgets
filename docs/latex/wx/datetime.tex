@@ -235,6 +235,7 @@ values were correct as constructors can not return an error code.
 \helpref{Set(double jdn)}{wxdatetimesetjdn}\\
 \helpref{Set(h, m, s, ms)}{wxdatetimesettime}\\
 \helpref{Set(day, mon, year, h, m, s, ms)}{wxdatetimesetdate}\\
+\helpref{SetFromDOS(unsigned long ddt)}{wxdatetimesetfromdos}\\
 \helpref{ResetTime}{wxdatetimeresettime}\\
 \helpref{SetYear}{wxdatetimesetyear}\\
 \helpref{SetMonth}{wxdatetimesetmonth}\\
@@ -268,7 +269,8 @@ some more complicated calculations to find the answer are under the
 \helpref{GetWeekOfMonth}{wxdatetimegetweekofmonth}\\
 \helpref{GetYearDay}{wxdatetimegetyearday}\\
 \helpref{IsWorkDay}{wxdatetimeisworkday}\\
-\helpref{IsGregorianDate}{wxdatetimeisgregoriandate}
+\helpref{IsGregorianDate}{wxdatetimeisgregoriandate}\\
+\helpref{GetAsDOS}{wxdatetimegetasdos}
 
 \membersection{Date comparison}
 
@@ -882,6 +884,24 @@ Returns {\tt TRUE} if the given date os later than the date of adoption of the
 Gregorian calendar in the given country (and hence the Gregorian calendar
 calculations make sense for it).
 
+%%%%%%%%%%%%%%%%%%%%%% dos date and time format %%%%%%%%%%%%%%%%%%%%%%%
+
+\membersection{wxDateTime::SetFromDOS}\label{wxdatetimesetfromdos}
+
+\func{wxDateTime\&}{Set}{\param{unsigned long }{ddt}}
+
+Sets the date from the date and time in 
+\urlref{DOS}{http://developer.novell.com/ndk/doc/smscomp/index.html?page=/ndk/doc/smscomp/sms\_docs/data/hc2vlu5i.html} 
+format.
+
+\membersection{wxDateTime::GetAsDOS}\label{wxdatetimegetasdos}
+
+\constfunc{unsigned long}{GetAsDOS}{\void}
+
+Returns the date and time in 
+\urlref{DOS}{http://developer.novell.com/ndk/doc/smscomp/index.html?page=/ndk/doc/smscomp/sms\_docs/data/hc2vlu5i.html} 
+format.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%% comparison %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \membersection{wxDateTime::IsEqualTo}\label{wxdatetimeisequalto}
@@ -1127,7 +1147,7 @@ This function returns the time representation in the ISO 8601 format
 
 \membersection{wxDateTime::SetToWeekDayInSameWeek}\label{wxdatetimesettoweekdayinsameweek}
 
-\func{wxDateTime\&}{SetToWeekDayInSameWeek}{\param{WeekDay }{weekday}}
+\func{wxDateTime\&}{SetToWeekDayInSameWeek}{\param{WeekDay }{weekday}, \param{WeekFlags}{flags = {\tt Monday\_First}}}
 
 Adjusts the date so that it will still lie in the same week as before, but its
 week day will be the given one.
@@ -1136,9 +1156,9 @@ Returns the reference to the modified object itself.
 
 \membersection{wxDateTime::GetWeekDayInSameWeek}\label{wxdatetimegetweekdayinsameweek}
 
-\constfunc{wxDateTime}{GetWeekDayInSameWeek}{\param{WeekDay }{weekday}}
+\constfunc{wxDateTime}{GetWeekDayInSameWeek}{\param{WeekDay }{weekday}, \param{WeekFlags}{flags = {\tt Monday\_First}}}
 
-Returns the copy of this object to which
+Returns the copy of this object to which 
 \helpref{SetToWeekDayInSameWeek}{wxdatetimesettoweekdayinsameweek} was
 applied.
 
@@ -1216,7 +1236,7 @@ Returns the copy of this object to which
 
 \membersection{wxDateTime::SetToTheWeek}\label{wxdatetimesettotheweek}
 
-\func{bool}{SetToTheWeek}{\param{wxDateTime\_t }{numWeek}, \param{WeekDay }{weekday = Mon}}
+\func{bool}{SetToTheWeek}{\param{wxDateTime\_t }{numWeek}, \param{WeekDay }{weekday = Mon}, \param{WeekFlags}{flags = {\tt Monday\_First}}}
 
 Set the date to the given {\it weekday} in the week with given number
 {\it numWeek}. The number should be in range $1\ldots53$ and {\tt FALSE} will
@@ -1225,7 +1245,7 @@ date was changed successfully.
 
 \membersection{wxDateTime::GetWeek}\label{wxdatetimegetweek}
 
-\constfunc{wxDateTime}{GetWeek}{\param{wxDateTime\_t }{numWeek}, \param{WeekDay }{weekday = Mon}}
+\constfunc{wxDateTime}{GetWeek}{\param{wxDateTime\_t }{numWeek}, \param{WeekDay }{weekday = Mon}, \param{WeekFlags}{flags = {\tt Monday\_First}}}
 
 Returns the copy of this object to which
 \helpref{SetToTheWeek}{wxdatetimesettotheweek} was applied.

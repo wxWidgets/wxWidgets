@@ -27,6 +27,7 @@
 #include "Platform.h"
 
 #include "Scintilla.h"
+#include "XPM.h"
 #ifdef SCI_LEXER
 #include "SciLexer.h"
 #include "PropSet.h"
@@ -122,9 +123,10 @@ public:
     void DoLoseFocus();
     void DoGainFocus();
     void DoSysColourChange();
-    void DoButtonDown(Point pt, unsigned int curTime, bool shift, bool ctrl, bool alt);
-    void DoButtonUp(Point pt, unsigned int curTime, bool ctrl);
-    void DoButtonMove(Point pt);
+    void DoLeftButtonDown(Point pt, unsigned int curTime, bool shift, bool ctrl, bool alt);
+    void DoLeftButtonUp(Point pt, unsigned int curTime, bool ctrl);
+    void DoLeftButtonMove(Point pt);
+    void DoMiddleButtonUp(Point pt);
     void DoMouseWheel(int rotation, int delta, int linesPerAction, int ctrlDown, bool isPageScroll);
     void DoAddChar(int key);
     int  DoKeyDown(int key, bool shift, bool ctrl, bool alt, bool* consumed);
@@ -148,6 +150,7 @@ public:
     bool GetHideSelection() { return hideSelection; }
     void DoScrollToLine(int line);
     void DoScrollToColumn(int column);
+    void ClipChildren(wxDC& dc, PRectangle rect);
 
 private:
     bool                capturedMouse;
@@ -158,6 +161,9 @@ private:
     wxDragResult        dragResult;
 #endif
     int                 wheelRotation;
+
+
+    friend class wxSTCCallTip;
 };
 
 //----------------------------------------------------------------------

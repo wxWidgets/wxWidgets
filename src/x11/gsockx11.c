@@ -30,7 +30,7 @@ void wxUnregisterSocketCallback(int fd, wxSocketTableType socketType);
 static void _GSocket_X11_Input(int *fid, void* data)
 {
   GSocket *socket = (GSocket *)data;
-
+  
   _GSocket_Detected_Read(socket);
 }
 
@@ -76,8 +76,10 @@ void _GSocket_Install_Callback(GSocket *socket, GSocketEvent event)
     default: return;
   }
 
-  //  if (m_id[c] != -1)
-  //    XtRemoveInput(m_id[c]);
+#if 0
+  if (m_id[c] != -1)
+      XtRemoveInput(m_id[c]);
+#endif /* 0 */
 
   if (c == 0)
   {

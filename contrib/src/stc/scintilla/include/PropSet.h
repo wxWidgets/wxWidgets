@@ -60,7 +60,7 @@ public:
 	bool onlyLineEnds;	///< Delimited by any white space or only line ends
 	bool sorted;
 	int starts[256];
-	WordList(bool onlyLineEnds_ = false) : 
+	WordList(bool onlyLineEnds_ = false) :
 		words(0), wordsNoCase(0), list(0), len(0), onlyLineEnds(onlyLineEnds_), sorted(false) {}
 	~WordList() { Clear(); }
 	operator bool() { return len ? true : false; }
@@ -70,9 +70,9 @@ public:
 	char *Allocate(int size);
 	void SetFromAllocated();
 	bool InList(const char *s);
-	const char *GetNearestWord(const char *wordStart, int searchLen = -1, 
+	const char *GetNearestWord(const char *wordStart, int searchLen = -1,
 		bool ignoreCase = false, SString wordCharacters="");
-	char *GetNearestWords(const char *wordStart, int searchLen=-1, 
+	char *GetNearestWords(const char *wordStart, int searchLen=-1,
 		bool ignoreCase=false, char otherSeparator='\0');
 };
 

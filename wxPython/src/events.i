@@ -407,7 +407,7 @@ public:
 
             for (int i=0; i<count; i++) {
 #if wxUSE_UNICODE
-                PyList_SetItem(list, i, PyUnicode_FromUnicode(files[i], files[i].Len()));
+                PyList_SetItem(list, i, PyUnicode_FromWideChar(files[i], files[i].Len()));
 #else
                 PyList_SetItem(list, i, PyString_FromString((const char*)files[i]));
 #endif

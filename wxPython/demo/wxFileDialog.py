@@ -1,6 +1,6 @@
 
 from wxPython.wx import *
-import string
+import os
 
 #---------------------------------------------------------------------------
 
@@ -9,10 +9,18 @@ wildcard = "Python source (*.py)|*.py|" \
            "All files (*.*)|*.*"
 
 def runTest(frame, nb, log):
-    dlg = wxFileDialog(frame, "Choose a file", "", "", wildcard, wxOPEN|wxMULTIPLE)
+    log.WriteText("CWD: %s\n" % os.getcwd())
+    dlg = wxFileDialog(frame, "Choose a file", os.getcwd(), "", wildcard,
+                       wxOPEN
+                       | wxMULTIPLE
+                       #| wxCHANGE_DIR
+                       )
     if dlg.ShowModal() == wxID_OK:
-        for path in dlg.GetPaths():
-            log.WriteText('You selected: %s\n' % path)
+        paths = dlg.GetPaths()
+        log.WriteText('You selected %d files:' % len(paths))
+        for path in paths:
+            log.WriteText('           %s\n' % path)
+    log.WriteText("CWD: %s\n" % os.getcwd())
     dlg.Destroy()
 
 #---------------------------------------------------------------------------
@@ -23,14 +31,14 @@ def runTest(frame, nb, log):
 
 
 
-
-
-
-
-
-
-
 overview = """\
-This class represents the file chooser dialog.
+This class provides the file chooser dialog.
 
 """
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
+

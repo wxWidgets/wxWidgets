@@ -1,11 +1,12 @@
 
-  Welcome to wxWindows/X11 2.3.3
+  Welcome to wxWindows/X11 2.4.1
 
-You have downloaded version 2.3.3 of the X11 port of
+You have downloaded version 2.4.1 of the X11 port of
 the wxWindows GUI library. This runs on X11 with no
 Motif, Xt, GTK+ or any other standard widget set --
 instead it uses the wxUniversal widgets. The intention
 is to have it run on NanoX as well as desktop X11.
+The wxX11 distribution also includes the wxMotif port.
 
 More information about the wxWindows project as a whole
 can be found at:

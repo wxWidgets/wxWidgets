@@ -37,6 +37,7 @@
 #endif
 
 #include "wx/splitter.h"
+#include "wx/sizer.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -84,9 +85,12 @@ public:
     void UpdateUIHorizontal(wxUpdateUIEvent& event);
     void UpdateUIVertical(wxUpdateUIEvent& event);
     void UpdateUIUnsplit(wxUpdateUIEvent& event);
+    
+    wxTextCtrl *GetLog()  { return m_log; }
 
 private:
     wxScrolledWindow *m_left, *m_right;
+    wxTextCtrl *m_log;
 
     wxSplitterWindow* m_splitter;
 
@@ -115,8 +119,14 @@ class MyCanvas: public wxScrolledWindow
 public:
     MyCanvas(wxWindow* parent);
     virtual ~MyCanvas();
-
+    
+    void OnMouse(wxMouseEvent& event);
     virtual void OnDraw(wxDC& dc);
+    
+private:
+    bool   m_capture;
+
+    DECLARE_EVENT_TABLE()
 };
 
 // ============================================================================
@@ -198,7 +208,14 @@ MyFrame::MyFrame()
     SetMenuBar(menuBar);
 
     menuBar->Check(SPLIT_LIVE, TRUE);
+    
+    wxBoxSizer *sizer = new wxBoxSizer( wxVERTICAL );
+    
     m_splitter = new MySplitterWindow(this);
+    sizer->Add( m_splitter, 1, wxGROW, 0 );
+    
+    m_log = new wxTextCtrl(this,-1,wxT(""),wxDefaultPosition,wxSize(100,80),wxTE_MULTILINE);
+    sizer->Add( m_log, 0, wxGROW );
 
 #if 1
     m_left = new MyCanvas(m_splitter);
@@ -222,6 +239,8 @@ MyFrame::MyFrame()
     // you can also try -100
     m_splitter->SplitVertically(m_left, m_right, 100);
 #endif
+
+    SetSizer( sizer );
 
     SetStatusText(_T("Min pane size = 0"), 1);
 }
@@ -383,9 +402,14 @@ void MySplitterWindow::OnUnsplit(wxSplitterEvent& event)
 // MyCanvas
 // ----------------------------------------------------------------------------
 
+BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
+    EVT_MOUSE_EVENTS(MyCanvas::OnMouse)
+END_EVENT_TABLE()
+
 MyCanvas::MyCanvas(wxWindow* parent)
         : wxScrolledWindow(parent, -1)
 {
+    m_capture = FALSE;
 }
 
 MyCanvas::~MyCanvas()
@@ -398,10 +422,41 @@ void MyCanvas::OnDraw(wxDC& dc)
     dc.DrawLine(0, 0, 100, 100);
 
     dc.SetBackgroundMode(wxTRANSPARENT);
-    dc.DrawText(_T("Testing"), 50, 50);
+    dc.DrawText(wxT("Click and drag mouse to test enter/leave events."), 50, 50);
 
     dc.SetPen(*wxRED_PEN);
     dc.SetBrush(*wxGREEN_BRUSH);
     dc.DrawRectangle(120, 120, 100, 80);
+}
+
+void MyCanvas::OnMouse(wxMouseEvent& event)
+{
+    MyFrame *frame = (MyFrame*)GetGrandParent();
+    wxTextCtrl *log = frame->GetLog();
+    
+    if (event.GetEventType() == wxEVT_LEFT_DOWN)
+    {
+        log->WriteText( wxT("Left down\n") );
+        m_capture = TRUE;
+        CaptureMouse();
+    }
+    
+    if (event.GetEventType() == wxEVT_LEFT_UP)
+    {
+        log->WriteText( wxT("Left up\n") );
+        m_capture = FALSE;
+        ReleaseMouse();
+    }
+    
+    if (event.GetEventType() == wxEVT_ENTER_WINDOW)
+    {
+        log->WriteText( wxT("Enter\n") );
+    }
+    
+    if (event.GetEventType() == wxEVT_LEAVE_WINDOW)
+    {
+        log->WriteText( wxT("Leave\n") );
+    }
+    
 }
 

@@ -65,6 +65,20 @@ public:
     virtual wxString ReadFile(const wxFSFile& file) const;
 };
 
+//--------------------------------------------------------------------------------
+// wxHtmlFilterHTML
+//          filter for text/html
+//--------------------------------------------------------------------------------
+
+class wxHtmlFilterHTML : public wxHtmlFilter
+{
+    DECLARE_DYNAMIC_CLASS(wxHtmlFilterHTML)
+
+    public:
+        virtual bool CanRead(const wxFSFile& file) const;
+        virtual wxString ReadFile(const wxFSFile& file) const;
+};
+
 
 
 #endif // wxUSE_HTML

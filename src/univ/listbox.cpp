@@ -1007,7 +1007,7 @@ void wxListBox::ExtendSelection(int itemTo)
     }
 }
 
-void wxListBox::Select(bool sel, int item)
+void wxListBox::DoSelect(int item, bool sel)
 {
     if ( item != -1 )
     {
@@ -1027,7 +1027,7 @@ void wxListBox::Select(bool sel, int item)
 
 void wxListBox::SelectAndNotify(int item)
 {
-    Select(TRUE, item);
+    DoSelect(item);
 
     SendEvent(wxEVT_COMMAND_LISTBOX_SELECTED);
 }
@@ -1046,7 +1046,7 @@ void wxListBox::Activate(int item)
 
     if ( item != -1 )
     {
-        Select(TRUE, item);
+        DoSelect(item);
 
         SendEvent(wxEVT_COMMAND_LISTBOX_DOUBLECLICKED);
     }
@@ -1089,7 +1089,7 @@ bool wxListBox::PerformAction(const wxControlAction& action,
             item = m_current;
 
         if ( IsSelected(item) )
-            Unselect(item);
+            DoUnselect(item);
         else
             SelectAndNotify(item);
     }
@@ -1100,12 +1100,12 @@ bool wxListBox::PerformAction(const wxControlAction& action,
         if ( strArg.empty() )
             SelectAndNotify(item);
         else
-            Select(TRUE, item);
+            DoSelect(item);
     }
     else if ( action == wxACTION_LISTBOX_SELECTADD )
-        Select(TRUE, item);
+        DoSelect(item);
     else if ( action == wxACTION_LISTBOX_UNSELECT )
-        Select(FALSE, item);
+        DoUnselect(item);
     else if ( action == wxACTION_LISTBOX_MOVEDOWN )
         ChangeCurrent(1);
     else if ( action == wxACTION_LISTBOX_MOVEUP )

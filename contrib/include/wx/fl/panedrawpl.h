@@ -27,7 +27,7 @@ would be enough for the frame layout to function properly
 (they are plugged in automatically by the wxFrameLayout class).
 */
 
-class cbPaneDrawPlugin : public cbPluginBase
+class WXFL_DECLSPEC cbPaneDrawPlugin : public cbPluginBase
 {
 public:
     DECLARE_DYNAMIC_CLASS( cbPaneDrawPlugin )

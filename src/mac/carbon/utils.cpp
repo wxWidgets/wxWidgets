@@ -158,7 +158,7 @@ void wxUsleep(unsigned long milliseconds)
     do 
     {
 	YieldToAnyThread() ;
-    } while( clock() - start < milliseconds / CLOCKS_PER_SEC ) ;
+    } while( clock() - start < milliseconds /  1000.0 * CLOCKS_PER_SEC ) ;
 }
 
 void wxSleep(int nSecs)
@@ -313,49 +313,38 @@ bool wxGetResource(const wxString& section, const wxString& entry, int *value, c
 }
 #endif // wxUSE_RESOURCES
 
-int wxBusyCursorCount = 0;
-extern CursHandle	gMacCurrentCursor ;
-CursHandle			gMacStoredActiveCursor = NULL ;
+int gs_wxBusyCursorCount = 0;
+extern wxCursor    gMacCurrentCursor ;
+wxCursor        gMacStoredActiveCursor ;
 
 // Set the cursor to the busy cursor for all windows
 void wxBeginBusyCursor(wxCursor *cursor)
 {
-  wxBusyCursorCount ++;
-  if (wxBusyCursorCount == 1)
+    if (gs_wxBusyCursorCount++ == 0)
   {
   	gMacStoredActiveCursor = gMacCurrentCursor ;
-		::SetCursor( *::GetCursor( watchCursor ) ) ;
-  }
-  else
-  {
-        // TODO
-  }
+        cursor->MacInstall() ;
+    }
+    //else: nothing to do, already set
 }
 
 // Restore cursor to normal
 void wxEndBusyCursor()
 {
-  if (wxBusyCursorCount == 0)
-    return;
-
-  wxBusyCursorCount --;
-  if (wxBusyCursorCount == 0)
-  {
-    if ( gMacStoredActiveCursor )
-    	::SetCursor( *gMacStoredActiveCursor ) ;
-    else
+    wxCHECK_RET( gs_wxBusyCursorCount > 0,
+        wxT("no matching wxBeginBusyCursor() for wxEndBusyCursor()") );
+    
+    if (--gs_wxBusyCursorCount == 0)
     {
-		Cursor 		MacArrow ;
-    	::SetCursor( GetQDGlobalsArrow( &MacArrow ) ) ;
-    }
-   	gMacStoredActiveCursor = NULL ;
+        gMacStoredActiveCursor.MacInstall() ;
+        gMacStoredActiveCursor = wxNullCursor ;
   }
 }
 
 // TRUE if we're between the above two calls
 bool wxIsBusy()
 {
-  return (wxBusyCursorCount > 0);
+    return (gs_wxBusyCursorCount > 0);
 }
 
 wxString wxMacFindFolder( short        vol,
@@ -461,7 +450,15 @@ int wxDisplayDepth()
 // Get size of display
 void wxDisplaySize(int *width, int *height)
 {
-  wxClientDisplayRect( NULL , NULL , width , height ) ;
+    BitMap screenBits;
+    GetQDGlobalsScreenBits( &screenBits );
+
+    if (width != NULL) {
+        *width = screenBits.bounds.right - screenBits.bounds.left  ;
+    }
+    if (height != NULL) {
+        *height = screenBits.bounds.bottom - screenBits.bounds.top ;
+    }
 }
 
 void wxDisplaySizeMM(int *width, int *height)
@@ -469,29 +466,42 @@ void wxDisplaySizeMM(int *width, int *height)
     wxDisplaySize(width, height);
     // on mac 72 is fixed (at least now ;-)
     float cvPt2Mm = 25.4 / 72;
-    *width = int( *width * cvPt2Mm );
-    *height = int( *height * cvPt2Mm );
+
+    if (width != NULL) {
+        *width = int( *width * cvPt2Mm );
+    }
+    if (height != NULL) {
+        *height = int( *height * cvPt2Mm );
+    }
 }
 
 void wxClientDisplayRect(int *x, int *y, int *width, int *height)
 {
-  	BitMap screenBits;
-  	GetQDGlobalsScreenBits( &screenBits );
+    BitMap screenBits;
+    GetQDGlobalsScreenBits( &screenBits );
 
-    if (x) *x = 0;
-    if (y) *y = 0;
+    if (x)
+        *x = 0;
+    if (y)
+        *y = 0;
 
-    *width = screenBits.bounds.right - screenBits.bounds.left  ;
-    *height = screenBits.bounds.bottom - screenBits.bounds.top ;
+    if (width != NULL) {
+        *width = screenBits.bounds.right - screenBits.bounds.left  ;
+    }
+    if (height != NULL) {
+        *height = screenBits.bounds.bottom - screenBits.bounds.top ;
+    }
 
-   	SInt16 mheight ;
+    SInt16 mheight ;
   #if TARGET_CARBON
-   	GetThemeMenuBarHeight( &mheight ) ;
+    GetThemeMenuBarHeight( &mheight ) ;
   #else
     mheight = LMGetMBarHeight() ;
   #endif
-    *height -= mheight ;
-    if ( y )
+    if (height != NULL) {
+        *height -= mheight ;
+    }
+    if (y)
       *y = mheight ;
 }
 
@@ -510,3 +520,27 @@ wxString wxGetOsDescription()
 #endif
 }
 
+#if TARGET_CARBON
+// converts this string into a carbon foundation string with optional pc 2 mac encoding
+void wxMacCFStringHolder::Assign( const wxString &str ) 
+{
+    m_cfs = CFStringCreateWithCString( kCFAllocatorSystemDefault , str.c_str() ,
+        wxApp::s_macDefaultEncodingIsPC ? 
+        kCFStringEncodingWindowsLatin1 : CFStringGetSystemEncoding() ) ;
+    m_release = true ;
+}
+
+wxString wxMacCFStringHolder::AsString() 
+{
+    wxString result ;
+    Size len = CFStringGetLength( m_cfs )  ;
+    wxChar* buf = result.GetWriteBuf( len ) ;
+
+    CFStringGetCString( m_cfs , buf , len+1 , wxApp::s_macDefaultEncodingIsPC ? 
+        kCFStringEncodingWindowsLatin1 : CFStringGetSystemEncoding() ) ;
+
+    buf[len] = 0 ;
+    result.UngetWriteBuf() ;
+    return result ;
+}
+#endif

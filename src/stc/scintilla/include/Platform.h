@@ -3,7 +3,7 @@
  ** Interface to platform facilities. Also includes some basic utilities.
  ** Implemented in PlatGTK.cxx for GTK+/Linux, PlatWin.cxx for Windows, and PlatWX.cxx for wxWindows.
  **/
-// Copyright 1998-2002 by Neil Hodgson <neilh@scintilla.org>
+// Copyright 1998-2003 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
 #ifndef PLATFORM_H
@@ -109,6 +109,12 @@ public:
 		return (right > other.left) && (left < other.right) &&
 			(bottom > other.top) && (top < other.bottom);
 	}
+	void Move(int xDelta, int yDelta) {
+		left += xDelta;
+		top += yDelta;
+		right += xDelta;
+		bottom += yDelta;
+	}
 	int Width() { return right - left; }
 	int Height() { return bottom - top; }
 };
@@ -136,7 +142,7 @@ public:
 	}
 
 	ColourDesired(unsigned int red, unsigned int green, unsigned int blue) {
-		co = red | (green << 8) | (blue << 16);
+		Set(red, green, blue);
 	}
 
 	bool operator==(const ColourDesired &other) const {
@@ -145,6 +151,31 @@ public:
 
 	void Set(long lcol) {
 		co = lcol;
+	}
+
+	void Set(unsigned int red, unsigned int green, unsigned int blue) {
+		co = red | (green << 8) | (blue << 16);
+	}
+
+	static inline unsigned int ValueOfHex(const char ch) {
+		if (ch >= '0' && ch <= '9')
+			return ch - '0';
+		else if (ch >= 'A' && ch <= 'F')
+			return ch - 'A' + 10;
+		else if (ch >= 'a' && ch <= 'f')
+			return ch - 'a' + 10;
+		else
+			return 0;
+	}
+
+	void Set(const char *val) {
+		if (*val == '#') {
+			val++;
+		}
+		unsigned int r = ValueOfHex(val[0]) * 16 + ValueOfHex(val[1]);
+		unsigned int g = ValueOfHex(val[2]) * 16 + ValueOfHex(val[3]);
+		unsigned int b = ValueOfHex(val[4]) * 16 + ValueOfHex(val[5]);
+		Set(r, g, b);
 	}
 
 	long AsLong() const {
@@ -194,6 +225,9 @@ struct ColourPair {
 
 	ColourPair(ColourDesired desired_=ColourDesired(0,0,0)) {
 		desired = desired_;
+		allocated.Set(desired.AsLong());
+	}
+	void Copy() {
 		allocated.Set(desired.AsLong());
 	}
 };
@@ -271,9 +305,9 @@ public:
 	virtual ~Surface() {};
 	static Surface *Allocate();
 
-	virtual void Init()=0;
-	virtual void Init(SurfaceID sid)=0;
-	virtual void InitPixMap(int width, int height, Surface *surface_)=0;
+	virtual void Init(WindowID wid)=0;
+	virtual void Init(SurfaceID sid, WindowID wid)=0;
+	virtual void InitPixMap(int width, int height, Surface *surface_, WindowID wid)=0;
 
 	virtual void Release()=0;
 	virtual bool Initialised()=0;
@@ -292,6 +326,7 @@ public:
 
 	virtual void DrawTextNoClip(PRectangle rc, Font &font_, int ybase, const char *s, int len, ColourAllocated fore, ColourAllocated back)=0;
 	virtual void DrawTextClipped(PRectangle rc, Font &font_, int ybase, const char *s, int len, ColourAllocated fore, ColourAllocated back)=0;
+	virtual void DrawTextTransparent(PRectangle rc, Font &font_, int ybase, const char *s, int len, ColourAllocated fore)=0;
 	virtual void MeasureWidths(Font &font_, const char *s, int len, int *positions)=0;
 	virtual int WidthText(Font &font_, const char *s, int len)=0;
 	virtual int WidthChar(Font &font_, char ch)=0;
@@ -307,6 +342,7 @@ public:
 	virtual void FlushCachedState()=0;
 
 	virtual void SetUnicodeMode(bool unicodeMode_)=0;
+	virtual void SetDBCSMode(int codePage)=0;
 };
 
 /**
@@ -329,8 +365,8 @@ public:
 		id = id_;
 		return *this;
 	}
-	WindowID GetID() { return id; }
-	bool Created() { return id != 0; }
+	WindowID GetID() const { return id; }
+	bool Created() const { return id != 0; }
 	void Destroy();
 	bool HasFocus();
 	PRectangle GetPosition();
@@ -341,7 +377,7 @@ public:
 	void InvalidateAll();
 	void InvalidateRectangle(PRectangle rc);
 	virtual void SetFont(Font &font);
-	enum Cursor { cursorInvalid, cursorText, cursorArrow, cursorUp, cursorWait, cursorHoriz, cursorVert, cursorReverseArrow };
+	enum Cursor { cursorInvalid, cursorText, cursorArrow, cursorUp, cursorWait, cursorHoriz, cursorVert, cursorReverseArrow, cursorHand };
 	void SetCursor(Cursor curs);
 	void SetTitle(const char *s);
 private:
@@ -353,38 +389,28 @@ private:
  */
 
 class ListBox : public Window {
-private:
-#if PLAT_GTK
-	WindowID list;
-	WindowID scroller;
-	int current;
-#endif
-	int desiredVisibleRows;
-	unsigned int maxItemCharacters;
-	unsigned int aveCharWidth;
-public:
-	CallBackAction doubleClickAction;
-	void *doubleClickActionData;
 public:
 	ListBox();
 	virtual ~ListBox();
-	void Create(Window &parent, int ctrlID);
-	virtual void SetFont(Font &font);
-	void SetAverageCharWidth(int width);
-	void SetVisibleRows(int rows);
-	PRectangle GetDesiredRect();
-	void Clear();
-	void Append(char *s);
-	int Length();
-	void Select(int n);
-	int GetSelection();
-	int Find(const char *prefix);
-	void GetValue(int n, char *value, int len);
-	void Sort();
-	void SetDoubleClickAction(CallBackAction action, void *data) {
-		doubleClickAction = action;
-		doubleClickActionData = data;
-	}
+	static ListBox *Allocate();
+
+	virtual void SetFont(Font &font)=0;
+	virtual void Create(Window &parent, int ctrlID, int lineHeight_, bool unicodeMode_)=0;
+	virtual void SetAverageCharWidth(int width)=0;
+	virtual void SetVisibleRows(int rows)=0;
+	virtual PRectangle GetDesiredRect()=0;
+	virtual int CaretFromEdge()=0;
+	virtual void Clear()=0;
+	virtual void Append(char *s, int type = -1)=0;
+	virtual int Length()=0;
+	virtual void Select(int n)=0;
+	virtual int GetSelection()=0;
+	virtual int Find(const char *prefix)=0;
+	virtual void GetValue(int n, char *value, int len)=0;
+	virtual void Sort()=0;
+	virtual void RegisterImage(int type, const char *xpm_data)=0;
+	virtual void ClearRegisteredImages()=0;
+	virtual void SetDoubleClickAction(CallBackAction, void *)=0;
 };
 
 /**
@@ -426,6 +452,7 @@ public:
 	static const char *DefaultFont();
 	static int DefaultFontSize();
 	static unsigned int DoubleClickTime();
+	static bool MouseButtonBounce();
 	static void DebugDisplay(const char *s);
 	static bool IsKeyDown(int key);
 	static long SendScintilla(
@@ -433,6 +460,8 @@ public:
 	static long SendScintillaPointer(
 		WindowID w, unsigned int msg, unsigned long wParam=0, void *lParam=0);
 	static bool IsDBCSLeadByte(int codePage, char ch);
+	static int DBCSCharLength(int codePage, const char *s);
+	static int DBCSCharMaxLength();
 
 	// These are utility functions not really tied to a platform
 	static int Minimum(int a, int b);

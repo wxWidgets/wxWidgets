@@ -27,6 +27,13 @@ of the item positions inserting or removing the items in the menu containing
 the radio items risks to not work correctly. Finally note that the radio items
 are only supported under Windows and GTK+ currently.
 
+\wxheading{Allocation strategy}
+
+All menus except the popup ones must be created on the heap. All menus
+attached to a menubar or to another menu will be deleted by their parent when
+it is deleted. As the frame menubar is deleted by the frame itself, it means
+that normally all menus used are deleted automatically.
+
 \wxheading{Derived from}
 
 \helpref{wxEvtHandler}{wxevthandler}\\
@@ -104,7 +111,9 @@ Adds a string item to the end of the menu.
 \func{void}{Append}{\param{int}{ id}, \param{const wxString\& }{ item}, \param{wxMenu *}{subMenu},\rtfsp
 \param{const wxString\& }{helpString = ""}}
 
-Adds a pull-right submenu to the end of the menu.
+Adds a pull-right submenu to the end of the menu. Append the submenu to the parent
+menu {\it after} you have added your menu items, or accelerators may not be
+registered properly.
 
 \func{void}{Append}{\param{wxMenuItem*}{ menuItem}}
 

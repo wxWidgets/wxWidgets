@@ -32,6 +32,7 @@
 #include  "wx/event.h"
 #include  "wx/control.h"
 #include  "wx/notebook.h"
+#include  "wx/app.h"
 
 #include  "wx/msw/private.h"
 
@@ -50,6 +51,23 @@
 
 #if defined(__WIN95__) && !((defined(__GNUWIN32_OLD__) || defined(__TWIN32__)) && !defined(__CYGWIN10__))
     #include <commctrl.h>
+#endif
+
+#include "wx/msw/winundef.h"
+
+#if wxUSE_UXTHEME
+#include "wx/msw/uxtheme.h"
+
+#include "wx/radiobut.h"
+#include "wx/radiobox.h"
+#include "wx/checkbox.h"
+#include "wx/bmpbuttn.h"
+#include "wx/statline.h"
+#include "wx/statbox.h"
+#include "wx/stattext.h"
+#include "wx/slider.h"
+#include "wx/scrolwin.h"
+#include "wx/panel.h"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -141,6 +159,20 @@ bool wxNotebook::Create(wxWindow *parent,
                         long style,
                         const wxString& name)
 {
+    // Does ComCtl32 support non-top tabs?
+    int verComCtl32 = wxApp::GetComCtl32Version();
+    if ( verComCtl32 < 470 || verComCtl32 >= 600 )
+    {
+        if (style & wxNB_BOTTOM)
+            style &= ~wxNB_BOTTOM;
+        
+        if (style & wxNB_LEFT)
+            style &= ~wxNB_LEFT;
+        
+        if (style & wxNB_RIGHT)
+            style &= ~wxNB_RIGHT;
+    }
+    
     // base init
     if ( !CreateControl(parent, id, pos, size, style, wxDefaultValidator, name) )
         return FALSE;
@@ -161,7 +193,7 @@ WXDWORD wxNotebook::MSWGetStyle(long style, WXDWORD *exstyle) const
 
     tabStyle |= WS_TABSTOP | TCS_TABS;
 
-    if ( style & wxTC_MULTILINE )
+    if ( style & wxNB_MULTILINE )
         tabStyle |= TCS_MULTILINE;
     if ( style & wxNB_FIXEDWIDTH )
         tabStyle |= TCS_FIXEDWIDTH;
@@ -205,9 +237,23 @@ int wxNotebook::SetSelection(int nPage)
 {
   wxCHECK_MSG( IS_VALID_PAGE(nPage), -1, wxT("notebook page out of range") );
 
-  ChangePage(m_nSelection, nPage);
+  if ( nPage != m_nSelection )
+  {
+    wxNotebookEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, m_windowId);
+    event.SetSelection(nPage);
+    event.SetOldSelection(m_nSelection);
+    event.SetEventObject(this);
+    if ( !GetEventHandler()->ProcessEvent(event) || event.IsAllowed() )
+    {
+      // program allows the page change
+      event.SetEventType(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED);
+      (void)GetEventHandler()->ProcessEvent(event);
 
-  return TabCtrl_SetCurSel(m_hwnd, nPage);
+      TabCtrl_SetCurSel(m_hwnd, nPage);
+    }
+  }
+
+  return m_nSelection;
 }
 
 bool wxNotebook::SetPageText(int nPage, const wxString& strText)
@@ -391,6 +437,18 @@ bool wxNotebook::InsertPage(int nPage,
   wxASSERT( pPage != NULL );
   wxCHECK( IS_VALID_PAGE(nPage) || nPage == GetPageCount(), FALSE );
 
+#if wxUSE_UXTHEME && wxUSE_UXTHEME_AUTO
+    // Automatically apply the theme background,
+    // changing the colour of the panel to match the
+    // tab page colour. This won't work well with all
+    // themes but it's a start.
+    if (wxUxThemeEngine::Get() && pPage->IsKindOf(CLASSINFO(wxPanel)))
+    {
+        wxNotebookApplyThemeBackground(this, pPage, wxNotebookGetThemeBackgroundColour(this));
+    }
+#endif
+
+    // add a new tab to the control
   // do add the tab to the control
 
   // init all fields to 0
@@ -631,44 +689,67 @@ bool wxNotebook::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM* result)
   return processed;
 }
 
-// ----------------------------------------------------------------------------
-// wxNotebook helper functions
-// ----------------------------------------------------------------------------
-
-// generate the page changing and changed events, hide the currently active
-// panel and show the new one
-void wxNotebook::ChangePage(int nOldSel, int nSel)
+// Windows only: attempts to get colour for UX theme page background
+wxColour wxNotebookGetThemeBackgroundColour(wxNotebook* notebook)
 {
-  // MT-FIXME should use a real semaphore
-  static bool s_bInsideChangePage = FALSE;
+#if wxUSE_UXTHEME
+    if (wxUxThemeEngine::Get())
+    {
+        WXHTHEME hTheme = wxUxThemeEngine::Get()->m_pfnOpenThemeData(notebook->GetHWND(), L"TAB");
+        if (hTheme)
+        {
+            // This is total guesswork.
+            // See PlatformSDK\Include\Tmschema.h for values
+            COLORREF themeColor;
+            wxUxThemeEngine::Get()->
+                m_pfnGetThemeColor(hTheme,
+                10 /* TABP_BODY */,
+                1 /* NORMAL */,
+                3821, /* FILLCOLORHINT */
+                & themeColor);
+            
+            wxUxThemeEngine::Get()->m_pfnCloseThemeData(hTheme);
+            
+            wxColour colour(GetRValue(themeColor), GetGValue(themeColor), GetBValue(themeColor));
+            return colour;
+        }
+    }
+#endif
+    return notebook->GetBackgroundColour();
+}
 
-  // when we call ProcessEvent(), our own OnSelChange() is called which calls
-  // this function - break the infinite loop
-  if ( s_bInsideChangePage )
-    return;
+// Windows only: attempts to apply the UX theme page background to this page
+void wxNotebookApplyThemeBackground(wxNotebook* notebook, wxWindow* window, const wxColour& colour)
+{
+#if wxUSE_UXTHEME
+    // Don't set the background for buttons since this will
+    // switch it into ownerdraw mode
+    if (window->IsKindOf(CLASSINFO(wxButton)) && !window->IsKindOf(CLASSINFO(wxBitmapButton)))
+        // This is essential, otherwise you'll see dark grey
+        // corners in the buttons.
+        ((wxButton*)window)->wxControl::SetBackgroundColour(colour);
+    else if (window->IsKindOf(CLASSINFO(wxStaticText)) ||
+             window->IsKindOf(CLASSINFO(wxStaticBox)) ||
+             window->IsKindOf(CLASSINFO(wxStaticLine)) ||
+             window->IsKindOf(CLASSINFO(wxRadioButton)) ||
+             window->IsKindOf(CLASSINFO(wxRadioBox)) ||
+             window->IsKindOf(CLASSINFO(wxCheckBox)) ||
+             window->IsKindOf(CLASSINFO(wxBitmapButton)) ||
+             window->IsKindOf(CLASSINFO(wxSlider)) ||
+             window->IsKindOf(CLASSINFO(wxPanel)) ||
+             (window->IsKindOf(CLASSINFO(wxNotebook)) && (window != notebook)) ||
+             window->IsKindOf(CLASSINFO(wxScrolledWindow))
+        )
+    {
+        window->SetBackgroundColour(colour);
+    }
 
-  // it's not an error (the message may be generated by the tab control itself)
-  // and it may happen - just do nothing
-  if ( nSel == nOldSel )
-    return;
-
-  s_bInsideChangePage = TRUE;
-
-  wxNotebookEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, m_windowId);
-  event.SetSelection(nSel);
-  event.SetOldSelection(nOldSel);
-  event.SetEventObject(this);
-  if ( GetEventHandler()->ProcessEvent(event) && !event.IsAllowed() )
-  {
-    // program doesn't allow the page change
-    s_bInsideChangePage = FALSE;
-    return;
-  }
-
-  event.SetEventType(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED);
-  GetEventHandler()->ProcessEvent(event);
-
-  s_bInsideChangePage = FALSE;
+    for ( wxWindowList::Node *node = window->GetChildren().GetFirst(); node; node = node->GetNext() )
+    {
+        wxWindow *child = node->GetData();
+        wxNotebookApplyThemeBackground(notebook, child, colour);
+    }
+#endif
 }
 
 #endif // wxUSE_NOTEBOOK

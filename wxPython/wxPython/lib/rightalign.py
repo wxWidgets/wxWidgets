@@ -28,6 +28,9 @@ Hope this can help someone, as much as this list helps me.
 
 Josu Oyanguren
 Ubera Servicios Informáticos.
+
+
+P.S.  This only works well on wxMSW.
 """
 
 from wxPython.wx import *
@@ -50,6 +53,12 @@ class wxRightTextCtrl(wxTextCtrl):
 
         y = (dcheight - textheight) / 2
         x = dcwidth - textwidth - 2
+
+        if self.IsEnabled():
+            fclr = self.GetForegroundColour()
+        else:
+            fclr = wxSystemSettings_GetColour(wxSYS_COLOUR_GRAYTEXT)
+        dc.SetTextForeground(fclr)
 
         dc.SetClippingRegion(0, 0, dcwidth, dcheight)
         dc.DrawText(text, x, y)

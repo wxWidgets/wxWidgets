@@ -72,7 +72,6 @@ from wxPython.wx import *
 import xmlrpcserver,xmlrpclib
 import threading
 import SocketServer
-import string
 import new
 import sys
 
@@ -305,7 +304,7 @@ class rpcMixin:
     event.rpcStatusLock.acquire()
     doQuit = 0
     try:
-      methsplit = string.split(event.method,'.')
+      methsplit = event.method.split('.')
       meth = self
       for piece in methsplit:
         meth = getattr(meth,piece)
@@ -388,8 +387,8 @@ if __name__ == '__main__':
       self.frame = rpcFrame(NULL, -1, "wxPython RPCDemo", wxDefaultPosition,
                             wxSize(300,300),
                             rpcHost='localhost',rpcPort=port)
-      self.frame.Show(TRUE)
-      return TRUE
+      self.frame.Show(True)
+      return True
 
 
   def testcon(port):

@@ -63,7 +63,7 @@ echo Removing backup files...
 rm *~ */*~ */*/*~ */*/*/*~ */*/*/*/*~
 
 rm -f $2/wxMac-${WXVER}*.tar.gz
-rm -f -r $2/wxWindows-${WXVER}
+rm -f -r $2/wxMac-${WXVER}
 
 cp $1/include/wx/mac/setup0.h $1/include/wx/setup.h
 
@@ -78,8 +78,8 @@ rm -f $1/include/wx/setup.h
 
 echo Re-tarring in a subdirectory...
 cd $2
-mkdir wxWindows-${WXVER}
-cd wxWindows-${WXVER}
+mkdir wxMac-${WXVER}
+cd wxMac-${WXVER}
 $TAR xf ../wxMac-${WXVER}.tar
 
 # Remove mmedia
@@ -87,8 +87,8 @@ rm -f -r contrib/src/mmedia contrib/samples/mmedia
 cd ..
 rm -f wxMac-${WXVER}.tar
 
-$TAR cf $2/wxMac-${WXVER}.tar wxWindows-${WXVER}/*
-rm -f -r wxWindows-${WXVER}
+$TAR cf $2/wxMac-${WXVER}.tar wxMac-${WXVER}/*
+rm -f -r wxMac-${WXVER}
 gzip $2/wxMac-${WXVER}.tar
 
 # Copy readme and other files

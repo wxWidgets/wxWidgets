@@ -37,7 +37,7 @@ class TestPanel(wxPanel):
         sz.AddGrowableCol(1)
         sz.AddGrowableCol(2)
         self.SetSizer(sz)
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
 
 
 #----------------------------------------------------------------------
@@ -57,3 +57,10 @@ overview = """\
 This control can be used to place a directory listing (with optional files)
 on an arbitrary window.
 """
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
+

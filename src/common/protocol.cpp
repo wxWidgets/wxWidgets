@@ -41,12 +41,12 @@
 wxProtoInfo::wxProtoInfo(const wxChar *name, const wxChar *serv,
                          const bool need_host1, wxClassInfo *info)
 {
-  m_protoname = name;
-  m_servname = serv;
-  m_cinfo = info;
-  m_needhost = need_host1;
-  next = wxURL::ms_protocols;
-  wxURL::ms_protocols = this;
+    m_protoname = name;
+    m_servname = serv;
+    m_cinfo = info;
+    m_needhost = need_host1;
+    next = wxURL::ms_protocols;
+    wxURL::ms_protocols = this;
 }
 
 /////////////////////////////////////////////////////////////////
@@ -69,19 +69,21 @@ wxProtocol::wxProtocol()
 #if wxUSE_SOCKETS
 bool wxProtocol::Reconnect()
 {
-  wxIPV4address addr;
+    wxIPV4address addr;
 
-  if (!GetPeer(addr))
-  {
-    Close();
-    return FALSE;
-  }
-  if (!Close())
-    return FALSE;
-  if (!Connect(addr))
-    return FALSE;
+    if (!GetPeer(addr))
+    {
+        Close();
+        return FALSE;
+    }
 
-  return TRUE;
+    if (!Close())
+        return FALSE;
+        
+    if (!Connect(addr))
+        return FALSE;
+
+    return TRUE;
 }
 
 // ----------------------------------------------------------------------------
@@ -117,11 +119,11 @@ wxProtocolError wxProtocol::ReadLine(wxSocketBase *socket, wxString& result)
                 // normal char
                 if ( chLast )
                 {
-                    result += chLast;
+                    result += wxString::FromAscii( chLast );
                     chLast = '\0';
                 }
 
-                result += ch;
+                result += wxString::FromAscii( ch );
         }
     }
 
@@ -134,38 +136,42 @@ wxProtocolError wxProtocol::ReadLine(wxString& result)
 }
 
 // old function which only chops '\n' and not '\r\n'
-wxProtocolError GetLine(wxSocketBase *sock, wxString& result) {
+wxProtocolError GetLine(wxSocketBase *sock, wxString& result)
+{
 #define PROTO_BSIZE 2048
-  size_t avail, size;
-  char tmp_buf[PROTO_BSIZE], tmp_str[PROTO_BSIZE];
-  char *ret;
-  bool found;
+    size_t avail, size;
+    char tmp_buf[PROTO_BSIZE], tmp_str[PROTO_BSIZE];
+    char *ret;
+    bool found;
 
-  avail = sock->Read(tmp_buf, PROTO_BSIZE).LastCount();
-  if (sock->Error() || avail == 0)
-    return wxPROTO_NETERR;
+    avail = sock->Read(tmp_buf, PROTO_BSIZE).LastCount();
+    if (sock->Error() || avail == 0)
+        return wxPROTO_NETERR;
 
-  memcpy(tmp_str, tmp_buf, avail);
+    memcpy(tmp_str, tmp_buf, avail);
 
-// Not implemented on all systems
-// ret = (char *)memccpy(tmp_str, tmp_buf, '\n', avail);
-  found = FALSE;
-  for (ret=tmp_str;ret < (tmp_str+avail); ret++)
-     if (*ret == '\n') {
-       found = TRUE;
-       break;
-     }
+    // Not implemented on all systems
+    // ret = (char *)memccpy(tmp_str, tmp_buf, '\n', avail);
+    found = FALSE;
+    for (ret=tmp_str;ret < (tmp_str+avail); ret++)
+        if (*ret == '\n') 
+        {
+            found = TRUE;
+            break;
+        }
 
-  if (!found)
-    return wxPROTO_PROTERR;
-  *ret = 0;
+    if (!found)
+        return wxPROTO_PROTERR;
+        
+    *ret = 0;
 
-  result = tmp_str;
-  result = result.Left(result.Length()-1);
+    result = wxString::FromAscii( tmp_str );
+    result = result.Left(result.Length()-1);
 
-  size = ret-tmp_str+1;
-  sock->Unread(&tmp_buf[size], avail-size);
-  return wxPROTO_NOERR;
+    size = ret-tmp_str+1;
+    sock->Unread(&tmp_buf[size], avail-size);
+  
+    return wxPROTO_NOERR;
 #undef PROTO_BSIZE
 }
 #endif // wxUSE_SOCKETS

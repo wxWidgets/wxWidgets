@@ -139,6 +139,8 @@ wxObject *wxSizerXmlHandler::DoCreateResource()
 
         wxCHECK_MSG(m_parentSizer != NULL ||
                 ((IsOfClass(parentNode, wxT("wxPanel")) ||
+                  IsOfClass(parentNode, wxT("wxWizardPage")) ||
+                  IsOfClass(parentNode, wxT("wxWizardPageSimple")) ||
                   IsOfClass(parentNode, wxT("wxFrame")) ||
                   IsOfClass(parentNode, wxT("wxDialog"))) &&
                  parentNode->GetType() == wxXML_ELEMENT_NODE), NULL,
@@ -150,7 +152,12 @@ wxObject *wxSizerXmlHandler::DoCreateResource()
         else if (m_class == wxT("wxStaticBoxSizer"))
         {
             sizer = new wxStaticBoxSizer(
-                         new wxStaticBox(m_parentAsWindow, -1, GetText(wxT("label"))),
+                         new wxStaticBox(m_parentAsWindow,
+                                         GetID(),
+                                         GetText(wxT("label")),
+                                         wxDefaultPosition, wxDefaultSize,
+                                         0/*style*/,
+                                         GetName()),
                          GetStyle(wxT("orient"), wxHORIZONTAL));
         }
         

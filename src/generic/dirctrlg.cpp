@@ -70,7 +70,9 @@
 
 #define INCL_BASE
 #include <os2.h>
+#ifndef __EMX__
 #include <direct.h>
+#endif
 #include <stdlib.h>
 #include <ctype.h>
 
@@ -509,10 +511,14 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
 
     if ((style & wxDIRCTRL_3D_INTERNAL) == 0)
         treeStyle |= wxNO_BORDER;
+    else
+        treeStyle |= wxBORDER_SUNKEN;
 
     long filterStyle = 0;
     if ((style & wxDIRCTRL_3D_INTERNAL) == 0)
         filterStyle |= wxNO_BORDER;
+    else
+        filterStyle |= wxBORDER_SUNKEN;
 
     m_treeCtrl = new wxTreeCtrl(this, wxID_TREECTRL, pos, size, treeStyle);
 
@@ -685,7 +691,7 @@ void wxGenericDirCtrl::OnBeginEditItem(wxTreeEvent &event)
     }
 
     // don't rename the individual sections
-    if (m_treeCtrl->GetParent( event.GetItem() ) == m_rootId)
+    if (m_treeCtrl->GetItemParent( event.GetItem() ) == m_rootId)
     {
         event.Veto();
         return;

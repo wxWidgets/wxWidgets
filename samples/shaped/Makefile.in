@@ -1,0 +1,16 @@
+# Purpose: makefile for shaped example (UNIX).
+# Created: 2000-01-03
+
+top_srcdir = @top_srcdir@/..
+top_builddir = ../..
+program_dir = samples/shaped
+
+DATAFILES=star.png
+PROGRAM=shaped
+
+OBJECTS =$(PROGRAM).o
+DEPFILES=$(PROGRAM).d
+
+include ../../src/makeprog.env
+
+@IF_GNU_MAKE@-include $(DEPFILES)

@@ -608,7 +608,7 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
     for ( line = (height - 1); line >= 0; line-- )
     {
         int linepos = 0;
-        for ( column = 0; column < width; )
+        for ( column = 0; column < width ; )
         {
             if ( bpp < 16 )
             {
@@ -631,11 +631,70 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
                 {
                     if ( comp == BI_RLE4 )
                     {
-                        if ( verbose )
-                            wxLogError(_("DIB Header: Cannot deal with 4bit encoded yet."));
-                        image->Destroy();
-                        delete[] cmap;
-                        return FALSE;
+                        wxUint8 first;
+                        first = aByte;
+                        aByte = stream.GetC();
+                        if ( first == 0 )
+                        {
+                            if ( aByte == 0 )
+                            {
+                                if ( column > 0 )
+                                    column = width;
+                            }
+                            else if ( aByte == 1 )
+                            {
+                                column = width;
+                                line = -1;
+                            }
+                            else if ( aByte == 2 )
+                            {
+                                aByte = stream.GetC();
+                                column += aByte;
+                                linepos = column * bpp / 4;
+                                aByte = stream.GetC();
+                                line -= aByte; // upside down
+                            }
+                            else
+                            {
+                                int absolute = aByte;
+                                wxUint8 nibble[2] ;
+                                int readBytes = 0 ;
+                                for (int k = 0; k < absolute; k++)
+                                {
+                                    if ( !(k % 2 ) )
+                                    {
+                                        ++readBytes ;
+                                        aByte = stream.GetC();
+                                        nibble[0] = ( (aByte & 0xF0) >> 4 ) ;
+                                        nibble[1] = ( aByte & 0x0F ) ;
+                                    }
+                                    ptr[poffset    ] = cmap[nibble[k%2]].r;
+                                    ptr[poffset + 1] = cmap[nibble[k%2]].g;
+                                    ptr[poffset + 2] = cmap[nibble[k%2]].b;
+                                    column++;
+                                    if ( k % 2 )
+                                        linepos++;
+                                }
+                                if ( readBytes & 0x01 )
+                                    aByte = stream.GetC();
+                            }
+                        }
+                        else
+                        {
+                            wxUint8 nibble[2] ;
+                            nibble[0] = ( (aByte & 0xF0) >> 4 ) ;
+                            nibble[1] = ( aByte & 0x0F ) ;
+
+                            for ( int l = 0; l < first && column < width; l++ )
+                            {
+                                ptr[poffset    ] = cmap[nibble[l%2]].r;
+                                ptr[poffset + 1] = cmap[nibble[l%2]].g;
+                                ptr[poffset + 2] = cmap[nibble[l%2]].b;
+                                column++;
+                                if ( l % 2 )
+                                    linepos++;
+                            }
+                        }
                     }
                     else
                     {
@@ -715,63 +774,64 @@ bool wxBMPHandler::DoLoadDib(wxImage * image, int width, int height,
                         // linepos += size;    seems to be wrong, RR
                     }
                 }
-               }
-               else if ( bpp == 24 )
-               {
-                   stream.Read(bbuf, 3);
-                   linepos += 3;
-                   ptr[poffset    ] = (unsigned char)bbuf[2];
-                   ptr[poffset + 1] = (unsigned char)bbuf[1];
-                   ptr[poffset + 2] = (unsigned char)bbuf[0];
-                   column++;
-               }
-               else if ( bpp == 16 )
-               {
-                   unsigned char temp;
-                   stream.Read(&aWord, 2);
-                   aWord = wxUINT16_SWAP_ON_BE(aWord);
-                   linepos += 2;
-                   /* use the masks and calculated amonut of shift
+            }
+            else if ( bpp == 24 )
+            {
+                stream.Read(bbuf, 3);
+                linepos += 3;
+                ptr[poffset    ] = (unsigned char)bbuf[2];
+                ptr[poffset + 1] = (unsigned char)bbuf[1];
+                ptr[poffset + 2] = (unsigned char)bbuf[0];
+                column++;
+            }
+            else if ( bpp == 16 )
+            {
+                unsigned char temp;
+                stream.Read(&aWord, 2);
+                aWord = wxUINT16_SWAP_ON_BE(aWord);
+                linepos += 2;
+                /* use the masks and calculated amonut of shift
                    to retrieve the color data out of the word.  Then
                    shift it left by (8 - number of bits) such that
                    the image has the proper dynamic range */
-                   temp = (aWord & rmask) >> rshift << (8-rbits);
-                   ptr[poffset] = temp;
-                   temp = (aWord & gmask) >> gshift << (8-gbits);
-                   ptr[poffset + 1] = temp;
-                   temp = (aWord & bmask) >> bshift << (8-bbits);
-                   ptr[poffset + 2] = temp;
-                   column++;
-               }
-               else
-               {
-                   unsigned char temp;
-                   stream.Read(&aDword, 4);
-                   aDword = wxINT32_SWAP_ON_BE(aDword);
-                   linepos += 4;
-                   temp = (aDword & rmask) >> rshift;
-                   ptr[poffset] = temp;
-                   temp = (aDword & gmask) >> gshift;
-                   ptr[poffset + 1] = temp;
-                   temp = (aDword & bmask) >> bshift;
-                   ptr[poffset + 2] = temp;
-                   column++;
-               }
-          }
-          while ( (linepos < linesize) && (comp != 1) && (comp != 2) )
-          {
-              stream.Read(&aByte, 1);
-              linepos += 1;
-              if ( stream.LastError() != wxStream_NOERROR )
-                  break;
-          }
-     }
-     if (cmap)
-       delete[] cmap;
+                temp = (aWord & rmask) >> rshift << (8-rbits);
+                ptr[poffset] = temp;
+                temp = (aWord & gmask) >> gshift << (8-gbits);
+                ptr[poffset + 1] = temp;
+                temp = (aWord & bmask) >> bshift << (8-bbits);
+                ptr[poffset + 2] = temp;
+                column++;
+            }
+            else
+            {
+                unsigned char temp;
+                stream.Read(&aDword, 4);
+                aDword = wxINT32_SWAP_ON_BE(aDword);
+                linepos += 4;
+                temp = (aDword & rmask) >> rshift;
+                ptr[poffset] = temp;
+                temp = (aDword & gmask) >> gshift;
+                ptr[poffset + 1] = temp;
+                temp = (aDword & bmask) >> bshift;
+                ptr[poffset + 2] = temp;
+                column++;
+            }
+        }
+        while ( (linepos < linesize) && (comp != 1) && (comp != 2) )
+        {
+            stream.Read(&aByte, 1);
+            linepos += 1;
+            if ( !stream )
+                break;
+        }
+    }
 
-     image->SetMask(FALSE);
+    delete[] cmap;
 
-    return ( stream.LastError() == wxSTREAM_NO_ERROR || stream.LastError() == wxSTREAM_EOF );
+    image->SetMask(FALSE);
+
+    const wxStreamError err = stream.GetLastError();
+    return err == wxSTREAM_NO_ERROR || err == wxSTREAM_EOF;
 }
 
 bool wxBMPHandler::LoadDib(wxImage *image, wxInputStream& stream,
@@ -1219,7 +1279,7 @@ int wxICOHandler::GetImageCount(wxInputStream& stream)
 
 bool wxICOHandler::DoCanRead(wxInputStream& stream)
 {
-    stream.SeekI(0);   
+    stream.SeekI(0);
     unsigned char hdr[4];
     if ( !stream.Read(hdr, WXSIZEOF(hdr)) )
         return FALSE;
@@ -1258,14 +1318,13 @@ bool wxANIHandler::LoadFile(wxImage *image, wxInputStream& stream,
 {
     wxInt32 FCC1, FCC2;
     wxUint32 datalen;
-    static const char *rifftxt = "RIFF";
-    static const char *listtxt = "LIST";
-    static const char *icotxt  = "icon";
 
-    wxInt32 riff32 = (wxInt32) rifftxt;
-    wxInt32 list32 = (wxInt32) listtxt;
-    wxInt32 ico32  = (wxInt32) icotxt;
-
+    wxInt32 riff32;
+    memcpy( &riff32, "RIFF", 4 );
+    wxInt32 list32;
+    memcpy( &list32, "LIST", 4 );
+    wxInt32 ico32;
+    memcpy( &ico32, "icon", 4 );
     int iIcon = 0;
 
     stream.SeekI(0);
@@ -1310,14 +1369,16 @@ bool wxANIHandler::DoCanRead(wxInputStream& stream)
 {
     wxInt32 FCC1, FCC2;
     wxUint32 datalen ;
-    static const char *rifftxt = "RIFF";
-    static const char *listtxt = "LIST";
-    static const char *anihtxt = "anih";
-
-    wxInt32 riff32 = (wxInt32) rifftxt;
-    wxInt32 list32 = (wxInt32) listtxt;
-    wxInt32 anih32 = (wxInt32) anihtxt;
-
+    
+    wxInt32 riff32;
+    memcpy( &riff32, "RIFF", 4 );
+    wxInt32 list32;
+    memcpy( &list32, "LIST", 4 );
+    wxInt32 ico32;
+    memcpy( &ico32, "icon", 4 ); 
+    wxInt32 anih32;
+    memcpy( &anih32, "anih", 4 );
+    
     stream.SeekI(0);
     if ( !stream.Read(&FCC1, 4) )
         return FALSE;
@@ -1360,14 +1421,16 @@ int wxANIHandler::GetImageCount(wxInputStream& stream)
 {
     wxInt32 FCC1, FCC2;
     wxUint32 datalen ;
-    static const char *rifftxt = "RIFF";
-    static const char *listtxt = "LIST";
-    static const char *anihtxt = "anih";
 
-    wxInt32 riff32 = (wxInt32) rifftxt;
-    wxInt32 list32 = (wxInt32) listtxt;
-    wxInt32 anih32 = (wxInt32) anihtxt;
-
+    wxInt32 riff32;
+    memcpy( &riff32, "RIFF", 4 );
+    wxInt32 list32;
+    memcpy( &list32, "LIST", 4 );
+    wxInt32 ico32;
+    memcpy( &ico32, "icon", 4 );
+    wxInt32 anih32;
+    memcpy( &anih32, "anih", 4 );
+    
     stream.SeekI(0);
     stream.Read(&FCC1, 4);
     if ( FCC1 != riff32 )

@@ -89,7 +89,8 @@ Destructor, destroying the list box.
 
 \func{void}{Check}{\param{int }{item}, \param{bool}{ check = TRUE}}
 
-Checks the given item.
+Checks the given item. Note that calling this method doesn't result in
+wxEVT\_COMMAND\_CHECKLISTBOX\_TOGGLE being emitted.
 
 \wxheading{Parameters}
 

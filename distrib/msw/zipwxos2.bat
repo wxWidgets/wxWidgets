@@ -5,7 +5,7 @@ set dest=%src\deliver
 set webfiles=c:\wx2dev\wxWebSite
 
 Rem Set this to the required version
-set version=2.3.3
+set version=2.3.4
 
 if "%src" == "" goto usage
 if "%dest" == "" goto usage
@@ -44,10 +44,10 @@ zip32 -u -@ %dest%\wxOS2-%version%.zip < %src%\distrib\msw\makefile.rsp
 
 Rem erase /Y %src%\include\wx\setup.h
 
-if direxist %dest%\wxWindows-%version% erase /sxyz %dest%\wxWindows-%version%
+if direxist %dest%\wxOS2-%version% erase /sxyz %dest%\wxOS2-%version%
 
-mkdir %dest%\wxWindows-%version%
-cd %dest%\wxWindows-%version%
+mkdir %dest%\wxOS2-%version%
+cd %dest%\wxOS2-%version%
 unzip32 ..\wxOS2-%version%.zip
 echo Overwriting with OS2-specific versions of configure files...
 unzip32 -o %src%\distrib\os2\os2-specific.zip
@@ -64,7 +64,8 @@ call %src%\distrib\msw\lower.bat
 cd %dest%
 
 erase wxOS2-%version%.zip
-zip32 -r wxOS2-%version%.zip wxWindows-%version%/*
+zip32 -r wxOS2-%version%.zip wxOS2-%version%/*
+erase /sxyz wxOS2-%version%
 
 echo wxOS2 archived.
 

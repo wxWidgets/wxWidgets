@@ -1057,7 +1057,7 @@ wxSize wxListBox::DoGetBestSize() const
 
     // And just a bit more
     int cx, cy;
-    GetTextExtent("X", &cx, &cy);
+    GetTextExtent( wxT("X"), &cx, &cy);
     lbWidth += 3 * cx;
 
     // don't make the listbox too tall (limit height to around 10 items) but don't

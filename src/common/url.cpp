@@ -65,7 +65,7 @@ wxURL::wxURL(const wxString& url)
 #if wxUSE_SOCKETS
     if ( ms_useDefaultProxy && !ms_proxyDefault )
     {
-        SetDefaultProxy(getenv("HTTP_PROXY"));
+        SetDefaultProxy( wxGetenv(wxT("HTTP_PROXY")) );
 
         if ( !ms_proxyDefault )
         {

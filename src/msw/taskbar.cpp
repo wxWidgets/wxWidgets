@@ -180,7 +180,7 @@ bool wxTaskBarIcon::PopupMenu(wxMenu *menu) //, int x, int y);
     wxGetMousePosition(&x, &y);
 
     // is wxFrame the best window type to use???
-    win = new wxFrame(NULL, -1, "", wxPoint(x,y), wxSize(-1,-1), 0);
+    win = new wxFrame(NULL, -1, wxEmptyString, wxPoint(x,y), wxSize(-1,-1), 0);
     win->PushEventHandler(this);
 
     // Remove from record of top-level windows, or will confuse wxWindows

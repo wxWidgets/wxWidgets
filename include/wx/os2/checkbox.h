@@ -26,9 +26,7 @@ class WXDLLEXPORT wxCheckBox : public wxCheckBoxBase
                       ,const wxPoint&     rPos = wxDefaultPosition
                       ,const wxSize&      rSize = wxDefaultSize
                       ,long lStyle = 0
-#if wxUSE_VALIDATORS
                       ,const wxValidator& rValidator = wxDefaultValidator
-#endif
                       ,const wxString&    rsName = wxCheckBoxNameStr
                      )
     {
@@ -38,9 +36,7 @@ class WXDLLEXPORT wxCheckBox : public wxCheckBoxBase
                ,rPos
                ,rSize
                ,lStyle
-#if wxUSE_VALIDATORS
                ,rValidator
-#endif
                ,rsName
               );
     }
@@ -51,9 +47,7 @@ class WXDLLEXPORT wxCheckBox : public wxCheckBoxBase
                 ,const wxPoint&     rPos = wxDefaultPosition
                 ,const wxSize&      rSize = wxDefaultSize
                 ,long lStyle = 0
-#if wxUSE_VALIDATORS
                 ,const wxValidator& rValidator = wxDefaultValidator
-#endif
                 ,const wxString&    rsName = wxCheckBoxNameStr
                );
 
@@ -83,9 +77,7 @@ class WXDLLEXPORT wxBitmapCheckBox: public wxCheckBox
                             ,const wxPoint&     rPos = wxDefaultPosition
                             ,const wxSize&      rSize = wxDefaultSize
                             ,long               lStyle = 0
-#if wxUSE_VALIDATORS
                             ,const wxValidator& rValidator = wxDefaultValidator
-#endif
                             ,const wxString&    rsName = wxCheckBoxNameStr
                            )
     {
@@ -106,9 +98,7 @@ class WXDLLEXPORT wxBitmapCheckBox: public wxCheckBox
                 ,const wxPoint&     rPos = wxDefaultPosition
                 ,const wxSize&      rSize = wxDefaultSize
                 ,long               lStyle = 0
-#if wxUSE_VALIDATORS
                 ,const wxValidator& rValidator = wxDefaultValidator
-#endif
                 ,const wxString&    rsName = wxCheckBoxNameStr
                );
 

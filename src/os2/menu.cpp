@@ -750,6 +750,15 @@ wxMenuBar::wxMenuBar(
 
 wxMenuBar::~wxMenuBar()
 {
+    //
+    // We should free PM's resources only if PM doesn't do it for us
+    // which happens if we're attached to a frame
+    //
+    if (m_hMenu && !IsAttached())
+    {
+        ::WinDestroyWindow((HMENU)m_hMenu);
+        m_hMenu = (WXHMENU)NULL;
+    }
 } // end of wxMenuBar::~wxMenuBar
 
 // ---------------------------------------------------------------------------

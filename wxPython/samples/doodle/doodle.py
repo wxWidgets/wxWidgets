@@ -6,11 +6,11 @@ can do simple drawings upon.
 """
 
 
-from wxPython.wx import *
+import wx                  # This module uses the new wx namespace
 
 #----------------------------------------------------------------------
 
-class DoodleWindow(wxWindow):
+class DoodleWindow(wx.Window):
     menuColours = { 100 : 'Black',
                     101 : 'Yellow',
                     102 : 'Red',
@@ -32,7 +32,7 @@ class DoodleWindow(wxWindow):
 
 
     def __init__(self, parent, ID):
-        wxWindow.__init__(self, parent, ID, style=wxNO_FULL_REPAINT_ON_RESIZE)
+        wx.Window.__init__(self, parent, ID, style=wx.NO_FULL_REPAINT_ON_RESIZE)
         self.SetBackgroundColour("WHITE")
         self.listeners = []
         self.thickness = 1
@@ -44,20 +44,20 @@ class DoodleWindow(wxWindow):
         self.InitBuffer()
 
         # hook some mouse events
-        EVT_LEFT_DOWN(self, self.OnLeftDown)
-        EVT_LEFT_UP(self, self.OnLeftUp)
-        EVT_RIGHT_UP(self, self.OnRightUp)
-        EVT_MOTION(self, self.OnMotion)
+        wx.EVT_LEFT_DOWN(self, self.OnLeftDown)
+        wx.EVT_LEFT_UP(self, self.OnLeftUp)
+        wx.EVT_RIGHT_UP(self, self.OnRightUp)
+        wx.EVT_MOTION(self, self.OnMotion)
 
         # the window resize event and idle events for managing the buffer
-        EVT_SIZE(self, self.OnSize)
-        EVT_IDLE(self, self.OnIdle)
+        wx.EVT_SIZE(self, self.OnSize)
+        wx.EVT_IDLE(self, self.OnIdle)
 
         # and the refresh event
-        EVT_PAINT(self, self.OnPaint)
+        wx.EVT_PAINT(self, self.OnPaint)
 
         # When the window is destroyed, clean up resources.
-        EVT_WINDOW_DESTROY(self, self.Cleanup)
+        wx.EVT_WINDOW_DESTROY(self, self.Cleanup)
 
 
     def Cleanup(self, evt):
@@ -69,25 +69,25 @@ class DoodleWindow(wxWindow):
     def InitBuffer(self):
         """Initialize the bitmap used for buffering the display."""
         size = self.GetClientSize()
-        self.buffer = wxEmptyBitmap(size.width, size.height)
-        dc = wxBufferedDC(None, self.buffer)
-        dc.SetBackground(wxBrush(self.GetBackgroundColour()))
+        self.buffer = wx.EmptyBitmap(size.width, size.height)
+        dc = wx.BufferedDC(None, self.buffer)
+        dc.SetBackground(wx.Brush(self.GetBackgroundColour()))
         dc.Clear()
         self.DrawLines(dc)
-        self.reInitBuffer = false
+        self.reInitBuffer = False
 
 
     def SetColour(self, colour):
         """Set a new colour and make a matching pen"""
         self.colour = colour
-        self.pen = wxPen(wxNamedColour(self.colour), self.thickness, wxSOLID)
+        self.pen = wx.Pen(self.colour, self.thickness, wx.SOLID)
         self.Notify()
 
 
     def SetThickness(self, num):
         """Set a new line thickness and make a matching pen"""
         self.thickness = num
-        self.pen = wxPen(wxNamedColour(self.colour), self.thickness, wxSOLID)
+        self.pen = wx.Pen(self.colour, self.thickness, wx.SOLID)
         self.Notify()
 
 
@@ -103,20 +103,20 @@ class DoodleWindow(wxWindow):
 
     def MakeMenu(self):
         """Make a menu that can be popped up later"""
-        menu = wxMenu()
+        menu = wx.Menu()
         keys = self.menuColours.keys()
         keys.sort()
         for k in keys:
             text = self.menuColours[k]
-            menu.Append(k, text, kind=wxITEM_CHECK)
-        EVT_MENU_RANGE(self, 100, 200, self.OnMenuSetColour)
-        EVT_UPDATE_UI_RANGE(self, 100, 200, self.OnCheckMenuColours)
+            menu.Append(k, text, kind=wx.ITEM_CHECK)
+        wx.EVT_MENU_RANGE(self, 100, 200, self.OnMenuSetColour)
+        wx.EVT_UPDATE_UI_RANGE(self, 100, 200, self.OnCheckMenuColours)
         menu.Break()
 
         for x in range(1, self.maxThickness+1):
-            menu.Append(x, str(x), kind=wxITEM_CHECK)
-        EVT_MENU_RANGE(self, 1, self.maxThickness, self.OnMenuSetThickness)
-        EVT_UPDATE_UI_RANGE(self, 1, self.maxThickness, self.OnCheckMenuThickness)
+            menu.Append(x, str(x), kind=wx.ITEM_CHECK)
+        wx.EVT_MENU_RANGE(self, 1, self.maxThickness, self.OnMenuSetThickness)
+        wx.EVT_UPDATE_UI_RANGE(self, 1, self.maxThickness, self.OnCheckMenuThickness)
         self.menu = menu
 
 
@@ -125,14 +125,17 @@ class DoodleWindow(wxWindow):
     def OnCheckMenuColours(self, event):
         text = self.menuColours[event.GetId()]
         if text == self.colour:
-            event.Check(true)
+            event.Check(True)
+            event.SetText(text.upper())
         else:
-            event.Check(false)
+            event.Check(False)
+            event.SetText(text)
+
     def OnCheckMenuThickness(self, event):
         if event.GetId() == self.thickness:
-            event.Check(true)
+            event.Check(True)
         else:
-            event.Check(false)
+            event.Check(False)
 
 
     def OnLeftDown(self, event):
@@ -164,7 +167,7 @@ class DoodleWindow(wxWindow):
         current one.  Save the coordinants for redraws.
         """
         if event.Dragging() and event.LeftIsDown():
-            dc = wxBufferedDC(wxClientDC(self), self.buffer)
+            dc = wx.BufferedDC(wx.ClientDC(self), self.buffer)
             dc.BeginDrawing()
             dc.SetPen(self.pen)
             pos = event.GetPositionTuple()
@@ -180,7 +183,7 @@ class DoodleWindow(wxWindow):
         Called when the window is resized.  We set a flag so the idle
         handler will resize the buffer.
         """
-        self.reInitBuffer = true
+        self.reInitBuffer = True
 
 
     def OnIdle(self, event):
@@ -192,7 +195,7 @@ class DoodleWindow(wxWindow):
         """
         if self.reInitBuffer:
             self.InitBuffer()
-            self.Refresh(FALSE)
+            self.Refresh(False)
 
 
     def OnPaint(self, event):
@@ -200,10 +203,10 @@ class DoodleWindow(wxWindow):
         Called when the window is exposed.
         """
         # Create a buffered paint DC.  It will create the real
-        # wxPaintDC and then blit the bitmap to it when dc is
+        # wx.PaintDC and then blit the bitmap to it when dc is
         # deleted.  Since we don't need to draw anything else
         # here that's all there is to it.
-        dc = wxBufferedPaintDC(self, self.buffer)
+        dc = wx.BufferedPaintDC(self, self.buffer)
 
 
     def DrawLines(self, dc):
@@ -212,7 +215,7 @@ class DoodleWindow(wxWindow):
         """
         dc.BeginDrawing()
         for colour, thickness, line in self.lines:
-            pen = wxPen(wxNamedColour(colour), thickness, wxSOLID)
+            pen = wx.Pen(colour, thickness, wx.SOLID)
             dc.SetPen(pen)
             for coords in line:
                 apply(dc.DrawLine, coords)
@@ -240,17 +243,17 @@ class DoodleWindow(wxWindow):
 
 #----------------------------------------------------------------------
 
-class DoodleFrame(wxFrame):
+class DoodleFrame(wx.Frame):
     def __init__(self, parent):
-        wxFrame.__init__(self, parent, -1, "Doodle Frame", size=(800,600),
-                         style=wxDEFAULT_FRAME_STYLE | wxNO_FULL_REPAINT_ON_RESIZE)
+        wx.Frame.__init__(self, parent, -1, "Doodle Frame", size=(800,600),
+                         style=wx.DEFAULT_FRAME_STYLE | wx.NO_FULL_REPAINT_ON_RESIZE)
         doodle = DoodleWindow(self, -1)
 
 #----------------------------------------------------------------------
 
 if __name__ == '__main__':
-    app = wxPySimpleApp()
+    app = wx.PySimpleApp()
     frame = DoodleFrame(None)
-    frame.Show(true)
+    frame.Show(True)
     app.MainLoop()
 

@@ -41,13 +41,13 @@ OBJECTS = \
 	helpctrl.obj,helpdata.obj,helpfrm.obj,htmlcell.obj,htmlfilt.obj,\
 	htmlpars.obj,htmltag.obj,htmlwin.obj,htmprint.obj,m_dflist.obj,\
 	m_fonts.obj,m_hline.obj,m_image.obj,m_layout.obj,m_links.obj,\
-	m_list.obj,m_meta.obj,m_pre.obj,m_tables.obj,winpars.obj
+	m_list.obj,m_pre.obj,m_tables.obj,winpars.obj
 
 SOURCES = \
 	helpctrl.cpp,helpdata.cpp,helpfrm.cpp,htmlcell.cpp,htmlfilt.cpp,\
 	htmlpars.cpp,htmltag.cpp,htmlwin.cpp,htmprint.cpp,m_dflist.cpp,\
 	m_fonts.cpp,m_hline.cpp,m_image.cpp,m_layout.cpp,m_links.cpp,\
-	m_list.cpp,m_meta.cpp,m_pre.cpp,m_tables.cpp,winpars.cpp
+	m_list.cpp,m_pre.cpp,m_tables.cpp,winpars.cpp
   
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
@@ -79,7 +79,6 @@ m_image.obj : m_image.cpp
 m_layout.obj : m_layout.cpp
 m_links.obj : m_links.cpp
 m_list.obj : m_list.cpp
-m_meta.obj : m_meta.cpp
 m_pre.obj : m_pre.cpp
 m_tables.obj : m_tables.cpp
 winpars.obj : winpars.cpp

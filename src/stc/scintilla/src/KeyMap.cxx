@@ -1,5 +1,5 @@
 // Scintilla source code edit control
-/** @file KeyMap.cxx 
+/** @file KeyMap.cxx
  ** Defines a mapping between keystrokes and commands.
  **/
 // Copyright 1998-2001 by Neil Hodgson <neilh@scintilla.org>
@@ -13,7 +13,7 @@
 
 KeyMap::KeyMap() : kmap(0), len(0), alloc(0) {
 	for (int i = 0; MapDefault[i].key; i++) {
-		AssignCmdKey(MapDefault[i].key, 
+		AssignCmdKey(MapDefault[i].key,
 			MapDefault[i].modifiers,
              		MapDefault[i].msg);
 	}
@@ -66,9 +66,13 @@ const KeyToCommand KeyMap::MapDefault[] = {
     {SCK_DOWN,		SCI_NORM,	SCI_LINEDOWN},
     {SCK_DOWN,		SCI_SHIFT,	SCI_LINEDOWNEXTEND},
     {SCK_DOWN,		SCI_CTRL,	SCI_LINESCROLLDOWN},
+    {SCK_DOWN,		SCI_ALT,		SCI_PARADOWN},
+    {SCK_DOWN,		SCI_ASHIFT,	SCI_PARADOWNEXTEND},
     {SCK_UP,			SCI_NORM,	SCI_LINEUP},
     {SCK_UP,			SCI_SHIFT,	SCI_LINEUPEXTEND},
     {SCK_UP,			SCI_CTRL,	SCI_LINESCROLLUP},
+    {SCK_UP,			SCI_ALT,		SCI_PARAUP},
+    {SCK_UP,			SCI_ASHIFT,	SCI_PARAUPEXTEND},
     {SCK_LEFT,		SCI_NORM,	SCI_CHARLEFT},
     {SCK_LEFT,		SCI_SHIFT,	SCI_CHARLEFTEXTEND},
     {SCK_LEFT,		SCI_CTRL,	SCI_WORDLEFT},
@@ -109,7 +113,7 @@ const KeyToCommand KeyMap::MapDefault[] = {
     {SCK_BACK,		SCI_SHIFT, 	SCI_DELETEBACK},
     {SCK_BACK,		SCI_CTRL, 	SCI_DELWORDLEFT},
     {SCK_BACK, 		SCI_ALT,	SCI_UNDO},
-    {SCK_BACK,		SCI_CSHIFT,	SCI_DELLINELEFT},    
+    {SCK_BACK,		SCI_CSHIFT,	SCI_DELLINELEFT},
     {'Z', 			SCI_CTRL,	SCI_UNDO},
     {'Y', 			SCI_CTRL,	SCI_REDO},
     {'X', 			SCI_CTRL,	SCI_CUT},
@@ -127,6 +131,7 @@ const KeyToCommand KeyMap::MapDefault[] = {
     {'L', 			SCI_CTRL,	SCI_LINECUT},
     {'L', 			SCI_CSHIFT,	SCI_LINEDELETE},
     {'T', 			SCI_CTRL,	SCI_LINETRANSPOSE},
+    {'D', 			SCI_CTRL,	SCI_LINEDUPLICATE},
     {'U', 			SCI_CTRL,	SCI_LOWERCASE},
     {'U', 			SCI_CSHIFT,	SCI_UPPERCASE},
     {0,0,0},

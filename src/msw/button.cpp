@@ -352,9 +352,18 @@ bool wxButton::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
     bool processed = FALSE;
     switch ( param )
     {
+        // NOTE: Apparently older versions (NT 4?) of the common controls send
+        //       BN_DOUBLECLICKED but not a second BN_CLICKED for owner-drawn
+        //       buttons, so in order to send two EVET_BUTTON events we should
+        //       catch both types.  Currently (Feb 2003) up-to-date versions of
+        //       win98, win2k and winXP all send two BN_CLICKED messages for
+        //       all button types, so we don't catch BN_DOUBLECLICKED anymore
+        //       in order to not get 3 EVT_BUTTON events.  If this is a problem
+        //       then we need to figure out which version of the comctl32 changed
+        //       this behaviour and test for it.
+
         case 1:                     // message came from an accelerator
         case BN_CLICKED:            // normal buttons send this
-        case BN_DOUBLECLICKED:      // owner-drawn ones also send this
             processed = SendClickEvent();
             break;
     }
@@ -406,8 +415,8 @@ static void DrawButtonText(HDC hdc,
     COLORREF colOld = SetTextColor(hdc, col);
     int modeOld = SetBkMode(hdc, TRANSPARENT);
 
-    DrawText(hdc, text, text.length(), pRect,
-             DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+    // Note: we must have DT_SINGLELINE for DT_VCENTER to work.
+    ::DrawText(hdc, text, text.length(), pRect, DT_SINGLELINE | DT_CENTER | DT_VCENTER);
 
     SetBkMode(hdc, modeOld);
     SetTextColor(hdc, colOld);

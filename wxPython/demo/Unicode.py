@@ -56,7 +56,7 @@ class TestPanel(wxPanel):
 
         else:
             f = self.GetFont()
-            font = wxFont(14, f.GetFamily(), f.GetStyle(), wxBOLD, false,
+            font = wxFont(14, f.GetFamily(), f.GetStyle(), wxBOLD, False,
                           f.GetFaceName(), f.GetEncoding())
 
             self.AddLine(box)
@@ -79,7 +79,7 @@ class TestPanel(wxPanel):
 
         border = wxBoxSizer(wxVERTICAL)
         border.Add(box, 1, wxEXPAND|wxALL, 10)
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         self.SetSizer(border)
 
 
@@ -139,3 +139,12 @@ and then pass the unicode to the wxPython method.
 
 </body></html>
 """
+
+
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
+

@@ -4,7 +4,7 @@
 // Author:      Stefan Neis
 // Modified by:
 // Created:     20/02/1999
-// RCS-ID:      $$
+// RCS-ID:      $Id$
 // Copyright:   (c) Stefan Neis (Stefan.Neis@t-online.de)
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -165,7 +165,7 @@ void wxGridSelection::SetSelectionMode(wxGrid::wxGridSelectionModes selmode)
                     m_blockSelectionBottomRight.RemoveAt(n);
                     SelectBlock( topRow, 0,
                                  bottomRow, m_grid->GetNumberCols() - 1,
-                                 0, FALSE );
+                                 FALSE, FALSE, FALSE, FALSE, FALSE );
                 }
             }
             else // selmode == wxGridSelectColumns)
@@ -176,7 +176,7 @@ void wxGridSelection::SetSelectionMode(wxGrid::wxGridSelectionModes selmode)
                     m_blockSelectionBottomRight.RemoveAt(n);
                     SelectBlock( 0, leftCol,
                                  m_grid->GetNumberRows() - 1, rightCol,
-                                 0, FALSE );
+                                 FALSE, FALSE, FALSE, FALSE, FALSE );
                 }
             }
         }
@@ -522,13 +522,13 @@ void wxGridSelection::SelectCell( int row, int col,
     if ( m_selectionMode == wxGrid::wxGridSelectRows )
     {
         SelectBlock(row, 0, row, m_grid->GetNumberCols() - 1,
-                    ControlDown, ShiftDown, AltDown, MetaDown);
+                    ControlDown, ShiftDown, AltDown, MetaDown, sendEvent);
         return;
     }
     else if ( m_selectionMode == wxGrid::wxGridSelectColumns )
     {
         SelectBlock(0, col, m_grid->GetNumberRows() - 1, col,
-                    ControlDown, ShiftDown, AltDown, MetaDown);
+                    ControlDown, ShiftDown, AltDown, MetaDown, sendEvent);
         return;
     }
     else if ( IsInSelection ( row, col ) )
@@ -647,18 +647,20 @@ void wxGridSelection::ToggleCellSelection( int row, int col,
             if ( m_selectionMode != wxGrid::wxGridSelectColumns )
             {
                 if ( topRow < row )
-                    SelectBlock( topRow, leftCol,
-                                 row - 1, rightCol, 0, FALSE );
+                    SelectBlock( topRow, leftCol, row - 1, rightCol,
+				 FALSE, FALSE, FALSE, FALSE, FALSE );
                 if ( bottomRow > row )
-                    SelectBlock( row + 1, leftCol,
-                                 bottomRow, rightCol, 0, FALSE );
+                    SelectBlock( row + 1, leftCol, bottomRow, rightCol,
+				 FALSE, FALSE, FALSE, FALSE, FALSE );
             }
             if ( m_selectionMode != wxGrid::wxGridSelectRows )
             {
                 if ( leftCol < col )
-                    SelectBlock( row, leftCol, row, col - 1, 0, FALSE );
+                    SelectBlock( row, leftCol, row, col - 1,
+				 FALSE, FALSE, FALSE, FALSE, FALSE );
                 if ( rightCol > col )
-                    SelectBlock( row, col + 1, row, rightCol, 0, FALSE );
+                    SelectBlock( row, col + 1, row, rightCol,
+				 FALSE, FALSE, FALSE, FALSE, FALSE );
             }
         }
     }
@@ -676,11 +678,12 @@ void wxGridSelection::ToggleCellSelection( int row, int col,
                 if (m_selectionMode == wxGrid::wxGridSelectCells)
                 {
                     if ( col > 0 )
-                        SelectBlock( row, 0, row, col - 1, 0, FALSE );
+                        SelectBlock( row, 0, row, col - 1,
+				     FALSE, FALSE, FALSE, FALSE, FALSE );
                     if ( col < m_grid->GetNumberCols() - 1 )
                         SelectBlock( row, col + 1,
                                      row, m_grid->GetNumberCols() - 1,
-                                     0, FALSE );
+                                     FALSE, FALSE, FALSE, FALSE, FALSE );
                 }
             }
         }
@@ -699,11 +702,12 @@ void wxGridSelection::ToggleCellSelection( int row, int col,
                 if (m_selectionMode == wxGrid::wxGridSelectCells)
                 {
                     if ( row > 0 )
-                        SelectBlock( 0, col, row - 1, col, 0, FALSE );
+                        SelectBlock( 0, col, row - 1, col,
+				     FALSE, FALSE, FALSE, FALSE, FALSE );
                     if ( row < m_grid->GetNumberRows() - 1 )
                         SelectBlock( row + 1, col,
                                      m_grid->GetNumberRows() - 1, col,
-                                     0, FALSE );
+                                     FALSE, FALSE, FALSE, FALSE, FALSE );
                 }
             }
         }

@@ -46,6 +46,10 @@ BEGIN_EVENT_TABLE(wxSashWindow, wxWindow)
     EVT_PAINT(wxSashWindow::OnPaint)
     EVT_SIZE(wxSashWindow::OnSize)
     EVT_MOUSE_EVENTS(wxSashWindow::OnMouseEvent)
+#ifdef __WXMSW__
+    EVT_SET_CURSOR(wxSashWindow::OnSetCursor)
+#endif // wxMSW
+
 END_EVENT_TABLE()
 
 bool wxSashWindow::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos,
@@ -77,6 +81,7 @@ void wxSashWindow::Init()
     m_sashCursorWE = new wxCursor(wxCURSOR_SIZEWE);
     m_sashCursorNS = new wxCursor(wxCURSOR_SIZENS);
     m_mouseCaptured = FALSE;
+    m_currentCursor = NULL;
 
     // Eventually, we'll respond to colour change messages
     InitColours();
@@ -86,9 +91,7 @@ void wxSashWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     wxPaintDC dc(this);
 
-    //    if ( m_borderSize > 0 )
     DrawBorders(dc);
-
     DrawSashes(dc);
 }
 
@@ -98,15 +101,6 @@ void wxSashWindow::OnMouseEvent(wxMouseEvent& event)
     event.GetPosition(&x, &y);
 
     wxSashEdgePosition sashHit = SashHitTest(x, y);
-
-    // reset the cursor
-#if defined(__WXMOTIF__) || defined(__WXGTK__)
-    // Not necessary and in fact inhibits proper cursor setting (JACS 8/2000)
-    //SetCursor(* wxSTANDARD_CURSOR);
-#endif
-#ifdef __WXMSW__
-    SetCursor(wxNullCursor);
-#endif
 
     if (event.LeftDown())
     {
@@ -139,11 +133,19 @@ void wxSashWindow::OnMouseEvent(wxMouseEvent& event)
 
             if ( (sashHit == wxSASH_LEFT) || (sashHit == wxSASH_RIGHT) )
             {
-                SetCursor(*m_sashCursorWE);
+                if (m_currentCursor != m_sashCursorWE)
+                {
+                    SetCursor(*m_sashCursorWE);
+                }
+                m_currentCursor = m_sashCursorWE;
             }
             else
             {
-                SetCursor(*m_sashCursorNS);
+                if (m_currentCursor != m_sashCursorNS)
+                {
+                    SetCursor(*m_sashCursorNS);
+                }
+                m_currentCursor = m_sashCursorNS;
             }
         }
     }
@@ -296,16 +298,25 @@ void wxSashWindow::OnMouseEvent(wxMouseEvent& event)
         {
             if ( (sashHit == wxSASH_LEFT) || (sashHit == wxSASH_RIGHT) )
             {
-                SetCursor(*m_sashCursorWE);
+                if (m_currentCursor != m_sashCursorWE)
+                {
+                    SetCursor(*m_sashCursorWE);
+                }
+                m_currentCursor = m_sashCursorWE;
             }
             else
             {
-                SetCursor(*m_sashCursorNS);
+                if (m_currentCursor != m_sashCursorNS)
+                {
+                    SetCursor(*m_sashCursorNS);
+                }
+                m_currentCursor = m_sashCursorNS;
             }
         }
         else
         {
             SetCursor(wxNullCursor);
+            m_currentCursor = NULL;
         }
     }
     else if ( event.Dragging() &&
@@ -314,11 +325,19 @@ void wxSashWindow::OnMouseEvent(wxMouseEvent& event)
     {
         if ( (m_draggingEdge == wxSASH_LEFT) || (m_draggingEdge == wxSASH_RIGHT) )
         {
-            SetCursor(*m_sashCursorWE);
+            if (m_currentCursor != m_sashCursorWE)
+            {
+                SetCursor(*m_sashCursorWE);
+            }
+            m_currentCursor = m_sashCursorWE;
         }
         else
         {
-            SetCursor(*m_sashCursorNS);
+            if (m_currentCursor != m_sashCursorNS)
+            {
+                SetCursor(*m_sashCursorNS);
+            }
+            m_currentCursor = m_sashCursorNS;
         }
 
         if (m_dragMode == wxSASH_DRAG_LEFT_DOWN)
@@ -682,5 +701,24 @@ void wxSashWindow::SetSashVisible(wxSashEdgePosition edge, bool sash)
      else
         m_sashes[edge].m_margin = 0;
 }
+
+#ifdef __WXMSW__
+
+// this is currently called (and needed) under MSW only...
+void wxSashWindow::OnSetCursor(wxSetCursorEvent& event)
+{
+    // if we don't do it, the resizing cursor might be set for child window:
+    // and like this we explicitly say that our cursor should not be used for
+    // children windows which overlap us
+
+    if ( SashHitTest(event.GetX(), event.GetY()) != wxSASH_NONE)
+    {
+        // default processing is ok
+        event.Skip();
+    }
+    //else: do nothing, in particular, don't call Skip()
+}
+
+#endif // wxMSW
 
 #endif // wxUSE_SASH

@@ -310,10 +310,10 @@ gtk_pizza_put (GtkPizza   *pizza,
 
     pizza->children = g_list_append (pizza->children, child_info);
 
-    gtk_widget_set_parent (widget, GTK_WIDGET (pizza));
-
     if (GTK_WIDGET_REALIZED (pizza))
       gtk_widget_set_parent_window (widget, pizza->bin_window);
+
+    gtk_widget_set_parent (widget, GTK_WIDGET (pizza));
 
 #ifndef __WXGTK20__ /* FIXME? */
     if (!IS_ONSCREEN (x, y))

@@ -43,7 +43,6 @@ contrib/samples/stc/*.rc
 contrib/samples/stc/*.def
 contrib/samples/stc/*.xbm
 contrib/samples/stc/make*.*
-contrib/samples/stc/Makefile
 contrib/samples/stc/*.txt
 contrib/samples/stc/*.ico
 contrib/samples/stc/*.bmp

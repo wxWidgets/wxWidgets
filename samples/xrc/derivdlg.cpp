@@ -61,7 +61,7 @@ END_EVENT_TABLE()
 // Constructor (Notice how small and easy it is)
 PreferencesDialog::PreferencesDialog(wxWindow* parent)
 {    
-    wxXmlResource::Get()->LoadDialog(this, parent, "derived_dialog");                                                            
+    wxXmlResource::Get()->LoadDialog(this, parent, wxT("derived_dialog"));
 }
 
 // Destructor. (Empty, as I don't need anything special done when destructing).

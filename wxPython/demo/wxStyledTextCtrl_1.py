@@ -2,6 +2,8 @@
 from wxPython.wx import *
 from wxPython.stc import *
 
+import images
+
 #----------------------------------------------------------------------
 
 debug = 1
@@ -74,7 +76,7 @@ class MySTC(wxStyledTextCtrl):
                        % (evt.GetDragAllowMove(), evt.GetDragText()))
 
         if debug and evt.GetPosition() < 250:
-            evt.SetDragAllowMove(false)     # you can prevent moving of text (only copy)
+            evt.SetDragAllowMove(False)     # you can prevent moving of text (only copy)
             evt.SetDragText("DRAGGED TEXT") # you can change what is dragged
             #evt.SetDragText("")             # or prevent the drag with empty text
 
@@ -159,13 +161,13 @@ def runTest(frame, nb, log):
         s = wxBoxSizer(wxHORIZONTAL)
         s.Add(ed, 1, wxEXPAND)
         p.SetSizer(s)
-        p.SetAutoLayout(true)
+        p.SetAutoLayout(True)
 
 
-    #ed.SetBufferedDraw(false)
+    #ed.SetBufferedDraw(False)
     #ed.StyleClearAll()
     #ed.SetScrollWidth(800)
-    #ed.SetWrapMode(true)
+    #ed.SetWrapMode(True)
 
     ed.SetText(demoText)
     if wxUSE_UNICODE:
@@ -212,7 +214,8 @@ def runTest(frame, nb, log):
     # setup some markers
     ed.SetMarginType(1, wxSTC_MARGIN_SYMBOL)
     ed.MarkerDefine(0, wxSTC_MARK_ROUNDRECT, "#CCFF00", "RED")
-    ed.MarkerDefine(1, wxSTC_MARK_CIRCLE, "FOREST GREEN", "SIENNA")
+    #ed.MarkerDefine(1, wxSTC_MARK_CIRCLE, "FOREST GREEN", "SIENNA")
+    ed.MarkerDefineBitmap(1, images.getFolder1Bitmap())
     ed.MarkerDefine(2, wxSTC_MARK_SHORTARROW, "blue", "blue")
     ed.MarkerDefine(3, wxSTC_MARK_ARROW, "#00FF00", "#00FF00")
 

@@ -140,7 +140,7 @@ void wxScrollBar::MacHandleControlClick( WXWidget control , wxInt16 controlpart 
         scrollEvent = wxEVT_SCROLL_THUMBTRACK;
 			break ;
                 default :
-                        wxLogError(_("illegal scrollbar selector %d"), controlpart);
+                        wxFAIL_MSG(wxT("illegal scrollbar selector"));
                         break ;
 	}
 

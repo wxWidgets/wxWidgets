@@ -279,10 +279,10 @@ bool wxSpinButton::Create( wxWindow *parent, wxWindowID id,
     wxPoint pt1, pt2;
     wxSize sz1, sz2;
     CalcSizes( wxPoint(0,0), newSize, pt1, sz1, pt2, sz2, isVert );
-    m_up = new wxArrowButton( this, -1, isVert ? wxARROW_UP : wxARROW_LEFT,
+    m_up = new wxArrowButton( this, -1, isVert ? wxARROW_UP : wxARROW_RIGHT,
                               pt1, sz1, 1 );
     m_down = new wxArrowButton( this, -1,
-                                isVert ? wxARROW_DOWN : wxARROW_RIGHT,
+                                isVert ? wxARROW_DOWN : wxARROW_LEFT,
                                 pt2, sz2, -1 );
 
     return TRUE;
@@ -331,14 +331,14 @@ void wxSpinButton::Increment( int delta )
 
     if( npos < m_min )
     {
-        if( GetWindowStyle() && wxSP_WRAP )
+        if( GetWindowStyle() & wxSP_WRAP )
             npos = m_max;
         else
             npos = m_min;
     }
     if( npos > m_max )
     {
-        if( GetWindowStyle() && wxSP_WRAP )
+        if( GetWindowStyle() & wxSP_WRAP )
             npos = m_min;
         else
             npos = m_max;

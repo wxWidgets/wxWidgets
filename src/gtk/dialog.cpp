@@ -30,8 +30,6 @@ extern void wxapp_install_idle_handler();
 extern bool g_isIdle;
 extern int g_openDialogs;
 
-
-
 //-----------------------------------------------------------------------------
 // wxDialog
 //-----------------------------------------------------------------------------
@@ -209,8 +207,10 @@ int wxDialog::ShowModal()
     }
 
     wxBusyCursorSuspender cs; // temporarily suppress the busy cursor
-
+    
     Show( TRUE );
+
+    SetFocus();
 
     m_modalShowing = TRUE;
 

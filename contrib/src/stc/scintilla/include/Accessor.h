@@ -25,7 +25,7 @@ protected:
 	char buf[bufferSize+1];
 	int startPos;
 	int endPos;
-	int codePage;	
+	int codePage;
 
 	virtual bool InternalIsLeadByte(char ch)=0;
 	virtual void Fill(int position)=0;
@@ -44,7 +44,7 @@ public:
 		if (position < startPos || position >= endPos) {
 			Fill(position);
 			if (position < startPos || position >= endPos) {
-				// Position is outside range of document 
+				// Position is outside range of document
 				return chDefault;
 			}
 		}

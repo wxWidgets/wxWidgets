@@ -520,7 +520,7 @@ bool wxApp::SendIdleEvents(wxWindow* win)
 
     wxIdleEvent event;
     event.SetEventObject(win);
-    win->ProcessEvent(event);
+    win->GetEventHandler()->ProcessEvent(event);
 
     if (event.MoreRequested())
         needMore = TRUE;
@@ -680,7 +680,7 @@ bool wxApp::CheckForKeyDown(WXEvent* event)
     wxKeyEvent keyEvent(wxEVT_KEY_DOWN);
     wxTranslateKeyEvent(keyEvent, win, (Widget) 0, xEvent);
 
-    return win->ProcessEvent( keyEvent );
+    return win->GetEventHandler()->ProcessEvent( keyEvent );
     }
 
     return FALSE;
@@ -705,7 +705,7 @@ bool wxApp::CheckForKeyUp(WXEvent* event)
         wxKeyEvent keyEvent(wxEVT_KEY_UP);
         wxTranslateKeyEvent(keyEvent, win, (Widget) 0, xEvent);
 
-        return win->ProcessEvent( keyEvent );
+        return win->GetEventHandler()->ProcessEvent( keyEvent );
     }
 
     return FALSE;

@@ -14,7 +14,7 @@ top_builddir = ../..
 program_dir = samples/image
 
 DATAFILES = horse.png horse.jpg horse.bmp horse.gif horse.pcx horse.pnm \
-            horse.tif horse.xpm smile.xbm horse.cur horse.ico
+            horse.tif horse.xpm smile.xbm horse.cur horse.ico horse3.ani
 
 PROGRAM=image
 

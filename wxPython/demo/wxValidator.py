@@ -24,14 +24,14 @@ class MyValidator(wxPyValidator):
         if self.flag == ALPHA_ONLY:
             for x in val:
                 if x not in string.letters:
-                    return false
+                    return False
 
         elif self.flag == DIGIT_ONLY:
             for x in val:
                 if x not in string.digits:
-                    return false
+                    return False
 
-        return true
+        return True
 
 
     def OnChar(self, event):
@@ -58,7 +58,7 @@ class MyValidator(wxPyValidator):
 class TestValidatorPanel(wxPanel):
     def __init__(self, parent):
         wxPanel.__init__(self, parent, -1)
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         VSPACE = 10
 
         fgs = wxFlexGridSizer(0, 2)
@@ -130,30 +130,30 @@ class TextObjectValidator(wxPyValidator):
              textCtrl.SetBackgroundColour("pink")
              textCtrl.SetFocus()
              textCtrl.Refresh()
-             return false
+             return False
          else:
              textCtrl.SetBackgroundColour(
                  wxSystemSettings_GetColour(wxSYS_COLOUR_WINDOW))
              textCtrl.Refresh()
-             return true
+             return True
 
 
      def TransferToWindow(self):
          """ Transfer data from validator to window.
 
-             The default implementation returns false, indicating that an error
-             occurred.  We simply return true, as we don't do any data transfer.
+             The default implementation returns False, indicating that an error
+             occurred.  We simply return True, as we don't do any data transfer.
          """
-         return true # Prevent wxDialog from complaining.
+         return True # Prevent wxDialog from complaining.
 
 
      def TransferFromWindow(self):
          """ Transfer data from window to validator.
 
-             The default implementation returns false, indicating that an error
-             occurred.  We simply return true, as we don't do any data transfer.
+             The default implementation returns False, indicating that an error
+             occurred.  We simply return True, as we don't do any data transfer.
          """
-         return true # Prevent wxDialog from complaining.
+         return True # Prevent wxDialog from complaining.
 
 #----------------------------------------------------------------------
 
@@ -161,7 +161,7 @@ class TestValidateDialog(wxDialog):
     def __init__(self, parent):
         wxDialog.__init__(self, parent, -1, "Validated Dialog")
 
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         VSPACE = 10
 
         fgs = wxFlexGridSizer(0, 2)
@@ -210,12 +210,6 @@ def runTest(frame, nb, log):
 
 
 
-
-
-
-
-
-
 overview = """\
 wxValidator is the base class for a family of validator classes that mediate between a class of control, and application data.
 
@@ -230,3 +224,11 @@ A validator has three major roles:
 Validators can be plugged into controls dynamically.
 
 """
+
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
+

@@ -435,7 +435,7 @@ void wxPrinterDC::DoDrawBitmap(const wxBitmap &bmp,
         memset( info, 0, sizeof( BITMAPINFOHEADER ) );
 
 #if wxUSE_DRAWBITMAP_24BITS
-        int iBitsSize = ((width + 3 ) & ~3 ) * height * 3;
+        int iBitsSize = (((width * 3) + 3 ) & ~3 ) * height;
 #else
         int iBitsSize = ((width + 3 ) & ~3 ) * height ;
 #endif
@@ -530,7 +530,11 @@ bool wxPrinterDC::DoBlit(wxCoord xdest, wxCoord ydest,
                 height = bmp.GetHeight();
 
             BITMAPINFO *info = (BITMAPINFO *) malloc( sizeof( BITMAPINFOHEADER ) + 256 * sizeof(RGBQUAD ) );
-            int iBitsSize = ((width + 3 ) & ~3 ) * height;
+#if wxUSE_DRAWBITMAP_24BITS
+            int iBitsSize = (((width * 3) + 3 ) & ~3 ) * height;
+#else
+            int iBitsSize = ((width + 3 ) & ~3 ) * height ;
+#endif
 
             void* bits = malloc( iBitsSize );
 
@@ -540,7 +544,11 @@ bool wxPrinterDC::DoBlit(wxCoord xdest, wxCoord ydest,
             info->bmiHeader.biWidth = width;
             info->bmiHeader.biHeight = height;
             info->bmiHeader.biPlanes = 1;
+#if wxUSE_DRAWBITMAP_24BITS
+            info->bmiHeader.biBitCount = 24;
+#else
             info->bmiHeader.biBitCount = 8;
+#endif
             info->bmiHeader.biCompression = BI_RGB;
 
             ScreenHDC display;

@@ -8,7 +8,7 @@
 WXDIR = $(%WXWIN)
 
 PROGRAM = hhp2cached
-OBJECTS = $(PROGRAM).obj
+OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj
 
 !include $(WXDIR)\src\makeprog.wat
 

@@ -205,7 +205,7 @@ void wxComboBox::DoMoveWindow(int x, int y, int width, int height) {
     }
     else
     {
-        wxCoord wText = width - POPUPWIDTH;
+        wxCoord wText = width - POPUPWIDTH - MARGIN ;
         m_text->SetSize(0, 0, wText, height);
         m_choice->SetSize(0 + wText + MARGIN, 0, POPUPWIDTH, -1);
     }    
@@ -311,7 +311,12 @@ wxString wxComboBox::GetValue() const
 
 void wxComboBox::SetValue(const wxString& value)
 {
-    SetStringSelection( value ) ;
+    int s = FindString (value);
+    if (s == wxNOT_FOUND && !HasFlag(wxCB_READONLY) )
+    {
+    	m_choice->Append(value) ;
+    }
+	SetStringSelection( value ) ;
 }
 
 // Clipboard operations
@@ -408,6 +413,10 @@ void wxComboBox::Append(const wxString& item)
 
 void wxComboBox::Delete(int n)
 {
+    if ( HasClientObjectData() )
+    {
+        SetClientObject(n, NULL);
+    }
     m_choice->Delete( n );
 }
 
