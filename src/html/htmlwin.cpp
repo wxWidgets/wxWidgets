@@ -771,8 +771,10 @@ void wxHtmlWindow::OnIdle(wxIdleEvent& WXUNUSED(event))
                 {
                     m_tmpSelFromCell = m_Cell->FindCellByPos(x, y,
                                                  wxHTML_FIND_NEAREST_BEFORE);
+#if 0 // FIXME -- needed or not?
                     if (!m_tmpSelFromCell)
                         m_tmpSelFromCell = m_Cell->GetFirstTerminal();
+#endif
                 }
                 else
                 {
