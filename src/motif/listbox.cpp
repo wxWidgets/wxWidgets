@@ -39,10 +39,6 @@ static void wxListBoxCallback(Widget w,
                               XtPointer clientData,
                               XmListCallbackStruct * cbs);
 
-static void wxListBoxDefaultActionProc(Widget list_w,
-                                XtPointer client_data,
-                                XmListCallbackStruct * cbs);
-
 // ============================================================================
 // list box control implementation
 // ============================================================================
@@ -51,7 +47,6 @@ static void wxListBoxDefaultActionProc(Widget list_w,
 wxListBox::wxListBox() : m_clientDataList(wxKEY_INTEGER)
 {
     m_noItems = 0;
-    m_selected = 0;
 }
 
 bool wxListBox::Create(wxWindow *parent, wxWindowID id,
@@ -64,7 +59,6 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
 {
     m_windowStyle = style;
     m_noItems = n;
-    m_selected = 0;
     //    m_backgroundColour = parent->GetBackgroundColour();
     m_backgroundColour = * wxWHITE;
     m_foregroundColour = parent->GetForegroundColour();
@@ -95,7 +89,8 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
     else
         count = 2;
 
-    Widget listWidget = XmCreateScrolledList (parentWidget, (char*) (const char*) name, args, count);
+    Widget listWidget = XmCreateScrolledList(parentWidget,
+                                             (char*)name.c_str(), args, count);
 
     m_mainWidget = (WXWidget) listWidget;
 
@@ -110,21 +105,29 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
     if (height == -1)
         height = 80;
 
-    XtAddCallback (listWidget, XmNbrowseSelectionCallback, (XtCallbackProc) wxListBoxCallback,
-        (XtPointer) this);
-    XtAddCallback (listWidget, XmNextendedSelectionCallback, (XtCallbackProc) wxListBoxCallback,
-        (XtPointer) this);
-    XtAddCallback (listWidget, XmNmultipleSelectionCallback, (XtCallbackProc) wxListBoxCallback,
-        (XtPointer) this);
-
-    XtAddCallback (listWidget, XmNdefaultActionCallback, (XtCallbackProc) wxListBoxDefaultActionProc,
-        (XtPointer) this);
+    XtAddCallback (listWidget,
+                   XmNbrowseSelectionCallback,
+                   (XtCallbackProc) wxListBoxCallback,
+                   (XtPointer) this);
+    XtAddCallback (listWidget,
+                   XmNextendedSelectionCallback,
+                   (XtCallbackProc) wxListBoxCallback,
+                   (XtPointer) this);
+    XtAddCallback (listWidget,
+                   XmNmultipleSelectionCallback,
+                   (XtCallbackProc) wxListBoxCallback,
+                   (XtPointer) this);
+    XtAddCallback (listWidget,
+                   XmNdefaultActionCallback,
+                   (XtCallbackProc) wxListBoxCallback,
+                   (XtPointer) this);
 
     m_font = parent->GetFont();
     ChangeFont(FALSE);
 
     SetCanAddEventHandler(TRUE);
-    AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, width, height);
+    AttachWidget (parent, m_mainWidget, (WXWidget) NULL,
+                  pos.x, pos.y, width, height);
 
     ChangeBackgroundColour();
 
@@ -135,7 +138,7 @@ wxListBox::~wxListBox()
 {
 }
 
-void wxListBox::SetFirstItem(int N)
+void wxListBox::DoSetFirstItem( int N )
 {
     int count, length;
 
@@ -148,14 +151,6 @@ void wxListBox::SetFirstItem(int N)
     if ((N + count) >= length)
         N = length - count;
     XmListSetPos ((Widget) m_mainWidget, N + 1);
-}
-
-void wxListBox::SetFirstItem(const wxString& s)
-{
-    int N = FindString (s);
-
-    if (N >= 0)
-        SetFirstItem (N);
 }
 
 void wxListBox::Delete(int N)
@@ -181,10 +176,13 @@ void wxListBox::Delete(int N)
         SetSize (-1, -1, width1, height1);
 
     // (JDH) need to add code here to take care of clientDataList
-    wxNode *node = m_clientDataList.Find((long)N);  // get item from list
-    if (node) m_clientDataList.DeleteNode(node);    // if existed then delete from list
-    node = m_clientDataList.First();                // we now have to adjust all keys that
-    while (node)                                  // are >=N+1
+    // get item from list
+    wxNode *node = m_clientDataList.Find((long)N);
+    // if existed then delete from list
+    if (node) m_clientDataList.DeleteNode(node);
+    // we now have to adjust all keys that are >=N+1
+    node = m_clientDataList.First();
+    while (node)
     {
         if (node->GetKeyInteger() >= (long)(N+1))
             node->SetKeyInteger(node->GetKeyInteger() - 1);
@@ -194,7 +192,7 @@ void wxListBox::Delete(int N)
     m_noItems --;
 }
 
-void wxListBox::Append(const wxString& item)
+int wxListBox::DoAppend(const wxString& item)
 {
     int width1, height1;
     int width2, height2;
@@ -233,55 +231,11 @@ void wxListBox::Append(const wxString& item)
     if (width1 != width2 || height1 != height2)
         SetSize (-1, -1, width1, height1);
     m_noItems ++;
+
+    return GetCount() - 1;
 }
 
-void wxListBox::Append(const wxString& item, void *clientData)
-{
-    int width1, height1;
-    int width2, height2;
-
-    Widget listBox = (Widget) m_mainWidget;
-
-    GetSize (&width1, &height1);
-    Bool managed = XtIsManaged(listBox);
-
-    if (managed)
-        XtUnmanageChild (listBox);
-
-    int n;
-    XtVaGetValues (listBox, XmNitemCount, &n, NULL);
-    XmString text = XmStringCreateSimple ((char*) (const char*) item);
-    //  XmListAddItem(listBox, text, n + 1);
-    XmListAddItemUnselected (listBox, text, 0);
-    XmStringFree (text);
-
-    // It seems that if the list is cleared, we must re-ask for
-    // selection policy!!
-    Arg args[3];
-    XtSetArg (args[0], XmNlistSizePolicy, XmCONSTANT);
-    if (m_windowStyle & wxLB_MULTIPLE)
-        XtSetArg (args[1], XmNselectionPolicy, XmMULTIPLE_SELECT);
-    else if (m_windowStyle & wxLB_EXTENDED)
-        XtSetArg (args[1], XmNselectionPolicy, XmEXTENDED_SELECT);
-    else
-        XtSetArg (args[1], XmNselectionPolicy, XmBROWSE_SELECT);
-    XtSetValues (listBox, args, 2);
-
-    m_clientDataList.Append ((long) n, (wxObject *) clientData);
-
-    if (managed)
-        XtManageChild (listBox);
-
-    GetSize (&width2, &height2);
-
-    // Correct for randomly resized listbox - bad boy, Motif!
-    if (width1 != width2 || height1 != height2)
-        SetSize (-1, -1, width1, height1);
-
-    m_noItems ++;
-}
-
-void wxListBox::Set(int n, const wxString *choices, void** clientData)
+void wxListBox::DoSetItems(const wxArrayString& items, void** clientData)
 {
     m_clientDataList.Clear();
     int width1, height1;
@@ -294,49 +248,41 @@ void wxListBox::Set(int n, const wxString *choices, void** clientData)
 
     if (managed)
         XtUnmanageChild (listBox);
-        /***
-        for (int i=0; i<n; i++)
-        {
-        XmString text = XmStringCreateSimple(choices[i]);
-        XmListAddItemUnselected(listBox, text, 0);
-        XmStringFree(text);
-        }
-    ***/
-    XmString *text = new XmString[n];
-    int i;
-    for (i = 0; i < n; i++)
-        text[i] = XmStringCreateSimple ((char*) (const char*) choices[i]);
+    XmString *text = new XmString[items.GetCount()];
+    size_t i;
+    for (i = 0; i < items.GetCount(); ++i)
+        text[i] = XmStringCreateSimple ((char*)items[i].c_str());
 
     if ( clientData )
-        for (i = 0; i < n; i++)
+        for (i = 0; i < items.GetCount(); ++i)
             m_clientDataList.Append ((long) i, (wxObject *) clientData[i]);
 
-        XmListAddItems (listBox, text, n, 0);
-        for (i = 0; i < n; i++)
-            XmStringFree (text[i]);
-        delete[]text;
+    XmListAddItems (listBox, text, items.GetCount(), 0);
+    for (i = 0; i < items.GetCount(); i++)
+        XmStringFree (text[i]);
+    delete[] text;
 
-        // It seems that if the list is cleared, we must re-ask for
-        // selection policy!!
-        Arg args[3];
-        XtSetArg (args[0], XmNlistSizePolicy, XmCONSTANT);
-        if (m_windowStyle & wxLB_MULTIPLE)
-            XtSetArg (args[1], XmNselectionPolicy, XmMULTIPLE_SELECT);
-        else if (m_windowStyle & wxLB_EXTENDED)
-            XtSetArg (args[1], XmNselectionPolicy, XmEXTENDED_SELECT);
-        else
-            XtSetArg (args[1], XmNselectionPolicy, XmBROWSE_SELECT);
-        XtSetValues (listBox, args, 2);
+    // It seems that if the list is cleared, we must re-ask for
+    // selection policy!!
+    Arg args[3];
+    XtSetArg (args[0], XmNlistSizePolicy, XmCONSTANT);
+    if (m_windowStyle & wxLB_MULTIPLE)
+        XtSetArg (args[1], XmNselectionPolicy, XmMULTIPLE_SELECT);
+    else if (m_windowStyle & wxLB_EXTENDED)
+        XtSetArg (args[1], XmNselectionPolicy, XmEXTENDED_SELECT);
+    else
+        XtSetArg (args[1], XmNselectionPolicy, XmBROWSE_SELECT);
+    XtSetValues (listBox, args, 2);
 
-        if (managed)
-            XtManageChild (listBox);
+    if (managed)
+        XtManageChild (listBox);
 
-        GetSize (&width2, &height2);
-        // Correct for randomly resized listbox - bad boy, Motif!
-        if (width1 != width2 || height1 != height2)
-            SetSize (-1, -1, width1, height1);
+    GetSize (&width2, &height2);
+    // Correct for randomly resized listbox - bad boy, Motif!
+    if (width1 != width2 || height1 != height2)
+        SetSize (-1, -1, width1, height1);
 
-        m_noItems = n;
+    m_noItems = items.GetCount();
 }
 
 int wxListBox::FindString(const wxString& s) const
@@ -344,7 +290,8 @@ int wxListBox::FindString(const wxString& s) const
     XmString str = XmStringCreateSimple ((char*) (const char*) s);
     int *positions = NULL;
     int no_positions = 0;
-    bool success = XmListGetMatchPos ((Widget) m_mainWidget, str, &positions, &no_positions);
+    bool success = XmListGetMatchPos ((Widget) m_mainWidget, str,
+                                      &positions, &no_positions);
     XmStringFree (str);
     if (success)
     {
@@ -390,18 +337,23 @@ void wxListBox::SetSelection(int N, bool select)
             int *selections = NULL;
             int n = GetSelections (&selections);
 
-            // This hack is supposed to work, to make it possible to select more
-            // than one item, but it DOESN'T under Motif 1.1.
+            // This hack is supposed to work, to make it possible
+            // to select more than one item, but it DOESN'T under Motif 1.1.
 
-            XtVaSetValues ((Widget) m_mainWidget, XmNselectionPolicy, XmMULTIPLE_SELECT, NULL);
+            XtVaSetValues ((Widget) m_mainWidget,
+                           XmNselectionPolicy, XmMULTIPLE_SELECT,
+                           NULL);
 
             int i;
             for (i = 0; i < n; i++)
-                XmListSelectPos ((Widget) m_mainWidget, selections[i] + 1, FALSE);
+                XmListSelectPos ((Widget) m_mainWidget,
+                                 selections[i] + 1, FALSE);
 
             XmListSelectPos ((Widget) m_mainWidget, N + 1, FALSE);
 
-            XtVaSetValues ((Widget) m_mainWidget, XmNselectionPolicy, XmEXTENDED_SELECT, NULL);
+            XtVaSetValues ((Widget) m_mainWidget,
+                           XmNselectionPolicy, XmEXTENDED_SELECT,
+                           NULL);
         }
         else
 #endif // 0
@@ -431,12 +383,17 @@ bool wxListBox::IsSelected(int N) const
     return FALSE;
 }
 
-void wxListBox::Deselect(int N)
+void wxListBox::DoSetItemClientObject(int n, wxClientData* clientData)
 {
-    XmListDeselectPos ((Widget) m_mainWidget, N + 1);
+    DoSetItemClientData(n, (void*) clientData);
 }
 
-void *wxListBox::GetClientData(int N) const
+wxClientData* wxListBox::DoGetItemClientObject(int n) const
+{
+    return (wxClientData*) DoGetItemClientData(n);
+}
+
+void *wxListBox::DoGetItemClientData(int N) const
 {
     wxNode *node = m_clientDataList.Find ((long) N);
     if (node)
@@ -445,7 +402,7 @@ void *wxListBox::GetClientData(int N) const
         return NULL;
 }
 
-void wxListBox::SetClientData(int N, void *Client_data)
+void wxListBox::DoSetItemClientData(int N, void *Client_data)
 {
     wxNode *node = m_clientDataList.Find ((long) N);
     if (node)
@@ -541,7 +498,7 @@ void wxListBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     */
 }
 
-void wxListBox::InsertItems(int nItems, const wxString items[], int pos)
+void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
 {
     int width1, height1;
     int width2, height2;
@@ -555,26 +512,25 @@ void wxListBox::InsertItems(int nItems, const wxString items[], int pos)
     if (managed)
         XtUnmanageChild(listBox);
 
-    XmString *text = new XmString[nItems];
-    int i;
+    XmString *text = new XmString[items.GetCount()];
+    size_t i;
     // Steve Hammes: Motif 1.1 compatibility
     // #if XmVersion > 1100
     // Corrected by Sergey Krasnov from Steve Hammes' code
 #if XmVersion > 1001
-    for (i = 0; i < nItems; i++)
-        text[i] = XmStringCreateSimple((char*) (const char*) items[i]);
-    XmListAddItemsUnselected(listBox, text, nItems, pos+1);
+    for (i = 0; i < items.GetCount(); i++)
+        text[i] = XmStringCreateSimple((char*)items[i].c_str());
+    XmListAddItemsUnselected(listBox, text, items.GetCount(), pos+1);
 #else
-    for (i = 0; i < nItems; i++)
+    for (i = 0; i < items.GetCount(); i++)
     {
-        text[i] = XmStringCreateSimple((char*) (const char*) items[i]);
-        //    XmListAddItemUnselected(listBox, text[i], i);
-        XmListAddItemUnselected(listBox, text[i], pos+i+1); // Another Sergey correction
+        text[i] = XmStringCreateSimple((char*)items[i].c_str());
+        // Another Sergey correction
+        XmListAddItemUnselected(listBox, text[i], pos+i+1);
     }
 #endif
-    for (i = 0; i < nItems; i++)
+    for (i = 0; i < items.GetCount(); i++)
         XmStringFree(text[i]);
-
     delete[] text;
 
     // It seems that if the list is cleared, we must re-ask for
@@ -596,7 +552,7 @@ void wxListBox::InsertItems(int nItems, const wxString items[], int pos)
     if (width1 != width2 /*|| height1 != height2*/)
         SetSize(-1, -1, width1, height1);
 
-    m_noItems += nItems;
+    m_noItems += items.GetCount();
 }
 
 void wxListBox::SetString(int N, const wxString& s)
@@ -622,34 +578,6 @@ void wxListBox::SetString(int N, const wxString& s)
         SetSize (-1, -1, width1, height1);
 }
 
-int wxListBox::Number () const
-{
-    return m_noItems;
-}
-
-// For single selection items only
-wxString wxListBox::GetStringSelection () const
-{
-    wxString res;
-    int sel = GetSelection();
-    if (sel > -1)
-        res = GetString(sel);
-
-    return res;
-}
-
-bool wxListBox::SetStringSelection (const wxString& s, bool flag)
-{
-    int sel = FindString (s);
-    if (sel > -1)
-    {
-        SetSelection (sel, flag);
-        return TRUE;
-    }
-    else
-        return FALSE;
-}
-
 void wxListBox::Command (wxCommandEvent & event)
 {
     if (event.m_extraLong)
@@ -665,74 +593,59 @@ void wxListBox::Command (wxCommandEvent & event)
 void wxListBoxCallback (Widget WXUNUSED(w), XtPointer clientData,
                         XmListCallbackStruct * cbs)
 {
-    /*
-    if (cbs->reason == XmCR_EXTENDED_SELECT)
-        cout << "*** Extend select\n";
-    else if (cbs->reason == XmCR_SINGLE_SELECT)
-        cout << "*** Single select\n";
-    else if (cbs->reason == XmCR_MULTIPLE_SELECT)
-        cout << "*** Multiple select\n";
-    else if (cbs->reason == XmCR_BROWSE_SELECT)
-        cout << "*** Browse select\n";
-
-    if (cbs->selection_type == XmMODIFICATION)
-        cout << "*** Modification\n";
-    else if (cbs->selection_type == XmINITIAL)
-        cout << "*** Initial\n";
-    else if (cbs->selection_type == XmADDITION)
-        cout << "*** Addition\n";
-    */
-
     wxListBox *item = (wxListBox *) clientData;
 
     if (item->InSetValue())
         return;
 
-    wxCommandEvent event (wxEVT_COMMAND_LISTBOX_SELECTED, item->GetId());
+    wxEventType evtType;
+
+    if( cbs->reason == XmCR_DEFAULT_ACTION )
+        evtType = wxEVT_COMMAND_LISTBOX_DOUBLECLICKED;
+    else
+        evtType = wxEVT_COMMAND_LISTBOX_SELECTED;
+
+    int n = cbs->item_position - 1;
+    wxCommandEvent event (evtType, item->GetId());
+    if ( item->HasClientObjectData() )
+        event.SetClientObject( item->GetClientObject(n) );
+    else if ( item->HasClientUntypedData() )
+        event.SetClientData( item->GetClientData(n) );
+    event.m_commandInt = n;
+    event.m_extraLong = TRUE;
+    event.SetEventObject(item);
+    event.SetString( item->GetString( n ) );
+
+    int x = -1;
+    if( cbs->event->type == ButtonRelease )
+    {
+        XButtonEvent* evt = (XButtonEvent*)cbs->event;
+
+        x = evt->x;
+    }
+
     switch (cbs->reason)
     {
     case XmCR_MULTIPLE_SELECT:
     case XmCR_BROWSE_SELECT:
-        {
-            event.m_clientData = item->GetClientData (cbs->item_position - 1);
-            event.m_commandInt = cbs->item_position - 1;
-            event.m_extraLong = TRUE;
-            event.SetEventObject(item);
-            item->ProcessCommand (event);
-            break;
-        }
+#if wxUSE_CHECKLISTBOX
+        item->DoToggleItem( n, x );
+#endif
+    case XmCR_DEFAULT_ACTION:
+        item->GetEventHandler()->ProcessEvent(event);
+        break;
     case XmCR_EXTENDED_SELECT:
+        switch (cbs->selection_type)
         {
-            switch (cbs->selection_type)
-            {
-            case XmINITIAL:
-            case XmADDITION:
-            case XmMODIFICATION:
-                {
-                    event.m_clientData = item->GetClientData (cbs->item_position - 1);
-                    event.m_commandInt = cbs->item_position - 1;
-                    event.m_extraLong = TRUE;
-                    event.SetEventObject(item);
-                    item->ProcessCommand (event);
-                    break;
-                }
-            }
+        case XmINITIAL:
+        case XmADDITION:
+        case XmMODIFICATION:
+            item->DoToggleItem( n, x );
+            item->GetEventHandler()->ProcessEvent(event);
             break;
         }
+        break;
     }
-}
-
-/* Respond by getting the
-* designated "default button" in the action area and activate it
-* as if the user had selected it.
-*/
-void wxListBoxDefaultActionProc (Widget WXUNUSED(list_w), XtPointer client_data, XmListCallbackStruct * WXUNUSED(cbs))
-{
-    wxListBox *lbox = (wxListBox *) client_data;
-
-    wxCommandEvent event(wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, lbox->GetId());
-    event.SetEventObject( lbox );
-    lbox->GetEventHandler()->ProcessEvent(event) ;
 }
 
 WXWidget wxListBox::GetTopWidget() const
@@ -795,71 +708,7 @@ void wxListBox::ChangeForegroundColour()
     */
 }
 
-// These implement functions needed by wxControlWithItems.
-// Unfortunately, they're not all implemented yet.
-
 int wxListBox::GetCount() const
 {
-    return Number();
-}
-
-int wxListBox::DoAppend(const wxString& item)
-{
-    Append(item, (void*) NULL);
-    return GetCount() - 1;
-}
-
-// Just appends, doesn't yet insert
-void wxListBox::DoInsertItems(const wxArrayString& items, int WXUNUSED(pos))
-{
-    size_t nItems = items.GetCount();
-
-    for ( size_t n = 0; n < nItems; n++ )
-    {
-        Append( items[n], (void*) NULL);
-    }
-}
-
-void wxListBox::DoSetItems(const wxArrayString& items, void **clientData)
-{
-    size_t nItems = items.GetCount();
-    wxString* strings = new wxString[nItems];
-
-    for ( size_t n = 0; n < nItems; n++ )
-    {
-        strings[n] = items[n];
-    }
-    Set(nItems, strings, clientData);
-
-    delete[] strings;
-}
-
-void wxListBox::DoSetFirstItem(int WXUNUSED(n))
-{
-    wxFAIL_MSG( wxT("wxListBox::DoSetFirstItem not implemented") );
-}
-
-void wxListBox::DoSetItemClientData(int n, void* clientData)
-{
-    SetClientData(n, clientData);
-}
-
-void* wxListBox::DoGetItemClientData(int n) const
-{
-    return GetClientData(n);
-}
-
-void wxListBox::DoSetItemClientObject(int n, wxClientData* clientData)
-{
-    DoSetItemClientData(n, (void*) clientData);
-}
-
-wxClientData* wxListBox::DoGetItemClientObject(int n) const
-{
-    return (wxClientData*) DoGetItemClientData(n);
-}
-
-void wxListBox::Select(int n)
-{
-    SetSelection(n, TRUE);
+    return m_noItems;
 }

@@ -39,7 +39,7 @@ public:
         long style = 0,
         const wxValidator& validator = wxDefaultValidator,
         const wxString& name = wxListBoxNameStr):
-    m_clientDataList(wxKEY_INTEGER)
+        m_clientDataList(wxKEY_INTEGER)
     {
         Create(parent, id, pos, size, n, choices, style, validator, name);
     }
@@ -54,57 +54,29 @@ public:
     
     ~wxListBox();
     
-    // Virtual functions required by wxControlWithItems.
-    // They are not all implemented yet :-(
+    // implementation of wxControlWithItems
     virtual int GetCount() const;
     virtual int DoAppend(const wxString& item);
+    virtual void DoSetItemClientData(int n, void* clientData); //
+    virtual void* DoGetItemClientData(int n) const; //
+    virtual void DoSetItemClientObject(int n, wxClientData* clientData); //
+    virtual wxClientData* DoGetItemClientObject(int n) const; //
+    virtual int GetSelection() const;
+    virtual void Delete(int n);
+    virtual int FindString(const wxString& s) const;
+    virtual void Clear();
+    virtual void SetString(int n, const wxString& s);
+    virtual wxString GetString(int n) const;
+
+    // implementation of wxListBoxbase
+    virtual void SetSelection(int n, bool select = TRUE);
     virtual void DoInsertItems(const wxArrayString& items, int pos);
     virtual void DoSetItems(const wxArrayString& items, void **clientData);
     virtual void DoSetFirstItem(int n);
-    virtual void DoSetItemClientData(int n, void* clientData);
-    virtual void* DoGetItemClientData(int n) const;
-    virtual void DoSetItemClientObject(int n, wxClientData* clientData);
-    virtual wxClientData* DoGetItemClientObject(int n) const;
-    virtual void Select(int n);
-    
-    virtual void Append(const wxString& item);
-    virtual void Append(const wxString& item, void *clientData);
-    virtual void Set(int n, const wxString* choices, void **clientData = NULL);
-            void Set(const wxArrayString& items, void **clientData = NULL)
-                { DoSetItems(items, clientData); }
-    virtual int FindString(const wxString& s) const ;
-    virtual void Clear();
-    virtual void SetSelection(int n, bool select = TRUE);
-    
-    virtual void Deselect(int n);
-    
-    // For single choice list item only
-    virtual int GetSelection() const ;
-    virtual void Delete(int n);
-    virtual void *GetClientData(int n) const ;
-    virtual void *GetClientData() { return wxWindow::GetClientData(); }
-    virtual void SetClientData(int n, void *clientData);
-    virtual void SetClientData( void *data ) { wxWindow::SetClientData(data); }
-    virtual void SetString(int n, const wxString& s);
-    
-    // For single or multiple choice list item
     virtual int GetSelections(wxArrayInt& aSelections) const;
-    virtual bool IsSelected(int n) const ;
-    virtual wxString GetString(int n) const ;
-    
-    // Set the specified item at the first visible item
-    // or scroll to max range.
-    virtual void SetFirstItem(int n) ;
-    virtual void SetFirstItem(const wxString& s) ;
-    
-    virtual void InsertItems(int nItems, const wxString items[], int pos);
-            void InsertItems(const wxArrayString& items, int pos)
-                { DoInsertItems(items, pos); }
+    virtual bool IsSelected(int n) const;
 
-    virtual wxString GetStringSelection() const ;
-    virtual bool SetStringSelection(const wxString& s, bool flag = TRUE);
-    virtual int Number() const ;
-    
+    // For single or multiple choice list item
     void Command(wxCommandEvent& event);
     
     // Implementation
@@ -112,10 +84,12 @@ public:
     virtual void ChangeBackgroundColour();
     virtual void ChangeForegroundColour();
     WXWidget GetTopWidget() const;
-    
+
+#if wxUSE_CHECKLISTBOX
+    virtual void DoToggleItem(int item, int x) {};
+#endif
 protected:
     int       m_noItems;
-    int       m_selected;
     
     // List mapping positions->client data
     wxList    m_clientDataList;

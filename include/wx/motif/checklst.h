@@ -19,7 +19,7 @@
 
 #include "wx/listbox.h"
 
-class wxCheckListBox : public wxListBox
+class wxCheckListBox : public wxCheckListBoxBase
 {
     DECLARE_DYNAMIC_CLASS(wxCheckListBox)
         
@@ -34,11 +34,29 @@ public:
         long style = 0,
         const wxValidator& validator = wxDefaultValidator,
         const wxString& name = wxListBoxNameStr);
+
+    bool Create(wxWindow *parent, wxWindowID id,
+        const wxPoint& pos = wxDefaultPosition,
+        const wxSize& size = wxDefaultSize,
+        int n = 0, const wxString choices[] = NULL,
+        long style = 0,
+        const wxValidator& validator = wxDefaultValidator,
+        const wxString& name = wxListBoxNameStr);
     
     // items may be checked
     bool IsChecked(size_t uiIndex) const;
     void Check(size_t uiIndex, bool bCheck = TRUE);
-    
+
+    // override base class functions
+    virtual int DoAppend(const wxString& item);
+    virtual int FindString(const wxString& s) const;
+    virtual void SetString(int n, const wxString& s);
+    virtual wxString GetString(int n) const;
+
+    virtual void DoInsertItems(const wxArrayString& items, int pos);
+    virtual void DoSetItems(const wxArrayString& items, void **clientData);
+private:
+    void DoToggleItem( int item, int x );
 private:
     DECLARE_EVENT_TABLE()
 };
