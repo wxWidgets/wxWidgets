@@ -84,6 +84,7 @@ public:
     virtual void OnInternalIdle();
 
     bool          m_menuBarDetached;
+    int           m_menuBarHeight;
     bool          m_toolBarDetached;
 
 protected:

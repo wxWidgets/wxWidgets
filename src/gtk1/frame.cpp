@@ -45,7 +45,6 @@
 // constants
 // ----------------------------------------------------------------------------
 
-const int wxMENU_HEIGHT    = 27;
 const int wxSTATUS_HEIGHT  = 25;
 const int wxPLACE_HOLDER   = 0;
 
@@ -206,6 +205,7 @@ void wxFrame::Init()
 {
     m_menuBarDetached = FALSE;
     m_toolBarDetached = FALSE;
+    m_menuBarHeight = 2;
 }
 
 bool wxFrame::Create( wxWindow *parent,
@@ -245,7 +245,7 @@ void wxFrame::DoGetClientSize( int *width, int *height ) const
         if (m_frameMenuBar)
         {
             if (!m_menuBarDetached)
-                (*height) -= wxMENU_HEIGHT;
+                (*height) -= m_menuBarHeight;
             else
                 (*height) -= wxPLACE_HOLDER;
         }
@@ -292,7 +292,7 @@ void wxFrame::DoSetClientSize( int width, int height )
         if (m_frameMenuBar)
         {
             if (!m_menuBarDetached)
-                height += wxMENU_HEIGHT;
+                height += m_menuBarHeight;
             else
                 height += wxPLACE_HOLDER;
         }
@@ -396,7 +396,7 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
             int xx = m_miniEdge;
             int yy = m_miniEdge + m_miniTitle;
             int ww = m_width  - 2*m_miniEdge;
-            int hh = wxMENU_HEIGHT;
+            int hh = m_menuBarHeight;
             if (m_menuBarDetached) hh = wxPLACE_HOLDER;
             m_frameMenuBar->m_x = xx;
             m_frameMenuBar->m_y = yy;
@@ -419,7 +419,7 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y),
             if (m_frameMenuBar)
             {
                 if (!m_menuBarDetached)
-                    yy += wxMENU_HEIGHT;
+                    yy += m_menuBarHeight;
                 else
                     yy += wxPLACE_HOLDER;
             }
@@ -578,6 +578,17 @@ void wxFrame::AttachMenuBar( wxMenuBar *menuBar )
         }
 
         m_frameMenuBar->Show( TRUE );
+        
+        GtkRequisition req;
+        req.width = 2;
+        req.height = 2;
+        (* GTK_WIDGET_CLASS( GTK_OBJECT_GET_CLASS(m_frameMenuBar->m_widget) )->size_request )
+            (m_frameMenuBar->m_widget, &req );
+        m_menuBarHeight = req.height;
+    }
+    else
+    {
+        m_menuBarHeight = 2;
     }
 
     // resize window in OnInternalIdle
