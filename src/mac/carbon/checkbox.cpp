@@ -97,6 +97,7 @@ bool wxBitmapCheckBox::Create(wxWindow *parent, wxWindowID id,
 void wxBitmapCheckBox::SetLabel(const wxBitmap *bitmap)
 {
     // TODO
+    wxFAIL_MSG(wxT("wxBitmapCheckBox::SetLabel() not yet implemented"));
 }
 
 void wxBitmapCheckBox::SetSize(int x, int y, int width, int height, int sizeFlags)
@@ -107,11 +108,13 @@ void wxBitmapCheckBox::SetSize(int x, int y, int width, int height, int sizeFlag
 void wxBitmapCheckBox::SetValue(bool val)
 {
     // TODO
+    wxFAIL_MSG(wxT("wxBitmapCheckBox::SetValue() not yet implemented"));
 }
 
 bool wxBitmapCheckBox::GetValue() const
 {
-    // TODOD
+    // TODO
+    wxFAIL_MSG(wxT("wxBitmapCheckBox::GetValue() not yet implemented"));
     return FALSE;
 }
 
