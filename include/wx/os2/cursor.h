@@ -23,7 +23,6 @@ public:
     ~wxCursorRefData();
 
 protected:
-  WXHCURSOR m_hCursor;
   bool m_destroyCursor;
 };
 
