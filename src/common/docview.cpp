@@ -227,16 +227,13 @@ bool wxDocument::OnNewDocument()
 
 bool wxDocument::Save()
 {
-    bool ret = FALSE;
+    if (!IsModified() && m_savedYet)
+        return TRUE;
 
-    if (!IsModified() && m_savedYet) return TRUE;
-    if (m_documentFile == wxT("") || !m_savedYet)
-        ret = SaveAs();
-    else
-        ret = OnSaveDocument(m_documentFile);
-    if ( ret )
-        SetDocumentSaved(TRUE);
-    return ret;
+    if ( m_documentFile.empty() || !m_savedYet )
+        return SaveAs();
+
+    return OnSaveDocument(m_documentFile);
 }
 
 bool wxDocument::SaveAs()
@@ -316,6 +313,7 @@ bool wxDocument::OnSaveDocument(const wxString& file)
     }
     Modify(FALSE);
     SetFilename(file);
+    SetDocumentSaved(TRUE);
     return TRUE;
 }
 
