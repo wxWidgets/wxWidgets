@@ -399,6 +399,7 @@ wxString wxGetUserName();
 wxString wxGetHomeDir();
 wxString wxGetUserHome(const wxString& user = wxPyEmptyString);
 
+unsigned long wxGetProcessId();
 
 // When wxApp gets the virtual method magic then enable this.
 // bool wxHandleFatalExceptions(bool doIt = TRUE);

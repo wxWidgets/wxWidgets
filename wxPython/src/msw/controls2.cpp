@@ -100,6 +100,8 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     DECLARE_DEF_STRING(DirDialogDefaultFolderStr);
 
     static const wxString wxPyEmptyString(wxT(""));
+
+    static const long longzero = 0;
   // C++ Version of a Python aware class
 class wxPyListCtrl : public wxListCtrl {
     DECLARE_ABSTRACT_CLASS(wxPyListCtrl);
@@ -7780,7 +7782,7 @@ static PyObject *_wrap_wxTreeCtrl_GetFirstChild(PyObject *self, PyObject *args, 
     wxTreeItemId * _result;
     wxPyTreeCtrl * _arg0;
     wxTreeItemId * _arg1;
-    long * _arg2 = (long *) &0;
+    long * _arg2 = (long *) &longzero;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
     long  temp;

@@ -10,7 +10,7 @@ set FLAGS=USE_SWIG=1 IN_CVS_TREE=1
 rem  Use non-default python?
 iff "%1" == "15" .or. "%1" == "20" .or. "%1" == "21" .or. "%1" == "22" then
 	set VER=%1
-	set PYTHON=d:\tools\python%1%\python.exe
+	set PYTHON=%TOOLS%\python%1%\python.exe
 	shift
 else
 	beep

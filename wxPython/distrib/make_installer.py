@@ -10,7 +10,7 @@ will be created.
 import sys, os, string
 
 KEEP_TEMPS = 0
-ISCC = r"D:\TOOLS\InnoSetup2Ex\ISCC.exe %s"
+ISCC = r"%s\InnoSetup2Ex\ISCC.exe %s"
 
 #----------------------------------------------------------------------
 
@@ -330,7 +330,7 @@ def main():
     f.write(IFS_Template % vars())
     f.close()
 
-    os.system(ISCC % ISSFILE)
+    os.system(ISCC % (os.environ['TOOLS'], ISSFILE))
 
     if not KEEP_TEMPS:
         os.remove(ISSFILE)
