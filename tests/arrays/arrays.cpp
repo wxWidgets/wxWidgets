@@ -1,10 +1,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        tests/arrays/arrays.cpp
 // Purpose:     wxArray unit test
-// Author:      Wlodzimierz ABX Skiba
+// Author:      Vadim Zeitlin, Wlodzimierz ABX Skiba
 // Created:     2004-04-01
 // RCS-ID:      $Id$
-// Copyright:   (c) 2004 Wlodzimierz Skiba
+// Copyright:   (c) 2004 Vadim Zeitlin, Wlodzimierz Skiba
 ///////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------------
