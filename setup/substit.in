@@ -24,6 +24,7 @@ s|*INSTALL_PROGRAM*|@INSTALL_PROGRAM@|g
 s|*INSTALL_DATA*|@INSTALL_DATA@|g
 s|*AWK*|@AWK@|g
 s|*LN_S*|@LN_S@|g
+s|*STRIP*|@STRIP@|g
 s|*prefix*|@prefix@|g
 s|*exec_prefix*|@exec_prefix@|g
 s|*libdir*|@libdir@|g

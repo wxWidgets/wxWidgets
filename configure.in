@@ -369,6 +369,11 @@ dnl ===========
 AC_PROG_AWK
 dnl   defines AWK with the appropriate command
 
+dnl strip command
+dnl =============
+AC_CHECK_PROG(STRIP, strip, strip, true)
+dnl   defines STRIP as strip or nothing if not found
+
 dnl ###############
 dnl # make checks #
 dnl ###############
@@ -915,7 +920,7 @@ AC_OVERRIDES(serial,serial,
 wxUSE_SERIAL)
 
 AC_OVERRIDES(sockets,sockets,
-**--with-sockets	  use wxSocket etc classes,
+**--with-sockets          use wxSocket etc classes,
 wxUSE_SOCKETS)
 
 dnl ----------------------------------------------------------------
@@ -1142,17 +1147,15 @@ EXTRA_LINK=
 
 WXDEBUG=
 if test "$wxUSE_DEBUG_GDB" = 1 ; then
-  wxUSE_DEBUG_INFO=1
-  WXDEBUG="-ggdb"
-  wxUSE_OPTIMISE=0
-else
-  if test "$wxUSE_DEBUG_INFO" = 1 ; then
+    wxUSE_DEBUG_INFO=1
+    WXDEBUG="-ggdb"
+fi
+
+if test "$wxUSE_DEBUG_INFO" = 1 ; then
     WXDEBUG="-g"
     wxUSE_OPTIMISE=0
-  else
-    EXTRA_LINK="-s $EXTRA_LINK"
-  fi
 fi
+
 AC_SUBST(WXDEBUG)
 
 if test "$wxUSE_DEBUG_FLAG" = 1 ; then
