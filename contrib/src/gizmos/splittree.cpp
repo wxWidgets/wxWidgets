@@ -733,9 +733,7 @@ void wxSplitterScrolledWindow::OnScroll(wxScrollWinEvent& event)
         node = node->GetNext();
     }
 
-#ifdef __WXMAC__
-    m_targetWindow->MacUpdateImmediately() ;
-#endif
+    m_targetWindow->Update() ;
 
     inOnScroll = FALSE;
 }
