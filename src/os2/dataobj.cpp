@@ -173,9 +173,11 @@ void CIDataObject::SetData (
             ulSize = strlen((const char *)pzBuffer);
             break;
 
+#if wxUSE_UNICODE
         case wxDF_UNICODETEXT:
              ulSize = ::wcslen((const wchar_t *)pzBuffer);
              break;
+#endif
 
         case wxDF_BITMAP:
         case wxDF_METAFILE:
