@@ -1141,6 +1141,9 @@ private:
     #else // !wxUniv
         #define wxWindowMSW wxWindow
         #define sm_classwxWindowMSW sm_classwxWindow
+        #define sm_constructorPropertiesCountwxWindowMSW sm_constructorPropertiesCountwxWindow
+        #define sm_constructorPropertieswxWindowMSW sm_constructorPropertieswxWindow
+        #define sm_constructorwxWindowMSW sm_constructorwxWindow
     #endif // wxUniv/!wxUniv
     #include "wx/msw/window.h"
 #elif defined(__WXMOTIF__)
