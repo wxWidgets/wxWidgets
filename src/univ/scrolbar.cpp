@@ -531,14 +531,16 @@ void wxScrollBar::ScrollToEnd()
     DoSetThumb(m_range - m_thumbSize);
 }
 
-void wxScrollBar::ScrollLines(int nLines)
+bool wxScrollBar::ScrollLines(int nLines)
 {
     DoSetThumb(m_thumbPos + nLines);
+    return TRUE;
 }
 
-void wxScrollBar::ScrollPages(int nPages)
+bool wxScrollBar::ScrollPages(int nPages)
 {
     DoSetThumb(m_thumbPos + nPages*m_pageSize);
+    return TRUE;
 }
 
 // ============================================================================
