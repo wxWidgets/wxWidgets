@@ -265,7 +265,7 @@ class TestPanel(wx.Panel):
         self.log = log
         wx.Panel.__init__(self, parent, -1, style=0)
         self.keysink = KeySink(self)
-        self.keysink.SetSize((100, 65))
+        self.keysink.SetSizeHints((100, 65))
         self.keylog = KeyLog(self)
 
         btn = wx.Button(self, -1, "Clear Log")
