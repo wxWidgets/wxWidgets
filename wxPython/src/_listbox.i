@@ -137,7 +137,7 @@ public:
     bool  IsChecked(int index);
     void  Check(int index, int check = True);
 
-#if !defined(__WXMAC__) && !defined(__WXX11__)
+#if defined(__WXMSW__) || defined(__WXGTK__)
     int GetItemHeight();
 #endif
 

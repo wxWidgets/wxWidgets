@@ -66,7 +66,7 @@ public:
                    const wxString& name = wxPyToggleButtonNameStr);
     %name(PreToggleButton)wxToggleButton();
 
-#if !defined(__WXMAC__) && !defined(__WXX11__)
+#if defined(__WXMSW__) || defined(__WXGTK__)
     bool Create(wxWindow *parent,
                    wxWindowID id,
                    const wxString& label,
