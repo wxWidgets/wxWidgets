@@ -36,7 +36,11 @@
 #include "wx/imaglist.h"
 #include "wx/notebook.h"
 
-#if defined(__WXMSW__) && !((defined(__GNUWIN32_OLD__) || defined(__TWIN32__)) && !defined(__CYGWIN10__))
+#ifdef __GNUWIN32_OLD__
+    #include "wx/msw/gnuwin32/extra.h"
+#endif
+
+#if defined(__WIN95__) && !(defined(__GNUWIN32_OLD__) && !defined(__CYGWIN10__))
 #include "wx/msw/private.h"
 #include <commctrl.h>
 #include "wx/msw/winundef.h"
