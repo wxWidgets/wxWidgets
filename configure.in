@@ -2403,7 +2403,7 @@ if test "$wxUSE_TIMEDATE" = "yes"; then
                     tm.tm_gmtoff++;
                 ],
                 [
-                    wx_cv_struct_tm_has_gmtoff=yes,
+                    wx_cv_struct_tm_has_gmtoff=yes
                     AC_DEFINE(WX_GMTOFF_IN_TM)
                 ],
                 wx_cv_struct_tm_has_gmtoff=no

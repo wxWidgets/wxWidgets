@@ -11204,7 +11204,7 @@ EOF
 if { (eval echo configure:11205: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   
-                    wx_cv_struct_tm_has_gmtoff=yes,
+                    wx_cv_struct_tm_has_gmtoff=yes
                     cat >> confdefs.h <<\EOF
 #define WX_GMTOFF_IN_TM 1
 EOF
