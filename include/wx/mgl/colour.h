@@ -25,23 +25,23 @@ public:
       // default
     wxColour();
       // from RGB
-    wxColour( unsigned char red, unsigned char green, unsigned char blue );
-    wxColour( unsigned long colRGB ) { Set(colRGB); }
+    wxColour(unsigned char red, unsigned char green, unsigned char blue);
+    wxColour(unsigned long colRGB) { Set(colRGB); }
 
       // implicit conversion from the colour name
-    wxColour( const wxString &colourName ) { InitFromName(colourName); }
-    wxColour( const char *colourName ) { InitFromName(colourName); }
+    wxColour(const wxString &colourName) { InitFromName(colourName); }
+    wxColour(const char *colourName) { InitFromName(colourName); }
 
 
       // copy ctors and assignment operators
-    wxColour( const wxColour& col );
-    wxColour& operator = ( const wxColour& col );
+    wxColour(const wxColour& col);
+    wxColour& operator = (const wxColour& col);
 
       // dtor
     ~wxColour();
 
     // Set() functions
-    void Set( unsigned char red, unsigned char green, unsigned char blue );
+    void Set(unsigned char red, unsigned char green, unsigned char blue);
     void Set(unsigned long colRGB)
     {
       // we don't need to know sizeof(long) here because we assume that the three
@@ -68,7 +68,8 @@ public:
     {
       return (m_red == colour.m_red &&
               m_green == colour.m_green &&
-              m_blue == colour.m_blue);
+              m_blue == colour.m_blue &&
+              m_isInit == colour.m_isInit);
     }
     bool operator != (const wxColour& colour) const { return !(*this == colour); }
 
