@@ -237,8 +237,8 @@ static void ConvertWxToFileTime(FILETIME *ft, const wxDateTime& dt)
 {
     SYSTEMTIME st;
     st.wDay = dt.GetDay();
-    st.wMonth = dt.GetMonth() + 1;
-    st.wYear = dt.GetYear();
+    st.wMonth = (WORD)(dt.GetMonth() + 1);
+    st.wYear = (WORD)dt.GetYear();
     st.wHour = dt.GetHour();
     st.wMinute = dt.GetMinute();
     st.wSecond = dt.GetSecond();
