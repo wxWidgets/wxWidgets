@@ -122,16 +122,37 @@ bool HP_TagHandler::HandleTag(const wxHtmlTag& tag)
         m_Name = m_Page = wxEmptyString;
         ParseInner(tag);
 
-        if (m_ItemsCnt % wxHTML_REALLOC_STEP == 0)
-            m_Items = (wxHtmlContentsItem*) realloc(m_Items, (m_ItemsCnt + wxHTML_REALLOC_STEP) * sizeof(wxHtmlContentsItem));
-        m_Items[m_ItemsCnt].m_Level = m_Level;
-        m_Items[m_ItemsCnt].m_ID = m_ID;
-        m_Items[m_ItemsCnt].m_Page = new wxChar[m_Page.Length() + 1];
-        wxStrcpy(m_Items[m_ItemsCnt].m_Page, m_Page.c_str());
-        m_Items[m_ItemsCnt].m_Name = new wxChar [m_Name.Length() + 1];
-        wxStrcpy(m_Items[m_ItemsCnt].m_Name, m_Name.c_str());
-        m_Items[m_ItemsCnt].m_Book = m_Book;
-        m_ItemsCnt++;
+        if (!m_Page.IsEmpty())
+        /* should be 'if (tag.GetParam("TYPE") == "text/sitemap")'
+           but this works fine. Valid HHW's file may contain only two
+           object tags:
+           
+           <OBJECT type="text/site properties">
+               <param name="ImageType" value="Folder">
+           </OBJECT>
+           
+           or
+           
+	       <OBJECT type="text/sitemap">
+		       <param name="Name" value="main page">
+		       <param name="Local" value="another.htm">
+		   </OBJECT>
+           
+           We're interested in the latter. !m_Page.IsEmpty() is valid
+           condition because text/site properties does not contain Local param
+        */
+        {
+            if (m_ItemsCnt % wxHTML_REALLOC_STEP == 0)
+                m_Items = (wxHtmlContentsItem*) realloc(m_Items, (m_ItemsCnt + wxHTML_REALLOC_STEP) * sizeof(wxHtmlContentsItem));
+            m_Items[m_ItemsCnt].m_Level = m_Level;
+            m_Items[m_ItemsCnt].m_ID = m_ID;
+            m_Items[m_ItemsCnt].m_Page = new wxChar[m_Page.Length() + 1];
+            wxStrcpy(m_Items[m_ItemsCnt].m_Page, m_Page.c_str());
+            m_Items[m_ItemsCnt].m_Name = new wxChar [m_Name.Length() + 1];
+            wxStrcpy(m_Items[m_ItemsCnt].m_Name, m_Name.c_str());
+            m_Items[m_ItemsCnt].m_Book = m_Book;
+            m_ItemsCnt++;
+        }
 
         return TRUE;
     }
