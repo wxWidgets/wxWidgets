@@ -4,8 +4,8 @@
 // Author:      David Elliott
 // Modified by:
 // Created:     2003/01/31
-// RCS-ID:      $Id: 
-// Copyright:   (c) 2003 David Elliott
+// RCS-ID:      $Id$
+// Copyright:   (c) 2003-2004 David Elliott
 // Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -22,8 +22,6 @@
     #include "wx/log.h"
 #endif // WX_PRECOMP
 
-#include "wx/cocoa/ObjcPose.h"
-
 #include "wx/cocoa/NSButton.h"
 #import <AppKit/NSButton.h>
 
@@ -33,34 +31,36 @@
 WX_IMPLEMENT_OBJC_INTERFACE_HASHMAP(NSButton)
 
 // ============================================================================
-// @class wxPoserNSButton
+// @class wxNSButtonTarget
 // ============================================================================
-@interface wxPoserNSButton : NSButton
+@interface wxNSButtonTarget : NSObject
 {
 }
 
 - (void)wxNSButtonAction: (id)sender;
-@end // wxPoserNSButton
+@end // wxNSButtonTarget
 
-WX_IMPLEMENT_POSER(wxPoserNSButton);
-
-@implementation wxPoserNSButton :  NSButton
+@implementation wxNSButtonTarget :  NSObject
 - (void)wxNSButtonAction: (id)sender
 {
-    wxASSERT_MSG((id)self==sender,wxT("Received wxNSButtonAction from another object"));
-    wxCocoaNSButton *button = wxCocoaNSButton::GetFromCocoa(self);
+    wxCocoaNSButton *button = wxCocoaNSButton::GetFromCocoa(sender);
     wxCHECK_RET(button,wxT("wxNSButtonAction received without associated wx object"));
     button->Cocoa_wxNSButtonAction();
 }
 
-@end // implementation wxPoserNSButton
+@end // implementation wxNSButtonTarget
+
+// ============================================================================
+// class wxCocoaNSButton
+// ============================================================================
+const wxObjcAutoRefFromAlloc<struct objc_object*> wxCocoaNSButton::sm_cocoaTarget = [[wxNSButtonTarget alloc] init];
 
 void wxCocoaNSButton::AssociateNSButton(WX_NSButton cocoaNSButton)
 {
     if(cocoaNSButton)
     {
         sm_cocoaHash.insert(wxCocoaNSButtonHash::value_type(cocoaNSButton,this));
-        [cocoaNSButton setTarget: cocoaNSButton];
+        [cocoaNSButton setTarget: sm_cocoaTarget];
         [cocoaNSButton setAction: @selector(wxNSButtonAction:)];
     }
 }
