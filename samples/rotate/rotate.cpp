@@ -16,6 +16,10 @@
 #pragma hdrstop
 #endif
 
+#ifndef WX_PRECOMP
+#include "wx/wx.h"
+#endif
+
 #include "wx/image.h"
 
 class MyApp: public wxApp

@@ -881,6 +881,12 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/resource/*.h $(DISTDIR)/samples/resource
 	cp $(SAMPDIR)/resource/*.wxr $(DISTDIR)/samples/resource
 	
+	mkdir $(DISTDIR)/samples/rotate
+	cp $(SAMPDIR)/rotate/Makefile.in $(DISTDIR)/samples/rotate
+	cp $(SAMPDIR)/rotate/makefile.unx $(DISTDIR)/samples/rotate
+	cp $(SAMPDIR)/rotate/*.cpp $(DISTDIR)/samples/rotate
+	cp $(SAMPDIR)/rotate/*.bmp $(DISTDIR)/samples/rotate
+    
 	mkdir $(DISTDIR)/samples/richedit
 	cp $(SAMPDIR)/richedit/Makefile.in $(DISTDIR)/samples/richedit
 	cp $(SAMPDIR)/richedit/*.cpp $(DISTDIR)/samples/richedit

@@ -38,6 +38,7 @@ AC_OUTPUT([
             propsize/Makefile
             richedit/Makefile
             resource/Makefile
+            rotate/Makefile
             sashtest/Makefile
             scroll/Makefile
             scrollsub/Makefile
