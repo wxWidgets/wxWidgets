@@ -506,7 +506,7 @@ void wxDCBase::DrawLabel(const wxString& text,
         }
         else // not end of line
         {
-            if ( pc - text == indexAccel )
+            if ( pc - text.c_str() == indexAccel )
             {
                 // remeber to draw underscore here
                 GetTextExtent(curLine, &startUnderscore, NULL);
