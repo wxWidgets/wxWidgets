@@ -117,7 +117,9 @@ wxGTK:
 - added wxEVT_MENU_OPEN event generation
 - fixed bug in generic file selector causing incomplete file extensions to
   be appended to filenames with no extension
-- added SetSelection implementation for GTK+ 2
+- added wxTextCtrl::SetSelection implementation for GTK+ 2
+- fixed wxTextCtrl::IsEditable() for GTK+ 2
+- don't consume 100% CPU when showing a poup menu
 
 wxMac:
 

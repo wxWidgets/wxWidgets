@@ -4214,8 +4214,7 @@ bool wxWindowGTK::DoPopupMenu( wxMenu *menu, int x, int y )
 
     while (is_waiting)
     {
-        while (gtk_events_pending())
-            gtk_main_iteration();
+        gtk_main_iteration();
     }
 
     return TRUE;
