@@ -231,12 +231,14 @@ short wxApp::MacHandleAEOApp(const WXEVENTREF WXUNUSED(event) , WXEVENTREF WXUNU
 
 short wxApp::MacHandleAEQuit(const WXEVENTREF WXUNUSED(event) , WXEVENTREF WXUNUSED(reply))
 {
-	wxWindow* win = GetTopWindow() ;
+    wxWindow* win = GetTopWindow() ;
     if ( win )
     {
-        win->Close(TRUE ) ;
+        wxCommandEvent exitEvent(wxEVT_COMMAND_MENU_SELECTED, s_macExitMenuItemId);
+        if (!win->ProcessEvent(exitEvent))
+            win->Close(TRUE ) ;
     }
-  	else
+    else
     {
         ExitMainLoop() ;
     }
