@@ -33,7 +33,7 @@
 
     
     <!-- Default flags (for all formats and bakefiles): -->
-    <add-flags>-Icompat -Iformats</add-flags>
+    <add-flags>-Iformats</add-flags>
     
     
     <!-- Directories where the files go: -->
