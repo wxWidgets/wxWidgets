@@ -77,6 +77,9 @@ public:
   virtual bool AttachOutput(wxWindow& output);
   //
   virtual void DetachOutput();
+
+  virtual bool IsPaused() = 0;
+  virtual bool IsStopped() = 0;
 };
 
 extern wxFrame *wxVideoCreateFrame(wxVideoBaseDriver *vid_drv);

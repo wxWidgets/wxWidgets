@@ -12,8 +12,12 @@
 #define __VID_xanim_H__
 
 #ifdef __GNUG__
-#pragma interface
+    #pragma interface "vidxanm.h"
 #endif
+
+#include "wx/defs.h"
+#include "wx/string.h"
+#include "wx/process.h"
 
 #if defined(WXMMEDIA_INTERNAL) && (defined(__X__) || defined(__WXGTK__))
 #include <X11/Xlib.h>
@@ -40,6 +44,7 @@ protected:
   bool m_xanim_started, m_paused;
   struct wxXANIMinternal *m_internal;
   wxString m_filename;
+  wxProcess *m_xanim_detector;
 public:
   wxVideoXANIM();
   wxVideoXANIM(wxInputStream& str);
@@ -58,6 +63,11 @@ public:
 
   bool AttachOutput(wxWindow& output);
   void DetachOutput();
+
+  bool IsPaused();
+  bool IsStopped();
+
+  friend class wxVideoXANIMProcess;
 
 protected:
   ///

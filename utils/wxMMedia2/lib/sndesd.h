@@ -38,8 +38,8 @@ class wxSoundStreamESD : public wxSoundStream {
 
   bool QueueFilled() const { return m_q_filled; }
  protected:
-  int m_fd;
-  int m_tag;
+  int m_fd_input, m_fd_output;
+  int m_tag_input, m_tag_output;
   bool m_esd_stop;
   wxString m_hostname;
   bool m_q_filled;

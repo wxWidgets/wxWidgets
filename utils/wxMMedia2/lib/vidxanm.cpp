@@ -37,10 +37,32 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxVideoXANIM, wxVideoBaseDriver)
 
+class wxVideoXANIMProcess: public wxProcess {
+ public:
+  wxVideoXANIMProcess(wxVideoXANIM *xanim);
+
+  void OnTerminate(int pid, int status);
+
+ protected:
+  wxVideoXANIM *m_vid_xanim;
+};
+
+
+wxVideoXANIMProcess::wxVideoXANIMProcess(wxVideoXANIM *xanim)
+{
+  m_vid_xanim = xanim;
+}
+
+void wxVideoXANIMProcess::OnTerminate(int WXUNUSED(pid), int WXUNUSED(status))
+{
+  m_vid_xanim->m_xanim_started = FALSE;
+}
+
 wxVideoXANIM::wxVideoXANIM()
  : wxVideoBaseDriver()
 {
   m_internal = new wxXANIMinternal;
+  m_xanim_detector = new wxVideoXANIMProcess(this);
   m_xanim_started = FALSE;
   m_paused = FALSE;
   m_filename = "";
@@ -50,6 +72,7 @@ wxVideoXANIM::wxVideoXANIM(wxInputStream& str)
   : wxVideoBaseDriver(str)
 {
   m_internal = new wxXANIMinternal;
+  m_xanim_detector = new wxVideoXANIMProcess(this);
   m_xanim_started = FALSE;
   m_paused = FALSE;
 
@@ -64,6 +87,7 @@ wxVideoXANIM::~wxVideoXANIM()
   if (m_xanim_started)
     Stop();
   delete m_internal;
+  delete m_xanim_detector;
 
   wxRemoveFile(m_filename);
 }
@@ -148,6 +172,16 @@ bool wxVideoXANIM::IsCapable(wxVideoType v_type)
     return FALSE;
 }
 
+bool wxVideoXANIM::IsPaused()
+{
+  return m_paused;
+}
+
+bool wxVideoXANIM::IsStopped()
+{
+  return !m_xanim_started;
+}
+
 bool wxVideoXANIM::AttachOutput(wxWindow& out)
 {
   if (!wxVideoBaseDriver::AttachOutput(out))
@@ -228,22 +262,22 @@ bool wxVideoXANIM::RestartXANIM()
 			WXSTRINGCAST m_filename);
 
   // Execute it
-  if (!wxExecute(xanim_command, FALSE))
+  if (!wxExecute(xanim_command, FALSE, m_xanim_detector))
     return FALSE;
 
   // Wait for XAnim to be ready
   nitems = 0;
-  while (nitems == 0) {
+  m_xanim_started = TRUE;
+  while (nitems == 0 && m_xanim_started) {
     ret = XGetWindowProperty(m_internal->xanim_dpy, m_internal->xanim_window,
 			     m_internal->xanim_atom,
 			     0, 4, False, AnyPropertyType, &prop_type,
 			     &prop_format, &nitems, &extra,
 			     (unsigned char **)&prop);
-//    wxYield();
+    wxYield();
   }
 
   m_paused = FALSE;
-  m_xanim_started = TRUE;
 
   return TRUE;
 }
