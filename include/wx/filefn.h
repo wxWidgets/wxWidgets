@@ -6,7 +6,7 @@
 // Created:     29/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Julian Smart
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef   __FILEFNH__
@@ -16,8 +16,26 @@
 #pragma interface "filefn.h"
 #endif
 
-#include "wx/list.h"
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
 
+// define off_t
+#include  <sys/types.h>
+
+#ifdef    _MSC_VER
+  #define   off_t       _off_t
+#endif
+
+typedef enum {
+  wxFromStart,
+  wxFromCurrent,
+  wxFromEnd
+} wxSeekMode;
+
+// ----------------------------------------------------------------------------
+// functions
+// ----------------------------------------------------------------------------
 bool WXDLLEXPORT wxFileExists(const wxString& filename);
 #define FileExists wxFileExists
 
@@ -157,6 +175,10 @@ void WXDLLEXPORT wxSplitPath(const char *pszFileName,
 
 // find a file in a list of directories, returns false if not found
 bool WXDLLEXPORT wxFindFileInPath(wxString *pStr, const char *pszPath, const char *pszFile);
+
+// ----------------------------------------------------------------------------
+// classes
+// ----------------------------------------------------------------------------
 
 // Path searching
 class WXDLLEXPORT wxPathList: public wxStringList

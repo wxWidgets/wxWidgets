@@ -17,21 +17,13 @@
 #endif
 
 #include <stdio.h>
-#include <wx/object.h>
-#include <wx/string.h>
-
-#ifdef    _MSC_VER
-  #define   off_t       _off_t
-#endif
+#include "wx/object.h"
+#include "wx/string.h"
+#include "wx/filefn.h"  // for off_t and wxSeekMode
 
 /*
  * wxStream: base classes
  */
-
-typedef enum {
-  wxFromStart, wxFromCurrent, wxFromEnd
-} wxSeekMode;
-
 class wxOutputStream;
 class wxInputStream: virtual public wxObject {
   DECLARE_ABSTRACT_CLASS(wxInputStream)

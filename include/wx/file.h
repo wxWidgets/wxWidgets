@@ -17,20 +17,8 @@
 #pragma interface "file.h"
 #endif
 
-// ----------------------------------------------------------------------------
-// simple types
-// ----------------------------------------------------------------------------
-
 #include  "wx/string.h"
 #include  "wx/filefn.h"
-#include  "wx/stream.h" // for wxSeekMode
-
-// define off_t
-#include  <sys/types.h>
-
-#ifdef    _MSC_VER
-  #define   off_t       _off_t
-#endif
 
 // ----------------------------------------------------------------------------
 // constants
@@ -85,7 +73,7 @@ public:
     // returns true on success
   uint Write(const void *pBuf, uint nCount);
     // returns true on success
-  bool Write(const wxString& str) { return Write(str.c_str(), str.Len()); }
+  bool Write(const wxString& s) { return Write(s.c_str(), s.Len()) != 0; }
     // flush data not yet written
   bool Flush();
 
@@ -144,8 +132,8 @@ public:
   bool IsOpened() const { return m_file.IsOpened(); }
 
   // I/O (both functions return true on success, false on failure)
-  bool Write(const void *p, uint n) { return m_file.Write(p, n); }
-  bool Write(const wxString& str)   { return m_file.Write(str);  }
+  bool Write(const void *p, uint n) { return m_file.Write(p, n) != 0; }
+  bool Write(const wxString& str)   { return m_file.Write(str); }
 
   // different ways to close the file
     // validate changes and delete the old file of name m_strName
@@ -163,4 +151,4 @@ private:
 };
 
 #endif
-	// __FILEH__
+        // __FILEH__
