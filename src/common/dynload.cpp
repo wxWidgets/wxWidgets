@@ -102,6 +102,9 @@ bool wxDynamicLibrary::Load(wxString libname, int flags)
         }
     }
 
+    // different ways to load a shared library
+    //
+    // FIXME: should go to the platform-specific files!
 #if defined(__WXMAC__) && !defined(__DARWIN__)
     FSSpec      myFSSpec;
     Ptr         myMainAddr;
@@ -133,29 +136,39 @@ bool wxDynamicLibrary::Load(wxString libname, int flags)
 
 #if defined(__VMS) || defined(__DARWIN__)
     m_handle = dlopen(libname.c_str(), 0);  // The second parameter is ignored
-#else
+#else // !__VMS  && !__DARWIN__
     int rtldFlags = 0;
 
-    if( flags & wxDL_LAZY )
+    if ( flags & wxDL_LAZY )
     {
         wxASSERT_MSG( (flags & wxDL_NOW) == 0,
                       _T("wxDL_LAZY and wxDL_NOW are mutually exclusive.") );
+#ifdef RTLD_LAZY
         rtldFlags |= RTLD_LAZY;
-    }
-    else if( flags & wxDL_NOW )
-    {
-        rtldFlags |= RTLD_NOW;
-    }
-    if( flags & wxDL_GLOBAL )
-    {
-#ifdef __osf__
-        wxLogDebug(_T("WARNING: RTLD_GLOBAL is not a supported on this platform."));
+#else
+        wxLogDebug(_T("wxDL_LAZY is not supported on this platform"));
 #endif
+    }
+    else if ( flags & wxDL_NOW )
+    {
+#ifdef RTLD_NOW
+        rtldFlags |= RTLD_NOW;
+#else
+        wxLogDebug(_T("wxDL_NOW is not supported on this platform"));
+#endif
+    }
+
+    if ( flags & wxDL_GLOBAL )
+    {
+#ifdef RTLD_GLOBAL
         rtldFlags |= RTLD_GLOBAL;
+#else
+        wxLogDebug(_T("RTLD_GLOBAL is not supported on this platform."));
+#endif
     }
 
     m_handle = dlopen(libname.c_str(), rtldFlags);
-#endif  // __VMS || __DARWIN__
+#endif  // __VMS || __DARWIN__ ?
 
 #elif defined(HAVE_SHL_LOAD)
     int shlFlags = 0;
@@ -174,9 +187,8 @@ bool wxDynamicLibrary::Load(wxString libname, int flags)
 
 #elif defined(__WINDOWS__)
     m_handle = ::LoadLibrary(libname.c_str());
-
 #else
-#error  "runtime shared lib support not implemented"
+    #error  "runtime shared lib support not implemented on this platform"
 #endif
 
     if ( m_handle == 0 )
