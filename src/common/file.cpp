@@ -56,6 +56,7 @@
 
 #elif (defined(__UNIX__) || defined(__GNUWIN32__))
     #include  <unistd.h>
+    #include  <sys/stat.h>
     #ifdef __GNUWIN32__
         #include <windows.h>
     #endif
