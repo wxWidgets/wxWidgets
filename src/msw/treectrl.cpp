@@ -247,7 +247,8 @@ static HTREEITEM GetItemFromPoint(HWND hwndTV, int x, int y)
     tvht.pt.x = x;
     tvht.pt.y = y;
 
-    return TreeView_HitTest(hwndTV, &tvht);
+    // TreeView_HitTest() doesn't do the right cast in mingw32 headers
+    return (HTREEITEM)TreeView_HitTest(hwndTV, &tvht);
 }
 
 // ----------------------------------------------------------------------------
