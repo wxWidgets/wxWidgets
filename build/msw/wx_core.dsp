@@ -2017,7 +2017,6 @@ SOURCE=..\..\src\msw\gdiobj.cpp
 # Begin Source File
 
 SOURCE=..\..\src\msw\gsockmsw.cpp
-# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -7602,10 +7601,6 @@ SOURCE=..\..\include\wx\msw\slider95.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\slidrmsw.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\msw\sound.h
 # End Source File
 # Begin Source File
@@ -8008,10 +8003,6 @@ SOURCE=..\..\include\wx\univ\window.h
 # Begin Group "wxHTML Headers"
 
 # PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\include\wx\html\forcelnk.h
-# End Source File
 # Begin Source File
 
 SOURCE=..\..\include\wx\html\helpctrl.h

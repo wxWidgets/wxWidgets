@@ -1655,6 +1655,10 @@ SOURCE=.\xrc\xh_choic.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\xrc\xh_choicbk.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\xrc\xh_combo.cpp
 # End Source File
 # Begin Source File
@@ -1684,6 +1688,10 @@ SOURCE=.\xrc\xh_html.cpp
 # Begin Source File
 
 SOURCE=.\xrc\xh_listb.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xrc\xh_listbk.cpp
 # End Source File
 # Begin Source File
 
@@ -3027,6 +3035,10 @@ SOURCE=..\include\wx\xrc\xh_choic.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\xrc\xh_choicbk.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\xrc\xh_combo.h
 # End Source File
 # Begin Source File
@@ -3056,6 +3068,10 @@ SOURCE=..\include\wx\xrc\xh_html.h
 # Begin Source File
 
 SOURCE=..\include\wx\xrc\xh_listb.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\xrc\xh_listbk.h
 # End Source File
 # Begin Source File
 
@@ -3520,10 +3536,6 @@ SOURCE=..\include\wx\msw\setup0.h
 # Begin Source File
 
 SOURCE=..\include\wx\msw\slider95.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\msw\slidrmsw.h
 # End Source File
 # Begin Source File
 

@@ -1799,7 +1799,6 @@ COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/msw/scrolbar.h \
 	wx/msw/setup0.h \
 	wx/msw/slider95.h \
-	wx/msw/slidrmsw.h \
 	wx/msw/spinbutt.h \
 	wx/msw/spinctrl.h \
 	wx/msw/statbmp.h \
@@ -2004,7 +2003,6 @@ COND_TOOLKIT_WINCE_GUI_HDR =  \
 	wx/msw/scrolbar.h \
 	wx/msw/setup0.h \
 	wx/msw/slider95.h \
-	wx/msw/slidrmsw.h \
 	wx/msw/spinbutt.h \
 	wx/msw/spinctrl.h \
 	wx/msw/statbmp.h \

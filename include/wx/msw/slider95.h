@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/msw/slider95.h
-// Purpose:     wxSlider95 class
+// Purpose:     wxSlider class, using the Win95 (and later) trackbar control
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
@@ -19,21 +19,21 @@
 class WXDLLEXPORT wxSubwindows;
 
 // Slider
-class WXDLLEXPORT wxSlider95 : public wxSliderBase
+class WXDLLEXPORT wxSlider : public wxSliderBase
 {
 public:
-    wxSlider95() { Init(); }
+    wxSlider() { Init(); }
 
-    wxSlider95(wxWindow *parent,
-               wxWindowID id,
-               int value,
-               int minValue,
-               int maxValue,
-               const wxPoint& pos = wxDefaultPosition,
-               const wxSize& size = wxDefaultSize,
-               long style = wxSL_HORIZONTAL,
-               const wxValidator& validator = wxDefaultValidator,
-               const wxString& name = wxSliderNameStr)
+    wxSlider(wxWindow *parent,
+             wxWindowID id,
+             int value,
+             int minValue,
+             int maxValue,
+             const wxPoint& pos = wxDefaultPosition,
+             const wxSize& size = wxDefaultSize,
+             long style = wxSL_HORIZONTAL,
+             const wxValidator& validator = wxDefaultValidator,
+             const wxString& name = wxSliderNameStr)
     {
         Init();
 
@@ -51,7 +51,7 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxSliderNameStr);
 
-    virtual ~wxSlider95();
+    virtual ~wxSlider();
 
     // slider methods
     virtual int GetValue() const;
@@ -127,7 +127,7 @@ protected:
     int           m_tickFreq;
 
 
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxSlider95)
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxSlider)
 };
 
 #endif // _WX_SLIDER95_H_

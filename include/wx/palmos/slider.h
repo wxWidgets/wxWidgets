@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/palmos/slider95.h
+// Name:        wx/palmos/slider.h
 // Purpose:     wxSlider class
 // Author:      William Osborne - minimal working wxPalmOS port
 // Modified by: Wlodzimierz ABX Skiba - native implementation
@@ -9,11 +9,11 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _SLIDER95_H_
-#define _SLIDER95_H_
+#ifndef _SLIDERPALM_H_
+#define _SLIDERPALM_H_
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "slider95.h"
+#pragma interface "slider.h"
 #endif
 
 // Slider
@@ -94,4 +94,4 @@ private:
 };
 
 #endif
-    // _SLIDER95_H_
+    // _SLIDERPALM_H_

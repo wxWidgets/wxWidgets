@@ -1368,7 +1368,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/scrolbar.h
     wx/msw/setup0.h
     wx/msw/slider95.h
-    wx/msw/slidrmsw.h
     wx/msw/spinbutt.h
     wx/msw/spinctrl.h
     wx/msw/statbmp.h

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        msw/slider95.cpp
-// Purpose:     wxSlider95, using the Win95 trackbar control
+// Name:        msw/slider.cpp
+// Purpose:     wxSlider, using the Win95 (and later) trackbar control
 // Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
@@ -46,7 +46,7 @@
 // constants
 // ----------------------------------------------------------------------------
 
-// indices of labels in wxSlider95::m_labels
+// indices of labels in wxSlider::m_labels
 enum
 {
     SliderLabel_Min,
@@ -107,9 +107,9 @@ wxBEGIN_FLAGS( wxSliderStyle )
 
 wxEND_FLAGS( wxSliderStyle )
 
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxSlider95, wxControl,"wx/scrolbar.h")
+IMPLEMENT_DYNAMIC_CLASS_XTI(wxSlider, wxControl,"wx/scrolbar.h")
 
-wxBEGIN_PROPERTIES_TABLE(wxSlider95)
+wxBEGIN_PROPERTIES_TABLE(wxSlider)
     wxEVENT_RANGE_PROPERTY( Scroll , wxEVT_SCROLL_TOP , wxEVT_SCROLL_ENDSCROLL , wxScrollEvent )
     wxEVENT_PROPERTY( Updated , wxEVT_COMMAND_SLIDER_UPDATED , wxCommandEvent )
 
@@ -122,23 +122,23 @@ wxBEGIN_PROPERTIES_TABLE(wxSlider95)
     wxPROPERTY_FLAGS( WindowStyle , wxSliderStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
 wxEND_PROPERTIES_TABLE()
 
-wxBEGIN_HANDLERS_TABLE(wxSlider95)
+wxBEGIN_HANDLERS_TABLE(wxSlider)
 wxEND_HANDLERS_TABLE()
 
-wxCONSTRUCTOR_8( wxSlider95 , wxWindow* , Parent , wxWindowID , Id , int , Value , int , Minimum , int , Maximum , wxPoint , Position , wxSize , Size , long , WindowStyle )
+wxCONSTRUCTOR_8( wxSlider , wxWindow* , Parent , wxWindowID , Id , int , Value , int , Minimum , int , Maximum , wxPoint , Position , wxSize , Size , long , WindowStyle )
 #else
-IMPLEMENT_DYNAMIC_CLASS(wxSlider95, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxSlider, wxControl)
 #endif
 
 // ============================================================================
-// wxSlider95 implementation
+// wxSlider implementation
 // ============================================================================
 
 // ----------------------------------------------------------------------------
 // construction
 // ----------------------------------------------------------------------------
 
-void wxSlider95::Init()
+void wxSlider::Init()
 {
     m_labels = NULL;
 
@@ -150,16 +150,16 @@ void wxSlider95::Init()
 }
 
 bool
-wxSlider95::Create(wxWindow *parent,
-                   wxWindowID id,
-                   int value,
-                   int minValue,
-                   int maxValue,
-                   const wxPoint& pos,
-                   const wxSize& size,
-                   long style,
-                   const wxValidator& validator,
-                   const wxString& name)
+wxSlider::Create(wxWindow *parent,
+                 wxWindowID id,
+                 int value,
+                 int minValue,
+                 int maxValue,
+                 const wxPoint& pos,
+                 const wxSize& size,
+                 long style,
+                 const wxValidator& validator,
+                 const wxString& name)
 {
     // initialize everything
     if ( !CreateControl(parent, id, pos, size, style, validator, name) )
@@ -219,7 +219,7 @@ wxSlider95::Create(wxWindow *parent,
     return true;
 }
 
-WXDWORD wxSlider95::MSWGetStyle(long style, WXDWORD *exstyle) const
+WXDWORD wxSlider::MSWGetStyle(long style, WXDWORD *exstyle) const
 {
     WXDWORD msStyle = wxControl::MSWGetStyle(style, exstyle);
 
@@ -249,7 +249,7 @@ WXDWORD wxSlider95::MSWGetStyle(long style, WXDWORD *exstyle) const
     return msStyle;
 }
 
-wxSlider95::~wxSlider95()
+wxSlider::~wxSlider()
 {
     delete m_labels;
 }
@@ -258,10 +258,10 @@ wxSlider95::~wxSlider95()
 // event handling
 // ----------------------------------------------------------------------------
 
-bool wxSlider95::MSWOnScroll(int WXUNUSED(orientation),
-                             WXWORD wParam,
-                             WXWORD WXUNUSED(pos),
-                             WXHWND control)
+bool wxSlider::MSWOnScroll(int WXUNUSED(orientation),
+                           WXWORD wParam,
+                           WXWORD WXUNUSED(pos),
+                           WXHWND control)
 {
     wxEventType scrollEvent;
     switch ( wParam )
@@ -328,7 +328,7 @@ bool wxSlider95::MSWOnScroll(int WXUNUSED(orientation),
     return GetEventHandler()->ProcessEvent( cevent );
 }
 
-void wxSlider95::Command (wxCommandEvent & event)
+void wxSlider::Command (wxCommandEvent & event)
 {
     SetValue (event.GetInt());
     ProcessCommand (event);
@@ -338,7 +338,7 @@ void wxSlider95::Command (wxCommandEvent & event)
 // geometry stuff
 // ----------------------------------------------------------------------------
 
-wxRect wxSlider95::GetBoundingBox() const
+wxRect wxSlider::GetBoundingBox() const
 {
     // take care not to call our own functions which would call us recursively
     int x, y, w, h;
@@ -356,7 +356,7 @@ wxRect wxSlider95::GetBoundingBox() const
     return rect;
 }
 
-void wxSlider95::DoGetSize(int *width, int *height) const
+void wxSlider::DoGetSize(int *width, int *height) const
 {
     wxRect rect = GetBoundingBox();
 
@@ -366,7 +366,7 @@ void wxSlider95::DoGetSize(int *width, int *height) const
         *height = rect.height;
 }
 
-void wxSlider95::DoGetPosition(int *x, int *y) const
+void wxSlider::DoGetPosition(int *x, int *y) const
 {
     wxRect rect = GetBoundingBox();
 
@@ -376,7 +376,7 @@ void wxSlider95::DoGetPosition(int *x, int *y) const
         *y = rect.y;
 }
 
-int wxSlider95::GetLabelsSize(int *width) const
+int wxSlider::GetLabelsSize(int *width) const
 {
     int cy;
 
@@ -397,7 +397,7 @@ int wxSlider95::GetLabelsSize(int *width) const
     return EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy);
 }
 
-void wxSlider95::DoMoveWindow(int x, int y, int width, int height)
+void wxSlider::DoMoveWindow(int x, int y, int width, int height)
 {
     // all complications below are because we need to position the labels,
     // without them everything is easy
@@ -464,7 +464,7 @@ void wxSlider95::DoMoveWindow(int x, int y, int width, int height)
     }
 }
 
-wxSize wxSlider95::DoGetBestSize() const
+wxSize wxSlider::DoGetBestSize() const
 {
     // these values are arbitrary
     static const int length = 100;
@@ -507,12 +507,12 @@ wxSize wxSlider95::DoGetBestSize() const
 // slider-specific methods
 // ----------------------------------------------------------------------------
 
-int wxSlider95::GetValue() const
+int wxSlider::GetValue() const
 {
     return ValueInvertOrNot(::SendMessage(GetHwnd(), TBM_GETPOS, 0, 0));
 }
 
-void wxSlider95::SetValue(int value)
+void wxSlider::SetValue(int value)
 {
     ::SendMessage(GetHwnd(), TBM_SETPOS, (WPARAM)TRUE, (LPARAM)ValueInvertOrNot(value));
 
@@ -522,7 +522,7 @@ void wxSlider95::SetValue(int value)
     }
 }
 
-void wxSlider95::SetRange(int minValue, int maxValue)
+void wxSlider::SetRange(int minValue, int maxValue)
 {
     m_rangeMin = minValue;
     m_rangeMax = maxValue;
@@ -536,72 +536,72 @@ void wxSlider95::SetRange(int minValue, int maxValue)
     }
 }
 
-void wxSlider95::SetTickFreq(int n, int pos)
+void wxSlider::SetTickFreq(int n, int pos)
 {
     m_tickFreq = n;
     ::SendMessage( GetHwnd(), TBM_SETTICFREQ, (WPARAM) n, (LPARAM) pos );
 }
 
-void wxSlider95::SetPageSize(int pageSize)
+void wxSlider::SetPageSize(int pageSize)
 {
     ::SendMessage( GetHwnd(), TBM_SETPAGESIZE, (WPARAM) 0, (LPARAM) pageSize );
     m_pageSize = pageSize;
 }
 
-int wxSlider95::GetPageSize() const
+int wxSlider::GetPageSize() const
 {
     return m_pageSize;
 }
 
-void wxSlider95::ClearSel()
+void wxSlider::ClearSel()
 {
     ::SendMessage(GetHwnd(), TBM_CLEARSEL, (WPARAM) TRUE, (LPARAM) 0);
 }
 
-void wxSlider95::ClearTicks()
+void wxSlider::ClearTicks()
 {
     ::SendMessage(GetHwnd(), TBM_CLEARTICS, (WPARAM) TRUE, (LPARAM) 0);
 }
 
-void wxSlider95::SetLineSize(int lineSize)
+void wxSlider::SetLineSize(int lineSize)
 {
     m_lineSize = lineSize;
     ::SendMessage(GetHwnd(), TBM_SETLINESIZE, (WPARAM) 0, (LPARAM) lineSize);
 }
 
-int wxSlider95::GetLineSize() const
+int wxSlider::GetLineSize() const
 {
     return (int)::SendMessage(GetHwnd(), TBM_GETLINESIZE, 0, 0);
 }
 
-int wxSlider95::GetSelEnd() const
+int wxSlider::GetSelEnd() const
 {
     return (int)::SendMessage(GetHwnd(), TBM_SETSELEND, 0, 0);
 }
 
-int wxSlider95::GetSelStart() const
+int wxSlider::GetSelStart() const
 {
     return (int)::SendMessage(GetHwnd(), TBM_GETSELSTART, 0, 0);
 }
 
-void wxSlider95::SetSelection(int minPos, int maxPos)
+void wxSlider::SetSelection(int minPos, int maxPos)
 {
     ::SendMessage(GetHwnd(), TBM_SETSEL,
                   (WPARAM) TRUE /* redraw */,
                   (LPARAM) MAKELONG( minPos, maxPos) );
 }
 
-void wxSlider95::SetThumbLength(int len)
+void wxSlider::SetThumbLength(int len)
 {
     ::SendMessage(GetHwnd(), TBM_SETTHUMBLENGTH, (WPARAM) len, (LPARAM) 0);
 }
 
-int wxSlider95::GetThumbLength() const
+int wxSlider::GetThumbLength() const
 {
     return (int)::SendMessage( GetHwnd(), TBM_GETTHUMBLENGTH, 0, 0);
 }
 
-void wxSlider95::SetTick(int tickPos)
+void wxSlider::SetTick(int tickPos)
 {
     ::SendMessage( GetHwnd(), TBM_SETTIC, (WPARAM) 0, (LPARAM) tickPos );
 }
@@ -610,21 +610,21 @@ void wxSlider95::SetTick(int tickPos)
 // composite control methods
 // ----------------------------------------------------------------------------
 
-WXHWND wxSlider95::GetStaticMin() const
+WXHWND wxSlider::GetStaticMin() const
 {
     return m_labels ? (WXHWND)(*m_labels)[SliderLabel_Min] : NULL;
 }
 
-WXHWND wxSlider95::GetStaticMax() const
+WXHWND wxSlider::GetStaticMax() const
 {
     return m_labels ? (WXHWND)(*m_labels)[SliderLabel_Max] : NULL;
 }
 
-WXHWND wxSlider95::GetEditValue() const
+WXHWND wxSlider::GetEditValue() const
 {
     return m_labels ? (WXHWND)(*m_labels)[SliderLabel_Value] : NULL;
 }
 
-WX_FORWARD_STD_METHODS_TO_SUBWINDOWS(wxSlider95, wxSliderBase, m_labels)
+WX_FORWARD_STD_METHODS_TO_SUBWINDOWS(wxSlider, wxSliderBase, m_labels)
 
 #endif // wxUSE_SLIDER
