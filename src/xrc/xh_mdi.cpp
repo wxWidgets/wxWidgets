@@ -107,7 +107,7 @@ wxObject *wxMdiXmlHandler::DoCreateResource()
         frame->Move(GetPosition());
     if (HasParam(wxT("icon")))
     {
-        wxFrame* f = wxDynamicCast(f, wxFrame);
+        wxFrame* f = wxDynamicCast(frame, wxFrame);
         if (f)
             f->SetIcon(GetIcon(wxT("icon"), wxART_FRAME_ICON));
     }
