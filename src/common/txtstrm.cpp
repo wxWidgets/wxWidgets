@@ -252,6 +252,17 @@ wxTextInputStream& wxTextInputStream::operator>>(char& c)
     return *this;
 }
 
+#if wxUSE_UNICODE && wxWCHAR_T_IS_REAL_TYPE
+
+wxTextInputStream& wxTextInputStream::operator>>(wchar_t& wc)
+{
+    wc = GetChar();
+
+    return *this;
+}
+
+#endif // wxUSE_UNICODE
+
 wxTextInputStream& wxTextInputStream::operator>>(wxInt16& i)
 {
     i = (wxInt16)Read16();
