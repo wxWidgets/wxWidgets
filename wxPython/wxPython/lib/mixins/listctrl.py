@@ -267,3 +267,82 @@ class wxListCtrlAutoWidthMixin:
 
 
 #----------------------------------------------------------------------------
+
+SEL_FOC = wxLIST_STATE_SELECTED | wxLIST_STATE_FOCUSED
+def selectBeforePopup(event):
+    """Ensures the item the mouse is pointing at is selected before a popup.
+
+    Works with both single-select and multi-select lists."""
+    ctrl = event.GetEventObject()
+    if isinstance(ctrl, wxListCtrl):
+        n, flags = ctrl.HitTest(event.GetPosition())
+        if n >= 0:
+            if not ctrl.GetItemState(n, wxLIST_STATE_SELECTED):
+                for i in range(ctrl.GetItemCount()):
+                    ctrl.SetItemState(i, 0, SEL_FOC)
+                #for i in getListCtrlSelection(ctrl, SEL_FOC):
+                #    ctrl.SetItemState(i, 0, SEL_FOC)
+                ctrl.SetItemState(n, SEL_FOC, SEL_FOC)
+
+def getListCtrlSelection(listctrl, state=wxLIST_STATE_SELECTED):
+    """ Returns list of item indexes of given state (selected by defaults) """
+    res = []
+    idx = -1
+    while 1:
+        idx = listctrl.GetNextItem(idx, wxLIST_NEXT_ALL, state)
+        if idx == -1:
+            break
+        res.append(idx)
+    return res
+
+class ListCtrlSelectionManagerMix:
+    """Mixin that defines a platform independent selection policy
+
+    As selection single and multi-select list return the item index or a
+    list of item indexes respectively.
+    """
+    wxEVT_DOPOPUPMENU = wxNewId()
+    _menu = None
+
+    def __init__(self):
+        EVT_RIGHT_DOWN(self, self.OnLCSMRightDown)
+        self.Connect(-1, -1, self.wxEVT_DOPOPUPMENU, self.OnLCSMDoPopup)
+
+    def getPopupMenu(self):
+        """ Override to implement dynamic menus (create) """
+        return self._menu
+
+    def setPopupMenu(self, menu):
+        """ Must be set for default behaviour """
+        self._menu = menu
+
+    def afterPopupMenu(self, menu):
+        """ Override to implement dynamic menus (destroy) """
+        pass
+
+    def getSelection(self):
+        res = getListCtrlSelection(self)
+        if self.GetWindowStyleFlag() & wxLC_SINGLE_SEL:
+            if res:
+                return res[0]
+            else:
+                return -1
+        else:
+            return res
+
+    def OnLCSMRightDown(self, event):
+        selectBeforePopup(event)
+        event.Skip()
+        menu = self.getPopupMenu()
+        if menu:
+            evt = wxPyEvent()
+            evt.SetEventType(self.wxEVT_DOPOPUPMENU)
+            evt.menu = menu
+            evt.pos = event.GetPosition()
+            wxPostEvent(self, evt)
+
+    def OnLCSMDoPopup(self, event):
+        self.PopupMenu(event.menu, event.pos)
+        self.afterPopupMenu(event.menu)
+
+#----------------------------------------------------------------------
