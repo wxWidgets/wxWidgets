@@ -125,6 +125,9 @@ wxWindowBase::wxWindowBase()
     m_minHeight =
     m_maxHeight = wxDefaultSize.y;
 
+    // invalidiated cache value
+    m_bestSizeCache = wxDefaultSize;
+
     // window are created enabled and visible by default
     m_isShown =
     m_isEnabled = true;
@@ -482,7 +485,7 @@ void wxWindowBase::Fit()
 {
     if ( GetChildren().GetCount() > 0 )
     {
-        SetClientSize(DoGetBestSize());
+        SetClientSize(GetBestSize());
     }
     //else: do nothing if we have no children
 }
@@ -620,31 +623,35 @@ wxSize wxWindowBase::DoGetBestSize() const
     }
 }
 
+
+wxSize wxWindowBase::GetBestFittingSize() const
+{
+    // merge the best size with the min size, giving priority to the min size
+    wxSize min = GetMinSize();
+    if (min.x == wxDefaultCoord || min.y == wxDefaultCoord)
+    {
+        wxSize best = GetBestSize();
+        if (min.x == wxDefaultCoord) min.x =  best.x;
+        if (min.y == wxDefaultCoord) min.y =  best.y;
+    }
+    return min;
+}
+
+
 void wxWindowBase::SetBestFittingSize(const wxSize& size)
 {
-    // If the given size is incomplete then merge with the best size.
-    wxSize sizeBest;
-    if ( size.x == wxDefaultSize.x || size.y == wxDefaultSize.y )
-    {
-        sizeBest = DoGetBestSize();
-        if ( size.x != wxDefaultSize.x )
-            sizeBest.x = size.x;
-        if ( size.y != wxDefaultSize.y )
-            sizeBest.y = size.y;
-    }
-    else // have complete explicit size
-    {
-        sizeBest = size;
-    }
+    // Set the min size to the size passed in.  This will usually either be
+    // wxDefaultSize or the size passed to this window's ctor/Create function.
+    SetMinSize(size);
 
-    // Change the size if needed
-    if (GetSize() != sizeBest)
-        SetSize(sizeBest);
-
-    // don't shrink the control below its best size
-    m_minWidth = sizeBest.x;
-    m_minHeight = sizeBest.y;
+    // Merge the size with the best size if needed
+    wxSize best = GetBestFittingSize();
+    
+    // If the current size doesn't match then change it
+    if (GetSize() != best)
+        SetSize(best);
 }
+
 
 // by default the origin is not shifted
 wxPoint wxWindowBase::GetClientAreaOrigin() const

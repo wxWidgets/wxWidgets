@@ -227,7 +227,9 @@ bool wxSpinButton::IsOwnGtkWindow( GdkWindow *window )
 
 wxSize wxSpinButton::DoGetBestSize() const
 {
-    return wxSize(15, 26); // FIXME
+    wxSize best(15, 26); // FIXME
+    CacheBestSize(best);
+    return best;
 }
 
 // static

@@ -230,9 +230,6 @@ public:
     void Move(const wxPoint& pt, int flags = wxSIZE_USE_EXISTING)
         { Move(pt.x, pt.y, flags); }
 
-    // A 'Smart' SetSize that will fill in default size values with 'best' size
-    void SetBestFittingSize(const wxSize& size=wxDefaultSize);
-
         // Z-order
     virtual void Raise() = 0;
     virtual void Lower() = 0;
@@ -297,17 +294,29 @@ public:
     }
 
         // get the size best suited for the window (in fact, minimal
-        // acceptable size using which it will still look "nice")
-    wxSize GetBestSize() const { return DoGetBestSize(); }
+        // acceptable size using which it will still look "nice" in
+        // most situations)
+    wxSize GetBestSize() const
+    {
+        if (m_bestSizeCache.IsFullySpecified())
+            return m_bestSizeCache;
+        return DoGetBestSize();
+    }
     void GetBestSize(int *w, int *h) const
     {
-        wxSize s = DoGetBestSize();
+        wxSize s = GetBestSize();
         if ( w )
             *w = s.x;
         if ( h )
             *h = s.y;
     }
 
+        // reset the cached best size value so it will be recalculated the
+        // next time it is needed.
+    void InvalidateBestSize() { m_bestSizeCache = wxDefaultSize; }
+    void CacheBestSize(const wxSize& size) const
+        { wxConstCast(this, wxWindowBase)->m_bestSizeCache = size; }
+    
         // There are times (and windows) where 'Best' size and 'Min' size
         // are vastly out of sync.  This should be remedied somehow, but in
         // the meantime, this method will return the larger of BestSize
@@ -315,9 +324,18 @@ public:
         // MinSize hint.
     wxSize GetAdjustedBestSize() const
     {
-        wxSize  s( DoGetBestSize() );
+        wxSize  s( GetBestSize() );
         return wxSize( wxMax( s.x, GetMinWidth() ), wxMax( s.y, GetMinHeight() ) );
     }
+
+        // This function will merge the window's best size into the window's
+        // minimum size, giving priority to the min size components, and
+        // returns the results.
+    wxSize GetBestFittingSize() const;
+    
+        // A 'Smart' SetSize that will fill in default size values with 'best'
+        // size.  Sets the minsize to what was passed in.
+    void SetBestFittingSize(const wxSize& size=wxDefaultSize);
 
         // the generic centre function - centers the window on parent by`
         // default or on screen if it doesn't have parent or
@@ -1137,11 +1155,15 @@ protected:
     static int WidthDefault(int w) { return w == -1 ? 20 : w; }
     static int HeightDefault(int h) { return h == -1 ? 20 : h; }
 
+
+    // Used to save the results of DoGetBestSize so it doesn't need to be
+    // recalculated each time the value is needed.
+    wxSize m_bestSizeCache;
+
     // keep the old name for compatibility, at least until all the internal
     // usages of it are changed to SetBestFittingSize
     void SetBestSize(const wxSize& size) { SetBestFittingSize(size); }
         
-
     // set the initial window size if none is given (i.e. at least one of the
     // components of the size passed to ctor/Create() is -1)
     //
@@ -1151,6 +1173,7 @@ protected:
     // can be accurately calculated
     virtual void SetInitialBestSize(const wxSize& WXUNUSED(size)) {}
 
+    
 
     // more pure virtual functions
     // ---------------------------

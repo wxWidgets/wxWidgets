@@ -215,8 +215,8 @@ void wxStaticText::SetLabel(const wxString& label)
     // disabled
     if ( !(GetWindowStyle() & wxST_NO_AUTORESIZE) )
     {
+        InvalidateBestSize();
         DoSetSize(-1, -1, -1, -1, wxSIZE_AUTO_WIDTH | wxSIZE_AUTO_HEIGHT);
-        SetSizeHints(GetSize());
     }
 }
 
@@ -229,8 +229,8 @@ bool wxStaticText::SetFont(const wxFont& font)
     // disabled
     if ( !(GetWindowStyle() & wxST_NO_AUTORESIZE) )
     {
+        InvalidateBestSize();
         DoSetSize(-1, -1, -1, -1, wxSIZE_AUTO_WIDTH | wxSIZE_AUTO_HEIGHT);
-        SetSizeHints(GetSize());
     }
 
     return ret;

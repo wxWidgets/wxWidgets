@@ -232,6 +232,7 @@ wxSize wxButton::DoGetBestSize() const
         if (ret.x < 80) ret.x = 80;
     }
 
+    CacheBestSize(ret);
     return ret;
 }
 

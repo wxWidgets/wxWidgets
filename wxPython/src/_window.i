@@ -510,6 +510,21 @@ after calling Fit.", "");
     
 
     DocDeclStr(
+        void , InvalidateBestSize(),
+        "Reset the cached best size value so it will be recalculated the next
+time it is needed.", "");
+
+
+    
+    DocDeclStr(
+        wxSize , GetBestFittingSize() const,
+        "This function will merge the window's best size into the window's
+minimum size, giving priority to the min size components, and returns
+the results.
+", "");
+    
+
+    DocDeclStr(
         wxSize , GetAdjustedBestSize() const,
         "This method is similar to GetBestSize, except in one
 thing. GetBestSize should return the minimum untruncated size of the
@@ -1325,7 +1340,7 @@ The cursor may be wx.NullCursor in which case the window cursor will
 be reset back to default.", "");
     
     DocDeclStr(
-        wxCursor& , GetCursor(),
+        wxCursor , GetCursor(),
         "Return the cursor associated with this window.", "");
     
 
@@ -1341,7 +1356,7 @@ be reset back to default.", "");
 
     
     DocDeclStr(
-        wxFont& , GetFont(),
+        wxFont , GetFont(),
         "Returns the default font used for this window.", "");
 
     

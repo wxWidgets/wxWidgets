@@ -113,7 +113,8 @@ void wxStaticBitmap::SetBitmap( const wxBitmap &bitmap )
             gtk_pixmap_set( GTK_PIXMAP(m_widget), m_bitmap.GetPixmap(), mask );
         }
 
-        SetBestSize(wxSize(bitmap.GetWidth(), bitmap.GetHeight()));
+        InvalidateBestSize();
+        SetSize(GetBestSize());
     }
 }
 

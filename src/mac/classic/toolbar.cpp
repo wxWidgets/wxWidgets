@@ -377,6 +377,7 @@ bool wxToolBar::Realize()
     }
     
     SetSize(maxWidth, maxHeight);
+    InvalidateBestSize();
     
     return TRUE;
 }
@@ -494,6 +495,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos),
 {
     // nothing special to do here - we relayout in Realize() later
     tool->Attach(this);
+    InvalidateBestSize();
 
     return TRUE;
 }
@@ -540,6 +542,7 @@ bool wxToolBar::DoDeleteTool(size_t WXUNUSED(pos), wxToolBarToolBase *tool)
         tool2->SetPosition( pt ) ;
     }
     
+    InvalidateBestSize();
     return TRUE ;
 }
 

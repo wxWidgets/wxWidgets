@@ -501,6 +501,7 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
         (m_widget, &req );
     m_width = req.width + m_xMargin;
     m_height = req.height + 2*m_yMargin;
+    InvalidateBestSize();
 
     return TRUE;
 }
@@ -522,6 +523,7 @@ bool wxToolBar::DoDeleteTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
         //case wxTOOL_STYLE_SEPARATOR: -- nothing to do
     }
 
+    InvalidateBestSize();
     return TRUE;
 }
 

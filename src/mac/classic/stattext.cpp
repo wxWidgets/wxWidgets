@@ -236,6 +236,7 @@ void wxStaticText::SetLabel(const wxString& st )
     {
         // temporary fix until layout measurement and drawing are in synch again
         Refresh() ;
+        InvalidateBestSize();
         SetSize( GetBestSize() ) ;
     }
     Refresh() ;
@@ -253,7 +254,8 @@ bool wxStaticText::SetFont(const wxFont& font)
 	    if ( !(GetWindowStyle() & wxST_NO_AUTORESIZE) )
 	    {
 	        // temporary fix until layout measurement and drawing are in synch again
-            Refresh() ;
+                Refresh() ;
+                InvalidateBestSize();
 	        SetSize( GetBestSize() );
 	    }
 	}

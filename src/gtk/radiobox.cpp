@@ -286,6 +286,7 @@ wxSize wxRadioBox::DoGetBestSize() const
     if (req.width > size.x)
         size.x = req.width;
 
+    CacheBestSize(size);
     return size;
 }
 

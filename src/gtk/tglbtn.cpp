@@ -123,6 +123,7 @@ void wxToggleBitmapButton::SetLabel(const wxBitmap& label)
     wxCHECK_RET(m_widget != NULL, wxT("invalid toggle button"));
 
     m_bitmap = label;
+    InvalidateBestSize();
     
     OnSetBitmap();
 }
@@ -192,7 +193,7 @@ void wxToggleBitmapButton::OnInternalIdle()
         UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
 }
 
-// wxSize DoGetBestSize() const
+
 // Get the "best" size for this control.
 wxSize wxToggleBitmapButton::DoGetBestSize() const
 {
@@ -204,6 +205,7 @@ wxSize wxToggleBitmapButton::DoGetBestSize() const
         best.x = m_bitmap.GetWidth()+border;
         best.y = m_bitmap.GetHeight()+border;
     }
+    CacheBestSize(best);
     return best;
 }
 
@@ -332,7 +334,7 @@ void wxToggleButton::OnInternalIdle()
         UpdateWindowUI(wxUPDATE_UI_FROMIDLE);
 }
 
-// wxSize DoGetBestSize() const
+
 // Get the "best" size for this control.
 wxSize wxToggleButton::DoGetBestSize() const
 {
@@ -343,8 +345,8 @@ wxSize wxToggleButton::DoGetBestSize() const
         if (ret.x < 80) ret.x = 80;
     }
     
-
-   return ret;
+    CacheBestSize(ret);
+    return ret;
 }
 
 // static

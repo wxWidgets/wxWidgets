@@ -301,7 +301,9 @@ bool wxSpinCtrl::IsOwnGtkWindow( GdkWindow *window )
 wxSize wxSpinCtrl::DoGetBestSize() const
 {
     wxSize ret( wxControl::DoGetBestSize() );
-    return wxSize(95, ret.y);
+    wxSize best(95, ret.y);
+    CacheBestSize(best);
+    return best;
 }
 
 // static

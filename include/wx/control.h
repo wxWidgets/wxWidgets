@@ -63,6 +63,9 @@ public:
     // if the button was clicked)
     virtual void Command(wxCommandEvent &event);
 
+    virtual void SetLabel( const wxString &label );
+    virtual bool SetFont(const wxFont& font);
+
 protected:
     // creates the control (calls wxWindowBase::CreateBase inside) and adds it
     // to the list of parents children

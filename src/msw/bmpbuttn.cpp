@@ -126,24 +126,10 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id,
         m_marginY = wxDEFAULT_BUTTON_MARGIN;
     }
 
-    int x = pos.x;
-    int y = pos.y;
-    int width = size.x;
-    int height = size.y;
-
     if (id == -1)
         m_windowId = NewControlId();
     else
         m_windowId = id;
-
-    if ( bitmap.Ok() )
-    {
-        wxSize newSize = DoGetBestSize();
-        if ( width == -1 )
-            width = newSize.x;
-        if ( height == -1 )
-            height = newSize.y;
-    }
 
     long msStyle = WS_VISIBLE | WS_TABSTOP | WS_CHILD | BS_OWNERDRAW ;
 
@@ -176,9 +162,8 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id,
     // Subclass again for purposes of dialog editing mode
     SubclassWin(m_hWnd);
 
-    SetFont(parent->GetFont());
-
-    SetSize(x, y, width, height);
+    SetPosition(pos);
+    SetBestSize(size);
 
     return true;
 }

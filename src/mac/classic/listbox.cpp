@@ -401,6 +401,8 @@ void wxListBox::Delete(int N)
 
 int wxListBox::DoAppend(const wxString& item)
 {
+    InvalidateBestSize();
+
     int index = m_noItems ;
     m_stringArray.Add( item ) ;
     m_dataArray.Add( NULL );
@@ -595,6 +597,8 @@ void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
     wxCHECK_RET( pos >= 0 && pos <= m_noItems,
         wxT("invalid index in wxListBox::InsertItems") );
     
+    InvalidateBestSize();
+
     int nItems = items.GetCount();
     
     for ( int i = 0 ; i < nItems ; i++ )

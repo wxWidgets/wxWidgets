@@ -439,6 +439,8 @@ void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
     wxASSERT_MSG( m_clientList.GetCount() == (size_t)GetCount(),
                   wxT("bug in client data management") );
 
+    InvalidateBestSize();
+
     GList *children = m_list->children;
     int length = g_list_length(children);
 
@@ -495,6 +497,8 @@ void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
 
 int wxListBox::DoAppend( const wxString& item )
 {
+    InvalidateBestSize();
+
     if (m_strings)
     {
         // need to determine the index
@@ -1076,7 +1080,9 @@ wxSize wxListBox::DoGetBestSize() const
     // make it too small neither
     lbHeight = (cy+4) * wxMin(wxMax(GetCount(), 3), 10);
 
-    return wxSize(lbWidth, lbHeight);
+    wxSize best(lbWidth, lbHeight);
+    CacheBestSize(best);        
+    return best;
 }
 
 void wxListBox::FixUpMouseEvent(GtkWidget *widget, wxCoord& x, wxCoord& y)

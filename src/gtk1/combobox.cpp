@@ -773,6 +773,8 @@ wxSize wxComboBox::DoGetBestSize() const
     // empty combobox should have some reasonable default size too
     if ( ret.x < 100 )
         ret.x = 100;
+
+    CacheBestSize(ret);
     return ret;
 }
 

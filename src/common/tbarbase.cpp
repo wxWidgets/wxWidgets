@@ -141,6 +141,7 @@ wxToolBarToolBase *wxToolBarBase::DoAddTool(int id,
                                             wxCoord WXUNUSED(xPos),
                                             wxCoord WXUNUSED(yPos))
 {
+    InvalidateBestSize();
     return InsertTool(GetToolsCount(), id, label, bitmap, bmpDisabled,
                       kind, shortHelp, longHelp, clientData);
 }

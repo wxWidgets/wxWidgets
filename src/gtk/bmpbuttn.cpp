@@ -205,6 +205,8 @@ void wxBitmapButton::OnSetBitmap()
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid bitmap button") );
 
+    InvalidateBestSize();
+    
     wxBitmap the_one;
     if (!m_isEnabled)
         the_one = m_bmpDisabled;
@@ -258,6 +260,7 @@ wxSize wxBitmapButton::DoGetBestSize() const
         best.x = m_bmpNormal.GetWidth()+border;
         best.y = m_bmpNormal.GetHeight()+border;
     }
+    CacheBestSize(best);
     return best;
 }
 

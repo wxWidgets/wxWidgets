@@ -91,6 +91,7 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
 void wxBitmapButton::SetBitmapLabel(const wxBitmap& bitmap)
 {
     m_bmpNormal = bitmap;
+    InvalidateBestSize();
 
     ControlButtonContentInfo info ;
     wxMacCreateBitmapButton( &info , m_bmpNormal ) ;

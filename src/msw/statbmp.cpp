@@ -217,6 +217,7 @@ void wxStaticBitmap::SetImage( const wxGDIImage* image )
 {
     wxGDIImage* convertedImage = ConvertImage( *image );
     SetImageNoCopy( convertedImage );
+    InvalidateBestSize();
 }
 
 void wxStaticBitmap::SetImageNoCopy( wxGDIImage* image)

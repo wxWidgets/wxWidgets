@@ -388,6 +388,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *tool)
     // Realize() later
     tool->Attach(this);
 
+    InvalidateBestSize();
     return TRUE;
 }
 
@@ -465,6 +466,7 @@ bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *tool)
         }
     }
 
+    InvalidateBestSize();
     return TRUE;
 }
 
@@ -922,6 +924,7 @@ bool wxToolBar::Realize()
         }
     }
 
+    InvalidateBestSize();
     return TRUE;
 }
 

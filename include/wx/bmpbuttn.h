@@ -67,7 +67,7 @@ public:
 
 protected:
     // function called when any of the bitmaps changes
-    virtual void OnSetBitmap() { }
+    virtual void OnSetBitmap() { InvalidateBestSize(); }
 
     // the bitmaps for various states
     wxBitmap m_bmpNormal,

@@ -116,6 +116,19 @@ void wxControlBase::InitCommandEvent(wxCommandEvent& event) const
     }
 }
 
+
+void wxControlBase::SetLabel( const wxString &label )
+{
+    InvalidateBestSize();
+    wxWindow::SetLabel(label);   
+}
+
+bool wxControlBase::SetFont(const wxFont& font)
+{
+    InvalidateBestSize();
+    return wxWindow::SetFont(font);
+}
+
 // ----------------------------------------------------------------------------
 // wxStaticBitmap
 // ----------------------------------------------------------------------------
@@ -129,12 +142,15 @@ wxStaticBitmapBase::~wxStaticBitmapBase()
 
 wxSize wxStaticBitmapBase::DoGetBestSize() const
 {
+    wxSize best;
     wxBitmap bmp = GetBitmap();
     if ( bmp.Ok() )
-        return wxSize(bmp.GetWidth(), bmp.GetHeight());
-
-    // this is completely arbitrary
-    return wxSize(16, 16);
+        best = wxSize(bmp.GetWidth(), bmp.GetHeight());
+    else
+        // this is completely arbitrary
+        best = wxSize(16, 16);
+    CacheBestSize(best);
+    return best;
 }
 
 #endif // wxUSE_STATBMP

@@ -66,6 +66,7 @@ void wxControl::SetLabel( const wxString &label )
         }
         m_label << *pc;
     }
+    InvalidateBestSize();    
 }
 
 wxString wxControl::GetLabel() const
@@ -85,7 +86,9 @@ wxSize wxControl::DoGetBestSize() const
     (* GTK_WIDGET_CLASS( GTK_OBJECT_GET_CLASS(m_widget) )->size_request )
         (m_widget, &req );
 
-    return wxSize(req.width, req.height);
+    wxSize best(req.width, req.height);
+    CacheBestSize(best);
+    return best;
 }
 
 

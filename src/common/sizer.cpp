@@ -192,18 +192,9 @@ wxSize wxSizerItem::CalcMin()
         if ( IsWindow() && !(m_flag & wxFIXED_MINSIZE) )
         {
             // Since the size of the window may change during runtime, we
-            // should use the current minimal size.  If there is a MinSize,
-            // use it, otherwise use the BestSize.
-            wxSize min  = m_window->GetMinSize();
-            if (min.x == -1 || min.y == -1)
-            {
-                wxSize best = m_window->GetBestSize();
-                if (min.x == -1) min.x =  best.x;
-                if (min.y == -1) min.y =  best.y;
-            }
-            m_minSize = min;
+            // should use the current minimal/best size.
+            m_minSize = m_window->GetBestFittingSize();
         }
-
         ret = m_minSize;
     }
 

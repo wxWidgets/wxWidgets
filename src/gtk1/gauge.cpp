@@ -72,10 +72,13 @@ void wxGauge::DoSetGauge()
 
 wxSize wxGauge::DoGetBestSize() const
 {
+    wxSize best;
     if (HasFlag(wxGA_VERTICAL))
-        return wxSize(28, 100);
+        best = wxSize(28, 100);
     else
-        return wxSize(100, 28);
+        best = wxSize(100, 28);
+    CacheBestSize(best);
+    return best;
 }
 
 void wxGauge::SetRange( int range )
