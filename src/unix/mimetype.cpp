@@ -2173,7 +2173,7 @@ bool wxMimeTypesManagerImpl::ReadMimeTypes(const wxString& strFileName)
             else if ( strLHS == wxT("exts") ) {
                 strExtensions = strRHS;
             }
-            else if ( strLHS != _T("icon") )
+            else if ( strLHS == _T("icon") )
             {
                 // this one is simply ignored: it usually refers to Netscape
                 // built in icons which are useless for us anyhow
