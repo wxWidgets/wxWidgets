@@ -2273,6 +2273,13 @@ void wxTreeCtrl::OnMouse( wxMouseEvent &event )
         // erase the highlighting
         DrawDropEffect(m_dropTarget);
 
+        if ( m_oldSelection )
+        {
+            m_oldSelection->SetHilight(TRUE);
+            RefreshLine(m_oldSelection);
+            m_oldSelection = (wxGenericTreeItem *)NULL;
+        }
+
         // generate the drag end event
         wxTreeEvent event(wxEVT_COMMAND_TREE_END_DRAG, GetId());
 
@@ -2284,13 +2291,6 @@ void wxTreeCtrl::OnMouse( wxMouseEvent &event )
 
         m_isDragging = FALSE;
         m_dropTarget = (wxGenericTreeItem *)NULL;
-
-        if ( m_oldSelection )
-        {
-            m_oldSelection->SetHilight(TRUE);
-            RefreshLine(m_oldSelection);
-            m_oldSelection = (wxGenericTreeItem *)NULL;
-        }
 
         ReleaseMouse();
 
