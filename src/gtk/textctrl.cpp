@@ -1416,14 +1416,6 @@ bool wxTextCtrl::SetBackgroundColour( const wxColour &colour )
     if (!m_widget->window)
         return FALSE;
 
-    wxColour sysbg = wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE );
-    if (sysbg.Red() == colour.Red() &&
-        sysbg.Green() == colour.Green() &&
-        sysbg.Blue() == colour.Blue())
-    {
-        return FALSE; // FIXME or TRUE?
-    }
-
     if (!m_backgroundColour.Ok())
         return FALSE;
 
