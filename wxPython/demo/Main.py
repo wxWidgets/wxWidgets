@@ -209,6 +209,7 @@ _treeList = [
 
 
 #---------------------------------------------------------------------------
+# Show how to derive a custom wxLog class
 
 class MyLog(wx.PyLog):
     def __init__(self, textCtrl, logTime=0):
@@ -232,6 +233,7 @@ class MyTP(wx.PyTipProvider):
 # A class to be used to display source code in the demo.  Try using the
 # wxSTC in the wxStyledTextCtrl_2 sample first, fall back to wxTextCtrl
 # if there is an error, such as the stc module not being present.
+#
 
 try:
     ##raise ImportError
