@@ -506,7 +506,7 @@ wxFont wxTabbedWindow::GetLabelingFont()
 
 	return font;
 #endif
-	return wxSystemSettings::GetSystemFont(wxSYS_SYSTEM_FONT);
+	return wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
 }
 
 void wxTabbedWindow::RecalcLayout(bool andRepaint)
@@ -730,7 +730,7 @@ wxFont wxPaggedWindow::GetLabelingFont()
 
 	return font;
 #endif
-	return wxSystemSettings::GetSystemFont(wxSYS_SYSTEM_FONT);
+	return wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
 }
 
 void wxPaggedWindow::OnTabAdded( twTabInfo* pInfo )

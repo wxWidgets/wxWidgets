@@ -15,6 +15,7 @@ open_icon BITMAP "../bitmaps/open.bmp"
 save_icon BITMAP "../bitmaps/save.bmp"
 saveall_icon BITMAP "../bitmaps/saveall.bmp"
 cut_icon BITMAP "../bitmaps/cut.bmp"
+new_icon BITMAP "../bitmaps/new.bmp"
 copy_icon BITMAP "../bitmaps/copy.bmp"
 paste_icon BITMAP "../bitmaps/paste.bmp"
 

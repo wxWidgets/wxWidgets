@@ -402,7 +402,7 @@ void wxNewBitmapButton::RenderLabelImage( wxBitmap*& destBmp, wxBitmap* srcBmp,
 	{
 		long txtWidth, txtHeight;
 
-		srcDc.SetFont( wxSystemSettings::GetSystemFont(wxSYS_SYSTEM_FONT) );
+		srcDc.SetFont( wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT) );
 		srcDc.GetTextExtent( mLabelText, &txtWidth, &txtHeight );
 
 		if ( mTextAlignment == NB_ALIGN_TEXT_RIGHT )
@@ -480,7 +480,7 @@ void wxNewBitmapButton::RenderLabelImage( wxBitmap*& destBmp, wxBitmap* srcBmp,
 			pTopWnd = pParent;
 		} while(1);
 
-		destDc.SetFont( wxSystemSettings::GetSystemFont( wxSYS_SYSTEM_FONT) );
+		destDc.SetFont( wxSystemSettings::GetSystemFont( wxSYS_DEFAULT_GUI_FONT) );
 
 		// Should be wxSYS_COLOUR_BTNTEXT, but gtk gives white?
 		destDc.SetTextForeground( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_BTNTEXT) );

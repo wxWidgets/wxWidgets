@@ -232,10 +232,11 @@ void StartButton95::OnPaint( wxPaintEvent& event )
                                    
             mDBmp.LoadFile( "start95_dp_icon", wxBITMAP_TYPE_BMP_RESOURCE );
 
-#endif
+#else
         if ( !mDBmp.Ok() )
                                    
             mDBmp = wxBitmap(start95_dp_xpm);
+#endif
 
         pBmp = &mDBmp;
     }
@@ -1080,7 +1081,7 @@ void MyFrame::DropInSomeBars( int layoutNo )
 		pToolBar->Create( mpInternalFrm, -1 );
 								 
 		// 1001-1006 ids of command events fired by added tool-buttons
-#ifdef __WXMSW__		
+#ifdef __WXMSW__ 		
 		pToolBar->AddTool( 1001, wxBitmap("new_icon") );
 		pToolBar->AddTool( 1002, wxBitmap("open_icon") );
 		pToolBar->AddTool( 1003, wxBitmap("save_icon") );
