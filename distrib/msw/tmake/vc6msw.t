@@ -359,7 +359,7 @@ SOURCE=..\include\wx\msw\setup.h
 InputPath=..\include\wx\msw\setup.h
 
 "../lib/mswdllu/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(InputPath) ..\lib\mswdllu\wx\setup.h
+	copy "$(InputPath)" ..\lib\mswdllu\wx\setup.h
 
 # End Custom Build
 !ELSEIF  "$(CFG)" == "wxWindows - Win32 Debug Unicode DLL"
@@ -367,7 +367,7 @@ InputPath=..\include\wx\msw\setup.h
 InputPath=..\include\wx\msw\setup.h
 
 "../lib/mswdllud/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(InputPath) ..\lib\mswdllud\wx\setup.h
+	copy "$(InputPath)" ..\lib\mswdllud\wx\setup.h
 
 # End Custom Build
 !ELSEIF  "$(CFG)" == "wxWindows - Win32 Release Unicode"
@@ -375,7 +375,7 @@ InputPath=..\include\wx\msw\setup.h
 InputPath=..\include\wx\msw\setup.h
 
 "../lib/mswu/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(InputPath) ..\lib\mswu\wx\setup.h
+	copy "$(InputPath)" ..\lib\mswu\wx\setup.h
 
 # End Custom Build
 !ELSEIF  "$(CFG)" == "wxWindows - Win32 Debug Unicode"
@@ -383,7 +383,7 @@ InputPath=..\include\wx\msw\setup.h
 InputPath=..\include\wx\msw\setup.h
 
 "../lib/mswud/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(InputPath) ..\lib\mswud\wx\setup.h
+	copy "$(InputPath)" ..\lib\mswud\wx\setup.h
 
 # End Custom Build
 !ELSEIF  "$(CFG)" == "wxWindows - Win32 Release DLL"
@@ -391,7 +391,7 @@ InputPath=..\include\wx\msw\setup.h
 InputPath=..\include\wx\msw\setup.h
 
 "../lib/mswdll/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(InputPath) ..\lib\mswdll\wx\setup.h
+	copy "$(InputPath)" ..\lib\mswdll\wx\setup.h
 
 # End Custom Build
 !ELSEIF  "$(CFG)" == "wxWindows - Win32 Debug DLL"
@@ -399,7 +399,7 @@ InputPath=..\include\wx\msw\setup.h
 InputPath=..\include\wx\msw\setup.h
 
 "../lib/mswdlld/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(InputPath) ..\lib\mswdlld\wx\setup.h
+	copy "$(InputPath)" ..\lib\mswdlld\wx\setup.h
 
 # End Custom Build
 !ELSEIF  "$(CFG)" == "wxWindows - Win32 Release"
@@ -407,7 +407,7 @@ InputPath=..\include\wx\msw\setup.h
 InputPath=..\include\wx\msw\setup.h
 
 "../lib/msw/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(InputPath) ..\lib\msw\wx\setup.h
+	copy "$(InputPath)" ..\lib\msw\wx\setup.h
 
 # End Custom Build
 !ELSEIF  "$(CFG)" == "wxWindows - Win32 Debug"
@@ -415,7 +415,7 @@ InputPath=..\include\wx\msw\setup.h
 InputPath=..\include\wx\msw\setup.h
 
 "../lib/mswd/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(InputPath) ..\lib\mswd\wx\setup.h
+	copy "$(InputPath)" ..\lib\mswd\wx\setup.h
 
 # End Custom Build
 !ENDIF 

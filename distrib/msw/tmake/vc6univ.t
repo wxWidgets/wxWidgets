@@ -208,7 +208,7 @@ SOURCE=..\include\wx\univ\setup.h
 InputPath=..\include\wx\univ\setup.h
 
 "../lib/univ/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(InputPath) ..\lib\univ\wx\setup.h
+	copy "$(InputPath)" ..\lib\univ\wx\setup.h
 
 # End Custom Build
 !ELSEIF  "$(CFG)" == "wxUniv - Win32 Debug"
@@ -216,7 +216,7 @@ InputPath=..\include\wx\univ\setup.h
 InputPath=..\include\wx\univ\setup.h
 
 "../lib/univd/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(InputPath) ..\lib\univd\wx\setup.h
+	copy "$(InputPath)" ..\lib\univd\wx\setup.h
 
 # End Custom Build
 !ENDIF 
