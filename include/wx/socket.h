@@ -33,6 +33,7 @@
 
 #include "wx/sckaddr.h"
 #include "wx/gsocket.h"
+#include "wx/list.h"
 
 // ------------------------------------------------------------------------
 // Types and constants
