@@ -288,7 +288,8 @@ void XmlResApp::FindFilesInXML(wxXmlNode *node, wxArrayString& flist, const wxSt
             wxString filename = GetInternalFileName(n->GetContent(), flist);
             n->SetContent(filename);
 
-            flist.Add(filename);
+            if (flist.Index(filename) == wxNOT_FOUND)
+                flist.Add(filename);
 
             wxFileInputStream sin(fullname);
             wxFileOutputStream sout(parOutputPath + "/" + filename);
