@@ -958,6 +958,8 @@ GtkWidget *wxListBox::GetConnectWidget()
 
 bool wxListBox::IsOwnGtkWindow( GdkWindow *window )
 {
+    if (m_widget->window == window) return TRUE;
+
     if (GTK_WIDGET(m_list)->window == window) return TRUE;
 
     GList *child = m_list->children;

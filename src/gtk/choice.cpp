@@ -502,5 +502,15 @@ wxSize wxChoice::DoGetBestSize() const
     return ret;
 }
 
+bool wxChoice::IsOwnGtkWindow( GdkWindow *window )
+{
+#ifdef __WXGTK20__
+    return GTK_BUTTON(m_widget)->event_window;
+#else
+    return (window == m_widget->window);
+#endif
+}
+
+
 #endif // wxUSE_CHOICE
 

@@ -2194,11 +2194,11 @@ gtk_window_realized_callback( GtkWidget *m_widget, wxWindow *win )
 
     if (g_isIdle)
         wxapp_install_idle_handler();
-
-    if (win->m_delayedBackgroundColour)
+        
+    if (win->m_delayedBackgroundColour && !win->GetThemeEnabled())
         win->GtkSetBackgroundColour( win->GetBackgroundColour() );
 
-    if (win->m_delayedForegroundColour)
+    if (win->m_delayedForegroundColour && !win->GetThemeEnabled())
         win->GtkSetForegroundColour( win->GetForegroundColour() );
 
 #ifdef __WXGTK20__
