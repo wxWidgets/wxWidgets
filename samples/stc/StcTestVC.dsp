@@ -147,6 +147,44 @@ LINK32=link.exe
 # Name "StcTestVC - Win32 Release DLL"
 # Begin Source File
 
+SOURCE=.\edit.cpp
+
+!IF  "$(CFG)" == "StcTestVC - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "StcTestVC - Win32 Debug"
+
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "StcTestVC - Win32 Debug DLL"
+
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "StcTestVC - Win32 Release DLL"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\prefs.cpp
+
+!IF  "$(CFG)" == "StcTestVC - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "StcTestVC - Win32 Debug"
+
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "StcTestVC - Win32 Debug DLL"
+
+# SUBTRACT CPP /YX /Yc /Yu
+
+!ELSEIF  "$(CFG)" == "StcTestVC - Win32 Release DLL"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\stctest.cpp
 
 !IF  "$(CFG)" == "StcTestVC - Win32 Release"
@@ -164,14 +202,6 @@ SOURCE=.\stctest.cpp
 
 !ENDIF 
 
-# End Source File
-# Begin Source File
-
-SOURCE=.\edit.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\prefs.cpp
 # End Source File
 # Begin Source File
 
