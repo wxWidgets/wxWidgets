@@ -315,7 +315,7 @@ extern "C"
 // DLL entry point
 
 BOOL WINAPI
-DllMain(HANDLE hModule, DWORD fdwReason, LPVOID WXUNUSED(lpReserved))
+DllMain(HINSTANCE hModule, DWORD fdwReason, LPVOID WXUNUSED(lpReserved))
 {
     // Only call wxEntry if the application itself is part of the DLL.
     // If only the wxWidgets library is in the DLL, then the
