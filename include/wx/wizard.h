@@ -194,12 +194,12 @@ public:
 
     // wxWizard should be created using "new wxWizard" now, not with Create()
 #ifdef WXWIN_COMPATIBILITY_2_2
-    wxWizard *Create(wxWindow *parent,
-                     int id = -1,
-                     const wxString& title = wxEmptyString,
-                     const wxBitmap& bitmap = wxNullBitmap,
-                     const wxPoint& pos = wxDefaultPosition,
-                     const wxSize& size = wxDefaultSize);
+    static wxWizard *Create(wxWindow *parent,
+                            int id = -1,
+                            const wxString& title = wxEmptyString,
+                            const wxBitmap& bitmap = wxNullBitmap,
+                            const wxPoint& pos = wxDefaultPosition,
+                            const wxSize& size = wxDefaultSize);
 #endif // WXWIN_COMPATIBILITY_2_2
 };
 
