@@ -41,12 +41,11 @@ IMPLEMENT_DYNAMIC_CLASS(wxPNMHandler,wxImageHandler)
 
 void Skip_Comment(wxInputStream &stream)
 {
-  wxString line;
   wxTextInputStream text_stream(stream);
 
   if (stream.Peek()==wxT('#'))
     {
-      text_stream >> line;
+      text_stream.ReadLine();
       Skip_Comment(stream);
     }
 }
@@ -55,7 +54,6 @@ bool wxPNMHandler::LoadFile( wxImage *image, wxInputStream& stream, bool WXUNUSE
 {
     wxUint32  width, height;
     wxUint16  maxval;
-    wxString  line;
     char      c(0);
 
     image->Destroy();
@@ -84,7 +82,7 @@ bool wxPNMHandler::LoadFile( wxImage *image, wxInputStream& stream, bool WXUNUSE
         return FALSE;
       }
 
-    text_stream >> line; // for the \n
+    text_stream.ReadLine(); // for the \n
     Skip_Comment(buf_stream);
     text_stream >> width >> height ;
     Skip_Comment(buf_stream);
