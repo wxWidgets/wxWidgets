@@ -30,6 +30,9 @@ public:
                                 wxDefaultPosition, wxDefaultSize,
                                 (flags & wxBORDER_MASK) | wxPOPUP_WINDOW);
     }
+
+protected:    
+    DECLARE_DYNAMIC_CLASS(wxPopupWindow)
 };
 
 #endif // _WX_POPUPWIN_H_
