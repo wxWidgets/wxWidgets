@@ -776,5 +776,24 @@ private:
     wxColour m_colFgOld;
 };
 
+// ----------------------------------------------------------------------------
+// another small helper class: sets the clipping region in its ctor and
+// destroys it in the dtor
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxDCClipper
+{
+public:
+    wxDCClipper(wxDC& dc, const wxRect& r) : m_dc(dc)
+        { dc.SetClippingRegion(r.x, r.y, r.width, r.height); }
+    wxDCClipper(wxDC& dc, wxCoord x, wxCoord y, wxCoord w, wxCoord h) : m_dc(dc)
+        { dc.SetClippingRegion(x, y, w, h); }
+
+    ~wxDCClipper() { m_dc.DestroyClippingRegion(); }
+
+private:
+    wxDC& m_dc;
+};
+
 #endif
     // _WX_DC_H_BASE_
