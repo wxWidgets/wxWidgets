@@ -148,7 +148,7 @@
  *
  * Note that you must link your programs with libc.a if you enable this and you
  * have libc 5 (you should enable this for libc6 where wcsrtombs() is
- * thread-safe version of wcstombs()). 
+ * thread-safe version of wcstombs()).
  */
 #define wxUSE_WCSRTOMBS 0
 
@@ -176,11 +176,11 @@
  * Use dnd
  */
 #define wxUSE_DRAG_AND_DROP 0
- 
+
 //------------------------------------------------------------------------
 // architecture options
 //------------------------------------------------------------------------
- 
+
 /*
  * Use the mdi architecture
  */
@@ -231,7 +231,7 @@
    Level 0: no backward compatibility, all new features
    Level 1: wxDC, OnSize (etc.) compatibility, but
    some new features such as event tables */
-#define WXWIN_COMPATIBILITY  1
+#define WXWIN_COMPATIBILITY  0
 /*
  * Enables debugging: memory tracing, assert, etc., contains debug level
  */
@@ -247,10 +247,10 @@
  * Disable it, If this causes problems (e.g. link errors)
  */
 #define wxUSE_DEBUG_NEW_ALWAYS 1
-/* 
+/*
  * In debug mode, causes new to be defined to
- * be WXDEBUG_NEW (see object.h). If this causes 
- * problems (e.g. link errors), set this to 0. 
+ * be WXDEBUG_NEW (see object.h). If this causes
+ * problems (e.g. link errors), set this to 0.
  */
 #define wxUSE_GLOBAL_MEMORY_OPERATORS 0
 /*
