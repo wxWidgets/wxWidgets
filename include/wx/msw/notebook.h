@@ -40,7 +40,7 @@ WX_DEFINE_ARRAY(wxNotebookPage *, wxArrayPages);
 class WXDLLEXPORT wxNotebookEvent : public wxCommandEvent
 {
 public:
-  wxNotebookEvent(wxEventType commandType = wxEVT_NULL, int id = 0, 
+  wxNotebookEvent(wxEventType commandType = wxEVT_NULL, int id = 0,
                   int nSel = -1, int nOldSel = -1)
     : wxCommandEvent(commandType, id) { m_nSel = nSel; m_nOldSel = nOldSel; }
 
@@ -71,14 +71,14 @@ public:
   wxNotebook();
     // the same arguments as for wxControl (@@@ any special styles?)
   wxNotebook(wxWindow *parent,
-             wxWindowID id, 
+             wxWindowID id,
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize,
              long style = 0,
              const wxString& name = "notebook");
     // Create() function
   bool Create(wxWindow *parent,
-              wxWindowID id, 
+              wxWindowID id,
               const wxPoint& pos = wxDefaultPosition,
               const wxSize& size = wxDefaultSize,
               long style = 0,
@@ -155,8 +155,7 @@ public:
   void OnSelChange(wxNotebookEvent& event);
   void OnSetFocus(wxFocusEvent& event);
   void OnNavigationKey(wxNavigationKeyEvent& event);
-  
->>>>>>> 1.5
+
   // base class virtuals
   // -------------------
   virtual void Command(wxCommandEvent& event);
