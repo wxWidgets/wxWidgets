@@ -669,14 +669,9 @@ bool wxTextCtrl::Create(wxWindow *parent,
             style |= wxALWAYS_SHOW_SB;
         }
 
-        // wxTE_WORDWRAP is 0 for now so we don't need the code below
-#if 0
-        if ( style & wxTE_WORDWRAP )
-        {
-            // wrapping words means wrapping, hence no horz scrollbar
-            style &= ~wxHSCROLL;
-        }
-#endif // 0
+        // wrapping style: wxTE_DONTWRAP == wxHSCROLL so if it's _not_ given,
+        // we won't have horizontal scrollbar automatically, no need to do
+        // anything
 
         // TODO: support wxTE_NO_VSCROLL (?)
 

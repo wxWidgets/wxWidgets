@@ -306,9 +306,10 @@ used, so that text won't be wrapped. No effect under wxGTK1.}
 \twocolitem{\windowstyle{wxTE\_LEFT}}{The text in the control will be left-justified (default).}
 \twocolitem{\windowstyle{wxTE\_CENTRE}}{The text in the control will be centered (currently wxMSW and wxGTK2 only).}
 \twocolitem{\windowstyle{wxTE\_RIGHT}}{The text in the control will be right-justified (currently wxMSW and wxGTK2 only).}
-\twocolitem{\windowstyle{wxTE\_DONTWRAP}}{Same as {\tt wxHSCROLL} style.}
-\twocolitem{\windowstyle{wxTE\_LINEWRAP}}{Wrap the lines too long to be shown entirely at any position (wxUniv and wxGTK2 only currently).}
-\twocolitem{\windowstyle{wxTE\_WORDWRAP}}{Wrap the lines too long to be shown entirely at word boundaries (this is the default if wxTE\_DONTWRAP is not given).}
+\twocolitem{\windowstyle{wxTE\_DONTWRAP}}{Same as {\tt wxHSCROLL} style: don't wrap at all, show horizontal scrollbar instead.}
+\twocolitem{\windowstyle{wxTE\_CHARWRAP}}{Wrap the lines too long to be shown entirely at any position (wxUniv and wxGTK2 only).}
+\twocolitem{\windowstyle{wxTE\_WORDWRAP}}{Wrap the lines too long to be shown entirely at word boundaries (wxUniv and wxGTK2 only).}
+\twocolitem{\windowstyle{wxTE\_BESTWRAP}}{Wrap the lines at word boundaries or at any other character if there are words longer than the window width (this is the default).}
 \twocolitem{\windowstyle{wxTE\_CAPITALIZE}}{On PocketPC and Smartphone, causes the first letter to be capitalized.}
 \end{twocollist}
 

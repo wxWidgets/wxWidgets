@@ -26,6 +26,7 @@ All (GUI):
 - Restored ability to set a custom splitter sash size with SetSashSize.
 - Fixed wxScrolledWindow sizer behaviour so that the virtual size
   isn't used to set the window size.
+- Added wxTE_BESTWRAP (based on patch by Mart Raudsepp)
 
 Unix:
 

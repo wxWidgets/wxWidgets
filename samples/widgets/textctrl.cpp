@@ -68,7 +68,18 @@ enum
 enum TextLines
 {
     TextLines_Single,
-    TextLines_Multi
+    TextLines_Multi,
+    TextLines_Max
+};
+
+// wrap style radio box
+enum WrapStyle
+{
+    WrapStyle_None,
+    WrapStyle_Word,
+    WrapStyle_Char,
+    WrapStyle_Best,
+    WrapStyle_Max
 };
 
 #ifdef __WXMSW__
@@ -78,7 +89,8 @@ enum TextKind
 {
     TextKind_Plain,
     TextKind_Rich,
-    TextKind_Rich2
+    TextKind_Rich2,
+    TextKind_Max
 };
 
 #endif // __WXMSW__
@@ -87,9 +99,12 @@ enum TextKind
 static const struct ControlValues
 {
     TextLines textLines;
+
     bool password;
-    bool wraplines;
     bool readonly;
+
+    WrapStyle wrapStyle;
+
 #ifdef __WXMSW__
     TextKind textKind;
 #endif // __WXMSW__
@@ -97,8 +112,8 @@ static const struct ControlValues
 {
     TextLines_Multi,    // multiline
     false,              // not password
-    true,               // do wrap lines
     false,              // not readonly
+    WrapStyle_Word,     // wrap on word boundaries
 #ifdef __WXMSW__
     TextKind_Plain      // plain EDIT control
 #endif // __WXMSW__
@@ -172,9 +187,11 @@ protected:
     // the radiobox to choose between single and multi line
     wxRadioBox *m_radioTextLines;
 
+    // and another one to choose the wrapping style
+    wxRadioBox *m_radioWrap;
+
     // the checkboxes controlling text ctrl styles
     wxCheckBox *m_chkPassword,
-               *m_chkWrapLines,
                *m_chkReadonly;
 
     // under MSW we test rich edit controls as well here
@@ -319,10 +336,10 @@ TextWidgetsPage::TextWidgetsPage(wxBookCtrl *book, wxImageList *imaglist)
 #ifdef __WXMSW__
     m_radioKind =
 #endif // __WXMSW__
+    m_radioWrap =
     m_radioTextLines = (wxRadioBox *)NULL;
 
     m_chkPassword =
-    m_chkWrapLines =
     m_chkReadonly = (wxCheckBox *)NULL;
 
     m_text =
@@ -358,17 +375,29 @@ TextWidgetsPage::TextWidgetsPage(wxBookCtrl *book, wxImageList *imaglist)
     wxSizer *sizerLeft = new wxStaticBoxSizer(box, wxVERTICAL);
 
     sizerLeft->Add(m_radioTextLines, 0, wxGROW | wxALL, 5);
-    sizerLeft->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
+    sizerLeft->AddSpacer(5);
 
     m_chkPassword = CreateCheckBoxAndAddToSizer(
                         sizerLeft, _T("&Password control"), TextPage_Password
                     );
-    m_chkWrapLines = CreateCheckBoxAndAddToSizer(
-                        sizerLeft, _T("Line &wrap"), TextPage_WrapLines
-                     );
     m_chkReadonly = CreateCheckBoxAndAddToSizer(
                         sizerLeft, _T("&Read-only mode")
                     );
+    sizerLeft->AddSpacer(5);
+
+    static const wxString wrap[] =
+    {
+        _T("no wrap"),
+        _T("word wrap"),
+        _T("char wrap"),
+        _T("best wrap"),
+    };
+
+    m_radioWrap = new wxRadioBox(this, wxID_ANY, _T("&Wrap style:"),
+                                 wxDefaultPosition, wxDefaultSize,
+                                 WXSIZEOF(wrap), wrap,
+                                 1, wxRA_SPECIFY_COLS);
+    sizerLeft->Add(m_radioWrap, 0, wxGROW | wxALL, 5);
 
 #ifdef __WXMSW__
     static const wxString kinds[] =
@@ -383,7 +412,7 @@ TextWidgetsPage::TextWidgetsPage(wxBookCtrl *book, wxImageList *imaglist)
                                  WXSIZEOF(kinds), kinds,
                                  1, wxRA_SPECIFY_COLS);
 
-    sizerLeft->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
+    sizerLeft->AddSpacer(5);
     sizerLeft->Add(m_radioKind, 0, wxGROW | wxALL, 5);
 #endif // __WXMSW__
 
@@ -547,9 +576,12 @@ wxSizer *TextWidgetsPage::CreateTextWithLabelSizer(const wxString& label,
 void TextWidgetsPage::Reset()
 {
     m_radioTextLines->SetSelection(DEFAULTS.textLines);
+
     m_chkPassword->SetValue(DEFAULTS.password);
-    m_chkWrapLines->SetValue(DEFAULTS.wraplines);
     m_chkReadonly->SetValue(DEFAULTS.readonly);
+
+    m_radioWrap->SetSelection(DEFAULTS.wrapStyle);
+
 #ifdef __WXMSW__
     m_radioKind->SetSelection(DEFAULTS.textKind);
 #endif // __WXMSW__
@@ -576,8 +608,29 @@ void TextWidgetsPage::CreateText()
         flags |= wxTE_PASSWORD;
     if ( m_chkReadonly->GetValue() )
         flags |= wxTE_READONLY;
-    if ( !m_chkWrapLines->GetValue() )
-        flags |= wxHSCROLL;
+
+    switch ( m_radioWrap->GetSelection() )
+    {
+        default:
+            wxFAIL_MSG( _T("unexpected wrap style radio box selection") );
+
+        case WrapStyle_None:
+            flags |= wxTE_DONTWRAP; // same as wxHSCROLL
+            break;
+
+        case WrapStyle_Word:
+            flags |= wxTE_WORDWRAP;
+            break;
+
+        case WrapStyle_Char:
+            flags |= wxTE_LINEWRAP;
+            break;
+
+        case WrapStyle_Best:
+            // this is default but use symbolic file name for consistency
+            flags |= wxTE_BESTWRAP;
+            break;
+    }
 
 #ifdef __WXMSW__
     switch ( m_radioKind->GetSelection() )
@@ -794,7 +847,7 @@ void TextWidgetsPage::OnUpdateUIResetButton(wxUpdateUIEvent& event)
 #endif // __WXMSW__
                   (m_chkReadonly->GetValue() != DEFAULTS.readonly) ||
                   (m_chkPassword->GetValue() != DEFAULTS.password) ||
-                  (m_chkWrapLines->GetValue() != DEFAULTS.wraplines) );
+                  (m_radioWrap->GetSelection() != DEFAULTS.wrapStyle) );
 }
 
 void TextWidgetsPage::OnText(wxCommandEvent& WXUNUSED(event))

@@ -79,9 +79,9 @@ const wxTextCoord wxInvalidTextCoord    = -2;
 // wxTextCtrl style flags
 // ----------------------------------------------------------------------------
 
-// the flag bits 0x0001, and 0x0004 are free but should be used only for the
-// things which don't make sense for a text control used by wxTextEntryDialog
-// because they would otherwise conflict with wxOK, wxCANCEL, wxCENTRE
+// the flag bit 0x0001 s free but should be used only for the things which
+// don't make sense for a text control used by wxTextEntryDialog because they
+// would otherwise conflict with wxOK, wxCANCEL, wxCENTRE
 
 #define wxTE_NO_VSCROLL     0x0002
 #define wxTE_AUTO_SCROLL    0x0008
@@ -113,11 +113,17 @@ const wxTextCoord wxInvalidTextCoord    = -2;
 // doesn't have focus - use this style to force it to always show it
 #define wxTE_NOHIDESEL      0x2000
 
-// use wxHSCROLL to not wrap text at all, wxTE_LINEWRAP to wrap it at any
+// use wxHSCROLL to not wrap text at all, wxTE_CHARWRAP to wrap it at any
 // position and wxTE_WORDWRAP to wrap at words boundary
+//
+// if no wrapping style is given at all, the control wraps at word boundary
 #define wxTE_DONTWRAP       wxHSCROLL
-#define wxTE_LINEWRAP       0x4000
-#define wxTE_WORDWRAP       0x0000  // it's just == !wxHSCROLL
+#define wxTE_CHARWRAP       0x4000  // wrap at any position
+#define wxTE_WORDWRAP       0x0001  // wrap only at words boundaries
+#define wxTE_BESTWRAP       0x0000  // this is the default
+
+// obsolete synonym
+#define wxTE_LINEWRAP       wxTE_CHARWRAP
 
 // force using RichEdit version 2.0 or 3.0 instead of 1.0 (default) for
 // wxTE_RICH controls - can be used together with or instead of wxTE_RICH
