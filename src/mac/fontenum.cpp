@@ -34,6 +34,7 @@
 
 #include "wx/fontenum.h"
 #include "wx/fontmap.h"
+#include "wx/fontutil.h"
 
 // ----------------------------------------------------------------------------
 // private classes

@@ -100,6 +100,15 @@ public:
         (void)Create(size, family, style, weight, underlined, face, encoding);
     }
 
+    wxFont(const wxNativeFontInfo& info)
+    {
+        Init();
+
+        (void)Create(info);
+    }
+
+    wxFont(const wxString& fontDesc);
+
     bool Create(int size,
                 int family,
                 int style,
@@ -107,6 +116,8 @@ public:
                 bool underlined = FALSE,
                 const wxString& face = wxEmptyString,
                 wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
+
+    bool Create(const wxNativeFontInfo& info);
 
     virtual ~wxFont();
 
