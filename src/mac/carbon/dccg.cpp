@@ -1246,7 +1246,7 @@ void  wxDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
             0 ) ;
         CGContextClosePath(ctx);
 
-        CGContextDrawPath( ctx , kCGPathFillStroke ) ;
+        CGContextDrawPath( ctx , mctx->GetDrawingMode() ) ;
     }
     else
     {
