@@ -7,12 +7,7 @@
         <sources>docview.cpp doc.cpp view.cpp</sources>
         <wx-lib>core</wx-lib>
         <win32-res>docview.rc</win32-res>
+        <mac-res>chart.r doc.r docview.r mondrian.r</mac-res>
     </exe>
 
-    <!-- FIXME FIXME
-RESOPTIONS=-i $(top_srcdir)/$(program_dir) chart.r doc.r docview.r mondrian.r -c WXMA
-SETOPTIONS=-a C
-    -->
-
-    
 </makefile>
