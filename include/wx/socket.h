@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_NETWORK_SOCKET_H
-#define _WX_NETWORK_SOCKET_H
+#ifndef _WX_SOCKET_H_
+#define _WX_SOCKET_H_
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
   #pragma interface "socket.h"
@@ -320,14 +320,13 @@ public:
 
 typedef void (wxEvtHandler::*wxSocketEventFunction)(wxSocketEvent&);
 
+#define wxSocketEventHandler(func) \
+    (wxObjectEventFunction)wxStaticCastEvent(wxSocketEventFunction, &func)
+
 #define EVT_SOCKET(id, func) \
-    DECLARE_EVENT_TABLE_ENTRY( wxEVT_SOCKET, id, wxID_ANY, \
-        (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxSocketEventFunction, & func ), \
-        (wxObject *) NULL ),
+    wx__DECLARE_EVT1(wxEVT_SOCKET, id, wxSocketEventHandler(func))
 
+#endif // wxUSE_SOCKETS
 
-#endif
-  // wxUSE_SOCKETS
+#endif // _WX_SOCKET_H_
 
-#endif
-  // _WX_NETWORK_SOCKET_H

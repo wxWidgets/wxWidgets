@@ -296,22 +296,28 @@ END_DECLARE_EVENT_TYPES()
 
 typedef void (wxEvtHandler::*wxWizardEventFunction)(wxWizardEvent&);
 
+#define wxWizardEventHandler(func) \
+    (wxObjectEventFunction)wxStaticCastEvent(wxWizardEventFunction, &func)
+
+#define wx__DECLARE_WIZARDEVT(evt, id, fn) \
+    wx__DECLARE_EVT1(wxEVT_WIZARD_ ## evt, id, wxWizardEventHandler(fn))
+
 // notifies that the page has just been changed (can't be vetoed)
-#define EVT_WIZARD_PAGE_CHANGED(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_WIZARD_PAGE_CHANGED, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxWizardEventFunction, & fn ), (wxObject *)NULL),
+#define EVT_WIZARD_PAGE_CHANGED(id, fn) wx__DECLARE_WIZARDEVT(PAGE_CHANGED, id, fn)
 
 // the user pressed "<Back" or "Next>" button and the page is going to be
 // changed - unless the event handler vetoes the event
-#define EVT_WIZARD_PAGE_CHANGING(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_WIZARD_PAGE_CHANGING, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxWizardEventFunction, & fn ), (wxObject *)NULL),
+#define EVT_WIZARD_PAGE_CHANGING(id, fn) wx__DECLARE_WIZARDEVT(PAGE_CHANGING, id, fn)
 
 // the user pressed "Cancel" button and the wizard is going to be dismissed -
 // unless the event handler vetoes the event
-#define EVT_WIZARD_CANCEL(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_WIZARD_CANCEL, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxWizardEventFunction, & fn ), (wxObject *)NULL),
+#define EVT_WIZARD_CANCEL(id, fn) wx__DECLARE_WIZARDEVT(CANCEL, id, fn)
 
 // the user pressed "Finish" button and the wizard is going to be dismissed -
-#define EVT_WIZARD_FINISHED(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_WIZARD_FINISHED, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxWizardEventFunction, & fn ), (wxObject *)NULL),
+#define EVT_WIZARD_FINISHED(id, fn) wx__DECLARE_WIZARDEVT(FINISHED, id, fn)
 
 // the user pressed "Help" button
-#define EVT_WIZARD_HELP(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_WIZARD_HELP, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxWizardEventFunction, & fn ), (wxObject *)NULL),
+#define EVT_WIZARD_HELP(id, fn) wx__DECLARE_WIZARDEVT(HELP, id, fn)
 
 #endif // wxUSE_WIZARDDLG
 

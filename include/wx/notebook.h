@@ -122,23 +122,14 @@ END_DECLARE_EVENT_TYPES()
 
 typedef void (wxEvtHandler::*wxNotebookEventFunction)(wxNotebookEvent&);
 
-#define EVT_NOTEBOOK_PAGE_CHANGED(winid, fn)                                   \
-  DECLARE_EVENT_TABLE_ENTRY(                                                   \
-    wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED,                                       \
-    winid,                                                                     \
-    wxID_ANY,                                                                  \
-    (wxObjectEventFunction)(wxEventFunction) wxStaticCastEvent( wxNotebookEventFunction, &fn ),  \
-    NULL                                                                       \
-  ),
+#define wxNotebookEventHandler(func) \
+    (wxObjectEventFunction)wxStaticCastEvent(wxNotebookEventFunction, &func)
 
-#define EVT_NOTEBOOK_PAGE_CHANGING(winid, fn)                                  \
-  DECLARE_EVENT_TABLE_ENTRY(                                                   \
-    wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING,                                      \
-    winid,                                                                     \
-    wxID_ANY,                                                                  \
-    (wxObjectEventFunction)(wxEventFunction) wxStaticCastEvent( wxNotebookEventFunction, &fn ),  \
-    NULL                                                                    \
-  ),
+#define EVT_NOTEBOOK_PAGE_CHANGED(winid, fn) \
+    wx__DECLARE_EVT1(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, winid, wxNotebookEventHandler(fn))
+
+#define EVT_NOTEBOOK_PAGE_CHANGING(winid, fn) \
+    wx__DECLARE_EVT1(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, winid, wxNotebookEventHandler(fn))
 
 // ----------------------------------------------------------------------------
 // wxNotebook class itself

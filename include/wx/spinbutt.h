@@ -110,13 +110,16 @@ private:
 
 typedef void (wxEvtHandler::*wxSpinEventFunction)(wxSpinEvent&);
 
+#define wxSpinEventHandler(func) \
+    (wxObjectEventFunction)wxStaticCastEvent(wxSpinEventFunction, &func)
+
 // macros for handling spin events
 #define EVT_SPIN_UP(winid, func) \
-    DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLL_LINEUP, winid, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxSpinEventFunction, & func ), NULL ),
+    wx__DECLARE_EVT1(wxEVT_SCROLL_LINEUP, winid, wxSpinEventHandler(func))
 #define EVT_SPIN_DOWN(winid, func) \
-    DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLL_LINEDOWN, winid, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxSpinEventFunction, & func ), NULL ),
+    wx__DECLARE_EVT1(wxEVT_SCROLL_LINEDOWN, winid, wxSpinEventHandler(func))
 #define EVT_SPIN(winid, func) \
-    DECLARE_EVENT_TABLE_ENTRY( wxEVT_SCROLL_THUMBTRACK, winid, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxSpinEventFunction, & func ), NULL ),
+    wx__DECLARE_EVT1(wxEVT_SCROLL_THUMBTRACK, winid, wxSpinEventHandler(func))
 
 #endif // wxUSE_SPINBTN
 

@@ -125,23 +125,18 @@ extern WXDLLIMPEXP_CORE const wxEventType wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING
 
 typedef void (wxEvtHandler::*wxChoicebookEventFunction)(wxChoicebookEvent&);
 
-#define EVT_CHOICEBOOK_PAGE_CHANGED(id, fn)                                 \
-  DECLARE_EVENT_TABLE_ENTRY(                                                \
-    wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED,                                  \
-    id,                                                                     \
-    wxID_ANY,                                                               \
-    (wxObjectEventFunction)(wxEventFunction) wxStaticCastEvent( wxChoicebookEventFunction, &fn ),  \
-    NULL                                                                    \
-  ),
+#define wxChoicebookEventHandler(func) \
+    (wxObjectEventFunction)wxStaticCastEvent(wxChoicebookEventFunction, &func)
 
-#define EVT_CHOICEBOOK_PAGE_CHANGING(id, fn)                                \
-  DECLARE_EVENT_TABLE_ENTRY(                                                \
-    wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING,                                 \
-    id,                                                                     \
-    wxID_ANY,                                                               \
-    (wxObjectEventFunction)(wxEventFunction) wxStaticCastEvent( wxChoicebookEventFunction, &fn ),  \
-    NULL                                                                    \
-  ),
+#define EVT_CHOICEBOOK_PAGE_CHANGED(id, fn)                                   \
+    wx__DECLARE_EVT1(wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED,                   \
+                     id,                                                      \
+                     wxChoicebookEventHandler(fn))
+
+#define EVT_CHOICEBOOK_PAGE_CHANGING(id, fn)                                  \
+    wx__DECLARE_EVT1(wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING,                  \
+                     id,                                                      \
+                     wxChoicebookEventHandler(fn))
 
 #endif // wxUSE_CHOICEBOOK
 

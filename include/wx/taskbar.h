@@ -84,13 +84,19 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV,wxEVT_TASKBAR_RIGHT_DCLICK,1556)
 END_DECLARE_EVENT_TYPES()
 
-#define EVT_TASKBAR_MOVE(fn)         DECLARE_EVENT_TABLE_ENTRY(wxEVT_TASKBAR_MOVE, wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTaskBarIconEventFunction, &fn ), NULL),
-#define EVT_TASKBAR_LEFT_DOWN(fn)    DECLARE_EVENT_TABLE_ENTRY(wxEVT_TASKBAR_LEFT_DOWN, wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTaskBarIconEventFunction, &fn ), NULL),
-#define EVT_TASKBAR_LEFT_UP(fn)      DECLARE_EVENT_TABLE_ENTRY(wxEVT_TASKBAR_LEFT_UP, wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTaskBarIconEventFunction, &fn ), NULL),
-#define EVT_TASKBAR_RIGHT_DOWN(fn)   DECLARE_EVENT_TABLE_ENTRY(wxEVT_TASKBAR_RIGHT_DOWN, wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTaskBarIconEventFunction, &fn ), NULL),
-#define EVT_TASKBAR_RIGHT_UP(fn)     DECLARE_EVENT_TABLE_ENTRY(wxEVT_TASKBAR_RIGHT_UP, wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTaskBarIconEventFunction, &fn ), NULL),
-#define EVT_TASKBAR_LEFT_DCLICK(fn)  DECLARE_EVENT_TABLE_ENTRY(wxEVT_TASKBAR_LEFT_DCLICK, wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTaskBarIconEventFunction, &fn ), NULL),
-#define EVT_TASKBAR_RIGHT_DCLICK(fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_TASKBAR_RIGHT_DCLICK, wxID_ANY, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTaskBarIconEventFunction, &fn ), NULL),
+#define wxTaskBarIconEventHandler(func) \
+    (wxObjectEventFunction)wxStaticCastEvent(wxTaskBarIconEventFunction, &func)
+
+#define wx__DECLARE_TASKBAREVT(evt, fn) \
+    wx__DECLARE_EVT0(wxEVT_TASKBAR_ ## evt, wxTaskBarIconEventHandler(fn))
+
+#define EVT_TASKBAR_MOVE(fn)         wx__DECLARE_TASKBAREVT(MOVE, fn)
+#define EVT_TASKBAR_LEFT_DOWN(fn)    wx__DECLARE_TASKBAREVT(LEFT_DOWN, fn)
+#define EVT_TASKBAR_LEFT_UP(fn)      wx__DECLARE_TASKBAREVT(LEFT_UP, fn)
+#define EVT_TASKBAR_RIGHT_DOWN(fn)   wx__DECLARE_TASKBAREVT(RIGHT_DOWN, fn)
+#define EVT_TASKBAR_RIGHT_UP(fn)     wx__DECLARE_TASKBAREVT(RIGHT_UP, fn)
+#define EVT_TASKBAR_LEFT_DCLICK(fn)  wx__DECLARE_TASKBAREVT(LEFT_DCLICK, fn)
+#define EVT_TASKBAR_RIGHT_DCLICK(fn) wx__DECLARE_TASKBAREVT(RIGHT_DCLICK, fn)
 
 #endif
     // wxHAS_TASK_BAR_ICON

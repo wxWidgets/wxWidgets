@@ -175,45 +175,23 @@ END_DECLARE_EVENT_TYPES()
 
 typedef void (wxEvtHandler::*wxFindDialogEventFunction)(wxFindDialogEvent&);
 
+#define wxFindDialogEventHandler(func) \
+    (wxObjectEventFunction)wxStaticCastEvent(wxFindDialogEventFunction, &func)
+
 #define EVT_FIND(id, fn) \
-    DECLARE_EVENT_TABLE_ENTRY( \
-        wxEVT_COMMAND_FIND, id, wxID_ANY, \
-        (wxObjectEventFunction)(wxEventFunction)(wxFindDialogEventFunction) \
-        & fn, \
-        (wxObject *) NULL \
-    ),
+    wx__DECLARE_EVT1(wxEVT_COMMAND_FIND, id, wxFindDialogEventHandler(fn))
 
 #define EVT_FIND_NEXT(id, fn) \
-    DECLARE_EVENT_TABLE_ENTRY( \
-        wxEVT_COMMAND_FIND_NEXT, id, wxID_ANY, \
-        (wxObjectEventFunction)(wxEventFunction)(wxFindDialogEventFunction) \
-        & fn, \
-        (wxObject *) NULL \
-    ),
+    wx__DECLARE_EVT1(wxEVT_COMMAND_FIND_NEXT, id, wxFindDialogEventHandler(fn))
 
 #define EVT_FIND_REPLACE(id, fn) \
-    DECLARE_EVENT_TABLE_ENTRY( \
-        wxEVT_COMMAND_FIND_REPLACE, id, wxID_ANY, \
-        (wxObjectEventFunction)(wxEventFunction)(wxFindDialogEventFunction) \
-        & fn, \
-        (wxObject *) NULL \
-    ),
+    wx__DECLARE_EVT1(wxEVT_COMMAND_FIND_REPLACE, id, wxFindDialogEventHandler(fn))
 
 #define EVT_FIND_REPLACE_ALL(id, fn) \
-    DECLARE_EVENT_TABLE_ENTRY( \
-        wxEVT_COMMAND_FIND_REPLACE_ALL, id, wxID_ANY, \
-        (wxObjectEventFunction)(wxEventFunction)(wxFindDialogEventFunction) \
-        & fn, \
-        (wxObject *) NULL \
-    ),
+    wx__DECLARE_EVT1(wxEVT_COMMAND_FIND_REPLACE_ALL, id, wxFindDialogEventHandler(fn))
 
 #define EVT_FIND_CLOSE(id, fn) \
-    DECLARE_EVENT_TABLE_ENTRY( \
-        wxEVT_COMMAND_FIND_CLOSE, id, wxID_ANY, \
-        (wxObjectEventFunction)(wxEventFunction)(wxFindDialogEventFunction) \
-        & fn, \
-        (wxObject *) NULL \
-    ),
+    wx__DECLARE_EVT1(wxEVT_COMMAND_FIND_CLOSE, id, wxFindDialogEventHandler(fn))
 
 #endif // wxUSE_FINDREPLDLG
 
