@@ -27,8 +27,7 @@
 #include "wx/font.h"        // for wxFont and wxFontEncoding
 
 #if defined(__WXMSW__)
-    #include <windows.h>
-    #include "wx/msw/winundef.h"
+    #include "wx/msw/wrapwin.h"
 #endif
 
 struct WXDLLEXPORT wxNativeEncodingInfo;
