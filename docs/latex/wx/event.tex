@@ -21,7 +21,7 @@ event object, and is an abstract base class for other event classes (see below).
 
 \membersection{wxEvent::wxEvent}
 
-\func{}{wxEvent}{\param{int }{id = 0}}
+\func{}{wxEvent}{\param{int }{id = 0}, \param{wxEventType }{eventType = {\tt wxEVT\_NULL}}}
 
 Constructor. Should not need to be used directly by an application.
 
@@ -58,7 +58,7 @@ Timestamp for this event.
 
 \membersection{wxEvent::Clone}\label{wxeventclone}
 
-\func{virtual wxEvent*}{Clone}{\void} const
+\constfunc{virtual wxEvent*}{Clone}{\void}
 
 Returns a copy of the event.
 
