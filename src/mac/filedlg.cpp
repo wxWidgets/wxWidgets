@@ -46,6 +46,24 @@ IMPLEMENT_CLASS(wxFileDialog, wxDialog)
 
 extern bool gUseNavServices ;
 
+// the data we need to pass to our standard file hook routine
+// includes a pointer to the dialog, a pointer to the standard
+// file reply record (so we can inspect the current selection)
+// and a copy of the "previous" file spec of the reply record
+// so we can see if the selection has changed
+
+const int kwxMacFileTypes = 10 ;
+
+struct OpenUserDataRec {
+  int           currentfilter ;
+  wxString      name [kwxMacFileTypes] ;
+  wxString      extensions[kwxMacFileTypes] ;
+	OSType				filtermactypes[kwxMacFileTypes] ;
+	int					  numfilters ;
+};
+typedef struct OpenUserDataRec
+	OpenUserDataRec, *OpenUserDataRecPtr;
+
 static pascal void	NavEventProc(
 								NavEventCallbackMessage		inSelector,
 								NavCBRecPtr					ioParams,
@@ -61,8 +79,9 @@ static pascal void
 NavEventProc(
 	NavEventCallbackMessage		inSelector,
 	NavCBRecPtr					ioParams,
-	NavCallBackUserData			/* ioUserData */)
+	NavCallBackUserData	ioUserData	)
 {
+	  OpenUserDataRec * data = ( OpenUserDataRec *) ioUserData ;
 	if (inSelector == kNavCBEvent) {	
 			// In Universal Headers 3.2, Apple changed the definition of
 		/*
@@ -75,12 +94,18 @@ NavEventProc(
 		*/
 		
          wxTheApp->MacHandleOneEvent(ioParams->eventData.eventDataParms.event);
+	} else if ( inSelector == kNavCBPopupMenuSelect )
+	{
+	  NavMenuItemSpec * menu = (NavMenuItemSpec *) ioParams->eventData.eventDataParms.param ;
+	  data->currentfilter = menu->menuType ;
 	}
 }
 
 char * gfilters[] =
 {
 	"*.TXT" ,
+	"*.TIF" ,
+	"*.JPG" ,
 	
 	NULL 
 } ;
@@ -88,28 +113,12 @@ char * gfilters[] =
 OSType gfiltersmac[] =
 {
 	'TEXT' ,
+	'TIFF' ,
+	'JPEG' ,
 	
 	'****'
 } ;
 
-// the data we need to pass to our standard file hook routine
-// includes a pointer to the dialog, a pointer to the standard
-// file reply record (so we can inspect the current selection)
-// and a copy of the "previous" file spec of the reply record
-// so we can see if the selection has changed
-
-const int kwxMacFileTypes = 10 ;
-
-struct OpenUserDataRec {
-	StandardFileReply	*sfrPtr;
-	FSSpec				oldSelectionFSSpec;
-	char				filter[kwxMacFileTypes][10] ;
-	OSType				filtermactypes[kwxMacFileTypes] ;
-	int					numfilters ;
-	DialogPtr			theDlgPtr;
-};
-typedef struct OpenUserDataRec
-	OpenUserDataRec, *OpenUserDataRecPtr;
 
 #if !TARGET_CARBON
 
@@ -238,7 +247,67 @@ static pascal Boolean SFGetFolderModalDialogFilter(DialogPtr theDlgPtr, EventRec
 }
 #endif !TARGET_CARBON
 
-void ExtendedOpenFile( ConstStr255Param message , ConstStr255Param path , const char *filter , FileFilterYDUPP fileFilter, StandardFileReply *theSFR)
+void MakeUserDataRec(OpenUserDataRec	*myData , const wxString& filter )
+{
+  myData->currentfilter = 0 ;
+  
+	if ( filter && filter[0] )
+	{
+	  wxString filter2(filter) ;
+    int filterIndex = 0;
+    bool isName = true ;
+    wxString current ;
+    for( unsigned int i = 0; i < filter2.Len(); i++ )
+    {
+       if( filter2.GetChar(i) == wxT('|') )
+       {
+        if( isName ) {
+          myData->name[filterIndex] = current ;
+        }
+        else {
+          myData->extensions[filterIndex] = current.MakeUpper() ;
+          ++filterIndex ;
+        }
+        isName = !isName ;
+         current = "" ;
+       }
+       else
+       {
+        current += filter2.GetChar(i) ;
+       }
+    }
+    if ( filterIndex > 0 )
+    {
+      wxASSERT_MSG( !isName , "incorrect format of format string" ) ;
+      myData->extensions[filterIndex] = current.MakeUpper() ;
+      ++filterIndex ;
+    }
+
+		myData->numfilters = filterIndex ;
+		for ( int i = 0 ; i < myData->numfilters ; i++ )
+		{
+			int j ;
+			for ( j = 0 ; gfilters[j] ; j++ )
+			{
+				if ( strcmp( myData->extensions[i] , gfilters[j] ) == 0 )
+				{
+					myData->filtermactypes[i] = gfiltersmac[j] ;
+					break ;
+				}
+			}
+			if( gfilters[j] == NULL )
+			{
+				myData->filtermactypes[i] = '****' ;
+			}
+		}
+	}
+	else
+	{
+		myData->numfilters = 0 ;
+	}
+
+}
+void ExtendedOpenFile( ConstStr255Param message , ConstStr255Param path , const char *filter , FileFilterYDUPP fileFilter, StandardFileReply *theSFR )
 {
 	Point 				thePt;
 	OpenUserDataRec			myData;
@@ -260,37 +329,7 @@ void ExtendedOpenFile( ConstStr255Param message , ConstStr255Param path , const 
 	
 	// point the user data parameter at the reply record so we can get to it later
 	
-	myData.sfrPtr = theSFR;
-	if ( filter && filter[0] )
-	{
-		myData.numfilters = 1 ;
-		for ( int i = 0 ; i < myData.numfilters ; i++ )
-		{
-			int j ;
-			
-			strcpy( myData.filter[i] , filter ) ;
-			for( j = 0 ; myData.filter[i][j] ; j++ )
-			{
-				myData.filter[i][j] = toupper( myData.filter[i][j] ) ;
-			}
-			for ( j = 0 ; gfilters[j] ; j++ )
-			{
-				if ( strcmp( myData.filter[i] , gfilters[j] ) == 0 )
-				{
-					myData.filtermactypes[i] = gfiltersmac[j] ;
-					break ;
-				}
-			}
-			if( gfilters[j] == NULL )
-			{
-				myData.filtermactypes[i] = '****' ;
-			}
-		}
-	}
-	else
-	{
-		myData.numfilters = 0 ;
-	}
+	MakeUserDataRec( &myData , filter ) ;
 	// display the dialog
 
 #if !TARGET_CARBON
@@ -373,9 +412,40 @@ void ExtendedOpenFile( ConstStr255Param message , ConstStr255Param path , const 
 	}
 }
 
+static Boolean CheckFile( ConstStr255Param name , OSType type , OpenUserDataRecPtr data)
+{
+	  Str255 			filename ;
+		PLstrcpy( filename , name ) ;
+
+		if ( data->numfilters > 0 )
+		{
+  		for( int j = 1 ; j <= filename[0] ; j++ )
+  		{
+  			filename[j] = toupper( filename[j] ) ;
+  		}
+  		//for ( int i = 0 ; i < data->numfilters ; ++i )
+  		int i = data->currentfilter ;
+  		if ( data->extensions[i].Right(2) == ".*" )
+  		  return true ;
+  		  
+  		{
+  			if ( type == data->filtermactypes[i] )
+  				return true ;
+
+        wxString extension = data->extensions[i] ;
+        if ( extension.GetChar(0) == '*' )
+          extension = extension.Mid(1) ;
+
+  			if ( filename[0] >= extension.Len() && extension == (char*) filename + 1 + filename[0] - extension.Len() )
+  					return true ;
+  		}
+  		return false ;
+  	}
+  	return true ;
+}
+
 static pascal Boolean CrossPlatformFileFilter(CInfoPBPtr myCInfoPBPtr, void *dataPtr)
 {	
-	Str255 			filename ;
 	OpenUserDataRecPtr data = (OpenUserDataRecPtr) dataPtr ;
 	// return true if this item is invisible or a file
 
@@ -393,27 +463,7 @@ static pascal Boolean CrossPlatformFileFilter(CInfoPBPtr myCInfoPBPtr, void *dat
 		
 	if ( !folderFlag )
 	{
-		if ( data->numfilters > 0 )
-		{
-			PLstrcpy( filename ,myCInfoPBPtr->hFileInfo.ioNamePtr ) ;
-			if ( filename[0] >= 4 )
-			{
-				for( int j = 1 ; j <= filename[0] ; j++ )
-				{
-					filename[j] = toupper( filename[j] ) ;
-				}
-				for ( int i = 0 ; i < data->numfilters ; ++i )
-				{
-					if ( myCInfoPBPtr->hFileInfo.ioFlFndrInfo.fdType == data->filtermactypes[i] )
-						return false ;
-
-					if ( strncmp( (char*) filename + 1 + filename[0] - 4 , 
-							& data->filter[i][ strlen(data->filter[i]) - 4 ] , 4 ) == 0 )
-							return false ;
-				}
-			}
-			return true ;				
-		}
+		return !CheckFile( myCInfoPBPtr->hFileInfo.ioNamePtr , myCInfoPBPtr->hFileInfo.ioFlFndrInfo.fdType , data ) ;
 	}	
 		
 	return false ;
@@ -494,6 +544,31 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
     m_dir = defaultDir;
     m_wildCard = wildCard;
     m_filterIndex = 1;
+}
+
+
+Boolean CrossPlatformFilterCallback (
+    AEDesc *theItem, 
+    void *info, 
+    void *callBackUD, 
+    NavFilterModes filterMode
+)
+{
+	bool display = true;
+	OpenUserDataRecPtr data = (OpenUserDataRecPtr) callBackUD ;
+
+	if (filterMode == kNavFilteringBrowserList)
+	{
+	  NavFileOrFolderInfo* theInfo = (NavFileOrFolderInfo*) info ;
+		if (theItem->descriptorType == typeFSS && !theInfo->isFolder)
+		{
+		  FSSpec	spec;
+		  memcpy( &spec , *theItem->dataHandle , sizeof(FSSpec) ) ;
+		  display = CheckFile( spec.name , theInfo->fileAndFolder.fileInfo.finderInfo.fdType , data ) ;
+		}
+	}
+
+	return display;
 }
 
 int wxFileDialog::ShowModal()
@@ -657,6 +732,27 @@ int wxFileDialog::ShowModal()
 		}
 		else
 		{
+	  	OpenUserDataRec			myData;
+	  	MakeUserDataRec( &myData , m_wildCard ) ;
+	  	NavTypeListHandle typelist = NULL ;
+
+	  	if ( myData.numfilters > 0 )
+	  	{
+	  	  mNavOptions.popupExtension = (NavMenuItemSpecArrayHandle) NewHandle( sizeof( NavMenuItemSpec ) * myData.numfilters ) ;
+	  	  for ( int i = 0 ; i < myData.numfilters ; ++i ) {
+	  	    (*mNavOptions.popupExtension)[i].version = kNavMenuItemSpecVersion ;
+	  	    (*mNavOptions.popupExtension)[i].menuCreator = 'WXNG' ;
+	  	    (*mNavOptions.popupExtension)[i].menuType = i ;
+          #if TARGET_CARBON
+          		c2pstrcpy((StringPtr)(*mNavOptions.popupExtension)[i].menuItemName, myData.name[i]) ;
+          #else
+          		strcpy((char *)(*mNavOptions.popupExtension)[i].menuItemName, myData.name[i]) ;
+          		c2pstr((char *)(*mNavOptions.popupExtension)[i].menuItemName ) ;
+          #endif
+	  	  }
+	  	}
+
+      mNavFilterUPP = NewNavObjectFilterProc( CrossPlatformFilterCallback ) ;
 			if ( m_dialogStyle & wxMULTIPLE )
 				mNavOptions.dialogOptionFlags |= kNavAllowMultipleFiles ;
 			else
@@ -669,10 +765,13 @@ int wxFileDialog::ShowModal()
 						sStandardNavEventFilter ,
 						mNavPreviewUPP,
 						mNavFilterUPP,
-						0L /*inFileTypes.TypeListHandle() */,
-						0L);							// User Data
+						typelist /*inFileTypes.TypeListHandle() */,
+						&myData);							// User Data
+			if ( typelist )
+			  DisposeHandle( (Handle) typelist ) ;
 		}
 		
+		DisposeNavObjectFilterUPP(mNavFilterUPP);
 		if ( mDefaultLocation.dataHandle != nil )
 		{
 			::AEDisposeDesc(&mDefaultLocation);
