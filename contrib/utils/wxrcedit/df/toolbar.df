@@ -1,0 +1,11 @@
+node toolbar
+type panel
+icon 0
+childtype toolbar_item
+var style of flags wxTB_FLAT,wxTB_DOCKABLE,wxTB_VERTICAL,wxTB_HORIZONTAL
+var bitmapsize of coord
+var pos of coord
+var size of coord
+var margins of coord
+var packing of integer
+var separation of integer

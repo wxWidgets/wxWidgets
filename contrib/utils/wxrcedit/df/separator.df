@@ -2,3 +2,4 @@ node separator
 icon 0
 type normal
 derived from menu_item
+derived from toolbar_item

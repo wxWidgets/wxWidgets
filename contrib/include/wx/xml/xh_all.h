@@ -34,5 +34,6 @@
 #include "wx/xml/xh_notbk.h"
 #include "wx/xml/xh_text.h"
 #include "wx/xml/xh_listb.h"
+#include "wx/xml/xh_toolb.h"
 
 #endif // _WX_XMLRES_H_

@@ -164,6 +164,10 @@ SOURCE=.\xh_listb.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\xh_toolb.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\xml.cpp
 # End Source File
 # Begin Source File

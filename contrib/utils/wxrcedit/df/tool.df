@@ -1,0 +1,10 @@
+node tool
+type normal
+icon 0
+var bitmap of text
+var bitmap2 of text
+var toggle of bool
+var pos of coord
+var tooltip of text
+var longhelp of text
+derived from toolbar_item
