@@ -63,6 +63,7 @@ dirdlgg.cpp	G	16
 fontdlgg.cpp	G	G,R
 filedlgg.cpp	G	U,X
 grid.cpp	G
+helpext.cpp	G	G
 helphtml.cpp	G	G
 helpwxht.cpp	G	G
 helpxlp.cpp	G	G,R
