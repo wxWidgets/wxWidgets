@@ -54,15 +54,7 @@ extern PyObject *SWIG_newvarlink(void);
 #define SWIG_name    "windowsc"
 
 #include "helpers.h"
-
-#ifdef __WXMSW__
-    // wxGTK defines wxMenuItem inside menu.h
 #include <wx/menuitem.h>
-#endif
-
-#ifdef __WXMSW__
-#include <wx/minifram.h>
-#endif
 
 static PyObject* l_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
@@ -4340,27 +4332,6 @@ static PyObject *_wrap_wxMenuItem_SetName(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-#define wxMenuItem_DeleteSubMenu(_swigobj)  (_swigobj->DeleteSubMenu())
-static PyObject *_wrap_wxMenuItem_DeleteSubMenu(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxMenuItem * _arg0;
-    char * _argc0 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"s:wxMenuItem_DeleteSubMenu",&_argc0)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxMenuItem_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMenuItem_DeleteSubMenu. Expected _wxMenuItem_p.");
-        return NULL;
-        }
-    }
-    wxMenuItem_DeleteSubMenu(_arg0);
-    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
 #define wxMenuItem_GetName(_swigobj)  (_swigobj->GetName())
 static PyObject *_wrap_wxMenuItem_GetName(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -4491,13 +4462,34 @@ static PyObject *_wrap_wxMenuItem_Check(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
+#define wxMenuItem_DeleteSubMenu(_swigobj)  (_swigobj->DeleteSubMenu())
+static PyObject *_wrap_wxMenuItem_DeleteSubMenu(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxMenuItem * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxMenuItem_DeleteSubMenu",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxMenuItem_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMenuItem_DeleteSubMenu. Expected _wxMenuItem_p.");
+        return NULL;
+        }
+    }
+    wxMenuItem_DeleteSubMenu(_arg0);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 static PyMethodDef windowscMethods[] = {
+	 { "wxMenuItem_DeleteSubMenu", _wrap_wxMenuItem_DeleteSubMenu, 1 },
 	 { "wxMenuItem_Check", _wrap_wxMenuItem_Check, 1 },
 	 { "wxMenuItem_Enable", _wrap_wxMenuItem_Enable, 1 },
 	 { "wxMenuItem_SetHelp", _wrap_wxMenuItem_SetHelp, 1 },
 	 { "wxMenuItem_GetHelp", _wrap_wxMenuItem_GetHelp, 1 },
 	 { "wxMenuItem_GetName", _wrap_wxMenuItem_GetName, 1 },
-	 { "wxMenuItem_DeleteSubMenu", _wrap_wxMenuItem_DeleteSubMenu, 1 },
 	 { "wxMenuItem_SetName", _wrap_wxMenuItem_SetName, 1 },
 	 { "wxMenuItem_GetSubMenu", _wrap_wxMenuItem_GetSubMenu, 1 },
 	 { "wxMenuItem_GetId", _wrap_wxMenuItem_GetId, 1 },
@@ -4696,6 +4688,7 @@ SWIGEXPORT(void,initwindowsc)() {
 	 SWIG_RegisterMapping("_class_wxRealPoint","_wxRealPoint",0);
 	 SWIG_RegisterMapping("_wxPrinterDC","_class_wxPrinterDC",0);
 	 SWIG_RegisterMapping("_class_wxMenuItem","_wxMenuItem",0);
+	 SWIG_RegisterMapping("_class_wxPostScriptDC","_wxPostScriptDC",0);
 	 SWIG_RegisterMapping("_wxPanel","_class_wxDialog",SwigwxDialogTowxPanel);
 	 SWIG_RegisterMapping("_wxPanel","_wxDialog",SwigwxDialogTowxPanel);
 	 SWIG_RegisterMapping("_wxPanel","_class_wxPanel",0);
@@ -4759,6 +4752,7 @@ SWIGEXPORT(void,initwindowsc)() {
 	 SWIG_RegisterMapping("_class_wxWindowDC","_wxWindowDC",0);
 	 SWIG_RegisterMapping("_class_wxAcceleratorEntry","_wxAcceleratorEntry",0);
 	 SWIG_RegisterMapping("_class_wxCursor","_wxCursor",0);
+	 SWIG_RegisterMapping("_wxPostScriptDC","_class_wxPostScriptDC",0);
 	 SWIG_RegisterMapping("_wxScrolledWindow","_class_wxScrolledWindow",0);
 	 SWIG_RegisterMapping("_unsigned_char","_byte",0);
 	 SWIG_RegisterMapping("_class_wxMetaFileDC","_wxMetaFileDC",0);

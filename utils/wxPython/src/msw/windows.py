@@ -621,9 +621,6 @@ class wxMenuItemPtr :
     def SetName(self,arg0):
         val = windowsc.wxMenuItem_SetName(self.this,arg0)
         return val
-    def DeleteSubMenu(self):
-        val = windowsc.wxMenuItem_DeleteSubMenu(self.this)
-        return val
     def GetName(self):
         val = windowsc.wxMenuItem_GetName(self.this)
         return val
@@ -638,6 +635,9 @@ class wxMenuItemPtr :
         return val
     def Check(self,*args):
         val = apply(windowsc.wxMenuItem_Check,(self.this,)+args)
+        return val
+    def DeleteSubMenu(self):
+        val = windowsc.wxMenuItem_DeleteSubMenu(self.this)
         return val
     def __repr__(self):
         return "<C wxMenuItem instance>"

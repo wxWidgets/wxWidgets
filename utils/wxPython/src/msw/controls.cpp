@@ -63,6 +63,10 @@ extern PyObject *SWIG_newvarlink(void);
 #endif
 #endif
 
+#ifdef __WXGTK__
+#include <wx/checklst.h>
+#endif
+
 static PyObject* l_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
     if (!target) {

@@ -54,10 +54,7 @@ extern PyObject *SWIG_newvarlink(void);
 #define SWIG_name    "framesc"
 
 #include "helpers.h"
-
-#ifdef __WXMSW__
 #include <wx/minifram.h>
-#endif
 
 static PyObject* l_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;

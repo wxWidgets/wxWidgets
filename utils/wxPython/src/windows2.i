@@ -324,6 +324,8 @@ public:
 
     bool SetIcon(const wxIcon& icon, const char* tooltip = "");
     bool RemoveIcon(void);
+    bool PopupMenu(wxMenu *menu);
+
 };
 #endif
 
@@ -331,6 +333,11 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.8  1998/12/17 18:05:53  RD
+// wxPython 0.5.2
+// Minor fixes and SWIG code generation for RR's changes.  MSW and GTK
+// versions are much closer now!
+//
 // Revision 1.7  1998/12/15 20:41:25  RD
 // Changed the import semantics from "from wxPython import *" to "from
 // wxPython.wx import *"  This is for people who are worried about

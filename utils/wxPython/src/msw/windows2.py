@@ -539,6 +539,9 @@ class wxTaskBarIconPtr(wxEvtHandlerPtr):
     def RemoveIcon(self):
         val = windows2c.wxTaskBarIcon_RemoveIcon(self.this)
         return val
+    def PopupMenu(self,arg0):
+        val = windows2c.wxTaskBarIcon_PopupMenu(self.this,arg0.this)
+        return val
     def __repr__(self):
         return "<C wxTaskBarIcon instance>"
 class wxTaskBarIcon(wxTaskBarIconPtr):

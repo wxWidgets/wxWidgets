@@ -783,6 +783,29 @@ static PyObject *_wrap_wxListCtrl_EndEditLabel(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
+#define wxListCtrl_GetEditControl(_swigobj)  (_swigobj->GetEditControl())
+static PyObject *_wrap_wxListCtrl_GetEditControl(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxTextCtrl * _result;
+    wxListCtrl * _arg0;
+    char * _argc0 = 0;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxListCtrl_GetEditControl",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxListCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxListCtrl_GetEditControl. Expected _wxListCtrl_p.");
+        return NULL;
+        }
+    }
+    _result = (wxTextCtrl *)wxListCtrl_GetEditControl(_arg0);
+    SWIG_MakePtr(_ptemp, (char *) _result,"_wxTextCtrl_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
 #define wxListCtrl_EnsureVisible(_swigobj,_swigarg0)  (_swigobj->EnsureVisible(_swigarg0))
 static PyObject *_wrap_wxListCtrl_EnsureVisible(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -967,29 +990,6 @@ static PyObject *_wrap_wxListCtrl_GetCountPerPage(PyObject *self, PyObject *args
     }
     _result = (int )wxListCtrl_GetCountPerPage(_arg0);
     _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxListCtrl_GetEditControl(_swigobj)  (_swigobj->GetEditControl())
-static PyObject *_wrap_wxListCtrl_GetEditControl(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxTextCtrl * _result;
-    wxListCtrl * _arg0;
-    char * _argc0 = 0;
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"s:wxListCtrl_GetEditControl",&_argc0)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxListCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxListCtrl_GetEditControl. Expected _wxListCtrl_p.");
-        return NULL;
-        }
-    }
-    _result = (wxTextCtrl *)wxListCtrl_GetEditControl(_arg0);
-    SWIG_MakePtr(_ptemp, (char *) _result,"_wxTextCtrl_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -1283,6 +1283,35 @@ static PyObject *_wrap_wxListCtrl_GetTextColour(PyObject *self, PyObject *args) 
     _result = new wxColour (wxListCtrl_GetTextColour(_arg0));
     SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
     _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxListCtrl_SetTextColour(_swigobj,_swigarg0)  (_swigobj->SetTextColour(_swigarg0))
+static PyObject *_wrap_wxListCtrl_SetTextColour(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxListCtrl * _arg0;
+    wxColour * _arg1;
+    char * _argc0 = 0;
+    char * _argc1 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"ss:wxListCtrl_SetTextColour",&_argc0,&_argc1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxListCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxListCtrl_SetTextColour. Expected _wxListCtrl_p.");
+        return NULL;
+        }
+    }
+    if (_argc1) {
+        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_wxColour_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxListCtrl_SetTextColour. Expected _wxColour_p.");
+        return NULL;
+        }
+    }
+    wxListCtrl_SetTextColour(_arg0,*_arg1);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -1893,35 +1922,6 @@ static PyObject *_wrap_wxListCtrl_SetSingleStyle(PyObject *self, PyObject *args)
     }
     _arg2 = (bool ) tempbool2;
     wxListCtrl_SetSingleStyle(_arg0,_arg1,_arg2);
-    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxListCtrl_SetTextColour(_swigobj,_swigarg0)  (_swigobj->SetTextColour(_swigarg0))
-static PyObject *_wrap_wxListCtrl_SetTextColour(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxListCtrl * _arg0;
-    wxColour * _arg1;
-    char * _argc0 = 0;
-    char * _argc1 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"ss:wxListCtrl_SetTextColour",&_argc0,&_argc1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxListCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxListCtrl_SetTextColour. Expected _wxListCtrl_p.");
-        return NULL;
-        }
-    }
-    if (_argc1) {
-        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_wxColour_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxListCtrl_SetTextColour. Expected _wxColour_p.");
-        return NULL;
-        }
-    }
-    wxListCtrl_SetTextColour(_arg0,*_arg1);
     Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -3886,7 +3886,6 @@ static PyMethodDef controls2cMethods[] = {
 	 { "delete_wxTreeItemId", _wrap_delete_wxTreeItemId, 1 },
 	 { "new_wxTreeItemId", _wrap_new_wxTreeItemId, 1 },
 	 { "wxListCtrl_SetWindowStyleFlag", _wrap_wxListCtrl_SetWindowStyleFlag, 1 },
-	 { "wxListCtrl_SetTextColour", _wrap_wxListCtrl_SetTextColour, 1 },
 	 { "wxListCtrl_SetSingleStyle", _wrap_wxListCtrl_SetSingleStyle, 1 },
 	 { "wxListCtrl_SetItemText", _wrap_wxListCtrl_SetItemText, 1 },
 	 { "wxListCtrl_SetItemState", _wrap_wxListCtrl_SetItemState, 1 },
@@ -3908,6 +3907,7 @@ static PyMethodDef controls2cMethods[] = {
 	 { "wxListCtrl_InsertColumnWithInfo", _wrap_wxListCtrl_InsertColumnWithInfo, 1 },
 	 { "wxListCtrl_HitTest", _wrap_wxListCtrl_HitTest, 1 },
 	 { "wxListCtrl_GetTopItem", _wrap_wxListCtrl_GetTopItem, 1 },
+	 { "wxListCtrl_SetTextColour", _wrap_wxListCtrl_SetTextColour, 1 },
 	 { "wxListCtrl_GetTextColour", _wrap_wxListCtrl_GetTextColour, 1 },
 	 { "wxListCtrl_GetSelectedItemCount", _wrap_wxListCtrl_GetSelectedItemCount, 1 },
 	 { "wxListCtrl_GetNextItem", _wrap_wxListCtrl_GetNextItem, 1 },
@@ -3920,7 +3920,6 @@ static PyMethodDef controls2cMethods[] = {
 	 { "wxListCtrl_GetItem", _wrap_wxListCtrl_GetItem, 1 },
 	 { "wxListCtrl_GetItemData", _wrap_wxListCtrl_GetItemData, 1 },
 	 { "wxListCtrl_GetImageList", _wrap_wxListCtrl_GetImageList, 1 },
-	 { "wxListCtrl_GetEditControl", _wrap_wxListCtrl_GetEditControl, 1 },
 	 { "wxListCtrl_GetCountPerPage", _wrap_wxListCtrl_GetCountPerPage, 1 },
 	 { "wxListCtrl_GetColumnWidth", _wrap_wxListCtrl_GetColumnWidth, 1 },
 	 { "wxListCtrl_GetColumn", _wrap_wxListCtrl_GetColumn, 1 },
@@ -3928,6 +3927,7 @@ static PyMethodDef controls2cMethods[] = {
 	 { "wxListCtrl_FindItemData", _wrap_wxListCtrl_FindItemData, 1 },
 	 { "wxListCtrl_FindItem", _wrap_wxListCtrl_FindItem, 1 },
 	 { "wxListCtrl_EnsureVisible", _wrap_wxListCtrl_EnsureVisible, 1 },
+	 { "wxListCtrl_GetEditControl", _wrap_wxListCtrl_GetEditControl, 1 },
 	 { "wxListCtrl_EndEditLabel", _wrap_wxListCtrl_EndEditLabel, 1 },
 	 { "wxListCtrl_EditLabel", _wrap_wxListCtrl_EditLabel, 1 },
 	 { "wxListCtrl_ClearAll", _wrap_wxListCtrl_ClearAll, 1 },

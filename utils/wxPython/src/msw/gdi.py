@@ -422,6 +422,9 @@ class wxDCPtr :
     def EndPage(self):
         val = gdic.wxDC_EndPage(self.this)
         return val
+    def FloodFill(self,arg0,arg1,arg2,*args):
+        val = apply(gdic.wxDC_FloodFill,(self.this,arg0,arg1,arg2.this,)+args)
+        return val
     def GetBackground(self):
         val = gdic.wxDC_GetBackground(self.this)
         val = wxBrushPtr(val)

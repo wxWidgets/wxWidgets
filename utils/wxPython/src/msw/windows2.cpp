@@ -3435,7 +3435,37 @@ static PyObject *_wrap_wxTaskBarIcon_RemoveIcon(PyObject *self, PyObject *args) 
     return _resultobj;
 }
 
+#define wxTaskBarIcon_PopupMenu(_swigobj,_swigarg0)  (_swigobj->PopupMenu(_swigarg0))
+static PyObject *_wrap_wxTaskBarIcon_PopupMenu(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxTaskBarIcon * _arg0;
+    wxMenu * _arg1;
+    char * _argc0 = 0;
+    char * _argc1 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"ss:wxTaskBarIcon_PopupMenu",&_argc0,&_argc1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxTaskBarIcon_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTaskBarIcon_PopupMenu. Expected _wxTaskBarIcon_p.");
+        return NULL;
+        }
+    }
+    if (_argc1) {
+        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_wxMenu_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTaskBarIcon_PopupMenu. Expected _wxMenu_p.");
+        return NULL;
+        }
+    }
+    _result = (bool )wxTaskBarIcon_PopupMenu(_arg0,_arg1);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 static PyMethodDef windows2cMethods[] = {
+	 { "wxTaskBarIcon_PopupMenu", _wrap_wxTaskBarIcon_PopupMenu, 1 },
 	 { "wxTaskBarIcon_RemoveIcon", _wrap_wxTaskBarIcon_RemoveIcon, 1 },
 	 { "wxTaskBarIcon_SetIcon", _wrap_wxTaskBarIcon_SetIcon, 1 },
 	 { "delete_wxTaskBarIcon", _wrap_delete_wxTaskBarIcon, 1 },

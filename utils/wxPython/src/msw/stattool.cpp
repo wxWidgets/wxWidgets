@@ -1129,6 +1129,35 @@ static PyObject *_wrap_wxToolBar_GetToolBitmapSize(PyObject *self, PyObject *arg
     return _resultobj;
 }
 
+#define wxToolBar_SetToolBitmapSize(_swigobj,_swigarg0)  (_swigobj->SetToolBitmapSize(_swigarg0))
+static PyObject *_wrap_wxToolBar_SetToolBitmapSize(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxToolBar * _arg0;
+    wxSize * _arg1;
+    char * _argc0 = 0;
+    char * _argc1 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"ss:wxToolBar_SetToolBitmapSize",&_argc0,&_argc1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxToolBar_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBar_SetToolBitmapSize. Expected _wxToolBar_p.");
+        return NULL;
+        }
+    }
+    if (_argc1) {
+        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_wxSize_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxToolBar_SetToolBitmapSize. Expected _wxSize_p.");
+        return NULL;
+        }
+    }
+    wxToolBar_SetToolBitmapSize(_arg0,*_arg1);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxToolBar_GetMaxSize(_swigobj)  (_swigobj->GetMaxSize())
 static PyObject *_wrap_wxToolBar_GetMaxSize(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -1313,35 +1342,6 @@ static PyObject *_wrap_wxToolBar_Realize(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-#define wxToolBar_SetToolBitmapSize(_swigobj,_swigarg0)  (_swigobj->SetToolBitmapSize(_swigarg0))
-static PyObject *_wrap_wxToolBar_SetToolBitmapSize(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxToolBar * _arg0;
-    wxSize * _arg1;
-    char * _argc0 = 0;
-    char * _argc1 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"ss:wxToolBar_SetToolBitmapSize",&_argc0,&_argc1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxToolBar_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBar_SetToolBitmapSize. Expected _wxToolBar_p.");
-        return NULL;
-        }
-    }
-    if (_argc1) {
-        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_wxSize_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxToolBar_SetToolBitmapSize. Expected _wxSize_p.");
-        return NULL;
-        }
-    }
-    wxToolBar_SetToolBitmapSize(_arg0,*_arg1);
-    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
 #define wxToolBar_SetToolLongHelp(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetToolLongHelp(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxToolBar_SetToolLongHelp(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -1517,7 +1517,6 @@ static PyMethodDef stattoolcMethods[] = {
 	 { "wxToolBar_SetMargins", _wrap_wxToolBar_SetMargins, 1 },
 	 { "wxToolBar_SetToolShortHelp", _wrap_wxToolBar_SetToolShortHelp, 1 },
 	 { "wxToolBar_SetToolLongHelp", _wrap_wxToolBar_SetToolLongHelp, 1 },
-	 { "wxToolBar_SetToolBitmapSize", _wrap_wxToolBar_SetToolBitmapSize, 1 },
 	 { "wxToolBar_Realize", _wrap_wxToolBar_Realize, 1 },
 	 { "wxToolBar_GetToolState", _wrap_wxToolBar_GetToolState, 1 },
 	 { "wxToolBar_GetToolShortHelp", _wrap_wxToolBar_GetToolShortHelp, 1 },
@@ -1526,6 +1525,7 @@ static PyMethodDef stattoolcMethods[] = {
 	 { "wxToolBar_GetToolLongHelp", _wrap_wxToolBar_GetToolLongHelp, 1 },
 	 { "wxToolBar_GetToolEnabled", _wrap_wxToolBar_GetToolEnabled, 1 },
 	 { "wxToolBar_GetMaxSize", _wrap_wxToolBar_GetMaxSize, 1 },
+	 { "wxToolBar_SetToolBitmapSize", _wrap_wxToolBar_SetToolBitmapSize, 1 },
 	 { "wxToolBar_GetToolBitmapSize", _wrap_wxToolBar_GetToolBitmapSize, 1 },
 	 { "wxToolBar_GetToolSize", _wrap_wxToolBar_GetToolSize, 1 },
 	 { "wxToolBar_FindToolForPosition", _wrap_wxToolBar_FindToolForPosition, 1 },

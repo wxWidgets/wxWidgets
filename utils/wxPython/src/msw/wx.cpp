@@ -33,24 +33,10 @@
  * and things like that.
  *
  * $Log$
- * Revision 1.1  1998/12/15 20:44:01  RD
- * Changed the import semantics from "from wxPython import *" to "from
- * wxPython.wx import *"  This is for people who are worried about
- * namespace pollution, they can use "from wxPython import wx" and then
- * prefix all the wxPython identifiers with "wx."
- *
- * Added wxTaskbarIcon for wxMSW.
- *
- * Made the events work for wxGrid.
- *
- * Added wxConfig.
- *
- * Added wxMiniFrame for wxGTK, (untested.)
- *
- * Changed many of the args and return values that were pointers to gdi
- * objects to references to reflect changes in the wxWindows API.
- *
- * Other assorted fixes and additions.
+ * Revision 1.2  1998/12/17 18:07:12  RD
+ * wxPython 0.5.2
+ * Minor fixes and SWIG code generation for RR's changes.  MSW and GTK
+ * versions are much closer now!
  *
  ************************************************************************/
 
@@ -1739,7 +1725,7 @@ SWIGEXPORT(void,initwxc)() {
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_TAB_SEL_CHANGING", PyInt_FromLong((long) wxEVT_COMMAND_TAB_SEL_CHANGING));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED", PyInt_FromLong((long) wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING", PyInt_FromLong((long) wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING));
-	 PyDict_SetItemString(d,"__version__", PyString_FromString("0.4.5"));
+	 PyDict_SetItemString(d,"__version__", PyString_FromString("0.5.2"));
 	 PyDict_SetItemString(d,"cvar", SWIG_globals);
 	 SWIG_addvarlink(SWIG_globals,"wxPyDefaultPosition",_wrap_wxPyDefaultPosition_get, _wrap_wxPyDefaultPosition_set);
 	 SWIG_addvarlink(SWIG_globals,"wxPyDefaultSize",_wrap_wxPyDefaultSize_get, _wrap_wxPyDefaultSize_set);
@@ -1814,6 +1800,7 @@ SWIGEXPORT(void,initwxc)() {
 	 SWIG_RegisterMapping("_class_wxPaintEvent","_wxPaintEvent",0);
 	 SWIG_RegisterMapping("_wxSysColourChangedEvent","_class_wxSysColourChangedEvent",0);
 	 SWIG_RegisterMapping("_class_wxStatusBar","_wxStatusBar",0);
+	 SWIG_RegisterMapping("_class_wxPostScriptDC","_wxPostScriptDC",0);
 	 SWIG_RegisterMapping("_wxPanel","_class_wxPanel",0);
 	 SWIG_RegisterMapping("_wxInitDialogEvent","_class_wxInitDialogEvent",0);
 	 SWIG_RegisterMapping("_wxCheckBox","_class_wxCheckBox",0);
@@ -1939,6 +1926,7 @@ SWIGEXPORT(void,initwxc)() {
 	 SWIG_RegisterMapping("_class_wxToolBarTool","_wxToolBarTool",0);
 	 SWIG_RegisterMapping("_class_wxAcceleratorEntry","_wxAcceleratorEntry",0);
 	 SWIG_RegisterMapping("_class_wxCursor","_wxCursor",0);
+	 SWIG_RegisterMapping("_wxPostScriptDC","_class_wxPostScriptDC",0);
 	 SWIG_RegisterMapping("_wxScrolledWindow","_class_wxScrolledWindow",0);
 	 SWIG_RegisterMapping("_wxTreeItemId","_class_wxTreeItemId",0);
 	 SWIG_RegisterMapping("_unsigned_char","_byte",0);

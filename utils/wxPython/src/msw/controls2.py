@@ -163,6 +163,10 @@ class wxListCtrlPtr(wxControlPtr):
     def EndEditLabel(self,arg0):
         val = controls2c.wxListCtrl_EndEditLabel(self.this,arg0)
         return val
+    def GetEditControl(self):
+        val = controls2c.wxListCtrl_GetEditControl(self.this)
+        val = wxTextCtrlPtr(val)
+        return val
     def EnsureVisible(self,arg0):
         val = controls2c.wxListCtrl_EnsureVisible(self.this,arg0)
         return val
@@ -183,10 +187,6 @@ class wxListCtrlPtr(wxControlPtr):
         return val
     def GetCountPerPage(self):
         val = controls2c.wxListCtrl_GetCountPerPage(self.this)
-        return val
-    def GetEditControl(self):
-        val = controls2c.wxListCtrl_GetEditControl(self.this)
-        val = wxTextCtrlPtr(val)
         return val
     def GetImageList(self,arg0):
         val = controls2c.wxListCtrl_GetImageList(self.this,arg0)
@@ -231,6 +231,9 @@ class wxListCtrlPtr(wxControlPtr):
         val = controls2c.wxListCtrl_GetTextColour(self.this)
         val = wxColourPtr(val)
         val.thisown = 1
+        return val
+    def SetTextColour(self,arg0):
+        val = controls2c.wxListCtrl_SetTextColour(self.this,arg0.this)
         return val
     def GetTopItem(self):
         val = controls2c.wxListCtrl_GetTopItem(self.this)
@@ -294,9 +297,6 @@ class wxListCtrlPtr(wxControlPtr):
         return val
     def SetSingleStyle(self,arg0,*args):
         val = apply(controls2c.wxListCtrl_SetSingleStyle,(self.this,arg0,)+args)
-        return val
-    def SetTextColour(self,arg0):
-        val = controls2c.wxListCtrl_SetTextColour(self.this,arg0.this)
         return val
     def SetWindowStyleFlag(self,arg0):
         val = controls2c.wxListCtrl_SetWindowStyleFlag(self.this,arg0)

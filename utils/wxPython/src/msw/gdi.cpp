@@ -55,6 +55,9 @@ extern PyObject *SWIG_newvarlink(void);
 
 #include "helpers.h"
 #include <wx/metafile.h>
+#ifndef __WXMSW__
+#include <wx/postscrp.h>
+#endif
 
 static PyObject* l_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
@@ -3459,6 +3462,38 @@ static PyObject *_wrap_wxDC_EndPage(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
+#define wxDC_FloodFill(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3)  (_swigobj->FloodFill(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
+static PyObject *_wrap_wxDC_FloodFill(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxDC * _arg0;
+    long  _arg1;
+    long  _arg2;
+    wxColour * _arg3;
+    int  _arg4 = (wxFLOOD_SURFACE);
+    char * _argc0 = 0;
+    char * _argc3 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"slls|i:wxDC_FloodFill",&_argc0,&_arg1,&_arg2,&_argc3,&_arg4)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxDC_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDC_FloodFill. Expected _wxDC_p.");
+        return NULL;
+        }
+    }
+    if (_argc3) {
+        if (SWIG_GetPtr(_argc3,(void **) &_arg3,"_wxColour_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of wxDC_FloodFill. Expected _wxColour_p.");
+        return NULL;
+        }
+    }
+    wxDC_FloodFill(_arg0,_arg1,_arg2,*_arg3,_arg4);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxDC_GetBackground(_swigobj)  (_swigobj->GetBackground())
 static PyObject *_wrap_wxDC_GetBackground(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -5165,6 +5200,7 @@ static PyMethodDef gdicMethods[] = {
 	 { "wxDC_GetCharHeight", _wrap_wxDC_GetCharHeight, 1 },
 	 { "wxDC_GetBrush", _wrap_wxDC_GetBrush, 1 },
 	 { "wxDC_GetBackground", _wrap_wxDC_GetBackground, 1 },
+	 { "wxDC_FloodFill", _wrap_wxDC_FloodFill, 1 },
 	 { "wxDC_EndPage", _wrap_wxDC_EndPage, 1 },
 	 { "wxDC_EndDrawing", _wrap_wxDC_EndDrawing, 1 },
 	 { "wxDC_EndDoc", _wrap_wxDC_EndDoc, 1 },

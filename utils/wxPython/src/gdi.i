@@ -405,10 +405,12 @@ public:
 
 //---------------------------------------------------------------------------
 
+#ifndef __WXMSW__
 class wxPostScriptDC : public wxDC {
 public:
       wxPostScriptDC(const wxString& output, bool interactive = TRUE, wxWindow* win = NULL);
 };
+#endif
 
 //---------------------------------------------------------------------------
 
@@ -503,7 +505,13 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.10  1998/12/17 18:05:50  RD
+// wxPython 0.5.2
+// Minor fixes and SWIG code generation for RR's changes.  MSW and GTK
+// versions are much closer now!
+//
 // Revision 1.9  1998/12/17 14:07:37  RR
+//
 //   Removed minor differences between wxMSW and wxGTK
 //
 // Revision 1.8  1998/12/16 22:10:54  RD

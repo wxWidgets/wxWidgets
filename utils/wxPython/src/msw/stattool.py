@@ -203,6 +203,9 @@ class wxToolBarPtr(wxControlPtr):
         val = wxSizePtr(val)
         val.thisown = 1
         return val
+    def SetToolBitmapSize(self,arg0):
+        val = stattoolc.wxToolBar_SetToolBitmapSize(self.this,arg0.this)
+        return val
     def GetMaxSize(self):
         val = stattoolc.wxToolBar_GetMaxSize(self.this)
         val = wxSizePtr(val)
@@ -228,9 +231,6 @@ class wxToolBarPtr(wxControlPtr):
         return val
     def Realize(self):
         val = stattoolc.wxToolBar_Realize(self.this)
-        return val
-    def SetToolBitmapSize(self,arg0):
-        val = stattoolc.wxToolBar_SetToolBitmapSize(self.this,arg0.this)
         return val
     def SetToolLongHelp(self,arg0,arg1):
         val = stattoolc.wxToolBar_SetToolLongHelp(self.this,arg0,arg1)
