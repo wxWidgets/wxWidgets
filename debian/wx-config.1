@@ -1,0 +1,67 @@
+.TH wxWindows 1 "15 Feb 2000" "wxGTK 2.1.13"
+.SH NAME
+wx-config - script to get information about the installed version of wxGTK
+.SH SYNOPSIS
+.nh
+.HP
+.B wx-config
+[\-\-version] [\-\-libs] [\-\-cflags] [\-\-cc] [\-\-cxx] [\-\-ld]
+[\-\-prefix\fI[=DIR]\fP] [\-\-exec\-prefix\fI[=DIR]\fP]
+.hy
+.SH DESCRIPTION
+.PP
+\fIwx-config\fP is a tool used to determine the compiler and
+linker flags that should be used to compile and link programs
+that use \fIwxGTK\fP.
+.
+.SH OPTIONS
+.l
+\fIwx-config\fP accepts the following options:
+.TP 8
+.B  \-\-version
+Report the currently installed version of \fIwxGTK\fP.
+.TP 8
+.B  \-\-libs
+Output the linker flags necessary to link a \fIwxGTK\fP program.
+.TP 8
+.B  \-\-cflags
+Output the compiler flags necessary to compile a \fIwxGTK\fP program.
+.TP 8
+.B  \-\-cc
+Output the name of the C compiler \fB$(CC)\fP.
+.TP 8
+.B  \-\-cxx
+Output the name of the C++ compiler \fB$(CXX)\fP.
+.TP 8
+.B  \-\-ld
+Output the Linker command \fB$(LD)\fP.
+.TP 8
+.B  \-\-prefix=PREFIX
+If specified, use PREFIX instead of the installation prefix that \fIwxGTK\fP
+was built with when computing the output for the \-\-cflags and
+\-\-libs options. This option is also used for the exec prefix
+if \-\-exec\-prefix was not specified. This option must be specified
+before any \-\-libs or \-\-cflags options.
+.TP 8
+.B  \-\-exec\-prefix=PREFIX
+If specified, use PREFIX instead of the installation exec prefix that
+\fIwxGTK\fP was built with when computing the output for the \-\-cflags
+and \-\-libs options.  This option must be specified before any
+\-\-libs or \-\-cflags options.
+.SH SEE ALSO
+.BR gtk-config (1)
+.SH COPYRIGHT
+This manpage was copied whole-heartedly from the \fBgtk-config\fP(1) manpage
+by Brian Bassett <brianb@debian.org> for the Debian GNU/Linux distribution of
+wxGTK.  It was then updated to include new options and otherwise kicked about
+generally by Ron Lee <ron@debian.org>
+
+The original gtk-config manpage copyright:
+
+Copyright \(co  1995 Spencer Kimball and Peter Mattis
+
+Permission to use, copy, modify, and distribute this software and its
+documentation for any purpose and without fee is hereby granted,
+provided that the above copyright notice appear in all copies and that
+both that copyright notice and this permission notice appear in
+supporting documentation.

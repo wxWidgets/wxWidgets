@@ -1,0 +1,14 @@
+#!/bin/sh
+set -e
+
+TEMPDIR=temp-debian
+
+echo "creating Debian source tree"
+
+rm -rf ${TEMPDIR}
+mkdir ${TEMPDIR}
+cd ${TEMPDIR} && ../configure && make debian-dist
+cd .. && rm -r ${TEMPDIR}
+
+echo "done."
+

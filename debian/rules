@@ -1,0 +1,106 @@
+#!/usr/bin/make -f
+# debian/rules file to build packages from wxWindows CVS source
+#
+# Sculpted 13/2/2000 by Ron Lee <ron@debian.org> from new and
+# variously stolen code :-)
+# (including a debhelper template, GNU copyright 1997 to 1999 by
+# Joey Hess, and some ideas found in the ncurses rules file that
+# I quite liked)
+
+#export DH_VERBOSE=1
+export DH_COMPAT=2
+
+# Change this when the release version changes and
+# touch control.in to propagate the change.
+release=2.1
+
+# These are the packages we will build
+package_gtk_lib=libwxgtk$(release)
+package_gtk_dev=libwxgtk$(release)-dev
+
+# Dirs to put the various builds object files in
+objdir_gtk_shared=objs_gtk_sh
+objdir_gtk_static=objs_gtk_st
+
+objdirs=$(objdir_gtk_shared) $(objdir_gtk_static)
+
+build_stamps=build-gtk-shared-stamp build-gtk-static-stamp
+
+
+debian/control: debian/control.in
+	sed -e 's/=V/$(release)/g' < debian/control.in > debian/control
+
+build: debian/control $(build_stamps)
+
+build-gtk-shared-stamp:
+	dh_testdir
+	mkdir $(objdir_gtk_shared)
+	cd $(objdir_gtk_shared) \
+		&& ../configure --prefix=/usr --with-gtk \
+		&& $(MAKE)
+	touch $@
+
+build-gtk-static-stamp:
+	dh_testdir
+	mkdir $(objdir_gtk_static)
+	cd $(objdir_gtk_static) \
+		&& ../configure --prefix=/usr --with-gtk --disable-shared \
+		&& $(MAKE)
+	touch $@
+
+clean: debian/control
+	dh_testdir
+	dh_testroot
+	-rm -rf $(build_stamps) $(objdirs)
+	dh_clean
+	-rm -f debian/$(package_gtk_lib).*
+	-rm -f debian/$(package_gtk_dev).*
+
+install: build
+	@for f in dirs docs files postinst; do \
+		echo "generating control file $(package_gtk_lib).$$f"; \
+		cp debian/libwxgtk.$$f debian/$(package_gtk_lib).$$f; \
+	done;
+	@for f in dirs docs files; do \
+		echo "generating control file $(package_gtk_dev).$$f"; \
+		cp debian/libwxgtk-dev.$$f debian/$(package_gtk_dev).$$f; \
+	done;
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	dh_installdirs
+	cd $(objdir_gtk_shared) \
+		&& $(MAKE) install prefix=`pwd`/../debian/tmp/usr
+	cp $(objdir_gtk_static)/lib/*.a debian/tmp/usr/lib
+	dh_movefiles
+
+
+# Build architecture-independent files here.
+binary-indep: build install
+# nothing to do.
+
+# Build architecture-dependent files here.
+binary-arch: build install
+	dh_testdir
+	dh_testroot
+	dh_installdocs
+	dh_installmanpages -p$(package_gtk_dev) \
+		ansi2knr.1 \
+		jpegtran.1 \
+		libpng.3 \
+		libpngpf.3 \
+		zlib.3 \
+		png.5
+	dh_installchangelogs 
+	dh_strip
+	dh_compress
+	dh_fixperms
+	dh_makeshlibs
+	dh_installdeb
+	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary install

@@ -1,0 +1,5 @@
+usr/bin/
+usr/include/wx/
+usr/lib/wx
+usr/lib/*.so
+usr/lib/*.a

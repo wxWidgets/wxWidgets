@@ -1,0 +1,35 @@
+Source: wxwindows
+Section: libs
+Priority: optional
+Build-Depends: debhelper, libgtk1.2-dev, flex, bison
+Maintainer: Ron Lee <ron@debian.org>
+Standards-Version: 3.1.1
+
+Package: libwxgtk=V
+Architecture: any
+Section: libs
+Depends: ${shlibs:Depends}
+Description: wxWindows Cross-platform C++ GUI toolkit (GTK+ runtime)
+ wxWindows is a class library for C++ providing GUI (Graphical User
+ Interface) and other facilities on more than one platform.  Version 2.1
+ currently supports subsets of GTK+, Motif, and MS Windows.
+ .
+ This package provides the shared libraries needed to run programs linked
+ against wxWindows.
+
+Package: libwxgtk=V-dev
+Architecture: any
+Section: devel
+Depends: libwxgtk=V (= ${Source-Version}), libc6-dev
+Suggests: libstdc++-dev, gettext
+Conflicts: libwxgtk-dev
+Replaces: libwxgtk-dev
+Provides: libwxgtk-dev
+Description: wxWindows Cross-platform C++ GUI toolkit (GTK+ development)
+ wxWindows is a class library for C++ providing GUI (Graphical User
+ Interface) and other facilities on more than one platform.  Version 2.1
+ currently supports subsets of GTK+, Motif, and MS Windows.
+ .
+ This package provides files needed to compile wxWindows programs.  It
+ includes header files and static libraries.
+
