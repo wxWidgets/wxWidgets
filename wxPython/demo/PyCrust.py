@@ -17,6 +17,7 @@ overview = shell.__doc__
 
 
 if __name__ == '__main__':
+    import sys,os
     import run
-    run.main(['', 'PyCrust'])
+    run.main(['', os.path.basename(sys.argv[0])])
 

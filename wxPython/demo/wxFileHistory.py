@@ -118,7 +118,7 @@ list appended to a menu, such as the File menu.
 """
 
 if __name__ == '__main__':
-    import os
+    import sys,os
     import run
-    run.main(['', os.path.basename(__file__)])
+    run.main(['', os.path.basename(sys.argv[0])])
 
