@@ -2260,12 +2260,15 @@ void wxWindowMac::MacPaintBorders( int leftOrigin , int rightOrigin )
     bool hasBothScrollbars = ( m_hScrollBar && m_hScrollBar->IsShown()) && ( m_vScrollBar && m_vScrollBar->IsShown()) ;
 
     m_peer->GetRect( &rect ) ;
-    InsetRect( &rect, -MacGetLeftBorderSize() , -MacGetTopBorderSize() ) ;
+    // back to the surrounding frame rectangle
+    InsetRect( &rect, -1 , -1 ) ;
 
 #if wxMAC_USE_CORE_GRAPHICS && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
     if ( UMAGetSystemVersion() >= 0x1030  )
     {
-        Rect srect = rect ;
+        CGRect cgrect = CGRectMake( rect.left , rect.top , rect.right - rect.left ,
+            rect.bottom - rect.top ) ;
+
         HIThemeFrameDrawInfo info ;
         memset( &info, 0 , sizeof( info ) ) ;
         
@@ -2273,49 +2276,31 @@ void wxWindowMac::MacPaintBorders( int leftOrigin , int rightOrigin )
         info.kind = 0 ;
         info.state = IsEnabled() ? kThemeStateActive : kThemeStateInactive ;
         info.isFocused = hasFocus ;
-        bool draw = false ;
 
         CGContextRef cgContext = (CGContextRef) GetParent()->MacGetCGContextRef() ;
         wxASSERT( cgContext ) ;
          
         if (HasFlag(wxRAISED_BORDER) || HasFlag( wxSUNKEN_BORDER) || HasFlag(wxDOUBLE_BORDER) )
         {
-            SInt32 border = 0 ;
-            GetThemeMetric( kThemeMetricEditTextFrameOutset , &border ) ;
-            InsetRect( &srect , border , border );
             info.kind = kHIThemeFrameTextFieldSquare ;
-            draw = true ;
+            HIThemeDrawFrame( &cgrect , &info , cgContext , kHIThemeOrientationNormal ) ;
         }
         else if (HasFlag(wxSIMPLE_BORDER))
         {
-            SInt32 border = 0 ;
-            GetThemeMetric( kThemeMetricListBoxFrameOutset , &border ) ;
-            InsetRect( &srect , border , border );
             info.kind = kHIThemeFrameListBox ;
-            draw = true ;
-        }
-            
-        if ( draw )
-        {
-            CGRect cgrect = CGRectMake( srect.left , srect.top , srect.right - srect.left ,
-                srect.bottom - srect.top ) ;
             HIThemeDrawFrame( &cgrect , &info , cgContext , kHIThemeOrientationNormal ) ;
         }
         else if ( hasFocus )
         {
-            srect = rect ;
-            CGRect cgrect = CGRectMake( srect.left , srect.top , srect.right - srect.left ,
-                srect.bottom - srect.top ) ;
             HIThemeDrawFocusRect( &cgrect , true , cgContext , kHIThemeOrientationNormal ) ;
         }
         
         m_peer->GetRect( &rect ) ;
         if ( hasBothScrollbars )
         {
-            srect = rect ;
             int size = m_hScrollBar->GetWindowVariant() == wxWINDOW_VARIANT_NORMAL ? 16 : 12 ;
-            CGRect cgrect = CGRectMake( srect.right - size , srect.bottom - size , size , size ) ;
-            CGPoint cgpoint = CGPointMake( srect.right - size , srect.bottom - size ) ;
+            CGRect cgrect = CGRectMake( rect.right - size , rect.bottom - size , size , size ) ;
+            CGPoint cgpoint = CGPointMake( rect.right - size , rect.bottom - size ) ;
             HIThemeGrowBoxDrawInfo info ; 
             memset( &info, 0 , sizeof( info ) ) ;
             info.version = 0 ;
@@ -2339,26 +2324,18 @@ void wxWindowMac::MacPaintBorders( int leftOrigin , int rightOrigin )
 
         if (HasFlag(wxRAISED_BORDER) || HasFlag( wxSUNKEN_BORDER) || HasFlag(wxDOUBLE_BORDER) )
         {
-            Rect srect = rect ;
-            SInt32 border = 0 ;
-            GetThemeMetric( kThemeMetricEditTextFrameOutset , &border ) ;
-            InsetRect( &srect , border , border );
-            DrawThemeEditTextFrame(&srect,IsEnabled() ? kThemeStateActive : kThemeStateInactive) ;
+            DrawThemeEditTextFrame(&rect,IsEnabled() ? kThemeStateActive : kThemeStateInactive) ;
         }
         else if (HasFlag(wxSIMPLE_BORDER))
         {
-            Rect srect = rect ;
-            SInt32 border = 0 ;
-            GetThemeMetric( kThemeMetricListBoxFrameOutset , &border ) ;
-            InsetRect( &srect , border , border );
             DrawThemeListBoxFrame(&rect,IsEnabled() ? kThemeStateActive : kThemeStateInactive) ;
         }
         
         if ( hasFocus )
         {
-            Rect srect = rect ;
-            DrawThemeFocusRect( &srect , true ) ;
+            DrawThemeFocusRect( &rect , true ) ;
         }
+
         if ( hasBothScrollbars )
         {
             // GetThemeStandaloneGrowBoxBounds    
@@ -2588,7 +2565,8 @@ void wxWindowMac::OnSetFocus(wxFocusEvent& event)
         wxMacWindowStateSaver sv( this ) ;
         Rect rect ;
         m_peer->GetRect( &rect ) ;
-        InsetRect( &rect, -MacGetLeftBorderSize() , -MacGetTopBorderSize() ) ;
+        // auf den umgebenden Rahmen zurück
+        InsetRect( &rect, -1 , -1 ) ;
 
         wxTopLevelWindowMac* top = MacGetTopLevelWindow();
         if (top )
@@ -3111,21 +3089,19 @@ long wxWindowMac::MacGetLeftBorderSize( ) const
     if( IsTopLevel() )
         return 0 ;
 
-    if (m_windowStyle & wxRAISED_BORDER || m_windowStyle & wxSUNKEN_BORDER )
+    SInt32 border = 0 ;
+    
+    if (HasFlag(wxRAISED_BORDER) || HasFlag( wxSUNKEN_BORDER) || HasFlag(wxDOUBLE_BORDER) )
     {
-        SInt32 border = 3 ;
-          return border ;
+        GetThemeMetric( kThemeMetricEditTextFrameOutset , &border ) ;
+        border += 1 ; // the metric above is only the 'outset' outside the simple frame rect
     }
-    else if (  m_windowStyle &wxDOUBLE_BORDER)
+    else if (HasFlag(wxSIMPLE_BORDER))
     {
-          SInt32 border = 3 ;
-          return border ;
+        GetThemeMetric( kThemeMetricListBoxFrameOutset , &border ) ;
+        border += 1 ; // the metric above is only the 'outset' outside the simple frame rect
     }
-    else if (m_windowStyle &wxSIMPLE_BORDER)
-    {
-        return 1 ;
-    }
-    return 0 ;
+    return border ;
 }
 
 long wxWindowMac::MacGetRightBorderSize( ) const
