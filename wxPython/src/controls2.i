@@ -703,7 +703,7 @@ public:
         '''get the currently focused item or -1 if none'''
         return self.GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_FOCUSED)
 
-    def GetFirstSelected(self, item):
+    def GetFirstSelected(self, *args):
         '''return first selected item, or -1 when none'''
         return self.GetNextSelected(-1)
 
