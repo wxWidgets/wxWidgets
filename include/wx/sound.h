@@ -71,12 +71,12 @@ protected:
 
 #if defined(__WXMSW__)
     #include "wx/msw/sound.h"
-#elif defined(__UNIX__)
-    #include "wx/unix/sound.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/sound.h"
 #elif defined(__WXPM__)
     #include "wx/os2/sound.h"
+#elif defined(__UNIX__)
+    #include "wx/unix/sound.h"
 #endif
 
 // ----------------------------------------------------------------------------
