@@ -27,8 +27,6 @@ samples/help/Makefile.in
 samples/htlbox/Makefile.in
 samples/internat/Makefile.in
 samples/ipc/Makefile.in
-samples/png/Makefile.in
-samples/sockets/Makefile.in
 samples/html/Makefile.in
 samples/html/about/Makefile.in
 samples/html/help/Makefile.in
@@ -51,6 +49,7 @@ samples/mobile/wxedit/Makefile.in
 samples/mobile/styles/Makefile.in
 samples/multimon/Makefile.in
 samples/notebook/Makefile.in
+samples/png/Makefile.in
 samples/printing/Makefile.in
 samples/propsize/Makefile.in
 samples/render/Makefile.in
@@ -59,6 +58,8 @@ samples/sashtest/Makefile.in
 samples/scroll/Makefile.in
 samples/scrollsub/Makefile.in
 samples/shaped/Makefile.in
+samples/sound/Makefile.in
+samples/sockets/Makefile.in
 samples/splitter/Makefile.in
 samples/statbar/Makefile.in
 samples/text/Makefile.in

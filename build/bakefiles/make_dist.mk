@@ -821,6 +821,11 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/sockets/*.cpp $(DISTDIR)/samples/sockets
 	cp $(SAMPDIR)/sockets/*.xpm $(DISTDIR)/samples/sockets
 
+	mkdir $(DISTDIR)/samples/sound
+	cp $(SAMPDIR)/sound/Makefile.in $(DISTDIR)/samples/sound
+	cp $(SAMPDIR)/sound/*.cpp $(DISTDIR)/samples/sound
+	cp $(SAMPDIR)/sound/*.wav $(DISTDIR)/samples/sound
+
 	mkdir $(DISTDIR)/samples/splitter
 	cp $(SAMPDIR)/splitter/Makefile.in $(DISTDIR)/samples/splitter
 	cp $(SAMPDIR)/splitter/makefile.unx $(DISTDIR)/samples/splitter

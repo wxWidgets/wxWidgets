@@ -1085,6 +1085,18 @@ samples/sockets/*.rc
 samples/sockets/*.pro
 samples/sockets/*.bkl
 
+samples/sound/*.cpp
+samples/sound/*.h
+samples/sound/makefile*
+samples/sound/*.rc
+samples/sound/*.def
+samples/sound/*.ico
+samples/sound/*.xpm
+samples/sound/*.bmp
+samples/sound/*.wav
+samples/sound/*.pro
+samples/sound/*.bkl
+
 samples/statbar/*.cpp
 samples/statbar/*.h
 samples/statbar/makefile*
