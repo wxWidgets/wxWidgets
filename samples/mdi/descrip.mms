@@ -9,16 +9,16 @@
 	define wx [--.include.wx]
 
 .ifdef __WXMOTIF__
-CXX_DEFINE = /define=(__WXMOTIF__=1)
+CXX_DEFINE = /define=(__WXMOTIF__=1)/name=(as_is,short)\
+	   /assume=(nostdnew,noglobal_array_new)
 .else
 .ifdef __WXGTK__
-CXX_DEFINE = /define=(__WXGTK__=1)
+CXX_DEFINE = /define=(__WXGTK__=1)/float=ieee/name=(as_is,short)/ieee=denorm\
+	   /assume=(nostdnew,noglobal_array_new)
 .else
 CXX_DEFINE =
 .endif
 .endif
-
-CXXFLAGS=/list/show=all
 
 .suffixes : .cpp
 

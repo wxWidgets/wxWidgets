@@ -21,6 +21,12 @@
     #pragma implementation "window.h"
 #endif
 
+#ifdef __VMS
+#define XtDisplay XTDISPLAY
+#define XtWINDOW XTWINDOW
+#define XtSreen XTSCREEN
+#endif
+
 #include "wx/setup.h"
 #include "wx/menu.h"
 #include "wx/dc.h"

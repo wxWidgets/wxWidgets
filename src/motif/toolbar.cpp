@@ -21,6 +21,10 @@
     #pragma implementation "toolbar.h"
 #endif
 
+#ifdef __VMS
+#define XtDisplay XTDISPLAY
+#endif
+
 #include "wx/wx.h"
 #include "wx/app.h"
 #include "wx/timer.h"

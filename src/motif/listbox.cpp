@@ -13,7 +13,12 @@
     #pragma implementation "listbox.h"
 #endif
 
-#include "wx/listbox.h"
+#ifdef __VMS
+#define XtParent XTPARENT
+#define XtDisplay XTDISPLAY
+#endif
+
+# include "wx/listbox.h"
 #include "wx/settings.h"
 #include "wx/dynarray.h"
 #include "wx/log.h"

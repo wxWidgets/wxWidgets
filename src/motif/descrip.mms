@@ -9,7 +9,9 @@
 	define wx [--.include.wx]
 
 .ifdef __WXMOTIF__
-CXX_DEFINE = /define=(__WXMOTIF__=1)
+CXX_DEFINE = /define=(__WXMOTIF__=1)/name=(as_is,short)\
+	   /assume=(nostdnew,noglobal_array_new)
+CC_DEFINE = /define=(__WXMOTIF__=1)/name=(as_is,short)
 .else
 CXX_DEFINE =
 .endif
@@ -19,7 +21,7 @@ CXX_DEFINE =
 .cpp.obj :
 	cxx $(CXXFLAGS)$(CXX_DEFINE) $(MMS$TARGET_NAME).cpp
 .c.obj :
-	cc $(CFLAGS)$(CXX_DEFINE) $(MMS$TARGET_NAME).c
+	cc $(CFLAGS)$(CC_DEFINE) $(MMS$TARGET_NAME).c
 
 OBJECTS = \
 		xmcombo.obj,\
@@ -138,7 +140,7 @@ all : $(SOURCES)
 .endif
 
 xmcombo.obj : [.xmcombo]xmcombo.c
-	cc $(CFLAGS)$(CXX_DEFINE) [.xmcombo]xmcombo.c
+	cc $(CFLAGS)$(CC_DEFINE) [.xmcombo]xmcombo.c
 
 accel.obj : accel.cpp
 app.obj : app.cpp

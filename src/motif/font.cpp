@@ -23,6 +23,7 @@
 
 #ifdef __VMS
 #pragma message disable nosimpint
+#include "wx/vms_x_fix.h"
 #endif
 #include <Xm/Xm.h>
 #ifdef __VMS
