@@ -56,7 +56,7 @@ bool wxCheckBox::Create(  wxWindow *parent, wxWindowID id, const wxString &label
 
   SetLabel( label );
 
-  m_widget = gtk_check_button_new_with_label( label );
+  m_widget = gtk_check_button_new_with_label( m_label );
  
   wxSize newSize = size;
   if (newSize.x == -1) newSize.x = 25+gdk_string_measure( m_widget->style->font, label );
