@@ -175,9 +175,15 @@ OTHER CHANGES
 2.4.2
 -----
 
+wxBase:
+
+- always NUL-terminate the log messages
+
 All:
 
 - wxRegEx::Compile() now calculates the number of groups correctly
+
+
 
 2.4.1
 -----

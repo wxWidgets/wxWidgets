@@ -114,13 +114,24 @@ static inline bool IsLoggingEnabled()
 //     macros and not all compilers inline vararg functions.
 // ----------------------------------------------------------------------------
 
+// wrapper for wxVsnprintf(s_szBuf) which always NULL-terminates it
+static inline void PrintfInLogBug(const wxChar *szFormat, va_list argptr)
+{
+    if ( wxVsnprintf(s_szBuf, s_szBufSize, szFormat, argptr) < 0 )
+    {
+        // must NUL-terminate it manually
+        s_szBuf[s_szBufSize - 1] = _T('\0');
+    }
+    //else: NUL-terminated by vsnprintf()
+}
+
 // generic log function
 void wxVLogGeneric(wxLogLevel level, const wxChar *szFormat, va_list argptr)
 {
     if ( IsLoggingEnabled() ) {
         wxCRIT_SECT_LOCKER(locker, gs_csLogBuf);
 
-        wxVsnprintf(s_szBuf, s_szBufSize, szFormat, argptr);
+        PrintfInLogBug(szFormat, argptr);
 
         wxLog::OnLog(level, s_szBuf, time(NULL));
     }
@@ -140,11 +151,12 @@ void wxLogGeneric(wxLogLevel level, const wxChar *szFormat, ...)
     if ( IsLoggingEnabled() ) {                                     \
       wxCRIT_SECT_LOCKER(locker, gs_csLogBuf);                      \
                                                                     \
-      wxVsnprintf(s_szBuf, s_szBufSize, szFormat, argptr);    \
+      PrintfInLogBug(szFormat, argptr);                             \
                                                                     \
       wxLog::OnLog(wxLOG_##level, s_szBuf, time(NULL));             \
     }                                                               \
   }                                                                 \
+                                                                    \
   void wxLog##level(const wxChar *szFormat, ...)                    \
   {                                                                 \
     va_list argptr;                                                 \
