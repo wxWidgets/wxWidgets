@@ -45,6 +45,8 @@ public:
 // Cocoa callbacks
 // ------------------------------------------------------------------------
 protected:
+    // Static lines cannot be enabled/disabled
+    virtual void CocoaSetEnabled(bool enable) { }
 // ------------------------------------------------------------------------
 // Implementation
 // ------------------------------------------------------------------------
