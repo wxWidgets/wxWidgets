@@ -42,7 +42,7 @@
 #include "wx/sizer.h"
 
 #include "widgets.h"
-#if 1
+#if wxUSE_SPINBTN
 #include "icons/spinbtn.xpm"
 
 // ----------------------------------------------------------------------------
@@ -428,3 +428,4 @@ void SpinBtnWidgetsPage::OnSpinCtrl(wxCommandEvent& event)
     wxLogMessage(_T("Spin control value changed, now %d"), value);
 }
 #endif
+    // wxUSE_SPINBTN
