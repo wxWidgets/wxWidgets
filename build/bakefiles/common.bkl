@@ -2,6 +2,8 @@
 <!-- $Id$ -->
 
 <makefile>
+    
+    <set var="BUILDING_LIB" overwrite="0">0</set>
 
     <!-- bakefile modules we need: -->
     <using module="datafiles"/>
@@ -142,6 +144,14 @@
         <mac_version>$(WXMACVERSION)</mac_version>
     </template>
     
+    
+    <!-- =============================================================== -->
+    <!--                       Contrib helpers:                          -->
+    <!-- =============================================================== -->
+
+    <template id="contrib">
+        <include>$(SRCDIR)/../../include</include>
+    </template>
     
     <!-- =============================================================== -->
     <!--               Support for wxWindows samples and contrib:        -->

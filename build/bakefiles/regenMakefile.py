@@ -66,7 +66,7 @@ addMakefile('wx.bkl', {'all':'..','autoconf':'../..'},
 addMakefile('../../samples/samples.bkl', {'all':'../../samples'})
 
 
-def onSample(arg, dirname, names):
+def onSubmakefile(acdir, dirname, names):
     bakes = [x for x in names if x.endswith('.bkl')]
     if len(bakes) == 0: return
     depth = dirname.count('/') - 2
@@ -79,11 +79,13 @@ def onSample(arg, dirname, names):
     }
     
     for bake in bakes:
-        addMakefile('%s/%s' % (dirname, bake), {'all':dirname},
+        addMakefile('%s/%s' % (dirname, bake),
+                    {'all':dirname,'autoconf':dirname+acdir},
                     deps=['common.bkl','common_samples.bkl','config.bkl'],
                     args=args)
 
-os.path.walk('../../samples', onSample, None)
+os.path.walk('../../samples', onSubmakefile, '')
+os.path.walk('../../contrib/src', onSubmakefile, '/..')
 
 
 cleanCmds = ''
