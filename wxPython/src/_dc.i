@@ -277,6 +277,15 @@ public:
         "Get the width, height, decent and leading of the text using the current or specified font.\n"
         "Works for single as well as multi-line strings.");
 
+    
+    %extend {
+        wxArrayInt GetPartialTextExtents(const wxString& text) {
+            wxArrayInt widths;
+            self->GetPartialTextExtents(text, widths);
+            return widths;
+        }
+    }
+    
 
     // size and resolution
     // -------------------
