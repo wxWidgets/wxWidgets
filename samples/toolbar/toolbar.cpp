@@ -330,7 +330,7 @@ void MyFrame::RecreateToolbar()
     toolBar->AddTool(wxID_COPY, _T("Copy"), toolBarBitmaps[3], _T("Toggle button 2"), wxITEM_CHECK);
     toolBar->AddTool(wxID_CUT, _T("Cut"), toolBarBitmaps[4], _T("Toggle/Untoggle help button"));
     toolBar->AddTool(wxID_PASTE, _T("Paste"), toolBarBitmaps[5], _T("Paste"));
-    toolBar->AddTool(wxID_PRINT, _T("Print"), toolBarBitmaps[6], _T("Delete this tool"));
+    toolBar->AddTool(wxID_PRINT, _T("Print"), toolBarBitmaps[6], _T("Delete this tool. This is a very long tooltip to test whether it does the right thing when the tooltip is more than Windows can cope with."));
     toolBar->AddSeparator();
     toolBar->AddTool(wxID_HELP, _T("Help"), toolBarBitmaps[7], _T("Help button"), wxITEM_CHECK);
 

@@ -318,7 +318,7 @@ void MyCanvas::OnAddButton( wxCommandEvent &WXUNUSED(event) )
     wxLogMessage( wxT("-> Position after inserting %d %d"), pt.x, pt.y );
 }
 
-void MyCanvas::OnDeleteButton( wxCommandEvent &event )
+void MyCanvas::OnDeleteButton( wxCommandEvent &WXUNUSED(event) )
 {
     wxLogMessage( wxT("Deleting button inserted with \"Add button\"...") );
     wxWindow *win = FindWindow( ID_NEWBUTTON );

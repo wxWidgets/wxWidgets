@@ -207,7 +207,7 @@ MyTopLabels::MyTopLabels( wxScrolledWindow *parent, wxWindowID id, const wxPoint
     m_owner = parent;
 }
 
-void MyTopLabels::OnPaint( wxPaintEvent &event )
+void MyTopLabels::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
     wxPaintDC dc(this);
 
@@ -241,7 +241,7 @@ MyRightLabels::MyRightLabels( wxScrolledWindow *parent, wxWindowID id, const wxP
     m_owner = parent;
 }
 
-void MyRightLabels::OnPaint( wxPaintEvent &event )
+void MyRightLabels::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
     wxPaintDC dc(this);
 

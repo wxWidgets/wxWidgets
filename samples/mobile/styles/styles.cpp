@@ -66,16 +66,16 @@ void MyFrame::CreateMyMenuBar()
     SetMenuBar( menu_bar );
 }
 
-void MyFrame::OnAbout( wxCommandEvent &event )
+void MyFrame::OnAbout( wxCommandEvent &WXUNUSED(event) )
 {
 }
 
-void MyFrame::OnQuit( wxCommandEvent &event )
+void MyFrame::OnQuit( wxCommandEvent &WXUNUSED(event) )
 {
      Close( TRUE );
 }
 
-void MyFrame::OnCloseWindow( wxCloseEvent &event )
+void MyFrame::OnCloseWindow( wxCloseEvent &WXUNUSED(event) )
 {
     Destroy();
 }

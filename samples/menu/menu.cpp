@@ -876,7 +876,7 @@ void MyFrame::ShowContextMenu(const wxPoint& pos)
 #endif // 0
 }
 
-void MyFrame::OnTestNormal(wxCommandEvent& event)
+void MyFrame::OnTestNormal(wxCommandEvent& WXUNUSED(event))
 {
     wxLogMessage(_T("Normal item selected"));
 }
@@ -919,7 +919,7 @@ void MyFrame::OnUpdateSubMenuRadio(wxUpdateUIEvent& event)
         event.Check(FALSE);
 }
 
-void MyFrame::OnSize(wxSizeEvent& event)
+void MyFrame::OnSize(wxSizeEvent& WXUNUSED(event))
 {
     if ( !m_textctrl )
         return;

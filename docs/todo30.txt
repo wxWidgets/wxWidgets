@@ -80,9 +80,8 @@ Core
     we definitely need it for the users makefiles.
 
 - Properties/Member-Metadata, 2-Step Init with virtual create
-    TODO: still unclear what do we need exactly
 
-- Tidy code and add comments to headers (preferably in
+- Tidy code and add comments to headers (possibly in
   Doxygen/Javadoc style)
 
 
@@ -152,12 +151,8 @@ Removal of old code
 
 In addition to wxCOMPATIBILITY code:
 
-- wxProperty classes.
-- All wxCOMPATIBILITY (1.X) code.
-- contrib/src/canvas?
 - contrib/src/mmedia
 - contrib/src/applet?
-- Old wxODBC code
 - Dialog Editor
 
 wxMiscellaneous

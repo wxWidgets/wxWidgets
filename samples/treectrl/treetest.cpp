@@ -435,12 +435,12 @@ void MyFrame::OnDumpSelected(wxCommandEvent& WXUNUSED(event))
     }
 }
 
-void MyFrame::OnSelect(wxCommandEvent& event)
+void MyFrame::OnSelect(wxCommandEvent& WXUNUSED(event))
 {
     m_treeCtrl->SelectItem(m_treeCtrl->GetSelection());
 }
 
-void MyFrame::OnUnselect(wxCommandEvent& event)
+void MyFrame::OnUnselect(wxCommandEvent& WXUNUSED(event))
 {
     m_treeCtrl->UnselectAll();
 }
@@ -485,7 +485,7 @@ void MyFrame::OnRecreate(wxCommandEvent& event)
     m_treeCtrl->AddTestItemsToTree(5, 2);
 }
 
-void MyFrame::OnSetImageSize(wxCommandEvent& event)
+void MyFrame::OnSetImageSize(wxCommandEvent& WXUNUSED(event))
 {
     int size = wxGetNumberFromUser(wxT("Enter the size for the images to use"),
                                     wxT("Size: "),
@@ -498,7 +498,7 @@ void MyFrame::OnSetImageSize(wxCommandEvent& event)
     wxGetApp().SetShowImages(TRUE);
 }
 
-void MyFrame::OnToggleImages(wxCommandEvent& event)
+void MyFrame::OnToggleImages(wxCommandEvent& WXUNUSED(event))
 {
     if ( wxGetApp().ShowImages() )
     {
@@ -512,7 +512,7 @@ void MyFrame::OnToggleImages(wxCommandEvent& event)
     }
 }
 
-void MyFrame::OnToggleButtons(wxCommandEvent& event)
+void MyFrame::OnToggleButtons(wxCommandEvent& WXUNUSED(event))
 {
 #if USE_GENERIC_TREECTRL || !defined(__WXMSW__)
     if ( wxGetApp().ShowButtons() )
@@ -528,12 +528,12 @@ void MyFrame::OnToggleButtons(wxCommandEvent& event)
 #endif
 }
 
-void MyFrame::OnCollapseAndReset(wxCommandEvent& event)
+void MyFrame::OnCollapseAndReset(wxCommandEvent& WXUNUSED(event))
 {
     m_treeCtrl->CollapseAndReset(m_treeCtrl->GetRootItem());
 }
 
-void MyFrame::OnEnsureVisible(wxCommandEvent& event)
+void MyFrame::OnEnsureVisible(wxCommandEvent& WXUNUSED(event))
 {
     m_treeCtrl->DoEnsureVisible();
 }
@@ -667,9 +667,9 @@ void MyTreeCtrl::CreateImageList(int size)
     AssignImageList(images);
 }
 
+#if USE_GENERIC_TREECTRL || !defined(__WXMSW__)
 void MyTreeCtrl::CreateButtonsImageList(int size)
 {
-#if USE_GENERIC_TREECTRL || !defined(__WXMSW__)
     if ( size == -1 )
     {
         SetButtonsImageList(NULL);
@@ -701,6 +701,9 @@ void MyTreeCtrl::CreateButtonsImageList(int size)
     }
 
     AssignButtonsImageList(images);
+#else
+void MyTreeCtrl::CreateButtonsImageList(int WXUNUSED(size))
+{
 #endif
 }
 

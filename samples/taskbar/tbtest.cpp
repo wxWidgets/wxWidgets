@@ -62,17 +62,17 @@ MyDialog::MyDialog(wxWindow* parent, const wxWindowID id, const wxString& title,
     Init();
 }
 
-void MyDialog::OnOK(wxCommandEvent& event)
+void MyDialog::OnOK(wxCommandEvent& WXUNUSED(event))
 {
     Show(FALSE);
 }
 
-void MyDialog::OnExit(wxCommandEvent& event)
+void MyDialog::OnExit(wxCommandEvent& WXUNUSED(event))
 {
     Close(TRUE);
 }
 
-void MyDialog::OnCloseWindow(wxCloseEvent& event)
+void MyDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 {
     Destroy();
 }

@@ -15,8 +15,10 @@ setup.h_vms
 regen
 
 build/bakefiles/*.bkl
-build/bakefiles/Makefile
+build/bakefiles/Bakefiles.bkgen
+build/bakefiles/README
 build/bakefiles/*.py
+build/bakefiles/*.mk
 build/bakefiles/compat/FORMATS.bkmanifest
 build/bakefiles/compat/README
 build/bakefiles/compat/wx24dsp.bkl

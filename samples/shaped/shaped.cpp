@@ -182,7 +182,7 @@ void ShapedFrame::SetWindowShape()
     m_hasShape = SetShape(region);
 }
 
-void ShapedFrame::OnDoubleClick(wxMouseEvent& evt)
+void ShapedFrame::OnDoubleClick(wxMouseEvent& WXUNUSED(evt))
 {
     if (m_hasShape)
     {
@@ -205,13 +205,13 @@ void ShapedFrame::OnLeftDown(wxMouseEvent& evt)
     m_delta = wxPoint(dx, dy);
 }
 
-void ShapedFrame::OnLeftUp(wxMouseEvent& evt)
+void ShapedFrame::OnLeftUp(wxMouseEvent& WXUNUSED(evt))
 {
     if (HasCapture())
     {
         ReleaseMouse();
         //printf("Mouse released\n");
-}
+    }
 }
 
 void ShapedFrame::OnMouseMove(wxMouseEvent& evt)
@@ -225,18 +225,18 @@ void ShapedFrame::OnMouseMove(wxMouseEvent& evt)
     }
 }
 
-void ShapedFrame::OnExit(wxMouseEvent& evt)
+void ShapedFrame::OnExit(wxMouseEvent& WXUNUSED(evt))
 {
     Close();
 }
 
-void ShapedFrame::OnPaint(wxPaintEvent& evt)
+void ShapedFrame::OnPaint(wxPaintEvent& WXUNUSED(evt))
 {
     wxPaintDC dc(this);
     dc.DrawBitmap(m_bmp, 0, 0, TRUE);
 }
 
-void ShapedFrame::OnWindowCreate(wxWindowCreateEvent& evt)
+void ShapedFrame::OnWindowCreate(wxWindowCreateEvent& WXUNUSED(evt))
 {
     SetWindowShape();
 }
