@@ -1157,7 +1157,7 @@ bool CeditorDlg::Initialize()
             return FALSE;
         }
         else
-            wxGetApp().CreateDataTable(TRUE);
+            wxGetApp().CreateDataTable(FALSE);
     }
 
     // Tables must be "opened" before anything other than creating/deleting table can be done
