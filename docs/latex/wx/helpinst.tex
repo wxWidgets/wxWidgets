@@ -19,7 +19,7 @@ appropriate class is aliased to the name wxHelpController for each platform, as 
 
 \begin{itemize}\itemsep=0pt
 \item On Windows, wxWinHelpController is used.
-\item On all other platforms, wxHelpControllerHtml is used if wxHTML is
+\item On all other platforms, wxHtmlHelpController is used if wxHTML is
 compiled into wxWindows; otherwise wxExtHelpController is used (for invoking an external
 browser).
 \end{itemize}
@@ -40,9 +40,7 @@ not available, \helpref{wxHtmlHelpController}{wxhtmlhelpcontroller}. You need to
 {\bf both} CHM and HTB versions of the help file. For 32bit Windows only.
 \item wxExtHelpController, for controlling external browsers under Unix.
 The default browser is Netscape Navigator. The 'help' sample shows its use.
-\item wxHelpControllerHtml, using \helpref{wxHTML}{wxhtml} to display help. See {\tt wx/helpwxht.h} for
-details of use.
-\item \helpref{wxHtmlHelpController}{wxhtmlhelpcontroller}, a more sophisticated help controller using \helpref{wxHTML}{wxhtml}, in
+\item \helpref{wxHtmlHelpController}{wxhtmlhelpcontroller}, a sophisticated help controller using \helpref{wxHTML}{wxhtml}, in
 a similar style to the Microsoft HTML Help viewer and using some of the same files.
 Although it has an API compatible with other help controllers, it has more advanced features, so it is
 recommended that you use the specific API for this class instead.
@@ -60,8 +58,7 @@ wxHelpControllerBase\\
 <wx/helpwin.h> (Windows Help controller)\\
 <wx/msw/helpchm.h> (MS HTML Help controller)\\
 <wx/generic/helpext.h> (external HTML browser controller)\\
-<wx/generic/helpwxht.h> (simple wxHTML-based help controller)\\
-<wx/html/helpctrl.h> (advanced wxHTML based help controller: wxHtmlHelpController)
+<wx/html/helpctrl.h> (wxHTML based help controller: wxHtmlHelpController)
 
 \wxheading{See also}
 
@@ -94,9 +91,7 @@ any attempts to communicate with the viewer.
 
 You may omit the file extension and a suitable one will be chosen. For
 wxHtmlHelpController, the extensions zip, htb and hhp will be appended while searching for
-a suitable file. For WinHelp, the hlp extension is appended. For wxHelpControllerHtml (the
-standard HTML help controller), the filename is assumed to be a directory containing
-the HTML files.
+a suitable file. For WinHelp, the hlp extension is appended.
 
 \membersection{wxHelpController::DisplayBlock}\label{wxhelpcontrollerdisplayblock}
 
@@ -147,7 +142,7 @@ If the help viewer is not running, runs it and displays the given section.
 
 {\it WinHelp, MS HTML Help:} {\it sectionNo} is a context id.
 
-{\it External HTML help/simple wxHTML help:} wxExtHelpController and wxHelpControllerHtml implement {\it sectionNo} as an id in a map file, which is of the form:
+{\it External HTML help/simple wxHTML help:} wxExtHelpController implements {\it sectionNo} as an id in a map file, which is of the form:
 
 \begin{verbatim}
 0  wx.html             ; Index
@@ -172,15 +167,7 @@ Returns FALSE if unsuccessful or not implemented.
 \func{virtual wxFrame *}{GetFrameParameters}{\param{const wxSize * }{size = NULL}, \param{const wxPoint * }{pos = NULL},
  \param{bool *}{newFrameEachTime = NULL}}
 
-This reads the current settings for the help frame in the case of the
-wxHelpControllerHtml, setting the frame size, position and
-the newFrameEachTime parameters to the last values used. It also
-returns the pointer to the last opened help frame. This can be used
-for example, to automatically close the help frame on program
-shutdown.
-
-wxHtmlHelpController returns the frame,
-size and position.
+wxHtmlHelpController returns the frame, size and position.
 
 For all other help controllers, this function does nothing
 and just returns NULL.
@@ -233,12 +220,6 @@ This does not work for all help controllers.
 \func{virtual void}{SetFrameParameters}{\param{const wxString \& }{title},
  \param{const wxSize \& }{size}, \param{const wxPoint \& }{pos = wxDefaultPosition},
  \param{bool }{newFrameEachTime = FALSE}}
-
-For wxHelpControllerHtml, this allows the application to set the
-default frame title, size and position for the frame. If the title
-contains \%s, this will be replaced with the page title. If the
-parameter newFrameEachTime is set, the controller will open a new
-help frame each time it is called.
 
 For wxHtmlHelpController, the title is set (again with \%s indicating the
 page title) and also the size and position of the frame if the frame is already
