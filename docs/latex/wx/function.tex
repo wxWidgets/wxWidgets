@@ -1399,7 +1399,7 @@ This function is deprecated, use \helpref{wxString}{wxstring} class instead.
 
 This macro expands into a call to plural form version of
 \helpref{wxGetTranslation}{wxgettranslation} 
-function, so it marks the message for the extraction by {\tt xgettext} just as
+function, so it marks the message for the extraction by {\tt xgettext} just as 
 \helpref{wxTRANSLATE}{wxtranslate} does, but also returns the translation of
 the string for the current locale during execution, either singular or plural
 form depending on the value of \arg{n}.
@@ -1544,21 +1544,21 @@ build. In fact, its definition is:
 \func{const wxChar *}{wxTRANSLATE}{\param{const char *}{s}}
 
 This macro doesn't do anything in the program code -- it simply expands to the
-value of its argument (expand in Unicode build where it is equivalent to 
+value of its argument (except in Unicode build where it is equivalent to 
 \helpref{wxT}{wxt} which makes it unnecessary to use both wxTRANSLATE and wxT
 with the same string which would be really unreadable).
 
 However it does have a purpose and it is to mark the literal strings for the
 extraction into the message catalog created by {\tt xgettext} program. Usually
 this is achieved using \helpref{\_()}{underscore} but that macro not only marks
-the string for extraction but also expands into 
+the string for extraction but also expands into a 
 \helpref{wxGetTranslation}{wxgettranslation} function call which means that it
-cannot be used in some situations, notably for the static arrays
+cannot be used in some situations, notably for static array
 initialization.
 
 Here is an example which should make it more clear: suppose that you have a
 static array of strings containing the weekday names and which have to be
-translated (note that it is a bad example, really, as
+translated (note that it is a bad example, really, as 
 \helpref{wxDateTime}{wxdatetime} already can be used to get the localized week
 day names already). If you write
 
@@ -1583,8 +1583,6 @@ Note that although the code {\bf would} compile if you simply omit
 wxTRANSLATE() in the above, it wouldn't work as expected because there would be
 no translations for the weekday names in the program message catalog and
 wxGetTranslation wouldn't find them.
-
-
 
 \membersection{::wxVsnprintf}\label{wxvsnprintf}
 
