@@ -722,13 +722,17 @@ bool wxDb::Open(const wxString &Dsn, const wxString &Uid, const wxString &AuthSt
     {
         if (!getDataTypeInfo(SQL_DATE,typeInfDate))
         {
-            if (!getDataTypeInfo(SQL_DATETIME,typeInfDate))
+#ifdef SQL_DATETIME
+            if (getDataTypeInfo(SQL_DATETIME,typeInfDate))
+            {
+                typeInfDate.FsqlType = SQL_TIME;
+            }
+            else
+#endif // SQL_DATETIME defined
             {
                 if (failOnDataTypeUnsupported)
                     return(FALSE);
             }
-            else
-                typeInfDate.FsqlType = SQL_TIME;
         }
         else
             typeInfDate.FsqlType = SQL_DATE;
