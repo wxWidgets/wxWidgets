@@ -211,10 +211,10 @@ wxString wxIPV4address::IPAddress() const
 	unsigned long raw =  GAddress_INET_GetHostAddress(m_address);
 	return wxString::Format(
 		_T("%u.%u.%u.%u"),
-		(unsigned char)(raw & 0xff),
-		(unsigned char)((raw>>8) & 0xff),
+		(unsigned char)((raw>>24) & 0xff),
 		(unsigned char)((raw>>16) & 0xff),
-		(unsigned char)((raw>>24) & 0xff)
+		(unsigned char)((raw>>8) & 0xff),
+		(unsigned char)(raw & 0xff)
 		);
 }
 
@@ -288,10 +288,10 @@ wxString wxIPV6address::IPAddress() const
 	unsigned long raw =  GAddress_INET_GetHostAddress(m_address);
 	return wxString::Format(
 		_T("%u.%u.%u.%u"),
-		(unsigned char)(raw & 0xff),
-		(unsigned char)((raw>>8) & 0xff),
+		(unsigned char)((raw>>24) & 0xff),
 		(unsigned char)((raw>>16) & 0xff),
-		(unsigned char)((raw>>24) & 0xff)
+		(unsigned char)((raw>>8) & 0xff),
+		(unsigned char)(raw & 0xff)
 		);
 }
 

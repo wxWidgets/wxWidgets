@@ -596,10 +596,10 @@ wxSocketClient *wxFTP::GetPort()
     wxSscanf(straddr, wxT("%d,%d,%d,%d,%d,%d"),
              &a[2],&a[3],&a[4],&a[5],&a[0],&a[1]);
 
-    wxUint32 hostaddr = (wxUint16)a[5] << 24 |
-                        (wxUint16)a[4] << 16 |
-                        (wxUint16)a[3] << 8 |
-                        a[2];
+    wxUint32 hostaddr = (wxUint16)a[2] << 24 |
+                        (wxUint16)a[3] << 16 |
+                        (wxUint16)a[4] << 8 |
+                        a[5];
     wxUint16 port = (wxUint16)a[0] << 8 | a[1];
 
     wxIPV4address addr;
