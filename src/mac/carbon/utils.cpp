@@ -45,6 +45,13 @@
 #include <Sound.h>
 #endif
 
+#if TARGET_API_MAC_OSX
+#include <CoreServices/CoreServices.h>
+#else
+#include <DriverServices.h>
+#include <Multiprocessing.h>
+#endif
+
 #include <ATSUnicode.h>
 #include <TextCommon.h>
 #include <TextEncodingConverter.h>
@@ -1428,12 +1435,12 @@ OSStatus wxMacCarbonEvent::SetParameter(EventParamName inName, EventParamType in
 // Control Access Support
 // ----------------------------------------------------------------------------
 
-OSStatus wxMacControl::GetData(ControlPartCode inPartCode , ResType inTag , Size inBufferSize , void * inOutBuffer , Size * outActualSize )
+OSStatus wxMacControl::GetData(ControlPartCode inPartCode , ResType inTag , Size inBufferSize , void * inOutBuffer , Size * outActualSize ) const
 {
     return ::GetControlData( m_controlRef , inPartCode , inTag , inBufferSize , inOutBuffer , outActualSize ) ;   
 }
 
-OSStatus wxMacControl::GetDataSize(ControlPartCode inPartCode , ResType inTag , Size * outActualSize )
+OSStatus wxMacControl::GetDataSize(ControlPartCode inPartCode , ResType inTag , Size * outActualSize ) const
 {
     return ::GetControlDataSize( m_controlRef , inPartCode , inTag , outActualSize ) ;   
 }
@@ -1512,6 +1519,53 @@ void wxMacControl::SetValueAndRange( SInt32 value , SInt32 minimum , SInt32 maxi
     ::SetControl32BitMinimum( m_controlRef , minimum ) ;
     ::SetControl32BitMaximum( m_controlRef , maximum ) ; 
     ::SetControl32BitValue( m_controlRef , value ) ;
+}
+
+void wxMacControl::VisibilityChanged(bool shown) 
+{
+}
+
+void wxMacControl::SetFont( const wxFont & font , const wxColour& foreground , long windowStyle ) 
+{
+    m_font = font ;
+	ControlFontStyleRec	fontStyle;
+	if ( font.MacGetThemeFontID() != kThemeCurrentPortFont )
+	{
+	    switch( font.MacGetThemeFontID() )
+	    {
+	        case kThemeSmallSystemFont :    fontStyle.font = kControlFontSmallSystemFont ;  break ;
+	        case 109 /*mini font */ :       fontStyle.font = -5 ;                           break ;
+	        case kThemeSystemFont :         fontStyle.font = kControlFontBigSystemFont ;    break ;
+	        default :                       fontStyle.font = kControlFontBigSystemFont ;    break ;
+	    }
+	    fontStyle.flags = kControlUseFontMask ; 
+	}
+	else
+	{
+	    fontStyle.font = font.MacGetFontNum() ;
+	    fontStyle.style = font.MacGetFontStyle() ;
+	    fontStyle.size = font.MacGetFontSize() ;
+	    fontStyle.flags = kControlUseFontMask | kControlUseFaceMask | kControlUseSizeMask ;
+	}
+
+    fontStyle.just = teJustLeft ;
+    fontStyle.flags |= kControlUseJustMask ;
+    if ( ( windowStyle & wxALIGN_MASK ) & wxALIGN_CENTER_HORIZONTAL )
+        fontStyle.just = teJustCenter ;
+    else if ( ( windowStyle & wxALIGN_MASK ) & wxALIGN_RIGHT )
+        fontStyle.just = teJustRight ;
+
+    
+    // we only should do this in case of a non-standard color, as otherwise 'disabled' controls
+    // won't get grayed out by the system anymore
+    
+    if ( foreground != *wxBLACK )
+    {
+        fontStyle.foreColor = MAC_WXCOLORREF(foreground.GetPixel() ) ;
+        fontStyle.flags |= kControlUseForeColorMask ;
+    }
+	
+	::SetControlFontStyle( m_controlRef , &fontStyle );
 }
 
 void wxMacControl::SetRange( SInt32 minimum , SInt32 maximum )
