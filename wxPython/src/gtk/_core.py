@@ -4761,6 +4761,16 @@ class PyApp(EvtHandler):
         """
         return _core_.PyApp_WakeUpIdle(*args, **kwargs)
 
+    def IsMainLoopRunning(*args, **kwargs):
+        """
+        IsMainLoopRunning() -> bool
+
+        Returns True if we're running the main loop, i.e. if the events can
+        currently be dispatched.
+        """
+        return _core_.PyApp_IsMainLoopRunning(*args, **kwargs)
+
+    IsMainLoopRunning = staticmethod(IsMainLoopRunning)
     def MainLoop(*args, **kwargs):
         """
         MainLoop(self) -> int
@@ -4986,6 +4996,15 @@ class PyAppPtr(PyApp):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = PyApp
 _core_.PyApp_swigregister(PyAppPtr)
+
+def PyApp_IsMainLoopRunning(*args, **kwargs):
+    """
+    PyApp_IsMainLoopRunning() -> bool
+
+    Returns True if we're running the main loop, i.e. if the events can
+    currently be dispatched.
+    """
+    return _core_.PyApp_IsMainLoopRunning(*args, **kwargs)
 
 def PyApp_GetMacSupportPCMenuShortcuts(*args, **kwargs):
     """PyApp_GetMacSupportPCMenuShortcuts() -> bool"""

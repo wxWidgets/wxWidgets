@@ -20215,6 +20215,30 @@ static PyObject *_wrap_PyApp_WakeUpIdle(PyObject *, PyObject *args, PyObject *kw
 }
 
 
+static PyObject *_wrap_PyApp_IsMainLoopRunning(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    bool result;
+    char *kwnames[] = {
+        NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)":PyApp_IsMainLoopRunning",kwnames)) goto fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)wxPyApp::IsMainLoopRunning();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_PyApp_MainLoop(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyApp *arg1 = (wxPyApp *) 0 ;
@@ -41241,6 +41265,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PyApp_ProcessPendingEvents", (PyCFunction) _wrap_PyApp_ProcessPendingEvents, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PyApp_Yield", (PyCFunction) _wrap_PyApp_Yield, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PyApp_WakeUpIdle", (PyCFunction) _wrap_PyApp_WakeUpIdle, METH_VARARGS | METH_KEYWORDS, NULL },
+	 { (char *)"PyApp_IsMainLoopRunning", (PyCFunction) _wrap_PyApp_IsMainLoopRunning, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PyApp_MainLoop", (PyCFunction) _wrap_PyApp_MainLoop, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PyApp_Exit", (PyCFunction) _wrap_PyApp_Exit, METH_VARARGS | METH_KEYWORDS, NULL },
 	 { (char *)"PyApp_ExitMainLoop", (PyCFunction) _wrap_PyApp_ExitMainLoop, METH_VARARGS | METH_KEYWORDS, NULL },

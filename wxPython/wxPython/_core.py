@@ -945,6 +945,7 @@ wxPRINT_WINDOWS = wx._core.PRINT_WINDOWS
 wxPRINT_POSTSCRIPT = wx._core.PRINT_POSTSCRIPT
 wxPyApp = wx._core.PyApp
 wxPyAppPtr = wx._core.PyAppPtr
+wxPyApp_IsMainLoopRunning = wx._core.PyApp_IsMainLoopRunning
 wxPyApp_GetMacSupportPCMenuShortcuts = wx._core.PyApp_GetMacSupportPCMenuShortcuts
 wxPyApp_GetMacAboutMenuItemId = wx._core.PyApp_GetMacAboutMenuItemId
 wxPyApp_GetMacPreferencesMenuItemId = wx._core.PyApp_GetMacPreferencesMenuItemId
