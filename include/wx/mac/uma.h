@@ -243,7 +243,7 @@ void UMAHighlightAndActivateWindow( WindowRef inWindowRef , bool inActivate ) ;
 #define GetQDGlobalsBlack( a ) (&((*a) = qd.black))
 #define GetQDGlobalsScreenBits( a ) (*a) = qd.screenBits
 #define GetQDGlobalsArrow( a ) (&((*a) = qd.arrow))
-#define GetControlBounds( c , b ) ((*b) = (**c).contrlRect )
+#define GetControlBounds( c , b ) &((*b) = (**c).contrlRect )
 #define GetPortBitMapForCopyBits( p ) ((BitMap*) &(((CGrafPtr)p)->portPixMap ))
 #endif
 

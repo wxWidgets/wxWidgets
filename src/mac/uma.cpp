@@ -471,7 +471,8 @@ void UMAActivateControl( ControlHandle inControl )
         ::ActivateControl( inControl ) ;
         if ( visible ) {
           SetControlVisibility( inControl , true , false ) ;
-          InvalWindowRect(GetControlOwner(inControl),&(**inControl).contrlRect ) ;
+          Rect ctrlBounds ;
+          InvalWindowRect(GetControlOwner(inControl),GetControlBounds(inControl,&ctrlBounds) ) ;
         }
        }
     }
@@ -530,12 +531,14 @@ void UMAMoveControl( ControlHandle inControl , short x , short y )
         bool visible = UMAIsControlVisible( inControl ) ;
         if ( visible ) {
           SetControlVisibility( inControl , false , false ) ;
-          InvalWindowRect(GetControlOwner(inControl),&(**inControl).contrlRect ) ;
+          Rect ctrlBounds ;
+          InvalWindowRect(GetControlOwner(inControl),GetControlBounds(inControl,&ctrlBounds) ) ;
         }
         ::MoveControl( inControl , x , y ) ;
         if ( visible ) {
           SetControlVisibility( inControl , true , false ) ;
-          InvalWindowRect(GetControlOwner(inControl),&(**inControl).contrlRect ) ;
+          Rect ctrlBounds ;
+          InvalWindowRect(GetControlOwner(inControl),GetControlBounds(inControl,&ctrlBounds) ) ;
         }
     }
 }
@@ -547,12 +550,14 @@ void UMASizeControl( ControlHandle inControl , short x , short y )
         bool visible = UMAIsControlVisible( inControl ) ;
         if ( visible ) {
           SetControlVisibility( inControl , false , false ) ;
-          InvalWindowRect(GetControlOwner(inControl),&(**inControl).contrlRect ) ;
+          Rect ctrlBounds ;
+          InvalWindowRect(GetControlOwner(inControl),GetControlBounds(inControl,&ctrlBounds) ) ;
         }
         ::SizeControl( inControl , x , y ) ;
         if ( visible ) {
           SetControlVisibility( inControl , true , false ) ;
-          InvalWindowRect(GetControlOwner(inControl),&(**inControl).contrlRect ) ;
+          Rect ctrlBounds ;
+          InvalWindowRect(GetControlOwner(inControl),GetControlBounds(inControl,&ctrlBounds) ) ;
         }
     }
 }
@@ -569,7 +574,8 @@ void UMADeactivateControl( ControlHandle inControl )
         ::DeactivateControl( inControl ) ;
         if ( visible ) {
           SetControlVisibility( inControl , true , false ) ;
-          InvalWindowRect(GetControlOwner(inControl),&(**inControl).contrlRect ) ;
+          Rect ctrlBounds ;
+          InvalWindowRect(GetControlOwner(inControl),GetControlBounds(inControl,&ctrlBounds) ) ;
         }
        }
     }
@@ -684,11 +690,8 @@ void UMAShowControl						(ControlHandle 			inControl)
     if ( UMAHasAppearance() )
     {
         SetControlVisibility( inControl , true , false ) ;
-        InvalWindowRect(GetControlOwner(inControl),&(**inControl).contrlRect ) ;
-    }
-    else
-    {
-        (**inControl).contrlVis = 255 ;
+        Rect ctrlBounds ;
+        InvalWindowRect(GetControlOwner(inControl),GetControlBounds(inControl,&ctrlBounds) ) ;
     }
 }
 
