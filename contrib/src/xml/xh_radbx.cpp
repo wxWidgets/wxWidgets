@@ -59,7 +59,7 @@ wxObject *wxRadioBoxXmlHandler::DoCreateResource()
                                     GetPosition(), GetSize(),
                                     strList.GetCount(),
                                     strings,
-                                    GetLong( _T("dimension"), 0 ),
+                                    GetLong( _T("dimension"), 1 ),
                                     GetStyle(),
                                     wxDefaultValidator,
                                     GetName()
