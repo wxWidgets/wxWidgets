@@ -194,6 +194,10 @@
     <set var="UNICODE_DEFINE">
         <if cond="FORMAT!='autoconf' and UNICODE=='1'">wxUSE_UNICODE=1</if>
     </set>
+    
+    <set var="UNICOWS_LIB">
+        <if cond="MSLU=='1'">unicows</if>
+    </set>
 
     <template id="common_settings">
         <debug-info>$(DEBUGINFO)</debug-info>
@@ -267,6 +271,7 @@
 
         <!-- system libraries on windows: -->
         <if cond="FORMAT!='autoconf'">
+            <sys-lib>$(UNICOWS_LIB)</sys-lib>
             <if cond="COMPILER=='bcc'">
                 <sys-lib>import32</sys-lib>
                 <sys-lib>ole2w32</sys-lib>

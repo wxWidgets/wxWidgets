@@ -32,6 +32,19 @@
         </description>
     </option>
 
+    <if cond="FORMAT!='autoconf' and FORMAT!='watcom'">
+        <option name="MSLU">
+            <values>0,1</values>
+            <default-value>0</default-value>        
+            <description>
+                Use MSLU library when building Unicode version.
+            </description>
+        </option>
+    </if>
+    <if cond="FORMAT=='autoconf' or FORMAT=='watcom'">
+        <set var="MSLU">0</set>
+    </if>
+
     <option name="BUILD">
         <values>debug,release</values>
         <values-description>Debug,Release</values-description>
