@@ -859,6 +859,16 @@
 #define wxUSE_ICO_CUR 0
 
 /*
+ * Use dynamic DIB loading/saving code in utils/dib under MSW
+ */
+#define wxUSE_IMAGE_LOADING_IN_MSW 0
+
+/*
+ * Use dynamic cursor/icon loading/saving code under MSW
+ */
+#define wxUSE_RESOURCE_LOADING_IN_MSW 0
+
+/*
  * Disable this if your compiler can't cope
  * with omission of prototype parameters.
  */
