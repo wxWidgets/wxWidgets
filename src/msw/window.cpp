@@ -1479,10 +1479,12 @@ void wxWindowMSW::Update()
 // drag and drop
 // ---------------------------------------------------------------------------
 
-#if wxUSE_DRAG_AND_DROP
+//FIXME __DIGITALMARS__ does not honor drag drop in setup.h
 
+#if wxUSE_DRAG_AND_DROP
 void wxWindowMSW::SetDropTarget(wxDropTarget *pDropTarget)
 {
+#ifndef __DIGITALMARS__
     if ( m_dropTarget != 0 ) {
         m_dropTarget->Revoke(m_hWnd);
         delete m_dropTarget;
@@ -1491,17 +1493,19 @@ void wxWindowMSW::SetDropTarget(wxDropTarget *pDropTarget)
     m_dropTarget = pDropTarget;
     if ( m_dropTarget != 0 )
         m_dropTarget->Register(m_hWnd);
+#endif //  __DIGITALMARS__
 }
-
 #endif // wxUSE_DRAG_AND_DROP
 
 // old style file-manager drag&drop support: we retain the old-style
 // DragAcceptFiles in parallel with SetDropTarget.
 void wxWindowMSW::DragAcceptFiles(bool accept)
 {
+#ifndef __DIGITALMARS__
     HWND hWnd = GetHwnd();
     if ( hWnd )
         ::DragAcceptFiles(hWnd, (BOOL)accept);
+#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -1932,7 +1936,11 @@ bool wxWindowMSW::DoPopupMenu(wxMenu *menu, int x, int y)
 long wxWindowMSW::MSWDefWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
     if ( m_oldWndProc )
+#ifdef __DIGITALMARS__
+        return ::CallWindowProc( (FARPROC) m_oldWndProc, GetHwnd(), (UINT) nMsg, (WPARAM) wParam, (LPARAM) lParam);
+#else
         return ::CallWindowProc(CASTWNDPROC m_oldWndProc, GetHwnd(), (UINT) nMsg, (WPARAM) wParam, (LPARAM) lParam);
+#endif
     else
         return ::DefWindowProc(GetHwnd(), nMsg, wParam, lParam);
 }
@@ -3422,7 +3430,10 @@ bool wxWindowMSW::HandleInitDialog(WXHWND WXUNUSED(hWndFocus))
 
 bool wxWindowMSW::HandleDropFiles(WXWPARAM wParam)
 {
-#ifndef __WXMICROWIN__
+//FIX ME  __DIGITALMARS__   
+#if defined (__WXMICROWIN__) || defined (__DIGITALMARS__)
+    return FALSE;
+#else // __WXMICROWIN__
     HDROP hFilesInfo = (HDROP) wParam;
 
     // Get the total number of files dropped
@@ -3457,8 +3468,6 @@ bool wxWindowMSW::HandleDropFiles(WXWPARAM wParam)
     event.m_pos.y = dropPoint.y;
 
     return GetEventHandler()->ProcessEvent(event);
-#else // __WXMICROWIN__
-    return FALSE;
 #endif
 }
 

@@ -157,6 +157,9 @@
     #elif defined(__WATCOMC__) && (__WATCOMC__ >= 1100)
         // Watcom 11+ supports bool
         #define HAVE_BOOL
+    #elif defined(__DIGITALMARS__) 
+        // DigitalMars supports bool
+        #define HAVE_BOOL
     #elif defined(__GNUWIN32__) || defined(__MINGW32__) || defined(__CYGWIN__)
         // Cygwin supports bool
         #define HAVE_BOOL

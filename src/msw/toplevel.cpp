@@ -191,7 +191,7 @@ WXDWORD wxTopLevelWindowMSW::MSWGetStyle(long style, WXDWORD *exflags) const
 
     if ( exflags )
     {
-#if !defined(__WIN16__) && !defined(__SC__)
+#if !defined(__WIN16__) 
         if ( !(GetExtraStyle() & wxTOPLEVEL_EX_DIALOG) )
         {
             if ( style & wxFRAME_TOOL_WINDOW )

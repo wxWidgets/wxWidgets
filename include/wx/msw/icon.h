@@ -54,7 +54,9 @@ public:
         // from raw data
     wxIcon(const char bits[], int width, int height);
         // from XPM data
+#ifndef __DIGITALMARS__
     wxIcon(const char **data) { CreateIconFromXpm(data); }
+#endif
     wxIcon(char **data) { CreateIconFromXpm((const char **)data); }
         // from resource/file
     wxIcon(const wxString& name,

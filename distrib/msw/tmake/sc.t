@@ -37,7 +37,7 @@
         #! these files don't compile with SC++ 6
         next if $file =~ /^(joystick|pnghand)\./;
 
-        next if $wxGeneric{$file} =~ /\b16\b/;
+        next if $wxMSW{$file} =~ /\b16\b/;
 
         my $isOleObj = $wxMSW{$file} =~ /\bO\b/;
         $file =~ s/cp?p?$/obj/;
@@ -61,7 +61,7 @@ include ..\makesc.env
 
 DEBUG=0
 
-LIBTARGET = $(LIBDIR)\wx.lib
+LIBTARGET = $(LIBDIR)\wx$(SC_SUFFIX).lib
 
 OPTIONS=
 
@@ -83,26 +83,35 @@ MSWOBJS = #$ ExpandList("WXMSWOBJS");
 # Add $(NONESSENTIALOBJS) if wanting generic dialogs, PostScript etc.
 OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS)
 
-all: $(LIBTARGET)
+all: MAKEARCHDIR $(LIBTARGET)
+
+MAKEARCHDIR:
+    @if not exist $(MSWINCDIR)\setup.h copy $(MSWINCDIR)\setup0.h $(MSWINCDIR)\setup.h
+    @if not exist $(ARCHINCDIR)\wx\setup.h mkdir $(ARCHINCDIR)
+    @if not exist $(ARCHINCDIR)\wx\setup.h mkdir $(ARCHINCDIR)\wx
+    @if not exist $(ARCHINCDIR)\wx\setup.h copy $(MSWINCDIR)\setup.h $(ARCHINCDIR)\wx\setup.h
 
 $(LIBTARGET): $(OBJECTS)
 	-del $(LIBTARGET)
 	*lib /PAGESIZE:512 $(LIBTARGET) y $(OBJECTS), nul;
 
 clean:
+	-del $(COMMDIR)\*.obj
+	-del $(MSWDIR)\*.obj
+	-del $(GENDIR)\*.obj
 	-del *.obj
     -del $(LIBTARGET)
 
-$(COMMDIR)\y_tab.obj:     $(COMMDIR)\y_tab.c $(COMMDIR)\lex_yy.c
-
-$(COMMDIR)\y_tab.c:     $(COMMDIR)\dosyacc.c
-        copy $(COMMDIR)\dosyacc.c $(COMMDIR)\y_tab.c
-
-$(COMMDIR)\lex_yy.c:    $(COMMDIR)\doslex.c
-    copy $(COMMDIR)\doslex.c $(COMMDIR)\lex_yy.c
-
-# $(COMMDIR)\cmndata.obj:     $(COMMDIR)\cmndata.cpp
-#	*$(CC) -c $(CFLAGS) -I$(INCLUDE) $(OPTIONS) $(COMMDIR)\cmndata.cpp -o$(COMMDIR)\cmndata.obj
+## $(COMMDIR)\y_tab.obj:     $(COMMDIR)\y_tab.c $(COMMDIR)\lex_yy.c
+##
+## $(COMMDIR)\y_tab.c:     $(COMMDIR)\dosyacc.c
+##        copy $(COMMDIR)\dosyacc.c $(COMMDIR)\y_tab.c
+##
+## $(COMMDIR)\lex_yy.c:    $(COMMDIR)\doslex.c
+##    copy $(COMMDIR)\doslex.c $(COMMDIR)\lex_yy.c
+##
+### $(COMMDIR)\cmndata.obj:     $(COMMDIR)\cmndata.cpp
+###	*$(CC) -c $(CFLAGS) -I$(INCLUDE) $(OPTIONS) $(COMMDIR)\cmndata.cpp -o$(COMMDIR)\cmndata.obj
 
 MFTYPE=sc
 makefile.$(MFTYPE) : $(WXWIN)\distrib\msw\tmake\filelist.txt $(WXWIN)\distrib\msw\tmake\$(MFTYPE).t

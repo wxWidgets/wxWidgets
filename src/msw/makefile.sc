@@ -14,7 +14,7 @@ include ..\makesc.env
 
 DEBUG=0
 
-LIBTARGET = $(LIBDIR)\wx.lib
+LIBTARGET = $(LIBDIR)\wx$(SC_SUFFIX).lib
 
 OPTIONS=
 
@@ -242,8 +242,10 @@ MSWOBJS = $(MSWDIR)\accel.obj \
 		$(MSWDIR)\helpchm.obj \
 		$(MSWDIR)\helpwin.obj \
 		$(MSWDIR)\icon.obj \
+		$(MSWDIR)\imaglist.obj \
 		$(MSWDIR)\iniconf.obj \
 		$(MSWDIR)\listbox.obj \
+		$(MSWDIR)\listctrl.obj \
 		$(MSWDIR)\main.obj \
 		$(MSWDIR)\mdi.obj \
 		$(MSWDIR)\menu.obj \
@@ -254,6 +256,7 @@ MSWOBJS = $(MSWDIR)\accel.obj \
 		$(MSWDIR)\msgdlg.obj \
 		$(MSWDIR)\mslu.obj \
 		$(MSWDIR)\nativdlg.obj \
+		$(MSWDIR)\notebook.obj \
 		$(MSWDIR)\ole\oleutils.obj \
 		$(MSWDIR)\ownerdrw.obj \
 		$(MSWDIR)\palette.obj \
@@ -270,7 +273,6 @@ MSWOBJS = $(MSWDIR)\accel.obj \
 		$(MSWDIR)\scrolbar.obj \
 		$(MSWDIR)\settings.obj \
 		$(MSWDIR)\slider95.obj \
-		$(MSWDIR)\slidrmsw.obj \
 		$(MSWDIR)\snglinst.obj \
 		$(MSWDIR)\spinbutt.obj \
 		$(MSWDIR)\spinctrl.obj \
@@ -282,7 +284,6 @@ MSWOBJS = $(MSWDIR)\accel.obj \
 		$(MSWDIR)\tabctrl.obj \
 		$(MSWDIR)\taskbar.obj \
 		$(MSWDIR)\tbar95.obj \
-		$(MSWDIR)\tbarmsw.obj \
 		$(MSWDIR)\textctrl.obj \
 		$(MSWDIR)\tglbtn.obj \
 		$(MSWDIR)\thread.obj \
@@ -300,26 +301,35 @@ MSWOBJS = $(MSWDIR)\accel.obj \
 # Add $(NONESSENTIALOBJS) if wanting generic dialogs, PostScript etc.
 OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS)
 
-all: $(LIBTARGET)
+all: MAKEARCHDIR $(LIBTARGET)
+
+MAKEARCHDIR:
+    @if not exist $(MSWINCDIR)\setup.h copy $(MSWINCDIR)\setup0.h $(MSWINCDIR)\setup.h
+    @if not exist $(ARCHINCDIR)\wx\setup.h mkdir $(ARCHINCDIR)
+    @if not exist $(ARCHINCDIR)\wx\setup.h mkdir $(ARCHINCDIR)\wx
+    @if not exist $(ARCHINCDIR)\wx\setup.h copy $(MSWINCDIR)\setup.h $(ARCHINCDIR)\wx\setup.h
 
 $(LIBTARGET): $(OBJECTS)
 	-del $(LIBTARGET)
 	*lib /PAGESIZE:512 $(LIBTARGET) y $(OBJECTS), nul;
 
 clean:
+	-del $(COMMDIR)\*.obj
+	-del $(MSWDIR)\*.obj
+	-del $(GENDIR)\*.obj
 	-del *.obj
     -del $(LIBTARGET)
 
-$(COMMDIR)\y_tab.obj:     $(COMMDIR)\y_tab.c $(COMMDIR)\lex_yy.c
-
-$(COMMDIR)\y_tab.c:     $(COMMDIR)\dosyacc.c
-        copy $(COMMDIR)\dosyacc.c $(COMMDIR)\y_tab.c
-
-$(COMMDIR)\lex_yy.c:    $(COMMDIR)\doslex.c
-    copy $(COMMDIR)\doslex.c $(COMMDIR)\lex_yy.c
-
-# $(COMMDIR)\cmndata.obj:     $(COMMDIR)\cmndata.cpp
-#	*$(CC) -c $(CFLAGS) -I$(INCLUDE) $(OPTIONS) $(COMMDIR)\cmndata.cpp -o$(COMMDIR)\cmndata.obj
+## $(COMMDIR)\y_tab.obj:     $(COMMDIR)\y_tab.c $(COMMDIR)\lex_yy.c
+##
+## $(COMMDIR)\y_tab.c:     $(COMMDIR)\dosyacc.c
+##        copy $(COMMDIR)\dosyacc.c $(COMMDIR)\y_tab.c
+##
+## $(COMMDIR)\lex_yy.c:    $(COMMDIR)\doslex.c
+##    copy $(COMMDIR)\doslex.c $(COMMDIR)\lex_yy.c
+##
+### $(COMMDIR)\cmndata.obj:     $(COMMDIR)\cmndata.cpp
+###	*$(CC) -c $(CFLAGS) -I$(INCLUDE) $(OPTIONS) $(COMMDIR)\cmndata.cpp -o$(COMMDIR)\cmndata.obj
 
 MFTYPE=sc
 makefile.$(MFTYPE) : $(WXWIN)\distrib\msw\tmake\filelist.txt $(WXWIN)\distrib\msw\tmake\$(MFTYPE).t

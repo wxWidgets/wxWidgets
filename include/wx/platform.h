@@ -297,5 +297,11 @@
     #define wxCHECK_W32API_VERSION(maj, min) (0)
 #endif
 
+#ifdef __SC__
+    #ifdef __DMC__
+         #define __DIGITALMARS__
+    #endif
+#endif
+
 #endif /* _WX_PLATFORM_H_ */
 

@@ -8,9 +8,9 @@ TARGET=minimal
 
 include $(WXDIR)\src\makesc.env
 
-minimal.exe: minimal.obj $(DEFFILE) minimal.res
-	*$(CC) $(LDFLAGS) -o$@ $** $(LIBS)
-    *$(RC) -k minimal.res
+minimal.exe: minimal.obj 
+	link $(LDFLAGS) $*, $@, $*, $(LIBS)
+    
 
 sc32.def:
      echo EXETYPE NT > sc32.def

@@ -431,6 +431,7 @@ bool wxEnhMetaFileSimpleDataObject::SetData(size_t WXUNUSED(len),
     return TRUE;
 }
 
+
 #endif // wxUSE_DRAG_AND_DROP
 
 #endif // wxUSE_ENH_METAFILE

@@ -180,6 +180,9 @@ bool wxGetFullHostName(wxChar *buf, int maxSize)
     // shouldn't use winsock.dll (a.k.a. ws2_32.dll) at all so only use this
     // code if we link with it anyhow
 #if wxUSE_SOCKETS
+    //FIXME __DIGITALMARS__ why is using sockets not properly turned off in setup.h ??
+    // find which library should contain sockets for Digital Mars CE April 2003
+#ifndef __DIGITALMARS__
     WSADATA wsa;
     if ( WSAStartup(MAKEWORD(1, 1), &wsa) == 0 )
     {
@@ -215,6 +218,8 @@ bool wxGetFullHostName(wxChar *buf, int maxSize)
             return TRUE;
         }
     }
+#endif //__DIGITALMARS__
+
 #endif // wxUSE_SOCKETS
 
 #endif // Win32
@@ -1009,7 +1014,7 @@ wxString wxGetOsDescription()
 
 int wxGetOsVersion(int *majorVsn, int *minorVsn)
 {
-#if defined(__WIN32__) && !defined(__SC__)
+#if defined(__WIN32__) 
     static int ver = -1, major = -1, minor = -1;
 
     if ( ver == -1 )

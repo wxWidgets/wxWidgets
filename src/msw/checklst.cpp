@@ -154,7 +154,7 @@ bool wxCheckListBoxItem::OnDrawItem(wxDC& dc, const wxRect& rc,
       HBITMAP hbmpOld = (HBITMAP)SelectObject(hdcMem, hbmpCheck);
 
       // then draw a check mark into it
-#if defined(__WIN32__) && !defined(__SC__)
+
       RECT rect;
       rect.left   = 0;
       rect.top    = 0;
@@ -162,22 +162,6 @@ bool wxCheckListBoxItem::OnDrawItem(wxDC& dc, const wxRect& rc,
       rect.bottom = nCheckHeight;
 
       DrawFrameControl(hdcMem, &rect, DFC_MENU, DFCS_MENUCHECK);
-#else
-      // In WIN16, draw a cross
-      HPEN blackPen = CreatePen(PS_SOLID, 1, RGB(0, 0, 0));
-      HPEN whiteBrush = (HPEN)GetStockObject(WHITE_BRUSH);
-      HPEN hPenOld = (HPEN)::SelectObject(hdcMem, blackPen);
-      HPEN hBrushOld = (HPEN)::SelectObject(hdcMem, whiteBrush);
-      ::SetROP2(hdcMem, R2_COPYPEN);
-      Rectangle(hdcMem, 0, 0, nCheckWidth, nCheckHeight);
-      MoveTo(hdcMem, 0, 0);
-      LineTo(hdcMem, nCheckWidth, nCheckHeight);
-      MoveTo(hdcMem, nCheckWidth, 0);
-      LineTo(hdcMem, 0, nCheckHeight);
-      ::SelectObject(hdcMem, hPenOld);
-      ::SelectObject(hdcMem, hBrushOld);
-      ::DeleteObject(blackPen);
-#endif
 
       // finally copy it to screen DC and clean up
       BitBlt(hdc, x, y, nCheckWidth - 1, nCheckHeight,

@@ -373,6 +373,14 @@ bool wxICOFileHandler::LoadIcon(wxIcon *icon,
                                 long WXUNUSED(flags),
                                 int desiredWidth, int desiredHeight)
 {
+#ifdef __DIGITALMARS__
+//FIXME __DIGITALMARS__ April 2003 CE
+    // why no ExtractIcon in library
+            wxLogTrace(_T("iconload"),
+                   _T("Returning false from wxICOFileHandler::Load because of DigitalMars compiler bug"));
+
+    return false;
+#else
     icon->UnRef();
 
     // actual size
@@ -475,6 +483,7 @@ bool wxICOFileHandler::LoadIcon(wxIcon *icon,
     icon->SetSize(size.x, size.y);
 
     return icon->Ok();
+#endif // Digitalmars
 }
 
 bool wxICOResourceHandler::LoadIcon(wxIcon *icon,
