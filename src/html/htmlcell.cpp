@@ -439,12 +439,14 @@ void wxHtmlContainerCell::Layout(int w)
                 int counter = 0;
                 int step = (s_width - xpos);
                 if (step < 0) step = 0;
+                xcnt--;
                 while (line != cell) {
                     line -> SetPos(line -> GetPosX() + s_indent +
                                    (counter++ * step / xcnt),
                                    ypos + line -> GetPosY());
                     line = line -> GetNext();
                 }
+                xcnt++;
             }
 
             ypos += ysizedown;
