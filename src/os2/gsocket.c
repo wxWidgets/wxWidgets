@@ -1495,8 +1495,8 @@ GSocketError GAddress_INET_SetHostName(GAddress *address, const char *hostname)
   {
 #else
   /* Use gethostbyname by default */
-//  int val = 1;  //VA doesn't like constants in conditional expressions at all
-  if (1)
+  int val = 1;  //VA doesn't like constants in conditional expressions at all
+  if (val)
   {
 #endif
     struct in_addr *array_addr;

@@ -332,7 +332,7 @@ bool wxApp::RegisterWindowClasses(
     if (!::WinRegisterClass( vHab
                             ,wxFrameClassName
                             ,wxFrameWndProc
-                            ,CS_SIZEREDRAW | CS_MOVENOTIFY | CS_SYNCPAINT  | CS_CLIPCHILDREN
+                            ,CS_SIZEREDRAW | CS_SYNCPAINT  | CS_CLIPCHILDREN
                             ,sizeof(ULONG)
                            ))
     {
@@ -423,7 +423,7 @@ bool wxApp::RegisterWindowClasses(
     if (!::WinRegisterClass( vHab
                             ,wxCanvasClassName
                             ,wxWndProc
-                            ,CS_MOVENOTIFY | CS_SIZEREDRAW | CS_HITTEST | CS_SAVEBITS | CS_SYNCPAINT | CS_CLIPCHILDREN
+                            ,CS_SIZEREDRAW | CS_HITTEST | CS_SYNCPAINT | CS_CLIPCHILDREN
                             ,sizeof(ULONG)
                            ))
     {

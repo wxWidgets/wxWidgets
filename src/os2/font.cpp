@@ -370,7 +370,7 @@ bool wxFont::RealizeResource()
         vError = ::WinGetLastError(vHabmain);
     }
 
-    strcpy(zFacename, M_FONTDATA->m_vFattrs.szFacename);
+    M_FONTDATA->m_sFaceName = zFacename;
 
     if(::GpiCreateLogFont( M_FONTDATA->m_hPS
                           ,NULL

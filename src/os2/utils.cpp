@@ -762,7 +762,7 @@ bool wxColourDisplay()
 #else
     // I don't see how the PM display could not be color. Besides, this
     // was leaking DCs and PSs!!!  MN
-    return true;
+    return TRUE;
 #endif
 }
 

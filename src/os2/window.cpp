@@ -388,36 +388,11 @@ bool wxWindowOS2::Create(
 
         pParent->AddChild(this);
         hParent = GetWinHwnd(pParent);
-        //
-        // OS2 uses normal coordinates, no bassackwards Windows ones
-        //
-        if (pParent->IsKindOf(CLASSINFO(wxGenericScrolledWindow)) ||
-            pParent->IsKindOf(CLASSINFO(wxScrolledWindow))
-           )
-        {
-            wxWindow*               pGrandParent = NULL;
 
-            pGrandParent = pParent->GetParent();
-            if (pGrandParent)
-                nTempy = pGrandParent->GetSize().y - (vPos.y + rSize.y);
-            else
-                nTempy = pParent->GetSize().y - (vPos.y + rSize.y);
-        }
-        else
-            nTempy = pParent->GetSize().y - (vPos.y + rSize.y);
-        vPos.y = nTempy;
         if ( pParent->IsKindOf(CLASSINFO(wxGenericScrolledWindow)) ||
              pParent->IsKindOf(CLASSINFO(wxScrolledWindow))
            )
             ulCreateFlags |= WS_CLIPSIBLINGS;
-    }
-    else
-    {
-        RECTL                   vRect;
-
-        ::WinQueryWindowRect(HWND_DESKTOP, &vRect);
-        hParent = HWND_DESKTOP;
-        vPos.y = vRect.yTop - (vPos.y + rSize.y);
     }
 
     //
@@ -614,10 +589,72 @@ bool wxWindowOS2::SetFont(
 
     if (hWnd != 0)
     {
-        wxChar                      zFont[128];
+        char                        zFont[128];
+        char                        zFacename[30];
+        char                        zWeight[30];
+        char                        zStyle[30];
 
-        sprintf(zFont, "%d.%s", rFont.GetPointSize(), rFont.GetFaceName().c_str());
-        return (bool)::WinSetPresParam(hWnd, PP_FONTNAMESIZE, strlen(zFont), (PVOID)zFont);
+        //
+        // The fonts available for Presentation Params are just three
+        // outline fonts, the rest are available to the GPI, so we must
+        // map the families to one of these three
+        //
+        switch(rFont.GetFamily())
+        {
+            case wxSCRIPT:
+            case wxDECORATIVE:
+            case wxROMAN:
+                strcpy(zFacename,"Times New Roman");
+                break;
+
+            case wxTELETYPE:
+            case wxMODERN:
+                strcpy(zFacename, "Courier");
+                break;
+
+            case wxSWISS:
+            case wxDEFAULT:
+            default:
+                strcpy(zFacename, "Helvetica");
+                break;
+        }
+
+        switch(rFont.GetWeight())
+        {
+            default:
+            case wxNORMAL:
+            case wxLIGHT:
+                zWeight[0] = '\0';
+                break;
+
+            case wxBOLD:
+            case wxFONTWEIGHT_MAX:
+                strcpy(zWeight, "Bold");
+                break;
+        }
+        switch(rFont.GetStyle())
+        {
+            case wxITALIC:
+            case wxSLANT:
+                strcpy(zStyle, "Italic");
+                break;
+
+            default:
+                zStyle[0] = '\0';
+                break;
+        }
+        sprintf(zFont, "%d.%s", rFont.GetPointSize(), zFacename);
+        if (zWeight[0] != '\0')
+        {
+            strcat(zFont, " ");
+            strcat(zFont, zWeight);
+        }
+        if (zStyle[0] != '\0')
+        {
+            strcat(zFont, " ");
+            strcat(zFont, zStyle);
+        }
+        ::WinSetPresParam(hWnd, PP_FONTNAMESIZE, strlen(zFont) + 1, (PVOID)zFont);
     }
     return(TRUE);
 }
@@ -1498,29 +1535,41 @@ void wxWindowOS2::DoMoveWindow(
 , int                               nHeight
 )
 {
-#if 0 // x and y coords should already be in os2 coordinates
     RECTL                           vRect;
     HWND                            hParent;
     wxWindow*                       pParent = GetParent();
 
     if (pParent)
-        hParent = GetWinHwnd(pParent);
-    else
-        hParent = HWND_DESKTOP;
-    ::WinQueryWindowRect(hParent, &vRect);
-    nY = vRect.yTop - (nY + nHeight);
-#endif
-    if ( !::WinSetWindowPos( GetHwnd()
-                            ,HWND_TOP
-                            ,(LONG)nX
-                            ,(LONG)nY
-                            ,(LONG)nWidth
-                            ,(LONG)nHeight
-                            ,SWP_SIZE | SWP_MOVE
-                           ))
     {
-        wxLogLastError("MoveWindow");
+        hParent = GetWinHwnd(pParent);
+        if (pParent->IsKindOf(CLASSINFO(wxFrame)))
+        {
+            if (IsKindOf(CLASSINFO(wxStatusBar)) ||
+                IsKindOf(CLASSINFO(wxMenuBar)) ||
+                IsKindOf(CLASSINFO(wxToolBar))
+               )
+                nY = pParent->GetSize().y - (nY + nHeight);
+            else
+                nY = pParent->GetClientSize().y - (nY + nHeight);
+        }
+        else
+            nY = pParent->GetSize().y - (nY + nHeight);
     }
+    else
+    {
+        RECTL                       vRect;
+
+        ::WinQueryWindowRect(HWND_DESKTOP, &vRect);
+        nY = vRect.yTop - (nY + nHeight);
+    }
+    ::WinSetWindowPos( GetHwnd()
+                      ,HWND_TOP
+                      ,(LONG)nX
+                      ,(LONG)nY
+                      ,(LONG)nWidth
+                      ,(LONG)nHeight
+                      ,SWP_ZORDER | SWP_SIZE | SWP_MOVE | SWP_SHOW
+                     );
 } // end of wxWindowOS2::DoMoveWindow
 
 //
@@ -1745,55 +1794,94 @@ void wxWindowOS2::GetTextExtent(
 , const wxFont*                     pTheFont
 ) const
 {
-    const wxFont*                   pFontToUse = pTheFont;
-    HPS                             hPs;
+    POINTL                          avPoint[TXTBOX_COUNT];
+    POINTL                          vPtMin;
+    POINTL                          vPtMax;
+    int                             i;
+    int                             l;
+    FONTMETRICS                     vFM; // metrics structure
+    BOOL                            bRc;
+    char*                           pStr;
+    ERRORID                         vErrorCode; // last error id code
+    HPS                             hPS;
 
-    hPs = ::WinGetPS(GetHwnd());
 
-    // Just prevent compiler warnings
-    wxString dummy = rString;
-    pX = pX;
-    pY = pY;
-    pDescent = pDescent;
-    pExternalLeading = pExternalLeading;
-/*
-// TODO: Will have to play with fonts later
+    hPS = ::WinGetPS(GetHwnd());
 
-    if (!pFontToUse)
-        pFontToUse = &m_font;
-
-    HFONT                           hFnt = 0;
-    HFONT                           hFfontOld = 0;
-
-    if (pFontToUse && pFontToUse->Ok())
+    l = rString.Length();
+    if (l > 0L)
     {
-        ::GpiCreateLog
-        hFnt = (HFONT)((wxFont *)pFontToUse)->GetResourceHandle(); // const_cast
-        if (hFnt)
-            hFontOld = (HFONT)SelectObject(dc,fnt);
+        pStr = (PCH)rString.c_str();
+
+        //
+        // In world coordinates.
+        //
+        bRc = ::GpiQueryTextBox( hPS
+                                ,l
+                                ,pStr
+                                ,TXTBOX_COUNT // return maximum information
+                                ,avPoint      // array of coordinates points
+                               );
+        if (bRc)
+        {
+            vPtMin.x = avPoint[0].x;
+            vPtMax.x = avPoint[0].x;
+            vPtMin.y = avPoint[0].y;
+            vPtMax.y = avPoint[0].y;
+            for (i = 1; i < 4; i++)
+            {
+                if(vPtMin.x > avPoint[i].x) vPtMin.x = avPoint[i].x;
+                if(vPtMin.y > avPoint[i].y) vPtMin.y = avPoint[i].y;
+                if(vPtMax.x < avPoint[i].x) vPtMax.x = avPoint[i].x;
+                if(vPtMax.y < avPoint[i].y) vPtMax.y = avPoint[i].y;
+            }
+            bRc = ::GpiQueryFontMetrics( hPS
+                                        ,sizeof(FONTMETRICS)
+                                        ,&vFM
+                                       );
+            if (!bRc)
+            {
+                vPtMin.x = 0;
+                vPtMin.y = 0;
+                vPtMax.x = 0;
+                vPtMax.y = 0;
+            }
+        }
+        else
+        {
+            vPtMin.x = 0;
+            vPtMin.y = 0;
+            vPtMax.x = 0;
+            vPtMax.y = 0;
+        }
     }
-
-    SIZE sizeRect;
-    TEXTMETRIC tm;
-    GetTextExtentPoint(dc, string, (int)string.Length(), &sizeRect);
-    GetTextMetrics(dc, &tm);
-
-    if ( fontToUse && fnt && hfontOld )
-        SelectObject(dc, hfontOld);
-
-    ReleaseDC(hWnd, dc);
-
-    if ( x )
-        *x = sizeRect.cx;
-    if ( y )
-        *y = sizeRect.cy;
-    if ( descent )
-        *descent = tm.tmDescent;
-    if ( externalLeading )
-        *externalLeading = tm.tmExternalLeading;
-*/
-    ::WinReleasePS(hPs);
-}
+    else
+    {
+        vPtMin.x = 0;
+        vPtMin.y = 0;
+        vPtMax.x = 0;
+        vPtMax.y = 0;
+    }
+    if (pX)
+        *pX = (vPtMax.x - vPtMin.x + 1);
+    if (pY)
+        *pY = (vPtMax.y - vPtMin.y + 1);
+    if (pDescent)
+    {
+        if (bRc)
+            *pDescent = vFM.lMaxDescender;
+        else
+            *pDescent = 0;
+    }
+    if (pExternalLeading)
+    {
+        if (bRc)
+            *pExternalLeading = vFM.lExternalLeading;
+        else
+            *pExternalLeading = 0;
+    }
+    ::WinReleasePS(hPS);
+} // end of wxWindow::GetTextExtent
 
 #if wxUSE_CARET && WXWIN_COMPATIBILITY
 // ---------------------------------------------------------------------------
@@ -2448,7 +2536,7 @@ MRESULT wxWindowOS2::OS2WindowProc(
                 if (uKeyFlags & KC_KEYUP)
                 {
                     //TODO: check if the cast to WXWORD isn't causing trouble
-                    bProcessed = HandleKeyUp((WXWORD)wParam, lParam);
+                    bProcessed = HandleKeyUp((WXDWORD)wParam, lParam);
                     break;
                 }
                 else // keydown event
@@ -2458,7 +2546,7 @@ MRESULT wxWindowOS2::OS2WindowProc(
                     // return 0 now (we've handled it). DON't RETURN
                     // we still need to process further
                     //
-                    HandleKeyDown((WXWORD)wParam, lParam);
+                    HandleKeyDown((WXDWORD)wParam, lParam);
                     if (uKeyFlags & KC_VIRTUALKEY)
                     {
                         USHORT          uVk = SHORT2FROMMP((MPARAM)lParam);
@@ -2492,13 +2580,13 @@ MRESULT wxWindowOS2::OS2WindowProc(
                             case VK_DOWN:
                             case VK_UP:
                             default:
-                                bProcessed = HandleChar((WXWORD)wParam, lParam);
+                                bProcessed = HandleChar((WXDWORD)wParam, lParam);
                          }
                          break;
                     }
                     else // WM_CHAR -- Always an ASCII character
                     {
-                        bProcessed = HandleChar((WXWORD)wParam, lParam, TRUE);
+                        bProcessed = HandleChar((WXDWORD)wParam, lParam, TRUE);
                         break;
                     }
                 }
@@ -2542,20 +2630,6 @@ MRESULT wxWindowOS2::OS2WindowProc(
             mResult = (MRESULT)(FALSE);
             break;
 
-        //
-        // Instead of CTLCOLOR messages PM sends QUERYWINDOWPARAMS to
-        // things such as colors and fonts and such
-        //
-        case WM_QUERYWINDOWPARAMS:
-            {
-                PWNDPARAMS          pWndParams = (PWNDPARAMS)wParam;
-
-                bProcessed = HandleWindowParams( pWndParams
-                                                ,lParam
-                                               );
-            }
-            break;
-
             // the return value for this message is ignored
         case WM_SYSCOLORCHANGE:
             bProcessed = HandleSysColorChange();
@@ -2564,11 +2638,6 @@ MRESULT wxWindowOS2::OS2WindowProc(
         case WM_REALIZEPALETTE:
             bProcessed = HandlePaletteChanged();
             break;
-
-        case WM_PRESPARAMCHANGED:
-            bProcessed = HandlePresParamChanged(wParam);
-            break;
-
 
         // move all drag and drops to wxDrg
         case WM_ENDDRAG:
@@ -3282,14 +3351,6 @@ bool wxWindowOS2::HandleCtlColor(
     return TRUE;
 } // end of wxWindowOS2::HandleCtlColor
 
-bool wxWindowOS2::HandleWindowParams(
-  PWNDPARAMS                        WXUNUSED(pWndParams)
-, WXLPARAM                          WXUNUSED(lParam)
-)
-{
-// TODO: I'll do something here, just not sure what yet
-    return TRUE;
-}
 
 // Define for each class of dialog and control
 WXHBRUSH wxWindowOS2::OnCtlColor(WXHDC WXUNUSED(hDC),
@@ -3314,21 +3375,6 @@ bool wxWindowOS2::HandlePaletteChanged()
 
     return GetEventHandler()->ProcessEvent(vEvent);
 } // end of wxWindowOS2::HandlePaletteChanged
-
-bool wxWindowOS2::HandlePresParamChanged(
-  WXWPARAM                          WXUNUSED(wParam)
-)
-{
-    //
-    // TODO:  Once again I'll do something here when I need it
-    //
-    //wxQueryNewPaletteEvent event(GetId());
-    //event.SetEventObject(this);
-    // if the background is erased
-//            bProcessed = HandleEraseBkgnd((WXHDC)(HDC)wParam);
-
-    return FALSE; //GetEventHandler()->ProcessEvent(event) && event.GetPaletteRealized();
-}
 
 //
 // Responds to colour changes: passes event on to children.
@@ -3384,65 +3430,6 @@ bool wxWindowOS2::HandlePaint()
 
     vEvent.SetEventObject(this);
     bProcessed = GetEventHandler()->ProcessEvent(vEvent);
-
-    if (!bProcessed)
-    {
-        HPS                         hPS;
-
-        hPS = ::WinBeginPaint( GetHwnd()
-                              ,NULLHANDLE
-                              ,&vRect
-                             );
-        if(hPS)
-        {
-#if 0
-            ::GpiCreateLogColorTable( hPS
-                                     ,0L
-                                     ,LCOLF_CONSECRGB
-                                     ,0L
-                                     ,(LONG)wxTheColourDatabase->m_nSize
-                                     ,(PLONG)wxTheColourDatabase->m_palTable
-                                    );
-#endif
-            ::GpiCreateLogColorTable( hPS
-                                     ,0L
-                                     ,LCOLF_RGB
-                                     ,0L
-                                     ,0L
-                                     ,NULL
-                                    );
-
-            ::WinFillRect(hPS, &vRect,  GetBackgroundColour().GetPixel());
-
-            if (m_dwExStyle)
-            {
-                LINEBUNDLE                      vLineBundle;
-
-                vLineBundle.lColor     = 0x00000000; // Black
-                vLineBundle.usMixMode  = FM_OVERPAINT;
-                vLineBundle.fxWidth    = 1;
-                vLineBundle.lGeomWidth = 1;
-                vLineBundle.usType     = LINETYPE_SOLID;
-                vLineBundle.usEnd      = 0;
-                vLineBundle.usJoin     = 0;
-                ::GpiSetAttrs( hPS
-                              ,PRIM_LINE
-                              ,LBB_COLOR | LBB_MIX_MODE | LBB_WIDTH | LBB_GEOM_WIDTH | LBB_TYPE
-                              ,0L
-                              ,&vLineBundle
-                             );
-                ::WinQueryWindowRect(GetHwnd(), &vRect);
-                wxDrawBorder( hPS
-                             ,vRect
-                             ,m_dwExStyle
-                            );
-            }
-            ::WinEndPaint(hPS);
-        }
-    }
-
-    ::GpiDestroyRegion(hPS, hRgn);
-    ::WinReleasePS(hPS);
 
     return GetEventHandler()->ProcessEvent(vEvent); //bProcessed;
 } // end of wxWindowOS2::HandlePaint
@@ -3755,7 +3742,7 @@ wxKeyEvent wxWindowOS2::CreateKeyEvent(
 // WM_KEYDOWN one
 //
 bool wxWindowOS2::HandleChar(
-  WXWORD                            wParam
+  WXDWORD                           wParam
 , WXLPARAM                          lParam
 , bool                              isASCII
 )
@@ -3849,7 +3836,7 @@ bool wxWindowOS2::HandleKeyDown(
 } // end of wxWindowOS2::HandleKeyDown
 
 bool wxWindowOS2::HandleKeyUp(
-  WXWORD                            wParam
+  WXDWORD                           wParam
 , WXLPARAM                          lParam
 )
 {
@@ -3946,13 +3933,34 @@ bool wxWindowOS2::OS2OnScroll(
 // ===========================================================================
 
 void wxGetCharSize(
-  WXHWND                            WXUNUSED(hWnd)
-, int*                              WXUNUSED(pX)
-, int*                              WXUNUSED(pY)
+  WXHWND                            hWnd
+, int*                              pX
+, int*                              pY
 ,wxFont*                            WXUNUSED(pTheFont)
 )
 {
-  // TODO: we'll do this later
+    FONTMETRICS                     vFM;
+    HPS                             hPS;
+    BOOL                            rc;
+
+    hPS =::WinGetPS(hWnd);
+
+    rc = ::GpiQueryFontMetrics(hPS, sizeof(FONTMETRICS), &vFM);
+    if (rc)
+    {
+        if (pX)
+            *pX = vFM.lAveCharWidth;
+        if (pY)
+            *pY = vFM.lEmHeight + vFM.lExternalLeading;
+    }
+    else
+    {
+        if (pX)
+            *pX = 10;
+        if (pY)
+            *pY = 15;
+    }
+    ::WinReleasePS(hPS);
 } // end of wxGetCharSize
 
 //

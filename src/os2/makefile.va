@@ -291,6 +291,7 @@ COMMONOBJS = \
   ..\common\$D\serbase.obj \
   ..\common\$D\sizer.obj \
   ..\common\$D\socket.obj \
+  ..\common\$D\statbar.obj \
   ..\common\$D\strconv.obj \
   ..\common\$D\stream.obj \
   ..\common\$D\string.obj \
@@ -418,6 +419,7 @@ COMLIBOBJS3 = \
   serbase.obj \
   sizer.obj \
   socket.obj \
+  statbar.obj \
   strconv.obj \
   stream.obj \
   string.obj \
@@ -780,6 +782,7 @@ $(COMLIBOBJS3):
   copy ..\common\$D\serbase.obj
   copy ..\common\$D\sizer.obj
   copy ..\common\$D\socket.obj
+  copy ..\common\$D\statbar.obj
   copy ..\common\$D\strconv.obj
   copy ..\common\$D\stream.obj
   copy ..\common\$D\string.obj

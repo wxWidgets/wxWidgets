@@ -171,7 +171,7 @@ bool wxTextCtrl::Create(
     }
     else
     {
-        lSstyle |= ES_LEFT;
+        lSstyle |= ES_LEFT | ES_AUTOSCROLL | ES_MARGIN;
 
         if (m_windowStyle & wxHSCROLL)
             lSstyle |=  ES_AUTOSCROLL;
@@ -1130,7 +1130,7 @@ wxSize wxTextCtrl::DoGetBestSize() const
     wxGetCharSize(GetHWND(), &nCx, &nCy, (wxFont*)&GetFont());
 
     int                             wText = DEFAULT_ITEM_WIDTH;
-    int                             hText = EDIT_HEIGHT_FROM_CHAR_HEIGHT(nCy);
+    int                             hText = (EDIT_HEIGHT_FROM_CHAR_HEIGHT(nCy) * .8);
 
     if (m_windowStyle & wxTE_MULTILINE)
     {

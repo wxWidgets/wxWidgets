@@ -237,6 +237,53 @@ wxFrame::~wxFrame()
 } // end of wxFrame::~wxFrame
 
 //
+//  IF we have child controls in the Frame's client we need to alter
+//  the y position, because, OS/2 controls are positioned relative to
+//  wxWindows orgin (top left) not the OS/2 origin (bottom left)
+void wxFrame::AlterChildPos()
+{
+    //
+    // OS/2 is the only OS concerned about this
+    //
+    wxWindow*                               pChild = NULL;
+    wxControl*                              pCtrl = NULL;
+    RECTL                                   vRect;
+    SWP                                     vSwp;
+
+    ::WinQueryWindowRect(GetHwnd(), &vRect);
+    for (wxWindowList::Node* pNode = GetChildren().GetFirst();
+         pNode;
+         pNode = pNode->GetNext())
+    {
+        wxWindow*                   pChild = pNode->GetData();
+
+        ::WinQueryWindowPos(pChild->GetHWND(), &vSwp);
+        vSwp.y += (vRect.yTop - m_vSwpClient.cy);
+        if (pChild->IsKindOf(CLASSINFO(wxControl)))
+        {
+            pCtrl = wxDynamicCast(pChild, wxControl);
+            //
+            // Must deal with controls that have margins like ENTRYFIELD.  The SWP
+            // struct of such a control will have and origin offset from its intended
+            // position by the width of the margins.
+            //
+            vSwp.y -= pCtrl->GetYComp();
+            vSwp.x -= pCtrl->GetXComp();
+        }
+        ::WinSetWindowPos( pChild->GetHWND()
+                          ,HWND_TOP
+                          ,vSwp.x
+                          ,vSwp.y
+                          ,vSwp.cx
+                          ,vSwp.cy
+                          ,SWP_MOVE
+                         );
+        ::WinQueryWindowPos(pChild->GetHWND(), &vSwp);
+        pChild = NULL;
+    }
+} // end of wxFrame::AlterChildPos
+
+//
 // Get size *available for subwindows* i.e. excluding menu bar, toolbar etc.
 //
 void wxFrame::DoGetClientSize(
@@ -375,6 +422,7 @@ bool wxFrame::Show(
 
         ::WinQueryWindowPos(m_hFrame, &vSwp);
         m_bIconized = vSwp.fl & SWP_MINIMIZE;
+        ::WinQueryWindowPos(m_hWnd, &m_vSwpClient);
         ::WinSendMsg(m_hFrame, WM_UPDATEFRAME, (MPARAM)~0, 0);
         ::WinEnableWindow(m_hFrame, TRUE);
         vEvent.SetEventObject(this);
@@ -518,6 +566,7 @@ void wxFrame::PositionStatusBar()
     if (m_frameStatusBar)
     {
         int                         nWidth;
+        int                         nY;
         int                         nStatbarWidth;
         int                         nStatbarHeight;
         HWND                        hWndClient;
@@ -525,21 +574,24 @@ void wxFrame::PositionStatusBar()
         RECTL                       vFRect;
 
         ::WinQueryWindowRect(m_hFrame, &vRect);
+        nY = vRect.yTop;
         ::WinMapWindowPoints(m_hFrame, HWND_DESKTOP, (PPOINTL)&vRect, 2);
         vFRect = vRect;
         ::WinCalcFrameRect(m_hFrame, &vRect, TRUE);
         nWidth = vRect.xRight - vRect.xLeft;
+        nY = nY - (vRect.yBottom - vFRect.yBottom);
 
         m_frameStatusBar->GetSize( &nStatbarWidth
                                   ,&nStatbarHeight
                                  );
 
+        nY= nY - nStatbarHeight;
         //
         // Since we wish the status bar to be directly under the client area,
         // we use the adjusted sizes without using wxSIZE_NO_ADJUSTMENTS.
         //
         m_frameStatusBar->SetSize( vRect.xLeft - vFRect.xLeft
-                                  ,vRect.yBottom - vFRect.yBottom
+                                  ,nY
                                   ,nWidth
                                   ,nStatbarHeight
                                  );
@@ -1056,6 +1108,17 @@ bool wxFrame::OS2Create(
     // Now size everything.  If adding a menu the client will need to be resized.
     //
 
+    if (pParent)
+    {
+        nY = pParent->GetSize().y - (nY + nHeight);
+    }
+    else
+    {
+        RECTL                   vRect;
+
+        ::WinQueryWindowRect(HWND_DESKTOP, &vRect);
+        nY = vRect.yTop - (nY + nHeight);
+    }
     if (!::WinSetWindowPos( m_hFrame
                            ,HWND_TOP
                            ,nX
@@ -1068,23 +1131,6 @@ bool wxFrame::OS2Create(
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
         wxLogError("Error sizing frame. Error: %s\n", sError);
-        return FALSE;
-    }
-    //
-    // We may have to be smarter here when variable sized toolbars are added!
-    //
-    if (!::WinSetWindowPos( m_hWnd
-                           ,HWND_TOP
-                           ,nX // + 20
-                           ,nY // + 20
-                           ,nWidth // - 60
-                           ,nHeight // - 60
-                           ,SWP_SIZE | SWP_MOVE | SWP_ACTIVATE | SWP_ZORDER
-                          ))
-    {
-        vError = ::WinGetLastError(vHabmain);
-        sError = wxPMErrorToStr(vError);
-        wxLogError("Error sizing client. Error: %s\n", sError);
         return FALSE;
     }
     return TRUE;
@@ -1446,6 +1492,7 @@ bool wxFrame::HandleSize(
 
         vEvent.SetEventObject(this);
         bProcessed = GetEventHandler()->ProcessEvent(vEvent);
+        AlterChildPos();
     }
     return bProcessed;
 } // end of wxFrame::HandleSize

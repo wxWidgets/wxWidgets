@@ -208,10 +208,5 @@ bool wxAcceleratorTable::Translate(
         int x = 1;
     }
     return (Ok() && rc);
-//    ::WinTranslateAccel( vHabmain
-//                        ,(HWND)hWnd
-//                        ,GetHaccel()
-//                        ,pMsg
-//                       );
 } // end of wxAcceleratorTable::Translate
 
