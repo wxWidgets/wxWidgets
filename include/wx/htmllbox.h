@@ -36,26 +36,24 @@ public:
                   wxWindowID id = wxID_ANY,
                   const wxPoint& pos = wxDefaultPosition,
                   const wxSize& size = wxDefaultSize,
-                  size_t countItems = 0,
                   long style = 0,
                   const wxString& name = wxVListBoxNameStr)
     {
         Init();
 
-        (void)Create(parent, id, pos, size, countItems, style, name);
+        (void)Create(parent, id, pos, size, style, name);
     }
 
     // really creates the control and sets the initial number of items in it
     // (which may be changed later with SetItemCount())
     //
-    // there are no special styles defined for wxVListBox
+    // the only special style which may be specified here is wxLB_MULTIPLE
     //
     // returns true on success or false if the control couldn't be created
     bool Create(wxWindow *parent,
                 wxWindowID id = wxID_ANY,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
-                size_t countItems = 0,
                 long style = 0,
                 const wxString& name = wxVListBoxNameStr);
 

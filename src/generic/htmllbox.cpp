@@ -143,11 +143,10 @@ bool wxHtmlListBox::Create(wxWindow *parent,
                            wxWindowID id,
                            const wxPoint& pos,
                            const wxSize& size,
-                           size_t countItems,
                            long style,
                            const wxString& name)
 {
-    return wxVListBox::Create(parent, id, pos, size, countItems, style, name);
+    return wxVListBox::Create(parent, id, pos, size, style, name);
 }
 
 wxHtmlListBox::~wxHtmlListBox()
