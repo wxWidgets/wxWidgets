@@ -2343,68 +2343,6 @@ class ArtProvider(object):
                 ...
                 return bmp
 
-
-    Identifying art resources
-    -------------------------
-
-    Every bitmap is known to wx.ArtProvider under an unique ID that is
-    used when requesting a resource from it. The IDs can have one of these
-    predefined values:
-
-        * wx.ART_ADD_BOOKMARK
-        * wx.ART_DEL_BOOKMARK
-        * wx.ART_HELP_SIDE_PANEL
-        * wx.ART_HELP_SETTINGS
-        * wx.ART_HELP_BOOK
-        * wx.ART_HELP_FOLDER
-        * wx.ART_HELP_PAGE
-        * wx.ART_GO_BACK
-        * wx.ART_GO_FORWARD
-        * wx.ART_GO_UP
-        * wx.ART_GO_DOWN
-        * wx.ART_GO_TO_PARENT
-        * wx.ART_GO_HOME
-        * wx.ART_FILE_OPEN
-        * wx.ART_PRINT
-        * wx.ART_HELP
-        * wx.ART_TIP
-        * wx.ART_REPORT_VIEW
-        * wx.ART_LIST_VIEW
-        * wx.ART_NEW_DIR
-        * wx.ART_FOLDER
-        * wx.ART_GO_DIR_UP
-        * wx.ART_EXECUTABLE_FILE
-        * wx.ART_NORMAL_FILE
-        * wx.ART_TICK_MARK
-        * wx.ART_CROSS_MARK
-        * wx.ART_ERROR
-        * wx.ART_QUESTION
-        * wx.ART_WARNING
-        * wx.ART_INFORMATION
-        * wx.ART_MISSING_IMAGE 
-
-
-    Clients
-    -------
-
-    The Client is the entity that calls wx.ArtProvider's `GetBitmap` or
-    `GetIcon` function.  Client IDs server as a hint to wx.ArtProvider
-    that is supposed to help it to choose the best looking bitmap. For
-    example it is often desirable to use slightly different icons in menus
-    and toolbars even though they represent the same action (e.g.
-    wx.ART_FILE_OPEN). Remember that this is really only a hint for
-    wx.ArtProvider -- it is common that `wx.ArtProvider.GetBitmap` returns
-    identical bitmap for different client values!
-
-        * wx.ART_TOOLBAR
-        * wx.ART_MENU
-        * wx.ART_FRAME_ICON
-        * wx.ART_CMN_DIALOG
-        * wx.ART_HELP_BROWSER
-        * wx.ART_MESSAGE_BOX
-        * wx.ART_OTHER (used for all requests that don't fit into any
-          of the categories above)
-
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyArtProvider instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -2428,68 +2366,6 @@ class ArtProvider(object):
                 def CreateBitmap(self, artid, client, size):
                     ...
                     return bmp
-
-
-        Identifying art resources
-        -------------------------
-
-        Every bitmap is known to wx.ArtProvider under an unique ID that is
-        used when requesting a resource from it. The IDs can have one of these
-        predefined values:
-
-            * wx.ART_ADD_BOOKMARK
-            * wx.ART_DEL_BOOKMARK
-            * wx.ART_HELP_SIDE_PANEL
-            * wx.ART_HELP_SETTINGS
-            * wx.ART_HELP_BOOK
-            * wx.ART_HELP_FOLDER
-            * wx.ART_HELP_PAGE
-            * wx.ART_GO_BACK
-            * wx.ART_GO_FORWARD
-            * wx.ART_GO_UP
-            * wx.ART_GO_DOWN
-            * wx.ART_GO_TO_PARENT
-            * wx.ART_GO_HOME
-            * wx.ART_FILE_OPEN
-            * wx.ART_PRINT
-            * wx.ART_HELP
-            * wx.ART_TIP
-            * wx.ART_REPORT_VIEW
-            * wx.ART_LIST_VIEW
-            * wx.ART_NEW_DIR
-            * wx.ART_FOLDER
-            * wx.ART_GO_DIR_UP
-            * wx.ART_EXECUTABLE_FILE
-            * wx.ART_NORMAL_FILE
-            * wx.ART_TICK_MARK
-            * wx.ART_CROSS_MARK
-            * wx.ART_ERROR
-            * wx.ART_QUESTION
-            * wx.ART_WARNING
-            * wx.ART_INFORMATION
-            * wx.ART_MISSING_IMAGE 
-
-
-        Clients
-        -------
-
-        The Client is the entity that calls wx.ArtProvider's `GetBitmap` or
-        `GetIcon` function.  Client IDs server as a hint to wx.ArtProvider
-        that is supposed to help it to choose the best looking bitmap. For
-        example it is often desirable to use slightly different icons in menus
-        and toolbars even though they represent the same action (e.g.
-        wx.ART_FILE_OPEN). Remember that this is really only a hint for
-        wx.ArtProvider -- it is common that `wx.ArtProvider.GetBitmap` returns
-        identical bitmap for different client values!
-
-            * wx.ART_TOOLBAR
-            * wx.ART_MENU
-            * wx.ART_FRAME_ICON
-            * wx.ART_CMN_DIALOG
-            * wx.ART_HELP_BROWSER
-            * wx.ART_MESSAGE_BOX
-            * wx.ART_OTHER (used for all requests that don't fit into any
-              of the categories above)
 
         """
         newobj = _misc_.new_ArtProvider(*args, **kwargs)
@@ -2652,23 +2528,22 @@ CONFIG_USE_NO_ESCAPE_CHARACTERS = _misc_.CONFIG_USE_NO_ESCAPE_CHARACTERS
 class ConfigBase(object):
     """
     wx.ConfigBase class defines the basic interface of all config
-    classes. It can not be used by itself (it is an abstract base
-    class) and you will always use one of its derivations: wx.Config
-    or wx.FileConfig.
+    classes. It can not be used by itself (it is an abstract base class)
+    and you will always use one of its derivations: wx.Config or
+    wx.FileConfig.
 
-    wx.ConfigBase organizes the items in a tree-like structure,
-    modeled after the Unix/Dos filesystem. There are groups that act
-    like directories and entries, key/value pairs that act like
-    files.  There is always one current group given by the current
-    path.  As in the file system case, to specify a key in the config
-    class you must use a path to it.  Config classes also support the
-    notion of the current group, which makes it possible to use
-    relative paths.
+    wx.ConfigBase organizes the items in a tree-like structure, modeled
+    after the Unix/Dos filesystem. There are groups that act like
+    directories and entries, key/value pairs that act like files.  There
+    is always one current group given by the current path.  As in the file
+    system case, to specify a key in the config class you must use a path
+    to it.  Config classes also support the notion of the current group,
+    which makes it possible to use relative paths.
 
     Keys are pairs "key_name = value" where value may be of string,
     integer floating point or boolean, you can not store binary data
-    without first encoding it as a string.  For performance reasons
-    items should be kept small, no more than a couple kilobytes.
+    without first encoding it as a string.  For performance reasons items
+    should be kept small, no more than a couple kilobytes.
 
     """
     def __init__(self): raise RuntimeError, "No constructor defined"
@@ -2689,8 +2564,8 @@ class ConfigBase(object):
         """
         Set(ConfigBase config) -> ConfigBase
 
-        Sets the global config object (the one returned by Get) and
-        returns a reference to the previous global config object.
+        Sets the global config object (the one returned by Get) and returns a
+        reference to the previous global config object.
         """
         return _misc_.ConfigBase_Set(*args, **kwargs)
 
@@ -2719,7 +2594,8 @@ class ConfigBase(object):
         """
         DontCreateOnDemand()
 
-        Should Get() try to create a new log object if there isn't a current one?
+        Should Get() try to create a new log object if there isn't a current
+        one?
         """
         return _misc_.ConfigBase_DontCreateOnDemand(*args, **kwargs)
 
@@ -2728,9 +2604,9 @@ class ConfigBase(object):
         """
         SetPath(self, String path)
 
-        Set current path: if the first character is '/', it's the absolute path,
-        otherwise it's a relative path. '..' is supported. If the strPath
-        doesn't exist it is created.
+        Set current path: if the first character is '/', it's the absolute
+        path, otherwise it's a relative path. '..' is supported. If the
+        strPath doesn't exist it is created.
         """
         return _misc_.ConfigBase_SetPath(*args, **kwargs)
 
@@ -2746,10 +2622,10 @@ class ConfigBase(object):
         """
         GetFirstGroup() -> (more, value, index)
 
-        Allows enumerating the subgroups in a config object.  Returns
-        a tuple containing a flag indicating there are more items, the
-        name of the current item, and an index to pass to GetNextGroup to
-        fetch the next item.
+        Allows enumerating the subgroups in a config object.  Returns a tuple
+        containing a flag indicating there are more items, the name of the
+        current item, and an index to pass to GetNextGroup to fetch the next
+        item.
         """
         return _misc_.ConfigBase_GetFirstGroup(*args, **kwargs)
 
@@ -2757,10 +2633,10 @@ class ConfigBase(object):
         """
         GetNextGroup(long index) -> (more, value, index)
 
-        Allows enumerating the subgroups in a config object.  Returns
-        a tuple containing a flag indicating there are more items, the
-        name of the current item, and an index to pass to GetNextGroup to
-        fetch the next item.
+        Allows enumerating the subgroups in a config object.  Returns a tuple
+        containing a flag indicating there are more items, the name of the
+        current item, and an index to pass to GetNextGroup to fetch the next
+        item.
         """
         return _misc_.ConfigBase_GetNextGroup(*args, **kwargs)
 
@@ -2769,8 +2645,8 @@ class ConfigBase(object):
         GetFirstEntry() -> (more, value, index)
 
         Allows enumerating the entries in the current group in a config
-        object.  Returns a tuple containing a flag indicating there are
-        more items, the name of the current item, and an index to pass to
+        object.  Returns a tuple containing a flag indicating there are more
+        items, the name of the current item, and an index to pass to
         GetNextGroup to fetch the next item.
         """
         return _misc_.ConfigBase_GetFirstEntry(*args, **kwargs)
@@ -2780,8 +2656,8 @@ class ConfigBase(object):
         GetNextEntry(long index) -> (more, value, index)
 
         Allows enumerating the entries in the current group in a config
-        object.  Returns a tuple containing a flag indicating there are
-        more items, the name of the current item, and an index to pass to
+        object.  Returns a tuple containing a flag indicating there are more
+        items, the name of the current item, and an index to pass to
         GetNextGroup to fetch the next item.
         """
         return _misc_.ConfigBase_GetNextEntry(*args, **kwargs)
@@ -2790,8 +2666,8 @@ class ConfigBase(object):
         """
         GetNumberOfEntries(self, bool recursive=False) -> size_t
 
-        Get the number of entries in the current group, with or
-        without its subgroups.
+        Get the number of entries in the current group, with or without its
+        subgroups.
         """
         return _misc_.ConfigBase_GetNumberOfEntries(*args, **kwargs)
 
@@ -2799,8 +2675,8 @@ class ConfigBase(object):
         """
         GetNumberOfGroups(self, bool recursive=False) -> size_t
 
-        Get the number of subgroups in the current group, with or
-        without its subgroups.
+        Get the number of subgroups in the current group, with or without its
+        subgroups.
         """
         return _misc_.ConfigBase_GetNumberOfGroups(*args, **kwargs)
 
@@ -2921,7 +2797,7 @@ class ConfigBase(object):
         """
         RenameGroup(self, String oldName, String newName) -> bool
 
-        Rename aa group.  Returns False on failure (probably because the new
+        Rename a group.  Returns False on failure (probably because the new
         name is already taken by an existing entry)
         """
         return _misc_.ConfigBase_RenameGroup(*args, **kwargs)
@@ -2930,8 +2806,8 @@ class ConfigBase(object):
         """
         DeleteEntry(self, String key, bool deleteGroupIfEmpty=True) -> bool
 
-        Deletes the specified entry and the group it belongs to if
-        it was the last key in it and the second parameter is True
+        Deletes the specified entry and the group it belongs to if it was the
+        last key in it and the second parameter is True
         """
         return _misc_.ConfigBase_DeleteEntry(*args, **kwargs)
 
@@ -2956,8 +2832,9 @@ class ConfigBase(object):
         """
         SetExpandEnvVars(self, bool doIt=True)
 
-        We can automatically expand environment variables in the config entries
-        (this option is on by default, you can turn it on/off at any time)
+        We can automatically expand environment variables in the config
+        entries this option is on by default, you can turn it on/off at any
+        time)
         """
         return _misc_.ConfigBase_SetExpandEnvVars(*args, **kwargs)
 
@@ -3029,8 +2906,8 @@ def ConfigBase_Set(*args, **kwargs):
     """
     ConfigBase_Set(ConfigBase config) -> ConfigBase
 
-    Sets the global config object (the one returned by Get) and
-    returns a reference to the previous global config object.
+    Sets the global config object (the one returned by Get) and returns a
+    reference to the previous global config object.
     """
     return _misc_.ConfigBase_Set(*args, **kwargs)
 
@@ -3056,7 +2933,8 @@ def ConfigBase_DontCreateOnDemand(*args, **kwargs):
     """
     ConfigBase_DontCreateOnDemand()
 
-    Should Get() try to create a new log object if there isn't a current one?
+    Should Get() try to create a new log object if there isn't a current
+    one?
     """
     return _misc_.ConfigBase_DontCreateOnDemand(*args, **kwargs)
 
@@ -3121,10 +2999,10 @@ _misc_.FileConfig_swigregister(FileConfigPtr)
 
 class ConfigPathChanger(object):
     """
-    A handy little class which changes current path to the path of
-    given entry and restores it in the destructoir: so if you declare
-    a local variable of this type, you work in the entry directory
-    and the path is automatically restored when the function returns.
+    A handy little class which changes current path to the path of given
+    entry and restores it in the destructoir: so if you declare a local
+    variable of this type, you work in the entry directory and the path is
+    automatically restored when the function returns.
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxConfigPathChanger instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -3162,9 +3040,9 @@ def ExpandEnvVars(*args, **kwargs):
     ExpandEnvVars(String sz) -> String
 
     Replace environment variables ($SOMETHING) with their values. The
-    format is $VARNAME or ${VARNAME} where VARNAME contains
-    alphanumeric characters and '_' only. '$' must be escaped ('\$')
-    in order to be taken literally.
+    format is $VARNAME or ${VARNAME} where VARNAME contains alphanumeric
+    characters and '_' only. '$' must be escaped ('\$') in order to be
+    taken literally.
     """
     return _misc_.ExpandEnvVars(*args, **kwargs)
 #---------------------------------------------------------------------------
@@ -3388,11 +3266,7 @@ class DateTime(object):
 
     GetWeekDayName = staticmethod(GetWeekDayName)
     def GetAmPmStrings(*args, **kwargs):
-        """
-        GetAmPmStrings() -> (am, pm)
-
-        Get the AM and PM strings in the current locale (may be empty)
-        """
+        """GetAmPmStrings() -> (am, pm)"""
         return _misc_.DateTime_GetAmPmStrings(*args, **kwargs)
 
     GetAmPmStrings = staticmethod(GetAmPmStrings)
@@ -3866,11 +3740,7 @@ def DateTime_GetWeekDayName(*args, **kwargs):
     return _misc_.DateTime_GetWeekDayName(*args, **kwargs)
 
 def DateTime_GetAmPmStrings(*args, **kwargs):
-    """
-    GetAmPmStrings() -> (am, pm)
-
-    Get the AM and PM strings in the current locale (may be empty)
-    """
+    """GetAmPmStrings() -> (am, pm)"""
     return _misc_.DateTime_GetAmPmStrings(*args, **kwargs)
 
 def DateTime_IsDSTApplicable(*args, **kwargs):
@@ -4398,14 +4268,11 @@ DF_MAX = _misc_.DF_MAX
 class DataFormat(object):
     """
     A wx.DataFormat is an encapsulation of a platform-specific format
-    handle which is used by the system for the clipboard and drag and
-    drop operations. The applications are usually only interested in,
-    for example, pasting data from the clipboard only if the data is
-    in a format the program understands.  A data format is is used to
-    uniquely identify this format.
-
-    On the system level, a data format is usually just a number
-    (CLIPFORMAT under Windows or Atom under X11, for example).
+    handle which is used by the system for the clipboard and drag and drop
+    operations. The applications are usually only interested in, for
+    example, pasting data from the clipboard only if the data is in a
+    format the program understands.  A data format is is used to uniquely
+    identify this format.
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxDataFormat instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -4413,9 +4280,8 @@ class DataFormat(object):
         """
         __init__(self, int type) -> DataFormat
 
-        Constructs a data format object for one of the standard data
-        formats or an empty data object (use SetType or SetId later in
-        this case)
+        Constructs a data format object for one of the standard data formats
+        or an empty data object (use SetType or SetId later in this case)
         """
         newobj = _misc_.new_DataFormat(*args, **kwargs)
         self.this = newobj.this
@@ -4445,7 +4311,8 @@ class DataFormat(object):
         """
         SetType(self, int format)
 
-        Sets the format to the given value, which should be one of wx.DF_XXX constants.
+        Sets the format to the given value, which should be one of wx.DF_XXX
+        constants.
         """
         return _misc_.DataFormat_SetType(*args, **kwargs)
 
@@ -4461,7 +4328,8 @@ class DataFormat(object):
         """
         GetId(self) -> String
 
-        Returns the name of a custom format (this function will fail for a standard format).
+        Returns the name of a custom format (this function will fail for a
+        standard format).
         """
         return _misc_.DataFormat_GetId(*args, **kwargs)
 
@@ -4486,7 +4354,8 @@ def CustomDataFormat(*args, **kwargs):
     """
     CustomDataFormat(String format) -> DataFormat
 
-    Constructs a data format object for a custom format identified by its name.
+    Constructs a data format object for a custom format identified by its
+    name.
     """
     val = _misc_.new_CustomDataFormat(*args, **kwargs)
     val.thisown = 1
@@ -5230,8 +5099,8 @@ class VideoMode(object):
         """
         Matches(self, VideoMode other) -> bool
 
-        Returns true if this mode matches the other one in the sense that
-        all non zero fields of the other mode have the same value in this
+        Returns true if this mode matches the other one in the sense that all
+        non zero fields of the other mode have the same value in this
         one (except for refresh which is allowed to have a greater value)
         """
         return _misc_.VideoMode_Matches(*args, **kwargs)
@@ -5240,8 +5109,7 @@ class VideoMode(object):
         """
         GetWidth(self) -> int
 
-        Returns the screen width in pixels (e.g. 640*480), 0 means
-        unspecified
+        Returns the screen width in pixels (e.g. 640*480), 0 means unspecified
         """
         return _misc_.VideoMode_GetWidth(*args, **kwargs)
 
@@ -5258,8 +5126,8 @@ class VideoMode(object):
         """
         GetDepth(self) -> int
 
-        Returns the screen's bits per pixel (e.g. 32), 1 is monochrome
-        and 0 means unspecified/known
+        Returns the screen's bits per pixel (e.g. 32), 1 is monochrome and 0
+        means unspecified/known
         """
         return _misc_.VideoMode_GetDepth(*args, **kwargs)
 
@@ -5300,9 +5168,9 @@ class Display(object):
         """
         __init__(self, size_t index=0) -> Display
 
-        Set up a Display instance with the specified display.  The
-        displays are numbered from 0 to GetCount() - 1, 0 is always the
-        primary display and the only one which is always supported
+        Set up a Display instance with the specified display.  The displays
+        are numbered from 0 to GetCount() - 1, 0 is always the primary display
+        and the only one which is always supported
         """
         newobj = _misc_.new_Display(*args, **kwargs)
         self.this = newobj.this
@@ -5327,8 +5195,8 @@ class Display(object):
         """
         GetFromPoint(Point pt) -> int
 
-        Find the display where the given point lies, return wx.NOT_FOUND
-        if it doesn't belong to any display
+        Find the display where the given point lies, return wx.NOT_FOUND if it
+        doesn't belong to any display
         """
         return _misc_.Display_GetFromPoint(*args, **kwargs)
 
@@ -5337,8 +5205,8 @@ class Display(object):
         """
         GetFromWindow(Window window) -> int
 
-        Find the display where the given window lies, return wx.NOT_FOUND
-        if it is not shown at all.
+        Find the display where the given window lies, return wx.NOT_FOUND if
+        it is not shown at all.
         """
         return _misc_.Display_GetFromWindow(*args, **kwargs)
 
@@ -5356,8 +5224,8 @@ class Display(object):
         """
         GetGeometry(self) -> Rect
 
-        Returns the bounding rectangle of the display whose index was
-        passed to the constructor.
+        Returns the bounding rectangle of the display whose index was passed
+        to the constructor.
         """
         return _misc_.Display_GetGeometry(*args, **kwargs)
 
@@ -5382,14 +5250,13 @@ class Display(object):
         """
         GetModes(VideoMode mode=DefaultVideoMode) -> [videoMode...]
 
-        Enumerate all video modes supported by this display matching the
-        given one (in the sense of VideoMode.Match()).
+        Enumerate all video modes supported by this display matching the given
+        one (in the sense of VideoMode.Match()).
 
-        As any mode matches the default value of the argument and there
-        is always at least one video mode supported by display, the
-        returned array is only empty for the default value of the
-        argument if this function is not supported at all on this
-        platform.
+        As any mode matches the default value of the argument and there is
+        always at least one video mode supported by display, the returned
+        array is only empty for the default value of the argument if this
+        function is not supported at all on this platform.
         """
         return _misc_.Display_GetModes(*args, **kwargs)
 
@@ -5438,8 +5305,8 @@ def Display_GetFromPoint(*args, **kwargs):
     """
     Display_GetFromPoint(Point pt) -> int
 
-    Find the display where the given point lies, return wx.NOT_FOUND
-    if it doesn't belong to any display
+    Find the display where the given point lies, return wx.NOT_FOUND if it
+    doesn't belong to any display
     """
     return _misc_.Display_GetFromPoint(*args, **kwargs)
 
@@ -5447,8 +5314,8 @@ def Display_GetFromWindow(*args, **kwargs):
     """
     Display_GetFromWindow(Window window) -> int
 
-    Find the display where the given window lies, return wx.NOT_FOUND
-    if it is not shown at all.
+    Find the display where the given window lies, return wx.NOT_FOUND if
+    it is not shown at all.
     """
     return _misc_.Display_GetFromWindow(*args, **kwargs)
 

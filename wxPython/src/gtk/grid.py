@@ -1186,13 +1186,14 @@ class GridCellCoords(object):
         """__ne__(self, GridCellCoords other) -> bool"""
         return _grid.GridCellCoords___ne__(*args, **kwargs)
 
-    def asTuple(*args, **kwargs):
-        """asTuple(self) -> PyObject"""
-        return _grid.GridCellCoords_asTuple(*args, **kwargs)
+    def Get(*args, **kwargs):
+        """Get(self) -> PyObject"""
+        return _grid.GridCellCoords_Get(*args, **kwargs)
 
-    def __str__(self):                   return str(self.asTuple())
-    def __repr__(self):                  return 'wxGridCellCoords'+str(self.asTuple())
-    def __len__(self):                   return len(self.asTuple())
+    asTuple = wx._deprecated(Get, "asTuple is deprecated, use `Get` instead")
+    def __str__(self):                   return str(self.Get())
+    def __repr__(self):                  return 'wxGridCellCoords'+str(self.Get())
+    def __len__(self):                   return len(self.Get())
     def __getitem__(self, index):        return self.asTuple()[index]
     def __setitem__(self, index, val):
         if index == 0: self.SetRow(val)
@@ -1987,15 +1988,15 @@ class Grid(_windows.ScrolledWindow):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-        Get the default attributes for this class.  This is useful if
-        you want to use the same font or colour in your own control as
-        in a standard control -- which is a much better idea than hard
-        coding specific colours or fonts which might look completely out
-        of place on the users system, especially if it uses themes.
+        Get the default attributes for this class.  This is useful if you want
+        to use the same font or colour in your own control as in a standard
+        control -- which is a much better idea than hard coding specific
+        colours or fonts which might look completely out of place on the users
+        system, especially if it uses themes.
 
         The variant parameter is only relevant under Mac currently and is
-        ignore under other platforms. Under Mac, it will change the size of the
-        returned font. See SetWindowVariant for more about this.
+        ignore under other platforms. Under Mac, it will change the size of
+        the returned font. See SetWindowVariant for more about this.
         """
         return _grid.Grid_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -2012,15 +2013,15 @@ def Grid_GetClassDefaultAttributes(*args, **kwargs):
     """
     Grid_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-    Get the default attributes for this class.  This is useful if
-    you want to use the same font or colour in your own control as
-    in a standard control -- which is a much better idea than hard
-    coding specific colours or fonts which might look completely out
-    of place on the users system, especially if it uses themes.
+    Get the default attributes for this class.  This is useful if you want
+    to use the same font or colour in your own control as in a standard
+    control -- which is a much better idea than hard coding specific
+    colours or fonts which might look completely out of place on the users
+    system, especially if it uses themes.
 
     The variant parameter is only relevant under Mac currently and is
-    ignore under other platforms. Under Mac, it will change the size of the
-    returned font. See SetWindowVariant for more about this.
+    ignore under other platforms. Under Mac, it will change the size of
+    the returned font. See SetWindowVariant for more about this.
     """
     return _grid.Grid_GetClassDefaultAttributes(*args, **kwargs)
 

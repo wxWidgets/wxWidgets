@@ -808,7 +808,7 @@ public:
     int GetNumberJoysticks() { return -1; }
     int GetManufacturerId() { return -1; }
     int GetProductId() { return -1; }
-    wxString GetProductName() { return ""; }
+    wxString GetProductName() { return wxEmptyString; }
     int GetXMin() { return -1; }
     int GetYMin() { return -1; }
     int GetZMin() { return -1; }

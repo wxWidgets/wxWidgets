@@ -46,29 +46,35 @@ _gdi_.GDIObject_swigregister(GDIObjectPtr)
 
 class Colour(_core.Object):
     """
-    A colour is an object representing a combination of Red, Green, and Blue (RGB)
-    intensity values, and is used to determine drawing colours, window colours,
-    etc.  Valid RGB values are in the range 0 to 255.
+    A colour is an object representing a combination of Red, Green, and
+    Blue (RGB) intensity values, and is used to determine drawing colours,
+    window colours, etc.  Valid RGB values are in the range 0 to 255.
 
-    In wxPython there are typemaps that will automatically convert from a colour
-    name, or from a '#RRGGBB' colour hex value string to a wx.Colour object when
-    calling C++ methods that expect a wxColour.  This means that the following are
-    all equivallent:
+    In wxPython there are typemaps that will automatically convert from a
+    colour name, or from a '#RRGGBB' colour hex value string to a
+    wx.Colour object when calling C++ methods that expect a wxColour.
+    This means that the following are all equivallent::
 
         win.SetBackgroundColour(wxColour(0,0,255))
         win.SetBackgroundColour('BLUE')
         win.SetBackgroundColour('#0000FF')
 
-    You can retrieve the various current system colour settings with
-    wx.SystemSettings.GetColour.
+    Additional colour names and their coresponding values can be added
+    using `wx.ColourDatabase`.  Various system colours (as set in the
+    user's system preferences) can be retrieved with
+    `wx.SystemSettings.GetColour`.
+
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxColour instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(self, unsigned char red=0, unsigned char green=0, unsigned char blue=0) -> Colour
+        __init__(self, byte red=0, byte green=0, byte blue=0) -> Colour
 
         Constructs a colour from red, green and blue values.
+
+        :see: Alternate constructors `wx.NamedColour` and `wx.ColourRGB`.
+
         """
         newobj = _gdi_.new_Colour(*args, **kwargs)
         self.this = newobj.this
@@ -82,7 +88,7 @@ class Colour(_core.Object):
 
     def Red(*args, **kwargs):
         """
-        Red(self) -> unsigned char
+        Red(self) -> byte
 
         Returns the red intensity.
         """
@@ -90,7 +96,7 @@ class Colour(_core.Object):
 
     def Green(*args, **kwargs):
         """
-        Green(self) -> unsigned char
+        Green(self) -> byte
 
         Returns the green intensity.
         """
@@ -98,7 +104,7 @@ class Colour(_core.Object):
 
     def Blue(*args, **kwargs):
         """
-        Blue(self) -> unsigned char
+        Blue(self) -> byte
 
         Returns the blue intensity.
         """
@@ -115,7 +121,7 @@ class Colour(_core.Object):
 
     def Set(*args, **kwargs):
         """
-        Set(self, unsigned char red, unsigned char green, unsigned char blue)
+        Set(self, byte red, byte green, byte blue)
 
         Sets the RGB intensity values.
         """
@@ -133,7 +139,8 @@ class Colour(_core.Object):
         """
         SetFromName(self, String colourName)
 
-        Sets the RGB intensity values using a colour name listed in wx.TheColourDatabase.
+        Sets the RGB intensity values using a colour name listed in
+        ``wx.TheColourDatabase``.
         """
         return _gdi_.Colour_SetFromName(*args, **kwargs)
 
@@ -142,8 +149,8 @@ class Colour(_core.Object):
         GetPixel(self) -> long
 
         Returns a pixel value which is platform-dependent. On Windows, a
-        COLORREF is returned. On X, an allocated pixel value is returned.
-        -1 is returned if the pixel is invalid (on X, unallocated).
+        COLORREF is returned. On X, an allocated pixel value is returned.  -1
+        is returned if the pixel is invalid (on X, unallocated).
         """
         return _gdi_.Colour_GetPixel(*args, **kwargs)
 
@@ -179,9 +186,9 @@ class Colour(_core.Object):
         """
         return _gdi_.Colour_GetRGB(*args, **kwargs)
 
-    asTuple = Get
-    def __str__(self):                  return str(self.asTuple())
-    def __repr__(self):                 return 'wx.Colour' + str(self.asTuple())
+    asTuple = wx._deprecated(Get, "asTuple is deprecated, use `Get` instead")
+    def __str__(self):                  return str(self.Get())
+    def __repr__(self):                 return 'wx.Colour' + str(self.Get())
     def __nonzero__(self):              return self.Ok()
     __safe_for_unpickling__ = True
     def __reduce__(self):               return (Colour, self.Get())
@@ -198,7 +205,8 @@ def NamedColour(*args, **kwargs):
     """
     NamedColour(String colorName) -> Colour
 
-    Constructs a colour object using a colour name listed in wx.TheColourDatabase.
+    Constructs a colour object using a colour name listed in
+    ``wx.TheColourDatabase``.
     """
     val = _gdi_.new_NamedColour(*args, **kwargs)
     val.thisown = 1
@@ -361,18 +369,6 @@ class Brush(GDIObject):
     A brush is a drawing tool for filling in areas. It is used for
     painting the background of rectangles, ellipses, etc. when drawing on
     a `wx.DC`.  It has a colour and a style.
-
-    :warning: Do not create instances of wx.Brush before the `wx.App`
-        object has been created because, depending on the platform,
-        required internal data structures may not have been initialized
-        yet.  Instead create your brushes in the app's OnInit or as they
-        are needed for drawing.
-
-    :note: On monochrome displays all brushes are white, unless the colour
-        really is black.
-
-    :see: `wx.BrushList`, `wx.DC`, `wx.DC.SetBrush`
-
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxBrush instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -380,24 +376,7 @@ class Brush(GDIObject):
         """
         __init__(self, Colour colour, int style=SOLID) -> Brush
 
-        Constructs a brush from a `wx.Colour` object and a style.  The style
-        parameter may be one of the following:
-
-            ===================   =============================
-            Style                 Meaning
-            ===================   =============================
-            wx.TRANSPARENT        Transparent (no fill).
-            wx.SOLID              Solid.
-            wx.STIPPLE            Uses a bitmap as a stipple.
-            wx.BDIAGONAL_HATCH    Backward diagonal hatch.
-            wx.CROSSDIAG_HATCH    Cross-diagonal hatch.
-            wx.FDIAGONAL_HATCH    Forward diagonal hatch.
-            wx.CROSS_HATCH        Cross hatch.
-            wx.HORIZONTAL_HATCH   Horizontal hatch.
-            wx.VERTICAL_HATCH     Vertical hatch.
-            ===================   =============================
-
-
+        Constructs a brush from a `wx.Colour` object and a style.
         """
         newobj = _gdi_.new_Brush(*args, **kwargs)
         self.this = newobj.this
@@ -485,19 +464,6 @@ class Bitmap(GDIObject):
     device context (instance of `wx.MemoryDC`). This enables the bitmap to
     be copied to a window or memory device context using `wx.DC.Blit`, or
     to be used as a drawing surface.
-
-    The BMP and XMP image file formats are supported on all platforms by
-    wx.Bitmap.  Other formats are automatically loaded by `wx.Image` and
-    converted to a wx.Bitmap, so any image file format supported by
-    `wx.Image` can be used.
-
-    :todo: Add wrappers and support for raw bitmap data access.  Can this
-           be be put into Python without losing the speed benefits of the
-           teplates and iterators in rawbmp.h?
-
-    :todo: Find a way to do very efficient PIL Image <--> wx.Bitmap
-           converstions.
-
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxBitmap instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -506,33 +472,6 @@ class Bitmap(GDIObject):
         __init__(self, String name, int type=BITMAP_TYPE_ANY) -> Bitmap
 
         Loads a bitmap from a file.
-
-        :param name:  Name of the file to load the bitmap from.
-        :param type: The type of image to expect.  Can be one of the following
-            constants (assuming that the neccessary `wx.Image` handlers are
-            loaded):
-
-                * wx.BITMAP_TYPE_ANY
-                * wx.BITMAP_TYPE_BMP
-                * wx.BITMAP_TYPE_ICO
-                * wx.BITMAP_TYPE_CUR
-                * wx.BITMAP_TYPE_XBM
-                * wx.BITMAP_TYPE_XPM
-                * wx.BITMAP_TYPE_TIF
-                * wx.BITMAP_TYPE_GIF
-                * wx.BITMAP_TYPE_PNG
-                * wx.BITMAP_TYPE_JPEG
-                * wx.BITMAP_TYPE_PNM
-                * wx.BITMAP_TYPE_PCX
-                * wx.BITMAP_TYPE_PICT
-                * wx.BITMAP_TYPE_ICON
-                * wx.BITMAP_TYPE_ANI
-                * wx.BITMAP_TYPE_IFF
-
-        :see: Alternate constructors `wx.EmptyBitmap`, `wx.BitmapFromIcon`,
-              `wx.BitmapFromImage`, `wx.BitmapFromXPMData`,
-              `wx.BitmapFromBits`
-
         """
         newobj = _gdi_.new_Bitmap(*args, **kwargs)
         self.this = newobj.this
@@ -773,7 +712,6 @@ class Mask(_core.Object):
     `wx.DC.DrawBitmap` or `wx.DC.Blit` when the source device context is a
     `wx.MemoryDC` with a `wx.Bitmap` selected into it that contains a
     mask.
-
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMask instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -979,15 +917,15 @@ def IconBundleFromIcon(*args, **kwargs):
 
 class Cursor(GDIObject):
     """
-    A cursor is a small bitmap usually used for denoting where the
-    mouse pointer is, with a picture that might indicate the
-    interpretation of a mouse click.
+    A cursor is a small bitmap usually used for denoting where the mouse
+    pointer is, with a picture that might indicate the interpretation of a
+    mouse click.
 
     A single cursor object may be used in many windows (any subwindow
-    type). The wxWindows convention is to set the cursor for a
-    window, as in X, rather than to set it globally as in MS Windows,
-    although a global wx.SetCursor function is also available for use
-    on MS Windows.
+    type). The wxWindows convention is to set the cursor for a window, as
+    in X, rather than to set it globally as in MS Windows, although a
+    global `wx.SetCursor` function is also available for use on MS Windows.
+
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxCursor instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -996,11 +934,11 @@ class Cursor(GDIObject):
         __init__(self, String cursorName, long type, int hotSpotX=0, int hotSpotY=0) -> Cursor
 
         Construct a Cursor from a file.  Specify the type of file using
-        wx.BITAMP_TYPE* constants, and specify the hotspot if not using a
-        .cur file.
+        wx.BITAMP_TYPE* constants, and specify the hotspot if not using a cur
+        file.
 
-        This cursor is not available on wxGTK, use wx.StockCursor,
-        wx.CursorFromImage, or wx.CursorFromBits instead.
+        This constructor is not available on wxGTK, use ``wx.StockCursor``,
+        ``wx.CursorFromImage``, or ``wx.CursorFromBits`` instead.
         """
         newobj = _gdi_.new_Cursor(*args, **kwargs)
         self.this = newobj.this
@@ -1029,8 +967,8 @@ def StockCursor(*args, **kwargs):
     """
     StockCursor(int id) -> Cursor
 
-    Create a cursor using one of the stock cursors.  Note that not
-    all cursors are available on all platforms.
+    Create a cursor using one of the stock cursors.  Note that not all
+    cursors are available on all platforms.
     """
     val = _gdi_.new_StockCursor(*args, **kwargs)
     val.thisown = 1
@@ -1040,17 +978,10 @@ def CursorFromImage(*args, **kwargs):
     """
     CursorFromImage(Image image) -> Cursor
 
-    Constructs a cursor from a wxImage. The cursor is monochrome,
-    colors with the RGB elements all greater than 127 will be
-    foreground, colors less than this background. The mask (if any)
-    will be used as transparent.
-
-    In MSW the foreground will be white and the background black. The
-    cursor is resized to 32x32 In GTK, the two most frequent colors
-    will be used for foreground and background. The cursor will be
-    displayed at the size of the image. On MacOS the cursor is
-    resized to 16x16 and currently only shown as black/white (mask
-    respected).
+    Constructs a cursor from a wxImage. The cursor is monochrome, colors
+    with the RGB elements all greater than 127 will be foreground, colors
+    less than this background. The mask (if any) will be used as
+    transparent.
     """
     val = _gdi_.new_CursorFromImage(*args, **kwargs)
     val.thisown = 1
@@ -2144,7 +2075,7 @@ class Locale(object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxLocale instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(self, int language=LANGUAGE_DEFAULT, int flags=wxLOCALE_LOAD_DEFAULT|wxLOCALE_CONV_ENCODING) -> Locale"""
+        """__init__(self, int language=-1, int flags=wxLOCALE_LOAD_DEFAULT|wxLOCALE_CONV_ENCODING) -> Locale"""
         newobj = _gdi_.new_Locale(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -2675,12 +2606,7 @@ class DC(_core.Object):
         return _gdi_.DC_GetCharWidth(*args, **kwargs)
 
     def GetTextExtent(*args, **kwargs):
-        """
-        GetTextExtent(wxString string) -> (width, height)
-
-        Get the width and height of the text using the current font.
-        Only works for single line strings.
-        """
+        """GetTextExtent(wxString string) -> (width, height)"""
         return _gdi_.DC_GetTextExtent(*args, **kwargs)
 
     def GetFullTextExtent(*args, **kwargs):
@@ -2688,8 +2614,8 @@ class DC(_core.Object):
         GetFullTextExtent(wxString string, Font font=None) ->
            (width, height, descent, externalLeading)
 
-        Get the width, height, decent and leading of the text using the current or specified font.
-        Only works for single line strings.
+        Get the width, height, decent and leading of the text using the
+        current or specified font. Only works for single line strings.
         """
         return _gdi_.DC_GetFullTextExtent(*args, **kwargs)
 
@@ -2697,9 +2623,6 @@ class DC(_core.Object):
         """
         GetMultiLineTextExtent(wxString string, Font font=None) ->
            (width, height, descent, externalLeading)
-
-        Get the width, height, decent and leading of the text using the current or specified font.
-        Works for single as well as multi-line strings.
         """
         return _gdi_.DC_GetMultiLineTextExtent(*args, **kwargs)
 

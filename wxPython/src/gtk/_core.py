@@ -644,10 +644,10 @@ CURSOR_MAX = _core_.CURSOR_MAX
 
 class Size(object):
     """
-    wx.Size is a useful data structure used to represent the size of something.
-    It simply contians integer width and height proprtites.  In most places in
-    wxPython where a wx.Size is expected a (width,height) tuple can be used
-    instead.
+    wx.Size is a useful data structure used to represent the size of
+    something.  It simply contians integer width and height proprtites.
+    In most places in wxPython where a wx.Size is expected a
+    (width,height) tuple can be used instead.
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSize instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -756,9 +756,8 @@ class Size(object):
         """
         SetDefaults(self, Size size)
 
-        Combine this size with the other one replacing the default
-        components of this object (i.e. equal to -1) with those of the
-        other.
+        Combine this size with the other one replacing the default components
+        of this object (i.e. equal to -1) with those of the other.
         """
         return _core_.Size_SetDefaults(*args, **kwargs)
 
@@ -770,7 +769,7 @@ class Size(object):
         """
         return _core_.Size_Get(*args, **kwargs)
 
-    asTuple = Get
+    asTuple = wx._deprecated(Get, "asTuple is deprecated, use `Get` instead")
     def __str__(self):                   return str(self.Get())
     def __repr__(self):                  return 'wx.Size'+str(self.Get())
     def __len__(self):                   return len(self.Get())
@@ -795,9 +794,9 @@ _core_.Size_swigregister(SizePtr)
 
 class RealPoint(object):
     """
-    A data structure for representing a point or position with floating point x
-    and y properties.  In wxPython most places that expect a wx.RealPoint can also
-    accept a (x,y) tuple.
+    A data structure for representing a point or position with floating
+    point x and y properties.  In wxPython most places that expect a
+    wx.RealPoint can also accept a (x,y) tuple.
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxRealPoint instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -867,7 +866,7 @@ class RealPoint(object):
         """
         return _core_.RealPoint_Get(*args, **kwargs)
 
-    asTuple = Get
+    asTuple = wx._deprecated(Get, "asTuple is deprecated, use `Get` instead")
     def __str__(self):                   return str(self.Get())
     def __repr__(self):                  return 'wx.RealPoint'+str(self.Get())
     def __len__(self):                   return len(self.Get())
@@ -892,9 +891,9 @@ _core_.RealPoint_swigregister(RealPointPtr)
 
 class Point(object):
     """
-    A data structure for representing a point or position with integer x and y
-    properties.  Most places in wxPython that expect a wx.Point can also accept a
-    (x,y) tuple.
+    A data structure for representing a point or position with integer x
+    and y properties.  Most places in wxPython that expect a wx.Point can
+    also accept a (x,y) tuple.
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPoint instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -980,7 +979,7 @@ class Point(object):
         """
         return _core_.Point_Get(*args, **kwargs)
 
-    asTuple = Get
+    asTuple = wx._deprecated(Get, "asTuple is deprecated, use `Get` instead")
     def __str__(self):                   return str(self.Get())
     def __repr__(self):                  return 'wx.Point'+str(self.Get())
     def __len__(self):                   return len(self.Get())
@@ -1005,9 +1004,9 @@ _core_.Point_swigregister(PointPtr)
 
 class Rect(object):
     """
-    A class for representing and manipulating rectangles.  It has x, y, width and
-    height properties.  In wxPython most palces that expect a wx.Rect can also
-    accept a (x,y,width,height) tuple.
+    A class for representing and manipulating rectangles.  It has x, y,
+    width and height properties.  In wxPython most palces that expect a
+    wx.Rect can also accept a (x,y,width,height) tuple.
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxRect instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -1134,8 +1133,9 @@ class Rect(object):
         """
         Inflate(self, int dx, int dy) -> Rect
 
-        Increase the rectangle size by dx in x direction and dy in y direction. Both
-        (or one of) parameters may be negative to decrease the rectangle size.
+        Increase the rectangle size by dx in x direction and dy in y
+        direction. Both or one of) parameters may be negative to decrease the
+        rectangle size.
         """
         return _core_.Rect_Inflate(*args, **kwargs)
 
@@ -1143,9 +1143,9 @@ class Rect(object):
         """
         Deflate(self, int dx, int dy) -> Rect
 
-        Decrease the rectangle size by dx in x direction and dy in y direction. Both
-        (or one of) parameters may be negative to increase the rectngle size. This
-        method is the opposite of Inflate.
+        Decrease the rectangle size by dx in x direction and dy in y
+        direction. Both or one of) parameters may be negative to increase the
+        rectngle size. This method is the opposite of Inflate.
         """
         return _core_.Rect_Deflate(*args, **kwargs)
 
@@ -1153,9 +1153,9 @@ class Rect(object):
         """
         OffsetXY(self, int dx, int dy)
 
-        Moves the rectangle by the specified offset. If dx is positive, the rectangle
-        is moved to the right, if dy is positive, it is moved to the bottom, otherwise
-        it is moved to the left or top respectively.
+        Moves the rectangle by the specified offset. If dx is positive, the
+        rectangle is moved to the right, if dy is positive, it is moved to the
+        bottom, otherwise it is moved to the left or top respectively.
         """
         return _core_.Rect_OffsetXY(*args, **kwargs)
 
@@ -1251,7 +1251,7 @@ class Rect(object):
         """
         return _core_.Rect_Get(*args, **kwargs)
 
-    asTuple = Get
+    asTuple = wx._deprecated(Get, "asTuple is deprecated, use `Get` instead")
     def __str__(self):                   return str(self.Get())
     def __repr__(self):                  return 'wx.Rect'+str(self.Get())
     def __len__(self):                   return len(self.Get())
@@ -1305,7 +1305,10 @@ def IntersectRect(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class Point2D(object):
-    """wx.Point2Ds represent a point or a vector in a 2d coordinate system with floating point values."""
+    """
+    wx.Point2Ds represent a point or a vector in a 2d coordinate system
+    with floating point values.
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPoint2D instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1319,19 +1322,11 @@ class Point2D(object):
         self.thisown = 1
         del newobj.thisown
     def GetFloor(*args, **kwargs):
-        """
-        GetFloor() -> (x,y)
-
-        Convert to integer
-        """
+        """GetFloor() -> (x,y)"""
         return _core_.Point2D_GetFloor(*args, **kwargs)
 
     def GetRounded(*args, **kwargs):
-        """
-        GetRounded() -> (x,y)
-
-        Convert to integer
-        """
+        """GetRounded() -> (x,y)"""
         return _core_.Point2D_GetRounded(*args, **kwargs)
 
     def GetVectorLength(*args, **kwargs):
@@ -1426,7 +1421,7 @@ class Point2D(object):
         """
         return _core_.Point2D_Get(*args, **kwargs)
 
-    asTuple = Get
+    asTuple = wx._deprecated(Get, "asTuple is deprecated, use `Get` instead")
     def __str__(self):                   return str(self.Get())
     def __repr__(self):                  return 'wx.Point2D'+str(self.Get())
     def __len__(self):                   return len(self.Get())
@@ -1955,13 +1950,7 @@ class ImageHistogram(object):
 
     MakeKey = staticmethod(MakeKey)
     def FindFirstUnusedColour(*args, **kwargs):
-        """
-        FindFirstUnusedColour(int startR=1, int startG=0, int startB=0) -> (success, r, g, b)
-
-        Find first colour that is not used in the image and has higher RGB values than
-        startR, startG, startB.  Returns a tuple consisting of a success flag and rgb
-        values.
-        """
+        """FindFirstUnusedColour(int startR=1, int startG=0, int startB=0) -> (success, r, g, b)"""
         return _core_.ImageHistogram_FindFirstUnusedColour(*args, **kwargs)
 
 
@@ -2048,13 +2037,7 @@ class Image(Object):
         return _core_.Image_HasAlpha(*args, **kwargs)
 
     def FindFirstUnusedColour(*args, **kwargs):
-        """
-        FindFirstUnusedColour(int startR=1, int startG=0, int startB=0) -> (success, r, g, b)
-
-        Find first colour that is not used in the image and has higher RGB values than
-        startR, startG, startB.  Returns a tuple consisting of a success flag and rgb
-        values.
-        """
+        """FindFirstUnusedColour(int startR=1, int startG=0, int startB=0) -> (success, r, g, b)"""
         return _core_.Image_FindFirstUnusedColour(*args, **kwargs)
 
     def SetMaskFromImage(*args, **kwargs):
@@ -3433,7 +3416,8 @@ class MouseEvent(Event):
         """
         GetPosition(self) -> Point
 
-        Returns the position of the mouse in window coordinates when the event happened.
+        Returns the position of the mouse in window coordinates when the event
+        happened.
         """
         return _core_.MouseEvent_GetPosition(*args, **kwargs)
 
@@ -3441,7 +3425,8 @@ class MouseEvent(Event):
         """
         GetPositionTuple() -> (x,y)
 
-        Returns the position of the mouse in window coordinates when the event happened.
+        Returns the position of the mouse in window coordinates when the event
+        happened.
         """
         return _core_.MouseEvent_GetPositionTuple(*args, **kwargs)
 
@@ -4603,11 +4588,12 @@ class PyApp(EvtHandler):
         recursively unless the value of ``onlyIfNeeded`` is True.
 
         :warning: This function is dangerous as it can lead to unexpected
-                  reentrancies (i.e. when called from an event handler it may
-                  result in calling the same event handler again), use with
-                  _extreme_ care or, better, don't use at all!
+              reentrancies (i.e. when called from an event handler it may
+              result in calling the same event handler again), use with
+              extreme care or, better, don't use at all!
 
         :see: `wx.Yield`, `wx.YieldIfNeeded`, `wx.SafeYield`
+
         """
         return _core_.PyApp_Yield(*args, **kwargs)
 
@@ -4758,18 +4744,7 @@ class PyApp(EvtHandler):
         """
         SetAssertMode(self, int mode)
 
-        Set the OnAssert behaviour for debug and hybrid builds.  The following
-        flags may be or'd together:
-
-           =========================   =======================================
-           wx.PYAPP_ASSERT_SUPPRESS    Don't do anything
-           wx.PYAPP_ASSERT_EXCEPTION   Turn it into a Python exception if possible
-                                       (default)
-           wx.PYAPP_ASSERT_DIALOG      Display a message dialog
-           wx.PYAPP_ASSERT_LOG         Write the assertion info to the wx.Log
-           =========================   =======================================
-
-
+        Set the OnAssert behaviour for debug and hybrid builds.
         """
         return _core_.PyApp_SetAssertMode(*args, **kwargs)
 
@@ -4969,7 +4944,7 @@ def App_CleanUp(*args, **kwargs):
     """
     App_CleanUp()
 
-    For internal use only, it is used to cleanup after wxWindows when
+    For internal use only, it is used to cleanup after wxWidgets when
     Python shuts down.
     """
     return _core_.App_CleanUp(*args, **kwargs)
@@ -5266,7 +5241,7 @@ class AcceleratorEntry(object):
     A class used to define items in an `wx.AcceleratorTable`.  wxPython
     programs can choose to use wx.AcceleratorEntry objects, but using a
     list of 3-tuple of integers (flags, keyCode, cmdID) usually works just
-    as well.  See `__init__` for details of the tuple values.
+    as well.  See `__init__` for  of the tuple values.
 
     :see: `wx.AcceleratorTable`
     """
@@ -5277,14 +5252,6 @@ class AcceleratorEntry(object):
         __init__(self, int flags=0, int keyCode=0, int cmdID=0) -> AcceleratorEntry
 
         Construct a wx.AcceleratorEntry.
-
-          :param flags: A bitmask of wx.ACCEL_ALT, wx.ACCEL_SHIFT,
-                        wx.ACCEL_CTRL or wx.ACCEL_NORMAL used to specify
-                        which modifier keys are held down.
-          :param keyCode: The keycode to be detected
-          :param cmdID: The menu or control command ID to use for the
-                        accellerator event.
-
         """
         newobj = _core_.new_AcceleratorEntry(*args, **kwargs)
         self.this = newobj.this
@@ -5343,27 +5310,6 @@ class AcceleratorTable(Object):
     keyboard shortcuts for menus or other commands. On Windows, menu or
     button commands are supported; on GTK, only menu commands are
     supported.
-
-    The object ``wx.NullAcceleratorTable`` is defined to be a table with
-    no data, and is the initial accelerator table for a window.
-
-    An accelerator takes precedence over normal processing and can be a
-    convenient way to program some event handling. For example, you can
-    use an accelerator table to make a hotkey generate an event no matter
-    which window within a frame has the focus.
-
-    Foe example::
-
-        aTable = wx.AcceleratorTable([(wx.ACCEL_ALT,  ord('X'), exitID),
-                                      (wx.ACCEL_CTRL, ord('H'), helpID),
-                                      (wx.ACCEL_CTRL, ord('F'), findID),
-                                      (wx.ACCEL_NORMAL, wx.WXK_F3, findnextID)
-                                      ])
-        self.SetAcceleratorTable(aTable)
-
-
-    :see: `wx.AcceleratorEntry`, `wx.Window.SetAcceleratorTable`
-
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxAcceleratorTable instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -5482,25 +5428,6 @@ class Window(EvtHandler):
         tries to close the window. It doesn't close the window itself,
         however.  If force is False (the default) then the window's close
         handler will be allowed to veto the destruction of the window.
-
-        Usually Close is only used with the top level windows (wx.Frame and
-        wx.Dialog classes) as the others are not supposed to have any special
-        EVT_CLOSE logic.
-
-        The close handler should check whether the window is being deleted
-        forcibly, using wx.CloseEvent.GetForce, in which case it should
-        destroy the window using wx.Window.Destroy.
-
-        Note that calling Close does not guarantee that the window will be
-        destroyed; but it provides a way to simulate a manual close of a
-        window, which may or may not be implemented by destroying the
-        window. The default EVT_CLOSE handler for wx.Dialog does not
-        necessarily delete the dialog, since it will simply simulate an
-        wxID_CANCEL event which is handled by the appropriate button event
-        handler and may do anything at all.
-
-        To guarantee that the window will be destroyed, call wx.Window.Destroy
-        instead.
         """
         return _core_.Window_Close(*args, **kwargs)
 
@@ -5523,7 +5450,8 @@ class Window(EvtHandler):
         """
         DestroyChildren(self) -> bool
 
-        Destroys all children of a window. Called automatically by the destructor.
+        Destroys all children of a window. Called automatically by the
+        destructor.
         """
         return _core_.Window_DestroyChildren(*args, **kwargs)
 
@@ -5563,13 +5491,12 @@ class Window(EvtHandler):
         """
         GetLabel(self) -> String
 
-        Generic way of getting a label from any window, for
-        identification purposes.  The interpretation of this function
-        differs from class to class. For frames and dialogs, the value
-        returned is the title. For buttons or static text controls, it is
-        the button text. This function can be useful for meta-programs
-        such as testing tools or special-needs access programs)which
-        need to identify windows by name.
+        Generic way of getting a label from any window, for identification
+        purposes.  The interpretation of this function differs from class to
+        class. For frames and dialogs, the value returned is the title. For
+        buttons or static text controls, it is the button text. This function
+        can be useful for meta-programs such as testing tools or special-needs
+        access programs)which need to identify windows by name.
         """
         return _core_.Window_GetLabel(*args, **kwargs)
 
@@ -5577,8 +5504,8 @@ class Window(EvtHandler):
         """
         SetName(self, String name)
 
-        Sets the window's name.  The window name is used for ressource
-        setting in X, it is not the same as the window title/label
+        Sets the window's name.  The window name is used for ressource setting
+        in X, it is not the same as the window title/label
         """
         return _core_.Window_SetName(*args, **kwargs)
 
@@ -5586,9 +5513,9 @@ class Window(EvtHandler):
         """
         GetName(self) -> String
 
-        Returns the windows name.  This name is not guaranteed to be
-        unique; it is up to the programmer to supply an appropriate name
-        in the window constructor or via wx.Window.SetName.
+        Returns the windows name.  This name is not guaranteed to be unique;
+        it is up to the programmer to supply an appropriate name in the window
+        constructor or via wx.Window.SetName.
         """
         return _core_.Window_GetName(*args, **kwargs)
 
@@ -5596,14 +5523,8 @@ class Window(EvtHandler):
         """
         SetWindowVariant(self, int variant)
 
-        Sets the variant of the window/font size to use for this window,
-        if the platform supports variants, for example, wxMac.  Variant values are:
-
-            wx.WINDOW_VARIANT_NORMAL    Normal size
-            wx.WINDOW_VARIANT_SMALL     Smaller size (about 25 % smaller than normal)
-            wx.WINDOW_VARIANT_MINI      Mini size (about 33 % smaller than normal)
-            wx.WINDOW_VARIANT_LARGE     Large size (about 25 % larger than normal)
-
+        Sets the variant of the window/font size to use for this window, if
+        the platform supports variants, for example, wxMac.
         """
         return _core_.Window_SetWindowVariant(*args, **kwargs)
 
@@ -5647,7 +5568,7 @@ class Window(EvtHandler):
         NextControlId(int winid) -> int
 
         Get the id of the control following the one with the given
-        (autogenerated) id
+        autogenerated) id
         """
         return _core_.Window_NextControlId(*args, **kwargs)
 
@@ -5657,7 +5578,7 @@ class Window(EvtHandler):
         PrevControlId(int winid) -> int
 
         Get the id of the control preceding the one with the given
-        (autogenerated) id
+        autogenerated) id
         """
         return _core_.Window_PrevControlId(*args, **kwargs)
 
@@ -5854,11 +5775,11 @@ class Window(EvtHandler):
         GetBestSize(self) -> Size
 
         This functions returns the best acceptable minimal size for the
-        window, if applicable. For example, for a static text control, it will be
-        the minimal size such that the control label is not truncated. For
-        windows containing subwindows (suzh aswx.Panel), the size returned
-        by this function will be the same as the size the window would have
-        had after calling Fit.
+        window, if applicable. For example, for a static text control, it will
+        be the minimal size such that the control label is not truncated. For
+        windows containing subwindows (suzh aswx.Panel), the size returned by
+        this function will be the same as the size the window would have had
+        after calling Fit.
         """
         return _core_.Window_GetBestSize(*args, **kwargs)
 
@@ -5867,11 +5788,11 @@ class Window(EvtHandler):
         GetBestSizeTuple() -> (width, height)
 
         This functions returns the best acceptable minimal size for the
-        window, if applicable. For example, for a static text control, it will be
-        the minimal size such that the control label is not truncated. For
-        windows containing subwindows (suzh aswx.Panel), the size returned
-        by this function will be the same as the size the window would have
-        had after calling Fit.
+        window, if applicable. For example, for a static text control, it will
+        be the minimal size such that the control label is not truncated. For
+        windows containing subwindows (suzh aswx.Panel), the size returned by
+        this function will be the same as the size the window would have had
+        after calling Fit.
         """
         return _core_.Window_GetBestSizeTuple(*args, **kwargs)
 
@@ -6105,10 +6026,10 @@ class Window(EvtHandler):
         """
         SetWindowStyleFlag(self, long style)
 
-        Sets the style of the window. Please note that some styles cannot
-        be changed after the window creation and that Refresh() might
-        need to be called after changing the others for the change to
-        take place immediately.
+        Sets the style of the window. Please note that some styles cannot be
+        changed after the window creation and that Refresh() might need to be
+        called after changing the others for the change to take place
+        immediately.
         """
         return _core_.Window_SetWindowStyleFlag(*args, **kwargs)
 
@@ -6284,7 +6205,8 @@ class Window(EvtHandler):
         """
         GetGrandParent(self) -> Window
 
-        Returns the parent of the parent of this window, or None if there isn't one.
+        Returns the parent of the parent of this window, or None if there
+        isn't one.
         """
         return _core_.Window_GetGrandParent(*args, **kwargs)
 
@@ -6364,7 +6286,7 @@ class Window(EvtHandler):
         substitute another, for example to allow central implementation of
         event-handling for a variety of different window classes.
 
-        It is usually better to use wx.Window.PushEventHandler since this sets
+        It is usually better to use `wx.Window.PushEventHandler` since this sets
         up a chain of event handlers, where an event not handled by one event
         handler is handed to the next one in the chain.
         """
@@ -6383,7 +6305,7 @@ class Window(EvtHandler):
 
         wx.Window.PushEventHandler allows an application to set up a chain of
         event handlers, where an event not handled by one event handler is
-        handed to the next one in the chain. Use wx.Window.PopEventHandler to
+        handed to the next one in the chain. Use `wx.Window.PopEventHandler` to
         remove the event handler.
         """
         return _core_.Window_PushEventHandler(*args, **kwargs)
@@ -6402,11 +6324,11 @@ class Window(EvtHandler):
         """
         RemoveEventHandler(self, EvtHandler handler) -> bool
 
-        Find the given handler in the event handler chain and remove (but
-        not delete) it from the event handler chain, return True if it was
-        found and False otherwise (this also results in an assert failure so
-        this function should only be called when the handler is supposed to
-        be there.)
+        Find the given handler in the event handler chain and remove (but not
+        delete) it from the event handler chain, return True if it was found
+        and False otherwise (this also results in an assert failure so this
+        function should only be called when the handler is supposed to be
+        there.)
         """
         return _core_.Window_RemoveEventHandler(*args, **kwargs)
 
@@ -6434,9 +6356,9 @@ class Window(EvtHandler):
         Validate(self) -> bool
 
         Validates the current values of the child controls using their
-        validators.  If the window has wx.WS_EX_VALIDATE_RECURSIVELY
-        extra style flag set, the method will also call Validate() of all
-        child windows.  Returns false if any of the validations failed.
+        validators.  If the window has wx.WS_EX_VALIDATE_RECURSIVELY extra
+        style flag set, the method will also call Validate() of all child
+        windows.  Returns false if any of the validations failed.
         """
         return _core_.Window_Validate(*args, **kwargs)
 
@@ -6444,10 +6366,10 @@ class Window(EvtHandler):
         """
         TransferDataToWindow(self) -> bool
 
-        Transfers values to child controls from data areas specified by
-        their validators.  If the window has wx.WS_EX_VALIDATE_RECURSIVELY
-        extra style flag set, the method will also call
-        TransferDataToWindow() of all child windows.
+        Transfers values to child controls from data areas specified by their
+        validators.  If the window has wx.WS_EX_VALIDATE_RECURSIVELY extra
+        style flag set, the method will also call TransferDataToWindow() of
+        all child windows.
         """
         return _core_.Window_TransferDataToWindow(*args, **kwargs)
 
@@ -6455,11 +6377,10 @@ class Window(EvtHandler):
         """
         TransferDataFromWindow(self) -> bool
 
-        Transfers values from child controls to data areas specified by
-        their validators. Returns false if a transfer failed.  If the
-        window has wx.WS_EX_VALIDATE_RECURSIVELY extra style flag set, the
-        method will also call TransferDataFromWindow() of all child
-        windows.
+        Transfers values from child controls to data areas specified by their
+        validators. Returns false if a transfer failed.  If the window has
+        wx.WS_EX_VALIDATE_RECURSIVELY extra style flag set, the method will
+        also call TransferDataFromWindow() of all child windows.
         """
         return _core_.Window_TransferDataFromWindow(*args, **kwargs)
 
@@ -6467,8 +6388,8 @@ class Window(EvtHandler):
         """
         InitDialog(self)
 
-        Sends an EVT_INIT_DIALOG event, whose handler usually transfers
-        data to the dialog via validators.
+        Sends an EVT_INIT_DIALOG event, whose handler usually transfers data
+        to the dialog via validators.
         """
         return _core_.Window_InitDialog(*args, **kwargs)
 
@@ -6667,10 +6588,11 @@ class Window(EvtHandler):
         """
         Freeze(self)
 
-        Freezes the window or, in other words, prevents any updates from taking place
-        on screen, the window is not redrawn at all. Thaw must be called to reenable
-        window redrawing.  Calls to Freeze/Thaw may be nested, with the actual Thaw
-        being delayed until all the nesting has been undone.
+        Freezes the window or, in other words, prevents any updates from
+        taking place on screen, the window is not redrawn at all. Thaw must be
+        called to reenable window redrawing.  Calls to Freeze/Thaw may be
+        nested, with the actual Thaw being delayed until all the nesting has
+        been undone.
 
         This method is useful for visual appearance optimization (for example,
         it is a good idea to use it before inserting large amount of text into
@@ -6685,8 +6607,8 @@ class Window(EvtHandler):
         Thaw(self)
 
         Reenables window updating after a previous call to Freeze.  Calls to
-        Freeze/Thaw may be nested, so Thaw must be called the same number of times
-        that Freeze was before the window will be updated.
+        Freeze/Thaw may be nested, so Thaw must be called the same number of
+        times that Freeze was before the window will be updated.
         """
         return _core_.Window_Thaw(*args, **kwargs)
 
@@ -6754,12 +6676,11 @@ class Window(EvtHandler):
         """
         GetDefaultAttributes(self) -> VisualAttributes
 
-        Get the default attributes for an instance of this class.  This
-        is useful if you want to use the same font or colour in your own
-        control as in a standard control -- which is a much better idea
-        than hard coding specific colours or fonts which might look
-        completely out of place on the users system, especially if it
-        uses themes.
+        Get the default attributes for an instance of this class.  This is
+        useful if you want to use the same font or colour in your own control
+        as in a standard control -- which is a much better idea than hard
+        coding specific colours or fonts which might look completely out of
+        place on the users system, especially if it uses themes.
         """
         return _core_.Window_GetDefaultAttributes(*args, **kwargs)
 
@@ -6767,15 +6688,15 @@ class Window(EvtHandler):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-        Get the default attributes for this class.  This is useful if
-        you want to use the same font or colour in your own control as
-        in a standard control -- which is a much better idea than hard
-        coding specific colours or fonts which might look completely out
-        of place on the users system, especially if it uses themes.
+        Get the default attributes for this class.  This is useful if you want
+        to use the same font or colour in your own control as in a standard
+        control -- which is a much better idea than hard coding specific
+        colours or fonts which might look completely out of place on the users
+        system, especially if it uses themes.
 
         The variant parameter is only relevant under Mac currently and is
-        ignore under other platforms. Under Mac, it will change the size of the
-        returned font. See SetWindowVariant for more about this.
+        ignore under other platforms. Under Mac, it will change the size of
+        the returned font. See SetWindowVariant for more about this.
         """
         return _core_.Window_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -6910,11 +6831,7 @@ class Window(EvtHandler):
         return _core_.Window_GetCharWidth(*args, **kwargs)
 
     def GetTextExtent(*args, **kwargs):
-        """
-        GetTextExtent(String string) -> (width, height)
-
-        Get the width and height of the text using the current font.
-        """
+        """GetTextExtent(String string) -> (width, height)"""
         return _core_.Window_GetTextExtent(*args, **kwargs)
 
     def GetFullTextExtent(*args, **kwargs):
@@ -6998,24 +6915,6 @@ class Window(EvtHandler):
         wx.UpdateUIEvent.SetMode or wx.UpdateUIEvent.SetUpdateInterval to
         limit the overhead that wxWindows incurs by sending update UI events
         in idle time.
-
-        The flags should be a bitlist of one or more of the following values:
-
-            wx.UPDATE_UI_NONE          No particular value
-            wx.UPDATE_UI_RECURSE       Call the function for descendants
-            wx.UPDATE_UI_FROMIDLE      Invoked from OnIdle
-
-        If you are calling this function from an OnIdle function, make sure
-        you pass the wx.UPDATE_UI_FROMIDLE flag, since this tells the window to
-        only update the UI elements that need to be updated in idle time. Some
-        windows update their elements only when necessary, for example when a
-        menu is about to be shown. The following is an example of how to call
-        UpdateWindowUI from an idle function.
-
-            def OnIdle(self, evt):
-                if wx.UpdateUIEvent.CanUpdate(self):
-                    self.UpdateWindowUI(wx.UPDATE_UI_FROMIDLE);
-
         """
         return _core_.Window_UpdateWindowUI(*args, **kwargs)
 
@@ -7061,22 +6960,10 @@ class Window(EvtHandler):
 
     def SetScrollbar(*args, **kwargs):
         """
-        SetScrollbar(self, int orientation, int pos, int thumbvisible, int range, 
+        SetScrollbar(self, int orientation, int position, int thumbSize, int range, 
             bool refresh=True)
 
         Sets the scrollbar properties of a built-in scrollbar.
-
-            orientation: Determines the scrollbar whose page size is to be
-                         set. May be wx.HORIZONTAL or wx.VERTICAL.
-
-            position:    The position of the scrollbar in scroll units.
-
-            thumbSize:   The size of the thumb, or visible portion of the
-                         scrollbar, in scroll units.
-
-            range:       The maximum position of the scrollbar.
-
-            refresh:     True to redraw the scrollbar, false otherwise.
         """
         return _core_.Window_SetScrollbar(*args, **kwargs)
 
@@ -7120,16 +7007,6 @@ class Window(EvtHandler):
         accordingly.  Use this function to optimise your scrolling
         implementations, to minimise the area that must be redrawn. Note that
         it is rarely required to call this function from a user program.
-
-            dx:   Amount to scroll horizontally.
-
-            dy:   Amount to scroll vertically.
-
-            rect: Rectangle to invalidate. If this is None, the whole window
-                  is invalidated. If you pass a rectangle corresponding to the
-                  area of the window exposed by the scroll, your painting
-                  handler can optimize painting by checking for the
-                  invalidated region.
         """
         return _core_.Window_ScrollWindow(*args, **kwargs)
 
@@ -7148,7 +7025,7 @@ class Window(EvtHandler):
         """
         ScrollPages(self, int pages) -> bool
 
-        If the platform and window class supports it,  scrolls the window by
+        If the platform and window class supports it, scrolls the window by
         the given number of pages down, if pages is positive, or up if pages
         is negative.  Returns True if the window was scrolled, False if it was
         already on top/bottom and nothing was done.
@@ -7366,30 +7243,30 @@ class Window(EvtHandler):
         """
         InheritAttributes(self)
 
-        This function is (or should be, in case of custom controls)
-        called during window creation to intelligently set up the window
-        visual attributes, that is the font and the foreground and
-        background colours.
+        This function is (or should be, in case of custom controls) called
+        during window creation to intelligently set up the window visual
+        attributes, that is the font and the foreground and background
+        colours.
 
-        By 'intelligently' the following is meant: by default, all
-        windows use their own default attributes. However if some of the
-        parent's attributes are explicitly changed (that is, using
-        SetFont and not SetDefaultFont) and if the corresponding
-        attribute hadn't been explicitly set for this window itself, then
-        this window takes the same value as used by the parent. In
-        addition, if the window overrides ShouldInheritColours to return
-        false, the colours will not be changed no matter what and only
-        the font might.
+        By 'intelligently' the following is meant: by default, all windows use
+        their own default attributes. However if some of the parent's
+        attributes are explicitly changed (that is, using SetFont and not
+        SetDefaultFont) and if the corresponding attribute hadn't been
+        explicitly set for this window itself, then this window takes the same
+        value as used by the parent. In addition, if the window overrides
+        ShouldInheritColours to return false, the colours will not be changed
+        no matter what and only the font might.
 
-        This rather complicated logic is necessary in order to accomodate
-        the different usage scenarius. The most common one is when all
-        default attributes are used and in this case, nothing should be
-        inherited as in modern GUIs different controls use different
-        fonts (and colours) than their siblings so they can't inherit the
-        same value from the parent. However it was also deemed desirable
-        to allow to simply change the attributes of all children at once
-        by just changing the font or colour of their common parent, hence
-        in this case we do inherit the parents attributes.
+        This rather complicated logic is necessary in order to accomodate the
+        different usage scenarius. The most common one is when all default
+        attributes are used and in this case, nothing should be inherited as
+        in modern GUIs different controls use different fonts (and colours)
+        than their siblings so they can't inherit the same value from the
+        parent. However it was also deemed desirable to allow to simply change
+        the attributes of all children at once by just changing the font or
+        colour of their common parent, hence in this case we do inherit the
+        parents attributes.
+
         """
         return _core_.Window_InheritAttributes(*args, **kwargs)
 
@@ -7398,11 +7275,11 @@ class Window(EvtHandler):
         ShouldInheritColours(self) -> bool
 
         Return true from here to allow the colours of this window to be
-        changed by InheritAttributes, returning false forbids inheriting
-        them from the parent window.
+        changed by InheritAttributes, returning false forbids inheriting them
+        from the parent window.
 
-        The base class version returns false, but this method is
-        overridden in wxControl where it returns true.
+        The base class version returns false, but this method is overridden in
+        wxControl where it returns true.
         """
         return _core_.Window_ShouldInheritColours(*args, **kwargs)
 
@@ -7450,7 +7327,7 @@ def Window_NextControlId(*args, **kwargs):
     Window_NextControlId(int winid) -> int
 
     Get the id of the control following the one with the given
-    (autogenerated) id
+    autogenerated) id
     """
     return _core_.Window_NextControlId(*args, **kwargs)
 
@@ -7459,7 +7336,7 @@ def Window_PrevControlId(*args, **kwargs):
     Window_PrevControlId(int winid) -> int
 
     Get the id of the control preceding the one with the given
-    (autogenerated) id
+    autogenerated) id
     """
     return _core_.Window_PrevControlId(*args, **kwargs)
 
@@ -7484,15 +7361,15 @@ def Window_GetClassDefaultAttributes(*args, **kwargs):
     """
     Window_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-    Get the default attributes for this class.  This is useful if
-    you want to use the same font or colour in your own control as
-    in a standard control -- which is a much better idea than hard
-    coding specific colours or fonts which might look completely out
-    of place on the users system, especially if it uses themes.
+    Get the default attributes for this class.  This is useful if you want
+    to use the same font or colour in your own control as in a standard
+    control -- which is a much better idea than hard coding specific
+    colours or fonts which might look completely out of place on the users
+    system, especially if it uses themes.
 
     The variant parameter is only relevant under Mac currently and is
-    ignore under other platforms. Under Mac, it will change the size of the
-    returned font. See SetWindowVariant for more about this.
+    ignore under other platforms. Under Mac, it will change the size of
+    the returned font. See SetWindowVariant for more about this.
     """
     return _core_.Window_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -8166,8 +8043,8 @@ class Control(Window):
     """
     This is the base class for a control or 'widget'.
 
-    A control is generally a small window which processes user input and/or
-    displays one or more item of data.
+    A control is generally a small window which processes user input
+    and/or displays one or more item of data.
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxControl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -8177,8 +8054,8 @@ class Control(Window):
             long style=0, Validator validator=DefaultValidator, 
             String name=ControlNameStr) -> Control
 
-        Create a Control.  Normally you should only call this from a
-        subclass' __init__ as a plain old wx.Control is not very useful.
+        Create a Control.  Normally you should only call this from a subclass'
+        __init__ as a plain old wx.Control is not very useful.
         """
         newobj = _core_.new_Control(*args, **kwargs)
         self.this = newobj.this
@@ -8200,8 +8077,10 @@ class Control(Window):
         """
         Command(self, CommandEvent event)
 
-        Simulates the effect of the user issuing a command to the
-        item. See wx.CommandEvent.
+        Simulates the effect of the user issuing a command to the item.
+
+        :see: `wx.CommandEvent`
+
         """
         return _core_.Control_Command(*args, **kwargs)
 
@@ -8225,15 +8104,15 @@ class Control(Window):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-        Get the default attributes for this class.  This is useful if
-        you want to use the same font or colour in your own control as
-        in a standard control -- which is a much better idea than hard
-        coding specific colours or fonts which might look completely out
-        of place on the users system, especially if it uses themes.
+        Get the default attributes for this class.  This is useful if you want
+        to use the same font or colour in your own control as in a standard
+        control -- which is a much better idea than hard coding specific
+        colours or fonts which might look completely out of place on the users
+        system, especially if it uses themes.
 
         The variant parameter is only relevant under Mac currently and is
-        ignore under other platforms. Under Mac, it will change the size of the
-        returned font. See SetWindowVariant for more about this.
+        ignore under other platforms. Under Mac, it will change the size of
+        the returned font. See SetWindowVariant for more about this.
         """
         return _core_.Control_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -8261,15 +8140,15 @@ def Control_GetClassDefaultAttributes(*args, **kwargs):
     """
     Control_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-    Get the default attributes for this class.  This is useful if
-    you want to use the same font or colour in your own control as
-    in a standard control -- which is a much better idea than hard
-    coding specific colours or fonts which might look completely out
-    of place on the users system, especially if it uses themes.
+    Get the default attributes for this class.  This is useful if you want
+    to use the same font or colour in your own control as in a standard
+    control -- which is a much better idea than hard coding specific
+    colours or fonts which might look completely out of place on the users
+    system, especially if it uses themes.
 
     The variant parameter is only relevant under Mac currently and is
-    ignore under other platforms. Under Mac, it will change the size of the
-    returned font. See SetWindowVariant for more about this.
+    ignore under other platforms. Under Mac, it will change the size of
+    the returned font. See SetWindowVariant for more about this.
     """
     return _core_.Control_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -8278,17 +8157,17 @@ def Control_GetClassDefaultAttributes(*args, **kwargs):
 class ItemContainer(object):
     """
     wx.ItemContainer defines an interface which is implemented by all
-    controls which have string subitems, each of which may be
-    selected, such as wx.ListBox, wx.CheckListBox, wx.Choice and
-    wx.ComboBox (which implements an extended interface deriving from
-    this one)
+    controls which have string subitems, each of which may be selected,
+    such as `wx.ListBox`, `wx.CheckListBox`, `wx.Choice` as well as
+    `wx.ComboBox` which implements an extended interface deriving from
+    this one.
 
-    It defines the methods for accessing the control's items and
-    although each of the derived classes implements them differently,
-    they still all conform to the same interface.
+    It defines the methods for accessing the control's items and although
+    each of the derived classes implements them differently, they still
+    all conform to the same interface.
 
-    The items in a wx.ItemContainer have (non empty) string labels
-    and, optionally, client data associated with them.
+    The items in a wx.ItemContainer have (non empty) string labels and,
+    optionally, client data associated with them.
 
     """
     def __init__(self): raise RuntimeError, "No constructor defined"
@@ -8298,10 +8177,10 @@ class ItemContainer(object):
         """
         Append(self, String item, PyObject clientData=None) -> int
 
-        Adds the item to the control, associating the given data with the
-        item if not None.  The return value is the index of the newly
-        added item which may be different from the last one if the
-        control is sorted (e.g. has wx.LB_SORT or wx.CB_SORT style).
+        Adds the item to the control, associating the given data with the item
+        if not None.  The return value is the index of the newly added item
+        which may be different from the last one if the control is sorted (e.g.
+        has wx.LB_SORT or wx.CB_SORT style).
         """
         return _core_.ItemContainer_Append(*args, **kwargs)
 
@@ -8309,9 +8188,9 @@ class ItemContainer(object):
         """
         AppendItems(self, wxArrayString strings)
 
-        Apend several items at once to the control.  Notice that calling
-        this method may be much faster than appending the items one by
-        one if you need to add a lot of items.
+        Apend several items at once to the control.  Notice that calling this
+        method may be much faster than appending the items one by one if you
+        need to add a lot of items.
         """
         return _core_.ItemContainer_AppendItems(*args, **kwargs)
 
@@ -8319,7 +8198,7 @@ class ItemContainer(object):
         """
         Insert(self, String item, int pos, PyObject clientData=None) -> int
 
-        Insert an item into the control before the item at the pos index,
+        Insert an item into the control before the item at the ``pos`` index,
         optionally associating some data object with the item.
         """
         return _core_.ItemContainer_Insert(*args, **kwargs)
@@ -8336,10 +8215,10 @@ class ItemContainer(object):
         """
         Delete(self, int n)
 
-        Deletes the item at the zero-based index 'n' from the control.
-        Note that it is an error (signalled by a PyAssertionError
-        exception if enabled) to remove an item with the index negative
-        or greater or equal than the number of items in the control.
+        Deletes the item at the zero-based index 'n' from the control. Note
+        that it is an error (signalled by a `wx.PyAssertionError` exception if
+        enabled) to remove an item with the index negative or greater or equal
+        than the number of items in the control.
         """
         return _core_.ItemContainer_Delete(*args, **kwargs)
 
@@ -8384,8 +8263,8 @@ class ItemContainer(object):
         FindString(self, String s) -> int
 
         Finds an item whose label matches the given string.  Returns the
-        zero-based position of the item, or wx.NOT_FOUND if the string
-        was not found.
+        zero-based position of the item, or ``wx.NOT_FOUND`` if the string was not
+        found.
         """
         return _core_.ItemContainer_FindString(*args, **kwargs)
 
@@ -8402,7 +8281,8 @@ class ItemContainer(object):
         """
         GetSelection(self) -> int
 
-        Returns the index of the selected item or wx.NOT_FOUND if no item is selected.
+        Returns the index of the selected item or ``wx.NOT_FOUND`` if no item
+        is selected.
         """
         return _core_.ItemContainer_GetSelection(*args, **kwargs)
 
@@ -8410,7 +8290,8 @@ class ItemContainer(object):
         """
         GetStringSelection(self) -> String
 
-        Returns the label of the selected item or an empty string if no item is selected.
+        Returns the label of the selected item or an empty string if no item
+        is selected.
         """
         return _core_.ItemContainer_GetStringSelection(*args, **kwargs)
 
@@ -8442,9 +8323,9 @@ _core_.ItemContainer_swigregister(ItemContainerPtr)
 
 class ControlWithItems(Control,ItemContainer):
     """
-    wx.ControlWithItems combines the wx.ItemContainer class with the
-    wx.Control class, and is used for the base class of various
-    controls that have items.
+    wx.ControlWithItems combines the ``wx.ItemContainer`` class with the
+    wx.Control class, and is used for the base class of various controls
+    that have items.
     """
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
@@ -9071,7 +8952,7 @@ class GBPosition(object):
         """Get(self) -> PyObject"""
         return _core_.GBPosition_Get(*args, **kwargs)
 
-    asTuple = Get
+    asTuple = wx._deprecated(Get, "asTuple is deprecated, use `Get` instead")
     def __str__(self):                   return str(self.Get())
     def __repr__(self):                  return 'wx.GBPosition'+str(self.Get())
     def __len__(self):                   return len(self.Get())
@@ -9136,7 +9017,7 @@ class GBSpan(object):
         """Get(self) -> PyObject"""
         return _core_.GBSpan_Get(*args, **kwargs)
 
-    asTuple = Get
+    asTuple = wx._deprecated(Get, "asTuple is deprecated, use `Get` instead")
     def __str__(self):                   return str(self.Get())
     def __repr__(self):                  return 'wx.GBSpan'+str(self.Get())
     def __len__(self):                   return len(self.Get())
@@ -9367,62 +9248,32 @@ SameAs = _core_.SameAs
 Absolute = _core_.Absolute
 class IndividualLayoutConstraint(Object):
     """
-    Objects of this class are stored in the wx.LayoutConstraint class as one of
-    eight possible constraints that a window can be involved in.  You will never
-    need to create an instance of wx.IndividualLayoutConstraint, rather you should
-    use create a wx.LayoutContstraints instance and use the individual contstraints
+    Objects of this class are stored in the `wx.LayoutConstraints` class as
+    one of eight possible constraints that a window can be involved in.
+    You will never need to create an instance of
+    wx.IndividualLayoutConstraint, rather you should create a
+    `wx.LayoutConstraints` instance and use the individual contstraints
     that it contains.
-
-    Constraints are initially set to have the relationship wx.Unconstrained, which
-    means that their values should be calculated by looking at known constraints.
-
-    The Edge specifies the type of edge or dimension of a window.
-
-     Edges
-
-        wx.Left 	The left edge.
-        wx.Top 	The top edge.
-        wx.Right 	The right edge.
-        wx.Bottom 	The bottom edge.
-        wx.CentreX 	The x-coordinate of the centre of the window.
-        wx.CentreY 	The y-coordinate of the centre of the window. 
-
-
-    The Relationship specifies the relationship that this edge or dimension has
-    with another specified edge or dimension. Normally, the user doesn't use these
-    directly because functions such as Below and RightOf are a convenience for
-    using the more general Set function.
-
-     Relationships
-
-        wx.Unconstrained 	The edge or dimension is unconstrained
-                            (the default for edges.)
-        wx.AsIs 	        The edge or dimension is to be taken from the current
-                            window position or size (the default for dimensions.)
-        wx.Above 	        The edge should be above another edge.
-        wx.Below 	        The edge should be below another edge.
-        wx.LeftOf 	        The edge should be to the left of another edge.
-        wx.RightOf 	        The edge should be to the right of another edge.
-        wx.SameAs 	        The edge or dimension should be the same as another edge
-                            or dimension.
-        wx.PercentOf 	The edge or dimension should be a percentage of another
-                            edge or dimension.
-        wx.Absolute 	The edge or dimension should be a given absolute value.
-
-
     """
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxIndividualLayoutConstraint instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def Set(*args, **kwargs):
-        """Set(self, int rel, Window otherW, int otherE, int val=0, int marg=wxLAYOUT_DEFAULT_MARGIN)"""
+        """
+        Set(self, int rel, Window otherW, int otherE, int val=0, int marg=wxLAYOUT_DEFAULT_MARGIN)
+
+        Sets the properties of the constraint. Normally called by one of the
+        convenience functions such as Above, RightOf, SameAs.
+        """
         return _core_.IndividualLayoutConstraint_Set(*args, **kwargs)
 
     def LeftOf(*args, **kwargs):
         """
         LeftOf(self, Window sibling, int marg=0)
 
-        Sibling relationship
+        Constrains this edge to be to the left of the given window, with an
+        optional margin. Implicitly, this is relative to the left edge of the
+        other window.
         """
         return _core_.IndividualLayoutConstraint_LeftOf(*args, **kwargs)
 
@@ -9430,7 +9281,9 @@ class IndividualLayoutConstraint(Object):
         """
         RightOf(self, Window sibling, int marg=0)
 
-        Sibling relationship
+        Constrains this edge to be to the right of the given window, with an
+        optional margin. Implicitly, this is relative to the right edge of the
+        other window.
         """
         return _core_.IndividualLayoutConstraint_RightOf(*args, **kwargs)
 
@@ -9438,7 +9291,9 @@ class IndividualLayoutConstraint(Object):
         """
         Above(self, Window sibling, int marg=0)
 
-        Sibling relationship
+        Constrains this edge to be above the given window, with an optional
+        margin. Implicitly, this is relative to the top edge of the other
+        window.
         """
         return _core_.IndividualLayoutConstraint_Above(*args, **kwargs)
 
@@ -9446,7 +9301,9 @@ class IndividualLayoutConstraint(Object):
         """
         Below(self, Window sibling, int marg=0)
 
-        Sibling relationship
+        Constrains this edge to be below the given window, with an optional
+        margin. Implicitly, this is relative to the bottom edge of the other
+        window.
         """
         return _core_.IndividualLayoutConstraint_Below(*args, **kwargs)
 
@@ -9454,7 +9311,8 @@ class IndividualLayoutConstraint(Object):
         """
         SameAs(self, Window otherW, int edge, int marg=0)
 
-        'Same edge' alignment
+        Constrains this edge or dimension to be to the same as the edge of the
+        given window, with an optional margin.
         """
         return _core_.IndividualLayoutConstraint_SameAs(*args, **kwargs)
 
@@ -9462,7 +9320,8 @@ class IndividualLayoutConstraint(Object):
         """
         PercentOf(self, Window otherW, int wh, int per)
 
-        The edge is a percentage of the other window's edge
+        Constrains this edge or dimension to be to a percentage of the given
+        window, with an optional margin.
         """
         return _core_.IndividualLayoutConstraint_PercentOf(*args, **kwargs)
 
@@ -9470,7 +9329,7 @@ class IndividualLayoutConstraint(Object):
         """
         Absolute(self, int val)
 
-        Edge has absolute value
+        Constrains this edge or dimension to be the given absolute value.
         """
         return _core_.IndividualLayoutConstraint_Absolute(*args, **kwargs)
 
@@ -9478,7 +9337,8 @@ class IndividualLayoutConstraint(Object):
         """
         Unconstrained(self)
 
-        Dimension is unconstrained
+        Sets this edge or dimension to be unconstrained, that is, dependent on
+        other edges and dimensions from which this value can be deduced.
         """
         return _core_.IndividualLayoutConstraint_Unconstrained(*args, **kwargs)
 
@@ -9486,7 +9346,12 @@ class IndividualLayoutConstraint(Object):
         """
         AsIs(self)
 
-        Dimension is 'as is' (use current size settings)
+        Sets this edge or constraint to be whatever the window's value is at
+        the moment. If either of the width and height constraints are *as is*,
+        the window will not be resized, but moved instead. This is important
+        when considering panel items which are intended to have a default
+        size, such as a button, which may take its size from the size of the
+        button label.
         """
         return _core_.IndividualLayoutConstraint_AsIs(*args, **kwargs)
 
@@ -9577,10 +9442,11 @@ _core_.IndividualLayoutConstraint_swigregister(IndividualLayoutConstraintPtr)
 
 class LayoutConstraints(Object):
     """
-    Note: constraints are now deprecated and you should use sizers instead.
+    **Note:** constraints are now deprecated and you should use sizers
+    instead.
 
-    Objects of this class can be associated with a window to define its layout
-    constraints, with respect to siblings or its parent.
+    Objects of this class can be associated with a window to define its
+    layout constraints, with respect to siblings or its parent.
 
     The class consists of the following eight constraints of class
     wx.IndividualLayoutConstraint, some or all of which should be accessed
@@ -9595,12 +9461,15 @@ class LayoutConstraints(Object):
         * centreX: represents the horizontal centre point of the window
         * centreY: represents the vertical centre point of the window 
 
-    Most constraints are initially set to have the relationship wxUnconstrained,
-    which means that their values should be calculated by looking at known
-    constraints. The exceptions are width and height, which are set to wxAsIs to
-    ensure that if the user does not specify a constraint, the existing width and
-    height will be used, to be compatible with panel items which often have take a
-    default size. If the constraint is wxAsIs, the dimension will not be changed.
+    Most constraints are initially set to have the relationship
+    wxUnconstrained, which means that their values should be calculated by
+    looking at known constraints. The exceptions are width and height,
+    which are set to wxAsIs to ensure that if the user does not specify a
+    constraint, the existing width and height will be used, to be
+    compatible with panel items which often have take a default size. If
+    the constraint is ``wx.AsIs``, the dimension will not be changed.
+
+    :see: `wx.IndividualLayoutConstraint`, `wx.Window.SetConstraints`
 
     """
     def __repr__(self):

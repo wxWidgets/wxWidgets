@@ -36,8 +36,8 @@ class Panel(_core.Window):
         """
         InitDialog(self)
 
-        Sends an EVT_INIT_DIALOG event, whose handler usually transfers
-        data to the dialog via validators.
+        Sends an EVT_INIT_DIALOG event, whose handler usually transfers data
+        to the dialog via validators.
         """
         return _windows_.Panel_InitDialog(*args, **kwargs)
 
@@ -45,15 +45,15 @@ class Panel(_core.Window):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-        Get the default attributes for this class.  This is useful if
-        you want to use the same font or colour in your own control as
-        in a standard control -- which is a much better idea than hard
-        coding specific colours or fonts which might look completely out
-        of place on the users system, especially if it uses themes.
+        Get the default attributes for this class.  This is useful if you want
+        to use the same font or colour in your own control as in a standard
+        control -- which is a much better idea than hard coding specific
+        colours or fonts which might look completely out of place on the users
+        system, especially if it uses themes.
 
         The variant parameter is only relevant under Mac currently and is
-        ignore under other platforms. Under Mac, it will change the size of the
-        returned font. See SetWindowVariant for more about this.
+        ignore under other platforms. Under Mac, it will change the size of
+        the returned font. See SetWindowVariant for more about this.
         """
         return _windows_.Panel_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -76,15 +76,15 @@ def Panel_GetClassDefaultAttributes(*args, **kwargs):
     """
     Panel_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-    Get the default attributes for this class.  This is useful if
-    you want to use the same font or colour in your own control as
-    in a standard control -- which is a much better idea than hard
-    coding specific colours or fonts which might look completely out
-    of place on the users system, especially if it uses themes.
+    Get the default attributes for this class.  This is useful if you want
+    to use the same font or colour in your own control as in a standard
+    control -- which is a much better idea than hard coding specific
+    colours or fonts which might look completely out of place on the users
+    system, especially if it uses themes.
 
     The variant parameter is only relevant under Mac currently and is
-    ignore under other platforms. Under Mac, it will change the size of the
-    returned font. See SetWindowVariant for more about this.
+    ignore under other platforms. Under Mac, it will change the size of
+    the returned font. See SetWindowVariant for more about this.
     """
     return _windows_.Panel_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -139,11 +139,7 @@ class ScrolledWindow(Panel):
         return _windows_.ScrolledWindow_SetScrollRate(*args, **kwargs)
 
     def GetScrollPixelsPerUnit(*args, **kwargs):
-        """
-        GetScrollPixelsPerUnit() -> (xUnit, yUnit)
-
-        Get the size of one logical unit in physical units.
-        """
+        """GetScrollPixelsPerUnit() -> (xUnit, yUnit)"""
         return _windows_.ScrolledWindow_GetScrollPixelsPerUnit(*args, **kwargs)
 
     def EnableScrolling(*args, **kwargs):
@@ -151,11 +147,7 @@ class ScrolledWindow(Panel):
         return _windows_.ScrolledWindow_EnableScrolling(*args, **kwargs)
 
     def GetViewStart(*args, **kwargs):
-        """
-        GetViewStart() -> (x,y)
-
-        Get the view start
-        """
+        """GetViewStart() -> (x,y)"""
         return _windows_.ScrolledWindow_GetViewStart(*args, **kwargs)
 
     def SetScale(*args, **kwargs):
@@ -208,15 +200,15 @@ class ScrolledWindow(Panel):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-        Get the default attributes for this class.  This is useful if
-        you want to use the same font or colour in your own control as
-        in a standard control -- which is a much better idea than hard
-        coding specific colours or fonts which might look completely out
-        of place on the users system, especially if it uses themes.
+        Get the default attributes for this class.  This is useful if you want
+        to use the same font or colour in your own control as in a standard
+        control -- which is a much better idea than hard coding specific
+        colours or fonts which might look completely out of place on the users
+        system, especially if it uses themes.
 
         The variant parameter is only relevant under Mac currently and is
-        ignore under other platforms. Under Mac, it will change the size of the
-        returned font. See SetWindowVariant for more about this.
+        ignore under other platforms. Under Mac, it will change the size of
+        the returned font. See SetWindowVariant for more about this.
         """
         return _windows_.ScrolledWindow_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -239,15 +231,15 @@ def ScrolledWindow_GetClassDefaultAttributes(*args, **kwargs):
     """
     ScrolledWindow_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-    Get the default attributes for this class.  This is useful if
-    you want to use the same font or colour in your own control as
-    in a standard control -- which is a much better idea than hard
-    coding specific colours or fonts which might look completely out
-    of place on the users system, especially if it uses themes.
+    Get the default attributes for this class.  This is useful if you want
+    to use the same font or colour in your own control as in a standard
+    control -- which is a much better idea than hard coding specific
+    colours or fonts which might look completely out of place on the users
+    system, especially if it uses themes.
 
     The variant parameter is only relevant under Mac currently and is
-    ignore under other platforms. Under Mac, it will change the size of the
-    returned font. See SetWindowVariant for more about this.
+    ignore under other platforms. Under Mac, it will change the size of
+    the returned font. See SetWindowVariant for more about this.
     """
     return _windows_.ScrolledWindow_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -477,15 +469,15 @@ class Frame(TopLevelWindow):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-        Get the default attributes for this class.  This is useful if
-        you want to use the same font or colour in your own control as
-        in a standard control -- which is a much better idea than hard
-        coding specific colours or fonts which might look completely out
-        of place on the users system, especially if it uses themes.
+        Get the default attributes for this class.  This is useful if you want
+        to use the same font or colour in your own control as in a standard
+        control -- which is a much better idea than hard coding specific
+        colours or fonts which might look completely out of place on the users
+        system, especially if it uses themes.
 
         The variant parameter is only relevant under Mac currently and is
-        ignore under other platforms. Under Mac, it will change the size of the
-        returned font. See SetWindowVariant for more about this.
+        ignore under other platforms. Under Mac, it will change the size of
+        the returned font. See SetWindowVariant for more about this.
         """
         return _windows_.Frame_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -508,15 +500,15 @@ def Frame_GetClassDefaultAttributes(*args, **kwargs):
     """
     Frame_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-    Get the default attributes for this class.  This is useful if
-    you want to use the same font or colour in your own control as
-    in a standard control -- which is a much better idea than hard
-    coding specific colours or fonts which might look completely out
-    of place on the users system, especially if it uses themes.
+    Get the default attributes for this class.  This is useful if you want
+    to use the same font or colour in your own control as in a standard
+    control -- which is a much better idea than hard coding specific
+    colours or fonts which might look completely out of place on the users
+    system, especially if it uses themes.
 
     The variant parameter is only relevant under Mac currently and is
-    ignore under other platforms. Under Mac, it will change the size of the
-    returned font. See SetWindowVariant for more about this.
+    ignore under other platforms. Under Mac, it will change the size of
+    the returned font. See SetWindowVariant for more about this.
     """
     return _windows_.Frame_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -577,15 +569,15 @@ class Dialog(TopLevelWindow):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-        Get the default attributes for this class.  This is useful if
-        you want to use the same font or colour in your own control as
-        in a standard control -- which is a much better idea than hard
-        coding specific colours or fonts which might look completely out
-        of place on the users system, especially if it uses themes.
+        Get the default attributes for this class.  This is useful if you want
+        to use the same font or colour in your own control as in a standard
+        control -- which is a much better idea than hard coding specific
+        colours or fonts which might look completely out of place on the users
+        system, especially if it uses themes.
 
         The variant parameter is only relevant under Mac currently and is
-        ignore under other platforms. Under Mac, it will change the size of the
-        returned font. See SetWindowVariant for more about this.
+        ignore under other platforms. Under Mac, it will change the size of
+        the returned font. See SetWindowVariant for more about this.
         """
         return _windows_.Dialog_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -608,15 +600,15 @@ def Dialog_GetClassDefaultAttributes(*args, **kwargs):
     """
     Dialog_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-    Get the default attributes for this class.  This is useful if
-    you want to use the same font or colour in your own control as
-    in a standard control -- which is a much better idea than hard
-    coding specific colours or fonts which might look completely out
-    of place on the users system, especially if it uses themes.
+    Get the default attributes for this class.  This is useful if you want
+    to use the same font or colour in your own control as in a standard
+    control -- which is a much better idea than hard coding specific
+    colours or fonts which might look completely out of place on the users
+    system, especially if it uses themes.
 
     The variant parameter is only relevant under Mac currently and is
-    ignore under other platforms. Under Mac, it will change the size of the
-    returned font. See SetWindowVariant for more about this.
+    ignore under other platforms. Under Mac, it will change the size of
+    the returned font. See SetWindowVariant for more about this.
     """
     return _windows_.Dialog_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -799,15 +791,15 @@ class StatusBar(_core.Window):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-        Get the default attributes for this class.  This is useful if
-        you want to use the same font or colour in your own control as
-        in a standard control -- which is a much better idea than hard
-        coding specific colours or fonts which might look completely out
-        of place on the users system, especially if it uses themes.
+        Get the default attributes for this class.  This is useful if you want
+        to use the same font or colour in your own control as in a standard
+        control -- which is a much better idea than hard coding specific
+        colours or fonts which might look completely out of place on the users
+        system, especially if it uses themes.
 
         The variant parameter is only relevant under Mac currently and is
-        ignore under other platforms. Under Mac, it will change the size of the
-        returned font. See SetWindowVariant for more about this.
+        ignore under other platforms. Under Mac, it will change the size of
+        the returned font. See SetWindowVariant for more about this.
         """
         return _windows_.StatusBar_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -830,15 +822,15 @@ def StatusBar_GetClassDefaultAttributes(*args, **kwargs):
     """
     StatusBar_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-    Get the default attributes for this class.  This is useful if
-    you want to use the same font or colour in your own control as
-    in a standard control -- which is a much better idea than hard
-    coding specific colours or fonts which might look completely out
-    of place on the users system, especially if it uses themes.
+    Get the default attributes for this class.  This is useful if you want
+    to use the same font or colour in your own control as in a standard
+    control -- which is a much better idea than hard coding specific
+    colours or fonts which might look completely out of place on the users
+    system, especially if it uses themes.
 
     The variant parameter is only relevant under Mac currently and is
-    ignore under other platforms. Under Mac, it will change the size of the
-    returned font. See SetWindowVariant for more about this.
+    ignore under other platforms. Under Mac, it will change the size of
+    the returned font. See SetWindowVariant for more about this.
     """
     return _windows_.StatusBar_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -860,10 +852,9 @@ SPLIT_DRAG_DRAGGING = _windows_.SPLIT_DRAG_DRAGGING
 SPLIT_DRAG_LEFT_DOWN = _windows_.SPLIT_DRAG_LEFT_DOWN
 class SplitterWindow(_core.Window):
     """
-    wx.SplitterWindow manages up to two subwindows or panes,
-    with an optional vertical or horizontal split which can be
-    used with the mouse or programmatically.
-
+    wx.SplitterWindow manages up to two subwindows or panes, with an
+    optional vertical or horizontal split which can be used with the mouse
+    or programmatically.
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSplitterWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -911,8 +902,8 @@ class SplitterWindow(_core.Window):
         SetSplitMode(self, int mode)
 
         Sets the split mode.  The mode can be wx.SPLIT_VERTICAL or
-        wx.SPLIT_HORIZONTAL.  This only sets the internal variable;
-        does not update the display.
+        wx.SPLIT_HORIZONTAL.  This only sets the internal variable; does not
+        update the display.
         """
         return _windows_.SplitterWindow_SetSplitMode(*args, **kwargs)
 
@@ -928,9 +919,9 @@ class SplitterWindow(_core.Window):
         """
         Initialize(self, Window window)
 
-        Initializes the splitter window to have one pane.  This
-        should be called if you wish to initially view only a single
-        pane in the splitter window.
+        Initializes the splitter window to have one pane.  This should be
+        called if you wish to initially view only a single pane in the
+        splitter window.
         """
         return _windows_.SplitterWindow_Initialize(*args, **kwargs)
 
@@ -939,24 +930,6 @@ class SplitterWindow(_core.Window):
         SplitVertically(self, Window window1, Window window2, int sashPosition=0) -> bool
 
         Initializes the left and right panes of the splitter window.
-
-            window1       The left pane.
-            window2       The right pane.
-            sashPosition  The initial position of the sash. If this
-                          value is positive, it specifies the size
-                          of the left pane. If it is negative, it is
-                          absolute value gives the size of the right
-                          pane. Finally, specify 0 (default) to
-                          choose the default position (half of the
-                          total window width).
-
-        Returns True if successful, False otherwise (the window was
-        already split).
-
-        SplitVertically should be called if you wish to initially
-        view two panes. It can also be called at any subsequent
-        time, but the application should check that the window is
-        not currently split using IsSplit.
         """
         return _windows_.SplitterWindow_SplitVertically(*args, **kwargs)
 
@@ -965,24 +938,6 @@ class SplitterWindow(_core.Window):
         SplitHorizontally(self, Window window1, Window window2, int sashPosition=0) -> bool
 
         Initializes the top and bottom panes of the splitter window.
-
-            window1       The top pane.
-            window2       The bottom pane.
-            sashPosition  The initial position of the sash. If this
-                          value is positive, it specifies the size
-                          of the upper pane. If it is negative, it
-                          is absolute value gives the size of the
-                          lower pane. Finally, specify 0 (default)
-                          to choose the default position (half of
-                          the total window height).
-
-        Returns True if successful, False otherwise (the window was
-        already split).
-
-        SplitHorizontally should be called if you wish to initially
-        view two panes. It can also be called at any subsequent
-        time, but the application should check that the window is
-        not currently split using IsSplit.
         """
         return _windows_.SplitterWindow_SplitHorizontally(*args, **kwargs)
 
@@ -990,9 +945,9 @@ class SplitterWindow(_core.Window):
         """
         Unsplit(self, Window toRemove=None) -> bool
 
-        Unsplits the window.  Pass the pane to remove, or None to
-        remove the right or bottom pane.  Returns True if
-        successful, False otherwise (the window was not split).
+        Unsplits the window.  Pass the pane to remove, or None to remove the
+        right or bottom pane.  Returns True if successful, False otherwise (the
+        window was not split).
 
         This function will not actually delete the pane being
         removed; it sends EVT_SPLITTER_UNSPLIT which can be handled
@@ -1006,18 +961,16 @@ class SplitterWindow(_core.Window):
         ReplaceWindow(self, Window winOld, Window winNew) -> bool
 
         This function replaces one of the windows managed by the
-        SplitterWindow with another one. It is in general better to
-        use it instead of calling Unsplit() and then resplitting the
-        window back because it will provoke much less flicker. It is
-        valid to call this function whether the splitter has two
-        windows or only one.
+        SplitterWindow with another one. It is in general better to use it
+        instead of calling Unsplit() and then resplitting the window back
+        because it will provoke much less flicker. It is valid to call this
+        function whether the splitter has two windows or only one.
 
-        Both parameters should be non-None and winOld must specify
-        one of the windows managed by the splitter. If the
-        parameters are incorrect or the window couldn't be replaced,
-        False is returned. Otherwise the function will return True,
-        but please notice that it will not Destroy the replaced
-        window and you may wish to do it yourself.
+        Both parameters should be non-None and winOld must specify one of the
+        windows managed by the splitter. If the parameters are incorrect or
+        the window couldn't be replaced, False is returned. Otherwise the
+        function will return True, but please notice that it will not Destroy
+        the replaced window and you may wish to do it yourself.
         """
         return _windows_.SplitterWindow_ReplaceWindow(*args, **kwargs)
 
@@ -1025,16 +978,15 @@ class SplitterWindow(_core.Window):
         """
         UpdateSize(self)
 
-        Causes any pending sizing of the sash and child panes to
-        take place immediately.
+        Causes any pending sizing of the sash and child panes to take place
+        immediately.
 
-        Such resizing normally takes place in idle time, in order to
-        wait for layout to be completed. However, this can cause
-        unacceptable flicker as the panes are resized after the
-        window has been shown. To work around this, you can perform
-        window layout (for example by sending a size event to the
-        parent window), and then call this function, before showing
-        the top-level window.
+        Such resizing normally takes place in idle time, in order to wait for
+        layout to be completed. However, this can cause unacceptable flicker
+        as the panes are resized after the window has been shown. To work
+        around this, you can perform window layout (for example by sending a
+        size event to the parent window), and then call this function, before
+        showing the top-level window.
         """
         return _windows_.SplitterWindow_UpdateSize(*args, **kwargs)
 
@@ -1082,8 +1034,8 @@ class SplitterWindow(_core.Window):
         """
         SetSashPosition(self, int position, bool redraw=True)
 
-        Sets the sash position, in pixels.  If redraw is Ttrue then
-        the panes are resized and the sash and border are redrawn.
+        Sets the sash position, in pixels.  If redraw is Ttrue then the panes
+        are resized and the sash and border are redrawn.
         """
         return _windows_.SplitterWindow_SetSashPosition(*args, **kwargs)
 
@@ -1101,13 +1053,12 @@ class SplitterWindow(_core.Window):
 
         Sets the minimum pane size in pixels.
 
-        The default minimum pane size is zero, which means that
-        either pane can be reduced to zero by dragging the sash,
-        thus removing one of the panes. To prevent this behaviour (and
-        veto out-of-range sash dragging), set a minimum size,
-        for example 20 pixels. If the wx.SP_PERMIT_UNSPLIT style is
-        used when a splitter window is created, the window may be
-        unsplit even if minimum size is non-zero.
+        The default minimum pane size is zero, which means that either pane
+        can be reduced to zero by dragging the sash, thus removing one of the
+        panes. To prevent this behaviour (and veto out-of-range sash
+        dragging), set a minimum size, for example 20 pixels. If the
+        wx.SP_PERMIT_UNSPLIT style is used when a splitter window is created,
+        the window may be unsplit even if minimum size is non-zero.
         """
         return _windows_.SplitterWindow_SetMinimumPaneSize(*args, **kwargs)
 
@@ -1147,15 +1098,15 @@ class SplitterWindow(_core.Window):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-        Get the default attributes for this class.  This is useful if
-        you want to use the same font or colour in your own control as
-        in a standard control -- which is a much better idea than hard
-        coding specific colours or fonts which might look completely out
-        of place on the users system, especially if it uses themes.
+        Get the default attributes for this class.  This is useful if you want
+        to use the same font or colour in your own control as in a standard
+        control -- which is a much better idea than hard coding specific
+        colours or fonts which might look completely out of place on the users
+        system, especially if it uses themes.
 
         The variant parameter is only relevant under Mac currently and is
-        ignore under other platforms. Under Mac, it will change the size of the
-        returned font. See SetWindowVariant for more about this.
+        ignore under other platforms. Under Mac, it will change the size of
+        the returned font. See SetWindowVariant for more about this.
         """
         return _windows_.SplitterWindow_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -1183,15 +1134,15 @@ def SplitterWindow_GetClassDefaultAttributes(*args, **kwargs):
     """
     SplitterWindow_GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
 
-    Get the default attributes for this class.  This is useful if
-    you want to use the same font or colour in your own control as
-    in a standard control -- which is a much better idea than hard
-    coding specific colours or fonts which might look completely out
-    of place on the users system, especially if it uses themes.
+    Get the default attributes for this class.  This is useful if you want
+    to use the same font or colour in your own control as in a standard
+    control -- which is a much better idea than hard coding specific
+    colours or fonts which might look completely out of place on the users
+    system, especially if it uses themes.
 
     The variant parameter is only relevant under Mac currently and is
-    ignore under other platforms. Under Mac, it will change the size of the
-    returned font. See SetWindowVariant for more about this.
+    ignore under other platforms. Under Mac, it will change the size of
+    the returned font. See SetWindowVariant for more about this.
     """
     return _windows_.SplitterWindow_GetClassDefaultAttributes(*args, **kwargs)
 
@@ -1213,14 +1164,12 @@ class SplitterEvent(_core.NotifyEvent):
         """
         SetSashPosition(self, int pos)
 
-        This funciton is only meaningful during
-        EVT_SPLITTER_SASH_POS_CHANGING and
-        EVT_SPLITTER_SASH_POS_CHANGED events.  In the case of
-        _CHANGED events, sets the the new sash position. In the case
-        of _CHANGING events, sets the new tracking bar position so
-        visual feedback during dragging will represent that change
-        that will actually take place. Set to -1 from the event
-        handler code to prevent repositioning.
+        This funciton is only meaningful during EVT_SPLITTER_SASH_POS_CHANGING
+        and EVT_SPLITTER_SASH_POS_CHANGED events.  In the case of _CHANGED
+        events, sets the the new sash position. In the case of _CHANGING
+        events, sets the new tracking bar position so visual feedback during
+        dragging will represent that change that will actually take place. Set
+        to -1 from the event handler code to prevent repositioning.
         """
         return _windows_.SplitterEvent_SetSashPosition(*args, **kwargs)
 
@@ -1228,9 +1177,8 @@ class SplitterEvent(_core.NotifyEvent):
         """
         GetSashPosition(self) -> int
 
-        Returns the new sash position while in
-        EVT_SPLITTER_SASH_POS_CHANGING and
-        EVT_SPLITTER_SASH_POS_CHANGED events.
+        Returns the new sash position while in EVT_SPLITTER_SASH_POS_CHANGING
+        and EVT_SPLITTER_SASH_POS_CHANGED events.
         """
         return _windows_.SplitterEvent_GetSashPosition(*args, **kwargs)
 
@@ -1238,8 +1186,8 @@ class SplitterEvent(_core.NotifyEvent):
         """
         GetWindowBeingRemoved(self) -> Window
 
-        Returns a pointer to the window being removed when a
-        splitter window is unsplit.
+        Returns a pointer to the window being removed when a splitter window
+        is unsplit.
         """
         return _windows_.SplitterEvent_GetWindowBeingRemoved(*args, **kwargs)
 
@@ -1809,7 +1757,7 @@ class VScrolledWindow(Panel):
         """
         ScrollPages(self, int pages) -> bool
 
-        If the platform and window class supports it,  scrolls the window by
+        If the platform and window class supports it, scrolls the window by
         the given number of pages down, if pages is positive, or up if pages
         is negative.  Returns True if the window was scrolled, False if it was
         already on top/bottom and nothing was done.
@@ -2269,17 +2217,6 @@ class DirDialog(Dialog):
     """
     wx.DirDialog allows the user to select a directory by browising the
     file system.
-
-
-    Window  Styles
-    --------------
-        ====================  ==========================================
-        wx.DD_NEW_DIR_BUTTON  Add 'Create new directory' button and allow
-                              directory names to be editable. On Windows
-                              the new directory button is only available
-                              with recent versions of the common dialogs.
-        ====================  ==========================================
-
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxDirDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -2350,45 +2287,6 @@ class FileDialog(Dialog):
     """
     wx.FileDialog allows the user to select one or more files from the
     filesystem.
-
-    In Windows, this is the common file selector dialog. On X based
-    platforms a generic alternative is used.  The path and filename are
-    distinct elements of a full file pathname. If path is "", the
-    current directory will be used. If filename is "", no default
-    filename will be supplied. The wildcard determines what files are
-    displayed in the file selector, and file extension supplies a type
-    extension for the required filename.
-
-    Both the X and Windows versions implement a wildcard filter. Typing a
-    filename containing wildcards (*, ?) in the filename text item, and
-    clicking on Ok, will result in only those files matching the pattern
-    being displayed. The wildcard may be a specification for multiple
-    types of file with a description for each, such as::
-
-       "BMP files (*.bmp)|*.bmp|GIF files (*.gif)|*.gif"
-
-
-    Window  Styles
-    --------------
-        ==================   ==========================================
-        wx.OPEN              This is an open dialog.
-
-        wx.SAVE              This is a save dialog.
-
-        wx.HIDE_READONLY     For open dialog only: hide the checkbox
-                             allowing to open the file in read-only mode.
-
-        wx.OVERWRITE_PROMPT  For save dialog only: prompt for a confirmation
-                             if a file will be overwritten.
-
-        wx.MULTIPLE          For open dialog only: allows selecting multiple
-                             files.
-
-        wx.CHANGE_DIR        Change the current working directory to the
-                             directory  where the file(s) chosen by the user
-                             are.
-        ==================   ==========================================
-
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFileDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -2575,12 +2473,7 @@ class MultiChoiceDialog(Dialog):
         self._setOORInfo(self)
 
     def SetSelections(*args, **kwargs):
-        """
-        SetSelections(List selections)
-
-        Specify the items in the list that should be selected, using a list of
-        integers.
-        """
+        """SetSelections(List selections)"""
         return _windows_.MultiChoiceDialog_SetSelections(*args, **kwargs)
 
     def GetSelections(*args, **kwargs):
@@ -2885,27 +2778,6 @@ class MessageDialog(Dialog):
     """
     This class provides a simple dialog that shows a single or multi-line
     message, with a choice of OK, Yes, No and/or Cancel buttons.
-
-
-    Window Styles
-    --------------
-        =================    =============================================
-        wx.OK                Show an OK button.
-        wx.CANCEL            Show a Cancel button.
-        wx.YES_NO            Show Yes and No buttons.
-        wx.YES_DEFAULT       Used with wxYES_NO, makes Yes button the
-                             default - which is the default behaviour.
-        wx.NO_DEFAULT        Used with wxYES_NO, makes No button the default.
-        wx.ICON_EXCLAMATION  Shows an exclamation mark icon.
-        wx.ICON_HAND         Shows an error icon.
-        wx.ICON_ERROR        Shows an error icon - the same as wxICON_HAND.
-        wx.ICON_QUESTION     Shows a question mark icon.
-        wx.ICON_INFORMATION  Shows an information (i) icon.
-        wx.STAY_ON_TOP       The message box stays on top of all other
-                             window, even those of the other applications
-                             (Windows only).
-        =================    =============================================
-
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMessageDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -2935,34 +2807,6 @@ class ProgressDialog(Frame):
     """
     A dialog that shows a short message and a progress bar. Optionally, it
     can display an ABORT button.
-
-    Window Styles
-    --------------
-        =================     =============================================
-        wx.PD_APP_MODAL       Make the progress dialog modal. If this flag is
-                              not given, it is only "locally" modal -
-                              that is the input to the parent window is
-                              disabled, but not to the other ones.
-
-        wx.PD_AUTO_HIDE       Causes the progress dialog to disappear from
-                              screen as soon as the maximum value of the
-                              progress meter has been reached.
-
-        wx.PD_CAN_ABORT       This flag tells the dialog that it should have
-                              a "Cancel" button which the user may press. If
-                              this happens, the next call to Update() will
-                              return false.
-
-        wx.PD_ELAPSED_TIME    This flag tells the dialog that it should show
-                              elapsed time (since creating the dialog).
-
-        wx.PD_ESTIMATED_TIME  This flag tells the dialog that it should show
-                              estimated time.
-
-        wx.PD_REMAINING_TIME  This flag tells the dialog that it should show
-                              remaining time.
-        =================     =============================================
-
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxProgressDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -3115,19 +2959,6 @@ class FindReplaceData(_core.Object):
 
     Note that all SetXXX() methods may only be called before showing the
     dialog and calling them has no effect later.
-
-    Flags
-    -----
-        ================   ===============================================  
-        wx.FR_DOWN         Downward search/replace selected (otherwise,
-                           upwards)
-
-        wx.FR_WHOLEWORD    Whole word search/replace selected
-
-        wx.FR_MATCHCASE    Case sensitive search/replace selected
-                           (otherwise, case insensitive)
-        ================   ===============================================  
-
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFindReplaceData instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -3212,21 +3043,6 @@ class FindReplaceDialog(Dialog):
     that unlike for the other standard dialogs this one must have a parent
     window. Also note that there is no way to use this dialog in a modal
     way; it is always, by design and implementation, modeless.
-
-
-    Window Styles
-    -------------
-
-        =====================  =========================================
-        wx.FR_REPLACEDIALOG    replace dialog (otherwise find dialog)
-
-        wx.FR_NOUPDOWN         don't allow changing the search direction
-
-        wx.FR_NOMATCHCASE      don't allow case sensitive searching
-
-        wx.FR_NOWHOLEWORD      don't allow whole word searching
-        =====================  =========================================
-
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFindReplaceDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
