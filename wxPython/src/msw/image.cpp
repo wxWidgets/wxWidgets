@@ -56,6 +56,7 @@ extern PyObject *SWIG_newvarlink(void);
 #define SWIG_name    "imagec"
 
 #include "helpers.h"
+#include "pyistream.h"
 #include <wx/image.h>
 
 
