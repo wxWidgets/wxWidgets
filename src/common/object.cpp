@@ -42,11 +42,25 @@
 #if defined(__WXDEBUG__) || wxUSE_DEBUG_CONTEXT
     // for wxObject::Dump
     #include "wx/ioswrap.h"
+    #if defined(__VISAGECPP__)
+    // help with VA debugging
+        #define DEBUG_PRINTF(NAME)   { static int raz=0; \
+          printf( #NAME " %i\n",raz); fflush(stdout);       \
+           raz++;                                        \
+         }
+    #else
+        #define DEBUG_PRINTF(NAME)
+    #endif
 #endif
 
 wxClassInfo wxObject::sm_classwxObject((wxChar *) wxT("wxObject"), (wxChar *) NULL, (wxChar *) NULL, (int ) sizeof(wxObject), (wxObjectConstructorFn) NULL);
 wxClassInfo* wxClassInfo::sm_first = (wxClassInfo *) NULL;
 wxHashTable* wxClassInfo::sm_classTable = (wxHashTable*) NULL;
+
+#if defined(__WXDEBUG__) && defined(__VISAGECPP__)
+  int wxObject::N = 0;  // total number of objects
+  int wxObject::Nid = 0;// object serial counter
+#endif // __WXDEBUG__
 
 // These are here so we can avoid 'always true/false' warnings
 // by referring to these instead of TRUE/FALSE
@@ -63,6 +77,12 @@ wxObject::wxObject()
 #if wxUSE_SERIAL
     m_serialObj = (wxObject_Serialize *)NULL;
 #endif
+#if defined(__WXDEBUG__) && defined(__VISAGECPP__)
+    id = Nid++;
+    N++;
+//  {  printf("wxObject %i/%i \t",id,N);
+//  }
+#endif
 }
 
 wxObject::~wxObject()
@@ -72,6 +92,11 @@ wxObject::~wxObject()
     if (m_serialObj)
         delete m_serialObj;
 #endif
+#if defined(__WXDEBUG__) && defined(__VISAGECPP__)
+     N--;
+//  {  printf("~wxObject %i/%i \t",id,N);
+//  }
+#endif  //__WXDEBUG__
 }
 
 /*
@@ -127,10 +152,19 @@ void *wxObject::operator new (size_t size, wxChar * fileName, int lineNum)
     return wxDebugAlloc(size, fileName, lineNum, TRUE);
 }
 
+#if defined(__VISAGECPP__)
+#  if __DEBUG_ALLOC__
+void wxObject::operator delete (void * buf,const char * _fname, size_t _line)
+{
+    wxDebugFree(buf);
+}
+#  endif  //__DEBUG_ALLOC__
+#else
 void wxObject::operator delete (void * buf)
 {
     wxDebugFree(buf);
 }
+#endif // __VISAGECPP__
 
 // VC++ 6.0
 #if defined(__VISUALC__) && (__VISUALC__ >= 1200)
@@ -266,6 +300,8 @@ void wxClassInfo::CleanUpClasses()
 
 wxObject *wxCreateDynamicObject(const wxChar *name)
 {
+ DEBUG_PRINTF(wxObject *wxCreateDynamicObject)
+
     if (wxClassInfo::sm_classTable)
     {
         wxClassInfo *info = (wxClassInfo *)wxClassInfo::sm_classTable->Get(name);
@@ -300,6 +336,8 @@ wxObject* wxCreateStoredObject( wxInputStream &stream )
 
 void wxObject::StoreObject( wxObjectOutputStream& stream )
 {
+ DEBUG_PRINTF(wxObject::StoreObject)
+
     wxString obj_name = wxString(GetClassInfo()->GetClassName()) + "_Serialize";
     wxLibrary *lib = wxTheLibraries.LoadLibrary("wxserial");
 
@@ -325,6 +363,8 @@ void wxObject::StoreObject( wxObjectOutputStream& stream )
 
 void wxObject::LoadObject( wxObjectInputStream& stream )
 {
+ DEBUG_PRINTF(wxObject::LoadObject)
+
     wxString obj_name = wxString(GetClassInfo()->GetClassName()) + "_Serialize";
     wxLibrary *lib = wxTheLibraries.LoadLibrary("wxserial");
 
@@ -352,6 +392,7 @@ void wxObject::LoadObject( wxObjectInputStream& stream )
 
 void wxObject::Ref(const wxObject& clone)
 {
+ DEBUG_PRINTF(wxObject::Ref)
     // delete reference to old data
     UnRef();
     // reference new data

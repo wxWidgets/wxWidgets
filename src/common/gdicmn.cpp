@@ -365,13 +365,15 @@ void wxInitializeStockObjects ()
 #ifdef __WXMSW__
   static const int sizeFont = 10;
 #else
-  static const int sizeFont = 12;
 #endif
 */
-
-//  wxNORMAL_FONT = new wxFont (sizeFont, wxMODERN, wxNORMAL, wxNORMAL);
+#if defined(__WXPM__)
+  static const int sizeFont = 12;
+  wxNORMAL_FONT = new wxFont (sizeFont, wxMODERN, wxNORMAL, wxNORMAL);
+#else
   wxNORMAL_FONT = new wxFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
   static const int sizeFont = wxNORMAL_FONT->GetPointSize();
+#endif
 
   wxSMALL_FONT = new wxFont (sizeFont - 2, wxSWISS, wxNORMAL, wxNORMAL);
   wxITALIC_FONT = new wxFont (sizeFont, wxROMAN, wxITALIC, wxNORMAL);
