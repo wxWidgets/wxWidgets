@@ -373,13 +373,13 @@ AC_ARG_WITH(gtk-prefix,        [  --with-gtk-prefix=PFX   prefix where GTK is in
 AC_ARG_WITH(gtk-exec-prefix,    [  --with-gtk-exec-prefix=PFX  exec prefix where GTK is installed],
             gtk_config_exec_prefix="$withval", gtk_config_exec_prefix="")
 AC_ARG_WITH(gtk,        [  --with-gtk              use GTK+],
-            wxUSE_GTK="$withval",wxUSE_GTK=0)
+            wxUSE_GTK="$withval",wxUSE_GTK=$DEFAULT_wxUSE_GTK)
 AC_ARG_WITH(motif,        [  --with-motif            use Motif/Lesstif],
-            wxUSE_MOTIF="$withval",wxUSE_MOTIF=0)
+            wxUSE_MOTIF="$withval",wxUSE_MOTIF=$DEFAULT_wxUSE_MOTIF)
 AC_ARG_WITH(cygwin,        [  --with-cygwin           use Cygwin for MS-Windows],
-            wxUSE_CYGWIN="$withval",wxUSE_CYGWIN=0)
+            wxUSE_CYGWIN="$withval",wxUSE_CYGWIN=$DEFAULT_wxUSE_CYGWIN)
 AC_ARG_WITH(mingw,        [  --with-mingw            use GCC Minimal MS-Windows],
-            wxUSE_MINGW="$withval",wxUSE_MINGW=0)
+            wxUSE_MINGW="$withval",wxUSE_MINGW=$DEFAULT_wxUSE_MINGW)
 
 AC_ARG_WITH(dmalloc,        [  --with-dmalloc          use dmalloc library (www.letters.com/dmalloc)],
             wxUSE_DMALLOC="$withval",wxUSE_DMALLOC=$DEFAULT_wxUSE_DMALLOC)
@@ -666,7 +666,12 @@ AC_ARG_ENABLE(validators, [  --enable-validators     use wxValidator and derived
 
 dnl check that no more than one toolkit is given and that if none are given that
 dnl we have a default one
-dnl
+
+dnl convert "yes" to 1 and "no" to 0
+wxUSE_GTK=`echo $wxUSE_GTK | sed -e 's/yes/1/' -e 's/no/0/'`
+wxUSE_MOTIF=`echo $wxUSE_MOTIF | sed -e 's/yes/1/' -e 's/no/0/'`
+wxUSE_MSW=`echo $wxUSE_MSW | sed -e 's/yes/1/' -e 's/no/0/'`
+
 dnl NB: this supposes that the shell is able to handle arithmetic expansion and
 dnl     the ${VAR:-VALUE} construction. It does simplify our life though...
 NUM_TOOLKITS="$((${wxUSE_GTK:-0}+${wxUSE_MOTIF:-0}+${wxUSE_MSW:-0}))"
@@ -675,13 +680,7 @@ case "$NUM_TOOLKITS" in
   1)
   ;;
   0)
-    if test "$((${DEFAULT_wxUSE_GTK:-0}+${DEFAULT_wxUSE_MOTIF:-0}+${DEFAULT_wxUSE_MSW:-0}))" = 0; then
-      AC_MSG_ERROR(Please specify a toolkit)
-    fi
-
-    wxUSE_GTK=$DEFAULT_wxUSE_GTK
-    wxUSE_MOTIF=$DEFAULT_wxUSE_MOTIF
-    wxUSE_MSW=$DEFAULT_wxUSE_MSW
+    AC_MSG_ERROR(Please specify a toolkit)
   ;;
   *)
     AC_MSG_ERROR(Please specify at most one toolkit)
@@ -1933,7 +1932,7 @@ dnl
 dnl NB: automake can't work correctly if our header lives in a directory which
 dnl     is only determined at configure time, so we create it on the top-level
 dnl     and make a link to allow '#include "wx/setup.h"' to still work
-AM_CONFIG_HEADER(setup.h:include/wx/unix/setup.h.in)
+AM_CONFIG_HEADER(setup.h)
 
 dnl MAKE_SET will be replaced with "MAKE=..." or nothing if make sets MAKE
 dnl itself (this is macro is required if SUBDIRS variable is used in Makefile.am
