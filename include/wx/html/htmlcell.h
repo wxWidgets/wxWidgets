@@ -172,6 +172,11 @@ public:
     int GetPosX() const {return m_PosX;}
     int GetPosY() const {return m_PosY;}
     int GetWidth() const {return m_Width;}
+    
+    // Returns the maximum possible length of the cell.
+    // Call Layout at least once before using GetMaxTotalWidth()
+    virtual int GetMaxTotalWidth() const { return m_Width; }
+
     int GetHeight() const {return m_Height;}
     int GetDescent() const {return m_Descent;}
 
@@ -428,6 +433,10 @@ public:
     // below first/last terminal cell). For internal use only.
     void RemoveExtraSpacing(bool top, bool bottom);
 
+    // Returns the maximum possible length of the container.
+    // Call Layout at least once before using GetMaxTotalWidth()
+    virtual int GetMaxTotalWidth() const { return m_MaxTotalWidth; }
+
 protected:
     void UpdateRenderingStatePre(wxHtmlRenderingInfo& info,
                                  wxHtmlCell *cell) const;
@@ -457,7 +466,10 @@ protected:
     int m_LastLayout;
             // if != -1 then call to Layout may be no-op
             // if previous call to Layout has same argument
+    int m_MaxTotalWidth;
+            // Maximum possible length if ignoring line wrap
 
+    
     DECLARE_ABSTRACT_CLASS(wxHtmlContainerCell)
     DECLARE_NO_COPY_CLASS(wxHtmlContainerCell)
 };

@@ -529,6 +529,7 @@ wxHtmlContainerCell::wxHtmlContainerCell(wxHtmlContainerCell *parent) : wxHtmlCe
 {
     m_Cells = m_LastCell = NULL;
     m_Parent = parent;
+    m_MaxTotalWidth = 0;
     if (m_Parent) m_Parent->InsertCell(this);
     m_AlignHor = wxHTML_ALIGN_LEFT;
     m_AlignVer = wxHTML_ALIGN_BOTTOM;
@@ -644,6 +645,8 @@ void wxHtmlContainerCell::Layout(int w)
     int ysizeup = 0, ysizedown = 0;
     int MaxLineWidth = 0;
     int xcnt = 0;
+    int curLineWidth = 0;
+    m_MaxTotalWidth = 0;
 
 
     /*
@@ -698,6 +701,20 @@ void wxHtmlContainerCell::Layout(int w)
         // layout nonbreakable run of cells:
         cell->SetPos(xpos, ybasicpos + cell->GetDescent());
         xpos += cell->GetWidth();
+        if (!cell->IsTerminalCell())
+        {
+            // Container cell indicates new line
+            if (curLineWidth > m_MaxTotalWidth)
+                m_MaxTotalWidth = curLineWidth;
+
+            if (wxMax(cell->GetWidth(), cell->GetMaxTotalWidth()) > m_MaxTotalWidth)
+                m_MaxTotalWidth = cell->GetMaxTotalWidth();
+            curLineWidth = 0;
+        }
+        else
+            // Normal cell, add maximum cell width to line width
+            curLineWidth += cell->GetMaxTotalWidth();
+
         cell = cell->GetNext();
         xcnt++;
             
@@ -785,6 +802,10 @@ void wxHtmlContainerCell::Layout(int w)
         m_Height = m_MinHeight;
     }
 
+    if (curLineWidth > m_MaxTotalWidth)
+        m_MaxTotalWidth = curLineWidth;
+            
+    m_MaxTotalWidth += s_indent + ((m_IndentRight < 0) ? (-m_IndentRight * m_Width / 100) : m_IndentRight);
     MaxLineWidth += s_indent + ((m_IndentRight < 0) ? (-m_IndentRight * m_Width / 100) : m_IndentRight);
     if (m_Width < MaxLineWidth) m_Width = MaxLineWidth;
 
