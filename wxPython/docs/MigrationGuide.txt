@@ -424,7 +424,7 @@ be used from XRC.
 You should not use AddWindow, AddSizer, AddSpacer (and similar for
 Insert, Prepend, and etc.) methods any longer.  Just use Add and the
 wrappers will figure out what to do.  **[Changed in 2.5.2.x]**
-AddWindow, AddSize, AddSpacer and etc. will now issue a
+AddWindow, AddSizer, AddSpacer and etc. will now issue a
 DeprecationWarning. 
 
 **[Changed in 2.5.2.x]** The Sizers have had some fundamental internal
