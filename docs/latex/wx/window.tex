@@ -2302,6 +2302,26 @@ Sets the window's title. Applicable only to frames and dialogs.
 Deletes the current validator (if any) and sets the window validator, having called wxValidator::Clone to
 create a new validator of this type.
 
+\membersection{wxWindow::SetToolTip}\label{wxwindowsettooltip}
+
+\func{void}{SetToolTip}{\param{const wxString\& }{tip}}
+
+\func{void}{SetToolTip}{\param{wxToolTip* }{tip}}
+
+Attach a tooltip to the window. 
+
+See also: \helpref{GetToolTip}{wxwindowgettooltip}, 
+          \helpref{wxToolTip}{wxtooltip}
+
+
+\membersection{wxWindow::GetToolTip}\label{wxwindowgettooltip}
+
+\constfunc{wxToolTip*}{GetToolTip}{\void}
+
+Get the associated tooltip or NULL if none.
+
+
+
 \membersection{wxWindow::SetWindowStyle}\label{wxwindowsetwindowstyle}
 
 \func{void}{SetWindowStyle}{\param{long}{ style}}
