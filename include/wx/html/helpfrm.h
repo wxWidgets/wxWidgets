@@ -32,6 +32,7 @@
 #include "wx/checkbox.h"
 #include "wx/stattext.h"
 #include "wx/html/htmlwin.h"
+#include "wx/html/htmprint.h"
 
 
 // style flags for the Help Frame
@@ -40,7 +41,9 @@
 #define wxHF_INDEX        0x0004
 #define wxHF_SEARCH       0x0008
 #define wxHF_BOOKMARKS    0x0010
-#define wxHF_DEFAULTSTYLE (wxHF_TOOLBAR | wxHF_CONTENTS | wxHF_INDEX | wxHF_SEARCH | wxHF_BOOKMARKS)
+#define wxHF_OPENFILES    0x0020
+#define wxHF_PRINT        0x0040
+#define wxHF_DEFAULTSTYLE (wxHF_TOOLBAR | wxHF_CONTENTS | wxHF_INDEX | wxHF_SEARCH | wxHF_BOOKMARKS | wxHF_PRINT)
 
 
 // Command IDs :
@@ -49,6 +52,11 @@ enum
     wxID_HTML_PANEL = wxID_HIGHEST + 1,
     wxID_HTML_BACK,
     wxID_HTML_FORWARD,
+    wxID_HTML_UPNODE,
+    wxID_HTML_UP,
+    wxID_HTML_DOWN,
+    wxID_HTML_PRINT,
+    wxID_HTML_OPENFILE,
     wxID_HTML_OPTIONS,
     wxID_HTML_BOOKMARKSLIST,
     wxID_HTML_BOOKMARKSADD,
@@ -146,6 +154,9 @@ class WXDLLEXPORT wxHtmlHelpFrame : public wxFrame
         // saved values : things set by SetFonts, SetBorders.
         void WriteCustomization(wxConfigBase *cfg, const wxString& path = wxEmptyString);
         // ...
+        
+        void NotifyPageChanged();
+        // call this to let wxHtmlHelpFrame know page changed
 
     protected:
         void Init(wxHtmlHelpData* data = NULL);
@@ -225,6 +236,13 @@ class WXDLLEXPORT wxHtmlHelpFrame : public wxFrame
         wxArrayString *m_NormalFonts, *m_FixedFonts;
         int m_FontSize; // 0,1,2 = small,medium,big
         wxString m_NormalFace, m_FixedFace;
+        
+        bool m_UpdateContents;
+
+#if wxUSE_PRINTING_ARCHITECTURE
+        wxHtmlEasyPrinting *m_Printer;
+#endif
+        wxHashTable *m_PagesHash;
 
         DECLARE_EVENT_TABLE()
 };
