@@ -205,7 +205,7 @@ zipstrm.cpp	C	B
 zstream.cpp	C	B
 
 gsocket.c	M	S,B
-gsockmsw.c	M	S
+gsockmsw.c	M	S,B
 accel.cpp	M
 app.cpp	M
 automtn.cpp	M	O
@@ -231,7 +231,7 @@ dcclient.cpp	M
 dcmemory.cpp	M
 dcprint.cpp	M
 dcscreen.cpp	M
-dde.cpp	M
+dde.cpp	M	B
 dialog.cpp	M
 dialup.cpp	M
 dib.cpp	M
@@ -572,7 +572,7 @@ dcmemory.h	W
 dcprint.h	W
 dcps.h	W
 dcscreen.h	W
-dde.h	W
+dde.h	W	B
 debug.h	W	B
 defs.h	W	B
 dialog.h	W
@@ -884,7 +884,7 @@ dcclient.h	9
 dcmemory.h	9
 dcprint.h	9
 dcscreen.h	9
-dde.h	9
+dde.h	9	B
 dialog.h	9
 dib.h	9
 dibutils.h	9
