@@ -1445,6 +1445,13 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
     delete [] cbuf;
   }
 #endif
+
+#ifdef __DJGPP__
+  // VS: DJGPP is Unicodish and uses / instead of \ as path deliminer. We don't like that.
+  for (wxChar *ch = buf; *ch; ch++)
+    if (*ch == wxT('/')) *ch = wxT('\\');
+#endif
+
   return buf;
 }
 
