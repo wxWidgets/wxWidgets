@@ -291,6 +291,11 @@
    }
 #endif
 
+
+#ifdef Yield
+    #undef Yield
+#endif
+
 // GetWindowProc
 //ifdef GetWindowProc
 //   #undef GetWindowProc
