@@ -27,6 +27,7 @@
 %import _defs.i
 %import misc.i
 %import gdi.i
+%import streams.i
 
 //---------------------------------------------------------------------------
 
@@ -138,6 +139,10 @@ public:
     bool SaveFile( const wxString& name, int type );
     %name(SaveMimeFile)bool SaveFile( const wxString& name, const wxString& mimetype );
 
+    %name(CanReadStream) static bool CanRead( wxInputStream& stream );
+    %name(LoadStream) bool LoadFile( wxInputStream& stream, long type = wxBITMAP_TYPE_ANY, int index = -1 );
+    %name(LoadMimeStream) bool LoadFile( wxInputStream& stream, const wxString& mimetype, int index = -1 );
+
     bool Ok();
     int GetWidth();
     int GetHeight();
@@ -209,6 +214,9 @@ public:
 %new wxImage* wxImageFromMime(const wxString& name, const wxString& mimetype, int index = -1);
 %new wxImage* wxImageFromBitmap(const wxBitmap &bitmap);
 %new wxImage* wxImageFromData(int width, int height, unsigned char* data);
+%new wxImage* wxImageFromStream(wxInputStream& stream, long type = wxBITMAP_TYPE_ANY, int index = -1);
+%new wxImage* wxImageFromStreamMime(wxInputStream& stream, const wxString& mimetype, int index = -1 );
+
 %{
     wxImage* wxEmptyImage(int width=0, int height=0) {
         if (width == 0 && height == 0)
@@ -217,13 +225,16 @@ public:
             return new wxImage(width, height);
     }
 
+
     wxImage* wxImageFromMime(const wxString& name, const wxString& mimetype, int index) {
         return new wxImage(name, mimetype, index);
     }
 
+
     wxImage* wxImageFromBitmap(const wxBitmap &bitmap) {
         return new wxImage(bitmap);
     }
+
 
     wxImage* wxImageFromData(int width, int height, unsigned char* data) {
         // Copy the source data so the wxImage can clean it up later
@@ -235,7 +246,21 @@ public:
         memcpy(copy, data, width*height*3);
         return new wxImage(width, height, copy, FALSE);
     }
+
+
+    wxImage* wxImageFromStream(wxInputStream& stream,
+                               long type = wxBITMAP_TYPE_ANY, int index = -1) {
+        return new wxImage(stream, type, index);
+    }
+
+
+    wxImage* wxImageFromStreamMime(wxInputStream& stream,
+                                   const wxString& mimetype, int index = -1 ) {
+        return new wxImage(stream, mimetype, index);
+    }
 %}
+
+
 
 void wxInitAllImageHandlers();
 

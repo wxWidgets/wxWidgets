@@ -22,6 +22,7 @@ import images
 
 _treeList = [
     ('New since last release', ['wxGenericDirCtrl',
+                                'wxImageFromStream',
                                 ]),
 
     ('Windows', ['wxFrame', 'wxDialog', 'wxMiniFrame',

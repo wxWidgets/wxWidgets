@@ -2,7 +2,7 @@
 // Name:        filesys.i
 // Purpose:     SWIG definitions of the wxFileSystem family of classes
 //
-// Author:      Joerg Baumann
+// Author:      Joerg Baumann and Robin Dunn
 //
 // Created:     25-Sept-2000
 // RCS-ID:      $Id$
@@ -35,56 +35,6 @@
 %pragma(python) code = "import string"
 
 //---------------------------------------------------------------------------
-
-//  // typemaps for wxInputStream: Note wxFSFile object has to do the delete
-//  // of wxInputStream *
-//  %typemap(python,in) wxInputStream *stream {
-//      if (PyInstance_Check($source)) {
-//          wxPyInputStream* ptr;
-//          if (SWIG_GetPtrObj($source, (void **) &ptr,"_wxPyInputStream_p")) {
-//              PyErr_SetString(PyExc_TypeError,"Expected _wxInputStream_p.");
-//              return NULL;
-//          }
-//          $target = ptr->wxi;
-//      } else {
-//          PyErr_SetString(PyExc_TypeError,"Expected _wxInputStream_p.");
-//          return NULL;
-//      }
-//  }
-
-
-//  // typemaps for wxInputStream: Note wxFSFile object has to do the delete
-//  // of wxInputStream *
-//  %typemap(python,out) wxInputStream* {
-//      wxPyInputStream * _ptr = NULL;
-
-//      if ($source) {
-//          _ptr = new wxPyInputStream($source);
-//      }
-//      if (_ptr) {
-//          char    swigptr[64];
-//          SWIG_MakePtr(swigptr, _ptr, "_wxPyInputStream_p");
-
-//          PyObject* classobj = PyDict_GetItemString(wxPython_dict, "wxInputStreamPtr");
-//          if (! classobj) {
-//              Py_INCREF(Py_None);
-//              $target = Py_None;
-//          } else {
-//              PyObject* arg = Py_BuildValue("(s)", swigptr);
-//              $target = PyInstance_New(classobj, arg, NULL);
-//              Py_DECREF(arg);
-
-//              // set ThisOwn
-//              PyObject* one = PyInt_FromLong(1);
-//              PyObject_SetAttrString($target, "thisown", one);
-//              Py_DECREF(one);
-//          }
-//      } else {
-//          Py_INCREF(Py_None);
-//          $target = Py_None;
-//      }
-//  }
-
 
 
 class wxFSFile : public wxObject {

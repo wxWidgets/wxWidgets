@@ -14,6 +14,11 @@ The calltip window and autocomplete window in wxSTC will now use a
 wxPopupWindow if available so they can extend beyond the client area
 of the STC if needed.
 
+Finished wrapping and providing typemaps for wxInputStream and also
+added the stream ctor and other methods for wxImage so images can now
+be loaded from any Python "file-like" object.
+
+
 
 
 2.3.2.1
