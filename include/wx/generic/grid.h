@@ -63,9 +63,7 @@ class WXDLLEXPORT wxGrid;
 
 class WXDLLEXPORT wxGridTableBase : public wxObject
 {
-    wxGrid * m_view;
-    
-  public:
+public:
     wxGridTableBase();
     virtual ~wxGridTableBase();
 
@@ -76,7 +74,7 @@ class WXDLLEXPORT wxGridTableBase : public wxObject
     virtual wxString GetValue( int row, int col ) = 0;
     virtual void SetValue( int row, int col, const wxString& s ) = 0;
     virtual bool IsEmptyCell( int row, int col ) = 0;
-    
+
     // Overriding these is optional
     //
     virtual void SetView( wxGrid *grid ) { m_view = grid; }
@@ -94,7 +92,10 @@ class WXDLLEXPORT wxGridTableBase : public wxObject
     virtual wxString GetColLabelValue( int col );
     virtual void SetRowLabelValue( int WXUNUSED(row), const wxString& ) {}
     virtual void SetColLabelValue( int WXUNUSED(col), const wxString& ) {}
-    
+
+private:
+    wxGrid * m_view;
+
     DECLARE_ABSTRACT_CLASS( wxGridTableBase );
 };
 
@@ -102,7 +103,8 @@ class WXDLLEXPORT wxGridTableBase : public wxObject
 
 // IDs for messages sent from grid table to view
 //
-enum wxGridTableRequest {
+enum wxGridTableRequest
+{
     wxGRIDTABLE_REQUEST_VIEW_GET_VALUES = 2000,
     wxGRIDTABLE_REQUEST_VIEW_SEND_VALUES,
     wxGRIDTABLE_NOTIFY_ROWS_INSERTED,
@@ -115,12 +117,7 @@ enum wxGridTableRequest {
 
 class WXDLLEXPORT wxGridTableMessage
 {
-    wxGridTableBase *m_table;
-    int m_id;
-    int m_comInt1;
-    int m_comInt2;
-    
-  public:
+public:
     wxGridTableMessage();
     wxGridTableMessage( wxGridTableBase *table, int id,
                         int comInt1 = -1,
@@ -133,7 +130,13 @@ class WXDLLEXPORT wxGridTableMessage
     void SetCommandInt( int comInt1 ) { m_comInt1 = comInt1; }
     int  GetCommandInt() { return m_comInt1; }
     void SetCommandInt2( int comInt2 ) { m_comInt2 = comInt2; }
-    int  GetCommandInt2() { return m_comInt2; }    
+    int  GetCommandInt2() { return m_comInt2; }
+
+private:
+    wxGridTableBase *m_table;
+    int m_id;
+    int m_comInt1;
+    int m_comInt2;
 };
 
 
@@ -154,15 +157,7 @@ WX_DECLARE_EXPORTED_OBJARRAY(wxArrayString, wxGridStringArray);
 
 class WXDLLEXPORT wxGridStringTable : public wxGridTableBase
 {
-    wxGridStringArray m_data;
-
-    // These only get used if you set your own labels, otherwise the
-    // GetRow/ColLabelValue functions return wxGridTableBase defaults
-    //
-    wxArrayString     m_rowLabels;
-    wxArrayString     m_colLabels;
-    
-  public:
+public:
     wxGridStringTable();
     wxGridStringTable( int numRows, int numCols );
     ~wxGridStringTable();
@@ -174,7 +169,7 @@ class WXDLLEXPORT wxGridStringTable : public wxGridTableBase
     wxString GetValue( int row, int col );
     void SetValue( int row, int col, const wxString& s );
     bool IsEmptyCell( int row, int col );
-    
+
     // overridden functions from wxGridTableBase
     //
     void Clear();
@@ -189,7 +184,16 @@ class WXDLLEXPORT wxGridStringTable : public wxGridTableBase
     void SetColLabelValue( int col, const wxString& );
     wxString GetRowLabelValue( int row );
     wxString GetColLabelValue( int col );
-    
+
+private:
+    wxGridStringArray m_data;
+
+    // These only get used if you set your own labels, otherwise the
+    // GetRow/ColLabelValue functions return wxGridTableBase defaults
+    //
+    wxArrayString     m_rowLabels;
+    wxArrayString     m_colLabels;
+
     DECLARE_DYNAMIC_CLASS( wxGridStringTable )
 };
 
@@ -203,10 +207,7 @@ class WXDLLEXPORT wxGridStringTable : public wxGridTableBase
 
 class WXDLLEXPORT wxGridCellCoords
 {
-    long m_row;
-    long m_col;
-    
-  public:
+public:
     wxGridCellCoords() { m_row = m_col = -1; }
     wxGridCellCoords( int r, int c ) { m_row = r; m_col = c; }
 
@@ -217,7 +218,7 @@ class WXDLLEXPORT wxGridCellCoords
     long GetCol() const { return m_col; }
     void SetCol( long n ) { m_col = n; }
     void Set( long row, long col ) { m_row = row; m_col = col; }
-    
+
     wxGridCellCoords& operator=( const wxGridCellCoords& other )
     {
         if ( &other != this )
@@ -242,6 +243,10 @@ class WXDLLEXPORT wxGridCellCoords
     {
         return (m_row == -1 && m_col == -1 );
     }
+
+private:
+    long m_row;
+    long m_col;
 };
 
 
@@ -257,22 +262,12 @@ WX_DECLARE_EXPORTED_OBJARRAY(wxGridCellCoords, wxGridCellCoordsArray);
 
 
 // This set of classes is to provide for the use of different types of
-// cell edit controls in the grid while avoiding the wx class info 
+// cell edit controls in the grid while avoiding the wx class info
 // system in deference to wxPython
 
 class WXDLLEXPORT wxGridTextCtrl : public wxTextCtrl
 {
-    wxGrid *m_grid;
-    
-    // TRUE for controls placed over cells,
-    // FALSE for a control on a grid control panel
-    bool m_isCellControl;  
-
-    wxString startValue;
-
-    void OnKeyDown( wxKeyEvent& );
-    
-  public:
+public:
     wxGridTextCtrl() {}
     wxGridTextCtrl( wxWindow *,
                     wxGrid *,
@@ -285,7 +280,18 @@ class WXDLLEXPORT wxGridTextCtrl : public wxTextCtrl
 
     void     SetStartValue( const wxString& );
     wxString GetStartValue() { return startValue; }
-    
+
+private:
+    wxGrid *m_grid;
+
+    // TRUE for controls placed over cells,
+    // FALSE for a control on a grid control panel
+    bool m_isCellControl;
+
+    wxString startValue;
+
+    void OnKeyDown( wxKeyEvent& );
+
     DECLARE_DYNAMIC_CLASS( wxGridTextCtrl )
     DECLARE_EVENT_TABLE()
 };
@@ -293,17 +299,18 @@ class WXDLLEXPORT wxGridTextCtrl : public wxTextCtrl
 
 class WXDLLEXPORT wxGridRowLabelWindow : public wxWindow
 {
+public:
+    wxGridRowLabelWindow() { m_owner = (wxGrid *)NULL; }
+    wxGridRowLabelWindow( wxGrid *parent, wxWindowID id,
+                          const wxPoint &pos, const wxSize &size );
+
+private:
     wxGrid   *m_owner;
-    
+
     void OnPaint( wxPaintEvent& event );
     void OnMouseEvent( wxMouseEvent& event );
     void OnKeyDown( wxKeyEvent& event );
 
-public:
-    wxGridRowLabelWindow() {}
-    wxGridRowLabelWindow( wxGrid *parent, wxWindowID id, 
-                          const wxPoint &pos, const wxSize &size );
-   
     DECLARE_DYNAMIC_CLASS(wxGridRowLabelWindow)
     DECLARE_EVENT_TABLE()
 };
@@ -311,17 +318,18 @@ public:
 
 class WXDLLEXPORT wxGridColLabelWindow : public wxWindow
 {
+public:
+    wxGridColLabelWindow() { m_owner = (wxGrid *)NULL; }
+    wxGridColLabelWindow( wxGrid *parent, wxWindowID id,
+                          const wxPoint &pos, const wxSize &size );
+
+private:
     wxGrid   *m_owner;
-    
+
     void OnPaint( wxPaintEvent &event );
     void OnMouseEvent( wxMouseEvent& event );
     void OnKeyDown( wxKeyEvent& event );
 
-public:
-    wxGridColLabelWindow() {}
-    wxGridColLabelWindow( wxGrid *parent, wxWindowID id, 
-                          const wxPoint &pos, const wxSize &size );
-   
     DECLARE_DYNAMIC_CLASS(wxGridColLabelWindow)
     DECLARE_EVENT_TABLE()
 };
@@ -329,15 +337,16 @@ public:
 
 class WXDLLEXPORT wxGridCornerLabelWindow : public wxWindow
 {
-    wxGrid *m_owner;
-    
-    void OnMouseEvent( wxMouseEvent& event );
-    void OnKeyDown( wxKeyEvent& event );
-    
-  public:
-    wxGridCornerLabelWindow() {}
+public:
+    wxGridCornerLabelWindow() { m_owner = (wxGrid *)NULL; }
     wxGridCornerLabelWindow( wxGrid *parent, wxWindowID id,
                              const wxPoint &pos, const wxSize &size );
+
+private:
+    wxGrid *m_owner;
+
+    void OnMouseEvent( wxMouseEvent& event );
+    void OnKeyDown( wxKeyEvent& event );
 
     DECLARE_DYNAMIC_CLASS(wxGridCornerLabelWindow)
     DECLARE_EVENT_TABLE()
@@ -347,6 +356,23 @@ class WXDLLEXPORT wxGridCornerLabelWindow : public wxWindow
 
 class WXDLLEXPORT wxGridWindow : public wxPanel
 {
+public:
+    wxGridWindow()
+    {
+        m_owner = (wxGrid *)NULL;
+        m_rowLabelWin = (wxGridRowLabelWindow *)NULL;
+        m_colLabelWin = (wxGridColLabelWindow *)NULL;
+    }
+
+    wxGridWindow( wxGrid *parent,
+                  wxGridRowLabelWindow *rowLblWin,
+                  wxGridColLabelWindow *colLblWin,
+                  wxWindowID id, const wxPoint &pos, const wxSize &size );
+    ~wxGridWindow();
+
+    void ScrollWindow( int dx, int dy, const wxRect *rect );
+
+private:
     wxGrid                   *m_owner;
     wxGridRowLabelWindow     *m_rowLabelWin;
     wxGridColLabelWindow     *m_colLabelWin;
@@ -354,16 +380,6 @@ class WXDLLEXPORT wxGridWindow : public wxPanel
     void OnPaint( wxPaintEvent &event );
     void OnMouseEvent( wxMouseEvent& event );
     void OnKeyDown( wxKeyEvent& );
-
-public:
-    wxGridWindow() {}
-    wxGridWindow( wxGrid *parent, 
-                  wxGridRowLabelWindow *rowLblWin,
-                  wxGridColLabelWindow *colLblWin,
-                  wxWindowID id, const wxPoint &pos, const wxSize &size );
-    ~wxGridWindow();
-
-    void ScrollWindow( int dx, int dy, const wxRect *rect );
 
     DECLARE_DYNAMIC_CLASS(wxGridWindow)
     DECLARE_EVENT_TABLE()
@@ -373,130 +389,10 @@ public:
 
 class WXDLLEXPORT wxGrid : public wxScrolledWindow
 {
-  protected:
-    bool m_created;
-
-    wxGridWindow             *m_gridWin;
-    wxGridRowLabelWindow     *m_rowLabelWin;
-    wxGridColLabelWindow     *m_colLabelWin;
-    wxGridCornerLabelWindow  *m_cornerLabelWin;
-
-    wxBoxSizer               *m_mainSizer;
-    wxBoxSizer               *m_topSizer;
-    wxBoxSizer               *m_middleSizer;
-    
-    wxGridTableBase          *m_table;
-
-    int m_left;
-    int m_top;
-    int m_right;
-    int m_bottom;
-    
-    int m_numRows;
-    int m_numCols;
-
-    wxGridCellCoords m_currentCellCoords;
-
-    wxGridCellCoords m_selectedTopLeft;
-    wxGridCellCoords m_selectedBottomRight;
-        
-    int        m_defaultRowHeight;
-    wxArrayInt m_rowHeights;
-    wxArrayInt m_rowBottoms;
-
-    int        m_defaultColWidth;
-    wxArrayInt m_colWidths;
-    wxArrayInt m_colRights;
-
-    int m_rowLabelWidth;
-    int m_colLabelHeight;
-
-    wxColour   m_labelBackgroundColour;
-    wxColour   m_labelTextColour;
-    wxFont     m_labelFont;
-    
-    int        m_rowLabelHorizAlign;
-    int        m_rowLabelVertAlign;
-    int        m_colLabelHorizAlign;
-    int        m_colLabelVertAlign;
-
-    bool       m_defaultRowLabelValues;
-    bool       m_defaultColLabelValues;
-
-    wxColour   m_gridLineColour;
-    bool       m_gridLinesEnabled;
-
-    wxFont     m_defaultCellFont;
-    
-    wxGridCellCoordsArray  m_cellsExposed;    
-    wxArrayInt             m_rowsExposed;
-    wxArrayInt             m_colsExposed;
-    wxArrayInt             m_rowLabelsExposed;
-    wxArrayInt             m_colLabelsExposed;
-
-    bool m_inOnKeyDown;
-    int  m_batchCount;
-
-    int  m_cursorMode;
-    enum { WXGRID_CURSOR_DEFAULT,
-           WXGRID_CURSOR_SELECT_CELL,
-           WXGRID_CURSOR_RESIZE_ROW,
-           WXGRID_CURSOR_RESIZE_COL,
-           WXGRID_CURSOR_SELECT_ROW,
-           WXGRID_CURSOR_SELECT_COL
-    };
-
-    int  m_dragLastPos;
-    int  m_dragRowOrCol;
-    bool m_isDragging;
-
-    wxGridCellCoords m_selectionStart;
-    
-    wxCursor m_rowResizeCursor;
-    wxCursor m_colResizeCursor;
-   
-    bool       m_editable;  // applies to whole grid
-    int        m_editCtrlType;  // for current cell
-    wxWindow*  m_cellEditCtrl;
-    bool       m_cellEditCtrlEnabled;
-    
-
-    void Create();
-    void Init();
-    void CalcDimensions();
-    bool Redimension( wxGridTableMessage& );
-
-    
-    bool SendEvent( const wxEventType,
-                    int row, int col,
-                    wxMouseEvent& );
-    
-    bool SendEvent( const wxEventType,
-                    int row, int col );
-    
-
-    void OnPaint( wxPaintEvent& );
-    void OnSize( wxSizeEvent& );
-    void OnKeyDown( wxKeyEvent& );
-
-
-    void SetCurrentCell( const wxGridCellCoords& coords );
-    void SetCurrentCell( int row, int col )
-        { SetCurrentCell( wxGridCellCoords(row, col) ); }
-    
-
-    // ------ functions to get/send data (see also public functions)
-    //
-    bool GetModelValues();
-    bool SetModelValues();
-
-
-    ////////////////////// Public section ////////////////////
-    
-  public:
+public:
     wxGrid()
         { Create(); }
-    
+
     wxGrid( wxWindow *parent,
             wxWindowID id,
             const wxPoint& pos = wxDefaultPosition,
@@ -504,33 +400,33 @@ class WXDLLEXPORT wxGrid : public wxScrolledWindow
             long style = 0,
             const wxString& name = wxPanelNameStr );
 
-    ~wxGrid();    
+    ~wxGrid();
 
     bool CreateGrid( int numRows, int numCols );
 
-    
+
     // ------ grid dimensions
     //
     int      GetNumberRows() { return  m_numRows; }
     int      GetNumberCols() { return  m_numCols; }
 
-    
+
     // ------ display update functions
     //
-    void CalcRowLabelsExposed( wxRegion& reg );    
-    void CalcColLabelsExposed( wxRegion& reg );    
-    void CalcCellsExposed( wxRegion& reg );    
+    void CalcRowLabelsExposed( wxRegion& reg );
+    void CalcColLabelsExposed( wxRegion& reg );
+    void CalcCellsExposed( wxRegion& reg );
 
-    
+
     // ------ event handlers
     //
     void ProcessRowLabelMouseEvent( wxMouseEvent& event );
     void ProcessColLabelMouseEvent( wxMouseEvent& event );
     void ProcessCornerLabelMouseEvent( wxMouseEvent& event );
-    void ProcessGridCellMouseEvent( wxMouseEvent& event );  
+    void ProcessGridCellMouseEvent( wxMouseEvent& event );
     bool ProcessTableMessage( wxGridTableMessage& );
 
-    
+
     wxGridTableBase * GetTable() const { return m_table; }
     void SetTable( wxGridTableBase *table ) { m_table = table; }
 
@@ -540,7 +436,7 @@ class WXDLLEXPORT wxGrid : public wxScrolledWindow
     bool DeleteRows( int pos = 0, int numRows = 1, bool updateLabels=TRUE );
     bool InsertCols( int pos = 0, int numCols = 1, bool updateLabels=TRUE );
     bool AppendCols( int numCols = 1, bool updateLabels=TRUE );
-    bool DeleteCols( int pos = 0, int numCols = 1, bool updateLabels=TRUE );    
+    bool DeleteCols( int pos = 0, int numCols = 1, bool updateLabels=TRUE );
 
     void DrawGridCellArea( wxDC& dc );
     void DrawCellBorder( wxDC& dc, const wxGridCellCoords& );
@@ -553,7 +449,7 @@ class WXDLLEXPORT wxGrid : public wxScrolledWindow
     void DrawRowLabel( wxDC& dc, int row );
     void DrawColLabels( wxDC& dc );
     void DrawColLabel( wxDC& dc, int col );
-    
+
 
     // ------ Cell text drawing functions
     //
@@ -565,11 +461,11 @@ class WXDLLEXPORT wxGrid : public wxScrolledWindow
     // strings and return the number of lines
     //
     void StringToLines( const wxString& value, wxArrayString& lines );
-    
+
     void GetTextBoxSize( wxDC& dc,
                          wxArrayString& lines,
                          long *width, long *height );
-    
+
 
     // ------
     // Code that does a lot of grid modification can be enclosed
@@ -586,7 +482,7 @@ class WXDLLEXPORT wxGrid : public wxScrolledWindow
     bool IsEditable() { return m_editable; }
     void EnableEditing( bool edit );
 
-#if 0  // at the moment the cell edit control is always active    
+#if 0  // at the moment the cell edit control is always active
     void     EnableCellEditControl( bool enable );
 #endif
 
@@ -598,9 +494,9 @@ class WXDLLEXPORT wxGrid : public wxScrolledWindow
     void SetEditControlValue( const wxString& s = wxEmptyString );
     void SaveEditControlValue();
 
-    
+
     // ------ grid location functions
-    //  Note that all of these functions work with the logical coordinates of 
+    //  Note that all of these functions work with the logical coordinates of
     //  grid cells and labels so you will need to convert from device
     //  coordinates for mouse events etc.
     //
@@ -617,7 +513,7 @@ class WXDLLEXPORT wxGrid : public wxScrolledWindow
 
     int  GetGridCursorRow() { return m_currentCellCoords.GetRow(); }
     int  GetGridCursorCol() { return m_currentCellCoords.GetCol(); }
-    
+
     // check to see if a cell is either wholly visible (the default arg) or
     // at least partially visible in the grid window
     //
@@ -628,7 +524,7 @@ class WXDLLEXPORT wxGrid : public wxScrolledWindow
     void MakeCellVisible( const wxGridCellCoords& coords )
         { MakeCellVisible( coords.GetRow(), coords.GetCol() ); }
 
-    
+
     // ------ grid cursor movement functions
     //
     void SetGridCursor( int row, int col )
@@ -645,12 +541,12 @@ class WXDLLEXPORT wxGrid : public wxScrolledWindow
     bool MoveCursorLeftBlock();
     bool MoveCursorRightBlock();
 
-    
+
     // ------ label and gridline formatting
     //
     int      GetDefaultRowLabelSize() { return WXGRID_DEFAULT_ROW_LABEL_WIDTH; }
     int      GetRowLabelSize() { return m_rowLabelWidth; }
-    int      GetDefaultColLabelSize() { return WXGRID_DEFAULT_COL_LABEL_HEIGHT; }    
+    int      GetDefaultColLabelSize() { return WXGRID_DEFAULT_COL_LABEL_HEIGHT; }
     int      GetColLabelSize() { return m_colLabelHeight; }
     wxColour GetLabelBackgroundColour() { return m_labelBackgroundColour; }
     wxColour GetLabelTextColour() { return m_labelTextColour; }
@@ -690,7 +586,7 @@ class WXDLLEXPORT wxGrid : public wxScrolledWindow
     wxFont   GetCellFont( int row, int col );
     void     GetDefaultCellAlignment( int *horiz, int *vert );
     void     GetCellAlignment( int row, int col, int *horiz, int *vert );
-    
+
     void     SetDefaultRowSize( int height, bool resizeExistingRows = FALSE );
     void     SetRowSize( int row, int height );
     void     SetDefaultColSize( int width, bool resizeExistingCols = FALSE );
@@ -721,18 +617,18 @@ class WXDLLEXPORT wxGrid : public wxScrolledWindow
 
     wxString GetCellValue( const wxGridCellCoords& coords )
         { return GetCellValue( coords.GetRow(), coords.GetCol() ); }
-        
+
     void SetCellValue( int row, int col, const wxString& s );
     void SetCellValue( const wxGridCellCoords& coords, const wxString& s )
         { SetCellValue( coords.GetRow(), coords.GetCol(), s ); }
 
-            
+
 
     // ------ selections of blocks of cells
     //
     void SelectRow( int row, bool addToSelected = FALSE );
     void SelectCol( int col, bool addToSelected = FALSE );
-    
+
     void SelectBlock( int topRow, int leftCol, int bottomRow, int rightCol );
 
     void SelectBlock( const wxGridCellCoords& topLeft,
@@ -741,7 +637,7 @@ class WXDLLEXPORT wxGrid : public wxScrolledWindow
                        bottomRight.GetRow(), bottomRight.GetCol() ); }
 
     void SelectAll();
-    
+
     bool IsSelection()
         { return ( m_selectedTopLeft != wxGridNoCellCoords &&
                    m_selectedBottomRight != wxGridNoCellCoords );
@@ -774,8 +670,8 @@ class WXDLLEXPORT wxGrid : public wxScrolledWindow
     // in device coords and clipped to the client size of the grid window.
     //
     wxRect SelectionToDeviceRect();
-    
-    
+
+
 
     // ------ For compatibility with previous wxGrid only...
     //
@@ -791,13 +687,13 @@ class WXDLLEXPORT wxGrid : public wxScrolledWindow
             long style = 0,
             const wxString& name = wxPanelNameStr )
         : wxScrolledWindow( parent, -1, wxPoint(x,y), wxSize(w,h), style, name )
-        { 
+        {
             Create();
-        }    
+        }
 
     void SetCellValue( const wxString& val, int row, int col )
         { SetCellValue( row, col, val ); }
-    
+
     void UpdateDimensions()
         { CalcDimensions(); }
 
@@ -805,28 +701,28 @@ class WXDLLEXPORT wxGrid : public wxScrolledWindow
     int GetCols() { return GetNumberCols(); }
     int GetCursorRow() { return GetGridCursorRow(); }
     int GetCursorColumn() { return GetGridCursorCol(); }
-    
+
     int GetScrollPosX() { return 0; }
     int GetScrollPosY() { return 0; }
-    
+
     void SetScrollX( int x ) { }
     void SetScrollY( int y ) { }
 
     void SetColumnWidth( int col, int width )
         { SetColSize( col, width ); }
-        
+
     int GetColumnWidth( int col )
         { return GetColSize( col ); }
-        
+
     void SetRowHeight( int row, int height )
         { SetRowSize( row, height ); }
-        
+
     int GetRowHeight( int row )
         { return GetRowSize( row ); }
-        
+
     int GetViewHeight() // returned num whole rows visible
         { return 0; }
-    
+
     int GetViewWidth() // returned num whole cols visible
         { return 0; }
 
@@ -876,7 +772,7 @@ class WXDLLEXPORT wxGrid : public wxScrolledWindow
             else
                 SetRowLabelValue( pos, val );
         }
-    
+
     wxString GetLabelValue( int orientation, int pos)
         {
             if ( orientation == wxHORIZONTAL )
@@ -885,30 +781,30 @@ class WXDLLEXPORT wxGrid : public wxScrolledWindow
                 return GetRowLabelValue( pos );
         }
 
-    wxFont GetCellTextFont() const 
+    wxFont GetCellTextFont() const
         { return m_defaultCellFont; }
-        
+
     wxFont GetCellTextFont(int WXUNUSED(row), int WXUNUSED(col)) const
         { return m_defaultCellFont; }
-        
+
     void SetCellTextFont(const wxFont& fnt)
         { SetDefaultCellFont( fnt ); }
-        
+
     void SetCellTextFont(const wxFont& fnt, int row, int col)
         { SetCellFont( row, col, fnt ); }
-        
+
     void SetCellTextColour(const wxColour& val, int row, int col)
         { SetCellTextColour( row, col, val ); }
-        
+
     void SetCellTextColour(const wxColour& col)
         { SetDefaultCellTextColour( col ); }
-        
+
     void SetCellBackgroundColour(const wxColour& col)
         { SetDefaultCellBackgroundColour( col ); }
-        
+
     void SetCellBackgroundColour(const wxColour& colour, int row, int col)
         { SetCellBackgroundColour( row, col, colour ); }
-     
+
     bool GetEditable() { return IsEditable(); }
     void SetEditable( bool edit = TRUE ) { EnableEditing( edit ); }
     bool GetEditInPlace() { return IsCellEditControlEnabled(); }
@@ -922,7 +818,7 @@ class WXDLLEXPORT wxGrid : public wxScrolledWindow
     void SetDividerPen(const wxPen& WXUNUSED(pen)) { }
     wxPen& GetDividerPen() const { return wxNullPen; }
     void OnActivate(bool WXUNUSED(active)) {}
-            
+
     // ******** End of compatibility functions **********
 
 
@@ -937,7 +833,127 @@ class WXDLLEXPORT wxGrid : public wxScrolledWindow
            wxGRID_CHOICE,
            wxGRID_COMBOBOX };
 
-    
+protected:
+    bool m_created;
+
+    wxGridWindow             *m_gridWin;
+    wxGridRowLabelWindow     *m_rowLabelWin;
+    wxGridColLabelWindow     *m_colLabelWin;
+    wxGridCornerLabelWindow  *m_cornerLabelWin;
+
+    wxBoxSizer               *m_mainSizer;
+    wxBoxSizer               *m_topSizer;
+    wxBoxSizer               *m_middleSizer;
+
+    wxGridTableBase          *m_table;
+
+    int m_left;
+    int m_top;
+    int m_right;
+    int m_bottom;
+
+    int m_numRows;
+    int m_numCols;
+
+    wxGridCellCoords m_currentCellCoords;
+
+    wxGridCellCoords m_selectedTopLeft;
+    wxGridCellCoords m_selectedBottomRight;
+
+    int        m_defaultRowHeight;
+    wxArrayInt m_rowHeights;
+    wxArrayInt m_rowBottoms;
+
+    int        m_defaultColWidth;
+    wxArrayInt m_colWidths;
+    wxArrayInt m_colRights;
+
+    int m_rowLabelWidth;
+    int m_colLabelHeight;
+
+    wxColour   m_labelBackgroundColour;
+    wxColour   m_labelTextColour;
+    wxFont     m_labelFont;
+
+    int        m_rowLabelHorizAlign;
+    int        m_rowLabelVertAlign;
+    int        m_colLabelHorizAlign;
+    int        m_colLabelVertAlign;
+
+    bool       m_defaultRowLabelValues;
+    bool       m_defaultColLabelValues;
+
+    wxColour   m_gridLineColour;
+    bool       m_gridLinesEnabled;
+
+    wxFont     m_defaultCellFont;
+
+    wxGridCellCoordsArray  m_cellsExposed;
+    wxArrayInt             m_rowsExposed;
+    wxArrayInt             m_colsExposed;
+    wxArrayInt             m_rowLabelsExposed;
+    wxArrayInt             m_colLabelsExposed;
+
+    bool m_inOnKeyDown;
+    int  m_batchCount;
+
+    int  m_cursorMode;
+    enum { WXGRID_CURSOR_DEFAULT,
+           WXGRID_CURSOR_SELECT_CELL,
+           WXGRID_CURSOR_RESIZE_ROW,
+           WXGRID_CURSOR_RESIZE_COL,
+           WXGRID_CURSOR_SELECT_ROW,
+           WXGRID_CURSOR_SELECT_COL
+    };
+
+    int  m_dragLastPos;
+    int  m_dragRowOrCol;
+    bool m_isDragging;
+
+    wxGridCellCoords m_selectionStart;
+
+    wxCursor m_rowResizeCursor;
+    wxCursor m_colResizeCursor;
+
+    bool       m_editable;  // applies to whole grid
+    int        m_editCtrlType;  // for current cell
+    wxWindow*  m_cellEditCtrl;
+    bool       m_cellEditCtrlEnabled;
+
+
+    void Create();
+    void Init();
+    void CalcDimensions();
+    bool Redimension( wxGridTableMessage& );
+
+
+    bool SendEvent( const wxEventType,
+                    int row, int col,
+                    wxMouseEvent& );
+
+    bool SendEvent( const wxEventType,
+                    int row, int col );
+
+
+    void OnPaint( wxPaintEvent& );
+    void OnSize( wxSizeEvent& );
+    void OnKeyDown( wxKeyEvent& );
+
+
+    void SetCurrentCell( const wxGridCellCoords& coords );
+    void SetCurrentCell( int row, int col )
+        { SetCurrentCell( wxGridCellCoords(row, col) ); }
+
+
+    // ------ functions to get/send data (see also public functions)
+    //
+    bool GetModelValues();
+    bool SetModelValues();
+
+
+    ////////////////////// Public section ////////////////////
+
+
     DECLARE_DYNAMIC_CLASS( wxGrid )
     DECLARE_EVENT_TABLE()
 };
@@ -952,17 +968,7 @@ class WXDLLEXPORT wxGrid : public wxScrolledWindow
 
 class WXDLLEXPORT wxGridEvent : public wxNotifyEvent
 {
-  protected:
-    int         m_row;
-    int         m_col;
-    int         m_x;
-    int         m_y;
-    bool        m_control;
-    bool        m_meta;
-    bool        m_shift;
-    bool        m_alt;
-        
-  public:
+public:
     wxGridEvent()
         : wxNotifyEvent(), m_row(-1), m_col(-1), m_x(-1), m_y(-1),
         m_control(0), m_meta(0), m_shift(0), m_alt(0)
@@ -981,22 +987,23 @@ class WXDLLEXPORT wxGridEvent : public wxNotifyEvent
     bool        ShiftDown() { return m_shift; }
     bool        AltDown() { return m_alt; }
 
-    DECLARE_DYNAMIC_CLASS(wxGridEvent)
-};
-
-
-class WXDLLEXPORT wxGridSizeEvent : public wxNotifyEvent
-{
-  protected:
-    int         m_rowOrCol;
+protected:
+    int         m_row;
+    int         m_col;
     int         m_x;
     int         m_y;
     bool        m_control;
     bool        m_meta;
     bool        m_shift;
     bool        m_alt;
-        
-  public:
+
+    DECLARE_DYNAMIC_CLASS(wxGridEvent)
+};
+
+
+class WXDLLEXPORT wxGridSizeEvent : public wxNotifyEvent
+{
+public:
     wxGridSizeEvent()
         : wxNotifyEvent(), m_rowOrCol(-1), m_x(-1), m_y(-1),
         m_control(0), m_meta(0), m_shift(0), m_alt(0)
@@ -1014,37 +1021,38 @@ class WXDLLEXPORT wxGridSizeEvent : public wxNotifyEvent
     bool        ShiftDown() { return m_shift; }
     bool        AltDown() { return m_alt; }
 
+protected:
+    int         m_rowOrCol;
+    int         m_x;
+    int         m_y;
+    bool        m_control;
+    bool        m_meta;
+    bool        m_shift;
+    bool        m_alt;
+
     DECLARE_DYNAMIC_CLASS(wxGridSizeEvent)
 };
 
 
 class WXDLLEXPORT wxGridRangeSelectEvent : public wxNotifyEvent
 {
-  protected:
-    wxGridCellCoords  m_topLeft;
-    wxGridCellCoords  m_bottomRight;
-    bool              m_control;
-    bool              m_meta;
-    bool              m_shift;
-    bool              m_alt;
-
-  public:
+public:
     wxGridRangeSelectEvent()
-	: wxNotifyEvent()
-	{
-	    m_topLeft     = wxGridNoCellCoords;
-	    m_bottomRight = wxGridNoCellCoords;
-	    m_control     = FALSE;
-	    m_meta        = FALSE;
-	    m_shift       = FALSE;
-	    m_alt         = FALSE;
-	}
+        : wxNotifyEvent()
+        {
+            m_topLeft     = wxGridNoCellCoords;
+            m_bottomRight = wxGridNoCellCoords;
+            m_control     = FALSE;
+            m_meta        = FALSE;
+            m_shift       = FALSE;
+            m_alt         = FALSE;
+        }
 
     wxGridRangeSelectEvent(int id, wxEventType type, wxObject* obj,
-			   const wxGridCellCoords& topLeft,
-			   const wxGridCellCoords& bottomRight,
-			   bool control=FALSE, bool shift=FALSE,
-			   bool alt=FALSE, bool meta=FALSE);
+                           const wxGridCellCoords& topLeft,
+                           const wxGridCellCoords& bottomRight,
+                           bool control=FALSE, bool shift=FALSE,
+                           bool alt=FALSE, bool meta=FALSE);
 
     wxGridCellCoords GetTopLeftCoords() { return m_topLeft; }
     wxGridCellCoords GetBottomRightCoords() { return m_bottomRight; }
@@ -1056,6 +1064,14 @@ class WXDLLEXPORT wxGridRangeSelectEvent : public wxNotifyEvent
     bool        MetaDown()     { return m_meta; }
     bool        ShiftDown()    { return m_shift; }
     bool        AltDown()      { return m_alt; }
+
+protected:
+    wxGridCellCoords  m_topLeft;
+    wxGridCellCoords  m_bottomRight;
+    bool              m_control;
+    bool              m_meta;
+    bool              m_shift;
+    bool              m_alt;
 
     DECLARE_DYNAMIC_CLASS(wxGridRangeSelectEvent)
 };
@@ -1091,7 +1107,7 @@ typedef void (wxEvtHandler::*wxGridRangeSelectEventFunction)(wxGridRangeSelectEv
 #define EVT_GRID_ROW_SIZE(fn)            { EVT_GRID_ROW_SIZE,           -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridSizeEventFunction) &fn, NULL },
 #define EVT_GRID_COL_SIZE(fn)            { EVT_GRID_COL_SIZE,           -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridSizeEventFunction) &fn, NULL },
 #define EVT_GRID_RANGE_SELECT(fn)        { EVT_GRID_RANGE_SELECT,       -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridRangeSelectEventFunction) &fn, NULL },
-#define EVT_GRID_CELL_CHANGE(fn)         { EVT_GRID_CELL_CHANGE,        -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL }, 
+#define EVT_GRID_CELL_CHANGE(fn)         { EVT_GRID_CELL_CHANGE,        -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL },
 #define EVT_GRID_SELECT_CELL(fn)         { EVT_GRID_SELECT_CELL,        -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxGridEventFunction) &fn, NULL },
 
 
