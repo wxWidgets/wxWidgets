@@ -337,23 +337,6 @@ typedef PyObject*       (*p_SWIG_Python_NewPackedObj_t)(void *, int sz, swig_typ
 typedef void            (*p_SWIG_Python_InstallConstants_t)(PyObject *d, swig_const_info constants[]);
 typedef void*           (*p_SWIG_Python_MustGetPtr_t)(PyObject *, swig_type_info *, int, int);
 
-typedef char*           (*p_SWIG_PyObj_AsCharPtr_t)(PyObject *obj, swig_type_info* pchar_info);
-typedef PyObject *      (*p_SWIG_PyObj_FromCharPtr_t)(const char* cptr);
-typedef unsigned long   (*p_SWIG_PyObj_AsUnsignedLong_t)(PyObject * obj);
-typedef long            (*p_SWIG_PyObj_AsLongInRange_t)(PyObject * obj, const char* type,
-                                                        long min_value, long max_value);
-typedef unsigned long   (*p_SWIG_PyObj_AsUnsignedLongInRange_t)(PyObject *obj, const char* type,
-                                                                unsigned long max_value);
-typedef char *          (*p_SWIG_PyObj_AsNewCharPtr_t)(PyObject *obj, swig_type_info* pchar_info);
-typedef void            (*p_SWIG_PyObj_AsCharPtrAndSize_t)(PyObject *obj, swig_type_info* pchar_info,
-                                                           char** cptr, size_t* size);
-typedef void            (*p_SWIG_PyObj_AsCharArray_t)(PyObject *obj, swig_type_info* pchar_info,
-                                                      char* carray, size_t size);
-typedef PyObject *      (*p_SWIG_PyObj_FromCharArray_t)(const char* carray, size_t size);
-typedef float           (*p_SWIG_PyObj_AsFloatConv_t)(PyObject *obj,  py_objasdbl_conv pyconv);
-
-
-
 
 struct wxPyCoreAPI {
 
@@ -375,17 +358,6 @@ struct wxPyCoreAPI {
     p_SWIG_Python_InstallConstants_t   p_SWIG_Python_InstallConstants;
     p_SWIG_Python_MustGetPtr_t         p_SWIG_Python_MustGetPtr;
     
-    p_SWIG_PyObj_AsCharPtr_t              p_SWIG_PyObj_AsCharPtr;
-    p_SWIG_PyObj_FromCharPtr_t            p_SWIG_PyObj_FromCharPtr;
-    p_SWIG_PyObj_AsUnsignedLong_t         p_SWIG_PyObj_AsUnsignedLong;
-    p_SWIG_PyObj_AsLongInRange_t          p_SWIG_PyObj_AsLongInRange;
-    p_SWIG_PyObj_AsUnsignedLongInRange_t  p_SWIG_PyObj_AsUnsignedLongInRange;
-    p_SWIG_PyObj_AsNewCharPtr_t           p_SWIG_PyObj_AsNewCharPtr;
-    p_SWIG_PyObj_AsCharPtrAndSize_t       p_SWIG_PyObj_AsCharPtrAndSize;
-    p_SWIG_PyObj_AsCharArray_t            p_SWIG_PyObj_AsCharArray;
-    p_SWIG_PyObj_FromCharArray_t          p_SWIG_PyObj_FromCharArray;
-    p_SWIG_PyObj_AsFloatConv_t            p_SWIG_PyObj_AsFloatConv;
-
     bool                (*p_wxPyCheckSwigType)(const wxChar* className);
     PyObject*           (*p_wxPyConstructObject)(void* ptr, const wxChar* className, int setThisOwn);
     bool                (*p_wxPyConvertSwigPtr)(PyObject* obj, void **ptr, const wxChar* className);

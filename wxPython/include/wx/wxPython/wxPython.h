@@ -55,17 +55,6 @@ static void wxPyCoreAPI_IMPORT() {
 #define SWIG_Python_InstallConstants(a,b)       (wxPyCoreAPIPtr->p_SWIG_Python_InstallConstants(a,b))
 #define SWIG_Python_MustGetPtr(a,b,c,d)         (wxPyCoreAPIPtr->p_SWIG_Python_MustGetPtr(a,b,c,d))
 
-#define SWIG_PyObj_AsCharPtr(a,b)               (wxPyCoreAPIPtr->p_SWIG_PyObj_AsCharPtr(a,b))
-#define SWIG_PyObj_FromCharPtr(a)               (wxPyCoreAPIPtr->p_SWIG_PyObj_FromCharPtr(a))
-#define SWIG_PyObj_AsUnsignedLong(a)            (wxPyCoreAPIPtr->p_SWIG_PyObj_AsUnsignedLong(a))
-#define SWIG_PyObj_AsLongInRange(a,b,c,d)       (wxPyCoreAPIPtr->p_SWIG_PyObj_AsLongInRange(a,b,c,d))
-#define SWIG_PyObj_AsUnsignedLongInRange(a,b,c) (wxPyCoreAPIPtr->p_SWIG_PyObj_AsUnsignedLongInRange(a,b,c))
-#define SWIG_PyObj_AsNewCharPtr(a,b)            (wxPyCoreAPIPtr->p_SWIG_PyObj_AsNewCharPtr(a,b))
-#define SWIG_PyObj_AsCharPtrAndSize(a,b,c,d)    (wxPyCoreAPIPtr->p_SWIG_PyObj_AsCharPtrAndSize(a,b,c,d))
-#define SWIG_PyObj_AsCharArray(a,b,c,d)         (wxPyCoreAPIPtr->p_SWIG_PyObj_AsCharArray(a,b,c,d))
-#define SWIG_PyObj_FromCharArray(a,b)           (wxPyCoreAPIPtr->p_SWIG_PyObj_FromCharArray(a,b))
-#define SWIG_PyObj_AsFloatConv(a,b)             (wxPyCoreAPIPtr->p_SWIG_PyObj_AsFloatConv(a,b))
-
 #define wxPyCheckSwigType(a)                    (wxPyCoreAPIPtr->p_wxPyCheckSwigType(a))
 #define wxPyConstructObject(a,b,c)              (wxPyCoreAPIPtr->p_wxPyConstructObject(a,b,c))
 #define wxPyConvertSwigPtr(a,b,c)               (wxPyCoreAPIPtr->p_wxPyConvertSwigPtr(a,b,c))

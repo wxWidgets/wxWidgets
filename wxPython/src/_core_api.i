@@ -150,17 +150,6 @@ static wxPyCoreAPI API = {
     (p_SWIG_Python_InstallConstants_t)SWIG_Python_InstallConstants,
     (p_SWIG_Python_MustGetPtr_t)SWIG_Python_MustGetPtr,
 
-    (p_SWIG_PyObj_AsCharPtr_t)SWIG_PyObj_AsCharPtr,
-    (p_SWIG_PyObj_FromCharPtr_t)SWIG_PyObj_FromCharPtr,
-    (p_SWIG_PyObj_AsUnsignedLong_t)SWIG_PyObj_AsUnsignedLong,
-    (p_SWIG_PyObj_AsLongInRange_t)SWIG_PyObj_AsLongInRange,
-    (p_SWIG_PyObj_AsUnsignedLongInRange_t)SWIG_PyObj_AsUnsignedLongInRange,
-    (p_SWIG_PyObj_AsNewCharPtr_t)SWIG_PyObj_AsNewCharPtr,
-    (p_SWIG_PyObj_AsCharPtrAndSize_t)SWIG_PyObj_AsCharPtrAndSize,
-    (p_SWIG_PyObj_AsCharArray_t)SWIG_PyObj_AsCharArray,
-    (p_SWIG_PyObj_FromCharArray_t)SWIG_PyObj_FromCharArray,
-    (p_SWIG_PyObj_AsFloatConv_t)SWIG_PyObj_AsFloatConv,
-        
     wxPyCheckSwigType,
     wxPyConstructObject,
     wxPyConvertSwigPtr,
