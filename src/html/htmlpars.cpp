@@ -49,8 +49,9 @@ public:
 WX_DECLARE_OBJARRAY(wxHtmlTextPiece, wxHtmlTextPieces);
 WX_DEFINE_OBJARRAY(wxHtmlTextPieces);
 
-struct wxHtmlParserState
+class wxHtmlParserState
 {
+public:
     wxHtmlTag         *m_curTag;
     wxHtmlTag         *m_tags;
     wxHtmlTextPieces  *m_textPieces;
