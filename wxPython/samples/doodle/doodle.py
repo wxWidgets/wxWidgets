@@ -6,7 +6,7 @@ can do simple drawings upon.
 """
 
 
-import wx
+import wx                  # This module uses the new wx namespace
 
 #----------------------------------------------------------------------
 

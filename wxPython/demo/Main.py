@@ -12,7 +12,8 @@
 #----------------------------------------------------------------------------
 
 import sys, os, time
-import wx
+
+import wx                  # This module uses the new wx namespace
 import wx.html
 
 import images

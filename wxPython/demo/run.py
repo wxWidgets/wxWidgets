@@ -17,9 +17,9 @@ directory within its own frame window.  Just specify the module name
 on the command line.
 """
 
+import wx                  # This module uses the new wx namespace
 
 import sys, os
-import wx
 
 #----------------------------------------------------------------------------
 

@@ -5,7 +5,7 @@
 # structure of any wxPython application.
 #----------------------------------------------------------------------
 
-import wx
+import wx                  # This module uses the new wx namespace
 
 class MyFrame(wx.Frame):
     """

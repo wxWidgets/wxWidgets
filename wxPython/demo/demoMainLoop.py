@@ -9,7 +9,7 @@ in Python.  This is not part of the demo framework.
 """
 
 
-import wx
+import wx                  # This module uses the new wx namespace
 import time
 
 
