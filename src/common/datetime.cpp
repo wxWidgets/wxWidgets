@@ -127,6 +127,12 @@ wxCUSTOM_TYPE_INFO(wxDateTime, wxToStringConverter<wxDateTime> , wxFromStringCon
     #undef HAVE_STRPTIME
 #endif // broken strptime()
 
+#if defined(HAVE_STRPTIME) && defined(__DARWIN__) && defined(_MSL_USING_MW_C_HEADERS) && _MSL_USING_MW_C_HEADERS
+    // configure detects strptime as linkable because it's in the OS X
+    // System library but MSL headers don't declare it.
+    char *strptime(const char *, const char *, struct tm *);
+#endif
+
 #if defined(__MWERKS__) && wxUSE_UNICODE
     #include <wtime.h>
 #endif
