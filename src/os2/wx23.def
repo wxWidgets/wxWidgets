@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  F:\DEV\WX2\WXWINDOWS\LIB\WX.lib
+;From library:  H:\DEV\WX2\WXWINDOWS\LIB\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -1325,14 +1325,16 @@ EXPORTS
       wxConstructorForwxDropFilesEvent__Fv
       ;wxEvtHandler::sm_eventTableEntries
       sm_eventTableEntries__12wxEvtHandler
-      ;wxWindowDestroyEvent::wxWindowDestroyEvent(wxWindow*)
-      __ct__20wxWindowDestroyEventFP8wxWindow
+      ;wxChildFocusEvent::wxChildFocusEvent(wxWindow*)
+      __ct__17wxChildFocusEventFP8wxWindow
       ;wxFindFocusDescendant(wxWindow*)
       wxFindFocusDescendant__FP8wxWindow
       wxEVT_RIGHT_DCLICK
       wxEVT_ENTER_WINDOW
       wxEVT_COMMAND_LEFT_CLICK
       wxEVT_CHAR_HOOK
+      ;wxWindowDestroyEvent::wxWindowDestroyEvent(wxWindow*)
+      __ct__20wxWindowDestroyEventFP8wxWindow
       ;wxEvtHandler::Connect(int,int,int,void( wxObject::*)(wxEvent&),wxObject*)
       Connect__12wxEvtHandlerFiN21M8wxObjectFR7wxEvent_vP8wxObject
       wxEVT_SOCKET
@@ -1406,6 +1408,7 @@ EXPORTS
       __dt__12wxEvtHandlerFv
       ;wxEvtHandler::GetEventTable() const
       GetEventTable__12wxEvtHandlerCFv
+      wxEVT_CHILD_FOCUS
       wxEVT_NC_LEAVE_WINDOW
       wxEVT_DROP_FILES
       wxEVT_COMMAND_RIGHT_CLICK
@@ -1430,6 +1433,8 @@ EXPORTS
       sm_classwxMoveEvent__11wxMoveEvent
       ;wxIconizeEvent::sm_classwxIconizeEvent
       sm_classwxIconizeEvent__14wxIconizeEvent
+      ;wxChildFocusEvent::sm_classwxChildFocusEvent
+      sm_classwxChildFocusEvent__17wxChildFocusEvent
       __vft16wxScrollWinEvent8wxObject
       __vft13wxNotifyEvent8wxObject
       __vft12wxMouseEvent8wxObject
@@ -1627,6 +1632,8 @@ EXPORTS
       wxConstructorForwxQueryNewPaletteEvent__Fv
       ;wxConstructorForwxFocusEvent()
       wxConstructorForwxFocusEvent__Fv
+      ;wxConstructorForwxChildFocusEvent()
+      wxConstructorForwxChildFocusEvent__Fv
       ;wxEvtHandler::sm_eventTable
       sm_eventTable__12wxEvtHandler
       wxEVT_LEFT_DCLICK
@@ -1634,7 +1641,7 @@ EXPORTS
       wxEVT_NC_LEFT_DCLICK
       wxEVT_INIT_DIALOG
       wxEVT_COMMAND_SET_FOCUS
-  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\extended.c
+  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\extended.c
     ;PUBDEFs (Symbols available from object file):
       ConvertToIeeeExtended
       ConvertFromIeeeExtended
@@ -5272,6 +5279,7 @@ EXPORTS
       wxEVT_COMMAND_TEXT_UPDATED
       ;wxConstructorForwxTextUrlEvent()
       wxConstructorForwxTextUrlEvent__Fv
+      wxEVT_COMMAND_TEXT_MAXLEN
       ;wxTextCtrlBase::SelectAll()
       SelectAll__14wxTextCtrlBaseFv
       ;wxTextCtrlBase::SaveFile(const wxString&)
@@ -5283,16 +5291,12 @@ EXPORTS
       SetStyle__14wxTextCtrlBaseFlT1RC10wxTextAttr
   ;From object file:  ..\common\textfile.cpp
     ;PUBDEFs (Symbols available from object file):
+      ;wxTextFile::Read(wxMBConv&)
+      Read__10wxTextFileFR8wxMBConv
       ;wxTextFile::GuessType() const
       GuessType__10wxTextFileCFv
-      ;wxTextFile::Open(const wxString&)
-      Open__10wxTextFileFRC8wxString
       ;wxTextFile::~wxTextFile()
       __dt__10wxTextFileFv
-      ;wxTextFile::Open()
-      Open__10wxTextFileFv
-      ;wxTextFile::Write(wxTextFileType)
-      Write__10wxTextFileF14wxTextFileType
       ;wxTextFile::typeDefault
       typeDefault__10wxTextFile
       ;wxTextFile::Exists() const
@@ -5303,8 +5307,12 @@ EXPORTS
       GetEOL__10wxTextFileF14wxTextFileType
       ;wxTextFile::Translate(const wxString&,wxTextFileType)
       Translate__10wxTextFileFRC8wxString14wxTextFileType
-      ;wxTextFile::Read()
-      Read__10wxTextFileFv
+      ;wxTextFile::Open(const wxString&,wxMBConv&)
+      Open__10wxTextFileFRC8wxStringR8wxMBConv
+      ;wxTextFile::Write(wxTextFileType,wxMBConv&)
+      Write__10wxTextFileF14wxTextFileTypeR8wxMBConv
+      ;wxTextFile::Open(wxMBConv&)
+      Open__10wxTextFileFR8wxMBConv
       ;wxTextFile::Close()
       Close__10wxTextFileFv
       ;wxTextFile::wxTextFile(const wxString&)
@@ -5459,7 +5467,7 @@ EXPORTS
       Read32__17wxTextInputStreamFv
       ;wxTextInputStream::SkipIfEndOfLine(char)
       SkipIfEndOfLine__17wxTextInputStreamFc
-  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\unzip.c
+  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\unzip.c
     ;PUBDEFs (Symbols available from object file):
       unzReadCurrentFile
       unzGetCurrentFileInfo
@@ -9003,15 +9011,19 @@ EXPORTS
       Init__7wxPanelFv
       ;wxPanel::Create(wxWindow*,int,const wxPoint&,const wxSize&,long,const wxString&)
       Create__7wxPanelFP8wxWindowiRC7wxPointRC6wxSizelRC8wxString
+      ;wxPanel::SetDefaultItem(wxWindow*)
+      SetDefaultItem__7wxPanelFP8wxWindow
       __vft7wxPanel8wxObject
       ;wxPanel::GetEventTable() const
       GetEventTable__7wxPanelCFv
-      ;wxPanel::InitDialog()
-      InitDialog__7wxPanelFv
-      ;wxPanel::sm_classwxPanel
-      sm_classwxPanel__7wxPanel
+      ;wxPanel::OnChildFocus(wxChildFocusEvent&)
+      OnChildFocus__7wxPanelFR17wxChildFocusEvent
       ;wxPanel::sm_eventTable
       sm_eventTable__7wxPanel
+      ;wxPanel::sm_classwxPanel
+      sm_classwxPanel__7wxPanel
+      ;wxPanel::~wxPanel()
+      __dt__7wxPanelFv
       ;wxPanel::OnNavigationKey(wxNavigationKeyEvent&)
       OnNavigationKey__7wxPanelFR20wxNavigationKeyEvent
       ;wxPanel::OnFocus(wxFocusEvent&)
@@ -9022,6 +9034,8 @@ EXPORTS
       wxConstructorForwxPanel__Fv
       ;wxPanel::SetFocus()
       SetFocus__7wxPanelFv
+      ;wxPanel::GetDefaultItem() const
+      GetDefaultItem__7wxPanelCFv
   ;From object file:  ..\generic\printps.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxPostScriptPrintPreview::wxPostScriptPrintPreview(wxPrintout*,wxPrintout*,wxPrintDialogData*)
@@ -9210,8 +9224,12 @@ EXPORTS
       EnableScrolling__14wxScrollHelperFUlT1
       ;wxAutoScrollTimer::Notify()
       Notify__17wxAutoScrollTimerFv
+      ;wxScrollHelper::DeleteEvtHandler()
+      DeleteEvtHandler__14wxScrollHelperFv
       ;wxScrollHelper::wxScrollHelper(wxWindow*)
       __ct__14wxScrollHelperFP8wxWindow
+      ;wxGenericScrolledWindow::sm_eventTable
+      sm_eventTable__23wxGenericScrolledWindow
       ;wxAutoScrollTimer::wxAutoScrollTimer(wxWindow*,wxScrollHelper*,int,int,int)
       __ct__17wxAutoScrollTimerFP8wxWindowP14wxScrollHelperiN23
       ;wxScrollHelper::HandleOnScroll(wxScrollWinEvent&)
@@ -9232,6 +9250,8 @@ EXPORTS
       StopAutoScrolling__14wxScrollHelperFv
       ;wxScrollHelper::AdjustScrollbars()
       AdjustScrollbars__14wxScrollHelperFv
+      ;wxGenericScrolledWindow::sm_eventTableEntries
+      sm_eventTableEntries__23wxGenericScrolledWindow
       ;wxScrollHelper::HandleOnSize(wxSizeEvent&)
       HandleOnSize__14wxScrollHelperFR11wxSizeEvent
       ;wxScrollHelper::HandleOnPaint(wxPaintEvent&)
@@ -9241,6 +9261,8 @@ EXPORTS
       ;wxScrollHelper::GetTargetWindow() const
       GetTargetWindow__14wxScrollHelperCFv
       __vft14wxScrollHelper
+      ;wxGenericScrolledWindow::GetEventTable() const
+      GetEventTable__23wxGenericScrolledWindowCFv
       ;wxGenericScrolledWindow::Create(wxWindow*,int,const wxPoint&,const wxSize&,long,const wxString&)
       Create__23wxGenericScrolledWindowFP8wxWindowiRC7wxPointRC6wxSizelRC8wxString
       ;wxScrollHelper::CalcUnscrolledPosition(int,int,int*,int*) const
@@ -9270,33 +9292,51 @@ EXPORTS
       __vft24wxScrollHelperEvtHandler8wxObject
       ;wxScrollHelper::SetScrollbars(int,int,int,int,int,int,unsigned long)
       SetScrollbars__14wxScrollHelperFiN51Ul
+      ;wxGenericScrolledWindow::OnPaint(wxPaintEvent&)
+      OnPaint__23wxGenericScrolledWindowFR12wxPaintEvent
       ;wxScrollHelper::GetScrollPageSize(int) const
       GetScrollPageSize__14wxScrollHelperCFi
       ;wxScrollHelper::SetWindow(wxWindow*)
       SetWindow__14wxScrollHelperFP8wxWindow
       ;wxGenericScrolledWindow::sm_classwxGenericScrolledWindow
       sm_classwxGenericScrolledWindow__23wxGenericScrolledWindow
+      ;wxScrollHelper::DoSetTargetWindow(wxWindow*)
+      DoSetTargetWindow__14wxScrollHelperFP8wxWindow
   ;From object file:  ..\generic\spinctlg.cpp
   ;From object file:  ..\generic\splitter.cpp
     ;PUBDEFs (Symbols available from object file):
-      ;wxSplitterWindow::OnSize(wxSizeEvent&)
-      OnSize__16wxSplitterWindowFR11wxSizeEvent
+      ;wxSplitterWindow::OnNavigationKey(wxNavigationKeyEvent&)
+      OnNavigationKey__16wxSplitterWindowFR20wxNavigationKeyEvent
       ;wxSplitterWindow::OnUnsplitEvent(wxSplitterEvent&)
       OnUnsplitEvent__16wxSplitterWindowFR15wxSplitterEvent
+      ;wxSplitterWindow::OnSize(wxSizeEvent&)
+      OnSize__16wxSplitterWindowFR11wxSizeEvent
+      ;wxSplitterWindow::OnChildFocus(wxChildFocusEvent&)
+      OnChildFocus__16wxSplitterWindowFR17wxChildFocusEvent
+      ;wxSplitterWindow::RemoveChild(wxWindowBase*)
+      RemoveChild__16wxSplitterWindowFP12wxWindowBase
       ;wxSplitterWindow::ReplaceWindow(wxWindow*,wxWindow*)
       ReplaceWindow__16wxSplitterWindowFP8wxWindowT1
+      ;wxSplitterWindow::GetDefaultItem() const
+      GetDefaultItem__16wxSplitterWindowCFv
       ;wxSplitterWindow::InitColours()
       InitColours__16wxSplitterWindowFv
-      ;wxSplitterWindow::OnSetCursor(wxSetCursorEvent&)
-      OnSetCursor__16wxSplitterWindowFR16wxSetCursorEvent
+      ;wxSplitterWindow::SetDefaultItem(wxWindow*)
+      SetDefaultItem__16wxSplitterWindowFP8wxWindow
+      ;wxSplitterWindow::OnFocus(wxFocusEvent&)
+      OnFocus__16wxSplitterWindowFR12wxFocusEvent
       wxEVT_COMMAND_SPLITTER_UNSPLIT
       __vft16wxSplitterWindow8wxObject
+      ;wxSplitterWindow::OnSetCursor(wxSetCursorEvent&)
+      OnSetCursor__16wxSplitterWindowFR16wxSetCursorEvent
       ;wxSplitterWindow::DrawSashTracker(int,int)
       DrawSashTracker__16wxSplitterWindowFiT1
       ;wxConstructorForwxSplitterWindow()
       wxConstructorForwxSplitterWindow__Fv
       ;wxSplitterWindow::~wxSplitterWindow()
       __dt__16wxSplitterWindowFv
+      ;wxSplitterWindow::SetFocus()
+      SetFocus__16wxSplitterWindowFv
       wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING
       ;wxSplitterWindow::OnSashPosChanged(wxSplitterEvent&)
       OnSashPosChanged__16wxSplitterWindowFR15wxSplitterEvent
@@ -10162,12 +10202,12 @@ EXPORTS
       PopTagHandler__12wxHtmlParserFv
       ;wxHtmlParser::CreateDOMTree()
       CreateDOMTree__12wxHtmlParserFv
-      ;wxHtmlParser::PushTagHandler(wxHtmlTagHandler*,wxString)
-      PushTagHandler__12wxHtmlParserFP16wxHtmlTagHandler8wxString
-      ;wxHtmlEntitiesParser::SetEncoding(wxFontEncoding)
-      SetEncoding__20wxHtmlEntitiesParserF14wxFontEncoding
       ;wxHtmlEntitiesParser::Parse(const wxString&)
       Parse__20wxHtmlEntitiesParserFRC8wxString
+      ;wxHtmlEntitiesParser::SetEncoding(wxFontEncoding)
+      SetEncoding__20wxHtmlEntitiesParserF14wxFontEncoding
+      ;wxHtmlParser::PushTagHandler(wxHtmlTagHandler*,wxString)
+      PushTagHandler__12wxHtmlParserFP16wxHtmlTagHandler8wxString
       ;wxHtmlTextPieces::RemoveAt(unsigned int)
       RemoveAt__16wxHtmlTextPiecesFUi
       ;wxHtmlEntitiesParser::GetCharForCode(unsigned int)
