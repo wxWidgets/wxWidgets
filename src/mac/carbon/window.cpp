@@ -2329,6 +2329,8 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
                 HIViewRender(*m_peer) ;
 #endif
         }
+        // as the native control might be not a 0/0 wx window coordinates, we have to offset
+        scrollrect.Offset( -MacGetLeftBorderSize() , -MacGetTopBorderSize() ) ;
         m_peer->ScrollRect( scrollrect , dx , dy ) ;
 #else
 
