@@ -49,6 +49,10 @@ INCOMPATIBLE CHANGES SINCE 2.4.x
   not using wxList keyed interface (the same used when wxUSE_STL == 1),
   the only incompatibility being that Next() returns a wxHashTable::Node*
   instead of a wxNode*.
+- non-const wxDC methods GetBackground(), GetBrush(), GetFont() and GetPen()
+  don't exist any more, please fix your code -- it never worked correctly
+  anyhow if you modified the objects returned by these methods so you should
+  simply switch to using const methods.
 
 wxTaskBarIcon must be explicitly destroyed now, otherwise the application
   won't exit even though there are no top level windows
