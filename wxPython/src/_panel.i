@@ -171,6 +171,12 @@ public:
     wxRect GetTargetRect() const;
 #endif
 
+    // TODO: directorize this?
+    DocDeclStr(
+        virtual void , DoPrepareDC( wxDC & dc ),
+        "Normally what is called by `PrepareDC`.", "");
+
+    
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 };
