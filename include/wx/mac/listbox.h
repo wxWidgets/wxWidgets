@@ -110,6 +110,8 @@ public:
 
     virtual void    SetupColours();
     virtual void    MacHandleControlClick( WXWidget control , wxInt16 controlpart ) ;
+   	virtual bool MacCanFocus() const { return true ; }
+    void OnChar(wxKeyEvent& event);
 
     void*           m_macList ;
     wxArrayString   m_stringArray ;
@@ -140,6 +142,8 @@ protected:
 
     int m_noItems;
     int m_selected;
+	wxString  m_typeIn ;
+	long      m_lastTypeIn ;
 
     virtual wxSize DoGetBestSize() const;
 
