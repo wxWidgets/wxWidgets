@@ -102,7 +102,7 @@ SHARED_LD_CC = @SHARED_LD_CC@
 @COND_USE_SOVERSION_1_PLATFORM_MACOSX_1@__basedll___targetsuf3 = .0.0.0.$(SO_SUFFIX)
 @COND_USE_SOVERSION_1_PLATFORM_MACOSX_0@__basedll___targetsuf2 = .$(SO_SUFFIX).0
 @COND_USE_SOVERSION_1_PLATFORM_MACOSX_1@__basedll___targetsuf2 = .0.$(SO_SUFFIX)
-@COND_DEPS_TRACKING_1@CCC = $(top_builddir)./bk-deps $(CC)
+@COND_DEPS_TRACKING_1@CCC = $(top_builddir)bk-deps $(CC)
 @COND_DEPS_TRACKING_0@CCC = $(CC)
 @COND_WXUSE_ODBC_BUILTIN@__LIB_ODBC_p_1 = -lwxodbc
 @COND_WXUSE_ODBC_BUILTIN@__LIB_ODBC_p_2 = -lwxodbc
@@ -1621,7 +1621,7 @@ SHARED_LD_CC = @SHARED_LD_CC@
 @COND_WXUSE_ODBC_BUILTIN@__LIB_ODBC_DEP_1 = $(__wxodbc___depname)
 @COND_WXUSE_LIBTIFF_BUILTIN@__LIB_TIFF_LIBR = $(top_builddir)lib/libwxtiff.a
 @COND_WXUSE_LIBTIFF_BUILTIN@__LIB_TIFF_p_2 = -lwxtiff
-@COND_DEPS_TRACKING_1@CXXC = $(top_builddir)./bk-deps $(CXX)
+@COND_DEPS_TRACKING_1@CXXC = $(top_builddir)bk-deps $(CXX)
 @COND_DEPS_TRACKING_0@CXXC = $(CXX)
 @COND_TOOLKIT_GTK@__LOWLEVEL_SRC_OBJECTS_5 = coredll-fontenum.o coredll-fontutil.o coredll-utilsx11.o coredll-taskbarcmn.o coredll-taskbarx11.o coredll-printps.o coredll-dialup.o coredll-gsockgtk.o coredll-win_gtk.o coredll-app.o coredll-bitmap.o coredll-brush.o coredll-clipbrd.o coredll-colour.o coredll-cursor.o coredll-data.o coredll-dataobj.o coredll-dc.o coredll-dcclient.o coredll-dcmemory.o coredll-dcscreen.o coredll-dnd.o coredll-evtloop.o coredll-font.o coredll-toplevel.o coredll-gdiobj.o coredll-icon.o coredll-main.o coredll-pen.o coredll-popupwin.o coredll-region.o coredll-settings.o coredll-timer.o coredll-tooltip.o coredll-utilsgtk.o coredll-window.o coredll-paletteg.o
 @COND_TOOLKIT_MOTIF@__LOWLEVEL_SRC_OBJECTS_5 = coredll-fontenum.o coredll-fontutil.o coredll-utilsx11.o coredll-taskbarcmn.o coredll-taskbarx11.o coredll-printps.o coredll-dialup.o coredll-region1.o coredll-pen1.o coredll-brush1.o coredll-bitmap1.o coredll-utilsx.o
@@ -2366,7 +2366,7 @@ install: all $(__install_monodll___depname) $(__install_monolib___depname) $(__i
 	$(INSTALL_DIR) $(libdir)/wx/include/$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5/wx
 	(cd ./ ; $(INSTALL_DATA)  lib/wx/include/$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5/wx/setup.h $(libdir)/wx/include/$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5/wx)
 	$(INSTALL_DIR) $(includedir)
-	for f in wx/arrimpl.cpp wx/listimpl.cpp wx/app.h wx/buffer.h wx/build.h wx/chkconf.h wx/clntdata.h wx/cmdline.h wx/confbase.h wx/config.h wx/datetime.h wx/datetime.inl wx/datstrm.h wx/db.h wx/dbtable.h wx/dde.h wx/debug.h wx/defs.h wx/dir.h wx/dynarray.h wx/dynlib.h wx/dynload.h wx/encconv.h wx/event.h wx/features.h wx/ffile.h wx/file.h wx/fileconf.h wx/filefn.h wx/filename.h wx/filesys.h wx/fontenc.h wx/fontmap.h wx/fs_inet.h wx/fs_zip.h wx/fs_mem.h wx/dbkeyg.h wx/gsocket.h wx/hash.h wx/hashmap.h wx/intl.h wx/iosfwrap.h wx/ioswrap.h wx/ipc.h wx/ipcbase.h wx/isql.h wx/isqlext.h wx/list.h wx/log.h wx/longlong.h wx/math.h wx/memory.h wx/memconf.h wx/memtext.h wx/mimetype.h wx/module.h wx/msgout.h wx/mstream.h wx/object.h wx/platform.h wx/process.h wx/regex.h wx/sckaddr.h wx/sckipc.h wx/sckstrm.h wx/socket.h wx/snglinst.h wx/strconv.h wx/stream.h wx/string.h wx/sysopt.h wx/textbuf.h wx/textfile.h wx/thread.h wx/thrimpl.cpp wx/timer.h wx/tokenzr.h wx/txtstrm.h wx/url.h wx/utils.h wx/variant.h wx/vector.h wx/version.h wx/volume.h wx/wfstream.h wx/wx.h wx/wxchar.h wx/wxprec.h wx/zipstrm.h wx/zstream.h $(BASE_PLATFORM_HDR) wx/selstore.h wx/generic/accel.h wx/generic/calctrl.h wx/generic/caret.h wx/generic/choicdgg.h wx/generic/colrdlgg.h wx/generic/dcpsg.h wx/generic/dirctrlg.h wx/generic/fontdlgg.h wx/generic/filedlgg.h wx/generic/grid.h wx/generic/gridctrl.h wx/generic/grid.h wx/generic/helpext.h wx/generic/logg.h wx/helphtml.h wx/generic/imaglist.h wx/generic/laywin.h wx/generic/msgdlgg.h wx/generic/notebook.h wx/generic/panelg.h wx/generic/prntdlgg.h wx/generic/progdlgg.h wx/generic/sashwin.h wx/generic/scrolwin.h wx/generic/spinctlg.h wx/generic/splash.h wx/generic/splitter.h wx/generic/textdlgg.h wx/generic/timer.h wx/generic/wizard.h wx/generic/treectlg.h $(GUI_HDR) $(LOWLEVEL_HDR); do \
+	for f in wx/arrimpl.cpp wx/listimpl.cpp wx/app.h wx/buffer.h wx/build.h wx/chkconf.h wx/clntdata.h wx/cmdline.h wx/confbase.h wx/config.h wx/datetime.h wx/datetime.inl wx/datstrm.h wx/db.h wx/dbtable.h wx/dde.h wx/debug.h wx/defs.h wx/dir.h wx/dynarray.h wx/dynlib.h wx/dynload.h wx/encconv.h wx/event.h wx/features.h wx/ffile.h wx/file.h wx/fileconf.h wx/filefn.h wx/filename.h wx/filesys.h wx/fontenc.h wx/fontmap.h wx/fs_inet.h wx/fs_zip.h wx/fs_mem.h wx/dbkeyg.h wx/gsocket.h wx/hash.h wx/hashmap.h wx/intl.h wx/iosfwrap.h wx/ioswrap.h wx/ipc.h wx/ipcbase.h wx/isql.h wx/isqlext.h wx/list.h wx/log.h wx/longlong.h wx/math.h wx/memory.h wx/memconf.h wx/memtext.h wx/mimetype.h wx/module.h wx/msgout.h wx/mstream.h wx/object.h wx/platform.h wx/process.h wx/regex.h wx/sckaddr.h wx/sckipc.h wx/sckstrm.h wx/socket.h wx/snglinst.h wx/stopwatch.h wx/strconv.h wx/stream.h wx/string.h wx/sysopt.h wx/textbuf.h wx/textfile.h wx/thread.h wx/thrimpl.cpp wx/timer.h wx/tokenzr.h wx/txtstrm.h wx/url.h wx/utils.h wx/variant.h wx/vector.h wx/version.h wx/volume.h wx/wfstream.h wx/wx.h wx/wxchar.h wx/wxprec.h wx/zipstrm.h wx/zstream.h $(BASE_PLATFORM_HDR) wx/selstore.h wx/generic/accel.h wx/generic/calctrl.h wx/generic/caret.h wx/generic/choicdgg.h wx/generic/colrdlgg.h wx/generic/dcpsg.h wx/generic/dirctrlg.h wx/generic/fontdlgg.h wx/generic/filedlgg.h wx/generic/grid.h wx/generic/gridctrl.h wx/generic/grid.h wx/generic/helpext.h wx/generic/logg.h wx/helphtml.h wx/generic/imaglist.h wx/generic/laywin.h wx/generic/msgdlgg.h wx/generic/notebook.h wx/generic/panelg.h wx/generic/prntdlgg.h wx/generic/progdlgg.h wx/generic/sashwin.h wx/generic/scrolwin.h wx/generic/spinctlg.h wx/generic/splash.h wx/generic/splitter.h wx/generic/textdlgg.h wx/generic/timer.h wx/generic/wizard.h wx/generic/treectlg.h $(GUI_HDR) $(LOWLEVEL_HDR); do \
 	if test ! -d $(includedir)/`dirname $$f` ; then \
 	$(INSTALL_DIR) $(includedir)/`dirname $$f`; \
 	fi; \
@@ -4830,7 +4830,7 @@ inphand.o: $(srcdir)/src/univ/inphand.cpp
 	$(CXXC) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) -I$(srcdir)/include -D__WXBASE__ -DwxUSE_BASE=1 -DWXMAKINGDLL $(CXXFLAGS) $(PIC_FLAG) $<
 
 lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.0.r: 
-	$(RESCOMP) -d __UNIX__ -useDF $(top_srcdir)/src/mac/apprsrc.r $(top_srcdir)/src/mac/carbrsrc.r $(top_srcdir)/src/mac/corersrc.r -o lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.0.rsrc
+	$(RESCOMP) -d __UNIX__ -useDF $(top_srcdir)/src/mac/apprsrc.r $(top_srcdir)/src/mac/carbrsrc.r ../src/mac/corersrc.r -o lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.0.rsrc
 	$(DEREZ) lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.0.rsrc Carbon.r -useDF >lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.0.r
 
 unzip.o: $(srcdir)/src/common/unzip.c
@@ -7787,23 +7787,28 @@ monolib-artstd.o: $(srcdir)/src/common/artstd.cpp
 	$(CXXC) -c -o $@ $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2) -I$(srcdir)/include -D__WXBASE__ -DwxUSE_BASE=1 $(CXXFLAGS) $<
 
 clean: 
-	rm -f ./*.o ./.deps/*
+	rm -rf ./.deps
+	rm -f -f ./*.o
 	rm -f $(top_builddir)lib/libwxregex.a
 	rm -f $(top_builddir)lib/libwxzlib.a
 	rm -f $(top_builddir)lib/libwxpng.a
 	rm -f $(top_builddir)lib/libwxjpeg.a
 	rm -f $(top_builddir)lib/libwxtiff.a
 	rm -f $(top_builddir)lib/libwxodbc.a
-	rm -f $(top_builddir)lib/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)-2.5$(__monodll___targetsuf3) $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT)
+	rm -f $(top_builddir)lib/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)-2.5$(__monodll___targetsuf3)
+	rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT)
 	rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(DLLIMPEXT) $(top_builddir)lib/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXCOMPILER)-2.5$(__monodll___targetsuf2)
 	rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.a
-	rm -f $(top_builddir)lib/$(DLLPREFIX)wx$(WXUNICODEFLAG)$(WXDEBUGFLAG)_base$(WXCOMPILER)-2.5$(__basedll___targetsuf3) $(top_builddir)lib/libwx$(WXUNICODEFLAG)$(WXDEBUGFLAG)_base-2.5$(DLLIMPEXT)
+	rm -f $(top_builddir)lib/$(DLLPREFIX)wx$(WXUNICODEFLAG)$(WXDEBUGFLAG)_base$(WXCOMPILER)-2.5$(__basedll___targetsuf3)
+	rm -f $(top_builddir)lib/libwx$(WXUNICODEFLAG)$(WXDEBUGFLAG)_base-2.5$(DLLIMPEXT)
 	rm -f $(top_builddir)lib/libwx$(WXUNICODEFLAG)$(WXDEBUGFLAG)_base-2.5$(DLLIMPEXT) $(top_builddir)lib/$(DLLPREFIX)wx$(WXUNICODEFLAG)$(WXDEBUGFLAG)_base$(WXCOMPILER)-2.5$(__basedll___targetsuf2)
 	rm -f $(top_builddir)lib/libwx$(WXUNICODEFLAG)$(WXDEBUGFLAG)_base-2.5.a
-	rm -f $(top_builddir)lib/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core$(WXCOMPILER)-2.5$(__coredll___targetsuf3) $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(DLLIMPEXT)
+	rm -f $(top_builddir)lib/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core$(WXCOMPILER)-2.5$(__coredll___targetsuf3)
+	rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(DLLIMPEXT)
 	rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(DLLIMPEXT) $(top_builddir)lib/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core$(WXCOMPILER)-2.5$(__coredll___targetsuf2)
 	rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5.a
-	rm -f $(top_builddir)lib/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html$(WXCOMPILER)-2.5$(__htmldll___targetsuf3) $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html-2.5$(DLLIMPEXT)
+	rm -f $(top_builddir)lib/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html$(WXCOMPILER)-2.5$(__htmldll___targetsuf3)
+	rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html-2.5$(DLLIMPEXT)
 	rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html-2.5$(DLLIMPEXT) $(top_builddir)lib/$(DLLPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html$(WXCOMPILER)-2.5$(__htmldll___targetsuf2)
 	rm -f $(top_builddir)lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html-2.5.a
 	rm -f lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.0.rsrc lib/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5.0.r

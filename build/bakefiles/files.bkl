@@ -230,6 +230,7 @@
     wx/sckstrm.h
     wx/socket.h
     wx/snglinst.h
+    wx/stopwatch.h
     wx/strconv.h
     wx/stream.h
     wx/string.h
