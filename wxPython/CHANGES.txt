@@ -107,7 +107,7 @@ specific.  It could have been added long ago but OOR required it.
 Finally added wxPyLineShape.GetLineControlPoints, which has been on my
 list for a while.  The above OOR modification made this easier.
 
-Fixed the __cmp__ methods for wxPoiunt and others.
+Fixed the __cmp__ methods for wxPoint and others.
 
 Added wxWave.
 

@@ -168,19 +168,16 @@ IMP_PYCALLBACK_STRING__pure( wxPyTipProvider, wxTipProvider, GetTip);
 
 
 #include <wx/generic/dragimgg.h>
-static wxPoint wxPyNullPoint;
 
 
 wxGenericDragImage* wxDragIcon(const wxIcon& image,
-                               const wxCursor& cursor,
-                               const wxPoint& hotspot) {
-    return new wxGenericDragImage(image, cursor, hotspot);
+                               const wxCursor& cursor) {
+    return new wxGenericDragImage(image, cursor);
 }
 
 wxGenericDragImage* wxDragString(const wxString& str,
-                                 const wxCursor& cursor,
-                                 const wxPoint& hotspot) {
-    return new wxGenericDragImage(str, cursor, hotspot);
+                                 const wxCursor& cursor) {
+    return new wxGenericDragImage(str, cursor);
 }
 
 wxGenericDragImage* wxDragTreeItem(const wxTreeCtrl& treeCtrl, wxTreeItemId& id) {
@@ -1990,16 +1987,13 @@ static PyObject *_wrap_wxDragIcon(PyObject *self, PyObject *args, PyObject *kwar
     wxGenericDragImage * _result;
     wxIcon * _arg0;
     wxCursor * _arg1 = (wxCursor *) &wxNullCursor;
-    wxPoint * _arg2 = (wxPoint *) &wxPyNullPoint;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
-    wxPoint  temp;
-    PyObject * _obj2 = 0;
-    char *_kwnames[] = { "image","cursor","hotspot", NULL };
+    char *_kwnames[] = { "image","cursor", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|OO:wxDragIcon",_kwnames,&_argo0,&_argo1,&_obj2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|O:wxDragIcon",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2015,15 +2009,9 @@ static PyObject *_wrap_wxDragIcon(PyObject *self, PyObject *args, PyObject *kwar
         return NULL;
         }
     }
-    if (_obj2)
-{
-    _arg2 = &temp;
-    if (! wxPoint_helper(_obj2, &_arg2))
-        return NULL;
-}
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxGenericDragImage *)wxDragIcon(*_arg0,*_arg1,*_arg2);
+        _result = (wxGenericDragImage *)wxDragIcon(*_arg0,*_arg1);
 
     wxPy_END_ALLOW_THREADS;
 }    if (_result) {
@@ -2041,16 +2029,13 @@ static PyObject *_wrap_wxDragString(PyObject *self, PyObject *args, PyObject *kw
     wxGenericDragImage * _result;
     wxString * _arg0;
     wxCursor * _arg1 = (wxCursor *) &wxNullCursor;
-    wxPoint * _arg2 = (wxPoint *) &wxPyNullPoint;
     PyObject * _obj0 = 0;
     PyObject * _argo1 = 0;
-    wxPoint  temp;
-    PyObject * _obj2 = 0;
-    char *_kwnames[] = { "str","cursor","hotspot", NULL };
+    char *_kwnames[] = { "str","cursor", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|OO:wxDragString",_kwnames,&_obj0,&_argo1,&_obj2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|O:wxDragString",_kwnames,&_obj0,&_argo1)) 
         return NULL;
 {
 #if PYTHON_API_VERSION >= 1009
@@ -2077,15 +2062,9 @@ static PyObject *_wrap_wxDragString(PyObject *self, PyObject *args, PyObject *kw
         return NULL;
         }
     }
-    if (_obj2)
-{
-    _arg2 = &temp;
-    if (! wxPoint_helper(_obj2, &_arg2))
-        return NULL;
-}
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxGenericDragImage *)wxDragString(*_arg0,*_arg1,*_arg2);
+        _result = (wxGenericDragImage *)wxDragString(*_arg0,*_arg1);
 
     wxPy_END_ALLOW_THREADS;
 }    if (_result) {
@@ -3655,22 +3634,19 @@ static void *SwigwxGenericDragImageTowxObject(void *ptr) {
     return (void *) dest;
 }
 
-#define new_wxDragImage(_swigarg0,_swigarg1,_swigarg2) (new wxGenericDragImage(_swigarg0,_swigarg1,_swigarg2))
+#define new_wxDragImage(_swigarg0,_swigarg1) (new wxGenericDragImage(_swigarg0,_swigarg1))
 static PyObject *_wrap_new_wxDragImage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxGenericDragImage * _result;
     wxBitmap * _arg0;
     wxCursor * _arg1 = (wxCursor *) &wxNullCursor;
-    wxPoint * _arg2 = (wxPoint *) &wxPyNullPoint;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
-    wxPoint  temp;
-    PyObject * _obj2 = 0;
-    char *_kwnames[] = { "image","cursor","hotspot", NULL };
+    char *_kwnames[] = { "image","cursor", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|OO:new_wxDragImage",_kwnames,&_argo0,&_argo1,&_obj2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|O:new_wxDragImage",_kwnames,&_argo0,&_argo1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3686,15 +3662,9 @@ static PyObject *_wrap_new_wxDragImage(PyObject *self, PyObject *args, PyObject 
         return NULL;
         }
     }
-    if (_obj2)
-{
-    _arg2 = &temp;
-    if (! wxPoint_helper(_obj2, &_arg2))
-        return NULL;
-}
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxGenericDragImage *)new_wxDragImage(*_arg0,*_arg1,*_arg2);
+        _result = (wxGenericDragImage *)new_wxDragImage(*_arg0,*_arg1);
 
     wxPy_END_ALLOW_THREADS;
 }    if (_result) {
@@ -3727,6 +3697,42 @@ static PyObject *_wrap_delete_wxDragImage(PyObject *self, PyObject *args, PyObje
 {
     wxPy_BEGIN_ALLOW_THREADS;
         delete_wxGenericDragImage(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxDragImage_SetBackingBitmap(_swigobj,_swigarg0)  (_swigobj->SetBackingBitmap(_swigarg0))
+static PyObject *_wrap_wxDragImage_SetBackingBitmap(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGenericDragImage * _arg0;
+    wxBitmap * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","bitmap", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxDragImage_SetBackingBitmap",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGenericDragImage_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDragImage_SetBackingBitmap. Expected _wxGenericDragImage_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxDragImage_SetBackingBitmap. Expected _wxBitmap_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxDragImage_SetBackingBitmap(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -7119,6 +7125,7 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxDragImage_EndDrag", (PyCFunction) _wrap_wxDragImage_EndDrag, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDragImage_BeginDrag2", (PyCFunction) _wrap_wxDragImage_BeginDrag2, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDragImage_BeginDrag", (PyCFunction) _wrap_wxDragImage_BeginDrag, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDragImage_SetBackingBitmap", (PyCFunction) _wrap_wxDragImage_SetBackingBitmap, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxDragImage", (PyCFunction) _wrap_delete_wxDragImage, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxDragImage", (PyCFunction) _wrap_new_wxDragImage, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPyTipProvider", (PyCFunction) _wrap_new_wxPyTipProvider, METH_VARARGS | METH_KEYWORDS },

@@ -213,6 +213,7 @@ public:
     bool Close(int force = FALSE);
     bool Destroy();
     void DestroyChildren();
+    bool IsBeingDeleted();
 #ifdef __WXMSW__
     void DragAcceptFiles(bool accept);
 #endif

@@ -220,6 +220,9 @@ class wxDragImagePtr(wxObjectPtr):
     def __del__(self,misc2c=misc2c):
         if self.thisown == 1 :
             misc2c.delete_wxDragImage(self)
+    def SetBackingBitmap(self, *_args, **_kwargs):
+        val = apply(misc2c.wxDragImage_SetBackingBitmap,(self,) + _args, _kwargs)
+        return val
     def BeginDrag(self, *_args, **_kwargs):
         val = apply(misc2c.wxDragImage_BeginDrag,(self,) + _args, _kwargs)
         return val
