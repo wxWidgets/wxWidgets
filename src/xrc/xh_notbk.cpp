@@ -59,7 +59,7 @@ wxObject *wxNotebookXmlHandler::DoCreateResource()
 
             if (wnd)
                 m_notebook->AddPage(wnd, GetText(wxT("label")),
-                                         GetBool(wxT("selected"), 0));
+                                         GetBool(wxT("selected")));
             else
                 wxLogError(wxT("Error in resource."));
             return wnd;
