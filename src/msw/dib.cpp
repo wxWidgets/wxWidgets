@@ -695,14 +695,15 @@ HPALETTE wxMakeDIBPalette(LPBITMAPINFOHEADER lpInfo)
 
 bool wxLoadIntoBitmap(wxChar *filename, wxBitmap *bitmap, wxPalette **pal)
 {
-  HBITMAP hBitmap;
-  HPALETTE hPalette;
+  HBITMAP hBitmap = NULL;
+  HPALETTE hPalette = NULL;
 
   bool success = (wxReadDIB(filename, &hBitmap, &hPalette) != 0);
 
   if (!success)
   {
-    DeleteObject(hPalette);
+    if (hPalette)
+        DeleteObject(hPalette);
     return FALSE;
   }
 
