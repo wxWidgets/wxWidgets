@@ -298,7 +298,7 @@ bool wxApp::RegisterWindowClasses(
     {
         vError = ::WinGetLastError(vHab);
         sError = wxPMErrorToStr(vError);
-        wxLogLastError(sError);
+        wxLogLastError(sError.c_str());
         return FALSE;
     }
 
@@ -311,7 +311,7 @@ bool wxApp::RegisterWindowClasses(
     {
         vError = ::WinGetLastError(vHab);
         sError = wxPMErrorToStr(vError);
-        wxLogLastError(sError);
+        wxLogLastError(sError.c_str());
         return FALSE;
     }
 
@@ -324,7 +324,7 @@ bool wxApp::RegisterWindowClasses(
     {
         vError = ::WinGetLastError(vHab);
         sError = wxPMErrorToStr(vError);
-        wxLogLastError(sError);
+        wxLogLastError(sError.c_str());
         return FALSE;
     }
 
@@ -337,7 +337,7 @@ bool wxApp::RegisterWindowClasses(
     {
         vError = ::WinGetLastError(vHab);
         sError = wxPMErrorToStr(vError);
-        wxLogLastError(sError);
+        wxLogLastError(sError.c_str());
         return FALSE;
     }
 
@@ -350,7 +350,7 @@ bool wxApp::RegisterWindowClasses(
     {
         vError = ::WinGetLastError(vHab);
         sError = wxPMErrorToStr(vError);
-        wxLogLastError(sError);
+        wxLogLastError(sError.c_str());
         return FALSE;
     }
 
@@ -363,7 +363,7 @@ bool wxApp::RegisterWindowClasses(
     {
         vError = ::WinGetLastError(vHab);
         sError = wxPMErrorToStr(vError);
-        wxLogLastError(sError);
+        wxLogLastError(sError.c_str());
         return FALSE;
     }
 
@@ -376,7 +376,7 @@ bool wxApp::RegisterWindowClasses(
     {
         vError = ::WinGetLastError(vHab);
         sError = wxPMErrorToStr(vError);
-        wxLogLastError(sError);
+        wxLogLastError(sError.c_str());
         return FALSE;
     }
 
@@ -389,7 +389,7 @@ bool wxApp::RegisterWindowClasses(
     {
         vError = ::WinGetLastError(vHab);
         sError = wxPMErrorToStr(vError);
-        wxLogLastError(sError);
+        wxLogLastError(sError.c_str());
         return FALSE;
     }
     if (!::WinRegisterClass( vHab
@@ -401,7 +401,7 @@ bool wxApp::RegisterWindowClasses(
     {
         vError = ::WinGetLastError(vHab);
         sError = wxPMErrorToStr(vError);
-        wxLogLastError(sError);
+        wxLogLastError(sError.c_str());
         return FALSE;
     }
     return TRUE;

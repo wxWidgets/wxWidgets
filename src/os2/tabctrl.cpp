@@ -59,8 +59,6 @@ bool wxTabCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, cons
 
     SetParent(parent);
 
-    DWORD msflags = 0;
-
     if (width <= 0)
         width = 100;
     if (height <= 0)
@@ -71,8 +69,6 @@ bool wxTabCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, cons
         y = 0;
 
     m_windowId = (id < 0 ? NewControlId() : id);
-
-    long tabStyle = 0;
 
     // Create the toolbar control.
     HWND hWndTabCtrl = 0;

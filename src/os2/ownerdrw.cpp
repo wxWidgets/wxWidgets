@@ -111,7 +111,7 @@ bool wxOwnerDrawn::OnMeasureItem(
     // Add space at the end of the menu for the submenu expansion arrow
     // this will also allow offsetting the accel string from the right edge
     //
-    *pWidth += GetDefaultMarginWidth() * 1.5;
+    *pWidth = (size_t)(*pWidth + GetDefaultMarginWidth() * 1.5);
 
     //
     // JACS: items still look too tightly packed, so adding 5 pixels.
@@ -303,7 +303,7 @@ bool wxOwnerDrawn::OnDrawItem(
     wxString                        sTgt = "\t";
     wxString                        sFullString = m_strName; // need to save the original text
     wxString                        sAccel;
-    size_t                          nIndex;
+    int                             nIndex;
     size_t                          nWidth;
     size_t                          nCharWidth;
     size_t                          nHeight;
@@ -336,7 +336,7 @@ bool wxOwnerDrawn::OnDrawItem(
                           ,(long *)&nWidth
                           ,(long *)&nHeight
                          );
-        sTmp = sFullString[nIndex + 1];
+        sTmp = sFullString[(size_t)(nIndex + 1)];
         rDC.GetTextExtent( sTmp
                           ,(long *)&nCharWidth
                           ,(long *)&nHeight
@@ -464,11 +464,6 @@ bool wxOwnerDrawn::OnDrawItem(
 
             if (eStatus & wxODSelected)
             {
-                RECT                vRectBmp = { rRect.x
-                                                ,rRect.y
-                                                ,rRect.x + GetMarginWidth() - 1
-                                                ,rRect.y + m_nHeight - 1
-                                               };
                 POINTL              vPnt1 = {rRect.x + 1, rRect.y + 3}; // Leave a little background border
                 POINTL              vPnt2 = {rRect.x + GetMarginWidth(), rRect.y + m_nHeight - 3};
 

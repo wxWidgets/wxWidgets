@@ -101,9 +101,6 @@ bool wxTextCtrl::Create(
 , const wxString&                   rsName
 )
 {
-    HWND                            hParent;
-    int                             nTempy;
-
     //
     // Base initialization
     //
@@ -607,8 +604,6 @@ void wxTextCtrl::Replace(
 {
 #if wxUSE_CLIPBOARD
     HWND                            hWnd      = GetHwnd();
-    long                            lFromChar = lFrom;
-    long                            lToChar   = lTo;
 
     //
     // Set selection and remove it
@@ -645,8 +640,6 @@ void wxTextCtrl::Remove(
 )
 {
     HWND                            hWnd      = GetHwnd();
-    long                            lFromChar = lFrom;
-    long                            lToChar   = lTo;
 
     if (m_bIsMLE)
     {
@@ -749,7 +742,6 @@ long wxTextCtrl::XYToPosition(
 , long                              lY
 ) const
 {
-    HWND                            hWnd = GetHwnd();
     long                            lCharIndex = 0L;
     long                            lLen;
 
@@ -1012,7 +1004,6 @@ WXHBRUSH wxTextCtrl::OnCtlColor(
 )
 {
     HPS                             hPS = (HPS)hWxDC;
-    wxBrush*                        pBrush = NULL;
     wxColour                        vColBack = GetBackgroundColour();
     wxColour                        vColFore = GetForegroundColour();
     wxBrush*                        pBackgroundBrush = wxTheBrushList->FindOrCreateBrush( GetBackgroundColour()
@@ -1047,7 +1038,7 @@ void wxTextCtrl::OnChar(
   wxKeyEvent&                       rEvent
 )
 {
-    switch (rEvent.KeyCode())
+    switch (rEvent.GetKeyCode())
     {
         case WXK_RETURN:
             if ( !(m_windowStyle & wxTE_MULTILINE) )
@@ -1202,7 +1193,7 @@ wxSize wxTextCtrl::DoGetBestSize() const
     wxGetCharSize(GetHWND(), &nCx, &nCy, (wxFont*)&GetFont());
 
     int                             wText = DEFAULT_ITEM_WIDTH;
-    int                             hText = (EDIT_HEIGHT_FROM_CHAR_HEIGHT(nCy) * .8);
+    int                             hText = (int)(EDIT_HEIGHT_FROM_CHAR_HEIGHT(nCy) * .8);
 
     if (m_windowStyle & wxTE_MULTILINE)
     {

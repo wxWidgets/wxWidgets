@@ -76,8 +76,8 @@ END_EVENT_TABLE()
 // Dialog window proc
 MRESULT EXPENTRY wxDlgProc( HWND WXUNUSED(hWnd)
                            ,UINT uMessage
-                           ,MPARAM WXUNUSED(wParam)
-                           ,MPARAM WXUNUSED(lParam)
+                           ,void * WXUNUSED(wParam)
+                           ,void * WXUNUSED(lParam)
                           )
 {
     switch(uMessage)
@@ -167,7 +167,7 @@ void wxTopLevelWindowOS2::OnActivate(
         //
         // Restore focus to the child which was last focused
         //
-        wxLogTrace(_T("focus"), _T("wxTLW %08x activated."), m_hWnd);
+        wxLogTrace(_T("focus"), _T("wxTLW %08lx activated."), m_hWnd);
 
         wxWindow*                   pParent = m_pWinLastFocused ? m_pWinLastFocused->GetParent()
                                                                 : NULL;
@@ -206,7 +206,7 @@ void wxTopLevelWindowOS2::OnActivate(
         }
 
         wxLogTrace(_T("focus"),
-                   _T("wxTLW %08x deactivated, last focused: %08x."),
+                   _T("wxTLW %08lx deactivated, last focused: %08lx."),
                    m_hWnd,
                    m_pWinLastFocused ? GetHwndOf(m_pWinLastFocused)
                                      : NULL);
@@ -366,7 +366,7 @@ bool wxTopLevelWindowOS2::CreateDialog(
     {
         wxFAIL_MSG(wxT("Did you forget to include wx/os2/wx.rc in your resources?"));
 
-        wxLogSysError(wxT("Can't create dialog using template '%ul'"), ulDlgTemplate);
+        wxLogSysError(wxT("Can't create dialog using template '%ld'"), ulDlgTemplate);
 
         return FALSE;
     }
@@ -730,7 +730,6 @@ bool wxTopLevelWindowOS2::Show(
 {
     int                             nShowCmd;
     SWP                             vSwp;
-    RECTL                           vRect;
 
     if (bShow != IsShown() )
     {
@@ -820,7 +819,6 @@ void wxTopLevelWindowOS2::Maximize(
 
 bool wxTopLevelWindowOS2::IsMaximized() const
 {
-    bool                            bIconic;
 
     ::WinQueryWindowPos(m_hFrame, (PSWP)&m_vSwp);
     return (m_vSwp.fl & SWP_MAXIMIZE);

@@ -58,7 +58,6 @@ void wxSlider::AdjustSubControls(
 , int                               nSizeFlags
 )
 {
-    SWP                             vSwp;
     int                             nXOffset = nX;
     int                             nYOffset = nY;
     int                             nCx;     // slider,min,max sizes
@@ -552,7 +551,7 @@ void wxSlider::DoSetSize(
                 ::WinSetWindowPos( (HWND)m_hStaticValue
                                   ,HWND_TOP
                                   ,(LONG)nXOffset
-                                  ,(LONG)nYOffset - (nCyf * 1.2)
+                                  ,(LONG)nYOffset - (LONG)(nCyf * 1.2)
                                   ,(LONG)nNewWidth
                                   ,(LONG)nValueHeight
                                   ,SWP_ZORDER | SWP_SIZE | SWP_MOVE | SWP_SHOW
@@ -562,7 +561,7 @@ void wxSlider::DoSetSize(
             ::WinSetWindowPos( (HWND)m_hStaticMin
                               ,HWND_TOP
                               ,(LONG)nXOffset
-                              ,(LONG)nYOffset - (nCyf * 1.2)
+                              ,(LONG)nYOffset - (LONG)(nCyf * 1.2)
                               ,(LONG)nMinLen
                               ,(LONG)nCy
                               ,SWP_ZORDER | SWP_SIZE | SWP_MOVE | SWP_SHOW
@@ -602,7 +601,7 @@ void wxSlider::DoSetSize(
             ::WinSetWindowPos( (HWND)m_hStaticMax
                               ,HWND_TOP
                               ,(LONG)nXOffset
-                              ,(LONG)nYOffset - (nCyf * 1.2)
+                              ,(LONG)nYOffset - (LONG)(nCyf * 1.2)
                               ,(LONG)nMaxLen
                               ,(LONG)nCy
                               ,SWP_ZORDER | SWP_SIZE | SWP_MOVE | SWP_SHOW
@@ -961,7 +960,7 @@ bool wxSlider::OS2OnScroll(
                                                                           ,(MPARAM)0
                                                                          )
                                                             );
-    nNewPos = (nPixelPos/m_dPixelToRange);
+    nNewPos = (int)(nPixelPos/m_dPixelToRange);
     if (nNewPos > (m_nRangeMax - m_nRangeMin)/2)
         nNewPos++;
     if ((nNewPos < GetMin()) || (nNewPos > GetMax()))
@@ -1080,7 +1079,7 @@ void wxSlider::SetTick(
   int                               nTickPos
 )
 {
-    nTickPos *= m_dPixelToRange;
+    nTickPos = (int)(nTickPos * m_dPixelToRange);
     ::WinSendMsg( GetHwnd()
                  ,SLM_ADDDETENT
                  ,MPFROMSHORT(nTickPos)
@@ -1118,7 +1117,7 @@ void wxSlider::SetTickFreq(
     ::WinSendMsg(GetHwnd(), WM_SETWINDOWPARAMS, (MPARAM)&vWndParams, (MPARAM)0);
     for (i = 1; i < (m_nRangeMax - m_nRangeMin)/n; i++)
     {
-        nPixelPos = i * n * m_dPixelToRange;
+        nPixelPos = (int)(i * n * m_dPixelToRange);
         ::WinSendMsg( GetHwnd()
                      ,SLM_ADDDETENT
                      ,MPFROMSHORT(nPixelPos)
@@ -1131,14 +1130,6 @@ void wxSlider::SetValue(
   int                               nValue
 )
 {
-    int                             nPixelPos = SHORT1FROMMR(::WinSendMsg( GetHwnd()
-                                                                          ,SLM_QUERYSLIDERINFO
-                                                                          ,MPFROM2SHORT( SMA_SLIDERARMPOSITION
-                                                                                        ,SMA_RANGEVALUE
-                                                                                       )
-                                                                          ,(MPARAM)0
-                                                                         )
-                                                            );
     int                             nPixelRange = SHORT1FROMMR(::WinSendMsg( GetHwnd()
                                                                             ,SLM_QUERYSLIDERINFO
                                                                             ,MPFROM2SHORT( SMA_SHAFTDIMENSIONS

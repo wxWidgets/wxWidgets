@@ -202,7 +202,7 @@ void wxMenu::UpdateAccel(
         //
         size_t                      n = FindAccel(pItem->GetId());
 
-        if (n == wxNOT_FOUND)
+        if (n == (size_t)wxNOT_FOUND)
         {
             //
             // No old, add new if any
@@ -247,7 +247,6 @@ bool wxMenu::DoInsertOrAppend(
 
     ERRORID                         vError;
     wxString                        sError;
-    char                            zMsg[128];
 
 #if wxUSE_ACCEL
     UpdateAccel(pItem);
@@ -331,7 +330,6 @@ bool wxMenu::DoInsertOrAppend(
 #if wxUSE_OWNER_DRAWN
     if (pItem->IsOwnerDrawn())
     {
-        BOOL                       rc;
         MENUITEM                   vMenuItem;
 
         ::WinSendMsg( GetHmenu()
@@ -343,7 +341,7 @@ bool wxMenu::DoInsertOrAppend(
                     );
     }
 #endif
-    if (rc == MIT_MEMERROR || rc == MIT_ERROR)
+    if (rc == (APIRET)MIT_MEMERROR || rc == (APIRET)MIT_ERROR)
     {
         vError = ::WinGetLastError(vHabmain);
         sError = wxPMErrorToStr(vError);
@@ -601,7 +599,7 @@ bool wxMenu::OS2Command(
         SendEvent( vId
                   ,(int)::WinSendMsg( GetHmenu()
                                      ,MM_QUERYITEMATTR
-                                     ,(MPARAM)vId
+                                     ,MPFROMSHORT(vId)
                                      ,(MPARAM)MIA_CHECKED
                                     )
                  );
@@ -730,7 +728,6 @@ void wxMenuBar::Refresh()
 
 WXHMENU wxMenuBar::Create()
 {
-    MENUITEM                        vItem;
     HWND                            hFrame;
 
     if (m_hMenu != 0 )
@@ -799,7 +796,7 @@ WXHMENU wxMenuBar::Create()
             m_menus[i]->m_vMenuData.iPosition = i;
 
             rc = (APIRET)::WinSendMsg(m_hMenu, MM_INSERTITEM, (MPARAM)&m_menus[i]->m_vMenuData, (MPARAM)m_titles[i].c_str());
-            if (rc == MIT_MEMERROR || rc == MIT_ERROR)
+            if (rc == (APIRET)MIT_MEMERROR || rc == (APIRET)MIT_ERROR)
             {
                 vError = ::WinGetLastError(vHabmain);
                 sError = wxPMErrorToStr(vError);

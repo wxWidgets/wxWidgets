@@ -44,7 +44,7 @@
 #if wxUSE_DRAG_AND_DROP
     #include "wx/dataobj.h"
 
-    static bool wxSetClipboardData(wxDataObject *data);
+//    static bool wxSetClipboardData(wxDataObject *data);
 #endif
 
 // ===========================================================================
@@ -124,6 +124,7 @@ bool wxIsClipboardFormatAvailable(wxDataFormat dataFormat)
     return FALSE;
 }
 
+#if 0
 #if wxUSE_DRAG_AND_DROP
 static bool wxSetClipboardData(wxDataObject *data)
 {
@@ -157,6 +158,7 @@ static bool wxSetClipboardData(wxDataObject *data)
     return TRUE;
 }
 #endif // wxUSE_DRAG_AND_DROP
+#endif
 
 bool wxSetClipboardData(wxDataFormat dataFormat,
                         const void *data,
@@ -281,7 +283,7 @@ bool wxSetClipboardData(wxDataFormat dataFormat,
 
 void *wxGetClipboardData(wxDataFormat dataFormat, long *len)
 {
-    void *retval = NULL;
+//  void *retval = NULL;
 // TODO:
 /*
     switch ( dataFormat )

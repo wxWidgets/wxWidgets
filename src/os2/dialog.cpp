@@ -98,14 +98,6 @@ bool wxDialog::Create(
 , const wxString&                   rsName
 )
 {
-    long                            lX = rPos.x;
-    long                            lY = rPos.y;
-    long                            lWidth = rSize.x;
-    long                            lHeight = rSize.y;
-    const char*                     zDlg;
-    WXDWORD                         dwExtendedStyle = 0L;
-    HWND                            hWnd;
-
     Init();
     SetExtraStyle(GetExtraStyle() | wxTOPLEVEL_EX_DIALOG);
 

@@ -379,7 +379,6 @@ bool wxToolBar::Create(
     int                             nY      = rPos.y;
     int                             nWidth  = rSize.x;
     int                             nHeight = rSize.y;
-    wxFrame*                        pFrame = wxDynamicCast(GetParent(), wxFrame);
 
     if (lStyle & wxTB_HORIZONTAL)
     {
@@ -435,8 +434,6 @@ bool wxToolBar::Realize()
 {
     int                             nMaxToolWidth  = 0;
     int                             nMaxToolHeight = 0;
-    int                             nX;
-    int                             nY;
 
     m_nCurrentRowsOrColumns = 0;
     m_vLastX               = m_xMargin;
@@ -847,7 +844,6 @@ void wxToolBar::DrawTool(
     wxBitmap                        vBitmap = pTool->GetNormalBitmap();
     bool                            bUseMask = FALSE;
     wxMask*                         pMask = NULL;
-    RECTL                           vRect;
 
     PrepareDC(rDc);
 
@@ -974,8 +970,6 @@ wxToolBarToolBase* wxToolBar::FindToolForPosition(
 , wxCoord                           vY
 ) const
 {
-    wxCoord                         vTextX = 0;
-    wxCoord                         vTextY = 0;
     wxCoord                         vTBarHeight = 0;
 
     GetSize( NULL

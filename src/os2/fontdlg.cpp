@@ -40,7 +40,6 @@ int wxFontDialog::ShowModal()
     FONTDLG                         vFontDlg;
     char                            zCurrentFont[FACESIZE];
     HWND                            hWndFontDlg;
-    FONTMETRICS                     vFm;
     FACENAMEDESC                    vFn;
 
     memset(&vFontDlg, '\0', sizeof(FONTDLG));

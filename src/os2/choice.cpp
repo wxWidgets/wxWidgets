@@ -114,7 +114,7 @@ int wxChoice::DoAppend(
 )
 {
     int                             nIndex;
-    SHORT                           nIndexType = 0;
+    LONG                            nIndexType = 0;
 
     if (m_windowStyle & wxLB_SORT)
         nIndexType = LIT_SORTASCENDING;
@@ -140,7 +140,7 @@ int wxChoice::DoInsert(
         return DoAppend(rsItem);
 
     int                             nIndex;
-    SHORT                           nIndexType = 0;
+    LONG                            nIndexType = 0;
 
     if (m_windowStyle & wxLB_SORT)
         nIndexType = LIT_SORTASCENDING;
@@ -227,7 +227,7 @@ void wxChoice::SetString(
 , const wxString&                   rsStr
 )
 {
-    SHORT                           nIndexType = 0;
+    LONG                            nIndexType = 0;
     void*                           pData;
 
     if ( m_clientDataItemsType != wxClientData_None )
@@ -263,7 +263,7 @@ wxString wxChoice::GetString(
   int                               n
 ) const
 {
-    size_t                          nLen = 0;
+    int                             nLen = 0;
     wxString                        sStr = "";
     char*                           zBuf;
 

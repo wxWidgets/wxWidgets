@@ -189,9 +189,6 @@ WXDWORD wxNotebook::OS2GetStyle (
 
 size_t wxNotebook::GetPageCount() const
 {
-    int                             nPageInternal = m_pages.Count();
-    int                             nPageAPI = (int)::WinSendMsg(GetHWND(), BKM_QUERYPAGECOUNT, (MPARAM)0, (MPARAM)BKA_END);
-
     //
     // Consistency check
     //
@@ -214,7 +211,7 @@ int wxNotebook::SetSelection(
 {
     wxCHECK_MSG( IS_VALID_PAGE(nPage), -1, wxT("notebook page out of range") );
 
-    if (nPage != m_nSelection)
+    if (nPage != (size_t)m_nSelection)
     {
         wxNotebookEvent             vEvent( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING
                                            ,m_windowId
@@ -231,8 +228,6 @@ int wxNotebook::SetSelection(
             //
             vEvent.SetEventType(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED);
             GetEventHandler()->ProcessEvent(vEvent);
-
-            ULONG                   ulPageId = (ULONG)m_alPageId[nPage];
 
             ::WinSendMsg( GetHWND()
                          ,BKM_TURNTOPAGE
@@ -251,10 +246,6 @@ bool wxNotebook::SetPageText(
 )
 {
     wxCHECK_MSG( IS_VALID_PAGE(nPage), FALSE, wxT("notebook page out of range") );
-
-
-    ULONG                           ulPageId = (ULONG)m_alPageId[nPage];
-
     return (bool)::WinSendMsg( m_hWnd
                               ,BKM_SETTABTEXT
                               ,MPFROMLONG((ULONG)m_alPageId[nPage])
@@ -273,9 +264,6 @@ wxString wxNotebook::GetPageText (
 
     wxCHECK_MSG( IS_VALID_PAGE(nPage), wxT(""), wxT("notebook page out of range") );
 
-
-    ULONG                           ulPageId = (ULONG)m_alPageId[nPage];
-
     memset(&vBookText, '\0', sizeof(BOOKTEXT));
     vBookText.textLen = 0; // This will get the length
     ulRc = LONGFROMMR(::WinSendMsg( m_hWnd
@@ -283,9 +271,9 @@ wxString wxNotebook::GetPageText (
                                    ,MPFROMLONG((ULONG)m_alPageId[nPage])
                                    ,MPFROMP(&vBookText)
                                   ));
-    if (ulRc == BOOKERR_INVALID_PARAMETERS || ulRc == 0L)
+    if (ulRc == (ULONG)BOOKERR_INVALID_PARAMETERS || ulRc == 0L)
     {
-        if (ulRc == BOOKERR_INVALID_PARAMETERS)
+        if (ulRc == (ULONG)BOOKERR_INVALID_PARAMETERS)
         {
             wxLogError(wxT("Invalid Page Id for page text querry."));
         }
@@ -302,7 +290,7 @@ wxString wxNotebook::GetPageText (
                                    ,MPFROMLONG((ULONG)m_alPageId[nPage])
                                    ,MPFROMP(&vBookText)
                                   ));
-    if (ulRc == BOOKERR_INVALID_PARAMETERS || ulRc == 0L)
+    if (ulRc == (ULONG)BOOKERR_INVALID_PARAMETERS || ulRc == 0L)
     {
         return wxEmptyString;
     }
@@ -332,9 +320,6 @@ bool wxNotebook::SetPageImage (
 )
 {
     wxBitmap*                       pBitmap = (wxBitmap*)m_imageList->GetBitmap(nImage);
-
-
-    ULONG                           ulPageId = (ULONG)m_alPageId[nPage];
 
     return (bool)::WinSendMsg( GetHWND()
                               ,BKM_SETTABBITMAP
@@ -415,9 +400,6 @@ wxNotebookPage* wxNotebook::DoRemovePage (
     if (!pPageRemoved)
         return NULL;
 
-
-    ULONG                           ulPageId = (ULONG)m_alPageId[nPage];
-
     ::WinSendMsg( GetHWND()
                  ,BKM_DELETEPAGE
                  ,MPFROMLONG((ULONG)m_alPageId[nPage])
@@ -437,14 +419,14 @@ wxNotebookPage* wxNotebook::DoRemovePage (
         //
         int                         nSelNew;
 
-        if (m_nSelection == GetPageCount())
+        if (m_nSelection == (int)GetPageCount())
         {
             //
             // Last page deleted, make the new last page the new selection
             //
             nSelNew = m_nSelection - 1;
         }
-        else if (nPage <= m_nSelection)
+        else if (nPage <= (size_t)m_nSelection)
         {
             //
             // We must show another page, even if it has the same index
@@ -594,7 +576,7 @@ bool wxNotebook::InsertPage (
     // If the inserted page is before the selected one, we must update the
     // index of the selected page
     //
-    if (nPage <= m_nSelection)
+    if (nPage <= (size_t)m_nSelection)
     {
         //
         // One extra page added
@@ -622,7 +604,7 @@ bool wxNotebook::InsertPage (
 
     vDC.GetTextExtent(rsStrText, &nTextX, &nTextY);
     nTextY *= 2;
-    nTextX *= 1.3;
+    nTextX  = (wxCoord)(nTextX * 1.3);
     if (nTextX > m_nTabSize)
     {
         m_nTabSize = nTextX;
@@ -730,7 +712,7 @@ void wxNotebook::OnSelChange (
 
         for (nSel = 0; nSel < nPageCount; nSel++)
         {
-            if (ulOS2Sel == m_alPageId[nSel])
+            if (ulOS2Sel == (ULONG)m_alPageId[nSel])
             {
                 bFound = TRUE;
                 break;
@@ -748,7 +730,7 @@ void wxNotebook::OnSelChange (
 
         for (nSel = 0; nSel < nPageCount; nSel++)
         {
-            if (ulOS2Sel == m_alPageId[nSel])
+            if (ulOS2Sel == (ULONG)m_alPageId[nSel])
             {
                 bFound = TRUE;
                 break;

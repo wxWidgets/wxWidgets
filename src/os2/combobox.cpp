@@ -256,7 +256,6 @@ long wxComboBox::GetInsertionPoint() const
 
 long wxComboBox::GetLastPosition() const
 {
-    HWND                            hEditWnd = GetHwnd();
     long                            lLineLength = 0L;
     WNDPARAMS                       vParams;
 
@@ -288,8 +287,6 @@ void wxComboBox::Replace(
 {
 #if wxUSE_CLIPBOARD
     HWND                            hWnd = GetHwnd();
-    long                            lFromChar = lFrom;
-    long                            lToChar = lTo;
 
     //
     // Set selection and remove it
@@ -320,8 +317,6 @@ void wxComboBox::Remove(
 {
 #if wxUSE_CLIPBOARD
     HWND                            hWnd = GetHwnd();
-    long                            lFromChar = lFrom;
-    long                            lToChar = lTo;
 
     ::WinSendMsg(hWnd, EM_SETSEL, MPFROM2SHORT((USHORT)lFrom, (USHORT)lTo), 0);
     ::WinSendMsg(hWnd, EM_CUT, (MPARAM)0, (MPARAM)0);
@@ -334,8 +329,8 @@ void wxComboBox::SetSelection(
 )
 {
     HWND                            hWnd = GetHwnd();
-    long                            lFromChar = lFrom;
-    long                            lToChar = lTo;
+    long                            lFromChar = 0;
+    long                            lToChar   = 0;
 
     //
     // If from and to are both -1, it means

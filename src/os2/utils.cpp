@@ -83,13 +83,13 @@ bool wxGetHostName(
 
     if ((zSysname = wxGetenv(_T("SYSTEM_NAME"))) == NULL)
     {
-        ULONG n = ::PrfQueryProfileString( HINI_PROFILE
-                                          ,(PSZ)WX_SECTION
-                                          ,(PSZ)eHOSTNAME
-                                          ,(PSZ)zDefaultHost
-                                          ,(void*)zBuf
-                                          ,(ULONG)nMaxSize - 1
-                                         );
+        ::PrfQueryProfileString( HINI_PROFILE
+                                ,(PSZ)WX_SECTION
+                                ,(PSZ)eHOSTNAME
+                                ,(PSZ)zDefaultHost
+                                ,(void*)zBuf
+                                ,(ULONG)nMaxSize - 1
+                               );
     }
     else
         wxStrncpy(zBuf, zSysname, nMaxSize - 1);

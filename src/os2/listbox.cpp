@@ -281,31 +281,30 @@ int wxListBox::DoAppend(
   const wxString&                   rsItem
 )
 {
-    int                             nIndex = 0;
-    SHORT                           nIndexType = 0;
+    long                            lIndex = 0;
+    LONG                            lIndexType = 0;
 
     if (m_windowStyle & wxLB_SORT)
-        nIndexType = LIT_SORTASCENDING;
+        lIndexType = LIT_SORTASCENDING;
     else
-        nIndexType = LIT_END;
-    nIndex = (int)::WinSendMsg(GetHwnd(), LM_INSERTITEM, (MPARAM)nIndexType, (MPARAM)rsItem.c_str());
+        lIndexType = LIT_END;
+    lIndex = (long)::WinSendMsg(GetHwnd(), LM_INSERTITEM, (MPARAM)lIndexType, (MPARAM)rsItem.c_str());
     m_nNumItems++;
 
 #if wxUSE_OWNER_DRAWN
     if (m_windowStyle & wxLB_OWNERDRAW)
     {
-        wxOwnerDrawn*               pNewItem = CreateItem(nIndex); // dummy argument
+        wxOwnerDrawn*               pNewItem = CreateItem(lIndex); // dummy argument
         wxScreenDC                  vDc;
-        wxCoord                     vHeight;
 
 
         pNewItem->SetName(rsItem);
-        m_aItems.Insert(pNewItem, nIndex);
-        ::WinSendMsg(GetHwnd(), LM_SETITEMHANDLE, (MPARAM)((SHORT)nIndex), MPFROMP(pNewItem));
+        m_aItems.Insert(pNewItem, lIndex);
+        ::WinSendMsg(GetHwnd(), LM_SETITEMHANDLE, (MPARAM)lIndex, MPFROMP(pNewItem));
         pNewItem->SetFont(GetFont());
     }
 #endif
-    return nIndex;
+    return (int)lIndex;
 } // end of wxListBox::DoAppend
 
 void wxListBox::DoSetItems(
@@ -314,9 +313,8 @@ void wxListBox::DoSetItems(
 )
 {
     BOOL                            bHideAndShow = IsShown();
-    int                             nCount = 0;
     int                             i;
-    SHORT                           nIndexType = 0;
+    LONG                            lIndexType = 0;
 
     if (bHideAndShow)
     {
@@ -328,10 +326,10 @@ void wxListBox::DoSetItems(
     {
 
         if (m_windowStyle & wxLB_SORT)
-            nIndexType = LIT_SORTASCENDING;
+            lIndexType = LIT_SORTASCENDING;
         else
-            nIndexType = LIT_END;
-        ::WinSendMsg(GetHwnd(), LM_INSERTITEM, (MPARAM)nIndexType, (MPARAM)raChoices[i].c_str());
+            lIndexType = LIT_END;
+        ::WinSendMsg(GetHwnd(), LM_INSERTITEM, (MPARAM)lIndexType, (MPARAM)raChoices[i].c_str());
 
         if (ppClientData)
         {
@@ -635,7 +633,7 @@ void wxListBox::DoInsertItems(
         m_aItems.Insert(pNewItem, nIndex);
         ::WinSendMsg( GetHwnd()
                      ,LM_SETITEMHANDLE
-                     ,(MPARAM)((SHORT)nIndex)
+                     ,(MPARAM)((LONG)nIndex)
                      ,MPFROMP(pNewItem)
                     );
         m_nNumItems += nItems;
@@ -857,7 +855,7 @@ long wxListBox::OS2OnMeasure(
     pMeasureStruct->rclItem.yTop   = 0;
     pMeasureStruct->rclItem.yBottom = 0;
 
-    vHeight = vDc.GetCharHeight() * 2.5;
+    vHeight = (wxCoord)(vDc.GetCharHeight() * 2.5);
     pMeasureStruct->rclItem.yTop  = (USHORT)vHeight;
 
     return long(MRFROM2SHORT((USHORT)vHeight, (USHORT)vWidth));

@@ -179,7 +179,6 @@ wxSize wxSpinButton::DoGetBestSize() const
 
 int wxSpinButton::GetValue() const
 {
-    int                             nVal = 0;
     long                            lVal = 0L;
     char                            zVal[10];
 

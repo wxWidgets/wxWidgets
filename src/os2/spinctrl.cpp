@@ -73,8 +73,7 @@ MRESULT EXPENTRY wxSpinCtrlWndProc(
     wxSpinCtrl*                    pSpin = (wxSpinCtrl *)::WinQueryWindowULong( hWnd
                                                                                ,QWL_USER
                                                                               );
-    bool                            bProccesed = FALSE;
-    MRESULT                         rc = (MRESULT)0;
+
     //
     // Forward some messages (the key ones only so far) to the spin ctrl
     //
@@ -347,7 +346,7 @@ void wxSpinCtrl::OnChar (
   wxKeyEvent&                       rEvent
 )
 {
-    switch (rEvent.KeyCode())
+    switch (rEvent.GetKeyCode())
     {
         case WXK_RETURN:
             {
@@ -474,7 +473,6 @@ bool wxSpinCtrl::SetFont(
         return FALSE;
     }
 
-    WXHANDLE                        hFont = GetFont().GetResourceHandle();
     wxOS2SetFont( m_hWnd
                  ,rFont
                 );

@@ -37,9 +37,6 @@ MRESULT EXPENTRY wxGaugeWndProc(
     wxGauge*                        pGauge = (wxGauge *)::WinQueryWindowULong( hWnd
                                                                               ,QWL_USER
                                                                              );
-    wxWindowOS2*                    pWindow = NULL;
-    MRESULT                         rc = (MRESULT)0;
-    bool                            bProcessed = FALSE;
     HPS                             hPS;
     RECTL                           vRect;
     RECTL                           vRect2;

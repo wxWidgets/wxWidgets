@@ -180,8 +180,6 @@ void wxFrame::DoSetClientSize(
 , int                               nHeight
 )
 {
-    wxStatusBar*                    pStatusBar = GetStatusBar();
-
     //
     // Statusbars are not part of the OS/2 Client but parent frame
     // so no statusbar consideration
@@ -217,8 +215,6 @@ wxStatusBar* wxFrame::OnCreateStatusBar(
 )
 {
     wxStatusBar*                    pStatusBar = NULL;
-    SWP                             vSwp;
-    ERRORID                         vError;
     wxString                        sError;
 
     pStatusBar = wxFrameBase::OnCreateStatusBar( nNumber
@@ -281,7 +277,6 @@ void wxFrame::PositionStatusBar()
         int                         nY;
         int                         nStatbarWidth;
         int                         nStatbarHeight;
-        HWND                        hWndClient;
         RECTL                       vRect;
         RECTL                       vFRect;
 
@@ -355,17 +350,7 @@ void wxFrame::SetMenuBar(
   wxMenuBar*                        pMenuBar
 )
 {
-    ERRORID                         vError;
     wxString                        sError;
-    HWND                            hTitlebar = NULLHANDLE;
-    HWND                            hHScroll = NULLHANDLE;
-    HWND                            hVScroll = NULLHANDLE;
-    HWND                            hMenuBar = NULLHANDLE;
-    SWP                             vSwp;
-    SWP                             vSwpTitlebar;
-    SWP                             vSwpVScroll;
-    SWP                             vSwpHScroll;
-    SWP                             vSwpMenu;
 
     if (!pMenuBar)
     {
@@ -738,10 +723,8 @@ void wxFrame::PositionToolBar()
     if (!pToolBar)
         return;
 
-    HWND                            hWndClient;
     RECTL                           vRect;
     RECTL                           vFRect;
-    SWP                             vSwp;
     wxPoint                         vPos;
 
     ::WinQueryWindowRect(m_hFrame, &vRect);
@@ -899,7 +882,6 @@ bool wxFrame::HandlePaint()
 
             if (hIcon)
             {
-                HWND                            hWndClient;
                 RECTL                           vRect3;
 
                 ::WinQueryWindowRect(GetHwnd(), &vRect3);
@@ -1227,7 +1209,6 @@ MRESULT EXPENTRY wxFrameWndProc(
     //
 
     MRESULT                         rc = (MRESULT)0;
-    bool                            bProcessed = FALSE;
 
     //
     // Stop right here if we don't have a valid handle in our wxWindow object.
@@ -1325,8 +1306,6 @@ MRESULT wxFrame::OS2WindowProc(
 
         case WM_SIZE:
             {
-                SHORT               nScxold = SHORT1FROMMP(wParam); // Old horizontal size.
-                SHORT               nScyold = SHORT2FROMMP(wParam); // Old vertical size.
                 SHORT               nScxnew = SHORT1FROMMP(lParam); // New horizontal size.
                 SHORT               nScynew = SHORT2FROMMP(lParam); // New vertical size.
 

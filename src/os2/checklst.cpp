@@ -226,9 +226,6 @@ void wxCheckListBoxItem::Check (
         m_nIndex = (size_t)nIndex;
     }
 
-    HWND                            hWndListbox = (HWND)m_pParent->GetHWND();
-    RECTL                           rUpdate;
-    MRESULT                         mRc;
 
     wxCommandEvent                  vEvent( wxEVT_COMMAND_CHECKLISTBOX_TOGGLED
                                            ,m_pParent->GetId()
@@ -445,7 +442,7 @@ void wxCheckListBox::OnChar (
   wxKeyEvent&                       rEvent
 )
 {
-    if (rEvent.KeyCode() == WXK_SPACE)
+    if (rEvent.GetKeyCode() == WXK_SPACE)
         GetItem(GetSelection())->Toggle();
     else
         rEvent.Skip();
@@ -468,7 +465,7 @@ void wxCheckListBox::OnLeftClick (
                 ,&nParentHeight
                );
         vDc.SetFont(GetFont());
-        vHeight = vDc.GetCharHeight() * 2.5;
+        vHeight = (wxCoord)(vDc.GetCharHeight() * 2.5);
 
         //
         // This, of course, will not work if the LB is scrolled

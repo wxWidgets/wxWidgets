@@ -162,7 +162,7 @@ wxSize wxButton::DoGetBestSize() const
     //
     // Need a little extra to make it look right
     //
-    nHeightButton += nHeightChar/1.5;
+    nHeightButton += (int)(nHeightChar/1.5);
 
     if (!HasFlag(wxBU_EXACTFIT))
     {

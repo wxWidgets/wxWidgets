@@ -148,9 +148,7 @@ long wxExecute(
     ULONG                           ulExecFlag;
     PSZ                             zArgs = NULL;
     PSZ                             zEnvs = NULL;
-    ULONG                           ulWindowId;
     APIRET                          rc;
-    PFNWP                           pOldProc;
     TID                             vTID;
 
     if (flags & wxEXEC_SYNC)

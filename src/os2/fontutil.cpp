@@ -392,7 +392,6 @@ void wxFillLogFont(
     // font, so now we need to generate an ID
     //
     long                            lNumLids = ::GpiQueryNumberSetIds(*phPS);
-    long                            lGpiError;
 
     if(lNumLids )
     {
@@ -465,17 +464,12 @@ void wxOS2SelectMatchingFontByName(
 )
 {
     int                             i;
-    int                             nDiff0;
     int                             nPointSize;
-    int                             nDiff;
     int                             nIs;
-    int                             nMinDiff;
     int                             nMinDiff0;
-    int                             nApirc;
     int                             anDiff[16];
     int                             anMinDiff[16];
     int                             nIndex = 0;
-    STR8                            zFn;
     char                            zFontFaceName[FACESIZE];
     wxString                        sFaceName;
     USHORT                          usWeightClass;

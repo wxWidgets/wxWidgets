@@ -97,8 +97,6 @@ bool wxStaticBitmap::Create(
 
     int                             nX= rPos.x;
     int                             nY = rPos.y;
-    int                             nWidth = rSize.x;
-    int                             nHeight = rSize.y;
     char                            zId[16];
 
     m_windowStyle = lStyle;
@@ -164,7 +162,6 @@ void wxStaticBitmap::OnPaint (
 )
 {
     wxPaintDC                       vDc(this);
-    int                             i;
     wxBitmap*                       pBitmap;
 
     if (m_pImage->IsKindOf(CLASSINFO(wxIcon)))

@@ -107,8 +107,6 @@ void wxRadioBox::AdjustButtons(
     int                             nStartY;
     int                             nMaxWidth;
     int                             nMaxHeight;
-    int                             nTotWidth;
-    int                             nTotHeight;
 
     wxGetCharSize( m_hWnd
                   ,&nCx1
@@ -318,12 +316,6 @@ bool wxRadioBox::Create(
         return FALSE;
 
     wxAssociateWinWithHandle(m_hWnd, this);
-#if RADIOBTN_PARENT_IS_RADIOBOX
-    HWND                            hWndParent = GetHwnd();
-#else
-    HWND                            hWndParent = GetHwndOf(pParent);
-#endif
-    HFONT                           hFont;
 
     //
     // Some radio boxes test consecutive id.
@@ -1041,8 +1033,6 @@ bool wxRadioBox::SetFont(
     //
     // Also set the font of our radio buttons
     //
-    WXHFONT                         hFont = wxFont(rFont).GetResourceHandle();
-
     for (int n = 0; n < (int)m_nNoItems; n++)
     {
         HWND                        hWndBtn = (HWND)m_ahRadioButtons[n];
@@ -1099,8 +1089,6 @@ bool wxRadioBox::Show(
   bool                              bShow
 )
 {
-    int                             nCmdShow = 0;
-
     if (!wxControl::Show(bShow))
         return FALSE;
 
@@ -1127,8 +1115,6 @@ void wxRadioBox::SubclassRadioButton(
   WXHWND                            hWndBtn
 )
 {
-    HWND                            hwndBtn = (HWND)hWndBtn;
-
     fnWndProcRadioBtn = (WXFARPROC)::WinSubclassWindow(hWndBtn, (PFNWP)wxRadioBtnWndProc);
 } // end of wxRadioBox::SubclassRadioButton
 

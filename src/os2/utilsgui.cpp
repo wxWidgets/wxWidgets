@@ -57,8 +57,6 @@ public:
     }
 };
 
-static wxTimer*                     wxTheSleepTimer = NULL;
-
 // Reading and writing resources (eg WIN.INI, .Xdefaults)
 #if wxUSE_RESOURCES
 bool wxWriteResource(
@@ -335,7 +333,6 @@ bool wxCheckForInterrupt(
         QMSG                        vMsg;
         HAB                         hab = 0;
         HWND                        hwndFilter = NULLHANDLE;
-        HWND                        hwndWin= (HWND) pWnd->GetHWND();
 
         while(::WinPeekMsg(hab, &vMsg, hwndFilter, 0, 0, PM_REMOVE))
         {

@@ -169,7 +169,7 @@ ULONG wxTimerProc(
 
     wxCHECK_MSG(pNode, 0, wxT("bogus timer id in wxTimerProc") );
     if (pNode)
-      wxProcessTimer(*(wxTimer *)pNode->Data());
+      wxProcessTimer(*(wxTimer *)pNode->GetData());
     return 0;
 }
 

@@ -32,6 +32,7 @@
 // Private functions
 /////////////////////////////////////////////////////////////////////////////
 
+#if 0
 static wxDragResult ConvertDragEffectToResult (
   DWORD                             dwEffect
 )
@@ -73,6 +74,7 @@ static DWORD ConvertDragResultToEffect (
             return DO_DEFAULT;
     }
 } // end of ConvertDragResultToEffect
+#endif
 
 class CIDropTarget
 {
@@ -516,6 +518,11 @@ bool wxDropSource::GiveFeedback (
 
             case wxDragLink:
                 m_pDragInfo->usOperation = DO_LINK;
+                break;
+
+            case wxDragNone:
+            case wxDragCancel:
+            case wxDragError:
                 break;
         }
         return TRUE;

@@ -376,8 +376,6 @@ bool wxFontRefData::Alloc(
     wxString                        sFaceName;
     long                            flId = m_hFont;
     long                            lRc;
-    short                           nIndex = 0;
-    PFONTMETRICS                    pFM = NULL;
     ERRORID                         vError;
     wxString                        sError;
 

@@ -718,8 +718,6 @@ void wxDC::DoDrawArc(
 {
      POINTL                         vPtlPos;
      POINTL                         vPtlArc[2]; // Structure for current position
-     int                            nDx;
-     int                            nDy;
      double                         dRadius;
      double                         dAngl1;
      double                         dAngl2;
@@ -756,8 +754,8 @@ void wxDC::DoDrawArc(
         // Medium point
         //
         dAnglmid = (dAngl1 + dAngl2)/2. + M_PI;
-        vXm      = vXc + dRadius * cos(dAnglmid);
-        vYm      = vYc + dRadius * sin(dAnglmid);
+        vXm      = (wxCoord)(vXc + dRadius * cos(dAnglmid));
+        vYm      = (wxCoord)(vYc + dRadius * sin(dAnglmid));
         DoDrawArc( vX1, vY1
                   ,vXm, vYm
                   ,vXc, vYc
@@ -773,8 +771,8 @@ void wxDC::DoDrawArc(
     // Medium point
     //
     dAnglmid = (dAngl1 + dAngl2)/2.;
-    vXm      = vXc + dRadius * cos(dAnglmid);
-    vYm      = vYc + dRadius * sin(dAnglmid);
+    vXm      = (wxCoord)(vXc + dRadius * cos(dAnglmid));
+    vYm      = (wxCoord)(vYc + dRadius * sin(dAnglmid));
 
     //
     // Ellipse main axis (r,q), (p,s) with center at (0,0) */
@@ -793,11 +791,11 @@ void wxDC::DoDrawArc(
     vPtlArc[1].x = vX2;
     vPtlArc[1].y = vY2;
     ::GpiPointArc(m_hPS, vPtlArc); // Draws the arc
-    CalcBoundingBox( (vXc - dRadius)
-                    ,(vYc - dRadius)
+    CalcBoundingBox( (wxCoord)(vXc - dRadius)
+                    ,(wxCoord)(vYc - dRadius)
                    );
-    CalcBoundingBox( (vXc + dRadius)
-                    ,(vYc + dRadius)
+    CalcBoundingBox( (wxCoord)(vXc + dRadius)
+                    ,(wxCoord)(vYc + dRadius)
                    );
 } // end of wxDC::DoDrawArc
 
@@ -1234,7 +1232,6 @@ void wxDC::DoDrawEllipticArc(
     FIXED                           vFSweepa; // Start angle, sweep angle
     double                          dIntPart;
     double                          dFractPart;
-    double                          dRadius;
 
     vY = OS2Y(vY,vHeight);
 
@@ -1251,8 +1248,8 @@ void wxDC::DoDrawEllipticArc(
     vArcp.lP = vWidth/2;
     vArcp.lS = 0;
     ::GpiSetArcParams(m_hPS, &vArcp); // Sets parameters to default
-    vPtlPos.x = vX + vWidth/2  * (1. + cos(DegToRad(dSa))); // Loads x-coordinate
-    vPtlPos.y = vY + vHeight/2 * (1. + sin(DegToRad(dSa))); // Loads y-coordinate
+    vPtlPos.x = (wxCoord)(vX + vWidth/2  * (1. + cos(DegToRad(dSa)))); // Loads x-coordinate
+    vPtlPos.y = (wxCoord)(vY + vHeight/2 * (1. + sin(DegToRad(dSa)))); // Loads y-coordinate
     ::GpiMove(m_hPS, &vPtlPos); // Sets current position
 
     //
@@ -1564,8 +1561,8 @@ void wxDC::DoDrawBitmap(
         }
         else
         {
-            LONG                        lOldForeGround = ::GpiQueryColor((HPS)GetHPS());
-            LONG                        lOldBackGround = ::GpiQueryBackColor((HPS)GetHPS());
+            ULONG                       lOldForeGround = ::GpiQueryColor((HPS)GetHPS());
+            ULONG                       lOldBackGround = ::GpiQueryBackColor((HPS)GetHPS());
 
             if (m_textForegroundColour.Ok())
             {
@@ -1636,10 +1633,6 @@ void wxDC::DoDrawBitmap(
                 unsigned char           cOldRedFore   = (unsigned char)(lOldForeGround >> 16);
                 unsigned char           cOldGreenFore = (unsigned char)(lOldForeGround >> 8);
                 unsigned char           cOldBlueFore  = (unsigned char)lOldForeGround;
-
-                unsigned char           cOldRedBack   = (unsigned char)(lOldBackGround >> 16);
-                unsigned char           cOldGreenBack = (unsigned char)(lOldBackGround >> 8);
-                unsigned char           cOldBlueBack  = (unsigned char)lOldBackGround;
 
                 unsigned char           cRedFore   = (unsigned char)(lForeGround >> 16);
                 unsigned char           cGreenFore = (unsigned char)(lForeGround >> 8);
@@ -1780,7 +1773,7 @@ void wxDC::DrawAnyText(
         if (m_pCanvas && m_pCanvas->IsKindOf(CLASSINFO(wxStatusBar)))
             vPtlStart.y = OS2Y(vY,vTextY);
         else
-            vPtlStart.y = OS2Y(vY,vTextY/1.5); // Full extent is a bit much
+            vPtlStart.y = (wxCoord)(OS2Y(vY,vTextY/1.5)); // Full extent is a bit much
     }
     else
     {
@@ -1791,7 +1784,7 @@ void wxDC::DrawAnyText(
             if (m_pCanvas && m_pCanvas->IsKindOf(CLASSINFO(wxStatusBar)))
                 vPtlStart.y = OS2Y(vY,vTextY);
             else
-                vPtlStart.y = OS2Y(vY,vTextY/1.5);
+                vPtlStart.y = (LONG)(OS2Y(vY,vTextY/1.5));
         }
         else
             vPtlStart.y = vY;
@@ -2277,7 +2270,7 @@ void wxDC::DoGetTextExtent(
        vErrorCode = ::WinGetLastError(wxGetInstance());
        sError = wxPMErrorToStr(vErrorCode);
        // DEBUG
-       sprintf(zMsg, "GpiQueryTextBox for %s: failed with Error: %x - %s", pStr, vErrorCode, sError.c_str());
+       sprintf(zMsg, "GpiQueryTextBox for %s: failed with Error: %lx - %s", pStr, vErrorCode, sError.c_str());
        (void)wxMessageBox( "wxWindows Menu sample"
                           ,zMsg
                           ,wxICON_INFORMATION
@@ -2873,8 +2866,8 @@ wxSize wxDC::GetPPI() const
         nPelHeight = lArray[CAPS_HEIGHT];
         nHorzRes   = lArray[CAPS_HORIZONTAL_RESOLUTION]; // returns pel/meter
         nVertRes   = lArray[CAPS_VERTICAL_RESOLUTION];   // returns pel/meter
-        nWidth   = (nHorzRes/39.3) * nPelWidth;
-        nHeight  = (nVertRes/39.3) * nPelHeight;
+        nWidth   = (int)((nHorzRes/39.3) * nPelWidth);
+        nHeight  = (int)((nVertRes/39.3) * nPelHeight);
     }
     return (wxSize(nWidth,nHeight));
 } // end of wxDC::GetPPI

@@ -1654,7 +1654,7 @@ GSocketError GAddress_INET_SetPortName(GAddress *address, const char *port,
     return GSOCK_INVPORT;
   }
  
-  se = getservbyname(port, protocol);
+  se = getservbyname(port, (char*)protocol);
   if (!se)
   {
     /* the cast to int suppresses compiler warnings about subscript having the

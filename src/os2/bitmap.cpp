@@ -412,8 +412,6 @@ bool wxBitmap::LoadFile(
 , long                              lType
 )
 {
-    HPS                             hPs = NULLHANDLE;
-
     UnRef();
 
     wxBitmapHandler*                pHandler = wxDynamicCast( FindHandler(lType)
@@ -453,8 +451,7 @@ bool wxBitmap::Create(
 
     if (!pHandler)
     {
-        wxLogDebug(wxT("Failed to create bitmap: no bitmap handler for "
-                       "type %d defined."), lType);
+        wxLogDebug(wxT("Failed to create bitmap: no bitmap handler for type %ld defined."), lType);
 
         return(FALSE);
     }
@@ -859,7 +856,6 @@ wxImage wxBitmap::ConvertToImage() const
     BITMAPINFOHEADER2               vDIBh;
     BITMAPINFO2                     vDIBInfo;
     HPS                             hPSMem;
-    HPS                             hPS;
     HBITMAP                         hBitmap;
     HBITMAP                         hOldBitmap;
     DEVOPENSTRUC                    vDop  = {0L, "DISPLAY", NULL, 0L, 0L, 0L, 0L, 0L, 0L};
@@ -1355,9 +1351,6 @@ bool wxMask::Create(
     HDC                             hDCDst = ::DevOpenDC(vHabmain, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&vDop, NULLHANDLE);
     HPS                             hPSSrc = ::GpiCreatePS(vHabmain, hDCSrc, &vSize, PU_PELS | GPIA_ASSOC);
     HPS                             hPSDst = ::GpiCreatePS(vHabmain, hDCDst, &vSize, PU_PELS | GPIA_ASSOC);
-    POINTL                          vPoint[4] = { {0 ,0}, {rBitmap.GetWidth(), rBitmap.GetHeight()},
-                                                  {0, 0}, {rBitmap.GetWidth(), rBitmap.GetHeight()}
-                                                };
 
     if (m_hMaskBitmap)
     {

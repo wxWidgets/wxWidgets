@@ -216,7 +216,7 @@ int wxFileDialog::ShowModal()
         m_fileNames.Empty();
         if ((m_dialogStyle & wxMULTIPLE ) && vFileDlg.ulFQFCount > 1)
         {
-            for (int i = 0; i < vFileDlg.ulFQFCount; i++)
+            for (int i = 0; i < (int)vFileDlg.ulFQFCount; i++)
             {
                 if (i == 0)
                 {
@@ -263,7 +263,7 @@ int wxFileDialog::ShowModal()
                 //
                 pzExtension = sFilterBuffer.c_str();
 
-                for( int i = 0; i < sFilterBuffer.length(); i++ )
+                for( int i = 0; i < (int)sFilterBuffer.length(); i++ )
                 {
                     //
                     // Get extension

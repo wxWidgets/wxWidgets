@@ -439,7 +439,6 @@ wxRegionContain wxRegion::Contains(
 , wxCoord                           y
 ) const
 {
-    bool                            bOK = FALSE;
     POINTL                          vPoint;
 
     vPoint.x = x;
