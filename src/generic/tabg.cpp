@@ -927,7 +927,7 @@ void wxTabView::SetTabSelection(int sel, bool activateTool)
     control->SetSelected((sel != 0)); // TODO ??
   else
   {
-    wxMessageBox("Could not find tab for id", "Error", wxOK);
+    wxMessageBox(_("Could not find tab for id"), _("Error"), wxOK);
     return;
   }
     

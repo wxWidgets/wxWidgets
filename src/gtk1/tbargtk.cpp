@@ -14,6 +14,7 @@
 #endif
 
 #include "wx/toolbar.h"
+#include <wx/intl.h>
 
 //-----------------------------------------------------------------------------
 // wxToolBarTool
@@ -170,7 +171,7 @@ void wxToolBar::AddSeparator(void)
 
 void wxToolBar::ClearTools(void)
 {
-  wxFAIL_MSG("wxToolBar::ClearTools not implemented");
+  wxFAIL_MSG(_("wxToolBar::ClearTools not implemented"));
 };
 
 void wxToolBar::Realize(void)
@@ -213,7 +214,7 @@ void wxToolBar::EnableTool(int toolIndex, bool enable)
 
 void wxToolBar::ToggleTool(int WXUNUSED(toolIndex), bool WXUNUSED(toggle) ) 
 {
-  wxFAIL_MSG("wxToolBar::ToggleTool not implemented");
+  wxFAIL_MSG(_("wxToolBar::ToggleTool not implemented"));
 };
 
 wxObject *wxToolBar::GetToolClientData(int index) const

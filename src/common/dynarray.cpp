@@ -24,6 +24,7 @@
 #endif
 
 #include "wx/dynarray.h"
+#include <wx/intl.h>
 
 #include <stdlib.h>
 #include <string.h> // for memmove
@@ -227,7 +228,7 @@ void wxBaseArray::Add(long lItem, CMPFUNC fnCompare)
 // add item at the given position
 void wxBaseArray::Insert(long lItem, uint uiIndex)
 {
-  wxCHECK_RET( uiIndex <= m_uiCount, "bad index in wxArray::Insert" );
+  wxCHECK_RET( uiIndex <= m_uiCount, _("bad index in wxArray::Insert") );
 
   Grow();
 
@@ -240,7 +241,7 @@ void wxBaseArray::Insert(long lItem, uint uiIndex)
 // removes item from array (by index)
 void wxBaseArray::Remove(uint uiIndex)
 {
-  wxCHECK_RET( uiIndex <= m_uiCount, "bad index in wxArray::Remove" );
+  wxCHECK_RET( uiIndex <= m_uiCount, _("bad index in wxArray::Remove") );
 
   memmove(&m_pItems[uiIndex], &m_pItems[uiIndex + 1],
           (m_uiCount - uiIndex - 1)*sizeof(long));
@@ -253,7 +254,7 @@ void wxBaseArray::Remove(long lItem)
   int iIndex = Index(lItem);
 
   wxCHECK_RET( iIndex != NOT_FOUND,
-               "removing inexistent item in wxArray::Remove" );
+               _("removing inexistent item in wxArray::Remove") );
 
   Remove((uint)iIndex);
 }

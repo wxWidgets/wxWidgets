@@ -16,6 +16,7 @@
 #include "wx/dynarray.h"
 #include "wx/listbox.h"
 #include "wx/utils.h"
+#include <wx/intl.h>
 
 //-----------------------------------------------------------------------------
 // data
@@ -166,7 +167,7 @@ void wxListBox::Delete( int n )
   wxNode *node = m_clientData.Nth( n );
   if (!node)
   {
-    wxFAIL_MSG("wxListBox::Delete wrong index");
+    wxFAIL_MSG(_("wxListBox::Delete wrong index"));
   }
   else
     m_clientData.DeleteNode( node );

@@ -36,6 +36,7 @@
 #include "wx/radiobox.h"
 #include "wx/filedlg.h"
 #include "wx/choice.h"
+#include <wx/intl.h>
 #endif
 
 #include "wx/generic/prntdlgg.h"
@@ -68,7 +69,7 @@ extern wxPrintPaperDatabase *wxThePrintPaperDatabase;
 
 
 wxGenericPrintDialog::wxGenericPrintDialog(wxWindow *parent, wxPrintData* data):
-  wxDialog(parent, -1, "Print", wxPoint(0, 0), wxSize(600, 600), wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL)
+  wxDialog(parent, -1, _("Print"), wxPoint(0, 0), wxSize(600, 600), wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL)
 {
   if ( data )
     printData = *data;
@@ -79,10 +80,10 @@ wxGenericPrintDialog::wxGenericPrintDialog(wxWindow *parent, wxPrintData* data):
   int yPos = 5;
   int xPos = 5;
 
-  wxButton *okButton = new wxButton(this, wxID_OK, "OK", wxPoint(5, yPos), wxSize(buttonWidth, buttonHeight));
-  (void) new wxButton(this, wxID_CANCEL, "Cancel", wxPoint(buttonWidth + 5 + spacing, yPos), wxSize(buttonWidth, buttonHeight));
+  wxButton *okButton = new wxButton(this, wxID_OK, _("OK"), wxPoint(5, yPos), wxSize(buttonWidth, buttonHeight));
+  (void) new wxButton(this, wxID_CANCEL, _("Cancel"), wxPoint(buttonWidth + 5 + spacing, yPos), wxSize(buttonWidth, buttonHeight));
 
-  setupButton = new wxButton(this, wxPRINTID_SETUP, "Setup...", wxPoint(buttonWidth*2 + 5 + 2*spacing, yPos), wxSize(buttonWidth, buttonHeight));
+  setupButton = new wxButton(this, wxPRINTID_SETUP, _("Setup..."), wxPoint(buttonWidth*2 + 5 + 2*spacing, yPos), wxSize(buttonWidth, buttonHeight));
 
   okButton->SetDefault();
   okButton->SetFocus();
@@ -90,10 +91,10 @@ wxGenericPrintDialog::wxGenericPrintDialog(wxWindow *parent, wxPrintData* data):
   yPos += 35;
 
   wxString choices[2];
-  choices[0] = "All";
-  choices[1] = "Pages";
+  choices[0] = _("All");
+  choices[1] = _("Pages");
 
-  rangeRadioBox = new wxRadioBox(this, wxPRINTID_RANGE, "Print Range",
+  rangeRadioBox = new wxRadioBox(this, wxPRINTID_RANGE, _("Print Range"),
     wxPoint(5, yPos), wxSize(-1, -1), 2, choices, 2);
   rangeRadioBox->SetSelection(1);
 
@@ -103,19 +104,19 @@ wxGenericPrintDialog::wxGenericPrintDialog(wxWindow *parent, wxPrintData* data):
   int textWidth = 40;
   spacing = 10;
 
-  (void) new wxStaticText(this, wxPRINTID_STATIC, "From:", wxPoint(xPos, yPos));
+  (void) new wxStaticText(this, wxPRINTID_STATIC, _("From:"), wxPoint(xPos, yPos));
   xPos += staticWidth;
 
   fromText = new wxTextCtrl(this, wxPRINTID_FROM, "", wxPoint(xPos, yPos), wxSize(textWidth, -1));
   xPos += spacing + textWidth;
 
-  (void) new wxStaticText(this, wxPRINTID_STATIC, "To:", wxPoint(xPos, yPos));
+  (void) new wxStaticText(this, wxPRINTID_STATIC, _("To:"), wxPoint(xPos, yPos));
   xPos += staticWidth;
 
   toText = new wxTextCtrl(this, wxPRINTID_TO, "", wxPoint(xPos, yPos), wxSize(textWidth, -1));
   xPos += spacing + textWidth;
 
-  (void) new wxStaticText(this, wxPRINTID_STATIC, "Copies:", wxPoint(xPos, yPos));
+  (void) new wxStaticText(this, wxPRINTID_STATIC, _("Copies:"), wxPoint(xPos, yPos));
   xPos += spacing + staticWidth;
 
   noCopiesText = new wxTextCtrl(this, wxPRINTID_COPIES, "", wxPoint(xPos, yPos), wxSize(textWidth, -1));
@@ -123,7 +124,7 @@ wxGenericPrintDialog::wxGenericPrintDialog(wxWindow *parent, wxPrintData* data):
   yPos += 30;
   xPos = 5;
 
-  printToFileCheckBox = new wxCheckBox(this, wxPRINTID_PRINTTOFILE, "Print to File", wxPoint(xPos, yPos));
+  printToFileCheckBox = new wxCheckBox(this, wxPRINTID_PRINTTOFILE, _("Print to File"), wxPoint(xPos, yPos));
 
   Fit();
   Centre(wxBOTH);
@@ -168,7 +169,7 @@ void wxGenericPrintDialog::OnOK(wxCommandEvent& WXUNUSED(event))
   {
     wxThePrintSetupData->SetPrinterMode(PS_FILE);
 
-    char *f = wxFileSelector("PostScript file",
+    char *f = wxFileSelector(_("PostScript file"),
         wxPathOnly(wxThePrintSetupData->GetPrinterFile()),
         wxFileNameFromPath(wxThePrintSetupData->GetPrinterFile()),
         "ps", "*.ps", 0, this);
@@ -271,7 +272,7 @@ wxDC *wxGenericPrintDialog::GetPrintDC(void)
  */
 
 wxGenericPrintSetupDialog::wxGenericPrintSetupDialog(wxWindow *parent, wxPrintSetupData* data):
-  wxDialog(parent, -1, "Print Setup", wxPoint(0, 0), wxSize(600, 600), wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL)
+  wxDialog(parent, -1, _("Print Setup"), wxPoint(0, 0), wxSize(600, 600), wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL)
 {
   if ( data )
     printData = *data;
@@ -282,9 +283,9 @@ wxGenericPrintSetupDialog::wxGenericPrintSetupDialog(wxWindow *parent, wxPrintSe
   int yPos = 5;
   int xPos = 5;
 
-  wxButton *okButton = new wxButton(this, wxID_OK, "OK", wxPoint(xPos, yPos), wxSize(buttonWidth, buttonHeight));
+  wxButton *okButton = new wxButton(this, wxID_OK, _("OK"), wxPoint(xPos, yPos), wxSize(buttonWidth, buttonHeight));
   xPos += buttonWidth + spacing;
-  (void) new wxButton(this, wxID_CANCEL, "Cancel", wxPoint(xPos, yPos), wxSize(buttonWidth, buttonHeight));
+  (void) new wxButton(this, wxID_CANCEL, _("Cancel"), wxPoint(xPos, yPos), wxSize(buttonWidth, buttonHeight));
 
   okButton->SetDefault();
   okButton->SetFocus();
@@ -295,16 +296,16 @@ wxGenericPrintSetupDialog::wxGenericPrintSetupDialog(wxWindow *parent, wxPrintSe
   paperTypeChoice = CreatePaperTypeChoice(&xPos, &yPos);
 
   wxString choices[2];
-  choices[0] = "Portrait";
-  choices[1] = "Landscape";
+  choices[0] = _("Portrait");
+  choices[1] = _("Landscape");
 
-  orientationRadioBox = new wxRadioBox(this, wxPRINTID_ORIENTATION, "Orientation",
+  orientationRadioBox = new wxRadioBox(this, wxPRINTID_ORIENTATION, _("Orientation"),
     wxPoint(xPos, yPos), wxSize(-1, -1), 2, choices, 2);
   orientationRadioBox->SetSelection(0);
 
   xPos += 200;
 
-  colourCheckBox = new wxCheckBox(this, wxPRINTID_PRINTCOLOUR, "Print in colour", wxPoint(xPos, yPos));
+  colourCheckBox = new wxCheckBox(this, wxPRINTID_PRINTCOLOUR, _("Print in colour"), wxPoint(xPos, yPos));
 
   xPos = 5;
   yPos += 60;
@@ -313,13 +314,13 @@ wxGenericPrintSetupDialog::wxGenericPrintSetupDialog(wxWindow *parent, wxPrintSe
   int textWidth = 120;
   spacing = 10;
 
-  (void) new wxStaticText(this, wxPRINTID_STATIC, "Printer command:", wxPoint(xPos, yPos));
+  (void) new wxStaticText(this, wxPRINTID_STATIC, _("Printer command:"), wxPoint(xPos, yPos));
   xPos += staticWidth;
 
   printerCommandText = new wxTextCtrl(this, wxPRINTID_COMMAND, "", wxPoint(xPos, yPos), wxSize(textWidth, -1));
   xPos += textWidth + spacing;
 
-  (void) new wxStaticText(this, wxPRINTID_STATIC, "Printer options:", wxPoint(xPos, yPos));
+  (void) new wxStaticText(this, wxPRINTID_STATIC, _("Printer options:"), wxPoint(xPos, yPos));
   xPos += staticWidth;
 
   printerOptionsText = new wxTextCtrl(this, wxPRINTID_OPTIONS, "", wxPoint(xPos, yPos), wxSize(textWidth, -1));
@@ -397,7 +398,7 @@ wxChoice *wxGenericPrintSetupDialog::CreatePaperTypeChoice(int *x, int *y)
       sel = i;
   }
 
-  (void) new wxStaticText(this, wxPRINTID_STATIC, "Paper size", wxPoint(*x, *y));
+  (void) new wxStaticText(this, wxPRINTID_STATIC, _("Paper size"), wxPoint(*x, *y));
   *y += 25;
 
   wxChoice *choice = new wxChoice(this, wxPRINTID_PAPERSIZE, wxPoint(*x, *y), wxSize(300, -1), n,
@@ -437,7 +438,7 @@ void wxGenericPageSetupDialog::OnPrinter(wxCommandEvent& WXUNUSED(event))
 }
 
 wxGenericPageSetupDialog::wxGenericPageSetupDialog(wxWindow *parent, wxPageSetupData* data):
-  wxDialog(parent, -1, "Page Setup", wxPoint(0, 0), wxSize(600, 600), wxDIALOG_MODAL|wxDEFAULT_DIALOG_STYLE)
+  wxDialog(parent, -1, _("Page Setup"), wxPoint(0, 0), wxSize(600, 600), wxDIALOG_MODAL|wxDEFAULT_DIALOG_STYLE)
 {
   if ( data )
     pageData = *data;
@@ -448,16 +449,16 @@ wxGenericPageSetupDialog::wxGenericPageSetupDialog(wxWindow *parent, wxPageSetup
   int yPos = 5;
   int xPos = 5;
 
-  wxButton *okButton = new wxButton(this, wxID_OK, "OK", wxPoint(5, yPos), wxSize(buttonWidth, buttonHeight));
-  (void) new wxButton(this, wxID_CANCEL, "Cancel", wxPoint(buttonWidth + 5 + spacing, yPos), wxSize(buttonWidth, buttonHeight));
+  wxButton *okButton = new wxButton(this, wxID_OK, _("OK"), wxPoint(5, yPos), wxSize(buttonWidth, buttonHeight));
+  (void) new wxButton(this, wxID_CANCEL, _("Cancel"), wxPoint(buttonWidth + 5 + spacing, yPos), wxSize(buttonWidth, buttonHeight));
 
-  printerButton = new wxButton(this, wxPRINTID_SETUP, "Printer...", wxPoint(buttonWidth*2 + 5 + 2*spacing, yPos), wxSize(buttonWidth, buttonHeight));
+  printerButton = new wxButton(this, wxPRINTID_SETUP, _("Printer..."), wxPoint(buttonWidth*2 + 5 + 2*spacing, yPos), wxSize(buttonWidth, buttonHeight));
 
   if ( !pageData.GetEnablePrinter() )
     printerButton->Enable(FALSE);
 
 //  if (printData.GetEnableHelp())
-//  wxButton *helpButton = new wxButton(this, (wxFunction)wxGenericPageSetupHelpProc, "Help", -1, -1, buttonWidth, buttonHeight);
+//  wxButton *helpButton = new wxButton(this, (wxFunction)wxGenericPageSetupHelpProc, _("Help"), -1, -1, buttonWidth, buttonHeight);
 
   okButton->SetDefault();
   okButton->SetFocus();
@@ -470,9 +471,9 @@ wxGenericPageSetupDialog::wxGenericPageSetupDialog(wxWindow *parent, wxPageSetup
   xPos = 5;
 
   wxString choices[2];
-  choices[0] = "Portrait";
-  choices[1] = "Landscape";
-  orientationRadioBox = new wxRadioBox(this, wxPRINTID_ORIENTATION, "Orientation",
+  choices[0] = _("Portrait");
+  choices[1] = _("Landscape");
+  orientationRadioBox = new wxRadioBox(this, wxPRINTID_ORIENTATION, _("Orientation"),
     wxPoint(xPos, yPos), wxSize(-1, -1), 2, choices, 2);
   orientationRadioBox->SetSelection(0);
 
@@ -483,13 +484,13 @@ wxGenericPageSetupDialog::wxGenericPageSetupDialog(wxWindow *parent, wxPageSetup
   int textWidth = 60;
   spacing = 10;
 
-  (void) new wxStaticText(this, wxPRINTID_STATIC, "Left margin (mm):", wxPoint(xPos, yPos));
+  (void) new wxStaticText(this, wxPRINTID_STATIC, _("Left margin (mm):"), wxPoint(xPos, yPos));
   xPos += staticWidth;
 
   marginLeftText = new wxTextCtrl(this, wxPRINTID_LEFTMARGIN, "", wxPoint(xPos, yPos), wxSize(textWidth, -1));
   xPos += textWidth + spacing;
 
-  (void) new wxStaticText(this, wxPRINTID_STATIC, "Right margin (mm):", wxPoint(xPos, yPos));
+  (void) new wxStaticText(this, wxPRINTID_STATIC, _("Right margin (mm):"), wxPoint(xPos, yPos));
   xPos += staticWidth;
 
   marginRightText = new wxTextCtrl(this, wxPRINTID_RIGHTMARGIN, "", wxPoint(xPos, yPos), wxSize(textWidth, -1));
@@ -498,13 +499,13 @@ wxGenericPageSetupDialog::wxGenericPageSetupDialog(wxWindow *parent, wxPageSetup
   yPos += 35;
   xPos = 5;
 
-  (void) new wxStaticText(this, wxPRINTID_STATIC, "Top margin (mm):", wxPoint(xPos, yPos));
+  (void) new wxStaticText(this, wxPRINTID_STATIC, _("Top margin (mm):"), wxPoint(xPos, yPos));
   xPos += staticWidth;
 
   marginTopText = new wxTextCtrl(this, wxPRINTID_TOPMARGIN, "", wxPoint(xPos, yPos), wxSize(textWidth, -1));
   xPos += textWidth + spacing;
 
-  (void) new wxStaticText(this, wxPRINTID_STATIC, "Bottom margin (mm):", wxPoint(xPos, yPos));
+  (void) new wxStaticText(this, wxPRINTID_STATIC, _("Bottom margin (mm):"), wxPoint(xPos, yPos));
   xPos += staticWidth;
 
   marginBottomText = new wxTextCtrl(this, wxPRINTID_BOTTOMMARGIN, "", wxPoint(xPos, yPos), wxSize(textWidth, -1));
@@ -595,7 +596,7 @@ wxChoice *wxGenericPageSetupDialog::CreatePaperTypeChoice(int *x, int *y)
       sel = i;
   }
 
-  (void) new wxStaticText(this, wxPRINTID_STATIC, "Paper size", wxPoint(*x, *y));
+  (void) new wxStaticText(this, wxPRINTID_STATIC, _("Paper size"), wxPoint(*x, *y));
   *y += 25;
 
   wxChoice *choice = new wxChoice(this, wxPRINTID_PAPERSIZE, wxPoint(*x, *y), wxSize(300, -1), n,

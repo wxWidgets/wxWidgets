@@ -14,6 +14,7 @@
 #include "wx/window.h"
 #include "wx/app.h"
 #include "wx/gdicmn.h"
+#include <wx/intl.h>
 
 #include "gdk/gdkprivate.h"
 

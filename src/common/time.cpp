@@ -32,6 +32,7 @@ seconds since January 1, 1901, GMT.
 #include "wx/time.h"
 #include "wx/date.h"
 #include "wx/utils.h"
+#include <wx/intl.h>
 
 #if USE_IOSTREAMH
 #include <iostream.h>
@@ -141,7 +142,7 @@ wxTime::wxTime(const wxDate& date, hourTy h, minuteTy m, secondTy s, bool dst)
 /*
                 if (IsDST()) setError(NIHCL_BADTIME,DEFAULT,
 								date.dayOfMonth(),date.nameOfMonth(),date.year(),
-								h,m,s,(dst?"DST":""));
+								h,m,s,(dst?_("DST"):""));
 */
   }
   sec += TIME_ZONE;                               // adjust to GMT
@@ -313,9 +314,9 @@ char *wxTime::FormatTime() const {
 
 	if (Format == wx12h)
 		if (GetHour() <= 12)
-			strcat(timeBuf,"am");
+			strcat(timeBuf,_("am"));
 		else
-			strcat(timeBuf,"pm");
+			strcat(timeBuf,_("pm"));
 
 	return timeBuf;
 }
@@ -348,8 +349,8 @@ void wxTime::printOn(ostream& strm) const
         strm << ' ' << ((hh <= 12) ? hh : hh-12) << ':'
              << setfill('0') << setw(2) << GetMinute() << ':'
 				 << setfill('0') << setw(2) << GetSecond() << ' ';
-        if (hh < 12) strm << "am";
-        else strm << "pm";
+        if (hh < 12) strm << _("am");
+        else strm << _("pm");
 }
 
 wxTime::wxTime(OIOin& strm)

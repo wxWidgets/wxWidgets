@@ -31,6 +31,7 @@
 #if USE_TIMEDATE
 
 #include "wx/date.h"
+#include <wx/intl.h>
 
 #include <stdio.h>
 #include <string.h>
@@ -47,11 +48,14 @@
 
 #define ABBR_LENGTH 3
 
-static const char *dayname[] = {"Sunday","Monday","Tuesday","Wednesday",
-	   "Thursday","Friday","Saturday"} ;
+static const char *dayname[] = {
+  "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
+};
 
-static const char *mname[] = {"January","February","March","April","May",
-	   "June","July","August","September","October","November","December"};
+static const char *mname[] = {
+  "January", "February", "March", "April", "May", "June", "July", "August",
+  "September", "October", "November", "December"
+};
 
 static int GauDays[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
@@ -346,17 +350,17 @@ wxString wxDate::FormatDate (int type) const
 	{
 		case wxDAY:
 			if ( (day_of_week < 1) || (day_of_week > 7) )
-				strcpy(buf,"invalid day");
+				strcpy(buf, _("invalid day"));
 			else
-				strncpy( buf, dayname[day_of_week-1],
+				strncpy( buf, _(dayname[day_of_week-1]),
 					(DisplayOptions & wxDATE_ABBR) ? ABBR_LENGTH : 9);
 			return wxString(buf);
 
 		case wxMONTH:
 			if ( (month < 1) || (month > 12) )
-				strcpy(buf,"invalid month");
+				strcpy(buf, _("invalid month"));
 			else
-				strncpy( buf, mname[month-1],
+				strncpy( buf, _(mname[month-1]),
 					(DisplayOptions & wxDATE_ABBR) ? ABBR_LENGTH : 9);
 			return wxString(buf);
 
@@ -364,39 +368,39 @@ wxString wxDate::FormatDate (int type) const
 			if ( (month < 1) || (month > 12) || (day_of_week < 0) ||
 				 (day_of_week > 7) )
 			{
-				strcpy(buf,"invalid date");
+				strcpy(buf, _("invalid date"));
 				return wxString(buf);
 			}
-			strncpy( buf, dayname[day_of_week-1],
+			strncpy( buf, _(dayname[day_of_week-1]),
 				(DisplayOptions & wxDATE_ABBR) ? ABBR_LENGTH : 9);
 			strcat( buf, ", ");
-			strncat( buf, mname[month-1],
+			strncat( buf, _(mname[month-1]),
 				(DisplayOptions & wxDATE_ABBR) ? ABBR_LENGTH : 9);
 			strcat( buf, " ");
 			sprintf( buf+strlen(buf), "%d, %d", day, abs(year) );
 			if (year < 0)
-				strcat(buf," B.C.");
+				strcat(buf,_(" B.C."));
 			return wxString(buf);
 
 		case wxEUROPEAN:
 			if ( (month < 1) || (month > 12) || (day_of_week < 0) ||
 				 (day_of_week > 7) )
 			{
-				strcpy(buf,"invalid date");
+				strcpy(buf, _("invalid date"));
 				return wxString(buf);
 			}
 			sprintf(buf,"%d ",	day);
-			strncat(buf, mname[month-1],
+			strncat(buf, _(mname[month-1]),
 				(DisplayOptions & wxDATE_ABBR) ? ABBR_LENGTH : 9);
 			sprintf( buf+strlen(buf), " %d", abs(year) );
 			if (year < 0)
-				strcat(buf," B.C.");
+				strcat(buf, _(" B.C."));
 			return wxString(buf);
 
 		case wxMDY:
 		default:
 			if (day==0 || month==0 || year==0)
-				strcpy(buf,"invalid date");
+				strcpy(buf, _("invalid date"));
 			else
 				sprintf( buf+strlen(buf), "%1d/%1d/%02d", month, day,
 					(DisplayOptions & wxNO_CENTURY) && (abs(year) > 1899)

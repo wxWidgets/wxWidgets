@@ -624,7 +624,7 @@ bool wxTreeCtrl::ExpandItem( long item, int action )
 void wxTreeCtrl::DeleteItem( long item )
 {
   wxGenericTreeItem *pItem = FindItem( item );
-  wxCHECK_RET( pItem != NULL, "wxTreeCtrl::DeleteItem: no such pItem." );
+  wxCHECK_RET( pItem != NULL, _("wxTreeCtrl::DeleteItem: no such pItem.") );
 
   pItem->m_parent->m_children.DeleteObject(pItem);
 
@@ -634,7 +634,7 @@ void wxTreeCtrl::DeleteItem( long item )
 void wxTreeCtrl::DeleteChildren( long item )
 {
   wxGenericTreeItem *pItem = FindItem( item );
-  wxCHECK_RET( pItem != NULL, "wxTreeCtrl::DeleteChildren: no such pItem." );
+  wxCHECK_RET( pItem != NULL, _("wxTreeCtrl::DeleteChildren: no such pItem.") );
 
   pItem->m_children.Clear();
 
@@ -701,7 +701,7 @@ bool wxTreeCtrl::SelectItem(long itemId)
 {
   wxGenericTreeItem *pItem = FindItem(itemId);
   if ( !pItem ) {
-    wxLogDebug("Can't select an item %d which doesn't exist.", itemId);
+    wxLogDebug(_("Can't select an item %d which doesn't exist."), itemId);
 
     return FALSE;
   }

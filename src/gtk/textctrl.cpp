@@ -14,6 +14,7 @@
 
 #include "wx/textctrl.h"
 #include "wx/utils.h"
+#include <wx/intl.h>
 
 //-----------------------------------------------------------------------------
 //  wxTextCtrl
@@ -185,14 +186,14 @@ void wxTextCtrl::WriteText( const wxString &text )
 
 bool wxTextCtrl::LoadFile( const wxString &WXUNUSED(file) )
 {
-  wxFAIL_MSG("wxTextCtrl::LoadFile not implemented");
+  wxFAIL_MSG(_("wxTextCtrl::LoadFile not implemented"));
 
   return FALSE;
 };
 
 bool wxTextCtrl::SaveFile( const wxString &WXUNUSED(file) )
 {
-  wxFAIL_MSG("wxTextCtrl::SaveFile not implemented");
+  wxFAIL_MSG(_("wxTextCtrl::SaveFile not implemented"));
 
   return FALSE;
 };
@@ -254,7 +255,7 @@ void wxTextCtrl::SetSelection( long from, long to )
 
 void wxTextCtrl::ShowPosition( long WXUNUSED(pos) )
 {
-  wxFAIL_MSG("wxTextCtrl::ShowPosition not implemented");
+  wxFAIL_MSG(_("wxTextCtrl::ShowPosition not implemented"));
 };
 
 long wxTextCtrl::GetInsertionPoint(void) const

@@ -27,6 +27,7 @@
 #include "wx/dc.h"
 #include "wx/app.h"
 #include "wx/msgdlg.h"
+#include <wx/intl.h>
 #endif
 
 #include "wx/generic/printps.h"
@@ -155,7 +156,7 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
     if (!printout->OnBeginDocument(printData.GetFromPage(), printData.GetToPage()))
     {
       wxEndBusyCursor();
-      wxMessageBox("Could not start printing.", "Print Error", wxOK, parent);
+      wxMessageBox(_("Could not start printing."), _("Print Error"), wxOK, parent);
       break;
     }
     if (abortIt)
@@ -229,11 +230,11 @@ void wxPostScriptPrintPreview::DetermineScaling(void)
 {
     const char *paperType = wxThePrintSetupData->GetPaperName();
     if (!paperType)
-      paperType = "A4 210 x 297 mm";
+      paperType = _("A4 210 x 297 mm");
 
     wxPrintPaperType *paper = wxThePrintPaperDatabase->FindPaperType(paperType);
     if (!paper)
-      paper = wxThePrintPaperDatabase->FindPaperType("A4 210 x 297 mm");
+      paper = wxThePrintPaperDatabase->FindPaperType(_("A4 210 x 297 mm"));
     if (paper)
     {
       previewPrintout->SetPPIScreen(100, 100);

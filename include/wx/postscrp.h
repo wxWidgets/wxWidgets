@@ -171,15 +171,15 @@ enum {
 };// ps_action = PS_PREVIEW;
 
 // PostScript printer settings
-void WXDLLEXPORT wxSetPrinterCommand(char *cmd);
-void WXDLLEXPORT wxSetPrintPreviewCommand(char *cmd);
-void WXDLLEXPORT wxSetPrinterOptions(char *flags);
+void WXDLLEXPORT wxSetPrinterCommand(const char *cmd);
+void WXDLLEXPORT wxSetPrintPreviewCommand(const char *cmd);
+void WXDLLEXPORT wxSetPrinterOptions(const char *flags);
 void WXDLLEXPORT wxSetPrinterOrientation(int orientation);
 void WXDLLEXPORT wxSetPrinterScaling(double x, double y);
 void WXDLLEXPORT wxSetPrinterTranslation(long x, long y);
 void WXDLLEXPORT wxSetPrinterMode(int mode);
-void WXDLLEXPORT wxSetPrinterFile(char *f);
-void WXDLLEXPORT wxSetAFMPath(char *f);
+void WXDLLEXPORT wxSetPrinterFile(const char *f);
+void WXDLLEXPORT wxSetAFMPath(const char *f);
 
 // Get current values
 char* WXDLLEXPORT wxGetPrinterCommand(void);
@@ -220,17 +220,17 @@ class WXDLLEXPORT wxPrintSetupData: public wxObject
   wxPrintSetupData(void);
   ~wxPrintSetupData(void);
 
-  void SetPrinterCommand(char *cmd);
-  void SetPaperName(char *paper);
-  void SetPrintPreviewCommand(char *cmd);
-  void SetPrinterOptions(char *flags);
-  void SetPrinterFile(char *f);
+  void SetPrinterCommand(const char *cmd);
+  void SetPaperName(const char *paper);
+  void SetPrintPreviewCommand(const char *cmd);
+  void SetPrinterOptions(const char *flags);
+  void SetPrinterFile(const char *f);
   void SetPrinterOrientation(int orient);
   void SetPrinterScaling(double x, double y);
   void SetPrinterTranslation(long x, long y);
   // 1 = Preview, 2 = print to file, 3 = send to printer
   void SetPrinterMode(int mode);
-  void SetAFMPath(char *f);
+  void SetAFMPath(const char *f);
   void SetColour(bool col);
 
   // Get current values
@@ -268,7 +268,7 @@ class WXDLLEXPORT wxPrintPaperType: public wxObject
   int heightPixels;
   char *pageName;
 
-  wxPrintPaperType(char *name = NULL, int wmm = 0, int hmm = 0, int wp = 0, int hp = 0);
+  wxPrintPaperType(const char *name = NULL, int wmm = 0, int hmm = 0, int wp = 0, int hp = 0);
   ~wxPrintPaperType(void);
 };
 
@@ -283,7 +283,7 @@ class WXDLLEXPORT wxPrintPaperDatabase: public wxList
   void CreateDatabase(void);
   void ClearDatabase(void);
 
-  void AddPaperType(char *name, int wmm, int hmm, int wp, int hp);
+  void AddPaperType(const char *name, int wmm, int hmm, int wp, int hp);
   wxPrintPaperType *FindPaperType(const char *name);
 };
 

@@ -228,12 +228,12 @@ void wxGenericColourDialog::CreateWidgets(void)
 {
   wxBeginBusyCursor();
   
-  wxButton *okButton = new wxButton(this, wxID_OK, "OK", wxPoint(okButtonX, buttonY));
+  wxButton *okButton = new wxButton(this, wxID_OK, _("OK"), wxPoint(okButtonX, buttonY));
   int bw, bh;
   okButton->GetSize(&bw, &bh);
 
-  (void) new wxButton(this, wxID_CANCEL, "Cancel", wxPoint(okButtonX + bw + 10, buttonY));
-  (void) new wxButton(this, wxID_ADD_CUSTOM, "Add to custom colours",
+  (void) new wxButton(this, wxID_CANCEL, _("Cancel"), wxPoint(okButtonX + bw + 10, buttonY));
+  (void) new wxButton(this, wxID_ADD_CUSTOM, _("Add to custom colours"),
      wxPoint(customButtonX, buttonY));
 
   int sliderX = singleCustomColourRect.x + singleCustomColourRect.width + sectionSpacing;

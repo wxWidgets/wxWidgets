@@ -234,7 +234,7 @@ wxPostScriptDC::~wxPostScriptDC (void)
 
 bool wxPostScriptDC::PrinterDialog(wxWindow *parent)
 {
-  wxPostScriptPrintDialog dialog (parent, "Printer Settings", wxPoint(150, 150), wxSize(400, 400), wxDEFAULT_DIALOG_STYLE | wxDIALOG_MODAL);
+  wxPostScriptPrintDialog dialog (parent, _("Printer Settings"), wxPoint(150, 150), wxSize(400, 400), wxDEFAULT_DIALOG_STYLE | wxDIALOG_MODAL);
   m_ok = (dialog.ShowModal () == wxID_OK) ;
 
   if (!m_ok)
@@ -264,7 +264,7 @@ bool wxPostScriptDC::PrinterDialog(wxWindow *parent)
     }
     else if ((m_filename == "") && (wxThePrintSetupData->GetPrinterMode() == PS_FILE))
     {
-      char *file = wxSaveFileSelector ("PostScript", "ps");
+      char *file = wxSaveFileSelector (_("PostScript"), "ps");
       if (!file)
       {
         m_ok = FALSE;
@@ -1985,11 +1985,11 @@ void wxPostScriptDC::GetSize(int* width, int* height) const
 {
   const char *paperType = wxThePrintSetupData->GetPaperName();
   if (!paperType)
-    paperType = "A4 210 x 297 mm";
+    paperType = _("A4 210 x 297 mm");
 
   wxPrintPaperType *paper = wxThePrintPaperDatabase->FindPaperType(paperType);
   if (!paper)
-    paper = wxThePrintPaperDatabase->FindPaperType("A4 210 x 297 mm");
+    paper = wxThePrintPaperDatabase->FindPaperType(_("A4 210 x 297 mm"));
   if (paper)
   {
     *width = paper->widthPixels;
@@ -2006,11 +2006,11 @@ void wxPostScriptDC::GetSizeMM(long *width, long *height) const
 {
   const char *paperType = wxThePrintSetupData->GetPaperName();
   if (!paperType)
-    paperType = "A4 210 x 297 mm";
+    paperType = _("A4 210 x 297 mm");
 
   wxPrintPaperType *paper = wxThePrintPaperDatabase->FindPaperType(paperType);
   if (!paper)
-    paper = wxThePrintPaperDatabase->FindPaperType("A4 210 x 297 mm");
+    paper = wxThePrintPaperDatabase->FindPaperType(_("A4 210 x 297 mm"));
   if (paper)
   {
     *width = paper->widthMM;
@@ -2053,15 +2053,15 @@ wxDialog(parent, -1, title, pos, size, style)
   (void) new wxStaticText(this, -1, _("Printer Command: "), wxPoint(5, yPos));
   wxTextCtrl *text_prt = new wxTextCtrl(this, wxID_PRINTER_COMMAND, wxThePrintSetupData->GetPrinterCommand(), wxPoint(100, yPos), wxSize(100, -1));
   
-  (void) new wxStaticText(this, -1, "Printer Options: ", wxPoint(210, yPos));
+  (void) new wxStaticText(this, -1, _("Printer Options: "), wxPoint(210, yPos));
   wxTextCtrl *text0 = new wxTextCtrl(this, wxID_PRINTER_OPTIONS, wxThePrintSetupData->GetPrinterOptions(), wxPoint(305, yPos), wxSize(150, -1));
 
   yPos += 40;
 #endif
 
   wxString orientation[2];
-  orientation[0] = "Portrait";
-  orientation[1] = "Landscape";
+  orientation[0] = _("Portrait");
+  orientation[1] = _("Landscape");
 
   wxRadioBox *radio0 = new wxRadioBox(this, wxID_PRINTER_ORIENTATION, "Orientation: ", wxPoint(5, yPos), wxSize(-1,-1),
   		2,orientation,2,0);
@@ -2074,12 +2074,12 @@ wxDialog(parent, -1, title, pos, size, style)
   wxGetResource ("wxWindows", "PSView", &wxThePrintSetupData->previewCommand);
 
   wxString print_modes[3];
-  print_modes[0] = "Send to Printer";
-  print_modes[1] = "Print to File";
-  print_modes[2] = "Preview Only";
+  print_modes[0] = _("Send to Printer");
+  print_modes[1] = _("Print to File");
+  print_modes[2] = _("Preview Only");
 
   int features = (wxThePrintSetupData->GetPrintPreviewCommand() && *wxThePrintSetupData->GetPrintPreviewCommand()) ? 3 : 2;
-  wxRadioBox *radio1 = new wxRadioBox(this, wxID_PRINTER_MODES, "PostScript:",
+  wxRadioBox *radio1 = new wxRadioBox(this, wxID_PRINTER_MODES, _("PostScript:"),
     wxPoint(150, yPos), wxSize(-1,-1), features, print_modes, features, 0);
 
 #ifdef __WXMSW__
@@ -2099,20 +2099,20 @@ wxDialog(parent, -1, title, pos, size, style)
 
   yPos += 90;
 
-  (void) new wxStaticText(this, -1, "X Scaling", wxPoint(5, yPos));
+  (void) new wxStaticText(this, -1, _("X Scaling"), wxPoint(5, yPos));
   /* wxTextCtrl *text1 = */ (void) new wxTextCtrl(this, wxID_PRINTER_X_SCALE, buf, wxPoint(100, yPos), wxSize(100, -1));
 
   sprintf (buf, "%.2f", wx_printer_scale_y);
-  (void) new wxStaticText(this, -1, "Y Scaling", wxPoint(220, yPos));
+  (void) new wxStaticText(this, -1, _("Y Scaling"), wxPoint(220, yPos));
   /* wxTextCtrl *text2 = */ (void) new wxTextCtrl(this, wxID_PRINTER_Y_SCALE, buf, wxPoint(320, yPos), wxSize(100, -1));
 
   yPos += 25;
 
-  (void) new wxStaticText(this, -1, "X Translation", wxPoint(5, yPos));
+  (void) new wxStaticText(this, -1, _("X Translation"), wxPoint(5, yPos));
   sprintf (buf, "%.2ld", wx_printer_translate_x);
   /* wxTextCtrl *text3 = */ (void) new wxTextCtrl(this, wxID_PRINTER_X_TRANS, buf, wxPoint(100, yPos), wxSize(100, -1));
 
-  (void) new wxStaticText(this, -1, "Y Translation", wxPoint(220, yPos));
+  (void) new wxStaticText(this, -1, _("Y Translation"), wxPoint(220, yPos));
   sprintf (buf, "%.2ld", wx_printer_translate_y);
   /* wxTextCtrl *text4 = */ (void) new wxTextCtrl(this, wxID_PRINTER_Y_TRANS, buf, wxPoint(320, yPos), wxSize(100, -1));
 
@@ -2159,22 +2159,22 @@ int wxPostScriptPrintDialog::ShowModal (void)
 
 // PostScript printer settings
 // RETAINED FOR BACKWARD COMPATIBILITY
-void wxSetPrinterCommand(char *cmd)
+void wxSetPrinterCommand(const char *cmd)
 {
   wxThePrintSetupData->SetPrinterCommand(cmd);
 }
 
-void wxSetPrintPreviewCommand(char *cmd)
+void wxSetPrintPreviewCommand(const char *cmd)
 {
   wxThePrintSetupData->SetPrintPreviewCommand(cmd);
 }
 
-void wxSetPrinterOptions(char *flags)
+void wxSetPrinterOptions(const char *flags)
 {
   wxThePrintSetupData->SetPrinterOptions(flags);
 }
 
-void wxSetPrinterFile(char *f)
+void wxSetPrinterFile(const char *f)
 {
   wxThePrintSetupData->SetPrinterFile(f);
 }
@@ -2200,7 +2200,7 @@ void wxSetPrinterMode(int mode)
   wxThePrintSetupData->SetPrinterMode(mode);
 }
 
-void wxSetAFMPath(char *f)
+void wxSetAFMPath(const char *f)
 {
   wxThePrintSetupData->SetAFMPath(f);
 }
@@ -2289,7 +2289,7 @@ wxPrintSetupData::~wxPrintSetupData(void)
     delete[] printerFile;
 }
 
-void wxPrintSetupData::SetPrinterCommand(char *cmd)
+void wxPrintSetupData::SetPrinterCommand(const char *cmd)
 {
   if (cmd == printerCommand)
     return;
@@ -2302,7 +2302,7 @@ void wxPrintSetupData::SetPrinterCommand(char *cmd)
     printerCommand = NULL;
 }
 
-void wxPrintSetupData::SetPrintPreviewCommand(char *cmd)
+void wxPrintSetupData::SetPrintPreviewCommand(const char *cmd)
 {
   if (cmd == previewCommand)
     return;
@@ -2315,7 +2315,7 @@ void wxPrintSetupData::SetPrintPreviewCommand(char *cmd)
     previewCommand = NULL;
 }
 
-void wxPrintSetupData::SetPaperName(char *name)
+void wxPrintSetupData::SetPaperName(const char *name)
 {
   if (name == paperName)
     return;
@@ -2328,7 +2328,7 @@ void wxPrintSetupData::SetPaperName(char *name)
     paperName = NULL;
 }
 
-void wxPrintSetupData::SetPrinterOptions(char *flags)
+void wxPrintSetupData::SetPrinterOptions(const char *flags)
 {
   if (printerFlags == flags)
     return;
@@ -2341,7 +2341,7 @@ void wxPrintSetupData::SetPrinterOptions(char *flags)
     printerFlags = NULL;
 }
 
-void wxPrintSetupData::SetPrinterFile(char *f)
+void wxPrintSetupData::SetPrinterFile(const char *f)
 {
   if (f == printerFile)
     return;
@@ -2377,7 +2377,7 @@ void wxPrintSetupData::SetPrinterMode(int mode)
   printerMode = mode;
 }
 
-void wxPrintSetupData::SetAFMPath(char *f)
+void wxPrintSetupData::SetAFMPath(const char *f)
 {
   if (f == afmPath)
     return;
@@ -2482,7 +2482,7 @@ void wxInitializePrintSetupData(bool init)
     wxThePrintSetupData->SetPrintPreviewCommand(PS_VIEWER_PROG);
     wxThePrintSetupData->SetPrinterOrientation(PS_PORTRAIT);
     wxThePrintSetupData->SetPrinterMode(PS_PREVIEW);
-    wxThePrintSetupData->SetPaperName("A4 210 x 297 mm");
+    wxThePrintSetupData->SetPaperName(_("A4 210 x 297 mm"));
 
     // Could have a .ini file to read in some defaults
     // - and/or use environment variables, e.g. WXWIN
@@ -2514,7 +2514,7 @@ void wxInitializePrintSetupData(bool init)
  * Paper size database for PostScript
  */
 
-wxPrintPaperType::wxPrintPaperType(char *name, int wmm, int hmm, int wp, int hp)
+wxPrintPaperType::wxPrintPaperType(const char *name, int wmm, int hmm, int wp, int hp)
 {
   widthMM = wmm;
   heightMM = hmm;
@@ -2549,10 +2549,10 @@ void wxPrintPaperDatabase::CreateDatabase(void)
   // Heck, someone will know how to make it hunky-dory...
   // JACS 25/5/95
   
-  AddPaperType("A4 210 x 297 mm", 210, 297,         595, 842);
-  AddPaperType("A3 297 x 420 mm", 297, 420,         842, 1191);
-  AddPaperType("Letter 8 1/2 x 11 in", 216, 279,    612, 791);
-  AddPaperType("Legal 8 1/2 x 14 in", 216, 356,     612, 1009);
+  AddPaperType(_("A4 210 x 297 mm"), 210, 297,         595, 842);
+  AddPaperType(_("A3 297 x 420 mm"), 297, 420,         842, 1191);
+  AddPaperType(_("Letter 8 1/2 x 11 in"), 216, 279,    612, 791);
+  AddPaperType(_("Legal 8 1/2 x 14 in"), 216, 356,     612, 1009);
 }
 
 void wxPrintPaperDatabase::ClearDatabase(void)
@@ -2560,7 +2560,7 @@ void wxPrintPaperDatabase::ClearDatabase(void)
   Clear();
 }
 
-void wxPrintPaperDatabase::AddPaperType(char *name, int wmm, int hmm, int wp, int hp)
+void wxPrintPaperDatabase::AddPaperType(const char *name, int wmm, int hmm, int wp, int hp)
 {
   Append(name, new wxPrintPaperType(name, wmm, hmm, wp, hp));
 }

@@ -31,7 +31,8 @@ void gtk_filedialog_ok_callback( GtkWidget *WXUNUSED(widget), gpointer data )
 
   if((style&wxSAVE)&&(style&wxOVERWRITE_PROMPT))
 	if(wxFileExists(gtk_file_selection_get_filename(GTK_FILE_SELECTION(dialog->m_widget) ))) {
-	  if(wxMessageBox("File exists. Overwrite?","Confirm",wxYES_NO)!=wxYES)
+	  if(wxMessageBox(_("File exists. Overwrite?"),
+	                  _("Confirm"), wxYES_NO) != wxYES)
 		return;
 	}
 
@@ -63,7 +64,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
   m_dialogStyle = style;
   m_filterIndex = 1;
 
-  m_widget = gtk_file_selection_new( "File selection" );
+  m_widget = gtk_file_selection_new(_("File selection"));
   
   int x = (gdk_screen_width () - 400) / 2;
   int y = (gdk_screen_height () - 400) / 2;
@@ -163,7 +164,4 @@ char* wxSaveFileSelector(const char *what, const char *extension, const char *de
 
   return wxFileSelector (prompt, NULL, default_name, ext, wild, 0, parent);
 };
-
-
-
 

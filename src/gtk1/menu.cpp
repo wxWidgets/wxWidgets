@@ -193,7 +193,7 @@ void wxMenuItem::SetText(const wxString& str)
 
 void wxMenuItem::Check( bool check )
 {
-  wxCHECK_RET( IsCheckable(), "can't check uncheckable item!" )
+  wxCHECK_RET( IsCheckable(), _("can't check uncheckable item!") )
 
   m_isChecked = check;
   gtk_check_menu_item_set_state( (GtkCheckMenuItem*)m_menuItem, (gint)check );
@@ -355,7 +355,7 @@ wxMenuItem *wxMenu::FindItem(int id) const
     node = node->Next();
   };
 
-  wxLogDebug("wxMenu::FindItem: item %d not found.", id);
+  wxLogDebug(_("wxMenu::FindItem: item %d not found."), id);
 
   return NULL;
 }

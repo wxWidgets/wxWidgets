@@ -1015,7 +1015,7 @@ void wxListMainWindow::OnRenameTimer()
   m_text->SetFocus();
 */
 /*
-  char *res = wxGetTextFromUser( "Enter new name:", "", s );
+  char *res = wxGetTextFromUser( _("Enter new name:"), "", s );
   if (res)
   {
     m_dirty = TRUE;

@@ -572,7 +572,7 @@ bool wxFileConfig::Write(const char *szKey, const char *szValue)
   wxString strName = path.Name();
   if ( strName.IsEmpty() ) {
     // setting the value of a group is an error
-    wxASSERT_MSG( IsEmpty(szValue), "can't set value of a group!" );
+    wxASSERT_MSG( IsEmpty(szValue), _("can't set value of a group!") );
 
     // ... except if it's empty in which case it's a way to force it's creation
     m_pCurrentGroup->SetDirty();

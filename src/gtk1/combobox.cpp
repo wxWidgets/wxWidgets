@@ -13,6 +13,7 @@
 #endif
 
 #include "wx/combobox.h"
+#include <wx/intl.h>
 
 //-----------------------------------------------------------------------------
 // data
@@ -155,7 +156,7 @@ void wxComboBox::Delete( int n )
   wxNode *node = m_clientData.Nth( n );
   if (!node)
   {
-    wxFAIL_MSG("wxComboBox::Delete wrong index");
+    wxFAIL_MSG(_("wxComboBox::Delete wrong index"));
   }
   else
     m_clientData.DeleteNode( node );

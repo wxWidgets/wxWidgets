@@ -24,6 +24,7 @@
 #include "wx/defs.h"
 #include "wx/list.h"
 #include "wx/utils.h"
+#include <wx/intl.h>
 #endif
 
 // Sun CC compatibility (interference with xview/pkg.h, apparently...)
@@ -252,7 +253,7 @@ wxNode *wxList::Find (const char *key) const
   {
       if (!current->key.string)
 	{
-	  wxFatalError ("wxList: string key not present, probably did not Append correctly!");
+	  wxFatalError (_("wxList: string key not present, probably did not Append correctly!"));
 	  break;
 	}
       if (strcmp (current->key.string, key) == 0)

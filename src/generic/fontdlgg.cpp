@@ -31,6 +31,7 @@
 #include "wx/dcclient.h"
 #include "wx/choice.h"
 #include "wx/checkbox.h"
+#include <wx/intl.h>
 #endif
 
 #include <string.h>
@@ -121,7 +122,7 @@ wxGenericFontDialog::wxGenericFontDialog(void)
 }
 
 wxGenericFontDialog::wxGenericFontDialog(wxWindow *parent, wxFontData *data):
-  wxDialog(parent, -1, "Font", wxPoint(0, 0), wxSize(600, 600), wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL)
+  wxDialog(parent, -1, _("Font"), wxPoint(0, 0), wxSize(600, 600), wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL)
 {
   m_useEvents = FALSE;
   Create(parent, data);
@@ -228,7 +229,7 @@ void wxGenericFontDialog::CreateWidgets(void)
   }
 
   pointSizeChoice = new wxChoice(this, wxID_FONT_SIZE, wxPoint(210, y), wxSize(50, -1), 40, pointSizes);
-  underLineCheckBox = new wxCheckBox(this, wxID_FONT_UNDERLINE, "Underline", wxPoint(280, y));
+  underLineCheckBox = new wxCheckBox(this, wxID_FONT_UNDERLINE, _("Underline"), wxPoint(280, y));
 
   int rectY;
   pointSizeChoice->GetPosition(&x, &rectY); //NL mod
@@ -242,8 +243,8 @@ void wxGenericFontDialog::CreateWidgets(void)
 
   int by = (fontRect.y + fontRect.height + 5);
 
-  wxButton *okButton = new wxButton(this, wxID_OK, "OK", wxPoint(5, by));
-  (void) new wxButton(this, wxID_OK, "Cancel", wxPoint(50, by));
+  wxButton *okButton = new wxButton(this, wxID_OK, _("OK"), wxPoint(5, by));
+  (void) new wxButton(this, wxID_OK, _("Cancel"), wxPoint(50, by));
 
   familyChoice->SetStringSelection( wxFontFamilyIntToString(dialogFont.GetFamily()) );
   styleChoice->SetStringSelection(wxFontStyleIntToString(dialogFont.GetStyle()));
@@ -306,7 +307,7 @@ void wxGenericFontDialog::PaintFont(wxDC& dc)
     float cy = (float)(fontRect.y + (fontRect.height/2.0) - (h/2.0));
     dc.SetTextForeground(fontData.fontColour);
     dc.SetClippingRegion( fontRect.x, fontRect.y, (long)(fontRect.width-2.0), (long)(fontRect.height-2.0));
-    dc.DrawText("ABCDEFGabcdefg12345", (long)cx, (long)cy);
+    dc.DrawText(_("ABCDEFGabcdefg12345"), (long)cx, (long)cy);
     dc.DestroyClippingRegion();
 	dc.SetFont(wxNullFont);
   }

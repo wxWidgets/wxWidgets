@@ -34,6 +34,7 @@
 #include "wx/menu.h"
 #include "wx/list.h"
 #include "wx/filedlg.h"
+#include <wx/intl.h>
 #endif
 
 #ifdef __WXGTK__
@@ -194,7 +195,7 @@ bool wxDocument::SaveAs(void)
   if (!docTemplate)
     return FALSE;
   
-  char *tmp = wxFileSelector("Save as", docTemplate->GetDirectory(), GetFilename(),
+  char *tmp = wxFileSelector(_("Save as"), docTemplate->GetDirectory(), GetFilename(),
     docTemplate->GetDefaultExtension(), docTemplate->GetFileFilter(),
     wxSAVE|wxOVERWRITE_PROMPT, GetDocumentWindow());
     
@@ -240,19 +241,19 @@ bool wxDocument::OnSaveDocument(const wxString& file)
   if (wxTheApp->GetAppName() != "")
     msgTitle = wxTheApp->GetAppName();
   else
-    msgTitle = wxString("File error");
+    msgTitle = wxString(_("File error"));
 
   ofstream store(file);
   if (store.fail() || store.bad())
   {
-    (void)wxMessageBox("Sorry, could not open this file for saving.", msgTitle, wxOK | wxICON_EXCLAMATION,
+    (void)wxMessageBox(_("Sorry, could not open this file for saving."), msgTitle, wxOK | wxICON_EXCLAMATION,
       GetDocumentWindow());
     // Saving error
     return FALSE;
   }
   if (SaveObject(store)==FALSE)
   {
-    (void)wxMessageBox("Sorry, could not save this file.", msgTitle, wxOK | wxICON_EXCLAMATION,
+    (void)wxMessageBox(_("Sorry, could not save this file."), msgTitle, wxOK | wxICON_EXCLAMATION,
       GetDocumentWindow());
     // Saving error
     return FALSE;
@@ -271,18 +272,18 @@ bool wxDocument::OnOpenDocument(const wxString& file)
   if (wxTheApp->GetAppName() != "")
     msgTitle = wxTheApp->GetAppName();
   else
-    msgTitle = wxString("File error");
+    msgTitle = wxString(_("File error"));
 
   ifstream store(file);
   if (store.fail() || store.bad())
   {
-    (void)wxMessageBox("Sorry, could not open this file.", msgTitle, wxOK|wxICON_EXCLAMATION,
+    (void)wxMessageBox(_("Sorry, could not open this file."), msgTitle, wxOK|wxICON_EXCLAMATION,
      GetDocumentWindow());
     return FALSE;
   }
   if (LoadObject(store)==FALSE)
   {
-    (void)wxMessageBox("Sorry, could not open this file.", msgTitle, wxOK|wxICON_EXCLAMATION,
+    (void)wxMessageBox(_("Sorry, could not open this file."), msgTitle, wxOK|wxICON_EXCLAMATION,
       GetDocumentWindow());
     return FALSE;
   }
@@ -329,7 +330,7 @@ bool wxDocument::GetPrintableName(wxString& buf) const
   }
   else
   {
-    buf = "unnamed";
+    buf = _("unnamed");
     return TRUE;
   }
 }
@@ -361,9 +362,9 @@ bool wxDocument::OnSaveModified(void)
     if (wxTheApp->GetAppName() != "")
       msgTitle = wxTheApp->GetAppName();
     else
-      msgTitle = wxString("Warning");
+      msgTitle = wxString(_("Warning"));
 
-    sprintf(buf, "Do you want to save changes to document %s?", (const char *)title);
+    sprintf(buf, _("Do you want to save changes to document %s?"), (const char *)title);
     int res = wxMessageBox(buf, msgTitle, wxYES_NO|wxCANCEL|wxICON_QUESTION,
       GetDocumentWindow());
     if (res == wxNO)
@@ -802,7 +803,7 @@ void wxDocManager::OnPreview(wxCommandEvent& WXUNUSED(event))
 #endif
        preview = new wxPostScriptPrintPreview(printout, view->OnCreatePrintout());
 
-    wxPreviewFrame *frame = new wxPreviewFrame(preview, (wxFrame *)wxTheApp->GetTopWindow(), "Print Preview",
+    wxPreviewFrame *frame = new wxPreviewFrame(preview, (wxFrame *)wxTheApp->GetTopWindow(), _("Print Preview"),
 		wxPoint(100, 100), wxSize(600, 650));
     frame->Centre(wxBOTH);
     frame->Initialize();
@@ -1027,7 +1028,7 @@ wxDocument *wxDocManager::GetCurrentDocument(void) const
 bool wxDocManager::MakeDefaultName(wxString& name)
 {
   char buf[256];
-  sprintf(buf, "unnamed%d", m_defaultDocumentNameCounter);
+  sprintf(buf, _("unnamed%d"), m_defaultDocumentNameCounter);
   m_defaultDocumentNameCounter ++;
   name = buf;
   return TRUE;
@@ -1161,7 +1162,7 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
     // Omit final "|"
     descrBuf[len-1] = 0;
 
-  char *pathTmp = wxFileSelector("Select a file", "", "", "", descrBuf, 0, wxTheApp->GetTopWindow());
+  char *pathTmp = wxFileSelector(_("Select a file"), "", "", "", descrBuf, 0, wxTheApp->GetTopWindow());
   delete[] descrBuf;
   if (pathTmp)
   {
@@ -1190,7 +1191,7 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
   if (!temp)
     return NULL;
 
-  char *pathTmp = wxFileSelector("Select a file", "", "",
+  char *pathTmp = wxFileSelector(_("Select a file"), "", "",
      temp->GetDefaultExtension(),
      temp->GetFileFilter(),
      0, wxTheApp->GetTopWindow());
@@ -1235,7 +1236,7 @@ wxDocTemplate *wxDocManager::SelectDocumentType(wxDocTemplate **templates,
     return temp;
   }
   
-  wxDocTemplate *theTemplate = (wxDocTemplate *)wxGetSingleChoiceData("Select a document template", "Templates", n,
+  wxDocTemplate *theTemplate = (wxDocTemplate *)wxGetSingleChoiceData(_("Select a document template"), _("Templates"), n,
     strings, data);
   delete[] strings;
   delete[] data;
@@ -1258,7 +1259,7 @@ wxDocTemplate *wxDocManager::SelectViewType(wxDocTemplate **templates,
       n ++;
     }
   }
-  wxDocTemplate *theTemplate = (wxDocTemplate *)wxGetSingleChoiceData("Select a document view", "Views", n,
+  wxDocTemplate *theTemplate = (wxDocTemplate *)wxGetSingleChoiceData(_("Select a document view"), _("Views"), n,
     strings, data);
   delete[] strings;
   delete[] data;
@@ -1630,12 +1631,12 @@ void wxCommandProcessor::SetMenuStrings(void)
     {
       wxCommand *command = (wxCommand *)m_currentCommand->Data();
       wxString commandName(command->GetName());
-      if (commandName == "") commandName = "Unnamed command";
+      if (commandName == "") commandName = _("Unnamed command");
       bool canUndo = command->CanUndo();
       if (canUndo)
-        buf = wxString("&Undo ") + commandName;
+        buf = wxString(_("&Undo ")) + commandName;
       else
-        buf = wxString("Can't &Undo ") + commandName;
+        buf = wxString(_("Can't &Undo ")) + commandName;
         
       m_commandEditMenu->SetLabel(wxID_UNDO, buf);
       m_commandEditMenu->Enable(wxID_UNDO, canUndo);
@@ -1645,25 +1646,25 @@ void wxCommandProcessor::SetMenuStrings(void)
       {
         wxCommand *redoCommand = (wxCommand *)m_currentCommand->Next()->Data();
         wxString redoCommandName(redoCommand->GetName());
-        if (redoCommandName == "") redoCommandName = "Unnamed command";
-        buf = wxString("&Redo ") + redoCommandName;
+        if (redoCommandName == "") redoCommandName = _("Unnamed command");
+        buf = wxString(_("&Redo ")) + redoCommandName;
         m_commandEditMenu->SetLabel(wxID_REDO, buf);
         m_commandEditMenu->Enable(wxID_REDO, TRUE);
       }
       else
       {
-        m_commandEditMenu->SetLabel(wxID_REDO, "&Redo");
+        m_commandEditMenu->SetLabel(wxID_REDO, _("&Redo"));
         m_commandEditMenu->Enable(wxID_REDO, FALSE);
       }
     }
     else
     {
-      m_commandEditMenu->SetLabel(wxID_UNDO, "&Undo");
+      m_commandEditMenu->SetLabel(wxID_UNDO, _("&Undo"));
       m_commandEditMenu->Enable(wxID_UNDO, FALSE);
 
       if (m_commands.Number() == 0)
       {
-        m_commandEditMenu->SetLabel(wxID_REDO, "&Redo");
+        m_commandEditMenu->SetLabel(wxID_REDO, _("&Redo"));
         m_commandEditMenu->Enable(wxID_REDO, FALSE);
       }
       else
@@ -1672,8 +1673,8 @@ void wxCommandProcessor::SetMenuStrings(void)
         // we've undone to the start of the list, but can redo the first.
         wxCommand *redoCommand = (wxCommand *)m_commands.First()->Data();
         wxString redoCommandName(redoCommand->GetName());
-        if (!redoCommandName) redoCommandName = "Unnamed command";
-        buf = wxString("&Redo ") + redoCommandName;
+        if (!redoCommandName) redoCommandName = _("Unnamed command");
+        buf = wxString(_("&Redo ")) + redoCommandName;
         m_commandEditMenu->SetLabel(wxID_REDO, buf);
         m_commandEditMenu->Enable(wxID_REDO, TRUE);
       }
@@ -1743,7 +1744,7 @@ void wxFileHistory::AddFileToHistory(const wxString& file)
   {
     if (m_fileHistoryN == 0)
       m_fileMenu->AppendSeparator();
-    m_fileMenu->Append(wxID_FILE1+m_fileHistoryN, "[EMPTY]");
+    m_fileMenu->Append(wxID_FILE1+m_fileHistoryN, _("[EMPTY]"));
     m_fileHistoryN ++;
   }
   // Shuffle filenames down

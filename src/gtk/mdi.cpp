@@ -16,6 +16,7 @@
 #include "wx/dialog.h"
 #include "wx/menu.h"
 #include "wx/gtk/win_gtk.h"
+#include <wx/intl.h>
 
 //-----------------------------------------------------------------------------
 
@@ -323,7 +324,7 @@ void wxMDIClientWindow::AddChild( wxWindow *child )
 {
   if (!child->IsKindOf(CLASSINFO(wxMDIChildFrame)))
   {
-     wxFAIL_MSG("wxNotebook::AddChild: Child has to be wxMDIChildFrame");
+     wxFAIL_MSG(_("wxNotebook::AddChild: Child has to be wxMDIChildFrame"));
      return;
   };
 
@@ -332,7 +333,7 @@ void wxMDIClientWindow::AddChild( wxWindow *child )
   wxString s;
   wxMDIChildFrame* mdi_child = (wxMDIChildFrame*) child;
   s = mdi_child->m_title;
-  if (s.IsNull()) s = "MDI child";
+  if (s.IsNull()) s = _("MDI child");
 
   GtkWidget *label_widget;
   label_widget = gtk_label_new( s );

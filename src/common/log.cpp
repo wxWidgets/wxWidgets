@@ -307,13 +307,13 @@ void wxLog::DoLog(wxLogLevel level, const char *szString)
       break;
 
     default:
-      wxFAIL_MSG("unknown log level in wxLog::DoLog");
+      wxFAIL_MSG(_("unknown log level in wxLog::DoLog"));
   }
 }
 
 void wxLog::DoLogString(const char *WXUNUSED(szString))
 {
-  wxFAIL_MSG("DoLogString must be overrided if it's called.");
+  wxFAIL_MSG(_("DoLogString must be overrided if it's called."));
 }
 
 void wxLog::Flush()
@@ -483,7 +483,7 @@ void wxLogGui::DoLog(wxLogLevel level, const char *szString)
       break;
 
     default:
-      wxFAIL_MSG("unknown log level in wxLogGui::DoLog");
+      wxFAIL_MSG(_("unknown log level in wxLogGui::DoLog"));
   }
 }
 
@@ -552,11 +552,11 @@ wxLogFrame::wxLogFrame(const char *szTitle)
   // create menu
   wxMenuBar *pMenuBar = new wxMenuBar;
   wxMenu *pMenu = new wxMenu;
-  pMenu->Append(Menu_Save,  "&Save...");
-  pMenu->Append(Menu_Clear, "C&lear");
+  pMenu->Append(Menu_Save,  _("&Save..."));
+  pMenu->Append(Menu_Clear, _("C&lear"));
   pMenu->AppendSeparator();
-  pMenu->Append(Menu_Close, "&Close");
-  pMenuBar->Append(pMenu, "&Log");
+  pMenu->Append(Menu_Close, _("&Close"));
+  pMenuBar->Append(pMenu, _("&Log"));
   SetMenuBar(pMenuBar);
 
   // @@ what about status bar? needed (for menu prompts)?
@@ -593,7 +593,7 @@ void wxLogFrame::OnSave(wxCommandEvent& WXUNUSED(event))
     wxString strMsg;
     strMsg.Printf(_("Append log to file '%s' "
                     "(choosing [No] will overwrite it)?"), szFileName);
-    switch ( wxMessageBox(strMsg, "Question", wxYES_NO | wxCANCEL) ) {
+    switch ( wxMessageBox(strMsg, _("Question"), wxYES_NO | wxCANCEL) ) {
       case wxYES:
         bAppend = TRUE;
         break;
@@ -606,7 +606,7 @@ void wxLogFrame::OnSave(wxCommandEvent& WXUNUSED(event))
         return;
 
       default:
-        wxFAIL_MSG("invalid message box return value");
+        wxFAIL_MSG(_("invalid message box return value"));
     }
 
     if ( bAppend ) {
@@ -624,7 +624,7 @@ void wxLogFrame::OnSave(wxCommandEvent& WXUNUSED(event))
   // -------------------------
 #ifdef __WXGTK__
   // @@@@ TODO: no GetNumberOfLines and GetLineText in wxGTK yet
-  wxLogError("Sorry, this function is not implemented under GTK");
+  wxLogError(_("Sorry, this function is not implemented under GTK"));
 #else
   int nLines = m_pTextCtrl->GetNumberOfLines();
   for ( int nLine = 0; bOk && nLine < nLines; nLine++ ) {

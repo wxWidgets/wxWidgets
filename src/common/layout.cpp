@@ -29,6 +29,7 @@
 #include "wx/utils.h"
 #include "wx/dialog.h"
 #include "wx/msgdlg.h"
+#include <wx/intl.h>
 #endif
 
 #include "wx/layout.h"
@@ -1098,7 +1099,7 @@ bool wxOldDoLayout(wxWindow *win)
   // failed, so we can print a specific diagnostic message.
   if (noFailures > 0)
   {
-    wxDebugMsg("wxWindow::Layout() failed.\n");
+    wxDebugMsg(_("wxWindow::Layout() failed.\n"));
   }
 */
   // Now set the sizes and positions of the children, and
@@ -1341,7 +1342,7 @@ bool wxSizer::LayoutPhase1(int *noChanges)
     {
       if (!m_sizerParent)
       {
-        wxMessageBox("wxExpandSizer has no parent!", "Sizer error", wxOK);
+        wxMessageBox(_("wxExpandSizer has no parent!"), _("Sizer error"), wxOK);
         return TRUE;
       }
 

@@ -27,6 +27,7 @@
 #include "wx/mdi.h"
 #include "wx/notebook.h"
 #include "wx/statusbr.h"
+#include <wx/intl.h>
 //#include "wx/treectrl.h"
 #include "gdk/gdkkeysyms.h"
 #include <math.h>
@@ -902,7 +903,7 @@ void wxWindow::PreCreation( wxWindow *parent, wxWindowID id,
       long style, const wxString &name )
 {
   if (m_needParent && (parent == NULL))
-    wxFatalError( "Need complete parent.", name );
+    wxFatalError( _("Need complete parent."), name );
 
   m_widget = NULL;
   m_hasVMT = FALSE;
@@ -1079,7 +1080,7 @@ void wxWindow::ImplementSetPosition(void)
   
   if (!m_parent)
   {
-    printf( "wxWindow::SetSize error.\n" );
+    printf( _("wxWindow::SetSize error.\n") );
     return;
   }
   
@@ -1679,7 +1680,7 @@ bool wxWindow::TransferDataToWindow(void)
     if (child->GetValidator() && /* child->GetValidator()->Ok() && */
   !child->GetValidator()->TransferToWindow() )
     {
-      wxMessageBox( "Application Error", "Could not transfer data to window", wxOK|wxICON_EXCLAMATION );
+      wxMessageBox( _("Application Error"), _("Could not transfer data to window"), wxOK|wxICON_EXCLAMATION );
       return FALSE;
     };
     node = node->Next();
@@ -2360,19 +2361,19 @@ void wxWindow::SetConstraintSizes(bool recurse)
 
     wxString winName;
   if (GetName() == "")
-    winName = "unnamed";
+    winName = _("unnamed");
   else
     winName = GetName();
-    wxDebugMsg("Constraint(s) not satisfied for window of type %s, name %s:\n", (const char *)windowClass, (const char *)winName);
+    wxDebugMsg(_("Constraint(s) not satisfied for window of type %s, name %s:\n"), (const char *)windowClass, (const char *)winName);
     if (!constr->left.GetDone())
-      wxDebugMsg("  unsatisfied 'left' constraint.\n");
+      wxDebugMsg(_("  unsatisfied 'left' constraint.\n"));
     if (!constr->right.GetDone())
-      wxDebugMsg("  unsatisfied 'right' constraint.\n");
+      wxDebugMsg(_("  unsatisfied 'right' constraint.\n"));
     if (!constr->width.GetDone())
-      wxDebugMsg("  unsatisfied 'width' constraint.\n");
+      wxDebugMsg(_("  unsatisfied 'width' constraint.\n"));
     if (!constr->height.GetDone())
-      wxDebugMsg("  unsatisfied 'height' constraint.\n");
-    wxDebugMsg("Please check constraints: try adding AsIs() constraints.\n");
+      wxDebugMsg(_("  unsatisfied 'height' constraint.\n"));
+    wxDebugMsg(_("Please check constraints: try adding AsIs() constraints.\n"));
   }
 
   if (recurse)

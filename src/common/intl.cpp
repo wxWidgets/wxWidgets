@@ -243,17 +243,17 @@ bool wxMsgCatalog::Load(const char *szDirPrefix, const char *szName)
   // (we're using an object because we have several return paths)
   NoTransErr noTransErr;
 
-  wxLogVerbose("looking for catalog '%s' in path '%s'.",
+  wxLogVerbose(_("looking for catalog '%s' in path '%s'."),
              szName, strPath.c_str());
 
   wxString strFullName;
   if ( !wxFindFileInPath(&strFullName, strPath, strFile) ) {
-    wxLogWarning("catalog file for domain '%s' not found.", szName);
+    wxLogWarning(_("catalog file for domain '%s' not found."), szName);
     return FALSE;
   }
 
   // open file
-  wxLogVerbose("using catalog '%s' from '%s'.",
+  wxLogVerbose(_("using catalog '%s' from '%s'."),
              szName, strFullName.c_str());
   
   wxFile fileMsg(strFullName);
@@ -288,7 +288,7 @@ bool wxMsgCatalog::Load(const char *szDirPrefix, const char *szName)
   
   if ( !bValid ) {
     // it's either too short or has incorrect magic number
-    wxLogWarning("'%s' is not a valid message catalog.", strFullName.c_str());
+    wxLogWarning(_("'%s' is not a valid message catalog."), strFullName.c_str());
     
     wxDELETEA(m_pData);
     return FALSE;
@@ -381,7 +381,7 @@ bool wxLocale::Init(const char *szName,
     szLocale = szName;
   m_pszOldLocale = setlocale(LC_ALL, szLocale);
   if ( m_pszOldLocale == NULL )
-    wxLogError("locale '%s' can not be set.", szLocale);
+    wxLogError(_("locale '%s' can not be set."), szLocale);
 
   // the short name will be used to look for catalog files as well,
   // so we need something here
@@ -451,10 +451,10 @@ const char *wxLocale::GetString(const char *szOrigString,
       wxSuppressTransErrors();
       
       if ( szDomain != NULL )
-        wxLogWarning("string '%s' not found in domain '%s' for locale '%s'.",
+        wxLogWarning(_("string '%s' not found in domain '%s' for locale '%s'."),
                     szOrigString, szDomain, m_strLocale.c_str());
       else
-        wxLogWarning("string '%s' not found in locale '%s'.",
+        wxLogWarning(_("string '%s' not found in locale '%s'."),
                    szOrigString, m_strLocale.c_str());
     }
 

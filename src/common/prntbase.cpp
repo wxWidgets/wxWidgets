@@ -141,7 +141,7 @@ wxWindow *wxPrinterBase::CreateAbortWindow(wxWindow *parent, wxPrintout *WXUNUSE
 
 void wxPrinterBase::ReportError(wxWindow *parent, wxPrintout *WXUNUSED(printout), char *message)
 {
-  wxMessageBox(message, "Printing Error", wxOK, parent);
+  wxMessageBox(message, _("Printing Error"), wxOK, parent);
 }
 
 /*
@@ -171,7 +171,7 @@ wxPrintout::~wxPrintout(void)
 
 bool wxPrintout::OnBeginDocument(int WXUNUSED(startPage), int WXUNUSED(endPage))
 {
-  return GetDC()->StartDoc("Printing");
+  return GetDC()->StartDoc(_("Printing"));
 }
 
 void wxPrintout::OnEndDocument(void)
@@ -354,14 +354,14 @@ void wxPreviewControlBar::CreateButtons(void)
   int y = 5;
   int gap = 5;
 
-  closeButton = new wxButton(this, wxID_PREVIEW_CLOSE, "Close",
+  closeButton = new wxButton(this, wxID_PREVIEW_CLOSE, _("Close"),
   	wxPoint(x, y), wxSize(buttonWidth, buttonHeight));
 
   x += gap + buttonWidth;
   
   if (buttonFlags & wxPREVIEW_PRINT)
   {
-    printButton =  new wxButton(this, wxID_PREVIEW_PRINT, "Print...", wxPoint(x, y),
+    printButton =  new wxButton(this, wxID_PREVIEW_PRINT, _("Print..."), wxPoint(x, y),
 		wxSize(buttonWidth, buttonHeight));
 	x += gap + buttonWidth;
   }
@@ -660,8 +660,8 @@ bool wxPrintPreviewBase::RenderPage(int pageNum)
 
   if (!previewCanvas)
   {
-    wxMessageBox("wxPrintPreviewBase::RenderPage: must use wxPrintPreviewBase::SetCanvas to let me know about the canvas!",
-      "Print Preview Failure", wxOK);
+    wxMessageBox(_("wxPrintPreviewBase::RenderPage: must use wxPrintPreviewBase::SetCanvas to let me know about the canvas!"),
+      _("Print Preview Failure"), wxOK);
     return FALSE;
   }
   previewCanvas->GetSize(&canvasWidth, &canvasHeight);
@@ -683,7 +683,7 @@ bool wxPrintPreviewBase::RenderPage(int pageNum)
     {
       if (previewBitmap)
         delete previewBitmap;
-      wxMessageBox("Sorry, not enough memory to create a preview.", "Print Preview Failure", wxOK);
+      wxMessageBox(_("Sorry, not enough memory to create a preview."), _("Print Preview Failure"), wxOK);
       return FALSE;
     }
   }
@@ -701,7 +701,7 @@ bool wxPrintPreviewBase::RenderPage(int pageNum)
 
   if (!previewPrintout->OnBeginDocument(printData.GetFromPage(), printData.GetToPage()))
   {
-    wxMessageBox("Could not start document preview.", "Print Preview Failure", wxOK);
+    wxMessageBox(_("Could not start document preview."), _("Print Preview Failure"), wxOK);
     
     memoryDC.SelectObject(wxNullBitmap);
 
@@ -720,9 +720,9 @@ bool wxPrintPreviewBase::RenderPage(int pageNum)
 
   char buf[200];
   if (maxPage != 0)
-    sprintf(buf, "Page %d of %d", pageNum, maxPage);
+    sprintf(buf, _("Page %d of %d"), pageNum, maxPage);
   else
-    sprintf(buf, "Page %d", pageNum);
+    sprintf(buf, _("Page %d"), pageNum);
 
   if (previewFrame)
     previewFrame->SetStatusText(buf);

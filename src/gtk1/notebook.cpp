@@ -184,7 +184,7 @@ int wxNotebook::GetSelection() const
     node = node->Next();
   };
 
-  wxCHECK_MSG( node != NULL, -1, "wxNotebook: no selection?");
+  wxCHECK_MSG( node != NULL, -1, _("wxNotebook: no selection?"));
 
   return page->m_id;
 };
@@ -230,7 +230,7 @@ wxNotebookPage* wxNotebook::GetNotebookPage(int page) const
     node = node->Next();
   };
 
-  wxLogDebug( "Notebook page %d not found!", page );
+  wxLogDebug( _("Notebook page %d not found!"), page );
 
   return NULL;
 };
@@ -301,12 +301,12 @@ bool wxNotebook::SetPageImage( int page, int image )
 
 void wxNotebook::SetPageSize( const wxSize &WXUNUSED(size) )
 {
-  wxFAIL_MSG("wxNotebook::SetPageSize not implemented");
+  wxFAIL_MSG(_("wxNotebook::SetPageSize not implemented"));
 };
 
 void wxNotebook::SetPadding( const wxSize &WXUNUSED(padding) )
 {
-  wxFAIL_MSG("wxNotebook::SetPadding not implemented");
+  wxFAIL_MSG(_("wxNotebook::SetPadding not implemented"));
 };
 
 bool wxNotebook::DeleteAllPages()
@@ -369,7 +369,7 @@ bool wxNotebook::AddPage(wxWindow* win, const wxString& text,
   };
 
   wxCHECK_MSG(page != NULL, FALSE,
-              "Can't add a page whose parent is not the notebook!");
+              _("Can't add a page whose parent is not the notebook!"));
 
   // then set the attributes
   page->m_text = text;
@@ -401,7 +401,7 @@ void wxNotebook::AddChild( wxWindow *win )
   wxNotebookPage *page = new wxNotebookPage();
 
   page->m_id = GetPageCount();
-  page->m_label = (GtkLabel *)gtk_label_new("Handle");
+  page->m_label = (GtkLabel *)gtk_label_new(_("Handle"));
   page->m_client = win;
   gtk_notebook_append_page( GTK_NOTEBOOK(m_widget), win->m_widget,
                             (GtkWidget *)page->m_label);
@@ -417,7 +417,7 @@ void wxNotebook::AddChild( wxWindow *win )
 
   if (!page->m_page)
   {
-     wxLogFatalError( "Notebook page creation error" );
+     wxLogFatalError( _("Notebook page creation error") );
      return;
   }
 

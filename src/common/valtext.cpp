@@ -132,8 +132,8 @@ bool wxTextValidator::Validate(wxWindow *parent)
 		if ( !m_includeList.Member(val) )
 		{
 			char buf[512];
-			sprintf(buf, "%s is invalid.", (const char *)val);
-			wxMessageBox(buf, "Validation conflict", wxOK | wxICON_EXCLAMATION, parent);
+			sprintf(buf, _("%s is invalid."), (const char *)val);
+			wxMessageBox(buf, _("Validation conflict"), wxOK | wxICON_EXCLAMATION, parent);
 			return FALSE;
 		}
 	}
@@ -142,37 +142,37 @@ bool wxTextValidator::Validate(wxWindow *parent)
 		if ( m_excludeList.Member(val) )
 		{
 			char buf[512];
-			sprintf(buf, "%s is invalid.", (const char *)val);
-			wxMessageBox(buf, "Validation conflict", wxOK | wxICON_EXCLAMATION, parent);
+			sprintf(buf, _("%s is invalid."), (const char *)val);
+			wxMessageBox(buf, _("Validation conflict"), wxOK | wxICON_EXCLAMATION, parent);
 			return FALSE;
 		}
 	}
 	if ( (m_validatorStyle & wxFILTER_ASCII) && !val.IsAscii() )
 	{
 			char buf[512];
-			sprintf(buf, "%s should only contain ASCII characters.", (const char *)val);
-			wxMessageBox(buf, "Validation conflict", wxOK | wxICON_EXCLAMATION, parent);
+			sprintf(buf, _("%s should only contain ASCII characters."), (const char *)val);
+			wxMessageBox(buf, _("Validation conflict"), wxOK | wxICON_EXCLAMATION, parent);
 			return FALSE;
 	}
 	if ( (m_validatorStyle & wxFILTER_ALPHA) && !wxIsAlpha(val) )
 	{
 			char buf[512];
-			sprintf(buf, "%s should only contain alphabetic characters.", (const char *)val);
-			wxMessageBox(buf, "Validation conflict", wxOK | wxICON_EXCLAMATION, parent);
+			sprintf(buf, _("%s should only contain alphabetic characters."), (const char *)val);
+			wxMessageBox(buf, _("Validation conflict"), wxOK | wxICON_EXCLAMATION, parent);
 			return FALSE;
 	}
 	if ( (m_validatorStyle & wxFILTER_ALPHANUMERIC) && !wxIsAlphaNumeric(val))
 	{
 			char buf[512];
-			sprintf(buf, "%s should only contain alphabetic or numeric characters.", (const char *)val);
-			wxMessageBox(buf, "Validation conflict", wxOK | wxICON_EXCLAMATION, parent);
+			sprintf(buf, _("%s should only contain alphabetic or numeric characters."), (const char *)val);
+			wxMessageBox(buf,_("Validation conflict"), wxOK | wxICON_EXCLAMATION, parent);
 			return FALSE;
 	}
 	if ( (m_validatorStyle & wxFILTER_NUMERIC) && !val.IsNumber())
 	{
 			char buf[512];
-			sprintf(buf, "%s should be numeric.", (const char *)val);
-			wxMessageBox(buf, "Validation conflict", wxOK | wxICON_EXCLAMATION, parent);
+			sprintf(buf, _("%s should be numeric."), (const char *)val);
+			wxMessageBox(buf, _("Validation conflict"), wxOK | wxICON_EXCLAMATION, parent);
 			return FALSE;
 	}
 

@@ -34,6 +34,7 @@
 #ifndef WX_PRECOMP
 #include "wx/defs.h"
 #include "wx/string.h"
+#include <wx/intl.h>
 #endif
 
 #include <ctype.h>
@@ -1230,7 +1231,7 @@ void wxArrayString::Insert(const wxString& str, size_t nIndex)
 {
   wxASSERT( str.GetStringData()->IsValid() );
 
-  wxCHECK_RET( nIndex <= m_nCount, "bad index in wxArrayString::Insert" );
+  wxCHECK_RET( nIndex <= m_nCount, ("bad index in wxArrayString::Insert") );
 
   Grow();
 
@@ -1246,7 +1247,7 @@ void wxArrayString::Insert(const wxString& str, size_t nIndex)
 // removes item from array (by index)
 void wxArrayString::Remove(size_t nIndex)
 {
-  wxCHECK_RET( nIndex <= m_nCount, "bad index in wxArrayString::Remove" );
+  wxCHECK_RET( nIndex <= m_nCount, _("bad index in wxArrayString::Remove") );
 
   // release our lock
   Item(nIndex).GetStringData()->Unlock();
@@ -1262,7 +1263,7 @@ void wxArrayString::Remove(const char *sz)
   int iIndex = Index(sz);
 
   wxCHECK_RET( iIndex != NOT_FOUND,
-               "removing inexistent element in wxArrayString::Remove" );
+               _("removing inexistent element in wxArrayString::Remove") );
 
   Remove((size_t)iIndex);
 }

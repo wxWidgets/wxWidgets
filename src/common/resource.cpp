@@ -99,7 +99,7 @@ void wxCleanUpResourceSystem(void)
 
 void wxWarning(char *msg)
 {
-  wxMessageBox(msg, "Warning", wxOK);
+  wxMessageBox(msg, _("Warning"), wxOK);
 }
 
 #if !USE_SHARED_LIBRARY
@@ -287,7 +287,7 @@ bool wxResourceTable::ParseResourceData(char *data)
   PrologDatabase db;
   if (!db.ReadPrologFromString(data))
   {
-    wxWarning("Ill-formed resource file syntax.");
+    wxWarning(_("Ill-formed resource file syntax."));
     return FALSE;
   }
 
@@ -794,7 +794,7 @@ wxItemResource *wxResourceInterpretControl(wxResourceTable& table, PrologExpr *e
         if (id == 0)
         {
           char buf[300];
-	  	  sprintf(buf, "Could not resolve control class or id '%s'. Use (non-zero) integer instead\n or provide #define (see manual for caveats)",
+	  	  sprintf(buf, _("Could not resolve control class or id '%s'. Use (non-zero) integer instead\n or provide #define (see manual for caveats)"),
                  (const char*) expr1->StringValue());
           wxWarning(buf);
 		  delete controlItem;
@@ -1209,7 +1209,7 @@ wxItemResource *wxResourceInterpretMenuItem(wxResourceTable& table, PrologExpr *
         if (id == 0)
         {
           char buf[300];
-	  sprintf(buf, "Could not resolve menu id '%s'. Use (non-zero) integer instead\n or provide #define (see manual for caveats)",
+	  sprintf(buf, _("Could not resolve menu id '%s'. Use (non-zero) integer instead\n or provide #define (see manual for caveats)"),
                  (const char*) idExpr->StringValue());
           wxWarning(buf);
         }
@@ -1631,7 +1631,7 @@ bool wxResourceReadOneResource(FILE *fd, PrologDatabase& db, bool *eof, wxResour
     else
     {
       char buf[300];
-      sprintf(buf, "#define %s must be an integer.", name);
+      sprintf(buf, _("#define %s must be an integer."), name);
       wxWarning(buf);
       delete[] name;
       delete[] value;
@@ -1655,7 +1655,7 @@ bool wxResourceReadOneResource(FILE *fd, PrologDatabase& db, bool *eof, wxResour
     if (!wxResourceParseIncludeFile(actualName, table))
     {
       char buf[400];
-      sprintf(buf, "Could not find resource include file %s.", actualName);
+      sprintf(buf, _("Could not find resource include file %s."), actualName);
       wxWarning(buf);
     }
     delete[] name;
@@ -1664,9 +1664,9 @@ bool wxResourceReadOneResource(FILE *fd, PrologDatabase& db, bool *eof, wxResour
   else if (strcmp(wxResourceBuffer, "static") != 0)
   {
     char buf[300];
-    strcpy(buf, "Found ");
+    strcpy(buf, _("Found "));
     strncat(buf, wxResourceBuffer, 30);
-    strcat(buf, ", expected static, #include or #define\nwhilst parsing resource.");
+    strcat(buf, _(", expected static, #include or #define\nwhilst parsing resource."));
     wxWarning(buf);
     return FALSE;
   }
@@ -1674,28 +1674,28 @@ bool wxResourceReadOneResource(FILE *fd, PrologDatabase& db, bool *eof, wxResour
   // char
   if (!wxGetResourceToken(fd))
   {
-    wxWarning("Unexpected end of file whilst parsing resource.");
+    wxWarning(_("Unexpected end of file whilst parsing resource."));
     *eof = TRUE;
     return FALSE;
   }
 
   if (strcmp(wxResourceBuffer, "char") != 0)
   {
-    wxWarning("Expected 'char' whilst parsing resource.");
+    wxWarning(_("Expected 'char' whilst parsing resource."));
     return FALSE;
   }
     
   // *name
   if (!wxGetResourceToken(fd))
   {
-    wxWarning("Unexpected end of file whilst parsing resource.");
+    wxWarning(_("Unexpected end of file whilst parsing resource."));
     *eof = TRUE;
     return FALSE;
   }
 
   if (wxResourceBuffer[0] != '*')
   {
-    wxWarning("Expected '*' whilst parsing resource.");
+    wxWarning(_("Expected '*' whilst parsing resource."));
     return FALSE;
   }
   char nameBuf[100];
@@ -1704,21 +1704,21 @@ bool wxResourceReadOneResource(FILE *fd, PrologDatabase& db, bool *eof, wxResour
   // =
   if (!wxGetResourceToken(fd))
   {
-    wxWarning("Unexpected end of file whilst parsing resource.");
+    wxWarning(_("Unexpected end of file whilst parsing resource."));
     *eof = TRUE;
     return FALSE;
   }
 
   if (strcmp(wxResourceBuffer, "=") != 0)
   {
-    wxWarning("Expected '=' whilst parsing resource.");
+    wxWarning(_("Expected '=' whilst parsing resource."));
     return FALSE;
   }
 
   // String
   if (!wxGetResourceToken(fd))
   {
-    wxWarning("Unexpected end of file whilst parsing resource.");
+    wxWarning(_("Unexpected end of file whilst parsing resource."));
     *eof = TRUE;
     return FALSE;
   }
@@ -1727,7 +1727,7 @@ bool wxResourceReadOneResource(FILE *fd, PrologDatabase& db, bool *eof, wxResour
     if (!db.ReadPrologFromString(wxResourceBuffer))
     {
       char buf[300];
-      sprintf(buf, "%s: ill-formed resource file syntax.", nameBuf);
+      sprintf(buf, _("%s: ill-formed resource file syntax."), nameBuf);
       wxWarning(buf);
       return FALSE;
     }
@@ -2060,7 +2060,7 @@ long wxParseWindowStyle(char *bitListString)
     if (!found)
     {
       char buf[200];
-      sprintf(buf, "Unrecognized style %s whilst parsing resource.", word);
+      sprintf(buf, _("Unrecognized style %s whilst parsing resource."), word);
       wxWarning(buf);
       return 0;
     }
@@ -2084,7 +2084,7 @@ wxBitmap *wxResourceCreateBitmap(char *resource, wxResourceTable *table)
     if (!item->GetType() || strcmp(item->GetType(), "wxBitmap") != 0)
     {
       char buf[300];
-      sprintf(buf, "%s not a bitmap resource specification.", resource);
+      sprintf(buf, _("%s not a bitmap resource specification."), resource);
       wxWarning(buf);
       return NULL;
     }
@@ -2186,13 +2186,13 @@ wxBitmap *wxResourceCreateBitmap(char *resource, wxResourceTable *table)
         if (!item)
         {
           char buf[400];
-          sprintf(buf, "Failed to find XBM resource %s.\nForgot to use wxResourceLoadBitmapData?", name);
+          sprintf(buf, _("Failed to find XBM resource %s.\nForgot to use wxResourceLoadBitmapData?"), name);
           wxWarning(buf);
           return NULL;
         }
         bitmap = new wxBitmap((char *)item->GetValue1(), (int)item->GetValue2(), (int)item->GetValue3()); 
 #else
-        wxWarning("No XBM facility available!");
+        wxWarning(_("No XBM facility available!"));
 #endif
         break;
       }
@@ -2203,13 +2203,13 @@ wxBitmap *wxResourceCreateBitmap(char *resource, wxResourceTable *table)
         if (!item)
         {
           char buf[400];
-          sprintf(buf, "Failed to find XPM resource %s.\nForgot to use wxResourceLoadBitmapData?", name);
+          sprintf(buf, _("Failed to find XPM resource %s.\nForgot to use wxResourceLoadBitmapData?"), name);
           wxWarning(buf);
           return NULL;
         }
         bitmap = new wxBitmap(item->GetValue1());
 #else
-        wxWarning("No XPM facility available!");
+        wxWarning(_("No XPM facility available!"));
 #endif
         break;
       }
@@ -2235,7 +2235,7 @@ wxBitmap *wxResourceCreateBitmap(char *resource, wxResourceTable *table)
   else
   {
     char buf[300];
-    sprintf(buf, "Bitmap resource specification %s not found.", resource);
+    sprintf(buf, _("Bitmap resource specification %s not found."), resource);
     wxWarning(buf);
     return NULL;
   }
@@ -2257,7 +2257,7 @@ wxIcon *wxResourceCreateIcon(char *resource, wxResourceTable *table)
     if (!item->GetType() || strcmp(item->GetType(), "wxIcon") != 0)
     {
       char buf[300];
-      sprintf(buf, "%s not an icon resource specification.", resource);
+      sprintf(buf, _("%s not an icon resource specification."), resource);
       wxWarning(buf);
       return NULL;
     }
@@ -2359,13 +2359,13 @@ wxIcon *wxResourceCreateIcon(char *resource, wxResourceTable *table)
         if (!item)
         {
           char buf[400];
-          sprintf(buf, "Failed to find XBM resource %s.\nForgot to use wxResourceLoadIconData?", name);
+          sprintf(buf, _("Failed to find XBM resource %s.\nForgot to use wxResourceLoadIconData?"), name);
           wxWarning(buf);
           return NULL;
         }
         icon = new wxIcon((char *)item->GetValue1(), (int)item->GetValue2(), (int)item->GetValue3()); 
 #else
-        wxWarning("No XBM facility available!");
+        wxWarning(_("No XBM facility available!"));
 #endif
         break;
       }
@@ -2378,16 +2378,16 @@ wxIcon *wxResourceCreateIcon(char *resource, wxResourceTable *table)
         if (!item)
         {
           char buf[400];
-          sprintf(buf, "Failed to find XPM resource %s.\nForgot to use wxResourceLoadIconData?", name);
+          sprintf(buf, _("Failed to find XPM resource %s.\nForgot to use wxResourceLoadIconData?"), name);
           wxWarning(buf);
           return NULL;
         }
         icon = new wxIcon((char **)item->GetValue1());
 #else
-        wxWarning("No XPM facility available!");
+        wxWarning(_("No XPM facility available!"));
 #endif
 */
-        wxWarning("No XPM icon facility available!");
+        wxWarning(_("No XPM icon facility available!"));
         break;
       }
       default:
@@ -2412,7 +2412,7 @@ wxIcon *wxResourceCreateIcon(char *resource, wxResourceTable *table)
   else
   {
     char buf[300];
-    sprintf(buf, "Icon resource specification %s not found.", resource);
+    sprintf(buf, _("Icon resource specification %s not found."), resource);
     wxWarning(buf);
     return NULL;
   }
@@ -2740,7 +2740,7 @@ bool wxResourceReadOneResourceString(char *s, PrologDatabase& db, bool *eof, wxR
     else
     {
       char buf[300];
-      sprintf(buf, "#define %s must be an integer.", name);
+      sprintf(buf, _("#define %s must be an integer."), name);
       wxWarning(buf);
       delete[] name;
       delete[] value;
@@ -2765,7 +2765,7 @@ bool wxResourceReadOneResourceString(char *s, PrologDatabase& db, bool *eof, wxR
     if (!wxResourceParseIncludeFile(actualName, table))
     {
       char buf[400];
-      sprintf(buf, "Could not find resource include file %s.", actualName);
+      sprintf(buf, _("Could not find resource include file %s."), actualName);
       wxWarning(buf);
     }
     delete[] name;
@@ -2775,9 +2775,9 @@ bool wxResourceReadOneResourceString(char *s, PrologDatabase& db, bool *eof, wxR
   else if (strcmp(wxResourceBuffer, "static") != 0)
   {
     char buf[300];
-    strcpy(buf, "Found ");
+    strcpy(buf, _("Found "));
     strncat(buf, wxResourceBuffer, 30);
-    strcat(buf, ", expected static, #include or #define\nwhilst parsing resource.");
+    strcat(buf, _(", expected static, #include or #define\nwhilst parsing resource."));
     wxWarning(buf);
     return FALSE;
   }
@@ -2785,28 +2785,28 @@ bool wxResourceReadOneResourceString(char *s, PrologDatabase& db, bool *eof, wxR
   // char
   if (!wxGetResourceTokenString(s))
   {
-    wxWarning("Unexpected end of file whilst parsing resource.");
+    wxWarning(_("Unexpected end of file whilst parsing resource."));
     *eof = TRUE;
     return FALSE;
   }
 
   if (strcmp(wxResourceBuffer, "char") != 0)
   {
-    wxWarning("Expected 'char' whilst parsing resource.");
+    wxWarning(_("Expected 'char' whilst parsing resource."));
     return FALSE;
   }
     
   // *name
   if (!wxGetResourceTokenString(s))
   {
-    wxWarning("Unexpected end of file whilst parsing resource.");
+    wxWarning(_("Unexpected end of file whilst parsing resource."));
     *eof = TRUE;
     return FALSE;
   }
 
   if (wxResourceBuffer[0] != '*')
   {
-    wxWarning("Expected '*' whilst parsing resource.");
+    wxWarning(_("Expected '*' whilst parsing resource."));
     return FALSE;
   }
   char nameBuf[100];
@@ -2815,21 +2815,21 @@ bool wxResourceReadOneResourceString(char *s, PrologDatabase& db, bool *eof, wxR
   // =
   if (!wxGetResourceTokenString(s))
   {
-    wxWarning("Unexpected end of file whilst parsing resource.");
+    wxWarning(_("Unexpected end of file whilst parsing resource."));
     *eof = TRUE;
     return FALSE;
   }
 
   if (strcmp(wxResourceBuffer, "=") != 0)
   {
-    wxWarning("Expected '=' whilst parsing resource.");
+    wxWarning(_("Expected '=' whilst parsing resource."));
     return FALSE;
   }
 
   // String
   if (!wxGetResourceTokenString(s))
   {
-    wxWarning("Unexpected end of file whilst parsing resource.");
+    wxWarning(_("Unexpected end of file whilst parsing resource."));
     *eof = TRUE;
     return FALSE;
   }
@@ -2838,7 +2838,7 @@ bool wxResourceReadOneResourceString(char *s, PrologDatabase& db, bool *eof, wxR
     if (!db.ReadPrologFromString(wxResourceBuffer))
     {
       char buf[300];
-      sprintf(buf, "%s: ill-formed resource file syntax.", nameBuf);
+      sprintf(buf, _("%s: ill-formed resource file syntax."), nameBuf);
       wxWarning(buf);
       return FALSE;
     }

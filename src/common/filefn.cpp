@@ -26,6 +26,7 @@
 #endif
 
 #include "wx/utils.h"
+#include <wx/intl.h>
 
 #include <ctype.h>
 #include <stdio.h>
@@ -960,7 +961,7 @@ char *wxGetTempFileName(const wxString& prefix, char *buf)
 	  return buf;
 	}
     }
-  cerr << "wxWindows: error finding temporary file name.\n";
+  cerr << _("wxWindows: error finding temporary file name.\n");
   if (buf) buf[0] = 0;
   return NULL;
 #endif
@@ -1304,7 +1305,7 @@ bool wxFindFileInPath(wxString *pStr, const char *pszPath, const char *pszFile)
 {
   // we assume that it's not empty
   wxCHECK_MSG( !IsEmpty(pszFile), FALSE, 
-               "empty file name in wxFindFileInPath");
+               _("empty file name in wxFindFileInPath"));
 
   // skip path separator in the beginning of the file name if present
   if ( wxIsPathSeparator(*pszFile) )
@@ -1339,7 +1340,7 @@ void WXDLLEXPORT wxSplitPath(const char *pszFileName,
                              wxString *pstrName,
                              wxString *pstrExt)
 {
-  wxCHECK_RET( pszFileName, "NULL file name in wxSplitPath" );
+  wxCHECK_RET( pszFileName, _("NULL file name in wxSplitPath") );
 
   const char *pDot = strrchr(pszFileName, FILE_SEP_EXT);
   const char *pSepUnix = strrchr(pszFileName, FILE_SEP_PATH_UNIX);
