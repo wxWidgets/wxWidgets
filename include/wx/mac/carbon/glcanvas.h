@@ -118,7 +118,7 @@ class WXDLLEXPORT wxGLCanvas: public wxWindow
    
      virtual void MacSuperChangedPosition() ;
      virtual void MacTopLevelWindowChangedPosition() ;
-     virtual void MacSuperShown( bool show ) ;
+    virtual void         MacVisibilityChanged() ;
 
      void MacUpdateView() ;
 

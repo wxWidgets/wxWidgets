@@ -92,6 +92,7 @@ public:
     virtual void MacSetBackgroundBrush( const wxBrush &brush ) ;
 
     bool MacUsesCompositing() { return m_macUsesCompositing; } 
+    virtual void MacInstallTopLevelWindowEventHandler() ;
 
     void MacSetMetalAppearance( bool on ) ;
 
