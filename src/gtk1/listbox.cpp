@@ -140,9 +140,9 @@ void wxListBox::Append( const wxString &item, char *clientData )
     gtk_signal_connect( GTK_OBJECT(list_item), "deselect", 
       GTK_SIGNAL_FUNC(gtk_listitem_select_callback), (gpointer)this );
   
-  gtk_container_add( GTK_CONTAINER(m_list), list_item );
-  
   m_clientData.Append( (wxObject*)clientData );
+  
+  gtk_container_add( GTK_CONTAINER(m_list), list_item );
   
   gtk_widget_show( list_item );
 }

@@ -63,6 +63,7 @@ class wxChoice: public wxControl
            const wxString& name = wxChoiceNameStr );
     void Append( const wxString &item );
     void Clear(void);
+    void Delete(int n);
     int FindString( const wxString &string ) const;
     int GetColumns(void) const;
     int GetSelection(void);

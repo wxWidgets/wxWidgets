@@ -103,6 +103,11 @@ void wxChoice::Clear(void)
   gtk_option_menu_set_menu( GTK_OPTION_MENU(m_widget), menu );
 }
 
+void wxChoice::Delete( int WXUNUSED(n) )
+{
+  wxFAIL_MSG( "wxChoice:Delete not implemented" );
+}
+
 int wxChoice::FindString( const wxString &string ) const
 {
   // If you read this code once and you think you understand

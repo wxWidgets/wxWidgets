@@ -143,22 +143,33 @@ void wxComboBox::Append( const wxString &item, char *clientData )
   gtk_signal_connect( GTK_OBJECT(list_item), "select", 
     GTK_SIGNAL_FUNC(gtk_combo_clicked_callback), (gpointer)this );
   
+  m_clientData.Append( (wxObject*)clientData );
+  
   gtk_container_add( GTK_CONTAINER(list), list_item );
     
   gtk_widget_show( list_item );
-  
-  m_clientData.Append( (wxObject*)clientData );
 }
 
 void wxComboBox::Delete( int n )
 {
-  GtkWidget *list = GTK_COMBO(m_widget)->list;
-  gtk_list_clear_items( GTK_LIST(list), n, n );
+  GtkList *listbox = GTK_LIST( GTK_COMBO(m_widget)->list );
+  
+  GList *child = g_list_nth( listbox->children, n );
+  
+  if (!child)
+  {
+    wxFAIL_MSG("wrong index");
+    return;
+  }
+  
+  GList *list = g_list_append( NULL, child->data );
+  gtk_list_remove_items( listbox, list );
+  g_list_free( list );
   
   wxNode *node = m_clientData.Nth( n );
   if (!node)
   {
-    wxFAIL_MSG( "wxComboBox: wrong index" );
+    wxFAIL_MSG( "wrong index" );
   }
   else
     m_clientData.DeleteNode( node );

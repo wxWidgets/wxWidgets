@@ -141,12 +141,14 @@ const  ID_CHOICE_SEL_NUM    = 121;
 const  ID_CHOICE_SEL_STR    = 122;
 const  ID_CHOICE_CLEAR      = 123;
 const  ID_CHOICE_APPEND     = 124;
+const  ID_CHOICE_DELETE     = 125;
 
 const  ID_COMBO             = 140;
 const  ID_COMBO_SEL_NUM     = 141;
 const  ID_COMBO_SEL_STR     = 142;
 const  ID_COMBO_CLEAR       = 143;
 const  ID_COMBO_APPEND      = 144;
+const  ID_COMBO_DELETE      = 145;
 
 const  ID_TEXT              = 150;
 
@@ -167,11 +169,13 @@ BEGIN_EVENT_TABLE(MyPanel, wxPanel)
   EVT_BUTTON    (ID_CHOICE_SEL_STR,     MyPanel::OnChoiceButtons)
   EVT_BUTTON    (ID_CHOICE_CLEAR,       MyPanel::OnChoiceButtons)
   EVT_BUTTON    (ID_CHOICE_APPEND,      MyPanel::OnChoiceButtons)
+  EVT_BUTTON    (ID_CHOICE_DELETE,      MyPanel::OnChoiceButtons)
   EVT_CHOICE    (ID_COMBO,              MyPanel::OnCombo)
   EVT_BUTTON    (ID_COMBO_SEL_NUM,      MyPanel::OnComboButtons)
   EVT_BUTTON    (ID_COMBO_SEL_STR,      MyPanel::OnComboButtons)
   EVT_BUTTON    (ID_COMBO_CLEAR,        MyPanel::OnComboButtons)
   EVT_BUTTON    (ID_COMBO_APPEND,       MyPanel::OnComboButtons)
+  EVT_BUTTON    (ID_COMBO_DELETE,       MyPanel::OnComboButtons)
   EVT_RADIOBOX  (ID_RADIOBOX,           MyPanel::OnRadio)
   EVT_BUTTON    (ID_RADIOBOX_SEL_NUM,   MyPanel::OnRadioButtons)
   EVT_BUTTON    (ID_RADIOBOX_SEL_STR,   MyPanel::OnRadioButtons)
@@ -207,6 +211,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   (void)new wxButton( panel, ID_CHOICE_SEL_STR, "Select 'This'", wxPoint(300,30), wxSize(100,30) );
   (void)new wxButton( panel, ID_CHOICE_CLEAR, "Clear", wxPoint(180,80), wxSize(100,30) );
   (void)new wxButton( panel, ID_CHOICE_APPEND, "Append 'Hi!'", wxPoint(300,80), wxSize(100,30) );
+  (void)new wxButton( panel, ID_CHOICE_DELETE, "Delete selected item", wxPoint(180,130), wxSize(140,30) );
   m_notebook->AddPage(panel, "wxChoice");
   
   panel = new wxPanel(m_notebook);
@@ -215,6 +220,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   (void)new wxButton( panel, ID_COMBO_SEL_STR, "Select 'This'", wxPoint(300,30), wxSize(100,30) );
   (void)new wxButton( panel, ID_COMBO_CLEAR, "Clear", wxPoint(180,80), wxSize(100,30) );
   (void)new wxButton( panel, ID_COMBO_APPEND, "Append 'Hi!'", wxPoint(300,80), wxSize(100,30) );
+  (void)new wxButton( panel, ID_COMBO_DELETE, "Delete selected item", wxPoint(180,130), wxSize(140,30) );
   m_notebook->AddPage(panel, "wxComboBox");
   
   wxTextCtrl *text = new wxTextCtrl( m_notebook, ID_TEXT, "Write text here.", wxPoint(10,10), wxSize(120,100), wxTE_MULTILINE );
@@ -233,8 +239,8 @@ void MyPanel::OnSize( wxSizeEvent& WXUNUSED(event) )
   int y = 0;
   GetClientSize( &x, &y );
   
-  if (m_notebook) m_notebook->SetSize( 2, 2, x-4, y/2-4 );
-  if (m_text) m_text->SetSize( 2, y/2+2, x-4, y/2-4 );
+  if (m_notebook) m_notebook->SetSize( 2, 2, x-4, y*2/3-4 );
+  if (m_text) m_text->SetSize( 2, y*2/3+2, x-4, y/3-4 );
 }
 
 void MyPanel::OnListBox( wxCommandEvent &event )
@@ -308,6 +314,12 @@ void MyPanel::OnChoiceButtons( wxCommandEvent &event )
       m_choice->Append( "Hi!" );
       break;
     }
+    case ID_CHOICE_DELETE:
+    {
+      int idx = m_choice->GetSelection();
+      m_choice->Delete( idx );
+      break;
+    }
   }
 }
 
@@ -340,6 +352,12 @@ void MyPanel::OnComboButtons( wxCommandEvent &event )
     case ID_COMBO_APPEND:
     {
       m_combo->Append( "Hi!" );
+      break;
+    }
+    case ID_COMBO_DELETE:
+    {
+      int idx = m_combo->GetSelection();
+      m_combo->Delete( idx );
       break;
     }
   }
