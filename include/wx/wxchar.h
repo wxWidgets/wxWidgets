@@ -184,10 +184,10 @@ typedef  _TUCHAR     wxUChar;
 #  define wxNEED_WX_TIME_H
 
 // VisualAge C++ V4.0 has broad tchar support
-#elif defined(__VISAGECPP__) && __IBMCPP >= 400
+#elif defined(__VISAGECPP__) && __IBMCPP__ >= 400
 
 #  define HAVE_WCSLEN 1
-
+#  include <wchar.h>
 #  include <tchar.h>
 
 #  if wxUSE_UNICODE // temporary - preserve binary compatibility
@@ -206,7 +206,7 @@ typedef  _TUCHAR     wxUChar;
    // ctype.h functions
 #  define  wxIsalnum   _istalnum
 #  define  wxIsalpha   _istalpha
-#  define  wxIsctrl    _istctrl
+#  define  wxIsctrl    _istcntrl
 #  define  wxIsdigit   _istdigit
 #  define  wxIsgraph   _istgraph
 #  define  wxIslower   _istlower
@@ -218,8 +218,8 @@ typedef  _TUCHAR     wxUChar;
 #  define  wxTolower   _totlower
 #  define  wxToupper   _totupper
 
-   // locale.h functons
-#  define  wxSetlocale _tsetlocale
+   // locale.h functons -- not defined in tchar.h
+#  define  wxSetlocale setlocale
 
    // string.h functions
 #  define  wxStrcat    _tcscat
@@ -246,46 +246,47 @@ typedef  _TUCHAR     wxUChar;
 
    // stdio.h functions
 #  define  wxFgetc     _fgettc
-#  define  wxFgetchar  _fgettchar
 #  define  wxFgets     _fgetts
-#  define  wxFopen     _tfopen
 #  define  wxFputc     _fputtc
-#  define  wxFputchar  _fputtchar
 #  define  wxFprintf   _ftprintf
-#  define  wxFreopen   _tfreopen
 #  define  wxFscanf    _ftscanf
 #  define  wxGetc      _gettc
 #  define  wxGetchar   _gettchar
-#  define  wxGets      _getts
-#  define  wxPerror    _tperror
 #  define  wxPrintf    _tprintf
 #  define  wxPutc      _puttc
 #  define  wxPutchar   _puttchar
-#  define  wxPuts      _putts
-#  define  wxRemove    _tremove
-#  define  wxRename    _trename
 #  define  wxScanf     _tscanf
 #  define  wxSprintf   _stprintf
 #  define  wxSscanf    _stscanf
-#  define  wxTmpnam    _ttmpnam
-#  define  wxUngetc    _tungetc
 #  define  wxVfprint   _vftprintf
 #  define  wxVprintf   _vtprintf
-#  define  wxVsscanf   _vstscanf
 #  define  wxVsprintf  _vstprintf
+// not defined in tchar.h
+#  define  wxFgetchar  fgetchar
+#  define  wxFopen     fopen
+#  define  wxFputchar  fputchar
+#  define  wxFreopen   freopen
+#  define  wxGets      gets
+#  define  wxPerror    perror
+#  define  wxPuts      puts
+#  define  wxRemove    remove
+#  define  wxRename    rename
+#  define  wxTmpnam    tmpnam
+#  define  wxUngetc    ungetc
+#  define  wxVsscanf   vsscanf
 
-   // stdlib.h functions
+   // stdlib.h functions -- none defined in tchar.h
 #  if !wxUSE_UNICODE
 #    define  wxAtof      atof
 #  endif
-#  define  wxAtoi      _ttoi
-#  define  wxAtol      _ttol
-#  define  wxGetenv    _tgetenv
-#  define  wxSystem    _tsystem
+#  define  wxAtoi      atoi
+#  define  wxAtol      atol
+#  define  wxGetenv    getenv
+#  define  wxSystem    system
 
-   // time.h functions
-#  define  wxAsctime   _tasctime
-#  define  wxCtime     _tctime
+   // time.h functions  -- none defined in tchar.h
+#  define  wxAsctime   asctime
+#  define  wxCtime     ctime
 
 // #elif defined(XXX)
    // #include XXX-specific files here
