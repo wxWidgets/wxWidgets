@@ -305,7 +305,7 @@ PDIB wxDibReadBitmapInfo(HFILE fh)
     }
 
     if (sizeof(bi) != _lread(fh,(LPSTR)&bi,sizeof(bi)))
-        return FALSE;
+        return NULL;
 
     /*
      *  what type of bitmap info is this?
