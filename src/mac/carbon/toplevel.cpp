@@ -306,29 +306,38 @@ static void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEvent )
                 break ;
         }
     }
-    // determinate the correct click button
-    if ( button == kEventMouseButtonSecondary )
+    // translate into wx types
+    switch ( cEvent.GetKind() )
     {
-        if (cEvent.GetKind() == kEventMouseDown )
-            wxevent.SetEventType( clickCount > 1 ? wxEVT_RIGHT_DCLICK : wxEVT_RIGHT_DOWN ) ;
-        else if ( cEvent.GetKind() == kEventMouseUp )
-            wxevent.SetEventType(wxEVT_RIGHT_UP ) ;
-    }
-    else if ( button == kEventMouseButtonTertiary )
-    {
-        if (cEvent.GetKind() == kEventMouseDown )
-            wxevent.SetEventType(clickCount > 1 ? wxEVT_MIDDLE_DCLICK : wxEVT_MIDDLE_DOWN ) ;
-        else if ( cEvent.GetKind() == kEventMouseUp )
-            wxevent.SetEventType(wxEVT_MIDDLE_UP ) ;
-    }
-    else
-    {
-        if (cEvent.GetKind() == kEventMouseDown )
-            wxevent.SetEventType(clickCount > 1 ? wxEVT_LEFT_DCLICK : wxEVT_LEFT_DOWN ) ;
-        else if ( cEvent.GetKind() == kEventMouseUp )
-            wxevent.SetEventType(wxEVT_LEFT_UP ) ;
-        else if ( cEvent.GetKind() == kEventMouseWheelMoved )
-        {
+        case kEventMouseDown :
+            switch( button )
+            {
+                case kEventMouseButtonPrimary :
+                    wxevent.SetEventType(clickCount > 1 ? wxEVT_LEFT_DCLICK : wxEVT_LEFT_DOWN )  ;
+                    break ;
+                case kEventMouseButtonSecondary :
+                    wxevent.SetEventType( clickCount > 1 ? wxEVT_RIGHT_DCLICK : wxEVT_RIGHT_DOWN ) ;
+                    break ;
+                case kEventMouseButtonTertiary :
+                    wxevent.SetEventType(clickCount > 1 ? wxEVT_MIDDLE_DCLICK : wxEVT_MIDDLE_DOWN ) ;
+                    break ;
+            }
+            break ;
+        case kEventMouseUp :
+            switch( button )
+            {
+                case kEventMouseButtonPrimary :
+                    wxevent.SetEventType( wxEVT_LEFT_UP )  ;
+                    break ;
+                case kEventMouseButtonSecondary :
+                    wxevent.SetEventType( wxEVT_RIGHT_UP ) ;
+                    break ;
+                case kEventMouseButtonTertiary :
+                    wxevent.SetEventType( wxEVT_MIDDLE_UP ) ;
+                    break ;
+            }
+            break ;
+        case kEventMouseWheelMoved :
             wxevent.SetEventType(wxEVT_MOUSEWHEEL ) ;
 
             // EventMouseWheelAxis axis = cEvent.GetParameter<EventMouseWheelAxis>(kEventParamMouseWheelAxis, typeMouseWheelAxis) ;
@@ -337,10 +346,11 @@ static void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEvent )
             wxevent.m_wheelRotation = delta;
             wxevent.m_wheelDelta = 1;
             wxevent.m_linesPerAction = 1;
-        }
-        else
+            break ;
+        default :
             wxevent.SetEventType(wxEVT_MOTION ) ;
-    }
+            break ;
+    }       
 }
 
 ControlRef wxMacFindSubControl( Point location , ControlRef superControl , ControlPartCode *outPart )
