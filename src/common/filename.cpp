@@ -452,7 +452,8 @@ void wxFileName::Assign(const wxString& fullpathOrig,
                   _T("the path shouldn't contain file name nor extension") );
 
 #else // !__WXDEBUG__
-    SplitPath(fullname, NULL /* no path */, &name, &ext, &hasExt, format);
+    SplitPath(fullname, NULL /* no volume */, NULL /* no path */,
+                        &name, &ext, &hasExt, format);
     SplitPath(fullpath, &volume, &path, NULL, NULL, format);
 #endif // __WXDEBUG__/!__WXDEBUG__
 
