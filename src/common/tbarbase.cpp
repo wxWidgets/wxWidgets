@@ -38,7 +38,7 @@
 #include "wx/image.h"
 #include "wx/settings.h"
 
-#include "wx/tbarbase.h"
+#include "wx/toolbar.h"
 
 // ----------------------------------------------------------------------------
 // wxWindows macros
