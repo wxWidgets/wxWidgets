@@ -17,12 +17,6 @@ import frame
 from shell import Shell
 from version import VERSION
 
-try:
-    True
-except NameError:
-    True = 1==1
-    False = 1==0
-
 
 class Crust(wx.SplitterWindow):
     """Crust based on SplitterWindow."""

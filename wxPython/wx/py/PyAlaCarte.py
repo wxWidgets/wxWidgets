@@ -11,12 +11,6 @@ import sys
 
 import editor
 
-try:
-    True
-except NameError:
-    True = 1==1
-    False = 1==0
-
 class App(wx.App):
     """PyAlaCarte standalone application."""
 

@@ -13,12 +13,6 @@ import sys
 import tokenize
 import types
 
-try:
-    True
-except NameError:
-    True = 1==1
-    False = 1==0
-
 def getAutoCompleteList(command='', locals=None, includeMagic=1, 
                         includeSingle=1, includeDouble=1):
     """Return list of auto-completion options for command.

@@ -10,12 +10,6 @@ from code import InteractiveInterpreter
 import dispatcher
 import introspect
 
-try:
-    True
-except NameError:
-    True = 1==1
-    False = 1==0
-
 
 class Interpreter(InteractiveInterpreter):
     """Interpreter based on code.InteractiveInterpreter."""

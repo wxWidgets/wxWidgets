@@ -13,12 +13,6 @@ __revision__ = "$Revision$"[11:-2]
 
 import wx
 
-try:
-    True
-except NameError:
-    True = 1==1
-    False = 1==0
-
 
 class App(wx.App):
     """PyCrust standalone application."""

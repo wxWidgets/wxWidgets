@@ -25,12 +25,6 @@ from pseudo import PseudoFileOut
 from pseudo import PseudoFileErr
 from version import VERSION
 
-try:
-    True
-except NameError:
-    True = 1==1
-    False = 1==0
-
 sys.ps3 = '<-- '  # Input prompt.
 
 NAVKEYS = (wx.WXK_END, wx.WXK_LEFT, wx.WXK_RIGHT,

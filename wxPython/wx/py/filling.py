@@ -16,11 +16,6 @@ import sys
 import types
 from version import VERSION
 
-try:
-    True
-except NameError:
-    True = 1==1
-    False = 1==0
 
 COMMONTYPES = [getattr(types, t) for t in dir(types) \
                if not t.startswith('_') \

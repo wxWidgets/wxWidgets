@@ -18,13 +18,6 @@ import shell
 import sys
 import wx
 
-try:
-    True
-except NameError:
-    True = 1==1
-    False = 1==0
-
-
 class App(filling.App):
     def OnInit(self):
         filling.App.OnInit(self)
@@ -37,7 +30,6 @@ def main():
     app = App(0)
     app.fillingFrame.filling.tree.Expand(app.root)
     app.MainLoop()
-
 
 if __name__ == '__main__':
     main()

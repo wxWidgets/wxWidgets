@@ -8,23 +8,15 @@ __revision__ = "$Revision$"[11:-2]
 import os
 import sys
 import wx
-from crust import CrustFrame as Frame
-
-try:
-    True
-except NameError:
-    True = 1==1
-    False = 1==0
-
+from wx.py.crust import CrustFrame
 
 def wrap(app):
     wx.InitAllImageHandlers()
-    frame = Frame()
+    frame = CrustFrame()
     frame.SetSize((750, 525))
     frame.Show(True)
     frame.shell.interp.locals['app'] = app
     app.MainLoop()
-
 
 def main(modulename=None):
     sys.path.insert(0, os.curdir)
@@ -46,11 +38,10 @@ def main(modulename=None):
         except (NameError, TypeError):
             pass
     if App is None:
-        print "No App class found."
+        print "No App class was found."
         raise SystemExit
     app = App()
     wrap(app)
-
 
 if __name__ == '__main__':
     main()

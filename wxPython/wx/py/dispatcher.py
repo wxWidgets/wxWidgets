@@ -8,12 +8,6 @@ import exceptions
 import types
 import weakref
 
-try:
-    True
-except NameError:
-    True = 1==1
-    False = 1==0
-
 
 class DispatcherError(exceptions.Exception):
     def __init__(self, args=None):

@@ -7,11 +7,6 @@ __revision__ = "$Revision$"[11:-2]
 import wx
 from version import VERSION
 
-try:
-    True
-except NameError:
-    True = 1==1
-    False = 1==0
 
 ID_NEW = wx.ID_NEW
 ID_OPEN = wx.ID_OPEN

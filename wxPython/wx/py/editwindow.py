@@ -15,11 +15,6 @@ import time
 import dispatcher
 from version import VERSION
 
-try:
-    True
-except NameError:
-    True = 1==1
-    False = 1==0
 
 if wx.Platform == '__WXMSW__':
     FACES = { 'times'  : 'Times New Roman',

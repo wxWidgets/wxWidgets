@@ -4,12 +4,6 @@ __author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"
 __cvsid__ = "$Id$"
 __revision__ = "$Revision$"[11:-2]
 
-try:
-    True
-except NameError:
-    True = 1==1
-    False = 1==0
-
 
 class PseudoKeyword:
     """A callable class that calls a method passed as a parameter.

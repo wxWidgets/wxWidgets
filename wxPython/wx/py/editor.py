@@ -14,12 +14,6 @@ import frame
 from shell import Shell
 import version
 
-try:
-    True
-except NameError:
-    True = 1==1
-    False = 1==0
-
 
 class EditorFrame(frame.Frame):
     """Frame containing one editor."""

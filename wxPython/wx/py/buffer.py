@@ -11,12 +11,6 @@ import sys
 
 import document
 
-try:
-    True
-except NameError:
-    True = 1==1
-    False = 1==0
-
 
 class Buffer:
     """Buffer class."""
