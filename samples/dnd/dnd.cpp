@@ -1451,7 +1451,7 @@ bool DnDFile::OnDropFiles(wxCoord, wxCoord, const wxArrayString& filenames)
 {
     size_t nFiles = filenames.GetCount();
     wxString str;
-    str.Printf( _T("%d files dropped"), nFiles);
+    str.Printf( _T("%d files dropped"), (int)nFiles);
     m_pOwner->Append(str);
     for ( size_t n = 0; n < nFiles; n++ ) {
         m_pOwner->Append(filenames[n]);
