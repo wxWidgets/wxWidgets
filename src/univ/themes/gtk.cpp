@@ -53,7 +53,7 @@
 // constants (to be removed, for testing only)
 // ----------------------------------------------------------------------------
 
-static const size_t BORDER_THICKNESS = 2;
+static const size_t BORDER_THICKNESS = 1;
 
 // ----------------------------------------------------------------------------
 // wxGTKRenderer: draw the GUI elements in GTK style
@@ -858,7 +858,7 @@ void wxGTKRenderer::DrawBorder(wxDC& dc,
     switch ( border )
     {
         case wxBORDER_SUNKEN:
-            for ( width = 0; width < BORDER_THICKNESS / 2; width++ )
+            for ( width = 0; width < BORDER_THICKNESS; width++ )
             {
                 DrawAntiShadedRect(dc, &rect, m_penDarkGrey, m_penHighlight);
                 DrawShadedRect(dc, &rect, m_penBlack, m_penLightGrey);
@@ -866,21 +866,21 @@ void wxGTKRenderer::DrawBorder(wxDC& dc,
             break;
 
         case wxBORDER_STATIC:
-            for ( width = 0; width < BORDER_THICKNESS / 2; width++ )
+            for ( width = 0; width < BORDER_THICKNESS; width++ )
             {
                 DrawShadedRect(dc, &rect, m_penDarkGrey, m_penHighlight);
             }
             break;
 
         case wxBORDER_RAISED:
-            for ( width = 0; width < BORDER_THICKNESS / 2; width++ )
+            for ( width = 0; width < BORDER_THICKNESS; width++ )
             {
                 DrawRaisedBorder(dc, &rect);
             }
             break;
 
         case wxBORDER_DOUBLE:
-            for ( width = 0; width < BORDER_THICKNESS / 3; width++ )
+            for ( width = 0; width < BORDER_THICKNESS; width++ )
             {
                 DrawShadedRect(dc, &rect, m_penLightGrey, m_penBlack);
                 DrawShadedRect(dc, &rect, m_penHighlight, m_penDarkGrey);
@@ -964,7 +964,7 @@ void wxGTKRenderer::DrawTextBorder(wxDC& dc,
 {
     wxRect rect = rectOrig;
 
-    for ( size_t width = 0; width < BORDER_THICKNESS / 2; width++ )
+    if ( border != wxBORDER_NONE )
     {
         if ( flags & wxCONTROL_FOCUSED )
         {
@@ -994,7 +994,7 @@ void wxGTKRenderer::DrawButtonBorder(wxDC& dc,
         // button pressed: draw a black border around it and an inward shade
         DrawRect(dc, &rect, m_penBlack);
 
-        for ( size_t width = 0; width < BORDER_THICKNESS / 2; width++ )
+        for ( size_t width = 0; width < BORDER_THICKNESS; width++ )
         {
             DrawAntiShadedRect(dc, &rect, m_penDarkGrey, m_penHighlight);
             DrawAntiShadedRect(dc, &rect, m_penBlack, m_penDarkGrey);
@@ -1016,7 +1016,7 @@ void wxGTKRenderer::DrawButtonBorder(wxDC& dc,
         }
 
         // now draw a normal button
-        for ( size_t width = 0; width < BORDER_THICKNESS / 2; width++ )
+        for ( size_t width = 0; width < BORDER_THICKNESS; width++ )
         {
             DrawShadedRect(dc, &rect, m_penHighlight, m_penBlack);
             DrawAntiShadedRect(dc, &rect,
@@ -1492,13 +1492,11 @@ void wxGTKRenderer::DrawRadioButton(wxDC& dc,
 // text control
 // ----------------------------------------------------------------------------
 
-static const int TEXT_BORDER = 2;
-
 wxRect wxGTKRenderer::GetTextTotalArea(const wxTextCtrl *text,
                                        const wxRect& rect)
 {
     wxRect rectTotal = rect;
-    rectTotal.Inflate(TEXT_BORDER);
+    rectTotal.Inflate(2*BORDER_THICKNESS);
     return rectTotal;
 }
 
@@ -1507,7 +1505,7 @@ wxRect wxGTKRenderer::GetTextClientArea(const wxTextCtrl *text,
                                         wxCoord *extraSpaceBeyond)
 {
     wxRect rectText = rect;
-    rectText.Inflate(-TEXT_BORDER);
+    rectText.Inflate(-2*BORDER_THICKNESS);
 
     if ( text->WrapLines() )
     {
