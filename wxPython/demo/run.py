@@ -55,14 +55,16 @@ class RunDemoApp(wx.App):
         frame = wx.Frame(None, -1, "RunDemo: " + self.name, pos=(50,50), size=(200,100),
                         style=wx.NO_FULL_REPAINT_ON_RESIZE|wx.DEFAULT_FRAME_STYLE)
         frame.CreateStatusBar()
+
         menuBar = wx.MenuBar()
         menu = wx.Menu()
-        menu.Append(101, "E&xit\tAlt-X", "Exit demo")
-        wx.EVT_MENU(self, 101, self.OnButton)
+        item = menu.Append(-1, "E&xit\tAlt-X", "Exit demo")
+        self.Bind(wx.EVT_MENU, self.OnButton, item)
         menuBar.Append(menu, "&File")
+
         frame.SetMenuBar(menuBar)
         frame.Show(True)
-        wx.EVT_CLOSE(frame, self.OnCloseFrame)
+        frame.Bind(wx.EVT_CLOSE, self.OnCloseFrame)
 
         win = self.demoModule.runTest(frame, frame, Log())
 
@@ -83,7 +85,7 @@ class RunDemoApp(wx.App):
                 p.Fit()
                 frame.SetClientSize(p.GetSize())
                 #frame.SetSize((200, 100))
-                wx.EVT_BUTTON(frame, b.GetId(), self.OnButton)
+                frame.Bind(wx.EVT_BUTTON, self.OnButton, b)
             else:
                 # It was probably a dialog or something that is already
                 # gone, so we're done.
