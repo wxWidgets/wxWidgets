@@ -125,17 +125,6 @@ wxWidgets sets this to a reasonable default before
 calling \helpref{wxApp::OnInit}{wxapponinit}, but the application can reset it at will.
 
 
-\membersection{wxApp::GetAuto3D}\label{wxappgetauto3d}
-
-\constfunc{bool}{GetAuto3D}{\void}
-
-Returns true if 3D control mode is on, false otherwise.
-
-\wxheading{See also}
-
-\helpref{wxApp::SetAuto3D}{wxappsetauto3d}
-
-
 \membersection{wxApp::GetClassName}\label{wxappgetclassname}
 
 \constfunc{wxString}{GetClassName}{\void}
@@ -601,26 +590,6 @@ wxWidgets.
 \wxheading{See also}
 
 \helpref{wxApp::GetAppName}{wxappgetappname}
-
-
-\membersection{wxApp::SetAuto3D}\label{wxappsetauto3d}
-
-\func{void}{SetAuto3D}{\param{const bool}{ auto3D}}
-
-Switches automatic 3D controls on or off.
-
-\wxheading{Parameters}
-
-\docparam{auto3D}{If true, all controls will be created with 3D appearances unless
-overridden for a control or dialog. The default is true}
-
-\wxheading{Remarks}
-
-This has an effect on Windows only.
-
-\wxheading{See also}
-
-\helpref{wxApp::GetAuto3D}{wxappgetauto3d}
 
 
 \membersection{wxApp::SetClassName}\label{wxappsetclassname}
