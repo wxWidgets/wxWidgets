@@ -468,11 +468,11 @@ LINK32=link.exe
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\tbtest.cpp
+SOURCE=.\..\..\samples\sample.rc
 # End Source File
 # Begin Source File
 
-SOURCE=.\tbtest.rc
+SOURCE=.\tbtest.cpp
 # End Source File
 # End Group
 # End Target
