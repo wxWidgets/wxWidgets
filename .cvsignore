@@ -33,3 +33,12 @@ setup.h
 stamp-h
 libtool
 aclocal.m4
+base
+gtk
+motif
+win32
+base-release
+gtk-release
+motif-release
+win32-release
+*tags
