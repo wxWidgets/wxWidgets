@@ -1223,7 +1223,7 @@ dnl   defines GCC empty if not using gcc
 dnl   defines CFLAGS
 dnl
 dnl this magic incantation is needed to prevent AC_PROG_CC from setting the
-dnl default CFLAGS (something like "-g -O2") - we don't need this as add
+dnl default CFLAGS (something like "-g -O2") -- we don't need this as we add
 dnl -g and -O flags ourselves below
 CFLAGS=${CFLAGS:=}
 AC_PROG_CC
@@ -5144,7 +5144,8 @@ AC_SUBST(LIBWXMACRES)
 AC_SUBST(LIBWXMACRESCOMP)
 AC_SUBST(LIBWXMACRESWXCONFIG)
 
-dnl These seem to be missing
+dnl other tools
+AC_SUBST(GCC)
 AC_SUBST(DLLTOOL)
 AC_SUBST(AS)
 AC_SUBST(NM)
