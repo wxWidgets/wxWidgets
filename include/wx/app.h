@@ -170,11 +170,13 @@ public:
 
 #if wxUSE_CMDLINE_PARSER
     // this one is called from OnInit() to add all supported options
-    // to the given parser
+    // to the given parser (don't forget to call the base class version if you
+    // override it!)
     virtual void OnInitCmdLine(wxCmdLineParser& parser);
 
     // called after successfully parsing the command line, return TRUE
-    // to continue and FALSE to exit
+    // to continue and FALSE to exit (don't forget to call the base class
+    // version if you override it!)
     virtual bool OnCmdLineParsed(wxCmdLineParser& parser);
 
     // called if "--help" option was specified, return TRUE to continue
@@ -346,6 +348,9 @@ public:
         // Override: rarely in GUI applications, always in console ones.
     virtual int OnRun();
 
+        // a matching function for OnInit()
+    virtual int OnExit();
+
         // very last clean up function
         //
         // Override: very rarely
@@ -455,6 +460,13 @@ public:
         // printing.
     virtual void SetPrintMode(int WXUNUSED(mode)) { }
     int GetPrintMode() const { return wxPRINT_POSTSCRIPT; }
+
+
+    // command line parsing (GUI-specific)
+    // ------------------------------------------------------------------------
+
+    virtual bool OnCmdLineParsed(wxCmdLineParser& parser);
+    virtual void OnInitCmdLine(wxCmdLineParser& parser);
 
 
     // miscellaneous other stuff

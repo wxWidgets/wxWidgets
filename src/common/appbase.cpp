@@ -182,10 +182,6 @@ int wxAppConsole::OnExit()
     delete wxConfigBase::Set((wxConfigBase *) NULL);
 #endif // wxUSE_CONFIG
 
-#ifdef __WXUNIVERSAL__
-    delete wxTheme::Set(NULL);
-#endif // __WXUNIVERSAL__
-
     // use Set(NULL) and not Get() to avoid creating a message output object on
     // demand when we just want to delete it
     delete wxMessageOutput::Set(NULL);
@@ -288,8 +284,6 @@ int wxAppConsole::FilterEvent(wxEvent& WXUNUSED(event))
 #if wxUSE_CMDLINE_PARSER
 
 #define OPTION_VERBOSE _T("verbose")
-#define OPTION_THEME   _T("theme")
-#define OPTION_MODE    _T("mode")
 
 void wxAppConsole::OnInitCmdLine(wxCmdLineParser& parser)
 {
@@ -316,31 +310,6 @@ void wxAppConsole::OnInitCmdLine(wxCmdLineParser& parser)
         },
 #endif // wxUSE_LOG
 
-#ifdef __WXUNIVERSAL__
-        {
-            wxCMD_LINE_OPTION,
-            _T(""),
-            OPTION_THEME,
-            gettext_noop("specify the theme to use"),
-            wxCMD_LINE_VAL_STRING,
-            0x0
-        },
-#endif // __WXUNIVERSAL__
-
-#if defined(__WXMGL__)
-        // VS: this is not specific to wxMGL, all fullscreen (framebuffer) ports
-        //     should provide this option. That's why it is in common/appcmn.cpp
-        //     and not mgl/app.cpp
-        {
-            wxCMD_LINE_OPTION,
-            _T(""),
-            OPTION_MODE,
-            gettext_noop("specify display mode to use (e.g. 640x480-16)"),
-            wxCMD_LINE_VAL_STRING,
-            0x0
-        },
-#endif // __WXMGL__
-
         // terminator
         {
             wxCMD_LINE_NONE,
@@ -363,39 +332,6 @@ bool wxAppConsole::OnCmdLineParsed(wxCmdLineParser& parser)
         wxLog::SetVerbose(TRUE);
     }
 #endif // wxUSE_LOG
-
-#ifdef __WXUNIVERSAL__
-    wxString themeName;
-    if ( parser.Found(OPTION_THEME, &themeName) )
-    {
-        wxTheme *theme = wxTheme::Create(themeName);
-        if ( !theme )
-        {
-            wxLogError(_("Unsupported theme '%s'."), themeName.c_str());
-            return FALSE;
-        }
-
-        // Delete the defaultly created theme and set the new theme.
-        delete wxTheme::Get();
-        wxTheme::Set(theme);
-    }
-#endif // __WXUNIVERSAL__
-
-#if defined(__WXMGL__)
-    wxString modeDesc;
-    if ( parser.Found(OPTION_MODE, &modeDesc) )
-    {
-        unsigned w, h, bpp;
-        if ( wxSscanf(modeDesc.c_str(), _T("%ux%u-%u"), &w, &h, &bpp) != 3 )
-        {
-            wxLogError(_("Invalid display mode specification '%s'."), modeDesc.c_str());
-            return FALSE;
-        }
-
-        if ( !SetDisplayMode(wxDisplayModeInfo(w, h, bpp)) )
-            return FALSE;
-    }
-#endif // __WXMGL__
 
     return TRUE;
 }

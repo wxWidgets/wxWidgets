@@ -40,6 +40,7 @@
 #endif
 
 #include "wx/apptrait.h"
+#include "wx/cmdline.h"
 #include "wx/msgout.h"
 #include "wx/thread.h"
 #include "wx/utils.h"
@@ -128,12 +129,105 @@ void wxAppBase::CleanUp()
     delete wxPendingEventsLocker;
     wxPendingEventsLocker = NULL;
 
-#if wxUSE_VALIDATORS
-    // If we don't do the following, we get an apparent memory leak.
-    ((wxEvtHandler&) wxDefaultValidator).ClearEventLocker();
-#endif // wxUSE_VALIDATORS
+    #if wxUSE_VALIDATORS
+        // If we don't do the following, we get an apparent memory leak.
+        ((wxEvtHandler&) wxDefaultValidator).ClearEventLocker();
+    #endif // wxUSE_VALIDATORS
 #endif // wxUSE_THREADS
 }
+
+#if wxUSE_CMDLINE_PARSER
+
+// ----------------------------------------------------------------------------
+// GUI-specific command line options handling
+// ----------------------------------------------------------------------------
+
+#define OPTION_THEME   _T("theme")
+#define OPTION_MODE    _T("mode")
+
+void wxAppBase::OnInitCmdLine(wxCmdLineParser& parser)
+{
+    // the standard command line options
+    static const wxCmdLineEntryDesc cmdLineGUIDesc[] =
+    {
+#ifdef __WXUNIVERSAL__
+        {
+            wxCMD_LINE_OPTION,
+            _T(""),
+            OPTION_THEME,
+            gettext_noop("specify the theme to use"),
+            wxCMD_LINE_VAL_STRING,
+            0x0
+        },
+#endif // __WXUNIVERSAL__
+
+#if defined(__WXMGL__)
+        // VS: this is not specific to wxMGL, all fullscreen (framebuffer) ports
+        //     should provide this option. That's why it is in common/appcmn.cpp
+        //     and not mgl/app.cpp
+        {
+            wxCMD_LINE_OPTION,
+            _T(""),
+            OPTION_MODE,
+            gettext_noop("specify display mode to use (e.g. 640x480-16)"),
+            wxCMD_LINE_VAL_STRING,
+            0x0
+        },
+#endif // __WXMGL__
+
+        // terminator
+        {
+            wxCMD_LINE_NONE,
+            _T(""),
+            _T(""),
+            _T(""),
+            wxCMD_LINE_VAL_NONE,
+            0x0
+        }
+    };
+
+    parser.SetDesc(cmdLineGUIDesc);
+}
+
+bool wxAppBase::OnCmdLineParsed(wxCmdLineParser& parser)
+{
+#ifdef __WXUNIVERSAL__
+    wxString themeName;
+    if ( parser.Found(OPTION_THEME, &themeName) )
+    {
+        wxTheme *theme = wxTheme::Create(themeName);
+        if ( !theme )
+        {
+            wxLogError(_("Unsupported theme '%s'."), themeName.c_str());
+            return FALSE;
+        }
+
+        // Delete the defaultly created theme and set the new theme.
+        delete wxTheme::Get();
+        wxTheme::Set(theme);
+    }
+#endif // __WXUNIVERSAL__
+
+#if defined(__WXMGL__)
+    wxString modeDesc;
+    if ( parser.Found(OPTION_MODE, &modeDesc) )
+    {
+        unsigned w, h, bpp;
+        if ( wxSscanf(modeDesc.c_str(), _T("%ux%u-%u"), &w, &h, &bpp) != 3 )
+        {
+            wxLogError(_("Invalid display mode specification '%s'."), modeDesc.c_str());
+            return FALSE;
+        }
+
+        if ( !SetDisplayMode(wxDisplayModeInfo(w, h, bpp)) )
+            return FALSE;
+    }
+#endif // __WXMGL__
+
+    return wxAppConsole::OnCmdLineParsed(parser);
+}
+
+#endif // wxUSE_CMDLINE_PARSER
 
 // ----------------------------------------------------------------------------
 // OnXXX() hooks
@@ -160,6 +254,15 @@ int wxAppBase::OnRun()
     //else: it has been changed, assume the user knows what he is doing
 
     return MainLoop();
+}
+
+int wxAppBase::OnExit()
+{
+#ifdef __WXUNIVERSAL__
+    delete wxTheme::Set(NULL);
+#endif // __WXUNIVERSAL__
+
+    return wxAppConsole::OnExit();
 }
 
 void wxAppBase::Exit()
