@@ -383,7 +383,7 @@ wxStringList *oglFormatText(wxDC& dc, const wxString& text, double width, double
 
   // Make new lines into NULL strings at this point
   int i = 0; int j = 0; int len = text.Length();
-  wxChar word[200]; word[0] = 0;
+  wxChar word[400]; word[0] = 0;
   bool end_word = false; bool new_line = false;
   while (i < len)
   {
