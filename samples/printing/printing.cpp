@@ -68,6 +68,7 @@ bool WritePageHeader(wxPrintout *printout, wxDC *dc, wxChar *text, float mmToLog
 
 // The `main program' equivalent, creating the windows and returning the
 // main frame
+
 bool MyApp::OnInit(void)
 {
     m_testFont.Create(10, wxSWISS, wxNORMAL, wxNORMAL);
