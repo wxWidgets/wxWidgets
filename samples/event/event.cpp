@@ -179,6 +179,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_UPDATE_UI(Event_Pop, MyFrame::OnUpdateUIPop)
 
     EVT_MY_CUSTOM_COMMAND(-1, MyFrame::OnProcessCustom)
+
+    // this would also work:
+    //EVT_CUSTOM(wxEVT_MY_CUSTOM_COMMAND, -1, MyFrame::OnProcessCustom)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyEvtHandler, wxEvtHandler)
