@@ -50,40 +50,56 @@
 #if wxUSE_WCHAR_T
 size_t WXDLLEXPORT wxMB2WC(wchar_t *buf, const char *psz, size_t n)
 {
+  // assume that we have mbsrtowcs() too if we have wcsrtombs()
+#if HAVE_WCSRTOMBS
+  mbstate_t mbstate;
+  memset(&mbstate, 0, sizeof(mbstate_t));
+#endif
+
   if (buf) {
     if (!n || !*psz) {
       if (n) *buf = wxT('\0');
       return 0;
     }
+#ifdef HAVE_WCSRTOMBS
+    return mbsrtowcs(buf, &psz, n, &mbstate);
+#else
     return mbstowcs(buf, psz, n);
+#endif
   }
 
-  // assume that we have mbsrtowcs() too if we have wcsrtombs()
 #ifdef HAVE_WCSRTOMBS
-  mbstate_t mbstate;
   return mbsrtowcs((wchar_t *) NULL, &psz, 0, &mbstate);
-#else  // !GNU libc
+#else
   return mbstowcs((wchar_t *) NULL, psz, 0);
-#endif // GNU
+#endif
 }
 
 size_t WXDLLEXPORT wxWC2MB(char *buf, const wchar_t *pwz, size_t n)
 {
+#if HAVE_WCSRTOMBS
+  mbstate_t mbstate;
+  memset(&mbstate, 0, sizeof(mbstate_t));
+#endif
+
   if (buf) {
     if (!n || !*pwz) {
       // glibc2.1 chokes on null input
       if (n) *buf = '\0';
       return 0;
     }
+#if HAVE_WCSRTOMBS
+    return wcsrtombs(buf, &pwz, n, &mbstate);
+#else
     return wcstombs(buf, pwz, n);
+#endif
   }
 
 #if HAVE_WCSRTOMBS
-  mbstate_t mbstate;
   return wcsrtombs((char *) NULL, &pwz, 0, &mbstate);
-#else  // !GNU libc
+#else
   return wcstombs((char *) NULL, pwz, 0);
-#endif // GNU
+#endif
 }
 #endif // wxUSE_WCHAR_T
 
