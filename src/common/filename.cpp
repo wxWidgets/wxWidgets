@@ -32,9 +32,9 @@
                 or just
                     filename
                 (although :filename works as well).
-                :::filename.ext is not yet supported. TODO.
                 Since the volume is just part of the file path, it is not
-                treated like a separate entity as it is done under DOS.
+                treated like a separate entity as it is done under DOS and
+                VMS, it is just treated as another dir. 
 
    wxPATH_VMS:  VMS native format, absolute file names have the form
                     <device>:[dir1.dir2.dir3]file.txt
@@ -225,6 +225,7 @@ void wxFileName::Assign( const wxFileName &filepath )
     m_dirs = filepath.GetDirs();
     m_name = filepath.GetName();
     m_ext = filepath.GetExt();
+    m_relative = filepath.IsRelative();
 }
 
 void wxFileName::Assign(const wxString& volume,
@@ -233,18 +234,70 @@ void wxFileName::Assign(const wxString& volume,
                         const wxString& ext,
                         wxPathFormat format )
 {
-    wxStringTokenizer tn(path, GetPathSeparators(format));
-
+    wxPathFormat my_format = GetFormat( format );
+    wxString my_path = path;
+    
     m_dirs.Clear();
-    while ( tn.HasMoreTokens() )
+    
+    if (!my_path.empty())
     {
-        wxString token = tn.GetNextToken();
+        // 1) Determine if the path is relative or absolute.
+        
+        switch (my_format)
+        {
+            case wxPATH_MAC:
+                m_relative = ( my_path[0u] == wxT(':') );
+                // We then remove a leading ":". The reason is in our
+                // storage form for relative paths:
+                // ":dir:file.txt" actually means "./dir/file.txt" in
+                // DOS notation and should get stored as 
+                // (relative) (dir) (file.txt)
+                // "::dir:file.txt" actually means "../dir/file.txt"
+                // stored as (relative) (..) (dir) (file.txt)
+                // This is important only for the Mac as an empty dir
+                // actually means <UP>, whereas under DOS, double
+                // slashes can be ignored: "\\\\" is the same as "\\".
+                if (m_relative)
+                    my_path.Remove( 0, 1 );
+                break;
+            case wxPATH_VMS:
+                // TODO: what is the relative path format here?
+                m_relative = FALSE;
+                break;
+            case wxPATH_UNIX:
+                m_relative = ( my_path[0u] != wxT('/') );
+                break;
+            case wxPATH_DOS:
+                m_relative = ( (my_path[0u] != wxT('/')) && (my_path[0u] != wxT('\\')) );
+                break;
+            default:
+                wxFAIL_MSG( "error" );
+                break;
+        }
+        
+        // 2) Break up the path into its members. If the original path
+        //    was just "/" or "\\", m_dirs will be empty. We know from
+        //    the m_relative field, if this means "nothing" or "root dir".
+        
+        wxStringTokenizer tn( my_path, GetPathSeparators(my_format) );
 
-        // if the path starts with a slash, we do need the first empty dir
-        // entry to be able to tell later that it was an absolute path, but
-        // otherwise ignore the double slashes
-        if ( m_dirs.IsEmpty() || !token.IsEmpty() )
-            m_dirs.Add( token );
+        while ( tn.HasMoreTokens() )
+        {
+            wxString token = tn.GetNextToken();
+
+            // Remove empty token under DOS and Unix, interpret them
+            // as .. under Mac.
+            if (token.empty())
+            {
+                if (my_format == wxPATH_MAC)
+                    m_dirs.Add( wxT("..") );
+                // else ignore
+            }
+            else
+            {
+               m_dirs.Add( token );
+            }
+        }
     }
 
     m_volume = volume;
@@ -276,7 +329,7 @@ void wxFileName::Assign(const wxString& fullpathOrig,
     wxString volume, path, name, ext;
 
     // do some consistency checks in debug mode: the name should be really just
-    // the filename and the path should be realyl just a path
+    // the filename and the path should be really just a path
 #ifdef __WXDEBUG__
     wxString pathDummy, nameDummy, extDummy;
 
@@ -649,7 +702,7 @@ bool wxFileName::Normalize(wxPathNormalize flags,
     format = GetFormat(format);
 
     // make the path absolute
-    if ( (flags & wxPATH_NORM_ABSOLUTE) && !IsAbsolute() )
+    if ( (flags & wxPATH_NORM_ABSOLUTE) && m_relative )
     {
         if ( cwd.empty() )
         {
@@ -660,6 +713,7 @@ bool wxFileName::Normalize(wxPathNormalize flags,
             curDir.AssignDir(cwd);
         }
 
+#if 0
         // the path may be not absolute because it doesn't have the volume name
         // but in this case we shouldn't modify the directory components of it
         // but just set the current volume
@@ -673,6 +727,7 @@ bool wxFileName::Normalize(wxPathNormalize flags,
                 curDir.Clear();
             }
         }
+#endif
     }
 
     // handle ~ stuff under Unix only
@@ -798,6 +853,8 @@ bool wxFileName::MakeRelativeTo(const wxString& pathBase, wxPathFormat format)
     {
         m_dirs.Insert(wxT(".."), 0u);
     }
+    
+    m_relative = TRUE;
 
     // we were modified
     return TRUE;
@@ -831,56 +888,6 @@ bool wxFileName::IsCaseSensitive( wxPathFormat format )
 {
     // only Unix filenames are truely case-sensitive
     return GetFormat(format) == wxPATH_UNIX;
-}
-
-bool wxFileName::IsAbsolute( wxPathFormat format )
-{
-    // if we have no path, we can't be an abs filename
-    if ( m_dirs.IsEmpty() )
-    {
-        return FALSE;
-    }
-
-    format = GetFormat(format);
-
-    if ( format == wxPATH_UNIX )
-    {
-        const wxString& str = m_dirs[0u];
-        if ( str.empty() )
-        {
-            // the path started with '/', it's an absolute one
-            return TRUE;
-        }
-
-        // the path is absolute if it starts with a path separator or
-        // with "~" or "~user"
-        wxChar ch = str[0u];
-
-        return IsPathSeparator(ch, format) || ch == _T('~');
-    }
-    else // !Unix
-    {
-        // must have the drive
-        if ( m_volume.empty() )
-            return FALSE;
-
-        switch ( format )
-        {
-            default:
-                wxFAIL_MSG( _T("unknown wxPATH_XXX style") );
-                // fall through
-
-            case wxPATH_DOS:
-                return m_dirs[0u].empty();
-
-            case wxPATH_VMS:
-                // TODO: what is the relative path format here?
-                return TRUE;
-
-            case wxPATH_MAC:
-                return !m_dirs[0u].empty();
-        }
-    }
 }
 
 /* static */
@@ -996,16 +1003,82 @@ wxString wxFileName::GetPath( bool add_separator, wxPathFormat format ) const
 {
     format = GetFormat( format );
 
-    wxString ret;
-    size_t count = m_dirs.GetCount();
-    for ( size_t i = 0; i < count; i++ )
+    wxString fullpath;
+
+    // the leading character
+    if ( format == wxPATH_MAC && m_relative )
     {
-        ret += m_dirs[i];
-        if ( add_separator || (i < count) )
-            ret += wxFILE_SEP_PATH;
+         fullpath += wxFILE_SEP_PATH_MAC;
+    }
+    else if ( format == wxPATH_DOS )
+    {
+         if (!m_relative)
+             fullpath += wxFILE_SEP_PATH_DOS;
+    }
+    else if ( format == wxPATH_UNIX )
+    {
+         if (!m_relative)
+             fullpath += wxFILE_SEP_PATH_UNIX;
+    }
+    
+    // then concatenate all the path components using the path separator
+    size_t dirCount = m_dirs.GetCount();
+    if ( dirCount )
+    {
+        if ( format == wxPATH_VMS )
+        {
+            fullpath += wxT('[');
+        }
+
+
+        for ( size_t i = 0; i < dirCount; i++ )
+        {
+            // TODO: What to do with ".." under VMS
+
+            switch (format)
+            {
+                case wxPATH_MAC:
+                {
+                    if (m_dirs[i] == wxT("."))
+                        break;
+                    if (m_dirs[i] != wxT(".."))  // convert back from ".." to nothing
+                         fullpath += m_dirs[i];
+                    fullpath += wxT(':');
+                    break;
+                }
+                case wxPATH_DOS:
+                {
+                    fullpath += m_dirs[i];
+                    fullpath += wxT('\\');
+                    break;
+                }
+                case wxPATH_UNIX:
+                {
+                    fullpath += m_dirs[i];
+                    fullpath += wxT('/');
+                    break;
+                }
+                case wxPATH_VMS:
+                {
+                    if (m_dirs[i] != wxT(".."))  // convert back from ".." to nothing
+                        fullpath += m_dirs[i];
+                    if (i == dirCount-1)
+                        fullpath += wxT(']');
+                    else
+                        fullpath += wxT('.');
+                    break;
+                }
+                default:
+                {
+                    wxFAIL_MSG( "error" );
+                }
+            }
+        }
     }
 
-    return ret;
+
+
+    return fullpath;
 }
 
 wxString wxFileName::GetFullPath( wxPathFormat format ) const
@@ -1026,50 +1099,82 @@ wxString wxFileName::GetFullPath( wxPathFormat format ) const
         	{
             	fullpath << wxFILE_SEP_PATH_DOS << wxFILE_SEP_PATH_DOS << m_volume;
         	}
-        	else // !UNC
+        	else if  ( format == wxPATH_DOS || format == wxPATH_VMS )
         	{
             	fullpath << m_volume << GetVolumeSeparator(format);
             }
+            // else ignore
         }
     }
-
+    
+    // the leading character
+    if ( format == wxPATH_MAC && m_relative )
+    {
+         fullpath += wxFILE_SEP_PATH_MAC;
+    }
+    else if ( format == wxPATH_DOS )
+    {
+         if (!m_relative)
+             fullpath += wxFILE_SEP_PATH_DOS;
+    }
+    else if ( format == wxPATH_UNIX )
+    {
+         if (!m_relative)
+             fullpath += wxFILE_SEP_PATH_UNIX;
+    }
+    
     // then concatenate all the path components using the path separator
     size_t dirCount = m_dirs.GetCount();
     if ( dirCount )
     {
-        // under Mac, we must have a path separator in the beginning of the
-        // relative path - otherwise it would be parsed as an absolute one
-        if ( format == wxPATH_MAC && m_dirs[0].empty() )
-        {
-            fullpath += wxFILE_SEP_PATH_MAC;
-        }
-
-        wxChar chPathSep = GetPathSeparators(format)[0u];
         if ( format == wxPATH_VMS )
         {
-            fullpath += _T('[');
+            fullpath += wxT('[');
         }
+
 
         for ( size_t i = 0; i < dirCount; i++ )
         {
-            // under VMS, we shouldn't have a leading dot
-            if ( i && (format != wxPATH_VMS || !m_dirs[i - 1].empty()) )
-                fullpath += chPathSep;
+            // TODO: What to do with ".." under VMS
 
-            fullpath += m_dirs[i];
-        }
-
-        if ( format == wxPATH_VMS )
-        {
-            fullpath += _T(']');
-        }
-        else // !VMS
-        {
-            // separate the file name from the last directory, notice that we
-            // intentionally do it even if the name and extension are empty as
-            // this allows us to distinguish the directories from the file
-            // names (the directories have the trailing slash)
-            fullpath += chPathSep;
+            switch (format)
+            {
+                case wxPATH_MAC:
+                {
+                    if (m_dirs[i] == wxT("."))
+                        break;
+                    if (m_dirs[i] != wxT(".."))  // convert back from ".." to nothing
+                         fullpath += m_dirs[i];
+                    fullpath += wxT(':');
+                    break;
+                }
+                case wxPATH_DOS:
+                {
+                    fullpath += m_dirs[i];
+                    fullpath += wxT('\\');
+                    break;
+                }
+                case wxPATH_UNIX:
+                {
+                    fullpath += m_dirs[i];
+                    fullpath += wxT('/');
+                    break;
+                }
+                case wxPATH_VMS:
+                {
+                    if (m_dirs[i] != wxT(".."))  // convert back from ".." to nothing
+                        fullpath += m_dirs[i];
+                    if (i == dirCount-1)
+                        fullpath += wxT(']');
+                    else
+                        fullpath += wxT('.');
+                    break;
+                }
+                default:
+                {
+                    wxFAIL_MSG( "error" );
+                }
+            }
         }
     }
 
@@ -1334,7 +1439,7 @@ void wxFileName::SplitPath(const wxString& fullpathWithVolume,
         else
         {
             // take everything up to the path separator but take care to make
-            // tha path equal to something like '/', not empty, for the files
+            // the path equal to something like '/', not empty, for the files
             // immediately under root directory
             size_t len = posLastSlash;
             if ( !len )

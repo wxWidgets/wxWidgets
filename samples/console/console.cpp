@@ -48,7 +48,7 @@
  */
 
 // what to test (in alphabetic order)? uncomment the line below to do all tests
-#define TEST_ALL
+// #define TEST_ALL
 #ifdef TEST_ALL
     #define TEST_ARRAYS
     #define TEST_CHARSET
@@ -828,7 +828,7 @@ static void TestFileNameConstruction()
             printf("ERROR: fullname should be '%s'\n", fni.fullname);
         }
 
-        bool isAbsolute = fn.IsAbsolute(fni.format);
+        bool isAbsolute = fn.IsAbsolute();
         printf("'%s' is %s (%s)\n\t",
                fullname.c_str(),
                isAbsolute ? "absolute" : "relative",
@@ -5304,7 +5304,7 @@ int main(int argc, char **argv)
 #endif // TEST_FILE
 
 #ifdef TEST_FILENAME
-    if ( 0 )
+    if ( 1 )
     {
         wxFileName fn;
         fn.Assign("c:\\foo", "bar.baz");

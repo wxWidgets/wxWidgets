@@ -260,11 +260,12 @@ public:
     static bool IsCaseSensitive( wxPathFormat format = wxPATH_NATIVE );
 
         // is this filename absolute?
-    bool IsAbsolute( wxPathFormat format = wxPATH_NATIVE );
+    bool IsAbsolute() const
+        { return !m_relative; }
 
         // is this filename relative?
-    bool IsRelative( wxPathFormat format = wxPATH_NATIVE )
-        { return !IsAbsolute(format); }
+    bool IsRelative() const
+        { return m_relative; }
 
     // Information about path format
 
@@ -354,6 +355,9 @@ private:
     // the file name and extension (empty for directories)
     wxString        m_name,
                     m_ext;
+                    
+    // is the path relative
+    bool            m_relative;
 };
 
 #endif // _WX_FILENAME_H_
