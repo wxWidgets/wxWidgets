@@ -186,13 +186,19 @@ wxRendererGTK::DrawTreeItemButton(wxWindow* win,
 {
     GtkWidget *tree = GetTreeWidget();
 
+    GtkStateType state;
+    if ( flags & wxCONTROL_CURRENT )
+        state = GTK_STATE_PRELIGHT;
+    else
+        state = GTK_STATE_NORMAL;
+        
     // VZ: I don't know how to get the size of the expander so as to centre it
     //     in the given rectangle, +2/3 below is just what looks good here...
     gtk_paint_expander
     (
         tree->style,
         GTK_PIZZA(win->m_wxwindow)->bin_window,
-        GTK_STATE_NORMAL,
+        state,
         NULL,
         tree,
         "treeview",
