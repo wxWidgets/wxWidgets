@@ -256,6 +256,8 @@ wxString wxFileConfig::GetGlobalDir()
 
   #ifdef __VMS__ // Note if __VMS is defined __UNIX is also defined
     strDir = wxT("sys$manager:");
+  #elif defined(__WXMAC__)
+	strDir = wxMacFindFolder(  (short) kOnSystemDisk, kPreferencesFolderType, kDontCreateFolder ) ;
   #elif defined( __UNIX__ )
     strDir = wxT("/etc/");
   #elif defined(__WXPM__)
@@ -351,8 +353,6 @@ wxString wxFileConfig::GetGlobalDir()
     }
   #elif defined(__WXSTUBS__)
     wxASSERT_MSG( FALSE, wxT("TODO") ) ;
-  #elif defined(__WXMAC__)
-	strDir = wxMacFindFolder(  (short) kOnSystemDisk, kPreferencesFolderType, kDontCreateFolder ) ;
   #else // Windows
     wxChar szWinDir[MAX_PATH];
     ::GetWindowsDirectory(szWinDir, MAX_PATH);
