@@ -507,12 +507,8 @@ static wxPyCoreAPI API = {
     wxColour_helper,
     wxPoint2D_helper,
                                              
-    wxSize_typecheck,
-    wxPoint_typecheck,
-    wxRealPoint_typecheck,
-    wxRect_typecheck,
+    wxPySimple_typecheck,
     wxColour_typecheck,
-    wxPoint2D_typecheck,
 
     wxPyCBH_setCallbackInfo,
     wxPyCBH_findCallback,
@@ -1073,15 +1069,13 @@ PyObject *wxSizerItem_GetUserData(wxSizerItem *self){
 struct wxPySizerItemInfo {
     wxPySizerItemInfo()
         : window(NULL), sizer(NULL), gotSize(false),
-          size(wxDefaultSize), sizePtr(&size),
-          gotPos(false), pos(-1)
+          size(wxDefaultSize), gotPos(false), pos(-1)
     {}
     
     wxWindow* window;
     wxSizer*  sizer;
     bool      gotSize;
     wxSize    size;
-    wxSize*   sizePtr;
     bool      gotPos;
     int       pos;
 };
@@ -1089,7 +1083,8 @@ struct wxPySizerItemInfo {
 static wxPySizerItemInfo wxPySizerItemTypeHelper(PyObject* item, bool checkSize, bool checkIdx ) {
 
     wxPySizerItemInfo info;
-    wxSize* sizePtr = &info.size;
+    wxSize  size;
+    wxSize* sizePtr = &size;
 
     // Find out what the type of the item is
     // try wxWindow
@@ -1103,8 +1098,10 @@ static wxPySizerItemInfo wxPySizerItemTypeHelper(PyObject* item, bool checkSize,
             info.sizer = NULL;
             
             // try wxSize or (w,h)
-            if ( checkSize && wxSize_helper(item, &sizePtr))
+            if ( checkSize && wxSize_helper(item, &sizePtr)) {
+                info.size = *sizePtr;
                 info.gotSize = true;
+            }
 
             // or a single int
             if (checkIdx && PyInt_Check(item)) {
@@ -1148,7 +1145,7 @@ void wxSizer_Add(wxSizer *self,PyObject *item,int proportion,int flag,int border
             else if ( info.sizer )
                 self->Add(info.sizer, proportion, flag, border, data);
             else if (info.gotSize)
-                self->Add(info.sizePtr->GetWidth(), info.sizePtr->GetHeight(),
+                self->Add(info.size.GetWidth(), info.size.GetHeight(),
                           proportion, flag, border, data);
         }
 void wxSizer_Insert(wxSizer *self,int before,PyObject *item,int proportion,int flag,int border,PyObject *userData){
@@ -1166,7 +1163,7 @@ void wxSizer_Insert(wxSizer *self,int before,PyObject *item,int proportion,int f
             else if ( info.sizer )
                 self->Insert(before, info.sizer, proportion, flag, border, data);
             else if (info.gotSize)
-                self->Insert(before, info.sizePtr->GetWidth(), info.sizePtr->GetHeight(),
+                self->Insert(before, info.size.GetWidth(), info.size.GetHeight(),
                              proportion, flag, border, data);
         }
 void wxSizer_Prepend(wxSizer *self,PyObject *item,int proportion,int flag,int border,PyObject *userData){
@@ -1184,7 +1181,7 @@ void wxSizer_Prepend(wxSizer *self,PyObject *item,int proportion,int flag,int bo
             else if ( info.sizer )
                 self->Prepend(info.sizer, proportion, flag, border, data);
             else if (info.gotSize)
-                self->Prepend(info.sizePtr->GetWidth(), info.sizePtr->GetHeight(),
+                self->Prepend(info.size.GetWidth(), info.size.GetHeight(),
                               proportion, flag, border, data);
         }
 bool wxSizer_Remove(wxSizer *self,PyObject *item){
@@ -1246,6 +1243,18 @@ IMPLEMENT_DYNAMIC_CLASS(wxPySizer, wxSizer);
 
 
 
+
+bool wxGBPosition_helper(PyObject* source, wxGBPosition** obj)
+{
+    return wxPyTwoIntItem_helper(source, obj, wxT("wxGBPosition"));
+}
+
+bool wxGBSpan_helper(PyObject* source, wxGBSpan** obj)
+{
+    return wxPyTwoIntItem_helper(source, obj, wxT("wxGBSpan"));
+}
+
+
 PyObject *wxGBPosition_asTuple(wxGBPosition *self){
             wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
@@ -1262,17 +1271,6 @@ PyObject *wxGBSpan_asTuple(wxGBSpan *self){
             wxPyEndBlockThreads();
             return tup;
         }
-
-bool wxGBPosition_helper(PyObject* source, wxGBPosition** obj)
-{
-    return wxPyTwoIntItem_helper(source, obj, wxT("wxGBPosition"));
-}
-
-bool wxGBSpan_helper(PyObject* source, wxGBSpan** obj)
-{
-    return wxPyTwoIntItem_helper(source, obj, wxT("wxGBSpan"));
-}
-
 bool wxGridBagSizer_Add(wxGridBagSizer *self,PyObject *item,wxGBPosition const &pos,wxGBSpan const &span,int flag,int border,PyObject *userData){
 
             wxPyUserData* data = NULL;
@@ -1288,7 +1286,7 @@ bool wxGridBagSizer_Add(wxGridBagSizer *self,PyObject *item,wxGBPosition const &
             else if ( info.sizer )
                 return self->Add(info.sizer, pos, span, flag, border, data);
             else if (info.gotSize)
-                return self->Add(info.sizePtr->GetWidth(), info.sizePtr->GetHeight(),
+                return self->Add(info.size.GetWidth(), info.size.GetHeight(),
                                  pos, span, flag, border, data);
             return false;
         }
@@ -32261,6 +32259,7 @@ static PyObject *_wrap_GBPosition___eq__(PyObject *self, PyObject *args, PyObjec
     wxGBPosition *arg1 = (wxGBPosition *) 0 ;
     wxGBPosition *arg2 = 0 ;
     bool result;
+    wxGBPosition temp2 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -32269,9 +32268,9 @@ static PyObject *_wrap_GBPosition___eq__(PyObject *self, PyObject *args, PyObjec
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:GBPosition___eq__",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxGBPosition,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxGBPosition,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if (arg2 == NULL) {
-        PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
+    {
+        arg2 = &temp2;
+        if ( ! wxGBPosition_helper(obj1, &arg2)) SWIG_fail;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -32292,6 +32291,7 @@ static PyObject *_wrap_GBPosition___ne__(PyObject *self, PyObject *args, PyObjec
     wxGBPosition *arg1 = (wxGBPosition *) 0 ;
     wxGBPosition *arg2 = 0 ;
     bool result;
+    wxGBPosition temp2 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -32300,9 +32300,9 @@ static PyObject *_wrap_GBPosition___ne__(PyObject *self, PyObject *args, PyObjec
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:GBPosition___ne__",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxGBPosition,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxGBPosition,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if (arg2 == NULL) {
-        PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
+    {
+        arg2 = &temp2;
+        if ( ! wxGBPosition_helper(obj1, &arg2)) SWIG_fail;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -32479,6 +32479,7 @@ static PyObject *_wrap_GBSpan___eq__(PyObject *self, PyObject *args, PyObject *k
     wxGBSpan *arg1 = (wxGBSpan *) 0 ;
     wxGBSpan *arg2 = 0 ;
     bool result;
+    wxGBSpan temp2 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -32487,9 +32488,9 @@ static PyObject *_wrap_GBSpan___eq__(PyObject *self, PyObject *args, PyObject *k
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:GBSpan___eq__",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxGBSpan,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxGBSpan,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if (arg2 == NULL) {
-        PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
+    {
+        arg2 = &temp2;
+        if ( ! wxGBSpan_helper(obj1, &arg2)) SWIG_fail;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -32510,6 +32511,7 @@ static PyObject *_wrap_GBSpan___ne__(PyObject *self, PyObject *args, PyObject *k
     wxGBSpan *arg1 = (wxGBSpan *) 0 ;
     wxGBSpan *arg2 = 0 ;
     bool result;
+    wxGBSpan temp2 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -32518,9 +32520,9 @@ static PyObject *_wrap_GBSpan___ne__(PyObject *self, PyObject *args, PyObject *k
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:GBSpan___ne__",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxGBSpan,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxGBSpan,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if (arg2 == NULL) {
-        PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
+    {
+        arg2 = &temp2;
+        if ( ! wxGBSpan_helper(obj1, &arg2)) SWIG_fail;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -32969,23 +32971,11 @@ static PyObject *_wrap_GBSizerItem_Intersects(PyObject *self, PyObject *args) {
         }
         if (_v) {
             {
-                void *ptr;
-                if (SWIG_ConvertPtr(argv[1], (void **) &ptr, SWIGTYPE_p_wxGBPosition, 0) == -1) {
-                    _v = 0;
-                    PyErr_Clear();
-                } else {
-                    _v = 1;
-                }
+                _v = wxPySimple_typecheck(argv[1], wxT("wxGBPosition"), 2);
             }
             if (_v) {
                 {
-                    void *ptr;
-                    if (SWIG_ConvertPtr(argv[2], (void **) &ptr, SWIGTYPE_p_wxGBSpan, 0) == -1) {
-                        _v = 0;
-                        PyErr_Clear();
-                    } else {
-                        _v = 1;
-                    }
+                    _v = wxPySimple_typecheck(argv[2], wxT("wxGBSpan"), 2);
                 }
                 if (_v) {
                     return _wrap_GBSizerItem_Intersects__SWIG_1(self,args);
@@ -33035,7 +33025,7 @@ static PyObject *_wrap_GBSizerItem_GetEndPos(PyObject *self, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_GBSizerItem_GetSizer(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GBSizerItem_GetGBSizer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGBSizerItem *arg1 = (wxGBSizerItem *) 0 ;
     wxGridBagSizer *result;
@@ -33044,11 +33034,11 @@ static PyObject *_wrap_GBSizerItem_GetSizer(PyObject *self, PyObject *args, PyOb
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:GBSizerItem_GetSizer",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:GBSizerItem_GetGBSizer",kwnames,&obj0)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxGBSizerItem,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxGridBagSizer *)((wxGBSizerItem const *)arg1)->GetSizer();
+        result = (wxGridBagSizer *)((wxGBSizerItem const *)arg1)->GetGBSizer();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -33060,7 +33050,7 @@ static PyObject *_wrap_GBSizerItem_GetSizer(PyObject *self, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_GBSizerItem_SetSizer(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_GBSizerItem_SetGBSizer(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGBSizerItem *arg1 = (wxGBSizerItem *) 0 ;
     wxGridBagSizer *arg2 = (wxGridBagSizer *) 0 ;
@@ -33070,12 +33060,12 @@ static PyObject *_wrap_GBSizerItem_SetSizer(PyObject *self, PyObject *args, PyOb
         (char *) "self",(char *) "sizer", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:GBSizerItem_SetSizer",kwnames,&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:GBSizerItem_SetGBSizer",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxGBSizerItem,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxGridBagSizer,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->SetSizer(arg2);
+        (arg1)->SetGBSizer(arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -33568,13 +33558,7 @@ static PyObject *_wrap_GridBagSizer_SetItemPosition(PyObject *self, PyObject *ar
             }
             if (_v) {
                 {
-                    void *ptr;
-                    if (SWIG_ConvertPtr(argv[2], (void **) &ptr, SWIGTYPE_p_wxGBPosition, 0) == -1) {
-                        _v = 0;
-                        PyErr_Clear();
-                    } else {
-                        _v = 1;
-                    }
+                    _v = wxPySimple_typecheck(argv[2], wxT("wxGBPosition"), 2);
                 }
                 if (_v) {
                     return _wrap_GridBagSizer_SetItemPosition__SWIG_0(self,args);
@@ -33605,13 +33589,7 @@ static PyObject *_wrap_GridBagSizer_SetItemPosition(PyObject *self, PyObject *ar
             }
             if (_v) {
                 {
-                    void *ptr;
-                    if (SWIG_ConvertPtr(argv[2], (void **) &ptr, SWIGTYPE_p_wxGBPosition, 0) == -1) {
-                        _v = 0;
-                        PyErr_Clear();
-                    } else {
-                        _v = 1;
-                    }
+                    _v = wxPySimple_typecheck(argv[2], wxT("wxGBPosition"), 2);
                 }
                 if (_v) {
                     return _wrap_GridBagSizer_SetItemPosition__SWIG_1(self,args);
@@ -33642,13 +33620,7 @@ static PyObject *_wrap_GridBagSizer_SetItemPosition(PyObject *self, PyObject *ar
             }
             if (_v) {
                 {
-                    void *ptr;
-                    if (SWIG_ConvertPtr(argv[2], (void **) &ptr, SWIGTYPE_p_wxGBPosition, 0) == -1) {
-                        _v = 0;
-                        PyErr_Clear();
-                    } else {
-                        _v = 1;
-                    }
+                    _v = wxPySimple_typecheck(argv[2], wxT("wxGBPosition"), 2);
                 }
                 if (_v) {
                     return _wrap_GridBagSizer_SetItemPosition__SWIG_2(self,args);
@@ -33972,13 +33944,7 @@ static PyObject *_wrap_GridBagSizer_SetItemSpan(PyObject *self, PyObject *args) 
             }
             if (_v) {
                 {
-                    void *ptr;
-                    if (SWIG_ConvertPtr(argv[2], (void **) &ptr, SWIGTYPE_p_wxGBSpan, 0) == -1) {
-                        _v = 0;
-                        PyErr_Clear();
-                    } else {
-                        _v = 1;
-                    }
+                    _v = wxPySimple_typecheck(argv[2], wxT("wxGBSpan"), 2);
                 }
                 if (_v) {
                     return _wrap_GridBagSizer_SetItemSpan__SWIG_0(self,args);
@@ -34009,13 +33975,7 @@ static PyObject *_wrap_GridBagSizer_SetItemSpan(PyObject *self, PyObject *args) 
             }
             if (_v) {
                 {
-                    void *ptr;
-                    if (SWIG_ConvertPtr(argv[2], (void **) &ptr, SWIGTYPE_p_wxGBSpan, 0) == -1) {
-                        _v = 0;
-                        PyErr_Clear();
-                    } else {
-                        _v = 1;
-                    }
+                    _v = wxPySimple_typecheck(argv[2], wxT("wxGBSpan"), 2);
                 }
                 if (_v) {
                     return _wrap_GridBagSizer_SetItemSpan__SWIG_1(self,args);
@@ -34046,13 +34006,7 @@ static PyObject *_wrap_GridBagSizer_SetItemSpan(PyObject *self, PyObject *args) 
             }
             if (_v) {
                 {
-                    void *ptr;
-                    if (SWIG_ConvertPtr(argv[2], (void **) &ptr, SWIGTYPE_p_wxGBSpan, 0) == -1) {
-                        _v = 0;
-                        PyErr_Clear();
-                    } else {
-                        _v = 1;
-                    }
+                    _v = wxPySimple_typecheck(argv[2], wxT("wxGBSpan"), 2);
                 }
                 if (_v) {
                     return _wrap_GridBagSizer_SetItemSpan__SWIG_2(self,args);
@@ -34429,23 +34383,11 @@ static PyObject *_wrap_GridBagSizer_CheckForIntersection(PyObject *self, PyObjec
         }
         if (_v) {
             {
-                void *ptr;
-                if (SWIG_ConvertPtr(argv[1], (void **) &ptr, SWIGTYPE_p_wxGBPosition, 0) == -1) {
-                    _v = 0;
-                    PyErr_Clear();
-                } else {
-                    _v = 1;
-                }
+                _v = wxPySimple_typecheck(argv[1], wxT("wxGBPosition"), 2);
             }
             if (_v) {
                 {
-                    void *ptr;
-                    if (SWIG_ConvertPtr(argv[2], (void **) &ptr, SWIGTYPE_p_wxGBSpan, 0) == -1) {
-                        _v = 0;
-                        PyErr_Clear();
-                    } else {
-                        _v = 1;
-                    }
+                    _v = wxPySimple_typecheck(argv[2], wxT("wxGBSpan"), 2);
                 }
                 if (_v) {
                     if (argc <= 3) {
@@ -36584,8 +36526,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"GBSizerItem_SetSpan", (PyCFunction) _wrap_GBSizerItem_SetSpan, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"GBSizerItem_Intersects", _wrap_GBSizerItem_Intersects, METH_VARARGS },
 	 { (char *)"GBSizerItem_GetEndPos", (PyCFunction) _wrap_GBSizerItem_GetEndPos, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"GBSizerItem_GetSizer", (PyCFunction) _wrap_GBSizerItem_GetSizer, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"GBSizerItem_SetSizer", (PyCFunction) _wrap_GBSizerItem_SetSizer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GBSizerItem_GetGBSizer", (PyCFunction) _wrap_GBSizerItem_GetGBSizer, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"GBSizerItem_SetGBSizer", (PyCFunction) _wrap_GBSizerItem_SetGBSizer, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"GBSizerItem_swigregister", GBSizerItem_swigregister, METH_VARARGS },
 	 { (char *)"new_GridBagSizer", (PyCFunction) _wrap_new_GridBagSizer, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"GridBagSizer_Add", (PyCFunction) _wrap_GridBagSizer_Add, METH_VARARGS | METH_KEYWORDS },
@@ -38008,8 +37950,6 @@ static swig_const_info swig_const_table[] = {
 { SWIG_PY_INT,     (char *)"wxEVT_COMMAND_COMBOBOX_SELECTED", (long) wxEVT_COMMAND_COMBOBOX_SELECTED, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"wxEVT_COMMAND_TOOL_RCLICKED", (long) wxEVT_COMMAND_TOOL_RCLICKED, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"wxEVT_COMMAND_TOOL_ENTER", (long) wxEVT_COMMAND_TOOL_ENTER, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"wxEVT_SOCKET", (long) wxEVT_SOCKET, 0, 0, 0},
-{ SWIG_PY_INT,     (char *)"wxEVT_TIMER", (long) wxEVT_TIMER, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"wxEVT_LEFT_DOWN", (long) wxEVT_LEFT_DOWN, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"wxEVT_LEFT_UP", (long) wxEVT_LEFT_UP, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"wxEVT_MIDDLE_DOWN", (long) wxEVT_MIDDLE_DOWN, 0, 0, 0},

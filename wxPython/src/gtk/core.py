@@ -1656,8 +1656,6 @@ wxEVT_COMMAND_VLBOX_SELECTED = _core.wxEVT_COMMAND_VLBOX_SELECTED
 wxEVT_COMMAND_COMBOBOX_SELECTED = _core.wxEVT_COMMAND_COMBOBOX_SELECTED
 wxEVT_COMMAND_TOOL_RCLICKED = _core.wxEVT_COMMAND_TOOL_RCLICKED
 wxEVT_COMMAND_TOOL_ENTER = _core.wxEVT_COMMAND_TOOL_ENTER
-wxEVT_SOCKET = _core.wxEVT_SOCKET
-wxEVT_TIMER = _core.wxEVT_TIMER
 wxEVT_LEFT_DOWN = _core.wxEVT_LEFT_DOWN
 wxEVT_LEFT_UP = _core.wxEVT_LEFT_UP
 wxEVT_MIDDLE_DOWN = _core.wxEVT_MIDDLE_DOWN
@@ -1795,8 +1793,6 @@ EVT_WINDOW_CREATE = wx.PyEventBinder( wxEVT_CREATE )
 EVT_WINDOW_DESTROY = wx.PyEventBinder( wxEVT_DESTROY )
 EVT_SET_CURSOR = wx.PyEventBinder( wxEVT_SET_CURSOR )
 EVT_MOUSE_CAPTURE_CHANGED = wx.PyEventBinder( wxEVT_MOUSE_CAPTURE_CHANGED )
-
-EVT_TIMER = wx.PyEventBinder( wxEVT_TIMER, 1 )
 
 EVT_LEFT_DOWN = wx.PyEventBinder( wxEVT_LEFT_DOWN )
 EVT_LEFT_UP = wx.PyEventBinder( wxEVT_LEFT_UP )
@@ -4017,8 +4013,8 @@ class GBSizerItem(SizerItem):
     def SetSpan(*args, **kwargs): return _core.GBSizerItem_SetSpan(*args, **kwargs)
     def Intersects(*args): return _core.GBSizerItem_Intersects(*args)
     def GetEndPos(*args, **kwargs): return _core.GBSizerItem_GetEndPos(*args, **kwargs)
-    def GetSizer(*args, **kwargs): return _core.GBSizerItem_GetSizer(*args, **kwargs)
-    def SetSizer(*args, **kwargs): return _core.GBSizerItem_SetSizer(*args, **kwargs)
+    def GetGBSizer(*args, **kwargs): return _core.GBSizerItem_GetGBSizer(*args, **kwargs)
+    def SetGBSizer(*args, **kwargs): return _core.GBSizerItem_SetGBSizer(*args, **kwargs)
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGBSizerItem instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
 

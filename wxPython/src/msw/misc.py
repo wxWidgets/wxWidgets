@@ -547,6 +547,7 @@ CreateFileTipProvider = _misc.CreateFileTipProvider
 
 TIMER_CONTINUOUS = _misc.TIMER_CONTINUOUS
 TIMER_ONE_SHOT = _misc.TIMER_ONE_SHOT
+wxEVT_TIMER = _misc.wxEVT_TIMER
 class Timer(core.EvtHandler):
     def __init__(self, *args, **kwargs):
         newobj = _misc.new_Timer(*args, **kwargs)
@@ -577,11 +578,54 @@ _misc.Timer_swigregister(TimerPtr)
 # For backwards compatibility with 2.4
 class PyTimer(Timer):
     def __init__(self, notify):
-        self.notify = self.notify
+        Timer.__init__(self)
+        self.notify = notify
 
     def Notify(self):
         if self.notify:
             self.notify()
+
+
+EVT_TIMER = wx.PyEventBinder( wxEVT_TIMER, 1 )
+                   
+
+class TimerEvent(core.Event):
+    def __init__(self, *args, **kwargs):
+        newobj = _misc.new_TimerEvent(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+    def GetInterval(*args, **kwargs): return _misc.TimerEvent_GetInterval(*args, **kwargs)
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxTimerEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+
+class TimerEventPtr(TimerEvent):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = TimerEvent
+_misc.TimerEvent_swigregister(TimerEventPtr)
+
+class TimerRunner(object):
+    def __init__(self, *args):
+        newobj = _misc.new_TimerRunner(*args)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+    def __del__(self, destroy=_misc.delete_TimerRunner):
+        try:
+            if self.thisown: destroy(self)
+        except: pass
+    def Start(*args, **kwargs): return _misc.TimerRunner_Start(*args, **kwargs)
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxTimerRunner instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+
+class TimerRunnerPtr(TimerRunner):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = TimerRunner
+_misc.TimerRunner_swigregister(TimerRunnerPtr)
 
 #---------------------------------------------------------------------------
 
