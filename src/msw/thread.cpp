@@ -440,6 +440,10 @@ bool wxThread::IsMain()
     return ::GetCurrentThreadId() == s_idMainThread;
 }
 
+#ifdef Yield
+#undef Yield
+#endif
+
 void wxThread::Yield()
 {
     // 0 argument to Sleep() is special
