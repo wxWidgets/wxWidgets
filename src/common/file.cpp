@@ -523,11 +523,11 @@ bool wxTempFile::Open(const wxString& strName)
     {
         // file probably didn't exist, just create with default mode _using_
         // user's umask (new files creation should respet umask)
-        changedUmask = TRUE;
+        changedUmask = FALSE;
     }
 #endif // Unix
 
-    bool ok =  m_file.Open(m_strTemp, wxFile::write, access);
+    bool ok = m_file.Open(m_strTemp, wxFile::write, access);
 
 #ifdef __UNIX__
     if ( changedUmask )
