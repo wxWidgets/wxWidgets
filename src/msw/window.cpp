@@ -297,7 +297,7 @@ wxWindow::~wxWindow()
         {
             if ( frame->GetLastFocus() == this )
                 frame->SetLastFocus((wxWindow*)NULL);
-            break;
+            //break;
         }
     }
 
