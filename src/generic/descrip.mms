@@ -14,19 +14,19 @@ CXX_DEFINE = /define=(__WXMOTIF__=1)/name=(as_is,short)\
 CC_DEFINE = /define=(__WXMOTIF__=1)/name=(as_is,short)
 .else
 .ifdef __WXGTK__
-.ifdef __WXUNIVERSAL__
-CXX_DEFINE = /define=(__WXGTK__=1,__WXUNIVERSAL__==1)/float=ieee\
-	/name=(as_is,short)/ieee=denorm/assume=(nostdnew,noglobal_array_new)
-CC_DEFINE = /define=(__WXGTK__=1,__WXUNIVERSAL__==1)/float=ieee\
-	/name=(as_is,short)/ieee=denorm
-.else
 CXX_DEFINE = /define=(__WXGTK__=1)/float=ieee/name=(as_is,short)/ieee=denorm\
 	   /assume=(nostdnew,noglobal_array_new)
 CC_DEFINE = /define=(__WXGTK__=1)/float=ieee/name=(as_is,short)/ieee=denorm
-.endif
+.else
+.ifdef __WXX11__
+CXX_DEFINE = /define=(__WXX11__=1,__WXUNIVERSAL__==1)/float=ieee\
+	/name=(as_is,short)/assume=(nostdnew,noglobal_array_new)
+CC_DEFINE = /define=(__WXX11__=1,__WXUNIVERSAL__==1)/float=ieee\
+	/name=(as_is,short)
 .else
 CXX_DEFINE =
 CC_DEFINE =
+.endif
 .endif
 .endif
 
@@ -111,13 +111,26 @@ SOURCES = \
 		tipdlg.cpp,\
 		tipwin.cpp,\
 		treectlg.cpp,\
-		wizard.cpp
+		wizard.cpp,\
+		dragimgg.cpp,\
+		fdrepdlg.cpp,\
+		htmllbox.cpp,\
+		listbkg.cpp,\
+		mdig.cpp,\
+		scrlwing.cpp,\
+		spinctlg.cpp,\
+		splash.cpp,\
+		timer.cpp,\
+		vlbox.cpp,\
+		vscroll.cpp
 
 .ifdef __WXMOTIF__
 OBJECTS0=,statusbr.obj,statline.obj,notebook.obj,scrlwing.obj,spinctlg.obj
 .else
-.ifdef __WXUNIVERSAL__
-OBJECTS0=,accel.obj,filedlgg.obj,paletteg.obj
+.ifdef __WXX11__
+OBJECTS0=,accel.obj,filedlgg.obj,dragimgg.obj,fdrepdlg.obj,htmllbox.obj,\
+	listbkg.obj,mdig.obj,scrlwing.obj,spinctlg.obj,splash.obj,timer.obj,\
+	vlbox.obj,vscroll.obj
 .else
 OBJECTS0=,accel.obj,statusbr.obj,filedlgg.obj,paletteg.obj
 .endif
@@ -129,10 +142,10 @@ all : $(SOURCES)
 	library/crea [--.lib]libwx_motif.olb $(OBJECTS)$(OBJECTS0)
 .else
 .ifdef __WXGTK__
-.ifdef __WXUNIVERSAL__
-	library/crea [--.lib]libwx_gtk_univ.olb $(OBJECTS)$(OBJECTS0)
-.else
 	library/crea [--.lib]libwx_gtk.olb $(OBJECTS)$(OBJECTS0)
+.else
+.ifdef __WXX11__
+	library/crea [--.lib]libwx_x11_univ.olb $(OBJECTS)$(OBJECTS0)
 .endif
 .endif
 .endif
@@ -178,3 +191,14 @@ tipdlg.obj : tipdlg.cpp
 tipwin.obj : tipwin.cpp
 treectlg.obj : treectlg.cpp
 wizard.obj : wizard.cpp
+dragimgg.obj : dragimgg.cpp
+fdrepdlg.obj : fdrepdlg.cpp
+htmllbox.obj : htmllbox.cpp
+listbkg.obj : listbkg.cpp
+mdig.obj : mdig.cpp
+scrlwing.obj : scrlwing.cpp
+spinctlg.obj : spinctlg.cpp
+splash.obj : splash.cpp
+timer.obj : timer.cpp
+vlbox.obj : vlbox.cpp
+vscroll.obj : vscroll.cpp

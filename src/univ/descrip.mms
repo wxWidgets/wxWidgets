@@ -8,10 +8,10 @@
 .first
 	define wx [--.include.wx]
 
-CXX_DEFINE = /define=(__WXGTK__=1,__WXUNIVERSAL__==1)/float=ieee\
-	/name=(as_is,short)/ieee=denorm/assume=(nostdnew,noglobal_array_new)
-CC_DEFINE = /define=(__WXGTK__=1,__WXUNIVERSAL__==1)/float=ieee\
-	/name=(as_is,short)/ieee=denorm
+CXX_DEFINE = /define=(__WXX11__=1,__WXUNIVERSAL__==1)/float=ieee\
+	/name=(as_is,short)/assume=(nostdnew,noglobal_array_new)
+CC_DEFINE = /define=(__WXX11__=1,__WXUNIVERSAL__==1)/float=ieee\
+	/name=(as_is,short)
 
 .suffixes : .cpp
 
@@ -27,18 +27,15 @@ OBJECTS = \
 		checklst.obj,\
 		choice.obj,\
 		colschem.obj,\
-		combobox.obj,\
 		control.obj,\
 		dialog.obj,\
 		framuniv.obj,\
 		gauge.obj,\
-		gtk.obj,\
 		inpcons.obj,\
 		inphand.obj,\
 		listbox.obj,\
 		menu.obj,\
 		notebook.obj,\
-		radiobox.obj,\
 		radiobut.obj,\
 		scrarrow.obj,\
 		scrolbar.obj,\
@@ -54,7 +51,14 @@ OBJECTS = \
 		theme.obj,\
 		toolbar.obj,\
 		topluniv.obj,\
-		winuniv.obj
+		winuniv.obj,\
+		combobox.obj,\
+		ctrlrend.obj,\
+		gtk.obj,\
+		metal.obj,\
+		radiobox.obj,\
+		scrthumb.obj,\
+		win32.obj
 
 SOURCES =\
 		bmpbuttn.cpp \
@@ -63,18 +67,15 @@ SOURCES =\
 		checklst.cpp \
 		choice.cpp \
 		colschem.cpp \
-		combobox.cpp \
 		control.cpp \
 		dialog.cpp \
 		framuniv.cpp \
 		gauge.cpp \
-		[.themes]gtk.cpp \
 		inpcons.cpp \
 		inphand.cpp \
 		listbox.cpp \
 		menu.cpp \
 		notebook.cpp \
-		radiobox.cpp \
 		radiobut.cpp \
 		scrarrow.cpp \
 		scrolbar.cpp \
@@ -90,11 +91,18 @@ SOURCES =\
 		theme.cpp \
 		toolbar.cpp \
 		topluniv.cpp \
-		winuniv.cpp
+		winuniv.cpp \
+		combobox.cpp \
+		ctrlrend.cpp \
+		gtk.cpp \
+		metal.cpp \
+		radiobox.cpp \
+		scrthumb.cpp \
+		win32.cpp
    
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
-	library [--.lib]libwx_gtk_univ.olb $(OBJECTS)
+	library [--.lib]libwx_x11_univ.olb $(OBJECTS)
 
 bmpbuttn.obj : bmpbuttn.cpp
 button.obj : button.cpp
@@ -102,19 +110,15 @@ checkbox.obj : checkbox.cpp
 checklst.obj : checklst.cpp
 choice.obj : choice.cpp
 colschem.obj : colschem.cpp
-combobox.obj : combobox.cpp
 control.obj : control.cpp
 dialog.obj : dialog.cpp
 framuniv.obj : framuniv.cpp
 gauge.obj : gauge.cpp
-gtk.obj : [.themes]gtk.cpp
-	cxx/obj=[]gtk.obj$(CXXFLAGS)$(CXX_DEFINE) [.themes]gtk.cpp
 inpcons.obj : inpcons.cpp
 inphand.obj : inphand.cpp
 listbox.obj : listbox.cpp
 menu.obj : menu.cpp
 notebook.obj : notebook.cpp
-radiobox.obj : radiobox.cpp
 radiobut.obj : radiobut.cpp
 scrarrow.obj : scrarrow.cpp
 scrolbar.obj : scrolbar.cpp
@@ -131,3 +135,10 @@ theme.obj : theme.cpp
 toolbar.obj : toolbar.cpp
 topluniv.obj : topluniv.cpp
 winuniv.obj : winuniv.cpp
+combobox.obj : combobox.cpp
+ctrlrend.obj : ctrlrend.cpp
+gtk.obj : gtk.cpp
+metal.obj : metal.cpp
+radiobox.obj : radiobox.cpp
+scrthumb.obj : scrthumb.cpp
+win32.obj : win32.cpp

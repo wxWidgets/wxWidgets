@@ -14,19 +14,19 @@ CXX_DEFINE = /define=(__WXMOTIF__=1)/name=(as_is,short)\
 CC_DEFINE = /define=(__WXMOTIF__=1)/name=(as_is,short)
 .else
 .ifdef __WXGTK__
-.ifdef __WXUNIVERSAL__
-CXX_DEFINE = /define=(__WXGTK__=1,__WXUNIVERSAL__==1)/float=ieee\
-	/name=(as_is,short)/ieee=denorm/assume=(nostdnew,noglobal_array_new)
-CC_DEFINE = /define=(__WXGTK__=1,__WXUNIVERSAL__==1)/float=ieee\
-	/name=(as_is,short)/ieee=denorm
-.else
 CXX_DEFINE = /define=(__WXGTK__=1)/float=ieee/name=(as_is,short)/ieee=denorm\
 	   /assume=(nostdnew,noglobal_array_new)
 CC_DEFINE = /define=(__WXGTK__=1)/float=ieee/name=(as_is,short)/ieee=denorm
-.endif
+.else
+.ifdef __WXX11__
+CXX_DEFINE = /define=(__WXX11__=1,__WXUNIVERSAL__==1)/float=ieee\
+	/name=(as_is,short)/assume=(nostdnew,noglobal_array_new)
+CC_DEFINE = /define=(__WXX11__=1,__WXUNIVERSAL__==1)/float=ieee\
+	/name=(as_is,short)
 .else
 CXX_DEFINE =
 CC_DEFINE =
+.endif
 .endif
 .endif
 
@@ -166,13 +166,18 @@ OBJECTS2=utilscmn.obj,\
 		valtext.obj,\
 		variant.obj,\
 		wfstream.obj,\
-		wincmn.obj,\
 		wxchar.obj,\
+		wincmn.obj,\
 		xpmdecod.obj,\
 		zipstrm.obj,\
 		zstream.obj
 
 OBJECTS_MOTIF=bmpbase.obj,gaugecmn.obj
+
+OBJECTS_X11=accesscmn.obj,bmpbase.obj,dndcmn.obj,dpycmn.obj,dseldlg.obj,\
+	dynload.obj,effects.obj,fddlgcmn.obj,fs_mem.obj,gaugecmn.obj,\
+	gbsizer.obj,geometry.obj,gzstream.obj,matrix.obj,radiocmn.obj,\
+	regex.obj,taskbarcmn.obj,xti.obj,xtistrm.obj,xtixml.obj
 
 SOURCES = \
 		appbase.cpp,\
@@ -301,7 +306,25 @@ SOURCES = \
 		wxchar.cpp,\
 		xpmdecod.cpp,\
 		zipstrm.cpp,\
-		zstream.cpp
+		zstream.cpp,\
+		accesscmn.cpp,\
+		dndcmn.cpp,\
+		dpycmn.cpp,\
+		dseldlg.cpp,\
+		dynload.cpp,\
+		effects.cpp,\
+		fddlgcmn.cpp,\
+		fs_mem.cpp,\
+		gbsizer.cpp,\
+		geometry.cpp,\
+		gzstream.cpp,\
+		matrix.cpp,\
+		radiocmn.cpp,\
+		regex.cpp,\
+		taskbarcmn.cpp,\
+		xti.cpp,\
+		xtistrm.cpp,\
+		xtixml.cpp
 
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
@@ -315,14 +338,16 @@ all : $(SOURCES)
 	library [--.lib]libwx_motif.olb $(OBJECTS_MOTIF)
 .else
 .ifdef __WXGTK__
-.ifdef __WXUNIVERSAL__
-	library [--.lib]libwx_gtk_univ.olb $(OBJECTS)
-	library [--.lib]libwx_gtk_univ.olb $(OBJECTS1)
-	library [--.lib]libwx_gtk_univ.olb $(OBJECTS2)
-.else
 	library [--.lib]libwx_gtk.olb $(OBJECTS)
 	library [--.lib]libwx_gtk.olb $(OBJECTS1)
 	library [--.lib]libwx_gtk.olb $(OBJECTS2)
+.else
+.ifdef __WXX11__
+	$(MMS)$(MMSQUALIFIERS) $(OBJECTS_X11)
+	library [--.lib]libwx_x11_univ.olb $(OBJECTS)
+	library [--.lib]libwx_x11_univ.olb $(OBJECTS1)
+	library [--.lib]libwx_x11_univ.olb $(OBJECTS2)
+	library [--.lib]libwx_x11_univ.olb $(OBJECTS_X11)
 .endif
 .endif
 .endif
@@ -454,3 +479,21 @@ wxchar.obj : wxchar.cpp
 xpmdecod.obj : xpmdecod.cpp
 zipstrm.obj : zipstrm.cpp
 zstream.obj : zstream.cpp
+accesscmn.obj : accesscmn.cpp
+dndcmn.obj : dndcmn.cpp
+dpycmn.obj : dpycmn.cpp
+dseldlg.obj : dseldlg.cpp
+dynload.obj : dynload.cpp
+effects.obj : effects.cpp
+fddlgcmn.obj : fddlgcmn.cpp
+fs_mem.obj : fs_mem.cpp
+gbsizer.obj : gbsizer.cpp
+geometry.obj : geometry.cpp
+gzstream.obj : gzstream.cpp
+matrix.obj : matrix.cpp
+radiocmn.obj : radiocmn.cpp
+regex.obj : regex.cpp
+taskbarcmn.obj : taskbarcmn.cpp
+xti.obj : xti.cpp
+xtistrm.obj : xtistrm.cpp
+xtixml.obj : xtixml.cpp

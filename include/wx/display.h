@@ -12,7 +12,7 @@
 #ifndef _WX_DISPLAY_H_BASE_
 #define _WX_DISPLAY_H_BASE_
 
-#if wxUSE_DISPLAY
+#ifdef wxUSE_DISPLAY
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
     #pragma interface "displaybase.h"
