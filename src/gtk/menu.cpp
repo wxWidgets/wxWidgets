@@ -594,8 +594,12 @@ void wxMenuItem::SetName( const wxString& str )
         {
 #if (GTK_MINOR_VERSION > 0)
             m_text << _T('_');
-        } else
-        if (*pc == _T('/'))      /* we have to filter out slashes ... */
+        }
+        else if ( *pc == _T('_') )    // escape underscores
+        {
+            m_text << _T("__");
+        }
+        else if (*pc == _T('/'))      /* we have to filter out slashes ... */
         {
             m_text << _T('\\');  /* ... and replace them with back slashes */
 #endif
@@ -829,7 +833,7 @@ void wxMenu::Append( int id, const wxString &item, const wxString &helpStr, bool
     wxString s = _T("<main>/");
     for ( const wxChar *pc = text; *pc != _T('\0'); pc++ )
     {
-        if (*pc == _T('_')) pc++; /* skip it */
+        while (*pc == _T('_')) pc++; /* skip it */
         s << *pc;
     }
 
