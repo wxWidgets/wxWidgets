@@ -1,8 +1,9 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        display.cpp
 // Purpose:     MSW Implementation of wxDisplay class
-// Author:      Royce Mitchell III, Ryan Norton
+// Author:      Royce Mitchell III
 // Modified by: VZ (resolutions enumeration/change support, DirectDraw, ...)
+//		    Ryan Norton (IsPrimary override)
 // Created:     06/21/02
 // RCS-ID:      $Id$
 // Copyright:   (c) wxWidgets team
