@@ -422,6 +422,7 @@ _WX_DEFINE_BASEARRAY(const void *, wxBaseArrayPtrVoid)
 _WX_DEFINE_BASEARRAY(short,        wxBaseArrayShort)
 _WX_DEFINE_BASEARRAY(int,          wxBaseArrayInt)
 _WX_DEFINE_BASEARRAY(long,         wxBaseArrayLong)
+_WX_DEFINE_BASEARRAY(size_t,       wxBaseArraySizeT)
 _WX_DEFINE_BASEARRAY(double,       wxBaseArrayDouble)
 
 #if wxUSE_STL
