@@ -343,6 +343,8 @@ WXHBRUSH wxControl::DoMSWControlColor(WXHDC pDC, wxColour colBg)
     WXHBRUSH hbr;
     if ( colBg.Ok() )
     {
+        ::SetBkColor(hdc, wxColourToRGB(colBg));
+
         // draw children with the same colour as the parent
         wxBrush *brush = wxTheBrushList->FindOrCreateBrush(colBg, wxSOLID);
 
