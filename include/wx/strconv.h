@@ -46,16 +46,16 @@ public:
     virtual size_t MB2WC(wchar_t *outputBuf, const char *psz, size_t outputSize) const = 0;
     virtual size_t WC2MB(char *outputBuf, const wchar_t *psz, size_t outputSize) const = 0;
 
-    // actual conversion for strings with embedded null characters
-    //
-    // outputSize is the size of the output buffer
-    // pszLen is the length of the input string (including all but last null character)
-    size_t MB2WC(wchar_t *outputBuf, const char *psz, size_t outputSize, size_t pszLen) const;
-    size_t WC2MB(char *outputBuf, const wchar_t *psz, size_t outputSize, size_t pszLen) const;
-
     // MB <-> WC
     const wxWCharBuffer cMB2WC(const char *psz) const;
     const wxCharBuffer cWC2MB(const wchar_t *psz) const;
+
+    // MB <-> WC for strings with embedded null characters
+    //
+    // pszLen length of the input string
+    // pOutSize gets the final size of the converted string
+    const wxWCharBuffer cMB2WC(const char *psz, size_t pszLen, size_t* pOutSize) const;
+    const wxCharBuffer cWC2MB(const wchar_t *psz, size_t pszLen, size_t* pOutSize) const;
 
     // convenience functions for converting MB or WC to/from wxWin default
 #if wxUSE_UNICODE

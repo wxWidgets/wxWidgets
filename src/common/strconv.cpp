@@ -217,14 +217,18 @@ const wxCharBuffer wxMBConv::cWC2MB(const wchar_t *pwz) const
     return buf;
 }
 
-size_t wxMBConv::MB2WC(wchar_t* szBuffer, const char* szString, 
-                       size_t outsize, size_t nStringLen) const
+const wxWCharBuffer wxMBConv::cMB2WC(const char *szString, size_t nStringLen, size_t* pOutSize) const
 {
+    wxASSERT(pOutSize != NULL);
+
     const char* szEnd = szString + nStringLen + 1;
     const char* szPos = szString;
     const char* szStart = szPos;
 
     size_t nActualLength = 0;
+    size_t nCurrentSize = nStringLen; //try normal size first (should never resize?)
+
+    wxWCharBuffer theBuffer(nCurrentSize);
 
     //Convert the string until the length() is reached, continuing the
     //loop every time a null character is reached
@@ -237,18 +241,31 @@ size_t wxMBConv::MB2WC(wchar_t* szBuffer, const char* szString,
 
         //Invalid conversion?
         if( nLen == (size_t)-1 )
-            return nLen;
+        {
+            *pOutSize = 0;
+            theBuffer.data()[0u] = wxT('\0');
+            return theBuffer;
+        }
+
 
         //Increase the actual length (+1 for current null character)
         nActualLength += nLen + 1;
 
-        //Only copy data in if buffer size is big enough
-        if (szBuffer != NULL &&
-            nActualLength <= outsize)
+        //if buffer too big, realloc the buffer
+        if (nActualLength > (nCurrentSize+1))
         {
-            //Convert the current (sub)string
-            if ( MB2WC(&szBuffer[szPos - szStart], szPos, nLen + 1) == (size_t)-1 )
-                return (size_t)-1;
+            wxWCharBuffer theNewBuffer(nCurrentSize << 1);
+            memcpy(theNewBuffer.data(), theBuffer.data(), nCurrentSize * sizeof(wchar_t));
+            theBuffer = theNewBuffer;
+            nCurrentSize <<= 1;
+        }
+
+        //Convert the current (sub)string
+        if ( MB2WC(&theBuffer.data()[szPos - szStart], szPos, nLen + 1) == (size_t)-1 )
+        {
+            *pOutSize = 0;
+            theBuffer.data()[0u] = wxT('\0');
+            return theBuffer;
         }
 
         //Increment to next (sub)string
@@ -258,17 +275,23 @@ size_t wxMBConv::MB2WC(wchar_t* szBuffer, const char* szString,
         szPos += strlen(szPos) + 1;
     }
 
-    return nActualLength - 1; //success - return actual length
+    //success - return actual length and the buffer
+    *pOutSize = nActualLength;
+    return theBuffer;  
 }
 
-size_t wxMBConv::WC2MB(char* szBuffer, const wchar_t* szString, 
-                       size_t outsize, size_t nStringLen) const
+const wxCharBuffer wxMBConv::cWC2MB(const wchar_t *szString, size_t nStringLen, size_t* pOutSize) const
 {
+    wxASSERT(pOutSize != NULL);
+
     const wchar_t* szEnd = szString + nStringLen + 1;
     const wchar_t* szPos = szString;
     const wchar_t* szStart = szPos;
 
     size_t nActualLength = 0;
+    size_t nCurrentSize = nStringLen << 2; //try * 4 first
+
+    wxCharBuffer theBuffer(nCurrentSize);
 
     //Convert the string until the length() is reached, continuing the
     //loop every time a null character is reached
@@ -281,18 +304,30 @@ size_t wxMBConv::WC2MB(char* szBuffer, const wchar_t* szString,
 
         //Invalid conversion?
         if( nLen == (size_t)-1 )
-            return nLen;
+        {
+            *pOutSize = 0;
+            theBuffer.data()[0u] = wxT('\0');
+            return theBuffer;
+        }
 
         //Increase the actual length (+1 for current null character)
         nActualLength += nLen + 1;
         
-        //Only copy data in if buffer size is big enough
-        if (szBuffer != NULL &&
-            nActualLength <= outsize)
+        //if buffer too big, realloc the buffer
+        if (nActualLength > (nCurrentSize+1))
         {
-            //Convert the current (sub)string
-            if(WC2MB(&szBuffer[szPos - szStart], szPos, nLen + 1) == (size_t)-1 )
-                return (size_t)-1;
+            wxCharBuffer theNewBuffer(nCurrentSize << 1);
+            memcpy(theNewBuffer.data(), theBuffer.data(), nCurrentSize);
+            theBuffer = theNewBuffer;
+            nCurrentSize <<= 1;
+        }
+
+        //Convert the current (sub)string
+        if(WC2MB(&theBuffer.data()[szPos - szStart], szPos, nLen + 1) == (size_t)-1 )
+        {
+            *pOutSize = 0;
+            theBuffer.data()[0u] = wxT('\0');
+            return theBuffer;
         }
 
         //Increment to next (sub)string
@@ -302,7 +337,9 @@ size_t wxMBConv::WC2MB(char* szBuffer, const wchar_t* szString,
         szPos += wxWcslen(szPos) + 1;
     }
 
-    return nActualLength - 1;  //success - return actual length
+    //success - return actual length and the buffer
+    *pOutSize = nActualLength;
+    return theBuffer;  
 }
 
 // ----------------------------------------------------------------------------

@@ -1028,45 +1028,21 @@ wxString::wxString(const char *psz, wxMBConv& conv, size_t nLength)
     // anything to do?
     if ( (nLen != 0) && (nLen != (size_t)-1) )
     {
-        //Get length of converted string
-        size_t dwConvLen = conv.MB2WC(NULL, psz, 0, nLen);
+        //Convert string
+        size_t nRealSize;
+        wxWCharBuffer theBuffer = conv.cMB2WC(psz, nLen, &nRealSize);
 
-        //if valid, do the conversion
-        if (dwConvLen != (size_t) -1)
-        {
-            //Get internal buffer
-            wxStringBufferLength internalBuffer(*this, dwConvLen + 1);
-
-            //Do the actual conversion & Set the length of the buffer
-            internalBuffer.SetLength(
-                   conv.MB2WC(internalBuffer, psz, dwConvLen + 1, nLen)
-                                    );
-        }
+        //Copy 
+        if (nRealSize)
+            assign( theBuffer.data() , nRealSize - 1 );
     }
 }
 
 //Convert wxString in Unicode mode to a multi-byte string
 const wxCharBuffer wxString::mb_str(wxMBConv& conv) const
 {
-    //Get length of converted string
-    size_t dwConvLen = conv.WC2MB(NULL, (*this).c_str(), 0, length());
-
-    //if valid, do the conversion
-    if (dwConvLen != (size_t) -1)
-    {
-        //Create good buffer
-        wxCharBuffer buffer(dwConvLen + 1);
-
-        //Do the actual conversion
-        conv.WC2MB(buffer.data(), (*this).c_str(), dwConvLen + 1, length());
-
-        return buffer;
-    }
-
-    //create bogus buffer
-    wxCharBuffer buffer(1);
-    buffer.data()[0u] = 0;
-    return buffer;
+    size_t dwOutSize;
+    return conv.cWC2MB(c_str(), length(), &dwOutSize);
 }
 
 #else // ANSI
@@ -1108,20 +1084,13 @@ wxString::wxString(const wchar_t *pwz, wxMBConv& conv, size_t nLength)
     // anything to do?
     if ( (nLen != 0) && (nLen != (size_t)-1) )
     {
-        //Get length of converted string
-        size_t dwConvLen = conv.WC2MB(NULL, pwz, 0, nLen);
+        //Convert string
+        size_t nRealSize;
+        wxCharBuffer theBuffer = conv.cWC2MB(pwz, nLen, &nRealSize);
 
-        //if valid, do the conversion
-        if (dwConvLen != (size_t) -1)
-        {
-            //Get internal buffer
-            wxStringBufferLength internalBuffer(*this, dwConvLen + 1);
-
-            //Do the actual conversion & Set the length of the buffer
-            internalBuffer.SetLength(
-                   conv.WC2MB(internalBuffer, pwz, dwConvLen + 1, nLen)
-                                    );
-        }
+        //Copy 
+        if (nRealSize)
+            assign( theBuffer.data() , nRealSize - 1 );
     }
 }
 
@@ -1129,25 +1098,8 @@ wxString::wxString(const wchar_t *pwz, wxMBConv& conv, size_t nLength)
 //mode is not enabled and wxUSE_WCHAR_T is enabled
 const wxWCharBuffer wxString::wc_str(wxMBConv& conv) const
 {
-    //Get length of converted string
-    size_t dwConvLen = conv.MB2WC(NULL, (*this).c_str(), 0, length());
-
-    //if valid, do the conversion
-    if (dwConvLen != (size_t) -1)
-    {
-        //Create good buffer
-        wxWCharBuffer buffer(dwConvLen + 1);
-
-        //Do the actual conversion
-        conv.MB2WC(buffer.data(), (*this).c_str(), dwConvLen + 1, length());
-
-        return buffer;
-    }
-
-    //create bogus buffer
-    wxWCharBuffer buffer(1);
-    buffer.data()[0u] = 0;
-    return buffer;
+    size_t dwOutSize;
+    return conv.cMB2WC(c_str(), length(), &dwOutSize);
 }
 
 #endif // wxUSE_WCHAR_T
