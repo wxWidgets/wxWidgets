@@ -19,14 +19,14 @@ from fileinput import FileInput
 IFACE         = './scintilla/include/Scintilla.iface'
 H_TEMPLATE    = './stc.h.in'
 CPP_TEMPLATE  = './stc.cpp.in'
-H_DEST        = '../../include/wx/stc/stc.h' # './stc_test.h' #
-CPP_DEST      = './stc.cpp' #'./stc_test.cpp'
+H_DEST        = '../../include/wx/stc/stc.h'
+CPP_DEST      = './stc.cpp'
 
 
 # Value prefixes to convert
 valPrefixes = [('SCI_', ''),
                ('SC_',  ''),
-               ('SCN_', None),  # just toss these...
+               ('SCN_', None),  # just toss these out...
                ('SCEN_', None),
                ('SCE_', ''),
                ('SCLEX_', 'LEX_'),

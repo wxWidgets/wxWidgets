@@ -95,6 +95,7 @@ ScintillaWX::ScintillaWX(wxStyledTextCtrl* win) {
     wMain = win;
     wDraw = win;
     stc   = win;
+    wheelRotation = 0;
     Initialise();
 }
 
@@ -362,6 +363,22 @@ void ScintillaWX::DoVScroll(int type, int pos) {
 
     ScrollTo(topLineNew);
 }
+
+
+void ScintillaWX::DoMouseWheel(int rotation, int delta, int linesPerAction) {
+    int topLineNew = topLine;
+    int lines;
+
+    wheelRotation += rotation;
+    lines = wheelRotation / delta;
+    wheelRotation -= lines * delta;
+    if (lines != 0) {
+        lines *= linesPerAction;
+        topLineNew -= lines;
+        ScrollTo(topLineNew);
+    }
+}
+
 
 void ScintillaWX::DoSize(int width, int height) {
     PRectangle rcClient(0,0,width,height);

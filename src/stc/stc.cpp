@@ -91,6 +91,7 @@ BEGIN_EVENT_TABLE(wxStyledTextCtrl, wxControl)
     EVT_MOTION                  (wxStyledTextCtrl::OnMouseMove)
     EVT_LEFT_UP                 (wxStyledTextCtrl::OnMouseLeftUp)
     EVT_RIGHT_UP                (wxStyledTextCtrl::OnMouseRightUp)
+    EVT_MOUSEWHEEL              (wxStyledTextCtrl::OnMouseWheel)
     EVT_CHAR                    (wxStyledTextCtrl::OnChar)
     EVT_KEY_DOWN                (wxStyledTextCtrl::OnKeyDown)
     EVT_KILL_FOCUS              (wxStyledTextCtrl::OnLoseFocus)
@@ -1555,6 +1556,14 @@ void wxStyledTextCtrl::OnMouseRightUp(wxMouseEvent& evt) {
     wxPoint pt = evt.GetPosition();
     m_swx->DoContextMenu(Point(pt.x, pt.y));
 }
+
+
+void wxStyledTextCtrl::OnMouseWheel(wxMouseEvent& evt) {
+    m_swx->DoMouseWheel(evt.GetWheelRotation(),
+                        evt.GetWheelDelta(),
+                        evt.GetLinesPerAction());
+}
+
 
 void wxStyledTextCtrl::OnChar(wxKeyEvent& evt) {
     long key = evt.KeyCode();
