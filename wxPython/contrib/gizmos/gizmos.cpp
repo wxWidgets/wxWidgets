@@ -659,11 +659,10 @@ static PyObject *_wrap_wxEditableListBox_SetStrings(PyObject *self, PyObject *ar
         PyObject* item = PySequence_GetItem(_obj1, i);
 #if wxUSE_UNICODE
         PyObject* str  = PyObject_Unicode(item);
-        _arg1->Add(PyUnicode_AsUnicode(str));
 #else
         PyObject* str  = PyObject_Str(item);
-        _arg1->Add(PyString_AsString(str));
 #endif
+        _arg1->Add(Py2wxString(str));
         Py_DECREF(item);
         Py_DECREF(str);
     }
@@ -1790,7 +1789,7 @@ static PyObject *_wrap_wxLEDNumberCtrl_GetValue(PyObject *self, PyObject *args, 
     if (PyErr_Occurred()) return NULL;
 }{
 #if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+    _resultobj = PyUnicode_FromWideChar(_result->c_str(), _result->Len());
 #else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
 #endif
