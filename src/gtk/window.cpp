@@ -1654,9 +1654,18 @@ gtk_window_realized_callback( GtkWidget *WXUNUSED(m_widget), wxWindow *win )
 // "size_allocate"
 //-----------------------------------------------------------------------------
 
+#ifdef HAVE_XIM
+    #define WXUNUSED_UNLESS_XIM(param)  param
+#else
+    #define WXUNUSED_UNLESS_XIM(param)  WXUNUSED(param)
+#endif
+
 /* Resize XIM window */
 
-static void gtk_wxwindow_size_callback( GtkWidget *widget, GtkAllocation* alloc, wxFrame *win )
+static
+void gtk_wxwindow_size_callback( GtkWidget * WXUNUSED_UNLESS_XIM(widget),
+                                 GtkAllocation * WXUNUSED_UNLESS_XIM(alloc),
+                                 wxFrame * WXUNUSED_UNLESS_XIM(win) )
 {
     if (g_isIdle)
         wxapp_install_idle_handler();
@@ -1669,7 +1678,7 @@ static void gtk_wxwindow_size_callback( GtkWidget *widget, GtkAllocation* alloc,
     {
         gint width, height;
 
-	gdk_window_get_size (widget->window, &width, &height);
+        gdk_window_get_size (widget->window, &width, &height);
         win->m_icattr->preedit_area.width = width;
         win->m_icattr->preedit_area.height = height;
         gdk_ic_set_attr (win->m_ic, win->m_icattr, GDK_IC_PREEDIT_AREA);
@@ -1684,7 +1693,8 @@ static void gtk_wxwindow_size_callback( GtkWidget *widget, GtkAllocation* alloc,
 /* Initialize XIM support */
 
 static gint
-gtk_wxwindow_realized_callback( GtkWidget *widget, wxWindow *win )
+gtk_wxwindow_realized_callback( GtkWidget * WXUNUSED_UNLESS_XIM(widget),
+                                wxWindow * WXUNUSED_UNLESS_XIM(win) )
 {
     if (g_isIdle)
         wxapp_install_idle_handler();

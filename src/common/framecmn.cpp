@@ -215,7 +215,7 @@ bool wxFrameBase::ProcessCommand(int id)
 
 // default resizing behaviour - if only ONE subwindow, resize to fill the
 // whole client area
-void wxFrameBase::OnSize(wxSizeEvent& event)
+void wxFrameBase::OnSize(wxSizeEvent& WXUNUSED(event))
 {
     // if we're using constraints - do use them
 #if wxUSE_CONSTRAINTS
@@ -276,7 +276,7 @@ void wxFrameBase::OnSize(wxSizeEvent& event)
 }
 
 // The default implementation for the close window event.
-void wxFrameBase::OnCloseWindow(wxCloseEvent& event)
+void wxFrameBase::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 {
     Destroy();
 }
