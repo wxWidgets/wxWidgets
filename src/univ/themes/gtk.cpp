@@ -1566,7 +1566,7 @@ wxRect wxGTKRenderer::GetTextClientArea(const wxTextCtrl *text,
                                         wxCoord *extraSpaceBeyond)
 {
     wxRect rectText = rect;
-    rectText.Inflate(-2*BORDER_THICKNESS);
+    rectText.Deflate(2*BORDER_THICKNESS);
 
     if ( text->WrapLines() )
     {
