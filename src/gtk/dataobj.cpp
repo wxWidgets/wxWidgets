@@ -197,13 +197,23 @@ size_t wxFileDataObject::GetDataSize() const
     return res + 1;
 }
 
-bool wxFileDataObject::SetData(size_t WXUNUSED(size), const void *buf)
+bool wxFileDataObject::SetData(size_t size, const void *buf)
 {
-    /* TODO */
+    // filenames are stores as a string with #0 as deliminators
 
-    wxString file( (const char *)buf );  /* char, not wxChar */
-
-    AddFile( file );
+    const char *filenames = (const char*) buf;
+    size_t pos = 0;
+    for(;;)
+    {
+        if (filenames[0] == 0)
+	    break;
+	if (pos >= size)
+	    break;
+        wxString file( filenames );  // this returns the first file
+        AddFile( file );
+	pos += file.Len()+1;
+	filenames += file.Len()+1;
+    }
 
     return TRUE;
 }

@@ -426,20 +426,6 @@ bool wxDropTarget::GetData()
     if (!m_dataObject->IsSupportedFormat( dragFormat ))
         return FALSE;
 
-    if (dragFormat.GetType() == wxDF_TEXT)
-    {
-        wxTextDataObject *text_object = (wxTextDataObject*)m_dataObject;
-        text_object->SetText( (const char*)m_dragData->data );
-        return TRUE;
-    }
-
-    if (dragFormat.GetType() == wxDF_FILENAME)
-    {
-        wxFileDataObject *file_object = (wxFileDataObject*)m_dataObject;
-        file_object->SetData( 0, (const char*)m_dragData->data );
-        return TRUE;
-    }
-
     m_dataObject->SetData( dragFormat, (size_t)m_dragData->length, (const void*)m_dragData->data );
 
     return TRUE;
@@ -713,7 +699,7 @@ void wxDropSource::PrepareIcon( int hot_x, int hot_y, GdkDragContext *context )
 
 wxDragResult wxDropSource::DoDragDrop( bool allowMove )
 {
-    wxASSERT_MSG( m_data, wxT("wxDragSource: no data") );
+    wxASSERT_MSG( m_data, wxT("Drop source: no data") );
 
     if (!m_data)
         return (wxDragResult) wxDragNone;
@@ -734,7 +720,7 @@ wxDragResult wxDropSource::DoDragDrop( bool allowMove )
     for (size_t i = 0; i < m_data->GetFormatCount(); i++)
     {
         GdkAtom atom = array[i];
-        wxLogDebug( wxT("Supported atom %s"), gdk_atom_name( atom ) );
+        wxLogDebug( wxT("Drop source: Supported atom %s"), gdk_atom_name( atom ) );
         gtk_target_list_add( target_list, atom, 0, 0 );
     }
     delete[] array;

@@ -31,6 +31,7 @@
 
 extern void wxapp_install_idle_handler();
 extern bool g_isIdle;
+extern int g_openDialogs;
 
 //-----------------------------------------------------------------------------
 // data
@@ -76,7 +77,7 @@ static void gtk_dialog_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation
 //-----------------------------------------------------------------------------
 
 static gint
-#if (GTK_MINOR_VERSON > 0)
+#if (GTK_MINOR_VERSION > 0)
 gtk_dialog_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *WXUNUSED(event), wxDialog *win )
 #else
 gtk_dialog_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *event, wxDialog *win )
@@ -87,7 +88,7 @@ gtk_dialog_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *e
 
     if (!win->m_hasVMT) return FALSE;
 
-#if (GTK_MINOR_VERSON > 0)
+#if (GTK_MINOR_VERSION > 0)
     int x = 0;
     int y = 0;
     gdk_window_get_root_origin( win->m_widget->window, &x, &y );
@@ -254,6 +255,8 @@ bool wxDialog::Create( wxWindow *parent,
                        const wxPoint &pos, const wxSize &size,
                        long style, const wxString &name )
 {
+    g_openDialogs++;
+
     wxTopLevelWindows.Append( this );
 
     m_needParent = FALSE;
@@ -322,6 +325,8 @@ wxDialog::~wxDialog()
     {
         wxTheApp->ExitMainLoop();
     }
+    
+    g_openDialogs--;
 }
 
 void wxDialog::SetTitle( const wxString& title )

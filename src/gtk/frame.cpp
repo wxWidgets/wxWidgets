@@ -45,6 +45,7 @@ const int wxPLACE_HOLDER   = 0;
 
 extern void wxapp_install_idle_handler();
 extern bool g_isIdle;
+extern int g_openDialogs;
 
 //-----------------------------------------------------------------------------
 // data
@@ -101,7 +102,8 @@ static gint gtk_frame_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WX
     if (g_isIdle)
         wxapp_install_idle_handler();
 
-    win->Close();
+    if (g_openDialogs == 0)
+        win->Close();
 
     return TRUE;
 }
@@ -165,7 +167,7 @@ static void gtk_toolbar_detached_callback( GtkWidget *WXUNUSED(widget), GtkWidge
 //-----------------------------------------------------------------------------
 
 static gint
-#if (GTK_MINOR_VERSON > 0)
+#if (GTK_MINOR_VERSION > 0)
 gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *WXUNUSED(event), wxFrame *win )
 #else
 gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *event, wxFrame *win )
@@ -174,9 +176,10 @@ gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *ev
     if (g_isIdle)
         wxapp_install_idle_handler();
 
-    if (!win->m_hasVMT) return FALSE;
-
-#if (GTK_MINOR_VERSON > 0)
+    if (!win->m_hasVMT) 
+        return FALSE;
+	
+#if (GTK_MINOR_VERSION > 0)
     int x = 0;
     int y = 0;
     gdk_window_get_root_origin( win->m_widget->window, &x, &y );

@@ -877,6 +877,11 @@ void DnDFrame::OnLeftDown(wxMouseEvent &WXUNUSED(event) )
     {
         // start drag operation
         wxTextDataObject textData(m_strText);
+/*
+        wxFileDataObject textData;
+	textData.AddFile( "/file1.txt" );
+	textData.AddFile( "/file2.txt" );
+*/
         wxDropSource source(textData, this
 #ifdef __WXMSW__
                             ,wxCURSOR_PENCIL,            // for copy

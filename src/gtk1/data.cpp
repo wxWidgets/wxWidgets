@@ -49,6 +49,9 @@ bool g_blockEventsOnDrag = FALSE;
 /* Don't allow mouse event propagation during scroll */
 bool g_blockEventsOnScroll = FALSE;
 
+/* Don't allow window closing if there are open dialogs */
+int g_openDialogs = 0;
+
 /* TRUE when the message queue is empty. this gets set to
    FALSE by all event callbacks before anything else is done */
 bool g_isIdle = FALSE;
