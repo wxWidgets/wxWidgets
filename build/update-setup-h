@@ -1,0 +1,46 @@
+#!/bin/sh
+##############################################################################
+# Name:       build/update-setup.h
+# Purpose:    run from root wx directory to update wx/*/setup.h files: those
+#             having special comment markers in them will be update using
+#             include/wx/setup_inc.h contents
+# Created:    2005-01-15
+# RCS-ID:     $Id$
+# Copyright:  (c) 2005 Vadim Zeitlin <vadim@wxwindows.org>
+# Licence:    wxWindows licence
+##############################################################################
+
+rc=0
+
+error()
+{
+    echo $* 1>&2
+}
+
+update_single_setup_h()
+{
+    tmp=$i.$$.tmp
+    sed -e '/^\/\* --- start common options --- \*\/$/q' $1 > $tmp &&
+    cat include/wx/setup_inc.h >> $tmp &&
+    sed -n -e '/^\/\* --- end common options --- \*\/$/,$p' $1 >> $tmp &&
+    mv $tmp $1
+
+    if [ $? -ne 0 ]; then
+        error "$0: failed to update file $1"
+        rc=2
+    fi
+}
+
+# entry point
+if [ ! -f wxwin.m4 ]; then
+    error "$0: must be ran from root wx directory"
+    exit 1
+fi
+
+update_single_setup_h include/wx/msw/setup0.h
+
+# get rid of C++ comments in this file
+#update_single_setup_h setup.h.in
+#sed -i -e '/^\/\//d' -e 's@ *//.*$@@' setup.h.in
+
+exit $rc
