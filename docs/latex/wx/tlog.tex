@@ -20,8 +20,9 @@ functions to use with them.
 
 First of all, no knowledge of {\it wxLog} classes is needed to use them. For
 this, you should only know about {\it wxLogXXX()} functions. All of them have
-the same syntax as {\it printf()}, i.e. they take the format string as the
-first argument and a variable number of arguments. Here are all of them:
+the same syntax as {\it printf()} or {\it vprintf()} , i.e. they take the
+format string as the first argument and respectively a variable number of
+arguments or a variable argument list pointer. Here are all of them:
 
 \begin{itemize}\itemsep=0pt
 \item{\bf wxLogFatalError} which is like {\it wxLogError}, but also
@@ -46,9 +47,9 @@ bar of the active or specified (as the first argument) \helpref{wxFrame}{wxframe
 \item{\bf wxLogSysError} is mostly used by wxWindows itself, but might be
 handy for logging errors after system call (API function) failure. It logs the
 specified message text as well as the last system error
-code ({\it errno} or {\it ::GetLastError()} depending on the platform) and the corresponding error
-message. The second form of this function takes the error code explicitly as the
-first argument.
+code ({\it errno} or {\it ::GetLastError()} depending on the platform) and
+the corresponding error message. The second form of this function takes the
+error code explicitly as the first argument.
 \item{\bf wxLogDebug} is {\bf the} right function for debug output. It only
 does anything at all in the debug mode (when the preprocessor symbol
 \_\_WXDEBUG\_\_ is defined) and expands to nothing in release mode (otherwise).
@@ -70,8 +71,9 @@ generic mechanisms, but are not really adapted for wxWindows, while the log
 classes are. Some of advantages in using wxWindows log functions are:
 
 \begin{itemize}\itemsep=0pt
-\item{\bf Portability} It is a common practice to use {\it printf()} statements or
-cout/cerr C++ streams for writing out some (debug or otherwise) information.
+\item{\bf Portability} It is a common practice to use {\it printf()}
+statements or cout/cerr C++ streams for writing out some (debug or otherwise)
+information.
 Although it works just fine under Unix, these messages go strictly nowhere
 under Windows where the stdout of GUI programs is not assigned to anything.
 Thus, you might view {\it wxLogMessage()} as a simple substitute for {\it

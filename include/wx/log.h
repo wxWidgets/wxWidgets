@@ -475,16 +475,24 @@ WXDLLEXPORT const wxChar* wxSysErrorMsg(unsigned long nErrCode = 0);
 // -------------------
 
 #define DECLARE_LOG_FUNCTION(level)                                 \
+extern void WXDLLEXPORT wxLog##level(const wxChar *szFormat,        \
+                                      va_list argptr);              \
 extern void WXDLLEXPORT wxLog##level(const wxChar *szFormat, ...)
 #define DECLARE_LOG_FUNCTION2(level, arg1)                          \
+extern void WXDLLEXPORT wxLog##level(arg1, const wxChar *szFormat,  \
+                                      va_list argptr);              \
 extern void WXDLLEXPORT wxLog##level(arg1, const wxChar *szFormat, ...)
 
 #else // !wxUSE_LOG
 
 // log functions do nothing at all
 #define DECLARE_LOG_FUNCTION(level)                                 \
+inline void WXDLLEXPORT wxLog##level(const wxChar *szFormat,        \
+                                     va_list argptr) {}             \
 inline void WXDLLEXPORT wxLog##level(const wxChar *szFormat, ...) {}
 #define DECLARE_LOG_FUNCTION2(level, arg1)                          \
+inline void WXDLLEXPORT wxLog##level(arg1, const wxChar *szFormat,  \
+                                     va_list argptr) {}             \
 inline void WXDLLEXPORT wxLog##level(arg1, const wxChar *szFormat, ...) {}
 
 #endif // wxUSE_LOG/!wxUSE_LOG
@@ -520,7 +528,7 @@ DECLARE_LOG_FUNCTION2(SysError, long lErrCode);
 #ifdef  __WXDEBUG__
     DECLARE_LOG_FUNCTION(Debug);
 
-    // first king of LogTrace is uncoditional: it doesn't check the level,
+    // first kind of LogTrace is unconditional: it doesn't check the level,
     DECLARE_LOG_FUNCTION(Trace);
 
     // this second version will only log the message if the mask had been
@@ -533,9 +541,13 @@ DECLARE_LOG_FUNCTION2(SysError, long lErrCode);
     DECLARE_LOG_FUNCTION2(Trace, wxTraceMask mask);
 #else   //!debug
     // these functions do nothing in release builds
+    inline void wxLogDebug(const wxChar *, va_list) { }
     inline void wxLogDebug(const wxChar *, ...) { }
+    inline void wxLogTrace(const wxChar *, va_list) { }
     inline void wxLogTrace(const wxChar *, ...) { }
+    inline void wxLogTrace(wxTraceMask, const wxChar *, va_list) { }
     inline void wxLogTrace(wxTraceMask, const wxChar *, ...) { }
+    inline void wxLogTrace(const wxChar *, const wxChar *, va_list) { }
     inline void wxLogTrace(const wxChar *, const wxChar *, ...) { }
 #endif // debug/!debug
 
