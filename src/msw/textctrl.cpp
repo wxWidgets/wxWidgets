@@ -413,6 +413,7 @@ WXDWORD wxTextCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
             // always adjust the vertical scrollbar automatically if we have it
             msStyle |= WS_VSCROLL | ES_AUTOVSCROLL;
 
+#if wxUSE_RICHEDIT
             // we have to use this style for the rich edit controls because
             // without it the vertical scrollbar never appears at all in
             // richedit 3.0 because of our ECO_NOHIDESEL hack (search for it)
@@ -420,6 +421,7 @@ WXDWORD wxTextCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
             {
                 msStyle |= ES_DISABLENOSCROLL;
             }
+#endif // wxUSE_RICHEDIT
         }
 
         style |= wxTE_PROCESS_ENTER;
