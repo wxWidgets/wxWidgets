@@ -1761,7 +1761,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxShapeRegion, wxObject)
 
 wxShapeRegion::wxShapeRegion()
 {
-  m_regionText = "";
+  m_regionText = wxEmptyString;
   m_font = g_oglNormalFont;
   m_minHeight = 5.0;
   m_minWidth = 5.0;
@@ -1773,9 +1773,9 @@ wxShapeRegion::wxShapeRegion()
   m_regionProportionX = -1.0;
   m_regionProportionY = -1.0;
   m_formatMode = FORMAT_CENTRE_HORIZ | FORMAT_CENTRE_VERT;
-  m_regionName = "";
-  m_textColour = "BLACK";
-  m_penColour = "BLACK";
+  m_regionName = wxEmptyString;
+  m_textColour = wxT("BLACK");
+  m_penColour = wxT("BLACK");
   m_penStyle = wxSOLID;
   m_actualColourObject = NULL;
   m_actualPenObject = NULL;
@@ -1897,7 +1897,7 @@ wxPen *wxShapeRegion::GetActualPen()
     return m_actualPenObject;
 
   if (!m_penColour) return NULL;
-  if (m_penColour == "Invisible")
+  if (m_penColour == wxT("Invisible"))
     return NULL;
   m_actualPenObject = wxThePenList->FindOrCreatePen(m_penColour, 1, m_penStyle);
   return m_actualPenObject;
