@@ -17,13 +17,13 @@
     #pragma hdrstop
 #endif
 
-#include "wx/defs.h"
-
 #if wxUSE_IMAGE
 
 #include "wx/image.h"
-#include "wx/brush.h"
-#include "wx/pen.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/brush.h"
+#endif
 
 // DoFloodFill
 // Fills with the colour extracted from fillBrush, starting at x,y until either

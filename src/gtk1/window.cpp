@@ -25,6 +25,7 @@
 #include "wx/utils.h"
 #include "wx/dialog.h"
 #include "wx/msgdlg.h"
+#include "wx/module.h"
 
 #if wxUSE_DRAG_AND_DROP
     #include "wx/dnd.h"
@@ -39,7 +40,7 @@
 #endif // wxUSE_CARET
 
 #if wxUSE_TEXTCTRL
-#include "wx/textctrl.h"
+    #include "wx/textctrl.h"
 #endif
 
 #include "wx/menu.h"
@@ -487,8 +488,8 @@ gint gtk_window_own_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_even
 #ifdef __WXGTK20__
 
     (* GTK_WIDGET_CLASS (pizza_parent_class)->expose_event) (widget, gdk_event);
-    
-#endif    
+
+#endif
     return TRUE;
 }
 
@@ -829,12 +830,12 @@ static int gtk_window_expose_callback( GtkWidget *widget,
 
     // Actual redrawing takes place in idle time.
     win->Update();
-    
+
 #ifdef __WXGTK20__
 
     (* GTK_WIDGET_CLASS (pizza_parent_class)->expose_event) (widget, gdk_event);
-    
-#endif    
+
+#endif
 
     return TRUE;
 }
@@ -934,7 +935,7 @@ static void gtk_window_draw_callback( GtkWidget *widget,
     win->GetUpdateRegion().Union( rect->x, rect->y, rect->width, rect->height );
 
     // Actual redrawing takes place in idle time.
-    
+
     win->Update();
 
 #ifndef __WXUNIVERSAL__
@@ -2366,7 +2367,7 @@ bool wxWindowGTK::Create( wxWindow *parent,
     m_vAdjust = gtk_range_get_adjustment( GTK_RANGE(scrolledWindow->vscrollbar) );
 
     m_wxwindow = gtk_pizza_new();
-    
+
 #ifndef __WXUNIVERSAL__
     GtkPizza *pizza = GTK_PIZZA(m_wxwindow);
 
@@ -2547,7 +2548,7 @@ void wxWindowGTK::PostCreation()
 #ifndef __WXGTK20__
             gtk_signal_connect( GTK_OBJECT(m_wxwindow), "draw",
                 GTK_SIGNAL_FUNC(gtk_window_draw_callback), (gpointer)this );
-                
+
             if (HasFlag(wxNO_FULL_REPAINT_ON_RESIZE))
             {
                 gtk_signal_connect( GTK_OBJECT(m_wxwindow), "event",
@@ -2773,7 +2774,7 @@ void wxWindowGTK::OnInternalIdle()
 {
     // Update invalidated regions.
     Update();
-    
+
     // Synthetize activate events.
     if ( g_sendActivateEvent != -1 )
     {
@@ -3387,14 +3388,14 @@ void wxWindowGTK::GtkSendPaintEvents()
     {
         wxWindowDC dc( (wxWindow*)this );
         dc.SetClippingRegion( m_clearRegion );
-        
+
         wxEraseEvent erase_event( GetId(), &dc );
         erase_event.SetEventObject( this );
-    
+
         if (!GetEventHandler()->ProcessEvent(erase_event))
         {
             gdk_gc_set_foreground( g_eraseGC, m_backgroundColour.GetColor() );
-        
+
             wxRegionIterator upd( m_clearRegion );
             while (upd)
             {
@@ -3421,9 +3422,9 @@ void wxWindowGTK::GtkSendPaintEvents()
     // The following code will result in all window-less widgets
     // being redrawn because the wxWindows class is allowed to
     // paint over the window-less widgets.
-    
+
     GtkPizza *pizza = GTK_PIZZA(m_wxwindow);
-    
+
     GList *children = pizza->children;
     while (children)
     {
@@ -3435,12 +3436,12 @@ void wxWindowGTK::GtkSendPaintEvents()
         {
             // Get intersection of widget area and update region
             wxRegion region( m_updateRegion );
-            
+
             GdkEventExpose gdk_event;
             gdk_event.type = GDK_EXPOSE;
             gdk_event.window = pizza->bin_window;
             gdk_event.count = 0;
-            
+
             wxRegionIterator upd( m_updateRegion );
             while (upd)
             {
@@ -3449,12 +3450,12 @@ void wxWindowGTK::GtkSendPaintEvents()
                 rect.y = upd.GetY();
                 rect.width = upd.GetWidth();
                 rect.height = upd.GetHeight();
-                
+
                 if (gtk_widget_intersect (child->widget, &rect, &gdk_event.area))
                 {
                     gtk_widget_event (child->widget, (GdkEvent*) &gdk_event);
                 }
-                
+
                 upd ++;
             }
         }
@@ -4063,42 +4064,42 @@ void wxWindowGTK::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
 
     // No scrolling requested.
     if ((dx == 0) && (dy == 0)) return;
-    
+
 #ifndef __WXGTK20__
     if (!m_updateRegion.IsEmpty())
     {
         m_updateRegion.Offset( dx, dy );
-        
+
         int cw = 0;
         int ch = 0;
         GetClientSize( &cw, &ch );
         m_updateRegion.Intersect( 0, 0, cw, ch );
     }
-    
+
     if (!m_clearRegion.IsEmpty())
     {
         m_clearRegion.Offset( dx, dy );
-        
+
         int cw = 0;
         int ch = 0;
         GetClientSize( &cw, &ch );
         m_clearRegion.Intersect( 0, 0, cw, ch );
     }
-    
+
     m_clipPaintRegion = TRUE;
-    
+
     gtk_pizza_scroll( GTK_PIZZA(m_wxwindow), -dx, -dy );
-    
+
     m_clipPaintRegion = FALSE;
 #else
 
     gdk_window_scroll( GTK_PIZZA(m_wxwindow)->bin_window, dx, dy );
-    
+
     GTK_PIZZA(m_wxwindow)->xoffset += dx;
     GTK_PIZZA(m_wxwindow)->yoffset += dy;
-    
-#endif    
-   
+
+#endif
+
 }
 
 
@@ -4163,7 +4164,7 @@ bool wxWinModule::OnInit()
 {
     g_eraseGC = gdk_gc_new( GDK_ROOT_PARENT() );
     gdk_gc_set_fill( g_eraseGC, GDK_SOLID );
-    
+
     return TRUE;
 }
 

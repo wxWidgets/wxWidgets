@@ -59,6 +59,12 @@ void wxSetIconsX11( WXDisplay* display, WXWindow window,
                 gMask = image.GetMaskGreen();
                 bMask = image.GetMaskBlue();
             }
+            else // no mask, but still init the variables to avoid warnings
+            {
+                rMask =
+                gMask =
+                bMask = 0;
+            }
 
             *ptr++ = width;
             *ptr++ = height;
