@@ -158,10 +158,6 @@ int wxDirDialog::ShowModal()
         bi.ulFlags |= BIF_EDITBOX;
     }
 
-    // normally the commented out part should work -- but in practice
-    // BIF_NONEWFOLDERBUTTON doesn't have any effect (Win2k, comctl 5.81) so I
-    // have to disable it [for now]
-#if 0
     // to have the "New Folder" button we must use the "new" dialog style which
     // is also the only way to have a resizable dialog
     //
@@ -169,20 +165,23 @@ int wxDirDialog::ShowModal()
     const bool needNewDir = HasFlag(wxDD_NEW_DIR_BUTTON);
     if ( (needNewDir || HasFlag(wxRESIZE_BORDER)) && (verComCtl32 >= 500) )
     {
-        bi.ulFlags |= BIF_NEWDIALOGSTYLE;
-
-        // we'll get the "New Folder" button by default now, don't show it if
-        // not needed
-        if ( !needNewDir )
-            bi.ulFlags |= BIF_NONEWFOLDERBUTTON;
+        if (needNewDir)
+        {
+            bi.ulFlags |= BIF_NEWDIALOGSTYLE;
+        }
+        else
+        {
+            // Versions < 600 doesn't support BIF_NONEWFOLDERBUTTON
+            // The only way to get rid of the Make New Folder button is use
+            // the old dialog style which doesn't have the button thus we
+            // simply don't set the New Dialog Style for such comctl versions.
+            if (verComCtl32 >= 600)
+            {
+                bi.ulFlags |= BIF_NEWDIALOGSTYLE;
+                bi.ulFlags |= BIF_NONEWFOLDERBUTTON;
+            }
+        }
     }
-#else
-    if ( HasFlag(wxDD_NEW_DIR_BUTTON) && verComCtl32 >= 500 )
-    {
-        // use the new style to make the "New Folder" button appear
-        bi.ulFlags |= BIF_NEWDIALOGSTYLE;
-    }
-#endif
 
     // do show the dialog
     LPITEMIDLIST pidl = SHBrowseForFolder(&bi);
