@@ -552,6 +552,8 @@ private:
     DECLARE_NO_COPY_CLASS(wxWindow);
     DECLARE_EVENT_TABLE()
 private:
+    HWND                            m_hWndScrollBar;
+
     // Virtual function hiding supression
     inline virtual bool Reparent(wxWindowBase* pNewParent)
     { return(wxWindowBase::Reparent(pNewParent));};

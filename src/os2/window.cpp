@@ -273,8 +273,9 @@ void wxWindow::Init()
     //
     // wxWnd
     //
-    m_hMenu = 0;
-    m_hWnd = 0;
+    m_hMenu         = 0L;
+    m_hWnd          = 0L;
+    m_hWndScrollBar = 0L;
 
     //
     // Pass WM_GETDLGCODE to DefWindowProc()
@@ -687,13 +688,74 @@ void wxWindow::SetScrollbar(
 , bool                              bRefresh
 )
 {
-    ::WinSendMsg(GetHwnd(), SBM_SETSCROLLBAR, (MPARAM)nPos, MPFROM2SHORT(0, nRange));
-    if (nOrient == wxHORIZONTAL)
+    int                             nOldRange = nRange - nThumbVisible;
+    int                             nRange1 = nOldRange;
+    int                             nPageSize = nThumbVisible;
+    SBCDATA                         vInfo;
+    HWND                            hWnd = GetHwnd();
+    ULONG                           ulStyle = WS_VISIBLE;
+    RECTL                           vRect;
+
+    ::WinQueryWindowRect(hWnd, &vRect);
+    if (nPageSize > 1 && nRange > 0)
     {
-        m_nXThumbSize = nThumbVisible;
+        nRange1 += (nPageSize - 1);
+    }
+
+    vInfo.cb = sizeof(SBCDATA);
+    vInfo.posFirst = 0;
+    vInfo.posLast = (SHORT)nRange1;
+    vInfo.posThumb = nPos;
+
+    if (nOrient == wxHORIZONTAL )
+    {
+        ulStyle |= SBS_HORZ;
+        if (m_hWndScrollBar == 0L)
+        {
+            m_hWndScrollBar = ::WinCreateWindow( hWnd
+                                                ,WC_SCROLLBAR
+                                                ,(PSZ)NULL
+                                                ,ulStyle
+                                                ,vRect.xLeft
+                                                ,vRect.yBottom
+                                                ,vRect.xRight - vRect.xLeft
+                                                ,20
+                                                ,hWnd
+                                                ,HWND_TOP
+                                                ,-1
+                                                ,&vInfo
+                                                ,NULL
+                                               );
+        }
+        else
+        {
+            ::WinSendMsg(m_hWndScrollBar, SBM_SETSCROLLBAR, (MPARAM)nPos, MPFROM2SHORT(0, (SHORT)nRange1));
+        }
     }
     else
     {
+        ulStyle |= SBS_VERT;
+        if (m_hWndScrollBar == 0L)
+        {
+            m_hWndScrollBar = ::WinCreateWindow( hWnd
+                                                ,WC_SCROLLBAR
+                                                ,(PSZ)NULL
+                                                ,ulStyle
+                                                ,vRect.xRight - 20
+                                                ,vRect.yBottom
+                                                ,20
+                                                ,vRect.yTop - vRect.yBottom
+                                                ,hWnd
+                                                ,HWND_TOP
+                                                ,-1
+                                                ,&vInfo
+                                                ,NULL
+                                               );
+        }
+        else
+        {
+            ::WinSendMsg(m_hWndScrollBar, SBM_SETSCROLLBAR, (MPARAM)nPos, MPFROM2SHORT(0, (SHORT)nRange1));
+        }
         m_nYThumbSize = nThumbVisible;
     }
 } // end of wxWindow::SetScrollbar

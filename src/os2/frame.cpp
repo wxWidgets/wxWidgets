@@ -1192,12 +1192,12 @@ void wxFrame::PositionToolBar()
     }
 #endif // wxUSE_STATUSBAR
 
-    if ( GetToolBar() )
+    if ( m_frameToolBar )
     {
         int                         nToolbarWidth;
         int                         nToolbarHeight;
 
-        GetToolBar()->GetSize( &nToolbarWidth
+        m_frameToolBar->GetSize( &nToolbarWidth
                               ,&nToolbarHeight
                              );
 

@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  H:\Dev\Wx2\WxWindows\lib\wx.lib
+;From library:  F:\DEV\WX2\WXWINDOWS\LIB\WX.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -1361,6 +1361,7 @@ EXPORTS
       Connect__12wxEvtHandlerFiN21M8wxObjectFR7wxEvent_vP8wxObject
       wxEVT_SOCKET
       wxEVT_SCROLLWIN_PAGEUP
+      wxEVT_MOUSEWHEEL
       wxEVT_MIDDLE_UP
       wxEVT_MENU_INIT
       wxEVT_HELP
@@ -1651,7 +1652,7 @@ EXPORTS
       wxEVT_NC_LEFT_DCLICK
       wxEVT_INIT_DIALOG
       wxEVT_COMMAND_SET_FOCUS
-  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\extended.c
+  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\extended.c
     ;PUBDEFs (Symbols available from object file):
       ConvertToIeeeExtended
       ConvertFromIeeeExtended
@@ -2296,6 +2297,8 @@ EXPORTS
       wxConstructorForwxPenList__Fv
       ;wxGetDisplaySizeMM()
       wxGetDisplaySizeMM__Fv
+      ;wxGetClientDisplayRect()
+      wxGetClientDisplayRect__Fv
       ;wxDeleteStockObjects()
       wxDeleteStockObjects__Fv
       ;wxConstructorForwxBitmapList()
@@ -5260,7 +5263,7 @@ EXPORTS
       Read32__17wxTextInputStreamFv
       ;wxTextInputStream::SkipIfEndOfLine(char)
       SkipIfEndOfLine__17wxTextInputStreamFc
-  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\unzip.c
+  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\unzip.c
     ;PUBDEFs (Symbols available from object file):
       unzReadCurrentFile
       unzGetCurrentFileInfo
@@ -6762,6 +6765,8 @@ EXPORTS
       __vft16wxGenericDirCtrl8wxObject
       ;wxGenericDirDialog::OnTreeSelected(wxTreeEvent&)
       OnTreeSelected__18wxGenericDirDialogFR11wxTreeEvent
+      ;setdrive(int)
+      setdrive__Fi
       ;wxDirFilterListCtrl::Init()
       Init__19wxDirFilterListCtrlFv
       ;wxConstructorForwxGenericDirCtrl()
@@ -8871,6 +8876,8 @@ EXPORTS
       sm_classwxScrolledWindow__16wxScrolledWindow
       ;wxGenericScrolledWindow::OnPaint(wxPaintEvent&)
       OnPaint__23wxGenericScrolledWindowFR12wxPaintEvent
+      ;wxGenericScrolledWindow::OnMouseWheel(wxMouseEvent&)
+      OnMouseWheel__23wxGenericScrolledWindowFR12wxMouseEvent
       ;wxGenericScrolledWindow::GetScrollPixelsPerUnit(int*,int*) const
       GetScrollPixelsPerUnit__23wxGenericScrolledWindowCFPiT1
       ;wxGenericScrolledWindow::wxGenericScrolledWindow()
@@ -9831,38 +9838,45 @@ EXPORTS
       sm_classwxHtmlTag__9wxHtmlTag
   ;From object file:  ..\html\htmlwin.cpp
     ;PUBDEFs (Symbols available from object file):
-      ;wxHtmlWindow::SetFonts(wxString,wxString,const int*)
-      SetFonts__12wxHtmlWindowF8wxStringT1PCi
+      ;wxHtmlHistoryArray::RemoveAt(unsigned int)
+      RemoveAt__18wxHtmlHistoryArrayFUi
       ;wxHtmlWinModule::sm_classwxHtmlWinModule
       sm_classwxHtmlWinModule__15wxHtmlWinModule
+      ;wxHtmlWindow::SetFonts(wxString,wxString,const int*)
+      SetFonts__12wxHtmlWindowF8wxStringT1PCi
+      ;wxHtmlHistoryArray::DoCopy(const wxHtmlHistoryArray&)
+      DoCopy__18wxHtmlHistoryArrayFRC18wxHtmlHistoryArray
+      ;wxHtmlHistoryArray::Add(const wxHtmlHistoryItem&)
+      Add__18wxHtmlHistoryArrayFRC17wxHtmlHistoryItem
+      ;wxHtmlHistoryArray::~wxHtmlHistoryArray()
+      __dt__18wxHtmlHistoryArrayFv
       ;wxHtmlWindow::~wxHtmlWindow()
       __dt__12wxHtmlWindowFv
       ;wxHtmlWindow::HistoryCanForward()
       HistoryCanForward__12wxHtmlWindowFv
       ;wxHtmlWindow::HistoryBack()
       HistoryBack__12wxHtmlWindowFv
+      ;wxwxHtmlProcessorListNode::DeleteData()
+      DeleteData__25wxwxHtmlProcessorListNodeFv
+      ;wxHtmlWindow::AddGlobalProcessor(wxHtmlProcessor*)
+      AddGlobalProcessor__12wxHtmlWindowFP15wxHtmlProcessor
       ;wxHtmlWindow::AddFilter(wxHtmlFilter*)
       AddFilter__12wxHtmlWindowFP12wxHtmlFilter
       ;wxHtmlWindow::OnDraw(wxDC&)
       OnDraw__12wxHtmlWindowFR4wxDC
       ;wxHtmlWindow::m_Filters
       m_Filters__12wxHtmlWindow
-      ;HtmlHistoryArray::Index(const HtmlHistoryItem&,unsigned long) const
-      Index__16HtmlHistoryArrayCFRC15HtmlHistoryItemUl
-      ;HtmlHistoryArray::RemoveAt(unsigned int)
-      RemoveAt__16HtmlHistoryArrayFUi
-      ;HtmlHistoryArray::operator=(const HtmlHistoryArray&)
-      __as__16HtmlHistoryArrayFRC16HtmlHistoryArray
-      ;HtmlHistoryArray::Insert(const HtmlHistoryItem&,unsigned int)
-      Insert__16HtmlHistoryArrayFRC15HtmlHistoryItemUi
-      ;HtmlHistoryArray::DoCopy(const HtmlHistoryArray&)
-      DoCopy__16HtmlHistoryArrayFRC16HtmlHistoryArray
-      ;HtmlHistoryArray::Add(const HtmlHistoryItem&)
-      Add__16HtmlHistoryArrayFRC15HtmlHistoryItem
-      ;HtmlHistoryArray::DoEmpty()
-      DoEmpty__16HtmlHistoryArrayFv
+      ;wxHtmlHistoryArray::Index(const wxHtmlHistoryItem&,unsigned long) const
+      Index__18wxHtmlHistoryArrayCFRC17wxHtmlHistoryItemUl
+      ;wxHtmlHistoryArray::Insert(const wxHtmlHistoryItem&,unsigned int)
+      Insert__18wxHtmlHistoryArrayFRC17wxHtmlHistoryItemUi
+      __vft25wxwxHtmlProcessorListNode10wxNodeBase
+      ;wxHtmlHistoryArray::DoEmpty()
+      DoEmpty__18wxHtmlHistoryArrayFv
       ;wxConstructorForwxHtmlWinModule()
       wxConstructorForwxHtmlWinModule__Fv
+      ;wxHtmlProcessor::sm_classwxHtmlProcessor
+      sm_classwxHtmlProcessor__15wxHtmlProcessor
       ;wxHtmlWindow::HistoryClear()
       HistoryClear__12wxHtmlWindowFv
       ;wxHtmlWindow::GetEventTable() const
@@ -9883,6 +9897,10 @@ EXPORTS
       OnSize__12wxHtmlWindowFR11wxSizeEvent
       ;wxHtmlWindow::OnMouseEvent(wxMouseEvent&)
       OnMouseEvent__12wxHtmlWindowFR12wxMouseEvent
+      ;wxHtmlHistoryArray::operator=(const wxHtmlHistoryArray&)
+      __as__18wxHtmlHistoryArrayFRC18wxHtmlHistoryArray
+      ;wxHtmlHistoryArray::wxHtmlHistoryArray(const wxHtmlHistoryArray&)
+      __ct__18wxHtmlHistoryArrayFRC18wxHtmlHistoryArray
       ;wxHtmlWindow::SetRelatedStatusBar(int)
       SetRelatedStatusBar__12wxHtmlWindowFi
       ;wxHtmlWindow::CleanUpStatics()
@@ -9897,21 +9915,21 @@ EXPORTS
       ReadCustomization__12wxHtmlWindowFP12wxConfigBase8wxString
       ;wxHtmlWindow::OnIdle(wxIdleEvent&)
       OnIdle__12wxHtmlWindowFR11wxIdleEvent
-      ;HtmlHistoryArray::~HtmlHistoryArray()
-      __dt__16HtmlHistoryArrayFv
-      ;wxConstructorForwxHtmlWindow()
-      wxConstructorForwxHtmlWindow__Fv
       ;wxHtmlWindow::CreateLayout()
       CreateLayout__12wxHtmlWindowFv
+      ;wxConstructorForwxHtmlWindow()
+      wxConstructorForwxHtmlWindow__Fv
       ;wxHtmlWindow::OnLinkClicked(const wxHtmlLinkInfo&)
       OnLinkClicked__12wxHtmlWindowFRC14wxHtmlLinkInfo
+      ;wxHtmlWindow::m_GlobalProcessors
+      m_GlobalProcessors__12wxHtmlWindow
       __vft12wxHtmlWindow8wxObject
-      ;HtmlHistoryArray::HtmlHistoryArray(const HtmlHistoryArray&)
-      __ct__16HtmlHistoryArrayFRC16HtmlHistoryArray
       ;wxHtmlWindow::HistoryCanBack()
       HistoryCanBack__12wxHtmlWindowFv
       ;wxHtmlWindow::HistoryForward()
       HistoryForward__12wxHtmlWindowFv
+      ;wxHtmlWindow::AddProcessor(wxHtmlProcessor*)
+      AddProcessor__12wxHtmlWindowFP15wxHtmlProcessor
       ;wxHtmlWindow::wxHtmlWindow(wxWindow*,int,const wxPoint&,const wxSize&,long,const wxString&)
       __ct__12wxHtmlWindowFP8wxWindowiRC7wxPointRC6wxSizelRC8wxString
       ;wxHtmlWindow::sm_eventTableEntries
@@ -13435,6 +13453,8 @@ EXPORTS
       wxFatalError__FRC8wxStringT1
       ;wxDisplaySize(int*,int*)
       wxDisplaySize__FPiT1
+      ;wxClientDisplayRect(int*,int*,int*,int*)
+      wxClientDisplayRect__FPiN31
       ;wxDisplayDepth()
       wxDisplayDepth__Fv
       gs_wxBusyCursor
