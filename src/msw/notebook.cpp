@@ -25,6 +25,7 @@
 // wxWidgets
 #ifndef WX_PRECOMP
   #include  "wx/string.h"
+  #include  "wx/dc.h"
 #endif  // WX_PRECOMP
 
 #include  "wx/log.h"
