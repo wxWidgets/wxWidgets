@@ -99,11 +99,11 @@ wxAcceleratorTable::wxAcceleratorTable(
     int                             i;
 
     m_refData = new wxAcceleratorRefData;
-    pArr = (PACCELTABLE) new int[nAccelLength];
+    pArr = (PACCELTABLE) new BYTE[nAccelLength];
 
     for (i = 0; i < n; i++)
     {
-        USHORT                      uVirt = 0;
+        USHORT                      uVirt = AF_CHAR;
 
         if (vaEntries[i].GetFlags() & wxACCEL_ALT)
             uVirt |= AF_ALT;
@@ -116,7 +116,8 @@ wxAcceleratorTable::wxAcceleratorTable(
         USHORT                      uKey = wxCharCodeWXToOS2( vaEntries[i].GetKeyCode()
                                                              ,&bIsVirtual
                                                             );
-        uVirt |= AF_VIRTUALKEY;
+        if (bIsVirtual)
+            uVirt |= AF_VIRTUALKEY;
 
         USHORT                      uCmd = vaEntries[i].GetCommand();
 
