@@ -169,6 +169,10 @@ __WXUNIV_DEFINE_p =
 !ifeq WXUNIV 1
 __WXUNIV_DEFINE_p = -d__WXUNIVERSAL__
 !endif
+__tex2rtf_gui___depname =
+!ifeq USE_GUI 1
+__tex2rtf_gui___depname = $(OBJS)\tex2rtf_gui.exe
+!endif
 
 ### Variables: ###
 
@@ -210,7 +214,7 @@ $(OBJS) :
 
 ### Targets: ###
 
-all : .SYMBOLIC $(OBJS)\tex2rtf.exe $(OBJS)\tex2rtf_gui.exe
+all : .SYMBOLIC $(OBJS)\tex2rtf.exe $(__tex2rtf_gui___depname)
 
 $(OBJS)\tex2rtf_gui_htmlutil.obj :  .AUTODEPEND .\htmlutil.cpp
 	$(CXX) -zq -fo=$^@ $(TEX2RTF_GUI_CXXFLAGS) $<
@@ -282,6 +286,7 @@ $(OBJS)\tex2rtf.exe :  $(TEX2RTF_OBJECTS)
 	@%append $(OBJS)\tex2rtf.lbc
 	wlink @$(OBJS)\tex2rtf.lbc
 
+!ifeq USE_GUI 1
 $(OBJS)\tex2rtf_gui.exe :  $(TEX2RTF_GUI_OBJECTS) $(OBJS)\tex2rtf_gui_sample.res
 	@%create $(OBJS)\tex2rtf_gui.lbc
 	@%append $(OBJS)\tex2rtf_gui.lbc option quiet
@@ -292,3 +297,4 @@ $(OBJS)\tex2rtf_gui.exe :  $(TEX2RTF_GUI_OBJECTS) $(OBJS)\tex2rtf_gui_sample.res
 	@for %i in ( $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\tex2rtf_gui.lbc library %i
 	@%append $(OBJS)\tex2rtf_gui.lbc option resource=$(OBJS)\tex2rtf_gui_sample.res
 	wlink @$(OBJS)\tex2rtf_gui.lbc
+!endif

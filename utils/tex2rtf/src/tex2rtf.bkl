@@ -24,7 +24,8 @@
         <install-to>$(BINDIR)</install-to>
     </exe>
     
-    <exe id="tex2rtf_gui" template="wx_util" template_append="wx_append">
+    <exe id="tex2rtf_gui" template="wx_util" template_append="wx_append"
+         cond="USE_GUI=='1'">
         <sources>$(TEX2RTF_SRC)</sources>
         <wx-lib>html</wx-lib>
         <wx-lib>core</wx-lib>
