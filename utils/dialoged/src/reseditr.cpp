@@ -2776,10 +2776,18 @@ bool wxResourceManager::ChangeOldToNewResource(wxItemResource* parent, wxItemRes
             res->SetType(wxT("wxDialog"));
 
         if (itemType == wxT("wxDialogBox") || itemType == wxT("wxDialog"))
-            res->SetSize(res->GetX(), res->GetY(), res->GetWidth(), res->GetHeight() + s_increaseDialogSize );
+        {
+            // Only change the height if it has a caption, i.e. it's going to be
+            // used as a proper dialog and not a panel
+            if (res->GetStyle() & wxCAPTION)
+                res->SetSize(res->GetX(), res->GetY(), res->GetWidth(), res->GetHeight() + s_increaseDialogSize );
+        }
 
         if (s_useSystemDefaultsAlways)
             res->SetResourceStyle(res->GetResourceStyle() | wxRESOURCE_USE_DEFAULTS);
+
+        if (res->GetValue1())
+            res->SetStyle(res->GetStyle() | wxDIALOG_MODAL);
 
         wxNode *node = res->GetChildren().First();
         while (node)

@@ -2055,6 +2055,11 @@ wxProperty *wxPanelPropertyInfo::GetProperty(wxString& name)
         return new wxProperty(name, ((panelWindow->GetWindowStyleFlag() & wxTHICK_FRAME) == wxTHICK_FRAME),
             "bool");
     }
+    else if (name == "modal")
+    {
+        return new wxProperty(name, ((panelWindow->GetWindowStyleFlag() & wxDIALOG_MODAL) == wxDIALOG_MODAL),
+            "bool");
+    }
     else if (name == "useSystemDefaults")
     {
         wxItemResource *resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(panelWindow);
@@ -2162,6 +2167,14 @@ bool wxPanelPropertyInfo::SetProperty(wxString& name, wxProperty *property)
         resource->SetStyle(panelWindow->GetWindowStyleFlag());
         return TRUE;
     }
+    else if (name == "modal")
+    {
+        SetWindowStyle(panelWindow, wxDIALOG_MODAL, property->GetValue().BoolValue());
+
+        wxItemResource *resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(panelWindow);
+        resource->SetStyle(panelWindow->GetWindowStyleFlag());
+        return TRUE;
+    }
     else if (name == "useSystemDefaults")
     {
         wxItemResource *resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(panelWindow);
@@ -2224,6 +2237,7 @@ void wxPanelPropertyInfo::GetPropertyNames(wxStringList& names)
     names.Add("thickFrame");
     names.Add("useSystemDefaults");
     names.Add("useDialogUnits");
+    names.Add("modal");
 }
 
 bool wxPanelPropertyInfo::InstantiateResource(wxItemResource *resource)

@@ -238,6 +238,7 @@ static wxWindowStylePair g_WindowStylesDialog[] = {
     { "wxSYSTEM_MENU", wxSYSTEM_MENU},
     { "wxMINIMIZE_BOX", wxMINIMIZE_BOX},
     { "wxMAXIMIZE_BOX", wxMAXIMIZE_BOX},
+    { "wxDIALOG_MODAL", wxDIALOG_MODAL},
     { "wxRESIZE_BOX", wxRESIZE_BOX}
 };
 

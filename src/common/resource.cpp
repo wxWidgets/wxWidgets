@@ -3143,7 +3143,7 @@ bool wxWindowBase::LoadFromResource(wxWindow *parent, const wxString& resourceNa
     
     wxString title(resource->GetTitle());
     long theWindowStyle = resource->GetStyle();
-    bool isModal = (resource->GetValue1() != 0);
+    bool isModal = (resource->GetValue1() != 0) ;
     int x = resource->GetX();
     int y = resource->GetY();
     int width = resource->GetWidth();

@@ -474,9 +474,10 @@ int wxListBox::GetSelections(wxArrayInt& aSelections) const
     }
     else  // single-selection listbox
     {
-        aSelections.Add(ListBox_GetCurSel(GetHwnd()));
+        if (ListBox_GetCurSel(GetHwnd()) > -1)
+            aSelections.Add(ListBox_GetCurSel(GetHwnd()));
 
-        return 1;
+        return aSelections.Count();
     }
 }
 
