@@ -25,7 +25,7 @@ struct _GSocket {
   GAddress *m_local, *m_peer;
   GSocketError m_error;
 
-  bool m_blocking, m_server, m_stream, m_oriented;
+  bool m_non_blocking, m_server, m_stream, m_oriented;
   unsigned long m_timeout;
 
   /* Callbacks */

@@ -99,7 +99,7 @@ GSocket *GSocket_new()
   socket->m_server		= FALSE;
   socket->m_stream		= TRUE;
   socket->m_gui_dependent	= NULL;
-  socket->m_blocking		= FALSE;
+  socket->m_non_blocking	= FALSE;
   socket->m_timeout             = 10*60*1000;
                                       /* 10 minutes * 60 sec * 1000 millisec */
 
@@ -291,7 +291,7 @@ GSocketError GSocket_SetServer(GSocket *sck)
     return GSOCK_IOERR;
   }
 
-  GSocket_SetNonBlocking(sck, sck->m_blocking);
+  GSocket_SetNonBlocking(sck, sck->m_non_blocking);
   GSocket_SetTimeout(sck, sck->m_timeout);
 
   return GSOCK_NOERROR;
@@ -365,7 +365,7 @@ GSocketError GSocket_SetNonOriented(GSocket *sck)
     return GSOCK_IOERR;
   }
 
-  GSocket_SetNonBlocking(sck, sck->m_blocking);
+  GSocket_SetNonBlocking(sck, sck->m_non_blocking);
   GSocket_SetTimeout(sck, sck->m_timeout);
 
   return GSOCK_NOERROR;
@@ -423,7 +423,7 @@ GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
   /* It is not a server */
   sck->m_server = FALSE;
 
-  GSocket_SetNonBlocking(sck, sck->m_blocking);
+  GSocket_SetNonBlocking(sck, sck->m_non_blocking);
   GSocket_SetTimeout(sck, sck->m_timeout);
 
   return GSOCK_NOERROR;
@@ -501,7 +501,7 @@ void GSocket_SetNonBlocking(GSocket *socket, bool non_block)
 {
   assert(socket != NULL);
 
-  socket->m_blocking = non_block;
+  socket->m_non_blocking = non_block;
 
   if (socket->m_fd != -1)
     ioctl(socket->m_fd, FIONBIO, &non_block);
