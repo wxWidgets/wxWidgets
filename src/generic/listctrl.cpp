@@ -3453,6 +3453,9 @@ void wxListMainWindow::SetColumnWidth( int col, int width )
                  _T("SetColumnWidth() can only be called in report mode.") );
 
     m_dirty = TRUE;
+    wxListHeaderWindow *headerWin = GetListCtrl()->m_headerWin;
+    if ( headerWin )
+        headerWin->m_dirty = TRUE;
 
     wxListHeaderDataList::Node *node = m_columns.Item( col );
     wxCHECK_RET( node, _T("no column?") );
