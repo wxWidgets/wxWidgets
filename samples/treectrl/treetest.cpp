@@ -41,15 +41,13 @@
 
 #include "treetest.h"
 
-// under Windows the icons are in the .rc file
-#ifndef __WXMSW__
-    #include "icon1.xpm"
-    #include "icon2.xpm"
-    #include "icon3.xpm"
-    #include "icon4.xpm"
-    #include "icon5.xpm"
-    #include "mondrian.xpm"
-#endif
+#include "icon1.xpm"
+#include "icon2.xpm"
+#include "icon3.xpm"
+#include "icon4.xpm"
+#include "icon5.xpm"
+#include "mondrian.xpm"
+
 
 // verify that the item is ok and insult the user if it is not
 #define CHECK_ITEM( item ) if ( !item.IsOk() ) {                                 \
@@ -645,20 +643,13 @@ void MyTreeCtrl::CreateImageList(int size)
     wxImageList *images = new wxImageList(size, size, TRUE);
 
     // should correspond to TreeCtrlIcon_xxx enum
-#if defined(__WXMSW__) && defined(__WIN16__)
-    images->Add(wxBitmap("bitmap1", wxBITMAP_TYPE_BMP_RESOURCE));
-    images->Add(wxBitmap("bitmap2", wxBITMAP_TYPE_BMP_RESOURCE));
-    images->Add(wxBitmap("bitmap3", wxBITMAP_TYPE_BMP_RESOURCE));
-    images->Add(wxBitmap("bitmap4", wxBITMAP_TYPE_BMP_RESOURCE));
-    images->Add(wxBitmap("bitmap5", wxBITMAP_TYPE_BMP_RESOURCE));
-#else // !MSW
     wxBusyCursor wait;
     wxIcon icons[5];
-    icons[0] = wxICON(icon1);
-    icons[1] = wxICON(icon2);
-    icons[2] = wxICON(icon3);
-    icons[3] = wxICON(icon4);
-    icons[4] = wxICON(icon5);
+    icons[0] = wxIcon(icon1_xpm);
+    icons[1] = wxIcon(icon2_xpm);
+    icons[2] = wxIcon(icon3_xpm);
+    icons[3] = wxIcon(icon4_xpm);
+    icons[4] = wxIcon(icon5_xpm);
 
     int sizeOrig = icons[0].GetWidth();
     for ( size_t i = 0; i < WXSIZEOF(icons); i++ )
@@ -672,7 +663,6 @@ void MyTreeCtrl::CreateImageList(int size)
             images->Add(wxBitmap(wxBitmap(icons[i]).ConvertToImage().Rescale(size, size)));
         }
     }
-#endif // MSW/!MSW
 
     AssignImageList(images);
 }
@@ -690,19 +680,12 @@ void MyTreeCtrl::CreateButtonsImageList(int size)
     wxImageList *images = new wxImageList(size, size, TRUE);
 
     // should correspond to TreeCtrlIcon_xxx enum
-#if defined(__WXMSW__) && defined(__WIN16__)
-    images->Add(wxBitmap("bitmap1", wxBITMAP_TYPE_BMP_RESOURCE));
-    images->Add(wxBitmap("bitmap2", wxBITMAP_TYPE_BMP_RESOURCE));
-    images->Add(wxBitmap("bitmap3", wxBITMAP_TYPE_BMP_RESOURCE));
-    images->Add(wxBitmap("bitmap4", wxBITMAP_TYPE_BMP_RESOURCE));
-    images->Add(wxBitmap("bitmap5", wxBITMAP_TYPE_BMP_RESOURCE));
-#else // !MSW
     wxBusyCursor wait;
     wxIcon icons[4];
-    icons[0] = wxICON(icon3);   // closed
-    icons[1] = wxICON(icon3);   // closed, selected
-    icons[2] = wxICON(icon5);   // open
-    icons[3] = wxICON(icon5);   // open, selected
+    icons[0] = wxIcon(icon3_xpm);   // closed
+    icons[1] = wxIcon(icon3_xpm);   // closed, selected
+    icons[2] = wxIcon(icon5_xpm);   // open
+    icons[3] = wxIcon(icon5_xpm);   // open, selected
 
     for ( size_t i = 0; i < WXSIZEOF(icons); i++ )
     {
@@ -716,7 +699,6 @@ void MyTreeCtrl::CreateButtonsImageList(int size)
             images->Add(wxBitmap(icons[i].ConvertToImage().Rescale(size, size)));
         }
     }
-#endif // MSW/!MSW
 
     AssignButtonsImageList(images);
 #endif
