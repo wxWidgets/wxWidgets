@@ -115,7 +115,7 @@ wxMenuItem::wxMenuItem(
 )
 : wxMenuItemBase( pParentMenu
                  ,nId
-                 ,rsText
+                 ,TextToLabel(rsText)
                  ,rsHelp
                  ,eKind
                  ,pSubMenu
@@ -141,7 +141,7 @@ wxMenuItem::wxMenuItem(
 )
 : wxMenuItemBase( pParentMenu
                  ,nId
-                 ,rsText
+                 ,TextToLabel(rsText)
                  ,rsHelp
                  ,bIsCheckable ? wxITEM_CHECK : wxITEM_NORMAL
                  ,pSubMenu
@@ -302,7 +302,7 @@ void wxMenuItem::Check(
     if (m_isChecked == bCheck)
         return;
 
-    HMENU                           hMenu = GetHMenuOf(m_parentMenu);
+    HMENU                           hMenu = GetHmenuOf(m_parentMenu);
 
     if ( GetKind() == wxITEM_RADIO )
     {
@@ -376,13 +376,13 @@ void wxMenuItem::Check(
     else // check item
     {
         if (bCheck)
-            bOk = (bool)::WinSendMsg( GetHMenuOf(m_parentMenu)
+            bOk = (bool)::WinSendMsg( hMenu
                                      ,MM_SETITEMATTR
                                      ,MPFROM2SHORT(GetRealId(), TRUE)
                                      ,MPFROM2SHORT(MIA_CHECKED, MIA_CHECKED)
                                     );
         else
-            bOk = (bool)::WinSendMsg( GetHMenuOf(m_parentMenu)
+            bOk = (bool)::WinSendMsg( hMenu
                                      ,MM_SETITEMATTR
                                      ,MPFROM2SHORT(GetRealId(), TRUE)
                                      ,MPFROM2SHORT(MIA_CHECKED, FALSE)
@@ -403,14 +403,14 @@ void wxMenuItem::SetText(
     // Don't do anything if label didn't change
     //
 
-    wxString Text = TextToLabel(rText);
-    if (m_text == Text)
+    wxString                        sText = TextToLabel(rText);
+    if (m_text == sText)
         return;
 
-    wxMenuItemBase::SetText(Text);
-    OWNER_DRAWN_ONLY(wxOwnerDrawn::SetName(Text));
+    wxMenuItemBase::SetText(sText);
+    OWNER_DRAWN_ONLY(wxOwnerDrawn::SetName(sText));
 
-    HWND                            hMenu = GetHMenuOf(m_parentMenu);
+    HWND                            hMenu = GetHmenuOf(m_parentMenu);
 
     wxCHECK_RET(hMenu, wxT("menuitem without menu"));
 
@@ -450,7 +450,7 @@ void wxMenuItem::SetText(
 #endif  //owner drawn
         {
             uFlagsOld |= MIS_TEXT;
-            pData = (BYTE*)Text.c_str();
+            pData = (BYTE*)sText.c_str();
         }
 
         //
