@@ -1533,13 +1533,7 @@ void wxWindowMSW::DoMoveWindow(int x, int y, int width, int height)
         height = 0;
 
     // if our parent had prepared a defer window handle for us, use it
-    wxWindowMSW *parent =
-#ifdef __WXUNIVERSAL__
-                          wxDynamicCast(m_parent, wxWindowMSW)
-#else
-                          m_parent
-#endif
-                          ;
+    wxWindowMSW *parent = GetParent();
     HDWP hdwp = parent ? (HDWP)parent->m_hDWP : NULL;
     if ( hdwp )
     {
@@ -2304,8 +2298,6 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                 {
                     wxLogLastError(_T("EndDeferWindowPos"));
                 }
-
-                m_hDWP = NULL;
             }
             break;
 #endif // __SMARTPHONE__
@@ -4141,9 +4133,16 @@ wxColour wxWindowMSW::MSWGetBgColourForChild(wxWindow *child)
 {
     if ( m_hasBgCol )
     {
+        // our background colour applies to:
+        //  1. this window itself, always
+        //  2. all children unless the colour is "not inheritable"
+        //  3. immediate transparent children which should show the same
+        //     background as we do, but not for transparent grandchildren
+        //     which use the background of their immediate parent instead
         if ( m_inheritBgCol ||
                 child == this ||
-                    child->HasTransparentBackground() )
+                    (child->HasTransparentBackground() &&
+                        child->GetParent() == this) )
         {
             return GetBackgroundColour();
         }
