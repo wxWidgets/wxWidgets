@@ -1,4 +1,4 @@
-wxWindows 2.2.0
+wxWindows 2.2.1
 ---------------
 
 Welcome to wxWindows 2, a sophisticated cross-platform C++
@@ -206,5 +206,5 @@ web site) or contact Julian Smart <julian.smart@ukonline.co.uk>.
 
 Good luck!
 
-The wxWindows Team, 9th July, 2000
+The wxWindows Team, 13th August, 2000
 

@@ -1,6 +1,60 @@
 wxWindows 2 Change Log
 ----------------------
 
+2.2.1
+-----
+
+wxBase:
+
+- Fixed logic bug in wxDateTime::ParseDate.
+- wxDB: replaced German variable names with English.
+- wxDbGetConnection() did not check for the correct scrolling
+  of cursors when re-using a cached database connection.
+    
+All (GUI):
+
+- Corrected uninitialized variable in wxDocument constructor.
+- DocView now finds more appropriate parent frame for dialogs.
+- Filter index checked, then path to find correct doc template.
+- Unicode compile fixes.
+- Generic list control column sizing bug fixed.
+- Corrected wxComboBox validation behaviour.
+- Added EVT_UPDATE_UI_RANGE macro.
+- Some DB sample problems corrected.
+- wxGrid fixes.
+- Fixed low resolution problem with wxPostScriptDC.
+
+wxMSW:
+
+- Removed delayed loading for winmm in VC++ makefile (problems
+  reported); USE_GLCANVAS now a variable in makefile.vc.
+- Comments added to setup.h.
+- wxCommandEvent::IsChecked now works for menu items.
+- wxDEFAULT font size handled properly.
+- Mods for Cygwin 1.1.
+- Updated VC++ project and makefiles for consistency. DLL now
+  has version number in name.
+- Added insertion point functions implementation for wxComboBox.
+- Handle wxNO_FULL_REPAINT_ON_RESIZE for MDI children.
+- Fixed problem with iconizing miniframes.
+- Fixed bug with radiobox size being miscalculated if the label was
+  too long.
+- The MSW radiobutton now informs about its state in the event (m_int)
+  as wxGTK did.
+
+wxGTK:
+
+- Please see docs/gtk/changes.txt.
+
+wxMotif:
+
+- Small compilation fixes
+
+Documentation:
+
+- Added preliminary wxGrid documentation.
+- Added notes for Cygwin 1.1 to MSW install.txt.
+
 2.2.0
 -----
 

@@ -398,9 +398,11 @@ Watcom C++ 10.6/11 compilation
 
 1. Make sure your WXWIN variable is set, and uses the DOS short
    name form.
-2. Change directory to wx\src\msw. Type 'wmake -f makefile.wat' to
+2. Change directory to wx\src\msw. Type
+   'wmake -f makefile.wat all' to
    make the wxWindows core library.
-3. Change directory to wx\samples\minimal and type 'wmake -f makefile.wat'
+3. Change directory to wx\samples\minimal and type
+   'wmake -f makefile.wat all'
    to make this sample. Repeat for other samples of interest.
 
 Note (1): makewat.env uses the odbc32.lib supplied in wxWindows' lib\watcom

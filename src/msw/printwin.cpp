@@ -89,7 +89,7 @@ wxWindowsPrinter::~wxWindowsPrinter()
 {
     // avoids mingw warning about statement with no effect (FreeProcInstance
     // doesn't do anything under Win32)
-#ifndef __GNUWIN32__
+#if !defined(__GNUWIN32__) && !defined(__WATCOMC__)
     FreeProcInstance((FARPROC) m_lpAbortProc);
 #endif
 }
