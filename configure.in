@@ -1752,7 +1752,13 @@ fi
     WX_LIBRARY="wx_${TOOLKIT_DIR}"
 
     dnl the sources, their dependenices and the headers
-    ALL_OBJECTS="\$(GUIOBJS) \$(COMMONOBJS) \$(GENERICOBJS) \$(UNIXOBJS) \$(HTMLOBJS) \$(IODBCOBJS)"
+    ALL_OBJECTS="\$(GUIOBJS) \$(COMMONOBJS) \$(GENERICOBJS) \$(UNIXOBJS) \$(HTMLOBJS)"
+
+    dnl ODBC objects are Unix only
+    if test "$(TOOLKIT)" != "MSW"; then
+        ALL_OBJECTS="${ALL_OBJECTS} \$(IODBCOBJS)"
+    fi
+
     if test "$wxUSE_LIBJPEG" = "yes" ; then
         ALL_OBJECTS="${ALL_OBJECTS} \$(JPEGOBJS)"
     fi
@@ -2609,9 +2615,8 @@ if test "$wxUSE_TIMEDATE" = "yes"; then
     dnl as we want $wx_cv_var_timezone to be expanded, use AC_DEFINE_UNQUOTED
     AC_DEFINE_UNQUOTED(WX_TIMEZONE, $wx_cv_var_timezone)
 
-    dnl check for localtime (POSIX), gettimeofday (SVr4, BSD 4.3) and ftime
-    dnl (V7, BSD 4.3)
-    AC_CHECK_FUNCS(localtime gettimeofday ftime, break)
+    dnl check for localtime (it's POSIX, but the check can do no harm...)
+    AC_CHECK_FUNCS(localtime)
 
     if test "$ac_cv_func_localtime" = "yes"; then
         AC_CACHE_CHECK(for tm_gmtoff in struct tm,
@@ -2632,7 +2637,13 @@ if test "$wxUSE_TIMEDATE" = "yes"; then
                 wx_cv_struct_tm_has_gmtoff=no
             )
         ])
-    elif test "$ac_cv_func_gettimeofday" = "yes"; then
+    fi
+
+    dnl check for gettimeofday (SVr4, BSD 4.3) and ftime (V7, BSD 4.3) for the
+    dnl function to be used for high resolution timers
+    AC_CHECK_FUNCS(gettimeofday ftime, break)
+
+    if test "$ac_cv_func_gettimeofday" = "yes"; then
         AC_CACHE_CHECK([whether gettimeofday takes two arguments],
                        wx_cv_func_gettimeofday_has_2_args,
         [
