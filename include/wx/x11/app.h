@@ -76,6 +76,8 @@ public:
     // Processes an X event.
     virtual void ProcessXEvent(WXEvent* event);
     
+    virtual void OnAssert(const wxChar *file, int line, const wxChar *msg);
+    
 protected:
     bool                  m_showOnInit;
     

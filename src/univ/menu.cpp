@@ -1837,6 +1837,7 @@ int wxMenuBar::GetMenuFromPoint(const wxPoint& pos) const
 void wxMenuBar::SelectMenu(size_t pos)
 {
     SetFocus();
+    wxLogDebug("Capturing mouse from wxMenuBar::SelectMenu");
     CaptureMouse();
 
     DoSelectMenu(pos);
@@ -1925,6 +1926,7 @@ void wxMenuBar::OnLeftDown(wxMouseEvent& event)
         }
         else // on item
         {
+	    wxLogDebug("Capturing mouse from wxMenuBar::OnLeftDown");
             CaptureMouse();
 
             // show it as selected
@@ -2286,7 +2288,10 @@ void wxMenuBar::OnDismissMenu(bool dismissMenuBar)
 void wxMenuBar::OnDismiss()
 {
     if ( GetCapture() )
+    {
+        wxLogDebug("Releasing mouse from wxMenuBar::OnDismiss");
         GetCapture()->ReleaseMouse();
+    }
 
     if ( m_current != -1 )
     {

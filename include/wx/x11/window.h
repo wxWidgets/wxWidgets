@@ -168,10 +168,9 @@ protected:
         int sizeFlags = wxSIZE_AUTO);
     virtual void DoSetClientSize(int width, int height);
     virtual void DoMoveWindow(int x, int y, int width, int height);
-    
     virtual void DoCaptureMouse();
     virtual void DoReleaseMouse();
-    
+
 #if wxUSE_TOOLTIPS
     virtual void DoSetToolTip( wxToolTip *tip );
 #endif // wxUSE_TOOLTIPS

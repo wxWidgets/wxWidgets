@@ -526,7 +526,7 @@ protected:
 
     virtual void     DoCaptureMouse(void);
     virtual void     DoReleaseMouse(void);
-
+    
     // move the window to the specified location and resize it: this is called
     // from both DoSetSize() and DoSetClientSize() and would usually just call
     // ::WinSetWindowPos() except for composite controls which will want to arrange

@@ -755,6 +755,19 @@ wxApp::GetStdIcon(int which) const
     }
 }
 
+void wxApp::OnAssert(const wxChar *file, int line, const wxChar *msg)
+{
+    // While the GUI isn't working that well, just print out the
+    // message.
+#if 0    
+    wxAppBase::OnAssert(file, line, msg);
+#else
+    wxString msg2;
+    msg2.Printf("At file %s:%d: %s", file, line, msg);
+    wxLogDebug(msg2);
+#endif
+}
+
 // ----------------------------------------------------------------------------
 // accessors for C modules
 // ----------------------------------------------------------------------------

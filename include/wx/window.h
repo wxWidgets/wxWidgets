@@ -923,7 +923,7 @@ protected:
     // capture/release the mouse, used by Capture/ReleaseMouse()
     virtual void DoCaptureMouse() = 0;
     virtual void DoReleaseMouse() = 0;
-
+    
     // retrieve the position/size of the window
     virtual void DoGetPosition( int *x, int *y ) const = 0;
     virtual void DoGetSize( int *width, int *height ) const = 0;

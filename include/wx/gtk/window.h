@@ -239,7 +239,7 @@ public:
 
     virtual void DoCaptureMouse();
     virtual void DoReleaseMouse();
-
+    
 #if wxUSE_TOOLTIPS
     virtual void DoSetToolTip( wxToolTip *tip );
 #endif // wxUSE_TOOLTIPS
