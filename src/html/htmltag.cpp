@@ -60,7 +60,7 @@ IMPLEMENT_CLASS(wxHtmlTagsCache,wxObject)
 wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
 {
     const wxChar *src = source.c_str();
-    int i, tg, pos, stpos;
+    int tg, stpos;
     int lng = source.Length();
     wxChar tagBuffer[256];
 
@@ -68,7 +68,7 @@ wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
     m_CacheSize = 0;
     m_CachePos = 0;
 
-    pos = 0;
+    int pos = 0;
     while (pos < lng)
     {
         if (src[pos] == wxT('<'))   // tag found:
@@ -78,6 +78,7 @@ wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
             tg = m_CacheSize++;
             m_Cache[tg].Key = stpos = pos++;
 
+            size_t i;
             for ( i = 0;
                   pos < lng && i < WXSIZEOF(tagBuffer) - 1 &&
                   src[pos] != wxT('>') && !wxIsspace(src[pos]);
@@ -114,7 +115,7 @@ wxHtmlTagsCache::wxHtmlTagsCache(const wxString& source)
     }
 
     // ok, we're done, now we'll free .Name members of cache - we don't need it anymore:
-    for (i = 0; i < m_CacheSize; i++)
+    for (int i = 0; i < m_CacheSize; i++)
     {
         delete[] m_Cache[i].Name;
         m_Cache[i].Name = NULL;
