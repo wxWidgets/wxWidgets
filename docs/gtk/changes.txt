@@ -1,4 +1,23 @@
 
+22nd December: wxWindows 2.2.4 released
+
+Patch for better 8-bit-display support.
+
+Implememted wxCommandEvent::IsSelection() for wxListBox.
+
+Corrected wxListBox::Set() for sorted mode.
+
+Added EVT_TEXT_UPDATED for spin ctrl.
+
+Corrected wrongly rounded value in slider and scrollbar
+for negative values.
+
+Translation updates.
+
+Various other fixes.
+
+Synchronized release with wxMSW again.
+
 3rd November: wxWindows 2.2.3 released
 
 Fixed bugs in HTTP code.

@@ -489,13 +489,13 @@ void MyPrintout::DrawPageTwo(wxDC *dc)
     dc->DrawText("Some test text", 200, 200 );
     
     { // GetTextExtent demo:
-        wxString words[7] = {"This ", "is ", "GetTextExtent ", "testing ", "string. ", "Enjoy ", "it!"};
+        wxString words[8] = {"This ", "is ", "a very long string for testing:"," GetTextExtent", " testing", "string. ", "Enjoy ", "it!"};
         long w, h;
         long x = 200, y= 250;
-        wxFont fnt(15, wxSWISS, wxNORMAL, wxNORMAL);
+        wxFont fnt(15, wxTELETYPE, wxBOLD, wxNORMAL);
         
         dc->SetFont(fnt);
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 8; i++) {
             dc->GetTextExtent(words[i], &w, &h);
             dc->DrawRectangle(x, y, w, h);
             dc->DrawText(words[i], x, y);

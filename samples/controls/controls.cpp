@@ -596,7 +596,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     wxPanel *panel = new wxPanel(m_notebook);
     m_listbox = new wxListBox( panel, ID_LISTBOX,
                                wxPoint(10,10), wxSize(120,50),
-                               5, choices);
+                               5, choices, wxLB_MULTIPLE);
     m_listbox->SetFirstItem( 1 );
     m_listboxSorted = new wxListBox( panel, ID_LISTBOX_SORTED,
                                      wxPoint(10,90), wxSize(120,50),
