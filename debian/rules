@@ -14,7 +14,7 @@ release:=$(shell dpkg-parsechangelog | sed -n 's/^Source: wxwindows//p')
 python_dir:=python$(shell python -c "import sys;print sys.version[:3]")
 
 cross_host=i586-mingw32msvc
-cross_build=i686-pc-linux-gnu
+cross_build=$(shell ./config.guess)
 
 # Packages to build:
 package_wxbase_lib=libwxbase$(release)
@@ -637,7 +637,6 @@ binary-wxbase-dev: control-files-stamp install-wxbase-dev install-headers
 
 binary-wxbase-dbg: control-files-stamp install-wxbase-dbg install-headers
 	$(MAKE) -f debian/rules DH_OPTIONS="-p$(package_wxbase_dbg) -p$(package_headers)" binary-common
-
 
 # docs package
 binary-doc: control-files-stamp install-doc

@@ -294,9 +294,9 @@ dnl   possible arguments are 'yes', 'no', or 'sys'
 dnl usage: WX_ARG_SYS_WITH(option, helpmessage, variable-name)
 AC_DEFUN(WX_ARG_SYS_WITH,
         [
-          AC_MSG_CHECKING("for --with-$1")
+          AC_MSG_CHECKING([for --with-$1])
           no_cache=0
-          AC_ARG_WITH($1, $2,
+          AC_ARG_WITH($1, [$2],
                       [
                         if test "$withval" = yes; then
                           ac_cv_use_$1='$3=yes'
@@ -339,9 +339,9 @@ dnl this macro checks for a command line argument and caches the result
 dnl usage: WX_ARG_WITH(option, helpmessage, variable-name)
 AC_DEFUN(WX_ARG_WITH,
         [
-          AC_MSG_CHECKING("for --with-$1")
+          AC_MSG_CHECKING([for --with-$1])
           no_cache=0
-          AC_ARG_WITH($1, $2,
+          AC_ARG_WITH($1, [$2],
                       [
                         if test "$withval" = yes; then
                           ac_cv_use_$1='$3=yes'
@@ -376,9 +376,9 @@ dnl like WX_ARG_WITH but uses AC_ARG_ENABLE instead of AC_ARG_WITH
 dnl usage: WX_ARG_ENABLE(option, helpmessage, variable-name)
 AC_DEFUN(WX_ARG_ENABLE,
         [
-          AC_MSG_CHECKING("for --enable-$1")
+          AC_MSG_CHECKING([for --enable-$1])
           no_cache=0
-          AC_ARG_ENABLE($1, $2,
+          AC_ARG_ENABLE($1, [$2],
                         [
                           if test "$enableval" = yes; then
                             ac_cv_use_$1='$3=yes'
@@ -1397,7 +1397,7 @@ dnl   defines STRIP as strip or nothing if not found
 AC_CHECK_PROG(STRIP, strip, strip, true)
 
 dnl check if VPATH works
-AC_MSG_CHECKING("make for VPATH support")
+AC_MSG_CHECKING(make for VPATH support)
 dnl create Makefile
 cat - << EOF > confMake
 check : file
@@ -1593,7 +1593,6 @@ if test "$wxUSE_GUI" = "yes"; then
 USE_GUI=1
 
 GUI_TK_LIBRARY=
-GUI_TK_LINK=
 
 WXGTK12=
 WXGTK127=
@@ -1675,8 +1674,7 @@ if test "$wxUSE_WINE" = 1; then
         AC_MSG_ERROR(no)
     fi
 
-    GUI_TK_LINK="-lwine $MESA_LINK $XPM_LINK -lXxf86dga -lXxf86vm -lSM -lICE -lXext -lXmu -lX11 -lncurses"
-    GUI_TK_LIBRARY="$GUI_TK_LIBRARY $GUI_TK_LINK"
+    GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lwine $MESA_LINK $XPM_LINK -lXxf86dga -lXxf86vm -lSM -lICE -lXext -lXmu -lX11 -lncurses"
     WXWINE=1
     TOOLKIT=MSW
     GUIDIST=MSW_DIST
@@ -1847,8 +1845,7 @@ if test "$wxUSE_MOTIF" = 1; then
         )
     fi
 
-    GUI_TK_LINK="-lXm $XPM_LINK -lXmu -lXext -lXt -lX11"
-    GUI_TK_LIBRARY="$GUI_TK_LIBRARY $GUI_TK_LINK"
+    GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXm $XPM_LINK -lXmu -lXext -lXt -lX11"
     TOOLKIT=MOTIF
     GUIDIST=MOTIF_DIST
 fi
@@ -1883,9 +1880,6 @@ fi
     if test "$wxUSE_LIBPNG" = "yes" ; then
         ALL_OBJECTS="${ALL_OBJECTS} \$(PNGOBJS)"
     fi
-    if test "$wxUSE_ZLIB" = "yes" ; then
-        ALL_OBJECTS="${ALL_OBJECTS} \$(ZLIBOBJS)"
-    fi
     ALL_DEPFILES="\$(GUIDEPS) \$(COMMONDEPS) \$(GENERICDEPS) \$(UNIXDEPS) \$(HTMLDEPS) \$(OGLDEPS)"
 
     PORT_FILES="src/\$(TOOLKITDIR)/files.lst"
@@ -1917,10 +1911,6 @@ else
         TOOLKIT_VPATH="\${top_srcdir}/src/unix"
     fi
 
-    if test "$wxUSE_ZLIB" = "yes" ; then
-        ALL_OBJECTS="${ALL_OBJECTS} \$(ZLIBOBJS)"
-    fi
-
     PORT_FILES="src/files.lst"
     RPM_FILES="src/rpmfiles.lst"
     RPM_SPEC="wxBase.spec"
@@ -1928,6 +1918,10 @@ else
     dnl distribute only wxBase sources/headers
     GUIDIST="BASE_DIST"
     DISTDIR="wxBase"
+fi
+
+if test "$wxUSE_ZLIB" = "yes" ; then
+    ALL_OBJECTS="${ALL_OBJECTS} \$(ZLIBOBJS)"
 fi
 
 if test "$wxUSE_OPENGL" = "yes"; then
@@ -3895,9 +3889,10 @@ AC_OUTPUT([
             Makefile
           ],
           [
-            dnl don't move the file on itself - this happens when we run
-            dnl config.status which, as configure, executes these commands
-            dnl but, unlike it, doesn't create wx-config (which already
+            dnl This test is required to make the following idempotent.
+            dnl Otherwise running config.status or rerunning configure
+            dnl would stomp the wx-config link or try to move it onto
+            dnl itself.
             if test ! -L wx-config; then
                 chmod +x wx-config
                 mv wx-config wx${TOOLCHAIN_NAME}-config
@@ -3929,3 +3924,4 @@ AC_OUTPUT([
           ]
          )
 
+dnl vi: set et sts=4 sw=4:
