@@ -24,6 +24,7 @@
 
 #include "wx/fileconf.h"
 #include "wx/sstream.h"
+#include "wx/log.h"
 
 static const wxChar *testconfig =
 _T("[root]\n")
