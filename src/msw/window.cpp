@@ -183,7 +183,7 @@ extern "C" LRESULT WXDLLEXPORT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT messag
 LRESULT WXDLLEXPORT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message,
                                    WPARAM wParam, LPARAM lParam);
 #endif
-                                   
+
 
 #ifdef  __WXDEBUG__
     const char *wxGetMessageName(int message);
@@ -1035,25 +1035,24 @@ WXDWORD wxWindowMSW::MSWGetStyle(long flags, WXDWORD *exstyle) const
         style |= WS_HSCROLL;
 
     wxBorder border = (wxBorder)(flags & wxBORDER_MASK);
-    
+
     // Check if we want to automatically give it a sunken style.
     // Note than because 'sunken' actually maps to WS_EX_CLIENTEDGE, which
     // is a more neutral term, we don't necessarily get a sunken effect in
     // Windows XP. Instead we get the appropriate style for the theme.
 
-    if (border == wxBORDER_DEFAULT && wxTheApp->GetAuto3D() && 
+    if (border == wxBORDER_DEFAULT && wxTheApp->GetAuto3D() &&
         IsKindOf(CLASSINFO(wxControl)) &&
-        GetParent() && (GetParent()->IsKindOf(CLASSINFO(wxPanel)) ||
-                        GetParent()->IsKindOf(CLASSINFO(wxDialog))) &&
+        GetParent() &&
         ((GetParent()->GetWindowStyleFlag() & wxUSER_COLOURS) != wxUSER_COLOURS))
     {
         border = (wxBorder)((flags & wxBORDER_MASK) | wxBORDER_SUNKEN);
-    }   
-    
+    }
+
     // Only give it WS_BORDER for wxBORDER_SIMPLE
     if (border & wxBORDER_SIMPLE)
         style |= WS_BORDER;
-    
+
     // now deal with ext style if the caller wants it
     if ( exstyle )
     {
@@ -3270,7 +3269,7 @@ bool wxWindowMSW::HandleInitDialog(WXHWND WXUNUSED(hWndFocus))
 
 bool wxWindowMSW::HandleDropFiles(WXWPARAM wParam)
 {
-#if defined (__WXMICROWIN__) 
+#if defined (__WXMICROWIN__)
     return FALSE;
 #else // __WXMICROWIN__
     HDROP hFilesInfo = (HDROP) wParam;
@@ -3746,7 +3745,7 @@ bool wxWindowMSW::HandlePaint()
 {
 //    if (GetExtraStyle() & wxWS_EX_THEMED_BACKGROUND)
 //        return FALSE;
-    
+
 #ifdef __WIN32__
     HRGN hRegion = ::CreateRectRgn(0, 0, 0, 0); // Dummy call to get a handle
     if ( !hRegion )
@@ -3821,7 +3820,7 @@ bool wxWindowMSW::HandleEraseBkgnd(WXHDC hdc)
         }
     }
 #endif
-    
+
     wxDCTemp dc(hdc);
 
     dc.SetHDC(hdc);
@@ -3893,7 +3892,7 @@ bool wxWindowMSW::HandleMoving(wxRect& rect)
 {
     wxMoveEvent event(rect, m_windowId);
     event.SetEventObject(this);
-    
+
     bool rc = GetEventHandler()->ProcessEvent(event);
     if (rc)
         rect = event.GetRect();
@@ -3916,7 +3915,7 @@ bool wxWindowMSW::HandleSizing(wxRect& rect)
 {
     wxSizeEvent event(rect, m_windowId);
     event.SetEventObject(this);
-    
+
     bool rc = GetEventHandler()->ProcessEvent(event);
     if (rc)
         rect = event.GetRect();
