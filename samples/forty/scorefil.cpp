@@ -41,8 +41,8 @@
 
 ScoreFile::ScoreFile(const char* appName)
 {
+#ifdef 0
 	wxString filename;
-#ifdef __WXGTK__
 	m_configFilename << "/usr/local/share/" << appName << ".scores";
 	if (access(m_configFilename, F_OK) == 0)
 	{
@@ -67,11 +67,13 @@ ScoreFile::ScoreFile(const char* appName)
 			close(fd);
 		}
 	}
-#else
-	// Windows
-	m_configFilename = wxFileConfig::GetGlobalFileName(appName);
 #endif
-	m_config = new wxFileConfig(m_configFilename);
+
+#ifdef __UNIX__
+	m_config = new wxFileConfig( appName, "" );  // only local
+#else
+	m_config = new wxFileConfig( "",appName );   // only global
+#endif
 }
 
 ScoreFile::~ScoreFile()
@@ -85,27 +87,23 @@ ScoreFile::~ScoreFile()
 }
 
 
-void ScoreFile::GetPlayerList(wxString** list, int& length)
+void ScoreFile::GetPlayerList( wxArrayString &list )
 {
 	m_config->SetPath("/Players");
-	length = m_config->GetNumberOfGroups();
+	int length = m_config->GetNumberOfGroups();
 
-	if (length <= 0)
-	{
-		*list = 0;
-		return;
-	}
-
-	*list = new wxString[length];
+	if (length <= 0) return;
 
 	wxString player;
 	long index, i = 0;
 	if (m_config->GetFirstGroup(player, index))
 	{
-		(*list)[i++] = player;
+	     list.Add( player );
+	     i++;
 		while (m_config->GetNextGroup(player, index))
 		{
-			(*list)[i++] = player;
+	          list.Add( player );
+		  i++;
 		}
 	}
 }

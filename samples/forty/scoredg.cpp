@@ -58,14 +58,13 @@ ScoreCanvas::ScoreCanvas(wxWindow* parent, ScoreFile* scoreFile) :
 	m_font = wxTheFontList->FindOrCreateFont(10, wxSWISS, wxNORMAL, wxNORMAL);
 #endif
 
-	wxString* players = 0;
-	int length = 0;
-	scoreFile->GetPlayerList(&players, length);
+        wxArrayString players;
+	scoreFile->GetPlayerList( players);
 
 	ostrstream os;
 
 	os << "Player\tWins\tGames\tScore\n";
-	for (int i = 0; i < length; i++)
+	for (int i = 0; i < players.Count(); i++)
 	{
 		int wins, games, score;
 		scoreFile->ReadPlayersScore(players[i], wins, games, score);
@@ -84,7 +83,6 @@ ScoreCanvas::ScoreCanvas(wxWindow* parent, ScoreFile* scoreFile) :
 	char* str = os.str();
 	m_text = str;
 	delete str;
-	delete players;
 }
 
 ScoreCanvas::~ScoreCanvas()

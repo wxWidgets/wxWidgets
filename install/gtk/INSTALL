@@ -209,7 +209,7 @@ distribution is:
 	make distrib
 
 NOTE: If you are in the base directory of wxGTK it will create 
-distribution packages for wxxt as well as for all packages in the
+distribution packages for wxGTK as well as for all packages in the
 user directory.
     So if you want to create only packages for the files in user,
 then go to the directory other and type:
@@ -221,7 +221,7 @@ enter the specific directory and type there:
 make distrib
 
 All the distribution files will be put in the directory
-distrib at the base of the wxxt-tree (where also configure
+distrib at the base of the wxGTK-tree (where also configure
 and template.mak can be found).
 
 ** Something about Makefile.in

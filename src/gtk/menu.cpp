@@ -122,19 +122,31 @@ wxMenuItem* wxMenuBar::FindMenuItemById( int id ) const
   return result;
 }
 
-bool wxMenuBar::IsChecked( int id ) const
+void wxMenuBar::Check( int id, bool check )
+{
+  wxMenuItem* item = FindMenuItemById( id );
+  if (item) item->Check(check);
+};
+
+bool wxMenuBar::Checked( int id ) const
 {
   wxMenuItem* item = FindMenuItemById( id );
   if (item) return item->IsChecked();
   return FALSE;
-}
+};
 
-bool wxMenuBar::IsEnabled( int id ) const
+void wxMenuBar::Enable( int id, bool enable )
+{
+  wxMenuItem* item = FindMenuItemById( id );
+  if (item) item->Enable(enable);
+};
+
+bool wxMenuBar::Enabled( int id ) const
 {
   wxMenuItem* item = FindMenuItemById( id );
   if (item) return item->IsEnabled();
   return FALSE;
-}
+};
 
 //-----------------------------------------------------------------------------
 // wxMenu

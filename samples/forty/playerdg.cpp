@@ -59,18 +59,13 @@ PlayerSelectionDialog::PlayerSelectionDialog(
 						0, 0,
 						wxLB_SINGLE
 						);
-#if 1
-//    Robert Roebling
     
-	int numPlayers = 0;
-	wxString* players = 0;
-	m_scoreFile->GetPlayerList(&players, numPlayers);
-	for (int i = 0; i < numPlayers; i++)
+	wxArrayString players;
+	m_scoreFile->GetPlayerList(players);
+	for (int i = 0; i < players.Count(); i++)
 	{
 		list->Append(players[i]);
 	}
-	delete players;
-#endif
 
 	m_textField = new wxTextCtrl(this, -1, "", wxDefaultPosition, wxDefaultSize, 0);
 

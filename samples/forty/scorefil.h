@@ -20,7 +20,7 @@ public:
 	ScoreFile(const char* appName);
 	virtual ~ScoreFile();
 
-	void GetPlayerList(wxString** list, int& number);
+	void GetPlayerList( wxArrayString &list );
 	wxString GetPreviousPlayer() const;
 
 	void ReadPlayersScore(const char* player, int& wins, int& games, int &score);

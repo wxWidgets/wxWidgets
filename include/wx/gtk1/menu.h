@@ -49,12 +49,16 @@ public:
 
   int FindMenuItem( const wxString &menuString, const wxString &itemString ) const;
   wxMenuItem* FindMenuItemById( int id ) const;
+  
+  void Check( int id, bool check );
+  bool Checked( int id ) const;
+  void Enable( int id, bool enable );
+  bool Enabled( int id ) const;
+  inline bool IsEnabled(int Id) const { return Enabled(Id); };
+  inline bool IsChecked(int Id) const { return Checked(Id); };
 
   int     GetMenuCount() const { return m_menus.Number(); }
   wxMenu *GetMenu(int n) const { return (wxMenu *)m_menus.Nth(n)->Data(); }
-
-  bool IsChecked( int id ) const;
-  bool IsEnabled( int id ) const;
 
   wxList       m_menus;
   GtkWidget   *m_menubar;

@@ -545,7 +545,7 @@ void wxPaintDC::Clear(void)
 {
   if (!Ok()) return;
   
-  DestroyClippingRegion();
+//  DestroyClippingRegion();
   
   if (m_isDrawable)
   {
@@ -556,7 +556,7 @@ void wxPaintDC::Clear(void)
     int width = 0;
     int height = 0;
     GetSize( &width, &height );
-    gdk_draw_rectangle( m_window, m_brushGC, TRUE, 0, 0, width, height );
+    gdk_draw_rectangle( m_window, m_bgGC, TRUE, 0, 0, width, height );
   };
 };
 
