@@ -685,16 +685,21 @@ public:
     // time. Using the functions below, it may be converted to another time
     // zone (for example, the Unix epoch is wxDateTime(1, Jan, 1970).ToGMT())
     //
+    // these functions try to handle DST internally, but there is no magical
+    // way to know all rules for it in all countries in the world, so if the
+    // program can handle it itself (or doesn't want to handle it at all for
+    // whatever reason), the DST handling can be disabled with noDST.
+    //
     // Converting to the local time zone doesn't do anything.
     // ------------------------------------------------------------------------
 
         // transform to any given timezone
-    inline wxDateTime ToTimezone(const TimeZone& tz) const;
-    wxDateTime& MakeTimezone(const TimeZone& tz);
+    inline wxDateTime ToTimezone(const TimeZone& tz, bool noDST = FALSE) const;
+    wxDateTime& MakeTimezone(const TimeZone& tz, bool noDST = FALSE);
 
         // transform to GMT/UTC
-    wxDateTime ToGMT() const { return ToTimezone(GMT0); }
-    wxDateTime& MakeGMT() { return MakeTimezone(GMT0); }
+    wxDateTime ToGMT(bool noDST = FALSE) const { return ToTimezone(GMT0, noDST); }
+    wxDateTime& MakeGMT(bool noDST = FALSE) { return MakeTimezone(GMT0, noDST); }
 
         // is daylight savings time in effect at this moment according to the
         // rules of the specified country?

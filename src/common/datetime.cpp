@@ -833,7 +833,8 @@ wxDateTime wxDateTime::GetBeginDST(int year, Country country)
 
         dt += wxTimeSpan::Hours(1);
 
-        dt.MakeGMT();
+        // disable DST tests because it could result in an infinite recursion!
+        dt.MakeGMT(TRUE);
     }
     else switch ( country )
     {
@@ -933,7 +934,8 @@ wxDateTime wxDateTime::GetEndDST(int year, Country country)
 
         dt += wxTimeSpan::Hours(1);
 
-        dt.MakeGMT();
+        // disable DST tests because it could result in an infinite recursion!
+        dt.MakeGMT(TRUE);
     }
     else switch ( country )
     {
@@ -1505,7 +1507,7 @@ wxDateTime::wxDateTime_t wxDateTime::GetDayOfYear(const TimeZone& tz) const
 
 wxDateTime::wxDateTime_t wxDateTime::GetWeekOfYear(const TimeZone& tz) const
 {
-#if 0
+#if 1
     // the first week of the year is the one which contains Jan, 4 (according
     // to ISO standard rule), so the year day N0 = 4 + 7*W always lies in the
     // week W+1. As any day N = 7*W + 4 + (N - 4)%7, it lies in the same week
@@ -1527,7 +1529,8 @@ wxDateTime::wxDateTime_t wxDateTime::GetWeekOfYear(const TimeZone& tz) const
     }
 
     return week;
-#else // this seems to be a bit simpler and I believe is also correct
+#else // 0
+    // an attempt at doing it simpler - but this doesn't quite work...
     return (WeekDay)((GetDayOfYear(tz) - (GetWeekDay(tz) - 1 + 7) % 7 + 7) / 7);
 #endif // 0/1
 }
@@ -1628,12 +1631,13 @@ int wxDateTime::IsDST(wxDateTime::Country country) const
     }
 }
 
-wxDateTime& wxDateTime::MakeTimezone(const TimeZone& tz)
+wxDateTime& wxDateTime::MakeTimezone(const TimeZone& tz, bool noDST)
 {
     int secDiff = GetTimeZone() + tz.GetOffset();
 
-    // we need to know whether DST is or not in effect for this date
-    if ( IsDST() == 1 )
+    // we need to know whether DST is or not in effect for this date unless
+    // the test disabled by the caller
+    if ( !noDST && (IsDST() == 1) )
     {
         // FIXME we assume that the DST is always shifted by 1 hour
         secDiff -= 3600;
@@ -2395,7 +2399,7 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
 
                     // this is the format which corresponds to ctime() output
                     // and strptime("%c") should parse it, so try it first
-                    static const wxChar *fmtCtime = _T("%a %b %e %H:%M:%S %Y");
+                    static const wxChar *fmtCtime = _T("%a %b %d %H:%M:%S %Y");
 
                     const wxChar *result = dt.ParseFormat(input, fmtCtime);
                     if ( !result )
@@ -2621,18 +2625,27 @@ const wxChar *wxDateTime::ParseFormat(const wxChar *date,
                 {
                     wxDateTime dt;
 
-                    wxString fmtDate;
+                    wxString fmtDate, fmtDateAlt;
                     if ( IsWestEuropeanCountry(GetCountry()) ||
                          GetCountry() == Russia )
                     {
                         fmtDate = _T("%d/%m/%y");
+                        fmtDateAlt = _T("%m/%d/%y");
                     }
                     else // assume USA
                     {
                         fmtDate = _T("%m/%d/%y");
+                        fmtDateAlt = _T("%d/%m/%y");
                     }
 
                     const wxChar *result = dt.ParseFormat(input, fmtDate);
+
+                    if ( !result )
+                    {
+                        // ok, be nice and try another one
+                        result = dt.ParseFormat(input, fmtDateAlt);
+                    }
+
                     if ( !result )
                     {
                         // bad luck

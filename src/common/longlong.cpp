@@ -30,6 +30,7 @@
 #include "wx/longlong.h"
 
 #include <memory.h>     // for memset()
+#include <math.h>       // for fabs()
 
 // ============================================================================
 // implementation
@@ -80,7 +81,27 @@ ostream& operator<< (ostream& o, const wxLongLongNative& ll)
 
 #endif // wxUSE_LONGLONG_NATIVE
 
+// ============================================================================
+// wxLongLongWx: emulation of 'long long' using 2 longs
+// ============================================================================
+
 #if wxUSE_LONGLONG_WX
+
+// assignment
+wxLongLongWx& wxLongLongWx::Assign(double d)
+{
+    if ( fabs(d) <= LONG_MAX )
+    {
+        m_hi = d < 0 ? 1 << (8*sizeof(long) - 1) : 0l;
+        m_lo = (long)d;
+    }
+    else
+    {
+        wxFAIL_MSG(_T("TODO"));       
+    }
+
+    return *this;
+}
 
 wxLongLongWx wxLongLongWx::operator<<(int shift) const
 {

@@ -1479,7 +1479,7 @@ int main(int argc, char **argv)
 #endif // TEST_MIME
 
 #ifdef TEST_TIME
-    if ( 0 )
+    if ( 1 )
     {
     TestTimeSet();
     TestTimeStatic();
@@ -1491,9 +1491,8 @@ int main(int argc, char **argv)
     TestTimeWDays();
     TestTimeWNumber();
     TestTimeParse();
-    }
-
     TestTimeFormat();
+    }
 #endif // TEST_TIME
 
     wxUninitialize();
