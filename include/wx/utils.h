@@ -370,7 +370,7 @@ WXDLLEXPORT bool wxYield();
 WXDLLEXPORT bool wxYieldIfNeeded();
 
 // Yield to other apps/messages and disable user input
-WXDLLEXPORT bool wxSafeYield(wxWindow *win = NULL);
+WXDLLEXPORT bool wxSafeYield(wxWindow *win = NULL, bool onlyIfNeeded = FALSE);
 
 // Enable or disable input to all top level windows
 WXDLLEXPORT void wxEnableTopLevelWindows(bool enable = TRUE);

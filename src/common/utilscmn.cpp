@@ -872,11 +872,14 @@ wxWindowDisabler::~wxWindowDisabler()
 
 // Yield to other apps/messages and disable user input to all windows except
 // the given one
-bool wxSafeYield(wxWindow *win)
+bool wxSafeYield(wxWindow *win, bool onlyIfNeeded = FALSE)
 {
     wxWindowDisabler wd(win);
 
-    bool rc = wxYield();
+    if (onlyIfNeeded)
+        bool rc = wxYieldIfNeeded();
+    else
+        bool rc = wxYield();
 
     return rc;
 }
@@ -900,13 +903,13 @@ bool wxSetDetectableAutoRepeat( bool WXUNUSED(flag) )
 const wxChar *wxGetInstallPrefix()
 {
     wxString prefix;
-    
+
     if ( wxGetEnv(wxT("WXPREFIX"), &prefix) )
         return prefix.c_str();
-    
+
 #ifdef wxINSTALL_PREFIX
     return wxT(wxINSTALL_PREFIX);
-#else 
+#else
     return wxT("");
 #endif
 }
