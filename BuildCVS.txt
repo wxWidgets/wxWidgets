@@ -60,10 +60,14 @@ Edit ~/wxWindows/src/make.env as you wish.
 III) Windows using configure
 ----------------------------------------
 
-No idea.., but take a look at Unix->Windows cross compiling. With minor
+Take a look at Unix->Windows cross compiling. With minor
 modifications, this should work in Windows if you've got the cygnus
 utilities (bash, GNU make, etc) and either mingw32 or cygwin32 installed. 
-See http://www.cygnus.com for these programs.
+See http://www.cygnus.com for these programs, or go straight to their
+ftp server at ftp://sourceware.cygnus.com/pub/cygwin/. 
+
+Of course, you can also build the library using plain makefiles (see 
+section I).
 
 IV) Unix using configure
 ----------------------------------------
@@ -143,11 +147,6 @@ Drag'n'drop is disabled because mingw32 lacks (AFAIK) OLE headers.
 Configure will conclude that shared libraries are out of the question and
 opt for a static one. I haven't looked into DLL creation yet.
 
-When configure is finished, examine setup.h in the win32 directory. Search for
-wxUSE_DYNLIB_CLASS, it will be defined twice. Remove the second define (0).
-If your cross-compiler is egcs-based, you might want to add #define __EGCS__
-in setup.h (only used by common/timercmn.cpp).
-
 Type 
 -> make -C src
 and wait, wait, wait. Don't leave the room, because the minute you do there
@@ -171,9 +170,7 @@ want to rename the cross-compiled one to i586-mingw32-wx-config, or something.
 Cross-compiling TODO:
 ---------------------
 - resource compiling must be done manually for now (should/can we link the 
-default wx resources into libwx_msw.a?)
+default wx resources into libwx_msw.a?) [ No we can't; the linker won't
+link it in... you have to supply an object file ]
 - dynamic libraries
 - static executables are HUGE -- there must be room for improvement.
-- wxUSE_DYNLIB_CLASS double def is probably a bug in configure.in
-- figure out a clean way to determine we're building with configure
-- possibly some problems with parser.y and lexer.c and the like.
