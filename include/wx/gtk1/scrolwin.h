@@ -63,7 +63,7 @@ public:
     // the area between the scrollbars (spreadsheet: only cell area
     // will move).
     virtual void SetTargetWindow( wxWindow *target, bool pushEventHandler = FALSE );
-    virtual wxWindow *GetTargetWindow();
+    virtual wxWindow *GetTargetWindow() const;
 
     // Set the scrolled area of the window.
     virtual void DoSetVirtualSize( int x, int y );

@@ -442,7 +442,7 @@ void wxScrolledWindow::SetTargetWindow( wxWindow *target, bool WXUNUSED(pushEven
     m_targetWindow = target;
 }
 
-wxWindow *wxScrolledWindow::GetTargetWindow()
+wxWindow *wxScrolledWindow::GetTargetWindow() const
 {
     return m_targetWindow;
 }
