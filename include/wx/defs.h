@@ -1780,6 +1780,7 @@ typedef unsigned short  WXWORD;
 
 typedef void*       WXWidget ;
 typedef void*       WXWindow ;
+typedef void*       WXDisplay ;
 /*
 typedef WindowPtr       WXHWND;
 typedef Handle          WXHANDLE;
