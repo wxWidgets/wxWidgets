@@ -1456,7 +1456,12 @@ if test "$wxUSE_CLIPBOARD" = 1 ; then
 fi
 
 if test "$wxUSE_TOOLTIPS" = 1 ; then
-  AC_DEFINE_UNQUOTED(wxUSE_TOOLTIPS,$wxUSE_TOOLTIPS)
+    if test "$wxUSE_MOTIF" = 1; then
+        AC_MSG_WARN(tooltips are not supported yet under Motif, sorry)
+        wxUSE_TOOLTIPS=0
+    fi
+
+    AC_DEFINE_UNQUOTED(wxUSE_TOOLTIPS,$wxUSE_TOOLTIPS)
 fi
 
 if test "$wxUSE_DRAG_AND_DROP" = 1 ; then
@@ -1702,7 +1707,9 @@ dnl ------------------------------------------------------------------------
 dnl add OS to list of configured
 echo $OS >> system.list
 
-AC_CONFIG_HEADER(./include/wx/gtk/setup.h:./setup/setup.hin)
+TOOLKIT_DIR=`echo ${TOOLKIT} | tr "A-Z" "a-z"`
+AC_CONFIG_HEADER(./include/wx/${TOOLKIT_DIR}/setup.h:./setup/setup.hin)
+
 AC_OUTPUT(./setup/substit ./wx-config:./wx-config.in,./setup/general/createall)
 
 AC_OVERRIDES_DONE
