@@ -68,6 +68,26 @@ Although it works just fine under Unix, these messages go strictly nowhere
 under Windows where the stdout of GUI programs is not assigned to anything.
 Thus, you might view {\it wxLogMessage()} as a simple substitute for {\it
 printf()}.
+
+Moreover {\it wxMSW} doesn't have a {\bf console} as you may have with {\it
+  wxGTK}. Under {\it wxMSW}, a call using {\it cout} just goes nowhere. To
+cope with this problem, {\it wxWindows} provides a way to redirect {\it cout}
+calls to \helpref{wxTreeCtrl}{wxtreectrl}, {\it i.e.}:
+{\small
+\begin{verbatim}
+  wxLogWindow *logger=new wxLogWindow(your_frame,"Logger");
+  cout=*new ostream(logger->GetTextCtrl());
+  wxLog::SetActiveTarget(logger);
+\end{verbatim}
+}
+On the opposite, if you like your {\it wxLogXXX} calls to behave as a {\it cout} 
+call does, just write :
+{\small
+\begin{verbatim}
+  wxLog *logger=new wxLogStream(&cout);
+  wxLog::SetActiveTarget(logger);
+\end{verbatim}
+}
 \item{\bf Flexibility} The output of wxLog functions can be redirected or
 suppressed entirely based on their importance, which is either impossible or
 difficult to do with traditional methods. For example, only error messages, or
