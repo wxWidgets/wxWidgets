@@ -34,6 +34,7 @@ extern KeySym wxCharCodeWXToX(int id);
 bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win, Widget widget, XEvent *xevent);
 bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win, Widget widget, XEvent *xevent);
 int wxGetBestMatchingPixel(Display *display, XColor *desiredColor, Colormap cmap);
+Pixmap XCreateInsensitivePixmap( Display *display, Pixmap pixmap );
 
 #define	wxNO_COLORS   0x00
 #define wxBACK_COLORS 0x01

@@ -25,6 +25,7 @@ class WXDLLEXPORT wxStaticBitmap: public wxControl
   DECLARE_DYNAMIC_CLASS(wxStaticBitmap)
  public:
   inline wxStaticBitmap() { }
+  ~wxStaticBitmap();
 
   inline wxStaticBitmap(wxWindow *parent, wxWindowID id,
            const wxBitmap& label,

@@ -40,7 +40,6 @@ wxListBox::wxListBox(): m_clientDataList(wxKEY_INTEGER)
 {
     m_noItems = 0;
     m_selected = 0;
-    m_inSetValue = FALSE;
 }
 
 bool wxListBox::Create(wxWindow *parent, wxWindowID id,
@@ -51,7 +50,6 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
                        const wxValidator& validator,
                        const wxString& name)
 {
-    m_inSetValue = FALSE;
     m_windowStyle = style;
     m_noItems = n;
     m_selected = 0;
@@ -85,6 +83,8 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
     Widget listWidget = XmCreateScrolledList (parentWidget, (char*) (const char*) name, args, count);
 
     m_mainWidget = (WXWidget) listWidget;
+
+    Set(n, choices);
 
     XtManageChild (listWidget);
 
@@ -434,6 +434,8 @@ void wxListBox::SetClientData(int N, char *Client_data)
     wxNode *node = m_clientDataList.Find ((long) N);
     if (node)
         node->SetData ((wxObject *)Client_data);
+    else
+        node = m_clientDataList.Append((long) N, (wxObject*) Client_data);
 }
 
 // Return number of selections and an array of selected integers
@@ -681,7 +683,7 @@ void wxListBoxCallback (Widget w, XtPointer clientData,
 
     wxListBox *item = (wxListBox *) clientData;
 
-    if (item->m_inSetValue)
+    if (item->InSetValue())
         return;
 
     wxCommandEvent event (wxEVT_COMMAND_LISTBOX_SELECTED);

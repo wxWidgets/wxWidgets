@@ -49,7 +49,7 @@ public:
   wxIcon(const char bits[], int width, int height);
 
   // Initialize with XPM data
-  wxIcon(const char **data);
+  wxIcon(char **data);
 
   wxIcon(const wxString& name, long flags = wxBITMAP_TYPE_ICO_RESOURCE,
     int desiredWidth = -1, int desiredHeight = -1);

@@ -75,10 +75,9 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
 
 void wxCheckBox::SetValue(bool val)
 {
-    // TODO: m_inSetValue
-    //  inSetValue = TRUE;
+    m_inSetValue = TRUE;
     XmToggleButtonSetState ((Widget) m_mainWidget, (Boolean) val, TRUE);
-    //  inSetValue = FALSE;
+    m_inSetValue = FALSE;
 }
 
 bool wxCheckBox::GetValue() const
@@ -140,9 +139,9 @@ void wxCheckBoxCallback (Widget w, XtPointer clientData,
 		    XtPointer ptr)
 {
   wxCheckBox *item = (wxCheckBox *) clientData;
-  // TODO
-  //  if (item->inSetValue)
-  //    return;
+
+  if (item->InSetValue())
+    return;
     
   wxCommandEvent event (wxEVT_COMMAND_CHECKBOX_CLICKED, item->GetId());
   event.SetInt((int) item->GetValue ());

@@ -51,19 +51,14 @@ public:
   int GetSelection() const;
   wxString GetString(int N) const;
   void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
-  void GetSize(int *x, int *y) const;
-  void GetPosition(int *x, int *y) const;
-  wxString GetLabel() const;
-  void SetLabel(const wxString& label);
+  void SetLabel(const wxString& label) { wxControl::SetLabel(label); };
   void SetLabel(int item, const wxString& label) ;
   wxString GetLabel(int item) const;
-  bool Show(bool show);
-  void SetFocus();
+  wxString GetLabel() const { return wxControl::GetLabel(); };
   void Enable(bool enable);
   void Enable(int item, bool enable);
   void Show(int item, bool show) ;
-  inline void SetLabelFont(const wxFont& WXUNUSED(font)) {};
-  inline void SetButtonFont(const wxFont& font) { SetFont(font); }
+  bool Show(bool show) { return wxControl::Show(show); };
 
   virtual wxString GetStringSelection() const;
   virtual bool SetStringSelection(const wxString& s);
@@ -73,15 +68,21 @@ public:
   inline int GetNumberOfRowsOrCols() const { return m_noRowsOrCols; }
   inline void SetNumberOfRowsOrCols(int n) { m_noRowsOrCols = n; }
 
+  WXWidget GetTopWidget() const { return m_formWidget; }
+  WXWidget GetLabelWidget() const { return m_labelWidget; }
+  inline WXWidget* GetRadioButtons() const { return m_radioButtons; }
+  inline void SetSel(int i) { m_selectedButton = i; }
+
 protected:
-/* TODO: implementation
-  WXHWND *          m_radioButtons;
-*/
   int               m_majorDim ;
   int               m_noItems;
   int               m_noRowsOrCols;
   int               m_selectedButton;
 
+  WXWidget          m_formWidget;
+  WXWidget          m_labelWidget;
+  WXWidget*         m_radioButtons;
+  wxString*         m_radioButtonLabels;
 };
 
 #endif

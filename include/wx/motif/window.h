@@ -465,7 +465,7 @@ public:
 
   // Get main widget for this window, e.g. a text widget
   virtual WXWidget GetMainWidget() const;
-  // Get the widget that supports font setting
+  // Get the widget that corresponds to the label (for font setting, label setting etc.)
   virtual WXWidget GetLabelWidget() const { return GetMainWidget(); }
   // Get the client widget for this window (something we can
   // create other windows on)

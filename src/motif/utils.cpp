@@ -18,43 +18,108 @@
 #include "wx/setup.h"
 #include "wx/utils.h"
 #include "wx/app.h"
+#include "wx/msgdlg.h"
+#include "wx/cursor.h"
 
 #include <ctype.h>
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <stdarg.h>
+#include <dirent.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <sys/wait.h>
+#include <pwd.h>
+#include <errno.h>
+#include <netdb.h>
+#include <signal.h>
+
+#ifdef __SVR4__
+#include <sys/systeminfo.h>
+#endif
 
 #include <Xm/Xm.h>
 
 #include "wx/motif/private.h"
 
+// Yuck this is really BOTH site and platform dependent
+// so we should use some other strategy!
+#ifdef sun
+# define DEFAULT_XRESOURCE_DIR "/usr/openwin/lib/app-defaults"
+#else
+# define DEFAULT_XRESOURCE_DIR "/usr/lib/X11/app-defaults"
+#endif
+
+static char *GetIniFile (char *dest, const char *filename);
+
+extern wxList wxTopLevelWindows;
+
 // Get full hostname (eg. DoDo.BSn-Germany.crg.de)
 bool wxGetHostName(char *buf, int maxSize)
 {
-    // TODO
-    return FALSE;
+#if defined(SVR4) && !defined(__hpux)
+  return (sysinfo (SI_HOSTNAME, buf, maxSize) != -1);
+#else /* BSD Sockets */
+  char name[255];
+  struct hostent *h;
+
+  // Get hostname
+  if (gethostname (name, sizeof (name) / sizeof (char) - 1) == -1)
+      return FALSE;
+  // Get official full name of host
+  strncpy (buf
+	   ,(h = gethostbyname (name)) != NULL ? h->h_name : name
+	   ,maxSize - 1);
+  return TRUE;
+#endif
 }
 
 // Get user ID e.g. jacs
 bool wxGetUserId(char *buf, int maxSize)
 {
-    // TODO
-    return FALSE;
+#ifdef VMS
+  *buf = '\0'; // return empty string
+  return FALSE;
+#else
+  struct passwd *who;
+
+  if ((who = getpwuid (getuid ())) != NULL)
+    {
+      strncpy (buf, who->pw_name, maxSize - 1);
+      return TRUE;
+    }
+  return FALSE;
+#endif
 }
 
 // Get user name e.g. Julian Smart
 bool wxGetUserName(char *buf, int maxSize)
 {
-    // TODO
-    return FALSE;
+#ifdef VMS
+  *buf = '\0'; // return empty string
+  return FALSE;
+#else
+  struct passwd *who;
+
+  if ((who = getpwuid (getuid ())) != NULL)
+    {
+      strncpy (buf, who->pw_gecos, maxSize - 1);
+      return TRUE;
+    }
+  return FALSE;
+#endif
 }
 
 int wxKill(long pid, int sig)
 {
-    // TODO
-    return 0;
+  int unixSignal = 0;
+  switch (sig)
+  {
+    case wxSIGTERM:
+    default:
+      unixSignal = SIGTERM;
+  }
+  return kill( (int)pid, unixSignal);
 }
 
 //
@@ -62,75 +127,194 @@ int wxKill(long pid, int sig)
 //
 bool wxShell(const wxString& command)
 {
-    // TODO
-    return FALSE;
+#ifdef VMS
+  return(FALSE);
+#else
+#if defined(sun) || defined(__ultrix) || defined(__bsdi__)
+  pid_t pid = vfork ();
+#else
+  pid_t pid = fork ();
+#endif
+  switch( pid ) {
+    case -1:			/* error */
+	return(FALSE);
+    case 0:			/* child */
+	// Generic X windows terminal window
+	if (command != "")
+	  execlp("xterm", "-e", (char *) (const char*) command, NULL);
+	else
+	  execlp("xterm", NULL);
+	_exit(127);
+  }
+  return TRUE;
+#endif
+ // End VMS
 }
 
 // Get free memory in bytes, or -1 if cannot determine amount (e.g. on UNIX)
 long wxGetFreeMemory()
 {
-    // TODO
-    return 0;
+    return -1;
 }
 
 void wxSleep(int nSecs)
 {
-    // TODO
+  sleep(nSecs);
 }
 
 // Consume all events until no more left
 void wxFlushEvents()
 {
+  Display *display = (Display*) wxGetDisplay();
+
+  XSync (display, FALSE);
+  XEvent event;
+  // XtAppPending returns availability of events AND timers/inputs, which
+  // are processed via callbacks, so XtAppNextEvent will not return if 
+  // there are no events. So added '& XtIMXEvent' - Sergey.
+  while (XtAppPending ((XtAppContext) wxTheApp->GetAppContext()) & XtIMXEvent)
+    {
+      XFlush (XtDisplay ((Widget) wxTheApp->GetTopLevelWidget()));
+      // Jan Lessner: works better when events are non-X events
+      XtAppProcessEvent((XtAppContext) wxTheApp->GetAppContext(), XtIMXEvent);
+    }
 }
 
 // Output a debug message, in a system dependent fashion.
 void wxDebugMsg(const char *fmt ...)
 {
   va_list ap;
-  static char buffer[512];
+  char buffer[BUFSIZ];
 
   if (!wxTheApp->GetWantDebugOutput())
     return ;
 
-  va_start(ap, fmt);
+  va_start (ap, fmt);
 
-  // wvsprintf(buffer,fmt,ap) ;
-  // TODO: output buffer
+  vsprintf (buffer, fmt, ap);
+  cerr << buffer;
 
-  va_end(ap);
+  va_end (ap);
 }
 
 // Non-fatal error: pop up message box and (possibly) continue
 void wxError(const wxString& msg, const wxString& title)
 {
-    // TODO
-    wxExit();
+  cerr << (const char*) title << ": " << (const char*) msg << "\n";
 }
 
 // Fatal error: pop up message box and abort
 void wxFatalError(const wxString& msg, const wxString& title)
 {
-    // TODO
+  cerr << (const char*) title << ": " << (const char*) msg << "\n";
+  exit (1);
 }
 
 // Emit a beeeeeep
 void wxBell()
 {
-    // TODO
+  // Use current setting for the bell
+  XBell ((Display*) wxGetDisplay(), 0);
 }
 
 int wxGetOsVersion(int *majorVsn, int *minorVsn)
 {
     // TODO
-    return 0;
+  // This code is WRONG!! Does NOT return the
+  // Motif version of the libs but the X protocol
+  // version! @@@@@ Fix ME!!!!!!!!!
+  Display *display = XtDisplay ((Widget) wxTheApp->GetTopLevelWidget());
+  if (majorVsn)
+    *majorVsn = ProtocolVersion (display);
+  if (minorVsn)
+    *minorVsn = ProtocolRevision (display);
+  return wxMOTIF_X;
 }
 
 // Reading and writing resources (eg WIN.INI, .Xdefaults)
 #if wxUSE_RESOURCES
+
+static char *GetResourcePath(char *buf, const char *name, bool create = FALSE)
+{
+  if (create && wxFileExists (name) ) {
+    strcpy(buf, name);
+    return buf; // Exists so ...
+  }
+
+  if (*name == '/')
+    strcpy(buf, name);
+  else {
+    // Put in standard place for resource files if not absolute
+    strcpy (buf, DEFAULT_XRESOURCE_DIR);
+    strcat (buf, "/");
+    strcat (buf, (const char*) wxFileNameFromPath (name));
+  }
+
+  if (create) {
+    // Touch the file to create it
+    FILE *fd = fopen (buf, "w");
+    if (fd) fclose (fd);
+  }
+  return buf;
+}
+
+/*
+ * We have a cache for writing different resource files,
+ * which will only get flushed when we call wxFlushResources().
+ * Build up a list of resource databases waiting to be written.
+ *
+ */
+
+wxList wxResourceCache (wxKEY_STRING);
+
+void 
+wxFlushResources (void)
+{
+  char nameBuffer[512];
+
+  wxNode *node = wxResourceCache.First ();
+  while (node)
+    {
+      char *file = node->key.string;
+      // If file doesn't exist, create it first.
+      (void)GetResourcePath(nameBuffer, file, TRUE);
+
+      XrmDatabase database = (XrmDatabase) node->Data ();
+      XrmPutFileDatabase (database, nameBuffer);
+      XrmDestroyDatabase (database);
+      wxNode *next = node->Next ();
+      delete node;
+      node = next;
+    }
+}
+
+static XrmDatabase wxResourceDatabase = 0;
+
+void wxXMergeDatabases (wxApp * theApp, Display * display);
+
 bool wxWriteResource(const wxString& section, const wxString& entry, const wxString& value, const wxString& file)
 {
-    // TODO
-    return FALSE;
+  char buffer[500];
+
+  (void) GetIniFile (buffer, file);
+
+  XrmDatabase database;
+  wxNode *node = wxResourceCache.Find (buffer);
+  if (node)
+    database = (XrmDatabase) node->Data ();
+  else
+    {
+      database = XrmGetFileDatabase (buffer);
+      wxResourceCache.Append (buffer, (wxObject *) database);
+    }
+
+  char resName[300];
+  strcpy (resName, (const char*) section);
+  strcat (resName, ".");
+  strcat (resName, (const char*) entry);
+
+  XrmPutStringResource (&database, resName, value);
+  return TRUE;
 }
 
 bool wxWriteResource(const wxString& section, const wxString& entry, float value, const wxString& file)
@@ -156,8 +340,60 @@ bool wxWriteResource(const wxString& section, const wxString& entry, int value, 
 
 bool wxGetResource(const wxString& section, const wxString& entry, char **value, const wxString& file)
 {
-    // TODO
-    return FALSE;
+  if (!wxResourceDatabase)
+    {
+      Display *display = (Display*) wxGetDisplay();
+      wxXMergeDatabases (wxTheApp, display);
+    }
+
+  XrmDatabase database;
+
+  if (file != "")
+  {
+      char buffer[500];
+      
+      // Is this right? Trying to get it to look in the user's
+      // home directory instead of current directory -- JACS
+      (void) GetIniFile (buffer, file);
+
+      wxNode *node = wxResourceCache.Find (buffer);
+      if (node)
+	database = (XrmDatabase) node->Data ();
+      else
+	{
+	  database = XrmGetFileDatabase (buffer);
+	  wxResourceCache.Append (buffer, (wxObject *) database);
+	}
+  }
+  else
+    database = wxResourceDatabase;
+
+  XrmValue xvalue;
+  char *str_type[20];
+  char buf[150];
+  strcpy (buf, section);
+  strcat (buf, ".");
+  strcat (buf, entry);
+
+  Bool success = XrmGetResource (database, buf, "*", str_type,
+				 &xvalue);
+  // Try different combinations of upper/lower case, just in case...
+  if (!success)
+    {
+      buf[0] = (isupper (buf[0]) ? tolower (buf[0]) : toupper (buf[0]));
+      success = XrmGetResource (database, buf, "*", str_type,
+				&xvalue);
+    }
+  if (success)
+    {
+      if (*value)
+        delete[] *value;
+
+      *value = new char[xvalue.size + 1];
+      strncpy (*value, xvalue.addr, (int) xvalue.size);
+      return TRUE;
+    }
+  return FALSE;
 }
 
 bool wxGetResource(const wxString& section, const wxString& entry, float *value, const wxString& file)
@@ -192,27 +428,167 @@ bool wxGetResource(const wxString& section, const wxString& entry, int *value, c
   bool succ = wxGetResource(section, entry, (char **)&s, file);
   if (succ)
   {
-    *value = (int)strtol(s, NULL, 10);
-    delete[] s; 
-    return TRUE;
+      // Handle True, False here
+      // True, Yes, Enables, Set or  Activated 
+      if (*s == 'T' || *s == 'Y' || *s == 'E' || *s == 'S' || *s == 'A')
+        *value = TRUE;
+      // False, No, Disabled, Reset, Cleared, Deactivated
+      else if (*s == 'F' || *s == 'N' || *s == 'D' || *s == 'R' || *s == 'C')
+        *value = FALSE;
+      // Handle as Integer
+      else
+        *value = (int) strtol (s, NULL, 10);
+        delete[] s;
+        return TRUE;
   }
-  else return FALSE;
+  else
+    return FALSE;
 }
+
+void wxXMergeDatabases (wxApp * theApp, Display * display)
+{
+  XrmDatabase homeDB, serverDB, applicationDB;
+  char filenamebuf[1024];
+
+  char *filename = &filenamebuf[0];
+  char *environment;
+  wxString classname = theApp->GetClassName();
+  char name[256];
+  (void) strcpy (name, "/usr/lib/X11/app-defaults/");
+  (void) strcat (name, (const char*) classname);
+
+  /* Get application defaults file, if any */
+  applicationDB = XrmGetFileDatabase (name);
+  (void) XrmMergeDatabases (applicationDB, &wxResourceDatabase);
+
+  /* Merge server defaults, created by xrdb, loaded as a property of the root
+   * window when the server initializes and loaded into the display
+   * structure on XOpenDisplay;
+   * if not defined, use .Xdefaults
+   */
+
+  if (XResourceManagerString (display) != NULL)
+    {
+      serverDB = XrmGetStringDatabase (XResourceManagerString (display));
+    }
+  else
+    {
+      (void) GetIniFile (filename, NULL);
+      serverDB = XrmGetFileDatabase (filename);
+    }
+  XrmMergeDatabases (serverDB, &wxResourceDatabase);
+
+  /* Open XENVIRONMENT file, or if not defined, the .Xdefaults,
+   * and merge into existing database
+   */
+
+  if ((environment = getenv ("XENVIRONMENT")) == NULL)
+    {
+      size_t len;
+      environment = GetIniFile (filename, NULL);
+      len = strlen (environment);
+#if defined(SVR4) && !defined(__hpux)
+      (void) sysinfo (SI_HOSTNAME, environment + len, 1024 - len);
+#else
+      (void) gethostname (environment + len, 1024 - len);
+#endif
+    }
+  homeDB = XrmGetFileDatabase (environment);
+  XrmMergeDatabases (homeDB, &wxResourceDatabase);
+}
+
+#if 0
+
+/*
+ * Not yet used but may be useful.
+ *
+ */
+void 
+wxSetDefaultResources (const Widget w, const char **resourceSpec, const char *name)
+{
+  int i;
+  Display *dpy = XtDisplay (w);	// Retrieve the display pointer
+
+  XrmDatabase rdb = NULL;	// A resource data base
+
+  // Create an empty resource database
+  rdb = XrmGetStringDatabase ("");
+
+  // Add the Component resources, prepending the name of the component
+
+  i = 0;
+  while (resourceSpec[i] != NULL)
+    {
+      char buf[1000];
+
+      sprintf (buf, "*%s%s", name, resourceSpec[i++]);
+      XrmPutLineResource (&rdb, buf);
+    }
+
+  // Merge them into the Xt database, with lowest precendence
+
+  if (rdb)
+    {
+#if (XlibSpecificationRelease>=5)
+      XrmDatabase db = XtDatabase (dpy);
+      XrmCombineDatabase (rdb, &db, FALSE);
+#else
+      XrmMergeDatabases (dpy->db, &rdb);
+      dpy->db = rdb;
+#endif
+    }
+}
+#endif
+   // 0
+
 #endif // wxUSE_RESOURCES
 
 static int wxBusyCursorCount = 0;
 
+// Helper function
+static void 
+wxXSetBusyCursor (wxWindow * win, wxCursor * cursor)
+{
+  Display *display = (Display*) win->GetXDisplay();
+
+  Window xwin = (Window) win->GetXWindow();
+  XSetWindowAttributes attrs;
+
+  if (cursor)
+    {
+      attrs.cursor = (Cursor) cursor->GetXCursor(display);
+    }
+  else
+    {
+      // Restore old cursor
+      if (win->GetCursor()->Ok())
+        attrs.cursor = (Cursor) win->GetCursor()->GetXCursor(display);
+      else
+        attrs.cursor = None;
+    }
+  if (xwin)
+    XChangeWindowAttributes (display, xwin, CWCursor, &attrs);
+
+  XFlush (display);
+
+  for(wxNode *node = win->GetChildren()->First (); node; node = node->Next())
+  {
+        wxWindow *child = (wxWindow *) node->Data ();
+	    wxXSetBusyCursor (child, cursor);
+  }
+}
+
 // Set the cursor to the busy cursor for all windows
 void wxBeginBusyCursor(wxCursor *cursor)
 {
-  wxBusyCursorCount ++;
+  wxBusyCursorCount++;
   if (wxBusyCursorCount == 1)
   {
-        // TODO
-  }
-  else
-  {
-        // TODO
+    for(wxNode *node = wxTopLevelWindows.First (); node; node = node->Next())
+    {
+        wxWindow *win = (wxWindow *) node->Data ();
+        wxXSetBusyCursor (win, cursor);
+    }
   }
 }
 
@@ -221,11 +597,15 @@ void wxEndBusyCursor()
 {
   if (wxBusyCursorCount == 0)
     return;
-    
-  wxBusyCursorCount --;
+
+  wxBusyCursorCount--;
   if (wxBusyCursorCount == 0)
   {
-    // TODO
+      for(wxNode *node = wxTopLevelWindows.First (); node; node = node->Next())
+      {
+	    wxWindow *win = (wxWindow *) node->Data ();
+	    wxXSetBusyCursor (win, NULL);
+      }
   }
 }
 
@@ -237,21 +617,72 @@ bool wxIsBusy()
 
 char *wxGetUserHome (const wxString& user)
 {
-    // TODO
-    return NULL;
+#ifdef VMS
+  return(NULL);
+#else
+  struct passwd *who = NULL;
+
+  if (user == "") {
+    register char *ptr;
+
+    if ((ptr = getenv("HOME")) != NULL) 
+      return ptr;
+    if ((ptr = getenv("USER")) != NULL ||
+	(ptr = getenv("LOGNAME")) != NULL)
+      {
+	who = getpwnam( ptr );
+      }
+    // We now make sure the the user exists!
+    if (who == NULL)
+      who = getpwuid( getuid() );
+  } else
+    who = getpwnam ((const char*) user);
+
+  return who ? who->pw_dir : (char*) NULL;
+#endif
+ // ifdef VMS
 }
 
 // Check whether this window wants to process messages, e.g. Stop button
 // in long calculations.
 bool wxCheckForInterrupt(wxWindow *wnd)
 {
-    // TODO
-    return FALSE;
+	if(wnd){
+		Display *dpy=(Display*) wnd->GetXDisplay();
+		Window win=(Window) wnd->GetXWindow();
+		XEvent event;
+		XFlush(dpy);
+		if(wnd->GetMainWidget()){
+			XmUpdateDisplay((Widget)(wnd->GetMainWidget()));
+		}
+		while(XCheckMaskEvent(dpy,
+							ButtonPressMask|ButtonReleaseMask|ButtonMotionMask|
+							PointerMotionMask|KeyPressMask|KeyReleaseMask,
+							&event)){
+			if(event.xany.window==win)
+				XtDispatchEvent(&event);
+	//		else
+	//			XBell(dpy,50);
+		}
+		return TRUE;//*** temporary?
+	}
+	else{
+		wxMessageBox("wnd==NULL !!!");
+		return FALSE;//*** temporary?
+	}
 }
 
 void wxGetMousePosition( int* x, int* y )
 {
-    // TODO
+    XMotionEvent xev;
+    Window root, child;
+    XQueryPointer((Display*) wxGetDisplay(),
+                  DefaultRootWindow((Display*) wxGetDisplay()), &root, &child,
+                  &(xev.x_root), &(xev.y_root),
+                  &(xev.x),      &(xev.y),
+                  &(xev.state));
+    *x = xev.x_root;
+    *y = xev.y_root;
 };
 
 // Return TRUE if we have a colour display
@@ -656,3 +1087,145 @@ KeySym wxCharCodeWXToX(int id)
   } // switch
   return keySym;
 }
+
+// Read $HOME for what it says is home, if not
+// read $USER or $LOGNAME for user name else determine
+// the Real User, then determine the Real home dir.
+static char * GetIniFile (char *dest, const char *filename)
+{
+  char *home = NULL;
+  if (filename && wxIsAbsolutePath(filename))
+  {
+    strcpy(dest, filename);
+  }
+  else if ((home = wxGetUserHome("")) != NULL)
+  {
+    strcpy(dest, home);
+    if (dest[strlen(dest) - 1] != '/')
+      strcat (dest, "/");
+    if (filename == NULL)
+      {
+        if ((filename = getenv ("XENVIRONMENT")) == NULL)
+          filename = ".Xdefaults";
+      }
+    else if (*filename != '.')
+      strcat (dest, ".");
+    strcat (dest, filename);
+  } else
+  {
+    dest[0] = '\0';    
+  }
+  return dest;
+}
+
+/*
+ * Some colour manipulation routines
+ */
+ 
+void wxHSVToXColor(wxHSV *hsv,XColor *rgb)
+   {
+     int h = hsv->h;
+     int s = hsv->s;
+     int v = hsv->v;
+     int r, g, b;
+     int i, f;
+     int p, q, t;
+     s = (s * wxMAX_RGB) / wxMAX_SV;
+     v = (v * wxMAX_RGB) / wxMAX_SV;
+     if (h == 360) h = 0;
+     if (s == 0) { h = 0; r = g = b = v; }
+     i = h / 60;
+     f = h % 60;
+     p = v * (wxMAX_RGB - s) / wxMAX_RGB;
+     q = v * (wxMAX_RGB - s * f / 60) / wxMAX_RGB;
+     t = v * (wxMAX_RGB - s * (60 - f) / 60) / wxMAX_RGB;
+     switch (i) 
+        {
+          case 0: r = v, g = t, b = p; break;
+          case 1: r = q, g = v, b = p; break;
+          case 2: r = p, g = v, b = t; break;
+          case 3: r = p, g = q, b = v; break;
+          case 4: r = t, g = p, b = v; break;
+          case 5: r = v, g = p, b = q; break;
+        }
+     rgb->red = r << 8;
+     rgb->green = g << 8;
+     rgb->blue = b << 8;
+   }
+
+void wxXColorToHSV(wxHSV *hsv,XColor *rgb)
+   {
+     int r = rgb->red >> 8;
+     int g = rgb->green >> 8;
+     int b = rgb->blue >> 8;
+     int maxv = wxMax3(r, g, b);
+     int minv = wxMin3(r, g, b);
+     int h, s, v;
+     v = maxv;
+     if (maxv) s = (maxv - minv) * wxMAX_RGB / maxv;
+     else s = 0;
+     if (s == 0) h = 0;
+     else 
+        {
+	      int rc, gc, bc, hex;
+	      rc = (maxv - r) * wxMAX_RGB / (maxv - minv);
+	      gc = (maxv - g) * wxMAX_RGB / (maxv - minv);
+	      bc = (maxv - b) * wxMAX_RGB / (maxv - minv);
+	      if (r == maxv) { h = bc - gc, hex = 0; } 
+	      else if (g == maxv) { h = rc - bc, hex = 2; } 
+	           else if (b == maxv) { h = gc - rc, hex = 4; }
+	      h = hex * 60 + (h * 60 / wxMAX_RGB);
+	      if (h < 0) h += 360;
+        }
+     hsv->h = h;
+     hsv->s = (s * wxMAX_SV) / wxMAX_RGB;
+     hsv->v = (v * wxMAX_SV) / wxMAX_RGB;
+   }
+
+void wxAllocNearestColor(Display *d,Colormap cmp,XColor *xc)
+   {
+     int llp;
+
+     int screen = DefaultScreen(d);
+     int num_colors = DisplayCells(d,screen);
+
+     XColor *color_defs = new XColor[num_colors];
+     for(llp = 0;llp < num_colors;llp++) color_defs[llp].pixel = llp;
+     XQueryColors(d,cmp,color_defs,num_colors);
+
+     wxHSV hsv_defs, hsv;
+     wxXColorToHSV(&hsv,xc);
+
+     int diff, min_diff, pixel = 0;
+
+     for(llp = 0;llp < num_colors;llp++)
+        {
+          wxXColorToHSV(&hsv_defs,&color_defs[llp]);
+          diff = wxSIGN(wxH_WEIGHT * (hsv.h - hsv_defs.h)) +
+                 wxSIGN(wxS_WEIGHT * (hsv.s - hsv_defs.s)) +
+                 wxSIGN(wxV_WEIGHT * (hsv.v - hsv_defs.v));
+          if (llp == 0) min_diff = diff;
+          if (min_diff > diff) { min_diff = diff; pixel = llp; }
+          if (min_diff == 0) break;
+        }
+
+     xc -> red = color_defs[pixel].red;
+     xc -> green = color_defs[pixel].green;
+     xc -> blue = color_defs[pixel].blue;
+     xc -> flags = DoRed | DoGreen | DoBlue;
+     if (!XAllocColor(d,cmp,xc))
+        cout << "wxAllocNearestColor : Warning : Cannot find nearest color !\n";
+
+     delete[] color_defs;
+   }
+
+void wxAllocColor(Display *d,Colormap cmp,XColor *xc)
+   {
+     if (!XAllocColor(d,cmp,xc))
+        {
+//          cout << "wxAllocColor : Warning : Can not allocate color, attempt find nearest !\n";
+          wxAllocNearestColor(d,cmp,xc);
+        }
+   }
+
+

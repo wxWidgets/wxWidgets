@@ -7,9 +7,9 @@
 #
 # "%W% %G%"
 #
-# Makefile for resource example (UNIX).
+# Makefile for dynamic example (UNIX).
 
-PROGRAM=resource
+PROGRAM=dynamic
 
 OBJECTS=$(PROGRAM).o
 

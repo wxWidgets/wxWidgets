@@ -447,8 +447,8 @@ long wxTreeCtrl::InsertItem( long parent, const wxString& label, int image,
 
     if (!p->HasChildren()) p->m_hasChildren = TRUE;
 
-    int ch = 0;
-    GetClientSize( (int *) NULL, &ch );
+    int cw = 0, ch = 0;
+    GetClientSize( &cw, &ch );
 
     PrepareDC( dc );
     

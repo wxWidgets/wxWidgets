@@ -51,9 +51,12 @@
 // AIAI spline code is slower, but freer of copyright issues.
                             	// 0 for no splines
 
-#define wxUSE_TOOLBAR     1
+#define wxUSE_XPM                 1
+                                // Use XPMs
+
+#define wxUSE_TOOLBAR             1
                                 // Use toolbars
-#define wxUSE_COMBOBOX    1
+#define wxUSE_COMBOBOX            1
                                 // Use wxComboBox
 #define wxUSE_DRAG_AND_DROP 1
                         	// 0 for no drag and drop
@@ -110,6 +113,10 @@
                                   // if enabled, compiles built-in OS independent wxConfig
                                   // class and it's file (any platform) and registry (Win)
                                   // based implementations
+
+#define wxUSE_GADGETS       0
+                                  // Use gadgets where possible
+
 /*
  * Finer detail
  *

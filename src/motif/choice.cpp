@@ -38,7 +38,6 @@ wxChoice::wxChoice()
     m_menuWidget = (WXWidget) 0;
     m_widgetList = (WXWidget*) 0;
     m_formWidget = (WXWidget) 0;
-    m_inSetValue = FALSE;
 }
 
 bool wxChoice::Create(wxWindow *parent, wxWindowID id,
@@ -57,7 +56,6 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
     m_menuWidget = (WXWidget) 0;
     m_widgetList = (WXWidget*) 0;
     m_formWidget = (WXWidget) 0;
-    m_inSetValue = FALSE;
 
     if (parent) parent->AddChild(this);
 
@@ -402,7 +400,7 @@ void wxChoiceCallback (Widget w, XtPointer clientData,
     wxChoice *item = (wxChoice *) clientData;
     if (item)
     {
-        if (item->m_inSetValue)
+        if (item->InSetValue())
             return;
         
         char *s = NULL;

@@ -97,6 +97,7 @@ class WXDLLEXPORT wxWindowDC: public wxDC
     void SetDCClipping (); // Helper function for setting clipping
 
     inline WXGC GetGC() const { return m_gc; }
+    inline WXDisplay* GetDisplay() const { return m_display; }
     inline bool GetAutoSetting() const { return m_autoSetting; }
     inline void SetAutoSetting(bool flag) { m_autoSetting = flag; }
 

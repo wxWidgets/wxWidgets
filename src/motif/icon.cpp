@@ -40,7 +40,7 @@ wxIcon::wxIcon(const char bits[], int width, int height)
 }
 
 // Create from XPM data
-wxIcon::wxIcon(const char **data)
+wxIcon::wxIcon(char **data)
 {
     (void) Create((void*) data, wxBITMAP_TYPE_XPM_DATA, 0, 0, 0);
 }

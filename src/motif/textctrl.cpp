@@ -67,7 +67,6 @@ wxTextCtrl::wxTextCtrl()
     m_tempCallbackStruct = (void*) NULL;
     m_modified = FALSE;
     m_processedDefault = FALSE;
-    m_inSetValue = FALSE;
 }
 
 bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
@@ -81,7 +80,6 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     m_modified = FALSE;
     m_processedDefault = FALSE;
     m_fileName = "";
-    m_inSetValue = FALSE;
 
     SetName(name);
     SetValidator(validator);
@@ -718,7 +716,7 @@ wxTextWindowModifyProc (Widget w, XtPointer clientData, XmTextVerifyCallbackStru
 
         tw->m_tempCallbackStruct = NULL;
 
-        if (tw->m_inSetValue)
+        if (tw->InSetValue())
             return;
     
         if (tw->m_processedDefault)
@@ -757,7 +755,7 @@ wxTextWindowModifyProc (Widget w, XtPointer clientData, XmTextVerifyCallbackStru
 
     tw->m_tempCallbackStruct = NULL;
 
-    if (tw->m_inSetValue)
+    if (tw->InSetValue())
         return;
     
     if (tw->m_processedDefault)
@@ -810,7 +808,7 @@ static void wxTextWindowActivateProc(Widget w, XtPointer clientData,
   }
   */
 
-  if (tw->m_inSetValue)
+  if (tw->InSetValue())
     return;
     
   wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER);

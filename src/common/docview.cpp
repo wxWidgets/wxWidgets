@@ -1155,6 +1155,9 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
   if (len > 0)
     // Omit final "|"
     descrBuf[len-1] = 0;
+#else
+  char* descrBuf = copystring("*.*");
+#endif
 
   char *pathTmp = wxFileSelector(_("Select a file"), "", "", "", descrBuf, 0, wxTheApp->GetTopWindow());
   delete[] descrBuf;
@@ -1177,7 +1180,7 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
     path = "";
     return (wxDocTemplate *) NULL;
   }
-#else
+#if 0
   // In all other windowing systems, until we have more advanced
   // file selectors, we must select the document type (template) first, and
   // _then_ pop up the file selector.

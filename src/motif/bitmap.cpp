@@ -19,13 +19,14 @@
 #include "wx/bitmap.h"
 #include "wx/icon.h"
 #include "wx/log.h"
+#include "wx/control.h"
 
 #include <Xm/Xm.h>
 
 #include "wx/motif/private.h"
 
 // TODO: correct symbol, path?
-#if USE_XPM
+#if wxUSE_XPM
 #include <X11/xpm.h>
 #endif
 
@@ -152,7 +153,7 @@ wxBitmap::wxBitmap(const wxString& filename, long type)
 
 // Create from XPM data
 static wxControl* sg_Control = NULL;
-wxBitmap::wxBitmap(const char **data, wxControl* control)
+wxBitmap::wxBitmap(char **data, wxControl* control)
 {
     // Pass the control to the Create function using a global
     sg_Control = control;
@@ -573,7 +574,7 @@ bool wxXBMDataHandler::Create(wxBitmap *bitmap, void *data, long flags, int widt
     return TRUE;
 }
 
-#if USE_XPM
+#if wxUSE_XPM
 class WXDLLEXPORT wxXPMFileHandler: public wxBitmapHandler
 {
     DECLARE_DYNAMIC_CLASS(wxXPMFileHandler)
@@ -595,7 +596,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxXPMFileHandler, wxBitmapHandler)
 bool wxXPMFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
           int desiredWidth, int desiredHeight)
 {
-    Display *dpy = wxGetDisplay();
+    Display *dpy = (Display*) wxGetDisplay();
     M_BITMAPHANDLERDATA->m_display = (WXDisplay*) dpy;
 
     XpmAttributes xpmAttr;
@@ -633,6 +634,7 @@ bool wxXPMFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long fla
 	    XpmFreeAttributes(&xpmAttr);
 
         M_BITMAPHANDLERDATA->m_ok = TRUE;
+        return TRUE;
     } else
     {
 //      XpmDebugError(errorStatus, name);
@@ -663,7 +665,7 @@ class WXDLLEXPORT wxXPMDataHandler: public wxBitmapHandler
 {
     DECLARE_DYNAMIC_CLASS(wxXPMDataHandler)
 public:
-    inline wxXBMDataHandler()
+    inline wxXPMDataHandler()
     {
         m_name = "XPM data";
         m_extension = "xpm";
@@ -681,7 +683,7 @@ bool wxXPMDataHandler::Create(wxBitmap *bitmap, void *data, long flags, int widt
     M_BITMAPHANDLERDATA->m_depth = 1;
     M_BITMAPHANDLERDATA->m_freePixmap = TRUE;
 
-    Display *dpy = wxGetDisplay();
+    Display *dpy = (Display*) wxGetDisplay();
     M_BITMAPHANDLERDATA->m_display = (WXDisplay*) dpy;
 
     XpmAttributes xpmAttr;
@@ -760,7 +762,7 @@ void wxBitmap::InitStandardHandlers()
 
     // XPM is considered standard for Moif, although it can be omitted if absolutely
     // necessary.
-#if USE_XPM
+#if wxUSE_XPM
     AddHandler(new wxXPMFileHandler);
     AddHandler(new wxXPMDataHandler);
 #endif

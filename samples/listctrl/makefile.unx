@@ -7,9 +7,9 @@
 #
 # "%W% %G%"
 #
-# Makefile for resource example (UNIX).
+# Makefile for listctrl example (UNIX).
 
-PROGRAM=resource
+PROGRAM=listtest
 
 OBJECTS=$(PROGRAM).o
 

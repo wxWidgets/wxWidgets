@@ -7,9 +7,9 @@
 #
 # "%W% %G%"
 #
-# Makefile for resource example (UNIX).
+# Makefile for sashtest example (UNIX).
 
-PROGRAM=resource
+PROGRAM=sashtest
 
 OBJECTS=$(PROGRAM).o
 

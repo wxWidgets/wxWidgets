@@ -475,6 +475,9 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
   if (m_vScrollBar)
 	XtRealizeWidget ((Widget) m_vScrollBar);
 
+  // Without this, the cursor may not be restored properly
+  // (e.g. in splitter sample).
+  SetCursor(*wxSTANDARD_CURSOR);
   SetSize(pos.x, pos.y, size.x, size.y);
 
   return TRUE;
@@ -584,15 +587,26 @@ void wxWindow::GetSize(int *x, int *y) const
 
 void wxWindow::GetPosition(int *x, int *y) const
 {
-  if (m_drawingArea)
-  {
-    CanvasGetPosition(x, y);
-    return;
-  }
-  Widget widget = (Widget) GetTopWidget();
-  Position xx, yy;
-  XtVaGetValues(widget, XmNx, &xx, XmNy, &yy, NULL);
-  *x = xx; *y = yy;
+    if (m_drawingArea)
+    {
+        CanvasGetPosition(x, y);
+        return;
+    }
+    Widget widget = (Widget) GetTopWidget();
+    Position xx, yy;
+    XtVaGetValues(widget, XmNx, &xx, XmNy, &yy, NULL);
+
+    // We may be faking the client origin.
+    // So a window that's really at (0, 30) may appear
+    // (to wxWin apps) to be at (0, 0).
+    if (GetParent())
+    {
+        wxPoint pt(GetParent()->GetClientAreaOrigin());
+        xx -= pt.x;
+        yy -= pt.y;
+    }
+
+    *x = xx; *y = yy;
 }
 
 void wxWindow::ScreenToClient(int *x, int *y) const
@@ -660,10 +674,13 @@ void wxWindow::SetSize(int x, int y, int width, int height, int sizeFlags)
   if (managed)
     XtUnmanageChild(widget);
 
+  int xx = x; int yy = y;
+  AdjustForParentClientOrigin(xx, yy, sizeFlags);
+
   if (x > -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-    XtVaSetValues(widget, XmNx, x, NULL);
+    XtVaSetValues(widget, XmNx, xx, NULL);
   if (y > -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-    XtVaSetValues(widget, XmNy, y, NULL);
+    XtVaSetValues(widget, XmNy, yy, NULL);
   if (width > -1)
     XtVaSetValues(widget, XmNwidth, width, NULL);
   if (height > -1)
@@ -1268,14 +1285,24 @@ void wxWindow::SetFont(const wxFont& font)
     m_windowFont = font;
 
     // Note that this causes the widget to be resized back
-    // to its original size! How can we stop that?
+    // to its original size! We therefore have to set the size
+    // back again. TODO: a better way in Motif?
     /*
     Widget w = (Widget) GetLabelWidget(); // Usually the main widget
     if (w && m_windowFont.Ok())
     {
+        int width, height, width1, height1;
+        GetSize(& width, & height);
+
         XtVaSetValues (w,
 		   XmNfontList, (XmFontList) m_windowFont.GetFontList(1.0, XtDisplay(w)),
 		   NULL);
+
+        GetSize(& width1, & height1);
+        if (width != width1 || height != height1)
+        {
+            SetSize(-1, -1, width, height);
+        }
     }
     */
 }
@@ -2380,6 +2407,8 @@ void wxCanvasInputEvent (Widget drawingArea, XtPointer data, XmDrawingAreaCallba
 
         wxevent.SetId(canvas->GetId());
         wxevent.SetEventObject(canvas);
+        wxevent.m_x = local_event.xbutton.x;
+        wxevent.m_y = local_event.xbutton.y;
 	canvas->GetEventHandler()->ProcessEvent (wxevent);
 	/*
 	if (eventType == wxEVT_ENTER_WINDOW ||
@@ -2494,16 +2523,19 @@ void wxWindow::CanvasSetSize (int x, int y, int w, int h, int sizeFlags)
     XtUnmanageChild (m_borderWidget ? (Widget) m_borderWidget : (Widget) m_scrolledWindow);
   XtVaSetValues((Widget) m_drawingArea, XmNresizePolicy, XmRESIZE_ANY, NULL);
 
+  int xx = x; int yy = y;
+  AdjustForParentClientOrigin(xx, yy, sizeFlags);
+
   if (x > -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
     {
       XtVaSetValues (m_borderWidget ? (Widget) m_borderWidget : (Widget) m_scrolledWindow,
-		     XmNx, x, NULL);
+		     XmNx, xx, NULL);
     }
 
   if (y > -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
     {
       XtVaSetValues (m_borderWidget ? (Widget) m_borderWidget : (Widget) m_scrolledWindow,
-		     XmNy, y, NULL);
+		     XmNy, yy, NULL);
     }
 
   if (w > -1)
@@ -2641,10 +2673,21 @@ void wxWindow::CanvasGetSize (int *w, int *h) const
 
 void wxWindow::CanvasGetPosition (int *x, int *y) const
 {
-  Position xx, yy;
-  XtVaGetValues (m_borderWidget ? (Widget) m_borderWidget : (Widget) m_scrolledWindow, XmNx, &xx, XmNy, &yy, NULL);
-  *x = xx;
-  *y = yy;
+    Position xx, yy;
+    XtVaGetValues (m_borderWidget ? (Widget) m_borderWidget : (Widget) m_scrolledWindow, XmNx, &xx, XmNy, &yy, NULL);
+
+    // We may be faking the client origin.
+    // So a window that's really at (0, 30) may appear
+    // (to wxWin apps) to be at (0, 0).
+    if (GetParent())
+    {
+        wxPoint pt(GetParent()->GetClientAreaOrigin());
+        xx -= pt.x;
+        yy -= pt.y;
+    }
+
+    *x = xx;
+    *y = yy;
 }
 
 // Add to hash table, add event handler

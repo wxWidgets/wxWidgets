@@ -15,6 +15,13 @@
 
 #include "wx/statbmp.h"
 
+#include <Xm/Xm.h>
+#include <Xm/Label.h>
+#include <Xm/LabelG.h>
+#include <Xm/RowColumn.h>
+
+#include <wx/motif/private.h>
+
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxStaticBitmap, wxControl)
 #endif
@@ -41,19 +48,72 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
 
     m_windowStyle = style;
 
-    // TODO: create static bitmap control
-    return FALSE;
+    Widget parentWidget = (Widget) parent->GetClientWidget();
+
+    m_mainWidget = (WXWidget) XtVaCreateManagedWidget ("staticBitmap",
+#if USE_GADGETS
+                    xmLabelGadgetClass, parentWidget,
+#else
+                    xmLabelWidgetClass, parentWidget,
+#endif
+                    XmNalignment, XmALIGNMENT_BEGINNING,
+                    NULL);
+
+    XtVaSetValues ((Widget) m_mainWidget,
+                    XmNlabelPixmap, (Pixmap) ((wxBitmap&)bitmap).GetLabelPixmap (m_mainWidget),
+                    XmNlabelType, XmPIXMAP,
+                    NULL);
+
+    SetCanAddEventHandler(TRUE);
+    AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, size.x, size.y);
+
+    SetFont(* parent->GetFont());
+
+    ChangeColour (m_mainWidget);
+
+    return TRUE;
+}
+
+wxStaticBitmap::~wxStaticBitmap()
+{
+    SetBitmap(wxNullBitmap);
 }
 
 void wxStaticBitmap::SetSize(int x, int y, int width, int height, int sizeFlags)
 {
-    // TODO
+    wxControl::SetSize(x, y, width, height, sizeFlags);
 }
 
 void wxStaticBitmap::SetBitmap(const wxBitmap& bitmap)
 {
     m_messageBitmap = bitmap;
 
-    // TODO: redraw bitmap
+    Widget widget = (Widget) m_mainWidget;
+    int x, y, w1, h1, w2, h2;
+
+    GetPosition(&x, &y);
+
+    if (bitmap.Ok())
+    {
+        w2 = bitmap.GetWidth();
+        h2 = bitmap.GetHeight();
+        XtVaSetValues (widget,
+            XmNlabelPixmap, ((wxBitmap&)bitmap).GetLabelPixmap (widget),
+            XmNlabelType, XmPIXMAP,
+		     NULL);
+        GetSize(&w1, &h1);
+
+        if (! (w1 == w2) && (h1 == h2))
+            SetSize(x, y, w2, h2);
+    }
+    else
+    {
+        // Null bitmap: must not use current pixmap
+        // since it is no longer valid.
+        XtVaSetValues (widget,
+            XmNlabelType, XmSTRING,
+            XmNlabelPixmap, NULL, // TODO: Does this work?
+            NULL);
+    }
 }
 

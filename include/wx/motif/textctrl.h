@@ -139,7 +139,6 @@ public:
   void*     m_tempCallbackStruct;
   bool      m_modified;
   wxString  m_value; // Required for password text controls
-  bool      m_inSetValue;
   bool      m_processedDefault; // Did we call wxTextCtrl::OnChar?
                                 // If so, generate a command event.
   DECLARE_EVENT_TABLE()

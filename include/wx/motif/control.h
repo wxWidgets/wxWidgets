@@ -23,27 +23,31 @@
 // General item class
 class WXDLLEXPORT wxControl: public wxWindow
 {
-  DECLARE_ABSTRACT_CLASS(wxControl)
+    DECLARE_ABSTRACT_CLASS(wxControl)
 public:
-   wxControl();
-   ~wxControl();
+    wxControl();
+    ~wxControl();
 
-   virtual void Command(wxCommandEvent& WXUNUSED(event)) {};        // Simulates an event
-   virtual void ProcessCommand(wxCommandEvent& event); // Calls the callback and
+    virtual void Command(wxCommandEvent& WXUNUSED(event)) {};        // Simulates an event
+    virtual void ProcessCommand(wxCommandEvent& event); // Calls the callback and
                                                                  // appropriate event handlers
-   virtual void SetLabel(const wxString& label);
-   virtual wxString GetLabel() const ;
+    virtual void SetLabel(const wxString& label);
+    virtual wxString GetLabel() const ;
 
-   // Places item in centre of panel - so can't be used BEFORE panel->Fit()
-   void Centre(int direction = wxHORIZONTAL);
-   inline void Callback(const wxFunction function) { m_callback = function; }; // Adds callback
+    // Places item in centre of panel - so can't be used BEFORE panel->Fit()
+    void Centre(int direction = wxHORIZONTAL);
+    inline void Callback(const wxFunction function) { m_callback = function; }; // Adds callback
 
-   inline wxFunction GetCallback() { return m_callback; }
+    inline wxFunction GetCallback() { return m_callback; }
 
+    inline bool InSetValue() const { return m_inSetValue; }
 protected:
-   wxFunction       m_callback;     // Callback associated with the window
+    wxFunction          m_callback;     // Callback associated with the window
 
-DECLARE_EVENT_TABLE()
+    bool                m_inSetValue;   // Motif: prevent callbacks being called while
+                                        // in SetValue
+
+    DECLARE_EVENT_TABLE()
 };
 
 #endif

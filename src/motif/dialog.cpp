@@ -280,10 +280,16 @@ wxDialog::~wxDialog()
 
     // Now process all events, because otherwise
     // this might remain on the screen.
-    XSync(XtDisplay(XtParent((Widget) m_mainWidget)), FALSE);
+    Display* display;
+    if (m_mainWidget)
+      display = XtDisplay((Widget) m_mainWidget);
+    else
+      display = (Display*) wxGetDisplay();
+
+    XSync(display, FALSE);
     XEvent event;
     while (XtAppPending((XtAppContext) wxTheApp->GetAppContext())) {
-      XFlush(XtDisplay((Widget) XtParent((Widget) m_mainWidget)));
+      XFlush(display);
       XtAppNextEvent((XtAppContext) wxTheApp->GetAppContext(), &event);
       XtDispatchEvent(&event);
     }

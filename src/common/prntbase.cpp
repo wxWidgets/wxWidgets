@@ -22,7 +22,7 @@
 
 #include "wx/defs.h"
 
-#ifdef __WXMSW__
+#ifndef __WXGTK__
 #define __GOOD_COMPILER__
 #endif
 
@@ -324,7 +324,7 @@ void wxPreviewControlBar::CreateButtons()
 #endif
 
   wxFont buttonFont(fontSize, wxSWISS, wxNORMAL, wxBOLD);
-  SetButtonFont(buttonFont);
+  SetFont(buttonFont);
 
   int buttonWidth = 65;
   int buttonHeight = 24;
@@ -359,7 +359,8 @@ void wxPreviewControlBar::CreateButtons()
 	x += gap + buttonWidth;
   }
 
-  static wxString choices[] = { "10%", "20%", "25%", "30%", "35%", "40%", "45%", "50%", "55%", "60%",
+  // Can't be static because gcc bails out
+  wxString choices[] = { "10%", "20%", "25%", "30%", "35%", "40%", "45%", "50%", "55%", "60%",
     "65%", "70%", "75%", "80%", "85%", "90%", "95%", "100%", "110%", "120%", "150%", "200%" };
   int n = 22;
   if (m_buttonFlags & wxPREVIEW_ZOOM)
@@ -370,7 +371,7 @@ void wxPreviewControlBar::CreateButtons()
   }
 
   m_closeButton->SetDefault();
-  
+
 #endif
 }
 
@@ -730,14 +731,14 @@ bool wxPrintPreviewBase::DrawBlankPage(wxWindow *canvas, wxDC& dc)
   int shadowOffset = 4;
   dc.SetPen(*wxBLACK_PEN);
   dc.SetBrush(*wxBLACK_BRUSH);
-  dc.DrawRectangle(x-1 + shadowOffset, y-1 + shadowOffset, actualWidth+2, actualHeight+2);
+  dc.DrawRectangle((int)(x-1 + shadowOffset), (int)(y-1 + shadowOffset), (int)(actualWidth+2), (int)(actualHeight+2));
 
   // Draw blank page allowing for 1-pixel border AROUND the actual page
   dc.SetPen(*wxBLACK_PEN);
   dc.SetBrush(*wxWHITE_BRUSH);
   
 
-  dc.DrawRectangle(x-1, y-1, actualWidth+2, actualHeight+2);
+  dc.DrawRectangle((int)(x-1), (int)(y-1), (int)(actualWidth+2), (int)(actualHeight+2));
   
 #endif
 

@@ -142,7 +142,7 @@ public:
   wxBitmap(const char bits[], int width, int height, int depth = 1);
 
   // Initialize with XPM data
-  wxBitmap(const char **data, wxControl* control = NULL);
+  wxBitmap(char **data, wxControl* control = NULL);
 
   // Load a file or resource
   wxBitmap(const wxString& name, long type = wxBITMAP_TYPE_XBM);

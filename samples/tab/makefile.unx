@@ -7,9 +7,9 @@
 #
 # "%W% %G%"
 #
-# Makefile for resource example (UNIX).
+# Makefile for tab example (UNIX).
 
-PROGRAM=resource
+PROGRAM=tab
 
 OBJECTS=$(PROGRAM).o
 

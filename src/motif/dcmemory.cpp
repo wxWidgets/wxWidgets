@@ -14,6 +14,11 @@
 #endif
 
 #include "wx/dcmemory.h"
+#include "wx/utils.h"
+
+#include <Xm/Xm.h>
+
+#include "wx/motif/private.h"
 
 //-----------------------------------------------------------------------------
 // wxMemoryDC
@@ -23,12 +28,57 @@ IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC, wxWindowDC)
 
 wxMemoryDC::wxMemoryDC(void)
 {
-  m_ok = FALSE;
+    m_ok = TRUE;
+    m_display = wxGetDisplay();
+
+    Display* display = (Display*) m_display;
+
+    XGCValues gcvalues;
+    gcvalues.foreground = BlackPixel (display, DefaultScreen (display));
+    gcvalues.background = WhitePixel (display, DefaultScreen (display));
+    gcvalues.graphics_exposures = False;
+    gcvalues.line_width = 1;
+    m_gc = (WXGC) XCreateGC (display, RootWindow (display, DefaultScreen (display)),
+        GCForeground | GCBackground | GCGraphicsExposures | GCLineWidth,
+          &gcvalues);
+
+    m_backgroundPixel = (int) gcvalues.background;
+
+    // Get the current Font so we can set it back later
+    XGCValues valReturn;
+    XGetGCValues((Display*) m_display, (GC) m_gc, GCFont, &valReturn);
+    m_oldFont = (WXFont) valReturn.font;
+    SetBrush (wxWHITE_BRUSH);
+    SetPen (wxBLACK_PEN);
 };
 
-wxMemoryDC::wxMemoryDC( wxDC *WXUNUSED(dc) )
+wxMemoryDC::wxMemoryDC( wxDC* dc )
 {
-  m_ok = FALSE;
+    m_ok = TRUE;
+    if (dc && dc->IsKindOf(CLASSINFO(wxWindowDC)))
+        m_display = ((wxWindowDC*)dc)->GetDisplay();
+    else
+        m_display = wxGetDisplay();
+
+    Display* display = (Display*) m_display;
+
+    XGCValues gcvalues;
+    gcvalues.foreground = BlackPixel (display, DefaultScreen (display));
+    gcvalues.background = WhitePixel (display, DefaultScreen (display));
+    gcvalues.graphics_exposures = False;
+    gcvalues.line_width = 1;
+    m_gc = (WXGC) XCreateGC (display, RootWindow (display, DefaultScreen (display)),
+        GCForeground | GCBackground | GCGraphicsExposures | GCLineWidth,
+          &gcvalues);
+
+    m_backgroundPixel = (int) gcvalues.background;
+
+    // Get the current Font so we can set it back later
+    XGCValues valReturn;
+    XGetGCValues((Display*) m_display, (GC) m_gc, GCFont, &valReturn);
+    m_oldFont = (WXFont) valReturn.font;
+    SetBrush (wxWHITE_BRUSH);
+    SetPen (wxBLACK_PEN);
 };
 
 wxMemoryDC::~wxMemoryDC(void)
@@ -38,13 +88,46 @@ wxMemoryDC::~wxMemoryDC(void)
 void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
 {
   m_bitmap = bitmap;
-  if (m_bitmap.Ok())
+
+  if (m_gc)
+    XFreeGC((Display*) m_display, (GC) m_gc);
+  m_gc = (WXGC) NULL;
+
+  if (m_bitmap.Ok() && (bitmap.GetDisplay() == m_display))
   {
     m_pixmap = m_bitmap.GetPixmap();
+    Display* display = (Display*) m_display;
+
+    XGCValues gcvalues;
+    gcvalues.foreground = BlackPixel (display, DefaultScreen (display));
+    gcvalues.background = WhitePixel (display, DefaultScreen (display));
+    gcvalues.graphics_exposures = False;
+    gcvalues.line_width = 1;
+    m_gc = (WXGC) XCreateGC (display, RootWindow (display, DefaultScreen (display)),
+        GCForeground | GCBackground | GCGraphicsExposures | GCLineWidth,
+          &gcvalues);
+
+    m_backgroundPixel = (int) gcvalues.background;
+
+    // Get the current Font so we can set it back later
+    XGCValues valReturn;
+    XGetGCValues((Display*) m_display, (GC) m_gc, GCFont, &valReturn);
+    m_oldFont = (WXFont) valReturn.font;
+
+    bool oldOpt = GetOptimization();
+    SetOptimization(FALSE);
+    
+    SetBrush (wxWHITE_BRUSH);
+    SetPen (wxBLACK_PEN);
+
+    SetOptimization(oldOpt);
+
+    m_ok = TRUE;
   }
   else
   {
     m_ok = FALSE;
+    m_pixmap = (WXPixmap) 0;
   };
 };
 

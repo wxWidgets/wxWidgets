@@ -146,7 +146,7 @@ wxWindowDC::wxWindowDC( wxWindow *window )
 
 wxWindowDC::~wxWindowDC(void)
 {
-    if ((m_oldFont != (WXFont) 0) && ((long) m_oldFont != -1))
+    if (m_gc && (m_oldFont != (WXFont) 0) && ((long) m_oldFont != -1))
     {
       XSetFont ((Display*) m_display, (GC) m_gc, (Font) m_oldFont);
 

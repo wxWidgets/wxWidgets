@@ -52,7 +52,7 @@ int orientation = wxPORTRAIT;
 // Main proc
 IMPLEMENT_APP(MyApp)
 
-#ifdef __WXGTK__
+#if defined(__WXGTK__) || defined(__WXMOTIF__)
 #include "folder.xpm"
 #endif
 
@@ -316,7 +316,7 @@ void MyFrame::Draw(wxDC& dc)
   dc.DrawLine(0, 0, 200, 200);
   dc.DrawLine(200, 0, 0, 200);
   
-#if defined(__WXGTK__)
+#if defined(__WXGTK__) || defined(__WXMOTIF__)
   wxIcon my_icon( folder_xpm );
 #elif defined(__WXMSW__)
   wxIcon my_icon( "mondrian" );

@@ -97,9 +97,6 @@ protected:
 
   // List mapping positions->client data
   wxList    m_clientDataList;
-
-public:
-  bool      m_inSetValue;
 };
 
 #endif

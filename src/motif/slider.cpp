@@ -14,6 +14,17 @@
 #endif
 
 #include "wx/slider.h"
+#include "wx/utils.h"
+
+#include <Xm/Xm.h>
+#include <Xm/Label.h>
+#include <Xm/LabelG.h>
+#include <Xm/RowColumn.h>
+#include <Xm/Scale.h>
+
+#include <wx/motif/private.h>
+
+void wxSliderCallback (Widget widget, XtPointer clientData, XmScaleCallbackStruct * cbs);
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxSlider, wxControl)
@@ -58,11 +69,41 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
     m_rangeMax = maxValue;
     m_rangeMin = minValue;
 
+    // Not used in Motif, I think
     m_pageSize = (int)((maxValue-minValue)/10);
 
-    // TODO create slider
+    Widget parentWidget = (Widget) parent->GetClientWidget();
 
-    return FALSE;
+    Widget sliderWidget = XtVaCreateManagedWidget ("sliderWidget",
+					     xmScaleWidgetClass, parentWidget,
+                         XmNorientation,
+           (((m_windowStyle & wxSL_VERTICAL) == wxSL_VERTICAL) ? XmVERTICAL : XmHORIZONTAL),
+				         XmNprocessingDirection,
+           (((m_windowStyle & wxSL_VERTICAL) == wxSL_VERTICAL) ? XmMAX_ON_TOP : XmMAX_ON_RIGHT),
+						 XmNmaximum, maxValue,
+						 XmNminimum, minValue,
+						 XmNvalue, value,
+						 XmNshowValue, True,
+						 NULL);
+
+    m_mainWidget = (WXWidget) sliderWidget;
+
+    if(style & wxSL_NOTIFY_DRAG)
+        XtAddCallback (sliderWidget, XmNdragCallback,
+                   (XtCallbackProc) wxSliderCallback, (XtPointer) this);
+    else
+        XtAddCallback (sliderWidget, XmNvalueChangedCallback,
+                   (XtCallbackProc) wxSliderCallback, (XtPointer) this);
+
+    XtAddCallback (sliderWidget, XmNdragCallback, (XtCallbackProc) wxSliderCallback, (XtPointer) this);
+
+    SetCanAddEventHandler(TRUE);
+    AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, size.x, size.y);
+
+    SetFont(* parent->GetFont());
+    ChangeColour(m_mainWidget);
+
+    return TRUE;
 }
 
 wxSlider::~wxSlider()
@@ -71,28 +112,50 @@ wxSlider::~wxSlider()
 
 int wxSlider::GetValue() const
 {
-    // TODO
-    return 0;
+    int val;
+    XtVaGetValues ((Widget) m_mainWidget, XmNvalue, &val, NULL);
+    return val;
 }
 
 void wxSlider::SetValue(int value)
 {
-    // TODO
+    XtVaSetValues ((Widget) m_mainWidget, XmNvalue, value, NULL);
 }
 
 void wxSlider::GetSize(int *width, int *height) const
 {
-    // TODO
-}
-
-void wxSlider::GetPosition(int *x, int *y) const
-{
-    // TODO
+    wxControl::GetSize(width, height);
 }
 
 void wxSlider::SetSize(int x, int y, int width, int height, int sizeFlags)
 {
-    // TODO
+  Widget widget = (Widget) m_mainWidget;
+
+  bool managed = XtIsManaged(widget);
+
+  if (managed)
+    XtUnmanageChild (widget);
+
+  if (((m_windowStyle & wxHORIZONTAL) == wxHORIZONTAL) && (width > -1))
+  {
+    XtVaSetValues (widget, XmNscaleWidth, wxMax (width, 10), NULL);
+  }
+
+  if (((m_windowStyle & wxVERTICAL) == wxVERTICAL) && (height > -1))
+  {
+    XtVaSetValues (widget, XmNscaleHeight, wxMax (height, 10), NULL);
+  }
+
+  int xx = x; int yy = y;
+  AdjustForParentClientOrigin(xx, yy, sizeFlags);
+
+  if (x > -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+    XtVaSetValues (widget, XmNx, xx, NULL);
+  if (y > -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+    XtVaSetValues (widget, XmNy, yy, NULL);
+
+  if (managed)
+    XtManageChild (widget);
 }
 
 void wxSlider::SetRange(int minValue, int maxValue)
@@ -100,19 +163,19 @@ void wxSlider::SetRange(int minValue, int maxValue)
     m_rangeMin = minValue;
     m_rangeMax = maxValue;
 
-    // TODO
+    XtVaSetValues ((Widget) m_mainWidget, XmNminimum, minValue, XmNmaximum, maxValue, NULL);
 }
 
 // For trackbars only
 void wxSlider::SetTickFreq(int n, int pos)
 {
-    // TODO
+    // Not implemented in Motif
     m_tickFreq = n;
 }
 
 void wxSlider::SetPageSize(int pageSize)
 {
-    // TODO
+    // Not implemented in Motif
     m_pageSize = pageSize;
 }
 
@@ -123,57 +186,57 @@ int wxSlider::GetPageSize() const
 
 void wxSlider::ClearSel()
 {
-    // TODO
+    // Not implemented in Motif
 }
 
 void wxSlider::ClearTicks()
 {
-    // TODO
+    // Not implemented in Motif
 }
 
 void wxSlider::SetLineSize(int lineSize)
 {
+    // Not implemented in Motif
     m_lineSize = lineSize;
-    // TODO
 }
 
 int wxSlider::GetLineSize() const
 {
-    // TODO
-    return 0;
+    // Not implemented in Motif
+    return m_lineSize;
 }
 
 int wxSlider::GetSelEnd() const
 {
-    // TODO
+    // Not implemented in Motif
     return 0;
 }
 
 int wxSlider::GetSelStart() const
 {
-    // TODO
+    // Not implemented in Motif
     return 0;
 }
 
-void wxSlider::SetSelection(int minPos, int maxPos)
+void wxSlider::SetSelection(int WXUNUSED(minPos), int WXUNUSED(maxPos))
 {
-    // TODO
+    // Not implemented in Motif
 }
 
-void wxSlider::SetThumbLength(int len)
+void wxSlider::SetThumbLength(int WXUNUSED(len))
 {
-    // TODO
+    // Not implemented in Motif (?)
 }
 
 int wxSlider::GetThumbLength() const
 {
-    // TODO
+    // Not implemented in Motif (?)
     return 0;
 }
 
-void wxSlider::SetTick(int tickPos)
+void wxSlider::SetTick(int WXUNUSED(tickPos))
 {
-    // TODO
+    // Not implemented in Motif
 }
 
 void wxSlider::Command (wxCommandEvent & event)
@@ -182,9 +245,25 @@ void wxSlider::Command (wxCommandEvent & event)
   ProcessCommand (event);
 }
 
-bool wxSlider::Show(bool show)
+void wxSliderCallback (Widget widget, XtPointer clientData, XmScaleCallbackStruct * cbs)
 {
-    // TODO
-    return TRUE;
+    wxSlider *slider = (wxSlider *) clientData;
+    switch (cbs->reason)
+    {
+        case XmCR_VALUE_CHANGED:
+        case XmCR_DRAG:
+        default:
+        {
+            // TODO: the XmCR_VALUE_CHANGED case should be handled
+            // differently (it's not sent continually as the slider moves).
+            // In which case we need a similar behaviour for other platforms.
+
+            wxScrollEvent event(wxEVT_SCROLL_THUMBTRACK, slider->GetId());
+            XtVaGetValues (widget, XmNvalue, &event.m_commandInt, NULL);
+            event.SetEventObject(slider);
+            slider->ProcessCommand(event);
+            break;
+        }
+    }
 }
 

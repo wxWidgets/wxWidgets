@@ -31,6 +31,7 @@ wxControl::wxControl()
     m_backgroundColour = *wxWHITE;
     m_foregroundColour = *wxBLACK;
     m_callback = 0;
+    m_inSetValue = FALSE;
 }
 
 wxControl::~wxControl()
@@ -47,41 +48,43 @@ wxControl::~wxControl()
 
 void wxControl::SetLabel(const wxString& label)
 {
-  if (!GetMainWidget())
-    return;
+    Widget widget = (Widget) GetLabelWidget() ;
+    if (!widget)
+        return;
  
-  wxStripMenuCodes((char*) (const char*) label, wxBuffer);
+    wxStripMenuCodes((char*) (const char*) label, wxBuffer);
 
-  XmString text = XmStringCreateSimple (wxBuffer);
-  XtVaSetValues ((Widget) GetMainWidget(),
-		 XmNlabelString, text,
-                 XmNlabelType, XmSTRING,
+    XmString text = XmStringCreateSimple (wxBuffer);
+    XtVaSetValues (widget,
+		    XmNlabelString, text,
+            XmNlabelType, XmSTRING,
 		 NULL);
-  XmStringFree (text);
+    XmStringFree (text);
 }
 
 wxString wxControl::GetLabel() const
 {
-  if (!GetMainWidget())
-    return wxEmptyString;
+    Widget widget = (Widget) GetLabelWidget() ;
+    if (!widget)
+        return wxEmptyString;
 
-  XmString text;
-  char *s;
-  XtVaGetValues ((Widget) GetMainWidget(),
+    XmString text;
+    char *s;
+    XtVaGetValues (widget,
 		 XmNlabelString, &text,
 		 NULL);
 
-  if (XmStringGetLtoR (text, XmSTRING_DEFAULT_CHARSET, &s))
+    if (XmStringGetLtoR (text, XmSTRING_DEFAULT_CHARSET, &s))
     {
-      wxString str(s);
-      XtFree (s);
-      XmStringFree(text);
-      return str;
+        wxString str(s);
+        XtFree (s);
+        XmStringFree(text);
+        return str;
     }
-  else
+    else
     {
-      XmStringFree(text);
-      return wxEmptyString;
+        XmStringFree(text);
+        return wxEmptyString;
     }
 }
 

@@ -257,6 +257,8 @@ MyCanvas *MyFrame::CreateCanvas(wxView *view, wxFrame *parent)
 
   // Give it scrollbars
   canvas->SetScrollbars(20, 20, 50, 50);
+  canvas->SetBackgroundColour(*wxWHITE);
+  canvas->Clear();
 
   return canvas;
 }

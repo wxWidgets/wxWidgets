@@ -348,7 +348,16 @@ void wxFrame::GetClientSize(int *x, int *y) const
     m_frameStatusBar->GetSize(& sbw, & sbh);
     yy -= sbh;
   }
-
+  if (m_frameToolBar)
+  {
+    int tbw, tbh;
+    m_frameToolBar->GetSize(& tbw, & tbh);
+    if (m_frameToolBar->GetWindowStyleFlag() & wxTB_VERTICAL)
+      xx -= tbw;
+    else
+      yy -= tbh;
+  }
+/*
   if (GetMenuBar() != (wxMenuBar*) NULL)
   {
     // it seems that if a frame holds a panel, the menu bar size
@@ -368,6 +377,7 @@ void wxFrame::GetClientSize(int *x, int *y) const
       yy -= ys;
     }
   }
+ */
 
   *x = xx; *y = yy;
 }
@@ -384,14 +394,22 @@ void wxFrame::SetClientSize(int width, int height)
 
   if (height > -1)
   {
-    /* TODO
-    if (status_line_exists)
+    if (m_frameStatusBar)
     {
-      Dimension ys;
-      XtVaGetValues(statusLineWidget, XmNheight, &ys, NULL);
-      height += ys;
+      int sbw, sbh;
+      m_frameStatusBar->GetSize(& sbw, & sbh);
+      height += sbh;
     }
-    */
+    if (m_frameToolBar)
+    {
+      int tbw, tbh;
+      m_frameToolBar->GetSize(& tbw, & tbh);
+      if (m_frameToolBar->GetWindowStyleFlag() & wxTB_VERTICAL)
+        width += tbw;
+      else
+        height += tbh;
+    }
+
     XtVaSetValues((Widget) m_workArea, XmNheight, height, NULL);
   }
   PreResize();
@@ -875,25 +893,14 @@ wxToolBar* wxFrame::CreateToolBar(long style, wxWindowID id, const wxString& nam
 
 wxToolBar* wxFrame::OnCreateToolBar(long style, wxWindowID id, const wxString& name)
 {
-    return new wxToolBar(this, id, wxDefaultPosition, wxDefaultSize, style, name);
+    return new wxToolBar(this, id, wxPoint(0, 0), wxSize(100, 24), style, name);
 }
 
 void wxFrame::PositionToolBar()
 {
     int cw, ch;
 
-    // TODO: we actually need to use the low-level client size, before
-    // the toolbar/status bar were added.
-    // So DEFINITELY replace the line below with something appropriate.
-
     GetClientSize(& cw, &ch);
-
-    if ( GetStatusBar() )
-    {
-      int statusX, statusY;
-      GetStatusBar()->GetClientSize(&statusX, &statusY);
-      ch -= statusY;
-    }
 
     if (GetToolBar())
     {
@@ -905,7 +912,7 @@ void wxFrame::PositionToolBar()
             // Use the 'real' position. wxSIZE_NO_ADJUSTMENTS
             // means, pretend we don't have toolbar/status bar, so we
             // have the original client size.
-            GetToolBar()->SetSize(0, 0, tw, ch, wxSIZE_NO_ADJUSTMENTS);
+            GetToolBar()->SetSize(0, 0, tw, ch + th, wxSIZE_NO_ADJUSTMENTS);
         }
         else
         {
@@ -1013,6 +1020,7 @@ static void wxFrameMapProc(Widget frameShell, XtPointer clientData,
 //// Motif-specific
 bool wxFrame::PreResize()
 {
+  PositionToolBar();
   PositionStatusBar();
   return TRUE;
 }

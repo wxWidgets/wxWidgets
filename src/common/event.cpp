@@ -134,6 +134,11 @@ wxMouseEvent::wxMouseEvent(wxEventType commandType)
   m_altDown = FALSE;
   m_controlDown = FALSE;
   m_shiftDown = FALSE;
+  m_leftDown = FALSE;
+  m_rightDown = FALSE;
+  m_middleDown = FALSE;
+  m_x = 0;
+  m_y = 0;
 }
 
 // True if was a button dclick event (1 = left, 2 = middle, 3 = right)

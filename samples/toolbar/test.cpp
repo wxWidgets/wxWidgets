@@ -23,7 +23,7 @@
 #include "wx/toolbar.h"
 #include "test.h"
 
-#ifdef __WXGTK__
+#if defined(__WXGTK__) || defined(__WXMOTIF__)
 #include "mondrian.xpm"
 #include "bitmaps/new.xpm"
 #include "bitmaps/open.xpm"
@@ -125,21 +125,21 @@ bool MyApp::InitToolbar(wxToolBar* toolBar)
 #endif
   int currentX = 5;
 
-  toolBar->AddTool(wxID_NEW, *(toolBarBitmaps[0]), wxNullBitmap, FALSE, (float)currentX, -1, (wxObject *) NULL, "New file");
+  toolBar->AddTool(wxID_NEW, *(toolBarBitmaps[0]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "New file");
   currentX += width + 5;
-  toolBar->AddTool(wxID_OPEN, *(toolBarBitmaps[1]), wxNullBitmap, FALSE, (float)currentX, -1, (wxObject *) NULL, "Open file");
+  toolBar->AddTool(wxID_OPEN, *(toolBarBitmaps[1]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Open file");
   currentX += width + 5;
-  toolBar->AddTool(wxID_SAVE, *(toolBarBitmaps[2]), wxNullBitmap, FALSE, (float)currentX, -1, (wxObject *) NULL, "Save file");
-  currentX += width + 5;
-  toolBar->AddSeparator();
-  toolBar->AddTool(wxID_COPY, *(toolBarBitmaps[3]), wxNullBitmap, FALSE, (float)currentX, -1, (wxObject *) NULL, "Copy");
-  currentX += width + 5;
-  toolBar->AddTool(wxID_CUT, *(toolBarBitmaps[4]), wxNullBitmap, FALSE, (float)currentX, -1, (wxObject *) NULL, "Cut");
-  currentX += width + 5;
-  toolBar->AddTool(wxID_PASTE, *(toolBarBitmaps[5]), wxNullBitmap, FALSE, (float)currentX, -1, (wxObject *) NULL, "Paste");
+  toolBar->AddTool(wxID_SAVE, *(toolBarBitmaps[2]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Save file");
   currentX += width + 5;
   toolBar->AddSeparator();
-  toolBar->AddTool(wxID_PRINT, *(toolBarBitmaps[6]), wxNullBitmap, FALSE, (float)currentX, -1, (wxObject *) NULL, "Print");
+  toolBar->AddTool(wxID_COPY, *(toolBarBitmaps[3]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Copy");
+  currentX += width + 5;
+  toolBar->AddTool(wxID_CUT, *(toolBarBitmaps[4]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Cut");
+  currentX += width + 5;
+  toolBar->AddTool(wxID_PASTE, *(toolBarBitmaps[5]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Paste");
+  currentX += width + 5;
+  toolBar->AddSeparator();
+  toolBar->AddTool(wxID_PRINT, *(toolBarBitmaps[6]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Print");
   currentX += width + 5;
   toolBar->AddSeparator();
   toolBar->AddTool(wxID_HELP, *(toolBarBitmaps[7]), wxNullBitmap, FALSE, currentX, -1, (wxObject *) NULL, "Help");

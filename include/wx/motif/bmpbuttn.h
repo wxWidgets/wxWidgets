@@ -26,7 +26,8 @@ class WXDLLEXPORT wxBitmapButton: public wxButton
 {
   DECLARE_DYNAMIC_CLASS(wxBitmapButton)
  public:
-  inline wxBitmapButton() { m_marginX = wxDEFAULT_BUTTON_MARGIN; m_marginY = wxDEFAULT_BUTTON_MARGIN; }
+  wxBitmapButton();
+  ~wxBitmapButton();
   inline wxBitmapButton(wxWindow *parent, wxWindowID id, const wxBitmap& bitmap,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize, long style = wxBU_AUTODRAW,
@@ -54,29 +55,24 @@ class WXDLLEXPORT wxBitmapButton: public wxButton
   inline wxBitmap& GetBitmapFocus() const { return (wxBitmap&) m_buttonBitmapFocus; }
   inline wxBitmap& GetBitmapDisabled() const { return (wxBitmap&) m_buttonBitmapDisabled; }
 
-  inline void SetBitmapSelected(const wxBitmap& sel) { m_buttonBitmapSelected = sel; };
-  inline void SetBitmapFocus(const wxBitmap& focus) { m_buttonBitmapFocus = focus; };
-  inline void SetBitmapDisabled(const wxBitmap& disabled) { m_buttonBitmapDisabled = disabled; };
+  void SetBitmapSelected(const wxBitmap& sel);
+  void SetBitmapFocus(const wxBitmap& focus);
+  void SetBitmapDisabled(const wxBitmap& disabled);
 
   inline void SetMargins(int x, int y) { m_marginX = x; m_marginY = y; }
   inline int GetMarginX() { return m_marginX; }
   inline int GetMarginY() { return m_marginY; }
-
-/*
-  // TODO: Implementation
-  virtual bool MSWOnDraw(WXDRAWITEMSTRUCT *item);
-  virtual void DrawFace( WXHDC dc, int left, int top, int right, int bottom, bool sel );
-  virtual void DrawButtonFocus( WXHDC dc, int left, int top, int right, int bottom, bool sel );
-  virtual void DrawButtonDisable( WXHDC dc, int left, int top, int right, int bottom, bool with_marg );
-*/
 
  protected:
   wxBitmap m_buttonBitmap;
   wxBitmap m_buttonBitmapSelected;
   wxBitmap m_buttonBitmapFocus;
   wxBitmap m_buttonBitmapDisabled;
+
   int      m_marginX;
   int      m_marginY;
+
+  WXPixmap m_insensPixmap;
 };
 
 #endif

@@ -33,26 +33,26 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
            long style,
            const wxString& name)
 {
-  SetName(name);
-  if (parent) parent->AddChild(this);
+    SetName(name);
+    if (parent) parent->AddChild(this);
 
-  SetBackgroundColour(parent->GetBackgroundColour()) ;
-  SetForegroundColour(parent->GetForegroundColour()) ;
+    SetBackgroundColour(parent->GetBackgroundColour()) ;
+    SetForegroundColour(parent->GetForegroundColour()) ;
 
-  if ( id == -1 )
-  	m_windowId = (int)NewControlId();
-  else
-	m_windowId = id;
+    if ( id == -1 )
+  	    m_windowId = (int)NewControlId();
+    else
+	    m_windowId = id;
 
-  m_windowStyle = style;
+    m_windowStyle = style;
 
-  char* label1 = (label.IsNull() ? "" : (char*) (const char*) label);
+    char* label1 = (label.IsNull() ? "" : (char*) (const char*) label);
 
-  Widget parentWidget = (Widget) parent->GetClientWidget();
+    Widget parentWidget = (Widget) parent->GetClientWidget();
 
-  XmString text = XmStringCreateSimple (label1);
+    XmString text = XmStringCreateSimple (label1);
 
-  m_mainWidget = (WXWidget) XtVaCreateManagedWidget ((char*) (const char*) name,
+    m_mainWidget = (WXWidget) XtVaCreateManagedWidget ((char*) (const char*) name,
                                          xmLabelWidgetClass,
                                          parentWidget,
                                          XmNlabelString, text,
@@ -62,17 +62,15 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
                      XmALIGNMENT_BEGINNING)),
                                          NULL);
 
-  XmStringFree (text);
+    XmStringFree (text);
 
-  SetCanAddEventHandler(TRUE);
-  AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, size.x, size.y);
+    SetCanAddEventHandler(TRUE);
+    AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, size.x, size.y);
 
-  SetFont(* parent->GetFont());
+    SetFont(* parent->GetFont());
 
-  ChangeColour (m_mainWidget);
-  //  ChangeFont (m_mainWidget);
+    ChangeColour (m_mainWidget);
 
-  return TRUE;
+    return TRUE;
 }
-
 

@@ -53,8 +53,6 @@ public:
   virtual void SetValue(int);
   void GetSize(int *x, int *y) const ;
   void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
-  void GetPosition(int *x, int *y) const ;
-  bool Show(bool show);
 
   void SetRange(int minValue, int maxValue);
 

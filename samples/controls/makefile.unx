@@ -7,9 +7,9 @@
 #
 # "%W% %G%"
 #
-# Makefile for resource example (UNIX).
+# Makefile for controls example (UNIX).
 
-PROGRAM=resource
+PROGRAM=controls
 
 OBJECTS=$(PROGRAM).o
 

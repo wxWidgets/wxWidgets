@@ -7,11 +7,12 @@
 #
 # "%W% %G%"
 #
-# Makefile for resource example (UNIX).
+# Makefile for toolbar example (UNIX).
 
-PROGRAM=resource
+PROGRAM=test
 
 OBJECTS=$(PROGRAM).o
 
 include ../../src/makeprog.env
+
 

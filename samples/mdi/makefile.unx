@@ -1,55 +1,17 @@
 #
 # File:		makefile.unx
 # Author:	Julian Smart
-# Created:	1993
+# Created:	1998
 # Updated:	
-# Copyright:	(c) 1993, AIAI, University of Edinburgh
+# Copyright:	(c) 1998 Julian Smart
 #
 # "%W% %G%"
 #
 # Makefile for mdi example (UNIX).
 
-WXDIR = ../..
+PROGRAM=mdi
 
-# All common UNIX compiler flags and options are now in
-# this central makefile.
-include $(WXDIR)/src/make.env
+OBJECTS=$(PROGRAM).o
 
-OBJECTS = $(OBJDIR)/mdi.$(OBJSUFF)
+include ../../src/makeprog.env
 
-.SUFFIXES:
-
-all:    $(OBJDIR) mdi$(GUISUFFIX)
-
-wx:
-#	cd $(WXDIR)/src/x; $(MAKE) -f makefile.unx
-motif:
-	$(MAKE) -f makefile.unx GUISUFFIX=_motif GUI=-Dwx_motif GUISUFFIX=_motif OPT='$(OPT)' LDLIBS='$(MOTIFLDLIBS)' OPTIONS='$(OPTIONS)' DEBUG='$(DEBUG)' WARN='$(WARN)' XLIB='$(XLIB)' XINCLUDE='$(XINCLUDE)' XVIEW_LINK=
-
-xview:
-	$(MAKE) -f makefile.unx GUI=-Dwx_xview GUISUFFIX=_ol CC=$(CC) OPTIONS='$(OPTIONS)' DEBUG='$(DEBUG)' WARN='$(WARN)' XLIB='$(XLIB)' XINCLUDE='$(XINCLUDE)'
-
-hp:
-	$(MAKE) -f makefile.unx GUI=-Dwx_motif GUISUFFIX=_hp CC=CC DEBUG='$(DEBUG)' WARN='-w' \
-         XINCLUDE='$(HPXINCLUDE)' XLIB='$(HPXLIB)' XVIEW_LINK='' LDLIBS='$(HPLDLIBS)'
-
-$(OBJDIR):
-	mkdir $(OBJDIR)
-
-mdi$(GUISUFFIX): $(OBJDIR)/mdi.$(OBJSUFF) $(WXLIB)
-	$(CC) $(LDFLAGS) -o mdi$(GUISUFFIX) $(OBJDIR)/mdi.$(OBJSUFF) $(XVIEW_LINK) $(LDLIBS)
-
-$(OBJDIR)/mdi.$(OBJSUFF):        mdi.$(SRCSUFF) mdi.h
-	$(CC) -c $(CPPFLAGS) -o $@ mdi.$(SRCSUFF)
-
-clean_motif:
-	$(MAKE) -f makefile.unx GUISUFFIX=_motif cleanany
-
-clean_ol:
-	$(MAKE) -f makefile.unx GUISUFFIX=_ol cleanany
-
-clean_hp:
-	$(MAKE) -f makefile.unx GUISUFFIX=_hp cleanany
-
-cleanany:
-	rm -f $(OBJECTS) mdi$(GUISUFFIX) core

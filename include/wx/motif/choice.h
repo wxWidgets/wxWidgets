@@ -77,8 +77,6 @@ protected:
   WXWidget*     m_widgetList ;
   WXWidget      m_formWidget;
   wxStringList  m_stringList;
-public:
-  bool          m_inSetValue;
 };
 
 #endif
