@@ -72,6 +72,7 @@ class ScrolledMessageDialog(wxDialog):
         ok = wxButton(self, wxID_OK, "OK")
         text.SetConstraints(Layoutf('t=t5#1;b=t5#2;l=l5#1;r=r5#1', (self,ok)))
         text.SetSize((w * 80 + 30, h * 40))
+        text.ShowPosition(1)
         ok.SetConstraints(Layoutf('b=b5#1;x%w50#1;w!80;h!25', (self,)))
         self.SetAutoLayout(True)
         self.Fit()
@@ -990,8 +991,8 @@ class App(wxApp):
     def OnInit(self):
         global debug
         # Process comand-line
+        opts = args = None
         try:
-            opts = args = None
             opts, args = getopt.getopt(sys.argv[1:], 'dhiv')
             for o,a in opts:
                 if o == '-h':
