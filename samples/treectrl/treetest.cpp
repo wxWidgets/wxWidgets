@@ -180,20 +180,20 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     file_menu->AppendSeparator();
     file_menu->Append(TreeTest_Quit, wxT("E&xit\tAlt-X"));
 
-    style_menu->Append(TreeTest_TogButtons, "Toggle &normal buttons", _T(""), TRUE);
-    style_menu->Append(TreeTest_TogTwist, "Toggle &twister buttons", _T(""), TRUE);
-    style_menu->Append(TreeTest_ToggleButtons, "Toggle image &buttons", _T(""), TRUE);
+    style_menu->Append(TreeTest_TogButtons, wxT("Toggle &normal buttons"), wxT(""), TRUE);
+    style_menu->Append(TreeTest_TogTwist, wxT("Toggle &twister buttons"), wxT(""), TRUE);
+    style_menu->Append(TreeTest_ToggleButtons, wxT("Toggle image &buttons"), wxT(""), TRUE);
     style_menu->AppendSeparator();
-    style_menu->Append(TreeTest_TogLines, "Toggle &connecting lines", _T(""), TRUE);
-    style_menu->Append(TreeTest_TogRootLines, "Toggle &lines at root", _T(""), TRUE);
-    style_menu->Append(TreeTest_TogHideRoot, "Toggle &hidden root", _T(""), TRUE);
-    style_menu->Append(TreeTest_TogBorder, "Toggle &item border", _T(""), TRUE);
-    style_menu->Append(TreeTest_TogFullHighlight, "Toggle &full row highlight", _T(""), TRUE);
-    style_menu->Append(TreeTest_TogEdit, "Toggle &edit mode", _T(""), TRUE);
+    style_menu->Append(TreeTest_TogLines, wxT("Toggle &connecting lines"), wxT(""), TRUE);
+    style_menu->Append(TreeTest_TogRootLines, wxT("Toggle &lines at root"), wxT(""), TRUE);
+    style_menu->Append(TreeTest_TogHideRoot, wxT("Toggle &hidden root"), wxT(""), TRUE);
+    style_menu->Append(TreeTest_TogBorder, wxT("Toggle &item border"), wxT(""), TRUE);
+    style_menu->Append(TreeTest_TogFullHighlight, wxT("Toggle &full row highlight"), wxT(""), TRUE);
+    style_menu->Append(TreeTest_TogEdit, wxT("Toggle &edit mode"), wxT(""), TRUE);
 #ifndef NO_MULTIPLE_SELECTION
-    style_menu->Append(TreeTest_ToggleSel, wxT("Toggle &selection mode"), _T(""), TRUE);
+    style_menu->Append(TreeTest_ToggleSel, wxT("Toggle &selection mode"), wxT(""), TRUE);
 #endif // NO_MULTIPLE_SELECTION
-    style_menu->Append(TreeTest_ToggleImages, wxT("Toggle show ima&ges"), _T(""), TRUE);
+    style_menu->Append(TreeTest_ToggleImages, wxT("Toggle show ima&ges"), wxT(""), TRUE);
     style_menu->Append(TreeTest_SetImageSize, wxT("Set image si&ze..."));
     style_menu->AppendSeparator();
     style_menu->Append(TreeTest_SetFgColour, wxT("Set &foreground colour..."));
@@ -201,55 +201,55 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     style_menu->AppendSeparator();
     style_menu->Append(TreeTest_ResetStyle, wxT("&Reset to default\tF10"));
 
-    tree_menu->Append(TreeTest_Recreate, "&Recreate the tree");
-    tree_menu->Append(TreeTest_CollapseAndReset, "C&ollapse and reset");
+    tree_menu->Append(TreeTest_Recreate, wxT("&Recreate the tree"));
+    tree_menu->Append(TreeTest_CollapseAndReset, wxT("C&ollapse and reset"));
     tree_menu->AppendSeparator();
-    tree_menu->Append(TreeTest_AddItem, "Append a &new item");
-    tree_menu->Append(TreeTest_InsertItem, "&Insert a new item");
-    tree_menu->Append(TreeTest_Delete, "&Delete this item");
-    tree_menu->Append(TreeTest_DeleteChildren, "Delete &children");
-    tree_menu->Append(TreeTest_DeleteAll, "Delete &all items");
+    tree_menu->Append(TreeTest_AddItem, wxT("Append a &new item"));
+    tree_menu->Append(TreeTest_InsertItem, wxT("&Insert a new item"));
+    tree_menu->Append(TreeTest_Delete, wxT("&Delete this item"));
+    tree_menu->Append(TreeTest_DeleteChildren, wxT("Delete &children"));
+    tree_menu->Append(TreeTest_DeleteAll, wxT("Delete &all items"));
     tree_menu->AppendSeparator();
-    tree_menu->Append(TreeTest_Count, "Count children of current item");
-    tree_menu->Append(TreeTest_CountRec, "Recursively count children of current item");
+    tree_menu->Append(TreeTest_Count, wxT("Count children of current item"));
+    tree_menu->Append(TreeTest_CountRec, wxT("Recursively count children of current item"));
     tree_menu->AppendSeparator();
-    tree_menu->Append(TreeTest_Sort, "Sort children of current item");
-    tree_menu->Append(TreeTest_SortRev, "Sort in reversed order");
+    tree_menu->Append(TreeTest_Sort, wxT("Sort children of current item"));
+    tree_menu->Append(TreeTest_SortRev, wxT("Sort in reversed order"));
     tree_menu->AppendSeparator();
-    tree_menu->Append(TreeTest_EnsureVisible, "Make the last item &visible");
+    tree_menu->Append(TreeTest_EnsureVisible, wxT("Make the last item &visible"));
     tree_menu->AppendSeparator();
-    tree_menu->Append(TreeTest_IncIndent, "Add 5 points to indentation\tAlt-I");
-    tree_menu->Append(TreeTest_DecIndent, "Reduce indentation by 5 points\tAlt-R");
+    tree_menu->Append(TreeTest_IncIndent, wxT("Add 5 points to indentation\tAlt-I"));
+    tree_menu->Append(TreeTest_DecIndent, wxT("Reduce indentation by 5 points\tAlt-R"));
     tree_menu->AppendSeparator();
-    tree_menu->Append(TreeTest_IncSpacing, "Add 5 points to spacing\tCtrl-I");
-    tree_menu->Append(TreeTest_DecSpacing, "Reduce spacing by 5 points\tCtrl-R");
+    tree_menu->Append(TreeTest_IncSpacing, wxT("Add 5 points to spacing\tCtrl-I"));
+    tree_menu->Append(TreeTest_DecSpacing, wxT("Reduce spacing by 5 points\tCtrl-R"));
 
-    item_menu->Append(TreeTest_Dump, "&Dump item children");
-    item_menu->Append(TreeTest_Rename, "&Rename item...");
+    item_menu->Append(TreeTest_Dump, wxT("&Dump item children"));
+    item_menu->Append(TreeTest_Rename, wxT("&Rename item..."));
 
     item_menu->AppendSeparator();
-    item_menu->Append(TreeTest_SetBold, "Make item &bold");
-    item_menu->Append(TreeTest_ClearBold, "Make item &not bold");
+    item_menu->Append(TreeTest_SetBold, wxT("Make item &bold"));
+    item_menu->Append(TreeTest_ClearBold, wxT("Make item &not bold"));
     item_menu->AppendSeparator();
-    item_menu->Append(TreeTest_ToggleIcon, "Toggle the item's &icon");
+    item_menu->Append(TreeTest_ToggleIcon, wxT("Toggle the item's &icon"));
 
 #ifndef NO_MULTIPLE_SELECTION
     item_menu->AppendSeparator();
-    item_menu->Append(TreeTest_DumpSelected, "Dump selected items\tAlt-D");
-    item_menu->Append(TreeTest_Select, "Select current item\tAlt-S");
-    item_menu->Append(TreeTest_Unselect, "Unselect everything\tAlt-U");
+    item_menu->Append(TreeTest_DumpSelected, wxT("Dump selected items\tAlt-D"));
+    item_menu->Append(TreeTest_Select, wxT("Select current item\tAlt-S"));
+    item_menu->Append(TreeTest_Unselect, wxT("Unselect everything\tAlt-U"));
 #endif // NO_MULTIPLE_SELECTION
 
     wxMenuBar *menu_bar = new wxMenuBar;
-    menu_bar->Append(file_menu, "&File");
-    menu_bar->Append(style_menu, "&Style");
-    menu_bar->Append(tree_menu, "&Tree");
-    menu_bar->Append(item_menu, "&Item");
+    menu_bar->Append(file_menu, wxT("&File"));
+    menu_bar->Append(style_menu, wxT("&Style"));
+    menu_bar->Append(tree_menu, wxT("&Tree"));
+    menu_bar->Append(item_menu, wxT("&Item"));
     SetMenuBar(menu_bar);
 #endif // wxUSE_MENUS
 
     // create the controls
-    m_textCtrl = new wxTextCtrl(this, -1, "",
+    m_textCtrl = new wxTextCtrl(this, -1, wxT(""),
                                 wxDefaultPosition, wxDefaultSize,
                                 wxTE_MULTILINE | wxSUNKEN_BORDER);
 
@@ -259,7 +259,7 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
 
     // create a status bar with 3 panes
     CreateStatusBar(3);
-    SetStatusText("", 0);
+    SetStatusText(wxT(""), 0);
 
 #ifdef __WXMOTIF__
     // For some reason, we get a memcpy crash in wxLogStream::DoLogStream
@@ -348,9 +348,9 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageBox("Tree test sample\n"
-                 "(c) Julian Smart 1997, Vadim Zeitlin 1998",
-                 "About tree test",
+    wxMessageBox(wxT("Tree test sample\n")
+                 wxT("(c) Julian Smart 1997, Vadim Zeitlin 1998"),
+                 wxT("About tree test"),
                  wxOK | wxICON_INFORMATION, this);
 }
 
@@ -363,7 +363,7 @@ void MyFrame::OnRename(wxCommandEvent& WXUNUSED(event))
     // old code - now we edit in place
 #if 0
     static wxString s_text;
-    s_text = wxGetTextFromUser("New name: ", "Tree sample question",
+    s_text = wxGetTextFromUser(wxT("New name: "), wxT("Tree sample question"),
             s_text, this);
     if ( !s_text.IsEmpty() )
     {
@@ -487,9 +487,9 @@ void MyFrame::OnRecreate(wxCommandEvent& event)
 
 void MyFrame::OnSetImageSize(wxCommandEvent& event)
 {
-    int size = wxGetNumberFromUser("Enter the size for the images to use",
-                                    "Size: ",
-                                    "TreeCtrl sample",
+    int size = wxGetNumberFromUser(wxT("Enter the size for the images to use"),
+                                    wxT("Size: "),
+                                    wxT("TreeCtrl sample"),
                                     m_treeCtrl->ImageSize());
     if ( size == -1 )
         return;
@@ -541,7 +541,7 @@ void MyFrame::OnEnsureVisible(wxCommandEvent& event)
 void MyFrame::OnInsertItem(wxCommandEvent& WXUNUSED(event))
 {
     int image = wxGetApp().ShowImages() ? MyTreeCtrl::TreeCtrlIcon_File : -1;
-    m_treeCtrl->InsertItem(m_treeCtrl->GetRootItem(), image, "2nd item");
+    m_treeCtrl->InsertItem(m_treeCtrl->GetRootItem(), image, wxT("2nd item"));
 }
 
 void MyFrame::OnAddItem(wxCommandEvent& WXUNUSED(event))
@@ -778,9 +778,9 @@ void MyTreeCtrl::AddTestItemsToTree(size_t numChildren,
                                     size_t depth)
 {
     int image = wxGetApp().ShowImages() ? MyTreeCtrl::TreeCtrlIcon_Folder : -1;
-    wxTreeItemId rootId = AddRoot("Root",
+    wxTreeItemId rootId = AddRoot(wxT("Root"),
                                   image, image,
-                                  new MyTreeItemData("Root item"));
+                                  new MyTreeItemData(wxT("Root item")));
     if ( image != -1 )
     {
         SetItemImage(rootId, TreeCtrlIcon_FolderOpened, wxTreeItemIcon_Expanded);
@@ -858,132 +858,132 @@ void LogKeyEvent(const wxChar *name, const wxKeyEvent& event)
     {
         switch ( keycode )
         {
-            case WXK_BACK: key = "BACK"; break;
-            case WXK_TAB: key = "TAB"; break;
-            case WXK_RETURN: key = "RETURN"; break;
-            case WXK_ESCAPE: key = "ESCAPE"; break;
-            case WXK_SPACE: key = "SPACE"; break;
-            case WXK_DELETE: key = "DELETE"; break;
-            case WXK_START: key = "START"; break;
-            case WXK_LBUTTON: key = "LBUTTON"; break;
-            case WXK_RBUTTON: key = "RBUTTON"; break;
-            case WXK_CANCEL: key = "CANCEL"; break;
-            case WXK_MBUTTON: key = "MBUTTON"; break;
-            case WXK_CLEAR: key = "CLEAR"; break;
-            case WXK_SHIFT: key = "SHIFT"; break;
-            case WXK_ALT: key = "ALT"; break;
-            case WXK_CONTROL: key = "CONTROL"; break;
-            case WXK_MENU: key = "MENU"; break;
-            case WXK_PAUSE: key = "PAUSE"; break;
-            case WXK_CAPITAL: key = "CAPITAL"; break;
-            case WXK_PRIOR: key = "PRIOR"; break;
-            case WXK_NEXT: key = "NEXT"; break;
-            case WXK_END: key = "END"; break;
-            case WXK_HOME: key = "HOME"; break;
-            case WXK_LEFT: key = "LEFT"; break;
-            case WXK_UP: key = "UP"; break;
-            case WXK_RIGHT: key = "RIGHT"; break;
-            case WXK_DOWN: key = "DOWN"; break;
-            case WXK_SELECT: key = "SELECT"; break;
-            case WXK_PRINT: key = "PRINT"; break;
-            case WXK_EXECUTE: key = "EXECUTE"; break;
-            case WXK_SNAPSHOT: key = "SNAPSHOT"; break;
-            case WXK_INSERT: key = "INSERT"; break;
-            case WXK_HELP: key = "HELP"; break;
-            case WXK_NUMPAD0: key = "NUMPAD0"; break;
-            case WXK_NUMPAD1: key = "NUMPAD1"; break;
-            case WXK_NUMPAD2: key = "NUMPAD2"; break;
-            case WXK_NUMPAD3: key = "NUMPAD3"; break;
-            case WXK_NUMPAD4: key = "NUMPAD4"; break;
-            case WXK_NUMPAD5: key = "NUMPAD5"; break;
-            case WXK_NUMPAD6: key = "NUMPAD6"; break;
-            case WXK_NUMPAD7: key = "NUMPAD7"; break;
-            case WXK_NUMPAD8: key = "NUMPAD8"; break;
-            case WXK_NUMPAD9: key = "NUMPAD9"; break;
-            case WXK_MULTIPLY: key = "MULTIPLY"; break;
-            case WXK_ADD: key = "ADD"; break;
-            case WXK_SEPARATOR: key = "SEPARATOR"; break;
-            case WXK_SUBTRACT: key = "SUBTRACT"; break;
-            case WXK_DECIMAL: key = "DECIMAL"; break;
-            case WXK_DIVIDE: key = "DIVIDE"; break;
-            case WXK_F1: key = "F1"; break;
-            case WXK_F2: key = "F2"; break;
-            case WXK_F3: key = "F3"; break;
-            case WXK_F4: key = "F4"; break;
-            case WXK_F5: key = "F5"; break;
-            case WXK_F6: key = "F6"; break;
-            case WXK_F7: key = "F7"; break;
-            case WXK_F8: key = "F8"; break;
-            case WXK_F9: key = "F9"; break;
-            case WXK_F10: key = "F10"; break;
-            case WXK_F11: key = "F11"; break;
-            case WXK_F12: key = "F12"; break;
-            case WXK_F13: key = "F13"; break;
-            case WXK_F14: key = "F14"; break;
-            case WXK_F15: key = "F15"; break;
-            case WXK_F16: key = "F16"; break;
-            case WXK_F17: key = "F17"; break;
-            case WXK_F18: key = "F18"; break;
-            case WXK_F19: key = "F19"; break;
-            case WXK_F20: key = "F20"; break;
-            case WXK_F21: key = "F21"; break;
-            case WXK_F22: key = "F22"; break;
-            case WXK_F23: key = "F23"; break;
-            case WXK_F24: key = "F24"; break;
-            case WXK_NUMLOCK: key = "NUMLOCK"; break;
-            case WXK_SCROLL: key = "SCROLL"; break;
-            case WXK_PAGEUP: key = "PAGEUP"; break;
-            case WXK_PAGEDOWN: key = "PAGEDOWN"; break;
-            case WXK_NUMPAD_SPACE: key = "NUMPAD_SPACE"; break;
-            case WXK_NUMPAD_TAB: key = "NUMPAD_TAB"; break;
-            case WXK_NUMPAD_ENTER: key = "NUMPAD_ENTER"; break;
-            case WXK_NUMPAD_F1: key = "NUMPAD_F1"; break;
-            case WXK_NUMPAD_F2: key = "NUMPAD_F2"; break;
-            case WXK_NUMPAD_F3: key = "NUMPAD_F3"; break;
-            case WXK_NUMPAD_F4: key = "NUMPAD_F4"; break;
-            case WXK_NUMPAD_HOME: key = "NUMPAD_HOME"; break;
-            case WXK_NUMPAD_LEFT: key = "NUMPAD_LEFT"; break;
-            case WXK_NUMPAD_UP: key = "NUMPAD_UP"; break;
-            case WXK_NUMPAD_RIGHT: key = "NUMPAD_RIGHT"; break;
-            case WXK_NUMPAD_DOWN: key = "NUMPAD_DOWN"; break;
-            case WXK_NUMPAD_PRIOR: key = "NUMPAD_PRIOR"; break;
-            case WXK_NUMPAD_PAGEUP: key = "NUMPAD_PAGEUP"; break;
-            case WXK_NUMPAD_PAGEDOWN: key = "NUMPAD_PAGEDOWN"; break;
-            case WXK_NUMPAD_END: key = "NUMPAD_END"; break;
-            case WXK_NUMPAD_BEGIN: key = "NUMPAD_BEGIN"; break;
-            case WXK_NUMPAD_INSERT: key = "NUMPAD_INSERT"; break;
-            case WXK_NUMPAD_DELETE: key = "NUMPAD_DELETE"; break;
-            case WXK_NUMPAD_EQUAL: key = "NUMPAD_EQUAL"; break;
-            case WXK_NUMPAD_MULTIPLY: key = "NUMPAD_MULTIPLY"; break;
-            case WXK_NUMPAD_ADD: key = "NUMPAD_ADD"; break;
-            case WXK_NUMPAD_SEPARATOR: key = "NUMPAD_SEPARATOR"; break;
-            case WXK_NUMPAD_SUBTRACT: key = "NUMPAD_SUBTRACT"; break;
-            case WXK_NUMPAD_DECIMAL: key = "NUMPAD_DECIMAL"; break;
+            case WXK_BACK: key = wxT("BACK"); break;
+            case WXK_TAB: key = wxT("TAB"); break;
+            case WXK_RETURN: key = wxT("RETURN"); break;
+            case WXK_ESCAPE: key = wxT("ESCAPE"); break;
+            case WXK_SPACE: key = wxT("SPACE"); break;
+            case WXK_DELETE: key = wxT("DELETE"); break;
+            case WXK_START: key = wxT("START"); break;
+            case WXK_LBUTTON: key = wxT("LBUTTON"); break;
+            case WXK_RBUTTON: key = wxT("RBUTTON"); break;
+            case WXK_CANCEL: key = wxT("CANCEL"); break;
+            case WXK_MBUTTON: key = wxT("MBUTTON"); break;
+            case WXK_CLEAR: key = wxT("CLEAR"); break;
+            case WXK_SHIFT: key = wxT("SHIFT"); break;
+            case WXK_ALT: key = wxT("ALT"); break;
+            case WXK_CONTROL: key = wxT("CONTROL"); break;
+            case WXK_MENU: key = wxT("MENU"); break;
+            case WXK_PAUSE: key = wxT("PAUSE"); break;
+            case WXK_CAPITAL: key = wxT("CAPITAL"); break;
+            case WXK_PRIOR: key = wxT("PRIOR"); break;
+            case WXK_NEXT: key = wxT("NEXT"); break;
+            case WXK_END: key = wxT("END"); break;
+            case WXK_HOME: key = wxT("HOME"); break;
+            case WXK_LEFT: key = wxT("LEFT"); break;
+            case WXK_UP: key = wxT("UP"); break;
+            case WXK_RIGHT: key = wxT("RIGHT"); break;
+            case WXK_DOWN: key = wxT("DOWN"); break;
+            case WXK_SELECT: key = wxT("SELECT"); break;
+            case WXK_PRINT: key = wxT("PRINT"); break;
+            case WXK_EXECUTE: key = wxT("EXECUTE"); break;
+            case WXK_SNAPSHOT: key = wxT("SNAPSHOT"); break;
+            case WXK_INSERT: key = wxT("INSERT"); break;
+            case WXK_HELP: key = wxT("HELP"); break;
+            case WXK_NUMPAD0: key = wxT("NUMPAD0"); break;
+            case WXK_NUMPAD1: key = wxT("NUMPAD1"); break;
+            case WXK_NUMPAD2: key = wxT("NUMPAD2"); break;
+            case WXK_NUMPAD3: key = wxT("NUMPAD3"); break;
+            case WXK_NUMPAD4: key = wxT("NUMPAD4"); break;
+            case WXK_NUMPAD5: key = wxT("NUMPAD5"); break;
+            case WXK_NUMPAD6: key = wxT("NUMPAD6"); break;
+            case WXK_NUMPAD7: key = wxT("NUMPAD7"); break;
+            case WXK_NUMPAD8: key = wxT("NUMPAD8"); break;
+            case WXK_NUMPAD9: key = wxT("NUMPAD9"); break;
+            case WXK_MULTIPLY: key = wxT("MULTIPLY"); break;
+            case WXK_ADD: key = wxT("ADD"); break;
+            case WXK_SEPARATOR: key = wxT("SEPARATOR"); break;
+            case WXK_SUBTRACT: key = wxT("SUBTRACT"); break;
+            case WXK_DECIMAL: key = wxT("DECIMAL"); break;
+            case WXK_DIVIDE: key = wxT("DIVIDE"); break;
+            case WXK_F1: key = wxT("F1"); break;
+            case WXK_F2: key = wxT("F2"); break;
+            case WXK_F3: key = wxT("F3"); break;
+            case WXK_F4: key = wxT("F4"); break;
+            case WXK_F5: key = wxT("F5"); break;
+            case WXK_F6: key = wxT("F6"); break;
+            case WXK_F7: key = wxT("F7"); break;
+            case WXK_F8: key = wxT("F8"); break;
+            case WXK_F9: key = wxT("F9"); break;
+            case WXK_F10: key = wxT("F10"); break;
+            case WXK_F11: key = wxT("F11"); break;
+            case WXK_F12: key = wxT("F12"); break;
+            case WXK_F13: key = wxT("F13"); break;
+            case WXK_F14: key = wxT("F14"); break;
+            case WXK_F15: key = wxT("F15"); break;
+            case WXK_F16: key = wxT("F16"); break;
+            case WXK_F17: key = wxT("F17"); break;
+            case WXK_F18: key = wxT("F18"); break;
+            case WXK_F19: key = wxT("F19"); break;
+            case WXK_F20: key = wxT("F20"); break;
+            case WXK_F21: key = wxT("F21"); break;
+            case WXK_F22: key = wxT("F22"); break;
+            case WXK_F23: key = wxT("F23"); break;
+            case WXK_F24: key = wxT("F24"); break;
+            case WXK_NUMLOCK: key = wxT("NUMLOCK"); break;
+            case WXK_SCROLL: key = wxT("SCROLL"); break;
+            case WXK_PAGEUP: key = wxT("PAGEUP"); break;
+            case WXK_PAGEDOWN: key = wxT("PAGEDOWN"); break;
+            case WXK_NUMPAD_SPACE: key = wxT("NUMPAD_SPACE"); break;
+            case WXK_NUMPAD_TAB: key = wxT("NUMPAD_TAB"); break;
+            case WXK_NUMPAD_ENTER: key = wxT("NUMPAD_ENTER"); break;
+            case WXK_NUMPAD_F1: key = wxT("NUMPAD_F1"); break;
+            case WXK_NUMPAD_F2: key = wxT("NUMPAD_F2"); break;
+            case WXK_NUMPAD_F3: key = wxT("NUMPAD_F3"); break;
+            case WXK_NUMPAD_F4: key = wxT("NUMPAD_F4"); break;
+            case WXK_NUMPAD_HOME: key = wxT("NUMPAD_HOME"); break;
+            case WXK_NUMPAD_LEFT: key = wxT("NUMPAD_LEFT"); break;
+            case WXK_NUMPAD_UP: key = wxT("NUMPAD_UP"); break;
+            case WXK_NUMPAD_RIGHT: key = wxT("NUMPAD_RIGHT"); break;
+            case WXK_NUMPAD_DOWN: key = wxT("NUMPAD_DOWN"); break;
+            case WXK_NUMPAD_PRIOR: key = wxT("NUMPAD_PRIOR"); break;
+            case WXK_NUMPAD_PAGEUP: key = wxT("NUMPAD_PAGEUP"); break;
+            case WXK_NUMPAD_PAGEDOWN: key = wxT("NUMPAD_PAGEDOWN"); break;
+            case WXK_NUMPAD_END: key = wxT("NUMPAD_END"); break;
+            case WXK_NUMPAD_BEGIN: key = wxT("NUMPAD_BEGIN"); break;
+            case WXK_NUMPAD_INSERT: key = wxT("NUMPAD_INSERT"); break;
+            case WXK_NUMPAD_DELETE: key = wxT("NUMPAD_DELETE"); break;
+            case WXK_NUMPAD_EQUAL: key = wxT("NUMPAD_EQUAL"); break;
+            case WXK_NUMPAD_MULTIPLY: key = wxT("NUMPAD_MULTIPLY"); break;
+            case WXK_NUMPAD_ADD: key = wxT("NUMPAD_ADD"); break;
+            case WXK_NUMPAD_SEPARATOR: key = wxT("NUMPAD_SEPARATOR"); break;
+            case WXK_NUMPAD_SUBTRACT: key = wxT("NUMPAD_SUBTRACT"); break;
+            case WXK_NUMPAD_DECIMAL: key = wxT("NUMPAD_DECIMAL"); break;
 
             default:
             {
                if ( wxIsprint((int)keycode) )
-                   key.Printf(_T("'%c'"), (char)keycode);
+                   key.Printf(wxT("'%c'"), (char)keycode);
                else if ( keycode > 0 && keycode < 27 )
-                   key.Printf(_("Ctrl-%c"), _T('A') + keycode - 1);
+                   key.Printf(_("Ctrl-%c"), wxT('A') + keycode - 1);
                else
-                   key.Printf(_T("unknown (%ld)"), keycode);
+                   key.Printf(wxT("unknown (%ld)"), keycode);
             }
         }
     }
 
-    wxLogMessage( _T("%s event: %s (flags = %c%c%c%c)"),
+    wxLogMessage( wxT("%s event: %s (flags = %c%c%c%c)"),
                   name,
                   key.c_str(),
-                  event.ControlDown() ? _T('C') : _T('-'),
-                  event.AltDown() ? _T('A') : _T('-'),
-                  event.ShiftDown() ? _T('S') : _T('-'),
-                  event.MetaDown() ? _T('M') : _T('-'));
+                  event.ControlDown() ? wxT('C') : wxT('-'),
+                  event.AltDown() ? wxT('A') : wxT('-'),
+                  event.ShiftDown() ? wxT('S') : wxT('-'),
+                  event.MetaDown() ? wxT('M') : wxT('-'));
 }
 
 void MyTreeCtrl::OnTreeKeyDown(wxTreeEvent& event)
 {
-    LogKeyEvent(_T("Tree key down "), event.GetKeyEvent());
+    LogKeyEvent(wxT("Tree key down "), event.GetKeyEvent());
 
     event.Skip();
 }
@@ -1112,17 +1112,17 @@ void MyTreeCtrl::ShowMenu(wxTreeItemId id, const wxPoint& pt)
     wxString title;
     if ( id.IsOk() )
     {
-        title << _T("Menu for ") << GetItemText(id);
+        title << wxT("Menu for ") << GetItemText(id);
     }
     else
     {
-        title = _T("Menu for no particular item");
+        title = wxT("Menu for no particular item");
     }
 
 #if wxUSE_MENUS
     wxMenu menu(title);
-    menu.Append(TreeTest_About, _T("&About..."));
-    menu.Append(TreeTest_Dump, _T("&Dump"));
+    menu.Append(TreeTest_About, wxT("&About..."));
+    menu.Append(TreeTest_Dump, wxT("&Dump"));
 
     PopupMenu(&menu, pt);
 #endif // wxUSE_MENUS
