@@ -619,7 +619,7 @@
 // Default is 1
 //
 // Recommended setting: 1 (used in the library itself)
-#define wxUSE_CHOICEDLG     0
+#define wxUSE_CHOICEDLG     1
 
 // Use colour picker dialog
 //
