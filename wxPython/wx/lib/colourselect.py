@@ -96,6 +96,13 @@ class ColourSelect(wx.BitmapButton):
         self.SetBitmap(bmp)
 
 
+    def SetLabel(self, label):
+        self.label = label
+
+    def GetLabel(self):
+        return self.label
+
+
     def MakeBitmap(self):
         bdr = 10
         width, height = self.GetSize()
