@@ -2695,17 +2695,6 @@ bool wxWindowGTK::Create( wxWindow *parent,
     gtk_signal_connect( GTK_OBJECT(m_vAdjust), "value_changed",
           (GtkSignalFunc) gtk_window_vscroll_callback, (gpointer) this );
 
-#ifdef __WXGTK20__
-    // Create input method handler
-    m_imContext = gtk_im_multicontext_new();
-
-    // Cannot handle drawing preedited text yet
-    gtk_im_context_set_use_preedit( m_imContext, FALSE );
-
-    g_signal_connect (G_OBJECT (m_imContext), "commit",
-                      G_CALLBACK (gtk_wxwindow_commit_cb), this);
-#endif
-
     gtk_widget_show( m_wxwindow );
 
     if (m_parent)
@@ -2801,6 +2790,7 @@ void wxWindowGTK::PostCreation()
 #else
             // gtk_widget_set_redraw_on_allocate( GTK_WIDGET(m_wxwindow), !HasFlag( wxFULL_REPAINT_ON_RESIZE ) );
 #endif
+        }
 
 #ifdef __WXGTK20__
         // Create input method handler
@@ -2812,7 +2802,6 @@ void wxWindowGTK::PostCreation()
         g_signal_connect (G_OBJECT (m_imContext), "commit",
                           G_CALLBACK (gtk_wxwindow_commit_cb), this);
 #endif
-        }
 
         // these are called when the "sunken" or "raised" borders are drawn
         gtk_signal_connect( GTK_OBJECT(m_widget), "expose_event",
