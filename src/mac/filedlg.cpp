@@ -360,9 +360,9 @@ int wxFileDialog::ShowModal()
     // tried using wxMacCFStringHolder in the code below, but it seems
     // the CFStrings were being released before the save dialog was called,
     // causing a crash - open dialog works fine with or without wxMacCFStringHolder
-    CFStringRef titleRef = ::CFStringCreateWithCString(NULL,
-                                                       m_message.wc_str(),
-                                                       kCFStringEncodingUnicode);
+    CFStringRef titleRef = ::CFStringCreateWithCharacters( kCFAllocatorDefault,
+                                (const unsigned short*)m_message.wc_str(), 
+                                m_message.Len() );
 #else
     CFStringRef titleRef = ::CFStringCreateWithCString(NULL,
                                                        m_message.c_str(),
@@ -370,9 +370,9 @@ int wxFileDialog::ShowModal()
 #endif
     dialogCreateOptions.windowTitle = titleRef;
 #if wxUSE_UNICODE
-    CFStringRef defaultFileNameRef = ::CFStringCreateWithCString(NULL,
-                                                                 m_fileName.wc_str(),
-                                                                 kCFStringEncodingUnicode);
+    CFStringRef defaultFileNameRef = ::CFStringCreateWithCharacters( kCFAllocatorDefault,
+                                        (const unsigned short*)m_fileName.wc_str(), 
+                                        m_fileName.Len() );
 #else
     CFStringRef defaultFileNameRef = ::CFStringCreateWithCString(NULL,
                                                                  m_fileName.c_str(),
@@ -459,8 +459,7 @@ int wxFileDialog::ShowModal()
         DescType    actualType;
         Size        actualSize;
         FSRef       theFSRef;
-        char        thePath[FILENAME_MAX];
-
+        wxString thePath ;
         long count;
         ::AECountItems(&navReply.selection , &count);
         for (long i = 1; i <= count; ++i)
@@ -472,7 +471,6 @@ int wxFileDialog::ShowModal()
 
             if (m_dialogStyle & wxSAVE)
             {
-                thePath[0] = '\0';
                 CFURLRef parentURLRef = ::CFURLCreateFromFSRef(NULL, &theFSRef);
 
                 if (parentURLRef)
@@ -500,23 +498,23 @@ int wxFileDialog::ShowModal()
 
                             if (cfStringUnescaped)
                             {
+                                Size len = CFStringGetLength( cfStringUnescaped )  ;
+                                wxChar* buf = thePath.GetWriteBuf( len ) ;
+                                //buf[0] = '\0';
 #if wxUSE_UNICODE
-                                ::CFStringGetCString(cfStringUnescaped,
-                                                    thePath,
-                                                    FILENAME_MAX,
-                                                    kCFStringEncodingUnicode);
+                                CFStringGetCharacters(cfStringUnescaped , CFRangeMake( 0 , len ) , (UniChar*) buf ) ;
 #else
-                                ::CFStringGetCString(cfStringUnescaped,
-                                                    thePath,
-                                                    FILENAME_MAX,
-                                                    CFStringGetSystemEncoding());
+                                CFStringGetCString( cfStringUnescaped , buf , len+1 , CFStringGetSystemEncoding() ) ;
 #endif
+                                buf[len] = 0 ;
+                                wxMacConvertNewlines10To13( buf ) ;
+                                thePath.UngetWriteBuf() ;
                                 ::CFRelease(cfStringUnescaped);
                             }
                         }
                     }
                 }
-                if (!thePath[0])
+                if (!thePath)
                 {
                     ::NavDisposeReply(&navReply);
                     return wxID_CANCEL;
@@ -524,8 +522,9 @@ int wxFileDialog::ShowModal()
             }
             else
             {
-                err = ::FSRefMakePath(&theFSRef,
-                                        (UInt8 *)thePath, sizeof(thePath));
+                const short maxpath = 1024 ;
+                ::FSRefMakePath( &theFSRef , (UInt8*) thePath.GetWriteBuf(maxpath+1),maxpath) ;
+                thePath.UngetWriteBuf() ;
                 if (err != noErr)
                     break;
             }
