@@ -6,11 +6,10 @@
     <!-- Additional dependencies of core libraries if plugins are
          disabled (these would be deps of the plugins if they were
          enabled): -->
-     
+
     <set var="PLUGIN_ADV_EXTRALIBS">
         <if cond="USE_PLUGINS=='0'">
-            $(EXTRALIBS_SDL)
-            $(EXTRALIBS_GNOMEPRINT)
+            $(EXTRALIBS_SDL) $(EXTRALIBS_GNOMEPRINT)
         </if>
     </set>
 
