@@ -18,6 +18,10 @@ static char yysccsid[] = "@(#)yaccpar     1.7 (Berkeley) 09/09/90";
 extern "C" {
 #endif
 #endif
+int yyparse(void);
+int PROIO_yyparse(void) {
+	return yyparse() ;
+}
 int yylex(void);
 int yylook(void);
 int yywrap(void);
