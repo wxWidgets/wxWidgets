@@ -4,6 +4,12 @@ ports.
 
 *** next release ***
 
+Added wxActivateEvent for top level windows.
+
+Corrected wxActiavteEvents for app (now wxEVT_ACTIAVTE_APP).
+
+wxTextCtrl sends focus events.
+
 Corrected so-library name.
 
 wxTreeCtrl now shows an item, if it was programmatically selected.
