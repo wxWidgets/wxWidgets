@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  H:\DEV\WX24\WXWINDOWS\LIB\os2jpeg.lib
+;From library:  H:\Dev\wx24\WxWindows\lib\os2jpeg.lib
   ;From object file:  ..\jpeg\jcomapi.c
     ;PUBDEFs (Symbols available from object file):
       jpeg_destroy

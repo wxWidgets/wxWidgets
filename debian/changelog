@@ -1,3 +1,41 @@
+wxwindows2.3 (2.3.4) unstable; urgency=low
+
+  * 2.4.0pre1 I guess.
+  * Added -ffunction-sections for broken hppa linker. Closes: #162948
+
+ -- Ron Lee <ron@debian.org>  Mon, 18 Nov 2002 18:54:21 -0800
+
+wxwindows2.3 (2.3.3.2) unstable; urgency=low
+
+  * The one more for luck release.
+  * Debian-wise, it fixes the problem with contrib lib name clashes;
+    code-wise, lots of little issues (and a couple of big 'uns) from
+    2.3.3 -- see the more regular change or cvs logs for details...
+  * Yes, it's still the unstable branch, yes the request for testing
+    to see if we can reasonably obsolete 2.2 in post-woody debian
+    is still current, and yes we're still working toward a stable
+    2.4 release as fast as we can.   Big thanks to everyone who's
+    been patient and/or active fixing things.
+
+ -- Ron Lee <ron@debian.org>  Thu, 26 Sep 2002 17:43:05 -0700
+
+wxwindows2.3 (2.3.3.1) unstable; urgency=low
+
+  * Ok, Robin says wxPython is good to go.
+  * Since wx2.2 has crashed and burned with the new releases of
+    python and png, Could package maintainers with packages that
+    depend on wx please recompile with this package and let me
+    know if they still need 2.2 in woody?   If not I'll have them
+    removed.  There should be a 2.4 release following very soon.
+    (hah, let's see how the date on that comment testifies!)
+  * Yes, I know wxpython is missing man pages for some of its
+    scripts.  File a bug if you must, but preferably, if you know
+    what they do, attach a patch containing one.  I don't use them
+    myself or could even do more than guess what they do today.
+    Sorry, C++.
+
+ -- Ron Lee <ron@debian.org>  Thu, 19 Sep 2002 16:25:12 -0700
+
 wxwindows2.3 (2.3.3) unstable; urgency=low
 
   * The "If it sucks, You whined for it!" release.

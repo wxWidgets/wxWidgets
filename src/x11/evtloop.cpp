@@ -175,7 +175,7 @@ void wxSocketTable::FillSets(fd_set* readset, fd_set* writeset, int* highest)
     while (node)
     {
         wxSocketTableEntry* entry = (wxSocketTableEntry*) node->Data();
-
+        
         if (entry->m_fdInput != -1)
         {
             FD_SET(entry->m_fdInput, readset);
@@ -201,7 +201,7 @@ void wxSocketTable::ProcessEvents(fd_set* readset, fd_set* writeset)
     while (node)
     {
         wxSocketTableEntry* entry = (wxSocketTableEntry*) node->Data();
-
+        
         if (entry->m_fdInput != -1 && FD_ISSET(entry->m_fdInput, readset))
         {
             (entry->m_callbackInput) (entry->m_fdInput, entry->m_dataInput);
@@ -375,7 +375,7 @@ int wxEventLoop::Run()
     while ( m_impl->m_keepGoing )
     {
 #if 0 // wxUSE_THREADS
-	wxMutexGuiLeaveOrEnter();
+        wxMutexGuiLeaveOrEnter();
 #endif // wxUSE_THREADS
 
         // generate and process idle events for as long as we don't have
@@ -387,7 +387,7 @@ int wxEventLoop::Run()
 #endif
             if (!m_impl->SendIdleEvent())
             {
-#if wxUSE_THREADS
+#if 0 // wxUSE_THREADS
                 // leave the main loop to give other threads a chance to
                 // perform their GUI work
                 wxMutexGuiLeave();
@@ -430,8 +430,8 @@ void wxEventLoop::Exit(int rc)
 
 bool wxEventLoop::Pending() const
 {
-    XFlush((Display*) wxGetDisplay());
-    return (XPending((Display*) wxGetDisplay()) > 0);
+    XFlush( wxGlobalDisplay() );
+    return (XPending( wxGlobalDisplay() ) > 0);
 }
 
 bool wxEventLoop::Dispatch()
@@ -447,7 +447,7 @@ bool wxEventLoop::Dispatch()
     // often, so we should probably limit idle processing to
     // not be repeated more than every N milliseconds.
     
-    if (XPending((Display*) wxGetDisplay()) == 0)
+    if (XPending( wxGlobalDisplay() ) == 0)
     {
 #if wxUSE_NANOX
         GR_TIMEOUT timeout = 10; // Milliseconds
@@ -462,7 +462,8 @@ bool wxEventLoop::Dispatch()
         struct timeval tv;
         tv.tv_sec=0;
         tv.tv_usec=10000; // TODO make this configurable
-        int fd = ConnectionNumber((Display*) wxGetDisplay());
+        int fd = ConnectionNumber( wxGlobalDisplay() );
+        
         fd_set readset;
         fd_set writeset;
         int highest = fd;
@@ -473,10 +474,10 @@ bool wxEventLoop::Dispatch()
 
 #if wxUSE_SOCKETS
         if (wxTheSocketTable)
-            wxTheSocketTable->FillSets(& readset, & writeset, & highest);
+            wxTheSocketTable->FillSets( &readset, &writeset, &highest );
 #endif
         
-        if (select(highest+1, &readset, &writeset, NULL, & tv) == 0)
+        if (select( highest+1, &readset, &writeset, NULL, &tv ) == 0)
         {
             // Timed out, so no event to process
             return TRUE;
@@ -484,23 +485,25 @@ bool wxEventLoop::Dispatch()
         else
         {
             // An X11 event was pending, so get it
-            if (FD_ISSET(fd, & readset))
-                XNextEvent((Display*) wxGetDisplay(), & event);
+            if (FD_ISSET( fd, &readset ))
+                XNextEvent( wxGlobalDisplay(), &event );
 
 #if wxUSE_SOCKETS
             // Check if any socket events were pending,
             // and if so, call their callbacks
             if (wxTheSocketTable)
-                wxTheSocketTable->ProcessEvents(& readset, & writeset);
+                wxTheSocketTable->ProcessEvents( &readset, &writeset );
 #endif
         }
 #endif
-    } else
+    } 
+    else
     {
-       XNextEvent((Display*) wxGetDisplay(), & event);
+        XNextEvent( wxGlobalDisplay(), &event );
     }
     
-    (void) m_impl->ProcessEvent(& event);
+    
+    (void) m_impl->ProcessEvent( &event );
     return TRUE;
 }
 

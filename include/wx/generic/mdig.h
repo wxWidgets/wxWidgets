@@ -265,6 +265,8 @@ private:
 
 #if wxUSE_GENERIC_MDI_AS_NATIVE
 
+class wxMDIChildFrame ;
+
 //-----------------------------------------------------------------------------
 // wxMDIParentFrame
 //-----------------------------------------------------------------------------
@@ -284,6 +286,9 @@ public:
     {
     }
 
+    wxMDIChildFrame * GetActiveChild() const ;
+    
+    
 private:
     DECLARE_DYNAMIC_CLASS(wxMDIParentFrame)
 };

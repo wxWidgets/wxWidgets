@@ -343,9 +343,12 @@ $(ARCHINCDIR)/wx:
 	mkdir $(subst $(PATH_SUBST),$(PATH_SEPARATOR),$(ARCHINCDIR))
 	mkdir $(subst $(PATH_SUBST),$(PATH_SEPARATOR),$(ARCHINCDIR)/wx)
 
-$(SETUP_H): $(ARCHINCDIR)/wx
-	$(COPY) $(WXDIR)/include/wx/msw/setup.h $@
+# Copy ALWAYS uses forward slashes now.
 
+$(SETUP_H): $(ARCHINCDIR)/wx
+	$(COPY) $(WXDIR)/include/wx/msw/setup.h $(subst $(BACKSLASH),/,$@)
+
+#	$(COPY) $(WXDIR)/include/wx/msw/setup.h $@
 #	$(COPY) $(subst $(PATH_SUBST),$(PATH_SEPARATOR),$(WXDIR)/include/wx/msw/setup.h) $(subst $(PATH_SUBST),$(PATH_SEPARATOR),$@)
 
 ifndef WXMAKINGDLL

@@ -13,7 +13,7 @@
 
 #include "wx/wxprec.h"
 
-#ifdef __BORDLANDC__
+#ifdef __BORLANDC__
 #pragma hdrstop
 #endif
 
@@ -173,7 +173,8 @@ wxFSFile* wxLocalFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString&
 {
     // location has Unix path separators
     wxString right = ms_root + GetRightLocation(location);
-    wxFileName fn(right, wxPATH_UNIX);
+    wxString nativePath = wxFileSystem::URLToNativePath(right);
+    wxFileName fn(nativePath, wxPATH_UNIX);
 
     if (!wxFileExists(fn.GetFullPath()))
         return (wxFSFile*) NULL;
@@ -417,7 +418,58 @@ void wxFileSystem::CleanUpHandlers()
     m_Handlers.Clear();
 }
 
+const static wxString g_unixPathString(wxT("/"));
+const static wxString g_nativePathString(wxFILE_SEP_PATH);
 
+// Returns the native path for a file URL
+wxString wxFileSystem::URLToNativePath( const wxString& url ) 
+{
+	wxString path = url ;
+
+	if ( path.Find(wxT("file://")) == 0 )
+	{
+		path = path.Mid(7) ;
+	}
+
+	// file urls either start with a forward slash (local harddisk),
+    // otherwise they have a servername/sharename notation,
+    // which only exists on msw and corresponds to a unc
+	if ( path[0u] == wxT('/') && path [1u] != wxT('/'))
+	{
+		path = path.Mid(1) ;
+	}
+#ifdef __WXMSW__
+	else if ( (url.Find(wxT("file://")) == 0) &&
+              (path.Find(wxT('/')) != wxNOT_FOUND) &&
+              (path.Length() > 1) && (path[1u] != wxT(':')) )
+	{
+		path = wxT("\\\\") + path ;
+	}
+#endif
+	path.Replace(g_unixPathString, g_nativePathString) ;
+
+	return path ;
+}
+
+// Returns the file URL for a native path
+wxString wxFileSystem::NativePathToURL( const wxString& path ) 
+{
+	wxString url = path ;
+#ifdef __WXMSW__
+	// unc notation
+	if ( url.Find(wxT("\\\\")) == 0 ) 
+	{
+		url = url.Mid(2) ;
+	}
+	else
+#endif
+	{
+		url = wxT("/") + url ;
+	}
+	url.Replace(g_nativePathString, g_unixPathString) ;
+	url = wxT("file://") + url ;
+	return url ;
+}
 
 
 ///// Module:

@@ -804,7 +804,7 @@ void ListBox::Clear() {
 }
 
 void ListBox::Append(char *s) {
-    GETLB(id)->Append(s);
+    GETLB(id)->Append(stc2wx(s));
 }
 
 int ListBox::Length() {

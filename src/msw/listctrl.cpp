@@ -104,10 +104,19 @@ public:
 private:
     wxMB2WXbuf *m_buf;
 
-#else
+#else // !wxUSE_UNICODE
     wxLV_ITEM(LV_ITEMW &item)
     {
         m_item = new LV_ITEM((LV_ITEM&)item);
+
+        // the code below doesn't compile without wxUSE_WCHAR_T and as I don't
+        // know if it's useful to have it at all (do we ever get Unicode
+        // notifications in ANSI mode? I don't think so...) I'm not going to
+        // write alternative implementation right now
+        //
+        // but if it is indeed used, we should simply directly use
+        // ::WideCharToMultiByte() here
+#if wxUSE_WCHAR_T
         if ( (item.mask & LVIF_TEXT) && item.pszText )
         {
 #ifdef __WXWINE__
@@ -119,12 +128,13 @@ private:
             m_item->pszText = (wxChar*)m_buf->data();
         }
         else
+#endif // wxUSE_WCHAR_T
             m_buf = NULL;
     }
     wxLV_ITEM(LV_ITEMA &item) : m_buf(NULL), m_item(&item) {}
 private:
     wxWC2WXbuf *m_buf;
-#endif
+#endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
     LV_ITEM *m_item;
 };
@@ -915,7 +925,7 @@ wxString wxListCtrl::GetItemText(long item) const
     info.m_itemId = item;
 
     if (!GetItem(info))
-        return wxString("");
+        return wxEmptyString;
     return info.m_text;
 }
 
@@ -1270,19 +1280,32 @@ wxTextCtrl* wxListCtrl::EditLabel(long item, wxClassInfo* textControlClass)
 
     // ListView_EditLabel requires that the list has focus.
     SetFocus();
-    WXHWND hWnd = (WXHWND) ListView_EditLabel(GetHwnd(), item);
 
-    if (m_textCtrl)
+    WXHWND hWnd = (WXHWND) ListView_EditLabel(GetHwnd(), item);
+    if ( !hWnd )
+    {
+        // failed to start editing
+        return NULL;
+    }
+
+    // [re]create the text control wrapping the HWND we got
+    if ( m_textCtrl )
     {
         m_textCtrl->SetHWND(0);
         m_textCtrl->UnsubclassWin();
         delete m_textCtrl;
     }
 
-    m_textCtrl = (wxTextCtrl*) textControlClass->CreateObject();
+    m_textCtrl = (wxTextCtrl *)textControlClass->CreateObject();
     m_textCtrl->SetHWND(hWnd);
     m_textCtrl->SubclassWin(hWnd);
     m_textCtrl->SetParent(this);
+
+    // we must disallow TABbing away from the control while the edit contol is
+    // shown because this leaves it in some strange state (just try removing
+    // this line and then pressing TAB while editing an item in  listctrl
+    // inside a panel)
+    m_textCtrl->SetWindowStyle(m_textCtrl->GetWindowStyle() | wxTE_PROCESS_TAB);
 
     return m_textCtrl;
 }
@@ -1522,14 +1545,18 @@ long wxListCtrl::InsertColumn(long col,
     return InsertColumn(col, item);
 }
 
-// Scrolls the list control. If in icon, small icon or report view mode,
-// x specifies the number of pixels to scroll. If in list view mode, x
-// specifies the number of columns to scroll.
-// If in icon, small icon or list view mode, y specifies the number of pixels
-// to scroll. If in report view mode, y specifies the number of lines to scroll.
+// scroll the control by the given number of pixels (exception: in list view,
+// dx is interpreted as number of columns)
 bool wxListCtrl::ScrollList(int dx, int dy)
 {
-    return (ListView_Scroll(GetHwnd(), dx, dy) != 0);
+    if ( !ListView_Scroll(GetHwnd(), dx, dy) )
+    {
+        wxLogDebug(_T("ListView_Scroll(%d, %d) failed"), dx, dy);
+
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 // Sort items.
@@ -1649,6 +1676,11 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             // work around is to simply catch both versions and hope that it
             // works (why should this message exist in ANSI and Unicode is
             // beyond me as it doesn't deal with strings at all...)
+            //
+            // note that fr HDN_TRACK another possibility could be to use
+            // HDN_ITEMCHANGING but it is sent even after HDN_ENDTRACK and when
+            // something other than the item width changes so we'd have to
+            // filter out the unwanted events then
             case HDN_BEGINTRACKA:
             case HDN_BEGINTRACKW:
                 eventType = wxEVT_COMMAND_LIST_COL_BEGIN_DRAG;
@@ -1664,6 +1696,8 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             case HDN_ENDTRACKW:
                 if ( eventType == wxEVT_NULL )
                     eventType = wxEVT_COMMAND_LIST_COL_END_DRAG;
+
+                event.m_item.m_width = nmHDR->pitem->cxy;
                 event.m_col = nmHDR->iItem;
                 break;
 
@@ -1708,6 +1742,22 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 }
                 break;
 
+            case HDN_GETDISPINFOW:
+                {
+                    LPNMHDDISPINFOW info = (LPNMHDDISPINFOW) lParam;
+                    // This is a fix for a strange bug under XP.
+                    // Normally, info->iItem is a valid index, but
+                    // sometimes this is a silly (large) number
+                    // and when we return FALSE via wxControl::MSWOnNotify
+                    // to indicate that it hasn't yet been processed,
+                    // there's a GPF in Windows.
+                    // By returning TRUE here, we avoid further processing
+                    // of this strange message.
+                    if (info->iItem > GetColumnCount())
+                        return TRUE;
+                }
+                // fall through
+
             default:
                 return wxControl::MSWOnNotify(idCtrl, lParam, result);
         }
@@ -1719,8 +1769,30 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
         // almost all messages use NM_LISTVIEW
         NM_LISTVIEW *nmLV = (NM_LISTVIEW *)nmhdr;
 
-        // this is true for almost all events
-        event.m_item.m_data = nmLV->lParam;
+        const int iItem = nmLV->iItem;
+
+        // set the data event field for all messages for which the system gives
+        // us a valid NM_LISTVIEW::lParam
+        switch ( nmLV->hdr.code )
+        {
+            case LVN_BEGINDRAG:
+            case LVN_BEGINRDRAG:
+            case LVN_COLUMNCLICK:
+            case LVN_ITEMCHANGED:
+            case LVN_ITEMCHANGING:
+                if ( iItem != -1 )
+                {
+                    wxListItemInternalData *internaldata =
+                        (wxListItemInternalData *) nmLV->lParam;
+
+                    if ( internaldata )
+                        event.m_item.m_data = internaldata->lParam;
+                }
+
+            default:
+                // fall through
+                ;
+        }
 
         switch ( nmhdr->code )
         {
@@ -1734,7 +1806,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     eventType = wxEVT_COMMAND_LIST_BEGIN_DRAG;
                 }
 
-                event.m_itemIndex = nmLV->iItem;
+                event.m_itemIndex = iItem;
                 event.m_pointDrag.x = nmLV->ptAction.x;
                 event.m_pointDrag.y = nmLV->ptAction.y;
                 break;
@@ -1796,9 +1868,9 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
             case LVN_DELETEITEM:
                 eventType = wxEVT_COMMAND_LIST_DELETE_ITEM;
-                event.m_itemIndex = nmLV->iItem;
+                event.m_itemIndex = iItem;
                 // delete the assoicated internal data
-                wxDeleteInternalData(this, nmLV->iItem);
+                wxDeleteInternalData(this, iItem);
                 break;
 
             case LVN_SETDISPINFO:
@@ -1811,25 +1883,33 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
             case LVN_INSERTITEM:
                 eventType = wxEVT_COMMAND_LIST_INSERT_ITEM;
-                event.m_itemIndex = nmLV->iItem;
+                event.m_itemIndex = iItem;
                 break;
 
             case LVN_ITEMCHANGED:
                 // we translate this catch all message into more interesting
                 // (and more easy to process) wxWindows events
 
-                // first of all, we deal with the state change events only
-                if ( nmLV->uChanged & LVIF_STATE )
+                // first of all, we deal with the state change events only and
+                // only for valid items (item == -1 for the virtual list
+                // control)
+                if ( nmLV->uChanged & LVIF_STATE && iItem != -1 )
                 {
                     // temp vars for readability
                     const UINT stOld = nmLV->uOldState;
                     const UINT stNew = nmLV->uNewState;
 
+                    event.m_item.SetId(iItem);
+                    event.m_item.SetMask(wxLIST_MASK_TEXT |
+                                         wxLIST_MASK_IMAGE |
+                                         wxLIST_MASK_DATA);
+                    GetItem(event.m_item);
+
                     // has the focus changed?
                     if ( !(stOld & LVIS_FOCUSED) && (stNew & LVIS_FOCUSED) )
                     {
                         eventType = wxEVT_COMMAND_LIST_ITEM_FOCUSED;
-                        event.m_itemIndex = nmLV->iItem;
+                        event.m_itemIndex = iItem;
                     }
 
                     if ( (stNew & LVIS_SELECTED) != (stOld & LVIS_SELECTED) )
@@ -1846,7 +1926,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                         {
                             // then need to set m_itemIndex as it wasn't done
                             // above
-                            event.m_itemIndex = nmLV->iItem;
+                            event.m_itemIndex = iItem;
                         }
 
                         eventType = stNew & LVIS_SELECTED
@@ -1914,16 +1994,16 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
                 // else translate it into wxEVT_COMMAND_LIST_ITEM_ACTIVATED event
                 // if it happened on an item (and not on empty place)
-                if ( nmLV->iItem == -1 )
+                if ( iItem == -1 )
                 {
                     // not on item
                     return FALSE;
                 }
 
                 eventType = wxEVT_COMMAND_LIST_ITEM_ACTIVATED;
-                event.m_itemIndex = nmLV->iItem;
-                event.m_item.m_text = GetItemText(nmLV->iItem);
-                event.m_item.m_data = GetItemData(nmLV->iItem);
+                event.m_itemIndex = iItem;
+                event.m_item.m_text = GetItemText(iItem);
+                event.m_item.m_data = GetItemData(iItem);
                 break;
 
             case NM_RCLICK:
@@ -2050,6 +2130,17 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
         case LVN_ENDLABELEDITW:
             // logic here is inversed compared to all the other messages
             *result = event.IsAllowed();
+
+            // don't keep a stale wxTextCtrl around
+            if ( m_textCtrl )
+            {
+                // EDIT control will be deleted by the list control itself so
+                // prevent us from deleting it as well
+                m_textCtrl->SetHWND(0);
+                m_textCtrl->UnsubclassWin();
+                delete m_textCtrl;
+                m_textCtrl = NULL;
+            }
 
             return TRUE;
     }

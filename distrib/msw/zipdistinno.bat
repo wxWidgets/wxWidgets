@@ -7,7 +7,7 @@ set webfiles=c:\wx2dev\wxWebSite
 set inno=1
 
 Rem Set this to the required version
-set version=2.3.3
+set version=2.3.4
 
 if "%src" == "" goto usage
 if "%dest" == "" goto usage
@@ -45,7 +45,7 @@ if direxist %dest\wx erase /sxyz %dest\wx\
 if not direxist %dest mkdir %dest
 if direxist %dest%\wxWindows-%version% erase /sxyz %dest%\wxWindows-%version%
 
-# Copy FAQ from wxWebSite CVS
+Rem Copy FAQ from wxWebSite CVS
 if not direxist %webfiles% echo Error - %webfiles% does not exist
 if not direxist %webfiles% goto end
 echo Copying FAQ and other files from %webfiles
@@ -56,6 +56,7 @@ copy %webfiles%\site\i18n.htm %src\docs\html
 Rem Copy setup0.h files to setup.h
 copy %src%\include\wx\os2\setup0.h %src%\include\wx\os2\setup.h
 copy %src%\include\wx\msw\setup0.h %src%\include\wx\msw\setup.h
+copy %src%\include\wx\univ\setup0.h %src%\include\wx\univ\setup.h
 
 cd %src%
 echo Zipping...

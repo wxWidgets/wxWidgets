@@ -8,11 +8,9 @@ config.sub
 configure.in
 setup.h.in
 install-sh
-missing
 mkinstalldirs
-modules
-template.mak
 wx-config.in
+version-script.in
 setup.h_vms
 
 distrib/msw/*.rsp
@@ -28,19 +26,18 @@ distrib/msw/tmake/makeall.bat
 distrib/msw/tmake/makeall.sh
 distrib/msw/tmake/wxwin.pro
 distrib/msw/tmake/tmake.conf
-distrib/gtk/*
 
 locale/*.po
-locale/*.mo
 locale/Makefile
 
 art/*.xpm
+art/*.ico
+art/*.png
 art/motif/*.xpm
 art/gtk/*.xpm
 
 docs/readme.txt
 docs/readme_vms.txt
-docs/install.txt
 docs/changes.txt
 docs/todo.txt
 docs/licence.txt
@@ -48,18 +45,10 @@ docs/licendoc.txt
 docs/preamble.txt
 docs/gpl.txt
 docs/lgpl.txt
-docs/symbols.txt
-docs/bugs.txt
 docs/index.htm
 docs/html/*.htm
 docs/html/*.gif
-docs/html/*.png
-docs/html/icons/*.gif
-docs/html/icons/*.png
-docs/html/icons/*.jpg
 docs/html/images/*.gif
-docs/html/images/*.png
-docs/html/images/*.jpg
 docs/tech/*.txt
 docs/tech/*.htm
 
@@ -152,19 +141,9 @@ lib/dummy
 
 tools/gettext/*.*
 
-bitmaps/xpm/16x16/*.*
-bitmaps/xpm/32x32/*.*
-bitmaps/xpm/64x64/*.*
-bitmaps/xpm/misc/*.*
-bitmaps/*.*
-bitmaps/bmp/16x15/*.*
-bitmaps/bmp/10x8/*.*
-bitmaps/ico/32x32/*.*
-
 misc/afm/*.afm
 misc/gs_afm/*.afm
 
-utils/*.txt
 utils/make*.*
 utils/configure
 utils/configure.in

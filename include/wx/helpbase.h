@@ -31,11 +31,9 @@
 // Defines the API for help controllers
 class WXDLLEXPORT wxHelpControllerBase: public wxObject
 {
-    DECLARE_CLASS(wxHelpControllerBase)
-
 public:
     inline wxHelpControllerBase() {}
-    inline ~wxHelpControllerBase() {};
+    inline ~wxHelpControllerBase() {}
 
     // Must call this to set the filename and server name.
     // server is only required when implementing TCP/IP-based
@@ -47,7 +45,7 @@ public:
     virtual void SetViewer(const wxString& WXUNUSED(viewer), long WXUNUSED(flags) = 0) {}
 
     // If file is "", reloads file given  in Initialize
-    virtual bool LoadFile(const wxString& file = "") = 0;
+    virtual bool LoadFile(const wxString& file = wxT("")) = 0;
 
     // Displays the contents
     virtual bool DisplayContents(void) = 0;
@@ -59,11 +57,11 @@ public:
     virtual bool DisplayContextPopup(int WXUNUSED(contextId)) { return FALSE; };
 
     // Display the text in a popup, if possible
-    virtual bool DisplayTextPopup(const wxString& WXUNUSED(text), const wxPoint& WXUNUSED(pos)) { return FALSE; };
+    virtual bool DisplayTextPopup(const wxString& WXUNUSED(text), const wxPoint& WXUNUSED(pos)) { return FALSE; }
 
     // By default, uses KeywordSection to display a topic. Implementations
     // may override this for more specific behaviour.
-    virtual bool DisplaySection(const wxString& section) { return KeywordSearch(section); };
+    virtual bool DisplaySection(const wxString& section) { return KeywordSearch(section); }
     virtual bool DisplayBlock(long blockNo) = 0;
     virtual bool KeywordSearch(const wxString& k) = 0;
     /// Allows one to override the default settings for the help frame.
@@ -80,11 +78,14 @@ public:
         wxPoint *WXUNUSED(pos) = NULL,
         bool *WXUNUSED(newFrameEachTime) = NULL)
     {
-        return (wxFrame*) NULL;// does nothing by default
+        return (wxFrame*) NULL; // does nothing by default
     }
 
-    virtual bool Quit(void) = 0;
-    virtual void OnQuit(void) {};
+    virtual bool Quit() = 0;
+    virtual void OnQuit() {}
+    
+private:
+    DECLARE_CLASS(wxHelpControllerBase)
 };
 
 #endif // wxUSE_HELP

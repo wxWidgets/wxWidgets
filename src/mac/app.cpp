@@ -101,6 +101,8 @@ long      wxApp::s_lastModifiers = 0 ;
 bool      wxApp::s_macDefaultEncodingIsPC = true ;
 bool      wxApp::s_macSupportPCMenuShortcuts = true ;
 long      wxApp::s_macAboutMenuItemId = wxID_ABOUT ;
+long      wxApp::s_macPreferencesMenuItemId = 0 ;
+long      wxApp::s_macExitMenuItemId = wxID_EXIT ;
 wxString  wxApp::s_macHelpMenuTitleName = "&Help" ;
 
 pascal OSErr AEHandleODoc( const AppleEvent *event , AppleEvent *reply , long refcon ) ;
@@ -923,10 +925,7 @@ int wxEntry( int argc, char *argv[] , bool enterLoop )
     // application (otherwise applications would need to handle it)
 
     if (argc > 1) {
-        char theArg[6] = "";
-        strncpy(theArg, argv[1], 5);
-
-        if (strcmp(theArg, "-psn_") == 0) {
+        if (strncmp(argv[1], "-psn_", 5) == 0) {
             // assume the argument is always the only one and remove it
             --argc;
         }
@@ -1443,7 +1442,9 @@ void wxApp::MacHandleModifierEvents( WXEVENTREF evr )
     EventRecord* ev = (EventRecord*) evr ;
 #if TARGET_CARBON
     if ( ev->what == mouseDown || ev->what == mouseUp || ev->what == activateEvt ||
-        ev->what == keyDown || ev->what == autoKey || ev->what == keyUp || ev->what == nullEvent )
+        ev->what == keyDown || ev->what == autoKey || ev->what == keyUp || ev->what == kHighLevelEvent ||
+        ev->what == nullEvent
+        )
     {
         // in these cases the modifiers are already correctly setup by carbon
     }
@@ -1628,23 +1629,28 @@ void wxApp::MacHandleMouseDownEvent( WXEVENTREF evr )
             break;
         case inGrow:
           {
-                int growResult = GrowWindow(window , ev->where, &screenBits.bounds);
-                if (growResult != 0)
+                Rect newContentRect ;
+                Rect constraintRect ;
+                constraintRect.top = win->GetMinHeight() ;
+                if ( constraintRect.top == -1 )
+                    constraintRect.top  = 0 ;
+                constraintRect.left = win->GetMinWidth() ;
+                if ( constraintRect.left == -1 )
+                    constraintRect.left  = 0 ;
+                constraintRect.right = win->GetMaxWidth() ;
+                if ( constraintRect.right == -1 )
+                    constraintRect.right  = 32000 ;
+                constraintRect.bottom = win->GetMaxHeight() ;
+                if ( constraintRect.bottom == -1 )
+                    constraintRect.bottom = 32000 ;
+
+                Boolean growResult = ResizeWindow( window , ev->where ,
+                    &constraintRect , &newContentRect ) ;
+                if ( growResult )
                 {
-                    int newWidth = LoWord(growResult);
-                    int newHeight = HiWord(growResult);
-                    int oldWidth, oldHeight;
-
-
-                    if (win)
-                    {
-                        win->GetSize(&oldWidth, &oldHeight);
-                        if (newWidth == 0)
-                            newWidth = oldWidth;
-                        if (newHeight == 0)
-                            newHeight = oldHeight;
-                        win->SetSize( -1, -1 , newWidth, newHeight, wxSIZE_USE_EXISTING);
-                    }
+                    win->SetSize( newContentRect.left , newContentRect.top , 
+                        newContentRect.right - newContentRect.left , 
+                        newContentRect.bottom - newContentRect.top, wxSIZE_USE_EXISTING);
                 }
                 s_lastMouseDown = 0;
           }
@@ -2309,35 +2315,31 @@ void wxApp::MacHandleMenuSelect( int macMenuId , int macMenuItemNum )
     }
     else
     {
+        MenuCommand id ;
+        GetMenuItemCommandID( GetMenuHandle(macMenuId) , macMenuItemNum , &id ) ;
+        wxMenuBar* mbar = wxMenuBar::MacGetInstalledMenuBar() ;
+        wxMenu* menu = NULL ;
+        wxMenuItem* item = NULL ;
+        if ( mbar )
+        {
+            item = mbar->FindItem( id , &menu ) ;
+        }
+        wxCHECK_RET( item != NULL && menu != NULL && mbar != NULL, wxT("error in menu item callback") );
+            
+        if (item->IsCheckable())
+        {
+            item->Check( !item->IsChecked() ) ;
+        }
+		
+		menu->SendEvent( id , item->IsCheckable() ? item->IsChecked() : -1 ) ;
+		/*
         wxWindow* frontwindow = wxFindWinFromMacWindow( ::FrontWindow() )  ;
-        if ( frontwindow && wxMenuBar::MacGetInstalledMenuBar() )
-            wxMenuBar::MacGetInstalledMenuBar()->MacMenuSelect( frontwindow->GetEventHandler() , 0 , macMenuId , macMenuItemNum ) ;
+        wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED, id );
+        event.m_timeStamp =  ((EventRecord*) MacGetCurrentEvent())->when ;
+        event.SetEventObject(menu);
+        event.SetInt(item->IsCheckable() ? item->IsChecked() : -1);
+        frontwindow->GetEventHandler()->ProcessEvent(event); 
+        */
     }
     HiliteMenu(0);
 }
-
-/*
-long wxApp::MacTranslateKey(char key, int mods)
-{
-}
-
-void wxApp::MacAdjustCursor()
-{
-}
-
-*/
-/*
-void
-wxApp::macAdjustCursor()
-{
-  if (ev->what != kHighLevelEvent)
-  {
-    wxWindow* theMacWxFrame = wxFrame::MacFindFrameOrDialog(::FrontWindow());
-    if (theMacWxFrame)
-    {
-        if (!theMacWxFrame->MacAdjustCursor(ev->where))
-        ::SetCursor(&(qd.arrow));
-      }
-  }
-}
-*/

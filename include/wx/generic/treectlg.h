@@ -117,6 +117,15 @@ public:
         // get the data associated with the item
     wxTreeItemData *GetItemData(const wxTreeItemId& item) const;
 
+        // get the item's text colour
+    wxColour GetItemTextColour(const wxTreeItemId& item) const;
+
+        // get the item's background colour
+    wxColour GetItemBackgroundColour(const wxTreeItemId& item) const;
+
+        // get the item's font
+    wxFont GetItemFont(const wxTreeItemId& item) const;
+
     // modifiers
     // ---------
 

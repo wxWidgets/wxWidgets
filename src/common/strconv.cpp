@@ -52,9 +52,13 @@
 #if wxUSE_WCHAR_T
     WXDLLEXPORT_DATA(wxMBConv) wxConvLibc;
     WXDLLEXPORT_DATA(wxCSConv) wxConvLocal((const wxChar *)NULL);
+    WXDLLEXPORT_DATA(wxCSConv) wxConvISO8859_1(_T("iso-8859-1"));
 #else
     // stand-ins in absence of wchar_t
-    WXDLLEXPORT_DATA(wxMBConv) wxConvLibc, wxConvFile, wxConvLocal;
+    WXDLLEXPORT_DATA(wxMBConv) wxConvLibc,
+                               wxConvFile,
+                               wxConvISO8859_1,
+                               wxConvLocal;
 #endif // wxUSE_WCHAR_T
 
 WXDLLEXPORT_DATA(wxMBConv *) wxConvCurrent = &wxConvLibc;
@@ -68,6 +72,7 @@ public:
     {
 #if wxUSE_WCHAR_T
          wxConvLocal.Clear();
+         wxConvISO8859_1.Clear();
 #endif
     }
 
@@ -188,6 +193,11 @@ static size_t decode_utf16(const wchar_t* input, wxUint32& output)
 
 #define IGNORE_LIBC 0
 
+wxMBConv::~wxMBConv()
+{
+    // nothing to do here
+}
+
 size_t wxMBConv::MB2WC(wchar_t *buf, const char *psz, size_t n) const
 {
 #if IGNORE_LIBC
@@ -226,28 +236,41 @@ size_t wxMBConv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 
 const wxWCharBuffer wxMBConv::cMB2WC(const char *psz) const
 {
-    if (psz)
+    if ( psz )
     {
-        size_t nLen = MB2WC((wchar_t *) NULL, psz, 0);  // return value excludes /0
-        if (nLen == (size_t)-1)
-            return wxWCharBuffer((wchar_t *) NULL);
-        wxWCharBuffer buf(nLen);                        // this allocates nLen1+
-        MB2WC((wchar_t *)(const wchar_t *) buf, psz, nLen+1);
-        return buf;
+        // calculate the length of the buffer needed first
+        size_t nLen = MB2WC(NULL, psz, 0);
+        if ( nLen != (size_t)-1 )
+        {
+            // now do the actual conversion
+            wxWCharBuffer buf(nLen);
+            MB2WC(buf.data(), psz, nLen + 1); // with the trailing NUL
+
+            return buf;
+        }
     }
-    else
-        return wxWCharBuffer((wchar_t *) NULL);
+
+    wxWCharBuffer buf((wchar_t *)NULL);
+
+    return buf;
 }
 
 const wxCharBuffer wxMBConv::cWC2MB(const wchar_t *pwz) const
 {
-    // return value excludes NUL
-    size_t nLen = pwz ? WC2MB((char *) NULL, pwz, 0) : (size_t)-1;
-    if (nLen == (size_t)-1)
-        return wxCharBuffer((const char *)NULL);
+    if ( pwz )
+    {
+        size_t nLen = WC2MB(NULL, pwz, 0);
+        if ( nLen != (size_t)-1 )
+        {
+            wxCharBuffer buf(nLen);
+            WC2MB(buf.data(), pwz, nLen + 1);
 
-    wxCharBuffer buf(nLen);                      // this allocates nLen+1
-    WC2MB((char *)(const char *) buf, pwz, nLen+1);
+            return buf;
+        }
+    }
+
+    wxCharBuffer buf((char *)NULL);
+
     return buf;
 }
 
@@ -590,7 +613,7 @@ IC_CharSet::IC_CharSet(const wxChar *name)
                 {
                     ms_wcCharsetName = NULL;
                     wxLogLastError(wxT("iconv"));
-                    wxLogError(_("Convertion to charset '%s' doesn't work."), name);
+                    wxLogError(_("Conversion to charset '%s' doesn't work."), name);
                 }
                 else
                 {
@@ -761,6 +784,12 @@ size_t IC_CharSet::WC2MB(char *buf, const wchar_t *psz, size_t n)
 
 #if defined(__WIN32__) && !defined(__WXMICROWIN__)
 
+#ifdef __WXWINE__
+    #define WINE_CAST (WCHAR *)
+#else
+    #define WINE_CAST
+#endif
+
 extern long wxCharsetToCodepage(const wxChar *charset); // from utils.cpp
 
 class CP_CharSet : public wxCharacterSet
@@ -774,29 +803,37 @@ public:
 
     size_t MB2WC(wchar_t *buf, const char *psz, size_t n)
     {
-        size_t len =
-#ifdef __WXWINE__
-            MultiByteToWideChar(m_CodePage, 0, psz, -1, (WCHAR*) buf, buf ? n : 0);
-#else
-            MultiByteToWideChar(m_CodePage, 0, psz, -1, buf, buf ? n : 0);
-#endif
-        //VS: returns # of written chars for buf!=NULL and *size*
-        //    needed buffer for buf==NULL
-        return len ? (buf ? len : len-1) : (size_t)-1;
+        const size_t len = ::MultiByteToWideChar
+                             (
+                                m_CodePage,     // code page
+                                0,              // flags (none)
+                                psz,            // input string
+                                -1,             // its length (NUL-terminated)
+                                WINE_CAST buf,  // output string
+                                buf ? n : 0     // size of output buffer
+                             );
+
+        // note that it returns # of written chars for buf != NULL and *size*
+        // of the needed buffer for buf == NULL
+        return len ? (buf ? len : len - 1) : (size_t)-1;
     }
 
     size_t WC2MB(char *buf, const wchar_t *psz, size_t n)
     {
-#ifdef __WXWINE__
-        size_t len = WideCharToMultiByte(m_CodePage, 0, (const WCHAR*) psz, -1, buf,
-                                         buf ? n : 0, NULL, NULL);
-#else
-        size_t len = WideCharToMultiByte(m_CodePage, 0, psz, -1, buf,
-                                         buf ? n : 0, NULL, NULL);
-#endif
-        //VS: returns # of written chars for buf!=NULL and *size*
-        //    needed buffer for buf==NULL
-        return len ? (buf ? len : len-1) : (size_t)-1;
+        const size_t len = ::WideCharToMultiByte
+                             (
+                                m_CodePage,     // code page
+                                0,              // flags (none)
+                                WINE_CAST psz,  // input string
+                                -1,             // it is (wide) NUL-terminated
+                                buf,            // output buffer
+                                buf ? n : 0,    // and its size
+                                NULL,           // default "replacement" char
+                                NULL            // [out] was it used?
+                             );
+
+        // see the comment above!
+        return len ? (buf ? len : len - 1) : (size_t)-1;
     }
 
     bool usable() const

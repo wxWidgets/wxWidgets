@@ -182,6 +182,10 @@ public:
     wxString GetStyleString() const;
     wxString GetWeightString() const;
 
+    // Unofficial API, don't use
+    virtual void SetNoAntiAliasing( bool no = TRUE ) {  }
+    virtual bool GetNoAntiAliasing() { return FALSE; }
+
     // the default encoding is used for creating all fonts with default
     // encoding parameter
     static wxFontEncoding GetDefaultEncoding() { return ms_encodingDefault; }
@@ -191,7 +195,7 @@ protected:
     // get the internal data
     wxFontRefData *GetFontData() const
         { return (wxFontRefData *)m_refData; }
-
+    
 private:
     // the currently default encoding: by default, it's the default system
     // encoding, but may be changed by the application using

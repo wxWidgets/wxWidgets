@@ -260,7 +260,11 @@ start_input_pass (j_decompress_ptr cinfo)
   per_scan_setup(cinfo);
   latch_quant_tables(cinfo);
   (*cinfo->entropy->start_pass) (cinfo);
+#if defined(__VISAGECPP__)
+  (*cinfo->coef->start_input_pass2) (cinfo);
+#else
   (*cinfo->coef->start_input_pass) (cinfo);
+#endif
   cinfo->inputctl->consume_input = cinfo->coef->consume_data;
 }
 
@@ -389,3 +393,4 @@ jinit_input_controller (j_decompress_ptr cinfo)
 #   undef start_input_pass2
 #  endif
 #endif
+

@@ -387,6 +387,10 @@ bool MyApp::OnInit()
 // main frame
 // ----------------------------------------------------------------------------
 
+#ifdef __VISUALC__
+#pragma warning(disable: 4355) // this used in base member initializer list
+#endif
+
 // frame constructor
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
        : wxFrame((wxFrame *)NULL, -1, title, pos, size),

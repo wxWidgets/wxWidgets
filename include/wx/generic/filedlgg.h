@@ -89,13 +89,16 @@ public:
     void OnHome( wxCommandEvent &event );
     void OnListOk( wxCommandEvent &event );
     void OnNew( wxCommandEvent &event );
-    void OnChoice( wxCommandEvent &event );
+    void OnChoiceFilter( wxCommandEvent &event );
     void OnTextEnter( wxCommandEvent &event );
     void OnCheck( wxCommandEvent &event );
 
     void HandleAction( const wxString &fn );
 
 protected:
+    // use the filter with the given index
+    void DoSetFilterIndex(int filterindex);
+
     wxString       m_message;
     long           m_dialogStyle;
     wxString       m_dir;

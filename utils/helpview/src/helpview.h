@@ -16,26 +16,78 @@
 #pragma interface "help.cpp"
 #endif
 
-// Define a new application type, each program should derive a class from wxApp
+#define hvVERSION 1.02
+
+// If 1, start a server to allow this to be used
+// as an external help viewer.
+#define hvUSE_IPC 1
+
+#if hvUSE_IPC
+#include <wx/ipc.h>
+
+class hvConnection;
+class hvServer;
+#endif
+
+/*!
+ * The helpview application class.
+ */
+
 class hvApp : public wxApp
 {
-    public:
-        // override base class virtuals
-        // ----------------------------
+public:
+    hvApp();
 
-        // this one is called on application startup and is a good place for the app
-        // initialization (doing it here and not in the ctor allows to have an error
-        // return: if OnInit() returns false, the application terminates)
+    /// Initialise the application.
+    virtual bool OnInit();
 
-        virtual bool OnInit();
-        virtual int OnExit();
+    /// Clean up the application's data.
+    virtual int OnExit();
+    
+    /// Prompt the user for a book to open
+    bool OpenBook(wxHtmlHelpController* controller);
 
-        // Prompt the user for a book to open
-        bool OpenBook(wxHtmlHelpController* controller);
+    /// Returns the help controller.
+    wxHtmlHelpController* GetHelpController() { return m_helpController; }
 
-    private:
-        wxHtmlHelpController *help;
+#if hvUSE_IPC
+    /// Returns the list of connections.
+    wxList& GetConnections() { return m_connections; }
+#endif
+
+private:
+    wxHtmlHelpController*   m_helpController;
+    
+#if hvUSE_IPC
+    wxList                  m_connections;
+    hvServer*               m_server;
+#endif
+    
 };
+
+#if hvUSE_IPC
+class hvConnection : public wxConnection
+{
+public:
+    hvConnection();
+    ~hvConnection();
+
+    bool OnExecute(const wxString& topic, wxChar*data, int size, wxIPCFormat format);
+    wxChar *OnRequest(const wxString& topic, const wxString& item, int *size, wxIPCFormat format);
+    bool OnPoke(const wxString& topic, const wxString& item, wxChar *data, int size, wxIPCFormat format);
+    bool OnStartAdvise(const wxString& topic, const wxString& item);
+
+private:
+};
+
+class hvServer: public wxServer
+{
+public:
+    wxConnectionBase *OnAcceptConnection(const wxString& topic);
+};
+
+
+#endif
 
 #endif
   // _WX_HELPVIEW_H_

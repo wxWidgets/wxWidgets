@@ -380,18 +380,17 @@ void NotebookWidgetsPage::CreateNotebook()
 
     if ( notebook )
     {
-        int sel = notebook->GetSelection();
+        const int sel = notebook->GetSelection();
 
-        int count = notebook->GetPageCount();
+        const int count = notebook->GetPageCount();
+
+        // recreate the pages
         for ( int n = 0; n < count; n++ )
         {
-            wxNotebookPage *page = notebook->GetPage(0);
-            page->Reparent(m_notebook);
-
-            m_notebook->AddPage(page, notebook->GetPageText(0), FALSE,
-                                notebook->GetPageImage(0));
-
-            notebook->RemovePage(0);
+            m_notebook->AddPage(CreateNewPage(),
+                                notebook->GetPageText(n),
+                                FALSE,
+                                notebook->GetPageImage(n));
         }
 
         m_sizerNotebook->Remove(notebook);

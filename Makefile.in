@@ -391,10 +391,18 @@ afminstall: preinstall
 	$(INSTALL) -d $(datadir)/wx/$(VER_MAJMIN)/gs_afm
 	$(INSTALL_DATA) $(top_srcdir)/misc/afm/*.afm $(datadir)/wx/$(VER_MAJMIN)/afm
 	$(INSTALL_DATA) $(top_srcdir)/misc/gs_afm/*.afm $(datadir)/wx/$(VER_MAJMIN)/gs_afm
-        
+
 m4datainstall: preinstall
 	$(INSTALL) -d $(datadir)/aclocal
 	$(INSTALL_DATA) $(top_srcdir)/wxwin.m4 $(datadir)/aclocal
+
+win32install: preinstall
+	$(INSTALL) -d $(includedir)/wx/msw
+	$(INSTALL_DATA) $(top_srcdir)/include/wx/msw/*.cur \
+			$(top_srcdir)/include/wx/msw/*.ico \
+			$(top_srcdir)/include/wx/msw/*.bmp \
+			$(top_srcdir)/include/wx/msw/wx.rc \
+				$(includedir)/wx/msw
 
 # this is the real install target: copies the library, wx-config and the
 # headers to the installation directory
@@ -462,7 +470,7 @@ preinstall_gl: $(build_libdir)/@WX_TARGET_LIBRARY_GL@
 	@if test ! -d $(libdir); then $(INSTALL) -d $(libdir); fi
 	@INSTALL_LIBRARY@ $(build_libdir)/@WX_TARGET_LIBRARY_GL@ $(libdir)/@WX_TARGET_LIBRARY_GL@
 
-install: @AFMINSTALL@ @WX_ALL_INSTALLED@ m4datainstall
+install: @AFMINSTALL@ @WX_ALL_INSTALLED@ m4datainstall @WIN32INSTALL@
 	@echo " "
 	@echo " The installation of wxWindows is finished.  On certain"
 	@echo " platforms (e.g. Linux) you'll now have to run ldconfig"
@@ -493,7 +501,7 @@ uninstall:
 	@$(RM) $(bindir)/wx@TOOLCHAIN_NAME@-config
 	@$(RM) $(datadir)/wx/$(VER_MAJMIN)/afm/*
 	@$(RM) $(datadir)/wx/$(VER_MAJMIN)/gs_afm/*
-# FIXME: wxBase doesnt install these next 3 dirs.
+	# FIXME: wxBase doesnt install these next 3 dirs.
 	@-rmdir $(datadir)/wx/$(VER_MAJMIN)/gs_afm
 	@-rmdir $(datadir)/wx/$(VER_MAJMIN)/afm
 	@-rmdir $(datadir)/wx/$(VER_MAJMIN)
@@ -502,6 +510,7 @@ uninstall:
 	@list='$(HEADERS)'; for p in $$list; do \
 	  $(RM) $(includedir)/wx/$$p; \
 	done
+	# TODO: uninstall the files installed by win32install
 	@echo " Removing i18n files..."
 	@-for p in $(WX_LINGUAS); do \
 	  $(RM) $(localedir)/$$p/LC_MESSAGES/wxstd.mo; \
@@ -536,6 +545,7 @@ ALL_DIST: distclean
 	cp $(WXDIR)/install-sh $(DISTDIR)
 	cp $(WXDIR)/mkinstalldirs $(DISTDIR)
 	cp $(WXDIR)/wx-config.in $(DISTDIR)
+	cp $(WXDIR)/version-script.in $(DISTDIR)
 	cp $(WXDIR)/setup.h.in $(DISTDIR)
 	cp $(WXDIR)/setup.h_vms $(DISTDIR)
 	cp $(WXDIR)/descrip.mms $(DISTDIR)
@@ -580,7 +590,8 @@ ALL_GUI_DIST: ALL_DIST
 	if test -f $(DOCDIR)/$(TOOLKITDIR)/changes.txt ; then \
 	  cp $(DOCDIR)/$(TOOLKITDIR)/changes.txt $(DISTDIR)/CHANGES-$(TOOLKIT).txt ; fi
 	cp $(DOCDIR)/$(TOOLKITDIR)/readme.txt $(DISTDIR)/README-$(TOOLKIT).txt
-	cp $(DOCDIR)/$(TOOLKITDIR)/todo.txt $(DISTDIR)/TODO.txt
+	if test -f $(DOCDIR)/$(TOOLKITDIR)/todo.txt ; then \
+	  cp $(DOCDIR)/$(TOOLKITDIR)/todo.txt $(DISTDIR)/TODO.txt ; fi
 	mkdir $(DISTDIR)/include
 	mkdir $(DISTDIR)/include/wx
 	mkdir $(DISTDIR)/include/wx/$(TOOLKITDIR)
@@ -777,6 +788,8 @@ MSW_ZIP_TEXT_DIST: ALL_GUI_DIST
 	cp $(SRCDIR)/*.??? $(DISTDIR)/src
 	cp $(SRCDIR)/*.?? $(DISTDIR)/src
 	cp $(MSWDIR)/?ake*.* $(DISTDIR)/src/msw
+	mkdir $(DISTDIR)/contrib
+	cp -R $(WXDIR)/contrib $(DISTDIR)
 
 UNIV_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/include/wx/univ
@@ -786,6 +799,15 @@ UNIV_DIST: ALL_GUI_DIST
 	cp $(SRCDIR)/univ/files.lst $(DISTDIR)/src/univ
 	cp $(SRCDIR)/univ/*.cpp $(DISTDIR)/src/univ
 	cp $(SRCDIR)/univ/themes/*.cpp $(DISTDIR)/src/univ/themes
+
+MGL_DIST: UNIV_DIST
+	cp $(WXDIR)/wxMGL.spec $(DISTDIR)
+	cp $(INCDIR)/wx/mgl/*.h $(DISTDIR)/include/wx/mgl
+	cp $(SRCDIR)/mgl/files.lst $(DISTDIR)/src/mgl
+	cp $(SRCDIR)/mgl/make* $(DISTDIR)/src/mgl
+	cp $(SRCDIR)/mgl/*.cpp $(DISTDIR)/src/mgl
+	mkdir $(DISTDIR)/contrib
+	cp -R $(WXDIR)/contrib $(DISTDIR)
 
 DEMOS_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/demos
@@ -841,6 +863,13 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/Makefile.in $(DISTDIR)/samples
 	cp $(SAMPDIR)/configure $(DISTDIR)/samples
 	cp $(SAMPDIR)/configure.in $(DISTDIR)/samples
+
+	mkdir $(DISTDIR)/samples/artprov
+	cp $(SAMPDIR)/artprov/Makefile.in $(DISTDIR)/samples/artprov
+	cp $(SAMPDIR)/artprov/makefile.unx $(DISTDIR)/samples/artprov
+	cp $(SAMPDIR)/artprov/*.cpp $(DISTDIR)/samples/artprov
+	cp $(SAMPDIR)/artprov/*.h $(DISTDIR)/samples/artprov
+	cp $(SAMPDIR)/artprov/*.xpm $(DISTDIR)/samples/artprov
 
 	mkdir $(DISTDIR)/samples/calendar
 	cp $(SAMPDIR)/calendar/Makefile.in $(DISTDIR)/samples/calendar
@@ -1053,6 +1082,10 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/joytest/*.h $(DISTDIR)/samples/joytest
 	cp $(SAMPDIR)/joytest/*.wav $(DISTDIR)/samples/joytest
 
+	mkdir $(DISTDIR)/samples/keyboard
+	cp $(SAMPDIR)/keyboard/Makefile.in $(DISTDIR)/samples/keyboard
+	cp $(SAMPDIR)/keyboard/*.cpp $(DISTDIR)/samples/keyboard
+
 	mkdir $(DISTDIR)/samples/layout
 	cp $(SAMPDIR)/layout/Makefile.in $(DISTDIR)/samples/layout
 	cp $(SAMPDIR)/layout/makefile.unx $(DISTDIR)/samples/layout
@@ -1110,6 +1143,11 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/mobile/wxedit/Makefile.in $(DISTDIR)/samples/mobile/wxedit
 	cp $(SAMPDIR)/mobile/wxedit/*.cpp $(DISTDIR)/samples/mobile/wxedit
 	cp $(SAMPDIR)/mobile/wxedit/*.h $(DISTDIR)/samples/mobile/wxedit
+	mkdir $(DISTDIR)/samples/mobile/styles
+	cp $(SAMPDIR)/mobile/styles/Makefile.in $(DISTDIR)/samples/mobile/styles
+	cp $(SAMPDIR)/mobile/styles/*.cpp $(DISTDIR)/samples/mobile/styles
+	cp $(SAMPDIR)/mobile/styles/*.h $(DISTDIR)/samples/mobile/styles
+	cp $(SAMPDIR)/mobile/styles/*.jpg $(DISTDIR)/samples/mobile/styles
     
 	mkdir $(DISTDIR)/samples/dialup
 	cp $(SAMPDIR)/dialup/Makefile.in $(DISTDIR)/samples/dialup
@@ -1305,6 +1343,18 @@ UTILS_DIST: ALL_GUI_DIST
 	cp $(UTILSDIR)/tex2rtf/src/*.cpp $(DISTDIR)/utils/tex2rtf/src
 	cp $(UTILSDIR)/tex2rtf/src/tex2rtf.* $(DISTDIR)/utils/tex2rtf/src
 
+	mkdir $(DISTDIR)/utils/emulator
+	mkdir $(DISTDIR)/utils/emulator/src
+	mkdir $(DISTDIR)/utils/emulator/docs
+	cp $(UTILSDIR)/emulator/*.in $(DISTDIR)/utils/emulator
+	cp $(UTILSDIR)/emulator/src/*.h $(DISTDIR)/utils/emulator/src
+	cp $(UTILSDIR)/emulator/src/*.in $(DISTDIR)/utils/emulator/src
+	cp $(UTILSDIR)/emulator/src/*.cpp $(DISTDIR)/utils/emulator/src
+	cp $(UTILSDIR)/emulator/src/*.jpg $(DISTDIR)/utils/emulator/src
+	cp $(UTILSDIR)/emulator/src/*.wxe $(DISTDIR)/utils/emulator/src
+	cp $(UTILSDIR)/emulator/docs/*.txt $(DISTDIR)/utils/emulator/docs
+	cp $(UTILSDIR)/emulator/docs/*.jpg $(DISTDIR)/utils/emulator/docs
+
 	mkdir $(DISTDIR)/utils/makegen
 	mkdir $(DISTDIR)/utils/makegen/templates
 	cp $(UTILSDIR)/makegen/Makefile.in $(DISTDIR)/utils/makegen
@@ -1319,7 +1369,29 @@ UTILS_DIST: ALL_GUI_DIST
 	cp $(UTILSDIR)/HelpGen/Makefile.in $(DISTDIR)/utils/HelpGen
 	cp $(UTILSDIR)/HelpGen/src/*.* $(DISTDIR)/utils/HelpGen/src
 
-	cp -R $(UTILSDIR)/dialoged $(DISTDIR)/utils/dialoged
+	mkdir $(DISTDIR)/utils/dialoged
+	mkdir $(DISTDIR)/utils/dialoged/src
+	mkdir $(DISTDIR)/utils/dialoged/src/bitmaps
+	mkdir $(DISTDIR)/utils/dialoged/docs
+	cp $(UTILSDIR)/dialoged/Makefile.in $(DISTDIR)/utils/dialoged
+	cp $(UTILSDIR)/dialoged/src/*.h $(DISTDIR)/utils/dialoged/src
+	cp $(UTILSDIR)/dialoged/src/*.cpp $(DISTDIR)/utils/dialoged/src
+	cp $(UTILSDIR)/dialoged/src/Makefile.in $(DISTDIR)/utils/dialoged/src
+	cp $(UTILSDIR)/dialoged/src/makefile.unx $(DISTDIR)/utils/dialoged/src
+	cp $(UTILSDIR)/dialoged/src/bitmaps/*.xpm $(DISTDIR)/utils/dialoged/src/bitmaps
+	cp $(UTILSDIR)/dialoged/docs/*.tex $(DISTDIR)/utils/dialoged/docs
+	cp $(UTILSDIR)/dialoged/docs/*.ini $(DISTDIR)/utils/dialoged/docs
+	cp $(UTILSDIR)/dialoged/docs/*.gif $(DISTDIR)/utils/dialoged/docs
+
+	mkdir $(DISTDIR)/utils/helpview
+	mkdir $(DISTDIR)/utils/helpview/src
+	mkdir $(DISTDIR)/utils/helpview/src/bitmaps
+	cp $(UTILSDIR)/helpview/Makefile.in $(DISTDIR)/utils/helpview
+	cp $(UTILSDIR)/helpview/src/*.h $(DISTDIR)/utils/helpview/src
+	cp $(UTILSDIR)/helpview/src/*.cpp $(DISTDIR)/utils/helpview/src
+	cp $(UTILSDIR)/helpview/src/Makefile.in $(DISTDIR)/utils/helpview/src
+	cp $(UTILSDIR)/helpview/src/test.zip $(DISTDIR)/utils/helpview/src
+	cp $(UTILSDIR)/helpview/src/bitmaps/*.xpm $(DISTDIR)/utils/helpview/src/bitmaps
 
 MISC_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/misc
@@ -1499,6 +1571,7 @@ debian-dist: debian-native-dist debian-msw-dirs MSW_DIST
 	mv $(DISTDIR) $(WXDIR)/../wxwindows$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER)-$(WX_MAJOR_VERSION_NUMBER).$(WX_MINOR_VERSION_NUMBER).$(WX_RELEASE_NUMBER)
 
 debian-native-dist: @GUIDIST@ UNIV_DIST MANUAL_DIST PYTHON_DIST
+	cp $(SRCDIR)/files.lst $(DISTDIR)/src
 
 debian-msw-dirs:
 	mkdir $(DISTDIR)/include/wx/msw

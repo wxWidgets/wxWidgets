@@ -639,7 +639,7 @@ void RegTreeCtrl::OnSelChanged(wxTreeEvent& event)
 void RegTreeCtrl::OnItemExpanding(wxTreeEvent& event)
 {
   TreeNode *pNode = GetNode(event);
-  bool bExpanding = event.GetCode() == wxTREE_EXPAND_EXPAND;
+  bool bExpanding = event.GetKeyCode() == wxTREE_EXPAND_EXPAND;
 
   // expansion might take some time
   wxSetCursor(*wxHOURGLASS_CURSOR);
@@ -782,7 +782,7 @@ void RegTreeCtrl::OnEndDrag(wxTreeEvent& event)
         wxRegKey keyDst(dst->Key(), src->m_strName);
         ok = keyDst.Create(FALSE);
         if ( !ok ) {
-            wxLogError(wxT("Key '%s' already exists"));
+            wxLogError(wxT("Key '%s' already exists"), keyDst.GetName().c_str());
         }
         else {
             ok = key.Copy(keyDst);

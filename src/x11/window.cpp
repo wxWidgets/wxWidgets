@@ -40,6 +40,7 @@
 #include "wx/module.h"
 #include "wx/menuitem.h"
 #include "wx/log.h"
+#include "wx/fontutil.h"
 #include "wx/univ/renderer.h"
 
 #if  wxUSE_DRAG_AND_DROP
@@ -151,18 +152,18 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
     // Note: The Xlib manual doesn't mention this restriction of XCreateWindow.
     wxSize size2(size);
     if (size2.x <= 0)
-	    size2.x = 20;
+        size2.x = 20;
     if (size2.y <= 0)
-	    size2.y = 20;
+        size2.y = 20;
 
     wxPoint pos2(pos);
     if (pos2.x == -1)
-	    pos2.x = 0;
+        pos2.x = 0;
     if (pos2.y == -1)
-	    pos2.y = 0;
-    
+        pos2.y = 0;
+        
 #if wxUSE_TWO_WINDOWS
-    bool need_two_windows = 
+    bool need_two_windows =
         ((( wxSUNKEN_BORDER | wxRAISED_BORDER | wxSIMPLE_BORDER | wxHSCROLL | wxVSCROLL ) & m_windowStyle) != 0);
 #else
     bool need_two_windows = FALSE;
@@ -307,7 +308,7 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
             xattributes_mask |= CWBitGravity;
             xattributes.bit_gravity = NorthWestGravity;
         }
-
+        
         Window xwindow = XCreateWindow( xdisplay, xparent, pos2.x, pos2.y, size2.x, size2.y, 
             0, DefaultDepth(xdisplay,xscreen), InputOutput, xvisual, xattributes_mask, &xattributes );
 #endif
@@ -340,7 +341,7 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
 wxWindowX11::~wxWindowX11()
 {
     if (g_captureWindow == this)
-	g_captureWindow = NULL;
+        g_captureWindow = NULL;
     
     m_isBeingDeleted = TRUE;
     
@@ -490,7 +491,7 @@ void wxWindowX11::DoCaptureMouse()
             FALSE,
             ButtonPressMask | ButtonReleaseMask | ButtonMotionMask | EnterWindowMask | LeaveWindowMask | PointerMotionMask,
             GrabModeAsync,
-	        GrabModeAsync,
+            GrabModeAsync,
             None,
             None, /* cursor */ // TODO: This may need to be set to the cursor of this window
             CurrentTime );
@@ -498,12 +499,11 @@ void wxWindowX11::DoCaptureMouse()
         if (res != GrabSuccess)
         {
             wxString msg;
-            msg.Printf("Failed to grab pointer for window %s", this->GetClassInfo()->GetClassName());
+            msg.Printf(wxT("Failed to grab pointer for window %s"), this->GetClassInfo()->GetClassName());
             wxLogDebug(msg);
             if (res == GrabNotViewable)
-            {
-                wxLogDebug("This is not a viewable window - perhaps not shown yet?");
-            }
+                wxLogDebug( wxT("This is not a viewable window - perhaps not shown yet?") );
+                
             g_captureWindow = NULL;
             return;
         }
@@ -988,6 +988,17 @@ int wxWindowX11::GetCharHeight() const
 {
     wxCHECK_MSG( m_font.Ok(), 0, "valid window font needed" );
 
+#if wxUSE_UNICODE
+    // There should be an easier way.
+    PangoLayout *layout = pango_layout_new( wxTheApp->GetPangoContext() );
+    pango_layout_set_font_description( layout, GetFont().GetNativeFontInfo()->description );
+    pango_layout_set_text(layout, "H", 1 );
+    int w,h;
+    pango_layout_get_pixel_size(layout, &w, &h);
+    g_object_unref( G_OBJECT( layout ) );
+    
+    return h;
+#else
     WXFontStructPtr pFontStruct = m_font.GetFontStruct(1.0, wxGlobalDisplay());
 
     int direction, ascent, descent;
@@ -997,12 +1008,24 @@ int wxWindowX11::GetCharHeight() const
 
     //  return (overall.ascent + overall.descent);
     return (ascent + descent);
+#endif
 }
 
 int wxWindowX11::GetCharWidth() const
 {
     wxCHECK_MSG( m_font.Ok(), 0, "valid window font needed" );
 
+#if wxUSE_UNICODE
+    // There should be an easier way.
+    PangoLayout *layout = pango_layout_new( wxTheApp->GetPangoContext() );
+    pango_layout_set_font_description( layout, GetFont().GetNativeFontInfo()->description );
+    pango_layout_set_text(layout, "H", 1 );
+    int w,h;
+    pango_layout_get_pixel_size(layout, &w, &h);
+    g_object_unref( G_OBJECT( layout ) );
+    
+    return w;
+#else
     WXFontStructPtr pFontStruct = m_font.GetFontStruct(1.0, wxGlobalDisplay());
 
     int direction, ascent, descent;
@@ -1011,6 +1034,7 @@ int wxWindowX11::GetCharWidth() const
         &descent, &overall);
 
     return overall.width;
+#endif
 }
 
 void wxWindowX11::GetTextExtent(const wxString& string,
@@ -1023,17 +1047,44 @@ void wxWindowX11::GetTextExtent(const wxString& string,
 
     wxCHECK_RET( fontToUse.Ok(), wxT("invalid font") );
 
+    if (string.IsEmpty())
+    {
+        if (x) (*x) = 0;
+        if (y) (*y) = 0;
+        return;
+    }
+
+#if wxUSE_UNICODE
+    PangoLayout *layout = pango_layout_new( wxTheApp->GetPangoContext() );
+    
+    PangoFontDescription *desc = fontToUse.GetNativeFontInfo()->description;
+    pango_layout_set_font_description(layout, desc);
+    
+    const wxCharBuffer data = wxConvUTF8.cWC2MB( string );
+    pango_layout_set_text(layout, (const char*) data, strlen( (const char*) data ));
+        
+    PangoLayoutLine *line = (PangoLayoutLine *)pango_layout_get_lines(layout)->data;
+
+    
+    PangoRectangle rect;
+    pango_layout_line_get_extents(line, NULL, &rect);
+    
+    if (x) (*x) = (wxCoord) (rect.width / PANGO_SCALE);
+    if (y) (*y) = (wxCoord) (rect.height / PANGO_SCALE);
+    if (descent)
+    {
+        // Do something about metrics here
+        (*descent) = 0;
+    }
+    if (externalLeading) (*externalLeading) = 0;  // ??
+
+    g_object_unref( G_OBJECT( layout ) );
+#else
     WXFontStructPtr pFontStruct = fontToUse.GetFontStruct(1.0, wxGlobalDisplay());
 
     int direction, ascent, descent2;
     XCharStruct overall;
     int slen = string.Len();
-
-#if 0
-    if (use16)
-        XTextExtents16((XFontStruct*) pFontStruct, (XChar2b *) (char*) (const char*) string, slen, &direction,
-        &ascent, &descent2, &overall);
-#endif
 
     XTextExtents((XFontStruct*) pFontStruct, (char*) string.c_str(), slen,
                  &direction, &ascent, &descent2, &overall);
@@ -1046,7 +1097,7 @@ void wxWindowX11::GetTextExtent(const wxString& string,
         *descent = descent2;
     if (externalLeading)
         *externalLeading = 0;
-
+#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -1242,8 +1293,9 @@ void wxWindowX11::OnInternalIdle()
         wxString msg;
         msg.Printf("Setting focus for %s from OnInternalIdle\n", GetClassInfo()->GetClassName());
         printf(msg.c_str());
-#endif        
-	SetFocus();
+#endif
+        SetFocus();
+        
         // If it couldn't set the focus now, there's
         // no point in trying again.
         m_needsInputFocus = FALSE;
@@ -1260,15 +1312,15 @@ bool wxAddWindowToTable(Window w, wxWindow *win)
     wxWindow *oldItem = NULL;
     if ((oldItem = (wxWindow *)wxWidgetHashTable->Get ((long) w)))
     {
-        wxLogDebug("Widget table clash: new widget is %ld, %s",
-                   (long)w, win->GetClassInfo()->GetClassName());
+        wxLogDebug( wxT("Widget table clash: new widget is %ld, %s"),
+                    (long)w, win->GetClassInfo()->GetClassName());
         return FALSE;
     }
 
     wxWidgetHashTable->Put((long) w, win);
 
-    wxLogTrace("widget", "XWindow 0x%08x <-> window %p (%s)",
-               (unsigned int) w, win, win->GetClassInfo()->GetClassName());
+    wxLogTrace( wxT("widget"), wxT("XWindow 0x%08x <-> window %p (%s)"),
+                (unsigned int) w, win, win->GetClassInfo()->GetClassName());
 
     return TRUE;
 }
@@ -1292,15 +1344,15 @@ bool wxAddClientWindowToTable(Window w, wxWindow *win)
     wxWindow *oldItem = NULL;
     if ((oldItem = (wxWindow *)wxClientWidgetHashTable->Get ((long) w)))
     {
-        wxLogDebug("Client window table clash: new window is %ld, %s",
-                   (long)w, win->GetClassInfo()->GetClassName());
+        wxLogDebug( wxT("Client window table clash: new window is %ld, %s"),
+                    (long)w, win->GetClassInfo()->GetClassName());
         return FALSE;
     }
 
     wxClientWidgetHashTable->Put((long) w, win);
 
-    wxLogTrace("widget", "XWindow 0x%08x <-> window %p (%s)",
-               (unsigned int) w, win, win->GetClassInfo()->GetClassName());
+    wxLogTrace( wxT("widget"), wxT("XWindow 0x%08x <-> window %p (%s)"),
+                (unsigned int) w, win, win->GetClassInfo()->GetClassName());
 
     return TRUE;
 }
@@ -1462,7 +1514,7 @@ bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win, Window window, 
     return FALSE;
 }
 
-bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win, Window WXUNUSED(win), XEvent *xevent)
+bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win, Window WXUNUSED(win), XEvent *xevent, bool isAscii)
 {
     switch (XEventGetType(xevent))
     {
@@ -1474,23 +1526,27 @@ bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win, Window WXUNUSED(win
             KeySym keySym;
             (void) XLookupString ((XKeyEvent *) xevent, buf, 20, &keySym, NULL);
             int id = wxCharCodeXToWX (keySym);
+            // id may be WXK_xxx code - these are outside ASCII range, so we
+            // can't just use toupper() on id.
+            // Only change this if we want the raw key that was pressed,
+            // and don't change it if we want an ASCII value.
+            if (!isAscii && (id >= 'a' && id <= 'z'))
+            {
+                id = id + 'A' - 'a';
+            }
 
             wxevent.m_shiftDown = XKeyEventShiftIsDown(xevent);
             wxevent.m_controlDown = XKeyEventCtrlIsDown(xevent);
             wxevent.m_altDown = XKeyEventAltIsDown(xevent);
             wxevent.m_metaDown = XKeyEventMetaIsDown(xevent);
             wxevent.SetEventObject(win);
-            wxevent.m_keyCode = toupper(id);
+            wxevent.m_keyCode = id;
             wxevent.SetTimestamp(XKeyEventGetTime(xevent));
 
             wxevent.m_x = XKeyEventGetX(xevent);
             wxevent.m_y = XKeyEventGetY(xevent);
 
-            if (id > -1)
-                return TRUE;
-            else
-                return FALSE;
-            break;
+            return id > -1;
         }
     default:
         break;
@@ -1566,8 +1622,8 @@ wxPoint wxGetMousePosition()
     unsigned int maskReturn;
 
     XQueryPointer (display,
-		   rootWindow,
-		   &rootReturn,
+                   rootWindow,
+                   &rootReturn,
                    &childReturn,
                    &rootX, &rootY, &winX, &winY, &maskReturn);
     return wxPoint(rootX, rootY);

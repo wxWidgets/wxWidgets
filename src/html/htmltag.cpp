@@ -17,7 +17,7 @@
 #include "wx/defs.h"
 #if wxUSE_HTML
 
-#ifdef __BORDLANDC__
+#ifdef __BORLANDC__
 #pragma hdrstop
 #endif
 

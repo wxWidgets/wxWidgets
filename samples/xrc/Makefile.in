@@ -16,7 +16,7 @@ OBJECTS=$(PROGRAM).o \
         derivdlg.o \
 	custclas.o
 
-APPEXTRALIBS=$(top_builddir)/lib/libwxxrc.@WX_TARGET_LIBRARY_TYPE@
+APPEXTRALIBS=$(top_builddir)/lib/lib@WX_LIBRARY_BASENAME@_xrc-@WX_RELEASE@.@WX_TARGET_LIBRARY_TYPE@
 APPEXTRADEFS=-I$(top_srcdir)/contrib/include
 
 DATADIRS = rc
@@ -31,6 +31,7 @@ DATAFILES = rc/artprov.xrc \
 	rc/toolbar.xrc \
 	rc/uncenter.xrc \
 	rc/variable.xrc \
+	rc/appicon.xpm \
 	rc/artprov.xpm \
 	rc/basicdlg.xpm \
 	rc/controls.xpm \

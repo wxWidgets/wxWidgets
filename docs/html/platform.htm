@@ -1,6 +1,6 @@
 <html>
 <head>
-   <title>Platforms supported by wxWindows 2.x</title>
+   <title>Platforms supported by wxWindows 2.4</title>
    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
    <meta name="Author" content="Vadim Zeitlin">
 </head>
@@ -20,10 +20,11 @@
 
 </p>
 
-You will find below the list of all supported platforms for different ports of wxWindows 2.x (wxMSW/wxGTK/wxMotif ports
-only). The cross icon in the third column doesn&#39;t mean that the platform is not supported, but just that wxWindows hasn&#39;t
-been tested on it recently (the table is being updated for wxWindows 2.3.3
-currently).
+You will find below the list of all supported platforms for different ports of
+wxWindows 2.x (wxMSW/wxGTK/wxMotif ports only). The cross icon in the third
+column doesn&#39;t mean that the platform is not supported, but just that
+wxWindows hasn&#39;t been tested on it recently (the table is being updated for
+wxWindows 2.4.0 currently).
 <p>
 See also:
 
@@ -86,9 +87,20 @@ often don&#39;t work.
 <tr> <td>wxMotif with gcc 2.95</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td><br></td><td>with <a href="http://www.openmotif.org">OpenMotif</a></td>
 </tr>
 
+<tr> <td bgcolor="#fafafa"><br></td><td bgcolor="#fafafa" colspan=5> All BSD systems tests are for wxGTK using gcc. </td>
 <tr>
 <td bgcolor="#F0F0F0" align=center valign=center rowspan=1>FreeBSD</td>
-     <td>wxGTK with gcc</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>VZ</td><td>Limited thread support on older systems</td>
+     <td>version from 3.2 to 4.6, x86</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>VZ</td><td><br></td>
+</tr>
+
+<tr>
+<td bgcolor="#FFFFFF" align=center valign=center rowspan=1>NetBSD</td>
+     <td>1.6, Alpha</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>VZ</td><td><br></td>
+</tr>
+
+<tr>
+<td bgcolor="#F0F0F0" align=center valign=center rowspan=1>OpenBSD</td>
+     <td>3.1, Alpha</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>VZ</td><td>Some problems with shared libraries, ok with static ones</td>
 </tr>
 
 <tr>

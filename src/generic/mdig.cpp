@@ -31,6 +31,7 @@
 #ifndef WX_PRECOMP
     #include "wx/panel.h"
     #include "wx/menu.h"
+    #include "wx/intl.h"
 #endif //WX_PRECOMP
 
 #include "wx/generic/mdig.h"
@@ -108,11 +109,11 @@ bool wxGenericMDIParentFrame::Create(wxWindow *parent,
 #if wxUSE_MENUS
       m_pWindowMenu = new wxMenu;
 
-      m_pWindowMenu->Append(wxWINDOWCLOSE,    _T("Cl&ose"));
-      m_pWindowMenu->Append(wxWINDOWCLOSEALL, _T("Close Al&l"));
+      m_pWindowMenu->Append(wxWINDOWCLOSE,    _("Cl&ose"));
+      m_pWindowMenu->Append(wxWINDOWCLOSEALL, _("Close All"));
       m_pWindowMenu->AppendSeparator();
-      m_pWindowMenu->Append(wxWINDOWNEXT,     _T("&Next"));
-      m_pWindowMenu->Append(wxWINDOWPREV,     _T("&Previouse"));
+      m_pWindowMenu->Append(wxWINDOWNEXT,     _("&Next"));
+      m_pWindowMenu->Append(wxWINDOWPREV,     _("&Previous"));
 #endif // wxUSE_MENUS
   }
 
@@ -199,7 +200,7 @@ bool wxGenericMDIParentFrame::ProcessEvent(wxEvent& event)
 #if 0
         /* This is sure to not give problems... */
         && (event.GetEventType() == wxEVT_COMMAND_MENU_SELECTED ||
-            event.GetEventType() == wxEVT_UPDATE_UI ))
+            event.GetEventType() == wxEVT_UPDATE_UI )
 #else
         /* This was tested on wxMSW and worked... */
         && event.GetEventObject() != m_pClientWindow
@@ -208,8 +209,9 @@ bool wxGenericMDIParentFrame::ProcessEvent(wxEvent& event)
              event.GetEventType() == wxEVT_KILL_FOCUS ||
              event.GetEventType() == wxEVT_CHILD_FOCUS ||
              event.GetEventType() == wxEVT_COMMAND_SET_FOCUS ||
-             event.GetEventType() == wxEVT_COMMAND_KILL_FOCUS ))
+             event.GetEventType() == wxEVT_COMMAND_KILL_FOCUS )
 #endif
+       )
     {
         res = m_pActiveChild->GetEventHandler()->ProcessEvent(event);
     }
@@ -290,7 +292,7 @@ void wxGenericMDIParentFrame::RemoveWindowMenu(wxMenuBar *pMenuBar)
     if (pMenuBar && m_pWindowMenu)
     {
         // Remove old window menu
-        int pos = pMenuBar->FindMenu(_T("&Window"));
+        int pos = pMenuBar->FindMenu(_("&Window"));
         if (pos != wxNOT_FOUND)
         {
             wxASSERT(m_pWindowMenu == pMenuBar->GetMenu(pos)); // DBG:: We're going to delete the wrong menu!!!
@@ -303,14 +305,14 @@ void wxGenericMDIParentFrame::AddWindowMenu(wxMenuBar *pMenuBar)
 {
     if (pMenuBar && m_pWindowMenu)
     {
-        int pos = pMenuBar->FindMenu(_T("Help"));
+        int pos = pMenuBar->FindMenu(_("Help"));
         if (pos == wxNOT_FOUND)
         {
-            pMenuBar->Append(m_pWindowMenu, _T("&Window"));
+            pMenuBar->Append(m_pWindowMenu, _("&Window"));
         }
         else
         {
-            pMenuBar->Insert(pos, m_pWindowMenu, _T("&Window"));
+            pMenuBar->Insert(pos, m_pWindowMenu, _("&Window"));
         }
     }
 }
@@ -453,7 +455,7 @@ bool wxGenericMDIChildFrame::Create( wxGenericMDIParentFrame *parent,
 {
     wxGenericMDIClientWindow* pClientWindow = parent->GetClientWindow();
 
-    wxASSERT_MSG((pClientWindow != (wxWindow*) NULL), "Missing MDI client window.");
+    wxASSERT_MSG((pClientWindow != (wxWindow*) NULL), wxT("Missing MDI client window.") );
 
     wxPanel::Create(pClientWindow, id, wxDefaultPosition, size, style, name);
 
@@ -792,6 +794,16 @@ void wxGenericMDIClientWindow::OnSize(wxSizeEvent& event)
  */
 
 #if wxUSE_GENERIC_MDI_AS_NATIVE
+
+wxMDIChildFrame * wxMDIParentFrame::GetActiveChild() const
+    {
+        wxGenericMDIChildFrame *pGFrame = wxGenericMDIParentFrame::GetActiveChild();
+        wxMDIChildFrame *pFrame = wxDynamicCast(pGFrame, wxMDIChildFrame);
+
+        wxASSERT_MSG(!(pFrame == NULL && pGFrame != NULL), wxT("Active frame is class not derived from wxMDIChildFrame!"));
+
+        return pFrame;
+    }
 
 IMPLEMENT_DYNAMIC_CLASS(wxMDIParentFrame, wxGenericMDIParentFrame)
 IMPLEMENT_DYNAMIC_CLASS(wxMDIChildFrame, wxGenericMDIChildFrame)

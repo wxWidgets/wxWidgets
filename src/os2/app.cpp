@@ -613,7 +613,7 @@ int wxEntry(
     {
         if (wxTheApp->OnInit())
         {
-            nRetValue = wxTheApp->OnRun();
+            wxTheApp->OnRun();
         }
         // Normal exit
         wxWindow*                   pTopWindow = wxTheApp->GetTopWindow();
@@ -641,7 +641,7 @@ int wxEntry(
     printf("wxTheApp->OnExit ");
     fflush(stdout);
 #endif
-    wxTheApp->OnExit();
+    nRetValue = wxTheApp->OnExit();
 #if wxUSE_CONSOLEDEBUG
     printf("wxApp::CleanUp ");
     fflush(stdout);
@@ -965,19 +965,20 @@ bool wxApp::ProcessMessage(
     return FALSE;
 } // end of wxApp::ProcessMessage
 
+bool                                gbInOnIdle = FALSE;
+
 void wxApp::OnIdle(
   wxIdleEvent&                      rEvent
 )
 {
-    static bool                     sbInOnIdle = FALSE;
 
     //
     // Avoid recursion (via ProcessEvent default case)
     //
-    if (sbInOnIdle)
+    if (gbInOnIdle)
         return;
 
-    sbInOnIdle = TRUE;
+    gbInOnIdle = TRUE;
 
     //
     // If there are pending events, we must process them: pending events
@@ -1019,7 +1020,7 @@ void wxApp::OnIdle(
         //
         rEvent.RequestMore(TRUE);
     }
-    sbInOnIdle = FALSE;
+    gbInOnIdle = FALSE;
 } // end of wxApp::OnIdle
 
 // Send idle event to all top-level windows

@@ -581,7 +581,7 @@ void wxPolygonShape::ResetControlPoints()
 }
 
 
-#ifdef PROLOGIO
+#if wxUSE_PROLOGIO
 void wxPolygonShape::WriteAttributes(wxExpr *clause)
 {
   wxShape::WriteAttributes(clause);
@@ -940,7 +940,7 @@ bool wxRectangleShape::GetPerimeterPoint(double x1, double y1,
   return TRUE;
 }
 
-#ifdef PROLOGIO
+#if wxUSE_PROLOGIO
 void wxRectangleShape::WriteAttributes(wxExpr *clause)
 {
   wxShape::WriteAttributes(clause);
@@ -1013,7 +1013,7 @@ void wxTextShape::Copy(wxShape& copy)
   wxRectangleShape::Copy(copy);
 }
 
-#ifdef PROLOGIO
+#if wxUSE_PROLOGIO
 void wxTextShape::WriteAttributes(wxExpr *clause)
 {
   wxRectangleShape::WriteAttributes(clause);
@@ -1080,7 +1080,7 @@ void wxEllipseShape::SetSize(double x, double y, bool recursive)
   SetDefaultRegionSize();
 }
 
-#ifdef PROLOGIO
+#if wxUSE_PROLOGIO
 void wxEllipseShape::WriteAttributes(wxExpr *clause)
 {
   wxShape::WriteAttributes(clause);

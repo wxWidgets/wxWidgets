@@ -1156,7 +1156,7 @@ msgstr "Vsebina"
 
 #: ../src/common/strconv.cpp:596
 #, c-format
-msgid "Convertion to charset '%s' doesn't work."
+msgid "Conversion to charset '%s' doesn't work."
 msgstr ""
 
 # generic/prntdlgg.cpp:196

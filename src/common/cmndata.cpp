@@ -247,7 +247,7 @@ wxPrintData::wxPrintData()
     m_printCollate = FALSE;
 
     // New, 24/3/99
-    m_printerName = "";
+    m_printerName = wxT("");
     m_colour = TRUE;
     m_duplexMode = wxDUPLEX_SIMPLEX;
     m_printQuality = wxPRINT_QUALITY_HIGH;
@@ -632,17 +632,7 @@ void wxPrintData::ConvertFromNative()
 
         if (devMode->dmDeviceName[0] != 0)
         {
-            // TODO: make this Unicode compatible
-            char buf[32];
-            int i = 0;
-            while (devMode->dmDeviceName[i] != 0)
-            {
-                buf[i] = devMode->dmDeviceName[i];
-                i ++;
-            }
-            buf[i] = 0;
-
-            m_printerName = buf;
+            m_printerName = devMode->dmDeviceName;
         }
 
         //// Colour

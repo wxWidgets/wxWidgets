@@ -1,3 +1,4 @@
+
 <HTML>
 
 <HEAD>
@@ -25,15 +26,18 @@ See also <a href="faq.htm">top-level FAQ page</a>.
 <h3>List of questions in this category</h3>
 <ul>
 <li><a href="#whatis">What is wxWindows?</a></li>
+<li><a href="#licence">Can I use wxWindows 2 for both proprietary projects, and GPL&#39;ed projects?</a></li>
+<li><a href="#support">Is there support?</a></li>
 <li><a href="#users">Who uses wxWindows?</a></li>
-<li><a href="#platforms">What platforms are supported by wxWindows 2?</a></li>
-<li><a href="#specific">How does wxWindows 2 support platform-specific features?</a></li>
+<li><a href="#platforms">What platforms are supported by wxWindows?</a></li>
+<li><a href="#specific">How does wxWindows support platform-specific features?</a></li>
 <li><a href="#stl">Does wxWindows use STL? or the standard string class?</a></li>
-<li><a href="#richedit">Is there a rich edit/markup widget for wxWindows 2?</a></ li>
+<li><a href="#richedit">Is there a rich edit/markup widget for wxWindows?</a></ li>
 <li><a href="#exceptions">How to use C++ exceptions with wxWindows?</a></ li>
-<li><a href="#dev">How is wxWindows 2 being developed?</a></li>
-<li><a href="#distrib">How is wxWindows 2 distributed?</a></li>
+<li><a href="#dev">How is wxWindows being developed?</a></li>
+<li><a href="#distrib">How is wxWindows distributed?</a></li>
 <li><a href="#future">What are the plans for the future?</a></li>
+<li><a href="#base">What is wxBase?</a></li>
 <li><a href="#univ">What is wxUniversal?</a></li>
 <li><a href="#jave">What about Java?</a></li>
 <li><a href="#help">How can I help the project?</a></li>
@@ -54,7 +58,7 @@ You don&#39;t have to use C++ to use wxWindows: there is a <a href="http://wxpyt
 and also a <a href="http://wxperl.sourceforge.net" target=_top>Perl interface</a>.
 <P>
 
-<h3>Can I use wxWindows 2 for both proprietary (commercial) projects, and GPL&#39;ed projects?</h3>
+<h3><a name="licence">Can I use wxWindows 2 for both proprietary (commercial) projects, and GPL&#39;ed projects?</a></h3>
 
 Yes. Please see the <a href="newlicen.htm">licence</a> for details, but basically
 you can distribute proprietary binaries without distributing any source code, and neither will wxWindows
@@ -64,7 +68,7 @@ The conditions for using wxWindows 2 are the same whether you are a personal, ac
 or commercial developer.
 <P>
 
-<h3>Is there support?</h3>
+<h3><a name="support">Is there support?</a></h3>
 
 No official support, but the mailing list is very helpful and some people say that
 wxWindows support is better than for much commercial software. The developers are
@@ -81,6 +85,9 @@ quite large for a list of this type.<P>
 
 See <a href="users.htm">Users</a> for a list of some users and their applications, and
 also <A href="feedback.htm">Feedback</a> for comments.<P>
+Our highest-profile user yet is industry veteran and Lotus Corp. founder Mitch Kapor
+and his <a href="http://www.osafoundation.org" target=_new>Open Source Applications Foundation</a>.
+<P>
 
 <H3><a name="platforms">What platforms are supported by wxWindows 2?</a></H3>
 
@@ -159,10 +166,9 @@ or by adding this to a header before you include any STL files:<P>
 These are the possibilities so far:<P>
 
 <ul>
-<li>The richedit sample has a text editor that does markup.
 <li>See <a href="http://www.scintilla.org" target=_top>www.scintilla.org</a> for
-a very nice syntax-highlighting editor widget. Robin Dunn is writing a wxWindows wrapper
-for this widget.
+a very nice syntax-highlighting editor widget. Robin Dunn has written a wxWindows wrapper
+for this widget, available in the wxWindows distribution under contrib/src/stc.
 <li>If you only need to display marked-up information, rather than edit it,
 then wxHTML will suit your needs. wxHTML is built into wxWindows - please see the reference
 manual for details, and samples/html.
@@ -200,29 +206,29 @@ There are a few issues to keep in mind, though:
 
 <p>
 
-<H3><a name="dev">How is wxWindows 2 being developed?</a></H3>
+<H3><a name="dev">How is wxWindows being developed?</a></H3>
 
 We are using the <a href="cvs.htm">CVS</a> system to develop and maintain wxWindows. This allows
-us to make alterations and upload them instantly to the SourceForge server, from
+us to make alterations and upload them instantly to the server, from
 which others can update their source.<P>
 
 To build source from CVS, see the file BuildCVS.txt in the top-level wxWindows distribution
 directory.<P>
 
-<H3><a name="distrib">How is wxWindows 2 distributed?</a></H3>
+<H3><a name="distrib">How is wxWindows distributed?</a></H3>
 
 By ftp, and via the <a href="cdrom2.htm">wxWindows CD-ROM</a>.
 <P>
 If you are feeling adventurous, you may also check out the sources directly
-from the <a href="cvs.htm">cvs</a>
+from <a href="cvs.htm">cvs</a>.
 <p>
 
 <H3><a name="future">What are the plans for the future?</a></H3>
 
-Currently we&#39;re working too hard on getting wxWindows 2 finished (are GUI toolkits ever
+Currently we&#39;re working too hard on getting wxWindows finished (are GUI toolkits ever
 finished?) to think very far ahead. However, we know we want to make wxWindows as robust
 and well-publicised as possible. We also want to aim for better platform-independence of
-resources such as icons and bitmaps, standardising on the PNG for all platforms.<P>
+resources such as icons and bitmaps, standardising on PNG and XPM for all platforms.<P>
 
 Other possibilities include: DCOM/CORBA compatibility; a wxWindows book;
 <a href="http://wxworkshop.sourceforge.net/">wxWorkshop</a>, an IDE;
@@ -234,12 +240,24 @@ their product.<P>
 The high-level goal of wxWindows is to be thought of as the number one C++ framework,
 for virtually any platform. Move over, MFC!<P>
 
+<h3><a name="base">What is wxBase?</a></h3>
+
+wxBase is a subset of wxWindows comprised by the non-GUI classes. It includes
+wxWindows container and primitive data type classes (including wxString,
+wxDateTime and so on) and also useful wrappers for the operating system objects
+such as files, processes, threads, sockets and so on. With very minor
+exceptions wxBase may be used in exactly the same way as wxWindows but it
+doesn&#39;t require a GUI to run and so is ideal for creating console mode
+utilities or server programs. It is also possible to create a program which can
+be compiled either as a console application (using wxBase) or a GUI one (using
+a full featured wxWindows port).
+
 <H3><a name="univ">What is wxUniversal?</a></H3>
 
-wxUniversal is a new port of wxWindows being currently actively developed. The
-main difference is that wxUniversal implements all controls (or widgets) in
-wxWindows itself thus allowing to have much more flexibility (i.e. support for
-themes even under MS Windows!). It also means that it is now much easier to
+The main difference between wxUniversal-based ports (such as wxX11, wxMGL) and other ports (such as wxMSW, wxGTK+, wxMac)
+is that wxUniversal implements all controls (or widgets) in
+wxWindows itself thus allowing to have much more flexibility (for example, support for
+themes even under MS Windows). It also means that it is now much easier to
 port wxWindows to a new platform as only the low-level classes must be ported
 which make for a small part of the library.
 <p>
@@ -255,7 +273,7 @@ from Java, and the level of interest in wxWindows is as high as ever.<P>
 
 Please check out the <a href="http://www.wxwindows.org/develop2.htm">Community</a> pages,
 in particular the <a href="projects.htm">suggested projects</a>, and
-mail <a href="mailto:julian.smart@btopenworld.com">Julian Smart</a> or the developers&#39; mailing list with your own suggestions.<P>
+mail the developers&#39; mailing list with your own suggestions.<P>
 
 </font>
 

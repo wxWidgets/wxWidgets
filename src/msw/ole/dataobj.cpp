@@ -1098,7 +1098,7 @@ protected:
         // CFSTR_SHELLURL is _always_ ANSI!
         wxCharBuffer char_buffer( GetDataSize() );
         wxCustomDataObject::GetDataHere( (void*)char_buffer.data() );
-        wxString unicode_buffer( char_buffer );
+        wxString unicode_buffer( char_buffer, wxConvLibc );
         memcpy( buffer, unicode_buffer.c_str(),
                 ( unicode_buffer.length() + 1 ) * sizeof(wxChar) );
 

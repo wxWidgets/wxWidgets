@@ -1,4 +1,4 @@
-Announcing wxWindows 2.3.3: a cross-platform GUI toolkit
+Announcing wxWindows 2.3.4: a cross-platform GUI toolkit
 ----------------------------------------------------------------
 
 September 16th, 2002 -- the wxWindows team is pleased to

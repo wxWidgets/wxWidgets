@@ -146,7 +146,6 @@ void wxXmlResource::ClearHandlers()
 }
 
 
-
 wxMenu *wxXmlResource::LoadMenu(const wxString& name)
 {
     return (wxMenu*)CreateResFromNode(FindResource(name, wxT("wxMenu")), NULL, NULL);
@@ -261,7 +260,7 @@ static void ProcessPlatformProperty(wxXmlNode *node)
             isok = TRUE;
         else
         {
-            wxStringTokenizer tkn(s, " |");
+            wxStringTokenizer tkn(s, wxT(" |"));
 
             while (tkn.HasMoreTokens())
             {
@@ -408,10 +407,25 @@ wxXmlNode *wxXmlResource::DoFindResource(wxXmlNode *parent,
         if ( node->GetType() == wxXML_ELEMENT_NODE &&
                  (node->GetName() == wxT("object") ||
                   node->GetName() == wxT("object_ref")) &&
-                (!classname ||
-                 node->GetPropVal(wxT("class"), wxEmptyString) == classname) &&
-                node->GetPropVal(wxT("name"), &dummy) && dummy == name )
-            return node;
+             node->GetPropVal(wxT("name"), &dummy) && dummy == name )
+        {
+            wxString cls(node->GetPropVal(wxT("class"), wxEmptyString));
+            if (!classname || cls == classname)
+                return node;
+            // object_ref may not have 'class' property:
+            if (cls.empty() && node->GetName() == wxT("object_ref"))
+            {
+                wxString refName = node->GetPropVal(wxT("ref"), wxEmptyString);
+                if (refName.empty())
+                    continue;
+                wxXmlNode* refNode = FindResource(refName, wxEmptyString, TRUE);
+                if (refNode &&
+                    refNode->GetPropVal(wxT("class"), wxEmptyString) == classname)
+                {
+                    return node;
+                }
+            }
+        }
     }
 
     if ( recursive )
@@ -487,7 +501,7 @@ static void MergeNodes(wxXmlNode& dest, wxXmlNode& with)
         for (dnode = dest.GetChildren(); dnode; dnode = dnode->GetNext() )
         {
             if ( dnode->GetName() == node->GetName() &&
-                 dnode->GetPropVal("name", wxEmptyString) == name &&
+                 dnode->GetPropVal(wxT("name"), wxEmptyString) == name &&
                  dnode->GetType() == node->GetType() )
             {
                 MergeNodes(*dnode, *node);
@@ -547,6 +561,40 @@ wxObject *wxXmlResource::CreateResFromNode(wxXmlNode *node, wxObject *parent, wx
 }
 
 
+#include "wx/listimpl.cpp"
+WX_DECLARE_LIST(wxXmlSubclassFactory, wxXmlSubclassFactoriesList);
+WX_DEFINE_LIST(wxXmlSubclassFactoriesList);
+
+wxXmlSubclassFactoriesList *wxXmlResource::ms_subclassFactories = NULL;
+
+/*static*/ void wxXmlResource::AddSubclassFactory(wxXmlSubclassFactory *factory)
+{
+    if (!ms_subclassFactories)
+    {
+        ms_subclassFactories = new wxXmlSubclassFactoriesList;
+        ms_subclassFactories->DeleteContents(TRUE);
+    }
+    ms_subclassFactories->Append(factory);
+}
+
+class wxXmlSubclassFactoryCXX : public wxXmlSubclassFactory
+{
+public:
+    ~wxXmlSubclassFactoryCXX() {}
+
+    wxObject *Create(const wxString& className)
+    {
+        wxClassInfo* classInfo = wxClassInfo::FindClass(className);
+
+        if (classInfo)
+            return classInfo->CreateObject();
+        else
+            return NULL;
+    }
+};
+
+
+
 
 
 wxXmlResourceHandler::wxXmlResourceHandler()
@@ -568,18 +616,23 @@ wxObject *wxXmlResourceHandler::CreateResource(wxXmlNode *node, wxObject *parent
         !(m_resource->GetFlags() & wxXRC_NO_SUBCLASSING))
     {
         wxString subclass = node->GetPropVal(wxT("subclass"), wxEmptyString);
-        wxClassInfo* classInfo = wxClassInfo::FindClass(subclass);
-
-        if (classInfo)
-            m_instance = classInfo->CreateObject();
-
-        if (!m_instance)
+        if (!subclass.empty())
         {
-            wxLogError(_("Subclass '%s' not found for resource '%s', not subclassing!"),
-                       subclass.c_str(), node->GetPropVal(wxT("name"), wxEmptyString).c_str());
-        }
+            for (wxXmlSubclassFactoriesList::Node *i = wxXmlResource::ms_subclassFactories->GetFirst();
+                 i; i = i->GetNext())
+            {
+                m_instance = i->GetData()->Create(subclass);
+                if (m_instance)
+                    break;
+            }
 
-        m_instance = classInfo->CreateObject();
+            if (!m_instance)
+            {
+                wxString name = node->GetPropVal(wxT("name"), wxEmptyString);
+                wxLogError(_("Subclass '%s' not found for resource '%s', not subclassing!"),
+                           subclass.c_str(), name.c_str());
+            }
+        }
     }
 
     m_node = node;
@@ -634,7 +687,7 @@ int wxXmlResourceHandler::GetStyle(const wxString& param, int defaults)
 
     if (!s) return defaults;
 
-    wxStringTokenizer tkn(s, wxT("| "), wxTOKEN_STRTOK);
+    wxStringTokenizer tkn(s, wxT("| \t\n"), wxTOKEN_STRTOK);
     int style = 0;
     int index;
     wxString fl;
@@ -733,6 +786,7 @@ int wxXmlResourceHandler::GetID()
     stdID(wxID_STATIC); stdID(wxID_FORWARD); stdID(wxID_BACKWARD);
     stdID(wxID_DEFAULT); stdID(wxID_MORE); stdID(wxID_SETUP);
     stdID(wxID_RESET); stdID(wxID_HELP_CONTEXT);
+    stdID(wxID_CLOSE_ALL);
 #undef stdID
     else return wxXmlResource::GetXRCID(sid);
 }
@@ -845,6 +899,8 @@ wxIcon wxXmlResourceHandler::GetIcon(const wxString& param,
 
 wxXmlNode *wxXmlResourceHandler::GetParamNode(const wxString& param)
 {
+    wxCHECK_MSG(m_node, NULL, wxT("You can't access handler data before it was initialized!"));
+
     wxXmlNode *n = m_node->GetChildren();
 
     while (n)
@@ -1166,11 +1222,13 @@ public:
     wxXmlResourceModule() {}
     bool OnInit()
     {
+        wxXmlResource::AddSubclassFactory(new wxXmlSubclassFactoryCXX);
         return TRUE;
     }
     void OnExit()
     {
         delete wxXmlResource::Set(NULL);
+        wxDELETE(wxXmlResource::ms_subclassFactories);
         CleanXRCID_Records();
     }
 };

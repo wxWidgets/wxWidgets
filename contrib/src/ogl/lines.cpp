@@ -1373,7 +1373,7 @@ void wxLineShape::ResetControlPoints()
   }
 }
 
-#ifdef PROLOGIO
+#if wxUSE_PROLOGIO
 void wxLineShape::WriteAttributes(wxExpr *clause)
 {
   wxShape::WriteAttributes(clause);

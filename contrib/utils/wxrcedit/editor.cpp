@@ -494,8 +494,7 @@ void EditorFrame::OnTreeSel(wxTreeEvent& event)
         }
         RecursivelyExpand(m_TreeCtrl, event.GetItem());
 
-        PreviewFrame::Get()->Preview(node,m_Resource->GetRoot()->GetPropVal(
-                                      wxT("version"), wxT("0.0.0.0")));
+        PreviewFrame::Get()->Preview(node,m_Resource);
     }
 }
 
@@ -509,8 +508,7 @@ void EditorFrame::OnToolbar(wxCommandEvent& event)
             {
             XmlTreeData* dt = (XmlTreeData*)m_TreeCtrl->GetItemData(m_TreeCtrl->GetSelection());;
             if (dt != NULL && dt->Node != NULL)
-                PreviewFrame::Get()->Preview(dt->Node,m_Resource->GetRoot()->GetPropVal(
-                                      wxT("version"), wxT("0.0.0.0")));
+                PreviewFrame::Get()->Preview(dt->Node, m_Resource);
             break;
             }
 

@@ -123,12 +123,13 @@
 // Use of wxFalse instead of FALSE suppresses compiler warnings about testing
 // constant expression
 WXDLLEXPORT_DATA(extern const bool) wxFalse;
+#define wxAssertFailure wxFalse
 
 // special form of assert: always triggers it (in debug mode)
-#define wxFAIL                 wxASSERT(wxFalse)
+#define wxFAIL                 wxASSERT(wxAssertFailure)
 
 // FAIL with some message
-#define wxFAIL_MSG(msg)        wxASSERT_MSG(wxFalse, msg)
+#define wxFAIL_MSG(msg)        wxASSERT_MSG(wxAssertFailure, msg)
 
 // NB: the following macros work also in release mode!
 

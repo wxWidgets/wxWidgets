@@ -28,11 +28,23 @@ comp.windows.x
 comp.windows.x.announce
 comp.windows.x.motif
 
+Note: submissions to comp.windows.linux.announce must be
+sent to cola@stump.algebra.com, with short descr
+of software and location. See http://stump.algebra.com/~cola/
+NO CROSSPOSTING when sending to this address.
+
+Pack plenty information into the subject. 
+Don't write a subject like "Foo version 1.1 released". Many
+people will not know what Foo is, so the subject won't help them
+select articles. Instead, say "Foo 1.1 - copy files more
+efficiently than cp". There is no need to say that the article
+is an announcement, so don't write a subject like "ANNOUNCEMENT:
+Foo version 1.1 released". 
 
 News and links sites:
 -----------------------
 
-slashdot.org, freshmeat.net
+slashdot.org, freshmeat.net, http://lwn.net/
 
 Many of these links will be out of date now:
 

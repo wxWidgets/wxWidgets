@@ -93,6 +93,9 @@ public:
     void SetFaceName(const wxString& facename);
     void SetEncoding(wxFontEncoding encoding);
 
+    void SetNoAntiAliasing( bool no = TRUE ) { m_noAA = no; }
+    bool GetNoAntiAliasing() { return m_noAA; }
+    
     // and this one also modifies all the other font data fields
     void SetNativeFontInfo(const wxNativeFontInfo& info);
 
@@ -130,17 +133,14 @@ protected:
     void InitFromNative();
 
 private:
-#ifdef __WXGTK20__
-    void ClearGdkFonts() { }
-#else // GTK 1.x
-    // clear m_scaled_xfonts
+    // clear m_scaled_xfonts if any
     void ClearGdkFonts();
 
+#ifndef __WXGTK20__
     // the map of font sizes to "GdkFont *"
     wxScaledFontList  m_scaled_xfonts;
 #endif // GTK 2.0/1.x
 
-    // the broken down font parameters
     int             m_pointSize;
     int             m_family,
                     m_style,
@@ -148,6 +148,7 @@ private:
     bool            m_underlined;
     wxString        m_faceName;
     wxFontEncoding  m_encoding;  // Unused under GTK 2.0
+    bool            m_noAA;      // No anti-aliasing
 
     // The native font info, basicly an XFLD under GTK 1.2 and
     // the pango font description under GTK 2.0.
@@ -156,12 +157,8 @@ private:
     friend class wxFont;
 };
 
-// ============================================================================
-// wxFontRefData implementation
-// ============================================================================
-
 // ----------------------------------------------------------------------------
-// wxFontRefData creation
+// wxFontRefData 
 // ----------------------------------------------------------------------------
 
 void wxFontRefData::Init(int pointSize,
@@ -188,25 +185,37 @@ void wxFontRefData::Init(int pointSize,
 
     m_underlined = underlined;
     m_encoding = encoding;
+    
+    m_noAA = FALSE;
 
 #ifdef __WXGTK20__
     // Create native font info
     m_nativeFontInfo.description = pango_font_description_new();
 
     // And set its values
-    switch (m_family)
+    if (!m_faceName.empty())
     {
-        case wxFONTFAMILY_MODERN:
-        case wxFONTFAMILY_TELETYPE:
-           pango_font_description_set_family( m_nativeFontInfo.description, "monospace" );
-           break;
-        case wxFONTFAMILY_SWISS:
-           pango_font_description_set_family( m_nativeFontInfo.description, "serif" );
-           break;
-        default:
-           pango_font_description_set_family( m_nativeFontInfo.description, "sans" );
-           break;
+       pango_font_description_set_family( m_nativeFontInfo.description, wxGTK_CONV(m_faceName) );
     }
+    else
+    {
+        switch (m_family)
+        {
+            case wxFONTFAMILY_MODERN:
+            case wxFONTFAMILY_TELETYPE:
+               pango_font_description_set_family( m_nativeFontInfo.description, "monospace" );
+               break;
+            case wxFONTFAMILY_ROMAN:
+               pango_font_description_set_family( m_nativeFontInfo.description, "serif" );
+               break;
+            case wxFONTFAMILY_SWISS:
+               // SWISS = sans serif
+            default:
+               pango_font_description_set_family( m_nativeFontInfo.description, "sans" );
+               break;
+        }
+    }
+    
     SetStyle( m_style );
     SetPointSize( m_pointSize );
     SetWeight( m_weight );
@@ -215,6 +224,8 @@ void wxFontRefData::Init(int pointSize,
 
 void wxFontRefData::InitFromNative()
 {
+    m_noAA = FALSE;
+
 #ifdef __WXGTK20__
     // Get native info
     PangoFontDescription *desc = m_nativeFontInfo.description;
@@ -266,6 +277,10 @@ void wxFontRefData::InitFromNative()
     else if (m_faceName == wxT("sans"))
     {
         m_family = wxFONTFAMILY_SWISS;
+    }
+    else if (m_faceName == wxT("serif"))
+    {
+        m_family = wxFONTFAMILY_ROMAN;
     }
     else
     {
@@ -391,6 +406,8 @@ wxFontRefData::wxFontRefData( const wxFontRefData& data )
     m_faceName = data.m_faceName;
     m_encoding = data.m_encoding;
 
+    m_noAA = data.m_noAA;
+    
     m_nativeFontInfo = data.m_nativeFontInfo;
 }
 
@@ -414,9 +431,9 @@ wxFontRefData::wxFontRefData(const wxString& fontname)
     InitFromNative();
 }
 
-#ifndef __WXGTK20__
 void wxFontRefData::ClearGdkFonts()
 {
+#ifndef __WXGTK20__
     for ( wxScaledFontList::iterator i = m_scaled_xfonts.begin();
           i != m_scaled_xfonts.end();
           ++i )
@@ -426,8 +443,8 @@ void wxFontRefData::ClearGdkFonts()
     }
 
     m_scaled_xfonts.clear();
-}
 #endif // GTK 1.x
+}
 
 wxFontRefData::~wxFontRefData()
 {
@@ -522,7 +539,27 @@ void wxFontRefData::SetWeight(int weight)
 {
     m_weight = weight;
 
-#ifndef __WXGTK20__
+#ifdef __WXGTK20__
+    PangoFontDescription *desc = m_nativeFontInfo.description;
+    switch ( weight )
+    {
+        case wxFONTWEIGHT_BOLD:
+            pango_font_description_set_weight(desc, PANGO_WEIGHT_BOLD);
+            break;
+
+        case wxFONTWEIGHT_LIGHT:
+            pango_font_description_set_weight(desc, PANGO_WEIGHT_LIGHT);
+            break;
+
+        default:
+            wxFAIL_MSG( _T("unknown font weight") );
+            // fall through
+
+        case wxFONTWEIGHT_NORMAL:
+            // unspecified
+            pango_font_description_set_weight(desc, PANGO_WEIGHT_NORMAL);
+    }
+#else //!__WXGTK20__
     if ( HasNativeFont() )
     {
         wxString boldness;
@@ -597,10 +634,6 @@ void wxFontRefData::SetNativeFontInfo(const wxNativeFontInfo& info)
     InitFromNative();
 }
 
-// ============================================================================
-// wxFont implementation
-// ============================================================================
-
 // ----------------------------------------------------------------------------
 // wxFont creation
 // ----------------------------------------------------------------------------
@@ -624,7 +657,7 @@ wxFont::wxFont(const wxNativeFontInfo& info)
             info.GetFaceName(),
             info.GetEncoding() );
 #else
-    Create(info.GetXFontName());
+    (void) Create(info.GetXFontName());
 #endif
 }
 
@@ -636,6 +669,8 @@ bool wxFont::Create( int pointSize,
                      const wxString& face,
                      wxFontEncoding encoding)
 {
+    UnRef();
+
     m_refData = new wxFontRefData(pointSize, family, style, weight,
                                   underlined, face, encoding);
 
@@ -678,9 +713,6 @@ wxFont::~wxFont()
 // ----------------------------------------------------------------------------
 // accessors
 // ----------------------------------------------------------------------------
-
-// all accessors are just forwarded to wxFontRefData which has everything we
-// need
 
 int wxFont::GetPointSize() const
 {
@@ -729,6 +761,13 @@ wxFontEncoding wxFont::GetEncoding() const
     wxCHECK_MSG( Ok(), wxFONTENCODING_DEFAULT, wxT("invalid font") );
 
     return M_FONTDATA->m_encoding;
+}
+
+bool wxFont::GetNoAntiAliasing()
+{
+    wxCHECK_MSG( Ok(), wxFONTENCODING_DEFAULT, wxT("invalid font") );
+
+    return M_FONTDATA->m_noAA;
 }
 
 wxNativeFontInfo *wxFont::GetNativeFontInfo() const
@@ -814,11 +853,18 @@ void wxFont::SetEncoding(wxFontEncoding encoding)
     M_FONTDATA->SetEncoding(encoding);
 }
 
-void wxFont::SetNativeFontInfo(const wxNativeFontInfo& info)
+void wxFont::SetNativeFontInfo( const wxNativeFontInfo& info )
 {
     Unshare();
 
-    M_FONTDATA->SetNativeFontInfo(info);
+    M_FONTDATA->SetNativeFontInfo( info );
+}
+
+void wxFont::SetNoAntiAliasing( bool no )
+{
+    Unshare();
+
+    M_FONTDATA->SetNoAntiAliasing( no );
 }
 
 // ----------------------------------------------------------------------------

@@ -109,6 +109,8 @@ public:
     static bool           s_macDefaultEncodingIsPC ;
     static bool           s_macSupportPCMenuShortcuts ;
     static long           s_macAboutMenuItemId ;
+    static long           s_macPreferencesMenuItemId ;
+    static long           s_macExitMenuItemId ;
     static wxString       s_macHelpMenuTitleName ;
 
     static bool           s_macHasAppearance ;

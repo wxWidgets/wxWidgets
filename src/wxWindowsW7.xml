@@ -2488,15 +2488,6 @@
                     <PATHTYPE>PathRelative</PATHTYPE>
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>html</ACCESSPATH>
-                    <PATH>m_meta.cpp</PATH>
-                    <PATHFORMAT>Windows</PATHFORMAT>
-                    <FILEKIND>Text</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>html</ACCESSPATH>
                     <PATH>m_pre.cpp</PATH>
                     <PATHFORMAT>Windows</PATHFORMAT>
                     <FILEKIND>Text</FILEKIND>
@@ -3560,6 +3551,15 @@
                     <FILEKIND>Text</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
                 </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>common</ACCESSPATH>
+                    <PATH>settcmn.cpp</PATH>
+                    <PATHFORMAT>Windows</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
             </FILELIST>
             <LINKORDER>
                 <FILEREF>
@@ -4273,6 +4273,13 @@
                     <PATHTYPE>PathRelative</PATHTYPE>
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>common</ACCESSPATH>
+                    <PATH>settcmn.cpp</PATH>
+                    <PATHFORMAT>Windows</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>common</ACCESSPATH>
                     <PATH>sizer.cpp</PATH>
                     <PATHFORMAT>Windows</PATHFORMAT>
                 </FILEREF>
@@ -4813,13 +4820,6 @@
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>html</ACCESSPATH>
                     <PATH>m_list.cpp</PATH>
-                    <PATHFORMAT>Windows</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>html</ACCESSPATH>
-                    <PATH>m_meta.cpp</PATH>
                     <PATHFORMAT>Windows</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
@@ -12799,15 +12799,6 @@
                     <PATHTYPE>PathRelative</PATHTYPE>
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>html</ACCESSPATH>
-                    <PATH>m_meta.cpp</PATH>
-                    <PATHFORMAT>Windows</PATHFORMAT>
-                    <FILEKIND>Text</FILEKIND>
-                    <FILEFLAGS>Debug</FILEFLAGS>
-                </FILE>
-                <FILE>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>html</ACCESSPATH>
                     <PATH>m_pre.cpp</PATH>
                     <PATHFORMAT>Windows</PATHFORMAT>
                     <FILEKIND>Text</FILEKIND>
@@ -13889,6 +13880,15 @@
                     <FILEKIND>Text</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
                 </FILE>
+                <FILE>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>common</ACCESSPATH>
+                    <PATH>settcmn.cpp</PATH>
+                    <PATHFORMAT>Windows</PATHFORMAT>
+                    <FILEKIND>Text</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
             </FILELIST>
             <LINKORDER>
                 <FILEREF>
@@ -14602,6 +14602,13 @@
                     <PATHTYPE>PathRelative</PATHTYPE>
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>common</ACCESSPATH>
+                    <PATH>settcmn.cpp</PATH>
+                    <PATHFORMAT>Windows</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>PathRelative</PATHTYPE>
+                    <PATHROOT>Project</PATHROOT>
+                    <ACCESSPATH>common</ACCESSPATH>
                     <PATH>sizer.cpp</PATH>
                     <PATHFORMAT>Windows</PATHFORMAT>
                 </FILEREF>
@@ -15142,13 +15149,6 @@
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>html</ACCESSPATH>
                     <PATH>m_list.cpp</PATH>
-                    <PATHFORMAT>Windows</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>html</ACCESSPATH>
-                    <PATH>m_meta.cpp</PATH>
                     <PATHFORMAT>Windows</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
@@ -17905,6 +17905,14 @@
                 <PATHTYPE>PathRelative</PATHTYPE>
                 <PATHROOT>Project</PATHROOT>
                 <ACCESSPATH>common</ACCESSPATH>
+                <PATH>settcmn.cpp</PATH>
+                <PATHFORMAT>Windows</PATHFORMAT>
+            </FILEREF>
+            <FILEREF>
+                <TARGETNAME>wxlib Win32 debug</TARGETNAME>
+                <PATHTYPE>PathRelative</PATHTYPE>
+                <PATHROOT>Project</PATHROOT>
+                <ACCESSPATH>common</ACCESSPATH>
                 <PATH>sizer.cpp</PATH>
                 <PATHFORMAT>Windows</PATHFORMAT>
             </FILEREF>
@@ -18561,14 +18569,6 @@
                     <PATHROOT>Project</PATHROOT>
                     <ACCESSPATH>html</ACCESSPATH>
                     <PATH>m_list.cpp</PATH>
-                    <PATHFORMAT>Windows</PATHFORMAT>
-                </FILEREF>
-                <FILEREF>
-                    <TARGETNAME>wxlib Win32 debug</TARGETNAME>
-                    <PATHTYPE>PathRelative</PATHTYPE>
-                    <PATHROOT>Project</PATHROOT>
-                    <ACCESSPATH>html</ACCESSPATH>
-                    <PATH>m_meta.cpp</PATH>
                     <PATHFORMAT>Windows</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
