@@ -17,6 +17,8 @@
 %{
 #include "helpers.h"
 #include "pyistream.h"
+#include "pytree.h"
+    
 #include <wx/resource.h>
 #include <wx/tooltip.h>
 #include <wx/caret.h>
@@ -35,6 +37,8 @@
 #include <wx/snglinst.h>
 #include <wx/effects.h>
 //#include <wx/spawnbrowser.h>
+
+   
 %}
 
 //----------------------------------------------------------------------
@@ -504,8 +508,8 @@ public:
                                         const wxCursor& cursor = wxNullCursor);
     %name(wxDragString)wxGenericDragImage(const wxString& str,
                                           const wxCursor& cursor = wxNullCursor);
-    %name(wxDragTreeItem)wxGenericDragImage(const wxTreeCtrl& treeCtrl, wxTreeItemId& id);
-    %name(wxDragListItem)wxGenericDragImage(const wxListCtrl& listCtrl, long id);
+    %name(wxDragTreeItem)wxGenericDragImage(const wxPyTreeCtrl& treeCtrl, wxTreeItemId& id);
+    %name(wxDragListItem)wxGenericDragImage(const wxPyListCtrl& listCtrl, long id);
 
     ~wxGenericDragImage();
 

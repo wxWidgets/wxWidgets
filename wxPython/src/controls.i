@@ -1134,6 +1134,8 @@ public:
     int GetValue();
     void SetRange(int min, int max);
     void SetValue(int value);
+    %name(SetValueString) void SetValue(const wxString& text);
+
 #ifdef __WXGTK__
     %addmethods {
         void SetSelection(long from, long to) {
