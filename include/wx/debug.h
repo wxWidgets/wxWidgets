@@ -179,11 +179,13 @@ WXDLLEXPORT_DATA(extern const bool) wxFalse;
   particular, this is why we define a struct and not an object (which would
   result in a warning about unused variable) and a named struct (otherwise we'd
   get a warning about an unnamed struct not used to define an object!).
+  The _n__ part is to stop VC++ 7 being confused since it encloses __LINE++ in
+  parentheses.
  */
 
 #define wxMAKE_ASSERT_NAME_HELPER(line)     wxAssert_ ## line
 #define wxMAKE_ASSERT_NAME(line)            wxMAKE_ASSERT_NAME_HELPER(line)
-#define wxMAKE_UNIQUE_ASSERT_NAME           wxMAKE_ASSERT_NAME(__LINE__)
+#define wxMAKE_UNIQUE_ASSERT_NAME           wxMAKE_ASSERT_NAME(_n___ ## __LINE__)
 #define wxMAKE_UNIQUE_ASSERT_NAME2(text)    wxMAKE_ASSERT_NAME(text)
 
 /*
