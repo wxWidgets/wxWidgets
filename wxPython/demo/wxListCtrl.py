@@ -273,7 +273,7 @@ class TestListCtrlPanel(wxPanel, wxColumnSorterMixin):
     def OnRightClick(self, event):
         self.log.WriteText("OnRightClick %s\n" % self.list.GetItemText(self.currentItem))
 
-        # only do this part the first time
+        # only do this part the first time so the events are only bound once
         if not hasattr(self, "popupID1"):
             self.popupID1 = wxNewId()
             self.popupID2 = wxNewId()
@@ -281,12 +281,18 @@ class TestListCtrlPanel(wxPanel, wxColumnSorterMixin):
             self.popupID4 = wxNewId()
             self.popupID5 = wxNewId()
             self.popupID6 = wxNewId()
+            self.popupID7 = wxNewId()
+            self.popupID8 = wxNewId()
+            self.popupID9 = wxNewId()
             EVT_MENU(self, self.popupID1, self.OnPopupOne)
             EVT_MENU(self, self.popupID2, self.OnPopupTwo)
             EVT_MENU(self, self.popupID3, self.OnPopupThree)
             EVT_MENU(self, self.popupID4, self.OnPopupFour)
             EVT_MENU(self, self.popupID5, self.OnPopupFive)
             EVT_MENU(self, self.popupID6, self.OnPopupSix)
+            EVT_MENU(self, self.popupID7, self.OnPopupSeven)
+            EVT_MENU(self, self.popupID8, self.OnPopupEIght)
+            EVT_MENU(self, self.popupID9, self.OnPopupNine)
 
         # make a menu
         menu = wxMenu()
@@ -300,6 +306,12 @@ class TestListCtrlPanel(wxPanel, wxColumnSorterMixin):
         menu.Append(self.popupID4, "DeleteAllItems")
         menu.Append(self.popupID5, "GetItem")
         menu.Append(self.popupID6, "Edit")
+        # make a submenu
+        sm = wxMenu()
+        sm.Append(self.popupID8, "sub item 1")
+        sm.Append(self.popupID9, "sub item 1")
+        menu.AppendMenu(self.popupID7, "Test Submenu", sm)
+
 
         # Popup the menu.  If an item is selected then its handler
         # will be called before PopupMenu returns.
@@ -332,6 +344,15 @@ class TestListCtrlPanel(wxPanel, wxColumnSorterMixin):
     def OnPopupSix(self, event):
         self.list.EditLabel(self.currentItem)
 
+
+    def OnPopupSeven(self, event):
+        self.log.WriteText("Popup seven\n")
+
+    def OnPopupEIght(self, event):
+        self.log.WriteText("Popup eight\n")
+
+    def OnPopupNine(self, event):
+        self.log.WriteText("Popup nine\n")
 
     def OnSize(self, event):
         w,h = self.GetClientSizeTuple()
