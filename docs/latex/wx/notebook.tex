@@ -188,7 +188,13 @@ Returns the number of rows in the notebook control.
 
 \constfunc{int}{GetSelection}{\void}
 
-Returns the currently selected page, or -1 if none was selected.
+Returns the currently selected page, or $-1$ if none was selected.
+
+Note that this method may return either the previously or newly selected page
+when called from the {\tt EVT\_NOTEBOOK\_PAGE\_CHANGED} handler depending on
+the platform and so\rtfsp
+\helpref{wxNotebookEvent::GetSelection}{wxnotebookeventgetselection} should be
+used instead in this case.
 
 \membersection{wxNotebook::InsertPage}\label{wxnotebookinsertpage}
 

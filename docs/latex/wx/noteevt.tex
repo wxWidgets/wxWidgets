@@ -16,10 +16,6 @@ before allowing the user to change it, it should process the PAGE\_CHANGING
 event, otherwise PAGE\_CHANGED is probably enough. In any case, it is probably
 unnecessary to process both events at once.
 
-{\bf NB:} under Windows, GetSelection() will return the same value as
-GetOldSelection() when called from PAGE\_CHANGING handler and not the page
-which is going to be selected if the handler doesn't call Veto().
-
 \wxheading{Derived from}
 
 \helpref{wxNotifyEvent}{wxnotifyevent}\\
@@ -43,7 +39,7 @@ which is going to be selected if the handler doesn't call Veto().
 \membersection{wxNotebookEvent::wxNotebookEvent}\label{wxnotebookeventconstr}
 
 \func{}{wxNotebookEvent}{\param{wxEventType}{ eventType = wxEVT\_NULL},
- \param{int}{ id = 0}, \param{int}{ sel = -1}, \param{int}{ oldSel = -1}}
+ \param{int}{ id = 0}, \param{int}{ sel = $-1$}, \param{int}{ oldSel = $-1$}}
 
 Constructor (used internally by wxWindows only).
 
@@ -51,13 +47,18 @@ Constructor (used internally by wxWindows only).
 
 \constfunc{int}{GetOldSelection}{\void}
 
-Returns the page that was selected before the change, -1 if none was selected.
+Returns the page that was selected before the change, $-1$ if none was selected.
 
 \membersection{wxNotebookEvent::GetSelection}\label{wxnotebookeventgetselection}
 
 \constfunc{int}{GetSelection}{\void}
 
-Returns the currently selected page, or -1 if none was selected.
+Returns the currently selected page, or $-1$ if none was selected.
+
+{\bf NB:} under Windows, GetSelection() will return the same value as\rtfsp
+\helpref{GetOldSelection()}{wxnotebookeventgetoldselection} when called from
+{\tt EVT\_NOTEBOOK\_PAGE\_CHANGING} handler and not the page which is going to
+be selected.
 
 \membersection{wxNotebookEvent::SetOldSelection}\label{wxnotebookeventsetoldselection}
 
