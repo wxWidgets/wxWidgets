@@ -822,7 +822,11 @@ wxColour wxNotebook::GetThemeBackgroundColour()
 }
 
 // Windows only: attempts to apply the UX theme page background to this page
+#if wxUSE_UXTHEME
 void wxNotebook::ApplyThemeBackground(wxWindow* window, const wxColour& colour)
+#else
+void wxNotebook::ApplyThemeBackground(wxWindow*, const wxColour&)
+#endif
 {
 #if wxUSE_UXTHEME
     // Don't set the background for buttons since this will
@@ -852,9 +856,6 @@ void wxNotebook::ApplyThemeBackground(wxWindow* window, const wxColour& colour)
         wxWindow *child = node->GetData();
         ApplyThemeBackground(child, colour);
     }
-#else
-    window;
-    colour;
 #endif
 }
 
