@@ -929,11 +929,11 @@ void wxEvtHandler__setOORInfo(wxEvtHandler *self,PyObject *_self){
             }
         }
 int wxKeyEvent_GetUniChar(wxKeyEvent *self){
-        
-
-
+        #if wxUSE_UNICODE
+            return self->m_uniChar;
+        #else
             return 0;
-        
+        #endif
         }
 void wxSizeEvent_SetSize(wxSizeEvent *self,wxSize size){
             self->m_size = size;
@@ -952,11 +952,7 @@ PyObject *wxDropFilesEvent_GetFiles(wxDropFilesEvent *self){
             }
 
             for (int i=0; i<count; i++) {
-
-
-
-                PyList_SetItem(list, i, PyString_FromString((const char*)files[i]));
-
+                PyList_SetItem(list, i, wx2PyString(files[i]));
             }
             return list;
         }
@@ -30642,8 +30638,8 @@ static PyObject *_wrap_Sizer_SetDimension(PyObject *self, PyObject *args, PyObje
 static PyObject *_wrap_Sizer_SetMinSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxSizer *arg1 = (wxSizer *) 0 ;
-    wxSize arg2 ;
-    wxSize *argp2 ;
+    wxSize *arg2 = 0 ;
+    wxSize temp2 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -30652,11 +30648,13 @@ static PyObject *_wrap_Sizer_SetMinSize(PyObject *self, PyObject *args, PyObject
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Sizer_SetMinSize",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxSizer,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_wxSize,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
+    {
+        arg2 = &temp2;
+        if ( ! wxSize_helper(obj1, &arg2)) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->SetMinSize(arg2);
+        (arg1)->SetMinSize((wxSize const &)*arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
