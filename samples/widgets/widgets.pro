@@ -12,6 +12,8 @@ CONFIG  = wx
 #WXCONFIGS = Debug Release DebugDll ReleaseDll
 
 # project files
-SOURCES = widgets.cpp
+SOURCES = widgets.cpp button.cpp combobox.cpp gauge.cpp listbox.cpp \
+          notebook.cpp radiobox.cpp slider.cpp spinbtn.cpp static.cpp \
+          textctrl.cpp
 RC_FILE = widgets.rc
 TARGET  = widgets
