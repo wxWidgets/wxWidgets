@@ -72,6 +72,10 @@ ViewStyle::ViewStyle(const ViewStyle &source) {
 	selbackset = source.selbackset;
 	selbackground.desired = source.selbackground.desired;
 	selbackground2.desired = source.selbackground2.desired;
+	whitespaceForegroundSet = source.whitespaceForegroundSet;
+	whitespaceForeground.desired = source.whitespaceForeground.desired;
+	whitespaceBackgroundSet = source.whitespaceBackgroundSet;
+	whitespaceBackground.desired = source.whitespaceBackground.desired;
 	selbar.desired = source.selbar.desired;
 	selbarlight.desired = source.selbarlight.desired;
 	caretcolour.desired = source.caretcolour.desired;
@@ -120,6 +124,10 @@ void ViewStyle::Init() {
 	selbackset = true;
 	selbackground.desired = ColourDesired(0xc0, 0xc0, 0xc0);
 	selbackground2.desired = ColourDesired(0xb0, 0xb0, 0xb0);
+	whitespaceForegroundSet = false;
+	whitespaceForeground.desired = ColourDesired(0, 0, 0);
+	whitespaceBackgroundSet = false;
+	whitespaceBackground.desired = ColourDesired(0xff, 0xff, 0xff);
 	selbar.desired = Platform::Chrome();
 	selbarlight.desired = Platform::ChromeHighlight();
 	styles[STYLE_LINENUMBER].fore.desired = ColourDesired(0, 0, 0);
@@ -176,6 +184,8 @@ void ViewStyle::RefreshColourPalette(Palette &pal, bool want) {
 	pal.WantFind(selforeground, want);
 	pal.WantFind(selbackground, want);
 	pal.WantFind(selbackground2, want);
+	pal.WantFind(whitespaceForeground, want);
+	pal.WantFind(whitespaceBackground, want);
 	pal.WantFind(selbar, want);
 	pal.WantFind(selbarlight, want);
 	pal.WantFind(caretcolour, want);

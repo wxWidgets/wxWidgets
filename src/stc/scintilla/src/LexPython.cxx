@@ -163,7 +163,7 @@ static void ColourisePyDoc(unsigned int startPos, int length, int initStyle,
 		// Check for a state end
 		if (sc.state == SCE_P_OPERATOR) {
 			kwLast = kwOther;
-			sc.SetState(SCE_C_DEFAULT);
+			sc.SetState(SCE_P_DEFAULT);
 		} else if (sc.state == SCE_P_NUMBER) {
 			if (!IsAWordChar(sc.ch) &&
 			        !(!hexadecimal && ((sc.ch == '+' || sc.ch == '-') && (sc.chPrev == 'e' || sc.chPrev == 'E')))) {

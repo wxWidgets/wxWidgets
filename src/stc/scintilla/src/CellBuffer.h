@@ -53,7 +53,7 @@ struct LineData {
  */
 class LineVector {
 public:
-	enum { growSize = 4000 };
+	int growSize;
 	int lines;
 	LineData *linesData;
 	int size;

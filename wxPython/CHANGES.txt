@@ -34,7 +34,7 @@ Updated XRCed from Roman Rolinsky
 Added wxBufferedDC.
 
 Upgraded wxSTC from Scintilla 1.40 to Scintilla 1.45, and then again
-to version 1.47.
+to version 1.47, and one more time to 1.48! <wink>
 
 UNICODE!
     wxWindows/wxPython can be compiled with unicode support enabled or

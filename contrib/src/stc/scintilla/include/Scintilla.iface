@@ -258,6 +258,8 @@ val SC_MARK_CIRCLEMINUSCONNECTED=21
 
 # Invisible mark that only sets the line background color.
 val SC_MARK_BACKGROUND=22
+val SC_MARK_DOTDOTDOT=23
+val SC_MARK_ARROWS=24
 
 val SC_MARK_CHARACTER=10000
 
@@ -466,6 +468,12 @@ set void IndicSetFore=2082(int indic, colour fore)
 
 # Retrieve the foreground colour of an indicator.
 get colour IndicGetFore=2083(int indic,)
+
+# Set the foreground colour of all whitespace and whether to use this setting.
+fun void SetWhitespaceFore=2084(bool useSetting, colour fore)
+
+# Set the background colour of all whitespace and whether to use this setting.
+fun void SetWhitespaceBack=2085(bool useSetting, colour back)
 
 # Divide each styling byte into lexical class bits (default: 5) and indicator
 # bits (default: 3). If a lexer requires more than 32 lexical states, then this
@@ -1118,6 +1126,20 @@ fun void LineScrollUp=2343(,)
 # Delete the selection or if no selection, the character before the caret.
 # Will not delete the character before at the start of a line.
 fun void DeleteBackNotLine=2344(,)
+
+# Move caret to first position on display line.
+fun void HomeDisplay=2345(,)
+
+# Move caret to first position on display line extending selection to 
+# new caret position.
+fun void HomeDisplayExtend=2346(,)
+
+# Move caret to last position on display line.
+fun void LineEndDisplay=2347(,)
+
+# Move caret to last position on display line extending selection to new 
+# caret position.
+fun void LineEndDisplayExtend=2348(,)
 
 # Move the caret inside current view if it's not there already.
 fun void MoveCaretInsideView=2401(,)

@@ -87,6 +87,8 @@
 
 // Invisible mark that only sets the line background color.
 #define wxSTC_MARK_BACKGROUND 22
+#define wxSTC_MARK_DOTDOTDOT 23
+#define wxSTC_MARK_ARROWS 24
 #define wxSTC_MARK_CHARACTER 10000
 
 // Markers used for outlining column.
@@ -326,6 +328,20 @@
 // Delete the selection or if no selection, the character before the caret.
 // Will not delete the character before at the start of a line.
 #define wxSTC_CMD_DELETEBACKNOTLINE 2344
+
+// Move caret to first position on display line.
+#define wxSTC_CMD_HOMEDISPLAY 2345
+
+// Move caret to first position on display line extending selection to 
+// new caret position.
+#define wxSTC_CMD_HOMEDISPLAYEXTEND 2346
+
+// Move caret to last position on display line.
+#define wxSTC_CMD_LINEENDDISPLAY 2347
+
+// Move caret to last position on display line extending selection to new 
+// caret position.
+#define wxSTC_CMD_LINEENDDISPLAYEXTEND 2348
 #define wxSTC_EDGE_NONE 0
 #define wxSTC_EDGE_LINE 1
 #define wxSTC_EDGE_BACKGROUND 2
@@ -1159,6 +1175,12 @@ public:
     // Retrieve the foreground colour of an indicator.
     wxColour IndicatorGetForeground(int indic);
 
+    // Set the foreground colour of all whitespace and whether to use this setting.
+    void SetWhitespaceForeground(bool useSetting, const wxColour& fore);
+
+    // Set the background colour of all whitespace and whether to use this setting.
+    void SetWhitespaceBackground(bool useSetting, const wxColour& back);
+
     // Divide each styling byte into lexical class bits (default: 5) and indicator
     // bits (default: 3). If a lexer requires more than 32 lexical states, then this
     // is used to expand the possible states.
@@ -1618,6 +1640,20 @@ public:
 
     // Retrieve the height of a particular line of text in pixels.
     int TextHeight(int line);
+
+    // Move caret to first position on display line.
+    void HomeDisplay();
+
+    // Move caret to first position on display line extending selection to 
+    // new caret position.
+    void HomeDisplayExtend();
+
+    // Move caret to last position on display line.
+    void LineEndDisplay();
+
+    // Move caret to last position on display line extending selection to new 
+    // caret position.
+    void LineEndDisplayExtend();
 
     // Move the caret inside current view if it's not there already.
     void MoveCaretInsideView();

@@ -113,7 +113,7 @@ static void ColouriseCppDoc(unsigned int startPos, int length, int initStyle, Wo
 					sc.SetState(SCE_C_DEFAULT);
 				}
 			} else {
-				if (sc.atLineEnd) {
+				if ((sc.atLineEnd) || (sc.Match('/', '*')) || (sc.Match('/', '/'))) {
 					sc.SetState(SCE_C_DEFAULT);
 				}
 			}

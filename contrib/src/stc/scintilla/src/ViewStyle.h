@@ -53,6 +53,10 @@ public:
 	bool selbackset;
 	ColourPair selbackground;
 	ColourPair selbackground2;
+	bool whitespaceForegroundSet;
+	ColourPair whitespaceForeground;
+	bool whitespaceBackgroundSet;
+	ColourPair whitespaceBackground;
 	ColourPair selbar;
 	ColourPair selbarlight;
 	/// Margins are ordered: Line Numbers, Selection Margin, Spacing Margin

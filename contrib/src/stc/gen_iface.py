@@ -216,6 +216,9 @@ methodOverrideMap = {
     'IndicSetFore' : ('IndicatorSetForeground', 0, 0, 0),
     'IndicGetFore' : ('IndicatorGetForeground', 0, 0, 0),
 
+    'SetWhitespaceFore' : ('SetWhitespaceForeground', 0, 0, 0),
+    'SetWhitespaceBack' : ('SetWhitespaceBackground', 0, 0, 0),
+
     'AutoCShow' : ('AutoCompShow', 0, 0, 0),
     'AutoCCancel' : ('AutoCompCancel', 0, 0, 0),
     'AutoCActive' : ('AutoCompActive', 0, 0, 0),
@@ -513,6 +516,7 @@ methodOverrideMap = {
     'GrabFocus' : (None, 0, 0, 0),
     'SetFocus'  : ('SetSTCFocus', 0, 0, 0),
     'GetFocus'  : ('GetSTCFocus', 0, 0, 0),
+
 
 
     '' : ('', 0, 0, 0),

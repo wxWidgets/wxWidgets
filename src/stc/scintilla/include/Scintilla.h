@@ -109,6 +109,8 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SC_MARK_CIRCLEMINUS 20
 #define SC_MARK_CIRCLEMINUSCONNECTED 21
 #define SC_MARK_BACKGROUND 22
+#define SC_MARK_DOTDOTDOT 23
+#define SC_MARK_ARROWS 24
 #define SC_MARK_CHARACTER 10000
 #define SC_MARKNUM_FOLDEREND 25
 #define SC_MARKNUM_FOLDEROPENMID 26
@@ -206,6 +208,8 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SCI_INDICGETSTYLE 2081
 #define SCI_INDICSETFORE 2082
 #define SCI_INDICGETFORE 2083
+#define SCI_SETWHITESPACEFORE 2084
+#define SCI_SETWHITESPACEBACK 2085
 #define SCI_SETSTYLEBITS 2090
 #define SCI_GETSTYLEBITS 2091
 #define SCI_SETLINESTATE 2092
@@ -418,6 +422,10 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SCI_LINESCROLLDOWN 2342
 #define SCI_LINESCROLLUP 2343
 #define SCI_DELETEBACKNOTLINE 2344
+#define SCI_HOMEDISPLAY 2345
+#define SCI_HOMEDISPLAYEXTEND 2346
+#define SCI_LINEENDDISPLAY 2347
+#define SCI_LINEENDDISPLAYEXTEND 2348
 #define SCI_MOVECARETINSIDEVIEW 2401
 #define SCI_LINELENGTH 2350
 #define SCI_BRACEHIGHLIGHT 2351

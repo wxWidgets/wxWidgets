@@ -239,6 +239,22 @@ void LineMarker::Draw(Surface *surface, PRectangle &rcWhole, Font &fontForCharac
 		surface->DrawTextClipped(rc, fontForCharacter, rc.bottom - 2, 
 			character, 1, fore.allocated, back.allocated);
 
+	} else if (markType == SC_MARK_DOTDOTDOT) {
+		int right = centreX - 6;
+		for (int b=0; b<3; b++) {
+			PRectangle rcBlob(right, rc.bottom - 4, right + 2, rc.bottom-2);
+			surface->FillRectangle(rcBlob, fore.allocated);
+			right += 5;
+		}
+	} else if (markType == SC_MARK_ARROWS) {
+		surface->PenColour(fore.allocated);
+		int right = centreX - 2;
+		for (int b=0; b<3; b++) {
+			surface->MoveTo(right - 4, centreY - 4);
+			surface->LineTo(right, centreY);
+			surface->LineTo(right - 5, centreY + 5);
+			right += 4;
+		}
 	} else { // SC_MARK_SHORTARROW
 		Point pts[] = {
 			Point(centreX, centreY + dimOn2),

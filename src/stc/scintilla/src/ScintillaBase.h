@@ -65,7 +65,8 @@ protected:
 	void AutoCompleteStart(int lenEntered, const char *list);
 	void AutoCompleteCancel();
 	void AutoCompleteMove(int delta);
-	void AutoCompleteChanged(char ch=0);
+	void AutoCompleteCharacterAdded(char ch);
+	void AutoCompleteCharacterDeleted();
 	void AutoCompleteCompleted();
 	void AutoCompleteMoveToCurrentWord();
 	static void AutoCompleteDoubleClick(void* p);

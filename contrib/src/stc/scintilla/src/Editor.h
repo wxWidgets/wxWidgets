@@ -322,14 +322,14 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	void SetSelection(int currentPos_);
 	void SetEmptySelection(int currentPos_);
 	int MovePositionOutsideChar(int pos, int moveDir, bool checkLineEnd=true);
-	int MovePositionTo(int newPos, bool extend = false);
+	int MovePositionTo(int newPos, bool extend=false, bool ensureVisible=true);
 	int MovePositionSoVisible(int pos, int moveDir);
 	void SetLastXChosen();
 
 	void ScrollTo(int line);
 	virtual void ScrollText(int linesToMove);
 	void HorizontalScrollTo(int xPos);
-	void MoveCaretInsideView();
+	void MoveCaretInsideView(bool ensureVisible=true);
 	int DisplayFromPosition(int pos);
 	void EnsureCaretVisible(bool useMargin=true, bool vert=true, bool horiz=true);
 	void ShowCaretAtCurrentPosition();
@@ -403,9 +403,10 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	void PageMove(int direction, bool extend=false);
 	void ChangeCaseOfSelection(bool makeUpperCase);
 	void LineTranspose();
-    	virtual void CancelModes();
+	virtual void CancelModes();
 	void NewLine();
 	void CursorUpOrDown(int direction, bool extend=false);
+	int StartEndDisplayLine(int pos, bool start);
 	virtual int KeyCommand(unsigned int iMessage);
 	virtual int KeyDefault(int /* key */, int /*modifiers*/);
 	int KeyDown(int key, bool shift, bool ctrl, bool alt, bool *consumed=0);

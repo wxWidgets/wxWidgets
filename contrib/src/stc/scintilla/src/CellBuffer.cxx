@@ -125,6 +125,7 @@ LineVector::LineVector() {
 	levels = 0;
 	sizeLevels = 0;
 	handleCurrent = 1;
+	growSize = 1000;
 
 	Init();
 }
@@ -199,6 +200,8 @@ void LineVector::ClearLevels() {
 void LineVector::InsertValue(int pos, int value) {
 	//Platform::DebugPrintf("InsertValue[%d] = %d\n", pos, value);
 	if ((lines + 2) >= size) {
+		if (growSize * 6 < size)
+			growSize *= 2;
 		Expand(size + growSize);
 		if (levels) {
 			ExpandLevels(size + growSize);

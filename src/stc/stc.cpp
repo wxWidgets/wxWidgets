@@ -643,6 +643,16 @@ wxColour wxStyledTextCtrl::IndicatorGetForeground(int indic) {
     return wxColourFromLong(c);
 }
 
+// Set the foreground colour of all whitespace and whether to use this setting.
+void wxStyledTextCtrl::SetWhitespaceForeground(bool useSetting, const wxColour& fore) {
+    SendMsg(2084, useSetting, wxColourAsLong(fore));
+}
+
+// Set the background colour of all whitespace and whether to use this setting.
+void wxStyledTextCtrl::SetWhitespaceBackground(bool useSetting, const wxColour& back) {
+    SendMsg(2085, useSetting, wxColourAsLong(back));
+}
+
 // Divide each styling byte into lexical class bits (default: 5) and indicator
 // bits (default: 3). If a lexer requires more than 32 lexical states, then this
 // is used to expand the possible states.
@@ -1461,6 +1471,28 @@ int wxStyledTextCtrl::GetEndAtLastLine() {
 // Retrieve the height of a particular line of text in pixels.
 int wxStyledTextCtrl::TextHeight(int line) {
     return SendMsg(2279, line, 0);
+}
+
+// Move caret to first position on display line.
+void wxStyledTextCtrl::HomeDisplay() {
+    SendMsg(2345, 0, 0);
+}
+
+// Move caret to first position on display line extending selection to 
+// new caret position.
+void wxStyledTextCtrl::HomeDisplayExtend() {
+    SendMsg(2346, 0, 0);
+}
+
+// Move caret to last position on display line.
+void wxStyledTextCtrl::LineEndDisplay() {
+    SendMsg(2347, 0, 0);
+}
+
+// Move caret to last position on display line extending selection to new 
+// caret position.
+void wxStyledTextCtrl::LineEndDisplayExtend() {
+    SendMsg(2348, 0, 0);
 }
 
 // Move the caret inside current view if it's not there already.

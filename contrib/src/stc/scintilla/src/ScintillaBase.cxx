@@ -69,8 +69,8 @@ void ScintillaBase::AddCharUTF(char *s, unsigned int len, bool treatAsDBCS) {
 		Editor::AddCharUTF(s, len, treatAsDBCS);
 	}
 	if (ac.Active()) {
-		AutoCompleteChanged(s[0]);
-		// For fill ups add the character after the autocompletion has
+		AutoCompleteCharacterAdded(s[0]);
+		// For fill ups add the character after the autocompletion has 
 		// triggered so containers see the key so can display a calltip.
 		if (isFillUp) {
 			Editor::AddCharUTF(s, len, treatAsDBCS);
@@ -145,12 +145,12 @@ int ScintillaBase::KeyCommand(unsigned int iMessage) {
 			return 0;
 		case SCI_DELETEBACK:
 			DelCharBack(true);
-			AutoCompleteChanged();
+			AutoCompleteCharacterDeleted();
 			EnsureCaretVisible();
 			return 0;
 		case SCI_DELETEBACKNOTLINE:
 			DelCharBack(false);
-			AutoCompleteChanged();
+			AutoCompleteCharacterDeleted();
 			EnsureCaretVisible();
 			return 0;
 		case SCI_TAB:
@@ -251,8 +251,8 @@ void ScintillaBase::AutoCompleteStart(int lenEntered, const char *list) {
 	// Make an allowance for large strings in list
 	rcList.left = pt.x - 5;
 	rcList.right = rcList.left + widthLB;
-        if (((pt.y + vs.lineHeight) >= (rcClient.bottom - heightAlloced)) &&  // Wont fit below.
-            ((pt.y + vs.lineHeight / 2) >= (rcClient.bottom + rcClient.top) / 2)) { // and there is more room above.
+	if (((pt.y + vs.lineHeight) >= (rcClient.bottom - heightAlloced)) &&  // Wont fit below.
+	        ((pt.y + vs.lineHeight / 2) >= (rcClient.bottom + rcClient.top) / 2)) { // and there is more room above.
 		rcList.top = pt.y - heightAlloced;
 	} else {
 		rcList.top = pt.y + vs.lineHeight;
@@ -283,14 +283,20 @@ void ScintillaBase::AutoCompleteMoveToCurrentWord() {
 	ac.Select(wordCurrent);
 }
 
-void ScintillaBase::AutoCompleteChanged(char ch) {
+void ScintillaBase::AutoCompleteCharacterAdded(char ch) {
 	if (ac.IsFillUpChar(ch)) {
 		AutoCompleteCompleted();
-	} else if (currentPos <= ac.posStart - ac.startLen) {
-		ac.Cancel();
-	} else if (ac.cancelAtStartPos && currentPos <= ac.posStart) {
-		ac.Cancel();
 	} else if (ac.IsStopChar(ch)) {
+		ac.Cancel();
+	} else {
+		AutoCompleteMoveToCurrentWord();
+	}
+}
+
+void ScintillaBase::AutoCompleteCharacterDeleted() {
+	if (currentPos <= ac.posStart - ac.startLen) {
+		ac.Cancel();
+	} else if (ac.cancelAtStartPos && (currentPos <= ac.posStart)) {
 		ac.Cancel();
 	} else {
 		AutoCompleteMoveToCurrentWord();

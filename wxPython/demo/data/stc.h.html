@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>stc.h</title>
+<title>/home/others/projects/wx2.3/contrib/include/wx/stc/stc.h.html</title>
 <meta name="Generator" content="Vim/6.0">
 </head>
 <body bgcolor="#f5deb3" text="#000000">
@@ -94,6 +94,8 @@
 
 <font color="#0000ff">// Invisible mark that only sets the line background color.</font>
 <font color="#a020f0">#define wxSTC_MARK_BACKGROUND </font><font color="#ff00ff">22</font>
+<font color="#a020f0">#define wxSTC_MARK_DOTDOTDOT </font><font color="#ff00ff">23</font>
+<font color="#a020f0">#define wxSTC_MARK_ARROWS </font><font color="#ff00ff">24</font>
 <font color="#a020f0">#define wxSTC_MARK_CHARACTER </font><font color="#ff00ff">10000</font>
 
 <font color="#0000ff">// Markers used for outlining column.</font>
@@ -333,6 +335,20 @@
 <font color="#0000ff">// Delete the selection or if no selection, the character before the caret.</font>
 <font color="#0000ff">// Will not delete the character before at the start of a line.</font>
 <font color="#a020f0">#define wxSTC_CMD_DELETEBACKNOTLINE </font><font color="#ff00ff">2344</font>
+
+<font color="#0000ff">// Move caret to first position on display line.</font>
+<font color="#a020f0">#define wxSTC_CMD_HOMEDISPLAY </font><font color="#ff00ff">2345</font>
+
+<font color="#0000ff">// Move caret to first position on display line extending selection to </font>
+<font color="#0000ff">// new caret position.</font>
+<font color="#a020f0">#define wxSTC_CMD_HOMEDISPLAYEXTEND </font><font color="#ff00ff">2346</font>
+
+<font color="#0000ff">// Move caret to last position on display line.</font>
+<font color="#a020f0">#define wxSTC_CMD_LINEENDDISPLAY </font><font color="#ff00ff">2347</font>
+
+<font color="#0000ff">// Move caret to last position on display line extending selection to new </font>
+<font color="#0000ff">// caret position.</font>
+<font color="#a020f0">#define wxSTC_CMD_LINEENDDISPLAYEXTEND </font><font color="#ff00ff">2348</font>
 <font color="#a020f0">#define wxSTC_EDGE_NONE </font><font color="#ff00ff">0</font>
 <font color="#a020f0">#define wxSTC_EDGE_LINE </font><font color="#ff00ff">1</font>
 <font color="#a020f0">#define wxSTC_EDGE_BACKGROUND </font><font color="#ff00ff">2</font>
@@ -1166,6 +1182,12 @@
     <font color="#0000ff">// Retrieve the foreground colour of an indicator.</font>
     wxColour IndicatorGetForeground(<font color="#2e8b57"><b>int</b></font> indic);
 
+    <font color="#0000ff">// Set the foreground colour of all whitespace and whether to use this setting.</font>
+    <font color="#2e8b57"><b>void</b></font> SetWhitespaceForeground(<font color="#2e8b57"><b>bool</b></font> useSetting, <font color="#2e8b57"><b>const</b></font> wxColour&amp; fore);
+
+    <font color="#0000ff">// Set the background colour of all whitespace and whether to use this setting.</font>
+    <font color="#2e8b57"><b>void</b></font> SetWhitespaceBackground(<font color="#2e8b57"><b>bool</b></font> useSetting, <font color="#2e8b57"><b>const</b></font> wxColour&amp; back);
+
     <font color="#0000ff">// Divide each styling byte into lexical class bits (default: 5) and indicator</font>
     <font color="#0000ff">// bits (default: 3). If a lexer requires more than 32 lexical states, then this</font>
     <font color="#0000ff">// is used to expand the possible states.</font>
@@ -1625,6 +1647,20 @@
 
     <font color="#0000ff">// Retrieve the height of a particular line of text in pixels.</font>
     <font color="#2e8b57"><b>int</b></font> TextHeight(<font color="#2e8b57"><b>int</b></font> line);
+
+    <font color="#0000ff">// Move caret to first position on display line.</font>
+    <font color="#2e8b57"><b>void</b></font> HomeDisplay();
+
+    <font color="#0000ff">// Move caret to first position on display line extending selection to </font>
+    <font color="#0000ff">// new caret position.</font>
+    <font color="#2e8b57"><b>void</b></font> HomeDisplayExtend();
+
+    <font color="#0000ff">// Move caret to last position on display line.</font>
+    <font color="#2e8b57"><b>void</b></font> LineEndDisplay();
+
+    <font color="#0000ff">// Move caret to last position on display line extending selection to new </font>
+    <font color="#0000ff">// caret position.</font>
+    <font color="#2e8b57"><b>void</b></font> LineEndDisplayExtend();
 
     <font color="#0000ff">// Move the caret inside current view if it's not there already.</font>
     <font color="#2e8b57"><b>void</b></font> MoveCaretInsideView();

@@ -100,8 +100,8 @@ rem "b" --> both debug and hybrid builds
 elseiff "%1" == "b" then
 	shift
 	set CMD=echo Finished!
-	call b.bat %VER% h %1 %2 %3 %4 %5 %6 %7 %8 %9
 	call b.bat %VER%   %1 %2 %3 %4 %5 %6 %7 %8 %9
+	call b.bat %VER% h %1 %2 %3 %4 %5 %6 %7 %8 %9
 
 rem (no command arg) --> normal build for development
 else
