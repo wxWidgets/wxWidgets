@@ -725,6 +725,7 @@ wxSize wxListBox::DoGetBestSize() const
     int                             nListbox = 0;
     int                             nCx;
     int                             nCy;
+    wxFont                          vFont = (wxFont)GetFont();
 
     for (int i = 0; i < m_nNumItems; i++)
     {
@@ -751,7 +752,7 @@ wxSize wxListBox::DoGetBestSize() const
     wxGetCharSize( GetHWND()
                   ,&nCx
                   ,&nCy
-                  ,(wxFont*)&GetFont()
+                  ,&vFont
                  );
     nListbox += 3 * nCx;
 

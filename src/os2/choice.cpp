@@ -360,6 +360,7 @@ wxSize wxChoice::DoGetBestSize() const
     int                             nItems = GetCount();
     int                             nCx;
     int                             nCy;
+    wxFont                          vFont = (wxFont)GetFont();
 
     for (int i = 0; i < nItems; i++)
     {
@@ -386,7 +387,7 @@ wxSize wxChoice::DoGetBestSize() const
     wxGetCharSize( GetHWND()
                   ,&nCx
                   ,&nCy
-                  ,(wxFont*)&GetFont()
+                  ,&vFont
                  );
     nChoiceWidth += 5 * nCx;
 

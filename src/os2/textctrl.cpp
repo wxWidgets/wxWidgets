@@ -1188,8 +1188,9 @@ wxSize wxTextCtrl::DoGetBestSize() const
 {
     int                             nCx;
     int                             nCy;
+    wxFont                          vFont = (wxFont)GetFont();
 
-    wxGetCharSize(GetHWND(), &nCx, &nCy, (wxFont*)&GetFont());
+    wxGetCharSize(GetHWND(), &nCx, &nCy, &vFont);
 
     int                             wText = DEFAULT_ITEM_WIDTH;
     int                             hText = (int)(EDIT_HEIGHT_FROM_CHAR_HEIGHT(nCy) * .8);

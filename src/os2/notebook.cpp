@@ -319,12 +319,12 @@ bool wxNotebook::SetPageImage (
 , int                               nImage
 )
 {
-    wxBitmap*                       pBitmap = (wxBitmap*)m_imageList->GetBitmap(nImage);
+    wxBitmap                        vBitmap = (wxBitmap)m_imageList->GetBitmap(nImage);
 
     return (bool)::WinSendMsg( GetHWND()
                               ,BKM_SETTABBITMAP
                               ,MPFROMLONG((ULONG)m_alPageId[nPage])
-                              ,(MPARAM)pBitmap->GetHBITMAP()
+                              ,(MPARAM)vBitmap.GetHBITMAP()
                              );
 } // end of wxNotebook::SetPageImage
 

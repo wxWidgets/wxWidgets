@@ -141,6 +141,7 @@ wxSize wxButton::DoGetBestSize() const
     int                             nWidthButton;
     int                             nWidthChar;
     int                             nHeightChar;
+    wxFont                          vFont = (wxFont)GetFont();
 
     GetTextExtent( rsLabel
                   ,&nWidthButton
@@ -150,7 +151,7 @@ wxSize wxButton::DoGetBestSize() const
     wxGetCharSize( GetHWND()
                   ,&nWidthChar
                   ,&nHeightChar
-                  ,(wxFont*)&GetFont()
+                  ,&vFont
                  );
 
     //

@@ -111,7 +111,6 @@ bool wxBitmapButton::OS2OnDraw(
         return FALSE;
 
     wxBitmap*                       pBitmap;
-    RECTL                           vRect;
     bool                            bIsSelected = pUser->fsState & BDS_HILITED;
     wxClientDC                      vDc(this);
 
@@ -132,7 +131,6 @@ bool wxBitmapButton::OS2OnDraw(
     // Centre the bitmap in the control area
     //
     int                             nX         = 0;
-    int                             nY         = 0;
     int                             nX1        = 0;
     int                             nY1        = 0;
     int                             nWidth     = vDc.m_vRclPaint.xRight - vDc.m_vRclPaint.xLeft;

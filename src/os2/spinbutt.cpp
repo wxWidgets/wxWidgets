@@ -32,7 +32,6 @@
 extern void  wxAssociateWinWithHandle( HWND         hWnd
                                       ,wxWindowOS2* pWin
                                      );
-static WXFARPROC fnWndProcSpinCtrl = (WXFARPROC)NULL;
 
 IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxNotifyEvent)
 

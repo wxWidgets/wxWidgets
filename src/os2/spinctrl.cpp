@@ -214,13 +214,14 @@ wxSize wxSpinCtrl::DoGetBestSize() const
 {
     wxSize                          vSizeBtn = wxSpinButton::DoGetBestSize();
     int                             nHeight;
+    wxFont                          vFont = (wxFont)GetFont();
 
     vSizeBtn.x += DEFAULT_ITEM_WIDTH + MARGIN_BETWEEN;
 
     wxGetCharSize( GetHWND()
                   ,NULL
                   ,&nHeight
-                  ,(wxFont*)&GetFont()
+                  ,&vFont
                  );
     nHeight = EDIT_HEIGHT_FROM_CHAR_HEIGHT(nHeight);
 

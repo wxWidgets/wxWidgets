@@ -210,7 +210,7 @@ public:
         {
             return true;
         }
-        PMYRECORD                   pRecord = FindOS2TreeRecordByID( GetTree()->GetHWND()
+        PMYRECORD                   pRecord = FindOS2TreeRecordByID( (HWND)GetTree()->GetHWND()
                                                                     ,rItem.m_pItem
                                                                    );
         if (pRecord->m_vRecord.flRecordAttr & CRA_SELECTED)

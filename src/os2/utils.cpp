@@ -220,12 +220,12 @@ wxBatteryState wxGetBatteryState()
 wxMemorySize wxGetFreeMemory()
 {
     void*                           pMemptr = NULL;
-    ULONG                           lSize;
+    LONG                            lSize;
     ULONG                           lMemFlags;
     APIRET                          rc;
 
     lMemFlags = PAG_FREE;
-    rc = ::DosQueryMem(pMemptr, &lSize, &lMemFlags);
+    rc = ::DosQueryMem(pMemptr, (PULONG)&lSize, &lMemFlags);
     if (rc != 0)
         lSize = -1L;
     return (wxMemorySize)lSize;

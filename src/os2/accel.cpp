@@ -203,10 +203,6 @@ bool wxAcceleratorTable::Translate(
                              ,GetHaccel()
                              ,pMsg
                             );
-    if (rc)
-    {
-        int x = 1;
-    }
     return (Ok() && rc);
 } // end of wxAcceleratorTable::Translate
 

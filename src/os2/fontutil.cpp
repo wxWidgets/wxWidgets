@@ -413,7 +413,7 @@ void wxFillLogFont(
         }
         if (*pflId == 0L)
             *pflId = 1L;
-        for(unsigned long LCNum = 0; LCNum < lNumLids; LCNum++)
+        for(unsigned long LCNum = 0; LCNum < (unsigned long)lNumLids; LCNum++)
             if(alIds[LCNum] == *pflId)
                ++*pflId;
         if(*pflId > 254)  // wow, no id available!
