@@ -162,7 +162,7 @@ wxTopLevelWindowMac::~wxTopLevelWindowMac()
         wxPendingDelete.Append( new wxMacDeferredWindowDeleter( (WindowRef) m_macWindow ) ) ;
     }
  
- #if TARGET_CARBON
+#if TARGET_CARBON
     if ( m_macEventHandler )
     {
         ::RemoveEventHandler((EventHandlerRef) m_macEventHandler);
@@ -171,21 +171,9 @@ wxTopLevelWindowMac::~wxTopLevelWindowMac()
 #endif   
     wxRemoveMacWindowAssociation( this ) ;
 
-    wxTopLevelWindows.DeleteObject(this);
-
     if ( wxModelessWindows.Find(this) )
         wxModelessWindows.DeleteObject(this);
 
-    // If this is the last top-level window, exit.
-    if ( wxTheApp && (wxTopLevelWindows.Number() == 0) )
-    {
-        wxTheApp->SetTopWindow(NULL);
-
-        if ( wxTheApp->GetExitOnFrameDelete() )
-        {
-          wxTheApp->ExitMainLoop() ;        
-        }
-    }
     DisposeRgn( (RgnHandle) m_macNoEraseUpdateRgn ) ;
 }
 
