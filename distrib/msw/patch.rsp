@@ -1,0 +1,3 @@
+include/wx/wxchar.h
+include/wx/msw/setup.h
+samples/dnd/*.wxr

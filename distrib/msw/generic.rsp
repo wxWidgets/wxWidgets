@@ -685,6 +685,7 @@ samples/dnd/*.cpp
 samples/dnd/*.h
 samples/dnd/makefile*
 samples/dnd/*.rc
+samples/dnd/*.wxr
 samples/dnd/*.def
 samples/dnd/*.bmp
 samples/dnd/*.xbm
