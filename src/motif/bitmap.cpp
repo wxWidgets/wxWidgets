@@ -13,6 +13,10 @@
 #pragma implementation "bitmap.h"
 #endif
 
+#ifdef __VMS
+#define XtParent XTPARENT
+#endif
+
 #include "wx/setup.h"
 #include "wx/utils.h"
 #include "wx/palette.h"

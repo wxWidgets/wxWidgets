@@ -13,7 +13,7 @@
 #pragma implementation "choice.h"
 #endif
 
-#ifdef VMS
+#ifdef __VMS
 #define XtDisplay XTDISPLAY
 #define XtParent XTPARENT
 #endif

@@ -17,6 +17,10 @@
 // headers
 // ----------------------------------------------------------------------------
 
+#ifdef __VMS
+#define XtDisplay XTDISPLAY
+#endif
+
 #include "wx/setup.h"
 #include "wx/utils.h"
 #include "wx/app.h"

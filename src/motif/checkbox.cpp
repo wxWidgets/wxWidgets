@@ -13,6 +13,10 @@
 #pragma implementation "checkbox.h"
 #endif
 
+#ifdef __VMS
+#define XtDisplay XTDISPLAY
+#endif
+
 #include "wx/checkbox.h"
 #include "wx/utils.h"
 

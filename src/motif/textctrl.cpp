@@ -21,6 +21,10 @@
     #pragma implementation "textctrl.h"
 #endif
 
+#ifdef __VMS
+#define XtParent XTPARENT
+#endif
+
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fstream.h>

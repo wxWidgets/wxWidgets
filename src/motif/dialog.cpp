@@ -13,6 +13,13 @@
 #pragma implementation "dialog.h"
 #endif
 
+#ifdef __VMS
+#define XtDisplay XTDISPLAY
+#define XtWindow XTWINDOW
+#define XtParent XTPARENT
+#define XtScreen XTSCREEN
+#endif
+
 #include "wx/dialog.h"
 #include "wx/utils.h"
 #include "wx/frame.h"

@@ -13,6 +13,11 @@
     #pragma implementation "app.h"
 #endif
 
+#ifdef __VMS
+#define XtParent XTPARENT
+#define XtDisplay XTDISPLAY
+#endif
+
 #include "wx/frame.h"
 #include "wx/app.h"
 #include "wx/utils.h"

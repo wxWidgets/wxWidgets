@@ -23,8 +23,8 @@
 
 #ifdef __VMS
 #define XtDisplay XTDISPLAY
-#define XtWINDOW XTWINDOW
-#define XtSreen XTSCREEN
+#define XtWindow XTWINDOW
+#define XtScreen XTSCREEN
 #endif
 
 #include "wx/setup.h"

@@ -13,6 +13,10 @@
 #pragma implementation "button.h"
 #endif
 
+#ifdef __VMS
+#define XtDisplay XTDISPLAY
+#endif
+
 #include "wx/button.h"
 #include "wx/utils.h"
 #include "wx/panel.h"
