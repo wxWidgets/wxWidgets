@@ -73,6 +73,11 @@ public:
     // menu handle depending on what we're
     int GetRealId(void) const;
 
+    //
+    // All OS/2PM Submenus and menus have one of these
+    //
+    MENUITEM                        m_vMenuData;
+
 private:
     DECLARE_DYNAMIC_CLASS(wxMenuItem)
 }; // end of CLASS wxMenuItem

@@ -47,7 +47,10 @@ enum
 class WXDLLEXPORT wxWindow : public wxWindowBase
 {
 public:
-    wxWindow() { Init(); }
+    wxWindow()
+    {
+        Init();
+    }
 
     wxWindow( wxWindow*       pParent
              ,wxWindowID      vId
@@ -244,18 +247,19 @@ public:
     virtual bool ContainsHWND(WXHWND WXUNUSED(hWnd)) const { return FALSE; };
 
     // returns TRUE if the window has been created
-    bool OS2Create( int           nId
-                   ,wxWindow*     pParent
-                   ,const wxChar* zWclass
-                   ,wxWindow*     pWxWin
+    bool OS2Create( WXHWND        hParent
+                   ,PSZ           zClass
                    ,const wxChar* zTitle
-                   ,int           nX
-                   ,int           nY
-                   ,int           nWidth
-                   ,int           nHeight
                    ,WXDWORD       dwStyle
-                   ,const wxChar* zDialogTemplate = NULL
-                   ,WXDWORD       dwExendedStyle = 0
+                   ,long          lX
+                   ,long          lY
+                   ,long          lWidth
+                   ,long          lHeight
+                   ,WXHWND        hOwner
+                   ,WXHWND        hZOrder
+                   ,unsigned long lId
+                   ,void*         pCtlData = NULL
+                   ,void*         pPresParams = NULL
                   );
     virtual bool OS2Command( WXUINT uParam
                             ,WXWORD nId
@@ -511,7 +515,7 @@ protected:
 
     // move the window to the specified location and resize it: this is called
     // from both DoSetSize() and DoSetClientSize() and would usually just call
-    // ::MoveWindow() except for composite controls which will want to arrange
+    // ::WinSetWindowPos() except for composite controls which will want to arrange
     // themselves inside the given rectangle
     virtual void DoMoveWindow( int nX
                               ,int nY
