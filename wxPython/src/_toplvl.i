@@ -156,7 +156,7 @@ public:
 
     // create the main status bar by calling OnCreateStatusBar()
     virtual wxStatusBar* CreateStatusBar(int number = 1,
-                                         long style = wxST_SIZEGRIP,
+                                         long style = wxDEFAULT_STATUSBAR_STYLE,
                                          wxWindowID winid = 0,
                                          const wxString& name = wxPyStatusLineNameStr);
 // TODO: with directors?

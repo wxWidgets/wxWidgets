@@ -544,6 +544,13 @@ enum {
 };
 
 
+#ifdef __WXGTK__
+#define wxDEFAULT_STATUSBAR_STYLE wxST_SIZEGRIP|wxFULL_REPAINT_ON_RESIZE
+#else
+#define wxDEFAULT_STATUSBAR_STYLE wxST_SIZEGRIP
+#endif
+
+
 
 enum wxGeometryCentre
 {

@@ -22,6 +22,7 @@
 %newgroup;
 
 
+
 // wxStatusBar: a window near the bottom of the frame used for status info
 class wxStatusBar : public wxWindow
 {
@@ -30,7 +31,7 @@ public:
     %pythonAppend wxStatusBar()       ""
     
     wxStatusBar(wxWindow* parent, wxWindowID id = -1,
-                long style = wxST_SIZEGRIP,
+                long style = wxDEFAULT_STATUSBAR_STYLE,
                 const wxString& name = wxPyStatusLineNameStr);
     %name(PreStatusBar)wxStatusBar();
 
