@@ -92,6 +92,8 @@ public:
     virtual void Maximize(bool WXUNUSED(maximize)) {}
     virtual void Restore() {}
 
+    virtual void Command( int id );
+    
     void OnCloseWindow( wxCloseEvent& event );
     void OnActivate( wxActivateEvent &WXUNUSED(event) ) { } // called from docview.cpp
     void OnSize( wxSizeEvent &event );

@@ -164,7 +164,7 @@ toolkit. You must do this by running configure with either of:
 
 The following options handle the kind of library you want to build.
 
-	--with-threads          Compile without thread support.
+	--with-threads          Compile with thread support.
 
 	--without-shared        Do not create shared libraries.
 

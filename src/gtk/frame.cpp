@@ -640,6 +640,23 @@ wxStatusBar *wxFrame::OnCreateStatusBar( int number, long style, wxWindowID id, 
     return statusBar;
 }
 
+void wxFrame::Command( int id )
+{
+    wxCommandEvent commandEvent(wxEVT_COMMAND_MENU_SELECTED, id);
+    commandEvent.SetInt( id );
+    commandEvent.SetEventObject( this );
+
+    wxMenuBar *bar = GetMenuBar();
+    if (!bar) return;
+
+    wxMenuItem *item = bar->FindItemForId(id) ;
+    if (item && item->IsCheckable())
+    {
+        bar->Check(id,!bar->Checked(id)) ;
+    }
+    GetEventHandler()->ProcessEvent(commandEvent);
+}
+
 void wxFrame::SetStatusText(const wxString& text, int number)
 {
     wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
