@@ -93,6 +93,9 @@ public:
 
   void OnPaint(wxPaintEvent& event);
   void OnSize(wxSizeEvent& event);
+  
+  void OnLeftDown(wxMouseEvent& event);
+  void OnRightDown(wxMouseEvent& event);
 
   virtual void InitColours();
 

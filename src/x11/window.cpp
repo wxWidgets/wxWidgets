@@ -498,12 +498,11 @@ void wxWindowX11::DoCaptureMouse()
         if (res != GrabSuccess)
         {
             wxString msg;
-            msg.Printf("Failed to grab pointer for window %s", this->GetClassInfo()->GetClassName());
+            msg.Printf(wxT("Failed to grab pointer for window %s"), this->GetClassInfo()->GetClassName());
             wxLogDebug(msg);
             if (res == GrabNotViewable)
-            {
-                wxLogDebug("This is not a viewable window - perhaps not shown yet?");
-            }
+                wxLogDebug( wxT("This is not a viewable window - perhaps not shown yet?") );
+                
             g_captureWindow = NULL;
             return;
         }
@@ -1242,8 +1241,9 @@ void wxWindowX11::OnInternalIdle()
         wxString msg;
         msg.Printf("Setting focus for %s from OnInternalIdle\n", GetClassInfo()->GetClassName());
         printf(msg.c_str());
-#endif        
-	SetFocus();
+#endif
+        SetFocus();
+        
         // If it couldn't set the focus now, there's
         // no point in trying again.
         m_needsInputFocus = FALSE;
@@ -1260,15 +1260,15 @@ bool wxAddWindowToTable(Window w, wxWindow *win)
     wxWindow *oldItem = NULL;
     if ((oldItem = (wxWindow *)wxWidgetHashTable->Get ((long) w)))
     {
-        wxLogDebug("Widget table clash: new widget is %ld, %s",
-                   (long)w, win->GetClassInfo()->GetClassName());
+        wxLogDebug( wxT("Widget table clash: new widget is %ld, %s"),
+                    (long)w, win->GetClassInfo()->GetClassName());
         return FALSE;
     }
 
     wxWidgetHashTable->Put((long) w, win);
 
-    wxLogTrace("widget", "XWindow 0x%08x <-> window %p (%s)",
-               (unsigned int) w, win, win->GetClassInfo()->GetClassName());
+    wxLogTrace( wxT("widget"), wxT("XWindow 0x%08x <-> window %p (%s)"),
+                (unsigned int) w, win, win->GetClassInfo()->GetClassName());
 
     return TRUE;
 }
@@ -1292,15 +1292,15 @@ bool wxAddClientWindowToTable(Window w, wxWindow *win)
     wxWindow *oldItem = NULL;
     if ((oldItem = (wxWindow *)wxClientWidgetHashTable->Get ((long) w)))
     {
-        wxLogDebug("Client window table clash: new window is %ld, %s",
-                   (long)w, win->GetClassInfo()->GetClassName());
+        wxLogDebug( wxT("Client window table clash: new window is %ld, %s"),
+                    (long)w, win->GetClassInfo()->GetClassName());
         return FALSE;
     }
 
     wxClientWidgetHashTable->Put((long) w, win);
 
-    wxLogTrace("widget", "XWindow 0x%08x <-> window %p (%s)",
-               (unsigned int) w, win, win->GetClassInfo()->GetClassName());
+    wxLogTrace( wxT("widget"), wxT("XWindow 0x%08x <-> window %p (%s)"),
+                (unsigned int) w, win, win->GetClassInfo()->GetClassName());
 
     return TRUE;
 }
@@ -1480,7 +1480,7 @@ bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win, Window WXUNUSED(win
             wxevent.m_altDown = XKeyEventAltIsDown(xevent);
             wxevent.m_metaDown = XKeyEventMetaIsDown(xevent);
             wxevent.SetEventObject(win);
-            wxevent.m_keyCode = toupper(id);
+            wxevent.m_keyCode = wxToupper(id);
             wxevent.SetTimestamp(XKeyEventGetTime(xevent));
 
             wxevent.m_x = XKeyEventGetX(xevent);

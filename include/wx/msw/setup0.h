@@ -846,7 +846,7 @@
 #define wxUSE_RESOURCE_LOADING_IN_MSW     1
                                 // Use dynamic icon/cursor loading/saving code
                                 // under MSW.
-#define wxUSE_WX_RESOURCES        1
+#define wxUSE_WX_RESOURCES      0
                                 // Use .wxr resource mechanism (requires PrologIO library)
 
 #define wxUSE_MOUSEWHEEL        1
