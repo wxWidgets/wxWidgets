@@ -76,6 +76,10 @@
     #endif
 #endif
 
+#ifdef __WXGTK20__
+extern GtkContainerClass *pizza_parent_class;
+#endif
+
 //-----------------------------------------------------------------------------
 // documentation on internals
 //-----------------------------------------------------------------------------
@@ -480,6 +484,11 @@ gint gtk_window_own_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_even
 
     draw_frame( widget, win );
 
+#ifdef __WXGTK20__
+
+    (* GTK_WIDGET_CLASS (pizza_parent_class)->expose_event) (widget, gdk_event);
+    
+#endif    
     return TRUE;
 }
 
@@ -768,10 +777,6 @@ static void gtk_window_size_request_callback( GtkWidget *widget, GtkRequisition 
 //-----------------------------------------------------------------------------
 // "expose_event" of m_wxwindow
 //-----------------------------------------------------------------------------
-
-#ifdef __WXGTK20__
-extern GtkContainerClass *pizza_parent_class;
-#endif
 
 static int gtk_window_expose_callback( GtkWidget *widget,
                                        GdkEventExpose *gdk_event,
