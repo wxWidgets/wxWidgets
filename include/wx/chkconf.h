@@ -877,14 +877,5 @@
 #   endif
 #endif /* wxUSE_CLIPBOARD */
 
-#if wxUSE_TIPWINDOW && !wxUSE_POPUPWIN
-#   ifdef wxABORT_ON_CONFIG_ERROR
-#       error "wxTipWindow requires wxPopupWindow"
-#   else
-#       undef wxUSE_POPUPWIN
-#       define wxUSE_POPUPWIN 1
-#   endif
-#endif /* wxUSE_TIPWINDOW */
-
 #endif /* wxUSE_GUI */
 
