@@ -330,6 +330,13 @@ wxDropTarget::~wxDropTarget()
 
 bool wxDropTarget::Register(WXHWND hwnd)
 {
+    // FIXME
+    // RegisterDragDrop not available on Windows CE >= 400?
+    // Or maybe we can dynamically load them from ceshell.dll
+    // or similar.
+#if defined(__WXWINCE__) && _WIN32_WCE >= 400
+    return FALSE;
+#else
     HRESULT hr;
 
     // May exist in later WinCE versions
@@ -355,10 +362,14 @@ bool wxDropTarget::Register(WXHWND hwnd)
     m_pIDropTarget->SetHwnd((HWND)hwnd);
 
     return TRUE;
+#endif
 }
 
 void wxDropTarget::Revoke(WXHWND hwnd)
 {
+#if defined(__WXWINCE__) && _WIN32_WCE >= 400
+    // Not available, see note above
+#else
     HRESULT hr = ::RevokeDragDrop((HWND) hwnd);
 
     if ( FAILED(hr) ) {
@@ -371,6 +382,7 @@ void wxDropTarget::Revoke(WXHWND hwnd)
 #endif
 
     m_pIDropTarget->SetHwnd(0);
+#endif
 }
 
 // ----------------------------------------------------------------------------
