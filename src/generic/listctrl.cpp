@@ -2698,8 +2698,11 @@ bool wxListCtrl::Create(wxWindow *parent,
         style = style | wxLC_LIST;
     }
 
-    bool ret = wxControl::Create( parent, id, pos, size, style, validator, name );
-
+    //
+    // FIXME BJ: as wxControl derives from wxWindow, a validator cannot be passed as parameter
+    //  bool ret = wxControl::Create( parent, id, pos, size, style, validator, name );
+    bool ret = wxControl::Create( parent, id, pos, size, style, name );
+    
     if (style & wxSUNKEN_BORDER)
         style -= wxSUNKEN_BORDER;
 
