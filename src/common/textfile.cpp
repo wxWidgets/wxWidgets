@@ -159,6 +159,32 @@ bool wxTextFile::Exists() const
     return wxFile::Exists(m_strFile);
 }
 
+bool wxTextFile::Create(const wxString& strFile)
+{
+  m_strFile = strFile;
+
+  return Create();
+}
+
+bool wxTextFile::Create()
+{
+  // file name must be either given in ctor or in Create(const wxString&)
+  wxASSERT( !m_strFile.IsEmpty() );
+
+  // if the file already exists do nothing
+  if ( Exists() ) return FALSE;
+  
+  if ( m_file.Open(m_strFile, wxFile::write) )
+  {
+    m_file.Close();
+    return TRUE;
+  }
+  else
+  {
+    return FALSE;
+  }
+}
+
 bool wxTextFile::Open(const wxString& strFile)
 {
   m_strFile = strFile;

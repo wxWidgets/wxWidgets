@@ -73,6 +73,10 @@ public:
   // file operations
     // file exists?
   bool Exists() const;
+    // create the file if it doesn't already exist
+  bool Create();
+    // same as Create() but with (another) file name
+  bool Create(const wxString& strFile);
     // Open() also loads file in memory on success
   bool Open();
     // same as Open() but with (another) file name
