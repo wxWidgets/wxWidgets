@@ -54,17 +54,17 @@
 
 - (void)wxMenuItemAction: (id)sender
 {
-    wxLogDebug("wxMenuItemAction");
+    wxLogDebug(wxT("wxMenuItemAction"));
     wxMenuItem *item = wxMenuItem::GetFromCocoa(sender);
-    wxCHECK_RET(item,"wxMenuItemAction received but no wxMenuItem exists!");
+    wxCHECK_RET(item,wxT("wxMenuItemAction received but no wxMenuItem exists!"));
 
     wxMenu *menu = item->GetMenu();
-    wxCHECK_RET(menu,"wxMenuItemAction received but wxMenuItem is not in a wxMenu");
+    wxCHECK_RET(menu,wxT("wxMenuItemAction received but wxMenuItem is not in a wxMenu"));
     wxMenuBar *menubar = menu->GetMenuBar();
     if(menubar)
     {
         wxFrame *frame = menubar->GetFrame();
-        wxCHECK_RET(frame, "wxMenuBar MUST be attached to a wxFrame!");
+        wxCHECK_RET(frame, wxT("wxMenuBar MUST be attached to a wxFrame!"));
         frame->ProcessCommand(item->GetId());
     }
 }
@@ -72,9 +72,9 @@
 - (BOOL)validateMenuItem: (id)menuItem
 {
     // TODO: Do wxWindows validation here and avoid sending during idle time
-    wxLogDebug("wxMenuItemAction");
+    wxLogDebug(wxT("wxMenuItemAction"));
     wxMenuItem *item = wxMenuItem::GetFromCocoa(menuItem);
-    wxCHECK_MSG(item,NO,"validateMenuItem received but no wxMenuItem exists!");
+    wxCHECK_MSG(item,NO,wxT("validateMenuItem received but no wxMenuItem exists!"));
     return item->IsEnabled();
 }
 
@@ -167,7 +167,7 @@ void wxMenuItem::Enable(bool bDoEnable)
 
 void wxMenuItem::Check(bool bDoCheck)
 {
-    wxCHECK_RET( IsCheckable(), "only checkable items may be checked" );
+    wxCHECK_RET( IsCheckable(), wxT("only checkable items may be checked") );
     wxMenuItemBase::Check(bDoCheck);
 }
 

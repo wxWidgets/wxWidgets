@@ -44,7 +44,7 @@ WX_DECLARE_HASH_MAP(int, wxMDIChildFrame*, wxIntegerHash, wxIntegerEqual, wxIntM
 @implementation wxMDIParentFrameObserver : NSObject
 - (id)init
 {
-    wxFAIL_MSG("[wxMDIParentFrameObserver -init] should never be called!");
+    wxFAIL_MSG(wxT("[wxMDIParentFrameObserver -init] should never be called!"));
     m_mdiParent = NULL;
     return self;
 }
@@ -158,7 +158,7 @@ wxMenuBar *wxMDIParentFrame::GetAppMenuBar(wxCocoaNSWindow *win)
 
 void wxMDIParentFrame::CocoaDelegate_windowDidBecomeKey(void)
 {
-    wxLogDebug("wxMDIParentFrame=%p::CocoaDelegate_windowDidBecomeKey",this);
+    wxLogDebug(wxT("wxMDIParentFrame=%p::CocoaDelegate_windowDidBecomeKey"),this);
     if(sm_cocoaDeactivateWindow && sm_cocoaDeactivateWindow==m_currentChild)
     {
         sm_cocoaDeactivateWindow = NULL;
@@ -183,7 +183,7 @@ void wxMDIParentFrame::CocoaDelegate_windowDidBecomeKey(void)
 
 void wxMDIParentFrame::CocoaDelegate_windowDidResignKey(void)
 {
-    wxLogDebug("wxMDIParentFrame=%p::CocoaDelegate_windowDidResignKey",this);
+    wxLogDebug(wxT("wxMDIParentFrame=%p::CocoaDelegate_windowDidResignKey"),this);
     if(m_closed)
         wxFrame::CocoaDelegate_windowDidResignKey();
     else
@@ -280,7 +280,7 @@ void wxMDIChildFrame::Activate()
 
 void wxMDIChildFrame::CocoaDelegate_windowDidBecomeKey(void)
 {
-    wxLogDebug("wxMDIChildFrame=%p::CocoaDelegate_windowDidBecomeKey",this);
+    wxLogDebug(wxT("wxMDIChildFrame=%p::CocoaDelegate_windowDidBecomeKey"),this);
     if(sm_cocoaDeactivateWindow && sm_cocoaDeactivateWindow==m_mdiParent)
     {
         sm_cocoaDeactivateWindow = NULL;
@@ -299,7 +299,7 @@ void wxMDIChildFrame::CocoaDelegate_windowDidBecomeMain(void)
 
 void wxMDIChildFrame::CocoaDelegate_windowDidResignKey(void)
 {
-    wxLogDebug("wxMDIChildFrame=%p::CocoaDelegate_windowDidResignKey",this);
+    wxLogDebug(wxT("wxMDIChildFrame=%p::CocoaDelegate_windowDidResignKey"),this);
     sm_cocoaDeactivateWindow = this;
 }
 

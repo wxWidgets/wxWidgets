@@ -50,48 +50,48 @@
 - (void)windowDidBecomeKey: (NSNotification *)notification
 {
     wxCocoaNSWindow *win = wxCocoaNSWindow::GetFromCocoa([notification object]);
-    wxCHECK_RET(win,"notificationDidBecomeKey received but no wxWindow exists");
+    wxCHECK_RET(win,wxT("notificationDidBecomeKey received but no wxWindow exists"));
     win->CocoaDelegate_windowDidBecomeKey();
 }
 
 - (void)windowDidResignKey: (NSNotification *)notification
 {
     wxCocoaNSWindow *win = wxCocoaNSWindow::GetFromCocoa([notification object]);
-    wxCHECK_RET(win,"notificationDidResignKey received but no wxWindow exists");
+    wxCHECK_RET(win,wxT("notificationDidResignKey received but no wxWindow exists"));
     win->CocoaDelegate_windowDidResignKey();
 }
 
 - (void)windowDidBecomeMain: (NSNotification *)notification
 {
     wxCocoaNSWindow *win = wxCocoaNSWindow::GetFromCocoa([notification object]);
-    wxCHECK_RET(win,"notificationDidBecomeMain received but no wxWindow exists");
+    wxCHECK_RET(win,wxT("notificationDidBecomeMain received but no wxWindow exists"));
     win->CocoaDelegate_windowDidBecomeMain();
 }
 
 - (void)windowDidResignMain: (NSNotification *)notification
 {
     wxCocoaNSWindow *win = wxCocoaNSWindow::GetFromCocoa([notification object]);
-    wxCHECK_RET(win,"notificationDidResignMain received but no wxWindow exists");
+    wxCHECK_RET(win,wxT("notificationDidResignMain received but no wxWindow exists"));
     win->CocoaDelegate_windowDidResignMain();
 }
 
 - (BOOL)windowShouldClose: (id)sender
 {
-    wxLogDebug("windowShouldClose");
+    wxLogDebug(wxT("windowShouldClose"));
     wxCocoaNSWindow *tlw = wxCocoaNSWindow::GetFromCocoa(sender);
     if(tlw && !tlw->CocoaDelegate_windowShouldClose())
     {
-        wxLogDebug("Window will not be closed");
+        wxLogDebug(wxT("Window will not be closed"));
         return NO;
     }
-    wxLogDebug("Window will be closed");
+    wxLogDebug(wxT("Window will be closed"));
     return YES;
 }
 
 - (void)windowWillClose: (NSNotification *)notification
 {
     wxCocoaNSWindow *win = wxCocoaNSWindow::GetFromCocoa([notification object]);
-    wxCHECK_RET(win,"windowWillClose received but no wxWindow exists");
+    wxCHECK_RET(win,wxT("windowWillClose received but no wxWindow exists"));
     win->CocoaDelegate_windowWillClose();
 }
 

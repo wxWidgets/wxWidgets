@@ -49,7 +49,7 @@
 @implementation wxMenuBarManagerObserver : NSObject
 - (id)init
 {
-    wxFAIL_MSG("[wxMenuBarManagerObserver -init] should never be called!");
+    wxFAIL_MSG(wxT("[wxMenuBarManagerObserver -init] should never be called!"));
     m_mbarman = NULL;
     return self;
 }
@@ -273,7 +273,7 @@ void wxMenuBarManager::InstallMenuBarForWindow(wxCocoaNSWindow *win)
     wxASSERT(win);
     m_windowCurrent = win;
     wxMenuBar *menubar = win->GetAppMenuBar(win);
-    wxLogDebug("Found menubar=%p for window=%p.",menubar,win);
+    wxLogDebug(wxT("Found menubar=%p for window=%p."),menubar,win);
     SetMenuBar(menubar);
 }
 

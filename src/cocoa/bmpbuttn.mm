@@ -32,10 +32,10 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID winid,
             const wxValidator& validator, const wxString& name)
 {
     wxAutoNSAutoreleasePool pool;
-    wxLogDebug("Creating control with id=%d",winid);
+    wxLogDebug(wxT("Creating control with id=%d"),winid);
     if(!CreateControl(parent,winid,pos,size,style,validator,name))
         return false;
-    wxLogDebug("Created control with id=%d",GetId());
+    wxLogDebug(wxT("Created control with id=%d"),GetId());
     m_cocoaNSView = NULL;
     SetNSButton([[NSButton alloc] initWithFrame: MakeDefaultNSRect(size)]);
     // NOTE: YES we want to release this (to match the alloc).
@@ -60,7 +60,7 @@ wxBitmapButton::~wxBitmapButton()
 
 void wxBitmapButton::Cocoa_wxNSButtonAction(void)
 {
-    wxLogDebug("YAY!");
+    wxLogDebug(wxT("YAY!"));
     wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, GetId());
     InitCommandEvent(event); //    event.SetEventObject(this);
     Command(event);

@@ -41,7 +41,7 @@ WX_IMPLEMENT_OBJC_INTERFACE_HASHMAP(NSTableView)
 - (int)numberOfRowsInTableView: (NSTableView *)tableView
 {
     wxCocoaNSTableView *wxView = wxCocoaNSTableView::GetFromCocoa(tableView);
-    wxCHECK_MSG(wxView, 0, "No associated wx object");
+    wxCHECK_MSG(wxView, 0, wxT("No associated wx object"));
     return wxView->CocoaDataSource_numberOfRows();
 }
 
@@ -50,7 +50,7 @@ WX_IMPLEMENT_OBJC_INTERFACE_HASHMAP(NSTableView)
     row: (int)rowIndex
 {
     wxCocoaNSTableView *wxView = wxCocoaNSTableView::GetFromCocoa(tableView);
-    wxCHECK_MSG(wxView, nil, "No associated wx object");
+    wxCHECK_MSG(wxView, nil, wxT("No associated wx object"));
     return wxView->CocoaDataSource_objectForTableColumn(tableColumn,rowIndex);
 }
 

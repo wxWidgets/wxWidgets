@@ -88,7 +88,7 @@ void wxEventLoop::Exit(int rc)
     m_impl->SetExitCode(rc);
 
     NSApplication *cocoaApp = [NSApplication sharedApplication];
-    wxLogDebug("wxEventLoop::Exit isRunning=%d", (int)[cocoaApp isRunning]);
+    wxLogDebug(wxT("wxEventLoop::Exit isRunning=%d"), (int)[cocoaApp isRunning]);
     wxTheApp->WakeUpIdle();
     /* Notes:
     If we're being called from idle time (which occurs while checking the

@@ -216,7 +216,7 @@ void wxWindowCocoaScroller::DoGetClientSize(int *x, int *y) const
 
 void wxWindowCocoaScroller::Cocoa_FrameChanged(void)
 {
-    wxLogDebug("Cocoa_FrameChanged");
+    wxLogDebug(wxT("Cocoa_FrameChanged"));
     wxSizeEvent event(m_owner->GetSize(), m_owner->GetId());
     event.SetEventObject(m_owner);
     m_owner->GetEventHandler()->ProcessEvent(event);
@@ -302,13 +302,13 @@ void wxWindowCocoa::CocoaRemoveFromParent(void)
 void wxWindowCocoa::SetNSView(WX_NSView cocoaNSView)
 {
     bool need_debug = cocoaNSView || m_cocoaNSView;
-    if(need_debug) wxLogDebug("wxWindowCocoa=%p::SetNSView [m_cocoaNSView=%p retainCount]=%d",this,m_cocoaNSView,[m_cocoaNSView retainCount]);
+    if(need_debug) wxLogDebug(wxT("wxWindowCocoa=%p::SetNSView [m_cocoaNSView=%p retainCount]=%d"),this,m_cocoaNSView,[m_cocoaNSView retainCount]);
     DisassociateNSView(m_cocoaNSView);
     [cocoaNSView retain];
     [m_cocoaNSView release];
     m_cocoaNSView = cocoaNSView;
     AssociateNSView(m_cocoaNSView);
-    if(need_debug) wxLogDebug("wxWindowCocoa=%p::SetNSView [cocoaNSView=%p retainCount]=%d",this,cocoaNSView,[cocoaNSView retainCount]);
+    if(need_debug) wxLogDebug(wxT("wxWindowCocoa=%p::SetNSView [cocoaNSView=%p retainCount]=%d"),this,cocoaNSView,[cocoaNSView retainCount]);
 }
 
 WX_NSView wxWindowCocoa::GetNSViewForSuperview() const
@@ -329,13 +329,13 @@ WX_NSView wxWindowCocoa::GetNSViewForHiding() const
 
 bool wxWindowCocoa::Cocoa_drawRect(const NSRect &rect)
 {
-    wxLogDebug("Cocoa_drawRect");
+    wxLogDebug(wxT("Cocoa_drawRect"));
     // Recursion can happen if the event loop runs from within the paint
     // handler.  For instance, if an assertion dialog is shown.
     // FIXME: This seems less than ideal.
     if(m_isInPaint)
     {
-        wxLogDebug("Paint event recursion!");
+        wxLogDebug(wxT("Paint event recursion!"));
         return false;
     }
     //FIXME: should probably turn that rect into the update region
@@ -349,7 +349,7 @@ bool wxWindowCocoa::Cocoa_drawRect(const NSRect &rect)
 
 void wxWindowCocoa::InitMouseEvent(wxMouseEvent& event, WX_NSEvent cocoaEvent)
 {
-    wxASSERT_MSG([m_cocoaNSView window]==[cocoaEvent window],"Mouse event for different NSWindow");
+    wxASSERT_MSG([m_cocoaNSView window]==[cocoaEvent window],wxT("Mouse event for different NSWindow"));
     NSPoint cocoaPoint = [m_cocoaNSView convertPoint:[(NSEvent*)cocoaEvent locationInWindow] fromView:nil];
     NSRect cocoaRect = [m_cocoaNSView frame];
     const wxPoint &clientorigin = GetClientAreaOrigin();
@@ -370,7 +370,7 @@ bool wxWindowCocoa::Cocoa_mouseMoved(WX_NSEvent theEvent)
 {
     wxMouseEvent event(wxEVT_MOTION);
     InitMouseEvent(event,theEvent);
-    wxLogDebug("Mouse Drag @%d,%d",event.m_x,event.m_y);
+    wxLogDebug(wxT("Mouse Drag @%d,%d"),event.m_x,event.m_y);
     return GetEventHandler()->ProcessEvent(event);
 }
 
@@ -388,7 +388,7 @@ bool wxWindowCocoa::Cocoa_mouseDown(WX_NSEvent theEvent)
 {
     wxMouseEvent event([theEvent clickCount]<2?wxEVT_LEFT_DOWN:wxEVT_LEFT_DCLICK);
     InitMouseEvent(event,theEvent);
-    wxLogDebug("Mouse Down @%d,%d num clicks=%d",event.m_x,event.m_y,[theEvent clickCount]);
+    wxLogDebug(wxT("Mouse Down @%d,%d num clicks=%d"),event.m_x,event.m_y,[theEvent clickCount]);
     return GetEventHandler()->ProcessEvent(event);
 }
 
@@ -397,7 +397,7 @@ bool wxWindowCocoa::Cocoa_mouseDragged(WX_NSEvent theEvent)
     wxMouseEvent event(wxEVT_MOTION);
     InitMouseEvent(event,theEvent);
     event.m_leftDown = true;
-    wxLogDebug("Mouse Drag @%d,%d",event.m_x,event.m_y);
+    wxLogDebug(wxT("Mouse Drag @%d,%d"),event.m_x,event.m_y);
     return GetEventHandler()->ProcessEvent(event);
 }
 
@@ -405,7 +405,7 @@ bool wxWindowCocoa::Cocoa_mouseUp(WX_NSEvent theEvent)
 {
     wxMouseEvent event(wxEVT_LEFT_UP);
     InitMouseEvent(event,theEvent);
-    wxLogDebug("Mouse Up @%d,%d",event.m_x,event.m_y);
+    wxLogDebug(wxT("Mouse Up @%d,%d"),event.m_x,event.m_y);
     return GetEventHandler()->ProcessEvent(event);
 }
 
@@ -441,7 +441,7 @@ bool wxWindowCocoa::Cocoa_otherMouseUp(WX_NSEvent theEvent)
 
 void wxWindowCocoa::Cocoa_FrameChanged(void)
 {
-    wxLogDebug("Cocoa_FrameChanged");
+    wxLogDebug(wxT("Cocoa_FrameChanged"));
     wxSizeEvent event(GetSize(), m_windowId);
     event.SetEventObject(this);
     GetEventHandler()->ProcessEvent(event);
@@ -493,7 +493,7 @@ bool wxWindow::Show(bool show)
     // If the window is marked as visible, then it shouldn't have a dummy view
     // If the window is marked hidden, then it should have a dummy view
     // wxSpinCtrl (generic) abuses m_isShown, don't use it for any logic
-//    wxASSERT_MSG( (m_isShown && !m_dummyNSView) || (!m_isShown && m_dummyNSView),"wxWindow: m_isShown does not agree with m_dummyNSView");
+//    wxASSERT_MSG( (m_isShown && !m_dummyNSView) || (!m_isShown && m_dummyNSView),wxT("wxWindow: m_isShown does not agree with m_dummyNSView"));
     // Return false if there isn't a window to show or hide
     NSView *cocoaView = GetNSViewForHiding();
     if(!cocoaView)
@@ -573,7 +573,7 @@ void wxWindowCocoa::DoMoveWindow(int x, int y, int width, int height)
 
     NSView *nsview = GetNSViewForSuperview();
     NSView *superview = [nsview superview];
-    wxCHECK_RET(superview,"NSView does not have a superview");
+    wxCHECK_RET(superview,wxT("NSView does not have a superview"));
     NSRect parentRect = [superview bounds];
 
     NSRect cocoaRect = NSMakeRect(x,parentRect.size.height-(y+height),width,height);
@@ -586,7 +586,7 @@ void wxWindowCocoa::SetInitialFrameRect(const wxPoint& pos, const wxSize& size)
 {
     NSView *nsview = GetNSViewForSuperview();
     NSView *superview = [nsview superview];
-    wxCHECK_RET(superview,"NSView does not have a superview");
+    wxCHECK_RET(superview,wxT("NSView does not have a superview"));
     NSRect parentRect = [superview bounds];
     NSRect frameRect = [nsview frame];
     if(size.x!=-1)
@@ -621,7 +621,7 @@ void wxWindow::DoGetPosition(int *x, int *y) const
 {
     NSView *nsview = GetNSViewForSuperview();
     NSView *superview = [nsview superview];
-    wxCHECK_RET(superview,"NSView does not have a superview");
+    wxCHECK_RET(superview,wxT("NSView does not have a superview"));
     NSRect parentRect = [superview bounds];
 
     NSRect cocoaRect = [nsview frame];
@@ -672,7 +672,7 @@ void wxWindow::DoClientToScreen(int *x, int *y) const
 // Get size *available for subwindows* i.e. excluding menu bar etc.
 void wxWindow::DoGetClientSize(int *x, int *y) const
 {
-    wxLogDebug("DoGetClientSize:");
+    wxLogDebug(wxT("DoGetClientSize:"));
     if(m_cocoaScroller)
         m_cocoaScroller->DoGetClientSize(x,y);
     else
@@ -681,7 +681,7 @@ void wxWindow::DoGetClientSize(int *x, int *y) const
 
 void wxWindow::DoSetClientSize(int width, int height)
 {
-    wxLogDebug("DoSetClientSize=(%d,%d)",width,height);
+    wxLogDebug(wxT("DoSetClientSize=(%d,%d)"),width,height);
     if(m_cocoaScroller)
         m_cocoaScroller->ClientSizeToSize(width,height);
     CocoaSetWxWindowSize(width,height);

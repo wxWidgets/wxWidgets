@@ -189,7 +189,7 @@ void *wxCocoaNSView::sm_cocoaObserver = [[wxNSViewNotificationObserver alloc] in
 - (void)notificationFrameChanged: (NSNotification *)notification;
 {
     wxCocoaNSView *win = wxCocoaNSView::GetFromCocoa([notification object]);
-    wxCHECK_RET(win,"notificationFrameChanged received but no wxWindow exists");
+    wxCHECK_RET(win,wxT("notificationFrameChanged received but no wxWindow exists"));
     win->Cocoa_FrameChanged();
 }
 

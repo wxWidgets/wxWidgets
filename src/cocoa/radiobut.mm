@@ -60,7 +60,7 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID winid,
             {
                 m_radioMaster = radioButton->m_radioMaster;
                 wxASSERT_MSG(m_radioMaster,
-                    "Previous radio button should be part of a group");
+                    wxT("Previous radio button should be part of a group"));
                 // Don't crash, assume user meant wxRB_SINGLE
                 if(m_radioMaster)
                     m_radioMaster->m_radioSlaves.Append(this);
@@ -140,7 +140,7 @@ bool wxRadioButton::GetValue() const
 
 void wxRadioButton::Cocoa_wxNSButtonAction(void)
 {
-    wxLogDebug("wxRadioButton");
+    wxLogDebug(wxT("wxRadioButton"));
     if(m_radioMaster && ([GetNSButton() state] == NSOnState))
     {
         for(wxRadioButtonList::compatibility_iterator slaveNode =

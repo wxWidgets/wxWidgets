@@ -38,7 +38,7 @@ wxWindowDC::wxWindowDC( wxWindow *window )
 :   m_window(window)
 ,   m_lockedNSView(NULL)
 {
-    wxLogDebug("non-client window DC's are not supported, oh well");
+    wxLogDebug(wxT("non-client window DC's are not supported, oh well"));
 };
 
 wxWindowDC::~wxWindowDC(void)
@@ -57,7 +57,7 @@ bool wxWindowDC::CocoaLockFocusOnNSView(WX_NSView nsview)
         m_lockedNSView = nsview;
         return true;
     }
-    wxLogDebug("focus lock failed!");
+    wxLogDebug(wxT("focus lock failed!"));
     return false;
 }
 
@@ -71,13 +71,13 @@ bool wxWindowDC::CocoaUnlockFocusOnNSView()
 
 bool wxWindowDC::CocoaLockFocus()
 {
-    wxLogDebug("Locking focus on wxWindowDC=%p, NSView=%p",this, m_window->GetNonClientNSView());
+    wxLogDebug(wxT("Locking focus on wxWindowDC=%p, NSView=%p"),this, m_window->GetNonClientNSView());
     return CocoaLockFocusOnNSView(m_window->GetNonClientNSView());
 }
 
 bool wxWindowDC::CocoaUnlockFocus()
 {
-    wxLogDebug("Unlocking focus on wxWindowDC=%p, NSView=%p",this, m_window->GetNonClientNSView());
+    wxLogDebug(wxT("Unlocking focus on wxWindowDC=%p, NSView=%p"),this, m_window->GetNonClientNSView());
     return CocoaUnlockFocusOnNSView();
 }
 
@@ -115,13 +115,13 @@ wxClientDC::~wxClientDC(void)
 
 bool wxClientDC::CocoaLockFocus()
 {
-    wxLogDebug("Locking focus on wxClientDC=%p, NSView=%p",this, m_window->GetNSView());
+    wxLogDebug(wxT("Locking focus on wxClientDC=%p, NSView=%p"),this, m_window->GetNSView());
     return CocoaLockFocusOnNSView(m_window->GetNSView());
 }
 
 bool wxClientDC::CocoaUnlockFocus()
 {
-    wxLogDebug("Unlocking focus on wxClientDC=%p, NSView=%p",this, m_window->GetNSView());
+    wxLogDebug(wxT("Unlocking focus on wxClientDC=%p, NSView=%p"),this, m_window->GetNSView());
     return CocoaUnlockFocusOnNSView();
 }
 
@@ -137,7 +137,7 @@ wxPaintDC::wxPaintDC(void)
 wxPaintDC::wxPaintDC( wxWindow *window )
 {
     m_window = window;
-    wxASSERT_MSG([NSView focusView]==window->GetNSView(), "PaintDC's NSView does not have focus.  Please use wxPaintDC only as the first DC created in a paint handler");
+    wxASSERT_MSG([NSView focusView]==window->GetNSView(), wxT("PaintDC's NSView does not have focus.  Please use wxPaintDC only as the first DC created in a paint handler"));
     sm_cocoaDCStack.Insert(this);
     m_lockedNSView = window->GetNSView();
     m_cocoaFlipped = [window->GetNSView() isFlipped];
@@ -152,7 +152,7 @@ wxPaintDC::~wxPaintDC(void)
 
 bool wxPaintDC::CocoaLockFocus()
 {
-    wxFAIL_MSG("wxPaintDC cannot be asked to lock focus!");
+    wxFAIL_MSG(wxT("wxPaintDC cannot be asked to lock focus!"));
     return false;
 }
 

@@ -296,7 +296,7 @@ bool wxBitmap::Create(int w, int h, int d)
             bytesPerRow: 0
             bitsPerPixel: 0];
 
-    wxLogDebug("M_BITMAPDATA=%p NSBitmapImageRep bitmapData=%p", M_BITMAPDATA, [M_BITMAPDATA->m_cocoaNSBitmapImageRep bitmapData]);
+    wxLogDebug(wxT("M_BITMAPDATA=%p NSBitmapImageRep bitmapData=%p"), M_BITMAPDATA, [M_BITMAPDATA->m_cocoaNSBitmapImageRep bitmapData]);
     M_BITMAPDATA->m_ok = true;
     M_BITMAPDATA->m_numColors = 0;
     M_BITMAPDATA->m_quality = 0;
@@ -510,7 +510,7 @@ bool wxMask::Create(const wxBitmap& bitmap, int paletteIndex)
 template <class PixelData>
 static bool wxMask_CreateFromBitmapData(PixelData srcData, const wxColour& colour, unsigned char *dstData)
 {
-    wxCHECK_MSG(dstData,false,"Couldn't access mask data");
+    wxCHECK_MSG(dstData,false,wxT("Couldn't access mask data"));
     class PixelData::Iterator p(srcData);
     const int nRows = srcData.GetHeight();
     const int nCols = srcData.GetWidth();
@@ -581,7 +581,7 @@ bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
 
     // We need the source NSBitmapImageRep to detemine its pixel format
     NSBitmapImageRep *srcBitmapRep = const_cast<wxBitmap&>(bitmap).GetNSBitmapImageRep();
-    wxCHECK_MSG(srcBitmapRep,false,"Can't create mask for an uninitialized bitmap");
+    wxCHECK_MSG(srcBitmapRep,false,wxT("Can't create mask for an uninitialized bitmap"));
 
     // Get a pointer to the destination data
     unsigned char *dstPlanes[5] = {NULL,NULL,NULL,NULL,NULL};
@@ -592,7 +592,7 @@ bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
     {
         wxPixelData<wxBitmap,wxNativePixelFormat> pixelData(const_cast<wxBitmap&>(bitmap));
         wxCHECK_MSG(wxMask_CreateFromBitmapData(pixelData, colour, dstData),
-            false, "Unable to access raw data");
+            false, wxT("Unable to access raw data"));
     }
     // 32-bpp RGBx (x=throw away, no alpha)
     else if([srcBitmapRep bitsPerPixel]==32 && [srcBitmapRep bitsPerSample]==8 && [srcBitmapRep samplesPerPixel]==3 && [srcBitmapRep hasAlpha]==NO)
@@ -600,17 +600,17 @@ bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
         typedef wxPixelFormat<unsigned char,32,0,1,2> PixelFormat;
         wxPixelData<wxBitmap,PixelFormat> pixelData(const_cast<wxBitmap&>(bitmap));
         wxCHECK_MSG(wxMask_CreateFromBitmapData(pixelData, colour, dstData),
-            false, "Unable to access raw data");
+            false, wxT("Unable to access raw data"));
     }
     // 32-bpp RGBA
     else if([srcBitmapRep bitsPerPixel]==32 && [srcBitmapRep bitsPerSample]==8 && [srcBitmapRep samplesPerPixel]==4 && [srcBitmapRep hasAlpha]==YES)
     {
         wxPixelData<wxBitmap,wxAlphaPixelFormat> pixelData(const_cast<wxBitmap&>(bitmap));
         wxCHECK_MSG(wxMask_CreateFromBitmapData(pixelData, colour, dstData),
-            false, "Unable to access raw data");
+            false, wxT("Unable to access raw data"));
     }
     else
-    {   wxCHECK_MSG(false,false,"Unimplemented pixel format"); }
+    {   wxCHECK_MSG(false,false,wxT("Unimplemented pixel format")); }
 
     // maskRep was autoreleased in case we had to exit quickly
     m_cocoaNSBitmapImageRep = [maskRep retain];

@@ -27,11 +27,11 @@ public:
         , m_style(wxNORMAL)
         , m_weight(wxNORMAL)
         , m_underlined(FALSE)
-        , m_faceName("Geneva")
+        , m_faceName(wxT("Geneva"))
         , m_encoding(wxFONTENCODING_DEFAULT)
     {
         Init(10, wxDEFAULT, wxNORMAL, wxNORMAL, FALSE,
-             "Geneva", wxFONTENCODING_DEFAULT);
+             wxT("Geneva"), wxFONTENCODING_DEFAULT);
     }
 
     wxFontRefData(const wxFontRefData& data)

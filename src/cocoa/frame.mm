@@ -165,7 +165,7 @@ void wxFrame::UpdateFrameNSView()
         [sbarNSView setAutoresizingMask: NSViewWidthSizable|NSViewMaxYMargin];
         sbarheight = sbarRect.size.height;
     }
-    wxLogDebug("frame height=%f, tbar=%f, sbar=%f",frameRect.size.height,tbarheight,sbarheight);
+    wxLogDebug(wxT("frame height=%f, tbar=%f, sbar=%f"),frameRect.size.height,tbarheight,sbarheight);
     NSRect innerRect = [m_cocoaNSView frame];
     innerRect.size.height = frameRect.size.height - tbarheight - sbarheight;
     innerRect.origin.y = sbarheight;

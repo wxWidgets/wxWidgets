@@ -58,35 +58,35 @@ struct objc_object *wxCocoaNSMenu::sm_cocoaObserver = [[wxNSMenuNotificationObse
 - (void)menuDidAddItem: (NSNotification *)notification
 {
     wxCocoaNSMenu *menu = wxCocoaNSMenu::GetFromCocoa([notification object]);
-    wxCHECK_RET(menu,"menuDidAddItem received but no wxMenu exists");
+    wxCHECK_RET(menu,wxT("menuDidAddItem received but no wxMenu exists"));
     menu->CocoaNotification_menuDidAddItem(notification);
 }
 
 - (void)menuDidChangeItem: (NSNotification *)notification
 {
     wxCocoaNSMenu *menu = wxCocoaNSMenu::GetFromCocoa([notification object]);
-    wxCHECK_RET(menu,"menuDidChangeItem received but no wxMenu exists");
+    wxCHECK_RET(menu,wxT("menuDidChangeItem received but no wxMenu exists"));
     menu->CocoaNotification_menuDidChangeItem(notification);
 }
 
 - (void)menuDidRemoveItem: (NSNotification *)notification
 {
     wxCocoaNSMenu *menu = wxCocoaNSMenu::GetFromCocoa([notification object]);
-    wxCHECK_RET(menu,"menuDidRemoveItem received but no wxMenu exists");
+    wxCHECK_RET(menu,wxT("menuDidRemoveItem received but no wxMenu exists"));
     menu->CocoaNotification_menuDidRemoveItem(notification);
 }
 
 - (void)menuDidSendAction: (NSNotification *)notification
 {
     wxCocoaNSMenu *menu = wxCocoaNSMenu::GetFromCocoa([notification object]);
-    wxCHECK_RET(menu,"menuDidSendAction received but no wxMenu exists");
+    wxCHECK_RET(menu,wxT("menuDidSendAction received but no wxMenu exists"));
     menu->CocoaNotification_menuDidSendAction(notification);
 }
 
 - (void)menuWillSendAction: (NSNotification *)notification
 {
     wxCocoaNSMenu *menu = wxCocoaNSMenu::GetFromCocoa([notification object]);
-    wxCHECK_RET(menu,"menuWillSendAction received but no wxMenu exists");
+    wxCHECK_RET(menu,wxT("menuWillSendAction received but no wxMenu exists"));
     menu->CocoaNotification_menuWillSendAction(notification);
 }
 

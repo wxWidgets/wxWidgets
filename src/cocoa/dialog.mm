@@ -75,7 +75,7 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID winid,
     // Because we do not release on close, the following release matches the
     // above alloc and thus the retain count will be 1.
     [m_cocoaNSWindow release];
-    wxLogDebug("wxDialog m_cocoaNSWindow retainCount=%d",[m_cocoaNSWindow retainCount]);
+    wxLogDebug(wxT("wxDialog m_cocoaNSWindow retainCount=%d"),[m_cocoaNSWindow retainCount]);
     [m_cocoaNSWindow setTitle:wxNSStringWithWxString(title)];
     [m_cocoaNSWindow setHidesOnDeactivate:NO];
 
@@ -84,7 +84,7 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID winid,
 
 wxDialog::~wxDialog()
 {
-    wxLogDebug("Destroying");
+    wxLogDebug(wxT("Destroying"));
     // setReleasedWhenClosed: NO
     [m_cocoaNSWindow close];
     DisassociateNSPanel(GetNSPanel());
@@ -94,7 +94,7 @@ void wxDialog::CocoaDelegate_windowWillClose(void)
 {
     m_closed = true;
     /* Actually, this isn't true anymore */
-    wxLogDebug("Woah: Dialogs are not generally closed");
+    wxLogDebug(wxT("Woah: Dialogs are not generally closed"));
 }
 
 void wxDialog::SetModal(bool flag)
@@ -124,7 +124,7 @@ bool wxDialog::Show(bool show)
         {
             wxAutoNSAutoreleasePool pool;
             wxModalDialogs.Append(this);
-            wxLogDebug("runModal");
+            wxLogDebug(wxT("runModal"));
             NSApplication *theNSApp = wxTheApp->GetNSApplication();
             // If the app hasn't started, flush the event queue
             // If we don't do this, the Dock doesn't get the message that
@@ -141,11 +141,11 @@ bool wxDialog::Show(bool show)
                 }
             }
             [wxTheApp->GetNSApplication() runModalForWindow:m_cocoaNSWindow];
-            wxLogDebug("runModal END");
+            wxLogDebug(wxT("runModal END"));
         }
         else
         {
-            wxLogDebug("abortModal");
+            wxLogDebug(wxT("abortModal"));
             [wxTheApp->GetNSApplication() abortModal];
             wxModalDialogs.DeleteObject(this);
         }
@@ -198,13 +198,13 @@ void wxDialog::OnCloseWindow(wxCloseEvent& event)
     
     if ( closing.Member(this) )
     {
-        wxLogDebug("WARNING: Attempting to recursively call Close for dialog");
+        wxLogDebug(wxT("WARNING: Attempting to recursively call Close for dialog"));
         return;
     }
     
     closing.Append(this);
     
-    wxLogDebug("Sending Cancel Event");
+    wxLogDebug(wxT("Sending Cancel Event"));
     wxCommandEvent cancelEvent(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
     cancelEvent.SetEventObject( this );
     GetEventHandler()->ProcessEvent(cancelEvent); // This may close the dialog
@@ -230,7 +230,7 @@ void wxDialog::OnApply(wxCommandEvent& event)
 
 void wxDialog::OnCancel(wxCommandEvent& event)
 {
-    wxLogDebug("Cancelled!");
+    wxLogDebug(wxT("Cancelled!"));
     EndModal(wxID_CANCEL);
 }
 

@@ -70,7 +70,7 @@ inline void CocoaSetPenForNSBezierPath(wxPen &pen, NSBezierPath *bezpath)
 
 void wxDC::CocoaInitializeTextSystem()
 {
-    wxASSERT_MSG(!sm_cocoaNSTextStorage && !sm_cocoaNSLayoutManager && !sm_cocoaNSTextContainer,"Text system already initalized!  BAD PROGRAMMER!");
+    wxASSERT_MSG(!sm_cocoaNSTextStorage && !sm_cocoaNSLayoutManager && !sm_cocoaNSTextContainer,wxT("Text system already initalized!  BAD PROGRAMMER!"));
 
     sm_cocoaNSTextStorage = [[NSTextStorage alloc] init];
 
@@ -108,7 +108,7 @@ void wxDC::CocoaUnwindStackAndLoseFocus()
             wxASSERT(dc!=this);
             if(!dc->CocoaUnlockFocus())
             {
-                wxFAIL_MSG("Unable to unlock focus on higher-level DC!");
+                wxFAIL_MSG(wxT("Unable to unlock focus on higher-level DC!"));
             }
             sm_cocoaDCStack.DeleteNode(node);
         }
@@ -205,7 +205,7 @@ void wxDC::DoGetTextExtent(const wxString& text, wxCoord *x, wxCoord *y, wxCoord
 {
     wxAutoNSAutoreleasePool pool;
 // FIXME: Cache this so it can be used for DoDrawText
-    wxASSERT_MSG(sm_cocoaNSTextStorage && sm_cocoaNSLayoutManager && sm_cocoaNSTextContainer, "Text system has not been initialized.  BAD PROGRAMMER!");
+    wxASSERT_MSG(sm_cocoaNSTextStorage && sm_cocoaNSLayoutManager && sm_cocoaNSTextContainer, wxT("Text system has not been initialized.  BAD PROGRAMMER!"));
     NSAttributedString *attributedString = [[NSAttributedString alloc]
             initWithString:[NSString stringWithCString:text.c_str()]];
     [sm_cocoaNSTextStorage setAttributedString:attributedString];
@@ -226,7 +226,7 @@ void wxDC::DoGetTextExtent(const wxString& text, wxCoord *x, wxCoord *y, wxCoord
 void wxDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
 {
     if(!CocoaTakeFocus()) return;
-    wxASSERT_MSG(sm_cocoaNSTextStorage && sm_cocoaNSLayoutManager && sm_cocoaNSTextContainer, "Text system has not been initialized.  BAD PROGRAMMER!");
+    wxASSERT_MSG(sm_cocoaNSTextStorage && sm_cocoaNSLayoutManager && sm_cocoaNSTextContainer, wxT("Text system has not been initialized.  BAD PROGRAMMER!"));
     NSAttributedString *attributedString = [[NSAttributedString alloc]
             initWithString:[NSString stringWithCString:text.c_str()]];
     [sm_cocoaNSTextStorage setAttributedString:attributedString];
@@ -252,7 +252,7 @@ void wxDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
     // there is no length or we don't start at zero
     if(!glyphRange.length)
         return;
-    wxASSERT_MSG(glyphRange.location==0,"glyphRange must begin at zero");
+    wxASSERT_MSG(glyphRange.location==0,wxT("glyphRange must begin at zero"));
 
     NSAffineTransform *transform = [NSAffineTransform transform];
     [transform translateXBy:x yBy:y];
@@ -274,7 +274,7 @@ void wxDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
     [flipTransform concat];
     #if 0
     // Draw+fill a rectangle so we can see where the shit is supposed to be.
-    wxLogDebug("(%f,%f) (%fx%f)",usedRect.origin.x,usedRect.origin.y,usedRect.size.width,usedRect.size.height);
+    wxLogDebug(wxT("(%f,%f) (%fx%f)"),usedRect.origin.x,usedRect.origin.y,usedRect.size.width,usedRect.size.height);
     NSBezierPath *bezpath = [NSBezierPath bezierPathWithRect:NSMakeRect(0,0,usedRect.size.width,usedRect.size.height)];
     [[NSColor blackColor] set];
     [bezpath stroke];
@@ -454,7 +454,7 @@ void wxDC::DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask)
 
 #if 0
     // Draw a rect so we can see where it's supposed to be
-    wxLogDebug("image at (%d,%d) size %dx%d",x,y,bmp.GetWidth(),bmp.GetHeight());
+    wxLogDebug(wxT("image at (%d,%d) size %dx%d"),x,y,bmp.GetWidth(),bmp.GetHeight());
     NSBezierPath *bezpath = [NSBezierPath bezierPathWithRect:NSMakeRect(x,y,bmp.GetWidth(),bmp.GetHeight())];
     [[NSColor blackColor] set];
     [bezpath stroke];

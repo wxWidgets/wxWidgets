@@ -105,7 +105,7 @@ wxMenuBar::~wxMenuBar()
 bool wxMenuBar::Append( wxMenu *menu, const wxString &title )
 {
     wxAutoNSAutoreleasePool pool;
-    wxLogDebug("append menu=%p, title=%s",menu,title.c_str());
+    wxLogDebug(wxT("append menu=%p, title=%s"),menu,title.c_str());
     if(!wxMenuBarBase::Append(menu,title))
         return false;
     wxASSERT(menu);
@@ -125,7 +125,7 @@ bool wxMenuBar::Append( wxMenu *menu, const wxString &title )
 bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
 {
     wxAutoNSAutoreleasePool pool;
-    wxLogDebug("insert pos=%lu, menu=%p, title=%s",pos,menu,title.c_str());
+    wxLogDebug(wxT("insert pos=%lu, menu=%p, title=%s"),pos,menu,title.c_str());
     // Get the current menu at this position
     wxMenu *nextmenu = GetMenu(pos);
     if(!wxMenuBarBase::Insert(pos,menu,title))

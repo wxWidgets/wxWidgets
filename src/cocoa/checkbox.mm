@@ -74,7 +74,7 @@ bool wxCheckBox::GetValue() const
 
 void wxCheckBox::Cocoa_wxNSButtonAction(void)
 {
-    wxLogDebug("Checkbox");
+    wxLogDebug(wxT("Checkbox"));
     wxCommandEvent event(wxEVT_COMMAND_CHECKBOX_CLICKED, GetId());
     InitCommandEvent(event); //    event.SetEventObject(this);
     event.SetInt(GetValue());

@@ -168,7 +168,7 @@ wxMenuBar* wxTopLevelWindowCocoa::GetAppMenuBar(wxCocoaNSWindow *win)
 void wxTopLevelWindowCocoa::SetNSWindow(WX_NSWindow cocoaNSWindow)
 {
     bool need_debug = cocoaNSWindow || m_cocoaNSWindow;
-    if(need_debug) wxLogDebug("wxTopLevelWindowCocoa=%p::SetNSWindow [m_cocoaNSWindow=%p retainCount]=%d",this,m_cocoaNSWindow,[m_cocoaNSWindow retainCount]);
+    if(need_debug) wxLogDebug(wxT("wxTopLevelWindowCocoa=%p::SetNSWindow [m_cocoaNSWindow=%p retainCount]=%d"),this,m_cocoaNSWindow,[m_cocoaNSWindow retainCount]);
     DisassociateNSWindow(m_cocoaNSWindow);
     [cocoaNSWindow retain];
     [m_cocoaNSWindow release];
@@ -178,7 +178,7 @@ void wxTopLevelWindowCocoa::SetNSWindow(WX_NSWindow cocoaNSWindow)
     else
         SetNSView(NULL);
     AssociateNSWindow(m_cocoaNSWindow);
-    if(need_debug) wxLogDebug("wxTopLevelWindowCocoa=%p::SetNSWindow [cocoaNSWindow=%p retainCount]=%d",this,cocoaNSWindow,[cocoaNSWindow retainCount]);
+    if(need_debug) wxLogDebug(wxT("wxTopLevelWindowCocoa=%p::SetNSWindow [cocoaNSWindow=%p retainCount]=%d"),this,cocoaNSWindow,[cocoaNSWindow retainCount]);
 }
 
 void wxTopLevelWindowCocoa::CocoaReplaceView(WX_NSView oldView, WX_NSView newView)
@@ -197,7 +197,7 @@ void wxTopLevelWindowCocoa::CocoaReplaceView(WX_NSView oldView, WX_NSView newVie
 void wxTopLevelWindowCocoa::CocoaDelegate_windowDidBecomeKey(void)
 {
     DeactivatePendingWindow();
-    wxLogDebug("wxTopLevelWindowCocoa=%p::CocoaDelegate_windowDidBecomeKey",this);
+    wxLogDebug(wxT("wxTopLevelWindowCocoa=%p::CocoaDelegate_windowDidBecomeKey"),this);
     wxActivateEvent event(wxEVT_ACTIVATE, TRUE, GetId());
     event.SetEventObject(this);
     GetEventHandler()->ProcessEvent(event);
@@ -205,7 +205,7 @@ void wxTopLevelWindowCocoa::CocoaDelegate_windowDidBecomeKey(void)
 
 void wxTopLevelWindowCocoa::CocoaDelegate_windowDidResignKey(void)
 {
-    wxLogDebug("wxTopLevelWindowCocoa=%p::CocoaDelegate_windowDidResignKey",this);
+    wxLogDebug(wxT("wxTopLevelWindowCocoa=%p::CocoaDelegate_windowDidResignKey"),this);
     wxActivateEvent event(wxEVT_ACTIVATE, FALSE, GetId());
     event.SetEventObject(this);
     GetEventHandler()->ProcessEvent(event);
@@ -213,12 +213,12 @@ void wxTopLevelWindowCocoa::CocoaDelegate_windowDidResignKey(void)
 
 void wxTopLevelWindowCocoa::CocoaDelegate_windowDidBecomeMain(void)
 {
-    wxLogDebug("wxTopLevelWindowCocoa=%p::CocoaDelegate_windowDidBecomeMain",this);
+    wxLogDebug(wxT("wxTopLevelWindowCocoa=%p::CocoaDelegate_windowDidBecomeMain"),this);
 }
 
 void wxTopLevelWindowCocoa::CocoaDelegate_windowDidResignMain(void)
 {
-    wxLogDebug("wxTopLevelWindowCocoa=%p::CocoaDelegate_windowDidResignMain",this);
+    wxLogDebug(wxT("wxTopLevelWindowCocoa=%p::CocoaDelegate_windowDidResignMain"),this);
 }
 
 void wxTopLevelWindowCocoa::CocoaDelegate_windowWillClose(void)
