@@ -161,9 +161,9 @@ int wxPalette::GetColoursCount() const
     return M_PALETTEDATA->m_count;
 }
 
-void *wxPalette::GetMGLpalette_t() const
+palette_t *wxPalette::GetMGLpalette_t() const
 {
     wxCHECK_MSG( Ok(), NULL, wxT("invalid palette") );   
-    return (void*)M_PALETTEDATA->m_entries;
+    return M_PALETTEDATA->m_entries;
 }
 

@@ -634,7 +634,7 @@ void wxBitmap::SetDepth(int depth)
     M_BMPDATA->m_bpp = depth;
 }
 
-bitmap_t_struct *wxBitmap::GetMGLbitmap_t() const
+bitmap_t *wxBitmap::GetMGLbitmap_t() const
 {
     return M_BMPDATA->m_bitmap;
 }

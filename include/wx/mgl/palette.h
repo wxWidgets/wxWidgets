@@ -26,6 +26,7 @@
 //-----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxPalette;
+struct palette_t;
 
 //-----------------------------------------------------------------------------
 // wxPalette
@@ -54,7 +55,7 @@ public:
     // FIXME_MGL -- make this method standard part of wx API
     // FIXME_MGL -- create wxXXXBase classes for all GDI stuff (Vadim wants that)
     
-    void *GetMGLpalette_t() const;
+    palette_t *GetMGLpalette_t() const;
 };
 
 #define wxColorMap wxPalette

@@ -30,7 +30,9 @@ class WXDLLEXPORT wxBitmap;
 class WXDLLEXPORT wxImage;
 class WXDLLEXPORT wxDC;
 class WXDLLEXPORT wxMemoryDC;
+
 class MGLDevCtx;
+struct bitmap_t;
 
 //-----------------------------------------------------------------------------
 // wxMask
@@ -117,7 +119,7 @@ public:
     virtual void SetDepth(int depth);
 
     // get underlying native representation:
-    void *GetMGLbitmap_t() const;
+    bitmap_t *GetMGLbitmap_t() const;
 
 protected:
     bool CreateFromXpm(const char **bits);
