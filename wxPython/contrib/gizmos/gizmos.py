@@ -54,10 +54,10 @@ class wxDynamicSashSplitEventPtr(wxCommandEventPtr):
         self.this = this
         self.thisown = 0
     def __repr__(self):
-        return "<C wxDynamicSashSplitEvent instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxDynamicSashSplitEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxDynamicSashSplitEvent(wxDynamicSashSplitEventPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(gizmosc.new_wxDynamicSashSplitEvent,_args,_kwargs)
+        self.this = gizmosc.new_wxDynamicSashSplitEvent(*_args,**_kwargs)
         self.thisown = 1
 
 
@@ -68,10 +68,10 @@ class wxDynamicSashUnifyEventPtr(wxCommandEventPtr):
         self.this = this
         self.thisown = 0
     def __repr__(self):
-        return "<C wxDynamicSashUnifyEvent instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxDynamicSashUnifyEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxDynamicSashUnifyEvent(wxDynamicSashUnifyEventPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(gizmosc.new_wxDynamicSashUnifyEvent,_args,_kwargs)
+        self.this = gizmosc.new_wxDynamicSashUnifyEvent(*_args,**_kwargs)
         self.thisown = 1
 
 
@@ -82,28 +82,28 @@ class wxDynamicSashWindowPtr(wxWindowPtr):
         self.this = this
         self.thisown = 0
     def Create(self, *_args, **_kwargs):
-        val = apply(gizmosc.wxDynamicSashWindow_Create,(self,) + _args, _kwargs)
+        val = gizmosc.wxDynamicSashWindow_Create(self, *_args, **_kwargs)
         return val
     def GetHScrollBar(self, *_args, **_kwargs):
-        val = apply(gizmosc.wxDynamicSashWindow_GetHScrollBar,(self,) + _args, _kwargs)
+        val = gizmosc.wxDynamicSashWindow_GetHScrollBar(self, *_args, **_kwargs)
         if val: val = wxScrollBarPtr(val) 
         return val
     def GetVScrollBar(self, *_args, **_kwargs):
-        val = apply(gizmosc.wxDynamicSashWindow_GetVScrollBar,(self,) + _args, _kwargs)
+        val = gizmosc.wxDynamicSashWindow_GetVScrollBar(self, *_args, **_kwargs)
         if val: val = wxScrollBarPtr(val) 
         return val
     def __repr__(self):
-        return "<C wxDynamicSashWindow instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxDynamicSashWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxDynamicSashWindow(wxDynamicSashWindowPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(gizmosc.new_wxDynamicSashWindow,_args,_kwargs)
+        self.this = gizmosc.new_wxDynamicSashWindow(*_args,**_kwargs)
         self.thisown = 1
         self._setOORInfo(self)
 
 
 
 def wxPreDynamicSashWindow(*_args,**_kwargs):
-    val = wxDynamicSashWindowPtr(apply(gizmosc.new_wxPreDynamicSashWindow,_args,_kwargs))
+    val = wxDynamicSashWindowPtr(gizmosc.new_wxPreDynamicSashWindow(*_args,**_kwargs))
     val.thisown = 1
     val._setOORInfo(val)
     return val
@@ -114,34 +114,34 @@ class wxEditableListBoxPtr(wxPanelPtr):
         self.this = this
         self.thisown = 0
     def SetStrings(self, *_args, **_kwargs):
-        val = apply(gizmosc.wxEditableListBox_SetStrings,(self,) + _args, _kwargs)
+        val = gizmosc.wxEditableListBox_SetStrings(self, *_args, **_kwargs)
         return val
     def GetStrings(self, *_args, **_kwargs):
-        val = apply(gizmosc.wxEditableListBox_GetStrings,(self,) + _args, _kwargs)
+        val = gizmosc.wxEditableListBox_GetStrings(self, *_args, **_kwargs)
         return val
     def GetListCtrl(self, *_args, **_kwargs):
-        val = apply(gizmosc.wxEditableListBox_GetListCtrl,(self,) + _args, _kwargs)
+        val = gizmosc.wxEditableListBox_GetListCtrl(self, *_args, **_kwargs)
         return val
     def GetDelButton(self, *_args, **_kwargs):
-        val = apply(gizmosc.wxEditableListBox_GetDelButton,(self,) + _args, _kwargs)
+        val = gizmosc.wxEditableListBox_GetDelButton(self, *_args, **_kwargs)
         return val
     def GetNewButton(self, *_args, **_kwargs):
-        val = apply(gizmosc.wxEditableListBox_GetNewButton,(self,) + _args, _kwargs)
+        val = gizmosc.wxEditableListBox_GetNewButton(self, *_args, **_kwargs)
         return val
     def GetUpButton(self, *_args, **_kwargs):
-        val = apply(gizmosc.wxEditableListBox_GetUpButton,(self,) + _args, _kwargs)
+        val = gizmosc.wxEditableListBox_GetUpButton(self, *_args, **_kwargs)
         return val
     def GetDownButton(self, *_args, **_kwargs):
-        val = apply(gizmosc.wxEditableListBox_GetDownButton,(self,) + _args, _kwargs)
+        val = gizmosc.wxEditableListBox_GetDownButton(self, *_args, **_kwargs)
         return val
     def GetEditButton(self, *_args, **_kwargs):
-        val = apply(gizmosc.wxEditableListBox_GetEditButton,(self,) + _args, _kwargs)
+        val = gizmosc.wxEditableListBox_GetEditButton(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxEditableListBox instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxEditableListBox instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxEditableListBox(wxEditableListBoxPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(gizmosc.new_wxEditableListBox,_args,_kwargs)
+        self.this = gizmosc.new_wxEditableListBox(*_args,**_kwargs)
         self.thisown = 1
         self._setOORInfo(self)
 
@@ -153,29 +153,29 @@ class wxRemotelyScrolledTreeCtrlPtr(wxTreeCtrlPtr):
         self.this = this
         self.thisown = 0
     def HideVScrollbar(self, *_args, **_kwargs):
-        val = apply(gizmosc.wxRemotelyScrolledTreeCtrl_HideVScrollbar,(self,) + _args, _kwargs)
+        val = gizmosc.wxRemotelyScrolledTreeCtrl_HideVScrollbar(self, *_args, **_kwargs)
         return val
     def AdjustRemoteScrollbars(self, *_args, **_kwargs):
-        val = apply(gizmosc.wxRemotelyScrolledTreeCtrl_AdjustRemoteScrollbars,(self,) + _args, _kwargs)
+        val = gizmosc.wxRemotelyScrolledTreeCtrl_AdjustRemoteScrollbars(self, *_args, **_kwargs)
         return val
     def GetScrolledWindow(self, *_args, **_kwargs):
-        val = apply(gizmosc.wxRemotelyScrolledTreeCtrl_GetScrolledWindow,(self,) + _args, _kwargs)
+        val = gizmosc.wxRemotelyScrolledTreeCtrl_GetScrolledWindow(self, *_args, **_kwargs)
         if val: val = wxScrolledWindowPtr(val) 
         return val
     def ScrollToLine(self, *_args, **_kwargs):
-        val = apply(gizmosc.wxRemotelyScrolledTreeCtrl_ScrollToLine,(self,) + _args, _kwargs)
+        val = gizmosc.wxRemotelyScrolledTreeCtrl_ScrollToLine(self, *_args, **_kwargs)
         return val
     def SetCompanionWindow(self, *_args, **_kwargs):
-        val = apply(gizmosc.wxRemotelyScrolledTreeCtrl_SetCompanionWindow,(self,) + _args, _kwargs)
+        val = gizmosc.wxRemotelyScrolledTreeCtrl_SetCompanionWindow(self, *_args, **_kwargs)
         return val
     def GetCompanionWindow(self, *_args, **_kwargs):
-        val = apply(gizmosc.wxRemotelyScrolledTreeCtrl_GetCompanionWindow,(self,) + _args, _kwargs)
+        val = gizmosc.wxRemotelyScrolledTreeCtrl_GetCompanionWindow(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxRemotelyScrolledTreeCtrl instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxRemotelyScrolledTreeCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxRemotelyScrolledTreeCtrl(wxRemotelyScrolledTreeCtrlPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(gizmosc.new_wxRemotelyScrolledTreeCtrl,_args,_kwargs)
+        self.this = gizmosc.new_wxRemotelyScrolledTreeCtrl(*_args,**_kwargs)
         self.thisown = 1
         self._setOORInfo(self)
 
@@ -187,20 +187,20 @@ class wxTreeCompanionWindowPtr(wxWindowPtr):
         self.this = this
         self.thisown = 0
     def _setCallbackInfo(self, *_args, **_kwargs):
-        val = apply(gizmosc.wxTreeCompanionWindow__setCallbackInfo,(self,) + _args, _kwargs)
+        val = gizmosc.wxTreeCompanionWindow__setCallbackInfo(self, *_args, **_kwargs)
         return val
     def GetTreeCtrl(self, *_args, **_kwargs):
-        val = apply(gizmosc.wxTreeCompanionWindow_GetTreeCtrl,(self,) + _args, _kwargs)
+        val = gizmosc.wxTreeCompanionWindow_GetTreeCtrl(self, *_args, **_kwargs)
         if val: val = wxRemotelyScrolledTreeCtrlPtr(val) 
         return val
     def SetTreeCtrl(self, *_args, **_kwargs):
-        val = apply(gizmosc.wxTreeCompanionWindow_SetTreeCtrl,(self,) + _args, _kwargs)
+        val = gizmosc.wxTreeCompanionWindow_SetTreeCtrl(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxTreeCompanionWindow instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxTreeCompanionWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxTreeCompanionWindow(wxTreeCompanionWindowPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(gizmosc.new_wxTreeCompanionWindow,_args,_kwargs)
+        self.this = gizmosc.new_wxTreeCompanionWindow(*_args,**_kwargs)
         self.thisown = 1
         self._setCallbackInfo(self, wxTreeCompanionWindow)
         self._setOORInfo(self)
@@ -213,10 +213,10 @@ class wxThinSplitterWindowPtr(wxSplitterWindowPtr):
         self.this = this
         self.thisown = 0
     def __repr__(self):
-        return "<C wxThinSplitterWindow instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxThinSplitterWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxThinSplitterWindow(wxThinSplitterWindowPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(gizmosc.new_wxThinSplitterWindow,_args,_kwargs)
+        self.this = gizmosc.new_wxThinSplitterWindow(*_args,**_kwargs)
         self.thisown = 1
         self._setOORInfo(self)
 
@@ -228,10 +228,10 @@ class wxSplitterScrolledWindowPtr(wxScrolledWindowPtr):
         self.this = this
         self.thisown = 0
     def __repr__(self):
-        return "<C wxSplitterScrolledWindow instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxSplitterScrolledWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxSplitterScrolledWindow(wxSplitterScrolledWindowPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(gizmosc.new_wxSplitterScrolledWindow,_args,_kwargs)
+        self.this = gizmosc.new_wxSplitterScrolledWindow(*_args,**_kwargs)
         self.thisown = 1
         self._setOORInfo(self)
 
@@ -243,38 +243,38 @@ class wxLEDNumberCtrlPtr(wxControlPtr):
         self.this = this
         self.thisown = 0
     def Create(self, *_args, **_kwargs):
-        val = apply(gizmosc.wxLEDNumberCtrl_Create,(self,) + _args, _kwargs)
+        val = gizmosc.wxLEDNumberCtrl_Create(self, *_args, **_kwargs)
         return val
     def GetAlignment(self, *_args, **_kwargs):
-        val = apply(gizmosc.wxLEDNumberCtrl_GetAlignment,(self,) + _args, _kwargs)
+        val = gizmosc.wxLEDNumberCtrl_GetAlignment(self, *_args, **_kwargs)
         return val
     def GetDrawFaded(self, *_args, **_kwargs):
-        val = apply(gizmosc.wxLEDNumberCtrl_GetDrawFaded,(self,) + _args, _kwargs)
+        val = gizmosc.wxLEDNumberCtrl_GetDrawFaded(self, *_args, **_kwargs)
         return val
     def GetValue(self, *_args, **_kwargs):
-        val = apply(gizmosc.wxLEDNumberCtrl_GetValue,(self,) + _args, _kwargs)
+        val = gizmosc.wxLEDNumberCtrl_GetValue(self, *_args, **_kwargs)
         return val
     def SetAlignment(self, *_args, **_kwargs):
-        val = apply(gizmosc.wxLEDNumberCtrl_SetAlignment,(self,) + _args, _kwargs)
+        val = gizmosc.wxLEDNumberCtrl_SetAlignment(self, *_args, **_kwargs)
         return val
     def SetDrawFaded(self, *_args, **_kwargs):
-        val = apply(gizmosc.wxLEDNumberCtrl_SetDrawFaded,(self,) + _args, _kwargs)
+        val = gizmosc.wxLEDNumberCtrl_SetDrawFaded(self, *_args, **_kwargs)
         return val
     def SetValue(self, *_args, **_kwargs):
-        val = apply(gizmosc.wxLEDNumberCtrl_SetValue,(self,) + _args, _kwargs)
+        val = gizmosc.wxLEDNumberCtrl_SetValue(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxLEDNumberCtrl instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxLEDNumberCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxLEDNumberCtrl(wxLEDNumberCtrlPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(gizmosc.new_wxLEDNumberCtrl,_args,_kwargs)
+        self.this = gizmosc.new_wxLEDNumberCtrl(*_args,**_kwargs)
         self.thisown = 1
         self._setOORInfo(self)
 
 
 
 def wxPreLEDNumberCtrl(*_args,**_kwargs):
-    val = wxLEDNumberCtrlPtr(apply(gizmosc.new_wxPreLEDNumberCtrl,_args,_kwargs))
+    val = wxLEDNumberCtrlPtr(gizmosc.new_wxPreLEDNumberCtrl(*_args,**_kwargs))
     val.thisown = 1
     val._setOORInfo(val)
     return val
