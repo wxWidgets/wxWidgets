@@ -744,12 +744,12 @@ void wxMenuBar::Refresh()
 {
     wxCHECK_RET( IsAttached(), wxT("can't refresh unattached menubar") );
 
-#if defined(WINCE_WITH_COMMANDBAR)
+#if defined(WINCE_WITHOUT_COMMANDBAR)
     if (GetToolBar())
     {
         CommandBar_DrawMenuBar((HWND) GetToolBar()->GetHWND(), 0);
     }
-#elif defined(WINCE_WITHOUT_COMMANDBAR)
+#elif defined(WINCE_WITH_COMMANDBAR)
     if (m_commandBar)
         DrawMenuBar((HWND) m_commandBar);
 #else
@@ -1171,24 +1171,9 @@ void wxMenuBar::Attach(wxFrame *frame)
 {
     wxMenuBarBase::Attach(frame);
 
-#if defined(__WXWINCE__)
+#if defined(WINCE_WITH_COMMANDBAR)
     if (!m_hMenu)
         this->Create();
-#if defined(WINCE_WITHOUT_COMMANDAR)
-
-    // No idea why this was here, but it seems to be obsolete.
-	// Remove after testing with other WinCE combinations - April 2004
-#if 0
-    if (GetToolBar())
-    {
-        HWND hCommandBar = (HWND) GetToolBar()->GetHWND();
-        if (!CommandBar_InsertMenubarEx(hCommandBar, NULL, (LPTSTR) m_hMenu, 0))
-        {
-            wxLogLastError(wxT("CommandBar_InsertMenubarEx"));
-        }
-    }
-#endif
-#else
     if (!m_commandBar)
         m_commandBar = (WXHWND) CommandBar_Create(wxGetInstance(), (HWND) frame->GetHWND(), NewControlId());
     if (m_commandBar)
@@ -1202,16 +1187,13 @@ void wxMenuBar::Attach(wxFrame *frame)
         }
     }
 #endif
-    // PSPC/WFSP
-#endif
-    // __WXWINCE__ && _WIN32_WCE >= 400
 
 #if wxUSE_ACCEL
     RebuildAccelTable();
 #endif // wxUSE_ACCEL
 }
 
-#if defined(WINCE_WITH_COMMANDAR)
+#if defined(WINCE_WITH_COMMANDBAR)
 bool wxMenuBar::AddAdornments(long style)
 {
     if (m_adornmentsAdded || !m_commandBar)
