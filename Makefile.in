@@ -17,7 +17,6 @@ CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
 CXXFLAGS = @CXXFLAGS@
 DEREZ = @DEREZ@
-DESTDIR = @DESTDIR@
 DLLPREFIX = @DLLPREFIX@
 EXTRALIBS = @EXTRALIBS@
 EXTRALIBS_GUI = @EXTRALIBS_GUI@
@@ -115,6 +114,7 @@ ALL_BASE_HEADERS =  \
 	wx/dynload.h \
 	wx/encconv.h \
 	wx/event.h \
+	wx/except.h \
 	wx/features.h \
 	wx/ffile.h \
 	wx/file.h \
@@ -504,6 +504,7 @@ DBGRIDLIB_CXXFLAGS = $(__dbgridlib_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
 	$(__INC_REGEX_p) $(__INC_EXPAT_p) $(CXXFLAGS)
 DBGRIDLIB_OBJECTS =  \
 	dbgridlib_dbgrid.o
+DESTDIR = 
 GLDLL_CXXFLAGS = $(__gldll_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
 	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
 	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
