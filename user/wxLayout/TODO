@@ -23,10 +23,17 @@ Selections:
 
 wxllist::GetSize() requires extra Layout() call, which should not be
 necessary. Find out why this is so.
+YES, it is necessary, because the normal drawing only happens within
+the visible window.
+I must find a way to re-Layout() objects. This is only required after
+their sizes change:
+- Just mark them as dirty:
+    - mark current line as dirty when editing it (so width gets recalculated)
+    - mark all following lines as dirty when changing font settings
+    - Let Layout() work only on the dirty lines.
+  !!! GOOD: this can also be used to recalculate the wxLayoutObjectCmds'
+            fonts! :-)
 
-
-- Image at end of a message doesn't get considered properly in
-  wxLayoutList::GetSize(), so it cannot be seen
 - searching for text
 - moving cursor in non-edit mode
 - cursor screen positioning ignores font sizes once again :-(

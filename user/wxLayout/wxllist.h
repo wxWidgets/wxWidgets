@@ -451,6 +451,13 @@ public:
                                                  CoordType *offset,
                                                  bool *found = NULL) const ;
 
+   /** Finds text in this line.
+       @param needle the text to find
+       @param xpos the position where to start the search
+       @return the cursoor coord where it was found or -1
+   */
+   CoordType FindText(const wxString &needle, CoordType xpos = 0) const;
+   
    /** Get the first object in the list. This is used by the wxlparser 
        functions to export the list.
        @return iterator to the first object
@@ -512,6 +519,7 @@ public:
    */
    wxLayoutObject * FindObjectScreen(wxDC &dc, CoordType xpos, bool
                                      *found = NULL);
+
    //@}
 
    /**@name List traversal */
@@ -669,6 +677,8 @@ public:
 
    /// Returns current cursor position.
    wxPoint GetCursorPos(wxDC &dc) const { return m_CursorPos; }
+   wxPoint GetCursorPos() const { return m_CursorPos; }
+   
    //@}
 
    /**@name Editing functions.
@@ -728,6 +738,13 @@ public:
       }
 
    //@}
+
+   /** Finds text in this list.
+       @param needle the text to find
+       @param cpos the position where to start the search
+       @return the cursoor coord where it was found or (-1,-1)
+   */
+   wxPoint FindText(const wxString &needle, const wxPoint &cpos = wxPoint(0,0)) const;
 
    /**@name Formatting options */
    //@{

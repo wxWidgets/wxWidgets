@@ -36,7 +36,7 @@ IMPLEMENT_APP(MyApp)
    enum ids{ ID_ADD_SAMPLE = 1, ID_CLEAR, ID_PRINT,
              ID_PRINT_SETUP, ID_PAGE_SETUP, ID_PREVIEW, ID_PRINT_PS,
              ID_PRINT_SETUP_PS, ID_PAGE_SETUP_PS,ID_PREVIEW_PS,
-             ID_WRAP, ID_NOWRAP, ID_PASTE, ID_COPY, ID_CUT,
+             ID_WRAP, ID_NOWRAP, ID_PASTE, ID_COPY, ID_CUT, ID_FIND,
              ID_WXLAYOUT_DEBUG, ID_QUIT, ID_CLICK, ID_HTML, ID_TEXT,
              ID_TEST, ID_LONG_TEST };
 
@@ -96,6 +96,7 @@ MyFrame::MyFrame(void) :
    edit_menu->Append(ID_COPY, "Copy", "Copy text to clipboard.");
    edit_menu->Append(ID_CUT, "Cut", "Cut text to clipboard.");
    edit_menu->Append(ID_PASTE,"Paste", "Paste text from clipboard.");
+   edit_menu->Append(ID_FIND, "Find", "Find text.");
    menu_bar->Append(edit_menu, "Edit" );
 
 #ifndef __WXMSW__
@@ -240,6 +241,10 @@ void MyFrame::OnCommand( wxCommandEvent &event )
       break;
    case ID_CUT:
       m_lwin->Cut();
+      m_lwin->Refresh(FALSE);
+      break;
+   case ID_FIND:
+      m_lwin->Find("void");
       m_lwin->Refresh(FALSE);
       break;
    case ID_HTML:

@@ -84,8 +84,10 @@ public:
    bool Copy(void);
    /// Copies selection to clipboard and deletes it.
    bool Cut(void);
-   
    //@}
+
+   bool Find(const wxString &needle,
+             wxPoint * fromWhere = NULL);
    
    void EnablePopup(bool enable = true) { m_DoPopupMenu = enable; }
 

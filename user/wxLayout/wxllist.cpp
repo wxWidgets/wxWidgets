@@ -439,9 +439,13 @@ wxLayoutLine::~wxLayoutLine()
 wxPoint
 wxLayoutLine::RecalculatePosition(wxLayoutList *llist)
 {
+   wxASSERT(m_Previous || GetLineNumber() == 0);
+
    if(m_Previous)
-      m_Position = m_Previous->GetPosition() +
-         wxPoint(0,m_Previous->GetHeight());
+   {
+      m_Position = m_Previous->GetPosition();
+      m_Position.y += m_Previous->GetHeight();
+   }
    else
       m_Position = wxPoint(0,0);
    llist->SetUpdateRect(m_Position);
@@ -513,7 +517,7 @@ wxLayoutLine::FindObjectScreen(wxDC &dc,
       if( x <= xpos && xpos <= x + width )
       {
          *cxpos = cx + (**i).GetOffsetScreen(dc, xpos-x);
-         WXLO_DEBUG(("wxLayoutLine::FindObjectScreen: cursor xpos = %ld", *cxpos));
+//         WXLO_DEBUG(("wxLayoutLine::FindObjectScreen: cursor xpos = %ld", *cxpos));
          if(found) *found = true;
          return i;
       }
@@ -524,6 +528,38 @@ wxLayoutLine::FindObjectScreen(wxDC &dc,
    *cxpos = cx;
    if(found) *found = false;
    return m_ObjectList.tail();
+}
+
+/** Finds text in this line.
+    @param needle the text to find
+    @param xpos the position where to start the search
+    @return the cursoor coord where it was found or -1
+*/
+CoordType
+wxLayoutLine::FindText(const wxString &needle, CoordType xpos = 0) const
+{
+   int
+      cpos = 0,
+      relpos = -1;
+   wxString const *text;
+   
+   for(wxLOiterator i = m_ObjectList.begin(); i != m_ObjectList.end(); i++)
+   {
+      if(cpos >= xpos) // search from here!
+      {
+         if((**i).GetType() == WXLO_TYPE_TEXT)
+         {
+            text = & ((wxLayoutObjectText*)(*i))->GetText();
+            relpos = text->Find(needle);
+            if(relpos >= cpos-xpos) // -1 if not found
+            {
+               return xpos+relpos;
+            }
+         }
+         cpos += (**i).GetLength();
+      }
+   }
+   return -1; // not found
 }
 
 bool
@@ -730,7 +766,7 @@ wxLayoutLine::Draw(wxDC &dc,
 
    CoordType from, to, tempto;
    int highlight = llist->IsSelected(this, &from, &to);
-   WXLO_DEBUG(("highlight=%d",  highlight ));
+//   WXLO_DEBUG(("highlight=%d",  highlight ));
    if(highlight == 1) // we need to draw the whole line inverted!
       llist->StartHighlighting(dc);
    else
@@ -1032,7 +1068,10 @@ wxLayoutLine::Debug(void)
    WXLO_DEBUG(("Line %ld, Pos (%ld,%ld), Height %ld",
               (long int) GetLineNumber(),
               (long int) pos.x, (long int) pos.y,
-              (long int) GetHeight()));
+               (long int) GetHeight()));
+   if(m_ObjectList.begin() != NULLIT)
+      (**m_ObjectList.begin()).Debug();
+
 }
 #endif
 
@@ -1200,6 +1239,27 @@ wxLayoutList::Clear(int family, int size, int style, int weight,
       wxLayoutStyleInfo(family,size,style,weight,underline,fg,bg);
 }
 
+wxPoint
+wxLayoutList::FindText(const wxString &needle, const wxPoint &cpos) const
+{
+   int xpos;
+   
+   wxLayoutLine *line;
+   for(line = m_FirstLine;
+       line;
+       line = line->GetNextLine())
+   {
+      if(line->GetLineNumber() >= cpos.y)
+      {
+         xpos = line->FindText(needle,
+                               (line->GetLineNumber() == cpos.y) ?
+                               cpos.x : 0);
+         if(xpos != -1)
+            return wxPoint(xpos, line->GetLineNumber());
+      }
+   }
+   return wxPoint(-1,-1);
+}
 
 
 bool
@@ -1381,7 +1441,7 @@ wxLayoutList::WrapLine(CoordType column)
       LineBreak();
       Delete(1); // delete the space
       m_CursorPos.x = newpos;
-   m_CursorLine->RecalculatePositions(true, this); //FIXME needed?
+      m_CursorLine->RecalculatePositions(true, this); //FIXME needed?
       return true;
    }
 }
@@ -1440,6 +1500,7 @@ wxLayoutList::DeleteLines(int n)
       {  // we cannot delete this line, but we can clear it
          MoveCursorToBeginOfLine();
          DeleteToEndOfLine();
+         m_CursorLine->RecalculatePositions(2, this);
          return n-1;
       }
       //else:
@@ -1605,6 +1666,7 @@ wxLayoutList::GetSize(void) const
    maxPoint.y = last->GetPosition().y + last->GetHeight();
    return maxPoint;
 }
+
 
 void
 wxLayoutList::DrawCursor(wxDC &dc, bool active, wxPoint const &translate)

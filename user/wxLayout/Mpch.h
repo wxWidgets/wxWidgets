@@ -4,5 +4,5 @@
   without modifying them.
 */
 
-static int _mpch_dummy = 0;
+// static int _mpch_dummy = 0;
 

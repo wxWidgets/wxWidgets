@@ -403,6 +403,8 @@ wxLayoutWindow::ScrollToCursor(void)
    GetScrollPixelsPerUnit(&dx, &dy);
    x0 *= dx; y0 *= dy;
 
+   WXLO_DEBUG(("ScrollToCursor: ViewStart is %d/%d", x0, y0));
+   
    // Get the size of the visible window:
    GetClientSize(&x1,&y1);
    wxASSERT(x1 > 0);
@@ -474,7 +476,7 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
 
    if(IsDirty())
    {
-//FIXME      m_llist->Layout(dc);
+      m_llist->Layout(dc);
       ResizeScrollbars();
    }
    /* Check whether the window has grown, if so, we need to reallocate 
@@ -576,7 +578,9 @@ void
 wxLayoutWindow::ResizeScrollbars(bool exact)
 {
    wxPoint max = m_llist->GetSize();
-   
+
+   WXLO_DEBUG(("ResizeScrollbars: GetSize: %ld, %ld", (long int)max.x, 
+               (long int) max.y));
    if(max.x > m_maxx || max.y > m_maxy
       || max.x > m_maxx-WXLO_ROFFSET || max.y > m_maxy-WXLO_BOFFSET
       || exact)
@@ -677,6 +681,29 @@ wxLayoutWindow::Cut(void)
    }
    else
       return FALSE;
+}
+bool
+wxLayoutWindow::Find(const wxString &needle,
+                     wxPoint * fromWhere)
+{
+   wxPoint found;
+   
+   if(fromWhere == NULL)
+      found = m_llist->FindText(needle, m_llist->GetCursorPos());
+   else
+      found = m_llist->FindText(needle, *fromWhere);
+   if(found.x != -1)
+   {
+      if(fromWhere)
+      {
+         *fromWhere = found;
+         fromWhere->x ++;
+      }
+      m_llist->MoveCursorTo(found);
+      ScrollToCursor();
+      return true;
+   }
+   return false;
 }
 
 wxMenu *
