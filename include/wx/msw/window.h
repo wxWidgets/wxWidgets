@@ -392,6 +392,9 @@ public:
   void OnPaint(wxPaintEvent& event);
   void OnIdle(wxIdleEvent& event);
 
+  // Does this window want to accept keyboard focus?
+  virtual bool AcceptsFocus() const;
+
 public:
   ////////////////////////////////////////////////////////////////////////
   //// IMPLEMENTATION
@@ -527,6 +530,8 @@ public:
   virtual void MSWOnJoyUp(int joystick, int x, int y, WXUINT flags);
   virtual void MSWOnJoyMove(int joystick, int x, int y, WXUINT flags);
   virtual void MSWOnJoyZMove(int joystick, int z, WXUINT flags);
+
+  virtual long MSWGetDlgCode();
 
   // Window procedure
   virtual long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
