@@ -1035,6 +1035,9 @@
 /* Define if you have the <X11/XKBlib.h> header file.  */
 #undef HAVE_X11_XKBLIB_H
 
+/* Define if you have the fnmatch() function */
+#undef HAVE_FNMATCH
+
 /* Define if you have the <fnmatch.h> header file.  */
 #undef HAVE_FNMATCH_H
 
