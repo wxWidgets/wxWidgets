@@ -3361,6 +3361,13 @@ class PyOnDemandOutputWindow:
         EVT_CLOSE(self.frame, self.OnCloseWindow)
         
 
+    def OnCloseWindow(self, event):
+        if self.frame is not None:
+            self.frame.Destroy()
+        self.frame = None
+        self.text  = None
+
+
     # These methods provide the file-like output behaviour.
     def write(self, text):
         """
@@ -3385,11 +3392,6 @@ class PyOnDemandOutputWindow:
             wx.CallAfter(self.frame.Close)
 
 
-    def OnCloseWindow(self, event):
-        if self.frame is not None:
-            self.frame.Destroy()
-        self.frame = None
-        self.text  = None
 
 #----------------------------------------------------------------------
 
@@ -3463,7 +3465,7 @@ your Mac."""
         self.RestoreStdio()
 
 
-    def RedirectStdio(self, filename):
+    def RedirectStdio(self, filename=None):
         """Redirect sys.stdout and sys.stderr to a file or a popup window."""
         if filename:
             _sys.stdout = _sys.stderr = open(filename, 'a')
@@ -4070,26 +4072,38 @@ has been added to the list of windows pending real deletion.</docstring>
       </method>
       <method name="GetLabel" type="String" overloaded="no">
         <autodoc>GetLabel() -&gt; String</autodoc>
-        <docstring>Generic way of getting a label from any window, for identification
-purposes.  The interpretation of this function differs from class to
-class. For frames and dialogs, the value returned is the title. For
-buttons or static text controls, it is the button text. This function
-can be useful for meta-programs (such as testing tools or
-special-needs access programs) which need to identify windows by name.</docstring>
+        <docstring>Generic way of getting a label from any window, for
+identification purposes.  The interpretation of this function
+differs from class to class. For frames and dialogs, the value
+returned is the title. For buttons or static text controls, it is
+the button text. This function can be useful for meta-programs
+(such as testing tools or special-needs access programs) which
+need to identify windows by name.</docstring>
       </method>
       <method name="SetName" type="" overloaded="no">
         <autodoc>SetName(String name)</autodoc>
-        <docstring>Sets the window's name.  The window name is used for ressource setting
-in X, it is not the same as the window title/label</docstring>
+        <docstring>Sets the window's name.  The window name is used for ressource
+setting in X, it is not the same as the window title/label</docstring>
         <paramlist>
           <param name="name" type="String" default=""/>
         </paramlist>
       </method>
       <method name="GetName" type="String" overloaded="no">
         <autodoc>GetName() -&gt; String</autodoc>
-        <docstring>Returns the window's name.  This name is not guaranteed to be unique;
-it is up to the programmer to supply an appropriate name in the window
-constructor or via wx.Window.SetName.</docstring>
+        <docstring>Returns the window's name.  This name is not guaranteed to be
+unique; it is up to the programmer to supply an appropriate name
+in the window constructor or via wx.Window.SetName.</docstring>
+      </method>
+      <method name="SetWindowVariant" type="" overloaded="no">
+        <autodoc>SetWindowVariant(int variant)</autodoc>
+        <docstring>Sets the variant of the window/font size to use for this window,
+if the platform supports variants, (for example, wxMac.)</docstring>
+        <paramlist>
+          <param name="variant" type="wxWindowVariant" default=""/>
+        </paramlist>
+      </method>
+      <method name="GetWindowVariant" type="wxWindowVariant" overloaded="no">
+        <autodoc>GetWindowVariant() -&gt; int</autodoc>
       </method>
       <method name="SetId" type="" overloaded="no">
         <autodoc>SetId(int winid)</autodoc>
@@ -4887,9 +4901,10 @@ colour. Does not cause an erase background event to be generated.</docstring>
       </method>
       <method name="Freeze" type="" overloaded="no">
         <autodoc>Freeze()</autodoc>
-        <docstring>Freezes the window or, in other words, prevents any updates from
-taking place on screen, the window is not redrawn at all. Thaw must be
-called to reenable window redrawing.
+        <docstring>Freezes the window or, in other words, prevents any updates from taking place
+on screen, the window is not redrawn at all. Thaw must be called to reenable
+window redrawing.  Calls to Freeze/Thaw may be nested, with the actual Thaw
+being delayed until all the nesting has been undone.
 
 This method is useful for visual appearance optimization (for example,
 it is a good idea to use it before inserting large amount of text into
@@ -4899,7 +4914,9 @@ mandatory directive.</docstring>
       </method>
       <method name="Thaw" type="" overloaded="no">
         <autodoc>Thaw()</autodoc>
-        <docstring>Reenables window updating after a previous call to Freeze.</docstring>
+        <docstring>Reenables window updating after a previous call to Freeze.  Calls to
+Freeze/Thaw may be nested, so Thaw must be called the same number of times
+that Freeze was before the window will be updated.</docstring>
       </method>
       <method name="PrepareDC" type="" overloaded="no">
         <autodoc>PrepareDC(DC dc)</autodoc>
@@ -4942,8 +4959,8 @@ exposed.</docstring>
           <param name="pt" type="Point" default=""/>
         </paramlist>
       </method>
-      <method name="isExposedRect" type="bool" overloaded="no">
-        <autodoc>isExposedRect(Rect rect) -&gt; bool</autodoc>
+      <method name="IsExposedRect" type="bool" overloaded="no">
+        <autodoc>IsExposedRect(Rect rect) -&gt; bool</autodoc>
         <docstring>Returns true if the given point or rectangle area has been exposed
 since the last repaint. Call this in an paint event handler to
 optimize redrawing by only redrawing those areas, which have been
@@ -5015,7 +5032,7 @@ be reset back to default.</docstring>
       </method>
       <method name="GetFont" type="wxFont" overloaded="no">
         <autodoc>GetFont() -&gt; Font</autodoc>
-        <docstring>Returns a reference to the font for this window.</docstring>
+        <docstring>Returns the default font used for this window.</docstring>
       </method>
       <method name="SetCaret" type="" overloaded="no">
         <autodoc>SetCaret(Caret caret)</autodoc>
@@ -5496,9 +5513,10 @@ hierarchy. The search is recursive in both cases.</docstring>
       </paramlist>
     </method>
     <method name="Window_FromHWND" oldname="wxWindow_FromHWND" type="Window" overloaded="no">
-      <autodoc>Window_FromHWND(unsigned long hWnd) -&gt; Window</autodoc>
+      <autodoc>Window_FromHWND(Window parent, unsigned long _hWnd) -&gt; Window</autodoc>
       <paramlist>
-        <param name="hWnd" type="unsigned long" default=""/>
+        <param name="parent" type="Window" default=""/>
+        <param name="_hWnd" type="unsigned long" default=""/>
       </paramlist>
     </method>
     <pythoncode>
@@ -7644,7 +7662,7 @@ def CallAfter(callable, *args, **kw):
 
 class FutureCall:
     """
-    A convenience class for wxTimer, that calls the given callable
+    A convenience class for wx.Timer, that calls the given callable
     object once after the given amount of milliseconds, passing any
     positional or keyword args.  The return value of the callable is
     availbale after it has been run with the GetResult method.
@@ -7661,6 +7679,7 @@ class FutureCall:
         self.callable = callable
         self.SetArgs(*args, **kwargs)
         self.runCount = 0
+        self.running = False
         self.hasRun = False
         self.result = None
         self.timer = None
@@ -7682,6 +7701,7 @@ class FutureCall:
         self.Stop()
         self.timer = wx.PyTimer(self.Notify)
         self.timer.Start(self.millis, wx.TIMER_ONE_SHOT)
+        self.running = True
     Restart = Start
 
 
@@ -7728,9 +7748,12 @@ class FutureCall:
         """
         if self.callable and getattr(self.callable, 'im_self', True):
             self.runCount += 1
+            self.running = False
             self.result = self.callable(*self.args, **self.kwargs)
         self.hasRun = True
-        wx.CallAfter(self.Stop)
+        if not self.running:
+            # if it wasn't restarted, then cleanup
+            wx.CallAfter(self.Stop)
 
 
 #----------------------------------------------------------------------------
@@ -8248,6 +8271,18 @@ to the bitmap. This function preserves bit depth and mask information.</docstrin
         <docstring>Set the depth property (does not affect the bitmap data).</docstring>
         <paramlist>
           <param name="depth" type="int" default=""/>
+        </paramlist>
+      </method>
+      <method name="__eq__" type="bool" overloaded="no">
+        <autodoc>__eq__(Bitmap other) -&gt; bool</autodoc>
+        <paramlist>
+          <param name="other" type="Bitmap" default=""/>
+        </paramlist>
+      </method>
+      <method name="__ne__" type="bool" overloaded="no">
+        <autodoc>__ne__(Bitmap other) -&gt; bool</autodoc>
+        <paramlist>
+          <param name="other" type="Bitmap" default=""/>
         </paramlist>
       </method>
     </class>
@@ -11259,11 +11294,11 @@ the borders, scrollbars, other decorations...)</docstring>
         </paramlist>
       </method>
       <method name="CreateStatusBar" type="wxStatusBar" overloaded="no">
-        <autodoc>CreateStatusBar(int number=1, long style=ST_SIZEGRIP, int winid=0, 
-    String name=StatusLineNameStr) -&gt; StatusBar</autodoc>
+        <autodoc>CreateStatusBar(int number=1, long style=wxST_SIZEGRIP|wxFULL_REPAINT_ON_RESIZE, 
+    int winid=0, String name=StatusLineNameStr) -&gt; StatusBar</autodoc>
         <paramlist>
           <param name="number" type="int" default="1"/>
-          <param name="style" type="long" default="wxST_SIZEGRIP"/>
+          <param name="style" type="long" default="wxST_SIZEGRIP|wxFULL_REPAINT_ON_RESIZE"/>
           <param name="winid" type="int" default="0"/>
           <param name="name" type="String" default="wxPyStatusLineNameStr"/>
         </paramlist>
@@ -11514,11 +11549,12 @@ the borders, scrollbars, other decorations...)</docstring>
     <class name="StatusBar" oldname="wxStatusBar" module="windows">
       <baseclass name="Window"/>
       <constructor name="StatusBar" overloaded="no">
-        <autodoc>__init__(Window parent, int id=-1, long style=ST_SIZEGRIP, String name=StatusLineNameStr) -&gt; StatusBar</autodoc>
+        <autodoc>__init__(Window parent, int id=-1, long style=wxST_SIZEGRIP|wxFULL_REPAINT_ON_RESIZE, 
+    String name=StatusLineNameStr) -&gt; StatusBar</autodoc>
         <paramlist>
           <param name="parent" type="Window" default=""/>
           <param name="id" type="int" default="-1"/>
-          <param name="style" type="long" default="wxST_SIZEGRIP"/>
+          <param name="style" type="long" default="wxST_SIZEGRIP|wxFULL_REPAINT_ON_RESIZE"/>
           <param name="name" type="String" default="wxPyStatusLineNameStr"/>
         </paramlist>
       </constructor>
@@ -14161,8 +14197,13 @@ non-None.  Use Show to display the dialog.</docstring>
     </class>
     <class name="PrintDialogData" oldname="wxPrintDialogData" module="windows">
       <baseclass name="Object"/>
-      <constructor name="PrintDialogData" overloaded="no">
-        <autodoc>__init__() -&gt; PrintDialogData</autodoc>
+      <constructor name="PrintDialogData" overloaded="yes"/>
+      <constructor name="PrintDialogData" overloaded="yes">
+        <autodoc>__init__() -&gt; PrintDialogData
+__init__(PrintData printData) -&gt; PrintDialogData</autodoc>
+        <paramlist>
+          <param name="printData" type="PrintData" default=""/>
+        </paramlist>
       </constructor>
       <destructor name="~wxPrintDialogData" overloaded="no">
         <autodoc>__del__()</autodoc>
@@ -14599,12 +14640,20 @@ non-None.  Use Show to display the dialog.</docstring>
     </class>
     <class name="PrintPreview" oldname="wxPrintPreview" module="windows">
       <baseclass name="Object"/>
-      <constructor name="PrintPreview" overloaded="no">
-        <autodoc>__init__(Printout printout, Printout printoutForPrinting, PrintData data=None) -&gt; PrintPreview</autodoc>
+      <constructor name="PrintPreview" overloaded="yes">
         <paramlist>
           <param name="printout" type="Printout" default=""/>
           <param name="printoutForPrinting" type="Printout" default=""/>
-          <param name="data" type="PrintData" default="NULL"/>
+          <param name="data" type="PrintDialogData" default="NULL"/>
+        </paramlist>
+      </constructor>
+      <constructor name="PrintPreview" overloaded="yes">
+        <autodoc>__init__(Printout printout, Printout printoutForPrinting, PrintDialogData data=None) -&gt; PrintPreview
+__init__(Printout printout, Printout printoutForPrinting, PrintData data) -&gt; PrintPreview</autodoc>
+        <paramlist>
+          <param name="printout" type="Printout" default=""/>
+          <param name="printoutForPrinting" type="Printout" default=""/>
+          <param name="data" type="PrintData" default=""/>
         </paramlist>
       </constructor>
       <method name="SetCurrentPage" type="bool" overloaded="no">
@@ -14711,12 +14760,20 @@ non-None.  Use Show to display the dialog.</docstring>
     </class>
     <class name="PyPrintPreview" oldname="wxPyPrintPreview" module="windows">
       <baseclass name="PrintPreview"/>
-      <constructor name="PyPrintPreview" overloaded="no">
-        <autodoc>__init__(Printout printout, Printout printoutForPrinting, PrintData data=None) -&gt; PyPrintPreview</autodoc>
+      <constructor name="PyPrintPreview" overloaded="yes">
         <paramlist>
           <param name="printout" type="Printout" default=""/>
           <param name="printoutForPrinting" type="Printout" default=""/>
-          <param name="data" type="PrintData" default="NULL"/>
+          <param name="data" type="PrintDialogData" default="NULL"/>
+        </paramlist>
+      </constructor>
+      <constructor name="PyPrintPreview" overloaded="yes">
+        <autodoc>__init__(Printout printout, Printout printoutForPrinting, PrintDialogData data=None) -&gt; PyPrintPreview
+__init__(Printout printout, Printout printoutForPrinting, PrintData data) -&gt; PyPrintPreview</autodoc>
+        <paramlist>
+          <param name="printout" type="Printout" default=""/>
+          <param name="printoutForPrinting" type="Printout" default=""/>
+          <param name="data" type="PrintData" default=""/>
         </paramlist>
       </constructor>
       <method name="_setCallbackInfo" type="" overloaded="no">
@@ -18291,6 +18348,9 @@ after changing the others for the change to take place immediately.</docstring>
           <param name="which" type="int" default=""/>
         </paramlist>
       </method>
+      <method name="InReportView" type="bool" overloaded="no">
+        <autodoc>InReportView() -&gt; bool</autodoc>
+      </method>
       <method name="IsVirtual" type="bool" overloaded="no">
         <autodoc>IsVirtual() -&gt; bool</autodoc>
       </method>
@@ -20602,10 +20662,11 @@ associated with the control (if any) in a tooltip.</docstring>
         <autodoc>__del__()</autodoc>
       </destructor>
       <method name="_setCallbackInfo" type="" overloaded="no">
-        <autodoc>_setCallbackInfo(PyObject self, PyObject _class)</autodoc>
+        <autodoc>_setCallbackInfo(PyObject self, PyObject _class, int incref=1)</autodoc>
         <paramlist>
           <param name="self" type="PyObject" default=""/>
           <param name="_class" type="PyObject" default=""/>
+          <param name="incref" type="int" default="1"/>
         </paramlist>
       </method>
       <method name="SetOwner" type="" overloaded="no">
@@ -20638,7 +20699,7 @@ associated with the control (if any) in a tooltip.</docstring>
         <autodoc>GetId() -&gt; int</autodoc>
       </method>
     </class>
-    <pythoncode>    
+    <pythoncode>
 # For backwards compatibility with 2.4
 class PyTimer(Timer):
     def __init__(self, notify):
@@ -20651,7 +20712,7 @@ class PyTimer(Timer):
 
 
 EVT_TIMER = wx.PyEventBinder( wxEVT_TIMER, 1 )
-                   
+
 </pythoncode>
     <class name="TimerEvent" oldname="wxTimerEvent" module="misc">
       <baseclass name="Event"/>
@@ -21700,18 +21761,19 @@ classes. It can not be used by itself (it is an abstract base
 class) and you will always use one of its derivations: wx.Config
 or wx.FileConfig.
 
-wx.ConfigBase organizes the items in a tree-like structure
-(modeled after the Unix/Dos filesystem). There are groups
-(directories) and keys (files).  There is always one current
-group given by the current path.  As in the file system case, to
-specify a key in the config class you must use a path to it.
-Config classes also support the notion of the current group,
-which makes it possible to use relative paths.
+wx.ConfigBase organizes the items in a tree-like structure,
+modeled after the Unix/Dos filesystem. There are groups that act
+like directories and entries, key/value pairs that act like
+files.  There is always one current group given by the current
+path.  As in the file system case, to specify a key in the config
+class you must use a path to it.  Config classes also support the
+notion of the current group, which makes it possible to use
+relative paths.
 
-Keys are pairs "key_name = value" where value may be of string, integer
-floating point or boolean, you can not store binary data without first
-encoding it as a string.  For performance reasons items should be kept small,
-no more than a couple kilobytes.
+Keys are pairs "key_name = value" where value may be of string,
+integer floating point or boolean, you can not store binary data
+without first encoding it as a string.  For performance reasons
+items should be kept small, no more than a couple kilobytes.
 </docstring>
       <destructor name="~wxConfigBase" overloaded="no">
         <autodoc>__del__()</autodoc>
@@ -22026,13 +22088,13 @@ and will be a wx.FileConfig on other platforms.</docstring>
       <constructor name="FileConfig" overloaded="no">
         <autodoc>__init__(String appName=EmptyString, String vendorName=EmptyString, 
     String localFilename=EmptyString, String globalFilename=EmptyString, 
-    long style=0) -&gt; FileConfig</autodoc>
+    long style=wxCONFIG_USE_LOCAL_FILE|wxCONFIG_USE_GLOBAL_FILE) -&gt; FileConfig</autodoc>
         <paramlist>
           <param name="appName" type="String" default="wxPyEmptyString"/>
           <param name="vendorName" type="String" default="wxPyEmptyString"/>
           <param name="localFilename" type="String" default="wxPyEmptyString"/>
           <param name="globalFilename" type="String" default="wxPyEmptyString"/>
-          <param name="style" type="long" default="0"/>
+          <param name="style" type="long" default="wxCONFIG_USE_LOCAL_FILE|wxCONFIG_USE_GLOBAL_FILE"/>
         </paramlist>
       </constructor>
       <destructor name="~wxFileConfig" overloaded="no">
@@ -23791,6 +23853,151 @@ the locker is destroyed.</docstring>
 successfully opened.</docstring>
       </method>
     </class>
+    <pythoncode>
+#---------------------------------------------------------------------------
+</pythoncode>
+    <class name="VideoMode" oldname="wxVideoMode" module="misc">
+      <docstring>A simple struct containing video mode parameters for a display</docstring>
+      <constructor name="VideoMode" overloaded="no">
+        <autodoc>__init__(int width=0, int height=0, int depth=0, int freq=0) -&gt; VideoMode</autodoc>
+        <docstring>A simple struct containing video mode parameters for a display</docstring>
+        <paramlist>
+          <param name="width" type="int" default="0"/>
+          <param name="height" type="int" default="0"/>
+          <param name="depth" type="int" default="0"/>
+          <param name="freq" type="int" default="0"/>
+        </paramlist>
+      </constructor>
+      <destructor name="~wxVideoMode" overloaded="no">
+        <autodoc>__del__()</autodoc>
+      </destructor>
+      <method name="Matches" type="bool" overloaded="no">
+        <autodoc>Matches(VideoMode other) -&gt; bool</autodoc>
+        <docstring>Returns true if this mode matches the other one in the sense that
+all non zero fields of the other mode have the same value in this
+one (except for refresh which is allowed to have a greater value)</docstring>
+        <paramlist>
+          <param name="other" type="VideoMode" default=""/>
+        </paramlist>
+      </method>
+      <method name="GetWidth" type="int" overloaded="no">
+        <autodoc>GetWidth() -&gt; int</autodoc>
+        <docstring>Returns the screen width in pixels (e.g. 640*480), 0 means
+unspecified</docstring>
+      </method>
+      <method name="GetHeight" type="int" overloaded="no">
+        <autodoc>GetHeight() -&gt; int</autodoc>
+        <docstring>Returns the screen width in pixels (e.g. 640*480), 0 means
+unspecified</docstring>
+      </method>
+      <method name="GetDepth" type="int" overloaded="no">
+        <autodoc>GetDepth() -&gt; int</autodoc>
+        <docstring>Returns the screen's bits per pixel (e.g. 32), 1 is monochrome
+and 0 means unspecified/known</docstring>
+      </method>
+      <method name="IsOk" type="bool" overloaded="no">
+        <autodoc>IsOk() -&gt; bool</autodoc>
+        <docstring>returns true if the object has been initialized</docstring>
+      </method>
+      <method name="__eq__" type="bool" overloaded="no">
+        <autodoc>__eq__(VideoMode other) -&gt; bool</autodoc>
+        <paramlist>
+          <param name="other" type="VideoMode" default=""/>
+        </paramlist>
+      </method>
+      <method name="__ne__" type="bool" overloaded="no">
+        <autodoc>__ne__(VideoMode other) -&gt; bool</autodoc>
+        <paramlist>
+          <param name="other" type="VideoMode" default=""/>
+        </paramlist>
+      </method>
+      <property name="w" type="int" readonly="no"/>
+      <property name="h" type="int" readonly="no"/>
+      <property name="bpp" type="int" readonly="no"/>
+      <property name="refresh" type="int" readonly="no"/>
+    </class>
+    <class name="Display" oldname="wxDisplay" module="misc">
+      <docstring>Represents a display/monitor attached to the system</docstring>
+      <constructor name="Display" overloaded="no">
+        <autodoc>__init__(size_t index=0) -&gt; Display</autodoc>
+        <docstring>Set up a Display instance with the specified display.  The
+displays are numbered from 0 to GetCount() - 1, 0 is always the
+primary display and the only one which is always supported</docstring>
+        <paramlist>
+          <param name="index" type="size_t" default="0"/>
+        </paramlist>
+      </constructor>
+      <destructor name="~wxDisplay" overloaded="no">
+        <autodoc>__del__()</autodoc>
+      </destructor>
+      <staticmethod name="GetCount" type="size_t" overloaded="no">
+        <autodoc>GetCount() -&gt; size_t</autodoc>
+        <docstring>Return the number of available displays.</docstring>
+      </staticmethod>
+      <staticmethod name="GetFromPoint" type="int" overloaded="no">
+        <autodoc>GetFromPoint(Point pt) -&gt; int</autodoc>
+        <docstring>Find the display where the given point lies, return wx.NOT_FOUND
+if it doesn't belong to any display</docstring>
+        <paramlist>
+          <param name="pt" type="Point" default=""/>
+        </paramlist>
+      </staticmethod>
+      <staticmethod name="GetFromWindow" type="int" overloaded="no">
+        <autodoc>GetFromWindow(Window window) -&gt; int</autodoc>
+        <docstring>Find the display where the given window lies, return wx.NOT_FOUND
+if it is not shown at all.</docstring>
+        <paramlist>
+          <param name="window" type="Window" default=""/>
+        </paramlist>
+      </staticmethod>
+      <method name="IsOk" type="bool" overloaded="no">
+        <autodoc>IsOk() -&gt; bool</autodoc>
+        <docstring>Return true if the object was initialized successfully</docstring>
+      </method>
+      <method name="GetGeometry" type="Rect" overloaded="no">
+        <autodoc>GetGeometry() -&gt; Rect</autodoc>
+        <docstring>Returns the bounding rectangle of the display whose index was
+passed to the constructor.</docstring>
+      </method>
+      <method name="GetName" type="String" overloaded="no">
+        <autodoc>GetName() -&gt; String</autodoc>
+        <docstring>Returns the display's name. A name is not available on all platforms.</docstring>
+      </method>
+      <method name="IsPrimary" type="bool" overloaded="no">
+        <autodoc>IsPrimary() -&gt; bool</autodoc>
+        <docstring>Returns true if the display is the primary display. The primary
+display is the one whose index is 0.</docstring>
+      </method>
+      <method name="GetModes" type="PyObject" overloaded="no">
+        <autodoc>GetModes(VideoMode mode=DefaultVideoMode) -&gt; [videoMode...]</autodoc>
+        <docstring>Enumerate all video modes supported by this display matching the
+given one (in the sense of VideoMode.Match()).
+
+As any mode matches the default value of the argument and there
+is always at least one video mode supported by display, the
+returned array is only empty for the default value of the
+argument if this function is not supported at all on this
+platform.</docstring>
+        <paramlist>
+          <param name="mode" type="VideoMode" default="wxDefaultVideoMode"/>
+        </paramlist>
+      </method>
+      <method name="GetCurrentMode" type="VideoMode" overloaded="no">
+        <autodoc>GetCurrentMode() -&gt; VideoMode</autodoc>
+        <docstring>Get the current video mode.</docstring>
+      </method>
+      <method name="ChangeMode" type="bool" overloaded="no">
+        <autodoc>ChangeMode(VideoMode mode=DefaultVideoMode) -&gt; bool</autodoc>
+        <docstring>Change current mode, return true if succeeded, false otherwise</docstring>
+        <paramlist>
+          <param name="mode" type="VideoMode" default="wxDefaultVideoMode"/>
+        </paramlist>
+      </method>
+      <method name="ResetMode" type="" overloaded="no">
+        <autodoc>ResetMode()</autodoc>
+        <docstring>Restore the default video mode (just a more readable synonym)</docstring>
+      </method>
+    </class>
   </module>
   <module name="calendar">
     <import name="misc"/>
@@ -25542,16 +25749,6 @@ validity of the remaining two values.  The result codes are:
       </method>
       <method name="ForceRefresh" type="" overloaded="no">
         <autodoc>ForceRefresh()</autodoc>
-      </method>
-      <method name="Refresh" type="" overloaded="no">
-        <autodoc>Refresh(bool eraseb=True, Rect rect=None)</autodoc>
-        <docstring>Mark the specified rectangle (or the whole window) as "dirty" so it
-will be repainted.  Causes an EVT_PAINT event to be generated and sent
-to the window.</docstring>
-        <paramlist>
-          <param name="eraseb" type="bool" default="True"/>
-          <param name="rect" type="Rect" default="NULL"/>
-        </paramlist>
       </method>
       <method name="IsEditable" type="bool" overloaded="no">
         <autodoc>IsEditable() -&gt; bool</autodoc>
@@ -27551,7 +27748,6 @@ EVT_GRID_EDITOR_CREATED = wx.PyEventBinder( wxEVT_GRID_EDITOR_CREATED )
       </method>
       <method name="SetTitle" type="" overloaded="no">
         <autodoc>SetTitle(String title)</autodoc>
-        <docstring>Sets the window's title. Applicable only to frames and dialogs.</docstring>
         <paramlist>
           <param name="title" type="String" default=""/>
         </paramlist>
@@ -35738,8 +35934,147 @@ ControlPoint =      PyControlPoint
           <param name="fore" type="Colour" default=""/>
         </paramlist>
       </method>
+      <method name="LineDown" type="" overloaded="no">
+        <autodoc>LineDown()</autodoc>
+        <docstring>This is just a wrapper for ScrollLines(1).</docstring>
+      </method>
+      <method name="LineDownExtend" type="" overloaded="no">
+        <autodoc>LineDownExtend()</autodoc>
+      </method>
+      <method name="LineUp" type="" overloaded="no">
+        <autodoc>LineUp()</autodoc>
+        <docstring>This is just a wrapper for ScrollLines(-1).</docstring>
+      </method>
+      <method name="LineUpExtend" type="" overloaded="no">
+        <autodoc>LineUpExtend()</autodoc>
+      </method>
+      <method name="CharLeft" type="" overloaded="no">
+        <autodoc>CharLeft()</autodoc>
+      </method>
+      <method name="CharLeftExtend" type="" overloaded="no">
+        <autodoc>CharLeftExtend()</autodoc>
+      </method>
+      <method name="CharRight" type="" overloaded="no">
+        <autodoc>CharRight()</autodoc>
+      </method>
+      <method name="CharRightExtend" type="" overloaded="no">
+        <autodoc>CharRightExtend()</autodoc>
+      </method>
+      <method name="WordLeft" type="" overloaded="no">
+        <autodoc>WordLeft()</autodoc>
+      </method>
+      <method name="WordLeftExtend" type="" overloaded="no">
+        <autodoc>WordLeftExtend()</autodoc>
+      </method>
+      <method name="WordRight" type="" overloaded="no">
+        <autodoc>WordRight()</autodoc>
+      </method>
+      <method name="WordRightExtend" type="" overloaded="no">
+        <autodoc>WordRightExtend()</autodoc>
+      </method>
+      <method name="Home" type="" overloaded="no">
+        <autodoc>Home()</autodoc>
+      </method>
+      <method name="HomeExtend" type="" overloaded="no">
+        <autodoc>HomeExtend()</autodoc>
+      </method>
+      <method name="LineEnd" type="" overloaded="no">
+        <autodoc>LineEnd()</autodoc>
+      </method>
+      <method name="LineEndExtend" type="" overloaded="no">
+        <autodoc>LineEndExtend()</autodoc>
+      </method>
+      <method name="DocumentStart" type="" overloaded="no">
+        <autodoc>DocumentStart()</autodoc>
+      </method>
+      <method name="DocumentStartExtend" type="" overloaded="no">
+        <autodoc>DocumentStartExtend()</autodoc>
+      </method>
+      <method name="DocumentEnd" type="" overloaded="no">
+        <autodoc>DocumentEnd()</autodoc>
+      </method>
+      <method name="DocumentEndExtend" type="" overloaded="no">
+        <autodoc>DocumentEndExtend()</autodoc>
+      </method>
+      <method name="PageUp" type="" overloaded="no">
+        <autodoc>PageUp()</autodoc>
+        <docstring>This is just a wrapper for ScrollPages(-1).</docstring>
+      </method>
+      <method name="PageUpExtend" type="" overloaded="no">
+        <autodoc>PageUpExtend()</autodoc>
+      </method>
+      <method name="PageDown" type="" overloaded="no">
+        <autodoc>PageDown()</autodoc>
+        <docstring>This is just a wrapper for ScrollPages(1).</docstring>
+      </method>
+      <method name="PageDownExtend" type="" overloaded="no">
+        <autodoc>PageDownExtend()</autodoc>
+      </method>
+      <method name="EditToggleOvertype" type="" overloaded="no">
+        <autodoc>EditToggleOvertype()</autodoc>
+      </method>
+      <method name="Cancel" type="" overloaded="no">
+        <autodoc>Cancel()</autodoc>
+      </method>
+      <method name="DeleteBack" type="" overloaded="no">
+        <autodoc>DeleteBack()</autodoc>
+      </method>
+      <method name="Tab" type="" overloaded="no">
+        <autodoc>Tab()</autodoc>
+      </method>
+      <method name="BackTab" type="" overloaded="no">
+        <autodoc>BackTab()</autodoc>
+      </method>
+      <method name="NewLine" type="" overloaded="no">
+        <autodoc>NewLine()</autodoc>
+      </method>
+      <method name="FormFeed" type="" overloaded="no">
+        <autodoc>FormFeed()</autodoc>
+      </method>
+      <method name="VCHome" type="" overloaded="no">
+        <autodoc>VCHome()</autodoc>
+      </method>
+      <method name="VCHomeExtend" type="" overloaded="no">
+        <autodoc>VCHomeExtend()</autodoc>
+      </method>
+      <method name="ZoomIn" type="" overloaded="no">
+        <autodoc>ZoomIn()</autodoc>
+      </method>
+      <method name="ZoomOut" type="" overloaded="no">
+        <autodoc>ZoomOut()</autodoc>
+      </method>
+      <method name="DelWordLeft" type="" overloaded="no">
+        <autodoc>DelWordLeft()</autodoc>
+      </method>
+      <method name="DelWordRight" type="" overloaded="no">
+        <autodoc>DelWordRight()</autodoc>
+      </method>
+      <method name="LineCut" type="" overloaded="no">
+        <autodoc>LineCut()</autodoc>
+      </method>
+      <method name="LineDelete" type="" overloaded="no">
+        <autodoc>LineDelete()</autodoc>
+      </method>
+      <method name="LineTranspose" type="" overloaded="no">
+        <autodoc>LineTranspose()</autodoc>
+      </method>
       <method name="LineDuplicate" type="" overloaded="no">
         <autodoc>LineDuplicate()</autodoc>
+      </method>
+      <method name="LowerCase" type="" overloaded="no">
+        <autodoc>LowerCase()</autodoc>
+      </method>
+      <method name="UpperCase" type="" overloaded="no">
+        <autodoc>UpperCase()</autodoc>
+      </method>
+      <method name="LineScrollDown" type="" overloaded="no">
+        <autodoc>LineScrollDown()</autodoc>
+      </method>
+      <method name="LineScrollUp" type="" overloaded="no">
+        <autodoc>LineScrollUp()</autodoc>
+      </method>
+      <method name="DeleteBackNotLine" type="" overloaded="no">
+        <autodoc>DeleteBackNotLine()</autodoc>
       </method>
       <method name="HomeDisplay" type="" overloaded="no">
         <autodoc>HomeDisplay()</autodoc>
@@ -35752,6 +36087,24 @@ ControlPoint =      PyControlPoint
       </method>
       <method name="LineEndDisplayExtend" type="" overloaded="no">
         <autodoc>LineEndDisplayExtend()</autodoc>
+      </method>
+      <method name="HomeWrap" type="" overloaded="no">
+        <autodoc>HomeWrap()</autodoc>
+      </method>
+      <method name="HomeWrapExtend" type="" overloaded="no">
+        <autodoc>HomeWrapExtend()</autodoc>
+      </method>
+      <method name="LineEndWrap" type="" overloaded="no">
+        <autodoc>LineEndWrap()</autodoc>
+      </method>
+      <method name="LineEndWrapExtend" type="" overloaded="no">
+        <autodoc>LineEndWrapExtend()</autodoc>
+      </method>
+      <method name="VCHomeWrap" type="" overloaded="no">
+        <autodoc>VCHomeWrap()</autodoc>
+      </method>
+      <method name="VCHomeWrapExtend" type="" overloaded="no">
+        <autodoc>VCHomeWrapExtend()</autodoc>
       </method>
       <method name="LineCopy" type="" overloaded="no">
         <autodoc>LineCopy()</autodoc>
@@ -36022,6 +36375,18 @@ ControlPoint =      PyControlPoint
           <param name="singleLine" type="bool" default=""/>
         </paramlist>
       </method>
+      <method name="ParaDown" type="" overloaded="no">
+        <autodoc>ParaDown()</autodoc>
+      </method>
+      <method name="ParaDownExtend" type="" overloaded="no">
+        <autodoc>ParaDownExtend()</autodoc>
+      </method>
+      <method name="ParaUp" type="" overloaded="no">
+        <autodoc>ParaUp()</autodoc>
+      </method>
+      <method name="ParaUpExtend" type="" overloaded="no">
+        <autodoc>ParaUpExtend()</autodoc>
+      </method>
       <method name="PositionBefore" type="int" overloaded="no">
         <autodoc>PositionBefore(int pos) -&gt; int</autodoc>
         <paramlist>
@@ -36068,6 +36433,57 @@ ControlPoint =      PyControlPoint
         <paramlist>
           <param name="line" type="int" default=""/>
         </paramlist>
+      </method>
+      <method name="LineDownRectExtend" type="" overloaded="no">
+        <autodoc>LineDownRectExtend()</autodoc>
+      </method>
+      <method name="LineUpRectExtend" type="" overloaded="no">
+        <autodoc>LineUpRectExtend()</autodoc>
+      </method>
+      <method name="CharLeftRectExtend" type="" overloaded="no">
+        <autodoc>CharLeftRectExtend()</autodoc>
+      </method>
+      <method name="CharRightRectExtend" type="" overloaded="no">
+        <autodoc>CharRightRectExtend()</autodoc>
+      </method>
+      <method name="HomeRectExtend" type="" overloaded="no">
+        <autodoc>HomeRectExtend()</autodoc>
+      </method>
+      <method name="VCHomeRectExtend" type="" overloaded="no">
+        <autodoc>VCHomeRectExtend()</autodoc>
+      </method>
+      <method name="LineEndRectExtend" type="" overloaded="no">
+        <autodoc>LineEndRectExtend()</autodoc>
+      </method>
+      <method name="PageUpRectExtend" type="" overloaded="no">
+        <autodoc>PageUpRectExtend()</autodoc>
+      </method>
+      <method name="PageDownRectExtend" type="" overloaded="no">
+        <autodoc>PageDownRectExtend()</autodoc>
+      </method>
+      <method name="StutteredPageUp" type="" overloaded="no">
+        <autodoc>StutteredPageUp()</autodoc>
+      </method>
+      <method name="StutteredPageUpExtend" type="" overloaded="no">
+        <autodoc>StutteredPageUpExtend()</autodoc>
+      </method>
+      <method name="StutteredPageDown" type="" overloaded="no">
+        <autodoc>StutteredPageDown()</autodoc>
+      </method>
+      <method name="StutteredPageDownExtend" type="" overloaded="no">
+        <autodoc>StutteredPageDownExtend()</autodoc>
+      </method>
+      <method name="WordLeftEnd" type="" overloaded="no">
+        <autodoc>WordLeftEnd()</autodoc>
+      </method>
+      <method name="WordLeftEndExtend" type="" overloaded="no">
+        <autodoc>WordLeftEndExtend()</autodoc>
+      </method>
+      <method name="WordRightEnd" type="" overloaded="no">
+        <autodoc>WordRightEnd()</autodoc>
+      </method>
+      <method name="WordRightEndExtend" type="" overloaded="no">
+        <autodoc>WordRightEndExtend()</autodoc>
       </method>
       <method name="SetWhitespaceChars" type="" overloaded="no">
         <autodoc>SetWhitespaceChars(String characters)</autodoc>
