@@ -305,7 +305,7 @@ public:
 
 // WARNING: still in alpha stage
 
-class wxDatagramSocket : public wxSocketBase
+class WXDLLEXPORT wxDatagramSocket : public wxSocketBase
 {
   DECLARE_CLASS(wxDatagramSocket)
 
