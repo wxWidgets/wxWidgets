@@ -1,0 +1,39 @@
+--------------------------------------------------------------------------
+| wxMultimedia (c) 1998, 1999, 2000 Guilhem Lavaux
+| wxWindows license
+--------------------------------------------------------------------------
+
+This is the wxMultimedia package. It intends to be a portable way to access
+some multimedia component on variable system. For the moment, I implemented
+sound, video and CD access.
+
+Sound features:
+  * low level/OSS style access to the sound card. You can open/setup the
+    parameters of the sound card then write/read directly to/from it.
+  * mid level codecs: compressors and sound codec are supported. For the
+    moment there is a support for G711/G721/G723 and MULAW formats (as well
+    PCM).
+  * high level format: WAV file format is supported in read/write and AIFF
+    format in read only
+
+
+Sound bugs:
+  * it seems there are still some bugs in the recording code on Windows
+    on Cygwin B20.1 (to be verified)
+  * wave files created with wxSoundWave have some problem with Windows Media
+    Player (not windows recorder)
+ 
+Video features:
+  * high level video file playing: on Unix you can play (through xanim) video
+    files directly into your application
+  * MPEG video file to be supported through SMPEG as soon as I have some free
+    time
+
+Video bugs:
+  * Recode windows port
+
+CD features:
+  * standard access to the CDAUDIO interface
+
+CD bugs:
+

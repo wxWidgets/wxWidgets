@@ -4,7 +4,7 @@
 // Author:     Guilhem Lavaux
 // Created:    February 1998
 // Updated:
-// Copyright:  (C) 1998, Guilhem Lavaux
+// Copyright:  (C) 1998, 1999, 2000 Guilhem Lavaux
 // License:    wxWindows license
 ////////////////////////////////////////////////////////////////////////////////
 

@@ -2,7 +2,7 @@
 // Name: sndoss.cpp
 // Purpose:
 // Date: 08/11/1999
-// Author: Guilhem Lavaux <lavaux@easynet.fr> (C) 1999
+// Author: Guilhem Lavaux <lavaux@easynet.fr> (C) 1999, 2000
 // CVSID: $Id$
 // --------------------------------------------------------------------------
 #ifdef __GNUG__
