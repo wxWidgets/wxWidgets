@@ -60,6 +60,20 @@ bool
 wxExtHelpController::DisplayHelp(wxString const &relativeURL)
 {
    wxBusyCursor b; // display a busy cursor
+
+
+#ifdef __WXMSW__
+   bool bOk = (int)ShellExecute(NULL, "open", relativeURL.c_str(),
+                           NULL, NULL, SW_SHOWNORMAL ) > 32;
+   if ( !bOk )
+   {
+      wxLogSysError(_("Cannot open URL '%s'"), relativeURL.c_str());
+      return false;
+   }
+   else
+      return true;
+#else
+   // assume UNIX
    wxString command;
 
    if(m_BrowserIsNetscape) // try re-loading first
@@ -85,6 +99,7 @@ wxExtHelpController::DisplayHelp(wxString const &relativeURL)
    command << _T(" file://")
            << m_MapFile << WXEXTHELP_SEPARATOR << relativeURL; 
    return wxExecute(command) != 0; 
+#endif
 }
 
 
