@@ -6,7 +6,7 @@
 // Created:     09.05.1999
 // RCS-ID:      $Id$
 // Copyright:   (c) Karsten Ballüder
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -17,18 +17,19 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/utils.h"
-#include "wx/frame.h"
-#include "wx/button.h"
-#include "wx/stattext.h"
-#include "wx/layout.h"
-#include "wx/event.h"
-#include "wx/gauge.h"
-#include "wx/intl.h"
+    #include "wx/utils.h"
+    #include "wx/frame.h"
+    #include "wx/button.h"
+    #include "wx/stattext.h"
+    #include "wx/layout.h"
+    #include "wx/event.h"
+    #include "wx/gauge.h"
+    #include "wx/intl.h"
+    #include "wx/settings.h"
 #endif
 
 #if wxUSE_PROGRESSDLG
@@ -60,13 +61,9 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
    m_disableParentOnly = (style & wxPD_APP_MODAL) == 0;
    m_parent = parent;
    m_maximum = maximum;
-   
-   int height = 70;     // FIXME arbitrary numbers
-   if ( hasAbortButton )
-      height += 35;
-   wxFrame::Create(m_parent, -1, title,
-                   wxPoint(0, 0), wxSize(220, height),
-                   wxDEFAULT_DIALOG_STYLE | style );
+
+   wxFrame::Create(m_parent, -1, title);
+   SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
 
    wxLayoutConstraints *c;
 
@@ -80,7 +77,9 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
 
    if ( maximum > 0 )
    {
-      m_gauge = new wxGauge(this, -1, maximum);
+      m_gauge = new wxGauge(this, -1, maximum,
+                            wxDefaultPosition, wxDefaultSize,
+                            wxGA_HORIZONTAL | wxRAISED_BORDER);
       c = new wxLayoutConstraints;
       c->left.SameAs(this, wxLeft, 2*LAYOUT_X_MARGIN);
       c->top.Below(m_msg, 2*LAYOUT_Y_MARGIN);
@@ -91,7 +90,7 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
    }
    else
       m_gauge = (wxGauge *)NULL;
-   
+
    if ( hasAbortButton )
    {
       m_btnAbort = new wxButton(this, -1, _("Cancel"));
@@ -106,9 +105,17 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
       m_btnAbort->SetConstraints(c);
    }
    else
-      m_btnAbort = (wxButton *)NULL; 
+      m_btnAbort = (wxButton *)NULL;
 
    SetAutoLayout(TRUE);
+   Layout();
+
+   // calc the height of the dialog
+   Fit();
+   // and set the width from it
+   wxSize size = GetClientSize();
+   SetClientSize(2*size.y, size.y);
+
    Show(TRUE);
    Centre(wxCENTER_FRAME | wxBOTH);
 
@@ -116,6 +123,7 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
       m_parent->Enable(FALSE);
    else
       wxEnableTopLevelWindows(FALSE);
+
    Enable(TRUE); // enable this window
    wxYield();
 }
@@ -130,7 +138,7 @@ wxProgressDialog::Update(int value, const wxString& newmsg)
 
    if( m_gauge )
       m_gauge->SetValue(value + 1);
-      
+
    if( !newmsg.IsEmpty() )
       m_msg->SetLabel(newmsg);
 
@@ -149,7 +157,7 @@ wxProgressDialog::Update(int value, const wxString& newmsg)
        }
 
        m_state = Finished;
-       
+
        // so that we return TRUE below
        m_state = Finished;
    }
