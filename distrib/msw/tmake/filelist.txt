@@ -1479,7 +1479,7 @@ helphtml.h	GenericH
 imaglist.h	GenericH
 laywin.h	GenericH
 listctrl.h	GenericH	NotWin32
-mdig.cpp	GenericH	NotWin32,NotGTK,NotOS2,NotMac
+mdig.h	    GenericH	NotWin32,NotGTK,NotOS2,NotMac
 msgdlgg.h	GenericH
 notebook.h	GenericH
 paletteg.h	GenericH	NotMSW,NotX,NotX11,NotOS2
