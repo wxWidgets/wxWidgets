@@ -202,6 +202,10 @@ OTHER CHANGES
 2.5.4
 -----
 
+All:
+
+- Norvegian (Bokmål) translation added (Hans F. Nordhaug)
+
 Unix:
 
 - wxPuts() now correctly outputs trailing new line in Unicode build
