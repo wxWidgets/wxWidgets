@@ -287,7 +287,7 @@ wxInputStream *wxURL::GetInputStream()
   // When we use a proxy, we have to pass the whole URL to it.
   wxInputStream *the_i_stream;
   
-  if (m_useProxy != NULL)
+  if (!m_useProxy)
   {
       the_i_stream = m_protocol->GetInputStream(m_url);
   }
