@@ -544,10 +544,10 @@ bool wxRegKey::HasSubKey(const char *szKey) const
     return FALSE;
 }
 
-wxRegKey::ValueType wxRegKey::GetValueType(const char *szValue)
+wxRegKey::ValueType wxRegKey::GetValueType(const char *szValue) const
 {
   #ifdef  __WIN32__
-    if ( !Open() )
+    if ( ! CONST_CAST Open() )
       return Type_None;
 
     DWORD dwType;

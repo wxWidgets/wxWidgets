@@ -438,6 +438,67 @@ bool wxRegConfig::Write(const wxString& key, long lValue)
 }
 
 // ----------------------------------------------------------------------------
+// renaming
+// ----------------------------------------------------------------------------
+
+bool wxRegConfig::RenameEntry(const wxString& oldName, const wxString& newName)
+{
+    // check that the old entry exists...
+    if ( !HasEntry(oldName) )
+        return FALSE;
+
+    // and that the new one doesn't
+    if ( HasEntry(newName) )
+        return FALSE;
+
+    // delete the old entry and create the new one - but do in the reverse
+    // order to not lose the data if Create() fails
+
+    bool ok;
+    if ( m_keyLocal.IsNumericValue(oldName) )
+    {
+        long val;
+        ok = m_keyLocal.QueryValue(oldName, &val) &&
+             m_keyLocal.SetValue(newName, val);
+    }
+    else
+    {
+        wxString val;
+        ok = m_keyLocal.QueryValue(oldName, val) &&
+             m_keyLocal.SetValue(newName, val);
+    }
+
+    if ( !ok )
+        return FALSE;
+
+    if ( !m_keyLocal.DeleteValue(oldName) )
+    {
+        m_keyLocal.DeleteValue(newName);
+
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
+bool wxRegConfig::RenameGroup(const wxString& oldName, const wxString& newName)
+{
+    // check that the old group exists...
+    if ( !HasGroup(oldName) )
+        return FALSE;
+
+    // and that the new one doesn't
+    if ( HasGroup(newName) )
+        return FALSE;
+
+    // TODO there is no way to rename a registry key - we must do a deep copy
+    //      ourselves
+    wxFAIL_MSG("Registry key renaming not implemented");
+
+    return FALSE;
+}
+
+// ----------------------------------------------------------------------------
 // deleting
 // ----------------------------------------------------------------------------
 bool wxRegConfig::DeleteEntry(const wxString& value, bool bGroupIfEmptyAlso)
