@@ -239,7 +239,6 @@ void wxWindow::Init()
     m_windowStyle = 0;
     m_windowParent = NULL;
     m_windowEventHandler = this;
-    m_windowCursor = *wxSTANDARD_CURSOR;
     m_children = new wxList;
     m_doubleClickAllowed = 0 ;
     m_winCaptured = FALSE;
@@ -1487,33 +1486,42 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 
     case WM_SETCURSOR:
         {
-            HCURSOR hcursor = 0;
-            if ( wxIsBusy() )
+            // don't set cursor when the mouse is not in the client part
+            short nHitTest = LOWORD(lParam);
+            if ( nHitTest == HTCLIENT || nHitTest == HTERROR )
             {
-                extern HCURSOR gs_wxBusyCursor; // from msw\utils.cpp
+                HCURSOR hcursor = 0;
+                if ( wxIsBusy() )
+                {
+                    extern HCURSOR gs_wxBusyCursor; // from msw\utils.cpp
 
-                hcursor = gs_wxBusyCursor;
-            }
-            else
-            {
-                extern wxCursor *g_globalCursor; // from msw\data.cpp
+                    hcursor = gs_wxBusyCursor;
+                }
+                else if ( m_windowCursor.Ok() )
+                {
+                    hcursor = (HCURSOR)m_windowCursor.GetHCURSOR();
+                }
+                else
+                {
+                    extern wxCursor *g_globalCursor; // from msw\data.cpp
 
-                if ( g_globalCursor && g_globalCursor->Ok() )
-                    hcursor = (HCURSOR)g_globalCursor->GetHCURSOR();
-            }
+                    if ( g_globalCursor && g_globalCursor->Ok() )
+                        hcursor = (HCURSOR)g_globalCursor->GetHCURSOR();
+                }
 
-            if ( hcursor )
-            {
-                ::SetCursor(hcursor);
+                if ( hcursor )
+                {
+                    ::SetCursor(hcursor);
 
-                // returning TRUE stops the DefWindowProc() from further
-                // processing this message - exactly what we need because we've
-                // just set the cursor
-                return TRUE;
+                    // returning TRUE stops the DefWindowProc() from further
+                    // processing this message - exactly what we need because
+                    // we've just set the cursor
+                    return TRUE;
+                }
             }
         }
 
-        break;  // leave it to DefWindowProc()
+        return MSWDefWindowProc(message, wParam, lParam );
 
     default:
         return MSWDefWindowProc(message, wParam, lParam );
@@ -2429,11 +2437,6 @@ void wxWindow::MSWOnRButtonDClick(int x, int y, WXUINT flags)
 void wxWindow::MSWOnMouseMove(int x, int y, WXUINT flags)
 {
     // 'normal' move event...
-    // Set cursor, but only if we're not in 'busy' mode
-
-    // Trouble with this is that it sets the cursor for controls too :-(
-    if (m_windowCursor.Ok() && !wxIsBusy())
-        ::SetCursor((HCURSOR) m_windowCursor.GetHCURSOR());
 
     if (!m_mouseInWindow)
     {

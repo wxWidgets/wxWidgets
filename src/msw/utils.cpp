@@ -537,7 +537,6 @@ void wxEndBusyCursor()
     wxCHECK_RET( gs_wxBusyCursorCount > 0,
                  "no matching wxBeginBusyCursor() for wxEndBusyCursor()" );
 
-    gs_wxBusyCursorCount--;
     if ( --gs_wxBusyCursorCount == 0 )
     {
         ::SetCursor(gs_wxBusyCursorOld);

@@ -460,12 +460,12 @@ void wxRadioBox::SetSize(int x, int y, int width, int height, int sizeFlags)
                 // It's a labelled toggle
                 textRadioButton = wxGetWindowText(m_radioButtons[i]);
                 GetTextExtent(textRadioButton, &current_width, &cyf,
-                        NULL,NULL, & this->GetFont());
+                              NULL, NULL, &GetFont());
 
                 if ( calcWidth )
-                    eachWidth = (int)(current_width + RADIO_SIZE);
+                    eachWidth = current_width + RADIO_SIZE;
                 if ( calcHeight )
-                    eachHeight = (int)((3*cyf)/2);
+                    eachHeight = (3*cyf)/2;
             }
             else
             {
@@ -500,7 +500,7 @@ void wxRadioBox::SetSize(int x, int y, int width, int height, int sizeFlags)
             totHeight = nbVer * (maxHeight+cy1/2) ;
         totWidth  = nbHor * (maxWidth+cx1) ;
 
-#if (!wxUSE_CTL3D)
+#if !defined(__WIN32__) && (!wxUSE_CTL3D)
         // Requires a bigger group box in plain Windows
         MoveWindow((HWND) m_hWnd,x_offset,y_offset,totWidth+cx1,totHeight+(3*cy1)/2,TRUE) ;
 #else
@@ -510,7 +510,7 @@ void wxRadioBox::SetSize(int x, int y, int width, int height, int sizeFlags)
         y_offset += cy1;
     }
 
-#if (!wxUSE_CTL3D)
+#if !defined(__WIN32__) && (!wxUSE_CTL3D)
     y_offset += (int)(cy1/2); // Fudge factor since buttons overlapped label
     // JACS 2/12/93. CTL3D draws group label quite high.
 #endif
@@ -535,19 +535,19 @@ void wxRadioBox::SetSize(int x, int y, int width, int height, int sizeFlags)
                     y_offset += cy1/2 ;
             }
         }
-        int eachWidth ;
-        int eachHeight ;
-        if (m_radioWidth[i]<0)
+
+        int eachWidth;
+        int eachHeight;
+
+        if ( m_radioWidth[i] < 0 )
         {
             // It's a labeled item
             textRadioButton = wxGetWindowText(m_radioButtons[i]);
             GetTextExtent(textRadioButton, &current_width, &cyf,
                           NULL,NULL, & this->GetFont());
 
-            // How do we find out radio button bitmap size!!
-            // By adjusting them carefully, manually :-)
-            eachWidth = (int)(current_width + RADIO_SIZE);
-            eachHeight = (int)((3*cyf)/2);
+            eachWidth = current_width + RADIO_SIZE;
+            eachHeight = (3*cyf)/2;
         }
         else
         {
@@ -555,15 +555,19 @@ void wxRadioBox::SetSize(int x, int y, int width, int height, int sizeFlags)
             eachHeight = m_radioHeight[i] ;
         }
 
-        MoveWindow((HWND) m_radioButtons[i],x_offset,y_offset,eachWidth,eachHeight,TRUE);
+        MoveWindow((HWND)m_radioButtons[i], x_offset, y_offset,
+                   eachWidth,eachHeight,TRUE);
+        if ( m_windowStyle & wxRA_VERTICAL )
         if (m_windowStyle & wxRA_SPECIFY_ROWS)
         {
             y_offset += maxHeight;
-            if (m_radioWidth[0]>0)
+            if ( m_radioWidth[0] > 0 )
                 y_offset += cy1/2 ;
         }
         else
+        {
             x_offset += maxWidth + cx1;
+        }
     }
 }
 #endif

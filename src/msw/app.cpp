@@ -346,7 +346,7 @@ bool wxApp::RegisterWindowClasses()
     wndclass2.cbWndExtra    = sizeof( DWORD ); // was 4
     wndclass2.hInstance     = wxhInstance;
     wndclass2.hIcon         = (HICON) NULL;
-    wndclass2.hCursor       = (HCURSOR) NULL;
+    wndclass2.hCursor       = LoadCursor( (HINSTANCE) NULL, IDC_ARROW );
     //  wndclass2.hbrBackground = (HBRUSH)(COLOR_BTNFACE+1) ;
     wndclass2.hbrBackground = (HBRUSH) GetStockObject( LTGRAY_BRUSH );
     wndclass2.lpszMenuName  = NULL;
@@ -371,7 +371,7 @@ bool wxApp::RegisterWindowClasses()
     wndclass3.cbWndExtra    = sizeof( DWORD ); // was 4
     wndclass3.hInstance     = wxhInstance;
     wndclass3.hIcon         = (HICON) NULL;
-    wndclass3.hCursor       = (HCURSOR) NULL;
+    wndclass3.hCursor       = LoadCursor( (HINSTANCE) NULL, IDC_ARROW );
     //  wndclass3.hbrBackground = (HBRUSH)(COLOR_WINDOW+1) ;
     wndclass3.hbrBackground = (HBRUSH) NULL;
     wndclass3.lpszMenuName  = NULL;
