@@ -6,8 +6,8 @@
  *  iODBC defines
  *
  *  The iODBC driver manager.
- *  
- *  Copyright (C) 1995 by Ke Jin <kejin@empress.com> 
+ *
+ *  Copyright (C) 1995 by Ke Jin <kejin@empress.com>
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -36,8 +36,17 @@
 #elif defined(WIN32)
 #define SQL_API				__stdcall
 
-#ifndef FAR  
-#define FAR 
+#ifndef FAR
+#define FAR
+#endif
+
+#elif defined(__OS2__)
+#define SQL_API				_Optlink
+
+#ifndef FAR
+#define FAR
+#define EXPORT
+#define CALLBACK
 #endif
 
 #else
