@@ -34,52 +34,90 @@ IMPLEMENT_DYNAMIC_CLASS(wxBitmapCheckBox, wxCheckBox)
 // wxCheckBox
 // ----------------------------------------------------------------------------
 
-bool wxCheckBox::OS2Command(WXUINT WXUNUSED(param), WXWORD WXUNUSED(id))
+bool wxCheckBox::OS2Command(
+  WXUINT                            WXUNUSED(uParam)
+, WXWORD                            WXUNUSED(wId)
+)
 {
-    wxCommandEvent event(wxEVT_COMMAND_CHECKBOX_CLICKED, m_windowId);
-    event.SetInt(GetValue());
-    event.SetEventObject(this);
-    ProcessCommand(event);
+    wxCommandEvent                  rEvent( wxEVT_COMMAND_CHECKBOX_CLICKED
+                                           ,m_windowId
+                                          );
+    rEvent.SetInt(GetValue());
+    rEvent.SetEventObject(this);
+    ProcessCommand(rEvent);
     return TRUE;
-}
+} // end of wxCheckBox::OS2Command
 
-// Single check box item
-bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
-           const wxPoint& pos,
-           const wxSize& size, long style,
+bool wxCheckBox::Create(
+  wxWindow*                         pParent
+, wxWindowID                        vId
+, const wxString&                   rsLabel
+, const wxPoint&                    rPos
+, const wxSize&                     rSize
+, long                              lStyle
 #if wxUSE_VALIDATORS
-           const wxValidator& validator,
+, const wxValidator&                rValidator
 #endif
-           const wxString& name)
+, const wxString&                   rsName
+)
 {
-    SetName(name);
+    SetName(rsName);
 #if wxUSE_VALIDATORS
-    SetValidator(validator);
+    SetValidator(rValidator);
 #endif
-    if (parent) parent->AddChild(this);
+    if (pParent)
+        pParent->AddChild(this);
 
-    SetBackgroundColour(parent->GetBackgroundColour()) ;
-    SetForegroundColour(parent->GetForegroundColour()) ;
+    SetBackgroundColour(pParent->GetBackgroundColour());
+    SetForegroundColour(pParent->GetForegroundColour());
+    m_windowStyle = lStyle;
 
-    m_windowStyle = style;
+    wxString                        sLabel = rsLabel;
 
-    wxString Label = label;
-    if (Label == wxT(""))
-        Label = wxT(" "); // Apparently needed or checkbox won't show
+    if (sLabel == wxT(""))
+        sLabel = wxT(" "); // Apparently needed or checkbox won't show
 
-    if ( id == -1 )
+    if (vId == -1 )
         m_windowId = NewControlId();
     else
-        m_windowId = id;
+        m_windowId = vId;
 
-    int x = pos.x;
-    int y = pos.y;
-    int width = size.x;
-    int height = size.y;
+    int                             nX      = rPos.x;
+    int                             nY      = rPos.y;
+    int                             nWidth  = rSize.x;
+    int                             nHeight = rSize.y;
+    long                            lSstyle = 0L;
 
-    // TODO: create checkbox
+    lSstyle = BS_AUTOCHECKBOX |
+              WS_TABSTOP      |
+              WS_VISIBLE;
+    if (lStyle & wxCLIP_SIBLINGS )
+        lSstyle |= WS_CLIPSIBLINGS;
 
+    //
+    // If the parent is a scrolled window the controls must
+    // have this style or they will overlap the scrollbars
+    //
+    if (pParent)
+        if (pParent->IsKindOf(CLASSINFO(wxScrolledWindow)) ||
+            pParent->IsKindOf(CLASSINFO(wxGenericScrolledWindow)))
+            lSstyle |= WS_CLIPSIBLINGS;
+
+    m_hWnd = (WXHWND)::WinCreateWindow ( GetHwndOf(pParent)
+                                        ,WC_BUTTON
+                                        ,rsLabel.c_str()
+                                        ,lSstyle
+                                        ,0, 0, 0, 0
+                                        ,GetWinHwnd(pParent)
+                                        ,HWND_TOP
+                                        ,(HMENU)m_windowId
+                                        ,NULL
+                                        ,NULL
+                                       );
+
+    //
     // Subclass again for purposes of dialog editing mode
+    //
     SubclassWin(m_hWnd);
 
     LONG                            lColor = (LONG)m_backgroundColour.GetPixel();
@@ -90,45 +128,73 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
                       ,(PVOID)&lColor
                      );
 
-    SetFont(parent->GetFont());
+    SetFont(pParent->GetFont());
 
-    SetSize(x, y, width, height);
+    SetSize( nX
+            ,nY
+            ,nWidth
+            ,nHeight
+           );
+    return TRUE;
+} // end of wxCheckBox::Create
 
-    return FALSE;
-}
-
-void wxCheckBox::SetLabel(const wxString& label)
+void wxCheckBox::SetLabel(
+  const wxString&                   rsLabel
+)
 {
-    // TODO
-}
+    ::WinSetWindowText(GetHwnd(), rsLabel.c_str());
+} // end of wxCheckBox::SetLabel
 
 wxSize wxCheckBox::DoGetBestSize() const
 {
-    int wCheckbox, hCheckbox;
+    static int                      nCheckSize = 0;
 
-    wxString str = wxGetWindowText(GetHWND());
-
-    if ( !str.IsEmpty() )
+    if (!nCheckSize)
     {
-        GetTextExtent(str, &wCheckbox, &hCheckbox);
-        wCheckbox += RADIO_SIZE;
+        wxScreenDC                  vDc;
 
-        if ( hCheckbox < RADIO_SIZE )
-            hCheckbox = RADIO_SIZE;
+        vDc.SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
+
+        //
+        // The height of a standard button in the dialog units is 8,
+        // translate this to pixels (as one dialog unit is precisely equal to
+        // 8 character heights, it's just the char height)
+        //
+        nCheckSize = vDc.GetCharHeight();
+    }
+
+    int                             nWidthCheckbox;
+    int                             nHeightCheckbox;
+    wxString                        sStr = wxGetWindowText(GetHWND());
+
+    if (!sStr.IsEmpty())
+    {
+        GetTextExtent( sStr
+                      ,&nWidthCheckbox
+                      ,&nHeightCheckbox
+                     );
+        nWidthCheckbox += nCheckSize + GetCharWidth();
+
+        if (nHeightCheckbox < nCheckSize)
+            nHeightCheckbox = nCheckSize;
     }
     else
     {
-        wCheckbox = RADIO_SIZE;
-        hCheckbox = RADIO_SIZE;
+        nWidthCheckbox  = nCheckSize;
+        nHeightCheckbox = nCheckSize;
     }
 
-    return wxSize(wCheckbox, hCheckbox);
-}
+    return wxSize( nWidthCheckbox
+                  ,nHeightCheckbox
+                 );
+} // end of wxCheckBox::DoGetBestSize
 
-void wxCheckBox::SetValue(bool val)
+void wxCheckBox::SetValue(
+  bool                              bValue
+)
 {
-    // TODO
-}
+    ::WinSendMsg(GetHwnd(), BM_SETCHECK, (MPARAM)bValue, 0);
+} // end of wxCheckBox::SetValue
 
 #ifndef BST_CHECKED
 #define BST_CHECKED 0x0001
@@ -136,101 +202,82 @@ void wxCheckBox::SetValue(bool val)
 
 bool wxCheckBox::GetValue() const
 {
-    // TODO
-    return FALSE;
-}
+    return((LONGFROMMR(::WinSendMsg(GetHwnd(), BM_QUERYCHECK, (MPARAM)0, (MPARAM)0)) == 1L));
+} // end of wxCheckBox::GetValue
 
-WXHBRUSH wxCheckBox::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-                                WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
+void wxCheckBox::Command (
+  wxCommandEvent&                  rEvent
+)
 {
-  // TODO:
-  /*
-#if wxUSE_CTL3D
-  if ( m_useCtl3D )
-  {
-    HBRUSH hbrush = Ctl3dCtlColorEx(message, wParam, lParam);
-
-      return (WXHBRUSH) hbrush;
-  }
-#endif
-
-  if (GetParent()->GetTransparentBackground())
-    SetBkMode((HDC) pDC, TRANSPARENT);
-  else
-    SetBkMode((HDC) pDC, OPAQUE);
-
-  ::SetBkColor((HDC) pDC, RGB(GetBackgroundColour().Red(), GetBackgroundColour().Green(), GetBackgroundColour().Blue()));
-  ::SetTextColor((HDC) pDC, RGB(GetForegroundColour().Red(), GetForegroundColour().Green(), GetForegroundColour().Blue()));
-
-*/
-
-  wxBrush *backgroundBrush = wxTheBrushList->FindOrCreateBrush(GetBackgroundColour(), wxSOLID);
-
-
-  // Note that this will be cleaned up in wxApp::OnIdle, if backgroundBrush
-  // has a zero usage count.
-// backgroundBrush->RealizeResource();
-   return (WXHBRUSH) backgroundBrush->GetResourceHandle();
-}
-
-void wxCheckBox::Command (wxCommandEvent & event)
-{
-    SetValue ((event.GetInt() != 0));
-    ProcessCommand (event);
-}
+    SetValue((rEvent.GetInt() != 0));
+    ProcessCommand(rEvent);
+} // end of wxCheckBox:: Command
 
 // ----------------------------------------------------------------------------
 // wxBitmapCheckBox
 // ----------------------------------------------------------------------------
 
-bool wxBitmapCheckBox::Create(wxWindow *parent, wxWindowID id, const wxBitmap *label,
-           const wxPoint& pos,
-           const wxSize& size, long style,
+bool wxBitmapCheckBox::Create(
+  wxWindow*                         pParent
+, wxWindowID                        vId
+, const wxBitmap*                   pLabel
+, const wxPoint&                    rPos
+, const wxSize&                     rSize
+, long                              lStyle
 #if wxUSE_VALIDATORS
-           const wxValidator& validator,
+, const wxValidator&                rValidator
 #endif
-           const wxString& name)
+, const wxString&                   rsName
+)
 {
-    SetName(name);
+    SetName(rsName);
 #if wxUSE_VALIDATORS
-    SetValidator(validator);
+    SetValidator(rValidator);
 #endif
-    if (parent) parent->AddChild(this);
+    if (pParent)
+        pParent->AddChild(this);
 
-    SetBackgroundColour(parent->GetBackgroundColour()) ;
-    SetForegroundColour(parent->GetForegroundColour()) ;
-    m_windowStyle = style;
+    SetBackgroundColour(pParent->GetBackgroundColour()) ;
+    SetForegroundColour(pParent->GetForegroundColour()) ;
+    m_windowStyle = lStyle;
 
-    if ( id == -1 )
+    if (vId == -1)
         m_windowId = NewControlId();
     else
-        m_windowId = id;
+        m_windowId = vId;
 
-    int x = pos.x;
-    int y = pos.y;
-    int width = size.x;
-    int height = size.y;
+    int                             nX      = rPos.x;
+    int                             nY      = rPos.y;
+    int                             nWidth  = rSize.x;
+    int                             nHeight = rSize.y;
 
-    checkWidth = -1 ;
-    checkHeight = -1 ;
+    m_nCheckWidth = -1 ;
+    m_nCheckHeight = -1 ;
 //    long msStyle = CHECK_FLAGS;
 
-    HWND wx_button = 0; // TODO: Create the bitmap checkbox
+    HWND hButton = 0; // TODO: Create the bitmap checkbox
 
-    m_hWnd = (WXHWND)wx_button;
+    m_hWnd = (WXHWND)hButton;
 
+    //
     // Subclass again for purposes of dialog editing mode
-    SubclassWin((WXHWND)wx_button);
+    //
+    SubclassWin((WXHWND)hButton);
 
-    SetSize(x, y, width, height);
+    SetSize( nX
+            ,nY
+            ,nWidth
+            ,nHeight
+           );
 
-// TODO:    ShowWindow(wx_button, SW_SHOW);
-
+    ::WinShowWindow(hButton, TRUE);
     return TRUE;
-}
+} // end of wxBitmapCheckBox::Create
 
-void wxBitmapCheckBox::SetLabel(const wxBitmap& bitmap)
+void wxBitmapCheckBox::SetLabel(
+  const wxBitmap&                   rBitmap
+)
 {
     wxFAIL_MSG(wxT("not implemented"));
-}
+}  // end of wxBitmapCheckBox::SetLabel
 

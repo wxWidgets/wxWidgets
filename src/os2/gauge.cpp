@@ -155,7 +155,14 @@ bool wxGauge::Create(
     if (m_windowStyle & wxCLIP_SIBLINGS)
         lMsStyle |= WS_CLIPSIBLINGS;
 
-
+    //
+    // If the parent is a scrolled window the controls must
+    // have this style or they will overlap the scrollbars
+    //
+    if (pParent)
+        if (pParent->IsKindOf(CLASSINFO(wxScrolledWindow)) ||
+            pParent->IsKindOf(CLASSINFO(wxGenericScrolledWindow)))
+            lMsStyle |= WS_CLIPSIBLINGS;
 
     m_hWnd = (WXHWND)::WinCreateWindow( (HWND)GetHwndOf(pParent) // Parent window handle
                                        ,WC_ENTRYFIELD            // Window class

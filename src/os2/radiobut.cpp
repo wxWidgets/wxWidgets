@@ -81,6 +81,15 @@ bool wxRadioButton::Create(
 
     if (m_windowStyle & wxCLIP_SIBLINGS )
         lsStyle |= WS_CLIPSIBLINGS;
+    //
+    // If the parent is a scrolled window the controls must
+    // have this style or they will overlap the scrollbars
+    //
+    if (pParent)
+        if (pParent->IsKindOf(CLASSINFO(wxScrolledWindow)) ||
+            pParent->IsKindOf(CLASSINFO(wxGenericScrolledWindow)))
+            lsStyle |= WS_CLIPSIBLINGS;
+
     m_hWnd = (WXHWND)::WinCreateWindow ( GetHwndOf(pParent)
                                         ,WC_BUTTON
                                         ,rsLabel.c_str()

@@ -151,6 +151,15 @@ bool wxSpinCtrl::Create(
     if (m_windowStyle & wxCLIP_SIBLINGS )
         lSstyle |= WS_CLIPSIBLINGS;
 
+    //
+    // If the parent is a scrolled window the controls must
+    // have this style or they will overlap the scrollbars
+    //
+    if (pParent)
+        if (pParent->IsKindOf(CLASSINFO(wxScrolledWindow)) ||
+            pParent->IsKindOf(CLASSINFO(wxGenericScrolledWindow)))
+            lSstyle |= WS_CLIPSIBLINGS;
+
     SPBCDATA                        vCtrlData;
 
     vCtrlData.cbSize = sizeof(SPBCDATA);

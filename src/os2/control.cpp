@@ -113,6 +113,10 @@ bool wxControl::OS2CreateControl(
 , WXDWORD                           dwExstyle
 )
 {
+    int                          nX = rPos.x == -1 ? 0 : rPos.x;
+    int                          nY = rPos.y == -1 ? 0 : rPos.y;
+    int                          nW = rSize.x == -1 ? 0 : rSize.x;
+    int                          nH = rSize.y == -1 ? 0 : rSize.y;
     //
     // Doesn't do anything at all under OS/2
     //
@@ -120,6 +124,42 @@ bool wxControl::OS2CreateControl(
     {
         dwExstyle = GetExStyle(dwStyle);
     }
+
+    wxWindow*                       pParent = GetParent();
+    PSZ                             zClass;
+
+    if (!pParent)
+        return FALSE;
+
+    if ((strcmp(zClassname, "COMBOBOX")) == 0)
+        zClass = WC_COMBOBOX;
+    else if ((strcmp(zClassname, "STATIC")) == 0)
+        zClass = WC_STATIC;
+    dwStyle |= WS_VISIBLE;
+
+    //
+    // If the parent is a scrolled window the controls must
+    // have this style or they will overlap the scrollbars
+    //
+    if (pParent)
+        if (pParent->IsKindOf(CLASSINFO(wxScrolledWindow)) ||
+            pParent->IsKindOf(CLASSINFO(wxGenericScrolledWindow)))
+            dwStyle |= WS_CLIPSIBLINGS;
+
+    m_hWnd = (WXHWND)::WinCreateWindow( (HWND)GetHwndOf(pParent) // Parent window handle
+                                       ,(PSZ)zClass              // Window class
+                                       ,(PSZ)rsLabel.c_str()     // Initial Text
+                                       ,(ULONG)dwStyle           // Style flags
+                                       ,(LONG)0                  // X pos of origin
+                                       ,(LONG)0                  // Y pos of origin
+                                       ,(LONG)0                  // control width
+                                       ,(LONG)0                  // control height
+                                       ,(HWND)GetHwndOf(pParent) // owner window handle (same as parent
+                                       ,HWND_TOP                 // initial z position
+                                       ,(ULONG)GetId()           // Window identifier
+                                       ,NULL                     // no control data
+                                       ,NULL                     // no Presentation parameters
+                                      );
 
     if ( !m_hWnd )
     {
@@ -129,29 +169,6 @@ bool wxControl::OS2CreateControl(
 
         return FALSE;
     }
-
-    PSZ                             zClass;
-
-    if ((strcmp(zClassname, "COMBOBOX")) == 0)
-        zClass = WC_COMBOBOX;
-    else if ((strcmp(zClassname, "STATIC")) == 0)
-        zClass = WC_STATIC;
-    dwStyle |= WS_VISIBLE;
-    m_hWnd = (WXHWND)::WinCreateWindow( (HWND)GetHwndOf(GetParent()) // Parent window handle
-                                       ,(PSZ)zClassname              // Window class
-                                       ,(PSZ)rsLabel.c_str()         // Initial Text
-                                       ,(ULONG)dwStyle               // Style flags
-                                       ,(LONG)0                      // X pos of origin
-                                       ,(LONG)0                      // Y pos of origin
-                                       ,(LONG)0                      // control width
-                                       ,(LONG)0                      // control height
-                                       ,(HWND)GetHwndOf(GetParent()) // owner window handle (same as parent
-                                       ,HWND_TOP                     // initial z position
-                                       ,(ULONG)GetId()               // Window identifier
-                                       ,NULL                         // no control data
-                                       ,NULL                         // no Presentation parameters
-                                      );
-
     //
     // Subclass again for purposes of dialog editing mode
     //
@@ -161,6 +178,8 @@ bool wxControl::OS2CreateControl(
     // Controls use the same font and colours as their parent dialog by default
     //
     InheritAttributes();
+    if (nW == 0 || nH == 0)
+        SetBestSize(rSize);
     return TRUE;
 } // end of wxControl::OS2CreateControl
 

@@ -142,6 +142,15 @@ bool wxListBox::Create(
     //
     lStyle |= LS_NOADJUSTPOS;
 
+    //
+    // If the parent is a scrolled window the controls must
+    // have this style or they will overlap the scrollbars
+    //
+    if (pParent)
+        if (pParent->IsKindOf(CLASSINFO(wxScrolledWindow)) ||
+            pParent->IsKindOf(CLASSINFO(wxGenericScrolledWindow)))
+            lStyle |= WS_CLIPSIBLINGS;
+
     m_hWnd = (WXHWND)::WinCreateWindow( GetWinHwnd(pParent) // Parent
                                        ,WC_LISTBOX          // Default Listbox class
                                        ,"LISTBOX"           // Control's name
@@ -170,6 +179,29 @@ bool wxListBox::Create(
         Append(asChoices[lUi]);
     }
     SetFont(pParent->GetFont());
+    
+    //
+    // Set standard wxWindows colors for Listbox items and highlighting
+    //
+    wxColour                        vColour;
+
+    vColour.Set(wxString("WHITE"));
+
+    LONG                            lColor = (LONG)vColour.GetPixel();
+
+    ::WinSetPresParam( m_hWnd
+                      ,PP_HILITEFOREGROUNDCOLOR
+                      ,sizeof(LONG)
+                      ,(PVOID)&lColor
+                     );
+    vColour.Set(wxString("NAVY"));
+    lColor = (LONG)vColour.GetPixel();
+    ::WinSetPresParam( m_hWnd
+                      ,PP_HILITEBACKGROUNDCOLOR
+                      ,sizeof(LONG)
+                      ,(PVOID)&lColor
+                     );
+
     SetSize( nX
             ,nY
             ,nWidth

@@ -526,6 +526,7 @@ OS2OBJS = \
   ..\os2\$D\timer.obj \
   ..\os2\$D\toolbar.obj \
   ..\os2\$D\tooltip.obj \
+  ..\os2\$D\toplevel.obj \
   ..\os2\$D\utils.obj \
   ..\os2\$D\utilsexc.obj \
   ..\os2\$D\wave.obj \
@@ -610,6 +611,7 @@ OS2LIBOBJS2 = \
   timer.obj \
   toolbar.obj \
   tooltip.obj \
+  toplevel.obj \
   utils.obj \
   utilsexc.obj \
   wave.obj \
@@ -958,6 +960,7 @@ $(OS2LIBOBJS2):
   copy ..\os2\$D\timer.obj
   copy ..\os2\$D\toolbar.obj
   copy ..\os2\$D\tooltip.obj
+  copy ..\os2\$D\toplevel.obj
   copy ..\os2\$D\utils.obj
   copy ..\os2\$D\utilsexc.obj
   copy ..\os2\$D\wave.obj

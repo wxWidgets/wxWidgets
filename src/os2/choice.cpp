@@ -50,8 +50,8 @@ bool wxChoice::Create(
                          ))
         return FALSE;
     lSstyle = CBS_DROPDOWNLIST |
-             WS_TABSTOP       |
-             WS_VISIBLE;
+              WS_TABSTOP       |
+              WS_VISIBLE;
 
     if (lStyle & wxCLIP_SIBLINGS )
         lSstyle |= WS_CLIPSIBLINGS;

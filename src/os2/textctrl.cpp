@@ -117,37 +117,11 @@ bool wxTextCtrl::Create(
         return FALSE;
 
     wxPoint                         vPos = rPos; // The OS/2 position
+    SWP                             vSwp;
 
     if (pParent )
     {
         pParent->AddChild(this);
-        hParent = GetWinHwnd(pParent);
-        //
-        // OS2 uses normal coordinates, no bassackwards Windows ones
-        //
-        if (pParent->IsKindOf(CLASSINFO(wxGenericScrolledWindow)) ||
-            pParent->IsKindOf(CLASSINFO(wxScrolledWindow))
-           )
-        {
-            wxWindow*               pGrandParent = NULL;
-
-            pGrandParent = pParent->GetParent();
-            if (pGrandParent)
-                nTempy = pGrandParent->GetSize().y - (vPos.y + rSize.y);
-            else
-                nTempy = pParent->GetSize().y - (vPos.y + rSize.y);
-        }
-        else
-            nTempy = pParent->GetSize().y - (vPos.y + rSize.y);
-        vPos.y = nTempy;
-    }
-    else
-    {
-        RECTL                   vRect;
-
-        ::WinQueryWindowRect(HWND_DESKTOP, &vRect);
-        hParent = HWND_DESKTOP;
-        vPos.y = vRect.yTop - (vPos.y + rSize.y);
     }
 
     m_windowStyle = lStyle;
@@ -180,10 +154,15 @@ bool wxTextCtrl::Create(
         if (m_windowStyle & wxTE_PASSWORD) // hidden input
             lSstyle |= ES_UNREADABLE;
     }
-    if ( pParent->IsKindOf(CLASSINFO(wxGenericScrolledWindow)) ||
-         pParent->IsKindOf(CLASSINFO(wxScrolledWindow))
-       )
-        lSstyle |= WS_CLIPSIBLINGS;
+    //
+    // If the parent is a scrolled window the controls must
+    // have this style or they will overlap the scrollbars
+    //
+    if (pParent)
+        if (pParent->IsKindOf(CLASSINFO(wxScrolledWindow)) ||
+            pParent->IsKindOf(CLASSINFO(wxGenericScrolledWindow)))
+            lSstyle |= WS_CLIPSIBLINGS;
+
     if (m_bIsMLE)
     {
         m_hWnd = (WXHWND)::WinCreateWindow( (HWND)GetHwndOf(pParent) // Parent window handle
@@ -244,6 +223,13 @@ bool wxTextCtrl::Create(
         SetValue(rsValue);
     }
     SetupColours();
+    //
+    // If X and/or Y are not zero the difference is the compensation value
+    // for margins for OS/2 controls.
+    //
+    ::WinQueryWindowPos(m_hWnd, &vSwp);
+    SetXComp(vSwp.x);
+    SetYComp(vSwp.y);
     SetSize( vPos.x
             ,vPos.y
             ,rSize.x

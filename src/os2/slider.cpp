@@ -200,6 +200,15 @@ bool wxSlider::Create(
     {
         lMsStyle |= WS_VISIBLE | SS_TEXT | DT_VCENTER;
 
+        //
+        // If the parent is a scrolled window the controls must
+        // have this style or they will overlap the scrollbars
+        //
+        if (pParent)
+            if (pParent->IsKindOf(CLASSINFO(wxScrolledWindow)) ||
+                pParent->IsKindOf(CLASSINFO(wxGenericScrolledWindow)))
+                lMsStyle |= WS_CLIPSIBLINGS;
+
         m_hStaticValue = (WXHWND)::WinCreateWindow( (HWND)GetHwndOf(pParent) // Parent window handle
                                                    ,WC_STATIC                // Window class
                                                    ,(PSZ)NULL                // Initial Text
@@ -219,6 +228,15 @@ bool wxSlider::Create(
         lWstyle = SS_TEXT|DT_LEFT|WS_VISIBLE;
         if (m_windowStyle & wxCLIP_SIBLINGS)
             lWstyle |= WS_CLIPSIBLINGS;
+        //
+        // If the parent is a scrolled window the controls must
+        // have this style or they will overlap the scrollbars
+        //
+        if (pParent)
+            if (pParent->IsKindOf(CLASSINFO(wxScrolledWindow)) ||
+                pParent->IsKindOf(CLASSINFO(wxGenericScrolledWindow)))
+                lWstyle |= WS_CLIPSIBLINGS;
+
         m_hStaticMin = (WXHWND)::WinCreateWindow( (HWND)GetHwndOf(pParent) // Parent window handle
                                                  ,WC_STATIC                // Window class
                                                  ,(PSZ)wxBuffer            // Initial Text
@@ -262,6 +280,15 @@ bool wxSlider::Create(
         lMsStyle |= SLS_PRIMARYSCALE1 | SLS_PRIMARYSCALE2;
     else
         lMsStyle |= SLS_PRIMARYSCALE2;
+
+    //
+    // If the parent is a scrolled window the controls must
+    // have this style or they will overlap the scrollbars
+    //
+    if (pParent)
+        if (pParent->IsKindOf(CLASSINFO(wxScrolledWindow)) ||
+            pParent->IsKindOf(CLASSINFO(wxGenericScrolledWindow)))
+            lMsStyle |= WS_CLIPSIBLINGS;
 
     m_nPageSize = ((nMaxValue - nMinValue)/10);
     vSlData.usScale1Increments = m_nPageSize;
@@ -311,6 +338,15 @@ bool wxSlider::Create(
         lWstyle = SS_TEXT|DT_LEFT|WS_VISIBLE;
         if (m_windowStyle & wxCLIP_SIBLINGS)
             lMsStyle |= WS_CLIPSIBLINGS;
+        //
+        // If the parent is a scrolled window the controls must
+        // have this style or they will overlap the scrollbars
+        //
+        if (pParent)
+            if (pParent->IsKindOf(CLASSINFO(wxScrolledWindow)) ||
+                pParent->IsKindOf(CLASSINFO(wxGenericScrolledWindow)))
+                lWstyle |= WS_CLIPSIBLINGS;
+
         m_hStaticMax = (WXHWND)::WinCreateWindow( (HWND)GetHwndOf(pParent) // Parent window handle
                                                  ,WC_STATIC                // Window class
                                                  ,(PSZ)wxBuffer            // Initial Text

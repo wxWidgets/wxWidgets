@@ -163,6 +163,7 @@ bool wxComboBox::Create(
     gfnWndprocEdit = (WXFARPROC)::WinSubclassWindow( (HWND)GetHwnd()
                                                     ,(PFNWP)wxComboEditWndProc
                                                    );
+    ::WinSetWindowULong(GetHwnd(), QWL_USER, (ULONG)this);
     return TRUE;
 } // end of wxComboBox::Create
 

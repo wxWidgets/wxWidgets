@@ -66,6 +66,15 @@ bool wxStaticText::Create(
         lSstyle |= DT_RIGHT;
     else
         lSstyle |= DT_LEFT;
+    //
+    // If the parent is a scrolled window the controls must
+    // have this style or they will overlap the scrollbars
+    //
+    if (pParent)
+        if (pParent->IsKindOf(CLASSINFO(wxScrolledWindow)) ||
+            pParent->IsKindOf(CLASSINFO(wxGenericScrolledWindow)))
+            lSstyle |= WS_CLIPSIBLINGS;
+
     m_hWnd = (WXHWND)::WinCreateWindow( (HWND)GetHwndOf(pParent) // Parent window handle
                                        ,WC_STATIC                // Window class
                                        ,(PSZ)rsLabel.c_str()     // Initial Text

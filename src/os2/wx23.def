@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  F:\DEV\WX2\WXWINDOWS\LIB\WX.lib
+;From library:  F:\DEV\WX2\WXWINDOWS\LIB\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -888,8 +888,29 @@ EXPORTS
       CreateButtonSizer__12wxDialogBaseFl
       ;wxDialogBase::Init()
       Init__12wxDialogBaseFv
+      ;wxDialogBase::GetDefaultItem() const
+      GetDefaultItem__12wxDialogBaseCFv
+      ;wxDialogBase::SetDefaultItem(wxWindow*)
+      SetDefaultItem__12wxDialogBaseFP8wxWindow
       ;wxDialogBase::CreateTextSizer(const wxString&)
       CreateTextSizer__12wxDialogBaseFRC8wxString
+      ;wxDialogBase::OnFocus(wxFocusEvent&)
+      OnFocus__12wxDialogBaseFR12wxFocusEvent
+      ;wxDialogBase::sm_eventTableEntries
+      sm_eventTableEntries__12wxDialogBase
+      ;wxDialogBase::SetFocus()
+      SetFocus__12wxDialogBaseFv
+      ;wxDialogBase::OnChildFocus(wxChildFocusEvent&)
+      OnChildFocus__12wxDialogBaseFR17wxChildFocusEvent
+      __vft12wxDialogBase8wxObject
+      ;wxDialogBase::sm_eventTable
+      sm_eventTable__12wxDialogBase
+      ;wxDialogBase::OnNavigationKey(wxNavigationKeyEvent&)
+      OnNavigationKey__12wxDialogBaseFR20wxNavigationKeyEvent
+      ;wxDialogBase::RemoveChild(wxWindowBase*)
+      RemoveChild__12wxDialogBaseFP12wxWindowBase
+      ;wxDialogBase::GetEventTable() const
+      GetEventTable__12wxDialogBaseCFv
   ;From object file:  ..\common\dobjcmn.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxDataObjectComposite::GetDataSize(const wxDataFormat&) const
@@ -2018,6 +2039,8 @@ EXPORTS
     ;PUBDEFs (Symbols available from object file):
       ;wxFileName::Assign(const wxString&,wxPathFormat)
       Assign__10wxFileNameFRC8wxString12wxPathFormat
+      ;wxFileName::SetPath(const wxString&,wxPathFormat)
+      SetPath__10wxFileNameFRC8wxString12wxPathFormat
       ;wxFileName::Normalize(wxPathNormalize,const wxString&,wxPathFormat)
       Normalize__10wxFileNameF15wxPathNormalizeRC8wxString12wxPathFormat
       ;wxFileName::IsWild(wxPathFormat)
@@ -2166,16 +2189,26 @@ EXPORTS
       OpenFile__12wxFileSystemFRC8wxString
   ;From object file:  ..\common\fontcmn.cpp
     ;PUBDEFs (Symbols available from object file):
+      ;wxNativeFontInfo::SetUnderlined(unsigned long)
+      SetUnderlined__16wxNativeFontInfoFUl
       ;wxFontBase::GetNativeFontInfo() const
       GetNativeFontInfo__10wxFontBaseCFv
+      ;wxNativeFontInfo::GetUnderlined() const
+      GetUnderlined__16wxNativeFontInfoCFv
       ;wxFontBase::New(const wxNativeFontInfo&)
       New__10wxFontBaseFRC16wxNativeFontInfo
       ;wxFontBase::New(const wxString&)
       New__10wxFontBaseFRC8wxString
+      ;wxNativeFontInfo::FromString(const wxString&)
+      FromString__16wxNativeFontInfoFRC8wxString
       ;wxFont::operator=(const wxFont&)
       __as__6wxFontFRC6wxFont
+      ;wxNativeFontInfo::SetFamily(wxFontFamily)
+      SetFamily__16wxNativeFontInfoF12wxFontFamily
       ;wxFontBase::GetNativeFontInfoDesc() const
       GetNativeFontInfoDesc__10wxFontBaseCFv
+      ;wxNativeFontInfo::ToUserString() const
+      ToUserString__16wxNativeFontInfoCFv
       ;wxFontBase::GetWeightString() const
       GetWeightString__10wxFontBaseCFv
       ;wxFontBase::GetStyleString() const
@@ -2186,19 +2219,47 @@ EXPORTS
       SetNativeFontInfo__10wxFontBaseFRC16wxNativeFontInfo
       ;wxFontBase::SetNativeFontInfoUserDesc(const wxString&)
       SetNativeFontInfoUserDesc__10wxFontBaseFRC8wxString
+      ;wxNativeFontInfo::SetStyle(wxFontStyle)
+      SetStyle__16wxNativeFontInfoF11wxFontStyle
       ;wxFontBase::ms_encodingDefault
       ms_encodingDefault__10wxFontBase
+      ;wxNativeFontInfo::GetPointSize() const
+      GetPointSize__16wxNativeFontInfoCFv
+      ;wxNativeFontInfo::GetStyle() const
+      GetStyle__16wxNativeFontInfoCFv
+      ;wxNativeFontInfo::GetFamily() const
+      GetFamily__16wxNativeFontInfoCFv
+      ;wxNativeFontInfo::GetFaceName() const
+      GetFaceName__16wxNativeFontInfoCFv
+      ;wxNativeFontInfo::SetEncoding(wxFontEncoding)
+      SetEncoding__16wxNativeFontInfoF14wxFontEncoding
       ;wxFontBase::SetNativeFontInfo(const wxString&)
       SetNativeFontInfo__10wxFontBaseFRC8wxString
-      ;wxFontBase::operator==(const wxFont&) const
-      __eq__10wxFontBaseCFRC6wxFont
+      ;wxNativeFontInfo::SetWeight(wxFontWeight)
+      SetWeight__16wxNativeFontInfoF12wxFontWeight
       __vft10wxFontBase8wxObject
       ;wxFontBase::operator!=(const wxFont&) const
       __ne__10wxFontBaseCFRC6wxFont
+      ;wxFontBase::operator==(const wxFont&) const
+      __eq__10wxFontBaseCFRC6wxFont
+      ;wxNativeFontInfo::SetPointSize(int)
+      SetPointSize__16wxNativeFontInfoFi
+      ;wxNativeFontInfo::ToString() const
+      ToString__16wxNativeFontInfoCFv
       ;wxFontBase::GetFamilyString() const
       GetFamilyString__10wxFontBaseCFv
+      ;wxNativeFontInfo::GetEncoding() const
+      GetEncoding__16wxNativeFontInfoCFv
+      ;wxNativeFontInfo::Init()
+      Init__16wxNativeFontInfoFv
+      ;wxNativeFontInfo::GetWeight() const
+      GetWeight__16wxNativeFontInfoCFv
       ;wxFontBase::New(int,int,int,int,unsigned long,const wxString&,wxFontEncoding)
       New__10wxFontBaseFiN31UlRC8wxString14wxFontEncoding
+      ;wxNativeFontInfo::SetFaceName(wxString)
+      SetFaceName__16wxNativeFontInfoF8wxString
+      ;wxNativeFontInfo::FromUserString(const wxString&)
+      FromUserString__16wxNativeFontInfoFRC8wxString
   ;From object file:  ..\common\fontmap.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxFontMapper::GetConfig()
@@ -5086,6 +5147,8 @@ EXPORTS
       Upper__8wxStringCFv
       ;wxString::IsNumber() const
       IsNumber__8wxStringCFv
+      ;wxArrayString::GetStringArray() const
+      GetStringArray__13wxArrayStringCFv
       ;wxArrayString::Empty()
       Empty__13wxArrayStringFv
       ;wxArrayString::Copy(const wxArrayString&)
@@ -5457,12 +5520,14 @@ EXPORTS
       SendIconizeEvent__20wxTopLevelWindowBaseFUl
       ;wxTopLevelWindowBase::sm_eventTable
       sm_eventTable__20wxTopLevelWindowBase
+      ;wxConstructorForwxTopLevelWindow()
+      wxConstructorForwxTopLevelWindow__Fv
       ;wxTopLevelWindowBase::DoClientToScreen(int*,int*) const
       DoClientToScreen__20wxTopLevelWindowBaseCFPiT1
-      ;wxTopLevelWindowBase::GetEventTable() const
-      GetEventTable__20wxTopLevelWindowBaseCFv
       ;wxTopLevelWindowBase::wxTopLevelWindowBase()
       __ct__20wxTopLevelWindowBaseFv
+      ;wxTopLevelWindowBase::GetEventTable() const
+      GetEventTable__20wxTopLevelWindowBaseCFv
       ;wxTopLevelWindowBase::OnSize(wxSizeEvent&)
       OnSize__20wxTopLevelWindowBaseFR11wxSizeEvent
       __vft20wxTopLevelWindowBase8wxObject
@@ -5474,6 +5539,8 @@ EXPORTS
       DoScreenToClient__20wxTopLevelWindowBaseCFPiT1
       ;wxTopLevelWindowBase::Destroy()
       Destroy__20wxTopLevelWindowBaseFv
+      ;wxTopLevelWindow::sm_classwxTopLevelWindow
+      sm_classwxTopLevelWindow__16wxTopLevelWindow
   ;From object file:  ..\common\treebase.cpp
     ;PUBDEFs (Symbols available from object file):
       wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT
@@ -11132,8 +11199,6 @@ EXPORTS
       ;wxCheckBox::SetValue(unsigned long)
       SetValue__10wxCheckBoxFUl
       __vft16wxBitmapCheckBox8wxObject
-      ;wxCheckBox::OnCtlColor(unsigned long,unsigned long,unsigned int,unsigned int,void*,void*)
-      OnCtlColor__10wxCheckBoxFUlT1UiT3PvT5
       ;wxCheckBox::DoGetBestSize() const
       DoGetBestSize__10wxCheckBoxCFv
       ;wxCheckBox::GetValue() const
@@ -11142,8 +11207,6 @@ EXPORTS
       Create__16wxBitmapCheckBoxFP8wxWindowiPC8wxBitmapRC7wxPointRC6wxSizelRC11wxValidatorRC8wxString
       ;wxCheckBox::SetLabel(const wxString&)
       SetLabel__10wxCheckBoxFRC8wxString
-      ;wxCheckBox::Command(wxCommandEvent&)
-      Command__10wxCheckBoxFR14wxCommandEvent
       ;wxBitmapCheckBox::sm_classwxBitmapCheckBox
       sm_classwxBitmapCheckBox__16wxBitmapCheckBox
   ;From object file:  ..\os2\checklst.cpp
@@ -11815,10 +11878,6 @@ EXPORTS
       SetModal__8wxDialogFUl
       ;wxDialog::OnCancel(wxCommandEvent&)
       OnCancel__8wxDialogFR14wxCommandEvent
-      ;wxDialog::DoGetPosition(int*,int*) const
-      DoGetPosition__8wxDialogCFPiT1
-      ;wxDialog::IsIconized() const
-      IsIconized__8wxDialogCFv
       ;wxDialog::IsModal() const
       IsModal__8wxDialogCFv
       ;wxDialog::Create(wxWindow*,int,const wxString&,const wxPoint&,const wxSize&,long,const wxString&)
@@ -11832,8 +11891,6 @@ EXPORTS
       OnOK__8wxDialogFR14wxCommandEvent
       ;wxDialog::OnCloseWindow(wxCloseEvent&)
       OnCloseWindow__8wxDialogFR12wxCloseEvent
-      ;wxDialog::DoSetClientSize(int,int)
-      DoSetClientSize__8wxDialogFiT1
       ;wxDialog::Init()
       Init__8wxDialogFv
       ;wxDialog::ShowModal()
@@ -11847,10 +11904,6 @@ EXPORTS
       OnSysColourChanged__8wxDialogFR23wxSysColourChangedEvent
       ;wxDialog::DoShowModal()
       DoShowModal__8wxDialogFv
-      ;wxDialog::Destroy()
-      Destroy__8wxDialogFv
-      ;wxDialog::Iconize(unsigned long)
-      Iconize__8wxDialogFUl
       ;wxDialog::Show(unsigned long)
       Show__8wxDialogFUl
       ;wxDialog::OnApply(wxCommandEvent&)
@@ -11865,7 +11918,6 @@ EXPORTS
       OS2WindowProc__8wxDialogFUiPvT2
       ;wxDialog::GetEventTable() const
       GetEventTable__8wxDialogCFv
-      wxModelessWindows
       ;wxDialog::sm_eventTable
       sm_eventTable__8wxDialog
   ;From object file:  ..\os2\dir.cpp
@@ -12072,12 +12124,10 @@ EXPORTS
       FromString__20wxNativeEncodingInfoFRC8wxString
   ;From object file:  ..\os2\frame.cpp
     ;PUBDEFs (Symbols available from object file):
-      ;wxFrame::Show(unsigned long)
-      Show__7wxFrameFUl
-      ;wxFrame::Iconize(unsigned long)
-      Iconize__7wxFrameFUl
       ;wxFrame::HandleMenuSelect(unsigned short,unsigned short,unsigned long)
       HandleMenuSelect__7wxFrameFUsT1Ul
+      ;wxFrame::SendSizeEvent()
+      SendSizeEvent__7wxFrameFv
       ;wxFrame::OS2TranslateMessage(void**)
       OS2TranslateMessage__7wxFrameFPPv
       ;wxFrame::HandlePaint()
@@ -12093,14 +12143,8 @@ EXPORTS
       HandleSize__7wxFrameFiT1Ui
       ;wxConstructorForwxFrame()
       wxConstructorForwxFrame__Fv
-      ;wxFrame::SetIcon(const wxIcon&)
-      SetIcon__7wxFrameFRC6wxIcon
-      ;wxFrame::Restore()
-      Restore__7wxFrameFv
-      ;wxFrame::IsMaximized() const
-      IsMaximized__7wxFrameCFv
-      ;wxFrame::IsIconized() const
-      IsIconized__7wxFrameCFv
+      ;wxFrame::Raise()
+      Raise__7wxFrameFv
       ;wxFrame::GetClientAreaOrigin() const
       GetClientAreaOrigin__7wxFrameCFv
       ;wxFrame::AttachMenuBar(wxMenuBar*)
@@ -12111,28 +12155,20 @@ EXPORTS
       OnSysColourChanged__7wxFrameFR23wxSysColourChangedEvent
       ;wxFrame::ShowFullScreen(unsigned long,long)
       ShowFullScreen__7wxFrameFUll
-      ;wxFrame::DoShowWindow(int)
-      DoShowWindow__7wxFrameFi
+      ;wxFrame::m_bUseNativeStatusBar
+      m_bUseNativeStatusBar__7wxFrame
       ;wxFrame::sm_eventTable
       sm_eventTable__7wxFrame
       ;wxFrame::sm_eventTableEntries
       sm_eventTableEntries__7wxFrame
       ;wxFrame::sm_classwxFrame
       sm_classwxFrame__7wxFrame
-      ;wxFrame::m_bUseNativeStatusBar
-      m_bUseNativeStatusBar__7wxFrame
       ;wxFrame::~wxFrame()
       __dt__7wxFrameFv
       ;wxFrame::GetClient()
       GetClient__7wxFrameFv
-      ;wxFrame::OS2Create(int,wxWindow*,const char*,wxWindow*,const char*,int,int,int,int,long)
-      OS2Create__7wxFrameFiP8wxWindowPCcT2T3N41l
       ;wxFrame::HandleCommand(unsigned short,unsigned short,unsigned long)
       HandleCommand__7wxFrameFUsT1Ul
-      ;wxFrame::DoGetSize(int*,int*) const
-      DoGetSize__7wxFrameCFPiT1
-      ;wxFrame::DoGetPosition(int*,int*) const
-      DoGetPosition__7wxFrameCFPiT1
       ;wxFrame::PositionStatusBar()
       PositionStatusBar__7wxFrameFv
       ;wxFrame::PositionToolBar()
@@ -12141,14 +12177,14 @@ EXPORTS
       OS2WindowProc__7wxFrameFUiPvT2
       ;wxFrame::InternalSetMenuBar()
       InternalSetMenuBar__7wxFrameFv
+      ;wxFrame::GetDefaultIcon() const
+      GetDefaultIcon__7wxFrameCFv
       ;wxFrame::CreateToolBar(long,int,const wxString&)
       CreateToolBar__7wxFrameFliRC8wxString
-      ;wxFrame::Maximize(unsigned long)
-      Maximize__7wxFrameFUl
-      ;wxFrame::SetClient(unsigned long)
-      SetClient__7wxFrameFUl
       ;wxFrame::IconizeChildFrames(unsigned long)
       IconizeChildFrames__7wxFrameFUl
+      ;wxFrame::SetClient(unsigned long)
+      SetClient__7wxFrameFUl
       ;wxFrame::DoGetClientSize(int*,int*) const
       DoGetClientSize__7wxFrameCFPiT1
       ;wxFrame::Init()
@@ -12159,8 +12195,6 @@ EXPORTS
       GetEventTable__7wxFrameCFv
       ;wxFrame::DetachMenuBar()
       DetachMenuBar__7wxFrameFv
-      ;wxFrame::AlterChildPos()
-      AlterChildPos__7wxFrameFv
       wxFrameMainWndProc
       wxFrameWndProc
       ;wxFrame::SetClient(wxWindow*)
@@ -14036,6 +14070,49 @@ EXPORTS
       Remove__9wxToolTipFv
       ;wxToolTip::hwndTT
       hwndTT__9wxToolTip
+  ;From object file:  ..\os2\toplevel.cpp
+    ;PUBDEFs (Symbols available from object file):
+      __vft19wxTopLevelWindowOS28wxObject
+      ;wxTopLevelWindowOS2::CreateFrame(const wxString&,const wxPoint&,const wxSize&)
+      CreateFrame__19wxTopLevelWindowOS2FRC8wxStringRC7wxPointRC6wxSize
+      ;wxTopLevelWindowOS2::~wxTopLevelWindowOS2()
+      __dt__19wxTopLevelWindowOS2Fv
+      ;wxTopLevelWindowOS2::ShowFullScreen(unsigned long,long)
+      ShowFullScreen__19wxTopLevelWindowOS2FUll
+      ;wxTopLevelWindowOS2::CreateDialog(unsigned long,const wxString&,const wxPoint&,const wxSize&)
+      CreateDialog__19wxTopLevelWindowOS2FUlRC8wxStringRC7wxPointRC6wxSize
+      ;wxTopLevelWindowOS2::DoShowWindow(int)
+      DoShowWindow__19wxTopLevelWindowOS2Fi
+      ;wxTopLevelWindowOS2::Init()
+      Init__19wxTopLevelWindowOS2Fv
+      ;wxTopLevelWindowOS2::OS2GetCreateWindowFlags(long*) const
+      OS2GetCreateWindowFlags__19wxTopLevelWindowOS2CFPl
+      ;wxTopLevelWindowOS2::Iconize(unsigned long)
+      Iconize__19wxTopLevelWindowOS2FUl
+      ;wxTopLevelWindowOS2::DoSetClientSize(int,int)
+      DoSetClientSize__19wxTopLevelWindowOS2FiT1
+      ;wxTopLevelWindowOS2::AlterChildPos()
+      AlterChildPos__19wxTopLevelWindowOS2Fv
+      ;wxTopLevelWindowOS2::SetIcon(const wxIcon&)
+      SetIcon__19wxTopLevelWindowOS2FRC6wxIcon
+      ;wxTopLevelWindowOS2::Restore()
+      Restore__19wxTopLevelWindowOS2Fv
+      ;wxTopLevelWindowOS2::IsMaximized() const
+      IsMaximized__19wxTopLevelWindowOS2CFv
+      ;wxTopLevelWindowOS2::Maximize(unsigned long)
+      Maximize__19wxTopLevelWindowOS2FUl
+      ;wxTopLevelWindowOS2::EnableCloseButton(unsigned long)
+      EnableCloseButton__19wxTopLevelWindowOS2FUl
+      ;wxTopLevelWindowOS2::DoGetClientSize(int*,int*) const
+      DoGetClientSize__19wxTopLevelWindowOS2CFPiT1
+      ;wxTopLevelWindowOS2::Create(wxWindow*,int,const wxString&,const wxPoint&,const wxSize&,long,const wxString&)
+      Create__19wxTopLevelWindowOS2FP8wxWindowiRC8wxStringRC7wxPointRC6wxSizelT3
+      ;wxTopLevelWindowOS2::Show(unsigned long)
+      Show__19wxTopLevelWindowOS2FUl
+      ;wxTopLevelWindowOS2::IsIconized() const
+      IsIconized__19wxTopLevelWindowOS2CFv
+      wxDlgProc
+      wxModelessWindows
   ;From object file:  ..\os2\utils.cpp
     ;PUBDEFs (Symbols available from object file):
       gs_wxBusyCursorOld
@@ -14178,6 +14255,10 @@ EXPORTS
       HandleMouseMove__8wxWindowFiT1Ui
       ;wxWindow::Raise()
       Raise__8wxWindowFv
+      ;wxWindowCreationHook::~wxWindowCreationHook()
+      __dt__20wxWindowCreationHookFv
+      ;wxWindow::Update()
+      Update__8wxWindowFv
       ;wxWindow::UnsubclassWin()
       UnsubclassWin__8wxWindowFv
       ;wxWindow::Lower()
@@ -14186,6 +14267,8 @@ EXPORTS
       HandleMaximize__8wxWindowFv
       ;wxWindow::HandleDestroy()
       HandleDestroy__8wxWindowFv
+      ;wxWindow::Freeze()
+      Freeze__8wxWindowFv
       ;wxWindow::DoPopupMenu(wxMenu*,int,int)
       DoPopupMenu__8wxWindowFP6wxMenuiT2
       ;wxWindow::UnpackCommand(void*,void*,unsigned short*,unsigned long*,unsigned short*)
@@ -14196,6 +14279,8 @@ EXPORTS
       sm_eventTable__8wxWindow
       ;wxWindow::sm_classwxWindow
       sm_classwxWindow__8wxWindow
+      ;wxWindowCreationHook::wxWindowCreationHook(wxWindow*)
+      __ct__20wxWindowCreationHookFP8wxWindow
       ;wxWindow::SetScrollPos(int,int,unsigned long)
       SetScrollPos__8wxWindowFiT1Ul
       ;wxCharCodeWXToOS2(int,unsigned long*)
@@ -14228,6 +14313,8 @@ EXPORTS
       OS2OnMeasureItem__8wxWindowFiPPv
       ;wxWindow::OS2DestroyWindow()
       OS2DestroyWindow__8wxWindowFv
+      ;wxWindow::IsMouseInWindow() const
+      IsMouseInWindow__8wxWindowCFv
       ;wxWindow::HandleKeyUp(unsigned long,void*)
       HandleKeyUp__8wxWindowFUlPv
       ;wxWindow::HandleKeyDown(unsigned short,void*)
@@ -14241,6 +14328,8 @@ EXPORTS
       wxWndHook
       ;wxWindow::Reparent(wxWindow*)
       Reparent__8wxWindowFP8wxWindow
+      ;wxWindow::OS2GetCreateWindowCoords(const wxPoint&,const wxSize&,int&,int&,int&,int&) const
+      OS2GetCreateWindowCoords__8wxWindowCFRC7wxPointRC6wxSizeRiN33
       ;wxWindow::Enable(unsigned long)
       Enable__8wxWindowFUl
       wxWinHandleList
@@ -14293,6 +14382,8 @@ EXPORTS
       ;wxAssociateWinWithHandle(unsigned long,wxWindow*)
       wxAssociateWinWithHandle__FUlP8wxWindow
       s_currentMsg
+      ;wxWindow::OS2Create(char*,const char*,unsigned long,const wxPoint&,const wxSize&,void*,unsigned long,unsigned long)
+      OS2Create__8wxWindowFPcPCcUlRC7wxPointRC6wxSizePvN23
       ;wxWindow::GetOS2ParentHeight(wxWindow*)
       GetOS2ParentHeight__8wxWindowFP8wxWindow
       ;wxWindow::Refresh(unsigned long,const wxRect*)
@@ -14340,6 +14431,10 @@ EXPORTS
       __dt__8wxWindowFv
       ;wxGetActiveWindow()
       wxGetActiveWindow__Fv
+      ;wxCheckWindowWndProc(unsigned long,void*(*)(unsigned long,unsigned long,void*,void*))
+      wxCheckWindowWndProc__FUlPFUlT1PvT3_Pv
+      ;wxWindow::Thaw()
+      Thaw__8wxWindowFv
       ;wxWindow::OS2WindowProc(unsigned int,void*,void*)
       OS2WindowProc__8wxWindowFUiPvT2
       ;wxWindow::OS2TranslateMessage(void**)
@@ -14374,8 +14469,6 @@ EXPORTS
       HandleActivate__8wxWindowFiUl
       ;wxWindow::FindItemByHWND(unsigned long,unsigned long) const
       FindItemByHWND__8wxWindowCFUlT1
-      ;wxWindow::OS2Create(unsigned long,char*,const char*,unsigned long,long,long,long,long,unsigned long,unsigned long,unsigned long,void*,void*,unsigned long)
-      OS2Create__8wxWindowFUlPcPCcT1lN35N31PvT12_T1
       ;wxWindow::HandleChar(unsigned long,void*,unsigned long)
       HandleChar__8wxWindowFUlPvT1
       ;wxWindow::DoMoveWindow(int,int,int,int)

@@ -294,7 +294,11 @@ bool wxRadioBox::Create(
 
 
     if (!OS2CreateControl( "STATIC"
-                          ,SS_GROUPBOX | WS_GROUP
+#if RADIOBTN_PARENT_IS_RADIOBOX
+                          ,SS_GROUPBOX | WS_GROUP | WS_CLIPCHILDREN
+#else
+                          ,SS_GROUPBOX | WS_GROUP | WS_CLIPSIBLINGS
+#endif
                           ,rPos
                           ,rSize
                           ,rsTitle
@@ -341,8 +345,16 @@ bool wxRadioBox::Create(
                                                                          ,NULL
                                                                          ,NULL
                                                                         );
+        lColor = (LONG)vColour.GetPixel();
         ::WinSetPresParam( hWndBtn
                           ,PP_FOREGROUNDCOLOR
+                          ,sizeof(LONG)
+                          ,(PVOID)&lColor
+                         );
+        lColor = (LONG)m_backgroundColour.GetPixel();
+
+        ::WinSetPresParam( hWndBtn
+                          ,PP_BACKGROUNDCOLOR
                           ,sizeof(LONG)
                           ,(PVOID)&lColor
                          );
@@ -374,8 +386,16 @@ bool wxRadioBox::Create(
                              ,NULL
                             );
      SetFont(*wxSMALL_FONT);
+    lColor = (LONG)vColour.GetPixel();
     ::WinSetPresParam( m_hWnd
                       ,PP_FOREGROUNDCOLOR
+                      ,sizeof(LONG)
+                      ,(PVOID)&lColor
+                     );
+    lColor = (LONG)m_backgroundColour.GetPixel();
+
+    ::WinSetPresParam( m_hWnd
+                      ,PP_BACKGROUNDCOLOR
                       ,sizeof(LONG)
                       ,(PVOID)&lColor
                      );
