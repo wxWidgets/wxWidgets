@@ -48,10 +48,6 @@
 #include "Editor.h"
 #include "ScintillaBase.h"
 
-#include <wx/wx.h>
-#include <wx/dataobj.h>
-#include <wx/clipbrd.h>
-#include <wx/dnd.h>
 
 //----------------------------------------------------------------------
 

@@ -17,8 +17,8 @@
 
 #include <ctype.h>
 
-#include "wx/stc/stc.h"
-#include "ScintillaWX.h"
+#define Point macPoint  // These names are also defined by some mac headers so
+#define Style macStyle  // change their names, and then undef before we need them
 
 #include <wx/wx.h>
 #include <wx/tokenzr.h>
@@ -26,6 +26,11 @@
 #include <wx/image.h>
 #include <wx/file.h>
 
+#undef Point
+#undef Style
+
+#include "wx/stc/stc.h"
+#include "ScintillaWX.h"
 
 //----------------------------------------------------------------------
 
@@ -178,9 +183,10 @@ void wxStyledTextCtrl::Create(wxWindow *parent,
     SetCodePage(wxSTC_CP_UTF8);
 #endif
 
+    SetBestFittingSize(size);
+
     // Reduces flicker on GTK+/X11
     SetBackgroundStyle(wxBG_STYLE_CUSTOM);
-    SetBestFittingSize(size);
 }
 
 

@@ -44,11 +44,6 @@
 #endif
 
 
-#if PLAT_WX
-#include <wx/object.h>  // For the global memory operators, if needed.
-#endif
-
-
 // Underlying the implementation of the platform classes are platform specific types.
 // Sometimes these need to be passed around by client code so they are defined here
 
