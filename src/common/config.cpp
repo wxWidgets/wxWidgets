@@ -30,6 +30,7 @@
 #include "wx/config.h"
 #include "wx/intl.h"
 #include "wx/log.h"
+#include "wx/arrstr.h"
 
 #if wxUSE_CONFIG && ((wxUSE_FILE && wxUSE_TEXTFILE) || wxUSE_CONFIG_NATIVE)
 

@@ -37,6 +37,7 @@
     #include "wx/filefn.h"
 #endif //WX_PRECOMP
 
+#include "wx/arrstr.h"
 #include "wx/dir.h"
 
 // ============================================================================
