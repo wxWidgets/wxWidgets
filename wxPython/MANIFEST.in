@@ -53,6 +53,9 @@ include wxPython/lib/*.txt
 include wxPython/lib/editor/*.py
 include wxPython/lib/editor/*.txt
 include wxPython/lib/mixins/*.py
+include wxPython/lib/PyCrust/*.py
+include wxPython/lib/PyCrust/*.txt
+include wxPython/lib/PyCrust/*.ico
 
 exclude wxPython/*
 exclude tests

@@ -70,6 +70,7 @@ Source: "%(SYSDIR)s\MSVCIRT.dll";           DestDir: "{sys}"; CopyMode: alwayssk
 Source: "%(WXDIR)s\lib\%(WXDLL)s";          DestDir: "{app}\wxPython"; Components: core
 Source: "wxPython\wxc.pyd";                 DestDir: "{app}\wxPython"; Components: core
 Source: "wxPython\gridc.pyd";               DestDir: "{app}\wxPython"; Components: core
+Source: "wxPython\helpc.pyd";               DestDir: "{app}\wxPython"; Components: core
 Source: "wxPython\htmlc.pyd";               DestDir: "{app}\wxPython"; Components: core
 Source: "wxPython\utilsc.pyd";              DestDir: "{app}\wxPython"; Components: core
 Source: "wxPython\calendarc.pyd";           DestDir: "{app}\wxPython"; Components: core
@@ -83,6 +84,9 @@ Source: "wxPython\lib\*.py";                DestDir: "{app}\wxPython\lib"; Compo
 Source: "wxPython\lib\editor\*.py";         DestDir: "{app}\wxPython\lib\editor"; Components: core
 Source: "wxPython\lib\editor\*.txt";        DestDir: "{app}\wxPython\lib\editor"; Components: core
 Source: "wxPython\lib\mixins\*.py";         DestDir: "{app}\wxPython\lib\mixins"; Components: core
+Source: "wxPython\lib\PyCrust\*.py";        DestDir: "{app}\wxPython\lib\PyCrust"; Components: core
+Source: "wxPython\lib\PyCrust\*.txt";       DestDir: "{app}\wxPython\lib\PyCrust"; Components: core
+Source: "wxPython\lib\PyCrust\*.ico";       DestDir: "{app}\wxPython\lib\PyCrust"; Components: core
 
 Source: "demo\*.py";                        DestDir: "{app}\wxPython\demo"; Components: demo
 Source: "demo\*.xml";                       DestDir: "{app}\wxPython\demo"; Components: demo
@@ -167,6 +171,8 @@ Type: files; Name: "{app}\wxPython\demo\*.pyo";
 Type: files; Name: "{app}\wxPython\demo\data\showTips";
 Type: files; Name: "{app}\wxPython\tools\*.pyc";
 Type: files; Name: "{app}\wxPython\tools\*.pyo";
+Type: files; Name: "{app}\wxPython\tools\XRCed\*.pyc";
+Type: files; Name: "{app}\wxPython\tools\XRCed\*.pyo";
 Type: files; Name: "{app}\wxPython\samples\doodle\*.pyc";
 Type: files; Name: "{app}\wxPython\samples\doodle\*.pyo";
 Type: files; Name: "{app}\wxPython\samples\wxProject\*.pyc";
@@ -204,7 +210,7 @@ begin
 
             MsgBox('No installation of Python %(PYTHONVER)s found.\nBe sure to enter a pathname that places wxPython\non the PYTHONPATH',
                    mbConfirmation, MB_OK);
-            PythonDir := 'C:\Put a directory on PYTHONPATH here\wxPython';
+            PythonDir := 'C:\Put a directory on PYTHONPATH here\';
         end;
     end;
     Result := true;
