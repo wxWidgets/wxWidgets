@@ -99,6 +99,7 @@ wxCreateHiddenWindow(LPCTSTR *pclassname, LPCTSTR classname, WNDPROC wndproc);
 #error "MAXSOCKETS is too big!"
 #endif
 
+typedef int PASCAL (*WSAAsyncSelectFunc)(SOCKET,HWND,u_int,long);
 
 /* Global variables */
 
@@ -107,6 +108,8 @@ static HWND hWin;
 static CRITICAL_SECTION critical;
 static GSocket* socketList[MAXSOCKETS];
 static int firstAvailable;
+static WSAAsyncSelectFunc gs_WSAAsyncSelect = NULL;
+static HMODULE gs_wsock32dll = 0;
 
 /* Global initializers */
 
@@ -129,6 +132,17 @@ int _GSocket_GUI_Init(void)
   }
   firstAvailable = 0;
 
+  /* Load WSAAsyncSelect from wsock32.dll (we don't link against it
+     statically to avoid dependency on wsock32.dll for apps that don't use
+     sockets): */
+  gs_wsock32dll = LoadLibraryA("wsock32.dll");
+  if (!gs_wsock32dll)
+      return FALSE;
+  gs_WSAAsyncSelect =(WSAAsyncSelectFunc)GetProcAddress(gs_wsock32dll,
+                                                        "WSAAsyncSelect");
+  if (!gs_WSAAsyncSelect)
+      return FALSE;
+
   return TRUE;
 }
 
@@ -137,6 +151,13 @@ void _GSocket_GUI_Cleanup(void)
   /* Destroy internal window */
   DestroyWindow(hWin);
   UnregisterClass(CLASSNAME, INSTANCE);
+
+  /* Unlock wsock32.dll */
+  if (gs_wsock32dll)
+  {
+      FreeLibrary(gs_wsock32dll);
+      gs_wsock32dll = 0;
+  }
 
   /* Delete critical section */
   DeleteCriticalSection(&critical);
@@ -267,7 +288,7 @@ void _GSocket_Enable_Events(GSocket *socket)
     long lEvent = socket->m_server?
                   FD_ACCEPT : (FD_READ | FD_WRITE | FD_CONNECT | FD_CLOSE);
 
-    WSAAsyncSelect(socket->m_fd, hWin, socket->m_msgnumber, lEvent);
+    gs_WSAAsyncSelect(socket->m_fd, hWin, socket->m_msgnumber, lEvent);
   }
 }
 
@@ -280,7 +301,7 @@ void _GSocket_Disable_Events(GSocket *socket)
 
   if (socket->m_fd != INVALID_SOCKET)
   {
-    WSAAsyncSelect(socket->m_fd, hWin, socket->m_msgnumber, 0);
+    gs_WSAAsyncSelect(socket->m_fd, hWin, socket->m_msgnumber, 0);
   }
 }
 
