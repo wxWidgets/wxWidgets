@@ -545,6 +545,11 @@ class xxxSpinCtrl(xxxObject):
     paramDict = {'value': ParamInt}
     winStyles = ['wxSP_HORIZONTAL', 'wxSP_VERTICAL', 'wxSP_ARROW_KEYS', 'wxSP_WRAP']
 
+class xxxToggleButton(xxxObject):
+    allParams = ['label', 'checked', 'pos', 'size', 'style']
+    paramDict = {'checked': ParamBool}
+    required = ['label']
+
 ################################################################################
 # Boxes
 
@@ -562,6 +567,8 @@ class xxxRadioBox(xxxObject):
 class xxxCheckBox(xxxObject):
     allParams = ['label', 'checked', 'pos', 'size', 'style']
     paramDict = {'checked': ParamBool}
+    winStyles = ['wxCHK_2STATE', 'wxCHK_3STATE', 'wxCHK_ALLOW_3RD_STATE_FOR_USER',
+                 'wxALIGN_RIGHT']
     required = ['label']
 
 class xxxComboBox(xxxObject):
@@ -773,6 +780,7 @@ xxxDict = {
     'wxBitmapButton': xxxBitmapButton,
     'wxRadioButton': xxxRadioButton,
     'wxSpinButton': xxxSpinButton,
+    'wxToggleButton' : xxxToggleButton,
 
     'wxStaticBox': xxxStaticBox,
     'wxStaticBitmap': xxxStaticBitmap,

@@ -56,6 +56,7 @@ class ID_NEW:
     BITMAP_BUTTON = wxNewId()
     RADIO_BUTTON = wxNewId()
     SPIN_BUTTON = wxNewId()
+    TOGGLE_BUTTON = wxNewId()
 
     STATIC_BOX = wxNewId()
     CHECK_BOX = wxNewId()
@@ -130,6 +131,7 @@ class PullDownMenu:
             ID_NEW.BITMAP_BUTTON: 'wxBitmapButton',
             ID_NEW.RADIO_BUTTON: 'wxRadioButton',
             ID_NEW.SPIN_BUTTON: 'wxSpinButton',
+            ID_NEW.TOGGLE_BUTTON: 'wxToggleButton',
 
             ID_NEW.STATIC_BOX: 'wxStaticBox',
             ID_NEW.CHECK_BOX: 'wxCheckBox',
@@ -213,6 +215,7 @@ class PullDownMenu:
              (ID_NEW.BITMAP_BUTTON, 'BitmapButton', 'Create bitmap button'),
              (ID_NEW.RADIO_BUTTON, 'RadioButton', 'Create radio button'),
              (ID_NEW.SPIN_BUTTON, 'SpinButton', 'Create spin button'),
+             (ID_NEW.TOGGLE_BUTTON, 'ToggleButton', 'Create toggle button'),
              ],
             ['box', 'Boxes',
              (ID_NEW.STATIC_BOX, 'StaticBox', 'Create static box'),
