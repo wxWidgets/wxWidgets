@@ -1348,6 +1348,7 @@ COND_PLATFORM_WIN32_1_BASE_PLATFORM_HDR =  \
 	wx/msw/stackwalk.h \
 	wx/msw/winundef.h \
 	wx/msw/wrapcctl.h \
+	wx/msw/wrapcdlg.h \
 	wx/msw/wrapwin.h \
 	$(BASE_WINCE_HDR)
 @COND_PLATFORM_WIN32_1@BASE_PLATFORM_HDR = $(COND_PLATFORM_WIN32_1_BASE_PLATFORM_HDR)

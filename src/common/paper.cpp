@@ -38,13 +38,10 @@
 #include <string.h>
 
 #ifdef __WXMSW__
-#include "wx/msw/wrapwin.h"
-#include <commdlg.h>
-
-#ifndef __WIN32__
-#include <print.h>
-#endif
-
+    #include "wx/msw/wrapcdlg.h"
+    #ifndef __WIN32__
+        #include <print.h>
+    #endif
 #endif
  // End __WXMSW__
 

@@ -276,6 +276,7 @@ wx/msw/mimetype.h
 wx/msw/stackwalk.h
 wx/msw/winundef.h
 wx/msw/wrapcctl.h
+wx/msw/wrapcdlg.h
 wx/msw/wrapwin.h
 wx/fs_inet.h
 wx/gsocket.h

@@ -59,9 +59,7 @@
 #endif
 
 #ifdef __WXMSW__
-    #include "wx/msw/private.h"
-    #include <commdlg.h>
-
+    #include "wx/msw/wrapcdlg.h"
     #ifndef __WIN32__
         #include <print.h>
     #endif

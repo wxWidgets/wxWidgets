@@ -1053,6 +1053,10 @@ SOURCE=..\..\include\wx\msw\wrapcctl.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\msw\wrapcdlg.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\msw\wrapwin.h
 # End Source File
 # End Group

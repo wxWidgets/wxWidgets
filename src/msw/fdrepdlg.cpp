@@ -35,12 +35,7 @@
     #include "wx/log.h"
 #endif
 
-#include "wx/msw/private.h"
-
-#if !defined(__WIN32__) || defined(__WXWINCE__)
-    #include <commdlg.h>
-#endif
-
+#include "wx/msw/wrapcdlg.h"
 #include "wx/fdrepdlg.h"
 
 // ----------------------------------------------------------------------------

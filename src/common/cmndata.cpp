@@ -50,17 +50,7 @@
 #endif // wxUSE_PRINTING_ARCHITECTURE
 
 #if defined(__WXMSW__)
-    #include <windowsx.h>
-    #include "wx/msw/private.h"
-
-    #ifndef __SMARTPHONE__ /* of WinCE */
-        #include <commdlg.h>
-    #endif
-
-    #if defined(__WATCOMC__) || defined(__SYMANTEC__) || defined(__SALFORDC__)
-        #include <windowsx.h>
-        #include <commdlg.h>
-    #endif
+    #include "wx/msw/wrapcdlg.h"
 #endif // MSW
 
     #if wxUSE_PRINTING_ARCHITECTURE
@@ -187,7 +177,7 @@ wxPrintData::wxPrintData()
 
     m_privData = NULL;
     m_privDataLen = 0;
-    
+
     m_nativeData = wxPrintFactory::GetFactory()->CreatePrintNativeData();
 }
 
@@ -218,7 +208,7 @@ wxPrintData::~wxPrintData()
     m_nativeData->m_ref--;
     if (m_nativeData->m_ref == 0)
         delete m_nativeData;
-        
+
     if (m_privData)
         delete [] m_privData;
 

@@ -44,9 +44,7 @@
 
 #include <stdlib.h>
 
-#include "wx/msw/private.h"
-
-#include <commdlg.h>
+#include "wx/msw/wrapcdlg.h"
 
 #ifndef __WIN32__
     #include <print.h>
@@ -302,7 +300,7 @@ bool wxWindowsPrintNativeData::TransferTo( wxPrintData &data )
             wxString printerName = (LPTSTR)lpDevNames + lpDevNames->wDeviceOffset;
 
             // Not sure if we should check for this mismatch
-//            wxASSERT_MSG( (m_printerName == "" || (devName == m_printerName)), "Printer name obtained from DEVMODE and DEVNAMES were different!");
+//            wxASSERT_MSG( (m_printerName.empty() || (devName == m_printerName)), "Printer name obtained from DEVMODE and DEVNAMES were different!");
 
             if (!printerName.empty())
                 data.SetPrinterName( printerName );

@@ -48,10 +48,7 @@
 #include "wx/colordlg.h"
 #include "wx/cmndata.h"
 #include "wx/math.h"
-
-#if !defined(__WIN32__) || defined(__WXWINCE__)
-    #include <commdlg.h>
-#endif
+#include "wx/msw/wrapcdlg.h"
 
 #include <stdlib.h>
 #include <string.h>

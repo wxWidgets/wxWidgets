@@ -41,9 +41,6 @@
     #include "wx/icon.h"
 #endif
 
-#include "wx/msw/private.h" // needs to be before #include <commdlg.h>
-#include "wx/msw/missing.h" // needs to be before #include <commdlg.h>
-
 #include "wx/sysopt.h"
 #include "wx/dcprint.h"
 #include "wx/module.h"
@@ -55,10 +52,7 @@
 
 #include <string.h>
 
-#if wxUSE_COMMON_DIALOGS && !defined(__WXMICROWIN__)
-    #include <commdlg.h>
-#endif
-
+#include "wx/msw/wrapcdlg.h"
 #ifndef __WIN32__
     #include <print.h>
 #endif

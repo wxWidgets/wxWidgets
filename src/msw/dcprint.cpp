@@ -48,10 +48,7 @@
 #include "wx/msw/printdlg.h"
 #include "wx/math.h"
 
-#if wxUSE_COMMON_DIALOGS
-    #include <commdlg.h>
-#endif
-
+#include "wx/msw/wrapcdlg.h"
 #ifndef __WIN32__
     #include <print.h>
 #endif

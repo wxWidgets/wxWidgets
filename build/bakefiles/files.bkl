@@ -116,6 +116,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/stackwalk.h
     wx/msw/winundef.h
     wx/msw/wrapcctl.h
+    wx/msw/wrapcdlg.h
     wx/msw/wrapwin.h
 </set>
 <set var="BASE_WINCE_HDR" hints="files">

@@ -43,9 +43,7 @@
 #include "wx/evtloop.h"
 #include "wx/ptr_scpd.h"
 
-#if wxUSE_COMMON_DIALOGS && !defined(__WXMICROWIN__)
-    #include <commdlg.h>
-#endif
+#include "wx/msw/wrapcdlg.h"
 
 #if defined(__SMARTPHONE__) && defined(__WXWINCE__)
     #include "wx/msw/wince/resources.h"
@@ -463,7 +461,7 @@ bool wxDialog::DoOK()
         event.SetEventObject(this);
 
         return GetEventHandler()->ProcessEvent(event);
-    }    
+    }
 }
 #endif
 
@@ -484,7 +482,7 @@ wxToolBar *wxDialog::OnCreateToolBar(long style,
     return new wxToolMenuBar(this, winid,
                          wxDefaultPosition, wxDefaultSize,
                          style, name);
-}                                        
+}
 #endif
 
 // ---------------------------------------------------------------------------
