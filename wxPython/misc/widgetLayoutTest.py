@@ -9,6 +9,10 @@ import wx
 import sys
 import os
 
+# stuff for debugging
+print "wx.VERSION_STRING = ", wx.VERSION_STRING
+print "pid:", os.getpid()
+#raw_input("Press Enter...")
 
 class LayoutTestFrame(wx.Frame):
     def __init__(self):
@@ -310,20 +314,6 @@ class LayoutTestFrame(wx.Frame):
 
         self.infoPane.Update(w, testPanel)
         
-        if False:
-            print 'w size', w.GetSize()
-            print 'w minsize', w.GetMinSize()
-            print 'w bestsize', w.GetBestSize()
-            print 'w abstsize', w.GetAdjustedBestSize()
-
-            tp = self.testPanel
-            #print tp.GetSizer()
-            print 'tp size', tp.GetSize()
-            print 'tp minsize', tp.GetMinSize()
-            print 'tp bestsize', tp.GetBestSize()
-            print 'tp abstsize', tp.GetAdjustedBestSize()
-
-
 
     def OnDestroyWidget(self, evt):
         self.testWidget.Destroy()
@@ -341,7 +331,6 @@ class LayoutTestFrame(wx.Frame):
 
         self.infoPane.Clear()
         
-
 
     def OnClear(self, evt):
         self.moduleName.SetValue("")
@@ -490,6 +479,9 @@ class ColourInfoPanel(wx.Panel):
         self._fgtxt.SetValue( clr2hex(win.GetForegroundColour(), self._fgclr) )
         self._bgtxt.SetValue( clr2hex(win.GetBackgroundColour(), self._bgclr) )
 
+##         f = win.GetFont()
+##         print f.GetNativeFontInfo().ToString()
+        
 
     def Clear(self):
         self._fgtxt.SetValue("")
