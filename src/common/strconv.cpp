@@ -454,7 +454,11 @@ size_t wxCSConv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
     }
     return n;
   }
+#if defined(__BORLANDC__) && (__BORLANDC__ > 0x530)
+  return std::wcslen(psz);
+#else
   return ::wcslen(psz);
+#endif
 }
 
 #endif
