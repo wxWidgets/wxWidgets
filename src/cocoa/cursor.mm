@@ -13,8 +13,11 @@
 #pragma implementation "cursor.h"
 #endif
 
-#include "wx/cursor.h"
-#include "wx/icon.h"
+#include "wx/wxprec.h"
+#ifndef WX_PRECOMP
+    #include "wx/icon.h"
+    #include "wx/cursor.h"
+#endif //WX_PRECOMP
 
 #if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxCursor, wxBitmap)

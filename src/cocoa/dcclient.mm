@@ -9,9 +9,12 @@
 // Licence:   	wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/dcclient.h"
-#include "wx/window.h"
-#include "wx/log.h"
+#include "wx/wxprec.h"
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+    #include "wx/window.h"
+    #include "wx/dcclient.h"
+#endif //WX_PRECOMP
 
 #import <AppKit/NSView.h>
 #import <AppKit/NSAffineTransform.h>

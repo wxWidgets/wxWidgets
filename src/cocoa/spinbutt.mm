@@ -9,10 +9,12 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/setup.h"
+#include "wx/wxprec.h"
 #if wxUSE_SPINBTN
 
-#include "wx/app.h"
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif //WX_PRECOMP
 #include "wx/spinbutt.h"
 
 #import <AppKit/NSStepper.h>

@@ -9,11 +9,13 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/setup.h"
+#include "wx/wxprec.h"
 #if wxUSE_GAUGE
 
-#include "wx/app.h"
-#include "wx/gauge.h"
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+    #include "wx/gauge.h"
+#endif //WX_PRECOMP
 
 #import <AppKit/NSProgressIndicator.h>
 

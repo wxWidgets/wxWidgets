@@ -9,9 +9,11 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/setup.h"
-#include "wx/utils.h"
-#include "wx/brush.h"
+#include "wx/wxprec.h"
+#ifndef WX_PRECOMP
+    #include "wx/utils.h"
+    #include "wx/brush.h"
+#endif //WX_PRECOMP
 #include "wx/colour.h"
 
 #import <AppKit/NSColor.h>

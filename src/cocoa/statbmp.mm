@@ -9,8 +9,11 @@
 // Licence:   	wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/app.h"
-#include "wx/statbmp.h"
+#include "wx/wxprec.h"
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+    #include "wx/statbmp.h"
+#endif //WX_PRECOMP
 
 #import <AppKit/NSView.h>
 

@@ -9,9 +9,12 @@
 // Licence:   	wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/app.h"
-#include "wx/checklst.h"
-#include "wx/log.h"
+#include "wx/wxprec.h"
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+    #include "wx/app.h"
+    #include "wx/checklst.h"
+#endif //WX_PRECOMP
 
 IMPLEMENT_DYNAMIC_CLASS(wxCheckListBox, wxListBox)
 BEGIN_EVENT_TABLE(wxCheckListBox, wxCheckListBoxBase)

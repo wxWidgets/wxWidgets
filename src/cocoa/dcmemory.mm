@@ -9,8 +9,11 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/dcmemory.h"
-#include "wx/log.h"
+#include "wx/wxprec.h"
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+    #include "wx/dcmemory.h"
+#endif //WX_PRECOMP
 
 #import <AppKit/NSImage.h>
 #import <AppKit/NSAffineTransform.h>

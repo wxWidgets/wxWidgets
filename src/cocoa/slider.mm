@@ -9,11 +9,13 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/setup.h"
+#include "wx/wxprec.h"
 #if wxUSE_SLIDER
 
-#include "wx/app.h"
-#include "wx/slider.h"
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+    #include "wx/slider.h"
+#endif //WX_PRECOMP
 
 #import <AppKit/NSView.h>
 

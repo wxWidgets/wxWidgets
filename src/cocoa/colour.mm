@@ -9,12 +9,16 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#import <AppKit/NSColor.h>
+#include "wx/wxprec.h"
+#ifndef WX_PRECOMP
+#endif //WX_PRECOMP
 
 #include "wx/gdicmn.h"
 #include "wx/colour.h"
 
 #include "wx/cocoa/autorelease.h"
+
+#import <AppKit/NSColor.h>
 
 IMPLEMENT_DYNAMIC_CLASS(wxColour, wxObject)
 

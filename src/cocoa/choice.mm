@@ -9,9 +9,12 @@
 // Licence:   	wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/app.h"
-#include "wx/choice.h"
-#include "wx/log.h"
+#include "wx/wxprec.h"
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+    #include "wx/app.h"
+    #include "wx/choice.h"
+#endif //WX_PRECOMP
 
 #import <AppKit/NSPopUpButton.h>
 

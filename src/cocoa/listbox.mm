@@ -9,9 +9,12 @@
 // Licence:   	wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/app.h"
-#include "wx/listbox.h"
-#include "wx/log.h"
+#include "wx/wxprec.h"
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+    #include "wx/app.h"
+    #include "wx/listbox.h"
+#endif //WX_PRECOMP
 
 #include "wx/cocoa/string.h"
 #include "wx/cocoa/NSTableDataSource.h"

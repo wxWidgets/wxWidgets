@@ -9,7 +9,10 @@
 // Licence:   	wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/dcscreen.h"
+#include "wx/wxprec.h"
+#ifndef WX_PRECOMP
+    #include "wx/dcscreen.h"
+#endif //WX_PRECOMP
 
 //-----------------------------------------------------------------------------
 // wxMemoryDC

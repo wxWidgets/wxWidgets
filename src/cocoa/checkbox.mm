@@ -9,9 +9,12 @@
 // Licence:   	wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/app.h"
-#include "wx/checkbox.h"
-#include "wx/log.h"
+#include "wx/wxprec.h"
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+    #include "wx/app.h"
+    #include "wx/checkbox.h"
+#endif //WX_PRECOMP
 
 #include "wx/cocoa/autorelease.h"
 

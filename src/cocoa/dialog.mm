@@ -9,10 +9,13 @@
 // Licence:   	wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/dialog.h"
-#include "wx/app.h"
-#include "wx/settings.h"
-#include "wx/log.h"
+#include "wx/wxprec.h"
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+    #include "wx/app.h"
+    #include "wx/dialog.h"
+    #include "wx/settings.h"
+#endif //WX_PRECOMP
 
 #include "wx/cocoa/autorelease.h"
 

@@ -9,7 +9,10 @@
 // Licence:   	wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/app.h"
+#include "wx/wxprec.h"
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+#endif //WX_PRECOMP
 #include "wx/statline.h"
 
 #import <AppKit/NSBox.h>

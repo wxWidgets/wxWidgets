@@ -9,8 +9,10 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/setup.h"
-#include "wx/pen.h"
+#include "wx/wxprec.h"
+#ifndef WX_PRECOMP
+    #include "wx/pen.h"
+#endif //WX_PRECOMP
 #include "wx/bitmap.h"
 #include "wx/colour.h"
 

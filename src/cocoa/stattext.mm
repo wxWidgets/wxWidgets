@@ -9,8 +9,11 @@
 // Licence:   	wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/app.h"
-#include "wx/stattext.h"
+#include "wx/wxprec.h"
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+    #include "wx/stattext.h"
+#endif //WX_PRECOMP
 
 #include "wx/cocoa/autorelease.h"
 

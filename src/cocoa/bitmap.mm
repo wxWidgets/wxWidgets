@@ -9,12 +9,14 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/setup.h"
-#include "wx/utils.h"
-#include "wx/palette.h"
+#include "wx/wxprec.h"
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+    #include "wx/utils.h"
+    #include "wx/palette.h"
+    #include "wx/icon.h"
+#endif //WX_PRECOMP
 #include "wx/bitmap.h"
-#include "wx/icon.h"
-#include "wx/log.h"
 #include "wx/image.h"
 #include "wx/xpmdecod.h"
 
