@@ -301,27 +301,26 @@ for n in range(20):
 
     static const WeekDateTestData weekDatesTestData[] =
     {
-        { { 20, wxDateTime::Mar, 2045 },  3, wxDateTime::Mon, wxDateTime::Mar, 2045 },
-        { {  5, wxDateTime::Jun, 1985 }, -4, wxDateTime::Wed, wxDateTime::Jun, 1985 },
-        { { 12, wxDateTime::Nov, 1961 }, -3, wxDateTime::Sun, wxDateTime::Nov, 1961 },
-        { { 27, wxDateTime::Feb, 2093 }, -1, wxDateTime::Fri, wxDateTime::Feb, 2093 },
-        { {  4, wxDateTime::Jul, 2070 }, -4, wxDateTime::Fri, wxDateTime::Jul, 2070 },
-        { {  2, wxDateTime::Apr, 1906 }, -5, wxDateTime::Mon, wxDateTime::Apr, 1906 },
-        { { 19, wxDateTime::Jul, 2023 }, -2, wxDateTime::Wed, wxDateTime::Jul, 2023 },
-        { {  5, wxDateTime::May, 1958 }, -4, wxDateTime::Mon, wxDateTime::May, 1958 },
-        { { 11, wxDateTime::Aug, 1900 },  2, wxDateTime::Sat, wxDateTime::Aug, 1900 },
-        { { 14, wxDateTime::Feb, 1945 },  2, wxDateTime::Wed, wxDateTime::Feb, 1945 },
-        { { 25, wxDateTime::Jul, 1967 }, -1, wxDateTime::Tue, wxDateTime::Jul, 1967 },
-        { {  9, wxDateTime::May, 1916 }, -4, wxDateTime::Tue, wxDateTime::May, 1916 },
-        { { 20, wxDateTime::Jun, 1927 },  3, wxDateTime::Mon, wxDateTime::Jun, 1927 },
-        { {  2, wxDateTime::Aug, 2000 },  1, wxDateTime::Wed, wxDateTime::Aug, 2000 },
-        { { 20, wxDateTime::Apr, 2044 },  3, wxDateTime::Wed, wxDateTime::Apr, 2044 },
-        { { 20, wxDateTime::Feb, 1932 }, -2, wxDateTime::Sat, wxDateTime::Feb, 1932 },
-        { { 25, wxDateTime::Jul, 2069 },  4, wxDateTime::Thu, wxDateTime::Jul, 2069 },
-        { {  3, wxDateTime::Apr, 1925 },  1, wxDateTime::Fri, wxDateTime::Apr, 1925 },
-        { { 21, wxDateTime::Mar, 2093 },  3, wxDateTime::Sat, wxDateTime::Mar, 2093 },
-        { {  3, wxDateTime::Dec, 2074 }, -5, wxDateTime::Mon, wxDateTime::Dec, 2074 },
-
+        { { 20, wxDateTime::Mar, 2045, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },  3, wxDateTime::Mon, wxDateTime::Mar, 2045 },
+        { {  5, wxDateTime::Jun, 1985, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 }, -4, wxDateTime::Wed, wxDateTime::Jun, 1985 },
+        { { 12, wxDateTime::Nov, 1961, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 }, -3, wxDateTime::Sun, wxDateTime::Nov, 1961 },
+        { { 27, wxDateTime::Feb, 2093, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 }, -1, wxDateTime::Fri, wxDateTime::Feb, 2093 },
+        { {  4, wxDateTime::Jul, 2070, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 }, -4, wxDateTime::Fri, wxDateTime::Jul, 2070 },
+        { {  2, wxDateTime::Apr, 1906, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 }, -5, wxDateTime::Mon, wxDateTime::Apr, 1906 },
+        { { 19, wxDateTime::Jul, 2023, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 }, -2, wxDateTime::Wed, wxDateTime::Jul, 2023 },
+        { {  5, wxDateTime::May, 1958, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 }, -4, wxDateTime::Mon, wxDateTime::May, 1958 },
+        { { 11, wxDateTime::Aug, 1900, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },  2, wxDateTime::Sat, wxDateTime::Aug, 1900 },
+        { { 14, wxDateTime::Feb, 1945, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },  2, wxDateTime::Wed, wxDateTime::Feb, 1945 },
+        { { 25, wxDateTime::Jul, 1967, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 }, -1, wxDateTime::Tue, wxDateTime::Jul, 1967 },
+        { {  9, wxDateTime::May, 1916, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 }, -4, wxDateTime::Tue, wxDateTime::May, 1916 },
+        { { 20, wxDateTime::Jun, 1927, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },  3, wxDateTime::Mon, wxDateTime::Jun, 1927 },
+        { {  2, wxDateTime::Aug, 2000, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },  1, wxDateTime::Wed, wxDateTime::Aug, 2000 },
+        { { 20, wxDateTime::Apr, 2044, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },  3, wxDateTime::Wed, wxDateTime::Apr, 2044 },
+        { { 20, wxDateTime::Feb, 1932, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 }, -2, wxDateTime::Sat, wxDateTime::Feb, 1932 },
+        { { 25, wxDateTime::Jul, 2069, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },  4, wxDateTime::Thu, wxDateTime::Jul, 2069 },
+        { {  3, wxDateTime::Apr, 1925, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },  1, wxDateTime::Fri, wxDateTime::Apr, 1925 },
+        { { 21, wxDateTime::Mar, 2093, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },  3, wxDateTime::Sat, wxDateTime::Mar, 2093 },
+        { {  3, wxDateTime::Dec, 2074, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 }, -5, wxDateTime::Mon, wxDateTime::Dec, 2074 }
     };
 
     wxDateTime dt;
@@ -404,28 +403,28 @@ for n in range(20):
     */
     static const WeekNumberTestData weekNumberTestDates[] =
     {
-        { { 27, wxDateTime::Dec, 1966 }, 52, 5, 5, 361 },
-        { { 22, wxDateTime::Jul, 1926 }, 29, 4, 4, 203 },
-        { { 22, wxDateTime::Oct, 2076 }, 43, 4, 4, 296 },
-        { {  1, wxDateTime::Jul, 1967 }, 26, 1, 1, 182 },
-        { {  8, wxDateTime::Nov, 2004 }, 46, 2, 2, 313 },
-        { { 21, wxDateTime::Mar, 1920 }, 12, 3, 4,  81 },
-        { {  7, wxDateTime::Jan, 1965 },  1, 2, 2,   7 },
-        { { 19, wxDateTime::Oct, 1999 }, 42, 4, 4, 292 },
-        { { 13, wxDateTime::Aug, 1955 }, 32, 2, 2, 225 },
-        { { 18, wxDateTime::Jul, 2087 }, 29, 3, 3, 199 },
-        { {  2, wxDateTime::Sep, 2028 }, 35, 1, 1, 246 },
-        { { 28, wxDateTime::Jul, 1945 }, 30, 5, 4, 209 },
-        { { 15, wxDateTime::Jun, 1901 }, 24, 3, 3, 166 },
-        { { 10, wxDateTime::Oct, 1939 }, 41, 3, 2, 283 },
-        { {  3, wxDateTime::Dec, 1965 }, 48, 1, 1, 337 },
-        { { 23, wxDateTime::Feb, 1940 },  8, 4, 4,  54 },
-        { {  2, wxDateTime::Jan, 1987 },  1, 1, 1,   2 },
-        { { 11, wxDateTime::Aug, 2079 }, 32, 2, 2, 223 },
-        { {  2, wxDateTime::Feb, 2063 },  5, 1, 1,  33 },
-        { { 16, wxDateTime::Oct, 1942 }, 42, 3, 3, 289 },
-        { { 30, wxDateTime::Dec, 2003 },  1, 5, 5, 364 },
-        { {  2, wxDateTime::Jan, 2004 },  1, 1, 1,   2 },
+        { { 27, wxDateTime::Dec, 1966, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 }, 52, 5, 5, 361 },
+        { { 22, wxDateTime::Jul, 1926, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 }, 29, 4, 4, 203 },
+        { { 22, wxDateTime::Oct, 2076, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 }, 43, 4, 4, 296 },
+        { {  1, wxDateTime::Jul, 1967, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 }, 26, 1, 1, 182 },
+        { {  8, wxDateTime::Nov, 2004, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 }, 46, 2, 2, 313 },
+        { { 21, wxDateTime::Mar, 1920, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 }, 12, 3, 4,  81 },
+        { {  7, wxDateTime::Jan, 1965, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },  1, 2, 2,   7 },
+        { { 19, wxDateTime::Oct, 1999, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 }, 42, 4, 4, 292 },
+        { { 13, wxDateTime::Aug, 1955, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 }, 32, 2, 2, 225 },
+        { { 18, wxDateTime::Jul, 2087, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 }, 29, 3, 3, 199 },
+        { {  2, wxDateTime::Sep, 2028, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 }, 35, 1, 1, 246 },
+        { { 28, wxDateTime::Jul, 1945, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 }, 30, 5, 4, 209 },
+        { { 15, wxDateTime::Jun, 1901, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 }, 24, 3, 3, 166 },
+        { { 10, wxDateTime::Oct, 1939, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 }, 41, 3, 2, 283 },
+        { {  3, wxDateTime::Dec, 1965, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 }, 48, 1, 1, 337 },
+        { { 23, wxDateTime::Feb, 1940, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },  8, 4, 4,  54 },
+        { {  2, wxDateTime::Jan, 1987, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },  1, 1, 1,   2 },
+        { { 11, wxDateTime::Aug, 2079, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 }, 32, 2, 2, 223 },
+        { {  2, wxDateTime::Feb, 2063, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },  5, 1, 1,  33 },
+        { { 16, wxDateTime::Oct, 1942, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 }, 42, 3, 3, 289 },
+        { { 30, wxDateTime::Dec, 2003, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },  1, 5, 5, 364 },
+        { {  2, wxDateTime::Jan, 2004, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },  1, 1, 1,   2 },
     };
 
     for ( size_t n = 0; n < WXSIZEOF(weekNumberTestDates); n++ )
@@ -466,38 +465,38 @@ void DateTimeTestCase::TestTimeDST()
     static const Date datesDST[2][2004 - 1900 + 1] =
     {
         {
-            { 1, wxDateTime::Apr, 1990 },
-            { 7, wxDateTime::Apr, 1991 },
-            { 5, wxDateTime::Apr, 1992 },
-            { 4, wxDateTime::Apr, 1993 },
-            { 3, wxDateTime::Apr, 1994 },
-            { 2, wxDateTime::Apr, 1995 },
-            { 7, wxDateTime::Apr, 1996 },
-            { 6, wxDateTime::Apr, 1997 },
-            { 5, wxDateTime::Apr, 1998 },
-            { 4, wxDateTime::Apr, 1999 },
-            { 2, wxDateTime::Apr, 2000 },
-            { 1, wxDateTime::Apr, 2001 },
-            { 7, wxDateTime::Apr, 2002 },
-            { 6, wxDateTime::Apr, 2003 },
-            { 4, wxDateTime::Apr, 2004 },
+            { 1, wxDateTime::Apr, 1990, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },
+            { 7, wxDateTime::Apr, 1991, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },
+            { 5, wxDateTime::Apr, 1992, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },
+            { 4, wxDateTime::Apr, 1993, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },
+            { 3, wxDateTime::Apr, 1994, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },
+            { 2, wxDateTime::Apr, 1995, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },
+            { 7, wxDateTime::Apr, 1996, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },
+            { 6, wxDateTime::Apr, 1997, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },
+            { 5, wxDateTime::Apr, 1998, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },
+            { 4, wxDateTime::Apr, 1999, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },
+            { 2, wxDateTime::Apr, 2000, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },
+            { 1, wxDateTime::Apr, 2001, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },
+            { 7, wxDateTime::Apr, 2002, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },
+            { 6, wxDateTime::Apr, 2003, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },
+            { 4, wxDateTime::Apr, 2004, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },
         },
         {
-            { 28, wxDateTime::Oct, 1990 },
-            { 27, wxDateTime::Oct, 1991 },
-            { 25, wxDateTime::Oct, 1992 },
-            { 31, wxDateTime::Oct, 1993 },
-            { 30, wxDateTime::Oct, 1994 },
-            { 29, wxDateTime::Oct, 1995 },
-            { 27, wxDateTime::Oct, 1996 },
-            { 26, wxDateTime::Oct, 1997 },
-            { 25, wxDateTime::Oct, 1998 },
-            { 31, wxDateTime::Oct, 1999 },
-            { 29, wxDateTime::Oct, 2000 },
-            { 28, wxDateTime::Oct, 2001 },
-            { 27, wxDateTime::Oct, 2002 },
-            { 26, wxDateTime::Oct, 2003 },
-            { 31, wxDateTime::Oct, 2004 },
+            { 28, wxDateTime::Oct, 1990, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },
+            { 27, wxDateTime::Oct, 1991, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },
+            { 25, wxDateTime::Oct, 1992, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },
+            { 31, wxDateTime::Oct, 1993, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },
+            { 30, wxDateTime::Oct, 1994, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },
+            { 29, wxDateTime::Oct, 1995, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },
+            { 27, wxDateTime::Oct, 1996, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },
+            { 26, wxDateTime::Oct, 1997, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },
+            { 25, wxDateTime::Oct, 1998, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },
+            { 31, wxDateTime::Oct, 1999, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },
+            { 29, wxDateTime::Oct, 2000, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },
+            { 28, wxDateTime::Oct, 2001, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },
+            { 27, wxDateTime::Oct, 2002, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },
+            { 26, wxDateTime::Oct, 2003, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },
+            { 31, wxDateTime::Oct, 2004, 0, 0, 0, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },
         }
     };
 
@@ -544,14 +543,14 @@ void DateTimeTestCase::TestTimeFormat()
 
     static const Date formatTestDates[] =
     {
-        { 29, wxDateTime::May, 1976, 18, 30, 00 },
-        { 31, wxDateTime::Dec, 1999, 23, 30, 00 },
+        { 29, wxDateTime::May, 1976, 18, 30, 00, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },
+        { 31, wxDateTime::Dec, 1999, 23, 30, 00, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },
 #if 0
         // this test can't work for other centuries because it uses two digit
         // years in formats, so don't even try it
-        { 29, wxDateTime::May, 2076, 18, 30, 00 },
-        { 29, wxDateTime::Feb, 2400, 02, 15, 25 },
-        { 01, wxDateTime::Jan,  -52, 03, 16, 47 },
+        { 29, wxDateTime::May, 2076, 18, 30, 00, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },
+        { 29, wxDateTime::Feb, 2400, 02, 15, 25, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },
+        { 01, wxDateTime::Jan,  -52, 03, 16, 47, 0.0, wxDateTime::Inv_WeekDay, 0, 0 },
 #endif
     };
 
@@ -629,8 +628,8 @@ void DateTimeTestCase::TestTimeParse()
         bool good;
     } parseTestDates[] =
     {
-        { _T("Sat, 18 Dec 1999 00:46:40 +0100"), { 18, wxDateTime::Dec, 1999, 00, 46, 40 }, true },
-        { _T("Wed, 1 Dec 1999 05:17:20 +0300"),  {  1, wxDateTime::Dec, 1999, 03, 17, 20 }, true },
+        { _T("Sat, 18 Dec 1999 00:46:40 +0100"), { 18, wxDateTime::Dec, 1999, 00, 46, 40, 0.0, wxDateTime::Inv_WeekDay, 0, 0 }, true },
+        { _T("Wed, 1 Dec 1999 05:17:20 +0300"),  {  1, wxDateTime::Dec, 1999, 03, 17, 20, 0.0, wxDateTime::Inv_WeekDay, 0, 0 }, true },
     };
 
     for ( size_t n = 0; n < WXSIZEOF(parseTestDates); n++ )
