@@ -57,8 +57,8 @@ class WXDLLEXPORT wxPoint;
 // ----------------------------------------------------------------------------
 
 // Useful buffer (FIXME VZ: To be removed!!!)
-// Now only needed in Mac and MSW ports
-#if !defined(__WXMOTIF__) && !defined(__WXGTK__) && !defined(__WXX11__) && !defined(__WXMGL__)
+// Now only needed in MSW port
+#if !defined(__WXMOTIF__) && !defined(__WXGTK__) && !defined(__WXX11__) && !defined(__WXMGL__) && !defined(__WXMAC__)
 WXDLLEXPORT_DATA(extern wxChar*) wxBuffer;
 #endif
 
