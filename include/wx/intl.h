@@ -535,7 +535,7 @@ inline const wxChar *wxGetTranslation(const wxChar *sz)
 // the macros should still be defined - otherwise compilation would fail
 
 #if !defined(WXINTL_NO_GETTEXT_MACRO) && !defined(_)
-    #define   _(str)  (str)
+    #define   _(str)  (_T(str))
 #endif
 
 #define wxTRANSLATE(str) _T(str)
