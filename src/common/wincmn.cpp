@@ -267,13 +267,11 @@ wxWindowBase::~wxWindowBase()
     wxASSERT_MSG( GetChildren().GetCount() == 0, wxT("children not destroyed") );
 
 #if wxUSE_CARET
-    if ( m_caret )
-        delete m_caret;
+    delete m_caret;
 #endif // wxUSE_CARET
 
 #if wxUSE_VALIDATORS
-    if ( m_windowValidator )
-        delete m_windowValidator;
+    delete m_windowValidator;
 #endif // wxUSE_VALIDATORS
 
 #if wxUSE_CONSTRAINTS
@@ -289,28 +287,23 @@ wxWindowBase::~wxWindowBase()
         delete m_constraints;
         m_constraints = NULL;
     }
-
 #endif // wxUSE_CONSTRAINTS
 
     if ( m_containingSizer )
         m_containingSizer->Detach( (wxWindow*)this );
 
-    if ( m_windowSizer )
-        delete m_windowSizer;
+    delete m_windowSizer;
 
 #if wxUSE_DRAG_AND_DROP
-    if ( m_dropTarget )
-        delete m_dropTarget;
+    delete m_dropTarget;
 #endif // wxUSE_DRAG_AND_DROP
 
 #if wxUSE_TOOLTIPS
-    if ( m_tooltip )
-        delete m_tooltip;
+    delete m_tooltip;
 #endif // wxUSE_TOOLTIPS
 
 #if wxUSE_ACCESSIBILITY
-    if ( m_accessible )
-        delete m_accessible;
+    delete m_accessible;
 #endif
 
     // reset the dangling pointer our parent window may keep to us
@@ -353,7 +346,8 @@ bool wxWindowBase::DestroyChildren()
         wxASSERT_MSG( child, wxT("children list contains empty nodes") );
 
         child->Show(FALSE);
-        delete child;
+
+        child->Destroy();
 
         wxASSERT_MSG( !GetChildren().Find(child),
                       wxT("child didn't remove itself using RemoveChild()") );
