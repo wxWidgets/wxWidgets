@@ -89,7 +89,7 @@ wxMenuItem::wxMenuItem(wxMenu *pParentMenu,
                        wxMenu *pSubMenu)
           : wxMenuItemBase(pParentMenu, id, text, strHelp, kind, pSubMenu)
 #if wxUSE_OWNER_DRAWN
-            , wxOwnerDrawn(text, kind == wxITEM_CHECK)
+            , wxOwnerDrawn(text, kind == wxITEM_CHECK, TRUE)
 #endif // owner drawn
 {
     Init();
