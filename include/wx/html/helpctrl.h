@@ -20,7 +20,7 @@
 
 #if wxUSE_HTML
 
-#include "helpfrm.h"
+#include "wx/html/helpfrm.h"
 
 class WXDLLEXPORT wxHtmlHelpController : public wxEvtHandler
 {

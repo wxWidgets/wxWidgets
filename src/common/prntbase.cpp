@@ -386,12 +386,12 @@ void wxPreviewControlBar::CreateButtons()
 
         m_zoomControl = new wxChoice(this, wxID_PREVIEW_ZOOM,
                                      wxPoint(x, y), wxSize(100, -1));
-				     
+				
         // Yes, this look stupid, but this is because gcc gives up otherwise.
         int n = WXSIZEOF(choices);
+// Someone is calling methods that do no exist in wxChoice!! So I'll just comment out for VA for now
         for ( int i = 0; i < n; i++ )
            m_zoomControl->Append(choices[i]);
-	
         SetZoomControl(m_printPreview->GetZoom());
     }
 
@@ -402,6 +402,7 @@ void wxPreviewControlBar::SetZoomControl(int zoom)
 {
     char buf[20];
     sprintf(buf, "%d%%", zoom);
+// Someone is calling methods that do no exist in wxChoice!! So I'll just comment out for VA for now
     if (m_zoomControl)
         m_zoomControl->SetStringSelection(buf);
 }

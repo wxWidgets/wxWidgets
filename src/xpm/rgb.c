@@ -193,10 +193,12 @@ xpmGetRgbName(xpmRgbName rgbn[], int rgbn_max, int red, int green, int blue)
     i = 0;
     while (i < numTheRGBRecords) {
 	rgbVal = theRGBRecords[i].rgb;
+#if !defined(__VISAGECPP__)
 	if (GetRValue(rgbVal) == red &&
 	    GetGValue(rgbVal) == green &&
 	    GetBValue(rgbVal) == blue)
 	    return (theRGBRecords[i].name);
+#endif
 	i++;
     }
     return (NULL);
@@ -247,9 +249,11 @@ xpmGetRGBfromName(char *inname, int *r, int *g, int *b)
 	cmp = strcasecmp(name, theRGBRecords[middle].name);
 	if (cmp == 0) {
 	    rgbVal = theRGBRecords[middle].rgb;
+#if !defined(__VISAGECPP__)
 	    *r = GetRValue(rgbVal);
 	    *g = GetGValue(rgbVal);
 	    *b = GetBValue(rgbVal);
+#endif
 	    free(name);
 	    return (1);
 	} else if (cmp < 0) {

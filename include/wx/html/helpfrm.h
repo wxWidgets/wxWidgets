@@ -20,7 +20,7 @@
 
 #if wxUSE_HTML
 
-#include "helpdata.h"
+#include "wx/html/helpdata.h"
 #include "wx/window.h"
 #include "wx/frame.h"
 #include "wx/config.h"

@@ -13,9 +13,9 @@
 /* use wxWindows' configure */
 #include "wx/setup.h"
 
-#define HAVE_PROTOTYPES 
-#define HAVE_UNSIGNED_CHAR 
-#define HAVE_UNSIGNED_SHORT 
+#define HAVE_PROTOTYPES
+#define HAVE_UNSIGNED_CHAR
+#define HAVE_UNSIGNED_SHORT
 #undef void
 #undef const
 
@@ -29,8 +29,8 @@
   #undef CHAR_IS_UNSIGNED
 #endif
 
-#define HAVE_STDDEF_H 
-#define HAVE_STDLIB_H 
+#define HAVE_STDDEF_H
+#define HAVE_STDLIB_H
 #undef NEED_BSD_STRINGS
 #undef NEED_SYS_TYPES_H
 #undef NEED_FAR_POINTERS

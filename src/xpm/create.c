@@ -222,17 +222,17 @@ SetCloseColor(Display *display, Colormap colormap, Visual *visual, XColor *col,
      * occurred, so we try the next closest color, and so on, until no more
      * colors are within closeness of the target. If we knew that the
      * colormap had changed, we could skip this sequence.
-     * 
+     *
      * If _none_ of the colors within closeness of the target can be allocated,
      * then we can finally be pretty sure that the colormap has actually
      * changed. In this case we try to allocate the original color (again),
      * then try the closecolor stuff (again)...
-     * 
+     *
      * In theory it would be possible for an infinite loop to occur if another
      * process kept changing the colormap every time we sorted it, so we set
      * a maximum on the number of iterations. After this many tries, we use
      * XGrabServer() to ensure that the colormap remains unchanged.
-     * 
+     *
      * This approach gives particularly bad worst case performance - as many as
      * <MaximumIterations> colormap reads and sorts may be needed, and as
      * many as <MaximumIterations> * <ColormapSize> attempted allocations
@@ -668,10 +668,10 @@ XpmCreateImageFromXpmImage(Display *display, XpmImage *image,
 
 	/*
 	 * set the ximage data
-	 * 
+	 *
 	 * In case depth is 1 or bits_per_pixel is 4, 6, 8, 24 or 32 use
 	 * optimized functions, otherwise use slower but sure general one.
-	 * 
+	 *
 	 */
 
 	if (ximage->depth == 1)
@@ -1432,6 +1432,7 @@ XpmCreatePixmapFromXpmImage(Display *display, Drawable d, XpmImage *image,
 }
 
 #else  /* FOR_MSW part follows */
+#if !defined(__VISAGECPP__)
 static void
 MSWSetImagePixels(Display *dc, XImage *image, unsigned int width, unsigned int height,
   unsigned int *pixelindex, Pixel *pixels)
@@ -1457,5 +1458,35 @@ MSWSetImagePixels(Display *dc, XImage *image, unsigned int width, unsigned int h
 		}
 	}
 }
+#else
+void MSWSetImagePixels(Display *dc, XImage *image, unsigned int width, unsigned int height,
+  unsigned int *pixelindex, Pixel *pixels)
+{
+    unsigned int *data = pixelindex;
+    unsigned int x, y;
+// TODO:
+/*
+    SelectObject(*dc, image->bitmap);
+	if (image->depth == 1)
+	{
+		for (y = 0; y < height; y++) {
+			for (x = 0; x < width; x++) {
+				SetPixel(*dc, x, y, (pixels[*(data++)] ? RGB(255,255,255) : 0));
+			}
+		}
+	}
+	else
+	{
+		for (y = 0; y < height; y++) {
+			for (x = 0; x < width; x++) {
+				SetPixel(*dc, x, y, pixels[*(data++)]);
+			}
+		}
+	}
+*/
+ return;
+}
+#endif // __VISAGECPP__
+
 
 #endif /* FOR_MSW */

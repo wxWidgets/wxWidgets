@@ -64,7 +64,6 @@ public:
 
     virtual wxDragResult OnDragOver(wxCoord x, wxCoord y, wxDragResult def);
     virtual bool OnDrop(wxCoord x, wxCoord y);
-    virtual bool OnData(wxCoord x, wxCoord y);
     virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult vResult);
     virtual bool GetData();
 
@@ -74,50 +73,6 @@ protected:
 
     DRAGINFO*                       m_pDragInfo;
     DRAGTRANSFER*                   m_pDragTransfer;
-};
-
-// ----------------------------------------------------------------------------
-// A simple wxDropTarget derived class for text data: you only need to
-// override OnDropText() to get something working
-// ----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxTextDropTarget : public wxDropTarget
-{
-public:
-    wxTextDropTarget();
-    virtual ~wxTextDropTarget();
-
-    virtual bool OnDropText( wxCoord         x
-                            ,wxCoord         y
-                            ,const wxString& rText
-                           ) = 0;
-
-    virtual bool OnData( wxCoord x
-                        ,wxCoord y
-                       );
-    virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult vResult);
-};
-
-// ----------------------------------------------------------------------------
-// A drop target which accepts files (dragged from File Manager or Explorer)
-// ----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxFileDropTarget : public wxDropTarget
-{
-public:
-    wxFileDropTarget();
-    virtual ~wxFileDropTarget();
-
-    // parameters are the number of files and the array of file names
-    virtual bool OnDropFiles( wxCoord              x
-                             ,wxCoord              y
-                             ,const wxArrayString& rFilenames
-                            ) = 0;
-
-    virtual bool OnData( wxCoord x
-                        ,wxCoord y
-                       );
-    virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult vResult);
 };
 
 #endif //__OS2DNDH__

@@ -240,10 +240,10 @@ XpmCreateXpmImageFromImage(Display *display, XImage *image, XImage *shapeimage,
 
     /*
      * scan the image data
-     * 
+     *
      * In case depth is 1 or bits_per_pixel is 4, 6, 8, 24 or 32 use optimized
      * functions, otherwise use slower but sure general one.
-     * 
+     *
      */
 
     if (image) {
@@ -369,8 +369,8 @@ ScanOtherColors(Display *display, XpmColor *colors, int ncolors, Pixel *pixels,
 #ifndef FOR_MSW
     xpmRgbName rgbn[MAX_RGBNAMES];
 #else
-    xpmRgbName *rgbn = NULL; 
-#endif    
+    xpmRgbName *rgbn = NULL;
+#endif
     int rgbn_max = 0;
     unsigned int i, j, c, i2;
     XpmColor *color;
@@ -490,7 +490,7 @@ ScanOtherColors(Display *display, XpmColor *colors, int ncolors, Pixel *pixels,
 #ifndef FOR_MSW
 		sprintf(buf, "#%04X%04X%04X",
 			xcolor->red, xcolor->green, xcolor->blue);
-#else   
+#else
 		sprintf(buf, "#%02x%02x%02x",
 			xcolor->red, xcolor->green, xcolor->blue);
 #endif			
@@ -792,12 +792,14 @@ MSWGetImagePixels(Display *display, XImage *image, unsigned int width, unsigned 
     iptr = pmap->pixelindex;
 
     for (y = 0; y < height; y++) {
+#if !defined(__VISAGECPP__) /* fixme for OS/2 */
 	for (x = 0; x < width; x++, iptr++) {
 	    /* bitmap must be selected !!! ??? */
 	    pixel = GetPixel(*display, x, y);
 	    if (storePixel(pixel, pmap, iptr))
 		return (XpmNoMemory);
 	}
+#endif
     }
     return (XpmSuccess);
 }

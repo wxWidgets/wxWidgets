@@ -29,6 +29,7 @@ GENTEMPTGT=$(WXDIR)\lib\wxgen.lib
 NONESTEMPTGT=$(WXDIR)\lib\wxnones.lib
 OS2TEMPTGT1=$(WXDIR)\lib\wxos21.lib
 OS2TEMPTGT2=$(WXDIR)\lib\wxos22.lib
+HTMLTEMPTGT=$(WXDIR)\lib\wxhtml.lib
 DUMMYOBJ=$D\dummy.obj
 !endif
 
@@ -110,8 +111,8 @@ GENERICOBJS= \
   ..\generic\$D\statusbr.obj \
   ..\generic\$D\tabg.obj \
   ..\generic\$D\textdlgg.obj \
-  ..\generic\$D\treectrl.obj \
-  ..\generic\$D\tipdlg.obj
+  ..\generic\$D\tipdlg.obj \
+  ..\generic\$D\treectrl.obj
 
 #  ..\generic\$D\gridg.obj \
 #  ..\generic\$D\notebook.obj \
@@ -145,8 +146,8 @@ GENLIBOBJS= \
   statusbr.obj \
   tabg.obj \
   textdlgg.obj \
-  treectrl.obj \
-  tipdlg.obj
+  tipdlg.obj \
+  treectrl.obj
 
 # These are generic things that don't need to be compiled on PM,
 # but sometimes it's useful to do so for testing purposes.
@@ -497,7 +498,7 @@ OS2LIBOBJS2 = \
   textctrl.obj \
   thread.obj \
   timer.obj \
-#  toolbar.obj \
+  toolbar.obj \
   tooltip.obj \
   utils.obj \
   utilsexc.obj \
@@ -505,26 +506,47 @@ OS2LIBOBJS2 = \
   window.obj
 
 HTMLOBJS = \
+  ..\html\$D\helpdata.obj \
+  ..\html\$D\helpfrm.obj \
   ..\html\$D\htmlcell.obj \
-  ..\html\$D\htmlfilter.obj \
-  ..\html\$D\htmlhelp.obj \
-  ..\html\$D\htmlhelp_io.obj \
-  ..\html\$D\htmlparser.obj \
+  ..\html\$D\htmlfilt.obj \
+  ..\html\$D\htmlpars.obj \
   ..\html\$D\htmltag.obj \
   ..\html\$D\htmlwin.obj \
-  ..\html\$D\htmlwinparser.obj \
-  ..\html\$D\mod_fonts.obj \
-  ..\html\$D\mod_hline.obj \
-  ..\html\$D\mod_image.obj \
-  ..\html\$D\mod_layout.obj \
-  ..\html\$D\mod_links.obj \
-  ..\html\$D\mod_list.obj \
-  ..\html\$D\mod_pre.obj \
-  ..\html\$D\mod_tables.obj \
-  ..\html\$D\search.obj
+  ..\html\$D\htmprint.obj \
+  ..\html\$D\m_fonts.obj \
+  ..\html\$D\m_hline.obj \
+  ..\html\$D\m_image.obj \
+  ..\html\$D\m_layout.obj \
+  ..\html\$D\m_links.obj \
+  ..\html\$D\m_list.obj \
+  ..\html\$D\m_pre.obj \
+  ..\html\$D\m_tables.obj \
+  ..\html\$D\search.obj \
+  ..\html\$D\winpars.obj
+
+HTMLLIBOBJS = \
+  helpdata.obj \
+  helpfrm.obj \
+  htmlcell.obj \
+  htmlfilt.obj \
+  htmlpars.obj \
+  htmltag.obj \
+  htmlwin.obj \
+  htmprint.obj \
+  m_fonts.obj \
+  m_hline.obj \
+  m_image.obj \
+  m_layout.obj \
+  m_links.obj \
+  m_list.obj \
+  m_pre.obj \
+  m_tables.obj \
+  search.obj \
+  winpars.obj
 
 # Add $(NONESSENTIALOBJS) if wanting generic dialogs, PostScript etc.
-OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(NONESSENTIALOBJS) $(OS2OBJS)
+OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(HTMLOBJS) $(NONESSENTIALOBJS) $(OS2OBJS)
 
 # Normal, static library
 all:    $(OBJECTS) $(PERIPH_TARGET) $(LIBTARGET)
@@ -680,8 +702,28 @@ $(GENLIBOBJS):
   copy ..\generic\$D\statusbr.obj
   copy ..\generic\$D\tabg.obj
   copy ..\generic\$D\textdlgg.obj
-  copy ..\generic\$D\treectrl.obj
   copy ..\generic\$D\tipdlg.obj
+  copy ..\generic\$D\treectrl.obj
+
+$(HTMLLIBOBJS):
+  copy ..\html\$D\helpdata.obj
+  copy ..\html\$D\helpfrm.obj
+  copy ..\html\$D\htmlcell.obj
+  copy ..\html\$D\htmlfilt.obj
+  copy ..\html\$D\htmlpars.obj
+  copy ..\html\$D\htmltag.obj
+  copy ..\html\$D\htmlwin.obj
+  copy ..\html\$D\htmprint.obj
+  copy ..\html\$D\m_fonts.obj
+  copy ..\html\$D\m_hline.obj
+  copy ..\html\$D\m_image.obj
+  copy ..\html\$D\m_layout.obj
+  copy ..\html\$D\m_links.obj
+  copy ..\html\$D\m_list.obj
+  copy ..\html\$D\m_pre.obj
+  copy ..\html\$D\m_tables.obj
+  copy ..\html\$D\search.obj
+  copy ..\html\$D\winpars.obj
 
 $(OS2LIBOBJS1):
   copy ..\os2\$D\accel.obj
@@ -753,7 +795,7 @@ $(OS2LIBOBJS2):
   copy ..\os2\$D\textctrl.obj
   copy ..\os2\$D\thread.obj
   copy ..\os2\$D\timer.obj
-#  copy ..\os2\$D\toolbar.obj
+  copy ..\os2\$D\toolbar.obj
   copy ..\os2\$D\tooltip.obj
   copy ..\os2\$D\utils.obj
   copy ..\os2\$D\utilsexc.obj
@@ -823,6 +865,13 @@ $(WXDIR)\lib\wxgen.lib: $(GENLIBOBJS)
     $**;
 <<
 
+$(WXDIR)\lib\wxhtml.lib: $(HTMLLIBOBJS)
+ touch $(WXDIR)\lib\wxhtml.lib
+ del $(WXDIR)\lib\wxhtml.lib
+ ilib $(LIBFLAGS) $@ @<<
+    $**;
+<<
+
 $(WXDIR)\lib\wxnones.lib: $(NONESSENTIALOBJS)
  touch $(WXDIR)\lib\wxnones.lib
  del $(WXDIR)\lib\wxnones.lib
@@ -851,6 +900,7 @@ $(WXDIR)\lib\wx.lib: \
   $(COMTEMPTGT2) \
   $(COMTEMPTGT3) \
   $(GENTEMPTGT) \
+  $(HTMLTEMPTGT) \
   $(NONESTEMPTGT) \
   $(OS2TEMPTGT1) \
   $(OS2TEMPTGT2) \
@@ -864,6 +914,7 @@ $(WXDIR)\lib\wx.lib: \
   del $(COMTEMPTGT2)
   del $(COMTEMPTGT3)
   del $(GENTEMPTGT)
+  del $(HTMLTEMPTGT)
   del $(NONESTEMPTGT)
   del $(OS2TEMPTGT1)
   del $(OS2TEMPTGT2)
@@ -931,9 +982,10 @@ clean: $(PERIPH_CLEAN_TARGET) clean_png clean_zlib clean_jpeg clean_xpm
         -erase $(COMMDIR)\lex_yy.c
         -erase $(OS2DIR)\$D\*.obj
         -rmdir $(D)
-        -rmdir ole\$(D)
         -rmdir ..\generic\$(D)
         -rmdir ..\common\$(D)
+        -rmdir ..\html\$(D)
+        -rmdir ..\os2\$(D)
 
 cleanall: clean
 

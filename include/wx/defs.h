@@ -1565,7 +1565,7 @@ typedef long            WXLPARAM;
 #  define LOGFONT       FATTRS
 #  define LOWORD        SHORT1FROMMP
 #  define HIWORD        SHORT2FROMMP
-#endif
+#endif // __WXMSW__
 typedef unsigned long   WXCOLORREF;
 typedef void *          WXRGNDATA;
 typedef void *          WXMSG;
@@ -1583,6 +1583,7 @@ typedef unsigned long   WXMSGID;
 typedef void*           WXRESULT;
 typedef int             (*WXFARPROC)();
 // some windows handles not defined by PM
+typedef unsigned long   COLORREF;
 typedef unsigned long   HANDLE;
 typedef unsigned long   HICON;
 typedef unsigned long   HFONT;

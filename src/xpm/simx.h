@@ -39,7 +39,12 @@
 
 #ifdef FOR_MSW
 
+#if defined(__OS2__)
+#define INCL_OS2
+#include<os2.h>
+#else
 #include "windows.h"			/* MS windows GDI types */
+#endif
 
 /*
  * minimal portability layer between ansi and KR C
@@ -72,7 +77,12 @@ typedef void *Visual;			/* not used yet, is for GRAY, COLOR,
 typedef void *Colormap;			/* should be COLORPALETTE, not done
 					 * yet */
 
+#if !defined(__OS2__)
 typedef COLORREF Pixel;
+#else
+typedef unsigned long COLORREF;
+typedef unsigned long Pixel;
+#endif
 
 #define PIXEL_ALREADY_TYPEDEFED		/* to let xpm.h know about it */
 

@@ -68,7 +68,7 @@ static wxString SafeFileName(const wxString& s)
 }
 
 
-static int IndexCompareFunc(const void *a, const void *b)
+static int LINKAGEMODE IndexCompareFunc(const void *a, const void *b)
 {
     return strcmp(((wxHtmlContentsItem*)a) -> m_Name, ((wxHtmlContentsItem*)b) -> m_Name);
 }
@@ -549,7 +549,11 @@ bool wxHtmlSearchStatus::Search()
 
     if (! m_Active) {
 	// sanity check. Illegal use, but we'll try to prevent a crash anyway
-	wxASSERT(0);
+#if !defined(__VISAGECPP__)
+wxASSERT(0);
+#else
+wxASSERT(m_Active);
+#endif
 	return FALSE;
     }
 

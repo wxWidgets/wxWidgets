@@ -72,15 +72,6 @@ bool wxDropTarget::OnDrop(
     return FALSE;
 };
 
-bool wxDropTarget::OnData(
-  wxCoord                           x
-, wxCoord                           y
-)
-{
-    //TODO:
-    return FALSE;
-};
-
 wxDragResult wxDropTarget::OnData(
   wxCoord                           x
 , wxCoord                           y
@@ -102,42 +93,6 @@ bool wxDropTarget::IsAcceptable(
 )
 {
     //TODO:
-    return FALSE;
-};
-
-// ----------------------------------------------------------------------------
-// wxTextDropTarget
-// ----------------------------------------------------------------------------
-
-wxTextDropTarget::~wxTextDropTarget()
-{
-    // TODO:
-}
-
-bool wxTextDropTarget::OnData(
-  wxCoord                           x
-, wxCoord                           y
-)
-{
-    // TODO:
-    return FALSE;
-};
-
-// ----------------------------------------------------------------------------
-// wxFileDropTarget
-// ----------------------------------------------------------------------------
-
-wxFileDropTarget::~wxFileDropTarget()
-{
-    // TODO:
-}
-
-bool wxFileDropTarget::OnData(
-  wxCoord                           x
-, wxCoord                           y
-)
-{
-    // TODO:
     return FALSE;
 };
 

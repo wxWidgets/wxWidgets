@@ -43,6 +43,10 @@
 #if (defined(_WINDOWS) || defined(__WXMSW__) || defined(WIN32)) && !defined(FOR_MSW)
 #define FOR_MSW
 #endif
+/* Piggyback on MSW for now */
+#if (defined(__OS2__) || defined(__WXPM__) || defined(OS232)) && !defined(FOR_MSW)
+#define FOR_MSW
+#endif
 
 /*
  * first some identification numbers:
@@ -271,7 +275,7 @@ extern "C" {
  * arguments to be corrupted espec. in XpmWriteFileFromXpmImage.
  * So, define all prototypes explicitly.
  */
-#ifdef _MSC_VER
+#if defined(_MSC_VER) || defined(__OS2__)
 
 /* FOR_MSW, all ..Pixmap.. are excluded, only the ..XImage.. are used */
 
@@ -511,7 +515,7 @@ extern "C" {
 					    XpmInfo *info));
 
 #endif // _MSC_VER
-					    
+					
 #ifdef __cplusplus
 } /* for C++ V2.0 */
 #endif
