@@ -382,10 +382,12 @@ size_t wxDisplayBase::GetCount()
 {
     InitDisplays();
 
-    // I'm not sure if they really always return the same thing and if this is
-    // not true I'd like to know in which situation does it happen
-    wxASSERT_MSG( gs_displays->GetCount() == (size_t)::GetSystemMetrics(SM_CMONITORS),
-                    _T("So how many displays does this system have?") );
+    //RN: FIXME:  This is wrong - the display info array should reload after every call
+    //to GetCount() - otherwise it will not be accurate.
+    //The user can change the number of displays in display properties/settings
+    //after GetCount or similar is called and really mess this up...  
+    //wxASSERT_MSG( gs_displays->GetCount() == (size_t)::GetSystemMetrics(SM_CMONITORS),
+    //                _T("So how many displays does this system have?") );
 
     return gs_displays->GetCount();
 }
