@@ -166,6 +166,7 @@ gaugecmn.cpp	Common
 gdicmn.cpp	Common
 geometry.cpp	Common
 gifdecod.cpp	Common
+iffdecod.cpp	Common
 hash.cpp	Common	Base
 helpbase.cpp	Common
 http.cpp	Common	Socket,Base
@@ -173,6 +174,7 @@ imagall.cpp	Common
 imagbmp.cpp	Common
 image.cpp	Common
 imaggif.cpp	Common
+imagiff.cpp	Common
 imagjpeg.cpp	Common	Win32Only
 imagpcx.cpp	Common	Win32Only
 imagpng.cpp	Common	Win32Only
@@ -794,8 +796,10 @@ helpbase.h	WXH
 helphtml.h	WXH
 helpwin.h	WXH
 icon.h	WXH
+iffdecod.h	WXH
 image.h	WXH
 imaggif.h	WXH
+imagiff.h	WXH
 imagxpm.h	WXH
 imagbmp.h	WXH
 imagpng.h	WXH

@@ -1,8 +1,6 @@
 
 -------------------- High priority ---------------------
 
-Port to GTK 2.0 - including its Unicode support.
-
 Fix crash in DnD reported from Mahogany.
 
 -------------------- Medium priority ---------------------
@@ -17,6 +15,8 @@ Show accelerator control labels and actually implement them
     
 Right aligned checkboxes: focus highlighting is wrong, tooltips can't be set can't be set
   -> Postponed. GTK 2.0 can do that.
+
+Port to GTK 2.0 - including its Unicode support.
 
 Add wxNoteBook::GetPageIndex()
 Add wxNoteBook::SetTabPosition()

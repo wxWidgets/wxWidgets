@@ -918,6 +918,9 @@
 // Set to 1 for PCX format support
 #define wxUSE_PCX           0
 
+// Set to 1 for IFF format support
+#define wxUSE_IFF           0
+
 // Set to 1 for XPM format support
 #define wxUSE_XPM           1
 

@@ -245,38 +245,37 @@ you download wxGTK, it will default to --with-gtk etc. But
 if you use all of our CVS repository you have to choose a 
 toolkit. You must do this by running configure with either of:
 
-    --without-gtk            Don't use the GIMP ToolKit (GTK)
+    --with-gtk              Use the GIMP ToolKit (GTK). Default.
 	
-	--with-motif             Use either Motif or Lesstif
-	                         Configure will look for both. 
+	--with-motif            Use either Motif or Lesstif
+	                        Configure will look for both. 
 
 The following options handle the kind of library you want to build.
 
 	--disable-threads       Compile without thread support.
 
-	--disable-shared        Do not create shared libraries.
-
-	--enable-static         Create static libraries.
+	--disable-shared        Do not create shared libraries, but
+                            build static libraries instead.
 
 	--disable-optimise	    Do not optimise the code. Can
 	                        sometimes be useful for debugging
-				and is required on some architectures
-				such as Sun with gcc 2.8.X which
-				would otherwise produce segvs.
+                            and is required on some architectures
+                            such as Sun with gcc 2.8.X which
+                            would otherwise produce segvs.
 
 	--enable-profile        Add profiling info to the object 
 				            files. Currently broken, I think.
 				
 	--enable-no_rtti        Enable compilation without creation of
 	                        C++ RTTI information in object files. 
-				This will speed-up compilation and reduce 
-				binary size.
+                            This will speed-up compilation and reduce 
+                            binary size.
 				
 	--enable-no_exceptions  Enable compilation without creation of
 	                        C++ exception information in object files. 
-				This will speed-up compilation and reduce 
-				binary size. Also fewer crashes during the
-				actual compilation...
+                            This will speed-up compilation and reduce 
+                            binary size. Also fewer crashes during the
+                            actual compilation...
 				
 	--enable-no_deps        Enable compilation without creation of
 	                        dependency information.
@@ -296,11 +295,11 @@ The following options handle the kind of library you want to build.
 
 	--enable-debug_flag	    Define __DEBUG__ and __WXDEBUG__ when
 	                        compiling. This enable wxWindows' very
-				useful internal debugging tricks (such
-				as automatically reporting illegal calls)
-				to work. Note that program and library
-				must be compiled with the same debug 
-				options.
+                            useful internal debugging tricks (such
+                            as automatically reporting illegal calls)
+                            to work. Note that program and library
+                            must be compiled with the same debug 
+                            options.
 
 * Feature Options
 -------------------
@@ -326,6 +325,8 @@ are
 	--disable-gif		    Disables GIF image format code.
 	
 	--disable-pcx		    Disables PCX image format code.
+	
+	--disable-iff		    Disables IFF image format code.
 	
     --disable-resources     Disables the use of *.wxr type
 	                        resources.

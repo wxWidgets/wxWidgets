@@ -1,7 +1,7 @@
 
-   Welcome to wxWindows/Gtk 2.2
+   Welcome to wxWindows/Gtk 2.3
 
-you have downloaded version 2.2 of the GTK port of the 
+you have downloaded version 2.3 of the GTK port of the 
 wxWindows GUI library.
 
 wxWindows no longer supports GTK 1.0 (as did some early

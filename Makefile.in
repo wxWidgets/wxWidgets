@@ -472,7 +472,7 @@ install: @AFMINSTALL@ @WX_ALL_INSTALLED@ m4datainstall
 	@echo " "
 	@echo " The installation of wxWindows is finished.  On certain"
 	@echo " platforms (e.g. Linux) you'll now have to run ldconfig"
-	@echo " if you installed a shared library and also modify"
+	@echo " if you installed a shared library and also modify the"
 	@echo " LD_LIBRARY_PATH (or equivalent) environment variable."
 	@echo " "
 	@echo " wxWindows comes with no guarantees and doesn't claim"

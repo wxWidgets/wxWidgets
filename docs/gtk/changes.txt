@@ -1,6 +1,19 @@
 
 *** wxWindows 2.3.3 ***
 
+Some wxFont changes for better mixing of native fonts
+and wxFont's accessors.
+
+Corrections to wxImage code for special SGI visuals.
+
+Added IFF image handler.
+
+Added ICO, CUR and ANI image handler.
+
+wxFrame::SetMenuBar() works again.
+
+wxButton honours wxBU_EXACTFIT.
+
 wxStaticBox honours wxALIGN_XXX styles
 
 Reworked wxConfig class interface.

@@ -819,6 +819,11 @@
 #define wxUSE_PCX 0
 
 /*
+ * IFF image format support
+ */
+#define wxUSE_IFF 0
+
+/*
  * PNM image format support
  */
 #define wxUSE_PNM 0

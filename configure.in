@@ -813,6 +813,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_GIF=no
   DEFAULT_wxUSE_PCX=no
   DEFAULT_wxUSE_PNM=no
+  DEFAULT_wxUSE_IFF=no
   DEFAULT_wxUSE_XPM=no
   DEFAULT_wxUSE_ICO_CUR=no
 else
@@ -983,6 +984,7 @@ else
   DEFAULT_wxUSE_IMAGE=yes
   DEFAULT_wxUSE_GIF=yes
   DEFAULT_wxUSE_PCX=yes
+  DEFAULT_wxUSE_IFF=yes
   DEFAULT_wxUSE_PNM=yes
   DEFAULT_wxUSE_XPM=yes
   DEFAULT_wxUSE_ICO_CUR=yes
@@ -1358,6 +1360,7 @@ WX_ARG_ENABLE(palette,     [  --enable-palette        use wxPalette class], wxUS
 WX_ARG_ENABLE(image,       [  --enable-image          use wxImage class], wxUSE_IMAGE)
 WX_ARG_ENABLE(gif,         [  --enable-gif            use gif images (GIF file format)], wxUSE_GIF)
 WX_ARG_ENABLE(pcx,         [  --enable-pcx            use pcx images (PCX file format)], wxUSE_PCX)
+WX_ARG_ENABLE(iff,         [  --enable-iff            use iff images (IFF file format)], wxUSE_IFF)
 WX_ARG_ENABLE(pnm,         [  --enable-pnm            use pnm images (PNM file format)], wxUSE_PNM)
 WX_ARG_ENABLE(xpm,         [  --enable-xpm            use xpm images (XPM file format)], wxUSE_XPM)
 WX_ARG_ENABLE(ico_cur,     [  --enable-icocur         use Windows ICO and CUR formats], wxUSE_ICO_CUR)
@@ -2407,7 +2410,11 @@ if test "$wxUSE_OPENGL" = "yes"; then
                 WX_PATH_FIND_LIBRARIES([$SEARCH_LIB],[GL])
                 if test "$ac_find_libraries" != "" ; then
                     WX_LINK_PATH_EXIST([$ac_find_libraries],[$LDFLAGS])
-                    LDFLAGS_GL="$LDFLAGS$ac_path_to_link"
+                    if test "$ac_path_to_link" = " -L/usr/lib" ; then
+                        LDFLAGS_GL="$LDFLAGS"
+                    else
+                        LDFLAGS_GL="$LDFLAGS$ac_path_to_link"
+                    fi
                     OPENGL_LIBS="-lGL -lGLU"
                     AC_MSG_RESULT([yes])
                 else
@@ -4710,6 +4717,10 @@ fi
 
 if test "$wxUSE_PCX" = "yes" ; then
   AC_DEFINE(wxUSE_PCX)
+fi
+
+if test "$wxUSE_IFF" = "yes" ; then
+  AC_DEFINE(wxUSE_IFF)
 fi
 
 if test "$wxUSE_PNM" = "yes" ; then
