@@ -56,7 +56,8 @@
 enum
 {
     wxCONFIG_USE_LOCAL_FILE = 1,
-    wxCONFIG_USE_GLOBAL_FILE = 2
+    wxCONFIG_USE_GLOBAL_FILE = 2,
+    wxCONFIG_USE_RELATIVE_PATH = 4
 };
 
 // ----------------------------------------------------------------------------
