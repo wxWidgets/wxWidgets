@@ -471,26 +471,44 @@ wxHtmlHelpFrame::~wxHtmlHelpFrame()
 
 void wxHtmlHelpFrame::AddToolbarButtons(wxToolBar *toolBar, int style)
 {
-    toolBar -> AddTool(wxID_HTML_PANEL, wxBITMAP(wpanel), wxNullBitmap,
+    wxBitmap wpanelBitmap = wxBITMAP(wpanel);
+    wxBitmap wbackBitmap = wxBITMAP(wback);
+    wxBitmap wforwardBitmap = wxBITMAP(wforward);
+    wxBitmap wupnodeBitmap = wxBITMAP(wupnode);
+    wxBitmap wupBitmap = wxBITMAP(wup);
+    wxBitmap wdownBitmap = wxBITMAP(wdown);
+    wxBitmap wopenBitmap = wxBITMAP(wopen);
+    wxBitmap wprintBitmap = wxBITMAP(wprint);
+    wxBitmap woptionsBitmap = wxBITMAP(woptions);
+
+    wxASSERT_MSG( (wpanelBitmap.Ok() && wbackBitmap.Ok() &&
+                   wforwardBitmap.Ok() && wupnodeBitmap.Ok() &&
+                   wupBitmap.Ok() && wdownBitmap.Ok() &&
+                   wopenBitmap.Ok() && wprintBitmap.Ok() &&
+                   woptionsBitmap.Ok()),
+                  wxT("One or more HTML help frame toolbar bitmap could not be loaded.")) ;
+
+
+    toolBar -> AddTool(wxID_HTML_PANEL, wpanelBitmap, wxNullBitmap,
                        FALSE, -1, -1, (wxObject *) NULL,
                        _("Show/hide navigation panel"));
 
     toolBar -> AddSeparator();
-    toolBar -> AddTool(wxID_HTML_BACK, wxBITMAP(wback), wxNullBitmap,
+    toolBar -> AddTool(wxID_HTML_BACK, wbackBitmap, wxNullBitmap,
                        FALSE, -1, -1, (wxObject *) NULL,
                        _("Go back"));
-    toolBar -> AddTool(wxID_HTML_FORWARD, wxBITMAP(wforward), wxNullBitmap,
+    toolBar -> AddTool(wxID_HTML_FORWARD, wforwardBitmap, wxNullBitmap,
                        FALSE, -1, -1, (wxObject *) NULL,
                        _("Go forward"));
     toolBar -> AddSeparator();
 
-    toolBar -> AddTool(wxID_HTML_UPNODE, wxBITMAP(wupnode), wxNullBitmap,
+    toolBar -> AddTool(wxID_HTML_UPNODE, wupnodeBitmap, wxNullBitmap,
                        FALSE, -1, -1, (wxObject *) NULL,
                        _("Go one level up in document hierarchy"));
-    toolBar -> AddTool(wxID_HTML_UP, wxBITMAP(wup), wxNullBitmap,
+    toolBar -> AddTool(wxID_HTML_UP, wupBitmap, wxNullBitmap,
                        FALSE, -1, -1, (wxObject *) NULL,
                        _("Previous page"));
-    toolBar -> AddTool(wxID_HTML_DOWN, wxBITMAP(wdown), wxNullBitmap,
+    toolBar -> AddTool(wxID_HTML_DOWN, wdownBitmap, wxNullBitmap,
                        FALSE, -1, -1, (wxObject *) NULL,
                        _("Next page"));
 
@@ -498,19 +516,19 @@ void wxHtmlHelpFrame::AddToolbarButtons(wxToolBar *toolBar, int style)
         toolBar -> AddSeparator();
         
     if (style & wxHF_OPENFILES)
-        toolBar -> AddTool(wxID_HTML_OPENFILE, wxBITMAP(wopen), wxNullBitmap,
+        toolBar -> AddTool(wxID_HTML_OPENFILE, wopenBitmap, wxNullBitmap,
                            FALSE, -1, -1, (wxObject *) NULL,
                            _("Open HTML document"));
 
 #if wxUSE_PRINTING_ARCHITECTURE
     if (style & wxHF_PRINT)
-        toolBar -> AddTool(wxID_HTML_PRINT, wxBITMAP(wprint), wxNullBitmap,
+        toolBar -> AddTool(wxID_HTML_PRINT, wprintBitmap, wxNullBitmap,
                            FALSE, -1, -1, (wxObject *) NULL,
                            _("Print this page"));
 #endif
 
     toolBar -> AddSeparator();
-    toolBar -> AddTool(wxID_HTML_OPTIONS, wxBITMAP(woptions), wxNullBitmap,
+    toolBar -> AddTool(wxID_HTML_OPTIONS, woptionsBitmap, wxNullBitmap,
                        FALSE, -1, -1, (wxObject *) NULL,
                        _("Display options dialog"));
 }

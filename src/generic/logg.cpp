@@ -800,11 +800,20 @@ void wxLogDialog::OnDetails(wxCommandEvent& WXUNUSED(event))
                 wxICON_INFORMATION
             };
 
+            bool loadedIcons = TRUE;
+
 #ifndef __WIN16__
             for ( size_t icon = 0; icon < WXSIZEOF(icons); icon++ )
             {
                 wxBitmap bmp = wxTheApp->GetStdIcon(icons[icon]);
-                imageList->Add(wxImage(bmp).
+
+                // This may very well fail if there are insufficient
+                // colours available. Degrade gracefully.
+
+                if (!bmp.Ok())
+                    loadedIcons = FALSE;
+                else
+                    imageList->Add(wxImage(bmp).
                                 Rescale(ICON_SIZE, ICON_SIZE).
                                  ConvertToBitmap());
             }
@@ -840,7 +849,14 @@ void wxLogDialog::OnDetails(wxCommandEvent& WXUNUSED(event))
                 }
 #endif
 
-                m_listctrl->InsertItem(n, m_messages[n], image);
+                if (!loadedIcons)
+                    image = -1;
+
+                if (image > -1)
+                    m_listctrl->InsertItem(n, m_messages[n], image);
+                else
+                    m_listctrl->InsertItem(n, m_messages[n]);
+
                 m_listctrl->SetItem(n, 1,
                                     wxDateTime((time_t)m_times[n]).Format(fmt));
             }
