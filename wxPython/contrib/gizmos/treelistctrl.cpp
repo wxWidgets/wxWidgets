@@ -1580,7 +1580,7 @@ wxTreeListItem *wxTreeListItem::HitTest(const wxPoint& point,
     {
         // evaluate the item
         int h = theCtrl->GetLineHeight(this);
-        if ((point.y > m_y) && (point.y < m_y + h))
+        if ((point.y > m_y) && (point.y <= m_y + h))
         {
             int y_mid = m_y + h/2;
             if (point.y < y_mid )
@@ -1649,15 +1649,16 @@ wxTreeListItem *wxTreeListItem::HitTest(const wxPoint& point,
     column = theCtrl->GetMainColumn(); //-1;
     wxTreeListItem* res = HitTest(point, theCtrl, flags, level);
 
-    if(!res) {
+    if (!res) {
         column = -1;
         return res;
     }
+  
     if (point.x >= theCtrl->m_owner->GetHeaderWindow()->GetWidth())
         column = -1;
-    else if(flags & wxTREE_HITTEST_ONITEMINDENT) {
+    else if (flags & wxTREE_HITTEST_ONITEMINDENT) {
         int x = 0;
-        for(size_t i = 0; i < theCtrl->GetMainColumn(); ++i) {
+        for (int i = 0; i < column; ++i) {
             int w = theCtrl->m_owner->GetHeaderWindow()->GetColumnWidth(i);
             if(point.x >= x && point.x < x+w) {
                 flags ^= wxTREE_HITTEST_ONITEMINDENT;
@@ -1665,23 +1666,24 @@ wxTreeListItem *wxTreeListItem::HitTest(const wxPoint& point,
                 column = i;
                 return res;
             }
+            x += w;
         }
     }
-    else if(flags & wxTREE_HITTEST_ONITEMRIGHT) {
+    else if (flags & wxTREE_HITTEST_ONITEMRIGHT) {
         int x = 0;
-        size_t i;
-        for(i = 0; i < theCtrl->GetMainColumn()+1; ++i) {
+        int i;
+        for (i = 0; i < column+1; ++i) {
             x += theCtrl->m_owner->GetHeaderWindow()->GetColumnWidth(i);
         }
-        for(i = theCtrl->GetMainColumn()+1;
-            i < theCtrl->GetColumnCount(); ++i) {
+        for (i = column+1; i < theCtrl->GetColumnCount(); ++i) {
             int w = theCtrl->m_owner->GetHeaderWindow()->GetColumnWidth(i);
-            if(point.x >= x && point.x < x+w) {
+            if (point.x >= x && point.x < x+w) {
                 flags ^= wxTREE_HITTEST_ONITEMRIGHT;
                 flags |= wxTREE_HITTEST_ONITEMCOLUMN;
                 column = i;
                 return res;
             }
+            x += w;
         }
     }
 
@@ -3839,12 +3841,8 @@ wxTreeItemId wxTreeListMainWindow::HitTest(const wxPoint& point, int& flags,
         return wxTreeItemId();
     }
 
-    wxClientDC dc(this);
-    PrepareDC(dc);
-    wxCoord x = dc.DeviceToLogicalX( point.x );
-    wxCoord y = dc.DeviceToLogicalY( point.y );
-    wxTreeListItem *hit = m_anchor->HitTest(wxPoint(x, y), this, flags,
-                                            column, 0);
+    wxTreeListItem *hit =  m_anchor->HitTest(CalcUnscrolledPosition(point),
+                                             this, flags, column, 0);
     if (hit == NULL)
     {
         flags = wxTREE_HITTEST_NOWHERE;
@@ -4326,7 +4324,8 @@ void wxTreeListMainWindow::RefreshSubtree(wxTreeListItem *item)
 
     int cw = 0;
     int ch = 0;
-    GetClientSize( &cw, &ch );
+    //GetClientSize( &cw, &ch );
+    GetVirtualSize(&cw, &ch);
 
     wxRect rect;
     rect.x = dc.LogicalToDeviceX( 0 );
@@ -4348,7 +4347,8 @@ void wxTreeListMainWindow::RefreshLine( wxTreeListItem *item )
 
     int cw = 0;
     int ch = 0;
-    GetClientSize( &cw, &ch );
+    //GetClientSize( &cw, &ch );
+    GetVirtualSize(&cw, &ch);
 
     wxRect rect;
     rect.x = dc.LogicalToDeviceX( 0 );
@@ -4734,8 +4734,7 @@ void wxTreeListCtrl::ScrollTo(const wxTreeItemId& item)
 wxTreeItemId wxTreeListCtrl::HitTest(const wxPoint& pos, int& flags,
                                      int& column)
 {
-    return m_main_win->HitTest(m_main_win->ScreenToClient(ClientToScreen(pos)),
-                               flags, column);
+    return m_main_win->HitTest(pos, flags, column);
 }
 
 bool wxTreeListCtrl::GetBoundingRect(const wxTreeItemId& item, wxRect& rect,
