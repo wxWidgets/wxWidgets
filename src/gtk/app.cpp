@@ -31,7 +31,10 @@
 #include "unistd.h"
 
 #ifdef __SUN__
-int usleep(unsigned int useconds); 
+extern "C" 
+{
+void usleep(unsigned long usec); 
+};
 #endif
 
 #include "glib.h"
