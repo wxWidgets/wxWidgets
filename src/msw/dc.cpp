@@ -2314,7 +2314,7 @@ wxAlphaBlend(wxDC& dc, int xDst, int yDst, int w, int h, const wxBitmap& bmpSrc)
 
     // combine them with the source bitmap using alpha
     wxAlphaPixelData dataDst(bmpDst),
-                     dataSrc(bmpSrc);
+                     dataSrc((wxBitmap &)bmpSrc);
 
     wxCHECK_RET( dataDst && dataSrc,
                     _T("failed to get raw data in wxAlphaBlend") );

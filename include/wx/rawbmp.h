@@ -180,11 +180,20 @@ struct WXDLLEXPORT wxPixelFormatFor<wxImage>
 class WXDLLEXPORT wxPixelDataBase
 {
 public:
+    // origin of the rectangular region we represent
+    wxPoint GetOrigin() const { return m_ptOrigin; }
+
+    // width and height of the region we represent
     int GetWidth() const { return m_width; }
     int GetHeight() const { return m_height; }
+
+    // the distance between two rows
     int GetRowStride() const { return m_stride; }
 
 // private: -- see comment in the beginning of the file
+
+    // the origin of this image inside the bigger bitmap (usually (0, 0))
+    wxPoint m_ptOrigin;
 
     // the size of the image we address, in pixels
     int m_width,
@@ -316,7 +325,8 @@ struct WXDLLEXPORT wxPixelDataOut<wxImage>
                 return *this;
             }
 
-            // postfix (hence less efficient -- don't use unless you must) version
+            // postfix (hence less efficient -- don't use it unless you
+            // absolutely must) version
             Iterator operator++(int)
             {
                 Iterator p(*this);
@@ -384,6 +394,25 @@ struct WXDLLEXPORT wxPixelDataOut<wxImage>
             m_stride = Iterator::SizePixel * m_width;
         }
 
+        // initializes us with the given region of the specified image
+        wxPixelDataIn(ImageType& image,
+                      const wxPoint& pt,
+                      const wxSize& sz) : m_image(image), m_pixels(image)
+        {
+            m_stride = Iterator::SizePixel * m_width;
+
+            InitRect(pt, sz);
+        }
+
+        // initializes us with the given region of the specified image
+        wxPixelDataIn(ImageType& image,
+                      const wxRect& rect) : m_image(image), m_pixels(image)
+        {
+            m_stride = Iterator::SizePixel * m_width;
+
+            InitRect(rect.GetPositions(), rect.GetSize());
+        }
+
         // we evaluate to true only if we could get access to bitmap data
         // successfully
         operator bool() const { return m_pixels.IsOk(); }
@@ -392,6 +421,15 @@ struct WXDLLEXPORT wxPixelDataOut<wxImage>
         Iterator GetPixels() const { return m_pixels; }
 
     private:
+        void InitRect(const wxPoint& pt, const wxSize& sz)
+        {
+            m_width = sz.x;
+            m_height = sz.y;
+
+            m_ptOrigin = pt;
+            m_pixels.Offset(*this, pt.x, pt.y);
+        }
+
         // the image we're working with
         ImageType& m_image;
 
@@ -431,21 +469,22 @@ struct WXDLLEXPORT wxPixelDataOut<wxBitmap>
                 *this = data.GetPixels();
             }
 
-            // initializes the iterator to point to the origin of the given pixel
-            // data
+            // initializes the iterator to point to the origin of the given
+            // pixel data
             Iterator(PixelData& data)
             {
                 Reset(data);
             }
 
-            // initializes the iterator to point to the origin of the given bitmap
+            // initializes the iterator to point to the origin of the given
+            // bitmap
             Iterator(wxBitmap& bmp, PixelData& data)
             {
-                // using cast here is ugly but it should be safe as GetRawData()
-                // real return type should be consistent with BitsPerPixel (which
-                // is in turn defined by ChannelType) and this is the only thing we
-                // can do without making GetRawData() a template function which is
-                // undesirable
+                // using cast here is ugly but it should be safe as
+                // GetRawData() real return type should be consistent with
+                // BitsPerPixel (which is in turn defined by ChannelType) and
+                // this is the only thing we can do without making GetRawData()
+                // a template function which is undesirable
                 m_ptr = (ChannelType *)
                             bmp.GetRawData(data, PixelFormat::BitsPerPixel);
             }
@@ -465,7 +504,8 @@ struct WXDLLEXPORT wxPixelDataOut<wxBitmap>
                 return *this;
             }
 
-            // postfix (hence less efficient -- don't use unless you must) version
+            // postfix (hence less efficient -- don't use it unless you
+            // absolutely must) version
             Iterator operator++(int)
             {
                 Iterator p(*this);
@@ -520,15 +560,29 @@ struct WXDLLEXPORT wxPixelDataOut<wxBitmap>
 
             // NB: for efficiency reasons this class must *not* have any other
             //     fields, otherwise it won't be put into a CPU register (as it
-            //     should inside the inner loops) by some compilers, notably gcc
+            //     should inside the inner loops) by some compilers, notably
+            //     gcc
             ChannelType *m_ptr;
         };
 
-        // ctor associates this pointer with a bitmap and locks the bitmap for raw
-        // access, it will be unlocked only by our dtor and so these objects should
-        // normally be only created on the stack, i.e. have limited life-time
-        wxPixelDataIn(wxBitmap bmp) : m_bmp(bmp), m_pixels(bmp, *this)
+        // ctor associates this pointer with a bitmap and locks the bitmap for
+        // raw access, it will be unlocked only by our dtor and so these
+        // objects should normally be only created on the stack, i.e. have
+        // limited life-time
+        wxPixelDataIn(wxBitmap& bmp) : m_bmp(bmp), m_pixels(bmp, *this)
         {
+        }
+
+        wxPixelDataIn(wxBitmap& bmp, const wxRect& rect)
+            : m_bmp(bmp), m_pixels(bmp, *this)
+        {
+            InitRect(rect.GetPositions(), rect.GetSize());
+        }
+
+        wxPixelDataIn(wxBitmap& bmp, const wxPoint& pt, const wxSize& sz)
+            : m_bmp(bmp), m_pixels(bmp, *this)
+        {
+            InitRect(pt, sz);
         }
 
         // we evaluate to true only if we could get access to bitmap data
@@ -554,6 +608,16 @@ struct WXDLLEXPORT wxPixelDataOut<wxBitmap>
 
         // the iterator pointing to the image origin
         Iterator m_pixels;
+
+    private:
+        void InitRect(const wxPoint& pt, const wxSize& sz)
+        {
+            m_pixels.Offset(*this, pt.x, pt.y);
+
+            m_ptOrigin = pt;
+            m_width = sz.x;
+            m_height = sz.y;
+        }
     };
 };
 
@@ -562,8 +626,18 @@ class wxPixelData :
     public wxPixelDataOut<Image>::template wxPixelDataIn<PixelFormat>
 {
 public:
-    wxPixelData(const Image& image)
+    wxPixelData(Image& image)
         : wxPixelDataOut<Image>::template wxPixelDataIn<PixelFormat>(image)
+        {
+        }
+
+    wxPixelData(Image& i, const wxPoint& pt, const wxSize& sz)
+        : wxPixelDataOut<Image>::template wxPixelDataIn<PixelFormat>(i, pt, sz)
+        {
+        }
+
+    wxPixelData(Image& i, const wxRect& rect)
+        : wxPixelDataOut<Image>::template wxPixelDataIn<PixelFormat>(i, rect)
         {
         }
 };
