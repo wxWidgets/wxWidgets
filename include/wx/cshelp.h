@@ -175,7 +175,7 @@ protected:
 };
 
 // Convenience function for turning context id into wxString
-wxString wxContextId(int id);
+WXDLLEXPORT wxString wxContextId(int id);
 
 #endif // _WX_CSHELPH__
 

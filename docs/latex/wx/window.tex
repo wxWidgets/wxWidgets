@@ -600,7 +600,7 @@ be used at all.
 
 Returns the grandparent of a window, or NULL if there isn't one.
 
-\membersection{wxWindow::GetHandle}
+\membersection{wxWindow::GetHandle}\label{wxwindowgethandle}
 
 \constfunc{void*}{GetHandle}{\void}
 
@@ -608,6 +608,19 @@ Returns the platform-specific handle of the physical window. Cast it to an appro
 handle, such as {\bf HWND} for Windows, {\bf Widget} for Motif or {\bf GtkWidget} for GTK.
 
 \pythonnote{This method will return an integer in wxPython.}
+
+\membersection{wxWindow::GetHelpText}\label{wxwindowgethelptext}
+
+\constfunc{virtual wxString}{GetHelpText}{\void}
+
+Gets the help text to be used as context-sensitive help for this window.
+
+Note that the text is actually stored by the current \helpref{wxHelpProvider}{wxhelpprovider} implementation,
+and not in the window object itself.
+
+\wxheading{See also}
+
+\helpref{SetHelpText}{wxwindowsethelptext}, \helpref{wxHelpProvider}{wxhelpprovider}
 
 \membersection{wxWindow::GetId}\label{wxwindowgetid}
 
@@ -1412,8 +1425,6 @@ Sent to the event handler when the window must be refreshed.
 
 \wxheading{Remarks}
 
-
-
 Use the EVT\_PAINT macro in an event table definition to intercept paint events.
 
 Note that In a paint event handler, the application must {\it always} create a \helpref{wxPaintDC}{wxpaintdc} object,
@@ -1991,6 +2002,19 @@ their parent windows.
 \helpref{wxWindow::GetForegroundColour}{wxwindowgetforegroundcolour},\rtfsp
 \helpref{wxWindow::SetBackgroundColour}{wxwindowsetbackgroundcolour},\rtfsp
 \helpref{wxWindow::GetBackgroundColour}{wxwindowgetbackgroundcolour}
+
+\membersection{wxWindow::SetHelpText}\label{wxwindowsethelptext}
+
+\func{virtual void}{SetHelpText}{\param{const wxString\& }{helpText}}
+
+Sets the help text to be used as context-sensitive help for this window.
+
+Note that the text is actually stored by the current \helpref{wxHelpProvider}{wxhelpprovider} implementation,
+and not in the window object itself.
+
+\wxheading{See also}
+
+\helpref{GetHelpText}{wxwindowgethelptext}, \helpref{wxHelpProvider}{wxhelpprovider}
 
 \membersection{wxWindow::SetId}\label{wxwindowsetid}
 
