@@ -4243,13 +4243,22 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
 
             if ( coords != wxGridNoCellCoords )
             {
-                if ( !IsSelection() )
-                {
-                    SelectBlock( coords, coords );
-                }
-                else
-                {
-                    SelectBlock( m_currentCellCoords, coords );
+	        if ( event.ControlDown() )
+		{
+		    if ( m_selectingKeyboard == wxGridNoCellCoords)
+		        m_selectingKeyboard = coords;
+		    SelectBlock ( m_selectingKeyboard, coords );
+		}
+		else
+		{
+		    if ( !IsSelection() )
+		    {
+			SelectBlock( coords, coords );
+		    }
+		    else
+		    {
+			SelectBlock( m_currentCellCoords, coords );
+		    }
                 }
 
                 if (! IsVisible(coords))
@@ -4363,15 +4372,20 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                 }
                 else
                 {
-                    m_selection->ToggleCellSelection( coords.GetRow(),
-                                                      coords.GetCol(),
-                                                      event.ControlDown(),
-                                                      event.ShiftDown(),
-                                                      event.AltDown(),
-                                                      event.MetaDown() );
-                    m_selectingTopLeft = wxGridNoCellCoords;
-                    m_selectingBottomRight = wxGridNoCellCoords;
-                    SetCurrentCell( coords );
+		    if ( event.ControlDown() )
+		    {
+			m_selection->ToggleCellSelection( coords.GetRow(),
+							  coords.GetCol(),
+							  event.ControlDown(),
+							  event.ShiftDown(),
+							  event.AltDown(),
+							  event.MetaDown() );
+			m_selectingTopLeft = wxGridNoCellCoords;
+			m_selectingBottomRight = wxGridNoCellCoords;
+			m_selectingKeyboard = coords;
+		    }
+		    else
+		        SetCurrentCell( coords );
                     m_waitForSlowClick = TRUE;
                 }
             }
@@ -6171,8 +6185,11 @@ bool wxGrid::MoveCursorUp( bool expandSelection )
             SelectBlock( m_currentCellCoords, m_selectingKeyboard );
         }
         else
+	{
+	    ClearSelection();
             SetCurrentCell( m_currentCellCoords.GetRow() - 1,
                             m_currentCellCoords.GetCol() );
+	}
         return TRUE;
     }
 
@@ -6195,8 +6212,11 @@ bool wxGrid::MoveCursorDown( bool expandSelection )
             SelectBlock( m_currentCellCoords, m_selectingKeyboard );
         }
         else
+	{
+	    ClearSelection();
             SetCurrentCell( m_currentCellCoords.GetRow() + 1,
                             m_currentCellCoords.GetCol() );
+	}
         return TRUE;
     }
 
@@ -6219,8 +6239,11 @@ bool wxGrid::MoveCursorLeft( bool expandSelection )
             SelectBlock( m_currentCellCoords, m_selectingKeyboard );
         }
         else
+	{
+	    ClearSelection();
             SetCurrentCell( m_currentCellCoords.GetRow(),
                             m_currentCellCoords.GetCol() - 1 );
+	}
         return TRUE;
     }
 
@@ -6244,8 +6267,11 @@ bool wxGrid::MoveCursorRight( bool expandSelection )
             SelectBlock( m_currentCellCoords, m_selectingKeyboard );
         }
         else
-            SetCurrentCell( m_currentCellCoords.GetRow(),
+	{
+	    ClearSelection();
+             SetCurrentCell( m_currentCellCoords.GetRow(),
                             m_currentCellCoords.GetCol() + 1 );
+	}
         return TRUE;
     }
 
@@ -6366,8 +6392,10 @@ bool wxGrid::MoveCursorUpBlock( bool expandSelection )
             SelectBlock( m_currentCellCoords, m_selectingKeyboard );
         }
         else
-            SetCurrentCell( row, col );
-
+	{
+	    ClearSelection();
+	    SetCurrentCell( row, col );
+	}
         return TRUE;
     }
 
@@ -6427,7 +6455,10 @@ bool wxGrid::MoveCursorDownBlock( bool expandSelection )
             SelectBlock( m_currentCellCoords, m_selectingKeyboard );
         }
         else
-            SetCurrentCell( row, col );
+	{
+	    ClearSelection();
+	    SetCurrentCell( row, col );
+	}
 
         return TRUE;
     }
@@ -6488,7 +6519,10 @@ bool wxGrid::MoveCursorLeftBlock( bool expandSelection )
             SelectBlock( m_currentCellCoords, m_selectingKeyboard );
         }
         else
-            SetCurrentCell( row, col );
+	{
+	    ClearSelection();
+	    SetCurrentCell( row, col );
+	}
 
         return TRUE;
     }
@@ -6549,7 +6583,10 @@ bool wxGrid::MoveCursorRightBlock( bool expandSelection )
             SelectBlock( m_currentCellCoords, m_selectingKeyboard );
         }
         else
-            SetCurrentCell( row, col );
+	{
+	    ClearSelection();
+	    SetCurrentCell( row, col );
+	}
 
         return TRUE;
     }
