@@ -12337,7 +12337,6 @@ fi
 fi
 
 
-AFMINSTALL=
 WIN32INSTALL=
 
 TOOLKIT=
@@ -13531,7 +13530,6 @@ done
         TOOLKIT_INCLUDE="$wx_cv_cflags_gtk"
         GUI_TK_LIBRARY="$wx_cv_libs_gtk"
 
-        AFMINSTALL=afminstall
         TOOLKIT=GTK
         GUIDIST=GTK_DIST
 
@@ -13640,7 +13638,6 @@ echo "configure:13595: checking for libmgl location" >&5
         TOOLKIT_INCLUDE="-I$MGL_ROOT/include"
         GUI_TK_LIBRARY="-L$MGL_ROOT/lib/$mgl_lib_type/$mgl_os -lmgl -lmglcpp -lpm"
 
-        AFMINSTALL=afminstall
         TOOLKIT=MGL
         GUIDIST=MGL_DIST
     fi
@@ -13666,7 +13663,6 @@ echo "configure:13651: checking for MicroWindows" >&5
 
         wxUSE_UNIVERSAL="yes"
 
-        AFMINSTALL=afminstall
         TOOLKIT=MICROWIN
         GUIDIST=MICROWIN_DIST
 
@@ -14515,7 +14511,6 @@ fi
 
         GUI_TK_LIBRARY="$X_LIBS"
         TOOLKIT_INCLUDE="$X_CFLAGS"
-        AFMINSTALL=afminstall
         COMPILED_X_PROGRAM=0
 
         if test "$wxUSE_NANOX" = "yes"; then
@@ -15612,7 +15607,6 @@ fi
 
                         GUI_TK_LIBRARY=`echo $X_LIBS | sed 's/ -LNONE//'`
         TOOLKIT_INCLUDE=`echo $X_CFLAGS | sed 's/ -INONE//'`
-        AFMINSTALL=afminstall
         COMPILED_X_PROGRAM=0
 
         echo $ac_n "checking for Motif/Lesstif headers""... $ac_c" 1>&6
@@ -22890,7 +22884,6 @@ s%@WX_TARGET_LIBRARY_TYPE@%$WX_TARGET_LIBRARY_TYPE%g
 s%@STATIC_FLAG@%$STATIC_FLAG%g
 s%@WXDEBUG_DEFINE@%$WXDEBUG_DEFINE%g
 s%@USE_GUI@%$USE_GUI%g
-s%@AFMINSTALL@%$AFMINSTALL%g
 s%@WIN32INSTALL@%$WIN32INSTALL%g
 s%@TOOLKIT@%$TOOLKIT%g
 s%@TOOLKIT_DIR@%$TOOLKIT_DIR%g

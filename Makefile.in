@@ -391,15 +391,6 @@ CREATE_INSTALLED_LINKS_GL: preinstall_gl
 		&& $(LN_S) @WX_LIBRARY_NAME_SHARED_GL@ @WX_LIBRARY_LINK1_GL@ \
 		&& $(LN_S) @WX_LIBRARY_NAME_SHARED_GL@ @WX_LIBRARY_LINK2_GL@
 
-afminstall: preinstall
-	@if test ! -d $(datadir); then $(INSTALL) -d $(datadir); fi
-	$(INSTALL) -d $(datadir)/wx
-	$(INSTALL) -d $(datadir)/wx/$(VER_MAJMIN)
-	$(INSTALL) -d $(datadir)/wx/$(VER_MAJMIN)/afm
-	$(INSTALL) -d $(datadir)/wx/$(VER_MAJMIN)/gs_afm
-	$(INSTALL_DATA) $(top_srcdir)/misc/afm/*.afm $(datadir)/wx/$(VER_MAJMIN)/afm
-	$(INSTALL_DATA) $(top_srcdir)/misc/gs_afm/*.afm $(datadir)/wx/$(VER_MAJMIN)/gs_afm
-
 m4datainstall: preinstall
 	$(INSTALL) -d $(datadir)/aclocal
 	$(INSTALL_DATA) $(top_srcdir)/wxwin.m4 $(datadir)/aclocal
@@ -482,7 +473,7 @@ preinstall_gl: $(build_libdir)/@WX_TARGET_LIBRARY_GL@
 	@if test ! -d $(libdir); then $(INSTALL) -d $(libdir); fi
 	@INSTALL_LIBRARY@ $(build_libdir)/@WX_TARGET_LIBRARY_GL@ $(libdir)/@WX_TARGET_LIBRARY_GL@
 
-install: @AFMINSTALL@ @WX_ALL_INSTALLED@ m4datainstall @WIN32INSTALL@
+install: @WX_ALL_INSTALLED@ m4datainstall @WIN32INSTALL@
 	@echo " "
 	@echo " The installation of wxWindows is finished.  On certain"
 	@echo " platforms (e.g. Linux) you'll now have to run ldconfig"
@@ -511,11 +502,7 @@ uninstall:
 	@$(RM) $(libdir)/wx/include/@TOOLCHAIN_NAME@/wx/setup.h
 	@$(RM) $(bindir)/wx-config
 	@$(RM) $(bindir)/wx@TOOLCHAIN_NAME@-config
-	@$(RM) $(datadir)/wx/$(VER_MAJMIN)/afm/*
-	@$(RM) $(datadir)/wx/$(VER_MAJMIN)/gs_afm/*
 	# FIXME: wxBase doesnt install these next 3 dirs.
-	@-rmdir $(datadir)/wx/$(VER_MAJMIN)/gs_afm
-	@-rmdir $(datadir)/wx/$(VER_MAJMIN)/afm
 	@-rmdir $(datadir)/wx/$(VER_MAJMIN)
 	@-rmdir $(datadir)/wx
 	@echo " Removing headers..."
@@ -1414,11 +1401,6 @@ UTILS_DIST: ALL_GUI_DIST
 	cp $(UTILSDIR)/helpview/src/bitmaps/*.xpm $(DISTDIR)/utils/helpview/src/bitmaps
 
 MISC_DIST: ALL_GUI_DIST
-	mkdir $(DISTDIR)/misc
-	mkdir $(DISTDIR)/misc/afm
-	cp $(MISCDIR)/afm/*.afm  $(DISTDIR)/misc/afm
-	mkdir $(DISTDIR)/misc/gs_afm
-	cp $(MISCDIR)/gs_afm/*.afm  $(DISTDIR)/misc/gs_afm
 
 INTL_DIST:
 	mkdir $(DISTDIR)/locale

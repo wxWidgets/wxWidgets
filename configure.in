@@ -2017,7 +2017,6 @@ dnl ----------------------------------------------------------------
 dnl search for toolkit (widget sets)
 dnl ----------------------------------------------------------------
 
-AFMINSTALL=
 WIN32INSTALL=
 
 TOOLKIT=
@@ -2208,7 +2207,6 @@ equivalent variable and GTK+ is version 1.2.3 or above.
         TOOLKIT_INCLUDE="$wx_cv_cflags_gtk"
         GUI_TK_LIBRARY="$wx_cv_libs_gtk"
 
-        AFMINSTALL=afminstall
         TOOLKIT=GTK
         GUIDIST=GTK_DIST
 
@@ -2276,7 +2274,6 @@ equivalent variable and GTK+ is version 1.2.3 or above.
         TOOLKIT_INCLUDE="-I$MGL_ROOT/include"
         GUI_TK_LIBRARY="-L$MGL_ROOT/lib/$mgl_lib_type/$mgl_os -lmgl -lmglcpp -lpm"
 
-        AFMINSTALL=afminstall
         TOOLKIT=MGL
         GUIDIST=MGL_DIST
     fi
@@ -2301,7 +2298,6 @@ equivalent variable and GTK+ is version 1.2.3 or above.
 
         wxUSE_UNIVERSAL="yes"
 
-        AFMINSTALL=afminstall
         TOOLKIT=MICROWIN
         GUIDIST=MICROWIN_DIST
 
@@ -2319,7 +2315,6 @@ equivalent variable and GTK+ is version 1.2.3 or above.
 
         GUI_TK_LIBRARY="$X_LIBS"
         TOOLKIT_INCLUDE="$X_CFLAGS"
-        AFMINSTALL=afminstall
         COMPILED_X_PROGRAM=0
 
         if test "$wxUSE_NANOX" = "yes"; then
@@ -2461,7 +2456,6 @@ equivalent variable and GTK+ is version 1.2.3 or above.
         dnl X_LIBS and X_CFLAGS respectively -- what for??
         GUI_TK_LIBRARY=`echo $X_LIBS | sed 's/ -LNONE//'`
         TOOLKIT_INCLUDE=`echo $X_CFLAGS | sed 's/ -INONE//'`
-        AFMINSTALL=afminstall
         COMPILED_X_PROGRAM=0
 
         AC_MSG_CHECKING(for Motif/Lesstif headers)
@@ -5503,7 +5497,6 @@ AC_SUBST(WXDEBUG_DEFINE)
 
 dnl toolkit options
 AC_SUBST(USE_GUI)
-AC_SUBST(AFMINSTALL)
 AC_SUBST(WIN32INSTALL)
 AC_SUBST(TOOLKIT)
 AC_SUBST(TOOLKIT_DIR)
