@@ -2183,11 +2183,13 @@ fi
 dnl ---------------------------------------------------------------------------
 dnl OpenGL libraries
 dnl ---------------------------------------------------------------------------
+
 if test "$wxUSE_OPENGL" = "yes"; then
     if test "$wxUSE_MAC" = 1; then
         OPENGL_LIBS="-framework OpenGL -framework AGL"
+    elif test "$wxUSE_MSW" = 1; then
+        OPENGL_LIBS="-lopengl32 -lglu32"
     else
-
         AC_CHECK_HEADER(GL/gl.h,
             [
                 AC_MSG_CHECKING([for -lGL])
@@ -2215,26 +2217,6 @@ if test "$wxUSE_OPENGL" = "yes"; then
                     fi
                 fi
             ])
-
-    dnl check for OpenGL libs availability first
-    dnl -lGL requires -lm with soem OpenGL versions
-
-#    AC_CHECK_HEADER(GL/gl.h,
-#        [
-#            AC_CHECK_LIB(GL, glFlush,
-#                [
-#                    OPENGL_LIBS="-lGL -lGLU"
-#                ],
-#                [
-#                    AC_CHECK_LIB(MesaGL, glFlush,
-#                        [
-#                            OPENGL_LIBS="-lMesaGL -lMesaGLU"
-#                        ],
-#                        [],
-#                        [-lm])
-#                ],
-#                [-lm])
-#        ])
 
         if test "x$OPENGL_LIBS" = "x"; then
             dnl it should be an error and not a warning because OpenGL is not on
