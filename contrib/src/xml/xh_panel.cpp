@@ -42,13 +42,13 @@ wxObject *wxPanelXmlHandler::DoCreateResource()
         panel = new wxPanel(m_parentAsWindow,
                                  GetID(),
                                  GetPosition(), GetSize(),
-                                 GetStyle(wxT("style"), 0),
+                                 GetStyle(wxT("style"), wxTAB_TRAVERSAL),
                                  GetName());
     else
         panel->Create(m_parentAsWindow,
                                  GetID(),
                                  GetPosition(), GetSize(),
-                                 GetStyle(wxT("style"), 0),
+                                 GetStyle(wxT("style"), wxTAB_TRAVERSAL),
                                  GetName());
     SetupWindow(panel);
     CreateChildren(panel);
