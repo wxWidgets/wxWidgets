@@ -197,10 +197,10 @@ void wxTabbedWindow::SizeTabs(int x,int y, int width, int height, bool repant)
 }
 
 //---------------------------------------------------------------------------
-void wxTabbedWindow::AddTab( wxWindow* pContent,
-                            wxString  tabText,
-                            wxString  imageFileName,
-                            long      imageType )
+void wxTabbedWindow::AddTab( wxWindow*   pContent,
+                            wxString     tabText,
+                            wxString     imageFileName,
+                            wxBitmapType imageType )
 {
     twTabInfo* pTab = new twTabInfo();
     

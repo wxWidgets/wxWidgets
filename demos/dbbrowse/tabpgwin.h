@@ -100,10 +100,10 @@ public:
  // tabs can be also added when the window is
  // already displayed - "on the fly"
 
- virtual void AddTab( wxWindow* pContent,           // contained window
-                      wxString  tabText,            // tab label
-                      wxString  imageFileName = "", // if "", only text label is displayed
-                      long      imageType     = wxBITMAP_TYPE_BMP );
+ virtual void AddTab( wxWindow*    pContent,           // contained window
+                      wxString     tabText,            // tab label
+                      wxString     imageFileName = "", // if "", only text label is displayed
+                      wxBitmapType imageType     = wxBITMAP_TYPE_BMP );
 
  // NOTE:: if this AddTab(..) overload is called, the
  //        image bitmap will not be serialized (if performed),
