@@ -223,6 +223,7 @@ class WXDLLEXPORT wxCSConv : public wxMBConv
   wxChar *m_name;
   wxCharacterSet *m_cset;
   bool m_deferred;
+  void SetName(const wxChar *charset);
  public:
   wxCSConv(const wxChar *charset);
   virtual ~wxCSConv();
