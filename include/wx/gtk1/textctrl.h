@@ -143,6 +143,11 @@ public:
 
     void SetModified() { m_modified = TRUE; }
 
+    // wxGTK-specific: called recursively by Enable,
+    // to give widgets an oppprtunity to correct their colours after they
+    // have been changed by Enable
+    virtual void OnParentEnable( bool enable ) ;
+
 protected:
     virtual wxSize DoGetBestSize() const;
 

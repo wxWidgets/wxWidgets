@@ -114,6 +114,11 @@ public:
     /* For compatibility across platforms (not in event table) */
     void OnIdle(wxIdleEvent& WXUNUSED(event)) {};
 
+    // wxGTK-specific: called recursively by Enable,
+    // to give widgets an oppprtunity to correct their colours after they
+    // have been changed by Enable
+    virtual void OnParentEnable( bool WXUNUSED(enable) ) {};
+
     /* used by all window classes in the widget creation process */
     bool PreCreation( wxWindow *parent, const wxPoint &pos, const wxSize &size );
     void PostCreation();

@@ -757,19 +757,6 @@ bool wxTextCtrl::Enable( bool enable )
     {
         gtk_text_set_editable( GTK_TEXT(m_text), enable );
 
-	// If we have a custom background colour, we use this colour in both
-	// disabled and enabled mode, or we end up with a different colour under the
-	// text.
-        wxColour oldColour = GetBackgroundColour();
-        if (oldColour.Ok())
-        {
-            // Need to set twice or it'll optimize the useful stuff out
-            if (oldColour == * wxWHITE)
-                SetBackgroundColour(*wxBLACK);
-            else
-                SetBackgroundColour(*wxWHITE);
-            SetBackgroundColour(oldColour);
-        }
     }
     else
     {
@@ -777,6 +764,26 @@ bool wxTextCtrl::Enable( bool enable )
     }
 
     return TRUE;
+}
+
+// wxGTK-specific: called recursively by Enable,
+// to give widgets an oppprtunity to correct their colours after they
+// have been changed by Enable
+void wxTextCtrl::OnParentEnable( bool enable )
+{
+    // If we have a custom background colour, we use this colour in both
+    // disabled and enabled mode, or we end up with a different colour under the
+    // text.
+    wxColour oldColour = GetBackgroundColour();
+    if (oldColour.Ok())
+    {
+        // Need to set twice or it'll optimize the useful stuff out
+        if (oldColour == * wxWHITE)
+            SetBackgroundColour(*wxBLACK);
+        else
+            SetBackgroundColour(*wxWHITE);
+        SetBackgroundColour(oldColour);
+    }
 }
 
 void wxTextCtrl::DiscardEdits()

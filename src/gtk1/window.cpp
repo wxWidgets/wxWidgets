@@ -2934,6 +2934,23 @@ bool wxWindow::Show( bool show )
     return TRUE;
 }
 
+static void wxWindowNotifyEnable(wxWindow* win, bool enable)
+{
+    win->OnParentEnable(enable);
+
+    // Recurse, so that children have the opportunity to Do The Right Thing
+    // and reset colours that have been messed up by a parent's (really ancestor's)
+    // Enable call
+    for ( wxWindowList::Node *node = win->GetChildren().GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        wxWindow *child = node->GetData();
+        if (!child->IsKindOf(CLASSINFO(wxDialog)) && !child->IsKindOf(CLASSINFO(wxFrame)))
+            wxWindowNotifyEnable(child, enable);
+    }
+}
+
 bool wxWindow::Enable( bool enable )
 {
     wxCHECK_MSG( (m_widget != NULL), FALSE, wxT("invalid window") );
@@ -2948,15 +2965,7 @@ bool wxWindow::Enable( bool enable )
     if ( m_wxwindow )
         gtk_widget_set_sensitive( m_wxwindow, enable );
 
-    // Recurse, so that children have the opportunity to Do The Right Thing.
-    for ( wxWindowList::Node *node = GetChildren().GetFirst();
-          node;
-          node = node->GetNext() )
-    {
-        wxWindow *child = node->GetData();
-	if (!child->IsKindOf(CLASSINFO(wxDialog)) && !child->IsKindOf(CLASSINFO(wxFrame)))
-            child->Enable(enable);
-    }
+    wxWindowNotifyEnable(this, enable);
 
     return TRUE;
 }
