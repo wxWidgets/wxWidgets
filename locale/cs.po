@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxWindows-2.4\n"
 "POT-Creation-Date: 2002-12-12 11:59+0100\n"
-"PO-Revision-Date: 2002-12-12 16:25+0100\n"
-"Last-Translator: foo <foo@bar.cz>\n"
+"PO-Revision-Date: 2002-12-14 22:10--100\n"
+"Last-Translator: Vaclav Slavik <vaclav.slavik@matfyz.cz>\n"
 "Language-Team: wxWindows translators <wx-translators@wxwindows.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-2\n"
@@ -92,7 +92,7 @@ msgstr "%s - varování"
 #: ../src/common/msgout.cpp:108
 #, c-format
 msgid "%s message"
-msgstr ""
+msgstr "%s"
 
 #: ../src/common/resourc2.cpp:709
 #: ../src/common/resource.cpp:2366
@@ -133,14 +133,13 @@ msgstr "Kaskádovì"
 msgid "&Close"
 msgstr "&Zavøít"
 
-# POUZIT WINDOWS TERMINOLOGII!
 #: ../src/msw/textctrl.cpp:1681
 msgid "&Copy"
-msgstr ""
+msgstr "&Kopírovat"
 
 #: ../src/msw/textctrl.cpp:1683
 msgid "&Delete"
-msgstr "&Smazat"
+msgstr "&Odstranit"
 
 #: ../src/generic/logg.cpp:695
 msgid "&Details"
@@ -162,10 +161,9 @@ msgstr "Nápovìda"
 msgid "&Log"
 msgstr "&Log"
 
-# POUZIT WINDOWS TERMINOLOGII!
 #: ../src/univ/themes/win32.cpp:4541
 msgid "&Move"
-msgstr ""
+msgstr "&Pøesunout"
 
 #: ../src/msw/mdi.cpp:193
 #: ../src/generic/mdig.cpp:115
@@ -438,9 +436,8 @@ msgstr "Obálka B6, 176 x 125 mm"
 
 #: ../src/common/imagbmp.cpp:468
 #: ../src/common/imagbmp.cpp:484
-#, fuzzy
 msgid "BMP: Couldn't allocate memory."
-msgstr "PNM: Nemohu alokovat pamì»."
+msgstr "BMP: Nemohu alokovat pamì»."
 
 #: ../src/common/imagbmp.cpp:86
 msgid "BMP: Couldn't save invalid image."
@@ -463,7 +460,6 @@ msgid "BMP: Couldn't write the file (BitmapInfo) header."
 msgstr "BMP: Nemohu zapsat hlavièku souboru (BitmapInfo)."
 
 #: ../src/common/imagbmp.cpp:120
-#, fuzzy
 msgid "BMP: wxImage doesn't have own wxPalette."
 msgstr "BMP: wxImage nemá vlastní wxPalette."
 
@@ -572,14 +568,13 @@ msgid "Can't copy values of unsupported type %d."
 msgstr "Nemohu kopírovat hodnoty nepodporovaného typu %d"
 
 #: ../src/msw/toplevel.cpp:315
-#, fuzzy
 msgid "Can't create dialog using memory template"
-msgstr "Nemohu vytvoøit dialog pomocí ¹ablony '%s'"
+msgstr "Nemohu vytvoøit dialog pomocí ¹ablony z pamìti"
 
 #: ../src/os2/toplevel.cpp:369
-#, fuzzy, c-format
+#, c-format
 msgid "Can't create dialog using template '%ul'"
-msgstr "Nemohu vytvoøit dialog pomocí ¹ablony '%s'"
+msgstr ""
 
 #: ../src/msw/listctrl.cpp:334
 msgid "Can't create list control window, check that comctl32.dll is installed."
@@ -668,9 +663,9 @@ msgid "Can't read value of key '%s'"
 msgstr "Nemohu naèíst hodnotu klíèe '%s'"
 
 #: ../src/common/image.cpp:955
-#, fuzzy, c-format
+#, c-format
 msgid "Can't save image to file '%s': unknown extension."
-msgstr "Nemohu naèíst obrázek ze souboru '%s': soubor neexistuje."
+msgstr "Nemohu ulo¾it do souboru '%s': neznámá pøípona."
 
 #: ../src/generic/logg.cpp:551
 #: ../src/generic/logg.cpp:985
@@ -708,9 +703,9 @@ msgid "Cannot convert dialog units: dialog unknown."
 msgstr "Nemohu pøevést dialogové jednotky: dialog není znám."
 
 #: ../src/common/strconv.cpp:963
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot convert from encoding '%s'!"
-msgstr "Neznámé kódování '%s'!"
+msgstr "Text nelze zkonvertovat z kódování '%s'!"
 
 #: ../src/msw/dialup.cpp:499
 #, c-format
@@ -761,9 +756,9 @@ msgid "Cannot initialize display."
 msgstr "Nemohu inicializovat obrazovku."
 
 #: ../src/msw/volume.cpp:634
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot load icon from '%s'."
-msgstr "Nemohu ze '%s' získat rozmìry."
+msgstr "Nemohu naèíst ikonu z '%s'."
 
 #: ../contrib/src/xrc/xmlres.cpp:356
 #, c-format
@@ -820,9 +815,9 @@ msgstr "Nemohu tisknout prázdnou stránku."
 
 #: ../src/msw/volume.cpp:195
 #: ../src/msw/volume.cpp:526
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot read typename from '%s'!"
-msgstr "Nemohu ze '%s' získat souøadnice."
+msgstr "Nemohu pøeèíst typ z '%s'!"
 
 #: ../src/unix/threadpsx.cpp:1077
 msgid "Cannot retrieve thread scheduling policy."
@@ -1018,10 +1013,9 @@ msgstr "Vytváøení adresáøe"
 msgid "Create new directory"
 msgstr "Vytvoøit nový adresáø"
 
-# POUZIT WINDOWS TERMINOLOGII!
 #: ../src/msw/textctrl.cpp:1680
 msgid "Cu&t"
-msgstr ""
+msgstr "&Vyjmout"
 
 #: ../src/generic/filedlgg.cpp:1143
 msgid "Current directory:"
@@ -1085,9 +1079,8 @@ msgid "Dial up functions are unavailable because the remote access service (RAS)
 msgstr "Vytáèené pøipojení není dostupné, proto¾e Remote Access Service (RAS) není nainstalován. Prosím, nainstalujte ho."
 
 #: ../src/os2/toplevel.cpp:367
-#, fuzzy
 msgid "Did you forget to include wx/os2/wx.rc in your resources?"
-msgstr "Nezapomnìl(a) jste vlo¾it wx/msw/wx.rc do resource souboru?"
+msgstr ""
 
 #: ../src/generic/tipdlg.cpp:217
 msgid "Did you know..."
@@ -1217,7 +1210,6 @@ msgstr "Executive, 7 1/4 x 10 1/2 palce"
 #: ../src/common/resource.cpp:1845
 #: ../src/common/resource.cpp:1975
 #: ../src/common/resource.cpp:3059
-#, fuzzy
 msgid "Expected '*' whilst parsing resource."
 msgstr "Pøi parsování resource oèekávám '*'."
 
@@ -1226,7 +1218,6 @@ msgstr "Pøi parsování resource oèekávám '*'."
 #: ../src/common/resource.cpp:1862
 #: ../src/common/resource.cpp:1991
 #: ../src/common/resource.cpp:3076
-#, fuzzy
 msgid "Expected '=' whilst parsing resource."
 msgstr "Pøi parsování resource oèekávám '='."
 
@@ -1235,7 +1226,6 @@ msgstr "Pøi parsování resource oèekávám '='."
 #: ../src/common/resource.cpp:1831
 #: ../src/common/resource.cpp:1961
 #: ../src/common/resource.cpp:3045
-#, fuzzy
 msgid "Expected 'char' whilst parsing resource."
 msgstr "Pøi parsování resource oèekávám 'char'."
 
@@ -1284,9 +1274,9 @@ msgid "Failed to copy the contents of registry key '%s' to '%s'."
 msgstr "Nelze zkopírovat obsah registrového klíèe '%s' do '%s'."
 
 #: ../src/common/filefn.cpp:1131
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to copy the file '%s' to '%s'"
-msgstr "Nelze se dotknout souboru '%s'"
+msgstr "Selhalo kopírování souboru '%s' na '%s'"
 
 #: ../src/msw/dde.cpp:948
 msgid "Failed to create DDE string"
@@ -1305,9 +1295,8 @@ msgid "Failed to create a temporary file name"
 msgstr "Nelze vytvoøit jméno doèasného souboru"
 
 #: ../src/msw/utilsexc.cpp:197
-#, fuzzy
 msgid "Failed to create an anonymous pipe"
-msgstr "Nelze vytvoøit status bar."
+msgstr "Nelze vytvoøit status anonymní rouru."
 
 #: ../src/msw/dde.cpp:412
 #, c-format
@@ -1315,25 +1304,24 @@ msgid "Failed to create connection to server '%s' on topic '%s'"
 msgstr "Nelze navázat spojení se server '%s' na téma '%s'"
 
 #: ../src/msw/toplevel.cpp:313
-#, fuzzy
 msgid "Failed to create dialog. Incorrect DLGTEMPLATE?"
-msgstr "Nemohu vytvoøit adresáø"
+msgstr ""
 
 #: ../src/unix/mimetype.cpp:372
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create directory %s/.gnome."
-msgstr "Nepodaøilo se vytvoøit rodièovské MDI okno."
+msgstr "Nelze vytvoøit u¾ivatelský %s/.gnome."
 
 #: ../src/unix/mimetype.cpp:381
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create directory %s/mime-info."
-msgstr "Nelze vytvoøit klíè registrù pro soubory '%s'."
+msgstr "Nelze vytvoøit adresáø %s/mime-info."
 
 #: ../src/generic/dirdlgg.cpp:201
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create directory '%s'\n"
 "(Do you have the required permissions?)"
-msgstr "\n"
+msgstr "Nemohu vytvoøit adresáø '%s'\n"
 "(Máte potøebná pøístupová práva?)"
 
 #: ../src/msw/mimetype.cpp:168
@@ -1417,9 +1405,8 @@ msgid "Failed to get the local system time"
 msgstr "Nepodaøilo se zjistit místní systémový èas"
 
 #: ../src/common/filefn.cpp:1512
-#, fuzzy
 msgid "Failed to get the working directory"
-msgstr "Nemohu vytvoøit adresáø"
+msgstr "Nemohu zjistit aktuální pracovní adresáø"
 
 #: ../src/univ/theme.cpp:122
 msgid "Failed to initialize GUI: no built-in themes found."
@@ -1479,9 +1466,9 @@ msgid "Failed to modify file times for '%s'"
 msgstr "Nelze zmìnit èas pøístupu k souboru '%s'"
 
 #: ../src/common/filename.cpp:164
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open '%s' for %s"
-msgstr "Nelze otevøít soubor '%s' pro ètení"
+msgstr "Nelze otevøít soubor '%s' pro %s"
 
 #: ../src/common/filename.cpp:743
 msgid "Failed to open temporary file."
@@ -1640,10 +1627,11 @@ msgid "File '%s' already exists, do you really want to overwrite it?"
 msgstr "Soubor '%s' existuje, opravdu ho chcete pøepsat?"
 
 #: ../src/msw/filedlg.cpp:518
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' already exists.\n"
 "Do you want to replace it?"
-msgstr "Soubor '%s' existuje, opravdu ho chcete pøepsat?"
+msgstr "Soubor '%s' ji¾ existuje.\n"
+"Opravdu ho chcete pøepsat?"
 
 #: ../src/common/textcmn.cpp:158
 msgid "File couldn't be loaded."
@@ -1765,7 +1753,7 @@ msgstr "Jít do nadøazeného adresáøe"
 
 #: ../src/common/prntbase.cpp:378
 msgid "Goto Page"
-msgstr ""
+msgstr "Jdi na stránku"
 
 #: ../src/common/fontmap.cpp:119
 msgid "Greek (ISO-8859-7)"
@@ -1826,11 +1814,11 @@ msgstr "ICO: Chyba pøi ukládání obrázku!"
 
 #: ../src/common/imagbmp.cpp:1009
 msgid "ICO: Image too tall for an icon."
-msgstr ""
+msgstr "ICO: Obrázek je na ikonu pøíli¹ vysoký"
 
 #: ../src/common/imagbmp.cpp:1015
 msgid "ICO: Image too wide for an icon."
-msgstr ""
+msgstr "ICO: Obrázek je na ikonu pøíli¹ ¹iroký"
 
 #: ../src/common/imagbmp.cpp:1248
 msgid "ICO: Invalid icon index."
@@ -2074,7 +2062,7 @@ msgstr "Obálka Monarch, 3 7/8 x 7 1/2 palce"
 
 #: ../src/common/dlgcmn.cpp:239
 msgid "More..."
-msgstr "Dal¹í..."
+msgstr "Více..."
 
 #: ../src/generic/filedlgg.cpp:703
 msgid "Name"
@@ -2415,7 +2403,7 @@ msgstr "Tiskárna..."
 #: ../src/common/prntbase.cpp:108
 #: ../src/common/prntbase.cpp:153
 msgid "Printing "
-msgstr ""
+msgstr "Tisknu "
 
 #: ../src/common/prntbase.cpp:125
 msgid "Printing Error"
@@ -2451,7 +2439,7 @@ msgstr "Chyba pøi ètení ze souboru '%s'"
 #: ../contrib/src/xrc/xmlres.cpp:532
 #, c-format
 msgid "Referenced object node with ref=\"%s\" not found!"
-msgstr ""
+msgstr "Objektový uzel s ref=\"%s\" nenalezen!"
 
 #: ../src/msw/registry.cpp:535
 #, c-format
@@ -2629,7 +2617,6 @@ msgid "Size"
 msgstr "Velikost"
 
 #: ../src/generic/fontdlgg.cpp:229
-#, fuzzy
 msgid "Slant"
 msgstr "Sklonìné"
 
@@ -2662,12 +2649,11 @@ msgstr "Status: "
 #: ../contrib/src/xrc/xmlres.cpp:632
 #, c-format
 msgid "Subclass '%s' not found for resource '%s', not subclassing!"
-msgstr ""
+msgstr "Podtøída '%s' ke zdroji '%s' nenalezena!"
 
 #: ../src/generic/fontdlgg.cpp:225
-#, fuzzy
 msgid "Swiss"
-msgstr "Swiss"
+msgstr "Bezpatkové"
 
 #: ../src/common/imagtiff.cpp:204
 #: ../src/common/imagtiff.cpp:215
@@ -2696,9 +2682,8 @@ msgid "Tabloid, 11 x 17 in"
 msgstr "Tabloid, 11 x 17 palcù"
 
 #: ../src/generic/fontdlgg.cpp:226
-#, fuzzy
 msgid "Teletype"
-msgstr "Psací stroj"
+msgstr "Neproporcionální"
 
 #: ../src/common/docview.cpp:1541
 msgid "Templates"
@@ -2768,7 +2753,7 @@ msgstr "Verze Remote Access Service (RAS) na tomto poèítaèi je pøíli¹ stará, pro
 
 #: ../src/html/htmprint.cpp:540
 msgid "There was a problem during page setup: you may need to set a default printer."
-msgstr ""
+msgstr "Pøi nastavování stránky nastala chyba: nastavte výchozí tiskárnu."
 
 #: ../src/msw/thread.cpp:1214
 msgid "Thread module initialization failed: can not store value in thread local storage"
@@ -2994,7 +2979,7 @@ msgstr "Pouze celá slova"
 
 #: ../src/univ/themes/win32.cpp:1168
 msgid "Win32 theme"
-msgstr "Win32 téma"
+msgstr "Téma Win32"
 
 #: ../src/msw/utils.cpp:983
 msgid "Win32s on Windows 3.1"
@@ -3114,7 +3099,7 @@ msgstr "ZIP soubory lze otevøít jenom z disku!"
 
 #: ../src/common/docview.cpp:1953
 msgid "[EMPTY]"
-msgstr "[PRÁZDNÉ]"
+msgstr "[PRÁZDNÝ]"
 
 #: ../src/msw/dde.cpp:1011
 msgid "a DDEML application has created a prolonged race condition."
@@ -3353,15 +3338,15 @@ msgstr "pøedvolené"
 
 #: ../src/common/datetime.cpp:3363
 msgid "eighteenth"
-msgstr "osmnáctý"
+msgstr "osmnáctého"
 
 #: ../src/common/datetime.cpp:3353
 msgid "eighth"
-msgstr "osmý"
+msgstr "osmého"
 
 #: ../src/common/datetime.cpp:3356
 msgid "eleventh"
-msgstr "jedenáctý"
+msgstr "jedenáctého"
 
 #: ../src/common/fileconf.cpp:1753
 #, c-format
@@ -3379,11 +3364,11 @@ msgstr "nelze vyprázdnit buffer souboru '%s'"
 
 #: ../src/common/datetime.cpp:3360
 msgid "fifteenth"
-msgstr "patnáctý"
+msgstr "patnáctého"
 
 #: ../src/common/datetime.cpp:3350
 msgid "fifth"
-msgstr "pátý"
+msgstr "pátého"
 
 #: ../src/common/fileconf.cpp:626
 #, c-format
@@ -3412,15 +3397,15 @@ msgstr "soubor '%s': neoèekávaný znak %c na øádku %d."
 
 #: ../src/common/datetime.cpp:3346
 msgid "first"
-msgstr "první"
+msgstr "prvního"
 
 #: ../src/common/datetime.cpp:3359
 msgid "fourteenth"
-msgstr "ètrnáctý"
+msgstr "ètrnáctého"
 
 #: ../src/common/datetime.cpp:3349
 msgid "fourth"
-msgstr "ètvrtý"
+msgstr "ètvrtého"
 
 #: ../src/common/appcmn.cpp:319
 msgid "generate verbose log messages"
@@ -3472,7 +3457,7 @@ msgstr "hledám katalog '%s' v cestì '%s'."
 
 #: ../src/common/datetime.cpp:3511
 msgid "midnight"
-msgstr "Tenké"
+msgstr "pùlnoc"
 
 #: ../src/common/timercmn.cpp:286
 msgid "mktime() failed"
@@ -3480,11 +3465,11 @@ msgstr "mktime() selhalo"
 
 #: ../src/common/datetime.cpp:3364
 msgid "nineteenth"
-msgstr "devatenáctý"
+msgstr "devatenáctého"
 
 #: ../src/common/datetime.cpp:3354
 msgid "ninth"
-msgstr "devátý"
+msgstr "devátého"
 
 #: ../src/msw/dde.cpp:986
 msgid "no DDE error."
@@ -3504,7 +3489,7 @@ msgstr "èíslo"
 
 #: ../src/common/filename.cpp:166
 msgid "reading"
-msgstr ""
+msgstr "ètení"
 
 #: ../src/msw/dde.cpp:1029
 msgid "reentrancy problem."
@@ -3512,15 +3497,15 @@ msgstr "problém reentrance."
 
 #: ../src/common/datetime.cpp:3347
 msgid "second"
-msgstr "druhý"
+msgstr "druhého"
 
 #: ../src/common/datetime.cpp:3362
 msgid "seventeenth"
-msgstr "sedmnáctý"
+msgstr "sedmnáctého"
 
 #: ../src/common/datetime.cpp:3352
 msgid "seventh"
-msgstr "sedmý"
+msgstr "sedmého"
 
 #: ../src/common/menucmn.cpp:101
 msgid "shift"
@@ -3532,11 +3517,11 @@ msgstr "zobrazí tuto nápovìdu"
 
 #: ../src/common/datetime.cpp:3361
 msgid "sixteenth"
-msgstr "¹estnáctý"
+msgstr "¹estnáctého"
 
 #: ../src/common/datetime.cpp:3351
 msgid "sixth"
-msgstr "¹estý"
+msgstr "¹estého"
 
 #: ../src/common/appcmn.cpp:344
 msgid "specify display mode to use (e.g. 640x480-16)"
@@ -3552,7 +3537,7 @@ msgstr "øetìzec"
 
 #: ../src/common/datetime.cpp:3355
 msgid "tenth"
-msgstr "desátý"
+msgstr "desátého"
 
 #: ../src/msw/dde.cpp:993
 msgid "the response to the transaction caused the DDE_FBUSY bit to be set."
@@ -3560,11 +3545,11 @@ msgstr "odpovìï na transakci zpùsobila nastavení bitu DDE_FBUSY."
 
 #: ../src/common/datetime.cpp:3348
 msgid "third"
-msgstr "tøetí"
+msgstr "tøetího"
 
 #: ../src/common/datetime.cpp:3358
 msgid "thirteenth"
-msgstr "tøináctý"
+msgstr "tøináctého"
 
 #: ../src/common/datetime.cpp:3190
 msgid "today"
@@ -3572,18 +3557,17 @@ msgstr "dnes"
 
 #: ../src/common/datetime.cpp:3192
 msgid "tomorrow"
-msgstr "vèera"
+msgstr "zítra"
 
 #: ../src/common/datetime.cpp:3357
 msgid "twelfth"
-msgstr "dvanáctý"
+msgstr "dvanáctého"
 
 # VSECHNY tyhle cislovky se asi vztahuji
 # k datu --> predelat je na dvacaTEHO apod.!!
 #: ../src/common/datetime.cpp:3365
-#, fuzzy
 msgid "twentieth"
-msgstr "dvacátý"
+msgstr "dvacátého"
 
 #: ../src/common/fontcmn.cpp:540
 msgid "underlined"
@@ -3640,17 +3624,17 @@ msgstr "pou¾ívám katalog '%s' z '%s'."
 
 #: ../src/common/filename.cpp:166
 msgid "writing"
-msgstr ""
+msgstr "zápis"
 
 #: ../src/common/dynlib.cpp:336
 #, c-format
 msgid "wxDllLoader failed to GetSymbol '%s'"
-msgstr ""
+msgstr "wxDllLoader selhal pøi volání GetSymbol '%s'"
 
 #: ../src/common/dynload.cpp:282
 #, c-format
 msgid "wxDynamicLibrary failed to GetSymbol '%s'"
-msgstr ""
+msgstr "wxDynamicLibrary selhala pøi volání GetSymbol '%s'"
 
 #: ../src/common/timercmn.cpp:335
 msgid "wxGetTimeOfDay failed."
