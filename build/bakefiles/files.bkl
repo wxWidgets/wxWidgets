@@ -1714,6 +1714,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/mac/carbon/data.cpp
     src/mac/carbon/dataobj.cpp
     src/mac/carbon/dc.cpp
+    src/mac/carbon/dccg.cpp
     src/mac/carbon/dcclient.cpp
     src/mac/carbon/dcmemory.cpp
     src/mac/carbon/dcprint.cpp
