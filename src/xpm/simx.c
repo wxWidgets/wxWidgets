@@ -294,7 +294,7 @@ XCreateImage(Display *d, Visual *v,
         } else*/ {
 #ifdef __OS2__
         img->bitmap = GpiCreateBitmap(*d, &bmih, 0L, NULL, NULL);
-        WinReleasePS(hps);
+        WinReleasePS(*d);
 #else
 	    img->bitmap = CreateBitmap(width, height, 1 /* plane */ ,
 				       depth /* bits per pixel */ , NULL);
