@@ -42,8 +42,65 @@ typedef char tchar;
 #define LINKAGEMODE __cdecl
 #endif
 
+#ifdef __WXMAC__
+
+#include "ATSUnicode.h"
+#include "TextCommon.h"
+#include "TextEncodingConverter.h"
+
+#include  "wx/mac/private.h"  // includes mac headers
+
+typedef struct {
+    wxFontEncoding enc ;
+    TextEncodingBase mac ;
+} MacCP ;
+
+MacCP gMacCodePages[] =
+{
+    wxFONTENCODING_MACROMAN, kTextEncodingMacRoman,
+    wxFONTENCODING_MACCENTRALEUR, kTextEncodingMacCentralEurRoman,
+    wxFONTENCODING_MACHEBREW, kTextEncodingMacHebrew,
+    wxFONTENCODING_MACGREEK, kTextEncodingMacGreek,
+    wxFONTENCODING_MACARABIC, kTextEncodingMacArabic,
+    wxFONTENCODING_MACTURKISH, kTextEncodingMacTurkish,
+    wxFONTENCODING_MACCYRILLIC, kTextEncodingMacCyrillic,
+} ;
+
+wxUint16 gMacEncodings[WXSIZEOF(gMacCodePages)][128] ;
+bool gMacEncodingsInited[WXSIZEOF(gMacCodePages)] ;
+
+#endif
+
 static wxUint16* LINKAGEMODE GetEncTable(wxFontEncoding enc)
 {
+#ifdef __WXMAC__
+    for (int i = 0 ; i < WXSIZEOF(gMacCodePages) ; ++i )
+    {
+        if ( gMacCodePages[i].enc == enc )
+        {
+            if ( gMacEncodingsInited[i] == false )
+            {
+                TECObjectRef converter ;
+                TextEncodingBase code = gMacCodePages[i].mac ;
+		        TextEncodingBase unicode = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicode16BitFormat) ;
+        	    OSStatus status = TECCreateConverter(&converter,code,unicode);
+        	    char s[2] ;
+        	    s[1] = 0 ;
+        	    ByteCount byteInLen, byteOutLen ;
+        	    for( char c = 255 ; c >= 128 ; --c )
+        	    {
+        	        s[0] = c ;
+	                status = TECConvertText(converter, (ConstTextPtr) &s , 1, &byteInLen,
+	                (TextPtr) &gMacEncodings[i][c-128] , 2, &byteOutLen);
+        	    }
+	            status = TECDisposeConverter(converter);
+	            gMacEncodingsInited[i]=true;	
+            }
+            return gMacEncodings[i] ;
+        }
+    }
+#endif
+
     for (int i = 0; encodings_list[i].table != NULL; i++)
     {
         if (encodings_list[i].encoding == enc)
@@ -324,7 +381,7 @@ static wxFontEncoding
         /* unix    */ {wxFONTENCODING_ISO8859_1, wxFONTENCODING_ISO8859_15, STOP},
         /* windows */ {wxFONTENCODING_CP1252, STOP},
         /* os2     */ {STOP},
-        /* mac     */ {STOP}
+        /* mac     */ {wxFONTENCODING_MACROMAN, STOP}
     },
 
     // Central European
@@ -332,7 +389,7 @@ static wxFontEncoding
         /* unix    */ {wxFONTENCODING_ISO8859_2, STOP},
         /* windows */ {wxFONTENCODING_CP1250, STOP},
         /* os2     */ {STOP},
-        /* mac     */ {STOP}
+        /* mac     */ {wxFONTENCODING_MACCENTRALEUR, STOP}
     },
 
     // Baltic
@@ -348,7 +405,7 @@ static wxFontEncoding
         /* unix    */ {wxFONTENCODING_ISO8859_8, STOP},
         /* windows */ {wxFONTENCODING_CP1255, STOP},
         /* os2     */ {STOP},
-        /* mac     */ {STOP}
+        /* mac     */ {wxFONTENCODING_MACHEBREW, STOP}
     },
 
     // Greek
@@ -356,7 +413,7 @@ static wxFontEncoding
         /* unix    */ {wxFONTENCODING_ISO8859_7, STOP},
         /* windows */ {wxFONTENCODING_CP1253, STOP},
         /* os2     */ {STOP},
-        /* mac     */ {STOP}
+        /* mac     */ {wxFONTENCODING_MACGREEK, STOP}
     },
 
     // Arabic
@@ -364,7 +421,7 @@ static wxFontEncoding
         /* unix    */ {wxFONTENCODING_ISO8859_6, STOP},
         /* windows */ {wxFONTENCODING_CP1256, STOP},
         /* os2     */ {STOP},
-        /* mac     */ {STOP}
+        /* mac     */ {wxFONTENCODING_MACARABIC, STOP}
     },
 
     // Turkish
@@ -372,7 +429,7 @@ static wxFontEncoding
         /* unix    */ {wxFONTENCODING_ISO8859_9, STOP},
         /* windows */ {wxFONTENCODING_CP1254, STOP},
         /* os2     */ {STOP},
-        /* mac     */ {STOP}
+        /* mac     */ {wxFONTENCODING_MACTURKISH, STOP}
     },
 
     // Cyrillic
@@ -380,7 +437,7 @@ static wxFontEncoding
         /* unix    */ {wxFONTENCODING_KOI8, wxFONTENCODING_ISO8859_5, STOP},
         /* windows */ {wxFONTENCODING_CP1251, STOP},
         /* os2     */ {STOP},
-        /* mac     */ {STOP}
+        /* mac     */ {wxFONTENCODING_MACCYRILLIC, STOP}
     },
 
     {{STOP},{STOP},{STOP},{STOP}} /* Terminator */
