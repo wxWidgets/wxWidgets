@@ -660,10 +660,10 @@ private:
 enum
 {
     wxMOUSE_BTN_ANY     = -1,
-    wxMOUSE_BTN_NONE    = -1,
-    wxMOUSE_BTN_LEFT    = 0,
-    wxMOUSE_BTN_MIDDLE  = 1,
-    wxMOUSE_BTN_RIGHT   = 2
+    wxMOUSE_BTN_NONE    = 0,
+    wxMOUSE_BTN_LEFT    = 1,
+    wxMOUSE_BTN_MIDDLE  = 2,
+    wxMOUSE_BTN_RIGHT   = 3
 };
 
 class WXDLLIMPEXP_CORE wxMouseEvent : public wxEvent
@@ -676,19 +676,19 @@ public:
     // Was it a button event? (*doesn't* mean: is any button *down*?)
     bool IsButton() const { return Button(wxMOUSE_BTN_ANY); }
 
-    // Was it a down event from button 1, 2 or 3 or any?
+    // Was it a down event from this (or any) button?
     bool ButtonDown(int but = wxMOUSE_BTN_ANY) const;
 
-    // Was it a dclick event from button 1, 2 or 3 or any?
+    // Was it a dclick event from this (or any) button?
     bool ButtonDClick(int but = wxMOUSE_BTN_ANY) const;
 
-    // Was it a up event from button 1, 2 or 3 or any?
+    // Was it a up event from this (or any) button?
     bool ButtonUp(int but = wxMOUSE_BTN_ANY) const;
 
-    // Was the given button 1,2,3 or any changing state?
+    // Was the given button?
     bool Button(int but) const;
 
-    // Was the given button 1,2,3 or any in Down state?
+    // Was the given button in Down state?
     bool ButtonIsDown(int but) const;
 
     // Get the button which is changing state (wxMOUSE_BTN_NONE if none)

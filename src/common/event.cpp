@@ -541,84 +541,103 @@ void wxMouseEvent::Assign(const wxMouseEvent& event)
     m_linesPerAction = event.m_linesPerAction;
 }
 
-// True if was a button dclick event (1 = left, 2 = middle, 3 = right)
-// or any button dclick event (but = -1)
+// return true if was a button dclick event
 bool wxMouseEvent::ButtonDClick(int but) const
 {
     switch (but)
     {
-        case -1:
-            return (LeftDClick() || MiddleDClick() || RightDClick());
-        case 1:
-            return LeftDClick();
-        case 2:
-            return MiddleDClick();
-        case 3:
-            return RightDClick();
         default:
             wxFAIL_MSG(wxT("invalid parameter in wxMouseEvent::ButtonDClick"));
+            // fall through
+
+        case wxMOUSE_BTN_ANY:
+            return (LeftDClick() || MiddleDClick() || RightDClick());
+
+        case wxMOUSE_BTN_LEFT:
+            return LeftDClick();
+
+        case wxMOUSE_BTN_MIDDLE:
+            return MiddleDClick();
+
+        case wxMOUSE_BTN_RIGHT:
+            return RightDClick();
     }
 
     return false;
 }
 
-// True if was a button down event (1 = left, 2 = middle, 3 = right)
-// or any button down event (but = -1)
+// return true if was a button down event
 bool wxMouseEvent::ButtonDown(int but) const
 {
     switch (but)
     {
-        case -1:
-            return (LeftDown() || MiddleDown() || RightDown());
-        case 1:
-            return LeftDown();
-        case 2:
-            return MiddleDown();
-        case 3:
-            return RightDown();
         default:
             wxFAIL_MSG(wxT("invalid parameter in wxMouseEvent::ButtonDown"));
+            // fall through
+
+        case wxMOUSE_BTN_ANY:
+            return (LeftDown() || MiddleDown() || RightDown());
+
+        case wxMOUSE_BTN_LEFT:
+            return LeftDown();
+
+        case wxMOUSE_BTN_MIDDLE:
+            return MiddleDown();
+
+        case wxMOUSE_BTN_RIGHT:
+            return RightDown();
     }
 
     return false;
 }
 
-// True if was a button up event (1 = left, 2 = middle, 3 = right)
-// or any button up event (but = -1)
+// return true if was a button up event
 bool wxMouseEvent::ButtonUp(int but) const
 {
     switch (but)
     {
-        case -1:
-            return (LeftUp() || MiddleUp() || RightUp());
-        case 1:
-            return LeftUp();
-        case 2:
-            return MiddleUp();
-        case 3:
-            return RightUp();
         default:
             wxFAIL_MSG(wxT("invalid parameter in wxMouseEvent::ButtonUp"));
+            // fall through
+
+        case wxMOUSE_BTN_ANY:
+            return (LeftUp() || MiddleUp() || RightUp());
+
+        case wxMOUSE_BTN_LEFT:
+            return LeftUp();
+
+        case wxMOUSE_BTN_MIDDLE:
+            return MiddleUp();
+
+        case wxMOUSE_BTN_RIGHT:
+            return RightUp();
     }
 
     return false;
 }
 
-// True if the given button is currently changing state
+// return true if the given button is currently changing state
 bool wxMouseEvent::Button(int but) const
 {
     switch (but)
     {
-        case -1:
-            return (ButtonUp(-1) || ButtonDown(-1) || ButtonDClick(-1));
-        case 1:
-            return (LeftDown() || LeftUp() || LeftDClick());
-        case 2:
-            return (MiddleDown() || MiddleUp() || MiddleDClick());
-        case 3:
-            return (RightDown() || RightUp() || RightDClick());
         default:
             wxFAIL_MSG(wxT("invalid parameter in wxMouseEvent::Button"));
+            // fall through
+
+        case wxMOUSE_BTN_ANY:
+            return ButtonUp(wxMOUSE_BTN_ANY) ||
+                    ButtonDown(wxMOUSE_BTN_ANY) ||
+                        ButtonDClick(wxMOUSE_BTN_ANY);
+
+        case wxMOUSE_BTN_LEFT:
+            return LeftDown() || LeftUp() || LeftDClick();
+
+        case wxMOUSE_BTN_MIDDLE:
+            return MiddleDown() || MiddleUp() || MiddleDClick();
+
+        case wxMOUSE_BTN_RIGHT:
+            return RightDown() || RightUp() || RightDClick();
     }
 
     return false;
@@ -628,16 +647,21 @@ bool wxMouseEvent::ButtonIsDown(int but) const
 {
     switch (but)
     {
-        case -1:
-            return (LeftIsDown() || MiddleIsDown() || RightIsDown());
-        case 1:
-            return LeftIsDown();
-        case 2:
-            return MiddleIsDown();
-        case 3:
-            return RightIsDown();
         default:
             wxFAIL_MSG(wxT("invalid parameter in wxMouseEvent::ButtonIsDown"));
+            // fall through
+
+        case wxMOUSE_BTN_ANY:
+            return LeftIsDown() || MiddleIsDown() || RightIsDown();
+
+        case wxMOUSE_BTN_LEFT:
+            return LeftIsDown();
+
+        case wxMOUSE_BTN_MIDDLE:
+            return MiddleIsDown();
+
+        case wxMOUSE_BTN_RIGHT:
+            return RightIsDown();
     }
 
     return false;
@@ -653,7 +677,7 @@ int wxMouseEvent::GetButton() const
         }
     }
 
-    return -1;
+    return wxMOUSE_BTN_NONE;
 }
 
 // Find the logical position of the event given the DC
