@@ -1,0 +1,410 @@
+/////////////////////////////////////////////////////////////////////////////
+// Name:        lboxtest.cpp
+// Purpose:     wxListBox sample
+// Author:      Vadim Zeitlin
+// Id:          $Id$
+// Copyright:   (c) 2000 Vadim Zeitlin
+// Licence:     wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
+
+// ============================================================================
+// declarations
+// ============================================================================
+
+#ifdef __GNUG__
+    #pragma implementation "lboxtest.cpp"
+    #pragma interface "lboxtest.cpp"
+#endif
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
+// For compilers that support precompilation, includes "wx/wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
+// for all others, include the necessary headers (this file is usually all you
+// need because it includes almost all "standard" wxWindows headers)
+#ifndef WX_PRECOMP
+    #include "wx/app.h"
+    #include "wx/frame.h"
+    #include "wx/dcclient.h"
+
+    #include "wx/bmpbuttn.h"
+    #include "wx/button.h"
+    #include "wx/checkbox.h"
+    #include "wx/checklst.h"
+    #include "wx/listbox.h"
+    #include "wx/radiobox.h"
+    #include "wx/radiobut.h"
+    #include "wx/scrolbar.h"
+    #include "wx/scrolwin.h"
+    #include "wx/statbox.h"
+    #include "wx/stattext.h"
+#endif
+
+#include "wx/sizer.h"
+
+#ifdef __WXUNIVERSAL__
+
+#include "wx/univ/theme.h"
+
+// ----------------------------------------------------------------------------
+// resources
+// ----------------------------------------------------------------------------
+
+#include "bricks.xpm"
+
+#endif // __WXUNIVERSAL__
+
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
+// control ids
+enum
+{
+    LboxTest_Reset = 100,
+    LboxTest_Create,
+    LboxTest_Add,
+    LboxTest_AddSeveral,
+    LboxTest_Clear,
+    LboxTest_Delete
+};
+
+// ----------------------------------------------------------------------------
+// our classes
+// ----------------------------------------------------------------------------
+
+// Define a new application type, each program should derive a class from wxApp
+class LboxTestApp : public wxApp
+{
+public:
+    // override base class virtuals
+    // ----------------------------
+
+    // this one is called on application startup and is a good place for the app
+    // initialization (doing it here and not in the ctor allows to have an error
+    // return: if OnInit() returns false, the application terminates)
+    virtual bool OnInit();
+};
+
+// Define a new frame type: this is going to be our main frame
+class LboxTestFrame : public wxFrame
+{
+public:
+    // ctor(s)
+    LboxTestFrame(const wxString& title);
+
+protected:
+    // event handlers
+    void OnButtonReset(wxCommandEvent& event);
+    void OnButtonCreate(wxCommandEvent& event);
+    void OnButtonClear(wxCommandEvent& event);
+    void OnButtonAdd(wxCommandEvent& event);
+    void OnButtonAddSeveral(wxCommandEvent& event);
+    void OnCheckOrRadioBox(wxCommandEvent& event);
+    void OnUpdateUIButtons(wxUpdateUIEvent& event);
+
+    // reset the listbox parameters
+    void Reset();
+
+    // (re)create the listbox
+    void CreateLbox();
+
+    // listbox parameters
+    // ------------------
+
+    // the selection mode
+    enum LboxSelection
+    {
+        LboxSel_Single,
+        LboxSel_Extended,
+        LboxSel_Multiple
+    } m_lboxSelMode;
+
+    // should it be sorted?
+    bool m_sorted;
+
+    // should it have horz scroll/vert scrollbar permanently shown?
+    bool m_horzScroll,
+         m_vertScrollAlways;
+
+    // should the recreate button be enabled?
+    bool m_dirty;
+
+    // the controls
+    // ------------
+
+    // the sel mode radiobox
+    wxRadioBox *m_radioSelMode;
+
+    // the checkboxes
+    wxCheckBox *m_chkSort,
+               *m_chkHScroll,
+               *m_chkVScroll;
+
+    // the listbox itself and the sizer it is in
+    wxListBox *m_lbox;
+    wxSizer *m_sizerLbox;
+
+    // the buttons to reset the settings and recreated the box
+    wxButton *m_btnReset,
+             *m_btnCreate;
+
+private:
+    // any class wishing to process wxWindows events must use this macro
+    DECLARE_EVENT_TABLE()
+};
+
+// ----------------------------------------------------------------------------
+// misc macros
+// ----------------------------------------------------------------------------
+
+IMPLEMENT_APP(LboxTestApp)
+
+#ifdef __WXUNIVERSAL__
+    WX_USE_THEME(win32);
+    WX_USE_THEME(gtk);
+#endif // __WXUNIVERSAL__
+
+// ----------------------------------------------------------------------------
+// event tables
+// ----------------------------------------------------------------------------
+
+BEGIN_EVENT_TABLE(LboxTestFrame, wxFrame)
+    EVT_BUTTON(LboxTest_Reset, LboxTestFrame::OnButtonReset)
+    EVT_BUTTON(LboxTest_Create, LboxTestFrame::OnButtonCreate)
+    EVT_BUTTON(LboxTest_Clear, LboxTestFrame::OnButtonClear)
+    EVT_BUTTON(LboxTest_Add, LboxTestFrame::OnButtonAdd)
+    EVT_BUTTON(LboxTest_AddSeveral, LboxTestFrame::OnButtonAddSeveral)
+
+    EVT_UPDATE_UI_RANGE(LboxTest_Reset, LboxTest_Create,
+                        LboxTestFrame::OnUpdateUIButtons)
+
+    EVT_CHECKBOX(-1, LboxTestFrame::OnCheckOrRadioBox)
+    EVT_RADIOBOX(-1, LboxTestFrame::OnCheckOrRadioBox)
+END_EVENT_TABLE()
+
+// ============================================================================
+// implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// app class
+// ----------------------------------------------------------------------------
+
+bool LboxTestApp::OnInit()
+{
+    wxFrame *frame = new LboxTestFrame(_T("wxListBox sample"));
+    frame->Show();
+
+    //wxLog::AddTraceMask(_T("listbox"));
+
+    return TRUE;
+}
+
+// ----------------------------------------------------------------------------
+// top level frame class
+// ----------------------------------------------------------------------------
+
+LboxTestFrame::LboxTestFrame(const wxString& title)
+             : wxFrame(NULL, -1, title)
+{
+    // init everything
+    m_dirty = FALSE;
+    m_radioSelMode = (wxRadioBox *)NULL;
+
+    m_chkVScroll =
+    m_chkHScroll =
+    m_chkSort = (wxCheckBox *)NULL;
+
+    m_lbox = (wxListBox *)NULL;
+    m_sizerLbox = (wxSizer *)NULL;
+
+    /*
+       What we create here is a frame having 2 panes: the explanatory pane to
+       the left allowing to set the listbox styles and recreate the control
+       and the pane containing the listbox itself and the control used for log
+       output to the right.
+
+       The left pane is divided, itself, in 2 parts with the upper one
+       allowing to recreate the listbox and the lower one to add/change/delete
+       strings to/from it.
+    */
+    wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL),
+            *sizerLeft = new wxBoxSizer(wxVERTICAL),
+            *sizerRight = new wxBoxSizer(wxVERTICAL);
+
+    // upper left pane
+    static const wxString modes[] =
+    {
+        _T("single"),
+        _T("extended"),
+        _T("multiple"),
+    };
+
+    m_radioSelMode = new wxRadioBox(this, -1, _T("Selection &mode:"),
+                                    wxDefaultPosition, wxDefaultSize,
+                                    WXSIZEOF(modes), modes,
+                                    1, wxRA_SPECIFY_COLS);
+
+    m_chkVScroll = new wxCheckBox(this, -1, _T("Always show &vertical scrollbar"));
+    m_chkHScroll = new wxCheckBox(this, -1, _T("Show &horizontal scrollbar"));
+    m_chkSort = new wxCheckBox(this, -1, _T("&Sort items"));
+
+    wxStaticBox *box = new wxStaticBox(this, -1, _T("&Set listbox parameters"));
+    wxSizer *sizerUp = new wxStaticBoxSizer(box, wxVERTICAL);
+
+    sizerUp->Add(m_chkVScroll, 0, wxLEFT | wxRIGHT, 5);
+    sizerUp->Add(m_chkHScroll, 0, wxLEFT | wxRIGHT, 5);
+    sizerUp->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
+    sizerUp->Add(m_radioSelMode, 0, wxALL, 5);
+    sizerUp->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
+    sizerUp->Add(m_chkSort, 0, wxLEFT | wxRIGHT, 5);
+
+    wxSizer *sizerBtn = new wxBoxSizer(wxHORIZONTAL);
+    wxButton *btn = new wxButton(this, LboxTest_Reset, _T("&Reset"));
+    sizerBtn->Add(btn, 0, wxLEFT | wxRIGHT, 5);
+    btn = new wxButton(this, LboxTest_Create, _T("&Create"));
+    sizerBtn->Add(btn, 0, wxLEFT | wxRIGHT, 5);
+    sizerUp->Add(sizerBtn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 5);
+
+    // lower left pane
+    wxStaticBox *box2 = new wxStaticBox(this, -1, _T("&Change listbox contents"));
+    wxSizer *sizerDown = new wxStaticBoxSizer(box2, wxVERTICAL);
+
+    btn = new wxButton(this, LboxTest_Add, _T("&Add string..."));
+    sizerDown->Add(btn, 0, wxALL, 5);
+    btn = new wxButton(this, LboxTest_AddSeveral, _T("Add a &few string"));
+    sizerDown->Add(btn, 0, wxALL, 5);
+    btn = new wxButton(this, LboxTest_Clear, _T("&Clear"));
+    sizerDown->Add(btn, 0, wxALL, 5);
+
+    sizerLeft->Add(sizerUp, 0, wxGROW | wxTOP | wxBOTTOM, 5);
+    sizerLeft->Add(sizerDown, 0,  wxGROW | wxTOP | wxBOTTOM, 5);
+
+    // right pane
+    m_lbox = new wxListBox(this, -1);
+    sizerRight->Add(m_lbox, 1, wxGROW | wxALL, 5);
+    m_sizerLbox = sizerRight;
+
+    sizerTop->Add(sizerLeft, 0, wxGROW | wxALL, 10);
+    sizerTop->Add(sizerRight, 1, wxGROW | wxALL, 10);
+
+    // final initialization
+    Reset();
+
+    SetAutoLayout(TRUE);
+    SetSizer(sizerTop);
+
+    sizerTop->Fit(this);
+    sizerTop->SetSizeHints(this);
+}
+
+// ----------------------------------------------------------------------------
+// operations
+// ----------------------------------------------------------------------------
+
+void LboxTestFrame::Reset()
+{
+    if ( m_radioSelMode->GetSelection() == LboxSel_Single &&
+         !m_chkSort->GetValue() &&
+         !m_chkHScroll->GetValue() &&
+         !m_chkVScroll->GetValue() )
+    {
+        // nothing to do
+        return;
+    }
+
+    m_radioSelMode->SetSelection(LboxSel_Single);
+    m_chkSort->SetValue(FALSE);
+    m_chkHScroll->SetValue(FALSE);
+    m_chkVScroll->SetValue(FALSE);
+
+    m_dirty = TRUE;
+}
+
+void LboxTestFrame::CreateLbox()
+{
+    int flags = 0;
+    switch ( m_radioSelMode->GetSelection() )
+    {
+        default:
+            wxFAIL_MSG( _T("unexpected radio box selection") );
+
+        case LboxSel_Single:    flags |= wxLB_SINGLE; break;
+        case LboxSel_Extended:  flags |= wxLB_EXTENDED; break;
+        case LboxSel_Multiple:  flags |= wxLB_MULTIPLE; break;
+    }
+
+    wxArrayString items;
+    if ( m_lbox )
+    {
+        int count = m_lbox->GetCount();
+        for ( int n = 0; n < count; n++ )
+        {
+            items.Add(m_lbox->GetString(n));
+        }
+
+        m_sizerLbox->Remove(m_lbox);
+        delete m_lbox;
+    }
+
+    m_lbox = new wxListBox(this, -1,
+                           wxDefaultPosition, wxDefaultSize,
+                           0, NULL,
+                           flags);
+    m_lbox->Set(items);
+    m_sizerLbox->Add(m_lbox, 1, wxGROW | wxALL, 5);
+
+    m_dirty = FALSE;
+}
+
+// ----------------------------------------------------------------------------
+// event handlers
+// ----------------------------------------------------------------------------
+
+void LboxTestFrame::OnButtonReset(wxCommandEvent& event)
+{
+    Reset();
+}
+
+void LboxTestFrame::OnButtonCreate(wxCommandEvent& event)
+{
+    CreateLbox();
+}
+
+void LboxTestFrame::OnButtonClear(wxCommandEvent& event)
+{
+    m_lbox->Clear();
+}
+
+void LboxTestFrame::OnButtonAdd(wxCommandEvent& event)
+{
+    static size_t s_item = 0;
+    m_lbox->Append(wxString::Format(_T("test item %u"), ++s_item));
+}
+
+void LboxTestFrame::OnButtonAddSeveral(wxCommandEvent& event)
+{
+    wxArrayString items;
+    items.Add(_T("First"));
+    items.Add(_T("another one"));
+    items.Add(_T("and the last (very long) one"));
+    m_lbox->InsertItems(items, 0);
+}
+
+void LboxTestFrame::OnUpdateUIButtons(wxUpdateUIEvent& event)
+{
+    event.Enable(m_dirty);
+}
+
+void LboxTestFrame::OnCheckOrRadioBox(wxCommandEvent& event)
+{
+    m_dirty = TRUE;
+}
