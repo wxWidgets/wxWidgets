@@ -74,6 +74,8 @@ class EditorFrame(frame.Frame):
     def OnIdle(self, event):
         """Event handler for idle time."""
         self._updateStatus()
+        if hasattr(self, 'notebook'):
+            self._updateTabText()
         self._updateTitle()
         event.Skip()
 
@@ -87,6 +89,24 @@ class EditorFrame(frame.Frame):
         if text != self._statusText:
             self.SetStatusText(text)
             self._statusText = text
+
+    def _updateTabText(self):
+        """Show current buffer information on notebook tab."""
+##         suffix = ' **'
+##         notebook = self.notebook
+##         selection = notebook.GetSelection()
+##         if selection == -1:
+##             return
+##         text = notebook.GetPageText(selection)
+##         window = notebook.GetPage(selection)
+##         if window.editor and window.editor.buffer.hasChanged():
+##             if text.endswith(suffix):
+##                 pass
+##             else:
+##                 notebook.SetPageText(selection, text + suffix)
+##         else:
+##             if text.endswith(suffix):
+##                 notebook.SetPageText(selection, text[:len(suffix)])
 
     def _updateTitle(self):
         """Show current title information."""
@@ -275,15 +295,16 @@ class EditorNotebookFrame(EditorFrame):
 
     def _updateTitle(self):
         """Show current title information."""
-        title = self.GetTitle()
-        if self.bufferHasChanged():
-            if title.startswith('* '):
-                pass
-            else:
-                self.SetTitle('* ' + title)
-        else:
-            if title.startswith('* '):
-                self.SetTitle(title[2:])
+        pass
+##         title = self.GetTitle()
+##         if self.bufferHasChanged():
+##             if title.startswith('* '):
+##                 pass
+##             else:
+##                 self.SetTitle('* ' + title)
+##         else:
+##             if title.startswith('* '):
+##                 self.SetTitle(title[2:])
         
     def bufferCreate(self, filename=None):
         """Create new buffer."""
@@ -334,6 +355,48 @@ class EditorNotebook(wx.wxNotebook):
                                       self.OnPageChanging)
         wx.EVT_NOTEBOOK_PAGE_CHANGED(self, self.GetId(),
                                      self.OnPageChanged)
+        wx.EVT_IDLE(self, self.OnIdle)
+
+    def OnIdle(self, event):
+        """Event handler for idle time."""
+        self._updateTabText()
+        event.Skip()
+
+    def _updateTabText(self):
+        """Show current buffer display name on all but first tab."""
+        size = 3
+        changed = ' **'
+        unchanged = ' --'
+        selection = self.GetSelection()
+        if selection < 1:
+            return
+        text = self.GetPageText(selection)
+        window = self.GetPage(selection)
+        if not window.editor:
+            return
+        if text.endswith(changed) or text.endswith(unchanged):
+            name = text[:-size]
+        else:
+            name = text
+        if name != window.editor.buffer.name:
+            text = window.editor.buffer.name
+        if window.editor.buffer.hasChanged():
+            if text.endswith(changed):
+                text = None
+            elif text.endswith(unchanged):
+                text = text[:-size] + changed
+            else:
+                text += changed
+        else:
+            if text.endswith(changed):
+                text = text[:-size] + unchanged
+            elif text.endswith(unchanged):
+                text = None
+            else:
+                text += unchanged
+        if text is not None:
+            self.SetPageText(selection, text)
+                
 
     def OnPageChanging(self, event):
         """Page changing event handler."""
