@@ -1,6 +1,6 @@
 # $Id$
 
-CONTRIB_SAMPLES=mmedia ogl stc gizmos
+CONTRIB_SAMPLES=multicell splittree
 
 all:
 	@for d in $(CONTRIB_SAMPLES); do (cd $$d && $(MAKE)); done
