@@ -56,7 +56,6 @@ extern PyObject *SWIG_newvarlink(void);
 
 #include "helpers.h"
 #include <wx/toolbar.h>
-#include <wx/tbarsmpl.h>
 
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {

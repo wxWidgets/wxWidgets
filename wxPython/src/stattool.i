@@ -16,7 +16,6 @@
 %{
 #include "helpers.h"
 #include <wx/toolbar.h>
-#include <wx/tbarsmpl.h>
 %}
 
 //----------------------------------------------------------------------
