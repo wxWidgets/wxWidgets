@@ -38,11 +38,12 @@ IMPLEMENT_DYNAMIC_CLASS(wxGIFHandler,wxImageHandler)
 
 #if wxUSE_STREAMS
 
-bool wxGIFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose, int WXUNUSED(index) )
+bool wxGIFHandler::LoadFile(wxImage *image, wxInputStream& stream,
+                            bool verbose, int index)
 {
     wxGIFDecoder *decod;
     int error;
-    bool ok;
+    bool ok = TRUE;
 
 //    image->Destroy();
     decod = new wxGIFDecoder(&stream, TRUE);
@@ -75,7 +76,30 @@ bool wxGIFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
         /* go on; image data is OK */
     }
 
-    ok = decod->ConvertToImage(image);
+    if (index != -1)
+    {
+        // We're already on index = 0 by default. So no need
+        // to call GoFrame(0) then. On top of that GoFrame doesn't
+        // accept an index of 0. (Instead GoFirstFrame() should be used)
+        // Also if the gif image has only one frame, calling GoFrame(0)
+        // fails because GoFrame() only works with gif animations.
+        // (It fails if IsAnimation() returns FALSE)
+        // All valid reasons to NOT call GoFrame when index equals 0.
+        if (index != 0)
+        {
+            ok = decod->GoFrame(index);
+        }
+    }
+
+    if (ok)
+    {
+        ok = decod->ConvertToImage(image);
+    }
+    else
+    {
+        wxLogError(_("GIF: Invalid gif index."));
+    }
+
     delete decod;
 
     return ok;

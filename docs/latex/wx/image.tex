@@ -130,9 +130,9 @@ Loads an image from an input stream.
 \docparam{mimetype}{MIME type string (for example 'image/jpeg')}
 
 \docparam{index}{Index of the image to load in the case that the image file contains multiple images.
-This is only used by ICO and TIFF handlers. The default value (-1) means 
+This is only used by GIF, ICO and TIFF handlers. The default value (-1) means 
 "choose the default image" and is interpreted as the first image (index=0) by 
-the TIFF handler and as the largest and most colourful one by the ICO handler.}
+the GIF and TIFF handler and as the largest and most colourful one by the ICO handler.}
 
 \wxheading{Remarks}
 
@@ -570,9 +570,9 @@ Loads an image from an input stream.
 \docparam{mimetype}{MIME type string (for example 'image/jpeg')}
 
 \docparam{index}{Index of the image to load in the case that the image file contains multiple images.
-This is only used by ICO and TIFF handlers. The default value (-1) means 
+This is only used by GIF, ICO and TIFF handlers. The default value (-1) means 
 "choose the default image" and is interpreted as the first image (index=0) by 
-the TIFF handler and as the largest and most colourful one by the ICO handler.}
+the GIF and TIFF handler and as the largest and most colourful one by the ICO handler.}
 
 \wxheading{Remarks}
 
@@ -588,7 +588,8 @@ hotspot for loaded cursor file:
 
 \wxheading{Return value}
 
-TRUE if the operation succeeded, FALSE otherwise.
+TRUE if the operation succeeded, FALSE otherwise. If the optional index parameter is out of range,
+FALSE is returned and a call to wxLogError() takes place.
 
 \wxheading{See also}
 
