@@ -1,0 +1,37 @@
+#
+# File:		makefile.g95
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile for printing example (UNIX). PRINTING NOT SUPPORTED
+# UNDER UNIX YET: THIS IS A PLACEHOLDER.
+
+WXDIR = ../..
+
+# All common UNIX compiler flags and options are now in
+# this central makefile.
+include $(WXDIR)/src/makeg95.env
+
+OBJECTS=$(OBJDIR)/printing.$(OBJSUFF) $(OBJDIR)/printing_resources.$(OBJSUFF)
+
+all:	$(OBJDIR) printing$(GUISUFFIX)
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+printing.exe: $(OBJECTS) $(WXLIB)
+	$(CC) $(LDFLAGS) -o printing$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
+
+$(OBJDIR)/printing.$(OBJSUFF):        printing.$(SRCSUFF) printing.h
+	$(CC) -c $(CPPFLAGS) -o $@ printing.$(SRCSUFF)
+
+$(OBJDIR)/printing_resources.o:  printing.rc
+	$(RESCOMP) -i printing.rc -o $(OBJDIR)/printing_resources.o $(RESFLAGS)
+
+clean:
+	rm -f $(OBJECTS) printing$(GUISUFFIX).exe core *.res *.rsc
+
