@@ -104,6 +104,12 @@ public:
 
     virtual void ShowPosition(long pos);
     virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt, long *pos) const;
+    virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt,
+                                            wxTextCoord *col,
+                                            wxTextCoord *row) const
+    {
+        return wxTextCtrlBase::HitTest(pt, col, row);
+    }
 
     // Clipboard operations
     virtual void Copy();
