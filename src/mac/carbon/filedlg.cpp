@@ -469,64 +469,36 @@ int wxFileDialog::ShowModal()
             if (err != noErr)
                 break;
 
+            CFURLRef fullURLRef;
             if (m_dialogStyle & wxSAVE)
             {
                 CFURLRef parentURLRef = ::CFURLCreateFromFSRef(NULL, &theFSRef);
 
                 if (parentURLRef)
                 {
-                    CFURLRef fullURLRef =
+                    fullURLRef =
                         ::CFURLCreateCopyAppendingPathComponent(NULL,
                                                                 parentURLRef,
                                                                 navReply.saveFileName,
                                                                 false);
                     ::CFRelease(parentURLRef);
-                    if (fullURLRef)
-                    {
-                        CFStringRef cfString = ::CFURLCopyPath(fullURLRef);
-                        ::CFRelease(fullURLRef);
-
-                        if (cfString)
-                        {
-                            // unescape the URL for
-                            // "file name" instead of "file%20name"
-                            CFStringRef cfStringUnescaped =
-                                ::CFURLCreateStringByReplacingPercentEscapes(NULL,
-                                                                             cfString,
-                                                                             CFSTR(""));
-                            ::CFRelease(cfString);
-
-                            if (cfStringUnescaped)
-                            {
-                                Size len = CFStringGetLength( cfStringUnescaped )  ;
-                                wxChar* buf = thePath.GetWriteBuf( len ) ;
-                                //buf[0] = '\0';
-#if wxUSE_UNICODE
-                                CFStringGetCharacters(cfStringUnescaped , CFRangeMake( 0 , len ) , (UniChar*) buf ) ;
-#else
-                                CFStringGetCString( cfStringUnescaped , buf , len+1 , CFStringGetSystemEncoding() ) ;
-#endif
-                                buf[len] = 0 ;
-                                wxMacConvertNewlines10To13( buf ) ;
-                                thePath.UngetWriteBuf() ;
-                                ::CFRelease(cfStringUnescaped);
-                            }
-                        }
-                    }
-                }
-                if (!thePath)
-                {
-                    ::NavDisposeReply(&navReply);
-                    return wxID_CANCEL;
                 }
             }
             else
             {
-                const short maxpath = 1024 ;
-                ::FSRefMakePath( &theFSRef , (UInt8*) thePath.GetWriteBuf(maxpath+1),maxpath) ;
-                thePath.UngetWriteBuf() ;
-                if (err != noErr)
-                    break;
+                fullURLRef = ::CFURLCreateFromFSRef(NULL, &theFSRef);
+            }
+#ifdef __UNIX__
+            CFURLPathStyle pathstyle = kCFURLPOSIXPathStyle;
+#else
+            CFURLPathStyle pathstyle = kCFURLHFSPathStyle;
+#endif
+            CFStringRef cfString = CFURLCopyFileSystemPath(fullURLRef, pathstyle);
+            thePath = wxMacCFStringHolder(cfString).AsString();
+            if (!thePath)
+            {
+                ::NavDisposeReply(&navReply);
+                return wxID_CANCEL;
             }
             m_path = thePath;
             m_paths.Add(m_path);
