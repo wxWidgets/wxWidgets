@@ -730,7 +730,6 @@
     wx/gtk/toplevel.h
     wx/gtk/gauge.h
     wx/gtk/gdiobj.h
-    wx/gtk/glcanvas.h
     wx/gtk/icon.h
     wx/gtk/joystick.h
     wx/gtk/listbox.h
@@ -815,7 +814,6 @@
     src/motif/frame.cpp
     src/motif/gauge.cpp
     src/motif/gdiobj.cpp
-    src/motif/glcanvas.cpp
     src/motif/icon.cpp
     src/motif/listbox.cpp
     src/motif/main.cpp
@@ -881,7 +879,6 @@
     wx/motif/frame.h
     wx/motif/gauge.h
     wx/motif/gdiobj.h
-    wx/motif/glcanvas.h
     wx/motif/icon.h
     wx/motif/listbox.h
     wx/motif/mdi.h
@@ -946,7 +943,6 @@
     src/x11/evtloop.cpp
     src/x11/font.cpp
     src/x11/gdiobj.cpp
-    src/x11/glcanvas.cpp
     src/x11/icon.cpp
     src/x11/joystick.cpp
     src/x11/main.cpp
@@ -982,7 +978,6 @@
     wx/x11/dnd.h
     wx/x11/font.h
     wx/x11/gdiobj.h
-    wx/x11/glcanvas.h
     wx/x11/icon.h
     wx/x11/joystick.h
     wx/x11/minifram.h
@@ -1030,7 +1025,6 @@
     src/msw/fontutil.cpp
     src/msw/gdiimage.cpp
     src/msw/gdiobj.cpp
-    src/msw/glcanvas.cpp
     src/msw/helpchm.cpp
     src/msw/helpwin.cpp
     src/msw/icon.cpp
@@ -1145,7 +1139,6 @@
     wx/msw/gauge95.h
     wx/msw/gdiimage.h
     wx/msw/gdiobj.h
-    wx/msw/glcanvas.h
     wx/msw/helpchm.h
     wx/msw/helpwin.h
     wx/msw/icon.h
@@ -1557,7 +1550,6 @@
     wx/mac/frame.h
     wx/mac/gauge.h
     wx/mac/gdiobj.h
-    wx/mac/glcanvas.h
     wx/mac/gsockmac.h
     wx/mac/helpxxxx.h
     wx/mac/icon.h
@@ -2048,6 +2040,7 @@
         $(BASE_CMN_HDR) $(BASE_PLATFORM_HDR)
         $(ALL_GUI_HEADERS)
         $(HTML_HDR)
+        $(OPENGL_HDR)
     </set>
 
 </makefile>
