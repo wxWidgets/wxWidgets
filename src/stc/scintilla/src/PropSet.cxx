@@ -26,13 +26,23 @@ static inline char MakeUpperCase(char ch) {
 		return static_cast<char>(ch - 'a' + 'A');
 }
 
+static inline bool IsLetter(char ch) {
+    return ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z'));
+}
+
+
 int CompareCaseInsensitive(const char *a, const char *b) {
 	while (*a && *b) {
 		if (*a != *b) {
-			char upperA = MakeUpperCase(*a);
-			char upperB = MakeUpperCase(*b);
-			if (upperA != upperB)
-				return upperA - upperB;
+			if (IsLetter(*a) && IsLetter(*b)) {
+				char upperA = MakeUpperCase(*a);
+				char upperB = MakeUpperCase(*b);
+				if (upperA != upperB)
+					return upperA - upperB;
+			}
+			else {
+				return *a - *b;
+			}
 		}
 		a++;
 		b++;
@@ -44,10 +54,15 @@ int CompareCaseInsensitive(const char *a, const char *b) {
 int CompareNCaseInsensitive(const char *a, const char *b, int len) {
 	while (*a && *b && len) {
 		if (*a != *b) {
-			char upperA = MakeUpperCase(*a);
-			char upperB = MakeUpperCase(*b);
-			if (upperA != upperB)
-				return upperA - upperB;
+			if (IsLetter(*a) && IsLetter(*b)) {
+				char upperA = MakeUpperCase(*a);
+				char upperB = MakeUpperCase(*b);
+				if (upperA != upperB)
+					return upperA - upperB;
+			}
+			else {
+				return *a - *b;
+			}
 		}
 		a++;
 		b++;
@@ -94,8 +109,8 @@ void PropSet::Set(const char *key, const char *val, int lenKey, int lenVal) {
 		lenVal = strlen(val);
 	unsigned int hash = HashString(key, lenKey);
 	for (Property *p = props[hash % hashRoots]; p; p = p->next) {
-		if ((hash == p->hash) && 
-			((strlen(p->key) == static_cast<unsigned int>(lenKey)) && 
+		if ((hash == p->hash) &&
+			((strlen(p->key) == static_cast<unsigned int>(lenKey)) &&
 				(0 == strncmp(p->key, key, lenKey)))) {
 			// Replace current value
 			delete [](p->val);
@@ -660,13 +675,13 @@ char *WordList::GetNearestWords(
 			if (!cond) {
 				// Find first match
 				while ((pivot > start) &&
-					(0 == CompareNCaseInsensitive(wordStart, 
+					(0 == CompareNCaseInsensitive(wordStart,
 						wordsNoCase[pivot-1], searchLen))) {
 					--pivot;
 				}
 				// Grab each match
 				while ((pivot <= end) &&
-					(0 == CompareNCaseInsensitive(wordStart, 
+					(0 == CompareNCaseInsensitive(wordStart,
 						wordsNoCase[pivot], searchLen))) {
 					wordlen = LengthWord(wordsNoCase[pivot], otherSeparator) + 1;
 					wordsNear.append(wordsNoCase[pivot], wordlen, ' ');
@@ -686,14 +701,14 @@ char *WordList::GetNearestWords(
 			if (!cond) {
 				// Find first match
 				while ((pivot > start) &&
-					(0 == strncmp(wordStart, 
-						words[pivot-1], searchLen))) { 
+					(0 == strncmp(wordStart,
+						words[pivot-1], searchLen))) {
 					--pivot;
 				}
 				// Grab each match
 				while ((pivot <= end) &&
-					(0 == strncmp(wordStart, 
-						words[pivot], searchLen))) { 
+					(0 == strncmp(wordStart,
+						words[pivot], searchLen))) {
 					wordlen = LengthWord(words[pivot], otherSeparator) + 1;
 					wordsNear.append(words[pivot], wordlen, ' ');
 					++pivot;
