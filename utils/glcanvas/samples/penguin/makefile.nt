@@ -53,7 +53,7 @@ $(PROGRAM).obj:      $(PROGRAM).$(SRCSUFF) $(PROGRAM).h $(DUMMYOBJ)
 $(CPPFLAGS2) /c /Tp $*.$(SRCSUFF)
 <<
 
-lw.obj:      lw.c lw.h
+lw.obj:      lw.cpp lw.h
         $(cc) @<<
 $(CPPFLAGS2) /c $*.$(SRCSUFF)
 <<
