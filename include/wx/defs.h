@@ -241,6 +241,8 @@ typedef int wxWindowID;
     #elif defined(__MWERKS__) && (__MWERKS__ >= 0x2400)
         // Metrowerks CW6 or higher has explicit
         #define HAVE_EXPLICIT
+    #elif defined(__DIGITALMARS__)
+        #define  HAAVE_EXPLICIT
     #endif
 #endif // !HAVE_EXPLICIT
 
