@@ -5,20 +5,131 @@
 1. Regenerating makefiles
 -------------------------
 
+wxWindows now uses Bakefile (http://bakefile.sourceforge.net) to generate
+native makefiles. You must have bakefile installed if you want to regenerate
+the makefiles. Bakefile currently runs on Unix and Windows systems. You will
+need Python >= 2.2 installed on Unix and either use Bakefile installer or have
+Python on Windows.
+
+Once you have installed Bakefile, you can easily regenerate the makefiles using
+the makefile in $(wx)/build/bakefiles directory. The makefile uses Unix make
+syntax and works on Unix or using either Borland Make or GNU Make (including
+native Win32 port called mingw32-make from http://www.mingw.org) on Windows.
+It is possible that other Windows make utilities work as well, but it wasn't
+tested. "make clean" only works on Unix or Cygwin or MSYS emulation layer on
+Windows.
+
+You can use following commands when generating the makefiles (must be run from
+$(wx)/build/bakefiles directory):
+
+make <filename>           generates one makefile (e.g. "make ../makefile.gcc")
+make all                  regenerates all makefiles that are out of date
+make library              only makefiles for the main library
+make <compiler>           only makefiles for given compiler; possible values
+                          are "borland", "watcom", "mingw", "autoconf", "msvc"
+                          and "mvsc6prj" (Visual C++ project files)
+make clean                deletes all generated files (Unix shell only)
+
+Note that it generates makefiles for samples and contrib libraries, too.
+
+IMPORTANT NOTE: Don't forget to run autoconf in wxWindows root directory if
+                you changed any conditional variable or target condition
+                in .bkl files! You will know that this happened if
+                $(wx)/autoconf_inc.m4 content changed.
+
 
 2. Bakefile files organization
 ------------------------------
+
+Makefile are generated from .bkl files ("bakefiles") from three places:
+  - $(wx)/build/bakefiles directory
+  - $(wx)/contrib/build/* directories
+  - samples directories
+$(wx)/build/bakefiles contains bakefiles for main library and support files
+that simplify writing bakefiles for contrib and samples.
+
+Support files are:
+  wxwin.py                - helper functions
+  common.bkl
+  common_samples.bkl
+  common_contrib.bkl      - shared definitions and templates
+  config.bkl              - user-configurable build options
+
+Files used to build the library are:
+  wx.bkl                  - main file
+  files.bkl               - lists of source files
+  monolithic.bkl          - targets for wxWin built as single big library
+  multilib.bkl            - targets for multilib build
+  opengl.bkl              - GL library with wxGLCanvas (this one is not
+                            included in monolithic library for historical
+                            reasons, so "monolithic" really means "two libs")
+  {expat,jpeg,png,tiff,
+   regex,zlib,odbc}.bkl   - 3rd party libraries makefiles
 
 
 3. Adding files to existing library
 -----------------------------------
 
+All files used by main libraries are listed in files.bkl. The file is
+organized into variables for toolkits, platforms and libraries. The variables
+come in pairs: there's always FOO_SRC for source files and FOO_HDR for header
+files. Platform or toolkit specific files are grouped together in variable
+with platform or tookit name in them, e.g. BASE_WIN32_SRC, BASE_UNIX_SRC,
+GTK_SRC, MOTIF_SRC.
 
-4. Adding sample or contrib library
------------------------------------
+Note: A side effect of this toolkit-centric organization is that one file may
+      be present several times in files.bkl in different contenxt.
+
+When you are adding a file, you must put it into appropriate variable. This is
+easy if you are adding the file to library that is always built from same
+sources on all platforms (e.g. wxXml or wxXML) -- simply add the file to e.g.
+HTML_SRC or HTML_HDR.
+
+If the file is used only on one platform and is part of wxBase, add it to
+BASE_{platform}_SRC/HDR. If it is used on all platforms, add it to BASE_CMN.
+If it is built on more than one platform but not on all of them, add the file
+to *all platforms that use it*!
+
+If a file is not wxBase file, but GUI file, then the variables are named after
+toolkits/ports, not platforms. Same rules as for wxBase files apply
+(substitute "platform" with "toolkit"). Make sure you correctly choose between
+{port}_LOWLEVEL_SRC and {port}_SRC -- the former is for files used by
+wxUniversal, e.g. GDI classes. Files shared by all X Window System ports
+should be put into XWIN_LOWLEVEL_SRC.
 
 
-5. Adding new core library
+4. Adding sample
+----------------
+
+Copy the bakefile from another sample, change the ID and files accordingly.
+If the sample uses some data files, make sure to have <wx-data> node
+in the sample's bakefile (see e.g. samples/image/image.bkl for an example).
+Make sure to add <wx-lib> statements for all libraries from multilib build
+that are required by the sample.
+
+Run Python script regenMakefile.py in $(wx)/build/bakefiles to update Makefile
+and commit $(wx)/build/bakefiles/Makefile.
+
+
+5. Adding contrib library
+-------------------------
+
+Contrib library bakefiles are located in $(wx)/contrib/build/name-of-contrib
+directory, together with generated makefiles. Copy the bakefile from another
+contrib library, change the IDs and files accordingly. Note that there must be
+two targets for contrib wxFoo: foodll and foolib.
+
+foodll definition must contain <wx-lib> statements for all libraries it
+depends on. WXUSINGDLL and WXMAKINGDLL_FOO must be defined and symbols from
+the library should use WXDLLIMPEXP_FOO defined in wxFoo's headers analogically
+to WXDLLIMPEXP_{BASE,CORE,HTML,...} in the main library (see 5g below for
+additional details).
+
+Run Python script regenMakefile.py in $(wx)/build/bakefiles to update Makefile
+and commit $(wx)/build/bakefiles/Makefile.
+
+
+6. Adding new core library
 --------------------------
 
 When adding new library to the core set of libraries, the files must be
@@ -26,7 +137,27 @@ added to both a newly added library in multilib build and into the single
 library built in monolithic mode. We will assume that the new library is
 called wxFoo.
 
-a) Add files to files.bkl                 FIXME
+a) Add files to files.bkl:
+   * If wxFoo builds from same files on all platforms (e.g. wxNet),
+     add FOO_SRC and FOO_HDR variables with lists of sources and headers.
+   * If wxFoo have no files in common (e.g. wxGL), add FOO_SRC and FOO_HDR
+     with toolkit or platform conditions. Have a look at OPENGL_SRC for an
+     example.
+   * Otherwise add FOO_CMN_SRC and FOO_CMN_HDR for common files and
+     FOO_{platform}_{SRC,HDR} or FOO_{toolkit}_{SRC,HDR} as appropriate. Add
+     FOO_PLATFORM_{SRC,HDR} into "Define sources for specific libraries"
+     section that is conditionally set to one of FOO_xxx_{SRC,HDR} based on
+     target platform/toolkit (see NET_PLATFORM_SRC definition for an example).
+     Finally, define FOO_SRC and FOO_HDR to contain both
+     FOO_PLATFORM_{SRC,HDR} and FOO_{SRC,HDR} (see NET_SRC definition for an
+     example).
+   * Add FOO_HDR to ALL_HEADERS
+
+   (You can apply different approaches to HDR and SRC variables, if e.g.
+   headers are all common but sources are not.)
+
+   Note that the conditions can only test for equality, due to limitations of
+   native make tools.
 
 b) Modify bakefile system in build/bakefiles/ to recognize wxFoo:
    * Add 'foo'to MAIN_LIBS and LIBS_NOGUI or LIBS_GUI (depending on whether
@@ -37,9 +168,12 @@ b) Modify bakefile system in build/bakefiles/ to recognize wxFoo:
           <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('foo')))</if>
        </set>
 
-c) Add files to monolithic build          FIXME
+c) Add files to monolithic build: it's enough to add FOO_SRC to MONOLIB_GUI_SRC
+   or MONOLIB_SRC, depending on whether wxFoo uses GUI or not.
 
-d) Add files to multilib build            FIXME
+d) Add files to multilib build: add foolib and foodll targets. Don't use
+   wxBase targets as the template, use e.g. wxXML or wxHTML. Make sure
+   WXMAKINGDLL_FOO is defined in foodll.
 
 e) Regenerate all makefiles (don't forget to run autoconf)
 
@@ -65,8 +199,9 @@ g) Update defs.h to define WXMAKINGDLL_FOO if WXMAKINGDLL is defined (add
             #define WXDLLIMPEXP_NET
             #define WXDLLIMPEXP_DATA_NET(type) type
         #endif
+   Use WXDLLIMPEXP_FOO when declaring wxFoo classes and functions.
 
-h) Add information about wxFoo to the manual
+i) Add information about wxFoo to the manual
    FIXME - where exactly
 
 
