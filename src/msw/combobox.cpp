@@ -174,6 +174,9 @@ LRESULT APIENTRY _EXPORT wxComboEditWndProc(HWND hWnd,
         case WM_KEYUP:
         case WM_KEYDOWN:
         case WM_CHAR:
+        case WM_SYSCHAR:
+        case WM_SYSKEYDOWN:
+        case WM_SYSKEYUP:
         case WM_SETFOCUS:
         case WM_KILLFOCUS:
             {
@@ -299,12 +302,16 @@ bool wxComboBox::MSWProcessEditMsg(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam)
                     return true;
                 }
             }
+            // fall through
 
+        case WM_SYSCHAR:
             return HandleChar(wParam, lParam, true /* isASCII */);
 
+        case WM_SYSKEYDOWN:
         case WM_KEYDOWN:
             return HandleKeyDown(wParam, lParam);
 
+        case WM_SYSKEYUP:
         case WM_KEYUP:
             return HandleKeyUp(wParam, lParam);
 
