@@ -20,6 +20,22 @@
 
 #import <AppKit/NSControl.h>
 
+@interface wxNonControlNSControl : NSControl
+{
+}
+
+- (void)drawRect: (NSRect)rect;
+@end // wxNonControlNSControl
+
+@implementation wxNonControlNSControl : NSControl
+- (void)drawRect: (NSRect)rect
+{
+    wxCocoaNSView *win = wxCocoaNSView::GetFromCocoa(self);
+    if( !win || !win->Cocoa_drawRect(rect) )
+        [super drawRect:rect];
+}
+@end // wxNonControlNSControl
+
 IMPLEMENT_ABSTRACT_CLASS(wxControl, wxWindow)
 BEGIN_EVENT_TABLE(wxControl, wxControlBase)
 END_EVENT_TABLE()
@@ -34,7 +50,7 @@ bool wxControl::Create(wxWindow *parent, wxWindowID winid,
         return false;
     wxLogDebug("Created control with id=%d",GetId());
     m_cocoaNSView = NULL;
-    SetNSControl([[NSControl alloc] initWithFrame: MakeDefaultNSRect(size)]);
+    SetNSControl([[wxNonControlNSControl alloc] initWithFrame: MakeDefaultNSRect(size)]);
     // NOTE: YES we want to release this (to match the alloc).
     // DoAddChild(this) will retain us again since addSubView doesn't.
     [m_cocoaNSView release];
