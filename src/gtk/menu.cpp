@@ -216,12 +216,14 @@ void wxMenuBar::Append( wxMenu *menu, const wxString &title )
         }
         else
         {
+#if __WXGTK12__
             if ( *pc == _T('_') )
             {
                 // underscores must be doubled to prevent them from being
                 // interpreted as accelerator character prefix by GTK
                 str << *pc;
             }
+#endif // GTK+ 1.2
 
             str << *pc;
         }
