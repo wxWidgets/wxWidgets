@@ -84,6 +84,13 @@ private:
    // as the next windows in the sizer, returns the created control
    wxStaticText *CreateLabel(const wxString& text, wxSizer *sizer);
 
+   // shortcuts for enabling buttons
+   void EnableClose();
+   void EnableSkip(bool enable=true);
+   void EnableAbort(bool enable=true);
+   inline void DisableSkip() { EnableSkip(false); }
+   inline void DisableAbort() { EnableAbort(false); }
+
    // the status bar
    wxGauge *m_gauge;
    // the message displayed
@@ -102,48 +109,51 @@ private:
    // parent top level window (may be NULL)
    wxWindow *m_parentTop;
 
-   // continue processing or not (return value for Update())
-   enum
-   {
-      Uncancelable = -1,   // dialog can't be canceled
-      Canceled,            // can be cancelled and, in fact, was
-      Continue,            // can be cancelled but wasn't
-      Finished             // finished, waiting to be removed from screen
-   } m_state;
+    // continue processing or not (return value for Update())
+    enum
+    {
+        Uncancelable = -1,   // dialog can't be canceled
+        Canceled,            // can be cancelled and, in fact, was
+        Continue,            // can be cancelled but wasn't
+        Finished             // finished, waiting to be removed from screen
+    } m_state;
 
-   // skip some portion
-   bool m_skip;
+    // skip some portion
+    bool m_skip;
 
 #if !defined(__SMARTPHONE__)
-   // the abort and skip buttons (or NULL if none)
-   wxButton *m_btnAbort;
-   wxButton *m_btnSkip;
+    // the abort and skip buttons (or NULL if none)
+    wxButton *m_btnAbort;
+    wxButton *m_btnSkip;
 #endif
 
-   // the maximum value
-   int m_maximum;
+    // the maximum value
+    int m_maximum;
 
-   // saves the time when elapsed time was updated so there is only one
-   // update per second
-   unsigned long m_last_timeupdate;
-   // tells how often a change of the estimated time has to be confirmed
-   // before it is actually displayed - this reduces the frequence of updates
-   // of estimated and remaining time
-   const int m_delay;
-   // counts the confirmations
-   int m_ctdelay;
-   unsigned long m_display_estimated;
+    // saves the time when elapsed time was updated so there is only one
+    // update per second
+    unsigned long m_last_timeupdate;
+    // tells how often a change of the estimated time has to be confirmed
+    // before it is actually displayed - this reduces the frequence of updates
+    // of estimated and remaining time
+    const int m_delay;
+    // counts the confirmations
+    int m_ctdelay;
+    unsigned long m_display_estimated;
+
+    bool m_hasAbortButton,
+         m_hasSkipButton;
 
 #if defined(__WXMSW__ ) || defined(__WXPM__)
-   // the factor we use to always keep the value in 16 bit range as the native
-   // control only supports ranges from 0 to 65,535
-   size_t m_factor;
+    // the factor we use to always keep the value in 16 bit range as the native
+    // control only supports ranges from 0 to 65,535
+    size_t m_factor;
 #endif // __WXMSW__
 
-   // for wxPD_APP_MODAL case
-   class WXDLLEXPORT wxWindowDisabler *m_winDisabler;
+    // for wxPD_APP_MODAL case
+    class WXDLLEXPORT wxWindowDisabler *m_winDisabler;
 
-   DECLARE_EVENT_TABLE()
+    DECLARE_EVENT_TABLE()
 private:
     // Virtual function hiding supression
     virtual void Update() { wxDialog::Update(); }
