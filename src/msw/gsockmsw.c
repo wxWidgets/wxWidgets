@@ -59,8 +59,8 @@
 #  pragma warning(default:4115) /* named type definition in parentheses */
 #endif
 
-#define CLASSNAME  "_GSocket_Internal_Window_Class"
-#define WINDOWNAME "_GSocket_Internal_Window_Name"
+#define CLASSNAME  TEXT("_GSocket_Internal_Window_Class")
+#define WINDOWNAME TEXT("_GSocket_Internal_Window_Name")
 
 /* Maximum number of different GSocket objects at a given time.
  * This value can be modified at will, but it CANNOT be greater
