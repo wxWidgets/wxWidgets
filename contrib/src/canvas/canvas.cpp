@@ -676,7 +676,7 @@ wxCanvasObject* wxCanvasObjectGroup::IsHitWorld( double x, double y, double marg
 
         if (!obj->IsControl() )
         {
-            if (obj->IsHitWorld(x,y,margin))
+            if (obj->IsHitWorld(xh,yh,margin))
             {
                 return obj;
             }
@@ -1321,6 +1321,13 @@ wxCanvasImage::wxCanvasImage( const wxImage &image, double x, double y, double w
     CalcBoundingBox();
 }
 
+void wxCanvasImage::SetPosXY( double x, double y)
+{
+    m_x = x;
+    m_y = y;
+    CalcBoundingBox();
+}
+
 void wxCanvasImage::TransLate( double x, double y )
 {
     m_x += x;
@@ -1337,7 +1344,7 @@ void wxCanvasImage::CalcBoundingBox()
 void wxCanvasImage::Render(wxTransformMatrix* cworld, int clip_x, int clip_y, int clip_width, int clip_height )
 {
     if (!m_visible) return;
-
+    
     wxRect tmparea;
 
     tmparea.x = m_admin->LogicalToDeviceXRel( m_bbox.GetMinX());
@@ -1352,6 +1359,7 @@ void wxCanvasImage::Render(wxTransformMatrix* cworld, int clip_x, int clip_y, in
     y = m_admin->LogicalToDeviceY(y);
 
 
+    // What is this???
     if (  m_orgw*5 < m_admin->LogicalToDeviceXRel( m_bbox.GetWidth()  ) ||
           m_orgw/5 > m_admin->LogicalToDeviceXRel( m_bbox.GetWidth()  ) ||
           m_orgh*5 < m_admin->LogicalToDeviceYRel( m_bbox.GetHeight() ) ||
@@ -1375,29 +1383,54 @@ void wxCanvasImage::Render(wxTransformMatrix* cworld, int clip_x, int clip_y, in
         dc->DestroyClippingRegion();
         return;
     }
+    
+    wxImage tmp;
+    bool is_cashed = FALSE;
 
-    if ((m_admin->LogicalToDeviceXRel( m_bbox.GetWidth() ) == m_image.GetWidth()) &&
-        (m_admin->LogicalToDeviceYRel( m_bbox.GetHeight() ) == m_image.GetHeight()))
+    if (m_cImage.Ok() && (m_cW == m_bbox.GetWidth()) && (m_cH == m_bbox.GetHeight()))
     {
-        m_tmp = m_image;
+        // use cached image
+        tmp = m_cImage;
+        is_cashed = TRUE;
     }
     else
     {
-        m_tmp = m_image.Scale( m_admin->LogicalToDeviceXRel( m_bbox.GetWidth()),
-                               m_admin->LogicalToDeviceYRel( m_bbox.GetHeight()) );
+        if ((m_admin->LogicalToDeviceXRel( m_bbox.GetWidth() ) == m_image.GetWidth()) &&
+            (m_admin->LogicalToDeviceYRel( m_bbox.GetHeight() ) == m_image.GetHeight()))
+        {
+            tmp = m_image;
+        }
+        else
+        {
+            tmp = m_image.Scale( m_admin->LogicalToDeviceXRel( m_bbox.GetWidth()),
+                                 m_admin->LogicalToDeviceYRel( m_bbox.GetHeight()) );
+        }
+        
+        // create cached image
+        m_cImage = tmp;
+        m_cW = tmp.GetWidth();
+        m_cH = tmp.GetHeight();
     }
 
-    wxBitmap bmp;
 //    wxPoint centr(m_admin->LogicalToDeviceX(m_x),m_admin->LogicalToDeviceY(m_y));
     wxPoint centr(0,0);
 
-    if (cworld->GetRotation())
+    wxBitmap bmp;
+    
+    if (m_cBitmap.Ok() && is_cashed && (m_cR == cworld->GetRotation()))
     {
-        bmp=m_tmp.Rotate(-cworld->GetRotation()/180.0 * pi,centr, TRUE,  NULL).ConvertToBitmap();
+        bmp = m_cBitmap;
     }
     else
     {
-        bmp = m_tmp.ConvertToBitmap();
+        if (cworld->GetRotation())
+            tmp = tmp.Rotate(-cworld->GetRotation()/180.0 * pi, centr, TRUE, NULL );
+            
+        bmp = tmp.ConvertToBitmap();
+        
+        // create cached bitmap
+        m_cBitmap = bmp;
+        m_cR = cworld->GetRotation();
     }
 
     wxDC *dc = m_admin->GetActive()->GetDC();
@@ -1423,28 +1456,9 @@ void wxCanvasImage::Render(wxTransformMatrix* cworld, int clip_x, int clip_y, in
     }
     else
     {
-        //TODO clipping not right
-//        dc->DrawPoint(centr2);
-//        dc->DrawPoint(x,y);
-
-        if ((clip_x == x) &&
-            (clip_y == y) &&
-            (clip_width == tmparea.width) &&
-            (clip_height == tmparea.height))
-        {
-            dc->DrawBitmap( m_tmp, clip_x, clip_y, TRUE );
-        }
-        else
-        {
-            int start_x = clip_x - (int)x;
-            int start_y = clip_y - (int)y;
-
-            //dc->DrawBitmap( bmp, x, y, TRUE );
-            wxMemoryDC dcm;
-            dcm.SelectObject(bmp);
-            dc->Blit(clip_x, clip_y,clip_width, clip_height,&dcm,start_x,start_y,wxCOPY,TRUE);
-            dcm.SelectObject(wxNullBitmap);
-        }
+        dc->SetClippingRegion( clip_x, clip_y, clip_width, clip_height );
+        dc->DrawBitmap( bmp, x, y, TRUE );
+        dc->DestroyClippingRegion();
     }
 }
 

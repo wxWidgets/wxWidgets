@@ -19,6 +19,7 @@
 #endif
 
 #include "wx/canvas/canvas.h"
+#include "wx/timer.h"
 
 //----------------------------------------------------------------------------
 //   constants
@@ -40,6 +41,7 @@ public:
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize,
         long style = wxDEFAULT_FRAME_STYLE );
+    ~MyFrame();
     
 private:
     // WDR: method declarations for MyFrame
@@ -50,11 +52,13 @@ private:
     wxCanvasImage    *m_smile1;
     wxCanvasImage    *m_smile2;
     wxCanvasAdmin    *m_admin;
+    wxTimer          *m_timer;
     
 private:
     // WDR: handler declarations for MyFrame
     void OnQuit( wxCommandEvent &event );
     void OnCloseWindow( wxCloseEvent &event );
+    void OnTimer( wxTimerEvent &event );
     
 private:
     DECLARE_EVENT_TABLE()

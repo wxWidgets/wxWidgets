@@ -38,6 +38,7 @@
 BEGIN_EVENT_TABLE(MyFrame,wxFrame)
     EVT_MENU(ID_QUIT, MyFrame::OnQuit)
     EVT_CLOSE(MyFrame::OnCloseWindow)
+    EVT_TIMER(-1, MyFrame::OnTimer)
 END_EVENT_TABLE()
 
 MyFrame::MyFrame( wxWindow *parent, wxWindowID id, const wxString &title,
@@ -75,11 +76,10 @@ MyFrame::MyFrame( wxWindow *parent, wxWindowID id, const wxString &title,
     m_smile1 = new wxCanvasImage( image, 0,70,32,32 );
     root->Append( m_smile1 );
 
-    wxCanvasRect *rect = new wxCanvasRect( 20,20,100,100 );
-    rect->SetBrush( *wxRED_BRUSH );
-    root->Append( rect );
+    wxCanvasCircle *circ = new wxCanvasCircle( 170,70,50 );
+    circ->SetBrush( *wxBLUE_BRUSH );
+    root->Append( circ );
     
-/*
     int i;
     for (i = 10; i < 300; i+=10)
     {
@@ -87,19 +87,16 @@ MyFrame::MyFrame( wxWindow *parent, wxWindowID id, const wxString &title,
         r->SetBrush( *wxRED_BRUSH );
         root->Append( r );
     }
-*/
     
     m_smile2 = new wxCanvasImage( image, 0,110,32,32 );
     root->Append( m_smile2 );
 
-/*
     for (i = 15; i < 300; i+=10)
     {
         wxCanvasRect *r = new wxCanvasRect( i,50,3,140 );
         r->SetBrush( *wxRED_BRUSH );
         root->Append( r );
     }
-*/
     
     // This will call all object and children recursivly so
     // all know what their wxCanvasAdmin is. Call at the end.
@@ -107,6 +104,14 @@ MyFrame::MyFrame( wxWindow *parent, wxWindowID id, const wxString &title,
     
     // One object group is the root object.
     canvas->SetRoot( root );
+    
+    m_timer = new wxTimer( this );
+    m_timer->Start( 80, FALSE );
+}
+
+MyFrame::~MyFrame()
+{
+    delete m_timer;
 }
 
 void MyFrame::CreateMyMenuBar()
@@ -132,6 +137,14 @@ void MyFrame::OnCloseWindow( wxCloseEvent &event )
     // if ! saved changes -> return
     
     Destroy();
+}
+
+void MyFrame::OnTimer( wxTimerEvent &event )
+{
+    m_smile1->MoveRelative( 1, 0);
+    m_smile2->MoveRelative( 1, 0);
+    
+    wxWakeUpIdle();
 }
 
 //------------------------------------------------------------------------------

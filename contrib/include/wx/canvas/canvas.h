@@ -490,7 +490,7 @@ public:
 
     double  GetPosX() { return m_x; }
     double  GetPosY() { return m_y; }
-    void    SetPosXY( double x, double y) {m_x=x; m_y=y;CalcBoundingBox(); };
+    void    SetPosXY( double x, double y);
 
     void TransLate( double x, double y );
 
@@ -507,7 +507,13 @@ private:
 
     wxImage     m_image;
     int         m_orgw,m_orgh;
-    wxImage     m_tmp;
+    
+    // cache
+    wxBitmap    m_cBitmap;
+    wxImage     m_cImage;
+    int         m_cW;
+    int         m_cH;
+    double      m_cR;
 };
 
 //----------------------------------------------------------------------------
