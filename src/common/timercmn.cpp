@@ -53,6 +53,11 @@
     #define HAVE_FTIME
 #endif
 
+#if defined(__VISAGECPP__) && !defined(HAVE_FTIME)
+    #define HAVE_FTIME
+    #define ftime(x) _ftime(x)
+#endif
+
 #include <time.h>
 #ifndef __WXMAC__
     #include <sys/types.h>      // for time_t
@@ -279,17 +284,8 @@ wxLongLong wxGetLocalTimeMillis()
 
     val *= wxGetLocalTime();
 
-#if defined(__VISAGECPP__)
-    // If your platform/compiler needs to use two different functions
-    // to get ms resolution, please do NOT just shut off these warnings,
-    // drop me a line instead at <guille@iies.es>
-    // Visualage does not support #warning
-    // #warning "Possible clock skew bug in wxGetLocalTimeMillis()!"
-
-    DATETIME dt;
-    ::DosGetDateTime(&dt);
-    val += (dt.hundredths*10);
-#elif defined (__WIN32__)
+// GRG: This will go soon as all WIN32 seem to have ftime
+#if defined (__WIN32__)
     // If your platform/compiler needs to use two different functions
     // to get ms resolution, please do NOT just shut off these warnings,
     // drop me a line instead at <guille@iies.es>
