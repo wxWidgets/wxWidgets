@@ -557,7 +557,8 @@ void wxToolBarSimple::DrawTool(wxDC& dc, wxToolBarToolBase *toolBase)
 
 #if wxUSE_PALETTE
 #ifndef __WXGTK__
-        memDC.SetPalette(wxNullPalette);
+        if (bitmap.GetPalette())
+            memDC.SetPalette(wxNullPalette);
 #endif
 #endif // wxUSE_PALETTE
     }
