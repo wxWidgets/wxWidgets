@@ -502,6 +502,14 @@ void wxGUIAppTraitsBase::RemoveFromPendingDelete(wxObject *object)
     #include "wx/unix/gsockunx.h"
 #elif defined(__WINDOWS__)
     #include "wx/msw/gsockmsw.h"
+#elif defined(__WXMAC__)
+  #include <MacHeaders.c>
+  #define OTUNIXERRORS 1
+  #include <OpenTransport.h>
+  #include <OpenTransportProviders.h>
+  #include <OpenTptInternet.h>
+
+  #include "wx/mac/gsockmac.h"
 #else
     #error "Must include correct GSocket header here"
 #endif
