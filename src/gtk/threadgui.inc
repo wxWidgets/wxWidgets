@@ -71,11 +71,10 @@ static void wxThreadGuiExit()
 
 void wxMutexGuiEnter()
 {
-  wxMainMutex->Lock();
+  gs_mutexGui->Lock();
 }
 
 void wxMutexGuiLeave()
 {
-  wxMainMutex->Unlock();
+  gs_mutexGui->Unlock();
 }
-
