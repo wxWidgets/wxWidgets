@@ -547,5 +547,13 @@ int wxCheckListBox::DoHitTestItem(wxCoord x, wxCoord y) const
   return nItem >= m_noItems ? wxNOT_FOUND : nItem;
 }
 
+
+wxSize wxCheckListBox::DoGetBestSize() const
+{
+    wxSize best = wxListBox::DoGetBestSize();
+    best.x += wxOwnerDrawn::GetDefaultMarginWidth();  // add room for the checkbox
+    return best;
+}
+
 #endif
 

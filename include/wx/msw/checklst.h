@@ -88,6 +88,8 @@ protected:
   void OnKeyDown(wxKeyEvent& event);
   void OnLeftClick(wxMouseEvent& event);
 
+  wxSize DoGetBestSize() const;
+
 private:
   size_t    m_nItemHeight;  // height of checklistbox items (the same for all)
 
