@@ -13,7 +13,7 @@ from my_distutils import run_swig, contrib_copy_tree
 # flags and values that affect this script
 #----------------------------------------------------------------------
 
-VERSION          = "2.3.4p1"
+VERSION          = "2.3.4p2"
 DESCRIPTION      = "Cross platform GUI toolkit for Python"
 AUTHOR           = "Robin Dunn"
 AUTHOR_EMAIL     = "Robin Dunn <robin@alldunn.com>"
@@ -38,6 +38,12 @@ BUILD_DLLWIDGET = 1# Build a module that enables unknown wx widgets
 
                    # Internet Explorer wrapper (experimental)
 BUILD_IEWIN = (os.name == 'nt')
+
+BUILD_CANVAS = 0   # Build a canvas module using the one in wx/contrib (experimental)
+BUILD_ART2D = 0    # Build a canvas module using code from the wxArt2D project (experimental)
+
+
+
 
 CORE_ONLY = 0      # if true, don't build any of the above
 
@@ -896,6 +902,119 @@ if not GL_ONLY and BUILD_DLLWIDGET:
                              ] + swig_sources,
 
                     include_dirs =  includes,
+                    define_macros = defines,
+
+                    library_dirs = libdirs,
+                    libraries = libs,
+
+                    extra_compile_args = cflags,
+                    extra_link_args = lflags,
+                    )
+
+    wxpExtensions.append(ext)
+
+
+#----------------------------------------------------------------------
+# Define the CANVAS extension module
+#----------------------------------------------------------------------
+
+if not GL_ONLY and BUILD_CANVAS:
+    msg('Preparing CANVAS...')
+    location = 'contrib/canvas'
+    CANVASLOC = opj(location, 'contrib/src/canvas')
+    CANVASINC = opj(location, 'contrib/include')
+
+    swig_files = ['canvas.i']
+
+    swig_sources = run_swig(swig_files, location, '', PKGDIR,
+                            USE_SWIG, swig_force, swig_args, swig_deps)
+
+    if IN_CVS_TREE:
+        # make sure local copy of contrib files are up to date
+        contrib_copy_tree(opj(CTRB_INC, 'canvas'), opj(CANVASINC, 'wx/canvas'))
+        contrib_copy_tree(opj(CTRB_SRC, 'canvas'), CANVASLOC)
+
+    ext = Extension('canvasc', ['%s/bbox.cpp' % CANVASLOC,
+                                '%s/liner.cpp' % CANVASLOC,
+                                '%s/polygon.cpp' % CANVASLOC,
+                                '%s/canvas.cpp' % CANVASLOC,
+                                ] + swig_sources,
+
+                    include_dirs = [CANVASINC] + includes,
+                    define_macros = defines,
+
+                    library_dirs = libdirs,
+                    libraries = libs,
+
+                    extra_compile_args = cflags,
+                    extra_link_args = lflags,
+                    )
+
+    wxpExtensions.append(ext)
+
+
+#----------------------------------------------------------------------
+# Define the ART2D extension module
+#----------------------------------------------------------------------
+
+if not GL_ONLY and BUILD_ART2D:
+    msg('Preparing ART2D...')
+    location = 'contrib/art2d'
+    ART2DLOC = opj(location, 'modules/canvas/src')
+    ART2DINC = opj(location, 'modules/canvas/include')
+    EXPATLOC = opj(location, 'modules/expat')
+    EXPATINC = opj(location, 'modules/expat/include')
+
+    swig_files = ['art2d.i',
+                  'art2d_misc.i',
+                  'art2d_base.i',
+                  'art2d_canvas.i',
+                  ]
+
+    swig_sources = run_swig(swig_files, location, '', PKGDIR,
+                            USE_SWIG, swig_force, swig_args, swig_deps)
+
+    if IN_CVS_TREE:
+        # Don't copy data in this case as the code snapshots are
+        # taken manually
+        pass
+
+    ext = Extension('art2dc', [ opj(ART2DLOC, 'afmatrix.cpp'),
+                                opj(ART2DLOC, 'bbox.cpp'),
+                                opj(ART2DLOC, 'cancom.cpp'),
+                                opj(ART2DLOC, 'candoc.cpp'),
+                                opj(ART2DLOC, 'canglob.cpp'),
+                                opj(ART2DLOC, 'canobj3d.cpp'),
+                                opj(ART2DLOC, 'canobj.cpp'),
+                                opj(ART2DLOC, 'canprim.cpp'),
+                                opj(ART2DLOC, 'canprop.cpp'),
+                                opj(ART2DLOC, 'canvas.cpp'),
+                                opj(ART2DLOC, 'docviewref.cpp'),
+                                opj(ART2DLOC, 'drawer.cpp'),
+                                opj(ART2DLOC, 'eval.cpp'),
+                                opj(ART2DLOC, 'graph.cpp'),
+                                opj(ART2DLOC, 'layerinf.cpp'),
+                                opj(ART2DLOC, 'liner.cpp'),
+                                opj(ART2DLOC, 'meta.cpp'),
+                                opj(ART2DLOC, 'objlist.cpp'),
+                                opj(ART2DLOC, 'polygon.cpp'),
+                                opj(ART2DLOC, 'recur.cpp'),
+                                opj(ART2DLOC, 'rendimg.cpp'),
+                                opj(ART2DLOC, 'tools.cpp'),
+                                opj(ART2DLOC, 'vpath.cpp'),
+                                opj(ART2DLOC, 'xmlpars.cpp'),
+
+                                opj(EXPATLOC, 'xmlparse/xmlparse.c'),
+                                opj(EXPATLOC, 'xmltok/xmlrole.c'),
+                                opj(EXPATLOC, 'xmltok/xmltok.c'),
+
+                                ] + swig_sources,
+
+                    include_dirs = [ ART2DINC,
+                                     EXPATINC,
+                                     opj(EXPATLOC, 'xmltok'),
+                                     opj(EXPATLOC, 'xmlparse'),
+                                     ] + includes,
                     define_macros = defines,
 
                     library_dirs = libdirs,
