@@ -112,11 +112,11 @@ void wxMacRemoveAllNotifiersForData( wxMacNotifierTableRef table , void* data )
     
     while ( e->top != index )
     {
-        if ( index == kMaxEvents )
-            index = 0 ;
         if ( e->data[index] == data )
             e->data[index] = NULL ;
         index++ ;
+        if ( index == kMaxEvents )
+            index = 0 ;
     }
 }
 
