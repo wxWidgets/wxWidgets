@@ -168,3 +168,18 @@ new revision: 1.235; previous revision: 1.234
 done
 
 src/msw/stattext.cpp: 1.33 -> 1.35
+
+14. wxMSW::wxFrame::Maximize(FALSE) would maximize the window if called before
+    showing it
+
+http://sf.net/tracker/index.php?func=detail&aid=667665&group_id=9863&atid=109863
+
+Checking in src/msw/toplevel.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/msw/toplevel.cpp,v  <--  toplevel.cpp
+new revision: 1.44; previous revision: 1.43
+done
+Checking in docs/changes.txt;
+/pack/cvsroots/wxwindows/wxWindows/docs/changes.txt,v  <--  changes.txt
+new revision: 1.236; previous revision: 1.235
+done
+
