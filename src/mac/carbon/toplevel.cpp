@@ -60,6 +60,10 @@ static   Point     gs_lastWhere;
 static   long      gs_lastWhen = 0;
 
 
+
+static pascal long wxShapedMacWindowDef(short varCode, WindowRef window, SInt16 message, SInt32 param);
+
+
 // ============================================================================
 // wxTopLevelWindowMac implementation
 // ============================================================================
@@ -158,14 +162,14 @@ wxTopLevelWindowMac::~wxTopLevelWindowMac()
         wxToolTip::NotifyWindowDelete(m_macWindow) ;
         wxPendingDelete.Append( new wxMacDeferredWindowDeleter( (WindowRef) m_macWindow ) ) ;
     }
- 
+
 #if TARGET_CARBON
     if ( m_macEventHandler )
     {
         ::RemoveEventHandler((EventHandlerRef) m_macEventHandler);
         m_macEventHandler = NULL ;
     }
-#endif   
+#endif
     wxRemoveMacWindowAssociation( this ) ;
 
     if ( wxModelessWindows.Find(this) )
@@ -254,8 +258,8 @@ void wxTopLevelWindowMac::MacInstallEventHandler()
 	{
 	    wxMacWindowEventHandlerUPP = NewEventHandlerUPP( wxMacWindowEventHandler ) ;
 	}
-	    
-	static const EventTypeSpec eventList[] = 
+
+	static const EventTypeSpec eventList[] =
 	{
 	    { kEventClassTextInput, kEventTextInputUnicodeForKeyEvent }
 	} ;
@@ -264,7 +268,7 @@ void wxTopLevelWindowMac::MacInstallEventHandler()
         ::RemoveEventHandler((EventHandlerRef) m_macEventHandler);
         m_macEventHandler = NULL ;
     }
-	InstallWindowEventHandler(MAC_WXHWND(m_macWindow), wxMacWindowEventHandlerUPP, WXSIZEOF(eventList), eventList, this, &((EventHandlerRef)m_macEventHandler));    
+	InstallWindowEventHandler(MAC_WXHWND(m_macWindow), wxMacWindowEventHandlerUPP, WXSIZEOF(eventList), eventList, this, &((EventHandlerRef)m_macEventHandler));
 #endif
 }
 
@@ -272,7 +276,7 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
            const wxPoint& pos,
            const wxSize& size,
            long style,
-           const wxString& name ) 
+           const wxString& name )
 {
   SetName(name);
   m_windowStyle = style;
@@ -288,12 +292,12 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
     m_y = 50 ;
   if ( m_x < 20 )
     m_x = 20 ;
-    
+
   m_width = size.x;
-    if (m_width == -1) 
+    if (m_width == -1)
         m_width = 20;
   m_height = size.y;
-    if (m_height == -1) 
+    if (m_height == -1)
         m_height = 20;
 
     ::SetRect(&theBoundsRect, m_x, m_y , m_x + m_width, m_y + m_height);
@@ -302,10 +306,10 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
 
     WindowClass wclass = 0;
     WindowAttributes attr = kWindowNoAttributes ;
-    
+
     if ( HasFlag( wxFRAME_TOOL_WINDOW) )
     {
-        if ( 
+        if (
             HasFlag( wxMINIMIZE_BOX ) || HasFlag( wxMAXIMIZE_BOX ) ||
             HasFlag( wxSYSTEM_MENU ) || HasFlag( wxCAPTION ) ||
             HasFlag(wxTINY_CAPTION_HORIZ) ||  HasFlag(wxTINY_CAPTION_VERT)
@@ -332,7 +336,7 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
         {
             wclass = kDocumentWindowClass ; // kMovableModalWindowClass ;
         }
-        else 
+        else
         {
             wclass = kDocumentWindowClass ;
         }
@@ -367,8 +371,25 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
     {
         attr |= kWindowCloseBoxAttribute ;
     }
-    
-    ::CreateNewWindow( wclass , attr , &theBoundsRect , (WindowRef*)&m_macWindow ) ;
+
+    if (HasFlag(wxSTAY_ON_TOP))
+    	wclass = kUtilityWindowClass;
+
+    if ( HasFlag(wxFRAME_SHAPED) )
+    {
+        WindowDefSpec customWindowDefSpec;
+        customWindowDefSpec.defType = kWindowDefProcPtr;
+        customWindowDefSpec.u.defProc = NewWindowDefUPP(wxShapedMacWindowDef);
+
+        ::CreateCustomWindow( &customWindowDefSpec, wclass,
+                              attr, &theBoundsRect,
+                              (WindowRef*) &m_macWindow);
+    }
+    else
+    {
+        ::CreateNewWindow( wclass , attr , &theBoundsRect , (WindowRef*)&m_macWindow ) ;
+    }
+
     wxAssociateWinWithMacWindow( m_macWindow , this ) ;
     wxString label ;
     if( wxApp::s_macDefaultEncodingIsPC )
@@ -380,9 +401,16 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
     MacInstallEventHandler() ;
 
     m_macFocus = NULL ;
+
+    if ( HasFlag(wxFRAME_SHAPED) )
+    {
+        // default shape matches the window size
+        wxRegion rgn(0, 0, m_width, m_height);
+        SetShape(rgn);
+    }
 }
 
-void wxTopLevelWindowMac::MacGetPortParams(WXPOINTPTR localOrigin, WXRECTPTR clipRect, WXHWND *window  , wxWindowMac** rootwin) 
+void wxTopLevelWindowMac::MacGetPortParams(WXPOINTPTR localOrigin, WXRECTPTR clipRect, WXHWND *window  , wxWindowMac** rootwin)
 {
     ((Point*)localOrigin)->h = 0;
     ((Point*)localOrigin)->v = 0;
@@ -451,9 +479,9 @@ void wxTopLevelWindowMac::MacFireMouseEvent( WXEVENTREF evr )
     wxMouseEvent event(wxEVT_LEFT_DOWN);
     bool isDown = !(ev->modifiers & btnState) ; // 1 is for up
     bool controlDown = ev->modifiers & controlKey ; // for simulating right mouse
-    
+
     event.m_leftDown = isDown && !controlDown;
-    
+
     event.m_middleDown = FALSE;
     event.m_rightDown = isDown && controlDown;
 
@@ -482,8 +510,8 @@ void wxTopLevelWindowMac::MacFireMouseEvent( WXEVENTREF evr )
     event.m_metaDown = ev->modifiers & cmdKey;
 
     Point       localwhere = ev->where ;
-        
-    GrafPtr     port ;  
+
+    GrafPtr     port ;
     ::GetPort( &port ) ;
     ::SetPort( UMAGetWindowPort( (WindowRef)m_macWindow ) ) ;
     ::GlobalToLocal( &localwhere ) ;
@@ -528,7 +556,7 @@ void wxTopLevelWindowMac::MacFireMouseEvent( WXEVENTREF evr )
         event.m_y = y ;
         event.SetEventObject( wxTheApp->s_captureWindow ) ;
         wxTheApp->s_captureWindow->GetEventHandler()->ProcessEvent( event ) ;
-        
+
         if ( ev->what == mouseUp )
         {
             wxTheApp->s_captureWindow = NULL ;
@@ -553,7 +581,7 @@ void wxTopLevelWindowMac::MacMouseUp( WXEVENTREF ev , short part)
 {
     switch (part)
     {
-        case inContent:     
+        case inContent:
             {
                 MacFireMouseEvent( ev ) ;
             }
@@ -565,7 +593,7 @@ void wxTopLevelWindowMac::MacMouseMoved( WXEVENTREF ev , short part)
 {
     switch (part)
     {
-        case inContent:     
+        case inContent:
             {
                 MacFireMouseEvent( ev ) ;
             }
@@ -577,11 +605,11 @@ void wxTopLevelWindowMac::MacActivate( WXEVENTREF ev , bool inIsActivating )
     wxActivateEvent event(wxEVT_ACTIVATE, inIsActivating , m_windowId);
     event.m_timeStamp = ((EventRecord*)ev)->when ;
     event.SetEventObject(this);
-    
+
     GetEventHandler()->ProcessEvent(event);
-    
+
     UMAHighlightAndActivateWindow( (WindowRef)m_macWindow , inIsActivating ) ;
-    
+
     // Early versions of MacOS X don't refresh backgrounds properly,
     // so refresh the whole window on activation and deactivation.
     long osVersion = UMAGetSystemVersion();
@@ -591,16 +619,16 @@ void wxTopLevelWindowMac::MacActivate( WXEVENTREF ev , bool inIsActivating )
         MacSuperEnabled( inIsActivating ) ;
 }
 
-void wxTopLevelWindowMac::MacKeyDown( WXEVENTREF ev ) 
+void wxTopLevelWindowMac::MacKeyDown( WXEVENTREF ev )
 {
 }
 
 void wxTopLevelWindowMac::SetTitle(const wxString& title)
 {
     wxWindow::SetTitle( title ) ;
-    
+
     wxString label ;
-    
+
     if( wxApp::s_macDefaultEncodingIsPC )
         label = wxMacMakeMacStringFromPC( m_label ) ;
     else
@@ -615,7 +643,7 @@ bool wxTopLevelWindowMac::Show(bool show)
         return FALSE;
 
     if (show)
-    { 
+    {
       // this is leading to incorrect window layering in some situations
       // ::TransitionWindow((WindowRef)m_macWindow,kWindowZoomTransitionEffect,kWindowShowTransitionAction,nil);
       ::ShowWindow( (WindowRef)m_macWindow ) ;
@@ -651,24 +679,24 @@ void wxTopLevelWindowMac::DoMoveWindow(int x, int y, int width, int height)
     int former_y = m_y ;
     int former_w = m_width ;
     int former_h = m_height ;
-    
+
   int actualWidth = width;
   int actualHeight = height;
   int actualX = x;
   int actualY = y;
-  
-    if ((m_minWidth != -1) && (actualWidth < m_minWidth)) 
+
+    if ((m_minWidth != -1) && (actualWidth < m_minWidth))
         actualWidth = m_minWidth;
-    if ((m_minHeight != -1) && (actualHeight < m_minHeight)) 
+    if ((m_minHeight != -1) && (actualHeight < m_minHeight))
         actualHeight = m_minHeight;
-    if ((m_maxWidth != -1) && (actualWidth > m_maxWidth)) 
+    if ((m_maxWidth != -1) && (actualWidth > m_maxWidth))
         actualWidth = m_maxWidth;
-    if ((m_maxHeight != -1) && (actualHeight > m_maxHeight)) 
+    if ((m_maxHeight != -1) && (actualHeight > m_maxHeight))
         actualHeight = m_maxHeight;
 
     bool doMove = false ;
     bool doResize = false ;
-    
+
     if ( actualX != former_x || actualY != former_y )
     {
         doMove = true ;
@@ -735,28 +763,28 @@ void wxTopLevelWindowMac::DoMoveWindow(int x, int y, int width, int height)
  * has been true for any part of the update rgn the background is erased in the entire region
  * not just in the specified rect.
  *
- * In order to achive this, we also have an internal m_macNoEraseUpdateRgn, all rects that have 
+ * In order to achive this, we also have an internal m_macNoEraseUpdateRgn, all rects that have
  * the eraseBackground flag set to false are also added to this rgn. upon receiving an update event
  * the update rgn is compared to the m_macNoEraseUpdateRgn and in case they differ, every window
  * will get the eraseBackground event first
  */
- 
-void wxTopLevelWindowMac::MacInvalidate( const WXRECTPTR rect, bool eraseBackground ) 
+
+void wxTopLevelWindowMac::MacInvalidate( const WXRECTPTR rect, bool eraseBackground )
 {
   GrafPtr formerPort ;
   GetPort( &formerPort ) ;
   SetPortWindowPort( (WindowRef)m_macWindow ) ;
-  
+
   m_macNeedsErasing |= eraseBackground ;
-  
+
   // if we already know that we will have to erase, there's no need to track the rest
   if ( !m_macNeedsErasing)
   {
     // we end only here if eraseBackground is false
     // if we already have a difference between m_macNoEraseUpdateRgn and UpdateRgn
     // we will have to erase anyway
-      
-    RgnHandle       updateRgn = NewRgn();    
+
+    RgnHandle       updateRgn = NewRgn();
     RgnHandle       diffRgn = NewRgn() ;
     if ( updateRgn && diffRgn )
     {
@@ -791,7 +819,169 @@ void wxTopLevelWindowMac::MacInvalidate( const WXRECTPTR rect, bool eraseBackgro
   SetPort( formerPort ) ;
 }
 
+
 bool wxTopLevelWindowMac::SetShape(const wxRegion& region)
 {
-    return FALSE;
+    wxCHECK_MSG( HasFlag(wxFRAME_SHAPED), FALSE,
+                 _T("Shaped windows must be created with the wxFRAME_SHAPED style."));
+
+    // The empty region signifies that the shape should be removed from the
+    // window.
+    if ( region.IsEmpty() )
+    {
+        wxSize sz = GetClientSize();
+        wxRegion rgn(0, 0, sz.x, sz.y);
+        return SetShape(rgn);
+    }
+
+    // Make a copy of the region
+    RgnHandle  shapeRegion = NewRgn();
+    CopyRgn( (RgnHandle)region.GetWXHRGN(), shapeRegion );
+
+    // Dispose of any shape region we may already have
+    RgnHandle oldRgn = (RgnHandle)GetWRefCon( (WindowRef)MacGetWindowRef() );
+    if ( oldRgn )
+        DisposeRgn(oldRgn);
+
+    // Save the region so we can use it later
+    SetWRefCon((WindowRef)MacGetWindowRef(), (SInt32)shapeRegion);
+
+    // Tell the window manager that the window has changed shape
+    ReshapeCustomWindow((WindowRef)MacGetWindowRef());
+    return TRUE;
 }
+
+
+
+// ---------------------------------------------------------------------------
+// Support functions for shaped windows, based on Apple's CustomWindow sample at
+// http://developer.apple.com/samplecode/Sample_Code/Human_Interface_Toolbox/Mac_OS_High_Level_Toolbox/CustomWindow.htm
+// ---------------------------------------------------------------------------
+
+
+static void wxShapedMacWindowGetPos(WindowRef window, Rect* inRect)
+{
+    GetWindowPortBounds(window, inRect);
+    Point pt = {inRect->left, inRect->top};
+    SetPort((GrafPtr) GetWindowPort(window));
+    LocalToGlobal(&pt);
+    inRect->top = pt.v;
+    inRect->left = pt.h;
+    inRect->bottom += pt.v;
+    inRect->right += pt.h;
+}
+
+
+static SInt32 wxShapedMacWindowGetFeatures(WindowRef window, SInt32 param)
+{
+    /*------------------------------------------------------
+        Define which options your custom window supports.
+    --------------------------------------------------------*/
+    //just enable everything for our demo
+    *(OptionBits*)param=//kWindowCanGrow|
+                        //kWindowCanZoom|
+                        //kWindowCanCollapse|
+                        //kWindowCanGetWindowRegion|
+                        //kWindowHasTitleBar|
+                        //kWindowSupportsDragHilite|
+                        kWindowCanDrawInCurrentPort|
+                        //kWindowCanMeasureTitle|
+                        kWindowWantsDisposeAtProcessDeath|
+                        kWindowSupportsSetGrowImageRegion|
+                        kWindowDefSupportsColorGrafPort;
+    return 1;
+}
+
+// The content region is left as a rectangle matching the window size, this is
+// so the origin in the paint event, and etc. still matches what the
+// programmer expects.
+static void wxShapedMacWindowContentRegion(WindowRef window, RgnHandle rgn)
+{
+    SetEmptyRgn(rgn);
+    wxTopLevelWindowMac* win = wxFindWinFromMacWindow(window);
+    if (win)
+    {
+        wxRect r = win->GetRect();
+        SetRectRgn(rgn, r.GetLeft(), r.GetTop(), r.GetRight(), r.GetBottom());
+    }
+}
+
+// The structure region is set to the shape given to the SetShape method.
+static void wxShapedMacWindowStructureRegion(WindowRef window, RgnHandle rgn)
+{
+    RgnHandle cachedRegion = (RgnHandle) GetWRefCon(window);
+
+    SetEmptyRgn(rgn);
+    if (cachedRegion)
+    {
+        Rect windowRect;
+        wxShapedMacWindowGetPos(window, &windowRect);	//how big is the window
+        CopyRgn(cachedRegion, rgn);		//make a copy of our cached region
+        OffsetRgn(rgn, windowRect.left, windowRect.top); // position it over window
+        //MapRgn(rgn, &mMaskSize, &windowRect);	//scale it to our actual window size
+    }
+}
+
+
+
+static SInt32 wxShapedMacWindowGetRegion(WindowRef window, SInt32 param)
+{
+    GetWindowRegionPtr rgnRec=(GetWindowRegionPtr)param;
+
+    switch(rgnRec->regionCode)
+    {
+        case kWindowStructureRgn:
+            wxShapedMacWindowStructureRegion(window, rgnRec->winRgn);
+            break;
+        case kWindowContentRgn:
+            wxShapedMacWindowContentRegion(window, rgnRec->winRgn);
+            break;
+        default:
+            SetEmptyRgn(rgnRec->winRgn);
+    }  //switch
+
+    return noErr;
+}
+
+
+static SInt32 wxShapedMacWindowHitTest(WindowRef window,SInt32 param)
+{
+    /*------------------------------------------------------
+        Determine the region of the window which was hit
+    --------------------------------------------------------*/
+    Point hitPoint;
+    static RgnHandle tempRgn=nil;
+
+    if(!tempRgn)
+    	tempRgn=NewRgn();
+
+    SetPt(&hitPoint,LoWord(param),HiWord(param));//get the point clicked
+
+     //Mac OS 8.5 or later
+    wxShapedMacWindowStructureRegion(window, tempRgn);
+    if (PtInRgn(hitPoint, tempRgn)) //in window content region?
+        return wInContent;
+
+    return wNoHit;//no significant area was hit.
+}
+
+
+static pascal long wxShapedMacWindowDef(short varCode, WindowRef window, SInt16 message, SInt32 param)
+{
+    switch(message)
+    {
+        case kWindowMsgHitTest:
+            return wxShapedMacWindowHitTest(window,param);
+
+        case kWindowMsgGetFeatures:
+            return wxShapedMacWindowGetFeatures(window,param);
+
+        // kWindowMsgGetRegion is sent during CreateCustomWindow and ReshapeCustomWindow
+        case kWindowMsgGetRegion:
+            return wxShapedMacWindowGetRegion(window,param);
+    }
+
+    return 0;
+}
+
+// ---------------------------------------------------------------------------

@@ -1406,7 +1406,8 @@ void wxApp::MacSuspend( bool convertClipboard )
     while (node)
     {
         wxTopLevelWindow* win = (wxTopLevelWindow*) node->Data();
-        win->MacActivate( MacGetCurrentEvent() , false ) ;
+        if (!win->HasFlag(wxSTAY_ON_TOP))
+            win->MacActivate( MacGetCurrentEvent() , false ) ;
 
         node = node->Next();
     }

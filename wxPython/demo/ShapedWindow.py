@@ -7,8 +7,10 @@ import images
 class TestFrame(wxFrame):
     def __init__(self, parent, log):
         self.log = log
-        wxFrame.__init__(self, parent, -1, "Shaped Window")
+        wxFrame.__init__(self, parent, -1, "Shaped Window",
+                         style = wxFRAME_SHAPED )
         self.hasShape = False
+        self.delta = wxPoint(0,0)
 
         EVT_LEFT_DCLICK(self, self.OnDoubleClick)
         EVT_LEFT_DOWN(self, self.OnLeftDown)
@@ -20,8 +22,11 @@ class TestFrame(wxFrame):
         self.bmp = images.getTuxBitmap()
         w, h = self.bmp.GetWidth(), self.bmp.GetHeight()
         self.SetClientSize( (w, h) )
-        self.SetToolTipString("Right-click to close the window\n"
-                              "Double-click the image to set/unset the window shape")
+
+        if wxPlatform != "__WXMAC__":
+            # wxMac clips the tooltip to the window shape, YUCK!!!
+            self.SetToolTipString("Right-click to close the window\n"
+                                  "Double-click the image to set/unset the window shape")
 
         if wxPlatform == "__WXGTK__":
             # wxGTK requires that the window be created before you can
@@ -29,9 +34,11 @@ class TestFrame(wxFrame):
             # this event.
             EVT_WINDOW_CREATE(self, self.SetWindowShape)
         else:
-            # On wxMSW the window has already been created, so go for it.
-            self.SetWindowShape()
+            # On wxMSW and wxMac the window has already been created, so go for it.
+            pass #self.SetWindowShape()
 
+        dc = wxClientDC(self)
+        dc.DrawBitmap(self.bmp, 0,0, True)
 
 
     def SetWindowShape(self, *evt):

@@ -506,10 +506,10 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long style )
     m_fsIsShowing = show;
 
     GdkWindow *window = m_widget->window;
-    wxX11FullScreenMethod method = 
+    wxX11FullScreenMethod method =
         wxGetFullScreenMethodX11((WXDisplay*)GDK_DISPLAY(),
                                  (WXWindow)GDK_ROOT_WINDOW());
-    
+
     if (show)
     {
         m_fsSaveFlag = style;
@@ -531,7 +531,7 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long style )
             gdk_window_set_decorations(window, (GdkWMDecoration)0);
             gdk_window_set_functions(window, (GdkWMFunction)0);
         }
-        
+
 		gdk_window_get_origin (m_widget->window, &root_x, &root_y);
 		gdk_window_get_geometry (m_widget->window, &client_x, &client_y,
 					 &width, &height, NULL);
@@ -554,7 +554,7 @@ bool wxTopLevelWindowGTK::ShowFullScreen(bool show, long style )
             gdk_window_set_decorations(window, (GdkWMDecoration)m_gdkDecor);
             gdk_window_set_functions(window, (GdkWMFunction)m_gdkFunc);
         }
-        
+
         wxSetFullScreenStateX11((WXDisplay*)GDK_DISPLAY(),
                                 (WXWindow)GDK_ROOT_WINDOW(),
                                 (WXWindow)GDK_WINDOW_XWINDOW(window),
@@ -995,6 +995,9 @@ static bool do_shape_combine_region(GdkWindow* window, const wxRegion& region)
 
 bool wxTopLevelWindowGTK::SetShape(const wxRegion& region)
 {
+    wxCHECK_MSG( HasFlag(wxFRAME_SHAPED), FALSE,
+                 _T("Shaped windows must be created with the wxFRAME_SHAPED style."));
+
     GdkWindow *window = NULL;
     if (m_wxwindow)
     {

@@ -726,6 +726,9 @@ bool wxTopLevelWindowMSW::EnableCloseButton(bool enable)
 
 bool wxTopLevelWindowMSW::SetShape(const wxRegion& region)
 {
+    wxCHECK_MSG( HasFlag(wxFRAME_SHAPED), FALSE,
+                 _T("Shaped windows must be created with the wxFRAME_SHAPED style."));
+
     // The empty region signifies that the shape should be removed from the
     // window.
     if ( region.IsEmpty() )
