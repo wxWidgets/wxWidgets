@@ -717,6 +717,7 @@ void wxGridCellNumberEditor::BeginEdit(int row, int col, wxGrid* grid)
     if ( HasRange() )
     {
         Spin()->SetValue((int)m_valueOld);
+        Spin()->SetFocus();
     }
     else
     {

@@ -70,6 +70,32 @@ static const int MARGIN_BETWEEN = 1;
 // ============================================================================
 
 // ----------------------------------------------------------------------------
+// wnd proc for the buddy text ctrl
+// ----------------------------------------------------------------------------
+
+LRESULT APIENTRY _EXPORT wxBuddyTextWndProc(HWND hwnd,
+                                            UINT message,
+                                            WPARAM wParam,
+                                            LPARAM lParam)
+{
+    wxSpinCtrl *spin = (wxSpinCtrl *)::GetWindowLong(hwnd, GWL_USERDATA);
+
+    // forward some messages (the key ones only so far) to the spin ctrl
+    switch ( message )
+    {
+        case WM_CHAR:
+        case WM_DEADCHAR:
+        case WM_KEYUP:
+        case WM_KEYDOWN:
+            spin->MSWWindowProc(message, wParam, lParam);
+            break;
+    }
+
+    return ::CallWindowProc(CASTWNDPROC spin->GetBuddyWndProc(),
+                            hwnd, message, wParam, lParam);
+}
+
+// ----------------------------------------------------------------------------
 // construction
 // ----------------------------------------------------------------------------
 
@@ -138,6 +164,11 @@ bool wxSpinCtrl::Create(wxWindow *parent,
         return FALSE;
     }
 
+    // subclass the text ctrl to be able to intercept some events
+    m_oldBuddyWndProc = (WXFARPROC)::GetWindowLong((HWND)m_hwndBuddy, GWL_WNDPROC);
+    ::SetWindowLong((HWND)m_hwndBuddy, GWL_USERDATA, (LONG)this);
+    ::SetWindowLong((HWND)m_hwndBuddy, GWL_WNDPROC, (LONG)wxBuddyTextWndProc);
+
     // should have the same font as the other controls
     SetFont(GetParent()->GetFont());
 
@@ -165,6 +196,13 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     }
 
     return TRUE;
+}
+
+wxSpinCtrl::~wxSpinCtrl()
+{
+    // destroy the buddy window because this pointer which wxBuddyTextWndProc
+    // uses will not soon be valid any more
+    ::DestroyWindow((HWND)m_hwndBuddy);
 }
 
 // ----------------------------------------------------------------------------

@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
 // Name:        msw/spinctrl.h
 // Purpose:     wxSpinCtrl class declaration for Win32
 // Author:      Vadim Zeitlin
@@ -57,6 +57,8 @@ public:
     // implementation only from now on
     // -------------------------------
 
+    virtual ~wxSpinCtrl();
+
     virtual void SetValue(int val) { wxSpinButton::SetValue(val); }
     virtual int  GetValue() const;
     virtual bool SetFont(const wxFont &font);
@@ -65,7 +67,10 @@ public:
     virtual bool Enable(bool enable = TRUE);
     virtual bool Show(bool show = TRUE);
 
-    virtual bool AcceptsFocus() const { return TRUE; }
+    // wxSpinButton doesn't accept focus, but we do
+    virtual bool AcceptsFocus() const { return wxWindow::AcceptsFocus(); }
+
+    WXFARPROC GetBuddyWndProc() const { return m_oldBuddyWndProc; }
 
 protected:
     virtual void DoMoveWindow(int x, int y, int width, int height);
@@ -74,7 +79,9 @@ protected:
     // the handler for wxSpinButton events
     void OnSpinChange(wxSpinEvent& event);
 
-    WXHWND m_hwndBuddy;
+    // the data for the "buddy" text ctrl
+    WXHWND     m_hwndBuddy;
+    WXFARPROC  m_oldBuddyWndProc;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxSpinCtrl)
