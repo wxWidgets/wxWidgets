@@ -49,7 +49,8 @@ class wxJoystick : public wxObject {
 public:
     wxJoystick(int joystick = wxJOYSTICK1) {
         wxPyBeginBlockThreads();
-        PyErr_SetString(PyExc_NotImplementedError, "wxJoystick is not available on this platform.");
+        PyErr_SetString(PyExc_NotImplementedError,
+                        "wxJoystick is not available on this platform.");
         wxPyEndBlockThreads();
     }
     wxPoint GetPosition() { return wxPoint(-1,-1); }

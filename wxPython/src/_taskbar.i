@@ -29,7 +29,7 @@
 class wxTaskBarIcon : public wxEvtHandler
 {
 public:
-    wxTaskBarIcon()  { PyErr_SetNone(PyExc_NotImplementedError); }
+    wxTaskBarIcon()  { wxPyRaiseNotImplemented(); }
 };
  
 
@@ -37,7 +37,7 @@ class wxTaskBarIconEvent : public wxEvent
 {
 public:
     wxTaskBarIconEvent(wxEventType, wxTaskBarIcon *)
-        { PyErr_SetNone(PyExc_NotImplementedError); }
+        { wxPyRaiseNotImplemented(); }
     virtual wxEvent* Clone() const { return NULL; }
 };
 

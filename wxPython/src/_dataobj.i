@@ -445,7 +445,7 @@ public:
 class wxMetafileDataObject : public wxDataObjectSimple
 {
 public:
-    wxMetafileDataObject() { PyErr_SetNone(PyExc_NotImplementedError); }
+    wxMetafileDataObject() { wxPyRaiseNotImplemented(); }
 };    
 %}
 

@@ -145,7 +145,8 @@ void wxPyEndBlockThreads();
 
 #endif // wxPyUSE_EXPORTED_API
 
-#define wxPyBLOCK_THREADS(stmt) wxPyBeginBlockThreads(); stmt; wxPyEndBlockThreads()
+#define wxPyBLOCK_THREADS(stmt) { wxPyBeginBlockThreads(); stmt; wxPyEndBlockThreads(); }
+#define wxPyRaiseNotImplemented() wxPyBLOCK_THREADS(PyErr_SetNone(PyExc_NotImplementedError))
 
 //---------------------------------------------------------------------------
 // These are helpers used by the typemaps

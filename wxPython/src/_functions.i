@@ -52,7 +52,7 @@ long wxGetFreeMemory();
 #else
 %inline %{
     long wxGetFreeMemory()
-        { PyErr_SetNone(PyExc_NotImplementedError); return 0; }
+        { wxPyRaiseNotImplemented(); return 0; }
 %}
 #endif
 
@@ -214,6 +214,11 @@ wxWindow* wxGetTopLevelParent(wxWindow *win);
 // This is generally most useful getting the state of
 // Caps Lock, Num Lock and Scroll Lock...
 bool wxGetKeyState(wxKeyCode key);
+#else
+%inline %{
+    bool wxGetKeyState(wxKeyCode key)
+        {  wxPyRaiseNotImplemented(); return False; }
+%}
 #endif
 
 

@@ -103,15 +103,15 @@ public:
 %{
 class wxPopupWindow : public wxWindow {
 public:
-    wxPopupWindow(wxWindow *, int)  { PyErr_SetNone(PyExc_NotImplementedError); }
-    wxPopupWindow()                 { PyErr_SetNone(PyExc_NotImplementedError); }
+    wxPopupWindow(wxWindow *, int)  { wxPyRaiseNotImplemented(); }
+    wxPopupWindow()                 { wxPyRaiseNotImplemented(); }
 };
 
 class wxPyPopupTransientWindow : public wxPopupWindow
 {
 public:
-    wxPyPopupTransientWindow(wxWindow *, int)  { PyErr_SetNone(PyExc_NotImplementedError); }
-    wxPyPopupTransientWindow()                 { PyErr_SetNone(PyExc_NotImplementedError); }
+    wxPyPopupTransientWindow(wxWindow *, int)  { wxPyRaiseNotImplemented(); }
+    wxPyPopupTransientWindow()                 { wxPyRaiseNotImplemented(); }
 };
 %}
 

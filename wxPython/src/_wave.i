@@ -30,12 +30,14 @@ class wxWave : public wxObject
 public:
     wxWave(const wxString& fileName, bool isResource = False) {
         wxPyBeginBlockThreads();
-        PyErr_SetString(PyExc_NotImplementedError, "wxWave is not available on this platform.");
+        PyErr_SetString(PyExc_NotImplementedError,
+                        "wxWave is not available on this platform.");
         wxPyEndBlockThreads();
     }
     wxWave(int size, const wxByte* data) {
         wxPyBeginBlockThreads();
-        PyErr_SetString(PyExc_NotImplementedError, "wxWave is not available on this platform.");
+        PyErr_SetString(PyExc_NotImplementedError,
+                        "wxWave is not available on this platform.");
         wxPyEndBlockThreads();
     }
 

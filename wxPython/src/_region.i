@@ -54,7 +54,7 @@ public:
     %extend {
         %name(RegionFromPoints)wxRegion(int points, wxPoint* points_array,
                                         int fillStyle = wxWINDING_RULE) {
-            PyErr_SetNone(PyExc_NotImplementedError);
+            wxPyRaiseNotImplemented();
             return NULL;
         }
     }

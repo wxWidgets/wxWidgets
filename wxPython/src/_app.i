@@ -257,7 +257,7 @@ public:
 #else
     %extend {
         static int GetComCtl32Version()
-            { PyErr_SetNone(PyExc_NotImplementedError); return 0; }
+            { wxPyRaiseNotImplemented(); return 0; }
     }
 #endif
 };
