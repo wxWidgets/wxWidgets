@@ -16,7 +16,7 @@ BUGS
 TODO
 =====================================================================
 
-Adding many lines makes it terribly slow.
+Inserting NL in empty line sometimes doesn't move cursor down.
 
 Printing produces empty pages only.
 
