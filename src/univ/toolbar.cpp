@@ -161,7 +161,7 @@ void wxToolBar::SetMargins(int x, int y)
 {
     // This required for similar visual effects under
     // native platforms and wxUniv.
-    wxToolBarBase::SetMargins( x + 2, y + 2 );
+    wxToolBarBase::SetMargins( x + 3, y + 3 );
 }
 
 // ----------------------------------------------------------------------------
@@ -405,7 +405,8 @@ void wxToolBar::DoLayout()
         tool->m_x = x;
         tool->m_y = y;
 
-        *pCur += (tool->IsSeparator() ? m_widthSeparator : widthTool) + margin;
+        // TODO ugly number fiddling
+        *pCur += ( tool->IsSeparator() ? m_widthSeparator : (widthTool+2) ) + margin;
     }
 
     // calculate the total toolbar size
@@ -487,6 +488,12 @@ void wxToolBar::DoDraw(wxControlRenderer *renderer)
         {
             // we're beyond the area to redraw, nothing left to do
             break;
+        }
+        
+        if (tool->IsSeparator() && !HasFlag(wxTB_FLAT))
+        {
+            // Draw seperators only in flat mode
+            continue;
         }
         
         // deal with the flags
@@ -632,11 +639,12 @@ bool wxStdToolbarInputHandler::HandleMouse(wxInputConsumer *consumer,
 
     if ( event.Button(1) )
     {
-        if ( !tool || !tool->IsEnabled() )
-            return TRUE;
 
         if ( event.LeftDown() || event.LeftDClick() )
         {
+            if ( !tool || !tool->IsEnabled() )
+                return TRUE;
+                
             m_winCapture = tbar;
             m_winCapture->CaptureMouse();
             
@@ -655,19 +663,13 @@ bool wxStdToolbarInputHandler::HandleMouse(wxInputConsumer *consumer,
             }
 
             if ( tool == m_toolCapture )
-            {
-                // this will generate a click event
-                consumer->PerformAction( wxACTION_BUTTON_TOGGLE, tool->GetId() );
-
-                m_toolCapture = NULL;
-                
-                return TRUE;
-            }
-            //else: the mouse was released outside the tool or in
-            //      a different tool
+                consumer->PerformAction( wxACTION_BUTTON_TOGGLE, m_toolCapture->GetId() );
+            else
+                consumer->PerformAction( wxACTION_TOOLBAR_LEAVE, m_toolCapture->GetId() );
             
             m_toolCapture = NULL;
-            
+                
+            return TRUE;
         }
         //else: don't do anything special about the double click
     }
@@ -694,27 +696,40 @@ bool wxStdToolbarInputHandler::HandleMouseMove(wxInputConsumer *consumer,
             tool = (wxToolBarTool*) tbar->FindToolForPosition( event.GetX(), event.GetY() );
         }
         
-        if ((tool) && (tool == m_toolLast))
+        if (m_toolCapture)
         {
-            // Still over the same tool as last time
-            return TRUE;
-        }
-        
-        if (m_toolLast)
-        {
-            // Leave old tool if any
-            consumer->PerformAction( wxACTION_TOOLBAR_LEAVE, m_toolLast->GetId() );
-        }
-        
-        if (m_toolCapture && (m_toolCapture != tool))
-            m_toolLast = NULL;
-        else
+            // During capture we only care of the captured tool
+            if (tool && (tool != m_toolCapture))
+                tool = NULL;
+                
+            if (tool == m_toolLast)
+                return TRUE;
+                
+            if (tool)
+                consumer->PerformAction( wxACTION_BUTTON_PRESS, m_toolCapture->GetId() );
+            else
+                consumer->PerformAction( wxACTION_BUTTON_RELEASE, m_toolCapture->GetId() );
+                
             m_toolLast = tool;
-        
-        if (m_toolLast)
+        }
+        else
         {
-            // Enter new tool if any
-            consumer->PerformAction( wxACTION_TOOLBAR_ENTER, m_toolLast->GetId() );
+            if (tool == m_toolLast)
+               return TRUE;
+               
+            if (m_toolLast)
+            {
+                // Leave old tool if any
+                consumer->PerformAction( wxACTION_TOOLBAR_LEAVE, m_toolLast->GetId() );
+            }
+            
+            if (tool)
+            {
+                // Enter new tool if any
+                consumer->PerformAction( wxACTION_TOOLBAR_ENTER, tool->GetId() );
+            }
+        
+            m_toolLast = tool;
         }
         
         return TRUE;
