@@ -26,7 +26,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
+#ifndef __MWERKS__
 #include <memory.h>
+#endif
 
 #include "wx/defs.h"
 #include "wx/object.h"

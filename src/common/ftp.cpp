@@ -20,7 +20,9 @@
 #pragma hdrstop
 #endif
 
+#ifndef __MWERKS__
 #include <memory.h>
+#endif
 #include <stdlib.h>
 #include "wx/string.h"
 #include "wx/utils.h"

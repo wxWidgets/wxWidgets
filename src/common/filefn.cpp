@@ -43,8 +43,13 @@
 #endif
 #endif
 #include <time.h>
+#ifndef __MWERKS__
 #include <sys/types.h>
 #include <sys/stat.h>
+#else
+#include <stat.h>
+#include <unistd.h>
+#endif
 
 #ifdef __UNIX__
 #include <unistd.h>
@@ -52,7 +57,7 @@
 #endif
 
 #ifdef __WINDOWS__
-#ifndef __GNUWIN32__
+#if !defined( __GNUWIN32__ ) && !defined( __MWERKS__ )
 #include <direct.h>
 #include <dos.h>
 #endif
@@ -1260,7 +1265,7 @@ char *wxGetWorkingDirectory(char *buf, int sz)
 {
   if (!buf)
     buf = new char[sz+1];
-#ifdef _MSC_VER
+#ifdef _MSC_VER 
   if (_getcwd(buf, sz) == NULL) {
 #else
   if (getcwd(buf, sz) == NULL) {

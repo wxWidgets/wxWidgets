@@ -51,8 +51,10 @@
 #endif
 #endif
 #include <time.h>
+#ifndef __MWERKS__
 #include <sys/types.h>
 #include <sys/stat.h>
+#endif
 
 // Pattern matching code.
 // Yes, this path is deliberate (for Borland compilation)
@@ -118,8 +120,13 @@ int strncasecmp(const char *str_1, const char *str_2, size_t maxchar)
 #ifdef __WINDOWS__
 
 #ifndef __GNUWIN32__
+#ifndef __MWERKS__
 #define strcasecmp stricmp
 #define strncasecmp strnicmp
+#else
+#define strcasecmp _stricmp
+#define strncasecmp _strnicmp
+#endif
 #endif
 
 #ifdef _MSC_VER
@@ -807,3 +814,14 @@ wxString wxGetTextFromUser(const wxString& message, const wxString& caption,
         return wxString("");
 }
 
+#ifdef __MWERKS__
+char *strdup(const char *s) 
+{
+	return strcpy( (char*) malloc( strlen( s ) + 1 ) , s ) ;
+}
+
+int	isascii( int c ) 
+{
+	return ( c >= 0 && c < 128 ) ;
+}
+#endif

@@ -62,11 +62,16 @@
 
 #include  <stdio.h>       // SEEK_xxx constants
 #include  <fcntl.h>       // O_RDONLY &c
+#ifndef __MWERKS__
 #include  <sys/types.h>   // needed for stat
 #include  <sys/stat.h>    // stat
+#endif
 
 // Microsoft compiler loves underscores, feed them to it
 #ifdef    _MSC_VER
+
+  #ifndef __MWERKS__
+
   // functions
   #define   open        _open
   #define   close       _close
@@ -81,6 +86,7 @@
   #define   stat        _stat
 
   // constants
+  
   #define   O_RDONLY    _O_RDONLY
   #define   O_WRONLY    _O_WRONLY
   #define   O_RDWR      _O_RDWR
@@ -90,6 +96,8 @@
 
   #define   S_IFDIR     _S_IFDIR
   #define   S_IFREG     _S_IFREG
+  
+  #endif
 
   #define   W_OK        2
   #define   R_OK        4
@@ -247,7 +255,11 @@ off_t wxFile::Read(void *pBuf, off_t nCount)
 {
   wxCHECK( (pBuf != NULL) && IsOpened(), 0 );
 
+#ifdef __MWERKS__
+  int iRc = ::read(m_fd, (char*) pBuf, nCount);
+#else
   int iRc = ::read(m_fd, pBuf, nCount);
+#endif
   if ( iRc == -1 ) {
     wxLogSysError(_("can't read from file descriptor %d"), m_fd);
     return wxInvalidOffset;
@@ -261,7 +273,11 @@ size_t wxFile::Write(const void *pBuf, size_t nCount)
 {
   wxCHECK( (pBuf != NULL) && IsOpened(), 0 );
 
+#ifdef __MWERKS__
+  int iRc = ::write(m_fd, (const char*) pBuf, nCount);
+#else
   int iRc = ::write(m_fd, pBuf, nCount);
+#endif
   if ( iRc == -1 ) {
     wxLogSysError(_("can't write to file descriptor %d"), m_fd);
     m_error = TRUE;
@@ -341,7 +357,7 @@ off_t wxFile::Length() const
 {
   wxASSERT( IsOpened() );
 
-  #ifdef  _MSC_VER
+  #if defined(  _MSC_VER ) && !defined( __MWERKS__ )
     int iRc = _filelength(m_fd);
   #else
     int iRc = tell(m_fd);
@@ -376,7 +392,7 @@ bool wxFile::Eof() const
 
   int iRc;
 
-  #if defined(__UNIX__) || defined(__GNUWIN32__)
+  #if defined(__UNIX__) || defined(__GNUWIN32__) || defined( __MWERKS__ )
     // @@ this doesn't work, of course, on unseekable file descriptors
     off_t ofsCur = Tell(),
           ofsMax = Length();

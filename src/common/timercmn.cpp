@@ -35,7 +35,7 @@
 #include <time.h>
 #include <sys/types.h>
 
-#if (!defined(__SC__) && !defined(__SGI__) && !defined(__GNUWIN32__)) || defined(__MINGW32__)
+#if (!defined(__SC__) && !defined(__SGI__) && !defined(__GNUWIN32__) && !defined(__MWERKS__)) || defined(__MINGW32__)
 #include <sys/timeb.h>
 #endif
 
@@ -76,7 +76,7 @@ void wxStartTimer(void)
   gettimeofday(&tp);
 #endif
   wxStartTime = 1000*tp.tv_sec + tp.tv_usec/1000;
-#elif (defined(__SC__) || defined(__SGI__) || defined(___BSDI__) || defined(__ALPHA__) || defined(__MINGW32__))
+#elif (defined(__SC__) || defined(__SGI__) || defined(___BSDI__) || defined(__ALPHA__) || defined(__MINGW32__) || defined(__MWERKS__))
   time_t t0;
   struct tm *tp;
   time(&t0);
@@ -103,7 +103,7 @@ long wxGetElapsedTime(bool resetTimer)
   long newTime = 1000*tp.tv_sec + tp.tv_usec / 1000;
   if (resetTimer)
     wxStartTime = newTime;
-#elif (defined(__SC__) || defined(__SGI__) || defined(___BSDI__) || defined(__ALPHA__) || defined(__MINGW32__))
+#elif (defined(__SC__) || defined(__SGI__) || defined(___BSDI__) || defined(__ALPHA__) || defined(__MINGW32__)|| defined(__MWERKS__))
   time_t t0;
   struct tm *tp;
   time(&t0);
@@ -145,7 +145,7 @@ bool wxGetLocalTime(long *timeZone, int *dstObserved)
   *dstObserved = tp->tm_isdst;
 #else
 
-#if (((defined(__SYSV__) && !defined(__HPUX__)) || defined(__MSDOS__) || defined(__WXMSW__)) && !defined(__GNUWIN32__))
+#if (((defined(__SYSV__) && !defined(__HPUX__)) || defined(__MSDOS__) || defined(__WXMSW__)) && !defined(__GNUWIN32__) && !defined(__MWERKS__))
 #ifdef __BORLANDC__
   /* Borland uses underscores */
   *timeZone = _timezone;
@@ -154,8 +154,10 @@ bool wxGetLocalTime(long *timeZone, int *dstObserved)
   *timeZone = timezone;
   *dstObserved = daylight;
 #endif
-#elif defined(__xlC__) || defined(__AIX__) || defined(__SVR4__) || defined(__SYSV__) || (defined(__GNUWIN32__) && !defined(__MINGW32__)) // || defined(__AIXV3__)
+#elif defined(__xlC__) || defined(__AIX__) || defined(__SVR4__) || defined(__SYSV__) || defined(__MWERKS__) || (defined(__GNUWIN32__) && !defined(__MINGW32__)) // || defined(__AIXV3__)
+#ifndef __MWERKS__ // shouldn't this be one scope below ?
   struct timeval tp;
+#endif 
 #if defined(__SYSV__) || (defined(__GNUWIN32__) && !defined(__MINGW32))
   struct timezone tz;
   gettimeofday(&tp, &tz);
@@ -166,7 +168,11 @@ bool wxGetLocalTime(long *timeZone, int *dstObserved)
   struct tm *tp;
   time(&t0);
   tp = localtime(&t0);
+#ifndef __MWERKS__
   *timeZone = tp->tm_gmtoff; // ???
+#else
+  *timeZone = 0 ;
+#endif
   *dstObserved = tp->tm_isdst;
 #endif
 #elif defined(__WXSTUBS__)

@@ -49,7 +49,7 @@
 #  endif
 #endif
 
-#if !defined(__WATCOMC__) && !defined(__VMS__)
+#if !defined(__WATCOMC__) && !defined(__VMS__) && !defined( __MWERKS__ )
 #include <memory.h>
 #endif
 
