@@ -137,13 +137,6 @@ extern "C" char *SWIG_GetPtrObj(PyObject *obj, void **ptr, char *type);
 # pragma warning(disable:4190)
 #endif
 
-
-
-// Non-const versions to keep SWIG happy.
-//  extern wxPoint  wxPyDefaultPosition;
-//  extern wxSize   wxPyDefaultSize;
-//  extern wxString wxPyEmptyStr;
-
 //----------------------------------------------------------------------
 
 class wxPyCallback : public wxObject {
@@ -620,8 +613,8 @@ public:
 #define IMP_PYCALLBACK__BOOL2DBL2INT(CLASS, PCLASS, CBNAME)                     \
     void CLASS::CBNAME(bool a, double b, double c, int d, int e) {              \
         bool doSave = wxPyRestoreThread();                                      \
-        if (wxPyCBH_findCallback(m_myInst, #CBNAME))                                     \
-            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(idii)",                       \
+        if (wxPyCBH_findCallback(m_myInst, #CBNAME))                            \
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iddii)",             \
                                                 (int)a,b,c,d,e));               \
         else                                                                    \
             PCLASS::CBNAME(a, b, c, d, e);                                      \
