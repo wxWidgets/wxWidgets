@@ -1271,36 +1271,26 @@ void wxWindow::MacOnScroll(wxScrollEvent &event )
 	    wevent.SetOrientation(event.GetOrientation());
 	    wevent.m_eventObject = this;
 	
-	    switch ( event.m_eventType )
-	    {
-	    case wxEVT_SCROLL_TOP:
+    	if (event.m_eventType == wxEVT_SCROLL_TOP) {
 	        wevent.m_eventType = wxEVT_SCROLLWIN_TOP;
-	        break;
-	
-	    case wxEVT_SCROLL_BOTTOM:
+	    } else
+    	if (event.m_eventType == wxEVT_SCROLL_BOTTOM) {
 	        wevent.m_eventType = wxEVT_SCROLLWIN_BOTTOM;
-	        break;
-	
-	    case wxEVT_SCROLL_LINEUP:
+	    } else
+    	if (event.m_eventType == wxEVT_SCROLL_LINEUP) {
 	        wevent.m_eventType = wxEVT_SCROLLWIN_LINEUP;
-	        break;
-	
-	    case wxEVT_SCROLL_LINEDOWN:
+	    } else
+    	if (event.m_eventType == wxEVT_SCROLL_LINEDOWN) {
 	        wevent.m_eventType = wxEVT_SCROLLWIN_LINEDOWN;
-	        break;
-	
-	    case wxEVT_SCROLL_PAGEUP:
+	    } else
+    	if (event.m_eventType == wxEVT_SCROLL_PAGEUP) {
 	        wevent.m_eventType = wxEVT_SCROLLWIN_PAGEUP;
-	        break;
-	
-	    case wxEVT_SCROLL_PAGEDOWN:
+	    } else
+    	if (event.m_eventType == wxEVT_SCROLL_PAGEDOWN) {
 	        wevent.m_eventType = wxEVT_SCROLLWIN_PAGEDOWN;
-	        break;
-	
-	    case wxEVT_SCROLL_THUMBTRACK:
+	    } else
+    	if (event.m_eventType == wxEVT_SCROLL_THUMBTRACK) {
 	        wevent.m_eventType = wxEVT_SCROLLWIN_THUMBTRACK;
-	        break;
-	
 	    }
 		
 	    GetEventHandler()->ProcessEvent(wevent);
