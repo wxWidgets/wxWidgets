@@ -39,6 +39,10 @@ END_EVENT_TABLE()
 const short kTextColumnId = 1024 ;
 
 // new databrowserbased version
+// because of the limited insert
+// functionality of DataBrowser, 
+// we just introduce id s corresponding
+// to the line number
 
 // Listbox item
 wxListBox::wxListBox()
@@ -74,44 +78,43 @@ static pascal  void DataBrowserItemNotificationProc(ControlRef browser, DataBrow
     if ( ref )
     {
         wxListBox* list = wxDynamicCast( (wxObject*) ref , wxListBox ) ;
-        for ( size_t i = 0 ; i < list->m_idArray.GetCount() ; ++i )
-            if ( list->m_idArray[i] == (long) itemID )
+        size_t i = itemID - 1 ;
+        if (i >= 0 && i < list->GetCount() )
+        {
+            bool trigger = false ;
+            wxCommandEvent event(
+                wxEVT_COMMAND_LISTBOX_SELECTED, list->GetId() );
+            switch( message )
             {
-                bool trigger = false ;
-                wxCommandEvent event(
-                    wxEVT_COMMAND_LISTBOX_SELECTED, list->GetId() );
-                switch( message )
-                {
-                    case kDataBrowserItemDeselected :
-                        if ( list->HasMultipleSelection() )
-                            trigger = true ;
-                        break ;
-                    case kDataBrowserItemSelected :
+                case kDataBrowserItemDeselected :
+                    if ( list->HasMultipleSelection() )
                         trigger = true ;
-                        break ;
-                    case kDataBrowserItemDoubleClicked :
-                        event.SetEventType(wxEVT_COMMAND_LISTBOX_DOUBLECLICKED) ;
-                        trigger = true ;
-                        break ;
-                    default :
-                        break ;
-                }
-                if ( trigger )
-                {
-                    event.SetEventObject( list );
-                    if ( list->HasClientObjectData() )
-                        event.SetClientObject( list->GetClientObject(i) );
-                    else if ( list->HasClientUntypedData() )
-                        event.SetClientData( list->GetClientData(i) );
-                    event.SetString( list->GetString(i) );
-                    event.SetInt(i) ;
-                    event.SetExtraLong( list->HasMultipleSelection() ? message == kDataBrowserItemSelected : TRUE );
-                    wxPostEvent( list->GetEventHandler() , event ) ;
-                    // direct notification is not always having the listbox GetSelection() having in synch with event
-                    // list->GetEventHandler()->ProcessEvent(event) ; 
-                } 
-                break ;
+                    break ;
+                case kDataBrowserItemSelected :
+                    trigger = true ;
+                    break ;
+                case kDataBrowserItemDoubleClicked :
+                    event.SetEventType(wxEVT_COMMAND_LISTBOX_DOUBLECLICKED) ;
+                    trigger = true ;
+                    break ;
+                default :
+                    break ;
             }
+            if ( trigger )
+            {
+                event.SetEventObject( list );
+                if ( list->HasClientObjectData() )
+                    event.SetClientObject( list->GetClientObject(i) );
+                else if ( list->HasClientUntypedData() )
+                    event.SetClientData( list->GetClientData(i) );
+                event.SetString( list->GetString(i) );
+                event.SetInt(i) ;
+                event.SetExtraLong( list->HasMultipleSelection() ? message == kDataBrowserItemSelected : TRUE );
+                wxPostEvent( list->GetEventHandler() , event ) ;
+                // direct notification is not always having the listbox GetSelection() having in synch with event
+                // list->GetEventHandler()->ProcessEvent(event) ; 
+            } 
+        }
     }
 }
 
@@ -133,14 +136,13 @@ static pascal OSStatus ListBoxGetSetItemData(ControlRef browser,
     		    if ( ref )
     		    {
     		        wxListBox* list = wxDynamicCast( (wxObject*) ref , wxListBox ) ;
-    		        for ( size_t i = 0 ; i < list->m_idArray.GetCount() ; ++i )
-    		            if ( list->m_idArray[i] == (long) itemID )
-    		            {
-    		                wxMacCFStringHolder cf( list->GetString(i) , list->GetFont().GetEncoding() ) ;
-    		                verify_noerr( ::SetDataBrowserItemDataText( itemData , cf ) ) ;
-    		                err = noErr ;
-    		                break ;
-    		            }
+                    size_t i = itemID - 1 ;
+                    if (i >= 0 && i < list->GetCount() )
+		            {
+		                wxMacCFStringHolder cf( list->GetString(i) , list->GetFont().GetEncoding() ) ;
+		                verify_noerr( ::SetDataBrowserItemDataText( itemData , cf ) ) ;
+		                err = noErr ;
+		            }
     			}
     		}	
     		break;
@@ -171,8 +173,6 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
 
     m_noItems = 0 ; // this will be increased by our append command
     m_selected = 0;
-    m_nextId = 1 ;
-    
 
     Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
 
@@ -241,6 +241,12 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
 	    NewDataBrowserItemNotificationUPP(DataBrowserItemNotificationProc) ;
 #endif
     m_peer->SetCallbacks( &callbacks);
+
+#if TARGET_API_MAC_OSX
+    // there is a redraw bug in 10.2.X
+    if ( UMAGetSystemVersion() < 0x1030 )
+        m_peer->SetData( kControlNoPart, kControlDataBrowserIncludesFrameAndFocusTag, (Boolean) false ) ;
+#endif
 
     MacPostControlCreate(pos,size) ;
 
@@ -521,10 +527,9 @@ void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
     {
         m_stringArray.Insert( items[i] , pos + i ) ;
         m_dataArray.Insert( NULL , pos + i ) ;
+        m_noItems++ ;
         MacInsert( pos + i , items[i] ) ;
     }
-    
-    m_noItems += nItems;
 }
 
 void wxListBox::SetString(int N, const wxString& s)
@@ -640,40 +645,38 @@ wxListBox::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
 
 void wxListBox::MacDelete( int N )
 {
-    UInt32 id = m_idArray[N] ;
+    UInt32 id = m_noItems+1 ;
     verify_noerr( m_peer->RemoveItems( kDataBrowserNoItem , 1 , (UInt32*) &id , kDataBrowserItemNoProperty ) ) ;
-    m_idArray.RemoveAt( N ) ;
+    verify_noerr( m_peer->UpdateItems( kDataBrowserNoItem , 1 , (UInt32*) kDataBrowserNoItem , kDataBrowserItemNoProperty , kDataBrowserItemNoProperty ) ) ;
 }
 
 void wxListBox::MacInsert( int n , const wxString& text)
 {
-    verify_noerr( m_peer->AddItems( kDataBrowserNoItem , 1 , (UInt32*) &m_nextId , kDataBrowserItemNoProperty ) ) ;
-    m_idArray.Insert( m_nextId , n ) ;
-    ++m_nextId ;
+    UInt32 id = m_noItems ; // this has already been increased
+    verify_noerr( m_peer->AddItems( kDataBrowserNoItem , 1 ,  (UInt32*) &id , kDataBrowserItemNoProperty ) ) ;
+    verify_noerr( m_peer->UpdateItems( kDataBrowserNoItem , 1 , (UInt32*) kDataBrowserNoItem , kDataBrowserItemNoProperty , kDataBrowserItemNoProperty ) ) ;
 }
 
 void wxListBox::MacAppend( const wxString& text)
 {
-    verify_noerr( m_peer->AddItems( kDataBrowserNoItem , 1 , (UInt32*) &m_nextId , kDataBrowserItemNoProperty ) ) ;
-    m_idArray.Add( m_nextId ) ;
-    ++m_nextId ;
+    UInt32 id = m_noItems ; // this has already been increased
+    verify_noerr( m_peer->AddItems( kDataBrowserNoItem , 1 ,  (UInt32*) &id , kDataBrowserItemNoProperty ) ) ;
 }
 
 void wxListBox::MacClear()
 {
     verify_noerr( m_peer->RemoveItems( kDataBrowserNoItem , 0 , NULL , kDataBrowserItemNoProperty ) ) ;
-    m_idArray.Empty() ;
 }
 
 void wxListBox::MacSetSelection( int n , bool select )
 {
-    UInt32 id = m_idArray[n] ;
+    UInt32 id = n + 1 ;
     if ( !(GetWindowStyle() & (wxLB_MULTIPLE|wxLB_EXTENDED) ) )
     {
         int n = MacGetSelection() ;
         if ( n >= 0 )
         {
-            UInt32 idOld = m_idArray[n] ;
+            UInt32 idOld = n + 1 ;
             m_peer->SetSelectedItems( 1 , & idOld , kDataBrowserItemsRemove ) ;
         }
     }
@@ -686,14 +689,14 @@ void wxListBox::MacSetSelection( int n , bool select )
 
 bool wxListBox::MacIsSelected( int n ) const
 {
-    return m_peer->IsItemSelected( m_idArray[n] ) ;
+    return m_peer->IsItemSelected( n + 1 ) ;
 }
 
 int wxListBox::MacGetSelection() const
 {
-    for ( size_t i = 0 ; i < m_idArray.GetCount() ; ++i )
+    for ( size_t i = 0 ; i < GetCount() ; ++i )
     {
-        if ( m_peer->IsItemSelected( m_idArray[i] ) )
+        if ( m_peer->IsItemSelected( i + 1 ) )
         {
             return i ;
         }
@@ -706,9 +709,9 @@ int wxListBox::MacGetSelections( wxArrayInt& aSelections ) const
     int no_sel = 0 ;
     
     aSelections.Empty();
-    for ( size_t i = 0 ; i < m_idArray.GetCount() ; ++i )
+    for ( size_t i = 0 ; i < GetCount() ; ++i )
     {
-        if ( m_peer->IsItemSelected( m_idArray[i] ) )
+        if ( m_peer->IsItemSelected( i + 1 ) )
         {
             aSelections.Add( i ) ;
             no_sel++ ;
@@ -720,13 +723,13 @@ int wxListBox::MacGetSelections( wxArrayInt& aSelections ) const
 void wxListBox::MacSet( int n , const wxString& text )
 {
     // as we don't store the strings we only have to issue a redraw
-    UInt32 id = m_idArray[n] ;
+    UInt32 id = n + 1 ;
     verify_noerr( m_peer->UpdateItems( kDataBrowserNoItem , 1 , &id , kDataBrowserItemNoProperty , kDataBrowserItemNoProperty ) ) ;
 }
 
 void wxListBox::MacScrollTo( int n )
 {
-    UInt32 id = m_idArray[n] ;
+    UInt32 id = n + 1 ;
     verify_noerr(  m_peer->RevealItem( id , kTextColumnId , kDataBrowserRevealWithoutSelecting ) ) ;
 }
 
