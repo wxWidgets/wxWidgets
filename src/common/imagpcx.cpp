@@ -277,9 +277,10 @@ int ReadPCX(wxImage *image, wxInputStream& stream)
             *(p++) = pal[3 * index + 2];
         }
 
-        unsigned char* r = new unsigned char[256];
-        unsigned char* g = new unsigned char[256];
-        unsigned char* b = new unsigned char[256];
+#if wxUSE_PALETTE
+        unsigned char r[256];
+        unsigned char g[256];
+        unsigned char b[256];
         for (i = 0; i < 256; i++)
         {
             r[i] = pal[3*i + 0];
@@ -287,7 +288,7 @@ int ReadPCX(wxImage *image, wxInputStream& stream)
             b[i] = pal[3*i + 2];
         }
         image->SetPalette(wxPalette(256, r, g, b));
-        delete[] r; delete[] g; delete[] b;
+#endif // wxUSE_PALETTE
     }
 
     return wxPCX_OK;

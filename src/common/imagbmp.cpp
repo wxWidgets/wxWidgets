@@ -91,7 +91,11 @@ bool wxBMPHandler::SaveFile(wxImage *image,
              (format == wxBMP_8BPP_RED) || (format == wxBMP_8BPP_PALETTE))
     {
         // need to set a wxPalette to use this, HOW TO CHECK IF VALID, SIZE?
-        if ((format == wxBMP_8BPP_PALETTE) && !image->HasPalette())
+        if ((format == wxBMP_8BPP_PALETTE)
+#if wxUSE_PALETTE
+                && !image->HasPalette()
+#endif // wxUSE_PALETTE
+            )
         {
             if (verbose)
                 wxLogError(_("BMP: wImage doesn't have own wxPalette."));
@@ -196,7 +200,9 @@ bool wxBMPHandler::SaveFile(wxImage *image,
         }
         else
         {
+#if wxUSE_PALETTE
             palette = new wxPalette(image->GetPalette());
+#endif // wxUSE_PALETTE
         }
 
         int i;
@@ -205,7 +211,10 @@ bool wxBMPHandler::SaveFile(wxImage *image,
 
         for (i=0; i<palette_size; i++)
         {
-            if (!palette->GetRGB( i, &r, &g, &b )) r = g = b = 0;
+#if wxUSE_PALETTE
+            if (!palette->GetRGB( i, &r, &g, &b ))
+#endif // wxUSE_PALETTE
+                r = g = b = 0;
 
             rgbquad[i*4] = b;
             rgbquad[i*4+1] = g;
@@ -236,10 +245,13 @@ bool wxBMPHandler::SaveFile(wxImage *image,
     {
         if (!stream.Write(rgbquad, palette_size*4))
         {
-            if (verbose) wxLogError(_("BMP: Couldn't write RGB color map."));
-            delete []rgbquad;
-            if (palette) delete palette;
-            if (q_image) delete q_image;
+            if (verbose)
+                wxLogError(_("BMP: Couldn't write RGB color map."));
+            delete [] rgbquad;
+#if wxUSE_PALETTE
+            delete palette;
+#endif // wxUSE_PALETTE
+            delete q_image;
             return FALSE;
         }
         delete []rgbquad;
@@ -273,9 +285,14 @@ bool wxBMPHandler::SaveFile(wxImage *image,
             for (x = 0; x < width; x++)
             {
                 pixel = 3*(y*width + x);
+#if wxUSE_PALETTE
                 buffer[x] = palette->GetPixel( data[pixel],
                                                data[pixel+1],
                                                data[pixel+2] );
+#else
+                // FIXME: what should this be? use some std palette maybe?
+                buffer[x] = 0;
+#endif // wxUSE_PALETTE
             }
         }
         else if (format == wxBMP_8BPP_GREY) // 1 byte per pix, rgb ave to grey
@@ -302,9 +319,20 @@ bool wxBMPHandler::SaveFile(wxImage *image,
                 pixel = 3*(y*width + x);
 
                 // fill buffer, ignore if > width
+#if wxUSE_PALETTE
                 buffer[x/2] =
-                                           ((wxUint8)palette->GetPixel(data[pixel], data[pixel+1], data[pixel+2]) << 4) |
-                    (((x+1) > width) ? 0 : ((wxUint8)palette->GetPixel(data[pixel+3], data[pixel+4], data[pixel+5]) ));
+                    ((wxUint8)palette->GetPixel(data[pixel],
+                                                data[pixel+1],
+                                                data[pixel+2]) << 4) |
+                    (((x+1) > width)
+                     ? 0
+                     : ((wxUint8)palette->GetPixel(data[pixel+3],
+                                                   data[pixel+4],
+                                                   data[pixel+5]) ));
+#else
+                // FIXME: what should this be? use some std palette maybe?
+                buffer[x/2] = 0;
+#endif // wxUSE_PALETTE
             }
         }
         else if (format == wxBMP_1BPP) // 1 bpp in "color"
@@ -313,8 +341,8 @@ bool wxBMPHandler::SaveFile(wxImage *image,
             {
                 pixel = 3*(y*width + x);
 
-                buffer[x/8] =
-                                           ((wxUint8)palette->GetPixel(data[pixel], data[pixel+1], data[pixel+2]) << 7) |
+#if wxUSE_PALETTE
+                buffer[x/8] = ((wxUint8)palette->GetPixel(data[pixel], data[pixel+1], data[pixel+2]) << 7) |
                     (((x+1) > width) ? 0 : ((wxUint8)palette->GetPixel(data[pixel+3], data[pixel+4], data[pixel+5]) << 6)) |
                     (((x+2) > width) ? 0 : ((wxUint8)palette->GetPixel(data[pixel+6], data[pixel+7], data[pixel+8]) << 5)) |
                     (((x+3) > width) ? 0 : ((wxUint8)palette->GetPixel(data[pixel+9], data[pixel+10], data[pixel+11]) << 4)) |
@@ -322,6 +350,10 @@ bool wxBMPHandler::SaveFile(wxImage *image,
                     (((x+5) > width) ? 0 : ((wxUint8)palette->GetPixel(data[pixel+15], data[pixel+16], data[pixel+17]) << 2)) |
                     (((x+6) > width) ? 0 : ((wxUint8)palette->GetPixel(data[pixel+18], data[pixel+19], data[pixel+20]) << 1)) |
                     (((x+7) > width) ? 0 : ((wxUint8)palette->GetPixel(data[pixel+21], data[pixel+22], data[pixel+23])     ));
+#else
+                // FIXME: what should this be? use some std palette maybe?
+                buffer[x/8] = 0;
+#endif // wxUSE_PALETTE
             }
         }
         else if (format == wxBMP_1BPP_BW) // 1 bpp B&W colormap from red color ONLY
@@ -347,14 +379,18 @@ bool wxBMPHandler::SaveFile(wxImage *image,
             if (verbose)
                 wxLogError(_("BMP: Couldn't write data."));
             delete[] buffer;
-            if (palette) delete palette;
-            if (q_image) delete q_image;
+#if wxUSE_PALETTE
+            delete palette;
+#endif // wxUSE_PALETTE
+            delete q_image;
             return FALSE;
         }
     }
     delete[] buffer;
-    if (palette) delete palette;
-    if (q_image) delete q_image;
+#if wxUSE_PALETTE
+    delete palette;
+#endif // wxUSE_PALETTE
+    delete q_image;
 
     return TRUE;
 }
@@ -497,8 +533,11 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
             g[j] = cmap[j].g;
             b[j] = cmap[j].b;
         }
+
+#if wxUSE_PALETTE
         // Set the palette for the wxImage
         image->SetPalette(wxPalette(ncolors, r, g, b));
+#endif // wxUSE_PALETTE
 
         delete[] r;
         delete[] g;

@@ -63,11 +63,11 @@ void wxGIFDecoder::Destroy()
 
     while (pimg != NULL)
     {
-	paux = pimg->next;
-	free(pimg->p);
-	free(pimg->pal);
-	delete pimg;
-	pimg = paux;
+        paux = pimg->next;
+        free(pimg->p);
+        free(pimg->pal);
+        delete pimg;
+        pimg = paux;
     }
 
     m_pimage  = NULL;
@@ -97,7 +97,7 @@ bool wxGIFDecoder::ConvertToImage(wxImage *image) const
     image->Create(GetWidth(), GetHeight());
 
     if (!image->Ok())
-	return FALSE;
+        return FALSE;
 
     pal = GetPalette();
     src = GetData();
@@ -107,46 +107,49 @@ bool wxGIFDecoder::ConvertToImage(wxImage *image) const
     /* set transparent colour mask */
     if (transparent != -1)
     {
-	for (i = 0; i < 256; i++)
-	{
-	    if ((pal[3 * i + 0] == 255) &&
-		(pal[3 * i + 1] == 0) &&
-		(pal[3 * i + 2] == 255))
-	    {
-		pal[3 * i + 2] = 254;
-	    }
-	}
+        for (i = 0; i < 256; i++)
+        {
+            if ((pal[3 * i + 0] == 255) &&
+                (pal[3 * i + 1] == 0) &&
+                (pal[3 * i + 2] == 255))
+            {
+                pal[3 * i + 2] = 254;
+            }
+        }
 
-	pal[3 * transparent + 0] = 255,
-	pal[3 * transparent + 1] = 0,
-	pal[3 * transparent + 2] = 255;
+        pal[3 * transparent + 0] = 255,
+        pal[3 * transparent + 1] = 0,
+        pal[3 * transparent + 2] = 255;
 
-	image->SetMaskColour(255, 0, 255);
+        image->SetMaskColour(255, 0, 255);
     }
     else
-	image->SetMask(FALSE);
+        image->SetMask(FALSE);
 
+#if wxUSE_PALETTE
     if (pal)
     {
-	unsigned char* r = new unsigned char[256];
-	unsigned char* g = new unsigned char[256];
-	unsigned char* b = new unsigned char[256];
-	for (i = 0; i < 256; i++)
-	{
-	    r[i] = pal[3*i + 0];
-	    g[i] = pal[3*i + 1];
-	    b[i] = pal[3*i + 2];
-	}
-	image->SetPalette(wxPalette(256, r, g, b));
-	delete[] r; delete[] g; delete[] b;
+        unsigned char r[256];
+        unsigned char g[256];
+        unsigned char b[256];
+
+        for (i = 0; i < 256; i++)
+        {
+            r[i] = pal[3*i + 0];
+            g[i] = pal[3*i + 1];
+            b[i] = pal[3*i + 2];
+        }
+
+        image->SetPalette(wxPalette(256, r, g, b));
     }
+#endif // wxUSE_PALETTE
 
     /* copy image data */
     for (i = 0; i < (GetWidth() * GetHeight()); i++, src++)
     {
-	*(dst++) = pal[3 * (*src) + 0];
-	*(dst++) = pal[3 * (*src) + 1];
-	*(dst++) = pal[3 * (*src) + 2];
+        *(dst++) = pal[3 * (*src) + 0];
+        *(dst++) = pal[3 * (*src) + 1];
+        *(dst++) = pal[3 * (*src) + 2];
     }
 
     return TRUE;
@@ -186,7 +189,7 @@ bool wxGIFDecoder::IsAnimation() const          { return (m_nimages > 1); }
 bool wxGIFDecoder::GoFirstFrame()
 {
     if (!IsAnimation())
-	return FALSE;
+        return FALSE;
 
     m_image = 1;
     m_pimage = m_pfirst;
@@ -196,7 +199,7 @@ bool wxGIFDecoder::GoFirstFrame()
 bool wxGIFDecoder::GoLastFrame()
 {
     if (!IsAnimation())
-	return FALSE;
+        return FALSE;
 
     m_image = m_nimages;
     m_pimage = m_plast;
@@ -206,45 +209,45 @@ bool wxGIFDecoder::GoLastFrame()
 bool wxGIFDecoder::GoNextFrame(bool cyclic)
 {
     if (!IsAnimation())
-	return FALSE;
+        return FALSE;
 
     if ((m_image < m_nimages) || (cyclic))
     {
-	m_pimage = m_pimage->next;
-	m_image++;
+        m_pimage = m_pimage->next;
+        m_image++;
 
-	if (!m_pimage)
-	{
-	    m_image = 1;
-	    m_pimage = m_pfirst;
-	}
+        if (!m_pimage)
+        {
+            m_image = 1;
+            m_pimage = m_pfirst;
+        }
 
-	return TRUE;
+        return TRUE;
     }
     else
-	return FALSE;
+        return FALSE;
 }
 
 bool wxGIFDecoder::GoPrevFrame(bool cyclic)
 {
     if (!IsAnimation())
-	return FALSE;
+        return FALSE;
 
     if ((m_image > 1) || (cyclic))
     {
-	m_pimage = m_pimage->prev;
-	m_image--;
+        m_pimage = m_pimage->prev;
+        m_image--;
 
-	if (!m_pimage)
-	{
-	    m_image = m_nimages;
-	    m_pimage = m_plast;
-	}
+        if (!m_pimage)
+        {
+            m_image = m_nimages;
+            m_pimage = m_plast;
+        }
 
-	return TRUE;
+        return TRUE;
     }
     else
-	return FALSE;
+        return FALSE;
 }
 
 bool wxGIFDecoder::GoFrame(int which)
@@ -252,19 +255,19 @@ bool wxGIFDecoder::GoFrame(int which)
     int i;
 
     if (!IsAnimation())
-	return FALSE;
+        return FALSE;
 
     if ((which >= 1) && (which <= m_nimages))
     {
-	m_pimage = m_pfirst;
+        m_pimage = m_pfirst;
 
-	for (i = 1; i < which; i++)
-	    m_pimage = m_pimage->next;
+        for (i = 1; i < which; i++)
+            m_pimage = m_pimage->next;
 
-	return TRUE;
+        return TRUE;
     }
     else
-	return FALSE;
+        return FALSE;
 }
 
 
@@ -288,35 +291,35 @@ int wxGIFDecoder::getcode(int bits, int ab_fin)
     /* keep reading new bytes while needed */
     while (bits > m_restbits)
     {
-	/* if no bytes left in this block, read the next block */
-	if (m_restbyte == 0)
-	{
-	    m_restbyte = (unsigned char)m_f->GetC();
+        /* if no bytes left in this block, read the next block */
+        if (m_restbyte == 0)
+        {
+            m_restbyte = (unsigned char)m_f->GetC();
 
-	    /* Some encoders are a bit broken: instead of issuing
-	     * an end-of-image symbol (ab_fin) they come up with
-	     * a zero-length subblock!! We catch this here so
-	     * that the decoder sees an ab_fin code.
-	     */
-	    if (m_restbyte == 0)
-	    {
-		code = ab_fin;
-		break;
-	    }
+            /* Some encoders are a bit broken: instead of issuing
+             * an end-of-image symbol (ab_fin) they come up with
+             * a zero-length subblock!! We catch this here so
+             * that the decoder sees an ab_fin code.
+             */
+            if (m_restbyte == 0)
+            {
+                code = ab_fin;
+                break;
+            }
 
-	    /* prefetch data */
-	    m_f->Read((void *) m_buffer, m_restbyte);
-	    m_bufp = m_buffer;
-	}
+            /* prefetch data */
+            m_f->Read((void *) m_buffer, m_restbyte);
+            m_bufp = m_buffer;
+        }
 
-	/* read next byte and isolate the bits we need */
-	m_lastbyte = (unsigned char) (*m_bufp++);
-	mask       = (1 << (bits - m_restbits)) - 1;
-	code       = code + ((m_lastbyte & mask) << m_restbits);
-	m_restbyte--;
+        /* read next byte and isolate the bits we need */
+        m_lastbyte = (unsigned char) (*m_bufp++);
+        mask       = (1 << (bits - m_restbits)) - 1;
+        code       = code + ((m_lastbyte & mask) << m_restbits);
+        m_restbyte--;
 
-	/* adjust total number of bits extracted from the buffer */
-	m_restbits = m_restbits + 8;
+        /* adjust total number of bits extracted from the buffer */
+        m_restbits = m_restbits + 8;
     }
 
     /* find number of bits remaining for next code */
@@ -366,95 +369,95 @@ int wxGIFDecoder::dgif(GIFImage *img, int interl, int bits)
 
     do
     {
-	/* get next code */
-	readcode = code = getcode(ab_bits, ab_fin);
+        /* get next code */
+        readcode = code = getcode(ab_bits, ab_fin);
 
-	/* end of image? */
-	if (code == ab_fin) break;
+        /* end of image? */
+        if (code == ab_fin) break;
 
-	/* reset alphabet? */
-	if (code == ab_clr)
-	{
-	    /* reset main variables */
-	    ab_bits  = bits + 1;
-	    ab_free  = (1 << bits) + 2;
-	    ab_max   = (1 << ab_bits) - 1;
-	    lastcode = -1;
-	    abcabca  = -1;
+        /* reset alphabet? */
+        if (code == ab_clr)
+        {
+            /* reset main variables */
+            ab_bits  = bits + 1;
+            ab_free  = (1 << bits) + 2;
+            ab_max   = (1 << ab_bits) - 1;
+            lastcode = -1;
+            abcabca  = -1;
 
-	    /* skip to next code */
-	    continue;
-	}
+            /* skip to next code */
+            continue;
+        }
 
-	/* unknown code: special case (like in ABCABCA) */
-	if (code >= ab_free)
-	{
-	    code = lastcode;            /* take last string */
-	    stack[pos++] = abcabca;     /* add first character */
-	}
+        /* unknown code: special case (like in ABCABCA) */
+        if (code >= ab_free)
+        {
+            code = lastcode;            /* take last string */
+            stack[pos++] = abcabca;     /* add first character */
+        }
 
-	/* build the string for this code in the stack */
-	while (code > ab_clr)
-	{
-	    stack[pos++] = ab_tail[code];
-	    code         = ab_prefix[code];
-	}
-	stack[pos] = code;              /* push last code into the stack */
-	abcabca    = code;              /* save for special case */
+        /* build the string for this code in the stack */
+        while (code > ab_clr)
+        {
+            stack[pos++] = ab_tail[code];
+            code         = ab_prefix[code];
+        }
+        stack[pos] = code;              /* push last code into the stack */
+        abcabca    = code;              /* save for special case */
 
-	/* make new entry in alphabet (only if NOT just cleared) */
-	if (lastcode != -1)
-	{
-	    ab_prefix[ab_free] = lastcode;
-	    ab_tail[ab_free]   = code;
-	    ab_free++;
+        /* make new entry in alphabet (only if NOT just cleared) */
+        if (lastcode != -1)
+        {
+            ab_prefix[ab_free] = lastcode;
+            ab_tail[ab_free]   = code;
+            ab_free++;
 
-	    if ((ab_free > ab_max) && (ab_bits < 12))
-	    {
-		ab_bits++;
-		ab_max = (1 << ab_bits) - 1;
-	    }
-	}
+            if ((ab_free > ab_max) && (ab_bits < 12))
+            {
+                ab_bits++;
+                ab_max = (1 << ab_bits) - 1;
+            }
+        }
 
-	/* dump stack data to the buffer */
-	while (pos >= 0)
-	{
-	    (img->p)[x + (y * (img->w))] = (char)stack[pos--];
+        /* dump stack data to the buffer */
+        while (pos >= 0)
+        {
+            (img->p)[x + (y * (img->w))] = (char)stack[pos--];
 
-	    if (++x >= (img->w))
-	    {
-		x = 0;
+            if (++x >= (img->w))
+            {
+                x = 0;
 
-		if (interl)
-		{
-		    /* support for interlaced images */
-		    switch (pass)
-		    {
-			case 1: y += 8; break;
-			case 2: y += 8; break;
-			case 3: y += 4; break;
-			case 4: y += 2; break;
-		    }
-		    if (y >= (img->h))
-		    {
-			switch (++pass)
-			{
-			    case 2: y = 4; break;
-			    case 3: y = 2; break;
-			    case 4: y = 1; break;
-			}
-		    }
-		}
-		else
-		{
-		    /* non-interlaced */
-		    y++;
-		}
-	    }
-	}
+                if (interl)
+                {
+                    /* support for interlaced images */
+                    switch (pass)
+                    {
+                        case 1: y += 8; break;
+                        case 2: y += 8; break;
+                        case 3: y += 4; break;
+                        case 4: y += 2; break;
+                    }
+                    if (y >= (img->h))
+                    {
+                        switch (++pass)
+                        {
+                            case 2: y = 4; break;
+                            case 3: y = 2; break;
+                            case 4: y = 1; break;
+                        }
+                    }
+                }
+                else
+                {
+                    /* non-interlaced */
+                    y++;
+                }
+            }
+        }
 
-	pos = 0;
-	lastcode = readcode;
+        pos = 0;
+        lastcode = readcode;
     }
     while (code != ab_fin);
 
@@ -498,17 +501,17 @@ int wxGIFDecoder::ReadGIF()
     unsigned char pal[768];
     unsigned char buf[16];
     GIFImage      **ppimg;
-	GIFImage      *pimg, *pprev;
+        GIFImage      *pimg, *pprev;
 
     /* check GIF signature */
     if (!CanRead())
-	return wxGIF_INVFORMAT;
+        return wxGIF_INVFORMAT;
 
     /* check for animated GIF support (ver. >= 89a) */
     m_f->Read(buf, 6);
 
     if (memcmp(buf + 3, "89a", 3) < 0)
-	m_anim = FALSE;
+        m_anim = FALSE;
 
     /* read logical screen descriptor block (LSDB) */
     m_f->Read(buf, 7);
@@ -518,10 +521,10 @@ int wxGIFDecoder::ReadGIF()
     /* load global color map if available */
     if ((buf[4] & 0x80) == 0x80)
     {
-	m_background = buf[5];
+        m_background = buf[5];
 
-	ncolors = 2 << (buf[4] & 0x07);
-	m_f->Read(pal, 3 * ncolors);
+        ncolors = 2 << (buf[4] & 0x07);
+        m_f->Read(pal, 3 * ncolors);
     }
 
     /* transparent colour, disposal method and delay default to unused */
@@ -538,157 +541,157 @@ int wxGIFDecoder::ReadGIF()
 
     while(!done)
     {
-	type = (unsigned char)m_f->GetC();
+        type = (unsigned char)m_f->GetC();
 
-	/* end of data? */
-	if (type == 0x3B)
-	{
-	    done = TRUE;
-	}
-	else
-	/* extension block? */
-	if (type == 0x21)
-	{
-	    if (((unsigned char)m_f->GetC()) == 0xF9)
-	    /* graphics control extension, parse it */
-	    {
-		m_f->Read(buf, 6);
+        /* end of data? */
+        if (type == 0x3B)
+        {
+            done = TRUE;
+        }
+        else
+        /* extension block? */
+        if (type == 0x21)
+        {
+            if (((unsigned char)m_f->GetC()) == 0xF9)
+            /* graphics control extension, parse it */
+            {
+                m_f->Read(buf, 6);
 
-		/* read delay and convert from 1/100 of a second to ms */
-		delay = 10 * (buf[2] + 256 * buf[3]);
+                /* read delay and convert from 1/100 of a second to ms */
+                delay = 10 * (buf[2] + 256 * buf[3]);
 
-		/* read transparent colour index, if used */
-		if (buf[1] & 0x01)
-		    transparent = buf[4];
+                /* read transparent colour index, if used */
+                if (buf[1] & 0x01)
+                    transparent = buf[4];
 
-		/* read disposal method */
-		disposal = (buf[1] & 0x1C) - 1;
-	    }
-	    else
-	    /* other extension, skip */
-	    {
-		while ((i = (unsigned char)m_f->GetC()) != 0)
-		{
-		    m_f->SeekI(i, wxFromCurrent);
-		}
-	    }
-	}
-	else
-	/* image descriptor block? */
-	if (type == 0x2C)
-	{
-	    /* allocate memory for IMAGEN struct */
-	    pimg = (*ppimg) = new GIFImage();
+                /* read disposal method */
+                disposal = (buf[1] & 0x1C) - 1;
+            }
+            else
+            /* other extension, skip */
+            {
+                while ((i = (unsigned char)m_f->GetC()) != 0)
+                {
+                    m_f->SeekI(i, wxFromCurrent);
+                }
+            }
+        }
+        else
+        /* image descriptor block? */
+        if (type == 0x2C)
+        {
+            /* allocate memory for IMAGEN struct */
+            pimg = (*ppimg) = new GIFImage();
 
-	    if (pimg == NULL)
-	    {
-		Destroy();
-		return wxGIF_MEMERR;
-	    }
+            if (pimg == NULL)
+            {
+                Destroy();
+                return wxGIF_MEMERR;
+            }
 
-	    /* fill in the data */
-	    m_f->Read(buf, 9);
-	    pimg->left = buf[0] + 256 * buf[1];
-	    pimg->top = buf[2] + 256 * buf[3];
+            /* fill in the data */
+            m_f->Read(buf, 9);
+            pimg->left = buf[0] + 256 * buf[1];
+            pimg->top = buf[2] + 256 * buf[3];
 /*
-	    pimg->left = buf[4] + 256 * buf[5];
-	    pimg->top = buf[4] + 256 * buf[5];
+            pimg->left = buf[4] + 256 * buf[5];
+            pimg->top = buf[4] + 256 * buf[5];
 */
-	    pimg->w = buf[4] + 256 * buf[5];
-	    pimg->h = buf[6] + 256 * buf[7];
-	    interl = ((buf[8] & 0x40)? 1 : 0);
-	    size = pimg->w * pimg->h;
+            pimg->w = buf[4] + 256 * buf[5];
+            pimg->h = buf[6] + 256 * buf[7];
+            interl = ((buf[8] & 0x40)? 1 : 0);
+            size = pimg->w * pimg->h;
 
-	    pimg->transparent = transparent;
-	    pimg->disposal = disposal;
-	    pimg->delay = delay;
-	    pimg->next = NULL;
-	    pimg->prev = pprev;
-	    pprev = pimg;
-	    ppimg = &pimg->next;
+            pimg->transparent = transparent;
+            pimg->disposal = disposal;
+            pimg->delay = delay;
+            pimg->next = NULL;
+            pimg->prev = pprev;
+            pprev = pimg;
+            ppimg = &pimg->next;
 
-	    /* allocate memory for image and palette */
-	    pimg->p   = (unsigned char *) malloc((size_t)size);
-	    pimg->pal = (unsigned char *) malloc(768);
+            /* allocate memory for image and palette */
+            pimg->p   = (unsigned char *) malloc((size_t)size);
+            pimg->pal = (unsigned char *) malloc(768);
 
-	    if ((!pimg->p) || (!pimg->pal))
-	    {
-		Destroy();
-		return wxGIF_MEMERR;
-	    }
+            if ((!pimg->p) || (!pimg->pal))
+            {
+                Destroy();
+                return wxGIF_MEMERR;
+            }
 
-	    /* load local color map if available, else use global map */
-	    if ((buf[8] & 0x80) == 0x80)
-	    {
-		ncolors = 2 << (buf[8] & 0x07);
-		m_f->Read(pimg->pal, 3 * ncolors);
-	    }
-	    else
-		memcpy(pimg->pal, pal, 768);
+            /* load local color map if available, else use global map */
+            if ((buf[8] & 0x80) == 0x80)
+            {
+                ncolors = 2 << (buf[8] & 0x07);
+                m_f->Read(pimg->pal, 3 * ncolors);
+            }
+            else
+                memcpy(pimg->pal, pal, 768);
 
-	    /* get initial code size from first byte in raster data */
-	    bits = (unsigned char)m_f->GetC();
+            /* get initial code size from first byte in raster data */
+            bits = (unsigned char)m_f->GetC();
 
-	    /* decode image */
-	    dgif(pimg, interl, bits);
-	    m_nimages++;
+            /* decode image */
+            dgif(pimg, interl, bits);
+            m_nimages++;
 
-	    /* if this is not an animated GIF, exit after first image */
-	    if (!m_anim)
-		done = TRUE;
-	}
+            /* if this is not an animated GIF, exit after first image */
+            if (!m_anim)
+                done = TRUE;
+        }
     }
 
     /* setup image pointers */
     if (m_nimages != 0)
     {
-	m_image = 1;
-	m_plast = pimg;
-	m_pimage = m_pfirst;
+        m_image = 1;
+        m_plast = pimg;
+        m_pimage = m_pfirst;
     }
 
     /* try to read to the end of the stream */
     while (type != 0x3B)
     {
-	type = (unsigned char)m_f->GetC();
+        type = (unsigned char)m_f->GetC();
 
-	if (type == 0x21)
-	{
-	    /* extension type */
-	    (void) m_f->GetC();
+        if (type == 0x21)
+        {
+            /* extension type */
+            (void) m_f->GetC();
 
-	    /* skip all data */
-	    while ((i = (unsigned char)m_f->GetC()) != 0)
-	    {
-		m_f->SeekI(i, wxFromCurrent);
-	    }
-	}
-	else if (type == 0x2C)
-	{
-	    /* image descriptor block */
-	    m_f->Read(buf, 9);
+            /* skip all data */
+            while ((i = (unsigned char)m_f->GetC()) != 0)
+            {
+                m_f->SeekI(i, wxFromCurrent);
+            }
+        }
+        else if (type == 0x2C)
+        {
+            /* image descriptor block */
+            m_f->Read(buf, 9);
 
-	    /* local color map */
-	    if ((buf[8] & 0x80) == 0x80)
-	    {
-		ncolors = 2 << (buf[8] & 0x07);
-		m_f->SeekI(3 * ncolors, wxFromCurrent);
-	    }
+            /* local color map */
+            if ((buf[8] & 0x80) == 0x80)
+            {
+                ncolors = 2 << (buf[8] & 0x07);
+                m_f->SeekI(3 * ncolors, wxFromCurrent);
+            }
 
-	    /* initial code size */
-	    (void) m_f->GetC();
+            /* initial code size */
+            (void) m_f->GetC();
 
-	    /* skip all data */
-	    while ((i = (unsigned char)m_f->GetC()) != 0)
-	    {
-		m_f->SeekI(i, wxFromCurrent);
-	    }
-	}
-	else if ((type != 0x3B) && (type != 00)) /* testing */
-	{
-	    /* images are OK, but couldn't read to the end of the stream */
-	    return wxGIF_TRUNCATED;
-	}
+            /* skip all data */
+            while ((i = (unsigned char)m_f->GetC()) != 0)
+            {
+                m_f->SeekI(i, wxFromCurrent);
+            }
+        }
+        else if ((type != 0x3B) && (type != 00)) /* testing */
+        {
+            /* images are OK, but couldn't read to the end of the stream */
+            return wxGIF_TRUNCATED;
+        }
     }
 
     return wxGIF_OK;
