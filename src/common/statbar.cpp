@@ -250,7 +250,11 @@ void wxStatusBarBase::FreeStacks()
 void wxStatusBarBase::PushStatusText(const wxString& text, int number)
 {
     wxListString* st = GetOrCreateStatusStack(number);
-    st->Insert(new wxString(GetStatusText(number)));
+    // This long-winded way around avoids an internal compiler error
+    // in VC++ 6 with RTTI enabled
+    wxString tmp1(GetStatusText(number));
+    wxString* tmp = new wxString(tmp1);
+    st->Insert(tmp);
     SetStatusText(text, number);
 }
 

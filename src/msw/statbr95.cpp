@@ -250,7 +250,7 @@ void wxStatusBar95::DoMoveWindow(int x, int y, int width, int height)
     // omitted because for normal status bars (positioned along the bottom
     // edge) the position is already set correctly, but if the user wants to
     // position them in some exotic location, this is really needed
-    wxWindow::DoMoveWindow(x, y, width, height);
+    wxWindowMSW::DoMoveWindow(x, y, width, height);
 
     // adjust fields widths to the new size
     SetFieldsWidth();
