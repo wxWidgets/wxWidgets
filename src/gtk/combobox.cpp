@@ -132,7 +132,7 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     GtkWidget *list = GTK_COMBO(m_widget)->list;
 
 #ifndef __WXGTK20__
-    gtk_list_set_selection_mode( GTK_LIST(list), GTK_SELECTION_MULTIPLE );
+    // gtk_list_set_selection_mode( GTK_LIST(list), GTK_SELECTION_MULTIPLE );
 #endif
 
     for (int i = 0; i < n; i++)
