@@ -2617,7 +2617,9 @@ bool GetDataSource(HENV henv, char *Dsn, SWORD DsnMax, char *DsDesc, SWORD DsDes
 	if (SQLDataSources(henv, direction, (UCHAR FAR *) Dsn, DsnMax, &cb1,
 							 (UCHAR FAR *) DsDesc, DsDescMax, &cb2) == SQL_SUCCESS)
 	{
-		DsDesc[cb2+1] = 0;  // Set the terminating character for the string
+#ifndef _IODBC_
+	  DsDesc[cb2+1] = 0;  // Set the terminating character for the string
+#endif
 		return(TRUE);
 	}
 	else
