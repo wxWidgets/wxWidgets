@@ -18,6 +18,13 @@
 #include "gtk/gtk.h"
 
 //-----------------------------------------------------------------------------
+// idle system
+//-----------------------------------------------------------------------------
+
+extern void wxapp_install_idle_handler();
+extern bool g_isIdle;
+
+//-----------------------------------------------------------------------------
 // data
 //-----------------------------------------------------------------------------
 
@@ -29,17 +36,17 @@ extern bool   g_blockEventsOnDrag;
 
 static void gtk_choice_clicked_callback( GtkWidget *WXUNUSED(widget), wxChoice *choice )
 {
-  if (!choice->HasVMT())
-      return;
+    if (g_isIdle) wxapp_install_idle_handler();
 
-  if (g_blockEventsOnDrag)
-      return;
+    if (!choice->HasVMT()) return;
 
-  wxCommandEvent event(wxEVT_COMMAND_CHOICE_SELECTED, choice->GetId() );
-  event.SetInt( choice->GetSelection() );
-  event.SetString( choice->GetStringSelection() );
-  event.SetEventObject(choice);
-  choice->GetEventHandler()->ProcessEvent(event);
+    if (g_blockEventsOnDrag) return;
+
+    wxCommandEvent event(wxEVT_COMMAND_CHOICE_SELECTED, choice->GetId() );
+    event.SetInt( choice->GetSelection() );
+    event.SetString( choice->GetStringSelection() );
+    event.SetEventObject(choice);
+    choice->GetEventHandler()->ProcessEvent(event);
 }
 
 //-----------------------------------------------------------------------------

@@ -22,6 +22,13 @@
 #include "gdk/gdkx.h"
 
 //-----------------------------------------------------------------------------
+// idle system
+//-----------------------------------------------------------------------------
+
+extern void wxapp_install_idle_handler();
+extern bool g_isIdle;
+
+//-----------------------------------------------------------------------------
 // data
 //-----------------------------------------------------------------------------
 
@@ -56,6 +63,8 @@ static void DrawFrame( GtkWidget *widget, int x, int y, int w, int h )
 
 static void gtk_window_own_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_event, wxFrame *win )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     if (!win->HasVMT()) return;
     if (gdk_event->count > 0) return;
     
@@ -73,6 +82,8 @@ static void gtk_window_own_expose_callback( GtkWidget *widget, GdkEventExpose *g
 
 static void gtk_window_own_draw_callback( GtkWidget *widget, GdkRectangle *WXUNUSED(rect), wxFrame *win )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     if (!win->HasVMT()) return;
     
     gtk_draw_shadow( widget->style, 
@@ -89,6 +100,8 @@ static void gtk_window_own_draw_callback( GtkWidget *widget, GdkRectangle *WXUNU
 
 static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton *gdk_event, wxMiniFrame *win )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     if (!win->HasVMT()) return FALSE;
     if (g_blockEventsOnDrag) return TRUE;
     if (g_blockEventsOnScroll) return TRUE;
@@ -124,6 +137,8 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
 
 static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButton *gdk_event, wxMiniFrame *win )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     if (!win->HasVMT()) return FALSE;
     if (g_blockEventsOnDrag) return TRUE;
     if (g_blockEventsOnScroll) return TRUE;
@@ -155,6 +170,8 @@ static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButto
 
 static gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion *gdk_event, wxMiniFrame *win )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     if (!win->HasVMT()) return FALSE;
     if (g_blockEventsOnDrag) return TRUE;
     if (g_blockEventsOnScroll) return TRUE;
@@ -186,6 +203,8 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion
 
 static void gtk_button_clicked_callback( GtkWidget *WXUNUSED(widget), wxMiniFrame *mf )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     mf->Close();
 }
 

@@ -20,6 +20,13 @@
 #include "gtk/gtk.h"
 
 //-----------------------------------------------------------------------------
+// idle system
+//-----------------------------------------------------------------------------
+
+extern void wxapp_install_idle_handler();
+extern bool g_isIdle;
+
+//-----------------------------------------------------------------------------
 // data
 //-----------------------------------------------------------------------------
 
@@ -33,6 +40,8 @@ static const float sensitivity = 0.2;
 
 static void gtk_spinbutt_callback( GtkWidget *WXUNUSED(widget), wxSpinButton *win )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     if (!win->HasVMT()) return;
     if (g_blockEventsOnDrag) return;
 

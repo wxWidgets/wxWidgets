@@ -23,6 +23,13 @@
 class wxButton;
 
 //-----------------------------------------------------------------------------
+// idle system
+//-----------------------------------------------------------------------------
+
+extern void wxapp_install_idle_handler();
+extern bool g_isIdle;
+
+//-----------------------------------------------------------------------------
 // data
 //-----------------------------------------------------------------------------
 
@@ -34,12 +41,14 @@ extern bool   g_blockEventsOnDrag;
 
 static void gtk_button_clicked_callback( GtkWidget *WXUNUSED(widget), wxButton *button )
 {
-  if (!button->HasVMT()) return;
-  if (g_blockEventsOnDrag) return;
+    if (g_isIdle) wxapp_install_idle_handler();
+
+    if (!button->HasVMT()) return;
+    if (g_blockEventsOnDrag) return;
   
-  wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, button->GetId());
-  event.SetEventObject(button);
-  button->GetEventHandler()->ProcessEvent(event);
+    wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, button->GetId());
+    event.SetEventObject(button);
+    button->GetEventHandler()->ProcessEvent(event);
 }
 
 //-----------------------------------------------------------------------------
@@ -54,7 +63,7 @@ wxButton::wxButton()
 
 wxButton::~wxButton()
 {
-  if (m_clientData) delete m_clientData;
+    if (m_clientData) delete m_clientData;
 }
 
 bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,

@@ -24,6 +24,13 @@
 #include "gdk/gdkkeysyms.h"
 
 //-----------------------------------------------------------------------------
+// idle system
+//-----------------------------------------------------------------------------
+
+extern void wxapp_install_idle_handler();
+extern bool g_isIdle;
+
+//-----------------------------------------------------------------------------
 // data
 //-----------------------------------------------------------------------------
 
@@ -86,6 +93,8 @@ static void gtk_notebook_page_change_callback(GtkNotebook *WXUNUSED(widget),
                                               gint nPage,
                                               gpointer data)
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     wxNotebook *notebook = (wxNotebook *)data;
 
     int old = notebook->GetSelection();
@@ -104,6 +113,8 @@ static void gtk_notebook_page_change_callback(GtkNotebook *WXUNUSED(widget),
 
 static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, wxWindow *win )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     if ((win->m_x == alloc->x) &&
         (win->m_y == alloc->y) &&
         (win->m_width == alloc->width) &&
@@ -124,6 +135,8 @@ static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* 
 static gint
 gtk_notebook_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxNotebook *notebook )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     if (g_blockEventsOnDrag) return FALSE;
 
     if (!notebook->HasVMT()) return FALSE;

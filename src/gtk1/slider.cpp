@@ -19,6 +19,13 @@
 #include "gtk/gtk.h"
 
 //-----------------------------------------------------------------------------
+// idle system
+//-----------------------------------------------------------------------------
+
+extern void wxapp_install_idle_handler();
+extern bool g_isIdle;
+
+//-----------------------------------------------------------------------------
 // data
 //-----------------------------------------------------------------------------
 
@@ -30,6 +37,8 @@ extern bool   g_blockEventsOnDrag;
 
 static void gtk_slider_callback( GtkWidget *WXUNUSED(widget), wxSlider *win )
 { 
+    if (g_isIdle) wxapp_install_idle_handler();
+
     if (!win->HasVMT()) return;
     if (g_blockEventsOnDrag) return;
     

@@ -23,6 +23,13 @@
 class wxBitmapButton;
 
 //-----------------------------------------------------------------------------
+// idle system
+//-----------------------------------------------------------------------------
+
+extern void wxapp_install_idle_handler();
+extern bool g_isIdle;
+
+//-----------------------------------------------------------------------------
 // data
 //-----------------------------------------------------------------------------
 
@@ -34,6 +41,8 @@ extern bool   g_blockEventsOnDrag;
 
 static void gtk_bmpbutton_clicked_callback( GtkWidget *WXUNUSED(widget), wxBitmapButton *button )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     if (!button->HasVMT()) return;
     if (g_blockEventsOnDrag) return;
   

@@ -19,6 +19,13 @@
 #include "gtk/gtk.h"
 
 //-----------------------------------------------------------------------------
+// idle system
+//-----------------------------------------------------------------------------
+
+extern void wxapp_install_idle_handler();
+extern bool g_isIdle;
+
+//-----------------------------------------------------------------------------
 // data
 //-----------------------------------------------------------------------------
 
@@ -30,6 +37,8 @@ extern bool   g_blockEventsOnDrag;
 
 static void gtk_toolbar_callback( GtkWidget *WXUNUSED(widget), wxToolBarTool *tool )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     if (g_blockEventsOnDrag) return;
     if (!tool->m_enabled) return;
 
@@ -45,6 +54,8 @@ static void gtk_toolbar_callback( GtkWidget *WXUNUSED(widget), wxToolBarTool *to
 static gint gtk_toolbar_enter_callback( GtkWidget *WXUNUSED(widget), 
   GdkEventCrossing *WXUNUSED(gdk_event), wxToolBarTool *tool )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     if (g_blockEventsOnDrag) return TRUE;
     
     /* we grey-out the tip text of disabled tool */

@@ -20,6 +20,15 @@
 #include "wx/gtk/win_gtk.h"
 
 //-----------------------------------------------------------------------------
+// idle system
+//-----------------------------------------------------------------------------
+
+extern void wxapp_install_idle_handler();
+extern bool g_isIdle;
+
+//-----------------------------------------------------------------------------
+// data
+//-----------------------------------------------------------------------------
 
 extern wxList wxPendingDelete;
 
@@ -29,6 +38,8 @@ extern wxList wxPendingDelete;
 
 bool gtk_dialog_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSED(event), wxDialog *win )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
 /*
     printf( "OnDelete from " );
     if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
@@ -47,6 +58,8 @@ bool gtk_dialog_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSED
 
 static void gtk_dialog_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, wxDialog *win )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     if (!win->HasVMT()) return;
 
 /*
@@ -70,6 +83,8 @@ static void gtk_dialog_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation
 
 static gint gtk_dialog_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *event, wxDialog *win )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     if (!win->HasVMT()) return FALSE;
 
     win->m_x = event->x;
@@ -92,6 +107,8 @@ static gint gtk_dialog_configure_callback( GtkWidget *WXUNUSED(widget), GdkEvent
 static gint 
 gtk_dialog_realized_callback( GtkWidget *widget, wxDialog *win )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     /* all this is for Motif Window Manager "hints" and is supposed to be
        recognized by other WM as well. not tested. */
     long decor = (long) GDK_DECOR_ALL;

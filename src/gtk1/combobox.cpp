@@ -19,6 +19,13 @@
 #include "gtk/gtk.h"
 
 //-----------------------------------------------------------------------------
+// idle system
+//-----------------------------------------------------------------------------
+
+extern void wxapp_install_idle_handler();
+extern bool g_isIdle;
+
+//-----------------------------------------------------------------------------
 // data
 //-----------------------------------------------------------------------------
 
@@ -31,11 +38,11 @@ extern bool   g_blockEventsOnDrag;
 static void
 gtk_combo_clicked_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
 {
-    if (!combo->HasVMT())
-        return;
+    if (g_isIdle) wxapp_install_idle_handler();
 
-    if (g_blockEventsOnDrag)
-        return;
+    if (!combo->HasVMT()) return;
+
+    if (g_blockEventsOnDrag) return;
 
     if (combo->m_alreadySent)
     {
@@ -60,6 +67,8 @@ gtk_combo_clicked_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
 static void
 gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+    
     wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, combo->GetId() );
     event.SetString( combo->GetValue() );
     event.SetEventObject( combo );

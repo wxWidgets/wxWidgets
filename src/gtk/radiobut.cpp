@@ -17,6 +17,13 @@
 #include "gtk/gtk.h"
 
 //-----------------------------------------------------------------------------
+// idle system
+//-----------------------------------------------------------------------------
+
+extern void wxapp_install_idle_handler();
+extern bool g_isIdle;
+
+//-----------------------------------------------------------------------------
 // data
 //-----------------------------------------------------------------------------
 
@@ -29,6 +36,8 @@ extern bool g_blockEventsOnDrag;
 static 
 void gtk_radiobutton_clicked_callback( GtkWidget *WXUNUSED(widget), wxRadioButton *rb )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     if (!rb->HasVMT()) return;
   
     if (rb->m_blockFirstEvent)

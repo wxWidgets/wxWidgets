@@ -18,6 +18,13 @@
 #include "gtk/gtk.h"
 
 //-----------------------------------------------------------------------------
+// idle system
+//-----------------------------------------------------------------------------
+
+extern void wxapp_install_idle_handler();
+extern bool g_isIdle;
+
+//-----------------------------------------------------------------------------
 // data
 //-----------------------------------------------------------------------------
 
@@ -29,6 +36,8 @@ extern bool   g_blockEventsOnDrag;
 
 static void gtk_checkbox_clicked_callback( GtkWidget *WXUNUSED(widget), wxCheckBox *cb )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     if (!cb->HasVMT()) return;
 
     if (cb->m_blockFirstEvent)

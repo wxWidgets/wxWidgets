@@ -128,12 +128,20 @@
 extern wxList     wxPendingDelete;
 extern bool       g_blockEventsOnDrag;
 extern bool       g_blockEventsOnScroll;
+extern bool       g_isIdle;
 static bool       g_capturing = FALSE;
 static wxWindow  *g_focusWindow = (wxWindow*) NULL;
 
 /* hack: we need something to pass to gtk_menu_popup, so we store the time of
    the last click here */
 static guint32 gs_timeLastClick = 0;
+
+//-----------------------------------------------------------------------------
+// idle system
+//-----------------------------------------------------------------------------
+
+extern void wxapp_install_idle_handler();
+extern bool g_isIdle;
 
 #if (GTK_MINOR_VERSION > 0)
 
@@ -231,6 +239,8 @@ static void gtk_window_own_draw_callback( GtkWidget *widget, GdkRectangle *WXUNU
 
 static void gtk_window_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExpose *gdk_event, wxWindow *win )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     if (!win->HasVMT()) return;
 
     win->m_updateRegion.Union( gdk_event->area.x,
@@ -260,6 +270,8 @@ static void gtk_window_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExp
 
 static void gtk_window_draw_callback( GtkWidget *WXUNUSED(widget), GdkRectangle *rect, wxWindow *win )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     if (!win->HasVMT()) return;
 
     win->m_updateRegion.Union( rect->x, rect->y, rect->width, rect->height );
@@ -277,6 +289,8 @@ static void gtk_window_draw_callback( GtkWidget *WXUNUSED(widget), GdkRectangle 
 
 static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxWindow *win )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     if (!win->HasVMT()) return FALSE;
     if (g_blockEventsOnDrag) return FALSE;
 
@@ -456,6 +470,8 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
 
 static gint gtk_window_key_release_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxWindow *win )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     if (!win->HasVMT()) return FALSE;
     if (g_blockEventsOnDrag) return FALSE;
 
@@ -572,6 +588,8 @@ static gint gtk_window_key_release_callback( GtkWidget *widget, GdkEventKey *gdk
 
 static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton *gdk_event, wxWindow *win )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
 /*
     wxPrintf( _T("1) OnButtonPress from ") );
     if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
@@ -734,6 +752,8 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
 
 static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButton *gdk_event, wxWindow *win )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     if (!win->HasVMT()) return FALSE;
     if (g_blockEventsOnDrag) return FALSE;
     if (g_blockEventsOnScroll) return FALSE;
@@ -838,6 +858,8 @@ static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButto
 
 static gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion *gdk_event, wxWindow *win )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     if (!win->HasVMT()) return FALSE;
     if (g_blockEventsOnDrag) return FALSE;
     if (g_blockEventsOnScroll) return FALSE;
@@ -945,6 +967,8 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion
 
 static gint gtk_window_focus_in_callback( GtkWidget *widget, GdkEvent *WXUNUSED(event), wxWindow *win )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     if (!win->HasVMT()) return FALSE;
     if (g_blockEventsOnDrag) return FALSE;
 
@@ -992,6 +1016,8 @@ static gint gtk_window_focus_in_callback( GtkWidget *widget, GdkEvent *WXUNUSED(
 
 static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEvent *WXUNUSED(event), wxWindow *win )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     if (!win->HasVMT()) return FALSE;
     if (g_blockEventsOnDrag) return FALSE;
     
@@ -1028,6 +1054,8 @@ static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEvent *WXUNUSED
 
 static gint gtk_window_enter_callback( GtkWidget *widget, GdkEventCrossing *gdk_event, wxWindow *win )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     if (!win->HasVMT()) return FALSE;
     if (g_blockEventsOnDrag) return FALSE;
     
@@ -1078,6 +1106,8 @@ static gint gtk_window_enter_callback( GtkWidget *widget, GdkEventCrossing *gdk_
 
 static gint gtk_window_leave_callback( GtkWidget *widget, GdkEventCrossing *gdk_event, wxWindow *win )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     if (!win->HasVMT()) return FALSE;
     if (g_blockEventsOnDrag) return FALSE;
 
@@ -1128,6 +1158,8 @@ static gint gtk_window_leave_callback( GtkWidget *widget, GdkEventCrossing *gdk_
 
 static void gtk_window_vscroll_callback( GtkWidget *WXUNUSED(widget), wxWindow *win )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     if (g_blockEventsOnDrag) return;
 
 /*
@@ -1176,6 +1208,8 @@ static void gtk_window_vscroll_callback( GtkWidget *WXUNUSED(widget), wxWindow *
 
 static void gtk_window_hscroll_callback( GtkWidget *WXUNUSED(widget), wxWindow *win )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     if (g_blockEventsOnDrag) return;
 
 /*
@@ -1224,6 +1258,8 @@ static void gtk_window_hscroll_callback( GtkWidget *WXUNUSED(widget), wxWindow *
 
 static void gtk_window_vscroll_change_callback( GtkWidget *WXUNUSED(widget), wxWindow *win )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     if (g_blockEventsOnDrag) return;
 
 /*
@@ -1249,6 +1285,8 @@ static void gtk_window_vscroll_change_callback( GtkWidget *WXUNUSED(widget), wxW
 
 static void gtk_window_hscroll_change_callback( GtkWidget *WXUNUSED(widget), wxWindow *win )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     if (g_blockEventsOnDrag) return;
 
 /*
@@ -1276,6 +1314,8 @@ static gint gtk_scrollbar_button_press_callback( GtkRange *WXUNUSED(widget),
                                                  GdkEventButton *WXUNUSED(gdk_event),
                                                  wxWindow *win )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
 //  don't test here as we can release the mouse while being over
 //  a different window then the slider
 //
@@ -1295,6 +1335,7 @@ static gint gtk_scrollbar_button_release_callback( GtkRange *widget,
                                                    GdkEventButton *WXUNUSED(gdk_event),
                                                    wxWindow *win )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
 
 //  don't test here as we can release the mouse while being over
 //  a different window then the slider
@@ -1324,6 +1365,8 @@ static gint gtk_scrollbar_button_release_callback( GtkRange *widget,
 static gint 
 gtk_window_realized_callback( GtkWidget *widget, wxWindow *win )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     if (win->m_font != *wxSWISS_FONT)
     {
         wxFont font( win->m_font );

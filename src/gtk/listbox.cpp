@@ -29,6 +29,13 @@
 #include "gdk/gdk.h"
 #include "gtk/gtk.h"
 
+//-----------------------------------------------------------------------------
+// idle system
+//-----------------------------------------------------------------------------
+
+extern void wxapp_install_idle_handler();
+extern bool g_isIdle;
+
 //-------------------------------------------------------------------------
 // conditional compilation
 //-------------------------------------------------------------------------
@@ -63,6 +70,8 @@ extern bool   g_blockEventsOnScroll;
 static gint
 gtk_listbox_button_press_callback( GtkWidget *widget, GdkEventButton *gdk_event, wxListBox *listbox )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     if (g_blockEventsOnDrag) return FALSE;
     if (g_blockEventsOnScroll) return FALSE;
 
@@ -116,6 +125,8 @@ gtk_listbox_button_press_callback( GtkWidget *widget, GdkEventButton *gdk_event,
 static gint
 gtk_listbox_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxListBox *listbox )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     if (g_blockEventsOnDrag) return FALSE;
 
     if (!listbox->HasVMT()) return FALSE;
@@ -142,6 +153,8 @@ gtk_listbox_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxLis
 
 static void gtk_listitem_select_callback( GtkWidget *WXUNUSED(widget), wxListBox *listbox )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     if (!listbox->HasVMT()) return;
     if (g_blockEventsOnDrag) return;
 

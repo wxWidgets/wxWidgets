@@ -25,6 +25,13 @@
 #include "gdk/gdkkeysyms.h"
 
 //-----------------------------------------------------------------------------
+// idle system
+//-----------------------------------------------------------------------------
+
+extern void wxapp_install_idle_handler();
+extern bool g_isIdle;
+
+//-----------------------------------------------------------------------------
 // data
 //-----------------------------------------------------------------------------
 
@@ -37,6 +44,8 @@ extern bool   g_blockEventsOnDrag;
 static void
 gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     if (!win->m_hasVMT) return;
 
     win->SetModified();
@@ -54,6 +63,8 @@ gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
 static void
 gtk_scrollbar_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     if (!win->m_hasVMT) return;
     
     win->CalculateScrollbar();

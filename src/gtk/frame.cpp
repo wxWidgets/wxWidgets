@@ -34,6 +34,13 @@ const int wxSTATUS_HEIGHT  = 25;
 const int wxPLACE_HOLDER   = 0;
 
 //-----------------------------------------------------------------------------
+// idle system
+//-----------------------------------------------------------------------------
+
+extern void wxapp_install_idle_handler();
+extern bool g_isIdle;
+
+//-----------------------------------------------------------------------------
 // data
 //-----------------------------------------------------------------------------
 
@@ -45,6 +52,8 @@ extern wxList wxPendingDelete;
 
 static void gtk_frame_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, wxFrame *win )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     if (!win->HasVMT()) return;
 
 /*
@@ -68,6 +77,8 @@ static void gtk_frame_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation*
 
 static gint gtk_frame_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSED(event), wxFrame *win )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
 /*
     printf( "OnDelete from " );
     if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
@@ -86,6 +97,8 @@ static gint gtk_frame_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WX
 
 static void gtk_menu_attached_callback( GtkWidget *WXUNUSED(widget), GtkWidget *WXUNUSED(child), wxFrame *win )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     if (!win->HasVMT()) return;
     
     win->m_menuBarDetached = FALSE;
@@ -98,6 +111,8 @@ static void gtk_menu_attached_callback( GtkWidget *WXUNUSED(widget), GtkWidget *
 
 static void gtk_menu_detached_callback( GtkWidget *WXUNUSED(widget), GtkWidget *WXUNUSED(child), wxFrame *win )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     if (!win->HasVMT()) return;
     
     win->m_menuBarDetached = TRUE;
@@ -110,6 +125,8 @@ static void gtk_menu_detached_callback( GtkWidget *WXUNUSED(widget), GtkWidget *
 
 static void gtk_toolbar_attached_callback( GtkWidget *WXUNUSED(widget), GtkWidget *WXUNUSED(child), wxFrame *win )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     if (!win->HasVMT()) return;
     
     win->m_toolBarDetached = FALSE;
@@ -122,6 +139,8 @@ static void gtk_toolbar_attached_callback( GtkWidget *WXUNUSED(widget), GtkWidge
 
 static void gtk_toolbar_detached_callback( GtkWidget *widget, GtkWidget *WXUNUSED(child), wxFrame *win )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     if (!win->HasVMT()) return;
     
     win->m_toolBarDetached = TRUE;
@@ -134,6 +153,8 @@ static void gtk_toolbar_detached_callback( GtkWidget *widget, GtkWidget *WXUNUSE
 
 static gint gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *event, wxFrame *win )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     if (!win->HasVMT()) return FALSE;
 
     win->m_x = event->x;
@@ -156,6 +177,8 @@ static gint gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventC
 static gint 
 gtk_frame_realized_callback( GtkWidget *widget, wxFrame *win )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     /* all this is for Motif Window Manager "hints" and is supposed to be
        recognized by other WM as well. not tested. */
     long decor = (long) GDK_DECOR_ALL;

@@ -21,6 +21,13 @@
 #include "gtk/gtk.h"
 
 //-----------------------------------------------------------------------------
+// idle system
+//-----------------------------------------------------------------------------
+
+extern void wxapp_install_idle_handler();
+extern bool g_isIdle;
+
+//-----------------------------------------------------------------------------
 // wxMenuBar
 //-----------------------------------------------------------------------------
 
@@ -343,6 +350,8 @@ wxString wxMenuBar::GetHelpString( int id ) const
 
 static void gtk_menu_clicked_callback( GtkWidget *widget, wxMenu *menu )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     int id = menu->FindMenuIdByMenuItem(widget);
 
     /* should find it for normal (not popup) menu */
@@ -392,6 +401,8 @@ static void gtk_menu_clicked_callback( GtkWidget *widget, wxMenu *menu )
 
 static void gtk_menu_hilight_callback( GtkWidget *widget, wxMenu *menu )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     int id = menu->FindMenuIdByMenuItem(widget);
 
     wxASSERT( id != -1 ); // should find it!
@@ -424,6 +435,8 @@ static void gtk_menu_hilight_callback( GtkWidget *widget, wxMenu *menu )
 
 static void gtk_menu_nolight_callback( GtkWidget *widget, wxMenu *menu )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     int id = menu->FindMenuIdByMenuItem(widget);
 
     wxASSERT( id != -1 ); // should find it!

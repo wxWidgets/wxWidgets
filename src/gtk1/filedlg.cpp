@@ -19,12 +19,21 @@
 #include "gtk/gtk.h"
 
 //-----------------------------------------------------------------------------
+// idle system
+//-----------------------------------------------------------------------------
+
+extern void wxapp_install_idle_handler();
+extern bool g_isIdle;
+
+//-----------------------------------------------------------------------------
 // "delete_event"
 //-----------------------------------------------------------------------------
 
 static
 bool gtk_filedialog_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSED(event), wxDialog *win )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
 /*
     printf( "OnDelete from " );
     if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
@@ -44,6 +53,8 @@ bool gtk_filedialog_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUN
 static
 void gtk_filedialog_ok_callback( GtkWidget *WXUNUSED(widget), wxFileDialog *dialog )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     int style = dialog->GetStyle();
 
     GtkFileSelection *filedlg = GTK_FILE_SELECTION(dialog->m_widget);
@@ -85,6 +96,8 @@ void gtk_filedialog_ok_callback( GtkWidget *WXUNUSED(widget), wxFileDialog *dial
 static
 void gtk_filedialog_cancel_callback( GtkWidget *WXUNUSED(w), wxFileDialog *dialog )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
     event.SetEventObject( dialog );
     dialog->GetEventHandler()->ProcessEvent( event );

@@ -28,6 +28,13 @@
 const int wxMENU_HEIGHT = 27;
 
 //-----------------------------------------------------------------------------
+// idle system
+//-----------------------------------------------------------------------------
+
+extern void wxapp_install_idle_handler();
+extern bool g_isIdle;
+
+//-----------------------------------------------------------------------------
 // globals
 //-----------------------------------------------------------------------------
 
@@ -314,6 +321,8 @@ void wxMDIChildFrame::OnActivate( wxActivateEvent &WXUNUSED(event) )
 
 static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, wxWindow *win )
 {
+    if (g_isIdle) wxapp_install_idle_handler();
+
     if ((win->m_x == alloc->x) &&
         (win->m_y == alloc->y) &&
         (win->m_width == alloc->width) &&

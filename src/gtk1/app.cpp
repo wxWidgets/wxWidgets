@@ -51,6 +51,7 @@ extern wxList *wxPendingEvents;
 extern wxCriticalSection *wxPendingEventsLocker;
 #endif
 extern wxResourceCache *wxTheResourceCache;
+extern bool g_isIdle;
 
 unsigned char g_palette[64*3] =
 {
@@ -135,7 +136,7 @@ void wxExit()
     gtk_main_quit();
 }
 
-// forward decl
+/* forward declaration */
 gint wxapp_idle_callback( gpointer WXUNUSED(data) );
 
 bool wxYield()
@@ -151,15 +152,62 @@ bool wxYield()
         win->OnInternalIdle();
     }
 
-    // We need to temporarily remove idle callbacks or the loop will
-    // never finish.
-    gtk_idle_remove( wxTheApp->m_idleTag );
+    if (wxTheApp->m_idleTag)
+    {
+        /* We need to temporarily remove idle callbacks or the loop will
+           never finish. */
+        gtk_idle_remove( wxTheApp->m_idleTag );
+        wxTheApp->m_idleTag = 0;
 
-    while (gtk_events_pending())
-        gtk_main_iteration();
+        while (gtk_events_pending())
+            gtk_main_iteration();
+
+        /* re-add idle handler */
+        wxTheApp->m_idleTag = gtk_idle_add( wxapp_idle_callback, (gpointer) NULL );
+    }
+    else
+    {
+        while (gtk_events_pending())
+            gtk_main_iteration();
+    }
+    
+    return TRUE;
+}
+
+gint wxapp_idle_callback( gpointer WXUNUSED(data) )
+{
+    if (!wxTheApp) return TRUE;
+    
+    /* sent idle event to all who request them */
+    while (wxTheApp->ProcessIdle()) { }
+    
+    /* we don't want any more idle events until the next event is
+       sent to wxGTK */
+    gtk_idle_remove( wxTheApp->m_idleTag );
+    wxTheApp->m_idleTag = 0;
+
+    /* indicate that we are now in idle mode - even so deeply
+       in idle mode that we don't get any idle events anymore.
+       this is like wxMSW where an idle event is sent only
+       once each time after the event queue has been completely
+       emptied */
+    g_isIdle = TRUE;
+    
+/*  wxMutexGuiLeave();
+    wxUsleep(10);
+    wxMutexGuiEnter(); */
+
+    return TRUE;
+}
+
+void wxapp_install_idle_handler()
+{
+    /* this routine gets called by all event handlers
+       indicating that the idle is over. */
 
     wxTheApp->m_idleTag = gtk_idle_add( wxapp_idle_callback, (gpointer) NULL );
-    return TRUE;
+    
+    g_isIdle = FALSE;
 }
 
 //-----------------------------------------------------------------------------
@@ -171,22 +219,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxApp,wxEvtHandler)
 BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
     EVT_IDLE(wxApp::OnIdle)
 END_EVENT_TABLE()
-
-gint wxapp_idle_callback( gpointer WXUNUSED(data) )
-{
-    if (wxTheApp)
-    {
-        while (wxTheApp->ProcessIdle())
-        {
-        }
-    }
-
-    wxMutexGuiLeave();
-    wxUsleep(10);
-    wxMutexGuiEnter();
-
-    return TRUE;
-}
 
 wxApp::wxApp()
 {
@@ -202,7 +234,7 @@ wxApp::wxApp()
 
 wxApp::~wxApp()
 {
-    gtk_idle_remove( m_idleTag );
+    if (m_idleTag) gtk_idle_remove( m_idleTag );
 
     if (m_colorCube) free(m_colorCube);
 }
@@ -255,14 +287,14 @@ bool wxApp::OnInitGui()
                 int bb = (b << 3) | (b >> 2);
 
                 GdkColor *colors = cmap->colors;
-                int max = 3 * (65536);
+                int max = 3 * 65536;
                 int index = -1;
 
                 for (int i = 0; i < cmap->size; i++)
                 {
                     int rdiff = ((rr << 8) - colors[i].red);
-                    int gdiff = ((gg << 8)- colors[i].green);
-                    int bdiff = ((bb << 8)- colors[i].blue);
+                    int gdiff = ((gg << 8) - colors[i].green);
+                    int bdiff = ((bb << 8) - colors[i].blue);
                     int sum = ABS (rdiff) + ABS (gdiff) + ABS (bdiff);
                     if (sum < max) { index = i; max = sum; }
                 }
@@ -271,7 +303,6 @@ bool wxApp::OnInitGui()
             }
         }
     }
-
 
     return TRUE;
 }
@@ -378,7 +409,7 @@ bool wxApp::Initialized()
 
 bool wxApp::Pending()
 {
-    return gtk_events_pending();
+    return (gtk_events_pending() > 0);
 }
 
 void wxApp::Dispatch()
