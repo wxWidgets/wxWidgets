@@ -22,6 +22,9 @@ src/zlib/zlib.dsw
 src/png/png.dsp
 src/png/png.dsw
 
+src/regex/regex.dsp
+src/regex/regex.dsw
+
 samples/samples.dsw
 
 samples/calendar/Calendar.dsp

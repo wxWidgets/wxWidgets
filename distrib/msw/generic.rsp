@@ -113,6 +113,19 @@ src/zlib/makefile*
 src/zlib/*.com
 src/zlib/*.3
 
+src/regex/COPYRIGHT
+src/regex/makefile*
+src/regex/README
+src/regex/WHATSNEW
+src/regex/mkh
+src/regex/makefile*
+src/regex/*.h
+src/regex/*.ih
+src/regex/*.c
+src/regex/tests
+src/regex/regex.3
+src/regex/regex.7
+
 include/wx/*.h
 include/wx/*.inl
 include/wx/*.cpp

@@ -1,4 +1,5 @@
 Makefile.in
+src/regex/Makefile.in
 locale/Makefile
 samples/Makefile.in
 samples/calendar/Makefile.in
@@ -157,4 +158,5 @@ src/motif/descrip.mms
 src/png/scripts/descrip.mms
 src/unix/descrip.mms
 src/zlib/descrip.mms
+src/regex/descrip.mms
 utils/dialoged/src/descrip.mms
