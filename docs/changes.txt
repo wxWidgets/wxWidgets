@@ -25,11 +25,17 @@ Unix:
 
 - fixed configure bug which prevented it from finding anything with some
   compiler versions
+- fixed thread priority setting under Linux
 
 wxMSW:
 
-- fixes to make it possible to build the library with CodwWarrior 7
+- fixes to make it possible to build the library with CodeWarrior 7
   (Igor Mikolic-Torreira)
+- multiple events avoided in wxComboBox
+- tooltip asserts avoided for read-only wxComboBox
+- fixed a race condition during a thread exit and a join
+- fixed a condition where a thread can hang during
+  message/event processing
 
 wxHTML:
 
@@ -37,6 +43,10 @@ wxHTML:
 - fixed alignment handling in tables
 - fixed memory corruption when shutting down application using wxHTML
 - fixed <font face="..."> handling to be case insensitive
+
+wxGTK:
+
+- made internal GC pool dynamically growable
 
 2.2.9
 -----
