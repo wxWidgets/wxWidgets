@@ -86,6 +86,7 @@ public:
     virtual bool GetUnderlined() const;
     virtual wxFontEncoding GetEncoding() const;
     virtual wxNativeFontInfo *GetNativeFontInfo() const;
+    virtual bool IsFixedWidth() const;
 
     virtual void SetPointSize( int pointSize );
     virtual void SetFamily( int family );
@@ -106,6 +107,9 @@ public:
 protected:
     // common part of all ctors
     void Init();
+
+    // do we have the XFLD for this font (or just wxWin description)?
+    inline bool HasNativeFont() const;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxFont)

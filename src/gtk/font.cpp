@@ -307,6 +307,11 @@ wxFont::~wxFont()
 // accessors
 // ----------------------------------------------------------------------------
 
+bool wxFont::HasNativeFont() const
+{
+    return !M_FONTDATA->m_nativeFontInfo.xFontName.empty();
+}
+
 int wxFont::GetPointSize() const
 {
     wxCHECK_MSG( Ok(), 0, wxT("invalid font") );
@@ -367,6 +372,21 @@ wxNativeFontInfo *wxFont::GetNativeFontInfo() const
     return new wxNativeFontInfo(M_FONTDATA->m_nativeFontInfo);
 }
 
+bool wxFont::IsFixedWidth() const
+{
+    wxCHECK_MSG( Ok(), FALSE, wxT("invalid font") );
+
+    if ( HasNativeFont() )
+    {
+        // the monospace fonts are supposed to have "M" in the spacing field
+        wxString spacing = M_FONTDATA->
+                            m_nativeFontInfo.GetXFontComponent(wxXLFD_SPACING);
+
+        return spacing.Upper() == _T('M');
+    }
+
+    return wxFontBase::IsFixedWidth();
+}
 
 // ----------------------------------------------------------------------------
 // change font attributes

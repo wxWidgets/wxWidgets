@@ -196,6 +196,20 @@ wxString wxNativeFontInfo::ToUserString() const
     return GetXFontName();
 }
 
+wxString wxNativeFontInfo::GetXFontComponent(wxXLFDField field) const
+{
+    wxCHECK_MSG( field < wxXLFD_MAX, _T(""), _T("invalid XLFD field") );
+
+    if ( fontElements[0].empty() )
+    {
+        // const_cast
+        if ( !((wxNativeFontInfo *)this)->FromXFontName(xFontName) )
+            return _T("");
+    }
+
+    return fontElements[field];
+}
+
 bool wxNativeFontInfo::FromXFontName(const wxString& fontname)
 {
     // TODO: we should be able to handle the font aliases here, but how?

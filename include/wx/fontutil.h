@@ -31,6 +31,30 @@
     #include "wx/msw/winundef.h"
 #endif
 
+#if defined(_WX_X_FONTLIKE)
+
+// the symbolic names for the XLFD fields (with examples for their value)
+enum wxXLFDField
+{
+    wxXLFD_FOUNDRY,     // adobe
+    wxXLFD_FAMILY,      // courier, times, ...
+    wxXLFD_WEIGHT,      // black, bold, demibold, medium, regular, light
+    wxXLFD_SLANT,       // r/i/o (roman/italique/oblique)
+    wxXLFD_SETWIDTH,    // condensed, expanded, ...
+    wxXLFD_ADDSTYLE,    // whatever - usually nothing
+    wxXLFD_PIXELSIZE,   // size in pixels
+    wxXLFD_POINTSIZE,   // size in points
+    wxXLFD_RESX,        // 72, 75, 100, ...
+    wxXLFD_RESY,
+    wxXLFD_SPACING,     // m/p/c (monospaced/proportional/character cell)
+    wxXLFD_AVGWIDTH,    // average width in 1/10 pixels
+    wxXLFD_REGISTRY,    // iso8859, rawin, koi8, ...
+    wxXLFD_ENCODING,    // 1, r, r, ...
+    wxXLFD_MAX
+};
+
+#endif // _WX_X_FONTLIKE
+
 // ----------------------------------------------------------------------------
 // types
 // ----------------------------------------------------------------------------
@@ -45,10 +69,14 @@
 //     further it might make sense to make it a real class with virtual methods
 struct WXDLLEXPORT wxNativeFontInfo
 {
-#if defined(__WXGTK__) || defined(__WXMOTIF__)
+#if defined(_WX_X_FONTLIKE)
+    // the fonts array can't be accessed directly as we only parse the
+    // xFontName when needed
+private:
     // the components of the XLFD
-    wxString     fontElements[14];
+    wxString     fontElements[wxXLFD_MAX];
 
+public:
     // the full XLFD
     wxString     xFontName;
 
@@ -57,6 +85,9 @@ struct WXDLLEXPORT wxNativeFontInfo
 
     // generate an XLFD using the fontElements
     wxString GetXFontName() const;
+
+    // get the given XFLD component
+    wxString GetXFontComponent(wxXLFDField field) const;
 #elif defined(__WXMSW__)
     LOGFONT      lf;
 #elif defined(__WXPM__)

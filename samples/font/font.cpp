@@ -180,7 +180,7 @@ bool MyApp::OnInit()
 {
     // Create the main application window
     MyFrame *frame = new MyFrame("Font wxWindows demo",
-                                 wxPoint(50, 50), wxSize(450, 340));
+                                 wxPoint(50, 50), wxSize(600, 400));
 
     // Show it and tell the application that it's our main window
     frame->Show(TRUE);
@@ -625,28 +625,42 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     dc.SetBackground(wxBrush(wxT("white"), wxSOLID));
     dc.Clear();
 
+    // one text line height
+    wxCoord hLine = dc.GetCharHeight();
+
+    // the current text origin
+    wxCoord x = 5,
+            y = 5;
+
     // output the font name/info
     wxString fontInfo;
-    fontInfo.Printf(wxT("Font size is %d points, family is %s, encoding is '%s', style %s, weight %s"),
+    fontInfo.Printf(wxT("Font size is %d points, family: %s, encoding: %s"),
                     m_font.GetPointSize(),
                     m_font.GetFamilyString().c_str(),
                     wxTheFontMapper->
-                        GetEncodingDescription(m_font.GetEncoding()).c_str(),
-                    m_font.GetStyleString().c_str(),
-                    m_font.GetWeightString().c_str());
+                        GetEncodingDescription(m_font.GetEncoding()).c_str());
 
-    dc.DrawText(fontInfo, 5, 5);
+    dc.DrawText(fontInfo, x, y);
+    y += hLine;
+                        
+    fontInfo.Printf(wxT("Style: %s, weight: %s, fixed width: %s"),
+                    m_font.GetStyleString().c_str(),
+                    m_font.GetWeightString().c_str(),
+                    m_font.IsFixedWidth() ? _T("yes") : _T("no"));
+
+    dc.DrawText(fontInfo, x, y);
+    y += hLine;
 
     if ( m_font.Ok() )
     {
         wxString fontDesc = m_font.GetNativeFontInfoUserDesc();
         fontInfo.Printf(wxT("Native font info: %s"), fontDesc.c_str());
-        dc.DrawText(fontInfo, 5, 5 + dc.GetCharHeight());
+
+        dc.DrawText(fontInfo, x, y);
+        y += hLine;
     }
 
-    // the origin for our table
-    int x = 5,
-        y = dc.GetCharHeight() * (2 + 1);
+    y += hLine;
 
     // prepare to draw the font
     dc.SetFont(m_font);

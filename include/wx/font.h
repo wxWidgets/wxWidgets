@@ -113,6 +113,8 @@ public:
     virtual wxFontEncoding GetEncoding() const = 0;
     virtual wxNativeFontInfo *GetNativeFontInfo() const;
 
+    virtual bool IsFixedWidth() const;
+
     wxString GetNativeFontInfoDesc() const;
     wxString GetNativeFontInfoUserDesc() const;
 

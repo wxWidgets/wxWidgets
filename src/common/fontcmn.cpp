@@ -82,6 +82,11 @@ wxFont *wxFontBase::New(const wxString& strNativeFontDesc)
     return New(fontInfo);
 }
 
+bool wxFontBase::IsFixedWidth() const
+{
+    return GetFamily() == wxFONTFAMILY_TELETYPE;
+}
+
 wxNativeFontInfo *wxFontBase::GetNativeFontInfo() const
 {
 #ifdef wxNO_NATIVE_FONTINFO
