@@ -437,3 +437,36 @@ setup(name             = PKGDIR,
       ext_modules = wxpExtensions,
 
       )
+
+
+
+
+#----------------------------------------------------------------------
+# The pre-distutils binary distributions of wxPython included the demo
+# as a subdirectory of the package dir.  This doesn't really make sense
+# for Linux/Unix platforms as it's not part of the package, and the user
+# may want to tweak and learn without having to become root first.
+#
+# For now I am going to start distributing the demo as a separate tarball,
+# but if I ever want to go back to the old way, this is how to do it the
+# distutils way:
+
+
+## from my_install_data import *
+
+## Add this to the setup() call
+##       # Overridden command classes
+##       cmdclass = {'install_data': my_install_data},
+##       # non python files of examples
+##       data_files = [
+##            Data_Files(
+##                base_dir='install_lib',
+##                copy_to = 'wxPython',
+##                #strip_dirs = 2,
+##                template=[ 'graft demo',
+##                           'global-exclude CVS/*'
+##                    ],
+##                preserve_path=1
+##            )
+##        ],
+
