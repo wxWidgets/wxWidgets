@@ -174,13 +174,13 @@ int main(int argc, char *argv[])
 		   INSTALLER_CONFIRM_OVERWRITE, INSTALLER_PACKAGE_COUNT);
    for(z=0;z<INSTALLER_PACKAGE_COUNT;z++)
       fprintf(installfile, "-%s", INSTALLER_PACKAGES[z]);
-   fwrite("~", 1, 1, installfile);
+   fwrite("*", 1, 1, installfile);
    for(z=0;z<INSTALLER_PACKAGE_COUNT;z++)
       {
          struct stat blah;
 
          stat(packagefilename[z], &blah);
-         fprintf(installfile, "DBSOFT-ACE%d%d-%lu~", z, packagefiles[z], blah.st_size);
+         fprintf(installfile, "DBSOFT-ACE%d%d-%lu*", z, packagefiles[z], blah.st_size);
          append_file(packagefilename[z]);
          printf("Package: %s - %d files in %s (%lu bytes).\n", INSTALLER_PACKAGES[z], packagefiles[z], packagefilename[z], blah.st_size);
       }
