@@ -851,6 +851,16 @@
 #   endif
 #endif /* wxUSE_UNICODE_MSLU */
 
+#if !wxUSE_DYNLIB_CLASS
+#   if wxUSE_DYNAMIC_LOADER
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxUSE_DYNAMIC_LOADER requires wxUSE_DYNLIB_CLASS."
+#       else
+#           define wxUSE_DYNLIB_CLASS 1
+#       endif
+#   endif
+#endif  /* wxUSE_DYNLIB_CLASS */
+
 /* the rest of the tests is for the GUI settings only */
 #if wxUSE_GUI
 

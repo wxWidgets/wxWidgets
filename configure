@@ -32157,7 +32157,8 @@ if test "$wxUSE_DYNAMIC_LOADER" = "yes" ; then
 #define wxUSE_DYNAMIC_LOADER 1
 _ACEOF
 
-elif test "$wxUSE_DYNLIB_CLASS" = "yes" ; then
+fi
+if test "$wxUSE_DYNLIB_CLASS" = "yes" ; then
     cat >>confdefs.h <<\_ACEOF
 #define wxUSE_DYNLIB_CLASS 1
 _ACEOF

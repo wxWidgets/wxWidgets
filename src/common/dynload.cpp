@@ -37,366 +37,10 @@
     #include "wx/utils.h"
 #endif
 
-#include "wx/filename.h"        // for SplitPath()
 #include "wx/strconv.h"
 
 #include "wx/dynload.h"
 #include "wx/module.h"
-
-#if defined(__DARWIN__)
-/* Porting notes:
- *   The dlopen port is a port from dl_next.xs by Anno Siegel.
- *   dl_next.xs is itself a port from dl_dlopen.xs by Paul Marquess.
- *   The method used here is just to supply the sun style dlopen etc.
- *   functions in terms of Darwin NS*.
- */
-void *dlopen(const char *path, int mode /* mode is ignored */);
-void *dlsym(void *handle, const char *symbol);
-int   dlclose(void *handle);
-const char *dlerror(void);
-#endif
-
-// ============================================================================
-// implementation
-// ============================================================================
-
-// ---------------------------------------------------------------------------
-// wxDynamicLibrary
-// ---------------------------------------------------------------------------
-
-//FIXME:  This class isn't really common at all, it should be moved into
-//        platform dependent files.
-
-#if defined(__WINDOWS__) || defined(__WXPM__) || defined(__EMX__)
-    const wxChar *wxDynamicLibrary::ms_dllext = _T(".dll");
-#elif defined(__UNIX__)
-    #if defined(__HPUX__)
-        const wxChar *wxDynamicLibrary::ms_dllext = _T(".sl");
-    #else
-        const wxChar *wxDynamicLibrary::ms_dllext = _T(".so");
-    #endif
-#endif
-
-wxDllType wxDynamicLibrary::GetProgramHandle()
-{
-#if defined( HAVE_DLOPEN ) && !defined(__EMX__)
-   return dlopen(0, RTLD_LAZY);
-#elif defined (HAVE_SHL_LOAD)
-   return PROG_HANDLE;
-#else
-   wxFAIL_MSG( wxT("This method is not implemented under Windows or OS/2"));
-   return 0;
-#endif
-}
-
-bool wxDynamicLibrary::Load(wxString libname, int flags)
-{
-    wxASSERT_MSG(m_handle == 0, _T("Library already loaded."));
-
-    // add the proper extension for the DLL ourselves unless told not to
-    if ( !(flags & wxDL_VERBATIM) )
-    {
-        // and also check that the libname doesn't already have it
-        wxString ext;
-        wxFileName::SplitPath(libname, NULL, NULL, &ext);
-        if ( ext.empty() )
-        {
-            libname += GetDllExt();
-        }
-    }
-
-    // different ways to load a shared library
-    //
-    // FIXME: should go to the platform-specific files!
-#if defined(__WXMAC__) && !defined(__DARWIN__)
-    FSSpec      myFSSpec;
-    Ptr         myMainAddr;
-    Str255      myErrName;
-
-    wxMacFilename2FSSpec( libname , &myFSSpec );
-
-    if( GetDiskFragment( &myFSSpec,
-                         0,
-                         kCFragGoesToEOF,
-                         "\p",
-                         kPrivateCFragCopy,
-                         &m_handle,
-                         &myMainAddr,
-                         myErrName ) != noErr )
-    {
-        p2cstr( myErrName );
-        wxLogSysError( _("Failed to load shared library '%s' Error '%s'"),
-                       libname.c_str(),
-                       (char*)myErrName );
-        m_handle = 0;
-    }
-
-#elif defined(__WXPM__) || defined(__EMX__)
-    char    err[256] = "";
-    DosLoadModule(err, sizeof(err), libname.c_str(), &m_handle);
-
-#elif defined(HAVE_DLOPEN) || defined(__DARWIN__)
-
-#if defined(__VMS) || defined(__DARWIN__)
-    m_handle = dlopen(libname.c_str(), 0);  // The second parameter is ignored
-#else // !__VMS  && !__DARWIN__
-    int rtldFlags = 0;
-
-    if ( flags & wxDL_LAZY )
-    {
-        wxASSERT_MSG( (flags & wxDL_NOW) == 0,
-                      _T("wxDL_LAZY and wxDL_NOW are mutually exclusive.") );
-#ifdef RTLD_LAZY
-        rtldFlags |= RTLD_LAZY;
-#else
-        wxLogDebug(_T("wxDL_LAZY is not supported on this platform"));
-#endif
-    }
-    else if ( flags & wxDL_NOW )
-    {
-#ifdef RTLD_NOW
-        rtldFlags |= RTLD_NOW;
-#else
-        wxLogDebug(_T("wxDL_NOW is not supported on this platform"));
-#endif
-    }
-
-    if ( flags & wxDL_GLOBAL )
-    {
-#ifdef RTLD_GLOBAL
-        rtldFlags |= RTLD_GLOBAL;
-#else
-        wxLogDebug(_T("RTLD_GLOBAL is not supported on this platform."));
-#endif
-    }
-
-    m_handle = dlopen(libname.fn_str(), rtldFlags);
-#endif  // __VMS || __DARWIN__ ?
-
-#elif defined(HAVE_SHL_LOAD)
-    int shlFlags = 0;
-
-    if( flags & wxDL_LAZY )
-    {
-        wxASSERT_MSG( (flags & wxDL_NOW) == 0,
-                      _T("wxDL_LAZY and wxDL_NOW are mutually exclusive.") );
-        shlFlags |= BIND_DEFERRED;
-    }
-    else if( flags & wxDL_NOW )
-    {
-        shlFlags |= BIND_IMMEDIATE;
-    }
-    m_handle = shl_load(libname.fn_str(), BIND_DEFERRED, 0);
-
-#elif defined(__WINDOWS__)
-    m_handle = ::LoadLibrary(libname.c_str());
-#else
-    #error  "runtime shared lib support not implemented on this platform"
-#endif
-
-    if ( m_handle == 0 )
-    {
-        wxString msg(_("Failed to load shared library '%s'"));
-#if defined(HAVE_DLERROR) && !defined(__EMX__)
-
-#if wxUSE_UNICODE
-        wxWCharBuffer buffer = wxConvLocal.cMB2WC( dlerror() );
-        const wxChar *err = buffer;
-#else
-        const wxChar *err = dlerror();
-#endif
-
-        if( err )
-            wxLogError( msg, err );
-#else
-        wxLogSysError( msg, libname.c_str() );
-#endif
-    }
-
-    return IsLoaded();
-}
-
-void wxDynamicLibrary::Unload()
-{
-    if( IsLoaded() )
-    {
-#if defined(__WXPM__) || defined(__EMX__)
-        DosFreeModule( m_handle );
-#elif defined(HAVE_DLOPEN) || defined(__DARWIN__)
-        dlclose( m_handle );
-#elif defined(HAVE_SHL_LOAD)
-        shl_unload( m_handle );
-#elif defined(__WINDOWS__)
-        ::FreeLibrary( m_handle );
-#elif defined(__WXMAC__) && !defined(__DARWIN__)
-        CloseConnection( (CFragConnectionID*) &m_handle );
-#else
-#error  "runtime shared lib support not implemented"
-#endif
-        m_handle = 0;
-    }
-}
-
-void *wxDynamicLibrary::GetSymbol(const wxString &name, bool *success) const
-{
-    wxCHECK_MSG( IsLoaded(), NULL,
-                 _T("Can't load symbol from unloaded library") );
-
-    bool     failed = FALSE;
-    void    *symbol = 0;
-
-#if defined(__WXMAC__) && !defined(__DARWIN__)
-    Ptr                 symAddress;
-    CFragSymbolClass    symClass;
-    Str255              symName;
-#if TARGET_CARBON
-    c2pstrcpy( (StringPtr) symName, name );
-#else
-    strcpy( (char *)symName, name );
-    c2pstr( (char *)symName );
-#endif
-    if( FindSymbol( dllHandle, symName, &symAddress, &symClass ) == noErr )
-        symbol = (void *)symAddress;
-
-#elif defined(__WXPM__) || defined(__EMX__)
-    DosQueryProcAddr( m_handle, 1L, name.c_str(), (PFN*)symbol );
-
-#elif defined(HAVE_DLOPEN) || defined(__DARWIN__)
-    symbol = dlsym( m_handle, name.fn_str() );
-
-#elif defined(HAVE_SHL_LOAD)
-    // use local variable since shl_findsym modifies the handle argument
-    // to indicate where the symbol was found (GD)
-    wxDllType the_handle = m_handle;
-    if( shl_findsym( &the_handle, name.fn_str(), TYPE_UNDEFINED, &symbol ) != 0 )
-        symbol = 0;
-
-#elif defined(__WINDOWS__)
-    symbol = (void*) ::GetProcAddress( m_handle, name.mb_str() );
-
-#else
-#error  "runtime shared lib support not implemented"
-#endif
-
-    if ( !symbol )
-    {
-#if defined(HAVE_DLERROR) && !defined(__EMX__)
-
-#if wxUSE_UNICODE
-        wxWCharBuffer buffer = wxConvLocal.cMB2WC( dlerror() );
-        const wxChar *err = buffer;
-#else
-        const wxChar *err = dlerror();
-#endif
-
-        if( err )
-        {
-            wxLogError(wxT("%s"), err);
-        }
-#else
-        failed = TRUE;
-        wxLogSysError(_("Couldn't find symbol '%s' in a dynamic library"),
-                      name.c_str());
-#endif
-    }
-    if( success )
-        *success = !failed;
-
-    return symbol;
-}
-    
-
-/*static*/
-wxString wxDynamicLibrary::CanonicalizeName(const wxString& name,
-                                            wxDynamicLibraryCategory cat)
-{
-#ifdef __UNIX__
-    if ( cat == wxDL_MODULE )
-        return name + GetDllExt();
-    else
-        return wxString(_T("lib")) + name + GetDllExt();
-#else
-    return name + GetDllExt();
-#endif
-}
-
-/*static*/
-wxString wxDynamicLibrary::CanonicalizePluginName(const wxString& name,
-                                                  wxPluginCategory cat)
-{
-    wxString suffix;
-    if ( cat == wxDL_PLUGIN_GUI )
-    {
-        suffix = wxString::FromAscii(
-#if defined(__WXMSW__)
-                "msw"
-#elif defined(__WXGTK__)
-                "gtk"
-#elif defined(__WXMGL__)
-                "mgl"
-#elif defined(__WXMOTIF__)
-                "motif"
-#elif defined(__WXOS2__)
-                "pm"
-#elif defined(__WXX11__)
-                "x11"
-#elif defined(__WXMAC__)
-                "mac"
-#elif defined(__WXCOCOA__)
-                "cocoa"
-#endif
-       );
-
-#ifdef __WXUNIVERSAL__
-        suffix << _T("univ");
-#endif
-    }
-#if wxUSE_UNICODE
-    suffix << _T('u');
-#endif
-#ifdef __WXDEBUG__
-    suffix << _T('d');
-#endif
-
-    if ( !suffix.empty() )
-        suffix = wxString(_T("_")) + suffix;
-
-#ifdef __UNIX__
-    #if (wxMINOR_VERSION % 2) == 0
-        #define wxDLLVER(x,y,z) "-" #x "." #y
-    #else
-        #define wxDLLVER(x,y,z) "-" #x "." #y "." #z
-    #endif
-#else
-    #if (wxMINOR_VERSION % 2) == 0
-        #define wxDLLVER(x,y,z) #x #y
-    #else
-        #define wxDLLVER(x,y,z) #x #y #z
-    #endif
-#endif
-    suffix << wxString::FromAscii(wxDLLVER(wxMAJOR_VERSION, wxMINOR_VERSION,
-                                           wxRELEASE_NUMBER));
-#undef wxDLLVER
-
-    return CanonicalizeName(name + suffix, wxDL_MODULE);
-}
-    
-/*static*/
-wxString wxDynamicLibrary::GetPluginsDirectory()
-{
-#ifdef __UNIX__
-    wxString format = wxGetInstallPrefix();
-    format << wxFILE_SEP_PATH
-           << wxT("lib") << wxFILE_SEP_PATH
-           << wxT("wx") << wxFILE_SEP_PATH
-           << wxT("%i.%i");
-    wxString dir;
-    dir.Printf(format.c_str(), wxMAJOR_VERSION, wxMINOR_VERSION);
-    return dir;
-#else
-    return wxEmptyString;
-#endif
-}
 
 
 // ---------------------------------------------------------------------------
@@ -723,23 +367,6 @@ bool wxPluginManager::UnloadLibrary(const wxString& libname)
     return TRUE;
 }
 
-#if WXWIN_COMPATIBILITY_2_2
-wxPluginLibrary *wxPluginManager::GetObjectFromHandle(wxDllType handle)
-{
-    for ( wxDLManifest::iterator i = ms_manifest->begin();
-          i != ms_manifest->end();
-          ++i )
-    {
-        wxPluginLibrary * const lib = i->second;
-
-        if ( lib->GetLibHandle() == handle )
-            return lib;
-    }
-
-    return NULL;
-}
-#endif // WXWIN_COMPATIBILITY_2_2
-
 // ------------------------
 // Class implementation
 // ------------------------
@@ -771,11 +398,29 @@ void wxPluginManager::Unload()
     m_entry = NULL;
 }
 
+
+
+#if WXWIN_COMPATIBILITY_2_2
+
+wxPluginLibrary *wxPluginManager::GetObjectFromHandle(wxDllType handle)
+{
+    for ( wxDLManifest::iterator i = ms_manifest->begin();
+          i != ms_manifest->end();
+          ++i )
+    {
+        wxPluginLibrary * const lib = i->second;
+
+        if ( lib->GetLibHandle() == handle )
+            return lib;
+    }
+
+    return NULL;
+}
+
 // ---------------------------------------------------------------------------
 // wxDllLoader   (all these methods are static)
 // ---------------------------------------------------------------------------
 
-#if WXWIN_COMPATIBILITY_2_2
 
 wxDllType wxDllLoader::LoadLibrary(const wxString &name, bool *success)
 {
@@ -818,7 +463,158 @@ wxDllLoader::GetSymbol(wxDllType dllHandle, const wxString &name, bool *success)
     return p->GetSymbol(name, success);
 }
 
+
+// ---------------------------------------------------------------------------
+// Global variables
+// ---------------------------------------------------------------------------
+
+wxLibraries wxTheLibraries;
+
+// ============================================================================
+// implementation
+// ============================================================================
+
+// construct the full name from the base shared object name: adds a .dll
+// suffix under Windows or .so under Unix
+static wxString ConstructLibraryName(const wxString& basename)
+{
+    wxString fullname;
+    fullname << basename << wxDllLoader::GetDllExt();
+
+    return fullname;
+}
+
+// ---------------------------------------------------------------------------
+// wxLibrary (one instance per dynamic library)
+// ---------------------------------------------------------------------------
+
+wxLibrary::wxLibrary(wxDllType handle)
+{
+    typedef wxClassInfo *(*t_get_first)(void);
+    t_get_first get_first;
+
+    m_handle = handle;
+
+    // Some system may use a local heap for library.
+    get_first = (t_get_first)GetSymbol(_T("wxGetClassFirst"));
+    // It is a wxWindows DLL.
+    if (get_first)
+        PrepareClasses(get_first());
+}
+
+wxLibrary::~wxLibrary()
+{
+    if ( m_handle )
+    {
+        wxDllLoader::UnloadLibrary(m_handle);
+    }
+}
+
+wxObject *wxLibrary::CreateObject(const wxString& name)
+{
+    wxClassInfo *info = (wxClassInfo *)classTable.Get(name);
+
+    if (!info)
+        return NULL;
+
+    return info->CreateObject();
+}
+
+void wxLibrary::PrepareClasses(wxClassInfo *first)
+{
+    // Index all class infos by their class name
+    wxClassInfo *info = first;
+    while (info)
+    {
+        if (info->m_className)
+            classTable.Put(info->m_className, (wxObject *)info);
+        info = info->m_next;
+    }
+
+    // Set base pointers for each wxClassInfo
+    info = first;
+    while (info)
+    {
+        if (info->GetBaseClassName1())
+            info->m_baseInfo1 = (wxClassInfo *)classTable.Get(info->GetBaseClassName1());
+        if (info->GetBaseClassName2())
+            info->m_baseInfo2 = (wxClassInfo *)classTable.Get(info->GetBaseClassName2());
+        info = info->m_next;
+    }
+}
+
+void *wxLibrary::GetSymbol(const wxString& symbname)
+{
+   return wxDllLoader::GetSymbol(m_handle, symbname);
+}
+
+
+// ---------------------------------------------------------------------------
+// wxLibraries (only one instance should normally exist)
+// ---------------------------------------------------------------------------
+
+wxLibraries::wxLibraries():m_loaded(wxKEY_STRING)
+{
+}
+
+wxLibraries::~wxLibraries()
+{
+    wxNode *node = m_loaded.First();
+
+    while (node) {
+        wxLibrary *lib = (wxLibrary *)node->Data();
+        delete lib;
+
+        node = node->Next();
+    }
+}
+
+wxLibrary *wxLibraries::LoadLibrary(const wxString& name)
+{
+    wxLibrary   *lib;
+    wxClassInfo *old_sm_first;
+    wxNode      *node = m_loaded.Find(name.GetData());
+
+    if (node != NULL)
+        return ((wxLibrary *)node->Data());
+
+    // If DLL shares data, this is necessary.
+    old_sm_first = wxClassInfo::sm_first;
+    wxClassInfo::sm_first = NULL;
+
+    wxString libname = ConstructLibraryName(name);
+
+    bool success = FALSE;
+    wxDllType handle = wxDllLoader::LoadLibrary(libname, &success);
+    if(success)
+    {
+       lib = new wxLibrary(handle);
+       wxClassInfo::sm_first = old_sm_first;
+
+       m_loaded.Append(name.GetData(), lib);
+    }
+    else
+       lib = NULL;
+    return lib;
+}
+
+wxObject *wxLibraries::CreateObject(const wxString& path)
+{
+    wxNode *node = m_loaded.First();
+    wxObject *obj;
+
+    while (node) {
+        obj = ((wxLibrary *)node->Data())->CreateObject(path);
+        if (obj)
+            return obj;
+
+        node = node->Next();
+    }
+    return NULL;
+}
+
 #endif  // WXWIN_COMPATIBILITY_2_2
+
 
 #endif  // wxUSE_DYNAMIC_LOADER
 

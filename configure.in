@@ -4714,7 +4714,8 @@ fi
 
 if test "$wxUSE_DYNAMIC_LOADER" = "yes" ; then
     AC_DEFINE(wxUSE_DYNAMIC_LOADER)
-elif test "$wxUSE_DYNLIB_CLASS" = "yes" ; then
+fi
+if test "$wxUSE_DYNLIB_CLASS" = "yes" ; then
     AC_DEFINE(wxUSE_DYNLIB_CLASS)
 fi
 
