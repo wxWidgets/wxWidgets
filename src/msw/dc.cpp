@@ -1105,22 +1105,22 @@ long wxDCBase::DeviceToLogicalYRel(long y) const
 
 long wxDCBase::LogicalToDeviceX(long x) const
 {
-    return (long) (floor((x) - m_logicalOriginX)*m_logicalScaleX*m_userScaleX*m_signX*m_scaleX + m_deviceOriginX);
+    return (long) ((x - m_logicalOriginX)*m_logicalScaleX*m_userScaleX*m_signX*m_scaleX + m_deviceOriginX);
 }
 
 long wxDCBase::LogicalToDeviceXRel(long x) const
 {
-    return (long) (floor(x)*m_logicalScaleX*m_userScaleX*m_signX*m_scaleX);
+    return (long) (x*m_logicalScaleX*m_userScaleX*m_signX*m_scaleX);
 }
 
 long wxDCBase::LogicalToDeviceY(long y) const
 {
-    return (long) (floor((y) - m_logicalOriginY)*m_logicalScaleY*m_userScaleY*m_signY*m_scaleY + m_deviceOriginY);
+    return (long) ((y - m_logicalOriginY)*m_logicalScaleY*m_userScaleY*m_signY*m_scaleY + m_deviceOriginY);
 }
 
 long wxDCBase::LogicalToDeviceYRel(long y) const
 {
-    return (long) (floor(y)*m_logicalScaleY*m_userScaleY*m_signY*m_scaleY);
+    return (long) (y*m_logicalScaleY*m_userScaleY*m_signY*m_scaleY);
 }
 
 // ---------------------------------------------------------------------------
