@@ -1720,61 +1720,61 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 #if 0
             case HDN_ITEMCHANGINGW:
                 {
-					return wxControl::MSWOnNotify(idCtrl, lParam, result);
+                    return wxControl::MSWOnNotify(idCtrl, lParam, result);
                 }
             case HDN_ITEMCHANGEDA:
                 {
-					return wxControl::MSWOnNotify(idCtrl, lParam, result);
+                    return wxControl::MSWOnNotify(idCtrl, lParam, result);
                 }
             case HDN_ITEMCHANGEDW:
                 {
-					return wxControl::MSWOnNotify(idCtrl, lParam, result);
+                    return wxControl::MSWOnNotify(idCtrl, lParam, result);
                 }
             case HDN_ITEMCLICKA:
                 {
-					return wxControl::MSWOnNotify(idCtrl, lParam, result);
+                    return wxControl::MSWOnNotify(idCtrl, lParam, result);
                 }
             case HDN_ITEMCLICKW:
                 {
-					return wxControl::MSWOnNotify(idCtrl, lParam, result);
+                    return wxControl::MSWOnNotify(idCtrl, lParam, result);
                 }
             case HDN_ITEMDBLCLICKA:
                 {
-					return wxControl::MSWOnNotify(idCtrl, lParam, result);
+                    return wxControl::MSWOnNotify(idCtrl, lParam, result);
                 }
             case HDN_ITEMDBLCLICKW:
                 {
-					return wxControl::MSWOnNotify(idCtrl, lParam, result);
+                    return wxControl::MSWOnNotify(idCtrl, lParam, result);
                 }
             case HDN_DIVIDERDBLCLICKA:
                 {
-					return wxControl::MSWOnNotify(idCtrl, lParam, result);
+                    return wxControl::MSWOnNotify(idCtrl, lParam, result);
                 }
             case HDN_DIVIDERDBLCLICKW:
                 {
-					return wxControl::MSWOnNotify(idCtrl, lParam, result);
+                    return wxControl::MSWOnNotify(idCtrl, lParam, result);
                 }
             case HDN_GETDISPINFOA:
                 {
-					return wxControl::MSWOnNotify(idCtrl, lParam, result);
+                    return wxControl::MSWOnNotify(idCtrl, lParam, result);
                 }
 #endif
-
+                
             case HDN_GETDISPINFOW:
                 {
                     LPNMHDDISPINFOW info = (LPNMHDDISPINFOW) lParam;
-					// This is a fix for a strange bug under XP.
-					// Normally, info->iItem is a valid index, but
-					// sometimes this is a silly (large) number
-					// and when we return FALSE via wxControl::MSWOnNotify
-					// to indicate that it hasn't yet been processed,
-					// there's a GPF in Windows.
-					// By returning TRUE here, we avoid further processing
-					// of this strange message.
+                    // This is a fix for a strange bug under XP.
+                    // Normally, info->iItem is a valid index, but
+                    // sometimes this is a silly (large) number
+                    // and when we return FALSE via wxControl::MSWOnNotify
+                    // to indicate that it hasn't yet been processed,
+                    // there's a GPF in Windows.
+                    // By returning TRUE here, we avoid further processing
+                    // of this strange message.
                     if (info->iItem > GetColumnCount())
                         return TRUE;
-					else
-						return wxControl::MSWOnNotify(idCtrl, lParam, result);
+                    else
+                        return wxControl::MSWOnNotify(idCtrl, lParam, result);
                 }
             default:
                 return wxControl::MSWOnNotify(idCtrl, lParam, result);
