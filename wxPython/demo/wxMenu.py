@@ -68,9 +68,13 @@ check the source for this sample to see how to implement them.
 
         menu5 = wxMenu()
         menu5.Append(501, "Interesting thing\tCtrl+A", "Note the shortcut!")
-
         menu5.AppendSeparator()
         menu5.Append(502, "Hello\tShift+H")
+        menu5.AppendSeparator()
+        menu5.Append(503, "remove the submenu")
+        menu6 = wxMenu()
+        menu6.Append(601, "Submenu Item")
+        menu5.AppendMenu(504, "submenu", menu6)
         menuBar.Append(menu5, "&Fun")
 
         self.SetMenuBar(menuBar)
@@ -97,6 +101,7 @@ check the source for this sample to see how to implement them.
 
         EVT_MENU(self, 501, self.Menu501)
         EVT_MENU(self, 502, self.Menu502)
+        EVT_MENU(self, 503, self.TestRemove)
 
     # Methods
 
@@ -145,6 +150,20 @@ check the source for this sample to see how to implement them.
 
     def Menu502(self, event):
         self.log.write('Hello from Jean-Michel\n')
+
+
+    def TestRemove(self, evt):
+        mb = self.GetMenuBar()
+        submenuItem = mb.FindItemById(601)
+        if not submenuItem:
+            return
+        submenu = submenuItem.GetMenu()
+        menu = submenu.GetParent()
+
+        #menu.Remove(504)               # works
+        menu.RemoveItem(mb.FindItemById(504))  # this also works
+        #menu.RemoveItem(submenuItem)   # doesn't work, as expected since submenuItem is not on menu
+
 
 #-------------------------------------------------------------------
 
