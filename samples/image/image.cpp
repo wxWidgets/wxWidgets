@@ -142,7 +142,7 @@ public:
         dc.DrawBitmap( m_bitmap, 0, 0, TRUE );
     }
 
-    void OnSave(wxCommandEvent& WXUNUSED(event))
+    void OnSave(wxMouseEvent& WXUNUSED(event))
     {
         wxImage image = m_bitmap.ConvertToImage();
 
