@@ -469,7 +469,6 @@ void wxMenu::ProcessCommand(wxCommandEvent & event)
 // Finds the item id matching the given string, -1 if not found.
 int wxMenu::FindItem (const wxString& itemString) const
 {
-    // FIXME fixed size buffer
     wxString itemLabel = wxStripMenuCodes(itemString);
     for ( wxNode *node = m_menuItems.First(); node; node = node->Next() )
     {
@@ -497,7 +496,7 @@ wxMenuItem *wxMenu::FindItemForId(int itemId, wxMenu ** itemMenu) const
         *itemMenu = NULL;
 
     wxMenuItem *item = NULL;
-    for ( wxNode *node = m_menuItems.First(); node; node = node->Next() )
+    for ( wxNode *node = m_menuItems.First(); node && !item; node = node->Next() )
     {
         item = (wxMenuItem *)node->Data();
 
@@ -505,13 +504,15 @@ wxMenuItem *wxMenu::FindItemForId(int itemId, wxMenu ** itemMenu) const
         {
             if (itemMenu)
                 *itemMenu = (wxMenu *)this;
-            break;
         }
         else if ( item->IsSubMenu() )
         {
             item = item->GetSubMenu()->FindItemForId(itemId, itemMenu);
-            if ( item )
-                break;
+        }
+        else
+        {
+            // don't exit the loop
+            item = NULL;
         }
     }
 
