@@ -27,6 +27,32 @@
 // wxNotebook
 // ----------------------------------------------------------------------------
 
+class WXDLLEXPORT wxNotebookPageInfo : public wxObject
+{
+public :
+    wxNotebookPageInfo() { m_page = NULL ; m_imageId = -1 ; m_selected = false ; }
+    virtual ~wxNotebookPageInfo() { }
+
+    void Create( wxNotebookPage *page , const wxString &text , bool selected , int imageId ) 
+    { m_page = page ; m_text = text ; m_selected = selected ; m_imageId = imageId ; }
+    wxNotebookPage* GetPage() const { return m_page ; }
+    wxString GetText() const { return m_text ; }
+    bool GetSelected() const { return m_selected ; }
+    int GetImageId() const { return m_imageId; }
+private :
+    wxNotebookPage *m_page ;
+    wxString m_text ;
+    bool m_selected ;
+    int m_imageId ;
+
+    DECLARE_DYNAMIC_CLASS(wxNotebookPageInfo) ;
+} ;
+
+
+WX_DECLARE_LIST(wxNotebookPageInfo, wxNotebookPageInfoList);
+// WX_DECLARE_EXPORTED_LIST(wxNotebookPageInfo, wxNotebookPageInfoList );
+// WX_DECLARE_LIST_3(wxNotebookPageInfo, wxNotebookPageInfo, wxNotebookPageInfoList, wxNotebookPageInfoListNode, class WXDLLEXPORT);
+
 class WXDLLEXPORT wxNotebook : public wxNotebookBase
 {
 public:
@@ -103,6 +129,9 @@ public:
                   bool bSelect = FALSE,
                   int imageId = -1);
 
+  void AddPageInfo( wxNotebookPageInfo* info ) { AddPage( info->GetPage() , info->GetText() , info->GetSelected() , info->GetImageId() ) ; }
+  const wxNotebookPageInfoList& GetPageInfos() const ;
+
     // Windows-only at present. Also, you must use the wxNB_FIXEDWIDTH
     // style.
   void SetTabSize(const wxSize& sz);
@@ -153,6 +182,8 @@ protected:
 
   // the current selection (-1 if none)
   int m_nSelection;
+
+  wxNotebookPageInfoList m_pageInfos ;
 
 
   DECLARE_DYNAMIC_CLASS_NO_COPY(wxNotebook)
