@@ -477,6 +477,16 @@ GdkVisual *wxApp::GetGdkVisual()
 
 bool wxApp::ProcessIdle()
 {
+    wxWindowList::Node* node = wxTopLevelWindows.GetFirst();
+    node = wxTopLevelWindows.GetFirst();
+    while (node)
+    {
+        wxWindow* win = node->GetData();
+        CallInternalIdle( win );
+
+        node = node->GetNext();
+    }
+    
     wxIdleEvent event;
     event.SetEventObject( this );
     ProcessEvent( event );
@@ -487,7 +497,7 @@ bool wxApp::ProcessIdle()
 void wxApp::OnIdle( wxIdleEvent &event )
 {
     static bool s_inOnIdle = FALSE;
-
+    
     // Avoid recursion (via ProcessEvent default case)
     if (s_inOnIdle)
         return;
@@ -524,14 +534,6 @@ bool wxApp::SendIdleEvents()
         node = node->GetNext();
     }
 
-    node = wxTopLevelWindows.GetFirst();
-    while (node)
-    {
-        wxWindow* win = node->GetData();
-        CallInternalIdle( win );
-
-        node = node->GetNext();
-    }
     return needMore;
 }
 
