@@ -42,7 +42,7 @@
 // BJO 20000503: introduce new GetColumns members which are more database independant and 
 //               return columns in the order they were created
 #define OLD_GETCOLUMNS 1
-
+#define EXPERIMENTAL_WXDB_FUNCTIONS 0
 
 // Use this line for wxWindows v1.x
 //#include "wx_ver.h"
@@ -432,6 +432,9 @@ public:
         char   databaseName[128];                        // Database filename
         char   outerJoins[2];                            // Indicates whether the data source supports outer joins
         char   procedureSupport[2];                      // Indicates whether the data source supports stored procedures
+#if EXPERIMENTAL_WXDB_FUNCTIONS  // will be added in 2.4
+        char   accessibleTables[2];                      // Indicates whether the data source only reports accessible tables in SQLTables.
+#endif
         UWORD  maxConnections;                           // Maximum # of connections the data source supports
         UWORD  maxStmts;                                 // Maximum # of HSTMTs per HDBC
         UWORD  apiConfLvl;                               // ODBC API conformance level
@@ -514,6 +517,9 @@ public:
     wxDbSqlTypeInfo GetTypeInfDate()   {return typeInfDate;}
 
     bool         TableExists(const char *tableName, const char *userID=NULL, const char *path=NULL);  // Table name can refer to a table, view, alias or synonym
+#if EXPERIMENTAL_WXDB_FUNCTIONS  // will be added in 2.4
+    bool         TablePrivileges(const char *tableName, const char* priv, const char *userID=NULL, const char *path=NULL);  // Table name can refer to a table, view, alias or synonym
+#endif
     void         LogError(const char *errMsg, const char *SQLState = 0) {logError(errMsg, SQLState);}
     void         SetDebugErrorMessages(bool state) { silent = !state; }
     bool         SetSqlLogging(wxDbSqlLogState state, const wxChar *filename = SQL_LOG_FILENAME, bool append = FALSE);
