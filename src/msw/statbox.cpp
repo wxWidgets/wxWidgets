@@ -37,6 +37,7 @@
 
 #include "wx/statbox.h"
 #include "wx/notebook.h"
+#include "wx/sysopt.h"
 
 #include "wx/msw/private.h"
 
@@ -151,7 +152,6 @@ wxSize wxStaticBox::DoGetBestSize() const
     return wxSize(wBox, hBox);
 }
 
-// Required for implementing dialog editors, please do not remove
 WXLRESULT wxStaticBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
     switch ( nMsg )
@@ -159,15 +159,24 @@ WXLRESULT wxStaticBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPar
 #ifndef __WXWINCE__
         case WM_NCHITTEST:
             {
-                int xPos = LOWORD(lParam);  // horizontal position of cursor
-                int yPos = HIWORD(lParam);  // vertical position of cursor
+                // This code breaks some other processing such as enter/leave tracking
+                // so it's off by default.
+                                
+                static int s_useHTClient = -1;
+                if (s_useHTClient == -1)
+                    s_useHTClient = wxSystemOptions::GetOptionInt(wxT("msw.staticbox.htclient"));
+                if (s_useHTClient == 1)
+                {
+                    int xPos = LOWORD(lParam);  // horizontal position of cursor
+                    int yPos = HIWORD(lParam);  // vertical position of cursor
 
-                ScreenToClient(&xPos, &yPos);
+                    ScreenToClient(&xPos, &yPos);
 
-                // Make sure you can drag by the top of the groupbox, but let
-                // other (enclosed) controls get mouse events also
-                if ( yPos < 10 )
-                    return (long)HTCLIENT;
+                    // Make sure you can drag by the top of the groupbox, but let
+                    // other (enclosed) controls get mouse events also
+                    if ( yPos < 10 )
+                        return (long)HTCLIENT;
+                }
             }
             break;
 #endif
