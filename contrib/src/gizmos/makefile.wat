@@ -10,7 +10,7 @@ THISDIR = $(WXDIR)\contrib\src\gizmos
 NAME = gizmos
 LNK = $(name).lnk
 
-OBJECTS =  multicell.obj splittree.obj editlbox.obj dynamicsash.obj
+OBJECTS =  multicell.obj splittree.obj editlbox.obj dynamicsash.obj ledctrl.obj
 
 all: $(GIZMOSLIB)
 

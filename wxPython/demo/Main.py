@@ -39,6 +39,7 @@ _treeList = [
                                 'wxDynamicSashWindow',
                                 'wxEditableListBox',
                                 'SplitTree',
+                                'wxLEDNumberCtrl',
                                 ]),
 
     ('Windows', ['wxFrame', 'wxDialog', 'wxMiniFrame',
@@ -62,7 +63,7 @@ _treeList = [
                   'wxTreeCtrl', 'wxSpinButton', 'wxSpinCtrl', 'wxStaticText',
                   'wxStaticBitmap', 'wxRadioBox', 'wxSlider', 'wxToolBar',
                   'wxCalendarCtrl', 'wxToggleButton',
-                  'wxEditableListBox',
+                  'wxEditableListBox', 'wxLEDNumberCtrl',
                   ]),
 
     ('Window Layout', ['wxLayoutConstraints', 'LayoutAnchors', 'Sizers', 'XML_Resource']),

@@ -59,6 +59,7 @@ extern PyObject *SWIG_newvarlink(void);
 #include <wx/gizmos/dynamicsash.h>
 #include <wx/gizmos/editlbox.h>
 #include <wx/gizmos/splittree.h>
+#include <wx/gizmos/ledctrl.h>
 
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
@@ -1320,7 +1321,385 @@ static PyObject *_wrap_new_wxSplitterScrolledWindow(PyObject *self, PyObject *ar
     return _resultobj;
 }
 
+static void *SwigwxLEDNumberCtrlTowxControl(void *ptr) {
+    wxLEDNumberCtrl *src;
+    wxControl *dest;
+    src = (wxLEDNumberCtrl *) ptr;
+    dest = (wxControl *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxLEDNumberCtrlTowxWindow(void *ptr) {
+    wxLEDNumberCtrl *src;
+    wxWindow *dest;
+    src = (wxLEDNumberCtrl *) ptr;
+    dest = (wxWindow *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxLEDNumberCtrlTowxEvtHandler(void *ptr) {
+    wxLEDNumberCtrl *src;
+    wxEvtHandler *dest;
+    src = (wxLEDNumberCtrl *) ptr;
+    dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxLEDNumberCtrlTowxObject(void *ptr) {
+    wxLEDNumberCtrl *src;
+    wxObject *dest;
+    src = (wxLEDNumberCtrl *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
+#define new_wxLEDNumberCtrl(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4) (new wxLEDNumberCtrl(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4))
+static PyObject *_wrap_new_wxLEDNumberCtrl(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxLEDNumberCtrl * _result;
+    wxWindow * _arg0;
+    wxWindowID  _arg1 = (wxWindowID ) -1;
+    wxPoint * _arg2 = (wxPoint *) &wxDefaultPosition;
+    wxSize * _arg3 = (wxSize *) &wxDefaultSize;
+    long  _arg4 = (long ) (wxLED_ALIGN_LEFT)|(wxLED_DRAW_FADED);
+    PyObject * _argo0 = 0;
+    wxPoint  temp;
+    PyObject * _obj2 = 0;
+    wxSize  temp0;
+    PyObject * _obj3 = 0;
+    char *_kwnames[] = { "parent","id","pos","size","style", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|iOOl:new_wxLEDNumberCtrl",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_arg4)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxLEDNumberCtrl. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+    if (_obj2)
+{
+    _arg2 = &temp;
+    if (! wxPoint_helper(_obj2, &_arg2))
+        return NULL;
+}
+    if (_obj3)
+{
+    _arg3 = &temp0;
+    if (! wxSize_helper(_obj3, &_arg3))
+        return NULL;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxLEDNumberCtrl *)new_wxLEDNumberCtrl(_arg0,_arg1,*_arg2,*_arg3,_arg4);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxLEDNumberCtrl_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define new_wxPreLEDNumberCtrl() (new wxLEDNumberCtrl())
+static PyObject *_wrap_new_wxPreLEDNumberCtrl(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxLEDNumberCtrl * _result;
+    char *_kwnames[] = {  NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxPreLEDNumberCtrl",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxLEDNumberCtrl *)new_wxPreLEDNumberCtrl();
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxLEDNumberCtrl_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxLEDNumberCtrl_Create(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4)  (_swigobj->Create(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4))
+static PyObject *_wrap_wxLEDNumberCtrl_Create(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxLEDNumberCtrl * _arg0;
+    wxWindow * _arg1;
+    wxWindowID  _arg2 = (wxWindowID ) -1;
+    wxPoint * _arg3 = (wxPoint *) &wxDefaultPosition;
+    wxSize * _arg4 = (wxSize *) &wxDefaultSize;
+    long  _arg5 = (long ) (wxLED_ALIGN_LEFT)|(wxLED_DRAW_FADED);
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    wxPoint  temp;
+    PyObject * _obj3 = 0;
+    wxSize  temp0;
+    PyObject * _obj4 = 0;
+    char *_kwnames[] = { "self","parent","id","pos","size","style", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|iOOl:wxLEDNumberCtrl_Create",_kwnames,&_argo0,&_argo1,&_arg2,&_obj3,&_obj4,&_arg5)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxLEDNumberCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxLEDNumberCtrl_Create. Expected _wxLEDNumberCtrl_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxLEDNumberCtrl_Create. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+    if (_obj3)
+{
+    _arg3 = &temp;
+    if (! wxPoint_helper(_obj3, &_arg3))
+        return NULL;
+}
+    if (_obj4)
+{
+    _arg4 = &temp0;
+    if (! wxSize_helper(_obj4, &_arg4))
+        return NULL;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxLEDNumberCtrl_Create(_arg0,_arg1,_arg2,*_arg3,*_arg4,_arg5);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxLEDNumberCtrl_GetAlignment(_swigobj)  (_swigobj->GetAlignment())
+static PyObject *_wrap_wxLEDNumberCtrl_GetAlignment(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxLEDValueAlign  _result;
+    wxLEDNumberCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxLEDNumberCtrl_GetAlignment",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxLEDNumberCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxLEDNumberCtrl_GetAlignment. Expected _wxLEDNumberCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxLEDValueAlign )wxLEDNumberCtrl_GetAlignment(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxLEDNumberCtrl_GetDrawFaded(_swigobj)  (_swigobj->GetDrawFaded())
+static PyObject *_wrap_wxLEDNumberCtrl_GetDrawFaded(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxLEDNumberCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxLEDNumberCtrl_GetDrawFaded",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxLEDNumberCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxLEDNumberCtrl_GetDrawFaded. Expected _wxLEDNumberCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxLEDNumberCtrl_GetDrawFaded(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxLEDNumberCtrl_GetValue(_swigobj)  (_swigobj->GetValue())
+static PyObject *_wrap_wxLEDNumberCtrl_GetValue(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxLEDNumberCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxLEDNumberCtrl_GetValue",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxLEDNumberCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxLEDNumberCtrl_GetValue. Expected _wxLEDNumberCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        const wxString & _result_ref = wxLEDNumberCtrl_GetValue(_arg0);
+    _result = (wxString *) &_result_ref;
+
+    wxPy_END_ALLOW_THREADS;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+    return _resultobj;
+}
+
+#define wxLEDNumberCtrl_SetAlignment(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetAlignment(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxLEDNumberCtrl_SetAlignment(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxLEDNumberCtrl * _arg0;
+    wxLEDValueAlign  _arg1;
+    bool  _arg2 = (bool ) true;
+    PyObject * _argo0 = 0;
+    int tempbool2 = (int) true;
+    char *_kwnames[] = { "self","Alignment","Redraw", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|i:wxLEDNumberCtrl_SetAlignment",_kwnames,&_argo0,&_arg1,&tempbool2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxLEDNumberCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxLEDNumberCtrl_SetAlignment. Expected _wxLEDNumberCtrl_p.");
+        return NULL;
+        }
+    }
+    _arg2 = (bool ) tempbool2;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxLEDNumberCtrl_SetAlignment(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxLEDNumberCtrl_SetDrawFaded(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetDrawFaded(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxLEDNumberCtrl_SetDrawFaded(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxLEDNumberCtrl * _arg0;
+    bool  _arg1;
+    bool  _arg2 = (bool ) true;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    int tempbool2 = (int) true;
+    char *_kwnames[] = { "self","DrawFaded","Redraw", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|i:wxLEDNumberCtrl_SetDrawFaded",_kwnames,&_argo0,&tempbool1,&tempbool2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxLEDNumberCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxLEDNumberCtrl_SetDrawFaded. Expected _wxLEDNumberCtrl_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+    _arg2 = (bool ) tempbool2;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxLEDNumberCtrl_SetDrawFaded(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxLEDNumberCtrl_SetValue(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetValue(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxLEDNumberCtrl_SetValue(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxLEDNumberCtrl * _arg0;
+    wxString * _arg1;
+    bool  _arg2 = (bool ) true;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    int tempbool2 = (int) true;
+    char *_kwnames[] = { "self","Value","Redraw", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|i:wxLEDNumberCtrl_SetValue",_kwnames,&_argo0,&_obj1,&tempbool2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxLEDNumberCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxLEDNumberCtrl_SetValue. Expected _wxLEDNumberCtrl_p.");
+        return NULL;
+        }
+    }
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+    _arg2 = (bool ) tempbool2;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxLEDNumberCtrl_SetValue(_arg0,*_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
 static PyMethodDef gizmoscMethods[] = {
+	 { "wxLEDNumberCtrl_SetValue", (PyCFunction) _wrap_wxLEDNumberCtrl_SetValue, METH_VARARGS | METH_KEYWORDS },
+	 { "wxLEDNumberCtrl_SetDrawFaded", (PyCFunction) _wrap_wxLEDNumberCtrl_SetDrawFaded, METH_VARARGS | METH_KEYWORDS },
+	 { "wxLEDNumberCtrl_SetAlignment", (PyCFunction) _wrap_wxLEDNumberCtrl_SetAlignment, METH_VARARGS | METH_KEYWORDS },
+	 { "wxLEDNumberCtrl_GetValue", (PyCFunction) _wrap_wxLEDNumberCtrl_GetValue, METH_VARARGS | METH_KEYWORDS },
+	 { "wxLEDNumberCtrl_GetDrawFaded", (PyCFunction) _wrap_wxLEDNumberCtrl_GetDrawFaded, METH_VARARGS | METH_KEYWORDS },
+	 { "wxLEDNumberCtrl_GetAlignment", (PyCFunction) _wrap_wxLEDNumberCtrl_GetAlignment, METH_VARARGS | METH_KEYWORDS },
+	 { "wxLEDNumberCtrl_Create", (PyCFunction) _wrap_wxLEDNumberCtrl_Create, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxPreLEDNumberCtrl", (PyCFunction) _wrap_new_wxPreLEDNumberCtrl, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxLEDNumberCtrl", (PyCFunction) _wrap_new_wxLEDNumberCtrl, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxSplitterScrolledWindow", (PyCFunction) _wrap_new_wxSplitterScrolledWindow, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxThinSplitterWindow", (PyCFunction) _wrap_new_wxThinSplitterWindow, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCompanionWindow_SetTreeCtrl", (PyCFunction) _wrap_wxTreeCompanionWindow_SetTreeCtrl, METH_VARARGS | METH_KEYWORDS },
@@ -1410,6 +1789,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_unsigned_short","_WXTYPE",0},
     { "_unsigned_short","_short",0},
     { "_wxSplitterWindow","_wxThinSplitterWindow",SwigwxThinSplitterWindowTowxSplitterWindow},
+    { "_wxObject","_wxLEDNumberCtrl",SwigwxLEDNumberCtrlTowxObject},
     { "_wxObject","_wxSplitterScrolledWindow",SwigwxSplitterScrolledWindowTowxObject},
     { "_wxObject","_wxThinSplitterWindow",SwigwxThinSplitterWindowTowxObject},
     { "_wxObject","_wxPyTreeCompanionWindow",SwigwxPyTreeCompanionWindowTowxObject},
@@ -1422,6 +1802,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_signed_short","_short",0},
     { "_wxScrolledWindow","_wxSplitterScrolledWindow",SwigwxSplitterScrolledWindowTowxScrolledWindow},
     { "_unsigned_char","_byte",0},
+    { "_wxControl","_wxLEDNumberCtrl",SwigwxLEDNumberCtrlTowxControl},
     { "_wxControl","_wxRemotelyScrolledTreeCtrl",SwigwxRemotelyScrolledTreeCtrlTowxControl},
     { "_unsigned_int","_wxCoord",0},
     { "_unsigned_int","_wxPrintQuality",0},
@@ -1471,12 +1852,14 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxCoord","_size_t",0},
     { "_wxCoord","_time_t",0},
     { "_wxCoord","_wxPrintQuality",0},
+    { "_wxEvtHandler","_wxLEDNumberCtrl",SwigwxLEDNumberCtrlTowxEvtHandler},
     { "_wxEvtHandler","_wxSplitterScrolledWindow",SwigwxSplitterScrolledWindowTowxEvtHandler},
     { "_wxEvtHandler","_wxThinSplitterWindow",SwigwxThinSplitterWindowTowxEvtHandler},
     { "_wxEvtHandler","_wxPyTreeCompanionWindow",SwigwxPyTreeCompanionWindowTowxEvtHandler},
     { "_wxEvtHandler","_wxRemotelyScrolledTreeCtrl",SwigwxRemotelyScrolledTreeCtrlTowxEvtHandler},
     { "_wxEvtHandler","_wxEditableListBox",SwigwxEditableListBoxTowxEvtHandler},
     { "_wxEvtHandler","_wxDynamicSashWindow",SwigwxDynamicSashWindowTowxEvtHandler},
+    { "_wxWindow","_wxLEDNumberCtrl",SwigwxLEDNumberCtrlTowxWindow},
     { "_wxWindow","_wxSplitterScrolledWindow",SwigwxSplitterScrolledWindowTowxWindow},
     { "_wxWindow","_wxThinSplitterWindow",SwigwxThinSplitterWindowTowxWindow},
     { "_wxWindow","_wxPyTreeCompanionWindow",SwigwxPyTreeCompanionWindowTowxWindow},
@@ -1498,6 +1881,11 @@ SWIGEXPORT(void) initgizmosc() {
 	 PyDict_SetItemString(d,"wxEVT_DYNAMIC_SASH_UNIFY", PyInt_FromLong((long) wxEVT_DYNAMIC_SASH_UNIFY));
 	 PyDict_SetItemString(d,"wxDS_MANAGE_SCROLLBARS", PyInt_FromLong((long) wxDS_MANAGE_SCROLLBARS));
 	 PyDict_SetItemString(d,"wxDS_DRAG_CORNER", PyInt_FromLong((long) wxDS_DRAG_CORNER));
+	 PyDict_SetItemString(d,"wxLED_ALIGN_LEFT", PyInt_FromLong((long) wxLED_ALIGN_LEFT));
+	 PyDict_SetItemString(d,"wxLED_ALIGN_RIGHT", PyInt_FromLong((long) wxLED_ALIGN_RIGHT));
+	 PyDict_SetItemString(d,"wxLED_ALIGN_CENTER", PyInt_FromLong((long) wxLED_ALIGN_CENTER));
+	 PyDict_SetItemString(d,"wxLED_ALIGN_MASK", PyInt_FromLong((long) wxLED_ALIGN_MASK));
+	 PyDict_SetItemString(d,"wxLED_DRAW_FADED", PyInt_FromLong((long) wxLED_DRAW_FADED));
 
 
     wxClassInfo::CleanUpClasses();

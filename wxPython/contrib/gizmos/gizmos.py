@@ -218,6 +218,48 @@ class wxSplitterScrolledWindow(wxSplitterScrolledWindowPtr):
 
 
 
+class wxLEDNumberCtrlPtr(wxControlPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def Create(self, *_args, **_kwargs):
+        val = apply(gizmosc.wxLEDNumberCtrl_Create,(self,) + _args, _kwargs)
+        return val
+    def GetAlignment(self, *_args, **_kwargs):
+        val = apply(gizmosc.wxLEDNumberCtrl_GetAlignment,(self,) + _args, _kwargs)
+        return val
+    def GetDrawFaded(self, *_args, **_kwargs):
+        val = apply(gizmosc.wxLEDNumberCtrl_GetDrawFaded,(self,) + _args, _kwargs)
+        return val
+    def GetValue(self, *_args, **_kwargs):
+        val = apply(gizmosc.wxLEDNumberCtrl_GetValue,(self,) + _args, _kwargs)
+        return val
+    def SetAlignment(self, *_args, **_kwargs):
+        val = apply(gizmosc.wxLEDNumberCtrl_SetAlignment,(self,) + _args, _kwargs)
+        return val
+    def SetDrawFaded(self, *_args, **_kwargs):
+        val = apply(gizmosc.wxLEDNumberCtrl_SetDrawFaded,(self,) + _args, _kwargs)
+        return val
+    def SetValue(self, *_args, **_kwargs):
+        val = apply(gizmosc.wxLEDNumberCtrl_SetValue,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxLEDNumberCtrl instance at %s>" % (self.this,)
+class wxLEDNumberCtrl(wxLEDNumberCtrlPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(gizmosc.new_wxLEDNumberCtrl,_args,_kwargs)
+        self.thisown = 1
+        self._setOORInfo(self)
+
+
+
+def wxPreLEDNumberCtrl(*_args,**_kwargs):
+    val = wxLEDNumberCtrlPtr(apply(gizmosc.new_wxPreLEDNumberCtrl,_args,_kwargs))
+    val.thisown = 1
+    val._setOORInfo(val)
+    return val
+
+
 
 
 #-------------- FUNCTION WRAPPERS ------------------
@@ -230,6 +272,11 @@ wxEVT_DYNAMIC_SASH_SPLIT = gizmosc.wxEVT_DYNAMIC_SASH_SPLIT
 wxEVT_DYNAMIC_SASH_UNIFY = gizmosc.wxEVT_DYNAMIC_SASH_UNIFY
 wxDS_MANAGE_SCROLLBARS = gizmosc.wxDS_MANAGE_SCROLLBARS
 wxDS_DRAG_CORNER = gizmosc.wxDS_DRAG_CORNER
+wxLED_ALIGN_LEFT = gizmosc.wxLED_ALIGN_LEFT
+wxLED_ALIGN_RIGHT = gizmosc.wxLED_ALIGN_RIGHT
+wxLED_ALIGN_CENTER = gizmosc.wxLED_ALIGN_CENTER
+wxLED_ALIGN_MASK = gizmosc.wxLED_ALIGN_MASK
+wxLED_DRAW_FADED = gizmosc.wxLED_DRAW_FADED
 
 
 #-------------- USER INCLUDE -----------------------

@@ -18,6 +18,7 @@
 #include <wx/gizmos/dynamicsash.h>
 #include <wx/gizmos/editlbox.h>
 #include <wx/gizmos/splittree.h>
+#include <wx/gizmos/ledctrl.h>
 %}
 
 //---------------------------------------------------------------------------
@@ -322,6 +323,52 @@ public:
 };
 
 
+//----------------------------------------------------------------------
+//----------------------------------------------------------------------
+
+
+enum wxLEDValueAlign
+{
+    wxLED_ALIGN_LEFT,
+    wxLED_ALIGN_RIGHT,
+    wxLED_ALIGN_CENTER,
+
+    wxLED_ALIGN_MASK,
+
+    wxLED_DRAW_FADED,
+};
+
+
+class wxLEDNumberCtrl :	public wxControl
+{
+public:
+    // Constructors.
+    wxLEDNumberCtrl(wxWindow *parent, wxWindowID id = -1,
+                    const wxPoint& pos = wxDefaultPosition,
+                    const wxSize& size = wxDefaultSize,
+                    long style =  wxLED_ALIGN_LEFT | wxLED_DRAW_FADED);
+    %name(wxPreLEDNumberCtrl) wxLEDNumberCtrl();
+
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreLEDNumberCtrl:val._setOORInfo(val)"
+
+    // Create functions.
+    bool Create(wxWindow *parent, wxWindowID id = -1,
+                    const wxPoint& pos = wxDefaultPosition,
+                    const wxSize& size = wxDefaultSize,
+                    long style = wxLED_ALIGN_LEFT | wxLED_DRAW_FADED);
+
+    wxLEDValueAlign GetAlignment() const { return m_Alignment; }
+    bool GetDrawFaded() const { return m_DrawFaded; }
+    const wxString &GetValue() const { return m_Value; }
+
+    void SetAlignment(wxLEDValueAlign Alignment, bool Redraw = true);
+    void SetDrawFaded(bool DrawFaded, bool Redraw = true);
+    void SetValue(const wxString &Value, bool Redraw = true);
+
+};
+
+//----------------------------------------------------------------------
 //----------------------------------------------------------------------
 
 %init %{

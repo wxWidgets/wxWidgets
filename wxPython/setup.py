@@ -778,8 +778,9 @@ if not GL_ONLY and BUILD_GIZMOS:
     ext = Extension('gizmosc', [
                                 '%s/dynamicsash.cpp' % GIZMOLOC,
                                 '%s/editlbox.cpp' % GIZMOLOC,
-                                '%s/multicell.cpp' % GIZMOLOC,
+                                #'%s/multicell.cpp' % GIZMOLOC,
                                 '%s/splittree.cpp' % GIZMOLOC,
+                                '%s/ledctrl.cpp'   % GIZMOLOC,
                              ] + swig_sources,
 
                     include_dirs =  gizmos_includes,

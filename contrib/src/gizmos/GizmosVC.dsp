@@ -7,19 +7,19 @@
 CFG=GizmosVC - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "GizmosVC.mak".
-!MESSAGE 
+!MESSAGE
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "GizmosVC.mak" CFG="GizmosVC - Win32 Debug"
-!MESSAGE 
+!MESSAGE
 !MESSAGE Possible choices for configuration are:
-!MESSAGE 
+!MESSAGE
 !MESSAGE "GizmosVC - Win32 Release" (based on "Win32 (x86) Static Library")
 !MESSAGE "GizmosVC - Win32 Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE 
+!MESSAGE
 
 # Begin Project
 # PROP AllowPerConfigDependencies 0
@@ -76,7 +76,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo /out:"..\..\..\lib\gizmosd.lib"
 
-!ENDIF 
+!ENDIF
 
 # Begin Target
 
@@ -117,6 +117,10 @@ SOURCE=.\multicell.cpp
 # Begin Source File
 
 SOURCE=.\splittree.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\ledctrl.cpp
 # End Source File
 # End Target
 # End Project
