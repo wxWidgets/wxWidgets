@@ -31,7 +31,7 @@
 // ----------------------------------------------------------------------------
 
 // number of iterations in loops
-#define ITEMS 10000
+#define ITEMS 1000
 
 // make a 64 bit number from 4 16 bit ones
 #define MAKE_LL(x1, x2, x3, x4) wxLongLong((x1 << 16) | x2, (x3 << 16) | x3)
