@@ -63,9 +63,11 @@ wxCursorRefData::~wxCursorRefData()
 	else if ( m_disposeHandle )
 	{
 		::DisposeHandle( (Handle ) m_hCursor ) ;
-	} else if ( m_releaseHandle )
+	} 
+	else if ( m_releaseHandle )
 	{
-		::ReleaseResource( (Handle ) m_hCursor ) ;
+		// we don't release the resource since it may already
+		// be in use again
 	}
 }
 
@@ -166,16 +168,30 @@ wxCursor::wxCursor(const wxString& cursor_file, long flags, int hotSpotX, int ho
     #endif
     	
         wxStAppResource resload ;
-    	M_CURSORDATA->m_hCursor = ::GetNamedResource( 'crsr' , theName ) ;
-    	if ( M_CURSORDATA->m_hCursor )
+    	Handle resHandle = ::GetNamedResource( 'crsr' , theName ) ;
+    	if ( resHandle )
     	{
-    		M_CURSORDATA->m_isColorCursor = true ;
+			short theId = -1 ;
+    		OSType theType ;
+    		GetResInfo( resHandle , &theId , &theType , theName ) ;
+    		ReleaseResource( resHandle ) ;
+    		M_CURSORDATA->m_hCursor = GetCCursor( theId ) ;
+    		if ( M_CURSORDATA->m_hCursor )
+    			M_CURSORDATA->m_isColorCursor = true ;
     	}
     	else
     	{   	
-        	M_CURSORDATA->m_hCursor = ::GetNamedResource( 'CURS' , theName ) ;
-        	if ( M_CURSORDATA->m_hCursor )
-        		M_CURSORDATA->m_releaseHandle = true ;
+        	Handle resHandle = ::GetNamedResource( 'CURS' , theName ) ;
+    		if ( resHandle )
+	    	{
+				short theId = -1 ;
+	    		OSType theType ;
+	    		GetResInfo( resHandle , &theId , &theType , theName ) ;
+	    		ReleaseResource( resHandle ) ;
+	     		M_CURSORDATA->m_hCursor = GetCursor( theId ) ;
+        		if ( M_CURSORDATA->m_hCursor )
+        			M_CURSORDATA->m_releaseHandle = true ;
+        	}
         }
     }
     else
