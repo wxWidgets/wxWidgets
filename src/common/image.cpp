@@ -885,9 +885,9 @@ wxBitmap wxImage::ConvertToBitmap() const
                 for(i=0; i<width; i++ )
                 {
                     // was causing a code gen bug in cw : if( ( cr !=r) || (cg!=g) || (cb!=b) )
-                        unsigned char cr = (*(ptdata++)) ;
-                        unsigned char cg = (*(ptdata++)) ;
-                        unsigned char cb = (*(ptdata++)) ;
+                    unsigned char cr = (*(ptdata++)) ;
+                    unsigned char cg = (*(ptdata++)) ;
+                    unsigned char cb = (*(ptdata++)) ;
 
                     if( ( cr !=r) || (cg!=g) || (cb!=b) )
                     {
@@ -1109,11 +1109,11 @@ wxBitmap wxImage::ConvertToBitmap() const
     int g_mask = GetMaskGreen();
     int b_mask = GetMaskBlue();
 
-                CGrafPtr         origPort ;
-                GDHandle        origDevice ;
+    CGrafPtr origPort ;
+    GDHandle origDevice ;
 
-                GetGWorld( &origPort , &origDevice ) ;
-                SetGWorld( bitmap.GetHBITMAP() , NULL ) ;
+    GetGWorld( &origPort , &origDevice ) ;
+    SetGWorld( bitmap.GetHBITMAP() , NULL ) ;
 
     register unsigned char* data = GetData();
 
@@ -1122,15 +1122,15 @@ wxBitmap wxImage::ConvertToBitmap() const
     {
         for (int x = 0; x < width; x++)
         {
-                    unsigned char r = data[index++];
-                    unsigned char g = data[index++];
-                    unsigned char b = data[index++];
-                       RGBColor color ;
-                       color.red = ( r  << 8 ) + r ;
-                       color.green = ( g << 8 ) + g ;
-                       color.blue = ( b << 8 ) + b ;
-                       SetCPixel( x , y , &color ) ;
-               }
+            unsigned char r = data[index++];
+            unsigned char g = data[index++];
+            unsigned char b = data[index++];
+            RGBColor color ;
+            color.red = ( r  << 8 ) + r ;
+            color.green = ( g << 8 ) + g ;
+            color.blue = ( b << 8 ) + b ;
+            SetCPixel( x , y , &color ) ;
+        }
     }  // for height
 
            SetGWorld( origPort , origDevice ) ;
@@ -2608,8 +2608,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxImageModule, wxModule)
 unsigned long wxImage::CountColours( unsigned long stopafter )
 {
     wxHashTable h;
-    wxNode *node;
-    wxHNode *hnode;
+    wxObject dummy;
     unsigned char r, g, b, *p;
     unsigned long size, nentries, key;
 
@@ -2624,19 +2623,12 @@ unsigned long wxImage::CountColours( unsigned long stopafter )
         b = *(p++);
         key = (r << 16) | (g << 8) | b;
 
-        hnode = (wxHNode *) h.Get(key);
-
-        if (!hnode)
+        if (h.Get(key) == NULL)
         {
-            h.Put(key, (wxObject *)(new wxHNode));
+            h.Put(key, &dummy);
             nentries++;
         }
     }
-
-    // delete all HNodes
-    h.BeginFind();
-    while ((node = h.Next()) != NULL)
-        delete (wxHNode *)node->GetData();
 
     return nentries;
 }
@@ -2699,7 +2691,6 @@ struct wxRotationPoint
     double x, y;
 };
 
-static const wxRotationPixel gs_BlankPixel = {0,0,0};
 static const double gs_Epsilon = 1e-10;
 
 static inline int wxCint (double x)
@@ -2731,7 +2722,7 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
     int i;
     angle = -angle;     // screen coordinates are a mirror image of "real" coordinates
 
-        // Create pointer-based array to accelerate access to wxImage's data
+    // Create pointer-based array to accelerate access to wxImage's data
     wxRotationPixel ** data = new wxRotationPixel * [img.GetHeight()];
 
     data[0] = (wxRotationPixel *) img.GetData();
@@ -2741,13 +2732,14 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
         data[i] = data[i - 1] + img.GetWidth();
     }
 
-        // pre-compute coefficients for rotation formula (sine and cosine of the angle)
+    // pre-compute coefficients for rotation formula
+    // (sine and cosine of the angle)
     const double cos_angle = cos(angle);
     const double sin_angle = sin(angle);
 
-        // Create new Image to store the result
-            // First, find rectangle that covers the rotated image;  to do that,
-            // rotate the four corners
+    // Create new Image to store the result
+    // First, find rectangle that covers the rotated image;  to do that,
+    // rotate the four corners
 
     const wxRotationPoint p0 = centre_of_rotation;
 
@@ -2769,7 +2761,6 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
         *offset_after_rotation = wxPoint (x1, y1);
     }
 
-
     wxRotationPixel ** result_data = new wxRotationPixel * [rotated.GetHeight()];
 
     result_data[0] = (wxRotationPixel *) rotated.GetData();
@@ -2779,9 +2770,27 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
         result_data[i] = result_data[i - 1] + rotated.GetWidth();
     }
 
-        // Now, for each point of the rotated image, find where it came from, by
-        // performing an inverse rotation (a rotation of -angle) and getting the
-        // pixel at those coordinates
+    // GRG: if the original image has a mask, use its RGB values
+    //      as the blank pixel, else, fall back to default (black).
+    //
+    wxRotationPixel blankPixel = {{ 0, 0, 0 }};
+
+    if (HasMask())
+    {
+        unsigned char r = GetMaskRed();
+        unsigned char g = GetMaskGreen();
+        unsigned char b = GetMaskBlue();
+        rotated.SetMaskColour( r, g, b );
+        blankPixel.rgb[0] = r;
+        blankPixel.rgb[1] = g;
+        blankPixel.rgb[2] = b;
+    }
+
+    // Now, for each point of the rotated image, find where it came from, by
+    // performing an inverse rotation (a rotation of -angle) and getting the
+    // pixel at those coordinates
+
+    // GRG: I'd suggest to take the (interpolating) test out of the loops
 
     int x;
     for (x = 0; x < rotated.GetWidth(); x++)
@@ -2795,17 +2804,17 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
                 if (0 < src.x && src.x < img.GetWidth() - 1 &&
                     0 < src.y && src.y < img.GetHeight() - 1)
                 {
-                        // interpolate using the 4 enclosing grid-points.  Those
-                        // points can be obtained using floor and ceiling of the
-                        // exact coordinates of the point
+                    // interpolate using the 4 enclosing grid-points.  Those
+                    // points can be obtained using floor and ceiling of the
+                    // exact coordinates of the point
 
                     const int x1 = wxCint(floor(src.x));
                     const int y1 = wxCint(floor(src.y));
                     const int x2 = wxCint(ceil(src.x));
                     const int y2 = wxCint(ceil(src.y));
 
-                        // get four points and the distances (square of the distance,
-                        // for efficiency reasons) for the interpolation formula
+                    // get four points and the distances (square of the distance,
+                    // for efficiency reasons) for the interpolation formula
                     const wxRotationPixel & v1 = data[y1][x1];
                     const wxRotationPixel & v2 = data[y1][x2];
                     const wxRotationPixel & v3 = data[y2][x2];
@@ -2816,11 +2825,11 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
                     const double d3 = (src.x - x2) * (src.x - x2) + (src.y - y2) * (src.y - y2);
                     const double d4 = (src.x - x1) * (src.x - x1) + (src.y - y2) * (src.y - y2);
 
-                        // Now interpolate as a weighted average of the four surrounding
-                        // points, where the weights are the distances to each of those points
+                    // Now interpolate as a weighted average of the four surrounding
+                    // points, where the weights are the distances to each of those points
 
-                        // If the point is exactly at one point of the grid of the source
-                        // image, then don't interpolate -- just assign the pixel
+                    // If the point is exactly at one point of the grid of the source
+                    // image, then don't interpolate -- just assign the pixel
 
                     if (d1 < gs_Epsilon)        // d1,d2,d3,d4 are positive -- no need for abs()
                     {
@@ -2847,14 +2856,14 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
                         {
                             result_data[y][x].rgb[i] =
                                 (unsigned char) ( (w1 * v1.rgb[i] + w2 * v2.rgb[i] +
-                                                             w3 * v3.rgb[i] + w4 * v4.rgb[i]) /
-                                                             (w1 + w2 + w3 + w4) );
+                                                   w3 * v3.rgb[i] + w4 * v4.rgb[i]) /
+                                                  (w1 + w2 + w3 + w4) );
                         }
                     }
                 }
                 else
                 {
-                    result_data[y][x] = gs_BlankPixel;
+                    result_data[y][x] = blankPixel;
                 }
             }
             else
@@ -2869,7 +2878,7 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
                 }
                 else
                 {
-                    result_data[y][x] = gs_BlankPixel;
+                    result_data[y][x] = blankPixel;
                 }
             }
         }
