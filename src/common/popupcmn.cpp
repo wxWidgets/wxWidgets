@@ -257,13 +257,13 @@ void wxPopupTransientWindow::Popup(wxWindow *winFocus)
     // otherwise everything else breaks down
     m_focus = FindFocus();
     if ( m_focus )
+#endif // __WXMSW__
     {
         delete m_handlerFocus;
         m_handlerFocus = new wxPopupFocusHandler(this);
 
         m_focus->PushEventHandler(m_handlerFocus);
     }
-#endif // __WXMSW__
 }
 
 void wxPopupTransientWindow::Dismiss()
