@@ -1,7 +1,7 @@
 Source: wxwindows=V
 Section: libs
 Priority: optional
-Build-Depends: debhelper, flex, bison, libgtk1.2-dev, python-dev (>=1.5.2), python-distutils, zlib1g-dev, libjpeg62-dev, libpng2-dev, libtiff3g-dev, libgl-dev, libesd0-dev
+Build-Depends: debhelper (>=1.1.17), flex, bison, libgtk1.2-dev, python-dev (>=1.5.2), python-distutils, zlib1g-dev, libjpeg62-dev, libpng2-dev, libtiff3g-dev, libgl-dev, libesd0-dev
 Maintainer: Ron Lee <ron@debian.org>
 Standards-Version: 3.2.1.2
 
