@@ -108,6 +108,7 @@ public:
     void OnToggleToolbarSize(wxCommandEvent& event);
     void OnToggleToolbarOrient(wxCommandEvent& event);
     void OnToggleToolbarRows(wxCommandEvent& event);
+    void OnToggleCustomDisabled(wxCommandEvent& event);
 
     void OnEnablePrint(wxCommandEvent& WXUNUSED(event)) { DoEnablePrint(); }
     void OnDeletePrint(wxCommandEvent& WXUNUSED(event)) { DoDeletePrint(); }
@@ -144,7 +145,8 @@ private:
 
     bool                m_smallToolbar,
                         m_horzToolbar,
-                        m_horzText;
+                        m_horzText,
+                        m_useCustomDisabled;
     size_t              m_rows;             // 1 or 2 only
 
     // the number of print buttons we have (they're added/removed dynamically)
@@ -170,6 +172,7 @@ enum
     IDM_TOOLBAR_TOGGLETOOLBARSIZE = 200,
     IDM_TOOLBAR_TOGGLETOOLBARORIENT,
     IDM_TOOLBAR_TOGGLETOOLBARROWS,
+    IDM_TOOLBAR_TOGGLECUSTOMDISABLED,
     IDM_TOOLBAR_ENABLEPRINT,
     IDM_TOOLBAR_DELETEPRINT,
     IDM_TOOLBAR_INSERTPRINT,
@@ -212,6 +215,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(IDM_TOOLBAR_TOGGLETOOLBARSIZE, MyFrame::OnToggleToolbarSize)
     EVT_MENU(IDM_TOOLBAR_TOGGLETOOLBARORIENT, MyFrame::OnToggleToolbarOrient)
     EVT_MENU(IDM_TOOLBAR_TOGGLETOOLBARROWS, MyFrame::OnToggleToolbarRows)
+    EVT_MENU(IDM_TOOLBAR_TOGGLECUSTOMDISABLED, MyFrame::OnToggleCustomDisabled)
 
     EVT_MENU(IDM_TOOLBAR_ENABLEPRINT, MyFrame::OnEnablePrint)
     EVT_MENU(IDM_TOOLBAR_DELETEPRINT, MyFrame::OnDeletePrint)
@@ -302,33 +306,47 @@ void MyFrame::RecreateToolbar()
 #endif
 
     // Set up toolbar
-    wxBitmap toolBarBitmaps[8];
+    enum
+    {
+        Tool_new,
+        Tool_open,
+        Tool_save,
+        Tool_copy,
+        Tool_cut,
+        Tool_paste,
+        Tool_print,
+        Tool_help,
+        Tool_Max
+    };
+
+    wxBitmap toolBarBitmaps[Tool_Max];
 
 #if USE_XPM_BITMAPS
-    toolBarBitmaps[0] = wxBitmap(new_xpm);
-    toolBarBitmaps[1] = wxBitmap(open_xpm);
-    toolBarBitmaps[2] = wxBitmap(save_xpm);
-    toolBarBitmaps[3] = wxBitmap(copy_xpm);
-    toolBarBitmaps[4] = wxBitmap(cut_xpm);
-    toolBarBitmaps[5] = wxBitmap(paste_xpm);
-    toolBarBitmaps[6] = wxBitmap(print_xpm);
-    toolBarBitmaps[7] = wxBitmap(help_xpm);
+    #define INIT_TOOL_BMP(bmp) \
+        toolBarBitmaps[Tool_##bmp] = wxBitmap(bmp##_xpm)
 #else // !USE_XPM_BITMAPS
-    toolBarBitmaps[0] = wxBITMAP(new);
-    toolBarBitmaps[1] = wxBITMAP(open);
-    toolBarBitmaps[2] = wxBITMAP(save);
-    toolBarBitmaps[3] = wxBITMAP(copy);
-    toolBarBitmaps[4] = wxBITMAP(cut);
-    toolBarBitmaps[5] = wxBITMAP(paste);
-    toolBarBitmaps[6] = wxBITMAP(print);
-    toolBarBitmaps[7] = wxBITMAP(help);
+    #define INIT_TOOL_BMP(bmp) \
+        toolBarBitmaps[Tool_##bmp] = wxBITMAP(bmp)
 #endif // USE_XPM_BITMAPS/!USE_XPM_BITMAPS
+
+    INIT_TOOL_BMP(new);
+    INIT_TOOL_BMP(open);
+    INIT_TOOL_BMP(save);
+    INIT_TOOL_BMP(copy);
+    INIT_TOOL_BMP(cut);
+    INIT_TOOL_BMP(paste);
+    INIT_TOOL_BMP(print);
+    INIT_TOOL_BMP(help);
+
+    int w = toolBarBitmaps[Tool_new].GetWidth(),
+        h = toolBarBitmaps[Tool_new].GetHeight();
 
     if ( !m_smallToolbar )
     {
-        int w = 2*toolBarBitmaps[0].GetWidth(),
-            h = 2*toolBarBitmaps[0].GetHeight();
-        for ( size_t n = 0; n < WXSIZEOF(toolBarBitmaps); n++ )
+        w *= 2;
+        h *= 2;
+
+        for ( size_t n = Tool_new; n < WXSIZEOF(toolBarBitmaps); n++ )
         {
             toolBarBitmaps[n] =
                 wxBitmap(toolBarBitmaps[n].ConvertToImage().Scale(w, h));
@@ -337,8 +355,8 @@ void MyFrame::RecreateToolbar()
         toolBar->SetToolBitmapSize(wxSize(w, h));
     }
 
-    toolBar->AddTool(wxID_NEW, _T("New"), toolBarBitmaps[0], _T("New file"));
-    toolBar->AddTool(wxID_OPEN, _T("Open"), toolBarBitmaps[1], _T("Open file"));
+    toolBar->AddTool(wxID_NEW, _T("New"), toolBarBitmaps[Tool_new], _T("New file"));
+    toolBar->AddTool(wxID_OPEN, _T("Open"), toolBarBitmaps[Tool_open], _T("Open file"));
 
     // the generic toolbar doesn't really support this
 #if (wxUSE_TOOLBAR_NATIVE && !USE_GENERIC_TBAR) && !defined(__WXX11__) || defined(__WXUNIVERSAL__)
@@ -355,13 +373,35 @@ void MyFrame::RecreateToolbar()
     }
 #endif // toolbars which don't support controls
 
-    toolBar->AddTool(wxID_SAVE, _T("Save"), toolBarBitmaps[2], _T("Toggle button 1"), wxITEM_CHECK);
-    toolBar->AddTool(wxID_COPY, _T("Copy"), toolBarBitmaps[3], _T("Toggle button 2"), wxITEM_CHECK);
-    toolBar->AddTool(wxID_CUT, _T("Cut"), toolBarBitmaps[4], _T("Toggle/Untoggle help button"));
-    toolBar->AddTool(wxID_PASTE, _T("Paste"), toolBarBitmaps[5], _T("Paste"));
-    toolBar->AddTool(wxID_PRINT, _T("Print"), toolBarBitmaps[6], _T("Delete this tool. This is a very long tooltip to test whether it does the right thing when the tooltip is more than Windows can cope with."));
+    toolBar->AddTool(wxID_SAVE, _T("Save"), toolBarBitmaps[Tool_save], _T("Toggle button 1"), wxITEM_CHECK);
+    toolBar->AddTool(wxID_COPY, _T("Copy"), toolBarBitmaps[Tool_copy], _T("Toggle button 2"), wxITEM_CHECK);
+    toolBar->AddTool(wxID_CUT, _T("Cut"), toolBarBitmaps[Tool_cut], _T("Toggle/Untoggle help button"));
+    toolBar->AddTool(wxID_PASTE, _T("Paste"), toolBarBitmaps[Tool_paste], _T("Paste"));
+
+    if ( m_useCustomDisabled )
+    {
+        wxBitmap bmpDisabled(w, h);
+        {
+            wxMemoryDC dc;
+            dc.SelectObject(bmpDisabled);
+            dc.DrawBitmap(toolBarBitmaps[Tool_print], 0, 0);
+
+            wxPen pen(*wxRED, 5);
+            dc.SetPen(pen);
+            dc.DrawLine(0, 0, w, h);
+        }
+
+        toolBar->AddTool(wxID_PRINT, _T("Print"), toolBarBitmaps[Tool_print],
+                         bmpDisabled);
+    }
+    else
+    {
+        toolBar->AddTool(wxID_PRINT, _T("Print"), toolBarBitmaps[Tool_print],
+                         _T("Delete this tool. This is a very long tooltip to test whether it does the right thing when the tooltip is more than Windows can cope with."));
+    }
+
     toolBar->AddSeparator();
-    toolBar->AddTool(wxID_HELP, _T("Help"), toolBarBitmaps[7], _T("Help button"), wxITEM_CHECK);
+    toolBar->AddTool(wxID_HELP, _T("Help"), toolBarBitmaps[Tool_help], _T("Help button"), wxITEM_CHECK);
 
     // after adding the buttons to the toolbar, must call Realize() to reflect
     // the changes
@@ -388,6 +428,7 @@ MyFrame::MyFrame(wxFrame* parent,
     m_smallToolbar = true;
     m_horzToolbar = true;
     m_horzText = false;
+    m_useCustomDisabled = false;
     m_rows = 1;
     m_nPrint = 1;
 
@@ -424,6 +465,11 @@ MyFrame::MyFrame(wxFrame* parent,
     tbarMenu->AppendCheckItem(IDM_TOOLBAR_TOGGLETOOLBARROWS,
                               _T("Toggle number of &rows\tCtrl-R"),
                               _T("Toggle number of toolbar rows between 1 and 2"));
+
+    tbarMenu->AppendCheckItem(IDM_TOOLBAR_TOGGLECUSTOMDISABLED,
+                              _T("Use c&ustom disabled images\tCtrl-U"),
+                              _T("Switch between using system-generated and custom disabled images"));
+
 
     tbarMenu->AppendSeparator();
 
@@ -579,6 +625,13 @@ void MyFrame::OnToggleToolbarRows(wxCommandEvent& WXUNUSED(event))
     GetToolBar()->SetRows(m_horzToolbar ? m_rows : 10 / m_rows);
 
     //RecreateToolbar(); -- this is unneeded
+}
+
+void MyFrame::OnToggleCustomDisabled(wxCommandEvent& WXUNUSED(event))
+{
+    m_useCustomDisabled = !m_useCustomDisabled;
+
+    RecreateToolbar();
 }
 
 void MyFrame::OnToggleToolbarOrient(wxCommandEvent& WXUNUSED(event))
