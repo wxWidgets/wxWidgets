@@ -42,9 +42,6 @@
     #include "wx/beforestd.h"
     #include <list>
     #include "wx/afterstd.h"
-    #if defined(__WXMSW__) && defined(__MINGW32__)
-        #include "wx/msw/winundef.h"
-    #endif
 #endif
 
 // ----------------------------------------------------------------------------

@@ -13,6 +13,9 @@
     See the comments in beforestd.h.
  */
 
+#if defined(__WXMSW__) && defined(__MINGW32__)
+    #include "wx/msw/winundef.h"
+#endif
 #ifdef _MSC_VER
 #   pragma warning(pop)
 #endif

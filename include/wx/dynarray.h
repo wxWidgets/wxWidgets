@@ -24,9 +24,6 @@
     #include <vector>
     #include <algorithm>
     #include "wx/afterstd.h"
-    #if defined(__WXMSW__) && defined(__MINGW32__)
-        #include "wx/msw/winundef.h"
-    #endif
 #endif
 
 /*
@@ -457,7 +454,7 @@ public:                                                               \
 // ----------------------------------------------------------------------------
 
 #define _WX_DEFINE_SORTED_TYPEARRAY_2(T, name, base, defcomp, classexp, comptype)\
-wxCOMPILE_TIME_ASSERT2(sizeof(T) <= sizeof(void *),                   \
+wxCOMPILE_TIME_ASSERT2(sizeof(T) <= sizeof(base::base_type),          \
                        TypeTooBigToBeStoredInSorted##base,            \
                        name);                                         \
 classexp name : public base                                           \
