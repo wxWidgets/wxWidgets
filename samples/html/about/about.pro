@@ -18,4 +18,4 @@ WXDIR=../../..
 # project files
 SOURCES = about.cpp
 RC_FILE = about.rc
-TARGET  = about
+TARGET  = htmlabout

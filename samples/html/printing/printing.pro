@@ -18,4 +18,4 @@ WXDIR=../../..
 # project files
 SOURCES = printing.cpp
 RC_FILE = printing.rc
-TARGET  = printing
+TARGET  = htmlprinting

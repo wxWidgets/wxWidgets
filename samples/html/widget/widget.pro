@@ -18,4 +18,4 @@ WXDIR=../../..
 # project files
 SOURCES = widget.cpp
 RC_FILE = widget.rc
-TARGET  = widget
+TARGET  = htmlwidget

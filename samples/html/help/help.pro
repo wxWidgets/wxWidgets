@@ -1,4 +1,4 @@
-# this is the project file for the help wxWindows sample
+# this is the project file for the html/help wxWindows sample
 
 # we generate the VC++ IDE project file, comment this line
 # to generate a makefile for (n)make
@@ -18,4 +18,4 @@ WXDIR=../../..
 # project files
 SOURCES = help.cpp
 RC_FILE = help.rc
-TARGET  = help
+TARGET  = htmlhelp

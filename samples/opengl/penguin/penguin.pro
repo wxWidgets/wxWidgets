@@ -1,4 +1,4 @@
-# this is the project file for the penguin wxWindows sample
+# this is the project file for the opengl/penguin wxWindows sample
 
 # we generate the VC++ IDE project file, comment this line
 # to generate a makefile for (n)make
@@ -18,4 +18,4 @@ WXDIR=../../..
 # project files
 SOURCES = penguin.cpp
 RC_FILE = penguin.rc
-TARGET  = penguin
+TARGET  = glpenguin

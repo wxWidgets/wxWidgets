@@ -18,4 +18,4 @@ WXDIR=../../..
 # project files
 SOURCES = helpview.cpp
 RC_FILE = helpview.rc
-TARGET  = helpview
+TARGET  = htmlhelpview

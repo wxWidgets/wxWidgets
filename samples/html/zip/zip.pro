@@ -18,4 +18,4 @@ WXDIR=../../..
 # project files
 SOURCES = zip.cpp
 RC_FILE = zip.rc
-TARGET  = zip
+TARGET  = htmlzip

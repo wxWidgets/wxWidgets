@@ -1,4 +1,4 @@
-# this is the project file for the isosurf wxWindows sample
+# this is the project file for the opengl/isosurf wxWindows sample
 
 # we generate the VC++ IDE project file, comment this line
 # to generate a makefile for (n)make
@@ -18,4 +18,4 @@ WXDIR=../../..
 # project files
 SOURCES = isosurf.cpp
 RC_FILE = isosurf.rc
-TARGET  = isosurf
+TARGET  = glisosurf

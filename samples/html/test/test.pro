@@ -18,4 +18,4 @@ WXDIR=../../..
 # project files
 SOURCES = test.cpp
 RC_FILE = test.rc
-TARGET  = test
+TARGET  = htmltest

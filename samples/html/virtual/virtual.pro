@@ -18,4 +18,4 @@ WXDIR=../../..
 # project files
 SOURCES = virtual.cpp
 RC_FILE = virtual.rc
-TARGET  = virtual
+TARGET  = htmlvirtual

@@ -1,4 +1,4 @@
-# this is the project file for the cube wxWindows sample
+# this is the project file for the opengl/cube wxWindows sample
 
 # we generate the VC++ IDE project file, comment this line
 # to generate a makefile for (n)make
@@ -18,4 +18,4 @@ WXDIR=../../..
 # project files
 SOURCES = cube.cpp
 RC_FILE = cube.rc
-TARGET  = cube
+TARGET  = glcube
