@@ -391,7 +391,14 @@ class WXDLLEXPORT wxGrid : public wxScrolledWindow
 {
 public:
     wxGrid()
-        { Create(); }
+        { 
+            m_table          = (wxGridTableBase *) NULL;
+            m_gridWin        = (wxGridWindow *) NULL;
+            m_rowLabelWin    = (wxGridRowLabelWindow *) NULL;
+            m_colLabelWin    = (wxGridColLabelWindow *) NULL;
+            m_cornerLabelWin = (wxGridCornerLabelWindow *) NULL;
+            m_cellEditCtrl   = (wxWindow *) NULL;
+        }
 
     wxGrid( wxWindow *parent,
             wxWindowID id,
@@ -671,8 +678,8 @@ public:
     // limited by TopLeft and BottomRight cell in device coords and clipped
     //  to the client size of the grid window.
     //
-    wxRect BlockToDeviceRect( const wxGridCellCoords & TopLeft,
-			      const wxGridCellCoords & BottomRight );
+    wxRect BlockToDeviceRect( const wxGridCellCoords & topLeft,
+			      const wxGridCellCoords & bottomRight );
 
     // This function returns the rectangle that encloses the selected cells
     // in device coords and clipped to the client size of the grid window.
@@ -960,9 +967,6 @@ protected:
     //
     bool GetModelValues();
     bool SetModelValues();
-
-
-    ////////////////////// Public section ////////////////////
 
 
     DECLARE_DYNAMIC_CLASS( wxGrid )
