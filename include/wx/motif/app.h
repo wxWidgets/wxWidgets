@@ -84,8 +84,6 @@ public:
     wxXVisualInfo* GetVisualInfo(WXDisplay* display);
 
 private:
-    wxEventLoop*    m_eventLoop;
-    
     // Motif-specific
     WXAppContext          m_appContext;
     WXColormap            m_mainColormap;

@@ -120,7 +120,7 @@ wxApp::wxApp()
     argc = 0;
     argv = NULL;
 
-    m_eventLoop = new wxEventLoop;
+    m_mainLoop = new wxEventLoop;
     m_mainColormap = (WXColormap) NULL;
     m_appContext = (WXAppContext) NULL;
     m_initialDisplay = (WXDisplay*) 0;
@@ -129,7 +129,7 @@ wxApp::wxApp()
 
 wxApp::~wxApp()
 {
-    delete m_eventLoop;
+    delete m_mainLoop;
 
     for( wxPerDisplayDataMap::iterator it  = m_perDisplayData->begin(),
                                        end = m_perDisplayData->end();
@@ -157,7 +157,7 @@ int wxApp::MainLoop()
         XDefaultRootWindow(XtDisplay((Widget) wxTheApp->GetTopLevelWidget())),
         PropertyChangeMask);
 
-    m_eventLoop->Run();
+    m_mainLoop->Run();
 
     return 0;
 }
