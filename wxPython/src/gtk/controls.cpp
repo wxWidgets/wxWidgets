@@ -6396,6 +6396,39 @@ static PyObject *_wrap_wxTextCtrl_GetSelection(PyObject *self, PyObject *args, P
     return _resultobj;
 }
 
+#define wxTextCtrl_GetStringSelection(_swigobj)  (_swigobj->GetStringSelection())
+static PyObject *_wrap_wxTextCtrl_GetStringSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTextCtrl_GetStringSelection",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_GetStringSelection. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxTextCtrl_GetStringSelection(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
 #define wxTextCtrl_Clear(_swigobj)  (_swigobj->Clear())
 static PyObject *_wrap_wxTextCtrl_Clear(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -11093,6 +11126,7 @@ static PyMethodDef controlscMethods[] = {
 	 { "wxTextCtrl_Remove", (PyCFunction) _wrap_wxTextCtrl_Remove, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_Replace", (PyCFunction) _wrap_wxTextCtrl_Replace, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_Clear", (PyCFunction) _wrap_wxTextCtrl_Clear, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextCtrl_GetStringSelection", (PyCFunction) _wrap_wxTextCtrl_GetStringSelection, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_GetSelection", (PyCFunction) _wrap_wxTextCtrl_GetSelection, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_IsEditable", (PyCFunction) _wrap_wxTextCtrl_IsEditable, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_IsModified", (PyCFunction) _wrap_wxTextCtrl_IsModified, METH_VARARGS | METH_KEYWORDS },

@@ -118,6 +118,34 @@ static void *SwigwxSizerItemTowxObject(void *ptr) {
     return (void *) dest;
 }
 
+#define wxSizerItem_DeleteWindows(_swigobj)  (_swigobj->DeleteWindows())
+static PyObject *_wrap_wxSizerItem_DeleteWindows(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSizerItem * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxSizerItem_DeleteWindows",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizerItem_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizerItem_DeleteWindows. Expected _wxSizerItem_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxSizerItem_DeleteWindows(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxSizerItem_GetPosition(_swigobj)  (_swigobj->GetPosition())
 static PyObject *_wrap_wxSizerItem_GetPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -1804,6 +1832,65 @@ static PyObject *_wrap_wxSizer_SetSizeHints(PyObject *self, PyObject *args, PyOb
     return _resultobj;
 }
 
+#define wxSizer_Clear(_swigobj,_swigarg0)  (_swigobj->Clear(_swigarg0))
+static PyObject *_wrap_wxSizer_Clear(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSizer * _arg0;
+    bool  _arg1 = (bool ) FALSE;
+    PyObject * _argo0 = 0;
+    int tempbool1 = (int) FALSE;
+    char *_kwnames[] = { "self","delete_windows", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|i:wxSizer_Clear",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizer_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizer_Clear. Expected _wxSizer_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxSizer_Clear(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxSizer_DeleteWindows(_swigobj)  (_swigobj->DeleteWindows())
+static PyObject *_wrap_wxSizer_DeleteWindows(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSizer * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxSizer_DeleteWindows",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizer_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizer_DeleteWindows. Expected _wxSizer_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxSizer_DeleteWindows(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 static PyObject * wxSizer_GetChildren(wxSizer *self) {
             wxList& list = self->GetChildren();
             return wxPy_ConvertList(&list, "wxSizerItem");
@@ -2923,6 +3010,8 @@ static PyMethodDef sizerscMethods[] = {
 	 { "wxPySizer__setCallbackInfo", (PyCFunction) _wrap_wxPySizer__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPySizer", (PyCFunction) _wrap_new_wxPySizer, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizer_GetChildren", (PyCFunction) _wrap_wxSizer_GetChildren, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSizer_DeleteWindows", (PyCFunction) _wrap_wxSizer_DeleteWindows, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSizer_Clear", (PyCFunction) _wrap_wxSizer_Clear, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizer_SetSizeHints", (PyCFunction) _wrap_wxSizer_SetSizeHints, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizer_Fit", (PyCFunction) _wrap_wxSizer_Fit, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizer_Layout", (PyCFunction) _wrap_wxSizer_Layout, METH_VARARGS | METH_KEYWORDS },
@@ -2971,6 +3060,7 @@ static PyMethodDef sizerscMethods[] = {
 	 { "wxSizerItem_CalcMin", (PyCFunction) _wrap_wxSizerItem_CalcMin, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizerItem_GetSize", (PyCFunction) _wrap_wxSizerItem_GetSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizerItem_GetPosition", (PyCFunction) _wrap_wxSizerItem_GetPosition, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSizerItem_DeleteWindows", (PyCFunction) _wrap_wxSizerItem_DeleteWindows, METH_VARARGS | METH_KEYWORDS },
 	 { NULL, NULL }
 };
 #ifdef __cplusplus
