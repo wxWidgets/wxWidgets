@@ -74,7 +74,9 @@
 #endif
 #include <stdarg.h>
 
-#include "wx/dde.h"         // for WX_DDE hack in wxExecute
+#if wxUSE_IPC
+    #include "wx/dde.h"         // for WX_DDE hack in wxExecute
+#endif // wxUSE_IPC
 
 // ----------------------------------------------------------------------------
 // constants
@@ -177,12 +179,13 @@ LRESULT APIENTRY _EXPORT wxExecuteWindowCbk(HWND hWnd, UINT message,
         return DefWindowProc(hWnd, message, wParam, lParam);
     }
 }
-#endif
+#endif // Win32
 
 long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
 {
     wxCHECK_MSG( !!cmd, 0, wxT("empty command in wxExecute") );
 
+#if wxUSE_IPC
     // DDE hack: this is really not pretty, but we need to allow this for
     // transparent handling of DDE servers in wxMimeTypesManager. Usually it
     // returns the command which should be run to view/open/... a file of the
@@ -247,6 +250,7 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
         }
     }
     else
+#endif // wxUSE_IPC
     {
         // no DDE
         command = cmd;
@@ -410,6 +414,7 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
         return pi.dwProcessId;
     }
 
+#if wxUSE_IPC
     // second part of DDE hack: now establish the DDE conversation with the
     // just launched process
     if ( !!ddeServer )
@@ -423,6 +428,7 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
             wxLogError(_("Couldn't launch DDE server '%s'."), command.c_str());
         }
     }
+#endif // wxUSE_IPC
 
     if ( !sync )
     {

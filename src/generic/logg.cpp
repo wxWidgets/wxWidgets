@@ -198,7 +198,7 @@ void wxLogGui::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
                         }
                     }
 
-                    if ( pFrame != NULL )
+                    if ( pFrame && pFrame->GetStatusBar() )
                         pFrame->SetStatusText(szString);
                 }
 #endif // wxUSE_STATUSBAR
