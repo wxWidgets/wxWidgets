@@ -1,8 +1,9 @@
 from wxPython.wx import *
 from wxPython.lib.maskededit import Field, wxMaskedTextCtrl, wxMaskedComboBox, wxIpAddrCtrl, states, months
 from wxPython.lib.maskededit import __doc__ as overviewdoc
+from wxPython.lib.maskededit import autoformats
 from wxPython.lib.scrolledpanel import wxScrolledPanel
-import string
+import string, sys, traceback
 
 class demoMixin:
     """
@@ -12,7 +13,7 @@ class demoMixin:
         description = wxStaticText( self, -1, "Description", )
         mask        = wxStaticText( self, -1, "Mask Value" )
         formatcode  = wxStaticText( self, -1, "Format" )
-        regex       = wxStaticText( self, -1, "Regexp\nValidator(opt.)" )
+        regex       = wxStaticText( self, -1, "Regexp Validator(opt.)" )
         ctrl        = wxStaticText( self, -1, "wxMaskedEdit Ctrl" )
 
         description.SetFont( wxFont(9, wxSWISS, wxNORMAL, wxBOLD))
@@ -72,13 +73,12 @@ class demoPage1(wxScrolledPanel, demoMixin):
 
         label = wxStaticText( self, -1, """\
 Here are some basic wxMaskedTextCtrls to give you an idea of what you can do
-with this control.  Note that all controls have been auto-sized by including
-F in the format code.
+with this control.  Note that all controls have been auto-sized by including 'F' in
+the format codes.
 
-Try entering nonsensical or partial values in validated fields to see what
-happens.  Note that the State and Last Name fields are list-limited (valid
-last names are: Smith, Jones, Williams).  Signs on numbers can be toggled
-with the minus key.
+Try entering nonsensical or partial values in validated fields to see what happens.
+Note that the State and Last Name fields are list-limited (valid last names are:
+Smith, Jones, Williams).  Signs on numbers can be toggled with the minus key.
 """)
         label.SetForegroundColour( "Blue" )
         header = wxBoxSizer( wxHORIZONTAL )
@@ -113,6 +113,7 @@ with the minus key.
        ("Zip plus 4",       "#{5}-#{4}",            "", 'F',        "\d{5}-(\s{4}|\d{4})",              '','',''),
        ("Customer No",      "\CAA-###",             "", 'F!',       "C[A-Z]{2}-\d{3}",                  '','',''),
        ("Invoice Total",    "#{9}.##",              "", 'F-_,',     "",                                 '','',''),
+       ("Integer",          "#{9}",                 "", 'F-_',      "",                                 '','',''),
        ]
 
         self.layoutGeneralTable(controls, grid)
@@ -137,6 +138,50 @@ with the minus key.
 
 
 class demoPage2(wxScrolledPanel, demoMixin):
+    def __init__( self, parent, log ):
+        self.log = log
+        wxScrolledPanel.__init__( self, parent, -1 )
+        self.sizer = wxBoxSizer( wxVERTICAL )
+
+        label = wxStaticText( self, -1, """\
+All these controls have been created by passing a single parameter, the autoformat code.
+The class contains an internal dictionary of types and formats (autoformats).
+Many of these already do complicated validation; To see some examples, try
+29 Feb 2002 vs. 2004 for the date formats, or email address validation.
+""")
+
+        label.SetForegroundColour( "Blue" )
+        self.sizer.Add( label, 0, wxALIGN_LEFT|wxALL, 5 )
+
+        description = wxStaticText( self, -1, "Description")
+        autofmt     = wxStaticText( self, -1, "AutoFormat Code")
+        ctrl        = wxStaticText( self, -1, "wxMaskedEdit Control")
+
+        description.SetFont( wxFont( 9, wxSWISS, wxNORMAL, wxBOLD ) )
+        autofmt.SetFont( wxFont( 9, wxSWISS, wxNORMAL, wxBOLD ) )
+        ctrl.SetFont( wxFont( 9, wxSWISS, wxNORMAL, wxBOLD ) )
+
+        grid = wxFlexGridSizer( 0, 3, vgap=10, hgap=5 )
+        grid.Add( description, 0, wxALIGN_LEFT )
+        grid.Add( autofmt,     0, wxALIGN_LEFT )
+        grid.Add( ctrl,        0, wxALIGN_LEFT )
+
+        for autoformat, desc in autoformats:
+            grid.Add( wxStaticText( self, -1, desc), 0, wxALIGN_LEFT )
+            grid.Add( wxStaticText( self, -1, autoformat), 0, wxALIGN_LEFT )
+            grid.Add( wxMaskedTextCtrl( self, -1, "",
+                                              autoformat       = autoformat,
+                                              demo             = True,
+                                              name             = autoformat),
+                            0, wxALIGN_LEFT )
+
+        self.sizer.Add( grid, 0, wxALIGN_LEFT|wxALL, border=5 )
+        self.SetSizer( self.sizer )
+        self.SetAutoLayout( 1 )
+        self.SetupScrolling()
+
+
+class demoPage3(wxScrolledPanel, demoMixin):
     def __init__(self, parent, log):
         self.log = log
         wxScrolledPanel.__init__(self, parent, -1)
@@ -182,76 +227,7 @@ has a legal range specified.
         self.changeControlParams( event, "validRequired", True, False )
 
 
-
-class demoPage3( wxScrolledPanel, demoMixin ):
-    def __init__( self, parent, log ):
-        self.log = log
-        wxScrolledPanel.__init__( self, parent, -1 )
-        self.sizer = wxBoxSizer( wxVERTICAL )
-
-        label = wxStaticText( self, -1, """\
-All these controls have been created by passing a single parameter, the autoformat code.
-The class contains an internal dictionary of types and formats (autoformats).
-To see a great example of validations in action, try entering a bad email address,
-then tab out.""")
-
-        label.SetForegroundColour( "Blue" )
-        self.sizer.Add( label, 0, wxALIGN_LEFT|wxALL, 5 )
-
-        description = wxStaticText( self, -1, "Description")
-        autofmt     = wxStaticText( self, -1, "AutoFormat Code")
-        ctrl        = wxStaticText( self, -1, "wxMaskedEdit Control")
-
-        description.SetFont( wxFont( 9, wxSWISS, wxNORMAL, wxBOLD ) )
-        autofmt.SetFont( wxFont( 9, wxSWISS, wxNORMAL, wxBOLD ) )
-        ctrl.SetFont( wxFont( 9, wxSWISS, wxNORMAL, wxBOLD ) )
-
-        grid = wxFlexGridSizer( 0, 3, vgap=10, hgap=5 )
-        grid.Add( description, 0, wxALIGN_LEFT )
-        grid.Add( autofmt,     0, wxALIGN_LEFT )
-        grid.Add( ctrl,        0, wxALIGN_LEFT )
-
-        controls = [
-        #description        autoformat code
-        ("Phone No w/opt. ext","USPHONEFULLEXT"),
-        ("Phone No only", "USPHONEFULL"),
-        ("US Date + Time","USDATETIMEMMDDYYYY/HHMMSS"),
-        ("US Date + Time\n(without seconds)","USDATETIMEMMDDYYYY/HHMM"),
-        ("US Date + Military Time","USDATEMILTIMEMMDDYYYY/HHMMSS"),
-        ("US Date + Military Time\n(without seconds)","USDATEMILTIMEMMDDYYYY/HHMM"),
-        ("US Date MMDDYYYY","USDATEMMDDYYYY/"),
-        ("Time", "TIMEHHMMSS"),
-        ("Time\n(without seconds)", "TIMEHHMM"),
-        ("Military Time", "MILTIMEHHMMSS"),
-        ("Military Time\n(without seconds)", "MILTIMEHHMM"),
-        ("European Date", "EUDATEYYYYMMDD/"),
-        ("Social Sec#","USSOCIALSEC"),
-        ("Credit Card","CREDITCARD"),
-        ("Expiration MM/YY","EXPDATEMMYY"),
-        ("Percentage","PERCENT"),
-        ("Person's Age","AGE"),
-        ("US State", "USSTATE"),
-        ("US Zip Code","USZIP"),
-        ("US Zip+4","USZIPPLUS4"),
-        ("Age", "AGE"),
-        ("Email Address","EMAIL"),
-        ]
-        for control in controls:
-            grid.Add( wxStaticText( self, -1, control[0]), 0, wxALIGN_LEFT )
-            grid.Add( wxStaticText( self, -1, control[1]), 0, wxALIGN_LEFT )
-            grid.Add( wxMaskedTextCtrl( self, -1, "",
-                                              autoformat       = control[1],
-                                              demo             = True,
-                                              name             = control[1]),
-                            0, wxALIGN_LEFT )
-
-        self.sizer.Add( grid, 0, wxALIGN_LEFT|wxALL, border=5 )
-        self.SetSizer( self.sizer )
-        self.SetAutoLayout( 1 )
-        self.SetupScrolling()
-
-
-class demoPage4( wxScrolledPanel, demoMixin ):
+class demoPage4(wxScrolledPanel, demoMixin):
     def __init__( self, parent, log ):
         self.log = log
         wxScrolledPanel.__init__( self, parent, -1 )
@@ -344,14 +320,14 @@ Page Up and Shift-Up arrow will similarly cycle backwards through the list.
         self.SetupScrolling()
 
 
-class demoPage5( wxScrolledPanel, demoMixin ):
+class demoPage5(wxScrolledPanel, demoMixin):
     def __init__( self, parent, log ):
         self.log = log
         wxScrolledPanel.__init__( self, parent, -1 )
         self.sizer = wxBoxSizer( wxVERTICAL )
         label = wxStaticText( self, -1, """\
-These are examples of wxMaskedComboBox and wxIpAddrCtrl, and a more
-useful configuration of a wxMaskedTextCtrl for floating point input.
+These are examples of wxMaskedComboBox and wxIpAddrCtrl, and more useful
+configurations of a wxMaskedTextCtrl for integer and floating point input.
 """)
         label.SetForegroundColour( "Blue" )
         self.sizer.Add( label, 0, wxALIGN_LEFT|wxALL, 5 )
@@ -420,13 +396,24 @@ of form: 10. (1|2) . (129..255) . (0..255)""")
         ip_addr3.SetFieldParameters(1, validRange=(129,255), validRequired=False )
 
         text7 = wxStaticText( self, -1, """\
+A right-insert integer entry control:""")
+        intctrl = wxMaskedTextCtrl(self, -1, name='intctrl', mask="#{9}", formatcodes = '_-r,F')
+
+        text8 = wxStaticText( self, -1, """\
 A floating point entry control
 with right-insert for ordinal:""")
-        floatctrl = wxMaskedTextCtrl(self, -1, mask="#{9}.#{2}", formatcodes="F_-R")
-        floatctrl.SetFieldParameters(0, formatcodes='r,<', validRequired=True)  # right-insert, allow commas, require explicit cursor movement to change fields
-        floatctrl.SetFieldParameters(1, defaultValue='00')                      # don't allow blank fraction
+        self.floatctrl = wxMaskedTextCtrl(self, -1, name='floatctrl', mask="#{9}.#{2}", formatcodes="F,_-R")
+        self.floatctrl.SetFieldParameters(0, formatcodes='r<', validRequired=True)  # right-insert, require explicit cursor movement to change fields
+        self.floatctrl.SetFieldParameters(1, defaultValue='00')                     # don't allow blank fraction
 
-        grid = wxFlexGridSizer( 0, 2, vgap=20, hgap = 5 )
+        text9 = wxStaticText( self, -1, """\
+Use this control to programmatically set
+the value of the above float control:""")
+        number_combo = wxComboBox(self, -1, choices = [ '', '111', '222.22', '-3', '54321.666666666', '-1353.978',
+                                                        '1234567', '-1234567', '123456789', '-123456789.1',
+                                                        '1234567890.', '-1234567890.1' ])
+
+        grid = wxFlexGridSizer( 0, 2, vgap=10, hgap = 5 )
         grid.Add( text1, 0, wxALIGN_LEFT )
         grid.Add( fraction, 0, wxALIGN_LEFT )
         grid.Add( text2, 0, wxALIGN_LEFT )
@@ -440,7 +427,11 @@ with right-insert for ordinal:""")
         grid.Add( text6, 0, wxALIGN_LEFT )
         grid.Add( ip_addr3, 0, wxALIGN_LEFT )
         grid.Add( text7, 0, wxALIGN_LEFT )
-        grid.Add( floatctrl, 0, wxALIGN_LEFT )
+        grid.Add( intctrl, 0, wxALIGN_LEFT )
+        grid.Add( text8, 0, wxALIGN_LEFT )
+        grid.Add( self.floatctrl, 0, wxALIGN_LEFT )
+        grid.Add( text9, 0, wxALIGN_LEFT )
+        grid.Add( number_combo, 0, wxALIGN_LEFT )
 
         self.sizer.Add( grid, 0, wxALIGN_LEFT|wxALL, border=5 )
         self.SetSizer( self.sizer )
@@ -457,14 +448,15 @@ with right-insert for ordinal:""")
         EVT_TEXT( self, ip_addr1.GetId(), self.OnIpAddrChange )
         EVT_TEXT( self, ip_addr2.GetId(), self.OnIpAddrChange )
         EVT_TEXT( self, ip_addr3.GetId(), self.OnIpAddrChange )
-        EVT_TEXT( self, floatctrl.GetId(), self.OnTextChange )
+        EVT_TEXT( self, intctrl.GetId(), self.OnTextChange )
+        EVT_TEXT( self, self.floatctrl.GetId(), self.OnTextChange )
+        EVT_COMBOBOX( self, number_combo.GetId(), self.OnNumberSelect )
 
 
     def OnComboChange( self, event ):
         ctl = self.FindWindowById( event.GetId() )
         if not ctl.IsValid():
             self.log.write('current value not a valid choice')
-
 
     def OnIpAddrChange( self, event ):
         ip_addr = self.FindWindowById( event.GetId() )
@@ -476,6 +468,21 @@ with right-insert for ordinal:""")
         if ctl.IsValid():
             self.log.write('new value = %s\n' % ctl.GetValue() )
 
+    def OnNumberSelect( self, event ):
+        value = event.GetString()
+        # Format choice to fit into format for #{9}.#{2}, with sign position reserved:
+        # (ordinal + fraction == 11 + decimal point + sign == 13)
+        if value:
+            floattext = "%13.2f" % float(value)
+        else:
+            floattext = value   # clear the value again
+        try:
+            self.floatctrl.SetValue(floattext)
+        except:
+            type, value, tb = sys.exc_info()
+            for line in traceback.format_exception_only(type, value):
+                self.log.write(line)
+
 # ---------------------------------------------------------------------
 class TestMaskedTextCtrls(wxNotebook):
     def __init__(self, parent, id, log):
@@ -486,10 +493,10 @@ class TestMaskedTextCtrls(wxNotebook):
         self.AddPage(win, "General examples")
 
         win = demoPage2(self, log)
-        self.AddPage(win, "Using default values")
+        self.AddPage(win, 'Auto-formatted controls')
 
         win = demoPage3(self, log)
-        self.AddPage(win, 'Auto-formatted controls')
+        self.AddPage(win, "Using default values")
 
         win = demoPage4(self, log)
         self.AddPage(win, 'Using auto-complete fields')

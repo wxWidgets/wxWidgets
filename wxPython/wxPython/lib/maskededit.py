@@ -86,8 +86,15 @@ formatcodes=
             R  right-align field(s)
             r  right-insert in field(s) (implies R)
             &lt;  stay in field until explicit navigation out of it
-            ,  Group digits
-            -  Signed numerals, (negative #s shown in red by default)
+            ,  Allow comma to be typed as grouping character; auto-group/regroup
+               digits in integer fields (if result fits) when leaving such a field.
+               (If used, .SetValue() will attempt to auto-group as well.)
+               Note: typing '.' in such fields will clip the value to that left
+               of the cursor for integer fields of controls with "integer" or
+               "floating point" masks.  If the ',' format code is specified, this
+               will also cause the resulting digits to be regrouped properly.
+            -  Prepend and reserve leading space for sign to mask and allow
+               signed values (negative #s shown in red by default)
             0  integer fields get leading zeros
             D  Date[/time] field
             T  Time field
@@ -238,12 +245,32 @@ Control Class Functions:
   .GetPlainValue(value=None)
                     Returns the value specified (or the control's text value
                     not specified) without the formatting text.
-                    In the example above, might return phone no="3522640075",
-                    whereas control.GetValue() would return "(352) 264-0075"
+                    In the example above, might return phone no='3522640075',
+                    whereas control.GetValue() would return '(352) 264-0075'
   .ClearValue()     Returns the control's value to its default, and places the
                     cursor at the beginning of the control.
-  .SetValue()       Does "smart insertion" of passed value into the control, as
-                    does the .Paste() method.
+  .SetValue()       Does "smart replacement" of passed value into the control, as does
+                    the .Paste() method.  As with other text entry controls, the
+                    .SetValue() text replacement begins at left-edge of the control,
+                    with missing mask characters inserted as appropriate.
+                    .SetValue will also adjust integer, float or date mask entry values,
+                    adding commas, auto-completing years, etc. as appropriate.
+                    If a value does not follow the format of the control's mask, or will
+                    not fit into the control, a ValueError exception will be raised.
+                    Eg:
+                      mask = '(###) ###-####'
+                          .SetValue('1234567890')           => '(123) 456-7890'
+                          .SetValue('(123)4567890')         => '(123) 456-7890'
+                          .SetValue('(123)456-7890')        => '(123) 456-7890'
+                          .SetValue('123/4567-890')         => illegal paste; ValueError
+
+                      mask = '#{6}.#{2}', formatcode = '_,-',
+                          .SetValue('111')                  => ' 111   .  '
+                          .SetValue(' %9.2f' % -111.12345 ) => '   -111.12'
+                          .SetValue(' %9.2f' % 1234.00 )    => '  1,234.00'
+                          .SetValue(' %9.2f' % -1234567.12345 ) => insufficient room; ValueError
+
+
   .IsValid(value=None)
                     Returns True if the value specified (or the value of the control
                     if not specified) passes validation tests
@@ -552,6 +579,10 @@ maskchardict  = {
         }
 
 months = '(01|02|03|04|05|06|07|08|09|10|11|12)'
+charmonths = '(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec|JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC|jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)'
+charmonths_dict = {'jan': 1, 'feb': 2, 'mar': 3, 'apr': 4, 'may': 5, 'jun': 6,
+                   'jul': 7, 'aug': 8, 'sep': 9, 'oct': 10, 'nov': 11, 'dec': 12}
+
 days   = '(01|02|03|04|05|06|07|08|09|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26|27|28|29|30|31)'
 hours  = '(0\d| \d|1[012])'
 milhours = '(00|01|02|03|04|05|06|07|08|09|10|11|12|13|14|15|16|17|18|19|20|21|22|23)'
@@ -560,6 +591,8 @@ minutes = """(00|01|02|03|04|05|06|07|08|09|10|11|12|13|14|15|\
 36|37|38|39|40|41|42|43|44|45|46|47|48|49|50|51|52|53|54|55|\
 56|57|58|59)"""
 seconds = minutes
+am_pm_exclude = 'BCDEFGHIJKLMNOQRSTUVWXYZ\x8a\x8c\x8e\x9f\xc0\xc1\xc2\xc3\xc4\xc5\xc6\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd0\xd1\xd2\xd3\xd4\xd5\xd6\xd8\xd9\xda\xdb\xdc\xdd\xde'
+
 states = "AL,AK,AZ,AR,CA,CO,CT,DE,DC,FL,GA,GU,HI,ID,IL,IN,IA,KS,KY,LA,MA,ME,MD,MI,MN,MS,MO,MT,NE,NV,NH,NJ,NM,NY,NC,ND,OH,OK,OR,PA,PR,RI,SC,SD,TN,TX,UT,VA,VT,VI,WA,WV,WI,WY".split(',')
 
 
@@ -568,42 +601,73 @@ states = "AL,AK,AZ,AR,CA,CO,CT,DE,DC,FL,GA,GU,HI,ID,IL,IN,IA,KS,KY,LA,MA,ME,MD,M
 ## The following table defines the current set of autoformat codes:
 
 masktags = {
-       #  Name: (mask, excludeChars, formatcodes, validRegex, choices, [choiceRequired])
-       "USPHONEFULLEXT":("(###) ###-#### x:###","",'F^-R',"^\(\d{3}\) \d{3}-\d{4}",[]),
-       "USPHONETIGHTEXT":("###-###-#### x:###","",'F^-R',"^\d{3}-\d{3}-\d{4}",[]),
-       "USPHONEFULL":("(###) ###-####","",'F^-R',"^\(\d{3}\) \d{3}-\d{4}",[]),
-       "USPHONETIGHT":("###-###-####","",'F^-R',"^\d{3}-\d{3}-\d{4}",[]),
-       "USSTATE":("AA","",'F!V',"([ACDFGHIKLMNOPRSTUVW] |%s)" % string.join(states,'|'), states, True),
-       "USSTATE3":("AAA","",'F!',"[A-Z]{3}",states, False),
-       "USDATETIMEMMDDYYYY/HHMMSS":("##/##/#### ##:##:## AM",'BCDEFGHIJKLMNOQRSTUVWXYZ','DF!','^' + months + '/' + days + '/' + '\d{4} ' + hours + ':' + minutes + ':' + seconds + ' (A|P)M',[]),
-       "USDATETIMEMMDDYYYY-HHMMSS":("##-##-#### ##:##:## AM",'BCDEFGHIJKLMNOQRSTUVWXYZ','DF!','^' + months + '-' + days + '-' + '\d{4} ' + hours + ':' + minutes + ':' + seconds + ' (A|P)M',[]),
-       "USDATEMILTIMEMMDDYYYY/HHMMSS":("##/##/#### ##:##:##",'','DF','^' + months + '/' + days + '/' + '\d{4} ' + milhours + ':' + minutes + ':' + seconds,[]),
-       "USDATEMILTIMEMMDDYYYY-HHMMSS":("##-##-#### ##:##:##",'','DF','^' + months + '/' + days + '/' + '\d{4} ' + milhours + ':' + minutes + ':' + seconds,[]),
-       "USDATETIMEMMDDYYYY/HHMM":("##/##/#### ##:## AM",'BCDEFGHIJKLMNOQRSTUVWXYZ','DF!','^' + months + '/' + days + '/' + '\d{4} ' + hours + ':' + minutes + ' (A|P)M',[]),
-       "USDATEMILTIMEMMDDYYYY/HHMM":("##/##/#### ##:##",'','DF','^' + months + '/' + days + '/' + '\d{4} ' + milhours + ':' + minutes,[]),
-       "USDATETIMEMMDDYYYY-HHMM":("##-##-#### ##:## AM",'BCDEFGHIJKLMNOQRSTUVWXYZ','DF!','^' + months + '-' + days + '-' + '\d{4} ' + hours + ':' + minutes + ' (A|P)M',[]),
-       "USDATEMILTIMEMMDDYYYY-HHMM":("##-##-#### ##:##",'','DF','^' + months + '/' + days + '/' + '\d{4} ' + milhours + ':' + minutes,[]),
-       "USDATEMMDDYYYY/":("##/##/####",'','DF','^' + months + '/' + days + '/' + '\d{4}',[]),
-       "EUDATEYYYYMMDD/":("####.##.##",'','DF','^' + '\d{4}'+ '.' + months + '.' + days,[]),
-       "USDATEMMDDYY/":("##/##/##",'','F','^' + months + '/' + days + '/\d\d',[]),
-       "USDATEMMDDYYYY-":("##-##-####",'','DF','^' + months + '-' + days + '-' +'\d{4}',[]),
-       "TIMEHHMMSS":("##:##:## AM", "BCDEFGHIJKLMNOQRSTUVWXYZ", 'TF!', '^' + hours + ':' + minutes + ':' + seconds + ' (A|P)M',[]),
-       "TIMEHHMM":("##:## AM", "BCDEFGHIJKLMNOQRSTUVWXYZ", 'TF!', '^' + hours + ':' + minutes + ' (A|P)M',[]),
-       "MILTIMEHHMMSS":("##:##:##", "", 'TF', '^' + milhours + ':' + minutes + ':' + seconds,[]),
-       "MILTIMEHHMM":("##:##", "", 'TF', '^' + milhours + ':' + minutes,[]),
-       "USSOCIALSEC":("###-##-####","",'F',"\d{3}-\d{2}-\d{4}",[]),
-       "CREDITCARD":("####-####-####-####","",'F',"\d{4}-\d{4}-\d{4}-\d{4}",[]),
-       "EXPDATEMMYY":("##/##", "", "F", "^" + months + "/\d\d",[]),
-       "USZIP":("#####","",'F',"^\d{5}",[]),
-       "USZIPPLUS4":("#####-####","",'F',"\d{5}-(\s{4}|\d{4})",[]),
-       "PERCENT":("0.##","",'F',"^0.\d\d",[]),
-       "AGE":("###","","F","^[1-9]{1}  |[1-9][0-9] |1[0|1|2][0-9]",[]),
+       #  Name: (mask, excludeChars, formatcodes, validRegex, choices, choiceRequired, description)
+       "USPHONEFULLEXT":("(###) ###-#### x:###","",'F^-R',"^\(\d{3}\) \d{3}-\d{4}",[], False, "Phone Number w/opt. ext"),
+       "USPHONETIGHTEXT":("###-###-#### x:###","",'F^-R',"^\d{3}-\d{3}-\d{4}",[], False, "Phone Number\n (w/hyphens and opt. ext)"),
+       "USPHONEFULL":("(###) ###-####","",'F^-R',"^\(\d{3}\) \d{3}-\d{4}",[], False, "Phone Number only"),
+       "USPHONETIGHT":("###-###-####","",'F^-R',"^\d{3}-\d{3}-\d{4}",[], False, "Phone Number\n(w/hyphens)"),
+       "USSTATE":("AA","",'F!V',"([ACDFGHIKLMNOPRSTUVW] |%s)" % string.join(states,'|'), states, True, "US State"),
+
+       "USDATETIMEMMDDYYYY/HHMMSS":("##/##/#### ##:##:## AM",am_pm_exclude,'DF!','^' + months + '/' + days + '/' + '\d{4} ' + hours + ':' + minutes + ':' + seconds + ' (A|P)M',[], False, "US Date + Time"),
+       "USDATETIMEMMDDYYYY-HHMMSS":("##-##-#### ##:##:## AM",am_pm_exclude,'DF!','^' + months + '-' + days + '-' + '\d{4} ' + hours + ':' + minutes + ':' + seconds + ' (A|P)M',[], False, "US Date + Time\n(w/hypens)"),
+       "USDATEMILTIMEMMDDYYYY/HHMMSS":("##/##/#### ##:##:##",'','DF','^' + months + '/' + days + '/' + '\d{4} ' + milhours + ':' + minutes + ':' + seconds,[], False, "US Date + Military Time"),
+       "USDATEMILTIMEMMDDYYYY-HHMMSS":("##-##-#### ##:##:##",'','DF','^' + months + '-' + days + '-' + '\d{4} ' + milhours + ':' + minutes + ':' + seconds,[], False, "US Date + Military Time\n(w/hypens)"),
+       "USDATETIMEMMDDYYYY/HHMM":("##/##/#### ##:## AM",am_pm_exclude,'DF!','^' + months + '/' + days + '/' + '\d{4} ' + hours + ':' + minutes + ' (A|P)M',[], False, "US Date + Time\n(without seconds)"),
+       "USDATEMILTIMEMMDDYYYY/HHMM":("##/##/#### ##:##",'','DF','^' + months + '/' + days + '/' + '\d{4} ' + milhours + ':' + minutes,[], False, "US Date + Military Time\n(without seconds)"),
+       "USDATETIMEMMDDYYYY-HHMM":("##-##-#### ##:## AM",am_pm_exclude,'DF!','^' + months + '-' + days + '-' + '\d{4} ' + hours + ':' + minutes + ' (A|P)M',[], False, "US Date + Time\n(w/hypens and w/o secs)"),
+       "USDATEMILTIMEMMDDYYYY-HHMM":("##-##-#### ##:##",'','DF','^' + months + '-' + days + '-' + '\d{4} ' + milhours + ':' + minutes,[], False, "US Date + Military Time\n(w/hyphens and w/o seconds)"),
+       "USDATEMMDDYYYY/":("##/##/####",'','DF','^' + months + '/' + days + '/' + '\d{4}',[], False, "US Date\n(MMDDYYYY)"),
+       "USDATEMMDDYY/":("##/##/##",'','DF','^' + months + '/' + days + '/\d\d',[], False, "US Date\n(MMDDYY)"),
+       "USDATEMMDDYYYY-":("##-##-####",'','DF','^' + months + '-' + days + '-' +'\d{4}',[], False, "MM-DD-YYYY"),
+
+       "EUDATEYYYYMMDD/":("####/##/##",'','DF','^' + '\d{4}'+ '/' + months + '/' + days,[], False, "YYYY/MM/DD"),
+       "EUDATEYYYYMMDD.":("####.##.##",'','DF','^' + '\d{4}'+ '.' + months + '.' + days,[], False, "YYYY.MM.DD"),
+       "EUDATEDDMMYYYY/":("##/##/####",'','DF','^' + days + '/' + months + '/' + '\d{4}',[], False, "DD/MM/YYYY"),
+       "EUDATEDDMMYYYY.":("##.##.####",'','DF','^' + days + '.' + months + '.' + '\d{4}',[], False, "DD.MM.YYYY"),
+       "EUDATEDDMMMYYYY.":("##.CCC.####",'','DF','^' + days + '.' + charmonths + '.' + '\d{4}',[], False, "DD.Month.YYYY"),
+       "EUDATEDDMMMYYYY/":("##/CCC/####",'','DF','^' + days + '/' + charmonths + '/' + '\d{4}',[], False, "DD/Month/YYYY"),
+
+       "EUDATETIMEYYYYMMDD/HHMMSS":("####/##/## ##:##:## AM",am_pm_exclude,'DF!','^' + '\d{4}'+ '/' + months + '/' + days + ' ' + hours + ':' + minutes + ':' + seconds + ' (A|P)M',[], False, "YYYY/MM/DD HH:MM:SS"),
+       "EUDATETIMEYYYYMMDD.HHMMSS":("####.##.## ##:##:## AM",am_pm_exclude,'DF!','^' + '\d{4}'+ '.' + months + '.' + days + ' ' + hours + ':' + minutes + ':' + seconds + ' (A|P)M',[], False, "YYYY.MM.DD HH:MM:SS"),
+       "EUDATETIMEDDMMYYYY/HHMMSS":("##/##/#### ##:##:## AM",am_pm_exclude,'DF!','^' + days + '/' + months + '/' + '\d{4} ' + hours + ':' + minutes + ':' + seconds + ' (A|P)M',[], False, "DD/MM/YYYY HH:MM:SS"),
+       "EUDATETIMEDDMMYYYY.HHMMSS":("##.##.#### ##:##:## AM",am_pm_exclude,'DF!','^' + days + '.' + months + '.' + '\d{4} ' + hours + ':' + minutes + ':' + seconds + ' (A|P)M',[], False, "DD.MM.YYYY HH:MM:SS"),
+
+       "EUDATETIMEYYYYMMDD/HHMM":("####/##/## ##:## AM",am_pm_exclude,'DF!','^' + '\d{4}'+ '/' + months + '/' + days + ' ' + hours + ':' + minutes + ' (A|P)M',[], False, "YYYY/MM/DD HH:MM"),
+       "EUDATETIMEYYYYMMDD.HHMM":("####.##.## ##:## AM",am_pm_exclude,'DF!','^' + '\d{4}'+ '.' + months + '.' + days + ' ' + hours + ':' + minutes + ' (A|P)M',[], False, "YYYY.MM.DD HH:MM"),
+       "EUDATETIMEDDMMYYYY/HHMM":("##/##/#### ##:## AM",am_pm_exclude,'DF!','^' + days + '/' + months + '/' + '\d{4} ' + hours + ':' + minutes + ' (A|P)M',[], False, "DD/MM/YYYY HH:MM"),
+       "EUDATETIMEDDMMYYYY.HHMM":("##.##.#### ##:## AM",am_pm_exclude,'DF!','^' + days + '.' + months + '.' + '\d{4} ' + hours + ':' + minutes + ' (A|P)M',[], False, "DD.MM.YYYY HH:MM"),
+
+       "EUDATEMILTIMEYYYYMMDD/HHMMSS":("####/##/## ##:##:##",'','DF','^' + '\d{4}'+ '/' + months + '/' + days + ' ' + milhours + ':' + minutes + ':' + seconds,[], False, "YYYY/MM/DD Mil. Time"),
+       "EUDATEMILTIMEYYYYMMDD.HHMMSS":("####.##.## ##:##:##",'','DF','^' + '\d{4}'+ '.' + months + '.' + days + ' ' + milhours + ':' + minutes + ':' + seconds,[], False, "YYYY.MM.DD Mil. Time"),
+       "EUDATEMILTIMEDDMMYYYY/HHMMSS":("##/##/#### ##:##:##",'','DF','^' + days + '/' + months + '/' + '\d{4} ' + milhours + ':' + minutes + ':' + seconds,[], False, "DD/MM/YYYY Mil. Time"),
+       "EUDATEMILTIMEDDMMYYYY.HHMMSS":("##.##.#### ##:##:##",'','DF','^' + days + '.' + months + '.' + '\d{4} ' + milhours + ':' + minutes + ':' + seconds,[], False, "DD.MM.YYYY Mil. Time"),
+       "EUDATEMILTIMEYYYYMMDD/HHMM":("####/##/## ##:##",'','DF','^' + '\d{4}'+ '/' + months + '/' + days + ' ' + milhours + ':' + minutes,[], False, "YYYY/MM/DD Mil. Time\n(w/o seconds)"),
+       "EUDATEMILTIMEYYYYMMDD.HHMM":("####.##.## ##:##",'','DF','^' + '\d{4}'+ '.' + months + '.' + days + ' ' + milhours + ':' + minutes,[], False, "YYYY.MM.DD Mil. Time\n(w/o seconds)"),
+       "EUDATEMILTIMEDDMMYYYY/HHMM":("##/##/#### ##:##",'','DF','^' + days + '/' + months + '/' + '\d{4} ' + milhours + ':' + minutes,[], False, "DD/MM/YYYY Mil. Time\n(w/o seconds)"),
+       "EUDATEMILTIMEDDMMYYYY.HHMM":("##.##.#### ##:##",'','DF','^' + days + '.' + months + '.' + '\d{4} ' + milhours + ':' + minutes,[], False, "DD.MM.YYYY Mil. Time\n(w/o seconds)"),
+
+       "TIMEHHMMSS":("##:##:## AM", am_pm_exclude, 'TF!', '^' + hours + ':' + minutes + ':' + seconds + ' (A|P)M',[], False, "HH:MM:SS (A|P)M\n(see wxTimeCtrl)"),
+       "TIMEHHMM":("##:## AM", am_pm_exclude, 'TF!', '^' + hours + ':' + minutes + ' (A|P)M',[], False, "HH:MM (A|P)M\n(see wxTimeCtrl)"),
+       "MILTIMEHHMMSS":("##:##:##", "", 'TF', '^' + milhours + ':' + minutes + ':' + seconds,[], False, "Military HH:MM:SS\n(see wxTimeCtrl)"),
+       "MILTIMEHHMM":("##:##", "", 'TF', '^' + milhours + ':' + minutes,[], False, "Military HH:MM\n(see wxTimeCtrl)"),
+       "USSOCIALSEC":("###-##-####","",'F',"\d{3}-\d{2}-\d{4}",[], False, "Social Sec#"),
+       "CREDITCARD":("####-####-####-####","",'F',"\d{4}-\d{4}-\d{4}-\d{4}",[], False, "Credit Card"),
+       "EXPDATEMMYY":("##/##", "", "F", "^" + months + "/\d\d",[], False, "Expiration MM/YY"),
+       "USZIP":("#####","",'F',"^\d{5}",[], False, "US 5-digit zip code"),
+       "USZIPPLUS4":("#####-####","",'F',"\d{5}-(\s{4}|\d{4})",[], False, "US zip+4 code"),
+       "PERCENT":("0.##","",'F',"^0.\d\d",[], False, "Percentage"),
+       "AGE":("###","","F","^[1-9]{1}  |[1-9][0-9] |1[0|1|2][0-9]",[], False, "Age"),
        "EMAIL":("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"," \\/*&%$#!+='\"","F",
-                "[a-zA-Z](\.\w+|\w*)@\w+.([a-zA-Z]\w*\.)*(com|org|net|edu|mil|gov|(co\.)?\w\w) *$",[]),
+                "[a-zA-Z]\w*(\.\w+)*@\w+\.([a-zA-Z]\w*\.)*(com|org|net|edu|mil|gov|(co\.)?\w\w) *$",[], False, "Email address"),
        "IPADDR":("###.###.###.###", "", 'F_Sr<',
-                 "(  \d| \d\d|(1\d\d|2[0-4]\d|25[0-5]))(\.(  \d| \d\d|(1\d\d|2[0-4]\d|25[0-5]))){3}",[])
+                 "(  \d| \d\d|(1\d\d|2[0-4]\d|25[0-5]))(\.(  \d| \d\d|(1\d\d|2[0-4]\d|25[0-5]))){3}",[], False, "IP Address\n(see wxIpAddrCtrl)")
        }
 
+# build demo-friendly dictionary of descriptions of autoformats
+autoformats = []
+for key, value in masktags.items():
+    autoformats.append((key, value[6]))
+autoformats.sort()
 
 ## ---------- ---------- ---------- ---------- ---------- ---------- ----------
 
@@ -781,6 +845,7 @@ class Field:
 ##                dbg('slice[%(pos)d] != self._fillChar?' %locals(), slice[pos] != self._fillChar[pos])
                 if slice[pos] not in (' ', self._fillChar):
                     empty = False
+                    break
             dbg("IsEmpty? %(empty)d (do all mask chars == fillChar?)" % locals(), indent=0)
             return empty
         else:
@@ -831,6 +896,7 @@ class Field:
         dbg('Field::_AdjustField("%s")' % slice, indent=1)
         length = len(self._mask)
         if self._isInt:
+            signpos = slice.find('-')
             intStr = slice.replace( '-', '' )                       # drop sign, if any
             intStr = intStr.replace(' ', '')                        # drop extra spaces
             intStr = string.replace(intStr,self._fillChar,"")       # drop extra fillchars
@@ -855,6 +921,10 @@ class Field:
             dbg('len(intStr):', len(intStr), 'field length:', length)
             if self._padZero and len(intStr) < length:
                 intStr = '0' * (length - len(intStr)) + intStr
+                if signpos != -1:
+                    intStr = '-' + intStr[1:]
+            elif signpos != -1:
+                intStr = '-' + intStr
             slice = intStr
 
         slice = slice.strip() # drop extra spaces
@@ -901,6 +971,11 @@ class wxMaskedEditMixin:
         # set up flag for doing optional things to base control if possible
         if not hasattr(self, 'controlInitialized'):
             self.controlInitialized = False
+
+        # Set internal state var for keeping track of whether or not a character
+        # action results in a modification of the control, since .SetValue()
+        # doesn't modify the base control's internal state:
+        self.modified = False
 
         # Validate legitimate set of parameters:
         for key in kwargs.keys():
@@ -982,7 +1057,7 @@ class wxMaskedEditMixin:
         for key, value in kwargs.items():
             if key not in wxMaskedEditMixin.valid_ctrl_params.keys() + Field.valid_params.keys():
                 raise TypeError('%s: invalid keyword argument "%s"' % (self.name, key))
-            elif key in Field.valid_params:
+            elif key in Field.valid_params.keys():
                 constraint_kwargs[key] = value
             else:
                 ctrl_kwargs[key] = value
@@ -1083,6 +1158,23 @@ class wxMaskedEditMixin:
 
         self._isDate     = 'D' in self._ctrl_constraints._formatcodes and isDateType(mask)
         self._isTime     = 'T' in self._ctrl_constraints._formatcodes and isTimeType(mask)
+        if self._isDate:
+            # Set _dateExtent, used in date validation to locate date in string;
+            # always set as though year will be 4 digits, even if mask only has
+            # 2 digits, so we can always properly process the intended year for
+            # date validation (leap years, etc.)
+            if self._mask.find('CCC') != -1: self._dateExtent = 11
+            else:                            self._dateExtent = 10
+
+            self._4digityear = len(self._mask) > 8 and self._mask[9] == '#'
+
+        if self._isDate and self._autoformat:
+            # Auto-decide datestyle:
+            if self._autoformat.find('MDDY')    != -1: self._datestyle = 'MDY'
+            elif self._autoformat.find('YMMD')  != -1: self._datestyle = 'YMD'
+            elif self._autoformat.find('YMMMD') != -1: self._datestyle = 'YMD'
+            elif self._autoformat.find('DMMY')  != -1: self._datestyle = 'DMY'
+            elif self._autoformat.find('DMMMY') != -1: self._datestyle = 'DMY'
 
 
         if self.controlInitialized:
@@ -1648,7 +1740,7 @@ class wxMaskedEditMixin:
         It will also set/reset the font if necessary and apply
         formatting to the control at this time.
         """
-##        dbg('wxMaskedEditMixin::_SetInitialValue("%s")' % value, indent=1)
+        dbg('wxMaskedEditMixin::_SetInitialValue("%s")' % value, indent=1)
         if not value:
             self._SetValue( self._template )
         else:
@@ -1657,13 +1749,13 @@ class wxMaskedEditMixin:
 
         # Set value/type-specific formatting
         self._applyFormatting()
-##        dbg(indent=0)
+        dbg(indent=0)
 
 
     def _calcSize(self, size=None):
         """ Calculate automatic size if allowed; must be called after the base control is instantiated"""
 ##        dbg('wxMaskedEditMixin::_calcSize', indent=1)
-        cont = (size == wxDefaultSize or size is None)
+        cont = (size is None or size == wxDefaultSize)
 
         if cont and self._autofit:
             sizing_text = 'M' * len(self._mask)
@@ -1721,6 +1813,9 @@ class wxMaskedEditMixin:
         else:
             dbg('oldvalue: "%s", newvalue: "%s"' % (self._oldvalue, newvalue))
             if self._Change():
+                if self._signOk and self._isNeg and newvalue.find('-') == -1:
+                    self._isNeg = False
+                    text, self._signpos = self._getSignedValue()
                 self._CheckValid()  # Recolor control as appropriate
             event.Skip()
             bValid = True
@@ -1739,6 +1834,7 @@ class wxMaskedEditMixin:
         if key in self._nav and event.ControlDown():
             # then this is the only place we will likely see these events;
             # process them now:
+            dbg('wxMaskedEditMixin::OnKeyDown: calling _OnChar')
             self._OnChar(event)
             return
         # else allow regular EVT_CHAR key processing
@@ -1755,6 +1851,7 @@ class wxMaskedEditMixin:
         # Get keypress value, adjusted by control options (e.g. convert to upper etc)
         key = event.GetKeyCode()
         orig_pos = self._GetInsertionPoint()
+        orig_value = self._GetValue()
         dbg('keycode = ', key)
         dbg('current pos = ', orig_pos)
         dbg('current selection = ', self._GetSelection())
@@ -1775,6 +1872,8 @@ class wxMaskedEditMixin:
         if key in self._nav + self._control:
             if self._keyhandlers.has_key(key):
                 keep_processing = self._keyhandlers[key](event)
+                if self._GetValue() != orig_value:
+                    self.modified = True
                 if not keep_processing:
                     dbg(indent=0)
                     return
@@ -1807,6 +1906,8 @@ class wxMaskedEditMixin:
             # there's an override for default behavior; use override function instead
             dbg('using supplied key handler:', self._keyhandlers[key])
             keep_processing = self._keyhandlers[key](event)
+            if self._GetValue() != orig_value:
+                self.modified = True
             if not keep_processing:
                 dbg(indent=0)
                 return
@@ -1855,11 +1956,16 @@ class wxMaskedEditMixin:
                         newstr = self._adjustDate(newstr)
                     dbg('adjusted newstr:', newstr)
 
+                    if newstr != orig_value:
+                        self.modified = True
+
                     wxCallAfter(self._SetValue, newstr)
 
                     # Adjust insertion point on date if just entered 2 digit year, and there are now 4 digits:
-                    if not self.IsDefault() and self._isDate and pos == 8 and unadjusted[8] != newstr[8]:
-                        newpos = pos+2
+                    if not self.IsDefault() and self._isDate and self._4digityear:
+                        year2dig = self._dateExtent - 2
+                        if pos == year2dig and unadjusted[year2dig] != newstr[year2dig]:
+                            newpos = pos+2
 
                     wxCallAfter(self._SetInsertionPoint, newpos)
                     newfield = self._FindField(newpos)
@@ -2048,7 +2154,7 @@ class wxMaskedEditMixin:
         """ Default Ctrl-S handler; prints value information if demo enabled. """
         dbg("wxMaskedEditMixin::_OnCtrl_S")
         if self._demo:
-            print "wxMaskedEditMixin.GetValue()       = %s\nwxMaskedEditMixin.GetPlainValue() = %s" % (self.GetValue(), self.GetPlainValue())
+            print 'wxMaskedEditMixin.GetValue()       = "%s"\nwxMaskedEditMixin.GetPlainValue() = "%s"' % (self.GetValue(), self.GetPlainValue())
             print "Valid? => " + str(self.IsValid())
             print "Current field, start, end, value =", str( self._FindFieldExtent(getslice=True))
         return False
@@ -2093,10 +2199,6 @@ class wxMaskedEditMixin:
                 wxBell()
             dbg(indent=0)
             return False
-        if self._signOk and sel_start == self._signpos and self._isNeg:
-            dbg('sel_start %d == self._signpos %d and self._isNeg' % (sel_start, self._signpos))
-            dbg('self._isNeg => 0')
-            self._isNeg = False
 
         field = self._FindField(sel_to)
         start, end = field._extent
@@ -2119,11 +2221,15 @@ class wxMaskedEditMixin:
             for i in range(start, end - len(newfield)):
                 if field._padZero:
                     left += '0'
+                elif self._signOk and self._isNeg and newfield.find('-') == -1 and i == 1:
+                    left += '-'
                 else:
                     left += self._template[i]   # this can produce strange results in combination with default values...
             newfield = left + newfield
             dbg('filled newfield: "%s"' % newfield)
             newstr = value[:start] + newfield + value[end:]
+            if self._signOk and self._isNeg and newstr[0] == '-':
+                newstr = ' ' + newstr[1:]
             pos = end
         else:
             if sel_start == sel_to:
@@ -2173,13 +2279,8 @@ class wxMaskedEditMixin:
             dbg(indent=0)
             return False
 
+        dbg('setting value (later) to', newstr)
         wxCallAfter(self._SetValue, newstr)
-        if self._isNeg and newstr[self._signpos] == ' ':
-            dbg("self._isNeg and newstr[self._signpos %d] == ' '" % self._signpos)
-            dbg('self._isNeg => 0')
-            self._isNeg = False
-        self._applyFormatting()
-
         dbg('setting insertion point (later) to', pos)
         wxCallAfter(self._SetInsertionPoint, pos)
         dbg(indent=0)
@@ -2219,10 +2320,12 @@ class wxMaskedEditMixin:
         """ Handles Home keypress in control. Should return False to skip other processing."""
         dbg("wxMaskedEditMixin::_OnHome", indent=1)
         pos = self._adjustPos(self._GetInsertionPoint(), event.GetKeyCode())
+        sel_start, sel_to = self._GetSelection()
+
         if event.ShiftDown():
             dbg("shift-home; select to beginning of non-whitespace")
-            # Will Sadkin: for some reason that escapes me, the following
-            # is necessary to get the selection to work:
+            if sel_to > pos:
+                pos = sel_to
             wxCallAfter(self._SetInsertionPoint, pos)
             wxCallAfter(self._SetSelection, 0, pos)
         else:
@@ -2376,7 +2479,9 @@ class wxMaskedEditMixin:
             clipped_text = value[0:pos]
             dbg('value: "%s"' % self._GetValue(), 'clipped_text:', clipped_text)
             newstr = self._adjustInt(clipped_text)
+            dbg('newstr: "%s"' % newstr)
             wxCallAfter(self._SetValue, newstr)
+            wxCallAfter(self._SetInsertionPoint, len(newstr.rstrip()))
             keep_processing = False
         dbg(indent=0)
 
@@ -2387,23 +2492,34 @@ class wxMaskedEditMixin:
         pos = self._adjustPos(self._GetInsertionPoint(), key)
         if chr(key) in ("-","+") or (chr(key) == " " and pos == self._signpos):
             cursign = self._isNeg
-##            dbg('cursign:', cursign)
+            dbg('cursign:', cursign)
             if chr(key) == "-":
                 self._isNeg = (not self._isNeg)   ## flip value
             else:
                 self._isNeg = False
-##            dbg('new sign:', self._isNeg)
+            dbg('isNeg?', self._isNeg)
 
             text, signpos = self._getSignedValue()
             if text is not None:
                 self._signpos = signpos
-##                dbg('self._signpos now:', self._signpos)
+                dbg('self._signpos now:', self._signpos)
             else:
                 text = self._GetValue()
-                self._signpos = 0
-##                dbg('self._signpos now:', self._signpos)
-                if self._isNeg:
-                    text = '-' + text[1:]
+                field = self._fields[0]
+                if field._alignRight and field._fillChar == ' ':
+                    self._signpos = text.find('-')
+                    if self._signpos == -1:
+                        if len(text.lstrip()) < len(text):
+                            self._signpos = len(text) - len(text.lstrip()) - 1
+                        else:
+                            self._signpos = 0
+                else:
+                    self._signpos = 0
+                dbg('self._signpos now:', self._signpos)
+            if self._isNeg:
+                text = text[:self._signpos] + '-' + text[self._signpos+1:]
+            else:
+                text = text[:self._signpos] + ' ' + text[self._signpos+1:]
 
             wxCallAfter(self._SetValue, text)
             wxCallAfter(self._applyFormatting)
@@ -2607,6 +2723,10 @@ class wxMaskedEditMixin:
 
         if self._isDate and value != self._template:
             newvalue = self._adjustDate(value, fixcentury=True)
+            if self._4digityear:
+                year2dig = self._dateExtent - 2
+                if pos == year2dig and value[year2dig] != newvalue[year2dig]:
+                    pos = pos+2
 
         if newvalue != value:
             self._SetValue(newvalue)
@@ -2638,41 +2758,54 @@ class wxMaskedEditMixin:
             and key in (ord('-'), ord('+'), ord(' ')) ):
             return pos
 
-        # Make sure the user is not trying to type over a template character
-        # If they are, move them to the next valid entry position
-        elif key not in self._nav and self._isTemplateChar(pos):
+        if key not in self._nav:
             field = self._FindField(pos)
-            start, end = field._extent
-            field_len = end - start
-            slice = self._GetValue()[start:end].strip()
+
+            dbg('field._insertRight?', field._insertRight)
             if field._insertRight:              # if allow right-insert
+                start, end = field._extent
+                slice = self._GetValue()[start:end].strip()
+                field_len = end - start
                 if pos == end:                      # if cursor at right edge of field
                     # if not filled or supposed to stay in field, keep current position
                     if len(slice) < field_len or not field._moveOnFieldFull:
+                        dbg('pos==end; len (slice) < field_len or not field._moveOnFieldFull')
                         pass
                 else:
                     # if at start of control, move to right edge
-                    if self._signOk and field._index == 0 and pos == 0:
+                    if sel_to == sel_start and self._isTemplateChar(pos) and pos != end:
                         pos = end                   # move to right edge
+                    elif sel_start <= start and sel_to == end:
+                        # select to right edge of field - 1 (to replace char)
+                        pos = end - 1
+                        self._SetInsertionPoint(pos)
+                        # restore selection
+                        self._SetSelection(sel_start, pos)
+
+                    elif self._signOk and sel_start == 0:   # if selected to beginning and signed,
+                        # adjust to past reserved sign position:
+                        pos = self._fields[0]._extent[0]
+                        self._SetInsertionPoint(pos)
+                        # restore selection
+                        self._SetSelection(pos, sel_to)
                     else:
-                        # must be full; move to next field:
-                        pos = self._findNextEntry(pos)
+                        pass    # leave position/selection alone
+
+            # else make sure the user is not trying to type over a template character
+            # If they are, move them to the next valid entry position
+            elif self._isTemplateChar(pos):
+                if( not field._moveOnFieldFull
+                      and (not self._signOk
+                           or (self._signOk
+                               and field._index == 0
+                               and pos > 0) ) ):      # don't move to next field without explicit cursor movement
+                    pass
+                else:
+                    # find next valid position
+                    pos = self._findNextEntry(pos)
                     self._SetInsertionPoint(pos)
                     if pos < sel_to:    # restore selection
                         self._SetSelection(pos, sel_to)
-
-            elif( not field._moveOnFieldFull
-                  and (not self._signOk
-                       or (self._signOk
-                           and field._index == 0
-                           and pos > 0) ) ):      # don't move to next field without explicit cursor movement
-                pass
-            else:
-                # find next valid position
-                pos = self._findNextEntry(pos)
-                self._SetInsertionPoint(pos)
-                if pos < sel_to:    # restore selection
-                    self._SetSelection(pos, sel_to)
         dbg('adjusted pos:', pos, indent=0)
         return pos
 
@@ -2702,7 +2835,8 @@ class wxMaskedEditMixin:
         dbg('right-justifed ordStr = "%(ordStr)s"' % locals())
         newvalue = ordStr + '.' + decStr
         if self._signOk:
-            newvalue = ' ' + newvalue
+            if len(newvalue) < len(self._mask):
+                newvalue = ' ' + newvalue
             signedvalue = self._getSignedValue(newvalue)[0]
             if signedvalue is not None: newvalue = signedvalue
 
@@ -2727,20 +2861,22 @@ class wxMaskedEditMixin:
         else: value = candidate
         intStr = self._fields[0]._AdjustField(value)
         intStr = intStr.strip() # drop extra spaces
-        if self._isNeg:
+        if self._isNeg and intStr.find('-') == -1:
             intStr = '-' + intStr
+        elif self._signOk and intStr.find('-') == -1:
+            intStr = ' ' + intStr
 
         if self._fields[0]._alignRight:     ## Only if right-alignment is enabled
             intStr = intStr.rjust( lenInt )
         else:
             intStr = intStr.ljust( lenInt )
 
-        if candidate is not None:
+        if candidate is None:
             wxCallAfter(self._SetValue, intStr )
         return intStr
 
 
-    def _adjustDate(self, candidate=None, fixcentury=False):
+    def _adjustDate(self, candidate=None, fixcentury=False, force4digit_year=False):
         """
         'Fixes' a date control, expanding the year if it can.
         Applies various self-formatting options.
@@ -2754,23 +2890,26 @@ class wxMaskedEditMixin:
         else:
             year_field = 2
 
+        dbg('getYear: "%s"' % getYear(text, self._datestyle))
         year    = string.replace( getYear( text, self._datestyle),self._fields[year_field]._fillChar,"")  # drop extra fillChars
         month   = getMonth( text, self._datestyle)
         day     = getDay( text, self._datestyle)
         dbg('self._datestyle:', self._datestyle, 'year:', year, 'Month', month, 'day:', day)
 
         yearVal = None
+        yearstart = self._dateExtent - 4
         if( len(year) < 4
             and (fixcentury
-                 or (self._GetInsertionPoint() > 7 and text[8] == ' ')
-                 or (self._GetInsertionPoint() > 8 and text[9] == ' ') ) ):
+                 or force4digit_year
+                 or (self._GetInsertionPoint() > yearstart+1 and text[yearstart+2] == ' ')
+                 or (self._GetInsertionPoint() > yearstart+2 and text[yearstart+3] == ' ') ) ):
             ## user entered less than four digits and changing fields or past point where we could
             ## enter another digit:
             try:
                 yearVal = int(year)
             except:
                 dbg('bad year=', year)
-                year = text[6:10]
+                year = text[yearstart:self._dateExtent]
 
         if len(year) < 4 and yearVal:
             if len(year) == 2:
@@ -2794,8 +2933,9 @@ class wxMaskedEditMixin:
                 year = str( yearVal )
             else:   # pad with 0's to make a 4-digit year
                 year = "%04d" % yearVal
-            text = makeDate(year, month, day, self._datestyle, text) + text[10:]
-        dbg('newdate:', text, indent=0)
+            if self._4digityear or force4digit_year:
+                text = makeDate(year, month, day, self._datestyle, text) + text[self._dateExtent:]
+        dbg('newdate: "%s"' % text, indent=0)
         return text
 
 
@@ -2891,6 +3031,8 @@ class wxMaskedEditMixin:
             okChars  = self._getAllowedChars(pos)
             if self._fields[0]._groupdigits and (self._isInt or (self._isDec and pos < self._decimalpos)):
                 okChars += self._fields[0]._groupchar
+            if self._signOk and (self._isInt or (self._isDec and pos < self._decimalpos)):
+                okChars += '-'
 ##            dbg('%s in %s?' % (char, okChars), char in okChars)
             approved = char in okChars
 
@@ -2928,15 +3070,17 @@ class wxMaskedEditMixin:
         dbg('wxMaskedEditMixin::_applyFormatting', indent=1)
 
         # Handle negative numbers
-        if (self._isDec or self._isInt) and self._isNeg and self._signOk:
-            signpos = self._GetValue().find('-')
-            if signpos == -1:
+        if self._signOk:
+##            value = self._GetValue()
+            text, signpos = self._getSignedValue()
+            dbg('text: "%s", signpos:' % text, signpos)
+            if not text or text[signpos] != '-':
                 self._isNeg = False
                 dbg('supposedly negative, but no sign found; new sign:', self._isNeg)
-            elif signpos != self._signpos:
-                self._signpos = signpos
-                dbg("self._signpos now:",  self._signpos)
-
+                if text and signpos != self._signpos:
+                    self._signpos = signpos
+            elif text and self._valid and not self._isNeg and text[signpos] == '-':
+                self._isNeg = True
 
         if self._signOk and self._isNeg:
             dbg('setting foreground to', self._signedForegroundColor)
@@ -2945,26 +3089,51 @@ class wxMaskedEditMixin:
             dbg('setting foreground to', self._foregroundColor)
             self.SetForegroundColour(self._foregroundColor)
 
-        if self.IsEmpty():
-            if self._emptyInvalid:
-                dbg('setting background to', self._invalidBackgroundColor)
+        if self._valid:
+            dbg('valid')
+            if self.IsEmpty():
+                if self._emptyInvalid:
+                    dbg('setting background to', self._invalidBackgroundColor)
+                else:
+                    dbg('setting background to', self._emptyBackgroundColor)
+                    self.SetBackgroundColour(self._emptyBackgroundColor)
             else:
-                dbg('setting background to', self._emptyBackgroundColor)
-                self.SetBackgroundColour(self._emptyBackgroundColor)
-        self.Refresh()
+                self.SetBackgroundColour(self._validBackgroundColor)
+        else:
+            dbg('invalid; coloring', self._invalidBackgroundColor)
+            self.SetBackgroundColour(self._invalidBackgroundColor) ## Change BG color if invalid
+
+        self._Refresh()
         dbg(indent=0, suspend=0)
 
 
     def _getAbsValue(self, candidate=None):
         """ Return an unsigned value (i.e. strip the '-' prefix if any).
         """
-        dbg('wxMaskedEditMixin::_getAbsValue; candidate=', candidate, indent=1)
+        dbg('wxMaskedEditMixin::_getAbsValue; candidate="%s"' % candidate, indent=1)
         if candidate is None: text = self._GetValue()
         else: text = candidate
 
         if self._isInt:
-            signpos = 0
-            text = self._template[0] + text[1:]
+            if self._ctrl_constraints._alignRight and self._fields[0]._fillChar == ' ':
+                signpos = text.find('-')
+                if signpos == -1:
+                    rstripped_text = text.rstrip()
+                    signpos = rstripped_text.rfind(' ')
+                    dbg('signpos:', signpos)
+                    if signpos == -1:
+                        signpos = 0
+                abstext = text[:signpos] + ' ' + text[signpos+1:]
+            else:
+                signpos = 0
+                text = self._template[0] + text[1:]
+            groupchar = self._fields[0]._groupchar
+            try:
+                value = long(text.replace(groupchar,''))
+            except:
+                dbg('invalid number', indent=0)
+                return None, None
+
         else:   # decimal value
             try:
                 groupchar = self._fields[0]._groupchar
@@ -2995,7 +3164,7 @@ class wxMaskedEditMixin:
         """ Return a signed value by adding a "-" prefix if the value
             is set to negative, or a space if positive.
         """
-        dbg('wxMaskedEditMixin::_getSignedValue; candidate=', candidate, indent=1)
+        dbg('wxMaskedEditMixin::_getSignedValue; candidate="%s"' % candidate, indent=1)
         if candidate is None: text = self._GetValue()
         else: text = candidate
 
@@ -3006,11 +3175,16 @@ class wxMaskedEditMixin:
                 dbg(indent=0)
                 return abstext, signpos
 
-            if self._isNeg:
+            if self._isNeg or text[signpos] == '-':
                 sign = '-'
             else:
                 sign = ' '
-            text = text[:signpos] + sign + text[signpos+1:]
+            if text[signpos] not in string.digits:
+                text = text[:signpos] + sign + text[signpos+1:]
+            else:
+                # this can happen if value passed is too big; sign assumed to be
+                # in position 0, but if already filled with a digit, prepend sign...
+                text = sign + text
         else:
             text = abstext
         dbg('signedtext = "%s"' % text, 'signpos:', signpos)
@@ -3025,17 +3199,26 @@ class wxMaskedEditMixin:
         if candidate is None: text = self._GetValue()
         else: text = candidate
 
-        if (self._isInt or self._isDec):
-            return string.replace( text," ","")     ## If numeric or decimal, return the value itself
-
-        elif self.IsEmpty():
+        if self.IsEmpty():
             return ""
         else:
             plain = ""
             for idx in range( len( self._template)):
                 if self._mask[idx] in maskchars:
                     plain += text[idx]
-            return plain
+
+            if self._isDec or self._isInt:
+                if self._fields[0]._alignRight:
+                    lpad = plain.count(',')
+                    plain = ' ' * lpad + plain.replace(',','')
+                else:
+                    plain = plain.replace(',','')
+
+                if self._signOk and self._isNeg and plain.count('-') == 0:
+                    # must be in reserved position; add to "plain value"
+                    plain = '-' + plain
+
+            return plain.rstrip()
 
 
     def IsEmpty(self, value=None):
@@ -3097,8 +3280,8 @@ class wxMaskedEditMixin:
                     newvalue[i] = '0'
                 else:
                     newvalue[i] = self._template[i]
-##            if not((self._isDec or self._isInt) and value[i] == ' '):
-##                newvalue[i] = self._template[i]
+            elif self._signOk and i == 0 and newvalue[i] == '-':
+                newvalue[i] = ' '
         value = string.join(newvalue,"")
         dbg('new value: "%s"' % value)
         dbg(indent=0)
@@ -3119,9 +3302,15 @@ class wxMaskedEditMixin:
                 fstr = text[start:end]
                 erasable_chars = [field._fillChar, ' ']
                 if field._padZero: erasable_chars.append('0')
-                if fstr[0] in erasable_chars:
+                erased = ''
+                if fstr[0] in erasable_chars or (self._signOk and field._index == 0 and fstr[0] == '-'):
+                    erased = fstr[0]
                     fstr = fstr[1:] + char
+                dbg('field str: "%s"' % fstr)
                 newtext = text[:start] + fstr + text[end:]
+                if erased == '-' and self._signOk:
+                    newtext = '-' + newtext[1:]
+                dbg('newtext: "%s"' % newtext)
                 if self._signOk and field._index == 0: start -= 1             # account for sign position
                 if( field._moveOnFieldFull
                     and len(fstr.lstrip()) == end-start):   # if field now full
@@ -3195,28 +3384,15 @@ class wxMaskedEditMixin:
                 if field.IsEmpty(value[start:end]):
                     valid = False
                     break
-##        elif self.IsEmpty(value):
-##            valid = not self._emptyInvalid        ## are empty values are OK
-##            dbg('valid "empty" value?', valid)
 
         dbg('valid?', valid)
 
         if not candidate:
             self._valid = valid
-            if self._valid and self.IsEmpty() and not self._emptyInvalid:
-                dbg('empty illegal; coloring', self._emptyBackgroundColor)
-                self.SetBackgroundColour(self._emptyBackgroundColor)
-            elif self._valid:
-                dbg('valid')
-                self.SetBackgroundColour(self._validBackgroundColor)
-            else:
-                dbg('invalid; coloring', self._invalidBackgroundColor)
-                self.SetBackgroundColour(self._invalidBackgroundColor) ## Change BG color if invalid
-
+            self._applyFormatting()
             if self._valid != oldValid:
                 dbg('validity changed: oldValid =',oldValid,'newvalid =', self._valid)
                 dbg('oldvalue: "%s"' % oldvalue, 'newvalue: "%s"' % self._GetValue())
-                self._Refresh()      ## Update the valid color -if- the value changed
         dbg(indent=0, suspend=0)
         return valid
 
@@ -3251,6 +3427,7 @@ class wxMaskedEditMixin:
                 number = float(value.replace(groupchar, ''))
             else:
                 number = int( value.replace(groupchar, ''))
+            dbg('number:', number)
             if self._ctrl_constraints._hasRange:
                 valid = self._ctrl_constraints._rangeLow <= number <= self._ctrl_constraints._rangeHigh
             else:
@@ -3265,7 +3442,7 @@ class wxMaskedEditMixin:
                 elif self._isDec:
                     ord = value[:self._decimalpos]
                 else:
-                    ord = value
+                    ord = value.strip()
 
                 parts = ord.split(groupchar)
                 for i in range(len(parts)):
@@ -3291,13 +3468,13 @@ class wxMaskedEditMixin:
         if candidate is None: value = self._GetValue()
         else: value = candidate
         dbg('value = "%s"' % value)
-        text = self._adjustDate(value)     ## Fix the date up before validating it
+        text = self._adjustDate(value, force4digit_year=True)     ## Fix the date up before validating it
         dbg('text =', text)
         valid = True   # assume True until proven otherwise
 
         try:
             # replace fillChar in each field with space:
-            datestr = text[0:10]
+            datestr = text[0:self._dateExtent]
             for i in range(3):
                 field = self._fields[i]
                 start, end = field._extent
@@ -3305,10 +3482,21 @@ class wxMaskedEditMixin:
                 fstr.replace(field._fillChar, ' ')
                 datestr = datestr[:start] + fstr + datestr[end:]
 
-            parts = getDateParts( datestr, self._datestyle)
-            year,month,day = [int(part) for part in parts]
+            year, month, day = getDateParts( datestr, self._datestyle)
+            year = int(year)
+            dbg('self._dateExtent:', self._dateExtent)
+            if self._dateExtent == 11:
+                month = charmonths_dict[month.lower()]
+            else:
+                month = int(month)
+            day = int(day)
+            dbg('year, month, day:', year, month, day)
+
         except ValueError:
             dbg('cannot convert string to integer parts')
+            valid = False
+        except KeyError:
+            dbg('cannot convert string to integer month')
             valid = False
 
         if valid:
@@ -3333,7 +3521,7 @@ class wxMaskedEditMixin:
             if valid:
                 # wxDateTime doesn't take kindly to leading/trailing spaces when parsing,
                 # so we eliminate them here:
-                timeStr     = text[11:].strip()         ## time portion of the string
+                timeStr     = text[self._dateExtent+1:].strip()         ## time portion of the string
                 if timeStr:
                     dbg('timeStr: "%s"' % timeStr)
                     try:
@@ -3529,7 +3717,7 @@ class wxMaskedEditMixin:
             return do.GetText().strip()
 
 
-    def _validatePaste(self, paste_text, sel_start, sel_to):
+    def _validatePaste(self, paste_text, sel_start, sel_to, raise_on_invalid=False):
         """
         Used by paste routine and field choice validation to see
         if a given slice of paste text is legal for the area in question:
@@ -3537,7 +3725,7 @@ class wxMaskedEditMixin:
         template.
         """
         dbg(suspend=1)
-        dbg('wxMaskedEditMixin::_validatePaste("%(paste_text)s", %(sel_start)d, %(sel_to)d)' % locals(), indent=1)
+        dbg('wxMaskedEditMixin::_validatePaste("%(paste_text)s", %(sel_start)d, %(sel_to)d), raise_on_invalid? %(raise_on_invalid)d' % locals(), indent=1)
         select_length = sel_to - sel_start
         maxlength = select_length
         dbg('sel_to - sel_start:', maxlength)
@@ -3547,7 +3735,10 @@ class wxMaskedEditMixin:
         length_considered = len(paste_text)
         if length_considered > maxlength:
             dbg('paste text will not fit into the control:', indent=0)
-            return False, None, None
+            if raise_on_invalid:
+                raise ValueError('"%s" will not fit into the control "%s"' % (paste_text, self.name))
+            else:
+                return False, None, None
 
         text = self._template
         dbg('length_considered:', length_considered)
@@ -3570,7 +3761,7 @@ class wxMaskedEditMixin:
                 dbg("replacement_text:", '"'+replacement_text+'"')
                 i += 1
                 replace_to += 1
-            elif char == self._template[replace_to]:
+            elif char == self._template[replace_to] or (i == 0 and char == '-' and self._signOk):
                 replacement_text += char
                 dbg("'%(char)s' == template(%(replace_to)d)" % locals())
                 dbg("replacement_text:", '"'+replacement_text+'"')
@@ -3585,6 +3776,17 @@ class wxMaskedEditMixin:
                     dbg("skipping template; next_entry =", next_entry)
                     dbg("replacement_text:", '"'+replacement_text+'"')
                     replace_to = next_entry  # so next_entry will be considered on next loop
+
+        if not valid_paste and raise_on_invalid:
+            dbg('raising exception')
+            raise ValueError('"%s" cannot be inserted into the control "%s"' % (paste_text, self.name))
+
+        elif i < len(paste_text):
+            valid_paste = False
+            if raise_on_invalid:
+                dbg('raising exception')
+                raise ValueError('"%s" will not fit into the control "%s"' % (paste_text, self.name))
+
         dbg('valid_paste?', valid_paste)
         if valid_paste:
             dbg('replacement_text: "%s"' % replacement_text, 'replace to:', replace_to)
@@ -3592,7 +3794,7 @@ class wxMaskedEditMixin:
         return valid_paste, replacement_text, replace_to
 
 
-    def _Paste( self, value=None ):
+    def _Paste( self, value=None, raise_on_invalid=False, just_return_value=False ):
         """
         Used to override the base control's .Paste() function,
         with our own that does validation.
@@ -3606,11 +3808,15 @@ class wxMaskedEditMixin:
         else:
             paste_text = value
 
-        if paste_text:
+        if paste_text is not None:
             dbg('paste text:', paste_text)
             # (conversion will raise ValueError if paste isn't legal)
             sel_start, sel_to = self._GetSelection()
-            valid_paste, replacement_text, replace_to = self._validatePaste(paste_text, sel_start, sel_to)
+            try:
+                valid_paste, replacement_text, replace_to = self._validatePaste(paste_text, sel_start, sel_to, raise_on_invalid)
+            except:
+                dbg('exception thrown', indent=0)
+                raise
 
             if not valid_paste:
                 dbg('paste text not legal for the selection or portion of the control following the cursor;')
@@ -3620,14 +3826,21 @@ class wxMaskedEditMixin:
             text = self._eraseSelection()
 
             new_text = text[:sel_start] + replacement_text + text[replace_to:]
+            if new_text:
+                new_text = string.ljust(new_text,len(self._mask))
             dbg("new_text:", '"'+new_text+'"')
 
-            if new_text == '':
-                self.ClearValue()
+            if not just_return_value:
+                if new_text == '':
+                    self.ClearValue()
+                else:
+                    wxCallAfter(self._SetValue, )
+                    new_pos = sel_start + len(replacement_text)
+                    wxCallAfter(self._SetInsertionPoint, new_pos)
             else:
-                wxCallAfter(self._SetValue, string.ljust(new_text,len(self._mask)))
-                new_pos = sel_start + len(replacement_text)
-                wxCallAfter(self._SetInsertionPoint, new_pos)
+                return new_text
+        elif just_return_value:
+            return self._GetValue()
         dbg(indent=0)
 
 
@@ -3733,7 +3946,23 @@ class wxMaskedTextCtrl( wxTextCtrl, wxMaskedEditMixin ):
         from the base wx control.
         """
         dbg('wxMaskedTextCtrl::SetValue = "%s"' % value, indent=1)
-        self._Paste(value)
+
+        # empty previous contents, replacing entire value:
+        self._SetInsertionPoint(0)
+        self._SetSelection(0, len(self._mask))
+
+        # make SetValue behave the same as if you had typed the value in:
+        value = self._Paste(value, raise_on_invalid=True, just_return_value=True)
+        if self._isDec:
+            self._isNeg = False     # (clear current assumptions)
+            value = self._adjustDec(value)
+        elif self._isInt:
+            self._isNeg = False     # (clear current assumptions)
+            value = self._adjustInt(value)
+        elif self._isDate:
+            value = self._adjustDate(value)
+
+        self._SetValue(value)
         dbg(indent=0)
 
 
@@ -3785,6 +4014,17 @@ class wxMaskedTextCtrl( wxTextCtrl, wxMaskedEditMixin ):
         from the base wx control.
         """
         self._Paste()   # call the mixin's Paste method
+
+
+    def IsModified(self):
+        """
+        This function overrides the raw wxTextCtrl method, because the
+        masked edit mixin uses SetValue to change the value, which doesn't
+        modify the state of this attribute.  So, we keep track on each
+        keystroke to see if the value changes, and if so, it's been
+        modified.
+        """
+        return wxTextCtrl.IsModified(self) or self.modified
 
 
 
@@ -3947,8 +4187,23 @@ class wxMaskedComboBox( wxComboBox, wxMaskedEditMixin ):
         masked control.  NOTE: this must be done in the class derived
         from the base wx control.
         """
-        self._Paste(value)
 
+        # empty previous contents, replacing entire value:
+        self._SetInsertionPoint(0)
+        self._SetSelection(0, len(self._mask))
+
+        # make SetValue behave the same as if you had typed the value in:
+        value = self._Paste(value, raise_on_invalid=True, just_return_value=True)
+        if self._isDec:
+            self._isNeg = False     # (clear current assumptions)
+            value = self._adjustDec(value)
+        elif self._isInt:
+            self._isNeg = False     # (clear current assumptions)
+            value = self._adjustInt(value)
+        elif self._isDate:
+            value = self._adjustDate(value)
+
+        self._SetValue(value)
 
     def _Refresh(self):
         """
@@ -4222,9 +4477,18 @@ def isDateType( fmtstring ):
     """ Checks the mask and returns True if it fits an allowed
         date or datetime format.
     """
-    dateMasks = ("^##/##/####$","^####/##/##$","^##/##/#### ",
-                 "^####/##/## ","^##-##-####$","^####-##-##$",
-                 "^##-##-#### ","^####-##-## ")
+    dateMasks = ("^##/##/####",
+                 "^##-##-####",
+                 "^##.##.####",
+                 "^####/##/##",
+                 "^####-##-##",
+                 "^####.##.##",
+                 "^##/CCC/####",
+                 "^##.CCC.####",
+                 "^##/##/##$",
+                 "^##/##/## ",
+                 "^##/CCC/##$",
+                 "^##.CCC.## ",)
     reString  = "|".join(dateMasks)
     filter = re.compile( reString)
     if re.match(filter,fmtstring): return True
@@ -4253,7 +4517,11 @@ def isInteger( fmtstring ):
 
 
 def getDateParts( dateStr, dateFmt ):
-    clip    = dateStr[0:10]
+    if len(dateStr) > 11: clip = dateStr[0:11]
+    else:                 clip = dateStr
+    if clip[-2] not in string.digits:
+        clip = clip[:-1]    # (got part of time; drop it)
+
     dateSep = (('/' in clip) * '/') + (('-' in clip) * '-') + (('.' in clip) * '.')
     slices  = clip.split(dateSep)
     if dateFmt == "MDY":
@@ -4360,21 +4628,21 @@ Try entering nonsensical or partial values in validated fields to see what happe
             # the options!
             controls = [
             #description        mask                    excl format     regexp                              range,list,initial
-##           ("Phone No",         "(###) ###-#### x:###", "", 'F!^-R',    "^\(\d\d\d\) \d\d\d-\d\d\d\d",    '','',''),
-##           ("Last Name Only",   "C{14}",                "", 'F {list}', '^[A-Z][a-zA-Z]+',                  '',('Smith','Jones','Williams'),''),
-##           ("Full Name",        "C{14}",                "", 'F_',       '^[A-Z][a-zA-Z]+ [A-Z][a-zA-Z]+',   '','',''),
-##           ("Social Sec#",      "###-##-####",          "", 'F',        "\d{3}-\d{2}-\d{4}",                '','',''),
-##           ("U.S. Zip+4",       "#{5}-#{4}",            "", 'F',        "\d{5}-(\s{4}|\d{4})",'','',''),
-##           ("U.S. State (2 char)\n(with default)","AA",                 "", 'F!',       "[A-Z]{2}",                         '',states, 'AZ'),
-##           ("Customer No",      "\CAA-###",              "", 'F!',       "C[A-Z]{2}-\d{3}",                   '','',''),
-           ("Date (MDY) + Time\n(with default)",      "##/##/#### ##:## AM",  'BCDEFGHIJKLMNOQRSTUVWXYZ','DFR!',"",                '','', '')#r'03/05/2003 12:00 AM'),
-##           ("Invoice Total",    "#{9}.##",              "", 'F-R,',     "",                                 '','', ''),
-##           ("Integer (signed)\n(with default)", "#{6}",                 "", 'F-R',      "",                                 '','', '0     '),
-##           ("Integer (unsigned)\n(with default), 1-399", "######",      "", 'F',        "",                                 (1,399),'', '1     '),
-##           ("Month selector",   "XXX",                  "", 'F',        "",                                 "","",
-##                ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']),
-##           ("fraction selector","#/##",                 "", 'F',        "^\d\/\d\d?",                       "","",
-##                ['2/3', '3/4', '1/2', '1/4', '1/8', '1/16', '1/32', '1/64'])
+           ("Phone No",         "(###) ###-#### x:###", "", 'F!^-R',    "^\(\d\d\d\) \d\d\d-\d\d\d\d",    (),[],''),
+           ("Last Name Only",   "C{14}",                "", 'F {list}', '^[A-Z][a-zA-Z]+',                  (),('Smith','Jones','Williams'),''),
+           ("Full Name",        "C{14}",                "", 'F_',       '^[A-Z][a-zA-Z]+ [A-Z][a-zA-Z]+',   (),[],''),
+           ("Social Sec#",      "###-##-####",          "", 'F',        "\d{3}-\d{2}-\d{4}",                (),[],''),
+           ("U.S. Zip+4",       "#{5}-#{4}",            "", 'F',        "\d{5}-(\s{4}|\d{4})",(),[],''),
+           ("U.S. State (2 char)\n(with default)","AA",                 "", 'F!',       "[A-Z]{2}",                         (),states, 'AZ'),
+           ("Customer No",      "\CAA-###",              "", 'F!',      "C[A-Z]{2}-\d{3}",                   (),[],''),
+           ("Date (MDY) + Time\n(with default)",      "##/##/#### ##:## AM",  'BCDEFGHIJKLMNOQRSTUVWXYZ','DFR!',"",                (),[], r'03/05/2003 12:00 AM'),
+           ("Invoice Total",    "#{9}.##",              "", 'F-R,',     "",                                 (),[], ''),
+           ("Integer (signed)\n(with default)", "#{6}",                 "", 'F-R',      "",                                 (),[], '0     '),
+           ("Integer (unsigned)\n(with default), 1-399", "######",      "", 'F',        "",                                 (1,399),[], '1     '),
+           ("Month selector",   "XXX",                  "", 'F',        "",                                 (),
+                ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],""),
+           ("fraction selector","#/##",                 "", 'F',        "^\d\/\d\d?",                       (),
+                ['2/3', '3/4', '1/2', '1/4', '1/8', '1/16', '1/32', '1/64'], "")
            ]
 
             for control in controls:
@@ -4598,9 +4866,37 @@ i=1
 ##  3. Fix shift-left selection for wxMaskedComboBox.
 
 
-
 ## CHANGELOG:
 ## ====================
+##  Version 1.2
+##   1. Fixed .SetValue() to replace the current value, rather than the current
+##      selection. Also changed it to generate ValueError if presented with
+##      either a value which doesn't follow the format or won't fit.  Also made
+##      set value adjust numeric and date controls as if user entered the value.
+##      Expanded doc explaining how SetValue() works.
+##   2. Fixed EUDATE* autoformats, fixed IsDateType mask list, and added ability to
+##      use 3-char months for dates, and EUDATETIME, and EUDATEMILTIME autoformats.
+##   3. Made all date autoformats automatically pick implied "datestyle".
+##   4. Added IsModified override, since base wxTextCtrl never reports modified if
+##      .SetValue used to change the value, which is what the masked edit controls
+##      use internally.
+##   5. Fixed bug in date position adjustment on 2 to 4 digit date conversion when
+##      using tab to "leave field" and auto-adjust.
+##   6. Fixed bug in _isCharAllowed() for negative number insertion on pastes,
+##      and bug in ._Paste() that didn't account for signs in signed masks either.
+##   7. Fixed issues with _adjustPos for right-insert fields causing improper
+##      selection/replacement of values
+##   8. Fixed _OnHome handler to properly handle extending current selection to
+##      beginning of control.
+##   9. Exposed all (valid) autoformats to demo, binding descriptions to
+##      autoformats.
+##  10. Fixed a couple of bugs in email regexp.
+##  11. Modified autoformats to be more amenable to international use.
+##  12. Clarified meaning of '-' formatcode in doc.
+##  13. Fixed a couple of coding bugs being flagged by Python2.1.
+##  14. Fixed several issues with sign positioning, erasure and validity
+##      checking for "numeric" masked controls.
+##
 ##  Version 1.1
 ##   1. Changed calling interface to use boolean "useFixedWidthFont" (True by default)
 ##      vs. literal font facename, and use wxTELETYPE as the font family
