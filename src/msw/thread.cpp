@@ -829,27 +829,49 @@ wxThreadError wxThread::Delete(ExitCode *pRc)
 
     HANDLE hThread = m_internal->GetHandle();
 
-    // does is still run?
-    if ( isRunning || IsRunning() )
+    // Check if thread is really still running.  There is a
+    // race condition in WinThreadStart between the time the
+    // m_internal->m_state is set to STATE_EXITED and the win32
+    // thread actually exits.  It can be flagged as STATE_EXITED
+    // and then we don't wait for it to exit.  This will cause
+    // GetExitCodeThread to return STILL_ACTIVE.
+    if ( !isRunning )
+    {
+        if ( !IsRunning() )
+        {
+            if ( ::GetExitCodeThread(hThread, (LPDWORD)&rc) )
+            {
+                if ((DWORD)rc == STILL_ACTIVE)
+                    isRunning = TRUE;
+            }
+        }														
+        else
+        {
+            isRunning = TRUE;
+        }
+    }
+    
+    // does it still run?
+    if ( isRunning )
     {
         if ( IsMain() )
         {
             // set flag for wxIsWaitingForThread()
             gs_waitingForThread = TRUE;
-
+            
 #if wxUSE_GUI
             wxBeginBusyCursor();
 #endif // wxUSE_GUI
         }
-
+        
         // ask the thread to terminate
         if ( shouldCancel )
         {
             wxCriticalSectionLocker lock(m_critsect);
-
+            
             m_internal->Cancel();
         }
-
+        
 #if wxUSE_GUI
         // we can't just wait for the thread to terminate because it might be
         // calling some GUI functions and so it will never terminate before we
@@ -858,50 +880,61 @@ wxThreadError wxThread::Delete(ExitCode *pRc)
         do
         {
             result = ::MsgWaitForMultipleObjects
-                     (
-                       1,              // number of objects to wait for
-                       &hThread,       // the objects
-                       FALSE,          // don't wait for all objects
-                       INFINITE,       // no timeout
-                       QS_ALLEVENTS    // return as soon as there are any events
-                     );
-
+                (
+                1,              // number of objects to wait for
+                &hThread,       // the objects
+                FALSE,          // don't wait for all objects
+                INFINITE,       // no timeout
+                QS_ALLEVENTS    // return as soon as there are any events
+                );
+            
             switch ( result )
             {
-                case 0xFFFFFFFF:
-                    // error
-                    wxLogSysError(_("Can not wait for thread termination"));
-                    Kill();
-                    return wxTHREAD_KILLED;
-
-                case WAIT_OBJECT_0:
-                    // thread we're waiting for terminated
-                    break;
-
-                case WAIT_OBJECT_0 + 1:
-                    // new message arrived, process it
-                    if ( !wxTheApp->DoMessage() )
+            case 0xFFFFFFFF:
+                // error
+                wxLogSysError(_("Can not wait for thread termination"));
+                Kill();
+                return wxTHREAD_KILLED;
+                
+            case WAIT_OBJECT_0:
+                // thread we're waiting for terminated
+                break;
+                
+            case WAIT_OBJECT_0 + 1:
+                {
+                    MSG	peekMsg;
+                    // Check if a new message has really arrived.
+                    // MsgWaitForMultipleObjects can indicate that a message
+                    // is ready for processing, but this message may be sucked
+                    // up by GetMessage and then GetMessage will hang and not
+                    // allow us to process the actual thread exit event.
+                    if (::PeekMessage(&peekMsg, (HWND) NULL, 0, 0, PM_NOREMOVE))
                     {
-                        // WM_QUIT received: kill the thread
-                        Kill();
-
-                        return wxTHREAD_KILLED;
-                    }
-
-                    if ( IsMain() )
-                    {
-                        // give the thread we're waiting for chance to exit
-                        // from the GUI call it might have been in
-                        if ( (gs_nWaitingForGui > 0) && wxGuiOwnedByMainThread() )
+                        // new message arrived, process it
+                        if ( !wxTheApp->DoMessage() )
                         {
-                            wxMutexGuiLeave();
+                            // WM_QUIT received: kill the thread
+                            Kill();
+                            
+                            return wxTHREAD_KILLED;
                         }
                     }
-
-                    break;
-
-                default:
-                    wxFAIL_MSG(wxT("unexpected result of MsgWaitForMultipleObject"));
+                }
+                
+                if ( IsMain() )
+                {
+                    // give the thread we're waiting for chance to exit
+                    // from the GUI call it might have been in
+                    if ( (gs_nWaitingForGui > 0) && wxGuiOwnedByMainThread() )
+                    {
+                        wxMutexGuiLeave();
+                    }
+                }
+                
+                break;
+                
+            default:
+                wxFAIL_MSG(wxT("unexpected result of MsgWaitForMultipleObject"));
             }
         } while ( result != WAIT_OBJECT_0 );
 #else // !wxUSE_GUI
