@@ -1169,7 +1169,7 @@ bool wxPathExists(const wxChar *pszPathName)
   wxStructStat st;
 
   return wxStat(wxFNSTRINGCAST strPath.fn_str(), &st) == 0 &&
-         S_ISDIR(st.st_mode);
+         ((st.st_mode & S_IFMT) == S_IFDIR);
 }
 
 // Get a temporary filename, opening and closing the file.

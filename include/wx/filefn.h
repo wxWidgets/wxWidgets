@@ -107,6 +107,7 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
         #define   O_CREAT     _O_CREAT
         #define   O_BINARY    _O_BINARY
 
+        #define   S_IFMT      _S_IFMT
         #define   S_IFDIR     _S_IFDIR
         #define   S_IFREG     _S_IFREG
     #endif // O_RDONLY
