@@ -190,11 +190,22 @@ void wxBell()
 
 int wxGetOsVersion(int *majorVsn, int *minorVsn)
 {
-	long theSystem ;
-  Gestalt(gestaltSystemVersion, &theSystem) ;
-  *minorVsn = (theSystem & 0xFF ) ;
-  *majorVsn = (theSystem >> 8 ) ; // are there x-platform conventions ?
-  return wxMACINTOSH;
+    long theSystem ;
+    
+    // are there x-platform conventions ?
+
+    Gestalt(gestaltSystemVersion, &theSystem) ;
+    if (minorVsn != NULL) {
+	*minorVsn = (theSystem & 0xFF ) ;
+    }
+    if (majorVsn != NULL) {
+	*majorVsn = (theSystem >> 8 ) ;
+    }
+#ifdef __DARWIN__
+    return wxMAC_DARWIN;
+#else
+    return wxMAC;
+#endif
 }
 
 // Reading and writing resources (eg WIN.INI, .Xdefaults)

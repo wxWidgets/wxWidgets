@@ -1503,7 +1503,8 @@ void wxWindowBase::OnMiddleClick( wxMouseEvent& event )
         switch ( wxGetOsVersion() )
         {
             case wxMOTIF_X:     port = _T("Motif"); break;
-            case wxMACINTOSH:   port = _T("Mac"); break;
+            case wxMAC:
+            case wxMAC_DARWIN:  port = _T("Mac"); break;
             case wxBEOS:        port = _T("BeOS"); break;
             case wxGTK:
             case wxGTK_WIN32:

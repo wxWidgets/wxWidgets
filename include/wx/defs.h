@@ -385,7 +385,8 @@ enum
     wxMOTIF_X,                // OSF Motif 1.x.x
     wxCOSE_X,                 // OSF Common Desktop Environment
     wxNEXTSTEP,               // NeXTStep
-    wxMACINTOSH,              // Apple System 7 and 8
+    wxMAC,                    // Apple Mac OS 8/9/X with Mac paths
+    wxMAC_DARWIN,             // Apple Mac OS X with Unix paths
     wxBEOS,                   // BeOS
     wxGTK,                    // GTK on X
     wxGTK_WIN32,              // GTK on Win32
