@@ -159,7 +159,7 @@ bool wxMemoryFSHandler::CheckHash(const wxString& filename)
 
     
     wxMemoryOutputStream mems;
-    if (image.Ok() && image.SaveFile(mems, type))
+    if (image.Ok() && image.SaveFile(mems, (int)type))
         m_Hash -> Put(filename, new MemFSHashObj(mems));
     else
     {
