@@ -100,7 +100,7 @@ clean:
         -erase *.map
         -erase *.pdb
 
-cleanutils: clean clean_wxprop
+cleanutils: clean
 
 DOCSOURCES=$(LOCALDOCDIR)\dialoged.tex $(LOCALDOCDIR)\body.tex\
  $(LOCALDOCDIR)\bugs.tex $(LOCALDOCDIR)\changes.tex\

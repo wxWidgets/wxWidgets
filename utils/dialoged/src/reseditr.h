@@ -25,8 +25,7 @@
 #include "wx/toolbar.h"
 #include "wx/imaglist.h"
 #include "wx/treectrl.h"
-
-#include "proplist.h"
+#include "wx/proplist.h"
 #include "symbtabl.h"
 #include "winstyle.h"
 

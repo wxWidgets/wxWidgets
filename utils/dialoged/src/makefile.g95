@@ -19,17 +19,7 @@ OBJECTS = $(OBJDIR)/dialoged.$(OBJSUFF) $(OBJDIR)/reseditr.$(OBJSUFF)\
  $(OBJDIR)/edlist.$(OBJSUFF) $(OBJDIR)/edtree.$(OBJSUFF) $(OBJDIR)/winstyle.$(OBJSUFF) $(OBJDIR)/symbtabl.$(OBJSUFF)\
  $(OBJDIR)/dialoged_resources.$(OBJSUFF)
 
-EXTRAINC = -I../../wxprop/src
-
-LDFLAGS =  -Wl,--subsystem,windows -mwindows -L$(WXDIR)/lib -L../../wxprop/lib
-LDLIBS=-lwxprop $(LIBS)
-
-CPPFLAGS = $(XINCLUDE) $(INC) $(OPTIONS) $(GUI) $(DEBUGFLAGS) -DDEBUG='$(DEBUG)' $(WARN) $(OPT) $(EXTRAINC)
-
-all:    $(OBJDIR) wxprop dialoged$(GUISUFFIX)$(EXESUFF)
-
-wxprop:
-	cd ../../wxprop/src; $(MAKE) -f makefile.g95
+all:    $(OBJDIR) dialoged$(GUISUFFIX)$(EXESUFF)
 
 $(OBJDIR):
 	mkdir $(OBJDIR)
