@@ -27,6 +27,10 @@ class DynamicSashSplitEventPtr(DynamicSashSplitEvent):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = DynamicSashSplitEvent
 _gizmos.DynamicSashSplitEvent_swigregister(DynamicSashSplitEventPtr)
+cvar = _gizmos.cvar
+DynamicSashNameStr = cvar.DynamicSashNameStr
+EditableListBoxNameStr = cvar.EditableListBoxNameStr
+TreeListCtrlNameStr = cvar.TreeListCtrlNameStr
 
 class DynamicSashUnifyEvent(core.CommandEvent):
     def __repr__(self):
@@ -52,7 +56,7 @@ class DynamicSashWindow(core.Window):
         """
         __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=wxCLIP_CHILDREN|wxDS_MANAGE_SCROLLBARS|wxDS_DRAG_CORNER, 
-            String name=wxPyDynamicSashNameStr) -> DynamicSashWindow
+            String name=DynamicSashNameStr) -> DynamicSashWindow
         """
         newobj = _gizmos.new_DynamicSashWindow(*args, **kwargs)
         self.this = newobj.this
@@ -64,7 +68,7 @@ class DynamicSashWindow(core.Window):
         """
         Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=wxCLIP_CHILDREN|wxDS_MANAGE_SCROLLBARS|wxDS_DRAG_CORNER, 
-            String name=wxPyDynamicSashNameStr) -> bool
+            String name=DynamicSashNameStr) -> bool
         """
         return _gizmos.DynamicSashWindow_Create(*args, **kwargs)
 
@@ -103,7 +107,7 @@ class EditableListBox(windows.Panel):
         """
         __init__(Window parent, int id, String label, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=wxEL_ALLOW_NEW|wxEL_ALLOW_EDIT|wxEL_ALLOW_DELETE, 
-            String name=wxPyEditableListBoxNameStr) -> EditableListBox
+            String name=EditableListBoxNameStr) -> EditableListBox
         """
         newobj = _gizmos.new_EditableListBox(*args, **kwargs)
         self.this = newobj.this
@@ -411,7 +415,7 @@ class TreeListCtrl(core.Control):
         __init__(Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=TR_DEFAULT_STYLE, 
             Validator validator=DefaultValidator, 
-            String name=wxPyTreeListCtrlNameStr) -> TreeListCtrl
+            String name=TreeListCtrlNameStr) -> TreeListCtrl
         """
         newobj = _gizmos.new_TreeListCtrl(*args, **kwargs)
         self.this = newobj.this
@@ -424,7 +428,7 @@ class TreeListCtrl(core.Control):
         Create(Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=TR_DEFAULT_STYLE, 
             Validator validator=DefaultValidator, 
-            String name=wxPyTreeListCtrlNameStr) -> bool
+            String name=TreeListCtrlNameStr) -> bool
         """
         return _gizmos.TreeListCtrl_Create(*args, **kwargs)
 
@@ -461,43 +465,43 @@ class TreeListCtrl(core.Control):
         return _gizmos.TreeListCtrl_SetLineSpacing(*args, **kwargs)
 
     def GetImageList(*args, **kwargs):
-        """GetImageList() -> wxImageList"""
+        """GetImageList() -> ImageList"""
         return _gizmos.TreeListCtrl_GetImageList(*args, **kwargs)
 
     def GetStateImageList(*args, **kwargs):
-        """GetStateImageList() -> wxImageList"""
+        """GetStateImageList() -> ImageList"""
         return _gizmos.TreeListCtrl_GetStateImageList(*args, **kwargs)
 
     def GetButtonsImageList(*args, **kwargs):
-        """GetButtonsImageList() -> wxImageList"""
+        """GetButtonsImageList() -> ImageList"""
         return _gizmos.TreeListCtrl_GetButtonsImageList(*args, **kwargs)
 
     def SetImageList(*args, **kwargs):
-        """SetImageList(wxImageList imageList)"""
+        """SetImageList(ImageList imageList)"""
         return _gizmos.TreeListCtrl_SetImageList(*args, **kwargs)
 
     def SetStateImageList(*args, **kwargs):
-        """SetStateImageList(wxImageList imageList)"""
+        """SetStateImageList(ImageList imageList)"""
         return _gizmos.TreeListCtrl_SetStateImageList(*args, **kwargs)
 
     def SetButtonsImageList(*args, **kwargs):
-        """SetButtonsImageList(wxImageList imageList)"""
+        """SetButtonsImageList(ImageList imageList)"""
         return _gizmos.TreeListCtrl_SetButtonsImageList(*args, **kwargs)
 
     def AssignImageList(*args, **kwargs):
-        """AssignImageList(wxImageList imageList)"""
+        """AssignImageList(ImageList imageList)"""
         val = _gizmos.TreeListCtrl_AssignImageList(*args, **kwargs)
         args[1].thisown = 0
         return val
 
     def AssignStateImageList(*args, **kwargs):
-        """AssignStateImageList(wxImageList imageList)"""
+        """AssignStateImageList(ImageList imageList)"""
         val = _gizmos.TreeListCtrl_AssignStateImageList(*args, **kwargs)
         args[1].thisown = 0
         return val
 
     def AssignButtonsImageList(*args, **kwargs):
-        """AssignButtonsImageList(wxImageList imageList)"""
+        """AssignButtonsImageList(ImageList imageList)"""
         val = _gizmos.TreeListCtrl_AssignButtonsImageList(*args, **kwargs)
         args[1].thisown = 0
         return val

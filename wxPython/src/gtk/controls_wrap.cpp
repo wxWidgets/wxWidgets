@@ -307,36 +307,22 @@ static swig_type_info *swig_types[84];
 #include "wx/wxPython/wxPython.h"
 #include "wx/wxPython/pyclasses.h"
 
-    DECLARE_DEF_STRING(PanelNameStr);
-    DECLARE_DEF_STRING(EmptyString);
-    DECLARE_DEF_STRING(ControlNameStr);
-
-
-
-    DECLARE_DEF_STRING(ButtonNameStr);
-
-
-    DECLARE_DEF_STRING(CheckBoxNameStr);
-
-
-    DECLARE_DEF_STRING(ChoiceNameStr);
-
-
-    DECLARE_DEF_STRING(ComboBoxNameStr);
-
-
-    DECLARE_DEF_STRING(GaugeNameStr);
-
-
-    DECLARE_DEF_STRING(StaticBitmapNameStr);
-    DECLARE_DEF_STRING(StaticBoxNameStr);
-    DECLARE_DEF_STRING(StaticTextNameStr);
-
+ static const wxString wxPyPanelNameStr(wxPanelNameStr); 
+ static const wxString wxPyEmptyString(wxEmptyString); 
+ static const wxString wxPyControlNameStr(wxControlNameStr); 
+ static const wxString wxPyButtonNameStr(wxButtonNameStr); 
+ static const wxString wxPyCheckBoxNameStr(wxCheckBoxNameStr); 
+ static const wxString wxPyChoiceNameStr(wxChoiceNameStr); 
+ static const wxString wxPyComboBoxNameStr(wxComboBoxNameStr); 
+ static const wxString wxPyGaugeNameStr(wxGaugeNameStr); 
+ static const wxString wxPyStaticBitmapNameStr(wxStaticBitmapNameStr); 
+ static const wxString wxPyStaticBoxNameStr(wxStaticBoxNameStr); 
+ static const wxString wxPyStaticTextNameStr(wxStaticTextNameStr); 
 
 #include <wx/checklst.h>
     
-    DECLARE_DEF_STRING(ListBoxNameStr);
 
+ static const wxString wxPyListBoxNameStr(wxListBoxNameStr); 
 void wxListBox_Insert(wxListBox *self,wxString const &item,int pos,PyObject *clientData){
             if (clientData) {
                 wxPyClientData* data = new wxPyClientData(clientData);
@@ -353,9 +339,7 @@ PyObject *wxListBox_GetSelections(wxListBox *self){
           }
           return tup;
       }
-
-    DECLARE_DEF_STRING(TextCtrlNameStr);
-
+ static const wxString wxPyTextCtrlNameStr(wxTextCtrlNameStr); 
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
@@ -389,32 +373,22 @@ void wxTextCtrl_write(wxTextCtrl *self,wxString const &text){
 wxString wxTextCtrl_GetString(wxTextCtrl *self,long from,long to){
             return self->GetValue().Mid(from, to - from);
         }
-
-    DECLARE_DEF_STRING(ScrollBarNameStr);
-
-
-    DECLARE_DEF_STRING(SPIN_BUTTON_NAME);
-    wxChar* wxSpinCtrlNameStr = _T("wxSpinCtrl");
-    DECLARE_DEF_STRING(SpinCtrlNameStr);
-
+ static const wxString wxPyScrollBarNameStr(wxScrollBarNameStr); 
+ static const wxString wxPySPIN_BUTTON_NAME(wxSPIN_BUTTON_NAME); 
+ static const wxString wxPySpinCtrlNameStr(wxT(_T("wxSpinCtrl"))); 
 void wxSpinCtrl_SetSelection(wxSpinCtrl *self,long from,long to){
         }
-
-    DECLARE_DEF_STRING(RadioBoxNameStr);
-    DECLARE_DEF_STRING(RadioButtonNameStr);
-
+ static const wxString wxPyRadioBoxNameStr(wxRadioBoxNameStr); 
+ static const wxString wxPyRadioButtonNameStr(wxRadioButtonNameStr); 
 int wxRadioBox_GetColumnCount(wxRadioBox const *self){ return -1; }
 int wxRadioBox_GetRowCount(wxRadioBox const *self){ return -1; }
 int wxRadioBox_GetNextItem(wxRadioBox const *self,int item,wxDirection dir,long style){ return -1; }
 
 #include <wx/slider.h>
 
-    DECLARE_DEF_STRING(SliderNameStr);
 
-
-    wxChar* wxToggleButtonNameStr = _T("wxToggleButton");
-    DECLARE_DEF_STRING(ToggleButtonNameStr);
-
+ static const wxString wxPySliderNameStr(wxSliderNameStr); 
+ static const wxString wxPyToggleButtonNameStr(wxT(_T("wxToggleButton"))); 
 
 #ifdef __WXMAC__
 // implement dummy classes and such for wxMac
@@ -434,12 +408,8 @@ public:
 };
 #endif
 
-
-    DECLARE_DEF_STRING(NOTEBOOK_NAME);
-
-
-    DECLARE_DEF_STRING(ToolBarNameStr);
-
+ static const wxString wxPyNOTEBOOK_NAME(wxNOTEBOOK_NAME); 
+ static const wxString wxPyToolBarNameStr(wxToolBarNameStr); 
 PyObject *wxToolBarToolBase_GetClientData(wxToolBarToolBase *self){
             wxPyUserData* udata = (wxPyUserData*)self->GetClientData();
             if (udata) {
@@ -483,9 +453,8 @@ void wxToolBarBase_SetToolClientData(wxToolBarBase *self,int id,PyObject *client
 
 #include <wx/listctrl.h>
 
-    const wxChar* wxListCtrlNameStr = _T("wxListCtrl");
-    DECLARE_DEF_STRING(ListCtrlNameStr);
 
+ static const wxString wxPyListCtrlNameStr(wxT(_T("wxListCtrl"))); 
 void wxListItemAttr_Destroy(wxListItemAttr *self){ delete self; }
  // Python aware sorting function for wxPyListCtrl
     static int wxCALLBACK wxPyListCtrl_SortItems(long item1, long item2, long funcPtr) {
@@ -588,10 +557,8 @@ wxWindow *wxPyListCtrl_GetMainWindow(wxPyListCtrl *self){
 
 #include <wx/treectrl.h>
 #include "wx/wxPython/pytree.h"
-    
-    const wxChar* wx_TreeCtrlNameStr = _T("wxTreeCtrl");
-    DECLARE_DEF_STRING(_TreeCtrlNameStr);
 
+ static const wxString wxPyTreeCtrlNameStr(wxT(_T("wxTreeCtrl"))); 
 bool wxTreeItemId_operator_ee___(wxTreeItemId *self,wxTreeItemId const *other){
             if (!other) return False;
             return *self == *other;
@@ -723,9 +690,7 @@ PyObject *wxPyTreeCtrl_GetBoundingRect(wxPyTreeCtrl *self,wxTreeItemId const &it
             else
                 RETURN_NONE();
         }
-
-    DECLARE_DEF_STRING(DirDialogDefaultFolderStr);
-
+ static const wxString wxPyDirDialogDefaultFolderStr(wxDirDialogDefaultFolderStr); 
  // C++ version of Python aware wxControl
 class wxPyControl : public wxControl
 {
@@ -804,6 +769,26 @@ void wxHelpProvider_Destroy(wxHelpProvider *self){ delete self; }
 #ifdef __cplusplus
 extern "C" {
 #endif
+static int _wrap_ButtonNameStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable ButtonNameStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_ButtonNameStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyButtonNameStr)->c_str(), (&wxPyButtonNameStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyButtonNameStr)->c_str(), (&wxPyButtonNameStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
 static PyObject *_wrap_new_Button(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
@@ -1582,6 +1567,26 @@ static PyObject * BitmapButton_swigregister(PyObject *self, PyObject *args) {
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
+static int _wrap_CheckBoxNameStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable CheckBoxNameStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_CheckBoxNameStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyCheckBoxNameStr)->c_str(), (&wxPyCheckBoxNameStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyCheckBoxNameStr)->c_str(), (&wxPyCheckBoxNameStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
 static PyObject *_wrap_new_CheckBox(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
@@ -1974,6 +1979,26 @@ static PyObject * CheckBox_swigregister(PyObject *self, PyObject *args) {
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
+static int _wrap_ChoiceNameStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable ChoiceNameStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_ChoiceNameStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyChoiceNameStr)->c_str(), (&wxPyChoiceNameStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyChoiceNameStr)->c_str(), (&wxPyChoiceNameStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
 static PyObject *_wrap_new_Choice(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
@@ -2344,6 +2369,26 @@ static PyObject * Choice_swigregister(PyObject *self, PyObject *args) {
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
+static int _wrap_ComboBoxNameStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable ComboBoxNameStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_ComboBoxNameStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyComboBoxNameStr)->c_str(), (&wxPyComboBoxNameStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyComboBoxNameStr)->c_str(), (&wxPyComboBoxNameStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
 static PyObject *_wrap_new_ComboBox(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
@@ -2985,6 +3030,26 @@ static PyObject * ComboBox_swigregister(PyObject *self, PyObject *args) {
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
+static int _wrap_GaugeNameStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable GaugeNameStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_GaugeNameStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyGaugeNameStr)->c_str(), (&wxPyGaugeNameStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyGaugeNameStr)->c_str(), (&wxPyGaugeNameStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
 static PyObject *_wrap_new_Gauge(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
@@ -3394,6 +3459,66 @@ static PyObject * Gauge_swigregister(PyObject *self, PyObject *args) {
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
+static int _wrap_StaticBitmapNameStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable StaticBitmapNameStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_StaticBitmapNameStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyStaticBitmapNameStr)->c_str(), (&wxPyStaticBitmapNameStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyStaticBitmapNameStr)->c_str(), (&wxPyStaticBitmapNameStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_StaticBoxNameStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable StaticBoxNameStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_StaticBoxNameStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyStaticBoxNameStr)->c_str(), (&wxPyStaticBoxNameStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyStaticBoxNameStr)->c_str(), (&wxPyStaticBoxNameStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_StaticTextNameStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable StaticTextNameStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_StaticTextNameStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyStaticTextNameStr)->c_str(), (&wxPyStaticTextNameStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyStaticTextNameStr)->c_str(), (&wxPyStaticTextNameStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
 static PyObject *_wrap_new_StaticBox(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
@@ -4266,6 +4391,26 @@ static PyObject * StaticBitmap_swigregister(PyObject *self, PyObject *args) {
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
+static int _wrap_ListBoxNameStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable ListBoxNameStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_ListBoxNameStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyListBoxNameStr)->c_str(), (&wxPyListBoxNameStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyListBoxNameStr)->c_str(), (&wxPyListBoxNameStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
 static PyObject *_wrap_new_ListBox(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
@@ -5338,6 +5483,26 @@ static PyObject * CheckListBox_swigregister(PyObject *self, PyObject *args) {
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
+static int _wrap_TextCtrlNameStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable TextCtrlNameStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_TextCtrlNameStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyTextCtrlNameStr)->c_str(), (&wxPyTextCtrlNameStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyTextCtrlNameStr)->c_str(), (&wxPyTextCtrlNameStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
 static PyObject *_wrap_new_TextAttr__SWIG_0(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     wxTextAttr *result;
@@ -7988,6 +8153,26 @@ static PyObject * TextUrlEvent_swigregister(PyObject *self, PyObject *args) {
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
+static int _wrap_ScrollBarNameStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable ScrollBarNameStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_ScrollBarNameStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyScrollBarNameStr)->c_str(), (&wxPyScrollBarNameStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyScrollBarNameStr)->c_str(), (&wxPyScrollBarNameStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
 static PyObject *_wrap_new_ScrollBar(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
@@ -8354,6 +8539,46 @@ static PyObject * ScrollBar_swigregister(PyObject *self, PyObject *args) {
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
+static int _wrap_SPIN_BUTTON_NAME_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable SPIN_BUTTON_NAME is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_SPIN_BUTTON_NAME_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPySPIN_BUTTON_NAME)->c_str(), (&wxPySPIN_BUTTON_NAME)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPySPIN_BUTTON_NAME)->c_str(), (&wxPySPIN_BUTTON_NAME)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_SpinCtrlNameStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable SpinCtrlNameStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_SpinCtrlNameStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPySpinCtrlNameStr)->c_str(), (&wxPySpinCtrlNameStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPySpinCtrlNameStr)->c_str(), (&wxPySpinCtrlNameStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
 static PyObject *_wrap_new_SpinButton(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
@@ -9119,6 +9344,46 @@ static PyObject * SpinCtrl_swigregister(PyObject *self, PyObject *args) {
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
+static int _wrap_RadioBoxNameStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable RadioBoxNameStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_RadioBoxNameStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyRadioBoxNameStr)->c_str(), (&wxPyRadioBoxNameStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyRadioBoxNameStr)->c_str(), (&wxPyRadioBoxNameStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_RadioButtonNameStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable RadioButtonNameStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_RadioButtonNameStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyRadioButtonNameStr)->c_str(), (&wxPyRadioButtonNameStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyRadioButtonNameStr)->c_str(), (&wxPyRadioButtonNameStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
 static PyObject *_wrap_new_RadioBox(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
@@ -10035,6 +10300,26 @@ static PyObject * RadioButton_swigregister(PyObject *self, PyObject *args) {
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
+static int _wrap_SliderNameStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable SliderNameStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_SliderNameStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPySliderNameStr)->c_str(), (&wxPySliderNameStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPySliderNameStr)->c_str(), (&wxPySliderNameStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
 static PyObject *_wrap_new_Slider(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
@@ -10749,6 +11034,26 @@ static PyObject * Slider_swigregister(PyObject *self, PyObject *args) {
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
+static int _wrap_ToggleButtonNameStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable ToggleButtonNameStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_ToggleButtonNameStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyToggleButtonNameStr)->c_str(), (&wxPyToggleButtonNameStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyToggleButtonNameStr)->c_str(), (&wxPyToggleButtonNameStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
 static PyObject *_wrap_new_ToggleButton(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
@@ -11056,6 +11361,26 @@ static PyObject * ToggleButton_swigregister(PyObject *self, PyObject *args) {
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
+static int _wrap_NOTEBOOK_NAME_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable NOTEBOOK_NAME is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_NOTEBOOK_NAME_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyNOTEBOOK_NAME)->c_str(), (&wxPyNOTEBOOK_NAME)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyNOTEBOOK_NAME)->c_str(), (&wxPyNOTEBOOK_NAME)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
 static PyObject *_wrap_BookCtrl_GetPageCount(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxBookCtrl *arg1 = (wxBookCtrl *) 0 ;
@@ -15062,6 +15387,26 @@ static PyObject * ToolBar_swigregister(PyObject *self, PyObject *args) {
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
+static int _wrap_ListCtrlNameStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable ListCtrlNameStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_ListCtrlNameStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyListCtrlNameStr)->c_str(), (&wxPyListCtrlNameStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyListCtrlNameStr)->c_str(), (&wxPyListCtrlNameStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
 static PyObject *_wrap_new_ListItemAttr(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxColour const &arg1_defvalue = wxNullColour ;
@@ -19776,6 +20121,26 @@ static PyObject * ListView_swigregister(PyObject *self, PyObject *args) {
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
+static int _wrap_TreeCtrlNameStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable TreeCtrlNameStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_TreeCtrlNameStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyTreeCtrlNameStr)->c_str(), (&wxPyTreeCtrlNameStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyTreeCtrlNameStr)->c_str(), (&wxPyTreeCtrlNameStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
 static PyObject *_wrap_new_TreeItemId(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxTreeItemId *result;
@@ -20590,7 +20955,7 @@ static PyObject *_wrap_new_TreeCtrl(PyObject *self, PyObject *args, PyObject *kw
     long arg5 = (long) wxTR_DEFAULT_STYLE ;
     wxValidator const &arg6_defvalue = wxDefaultValidator ;
     wxValidator *arg6 = (wxValidator *) &arg6_defvalue ;
-    wxString const &arg7_defvalue = wxPy_TreeCtrlNameStr ;
+    wxString const &arg7_defvalue = wxPyTreeCtrlNameStr ;
     wxString *arg7 = (wxString *) &arg7_defvalue ;
     wxPyTreeCtrl *result;
     wxPoint temp3 ;
@@ -20639,7 +21004,9 @@ static PyObject *_wrap_new_TreeCtrl(PyObject *self, PyObject *args, PyObject *kw
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxPyTreeCtrl, 1);
+    {
+        resultobj = wxPyMake_wxObject(result); 
+    }
     {
         if (temp7)
         delete arg7;
@@ -20669,7 +21036,9 @@ static PyObject *_wrap_new_PreTreeCtrl(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxPyTreeCtrl, 1);
+    {
+        resultobj = wxPyMake_wxObject(result); 
+    }
     return resultobj;
     fail:
     return NULL;
@@ -20688,7 +21057,7 @@ static PyObject *_wrap_TreeCtrl_Create(PyObject *self, PyObject *args, PyObject 
     long arg6 = (long) wxTR_DEFAULT_STYLE ;
     wxValidator const &arg7_defvalue = wxDefaultValidator ;
     wxValidator *arg7 = (wxValidator *) &arg7_defvalue ;
-    wxString const &arg8_defvalue = wxPy_TreeCtrlNameStr ;
+    wxString const &arg8_defvalue = wxPyTreeCtrlNameStr ;
     wxString *arg8 = (wxString *) &arg8_defvalue ;
     bool result;
     wxPoint temp4 ;
@@ -23031,6 +23400,26 @@ static PyObject * TreeCtrl_swigregister(PyObject *self, PyObject *args) {
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
+static int _wrap_DirDialogDefaultFolderStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable DirDialogDefaultFolderStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_DirDialogDefaultFolderStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyDirDialogDefaultFolderStr)->c_str(), (&wxPyDirDialogDefaultFolderStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyDirDialogDefaultFolderStr)->c_str(), (&wxPyDirDialogDefaultFolderStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
 static PyObject *_wrap_new_GenericDirCtrl(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
@@ -23045,7 +23434,7 @@ static PyObject *_wrap_new_GenericDirCtrl(PyObject *self, PyObject *args, PyObje
     wxString const &arg7_defvalue = wxPyEmptyString ;
     wxString *arg7 = (wxString *) &arg7_defvalue ;
     int arg8 = (int) 0 ;
-    wxString const &arg9_defvalue = wxPy_TreeCtrlNameStr ;
+    wxString const &arg9_defvalue = wxPyTreeCtrlNameStr ;
     wxString *arg9 = (wxString *) &arg9_defvalue ;
     wxGenericDirCtrl *result;
     bool temp3 = False ;
@@ -23173,7 +23562,7 @@ static PyObject *_wrap_GenericDirCtrl_Create(PyObject *self, PyObject *args, PyO
     wxString const &arg8_defvalue = wxPyEmptyString ;
     wxString *arg8 = (wxString *) &arg8_defvalue ;
     int arg9 = (int) 0 ;
-    wxString const &arg10_defvalue = wxPy_TreeCtrlNameStr ;
+    wxString const &arg10_defvalue = wxPyTreeCtrlNameStr ;
     wxString *arg10 = (wxString *) &arg10_defvalue ;
     bool result;
     bool temp4 = False ;
@@ -23686,7 +24075,7 @@ static PyObject *_wrap_GenericDirCtrl_GetRootId(PyObject *self, PyObject *args, 
 static PyObject *_wrap_GenericDirCtrl_GetTreeCtrl(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGenericDirCtrl *arg1 = (wxGenericDirCtrl *) 0 ;
-    wxTreeCtrl *result;
+    wxPyTreeCtrl *result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "self", NULL 
@@ -23696,7 +24085,7 @@ static PyObject *_wrap_GenericDirCtrl_GetTreeCtrl(PyObject *self, PyObject *args
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxGenericDirCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxTreeCtrl *)((wxGenericDirCtrl const *)arg1)->GetTreeCtrl();
+        result = (wxPyTreeCtrl *)((wxGenericDirCtrl const *)arg1)->GetTreeCtrl();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -28130,16 +28519,36 @@ SWIGEXPORT(void) SWIG_init(void) {
     }
     SWIG_InstallConstants(d,swig_const_table);
     
+    PyDict_SetItemString(d,(char*)"cvar", SWIG_globals);
+    SWIG_addvarlink(SWIG_globals,(char*)"ButtonNameStr",_wrap_ButtonNameStr_get, _wrap_ButtonNameStr_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"CheckBoxNameStr",_wrap_CheckBoxNameStr_get, _wrap_CheckBoxNameStr_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"ChoiceNameStr",_wrap_ChoiceNameStr_get, _wrap_ChoiceNameStr_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"ComboBoxNameStr",_wrap_ComboBoxNameStr_get, _wrap_ComboBoxNameStr_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"GaugeNameStr",_wrap_GaugeNameStr_get, _wrap_GaugeNameStr_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"StaticBitmapNameStr",_wrap_StaticBitmapNameStr_get, _wrap_StaticBitmapNameStr_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"StaticBoxNameStr",_wrap_StaticBoxNameStr_get, _wrap_StaticBoxNameStr_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"StaticTextNameStr",_wrap_StaticTextNameStr_get, _wrap_StaticTextNameStr_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"ListBoxNameStr",_wrap_ListBoxNameStr_get, _wrap_ListBoxNameStr_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"TextCtrlNameStr",_wrap_TextCtrlNameStr_get, _wrap_TextCtrlNameStr_set);
     PyDict_SetItemString(d, "wxEVT_COMMAND_TEXT_UPDATED", PyInt_FromLong(wxEVT_COMMAND_TEXT_UPDATED));
     PyDict_SetItemString(d, "wxEVT_COMMAND_TEXT_ENTER", PyInt_FromLong(wxEVT_COMMAND_TEXT_ENTER));
     PyDict_SetItemString(d, "wxEVT_COMMAND_TEXT_URL", PyInt_FromLong(wxEVT_COMMAND_TEXT_URL));
     PyDict_SetItemString(d, "wxEVT_COMMAND_TEXT_MAXLEN", PyInt_FromLong(wxEVT_COMMAND_TEXT_MAXLEN));
+    SWIG_addvarlink(SWIG_globals,(char*)"ScrollBarNameStr",_wrap_ScrollBarNameStr_get, _wrap_ScrollBarNameStr_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"SPIN_BUTTON_NAME",_wrap_SPIN_BUTTON_NAME_get, _wrap_SPIN_BUTTON_NAME_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"SpinCtrlNameStr",_wrap_SpinCtrlNameStr_get, _wrap_SpinCtrlNameStr_set);
     PyDict_SetItemString(d, "wxEVT_COMMAND_SPINCTRL_UPDATED", PyInt_FromLong(wxEVT_COMMAND_SPINCTRL_UPDATED));
+    SWIG_addvarlink(SWIG_globals,(char*)"RadioBoxNameStr",_wrap_RadioBoxNameStr_get, _wrap_RadioBoxNameStr_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"RadioButtonNameStr",_wrap_RadioButtonNameStr_get, _wrap_RadioButtonNameStr_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"SliderNameStr",_wrap_SliderNameStr_get, _wrap_SliderNameStr_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"ToggleButtonNameStr",_wrap_ToggleButtonNameStr_get, _wrap_ToggleButtonNameStr_set);
     PyDict_SetItemString(d, "wxEVT_COMMAND_TOGGLEBUTTON_CLICKED", PyInt_FromLong(wxEVT_COMMAND_TOGGLEBUTTON_CLICKED));
+    SWIG_addvarlink(SWIG_globals,(char*)"NOTEBOOK_NAME",_wrap_NOTEBOOK_NAME_get, _wrap_NOTEBOOK_NAME_set);
     PyDict_SetItemString(d, "wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED", PyInt_FromLong(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED));
     PyDict_SetItemString(d, "wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING", PyInt_FromLong(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING));
     PyDict_SetItemString(d, "wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED", PyInt_FromLong(wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED));
     PyDict_SetItemString(d, "wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING", PyInt_FromLong(wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING));
+    SWIG_addvarlink(SWIG_globals,(char*)"ListCtrlNameStr",_wrap_ListCtrlNameStr_get, _wrap_ListCtrlNameStr_set);
     PyDict_SetItemString(d, "wxEVT_COMMAND_LIST_BEGIN_DRAG", PyInt_FromLong(wxEVT_COMMAND_LIST_BEGIN_DRAG));
     PyDict_SetItemString(d, "wxEVT_COMMAND_LIST_BEGIN_RDRAG", PyInt_FromLong(wxEVT_COMMAND_LIST_BEGIN_RDRAG));
     PyDict_SetItemString(d, "wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT", PyInt_FromLong(wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT));
@@ -28166,6 +28575,7 @@ SWIGEXPORT(void) SWIG_init(void) {
     // Map renamed classes back to their common name for OOR
     wxPyPtrTypeMap_Add("wxListCtrl", "wxPyListCtrl");
     
+    SWIG_addvarlink(SWIG_globals,(char*)"TreeCtrlNameStr",_wrap_TreeCtrlNameStr_get, _wrap_TreeCtrlNameStr_set);
     PyDict_SetItemString(d, "wxEVT_COMMAND_TREE_BEGIN_DRAG", PyInt_FromLong(wxEVT_COMMAND_TREE_BEGIN_DRAG));
     PyDict_SetItemString(d, "wxEVT_COMMAND_TREE_BEGIN_RDRAG", PyInt_FromLong(wxEVT_COMMAND_TREE_BEGIN_RDRAG));
     PyDict_SetItemString(d, "wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT", PyInt_FromLong(wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT));
@@ -28191,6 +28601,7 @@ SWIGEXPORT(void) SWIG_init(void) {
     wxPyPtrTypeMap_Add("wxTreeItemData", "wxPyTreeItemData");
     wxPyPtrTypeMap_Add("wxTreeCtrl", "wxPyTreeCtrl");
     
+    SWIG_addvarlink(SWIG_globals,(char*)"DirDialogDefaultFolderStr",_wrap_DirDialogDefaultFolderStr_get, _wrap_DirDialogDefaultFolderStr_set);
     PyDict_SetItemString(d, "wxEVT_HELP", PyInt_FromLong(wxEVT_HELP));
     PyDict_SetItemString(d, "wxEVT_DETAILED_HELP", PyInt_FromLong(wxEVT_DETAILED_HELP));
     

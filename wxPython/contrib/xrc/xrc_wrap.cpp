@@ -250,15 +250,15 @@ static swig_type_info *swig_types[23];
 #include <wx/xml/xml.h>
 #include <wx/xrc/xmlres.h>
 
-    static const wxString wxPyEmptyString(wxT(""));
-    static const wxString wxPyUTF8String(wxT("UTF-8"));
-    static const wxString wxPyStyleString(wxT("style"));
-    static const wxString wxPySizeString(wxT("size"));
-    static const wxString wxPyPosString(wxT("pos"));
-    static const wxString wxPyBitmapString(wxT("bitmap"));
-    static const wxString wxPyIconString(wxT("icon"));
-    static const wxString wxPyFontString(wxT("font"));
 
+ static const wxString wxPyEmptyString(wxEmptyString); 
+ static const wxString wxPyUTF8String(wxT("UTF-8")); 
+ static const wxString wxPyStyleString(wxT("style")); 
+ static const wxString wxPySizeString(wxT("size")); 
+ static const wxString wxPyPosString(wxT("pos")); 
+ static const wxString wxPyBitmapString(wxT("bitmap")); 
+ static const wxString wxPyIconString(wxT("icon")); 
+ static const wxString wxPyFontString(wxT("font")); 
 bool wxXmlResource_LoadFromString(wxXmlResource *self,wxString const &data){
             static int s_memFileIdx = 0;
 
@@ -413,6 +413,146 @@ IMP_PYCALLBACK_BOOL_NODE_pure(wxPyXmlResourceHandler, wxXmlResourceHandler, CanH
 #ifdef __cplusplus
 extern "C" {
 #endif
+static int _wrap_UTF8String_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable UTF8String is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_UTF8String_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyUTF8String)->c_str(), (&wxPyUTF8String)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyUTF8String)->c_str(), (&wxPyUTF8String)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_StyleString_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable StyleString is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_StyleString_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyStyleString)->c_str(), (&wxPyStyleString)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyStyleString)->c_str(), (&wxPyStyleString)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_SizeString_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable SizeString is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_SizeString_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPySizeString)->c_str(), (&wxPySizeString)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPySizeString)->c_str(), (&wxPySizeString)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_PosString_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable PosString is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_PosString_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyPosString)->c_str(), (&wxPyPosString)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyPosString)->c_str(), (&wxPyPosString)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_BitmapString_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable BitmapString is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_BitmapString_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyBitmapString)->c_str(), (&wxPyBitmapString)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyBitmapString)->c_str(), (&wxPyBitmapString)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_IconString_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable IconString is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_IconString_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyIconString)->c_str(), (&wxPyIconString)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyIconString)->c_str(), (&wxPyIconString)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_FontString_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable FontString is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_FontString_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyFontString)->c_str(), (&wxPyFontString)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyFontString)->c_str(), (&wxPyFontString)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
 static PyObject *_wrap_new_XmlResource(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxString *arg1 = 0 ;
@@ -5229,6 +5369,14 @@ SWIGEXPORT(void) SWIG_init(void) {
     }
     SWIG_InstallConstants(d,swig_const_table);
     
+    PyDict_SetItemString(d,(char*)"cvar", SWIG_globals);
+    SWIG_addvarlink(SWIG_globals,(char*)"UTF8String",_wrap_UTF8String_get, _wrap_UTF8String_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"StyleString",_wrap_StyleString_get, _wrap_StyleString_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"SizeString",_wrap_SizeString_get, _wrap_SizeString_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"PosString",_wrap_PosString_get, _wrap_PosString_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"BitmapString",_wrap_BitmapString_get, _wrap_BitmapString_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"IconString",_wrap_IconString_get, _wrap_IconString_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"FontString",_wrap_FontString_get, _wrap_FontString_set);
     
     
     wxXmlInitResourceModule();

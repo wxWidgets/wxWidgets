@@ -29,11 +29,6 @@
 #include "treelistctrl.h"
 #include "wx/wxPython/pytree.h"
 
-    
-    static const wxString wxPyDynamicSashNameStr(wxT("dynamicSashWindow"));
-    static const wxString wxPyEditableListBoxNameStr(wxT("editableListBox"));
-    static const wxString wxPyTreeListCtrlNameStr(wxT("treelistctrl"));
-    static const wxString wxPyEmptyString(wxT(""));
 %}
 
 //---------------------------------------------------------------------------
@@ -41,6 +36,14 @@
 %import windows.i
 %import controls.i
 %pythoncode { wx = core }
+
+
+MAKE_CONST_WXSTRING2(DynamicSashNameStr, "dynamicSashWindow");
+MAKE_CONST_WXSTRING2(EditableListBoxNameStr, "editableListBox");
+MAKE_CONST_WXSTRING2(TreeListCtrlNameStr, "treelistctrl");
+
+MAKE_CONST_WXSTRING_NOSWIG(EmptyString);
+
 
 %include _gizmos_rename.i
 

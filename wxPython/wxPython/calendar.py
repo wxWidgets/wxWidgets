@@ -46,6 +46,7 @@ wxEVT_CALENDAR_DAY_CHANGED = wx.calendar.wxEVT_CALENDAR_DAY_CHANGED
 wxEVT_CALENDAR_MONTH_CHANGED = wx.calendar.wxEVT_CALENDAR_MONTH_CHANGED
 wxEVT_CALENDAR_YEAR_CHANGED = wx.calendar.wxEVT_CALENDAR_YEAR_CHANGED
 wxEVT_CALENDAR_WEEKDAY_CLICKED = wx.calendar.wxEVT_CALENDAR_WEEKDAY_CLICKED
+wxCalendarNameStr = wx.calendar.CalendarNameStr
 wxCalendarCtrl = wx.calendar.CalendarCtrl
 wxCalendarCtrlPtr = wx.calendar.CalendarCtrlPtr
 wxPreCalendarCtrl = wx.calendar.PreCalendarCtrl

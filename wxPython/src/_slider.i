@@ -18,8 +18,9 @@
 %{
 #include <wx/slider.h>
 
-    DECLARE_DEF_STRING(SliderNameStr);
 %}
+
+MAKE_CONST_WXSTRING(SliderNameStr);
 
 //---------------------------------------------------------------------------
 %newgroup

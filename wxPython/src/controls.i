@@ -17,22 +17,22 @@
 %{
 #include "wx/wxPython/wxPython.h"
 #include "wx/wxPython/pyclasses.h"
-
-    DECLARE_DEF_STRING(PanelNameStr);
-    DECLARE_DEF_STRING(EmptyString);
-    DECLARE_DEF_STRING(ControlNameStr);
-
 %}
-
+    
 //---------------------------------------------------------------------------
 
 %import core.i
 %pythoncode { wx = core }
 
+%include _controls_rename.i
+
+MAKE_CONST_WXSTRING_NOSWIG(PanelNameStr);
+MAKE_CONST_WXSTRING_NOSWIG(EmptyString);
+MAKE_CONST_WXSTRING_NOSWIG(ControlNameStr);
+
 
 // Include all the files that make up this module
 
-%include _controls_rename.i
 
 //%include _control.i  <-- It's in core so other modules don't have to %import controls.i
 %include _button.i

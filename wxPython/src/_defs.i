@@ -64,6 +64,16 @@ typedef unsigned char   byte;
     %mutable;
 %enddef
 
+%define MAKE_CONST_WXSTRING2(strname, val)
+    %{ static const wxString wxPy##strname(wxT(val)); %}
+    %immutable;
+    %name(strname) const wxString wxPy##strname;
+    %mutable;
+%enddef
+
+%define MAKE_CONST_WXSTRING_NOSWIG(strname)
+    %{ static const wxString wxPy##strname(wx##strname); %}
+%enddef
 
 // Generate code in the module init for the event types, since they may not be
 // initialized yet when they are used in the static swig_const_table.
@@ -75,10 +85,15 @@ typedef unsigned char   byte;
 // Macros for the docstring and autodoc features of SWIG.
 
 // Set the docsring for the given full or partial declaration
-#define DocStr(decl, docstr)     %feature("docstring") decl docstr
+%define DocStr(decl, docstr)
+    %feature("docstring") decl docstr;
+    //%feature("refdoc") decl "";
+%enddef
 
 // Set the autodoc string for a full or partial declaration
-#define DocA(decl, astr)        %feature("autodoc") decl astr
+%define DocA(decl, astr)
+    %feature("autodoc") decl astr;
+%enddef
 
 // Set both the autodoc and docstring for a full or partial declaration
 %define DocAStr(decl, astr, docstr)
@@ -186,6 +201,7 @@ typedef unsigned char   byte;
 
 // A placeholder for the detailed reference docs.
 %define RefDoc(decl, docstr)
+        %feature("refdoc") decl docstr;       
 %enddef        
     
     
@@ -209,18 +225,24 @@ typedef unsigned char   byte;
     %enddef
 #endif
 
-FORWARD_DECLARE(wxString,       String);
-FORWARD_DECLARE(wxBitmap,       Bitmap);
-FORWARD_DECLARE(wxDateTime,     DateTime);
-FORWARD_DECLARE(wxInputStream,  InputStream);
-FORWARD_DECLARE(wxDC,           DC);
-FORWARD_DECLARE(wxCursor,       Cursor);
-FORWARD_DECLARE(wxRegion,       Region);
-FORWARD_DECLARE(wxColour,       Colour);
-FORWARD_DECLARE(wxFont,         Font);
-FORWARD_DECLARE(wxCaret,        Caret);
-FORWARD_DECLARE(wxToolTip,      ToolTip);
-FORWARD_DECLARE(wxPyDropTarget, PyDropTarget);
+FORWARD_DECLARE(wxString,         String);
+FORWARD_DECLARE(wxBitmap,         Bitmap);
+FORWARD_DECLARE(wxDateTime,       DateTime);
+FORWARD_DECLARE(wxInputStream,    InputStream);
+FORWARD_DECLARE(wxDC,             DC);
+FORWARD_DECLARE(wxCursor,         Cursor);
+FORWARD_DECLARE(wxRegion,         Region);
+FORWARD_DECLARE(wxColour,         Colour);
+FORWARD_DECLARE(wxFont,           Font);
+FORWARD_DECLARE(wxCaret,          Caret);
+FORWARD_DECLARE(wxToolTip,        ToolTip);
+FORWARD_DECLARE(wxPyDropTarget,   PyDropTarget);
+FORWARD_DECLARE(wxImageList,      ImageList);
+FORWARD_DECLARE(wxMemoryDC,       MemoryDC);
+FORWARD_DECLARE(wxHtmlTagHandler, HtmlTagHandler);
+FORWARD_DECLARE(wxConfigBase,     ConfigBase);
+FORWARD_DECLARE(wxIcon,           Icon);
+
 
 //---------------------------------------------------------------------------
 

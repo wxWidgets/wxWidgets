@@ -18,8 +18,10 @@
 %{
 #include <wx/checklst.h>
     
-    DECLARE_DEF_STRING(ListBoxNameStr);
 %}
+
+MAKE_CONST_WXSTRING(ListBoxNameStr);
+
 
 //---------------------------------------------------------------------------
 %newgroup

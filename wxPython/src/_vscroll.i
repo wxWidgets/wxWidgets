@@ -201,8 +201,9 @@ public:
 
 %{
 #include <wx/vlbox.h>
-DECLARE_DEF_STRING(VListBoxNameStr);
 %}
+
+MAKE_CONST_WXSTRING(VListBoxNameStr);
 
 
 // First, the C++ version

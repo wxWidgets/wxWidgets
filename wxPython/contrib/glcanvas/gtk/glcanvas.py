@@ -62,6 +62,8 @@ class GLContextPtr(GLContext):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = GLContext
 _glcanvas.GLContext_swigregister(GLContextPtr)
+cvar = _glcanvas.cvar
+GLCanvasNameStr = cvar.GLCanvasNameStr
 
 WX_GL_RGBA = _glcanvas.WX_GL_RGBA
 WX_GL_BUFFER_SIZE = _glcanvas.WX_GL_BUFFER_SIZE
@@ -85,9 +87,8 @@ class GLCanvas(core.Window):
     def __init__(self, *args, **kwargs):
         """
         __init__(Window parent, int id=-1, Point pos=DefaultPosition, 
-            Size size=DefaultSize, long style=0, String name=wxPyGLCanvasNameStr, 
-            int attribList=None, 
-            wxPalette palette=wxNullPalette) -> GLCanvas
+            Size size=DefaultSize, long style=0, String name=GLCanvasNameStr, 
+            int attribList=None, wxPalette palette=wxNullPalette) -> GLCanvas
         """
         newobj = _glcanvas.new_GLCanvas(*args, **kwargs)
         self.this = newobj.this
@@ -123,7 +124,7 @@ def wxGLCanvasWithContext(*args, **kwargs):
     """
     wxGLCanvasWithContext(Window parent, GLContext shared=None, int id=-1, Point pos=DefaultPosition, 
         Size size=DefaultSize, 
-        long style=0, String name=wxPyGLCanvasNameStr, 
+        long style=0, String name=GLCanvasNameStr, 
         int attribList=None, wxPalette palette=wxNullPalette) -> GLCanvas
     """
     val = _glcanvas.new_wxGLCanvasWithContext(*args, **kwargs)

@@ -19,10 +19,9 @@
 %{
 #include <wx/datetime.h>
 
-    DECLARE_DEF_STRING2(DateFormatStr, wxT("%c"));
-    DECLARE_DEF_STRING2(TimeSpanFormatStr, wxT("%H:%M:%S"));
-
-%}    
+%}
+MAKE_CONST_WXSTRING2(DateFormatStr, wxT("%c"));
+MAKE_CONST_WXSTRING2(TimeSpanFormatStr, wxT("%H:%M:%S"));
 
 //---------------------------------------------------------------------------
 

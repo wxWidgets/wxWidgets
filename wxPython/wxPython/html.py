@@ -19,6 +19,9 @@ del sys, _wx
 
 
 # Now assign all the reverse-renamed names:
+wxHtmlWindowNameStr = wx.html.HtmlWindowNameStr
+wxHtmlPrintoutTitleStr = wx.html.HtmlPrintoutTitleStr
+wxHtmlPrintingTitleStr = wx.html.HtmlPrintingTitleStr
 wxHTML_ALIGN_LEFT = wx.html.HTML_ALIGN_LEFT
 wxHTML_ALIGN_CENTER = wx.html.HTML_ALIGN_CENTER
 wxHTML_ALIGN_RIGHT = wx.html.HTML_ALIGN_RIGHT

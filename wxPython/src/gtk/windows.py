@@ -210,11 +210,11 @@ class TopLevelWindow(core.Window):
         return _windows.TopLevelWindow_IsIconized(*args, **kwargs)
 
     def GetIcon(*args, **kwargs):
-        """GetIcon() -> wxIcon"""
+        """GetIcon() -> Icon"""
         return _windows.TopLevelWindow_GetIcon(*args, **kwargs)
 
     def SetIcon(*args, **kwargs):
-        """SetIcon(wxIcon icon)"""
+        """SetIcon(Icon icon)"""
         return _windows.TopLevelWindow_SetIcon(*args, **kwargs)
 
     def SetIcons(*args, **kwargs):
@@ -248,6 +248,11 @@ class TopLevelWindowPtr(TopLevelWindow):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = TopLevelWindow
 _windows.TopLevelWindow_swigregister(TopLevelWindowPtr)
+cvar = _windows.cvar
+FrameNameStr = cvar.FrameNameStr
+DialogNameStr = cvar.DialogNameStr
+StatusLineNameStr = cvar.StatusLineNameStr
+ToolBarNameStr = cvar.ToolBarNameStr
 
 #---------------------------------------------------------------------------
 
@@ -258,7 +263,7 @@ class Frame(TopLevelWindow):
         """
         __init__(Window parent, int id, String title, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=DEFAULT_FRAME_STYLE, 
-            String name=wxPyFrameNameStr) -> Frame
+            String name=FrameNameStr) -> Frame
         """
         newobj = _windows.new_Frame(*args, **kwargs)
         self.this = newobj.this
@@ -270,7 +275,7 @@ class Frame(TopLevelWindow):
         """
         Create(Window parent, int id, String title, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=DEFAULT_FRAME_STYLE, 
-            String name=wxPyFrameNameStr) -> bool
+            String name=FrameNameStr) -> bool
         """
         return _windows.Frame_Create(*args, **kwargs)
 
@@ -298,7 +303,7 @@ class Frame(TopLevelWindow):
     def CreateStatusBar(*args, **kwargs):
         """
         CreateStatusBar(int number=1, long style=ST_SIZEGRIP, int winid=0, 
-            String name=wxPyStatusLineNameStr) -> StatusBar
+            String name=StatusLineNameStr) -> StatusBar
         """
         return _windows.Frame_CreateStatusBar(*args, **kwargs)
 
@@ -335,7 +340,7 @@ class Frame(TopLevelWindow):
         return _windows.Frame_GetStatusBarPane(*args, **kwargs)
 
     def CreateToolBar(*args, **kwargs):
-        """CreateToolBar(long style=-1, int winid=-1, String name=wxPyToolBarNameStr) -> wxToolBar"""
+        """CreateToolBar(long style=-1, int winid=-1, String name=ToolBarNameStr) -> wxToolBar"""
         return _windows.Frame_CreateToolBar(*args, **kwargs)
 
     def GetToolBar(*args, **kwargs):
@@ -377,7 +382,7 @@ class Dialog(TopLevelWindow):
         """
         __init__(Window parent, int id, String title, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=DEFAULT_DIALOG_STYLE, 
-            String name=wxPyDialogNameStr) -> Dialog
+            String name=DialogNameStr) -> Dialog
         """
         newobj = _windows.new_Dialog(*args, **kwargs)
         self.this = newobj.this
@@ -389,7 +394,7 @@ class Dialog(TopLevelWindow):
         """
         Create(Window parent, int id, String title, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=DEFAULT_DIALOG_STYLE, 
-            String name=wxPyDialogNameStr) -> bool
+            String name=DialogNameStr) -> bool
         """
         return _windows.Dialog_Create(*args, **kwargs)
 
@@ -452,7 +457,7 @@ class MiniFrame(Frame):
         """
         __init__(Window parent, int id, String title, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=DEFAULT_FRAME_STYLE, 
-            String name=wxPyFrameNameStr) -> MiniFrame
+            String name=FrameNameStr) -> MiniFrame
         """
         newobj = _windows.new_MiniFrame(*args, **kwargs)
         self.this = newobj.this
@@ -464,7 +469,7 @@ class MiniFrame(Frame):
         """
         Create(Window parent, int id, String title, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=DEFAULT_FRAME_STYLE, 
-            String name=wxPyFrameNameStr) -> bool
+            String name=FrameNameStr) -> bool
         """
         return _windows.MiniFrame_Create(*args, **kwargs)
 
@@ -560,7 +565,7 @@ class StatusBar(core.Window):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxStatusBar instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Window parent, int id=-1, long style=ST_SIZEGRIP, String name=wxPyStatusLineNameStr) -> StatusBar"""
+        """__init__(Window parent, int id=-1, long style=ST_SIZEGRIP, String name=StatusLineNameStr) -> StatusBar"""
         newobj = _windows.new_StatusBar(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -568,7 +573,7 @@ class StatusBar(core.Window):
         self._setOORInfo(self)
 
     def Create(*args, **kwargs):
-        """Create(Window parent, int id, long style=ST_SIZEGRIP, String name=wxPyStatusLineNameStr) -> bool"""
+        """Create(Window parent, int id, long style=ST_SIZEGRIP, String name=StatusLineNameStr) -> bool"""
         return _windows.StatusBar_Create(*args, **kwargs)
 
     def SetFieldsCount(*args, **kwargs):
@@ -650,7 +655,7 @@ class SplitterWindow(core.Window):
     def __init__(self, *args, **kwargs):
         """
         __init__(Window parent, int id, Point point=DefaultPosition, 
-            Size size=DefaultSize, long style=SP_3D, String name=wxPySplitterNameStr) -> SplitterWindow
+            Size size=DefaultSize, long style=SP_3D, String name=SplitterNameStr) -> SplitterWindow
         """
         newobj = _windows.new_SplitterWindow(*args, **kwargs)
         self.this = newobj.this
@@ -661,7 +666,7 @@ class SplitterWindow(core.Window):
     def Create(*args, **kwargs):
         """
         Create(Window parent, int id, Point point=DefaultPosition, 
-            Size size=DefaultSize, long style=SP_3D, String name=wxPySplitterNameStr) -> bool
+            Size size=DefaultSize, long style=SP_3D, String name=SplitterNameStr) -> bool
         """
         return _windows.SplitterWindow_Create(*args, **kwargs)
 
@@ -760,6 +765,7 @@ class SplitterWindowPtr(SplitterWindow):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = SplitterWindow
 _windows.SplitterWindow_swigregister(SplitterWindowPtr)
+SplitterNameStr = cvar.SplitterNameStr
 
 def PreSplitterWindow(*args, **kwargs):
     """PreSplitterWindow() -> SplitterWindow"""
@@ -835,7 +841,7 @@ class SashWindow(core.Window):
         """
         __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=wxCLIP_CHILDREN|wxSW_3D, 
-            String name=wxPySashNameStr) -> SashWindow
+            String name=SashNameStr) -> SashWindow
         """
         newobj = _windows.new_SashWindow(*args, **kwargs)
         self.this = newobj.this
@@ -847,7 +853,7 @@ class SashWindow(core.Window):
         """
         Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=wxCLIP_CHILDREN|wxSW_3D, 
-            String name=wxPySashNameStr) -> bool
+            String name=SashNameStr) -> bool
         """
         return _windows.SashWindow_Create(*args, **kwargs)
 
@@ -934,6 +940,8 @@ class SashWindowPtr(SashWindow):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = SashWindow
 _windows.SashWindow_swigregister(SashWindowPtr)
+SashNameStr = cvar.SashNameStr
+SashLayoutNameStr = cvar.SashLayoutNameStr
 
 def PreSashWindow(*args, **kwargs):
     """PreSashWindow() -> SashWindow"""
@@ -1103,7 +1111,7 @@ class SashLayoutWindow(SashWindow):
         """
         __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=wxCLIP_CHILDREN|wxSW_3D, 
-            String name=wxPySashLayoutNameStr) -> SashLayoutWindow
+            String name=SashLayoutNameStr) -> SashLayoutWindow
         """
         newobj = _windows.new_SashLayoutWindow(*args, **kwargs)
         self.this = newobj.this
@@ -1115,7 +1123,7 @@ class SashLayoutWindow(SashWindow):
         """
         Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=wxCLIP_CHILDREN|wxSW_3D, 
-            String name=wxPySashLayoutNameStr) -> bool
+            String name=SashLayoutNameStr) -> bool
         """
         return _windows.SashLayoutWindow_Create(*args, **kwargs)
 
@@ -1390,7 +1398,7 @@ class VListBox(VScrolledWindow):
     def __init__(self, *args, **kwargs):
         """
         __init__(Window parent, int id=ID_ANY, Point pos=DefaultPosition, 
-            Size size=DefaultSize, long style=0, String name=wxPyVListBoxNameStr) -> VListBox
+            Size size=DefaultSize, long style=0, String name=VListBoxNameStr) -> VListBox
         """
         newobj = _windows.new_VListBox(*args, **kwargs)
         self.this = newobj.this
@@ -1405,7 +1413,7 @@ class VListBox(VScrolledWindow):
     def Create(*args, **kwargs):
         """
         Create(Window parent, int id=ID_ANY, Point pos=DefaultPosition, 
-            Size size=DefaultSize, long style=0, String name=wxPyVListBoxNameStr) -> bool
+            Size size=DefaultSize, long style=0, String name=VListBoxNameStr) -> bool
         """
         return _windows.VListBox_Create(*args, **kwargs)
 
@@ -1500,6 +1508,7 @@ class VListBoxPtr(VListBox):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = VListBox
 _windows.VListBox_swigregister(VListBoxPtr)
+VListBoxNameStr = cvar.VListBoxNameStr
 
 def PreVListBox(*args, **kwargs):
     """PreVListBox() -> VListBox"""
@@ -1513,7 +1522,7 @@ class HtmlListBox(VListBox):
     def __init__(self, *args, **kwargs):
         """
         __init__(Window parent, int id=ID_ANY, Point pos=DefaultPosition, 
-            Size size=DefaultSize, long style=0, String name=wxPyVListBoxNameStr) -> HtmlListBox
+            Size size=DefaultSize, long style=0, String name=VListBoxNameStr) -> HtmlListBox
         """
         newobj = _windows.new_HtmlListBox(*args, **kwargs)
         self.this = newobj.this
@@ -1528,7 +1537,7 @@ class HtmlListBox(VListBox):
     def Create(*args, **kwargs):
         """
         Create(Window parent, int id=ID_ANY, Point pos=DefaultPosition, 
-            Size size=DefaultSize, long style=0, String name=wxPyVListBoxNameStr) -> bool
+            Size size=DefaultSize, long style=0, String name=VListBoxNameStr) -> bool
         """
         return _windows.HtmlListBox_Create(*args, **kwargs)
 
@@ -1580,7 +1589,7 @@ class TaskBarIcon(core.EvtHandler):
         return _windows.TaskBarIcon_IsIconInstalled(*args, **kwargs)
 
     def SetIcon(*args, **kwargs):
-        """SetIcon(wxIcon icon, String tooltip=EmptyString) -> bool"""
+        """SetIcon(Icon icon, String tooltip=EmptyString) -> bool"""
         return _windows.TaskBarIcon_SetIcon(*args, **kwargs)
 
     def RemoveIcon(*args, **kwargs):
@@ -1679,6 +1688,12 @@ class ColourDataPtr(ColourData):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = ColourData
 _windows.ColourData_swigregister(ColourDataPtr)
+FileSelectorPromptStr = cvar.FileSelectorPromptStr
+DirSelectorPromptStr = cvar.DirSelectorPromptStr
+DirDialogNameStr = cvar.DirDialogNameStr
+FileSelectorDefaultWildcardStr = cvar.FileSelectorDefaultWildcardStr
+GetTextFromUserPromptStr = cvar.GetTextFromUserPromptStr
+MessageBoxCaptionStr = cvar.MessageBoxCaptionStr
 
 class ColourDialog(Dialog):
     def __repr__(self):
@@ -1712,10 +1727,10 @@ class DirDialog(Dialog):
         return "<%s.%s; proxy of C++ wxDirDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Window parent, String message=wxPyDirSelectorPromptStr, 
+        __init__(Window parent, String message=DirSelectorPromptStr, 
             String defaultPath=EmptyString, long style=0, 
             Point pos=DefaultPosition, Size size=DefaultSize, 
-            String name=wxPyDirDialogNameStr) -> DirDialog
+            String name=DirDialogNameStr) -> DirDialog
         """
         newobj = _windows.new_DirDialog(*args, **kwargs)
         self.this = newobj.this
@@ -1760,11 +1775,10 @@ class FileDialog(Dialog):
         return "<%s.%s; proxy of C++ wxFileDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Window parent, String message=wxPyFileSelectorPromptStr, 
+        __init__(Window parent, String message=FileSelectorPromptStr, 
             String defaultDir=EmptyString, String defaultFile=EmptyString, 
-            String wildcard=wxPyFileSelectorDefaultWildcardStr, 
-            long style=0, 
-            Point pos=DefaultPosition) -> FileDialog
+            String wildcard=FileSelectorDefaultWildcardStr, 
+            long style=0, Point pos=DefaultPosition) -> FileDialog
         """
         newobj = _windows.new_FileDialog(*args, **kwargs)
         self.this = newobj.this
@@ -1920,10 +1934,9 @@ class TextEntryDialog(Dialog):
         return "<%s.%s; proxy of C++ wxTextEntryDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Window parent, String message, String caption=wxPyGetTextFromUserPromptStr, 
+        __init__(Window parent, String message, String caption=GetTextFromUserPromptStr, 
             String defaultValue=EmptyString, 
-            long style=wxOK|wxCANCEL|wxCENTRE, 
-            Point pos=DefaultPosition) -> TextEntryDialog
+            long style=wxOK|wxCANCEL|wxCENTRE, Point pos=DefaultPosition) -> TextEntryDialog
         """
         newobj = _windows.new_TextEntryDialog(*args, **kwargs)
         self.this = newobj.this
@@ -2058,7 +2071,7 @@ class MessageDialog(Dialog):
         return "<%s.%s; proxy of C++ wxMessageDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Window parent, String message, String caption=wxPyMessageBoxCaptionStr, 
+        __init__(Window parent, String message, String caption=MessageBoxCaptionStr, 
             long style=wxOK|wxCANCEL|wxCENTRE, 
             Point pos=DefaultPosition) -> MessageDialog
         """
@@ -2287,7 +2300,7 @@ class MDIParentFrame(Frame):
         """
         __init__(Window parent, int id, String title, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=wxDEFAULT_FRAME_STYLE|wxVSCROLL|wxHSCROLL, 
-            String name=wxPyFrameNameStr) -> MDIParentFrame
+            String name=FrameNameStr) -> MDIParentFrame
         """
         newobj = _windows.new_MDIParentFrame(*args, **kwargs)
         self.this = newobj.this
@@ -2299,7 +2312,7 @@ class MDIParentFrame(Frame):
         """
         Create(Window parent, int id, String title, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=wxDEFAULT_FRAME_STYLE|wxVSCROLL|wxHSCROLL, 
-            String name=wxPyFrameNameStr) -> bool
+            String name=FrameNameStr) -> bool
         """
         return _windows.MDIParentFrame_Create(*args, **kwargs)
 
@@ -2356,7 +2369,7 @@ class MDIChildFrame(Frame):
         """
         __init__(MDIParentFrame parent, int id, String title, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=DEFAULT_FRAME_STYLE, 
-            String name=wxPyFrameNameStr) -> MDIChildFrame
+            String name=FrameNameStr) -> MDIChildFrame
         """
         newobj = _windows.new_MDIChildFrame(*args, **kwargs)
         self.this = newobj.this
@@ -2368,7 +2381,7 @@ class MDIChildFrame(Frame):
         """
         Create(MDIParentFrame parent, int id, String title, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=DEFAULT_FRAME_STYLE, 
-            String name=wxPyFrameNameStr) -> bool
+            String name=FrameNameStr) -> bool
         """
         return _windows.MDIChildFrame_Create(*args, **kwargs)
 
@@ -2683,7 +2696,7 @@ class PrintData(core.Object):
         return _windows.PrintData_GetPaperSize(*args, **kwargs)
 
     def GetQuality(*args, **kwargs):
-        """GetQuality() -> wxPrintQuality"""
+        """GetQuality() -> int"""
         return _windows.PrintData_GetQuality(*args, **kwargs)
 
     def SetNoCopies(*args, **kwargs):
@@ -2719,7 +2732,7 @@ class PrintData(core.Object):
         return _windows.PrintData_SetPaperSize(*args, **kwargs)
 
     def SetQuality(*args, **kwargs):
-        """SetQuality(wxPrintQuality quality)"""
+        """SetQuality(int quality)"""
         return _windows.PrintData_SetQuality(*args, **kwargs)
 
     def GetPrinterCommand(*args, **kwargs):
@@ -2818,6 +2831,8 @@ class PrintDataPtr(PrintData):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = PrintData
 _windows.PrintData_swigregister(PrintDataPtr)
+PrintoutTitleStr = cvar.PrintoutTitleStr
+PreviewCanvasNameStr = cvar.PreviewCanvasNameStr
 
 class PageSetupDialogData(core.Object):
     def __repr__(self):
@@ -3232,7 +3247,7 @@ class Printout(core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyPrintout instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(String title=wxPyPrintoutTitleStr) -> Printout"""
+        """__init__(String title=PrintoutTitleStr) -> Printout"""
         newobj = _windows.new_Printout(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -3338,7 +3353,7 @@ class PreviewCanvas(ScrolledWindow):
         """
         __init__(PrintPreview preview, Window parent, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=0, 
-            String name=wxPyPreviewCanvasNameStr) -> PreviewCanvas
+            String name=PreviewCanvasNameStr) -> PreviewCanvas
         """
         newobj = _windows.new_PreviewCanvas(*args, **kwargs)
         self.this = newobj.this
@@ -3361,7 +3376,7 @@ class PreviewFrame(Frame):
         """
         __init__(PrintPreview preview, Frame parent, String title, Point pos=DefaultPosition, 
             Size size=DefaultSize, 
-            long style=DEFAULT_FRAME_STYLE, String name=wxPyFrameNameStr) -> PreviewFrame
+            long style=DEFAULT_FRAME_STYLE, String name=FrameNameStr) -> PreviewFrame
         """
         newobj = _windows.new_PreviewFrame(*args, **kwargs)
         self.this = newobj.this
@@ -3628,7 +3643,7 @@ class PyPreviewFrame(PreviewFrame):
         """
         __init__(PrintPreview preview, Frame parent, String title, Point pos=DefaultPosition, 
             Size size=DefaultSize, 
-            long style=DEFAULT_FRAME_STYLE, String name=wxPyFrameNameStr) -> PyPreviewFrame
+            long style=DEFAULT_FRAME_STYLE, String name=FrameNameStr) -> PyPreviewFrame
         """
         newobj = _windows.new_PyPreviewFrame(*args, **kwargs)
         self.this = newobj.this

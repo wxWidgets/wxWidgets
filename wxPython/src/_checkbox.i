@@ -16,9 +16,7 @@
 //---------------------------------------------------------------------------
 %newgroup;
 
-%{
-    DECLARE_DEF_STRING(CheckBoxNameStr);
-%}
+MAKE_CONST_WXSTRING(CheckBoxNameStr);
 
 
 enum {

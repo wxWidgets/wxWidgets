@@ -991,6 +991,7 @@ wxMenuItem = wx.core.MenuItem
 wxMenuItemPtr = wx.core.MenuItemPtr
 wxMenuItem_GetLabelFromText = wx.core.MenuItem_GetLabelFromText
 wxMenuItem_GetDefaultMarginWidth = wx.core.MenuItem_GetDefaultMarginWidth
+wxControlNameStr = wx.core.ControlNameStr
 wxControl = wx.core.Control
 wxControlPtr = wx.core.ControlPtr
 wxPreControl = wx.core.PreControl

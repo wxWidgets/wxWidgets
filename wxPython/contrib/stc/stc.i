@@ -18,13 +18,15 @@
 #include "wx/wxPython/pyclasses.h"
 #include <wx/stc/stc.h>
 
-    DECLARE_DEF_STRING(STCNameStr);
 %}
 
 //---------------------------------------------------------------------------
 
 %import core.i
 %pythoncode { wx = core }
+
+MAKE_CONST_WXSTRING(STCNameStr);
+
 
 %include _stc_rename.i
 

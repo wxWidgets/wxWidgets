@@ -18,10 +18,9 @@
 %{
 #include <wx/treectrl.h>
 #include "wx/wxPython/pytree.h"
-    
-    const wxChar* wx_TreeCtrlNameStr = _T("wxTreeCtrl");
-    DECLARE_DEF_STRING(_TreeCtrlNameStr);
 %}
+    
+MAKE_CONST_WXSTRING2(TreeCtrlNameStr, _T("wxTreeCtrl"));
 
 //---------------------------------------------------------------------------
 %newgroup
@@ -328,7 +327,7 @@ public:
                  const wxSize& size = wxDefaultSize,
                  long style = wxTR_DEFAULT_STYLE,
                  const wxValidator& validator = wxDefaultValidator,
-                 const wxString& name = wxPy_TreeCtrlNameStr);
+                 const wxString& name = wxPyTreeCtrlNameStr);
     %name(PreTreeCtrl)wxPyTreeCtrl();
 
     bool Create(wxWindow *parent, wxWindowID id = -1,
@@ -336,7 +335,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxTR_DEFAULT_STYLE,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxPy_TreeCtrlNameStr);
+                const wxString& name = wxPyTreeCtrlNameStr);
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
 

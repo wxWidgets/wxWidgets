@@ -25,7 +25,7 @@ class Button(core.Control):
         """
         __init__(Window parent, int id, String label, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=0, 
-            Validator validator=DefaultValidator, String name=wxPyButtonNameStr) -> Button
+            Validator validator=DefaultValidator, String name=ButtonNameStr) -> Button
 
         Create and show a button.
         """
@@ -39,7 +39,7 @@ class Button(core.Control):
         """
         Create(Window parent, int id, String label, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=0, 
-            Validator validator=DefaultValidator, String name=wxPyButtonNameStr) -> bool
+            Validator validator=DefaultValidator, String name=ButtonNameStr) -> bool
 
         Acutally create the GUI Button for 2-phase creation.
         """
@@ -65,6 +65,8 @@ class ButtonPtr(Button):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = Button
 _controls.Button_swigregister(ButtonPtr)
+cvar = _controls.cvar
+ButtonNameStr = cvar.ButtonNameStr
 
 def PreButton(*args, **kwargs):
     """
@@ -89,7 +91,7 @@ class BitmapButton(Button):
         __init__(Window parent, int id, Bitmap bitmap, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=BU_AUTODRAW, 
             Validator validator=DefaultValidator, 
-            String name=wxPyButtonNameStr) -> BitmapButton
+            String name=ButtonNameStr) -> BitmapButton
 
         Create and show a button.
         """
@@ -104,7 +106,7 @@ class BitmapButton(Button):
         Create(Window parent, int id, Bitmap bitmap, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=BU_AUTODRAW, 
             Validator validator=DefaultValidator, 
-            String name=wxPyButtonNameStr) -> bool
+            String name=ButtonNameStr) -> bool
 
         Acutally create the GUI BitmapButton for 2-phase creation.
         """
@@ -220,7 +222,7 @@ class CheckBox(core.Control):
         """
         __init__(Window parent, int id, String label, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=0, 
-            Validator validator=DefaultValidator, String name=wxPyCheckBoxNameStr) -> CheckBox
+            Validator validator=DefaultValidator, String name=CheckBoxNameStr) -> CheckBox
         """
         newobj = _controls.new_CheckBox(*args, **kwargs)
         self.this = newobj.this
@@ -232,7 +234,7 @@ class CheckBox(core.Control):
         """
         Create(Window parent, int id, String label, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=0, 
-            Validator validator=DefaultValidator, String name=wxPyCheckBoxNameStr) -> bool
+            Validator validator=DefaultValidator, String name=CheckBoxNameStr) -> bool
         """
         return _controls.CheckBox_Create(*args, **kwargs)
 
@@ -271,6 +273,7 @@ class CheckBoxPtr(CheckBox):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = CheckBox
 _controls.CheckBox_swigregister(CheckBoxPtr)
+CheckBoxNameStr = cvar.CheckBoxNameStr
 
 def PreCheckBox(*args, **kwargs):
     """PreCheckBox() -> CheckBox"""
@@ -288,7 +291,7 @@ class Choice(core.ControlWithItems):
         __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
             int choices=0, String choices_array=None, 
             long style=0, Validator validator=DefaultValidator, 
-            String name=wxPyChoiceNameStr) -> Choice
+            String name=ChoiceNameStr) -> Choice
         """
         newobj = _controls.new_Choice(*args, **kwargs)
         self.this = newobj.this
@@ -301,7 +304,7 @@ class Choice(core.ControlWithItems):
         Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
             int choices=0, String choices_array=None, 
             long style=0, Validator validator=DefaultValidator, 
-            String name=wxPyChoiceNameStr) -> bool
+            String name=ChoiceNameStr) -> bool
         """
         return _controls.Choice_Create(*args, **kwargs)
 
@@ -332,6 +335,7 @@ class ChoicePtr(Choice):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = Choice
 _controls.Choice_swigregister(ChoicePtr)
+ChoiceNameStr = cvar.ChoiceNameStr
 
 def PreChoice(*args, **kwargs):
     """PreChoice() -> Choice"""
@@ -350,7 +354,7 @@ class ComboBox(core.Control,core.ItemContainer):
             Size size=DefaultSize, 
             int choices=0, String choices_array=None, 
             long style=0, Validator validator=DefaultValidator, 
-            String name=wxPyComboBoxNameStr) -> ComboBox
+            String name=ComboBoxNameStr) -> ComboBox
         """
         newobj = _controls.new_ComboBox(*args, **kwargs)
         self.this = newobj.this
@@ -364,7 +368,7 @@ class ComboBox(core.Control,core.ItemContainer):
             Size size=DefaultSize, 
             int choices=0, String choices_array=None, 
             long style=0, Validator validator=DefaultValidator, 
-            String name=wxPyComboBoxNameStr) -> bool
+            String name=ComboBoxNameStr) -> bool
         """
         return _controls.ComboBox_Create(*args, **kwargs)
 
@@ -431,6 +435,7 @@ class ComboBoxPtr(ComboBox):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = ComboBox
 _controls.ComboBox_swigregister(ComboBoxPtr)
+ComboBoxNameStr = cvar.ComboBoxNameStr
 
 def PreComboBox(*args, **kwargs):
     """PreComboBox() -> ComboBox"""
@@ -452,7 +457,7 @@ class Gauge(core.Control):
         __init__(Window parent, int id, int range, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=GA_HORIZONTAL, 
             Validator validator=DefaultValidator, 
-            String name=wxPyGaugeNameStr) -> Gauge
+            String name=GaugeNameStr) -> Gauge
         """
         newobj = _controls.new_Gauge(*args, **kwargs)
         self.this = newobj.this
@@ -465,7 +470,7 @@ class Gauge(core.Control):
         Create(Window parent, int id, int range, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=GA_HORIZONTAL, 
             Validator validator=DefaultValidator, 
-            String name=wxPyGaugeNameStr) -> bool
+            String name=GaugeNameStr) -> bool
         """
         return _controls.Gauge_Create(*args, **kwargs)
 
@@ -512,6 +517,7 @@ class GaugePtr(Gauge):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = Gauge
 _controls.Gauge_swigregister(GaugePtr)
+GaugeNameStr = cvar.GaugeNameStr
 
 def PreGauge(*args, **kwargs):
     """PreGauge() -> Gauge"""
@@ -528,7 +534,7 @@ class StaticBox(core.Control):
         """
         __init__(Window parent, int id, String label, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=0, 
-            String name=wxPyStaticBoxNameStr) -> StaticBox
+            String name=StaticBoxNameStr) -> StaticBox
         """
         newobj = _controls.new_StaticBox(*args, **kwargs)
         self.this = newobj.this
@@ -540,7 +546,7 @@ class StaticBox(core.Control):
         """
         Create(Window parent, int id, String label, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=0, 
-            String name=wxPyStaticBoxNameStr) -> bool
+            String name=StaticBoxNameStr) -> bool
         """
         return _controls.StaticBox_Create(*args, **kwargs)
 
@@ -551,6 +557,9 @@ class StaticBoxPtr(StaticBox):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = StaticBox
 _controls.StaticBox_swigregister(StaticBoxPtr)
+StaticBitmapNameStr = cvar.StaticBitmapNameStr
+StaticBoxNameStr = cvar.StaticBoxNameStr
+StaticTextNameStr = cvar.StaticTextNameStr
 
 def PreStaticBox(*args, **kwargs):
     """PreStaticBox() -> StaticBox"""
@@ -567,7 +576,7 @@ class StaticLine(core.Control):
         """
         __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=LI_HORIZONTAL, 
-            String name=wxPyStaticTextNameStr) -> StaticLine
+            String name=StaticTextNameStr) -> StaticLine
         """
         newobj = _controls.new_StaticLine(*args, **kwargs)
         self.this = newobj.this
@@ -579,7 +588,7 @@ class StaticLine(core.Control):
         """
         Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=LI_HORIZONTAL, 
-            String name=wxPyStaticTextNameStr) -> bool
+            String name=StaticTextNameStr) -> bool
         """
         return _controls.StaticLine_Create(*args, **kwargs)
 
@@ -619,7 +628,7 @@ class StaticText(core.Control):
         """
         __init__(Window parent, int id, String label, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=0, 
-            String name=wxPyStaticTextNameStr) -> StaticText
+            String name=StaticTextNameStr) -> StaticText
         """
         newobj = _controls.new_StaticText(*args, **kwargs)
         self.this = newobj.this
@@ -631,7 +640,7 @@ class StaticText(core.Control):
         """
         Create(Window parent, int id, String label, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=0, 
-            String name=wxPyStaticTextNameStr) -> bool
+            String name=StaticTextNameStr) -> bool
         """
         return _controls.StaticText_Create(*args, **kwargs)
 
@@ -658,7 +667,7 @@ class StaticBitmap(core.Control):
         """
         __init__(Window parent, int id, Bitmap bitmap, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=0, 
-            String name=wxPyStaticBitmapNameStr) -> StaticBitmap
+            String name=StaticBitmapNameStr) -> StaticBitmap
         """
         newobj = _controls.new_StaticBitmap(*args, **kwargs)
         self.this = newobj.this
@@ -668,7 +677,7 @@ class StaticBitmap(core.Control):
         """
         Create(Window parent, int id, Bitmap bitmap, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=0, 
-            String name=wxPyStaticBitmapNameStr) -> bool
+            String name=StaticBitmapNameStr) -> bool
         """
         return _controls.StaticBitmap_Create(*args, **kwargs)
 
@@ -681,7 +690,7 @@ class StaticBitmap(core.Control):
         return _controls.StaticBitmap_SetBitmap(*args, **kwargs)
 
     def SetIcon(*args, **kwargs):
-        """SetIcon(wxIcon icon)"""
+        """SetIcon(Icon icon)"""
         return _controls.StaticBitmap_SetIcon(*args, **kwargs)
 
 
@@ -708,7 +717,7 @@ class ListBox(core.ControlWithItems):
         __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
             int choices=0, String choices_array=None, 
             long style=0, Validator validator=DefaultValidator, 
-            String name=wxPyListBoxNameStr) -> ListBox
+            String name=ListBoxNameStr) -> ListBox
         """
         newobj = _controls.new_ListBox(*args, **kwargs)
         self.this = newobj.this
@@ -721,7 +730,7 @@ class ListBox(core.ControlWithItems):
         Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
             int choices=0, String choices_array=None, 
             long style=0, Validator validator=DefaultValidator, 
-            String name=wxPyListBoxNameStr) -> bool
+            String name=ListBoxNameStr) -> bool
         """
         return _controls.ListBox_Create(*args, **kwargs)
 
@@ -792,6 +801,7 @@ class ListBoxPtr(ListBox):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = ListBox
 _controls.ListBox_swigregister(ListBoxPtr)
+ListBoxNameStr = cvar.ListBoxNameStr
 
 def PreListBox(*args, **kwargs):
     """PreListBox() -> ListBox"""
@@ -809,7 +819,7 @@ class CheckListBox(ListBox):
         __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
             int choices=0, String choices_array=None, 
             long style=0, Validator validator=DefaultValidator, 
-            String name=wxPyListBoxNameStr) -> CheckListBox
+            String name=ListBoxNameStr) -> CheckListBox
         """
         newobj = _controls.new_CheckListBox(*args, **kwargs)
         self.this = newobj.this
@@ -820,7 +830,7 @@ class CheckListBox(ListBox):
         Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
             int choices=0, String choices_array=None, 
             long style=0, Validator validator=DefaultValidator, 
-            String name=wxPyListBoxNameStr) -> bool
+            String name=ListBoxNameStr) -> bool
         """
         return _controls.CheckListBox_Create(*args, **kwargs)
 
@@ -1025,6 +1035,7 @@ class TextAttrPtr(TextAttr):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = TextAttr
 _controls.TextAttr_swigregister(TextAttrPtr)
+TextCtrlNameStr = cvar.TextCtrlNameStr
 
 def TextAttr_Combine(*args, **kwargs):
     """TextAttr_Combine(TextAttr attr, TextAttr attrDef, TextCtrl text) -> TextAttr"""
@@ -1038,7 +1049,7 @@ class TextCtrl(core.Control):
         __init__(Window parent, int id, String value=EmptyString, Point pos=DefaultPosition, 
             Size size=DefaultSize, 
             long style=0, Validator validator=DefaultValidator, 
-            String name=wxPyTextCtrlNameStr) -> TextCtrl
+            String name=TextCtrlNameStr) -> TextCtrl
         """
         newobj = _controls.new_TextCtrl(*args, **kwargs)
         self.this = newobj.this
@@ -1051,7 +1062,7 @@ class TextCtrl(core.Control):
         Create(Window parent, int id, String value=EmptyString, Point pos=DefaultPosition, 
             Size size=DefaultSize, 
             long style=0, Validator validator=DefaultValidator, 
-            String name=wxPyTextCtrlNameStr) -> bool
+            String name=TextCtrlNameStr) -> bool
         """
         return _controls.TextCtrl_Create(*args, **kwargs)
 
@@ -1316,7 +1327,7 @@ class ScrollBar(core.Control):
         """
         __init__(Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=SB_HORIZONTAL, 
-            Validator validator=DefaultValidator, String name=wxPyScrollBarNameStr) -> ScrollBar
+            Validator validator=DefaultValidator, String name=ScrollBarNameStr) -> ScrollBar
         """
         newobj = _controls.new_ScrollBar(*args, **kwargs)
         self.this = newobj.this
@@ -1328,7 +1339,7 @@ class ScrollBar(core.Control):
         """
         Create(Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=SB_HORIZONTAL, 
-            Validator validator=DefaultValidator, String name=wxPyScrollBarNameStr) -> bool
+            Validator validator=DefaultValidator, String name=ScrollBarNameStr) -> bool
         """
         return _controls.ScrollBar_Create(*args, **kwargs)
 
@@ -1371,6 +1382,7 @@ class ScrollBarPtr(ScrollBar):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = ScrollBar
 _controls.ScrollBar_swigregister(ScrollBarPtr)
+ScrollBarNameStr = cvar.ScrollBarNameStr
 
 def PreScrollBar(*args, **kwargs):
     """PreScrollBar() -> ScrollBar"""
@@ -1391,7 +1403,7 @@ class SpinButton(core.Control):
         """
         __init__(Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=SP_HORIZONTAL, 
-            String name=wxPySPIN_BUTTON_NAME) -> SpinButton
+            String name=SPIN_BUTTON_NAME) -> SpinButton
         """
         newobj = _controls.new_SpinButton(*args, **kwargs)
         self.this = newobj.this
@@ -1403,7 +1415,7 @@ class SpinButton(core.Control):
         """
         Create(Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=SP_HORIZONTAL, 
-            String name=wxPySPIN_BUTTON_NAME) -> bool
+            String name=SPIN_BUTTON_NAME) -> bool
         """
         return _controls.SpinButton_Create(*args, **kwargs)
 
@@ -1446,6 +1458,8 @@ class SpinButtonPtr(SpinButton):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = SpinButton
 _controls.SpinButton_swigregister(SpinButtonPtr)
+SPIN_BUTTON_NAME = cvar.SPIN_BUTTON_NAME
+SpinCtrlNameStr = cvar.SpinCtrlNameStr
 
 def PreSpinButton(*args, **kwargs):
     """PreSpinButton() -> SpinButton"""
@@ -1461,7 +1475,7 @@ class SpinCtrl(core.Control):
         __init__(Window parent, int id=-1, String value=EmptyString, 
             Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=SP_ARROW_KEYS, int min=0, int max=100, 
-            int initial=0, String name=wxPySpinCtrlNameStr) -> SpinCtrl
+            int initial=0, String name=SpinCtrlNameStr) -> SpinCtrl
         """
         newobj = _controls.new_SpinCtrl(*args, **kwargs)
         self.this = newobj.this
@@ -1474,7 +1488,7 @@ class SpinCtrl(core.Control):
         Create(Window parent, int id=-1, String value=EmptyString, 
             Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=SP_ARROW_KEYS, int min=0, int max=100, 
-            int initial=0, String name=wxPySpinCtrlNameStr) -> bool
+            int initial=0, String name=SpinCtrlNameStr) -> bool
         """
         return _controls.SpinCtrl_Create(*args, **kwargs)
 
@@ -1534,7 +1548,7 @@ class RadioBox(core.Control):
             Size size=DefaultSize, int choices=0, 
             String choices_array=None, int majorDimension=0, 
             long style=RA_HORIZONTAL, Validator validator=DefaultValidator, 
-            String name=wxPyRadioBoxNameStr) -> RadioBox
+            String name=RadioBoxNameStr) -> RadioBox
         """
         newobj = _controls.new_RadioBox(*args, **kwargs)
         self.this = newobj.this
@@ -1548,7 +1562,7 @@ class RadioBox(core.Control):
             Size size=DefaultSize, int choices=0, 
             String choices_array=None, int majorDimension=0, 
             long style=RA_HORIZONTAL, Validator validator=DefaultValidator, 
-            String name=wxPyRadioBoxNameStr) -> bool
+            String name=RadioBoxNameStr) -> bool
         """
         return _controls.RadioBox_Create(*args, **kwargs)
 
@@ -1613,6 +1627,8 @@ class RadioBoxPtr(RadioBox):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = RadioBox
 _controls.RadioBox_swigregister(RadioBoxPtr)
+RadioBoxNameStr = cvar.RadioBoxNameStr
+RadioButtonNameStr = cvar.RadioButtonNameStr
 
 def PreRadioBox(*args, **kwargs):
     """PreRadioBox() -> RadioBox"""
@@ -1629,7 +1645,7 @@ class RadioButton(core.Control):
         """
         __init__(Window parent, int id, String label, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=0, 
-            Validator validator=DefaultValidator, String name=wxPyRadioButtonNameStr) -> RadioButton
+            Validator validator=DefaultValidator, String name=RadioButtonNameStr) -> RadioButton
         """
         newobj = _controls.new_RadioButton(*args, **kwargs)
         self.this = newobj.this
@@ -1641,7 +1657,7 @@ class RadioButton(core.Control):
         """
         Create(Window parent, int id, String label, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=0, 
-            Validator validator=DefaultValidator, String name=wxPyRadioButtonNameStr) -> bool
+            Validator validator=DefaultValidator, String name=RadioButtonNameStr) -> bool
         """
         return _controls.RadioButton_Create(*args, **kwargs)
 
@@ -1677,7 +1693,7 @@ class Slider(core.Control):
         __init__(Window parent, int id, int value, int minValue, int maxValue, 
             Point point=DefaultPosition, Size size=DefaultSize, 
             long style=SL_HORIZONTAL, Validator validator=DefaultValidator, 
-            String name=wxPySliderNameStr) -> Slider
+            String name=SliderNameStr) -> Slider
         """
         newobj = _controls.new_Slider(*args, **kwargs)
         self.this = newobj.this
@@ -1690,7 +1706,7 @@ class Slider(core.Control):
         Create(Window parent, int id, int value, int minValue, int maxValue, 
             Point point=DefaultPosition, Size size=DefaultSize, 
             long style=SL_HORIZONTAL, Validator validator=DefaultValidator, 
-            String name=wxPySliderNameStr) -> bool
+            String name=SliderNameStr) -> bool
         """
         return _controls.Slider_Create(*args, **kwargs)
 
@@ -1785,6 +1801,7 @@ class SliderPtr(Slider):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = Slider
 _controls.Slider_swigregister(SliderPtr)
+SliderNameStr = cvar.SliderNameStr
 
 def PreSlider(*args, **kwargs):
     """PreSlider() -> Slider"""
@@ -1804,7 +1821,7 @@ class ToggleButton(core.Control):
         """
         __init__(Window parent, int id, String label, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=0, 
-            Validator validator=DefaultValidator, String name=wxPyToggleButtonNameStr) -> ToggleButton
+            Validator validator=DefaultValidator, String name=ToggleButtonNameStr) -> ToggleButton
         """
         newobj = _controls.new_ToggleButton(*args, **kwargs)
         self.this = newobj.this
@@ -1816,7 +1833,7 @@ class ToggleButton(core.Control):
         """
         Create(Window parent, int id, String label, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=0, 
-            Validator validator=DefaultValidator, String name=wxPyToggleButtonNameStr) -> bool
+            Validator validator=DefaultValidator, String name=ToggleButtonNameStr) -> bool
         """
         return _controls.ToggleButton_Create(*args, **kwargs)
 
@@ -1839,6 +1856,7 @@ class ToggleButtonPtr(ToggleButton):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = ToggleButton
 _controls.ToggleButton_swigregister(ToggleButtonPtr)
+ToggleButtonNameStr = cvar.ToggleButtonNameStr
 
 def PreToggleButton(*args, **kwargs):
     """PreToggleButton() -> ToggleButton"""
@@ -1873,17 +1891,17 @@ class BookCtrl(core.Control):
         return _controls.BookCtrl_GetPageText(*args, **kwargs)
 
     def SetImageList(*args, **kwargs):
-        """SetImageList(wxImageList imageList)"""
+        """SetImageList(ImageList imageList)"""
         return _controls.BookCtrl_SetImageList(*args, **kwargs)
 
     def AssignImageList(*args, **kwargs):
-        """AssignImageList(wxImageList imageList)"""
+        """AssignImageList(ImageList imageList)"""
         val = _controls.BookCtrl_AssignImageList(*args, **kwargs)
         args[1].thisown = 0
         return val
 
     def GetImageList(*args, **kwargs):
-        """GetImageList() -> wxImageList"""
+        """GetImageList() -> ImageList"""
         return _controls.BookCtrl_GetImageList(*args, **kwargs)
 
     def GetPageImage(*args, **kwargs):
@@ -1940,6 +1958,7 @@ class BookCtrlPtr(BookCtrl):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = BookCtrl
 _controls.BookCtrl_swigregister(BookCtrlPtr)
+NOTEBOOK_NAME = cvar.NOTEBOOK_NAME
 
 class BookCtrlEvent(core.NotifyEvent):
     def __repr__(self):
@@ -1995,7 +2014,7 @@ class Notebook(BookCtrl):
     def __init__(self, *args, **kwargs):
         """
         __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=0, String name=wxPyNOTEBOOK_NAME) -> Notebook
+            long style=0, String name=NOTEBOOK_NAME) -> Notebook
         """
         newobj = _controls.new_Notebook(*args, **kwargs)
         self.this = newobj.this
@@ -2006,7 +2025,7 @@ class Notebook(BookCtrl):
     def Create(*args, **kwargs):
         """
         Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=0, String name=wxPyNOTEBOOK_NAME) -> bool
+            long style=0, String name=NOTEBOOK_NAME) -> bool
         """
         return _controls.Notebook_Create(*args, **kwargs)
 
@@ -2882,6 +2901,7 @@ class ListItemAttrPtr(ListItemAttr):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = ListItemAttr
 _controls.ListItemAttr_swigregister(ListItemAttrPtr)
+ListCtrlNameStr = cvar.ListCtrlNameStr
 
 #---------------------------------------------------------------------------
 
@@ -3171,7 +3191,7 @@ class ListCtrl(core.Control):
         """
         __init__(Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=LC_ICON, 
-            Validator validator=DefaultValidator, String name=wxPyListCtrlNameStr) -> ListCtrl
+            Validator validator=DefaultValidator, String name=ListCtrlNameStr) -> ListCtrl
         """
         newobj = _controls.new_ListCtrl(*args, **kwargs)
         self.this = newobj.this
@@ -3183,7 +3203,7 @@ class ListCtrl(core.Control):
         """
         Create(Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=LC_ICON, 
-            Validator validator=DefaultValidator, String name=wxPyListCtrlNameStr) -> bool
+            Validator validator=DefaultValidator, String name=ListCtrlNameStr) -> bool
         """
         return _controls.ListCtrl_Create(*args, **kwargs)
 
@@ -3324,15 +3344,15 @@ class ListCtrl(core.Control):
         return _controls.ListCtrl_GetNextItem(*args, **kwargs)
 
     def GetImageList(*args, **kwargs):
-        """GetImageList(int which) -> wxImageList"""
+        """GetImageList(int which) -> ImageList"""
         return _controls.ListCtrl_GetImageList(*args, **kwargs)
 
     def SetImageList(*args, **kwargs):
-        """SetImageList(wxImageList imageList, int which)"""
+        """SetImageList(ImageList imageList, int which)"""
         return _controls.ListCtrl_SetImageList(*args, **kwargs)
 
     def AssignImageList(*args, **kwargs):
-        """AssignImageList(wxImageList imageList, int which)"""
+        """AssignImageList(ImageList imageList, int which)"""
         val = _controls.ListCtrl_AssignImageList(*args, **kwargs)
         args[1].thisown = 0
         return val
@@ -3543,7 +3563,7 @@ class ListView(ListCtrl):
         """
         __init__(Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=LC_REPORT, 
-            Validator validator=DefaultValidator, String name=wxPyListCtrlNameStr) -> ListView
+            Validator validator=DefaultValidator, String name=ListCtrlNameStr) -> ListView
         """
         newobj = _controls.new_ListView(*args, **kwargs)
         self.this = newobj.this
@@ -3555,7 +3575,7 @@ class ListView(ListCtrl):
         """
         Create(Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=LC_REPORT, 
-            Validator validator=DefaultValidator, String name=wxPyListCtrlNameStr) -> bool
+            Validator validator=DefaultValidator, String name=ListCtrlNameStr) -> bool
         """
         return _controls.ListView_Create(*args, **kwargs)
 
@@ -3681,6 +3701,7 @@ class TreeItemIdPtr(TreeItemId):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = TreeItemId
 _controls.TreeItemId_swigregister(TreeItemIdPtr)
+TreeCtrlNameStr = cvar.TreeCtrlNameStr
 
 class TreeItemData(object):
     def __repr__(self):
@@ -3845,7 +3866,7 @@ class TreeCtrl(core.Control):
         __init__(Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=TR_DEFAULT_STYLE, 
             Validator validator=DefaultValidator, 
-            String name=wxPy_TreeCtrlNameStr) -> TreeCtrl
+            String name=TreeCtrlNameStr) -> TreeCtrl
         """
         newobj = _controls.new_TreeCtrl(*args, **kwargs)
         self.this = newobj.this
@@ -3858,7 +3879,7 @@ class TreeCtrl(core.Control):
         Create(Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=TR_DEFAULT_STYLE, 
             Validator validator=DefaultValidator, 
-            String name=wxPy_TreeCtrlNameStr) -> bool
+            String name=TreeCtrlNameStr) -> bool
         """
         return _controls.TreeCtrl_Create(*args, **kwargs)
 
@@ -3887,29 +3908,29 @@ class TreeCtrl(core.Control):
         return _controls.TreeCtrl_SetSpacing(*args, **kwargs)
 
     def GetImageList(*args, **kwargs):
-        """GetImageList() -> wxImageList"""
+        """GetImageList() -> ImageList"""
         return _controls.TreeCtrl_GetImageList(*args, **kwargs)
 
     def GetStateImageList(*args, **kwargs):
-        """GetStateImageList() -> wxImageList"""
+        """GetStateImageList() -> ImageList"""
         return _controls.TreeCtrl_GetStateImageList(*args, **kwargs)
 
     def SetImageList(*args, **kwargs):
-        """SetImageList(wxImageList imageList)"""
+        """SetImageList(ImageList imageList)"""
         return _controls.TreeCtrl_SetImageList(*args, **kwargs)
 
     def SetStateImageList(*args, **kwargs):
-        """SetStateImageList(wxImageList imageList)"""
+        """SetStateImageList(ImageList imageList)"""
         return _controls.TreeCtrl_SetStateImageList(*args, **kwargs)
 
     def AssignImageList(*args, **kwargs):
-        """AssignImageList(wxImageList imageList)"""
+        """AssignImageList(ImageList imageList)"""
         val = _controls.TreeCtrl_AssignImageList(*args, **kwargs)
         args[1].thisown = 0
         return val
 
     def AssignStateImageList(*args, **kwargs):
-        """AssignStateImageList(wxImageList imageList)"""
+        """AssignStateImageList(ImageList imageList)"""
         val = _controls.TreeCtrl_AssignStateImageList(*args, **kwargs)
         args[1].thisown = 0
         return val
@@ -4186,11 +4207,11 @@ class GenericDirCtrl(core.Control):
         return "<%s.%s; proxy of C++ wxGenericDirCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Window parent, int id=-1, String dir=wxPyDirDialogDefaultFolderStr, 
+        __init__(Window parent, int id=-1, String dir=DirDialogDefaultFolderStr, 
             Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=wxDIRCTRL_3D_INTERNAL|wxSUNKEN_BORDER, 
             String filter=EmptyString, 
-            int defaultFilter=0, String name=wxPy_TreeCtrlNameStr) -> GenericDirCtrl
+            int defaultFilter=0, String name=TreeCtrlNameStr) -> GenericDirCtrl
         """
         newobj = _controls.new_GenericDirCtrl(*args, **kwargs)
         self.this = newobj.this
@@ -4200,11 +4221,11 @@ class GenericDirCtrl(core.Control):
 
     def Create(*args, **kwargs):
         """
-        Create(Window parent, int id=-1, String dir=wxPyDirDialogDefaultFolderStr, 
+        Create(Window parent, int id=-1, String dir=DirDialogDefaultFolderStr, 
             Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=wxDIRCTRL_3D_INTERNAL|wxSUNKEN_BORDER, 
             String filter=EmptyString, 
-            int defaultFilter=0, String name=wxPy_TreeCtrlNameStr) -> bool
+            int defaultFilter=0, String name=TreeCtrlNameStr) -> bool
         """
         return _controls.GenericDirCtrl_Create(*args, **kwargs)
 
@@ -4261,7 +4282,7 @@ class GenericDirCtrl(core.Control):
         return _controls.GenericDirCtrl_GetRootId(*args, **kwargs)
 
     def GetTreeCtrl(*args, **kwargs):
-        """GetTreeCtrl() -> wxTreeCtrl"""
+        """GetTreeCtrl() -> TreeCtrl"""
         return _controls.GenericDirCtrl_GetTreeCtrl(*args, **kwargs)
 
     def GetFilterListCtrl(*args, **kwargs):
@@ -4294,6 +4315,7 @@ class GenericDirCtrlPtr(GenericDirCtrl):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = GenericDirCtrl
 _controls.GenericDirCtrl_swigregister(GenericDirCtrlPtr)
+DirDialogDefaultFolderStr = cvar.DirDialogDefaultFolderStr
 
 def PreGenericDirCtrl(*args, **kwargs):
     """PreGenericDirCtrl() -> GenericDirCtrl"""
@@ -4349,7 +4371,7 @@ class PyControl(core.Control):
         """
         __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=0, Validator validator=DefaultValidator, 
-            String name=wxPyControlNameStr) -> PyControl
+            String name=ControlNameStr) -> PyControl
         """
         newobj = _controls.new_PyControl(*args, **kwargs)
         self.this = newobj.this
@@ -4670,7 +4692,7 @@ class DragImage(core.Object):
         return _controls.DragImage_DoDrawImage(*args, **kwargs)
 
     def UpdateBackingFromWindow(*args, **kwargs):
-        """UpdateBackingFromWindow(DC windowDC, wxMemoryDC destDC, Rect sourceRect, Rect destRect) -> bool"""
+        """UpdateBackingFromWindow(DC windowDC, MemoryDC destDC, Rect sourceRect, Rect destRect) -> bool"""
         return _controls.DragImage_UpdateBackingFromWindow(*args, **kwargs)
 
     def RedrawImage(*args, **kwargs):
@@ -4686,7 +4708,7 @@ class DragImagePtr(DragImage):
 _controls.DragImage_swigregister(DragImagePtr)
 
 def DragIcon(*args, **kwargs):
-    """DragIcon(wxIcon image, Cursor cursor=wxNullCursor) -> DragImage"""
+    """DragIcon(Icon image, Cursor cursor=wxNullCursor) -> DragImage"""
     val = _controls.new_DragIcon(*args, **kwargs)
     val.thisown = 1
     return val

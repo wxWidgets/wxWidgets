@@ -19,6 +19,7 @@ del sys, _wx
 
 
 # Now assign all the reverse-renamed names:
+wxSTCNameStr = wx.stc.STCNameStr
 STC_USE_DND = wx.stc.STC_USE_DND
 wxSTC_USE_POPUP = wx.stc.STC_USE_POPUP
 wxSTC_INVALID_POSITION = wx.stc.STC_INVALID_POSITION

@@ -236,7 +236,7 @@ class Wizard(windows.Dialog):
         return "<%s.%s; proxy of C++ wxWizard instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Window parent, int id=-1, String title=wxEmptyString, 
+        __init__(Window parent, int id=-1, String title=EmptyString, 
             Bitmap bitmap=wxNullBitmap, Point pos=DefaultPosition, 
             long style=DEFAULT_DIALOG_STYLE) -> Wizard
         """
@@ -248,7 +248,7 @@ class Wizard(windows.Dialog):
 
     def Create(*args, **kwargs):
         """
-        Create(Window parent, int id=-1, String title=wxEmptyString, 
+        Create(Window parent, int id=-1, String title=EmptyString, 
             Bitmap bitmap=wxNullBitmap, Point pos=DefaultPosition) -> bool
         """
         return _wizard.Wizard_Create(*args, **kwargs)

@@ -15,11 +15,7 @@
 
 //---------------------------------------------------------------------------
 
-%{
-    static const wxChar* wxSplitterNameStr = wxT("splitter");
-    DECLARE_DEF_STRING(SplitterNameStr);
-%}
-
+MAKE_CONST_WXSTRING2(SplitterNameStr, wxT("splitter"));
 
 //---------------------------------------------------------------------------
 %newgroup

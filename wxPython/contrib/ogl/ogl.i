@@ -18,15 +18,15 @@
 #include "wx/wxPython/pyclasses.h"
 #include "oglhelpers.h"
 
-
-    static const wxString wxPyEmptyString(wxT(""));
 %}
 
 //---------------------------------------------------------------------------
 
 %import windows.i
-
 %pythoncode { wx = core }
+
+
+MAKE_CONST_WXSTRING_NOSWIG(EmptyString);
 
 %include _ogl_rename.i
 

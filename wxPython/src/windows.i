@@ -19,9 +19,6 @@
 #include "wx/wxPython/wxPython.h"
 #include "wx/wxPython/pyclasses.h"
     
-    DECLARE_DEF_STRING(PanelNameStr);
-    DECLARE_DEF_STRING(EmptyString);
-    
 %}
 
 //---------------------------------------------------------------------------
@@ -30,6 +27,10 @@
 %pythoncode { wx = core }
 
 %include _windows_rename.i
+
+
+MAKE_CONST_WXSTRING_NOSWIG(EmptyString);
+MAKE_CONST_WXSTRING_NOSWIG(PanelNameStr);
 
 
 // Include all the files that make up this module

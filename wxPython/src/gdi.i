@@ -18,7 +18,6 @@
 #include "wx/wxPython/wxPython.h"
 #include "wx/wxPython/pyclasses.h"
     
-    DECLARE_DEF_STRING(EmptyString);
 %}
 
 //---------------------------------------------------------------------------
@@ -26,13 +25,14 @@
 %import core.i
 %pythoncode { wx = core }
 
-
-// Include all the files that make up this module
-
 %include _gdi_rename.i
 
 
-// GDI
+MAKE_CONST_WXSTRING_NOSWIG(EmptyString);
+
+
+// Include all the files that make up this module
+
 %include _gdiobj.i
 %include _colour.i
 %include _palette.i

@@ -112,7 +112,7 @@ class XmlResource(core.Object):
         return _xrc.XmlResource_LoadBitmap(*args, **kwargs)
 
     def LoadIcon(*args, **kwargs):
-        """LoadIcon(String name) -> wxIcon"""
+        """LoadIcon(String name) -> Icon"""
         return _xrc.XmlResource_LoadIcon(*args, **kwargs)
 
     def AttachUnknownControl(*args, **kwargs):
@@ -157,6 +157,14 @@ class XmlResourcePtr(XmlResource):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = XmlResource
 _xrc.XmlResource_swigregister(XmlResourcePtr)
+cvar = _xrc.cvar
+UTF8String = cvar.UTF8String
+StyleString = cvar.StyleString
+SizeString = cvar.SizeString
+PosString = cvar.PosString
+BitmapString = cvar.BitmapString
+IconString = cvar.IconString
+FontString = cvar.FontString
 
 def EmptyXmlResource(*args, **kwargs):
     """EmptyXmlResource(int flags=XRC_USE_LOCALE) -> XmlResource"""
@@ -396,7 +404,7 @@ class XmlDocument(core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxXmlDocument instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(String filename, String encoding=wxPyUTF8String) -> XmlDocument"""
+        """__init__(String filename, String encoding=UTF8String) -> XmlDocument"""
         newobj = _xrc.new_XmlDocument(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -408,11 +416,11 @@ class XmlDocument(core.Object):
         except: pass
 
     def Load(*args, **kwargs):
-        """Load(String filename, String encoding=wxPyUTF8String) -> bool"""
+        """Load(String filename, String encoding=UTF8String) -> bool"""
         return _xrc.XmlDocument_Load(*args, **kwargs)
 
     def LoadFromStream(*args, **kwargs):
-        """LoadFromStream(InputStream stream, String encoding=wxPyUTF8String) -> bool"""
+        """LoadFromStream(InputStream stream, String encoding=UTF8String) -> bool"""
         return _xrc.XmlDocument_LoadFromStream(*args, **kwargs)
 
     def Save(*args, **kwargs):
@@ -460,7 +468,7 @@ class XmlDocumentPtr(XmlDocument):
 _xrc.XmlDocument_swigregister(XmlDocumentPtr)
 
 def XmlDocumentFromStream(*args, **kwargs):
-    """XmlDocumentFromStream(InputStream stream, String encoding=wxPyUTF8String) -> XmlDocument"""
+    """XmlDocumentFromStream(InputStream stream, String encoding=UTF8String) -> XmlDocument"""
     val = _xrc.new_XmlDocumentFromStream(*args, **kwargs)
     val.thisown = 1
     return val
@@ -553,7 +561,7 @@ class XmlResourceHandler(core.Object):
         return _xrc.XmlResourceHandler_AddWindowStyles(*args, **kwargs)
 
     def GetStyle(*args, **kwargs):
-        """GetStyle(String param=wxPyStyleString, int defaults=0) -> int"""
+        """GetStyle(String param=StyleString, int defaults=0) -> int"""
         return _xrc.XmlResourceHandler_GetStyle(*args, **kwargs)
 
     def GetText(*args, **kwargs):
@@ -581,11 +589,11 @@ class XmlResourceHandler(core.Object):
         return _xrc.XmlResourceHandler_GetColour(*args, **kwargs)
 
     def GetSize(*args, **kwargs):
-        """GetSize(String param=wxPySizeString) -> Size"""
+        """GetSize(String param=SizeString) -> Size"""
         return _xrc.XmlResourceHandler_GetSize(*args, **kwargs)
 
     def GetPosition(*args, **kwargs):
-        """GetPosition(String param=wxPyPosString) -> Point"""
+        """GetPosition(String param=PosString) -> Point"""
         return _xrc.XmlResourceHandler_GetPosition(*args, **kwargs)
 
     def GetDimension(*args, **kwargs):
@@ -594,20 +602,20 @@ class XmlResourceHandler(core.Object):
 
     def GetBitmap(*args, **kwargs):
         """
-        GetBitmap(String param=wxPyBitmapString, wxArtClient defaultArtClient=wxART_OTHER, 
+        GetBitmap(String param=BitmapString, wxArtClient defaultArtClient=wxART_OTHER, 
             Size size=DefaultSize) -> Bitmap
         """
         return _xrc.XmlResourceHandler_GetBitmap(*args, **kwargs)
 
     def GetIcon(*args, **kwargs):
         """
-        GetIcon(String param=wxPyIconString, wxArtClient defaultArtClient=wxART_OTHER, 
-            Size size=DefaultSize) -> wxIcon
+        GetIcon(String param=IconString, wxArtClient defaultArtClient=wxART_OTHER, 
+            Size size=DefaultSize) -> Icon
         """
         return _xrc.XmlResourceHandler_GetIcon(*args, **kwargs)
 
     def GetFont(*args, **kwargs):
-        """GetFont(String param=wxPyFontString) -> Font"""
+        """GetFont(String param=FontString) -> Font"""
         return _xrc.XmlResourceHandler_GetFont(*args, **kwargs)
 
     def SetupWindow(*args, **kwargs):

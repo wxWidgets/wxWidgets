@@ -19,7 +19,6 @@
 
 #include <wx/wizard.h>
     
-    static const wxString wxPyEmptyString(wxT(""));
 %}
 
 //----------------------------------------------------------------------
@@ -28,6 +27,8 @@
 %pythoncode { wx = core }
 
 %include _wizard_rename.i
+
+MAKE_CONST_WXSTRING_NOSWIG(EmptyString);
 
 //----------------------------------------------------------------------
 
@@ -310,7 +311,7 @@ public:
     // ctor
     wxWizard(wxWindow *parent,
              int id = -1,
-             const wxString& title = wxEmptyString,
+             const wxString& title = wxPyEmptyString,
              const wxBitmap& bitmap = wxNullBitmap,
              const wxPoint& pos = wxDefaultPosition,
              long style = wxDEFAULT_DIALOG_STYLE);
@@ -318,7 +319,7 @@ public:
 
     bool Create(wxWindow *parent,
              int id = -1,
-             const wxString& title = wxEmptyString,
+             const wxString& title = wxPyEmptyString,
              const wxBitmap& bitmap = wxNullBitmap,
              const wxPoint& pos = wxDefaultPosition);
 

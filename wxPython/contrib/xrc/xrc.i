@@ -21,20 +21,23 @@
 #include <wx/xml/xml.h>
 #include <wx/xrc/xmlres.h>
 
-    static const wxString wxPyEmptyString(wxT(""));
-    static const wxString wxPyUTF8String(wxT("UTF-8"));
-    static const wxString wxPyStyleString(wxT("style"));
-    static const wxString wxPySizeString(wxT("size"));
-    static const wxString wxPyPosString(wxT("pos"));
-    static const wxString wxPyBitmapString(wxT("bitmap"));
-    static const wxString wxPyIconString(wxT("icon"));
-    static const wxString wxPyFontString(wxT("font"));
 %}
 
 //---------------------------------------------------------------------------
 
 %import core.i
 %pythoncode { wx = core }
+
+
+MAKE_CONST_WXSTRING_NOSWIG(EmptyString);
+MAKE_CONST_WXSTRING2(UTF8String, "UTF-8");
+MAKE_CONST_WXSTRING2(StyleString, "style");
+MAKE_CONST_WXSTRING2(SizeString, "size");
+MAKE_CONST_WXSTRING2(PosString, "pos");
+MAKE_CONST_WXSTRING2(BitmapString, "bitmap");
+MAKE_CONST_WXSTRING2(IconString, "icon");
+MAKE_CONST_WXSTRING2(FontString, "font");
+
 
 %include _xrc_rename.i
 

@@ -19,12 +19,10 @@
 %{
 #include "wx/wxPython/printfw.h"
 
-    static const wxChar* wxPrintoutTitleStr = wxT("Printout");
-    DECLARE_DEF_STRING(PrintoutTitleStr);
-    static const wxChar* wxPreviewCanvasNameStr = wxT("previewcanvas");
-    DECLARE_DEF_STRING(PreviewCanvasNameStr);
-
 %}
+
+MAKE_CONST_WXSTRING2(PrintoutTitleStr, wxT("Printout"));
+MAKE_CONST_WXSTRING2(PreviewCanvasNameStr, wxT("previewcanvas"));
 
 
 //---------------------------------------------------------------------------
@@ -56,7 +54,7 @@ public:
     wxPaperSize GetPaperId();
     const wxSize& GetPaperSize();
 
-    wxPrintQuality GetQuality();
+    int GetQuality();
 
     void SetNoCopies(int v);
     void SetCollate(bool flag);
@@ -67,7 +65,7 @@ public:
     void SetDuplex(wxDuplexMode duplex);
     void SetPaperId(wxPaperSize sizeId);
     void SetPaperSize(const wxSize& sz);
-    void SetQuality(wxPrintQuality quality);
+    void SetQuality(int quality);
 
     // PostScript-specific data
     const wxString& GetPrinterCommand();

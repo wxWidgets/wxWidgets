@@ -19,14 +19,17 @@
 
 #include <wx/glcanvas.h>
 
-    static const wxString wxPyGLCanvasNameStr(wxT("GLCanvas"));
-    static const wxString wxPyEmptyString(wxT(""));
 %}
 
 //---------------------------------------------------------------------------
 
 %import core.i
 %pythoncode { wx = core }
+
+
+MAKE_CONST_WXSTRING2(GLCanvasNameStr, "GLCanvas");
+MAKE_CONST_WXSTRING_NOSWIG(EmptyString);
+
 
 %include _glcanvas_rename.i
 

@@ -19,6 +19,13 @@ del sys, _wx
 
 
 # Now assign all the reverse-renamed names:
+wxUTF8String = wx.xrc.UTF8String
+wxStyleString = wx.xrc.StyleString
+wxSizeString = wx.xrc.SizeString
+wxPosString = wx.xrc.PosString
+wxBitmapString = wx.xrc.BitmapString
+wxIconString = wx.xrc.IconString
+wxFontString = wx.xrc.FontString
 WX_XMLRES_CURRENT_VERSION_MAJOR = wx.xrc.WX_XMLRES_CURRENT_VERSION_MAJOR
 WX_XMLRES_CURRENT_VERSION_MINOR = wx.xrc.WX_XMLRES_CURRENT_VERSION_MINOR
 WX_XMLRES_CURRENT_VERSION_RELEASE = wx.xrc.WX_XMLRES_CURRENT_VERSION_RELEASE

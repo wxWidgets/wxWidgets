@@ -16,11 +16,9 @@
 
 //---------------------------------------------------------------------------
 
-%{
-    DECLARE_DEF_STRING(StaticBitmapNameStr);
-    DECLARE_DEF_STRING(StaticBoxNameStr);
-    DECLARE_DEF_STRING(StaticTextNameStr);
-%}
+MAKE_CONST_WXSTRING(StaticBitmapNameStr);
+MAKE_CONST_WXSTRING(StaticBoxNameStr);
+MAKE_CONST_WXSTRING(StaticTextNameStr);
 
 //---------------------------------------------------------------------------
 %newgroup

@@ -15,10 +15,7 @@
 
 //---------------------------------------------------------------------------
 
-%{
-    wxChar* wxToggleButtonNameStr = _T("wxToggleButton");
-    DECLARE_DEF_STRING(ToggleButtonNameStr);
-%}
+MAKE_CONST_WXSTRING2(ToggleButtonNameStr, _T("wxToggleButton"));
 
 //---------------------------------------------------------------------------
 %newgroup

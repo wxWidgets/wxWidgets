@@ -19,6 +19,9 @@ del sys, _wx
 
 
 # Now assign all the reverse-renamed names:
+wxDynamicSashNameStr = wx.gizmos.DynamicSashNameStr
+wxEditableListBoxNameStr = wx.gizmos.EditableListBoxNameStr
+wxTreeListCtrlNameStr = wx.gizmos.TreeListCtrlNameStr
 wxEVT_DYNAMIC_SASH_SPLIT = wx.gizmos.wxEVT_DYNAMIC_SASH_SPLIT
 wxEVT_DYNAMIC_SASH_UNIFY = wx.gizmos.wxEVT_DYNAMIC_SASH_UNIFY
 wxDS_MANAGE_SCROLLBARS = wx.gizmos.DS_MANAGE_SCROLLBARS

@@ -20,9 +20,6 @@
 #include <wx/grid.h>
 #include <wx/generic/gridctrl.h>
 
-    DECLARE_DEF_STRING(PanelNameStr);
-    DECLARE_DEF_STRING2(DateTimeFormatStr, wxT("%c"));
-    static const wxString wxPyEmptyString(wxT(""));
 %}
 
 
@@ -31,7 +28,13 @@
 %import windows.i
 %pythoncode { wx = core }
 
+
 %include _grid_rename.i
+
+MAKE_CONST_WXSTRING_NOSWIG(EmptyString);
+MAKE_CONST_WXSTRING_NOSWIG(PanelNameStr);
+MAKE_CONST_WXSTRING2(DateTimeFormatStr, wxT("%c"));
+
 
 //---------------------------------------------------------------------------
 // OOR related typemaps and helper functions

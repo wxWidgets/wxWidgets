@@ -15,10 +15,8 @@
 
 //---------------------------------------------------------------------------
 
-%{
-    DECLARE_DEF_STRING(RadioBoxNameStr);
-    DECLARE_DEF_STRING(RadioButtonNameStr);
-%}
+MAKE_CONST_WXSTRING(RadioBoxNameStr);
+MAKE_CONST_WXSTRING(RadioButtonNameStr);
 
 //---------------------------------------------------------------------------
 %newgroup

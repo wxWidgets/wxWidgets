@@ -15,11 +15,9 @@
 
 //---------------------------------------------------------------------------
 
-%{
-    DECLARE_DEF_STRING(FileSelectorPromptStr);
-    DECLARE_DEF_STRING(FileSelectorDefaultWildcardStr);
-    DECLARE_DEF_STRING(DirSelectorPromptStr);
-%}
+MAKE_CONST_WXSTRING(FileSelectorPromptStr);
+MAKE_CONST_WXSTRING(FileSelectorDefaultWildcardStr);
+MAKE_CONST_WXSTRING(DirSelectorPromptStr);
 
 //---------------------------------------------------------------------------
 %newgroup;

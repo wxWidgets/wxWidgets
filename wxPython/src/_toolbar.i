@@ -15,9 +15,8 @@
 
 //---------------------------------------------------------------------------
 
-%{
-    DECLARE_DEF_STRING(ToolBarNameStr);
-%}
+MAKE_CONST_WXSTRING_NOSWIG(ToolBarNameStr);
+
 
 //---------------------------------------------------------------------------
 %newgroup;
@@ -60,13 +59,13 @@ class wxToolBarToolBase : public wxObject {
 public:
 //      wxToolBarToolBase(wxToolBarBase *tbar = (wxToolBarBase *)NULL,
 //                        int id = wxID_SEPARATOR,
-//                        const wxString& label = wxEmptyString,
+//                        const wxString& label = wxPyEmptyString,
 //                        const wxBitmap& bmpNormal = wxNullBitmap,
 //                        const wxBitmap& bmpDisabled = wxNullBitmap,
 //                        wxItemKind kind = wxITEM_NORMAL,
 //                        wxObject *clientData = (wxObject *) NULL,
-//                        const wxString& shortHelpString = wxEmptyString,
-//                        const wxString& longHelpString = wxEmptyString)
+//                        const wxString& shortHelpString = wxPyEmptyString,
+//                        const wxString& longHelpString = wxPyEmptyString)
 //      ~wxToolBarToolBase();
 
     int GetId();

@@ -282,15 +282,10 @@ static swig_type_info *swig_types[52];
 #include <wx/html/helpctrl.h>
 
 
-    DECLARE_DEF_STRING(EmptyString);
-    static const wxChar* wxHtmlWindowNameStr = wxT("htmlWindow");
-    DECLARE_DEF_STRING(HtmlWindowNameStr);
-    static const wxChar* wxHtmlPrintoutTitleStr = wxT("Printout");
-    DECLARE_DEF_STRING(HtmlPrintoutTitleStr);
-    static const wxChar* wxHtmlPrintingTitleStr = wxT("Printing");
-    DECLARE_DEF_STRING(HtmlPrintingTitleStr);
-    
-
+ static const wxString wxPyEmptyString(wxEmptyString); 
+ static const wxString wxPyHtmlWindowNameStr(wxT("htmlWindow")); 
+ static const wxString wxPyHtmlPrintoutTitleStr(wxT("Printout")); 
+ static const wxString wxPyHtmlPrintingTitleStr(wxT("Printing")); 
 void wxHtmlWinParser_SetFonts(wxHtmlWinParser *self,wxString normal_face,wxString fixed_face,PyObject *sizes){
             int* temp = NULL;
             if (sizes) temp = int_LIST_helper(sizes);
@@ -598,6 +593,66 @@ wxHtmlBookRecord *wxHtmlContentsItem_GetBook(wxHtmlContentsItem *self){ return s
 #ifdef __cplusplus
 extern "C" {
 #endif
+static int _wrap_HtmlWindowNameStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable HtmlWindowNameStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_HtmlWindowNameStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyHtmlWindowNameStr)->c_str(), (&wxPyHtmlWindowNameStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyHtmlWindowNameStr)->c_str(), (&wxPyHtmlWindowNameStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_HtmlPrintoutTitleStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable HtmlPrintoutTitleStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_HtmlPrintoutTitleStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyHtmlPrintoutTitleStr)->c_str(), (&wxPyHtmlPrintoutTitleStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyHtmlPrintoutTitleStr)->c_str(), (&wxPyHtmlPrintoutTitleStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_HtmlPrintingTitleStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable HtmlPrintingTitleStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_HtmlPrintingTitleStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyHtmlPrintingTitleStr)->c_str(), (&wxPyHtmlPrintingTitleStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyHtmlPrintingTitleStr)->c_str(), (&wxPyHtmlPrintingTitleStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
 static PyObject *_wrap_new_HtmlLinkInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxString *arg1 = 0 ;
@@ -10725,6 +10780,10 @@ SWIGEXPORT(void) SWIG_init(void) {
     }
     SWIG_InstallConstants(d,swig_const_table);
     
+    PyDict_SetItemString(d,(char*)"cvar", SWIG_globals);
+    SWIG_addvarlink(SWIG_globals,(char*)"HtmlWindowNameStr",_wrap_HtmlWindowNameStr_get, _wrap_HtmlWindowNameStr_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"HtmlPrintoutTitleStr",_wrap_HtmlPrintoutTitleStr_get, _wrap_HtmlPrintoutTitleStr_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"HtmlPrintingTitleStr",_wrap_HtmlPrintingTitleStr_get, _wrap_HtmlPrintingTitleStr_set);
     
     wxPyPtrTypeMap_Add("wxHtmlTagHandler",    "wxPyHtmlTagHandler");
     wxPyPtrTypeMap_Add("wxHtmlWinTagHandler", "wxPyHtmlWinTagHandler");

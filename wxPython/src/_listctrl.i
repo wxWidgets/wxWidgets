@@ -18,9 +18,8 @@
 %{
 #include <wx/listctrl.h>
 
-    const wxChar* wxListCtrlNameStr = _T("wxListCtrl");
-    DECLARE_DEF_STRING(ListCtrlNameStr);
 %}
+MAKE_CONST_WXSTRING2(ListCtrlNameStr, _T("wxListCtrl"));
 
 //---------------------------------------------------------------------------
 %newgroup

@@ -234,12 +234,32 @@ static swig_type_info *swig_types[9];
 
 #include <wx/glcanvas.h>
 
-    static const wxString wxPyGLCanvasNameStr(wxT("GLCanvas"));
-    static const wxString wxPyEmptyString(wxT(""));
 
+ static const wxString wxPyGLCanvasNameStr(wxT("GLCanvas")); 
+ static const wxString wxPyEmptyString(wxEmptyString); 
 #ifdef __cplusplus
 extern "C" {
 #endif
+static int _wrap_GLCanvasNameStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable GLCanvasNameStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_GLCanvasNameStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyGLCanvasNameStr)->c_str(), (&wxPyGLCanvasNameStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyGLCanvasNameStr)->c_str(), (&wxPyGLCanvasNameStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
 static PyObject *_wrap_new_GLContext(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     bool arg1 ;
@@ -1214,6 +1234,8 @@ SWIGEXPORT(void) SWIG_init(void) {
     }
     SWIG_InstallConstants(d,swig_const_table);
     
+    PyDict_SetItemString(d,(char*)"cvar", SWIG_globals);
+    SWIG_addvarlink(SWIG_globals,(char*)"GLCanvasNameStr",_wrap_GLCanvasNameStr_get, _wrap_GLCanvasNameStr_set);
     
     
     

@@ -136,9 +136,7 @@ EVT_CALENDAR_WEEKDAY_CLICKED = wx.PyEventBinder( wxEVT_CALENDAR_WEEKDAY_CLICKED,
 
 //---------------------------------------------------------------------------
 
-%{
-    DECLARE_DEF_STRING(CalendarNameStr);
-%}
+MAKE_CONST_WXSTRING(CalendarNameStr);
 
 
 

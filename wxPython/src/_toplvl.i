@@ -15,13 +15,10 @@
 
 //---------------------------------------------------------------------------
 
-%{
-    // Put some wx default wxChar* values into wxStrings.
-    DECLARE_DEF_STRING(FrameNameStr);
-    DECLARE_DEF_STRING(DialogNameStr);
-    DECLARE_DEF_STRING(StatusLineNameStr);
-    DECLARE_DEF_STRING(ToolBarNameStr);
-%}
+MAKE_CONST_WXSTRING(FrameNameStr);
+MAKE_CONST_WXSTRING(DialogNameStr);
+MAKE_CONST_WXSTRING(StatusLineNameStr);
+MAKE_CONST_WXSTRING(ToolBarNameStr);
 
 //---------------------------------------------------------------------------
 %newgroup

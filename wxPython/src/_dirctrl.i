@@ -15,9 +15,7 @@
 
 //---------------------------------------------------------------------------
 
-%{
-    DECLARE_DEF_STRING(DirDialogDefaultFolderStr);
-%}
+MAKE_CONST_WXSTRING(DirDialogDefaultFolderStr);
 
 //---------------------------------------------------------------------------
 %newgroup
@@ -69,7 +67,7 @@ public:
                      long style = wxDIRCTRL_3D_INTERNAL|wxSUNKEN_BORDER,
                      const wxString& filter = wxPyEmptyString,
                      int defaultFilter = 0,
-                     const wxString& name = wxPy_TreeCtrlNameStr);
+                     const wxString& name = wxPyTreeCtrlNameStr);
     %name(PreGenericDirCtrl)wxGenericDirCtrl();
 
 
@@ -80,7 +78,7 @@ public:
                 long style = wxDIRCTRL_3D_INTERNAL|wxSUNKEN_BORDER,
                 const wxString& filter = wxPyEmptyString,
                 int defaultFilter = 0,
-                const wxString& name = wxPy_TreeCtrlNameStr);
+                const wxString& name = wxPyTreeCtrlNameStr);
 
 
     
@@ -110,7 +108,7 @@ public:
 
     virtual wxTreeItemId GetRootId();
 
-    virtual wxTreeCtrl* GetTreeCtrl() const;
+    virtual wxPyTreeCtrl* GetTreeCtrl() const;
     virtual wxDirFilterListCtrl* GetFilterListCtrl() const;
 
     

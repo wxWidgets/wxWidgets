@@ -350,12 +350,12 @@ def Trap(*args, **kwargs):
 
 def FileSelector(*args, **kwargs):
     """
-    FileSelector(String message=wxPyFileSelectorPromptStr, String default_path=EmptyString, 
+    FileSelector(String message=FileSelectorPromptStr, String default_path=EmptyString, 
         String default_filename=EmptyString, 
         String default_extension=EmptyString, 
-        String wildcard=wxPyFileSelectorDefaultWildcardStr, 
-        int flags=0, Window parent=None, 
-        int x=-1, int y=-1) -> String
+        String wildcard=FileSelectorDefaultWildcardStr, 
+        int flags=0, Window parent=None, int x=-1, 
+        int y=-1) -> String
     """
     return _misc.FileSelector(*args, **kwargs)
 
@@ -375,7 +375,7 @@ def SaveFileSelector(*args, **kwargs):
 
 def DirSelector(*args, **kwargs):
     """
-    DirSelector(String message=wxPyDirSelectorPromptStr, String defaultPath=EmptyString, 
+    DirSelector(String message=DirSelectorPromptStr, String defaultPath=EmptyString, 
         long style=DD_DEFAULT_STYLE, 
         Point pos=DefaultPosition, Window parent=None) -> String
     """
@@ -521,6 +521,10 @@ class MutexGuiLockerPtr(MutexGuiLocker):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = MutexGuiLocker
 _misc.MutexGuiLocker_swigregister(MutexGuiLockerPtr)
+cvar = _misc.cvar
+FileSelectorPromptStr = cvar.FileSelectorPromptStr
+FileSelectorDefaultWildcardStr = cvar.FileSelectorDefaultWildcardStr
+DirSelectorPromptStr = cvar.DirSelectorPromptStr
 
 
 def Thread_IsMain(*args, **kwargs):
@@ -2158,7 +2162,7 @@ class FileType(object):
         return _misc.FileType_GetExtensions(*args, **kwargs)
 
     def GetIcon(*args, **kwargs):
-        """GetIcon() -> wxIcon"""
+        """GetIcon() -> Icon"""
         return _misc.FileType_GetIcon(*args, **kwargs)
 
     def GetIconInfo(*args, **kwargs):
@@ -2277,7 +2281,6 @@ class MimeTypesManagerPtr(MimeTypesManager):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = MimeTypesManager
 _misc.MimeTypesManager_swigregister(MimeTypesManagerPtr)
-cvar = _misc.cvar
 TheMimeTypesManager = cvar.TheMimeTypesManager
 
 def MimeTypesManager_IsOfType(*args, **kwargs):
@@ -2341,7 +2344,7 @@ class ArtProvider(object):
     GetBitmap = staticmethod(GetBitmap)
     def GetIcon(*args, **kwargs):
         """
-        ArtProvider.GetIcon(String id, String client=ART_OTHER, Size size=DefaultSize) -> wxIcon
+        ArtProvider.GetIcon(String id, String client=ART_OTHER, Size size=DefaultSize) -> Icon
 
         Query the providers for icon with given ID and return it. Return
         wx.NullIcon if no provider provides it.
@@ -2435,7 +2438,7 @@ def ArtProvider_GetBitmap(*args, **kwargs):
 
 def ArtProvider_GetIcon(*args, **kwargs):
     """
-    ArtProvider_GetIcon(String id, String client=ART_OTHER, Size size=DefaultSize) -> wxIcon
+    ArtProvider_GetIcon(String id, String client=ART_OTHER, Size size=DefaultSize) -> Icon
 
     Query the providers for icon with given ID and return it. Return
     wx.NullIcon if no provider provides it.
@@ -3332,7 +3335,7 @@ class DateTime(object):
         return _misc.DateTime_ParseRfc822Date(*args, **kwargs)
 
     def ParseFormat(*args, **kwargs):
-        """ParseFormat(String date, String format=wxPyDateFormatStr, DateTime dateDef=wxDefaultDateTime) -> int"""
+        """ParseFormat(String date, String format=DateFormatStr, DateTime dateDef=wxDefaultDateTime) -> int"""
         return _misc.DateTime_ParseFormat(*args, **kwargs)
 
     def ParseDateTime(*args, **kwargs):
@@ -3348,7 +3351,7 @@ class DateTime(object):
         return _misc.DateTime_ParseTime(*args, **kwargs)
 
     def Format(*args, **kwargs):
-        """Format(String format=wxPyDateFormatStr, wxDateTime::TimeZone tz=LOCAL_TZ) -> String"""
+        """Format(String format=DateFormatStr, wxDateTime::TimeZone tz=LOCAL_TZ) -> String"""
         return _misc.DateTime_Format(*args, **kwargs)
 
     def FormatDate(*args, **kwargs):
@@ -3379,6 +3382,8 @@ class DateTimePtr(DateTime):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = DateTime
 _misc.DateTime_swigregister(DateTimePtr)
+DateFormatStr = cvar.DateFormatStr
+TimeSpanFormatStr = cvar.TimeSpanFormatStr
 
 def DateTime_SetCountry(*args, **kwargs):
     """DateTime_SetCountry(int country)"""
@@ -3677,7 +3682,7 @@ class TimeSpan(object):
         return _misc.TimeSpan_GetMilliseconds(*args, **kwargs)
 
     def Format(*args, **kwargs):
-        """Format(String format=wxPyTimeSpanFormatStr) -> String"""
+        """Format(String format=TimeSpanFormatStr) -> String"""
         return _misc.TimeSpan_Format(*args, **kwargs)
 
     def __repr__(self):
@@ -4354,8 +4359,8 @@ class DropSource(object):
         return "<%s.%s; proxy of C++ wxPyDropSource instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Window win=None, wxIcon copy=wxNullIcon, wxIcon move=wxNullIcon, 
-            wxIcon none=wxNullIcon) -> DropSource
+        __init__(Window win=None, Icon copy=wxNullIcon, Icon move=wxNullIcon, 
+            Icon none=wxNullIcon) -> DropSource
         """
         newobj = _misc.new_DropSource(*args, **kwargs)
         self.this = newobj.this

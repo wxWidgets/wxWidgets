@@ -279,8 +279,8 @@ static swig_type_info *swig_types[56];
 #include "wx/wxPython/wxPython.h"
 #include "wx/wxPython/pyclasses.h"
     
-    DECLARE_DEF_STRING(EmptyString);
 
+ static const wxString wxPyEmptyString(wxEmptyString); 
 PyObject *wxColour_Get(wxColour *self){
             PyObject* rv = PyTuple_New(3);
             int red = -1;

@@ -307,16 +307,13 @@ static swig_type_info *swig_types[83];
 #include "wx/wxPython/pyclasses.h"
 #include "wx/wxPython/pyistream.h"
     
-    DECLARE_DEF_STRING(EmptyString);
-    
+
+ static const wxString wxPyEmptyString(wxEmptyString); 
 
 
-
-
-    DECLARE_DEF_STRING(FileSelectorPromptStr);
-    DECLARE_DEF_STRING(FileSelectorDefaultWildcardStr);
-    DECLARE_DEF_STRING(DirSelectorPromptStr);
-
+ static const wxString wxPyFileSelectorPromptStr(wxFileSelectorPromptStr); 
+ static const wxString wxPyFileSelectorDefaultWildcardStr(wxFileSelectorDefaultWildcardStr); 
+ static const wxString wxPyDirSelectorPromptStr(wxDirSelectorPromptStr); 
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
@@ -845,10 +842,9 @@ bool wxConfigBase_ReadBool(wxConfigBase *self,wxString const &key,bool defaultVa
 
 #include <wx/datetime.h>
 
-    DECLARE_DEF_STRING2(DateFormatStr, wxT("%c"));
-    DECLARE_DEF_STRING2(TimeSpanFormatStr, wxT("%H:%M:%S"));
 
-
+ static const wxString wxPyDateFormatStr(wxT(wxT("%c"))); 
+ static const wxString wxPyTimeSpanFormatStr(wxT(wxT("%H:%M:%S"))); 
 
 #define LOCAL_TZ wxDateTime::Local
 
@@ -1523,6 +1519,66 @@ static PyObject * SystemOptions_swigregister(PyObject *self, PyObject *args) {
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
+static int _wrap_FileSelectorPromptStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable FileSelectorPromptStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_FileSelectorPromptStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyFileSelectorPromptStr)->c_str(), (&wxPyFileSelectorPromptStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyFileSelectorPromptStr)->c_str(), (&wxPyFileSelectorPromptStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_FileSelectorDefaultWildcardStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable FileSelectorDefaultWildcardStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_FileSelectorDefaultWildcardStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyFileSelectorDefaultWildcardStr)->c_str(), (&wxPyFileSelectorDefaultWildcardStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyFileSelectorDefaultWildcardStr)->c_str(), (&wxPyFileSelectorDefaultWildcardStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_DirSelectorPromptStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable DirSelectorPromptStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_DirSelectorPromptStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyDirSelectorPromptStr)->c_str(), (&wxPyDirSelectorPromptStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyDirSelectorPromptStr)->c_str(), (&wxPyDirSelectorPromptStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
 static PyObject *_wrap_NewId(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     long result;
@@ -15158,6 +15214,46 @@ static PyObject *_wrap_ExpandEnvVars(PyObject *self, PyObject *args, PyObject *k
 }
 
 
+static int _wrap_DateFormatStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable DateFormatStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_DateFormatStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyDateFormatStr)->c_str(), (&wxPyDateFormatStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyDateFormatStr)->c_str(), (&wxPyDateFormatStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_TimeSpanFormatStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable TimeSpanFormatStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_TimeSpanFormatStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyTimeSpanFormatStr)->c_str(), (&wxPyTimeSpanFormatStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyTimeSpanFormatStr)->c_str(), (&wxPyTimeSpanFormatStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
 static PyObject *_wrap_DateTime_SetCountry(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 ;
@@ -26249,6 +26345,10 @@ SWIGEXPORT(void) SWIG_init(void) {
     }
     SWIG_InstallConstants(d,swig_const_table);
     
+    PyDict_SetItemString(d,(char*)"cvar", SWIG_globals);
+    SWIG_addvarlink(SWIG_globals,(char*)"FileSelectorPromptStr",_wrap_FileSelectorPromptStr_get, _wrap_FileSelectorPromptStr_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"FileSelectorDefaultWildcardStr",_wrap_FileSelectorDefaultWildcardStr_get, _wrap_FileSelectorDefaultWildcardStr_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"DirSelectorPromptStr",_wrap_DirSelectorPromptStr_get, _wrap_DirSelectorPromptStr_set);
     PyDict_SetItemString(d, "wxEVT_TIMER", PyInt_FromLong(wxEVT_TIMER));
     PyDict_SetItemString(d, "wxEVT_END_PROCESS", PyInt_FromLong(wxEVT_END_PROCESS));
     
@@ -26258,7 +26358,6 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d, "wxEVT_JOY_BUTTON_UP", PyInt_FromLong(wxEVT_JOY_BUTTON_UP));
     PyDict_SetItemString(d, "wxEVT_JOY_MOVE", PyInt_FromLong(wxEVT_JOY_MOVE));
     PyDict_SetItemString(d, "wxEVT_JOY_ZMOVE", PyInt_FromLong(wxEVT_JOY_ZMOVE));
-    PyDict_SetItemString(d,(char*)"cvar", SWIG_globals);
     SWIG_addvarlink(SWIG_globals,(char*)"TheMimeTypesManager",_wrap_TheMimeTypesManager_get, _wrap_TheMimeTypesManager_set);
     SWIG_addvarlink(SWIG_globals,(char*)"ART_TOOLBAR",_wrap_ART_TOOLBAR_get, _wrap_ART_TOOLBAR_set);
     SWIG_addvarlink(SWIG_globals,(char*)"ART_MENU",_wrap_ART_MENU_get, _wrap_ART_MENU_set);
@@ -26301,6 +26400,8 @@ SWIGEXPORT(void) SWIG_init(void) {
     
     wxPyPtrTypeMap_Add("wxArtProvider", "wxPyArtProvider");
     
+    SWIG_addvarlink(SWIG_globals,(char*)"DateFormatStr",_wrap_DateFormatStr_get, _wrap_DateFormatStr_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"TimeSpanFormatStr",_wrap_TimeSpanFormatStr_get, _wrap_TimeSpanFormatStr_set);
     SWIG_addvarlink(SWIG_globals,(char*)"FormatInvalid",_wrap_FormatInvalid_get, _wrap_FormatInvalid_set);
     
     wxPyPtrTypeMap_Add("wxDropSource",     "wxPyDropSource");

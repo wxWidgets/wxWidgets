@@ -373,6 +373,7 @@
 %typemap(out) wxToolBar*                { $result = wxPyMake_wxObject($1); }
 %typemap(out) wxToolBarBase*            { $result = wxPyMake_wxObject($1); }
 %typemap(out) wxTreeCtrl*               { $result = wxPyMake_wxObject($1); }
+%typemap(out) wxPyTreeCtrl*             { $result = wxPyMake_wxObject($1); }
 %typemap(out) wxWindow*                 { $result = wxPyMake_wxObject($1); }
 %typemap(out) wxHtmlWindow*             { $result = wxPyMake_wxObject($1); }
 %typemap(out) wxPyHtmlWindow*           { $result = wxPyMake_wxObject($1); }

@@ -20,8 +20,6 @@
 #include "wx/wxPython/pyclasses.h"
 #include "wx/wxPython/pyistream.h"
     
-    DECLARE_DEF_STRING(EmptyString);
-    
 %}
 
 //---------------------------------------------------------------------------
@@ -31,6 +29,8 @@
 
 %include _misc_rename.i
 
+
+MAKE_CONST_WXSTRING_NOSWIG(EmptyString);
 
 
 // Include all the files that make up this module

@@ -15,9 +15,7 @@
 
 //---------------------------------------------------------------------------
 
-%{
-    DECLARE_DEF_STRING(GaugeNameStr);
-%}
+MAKE_CONST_WXSTRING(GaugeNameStr);
 
 %newgroup
 

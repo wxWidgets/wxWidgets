@@ -19,6 +19,7 @@ del sys, _wx
 
 
 # Now assign all the reverse-renamed names:
+wxGLCanvasNameStr = wx.glcanvas.GLCanvasNameStr
 wxGLContext = wx.glcanvas.GLContext
 wxGLContextPtr = wx.glcanvas.GLContextPtr
 WX_GL_RGBA = wx.glcanvas.WX_GL_RGBA

@@ -16,10 +16,7 @@
 //---------------------------------------------------------------------------
 %newgroup;
 
-
-%{
-    DECLARE_DEF_STRING(ButtonNameStr);
-%}
+MAKE_CONST_WXSTRING(ButtonNameStr);
 
 enum {
     wxBU_LEFT,
@@ -40,16 +37,15 @@ DocStr(wxButton,
 
 RefDoc(wxButton,  "
  Styles
-    wxBU_LEFT:     Left-justifies the label. WIN32 only.
-    wxBU_TOP:      Aligns the label to the top of the button. WIN32 only.
-    wxBU_RIGHT:    Right-justifies the bitmap label. WIN32 only.
-    wxBU_BOTTOM:   Aligns the label to the bottom of the button. WIN32 only.
-    wxBU_EXACTFIT: Creates the button as small as possible instead of making
-                   it of the standard size (which is the default behaviour.)
+    wx.BU_LEFT:     Left-justifies the label. WIN32 only.
+    wx.BU_TOP:      Aligns the label to the top of the button. WIN32 only.
+    wx.BU_RIGHT:    Right-justifies the bitmap label. WIN32 only.
+    wx.BU_BOTTOM:   Aligns the label to the bottom of the button. WIN32 only.
+    wx.BU_EXACTFIT: Creates the button as small as possible instead of making
+                    it of the standard size (which is the default behaviour.)
 
  Events
-     EVT_BUTTON(win,id,func):
-         Sent when the button is clicked.
+     EVT_BUTTON:    Sent when the button is clicked.
 ");
 
 class wxButton : public wxControl
@@ -59,7 +55,8 @@ public:
     %addtofunc wxButton()       ""
 
 
-    DocStr(wxButton, "Create and show a button.")
+    DocStr(wxButton, "Create and show a button.");
+    RefDoc(wxButton, "");
     wxButton(wxWindow* parent, wxWindowID id, const wxString& label,
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize,

@@ -23,16 +23,8 @@
 #include <wx/html/htmprint.h>
 #include <wx/html/helpctrl.h>
 
-
-    DECLARE_DEF_STRING(EmptyString);
-    static const wxChar* wxHtmlWindowNameStr = wxT("htmlWindow");
-    DECLARE_DEF_STRING(HtmlWindowNameStr);
-    static const wxChar* wxHtmlPrintoutTitleStr = wxT("Printout");
-    DECLARE_DEF_STRING(HtmlPrintoutTitleStr);
-    static const wxChar* wxHtmlPrintingTitleStr = wxT("Printing");
-    DECLARE_DEF_STRING(HtmlPrintingTitleStr);
-    
 %}
+
 
 //---------------------------------------------------------------------------
 
@@ -40,6 +32,12 @@
 %pythoncode { wx = core }
 
 %include _html_rename.i
+
+
+MAKE_CONST_WXSTRING_NOSWIG(EmptyString);
+MAKE_CONST_WXSTRING2(HtmlWindowNameStr, "htmlWindow")
+MAKE_CONST_WXSTRING2(HtmlPrintoutTitleStr, "Printout")
+MAKE_CONST_WXSTRING2(HtmlPrintingTitleStr, "Printing")
 
 
 // TODO: Split this file into multiple %included files that coresponds to the

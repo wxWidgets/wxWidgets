@@ -1029,9 +1029,7 @@ PyObject *wxMenu_GetMenuItems(wxMenu *self){
             return wxPy_ConvertList(&list);
         }
 int MenuItem_GetDefaultMarginWidth(){ return 0; }
-
-    DECLARE_DEF_STRING(ControlNameStr);
-
+ static const wxString wxPyControlNameStr(wxControlNameStr); 
 int wxItemContainer_Append(wxItemContainer *self,wxString const &item,PyObject *clientData){
             if (clientData) {
                 wxPyClientData* data = new wxPyClientData(clientData);
@@ -28659,6 +28657,26 @@ static PyObject * MenuItem_swigregister(PyObject *self, PyObject *args) {
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
+static int _wrap_ControlNameStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable ControlNameStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_ControlNameStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyControlNameStr)->c_str(), (&wxPyControlNameStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyControlNameStr)->c_str(), (&wxPyControlNameStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
 static PyObject *_wrap_new_Control(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
@@ -38348,6 +38366,7 @@ SWIGEXPORT(void) SWIG_init(void) {
     SWIG_addvarlink(SWIG_globals,(char*)"NullAcceleratorTable",_wrap_NullAcceleratorTable_get, _wrap_NullAcceleratorTable_set);
     SWIG_addvarlink(SWIG_globals,(char*)"PanelNameStr",_wrap_PanelNameStr_get, _wrap_PanelNameStr_set);
     SWIG_addvarlink(SWIG_globals,(char*)"DefaultValidator",_wrap_DefaultValidator_get, _wrap_DefaultValidator_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"ControlNameStr",_wrap_ControlNameStr_get, _wrap_ControlNameStr_set);
     SWIG_addvarlink(SWIG_globals,(char*)"DefaultSpan",_wrap_DefaultSpan_get, _wrap_DefaultSpan_set);
     
     // Initialize threading, some globals and such

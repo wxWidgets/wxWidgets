@@ -15,12 +15,8 @@
 
 //---------------------------------------------------------------------------
 
-%{
-    static const wxChar* wxSashNameStr = wxT("sashWindow");
-    DECLARE_DEF_STRING(SashNameStr);
-    static const wxChar* wxSashLayoutNameStr = wxT("layoutWindow");
-    DECLARE_DEF_STRING(SashLayoutNameStr);
-%}
+MAKE_CONST_WXSTRING2(SashNameStr, wxT("sashWindow"));
+MAKE_CONST_WXSTRING2(SashLayoutNameStr, wxT("layoutWindow"));
 
 //---------------------------------------------------------------------------
 %newgroup;

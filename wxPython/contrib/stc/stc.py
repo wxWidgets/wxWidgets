@@ -783,7 +783,7 @@ class StyledTextCtrl(core.Control):
     def __init__(self, *args, **kwargs):
         """
         __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=0, String name=wxPySTCNameStr) -> StyledTextCtrl
+            long style=0, String name=STCNameStr) -> StyledTextCtrl
         """
         newobj = _stc.new_StyledTextCtrl(*args, **kwargs)
         self.this = newobj.this
@@ -2162,6 +2162,8 @@ class StyledTextCtrlPtr(StyledTextCtrl):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = StyledTextCtrl
 _stc.StyledTextCtrl_swigregister(StyledTextCtrlPtr)
+cvar = _stc.cvar
+STCNameStr = cvar.STCNameStr
 
 def PreStyledTextCtrl(*args, **kwargs):
     """PreStyledTextCtrl() -> StyledTextCtrl"""

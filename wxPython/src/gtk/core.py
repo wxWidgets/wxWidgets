@@ -6747,7 +6747,7 @@ class Control(Window):
         """
         __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=0, Validator validator=DefaultValidator, 
-            String name=wxPyControlNameStr) -> Control
+            String name=ControlNameStr) -> Control
         """
         newobj = _core.new_Control(*args, **kwargs)
         self.this = newobj.this
@@ -6759,7 +6759,7 @@ class Control(Window):
         """
         Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=0, Validator validator=DefaultValidator, 
-            String name=wxPyControlNameStr) -> bool
+            String name=ControlNameStr) -> bool
         """
         return _core.Control_Create(*args, **kwargs)
 
@@ -6782,6 +6782,7 @@ class ControlPtr(Control):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = Control
 _core.Control_swigregister(ControlPtr)
+ControlNameStr = cvar.ControlNameStr
 
 def PreControl(*args, **kwargs):
     """PreControl() -> Control"""

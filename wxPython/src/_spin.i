@@ -15,11 +15,8 @@
 
 //---------------------------------------------------------------------------
 
-%{
-    DECLARE_DEF_STRING(SPIN_BUTTON_NAME);
-    wxChar* wxSpinCtrlNameStr = _T("wxSpinCtrl");
-    DECLARE_DEF_STRING(SpinCtrlNameStr);
-%}
+MAKE_CONST_WXSTRING(SPIN_BUTTON_NAME);
+MAKE_CONST_WXSTRING2(SpinCtrlNameStr, _T("wxSpinCtrl"));
 
 //---------------------------------------------------------------------------
 %newgroup

@@ -1283,7 +1283,7 @@ class FontMapper(object):
 
     GetEncodingDescription = staticmethod(GetEncodingDescription)
     def SetConfig(*args, **kwargs):
-        """SetConfig(wxConfigBase config)"""
+        """SetConfig(ConfigBase config)"""
         return _gdi.FontMapper_SetConfig(*args, **kwargs)
 
     def SetConfigPath(*args, **kwargs):

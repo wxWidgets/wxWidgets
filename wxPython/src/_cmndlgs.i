@@ -16,16 +16,12 @@
 //---------------------------------------------------------------------------
 %newgroup
 
-%{
-
-    DECLARE_DEF_STRING(FileSelectorPromptStr);
-    DECLARE_DEF_STRING(DirSelectorPromptStr);
-    DECLARE_DEF_STRING(DirDialogNameStr);
-    DECLARE_DEF_STRING(FileSelectorDefaultWildcardStr);
-    DECLARE_DEF_STRING(GetTextFromUserPromptStr);
-    DECLARE_DEF_STRING(MessageBoxCaptionStr);
-
-%}
+MAKE_CONST_WXSTRING(FileSelectorPromptStr);
+MAKE_CONST_WXSTRING(DirSelectorPromptStr);
+MAKE_CONST_WXSTRING(DirDialogNameStr);
+MAKE_CONST_WXSTRING(FileSelectorDefaultWildcardStr);
+MAKE_CONST_WXSTRING(GetTextFromUserPromptStr);
+MAKE_CONST_WXSTRING(MessageBoxCaptionStr);
 
 //---------------------------------------------------------------------------
 

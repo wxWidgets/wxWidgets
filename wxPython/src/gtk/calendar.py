@@ -171,7 +171,7 @@ class CalendarCtrl(core.Control):
         __init__(Window parent, int id, DateTime date=wxDefaultDateTime, 
             Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=wxCAL_SHOW_HOLIDAYS|wxWANTS_CHARS, 
-            String name=wxPyCalendarNameStr) -> CalendarCtrl
+            String name=CalendarNameStr) -> CalendarCtrl
         """
         newobj = _calendar.new_CalendarCtrl(*args, **kwargs)
         self.this = newobj.this
@@ -184,7 +184,7 @@ class CalendarCtrl(core.Control):
         Create(Window parent, int id, DateTime date=wxDefaultDateTime, 
             Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=wxCAL_SHOW_HOLIDAYS|wxWANTS_CHARS, 
-            String name=wxPyCalendarNameStr) -> bool
+            String name=CalendarNameStr) -> bool
         """
         return _calendar.CalendarCtrl_Create(*args, **kwargs)
 
@@ -307,6 +307,8 @@ class CalendarCtrlPtr(CalendarCtrl):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = CalendarCtrl
 _calendar.CalendarCtrl_swigregister(CalendarCtrlPtr)
+cvar = _calendar.cvar
+CalendarNameStr = cvar.CalendarNameStr
 
 def PreCalendarCtrl(*args, **kwargs):
     """PreCalendarCtrl() -> CalendarCtrl"""

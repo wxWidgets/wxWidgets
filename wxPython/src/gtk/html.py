@@ -84,6 +84,10 @@ class HtmlLinkInfoPtr(HtmlLinkInfo):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = HtmlLinkInfo
 _html.HtmlLinkInfo_swigregister(HtmlLinkInfoPtr)
+cvar = _html.cvar
+HtmlWindowNameStr = cvar.HtmlWindowNameStr
+HtmlPrintoutTitleStr = cvar.HtmlPrintoutTitleStr
+HtmlPrintingTitleStr = cvar.HtmlPrintingTitleStr
 
 class HtmlTag(core.Object):
     def __init__(self): raise RuntimeError, "No constructor defined"
@@ -162,7 +166,7 @@ class HtmlParser(core.Object):
         return _html.HtmlParser_StopParsing(*args, **kwargs)
 
     def AddTagHandler(*args, **kwargs):
-        """AddTagHandler(wxHtmlTagHandler handler)"""
+        """AddTagHandler(HtmlTagHandler handler)"""
         return _html.HtmlParser_AddTagHandler(*args, **kwargs)
 
     def GetSource(*args, **kwargs):
@@ -170,7 +174,7 @@ class HtmlParser(core.Object):
         return _html.HtmlParser_GetSource(*args, **kwargs)
 
     def PushTagHandler(*args, **kwargs):
-        """PushTagHandler(wxHtmlTagHandler handler, String tags)"""
+        """PushTagHandler(HtmlTagHandler handler, String tags)"""
         return _html.HtmlParser_PushTagHandler(*args, **kwargs)
 
     def PopTagHandler(*args, **kwargs):
@@ -923,7 +927,7 @@ class HtmlWindow(windows.ScrolledWindow):
         """
         __init__(Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, int style=HW_DEFAULT_STYLE, 
-            String name=wxPyHtmlWindowNameStr) -> HtmlWindow
+            String name=HtmlWindowNameStr) -> HtmlWindow
         """
         newobj = _html.new_HtmlWindow(*args, **kwargs)
         self.this = newobj.this
@@ -935,7 +939,7 @@ class HtmlWindow(windows.ScrolledWindow):
         """
         Create(Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, int style=HW_SCROLLBAR_AUTO, 
-            String name=wxPyHtmlWindowNameStr) -> bool
+            String name=HtmlWindowNameStr) -> bool
         """
         return _html.HtmlWindow_Create(*args, **kwargs)
 
@@ -996,11 +1000,11 @@ class HtmlWindow(windows.ScrolledWindow):
         return _html.HtmlWindow_SetBorders(*args, **kwargs)
 
     def ReadCustomization(*args, **kwargs):
-        """ReadCustomization(wxConfigBase cfg, String path=EmptyString)"""
+        """ReadCustomization(ConfigBase cfg, String path=EmptyString)"""
         return _html.HtmlWindow_ReadCustomization(*args, **kwargs)
 
     def WriteCustomization(*args, **kwargs):
-        """WriteCustomization(wxConfigBase cfg, String path=EmptyString)"""
+        """WriteCustomization(ConfigBase cfg, String path=EmptyString)"""
         return _html.HtmlWindow_WriteCustomization(*args, **kwargs)
 
     def HistoryBack(*args, **kwargs):
@@ -1137,7 +1141,7 @@ class HtmlPrintout(windows.Printout):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlPrintout instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(String title=wxPyHtmlPrintoutTitleStr) -> HtmlPrintout"""
+        """__init__(String title=HtmlPrintoutTitleStr) -> HtmlPrintout"""
         newobj = _html.new_HtmlPrintout(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -1199,7 +1203,7 @@ class HtmlEasyPrinting(core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxHtmlEasyPrinting instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(String name=wxPyHtmlPrintingTitleStr, Window parentWindow=None) -> HtmlEasyPrinting"""
+        """__init__(String name=HtmlPrintingTitleStr, Window parentWindow=None) -> HtmlEasyPrinting"""
         newobj = _html.new_HtmlEasyPrinting(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -1495,15 +1499,15 @@ class HtmlHelpFrame(windows.Frame):
         return _html.HtmlHelpFrame_KeywordSearch(*args, **kwargs)
 
     def UseConfig(*args, **kwargs):
-        """UseConfig(wxConfigBase config, String rootpath=EmptyString)"""
+        """UseConfig(ConfigBase config, String rootpath=EmptyString)"""
         return _html.HtmlHelpFrame_UseConfig(*args, **kwargs)
 
     def ReadCustomization(*args, **kwargs):
-        """ReadCustomization(wxConfigBase cfg, String path=EmptyString)"""
+        """ReadCustomization(ConfigBase cfg, String path=EmptyString)"""
         return _html.HtmlHelpFrame_ReadCustomization(*args, **kwargs)
 
     def WriteCustomization(*args, **kwargs):
-        """WriteCustomization(wxConfigBase cfg, String path=EmptyString)"""
+        """WriteCustomization(ConfigBase cfg, String path=EmptyString)"""
         return _html.HtmlHelpFrame_WriteCustomization(*args, **kwargs)
 
 
@@ -1573,15 +1577,15 @@ class HtmlHelpController(core.EvtHandler):
         return _html.HtmlHelpController_KeywordSearch(*args, **kwargs)
 
     def UseConfig(*args, **kwargs):
-        """UseConfig(wxConfigBase config, String rootpath=EmptyString)"""
+        """UseConfig(ConfigBase config, String rootpath=EmptyString)"""
         return _html.HtmlHelpController_UseConfig(*args, **kwargs)
 
     def ReadCustomization(*args, **kwargs):
-        """ReadCustomization(wxConfigBase cfg, String path=EmptyString)"""
+        """ReadCustomization(ConfigBase cfg, String path=EmptyString)"""
         return _html.HtmlHelpController_ReadCustomization(*args, **kwargs)
 
     def WriteCustomization(*args, **kwargs):
-        """WriteCustomization(wxConfigBase cfg, String path=EmptyString)"""
+        """WriteCustomization(ConfigBase cfg, String path=EmptyString)"""
         return _html.HtmlHelpController_WriteCustomization(*args, **kwargs)
 
     def GetFrame(*args, **kwargs):

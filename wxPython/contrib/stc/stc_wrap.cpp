@@ -245,8 +245,8 @@ static swig_type_info *swig_types[21];
 #include "wx/wxPython/pyclasses.h"
 #include <wx/stc/stc.h>
 
-    DECLARE_DEF_STRING(STCNameStr);
 
+ static const wxString wxPySTCNameStr(wxSTCNameStr); 
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
@@ -277,6 +277,26 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 #ifdef __cplusplus
 extern "C" {
 #endif
+static int _wrap_STCNameStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable STCNameStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_STCNameStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPySTCNameStr)->c_str(), (&wxPySTCNameStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPySTCNameStr)->c_str(), (&wxPySTCNameStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
 static PyObject *_wrap_new_StyledTextCtrl(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
@@ -12712,6 +12732,8 @@ SWIGEXPORT(void) SWIG_init(void) {
     }
     SWIG_InstallConstants(d,swig_const_table);
     
+    PyDict_SetItemString(d,(char*)"cvar", SWIG_globals);
+    SWIG_addvarlink(SWIG_globals,(char*)"STCNameStr",_wrap_STCNameStr_get, _wrap_STCNameStr_set);
     
     
 }

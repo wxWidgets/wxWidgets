@@ -58,6 +58,7 @@ class GridCellRendererPtr(GridCellRenderer):
         self.__class__ = GridCellRenderer
 _grid.GridCellRenderer_swigregister(GridCellRendererPtr)
 cvar = _grid.cvar
+DateTimeFormatStr = cvar.DateTimeFormatStr
 GridNoCellCoords = cvar.GridNoCellCoords
 GridNoCellRect = cvar.GridNoCellRect
 
@@ -184,7 +185,7 @@ class GridCellDateTimeRenderer(GridCellStringRenderer):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGridCellDateTimeRenderer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(String outformat=wxPyDateTimeFormatStr, String informat=wxPyDateTimeFormatStr) -> GridCellDateTimeRenderer"""
+        """__init__(String outformat=DateTimeFormatStr, String informat=DateTimeFormatStr) -> GridCellDateTimeRenderer"""
         newobj = _grid.new_GridCellDateTimeRenderer(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1

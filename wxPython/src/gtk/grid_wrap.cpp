@@ -279,10 +279,10 @@ static swig_type_info *swig_types[52];
 #include <wx/grid.h>
 #include <wx/generic/gridctrl.h>
 
-    DECLARE_DEF_STRING(PanelNameStr);
-    DECLARE_DEF_STRING2(DateTimeFormatStr, wxT("%c"));
-    static const wxString wxPyEmptyString(wxT(""));
 
+ static const wxString wxPyEmptyString(wxEmptyString); 
+ static const wxString wxPyPanelNameStr(wxPanelNameStr); 
+ static const wxString wxPyDateTimeFormatStr(wxT(wxT("%c"))); 
 
 
 #define wxPyMake_TEMPLATE(TYPE) \
@@ -1204,6 +1204,26 @@ wxGridCellCoords wxGrid_XYToCell(wxGrid *self,int x,int y){
 #ifdef __cplusplus
 extern "C" {
 #endif
+static int _wrap_DateTimeFormatStr_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable DateTimeFormatStr is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_DateTimeFormatStr_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyDateTimeFormatStr)->c_str(), (&wxPyDateTimeFormatStr)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyDateTimeFormatStr)->c_str(), (&wxPyDateTimeFormatStr)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
 static int _wrap_GridNoCellCoords_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable GridNoCellCoords is read-only.");
     return 1;
@@ -15333,6 +15353,7 @@ SWIGEXPORT(void) SWIG_init(void) {
     SWIG_InstallConstants(d,swig_const_table);
     
     PyDict_SetItemString(d,(char*)"cvar", SWIG_globals);
+    SWIG_addvarlink(SWIG_globals,(char*)"DateTimeFormatStr",_wrap_DateTimeFormatStr_get, _wrap_DateTimeFormatStr_set);
     SWIG_addvarlink(SWIG_globals,(char*)"GridNoCellCoords",_wrap_GridNoCellCoords_get, _wrap_GridNoCellCoords_set);
     SWIG_addvarlink(SWIG_globals,(char*)"GridNoCellRect",_wrap_GridNoCellRect_get, _wrap_GridNoCellRect_set);
     PyDict_SetItemString(d, "wxEVT_GRID_CELL_LEFT_CLICK", PyInt_FromLong(wxEVT_GRID_CELL_LEFT_CLICK));
