@@ -23,6 +23,7 @@ class PyOnDemandOutputWindow:
                               style=wx.DEFAULT_FRAME_STYLE | wx.NO_FULL_REPAINT_ON_RESIZE)
         self.text  = wx.TextCtrl(self.frame, -1, "",
                                  style = wx.TE_MULTILINE | wx.TE_READONLY)
+        self.text.AppendText(st)
         self.frame.SetSize((450, 300))
         self.frame.Show(True)
         EVT_CLOSE(self.frame, self.OnCloseWindow)
