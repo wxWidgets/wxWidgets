@@ -19,6 +19,7 @@
 
 #ifdef __GNUG__
 #pragma implementation "menu.h"
+#pragma implementation "menuitem.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
@@ -158,7 +159,7 @@ void wxMenu::Append(wxMenuItem *pItem)
   UINT id;
   wxMenu *SubMenu = pItem->GetSubMenu();
   if ( SubMenu != NULL ) {
-    wxASSERT( SubMenu->m_hMenu != NULL );
+    wxASSERT( SubMenu->m_hMenu != (WXHMENU) NULL );
 
     id = (UINT)SubMenu->m_hMenu;
 

@@ -30,7 +30,7 @@
 
 #include  <wx/defs.h>
 
-#ifdef __WIN32__
+#if defined(__WIN32__) && !defined(__GNUWIN32__)
 
 #include  <wx/log.h>
 #include  <wx/msw/ole/oleutils.h>

@@ -10,7 +10,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation "utils.h"
+#pragma implementation
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
@@ -134,10 +134,8 @@ long wxExecute(const wxString& command, bool sync, wxProcess *handler)
     *argp++ = '\0';
 
 #ifdef __GNUWIN32__
-  result = ShellExecute((HWND) (wxTheApp->GetTopWindow() ? (HWND) wxTheApp->GetT
-opWindow()->GetHWND() : NULL),
-     (const wchar_t) "open", (const wchar_t) cl, (const wchar_t) arg
-p,i
+  result = ShellExecute((HWND) (wxTheApp->GetTopWindow() ? (HWND) wxTheApp->GetTopWindow()->GetHWND() : NULL),
+     (const wchar_t) "open", (const wchar_t) cl, (const wchar_t) argp,
      (const wchar_t) NULL, SW_SHOWNORMAL);
 #else
   result = ShellExecute( (HWND) (wxTheApp->GetTopWindow() ? wxTheApp->GetTopWindow()->GetHWND() : NULL),
