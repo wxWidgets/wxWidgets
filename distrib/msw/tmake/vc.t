@@ -294,7 +294,7 @@ $(WXDIR)\lib\$(WXLIBNAME).dll: $(DUMMYOBJ) $(OBJECTS)
     $(link) @<<
     $(LINKFLAGS) $(INCREMENTAL)
     -out:$(WXDIR)\lib\$(WXLIBNAME).dll
-    $(DUMMYOBJ) $(OBJECTS) $(MSLU_LIBS) $(guilibsdll) shell32.lib comctl32.lib ctl3d32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib odbc32.lib advapi32.lib winmm.lib $(GL_LIBS) $(WXDIR)\lib\png$(LIBEXT).lib $(WXDIR)\lib\zlib$(LIBEXT).lib $(WXDIR)\lib\jpeg$(LIBEXT).lib $(WXDIR)\lib\tiff$(LIBEXT).lib $(WXDIR)\lib\regex$(LIBEXT).lib $(DELAY_LOAD)
+    $(DUMMYOBJ) $(OBJECTS) $(MSLU_LIBS) $(guilibsdll) shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib odbc32.lib advapi32.lib winmm.lib $(GL_LIBS) $(WXDIR)\lib\png$(LIBEXT).lib $(WXDIR)\lib\zlib$(LIBEXT).lib $(WXDIR)\lib\jpeg$(LIBEXT).lib $(WXDIR)\lib\tiff$(LIBEXT).lib $(WXDIR)\lib\regex$(LIBEXT).lib $(DELAY_LOAD)
 <<
 
 !endif
@@ -608,11 +608,11 @@ $(DOCDIR)\html\wx\wx.htm:         $(DOCDIR)\latex\wx\classes.tex $(DOCDIR)\latex
 
 $(DOCDIR)\htmlhelp\wx.chm : $(DOCDIR)\html\wx\wx.htm $(DOCDIR)\mshtml\wx\wx.htm $(DOCDIR)\mshtml\wx\wx.hhp
 	cd $(DOCDIR)\mshtml\wx
-    copy $(DOCDIR)\latex\wx\wx.css .
+	copy $(DOCDIR)\latex\wx\wx.css .
 	-hhc wx.hhp
-    -mkdir ..\..\htmlhelp
-    -erase $(DOCDIR)\htmlhelp\wx.chm
-    move wx.chm ..\..\htmlhelp
+	-mkdir ..\..\htmlhelp
+	-erase $(DOCDIR)\htmlhelp\wx.chm
+	move wx.chm ..\..\htmlhelp
 	cd $(THISDIR)
 
 $(WXDIR)\docs\latex\wx\manual.dvi:	$(DOCDIR)/latex/wx/body.tex $(DOCDIR)/latex/wx/manual.tex
