@@ -1703,6 +1703,21 @@ static gint gtk_window_button_press_callback( GtkWidget *widget,
     // a chance to correct this
     win->FixUpMouseEvent(widget, event.m_x, event.m_y);
 
+    if ( event_type == wxEVT_RIGHT_DOWN )
+    {
+        // generate a "context menu" event: this is similar to right mouse
+        // click under many GUIs except that it is generated differently
+        // (right up under MSW, ctrl-click under Mac, right down here) and
+        //
+        // (a) it's a command event and so is propagated to the parent
+        // (b) under MSW it can be generated from kbd too
+        // (c) it uses screen coords (because of (a))
+        wxContextMenuEvent evtCtx(wxEVT_CONTEXT_MENU,
+                                  win->GetId(),
+                                  win->ClientToScreen(event.GetPosition()));
+        (void)win->GetEventHandler()->ProcessEvent(evtCtx);
+    }
+
     // find the correct window to send the event too: it may be a different one
     // from the one which got it at GTK+ level because some control don't have
     // their own X window and thus cannot get any events.
@@ -1710,13 +1725,6 @@ static gint gtk_window_button_press_callback( GtkWidget *widget,
         win = FindWindowForMouseEvent(win, event.m_x, event.m_y);
 
     gs_timeLastClick = gdk_event->time;
-
-/*
-    wxPrintf( wxT("2) OnButtonPress from ") );
-    if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
-        wxPrintf( win->GetClassInfo()->GetClassName() );
-    wxPrintf( wxT(".\n") );
-*/
 
 #ifndef __WXGTK20__
     if (event_type == wxEVT_LEFT_DCLICK)
@@ -1788,20 +1796,6 @@ static gint gtk_window_button_release_callback( GtkWidget *widget,
 
     // same wxListBox hack as above
     win->FixUpMouseEvent(widget, event.m_x, event.m_y);
-
-    if ( event_type == wxEVT_RIGHT_UP )
-    {
-        // generate a "context menu" event: this is similar to wxEVT_RIGHT_UP
-        // except that:
-        //
-        // (a) it's a command event and so is propagated to the parent
-        // (b) under MSW it can be generated from kbd too
-        // (c) it uses screen coords (because of (a))
-        wxContextMenuEvent evtCtx(wxEVT_CONTEXT_MENU,
-                                  win->GetId(),
-                                  win->ClientToScreen(event.GetPosition()));
-        (void)win->GetEventHandler()->ProcessEvent(evtCtx);
-    }
 
     if ( !g_captureWindow )
         win = FindWindowForMouseEvent(win, event.m_x, event.m_y);

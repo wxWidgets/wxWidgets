@@ -240,6 +240,7 @@ wxGTK:
   in wxSystemSettings::GetMetric (Mart Raudsepp)
 - implemented wxTopLevel::IsMaximized() for GTK+2 and WMs that implement
   freedesktop.org's wm-spec (Mart Raudsepp)
+- wxEVT_CONTEXT_MENU is now generated for right mouse press, not release
 
 wxMotif:
 
