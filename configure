@@ -34603,7 +34603,7 @@ echo "$as_me: error: unknown system type $host." >&2;}
         SHARED_LD_MODULE_CC="$SHARED_LD_CC"
     fi
     if test "x$SHARED_LD_MODULE_CXX" = "x" ; then
-        SHARED_LD_MODULE_CC="$SHARED_LD_CXX"
+        SHARED_LD_MODULE_CXX="$SHARED_LD_CXX"
     fi
 
 

@@ -1413,7 +1413,7 @@ EOF
         SHARED_LD_MODULE_CC="$SHARED_LD_CC"
     fi
     if test "x$SHARED_LD_MODULE_CXX" = "x" ; then
-        SHARED_LD_MODULE_CC="$SHARED_LD_CXX"
+        SHARED_LD_MODULE_CXX="$SHARED_LD_CXX"
     fi
 
     AC_SUBST(SHARED_LD_CC)
