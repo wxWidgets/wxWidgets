@@ -1344,15 +1344,33 @@ void  wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
     OSStatus status = noErr ;
     ATSUTextLayout atsuLayout ;
     UniCharCount chars = str.Length() ;
+    UniChar* ubuf = NULL ;
+#if SIZEOF_WCHAR_T == 4
+	wxMBConvUTF16BE converter ;
 #if wxUSE_UNICODE
-    status = ::ATSUCreateTextLayoutWithTextPtr( (UniCharArrayPtr) (const wxChar*) str , 0 , str.Length() , str.Length() , 1 ,
-        &chars , (ATSUStyle*) &m_macATSUIStyle , &atsuLayout ) ;
+	size_t unicharlen = converter.WC2MB( NULL , str.wc_str() , 0 ) ;
+	ubuf = (UniChar*) malloc( unicharlen + 2 ) ;
+	converter.WC2MB( (char*) ubuf , str.wc_str(), unicharlen + 2 ) ;
+#else
+    const wxWCharBuffer wchar = str.wc_str( wxConvLocal ) ;
+	size_t unicharlen = converter.WC2MB( NULL , wchar.data()  , 0 ) ;
+	ubuf = (UniChar*) malloc( unicharlen + 2 ) ;
+	converter.WC2MB( (char*) ubuf , wchar.data() , unicharlen + 2 ) ;
+#endif
+    chars = unicharlen / 2 ;
+#else
+#if wxUSE_UNICODE
+    ubuf = (UniChar*) str.wc_str() ;
 #else
     wxWCharBuffer wchar = str.wc_str( wxConvLocal ) ;
-    int wlen = wxWcslen( wchar.data() ) ;
-    status = ::ATSUCreateTextLayoutWithTextPtr( (UniCharArrayPtr) wchar.data() , 0 , wlen , wlen , 1 ,
-        &chars , (ATSUStyle*) &m_macATSUIStyle , &atsuLayout ) ;
+    chars = wxWcslen( wchar.data() ) ;
+    ubuf = (UniChar*) wchar.data() ;
 #endif
+#endif
+
+    status = ::ATSUCreateTextLayoutWithTextPtr( (UniCharArrayPtr) ubuf , 0 , chars , chars , 1 ,
+        &chars , (ATSUStyle*) &m_macATSUIStyle , &atsuLayout ) ;
+
     wxASSERT_MSG( status == noErr , wxT("couldn't create the layout of the rotated text") );
     int iAngle = int( angle );
     int drawX = XLOG2DEVMAC(x) ;
@@ -1398,6 +1416,9 @@ void  wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
     CalcBoundingBox(XDEV2LOG(rect.left), YDEV2LOG(rect.top) );
     CalcBoundingBox(XDEV2LOG(rect.right), YDEV2LOG(rect.bottom) );
     ::ATSUDisposeTextLayout(atsuLayout);
+#if SIZEOF_WCHAR_T == 4
+    free( ubuf ) ;
+#endif
 }
 
 void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
