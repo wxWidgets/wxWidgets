@@ -1828,7 +1828,7 @@ extern wxPyApp *wxPythonApp;
             ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(OO)",        \
                                          obj, s));                              \
             if (ro) {                                                           \
-                wxPyConvertSwigPtr(ro, (void **)&rval, wxT("wxFSFILE"));        \
+                wxPyConvertSwigPtr(ro, (void **)&rval, wxT("wxFSFile"));        \
                 Py_DECREF(ro);                                                  \
             }                                                                   \
             Py_DECREF(obj);                                                     \

@@ -7,7 +7,6 @@ import wx.lib.popupctl
 __doc__ =  wx.lib.popupctl.__doc__
 
 PopButton = wx.lib.popupctl.PopButton
-wxPopupControl = wx.lib.popupctl.wxPopupControl
-wxPopupCtrl = wx.lib.popupctl.PopupCtrl
-wxPopupControl = wx.lib.popupctl.PopupControl
 wxPopupDialog = wx.lib.popupctl.PopupDialog
+wxPopupControl = wx.lib.popupctl.PopupControl
+wxPopupCtrl = wx.lib.popupctl.PopupCtrl
