@@ -504,12 +504,15 @@ the rectangle.
 
 \membersection{wxDC::DrawSpline}\label{wxdcdrawspline}
 
+\func{void}{DrawSpline}{\param{int }, \param{wxPoint }{points[]}}
+
+Draws a spline between all given control points, using the current
+pen.
+
 \func{void}{DrawSpline}{\param{wxList *}{points}}
 
 Draws a spline between all given control points, using the current
-pen.  Doesn't delete the wxList and contents. The spline is drawn
-using a series of lines, using an algorithm taken from the X drawing
-program `XFIG'.
+pen.  Doesn't delete the wxList and contents.
 
 \func{void}{DrawSpline}{\param{wxCoord}{ x1}, \param{wxCoord}{ y1}, \param{wxCoord}{ x2}, \param{wxCoord}{ y2}, \param{wxCoord}{ x3}, \param{wxCoord}{ y3}}
 

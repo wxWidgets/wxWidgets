@@ -119,11 +119,11 @@ Its meaning is determined by the {\it type} parameter.}
 \twocolwidtha{5cm}
 \begin{twocollist}
 \twocolitem{\indexit{wxBITMAP\_TYPE\_BMP}}{Load a Windows bitmap file.}
-\twocolitem{\indexit{wxBITMAP\_TYPE\_BMP\_RESOURCE}}{Load a Windows bitmap from the resource database.}
+\twocolitem{\indexit{wxBITMAP\_TYPE\_BMP\_RESOURCE}}{Load a Windows bitmap resource from the executable. Windows only.}
+\twocolitem{\indexit{wxBITMAP\_TYPE\_PICT\_RESOURCE}}{Load a PICT image resource from the executable. Mac OS only.}
 \twocolitem{\indexit{wxBITMAP\_TYPE\_GIF}}{Load a GIF bitmap file.}
 \twocolitem{\indexit{wxBITMAP\_TYPE\_XBM}}{Load an X bitmap file.}
 \twocolitem{\indexit{wxBITMAP\_TYPE\_XPM}}{Load an XPM bitmap file.}
-\twocolitem{\indexit{wxBITMAP\_TYPE\_RESOURCE}}{Load a Windows resource name.}
 \end{twocollist}
 
 The validity of these flags depends on the platform and wxWidgets configuration.
@@ -422,7 +422,8 @@ The meaning of {\it name} is determined by the {\it type} parameter.}
 \twocolwidtha{5cm}
 \begin{twocollist}
 \twocolitem{{\bf wxBITMAP\_TYPE\_BMP}}{Load a Windows bitmap file.}
-\twocolitem{{\bf wxBITMAP\_TYPE\_BMP\_RESOURCE}}{Load a Windows bitmap from the resource database.}
+\twocolitem{{\bf wxBITMAP\_TYPE\_BMP\_RESOURCE}}{Load a Windows bitmap resource from the executable.}
+\twocolitem{{\bf wxBITMAP\_TYPE\_PICT\_RESOURCE}}{Load a PICT image resource from the executable. Mac OS only.}
 \twocolitem{{\bf wxBITMAP\_TYPE\_GIF}}{Load a GIF bitmap file.}
 \twocolitem{{\bf wxBITMAP\_TYPE\_XBM}}{Load an X bitmap file.}
 \twocolitem{{\bf wxBITMAP\_TYPE\_XPM}}{Load an XPM bitmap file.}

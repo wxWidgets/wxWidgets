@@ -5,6 +5,11 @@ wxWidgets 2.5 Change Log - For more verbose changes, see the manual
 2.5.5
 -----
 
+All:
+
+- Added GetIcon, GetBitmap to wxImageList. wxGenericImageList's original
+  GetBitmap is renamed GetBitmapPtr.
+
 wxPalmOS:
 
 - native wxRadioBox implementation
