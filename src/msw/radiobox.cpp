@@ -700,6 +700,7 @@ void wxRadioBox::SendNotificationEvent()
 {
     wxCommandEvent event(wxEVT_COMMAND_RADIOBOX_SELECTED, m_windowId);
     event.SetInt( m_selectedButton );
+    event.SetString( GetString(m_selectedButton) );
     event.SetEventObject( this );
     ProcessCommand(event);
 }
