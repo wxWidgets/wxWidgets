@@ -214,10 +214,6 @@ wxString ExpandEnvVars(const wxString& str)
         }
         break;
 
-      case '\\':
-        n++;
-        // fall through
-
       default:
         strResult += str[n];
     }
