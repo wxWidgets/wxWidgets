@@ -16,6 +16,7 @@
 
     <set var="TIFF_PLATFORM_SRC">
         <if cond="PLATFORM_UNIX=='1'">src/tiff/tif_unix.c</if>
+        <if cond="PLATFORM_MACOSX=='1'">src/tiff/tif_unix.c</if>
         <if cond="PLATFORM_WIN32=='1'">src/tiff/tif_win32.c</if>
     </set>
     
