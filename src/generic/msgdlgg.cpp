@@ -25,7 +25,11 @@
   #include "wx/dialog.h"
   #include "wx/button.h"
   #include "wx/stattext.h"
+  #include "wx/statbmp.h"
+  #include  "wx/layout.h"
   #include "wx/intl.h"
+  #include "wx/dcclient.h"
+  #include "wx/settings.h"
 #endif
 
 #include <stdio.h>
@@ -37,42 +41,18 @@
   #include "wx/statline.h"
 #endif
 
-/* Split message, using constraints to position controls */
-static wxSize wxSplitMessage2( const wxString &message, wxWindow *parent )
-{
-    int y = 10;
-    int w = 50;
-    wxString line( _T("") );
-    for (uint pos = 0; pos < message.Len(); pos++)
-    {
-        if (message[pos] == _T('\n'))
-        {
-            if (!line.IsEmpty())
-            {
-                wxStaticText *s1 = new wxStaticText( parent, -1, line, wxPoint(15,y) );
-                wxSize size1( s1->GetSize() );
-                if (size1.x > w) w = size1.x;
-                line = _T("");
-            }
-            y += 18;
-        }
-        else
-        {
-            line += message[pos];
-        }
-    }
-    
-    if (!line.IsEmpty())
-    {
-        wxStaticText *s2 = new wxStaticText( parent, -1, line, wxPoint(15,y) );
-        wxSize size2( s2->GetSize() );
-        if (size2.x > w) w = size2.x;
-    }
-        
-    y += 18;
-    
-    return wxSize(w+30,y);
-}
+// ----------------------------------------------------------------------------
+// icons
+// ----------------------------------------------------------------------------
+
+// MSW icons are in the ressources, for all other platforms - in XPM files
+#ifndef __WXMSW__
+    #include "wx/generic/info.xpm"
+    #include "wx/generic/question.xpm"
+    #include "wx/generic/warning.xpm"
+    #include "wx/generic/error.xpm"
+#endif // __WXMSW__
+
 
 #if !USE_SHARED_LIBRARY
 BEGIN_EVENT_TABLE(wxGenericMessageDialog, wxDialog)
@@ -84,85 +64,244 @@ END_EVENT_TABLE()
 IMPLEMENT_CLASS(wxGenericMessageDialog, wxDialog)
 #endif
 
-wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent, const wxString& message, 
-   const wxString& caption, long style, const wxPoint& pos) :
-  wxDialog( parent, -1, caption, pos, wxDefaultSize, wxDEFAULT_DIALOG_STYLE )
+wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
+                                                const wxString& message,
+                                                const wxString& caption,
+                                                long style,
+                                                const wxPoint& pos)
+                      : wxDialog( parent, -1, caption, pos, wxDefaultSize, wxDEFAULT_DIALOG_STYLE )
 {
+    static const int LAYOUT_X_MARGIN = 5;
+    static const int LAYOUT_Y_MARGIN = 5;
+
     m_dialogStyle = style;
 
     wxBeginBusyCursor();
 
-    wxSize message_size( wxSplitMessage2( message, this ) );
+    wxLayoutConstraints *c;
+    SetAutoLayout(TRUE);
 
-    wxButton *ok = (wxButton *) NULL;
-    wxButton *cancel = (wxButton *) NULL;
-    wxButton *yes = (wxButton *) NULL;
-    wxButton *no = (wxButton *) NULL;
-    
-    int y = message_size.y + 30;
-    
-    if (style & wxYES_NO) 
+    // create an icon
+    enum
     {
-        yes = new wxButton( this, wxID_YES, _("Yes"), wxPoint(-1,y), wxSize(80,-1) );
-        m_buttons.Append( yes );
-        no = new wxButton( this, wxID_NO, _("No"), wxPoint(-1,y), wxSize(80,-1) );
-        m_buttons.Append( no );
+        Icon_Information,
+        Icon_Question,
+        Icon_Warning,
+        Icon_Error
+    } which;
+
+#ifdef __WXMSW__
+    static char *icons[] =
+    {
+        "wxICON_INFO",
+        "wxICON_QUESTION",
+        "wxICON_WARNING",
+        "wxICON_ERROR",
+    };
+#else // XPM icons
+    static char **icons[] =
+    {
+        info,
+        question,
+        warning,
+        error,
+    };
+#endif // !XPM/XPM
+
+    if ( style & wxICON_EXCLAMATION )
+        which = Icon_Warning;
+    else if ( style & wxICON_HAND )
+        which = Icon_Error;
+    else if ( style & wxICON_QUESTION )
+        which = Icon_Question;
+    else
+        which = Icon_Information;
+
+    wxStaticBitmap *icon = new wxStaticBitmap(this, -1, wxIcon(icons[which]));
+    const int iconSize = icon->GetBitmap().GetWidth();
+
+    // split the message in lines
+    // --------------------------
+    wxClientDC dc(this);
+    dc.SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
+
+    wxArrayString lines;
+    wxString curLine;
+    long height, width, heightTextMax = 0, widthTextMax = 0;
+    for ( const char *pc = message; ; pc++ ) {
+        if ( *pc == '\n' || *pc == '\0' ) {
+            dc.GetTextExtent(curLine, &width, &height);
+            if ( width > widthTextMax )
+                widthTextMax = width;
+            if ( height > heightTextMax )
+                heightTextMax = height;
+
+            lines.Add(curLine);
+
+            if ( *pc == '\n' ) {
+               curLine.Empty();
+            }
+            else {
+               // the end of string
+               break;
+            }
+        }
+        else {
+            curLine += *pc;
+        }
     }
 
-    if (style & wxOK) 
+    // calculate the total dialog size
+    enum
     {
-        ok = new wxButton( this, wxID_OK, _("OK"), wxPoint(-1,y), wxSize(80,-1) );
-        m_buttons.Append( ok );
-    }
+        Btn_Ok,
+        Btn_Yes,
+        Btn_No,
+        Btn_Cancel,
+        Btn_Max
+    };
+    wxButton *buttons[Btn_Max] = { NULL, NULL, NULL, NULL };
+    int nDefaultBtn = -1;
 
-    if (style & wxCANCEL) 
-    {
-        cancel = new wxButton( this, wxID_CANCEL, _("Cancel"), wxPoint(-1,y), wxSize(80,-1) );
-        m_buttons.Append( cancel );
-    }
+    // some checks are in order...
+    wxASSERT_MSG( !(style & wxOK) || !(style & wxYES_NO),
+                  "don't create dialog with both Yes/No and Ok buttons!" );
 
-    if (ok)
-    {
-        ok->SetDefault();
-        ok->SetFocus();
-    }
-    else if (yes)
-    {
+    wxASSERT_MSG( (style & wxOK ) || (style & wxYES_NO),
+                  "don't create dialog with only the Cancel button!" );
+
+    if ( style & wxYES_NO ) {
+       buttons[Btn_Yes] = new wxButton(this, wxID_YES, _("Yes"));
+       buttons[Btn_No] = new wxButton(this, wxID_NO, _("No"));
+
+
        if(style & wxNO_DEFAULT)
-       {
-          no->SetDefault();
-          no->SetFocus();
-       }
+          nDefaultBtn = Btn_No;
        else
-       {
-          yes->SetDefault();
-          yes->SetFocus();
-       }
+          nDefaultBtn = Btn_Yes;
     }
-    
-    int w = m_buttons.GetCount() * 100;
-    if (message_size.x > w) w = message_size.x;
-    int space = w / (m_buttons.GetCount()*2);
-    
-    int n = 0;
-    wxNode *node = m_buttons.First();
-    while (node)
-    {
-        wxWindow *win = (wxWindow*)node->Data();
-        int x = (n*2+1)*space - 40 + 15;
-        win->Move( x, -1 );
-        node = node->Next();
-        n++;
-    }
-    
-#if wxUSE_STATLINE
-    (void) new wxStaticLine( this, -1, wxPoint(0,y-20), wxSize(w+30, 5) );
-#endif
-    
-    SetSize( w+30, y+40 );
 
-    Centre( wxBOTH );
-    
+    if (style & wxOK) {
+        buttons[Btn_Ok] = new wxButton(this, wxID_OK, _("OK"));
+
+        if ( nDefaultBtn == -1 )
+            nDefaultBtn = Btn_Ok;
+    }
+
+    if (style & wxCANCEL) {
+        buttons[Btn_Cancel] = new wxButton(this, wxID_CANCEL, _("Cancel"));
+    }
+
+    // get the longest caption and also calc the number of buttons
+    size_t nBtn, nButtons = 0;
+    long widthBtnMax = 0;
+    for ( nBtn = 0; nBtn < Btn_Max; nBtn++ ) {
+        if ( buttons[nBtn] ) {
+            nButtons++;
+            dc.GetTextExtent(buttons[nBtn]->GetLabel(), &width, NULL);
+            if ( width > widthBtnMax )
+                widthBtnMax = width;
+        }
+    }
+
+    // now we can place the buttons
+    if ( widthBtnMax < 75 )
+        widthBtnMax = 75;
+    else
+        widthBtnMax += 10;
+    long heightButton = widthBtnMax*23/75;
+
+    // *1.2 baselineskip
+    heightTextMax *= 12;
+    heightTextMax /= 10;
+
+    size_t nLineCount = lines.Count();
+
+    long widthButtonsTotal = nButtons * (widthBtnMax + LAYOUT_X_MARGIN) -
+                             LAYOUT_X_MARGIN;
+
+    // the size of the dialog
+    long widthDlg = wxMax(widthTextMax + iconSize + 4*LAYOUT_X_MARGIN,
+                        wxMax(widthButtonsTotal, width)) +
+                    2*LAYOUT_X_MARGIN,
+         heightDlg = 8*LAYOUT_Y_MARGIN + heightButton +
+                     heightTextMax*(nLineCount + 1);
+
+    // create the controls
+    // -------------------
+
+    // the icon first
+    c = new wxLayoutConstraints;
+    c->width.Absolute(iconSize);
+    c->height.Absolute(iconSize);
+    c->top.SameAs(this, wxTop, 3*LAYOUT_Y_MARGIN);
+    c->left.SameAs(this, wxLeft, 2*LAYOUT_X_MARGIN);
+    icon->SetConstraints(c);
+
+    wxStaticText *text = NULL;
+    for ( size_t nLine = 0; nLine < nLineCount; nLine++ ) {
+        c = new wxLayoutConstraints;
+        if ( text == NULL )
+            c->top.SameAs(this, wxTop, 3*LAYOUT_Y_MARGIN);
+        else
+            c->top.Below(text);
+
+        c->left.RightOf(icon, 2*LAYOUT_X_MARGIN);
+        c->width.Absolute(widthTextMax);
+        c->height.Absolute(heightTextMax);
+        text = new wxStaticText(this, -1, lines[nLine]);
+        text->SetConstraints(c);
+    }
+
+    // create the buttons
+    wxButton *btnPrevious = (wxButton *)NULL;
+    for ( nBtn = 0; nBtn < Btn_Max; nBtn++ ) {
+        if ( buttons[nBtn] ) {
+            c = new wxLayoutConstraints;
+
+            if ( btnPrevious ) {
+                c->left.RightOf(btnPrevious, LAYOUT_X_MARGIN);
+            }
+            else {
+                c->left.SameAs(this, wxLeft,
+                               (widthDlg - widthButtonsTotal) / 2);
+            }
+
+            c->width.Absolute(widthBtnMax);
+            c->top.Below(text, 4*LAYOUT_Y_MARGIN);
+            c->height.Absolute(heightButton);
+            buttons[nBtn]->SetConstraints(c);
+
+            btnPrevious = buttons[nBtn];
+        }
+    }
+
+    // set default button
+    // ------------------
+
+    if ( nDefaultBtn != -1 ) {
+        buttons[nDefaultBtn]->SetDefault();
+        buttons[nDefaultBtn]->SetFocus();
+    }
+    else {
+        wxFAIL_MSG( "can't find default button for this dialog." );
+    }
+
+    // position the controls and the dialog itself
+    // -------------------------------------------
+
+    SetClientSize(widthDlg, heightDlg);
+
+    // SetSizeHints() wants the size of the whole dialog, not just client size
+    wxSize sizeTotal = GetSize(),
+           sizeClient = GetClientSize();
+    SetSizeHints(widthDlg + sizeTotal.GetWidth() - sizeClient.GetWidth(),
+                 heightDlg + sizeTotal.GetHeight() - sizeClient.GetHeight());
+
+    Layout();
+
+    Centre(wxCENTER_FRAME | wxBOTH);
+
     wxEndBusyCursor();
 }
 
