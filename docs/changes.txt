@@ -110,6 +110,7 @@ All (GUI):
 wxMSW:
 
 - small appearance fixes for native look under Windows XP
+- refresh the buttons properly when the window is resized (Hans Van Leemputten)
 - huge (40*) speed up in wxMask::Create()
 - changing wxWindows styles also changes the underlying Windows window style
 - fixed flicker in wxTreeCtrl::SetItemXXX()

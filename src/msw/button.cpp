@@ -68,66 +68,47 @@ bool wxButton::Create(wxWindow *parent,
                       const wxValidator& validator,
                       const wxString& name)
 {
-    if ( !CreateBase(parent, id, pos, size, style, validator, name) )
+    if ( !CreateControl(parent, id, pos, size, style, validator, name) )
         return FALSE;
 
-    parent->AddChild((wxButton *)this);
-
-    m_backgroundColour = parent->GetBackgroundColour();
-    m_foregroundColour = parent->GetForegroundColour();
-
-    long msStyle = WS_VISIBLE | WS_TABSTOP | WS_CHILD /* | WS_CLIPSIBLINGS */ ;
-
-    if ( m_windowStyle & wxCLIP_SIBLINGS )
-        msStyle |= WS_CLIPSIBLINGS;
-
-#ifdef __WIN32__
-    if(m_windowStyle & wxBU_LEFT)
-        msStyle |= BS_LEFT;
-    if(m_windowStyle & wxBU_RIGHT)
-        msStyle |= BS_RIGHT;
-    if(m_windowStyle & wxBU_TOP)
-        msStyle |= BS_TOP;
-    if(m_windowStyle & wxBU_BOTTOM)
-        msStyle |= BS_BOTTOM;
-#endif
-
-    m_hWnd = (WXHWND)CreateWindowEx
-                     (
-                      MakeExtendedStyle(m_windowStyle),
-                      wxT("BUTTON"),
-                      label,
-                      msStyle,
-                      0, 0, 0, 0,
-                      GetWinHwnd(parent),
-                      (HMENU)m_windowId,
-                      wxGetInstance(),
-                      NULL
-                     );
-
-    if (m_hWnd == 0)
-    {
-        wxString msg;
-#ifdef __WIN16__
-        msg.Printf(wxT("CreateWindowEx failed"));
-#else
-        msg.Printf(wxT("CreateWindowEx failed with error number %ld"), (long) GetLastError());
-#endif
-        wxFAIL_MSG(msg);
-    }
-
-    // Subclass again for purposes of dialog editing mode
-    SubclassWin(m_hWnd);
-
-    SetFont(parent->GetFont());
-
-    SetSize(pos.x, pos.y, size.x, size.y);
-
-    return TRUE;
+    return MSWCreateControl(_T("BUTTON"), label, pos, size, style);
 }
 
 wxButton::~wxButton()
 {
+}
+
+// ----------------------------------------------------------------------------
+// flags
+// ----------------------------------------------------------------------------
+
+WXDWORD wxButton::MSWGetStyle(long style, WXDWORD *exstyle) const
+{
+    // buttons never have an external border, they draw their own one
+    WXDWORD msStyle = wxControl::MSWGetStyle
+                      (
+                        (style & ~wxBORDER_MASK) | wxBORDER_NONE, exstyle
+                      );
+
+    // we must use WS_CLIPSIBLINGS with the buttons or they would draw over
+    // each other in any resizeable dialog which has more than one button in
+    // the bottom
+    msStyle |= WS_CLIPSIBLINGS;
+
+#ifdef __WIN32__
+    // don't use "else if" here: weird as it is, but you may combine wxBU_LEFT
+    // and wxBU_RIGHT to get BS_CENTER!
+    if ( style & wxBU_LEFT )
+        msStyle |= BS_LEFT;
+    if ( style & wxBU_RIGHT )
+        msStyle |= BS_RIGHT;
+    if ( style & wxBU_TOP )
+        msStyle |= BS_TOP;
+    if ( style & wxBU_BOTTOM )
+        msStyle |= BS_BOTTOM;
+#endif // __WIN32__
+
+    return msStyle;
 }
 
 // ----------------------------------------------------------------------------
@@ -284,6 +265,12 @@ long wxButton::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 
         // and conitnue with processing the message normally as well
     }
+#if 0
+    else if ( nMsg == WM_MOVE )
+    {
+        Refresh();
+    }
+#endif
 
     // let the base class do all real processing
     return wxControl::MSWWindowProc(nMsg, wParam, lParam);

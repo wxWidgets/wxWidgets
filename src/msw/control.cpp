@@ -57,19 +57,34 @@ wxControl::~wxControl()
 }
 
 
-bool wxControl::Create(wxWindow *parent, wxWindowID id,
+bool wxControl::Create(wxWindow *parent,
+                       wxWindowID id,
                        const wxPoint& pos,
-                       const wxSize& size, long style,
+                       const wxSize& size,
+                       long style,
                        const wxValidator& validator,
                        const wxString& name)
 {
-    bool rval = wxWindow::Create(parent, id, pos, size, style, name);
-    if (rval) {
+    if ( !wxWindow::Create(parent, id, pos, size, style, name) )
+        return FALSE;
+
 #if wxUSE_VALIDATORS
-        SetValidator(validator);
+    SetValidator(validator);
 #endif
-    }
-    return rval;
+
+    return TRUE;
+}
+
+bool wxControl::MSWCreateControl(const wxChar *classname,
+                                 const wxString& label,
+                                 const wxPoint& pos,
+                                 const wxSize& size,
+                                 long style)
+{
+    WXDWORD exstyle;
+    WXDWORD msStyle = MSWGetStyle(style, &exstyle);
+
+    return MSWCreateControl(classname, msStyle, pos, size, label, exstyle);
 }
 
 bool wxControl::MSWCreateControl(const wxChar *classname,
@@ -88,11 +103,11 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
     // if no extended style given, determine it ourselves
     if ( exstyle == (WXDWORD)-1 )
     {
-        exstyle = GetExStyle(style, &want3D);
+        exstyle = Determine3DEffects(WS_EX_CLIENTEDGE, &want3D);
     }
 
-    // all controls have these styles (wxWindows creates all controls visible
-    // by default)
+    // all controls should have these styles (wxWindows creates all controls
+    // visible by default)
     style |= WS_CHILD | WS_VISIBLE;
 
     int x = pos.x == -1 ? 0 : pos.x,
@@ -269,16 +284,16 @@ WXHBRUSH wxControl::OnCtlColor(WXHDC pDC, WXHWND WXUNUSED(pWnd), WXUINT WXUNUSED
     return (WXHBRUSH)brush->GetResourceHandle();
 }
 
-WXDWORD wxControl::GetExStyle(WXDWORD& style, bool *want3D) const
+WXDWORD wxControl::MSWGetStyle(long style, WXDWORD *exstyle) const
 {
-    WXDWORD exStyle = Determine3DEffects(WS_EX_CLIENTEDGE, want3D);
+    long msStyle = wxWindow::MSWGetStyle(style, exstyle);
 
-    // Even with extended styles, need to combine with WS_BORDER for them to
-    // look right.
-    if ( *want3D || wxStyleHasBorder(m_windowStyle) )
-        style |= WS_BORDER;
+    if ( AcceptsFocus() )
+    {
+        msStyle |= WS_TABSTOP;
+    }
 
-    return exStyle;
+    return msStyle;
 }
 
 // ---------------------------------------------------------------------------

@@ -1027,7 +1027,11 @@ void wxWindowMSW::SetWindowStyleFlag(long flags)
     // update the internal variable
     wxWindowBase::SetWindowStyleFlag(flags);
 
-    // now update the Windows style as well if needed
+    // now update the Windows style as well if needed - and if the window had
+    // been already created
+    if ( !GetHwnd() )
+        return;
+
     WXDWORD exstyle, exstyleOld;
     long style = MSWGetStyle(flags, &exstyle),
          styleOld = MSWGetStyle(flagsOld, &exstyleOld);

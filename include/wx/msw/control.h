@@ -92,6 +92,17 @@ protected:
 
     virtual wxSize DoGetBestSize() const;
 
+    // create the control of the given Window class
+    bool MSWCreateControl(const wxChar *classname,
+                          const wxString& label,
+                          const wxPoint& pos,
+                          const wxSize& size,
+                          long style);
+
+    // NB: the method below is deprecated now, with MSWGetStyle() the method
+    //     above should be used instead! Once all the controls are updated to
+    //     implement MSWGetStyle() this version will disappear.
+    //
     // create the control of the given class with the given style (combination
     // of WS_XXX flags, i.e. Windows style, not wxWindows one), returns
     // FALSE if creation failed
@@ -108,9 +119,8 @@ protected:
                           const wxString& label = wxEmptyString,
                           WXDWORD exstyle = (WXDWORD)-1);
 
-    // determine the extended styles combination for this window (may slightly
-    // modify style parameter, this is why it's non const)
-    WXDWORD GetExStyle(WXDWORD& style, bool *want3D) const;
+    // default style for the control include WS_TABSTOP if it AcceptsFocus()
+    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
 
 private:
     DECLARE_EVENT_TABLE()

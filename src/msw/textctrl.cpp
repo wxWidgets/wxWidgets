@@ -360,7 +360,7 @@ WXDWORD wxTextCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
     long msStyle = wxControl::MSWGetStyle(style, exstyle);
 
     // default styles
-    msStyle |= ES_LEFT | WS_TABSTOP;
+    msStyle |= ES_LEFT;
 
     if ( style & wxTE_MULTILINE )
     {

@@ -69,7 +69,9 @@ protected:
     // send a notification event, return TRUE if processed
     bool SendClickEvent();
 
+    // usually overridden base class virtuals
     virtual wxSize DoGetBestSize() const;
+    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxButton)
