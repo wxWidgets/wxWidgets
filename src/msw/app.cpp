@@ -6,33 +6,33 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation "app.h"
+  #pragma implementation "app.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #if defined(__BORLANDC__)
-#pragma hdrstop
+  #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/frame.h"
-#include "wx/app.h"
-#include "wx/utils.h"
-#include "wx/gdicmn.h"
-#include "wx/pen.h"
-#include "wx/brush.h"
-#include "wx/cursor.h"
-#include "wx/icon.h"
-#include "wx/palette.h"
-#include "wx/dc.h"
-#include "wx/dialog.h"
-#include "wx/msgdlg.h"
+  #include "wx/frame.h"
+  #include "wx/app.h"
+  #include "wx/utils.h"
+  #include "wx/gdicmn.h"
+  #include "wx/pen.h"
+  #include "wx/brush.h"
+  #include "wx/cursor.h"
+  #include "wx/icon.h"
+  #include "wx/palette.h"
+  #include "wx/dc.h"
+  #include "wx/dialog.h"
+  #include "wx/msgdlg.h"
 #endif
 
 #include "wx/msw/private.h"
@@ -41,22 +41,25 @@
 #include "wx/module.h"
 
 #if USE_WX_RESOURCES
-#include "wx/resource.h"
+  #include "wx/resource.h"
 #endif
 
-
 #include <string.h>
+#include <ctype.h>
 
 #if defined(__WIN95__) && !defined(__GNUWIN32__)
-#include <commctrl.h>
+  #include <commctrl.h>
 #endif
 
 // use debug CRT functions for memory leak detections in VC++
-/* Doesn't work when using the makefiles, for some reason.
 #if defined(__WXDEBUG__) && defined(_MSC_VER)
+  // VC++ uses this macro as debug/release mode indicator
+  #ifndef _DEBUG
+    #define _DEBUG
+  #endif
+
   #include <crtdbg.h>
 #endif
-*/
 
 extern char *wxBuffer;
 extern char *wxOsVersion;
@@ -69,6 +72,7 @@ HINSTANCE wxhInstance = 0;
 static MSG s_currentMsg;
 wxApp *wxTheApp = NULL;
 
+// @@ why not const? and not static?
 char wxFrameClassName[]         = "wxFrameClass";
 char wxMDIFrameClassName[]      = "wxMDIFrameClass";
 char wxMDIChildFrameClassName[] = "wxMDIChildFrameClass";
@@ -88,16 +92,17 @@ HBRUSH wxDisableButtonBrush = 0;
 LRESULT APIENTRY wxWndProc(HWND, UINT, WPARAM, LPARAM);
 
 #if !USE_SHARED_LIBRARY
-IMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler)
-BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
-    EVT_IDLE(wxApp::OnIdle)
-END_EVENT_TABLE()
+  IMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler)
+
+  BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
+      EVT_IDLE(wxApp::OnIdle)
+  END_EVENT_TABLE()
 #endif
 
 long wxApp::sm_lastMessageTime = 0;
 
 #ifdef __WIN95__
-static HINSTANCE gs_hRichEdit = NULL;
+  static HINSTANCE gs_hRichEdit = NULL;
 #endif
 
 //// Initialize
@@ -106,32 +111,29 @@ bool wxApp::Initialize()
 {
   wxBuffer = new char[1500];
 
-/* Doesn't work when using the makefiles, for some reason.
   #if defined(__WXDEBUG__) && defined(_MSC_VER)
     // do check for memory leaks on program exit
     // (another useful flag is _CRTDBG_DELAY_FREE_MEM_DF which doesn't free
     //  deallocated memory which may be used to simulate low-memory condition)
     _CrtSetDbgFlag(_CrtSetDbgFlag(_CRTDBG_REPORT_FLAG) | _CRTDBG_LEAK_CHECK_DF);
   #endif // debug build under MS VC++
-*/
 
-#if (WXDEBUG && USE_MEMORY_TRACING) || USE_DEBUG_CONTEXT
+  #if (WXDEBUG && USE_MEMORY_TRACING) || USE_DEBUG_CONTEXT
+    #if defined(_WINDLL)
+      streambuf* sBuf = NULL;
+    #else  // EXE
+      streambuf* sBuf = new wxDebugStreamBuf;
+    #endif // DLL
 
-#if !defined(_WINDLL)
-  streambuf* sBuf = new wxDebugStreamBuf;
-#else
-  streambuf* sBuf = NULL;
-#endif
-  ostream* oStr = new ostream(sBuf) ;
-  wxDebugContext::SetStream(oStr, sBuf);
-
-#endif  // USE_MEMORY_TRACING
+    ostream* oStr = new ostream(sBuf) ;
+    wxDebugContext::SetStream(oStr, sBuf);
+  #endif  // USE_MEMORY_TRACING
 
   wxClassInfo::InitializeClasses();
 
-#if USE_RESOURCES
-  wxGetResource("wxWindows", "OsVersion", &wxOsVersion);
-#endif
+  #if USE_RESOURCES
+    wxGetResource("wxWindows", "OsVersion", &wxOsVersion);
+  #endif
 
   wxTheColourDatabase = new wxColourDatabase(wxKEY_STRING);
   wxTheColourDatabase->Initialize();
@@ -139,41 +141,41 @@ bool wxApp::Initialize()
   wxInitializeStockLists();
   wxInitializeStockObjects();
 
-#if USE_WX_RESOURCES
-  wxInitializeResourceSystem();
-#endif
+  #if USE_WX_RESOURCES
+    wxInitializeResourceSystem();
+  #endif
 
   // For PostScript printing
-#if USE_POSTSCRIPT
-  wxInitializePrintSetupData();
-  wxThePrintPaperDatabase = new wxPrintPaperDatabase;
-  wxThePrintPaperDatabase->CreateDatabase();
-#endif
+  #if USE_POSTSCRIPT
+    wxInitializePrintSetupData();
+    wxThePrintPaperDatabase = new wxPrintPaperDatabase;
+    wxThePrintPaperDatabase->CreateDatabase();
+  #endif
 
   wxBitmap::InitStandardHandlers();
 
-#if defined(__WIN95__)
-  InitCommonControls();
-  gs_hRichEdit = LoadLibrary("RICHED32.DLL");
+  #if defined(__WIN95__)
+    InitCommonControls();
+    gs_hRichEdit = LoadLibrary("RICHED32.DLL");
 
-  if (gs_hRichEdit == NULL)
-  {
-    wxMessageBox("Could not initialise Rich Edit DLL");
-  }
-#endif
+    if (gs_hRichEdit == NULL)
+    {
+      wxMessageBox("Could not initialise Rich Edit DLL");
+    }
+  #endif
 
-#if     defined(WX_DRAG_DROP)
-  // we need to initialize OLE library
-  if ( FAILED(::OleInitialize(NULL)) )
-    wxFatalError(_("Cannot initialize OLE"));
-#endif
+  #if  defined(WX_DRAG_DROP)
+    // we need to initialize OLE library
+    if ( FAILED(::OleInitialize(NULL)) )
+      wxFatalError(_("Cannot initialize OLE"));
+  #endif
 
-#if CTL3D
-  if (!Ctl3dRegister(wxhInstance))
-    wxFatalError("Cannot register CTL3D");
+  #if CTL3D
+    if (!Ctl3dRegister(wxhInstance))
+      wxFatalError("Cannot register CTL3D");
 
-  Ctl3dAutoSubclass(wxhInstance);
-#endif
+    Ctl3dAutoSubclass(wxhInstance);
+  #endif
 
   g_globalCursor = new wxCursor;
 
@@ -195,18 +197,19 @@ bool wxApp::Initialize()
   wxDisableButtonBrush = ::CreateBrushIndirect( & lb ) ;
   ::DeleteObject( (HGDIOBJ)lb.lbHatch ) ;
 
-#if USE_PENWINDOWS
-  wxRegisterPenWin();
-#endif
+  #if USE_PENWINDOWS
+    wxRegisterPenWin();
+  #endif
 
   wxWinHandleList = new wxList(wxKEY_INTEGER);
 
   // This is to foil optimizations in Visual C++ that
   // throw out dummy.obj.
-#if (_MSC_VER >= 800) && !defined(WXMAKINGDLL)
-  extern char wxDummyChar;
-  if (wxDummyChar) wxDummyChar++;
-#endif
+  #if (_MSC_VER >= 800) && !defined(WXMAKINGDLL)
+    extern char wxDummyChar;
+    if (wxDummyChar) wxDummyChar++;
+  #endif
+
   wxSetKeyboardHook(TRUE);
 
   wxModule::RegisterModules();
@@ -262,7 +265,7 @@ bool wxApp::RegisterWindowClasses()
   if (!RegisterClass( &wndclass1 ))
   {
 //    wxFatalError("Can't register MDI Frame window class");
-//	return FALSE;
+//  return FALSE;
   }
 
 ///////////////////////////////////////////////////////////////////////
@@ -343,16 +346,14 @@ bool wxApp::RegisterWindowClasses()
 
 //// Convert Windows to argc, argv style
 
+// FIXME this code should be rewritten (use wxArrayString instead...)
 void wxApp::ConvertToStandardCommandArgs(char* lpCmdLine)
 {
   // Split command line into tokens, as in usual main(argc, argv)
-  char **command = new char*[50];
+  char **command = new char*[50]; // VZ: sure? why not 25 or 73 and a half??
 
   int count = 0;
   char *buf = new char[strlen(lpCmdLine) + 1];
-
-  // Hangs around until end of app. in case
-  // user carries pointers to the tokens
 
   /* Model independent strcpy */
   int i;
@@ -362,8 +363,8 @@ void wxApp::ConvertToStandardCommandArgs(char* lpCmdLine)
   }
 
   // Get application name
-  char name[200];
-  ::GetModuleFileName(wxhInstance, name, 199);
+  char name[260]; // 260 is MAX_PATH value from windef.h
+  ::GetModuleFileName(wxhInstance, name, WXSIZEOF(name));
 
   // Is it only 16-bit Borland that already copies the program name
   // to the first argv index?
@@ -379,33 +380,48 @@ void wxApp::ConvertToStandardCommandArgs(char* lpCmdLine)
 
   /* Break up string */
   // Treat strings enclosed in double-quotes as single arguments
-    char* str = buf;
-	while (*str)
-	{
-		while (*str && *str <= ' ') str++;	// skip whitespace
-		if (*str == '"')
-		{
-			str++;
-			command[count++] = str;
-			while (*str && *str != '"') str++;
-		}
-		else if (*str)
-		{
-			command[count++] = str;
-			while (*str && *str > ' ') str++;
-		}
-		if (*str) *str++ = '\0';
-	}
+  char* str = buf;
+  while (*str)
+  {
+    if ( count == WXSIZEOF(command) )
+    {
+      wxFAIL_MSG("too many command line args.");
+      break;
+    }
 
-  wxTheApp->argv = new char*[argc+1];
+    while ( *str && isspace(*str) )  // skip whitespace
+      str++;
+
+    if (*str == '"')
+    {
+      str++;
+      command[count++] = str;
+      while (*str && *str != '"')
+        str++;
+    }
+    else if (*str)
+    {
+      command[count++] = str;
+      while (*str && !isspace(*str))
+        str++;
+    }
+    if (*str)
+      *str++ = '\0';
+  }
+
+  wxTheApp->argv = new char*[count + 1];
   wxTheApp->argv[count] = NULL; /* argv[] is NULL terminated list! */
   wxTheApp->argc = count;
 
   for (i = 0; i < count; i++)
   {
     wxTheApp->argv[i] = copystring(command[i]);
+
+    delete [] command[i];
   }
-  delete[] buf;
+
+  delete [] command;
+  delete [] buf;
 }
 
 //// Cleans up any wxWindows internal structures left lying around
@@ -498,34 +514,36 @@ void wxApp::CleanUp()
 #if !defined(_WINDLL) || (defined(_WINDLL) && defined(WXMAKINGDLL))
 
 //// Main wxWindows entry point
-
-int wxEntry(WXHINSTANCE hInstance, WXHINSTANCE WXUNUSED(hPrevInstance), char *lpCmdLine,
-                    int nCmdShow, bool enterLoop)
+int wxEntry(WXHINSTANCE hInstance,
+            WXHINSTANCE WXUNUSED(hPrevInstance),
+            char *lpCmdLine,
+            int nCmdShow,
+            bool enterLoop)
 {
+#ifndef __WXDEBUG__ // take everything into a try-except block in release build
+  __try {
+#endif
+
   wxhInstance = (HINSTANCE) hInstance;
 
   if (!wxApp::Initialize())
     return 0;
 
-  // The app may have declared a global application object, but we recommend
-  // the IMPLEMENT_APP macro is used instead, which sets an initializer function
-  // for delayed, dynamic app object construction.
+  // create the application object or ensure that one already exists
   if (!wxTheApp)
   {
-  	if (!wxApp::GetInitializerFunction())
-  	{
-    	MessageBox(NULL, "No initializer - use IMPLEMENT_APP macro.", "wxWindows Error", MB_APPLMODAL | MB_ICONSTOP | MB_OK);
-		return 0;
-  	}
+    // The app may have declared a global application object, but we recommend
+    // the IMPLEMENT_APP macro is used instead, which sets an initializer
+    // function for delayed, dynamic app object construction.
+    wxCHECK_MSG( wxApp::GetInitializerFunction(), 0,
+                 "No initializer - use IMPLEMENT_APP macro." );
 
-  	wxTheApp = (* wxApp::GetInitializerFunction()) ();
+    wxTheApp = (*wxApp::GetInitializerFunction()) ();
   }
 
-  if (!wxTheApp) {
-    MessageBox(NULL, "You have to define an instance of wxApp!", "wxWindows Error", MB_APPLMODAL | MB_ICONSTOP | MB_OK);
-    return 0;
-  }
+  wxCHECK_MSG( wxTheApp, 0, "You have to define an instance of wxApp!" );
 
+  // save the WinMain() parameters
   wxTheApp->ConvertToStandardCommandArgs(lpCmdLine);
   wxTheApp->m_nCmdShow = nCmdShow;
 
@@ -533,46 +551,32 @@ int wxEntry(WXHINSTANCE hInstance, WXHINSTANCE WXUNUSED(hPrevInstance), char *lp
   // but this call is provided for compatibility across platforms.
   wxTheApp->OnInitGui() ;
 
-  if (!wxTheApp->OnInit())
+  int retValue = 0;
+
+  if ( wxTheApp->OnInit() )
   {
-    	wxTheApp->DeletePendingObjects();
-        wxTheApp->OnExit();
-        wxApp::CleanUp();
-
-        delete wxTheApp;
-        wxTheApp = NULL;
-
-   	    return 0;
+      if ( enterLoop )
+      {
+          retValue = wxTheApp->OnRun();
+      }
   }
+  //else: app initialization failed, so we skipped OnRun()
 
-  if (!enterLoop)
-	return 0;
-
-  int retValue = 1;
-
-/* New behaviour - leave it to the app to show the top window
-  if (wxTheApp->GetTopWindow()) {
-    // show the toplevel frame, only if we are not iconized (from MS-Windows)
-    if(wxTheApp->GetShowFrameOnInit() && (nCmdShow!=SW_HIDE)) wxTheApp->GetTopWindow()->Show(TRUE);
-  }
-*/
-
-  retValue = wxTheApp->OnRun();
-
-  if (wxTheApp->GetTopWindow())
+  wxWindow *topWindow = wxTheApp->GetTopWindow();
+  if ( topWindow )
   {
-    // Forcibly delete the window.
-	if (wxTheApp->GetTopWindow()->IsKindOf(CLASSINFO(wxFrame)) ||
-	    wxTheApp->GetTopWindow()->IsKindOf(CLASSINFO(wxDialog)))
-	{
-    	wxTheApp->GetTopWindow()->Close(TRUE);
-    	wxTheApp->DeletePendingObjects();
-	}
-	else
-	{
-		delete wxTheApp->GetTopWindow();
-		wxTheApp->SetTopWindow(NULL);
-	}
+      // Forcibly delete the window.
+      if ( topWindow->IsKindOf(CLASSINFO(wxFrame)) ||
+           topWindow->IsKindOf(CLASSINFO(wxDialog)) )
+      {
+          topWindow->Close(TRUE);
+          wxTheApp->DeletePendingObjects();
+      }
+      else
+      {
+          delete topWindow;
+          wxTheApp->SetTopWindow(NULL);
+      }
   }
 
   wxTheApp->OnExit();
@@ -588,14 +592,25 @@ int wxEntry(WXHINSTANCE hInstance, WXHINSTANCE WXUNUSED(hPrevInstance), char *lp
   // wxDebugContext, too.
   if (wxDebugContext::CountObjectsLeft() > 0)
   {
-    wxTrace("There were memory leaks.\n");
-    wxDebugContext::Dump();
-    wxDebugContext::PrintStatistics();
+      wxTrace("There were memory leaks.\n");
+      wxDebugContext::Dump();
+      wxDebugContext::PrintStatistics();
   }
   wxDebugContext::SetStream(NULL, NULL);
 #endif
 
   return retValue;
+#ifndef __WXDEBUG__ // catch exceptions only in release build
+  }
+  __except ( EXCEPTION_EXECUTE_HANDLER ) {
+    /*
+    if ( wxTheApp )
+      wxTheApp->OnFatalException();
+    */
+
+    ::ExitProcess(3); // the same exit code as abort()
+  }
+#endif //debug
 }
 
 #else /*  _WINDLL  */
@@ -613,13 +628,13 @@ int wxEntry(WXHINSTANCE hInstance)
 
   if (!wxTheApp)
   {
-  	if (!wxApp::GetInitializerFunction())
-  	{
-    	MessageBox(NULL, "No initializer - use IMPLEMENT_APP macro.", "wxWindows Error", MB_APPLMODAL | MB_ICONSTOP | MB_OK);
-		return 0;
-  	}
+    if (!wxApp::GetInitializerFunction())
+    {
+      MessageBox(NULL, "No initializer - use IMPLEMENT_APP macro.", "wxWindows Error", MB_APPLMODAL | MB_ICONSTOP | MB_OK);
+    return 0;
+    }
 
-  	wxTheApp = (* wxApp::GetInitializerFunction()) ();
+    wxTheApp = (* wxApp::GetInitializerFunction()) ();
   }
 
   if (!wxTheApp) {
@@ -832,40 +847,40 @@ void wxApp::OnIdle(wxIdleEvent& event)
 bool wxApp::SendIdleEvents()
 {
     bool needMore = FALSE;
-	wxNode* node = wxTopLevelWindows.First();
-	while (node)
-	{
-		wxWindow* win = (wxWindow*) node->Data();
-		if (SendIdleEvents(win))
+  wxNode* node = wxTopLevelWindows.First();
+  while (node)
+  {
+    wxWindow* win = (wxWindow*) node->Data();
+    if (SendIdleEvents(win))
             needMore = TRUE;
 
-		node = node->Next();
-	}
+    node = node->Next();
+  }
     return needMore;
 }
 
 // Send idle event to window and all subwindows
 bool wxApp::SendIdleEvents(wxWindow* win)
 {
-    bool needMore = FALSE;
+  bool needMore = FALSE;
 
-	wxIdleEvent event;
-	event.SetEventObject(win);
-	win->ProcessEvent(event);
+  wxIdleEvent event;
+  event.SetEventObject(win);
+  win->ProcessEvent(event);
 
-    if (event.MoreRequested())
-        needMore = TRUE;
+  if (event.MoreRequested())
+    needMore = TRUE;
 
-	wxNode* node = win->GetChildren()->First();
-	while (node)
-	{
-		wxWindow* win = (wxWindow*) node->Data();
-		if (SendIdleEvents(win))
-            needMore = TRUE;
+  wxNode* node = win->GetChildren()->First();
+  while (node)
+  {
+    wxWindow* win = (wxWindow*) node->Data();
+    if (SendIdleEvents(win))
+      needMore = TRUE;
 
-		node = node->Next();
-	}
-    return needMore ;
+    node = node->Next();
+  }
+  return needMore ;
 }
 
 void wxApp::DeletePendingObjects()
@@ -915,30 +930,30 @@ int wxApp::GetComCtl32Version() const
 
         if (! theProc)
         {                    // not found, must be 4.00
-			version = 400;
+      version = 400;
         }
         else
         {
-			// The following symbol are unique to 4.71
-			//   DllInstall
-			//   FlatSB_EnableScrollBar FlatSB_GetScrollInfo FlatSB_GetScrollPos
-			//   FlatSB_GetScrollProp FlatSB_GetScrollRange FlatSB_SetScrollInfo
-			//   FlatSB_SetScrollPos FlatSB_SetScrollProp FlatSB_SetScrollRange
-			//   FlatSB_ShowScrollBar
-			//   _DrawIndirectImageList _DuplicateImageList
-			//   InitializeFlatSB
-			//   UninitializeFlatSB
-			// we could check for any of these - I chose DllInstall
-			FARPROC theProc = ::GetProcAddress(theModule, "DllInstall");
-			if (! theProc)
-			{
-				// not found, must be 4.70
-				version = 470;
-			}
-			else
-			{                         // found, must be 4.71
-				version = 471;
-			}
+      // The following symbol are unique to 4.71
+      //   DllInstall
+      //   FlatSB_EnableScrollBar FlatSB_GetScrollInfo FlatSB_GetScrollPos
+      //   FlatSB_GetScrollProp FlatSB_GetScrollRange FlatSB_SetScrollInfo
+      //   FlatSB_SetScrollPos FlatSB_SetScrollProp FlatSB_SetScrollRange
+      //   FlatSB_ShowScrollBar
+      //   _DrawIndirectImageList _DuplicateImageList
+      //   InitializeFlatSB
+      //   UninitializeFlatSB
+      // we could check for any of these - I chose DllInstall
+      FARPROC theProc = ::GetProcAddress(theModule, "DllInstall");
+      if (! theProc)
+      {
+        // not found, must be 4.70
+        version = 470;
+      }
+      else
+      {                         // found, must be 4.71
+        version = 471;
+      }
         }
     }
     return version;
@@ -967,12 +982,11 @@ bool wxYield()
 
 HINSTANCE wxGetInstance()
 {
-	return wxhInstance;
+  return wxhInstance;
 }
 
 // For some reason, with MSVC++ 1.5, WinMain isn't linked in properly
 // if in a separate file. So include it here to ensure it's linked.
 #if (defined(_MSC_VER) && !defined(__WIN32__)) || defined(__GNUWIN32__)
-#include "main.cpp"
+  #include "main.cpp"
 #endif
-
