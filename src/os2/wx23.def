@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  H:\Dev\Wx2\WxWindows\Lib\WX.lib
+;From library:  H:\Dev\Wx2\WxWindows\lib\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -53,8 +53,6 @@ EXPORTS
       wxConstructorForwxDefaultArtProviderModule__Fv
   ;From object file:  ..\common\appcmn.cpp
     ;PUBDEFs (Symbols available from object file):
-      ;wxOnAssert(const char*,int,const char*)
-      wxOnAssert__FPCciT1
       ;wxAppBase::OnInitGui()
       OnInitGui__9wxAppBaseFv
       ;wxAppBase::OnInitCmdLine(wxCmdLineParser&)
@@ -70,16 +68,18 @@ EXPORTS
       OnCmdLineHelp__9wxAppBaseFR15wxCmdLineParser
       ;wxTrap()
       wxTrap__Fv
-      ;wxAppBase::OnAssert(const char*,int,const char*)
-      OnAssert__9wxAppBaseFPCciT1
       ;wxAppBase::OnExit()
       OnExit__9wxAppBaseFv
       ;wxAssertIsEqual(int,int)
       wxAssertIsEqual__FiT1
+      ;wxAppBase::OnAssert(const char*,int,const char*,const char*)
+      OnAssert__9wxAppBaseFPCciN21
       ;wxAppBase::wxAppBase()
       __ct__9wxAppBaseFv
       ;wxAppBase::OnInit()
       OnInit__9wxAppBaseFv
+      ;wxOnAssert(const char*,int,const char*,const char*)
+      wxOnAssert__FPCciN21
       ;wxAppBase::~wxAppBase()
       __dt__9wxAppBaseFv
       ;wxAppBase::ProcessPendingEvents()
@@ -442,10 +442,12 @@ EXPORTS
       OnInit__20wxHelpProviderModuleFv
       ;wxContextHelpEvtHandler::ProcessEvent(wxEvent&)
       ProcessEvent__23wxContextHelpEvtHandlerFR7wxEvent
-      ;wxSimpleHelpProvider::ShowHelp(wxWindowBase*)
-      ShowHelp__20wxSimpleHelpProviderFP12wxWindowBase
+      ;wxSimpleHelpProvider::RemoveHelp(wxWindowBase*)
+      RemoveHelp__20wxSimpleHelpProviderFP12wxWindowBase
       ;wxHelpProviderModule::sm_classwxHelpProviderModule
       sm_classwxHelpProviderModule__20wxHelpProviderModule
+      ;wxSimpleHelpProvider::ShowHelp(wxWindowBase*)
+      ShowHelp__20wxSimpleHelpProviderFP12wxWindowBase
       ;wxContextHelpButton::sm_eventTableEntries
       sm_eventTableEntries__19wxContextHelpButton
       ;wxHelpProvider::AddHelp(int,const wxString&)
@@ -480,6 +482,8 @@ EXPORTS
       __vft23wxContextHelpEvtHandler8wxObject
       __vft20wxHelpProviderModule8wxObject
       __vft13wxContextHelp8wxObject
+      ;wxHelpProvider::RemoveHelp(wxWindowBase*)
+      RemoveHelp__14wxHelpProviderFP12wxWindowBase
       ;wxContextHelpButton::GetEventTable() const
       GetEventTable__19wxContextHelpButtonCFv
       ;wxContextHelpButton::sm_classwxContextHelpButton
@@ -2891,6 +2895,8 @@ EXPORTS
       Put__11wxHashTableFlP8wxObject
       ;wxHashTable::Get(long) const
       Get__11wxHashTableCFl
+      ;wxStringHashTable::Delete(long) const
+      Delete__17wxStringHashTableCFl
       ;wxHashTable::DeleteContents(unsigned long)
       DeleteContents__11wxHashTableFUl
       ;wxHashTableLong::Create(unsigned int)
@@ -4490,8 +4496,6 @@ EXPORTS
       Create__17wxPopupWindowBaseFP8wxWindowi
       ;wxPopupWindowBase::~wxPopupWindowBase()
       __dt__17wxPopupWindowBaseFv
-      ;wxConstructorForwxPopupWindow()
-      wxConstructorForwxPopupWindow__Fv
       ;wxPopupTransientWindow::OnDismiss()
       OnDismiss__22wxPopupTransientWindowFv
       ;wxPopupTransientWindow::DismissAndNotify()
@@ -4506,8 +4510,6 @@ EXPORTS
       __dt__22wxPopupTransientWindowFv
       ;wxPopupTransientWindow::PopHandlers()
       PopHandlers__22wxPopupTransientWindowFv
-      ;wxPopupWindow::sm_classwxPopupWindow
-      sm_classwxPopupWindow__13wxPopupWindow
   ;From object file:  ..\common\prntbase.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxPreviewControlBar::OnZoom(wxCommandEvent&)
@@ -9930,6 +9932,8 @@ EXPORTS
       Update__16wxProgressDialogFiRC8wxString
       ;wxProgressDialog::OnClose(wxCloseEvent&)
       OnClose__16wxProgressDialogFR12wxCloseEvent
+      ;wxProgressDialog::Resume()
+      Resume__16wxProgressDialogFv
       ;wxProgressDialog::sm_classwxProgressDialog
       sm_classwxProgressDialog__16wxProgressDialog
       ;wxProgressDialog::sm_eventTable
@@ -10019,8 +10023,6 @@ EXPORTS
       GetScrollPixelsPerUnit__14wxScrollHelperCFPiT1
       ;wxScrollHelper::Scroll(int,int)
       Scroll__14wxScrollHelperFiT1
-      ;wxGenericScrolledWindow::DoSetVirtualSize(int,int)
-      DoSetVirtualSize__23wxGenericScrolledWindowFiT1
       ;wxScrollHelper::~wxScrollHelper()
       __dt__14wxScrollHelperFv
       ;wxConstructorForwxGenericScrolledWindow()
@@ -10462,6 +10464,8 @@ EXPORTS
       SetText__17wxGenericTreeItemFRC8wxString
       ;wxGenericTreeCtrl::GetSelections(wxArrayTreeItemIds&) const
       GetSelections__17wxGenericTreeCtrlCFR18wxArrayTreeItemIds
+      ;wxGenericTreeCtrl::FindItem(const wxTreeItemId&,const wxString&) const
+      FindItem__17wxGenericTreeCtrlCFRC12wxTreeItemIdRC8wxString
       ;wxGenericTreeCtrl::Edit(const wxTreeItemId&)
       Edit__17wxGenericTreeCtrlFRC12wxTreeItemId
       ;wxTreeTextCtrl::sm_eventTableEntries
@@ -12831,8 +12835,6 @@ EXPORTS
       HandlePaint__7wxFrameFv
       ;wxFrame::OnCreateStatusBar(int,long,int,const wxString&)
       OnCreateStatusBar__7wxFrameFilT1RC8wxString
-      ;wxFrame::OnActivate(wxActivateEvent&)
-      OnActivate__7wxFrameFR15wxActivateEvent
       __vft7wxFrame8wxObject
       ;wxFrame::DoSetClientSize(int,int)
       DoSetClientSize__7wxFrameFiT1
@@ -13865,16 +13867,16 @@ EXPORTS
       __vft13wxPopupWindow8wxObject
       ;wxPopupWindow::DoGetPosition(int*,int*) const
       DoGetPosition__13wxPopupWindowCFPiT1
-      ;wxPopupWindow::FindPopupFor(wxWindow*)
-      FindPopupFor__13wxPopupWindowFP8wxWindow
-      ;wxPopupWindow::Show(unsigned long)
-      Show__13wxPopupWindowFUl
-      ;wxPopupWindow::m_svShownPopups
-      m_svShownPopups__13wxPopupWindow
+      ;wxConstructorForwxPopupWindow()
+      wxConstructorForwxPopupWindow__Fv
       ;wxPopupWindow::OS2GetStyle(long,unsigned long*) const
       OS2GetStyle__13wxPopupWindowCFlPUl
       ;wxPopupWindow::Create(wxWindow*,int)
       Create__13wxPopupWindowFP8wxWindowi
+      ;wxPopupWindow::OS2GetParent() const
+      OS2GetParent__13wxPopupWindowCFv
+      ;wxPopupWindow::sm_classwxPopupWindow
+      sm_classwxPopupWindow__13wxPopupWindow
   ;From object file:  ..\os2\print.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxPrintPreview::Print(unsigned long)
@@ -14622,12 +14624,12 @@ EXPORTS
   ;From object file:  ..\os2\thread.cpp
     ;PUBDEFs (Symbols available from object file):
       p_wxMainMutex
+      ;wxMutex::wxMutex(wxMutexType)
+      __ct__7wxMutexF11wxMutexType
       ;wxCriticalSection::Leave()
       Leave__17wxCriticalSectionFv
       ;wxMutex::~wxMutex()
       __dt__7wxMutexFv
-      ;wxMutex::wxMutex()
-      __ct__7wxMutexFv
       ;wxThread::Pause()
       Pause__8wxThreadFv
       ;wxThread::Kill()
@@ -14640,8 +14642,6 @@ EXPORTS
       Delete__8wxThreadFPPv
       ;wxCondition::wxCondition(wxMutex&)
       __ct__11wxConditionFR7wxMutex
-      ;wxCondition::Wait(unsigned long)
-      Wait__11wxConditionFUl
       ;wxThreadInternal::OS2ThreadStart(wxThread*)
       OS2ThreadStart__16wxThreadInternalFP8wxThread
       ;wxMutex::Lock()
@@ -14679,11 +14679,13 @@ EXPORTS
       TryLock__7wxMutexFv
       ;wxThread::This()
       This__8wxThreadFv
-      ;wxThread::Sleep(unsigned long)
-      Sleep__8wxThreadFUl
+      ;wxCondition::WaitTimeout(unsigned long)
+      WaitTimeout__11wxConditionFUl
       __vft8wxThread
       ;wxThread::wxThread(wxThreadKind)
       __ct__8wxThreadF12wxThreadKind
+      ;wxThread::Sleep(unsigned long)
+      Sleep__8wxThreadFUl
       ;wxMutex::Unlock()
       Unlock__7wxMutexFv
       ;wxMutexGuiLeaveOrEnter()
@@ -14830,6 +14832,8 @@ EXPORTS
       CreateFrame__19wxTopLevelWindowOS2FRC8wxStringRC7wxPointRC6wxSize
       ;wxTopLevelWindowOS2::~wxTopLevelWindowOS2()
       __dt__19wxTopLevelWindowOS2Fv
+      ;wxTopLevelWindowOS2::sm_eventTableEntries
+      sm_eventTableEntries__19wxTopLevelWindowOS2
       ;wxTopLevelWindowOS2::ShowFullScreen(unsigned long,long)
       ShowFullScreen__19wxTopLevelWindowOS2FUll
       ;wxTopLevelWindowOS2::CreateDialog(unsigned long,const wxString&,const wxPoint&,const wxSize&)
@@ -14842,6 +14846,8 @@ EXPORTS
       m_sbInitialized__19wxTopLevelWindowOS2
       ;wxTopLevelWindowOS2::OS2GetParent() const
       OS2GetParent__19wxTopLevelWindowOS2CFv
+      ;wxTopLevelWindowOS2::GetEventTable() const
+      GetEventTable__19wxTopLevelWindowOS2CFv
       ;wxTopLevelWindowOS2::Iconize(unsigned long)
       Iconize__19wxTopLevelWindowOS2FUl
       ;wxTopLevelWindowOS2::DoSetClientSize(int,int)
@@ -14854,6 +14860,8 @@ EXPORTS
       SetIcon__19wxTopLevelWindowOS2FRC6wxIcon
       ;wxTopLevelWindowOS2::Restore()
       Restore__19wxTopLevelWindowOS2Fv
+      ;wxTopLevelWindowOS2::OnActivate(wxActivateEvent&)
+      OnActivate__19wxTopLevelWindowOS2FR15wxActivateEvent
       ;wxTopLevelWindowOS2::Maximize(unsigned long)
       Maximize__19wxTopLevelWindowOS2FUl
       ;wxTopLevelWindowOS2::EnableCloseButton(unsigned long)
@@ -14868,6 +14876,8 @@ EXPORTS
       SetIcons__19wxTopLevelWindowOS2FRC12wxIconBundle
       ;wxTopLevelWindowOS2::IsIconized() const
       IsIconized__19wxTopLevelWindowOS2CFv
+      ;wxTopLevelWindowOS2::sm_eventTable
+      sm_eventTable__19wxTopLevelWindowOS2
       ;wxTopLevelWindowOS2::SendSizeEvent()
       SendSizeEvent__19wxTopLevelWindowOS2Fv
       wxDlgProc
