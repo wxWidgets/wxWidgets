@@ -493,7 +493,7 @@ private:
 // Backwards compatibility for wxCommandEvent::m_commandString, will lead to compilation errors in some cases of usage
 class WXDLLIMPEXP_CORE wxCommandEvent;
 
-class wxCommandEventStringHelper
+class WXDLLIMPEXP_CORE wxCommandEventStringHelper
 {
 public:
     wxCommandEventStringHelper(wxCommandEvent * evt)
