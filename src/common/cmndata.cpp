@@ -293,16 +293,16 @@ static HGLOBAL wxCreateDevNames(const wxString& driverName, const wxString& prin
             printerName.Length() + 1 +
                              portName.Length()+1 ) * sizeof(wxChar) );
         LPDEVNAMES lpDev = (LPDEVNAMES)GlobalLock(hDev);
-        lpDev->wDriverOffset = sizeof(WORD)*4;
-        wxStrcpy((wxChar*)((char*)lpDev + lpDev->wDriverOffset ), driverName);
+        lpDev->wDriverOffset = sizeof(WORD) * 4 / sizeof(wxChar);
+        wxStrcpy((wxChar*)lpDev + lpDev->wDriverOffset, driverName);
 
         lpDev->wDeviceOffset = (WORD)( lpDev->wDriverOffset +
-                                       sizeof(wxChar) * ( driverName.Length() + 1 ) );
-        wxStrcpy((wxChar*)((char*)lpDev + lpDev->wDeviceOffset ), printerName);
+                                       driverName.Length() + 1 );
+        wxStrcpy((wxChar*)lpDev + lpDev->wDeviceOffset, printerName);
 
         lpDev->wOutputOffset = (WORD)( lpDev->wDeviceOffset +
-                                       sizeof(wxChar) * ( printerName.Length() + 1 ) );
-        wxStrcpy((wxChar*)((char*) lpDev + lpDev->wOutputOffset ), portName);
+                                       printerName.Length() + 1 );
+        wxStrcpy((wxChar*)lpDev + lpDev->wOutputOffset, portName);
 
         lpDev->wDefault = 0;
 
