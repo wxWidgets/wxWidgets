@@ -69,7 +69,9 @@
 extern wxList wxPendingDelete;
 extern wxList *wxWinMacWindowList;
 extern wxList *wxWinMacControlList;
+#if wxUSE_THREADS
 extern size_t g_numberOfThreads;
+#endif // wxUSE_THREADS
 
 // statics for implementation
 
@@ -1277,11 +1279,13 @@ void wxApp::MacDoOneEvent()
             sleepTime = kEventDurationNoWait ;
         else
         {
+#if wxUSE_THREADS
             if (g_numberOfThreads)
             {
                 sleepTime = kEventDurationNoWait;
             }
             else
+#endif // wxUSE_THREADS
             {
                 sleepTime = kEventDurationSecond;
             }
@@ -1320,11 +1324,13 @@ void wxApp::MacDoOneEvent()
             sleepTime = kEventDurationNoWait;
         else
         {
+#if wxUSE_THREADS
             if (g_numberOfThreads)
             {
                 sleepTime = kEventDurationNoWait;
             }
             else
+#endif // wxUSE_THREADS
             {
                 sleepTime = kEventDurationSecond;
             }
