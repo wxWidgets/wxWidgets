@@ -26,8 +26,14 @@
 // conditinal compilation
 // ----------------------------------------------------------------------------
 
+// wxString may be #define'd as std::string to use the standard class instead
+// of the wxWindows one if desired by the user -- of course, plenty of code
+// using wxString methods not present in std::string wouldn't compile then so
+// use at your own risk
+#ifndef wxString
+
 // compile the std::string compatibility functions if defined
-#define   wxSTD_STRING_COMPATIBILITY
+#define  wxSTD_STRING_COMPATIBILITY
 
 // ----------------------------------------------------------------------------
 // headers
@@ -1265,5 +1271,7 @@ WXDLLEXPORT wxSTD istream& operator>>(wxSTD istream&, wxString&);
 WXDLLEXPORT wxSTD ostream& operator<<(wxSTD ostream&, const wxString&);
 
 #endif  // wxSTD_STRING_COMPATIBILITY
+
+#endif // !defined(wxString)
 
 #endif  // _WX_WXSTRINGH__

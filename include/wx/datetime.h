@@ -1262,6 +1262,10 @@ private:
         m_days;
 };
 
+// wxDateTimeHolidayAuthority is only available when we're using (entire)
+// wxWindows library
+#ifdef __WXWINDOWS__
+
 // ----------------------------------------------------------------------------
 // wxDateTimeArray: array of dates.
 // ----------------------------------------------------------------------------
@@ -1333,6 +1337,8 @@ protected:
                                         const wxDateTime& dtEnd,
                                         wxDateTimeArray& holidays) const;
 };
+
+#endif // __WXWINDOWS__
 
 // ============================================================================
 // inline functions implementation

@@ -70,17 +70,19 @@
     #include "wx/log.h"
 #endif // WX_PRECOMP
 
-#include "wx/intl.h"
-#include "wx/thread.h"
-#include "wx/tokenzr.h"
-#include "wx/module.h"
+#ifdef __WXWINDOWS__
+    #include "wx/intl.h"
+    #include "wx/thread.h"
+    #include "wx/tokenzr.h"
+    #include "wx/module.h"
+#endif // __WXWINDOWS__
 
 #define wxDEFINE_TIME_CONSTANTS // before including datetime.h
+#include "wx/datetime.h"
+
+//#include "wx/timer.h"           // for wxGetLocalTimeMillis()
 
 #include <ctype.h>
-
-#include "wx/datetime.h"
-#include "wx/timer.h"           // for wxGetLocalTimeMillis()
 
 // ----------------------------------------------------------------------------
 // conditional compilation
@@ -142,6 +144,8 @@
 // private classes
 // ----------------------------------------------------------------------------
 
+#ifdef __WXWINDOWS__
+
 class wxDateTimeHolidaysModule : public wxModule
 {
 public:
@@ -163,6 +167,8 @@ private:
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxDateTimeHolidaysModule, wxModule)
+
+#endif // __WXWINDOWS__
 
 // ----------------------------------------------------------------------------
 // constants
@@ -237,7 +243,7 @@ extern const wxChar *wxDumpDate(const wxDateTime* dt)
 {
     static wxChar buf[128];
 
-    wxStrcpy(buf, dt->Format(_T("%Y-%m-%d (%a) %H:%M:%S")));
+    wxStrcpy(buf, dt->Format(_T("%Y-%m-%d (%a) %H:%M:%S")).c_str());
 
     return buf;
 }
@@ -453,7 +459,7 @@ static bool GetNumericToken(size_t len, const wxChar*& p, unsigned long *number)
             break;
     }
 
-    return !!s && s.ToULong(number);
+    return !s.empty() && s.ToULong(number);
 }
 
 // scans all alphabetic characters and returns the resulting string
@@ -2007,13 +2013,13 @@ wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
                         // not optimal way of doing it... improvements welcome!)
                         wxString fmt = format;
                         wxString replacement = (wxChar)-1;
-                        while ( fmt.Find(replacement) != wxNOT_FOUND )
+                        while ( fmt.find(replacement) != wxString::npos )
                         {
                             replacement << (wxChar)-1;
                         }
 
                         wxString replacement2 = (wxChar)-2;
-                        while ( fmt.Find(replacement) != wxNOT_FOUND )
+                        while ( fmt.find(replacement) != wxString::npos )
                         {
                             replacement << (wxChar)-2;
                         }
