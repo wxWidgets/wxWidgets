@@ -30,7 +30,7 @@ dnl       never defined in configure.in (remove these lines to see what I'm
 dnl       speaking about) - Tom Tromey <tromey@cygnus.com> told me that it will
 dnl       be fixed in the next release.
 LIBOBJS=
-LIBOBJS="$LIBOBJS common/extended.o"
+dnl LIBOBJS="$LIBOBJS common/extended.o"
 
 dnl ------------------------------------------------------------------------
 dnl Check platform (host system)
@@ -148,7 +148,7 @@ esac
 if test "$USE_UNIX" = 1 ; then
   wxUSE_UNIX=yes
   AC_DEFINE(__UNIX__)
-  EXTRA_VPATH="$EXTRA_VPATH:\$(srcdir)/unix"
+  EXTRA_VPATH="$EXTRA_VPATH:\$(srcdir)/../unix"
   INCLUDE_SUBDIRS="$INCLUDE_SUBDIRS unix"
 fi
 
@@ -934,9 +934,7 @@ if test "$wxUSE_GTK" = 1; then
 
   TOOLKIT_INCLUDE="$GTK_CFLAGS"
   GUI_TK_LIBRARY="$GTK_LIBS"
-
   TOOLKIT=GTK
-  LTLIBOBJS="$LTLIBOBJS image.lo utilsgtk.lo win_gtk.lo"
 fi
 
 if test "$wxUSE_MOTIF" = 1; then
@@ -1285,29 +1283,25 @@ dnl ---------------------------------------------------------------------------
 
 if test "$wxUSE_ZLIB" = "yes" ; then
   AC_DEFINE(wxUSE_ZLIB)
-  EXTRA_VPATH="$EXTRA_VPATH:\$(srcdir)/zlib"
+  EXTRA_VPATH="$EXTRA_VPATH:\$(srcdir)/../zlib"
   LTLIBOBJS="$LTLIBOBJS adler32.lo compress.lo crc32.lo gzio.lo uncompr.lo deflate.lo trees.lo zutil.lo inflate.lo infblock.lo inftrees.lo infcodes.lo infutil.lo inffast.lo"
-  if eval "test x$wxUSE_STREAMS = x1"; then
-    LTLIBOBJS="$LTLIBOBJS zstream.lo"
-  fi
 fi
 
 if test "$wxUSE_LIBPNG" = "yes" ; then
   AC_DEFINE(wxUSE_LIBPNG)
-  LTLIBOBJS="$LTLIBOBJS imagpng.lo png.lo pngset.lo pngget.lo pngrutil.lo pngtrans.lo pngwutil.lo pngread.lo pngrio.lo pngwio.lo pngwrite.lo pngrtran.lo pngwtran.lo pngmem.lo pngerror.lo pngpread.lo"
-  EXTRA_VPATH="$EXTRA_VPATH:\$(srcdir)/png"
+  LTLIBOBJS="$LTLIBOBJS png.lo pngset.lo pngget.lo pngrutil.lo pngtrans.lo pngwutil.lo pngread.lo pngrio.lo pngwio.lo pngwrite.lo pngrtran.lo pngwtran.lo pngmem.lo pngerror.lo pngpread.lo"
+  EXTRA_VPATH="$EXTRA_VPATH:\$(srcdir)/../png"
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS png"
 fi
 
 if test "$wxUSE_LIBGIF" = "yes" ; then
   AC_DEFINE(wxUSE_LIBGIF)
-  LTLIBOBJS="$LTLIBOBJS imaggif.lo"
 fi
 
 if test "$wxUSE_LIBJPEG" = "yes" ; then
   AC_DEFINE(wxUSE_LIBJPEG)
-  EXTRA_VPATH="$EXTRA_VPATH:\${srcdir}/jpeg"
-  LTLIBOBJS="$LTLIBOBJS imagjpeg.lo \
+  EXTRA_VPATH="$EXTRA_VPATH:\${srcdir}/../jpeg"
+  LTLIBOBJS="$LTLIBOBJS \
              jcomapi.lo jutils.lo jerror.lo jmemmgr.lo jmemnobs.lo \
              jcapimin.lo jcapistd.lo jctrans.lo jcparam.lo jdatadst.lo \
              jcinit.lo jcmaster.lo jcmarker.lo jcmainct.lo jcprepct.lo \
@@ -1354,13 +1348,13 @@ if test "$wxUSE_GUI" = "yes"; then
   dnl    need the dcs, pens, brushes, ...), this just can't be done now
   dnl 4. menu stuff: wxMenu, wxMenuBar, wxMenuItem
   dnl 5. misc stuff: timers, settings, message box
-  LTLIBOBJS="$LTLIBOBJS \
-main.lo app.lo event.lo wincmn.lo window.lo control.lo framecmn.lo frame.lo dialog.lo panelg.lo \
-button.lo stattext.lo textctrl.lo \
-bitmap.lo brush.lo colour.lo cursor.lo data.lo dc.lo dcbase.lo dcclient.lo \
-dcmemory.lo dcscreen.lo font.lo gdicmn.lo gdiobj.lo icon.lo palette.lo pen.lo region.lo \
-menu.lo \
-settings.lo timer.lo msgdlgg.lo"
+  dnl   LTLIBOBJS="$LTLIBOBJS \
+  dnl main.lo app.lo event.lo wincmn.lo window.lo control.lo framecmn.lo frame.lo dialog.lo panelg.lo \
+  dnl button.lo stattext.lo textctrl.lo \
+  dnl bitmap.lo brush.lo colour.lo cursor.lo data.lo dc.lo dcbase.lo dcclient.lo \
+  dnl dcmemory.lo dcscreen.lo font.lo gdicmn.lo gdiobj.lo icon.lo palette.lo pen.lo region.lo \
+  dnl menu.lo \
+  dnl settings.lo timer.lo msgdlgg.lo"
 else
   AC_DEFINE(wxUSE_NOGUI)
 fi
@@ -1371,7 +1365,6 @@ dnl ---------------------------------------------------------------------------
 
 if test "$wxUSE_UNIX" = "yes"; then
   AC_DEFINE(wxUSE_UNIX)
-  LTLIBOBJS="$LTLIBOBJS utilsunx.lo"
 fi
 
 dnl ---------------------------------------------------------------------------
@@ -1380,18 +1373,15 @@ dnl ---------------------------------------------------------------------------
 
 if test "$wxUSE_APPLE_IEEE" = "yes"; then
   AC_DEFINE(wxUSE_APPLE_IEEE)
-  LTLIBOBJS="$LTLIBOBJS extended.lo"
 fi
 
 if test "$wxUSE_TIMEDATE" = "yes"; then
   AC_DEFINE(wxUSE_TIMEDATE)
-  LTLIBOBJS="$LTLIBOBJS date.lo time.lo"
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS typetest"
 fi
 
 if test "$wxUSE_FILE" = "yes"; then
   AC_DEFINE(wxUSE_FILE)
-  LTLIBOBJS="$LTLIBOBJS file.lo"
 fi
 
 if test "$wxUSE_TEXTFILE" = "yes"; then
@@ -1399,7 +1389,6 @@ if test "$wxUSE_TEXTFILE" = "yes"; then
     AC_MSG_WARN(wxTextFile requires wxFile and it won't be compiled without it)
   else
     AC_DEFINE(wxUSE_TEXTFILE)
-    LTLIBOBJS="$LTLIBOBJS textfile.lo"
   fi
 fi
 
@@ -1408,7 +1397,6 @@ if test "$wxUSE_CONFIG" = "yes" ; then
     AC_MSG_WARN(wxConfig requires wxTextFile and it won't be compiled without it)
   else
     AC_DEFINE(wxUSE_CONFIG)
-    LTLIBOBJS="$LTLIBOBJS config.lo fileconf.lo"
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS config"
   fi
 fi
@@ -1418,25 +1406,21 @@ if test "$wxUSE_INTL" = "yes" ; then
     AC_MSG_WARN(I18n code requires wxFile and it won't be compiled without it)
   else
     AC_DEFINE(wxUSE_INTL)
-    LTLIBOBJS="$LTLIBOBJS intl.lo"
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS internat"
   fi
 fi
 
 if test "$wxUSE_LOG" = "yes"; then
   AC_DEFINE(wxUSE_LOG)
-  LTLIBOBJS="$LTLIBOBJS log.lo"
 fi
 
 if test "$wxUSE_LONGLONG" = "yes"; then
   AC_DEFINE(wxUSE_LONGLONG)
-  LTLIBOBJS="$LTLIBOBJS longlong.lo"
 fi
 
 if test "$wxUSE_SOCKETS" = "yes" ; then
     if test "$wxUSE_THREADS" = "yes" ; then
         AC_DEFINE(wxUSE_SOCKETS)
-        LTLIBOBJS="$LTLIBOBJS sckint.lo socket.lo sckaddr.lo protocol.lo http.lo ftp.lo url.lo"
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS wxsocket"
         INCLUDE_SUBDIRS="$INCLUDE_SUBDIRS protocol"
     else
@@ -1447,10 +1431,6 @@ fi
 
 if test "$wxUSE_STREAMS" = "yes" ; then
   AC_DEFINE(wxUSE_STREAMS)
-  LTLIBOBJS="$LTLIBOBJS stream.lo wfstream.lo datstrm.lo mstream.lo objstrm.lo"
-  if test "$wxUSE_SOCKETS" = "yes" ; then
-    LTLIBOBJS="$LTLIBOBJS sckstrm.lo"
-  fi
 fi
 
 if test "$wxUSE_SERIAL" = "yes" ; then
@@ -1494,7 +1474,6 @@ if test "$wxUSE_JOYSTICK" = 1; then
   AC_CHECK_HEADERS(linux/joystick.h)
   if test "$ac_cv_header_linux_joystick_h" = "yes"; then
     AC_DEFINE(wxUSE_JOYSTICK)
-    LTLIBOBJS="$LTLIBOBJS joystick.lo"
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS joytest"
   fi
 fi
@@ -1524,7 +1503,6 @@ fi
 
 if test "$wxUSE_DYNLIB_CLASS" = "yes" ; then
   AC_DEFINE(wxUSE_DYNLIB_CLASS)
-  LTLIBOBJS="$LTLIBOBJS dynlib.lo"
 fi
 
 dnl ---------------------------------------------------------------------------
@@ -1546,7 +1524,7 @@ dnl ----------------------------------------------------------------
 IODBC_C_SRC=""
 if test "$wxUSE_ODBC" = "yes" ; then
   AC_DEFINE(wxUSE_ODBC)
-  EXTRA_VPATH="$EXTRA_VPATH:\$(srcdir)/iodbc"
+  EXTRA_VPATH="$EXTRA_VPATH:\$(srcdir)/../iodbc"
   LTLIBOBJS="$LTLIBOBJS catalog.lo connect.lo dlf.lo dlproc.lo execute.lo fetch.lo hdbc.lo henv.lo herr.lo hstmt.lo info.lo itrace.lo misc.lo prepare.lo result.lo"
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS db"
 fi
@@ -1557,7 +1535,6 @@ dnl ----------------------------------------------------------------
 
 if test "$wxUSE_POSTSCRIPT" = "yes" ; then
   AC_DEFINE(wxUSE_POSTSCRIPT)
-  LTLIBOBJS="$LTLIBOBJS printps.lo dcpsg.lo"
 fi
 
 AC_DEFINE(wxUSE_AFM_FOR_POSTSCRIPT)
@@ -1570,42 +1547,34 @@ dnl ---------------------------------------------------------------------------
 
 if test "$wxUSE_CONSTRAINTS" = "yes"; then
   AC_DEFINE(wxUSE_CONSTRAINTS)
-
-  LTLIBOBJS="$LTLIBOBJS layout.lo laywin.lo"
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS layout"
 fi
 
 if test "$wxUSE_MDI_ARCHITECTURE" = "yes"; then
   AC_DEFINE(wxUSE_MDI_ARCHITECTURE)
-  LTLIBOBJS="$LTLIBOBJS mdi.lo"
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS mdi"
 fi
 
 if test "$wxUSE_DOC_VIEW_ARCHITECTURE" = "yes" ; then
   AC_DEFINE(wxUSE_DOC_VIEW_ARCHITECTURE)
-  LTLIBOBJS="$LTLIBOBJS docview.lo"
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS docview"
   if test "$wxUSE_MDI_ARCHITECTURE" = "yes"; then
-    LTLIBOBJS="$LTLIBOBJS docmdi.lo"
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS docvwmdi"
   fi
 fi
 
 if test "$wxUSE_HELP" = "yes"; then
   AC_DEFINE(wxUSE_HELP)
-  LTLIBOBJS="$LTLIBOBJS helpext.lo helphtml.lo helpbase.lo"
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS help"
 fi
 
 if test "$wxUSE_PRINTING_ARCHITECTURE" = "yes" ; then
   AC_DEFINE(wxUSE_PRINTING_ARCHITECTURE)
-  LTLIBOBJS="$LTLIBOBJS prntbase.lo paper.lo"
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS printing"
 fi
 
 if test "$wxUSE_PROLOGIO" = "yes" ; then
   AC_DEFINE(wxUSE_PROLOGIO)
-  LTLIBOBJS="$LTLIBOBJS wxexpr.lo parser.lo"
 fi
 
 if test "$wxUSE_RESOURCES" = "yes" ; then
@@ -1631,22 +1600,16 @@ dnl ---------------------------------------------------------------------------
 
 if test "$wxUSE_IPC" = "yes"; then
   AC_DEFINE(wxUSE_IPC)
-  LTLIBOBJS="$LTLIBOBJS ipcbase.lo sckipc.lo"
 fi
 
 if test "$wxUSE_CLIPBOARD" = "yes"; then
   AC_DEFINE(wxUSE_CLIPBOARD)
-  LTLIBOBJS="$LTLIBOBJS clipbrd.lo dataobj.lo"
 fi
 
 if test "$wxUSE_DRAG_AND_DROP" = "yes"; then
   if test "$WXGTK12" = 1 ; then
     AC_DEFINE(wxUSE_DRAG_AND_DROP)
-    LTLIBOBJS="$LTLIBOBJS dnd.lo"
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS dnd"
-    if test "$wxUSE_CLIPBOARD" != "yes"; then
-      LTLIBOBJS="$LTLIBOBJS dataobj.lo"
-    fi
   else
     AC_MSG_WARN(drag and drop is only supported under GTK 1.2)
   fi
@@ -1662,61 +1625,50 @@ dnl ---------------------------------------------------------------------------
 
 if test "$wxUSE_ACCEL" = "yes"; then
   AC_DEFINE(wxUSE_ACCEL)
-  LTLIBOBJS="$LTLIBOBJS accel.lo"
 fi
 
 if test "$wxUSE_CARET" = "yes"; then
   AC_DEFINE(wxUSE_CARET)
-  LTLIBOBJS="$LTLIBOBJS caret.lo"
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS caret"
 fi
 
 if test "$wxUSE_COMBOBOX" = "yes"; then
   AC_DEFINE(wxUSE_COMBOBOX)
-  LTLIBOBJS="$LTLIBOBJS choice.lo combobox.lo"
 fi
 
 if test "$wxUSE_BMPBUTTON" = "yes"; then
   AC_DEFINE(wxUSE_BMPBUTTON)
-  LTLIBOBJS="$LTLIBOBJS bmpbuttn.lo"
 fi
 
 if test "$wxUSE_CHECKBOX" = "yes"; then
   AC_DEFINE(wxUSE_CHECKBOX)
-  LTLIBOBJS="$LTLIBOBJS checkbox.lo"
 fi
 
 if test "$wxUSE_CHECKLST" = "yes"; then
   AC_DEFINE(wxUSE_CHECKLISTBOX)
-  LTLIBOBJS="$LTLIBOBJS checklst.lo"
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS checklst"
 fi
 
 if test "$wxUSE_GAUGE" = "yes"; then
   AC_DEFINE(wxUSE_GAUGE)
-  LTLIBOBJS="$LTLIBOBJS gauge.lo"
 fi
 
 if test "$wxUSE_GRID" = "yes"; then
   AC_DEFINE(wxUSE_GRID)
-  LTLIBOBJS="$LTLIBOBJS gridg.lo"
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS grid"
 fi
 
 if test "$wxUSE_IMAGLIST" = "yes"; then
   AC_DEFINE(wxUSE_IMAGLIST)
-  LTLIBOBJS="$LTLIBOBJS imaglist.lo"
 fi
 
 if test "$wxUSE_LISTBOX" = "yes"; then
   AC_DEFINE(wxUSE_LISTBOX)
-  LTLIBOBJS="$LTLIBOBJS listbox.lo"
 fi
 
 if test "$wxUSE_LISTCTRL" = "yes"; then
   if test "$wxUSE_IMAGLIST" = "yes"; then
     AC_DEFINE(wxUSE_LISTCTRL)
-    LTLIBOBJS="$LTLIBOBJS listctrl.lo"
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS listctrl"
   else
     AC_MSG_WARN([wxListCtrl requires wxImageList and won't be compiled without it])
@@ -1725,77 +1677,63 @@ fi
 
 if test "$wxUSE_NOTEBOOK" = "yes"; then
   AC_DEFINE(wxUSE_NOTEBOOK)
-  LTLIBOBJS="$LTLIBOBJS notebook.lo"
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS notebook"
 fi
 
 if test "$wxUSE_RADIOBOX" = "yes"; then
   AC_DEFINE(wxUSE_RADIOBOX)
-  LTLIBOBJS="$LTLIBOBJS radiobox.lo"
 fi
 
 if test "$wxUSE_RADIOBTN" = "yes"; then
   AC_DEFINE(wxUSE_RADIOBTN)
-  LTLIBOBJS="$LTLIBOBJS radiobut.lo"
 fi
 
 if test "wxUSE_SASH" = 1; then
   AC_DEFINE(wxUSE_SASH)
-  LTLIBOBJS="$LTLIBOBJS sashwin.lo"
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS sashtest"
 fi
 
 if test "$wxUSE_SCROLLBAR" = "yes"; then
   AC_DEFINE(wxUSE_SCROLLBAR)
-  LTLIBOBJS="$LTLIBOBJS scrolbar.lo scrolwin.lo"
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS scroll"
 fi
 
 if test "$wxUSE_SLIDER" = "yes"; then
   AC_DEFINE(wxUSE_SLIDER)
-  LTLIBOBJS="$LTLIBOBJS slider.lo"
 fi
 
 if test "$wxUSE_SPINBTN" = "yes"; then
   AC_DEFINE(wxUSE_SPINBTN)
-  LTLIBOBJS="$LTLIBOBJS spinbutt.lo"
 fi
 
 if test "$wxUSE_SPLITTER" = "yes"; then
   AC_DEFINE(wxUSE_SPLITTER)
-  LTLIBOBJS="$LTLIBOBJS splitter.lo"
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS splitter"
 fi
 
 if test "$wxUSE_STATBMP" = "yes"; then
   AC_DEFINE(wxUSE_STATBMP)
-  LTLIBOBJS="$LTLIBOBJS statbmp.lo"
 fi
 
 if test "$wxUSE_STATBOX" = "yes"; then
   AC_DEFINE(wxUSE_STATBOX)
-  LTLIBOBJS="$LTLIBOBJS statbox.lo"
 fi
 
 if test "$wxUSE_STATLINE" = "yes"; then
   AC_DEFINE(wxUSE_STATLINE)
-  LTLIBOBJS="$LTLIBOBJS statline.lo"
 fi
 
 if test "$wxUSE_STATUSBAR" = "yes"; then
   AC_DEFINE(wxUSE_STATUSBAR)
-  LTLIBOBJS="$LTLIBOBJS statusbr.lo"
 fi
 
 if test "$wxUSE_TABDIALOG" = "yes"; then
   AC_DEFINE(wxUSE_TAB_DIALOG)
-  LTLIBOBJS="$LTLIBOBJS tabg.lo"
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS tab"
 fi
 
 if test "$wxUSE_TOOLBAR" = "yes"; then
   AC_DEFINE(wxUSE_TOOLBAR)
-  LTLIBOBJS="$LTLIBOBJS tbarbase.lo tbargtk.lo"
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS toolbar"
 fi
 
@@ -1804,14 +1742,12 @@ if test "$wxUSE_TOOLTIPS" = "yes" ; then
       AC_MSG_WARN(tooltips are not supported yet under Motif)
     else
       AC_DEFINE(wxUSE_TOOLTIPS)
-      LTLIBOBJS="$LTLIBOBJS tooltip.lo"
     fi
 fi
 
 if test "$wxUSE_TREECTRL" = "yes"; then
   if test "$wxUSE_IMAGLIST" = "yes"; then
     AC_DEFINE(wxUSE_TREECTRL)
-    LTLIBOBJS="$LTLIBOBJS treectrl.lo"
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS treectrl"
   else
     AC_MSG_WARN([wxTreeCtrl requires wxImageList and won't be compiled without it])
@@ -1829,44 +1765,36 @@ dnl fi
 
 if test "$wxUSE_METAFILE" = "yes"; then
   AC_DEFINE(wxUSE_METAFILE)
-  LTLIBOBJS="$LTLIBOBJS metafile.lo"
 fi
 
 if test "$wxUSE_COMMONDLGS" = "yes"; then
   dnl these classes don't depend on anything at all
-  LTLIBOBJS="$LTLIBOBJS progdlgg.lo filedlg.lo fontdlgg.lo"
 
   if test "$wxUSE_CONSTRAINTS" != "yes"; then
     AC_MSG_WARN(many common dialogs cannot be used without constraints so they won't be compiled without them)
   else
     AC_DEFINE(wxUSE_CONSTRAINTS)
     AC_DEFINE(wxUSE_TEXTDLG)
-    LTLIBOBJS="$LTLIBOBJS colrdlgg.lo textdlgg.lo choicdgg.lo"
 
     if test "$wxUSE_TREECTRL" != "yes"; then
       AC_MSG_WARN(wxDirDialog cannot be used without wxTreeCtrl and it won't be compiled without it)
     else
       AC_DEFINE(wxUSE_DIRDLG)
-      LTLIBOBJS="$LTLIBOBJS dirdlgg.lo"
     fi
   fi
 
-  if test "$wxUSE_PRINTING_ARCHITECTURE" = "yes"; then
-    LTLIBOBJS="$LTLIBOBJS prntdlgg.lo"
-  else
+  if test "$wxUSE_PRINTING_ARCHITECTURE" = "no"; then
     AC_MSG_WARN([wxPrintDialog class won't be compiled without printing support])
   fi
 fi
 
 if test "$wxUSE_MINIFRAME" = "yes"; then
   AC_DEFINE(wxUSE_MINIFRAME)
-  LTLIBOBJS="$LTLIBOBJS minifram.lo"
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS minifram"
 fi
 
 if test "$wxUSE_VALIDATORS" = "yes"; then
   AC_DEFINE(wxUSE_VALIDATORS)
-  LTLIBOBJS="$LTLIBOBJS valgen.lo validate.lo valtext.lo"
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS validate"
 fi
 
@@ -1974,7 +1902,9 @@ dnl (the original file name may be overriden by appending another name after a
 dnl colon)
 AC_OUTPUT([
             wx-config
-            Makefile src/Makefile
+            Makefile 
+	    src/Makefile
+	    src/gtk/Makefile
             include/Makefile
             include/wx/Makefile
             include/wx/generic/Makefile
