@@ -228,7 +228,11 @@ void wxSpinCtrl::DoMoveWindow(int x, int y, int width, int height)
 
     wxCoord wText = width - sizeBtn.x;
     m_text->SetSize(x, y, wText, height);
+#ifdef __WXMAC__
+    m_btn->SetSize(x + wText + MARGIN, y, -1, -1);
+#else
     m_btn->SetSize(x + wText + MARGIN, y, -1, height);
+#endif
 }
 
 // ----------------------------------------------------------------------------
