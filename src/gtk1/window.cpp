@@ -27,6 +27,7 @@
 #include "wx/statusbr.h"
 #include "wx/intl.h"
 #include "wx/settings.h"
+#include "wx/log.h"
 #include "gdk/gdkprivate.h"
 #include "gdk/gdkkeysyms.h"
 
@@ -1155,8 +1156,7 @@ void wxWindow::PreCreation( wxWindow *parent, wxWindowID id,
       const wxPoint &pos, const wxSize &size,
       long style, const wxString &name )
 {
-    if (m_needParent && (parent == NULL))
-        wxFatalError( "Need complete parent.", name );
+    wxASSERT_MSG( (!m_needParent) || (parent), "Need complete parent." );
 
     m_widget = (GtkWidget*) NULL;
     m_wxwindow = (GtkWidget*) NULL;
@@ -2873,19 +2873,17 @@ void wxWindow::SetConstraintSizes(bool recurse)
 
     wxString winName;
   if (GetName() == "")
-    winName = _("unnamed");
+    winName = "unnamed";
   else
     winName = GetName();
-    wxDebugMsg(_("Constraint(s) not satisfied for window of type %s, name %s:\n"), (const char *)windowClass, (const char *)winName);
-    if (!constr->left.GetDone())
-      wxDebugMsg(_("  unsatisfied 'left' constraint.\n"));
-    if (!constr->right.GetDone())
-      wxDebugMsg(_("  unsatisfied 'right' constraint.\n"));
-    if (!constr->width.GetDone())
-      wxDebugMsg(_("  unsatisfied 'width' constraint.\n"));
-    if (!constr->height.GetDone())
-      wxDebugMsg(_("  unsatisfied 'height' constraint.\n"));
-    wxDebugMsg(_("Please check constraints: try adding AsIs() constraints.\n"));
+    wxLogDebug( "Constraint(s) not satisfied for window of type %s, name %s:\n", 
+                (const char *)windowClass, 
+		(const char *)winName);
+    if (!constr->left.GetDone()) wxLogDebug( "  unsatisfied 'left' constraint.\n" );
+    if (!constr->right.GetDone()) wxLogDebug( "  unsatisfied 'right' constraint.\n" );
+    if (!constr->width.GetDone()) wxLogDebug( "  unsatisfied 'width' constraint.\n" );
+    if (!constr->height.GetDone())  wxLogDebug( "  unsatisfied 'height' constraint.\n" );
+    wxLogDebug( "Please check constraints: try adding AsIs() constraints.\n" );
   }
 
   if (recurse)

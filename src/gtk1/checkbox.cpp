@@ -27,6 +27,13 @@ extern bool   g_blockEventsOnDrag;
 static void gtk_checkbox_clicked_callback( GtkWidget *WXUNUSED(widget), wxCheckBox *cb )
 {
   if (!cb->HasVMT()) return;
+  
+  if (cb->m_blockFirstEvent)
+  {
+    cb->m_blockFirstEvent = FALSE;
+    return;
+  } 
+  
   if (g_blockEventsOnDrag) return;
   
   wxCommandEvent event(wxEVT_COMMAND_CHECKBOX_CLICKED, cb->GetId());
@@ -57,6 +64,8 @@ bool wxCheckBox::Create(  wxWindow *parent, wxWindowID id, const wxString &label
 
   m_widget = gtk_check_button_new_with_label( m_label );
  
+  m_blockFirstEvent = FALSE;
+  
   wxSize newSize = size;
   if (newSize.x == -1) newSize.x = 25+gdk_string_measure( m_widget->style->font, label );
   if (newSize.y == -1) newSize.y = 26;
@@ -91,6 +100,8 @@ void wxCheckBox::SetValue( bool state )
     gtk_toggle_button_set_state( GTK_TOGGLE_BUTTON(m_widget), GTK_STATE_ACTIVE );
   else
     gtk_toggle_button_set_state( GTK_TOGGLE_BUTTON(m_widget), GTK_STATE_NORMAL );
+    
+  m_blockFirstEvent = TRUE;
 }
 
 bool wxCheckBox::GetValue() const

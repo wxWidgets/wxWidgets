@@ -15,6 +15,7 @@
 #include "wx/wx.h"
 #include "wx/module.h"
 #include "wx/thread.h"
+#include "wx/log.h"
 
 wxMutex::wxMutex()
 {
@@ -24,7 +25,7 @@ wxMutex::wxMutex()
 wxMutex::~wxMutex()
 {
   if (m_locked)
-    wxDebugMsg("wxMutex warning: destroying a locked mutex (%d locks)\n", m_locked);
+    wxLogDebug( "wxMutex warning: destroying a locked mutex (%d locks)\n", m_locked );
 }
 
 wxMutexError wxMutex::Lock()

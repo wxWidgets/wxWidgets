@@ -351,9 +351,9 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   (*m_multitext) << " More text.";
 //  m_multitext->SetBackgroundColour("wheat");
   (void)new wxStaticBox( panel, -1, "wxClipboard", wxPoint(345,50), wxSize(160,145) );
-  (void)new wxButton( panel, ID_COPY_TEXT, "Copy text", wxPoint(370,70), wxSize(110,30) );
+  (void)new wxButton( panel, ID_COPY_TEXT, "Copy line 1", wxPoint(370,70), wxSize(110,30) );
   (void)new wxButton( panel, ID_PASTE_TEXT, "Paste text", wxPoint(370,110), wxSize(110,30) );
-  (void)new wxButton( panel, ID_CUT_TEXT, "Cut text", wxPoint(370,150), wxSize(110,30) );
+  (void)new wxButton( panel, ID_CUT_TEXT, "Cut line 1", wxPoint(370,150), wxSize(110,30) );
   m_notebook->AddPage(panel, "wxTextCtrl" , FALSE, Image_Text);
   
   wxString choices2[] =
@@ -428,6 +428,17 @@ void MyPanel::OnPasteFromClipboard( wxCommandEvent &WXUNUSED(event) )
 
 void MyPanel::OnCopyToClipboard( wxCommandEvent &WXUNUSED(event) )
 {
+#ifdef __WXGTK__
+  
+  wxString text( m_multitext->GetLineText(0) );
+
+  if (text.IsEmpty()) return;
+  
+  wxTextDataObject *data = new wxTextDataObject( text );
+  
+  wxTheClipboard->SetData( data );
+
+#endif
 }
 
 void MyPanel::OnCutToClipboard( wxCommandEvent &WXUNUSED(event) )

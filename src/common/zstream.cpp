@@ -18,6 +18,7 @@
 #include <wx/zstream.h>
 #include <wx/utils.h>
 #include <wx/intl.h>
+#include "wx/log.h"
 #include "../zlib/zlib.h"   // don't change this, Robert
 
 #ifdef __BORLANDC__
@@ -127,9 +128,9 @@ wxZlibOutputStream::~wxZlibOutputStream()
   Sync();
 
   err = deflate(m_deflate, Z_FINISH);
-  if (err != Z_STREAM_END) {
-    wxDebugMsg(_("wxZlibOutputStream: an error occured while we was closing "
-               "the stream.\n"));
+  if (err != Z_STREAM_END) 
+  {
+    wxLogDebug( "wxZlibOutputStream: an error occured while closing the stream.\n" );
     return;
   }
 

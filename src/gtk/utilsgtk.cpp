@@ -212,7 +212,7 @@ void wxDebugMsg( const char *format, ... )
   vfprintf( stderr, format, ap );
   fflush( stderr );
   va_end(ap);
-};
+}
 
 void wxError( const wxString &msg, const wxString &title )
 {
@@ -220,7 +220,7 @@ void wxError( const wxString &msg, const wxString &title )
   if (!title.IsNull()) fprintf( stderr, "%s ", WXSTRINGCAST(title) );
   if (!msg.IsNull()) fprintf( stderr, ": %s", WXSTRINGCAST(msg) );
   fprintf( stderr, ".\n" );
-};
+}
 
 void wxFatalError( const wxString &msg, const wxString &title )
 {
@@ -229,7 +229,7 @@ void wxFatalError( const wxString &msg, const wxString &title )
   if (!msg.IsNull()) fprintf( stderr, ": %s", WXSTRINGCAST(msg) );
   fprintf( stderr, ".\n" );
   exit(3); // the same exit code as for abort()
-};
+}
 
 //------------------------------------------------------------------------
 // directory routines
@@ -241,7 +241,7 @@ bool wxDirExists( const wxString& dir )
     strcpy( buf, WXSTRINGCAST(dir) );
     struct stat sbuf;
     return ((stat(buf, &sbuf) != -1) && S_ISDIR(sbuf.st_mode) ? TRUE : FALSE);
-};
+}
 
 //------------------------------------------------------------------------
 // subprocess routines
@@ -280,7 +280,7 @@ static void GTK_EndProcessDetector(gpointer data, gint source,
     delete proc_data;
   else
     proc_data->pid = 0;
-};
+}
 
 long wxExecute( char **argv, bool sync, wxProcess *process )
 {
@@ -351,7 +351,7 @@ long wxExecute( char **argv, bool sync, wxProcess *process )
       //     failed!
       return pid;
     }
-};
+}
 
 long wxExecute( const wxString& command, bool sync, wxProcess *process )
 {
@@ -373,4 +373,4 @@ long wxExecute( const wxString& command, bool sync, wxProcess *process )
     delete [] tmp;
 
     return lRc;
-};
+}

@@ -19,6 +19,7 @@
 #include "wx/thread.h"
 #include "wx/module.h"
 #include "wx/utils.h"
+#include "wx/log.h"
 
 enum thread_state {
   STATE_IDLE = 0,
@@ -63,8 +64,7 @@ wxMutex::wxMutex()
 wxMutex::~wxMutex()
 {
   if (m_locked > 0)
-    wxDebugMsg("wxMutex warning: freeing a locked mutex (%d locks)\n",
-               m_locked);
+    wxLogDebug( "wxMutex warning: freeing a locked mutex (%d locks)\n", m_locked );
 
   pthread_mutex_destroy(&(p_internal->p_mutex));
   delete p_internal;

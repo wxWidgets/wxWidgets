@@ -66,6 +66,7 @@ class wxCheckBox: public wxControl
   
     void ApplyWidgetStyle();    
 
+    bool   m_blockFirstEvent;
 };
 
 #endif // __GTKCHECKBOXH__
