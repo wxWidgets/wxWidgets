@@ -201,7 +201,9 @@ wxHtmlWindow::~wxHtmlWindow()
 #endif // wxUSE_CLIPBOARD
     HistoryClear();
 
-    if (m_Cell) delete m_Cell;
+    delete m_selection;
+
+    delete m_Cell;
 
     if ( m_Processors )
     {
