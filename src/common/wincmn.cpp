@@ -126,7 +126,9 @@ void wxWindowBase::InitBase()
 #else
 	m_font = settings.GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
 #endif
+
     // no style bits
+    m_exStyle =
     m_windowStyle = 0;
 
     // an optimization for the event processing: checking this flag is much
@@ -704,12 +706,19 @@ void wxWindowBase::MakeModal(bool modal)
 bool wxWindowBase::Validate()
 {
 #if wxUSE_VALIDATORS
+    bool recurse = (GetExtraStyle() & wxWS_EX_VALIDATE_RECURSIVELY) != 0;
+
     wxWindowList::Node *node;
     for ( node = m_children.GetFirst(); node; node = node->GetNext() )
     {
         wxWindowBase *child = node->GetData();
         wxValidator *validator = child->GetValidator();
         if ( validator && !validator->Validate((wxWindow *)this) )
+        {
+            return FALSE;
+        }
+
+        if ( recurse && !child->Validate() )
         {
             return FALSE;
         }
@@ -722,6 +731,8 @@ bool wxWindowBase::Validate()
 bool wxWindowBase::TransferDataToWindow()
 {
 #if wxUSE_VALIDATORS
+    bool recurse = (GetExtraStyle() & wxWS_EX_VALIDATE_RECURSIVELY) != 0;
+
     wxWindowList::Node *node;
     for ( node = m_children.GetFirst(); node; node = node->GetNext() )
     {
@@ -729,14 +740,19 @@ bool wxWindowBase::TransferDataToWindow()
         wxValidator *validator = child->GetValidator();
         if ( validator && !validator->TransferToWindow() )
         {
-            wxLog *log = wxLog::GetActiveTarget();
-            if ( log )
-            {
-                wxLogWarning(_("Could not transfer data to window"));
-                log->Flush();
-            }
+            wxLogWarning(_("Could not transfer data to window"));
+            wxLog::FlushActive();
 
             return FALSE;
+        }
+
+        if ( recurse )
+        {
+            if ( !child->TransferToWindow() )
+            {
+                // warning already given
+                return FALSE;
+            }
         }
     }
 #endif // wxUSE_VALIDATORS
@@ -747,14 +763,28 @@ bool wxWindowBase::TransferDataToWindow()
 bool wxWindowBase::TransferDataFromWindow()
 {
 #if wxUSE_VALIDATORS
+    bool recurse = (GetExtraStyle() & wxWS_EX_VALIDATE_RECURSIVELY) != 0;
+
     wxWindowList::Node *node;
     for ( node = m_children.GetFirst(); node; node = node->GetNext() )
     {
         wxWindow *child = node->GetData();
-        if ( child->GetValidator() &&
-             !child->GetValidator()->TransferFromWindow() )
+        wxValidator *validator = child->GetValidator();
+        if ( validator && !validator->TransferFromWindow() )
         {
+            // nop warning here because the application is supposed to give
+            // one itself - we don't know here what might have gone wrongly
+
             return FALSE;
+        }
+
+        if ( recurse )
+        {
+            if ( !child->TransferFromWindow() )
+            {
+                // warning already given
+                return FALSE;
+            }
         }
     }
 #endif // wxUSE_VALIDATORS

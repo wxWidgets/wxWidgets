@@ -842,20 +842,20 @@ enum wxStretch
 #define wxTRANSPARENT_WINDOW    0x00100000
 #define wxNO_BORDER             0x00200000
 
+// Override CTL3D etc. control colour processing to allow own background
+// colour.
+// OBSOLETE - use wxNO_3D instead
 #define wxUSER_COLOURS          0x00800000
-                                 // Override CTL3D etc. control colour processing to
-                                 // allow own background colour
-                                 // OBSOLETE - use wxNO_3D instead
+// Override CTL3D or native 3D styles for children
 #define wxNO_3D                 0x00800000
-                                 // Override CTL3D or native 3D styles for children
-#define wxCLIP_CHILDREN         0x00400000
-                                 // Clip children when painting, which reduces flicker in
-                                 // e.g. frames and splitter windows, but can't be used in
-                                 // a panel where a static box must be 'transparent' (panel
-                                 // paints the background for it)
 
-// Add this style to a panel to get tab traversal working
-// outside of dialogs.
+// Clip children when painting, which reduces flicker in e.g. frames and
+// splitter windows, but can't be used in a panel where a static box must be
+// 'transparent' (panel paints the background for it)
+#define wxCLIP_CHILDREN         0x00400000
+
+// Add this style to a panel to get tab traversal working outside of dialogs
+// (on by default for wxPanel, wxDialog, wxScrolledWindow)
 #define wxTAB_TRAVERSAL         0x00080000
 
 // Add this style if the control wants to get all keyboard messages (under
@@ -869,6 +869,17 @@ enum wxStretch
 // don't invalidate the whole window (resulting in a PAINT event) when the
 // window is resized (currently, makes sense for wxMSW only)
 #define wxNO_FULL_REPAINT_ON_RESIZE 0x00010000
+
+/*
+ * Extra window style flags (use wxWS_EX prefix to make it clear that they
+ * should be passed to wxWindow::SetExtraStyle(), not SetWindowStyle())
+ */
+
+// by default, TransferDataTo/FromWindow() only work on direct children of the
+// window (compatible behaviour), set this flag to make them recursively
+// descend into all subwindows
+#define wxWS_EX_VALIDATE_RECURSIVELY    0x00000001
+
 /*
  * wxFrame/wxDialog style flags
  */

@@ -536,6 +536,12 @@ own event handler.
 \helpref{wxEvtHandler::ProcessEvent}{wxevthandlerprocessevent},\rtfsp
 \helpref{wxEvtHandler}{wxevthandler}\rtfsp
 
+\membersection{wxWindow::GetExtraStyle}\label{wxwindowgetextrastyle}
+
+\constfunc{long}{GetExtraStyle}{\void}
+
+Returns the extra style bits for the window.
+
 \membersection{wxWindow::GetFont}\label{wxwindowgetfont}
 
 \constfunc{wxFont\&}{GetFont}{\void}
@@ -773,12 +779,12 @@ only be called within an \helpref{OnPaint}{wxwindowonpaint} event handler.
 
 Returns a pointer to the current validator for the window, or NULL if there is none.
 
-\membersection{wxWindow::GetWindowStyleFlag}
+\membersection{wxWindow::GetWindowStyleFlag}\label{wxwindowgetwindowstyleflag}
 
 \constfunc{long}{GetWindowStyleFlag}{\void}
 
-Gets the window style that was passed to the consructor or {\bf Create} member.
-{\bf GetWindowStyle} is synonymous.
+Gets the window style that was passed to the constructor or {\bf Create}
+method. {\bf GetWindowStyle()} is another name for the same function.
 
 \membersection{wxWindow::InitDialog}\label{wxwindowinitdialog}
 
@@ -1883,6 +1889,20 @@ If the window already has a drop target, it is deleted.
 \helpref{wxWindow::GetDropTarget}{wxwindowgetdroptarget},
 \helpref{Drag and drop overview}{wxdndoverview}
 
+\membersection{wxWindow::SetExtraStyle}\label{wxwindowsetextrastyle}
+
+\func{void}{SetExtraStyle}{\param{long }{exStyle}}
+
+Sets the extra style bits for the window. The currently defined extra style
+bits are:
+
+\twocolwidtha{5cm}%
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxWS\_EX\_VALIDATE\_RECURSIVELY}}{TransferDataTo/FromWindow()
+and Validate() methods will recursively descend into all children of the
+window if it has this style flag set.}
+\end{twocollist}
+
 \membersection{wxWindow::SetFocus}\label{wxwindowsetfocus}
 
 \func{virtual void}{SetFocus}{\void}
@@ -2253,6 +2273,30 @@ Sets the window's title. Applicable only to frames and dialogs.
 Deletes the current validator (if any) and sets the window validator, having called wxValidator::Clone to
 create a new validator of this type.
 
+\membersection{wxWindow::SetWindowStyleFlag}\label{wxwindowsetwindowstyleflag}
+
+\func{virtual void}{SetWindowStyleFlag}{\param{long}{ style}}
+
+\membersection{wxWindow::SetWindowStyle}\label{wxwindowsetwindowstyle}
+
+\func{void}{SetWindowStyle}{\param{long}{ style}}
+
+Identical to \helpref{SetWindowStyleFlag}{wxwindowsetwindowstyleflag}.
+
+\membersection{wxWindow::SetWindowStyleFlag}\label{wxwindowsetwindowstyleflag}
+
+\func{virtual void}{SetWindowStyleFlag}{\param{long}{ style}}
+
+Sets the style of the window. Please note that some styles cannot be changed
+after the window creation and that \helpref{Refresh()}{wxwindowrefresh} might
+be called after changing the others for the change to take place immediately.
+
+See \helpref{Windowstyles}{windowstyles} for more information about flags.
+
+\wxheading{See also}
+
+\helpref{GetWindowStyleFlag}{wxwindowgetwindowstyleflag}
+
 \membersection{wxWindow::Show}\label{wxwindowshow}
 
 \func{virtual bool}{Show}{\param{bool}{ show}}
@@ -2275,6 +2319,9 @@ hides the window.}
 Transfers values from child controls to data areas specified by their validators. Returns
 FALSE if a transfer failed.
 
+If the window has {\tt wxWS\_EX\_VALIDATE\_RECURSIVELY} extra style flag set,
+the method will also call TransferDataFromWindow() of all child windows.
+
 \wxheading{See also}
 
 \helpref{wxWindow::TransferDataToWindow}{wxwindowtransferdatatowindow},\rtfsp
@@ -2285,6 +2332,9 @@ FALSE if a transfer failed.
 \func{virtual bool}{TransferDataToWindow}{\void}
 
 Transfers values to child controls from data areas specified by their validators.
+
+If the window has {\tt wxWS\_EX\_VALIDATE\_RECURSIVELY} extra style flag set,
+the method will also call TransferDataToWindow() of all child windows.
 
 \wxheading{Return value}
 
@@ -2300,6 +2350,9 @@ Returns FALSE if a transfer failed.
 \func{virtual bool}{Validate}{\void}
 
 Validates the current values of the child controls using their validators.
+
+If the window has {\tt wxWS\_EX\_VALIDATE\_RECURSIVELY} extra style flag set,
+the method will also call Validate() of all child windows.
 
 \wxheading{Return value}
 

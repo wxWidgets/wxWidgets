@@ -1,42 +1,41 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        scrolwin.cpp
+// Name:        generic/scrolwin.cpp
 // Purpose:     wxScrolledWindow implementation
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:           wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
 #ifdef __GNUG__
-#pragma implementation
-#pragma implementation "scrolwin.h"
+    #pragma implementation "scrolwin.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
 #include "wx/utils.h"
 #include "wx/dcclient.h"
-
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 #include "wx/generic/scrolwin.h"
 #include "wx/panel.h"
 
-BEGIN_EVENT_TABLE(wxScrolledWindow, wxPanel)
-    EVT_SCROLLWIN(wxScrolledWindow::OnScroll)
-    EVT_SIZE(wxScrolledWindow::OnSize)
-    EVT_PAINT(wxScrolledWindow::OnPaint)
-END_EVENT_TABLE()
-
-IMPLEMENT_DYNAMIC_CLASS(wxScrolledWindow, wxPanel)
-
 #ifdef __WXMSW__
-#include "windows.h"
+    #include "windows.h"
 #endif
 
 #ifdef __WXMOTIF__
@@ -50,6 +49,27 @@ IMPLEMENT_DYNAMIC_CLASS(wxScrolledWindow, wxPanel)
 # pragma message enable nosimpint
 #endif
 #endif
+
+// ----------------------------------------------------------------------------
+// event tables
+// ----------------------------------------------------------------------------
+
+BEGIN_EVENT_TABLE(wxScrolledWindow, wxPanel)
+    EVT_SCROLLWIN(wxScrolledWindow::OnScroll)
+    EVT_SIZE(wxScrolledWindow::OnSize)
+    EVT_PAINT(wxScrolledWindow::OnPaint)
+    EVT_KEY_DOWN(wxScrolledWindow::OnKeyDown)
+END_EVENT_TABLE()
+
+IMPLEMENT_DYNAMIC_CLASS(wxScrolledWindow, wxPanel)
+
+// ============================================================================
+// implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxScrolledWindow creation
+// ----------------------------------------------------------------------------
 
 wxScrolledWindow::wxScrolledWindow()
 {
@@ -67,11 +87,12 @@ wxScrolledWindow::wxScrolledWindow()
     m_scaleY = 1.0;
 }
 
-bool wxScrolledWindow::Create(wxWindow *parent, wxWindowID id,
-           const wxPoint& pos,
-           const wxSize& size,
-           long style,
-           const wxString& name)
+bool wxScrolledWindow::Create(wxWindow *parent,
+                              wxWindowID id,
+                              const wxPoint& pos,
+                              const wxSize& size,
+                              long style,
+                              const wxString& name)
 {
     m_xScrollPixelsPerLine = 0;
     m_yScrollPixelsPerLine = 0;
@@ -91,13 +112,21 @@ bool wxScrolledWindow::Create(wxWindow *parent, wxWindowID id,
     return wxPanel::Create(parent, id, pos, size, style, name);
 }
 
+wxScrolledWindow::~wxScrolledWindow()
+{
+}
+
+// ----------------------------------------------------------------------------
+// setting scrolling parameters
+// ----------------------------------------------------------------------------
+
 /*
  * pixelsPerUnitX/pixelsPerUnitY: number of pixels per unit (e.g. pixels per text line)
  * noUnitsX/noUnitsY:        : no. units per scrollbar
  */
 void wxScrolledWindow::SetScrollbars (int pixelsPerUnitX, int pixelsPerUnitY,
-	       int noUnitsX, int noUnitsY,
-	       int xPos, int yPos, bool noRefresh )
+               int noUnitsX, int noUnitsY,
+               int xPos, int yPos, bool noRefresh )
 {
     bool do_refresh =
     (
@@ -146,10 +175,10 @@ void wxScrolledWindow::SetScrollbars (int pixelsPerUnitX, int pixelsPerUnitY,
             m_pixmapHeight = totalPixelHeight;
             m_backingPixmap = (WXPixmap) XCreatePixmap (dpy, RootWindow (dpy, DefaultScreen (dpy)),
             m_pixmapWidth, m_pixmapHeight, depth);
-	}
+        }
 
     }
-#endif
+#endif // Motif
       
     AdjustScrollbars();
    
@@ -167,13 +196,13 @@ void wxScrolledWindow::SetScrollbars (int pixelsPerUnitX, int pixelsPerUnitY,
     // UpdateWindow ((HWND) m_targetWindow->GetHWND());
 #endif
 #ifdef __WXMAC__
-		m_targetWindow->MacUpdateImmediately() ;
+    m_targetWindow->MacUpdateImmediately() ;
 #endif
 }
 
-wxScrolledWindow::~wxScrolledWindow()
-{
-}
+// ----------------------------------------------------------------------------
+// target window handling
+// ----------------------------------------------------------------------------
 
 void wxScrolledWindow::SetTargetWindow( wxWindow *target )
 {
@@ -185,6 +214,10 @@ wxWindow *wxScrolledWindow::GetTargetWindow()
 {
     return m_targetWindow;
 }
+
+// ----------------------------------------------------------------------------
+// scrolling implementation itself
+// ----------------------------------------------------------------------------
 
 void wxScrolledWindow::OnScroll(wxScrollWinEvent& event)
 {
@@ -228,7 +261,7 @@ void wxScrolledWindow::OnScroll(wxScrollWinEvent& event)
             m_targetWindow->Refresh();
   }
 #ifdef __WXMAC__
-	m_targetWindow->MacUpdateImmediately() ;
+    m_targetWindow->MacUpdateImmediately() ;
 #endif
 }
 
@@ -306,12 +339,12 @@ int wxScrolledWindow::CalcScrollInc(wxScrollWinEvent& event)
             int nMaxWidth = m_xScrollLines*m_xScrollPixelsPerLine;
             int noPositions = (int) ( ((nMaxWidth - w)/(double)m_xScrollPixelsPerLine) + 0.5 );
             if (noPositions < 0)
-	        noPositions = 0;
+                noPositions = 0;
 
             if ( (m_xScrollPosition + nScrollInc) < 0 )
-	        nScrollInc = -m_xScrollPosition; // As -ve as we can go
+                nScrollInc = -m_xScrollPosition; // As -ve as we can go
             else if ( (m_xScrollPosition + nScrollInc) > noPositions )
-	        nScrollInc = noPositions - m_xScrollPosition; // As +ve as we can go
+                nScrollInc = noPositions - m_xScrollPosition; // As +ve as we can go
         }
         else
             m_targetWindow->Refresh();
@@ -319,19 +352,19 @@ int wxScrolledWindow::CalcScrollInc(wxScrollWinEvent& event)
     else
     {
         if (m_yScrollPixelsPerLine > 0) 
-	{
+        {
             int w, h;
             m_targetWindow->GetClientSize(&w, &h);
       
             int nMaxHeight = m_yScrollLines*m_yScrollPixelsPerLine;
             int noPositions = (int) ( ((nMaxHeight - h)/(double)m_yScrollPixelsPerLine) + 0.5 );
             if (noPositions < 0)
-	        noPositions = 0;
+                noPositions = 0;
       
             if ( (m_yScrollPosition + nScrollInc) < 0 )
-	        nScrollInc = -m_yScrollPosition; // As -ve as we can go
+                nScrollInc = -m_yScrollPosition; // As -ve as we can go
             else if ( (m_yScrollPosition + nScrollInc) > noPositions )
-	        nScrollInc = noPositions - m_yScrollPosition; // As +ve as we can go
+                nScrollInc = noPositions - m_yScrollPosition; // As +ve as we can go
         }
         else
             m_targetWindow->Refresh();
@@ -351,14 +384,14 @@ void wxScrolledWindow::AdjustScrollbars()
 
     if (m_xScrollLines > 0)
     {
-	    // Calculate page size i.e. number of scroll units you get on the
-	    // current client window
+            // Calculate page size i.e. number of scroll units you get on the
+            // current client window
         int noPagePositions = (int) ( (w/(double)m_xScrollPixelsPerLine) + 0.5 );
         if (noPagePositions < 1) noPagePositions = 1;
 
         // Correct position if greater than extent of canvas minus
-	    // the visible portion of it or if below zero
-	    m_xScrollPosition = wxMin( m_xScrollLines-noPagePositions, m_xScrollPosition);
+            // the visible portion of it or if below zero
+            m_xScrollPosition = wxMin( m_xScrollLines-noPagePositions, m_xScrollPosition);
         m_xScrollPosition = wxMax( 0, m_xScrollPosition );
 
         SetScrollbar(wxHORIZONTAL, m_xScrollPosition, noPagePositions, m_xScrollLines);
@@ -373,13 +406,13 @@ void wxScrolledWindow::AdjustScrollbars()
     
     if (m_yScrollLines > 0)
     {
-	    // Calculate page size i.e. number of scroll units you get on the
-	    // current client window
+            // Calculate page size i.e. number of scroll units you get on the
+            // current client window
         int noPagePositions = (int) ( (h/(double)m_yScrollPixelsPerLine) + 0.5 );
         if (noPagePositions < 1) noPagePositions = 1;
 
         // Correct position if greater than extent of canvas minus
-	    // the visible portion of it or if below zero
+            // the visible portion of it or if below zero
         m_yScrollPosition = wxMin( m_yScrollLines-noPagePositions, m_yScrollPosition );
         m_yScrollPosition = wxMax( 0, m_yScrollPosition );
 
@@ -408,26 +441,6 @@ void wxScrolledWindow::AdjustScrollbars()
         else
             m_targetWindow->Refresh();
     }
-}
-
-// Default OnSize resets scrollbars, if any
-void wxScrolledWindow::OnSize(wxSizeEvent& WXUNUSED(event))
-{
-#if wxUSE_CONSTRAINTS
-    if (GetAutoLayout()) Layout();
-#endif
-
-    AdjustScrollbars();
-}
-
-// This calls OnDraw, having adjusted the origin according to the current
-// scroll position
-void wxScrolledWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
-{
-    wxPaintDC dc(this);
-    PrepareDC(dc);
-
-    OnDraw(dc);
 }
 
 // Override this function if you don't want to have wxScrolledWindow
@@ -495,43 +508,43 @@ void wxScrolledWindow::Scroll( int x_pos, int y_pos )
         int old_x = m_xScrollPosition;
         m_xScrollPosition = x_pos;
     
-	    // Calculate page size i.e. number of scroll units you get on the
-	    // current client window
+            // Calculate page size i.e. number of scroll units you get on the
+            // current client window
         int noPagePositions = (int) ( (w/(double)m_xScrollPixelsPerLine) + 0.5 );
         if (noPagePositions < 1) noPagePositions = 1;
 
         // Correct position if greater than extent of canvas minus
-	    // the visible portion of it or if below zero
+            // the visible portion of it or if below zero
         m_xScrollPosition = wxMin( m_xScrollLines-noPagePositions, m_xScrollPosition );
         m_xScrollPosition = wxMax( 0, m_xScrollPosition );
       
         m_targetWindow->SetScrollPos( wxHORIZONTAL, m_xScrollPosition, TRUE );
-	
-	    m_targetWindow->ScrollWindow( (old_x-m_xScrollPosition)*m_xScrollPixelsPerLine, 0 );
+        
+            m_targetWindow->ScrollWindow( (old_x-m_xScrollPosition)*m_xScrollPixelsPerLine, 0 );
     }
     if (y_pos != -1)
     {
         int old_y = m_yScrollPosition;
         m_yScrollPosition = y_pos;
-	
-	    // Calculate page size i.e. number of scroll units you get on the
-	    // current client window
+        
+            // Calculate page size i.e. number of scroll units you get on the
+            // current client window
         int noPagePositions = (int) ( (h/(double)m_yScrollPixelsPerLine) + 0.5 );
         if (noPagePositions < 1) noPagePositions = 1;
 
         // Correct position if greater than extent of canvas minus
-	    // the visible portion of it or if below zero
+            // the visible portion of it or if below zero
         m_yScrollPosition = wxMin( m_yScrollLines-noPagePositions, m_yScrollPosition );
         m_yScrollPosition = wxMax( 0, m_yScrollPosition );
-	
+        
         m_targetWindow->SetScrollPos( wxVERTICAL, m_yScrollPosition, TRUE );
-	
-	    m_targetWindow->ScrollWindow( 0, (old_y-m_yScrollPosition)*m_yScrollPixelsPerLine );
+        
+        m_targetWindow->ScrollWindow( 0, (old_y-m_yScrollPosition)*m_yScrollPixelsPerLine );
     }
     
     
 #ifdef __WXMAC__
-		m_targetWindow->MacUpdateImmediately() ;
+    m_targetWindow->MacUpdateImmediately() ;
 #endif
 }
 
@@ -572,4 +585,90 @@ void wxScrolledWindow::CalcUnscrolledPosition(int x, int y, int *xx, int *yy) co
         *xx = x + m_xScrollPosition * m_xScrollPixelsPerLine;
     if ( yy )
         *yy = y + m_yScrollPosition * m_yScrollPixelsPerLine;
+}
+
+// ----------------------------------------------------------------------------
+// event handlers
+// ----------------------------------------------------------------------------
+
+// Default OnSize resets scrollbars, if any
+void wxScrolledWindow::OnSize(wxSizeEvent& WXUNUSED(event))
+{
+#if wxUSE_CONSTRAINTS
+    if (GetAutoLayout())
+        Layout();
+#endif
+
+    AdjustScrollbars();
+}
+
+// This calls OnDraw, having adjusted the origin according to the current
+// scroll position
+void wxScrolledWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
+{
+    wxPaintDC dc(this);
+    PrepareDC(dc);
+
+    OnDraw(dc);
+}
+
+// kbd handling
+void wxScrolledWindow::OnKeyDown(wxKeyEvent& event)
+{
+    int stx, sty,       // view origin
+        szx, szy,       // view size (total)
+        clix, cliy;     // view size (on screen)
+
+    ViewStart(&stx, &sty);
+    GetClientSize(&clix, &cliy);
+    clix /= m_xScrollPixelsPerLine;
+    cliy /= m_yScrollPixelsPerLine;
+    GetVirtualSize(&szx, &szy);
+    szx /= m_xScrollPixelsPerLine;
+    szy /= m_yScrollPixelsPerLine;
+
+    switch ( event.KeyCode() )
+    {
+        case WXK_PAGEUP:
+        case WXK_PRIOR:
+            Scroll(-1, sty - (5 * cliy / 6));
+            break;
+
+        case WXK_PAGEDOWN:
+        case WXK_NEXT:
+            Scroll(-1, sty + (5 * cliy / 6));
+            break;
+
+        // notice that handling of Ctrl-Home/End is asymmetrical: Home goes to
+        // the beginning of the current line, Ctrl-Home returns to the origin
+        // while End goes to the bottom without changing horizontal position
+        // and only Ctrl-End does go to the most rightmost position as well
+        case WXK_HOME:
+            Scroll(0, event.ControlDown() ? 0 : -1);
+            break;
+
+        case WXK_END:
+            Scroll(event.ControlDown() ? szx - clix : -1, szy - cliy);
+            break;
+
+        case WXK_UP:
+            Scroll(-1, sty - 1);
+            break;
+
+        case WXK_DOWN:
+            Scroll(-1, sty + 1);
+            break;
+
+        case WXK_LEFT:
+            Scroll(stx - 1, -1);
+            break;
+
+        case WXK_RIGHT:
+            Scroll(stx + 1, -1);
+            break;
+
+        default:
+            // not for us
+            event.Skip();
+    }
 }

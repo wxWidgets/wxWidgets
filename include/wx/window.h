@@ -315,9 +315,12 @@ public:
     long GetWindowStyle() const { return GetWindowStyleFlag(); }
 
     bool HasFlag(int flag) const { return (m_windowStyle & flag) != 0; }
+    virtual bool IsRetained() const { return HasFlag(wxRETAINED); }
 
-    virtual bool IsRetained() const
-        { return (m_windowStyle & wxRETAINED) != 0; }
+        // extra style: the less often used style bits which can't be set with
+        // SetWindowStyleFlag()
+    void SetExtraStyle(long exStyle) { m_exStyle = exStyle; }
+    long GetExtraStyle() const { return m_exStyle; }
 
         // make the window modal (all other windows unresponsive)
     virtual void MakeModal(bool modal = TRUE);
@@ -739,7 +742,8 @@ protected:
     bool                 m_isBeingDeleted:1;
 
     // window attributes
-    long                 m_windowStyle;
+    long                 m_windowStyle,
+                         m_exStyle;
     wxString             m_windowName;
 
 protected:
