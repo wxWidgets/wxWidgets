@@ -9,9 +9,9 @@ class wxGDIObjectPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,gdic=gdic):
-        if self.thisown == 1 :
-            gdic.delete_wxGDIObject(self)
+    def __del__(self, delfunc=gdic.delete_wxGDIObject):
+        if self.thisown == 1:
+            delfunc(self)
     def GetVisible(self, *_args, **_kwargs):
         val = apply(gdic.wxGDIObject_GetVisible,(self,) + _args, _kwargs)
         return val
@@ -35,9 +35,9 @@ class wxBitmapPtr(wxGDIObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,gdic=gdic):
-        if self.thisown == 1 :
-            gdic.delete_wxBitmap(self)
+    def __del__(self, delfunc=gdic.delete_wxBitmap):
+        if self.thisown == 1:
+            delfunc(self)
     def GetPalette(self, *_args, **_kwargs):
         val = apply(gdic.wxBitmap_GetPalette,(self,) + _args, _kwargs)
         if val: val = wxPalettePtr(val) 
@@ -86,13 +86,10 @@ class wxBitmapPtr(wxGDIObjectPtr):
     def __repr__(self):
         return "<C wxBitmap instance at %s>" % (self.this,)
     
-    def __del__(self,gdic=gdic):
-        try:
-            if self.thisown == 1 :
-                gdic.delete_wxBitmap(self)
-        except:
-            pass
-
+    def SetMaskColour(self, colour):
+        mask = wxMaskColour(self, colour)
+        self.SetMask(mask)
+    
 class wxBitmap(wxBitmapPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(gdic.new_wxBitmap,_args,_kwargs)
@@ -122,9 +119,9 @@ class wxIconPtr(wxGDIObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,gdic=gdic):
-        if self.thisown == 1 :
-            gdic.delete_wxIcon(self)
+    def __del__(self, delfunc=gdic.delete_wxIcon):
+        if self.thisown == 1:
+            delfunc(self)
     def LoadFile(self, *_args, **_kwargs):
         val = apply(gdic.wxIcon_LoadFile,(self,) + _args, _kwargs)
         return val
@@ -154,14 +151,6 @@ class wxIconPtr(wxGDIObjectPtr):
         return val
     def __repr__(self):
         return "<C wxIcon instance at %s>" % (self.this,)
-    
-    def __del__(self,gdic=gdic):
-        try:
-            if self.thisown == 1 :
-                gdic.delete_wxIcon(self)
-        except:
-            pass
-
 class wxIcon(wxIconPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(gdic.new_wxIcon,_args,_kwargs)
@@ -174,9 +163,9 @@ class wxIconBundlePtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,gdic=gdic):
-        if self.thisown == 1 :
-            gdic.delete_wxIconBundle(self)
+    def __del__(self, delfunc=gdic.delete_wxIconBundle):
+        if self.thisown == 1:
+            delfunc(self)
     def AddIcon(self, *_args, **_kwargs):
         val = apply(gdic.wxIconBundle_AddIcon,(self,) + _args, _kwargs)
         return val
@@ -211,9 +200,9 @@ class wxCursorPtr(wxGDIObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,gdic=gdic):
-        if self.thisown == 1 :
-            gdic.delete_wxCursor(self)
+    def __del__(self, delfunc=gdic.delete_wxCursor):
+        if self.thisown == 1:
+            delfunc(self)
     def Ok(self, *_args, **_kwargs):
         val = apply(gdic.wxCursor_Ok,(self,) + _args, _kwargs)
         return val
@@ -230,9 +219,9 @@ class wxColourPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,gdic=gdic):
-        if self.thisown == 1 :
-            gdic.delete_wxColour(self)
+    def __del__(self, delfunc=gdic.delete_wxColour):
+        if self.thisown == 1:
+            delfunc(self)
     def Red(self, *_args, **_kwargs):
         val = apply(gdic.wxColour_Red,(self,) + _args, _kwargs)
         return val
@@ -302,9 +291,9 @@ class wxPenPtr(wxGDIObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,gdic=gdic):
-        if self.thisown == 1 :
-            gdic.delete_wxPen(self)
+    def __del__(self, delfunc=gdic.delete_wxPen):
+        if self.thisown == 1:
+            delfunc(self)
     def GetCap(self, *_args, **_kwargs):
         val = apply(gdic.wxPen_GetCap,(self,) + _args, _kwargs)
         return val
@@ -359,9 +348,9 @@ class wxPyPenPtr(wxPenPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,gdic=gdic):
-        if self.thisown == 1 :
-            gdic.delete_wxPyPen(self)
+    def __del__(self, delfunc=gdic.delete_wxPyPen):
+        if self.thisown == 1:
+            delfunc(self)
     def SetDashes(self, *_args, **_kwargs):
         val = apply(gdic.wxPyPen_SetDashes,(self,) + _args, _kwargs)
         return val
@@ -405,9 +394,9 @@ class wxBrushPtr(wxGDIObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,gdic=gdic):
-        if self.thisown == 1 :
-            gdic.delete_wxBrush(self)
+    def __del__(self, delfunc=gdic.delete_wxBrush):
+        if self.thisown == 1:
+            delfunc(self)
     def GetColour(self, *_args, **_kwargs):
         val = apply(gdic.wxBrush_GetColour,(self,) + _args, _kwargs)
         if val: val = wxColourPtr(val) ; val.thisown = 1
@@ -471,9 +460,9 @@ class wxDCPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,gdic=gdic):
-        if self.thisown == 1 :
-            gdic.delete_wxDC(self)
+    def __del__(self, delfunc=gdic.delete_wxDC):
+        if self.thisown == 1:
+            delfunc(self)
     def BeginDrawing(self, *_args, **_kwargs):
         val = apply(gdic.wxDC_BeginDrawing,(self,) + _args, _kwargs)
         return val
@@ -916,9 +905,9 @@ class wxPalettePtr(wxGDIObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,gdic=gdic):
-        if self.thisown == 1 :
-            gdic.delete_wxPalette(self)
+    def __del__(self, delfunc=gdic.delete_wxPalette):
+        if self.thisown == 1:
+            delfunc(self)
     def GetPixel(self, *_args, **_kwargs):
         val = apply(gdic.wxPalette_GetPixel,(self,) + _args, _kwargs)
         return val
@@ -942,9 +931,9 @@ class wxImageListPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,gdic=gdic):
-        if self.thisown == 1 :
-            gdic.delete_wxImageList(self)
+    def __del__(self, delfunc=gdic.delete_wxImageList):
+        if self.thisown == 1:
+            delfunc(self)
     def Add(self, *_args, **_kwargs):
         val = apply(gdic.wxImageList_Add,(self,) + _args, _kwargs)
         return val
@@ -986,9 +975,9 @@ class wxRegionPtr(wxGDIObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,gdic=gdic):
-        if self.thisown == 1 :
-            gdic.delete_wxRegion(self)
+    def __del__(self, delfunc=gdic.delete_wxRegion):
+        if self.thisown == 1:
+            delfunc(self)
     def Clear(self, *_args, **_kwargs):
         val = apply(gdic.wxRegion_Clear,(self,) + _args, _kwargs)
         return val
@@ -1069,9 +1058,9 @@ class wxRegionIteratorPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,gdic=gdic):
-        if self.thisown == 1 :
-            gdic.delete_wxRegionIterator(self)
+    def __del__(self, delfunc=gdic.delete_wxRegionIterator):
+        if self.thisown == 1:
+            delfunc(self)
     def GetX(self, *_args, **_kwargs):
         val = apply(gdic.wxRegionIterator_GetX,(self,) + _args, _kwargs)
         return val

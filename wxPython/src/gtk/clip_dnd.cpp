@@ -203,15 +203,17 @@ void wxPyBitmapDataObject::SetBitmap(const wxBitmap& bitmap) {
 class wxPyDropSource : public wxDropSource {
 public:
 #ifdef __WXMSW__
-    wxPyDropSource(wxWindow *win = NULL,
-                   const wxCursor &cursorCopy = wxNullCursor,
-                   const wxCursor &cursorMove = wxNullCursor,
-                   const wxCursor &cursorStop = wxNullCursor)
-        : wxDropSource(win, cursorCopy, cursorMove, cursorStop) {}
+     wxPyDropSource(wxWindow *win = NULL,
+                    const wxCursor &copy = wxNullCursor,
+                    const wxCursor &move = wxNullCursor,
+                    const wxCursor &none = wxNullCursor)
+         : wxDropSource(win, copy, move, none) {}
 #else
     wxPyDropSource(wxWindow *win = NULL,
-                   const wxIcon &go = wxNullIcon)
-        : wxDropSource(win, go) {}
+                   const wxIcon& copy = wxNullIcon,
+                   const wxIcon& move = wxNullIcon,
+                   const wxIcon& none = wxNullIcon)
+        : wxDropSource(win, copy, move, none) {}
 #endif
     ~wxPyDropSource() { }
 
@@ -2344,19 +2346,23 @@ static PyObject *_wrap_wxClipboard_UsePrimarySelection(PyObject *self, PyObject 
     return _resultobj;
 }
 
-#define new_wxDropSource(_swigarg0,_swigarg1) (new wxPyDropSource(_swigarg0,_swigarg1))
+#define new_wxDropSource(_swigarg0,_swigarg1,_swigarg2,_swigarg3) (new wxPyDropSource(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
 static PyObject *_wrap_new_wxDropSource(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyDropSource * _result;
     wxWindow * _arg0 = (wxWindow *) NULL;
     wxIcon * _arg1 = (wxIcon *) &wxNullIcon;
+    wxIcon * _arg2 = (wxIcon *) &wxNullIcon;
+    wxIcon * _arg3 = (wxIcon *) &wxNullIcon;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
-    char *_kwnames[] = { "win","go", NULL };
+    PyObject * _argo2 = 0;
+    PyObject * _argo3 = 0;
+    char *_kwnames[] = { "win","copy","move","none", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|OO:new_wxDropSource",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|OOOO:new_wxDropSource",_kwnames,&_argo0,&_argo1,&_argo2,&_argo3)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2371,9 +2377,21 @@ static PyObject *_wrap_new_wxDropSource(PyObject *self, PyObject *args, PyObject
         return NULL;
         }
     }
+    if (_argo2) {
+        if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxIcon_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of new_wxDropSource. Expected _wxIcon_p.");
+        return NULL;
+        }
+    }
+    if (_argo3) {
+        if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxIcon_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of new_wxDropSource. Expected _wxIcon_p.");
+        return NULL;
+        }
+    }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxPyDropSource *)new_wxDropSource(_arg0,*_arg1);
+    _result = (wxPyDropSource *)new_wxDropSource(_arg0,*_arg1,*_arg2,*_arg3);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
