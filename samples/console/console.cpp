@@ -84,7 +84,7 @@
     #define TEST_WCHAR
     #define TEST_ZIP
 #else // #if TEST_ALL
-    #define TEST_STDPATHS
+    #define TEST_DLLLOADER
 #endif
 
 // some tests are interactive, define this to run them
@@ -382,7 +382,7 @@ static void TestDllLoad()
     static const wxChar *FUNC_NAME = _T("lstrlenA");
 #elif defined(__UNIX__)
     // weird: using just libc.so does *not* work!
-    static const wxChar *LIB_NAME = _T("/lib/libc-2.0.7.so");
+    static const wxChar *LIB_NAME = _T("/lib/libc.so.6");
     static const wxChar *FUNC_NAME = _T("strlen");
 #else
     #error "don't know how to test wxDllLoader on this platform"
@@ -406,6 +406,9 @@ static void TestDllLoad()
         }
         else
         {
+            wxPrintf(_T("Calling %s dynamically loaded from %s "),
+                     FUNC_NAME, LIB_NAME);
+
             if ( pfnStrlen("foo") != 3 )
             {
                 wxPrintf(_T("ERROR: loaded function is not wxStrlen()!\n"));
