@@ -332,6 +332,17 @@ case "${host}" in
     AC_DEFINE(TARGET_CARBON)
     DEFAULT_DEFAULT_wxUSE_MAC=1
   ;;
+  powerpc-apple-macos* )
+    dnl Classic Mac OS (< X)
+    USE_UNIX=0
+    dnl For some reason the test that should be cross-compiler capable fails
+    dnl However, there is no doubt that MacOS PowerPC is big endian.
+    ac_cv_c_bigendian=yes
+    SO_SUFFIX=shlib
+    dnl AC_DEFINE(TARGET_CARBON)
+    dnl platform.h needs TARGET_CARBON before setup.h, we'll add it to CPPFLAGS
+    DEFAULT_DEFAULT_wxUSE_MAC=1
+  ;;
 
   *-*-beos* )
     dnl leave USE_UNIX on - BeOS is sufficiently Unix-like for this
@@ -1314,7 +1325,7 @@ AC_CACHE_SAVE
 dnl cross-compiling support: we're cross compiling if the build system is
 dnl different from the target one (assume host and target be always the same)
 if test "$build" != "$host" ; then
-    if test "$USE_WIN32" = 1 -o "$USE_DOS" = 1 -o "$USE_UNIX"; then
+    if test "$USE_WIN32" = 1 -o "$USE_DOS" = 1 -o "$USE_UNIX" = 1; then
         CC=$host_alias-gcc
         CXX=$host_alias-c++
         AR=$host_alias-ar
@@ -1322,6 +1333,8 @@ if test "$build" != "$host" ; then
         DLLTOOL=$host_alias-dlltool
         RESCOMP=$host_alias-windres
         STRIP=$host_alias-strip
+    elif test "x$CC" '!=' "x"; then
+        echo "You set CC, I assume you know what you are doing."
     else
         AC_MSG_ERROR($build_alias -> $host_alias cross compilation not supported yet.)
     fi
@@ -2984,7 +2997,12 @@ equivalent variable and GTK+ is version 1.2.3 or above.
             AC_MSG_RESULT([none])
         fi
 
-        CPPFLAGS="$CPPFLAGS $CPPFLAGS_PASCAL -I\${top_srcdir}/src/mac/carbon/morefilex -I/Developer/Headers/FlatCarbon"
+        if test "x$wxUSE_UNIX" = "xyes"; then
+            CPPFLAGS="$CPPFLAGS $CPPFLAGS_PASCAL -I\${top_srcdir}/src/mac/carbon/morefilex -I/Developer/Headers/FlatCarbon"
+        else
+            dnl platform.h needs TARGET_CARBON before setup.h
+            CPPFLAGS="$CPPFLAGS $CPPFLAGS_PASCAL -I\${top_srcdir}/src/mac/carbon/morefilex -DTARGET_CARBON"
+        fi
 
         TOOLKIT=MAC
         dnl we can't call this MAC_DIST or autoconf thinks its a macro
@@ -5600,7 +5618,7 @@ if test "$wxUSE_HTML" = "yes"; then
     fi
 fi
 if test "$wxUSE_WEBKIT" = "yes"; then
-    if test "$wxUSE_MAC" = 1; then
+    if test "$wxUSE_MAC" = 1 -a "$USE_DARWIN" = 1; then
         old_CPPFLAGS="$CPPFLAGS"
         CPPFLAGS="$CPPFLAGS -x objective-c++"
         AC_CHECK_HEADER([WebKit/HIWebView.h],
@@ -5844,12 +5862,17 @@ dnl extended.c uses floor() and is always linked in
 
 if test "$wxUSE_MAC" = 1 ; then
     if test "$wxUSE_SOUND" = "yes" || test "$wxUSE_MEDIACTRL" = "yes"; then
-       LDFLAGS="$LDFLAGS -framework QuickTime"
+        if test "$USE_DARWIN" = 1; then
+            LDFLAGS="$LDFLAGS -framework QuickTime"
+        else
+            LDFLAGS="$LDFLAGS -lQuickTimeLib"
+        fi
     fi
     if test "$USE_DARWIN" = 1; then
-       LDFLAGS="$LDFLAGS -framework IOKit"
+        LDFLAGS="$LDFLAGS -framework IOKit -framework Carbon -framework Cocoa -framework System"
+    else
+        LDFLAGS="$LDFLAGS -lCarbonLib"
     fi
-    LDFLAGS="$LDFLAGS -framework Carbon -framework Cocoa -framework System"
 fi
 if test "$wxUSE_COCOA" = 1 ; then
     LDFLAGS="$LDFLAGS -framework Cocoa"
