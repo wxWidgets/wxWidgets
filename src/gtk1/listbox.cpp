@@ -347,7 +347,7 @@ void wxListBox::AppendCommon( const wxString &item )
 #endif
 #endif
 
-    if (m_toolTip) m_toolTip->Create( list_item );
+    if (m_toolTip) m_toolTip->Apply( this );
 }
 
 void wxListBox::Append( const wxString &item )
@@ -676,25 +676,12 @@ int wxListBox::GetIndex( GtkWidget *item ) const
     return -1;
 }
 
-void wxListBox::SetToolTip( const wxString &tip )
+void wxListBox::ApplyToolTip( GtkTooltips *tips, const char *tip )
 {
-    SetToolTip( new wxToolTip( tip ) );
-}
-
-void wxListBox::SetToolTip( wxToolTip *tip )
-{
-    if (m_toolTip) delete m_toolTip;
-    
-    m_toolTip = tip;
-    
-    if (!tip) return;
-    
-    m_toolTip->Create( GTK_WIDGET(m_list) );  /* this has no effect */
-    
     GList *child = m_list->children;
     while (child)
     {
-	m_toolTip->Create( GTK_WIDGET( child->data ) );
+        gtk_tooltips_set_tip( tips, GTK_WIDGET( child->data ), tip, (gchar*) NULL );
         child = child->next;
     }
 }

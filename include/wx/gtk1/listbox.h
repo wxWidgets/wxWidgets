@@ -94,9 +94,6 @@ public:
 #if wxUSE_DRAG_AND_DROP
   void SetDropTarget( wxDropTarget *dropTarget );
 #endif
-  void SetToolTip( wxToolTip *tip );
-  void SetToolTip( const wxString &tip );
-
 
 // implementation
     
@@ -105,6 +102,7 @@ public:
   GtkWidget *GetConnectWidget();
   bool IsOwnGtkWindow( GdkWindow *window );
   void ApplyWidgetStyle();
+  void ApplyToolTip( GtkTooltips *tips, const char *tip );
     
   GtkList   *m_list;
   wxList     m_clientDataList;

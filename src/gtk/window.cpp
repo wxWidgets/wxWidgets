@@ -2475,24 +2475,44 @@ void wxWindow::Clear()
 
 void wxWindow::SetToolTip( const wxString &tip )
 {
-    SetToolTip( new wxToolTip( tip ) );
+    if (m_toolTip)
+    {
+        m_toolTip->SetTip( tip );
+    }
+    else
+    {
+        m_toolTip = new wxToolTip( tip );
+	m_toolTip->Apply( this );
+    }
+    
+    if (tip.IsEmpty())
+    {
+        delete m_toolTip;
+	m_toolTip = (wxToolTip*) NULL;
+    }
 }
 
 void wxWindow::SetToolTip( wxToolTip *tip )
 {
-    if (m_toolTip) delete m_toolTip;
+    if (m_toolTip)
+    {
+        m_toolTip->SetTip( (char*) NULL );
+        delete m_toolTip;
+    }
     
     m_toolTip = tip;
     
-    if (m_toolTip) m_toolTip->Create( GetConnectWidget() );
+    if (m_toolTip) m_toolTip->Apply( this );
 }
 
-wxToolTip& wxWindow::GetToolTip()
+void wxWindow::ApplyToolTip( GtkTooltips *tips, const char *tip )
 {
-    if (!m_toolTip)
-        wxLogError( "No tooltip set." );
-	
-    return *m_toolTip;
+    gtk_tooltips_set_tip( tips, GetConnectWidget(), tip, (gchar*) NULL );
+}
+
+wxToolTip* wxWindow::GetToolTip()
+{
+    return m_toolTip;
 }
 
 wxColour wxWindow::GetBackgroundColour() const

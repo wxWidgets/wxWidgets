@@ -658,6 +658,13 @@ void MyPanel::OnListBoxButtons( wxCommandEvent &event )
     case ID_LISTBOX_ENABLE:
     {
       m_text->WriteText("Checkbox clicked.\n");
+#ifdef __WXGTK__
+      wxCheckBox *cb = (wxCheckBox*)event.GetEventObject();
+      if (event.GetInt())
+        cb->SetToolTip( "Click to enable listbox" );
+      else
+        cb->SetToolTip( "Click to disable listbox" );
+#endif
       m_listbox->Enable( event.GetInt() == 0 );
       break;
     }

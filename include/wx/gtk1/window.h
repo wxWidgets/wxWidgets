@@ -231,16 +231,16 @@ public:
   
   virtual void SetToolTip( const wxString &tip );
   virtual void SetToolTip( wxToolTip *tip );
-  virtual wxToolTip& GetToolTip();
+  virtual wxToolTip* GetToolTip();
 
   virtual void Refresh( bool eraseBackground = TRUE, const wxRect *rect = (const wxRect *) NULL );
   virtual void Clear();
 
   virtual wxRegion GetUpdateRegion() const;
-  virtual bool IsExposed(int x, int y) const;
-  virtual bool IsExposed(int x, int y, int w, int h) const;
-  virtual bool IsExposed(const wxPoint& pt) const;
-  virtual bool IsExposed(const wxRect& rect) const;
+  virtual bool IsExposed( int x, int y ) const;
+  virtual bool IsExposed( int x, int y, int w, int h ) const;
+  virtual bool IsExposed( const wxPoint& pt ) const;
+  virtual bool IsExposed( const wxRect& rect ) const;
 
   virtual wxColour GetBackgroundColour() const;
   virtual void SetBackgroundColour( const wxColour &colour );
@@ -320,24 +320,37 @@ public:
 
   // implementation
 
+  virtual wxPoint GetClientAreaOrigin() const;
+  virtual void AdjustForParentClientOrigin( int& x, int& y, int sizeFlags );
+
+  bool HasVMT();
+
+  virtual void OnInternalIdle();
+  
+  /* used by all classes in the widget creation process */
+  
   void PreCreation( wxWindow *parent, wxWindowID id, const wxPoint &pos,
                     const wxSize &size, long style, const wxString &name );
   void PostCreation();
+  
+  /* the methods below are required because many native widgets
+     are composed of several subwidgets and setting a style for
+     the widget means setting it for all subwidgets as well. 
+     also, it is nor clear, which native widget is the top
+     widget where (most of) the input goes. even tooltips have
+     to be applied to all subwidgets. */
   
   virtual GtkWidget* GetConnectWidget();
   virtual bool IsOwnGtkWindow( GdkWindow *window );
   void ConnectWidget( GtkWidget *widget );
 
-  bool HasVMT();
-
-  virtual wxPoint GetClientAreaOrigin() const;
-  virtual void AdjustForParentClientOrigin( int& x, int& y, int sizeFlags );
-
   GtkStyle *GetWidgetStyle();
   void SetWidgetStyle();
   virtual void ApplyWidgetStyle();
   
-  virtual void OnInternalIdle();
+  virtual void ApplyToolTip( GtkTooltips *tips, const char *tip );
+
+  /* private member variables */
 
   wxWindow            *m_parent;
   wxList               m_children;

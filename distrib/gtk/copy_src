@@ -3,7 +3,10 @@
 # This script is creates a dir tree in ~/wxgtk_dist which
 # can then be packed into an archive
 
-echo This script will copy the wxGTK release files into ~/wxgtk_dist
+echo                               --------
+echo    This script will copy the wxGTK release files into ~/wxgtk_dist
+echo                               --------
+echo
 
 mkdir ~/wxgtk_dist
 mkdir ~/wxgtk_dist/wxGTK
@@ -668,9 +671,13 @@ cp Makefile ~/wxgtk_dist/wxGTK/samples/wxsocket
 cp Makefile.in ~/wxgtk_dist/wxGTK/samples/wxsocket
 cp *.cpp ~/wxgtk_dist/wxGTK/samples/wxsocket
 cp *.xpm ~/wxgtk_dist/wxGTK/samples/wxsocket
-cd ..
+cd ../..
 
+echo LOCAL CORRECTCIONS
 
+cd distrib/gtk
+cp README.txt ~/wxgtk_dist/wxGTK/utils/wxPython
+cp Setup ~/wxgtk_dist/wxGTK/utils/wxPython/src
 
 
 

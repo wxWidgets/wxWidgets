@@ -33,23 +33,21 @@ class wxToolTip: public wxObject
 public:
   
     wxToolTip( const wxString &tip );
-    ~wxToolTip();
     
-    wxString GetTip();
+    void SetTip( const wxString &tip );
+    wxString GetTip() const;
+    wxWindow *GetWindow() const;
+    bool Ok() const;
     
-    void Enable( bool flag );
-    void SetDelay( long msecs );
-    bool Ok();
+    static void Enable( bool flag );
+    static void SetDelay( long msecs );
 
   // implementation
     
     wxString     m_text;
+    wxWindow    *m_window;
     
-    GtkTooltips *m_tooltips;
-    GdkColor    *m_bg;
-    GdkColor    *m_fg;
-    
-    void Create( GtkWidget *tool );
+    void Apply( wxWindow *win );
 };
 
 #endif // __GTKTOOLTIPH__
