@@ -1212,13 +1212,7 @@ void wxDC::DoDrawBitmap(
     if (!IsKindOf(CLASSINFO(wxPrinterDC)))
     {
         HBITMAP                         hBitmap =  (HBITMAP)rBmp.GetHBITMAP();
-        wxBitmap                        vNewBitmap( rBmp.GetWidth()
-                                                   ,rBmp.GetHeight()
-                                                   ,rBmp.GetDepth()
-                                                  );
-        HBITMAP                         hBitmapOld = ::GpiSetBitmap((HPS)GetHPS(), vNewBitmap.GetHBITMAP());
-        LONG                            lOldTextground = ::GpiQueryColor((HPS)GetHPS());
-        LONG                            lOldBackground = ::GpiQueryBackColor((HPS)GetHPS());
+        HBITMAP                         hBitmapOld;
 
         vY = OS2Y(vY,rBmp.GetHeight());
 
@@ -1230,124 +1224,237 @@ void wxDC::DoDrawBitmap(
                                                  ,0, 0
                                                  ,rBmp.GetWidth(), rBmp.GetHeight()
                                                 };
-
-        if (m_textForegroundColour.Ok())
-        {
-            ::GpiSetColor( (HPS)GetHPS()
-                           ,m_textForegroundColour.GetPixel()
-                          );
-        }
-        if (m_textBackgroundColour.Ok())
-        {
-            ::GpiSetBackColor( (HPS)GetHPS()
-                              ,m_textBackgroundColour.GetPixel()
-                             );
-        }
         if (bUseMask)
         {
             wxMask*                     pMask = rBmp.GetMask();
-            HPS                         hPS;
-            HDC                         hDC;
-
-            if (!IsKindOf(CLASSINFO(wxMemoryDC)))
-            {
-                DEVOPENSTRUC                    vDop  = {0L, "DISPLAY", NULL, 0L, 0L, 0L, 0L, 0L, 0L};
-                SIZEL                           vSize = {0, 0};
-
-                hDC   = ::DevOpenDC(vHabmain, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&vDop, NULLHANDLE);
-                hPS   = ::GpiCreatePS(vHabmain, hDC, &vSize, PU_PELS | GPIA_ASSOC);
-            }
-            else
-                hPS = m_hPS;
 
             if (pMask)
             {
-                BITMAPINFOHEADER2           vHeader;
-                BITMAPINFO2                 vInfo;
-                int                         nBytesPerLine = rBmp.GetWidth() * 3;
-                unsigned char*              pucData;
-                LONG                        lScans = 0L;
-                LONG                        alFormats[24]; // Max formats OS/2 PM supports
-                ULONG                       ulBitcount;
-                HBITMAP                     hMask = (HBITMAP)pMask->GetMaskBitmap();
-                POINTL                      vPointMask[4] = { 0, 0, rBmp.GetWidth(), rBmp.GetHeight()
-                                                             ,0, 0, rBmp.GetWidth(), rBmp.GetHeight()
-                                                            };
+                //
+                // Need to imitate ::MaskBlt in windows.
+                // 1) Extract the bits from from the bitmap.
+                // 2) Extract the bits from the mask
+                // 3) Using the mask bits do the following:
+                //   A) If the mask byte is 00 leave the bitmap byte alone
+                //   B) If the mask byte is FF copy the screen color into
+                //      bitmap byte
+                // 4) Create a new bitmap and set its bits to the above result
+                // 5) Blit this to the screen PS
+                //
+                HBITMAP                 hMask = (HBITMAP)pMask->GetMaskBitmap();
+                HBITMAP                 hOldBitmap = NULLHANDLE;
+                HBITMAP                 hNewBitmap = NULLHANDLE;
+                unsigned char*          pucBits;     // buffer that will contain the bitmap data
+                unsigned char*          pucBitsMask; // buffer that will contain the mask data
+                unsigned char*          pucData;     // pointer to use to traverse bitmap data
+                unsigned char*          pucDataMask; // pointer to use to traverse mask data
+                LONG                    lHits;
+                ERRORID                 vError;
+                wxString                sError;
 
-                ::GpiSetBitmap(hPS, hMask);
+                //
+                // The usual Memory context creation stuff
+                //
+                DEVOPENSTRUC                    vDop  = {0L, "DISPLAY", NULL, 0L, 0L, 0L, 0L, 0L, 0L};
+                SIZEL                           vSize = {0, 0};
+                HDC                             hDC   = ::DevOpenDC(vHabmain, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&vDop, NULLHANDLE);
+                HPS                             hPS   = ::GpiCreatePS(vHabmain, hDC, &vSize, PU_PELS | GPIA_ASSOC);
 
-                ::GpiQueryDeviceBitmapFormats(hPS, 24, alFormats);
-                ulBitcount = alFormats[1]; // the best one
-                if (ulBitcount > 24) // PM supports a max of 24
-                    ulBitcount = 24;
+                //
+                // The usual bitmap header stuff
+                //
+                BITMAPINFOHEADER2               vHeader;
+                BITMAPINFO2                     vInfo;
 
-                vInfo.cbFix     = 16;
-                vInfo.cx        = rBmp.GetWidth();
-                vInfo.cy        = rBmp.GetHeight();
-                vInfo.cPlanes   = 1;
-                vInfo.cBitCount = ulBitcount;
-                pucData = (unsigned char*)malloc(nBytesPerLine * rBmp.GetHeight());
+                memset(&vHeader, '\0', 16);
+                vHeader.cbFix           = 16;
+                vHeader.cx              = (ULONG)rBmp.GetWidth();
+                vHeader.cy              = (ULONG)rBmp.GetHeight();
+                vHeader.cPlanes         = 1L;
+                vHeader.cBitCount       = 24;
+
+                memset(&vInfo, '\0', 16);
+                vInfo.cbFix           = 16;
+                vInfo.cx              = (ULONG)rBmp.GetWidth();
+                vInfo.cy              = (ULONG)rBmp.GetHeight();
+                vInfo.cPlanes         = 1;
+                vInfo.cBitCount       = 24; // Set to desired count going in
+
+                //
+                // Create the buffers for data....all wxBitmaps are 24 bit internally
+                //
+                int                     nBytesPerLine = rBmp.GetWidth() * 3;
+                int                     nSizeDWORD    = sizeof(DWORD);
+                int                     nLineBoundary = nBytesPerLine % nSizeDWORD;
+                int                     nPadding = 0;
+                int                     i;
+                int                     j;
+                LONG                    lScans = 0L;
+                LONG                    lColor = 0L;
+
+                //
+                // Need to get a background color for mask blitting
+                //
+                if (IsKindOf(CLASSINFO(wxPaintDC)))
+                {
+                    wxPaintDC*              pPaintDC = wxDynamicCast(this, wxPaintDC);
+
+                    lColor = pPaintDC->m_pCanvas->GetBackgroundColour().GetPixel();
+                }
+                else if (GetBrush() != wxNullBrush)
+                    lColor = GetBrush().GetColour().GetPixel();
+                else
+                    lColor = m_textBackgroundColour.GetPixel();
+
+                //
+                // Bitmap must be ina double-word alligned address so we may
+                // have some padding to worry about
+                //
+                if (nLineBoundary > 0)
+                {
+                    nPadding     = nSizeDWORD - nLineBoundary;
+                    nBytesPerLine += nPadding;
+                }
+                pucBits = (unsigned char *)malloc(nBytesPerLine * rBmp.GetHeight());
+                pucBitsMask = (unsigned char *)malloc(nBytesPerLine * rBmp.GetHeight());
+                memset(pucBits, '\0', (nBytesPerLine * rBmp.GetHeight()));
+                memset(pucBitsMask, '\0', (nBytesPerLine * rBmp.GetHeight()));
+
+                //
+                // Extract the bitmap and mask data
+                //
+                if ((hOldBitmap = ::GpiSetBitmap(hPS, hBitmap)) == HBM_ERROR)
+                {
+                    vError = ::WinGetLastError(vHabmain);
+                    sError = wxPMErrorToStr(vError);
+                }
                 if ((lScans = ::GpiQueryBitmapBits( hPS
                                                    ,0L
                                                    ,(LONG)rBmp.GetHeight()
-                                                   ,(PBYTE)pucData
+                                                   ,(PBYTE)pucBits
                                                    ,&vInfo
                                                   )) == GPI_ALTERROR)
                 {
-                    ERRORID                     vError;
-                    wxString                    sError;
-
                     vError = ::WinGetLastError(vHabmain);
                     sError = wxPMErrorToStr(vError);
                 }
-                if ((hBitmapOld = ::GpiSetBitmap(hPS, (HBITMAP)vNewBitmap.GetHBITMAP())) == HBM_ERROR)
+                if ((hOldBitmap = ::GpiSetBitmap(hPS, hMask)) == HBM_ERROR)
                 {
-                    ERRORID                     vError;
-                    wxString                    sError;
-
                     vError = ::WinGetLastError(vHabmain);
                     sError = wxPMErrorToStr(vError);
                 }
-                if ((lScans = ::GpiSetBitmapBits( hPS
-                                                 ,0
-                                                 ,(LONG)rBmp.GetHeight()
-                                                 ,(PBYTE)pucData
-                                                 ,&vInfo
-                                                )) == GPI_ALTERROR)
+                if ((lScans = ::GpiQueryBitmapBits( hPS
+                                                   ,0L
+                                                   ,(LONG)rBmp.GetHeight()
+                                                   ,(PBYTE)pucBitsMask
+                                                   ,&vInfo
+                                                  )) == GPI_ALTERROR)
                 {
-                    ERRORID                 vError;
-                    wxString                sError;
-
                     vError = ::WinGetLastError(vHabmain);
                     sError = wxPMErrorToStr(vError);
                 }
-                if ((hBitmapOld = ::GpiSetBitmap(hPS, NULLHANDLE)) == HBM_ERROR)
+
+                //
+                // Now set the bytes(bits) according to the mask values
+                // 3 bytes per pel...must handle one at a time
+                //
+                pucData     = pucBits;
+                pucDataMask = pucBitsMask;
+
+                for (i = 0; i < rBmp.GetHeight(); i++)
                 {
-                    ERRORID                     vError;
-                    wxString                    sError;
+                    for (j = 0; j < rBmp.GetWidth(); j++)
+                    {
+                        // Byte 1
+                        if (*pucDataMask == 0x00) // leave bitmap byte alone
+                            pucData++;
+                        else
+                        {
+                            *pucData = (unsigned char)lColor;
+                            pucData++;
+                        }
+                        // Byte 2
+                        if (*(pucDataMask + 1) == 0x00) // leave bitmap byte alone
+                            pucData++;
+                        else
+                        {
+                            *pucData = (unsigned char)lColor >> 8;
+                            pucData++;
+                        }
 
-                    vError = ::WinGetLastError(vHabmain);
-                    sError = wxPMErrorToStr(vError);
+                        // Byte 3
+                        if (*(pucDataMask + 2) == 0x00) // leave bitmap byte alone
+                            pucData++;
+                        else
+                        {
+                            *pucData = (unsigned char)lColor >> 16;
+                            pucData++;
+                        }
+                        pucDataMask += 3;
+                    }
+                    for (j = 0; j < nPadding; j++)
+                    {
+                        pucData++;
+                        pucDataMask++;
+                    }
                 }
-                if ((hBitmapOld = ::GpiSetBitmap((HPS)GetHPS(), vNewBitmap.GetHBITMAP())) == HBM_ERROR)
+
+                //
+                // Create a new bitmap
+                //
+                if ((hNewBitmap = ::GpiCreateBitmap( hPS
+                                                    ,&vHeader
+                                                    ,CBM_INIT
+                                                    ,(PBYTE)pucBits
+                                                    ,&vInfo
+                                                   )) == GPI_ERROR)
                 {
-                    ERRORID                     vError;
-                    wxString                    sError;
-
                     vError = ::WinGetLastError(vHabmain);
                     sError = wxPMErrorToStr(vError);
                 }
-                ::GpiWCBitBlt( (HPS)GetHPS()
-                              ,hBitmap
-                              ,4
-                              ,vPoint
-                              ,ROP_SRCAND
-                              ,BBO_IGNORE
-                             );
+
+                //
+                // Now blit it to the screen PS
+                //
+                if ((lHits = ::GpiWCBitBlt( (HPS)GetHPS()
+                                           ,hNewBitmap
+                                           ,4
+                                           ,vPoint
+                                           ,ROP_SRCCOPY
+                                           ,BBO_IGNORE
+                                          )) == GPI_ERROR)
+                {
+                    vError = ::WinGetLastError(vHabmain);
+                    sError = wxPMErrorToStr(vError);
+                }
+
+                //
+                // Clean up
+                //
+                free(pucBits);
+                free(pucBitsMask);
+                ::GpiSetBitmap(hPS, NULLHANDLE);
+                ::GpiDestroyPS(hPS);
+                ::DevCloseDC(hDC);
             }
         }
         else
         {
+            LONG                        lOldTextground = ::GpiQueryColor((HPS)GetHPS());
+            LONG                        lOldBackground = ::GpiQueryBackColor((HPS)GetHPS());
+
+            if (m_textForegroundColour.Ok())
+            {
+                ::GpiSetColor( (HPS)GetHPS()
+                               ,m_textForegroundColour.GetPixel()
+                              );
+            }
+            if (m_textBackgroundColour.Ok())
+            {
+                ::GpiSetBackColor( (HPS)GetHPS()
+                                  ,m_textBackgroundColour.GetPixel()
+                                 );
+            }
             ::GpiWCBitBlt( (HPS)GetHPS()
                           ,hBitmap
                           ,4
@@ -1355,10 +1462,10 @@ void wxDC::DoDrawBitmap(
                           ,ROP_SRCCOPY
                           ,BBO_IGNORE
                          );
+            ::GpiSetBitmap((HPS)GetHPS(), hBitmapOld);
+            ::GpiSetColor((HPS)GetHPS(), lOldTextground);
+            ::GpiSetBackColor((HPS)GetHPS(), lOldBackground);
         }
-        ::GpiSetBitmap((HPS)GetHPS(), hBitmapOld);
-        ::GpiSetColor((HPS)GetHPS(), lOldTextground);
-        ::GpiSetBackColor((HPS)GetHPS(), lOldBackground);
     }
 } // end of wxDC::DoDrawBitmap
 

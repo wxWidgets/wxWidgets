@@ -319,7 +319,7 @@ wxPaintDC::wxPaintDC(
     {
         HPS                         hPS;
 
-        m_hDC = (WXHDC)::WinOpenWindowDC(GetWinHwnd(m_pCanvas));
+        m_hDC = ::WinOpenWindowDC(GetWinHwnd(m_pCanvas));
         hPS = ::WinBeginPaint( GetWinHwnd(m_pCanvas)
                               ,NULLHANDLE
                               ,&g_paintStruct

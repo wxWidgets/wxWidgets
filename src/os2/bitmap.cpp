@@ -568,8 +568,6 @@ bool wxBitmap::CreateFromImage (
     //
     BITMAPINFOHEADER2               vHeader;
     BITMAPINFO2                     vInfo;
-    LONG                            alFormats[24]; // Max formats OS/2 PM supports
-    ULONG                           ulBitcount;
 
     //
     // Fill in the DIB header
@@ -592,6 +590,7 @@ bool wxBitmap::CreateFromImage (
         wxFAIL_MSG(wxT("could not allocate memory for DIB"));
         return FALSE;
     }
+    memset(pucBits, '\0', (nBytePerLine * nHeight));
 
     //
     // Create and set the device-dependent bitmap
@@ -606,16 +605,12 @@ bool wxBitmap::CreateFromImage (
     HBITMAP                         hBmp;
     HBITMAP                         hBmpOld;
 
-    ::GpiQueryDeviceBitmapFormats(hPS, 24, alFormats);
-    ulBitcount = alFormats[1]; // the best one for the device
-    if (ulBitcount > 24)
-        ulBitcount = 24;  // MAX bits supported by PM
     memset(&vInfo, '\0', 16);
     vInfo.cbFix           = 16;
     vInfo.cx              = (ULONG)nWidth;
     vInfo.cy              = (ULONG)nHeight;
     vInfo.cPlanes         = 1;
-    vInfo.cBitCount       = ulBitcount;
+    vInfo.cBitCount       = 24; // Set to desired count going in
 
     hBmp = ::GpiCreateBitmap( hPS
                              ,&vHeader
@@ -686,6 +681,9 @@ bool wxBitmap::CreateFromImage (
             vError = ::WinGetLastError(vHabmain);
             sError = wxPMErrorToStr(vError);
         }
+        //
+        // Debug stuff
+        //
 
         hPSScreen = ::GpiCreatePS( vHabmain
                                   ,hDCScreen
@@ -855,13 +853,7 @@ wxImage wxBitmap::ConvertToImage() const
     DEVOPENSTRUC                    vDop  = {0L, "DISPLAY", NULL, 0L, 0L, 0L, 0L, 0L, 0L};
     SIZEL                           vSizlPage = {0,0};
     HDC                             hDCMem;
-    LONG                            alFormats[24]; // 24 is MAX formats supported
-    ULONG                           ulBitcount;
 
-    ::GpiQueryDeviceBitmapFormats(hPS, 24, alFormats);
-    ulBitcount = alFormats[1]; // the best one
-    if (ulBitcount > 24) // PM supports a max of 24
-        ulBitcount = 24;
     vImage.Create( nWidth
                   ,nHeight
                  );
@@ -894,7 +886,7 @@ wxImage wxBitmap::ConvertToImage() const
     vDIBInfo.cx              = nWidth;
     vDIBInfo.cy              = nHeight;
     vDIBInfo.cPlanes         = 1;
-    vDIBInfo.cBitCount       = ulBitcount;
+    vDIBInfo.cBitCount       = 24;
 
     lpBits = (unsigned char *)malloc(nBytePerLine * nHeight);
     if (!lpBits)
@@ -903,6 +895,8 @@ wxImage wxBitmap::ConvertToImage() const
         free(pData);
         return wxNullImage;
     }
+    memset(lpBits, '\0', (nBytePerLine * nHeight));
+    hBitmap = (HBITMAP)GetHBITMAP();
 
     //
     // May already be selected into a PS
@@ -925,7 +919,6 @@ wxImage wxBitmap::ConvertToImage() const
                                ,&vSizlPage
                                ,PU_PELS | GPIA_ASSOC
                               );
-        hBitmap = (HBITMAP)GetHBITMAP();
         if ((hOldBitmap = ::GpiSetBitmap(hPSMem, hBitmap)) == HBM_ERROR)
         {
             ERRORID                 vError;

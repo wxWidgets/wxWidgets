@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  F:\DEV\WX2\WXWINDOWS\LIB\wx.lib
+;From library:  H:\DEV\WX2\WXWINDOWS\LIB\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -1925,7 +1925,7 @@ EXPORTS
       wxEVT_NC_LEFT_DCLICK
       wxEVT_INIT_DIALOG
       wxEVT_COMMAND_SET_FOCUS
-  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\extended.c
+  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\extended.c
     ;PUBDEFs (Symbols available from object file):
       ConvertToIeeeExtended
       ConvertFromIeeeExtended
@@ -6039,7 +6039,7 @@ EXPORTS
       Read32__17wxTextInputStreamFv
       ;wxTextInputStream::SkipIfEndOfLine(char)
       SkipIfEndOfLine__17wxTextInputStreamFc
-  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\unzip.c
+  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\unzip.c
     ;PUBDEFs (Symbols available from object file):
       unzReadCurrentFile
       unzGetCurrentFileInfo
@@ -12303,11 +12303,17 @@ EXPORTS
     ;PUBDEFs (Symbols available from object file):
       ;wxMemoryDC::DoDrawRoundedRectangle(int,int,int,int,double)
       DoDrawRoundedRectangle__10wxMemoryDCFiN31d
+      ;wxMemoryDC::DoDrawText(const wxString&,int,int)
+      DoDrawText__10wxMemoryDCFRC8wxStringiT2
       ;wxMemoryDC::SelectObject(const wxBitmap&)
       SelectObject__10wxMemoryDCFRC8wxBitmap
       __vft10wxMemoryDC8wxObject
+      ;wxMemoryDC::DoDrawLine(int,int,int,int)
+      DoDrawLine__10wxMemoryDCFiN31
       ;wxMemoryDC::Init()
       Init__10wxMemoryDCFv
+      ;wxLoadBitmapWithData(unsigned long,unsigned long,int,int)
+      wxLoadBitmapWithData__FUlT1iT3
       ;wxMemoryDC::DoGetSize(int*,int*) const
       DoGetSize__10wxMemoryDCCFPiT1
       ;wxMemoryDC::wxMemoryDC(wxDC*)

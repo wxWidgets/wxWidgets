@@ -24,6 +24,12 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC, wxDC)
 
+extern void wxLoadBitmapWithData( HPS     hPS
+                                 ,HBITMAP hBitmap
+                                 ,int     nWidth
+                                 ,int     nHeight
+                                );
+
 /////////////////////////////////////////////////////////////////////////////
 // Memory DC
 /////////////////////////////////////////////////////////////////////////////
@@ -191,77 +197,11 @@ void wxMemoryDC::DoDrawRectangle(
 {
     wxDC::DoDrawRectangle(vX, vY, vWidth, vHeight);
 
-    //
-    // Debug testing:
-    //
-    if (m_vSelectedBitmap.GetHBITMAP() != NULLHANDLE)
-    {
-        BITMAPINFOHEADER2           vHeader;
-        BITMAPINFO2                 vInfo;
-
-        vHeader.cbFix = 16L;
-        if (::GpiQueryBitmapInfoHeader(m_vSelectedBitmap.GetHBITMAP(), &vHeader))
-        {
-            unsigned char*          pucData = NULL;
-            unsigned char*          pucBits;
-            int                     nBytesPerLine = m_vSelectedBitmap.GetWidth() * 3;
-            LONG                    lScans = 0L;
-            POINTL                  vPoint;
-            LONG                    lColor;
-            LONG                    alFormats[24]; // Max formats OS/2 PM supports
-            ULONG                   ulBitcount;
-
-            ::GpiQueryDeviceBitmapFormats(m_hPS, 24, alFormats);
-            ulBitcount = alFormats[1]; // the best one for the device
-            if (ulBitcount > 24)
-                ulBitcount = 24;  // MAX bits supported by PM
-            vInfo.cbFix     = 16;
-            vInfo.cx        = vHeader.cx;
-            vInfo.cy        = vHeader.cy;
-            vInfo.cPlanes   = vHeader.cPlanes;
-            vInfo.cBitCount = ulBitcount;
-            pucData = (unsigned char*)malloc(nBytesPerLine * m_vSelectedBitmap.GetHeight());
-            if ((lScans = ::GpiQueryBitmapBits( m_hPS
-                                               ,0L
-                                               ,(LONG)m_vSelectedBitmap.GetHeight()
-                                               ,(PBYTE)pucData
-                                               ,&vInfo
-                                              )) == GPI_ALTERROR)
-            {
-                ERRORID                     vError;
-                wxString                    sError;
-
-                vError = ::WinGetLastError(vHabmain);
-                sError = wxPMErrorToStr(vError);
-            }
-            pucBits = pucData;
-            for (int i = 0; i < m_vSelectedBitmap.GetHeight(); i++)
-            {
-                for (int j = 0; j < m_vSelectedBitmap.GetWidth(); j++)
-                {
-                    vPoint.x = j; vPoint.y = i;
-                    lColor = ::GpiQueryPel(m_hPS, &vPoint);
-                    *(pucBits++) = (unsigned char)lColor;
-                    *(pucBits++) = (unsigned char)(lColor >> 8);
-                    *(pucBits++) = (unsigned char)(lColor >> 16);
-                }
-            }
-            if ((lScans = ::GpiSetBitmapBits( m_hPS
-                                             ,0
-                                             ,(LONG)m_vSelectedBitmap.GetHeight()
-                                             ,(PBYTE)pucData
-                                             ,&vInfo
-                                            )) == GPI_ALTERROR)
-            {
-                ERRORID             vError;
-                wxString            sError;
-
-                vError = ::WinGetLastError(vHabmain);
-                sError = wxPMErrorToStr(vError);
-            }
-            free(pucData);
-        }
-    }
+    wxLoadBitmapWithData( m_hPS
+                         ,(HBITMAP)m_vSelectedBitmap.GetHBITMAP()
+                         ,m_vSelectedBitmap.GetWidth()
+                         ,m_vSelectedBitmap.GetHeight()
+                        );
 } // end of wxMemoryDC::DoDrawRectangle
 
 void wxMemoryDC::DoDrawRoundedRectangle(
@@ -274,76 +214,95 @@ void wxMemoryDC::DoDrawRoundedRectangle(
 {
     wxDC::DoDrawRoundedRectangle(vX, vY, vWidth, vHeight, dRadius);
 
-    //
-    // Debug testing:
-    //
-    if (m_vSelectedBitmap.GetHBITMAP() != NULLHANDLE)
-    {
-        BITMAPINFOHEADER2           vHeader;
-        BITMAPINFO2                 vInfo;
+    wxLoadBitmapWithData( m_hPS
+                         ,(HBITMAP)m_vSelectedBitmap.GetHBITMAP()
+                         ,m_vSelectedBitmap.GetWidth()
+                         ,m_vSelectedBitmap.GetHeight()
+                        );
+} // end of wxMemoryDC::DoDrawRoundedRectangle
 
-        vHeader.cbFix = 16L;
-        if (::GpiQueryBitmapInfoHeader(m_vSelectedBitmap.GetHBITMAP(), &vHeader))
-        {
-            unsigned char*          pucData = NULL;
-            unsigned char*          pucBits;
-            int                     nBytesPerLine = m_vSelectedBitmap.GetWidth() * 3;
-            LONG                    lScans = 0L;
-            POINTL                  vPoint;
-            LONG                    lColor;
-            LONG                    alFormats[24]; // Max formats OS/2 PM supports
-            ULONG                   ulBitcount;
+void wxMemoryDC::DoDrawText(
+  const wxString&                   rsText
+, wxCoord                           vX
+, wxCoord                           vY
+)
+{
+    wxDC::DoDrawText(rsText, vX, vY);
 
-            ::GpiQueryDeviceBitmapFormats(m_hPS, 24, alFormats);
-            ulBitcount = alFormats[1]; // the best one for the device
-            if (ulBitcount > 24)
-                ulBitcount = 24;  // MAX bits supported by PM
-            vInfo.cbFix     = 16;
-            vInfo.cx        = vHeader.cx;
-            vInfo.cy        = vHeader.cy;
-            vInfo.cPlanes   = vHeader.cPlanes;
-            vInfo.cBitCount = ulBitcount;
-            pucData = (unsigned char*)malloc(nBytesPerLine * m_vSelectedBitmap.GetHeight());
-            if ((lScans = ::GpiQueryBitmapBits( m_hPS
-                                               ,0L
-                                               ,(LONG)m_vSelectedBitmap.GetHeight()
-                                               ,(PBYTE)pucData
-                                               ,&vInfo
-                                              )) == GPI_ALTERROR)
-            {
-                ERRORID                     vError;
-                wxString                    sError;
-
-                vError = ::WinGetLastError(vHabmain);
-                sError = wxPMErrorToStr(vError);
-            }
-            pucBits = pucData;
-            for (int i = 0; i < m_vSelectedBitmap.GetHeight(); i++)
-            {
-                for (int j = 0; j < m_vSelectedBitmap.GetWidth(); j++)
-                {
-                    vPoint.x = j; vPoint.y = i;
-                    lColor = ::GpiQueryPel(m_hPS, &vPoint);
-                    *(pucBits++) = (unsigned char)lColor;
-                    *(pucBits++) = (unsigned char)(lColor >> 8);
-                    *(pucBits++) = (unsigned char)(lColor >> 16);
-                }
-            }
-            if ((lScans = ::GpiSetBitmapBits( m_hPS
-                                             ,0
-                                             ,(LONG)m_vSelectedBitmap.GetHeight()
-                                             ,(PBYTE)pucData
-                                             ,&vInfo
-                                            )) == GPI_ALTERROR)
-            {
-                ERRORID             vError;
-                wxString            sError;
-
-                vError = ::WinGetLastError(vHabmain);
-                sError = wxPMErrorToStr(vError);
-            }
-            free(pucData);
-        }
-    }
+    wxLoadBitmapWithData( m_hPS
+                         ,(HBITMAP)m_vSelectedBitmap.GetHBITMAP()
+                         ,m_vSelectedBitmap.GetWidth()
+                         ,m_vSelectedBitmap.GetHeight()
+                        );
 } // end of wxMemoryDC::DoDrawRectangle
 
+void wxMemoryDC::DoDrawLine(
+  wxCoord                           vX1
+, wxCoord                           vY1
+, wxCoord                           vX2
+, wxCoord                           vY2
+)
+{
+    wxDC::DoDrawLine(vX1, vY1, vX2, vY2);
+
+    wxLoadBitmapWithData( m_hPS
+                         ,(HBITMAP)m_vSelectedBitmap.GetHBITMAP()
+                         ,m_vSelectedBitmap.GetWidth()
+                         ,m_vSelectedBitmap.GetHeight()
+                        );
+} // end of wxMemoryDC::DoDrawRoundedRectangle
+
+void wxLoadBitmapWithData(
+  HPS                               hPS
+, HBITMAP                           hBitmap
+, int                               nWidth
+, int                               nHeight
+)
+{
+    BITMAPINFOHEADER2               vHeader;
+    BITMAPINFO2                     vInfo;
+
+    vHeader.cbFix = 16L;
+    if (::GpiQueryBitmapInfoHeader(hBitmap, &vHeader))
+    {
+        unsigned char*              pucData = NULL;
+        unsigned char*              pucBits;
+        int                         nBytesPerLine = nWidth * 3;
+        LONG                        lScans = 0L;
+        POINTL                      vPoint;
+        LONG                        lColor;
+
+        vInfo.cbFix     = 16;
+        vInfo.cx        = vHeader.cx;
+        vInfo.cy        = vHeader.cy;
+        vInfo.cPlanes   = vHeader.cPlanes;
+        vInfo.cBitCount = 24;
+        pucData = (unsigned char*)malloc(nBytesPerLine * nHeight);
+        pucBits = pucData;
+        for (int i = 0; i < nHeight; i++)
+        {
+            for (int j = 0; j < nWidth; j++)
+            {
+                vPoint.x = j; vPoint.y = i;
+                lColor = ::GpiQueryPel(hPS, &vPoint);
+                *(pucBits++) = (unsigned char)lColor;
+                *(pucBits++) = (unsigned char)(lColor >> 8);
+                *(pucBits++) = (unsigned char)(lColor >> 16);
+            }
+        }
+        if ((lScans = ::GpiSetBitmapBits( hPS
+                                         ,0
+                                         ,(LONG)nHeight
+                                         ,(PBYTE)pucData
+                                         ,&vInfo
+                                        )) == GPI_ALTERROR)
+        {
+            ERRORID             vError;
+            wxString            sError;
+
+            vError = ::WinGetLastError(vHabmain);
+            sError = wxPMErrorToStr(vError);
+        }
+        free(pucData);
+    }
+}
