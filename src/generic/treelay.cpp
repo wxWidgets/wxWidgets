@@ -300,6 +300,32 @@ long wxTreeLayoutStored::AddChild(const wxString& name, const wxString& parent)
         return -1;
 }
 
+long wxTreeLayoutStored::AddChild(const wxString& name, long parent)
+{
+    if (m_num < (m_maxNodes -1 ) && parent < m_num)
+    {
+        long i = -1;
+        if (parent != -1)
+        {
+          i = parent;
+        }
+        else 
+        {
+          m_parentNode = m_num;
+        }
+        
+        m_nodes[m_num].m_parentId = i;
+        m_nodes[m_num].m_name = name;
+        m_nodes[m_num].m_x = m_nodes[m_num].m_y = 0;
+        m_nodes[m_num].m_clientData = 0;
+        m_num ++;
+        
+        return (m_num - 1);
+    }
+    else
+        return -1;
+}
+
 long wxTreeLayoutStored::NameToId(const wxString& name)
 {
     long i;

@@ -131,6 +131,7 @@ public:
     virtual long GetClientData(long id) const;
 
     virtual long AddChild(const wxString& name, const wxString& parent = "");
+    virtual long AddChild(const wxString& name, long parent);
     virtual long NameToId(const wxString& name);
 
     // Data members
