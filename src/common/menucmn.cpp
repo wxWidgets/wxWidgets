@@ -210,6 +210,9 @@ wxAcceleratorEntry *wxGetAccelFromString(const wxString& label)
                     else if ( current == wxT("TAB") ) {
                         keyCode = WXK_TAB;
                     }
+                    else if ( current == wxT("ESC") ) {
+                        keyCode = WXK_ESCAPE;
+                    }
                     else
                     {
                         wxLogDebug(wxT("Unrecognized accel key '%s', accel string ignored."),
