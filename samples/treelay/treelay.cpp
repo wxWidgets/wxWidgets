@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        test.cpp
+// Name:        treelay.cpp
 // Purpose:     wxTreeLayout sample
 // Author:      Julian Smart
 // Modified by: 
@@ -10,19 +10,19 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 // For compilers that support precompilation, includes "wx.h".
-#include <wx/wxprec.h>
+#include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
 #pragma hdrstop
 #endif
 
 #ifndef WX_PRECOMP
-#include <wx/wx.h>
+#include "wx/wx.h"
 #endif
 
-#include <wx/treelay.h>
+#include "wx/treelay.h"
 
-#include "test.h"
+#include "treelay.h"
 
 wxTreeLayoutStored *myTree = NULL;
 

@@ -1,21 +1,9 @@
-#
-# File:		Makefile for samples
-# Author:	Robert Roebling
-# Created:	1999
-# Updated:	
-# Copyright:	(c) 1998 Robert Roebling
-#
-# This makefile requires a Unix version of wxWindows
-# to be installed on your system. This is most often
-# done typing "make install" when using the complete
-# sources of wxWindows or by installing the two
-# RPM packages wxGTK.XXX.rpm and wxGTK-devel.XXX.rpm
-# under Linux.
-#
+# Purpose: makefile for treelay example (Unix)
+# Created: 2000-03-15
 
 CC = gcc
 
-PROGRAM = test
+PROGRAM = treelay
 
 OBJECTS = $(PROGRAM).o
 
@@ -31,5 +19,5 @@ all:    $(PROGRAM)
 $(PROGRAM):	$(OBJECTS)
 	$(CC) -o $(PROGRAM) $(OBJECTS) `wx-config --libs`
 
-clean: 
+clean:
 	rm -f *.o $(PROGRAM)

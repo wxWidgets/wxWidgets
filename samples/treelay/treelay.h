@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        test.h
+// Name:        treelay.h
 // Purpose:     wxTreeLayout sample
 // Author:      Julian Smart
 // Modified by: 
