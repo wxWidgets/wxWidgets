@@ -60,40 +60,20 @@ public:
     virtual bool OnInit();
 };
 
-class MyFrame : public wxFrame
-{
-public:
-    MyFrame();
-    virtual ~MyFrame();
-
-    // event handlers
-    void OnQuit(wxCommandEvent& event);
-    void OnAbout(wxCommandEvent& event);
-
-    void OnLboxSelect(wxCommandEvent& event)
-    {
-        wxLogMessage(_T("Listbox selection is now %ld."), event.GetInt());
-    }
-
-    void OnLboxDClick(wxCommandEvent& event)
-    {
-        wxLogMessage(_T("Listbox item %ld double clicked."), event.GetInt());
-    }
-
-private:
-    // any class wishing to process wxWindows events must use this macro
-    DECLARE_EVENT_TABLE()
-};
-
 // to use wxHtmlListBox you must derive a new class from it as you must
 // implement pure virtual OnGetItem()
 class MyHtmlListBox : public wxHtmlListBox
 {
 public:
-    MyHtmlListBox(wxWindow *parent) : wxHtmlListBox(parent)
+    MyHtmlListBox(wxWindow *parent, bool multi)
+        : wxHtmlListBox(parent, -1, wxDefaultPosition, wxDefaultSize,
+                        multi ? wxLB_MULTIPLE : 0)
     {
         SetItemCount(1000);
-        SetSelection(10);
+        if ( HasMultipleSelection() )
+            Select(10);
+        else
+            SetSelection(10);
         SetMargins(5, 5);
     }
 
@@ -120,6 +100,60 @@ protected:
         dc.DrawLine(rect.x, rect.GetBottom(), rect.GetRight(), rect.GetBottom());
     }
 
+};
+
+class MyFrame : public wxFrame
+{
+public:
+    MyFrame();
+    virtual ~MyFrame();
+
+    // event handlers
+    void OnQuit(wxCommandEvent& event);
+    void OnAbout(wxCommandEvent& event);
+
+    void OnLboxSelect(wxCommandEvent& event)
+    {
+        wxLogMessage(_T("Listbox selection is now %ld."), event.GetInt());
+
+        if ( m_hlbox->HasMultipleSelection() )
+        {
+            wxString s;
+
+            bool first = true;
+            unsigned long cookie;
+            for ( int item = m_hlbox->GetFirstSelected(cookie);
+                  item != wxNOT_FOUND;
+                  item = m_hlbox->GetNextSelected(cookie) )
+            {
+                if ( first )
+                    first = false;
+                else
+                    s << _T(", ");
+
+                s << item;
+            }
+
+            if ( !s.empty() )
+                wxLogMessage(_T("Selected items: %s"), s.c_str());
+        }
+
+        SetStatusText(wxString::Format(
+                        _T("# items selected = %lu"),
+                        (unsigned long)m_hlbox->GetSelectedCount()
+                      ));
+    }
+
+    void OnLboxDClick(wxCommandEvent& event)
+    {
+        wxLogMessage(_T("Listbox item %ld double clicked."), event.GetInt());
+    }
+
+private:
+    MyHtmlListBox *m_hlbox;
+
+    // any class wishing to process wxWindows events must use this macro
+    DECLARE_EVENT_TABLE()
 };
 
 // ----------------------------------------------------------------------------
@@ -214,7 +248,7 @@ MyFrame::MyFrame()
 #endif // wxUSE_STATUSBAR
 
     // create the child controls
-    MyHtmlListBox *hlbox = new MyHtmlListBox(this);
+    m_hlbox = new MyHtmlListBox(this, true);
     wxTextCtrl *text = new wxTextCtrl(this, -1, _T(""),
                                       wxDefaultPosition, wxDefaultSize,
                                       wxTE_MULTILINE);
@@ -222,7 +256,7 @@ MyFrame::MyFrame()
 
     // and lay them out
     wxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
-    sizer->Add(hlbox, 1, wxGROW);
+    sizer->Add(m_hlbox, 1, wxGROW);
     sizer->Add(text, 1, wxGROW);
 
     SetSizer(sizer);
