@@ -37,7 +37,7 @@ extern "C"
 #include "wx/intl.h"
 #include "wx/module.h"
 
-#ifdef __WATCOMC__
+#if defined(__WATCOMC__) && !defined(__DOS__)
 #ifdef LINKAGEMODE
 #undef LINKAGEMODE
 #define LINKAGEMODE __cdecl

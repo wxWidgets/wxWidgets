@@ -58,7 +58,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxPNGHandler,wxImageHandler)
 
 #if defined(__VISAGECPP__)
 #define PNGLINKAGEMODE _Optlink
-#elif defined(__WATCOMC__)
+#elif defined(__WATCOMC__) && !defined(__DOS__)
 #define PNGLINKAGEMODE _cdecl
 #else
 #define PNGLINKAGEMODE
