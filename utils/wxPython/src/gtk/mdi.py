@@ -31,9 +31,6 @@ class wxMDIParentFramePtr(wxFramePtr):
     def Cascade(self):
         val = mdic.wxMDIParentFrame_Cascade(self.this)
         return val
-    def GetClientSize(self):
-        val = mdic.wxMDIParentFrame_GetClientSize(self.this)
-        return val
     def GetActiveChild(self):
         val = mdic.wxMDIParentFrame_GetActiveChild(self.this)
         val = wxMDIChildFramePtr(val)
@@ -78,15 +75,6 @@ class wxMDIChildFramePtr(wxFramePtr):
         return val
     def Restore(self):
         val = mdic.wxMDIChildFrame_Restore(self.this)
-        return val
-    def SetMenuBar(self,arg0):
-        val = mdic.wxMDIChildFrame_SetMenuBar(self.this,arg0.this)
-        return val
-    def SetClientSize(self,arg0,arg1):
-        val = mdic.wxMDIChildFrame_SetClientSize(self.this,arg0,arg1)
-        return val
-    def GetPosition(self):
-        val = mdic.wxMDIChildFrame_GetPosition(self.this)
         return val
     def __repr__(self):
         return "<C wxMDIChildFrame instance>"

@@ -277,47 +277,6 @@ static PyObject *_wrap_wxMDIParentFrame_Cascade(PyObject *self, PyObject *args) 
     return _resultobj;
 }
 
-#define wxMDIParentFrame_GetClientSize(_swigobj,_swigarg0,_swigarg1)  (_swigobj->GetClientSize(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxMDIParentFrame_GetClientSize(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxMDIParentFrame * _arg0;
-    int * _arg1;
-    int  temp;
-    int * _arg2;
-    int  temp0;
-    char * _argc0 = 0;
-
-    self = self;
-{
-  _arg1 = &temp;
-}
-{
-  _arg2 = &temp0;
-}
-    if(!PyArg_ParseTuple(args,"s:wxMDIParentFrame_GetClientSize",&_argc0)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxMDIParentFrame_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMDIParentFrame_GetClientSize. Expected _wxMDIParentFrame_p.");
-        return NULL;
-        }
-    }
-    wxMDIParentFrame_GetClientSize(_arg0,_arg1,_arg2);
-    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-{
-    PyObject *o;
-    o = PyInt_FromLong((long) (*_arg1));
-    _resultobj = t_output_helper(_resultobj, o);
-}
-{
-    PyObject *o;
-    o = PyInt_FromLong((long) (*_arg2));
-    _resultobj = t_output_helper(_resultobj, o);
-}
-    return _resultobj;
-}
-
 #define wxMDIParentFrame_GetActiveChild(_swigobj)  (_swigobj->GetActiveChild())
 static PyObject *_wrap_wxMDIParentFrame_GetActiveChild(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -550,99 +509,6 @@ static PyObject *_wrap_wxMDIChildFrame_Restore(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-#define wxMDIChildFrame_SetMenuBar(_swigobj,_swigarg0)  (_swigobj->SetMenuBar(_swigarg0))
-static PyObject *_wrap_wxMDIChildFrame_SetMenuBar(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxMDIChildFrame * _arg0;
-    wxMenuBar * _arg1;
-    char * _argc0 = 0;
-    char * _argc1 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"ss:wxMDIChildFrame_SetMenuBar",&_argc0,&_argc1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxMDIChildFrame_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMDIChildFrame_SetMenuBar. Expected _wxMDIChildFrame_p.");
-        return NULL;
-        }
-    }
-    if (_argc1) {
-        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_wxMenuBar_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxMDIChildFrame_SetMenuBar. Expected _wxMenuBar_p.");
-        return NULL;
-        }
-    }
-    wxMDIChildFrame_SetMenuBar(_arg0,_arg1);
-    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxMDIChildFrame_SetClientSize(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetClientSize(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxMDIChildFrame_SetClientSize(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxMDIChildFrame * _arg0;
-    int  _arg1;
-    int  _arg2;
-    char * _argc0 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"sii:wxMDIChildFrame_SetClientSize",&_argc0,&_arg1,&_arg2)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxMDIChildFrame_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMDIChildFrame_SetClientSize. Expected _wxMDIChildFrame_p.");
-        return NULL;
-        }
-    }
-    wxMDIChildFrame_SetClientSize(_arg0,_arg1,_arg2);
-    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxMDIChildFrame_GetPosition(_swigobj,_swigarg0,_swigarg1)  (_swigobj->GetPosition(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxMDIChildFrame_GetPosition(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxMDIChildFrame * _arg0;
-    int * _arg1;
-    int  temp;
-    int * _arg2;
-    int  temp0;
-    char * _argc0 = 0;
-
-    self = self;
-{
-  _arg1 = &temp;
-}
-{
-  _arg2 = &temp0;
-}
-    if(!PyArg_ParseTuple(args,"s:wxMDIChildFrame_GetPosition",&_argc0)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxMDIChildFrame_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMDIChildFrame_GetPosition. Expected _wxMDIChildFrame_p.");
-        return NULL;
-        }
-    }
-    wxMDIChildFrame_GetPosition(_arg0,_arg1,_arg2);
-    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-{
-    PyObject *o;
-    o = PyInt_FromLong((long) (*_arg1));
-    _resultobj = t_output_helper(_resultobj, o);
-}
-{
-    PyObject *o;
-    o = PyInt_FromLong((long) (*_arg2));
-    _resultobj = t_output_helper(_resultobj, o);
-}
-    return _resultobj;
-}
-
 static void *SwigwxMDIClientWindowTowxWindow(void *ptr) {
     wxMDIClientWindow *src;
     wxWindow *dest;
@@ -685,9 +551,6 @@ static PyObject *_wrap_new_wxMDIClientWindow(PyObject *self, PyObject *args) {
 
 static PyMethodDef mdicMethods[] = {
 	 { "new_wxMDIClientWindow", _wrap_new_wxMDIClientWindow, 1 },
-	 { "wxMDIChildFrame_GetPosition", _wrap_wxMDIChildFrame_GetPosition, 1 },
-	 { "wxMDIChildFrame_SetClientSize", _wrap_wxMDIChildFrame_SetClientSize, 1 },
-	 { "wxMDIChildFrame_SetMenuBar", _wrap_wxMDIChildFrame_SetMenuBar, 1 },
 	 { "wxMDIChildFrame_Restore", _wrap_wxMDIChildFrame_Restore, 1 },
 	 { "wxMDIChildFrame_Maximize", _wrap_wxMDIChildFrame_Maximize, 1 },
 	 { "wxMDIChildFrame_Activate", _wrap_wxMDIChildFrame_Activate, 1 },
@@ -696,7 +559,6 @@ static PyMethodDef mdicMethods[] = {
 	 { "wxMDIParentFrame_GetToolBar", _wrap_wxMDIParentFrame_GetToolBar, 1 },
 	 { "wxMDIParentFrame_GetClientWindow", _wrap_wxMDIParentFrame_GetClientWindow, 1 },
 	 { "wxMDIParentFrame_GetActiveChild", _wrap_wxMDIParentFrame_GetActiveChild, 1 },
-	 { "wxMDIParentFrame_GetClientSize", _wrap_wxMDIParentFrame_GetClientSize, 1 },
 	 { "wxMDIParentFrame_Cascade", _wrap_wxMDIParentFrame_Cascade, 1 },
 	 { "wxMDIParentFrame_ArrangeIcons", _wrap_wxMDIParentFrame_ArrangeIcons, 1 },
 	 { "wxMDIParentFrame_ActivatePrevious", _wrap_wxMDIParentFrame_ActivatePrevious, 1 },

@@ -33,17 +33,8 @@
  * and things like that.
  *
  * $Log$
- * Revision 1.7  1999/02/20 10:01:33  RD
- * Added wxWindow_FromHWND(hWnd) for wxMSW to construct a wxWindow from a
- * window handle.  If you can get the window handle into the python code,
- * it should just work...  More news on this later.
- *
- * Added wxImageList, wxToolTip.
- *
- * Re-enabled wxConfig.DeleteAll() since it is reportedly fixed for the
- * wxRegConfig class.
- *
- * As usual, some bug fixes, tweaks, etc.
+ * Revision 1.8  1999/02/25 07:18:51  RD
+ * wxPython version 2.0b5
  *
  ************************************************************************/
 
@@ -638,10 +629,10 @@ extern "C" SWIGEXPORT(void,initcontrols2c)();
 extern "C" SWIGEXPORT(void,initcmndlgsc)();
 extern "C" SWIGEXPORT(void,initstattoolc)();
 extern "C" SWIGEXPORT(void,initframesc)();
-extern "C" SWIGEXPORT(void,initutilsc)();
 extern "C" SWIGEXPORT(void,initwindows3c)();
-
-
+#ifndef SEPARATE
+extern "C" SWIGEXPORT(void,initutilsc)();
+#endif
 static int _wrap_wxPyDefaultPosition_set(PyObject *val) {
     char * tval;
     wxPoint * temp;

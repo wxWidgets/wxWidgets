@@ -662,17 +662,17 @@ class wxRadioBoxPtr(wxControlPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def EnableBox(self,arg0):
-        val = controlsc.wxRadioBox_EnableBox(self.this,arg0)
+    def Enable(self,arg0):
+        val = controlsc.wxRadioBox_Enable(self.this,arg0)
         return val
-    def Enable(self,arg0,arg1):
-        val = controlsc.wxRadioBox_Enable(self.this,arg0,arg1)
+    def EnableItem(self,arg0,arg1):
+        val = controlsc.wxRadioBox_EnableItem(self.this,arg0,arg1)
         return val
     def FindString(self,arg0):
         val = controlsc.wxRadioBox_FindString(self.this,arg0)
         return val
-    def GetLabel(self,arg0):
-        val = controlsc.wxRadioBox_GetLabel(self.this,arg0)
+    def GetItemLabel(self,arg0):
+        val = controlsc.wxRadioBox_GetItemLabel(self.this,arg0)
         return val
     def GetSelection(self):
         val = controlsc.wxRadioBox_GetSelection(self.this)
@@ -686,11 +686,11 @@ class wxRadioBoxPtr(wxControlPtr):
     def Number(self):
         val = controlsc.wxRadioBox_Number(self.this)
         return val
-    def SetBoxLabel(self,arg0):
-        val = controlsc.wxRadioBox_SetBoxLabel(self.this,arg0)
+    def SetLabel(self,arg0):
+        val = controlsc.wxRadioBox_SetLabel(self.this,arg0)
         return val
-    def SetLabel(self,arg0,arg1):
-        val = controlsc.wxRadioBox_SetLabel(self.this,arg0,arg1)
+    def SetItemLabel(self,arg0,arg1):
+        val = controlsc.wxRadioBox_SetItemLabel(self.this,arg0,arg1)
         return val
     def SetSelection(self,arg0):
         val = controlsc.wxRadioBox_SetSelection(self.this,arg0)

@@ -4245,8 +4245,8 @@ static PyObject *_wrap_new_wxRadioBox(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-#define wxRadioBox_EnableBox(_swigobj,_swigarg0)  (_swigobj->Enable(_swigarg0))
-static PyObject *_wrap_wxRadioBox_EnableBox(PyObject *self, PyObject *args) {
+#define wxRadioBox_Enable(_swigobj,_swigarg0)  (_swigobj->Enable(_swigarg0))
+static PyObject *_wrap_wxRadioBox_Enable(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     wxRadioBox * _arg0;
     bool  _arg1;
@@ -4254,23 +4254,23 @@ static PyObject *_wrap_wxRadioBox_EnableBox(PyObject *self, PyObject *args) {
     int tempbool1;
 
     self = self;
-    if(!PyArg_ParseTuple(args,"si:wxRadioBox_EnableBox",&_argc0,&tempbool1)) 
+    if(!PyArg_ParseTuple(args,"si:wxRadioBox_Enable",&_argc0,&tempbool1)) 
         return NULL;
     if (_argc0) {
         if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxRadioBox_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxRadioBox_EnableBox. Expected _wxRadioBox_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxRadioBox_Enable. Expected _wxRadioBox_p.");
         return NULL;
         }
     }
     _arg1 = (bool ) tempbool1;
-    wxRadioBox_EnableBox(_arg0,_arg1);
+    wxRadioBox_Enable(_arg0,_arg1);
     Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
 
-#define wxRadioBox_Enable(_swigobj,_swigarg0,_swigarg1)  (_swigobj->Enable(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxRadioBox_Enable(PyObject *self, PyObject *args) {
+#define wxRadioBox_EnableItem(_swigobj,_swigarg0,_swigarg1)  (_swigobj->Enable(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxRadioBox_EnableItem(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     wxRadioBox * _arg0;
     int  _arg1;
@@ -4279,16 +4279,16 @@ static PyObject *_wrap_wxRadioBox_Enable(PyObject *self, PyObject *args) {
     int tempbool2;
 
     self = self;
-    if(!PyArg_ParseTuple(args,"sii:wxRadioBox_Enable",&_argc0,&_arg1,&tempbool2)) 
+    if(!PyArg_ParseTuple(args,"sii:wxRadioBox_EnableItem",&_argc0,&_arg1,&tempbool2)) 
         return NULL;
     if (_argc0) {
         if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxRadioBox_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxRadioBox_Enable. Expected _wxRadioBox_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxRadioBox_EnableItem. Expected _wxRadioBox_p.");
         return NULL;
         }
     }
     _arg2 = (bool ) tempbool2;
-    wxRadioBox_Enable(_arg0,_arg1,_arg2);
+    wxRadioBox_EnableItem(_arg0,_arg1,_arg2);
     Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -4328,8 +4328,8 @@ static PyObject *_wrap_wxRadioBox_FindString(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-#define wxRadioBox_GetLabel(_swigobj,_swigarg0)  (_swigobj->GetLabel(_swigarg0))
-static PyObject *_wrap_wxRadioBox_GetLabel(PyObject *self, PyObject *args) {
+#define wxRadioBox_GetItemLabel(_swigobj,_swigarg0)  (_swigobj->GetLabel(_swigarg0))
+static PyObject *_wrap_wxRadioBox_GetItemLabel(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     wxString * _result;
     wxRadioBox * _arg0;
@@ -4337,15 +4337,15 @@ static PyObject *_wrap_wxRadioBox_GetLabel(PyObject *self, PyObject *args) {
     char * _argc0 = 0;
 
     self = self;
-    if(!PyArg_ParseTuple(args,"si:wxRadioBox_GetLabel",&_argc0,&_arg1)) 
+    if(!PyArg_ParseTuple(args,"si:wxRadioBox_GetItemLabel",&_argc0,&_arg1)) 
         return NULL;
     if (_argc0) {
         if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxRadioBox_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxRadioBox_GetLabel. Expected _wxRadioBox_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxRadioBox_GetItemLabel. Expected _wxRadioBox_p.");
         return NULL;
         }
     }
-    _result = new wxString (wxRadioBox_GetLabel(_arg0,_arg1));
+    _result = new wxString (wxRadioBox_GetItemLabel(_arg0,_arg1));
 {
     _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
 }
@@ -4450,8 +4450,8 @@ static PyObject *_wrap_wxRadioBox_Number(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-#define wxRadioBox_SetBoxLabel(_swigobj,_swigarg0)  (_swigobj->SetLabel(_swigarg0))
-static PyObject *_wrap_wxRadioBox_SetBoxLabel(PyObject *self, PyObject *args) {
+#define wxRadioBox_SetLabel(_swigobj,_swigarg0)  (_swigobj->SetLabel(_swigarg0))
+static PyObject *_wrap_wxRadioBox_SetLabel(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     wxRadioBox * _arg0;
     wxString * _arg1;
@@ -4459,11 +4459,11 @@ static PyObject *_wrap_wxRadioBox_SetBoxLabel(PyObject *self, PyObject *args) {
     PyObject * _obj1 = 0;
 
     self = self;
-    if(!PyArg_ParseTuple(args,"sO:wxRadioBox_SetBoxLabel",&_argc0,&_obj1)) 
+    if(!PyArg_ParseTuple(args,"sO:wxRadioBox_SetLabel",&_argc0,&_obj1)) 
         return NULL;
     if (_argc0) {
         if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxRadioBox_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxRadioBox_SetBoxLabel. Expected _wxRadioBox_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxRadioBox_SetLabel. Expected _wxRadioBox_p.");
         return NULL;
         }
     }
@@ -4474,7 +4474,7 @@ static PyObject *_wrap_wxRadioBox_SetBoxLabel(PyObject *self, PyObject *args) {
     }
     _arg1 = new wxString(PyString_AsString(_obj1));
 }
-    wxRadioBox_SetBoxLabel(_arg0,*_arg1);
+    wxRadioBox_SetLabel(_arg0,*_arg1);
     Py_INCREF(Py_None);
     _resultobj = Py_None;
 {
@@ -4484,8 +4484,8 @@ static PyObject *_wrap_wxRadioBox_SetBoxLabel(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-#define wxRadioBox_SetLabel(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetLabel(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxRadioBox_SetLabel(PyObject *self, PyObject *args) {
+#define wxRadioBox_SetItemLabel(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetLabel(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxRadioBox_SetItemLabel(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     wxRadioBox * _arg0;
     int  _arg1;
@@ -4494,11 +4494,11 @@ static PyObject *_wrap_wxRadioBox_SetLabel(PyObject *self, PyObject *args) {
     PyObject * _obj2 = 0;
 
     self = self;
-    if(!PyArg_ParseTuple(args,"siO:wxRadioBox_SetLabel",&_argc0,&_arg1,&_obj2)) 
+    if(!PyArg_ParseTuple(args,"siO:wxRadioBox_SetItemLabel",&_argc0,&_arg1,&_obj2)) 
         return NULL;
     if (_argc0) {
         if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxRadioBox_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxRadioBox_SetLabel. Expected _wxRadioBox_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxRadioBox_SetItemLabel. Expected _wxRadioBox_p.");
         return NULL;
         }
     }
@@ -4509,7 +4509,7 @@ static PyObject *_wrap_wxRadioBox_SetLabel(PyObject *self, PyObject *args) {
     }
     _arg2 = new wxString(PyString_AsString(_obj2));
 }
-    wxRadioBox_SetLabel(_arg0,_arg1,*_arg2);
+    wxRadioBox_SetItemLabel(_arg0,_arg1,*_arg2);
     Py_INCREF(Py_None);
     _resultobj = Py_None;
 {
@@ -5271,16 +5271,16 @@ static PyMethodDef controlscMethods[] = {
 	 { "wxRadioBox_Show", _wrap_wxRadioBox_Show, 1 },
 	 { "wxRadioBox_SetStringSelection", _wrap_wxRadioBox_SetStringSelection, 1 },
 	 { "wxRadioBox_SetSelection", _wrap_wxRadioBox_SetSelection, 1 },
+	 { "wxRadioBox_SetItemLabel", _wrap_wxRadioBox_SetItemLabel, 1 },
 	 { "wxRadioBox_SetLabel", _wrap_wxRadioBox_SetLabel, 1 },
-	 { "wxRadioBox_SetBoxLabel", _wrap_wxRadioBox_SetBoxLabel, 1 },
 	 { "wxRadioBox_Number", _wrap_wxRadioBox_Number, 1 },
 	 { "wxRadioBox_GetStringSelection", _wrap_wxRadioBox_GetStringSelection, 1 },
 	 { "wxRadioBox_GetString", _wrap_wxRadioBox_GetString, 1 },
 	 { "wxRadioBox_GetSelection", _wrap_wxRadioBox_GetSelection, 1 },
-	 { "wxRadioBox_GetLabel", _wrap_wxRadioBox_GetLabel, 1 },
+	 { "wxRadioBox_GetItemLabel", _wrap_wxRadioBox_GetItemLabel, 1 },
 	 { "wxRadioBox_FindString", _wrap_wxRadioBox_FindString, 1 },
+	 { "wxRadioBox_EnableItem", _wrap_wxRadioBox_EnableItem, 1 },
 	 { "wxRadioBox_Enable", _wrap_wxRadioBox_Enable, 1 },
-	 { "wxRadioBox_EnableBox", _wrap_wxRadioBox_EnableBox, 1 },
 	 { "new_wxRadioBox", _wrap_new_wxRadioBox, 1 },
 	 { "wxStaticBitmap_SetBitmap", _wrap_wxStaticBitmap_SetBitmap, 1 },
 	 { "wxStaticBitmap_GetBitmap", _wrap_wxStaticBitmap_GetBitmap, 1 },
