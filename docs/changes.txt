@@ -60,6 +60,13 @@ Unix ports:
   and the compiler flags for C++ files only, CFLAGS should still be used
   to compile pure C files.
 
+2.3.3
+-----
+
+wxMSW:
+
+- fixed flicker in wxTreeCtrl::SetItemXXX()
+
 2.3.2
 -----
 

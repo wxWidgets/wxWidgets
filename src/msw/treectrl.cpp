@@ -1032,6 +1032,15 @@ void wxTreeCtrl::SetItemDropHighlight(const wxTreeItemId& item, bool highlight)
     DoSetItem(&tvItem);
 }
 
+void wxTreeCtrl::RefreshItem(const wxTreeItemId& item)
+{
+    wxRect rect;
+    if ( GetBoundingRect(item, rect) )
+    {
+        RefreshRect(rect);
+    }
+}
+
 void wxTreeCtrl::SetItemTextColour(const wxTreeItemId& item,
                                    const wxColour& col)
 {
@@ -1046,7 +1055,8 @@ void wxTreeCtrl::SetItemTextColour(const wxTreeItemId& item,
     }
 
     attr->SetTextColour(col);
-    Refresh();
+
+    RefreshItem(item);
 }
 
 void wxTreeCtrl::SetItemBackgroundColour(const wxTreeItemId& item,
@@ -1063,7 +1073,8 @@ void wxTreeCtrl::SetItemBackgroundColour(const wxTreeItemId& item,
     }
 
     attr->SetBackgroundColour(col);
-    Refresh();
+
+    RefreshItem(item);
 }
 
 void wxTreeCtrl::SetItemFont(const wxTreeItemId& item, const wxFont& font)
@@ -1079,7 +1090,8 @@ void wxTreeCtrl::SetItemFont(const wxTreeItemId& item, const wxFont& font)
     }
 
     attr->SetFont(font);
-    Refresh();
+
+    RefreshItem(item);
 }
 
 // ----------------------------------------------------------------------------
@@ -1097,7 +1109,6 @@ bool wxTreeCtrl::IsVisible(const wxTreeItemId& item) const
 
     // FALSE means get item rect for the whole item, not only text
     return SendMessage(GetHwnd(), TVM_GETITEMRECT, FALSE, (LPARAM)&rect) != 0;
-
 }
 
 bool wxTreeCtrl::ItemHasChildren(const wxTreeItemId& item) const
