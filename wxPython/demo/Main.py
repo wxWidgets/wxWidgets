@@ -35,6 +35,7 @@ _treeList = [
         'wxMenu',
         'wxIEHtmlWin',
         'wxKeyEvents',
+        'wxWizard',
         ]),
 
     # managed windows == things with a caption you can close
@@ -43,6 +44,7 @@ _treeList = [
         'wxFrame',
         'wxMDIWindows',
         'wxMiniFrame',
+        'wxWizard',
         ]),
 
     # the common dialogs
@@ -60,7 +62,7 @@ _treeList = [
         'wxTextEntryDialog',
         ]),
 
-    # dialogs form libraries
+    # dialogs from libraries
     ('More Dialogs', [
         'ErrorDialogs',
         'ImageBrowser',

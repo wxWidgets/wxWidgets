@@ -1740,4 +1740,50 @@ void wxPyCBH_delete(wxPyCallbackHelper* cbh);
 
 //---------------------------------------------------------------------------
 
+#define DEC_PYCALLBACK_WIZPG__pure(CBNAME)                                      \
+    wxWizardPage* CBNAME() const;
+
+#define IMP_PYCALLBACK_WIZPG__pure(CLASS, PCLASS, CBNAME)                       \
+    wxWizardPage* CLASS::CBNAME() const {                                       \
+        wxWizardPage* rv = NULL;                                                \
+        bool found;                                                             \
+        wxPyBeginBlockThreads();                                                \
+        if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
+            PyObject* ro;                                                       \
+            ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("()"));        \
+            if (ro) {                                                           \
+                SWIG_GetPtrObj(ro, (void **)&rv, "_wxWizardPage_p");            \
+                Py_DECREF(ro);                                                  \
+            }                                                                   \
+        }                                                                       \
+        wxPyEndBlockThreads();                                                  \
+        return rv;                                                              \
+    }
+
+//---------------------------------------------------------------------------
+
+#define DEC_PYCALLBACK_BITMAP__pure(CBNAME)                                     \
+    wxBitmap CBNAME() const;
+
+#define IMP_PYCALLBACK_BITMAP__pure(CLASS, PCLASS, CBNAME)                      \
+    wxBitmap CLASS::CBNAME() const {                                            \
+        wxBitmap rv;                                                            \
+        bool found;                                                             \
+        wxPyBeginBlockThreads();                                                \
+        if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
+            PyObject* ro;                                                       \
+            wxBitmap* ptr;                                                      \
+            ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("()"));        \
+            if (ro) {                                                           \
+                if (! SWIG_GetPtrObj(ro, (void **)&ptr, "_wxBitmap_p"))         \
+                    rv = *ptr;                                                  \
+                Py_DECREF(ro);                                                  \
+            }                                                                   \
+        }                                                                       \
+        wxPyEndBlockThreads();                                                  \
+        return rv;                                                              \
+    }
+
+//---------------------------------------------------------------------------
+
 #endif

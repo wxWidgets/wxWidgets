@@ -55,7 +55,10 @@ command_lines = [
     "-a -u -n File1   -m #FFFFFF bmp_source/file1.bmp   images.py",
     "-a -u -n File2   -m #FFFFFF bmp_source/file2.bmp   images.py",
 
-    "-a -u -n NoIcon  bmp_source/noicon.png  images.py"
+    "-a -u -n NoIcon  bmp_source/noicon.png  images.py",
+
+    "-a -u -n WizTest1 bmp_source/wiztest1.bmp images.py",
+    "-a -u -n WizTest2 bmp_source/wiztest2.bmp images.py",
 
     ]
 
