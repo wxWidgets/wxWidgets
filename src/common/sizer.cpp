@@ -78,9 +78,27 @@ WX_DEFINE_EXPORTED_LIST( wxSizerItemList );
        growablecols
     minsize
 */
+
 //---------------------------------------------------------------------------
 // wxSizerItem
 //---------------------------------------------------------------------------
+
+void wxSizerItem::Init()
+{
+    m_window = NULL;
+    m_sizer = NULL;
+    m_show = true;
+    m_userData = NULL;
+}
+
+void wxSizerItem::Init(const wxSizerFlags& flags)
+{
+    Init();
+
+    m_proportion = flags.GetProportion();
+    m_flag = flags.GetFlags();
+    m_border = flags.GetBorderInPixels();
+}
 
 wxSizerItem::wxSizerItem( int width, int height, int proportion, int flag, int border, wxObject* userData )
     : m_window( NULL )
@@ -130,15 +148,12 @@ wxSizerItem::wxSizerItem( wxSizer *sizer, int proportion, int flag, int border, 
 }
 
 wxSizerItem::wxSizerItem()
-    : m_window( NULL )
-    , m_sizer( NULL )
-    , m_proportion( 0 )
-    , m_border( 0 )
-    , m_flag( 0 )
-    , m_show( true )
-    , m_ratio( 0.0 )
-    , m_userData( NULL )
 {
+    Init();
+
+    m_proportion = 0;
+    m_border = 0;
+    m_flag = 0;
 }
 
 wxSizerItem::~wxSizerItem()
