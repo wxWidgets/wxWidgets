@@ -166,7 +166,7 @@ void wxHtmlWinParser::InitParser(const wxString& source)
     OpenContainer();
     OpenContainer();
 
-#if 0 //!wxUSE_UNICODE
+#if !wxUSE_UNICODE
     wxString charset = ExtractCharsetInformation(source);
     if (!charset.empty())
     {
