@@ -1,7 +1,7 @@
-Installing wxWindows 2.4.1
+Installing wxWindows 2.4.2
 --------------------------
 
-This is wxWindows 2.4.1 for IBM OS/2 Warp3 and Warp4. This is an unstable
+This is wxWindows 2.4.2 for IBM OS/2 Warp3 and Warp4. This is an unstable
 development release and OS/2 is considered to be in beta.
 
 IMPORTANT NOTE: If you experience problems installing, please
@@ -17,7 +17,7 @@ Unarchiving
 At this time there is no comprehensive setup.exe type installation program.
 wxWindows for OS/2 requires you download various .zip files and unpack them
 to your desired location on your system.  Pick a location say,
-C:\wx\wxWindows-2.4.1, copy the .zip files to there and unzip them ensuring you
+C:\wx\wxWindows-2.4.2, copy the .zip files to there and unzip them ensuring you
 unzip the subdirectories as well.  You will need:
 
 - All common, generic and OS2-specific wxWindows source;
@@ -30,7 +30,7 @@ unzip the subdirectories as well.  You will need:
 - PNG library source;
 - ZLIB library source;
 
-All but the documentation is included in wxOS2-2.4.1.zip, documentation
+All but the documentation is included in wxOS2-2.4.2.zip, documentation
 must be downloaded separately from the wxWindows Web site.
 
 Other add-on packages are available from the wxWindows Web site, such as:
@@ -46,27 +46,27 @@ General installation notes
 After unzipping everything your directory tree should look something like
 this:
 
-x:\wx\wxWindows-2.4.1\docs (your HTML reference manual)
-x:\wx\wxWindows-2.4.1\include\wx
-x:\wx\wxWindows-2.4.1\include\wx\generic
-x:\wx\wxWindows-2.4.1\include\wx\html
-x:\wx\wxWindows-2.4.1\include\wx\os2
-x:\wx\wxWindows-2.4.1\samples\....  (all the sample directories)
-x:\wx\wxWindows-2.4.1\src
-x:\wx\wxWindows-2.4.1\src\common
-x:\wx\wxWindows-2.4.1\src\generic
-x:\wx\wxWindows-2.4.1\src\html
-x:\wx\wxWindows-2.4.1\src\jpeg
-x:\wx\wxWindows-2.4.1\src\os2
-x:\wx\wxWindows-2.4.1\src\png
-x:\wx\wxWindows-2.4.1\src\tiff
-x:\wx\wxWindows-2.4.1\src\zlib
+x:\wx\wxWindows-2.4.2\docs (your HTML reference manual)
+x:\wx\wxWindows-2.4.2\include\wx
+x:\wx\wxWindows-2.4.2\include\wx\generic
+x:\wx\wxWindows-2.4.2\include\wx\html
+x:\wx\wxWindows-2.4.2\include\wx\os2
+x:\wx\wxWindows-2.4.2\samples\....  (all the sample directories)
+x:\wx\wxWindows-2.4.2\src
+x:\wx\wxWindows-2.4.2\src\common
+x:\wx\wxWindows-2.4.2\src\generic
+x:\wx\wxWindows-2.4.2\src\html
+x:\wx\wxWindows-2.4.2\src\jpeg
+x:\wx\wxWindows-2.4.2\src\os2
+x:\wx\wxWindows-2.4.2\src\png
+x:\wx\wxWindows-2.4.2\src\tiff
+x:\wx\wxWindows-2.4.2\src\zlib
 
 If you are using VisualAge, you will also need to ensure you have a
-\lib directory as well, x:\wx\wxWindows-2.4.1\lib
+\lib directory as well, x:\wx\wxWindows-2.4.2\lib
 and you will have to set a WXWIN environment variable in your
 config.sys,
-SET WXWIN=X:\WX\WXWINDOWS-2.4.1;
+SET WXWIN=X:\WX\WXWINDOWS-2.4.2;
 
 Compilation
 -----------
@@ -168,12 +168,12 @@ configure script working - the one from GNU shell utilities 1.12
 does work (check that uname -s returns "OS/2" and uname -m returns "i386"
 and you should be mostly fine.
 
-If you donwloaded wxAll-2.4.1, the directories will contain unix versions
+If you donwloaded wxAll-2.4.2, the directories will contain unix versions
 of all configure scripts which need to be replaced by the OS/2 enhanced
-versions contained in e.g. \wx\wxWindows-2.4.1\docs\os2\os2-specific.zip.
-For this purpose change into the top level directory (\wx\wxWindows-2.4.1)
+versions contained in e.g. \wx\wxWindows-2.4.2\docs\os2\os2-specific.zip.
+For this purpose change into the top level directory (\wx\wxWindows-2.4.2)
 and call "unzip docs\os2\os2-specific.zip" (assuming you have InfoZip's
-unzip installed). Of course, replace \wx\wxWindows-2.4.1 by the path you
+unzip installed). Of course, replace \wx\wxWindows-2.4.2 by the path you
 did choose.
 
 Once you are done with those preliminaries, the first thing to do is to
@@ -185,13 +185,13 @@ applications you might want to compile (and update) e.g. wxGTK or wxX11
 as well.
 
 In the following, let's assume you decided to build in
-\wx\wxWindows-2.4.1\build\pm. Now we need to set some environment
+\wx\wxWindows-2.4.2\build\pm. Now we need to set some environment
 variables, namely MAKE_SHELL (to a Unix like shell, let's assume ash)
 and INSTALL (to point to the install script. If you omit this, configure
 might find something like the system's tcpip\pcomos\install.exe which will
 not do the thing you want), e.g.
 SET MAKE_SHELL=ash
-SET INSTALL=/wx/wxWindows-2.4.1/install-sh.
+SET INSTALL=/wx/wxWindows-2.4.2/install-sh.
 
 Be warned that depending on the precise version of your make, setting
 MAKE_SHELL might not be sufficient, it might be necessary to set SHELL
@@ -245,7 +245,7 @@ Finally, if you also want to build a different port, e.g. wxGTK, you
 essentially have to use the procedure described above, the only difference
 being that you have to pass a switch to configure indicating which port
 to build. If you do not do this in a separate build directory (e.g.
-\wxWindows-2.4.1\build\gtk), you'll have to do a `make clean' first.
+\wxWindows-2.4.2\build\gtk), you'll have to do a `make clean' first.
 The magical switches that have to be passed to configure for the various
 ports are --with-gtk (wxGTK), --with-motif (wxMotif), --with-x11 (wxX11),
 and --disable-gui (wxBase). Note that contrary to the native, PM based

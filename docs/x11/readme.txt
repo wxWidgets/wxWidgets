@@ -1,7 +1,7 @@
 
-  Welcome to wxWindows/X11 2.4.1
+  Welcome to wxWindows/X11 2.4.2
 
-You have downloaded version 2.4.1 of the X11 port of
+You have downloaded version 2.4.2 of the X11 port of
 the wxWindows GUI library. This runs on X11 with no
 Motif, Xt, GTK+ or any other standard widget set --
 instead it uses the wxUniversal widgets. The intention

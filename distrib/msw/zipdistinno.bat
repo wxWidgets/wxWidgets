@@ -7,7 +7,7 @@ set webfiles=c:\wx2dev\wxWebSite
 set inno=0
 
 Rem Set this to the required version
-set version=2.4.1
+set version=2.4.2
 
 if "%src" == "" goto usage
 if "%dest" == "" goto usage

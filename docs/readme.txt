@@ -1,4 +1,4 @@
-wxWindows 2.4.1
+wxWindows 2.4.2
 ---------------
 
 Welcome to wxWindows, a sophisticated cross-platform C++
