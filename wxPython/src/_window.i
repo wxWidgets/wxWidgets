@@ -567,14 +567,20 @@ anything if there are no subwindows.", "");
         "Allows specification of minimum and maximum window sizes, and window
 size increments. If a pair of values is not set (or set to -1), the
 default values will be used.  If this function is called, the user
-will not be able to size the window outside the given bounds. The
-resizing increments are only significant under Motif or Xt.", "");
-    virtual void SetSizeHints( int minW, int minH,
-                               int maxW = -1, int maxH = -1,
-                               int incW = -1, int incH = -1 );
+will not be able to size the window outside the given bounds (if it is
+a top-level window.)  Sizers will also inspect the minimum window size
+and will use that value if set when calculating layout.
+
+The resizing increments are only significant under Motif or Xt.", "
+
+:see: `GetMinSize`, `GetMaxSize`, `SetMinSize`, `SetMaxSize`
+");
     void SetSizeHints( const wxSize& minSize,
                        const wxSize& maxSize=wxDefaultSize,
                        const wxSize& incSize=wxDefaultSize);
+    virtual void SetSizeHints( int minW, int minH,
+                               int maxW = -1, int maxH = -1,
+                               int incW = -1, int incH = -1 );
 
     
     %nokwargs SetVirtualSizeHints;
@@ -583,11 +589,31 @@ resizing increments are only significant under Motif or Xt.", "");
 pair of values is not set (or set to -1), the default values will be
 used.  If this function is called, the user will not be able to size
 the virtual area of the window outside the given bounds.", "");
-    virtual void SetVirtualSizeHints( int minW, int minH,
-                                      int maxW = -1, int maxH = -1 );
     void SetVirtualSizeHints( const wxSize& minSize,
                               const wxSize& maxSize=wxDefaultSize);
+    virtual void SetVirtualSizeHints( int minW, int minH,
+                                      int maxW = -1, int maxH = -1 );
     
+    DocDeclStr(
+        virtual wxSize , GetMaxSize() const,
+        "", "");
+    
+    DocDeclStr(
+        virtual wxSize , GetMinSize() const,
+        "", "");
+    
+    DocDeclStr(
+        void , SetMinSize(const wxSize& minSize),
+        "A more convenient method than `SetSizeHints` for setting just the
+min size.", "");
+    
+    DocDeclStr(
+        void , SetMaxSize(const wxSize& maxSize),
+        "A more convenient method than `SetSizeHints` for setting just the
+max size.", "");
+    
+
+
     DocDeclStr(
         virtual int , GetMinWidth() const,
         "", "");
@@ -604,15 +630,6 @@ the virtual area of the window outside the given bounds.", "");
         int , GetMaxHeight() const,
         "", "");
     
-
-    DocDeclStr(
-        virtual wxSize , GetMaxSize() const,
-        "", "");
-    
-
-    DocDeclStr(
-        virtual wxSize , GetMinSize() const,
-        "", "");
     
     
     DocStr(SetVirtualSize,
@@ -812,7 +829,31 @@ by pressing <Enter> such as the OK button on a wx.Dialog.", "");
         "Set this child as temporary default", "");
     
 
+    // Navigates in the specified direction by sending a wxNavigationKeyEvent
+    DocDeclAStr(
+        virtual bool , Navigate(int flags = wxNavigationKeyEvent::IsForward),
+        "Navigate(self, int flags=NavigationKeyEvent.IsForward) -> bool",
+        "Does keyboard navigation from this window to another, by sending a
+`wx.NavigationKeyEvent`.", "
+ 
+    :param flags: A combination of the ``IsForward`` and ``WinChange``
+                  values in the `wx.NavigationKeyEvent` class, which
+                  determine if the navigation should be in forward or
+                  reverse order, and if it should be able to cross
+                  parent window boundaries, such as between notebook
+                  pages or MDI child frames.  Typically the status of
+                  the Shift key (for forward or reverse) or the
+                  Control key (for WinChange) would be used to
+                  determine how to set the flags.
+
+One situation in which you may wish to call this method is from a text
+control custom keypress handler to do the default navigation behaviour
+for the tab key, since the standard default behaviour for a multiline
+text control with the wx.TE_PROCESS_TAB style is to insert a tab and
+not navigate to the next control.");
     
+
+
 
 
     // parent/children relations

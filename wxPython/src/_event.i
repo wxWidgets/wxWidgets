@@ -1104,17 +1104,24 @@ public:
     
     // direction: forward (True) or backward (False)
     bool GetDirection() const;
-    void SetDirection(bool bForward);
+    void SetDirection(bool forward);
 
     // it may be a window change event (MDI, notebook pages...) or a control
     // change event
     bool IsWindowChange() const;
-    void SetWindowChange(bool bIs);
+    void SetWindowChange(bool ischange);
 
+    void SetFlags(long flags);
+    
     // the child which has the focus currently (may be NULL - use
     // wxWindow::FindFocus then)
     wxWindow* GetCurrentFocus() const;
     void SetCurrentFocus(wxWindow *win);
+
+    enum {
+        IsForward,
+        WinChange
+    };
 };
 
 
