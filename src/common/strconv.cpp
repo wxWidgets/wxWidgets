@@ -506,11 +506,7 @@ public:
 #define ICONV_FAILED(cres, bufLeft)  (cres == (size_t)-1)
 #endif
 
-#if ICONV_CONST
-#define ICONV_CHAR_CAST(x)  ((char **)(x))
-#else
-#define ICONV_CHAR_CAST(x)  ((const char **)(x))
-#endif
+#define ICONV_CHAR_CAST(x)  ((ICONV_CONST char **)(x))
 
 // ----------------------------------------------------------------------------
 // IC_CharSet: encapsulates an iconv character set
