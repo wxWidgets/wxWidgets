@@ -1828,13 +1828,14 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
     if (!GetHDC()) return FALSE;
 #endif
 
+    const wxBitmap& bmpSrc = source->m_selectedBitmap;
+
     wxMask *mask = NULL;
     if ( useMask )
     {
-        const wxBitmap& bmp = source->m_selectedBitmap;
-        mask = bmp.GetMask();
+        mask = bmpSrc.GetMask();
 
-        if ( !(bmp.Ok() && mask && mask->GetMaskBitmap()) )
+        if ( !(bmpSrc.Ok() && mask && mask->GetMaskBitmap()) )
         {
             // don't give assert here because this would break existing
             // programs - just silently ignore useMask parameter
@@ -1998,36 +1999,79 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
     }
     else // no mask, just BitBlt() it
     {
-        // use StretchBlt() if available
-        if ( ::GetDeviceCaps(GetHdc(), RASTERCAPS) & RC_STRETCHBLT )
+        // if we already have a DIB, draw it using StretchDIBits(), otherwise
+        // use StretchBlt() if available and finally fall back to BitBlt()
+        const int caps = ::GetDeviceCaps(GetHdc(), RASTERCAPS);
+        if ( bmpSrc.Ok() && (caps & RC_STRETCHDIB) )
+        {
+            DIBSECTION ds;
+            wxZeroMemory(ds);
+
+            if ( ::GetObject(GetHbitmapOf(bmpSrc),
+                             sizeof(ds),
+                             &ds) == sizeof(ds) )
+            {
+                StretchBltModeChanger changeMode(GetHdc(), COLORONCOLOR);
+
+                if ( ::StretchDIBits(GetHdc(),
+                                     xdest, ydest,
+                                     width, height,
+                                     0, 0,
+                                     width, height,
+                                     ds.dsBm.bmBits,
+                                     (LPBITMAPINFO)&ds.dsBmih,
+                                     DIB_RGB_COLORS,
+                                     SRCCOPY
+                                     ) == (int)GDI_ERROR )
+                {
+                    wxLogLastError(wxT("StretchDIBits"));
+                }
+                else
+                {
+                    success = TRUE;
+                }
+            }
+        }
+
+        if ( !success && (caps & RC_STRETCHBLT) )
         {
             StretchBltModeChanger changeMode(GetHdc(), COLORONCOLOR);
 
-            success = ::StretchBlt
-                        (
-                            GetHdc(),
-                            xdest, ydest, width, height,
-                            GetHdcOf(*source),
-                            xsrc, ysrc, width, height,
-                            dwRop
-                        ) != 0;
-        }
-        else
-        {
-            success = ::BitBlt
-                        (
-                            GetHdc(),
-                            xdest, ydest,
-                            (int)width, (int)height,
-                            GetHdcOf(*source),
-                            xsrc, ysrc,
-                            dwRop
-                        ) != 0;
+            if ( !::StretchBlt
+                    (
+                        GetHdc(),
+                        xdest, ydest, width, height,
+                        GetHdcOf(*source),
+                        xsrc, ysrc, width, height,
+                        dwRop
+                    ) )
+            {
+                wxLogLastError(_T("StretchBlt"));
+            }
+            else
+            {
+                success = TRUE;
+            }
         }
 
         if ( !success )
         {
-            wxLogLastError(wxT("BitBlt/StretchBlt"));
+            if ( !::BitBlt
+                    (
+                        GetHdc(),
+                        xdest, ydest,
+                        (int)width, (int)height,
+                        GetHdcOf(*source),
+                        xsrc, ysrc,
+                        dwRop
+                    ) )
+            {
+                wxLogLastError(_T("BitBlt"));
+            }
+            else
+            {
+                success = TRUE;
+            }
         }
     }
 
