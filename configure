@@ -966,6 +966,7 @@ Optional Features:
   --enable-gauge          use wxGauge class
   --enable-grid           use wxGrid class
   --enable-imaglist       use wxImageList class
+  --enable-listbook       use wxListbook class
   --enable-listbox        use wxListBox class
   --enable-listctrl       use wxListCtrl class
   --enable-notebook       use wxNotebook class
@@ -2092,6 +2093,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_GAUGE=no
   DEFAULT_wxUSE_GRID=no
   DEFAULT_wxUSE_IMAGLIST=no
+  DEFAULT_wxUSE_LISTBOOK=no
   DEFAULT_wxUSE_LISTBOX=no
   DEFAULT_wxUSE_LISTCTRL=no
   DEFAULT_wxUSE_NOTEBOOK=no
@@ -2268,6 +2270,7 @@ else
   DEFAULT_wxUSE_GAUGE=yes
   DEFAULT_wxUSE_GRID=yes
   DEFAULT_wxUSE_IMAGLIST=yes
+  DEFAULT_wxUSE_LISTBOOK=yes
   DEFAULT_wxUSE_LISTBOX=yes
   DEFAULT_wxUSE_LISTCTRL=yes
   DEFAULT_wxUSE_NOTEBOOK=yes
@@ -6476,6 +6479,7 @@ if test "$wxUSE_CONTROLS" = "yes"; then
   DEFAULT_wxUSE_GAUGE=yes
   DEFAULT_wxUSE_GRID=yes
   DEFAULT_wxUSE_IMAGLIST=yes
+  DEFAULT_wxUSE_LISTBOOK=yes
   DEFAULT_wxUSE_LISTBOX=yes
   DEFAULT_wxUSE_LISTCTRL=yes
   DEFAULT_wxUSE_NOTEBOOK=yes
@@ -6513,6 +6517,7 @@ elif test "$wxUSE_CONTROLS" = "no"; then
   DEFAULT_wxUSE_GAUGE=no
   DEFAULT_wxUSE_GRID=no
   DEFAULT_wxUSE_IMAGLIST=no
+  DEFAULT_wxUSE_LISTBOOK=no
   DEFAULT_wxUSE_LISTBOX=no
   DEFAULT_wxUSE_LISTCTRL=no
   DEFAULT_wxUSE_NOTEBOOK=no
@@ -7077,6 +7082,47 @@ fi;
           fi
 
           if test "$wxUSE_IMAGLIST" = yes; then
+            echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+          else
+            echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+          fi
+
+
+	  enablestring=
+          echo "$as_me:$LINENO: checking for --${enablestring:-enable}-listbook" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-listbook... $ECHO_C" >&6
+          no_cache=0
+          # Check whether --enable-listbook or --disable-listbook was given.
+if test "${enable_listbook+set}" = set; then
+  enableval="$enable_listbook"
+
+                          if test "$enableval" = yes; then
+                            ac_cv_use_listbook='wxUSE_LISTBOOK=yes'
+                          else
+                            ac_cv_use_listbook='wxUSE_LISTBOOK=no'
+                          fi
+
+else
+
+                          LINE=`grep "wxUSE_LISTBOOK" ${wx_arg_cache_file}`
+                          if test "x$LINE" != x ; then
+                            eval "DEFAULT_$LINE"
+                          else
+                            no_cache=1
+                          fi
+
+                          ac_cv_use_listbook='wxUSE_LISTBOOK='$DEFAULT_wxUSE_LISTBOOK
+
+fi;
+
+          eval "$ac_cv_use_listbook"
+          if test "$no_cache" != 1; then
+            echo $ac_cv_use_listbook >> ${wx_arg_cache_file}.tmp
+          fi
+
+          if test "$wxUSE_LISTBOOK" = yes; then
             echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
           else
@@ -10487,8 +10533,7 @@ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
   for ac_declaration in \
-   ''\
-   '#include <stdlib.h>' \
+   '' \
    'extern "C" void std::exit (int) throw (); using std::exit;' \
    'extern "C" void std::exit (int); using std::exit;' \
    'extern "C" void exit (int) throw ();' \
@@ -10502,8 +10547,8 @@ _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-#include <stdlib.h>
 $ac_declaration
+#include <stdlib.h>
 int
 main ()
 {
@@ -11128,8 +11173,7 @@ else
   fi
 fi
 for ac_declaration in \
-   ''\
-   '#include <stdlib.h>' \
+   '' \
    'extern "C" void std::exit (int) throw (); using std::exit;' \
    'extern "C" void std::exit (int); using std::exit;' \
    'extern "C" void exit (int) throw ();' \
@@ -11143,8 +11187,8 @@ _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-#include <stdlib.h>
 $ac_declaration
+#include <stdlib.h>
 int
 main ()
 {
@@ -18950,7 +18994,8 @@ echo "${ECHO_T}$ac_cv_header_tiffio_h" >&6
 
 fi
 if test $ac_cv_header_tiffio_h = yes; then
-  echo "$as_me:$LINENO: checking for TIFFError in -ltiff" >&5
+
+                            echo "$as_me:$LINENO: checking for TIFFError in -ltiff" >&5
 echo $ECHO_N "checking for TIFFError in -ltiff... $ECHO_C" >&6
 if test "${ac_cv_lib_tiff_TIFFError+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -19007,6 +19052,7 @@ echo "${ECHO_T}$ac_cv_lib_tiff_TIFFError" >&6
 if test $ac_cv_lib_tiff_TIFFError = yes; then
   TIFF_LINK=" -ltiff"
 fi
+
 
 
 fi
@@ -28180,7 +28226,8 @@ echo "${ECHO_T}$ac_cv_lib_nsl_inet_addr" >&6
 if test $ac_cv_lib_nsl_inet_addr = yes; then
   INET_LINK="nsl"
 else
-  echo "$as_me:$LINENO: checking for inet_addr in -lresolv" >&5
+
+                echo "$as_me:$LINENO: checking for inet_addr in -lresolv" >&5
 echo $ECHO_N "checking for inet_addr in -lresolv... $ECHO_C" >&6
 if test "${ac_cv_lib_resolv_inet_addr+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -28237,7 +28284,8 @@ echo "${ECHO_T}$ac_cv_lib_resolv_inet_addr" >&6
 if test $ac_cv_lib_resolv_inet_addr = yes; then
   INET_LINK="resolv"
 else
-  echo "$as_me:$LINENO: checking for inet_addr in -lsocket" >&5
+
+                        echo "$as_me:$LINENO: checking for inet_addr in -lsocket" >&5
 echo $ECHO_N "checking for inet_addr in -lsocket... $ECHO_C" >&6
 if test "${ac_cv_lib_socket_inet_addr+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -28297,7 +28345,9 @@ if test $ac_cv_lib_socket_inet_addr = yes; then
 fi
 
 
+
 fi
+
 
 
 fi
@@ -31019,7 +31069,8 @@ echo "${ECHO_T}$ac_cv_func_socket" >&6
 if test $ac_cv_func_socket = yes; then
   :
 else
-  echo "$as_me:$LINENO: checking for socket in -lsocket" >&5
+
+                echo "$as_me:$LINENO: checking for socket in -lsocket" >&5
 echo $ECHO_N "checking for socket in -lsocket... $ECHO_C" >&6
 if test "${ac_cv_lib_socket_socket+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -31075,16 +31126,17 @@ echo "$as_me:$LINENO: result: $ac_cv_lib_socket_socket" >&5
 echo "${ECHO_T}$ac_cv_lib_socket_socket" >&6
 if test $ac_cv_lib_socket_socket = yes; then
   if test "$INET_LINK" != " -lsocket"; then
-                    INET_LINK="$INET_LINK -lsocket"
-                fi
+                        INET_LINK="$INET_LINK -lsocket"
+                    fi
 else
 
-                    { echo "$as_me:$LINENO: WARNING: socket library not found - sockets will be disabled" >&5
+                        { echo "$as_me:$LINENO: WARNING: socket library not found - sockets will be disabled" >&5
 echo "$as_me: WARNING: socket library not found - sockets will be disabled" >&2;}
-                    wxUSE_SOCKETS=no
+                        wxUSE_SOCKETS=no
 
 
 fi
+
 
 
 fi
@@ -31904,7 +31956,8 @@ _ACEOF
 _ACEOF
 
 else
-  echo "$as_me:$LINENO: checking for dlerror in -ldl" >&5
+
+                    echo "$as_me:$LINENO: checking for dlerror in -ldl" >&5
 echo $ECHO_N "checking for dlerror in -ldl... $ECHO_C" >&6
 if test "${ac_cv_lib_dl_dlerror+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -31964,6 +32017,8 @@ if test $ac_cv_lib_dl_dlerror = yes; then
 _ACEOF
 
 fi
+
+
 
 fi
 done
@@ -32619,6 +32674,14 @@ if test "$wxUSE_IMAGLIST" = "yes"; then
 #define wxUSE_IMAGLIST 1
 _ACEOF
 
+fi
+
+if test "$wxUSE_LISTBOOK" = "yes"; then
+    cat >>confdefs.h <<\_ACEOF
+#define wxUSE_LISTBOOK 1
+_ACEOF
+
+    USES_CONTROLS=1
 fi
 
 if test "$wxUSE_LISTBOX" = "yes"; then
@@ -34627,6 +34690,8 @@ fi
 
         ;;
     esac
+
+
 
 
 
