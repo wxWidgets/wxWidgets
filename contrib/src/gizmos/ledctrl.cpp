@@ -161,12 +161,12 @@ BEGIN_EVENT_TABLE(wxLEDNumberCtrl, wxControl)
 END_EVENT_TABLE()
 
 
-void wxLEDNumberCtrl::OnEraseBackground(wxEraseEvent &Event)
+void wxLEDNumberCtrl::OnEraseBackground(wxEraseEvent &WXUNUSED(event))
 {
 }
 
 
-void wxLEDNumberCtrl::OnPaint(wxPaintEvent &Event)
+void wxLEDNumberCtrl::OnPaint(wxPaintEvent &WXUNUSED(event))
 {
     wxPaintDC Dc(this);
 

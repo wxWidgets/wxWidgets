@@ -1052,12 +1052,12 @@ wxScrollBar *wxDynamicSashWindowLeaf::FindScrollBar(const wxWindow *child, int v
     return NULL;
 }
 
-void wxDynamicSashWindowLeaf::OnSize(wxSizeEvent &event) {
+void wxDynamicSashWindowLeaf::OnSize(wxSizeEvent &WXUNUSED(event)) {
     m_impl->m_container->Refresh();
     ResizeChild(m_viewport->GetSize());
 }
 
-void wxDynamicSashWindowLeaf::OnPaint(wxPaintEvent &event) {
+void wxDynamicSashWindowLeaf::OnPaint(wxPaintEvent &WXUNUSED(event)) {
     wxPaintDC dc(m_impl->m_container);
     dc.SetBackground(wxBrush(m_impl->m_container->GetBackgroundColour(), wxSOLID));
     dc.Clear();
@@ -1128,7 +1128,7 @@ void wxDynamicSashWindowLeaf::OnPaint(wxPaintEvent &event) {
     }
 }
 
-void wxDynamicSashWindowLeaf::OnScroll(wxScrollEvent &event) {
+void wxDynamicSashWindowLeaf::OnScroll(wxScrollEvent &WXUNUSED(event)) {
     int nx = -m_hscroll->GetThumbPosition();
     int ny = -m_vscroll->GetThumbPosition();
 
@@ -1175,7 +1175,7 @@ void wxDynamicSashWindowLeaf::OnMouseMove(wxMouseEvent &event) {
     m_impl->m_container->SetCursor(cursor);
 }
 
-void wxDynamicSashWindowLeaf::OnLeave(wxMouseEvent &event) {
+void wxDynamicSashWindowLeaf::OnLeave(wxMouseEvent &WXUNUSED(event)) {
     wxCursor cursor(wxCURSOR_ARROW);
     m_impl->m_container->SetCursor(cursor);
 }
@@ -1213,10 +1213,10 @@ void wxDynamicSashWindowLeaf::OnPress(wxMouseEvent &event) {
     }
 }
 
-void wxDynamicSashWindowLeaf::OnRelease(wxMouseEvent &event) {
+void wxDynamicSashWindowLeaf::OnRelease(wxMouseEvent &WXUNUSED(event)) {
 }
 
-void wxDynamicSashWindowLeaf::OnReparent(wxEvent &event) {
+void wxDynamicSashWindowLeaf::OnReparent(wxEvent &WXUNUSED(event)) {
     if (m_child) {
         m_child->Reparent(m_viewport);
     }
