@@ -756,7 +756,7 @@ bool wxTextCtrl::Enable( bool enable )
     if (m_windowStyle & wxTE_MULTILINE)
     {
         gtk_text_set_editable( GTK_TEXT(m_text), enable );
-
+        OnParentEnable(enable);
     }
     else
     {
