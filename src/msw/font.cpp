@@ -85,7 +85,7 @@ public:
         Init(size, family, style, weight, underlined, faceName, encoding);
     }
 
-    wxFontRefData(const wxNativeFontInfo& info) 
+    wxFontRefData(const wxNativeFontInfo& info)
     {
         Init(info);
     }
@@ -121,7 +121,7 @@ protected:
 
     // Windows font handle
     WXHFONT       m_hFont;
-    
+
     // Native font info
     wxNativeFontInfo m_nativeFontInfo;
     bool             m_nativeFontInfoOk;
@@ -156,7 +156,7 @@ void wxFontRefData::Init(int pointSize,
     m_temporary = FALSE;
 
     m_hFont = 0;
-    
+
     m_nativeFontInfoOk = FALSE;
 }
 
@@ -229,14 +229,14 @@ void wxFontRefData::Init(const wxNativeFontInfo& info)
     static const int ppInch = 96;
 #endif
     m_pointSize = (int) (((72.0*((double)height))/(double) ppInch) + 0.5);
-    
+
     m_encoding = wxGetFontEncFromCharSet(info.lf.lfCharSet);
-    
+
     m_fontId = 0;
     m_temporary = FALSE;
 
     m_hFont = 0;
-    
+
     m_nativeFontInfoOk = TRUE;
     m_nativeFontInfo = info;
 }
@@ -443,7 +443,7 @@ bool wxFont::RealizeResource()
       wxFillLogFont(&M_FONTDATA->m_nativeFontInfo.lf, this);
       M_FONTDATA->m_nativeFontInfoOk = TRUE;
     }
-    
+
     M_FONTDATA->m_hFont = (WXHFONT)::CreateFontIndirect(&M_FONTDATA->m_nativeFontInfo.lf);
     M_FONTDATA->m_faceName = M_FONTDATA->m_nativeFontInfo.lf.lfFaceName;
     if ( !M_FONTDATA->m_hFont )
@@ -582,8 +582,8 @@ void wxFont::SetEncoding(wxFontEncoding encoding)
 void wxFont::SetNativeFontInfo(const wxNativeFontInfo& info)
 {
     Unshare();
- 
-    FreeResource();   
+
+    FreeResource();
 
     M_FONTDATA->Init(info);
 
@@ -596,44 +596,57 @@ void wxFont::SetNativeFontInfo(const wxNativeFontInfo& info)
 
 int wxFont::GetPointSize() const
 {
+    wxCHECK_MSG( Ok(), 0, wxT("invalid font") );
+
     return M_FONTDATA->m_pointSize;
 }
 
 int wxFont::GetFamily() const
 {
+    wxCHECK_MSG( Ok(), 0, wxT("invalid font") );
+
     return M_FONTDATA->m_family;
 }
 
 int wxFont::GetFontId() const
 {
+    wxCHECK_MSG( Ok(), 0, wxT("invalid font") );
+
     return M_FONTDATA->m_fontId;
 }
 
 int wxFont::GetStyle() const
 {
+    wxCHECK_MSG( Ok(), 0, wxT("invalid font") );
+
     return M_FONTDATA->m_style;
 }
 
 int wxFont::GetWeight() const
 {
+    wxCHECK_MSG( Ok(), 0, wxT("invalid font") );
+
     return M_FONTDATA->m_weight;
 }
 
 bool wxFont::GetUnderlined() const
 {
+    wxCHECK_MSG( Ok(), FALSE, wxT("invalid font") );
+
     return M_FONTDATA->m_underlined;
 }
 
 wxString wxFont::GetFaceName() const
 {
-    wxString str;
-    if ( M_FONTDATA )
-        str = M_FONTDATA->m_faceName;
-    return str;
+    wxCHECK_MSG( Ok(), wxT(""), wxT("invalid font") );
+
+    return M_FONTDATA->m_faceName;
 }
 
 wxFontEncoding wxFont::GetEncoding() const
 {
+    wxCHECK_MSG( Ok(), wxFONTENCODING_DEFAULT, wxT("invalid font") );
+
     return M_FONTDATA->m_encoding;
 }
 
@@ -641,7 +654,7 @@ wxNativeFontInfo *wxFont::GetNativeFontInfo() const
 {
     if( M_FONTDATA->m_nativeFontInfoOk )
         return new wxNativeFontInfo(M_FONTDATA->m_nativeFontInfo);
-        
+
     return 0;
 }
 
