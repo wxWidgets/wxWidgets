@@ -1680,7 +1680,7 @@ int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
     const unsigned int size = 16;
     
     int id = m_smallImageList->GetImageCount();
-    if ((bmp.GetWidth() == size) && (bmp.GetHeight() == size))
+    if ((bmp.GetWidth() == (int) size) && (bmp.GetHeight() == (int) size))
     {
         m_smallImageList->Add(bmp);
     }
