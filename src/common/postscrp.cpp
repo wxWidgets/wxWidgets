@@ -1711,8 +1711,7 @@ void wxPostScriptDC::GetTextExtent (const wxString& string, long *x, long *y,
         }
 	// JC 2.) check for UnderlineThickness
         else if(strncmp(line,"UnderlineThickness",18)==0){
-           if((sscanf(line,"%s%
-f",utString,&UnderlineThickness)!=2)
+           if((sscanf(line,"%s%lf",utString,&UnderlineThickness)!=2)
 	     || (strcmp(utString,"UnderlineThickness")!=0)) {
 	    wxDebugMsg("AFM-file '%s': line '%s' has error (bad UnderlineThickness)\n",
 		       afmName,line);
