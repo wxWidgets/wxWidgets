@@ -701,6 +701,16 @@ public:
 
     def ClearColumnImage(self, col):
         self.SetColumnImage(col, -1)
+
+    def Append(self, entry):
+        '''Append an item to the list control.  The entry parameter should be a
+           sequence with an item for each column'''
+        if len(entry):
+            pos = self.GetItemCount()
+            self.InsertStringItem(pos, str(entry[0]))
+            for i in range(1, len(entry)):
+                self.SetStringItem(pos, i, str(entry[i]))
+            return pos
     "
 };
 
