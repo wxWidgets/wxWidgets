@@ -399,7 +399,10 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
                         validator, name) )
         return FALSE;
 
-    SetValue(value);
+    // we shouldn't call SetValue() for an empty read only combobox as it would
+    // (correctly) thro an assert and is otherwise useless anyhow
+    if ( n || !HasFlag(wxCB_READONLY) )
+        SetValue(value);
 
     // a (not read only) combobox is, in fact, 2 controls: the combobox itself
     // and an edit control inside it and if we want to catch events from this
