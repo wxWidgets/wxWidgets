@@ -892,16 +892,21 @@ enum wxStretch
 #define wxICONIZE               0x4000
 #define wxMINIMIZE              wxICONIZE
 #define wxMAXIMIZE              0x2000
-#define wxTHICK_FRAME           0x1000
+// free value: 0x1000
 #define wxSYSTEM_MENU           0x0800
 #define wxMINIMIZE_BOX          0x0400
 #define wxMAXIMIZE_BOX          0x0200
 #define wxTINY_CAPTION_HORIZ    0x0100
 #define wxTINY_CAPTION_VERT     0x0080
-#define wxRESIZE_BOX            wxMAXIMIZE_BOX
 #define wxRESIZE_BORDER         0x0040
+
+// deprecated versions defined for compatibility reasons
+#define wxRESIZE_BOX            wxMAXIMIZE_BOX
+#define wxTHICK_FRAME           wxRESIZE_BORDER
+
 #define wxDIALOG_MODAL          0x0020
 #define wxDIALOG_MODELESS       0x0000
+
 // Add for normal Windows frame behaviour
 #define wxFRAME_FLOAT_ON_PARENT 0x0020
 
