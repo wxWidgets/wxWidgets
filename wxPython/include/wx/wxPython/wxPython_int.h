@@ -467,12 +467,14 @@ public:
 // A wxClientData that holds a refernece to a Python object
 class wxPyClientData : public wxClientData {
 public:
-    wxPyClientData(PyObject* obj) {
+    wxPyClientData(PyObject* obj, bool incref=true) {
         m_obj = obj;
-        Py_INCREF(m_obj);
+        m_incRef = incref;
+        if (incref)
+            Py_INCREF(m_obj);
     }
-
     ~wxPyClientData() {
+
 #ifdef wxPyUSE_EXPORTED_API
         wxPyGetCoreAPIPtr()->p_wxPyClientData_dtor(this);
 #else
@@ -480,6 +482,7 @@ public:
 #endif
     }
     PyObject* m_obj;
+    bool      m_incRef;
 };
 
 
@@ -487,10 +490,10 @@ public:
 // OOR magic on the Python Object.
 class wxPyOORClientData : public wxPyClientData {
 public:
-    wxPyOORClientData(PyObject* obj)
-        : wxPyClientData(obj) {}
-
+    wxPyOORClientData(PyObject* obj, bool incref=true)
+        : wxPyClientData(obj, incref) {}
     ~wxPyOORClientData() {
+
 #ifdef wxPyUSE_EXPORTED_API
         wxPyGetCoreAPIPtr()->p_wxPyOORClientData_dtor(this);
 #else

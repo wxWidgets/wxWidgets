@@ -866,17 +866,6 @@ bool wxPyCheckForApp() {
 
 //---------------------------------------------------------------------------
 
-
-void wxPyClientData_dtor(wxPyClientData* self) {
-    if (! wxPyDoingCleanup) {           // Don't do it during cleanup as Python
-                                        // may have already garbage collected the object...
-        bool blocked = wxPyBeginBlockThreads();
-        Py_DECREF(self->m_obj);
-        self->m_obj = NULL;
-        wxPyEndBlockThreads(blocked);
-    }
-}
-
 void wxPyUserData_dtor(wxPyUserData* self) {
     if (! wxPyDoingCleanup) {
         bool blocked = wxPyBeginBlockThreads();
@@ -885,6 +874,20 @@ void wxPyUserData_dtor(wxPyUserData* self) {
         wxPyEndBlockThreads(blocked);
     }
 }
+
+
+void wxPyClientData_dtor(wxPyClientData* self) {
+    if (! wxPyDoingCleanup) {           // Don't do it during cleanup as Python
+                                        // may have already garbage collected the object...
+        if (self->m_incRef) {
+            bool blocked = wxPyBeginBlockThreads();
+            Py_DECREF(self->m_obj);
+            wxPyEndBlockThreads(blocked);
+        }
+        self->m_obj = NULL;
+    }
+}
+
 
 
 // This is called when an OOR controled object is being destroyed.  Although
@@ -909,8 +912,9 @@ void wxPyOORClientData_dtor(wxPyOORClientData* self) {
     }
 
 
-    // Only if there is more than one reference to the object
-    if ( !wxPyDoingCleanup && self->m_obj->ob_refcnt > 1 ) {
+    // Only if there is more than one reference to the object and we are
+    // holding the OOR reference:
+    if ( !wxPyDoingCleanup && self->m_obj->ob_refcnt > 1 && self->m_incRef) {
         // bool isInstance = wxPyInstance_Check(self->m_obj);
         // TODO same here
         //wxASSERT_MSG(isInstance, wxT("m_obj not an instance!?!?!"));

@@ -87,6 +87,22 @@ maintainable and hopefully less buggy.  The position of the labels has
 also been changed in order to better comply with Microsoft's examples
 of how to use the control.
 
+wxMSW:  Fix wx.TreeCtrl to end label editing if the control loses
+focus (a slightly modified patch 1084592.)
+
+Added wx.EXEC_NODISABLE flag for wx.Execute, which will prevent all
+the app's windows being disabled while a synchronous child process is
+running. 
+
+wxMSW: Much work to correct painting (or leaving transparent) of
+control backgrounds, properly using background themes on XP, etc.
+
+Fixed a circular reference problem with wx.Timer.  It will now
+completely cleanup after itself when the last reference to the timer
+is removed.  If you were previously using timer.Destroy() to cleanup
+your timers it will no longer work.  Instead you should hold a
+reference to the timer and then del the reference when you are
+finished with the timer.
 
 
 

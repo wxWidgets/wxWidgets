@@ -79,11 +79,7 @@ public:
 class wxPyTimer : public wxTimer
 {
 public:
-    wxPyTimer(wxEvtHandler *owner=NULL, int id = -1)
-        : wxTimer(owner, id)
-    {
-        if (owner == NULL) SetOwner(this);
-    }
+    wxPyTimer(wxEvtHandler *owner=NULL, int id = -1);
 
     DEC_PYCALLBACK__(Notify);
     PYPRIVATE;
