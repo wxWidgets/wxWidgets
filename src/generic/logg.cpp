@@ -207,13 +207,6 @@ void wxLogTextCtrl::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
 
 wxLogGui::wxLogGui()
 {
-    // we must translate them here in the very beginning or we risk to have
-    // reentrancy problems when called from inside wxGetTranslation() leading
-    // to inifnite recursion
-    m_error = _("Error");
-    m_warning = _("Warning");
-    m_info = _("Information");
-
     Clear();
 }
 
@@ -236,26 +229,27 @@ void wxLogGui::Flush()
     // do it right now to block any new calls to Flush() while we're here
     m_bHasMessages = FALSE;
 
-    wxString title = wxTheApp->GetAppName();
-    if ( !!title )
-    {
-        title[0u] = wxToupper(title[0u]);
-        title += _T(' ');
-    }
+    wxString appName = wxTheApp->GetAppName();
+    if ( !!appName )
+        appName[0u] = wxToupper(appName[0u]);
 
     long style;
+    wxString titleFormat;
     if ( m_bErrors ) {
-        title += m_error;
+        titleFormat = _("%s Error");
         style = wxICON_STOP;
     }
     else if ( m_bWarnings ) {
-        title += m_warning;
+        titleFormat = _("%s Warning");
         style = wxICON_EXCLAMATION;
     }
     else {
-        title += m_info;
+        titleFormat = _("%s Information");
         style = wxICON_INFORMATION;
     }
+    
+    wxString title;
+    title.Printf(titleFormat, appName.c_str());
 
     // this is the best we can do here
     wxWindow *parent = wxTheApp->GetTopWindow();

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWindows-2.2\n"
-"POT-Creation-Date: 2000-06-28 21:07+0200\n"
+"POT-Creation-Date: 2000-07-01 14:41+0200\n"
 "PO-Revision-Date: 2000-06-17 19:23+0200\n"
 "Last-Translator: Vaclav Slavik <v.slavik@volny.cz>\n"
 "Language-Team: wxWindows Team <wx-devel@wxwindows.org>\n"
@@ -32,7 +32,7 @@ msgstr ""
 msgid " (error %ld: %s)"
 msgstr " (chyba %ld: %s)"
 
-#: ../src/common/docview.cpp:1195
+#: ../src/common/docview.cpp:1204
 msgid " - "
 msgstr " - "
 
@@ -82,6 +82,18 @@ msgstr "%i z %i"
 msgid "%s (or %s)"
 msgstr "%s (nebo %s)"
 
+#: ../src/generic/logg.cpp:239
+msgid "%s Error"
+msgstr "%s - chyba"
+
+#: ../src/generic/logg.cpp:247
+msgid "%s Information"
+msgstr "%s - informace"
+
+#: ../src/generic/logg.cpp:243
+msgid "%s Warning"
+msgstr "%s - varování"
+
 #: ../src/common/resourc2.cpp:709 ../src/common/resource.cpp:2359
 #, c-format
 msgid "%s not a bitmap resource specification."
@@ -99,11 +111,11 @@ msgstr "%s není specifikace icon resource."
 msgid "%s: ill-formed resource file syntax."
 msgstr "%s: chybná syntaxe resource souboru."
 
-#: ../src/generic/logg.cpp:479 ../src/generic/tipdlg.cpp:170
+#: ../src/generic/logg.cpp:473 ../src/generic/tipdlg.cpp:170
 msgid "&Close"
 msgstr "&Zavøít"
 
-#: ../src/generic/logg.cpp:691
+#: ../src/generic/logg.cpp:685
 msgid "&Details"
 msgstr "&Detaily"
 
@@ -111,7 +123,7 @@ msgstr "&Detaily"
 msgid "&Finish"
 msgstr "&Dokonèit"
 
-#: ../src/generic/logg.cpp:480
+#: ../src/generic/logg.cpp:474
 msgid "&Log"
 msgstr "&Log"
 
@@ -123,15 +135,15 @@ msgstr "&Dal¹í >"
 msgid "&Next Tip"
 msgstr "&Dal¹í tip"
 
-#: ../src/common/docview.cpp:1891 ../src/common/docview.cpp:1902
+#: ../src/common/docview.cpp:1900 ../src/common/docview.cpp:1911
 msgid "&Redo"
 msgstr "&Zopakovat"
 
-#: ../src/common/docview.cpp:1885 ../src/common/docview.cpp:1912
+#: ../src/common/docview.cpp:1894 ../src/common/docview.cpp:1921
 msgid "&Redo "
 msgstr "&Zopakovat "
 
-#: ../src/generic/logg.cpp:475 ../src/generic/logg.cpp:776
+#: ../src/generic/logg.cpp:469 ../src/generic/logg.cpp:770
 msgid "&Save..."
 msgstr "&Ulo¾it..."
 
@@ -139,11 +151,11 @@ msgstr "&Ulo¾it..."
 msgid "&Show tips at startup"
 msgstr "&Zobrazit tipy pøi spu¹tìní"
 
-#: ../src/common/docview.cpp:1897
+#: ../src/common/docview.cpp:1906
 msgid "&Undo"
 msgstr "Z&pìt"
 
-#: ../src/common/docview.cpp:1872
+#: ../src/common/docview.cpp:1881
 msgid "&Undo "
 msgstr "Z&pìt "
 
@@ -319,7 +331,7 @@ msgstr "ABCDEFGabcdefg12345"
 msgid "Add current page to bookmarks"
 msgstr "Pøidá tuto stránku k zálo¾kám"
 
-#: ../src/generic/colrdlgg.cpp:264
+#: ../src/generic/colrdlgg.cpp:272
 msgid "Add to custom colours"
 msgstr "Pøidat k u¾ivatelským barvám"
 
@@ -340,7 +352,7 @@ msgstr "V¹echny (*)|*"
 msgid "Already dialling ISP."
 msgstr "U¾ vytáèím."
 
-#: ../src/generic/logg.cpp:1023
+#: ../src/generic/logg.cpp:1017
 #, c-format
 msgid "Append log to file '%s' (choosing [No] will overwrite it)?"
 msgstr "Pøipojit log k souboru '%s' (pokud zvolíte [Ne], soubor pøepí¹ete)?"
@@ -442,7 +454,7 @@ msgstr "Dolní okraj (mm):"
 msgid "C sheet, 17 x 22 in"
 msgstr "stránka C, 17 x 22 palcù"
 
-#: ../src/generic/logg.cpp:477
+#: ../src/generic/logg.cpp:471
 msgid "C&lear"
 msgstr "&Vymazat"
 
@@ -502,7 +514,7 @@ msgstr "Nemohu pozastavit vlákno %x"
 msgid "Can not wait for thread termination"
 msgstr "Nemohu poèkat na ukonèení vlákna"
 
-#: ../src/common/docview.cpp:1874
+#: ../src/common/docview.cpp:1883
 msgid "Can't &Undo "
 msgstr "Nemohu vzít zpìt"
 
@@ -544,7 +556,7 @@ msgstr "Nemohu vytvoøit meziprocesovou rouru pro zápis"
 msgid "Can't create thread"
 msgstr "Nemohu vytvoøit vlákno"
 
-#: ../src/msw/window.cpp:2397
+#: ../src/msw/window.cpp:2388
 #, c-format
 msgid ""
 "Can't create window of class %s!\n"
@@ -588,7 +600,7 @@ msgstr "Nemohu vyjmenovat hodnoty klíèe '%s'"
 msgid "Can't find current position in file '%s'"
 msgstr "Nemohu zjistit pozici v souboru '%s'"
 
-#: ../src/msw/window.cpp:2347
+#: ../src/msw/window.cpp:2338
 msgid ""
 "Can't find dummy dialog template!\n"
 "Check resource include path for finding wx.rc."
@@ -635,7 +647,7 @@ msgstr "Nemohu pøeèíst hodnotu '%s'"
 msgid "Can't read value of key '%s'"
 msgstr "Nemohu naèíst hodnotu klíèe '%s'"
 
-#: ../src/generic/logg.cpp:537 ../src/generic/logg.cpp:934
+#: ../src/generic/logg.cpp:531 ../src/generic/logg.cpp:928
 msgid "Can't save log contents to file."
 msgstr "Nemohu ulo¾it obsah logu do souboru."
 
@@ -745,7 +757,7 @@ msgstr "Vyberte ISP, ke kterému se má volat"
 msgid "Choose font"
 msgstr "Vyberte písmo"
 
-#: ../src/generic/logg.cpp:477
+#: ../src/generic/logg.cpp:471
 msgid "Clear the log contents"
 msgstr "Smazat obsah logu"
 
@@ -754,7 +766,7 @@ msgstr "Smazat obsah logu"
 msgid "Close"
 msgstr "Zavøít"
 
-#: ../src/generic/logg.cpp:479
+#: ../src/generic/logg.cpp:473
 msgid "Close this window"
 msgstr "Zavøít okno"
 
@@ -956,7 +968,7 @@ msgstr ""
 msgid "Display options dialog"
 msgstr "Zobrazí dialog s nastaveními"
 
-#: ../src/common/docview.cpp:431
+#: ../src/common/docview.cpp:438
 #, c-format
 msgid "Do you want to save changes to document %s?"
 msgstr "Chcete ulo¾it zmìny do dokumentu %s?"
@@ -994,8 +1006,7 @@ msgstr ""
 #: ../src/generic/filedlgg.cpp:717 ../src/generic/filedlgg.cpp:731
 #: ../src/generic/filedlgg.cpp:744 ../src/generic/filedlgg.cpp:1043
 #: ../src/generic/filedlgg.cpp:1092 ../src/generic/helpxlp.cpp:241
-#: ../src/generic/logg.cpp:213 ../src/gtk/filedlg.cpp:83
-#: ../src/gtk/fontdlg.cpp:72
+#: ../src/gtk/filedlg.cpp:83 ../src/gtk/fontdlg.cpp:72
 msgid "Error"
 msgstr "Chyba"
 
@@ -1266,7 +1277,7 @@ msgstr "Nelze ukonèit vytáèené spojení: %s"
 msgid "Failed to unregister DDE server '%s'"
 msgstr "Nelze odregistrovat DDE server '%s'"
 
-#: ../src/generic/logg.cpp:373
+#: ../src/generic/logg.cpp:367
 msgid "Fatal error"
 msgstr "Kritická chyba"
 
@@ -1287,7 +1298,7 @@ msgstr "Soubor '%s' existuje, opravdu ho chcete pøepsat?"
 msgid "File couldn't be loaded."
 msgstr "Soubor nelze naèíst."
 
-#: ../src/common/docview.cpp:287 ../src/common/docview.cpp:323
+#: ../src/common/docview.cpp:294 ../src/common/docview.cpp:330
 msgid "File error"
 msgstr "Chyba souboru"
 
@@ -1478,10 +1489,6 @@ msgstr "©patná verze knihy s HTML nápovìdou"
 msgid "Index"
 msgstr "Rejtøík"
 
-#: ../src/generic/logg.cpp:215
-msgid "Information"
-msgstr "Informace"
-
 #: ../src/common/imagtiff.cpp:171
 msgid "Invalid TIFF image index."
 msgstr "Po¹kozený index v TIFF obrázku."
@@ -1553,7 +1560,7 @@ msgstr "Naèítání ¹edých ascii PNM obrázkù není je¹tì implementováno."
 msgid "Loading Grey Raw PNM image is not yet implemented."
 msgstr "Naèítání ¹edých raw PNM obrázkù není je¹tì implementováno."
 
-#: ../src/generic/logg.cpp:540
+#: ../src/generic/logg.cpp:534
 #, c-format
 msgid "Log saved to the file '%s'."
 msgstr "Log ulo¾en do souboru '%s'."
@@ -1675,7 +1682,7 @@ msgstr "Note, 8 1/2 x 11 palcù"
 
 #: ../src/common/dlgcmn.cpp:127 ../src/generic/dcpsg.cpp:2240
 #: ../src/generic/dirdlgg.cpp:422 ../src/generic/filedlgg.cpp:907
-#: ../src/generic/fontdlgg.cpp:256 ../src/generic/logg.cpp:735
+#: ../src/generic/fontdlgg.cpp:256 ../src/generic/logg.cpp:729
 #: ../src/generic/prntdlgg.cpp:467 ../src/generic/proplist.cpp:511
 #: ../src/gtk/filedlg.cpp:158 ../src/gtk/fontdlg.cpp:172
 #: ../src/html/helpfrm.cpp:909
@@ -1843,7 +1850,7 @@ msgstr "Vytisknout"
 msgid "Print Error"
 msgstr "Chyba tisku"
 
-#: ../src/common/docview.cpp:887
+#: ../src/common/docview.cpp:895
 msgid "Print Preview"
 msgstr "Náhled tisku"
 
@@ -1933,7 +1940,7 @@ msgstr "Program pøeru¹en."
 msgid "Quarto, 215 x 275 mm"
 msgstr "Quarto, 215 x 275 mm"
 
-#: ../src/generic/logg.cpp:1025
+#: ../src/generic/logg.cpp:1019
 msgid "Question"
 msgstr "Otázka"
 
@@ -1999,11 +2006,11 @@ msgstr "Patkové"
 msgid "Save %s file"
 msgstr "Ulo¾it soubor %s"
 
-#: ../src/common/docview.cpp:240
+#: ../src/common/docview.cpp:247
 msgid "Save as"
 msgstr "Ulo¾it jako"
 
-#: ../src/generic/logg.cpp:475
+#: ../src/generic/logg.cpp:469
 msgid "Save log contents to file"
 msgstr "Ulo¾it obsah logu do souboru"
 
@@ -2041,15 +2048,15 @@ msgstr "Sekce"
 msgid "Seek error on file '%s'"
 msgstr "Chyba pøi nastavování pozice v souboru '%s'"
 
-#: ../src/common/docview.cpp:1417
+#: ../src/common/docview.cpp:1426
 msgid "Select a document template"
 msgstr "Vyberte ¹ablonu dokumentu"
 
-#: ../src/common/docview.cpp:1440
+#: ../src/common/docview.cpp:1449
 msgid "Select a document view"
 msgstr "Vyberte zobrazení dokumentu"
 
-#: ../src/common/docview.cpp:1335 ../src/common/docview.cpp:1372
+#: ../src/common/docview.cpp:1344 ../src/common/docview.cpp:1381
 msgid "Select a file"
 msgstr "Vyberte soubor"
 
@@ -2094,15 +2101,15 @@ msgstr "Velikost"
 msgid "Slant"
 msgstr "Sklonìné"
 
-#: ../src/common/docview.cpp:297
+#: ../src/common/docview.cpp:304
 msgid "Sorry, could not open this file for saving."
 msgstr "Tento soubor nelze otevøít pro zápis."
 
-#: ../src/common/docview.cpp:333 ../src/common/docview.cpp:345
+#: ../src/common/docview.cpp:340 ../src/common/docview.cpp:352
 msgid "Sorry, could not open this file."
 msgstr "Tento soubor nelze otevøít."
 
-#: ../src/common/docview.cpp:304
+#: ../src/common/docview.cpp:311
 msgid "Sorry, could not save this file."
 msgstr "Tento soubor nelze ulo¾it."
 
@@ -2114,7 +2121,7 @@ msgstr "Nedostatek pamìti na vytvoøení náhledu."
 msgid "Statement, 5 1/2 x 8 1/2 in"
 msgstr "Statement, 5 1/2 x 8 1/2 palce"
 
-#: ../src/generic/logg.cpp:600
+#: ../src/generic/logg.cpp:594
 msgid "Status: "
 msgstr "Status: "
 
@@ -2151,7 +2158,7 @@ msgstr "Tabloid, 11 x 17 palcù"
 msgid "Teletype"
 msgstr "Psací stroj"
 
-#: ../src/common/docview.cpp:1417
+#: ../src/common/docview.cpp:1426
 msgid "Templates"
 msgstr "©ablony"
 
@@ -2198,7 +2205,7 @@ msgstr ""
 "Pøejete si vybrat font, který se má s tímto kódováním pou¾ít\n"
 "(jinak se text v tomto kódování nezobrazí správnì)?"
 
-#: ../src/common/docview.cpp:1622
+#: ../src/common/docview.cpp:1631
 #, c-format
 msgid ""
 "The file '%s' doesn't exist and couldn't be opened.\n"
@@ -2364,8 +2371,8 @@ msgstr "Neznámá volba '%s'"
 msgid "Unmatched '{' in an entry for mime type %s."
 msgstr "Pøebyteèná '{' v popisu mime typu %s."
 
-#: ../src/common/docview.cpp:1869 ../src/common/docview.cpp:1884
-#: ../src/common/docview.cpp:1911
+#: ../src/common/docview.cpp:1878 ../src/common/docview.cpp:1893
+#: ../src/common/docview.cpp:1920
 msgid "Unnamed command"
 msgstr "Nepojmenovaný pøíkaz"
 
@@ -2407,7 +2414,7 @@ msgstr "Prohlí¾et soubory v detailním pohledu"
 msgid "View files as a list view"
 msgstr "Prohlí¾et soubory v seznamu"
 
-#: ../src/common/docview.cpp:1440
+#: ../src/common/docview.cpp:1449
 msgid "Views"
 msgstr "Pohledy"
 
@@ -2415,8 +2422,7 @@ msgstr "Pohledy"
 msgid "Waiting for subprocess termination failed"
 msgstr "Èekání na ukonèení podprocesu selhalo"
 
-#: ../src/common/docview.cpp:428 ../src/common/resource.cpp:121
-#: ../src/generic/logg.cpp:214
+#: ../src/common/docview.cpp:435 ../src/common/resource.cpp:121
 msgid "Warning"
 msgstr "Varování"
 
@@ -2523,7 +2529,7 @@ msgstr "Ano"
 msgid "You cannot add a new directory to this section."
 msgstr "Nemù¾ete pøidat nový adresáø do této sekce."
 
-#: ../src/common/docview.cpp:1980
+#: ../src/common/docview.cpp:1989
 msgid "[EMPTY]"
 msgstr "[PRÁZDNÉ]"
 
@@ -2829,7 +2835,7 @@ msgstr "inicializovat"
 msgid "invalid eof() return value."
 msgstr "¹patná návratová hodnota eof()."
 
-#: ../src/generic/logg.cpp:1039
+#: ../src/generic/logg.cpp:1033
 msgid "invalid message box return value"
 msgstr "¹patná návratová hodnota message boxu"
 
@@ -2974,11 +2980,11 @@ msgstr "neznámý poèátek pro nastavení pozice"
 msgid "unknown-%d"
 msgstr "nezname-%d"
 
-#: ../src/common/docview.cpp:397
+#: ../src/common/docview.cpp:404
 msgid "unnamed"
 msgstr "nepojmenovaný"
 
-#: ../src/common/docview.cpp:1177
+#: ../src/common/docview.cpp:1186
 #, c-format
 msgid "unnamed%d"
 msgstr "nepojmenovaný%d"
