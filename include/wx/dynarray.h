@@ -19,7 +19,7 @@
 #include "wx/defs.h"
 #include "wx/debug.h"
 
-/** @name Dynamic arrays and lists
+/** @name Dynamic arrays and object arrays (array which own their elements)
     @memo Arrays which grow on demand and do range checking (only in debug)
   */
 //@{
@@ -29,7 +29,7 @@
 // ----------------------------------------------------------------------------
 
 /**
- the initial size by which an array/list grows when an element is added
+ the initial size by which an array grows when an element is added
  default value avoids allocate one or two bytes when the array is created
  which is rather inefficient
 */
@@ -61,7 +61,7 @@ typedef int (CMPFUNC_CONV *CMPFUNC)(const void* pItem1, const void* pItem2);
      so it's not too important if it's not called (this happens when you cast
      "SomeArray *" as "BaseArray *" and then delete it)
 
-  @memo Base class for template array and list classes
+  @memo Base class for template array classes
 */
 // ----------------------------------------------------------------------------
 class WXDLLEXPORT wxBaseArray
@@ -85,9 +85,9 @@ public:
 
   /** @name memory management */
   //@{
-    /// empties the list, but doesn't release memory
+    /// empties the array, but doesn't release memory
   void Empty() { m_nCount = 0; }
-    /// empties the list and releases memory
+    /// empties the array and releases memory
   void Clear();
     /// preallocates memory for given number of items
   void Alloc(size_t uiSize);
@@ -106,7 +106,7 @@ public:
 
 protected:
   // these methods are protected because if they were public one could
-  // mistakenly call one of them instead of DEFINE_ARRAY's or LIST's
+  // mistakenly call one of them instead of DEFINE_ARRAY's or OBJARRAY's
   // type safe methods
 
   /** @name items access */
@@ -255,11 +255,11 @@ private:                                                            \
 }
 
 // ----------------------------------------------------------------------------
-// see WX_DECLARE_LIST and WX_DEFINE_LIST
+// see WX_DECLARE_OBJARRAY and WX_DEFINE_OBJARRAY
 // ----------------------------------------------------------------------------
-#define _WX_DECLARE_LIST(T, name)                                   \
+#define _WX_DECLARE_OBJARRAY(T, name)                               \
 typedef int (CMPFUNC_CONV *CMPFUNC##T)(T** pItem1, T** pItem2);     \
-class WXDLLEXPORTLOCAL  name : public wxBaseArray                                     \
+class WXDLLEXPORTLOCAL name : public wxBaseArray                    \
 {                                                                   \
 public:                                                             \
   name() { }                                                        \
@@ -299,17 +299,17 @@ private:                                                            \
 }
 
 // ----------------------------------------------------------------------------
-/** @name Macros for definition of dynamic arrays and lists
+/** @name Macros for definition of dynamic arrays and objarrays
 
   These macros are ugly (especially if you look in the sources ;-), but they
   allow us to define 'template' classes without actually using templates.
   <BR>
   <BR>
-  Range checking is performed in debug build for both arrays and lists. Type
-  checking is done at compile-time. Warning: arrays <I>never</I> shrink, they
-  only grow, so loading 10 millions in an array only to delete them 2 lines
-  below is <I>not</I> recommended. However, it does free memory when it's
-  destroyed, so if you destroy array also, it's ok.
+  Range checking is performed in debug build for both arrays and objarrays.
+  Type checking is done at compile-time. Warning: arrays <I>never</I> shrink,
+  they only grow, so loading 10 millions in an array only to delete them 2
+  lines below is <I>not</I> recommended. However, it does free memory when
+  it's destroyed, so if you destroy array also, it's ok.
   */
 // ----------------------------------------------------------------------------
 
@@ -334,60 +334,60 @@ private:                                                            \
                                   _WX_DEFINE_SORTED_ARRAY(_A##name, name)
 
   /**
-   This macro generates a new list class which owns the objects it contains,
-   i.e. it will delete them when it is destroyed. An element is of type T*,
-   but arguments of type T& are taken (see below!) and T& is returned.
-   <BR>
+   This macro generates a new objarrays class which owns the objects it
+   contains, i.e. it will delete them when it is destroyed. An element is of
+   type T*, but arguments of type T& are taken (see below!) and T& is
+   returned. <BR>
    Don't use this for simple types such as "int" or "long"!
    You _may_ use it for "double" but it's awfully inefficient.
    <BR>
    <BR>
    Note on Add/Insert functions:
    <BR>
-    1) function(T*) gives the object to the list, i.e. it will delete the
-       object when it's removed or in the list's dtor
+    1) function(T*) gives the object to the array, i.e. it will delete the
+       object when it's removed or in the array's dtor
    <BR>
     2) function(T&) will create a copy of the object and work with it
    <BR>
    <BR>
    Also:
    <BR>
-    1) Remove() will delete the object after removing it from the list
+    1) Remove() will delete the object after removing it from the array
    <BR>
-    2) Detach() just removes the object from the list (returning pointer to it)
+    2) Detach() just removes the object from the array (returning pointer to it)
    <BR>
    <BR>
    NB1: Base type T should have an accessible copy ctor  if  Add(T&) is used,
    <BR>
-   NB2: Never ever cast a list to it's base type: as dtor is <B>not</B> virtual
+   NB2: Never ever cast a array to it's base type: as dtor is <B>not</B> virtual
         it will provoke memory leaks
    <BR>
    <BR>
    some functions of this class are not inline, so it takes some space to
    define new class from this template.
 
-   @memo declare list class 'name' containing elements of type 'T'
+   @memo declare objarray class 'name' containing elements of type 'T'
   */
 #define WX_DECLARE_OBJARRAY(T, name)  typedef T _L##name;                 \
                                       _WX_DECLARE_LIST(_L##name, name)
   /**
-    To use a list class you must
+    To use an objarray class you must
     <ll>
     <li>#include "dynarray.h"
-    <li>DECLARE_LIST(element_type, list_class_name)
-    <li>#include "listimpl.cpp"
-    <li>DEFINE_LIST(list_class_name)   // same as above!
+    <li>WX_DECLARE_OBJARRAY(element_type, list_class_name)
+    <li>#include "arrimpl.cpp"
+    <li>WX_DEFINE_OBJARRAY(list_class_name)   // same as above!
     </ll>
     <BR><BR>
-    This is necessary because at the moment of DEFINE_LIST class element_type
-    must be fully defined (i.e. forward declaration is not enough), while
-    DECLARE_LIST may be done anywhere. The separation of two allows to break
-    cicrcular dependencies with classes which have member variables of list
-    type.
+    This is necessary because at the moment of DEFINE_OBJARRAY class
+    element_type must be fully defined (i.e. forward declaration is not
+    enough), while WX_DECLARE_OBJARRAY may be done anywhere. The separation of
+    two allows to break cicrcular dependencies with classes which have member
+    variables of objarray type.
 
-    @memo define (must include listimpl.cpp!) list class 'name'
+    @memo define (must include arrimpl.cpp!) objarray class 'name'
    */
-#define WX_DEFINE_OBJARRAY(name)       "don't forget to include listimpl.cpp!"
+#define WX_DEFINE_OBJARRAY(name)       "don't forget to include arrimpl.cpp!"
 //@}
 
 // ----------------------------------------------------------------------------
