@@ -1811,6 +1811,17 @@ void WXDLLEXPORT wxSplitPath(const wxChar *pszFileName,
     }
 }
 
+
+
+time_t WXDLLEXPORT wxFileModificationTime(const wxString& filename)
+{
+    struct stat buf;
+
+    stat(filename.fn_str(), &buf);
+    return buf.st_mtime;
+}
+
+
 //------------------------------------------------------------------------
 // wild character routines
 //------------------------------------------------------------------------

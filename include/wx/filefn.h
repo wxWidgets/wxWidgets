@@ -18,6 +18,8 @@
 
 #include "wx/list.h"
 
+#include <time.h>
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -211,6 +213,9 @@ WXDLLEXPORT bool wxFindFileInPath(wxString *pStr, const wxChar *pszPath, const w
 // Get the OS directory if appropriate (such as the Windows directory).
 // On non-Windows platform, probably just return the empty string.
 WXDLLEXPORT wxString wxGetOSDirectory();
+
+// Get file modification time
+WXDLLEXPORT time_t wxFileModificationTime(const wxString& filename);
 
 // ----------------------------------------------------------------------------
 // classes
