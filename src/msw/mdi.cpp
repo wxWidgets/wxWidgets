@@ -302,7 +302,7 @@ void wxMDIParentFrame::SetWindowMenu(wxMenu* menu)
         if (GetMenuBar())
         {
             InsertWindowMenu(GetClientWindow(), m_hMenu,
-                             GetHMenuOf(m_windowMenu));
+                             GetHmenuOf(m_windowMenu));
         }
     }
 }
