@@ -42,11 +42,11 @@ top_srcdir = @top_srcdir@
 ### Variables: ###
 
 LIBDIRNAME = $(top_builddir)lib
-XRCDLL_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
-	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
-	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
-	-I$(srcdir)/../../include -DWXUSINGDLL -DWXMAKINGDLL_XRC $(CXXFLAGS) \
-	$(PIC_FLAG)
+XRCDLL_CXXFLAGS = $(__xrcdll_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
+	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
+	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
+	$(__INC_REGEX_p) $(__INC_EXPAT_p) -I$(srcdir)/../../include -DWXUSINGDLL \
+	-DWXMAKINGDLL_XRC $(CXXFLAGS) $(PIC_FLAG)
 XRCDLL_OBJECTS =  \
 	xrcdll_xmlres.o \
 	xrcdll_xh_bmp.o \
@@ -85,11 +85,11 @@ XRCDLL_OBJECTS =  \
 	xrcdll_xh_unkwn.o \
 	xrcdll_xh_wizrd.o \
 	xrcdll_xmlrsall.o
-XRCLIB_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
-	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
-	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
-	-I$(srcdir)/../../include -I$(srcdir)/expat/xmlparse \
-	-I$(srcdir)/expat/xmltok $(CXXFLAGS)
+XRCLIB_CXXFLAGS = $(__xrclib_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
+	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
+	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
+	$(__INC_REGEX_p) $(__INC_EXPAT_p) -I$(srcdir)/../../include \
+	-I$(srcdir)/expat/xmlparse -I$(srcdir)/expat/xmltok $(CXXFLAGS)
 XRCLIB_OBJECTS =  \
 	xrclib_xmlres.o \
 	xrclib_xh_bmp.o \
@@ -192,6 +192,8 @@ COND_MONOLITHIC_1___WXLIB_MONO_p = \
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
 @COND_SHARED_1@__install_xrcdll___depname = install_xrcdll
 @COND_SHARED_0@__install_xrclib___depname = install_xrclib
+@COND_GCC_PCH_1@__xrcdll_PCH_DEP = .pch/wxprec_xrcdll/wx/wxprec.h.gch
+@COND_GCC_PCH_1@__xrcdll_PCH_INC = -I.pch/wxprec_xrcdll
 COND_SHARED_1___xrcdll___depname = \
 	$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__xrcdll___targetsuf3)
 @COND_SHARED_1@__xrcdll___depname = $(COND_SHARED_1___xrcdll___depname)
@@ -239,6 +241,8 @@ COND_USE_SOVERSOLARIS_1___xrcdll___soname_flags = \
 @COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@__xrcdll___targetsuf3 \
 @COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@	= .0.0.0.$(SO_SUFFIX)
 @COND_USE_SOVERSION_0@__xrcdll___targetsuf3 = .$(SO_SUFFIX)
+@COND_GCC_PCH_1@__xrclib_PCH_DEP = .pch/wxprec_xrclib/wx/wxprec.h.gch
+@COND_GCC_PCH_1@__xrclib_PCH_INC = -I.pch/wxprec_xrclib
 COND_SHARED_0___xrclib___depname = \
 	$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc-2.5$(HOST_SUFFIX).a
 @COND_SHARED_0@__xrclib___depname = $(COND_SHARED_0___xrclib___depname)
@@ -247,8 +251,14 @@ COND_SHARED_0___xrclib___depname = \
 
 all: $(__xrcdll___depname) $(__xrclib___depname)
 
+@COND_GCC_PCH_1@.pch/wxprec_xrcdll/wx/wxprec.h.gch: 
+@COND_GCC_PCH_1@	$(top_builddir)./bk-make-pch .pch/wxprec_xrcdll/wx/wxprec.h.gch wx/wxprec.h $(CXX) $(XRCDLL_CXXFLAGS)
+
+@COND_GCC_PCH_1@.pch/wxprec_xrclib/wx/wxprec.h.gch: 
+@COND_GCC_PCH_1@	$(top_builddir)./bk-make-pch .pch/wxprec_xrclib/wx/wxprec.h.gch wx/wxprec.h $(CXX) $(XRCLIB_CXXFLAGS)
+
 clean: 
-	rm -rf ./.deps
+	rm -rf ./.deps ./.pch
 	rm -f ./*.o
 	rm -f $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__xrcdll___targetsuf3)
 	rm -f $(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
@@ -256,8 +266,7 @@ clean:
 	rm -f $(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc-2.5$(HOST_SUFFIX).a
 
 distclean: clean
-	rm -f configure config.cache config.log config.status
-	rm -f bk-deps shared-ld-sh
+	rm -f configure config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
 install: all $(__install_xrcdll___depname) $(__install_xrclib___depname)
 	$(INSTALL_DIR) $(includedir)
@@ -283,7 +292,7 @@ install-strip: install
 
 uninstall: 
 
-@COND_SHARED_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__xrcdll___targetsuf3): $(XRCDLL_OBJECTS)
+@COND_SHARED_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__xrcdll___targetsuf3): $(__xrcdll_PCH_DEP)  $(XRCDLL_OBJECTS)
 @COND_SHARED_1@	$(SHARED_LD_CXX) $@ $(XRCDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__xrcdll___macinstnamecmd) $(__xrcdll___importlib) $(__xrcdll___soname_flags) $(__xrcdll___macver)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(__WXLIB_HTML_p) $(__WXLIB_ADV_p) $(__WXLIB_CORE_p) $(__WXLIB_XML_p) $(__WXLIB_BASE_p)
 @COND_SHARED_1@	$(__xrcdll___so_symlinks_cmd)
 
@@ -398,7 +407,7 @@ xrcdll_xmlres.o: $(srcdir)/xmlres.cpp
 xrcdll_xmlrsall.o: $(srcdir)/xmlrsall.cpp
 	$(CXXC) -c -o $@ $(XRCDLL_CXXFLAGS) $<
 
-@COND_SHARED_0@$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc-2.5$(HOST_SUFFIX).a: $(XRCLIB_OBJECTS)
+@COND_SHARED_0@$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc-2.5$(HOST_SUFFIX).a: $(__xrclib_PCH_DEP)  $(XRCLIB_OBJECTS)
 @COND_SHARED_0@	rm -f $@
 @COND_SHARED_0@	$(AR) rcu $@ $(XRCLIB_OBJECTS)
 @COND_SHARED_0@	$(RANLIB) $@

@@ -5634,6 +5634,21 @@ AC_SUBST(HOST_SUFFIX)
 AC_BAKEFILE
 
 
+dnl Find out if we have to define NO_GCC_PRAGMA and WX_PRECOMP:
+if test $GCC_PCH = 1 ; then
+    CPPFLAGS="-DWX_PRECOMP -DNO_GCC_PRAGMA $CPPFLAGS"
+else
+    case "${host}" in
+        powerpc-*-darwin* )
+            dnl Some Apple's GCC version are broken and can't handle the
+            dnl pragmas:
+            CPPFLAGS="-DNO_GCC_PRAGMA $CPPFLAGS"
+            ;;
+        *)
+            ;;
+    esac
+fi
+
 
 dnl for convenience, sort the samples in alphabetical order
 dnl

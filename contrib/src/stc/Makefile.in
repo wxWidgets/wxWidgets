@@ -265,7 +265,7 @@ COND_SHARED_0___stclib___depname = \
 all: $(__stcdll___depname) $(__stclib___depname)
 
 clean: 
-	rm -rf ./.deps
+	rm -rf ./.deps ./.pch
 	rm -f ./*.o
 	rm -f $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_stc$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__stcdll___targetsuf3)
 	rm -f $(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_stc-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
@@ -273,8 +273,7 @@ clean:
 	rm -f $(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_stc-2.5$(HOST_SUFFIX).a
 
 distclean: clean
-	rm -f configure config.cache config.log config.status
-	rm -f bk-deps shared-ld-sh
+	rm -f configure config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
 install: all $(__install_stcdll___depname) $(__install_stclib___depname)
 	$(INSTALL_DIR) $(includedir)

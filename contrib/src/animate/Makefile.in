@@ -41,17 +41,17 @@ top_srcdir = @top_srcdir@
 
 ### Variables: ###
 
-ANIMATEDLL_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
-	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
-	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
-	-I$(srcdir)/../../include -DWXUSINGDLL -DWXMAKINGDLL_ANIMATE $(CXXFLAGS) \
-	$(PIC_FLAG)
+ANIMATEDLL_CXXFLAGS = $(__animatedll_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
+	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
+	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
+	$(__INC_REGEX_p) $(__INC_EXPAT_p) -I$(srcdir)/../../include -DWXUSINGDLL \
+	-DWXMAKINGDLL_ANIMATE $(CXXFLAGS) $(PIC_FLAG)
 ANIMATEDLL_OBJECTS =  \
 	animatedll_animate.o
-ANIMATELIB_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
-	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
-	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
-	-I$(srcdir)/../../include $(CXXFLAGS)
+ANIMATELIB_CXXFLAGS = $(__animatelib_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
+	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
+	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
+	$(__INC_REGEX_p) $(__INC_EXPAT_p) -I$(srcdir)/../../include $(CXXFLAGS)
 ANIMATELIB_OBJECTS =  \
 	animatelib_animate.o
 LIBDIRNAME = $(top_builddir)lib
@@ -109,6 +109,9 @@ COND_MONOLITHIC_1___WXLIB_MONO_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)
 @COND_MONOLITHIC_1@__WXLIB_MONO_p = $(COND_MONOLITHIC_1___WXLIB_MONO_p)
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
+@COND_GCC_PCH_1@__animatedll_PCH_DEP = \
+@COND_GCC_PCH_1@	.pch/wxprec_animatedll/wx/wxprec.h.gch
+@COND_GCC_PCH_1@__animatedll_PCH_INC = -I.pch/wxprec_animatedll
 COND_SHARED_1___animatedll___depname = \
 	$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_animate$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__animatedll___targetsuf3)
 @COND_SHARED_1@__animatedll___depname = $(COND_SHARED_1___animatedll___depname)
@@ -157,6 +160,9 @@ COND_USE_SOVERSOLARIS_1___animatedll___soname_flags = \
 @COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@__animatedll___targetsuf3 \
 @COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@	= .0.0.0.$(SO_SUFFIX)
 @COND_USE_SOVERSION_0@__animatedll___targetsuf3 = .$(SO_SUFFIX)
+@COND_GCC_PCH_1@__animatelib_PCH_DEP = \
+@COND_GCC_PCH_1@	.pch/wxprec_animatelib/wx/wxprec.h.gch
+@COND_GCC_PCH_1@__animatelib_PCH_INC = -I.pch/wxprec_animatelib
 COND_SHARED_0___animatelib___depname = \
 	$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_animate-2.5$(HOST_SUFFIX).a
 @COND_SHARED_0@__animatelib___depname = $(COND_SHARED_0___animatelib___depname)
@@ -167,14 +173,20 @@ COND_SHARED_0___animatelib___depname = \
 
 all: $(__animatedll___depname) $(__animatelib___depname)
 
-@COND_SHARED_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_animate$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__animatedll___targetsuf3): $(ANIMATEDLL_OBJECTS)
+@COND_GCC_PCH_1@.pch/wxprec_animatedll/wx/wxprec.h.gch: 
+@COND_GCC_PCH_1@	$(top_builddir)./bk-make-pch .pch/wxprec_animatedll/wx/wxprec.h.gch wx/wxprec.h $(CXX) $(ANIMATEDLL_CXXFLAGS)
+
+@COND_GCC_PCH_1@.pch/wxprec_animatelib/wx/wxprec.h.gch: 
+@COND_GCC_PCH_1@	$(top_builddir)./bk-make-pch .pch/wxprec_animatelib/wx/wxprec.h.gch wx/wxprec.h $(CXX) $(ANIMATELIB_CXXFLAGS)
+
+@COND_SHARED_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_animate$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__animatedll___targetsuf3): $(__animatedll_PCH_DEP)  $(ANIMATEDLL_OBJECTS)
 @COND_SHARED_1@	$(SHARED_LD_CXX) $@ $(ANIMATEDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__animatedll___macinstnamecmd) $(__animatedll___importlib) $(__animatedll___soname_flags) $(__animatedll___macver)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p)
 @COND_SHARED_1@	$(__animatedll___so_symlinks_cmd)
 
 animatedll_animate.o: $(srcdir)/animate.cpp
 	$(CXXC) -c -o $@ $(ANIMATEDLL_CXXFLAGS) $<
 
-@COND_SHARED_0@$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_animate-2.5$(HOST_SUFFIX).a: $(ANIMATELIB_OBJECTS)
+@COND_SHARED_0@$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_animate-2.5$(HOST_SUFFIX).a: $(__animatelib_PCH_DEP)  $(ANIMATELIB_OBJECTS)
 @COND_SHARED_0@	rm -f $@
 @COND_SHARED_0@	$(AR) rcu $@ $(ANIMATELIB_OBJECTS)
 @COND_SHARED_0@	$(RANLIB) $@
@@ -183,7 +195,7 @@ animatelib_animate.o: $(srcdir)/animate.cpp
 	$(CXXC) -c -o $@ $(ANIMATELIB_CXXFLAGS) $<
 
 clean: 
-	rm -rf ./.deps
+	rm -rf ./.deps ./.pch
 	rm -f ./*.o
 	rm -f $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_animate$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__animatedll___targetsuf3)
 	rm -f $(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_animate-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
@@ -191,8 +203,7 @@ clean:
 	rm -f $(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_animate-2.5$(HOST_SUFFIX).a
 
 distclean: clean
-	rm -f configure config.cache config.log config.status
-	rm -f bk-deps shared-ld-sh
+	rm -f configure config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
 install: all $(__install_animatedll___depname) $(__install_animatelib___depname)
 	$(INSTALL_DIR) $(includedir)

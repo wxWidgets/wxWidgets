@@ -42,19 +42,19 @@ top_srcdir = @top_srcdir@
 ### Variables: ###
 
 LIBDIRNAME = $(top_builddir)lib
-NETUTILSDLL_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
-	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
-	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
-	-I$(srcdir)/../../include -DWXUSINGDLL -DWXMAKINGDLL_NETUTILS $(CXXFLAGS) \
-	$(PIC_FLAG)
+NETUTILSDLL_CXXFLAGS = $(__netutilsdll_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
+	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
+	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
+	$(__INC_REGEX_p) $(__INC_EXPAT_p) -I$(srcdir)/../../include -DWXUSINGDLL \
+	-DWXMAKINGDLL_NETUTILS $(CXXFLAGS) $(PIC_FLAG)
 NETUTILSDLL_OBJECTS =  \
 	netutilsdll_email.o \
 	netutilsdll_smapi.o \
 	netutilsdll_web.o
-NETUTILSLIB_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
-	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
-	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
-	-I$(srcdir)/../../include $(CXXFLAGS)
+NETUTILSLIB_CXXFLAGS = $(__netutilslib_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
+	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
+	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
+	$(__INC_REGEX_p) $(__INC_EXPAT_p) -I$(srcdir)/../../include $(CXXFLAGS)
 NETUTILSLIB_OBJECTS =  \
 	netutilslib_email.o \
 	netutilslib_smapi.o \
@@ -115,6 +115,9 @@ COND_MONOLITHIC_1___WXLIB_MONO_p = \
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
 @COND_SHARED_1@__install_netutilsdll___depname = install_netutilsdll
 @COND_SHARED_0@__install_netutilslib___depname = install_netutilslib
+@COND_GCC_PCH_1@__netutilsdll_PCH_DEP = \
+@COND_GCC_PCH_1@	.pch/wxprec_netutilsdll/wx/wxprec.h.gch
+@COND_GCC_PCH_1@__netutilsdll_PCH_INC = -I.pch/wxprec_netutilsdll
 COND_SHARED_1___netutilsdll___depname = \
 	$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_netutils$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__netutilsdll___targetsuf3)
 @COND_SHARED_1@__netutilsdll___depname = $(COND_SHARED_1___netutilsdll___depname)
@@ -163,6 +166,9 @@ COND_USE_SOVERSOLARIS_1___netutilsdll___soname_flags = \
 @COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@__netutilsdll___targetsuf3 \
 @COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@	= .0.0.0.$(SO_SUFFIX)
 @COND_USE_SOVERSION_0@__netutilsdll___targetsuf3 = .$(SO_SUFFIX)
+@COND_GCC_PCH_1@__netutilslib_PCH_DEP = \
+@COND_GCC_PCH_1@	.pch/wxprec_netutilslib/wx/wxprec.h.gch
+@COND_GCC_PCH_1@__netutilslib_PCH_INC = -I.pch/wxprec_netutilslib
 COND_SHARED_0___netutilslib___depname = \
 	$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_netutils-2.5$(HOST_SUFFIX).a
 @COND_SHARED_0@__netutilslib___depname = $(COND_SHARED_0___netutilslib___depname)
@@ -171,8 +177,14 @@ COND_SHARED_0___netutilslib___depname = \
 
 all: $(__netutilsdll___depname) $(__netutilslib___depname)
 
+@COND_GCC_PCH_1@.pch/wxprec_netutilsdll/wx/wxprec.h.gch: 
+@COND_GCC_PCH_1@	$(top_builddir)./bk-make-pch .pch/wxprec_netutilsdll/wx/wxprec.h.gch wx/wxprec.h $(CXX) $(NETUTILSDLL_CXXFLAGS)
+
+@COND_GCC_PCH_1@.pch/wxprec_netutilslib/wx/wxprec.h.gch: 
+@COND_GCC_PCH_1@	$(top_builddir)./bk-make-pch .pch/wxprec_netutilslib/wx/wxprec.h.gch wx/wxprec.h $(CXX) $(NETUTILSLIB_CXXFLAGS)
+
 clean: 
-	rm -rf ./.deps
+	rm -rf ./.deps ./.pch
 	rm -f ./*.o
 	rm -f $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_netutils$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__netutilsdll___targetsuf3)
 	rm -f $(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_netutils-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
@@ -180,8 +192,7 @@ clean:
 	rm -f $(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_netutils-2.5$(HOST_SUFFIX).a
 
 distclean: clean
-	rm -f configure config.cache config.log config.status
-	rm -f bk-deps shared-ld-sh
+	rm -f configure config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
 install: all $(__install_netutilsdll___depname) $(__install_netutilslib___depname)
 	$(INSTALL_DIR) $(includedir)
@@ -205,7 +216,7 @@ install-strip: install
 @COND_SHARED_0@	$(INSTALL_DIR) $(libdir)
 @COND_SHARED_0@	$(INSTALL_DATA) $(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_netutils-2.5$(HOST_SUFFIX).a $(libdir)
 
-@COND_SHARED_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_netutils$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__netutilsdll___targetsuf3): $(NETUTILSDLL_OBJECTS)
+@COND_SHARED_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_netutils$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__netutilsdll___targetsuf3): $(__netutilsdll_PCH_DEP)  $(NETUTILSDLL_OBJECTS)
 @COND_SHARED_1@	$(SHARED_LD_CXX) $@ $(NETUTILSDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__netutilsdll___macinstnamecmd) $(__netutilsdll___importlib) $(__netutilsdll___soname_flags) $(__netutilsdll___macver)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p)
 @COND_SHARED_1@	$(__netutilsdll___so_symlinks_cmd)
 
@@ -218,7 +229,7 @@ netutilsdll_smapi.o: $(srcdir)/smapi.cpp
 netutilsdll_web.o: $(srcdir)/web.cpp
 	$(CXXC) -c -o $@ $(NETUTILSDLL_CXXFLAGS) $<
 
-@COND_SHARED_0@$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_netutils-2.5$(HOST_SUFFIX).a: $(NETUTILSLIB_OBJECTS)
+@COND_SHARED_0@$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_netutils-2.5$(HOST_SUFFIX).a: $(__netutilslib_PCH_DEP)  $(NETUTILSLIB_OBJECTS)
 @COND_SHARED_0@	rm -f $@
 @COND_SHARED_0@	$(AR) rcu $@ $(NETUTILSLIB_OBJECTS)
 @COND_SHARED_0@	$(RANLIB) $@

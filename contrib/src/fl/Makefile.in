@@ -41,11 +41,11 @@ top_srcdir = @top_srcdir@
 
 ### Variables: ###
 
-FLDLL_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
-	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
-	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
-	-I$(srcdir)/../../include -DWXUSINGDLL -DWXMAKINGDLL_FL $(CXXFLAGS) \
-	$(PIC_FLAG)
+FLDLL_CXXFLAGS = $(__fldll_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
+	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
+	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
+	$(__INC_REGEX_p) $(__INC_EXPAT_p) -I$(srcdir)/../../include -DWXUSINGDLL \
+	-DWXMAKINGDLL_FL $(CXXFLAGS) $(PIC_FLAG)
 FLDLL_OBJECTS =  \
 	fldll_antiflickpl.o \
 	fldll_bardragpl.o \
@@ -64,10 +64,10 @@ FLDLL_OBJECTS =  \
 	fldll_rowlayoutpl.o \
 	fldll_toolwnd.o \
 	fldll_updatesmgr.o
-FLLIB_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
-	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
-	$(__INC_ZLIB_p) $(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) \
-	-I$(srcdir)/../../include $(CXXFLAGS)
+FLLIB_CXXFLAGS = $(__fllib_PCH_INC) $(CPPFLAGS) -D__WX$(TOOLKIT)__ \
+	$(__WXUNIV_DEFINE_p) -I$(top_srcdir)/include $(__INC_TIFF_p) \
+	$(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) $(__INC_ODBC_p) \
+	$(__INC_REGEX_p) $(__INC_EXPAT_p) -I$(srcdir)/../../include $(CXXFLAGS)
 FLLIB_OBJECTS =  \
 	fllib_antiflickpl.o \
 	fllib_bardragpl.o \
@@ -141,6 +141,8 @@ COND_MONOLITHIC_1___WXLIB_MONO_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX)
 @COND_MONOLITHIC_1@__WXLIB_MONO_p = $(COND_MONOLITHIC_1___WXLIB_MONO_p)
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
+@COND_GCC_PCH_1@__fldll_PCH_DEP = .pch/wxprec_fldll/wx/wxprec.h.gch
+@COND_GCC_PCH_1@__fldll_PCH_INC = -I.pch/wxprec_fldll
 COND_SHARED_1___fldll___depname = \
 	$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_fl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__fldll___targetsuf3)
 @COND_SHARED_1@__fldll___depname = $(COND_SHARED_1___fldll___depname)
@@ -188,6 +190,8 @@ COND_USE_SOVERSOLARIS_1___fldll___soname_flags = \
 @COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@__fldll___targetsuf3 \
 @COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@	= .0.0.0.$(SO_SUFFIX)
 @COND_USE_SOVERSION_0@__fldll___targetsuf3 = .$(SO_SUFFIX)
+@COND_GCC_PCH_1@__fllib_PCH_DEP = .pch/wxprec_fllib/wx/wxprec.h.gch
+@COND_GCC_PCH_1@__fllib_PCH_INC = -I.pch/wxprec_fllib
 COND_SHARED_0___fllib___depname = \
 	$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_fl-2.5$(HOST_SUFFIX).a
 @COND_SHARED_0@__fllib___depname = $(COND_SHARED_0___fllib___depname)
@@ -198,8 +202,14 @@ COND_SHARED_0___fllib___depname = \
 
 all: $(__fldll___depname) $(__fllib___depname)
 
+@COND_GCC_PCH_1@.pch/wxprec_fldll/wx/wxprec.h.gch: 
+@COND_GCC_PCH_1@	$(top_builddir)./bk-make-pch .pch/wxprec_fldll/wx/wxprec.h.gch wx/wxprec.h $(CXX) $(FLDLL_CXXFLAGS)
+
+@COND_GCC_PCH_1@.pch/wxprec_fllib/wx/wxprec.h.gch: 
+@COND_GCC_PCH_1@	$(top_builddir)./bk-make-pch .pch/wxprec_fllib/wx/wxprec.h.gch wx/wxprec.h $(CXX) $(FLLIB_CXXFLAGS)
+
 clean: 
-	rm -rf ./.deps
+	rm -rf ./.deps ./.pch
 	rm -f ./*.o
 	rm -f $(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_fl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__fldll___targetsuf3)
 	rm -f $(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_fl-2.5$(HOST_SUFFIX)$(DLLIMPEXT)
@@ -207,10 +217,9 @@ clean:
 	rm -f $(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_fl-2.5$(HOST_SUFFIX).a
 
 distclean: clean
-	rm -f configure config.cache config.log config.status
-	rm -f bk-deps shared-ld-sh
+	rm -f configure config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
-@COND_SHARED_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_fl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__fldll___targetsuf3): $(FLDLL_OBJECTS)
+@COND_SHARED_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_fl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__fldll___targetsuf3): $(__fldll_PCH_DEP)  $(FLDLL_OBJECTS)
 @COND_SHARED_1@	$(SHARED_LD_CXX) $@ $(FLDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__fldll___macinstnamecmd) $(__fldll___importlib) $(__fldll___soname_flags) $(__fldll___macver)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p)
 @COND_SHARED_1@	$(__fldll___so_symlinks_cmd)
 
@@ -265,7 +274,7 @@ fldll_toolwnd.o: $(srcdir)/toolwnd.cpp
 fldll_updatesmgr.o: $(srcdir)/updatesmgr.cpp
 	$(CXXC) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-@COND_SHARED_0@$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_fl-2.5$(HOST_SUFFIX).a: $(FLLIB_OBJECTS)
+@COND_SHARED_0@$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_fl-2.5$(HOST_SUFFIX).a: $(__fllib_PCH_DEP)  $(FLLIB_OBJECTS)
 @COND_SHARED_0@	rm -f $@
 @COND_SHARED_0@	$(AR) rcu $@ $(FLLIB_OBJECTS)
 @COND_SHARED_0@	$(RANLIB) $@
