@@ -753,7 +753,7 @@ int GSocket_Write(GSocket *socket, const char *buffer, int size)
  */
 GSocketEventFlags GSocket_Select(GSocket *socket, GSocketEventFlags flags)
 {
-  if (USE_GUI())
+  if (!USE_GUI())
   {
     GSocketEventFlags result = 0;
     fd_set readfds;
@@ -860,7 +860,7 @@ GSocketEventFlags GSocket_Select(GSocket *socket, GSocketEventFlags flags)
 
     return (result & flags);
   }
-  else /* !USE_GUI() */
+  else /* USE_GUI() */
   {
     assert(socket != NULL);
     return flags & socket->m_detected;
