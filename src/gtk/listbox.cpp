@@ -83,7 +83,13 @@ extern "C" gint wxlistbox_idle_callback( gpointer gdata )
 
     gtk_idle_remove( data->m_tag );
 
-    data->m_listbox->SetFirstItem( data->m_item );
+    // check that the items haven't been deleted from the listbox since we had
+    // installed this callback
+    wxListBox *lbox = data->m_listbox;
+    if ( data->m_item < lbox->GetCount() )
+    {
+        lbox->SetFirstItem( data->m_item );
+    }
 
     delete data;
 
