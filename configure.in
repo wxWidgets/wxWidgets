@@ -440,6 +440,11 @@ USE_CYGWIN=
 USE_MINGW=
 USE_DATA_GENERAL=
 
+dnl on some platforms xxx_r() functions are declared inside "#ifdef
+dnl _REENTRANT" and it's easier to just define this symbol for these platforms
+dnl than checking it during run-time
+NEEDS_D_REENTRANT_FOR_R_FUNCS=0
+
 dnl the list of all available toolkits
 ALL_TOOLKITS="CYGWIN GTK MINGW MOTIF WINE"
 
@@ -462,6 +467,7 @@ case "${host}" in
   *-hp-hpux* )
     USE_HPUX=1
     DEFAULT_DEFAULT_wxUSE_MOTIF=1
+    NEEDS_D_REENTRANT_FOR_R_FUNCS=1
     AC_DEFINE(__HPUX__)
   ;;
   *-*-linux* )
@@ -489,6 +495,7 @@ case "${host}" in
     AC_DEFINE(__SOLARIS__)
     AC_DEFINE(__SVR4__)
     DEFAULT_DEFAULT_wxUSE_MOTIF=1
+    NEEDS_D_REENTRANT_FOR_R_FUNCS=1
   ;;
   *-*-sunos4* )
     USE_SUN=1
@@ -2128,17 +2135,13 @@ else
   dnl on some systems, _REENTRANT should bedefined if we want to use any _r()
   dnl functions - add tests for other functions here as well
   if test "$ac_cv_func_strtok_r" = "yes"; then
-    dnl and now try with C++
-    unset ac_cv_func_strtok_r
-    AC_LANG_SAVE
-    AC_LANG_CPLUSPLUS
-    AC_CHECK_FUNCS(strtok_r)
-    AC_LANG_RESTORE
-
-    if test "$ac_cv_func_strtok_r" != "yes"; then
-      ac_cv_func_strtok_r=yes
-      CFLAGS="${CFLAGS} -D_REENTRANT"
-      CXXFLAGS="${CXXFLAGS} -D_REENTRANT"
+    AC_MSG_CHECKING(if -D_REENTRANT is needed)
+    if test "$NEEDS_D_REENTRANT_FOR_R_FUNCS" = 1; then
+        CFLAGS="${CFLAGS} -D_REENTRANT"
+        CXXFLAGS="${CXXFLAGS} -D_REENTRANT"
+        AC_MSG_RESULT(yes)
+    else
+        AC_MSG_RESULT(no)
     fi
   fi
 fi
