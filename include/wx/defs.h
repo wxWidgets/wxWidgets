@@ -312,8 +312,11 @@ typedef void (*wxFunction) (wxObject&, wxEvent&);
                                  // OBSOLETE - use wxNO_CTL3D instead
 #define wxNO_3D             0x00800000
                                  // Override CTL3D or native 3D styles for children
-#define wxOVERRIDE_KEY_TRANSLATIONS 0x00400000
-                                 // TODO: do we need this??? (Motif only)
+#define wxCLIP_CHILDREN     0x00400000
+                                 // Clip children when painting, which reduces flicker in
+                                 // e.g. frames and splitter windows, but can't be used in
+                                 // a panel where a static box must be 'transparent' (panel
+                                 // paints the background for it)
 
 // Add this style to a panel to get tab traversal working
 // outside of dialogs.
@@ -343,7 +346,7 @@ typedef void (*wxFunction) (wxObject&, wxEvent&);
 #define wxDIALOG_MODAL      0x0020
 #define wxDIALOG_MODELESS   0x0000
 
-#define wxDEFAULT_FRAME_STYLE    (wxRESIZE_BORDER | wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxTHICK_FRAME | wxSYSTEM_MENU | wxCAPTION)
+#define wxDEFAULT_FRAME_STYLE    (wxRESIZE_BORDER | wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxTHICK_FRAME | wxSYSTEM_MENU | wxCAPTION | wxCLIP_CHILDREN)
 
 #if WXWIN_COMPATIBILITY
 #define wxDEFAULT_FRAME wxDEFAULT_FRAME_STYLE
@@ -541,7 +544,7 @@ typedef void (*wxFunction) (wxObject&, wxEvent&);
  * wxStatusBar95 flags
  */
 
-#define wxSB_SIZEGRIP       0x0002
+#define wxST_SIZEGRIP       0x0002
 
 /*
  * GDI descriptions

@@ -16,6 +16,8 @@
 // headers
 // ----------------------------------------------------------------------------
 
+#include "wx/setup.h"
+
 // an exception to the general rule that a normal header doesn't include other
 // headers - only because ownerdrw.h is not always included and I don't want
 // to write #ifdef's everywhere...

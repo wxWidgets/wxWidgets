@@ -249,7 +249,7 @@
 #define USE_PENWINDOWS 0
                                     // Set to 1 to use PenWindows
 
-#define USE_OWNER_DRAWN             1
+#define USE_OWNER_DRAWN             0
                                     // Owner-drawn menus and listboxes
 
 #define USE_NATIVE_STATUSBAR        1

@@ -21,10 +21,10 @@ class WXDLLEXPORT wxStatusBar95 : public wxStatusBar
 public:
   // ctors
   wxStatusBar95();
-  wxStatusBar95(wxWindow *parent, wxWindowID id = -1, long style = wxSB_SIZEGRIP);
+  wxStatusBar95(wxWindow *parent, wxWindowID id = -1, long style = wxST_SIZEGRIP);
 
   // create status line
-  bool Create(wxWindow *parent, wxWindowID id = -1, long style = wxSB_SIZEGRIP);
+  bool Create(wxWindow *parent, wxWindowID id = -1, long style = wxST_SIZEGRIP);
 
   // a status line can have several (<256) fields numbered from 0
   virtual void SetFieldsCount(int number = 1, const int *widths = NULL);

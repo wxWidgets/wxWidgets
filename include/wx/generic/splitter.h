@@ -58,7 +58,7 @@ class WXDLLEXPORT wxSplitterWindow: public wxWindow
 
     // Normal constructor
     wxSplitterWindow(wxWindow *parent, const wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition,
-        const wxSize& size = wxDefaultSize, const long style = wxSP_3D, const wxString& name = "splitter");
+        const wxSize& size = wxDefaultSize, const long style = wxSP_3D|wxCLIP_CHILDREN, const wxString& name = "splitter");
     ~wxSplitterWindow(void);
 
     // Gets the only or left/top pane
