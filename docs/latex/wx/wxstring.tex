@@ -79,6 +79,9 @@ use it.
 \helpref{Last}{wxstringlast}\\
 \helpref{operator []}{wxstringoperatorbracket}\\
 \helpref{c\_str}{wxstringcstr}\\
+\helpref{mb\_str}{wxstringmbstr}\\
+\helpref{wc\_str}{wxstringwcstr}\\
+\helpref{fn\_str}{wxstringfnstr}\\
 \helpref{operator const char*}{wxstringoperatorconstcharpt}
 
 \membersection{Concatenation}
@@ -397,7 +400,7 @@ their documentation.
 
 \func{}{wxString}{\void}
 
-Default constructor.
+Default constructor. Initializes the string to {\tt ""} (empty string).
 
 \func{}{wxString}{\param{const wxString\&}{ x}}
 
@@ -410,7 +413,7 @@ Constructs a string of {\it n} copies of character {\it ch}.
 \func{}{wxString}{\param{const char*}{ psz}, \param{size\_t}{ nLength = wxSTRING\_MAXLEN}}
 
 Takes first {\it nLength} characters from the C string {\it psz}.
-The default value of wxSTRING\_MAXLEN means to take all the string.
+The default value of {\tt wxSTRING\_MAXLEN} means to take all the string.
 
 Note that this constructor may be used even if {\it psz} points to a buffer
 with binary data (i.e. containing {\tt NUL} characters) as long as you provide
@@ -422,11 +425,36 @@ results otherwise.
 \func{}{wxString}{\param{const unsigned char*}{ psz}, \param{size\_t}{ nLength = wxSTRING\_MAXLEN}}
 
 For compilers using unsigned char: takes first {\it nLength} characters from the C string {\it psz}.
-The default value of wxSTRING\_MAXLEN means take all the string.
+The default value of {\tt wxSTRING\_MAXLEN} means take all the string.
 
-\func{}{wxString}{\param{const wchar\_t*}{ psz}}
+{\bf Note:} In Unicode build, all of the above constructors take
+{\tt wchar\_t} arguments instead of {\tt char}.
 
-Constructs a string from the wide (UNICODE) string.
+\wxheading{Constructors with conversion}
+
+The following constructors allow you to construct wxString from wide string
+in ANSI build or from C string in Unicode build.
+
+\func{}{wxString}{\param{const wchar\_t*}{ psz}, \param{wxMBConv\&}{ conv}, \param{size\_t}{ nLength = wxSTRING\_MAXLEN}}
+
+Initializes the string from first \arg{nLength} characters of wide string. 
+The default value of {\tt wxSTRING\_MAXLEN} means take all the string.
+In ANSI build, \arg{conv}'s 
+\helpref{WC2MB}{wxmbconvwc2mb} method is called to
+convert \arg{psz} to wide string. It is ignored in Unicode build.
+
+\func{}{wxString}{\param{const char*}{ psz}, \param{wxMBConv\&}{ conv}, \param{size\_t}{ nLength = wxSTRING\_MAXLEN}}
+
+Initializes the string from first \arg{nLength} characters of C string.
+The default value of {\tt wxSTRING\_MAXLEN} means take all the string.
+In Unicode build, \arg{conv}'s 
+\helpref{MB2WC}{wxmbconvmb2wc} method is called to
+convert \arg{psz} to wide string. It is ignored in ANSI build.
+
+\wxheading{See also}
+
+\helpref{wxMBConv classes}{mbconvclasses}, \helpref{mb\_str}{wxstringmbstr},
+\helpref{wc\_str}{wxstringwcstr}
 
 \membersection{wxString::\destruct{wxString}}\label{wxstringdestruct}
 
@@ -514,7 +542,13 @@ Returns the empty string if {\it ch} is not found.
 
 \constfunc{const char *}{c\_str}{\void}
 
-Returns a pointer to the string data.
+Returns a pointer to the string data ({\tt const char*} in ANSI build,
+{\tt const wchar\_t*} in Unicode build).
+
+\wxheading{See also}
+
+\helpref{mb\_str}{wxstringmbstr}, \helpref{wc\_str}{wxstringwcstr},
+\helpref{fn\_str}{wxstringfnstr}
 
 \membersection{wxString::Clear}\label{wxstringclear}
 
@@ -593,6 +627,25 @@ Searches for the given string. Returns the starting index, or -1 if not found.
 
 Same as \helpref{Find}{wxstringfind}.
 
+\membersection{wxString::fn\_str}\label{wxstringfnstr}
+
+\constfunc{const wchar\_t*}{fn\_str}{\void}
+
+\constfunc{const char*}{fn\_str}{\void}
+
+\constfunc{const wxCharBuffer}{fn\_str}{\void}
+
+Returns string representation suitable for passing to OS' functions for
+file handling. In ANSI build, this is same as \helpref{c\_str}{wxstringcstr}.
+In Unicode build, returned value can be either wide character string
+or C string in charset matching the {\tt wxConvFile} object, depending on
+the OS.
+
+\wxheading{See also}
+
+\helpref{wxMBConv}{wxmbconv},
+\helpref{wc\_str}{wxstringwcstr}, \helpref{mb\_str}{wxstringwcstr}
+
 \membersection{wxString::Format}\label{wxstringformat}
 
 \func{static wxString}{Format}{\param{const wxChar }{*format}, \param{}{...}}
@@ -630,6 +683,8 @@ Returns the number of occurrences of {\it ch} in the string.
 Converts the string or character from an ASCII, 7-bit form
 to the native wxString representation. Most useful when using
 a Unicode build of wxWidgets.
+Use \helpref{wxString constructors}{wxstringconstruct} if you
+need to convert from another charset.
 
 \membersection{wxString::GetChar}\label{wxstringgetchar}
 
@@ -796,6 +851,24 @@ Converts all characters to upper case and returns the result.
 
 Returns true if the string contents matches a mask containing '*' and '?'.
 
+\membersection{wxString::mb\_str}\label{wxstringmbstr}
+
+\constfunc{const char*}{mb\_str}{\param{wxMBConv\&}{ conv}}
+
+\constfunc{const wxCharBuffer}{mb\_str}{\param{wxMBConv\&}{ conv}}
+
+Returns multibyte (C string) representation of the string.
+In Unicode build, converts using \arg{conv}'s \helpref{cWC2MB}{wxmbconvcwc2mb}
+method and returns wxCharBuffer. In ANSI build, this function is same
+as \helpref{c\_str}{wxstringcstr}.
+The macro wxWX2MBbuf is defined as the correct return type (without const).
+
+\wxheading{See also}
+
+\helpref{wxMBConv}{wxmbconv},
+\helpref{c\_str}{wxstringcstr}, \helpref{wc\_str}{wxstringwcstr},
+\helpref{fn\_str}{wxstringfnstr}
+
 \membersection{wxString::Mid}\label{wxstringmid}
 
 \constfunc{wxString}{Mid}{\param{size\_t}{ first}, \param{size\_t}{ count = wxSTRING\_MAXLEN}}
@@ -929,6 +1002,10 @@ Converts the string to an ASCII, 7-bit string (ANSI builds only).
 Converts the string to an ASCII, 7-bit string in the form of
 a wxCharBuffer (Unicode builds only).
 
+Note that this conversion only works if the string contains only ASCII
+characters. The \helpref{mb\_str}{wxstringmbstr} method provides more
+powerful means of converting wxString to C string.
+
 \membersection{wxString::ToDouble}\label{wxstringtodouble}
 
 \constfunc{bool}{ToDouble}{\param{double}{ *val}}
@@ -1021,6 +1098,24 @@ Returns this string converted to upper case.
 \func{void}{UpperCase}{\void}
 
 The same as MakeUpper.
+
+\membersection{wxString::wc\_str}\label{wxstringwcstr}
+
+\constfunc{const wchar\_t*}{wc\_str}{\param{wxMBConv\&}{ conv}}
+
+\constfunc{const wxWCharBuffer}{wc\_str}{\param{wxMBConv\&}{ conv}}
+
+Returns wide character representation of the string.
+In ANSI build, converts using \arg{conv}'s \helpref{cMB2WC}{wxmbconvcmb2wc}
+method and returns wxWCharBuffer. In Unicode build, this function is same
+as \helpref{c\_str}{wxstringcstr}.
+The macro wxWX2WCbuf is defined as the correct return type (without const).
+
+\wxheading{See also}
+
+\helpref{wxMBConv}{wxmbconv},
+\helpref{c\_str}{wxstringcstr}, \helpref{mb\_str}{wxstringwcstr},
+\helpref{fn\_str}{wxstringfnstr}
 
 \membersection{wxString::operator!}\label{wxstringoperatornot}
 
