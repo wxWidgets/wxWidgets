@@ -23,6 +23,7 @@ class MyFrame(wxFrame):
 	self.wf = wf
 	wxFrame.__init__(self, NULL, -1, "test threads", wxDefaultPosition, wxSize(300,200))
 	self.panel = wxPanel(self, -1)
+	self.panel.SetBackgroundColour(wxNamedColour('white'))
 	self.panel.SetFocus()
 	menu = wxMenu()
 	menu.Append(1001, "New")
