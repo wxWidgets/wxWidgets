@@ -13,6 +13,8 @@ if [ ! -d wxPython ]; then  # TODO: make this test more robust
 fi
 
 
+CONTRIBS="ogl gizmos"
+
 # **** Make a directory to build up a distribution tree
 
 DEST=wxPython-$1/docs
@@ -20,19 +22,24 @@ DEST=wxPython-$1/docs
 mkdir -p _build_docs/$DEST
 cd _build_docs
 mkdir $DEST/wx
-mkdir $DEST/ogl
 
 WXDIR=../..
 
-# **** Build the docs using tex2rtf
+# **** Build the main docs using tex2rtf
+echo "****" main "****"
 cp $WXDIR/docs/latex/wx/*.gif $DEST/wx
-$WXDIR/utils/tex2rtf/src/tex2rtf $WXDIR/docs/latex/wx/manual.tex $DEST/wx/wx.htm -twice -html
+$WXDIR/utils/tex2rtf/src/tex2rtf $WXDIR/docs/latex/wx/manual.tex $DEST/wx/wx.htm -twice -html -macros $WXDIR/docs/latex/wx/tex2rtf.ini
 cp $DEST/wx/wx.htm $DEST/wx/index.htm
 
-cp $WXDIR/contrib/docs/latex/ogl/*.gif $DEST/ogl
-cp $WXDIR/contrib/docs/latex/ogl/*.bmp $DEST/ogl
-$WXDIR/utils/tex2rtf/src/tex2rtf $WXDIR/contrib/docs/latex/ogl/ogl.tex $DEST/ogl/ogl.htm -twice -html
-cp $DEST/ogl/ogl.htm $DEST/ogl/index.htm
+# **** and the contribs
+for c in $CONTRIBS; do
+    echo "****" $c "****"
+    mkdir $DEST/$c
+    cp $WXDIR/contrib/docs/latex/$c/*.gif $DEST/$c
+    cp $WXDIR/contrib/docs/latex/$c/*.bmp $DEST/$c
+    $WXDIR/utils/tex2rtf/src/tex2rtf $WXDIR/contrib/docs/latex/$c/$c.tex $DEST/$c/$c.htm -twice -html -macros $WXDIR/docs/latex/wx/tex2rtf.ini
+    cp $DEST/$c/$c.htm $DEST/$c/index.htm || cp $DEST/$c/${c}_contents.html $DEST/$c/index.htm
+done
 
 
 # **** zip the docs into "books"
@@ -42,10 +49,12 @@ zip ../wx.zip *
 popd
 rm -r wx
 
-pushd ogl
-zip ../ogl.zip *
-popd
-rm -r ogl
+for c in $CONTRIBS; do
+    pushd $c
+    zip ../$c.zip *
+    popd
+    rm -r $c
+done
 
 popd
 cp ../distrib/viewdocs.py $DEST
