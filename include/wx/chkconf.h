@@ -17,6 +17,8 @@
 
 #if defined(__WXPALMOS__)
 #  include "wx/palmos/chkconf.h"
+#elif defined(__WXWINCE__)
+#  include "wx/msw/wince/chkconf.h"
 #elif defined(__WXMSW__)
 #  include "wx/msw/chkconf.h"
 #elif defined(__WXMAC__)
