@@ -241,7 +241,7 @@ void wxIEHtmlWin::SetCharset(wxString charset)
 	{
 		wxAutoOleInterface<IHTMLDocument2> doc(IID_IHTMLDocument2, disp);
 		if (doc.Ok())
-			doc->put_charset((BSTR) wxConvUTF8.cMB2WC(charset).data());
+            doc->put_charset((BSTR) (const wchar_t*)charset.wc_str(wxConvUTF8));
 	};
 };
 
@@ -316,14 +316,14 @@ void wxIEHtmlWin::LoadUrl(const wxString& url)
 	headers.vt = VT_EMPTY;
 
 	HRESULT hret = 0;
-	hret = m_webBrowser->Navigate((BSTR) wxConvUTF8.cMB2WC(url).data(),
+	hret = m_webBrowser->Navigate((BSTR) (const wchar_t*)url.wc_str(wxConvUTF8),
 		&navFlag, &targetFrame, &postData, &headers);
 };
 
 
 bool  wxIEHtmlWin::LoadString(wxString html)
 {
-	string s = html.c_str();
+	string s = html.mb_str(wxConvUTF8);
 	istringstream *is = new istringstream(s);
 	return LoadStream(is);
 };

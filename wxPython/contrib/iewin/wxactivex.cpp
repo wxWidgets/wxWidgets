@@ -206,7 +206,7 @@ wxActiveX::wxActiveX(wxWindow * parent, wxString progId, wxWindowID id,
 {
 	m_bAmbientUserMode = true;
     m_docAdviseCookie = 0;
-	CreateActiveX((LPOLESTR) wxConvUTF8.cMB2WC(progId).data());
+	CreateActiveX((LPOLESTR) (const wchar_t*)progId.wc_str(wxConvUTF8));
 }
 
 wxActiveX::~wxActiveX()
