@@ -407,12 +407,14 @@ void wxTreeTextCtrl::OnChar( wxKeyEvent &event )
     switch ( event.m_keyCode )
     {
         case WXK_RETURN:
-            if ( !AcceptChanges() )
+            if ( AcceptChanges() )
             {
-                // vetoed by the user, don't disappear
-                break;
+                // Close the text control, changes were accepted
+                Finish();
             }
-            //else: fall through
+            // else do nothing, do not accept and do not close
+
+            break;
 
         case WXK_ESCAPE:
             Finish();
