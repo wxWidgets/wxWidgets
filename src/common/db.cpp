@@ -783,7 +783,8 @@ void wxDB::Close(void)
 #endif
 
 	// Copy the error messages to a global variable
-	for (int i = 0; i < DB_MAX_ERROR_HISTORY; i++)
+	int i;
+	for (i = 0; i < DB_MAX_ERROR_HISTORY; i++)
 		strcpy(DBerrorList[i],errorList[i]);
 
 } // wxDB::Close()
