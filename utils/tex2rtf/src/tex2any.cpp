@@ -394,7 +394,7 @@ bool read_a_line(char *buf)
        if (rightCurly > leftCurly)
        {
            wxString errBuf;
-           errBuf.Printf("An extra right Curly brace ('}') was detected at line %lu inside file %s",LineNumbers[CurrentInputIndex], (const char*) currentFile.c_str());
+           errBuf.Printf("An extra right Curly brace ('}') was detected at line %lu inside file %s",LineNumbers[CurrentInputIndex], (const char*) currentFileName.c_str());
            OnError((char *)errBuf.c_str());
 
            // Reduce the count of right curly braces, so the mismatched count
@@ -478,7 +478,7 @@ bool read_a_line(char *buf)
       if (leftCurly != rightCurly)
       {
         wxString errBuf;
-        errBuf.Printf("Curly braces do not match inside file %s\n%lu opens, %lu closes", (const char*) currentFile.c_str(),leftCurly,rightCurly);
+        errBuf.Printf("Curly braces do not match inside file %s\n%lu opens, %lu closes", (const char*) currentFileName.c_str(),leftCurly,rightCurly);
         OnError((char *)errBuf.c_str());
       }
       leftCurly = 0;
@@ -523,7 +523,7 @@ bool read_a_line(char *buf)
     if (buf[j-1] == '}') buf[j-1] = 0; // Ignore final brace
 
     wxString actualFile = TexPathList.FindValidPath(fileName);
-    currentFile = actualFile;
+    currentFileName = actualFile;
     if (actualFile == "")
     {
       char errBuf[300];
@@ -588,7 +588,7 @@ bool read_a_line(char *buf)
 
     // Ignore some types of input files (e.g. macro definition files)
     char *fileOnly = FileNameFromPath(fileName);
-    currentFile = fileOnly;
+    currentFileName = fileOnly;
     if (IgnorableInputFiles.Member(fileOnly))
       return read_a_line(buf);
 
@@ -599,7 +599,7 @@ bool read_a_line(char *buf)
       sprintf(buf2, "%s.tex", fileName);
       actualFile = TexPathList.FindValidPath(buf2);
     }
-    currentFile = actualFile;
+    currentFileName = actualFile;
 
     if (actualFile == "")
     {
@@ -645,7 +645,7 @@ bool read_a_line(char *buf)
   if (ch == EOF && leftCurly != rightCurly)
   {
     wxString errBuf;
-    errBuf.Printf("Curly braces do not match inside file %s\n%lu opens, %lu closes", (const char*) currentFile.c_str(),leftCurly,rightCurly);
+    errBuf.Printf("Curly braces do not match inside file %s\n%lu opens, %lu closes", (const char*) currentFileName.c_str(),leftCurly,rightCurly);
     OnError((char *)errBuf.c_str());
   }
 
