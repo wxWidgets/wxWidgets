@@ -492,6 +492,16 @@ wxMimeTypesManager::GetFileTypeFromMimeType(const wxString& mimeType)
     return m_impl->GetFileTypeFromMimeType(mimeType);
 }
 
+void wxMimeTypesManager::ReadMailcap(const wxString& filename)
+{
+    m_impl->ReadMailcap(filename);
+}
+
+void wxMimeTypesManager::ReadMimeTypes(const wxString& filename)
+{
+    m_impl->ReadMimeTypes(filename);
+}
+
 // ============================================================================
 // real (OS specific) implementation
 // ============================================================================
@@ -889,17 +899,27 @@ void wxMimeTypesManagerImpl::ReadMimeTypes(const wxString& strFileName)
     wxString strMimeType, strDesc, strExtensions;
 
     size_t nLineCount = file.GetLineCount();
+    const char *pc = NULL;
     for ( size_t nLine = 0; nLine < nLineCount; nLine++ ) {
-        // now we're at the start of the line
-        const char *pc = file[nLine].c_str();
+        if ( pc == NULL ) {
+            // now we're at the start of the line
+            pc = file[nLine].c_str();
+        }
+        else {
+            // we didn't finish with the previous line yet
+            nLine--;
+        }
 
         // skip whitespace
         while ( isspace(*pc) )
             pc++;
 
         // comment?
-        if ( *pc == '#' )
+        if ( *pc == '#' ) {
+            // skip the whole line
+            pc = NULL;
             continue;
+        }
 
         // detect file format
         const char *pEqualSign = strchr(pc, '=');
@@ -944,7 +964,7 @@ void wxMimeTypesManagerImpl::ReadMimeTypes(const wxString& strFileName)
                 }
             }
             else {
-                // unquoted stringends at the first space
+                // unquoted string ends at the first space
                 for ( pEnd = pc; !isspace(*pEnd); pEnd++ )
                     ;
             }
@@ -952,8 +972,7 @@ void wxMimeTypesManagerImpl::ReadMimeTypes(const wxString& strFileName)
             // now we have the RHS (field value)
             wxString strRHS(pc, pEnd - pc);
 
-            // check that it's more or less what we're waiting for, i.e. that
-            // only '\' is left on the line
+            // check what follows this entry
             if ( *pEnd == '"' ) {
                 // skip this quote
                 pEnd++;
@@ -962,14 +981,13 @@ void wxMimeTypesManagerImpl::ReadMimeTypes(const wxString& strFileName)
             for ( pc = pEnd; isspace(*pc); pc++ )
                 ;
 
-            // only '\\' may be left on the line normally
-            bool entryEnded = *pc == '\0';
-            if ( !entryEnded && ((*pc != '\\') || (*++pc != '\0')) ) {
-                wxLogWarning(_("Mime.types file %s, line %d: extra characters "
-                               "after the field value ignored."),
-                             strFileName.c_str(), nLine + 1);
+            // if there is something left, it may be either a '\\' to continue
+            // the line or the next field of the same entry
+            bool entryEnded = *pc == '\0',
+                 nextFieldOnSameLine = FALSE;
+            if ( !entryEnded ) {
+                nextFieldOnSameLine = ((*pc != '\\') || (pc[1] != '\0'));
             }
-            // if there is a trailing backslash entryEnded = FALSE
 
             // now see what we got
             if ( strLHS == "type" ) {
@@ -987,8 +1005,13 @@ void wxMimeTypesManagerImpl::ReadMimeTypes(const wxString& strFileName)
             }
 
             if ( !entryEnded ) {
-                // as we don't reset strMimeType, the next line in this entry
+                if ( !nextFieldOnSameLine )
+                    pc = NULL;
+                //else: don't reset it
+
+                // as we don't reset strMimeType, the next field in this entry
                 // will be interpreted correctly.
+
                 continue;
             }
         }
@@ -1018,6 +1041,9 @@ void wxMimeTypesManagerImpl::ReadMimeTypes(const wxString& strFileName)
             }
             m_aExtensions[index] += strExtensions;
         }
+
+        // finished with this line
+        pc = NULL;
     }
 
     // check our data integriry
