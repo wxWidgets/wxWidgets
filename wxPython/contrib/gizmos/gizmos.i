@@ -654,6 +654,8 @@ public:
                 data->SetData(obj);
         }
     }
+    %pythoncode { GetPyData = GetItemPyData }
+    %pythoncode { SetPyData = SetItemPyData }
 
 
     // force appearance of [+] button near the item. This is useful to
