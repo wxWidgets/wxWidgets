@@ -50,6 +50,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID winid,
 
     SetNSTableView([[NSTableView alloc] initWithFrame: MakeDefaultNSRect(size)]);
     [m_cocoaNSView release];
+    [GetNSTableView() setHeaderView: nil];
 
     // Set up the data source
     m_cocoaDataSource = [[wxCocoaNSTableDataSource alloc] init];
@@ -58,11 +59,15 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID winid,
     // Add the single column
     NSTableColumn *tableColumn = [[NSTableColumn alloc] initWithIdentifier:nil];
     [GetNSTableView() addTableColumn: tableColumn];
-//    [tableColumn release];
+    [tableColumn release];
 
+    [GetNSTableView() sizeToFit];
     // Finish
     if(m_parent)
         m_parent->CocoaAddChild(this);
+    // NSTableView does WEIRD things with sizes.  Wrapping it in an
+    // NSScrollView seems to be the only reasonable solution.
+    CocoaCreateNSScrollView();
     SetInitialFrameRect(pos,size);
 
     return true;
