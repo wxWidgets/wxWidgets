@@ -3113,16 +3113,16 @@ dnl ---------------------------------------------------------------------------
         
         else
             AC_MSG_RESULT([no])
-            AC_MSG_WARN("*** Xinerama not found; disabling wxDisplay")
+            AC_MSG_WARN([Xinerama not found; disabling wxDisplay])
             wxUSE_DISPLAY="no"
         fi
     elif test "$wxUSE_MSW" = 1; then
 dnl ---------------------------------------------------------------------------
 dnl DirectDraw  / Multimon for MSW
 dnl ---------------------------------------------------------------------------
-        AC_CHECK_HEADERS(multimon.h ddraw.h,[], [
+        AC_CHECK_HEADERS([multimon.h ddraw.h], [], [
             wxUSE_DISPLAY="no"
-            AC_MSG_WARN("*** ddraw.h or multimon.h not found; disabling wxDisplay")
+            AC_MSG_WARN([ddraw.h or multimon.h not found; disabling wxDisplay])
           ] )
     fi
 fi
