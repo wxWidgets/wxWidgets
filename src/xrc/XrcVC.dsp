@@ -1,25 +1,25 @@
-# Microsoft Developer Studio Project File - Name="wxXMLVC" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="XrcVC" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
-CFG=wxXMLVC - Win32 Debug
+CFG=XrcVC - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "wxXMLVC.mak".
-!MESSAGE 
+!MESSAGE NMAKE /f "XrcVC.mak".
+!MESSAGE
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "wxXMLVC.mak" CFG="wxXMLVC - Win32 Debug"
-!MESSAGE 
+!MESSAGE NMAKE /f "XrcVC.mak" CFG="XrcVC - Win32 Debug"
+!MESSAGE
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "wxXMLVC - Win32 Release" (based on "Win32 (x86) Static Library")
-!MESSAGE "wxXMLVC - Win32 Debug" (based on "Win32 (x86) Static Library")
-!MESSAGE 
+!MESSAGE "XrcVC - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "XrcVC - Win32 Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE
 
 # Begin Project
 # PROP AllowPerConfigDependencies 0
@@ -28,7 +28,7 @@ CFG=wxXMLVC - Win32 Debug
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "wxXMLVC - Win32 Release"
+!IF  "$(CFG)" == "XrcVC - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -52,7 +52,7 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo /out:"..\..\lib\wxxrc.lib"
 
-!ELSEIF  "$(CFG)" == "wxXMLVC - Win32 Debug"
+!ELSEIF  "$(CFG)" == "XrcVC - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -80,8 +80,8 @@ LIB32=link.exe -lib
 
 # Begin Target
 
-# Name "wxXMLVC - Win32 Release"
-# Name "wxXMLVC - Win32 Debug"
+# Name "XrcVC - Win32 Release"
+# Name "XrcVC - Win32 Debug"
 # Begin Group "Expat"
 
 # PROP Default_Filter ""
