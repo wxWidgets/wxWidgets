@@ -319,17 +319,29 @@ void wxFrame::PositionStatusBar()
 void wxFrame::AttachMenuBar(wxMenuBar *menubar)
 {
 #if defined(__SMARTPHONE__)
-    wxMenu *autoMenu = new wxMenu;
 
-    for( size_t n = 0; n < menubar->GetMenuCount(); n++ )
+    wxMenu *autoMenu = NULL;
+
+    if( menubar->GetMenuCount() == 1 )
     {
-        wxMenu *item = menubar->GetMenu(n);
-        wxString label = menubar->GetLabelTop(n);
-        wxMenu *new_item = wxTopLevelWindowMSW::ButtonMenu::DuplicateMenu(item);
-        autoMenu->Append(wxID_ANY, label, new_item);
+        autoMenu = wxTopLevelWindowMSW::ButtonMenu::DuplicateMenu(menubar->GetMenu(0));
+        SetRightMenu(wxID_ANY, menubar->GetLabelTop(0), autoMenu);
+    }
+    else
+    {
+        autoMenu = new wxMenu;
+
+        for( size_t n = 0; n < menubar->GetMenuCount(); n++ )
+        {
+            wxMenu *item = menubar->GetMenu(n);
+            wxString label = menubar->GetLabelTop(n);
+            wxMenu *new_item = wxTopLevelWindowMSW::ButtonMenu::DuplicateMenu(item);
+            autoMenu->Append(wxID_ANY, label, new_item);
+        }
+
+        SetRightMenu(wxID_ANY, _("Menu"), autoMenu);
     }
 
-    SetRightMenu(wxID_ANY, _("Menu"), autoMenu);
 #elif defined(WINCE_WITHOUT_COMMANDBAR)
     if (!GetToolBar())
     {

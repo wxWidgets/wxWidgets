@@ -350,13 +350,9 @@ bool MyApp::OnInit()
     file_menu->AppendSeparator();
     file_menu->Append(wxID_EXIT, _T("E&xit\tAlt-X"));
 
-#if !defined( __SMARTPHONE__ )
     wxMenuBar *menu_bar = new wxMenuBar;
     menu_bar->Append(file_menu, _T("&File"));
     frame->SetMenuBar(menu_bar);
-#else
-    frame->SetRightMenu(wxID_ANY, _T("Menu"), file_menu);
-#endif // __SMARTPHONE__
 
     myCanvas = new MyCanvas(frame);
     myCanvas->SetBackgroundColour(*wxWHITE);
