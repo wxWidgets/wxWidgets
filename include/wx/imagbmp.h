@@ -25,10 +25,12 @@
 #define wxIMAGE_OPTION_CUR_HOTSPOT_X  wxT("HotSpotX")
 #define wxIMAGE_OPTION_CUR_HOTSPOT_Y  wxT("HotSpotY")
 
-// Do not use these macros, they are deprecated!! :
-#define wxBMP_FORMAT    wxIMAGE_OPTION_BMP_FORMAT
-#define wxCUR_HOTSPOT_X wxIMAGE_OPTION_CUR_HOTSPOT_X
-#define wxCUR_HOTSPOT_Y wxIMAGE_OPTION_CUR_HOTSPOT_Y
+#if WXWIN_COMPATIBILITY_2_4
+    // Do not use these macros, they are deprecated
+    #define wxBMP_FORMAT    wxIMAGE_OPTION_BMP_FORMAT
+    #define wxCUR_HOTSPOT_X wxIMAGE_OPTION_CUR_HOTSPOT_X
+    #define wxCUR_HOTSPOT_Y wxIMAGE_OPTION_CUR_HOTSPOT_Y
+#endif
 
 
 enum
