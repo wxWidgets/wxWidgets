@@ -94,6 +94,7 @@ public:
     bool IsExiting() { return !m_keepGoing ; }
 #if TARGET_CARBON
 	WXEVENTHANDLERREF	MacGetEventHandler() { return m_macEventHandler ; }
+	WXEVENTHANDLERREF	MacGetCurrentEventHandlerCallRef() { return m_macCurrentEventHandlerCallRef ; }
 #endif
 
 public:
@@ -102,21 +103,20 @@ public:
     static int            s_lastMouseDown ; // 0 = none , 1 = left , 2 = right
     static WXHRGN         s_macCursorRgn ;
     static long           s_lastModifiers ;
-    WXEVENTREF            m_macCurrentEvent ;
     
     int                   m_nCmdShow;
     
-protected:
+private:
     bool                  m_keepGoing ;
 
     // mac specifics
+#if TARGET_CARBON
+	WXEVENTHANDLERREF	  m_macEventHandler ;
+	WXEVENTHANDLERCALLREF	  m_macCurrentEventHandlerCallRef ;
+#endif
+    WXEVENTREF            m_macCurrentEvent ;
 
 public:
-#if TARGET_CARBON
-	// public to avoid change in initialization order of handlers
-	// could be moved into a override of OnInitGui eventually
-	WXEVENTHANDLERREF	  m_macEventHandler ;
-#endif
     static bool           s_macDefaultEncodingIsPC ;
     static bool           s_macSupportPCMenuShortcuts ;
     static long           s_macAboutMenuItemId ;
@@ -144,6 +144,9 @@ public:
     virtual void          MacConvertPrivateToPublicScrap() ;
     virtual void          MacConvertPublicToPrivateScrap() ;
     
+    void                  MacDoOneEvent() ;
+    WXEVENTREF            MacGetCurrentEvent() { return m_macCurrentEvent ; }
+    void                  MacHandleOneEvent( WXEVENTREF ev ) ;
 #if !TARGET_CARBON
     virtual void          MacHandleMenuSelect( int menuid , int menuitem ) ;
     virtual void          MacHandleMouseUpEvent( WXEVENTREF ev ) ;
@@ -151,25 +154,19 @@ public:
     virtual void          MacHandleDiskEvent( WXEVENTREF ev ) ;
     virtual void          MacHandleActivateEvent( WXEVENTREF ev ) ;
     virtual void          MacHandleUpdateEvent( WXEVENTREF ev ) ;
-#endif
     virtual void          MacHandleMouseDownEvent( WXEVENTREF ev ) ;
 
-    void				  MacHandleMenuCommand( wxUint32 command ) ;
-    // event main methods
-
-    void                  MacDoOneEvent() ;
-    void                  MacHandleOneEvent( WXEVENTREF ev ) ;
     void                  MacHandleModifierEvents( WXEVENTREF ev ) ;
-    WXEVENTREF            MacGetCurrentEvent() { return m_macCurrentEvent ; }
-  
-    // primary events
-	
+
     virtual void          MacHandleKeyDownEvent( WXEVENTREF ev ) ;
     virtual void          MacHandleKeyUpEvent( WXEVENTREF ev ) ;
     virtual void          MacHandleHighLevelEvent( WXEVENTREF ev ) ;
     
-    virtual bool          MacSendKeyDownEvent( wxWindow* focus , long keyval , long modifiers , long when , short wherex , short wherey ) ;
-    virtual bool          MacSendKeyUpEvent( wxWindow* focus , long keyval , long modifiers , long when , short wherex , short wherey ) ;
+#endif
+
+    void				  MacHandleMenuCommand( wxUint32 command ) ;	
+    bool          		  MacSendKeyDownEvent( wxWindow* focus , long keyval , long modifiers , long when , short wherex , short wherey ) ;
+    bool          		  MacSendKeyUpEvent( wxWindow* focus , long keyval , long modifiers , long when , short wherex , short wherey ) ;
     
     virtual short         MacHandleAEODoc(const WXAPPLEEVENTREF event , WXAPPLEEVENTREF reply) ;
     virtual short         MacHandleAEPDoc(const WXAPPLEEVENTREF event , WXAPPLEEVENTREF reply) ;
@@ -204,39 +201,6 @@ private:
 #ifndef __DARWIN__
 int WXDLLEXPORT wxEntry( int argc, char *argv[] , bool enterLoop = TRUE);
 #endif
-
-void wxMacConvertFromPCForControls( char * p ) ;
-
-void wxMacConvertToPC( const char *from , char *to , int len ) ;
-void wxMacConvertFromPC( const char *from , char *to , int len ) ;
-void wxMacConvertToPC( const char *from , char *to , int len ) ;
-void wxMacConvertFromPC( char * p ) ;
-void wxMacConvertFromPC( unsigned char *p ) ;
-wxString wxMacMakeMacStringFromPC( const char * p ) ;
-void wxMacConvertToPC( char * p ) ;
-void wxMacConvertToPC( unsigned char *p ) ;
-wxString wxMacMakePCStringFromMac( const char * p ) ;
-
-// converts this string into a pascal with optional pc 2 mac encoding
-void wxMacStringToPascal( const char * from , unsigned char* to , bool pc2macEncoding ) ;
-
-// converts this string into a pascal with pc 2 mac encoding if s_macDefaultEncodingIsPC
-inline void wxMacStringToPascal( const char * from , unsigned char*  to ) 
-  { wxMacStringToPascal( from , to , wxApp::s_macDefaultEncodingIsPC ) ; }
-
-// converts this string into a pascal with optional mac 2 pc encoding
-wxString wxMacMakeStringFromPascal( unsigned char*  from , bool mac2pcEncoding ) ;
-
-// converts this pascal string into a wxString with pc 2 mac encoding if s_macDefaultEncodingIsPC
-inline wxString wxMacMakeStringFromPascal( unsigned char*  from  ) 
-  { return wxMacMakeStringFromPascal( from , wxApp::s_macDefaultEncodingIsPC ) ; }
-
-// converts this c string into a wxString with optional mac 2 pc encoding
-wxString wxMacMakeStringFromMacString( const char* from , bool mac2pcEncoding ) ;
-
-// converts this c string into a wxString with pc 2 mac encoding if s_macDefaultEncodingIsPC
-inline wxString wxMacMakeStringFromMacString( const char* from  ) 
-  { return wxMacMakeStringFromMacString( from , wxApp::s_macDefaultEncodingIsPC ) ; }
 
 #endif
     // _WX_APP_H_
