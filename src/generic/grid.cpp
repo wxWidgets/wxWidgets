@@ -30,9 +30,11 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_GRID
+
 #if !defined(wxUSE_NEW_GRID) || !(wxUSE_NEW_GRID)
-#include "gridg.cpp"
-#else
+    #include "gridg.cpp"
+#else // wxUSE_NEW_GRID
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
@@ -8774,4 +8776,7 @@ wxGridEditorCreatedEvent::wxGridEditorCreatedEvent(int id, wxEventType type,
 }
 
 
-#endif // ifndef wxUSE_NEW_GRID
+#endif // !wxUSE_NEW_GRID/wxUSE_NEW_GRID
+
+#endif // wxUSE_GRID
+
