@@ -15,15 +15,14 @@
 # the default value set here will be used instead.
 
 
-# Used to set the Release tag below.  I normally use it to define what
-# distro the RPM was build on and also include the version of Python
-# it was built with.  
-%if %{?release:0}%{!?release:1}
-%define release 1_py%{pyver}
+# Which version of Python to build with.  Used to assemble python
+# binary name so use '2.2', '2.3', etc.
+%if %{?pyver:0}%{!?pyver:1}
+%define pyver 2.3
 %endif
 
 
-# Which wxWidgets port to build and use.  Current acceptable valuse
+# Which wxWidgets port to build and use.  Current acceptable values
 # are 'gtk' and 'gtk2'.
 %if %{?port:0}%{!?port:1}
 %define port gtk2
@@ -35,14 +34,6 @@
 %if %{?unicode:0}%{!?unicode:1}
 %define unicode 1
 %endif
-
-# Which version of Python to build with.  Used to assemble python
-# binary name so use '2.2', '2.3', etc.
-%if %{?pyver:0}%{!?pyver:1}
-%define pyver 2.3
-%endif
-
-
 
 
 # Should the builtin image and etc. libs be used, or system libs?
@@ -64,6 +55,15 @@
 %if %{?debug_flag:0}%{!?debug_flag:1}
 %define debug_flag 1
 %endif
+
+
+# Used to set the Release tag below.  I normally use it to define what
+# distro the RPM was build on and also include the version of Python
+# it was built with.  
+%if %{?release:0}%{!?release:1}
+%define release 1_py%{pyver}
+%endif
+
 
 
 #----------------------------------------------------------------------
