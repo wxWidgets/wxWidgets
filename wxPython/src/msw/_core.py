@@ -3581,10 +3581,11 @@ class KeyEvent(Event):
         return _core_.KeyEvent_GetKeyCode(*args, **kwargs)
 
     KeyCode = GetKeyCode 
-    def GetUniChar(*args, **kwargs):
-        """GetUniChar(self) -> int"""
-        return _core_.KeyEvent_GetUniChar(*args, **kwargs)
+    def GetUnicodeKey(*args, **kwargs):
+        """GetUnicodeKey(self) -> int"""
+        return _core_.KeyEvent_GetUnicodeKey(*args, **kwargs)
 
+    GetUniChar = GetUnicodeKey 
     def GetRawKeyCode(*args, **kwargs):
         """GetRawKeyCode(self) -> unsigned int"""
         return _core_.KeyEvent_GetRawKeyCode(*args, **kwargs)
@@ -5050,6 +5051,10 @@ class PyOnDemandOutputWindow:
         if self.frame is not None:
             wx.CallAfter(self.frame.Close)
 
+
+    def flush(self):
+        pass
+    
 
 
 #----------------------------------------------------------------------

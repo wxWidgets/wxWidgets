@@ -1270,9 +1270,9 @@ void wxEvtHandler__setOORInfo(wxEvtHandler *self,PyObject *_self){
                 }
             }
         }
-int wxKeyEvent_GetUniChar(wxKeyEvent *self){
+int wxKeyEvent_GetUnicodeKey(wxKeyEvent *self){
         #if wxUSE_UNICODE
-            return self->m_uniChar;
+            return self->GetUnicodeKey();
         #else
             return 0;
         #endif
@@ -15565,7 +15565,7 @@ static PyObject *_wrap_KeyEvent_GetKeyCode(PyObject *self, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_KeyEvent_GetUniChar(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_KeyEvent_GetUnicodeKey(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxKeyEvent *arg1 = (wxKeyEvent *) 0 ;
     int result;
@@ -15574,12 +15574,12 @@ static PyObject *_wrap_KeyEvent_GetUniChar(PyObject *self, PyObject *args, PyObj
         (char *) "self", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:KeyEvent_GetUniChar",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:KeyEvent_GetUnicodeKey",kwnames,&obj0)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxKeyEvent,
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (int)wxKeyEvent_GetUniChar(arg1);
+        result = (int)wxKeyEvent_GetUnicodeKey(arg1);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -40942,7 +40942,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"KeyEvent_ShiftDown", (PyCFunction) _wrap_KeyEvent_ShiftDown, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"KeyEvent_HasModifiers", (PyCFunction) _wrap_KeyEvent_HasModifiers, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"KeyEvent_GetKeyCode", (PyCFunction) _wrap_KeyEvent_GetKeyCode, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"KeyEvent_GetUniChar", (PyCFunction) _wrap_KeyEvent_GetUniChar, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"KeyEvent_GetUnicodeKey", (PyCFunction) _wrap_KeyEvent_GetUnicodeKey, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"KeyEvent_GetRawKeyCode", (PyCFunction) _wrap_KeyEvent_GetRawKeyCode, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"KeyEvent_GetRawKeyFlags", (PyCFunction) _wrap_KeyEvent_GetRawKeyFlags, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"KeyEvent_GetPosition", (PyCFunction) _wrap_KeyEvent_GetPosition, METH_VARARGS | METH_KEYWORDS },
