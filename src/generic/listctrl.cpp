@@ -1236,10 +1236,12 @@ void wxListHeaderWindow::DrawCurrent()
     int y1 = 0;
     int x2 = m_currentX-1;
     int y2 = 0;
-    int dummy;
-    m_owner->GetClientSize( &dummy, &y2 );
+    m_owner->GetClientSize( NULL, &y2 );
     ClientToScreen( &x1, &y1 );
     m_owner->ClientToScreen( &x2, &y2 );
+
+    m_owner->CalcScrolledPosition( x1, 0, &x1, NULL );
+    x2 = x1 - 1;
 
     wxScreenDC dc;
     dc.SetLogicalFunction( wxINVERT );
@@ -1256,8 +1258,15 @@ void wxListHeaderWindow::DrawCurrent()
 
 void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
 {
-    wxCoord x = (wxCoord)event.GetX();
-    wxCoord y = (wxCoord)event.GetY();
+    // translate x coord as we're shifted with the horz scrollbar of the main
+    // window, but not the y one as we don't care about the vert scrollbar
+    wxCoord xLog,
+            x = (wxCoord)event.GetX(),
+            y = (wxCoord)event.GetY();
+    m_owner->CalcUnscrolledPosition( x, 0, &xLog, NULL );
+
+    m_owner->GetViewStart(&m_minX, NULL);
+
     if (m_isDragging)
     {
         DrawCurrent();
@@ -1270,31 +1279,30 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
         else
         {
             int size_x = 0;
-            int dummy;
-            GetClientSize( &size_x, & dummy );
-            if (x > m_minX+7)
-                m_currentX = x;
+            m_owner->GetVirtualSize( &size_x, NULL );
+            if (xLog > m_minX+7)
+                m_currentX = xLog;
             else
                 m_currentX = m_minX+7;
-            if (m_currentX > size_x-7) m_currentX = size_x-7;
+            if (m_currentX > size_x-7)
+                m_currentX = size_x-7;
             DrawCurrent();
         }
         return;
     }
 
-    m_minX = 0;
     bool hit_border = FALSE;
     int xpos = 0;
     for (int j = 0; j < m_owner->GetColumnCount(); j++)
     {
         xpos += m_owner->GetColumnWidth( j );
         m_column = j;
-        if ((abs(x-xpos) < 3) && (y < 22) && (m_column < m_owner->GetColumnCount()-1))
+        if ((abs(xLog-xpos) < 3) && (y < 22) && (m_column < m_owner->GetColumnCount()-1))
         {
             hit_border = TRUE;
             break;
         }
-        if (x-xpos < 0)
+        if (xLog-xpos < 0)
         {
             break;
         }
@@ -1323,16 +1331,20 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
 
     if (event.Moving())
     {
+        bool setCursor;
         if (hit_border)
         {
-            if (m_currentCursor == wxSTANDARD_CURSOR) SetCursor( * m_resizeCursor );
+            setCursor = m_currentCursor == wxSTANDARD_CURSOR;
             m_currentCursor = m_resizeCursor;
         }
         else
         {
-            if (m_currentCursor != wxSTANDARD_CURSOR) SetCursor( * wxSTANDARD_CURSOR );
+            setCursor = m_currentCursor != wxSTANDARD_CURSOR;
             m_currentCursor = wxSTANDARD_CURSOR;
         }
+
+        if ( setCursor )
+            SetCursor(*m_currentCursor);
     }
 }
 
@@ -2242,7 +2254,7 @@ void wxListMainWindow::SetImageList( wxImageList *imageList, int which )
     // calc the spacing from the icon size
     int width = 0,
         height = 0;
-    if ( imageList->GetImageCount() )
+    if ( imageList && imageList->GetImageCount() )
     {
         imageList->GetSize(0, width, height);
     }
