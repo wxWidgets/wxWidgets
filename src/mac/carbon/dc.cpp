@@ -424,12 +424,12 @@ void wxDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord hei
 void wxDC::DoSetClippingRegionAsRegion( const wxRegion &region  )
 {
     wxCHECK_RET( Ok(), wxT("invalid window dc") ) ;
-  	wxMacPortSetter helper(this) ;
     if (region.Empty())
     {
         DestroyClippingRegion();
         return;
     }
+  	wxMacPortSetter helper(this) ;
     wxCoord x, y, w, h;
     region.GetBox( x, y, w, h );
     wxCoord xx, yy, ww, hh;
@@ -1840,7 +1840,7 @@ void wxDC::MacInstallPen() const
 	::RGBForeColor( &forecolor );
 	::RGBBackColor( &backcolor );
 	::PenNormal() ;
-	int penWidth = m_pen.GetWidth() * (int) m_scaleX ;
+    int penWidth = (int) (m_pen.GetWidth() * m_scaleX) ; ;
 	// null means only one pixel, at whatever resolution
 	if ( penWidth == 0 )
 		penWidth = 1 ;
