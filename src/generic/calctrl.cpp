@@ -480,7 +480,7 @@ wxSize wxCalendarCtrl::DoGetBestSize() const
     if ( GetWindowStyle() & (wxRAISED_BORDER | wxSUNKEN_BORDER) )
     {
         // the border would clip the last line otherwise
-        height += 4;
+        height += 6;
     }
 
     return wxSize(width, height);
@@ -648,7 +648,7 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 
                 wxCalendarDateAttr *attr = m_attrs[day - 1];
 
-                bool isSel = m_date == date;
+                bool isSel = date.IsSameDate(m_date);
                 if ( isSel )
                 {
                     dc.SetTextForeground(m_colHighlightFg);
