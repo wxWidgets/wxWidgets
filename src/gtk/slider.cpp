@@ -16,10 +16,11 @@
 #if wxUSE_SLIDER
 
 #include "wx/utils.h"
+
 #include <math.h>
 
-#include "gdk/gdk.h"
-#include "gtk/gtk.h"
+#include <gdk/gdk.h>
+#include <gtk/gtk.h>
 
 //-----------------------------------------------------------------------------
 // idle system
@@ -34,6 +35,8 @@ extern bool g_isIdle;
 
 extern bool   g_blockEventsOnDrag;
 
+static const float sensitivity = 0.02;
+
 //-----------------------------------------------------------------------------
 // "value_changed"
 //-----------------------------------------------------------------------------
@@ -46,7 +49,7 @@ static void gtk_slider_callback( GtkAdjustment *adjust, wxSlider *win )
     if (g_blockEventsOnDrag) return;
 
     float diff = adjust->value - win->m_oldPos;
-    if (fabs(diff) < 0.2) return;
+    if (fabs(diff) < sensitivity) return;
 
     win->m_oldPos = adjust->value;
 
@@ -78,14 +81,6 @@ static void gtk_slider_callback( GtkAdjustment *adjust, wxSlider *win )
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxSlider,wxControl)
-
-wxSlider::wxSlider(void)
-{
-}
-
-wxSlider::~wxSlider(void)
-{
-}
 
 bool wxSlider::Create(wxWindow *parent, wxWindowID id,
         int value, int minValue, int maxValue,
