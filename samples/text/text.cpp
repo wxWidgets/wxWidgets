@@ -210,6 +210,11 @@ public:
         MyTextCtrl::ms_logText = event.IsChecked();
     }
 
+    void OnSetText(wxCommandEvent& event)
+    {
+        m_panel->m_text->SetValue(_T("Hello, world (what else did you expect)?"));
+    }
+
     void OnIdle( wxIdleEvent& event );
 
 private:
@@ -271,6 +276,7 @@ enum
     TEXT_PAGE_DOWN,
     TEXT_PAGE_UP,
     TEXT_REMOVE,
+    TEXT_SET,
 
     // log menu
     TEXT_LOG_KEY,
@@ -324,6 +330,7 @@ bool MyApp::OnInit()
     menuText->Append(TEXT_ADD_SOME, "&Append some text\tCtrl-A");
     menuText->Append(TEXT_ADD_FREEZE, "&Append text with freeze/thaw\tShift-Ctrl-A");
     menuText->Append(TEXT_REMOVE, "&Remove first 10 characters\tCtrl-X");
+    menuText->Append(TEXT_SET, "&Set the first text zone value\tCtrl-E");
     menuText->AppendSeparator();
     menuText->Append(TEXT_MOVE_ENDTEXT, "Move cursor to the end of &text");
     menuText->Append(TEXT_MOVE_ENDENTRY, "Move cursor to the end of &entry");
@@ -781,7 +788,11 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                 m_horizontal->SetFont(wxFont(18, wxSWISS, wxNORMAL, wxNORMAL,
                                              FALSE, "",
                                              wxFONTENCODING_CP1251));
+#if wxUSE_UNICODE
+                m_horizontal->SetValue(L"\x0412\x0430\x0434\x0438\x043c \x0426");
+#else
                 m_horizontal->SetValue("кажется удачным");
+#endif
         }
     }
     else
@@ -983,7 +994,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TEXT_LOG_CHAR, MyFrame::OnLogChar)
     EVT_MENU(TEXT_LOG_MOUSE,MyFrame::OnLogMouse)
     EVT_MENU(TEXT_LOG_TEXT, MyFrame::OnLogText)
-    EVT_MENU(TEXT_CLEAR,  MyFrame::OnLogClear)
+    EVT_MENU(TEXT_CLEAR,    MyFrame::OnLogClear)
 
 #if wxUSE_TOOLTIPS
     EVT_MENU(TEXT_TOOLTIPS_SETDELAY,  MyFrame::OnSetTooltipDelay)
@@ -1008,6 +1019,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TEXT_LINE_UP,            MyFrame::OnScrollLineUp)
     EVT_MENU(TEXT_PAGE_DOWN,          MyFrame::OnScrollPageDown)
     EVT_MENU(TEXT_PAGE_UP,            MyFrame::OnScrollPageUp)
+
+    EVT_MENU(TEXT_SET,                MyFrame::OnSetText)
 
     EVT_IDLE(MyFrame::OnIdle)
 END_EVENT_TABLE()
