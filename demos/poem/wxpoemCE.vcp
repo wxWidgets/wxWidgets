@@ -4,6 +4,7 @@
 
 # TARGTYPE "Win32 (WCE x86) Application" 0x8301
 # TARGTYPE "Win32 (WCE ARM) Application" 0x8501
+# TARGTYPE "Win32 (WCE emulator) Application" 0xa601
 
 CFG=wxPoemCE - Win32 (WCE ARM) Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
@@ -22,6 +23,10 @@ CFG=wxPoemCE - Win32 (WCE ARM) Debug
 !MESSAGE "wxPoemCE - Win32 (WCE ARM) Debug" (based on "Win32 (WCE ARM) Application")
 !MESSAGE "wxPoemCE - Win32 (WCE x86) Release" (based on "Win32 (WCE x86) Application")
 !MESSAGE "wxPoemCE - Win32 (WCE x86) Debug" (based on "Win32 (WCE x86) Application")
+!MESSAGE "wxPoemCE - Win32 (WCE emulator) Release" (based on "Win32 (WCE emulator) Application")
+!MESSAGE "wxPoemCE - Win32 (WCE x86) Debug eVC4" (based on "Win32 (WCE x86) Application")
+!MESSAGE "wxPoemCE - Win32 (WCE x86) Release eVC4" (based on "Win32 (WCE x86) Application")
+!MESSAGE "wxPoemCE - Win32 (WCE emulator) Debug" (based on "Win32 (WCE emulator) Application")
 !MESSAGE 
 
 # Begin Project
@@ -45,22 +50,23 @@ CFG=wxPoemCE - Win32 (WCE ARM) Debug
 # PROP Intermediate_Dir "ARMRel"
 # PROP CPU_ID "{D6518FFC-710F-11D3-99F2-00105A0DF099}"
 # PROP Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-RSC=rc.exe
-# ADD BASE RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "NDEBUG" /d "$(CePlatform)" /d "ARM" /d "_ARM_" /r
-# ADD RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "NDEBUG" /d "$(CePlatform)" /d "ARM" /d "_ARM_" /r
-CPP=clarm.exe
-# ADD BASE CPP /nologo /W3 /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "ARM" /D "_ARM_" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "NDEBUG" /YX /Oxs /M$(CECrtMT) /c
-# ADD CPP /nologo /W3 /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "ARM" /D "_ARM_" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "NDEBUG" /YX /Oxs /M$(CECrtMT) /c
-MTL=midl.exe
-# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
-# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+LINK32=link.exe
+# ADD BASE LINK32 commctrl.lib coredll.lib aygshell.lib /nologo /base:"0x00010000" /stack:0x10000,0x1000 /entry:"WinMainCRTStartup" /nodefaultlib:"$(CENoDefaultLib)" /subsystem:$(CESubsystem) /align:"4096" /MACHINE:ARM
+# ADD LINK32 wxmswce_armu.lib commdlg.lib ole32.lib oleaut32.lib ceshell.lib winsock.lib wininet.lib commctrl.lib coredll.lib aygshell.lib /nologo /base:"0x00010000" /stack:0x20000,0x2000 /entry:"WinMainCRTStartup" /nodefaultlib:"$(CENoDefaultLib)" /libpath:"../../lib" /subsystem:$(CESubsystem) /align:"4096" /MACHINE:ARM
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
-LINK32=link.exe
-# ADD BASE LINK32 commctrl.lib coredll.lib /nologo /base:"0x00010000" /stack:0x10000,0x1000 /entry:"WinMainCRTStartup" /nodefaultlib:"$(CENoDefaultLib)" /subsystem:$(CESubsystem) /align:"4096" /MACHINE:ARM
-# ADD LINK32 commctrl.lib coredll.lib /nologo /base:"0x00010000" /stack:0x10000,0x1000 /entry:"WinMainCRTStartup" /nodefaultlib:"$(CENoDefaultLib)" /subsystem:$(CESubsystem) /align:"4096" /MACHINE:ARM
+MTL=midl.exe
+# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+CPP=clarm.exe
+# ADD BASE CPP /nologo /W3 /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "ARM" /D "_ARM_" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "NDEBUG" /YX /Oxs /M$(CECrtMT) /c
+# ADD CPP /nologo /W3 /I "../../include" /I "../../lib/wince_arm" /D "ARM" /D "_ARM_" /D "NDEBUG" /D "__WXWINCE__" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "UNICODE" /D "_UNICODE" /YX /Oxs /M$(CECrtMT) /c
+RSC=rc.exe
+# ADD BASE RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "NDEBUG" /d "$(CePlatform)" /d "ARM" /d "_ARM_" /r
+# ADD RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "NDEBUG" /d "$(CePlatform)" /d "ARM" /d "_ARM_" /r
 
 !ELSEIF  "$(CFG)" == "wxPoemCE - Win32 (WCE ARM) Debug"
 
@@ -77,22 +83,24 @@ LINK32=link.exe
 # PROP Intermediate_Dir "ARMDbg"
 # PROP CPU_ID "{D6518FFC-710F-11D3-99F2-00105A0DF099}"
 # PROP Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-RSC=rc.exe
-# ADD BASE RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "DEBUG" /d "$(CePlatform)" /d "ARM" /d "_ARM_" /r
-# ADD RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "DEBUG" /d "$(CePlatform)" /d "ARM" /d "_ARM_" /r
-CPP=clarm.exe
-# ADD BASE CPP /nologo /W3 /Zi /Od /D "DEBUG" /D "ARM" /D "_ARM_" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "UNICODE" /D "_UNICODE" /YX /M$(CECrtMTDebug) /c
-# ADD CPP /nologo /W3 /Zi /Od /D "DEBUG" /D "ARM" /D "_ARM_" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "UNICODE" /D "_UNICODE" /YX /M$(CECrtMTDebug) /c
-MTL=midl.exe
-# ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
-# ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
+LINK32=link.exe
+# ADD BASE LINK32 commctrl.lib coredll.lib aygshell.lib /nologo /base:"0x00010000" /stack:0x10000,0x1000 /entry:"WinMainCRTStartup" /debug /nodefaultlib:"$(CENoDefaultLib)" /subsystem:$(CESubsystem) /align:"4096" /MACHINE:ARM
+# ADD LINK32 wxmswce_armud.lib commdlg.lib ole32.lib oleaut32.lib ceshell.lib winsock.lib wininet.lib commctrl.lib coredll.lib aygshell.lib /nologo /base:"0x00010000" /stack:0x20000,0x2000 /entry:"WinMainCRTStartup" /debug /nodefaultlib:"$(CENoDefaultLib)" /libpath:"../../lib" /subsystem:$(CESubsystem) /align:"4096" /MACHINE:ARM
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
-LINK32=link.exe
-# ADD BASE LINK32 commctrl.lib coredll.lib /nologo /base:"0x00010000" /stack:0x10000,0x1000 /entry:"WinMainCRTStartup" /debug /nodefaultlib:"$(CENoDefaultLib)" /subsystem:$(CESubsystem) /align:"4096" /MACHINE:ARM
-# ADD LINK32 commctrl.lib coredll.lib /nologo /base:"0x00010000" /stack:0x10000,0x1000 /entry:"WinMainCRTStartup" /debug /nodefaultlib:"$(CENoDefaultLib)" /subsystem:$(CESubsystem) /align:"4096" /MACHINE:ARM
+MTL=midl.exe
+# ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
+# ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
+CPP=clarm.exe
+# ADD BASE CPP /nologo /W3 /Zi /Od /D "DEBUG" /D "ARM" /D "_ARM_" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "UNICODE" /D "_UNICODE" /YX /M$(CECrtMTDebug) /c
+# ADD CPP /nologo /W3 /Zi /Od /I "../../include" /I "../../lib/wince_armd" /D "DEBUG" /D "ARM" /D "_ARM_" /D "__WXWINCE__" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "UNICODE" /D "_UNICODE" /M$(CECrtMTDebug) /c
+# SUBTRACT CPP /YX
+RSC=rc.exe
+# ADD BASE RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "DEBUG" /d "$(CePlatform)" /d "ARM" /d "_ARM_" /r
+# ADD RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "DEBUG" /d "$(CePlatform)" /d "ARM" /d "_ARM_" /r
 
 !ELSEIF  "$(CFG)" == "wxPoemCE - Win32 (WCE x86) Release"
 
@@ -109,13 +117,14 @@ LINK32=link.exe
 # PROP Intermediate_Dir "X86Rel"
 # PROP CPU_ID "{D6518FF3-710F-11D3-99F2-00105A0DF099}"
 # PROP Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 RSC=rc.exe
 # ADD BASE RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "NDEBUG" /d "$(CePlatform)" /d "_X86_" /d "x86" /d "_i386_" /r
 # ADD RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "NDEBUG" /d "$(CePlatform)" /d "_X86_" /d "x86" /d "_i386_" /r
 CPP=cl.exe
-# ADD BASE CPP /nologo /W3 /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "_i386_" /D UNDER_CE=$(CEVersion) /D "i_386_" /D "UNICODE" /D "_UNICODE" /D "_X86_" /D "x86" /D "NDEBUG" /YX /Gs8192 /GF /Oxs /c
-# ADD CPP /nologo /W3 /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "_i386_" /D UNDER_CE=$(CEVersion) /D "i_386_" /D "UNICODE" /D "_UNICODE" /D "_X86_" /D "x86" /D "NDEBUG" /YX /Gs8192 /GF /Oxs /c
+# ADD BASE CPP /nologo /W3 /Oxs /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "_i386_" /D UNDER_CE=$(CEVersion) /D "i_386_" /D "UNICODE" /D "_UNICODE" /D "_X86_" /D "x86" /D "NDEBUG" /YX /Gs8192 /GF /c
+# ADD CPP /nologo /W3 /Oxs /I "../../lib/wince_x86u" /I "../../include" /D "_i386_" /D "i_386_" /D "_X86_" /D "x86" /D "NDEBUG" /D "__WXWINCE__" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "UNICODE" /D "_UNICODE" /YX /Gs8192 /GF /c
 MTL=midl.exe
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
@@ -123,8 +132,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 commctrl.lib coredll.lib $(CEx86Corelibc) /nologo /base:"0x00010000" /stack:0x10000,0x1000 /entry:"WinMainCRTStartup" /nodefaultlib:"OLDNAMES.lib" /nodefaultlib:$(CENoDefaultLib) /subsystem:$(CESubsystem) /MACHINE:IX86
-# ADD LINK32 commctrl.lib coredll.lib $(CEx86Corelibc) /nologo /base:"0x00010000" /stack:0x10000,0x1000 /entry:"WinMainCRTStartup" /nodefaultlib:"OLDNAMES.lib" /nodefaultlib:$(CENoDefaultLib) /subsystem:$(CESubsystem) /MACHINE:IX86
+# ADD BASE LINK32 commctrl.lib coredll.lib $(CEx86Corelibc) aygshell.lib /nologo /base:"0x00010000" /stack:0x10000,0x1000 /entry:"WinMainCRTStartup" /nodefaultlib:"OLDNAMES.lib" /nodefaultlib:$(CENoDefaultLib) /subsystem:$(CESubsystem) /MACHINE:IX86
+# ADD LINK32 $(CEx86Corelibc) wxmswce_x86u.lib commdlg.lib ole32.lib oleaut32.lib winsock.lib wininet.lib commctrl.lib coredll.lib /nologo /base:"0x00010000" /stack:0x20000,0x2000 /entry:"WinMainCRTStartup" /nodefaultlib:"OLDNAMES.lib" /nodefaultlib:$(CENoDefaultLib) /libpath:"../../lib" /subsystem:$(CESubsystem) /MACHINE:IX86
 
 !ELSEIF  "$(CFG)" == "wxPoemCE - Win32 (WCE x86) Debug"
 
@@ -148,7 +157,7 @@ RSC=rc.exe
 # ADD RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "DEBUG" /d "$(CePlatform)" /d "_X86_" /d "x86" /d "_i386_" /r
 CPP=cl.exe
 # ADD BASE CPP /nologo /W3 /Zi /Od /D "DEBUG" /D "_i386_" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "i_386_" /D "UNICODE" /D "_UNICODE" /D "_X86_" /D "x86" /YX /Gs8192 /GF /c
-# ADD CPP /nologo /W3 /Zi /Od /I "../../include" /I "../../lib/wince_x86ud" /D "DEBUG" /D "_i386_" /D "i_386_" /D "_X86_" /D "x86" /D "__WXWINCE__" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "UNICODE" /D "_UNICODE" /FR /YX /Gs8192 /GF /c
+# ADD CPP /nologo /W3 /Zi /Od /I "../../lib/wince_x86ud" /I "../../include" /D "DEBUG" /D "_i386_" /D "i_386_" /D "_X86_" /D "x86" /D "__WXWINCE__" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "UNICODE" /D "_UNICODE" /YX /Gs8192 /GF /c
 MTL=midl.exe
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
@@ -156,9 +165,146 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 commctrl.lib coredll.lib $(CEx86Corelibc) /nologo /base:"0x00010000" /stack:0x10000,0x1000 /entry:"WinMainCRTStartup" /debug /nodefaultlib:"OLDNAMES.lib" /nodefaultlib:$(CENoDefaultLib) /subsystem:$(CESubsystem) /MACHINE:IX86
-# ADD LINK32 $(CEx86Corelibc) wxmswce_x86ud.lib commdlg.lib ole32.lib oleaut32.lib ceshell.lib winsock.lib wininet.lib commctrl.lib coredll.lib aygshell.lib /nologo /base:"0x00010000" /stack:0x10000,0x1000 /entry:"WinMainCRTStartup" /debug /nodefaultlib:"OLDNAMES.lib" /nodefaultlib:$(CENoDefaultLib) /libpath:"../../lib" /subsystem:$(CESubsystem) /MACHINE:IX86
-# SUBTRACT LINK32 /pdb:none
+# ADD BASE LINK32 commctrl.lib coredll.lib $(CEx86Corelibc) aygshell.lib /nologo /base:"0x00010000" /stack:0x10000,0x1000 /entry:"WinMainCRTStartup" /debug /nodefaultlib:"OLDNAMES.lib" /nodefaultlib:$(CENoDefaultLib) /subsystem:$(CESubsystem) /MACHINE:IX86
+# ADD LINK32 $(CEx86Corelibc) wxmswce_x86ud.lib commdlg.lib ole32.lib oleaut32.lib ceshell.lib winsock.lib wininet.lib commctrl.lib coredll.lib aygshell.lib /nologo /base:"0x00010000" /stack:0x20000,0x2000 /entry:"WinMainCRTStartup" /debug /nodefaultlib:"OLDNAMES.lib" /nodefaultlib:$(CENoDefaultLib) /libpath:"../../lib" /subsystem:$(CESubsystem) /MACHINE:IX86
+
+!ELSEIF  "$(CFG)" == "wxPoemCE - Win32 (WCE emulator) Release"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "emulatorRel"
+# PROP BASE Intermediate_Dir "emulatorRel"
+# PROP BASE CPU_ID "{D6518FF3-710F-11D3-99F2-00105A0DF099}"
+# PROP BASE Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP BASE Ignore_Export_Lib 0
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "ReleaseUnicodeEmulator"
+# PROP Intermediate_Dir "ReleaseUnicodeEmulator"
+# PROP CPU_ID "{D6518FF3-710F-11D3-99F2-00105A0DF099}"
+# PROP Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP Ignore_Export_Lib 0
+# PROP Target_Dir ""
+RSC=rc.exe
+# ADD BASE RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "NDEBUG" /d "$(CePlatform)" /d "_X86_" /d "x86" /d "_i386_" /r
+# ADD RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "NDEBUG" /d "$(CePlatform)" /d "_X86_" /d "x86" /d "_i386_" /r
+CPP=cl.exe
+# ADD BASE CPP /nologo /W3 /Oxs /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "_i386_" /D UNDER_CE=$(CEVersion) /D "i_386_" /D "UNICODE" /D "_UNICODE" /D "_X86_" /D "x86" /D "NDEBUG" /D "__WXWINCE__" /YX /Gs8192 /GF /c
+# ADD CPP /nologo /W3 /Oxs /I "../../lib/wince_emu" /I "../../include" /D "_i386_" /D "i_386_" /D "_X86_" /D "x86" /D "NDEBUG" /D "__WXWINCE__" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "UNICODE" /D "_UNICODE" /Fp"X86Rel/wxPoemCE.pch" /YX /Fo"X86Rel/" /Gs8192 /GF /c
+MTL=midl.exe
+# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 $(CEx86Corelibc) wxmswce_x86u.lib commdlg.lib ole32.lib oleaut32.lib winsock.lib wininet.lib commctrl.lib coredll.lib /nologo /base:"0x00010000" /stack:0x20000,0x2000 /entry:"WinMainCRTStartup" /nodefaultlib:"OLDNAMES.lib" /nodefaultlib:$(CENoDefaultLib) /subsystem:$(CESubsystem) /MACHINE:IX86
+# ADD LINK32 $(CEx86Corelibc) wxmswce_emu.lib commdlg.lib ole32.lib oleaut32.lib winsock.lib wininet.lib commctrl.lib coredll.lib /nologo /base:"0x00010000" /stack:0x20000,0x2000 /entry:"WinMainCRTStartup" /nodefaultlib:"OLDNAMES.lib" /nodefaultlib:$(CENoDefaultLib) /libpath:"../../lib" /subsystem:$(CESubsystem) /MACHINE:IX86
+
+!ELSEIF  "$(CFG)" == "wxPoemCE - Win32 (WCE x86) Debug eVC4"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "X86Debug eVC4"
+# PROP BASE Intermediate_Dir "X86Debug eVC4"
+# PROP BASE CPU_ID "{D6518FF3-710F-11D3-99F2-00105A0DF099}"
+# PROP BASE Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP BASE Ignore_Export_Lib 0
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "X86Debug"
+# PROP Intermediate_Dir "X86Debug"
+# PROP CPU_ID "{D6518FF3-710F-11D3-99F2-00105A0DF099}"
+# PROP Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP Ignore_Export_Lib 0
+# PROP Target_Dir ""
+RSC=rc.exe
+# ADD BASE RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "DEBUG" /d "$(CePlatform)" /d "_X86_" /d "x86" /d "_i386_" /r
+# ADD RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "DEBUG" /d "$(CePlatform)" /d "_X86_" /d "x86" /d "_i386_" /r
+CPP=cl.exe
+# ADD BASE CPP /nologo /W3 /Zi /Od /D "DEBUG" /D "_i386_" /D "i_386_" /D "_X86_" /D "x86" /D "__WXWINCE__" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "UNICODE" /D "_UNICODE" /YX /Gs8192 /GF /c
+# ADD CPP /nologo /W3 /Zi /Od /I "../../lib/wince_x86ud" /I "../../include" /D "DEBUG" /D "_i386_" /D "i_386_" /D "_X86_" /D "x86" /D "__WXWINCE__" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "UNICODE" /D "_UNICODE" /YX /Gs8192 /GF /c
+MTL=midl.exe
+# ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
+# ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 $(CEx86Corelibc) wxmswce_x86ud.lib commdlg.lib ole32.lib oleaut32.lib ceshell.lib winsock.lib wininet.lib commctrl.lib coredll.lib aygshell.lib /nologo /base:"0x00010000" /stack:0x20000,0x2000 /entry:"WinMainCRTStartup" /debug /nodefaultlib:"OLDNAMES.lib" /nodefaultlib:$(CENoDefaultLib) /subsystem:$(CESubsystem) /MACHINE:IX86
+# ADD LINK32 $(CEx86Corelibc) wxmswce_x86ud.lib commdlg.lib ole32.lib oleaut32.lib winsock.lib wininet.lib commctrl.lib coredll.lib /nologo /base:"0x00010000" /stack:0x20000,0x2000 /entry:"WinMainCRTStartup" /debug /nodefaultlib:"OLDNAMES.lib" /nodefaultlib:$(CENoDefaultLib) /libpath:"../../lib" /subsystem:$(CESubsystem) /MACHINE:IX86
+
+!ELSEIF  "$(CFG)" == "wxPoemCE - Win32 (WCE x86) Release eVC4"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "X86Release eVC4"
+# PROP BASE Intermediate_Dir "X86Release eVC4"
+# PROP BASE CPU_ID "{D6518FF3-710F-11D3-99F2-00105A0DF099}"
+# PROP BASE Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP BASE Ignore_Export_Lib 0
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "X86Release"
+# PROP Intermediate_Dir "X86Release"
+# PROP CPU_ID "{D6518FF3-710F-11D3-99F2-00105A0DF099}"
+# PROP Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP Ignore_Export_Lib 0
+# PROP Target_Dir ""
+RSC=rc.exe
+# ADD BASE RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "NDEBUG" /d "$(CePlatform)" /d "_X86_" /d "x86" /d "_i386_" /r
+# ADD RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "NDEBUG" /d "$(CePlatform)" /d "_X86_" /d "x86" /d "_i386_" /r
+CPP=cl.exe
+# ADD BASE CPP /nologo /W3 /Oxs /D "_i386_" /D "i_386_" /D "_X86_" /D "x86" /D "NDEBUG" /D "__WXWINCE__" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "UNICODE" /D "_UNICODE" /YX /Gs8192 /GF /c
+# ADD CPP /nologo /W3 /Oxs /I "../../lib/wince_x86u" /I "../../include" /D "_i386_" /D "i_386_" /D "_X86_" /D "x86" /D "NDEBUG" /D "__WXWINCE__" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "UNICODE" /D "_UNICODE" /YX /Gs8192 /GF /c
+MTL=midl.exe
+# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 $(CEx86Corelibc) wxmswce_x86u.lib commdlg.lib ole32.lib oleaut32.lib winsock.lib wininet.lib commctrl.lib coredll.lib /nologo /base:"0x00010000" /stack:0x20000,0x2000 /entry:"WinMainCRTStartup" /nodefaultlib:"OLDNAMES.lib" /nodefaultlib:$(CENoDefaultLib) /subsystem:$(CESubsystem) /MACHINE:IX86
+# ADD LINK32 $(CEx86Corelibc) wxmswce_x86u.lib commdlg.lib ole32.lib oleaut32.lib winsock.lib wininet.lib commctrl.lib coredll.lib /nologo /base:"0x00010000" /stack:0x20000,0x2000 /entry:"WinMainCRTStartup" /nodefaultlib:"OLDNAMES.lib" /nodefaultlib:$(CENoDefaultLib) /libpath:"../../lib" /subsystem:$(CESubsystem) /MACHINE:IX86
+
+!ELSEIF  "$(CFG)" == "wxPoemCE - Win32 (WCE emulator) Debug"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "emulatorDbg"
+# PROP BASE Intermediate_Dir "emulatorDbg"
+# PROP BASE CPU_ID "{D6518FF3-710F-11D3-99F2-00105A0DF099}"
+# PROP BASE Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP BASE Ignore_Export_Lib 0
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "DebugUnicodeEmulator"
+# PROP Intermediate_Dir "DebugUnicodeEmulator"
+# PROP CPU_ID "{D6518FF3-710F-11D3-99F2-00105A0DF099}"
+# PROP Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
+# PROP Ignore_Export_Lib 0
+# PROP Target_Dir ""
+RSC=rc.exe
+# ADD BASE RSC /l 0x409 /d "$(CePlatform)" /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "DEBUG" /d "_X86_" /d "x86" /d "_i386_" /r
+# ADD RSC /l 0x409 /d "$(CePlatform)" /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "DEBUG" /d "_X86_" /d "x86" /d "_i386_" /r
+CPP=cl.exe
+# ADD BASE CPP /nologo /W3 /Zi /Od /D "DEBUG" /D "_i386_" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "i_386_" /D "UNICODE" /D "_UNICODE" /D "_X86_" /D "x86" /YX /Gs8192 /GF /c
+# ADD CPP /nologo /W3 /Zi /Od /I "../../lib/wince_emud" /I "../../include" /D "_i386_" /D "i_386_" /D "_X86_" /D "x86" /D "DEBUG" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "UNICODE" /D "_UNICODE" /D "__WXWINCE__" /YX /Gs8192 /GF /c
+MTL=midl.exe
+# ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
+# ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 $(CEx86Corelibc) wxmswce_x86ud.lib commdlg.lib ole32.lib oleaut32.lib winsock.lib wininet.lib commctrl.lib coredll.lib /nologo /base:"0x00010000" /stack:0x20000,0x2000 /entry:"WinMainCRTStartup" /debug /nodefaultlib:"OLDNAMES.lib" /nodefaultlib:$(CENoDefaultLib) /out:"X86Debug/wxPoemCE.exe" /subsystem:$(CESubsystem) /MACHINE:IX86
+# SUBTRACT BASE LINK32 /incremental:no
+# ADD LINK32 $(CEx86Corelibc) wxmswce_emud.lib commdlg.lib ole32.lib oleaut32.lib winsock.lib wininet.lib commctrl.lib coredll.lib /nologo /base:"0x00010000" /stack:0x20000,0x2000 /entry:"WinMainCRTStartup" /debug /nodefaultlib:"OLDNAMES.lib" /nodefaultlib:$(CENoDefaultLib) /out:"X86Debug/wxPoemCE.exe" /libpath:"../../lib" /subsystem:$(CESubsystem) /MACHINE:IX86
+# SUBTRACT LINK32 /incremental:no
 
 !ENDIF 
 
@@ -168,6 +314,10 @@ LINK32=link.exe
 # Name "wxPoemCE - Win32 (WCE ARM) Debug"
 # Name "wxPoemCE - Win32 (WCE x86) Release"
 # Name "wxPoemCE - Win32 (WCE x86) Debug"
+# Name "wxPoemCE - Win32 (WCE emulator) Release"
+# Name "wxPoemCE - Win32 (WCE x86) Debug eVC4"
+# Name "wxPoemCE - Win32 (WCE x86) Release eVC4"
+# Name "wxPoemCE - Win32 (WCE emulator) Debug"
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
@@ -235,6 +385,66 @@ NODEP_CPP_WXPOEM=\
 	".\wx\wxprec.h"\
 	
 
+!ELSEIF  "$(CFG)" == "xPoemCE - Win32 (WCE emulator) Release"
+
+DEP_CPP_WXPOEM=\
+	".\wxpoem.h"\
+	".\wxpoem.xpm"\
+	".\corner1.h"\
+	".\corner2.h"\
+	".\corner3.h"\
+	".\corner4.h"\
+	
+NODEP_CPP_WXPOEM=\
+	".\wx\wx.h"\
+	".\wx\wxprec.h"\
+	
+
+!ELSEIF  "$(CFG)" == "wxPoemCE - Win32 (WCE x86) Debug eVC4"
+
+DEP_CPP_WXPOEM=\
+	".\wxpoem.h"\
+	".\wxpoem.xpm"\
+	".\corner1.h"\
+	".\corner2.h"\
+	".\corner3.h"\
+	".\corner4.h"\
+	
+NODEP_CPP_WXPOEM=\
+	".\wx\wx.h"\
+	".\wx\wxprec.h"\
+	
+
+!ELSEIF  "$(CFG)" == "wxPoemCE - Win32 (WCE x86) Release eVC4"
+
+DEP_CPP_WXPOEM=\
+	".\wxpoem.h"\
+	".\wxpoem.xpm"\
+	".\corner1.h"\
+	".\corner2.h"\
+	".\corner3.h"\
+	".\corner4.h"\
+	
+NODEP_CPP_WXPOEM=\
+	".\wx\wx.h"\
+	".\wx\wxprec.h"\
+	
+
+!ELSEIF  "$(CFG)" == "wxPoemCE - Win32 (WCE emulator) Debug"
+
+DEP_CPP_WXPOEM=\
+	".\wxpoem.h"\
+	".\wxpoem.xpm"\
+	".\corner1.h"\
+	".\corner2.h"\
+	".\corner3.h"\
+	".\corner4.h"\
+	
+NODEP_CPP_WXPOEM=\
+	".\wx\wx.h"\
+	".\wx\wxprec.h"\
+	
+
 !ENDIF 
 
 # End Source File
@@ -248,7 +458,30 @@ SOURCE=.\wxpoem.rc
 
 !ELSEIF  "$(CFG)" == "wxPoemCE - Win32 (WCE x86) Release"
 
+# ADD BASE RSC /l 0x409
+# ADD RSC /l 0x409 /i "../../include"
+
 !ELSEIF  "$(CFG)" == "wxPoemCE - Win32 (WCE x86) Debug"
+
+# ADD BASE RSC /l 0x409
+# ADD RSC /l 0x409 /i "../../include"
+
+!ELSEIF  "$(CFG)" == "wxPoemCE - Win32 (WCE emulator) Release"
+
+# ADD BASE RSC /l 0x409
+# ADD RSC /l 0x409 /i "../../include"
+
+!ELSEIF  "$(CFG)" == "wxPoemCE - Win32 (WCE x86) Debug eVC4"
+
+# ADD BASE RSC /l 0x409
+# ADD RSC /l 0x409 /i "../../include"
+
+!ELSEIF  "$(CFG)" == "wxPoemCE - Win32 (WCE x86) Release eVC4"
+
+# ADD BASE RSC /l 0x409
+# ADD RSC /l 0x409 /i "../../include"
+
+!ELSEIF  "$(CFG)" == "wxPoemCE - Win32 (WCE emulator) Debug"
 
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409 /i "../../include"
