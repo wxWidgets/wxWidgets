@@ -1,7 +1,7 @@
 \section{\class{wxCheckBox}}\label{wxcheckbox}
 
 A checkbox is a labelled box which by default is either on (checkmark is
-visible) or off (no checkmark). Optionally (When the wxCHK\_3STATE style flag
+visible) or off (no checkmark). Optionally (when the wxCHK\_3STATE style flag
 is set) it can have a third state, called the mixed or undetermined state.
 Often this is used as a "Does Not Apply" state.
 
@@ -21,7 +21,8 @@ Often this is used as a "Does Not Apply" state.
 \twocolwidtha{7cm}
 \begin{twocollist}\itemsep=0pt
 \twocolitem{\windowstyle{wxCHK\_2STATE}}{Create a 2-state checkbox. This is the default.}
-\twocolitem{\windowstyle{wxCHK\_3STATE}}{Create a 3-state checkbox.}
+\twocolitem{\windowstyle{wxCHK\_3STATE}}{Create a 3-state checkbox.
+Not implemented in wxMGL, wxOS2 and wxGTK built against GTK+ 1.2.}
 \twocolitem{\windowstyle{wxCHK\_ALLOW\_3RD\_STATE\_FOR\_USER}}{By default a user can't set a 3-state checkbox
 to the third state. It can only be done from code. Using this flags allows the user to set the checkbox to the third state by clicking. }
 \twocolitem{\windowstyle{wxALIGN\_RIGHT}}{Makes the text appear on the left of the checkbox.}

@@ -135,6 +135,7 @@ wxGTK:
 - fixed many rendering artifacts and wrong colours with lots of GTK+ themes
 - implemented wxColourDialog as native dialog
 - wxTreeCtrl::GetCount() counts root as well now (compatible with MSW)
+- added support for wxCHK_3STATE style (GTK2 only)
 
 wxMotif:
 
