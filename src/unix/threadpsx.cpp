@@ -1483,6 +1483,12 @@ void wxThread::Exit(ExitCode status)
         //       only call one thread function at a time :-(
         DeleteThread(this);
     }
+    else
+    {
+        m_critsect.Enter();
+        m_internal->SetState(STATE_EXITED);
+        m_critsect.Leave();
+    }
 
     // terminate the thread (pthread_exit() never returns)
     pthread_exit(status);
