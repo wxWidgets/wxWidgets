@@ -780,6 +780,10 @@
  */
 #define wxUSE_MDI_ARCHITECTURE 0
 /*
+ * Use MDI
+ */
+#define wxUSE_MDI 0
+/*
  * Use the document/view architecture
  */
 #define wxUSE_DOC_VIEW_ARCHITECTURE 0
