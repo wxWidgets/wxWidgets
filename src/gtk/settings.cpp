@@ -97,6 +97,7 @@ wxColour wxSystemSettings::GetSystemColour( int index )
         case wxSYS_COLOUR_ACTIVEBORDER:
         case wxSYS_COLOUR_INACTIVEBORDER:
         case wxSYS_COLOUR_BTNFACE:
+        case wxSYS_COLOUR_3DLIGHT:
         {
             if (!g_systemBtnFaceColour)
             {
