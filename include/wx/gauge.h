@@ -31,7 +31,7 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxGaugeNameStr;
 class WXDLLEXPORT wxGaugeBase : public wxControl
 {
 public:
-    wxGaugeBase() { }
+    wxGaugeBase() { m_rangeMax = m_gaugePos = 0; }
     virtual ~wxGaugeBase();
 
     bool Create(wxWindow *parent,
@@ -51,8 +51,11 @@ public:
     virtual void SetValue(int pos);
     virtual int GetValue() const;
 
-    // appearance params (not implemented for most ports)
+    // simple accessors
+    bool IsVertical() const { return HasFlag(wxGA_VERTICAL); }
 
+
+    // appearance params (not implemented for most ports)
     virtual void SetShadowWidth(int w);
     virtual int GetShadowWidth() const;
 
