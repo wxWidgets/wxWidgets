@@ -224,6 +224,8 @@ bool wxGLCanvas::Create( wxWindow *parent,
     
     g_vi = glXChooseVisual( dpy, DefaultScreen(dpy), attribList );
     
+    wxCHECK_MSG( g_vi, FALSE, "required visual couldn't be found" );
+
     GdkVisual *visual = gdkx_visual_get( g_vi->visualid );
     GdkColormap *colormap = gdk_colormap_new( gdkx_visual_get(g_vi->visualid), TRUE );
     
