@@ -5,13 +5,16 @@ option ProjectOptions = lang(longlong, "yes"),  gen(manglelinkagekeywordonlyfunc
                         lang(trailingenumcommas, "no"), lang(universalcharacternames, "no"),
                         link(debug, "yes"), link(linkwithmultithreadlib, "yes"), link(exportAll, "yes"),
                         link(linkwithsharedlib, "yes"), link(defaultlibs, "yes"), link(extdictionary, "no"),
-                        link(defaultlibsname, "..\\lib\\png.lib"),
-                        link(defaultlibsname, "..\\lib\\xpm.lib"),
-                        link(defaultlibsname, "..\\lib\\jpeg.lib"),
-                        link(defaultlibsname, "..\\lib\\zlib.lib"),
-                        link(defaultlibsname, "..\\lib\\tiff.lib"),
+                        link(defaultlibsname, "..\\lib\\os2png.lib"),
+                        link(defaultlibsname, "..\\lib\\os2xpm.lib"),
+                        link(defaultlibsname, "..\\lib\\os2jpeg.lib"),
+                        link(defaultlibsname, "..\\lib\\os2zlib.lib"),
+                        link(defaultlibsname, "..\\lib\\os2tifd.lib"),
                         link(defaultlibsname, "NETAPI32.LIB"),
                         link(defaultlibsname, "UPM32.LIB"),
+                        link(defaultlibsname, "TCP32DLL.LIB"),
+                        link(defaultlibsname, "SO32DLL.LIB"),
+                        link(defaultlibsname, "TCPIP32.LIB"),
                         link(defaultlibsname, "..\\..\\LIB\\dummy.obj"),
                         link(extdictionary, "no"),link(pmtype, "pm"),
                         define("__VISAGECPP__", ), define("__WXPM__", ),
@@ -19,11 +22,17 @@ option ProjectOptions = lang(longlong, "yes"),  gen(manglelinkagekeywordonlyfunc
                         incl(searchpath, "..\\src\\zlib"), incl(searchpath, "..\\src\\tiff"),
                         incl(searchpath, "..\\src\\xpm"), incl(searchpath, "..\\src\\png"),
                         macros(redefine, "yes"),
+                        file(genobject, "..\\src\\common\\dbgos240dll\\"),
                         file(usepch, "No"), debug(maxerrors, 100), info(cmp, "yes"), info(cnd, "yes"), info(cns, "yes"), info(cnv, "yes"),
                         info(cpy, "yes"), info(dcl, "yes"), info(eff, "yes"), info(enu, "yes"), info(ext, "yes"), info(ini, "yes"),
                         info(ord, "yes"), info(par, "yes"), info(rea, "yes"), info(trd, "yes"), info(tru, "yes"), info(uni, "yes"),
                         info(use, "yes")
 {
+   perform
+   {
+       run before '-mkdir ' '..\\src\\common\\dbgos240dll'
+       run before '-mkdir ' '..\\samples\\minimal\\dbgos240dll'
+   }
    target type("dll") "..\\lib\\Wxwindll.dll"
    {
       source type(cpp) "COMMON\\APPCMN.CPP"
@@ -271,5 +280,10 @@ option ProjectOptions = lang(longlong, "yes"),  gen(manglelinkagekeywordonlyfunc
       source type(cpp) "OS2\\UTILSEXC.CPP"
       source type(cpp) "OS2\\WAVE.CPP"
       source type(cpp) "OS2\\WINDOW.CPP"
+   }
+   target "..\\samples\\minimal\\dbgos240dll\\Minimal.exe"
+   {
+      source type(cpp) "..\\SAMPLES\\MINIMAL\\MINIMAL.CPP"
+      source type(rc) "..\\SAMPLES\\MINIMAL\\MINIMAL.RCO"
    }
 }
