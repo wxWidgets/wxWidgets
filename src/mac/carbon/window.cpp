@@ -2611,4 +2611,13 @@ void wxWindowMac::MacHandleControlClick( WXWidget control , wxInt16 controlpart 
     wxASSERT_MSG( (ControlRef) m_macControl != NULL , wxT("No valid mac control") ) ;
 }
 
+Rect wxMacGetBoundsForControl( wxWindow* window , const wxPoint& pos , const wxSize &size ) 
+{
+    int x ,y , w ,h ;
+    
+    window->MacGetBoundsForControl( pos , size , x , y, w, h ) ;
+    Rect bounds =  { y , x , y+h , x+w  };
+    return bounds ;
+}
+
 

@@ -533,15 +533,6 @@ bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
 // wxMac Specific utility functions
 //---------------------------------------------------------------------------
 
-Rect wxMacGetBoundsForControl( wxWindow* window , const wxPoint& pos , const wxSize &size ) 
-{
-    int x ,y , w ,h ;
-    
-    window->MacGetBoundsForControl( pos , size , x , y, w, h ) ;
-    Rect bounds =  { y , x , y+h , x+w  };
-    return bounds ;
-}
-
 void wxMacStringToPascal( const wxString&from , StringPtr to )
 {
     wxCharBuffer buf = from.mb_str( wxConvLocal ) ;
