@@ -1,7 +1,7 @@
-Source: wxwindows
+Source: wxwindows=V
 Section: libs
 Priority: optional
-Build-Depends: debhelper, libgtk1.2-dev, flex, bison
+Build-Depends: debhelper, libgtk1.2-dev, python-dev (>=1.5), flex, bison
 Maintainer: Ron Lee <ron@debian.org>
 Standards-Version: 3.1.1
 
@@ -21,7 +21,7 @@ Package: libwxgtk=V-dev
 Architecture: any
 Section: devel
 Depends: libwxgtk=V (= ${Source-Version}), libc6-dev
-Suggests: libstdc++-dev, gettext
+Suggests: wxwin=V-doc, libstdc++-dev, gettext
 Conflicts: libwxgtk-dev
 Replaces: libwxgtk-dev
 Provides: libwxgtk-dev
@@ -33,7 +33,19 @@ Description: wxWindows Cross-platform C++ GUI toolkit (GTK+ development)
  This package provides files needed to compile wxWindows programs.  It
  includes header files and static libraries.
 
-Package: libwx=V-doc
+Package: libwxgtk=V-python
+Architecture: any
+Section: interpreters
+Depends: libwxgtk=V (= ${Source-Version}), python-base (>=1.5), ${shlibs:Depends}
+Suggests: wxwin=V-doc
+Description: wxWindows Cross-platform C++ GUI toolkit (Python binding)
+ wxWindows is a class library for C++ providing GUI (Graphical User
+ Interface) and other facilities on more than one platform.  Version 2.1
+ currently supports subsets of GTK+, Motif, and MS Windows.
+ .
+ This package provides a Python binding to the wxGTK library.
+
+Package: wxwin=V-doc
 Architecture: all
 Section: doc
 Suggests: doc-base, www-browser

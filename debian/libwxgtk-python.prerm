@@ -1,0 +1,9 @@
+#!/bin/sh
+
+set -e
+
+WXPYTHONDIR="/usr/lib/python1.5/site-packages/wxPython"
+find ${WXPYTHONDIR} -name "*.py?" -exec rm -f {} \;
+
+#DEBHELPER#
+

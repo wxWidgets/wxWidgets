@@ -1,5 +1,5 @@
 usr/bin/
 usr/include/wx/
 usr/lib/wx
-usr/lib/*.so
-usr/lib/*.a
+usr/lib/libwx_gtk*.so
+usr/lib/libwx_gtk*.a

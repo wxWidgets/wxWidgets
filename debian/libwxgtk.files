@@ -1,2 +1,2 @@
-usr/lib/*.so.*
+usr/lib/libwx_gtk*.so.*
 usr/share/wx

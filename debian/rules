@@ -5,39 +5,49 @@
 # variously stolen code :-)
 # (including a debhelper template, GNU copyright 1997 to 1999 by
 # Joey Hess, and some ideas found in the ncurses rules file that
-# I quite liked)
+# I quite liked.  Thanks!)
 
 #export DH_VERBOSE=1
 export DH_COMPAT=2
 
-# Change this when the release version changes and
-# touch control.in to propagate the change.
-release=2.1
+release:=$(shell dpkg-parsechangelog | sed -n 's/^Source: wxwindows//p')
 
-# These are the packages we will build
+# Packages to build:
 package_gtk_lib=libwxgtk$(release)
 package_gtk_dev=libwxgtk$(release)-dev
-package_doc=libwx$(release)-doc
+package_gtk_py=libwxgtk$(release)-python
+package_doc=wxwin$(release)-doc
 
-# Dirs to put the various builds object files in
+# Build directories:
 objdir_gtk_shared=objs_gtk_sh
 objdir_gtk_static=objs_gtk_st
+objdir_doc_cruft=objs_doc_con
+objdir_doc=docs/wxWindows-manual.html
+objdirs=$(objdir_gtk_shared) $(objdir_gtk_static) $(objdir_doc)
 
-objdirs=$(objdir_gtk_shared) $(objdir_gtk_static)
+build_stamps=build-gtk-shared-stamp build-gtk-static-stamp \
+             build-gtk-python-stamp build-doc-stamp
 
-build_stamps=build-gtk-shared-stamp build-gtk-static-stamp build-doc-stamp
+wxconfig:=$(shell pwd)/$(objdir_gtk_shared)/wx-config \
+		--prefix=$(shell pwd) \
+		--exec-prefix=$(shell pwd)/$(objdir_gtk_shared)
 
+
+# The Rules:
 
 debian/control: debian/control.in
 	sed -e 's/=V/$(release)/g' < debian/control.in > debian/control
 
-build: debian/control $(build_stamps)
+debian/wxwin-doc.doc-base: debian/wxwin-doc.doc-base.in
+	sed -e 's/=V/$(release)/g' < debian/wxwin-doc.doc-base.in > debian/wxwin-doc.doc-base
+
+build: debian/control debian/wxwin-doc.doc-base $(build_stamps)
 
 build-gtk-shared-stamp:
 	dh_testdir
 	mkdir $(objdir_gtk_shared)
 	cd $(objdir_gtk_shared) \
-		&& ../configure --prefix=/usr --with-gtk \
+		&& ../configure --prefix=/usr --with-gtk --enable-burnt_name --disable-newgrid \
 		&& $(MAKE)
 	touch $@
 
@@ -49,30 +59,49 @@ build-gtk-static-stamp:
 		&& $(MAKE)
 	touch $@
 
+build-gtk-python-stamp: build-gtk-shared-stamp
+	dh_testdir
+	cd utils/wxPython/src \
+		&& touch gtk/*.cpp gtk/*.py \
+		&& ../distrib/build.py -b WXDIR=../../.. WXCONFIG='$(wxconfig)'
+	cd utils/wxPython/modules/html \
+		&& ../../distrib/build.py -b WXDIR=../../../.. WXCONFIG='$(wxconfig)'
+	cd utils/wxPython/modules/utils \
+		&& ../../distrib/build.py -b WXDIR=../../../.. WXCONFIG='$(wxconfig)'
+	touch $@
+
 build-doc-stamp: build-gtk-shared-stamp
 	dh_testdir
 	cd $(objdir_gtk_shared)/utils/tex2rtf/src \
-		&& $(MAKE) \
-		&& mkdir HTML \
-		&& ./tex2rtf ../../../../docs/latex/wx/manual.tex HTML/wxwin -twice -html \
-		&& cp ../../../../docs/latex/wx/*.gif HTML \
-		&& rm -f *.con \
-		&& rm -f HTML/wxwin.con HTML/wxwin.hh* HTML/wxwin.htx HTML/wxwin.ref
-	rm -rf docs/wxWindows-manual.html
-	mv $(objdir_gtk_shared)/utils/tex2rtf/src/HTML docs/wxWindows-manual.html
+		&& $(MAKE)
+	mkdir $(objdir_doc)
+	mkdir $(objdir_doc_cruft)
+	cd $(objdir_doc_cruft) \
+		&& LD_LIBRARY_PATH=../$(objdir_gtk_shared)/lib \
+		   ../$(objdir_gtk_shared)/utils/tex2rtf/src/tex2rtf \
+		   ../docs/latex/wx/manual.tex ../$(objdir_doc)/wxwin -twice -html
+	cp docs/latex/wx/*.gif $(objdir_doc)
+	rm -rf $(objdir_doc_cruft)
+	rm -f $(objdir_doc)/wxwin.con $(objdir_doc)/wxwin.hh* \
+	      $(objdir_doc)/wxwin.htx $(objdir_doc)/wxwin.ref
 	touch $@
 
 clean: debian/control
 	dh_testdir
 	dh_testroot
 	rm -rf $(build_stamps) $(objdirs)
-	rm -rf docs/wxWindows-manual.html
+	-cd utils/wxPython/src && $(MAKE) clean
+	-cd utils/wxPython/modules/html && $(MAKE) clean
+	-cd utils/wxPython/modules/utils && $(MAKE) clean
 	dh_clean
 	rm -f debian/$(package_gtk_lib).*
 	rm -f debian/$(package_gtk_dev).*
+	rm -f debian/$(package_gtk_py).*
 	rm -f debian/$(package_doc).*
 
 install: build
+	dh_testdir
+	dh_testroot
 	@for f in dirs docs files postinst; do \
 		echo "generating control file $(package_gtk_lib).$$f"; \
 		cp debian/libwxgtk.$$f debian/$(package_gtk_lib).$$f; \
@@ -81,17 +110,34 @@ install: build
 		echo "generating control file $(package_gtk_dev).$$f"; \
 		cp debian/libwxgtk-dev.$$f debian/$(package_gtk_dev).$$f; \
 	done;
+	@for f in dirs docs files postinst prerm; do \
+		echo "generating control file $(package_gtk_py).$$f"; \
+		cp debian/libwxgtk-python.$$f debian/$(package_gtk_py).$$f; \
+	done;
 	@for f in dirs docs doc-base; do \
 		echo "generating control file $(package_doc).$$f"; \
-		cp debian/libwx-doc.$$f debian/$(package_doc).$$f; \
+		cp debian/wxwin-doc.$$f debian/$(package_doc).$$f; \
 	done;
-	dh_testdir
-	dh_testroot
 	dh_clean -k
 	dh_installdirs
 	cd $(objdir_gtk_shared) \
 		&& $(MAKE) install prefix=`pwd`/../debian/tmp/usr
 	cp $(objdir_gtk_static)/lib/*.a debian/tmp/usr/lib
+	cd utils/wxPython/src \
+		&& ../distrib/build.py -i \
+			TARGETDIR=../../../debian/tmp/usr/lib/python1.5/site-packages/wxPython \
+			HELPERLIBDIR=../../../debian/tmp/usr/lib \
+			WXDIR=../../..
+	cd utils/wxPython/modules/html \
+		&& ../../distrib/build.py -i \
+			TARGETDIR=../../../../debian/tmp/usr/lib/python1.5/site-packages/wxPython \
+			WXDIR=../../../..
+	cd utils/wxPython/modules/utils \
+		&& ../../distrib/build.py -i \
+			TARGETDIR=../../../../debian/tmp/usr/lib/python1.5/site-packages/wxPython \
+			WXDIR=../../../..
+	find debian/tmp/usr/lib/python1.5/site-packages/wxPython \
+		-name '*.py?' -exec rm '{}' ';'
 	dh_movefiles
 
 
@@ -117,7 +163,7 @@ binary-arch: build install
 	dh_fixperms
 	dh_makeshlibs
 	dh_installdeb
-	dh_shlibdeps
+	dh_shlibdeps -ldebian/$(package_gtk_lib)/usr/lib:debian/$(package_gtk_py)/usr/lib
 	dh_gencontrol
 	dh_md5sums
 	dh_builddeb
