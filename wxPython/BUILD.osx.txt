@@ -8,7 +8,7 @@ that you know your way around a command line and that you know how to
 get things from various CVS repositories as needed.
 
 
-1. "MachoPython" 2.2 is required.  There is a disk image with an
+1. "MacPython-OSX" 2.3 is required.  There is a disk image with an
    installer package in the wxPython Sourceforge download area, in
    this group:
 
@@ -16,34 +16,12 @@ get things from various CVS repositories as needed.
 
    If, for some reason you need to build your own Python, get the
    source from www.python.org and follow the instructions in the
-   Mac/OSX/README file to build and install Python.app and the
-   Python.framework.
-
-   If you build your own Python then you may want to make a symlink or
-   two in /usr/local/bin so that this version of Python can be found
-   from the command line.  For example:
-
-        cd /usr/local/bin
-	sudo ln -s /Library/Frameworks/Python.framework/Versions/2.2/bin/python2.2 python2.2
-        sudo ln -s python2.2 python
-
-   Also, if you create a /usr/local/bin/pythonw script like the
-   following then you can run Python GUI apps (like wxPython apps)
-   directly from the command line:
-
-       #!/bin/sh
-       exec /Applications/Python.app/Contents/MacOS/python $@
-
-   Be sure to give this script execute permissions:
-
-       sudo chmod +x /usr/local/bin/pythonw
-
-   If you would like to make a MachoPython installer from what you
-   built then you may want to look at the scripts I use to do it
-   located in wxPython/distrib/mac/buildPython in CVS.
+   Mac/OSX/README file to build and install the Python.framework and
+   Python tools.
 
    One last thing, make sure that /usr/local/bin is in your PATH
-   environment variable.
+   environment variable since that is where the new python and pythonw
+   commands will be located.
 
 
 2. In a wxWindows CVS tree make a build directory.  (You can also use
@@ -66,7 +44,7 @@ get things from various CVS repositories as needed.
 5. Build and install wxPython.
 
 	cd ../wxPython
-	python setup.py IN_CVS_TREE=1 build install
+	python setup.py build install
 
 6. Test.  Just navigate in the Finder to the demo directory and double
    click demo.py, or simple.py, or whatever you want to run.  Or from

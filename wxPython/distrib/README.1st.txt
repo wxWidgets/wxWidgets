@@ -14,13 +14,13 @@ archive.  If you wish to use the released wxGTK binary as has been
 done in the past then you can still follow the old build directions in
 wxPython/BUILD.unix.txt.  If you are building for Windows or Mac OS X
 then you should look at wxPython/BUILD.win32.txt or
-wxPython/BUILD.osx.txt respectivly.  In all these cases you should use
-the IN_CVS_TREE=1 flag since this archive is really just a modified
-CVS snapshot.
+wxPython/BUILD.osx.txt respectivly.
 
 If, on the other hand, you would like to build Linux/Unix binaries
 with a private copy of wxGTK like what I am now distributing then
-you'll want to follow the instructions in this file.
+you'll want to follow the instructions in this file.  (You should
+probably still read wxPython/BUILD.unix.txt though since there are
+other details there that you may need to be aware of.
 
 Clear as mud?  Good.  Let's get started.
 
@@ -58,17 +58,23 @@ Clear as mud?  Good.  Let's get started.
                      --with-libjpeg=builtin \
                      --with-libpng=builtin \
                      --with-libtiff=builtin \
-                     --with-zlib=builtin
+                     --with-zlib=builtin \
+
+   If you would like to use GTK 2.x and unicode, then add the
+   following flags.  Please note that this is still beta-level
+   quality, but does look and work quite nice for the most part:
+
+		     --enable-gtk2 \
+		     --enable-unicode \
 
 
 3. Build and install wxGTK.  (You may need to be root for the last
    step, depending on where your WXPREF is.)
 
         make
-        cd ../locale
-        make allmo
         cd ../build
         make install
+
 
 4. Build and install wxPython.  If you want to use a different version
    of Python than is found by default on the PATH then specify the
@@ -79,10 +85,23 @@ Clear as mud?  Good.  Let's get started.
 
         cd ../wxPython
         python setup.py \
-               IN_CVS_TREE=1 WX_CONFIG=$WXPREF/bin/wx-config \
+               WX_CONFIG=$WXPREF/bin/wx-config \
                build install
 
-5. That's all!
+   If you are using GTK 2.x and unicode then do it this way instead:
+
+        python setup.py \
+               WX_CONFIG=$WXPREF/bin/wx-config \
+	       WXPORT=gtk2 UNICODE=1 \
+               build install
+
+   If you get errors about wxGLCanvas or being unable to find libGLU
+   or something like that then you can add BUILD_GLCANVAS=0 to the
+   setup.py command line to disable the building of the glcanvas
+   module.
+
+
+5. That's all, except for the having fun part!
 
 --
 Robin Dunn
