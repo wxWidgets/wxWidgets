@@ -1469,7 +1469,7 @@ case "${host}" in
           RESPROGRAMOBJ="\${top_srcdir}/include/wx/os2/wx.res"
       fi
       AC_CACHE_CHECK([for gcc 3 or later], wx_cv_gcc3,[
-          AC_TRY_COMPILE([#include <features.h>],
+          AC_TRY_COMPILE([],
               [
                   #if (__GNUC__ < 3)
                       #error old gcc
