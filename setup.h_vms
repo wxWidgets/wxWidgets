@@ -32,14 +32,11 @@
 /* fill in with the string wxGetOsDescription() will return */
 #define WXWIN_OS_DESCRIPTION "OpenVMS"
 
+/* the installation location prefix from configure */
+#undef wxINSTALL_PREFIX
+
 /* Define to `int' if <sys/types.h> doesn't define.  */
 #undef gid_t
-
-/* Define if you don't have vprintf but do have _doprnt.  */
-#undef HAVE_DOPRNT
-
-/* Define if you have the vprintf function.  */
-#define HAVE_VPRINTF
 
 /* Define to `int' if <sys/types.h> doesn't define.  */
 #undef mode_t
@@ -62,12 +59,6 @@
 /* Define if your processor stores words with the most significant
    byte first (like Motorola and SPARC, unlike Intel and VAX).  */
 #undef WORDS_BIGENDIAN
-
-/* Define if the X Window System is missing or not being used.  */
-#undef X_DISPLAY_MISSING
-
-/* Define if lex declares yytext as a char * by default, not a char[].  */
-#undef YYTEXT_POINTER
 
 /* Define this if your version of GTK+ is greater than 1.2 */
 #define __WXGTK12__ 1
@@ -131,6 +122,10 @@
  */
 #define HAVE_BOOL
 
+/*
+ * Use regex support
+ */
+#define wxUSE_REGEX 0
 /*
  * Use zlib
  */
@@ -222,6 +217,11 @@
  * Use wxFileDialog
  */
 #define wxUSE_FILEDLG 1
+
+/*
+ * Use wxFindReplaceDialog
+ */
+#define wxUSE_FINDREPLDLG 0
 
 /*
  * Use wxFontDialog
@@ -451,6 +451,11 @@
     #define wxUSE_BUTTONBAR 1
   #endif
 #endif
+
+/*
+ * Use wxTreeLayout class
+ */
+#define wxUSE_TREELAYOUT 1
 
 /*
  * Use this control
@@ -860,6 +865,9 @@
 /* Define if you have shl_load() */
 #undef HAVE_SHL_LOAD
 
+/* define if you have statfs function */
+#undef HAVE_STATFS
+
 /* Define if you have strptime() */
 #define HAVE_STRPTIME 1
  
@@ -990,8 +998,5 @@
 
 /* Define this if you are using gtk and gdk contains support for X11R6 XIM */
 #undef HAVE_XIM
-
-/* now check the settings self consistency */
-#include "wx/chkconf.h"
 
 #endif /* __WX_SETUP_H__ */

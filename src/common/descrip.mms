@@ -45,6 +45,7 @@ OBJECTS = \
 		cmdline.obj,\
 		cmndata.obj,\
 		config.obj,\
+		containr.obj,\
 		cshelp.obj,\
 		ctrlcmn.obj,\
 		ctrlsub.obj,\
@@ -109,6 +110,7 @@ OBJECTS1=framecmn.obj,\
 		prntbase.obj,\
 		process.obj,\
 		protocol.obj,\
+		quantize.obj,\
 		resource.obj,\
 		sckaddr.obj,\
 		sckfile.obj,\
@@ -151,6 +153,7 @@ SOURCES = \
 		cmdline.cpp,\
 		cmndata.cpp,\
 		config.cpp,\
+		containr.cpp,\
 		cshelp.cpp,\
 		ctrlcmn.cpp,\
 		ctrlsub.cpp,\
@@ -214,6 +217,7 @@ SOURCES = \
 		prntbase.cpp,\
 		process.cpp,\
 		protocol.cpp,\
+		quantize.cpp,\
 		resource.cpp,\
 		sckaddr.cpp,\
 		sckfile.cpp,\
@@ -286,6 +290,7 @@ clipcmn.obj : clipcmn.cpp
 cmndata.obj : cmndata.cpp
 cmdline.obj : cmdline.cpp
 config.obj : config.cpp
+containr.obj : containr.cpp
 cshelp.obj : cshelp.cpp
 ctrlcmn.obj : ctrlcmn.cpp
 ctrlsub.obj : ctrlsub.cpp
@@ -349,6 +354,7 @@ paper.obj : paper.cpp
 prntbase.obj : prntbase.cpp
 process.obj : process.cpp
 protocol.obj : protocol.cpp
+quantize.obj : quantize.cpp
 resource.obj : resource.cpp
 sckaddr.obj : sckaddr.cpp
 sckfile.obj : sckfile.cpp
