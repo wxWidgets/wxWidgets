@@ -158,10 +158,12 @@ private :
 };
 
 #define WX_DEFINE_FLAGS( flags ) \
-    struct WXDLLEXPORT flags \
+    class WXDLLEXPORT flags \
     {\
-    flags(long data=0) :m_data(data) {} \
+    public : \
+        flags(long data=0) :m_data(data) {} \
         long m_data ;\
+        bool operator ==(const flags &rhs) const { return m_data == rhs.m_data; }\
     } ;
 
 #endif

@@ -203,6 +203,19 @@ public :
         const wxClassInfo **objectClassInfos ,
         wxxVariantArray &metadata) = 0;
 
+    // construct the new object on the heap, that object will have the passed in ID (for objects that
+    // don't support allocate-create type of creation)
+    // creation parameters which are objects are having their Ids passed in objectIDValues
+    // having objectId <> wxInvalidObjectID
+
+    virtual void ConstructObject(int objectID,
+        const wxClassInfo *classInfo,
+        int paramCount,
+        wxxVariant *VariantValues ,
+        int *objectIDValues ,
+        const wxClassInfo **objectClassInfos ,
+        wxxVariantArray &metadata) = 0;
+
     // destroy the heap-allocated object having the ID objectID, this may be used if an object
     // is embedded in another object and set via value semantics, so the intermediate
     // object can be destroyed after safely
@@ -274,6 +287,19 @@ public :
         const wxClassInfo **objectClassInfos ,
         wxxVariantArray &metadata
         ) ;
+
+    // construct the new object on the heap, that object will have the passed in ID (for objects that
+    // don't support allocate-create type of creation)
+    // creation parameters which are objects are having their Ids passed in objectIDValues
+    // having objectId <> wxInvalidObjectID
+
+    virtual void ConstructObject(int objectID,
+        const wxClassInfo *classInfo,
+        int paramCount,
+        wxxVariant *VariantValues ,
+        int *objectIDValues ,
+        const wxClassInfo **objectClassInfos ,
+        wxxVariantArray &metadata) ;
 
     // destroy the heap-allocated object having the ID objectID, this may be used if an object
     // is embedded in another object and set via value semantics, so the intermediate
@@ -348,6 +374,19 @@ public:
         const wxClassInfo **objectClassInfos ,
         wxxVariantArray &metadata
         ) ;
+
+     // construct the new object on the heap, that object will have the passed in ID (for objects that
+    // don't support allocate-create type of creation)
+    // creation parameters which are objects are having their Ids passed in objectIDValues
+    // having objectId <> wxInvalidObjectID
+
+    virtual void ConstructObject(int objectID,
+        const wxClassInfo *classInfo,
+        int paramCount,
+        wxxVariant *VariantValues ,
+        int *objectIDValues ,
+        const wxClassInfo **objectClassInfos ,
+        wxxVariantArray &metadata) ;
 
     // destroy the heap-allocated object having the ID objectID, this may be used if an object
     // is embedded in another object and set via value semantics, so the intermediate

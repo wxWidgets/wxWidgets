@@ -132,7 +132,7 @@ private :
 #define WX_BEGIN_ENUM( e ) \
     wxEnumMemberData s_enumDataMembers##e[] = {
 
-#define WX_ENUM_MEMBER( v ) { #v, v } ,
+#define WX_ENUM_MEMBER( v ) { wxT(#v), v } ,
 
 #define WX_END_ENUM( e ) { NULL , 0 } } ; \
     wxEnumData s_enumData##e( s_enumDataMembers##e ) ; \
@@ -147,7 +147,7 @@ private :
 } \
     void FromLong##e( long data , wxxVariant& result ) { result = wxxVariant((e)data) ;} \
     void ToLong##e( const wxxVariant& data , long &result ) { result = (long) data.Get<e>() ;} \
-    wxEnumTypeInfo s_typeInfo##e(wxT_ENUM , &s_enumData##e , &wxToStringConverter<e> , &wxFromStringConverter<e> , &ToLong##e , &FromLong##e , typeid(e).name() ) ; 
+    wxEnumTypeInfo s_typeInfo##e(wxT_ENUM , &s_enumData##e , &wxToStringConverter<e> , &wxFromStringConverter<e> , &ToLong##e , &FromLong##e , typeid(e).name() ) ;
 
 // ----------------------------------------------------------------------------
 // Set Support
@@ -215,7 +215,7 @@ void wxSetToString( wxString &s , const wxBitset<e> &data )
         {
             // this could also be done by the templated calls
             if ( !s.IsEmpty() )
-                s +="|" ;
+                s +=wxT("|") ;
             s += edata->GetEnumMemberNameByIndex(i) ;
         }
     }
@@ -273,7 +273,7 @@ void wxFlagsToString( wxString &s , const e& data )
             dataValue &= ~value ;
             // this could also be done by the templated calls
             if ( !s.IsEmpty() )
-                s +="|" ;
+                s +=wxT("|") ;
             s += edata->GetEnumMemberNameByIndex(i) ;
         }
     }
@@ -282,7 +282,7 @@ void wxFlagsToString( wxString &s , const e& data )
 #define WX_BEGIN_FLAGS( e ) \
     wxEnumMemberData s_enumDataMembers##e[] = {
 
-#define WX_FLAGS_MEMBER( v ) { #v, v } ,
+#define WX_FLAGS_MEMBER( v ) { wxT(#v), v } ,
 
 #define WX_END_FLAGS( e ) { NULL , 0 } } ; \
     wxEnumData s_enumData##e( s_enumDataMembers##e ) ; \
@@ -297,7 +297,7 @@ void wxFlagsToString( wxString &s , const e& data )
 } \
     void FromLong##e( long data , wxxVariant& result ) { result = wxxVariant(e(data)) ;} \
     void ToLong##e( const wxxVariant& data , long &result ) { result = (long) data.Get<e>().m_data ;} \
-    wxEnumTypeInfo s_typeInfo##e(wxT_SET , &s_enumData##e , &wxToStringConverter<e> , &wxFromStringConverter<e> , &ToLong##e , &FromLong##e, typeid(e).name()  ) ; 
+    wxEnumTypeInfo s_typeInfo##e(wxT_SET , &s_enumData##e , &wxToStringConverter<e> , &wxFromStringConverter<e> , &ToLong##e , &FromLong##e, typeid(e).name()  ) ;
 // ----------------------------------------------------------------------------
 // Type Information
 // ----------------------------------------------------------------------------
@@ -351,10 +351,19 @@ public :
     wxTypeInfo(wxTypeKind kind,
                converterToString_t to = NULL, converterFromString_t from = NULL,
                const wxString &name = wxEmptyString):
-            m_toString(to), m_fromString(from), m_kind(kind), m_name(name) 
+            m_toString(to), m_fromString(from), m_kind(kind), m_name(name)
     {
         Register();
     }
+#if wxUSE_UNICODE
+    wxTypeInfo(wxTypeKind kind,
+               converterToString_t to = NULL, converterFromString_t from = NULL,
+               const char *name = ""):
+            m_toString(to), m_fromString(from), m_kind(kind), m_name(wxString::FromAscii(name))
+    {
+        Register();
+    }
+#endif
 
     virtual ~wxTypeInfo()
     {
@@ -388,6 +397,9 @@ public :
     void ConvertFromString( const wxString& data , wxxVariant &result ) const
     { wxASSERT_MSG( m_fromString , wxT("String conversions not supported") ) ; (*m_fromString)( data , result ) ; }
 
+#if wxUSE_UNICODE
+    static wxTypeInfo        *FindType(const char *typeName) { return FindType( wxString::FromAscii(typeName) ) ; }
+#endif
     static wxTypeInfo        *FindType(const wxChar *typeName);
 
 private :
@@ -410,6 +422,11 @@ public :
     wxBuiltInTypeInfo( wxTypeKind kind , converterToString_t to = NULL , converterFromString_t from = NULL , const wxString &name = wxEmptyString ) :
        wxTypeInfo( kind , to , from , name )
        { wxASSERT_MSG( GetKind() < wxT_SET , wxT("Illegal Kind for Base Type") ) ; }
+#if wxUSE_UNICODE
+    wxBuiltInTypeInfo( wxTypeKind kind , converterToString_t to  , converterFromString_t from  , const char *name  ) :
+       wxTypeInfo( kind , to , from , name )
+       { wxASSERT_MSG( GetKind() < wxT_SET , wxT("Illegal Kind for Base Type") ) ; }
+#endif
 } ;
 
 class WXDLLIMPEXP_BASE wxCustomTypeInfo : public wxTypeInfo
@@ -418,6 +435,11 @@ public :
     wxCustomTypeInfo( const wxString &name , converterToString_t to , converterFromString_t from ) :
        wxTypeInfo( wxT_CUSTOM , to , from , name )
        {}
+#if wxUSE_UNICODE
+    wxCustomTypeInfo( const char *name  , converterToString_t to , converterFromString_t from ) :
+       wxTypeInfo( wxT_CUSTOM , to , from , name )
+       {}
+#endif
 } ;
 
 class WXDLLIMPEXP_BASE wxEnumTypeInfo : public wxTypeInfo
@@ -430,6 +452,13 @@ public :
         converterToLong_t toLong , converterFromLong_t fromLong , const wxString &name  ) :
     wxTypeInfo( kind , to , from , name ) , m_toLong( toLong ) , m_fromLong( fromLong )
     { wxASSERT_MSG( kind == wxT_ENUM || kind == wxT_SET , wxT("Illegal Kind for Enum Type")) ; m_enumInfo = enumInfo ;}
+
+#if wxUSE_UNICODE
+    wxEnumTypeInfo( wxTypeKind kind , wxEnumData* enumInfo , converterToString_t to , converterFromString_t from ,
+        converterToLong_t toLong , converterFromLong_t fromLong , const char * name   ) :
+    wxTypeInfo( kind , to , from , name ) , m_toLong( toLong ) , m_fromLong( fromLong )
+    { wxASSERT_MSG( kind == wxT_ENUM || kind == wxT_SET , wxT("Illegal Kind for Enum Type")) ; m_enumInfo = enumInfo ;}
+#endif
     const wxEnumData* GetEnumData() const { return m_enumInfo ; }
 
     // convert a wxxVariant holding data of this type into a long
@@ -452,6 +481,9 @@ class WXDLLIMPEXP_BASE wxClassTypeInfo : public wxTypeInfo
 {
 public :
     wxClassTypeInfo( wxTypeKind kind , wxClassInfo* classInfo , converterToString_t to = NULL , converterFromString_t from = NULL , const wxString &name = wxEmptyString) ;
+#if wxUSE_UNICODE
+    wxClassTypeInfo( wxTypeKind kind , wxClassInfo* classInfo , converterToString_t to  , converterFromString_t from  , const char *name ) ;
+#endif
     const wxClassInfo *GetClassInfo() const { return m_classInfo ; }
 private :
     wxClassInfo *m_classInfo; // Kind == wxT_OBJECT - could be NULL
@@ -463,7 +495,11 @@ public :
     wxCollectionTypeInfo( wxTypeInfo *elementType , converterToString_t to , converterFromString_t from  , const wxString &name) :
        wxTypeInfo( wxT_COLLECTION , to , from , name )
        { m_elementType = elementType ;}
-
+#if wxUSE_UNICODE
+    wxCollectionTypeInfo( wxTypeInfo *elementType , converterToString_t to , converterFromString_t from  , const char *name ) :
+       wxTypeInfo( wxT_COLLECTION , to , from , name )
+       { m_elementType = elementType ;}
+#endif
        const wxTypeInfo* GetElementType() const { return m_elementType ; }
 private :
     wxTypeInfo * m_elementType ;
@@ -489,11 +525,11 @@ template<typename T> const wxTypeInfo* wxGetTypeInfo( T * ) { return wxTypeInfo:
     wxCustomTypeInfo s_typeInfo##e(typeid(e).name() , &toString , &fromString) ;
 
 #define WX_COLLECTION_TYPE_INFO( element , collection ) \
-    wxCollectionTypeInfo s_typeInfo##collection( (wxTypeInfo*) wxGetTypeInfo( (element *) NULL) , NULL , NULL , typeid(collection).name() ) ; 
+    wxCollectionTypeInfo s_typeInfo##collection( (wxTypeInfo*) wxGetTypeInfo( (element *) NULL) , NULL , NULL , typeid(collection).name() ) ;
 
 // sometimes a compiler invents specializations that are nowhere called, use this macro to satisfy the refs
 
-#define WX_ILLEGAL_TYPE_SPECIALIZATION( a ) 
+#define WX_ILLEGAL_TYPE_SPECIALIZATION( a )
 /*
     template<>  const wxTypeInfo* wxGetTypeInfo( a * ) { assert(0) ; \
     static wxBuiltInTypeInfo s_typeInfo( wxT_VOID ) ; return &s_typeInfo ; } \
@@ -537,6 +573,7 @@ public:
 
     // returns the type info of the contentc
     virtual const wxTypeInfo* GetTypeInfo() const { return wxGetTypeInfo( (T*) NULL ) ; }
+
 private:
     T m_data;
 };
@@ -568,6 +605,8 @@ public :
         wxASSERT_MSG( dataptr , wxT("Cast not possible") ) ;
         return dataptr->Get() ;
     }
+
+    bool IsEmpty() const { return m_data == NULL ; }
 
     template<typename T> bool HasData() const
     {
@@ -686,7 +725,7 @@ private :
 class wxSetter##property : public wxSetter \
 { \
 public: \
-    wxSetter##property() : wxSetter( #setterMethod ) {} \
+    wxSetter##property() : wxSetter( wxT(#setterMethod) ) {} \
     ~wxSetter##property() {} \
     void Set( wxObject *object, const wxxVariant &variantValue ) const \
 { \
@@ -702,7 +741,7 @@ public: \
 class wxGetter##property : public wxGetter \
 { \
 public : \
-    wxGetter##property() : wxGetter( #gettermethod ) {} \
+    wxGetter##property() : wxGetter( wxT(#gettermethod) ) {} \
     ~wxGetter##property() {} \
     void Get( const wxObject *object , wxxVariant &result) const \
 { \
@@ -715,7 +754,7 @@ public : \
 class wxAdder##property : public wxAdder \
 { \
 public: \
-    wxAdder##property() : wxAdder( #addermethod ) {} \
+    wxAdder##property() : wxAdder( wxT(#addermethod) ) {} \
     ~wxAdder##property() {} \
     void Add( wxObject *object, const wxxVariant &variantValue ) const \
 { \
@@ -731,7 +770,7 @@ public: \
 class wxCollectionGetter##property : public wxCollectionGetter \
 { \
 public : \
-    wxCollectionGetter##property() : wxCollectionGetter( #gettermethod ) {} \
+    wxCollectionGetter##property() : wxCollectionGetter( wxT(#gettermethod) ) {} \
     ~wxCollectionGetter##property() {} \
     void Get( const wxObject *object , wxxVariantArray &result) const \
 { \
@@ -848,20 +887,44 @@ public :
                    wxPropertyInfoFlags flags = 0,
                    const wxString& helpString = wxEmptyString,
                    const wxString& groupString = wxEmptyString) :
+                   m_itsClass(itsClass),
            m_name(name),
-           m_groupString(groupString),
-           m_helpString(helpString),
-           m_itsClass(itsClass),
-           m_flags(flags),
-           m_typeName(typeName) ,
            m_typeInfo(NULL),
+           m_typeName(typeName) ,
            m_collectionElementTypeInfo(NULL),
            m_accessor(accessor),
-           m_defaultValue(dv)
+           m_defaultValue(dv),
+           m_flags(flags),
+           m_helpString(helpString),
+           m_groupString(groupString)
        {
            Insert(iter);
        }
 
+#if wxUSE_UNICODE
+    wxPropertyInfo(wxPropertyInfo* &iter,
+                   wxClassInfo* itsClass,
+                   const wxString& name,
+                   const char* typeName,
+                   wxPropertyAccessor *accessor,
+                   wxxVariant dv,
+                   wxPropertyInfoFlags flags = 0,
+                   const wxString& helpString = wxEmptyString,
+                   const wxString& groupString = wxEmptyString) :
+                   m_itsClass(itsClass),
+           m_name(name),
+           m_typeInfo(NULL),
+           m_typeName(wxString::FromAscii(typeName)) ,
+           m_collectionElementTypeInfo(NULL),
+           m_accessor(accessor),
+           m_defaultValue(dv),
+           m_flags(flags),
+           m_helpString(helpString),
+           m_groupString(groupString)
+       {
+           Insert(iter);
+       }
+#endif
     wxPropertyInfo(wxPropertyInfo* &iter,
                    wxClassInfo* itsClass,
                    const wxString& name,
@@ -871,15 +934,15 @@ public :
                    wxPropertyInfoFlags flags = 0,
                    const wxString& helpString = wxEmptyString,
                    const wxString& groupString = wxEmptyString) :
-           m_name(name),
-           m_groupString(groupString),
-           m_helpString(helpString),
            m_itsClass(itsClass),
-           m_flags(flags),
+           m_name(name),
            m_typeInfo(type),
            m_collectionElementTypeInfo(NULL),
            m_accessor(accessor),
-           m_defaultValue(dv)
+           m_defaultValue(dv),
+           m_flags(flags),
+           m_helpString(helpString),
+           m_groupString(groupString)
        {
            Insert(iter);
        }
@@ -892,20 +955,43 @@ public :
                       wxPropertyInfoFlags flags = 0,
                       const wxString& helpString = wxEmptyString,
                       const wxString& groupString = wxEmptyString) :
-           m_name(name),
-           m_groupString(groupString),
-           m_helpString(helpString),
            m_itsClass(itsClass),
-           m_flags(flags),
+           m_name(name),
            m_typeInfo(NULL),
            m_typeName(collectionTypeName) ,
            m_collectionElementTypeInfo(NULL),
            m_collectionElementTypeName(elementTypeName),
-           m_accessor(accessor)
+           m_accessor(accessor) ,
+           m_flags(flags),
+           m_helpString(helpString),
+           m_groupString(groupString)
        {
            Insert(iter);
        }
 
+#if wxUSE_UNICODE
+              wxPropertyInfo(wxPropertyInfo* &iter,
+                      wxClassInfo* itsClass, const wxString& name,
+                      const char* collectionTypeName,
+                      const char* elementTypeName,
+                      wxPropertyAccessor *accessor,
+                      wxPropertyInfoFlags flags = 0,
+                      const wxString& helpString = wxEmptyString,
+                      const wxString& groupString = wxEmptyString) :
+           m_itsClass(itsClass),
+           m_name(name),
+           m_typeInfo(NULL),
+           m_typeName(wxString::FromAscii(collectionTypeName)) ,
+           m_collectionElementTypeInfo(NULL),
+           m_collectionElementTypeName(wxString::FromAscii(elementTypeName)),
+           m_accessor(accessor) ,
+           m_flags(flags),
+           m_helpString(helpString),
+           m_groupString(groupString)
+       {
+           Insert(iter);
+       }
+#endif
        ~wxPropertyInfo() ;
 
        // return the class this property is declared in
@@ -924,19 +1010,19 @@ public :
        const wxString&     GetGroupString() const { return m_groupString ; }
 
        // return the element type info of this property (for collections, otherwise NULL)
-       const wxTypeInfo *	GetCollectionElementTypeInfo() const 
+       const wxTypeInfo *	GetCollectionElementTypeInfo() const
        {
            if ( m_collectionElementTypeInfo == NULL )
                m_collectionElementTypeInfo = wxTypeInfo::FindType(m_collectionElementTypeName) ;
-           return m_collectionElementTypeInfo ; 
+           return m_collectionElementTypeInfo ;
        }
 
        // return the type info of this property
-       const wxTypeInfo *	GetTypeInfo() const 
+       const wxTypeInfo *	GetTypeInfo() const
        {
            if ( m_typeInfo == NULL )
                m_typeInfo = wxTypeInfo::FindType(m_typeName) ;
-           return m_typeInfo ; 
+           return m_typeInfo ;
        }
 
        // return the accessor for this property
@@ -962,18 +1048,18 @@ private :
             i->m_next = this ;
         }
     }
-    
-    wxString            m_name ;
-    wxString            m_typeName ;
-    wxString            m_collectionElementTypeName ;
-    wxString            m_groupString ;
-    wxString            m_helpString ;
+
     wxClassInfo*        m_itsClass ;
-    wxPropertyInfoFlags m_flags ;
+    wxString            m_name ;
     mutable wxTypeInfo*         m_typeInfo ;
+    wxString            m_typeName ;
     mutable wxTypeInfo*         m_collectionElementTypeInfo ;
+    wxString            m_collectionElementTypeName ;
     wxPropertyAccessor* m_accessor ;
-    wxxVariant m_defaultValue;
+    wxxVariant 		m_defaultValue;
+    wxPropertyInfoFlags m_flags ;
+    wxString            m_helpString ;
+    wxString            m_groupString ;
     // string representation of the default value
     //  to be assigned by the designer to the property
     //  when the component is dropped on the container.
@@ -992,7 +1078,7 @@ WX_DECLARE_STRING_HASH_MAP_WITH_DECL( wxPropertyInfo* , wxPropertyInfoMap , clas
     return first ; }
 
 #define WX_HIDE_PROPERTY( pname ) \
-    static wxPropertyInfo _propertyInfo##pname( first , class_t::GetClassInfoStatic() , #pname , typeid(void).name() ,NULL , wxxVariant() , wxPROP_DONT_STREAM , wxEmptyString , wxEmptyString ) ;
+    static wxPropertyInfo _propertyInfo##pname( first , class_t::GetClassInfoStatic() , wxT(#pname) , typeid(void).name() ,NULL , wxxVariant() , wxPROP_DONT_STREAM , wxEmptyString , wxEmptyString ) ;
 
 #define WX_PROPERTY( pname , type , setter , getter ,defaultValue , flags , help , group) \
     WX_SETTER( pname , class_t , type , setter ) \
@@ -1000,7 +1086,7 @@ WX_DECLARE_STRING_HASH_MAP_WITH_DECL( wxPropertyInfo* , wxPropertyInfoMap , clas
     WX_GETTER( pname , class_t , type , getter ) \
     static wxGetter##pname _getter##pname ; \
     static wxPropertyAccessor _accessor##pname( &_setter##pname , &_getter##pname , NULL , NULL ) ; \
-    static wxPropertyInfo _propertyInfo##pname( first , class_t::GetClassInfoStatic() , #pname , typeid(type).name() ,&_accessor##pname , wxxVariant(defaultValue) , flags , group , help ) ;
+    static wxPropertyInfo _propertyInfo##pname( first , class_t::GetClassInfoStatic() , wxT(#pname) , typeid(type).name() ,&_accessor##pname , wxxVariant(defaultValue) , flags , group , help ) ;
 
 #define WX_PROPERTY_FLAGS( pname , flags , type , setter , getter ,defaultValue , pflags , help , group) \
     WX_SETTER( pname , class_t , type , setter ) \
@@ -1008,13 +1094,19 @@ WX_DECLARE_STRING_HASH_MAP_WITH_DECL( wxPropertyInfo* , wxPropertyInfoMap , clas
     WX_GETTER( pname , class_t , type , getter ) \
     static wxGetter##pname _getter##pname ; \
     static wxPropertyAccessor _accessor##pname( &_setter##pname , &_getter##pname , NULL , NULL ) ; \
-    static wxPropertyInfo _propertyInfo##pname( first , class_t::GetClassInfoStatic() , #pname , typeid(flags).name() ,&_accessor##pname , wxxVariant(defaultValue), wxPROP_ENUM_STORE_LONG | pflags , help , group ) ;
+    static wxPropertyInfo _propertyInfo##pname( first , class_t::GetClassInfoStatic() , wxT(#pname) , typeid(flags).name() ,&_accessor##pname , wxxVariant(defaultValue), wxPROP_ENUM_STORE_LONG | pflags , help , group ) ;
 
 #define WX_READONLY_PROPERTY( pname , type , getter ,defaultValue , flags , help , group) \
     WX_GETTER( pname , class_t , type , getter ) \
     static wxGetter##pname _getter##pname ; \
     static wxPropertyAccessor _accessor##pname( NULL , &_getter##pname , NULL , NULL ) ; \
-    static wxPropertyInfo _propertyInfo##pname( first , class_t::GetClassInfoStatic() , #pname , typeid(type).name() ,&_accessor##pname , wxxVariant(defaultValue), flags , help , group ) ;
+    static wxPropertyInfo _propertyInfo##pname( first , class_t::GetClassInfoStatic() , wxT(#pname) , typeid(type).name() ,&_accessor##pname , wxxVariant(defaultValue), flags , help , group ) ;
+
+#define WX_READONLY_PROPERTY_FLAGS( pname , flags , type , getter ,defaultValue , pflags , help , group) \
+    WX_GETTER( pname , class_t , type , getter ) \
+    static wxGetter##pname _getter##pname ; \
+    static wxPropertyAccessor _accessor##pname( NULL , &_getter##pname , NULL , NULL ) ; \
+    static wxPropertyInfo _propertyInfo##pname( first , class_t::GetClassInfoStatic() , wxT(#pname) , typeid(flags).name() ,&_accessor##pname , wxxVariant(defaultValue), wxPROP_ENUM_STORE_LONG | pflags , help , group ) ;
 
 #define WX_PROPERTY_COLLECTION( pname , colltype , addelemtype , adder , getter , flags , help , group ) \
     WX_ADDER( pname , class_t , addelemtype , adder ) \
@@ -1022,18 +1114,18 @@ WX_DECLARE_STRING_HASH_MAP_WITH_DECL( wxPropertyInfo* , wxPropertyInfoMap , clas
     WX_COLLECTION_GETTER( pname , class_t , colltype , getter ) \
     static wxCollectionGetter##pname _collectionGetter##pname ; \
     static wxPropertyAccessor _accessor##pname( NULL , NULL ,&_adder##pname , &_collectionGetter##pname ) ; \
-    static wxPropertyInfo _propertyInfo##pname( first , class_t::GetClassInfoStatic() , #pname , typeid(colltype).name() ,typeid(addelemtype).name() ,&_accessor##pname , flags , help , group ) ;
+    static wxPropertyInfo _propertyInfo##pname( first , class_t::GetClassInfoStatic() , wxT(#pname) , typeid(colltype).name() ,typeid(addelemtype).name() ,&_accessor##pname , flags , help , group ) ;
 
 #define WX_READONLY_PROPERTY_COLLECTION( pname , colltype , addelemtype , getter , flags , help , group) \
     WX_COLLECTION_GETTER( pname , class_t , colltype , getter ) \
     static wxCollectionGetter##pname _collectionGetter##pname ; \
     static wxPropertyAccessor _accessor##pname( NULL , NULL , NULL , &_collectionGetter##pname ) ; \
-    static wxPropertyInfo _propertyInfo##pname( first ,class_t::GetClassInfoStatic() ,  #pname , typeid(colltype).name() ,typeid(addelemtype).name() ,&_accessor##pname , flags , help , group  ) ;
+    static wxPropertyInfo _propertyInfo##pname( first ,class_t::GetClassInfoStatic() ,  wxT(#pname) , typeid(colltype).name() ,typeid(addelemtype).name() ,&_accessor##pname , flags , help , group  ) ;
 
 
 #define WX_DELEGATE( name , eventType , eventClass ) \
     static wxDelegateTypeInfo _typeInfo##name( eventType , CLASSINFO( eventClass ) ) ; \
-    static wxPropertyInfo _propertyInfo##name( first ,class_t::GetClassInfoStatic() , #name , &_typeInfo##name , NULL , wxxVariant() ) ; \
+    static wxPropertyInfo _propertyInfo##name( first ,class_t::GetClassInfoStatic() , wxT(#name) , &_typeInfo##name , NULL , wxxVariant() ) ; \
 
 // ----------------------------------------------------------------------------
 // Handler Info
@@ -1114,8 +1206,17 @@ private :
 class WXDLLIMPEXP_BASE wxConstructorBridge
 {
 public :
-    virtual void Create(wxObject *o, wxxVariant *args) = 0;
+    virtual void Create(wxObject * &o, wxxVariant *args) = 0;
 };
+
+// a direct constructor bridge calls the operator new for this class and
+// passes all params to the constructor. needed for classes that cannot be
+// instantiated using alloc-create semantics
+class WXDLLIMPEXP_BASE wxDirectConstructorBrigde : public wxConstructorBridge
+{
+public :
+    virtual void Create(wxObject * &o, wxxVariant *args) = 0;
+} ;
 
 // Creator Bridges for all Numbers of Params
 
@@ -1124,7 +1225,7 @@ public :
 template<typename Class>
 struct wxConstructorBridge_0 : public wxConstructorBridge
 {
-    void Create(wxObject *o, wxxVariant *)
+    void Create(wxObject * &o, wxxVariant *)
     {
         Class *obj = dynamic_cast<Class*>(o);
         obj->Create();
@@ -1133,7 +1234,7 @@ struct wxConstructorBridge_0 : public wxConstructorBridge
 
 struct wxConstructorBridge_Dummy : public wxConstructorBridge
 {
-    void Create(wxObject *, wxxVariant *)
+    void Create(wxObject *&, wxxVariant *)
     {
     }
 } ;
@@ -1155,7 +1256,7 @@ struct wxConstructorBridge_Dummy : public wxConstructorBridge
 template<typename Class, typename T0>
 struct wxConstructorBridge_1 : public wxConstructorBridge
 {
-    void Create(wxObject *o, wxxVariant *args)
+    void Create(wxObject * &o, wxxVariant *args)
     {
         Class *obj = dynamic_cast<Class*>(o);
         obj->Create(
@@ -1167,7 +1268,7 @@ struct wxConstructorBridge_1 : public wxConstructorBridge
 #define WX_CONSTRUCTOR_1(klass,t0,v0) \
     wxConstructorBridge_1<klass,t0> constructor##klass ; \
     wxConstructorBridge* klass::sm_constructor##klass = &constructor##klass ; \
-    const wxChar *klass::sm_constructorProperties##klass[] = { #v0 } ; \
+    const wxChar *klass::sm_constructorProperties##klass[] = { wxT(#v0) } ; \
     const int klass::sm_constructorPropertiesCount##klass = 1 ;
 
 // 2 params
@@ -1176,7 +1277,7 @@ template<typename Class,
 typename T0, typename T1>
 struct wxConstructorBridge_2 : public wxConstructorBridge
 {
-    void Create(wxObject *o, wxxVariant *args)
+    void Create(wxObject * &o, wxxVariant *args)
     {
         Class *obj = dynamic_cast<Class*>(o);
         obj->Create(
@@ -1189,8 +1290,30 @@ struct wxConstructorBridge_2 : public wxConstructorBridge
 #define WX_CONSTRUCTOR_2(klass,t0,v0,t1,v1) \
     wxConstructorBridge_2<klass,t0,t1> constructor##klass ; \
     wxConstructorBridge* klass::sm_constructor##klass = &constructor##klass ; \
-    const wxChar *klass::sm_constructorProperties##klass[] = { #v0 , #v1 } ; \
+    const wxChar *klass::sm_constructorProperties##klass[] = { wxT(#v0)  , wxT(#v1)  } ; \
     const int klass::sm_constructorPropertiesCount##klass = 2;
+
+// direct constructor version
+
+template<typename Class,
+typename T0, typename T1>
+struct wxDirectConstructorBridge_2 : public wxDirectConstructorBrigde
+{
+    void Create(wxObject * &o, wxxVariant *args)
+    {
+        o = new Class(
+            args[0].WX_TEMPLATED_MEMBER_CALL(Get , T0) ,
+            args[1].WX_TEMPLATED_MEMBER_CALL(Get , T1)
+            );
+    }
+};
+
+#define WX_DIRECT_CONSTRUCTOR_2(klass,t0,v0,t1,v1) \
+    wxDirectConstructorBridge_2<klass,t0,t1> constructor##klass ; \
+    wxConstructorBridge* klass::sm_constructor##klass = &constructor##klass ; \
+    const wxChar *klass::sm_constructorProperties##klass[] = { wxT(#v0)  , wxT(#v1)  } ; \
+    const int klass::sm_constructorPropertiesCount##klass = 2;
+
 
 // 3 params
 
@@ -1198,7 +1321,7 @@ template<typename Class,
 typename T0, typename T1, typename T2>
 struct wxConstructorBridge_3 : public wxConstructorBridge
 {
-    void Create(wxObject *o, wxxVariant *args)
+    void Create(wxObject * &o, wxxVariant *args)
     {
         Class *obj = dynamic_cast<Class*>(o);
         obj->Create(
@@ -1212,7 +1335,7 @@ struct wxConstructorBridge_3 : public wxConstructorBridge
 #define WX_CONSTRUCTOR_3(klass,t0,v0,t1,v1,t2,v2) \
     wxConstructorBridge_3<klass,t0,t1,t2> constructor##klass ; \
     wxConstructorBridge* klass::sm_constructor##klass = &constructor##klass ; \
-    const wxChar *klass::sm_constructorProperties##klass[] = { #v0 , #v1 , #v2 } ; \
+    const wxChar *klass::sm_constructorProperties##klass[] = { wxT(#v0)  , wxT(#v1)  , wxT(#v2)  } ; \
     const int klass::sm_constructorPropertiesCount##klass = 3 ;
 
 // 4 params
@@ -1221,7 +1344,7 @@ template<typename Class,
 typename T0, typename T1, typename T2, typename T3>
 struct wxConstructorBridge_4 : public wxConstructorBridge
 {
-    void Create(wxObject *o, wxxVariant *args)
+    void Create(wxObject * &o, wxxVariant *args)
     {
         Class *obj = dynamic_cast<Class*>(o);
         obj->Create(
@@ -1236,7 +1359,7 @@ struct wxConstructorBridge_4 : public wxConstructorBridge
 #define WX_CONSTRUCTOR_4(klass,t0,v0,t1,v1,t2,v2,t3,v3) \
     wxConstructorBridge_4<klass,t0,t1,t2,t3> constructor##klass ; \
     wxConstructorBridge* klass::sm_constructor##klass = &constructor##klass ; \
-    const wxChar *klass::sm_constructorProperties##klass[] = { #v0 , #v1 , #v2 , #v3 } ; \
+    const wxChar *klass::sm_constructorProperties##klass[] = { wxT(#v0)  , wxT(#v1)  , wxT(#v2)  , wxT(#v3)  } ; \
     const int klass::sm_constructorPropertiesCount##klass = 4 ;
 
 // 5 params
@@ -1245,7 +1368,7 @@ template<typename Class,
 typename T0, typename T1, typename T2, typename T3, typename T4>
 struct wxConstructorBridge_5 : public wxConstructorBridge
 {
-    void Create(wxObject *o, wxxVariant *args)
+    void Create(wxObject * &o, wxxVariant *args)
     {
         Class *obj = dynamic_cast<Class*>(o);
         obj->Create(
@@ -1261,7 +1384,7 @@ struct wxConstructorBridge_5 : public wxConstructorBridge
 #define WX_CONSTRUCTOR_5(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4) \
     wxConstructorBridge_5<klass,t0,t1,t2,t3,t4> constructor##klass ; \
     wxConstructorBridge* klass::sm_constructor##klass = &constructor##klass ; \
-    const wxChar *klass::sm_constructorProperties##klass[] = { #v0 , #v1 , #v2 , #v3 , #v4 } ; \
+    const wxChar *klass::sm_constructorProperties##klass[] = { wxT(#v0)  , wxT(#v1)  , wxT(#v2)  , wxT(#v3)  , wxT(#v4)  } ; \
     const int klass::sm_constructorPropertiesCount##klass = 5;
 
 // 6 params
@@ -1270,7 +1393,7 @@ template<typename Class,
 typename T0, typename T1, typename T2, typename T3, typename T4, typename T5>
 struct wxConstructorBridge_6 : public wxConstructorBridge
 {
-    void Create(wxObject *o, wxxVariant *args)
+    void Create(wxObject * &o, wxxVariant *args)
     {
         Class *obj = dynamic_cast<Class*>(o);
         obj->Create(
@@ -1284,13 +1407,21 @@ struct wxConstructorBridge_6 : public wxConstructorBridge
     }
 };
 
+#define WX_CONSTRUCTOR_6(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4,t5,v5) \
+    wxConstructorBridge_6<klass,t0,t1,t2,t3,t4,t5> constructor##klass ; \
+    wxConstructorBridge* klass::sm_constructor##klass = &constructor##klass ; \
+    const wxChar *klass::sm_constructorProperties##klass[] = { wxT(#v0)  , wxT(#v1)  , wxT(#v2)  , wxT(#v3)  , wxT(#v4)  , wxT(#v5)  } ; \
+    const int klass::sm_constructorPropertiesCount##klass = 6;
+
+// direct constructor version
+
 template<typename Class,
 typename T0, typename T1, typename T2, typename T3, typename T4, typename T5>
-struct wxDirectConstructorBridge_6 : public wxConstructorBridge
+struct wxDirectConstructorBridge_6 : public wxDirectConstructorBrigde
 {
-    void Create(wxObject *o, wxxVariant *args)
+    void Create(wxObject * &o, wxxVariant *args)
     {
-        Class *obj = new Class(
+        o = new Class(
             args[0].WX_TEMPLATED_MEMBER_CALL(Get , T0) ,
             args[1].WX_TEMPLATED_MEMBER_CALL(Get , T1) ,
             args[2].WX_TEMPLATED_MEMBER_CALL(Get , T2) ,
@@ -1304,13 +1435,7 @@ struct wxDirectConstructorBridge_6 : public wxConstructorBridge
 #define WX_DIRECT_CONSTRUCTOR_6(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4,t5,v5) \
     wxDirectConstructorBridge_6<klass,t0,t1,t2,t3,t4,t5> constructor##klass ; \
     wxConstructorBridge* klass::sm_constructor##klass = &constructor##klass ; \
-    const wxChar *klass::sm_constructorProperties##klass[] = { #v0 , #v1 , #v2 , #v3 , #v4 , #v5 } ; \
-    const int klass::sm_constructorPropertiesCount##klass = 6;
-
-#define WX_CONSTRUCTOR_6(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4,t5,v5) \
-    wxConstructorBridge_6<klass,t0,t1,t2,t3,t4,t5> constructor##klass ; \
-    wxConstructorBridge* klass::sm_constructor##klass = &constructor##klass ; \
-    const wxChar *klass::sm_constructorProperties##klass[] = { #v0 , #v1 , #v2 , #v3 , #v4 , #v5 } ; \
+    const wxChar *klass::sm_constructorProperties##klass[] = { wxT(#v0)  , wxT(#v1)  , wxT(#v2)  , wxT(#v3)  , wxT(#v4)  , wxT(#v5)  } ; \
     const int klass::sm_constructorPropertiesCount##klass = 6;
 
 // 7 params
@@ -1319,7 +1444,7 @@ template<typename Class,
 typename T0, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6>
 struct wxConstructorBridge_7 : public wxConstructorBridge
 {
-    void Create(wxObject *o, wxxVariant *args)
+    void Create(wxObject * &o, wxxVariant *args)
     {
         Class *obj = dynamic_cast<Class*>(o);
         obj->Create(
@@ -1337,7 +1462,7 @@ struct wxConstructorBridge_7 : public wxConstructorBridge
 #define WX_CONSTRUCTOR_7(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4,t5,v5,t6,v6) \
     wxConstructorBridge_7<klass,t0,t1,t2,t3,t4,t5,t6> constructor##klass ; \
     wxConstructorBridge* klass::sm_constructor##klass = &constructor##klass ; \
-    const wxChar *klass::sm_constructorProperties##klass[] = { #v0 , #v1 , #v2 , #v3 , #v4 , #v5 , #v6} ; \
+    const wxChar *klass::sm_constructorProperties##klass[] = { wxT(#v0)  , wxT(#v1)  , wxT(#v2)  , wxT(#v3)  , wxT(#v4)  , wxT(#v5)  , wxT(#v6) } ; \
     const int klass::sm_constructorPropertiesCount##klass = 7;
 
 // 8 params
@@ -1346,7 +1471,7 @@ template<typename Class,
 typename T0, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7>
 struct wxConstructorBridge_8 : public wxConstructorBridge
 {
-    void Create(wxObject *o, wxxVariant *args)
+    void Create(wxObject * &o, wxxVariant *args)
     {
         Class *obj = dynamic_cast<Class*>(o);
         obj->Create(
@@ -1365,7 +1490,7 @@ struct wxConstructorBridge_8 : public wxConstructorBridge
 #define WX_CONSTRUCTOR_8(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4,t5,v5,t6,v6,t7,v7) \
     wxConstructorBridge_8<klass,t0,t1,t2,t3,t4,t5,t6,t7> constructor##klass ; \
     wxConstructorBridge* klass::sm_constructor##klass = &constructor##klass ; \
-    const wxChar *klass::sm_constructorProperties##klass[] = { #v0 , #v1 , #v2 , #v3 , #v4 , #v5 , #v6 , #v7} ; \
+    const wxChar *klass::sm_constructorProperties##klass[] = { wxT(#v0)  , wxT(#v1)  , wxT(#v2)  , wxT(#v3)  , wxT(#v4)  , wxT(#v5)  , wxT(#v6) , wxT(#v7) } ; \
     const int klass::sm_constructorPropertiesCount##klass = 8;
 // ----------------------------------------------------------------------------
 // wxClassInfo
@@ -1399,8 +1524,8 @@ public:
         wxVariantToObjectConverter _Converter2 ,
         wxObjectToVariantConverter _Converter3 ,
         wxObjectStreamingCallback _streamingCallback = NULL
-        ) : 
-    
+        ) :
+
             m_className(_ClassName),
             m_objectSize(size),
             m_objectConstructor(ctor),
@@ -1408,7 +1533,7 @@ public:
             m_firstProperty(_Props),
             m_firstHandler(_Handlers),
             m_parents(_Parents),
-            m_unitName(_UnitName),            
+            m_unitName(_UnitName),
             m_constructor(_Constructor),
             m_constructorProperties(_ConstructorProperties),
             m_constructorPropertiesCount(_ConstructorPropertiesCount),
@@ -1422,7 +1547,7 @@ public:
     }
 
     wxClassInfo(const wxChar *_UnitName, const wxChar *_ClassName,
-                const wxClassInfo **_Parents) : 
+                const wxClassInfo **_Parents) :
             m_className(_ClassName),
             m_objectSize(0),
             m_objectConstructor(NULL),
@@ -1451,6 +1576,17 @@ public:
 
     // 'old naming' for AllocateObject staying here for backward compatibility
     wxObject *CreateObject() const { return AllocateObject() ; }
+
+    // direct construction call for classes that cannot construct instances via alloc/create
+    wxObject *ConstructObject(int ParamCount, wxxVariant *Params) const
+    {
+        wxASSERT_MSG( ParamCount == m_constructorPropertiesCount , wxT("Illegal Parameter Count for ConstructObject Method")) ;
+        wxObject *object = NULL ;
+        m_constructor->Create( object , Params ) ;
+        return object ;
+    }
+
+    bool NeedsDirectConstruction() const { return dynamic_cast<wxDirectConstructorBrigde*>( m_constructor) != NULL ; }
 
     const wxChar       *GetClassName() const { return m_className; }
     const wxChar       *GetIncludeName() const { return m_unitName ; }
@@ -1683,9 +1819,9 @@ public :
 
 // Single inheritance with one base class
 
-#define _TYPEINFO_CLASSES(n) \
-    wxClassTypeInfo s_typeInfo##n(wxT_OBJECT , &n::sm_class##n , NULL , NULL , typeid(n).name()) ; \
-    wxClassTypeInfo s_typeInfoPtr##n(wxT_OBJECT_PTR , &n::sm_class##n , NULL , NULL , typeid(n*).name()) ; 
+#define _TYPEINFO_CLASSES(n , toString , fromString ) \
+    wxClassTypeInfo s_typeInfo##n(wxT_OBJECT , &n::sm_class##n , toString , fromString , typeid(n).name()) ; \
+    wxClassTypeInfo s_typeInfoPtr##n(wxT_OBJECT_PTR , &n::sm_class##n , toString , fromString , typeid(n*).name()) ;
 
 #define _IMPLEMENT_DYNAMIC_CLASS(name, basename, unit , callback)                 \
     wxObject* wxConstructorFor##name()                             \
@@ -1697,8 +1833,7 @@ public :
     (int) sizeof(name),                              \
     (wxObjectConstructorFn) wxConstructorFor##name   ,   \
     name::GetPropertiesStatic(),name::GetHandlersStatic(),name::sm_constructor##name , name::sm_constructorProperties##name ,     \
-    name::sm_constructorPropertiesCount##name , wxVariantOfPtrToObjectConverter##name , NULL , wxObjectToVariantConverter##name , callback);    \
-    _TYPEINFO_CLASSES(name) 
+    name::sm_constructorPropertiesCount##name , wxVariantOfPtrToObjectConverter##name , NULL , wxObjectToVariantConverter##name , callback);
 
 #define _IMPLEMENT_DYNAMIC_CLASS_WITH_COPY(name, basename, unit, callback )                 \
     wxObject* wxConstructorFor##name()                             \
@@ -1711,29 +1846,37 @@ public :
     (int) sizeof(name),                              \
     (wxObjectConstructorFn) wxConstructorFor##name   ,   \
     name::GetPropertiesStatic(),name::GetHandlersStatic(),name::sm_constructor##name , name::sm_constructorProperties##name ,     \
-    name::sm_constructorPropertiesCount##name , wxVariantOfPtrToObjectConverter##name , wxVariantToObjectConverter##name , wxObjectToVariantConverter##name, callback);    \
-    _TYPEINFO_CLASSES(name) 
+    name::sm_constructorPropertiesCount##name , wxVariantOfPtrToObjectConverter##name , wxVariantToObjectConverter##name , wxObjectToVariantConverter##name, callback);
 
 #define IMPLEMENT_DYNAMIC_CLASS_WITH_COPY( name , basename ) \
     _IMPLEMENT_DYNAMIC_CLASS_WITH_COPY( name , basename , "" , NULL ) \
+    _TYPEINFO_CLASSES(name, NULL , NULL) \
     const wxPropertyInfo *name::GetPropertiesStatic() { return (wxPropertyInfo*) NULL ; } \
     const wxHandlerInfo *name::GetHandlersStatic() { return (wxHandlerInfo*) NULL ; } \
     WX_CONSTRUCTOR_DUMMY( name )
 
 #define IMPLEMENT_DYNAMIC_CLASS( name , basename ) \
     _IMPLEMENT_DYNAMIC_CLASS( name , basename , "" , NULL ) \
-    wxPropertyInfo *name::GetPropertiesStatic() { return (wxPropertyInfo*) NULL ; } \
+     _TYPEINFO_CLASSES(name, NULL , NULL) \
+   wxPropertyInfo *name::GetPropertiesStatic() { return (wxPropertyInfo*) NULL ; } \
     wxHandlerInfo *name::GetHandlersStatic() { return (wxHandlerInfo*) NULL ; } \
     WX_CONSTRUCTOR_DUMMY( name )
 
 #define IMPLEMENT_DYNAMIC_CLASS_XTI( name , basename , unit ) \
-    _IMPLEMENT_DYNAMIC_CLASS( name , basename , unit , NULL )
+    _IMPLEMENT_DYNAMIC_CLASS( name , basename , unit , NULL ) \
+    _TYPEINFO_CLASSES(name, NULL , NULL)
 
 #define IMPLEMENT_DYNAMIC_CLASS_XTI_CALLBACK( name , basename , unit , callback ) \
-    _IMPLEMENT_DYNAMIC_CLASS( name , basename , unit , &callback )
+    _IMPLEMENT_DYNAMIC_CLASS( name , basename , unit , &callback ) \
+    _TYPEINFO_CLASSES(name, NULL , NULL)
 
 #define IMPLEMENT_DYNAMIC_CLASS_WITH_COPY_XTI( name , basename , unit ) \
-    _IMPLEMENT_DYNAMIC_CLASS_WITH_COPY( name , basename , unit , NULL  )
+    _IMPLEMENT_DYNAMIC_CLASS_WITH_COPY( name , basename , unit , NULL  ) \
+    _TYPEINFO_CLASSES(name, NULL , NULL)
+
+#define IMPLEMENT_DYNAMIC_CLASS_WITH_COPY_AND_STREAMERS_XTI( name , basename , unit , toString , fromString ) \
+    _IMPLEMENT_DYNAMIC_CLASS_WITH_COPY( name , basename , unit , NULL  ) \
+    _TYPEINFO_CLASSES(name, toString , fromString)
 
 // this is for classes that do not derive from wxobject, there are no creators for these
 
@@ -1744,7 +1887,7 @@ public :
     (wxObjectConstructorFn) 0   ,   \
     name::GetPropertiesStatic(),name::GetHandlersStatic(),0 , 0 ,     \
     0 , 0 , 0 );    \
-    _TYPEINFO_CLASSES(name) 
+    _TYPEINFO_CLASSES(name, NULL , NULL)
 
 // this is for subclasses that still do not derive from wxobject
 
@@ -1755,7 +1898,7 @@ public :
     (wxObjectConstructorFn) 0   ,   \
     name::GetPropertiesStatic(),name::GetHandlersStatic(),0 , 0 ,     \
     0 , 0 , 0 );    \
-    _TYPEINFO_CLASSES(name) 
+    _TYPEINFO_CLASSES(name, NULL , NULL)
 
 
 // Multiple inheritance with two base classes
@@ -1771,16 +1914,18 @@ public :
     (wxObjectConstructorFn) wxConstructorFor##name   ,   \
     name::GetPropertiesStatic(),name::GetHandlersStatic(),name::sm_constructor##name , name::sm_constructorProperties##name ,     \
     name::sm_constructorPropertiesCount##name , wxVariantToObjectConverter##name , wxObjectToVariantConverter##name);    \
-    _TYPEINFO_CLASSES(name) 
 
 #define IMPLEMENT_DYNAMIC_CLASS2( name , basename , basename2) \
     _IMPLEMENT_DYNAMIC_CLASS2( name , basename , basename2 , "") \
+    _TYPEINFO_CLASSES(name, NULL , NULL) \
     wxPropertyInfo *name::GetPropertiesStatic() { return (wxPropertyInfo*) NULL ; } \
     wxHandlerInfo *name::GetHandlersStatic() { return (wxHandlerInfo*) NULL ; } \
     WX_CONSTRUCTOR_DUMMY( name )
 
 #define IMPLEMENT_DYNAMIC_CLASS2_XTI( name , basename , basename2, unit) \
-    _IMPLEMENT_DYNAMIC_CLASS2( name , basename , basename2 , unit)
+    _IMPLEMENT_DYNAMIC_CLASS2( name , basename , basename2 , unit) \
+    _TYPEINFO_CLASSES(name, NULL , NULL)
+
 
 // -----------------------------------
 // for abstract classes
@@ -1798,7 +1943,7 @@ public :
     (wxObjectConstructorFn) 0   ,   \
     name::GetPropertiesStatic(),name::GetHandlersStatic(),0 , 0 ,     \
     0 , wxVariantOfPtrToObjectConverter##name ,wxVariantToObjectConverter##name , wxObjectToVariantConverter##name);    \
-    _TYPEINFO_CLASSES(name) 
+    _TYPEINFO_CLASSES(name, NULL , NULL)
 
 #define IMPLEMENT_ABSTRACT_CLASS( name , basename ) \
     _IMPLEMENT_ABSTRACT_CLASS( name , basename ) \
