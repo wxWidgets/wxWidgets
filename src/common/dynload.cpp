@@ -665,7 +665,7 @@ void wxPluginManager::Unload()
         if ( i->second == m_entry )
         {
             ms_manifest->erase(i);
-            return;
+            break;
         }
     }
 
