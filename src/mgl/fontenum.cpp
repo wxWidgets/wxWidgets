@@ -24,7 +24,6 @@
 #include "wx/string.h"
 #include "wx/utils.h"
 
-#include "wx/fontmap.h"
 #include "wx/fontenum.h"
 #include "wx/fontutil.h"
 
@@ -42,26 +41,35 @@
 bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
                                           bool fixedWidthOnly)
 {
+    bool found = FALSE;
     wxMGLFontFamilyList *list = wxTheFontsManager->GetFamilyList();
     wxMGLFontFamilyList::Node *node;
     wxMGLFontFamily *f = NULL;
+    wxNativeEncodingInfo info;
 
-    // FIXME_MGL - available encodings    
+    if ( encoding != wxFONTENCODING_SYSTEM )
+        wxGetNativeFontEncoding(encoding, &info);
+     
     for (node = list->GetFirst(); node; node = node->GetNext())
     {
         f = node->GetData();
-        if ( !fixedWidthOnly || f->GetInfo()->isFixed )
+        info.facename = f->GetName();
+        if ( (!fixedWidthOnly || f->GetInfo()->isFixed) &&
+             (encoding == wxFONTENCODING_SYSTEM || wxTestFontEncoding(info)) )
+        {
+            found = TRUE;
             if ( !OnFacename(f->GetName()) )
                 return TRUE;
+        }
     }
 
-    return (f != NULL) /* i.e. FALSE if there are no fonts */;
+    return found;
 }
 
 bool wxFontEnumerator::EnumerateEncodings(const wxString& family)
 {
-#if 0
-    static wxFontEncoding encodings[] = {
+    static wxFontEncoding encodings[] = 
+    {
         wxFONTENCODING_ISO8859_1,
         wxFONTENCODING_ISO8859_2,
         wxFONTENCODING_ISO8859_3,
@@ -86,15 +94,48 @@ bool wxFontEnumerator::EnumerateEncodings(const wxString& family)
         wxFONTENCODING_CP1256,
         wxFONTENCODING_CP1257,
         wxFONTENCODING_KOI8,
+        
         wxFONTENCODING_SYSTEM
     };
     
+    static const char *encodingNames[] = 
+    {
+        "iso88590-1",
+        "iso88590-2",
+        "iso88590-3",
+        "iso88590-4",
+        "iso88590-5",
+        "iso88590-6",
+        "iso88590-7",
+        "iso88590-8",
+        "iso88590-9",
+        "iso88590-10",
+        "iso88590-13",
+        "iso88590-14",
+        "iso88590-15",
+        "windows-1250",
+        "windows-1251",
+        "windows-1252",
+        "windows-1253",
+        "windows-1254",
+        "windows-1255",
+        "windows-1256",
+        "windows-1257",
+        "koi-8",
+        NULL
+    };
+    
+    wxNativeEncodingInfo info;
+    info.facename = family;
+    
     for (size_t i = 0; encodings[i] != wxFONTENCODING_SYSTEM; i++)
-        if ( !OnFontEncoding(family, encodings[i]) )
+    {
+        if ( !wxGetNativeFontEncoding(encodings[i], &info) ||
+             !wxTestFontEncoding(info) ) 
+            continue;
+        if ( !OnFontEncoding(family, encodingNames[i]) )
             break;
-#endif
-    OnFontEncoding(family, wxT("iso8859-1"));
-    // FIXME_MGL -- tests for validity
+    }
 
     return TRUE;
 }

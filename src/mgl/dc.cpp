@@ -32,12 +32,16 @@
     #include "wx/dcmemory.h"
 #endif
 
+#include "wx/fontutil.h"
+#include "wx/fontmap.h"
+#include "wx/mgl/private.h"
+#include "wx/log.h"
+
 #include <string.h>
 #include <math.h>
-
-#include "wx/mgl/private.h"
-
 #include <mgraph.hpp>
+
+
 
 //-----------------------------------------------------------------------------
 // constants
@@ -166,6 +170,8 @@ wxDC::wxDC()
 
     m_penSelected = m_brushSelected = FALSE;
     m_downloadedPatterns[0] = m_downloadedPatterns[1] = FALSE;
+    
+    m_mglFont = NULL;
 }
 
 
@@ -182,8 +188,17 @@ void wxDC::SetMGLDC(MGLDevCtx *mgldc, bool OwnsMGLDC)
     m_MGLDC = mgldc;
     m_OwnsMGLDC = OwnsMGLDC;
 	m_ok = TRUE;
+    InitializeMGLDC();
 }
 
+void wxDC::InitializeMGLDC()
+{
+    if ( GetDepth() > 8 )
+    {
+        wxCurrentDCSwitcher switcher(m_MGLDC); // will go away with MGL6
+        m_MGLDC->setFontBlendMode(MGL_AA_RGBBLEND);
+    }
+}
 
 
 // ---------------------------------------------------------------------------
@@ -676,33 +691,125 @@ void wxDC::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,double sa,d
 
 void wxDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
 {
+    if ( m_pen.GetStyle() == wxTRANSPARENT ) return;
     m_MGLDC->makeCurrent(); // will go away with MGL6.0
-#if 0 // FIXME_MGL
     DrawAnyText(text, x, y);
 
     // update the bounding box
-    CalcBoundingBox(x, y);
-
     wxCoord w, h;
+    CalcBoundingBox(x, y);
     GetTextExtent(text, &w, &h);
     CalcBoundingBox(x + w, y + h);
+}
+
+bool wxDC::SelectMGLFont()
+{
+    if ( m_mglFont == NULL )
+    {
+        float scale = m_scaleY;
+        bool antialiased = (GetDepth() > 8);
+
+        m_mglFont = m_font.GetMGLfont_t(scale, antialiased);
+        wxCHECK_MSG( m_mglFont, FALSE, wxT("invalid font") );
+        
+        m_MGLDC->useFont(m_mglFont);
+        wxLogTrace("mgl_font", "useFont(%p)", m_mglFont);
+
+#if !wxUSE_UNICODE
+        wxNativeEncodingInfo nativeEnc;
+        wxFontEncoding encoding = m_font.GetEncoding();
+        if ( !wxGetNativeFontEncoding(encoding, &nativeEnc) ||
+             !wxTestFontEncoding(nativeEnc) )
+        {
+#if wxUSE_FONTMAP
+            if ( !wxTheFontMapper->GetAltForEncoding(encoding, &nativeEnc) )
 #endif
+            {
+                nativeEnc.mglEncoding = MGL_ENCODING_ASCII;
+            }
+        }
+        m_MGLDC->setTextEncoding(nativeEnc.mglEncoding);
+#endif
+    }
+    return TRUE;
 }
 
 void wxDC::DrawAnyText(const wxString& text, wxCoord x, wxCoord y)
 {
     wxCHECK_RET( Ok(), wxT("invalid dc") );
 
-    m_MGLDC->makeCurrent(); // will go away with MGL6.0
-    //FIXME_MGL
+    SelectMGLFont();
+
+    m_MGLDC->setColor(m_MGLDC->packColorFast(m_textForegroundColour.Red(),
+            m_textForegroundColour.Green(), m_textForegroundColour.Blue()));
+    m_MGLDC->setBackColor(m_MGLDC->packColorFast(m_textBackgroundColour.Red(),
+            m_textBackgroundColour.Green(), m_textBackgroundColour.Blue()));
+
+    // Render the text:
+    wxCoord xx = XLOG2DEV(x);
+    wxCoord yy = YLOG2DEV(y);
+
+    m_MGLDC->setLineStyle(MGL_LINE_STIPPLE);
+    m_MGLDC->setLineStipple(0xFFFF);
+    m_MGLDC->setPenSize(1, 1);
+    m_MGLDC->setPenStyle(MGL_BITMAP_SOLID);
+    
+#if wxUSE_UNICODE
+    const wchar_t *c_text = text.c_str();
+#else
+    const char *c_text = text.c_str();
+#endif
+    m_MGLDC->drawStr(xx, yy, c_text);
+    
+    // Render underline:
+    if ( m_font.GetUnderlined() )
+    {
+        int x1 = xx, y1 = yy;
+        int x2, y2;
+        int w = m_MGLDC->textWidth(c_text);
+        m_MGLDC->underScoreLocation(x1, y1, c_text);
+        switch (m_MGLDC->getTextDirection())
+        {
+            case MGL_RIGHT_DIR: x2 = x1 + w, y2 = y1; break;
+            case MGL_LEFT_DIR:  x2 = x1 - w, y2 = y1; break;
+            case MGL_UP_DIR:    x2 = x1, y2 = y1 - w; break;
+            case MGL_DOWN_DIR:  x2 = x1, y2 = y1 + w; break;
+        }
+        m_MGLDC->line(x1, y1, x2, y2);
+    }
+
+    m_penSelected = m_brushSelected = FALSE;
 }
 
 void wxDC::DoDrawRotatedText(const wxString& text,
                              wxCoord x, wxCoord y,
                              double angle)
 {
+    if ( m_pen.GetStyle() == wxTRANSPARENT ) return;
     m_MGLDC->makeCurrent(); // will go away with MGL6.0
-    //FIXME_MGL
+    
+    if ( angle == 0 )
+    {
+        DoDrawText(text, x, y);
+        return;
+    }
+    else if ( angle == 90.0 )
+        m_MGLDC->setTextDirection(MGL_UP_DIR);
+    else if ( angle == 180.0 )
+        m_MGLDC->setTextDirection(MGL_LEFT_DIR);
+    else if ( angle == 270.0 )
+        m_MGLDC->setTextDirection(MGL_DOWN_DIR);
+    else
+    {
+        // FIXME_MGL -- implement once MGL supports it
+        wxFAIL_MSG(wxT("wxMGL only supports rotated text with angle 0,90,180 or 270"));
+        return;
+    }
+    
+    DrawAnyText(text, x, y);
+    
+    // Restore default:
+    m_MGLDC->setTextDirection(MGL_RIGHT_DIR);
 }
 
 // ---------------------------------------------------------------------------
@@ -980,15 +1087,16 @@ void wxDC::SetPalette(const wxPalette& palette)
     m_palette = palette;
 
     int cnt = m_palette.GetColoursCount();
-    palette_t *pal = (palette_t*) m_palette.GetMGLpalette_t();   
+    palette_t *pal = m_palette.GetMGLpalette_t();   
     m_MGLDC->setPalette(pal, cnt, 0);
     m_MGLDC->realizePalette(cnt, 0, TRUE);
 }
 
-void wxDC::SetFont(const wxFont& the_font)
+void wxDC::SetFont(const wxFont& font)
 {
-    m_MGLDC->makeCurrent(); // will go away with MGL6.0
-// FIXME_MGL
+    wxCHECK_RET( font.Ok(), wxT("invalid font") );
+    m_font = font;
+    m_mglFont = NULL;
 }
 
 void wxDC::SetBackground(const wxBrush& brush)
@@ -1006,8 +1114,11 @@ void wxDC::SetBackground(const wxBrush& brush)
 
 void wxDC::SetBackgroundMode(int mode)
 {
-    // FIXME_MGL - make sure I use it somewhee
     m_backgroundMode = mode;
+    if ( mode == wxSOLID )
+        m_MGLDC->setBackMode(MGL_OPAQUE_BACKGROUND);
+    else
+        m_MGLDC->setBackMode(MGL_TRANSPARENT_BACKGROUND);
 }
 
 void wxDC::SetLogicalFunction(int function)
@@ -1073,31 +1184,49 @@ void wxDC::EndPage()
 
 wxCoord wxDC::GetCharHeight() const
 {
-#if 0 // FIXME_MGL
-    TEXTMETRIC lpTextMetric;
-
-    GetTextMetrics(GetHdc(), &lpTextMetric);
-
-    return YDEV2LOGREL(lpTextMetric.tmHeight);
-#endif
+    wxCurrentDCSwitcher switcher(m_MGLDC);
+    if ( !wxConstCast(this, wxDC)->SelectMGLFont() ) return -1;
+    return YDEV2LOGREL(m_mglFont->fontHeight);
 }
 
 wxCoord wxDC::GetCharWidth() const
 {
-#if 0 // FIXME_MGL
-    TEXTMETRIC lpTextMetric;
-
-    GetTextMetrics(GetHdc(), &lpTextMetric);
-
-    return XDEV2LOGREL(lpTextMetric.tmAveCharWidth);
-#endif
+    wxCurrentDCSwitcher switcher(m_MGLDC);
+    if ( !wxConstCast(this, wxDC)->SelectMGLFont() ) return -1;
+    // VS: wxT() is intentional, charWidth() has both char and wchar_t version
+    // VS: YDEV is corrent, it should *not* be XDEV, because font's are only
+    //     scaled according to m_scaleY
+    return YDEV2LOGREL(m_mglFont->fontWidth);
 }
 
 void wxDC::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
                            wxCoord *descent, wxCoord *externalLeading,
                            wxFont *theFont) const
 {
-//FIXME_MGL
+    wxFont oldFont;
+    
+    if ( theFont != NULL )
+    {
+        oldFont = m_font;
+        wxConstCast(this, wxDC)->SetFont(*theFont);
+    }
+    
+    wxCurrentDCSwitcher switcher(m_MGLDC);
+    if ( !wxConstCast(this, wxDC)->SelectMGLFont() ) return;
+
+    if ( x )
+        // VS: YDEV is corrent, it should *not* be XDEV, because font's are 
+        //     only scaled according to m_scaleY
+        *x = YDEV2LOGREL(m_MGLDC->textWidth(string.c_str()));
+    if ( y )
+        *y = YDEV2LOGREL(m_MGLDC->textHeight());
+    if ( descent )
+        *descent = YDEV2LOGREL(m_mglFont->descent);
+    if ( externalLeading )
+        *externalLeading = YDEV2LOGREL(m_mglFont->leading);
+    
+    if ( theFont != NULL )
+        wxConstCast(this, wxDC)->SetFont(oldFont);
 }
 
 
@@ -1108,10 +1237,17 @@ void wxDC::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
 
 void wxDC::ComputeScaleAndOrigin()
 {
-    m_scaleX = m_logicalScaleX * m_userScaleX;
-    m_scaleY = m_logicalScaleY * m_userScaleY;
+    double newX = m_logicalScaleX * m_userScaleX;
+    double newY = m_logicalScaleY * m_userScaleY;
+    
+    // make sure font will be reloaded before drawing:
+    if ( newY != m_scaleY )
+        m_mglFont = NULL;
     // make sure m_penOfs{X,Y} will be reevaluated before drawing:
-    m_penSelected = FALSE;
+    if ( newY != m_scaleY || newX != m_scaleX )
+        m_penSelected = FALSE;
+    
+    m_scaleX = newX, m_scaleY = newY;
 }
 
 void wxDC::SetMapMode(int mode)
@@ -1244,27 +1380,8 @@ wxSize wxDC::GetPPI() const
 }
 
 
-#if WXWIN_COMPATIBILITY
-void wxDC::DoGetTextExtent(const wxString& string, float *x, float *y,
-                         float *descent, float *externalLeading,
-                         wxFont *theFont, bool use16bit) const
-{
-// FIXME_MGL
-/*
-    wxCoord x1, y1, descent1, externalLeading1;
-    GetTextExtent(string, & x1, & y1, & descent1, & externalLeading1, theFont, use16bit);
-    *x = x1; *y = y1;
-    if (descent)
-        *descent = descent1;
-    if (externalLeading)
-        *externalLeading = externalLeading1;
-*/
-}
-#endif
-
-
 // ---------------------------------------------------------------------------
-// Blitting (Blit
+// Blitting
 // ---------------------------------------------------------------------------
 
 bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
@@ -1328,7 +1445,7 @@ static inline void DoBitBlt(const wxBitmap& src, MGLDevCtx *dst,
                             int dx, int dy, int dw, int dh, 
                             int rop, bool useStretching, bool putSection)
 {
-    bitmap_t *bmp = (bitmap_t*)(src.GetMGLbitmap_t());
+    bitmap_t *bmp = src.GetMGLbitmap_t();
     if (!useStretching)
     {
         if (!putSection)

@@ -137,7 +137,8 @@ wxFontRefData::wxFontRefData(int size, int family, int style,
 
 wxFontRefData::~wxFontRefData()
 {
-    m_library->DecRef();
+    if ( m_library )
+        m_library->DecRef();
 }
 
 // ----------------------------------------------------------------------------
@@ -178,7 +179,8 @@ struct font_t *wxFont::GetMGLfont_t(float scale, bool antialiased)
         wxMGLFontLibrary *old = M_FONTDATA->m_library;
         M_FONTDATA->m_library = wxTheFontsManager->GetFontLibrary(this);
         M_FONTDATA->m_library->IncRef();
-        old->DecRef();
+        if ( old )
+            old->DecRef();
     }
 
     wxMGLFontInstance *instance = 

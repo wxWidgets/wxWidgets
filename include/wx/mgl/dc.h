@@ -23,7 +23,7 @@
 // classes
 //-----------------------------------------------------------------------------
 
-class wxDC;
+class WXDLLEXPORT wxDC;
 
 //-----------------------------------------------------------------------------
 // constants
@@ -45,7 +45,7 @@ class wxDC;
 
 // MGL fwd declarations:
 class MGLDevCtx;
-
+struct font_t;
 
 class WXDLLEXPORT wxDC : public wxDCBase
 {
@@ -223,6 +223,10 @@ protected:
     // implementation from now on:
 
 protected:
+    // setup newly attached MGLDevCtx for wxDC's use
+    // (does things like setting RGB blending mode for antialiased texts):
+    void InitializeMGLDC();
+
     // common part of DoDrawText() and DoDrawRotatedText()
     void DrawAnyText(const wxString& text, wxCoord x, wxCoord y);
     
@@ -232,6 +236,9 @@ protected:
     void SelectBrush();
     void SelectMGLStipplePen(int style);
     void SelectMGLFatPen(int style, int flag);
+    
+    // Select m_font into m_MGLDC:
+    bool SelectMGLFont();
     
     // Convert wxWin logical function to MGL rop:
     int LogicalFunctionToMGLRop(int logFunc) const;
@@ -264,6 +271,8 @@ protected:
 
     // wxDC::Blit handles memoryDCs as special cases :(
     bool              m_isMemDC;
+    
+    font_t            *m_mglFont;
 };
 
 #endif
