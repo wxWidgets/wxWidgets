@@ -1364,11 +1364,7 @@ const wxMB2WXbuf wxLocale::GetString(const wxChar *szOrigString,
                                      const wxChar *szDomain) const
 {
   if ( wxIsEmpty(szOrigString) )
-#if wxUSE_UNICODE
-      return szDomain ? szDomain : wxT("");
-#else // ANSI
-      return szDomain;
-#endif
+    return _T("");
 
   const char *pszTrans = NULL;
 #if wxUSE_UNICODE
