@@ -1,7 +1,55 @@
 <?xml version="1.0" ?>
 <resource>
+  <object class="wxDialog" name="DIALOG_TEXT">
+    <title>Text Dialog</title>
+    <centered>1</centered>
+    <object class="wxBoxSizer">
+      <orient>wxVERTICAL</orient>
+      <object class="sizeritem">
+        <object class="wxBoxSizer">
+          <orient>wxHORIZONTAL</orient>
+          <object class="sizeritem">
+            <object class="wxTextCtrl" name="TEXT">
+              <style>wxTE_MULTILINE</style>
+            </object>
+            <option>1</option>
+            <flag>wxALL|wxEXPAND</flag>
+            <border>5</border>
+          </object>
+        </object>
+        <option>1</option>
+        <flag>wxEXPAND</flag>
+      </object>
+      <object class="sizeritem">
+        <object class="wxStaticLine"/>
+        <flag>wxEXPAND</flag>
+      </object>
+      <object class="sizeritem">
+        <object class="wxBoxSizer">
+          <orient>wxHORIZONTAL</orient>
+          <object class="sizeritem">
+            <object class="wxButton" name="wxID_OK">
+              <label>OK</label>
+              <default>1</default>
+            </object>
+            <flag>wxRIGHT</flag>
+            <border>10</border>
+          </object>
+          <object class="sizeritem">
+            <object class="wxButton" name="wxID_CANCEL">
+              <label>Cancel</label>
+            </object>
+          </object>
+        </object>
+        <flag>wxALL|wxALIGN_CENTRE_HORIZONTAL</flag>
+        <border>10</border>
+      </object>
+    </object>
+    <style>wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</style>
+  </object>
   <object class="wxDialog" name="DIALOG_CONTENT">
     <title>Content</title>
+    <centered>1</centered>
     <size>250,300</size>
     <object class="wxBoxSizer">
       <orient>wxVERTICAL</orient>
@@ -86,6 +134,7 @@
   </object>
   <object class="wxDialog" name="DIALOG_CONTENT_CHECK_LIST">
     <title>Content</title>
+    <centered>1</centered>
     <size>250,300</size>
     <object class="wxBoxSizer">
       <orient>wxVERTICAL</orient>
@@ -170,6 +219,7 @@
   </object>
   <object class="wxDialog" name="DIALOG_INTLIST">
     <title>Numbers</title>
+    <centered>1</centered>
     <size>100,300</size>
     <object class="wxBoxSizer">
       <orient>wxVERTICAL</orient>

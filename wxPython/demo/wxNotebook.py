@@ -14,7 +14,7 @@ import sys
 class TestNB(wxNotebook):
     def __init__(self, parent, id, log):
         wxNotebook.__init__(self, parent, id, style=
-                            #0
+                            #wxNB_TOP
                             wxNB_BOTTOM
                             #wxNB_LEFT
                             #wxNB_RIGHT
@@ -59,11 +59,11 @@ class TestNB(wxNotebook):
         win = self.makeColorPanel(wxCYAN)
         self.AddPage(win, "Cyan")
 
-        win = self.makeColorPanel(wxWHITE)
-        self.AddPage(win, "White")
+##         win = self.makeColorPanel(wxWHITE)
+##         self.AddPage(win, "White")
 
-        win = self.makeColorPanel(wxBLACK)
-        self.AddPage(win, "Black")
+##         win = self.makeColorPanel(wxBLACK)
+##         self.AddPage(win, "Black")
 
         win = self.makeColorPanel(wxNamedColour('MIDNIGHT BLUE'))
         self.AddPage(win, "MIDNIGHT BLUE")
@@ -88,15 +88,16 @@ class TestNB(wxNotebook):
     def OnPageChanged(self, event):
         old = event.GetOldSelection()
         new = event.GetSelection()
-        self.log.write('OnPageChanged, old:%d, new:%d\n' % (old, new))
+        sel = self.GetSelection()
+        self.log.write('OnPageChanged,  old:%d, new:%d, sel:%d\n' % (old, new, sel))
         event.Skip()
 
     def OnPageChanging(self, event):
         old = event.GetOldSelection()
         new = event.GetSelection()
-        self.log.write('OnPageChanging, old:%d, new:%d\n' % (old, new))
+        sel = self.GetSelection()
+        self.log.write('OnPageChanging, old:%d, new:%d, sel:%d\n' % (old, new, sel))
         event.Skip()
-
 
 #----------------------------------------------------------------------------
 

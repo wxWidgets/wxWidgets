@@ -60,6 +60,7 @@ command_lines = [
     "-a -u -n WizTest1 bmp_source/wiztest1.bmp images.py",
     "-a -u -n WizTest2 bmp_source/wiztest2.bmp images.py",
 
+    "-a -u -n Tux bmp_source/Tux.png images.py",
 
 
     "   -u -c bmp_source/001.png throbImages.py",

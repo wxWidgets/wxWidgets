@@ -333,6 +333,8 @@ public:
             return bitmap;
         }
     }
+
+    %pragma(python) addtoclass = "def __nonzero__(self): return self.Ok()"
 };
 
 

@@ -386,6 +386,10 @@ void __wxPreStart(PyObject* moduleDict)
     wxPyTMutex = new wxMutex;
 #endif
 
+     // Restore default signal handlers, (prevents crash upon Ctrl-C in the
+     // console that launched a wxPython app...)
+    PyOS_FiniInterrupts();
+
     wxApp::CheckBuildOptions(wxBuildOptions());
 
     wxPyAssertionError = PyErr_NewException("wxPython.wxc.wxPyAssertionError",
@@ -587,20 +591,36 @@ void wxPyOORClientData_dtor(wxPyOORClientData* self) {
         Py_INCREF(deadObjectClass);
     }
 
-    // TODO:  If wxPyDOingCleanup, should we skip the code below?
 
-    // Clear the instance's dictionary, put the name of the old class into the
-    // instance, and then reset the class to be the dead class.
-    if (self->m_obj->ob_refcnt > 1) {  // but only if there is more than one reference
+    // Only if there is more than one reference to the object
+    if ( !wxPyDoingCleanup && self->m_obj->ob_refcnt > 1 ) {
         wxASSERT_MSG(PyInstance_Check(self->m_obj), wxT("m_obj not an instance!?!?!"));
+
+        // Call __del__, if there is one.
+        PyObject* func = PyObject_GetAttrString(self->m_obj, "__del__");
+        if (func) {
+            PyObject* rv = PyObject_CallMethod(self->m_obj, "__del__", NULL);
+            Py_XDECREF(rv);
+            Py_DECREF(func);
+        }
+        if (PyErr_Occurred())
+            PyErr_Clear();      // just ignore it for now
+
+        // Clear the instance's dictionary
         PyInstanceObject* inst = (PyInstanceObject*)self->m_obj;
         PyDict_Clear(inst->in_dict);
+
+        // put the name of the old class into the instance, and then reset the
+        // class to be the dead class.
         PyDict_SetItemString(inst->in_dict, "_name", inst->in_class->cl_name);
         inst->in_class = (PyClassObject*)deadObjectClass;
         Py_INCREF(deadObjectClass);
     }
+
+    // m_obj is DECREF's in the base class dtor...
     wxPyEndBlockThreads();
 }
+
 
 //---------------------------------------------------------------------------
 // Stuff used by OOR to find the right wxPython class type to return and to
@@ -1145,13 +1165,19 @@ size_t wxPyCBInputStream::OnSysWrite(const void *buffer, size_t bufsize) {
 
 off_t wxPyCBInputStream::OnSysSeek(off_t off, wxSeekMode mode) {
     wxPyBeginBlockThreads();
+#ifdef _LARGE_FILES
+    // off_t is a 64-bit value...
+    PyObject* arglist = Py_BuildValue("(Li)", off, mode);
+#else
     PyObject* arglist = Py_BuildValue("(ii)", off, mode);
+#endif
     PyObject* result = PyEval_CallObject(m_seek, arglist);
     Py_DECREF(arglist);
     Py_XDECREF(result);
     wxPyEndBlockThreads();
     return OnSysTell();
 }
+
 
 off_t wxPyCBInputStream::OnSysTell() const {
     wxPyBeginBlockThreads();
@@ -1160,7 +1186,13 @@ off_t wxPyCBInputStream::OnSysTell() const {
     Py_DECREF(arglist);
     off_t o = 0;
     if (result != NULL) {
+#ifdef _LARGE_FILES
+        if (PyLong_Check(result))
+            o = PyLong_AsLongLong(result);
+        else
+#else
         o = PyInt_AsLong(result);
+#endif
         Py_DECREF(result);
     };
     wxPyEndBlockThreads();

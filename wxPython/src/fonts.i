@@ -374,6 +374,7 @@ public:
     static wxFontEncoding GetDefaultEncoding();
     static void SetDefaultEncoding(wxFontEncoding encoding);
 
+    %pragma(python) addtoclass = "def __nonzero__(self): return self.Ok()"
 };
 
 
@@ -739,9 +740,9 @@ public:
     %pragma(python) addtoclass = "
     def Init(self, *_args, **_kwargs):
         if type(_args[0]) in [type(''), type(u'')]:
-            val = apply(self.Init1, _args, _kwargs)
+            val = self.Init1(*_args, **_kwargs)
         else:
-            val = apply(self.Init2, _args, _kwargs)
+            val = self.Init2(*_args, **_kwargs)
         return val
     "
 
@@ -969,6 +970,7 @@ public:
     // equivalent encodings, regardless the platform, including itself.
     static wxFontEncodingArray GetAllEquivalents(wxFontEncoding enc);
 
+    %pragma(python) addtoclass = "def __nonzero__(self): return self.IsOk()"
 };
 
 

@@ -1277,7 +1277,7 @@ static PyObject *_wrap_wxNotebook_InsertPage(PyObject *self, PyObject *args, PyO
     PyObject * _argo2 = 0;
     PyObject * _obj3 = 0;
     int tempbool4 = (int) FALSE;
-    char *_kwnames[] = { "self","page","page","text","select","imageId", NULL };
+    char *_kwnames[] = { "self","index","page","text","select","imageId", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiOO|ii:wxNotebook_InsertPage",_kwnames,&_argo0,&_arg1,&_argo2,&_obj3,&tempbool4,&_arg5)) 

@@ -140,9 +140,9 @@ class ParamColour(PPanel):
         self.SetBackgroundColour(g.panel.GetBackgroundColour())
         sizer = wxBoxSizer()
         self.text = wxTextCtrl(self, self.ID_TEXT_CTRL, size=(65,-1))
-        sizer.Add(self.text, 0, wxRIGHT, 5)
-        self.button = wxPanel(self, self.ID_BUTTON, wxDefaultPosition, wxSize(20, 20))
-        sizer.Add(self.button, 0, wxGROW)
+        sizer.Add(self.text, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 5)
+        self.button = wxPanel(self, self.ID_BUTTON, wxDefaultPosition, wxSize(20, 1))
+        sizer.Add(self.button, 0, wxGROW | wxALIGN_CENTER_VERTICAL)
         self.SetAutoLayout(True)
         self.SetSizer(sizer)
         sizer.Fit(self)
@@ -199,7 +199,7 @@ class ParamFont(PPanel):
         self.ID_BUTTON_SELECT = wxNewId()
         self.SetBackgroundColour(g.panel.GetBackgroundColour())
         sizer = wxBoxSizer()
-        self.text = wxTextCtrl(self, self.ID_TEXT_CTRL, size=wxSize(200,-1))
+        self.text = wxTextCtrl(self, self.ID_TEXT_CTRL, size=(200,-1))
         sizer.Add(self.text, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 5)
         self.button = wxButton(self, self.ID_BUTTON_SELECT, 'Select...', size=buttonSize)
         sizer.Add(self.button, 0, wxALIGN_CENTER_VERTICAL)
@@ -290,7 +290,7 @@ class ParamInt(PPanel):
         PPanel.__init__(self, parent, name)
         self.ID_SPIN_CTRL = wxNewId()
         sizer = wxBoxSizer()
-        self.spin = wxSpinCtrl(self, self.ID_SPIN_CTRL, size=wxSize(50,-1))
+        self.spin = wxSpinCtrl(self, self.ID_SPIN_CTRL, size=(50,-1))
         self.SetBackgroundColour(g.panel.GetBackgroundColour())
         sizer.Add(self.spin)
         self.SetAutoLayout(True)
@@ -312,12 +312,12 @@ class ParamUnit(PPanel):
         self.ID_TEXT_CTRL = wxNewId()
         self.ID_SPIN_BUTTON = wxNewId()
         sizer = wxBoxSizer()
-        self.text = wxTextCtrl(self, self.ID_TEXT_CTRL, size=wxSize(35,-1))
-        self.spin = wxSpinButton(self, self.ID_SPIN_BUTTON, style = wxSP_VERTICAL)
+        self.text = wxTextCtrl(self, self.ID_TEXT_CTRL, size=(35,-1))
+        self.spin = wxSpinButton(self, self.ID_SPIN_BUTTON, style = wxSP_VERTICAL, size=(-1,1))
         self.spin.SetRange(-10000, 10000)
         self.SetBackgroundColour(g.panel.GetBackgroundColour())
         sizer.Add(self.text, 0, wxEXPAND | wxRIGHT, 2)
-        sizer.Add(self.spin)
+        sizer.Add(self.spin, 0, wxEXPAND)
         self.SetAutoLayout(True)
         self.SetSizer(sizer)
         sizer.Fit(self)
@@ -349,6 +349,50 @@ class ParamUnit(PPanel):
         self.Change(1)
     def OnSpinDown(self, evt):
         self.Change(-1)
+
+# Dialog for editing multi-line text
+class TextDialog(wxDialog):
+    def __init__(self, parent, value):
+	pre = wxPreDialog()
+        g.frame.res.LoadOnDialog(pre, parent, 'DIALOG_TEXT')
+        self.this = pre.this
+	self._setOORInfo(self)
+        self.text = self.FindWindowByName('TEXT')
+        self.text.SetValue(value)
+        self.SetAutoLayout(True)
+        self.SetSize((300,200))
+    def GetValue(self):
+        return self.text.GetValue()
+
+class ParamMultilineText(PPanel):
+    def __init__(self, parent, name, textWidth=-1):
+        PPanel.__init__(self, parent, name)
+        self.ID_TEXT_CTRL = wxNewId()
+        self.ID_BUTTON_EDIT = wxNewId()
+        self.SetBackgroundColour(g.panel.GetBackgroundColour())
+        sizer = wxBoxSizer()
+        self.SetBackgroundColour(g.panel.GetBackgroundColour())
+        self.text = wxTextCtrl(self, self.ID_TEXT_CTRL, size=wxSize(200,-1))
+        sizer.Add(self.text, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 5)
+        self.button = wxButton(self, self.ID_BUTTON_EDIT, 'Edit...', size=buttonSize)
+        sizer.Add(self.button, 0, wxALIGN_CENTER_VERTICAL)
+        self.SetAutoLayout(True)
+        self.SetSizer(sizer)
+        sizer.Fit(self)
+        EVT_BUTTON(self, self.ID_BUTTON_EDIT, self.OnButtonEdit)
+        EVT_TEXT(self, self.ID_TEXT_CTRL, self.OnChange)
+    def GetValue(self):
+        return self.text.GetValue()
+    def SetValue(self, value):
+        self.freeze = True              # disable other handlers
+        self.text.SetValue(value)
+        self.freeze = False             # disable other handlers
+    def OnButtonEdit(self, evt):
+        dlg = TextDialog(self, self.text.GetValue())
+        if dlg.ShowModal() == wxID_OK:
+            self.text.SetValue(dlg.GetValue())
+            self.SetModified()
+        dlg.Destroy()
 
 class ParamText(PPanel):
     def __init__(self, parent, name, textWidth=-1):
@@ -388,14 +432,13 @@ class ParamEncoding(ParamText):
     def __init__(self, parent, name):
         ParamText.__init__(self, parent, name, 100)
 
-class ContentDialog(wxDialogPtr):
+class ContentDialog(wxDialog):
     def __init__(self, parent, value):
         # Load from resource
-        w = g.frame.res.LoadDialog(parent, 'DIALOG_CONTENT')
-        # Perform initialization with class pointer
-        wxDialogPtr.__init__(self, w.this)
-        self.thisown = 1
-        self.Center()
+	pre = wxPreDialog()
+        g.frame.res.LoadOnDialog(pre, parent, 'DIALOG_CONTENT')
+        self.this = pre.this
+	self._setOORInfo(self)
         self.list = self.FindWindowByName('LIST')
         # Set list items
         for v in value:
@@ -440,12 +483,12 @@ class ContentDialog(wxDialogPtr):
             evt.Enable(self.list.GetSelection() != -1 and \
                        self.list.GetSelection() < self.list.Number() - 1)
 
-class ContentCheckListDialog(wxDialogPtr):
+class ContentCheckListDialog(wxDialog):
     def __init__(self, parent, value):
-        w = g.frame.res.LoadDialog(parent, 'DIALOG_CONTENT_CHECK_LIST')
-        wxDialogPtr.__init__(self, w.this)
-        self.thisown = 1
-        self.Center()
+	pre = wxPreDialog()
+        g.frame.res.LoadOnDialog(pre, parent, 'DIALOG_CONTENT_CHECK_LIST')
+        self.this = pre.this
+	self._setOORInfo(self)
         self.list = self.FindWindowByName('CHECK_LIST')
         # Set list items
         i = 0
@@ -573,13 +616,12 @@ class ParamContentCheckList(ParamContent):
             self.textModified = False
         dlg.Destroy()
 
-class IntListDialog(wxDialogPtr):
+class IntListDialog(wxDialog):
     def __init__(self, parent, value):
-        # Is this normal???
-        w = g.frame.res.LoadDialog(parent, 'DIALOG_INTLIST')
-        wxDialogPtr.__init__(self, w.this)
-        self.thisown = 1
-        self.Center()
+	pre = wxPreDialog()
+        g.frame.res.LoadOnDialog(pre, parent, 'DIALOG_INTLIST')
+        self.this = pre.this
+	self._setOORInfo(self)
         self.list = self.FindWindowByName('LIST')
         # Set list items
         value.sort()
@@ -598,6 +640,7 @@ class IntListDialog(wxDialogPtr):
         EVT_UPDATE_UI(self, self.ID_BUTTON_REMOVE, self.OnUpdateUI)
     def OnButtonAppend(self, evt):
         s = wxGetTextFromUser('Enter new number:', 'Add', '', self)
+        if not s: return
         # Check that it's unique
         try:
             v = int(s)
@@ -742,11 +785,10 @@ class ParamFile(PPanel):
 
 class ParamBitmap(PPanel):
     def __init__(self, parent, name):
-        # Load from resource
-        w = g.frame.res.LoadPanel(parent, 'PANEL_BITMAP')
-        # Perform initialization with class pointer
-        wxPanelPtr.__init__(self, w.this)
-        self.thisown = 1
+	pre = wxPrePanel()
+        g.frame.res.LoadOnPanel(pre, parent, 'PANEL_BITMAP')
+        self.this = pre.this
+	self._setOORInfo(self)
         self.modified = self.freeze = False
         self.SetBackgroundColour(g.panel.GetBackgroundColour())
         self.radio_std = self.FindWindowByName('RADIO_STD')
@@ -827,11 +869,13 @@ paramDict = {
     'vgap': ParamUnit, 'hgap': ParamUnit,
     'checkable': ParamBool, 'checked': ParamBool, 'radio': ParamBool,
     'accel': ParamAccel,
-    'label': ParamText, 'title': ParamText, 'value': ParamText,
+    'label': ParamMultilineText, 'title': ParamText, 'value': ParamText,
     'content': ParamContent, 'selection': ParamInt,
     'min': ParamInt, 'max': ParamInt,
     'fg': ParamColour, 'bg': ParamColour, 'font': ParamFont,
     'enabled': ParamBool, 'focused': ParamBool, 'hidden': ParamBool,
     'tooltip': ParamText, 'bitmap': ParamBitmap, 'icon': ParamBitmap,
-    'label': ParamLabel, 'encoding': ParamEncoding
+    'encoding': ParamEncoding
     }
+
+

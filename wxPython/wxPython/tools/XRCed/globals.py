@@ -15,7 +15,7 @@ modernFont = wxFont(sysFont.GetPointSize(), wxMODERN, wxNORMAL, wxNORMAL)
 smallerFont = wxFont(sysFont.GetPointSize()-2, wxDEFAULT, wxNORMAL, wxNORMAL)
 
 progname = 'XRCed'
-version = '0.1.0'
+version = '0.1.1-3'
 
 try:
     True
@@ -34,6 +34,6 @@ class Globals:
     testWin = None
     testWinPos = wxDefaultPosition
     currentXXX = None
-    xmlFlags = wxXRC_USE_LOCALE | wxXRC_NO_SUBCLASSING
+    currentEncoding = sys.getdefaultencoding() # wxLocale_GetSystemEncodingName()
 
 g = Globals()

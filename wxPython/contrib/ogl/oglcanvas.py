@@ -50,82 +50,82 @@ class wxDiagramPtr(wxObjectPtr):
         self.this = this
         self.thisown = 0
     def AddShape(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxDiagram_AddShape,(self,) + _args, _kwargs)
+        val = oglcanvasc.wxDiagram_AddShape(self, *_args, **_kwargs)
         return val
     def Clear(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxDiagram_Clear,(self,) + _args, _kwargs)
+        val = oglcanvasc.wxDiagram_Clear(self, *_args, **_kwargs)
         return val
     def DeleteAllShapes(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxDiagram_DeleteAllShapes,(self,) + _args, _kwargs)
+        val = oglcanvasc.wxDiagram_DeleteAllShapes(self, *_args, **_kwargs)
         return val
     def DrawOutline(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxDiagram_DrawOutline,(self,) + _args, _kwargs)
+        val = oglcanvasc.wxDiagram_DrawOutline(self, *_args, **_kwargs)
         return val
     def FindShape(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxDiagram_FindShape,(self,) + _args, _kwargs)
+        val = oglcanvasc.wxDiagram_FindShape(self, *_args, **_kwargs)
         return val
     def GetCanvas(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxDiagram_GetCanvas,(self,) + _args, _kwargs)
+        val = oglcanvasc.wxDiagram_GetCanvas(self, *_args, **_kwargs)
         return val
     def GetCount(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxDiagram_GetCount,(self,) + _args, _kwargs)
+        val = oglcanvasc.wxDiagram_GetCount(self, *_args, **_kwargs)
         return val
     def GetGridSpacing(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxDiagram_GetGridSpacing,(self,) + _args, _kwargs)
+        val = oglcanvasc.wxDiagram_GetGridSpacing(self, *_args, **_kwargs)
         return val
     def GetMouseTolerance(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxDiagram_GetMouseTolerance,(self,) + _args, _kwargs)
+        val = oglcanvasc.wxDiagram_GetMouseTolerance(self, *_args, **_kwargs)
         return val
     def GetShapeList(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxDiagram_GetShapeList,(self,) + _args, _kwargs)
+        val = oglcanvasc.wxDiagram_GetShapeList(self, *_args, **_kwargs)
         return val
     def GetQuickEditMode(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxDiagram_GetQuickEditMode,(self,) + _args, _kwargs)
+        val = oglcanvasc.wxDiagram_GetQuickEditMode(self, *_args, **_kwargs)
         return val
     def GetSnapToGrid(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxDiagram_GetSnapToGrid,(self,) + _args, _kwargs)
+        val = oglcanvasc.wxDiagram_GetSnapToGrid(self, *_args, **_kwargs)
         return val
     def InsertShape(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxDiagram_InsertShape,(self,) + _args, _kwargs)
+        val = oglcanvasc.wxDiagram_InsertShape(self, *_args, **_kwargs)
         return val
     def RecentreAll(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxDiagram_RecentreAll,(self,) + _args, _kwargs)
+        val = oglcanvasc.wxDiagram_RecentreAll(self, *_args, **_kwargs)
         return val
     def Redraw(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxDiagram_Redraw,(self,) + _args, _kwargs)
+        val = oglcanvasc.wxDiagram_Redraw(self, *_args, **_kwargs)
         return val
     def RemoveAllShapes(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxDiagram_RemoveAllShapes,(self,) + _args, _kwargs)
+        val = oglcanvasc.wxDiagram_RemoveAllShapes(self, *_args, **_kwargs)
         return val
     def RemoveShape(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxDiagram_RemoveShape,(self,) + _args, _kwargs)
+        val = oglcanvasc.wxDiagram_RemoveShape(self, *_args, **_kwargs)
         return val
     def SetCanvas(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxDiagram_SetCanvas,(self,) + _args, _kwargs)
+        val = oglcanvasc.wxDiagram_SetCanvas(self, *_args, **_kwargs)
         return val
     def SetGridSpacing(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxDiagram_SetGridSpacing,(self,) + _args, _kwargs)
+        val = oglcanvasc.wxDiagram_SetGridSpacing(self, *_args, **_kwargs)
         return val
     def SetMouseTolerance(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxDiagram_SetMouseTolerance,(self,) + _args, _kwargs)
+        val = oglcanvasc.wxDiagram_SetMouseTolerance(self, *_args, **_kwargs)
         return val
     def SetQuickEditMode(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxDiagram_SetQuickEditMode,(self,) + _args, _kwargs)
+        val = oglcanvasc.wxDiagram_SetQuickEditMode(self, *_args, **_kwargs)
         return val
     def SetSnapToGrid(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxDiagram_SetSnapToGrid,(self,) + _args, _kwargs)
+        val = oglcanvasc.wxDiagram_SetSnapToGrid(self, *_args, **_kwargs)
         return val
     def ShowAll(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxDiagram_ShowAll,(self,) + _args, _kwargs)
+        val = oglcanvasc.wxDiagram_ShowAll(self, *_args, **_kwargs)
         return val
     def Snap(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxDiagram_Snap,(self,) + _args, _kwargs)
+        val = oglcanvasc.wxDiagram_Snap(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxDiagram instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxDiagram instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxDiagram(wxDiagramPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(oglcanvasc.new_wxDiagram,_args,_kwargs)
+        self.this = oglcanvasc.new_wxDiagram(*_args,**_kwargs)
         self.thisown = 1
 
 
@@ -136,71 +136,71 @@ class wxPyShapeCanvasPtr(wxScrolledWindowPtr):
         self.this = this
         self.thisown = 0
     def _setCallbackInfo(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxPyShapeCanvas__setCallbackInfo,(self,) + _args, _kwargs)
+        val = oglcanvasc.wxPyShapeCanvas__setCallbackInfo(self, *_args, **_kwargs)
         return val
     def AddShape(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxPyShapeCanvas_AddShape,(self,) + _args, _kwargs)
+        val = oglcanvasc.wxPyShapeCanvas_AddShape(self, *_args, **_kwargs)
         return val
     def FindShape(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxPyShapeCanvas_FindShape,(self,) + _args, _kwargs)
+        val = oglcanvasc.wxPyShapeCanvas_FindShape(self, *_args, **_kwargs)
         return val
     def FindFirstSensitiveShape(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxPyShapeCanvas_FindFirstSensitiveShape,(self,) + _args, _kwargs)
+        val = oglcanvasc.wxPyShapeCanvas_FindFirstSensitiveShape(self, *_args, **_kwargs)
         return val
     def GetDiagram(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxPyShapeCanvas_GetDiagram,(self,) + _args, _kwargs)
+        val = oglcanvasc.wxPyShapeCanvas_GetDiagram(self, *_args, **_kwargs)
         return val
     def GetQuickEditMode(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxPyShapeCanvas_GetQuickEditMode,(self,) + _args, _kwargs)
+        val = oglcanvasc.wxPyShapeCanvas_GetQuickEditMode(self, *_args, **_kwargs)
         return val
     def InsertShape(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxPyShapeCanvas_InsertShape,(self,) + _args, _kwargs)
+        val = oglcanvasc.wxPyShapeCanvas_InsertShape(self, *_args, **_kwargs)
         return val
     def base_OnBeginDragLeft(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxPyShapeCanvas_base_OnBeginDragLeft,(self,) + _args, _kwargs)
+        val = oglcanvasc.wxPyShapeCanvas_base_OnBeginDragLeft(self, *_args, **_kwargs)
         return val
     def base_OnBeginDragRight(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxPyShapeCanvas_base_OnBeginDragRight,(self,) + _args, _kwargs)
+        val = oglcanvasc.wxPyShapeCanvas_base_OnBeginDragRight(self, *_args, **_kwargs)
         return val
     def base_OnEndDragLeft(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxPyShapeCanvas_base_OnEndDragLeft,(self,) + _args, _kwargs)
+        val = oglcanvasc.wxPyShapeCanvas_base_OnEndDragLeft(self, *_args, **_kwargs)
         return val
     def base_OnEndDragRight(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxPyShapeCanvas_base_OnEndDragRight,(self,) + _args, _kwargs)
+        val = oglcanvasc.wxPyShapeCanvas_base_OnEndDragRight(self, *_args, **_kwargs)
         return val
     def base_OnDragLeft(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxPyShapeCanvas_base_OnDragLeft,(self,) + _args, _kwargs)
+        val = oglcanvasc.wxPyShapeCanvas_base_OnDragLeft(self, *_args, **_kwargs)
         return val
     def base_OnDragRight(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxPyShapeCanvas_base_OnDragRight,(self,) + _args, _kwargs)
+        val = oglcanvasc.wxPyShapeCanvas_base_OnDragRight(self, *_args, **_kwargs)
         return val
     def base_OnLeftClick(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxPyShapeCanvas_base_OnLeftClick,(self,) + _args, _kwargs)
+        val = oglcanvasc.wxPyShapeCanvas_base_OnLeftClick(self, *_args, **_kwargs)
         return val
     def base_OnRightClick(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxPyShapeCanvas_base_OnRightClick,(self,) + _args, _kwargs)
+        val = oglcanvasc.wxPyShapeCanvas_base_OnRightClick(self, *_args, **_kwargs)
         return val
     def Redraw(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxPyShapeCanvas_Redraw,(self,) + _args, _kwargs)
+        val = oglcanvasc.wxPyShapeCanvas_Redraw(self, *_args, **_kwargs)
         return val
     def RemoveShape(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxPyShapeCanvas_RemoveShape,(self,) + _args, _kwargs)
+        val = oglcanvasc.wxPyShapeCanvas_RemoveShape(self, *_args, **_kwargs)
         return val
     def SetDiagram(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxPyShapeCanvas_SetDiagram,(self,) + _args, _kwargs)
+        val = oglcanvasc.wxPyShapeCanvas_SetDiagram(self, *_args, **_kwargs)
         return val
     def Snap(self, *_args, **_kwargs):
-        val = apply(oglcanvasc.wxPyShapeCanvas_Snap,(self,) + _args, _kwargs)
+        val = oglcanvasc.wxPyShapeCanvas_Snap(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxPyShapeCanvas instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxPyShapeCanvas instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
     
     def GetShapeList(self):
         return self.GetDiagram().GetShapeList()
     
 class wxPyShapeCanvas(wxPyShapeCanvasPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(oglcanvasc.new_wxPyShapeCanvas,_args,_kwargs)
+        self.this = oglcanvasc.new_wxPyShapeCanvas(*_args,**_kwargs)
         self.thisown = 1
         self._setCallbackInfo(self, wxPyShapeCanvas)
         self._setOORInfo(self)

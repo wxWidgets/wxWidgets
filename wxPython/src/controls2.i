@@ -21,6 +21,8 @@
 #include <wx/treectrl.h>
 #include <wx/imaglist.h>
 #include <wx/dirctrl.h>
+
+#include "pytree.h"
 %}
 
 //----------------------------------------------------------------------
@@ -454,7 +456,7 @@ public:
     } // The OOR typemaps don't know what to do with the %new, so fix it up.
     %pragma(python) addtoclass = "
     def GetColumn(self, *_args, **_kwargs):
-        val = apply(controls2c.wxListCtrl_GetColumn,(self,) + _args, _kwargs)
+        val = controls2c.wxListCtrl_GetColumn(self, *_args, **_kwargs)
         if val is not None: val.thisown = 1
         return val
     "
@@ -493,7 +495,7 @@ public:
     }  // The OOR typemaps don't know what to do with the %new, so fix it up.
     %pragma(python) addtoclass = "
     def GetItem(self, *_args, **_kwargs):
-        val = apply(controls2c.wxListCtrl_GetItem,(self,) + _args, _kwargs)
+        val = controls2c.wxListCtrl_GetItem(self, *_args, **_kwargs)
         if val is not None: val.thisown = 1
         return val
     "
@@ -1003,7 +1005,11 @@ public:
     wxTreeItemId();
     ~wxTreeItemId();
     bool IsOk();
-    %pragma(python) addtoclass = "Ok = IsOk"
+    %pragma(python) addtoclass = "
+    Ok = IsOk
+    def __nonzero__(self):
+        return self.IsOk()
+"
 
     %addmethods {
         int __cmp__(wxTreeItemId* other) {
@@ -1013,40 +1019,6 @@ public:
     }
 };
 
-
-
-%{
-class wxPyTreeItemData : public wxTreeItemData {
-public:
-    wxPyTreeItemData(PyObject* obj = NULL) {
-        if (obj == NULL)
-            obj = Py_None;
-        Py_INCREF(obj);
-        m_obj = obj;
-    }
-
-    ~wxPyTreeItemData() {
-        wxPyBeginBlockThreads();
-        Py_DECREF(m_obj);
-        wxPyEndBlockThreads();
-    }
-
-    PyObject* GetData() {
-        Py_INCREF(m_obj);
-        return m_obj;
-    }
-
-    void SetData(PyObject* obj) {
-        wxPyBeginBlockThreads();
-        Py_DECREF(m_obj);
-        wxPyEndBlockThreads();
-        m_obj = obj;
-        Py_INCREF(obj);
-    }
-
-    PyObject* m_obj;
-};
-%}
 
 
 
@@ -1075,6 +1047,12 @@ public:
     %pragma(python) addtoclass = "GetCode = GetKeyCode"
     const wxString& GetLabel();
     bool IsEditCancelled() const;
+    void SetItem(const wxTreeItemId& item);
+    void SetOldItem(const wxTreeItemId& item);
+    void SetPoint(const wxPoint& pt);
+    void SetKeyEvent(const wxKeyEvent& evt);
+    void SetLabel(const wxString& label);
+    void SetEditCanceled(bool editCancelled);
 };
 
 
@@ -1134,19 +1112,19 @@ IMPLEMENT_ABSTRACT_CLASS(wxPyTreeCtrl, wxTreeCtrl);
 %name(wxTreeCtrl)class wxPyTreeCtrl : public wxControl {
 public:
     wxPyTreeCtrl(wxWindow *parent, wxWindowID id = -1,
-               const wxPoint& pos = wxDefaultPosition,
-               const wxSize& size = wxDefaultSize,
-               long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT,
-               const wxValidator& validator = wxDefaultValidator,
-               const wxString& name = wxPy_TreeCtrlNameStr);
+                 const wxPoint& pos = wxDefaultPosition,
+                 const wxSize& size = wxDefaultSize,
+                 long style = wxTR_DEFAULT_STYLE,
+                 const wxValidator& validator = wxDefaultValidator,
+                 const wxString& name = wxPy_TreeCtrlNameStr);
     %name(wxPreTreeCtrl)wxPyTreeCtrl();
 
     bool Create(wxWindow *parent, wxWindowID id = -1,
-               const wxPoint& pos = wxDefaultPosition,
-               const wxSize& size = wxDefaultSize,
-               long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT,
-               const wxValidator& validator = wxDefaultValidator,
-               const wxString& name = wxPy_TreeCtrlNameStr);
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxTR_DEFAULT_STYLE,
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = wxPy_TreeCtrlNameStr);
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
     %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxTreeCtrl)"
@@ -1340,7 +1318,7 @@ public:
             if (self->GetBoundingRect(item, rect, textOnly)) {
                 wxPyBeginBlockThreads();
                 wxRect* r = new wxRect(rect);
-                PyObject* val = wxPyConstructObject((void*)r, wxT("wxRect"));
+                PyObject* val = wxPyConstructObject((void*)r, wxT("wxRect"), 1);
                 wxPyEndBlockThreads();
                 return val;
             }
@@ -1355,17 +1333,17 @@ public:
 %pragma(python) addtoclass = "
     # Redefine some methods that SWIG gets a bit confused on...
     def GetFirstChild(self, *_args, **_kwargs):
-        val1,val2 = apply(controls2c.wxTreeCtrl_GetFirstChild,(self,) + _args, _kwargs)
+        val1,val2 = controls2c.wxTreeCtrl_GetFirstChild(self, *_args, **_kwargs)
         val1 = wxTreeItemIdPtr(val1)
         val1.thisown = 1
         return (val1,val2)
     def GetNextChild(self, *_args, **_kwargs):
-        val1,val2 = apply(controls2c.wxTreeCtrl_GetNextChild,(self,) + _args, _kwargs)
+        val1,val2 = controls2c.wxTreeCtrl_GetNextChild(self, *_args, **_kwargs)
         val1 = wxTreeItemIdPtr(val1)
         val1.thisown = 1
         return (val1,val2)
     def HitTest(self, *_args, **_kwargs):
-        val1, val2 = apply(controls2c.wxTreeCtrl_HitTest,(self,) + _args, _kwargs)
+        val1, val2 = controls2c.wxTreeCtrl_HitTest(self, *_args, **_kwargs)
         val1 = wxTreeItemIdPtr(val1)
         val1.thisown = 1
         return (val1,val2)
@@ -1457,6 +1435,9 @@ public:
 
     wxTreeCtrl* GetTreeCtrl() const;
     wxDirFilterListCtrl* GetFilterListCtrl() const;
+
+    // Collapse & expand the tree, thus re-creating it from scratch:
+    void ReCreateTree();
 
 //  //// Helpers
 //      void SetupSections();

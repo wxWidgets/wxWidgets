@@ -104,5 +104,16 @@ def runTest(frame, nb, log):
 
 
 overview = """\
-A status bar is a narrow window that can be placed along the bottom of a frame to give small amounts of status information. It can contain one or more fields, one or more of which can be variable length according to the size of the window.
-"""
+A status bar is a narrow window that can be placed along the bottom of
+a frame to give small amounts of status information. It can contain
+one or more fields, one or more of which can be variable length
+according to the size of the window.  """
+
+
+
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])

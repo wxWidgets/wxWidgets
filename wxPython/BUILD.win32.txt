@@ -119,6 +119,7 @@ C. Change to the %WXWIN%\include\wx\msw directory and copy setup0.h to
          wxUSE_TREELAYOUT		0
 	 wxUSE_MS_HTML_HELP		0
          wxUSE_POSTSCRIPT		1
+	 wxUSE_DYNLIB_CLASS		1
 
 
     ** NEW **

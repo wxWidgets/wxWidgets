@@ -98,6 +98,7 @@ class TestListCtrlPanel(wxPanel, wxColumnSorterMixin):
 
         self.list = TestListCtrl(self, tID,
                                  style=wxLC_REPORT | wxSUNKEN_BORDER
+                                 | wxLC_EDIT_LABELS
                                  #| wxLC_NO_HEADER
                                  #| wxLC_VRULES | wxLC_HRULES
                                  )
@@ -121,6 +122,7 @@ class TestListCtrlPanel(wxPanel, wxColumnSorterMixin):
         EVT_LIST_COL_BEGIN_DRAG(self, tID, self.OnColBeginDrag)
         EVT_LIST_COL_DRAGGING(self, tID, self.OnColDragging)
         EVT_LIST_COL_END_DRAG(self, tID, self.OnColEndDrag)
+        EVT_LIST_BEGIN_LABEL_EDIT(self, tID, self.OnBeginEdit)
 
         EVT_LEFT_DCLICK(self.list, self.OnDoubleClick)
         EVT_RIGHT_DOWN(self.list, self.OnRightDown)
@@ -218,6 +220,8 @@ class TestListCtrlPanel(wxPanel, wxColumnSorterMixin):
             #event.Veto()  # doesn't work
             # this does
             self.list.SetItemState(10, 0, wxLIST_STATE_SELECTED)
+        event.Skip()
+
 
     def OnItemDeselected(self, evt):
         item = evt.GetItem()
@@ -232,6 +236,10 @@ class TestListCtrlPanel(wxPanel, wxColumnSorterMixin):
         self.currentItem = event.m_itemIndex
         self.log.WriteText("OnItemActivated: %s\nTopItem: %s" %
                            (self.list.GetItemText(self.currentItem), self.list.GetTopItem()))
+
+    def OnBeginEdit(self, event):
+        self.log.WriteText("OnBeginEdit")
+        event.Allow()
 
     def OnItemDelete(self, event):
         self.log.WriteText("OnItemDelete\n")
@@ -265,30 +273,30 @@ class TestListCtrlPanel(wxPanel, wxColumnSorterMixin):
     def OnRightClick(self, event):
         self.log.WriteText("OnRightClick %s\n" % self.list.GetItemText(self.currentItem))
 
-        # only do this part the first time
+        # only do this part the first time so the events are only bound once
         if not hasattr(self, "popupID1"):
             self.popupID1 = wxNewId()
             self.popupID2 = wxNewId()
             self.popupID3 = wxNewId()
             self.popupID4 = wxNewId()
             self.popupID5 = wxNewId()
+            self.popupID6 = wxNewId()
             EVT_MENU(self, self.popupID1, self.OnPopupOne)
             EVT_MENU(self, self.popupID2, self.OnPopupTwo)
             EVT_MENU(self, self.popupID3, self.OnPopupThree)
             EVT_MENU(self, self.popupID4, self.OnPopupFour)
             EVT_MENU(self, self.popupID5, self.OnPopupFive)
+            EVT_MENU(self, self.popupID6, self.OnPopupSix)
 
         # make a menu
         menu = wxMenu()
-        # Show how to put an icon in the menu
-        item = wxMenuItem(menu, self.popupID1,"One")
-        item.SetBitmap(images.getSmilesBitmap())
-        menu.AppendItem(item)
-        # add some other items
-        menu.Append(self.popupID2, "Two")
+        # add some items
+        menu.Append(self.popupID1, "FindItem tests")
+#        menu.Append(self.popupID2, "Two")
         menu.Append(self.popupID3, "ClearAll and repopulate")
         menu.Append(self.popupID4, "DeleteAllItems")
         menu.Append(self.popupID5, "GetItem")
+        menu.Append(self.popupID6, "Edit")
 
         # Popup the menu.  If an item is selected then its handler
         # will be called before PopupMenu returns.
@@ -308,8 +316,6 @@ class TestListCtrlPanel(wxPanel, wxColumnSorterMixin):
         self.log.WriteText("Popup three\n")
         self.list.ClearAll()
         wxCallAfter(self.PopulateList)
-        #wxYield()
-        #self.PopulateList()
 
     def OnPopupFour(self, event):
         self.list.DeleteAllItems()
@@ -317,6 +323,10 @@ class TestListCtrlPanel(wxPanel, wxColumnSorterMixin):
     def OnPopupFive(self, event):
         item = self.list.GetItem(self.currentItem)
         print item.m_text, item.m_itemId, self.list.GetItemData(self.currentItem)
+
+    def OnPopupSix(self, event):
+        self.list.EditLabel(self.currentItem)
+
 
     def OnSize(self, event):
         w,h = self.GetClientSizeTuple()

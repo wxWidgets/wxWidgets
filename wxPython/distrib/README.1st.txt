@@ -36,7 +36,7 @@ Clear as mud?  Good.  Let's get started.
 
 2. Make a build directory and configure wxGTK.
 
-        cd wxPythonGTK-2.3.3   # or whatever the top-level dir is
+        cd wxPythonSrc-2.4.0   # or whatever the top-level dir is
         mkdir build
         cd build
         ../configure --with-gtk \
@@ -72,7 +72,6 @@ Clear as mud?  Good.  Let's get started.
    step, depending on where your WXPREF is.)
 
         make
-        cd ../build
         make install
 
 
@@ -104,11 +103,23 @@ Clear as mud?  Good.  Let's get started.
    site-packages directory (such as to your home directory) then you
    can add "--root=<path>" after the "install" command.  To use
    wxPython like this you'll need to ensure that the directory
-   containing wxPyrthon is contained in in the PYTHONPATH environment
+   containing wxPython is contained in the PYTHONPATH environment
    variable.
 
 
-5. That's all, except for the having fun part!
+5. If you havn't already, get a new copy of the demo and documentation
+   to go with the wxPython you just built and installed.  See
+   http://wxpython.org/download.php#documentation
+
+
+6. Change to the demo directory and run it like this:
+
+        python demo.py
+
+
+7. That's all, except for the having fun part!
+
+
 
 --
 Robin Dunn

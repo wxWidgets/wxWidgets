@@ -27,8 +27,10 @@ as a proper class (and the demo is now converted to just use it.)
                                   pos=pos, size=size,
                                   style=style, name=name)
 
+        EVT_CHILD_FOCUS(self, self.OnChildFocus)
 
-    def SetupScrolling(self, scroll_x=True, scroll_y=True, rate_x=1, rate_y=1):
+
+    def SetupScrolling(self, scroll_x=True, scroll_y=True, rate_x=20, rate_y=20):
         """
         This function sets up the event handling necessary to handle
         scrolling properly. It should be called within the __init__
@@ -42,10 +44,18 @@ as a proper class (and the demo is now converted to just use it.)
         if not scroll_x: rate_x = 0
         if not scroll_y: rate_y = 0
 
-        self.SetScrollRate(rate_x, rate_y)
+        # Round up the virtual size to be a multiple of the scroll rate
+        sizer = self.GetSizer()
+        if sizer:
+            w, h = sizer.GetMinSize()
+            if rate_x:
+                w += rate_x - (w % rate_x)
+            if rate_y:
+                h += rate_y - (h % rate_y)
+            self.SetVirtualSize( (w, h) )
+            self.SetVirtualSizeHints( w, h )
 
-        self.GetSizer().SetVirtualSizeHints(self)
-        EVT_CHILD_FOCUS(self, self.OnChildFocus)
+        self.SetScrollRate(rate_x, rate_y)
         wxCallAfter(self.Scroll, 0, 0) # scroll back to top after initial events
 
 

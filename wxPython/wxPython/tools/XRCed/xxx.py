@@ -8,10 +8,6 @@ from xml.dom import minidom
 from globals import *
 from params import *
 
-currentEncoding = wxLocale_GetSystemEncodingName()
-if not currentEncoding:
-    currentEncoding = 'ascii'
-
 # Base class for interface parameter classes
 class xxxNode:
     def __init__(self, node):
@@ -32,6 +28,15 @@ class xxxParam(xxxNode):
         else:
             text = node.childNodes[0] # first child must be text node
             assert text.nodeType == minidom.Node.TEXT_NODE
+            # Append other text nodes if present and delete them
+            extraText = ''
+            for n in node.childNodes[1:]:
+                if n.nodeType == minidom.Node.TEXT_NODE:
+                    extraText += n.data
+                    node.removeChild(n)
+                    n.unlink()
+                else: break
+            if extraText: text.data = text.data + extraText
         # Use convertion from unicode to current encoding
         self.textNode = text
     # Value returns string
@@ -42,9 +47,9 @@ class xxxParam(xxxNode):
             self.textNode.data = value
     else:
         def value(self):
-            return self.textNode.data.encode(currentEncoding)
+            return self.textNode.data.encode(g.currentEncoding)
         def update(self, value):
-            self.textNode.data = unicode(value, currentEncoding)
+            self.textNode.data = unicode(value, g.currentEncoding)
 
 # Integer parameter
 class xxxParamInt(xxxParam):
@@ -238,7 +243,13 @@ class xxxObject:
                 # If default is specified, set it
                 if self.default.has_key(param):
                     elem = g.tree.dom.createElement(param)
-                    self.params[param] = xxxParam(elem)
+                    if param == 'content':
+                        if self.className == 'wxCheckList':
+                            self.params[param] = xxxParamContentCheckList(elem)
+                        else:
+                            self.params[param] = xxxParamContent(elem)
+                    else:
+                        self.params[param] = xxxParam(elem)
                     # Find place to put new element: first present element after param
                     found = False
                     paramStyles = self.allParams + self.styles
@@ -325,12 +336,13 @@ class xxxEncoding:
 # Special class for root node
 class xxxMainNode(xxxContainer):
     allParams = ['encoding']
-    required = ['encoding']
-    default = {'encoding': ''}
     hasStyle = hasName = False
     def __init__(self, dom):
         xxxContainer.__init__(self, None, dom.documentElement)
         self.className = 'XML tree'
+        # Reset required parameters after processing XML, because encoding is
+        # a little special
+        self.required = ['encoding']
         self.params['encoding'] = xxxEncoding(dom.encoding)
 
 ################################################################################
@@ -347,6 +359,7 @@ class xxxDialog(xxxContainer):
     allParams = ['title', 'centered', 'pos', 'size', 'style']
     paramDict = {'centered': ParamBool}
     required = ['title']
+    default = {'title': ''}
     winStyles = ['wxDEFAULT_DIALOG_STYLE', 'wxSTAY_ON_TOP',
                  'wxDIALOG_MODAL', 'wxDIALOG_MODELESS',
                  'wxCAPTION', 'wxSYSTEM_MENU', 'wxRESIZE_BORDER', 'wxRESIZE_BOX',
@@ -360,6 +373,7 @@ class xxxFrame(xxxContainer):
     allParams = ['title', 'centered', 'pos', 'size', 'style']
     paramDict = {'centered': ParamBool}
     required = ['title']
+    default = {'title': ''}
     winStyles = ['wxDEFAULT_FRAME_STYLE', 'wxDEFAULT_DIALOG_STYLE',
                  'wxSTAY_ON_TOP',
                  'wxCAPTION', 'wxSYSTEM_MENU', 'wxRESIZE_BORDER',
@@ -418,10 +432,12 @@ class xxxTextCtrl(xxxObject):
     allParams = ['value', 'pos', 'size', 'style']
     winStyles = ['wxTE_PROCESS_ENTER', 'wxTE_PROCESS_TAB', 'wxTE_MULTILINE',
               'wxTE_PASSWORD', 'wxTE_READONLY', 'wxHSCROLL']
+    paramDict = {'value': ParamMultilineText}
 
 class xxxChoice(xxxObject):
     allParams = ['content', 'selection', 'pos', 'size', 'style']
     required = ['content']
+    default = {'content': '[]'}
     winStyles = ['wxCB_SORT']
 
 class xxxSlider(xxxObject):
@@ -462,7 +478,7 @@ class xxxTreeCtrl(xxxObject):
 
 class xxxHtmlWindow(xxxObject):
     allParams = ['pos', 'size', 'style', 'borders', 'url', 'htmlcode']
-    paramDict = {'borders': ParamInt}
+    paramDict = {'borders': ParamInt, 'htmlcode':ParamMultilineText}
     winStyles = ['wxHW_SCROLLBAR_NEVER', 'wxHW_SCROLLBAR_AUTO']
 
 class xxxCalendarCtrl(xxxObject):
@@ -478,6 +494,10 @@ class xxxGenericDirCtrl(xxxObject):
     paramDict = {'defaultfilter': ParamInt}
     winStyles = ['wxDIRCTRL_DIR_ONLY', 'wxDIRCTRL_3D_INTERNAL', 'wxDIRCTRL_SELECT_FIRST',
                  'wxDIRCTRL_SHOW_FILTERS', 'wxDIRCTRL_EDIT_LABELS']
+
+class xxxScrolledWindow(xxxContainer):
+    allParams = ['pos', 'size', 'style']
+    winStyles = ['wxHSCROLL', 'wxVSCROLL']
 
 ################################################################################
 # Buttons
@@ -522,6 +542,7 @@ class xxxRadioBox(xxxObject):
     allParams = ['label', 'content', 'selection', 'dimension', 'pos', 'size', 'style']
     paramDict = {'dimension': ParamInt}
     required = ['label', 'content']
+    default = {'content': '[]'}
     winStyles = ['wxRA_SPECIFY_ROWS', 'wxRA_SPECIFY_COLS']
 
 class xxxCheckBox(xxxObject):
@@ -532,17 +553,20 @@ class xxxCheckBox(xxxObject):
 class xxxComboBox(xxxObject):
     allParams = ['content', 'selection', 'value', 'pos', 'size', 'style']
     required = ['content']
+    default = {'content': '[]'}
     winStyles = ['wxCB_SIMPLE', 'wxCB_SORT', 'wxCB_READONLY', 'wxCB_DROPDOWN']
 
 class xxxListBox(xxxObject):
     allParams = ['content', 'selection', 'pos', 'size', 'style']
     required = ['content']
+    default = {'content': '[]'}
     winStyles = ['wxLB_SINGLE', 'wxLB_MULTIPLE', 'wxLB_EXTENDED', 'wxLB_HSCROLL',
               'wxLB_ALWAYS_SB', 'wxLB_NEEDED_SB', 'wxLB_SORT']
 
 class xxxCheckList(xxxObject):
     allParams = ['content', 'pos', 'size', 'style']
     required = ['content']
+    default = {'content': '[]'}
     winStyles = ['wxLC_LIST', 'wxLC_REPORT', 'wxLC_ICON', 'wxLC_SMALL_ICON',
               'wxLC_ALIGN_TOP', 'wxLC_ALIGN_LEFT', 'wxLC_AUTOARRANGE',
               'wxLC_USER_TEXT', 'wxLC_EDIT_LABELS', 'wxLC_NO_HEADER',
@@ -733,6 +757,7 @@ xxxDict = {
     'wxCalendarCtrl': xxxCalendarCtrl,
     'wxGenericDirCtrl': xxxGenericDirCtrl,
     'wxSpinCtrl': xxxSpinCtrl,
+    'wxScrolledWindow': xxxScrolledWindow,
 
     'wxBoxSizer': xxxBoxSizer,
     'wxStaticBoxSizer': xxxStaticBoxSizer,
@@ -772,9 +797,9 @@ def MakeXXXFromDOM(parent, element):
     try:
         klass = xxxDict[element.getAttribute('class')]
     except KeyError:
-        # Verify that it's not recursive exception
-        print 'ERROR: unknown class:', element.getAttribute('class')
-        raise
+        # If we encounter a weird class, use unknown template
+        print 'WARNING: unsupported class:', element.getAttribute('class')
+        klass = xxxUnknown
     return klass(parent, element)
 
 # Make empty DOM element

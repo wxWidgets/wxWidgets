@@ -17,9 +17,9 @@ directory within its own frame window.  Just specify the module name
 on the command line.
 """
 
+import wx                  # This module uses the new wx namespace
 
 import sys, os
-from wxPython.wx import *
 
 #----------------------------------------------------------------------------
 
@@ -27,32 +27,34 @@ class Log:
     def WriteText(self, text):
         if text[-1:] == '\n':
             text = text[:-1]
-        wxLogMessage(text)
+        wx.LogMessage(text)
     write = WriteText
 
 
-class RunDemoApp(wxApp):
+class RunDemoApp(wx.App):
     def __init__(self, name, module):
         self.name = name
         self.demoModule = module
-        wxApp.__init__(self, 0) ##wxPlatform == "__WXMAC__")
+        wx.App.__init__(self, 0)
 
 
     def OnInit(self):
-        wxInitAllImageHandlers()
-        wxLog_SetActiveTarget(wxLogStderr())
+        wx.InitAllImageHandlers()
+        wx.Log_SetActiveTarget(wx.LogStderr())
 
-        frame = wxFrame(None, -1, "RunDemo: " + self.name, pos=(50,50), size=(0,0),
-                        style=wxNO_FULL_REPAINT_ON_RESIZE|wxDEFAULT_FRAME_STYLE)
+        #self.SetAssertMode(wx.PYAPP_ASSERT_DIALOG)
+
+        frame = wx.Frame(None, -1, "RunDemo: " + self.name, pos=(50,50), size=(0,0),
+                        style=wx.NO_FULL_REPAINT_ON_RESIZE|wx.DEFAULT_FRAME_STYLE)
         frame.CreateStatusBar()
-        menuBar = wxMenuBar()
-        menu = wxMenu()
+        menuBar = wx.MenuBar()
+        menu = wx.Menu()
         menu.Append(101, "E&xit\tAlt-X", "Exit demo")
-        EVT_MENU(self, 101, self.OnButton)
+        wx.EVT_MENU(self, 101, self.OnButton)
         menuBar.Append(menu, "&File")
         frame.SetMenuBar(menuBar)
         frame.Show(True)
-        EVT_CLOSE(frame, self.OnCloseFrame)
+        wx.EVT_CLOSE(frame, self.OnCloseFrame)
 
         win = self.demoModule.runTest(frame, frame, Log())
 
@@ -68,9 +70,9 @@ class RunDemoApp(wxApp):
             # otherwise the demo made its own frame, so just put a
             # button in this one
             if hasattr(frame, 'otherWin'):
-                b = wxButton(frame, -1, " Exit ")
+                b = wx.Button(frame, -1, " Exit ")
                 frame.SetSize((200, 100))
-                EVT_BUTTON(frame, b.GetId(), self.OnButton)
+                wx.EVT_BUTTON(frame, b.GetId(), self.OnButton)
             else:
                 # It was probably a dialog or something that is already
                 # gone, so we're done.
@@ -79,8 +81,8 @@ class RunDemoApp(wxApp):
 
         self.SetTopWindow(frame)
         self.frame = frame
-        #wxLog_SetActiveTarget(wxLogStderr())
-        #wxLog_SetTraceMask(wxTraceMessages)
+        #wx.Log_SetActiveTarget(wx.LogStderr())
+        #wx.Log_SetTraceMask(wx.TraceMessages)
         return True
 
 

@@ -214,6 +214,9 @@ if [ -z "$skipinstall" ]; then
     mv -f $INSTALLROOT$PREFIX/lib/wx  $INSTALLDEVEL$PREFIX/lib
     mv -f $INSTALLROOT$PREFIX/bin/wx* $INSTALLDEVEL$PREFIX/bin
 
+    # TODO for $INSTALLROOT and $INSTALLDEVEL ?
+    # chown -R root:admin
+    # chmod -R g+w
 fi
 
 popd

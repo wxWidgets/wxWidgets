@@ -117,7 +117,7 @@ public:
                  const wxString& text,
                  int select = FALSE,
                  int imageId = -1);
-    bool InsertPage(int page,
+    bool InsertPage(int index,
                     /*wxNotebookPage*/ wxWindow *page,
                     const wxString& text,
                     bool select = FALSE,

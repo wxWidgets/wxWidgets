@@ -19,7 +19,12 @@
 #include <wx/gizmos/editlbox.h>
 #include <wx/gizmos/splittree.h>
 #include <wx/gizmos/ledctrl.h>
+
 #include <wx/listctrl.h>
+#include <wx/treectrl.h>
+#include <wx/imaglist.h>
+#include "treelistctrl.h"
+#include "pytree.h"
 %}
 
 //---------------------------------------------------------------------------
@@ -32,6 +37,8 @@
 %extern _defs.i
 %extern events.i
 %extern controls.i
+%extern controls2.i
+%extern gdi.i
 
 
 //----------------------------------------------------------------------
@@ -40,6 +47,8 @@
     // Put some wx default wxChar* values into wxStrings.
     static const wxString wxPyDynamicSashNameStr(wxT("dynamicSashWindow"));
     static const wxString wxPyEditableListBoxNameStr(wxT("editableListBox"));
+    static const wxString wxPyTreeListCtrlNameStr(wxT("treelistctrl"));
+    static const wxString wxPyEmptyString(wxT(""));
 %}
 
 ///----------------------------------------------------------------------
@@ -390,6 +399,521 @@ public:
 
 };
 
+
+
+//----------------------------------------------------------------------------
+// wxTreeListCtrl - the multicolumn tree control
+//----------------------------------------------------------------------------
+
+enum wxTreeListColumnAlign {
+    wxTL_ALIGN_LEFT,
+    wxTL_ALIGN_RIGHT,
+    wxTL_ALIGN_CENTER
+};
+
+
+
+enum {
+    wxTREE_HITTEST_ONITEMCOLUMN
+};
+
+
+
+
+class wxTreeListColumnInfo: public wxObject {
+public:
+    wxTreeListColumnInfo(const wxString& text = wxPyEmptyString,
+			 int image = -1,
+			 size_t width = 100,
+			 wxTreeListColumnAlign alignment = wxTL_ALIGN_LEFT);
+
+    wxTreeListColumnAlign GetAlignment() const;
+    wxString GetText() const;
+    int GetImage() const;
+    int GetSelectedImage() const;
+    size_t GetWidth() const;
+
+    void SetAlignment(wxTreeListColumnAlign alignment);
+    void SetText(const wxString& text);
+    void SetImage(int image);
+    void SetSelectedImage(int image);
+    void SetWidth(size_t with);
+};
+
+
+
+
+%{ // C++ version of Python aware control
+class wxPyTreeListCtrl : public wxTreeListCtrl {
+    DECLARE_ABSTRACT_CLASS(wxPyTreeListCtrl);
+public:
+    wxPyTreeListCtrl() : wxTreeListCtrl() {}
+    wxPyTreeListCtrl(wxWindow *parent, wxWindowID id,
+                     const wxPoint& pos,
+                     const wxSize& size,
+                     long style,
+                     const wxValidator &validator,
+                     const wxString& name) :
+        wxTreeListCtrl(parent, id, pos, size, style, validator, name) {}
+
+    int OnCompareItems(const wxTreeItemId& item1,
+                       const wxTreeItemId& item2) {
+        int rval = 0;
+        bool found;
+        wxPyBeginBlockThreads();
+        if ((found = wxPyCBH_findCallback(m_myInst, "OnCompareItems"))) {
+            PyObject *o1 = wxPyConstructObject((void*)&item1, wxT("wxTreeItemId"), 0);
+            PyObject *o2 = wxPyConstructObject((void*)&item2, wxT("wxTreeItemId"), 0);
+            rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OO)",o1,o2));
+            Py_DECREF(o1);
+            Py_DECREF(o2);
+        }
+        wxPyEndBlockThreads();
+        if (! found)
+            rval = wxTreeListCtrl::OnCompareItems(item1, item2);
+        return rval;
+    }
+    PYPRIVATE;
+};
+
+IMPLEMENT_ABSTRACT_CLASS(wxPyTreeListCtrl, wxTreeListCtrl)
+
+%}
+
+
+
+
+// These are for the GetFirstChild/GetNextChild methods below
+%{
+    static const long longzero = 0;
+%}
+%typemap(python, in)     long& INOUT = long* INOUT;
+%typemap(python, argout) long& INOUT = long* INOUT;
+
+
+%name(wxTreeListCtrl) class wxPyTreeListCtrl : public wxControl
+{
+public:
+    wxPyTreeListCtrl(wxWindow *parent, wxWindowID id = -1,
+                   const wxPoint& pos = wxDefaultPosition,
+                   const wxSize& size = wxDefaultSize,
+                   long style = wxTR_DEFAULT_STYLE,
+                   const wxValidator &validator = wxDefaultValidator,
+                   const wxString& name = wxPyTreeListCtrlNameStr );
+    %name(wxPreTreeListCtrl)wxPyTreeListCtrl();
+
+    bool Create(wxWindow *parent, wxWindowID id = -1,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxTR_DEFAULT_STYLE,
+                const wxValidator &validator = wxDefaultValidator,
+                const wxString& name = wxPyTreeListCtrlNameStr );
+
+    void _setCallbackInfo(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxTreeListCtrl)"
+
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreTreeListCtrl:val._setOORInfo(val)"
+
+
+
+    // get the total number of items in the control
+    size_t GetCount() const;
+
+    // indent is the number of pixels the children are indented relative to
+    // the parents position. SetIndent() also redraws the control
+    // immediately.
+    unsigned int GetIndent() const;
+    void SetIndent(unsigned int indent);
+
+    // spacing is the number of pixels between the start and the Text
+    unsigned int GetSpacing() const;
+    void SetSpacing(unsigned int spacing);
+
+    // line spacing is the space above and below the text on each line
+    unsigned int GetLineSpacing() const;
+    void SetLineSpacing(unsigned int spacing);
+
+    // image list: these functions allow to associate an image list with
+    // the control and retrieve it. Note that when assigned with
+    // SetImageList, the control does _not_ delete
+    // the associated image list when it's deleted in order to allow image
+    // lists to be shared between different controls. If you use
+    // AssignImageList, the control _does_ delete the image list.
+    //
+    // The normal image list is for the icons which correspond to the
+    // normal tree item state (whether it is selected or not).
+    // Additionally, the application might choose to show a state icon
+    // which corresponds to an app-defined item state (for example,
+    // checked/unchecked) which are taken from the state image list.
+    wxImageList *GetImageList() const;
+    wxImageList *GetStateImageList() const;
+    wxImageList *GetButtonsImageList() const;
+
+    void SetImageList(wxImageList *imageList);
+    void SetStateImageList(wxImageList *imageList);
+    void SetButtonsImageList(wxImageList *imageList);
+    void AssignImageList(wxImageList *imageList);
+    void AssignStateImageList(wxImageList *imageList);
+    void AssignButtonsImageList(wxImageList *imageList);
+
+
+
+    // adds a column
+    void AddColumn(const wxString& text);
+    %name(AddColumnInfo) void AddColumn(const wxTreeListColumnInfo& col);
+
+    // inserts a column before the given one
+    void InsertColumn(size_t before, const wxString& text);
+    %name(InsertColumnInfo) void InsertColumn(size_t before, const wxTreeListColumnInfo& col);
+
+    // deletes the given column - does not delete the corresponding column
+    // of each item
+    void RemoveColumn(size_t column);
+
+    // returns the number of columns in the ctrl
+    size_t GetColumnCount() const;
+
+    void SetColumnWidth(size_t column, size_t width);
+    int GetColumnWidth(size_t column) const;
+
+    // tells which column is the "main" one, i.e. the "threaded" one
+    void SetMainColumn(size_t column);
+    size_t GetMainColumn() const;
+
+    void SetColumnText(size_t column, const wxString& text);
+    wxString GetColumnText(size_t column) const;
+
+    void SetColumn(size_t column, const wxTreeListColumnInfo& info);
+    wxTreeListColumnInfo& GetColumn(size_t column);
+
+    // other column-related methods
+    void SetColumnAlignment(size_t column, wxTreeListColumnAlign align);
+    wxTreeListColumnAlign GetColumnAlignment(size_t column) const;
+
+    void SetColumnImage(size_t column, int image);
+    int GetColumnImage(size_t column) const;
+
+
+    %addmethods {
+        // retrieves item's label of the given column (main column by default)
+        wxString GetItemText(const wxTreeItemId& item, int column = -1) {
+            if (column < 0) column = self->GetMainColumn();
+            return self->GetItemText(item, column);
+        }
+
+        // get one of the images associated with the item (normal by default)
+        int GetItemImage(const wxTreeItemId& item, int column = -1,
+                         wxTreeItemIcon which = wxTreeItemIcon_Normal) {
+            if (column < 0) column = self->GetMainColumn();
+            return self->GetItemImage(item, column, which);
+        }
+
+        // set item's label (main column by default)
+        void SetItemText(const wxTreeItemId& item, const wxString& text, int column = -1) {
+            if (column < 0) column = self->GetMainColumn();
+            self->SetItemText(item, column, text);
+        }
+
+        // set one of the images associated with the item (normal by default)
+        // the which parameter is ignored for all columns but the main one
+        void SetItemImage(const wxTreeItemId& item, int image, int column = -1,
+                          wxTreeItemIcon which = wxTreeItemIcon_Normal) {
+            if (column < 0) column = self->GetMainColumn();
+            self->SetItemImage(item, column, image, which);
+        }
+
+
+        // [Get|Set]ItemData substitutes.  Automatically create wxPyTreeItemData
+        // if needed.
+        wxPyTreeItemData* GetItemData(const wxTreeItemId& item) {
+            wxPyTreeItemData* data = (wxPyTreeItemData*)self->GetItemData(item);
+            if (data == NULL) {
+                data = new wxPyTreeItemData();
+                data->SetId(item); // set the id
+                self->SetItemData(item, data);
+            }
+            return data;
+        }
+
+        void SetItemData(const wxTreeItemId& item, wxPyTreeItemData* data) {
+            data->SetId(item); // set the id
+            self->SetItemData(item, data);
+        }
+
+        // [Get|Set]PyData are short-cuts.  Also made somewhat crash-proof by
+        // automatically creating data classes.
+        PyObject* GetPyData(const wxTreeItemId& item) {
+            wxPyTreeItemData* data = (wxPyTreeItemData*)self->GetItemData(item);
+            if (data == NULL) {
+                data = new wxPyTreeItemData();
+                data->SetId(item); // set the id
+                self->SetItemData(item, data);
+            }
+            return data->GetData();
+        }
+
+        void SetPyData(const wxTreeItemId& item, PyObject* obj) {
+            wxPyTreeItemData* data = (wxPyTreeItemData*)self->GetItemData(item);
+            if (data == NULL) {
+                data = new wxPyTreeItemData(obj);
+                data->SetId(item); // set the id
+                self->SetItemData(item, data);
+            } else
+                data->SetData(obj);
+        }
+    }
+
+
+    // force appearance of [+] button near the item. This is useful to
+    // allow the user to expand the items which don't have any children now
+    // - but instead add them only when needed, thus minimizing memory
+    // usage and loading time.
+    void SetItemHasChildren(const wxTreeItemId& item, bool has = TRUE);
+
+    // the item will be shown in bold
+    void SetItemBold(const wxTreeItemId& item, bool bold = TRUE);
+
+    // set the item's text colour
+    void SetItemTextColour(const wxTreeItemId& item, const wxColour& col);
+
+    // set the item's background colour
+    void SetItemBackgroundColour(const wxTreeItemId& item,
+				 const wxColour& col);
+
+    // set the item's font (should be of the same height for all items)
+    void SetItemFont(const wxTreeItemId& item, const wxFont& font);
+
+
+    bool GetItemBold(const wxTreeItemId& item) const;
+    wxColour GetItemTextColour(const wxTreeItemId& item) const;
+    wxColour GetItemBackgroundColour(const wxTreeItemId& item) const;
+    wxFont GetItemFont(const wxTreeItemId& item) const;
+
+    // is the item visible (it might be outside the view or not expanded)?
+    bool IsVisible(const wxTreeItemId& item) const;
+
+    // does the item has any children?
+    bool ItemHasChildren(const wxTreeItemId& item) const;
+
+    // is the item expanded (only makes sense if HasChildren())?
+    bool IsExpanded(const wxTreeItemId& item) const;
+
+    // is this item currently selected (the same as has focus)?
+    bool IsSelected(const wxTreeItemId& item) const;
+
+    // is item text in bold font?
+    bool IsBold(const wxTreeItemId& item) const;
+
+    // if 'recursively' is FALSE, only immediate children count, otherwise
+    // the returned number is the number of all items in this branch
+    size_t GetChildrenCount(const wxTreeItemId& item, bool recursively = TRUE);
+
+
+    // wxTreeItemId.IsOk() will return FALSE if there is no such item
+
+    // get the root tree item
+    wxTreeItemId GetRootItem() const;
+
+    // get the item currently selected (may return NULL if no selection)
+    wxTreeItemId GetSelection() const;
+
+    // get the items currently selected, return the number of such item
+    //size_t GetSelections(wxArrayTreeItemIds&) const;
+    %addmethods {
+        PyObject* GetSelections() {
+            wxPyBeginBlockThreads();
+            PyObject*           rval = PyList_New(0);
+            wxArrayTreeItemIds  array;
+            size_t              num, x;
+            num = self->GetSelections(array);
+            for (x=0; x < num; x++) {
+                wxTreeItemId *tii = new wxTreeItemId(array.Item(x));
+                PyObject* item = wxPyConstructObject((void*)tii, wxT("wxTreeItemId"), TRUE);
+                PyList_Append(rval, item);
+            }
+            wxPyEndBlockThreads();
+            return rval;
+        }
+    }
+
+
+    // get the parent of this item (may return NULL if root)
+    %name(GetItemParent)wxTreeItemId GetParent(const wxTreeItemId& item) const;
+
+    // for this enumeration function you must pass in a "cookie" parameter
+    // which is opaque for the application but is necessary for the library
+    // to make these functions reentrant (i.e. allow more than one
+    // enumeration on one and the same object simultaneously). Of course,
+    // the "cookie" passed to GetFirstChild() and GetNextChild() should be
+    // the same!
+
+    // get the first child of this item
+    wxTreeItemId GetFirstChild(const wxTreeItemId& item, long& INOUT = longzero) const;
+
+    // get the next child
+    wxTreeItemId GetNextChild(const wxTreeItemId& item, long& INOUT) const;
+
+    // get the last child of this item - this method doesn't use cookies
+    wxTreeItemId GetLastChild(const wxTreeItemId& item) const;
+
+    // get the next sibling of this item
+    wxTreeItemId GetNextSibling(const wxTreeItemId& item) const;
+
+    // get the previous sibling
+    wxTreeItemId GetPrevSibling(const wxTreeItemId& item) const;
+
+    // get first visible item
+    wxTreeItemId GetFirstVisibleItem() const;
+
+    // get the next visible item: item must be visible itself!
+    // see IsVisible() and wxTreeCtrl::GetFirstVisibleItem()
+    wxTreeItemId GetNextVisible(const wxTreeItemId& item) const;
+
+    // get the previous visible item: item must be visible itself!
+    wxTreeItemId GetPrevVisible(const wxTreeItemId& item) const;
+
+    // Only for internal use right now, but should probably be public
+    wxTreeItemId GetNext(const wxTreeItemId& item) const;
+
+
+    // add the root node to the tree
+    wxTreeItemId AddRoot(const wxString& text,
+                         int image = -1, int selectedImage = -1,
+                         wxPyTreeItemData *data = NULL);
+
+    // insert a new item in as the first child of the parent
+    wxTreeItemId PrependItem(const wxTreeItemId& parent,
+                             const wxString& text,
+                             int image = -1, int selectedImage = -1,
+                             wxPyTreeItemData *data = NULL);
+
+    // insert a new item after a given one
+    wxTreeItemId InsertItem(const wxTreeItemId& parent,
+                            const wxTreeItemId& idPrevious,
+                            const wxString& text,
+                            int image = -1, int selectedImage = -1,
+                            wxPyTreeItemData *data = NULL);
+
+    // insert a new item before the one with the given index
+    %name(InsertItemBefore)
+        wxTreeItemId InsertItem(const wxTreeItemId& parent,
+                                size_t index,
+                                const wxString& text,
+                                int image = -1, int selectedImage = -1,
+                                wxPyTreeItemData *data = NULL);
+
+    // insert a new item in as the last child of the parent
+    wxTreeItemId AppendItem(const wxTreeItemId& parent,
+                            const wxString& text,
+                            int image = -1, int selectedImage = -1,
+                            wxPyTreeItemData *data = NULL);
+
+    // delete this item and associated data if any
+    void Delete(const wxTreeItemId& item);
+
+    // delete all children (but don't delete the item itself)
+    // NB: this won't send wxEVT_COMMAND_TREE_ITEM_DELETED events
+    void DeleteChildren(const wxTreeItemId& item);
+
+    // delete all items from the tree
+    // NB: this won't send wxEVT_COMMAND_TREE_ITEM_DELETED events
+    void DeleteAllItems();
+
+    // expand this item
+    void Expand(const wxTreeItemId& item);
+
+    // expand this item and all subitems recursively
+    void ExpandAll(const wxTreeItemId& item);
+
+    // collapse the item without removing its children
+    void Collapse(const wxTreeItemId& item);
+
+    // collapse the item and remove all children
+    void CollapseAndReset(const wxTreeItemId& item);
+
+    // toggles the current state
+    void Toggle(const wxTreeItemId& item);
+
+    // remove the selection from currently selected item (if any)
+    void Unselect();
+    void UnselectAll();
+
+    // select this item
+    void SelectItem(const wxTreeItemId& item, bool unselect_others=TRUE,
+		    bool extended_select=FALSE);
+
+    // make sure this item is visible (expanding the parent item and/or
+    // scrolling to this item if necessary)
+    void EnsureVisible(const wxTreeItemId& item);
+
+    // scroll to this item (but don't expand its parent)
+    void ScrollTo(const wxTreeItemId& item);
+
+    // Returns wxTreeItemId, flags, and column
+    wxTreeItemId HitTest(const wxPoint& point, int& OUTPUT, int& OUTPUT);
+
+    %addmethods {
+        // get the bounding rectangle of the item (or of its label only)
+        PyObject* GetBoundingRect(const wxTreeItemId& item, bool textOnly = FALSE) {
+            wxRect rect;
+            if (self->GetBoundingRect(item, rect, textOnly)) {
+                wxPyBeginBlockThreads();
+                wxRect* r = new wxRect(rect);
+                PyObject* val = wxPyConstructObject((void*)r, wxT("wxRect"), 1);
+                wxPyEndBlockThreads();
+                return val;
+            }
+            else {
+                Py_INCREF(Py_None);
+                return Py_None;
+            }
+        }
+    }
+
+
+    // Start editing the item label: this (temporarily) replaces the item
+    // with a one line edit control. The item will be selected if it hadn't
+    // been before.
+    void EditLabel( const wxTreeItemId& item );
+    void Edit( const wxTreeItemId& item );
+
+    // sort the children of this item using OnCompareItems
+    void SortChildren(const wxTreeItemId& item);
+
+    // get the selected item image
+    int GetItemSelectedImage(const wxTreeItemId& item) const;
+
+    // set the selected item image
+    void SetItemSelectedImage(const wxTreeItemId& item, int image);
+
+
+    wxWindow* GetHeaderWindow() const;
+    wxWindow* GetMainWindow() const;
+
+%pragma(python) addtoclass = "
+    # Redefine some methods that SWIG gets a bit confused on...
+    def GetFirstChild(self, *_args, **_kwargs):
+        val1,val2 = gizmosc.wxTreeListCtrl_GetFirstChild(self, *_args, **_kwargs)
+        val1 = wxTreeItemIdPtr(val1)
+        val1.thisown = 1
+        return (val1,val2)
+    def GetNextChild(self, *_args, **_kwargs):
+        val1,val2 = gizmosc.wxTreeListCtrl_GetNextChild(self, *_args, **_kwargs)
+        val1 = wxTreeItemIdPtr(val1)
+        val1.thisown = 1
+        return (val1,val2)
+    def HitTest(self, *_args, **_kwargs):
+        val1, val2, val3 = gizmosc.wxTreeListCtrl_HitTest(self, *_args, **_kwargs)
+        val1 = wxTreeItemIdPtr(val1)
+        val1.thisown = 1
+        return (val1, val2, val3)
+"
+};
+
+
+
+
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------
 
@@ -399,6 +923,7 @@ public:
     wxClassInfo::InitializeClasses();
 
     wxPyPtrTypeMap_Add("wxTreeCompanionWindow", "wxPyTreeCompanionWindow");
+    wxPyPtrTypeMap_Add("wxTreeListCtrl", "wxPyTreeListCtrl");
 %}
 
 

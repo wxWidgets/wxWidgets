@@ -130,12 +130,12 @@ class _MyStatusBar(wxStatusBar):
 
         self.SetStatusText("",0)
 
-        ID = NewId()
+        ID = wxNewId()
         self.button1 = wxButton(self,ID,"Dismiss",
                                style=wxTAB_TRAVERSAL)
         EVT_BUTTON(self,ID,self.OnButton1)
 
-        ID = NewId()
+        ID = wxNewId()
         if not useopenbutton:
             self.button2 = wxButton(self,ID,"Close File",
                                    style=wxTAB_TRAVERSAL)

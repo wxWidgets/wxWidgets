@@ -222,6 +222,7 @@ enum {
     wxFRAME_FLOAT_ON_PARENT,
     wxFRAME_NO_WINDOW_MENU,
     wxFRAME_NO_TASKBAR,
+    wxFRAME_SHAPED,
 
     wxED_CLIENT_MARGIN,
     wxED_BUTTONS_BOTTOM,
@@ -492,6 +493,7 @@ enum {
     wxEXPAND,
 
     wxNB_FIXEDWIDTH,
+    wxNB_TOP,
     wxNB_LEFT,
     wxNB_RIGHT,
     wxNB_BOTTOM,

@@ -4,7 +4,7 @@
 #
 # Author:       Lorne White (email: lorne.white@telusplanet.net)
 #
-# Version       0.5 
+# Version       0.5
 # Date:         Feb 26, 2001
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------
@@ -20,11 +20,11 @@ def runTest(frame, nb, log):
     initial_dir = os.path.join(dir, 'bitmaps')  # set the initial directory for the demo bitmaps
     win = ImageDialog(frame, initial_dir)   # open the image browser dialog
     win.Centre()
-    if win.ShowModal() == wxID_OK:      
+    if win.ShowModal() == wxID_OK:
         log.WriteText("You Selected File: " + win.GetFile())        # show the selected file
     else:
         log.WriteText("You pressed Cancel\n")
-            
+
 #---------------------------------------------------------------------------
 
 
@@ -38,3 +38,12 @@ def runTest(frame, nb, log):
 
 overview = """\
 """
+
+
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
+

@@ -112,930 +112,1019 @@ def EVT_STC_DO_DROP(win, id, func):
 def EVT_STC_ZOOM(win, id, func):
     win.Connect(id, -1, wxEVT_STC_ZOOM, func)
 
+def EVT_STC_HOTSPOT_CLICK(win, id, func):
+    win.Connect(id, -1, wxEVT_STC_HOTSPOT_CLICK, func)
+
+def EVT_STC_HOTSPOT_DCLICK(win, id, func):
+    win.Connect(id, -1, wxEVT_STC_HOTSPOT_DCLICK, func)
+
+def EVT_STC_CALLTIP_CLICK(win, id, func):
+    win.Connect(id, -1, wxEVT_STC_CALLTIP_CLICK, func)
 
 class wxStyledTextCtrlPtr(wxControlPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
     def AddText(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_AddText,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_AddText(self, *_args, **_kwargs)
         return val
     def AddStyledText(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_AddStyledText,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_AddStyledText(self, *_args, **_kwargs)
         return val
     def InsertText(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_InsertText,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_InsertText(self, *_args, **_kwargs)
         return val
     def ClearAll(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_ClearAll,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_ClearAll(self, *_args, **_kwargs)
         return val
     def ClearDocumentStyle(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_ClearDocumentStyle,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_ClearDocumentStyle(self, *_args, **_kwargs)
         return val
     def GetLength(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetLength,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetLength(self, *_args, **_kwargs)
         return val
     def GetCharAt(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetCharAt,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetCharAt(self, *_args, **_kwargs)
         return val
     def GetCurrentPos(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetCurrentPos,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetCurrentPos(self, *_args, **_kwargs)
         return val
     def GetAnchor(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetAnchor,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetAnchor(self, *_args, **_kwargs)
         return val
     def GetStyleAt(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetStyleAt,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetStyleAt(self, *_args, **_kwargs)
         return val
     def Redo(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_Redo,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_Redo(self, *_args, **_kwargs)
         return val
     def SetUndoCollection(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetUndoCollection,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetUndoCollection(self, *_args, **_kwargs)
         return val
     def SelectAll(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SelectAll,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SelectAll(self, *_args, **_kwargs)
         return val
     def SetSavePoint(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetSavePoint,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetSavePoint(self, *_args, **_kwargs)
         return val
     def GetStyledText(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetStyledText,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetStyledText(self, *_args, **_kwargs)
         return val
     def CanRedo(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_CanRedo,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_CanRedo(self, *_args, **_kwargs)
         return val
     def MarkerLineFromHandle(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_MarkerLineFromHandle,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_MarkerLineFromHandle(self, *_args, **_kwargs)
         return val
     def MarkerDeleteHandle(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_MarkerDeleteHandle,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_MarkerDeleteHandle(self, *_args, **_kwargs)
         return val
     def GetUndoCollection(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetUndoCollection,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetUndoCollection(self, *_args, **_kwargs)
         return val
     def GetViewWhiteSpace(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetViewWhiteSpace,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetViewWhiteSpace(self, *_args, **_kwargs)
         return val
     def SetViewWhiteSpace(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetViewWhiteSpace,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetViewWhiteSpace(self, *_args, **_kwargs)
         return val
     def PositionFromPoint(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_PositionFromPoint,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_PositionFromPoint(self, *_args, **_kwargs)
         return val
     def PositionFromPointClose(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_PositionFromPointClose,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_PositionFromPointClose(self, *_args, **_kwargs)
         return val
     def GotoLine(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GotoLine,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GotoLine(self, *_args, **_kwargs)
         return val
     def GotoPos(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GotoPos,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GotoPos(self, *_args, **_kwargs)
         return val
     def SetAnchor(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetAnchor,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetAnchor(self, *_args, **_kwargs)
         return val
     def GetCurLine(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetCurLine,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetCurLine(self, *_args, **_kwargs)
         return val
     def GetEndStyled(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetEndStyled,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetEndStyled(self, *_args, **_kwargs)
         return val
     def ConvertEOLs(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_ConvertEOLs,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_ConvertEOLs(self, *_args, **_kwargs)
         return val
     def GetEOLMode(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetEOLMode,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetEOLMode(self, *_args, **_kwargs)
         return val
     def SetEOLMode(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetEOLMode,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetEOLMode(self, *_args, **_kwargs)
         return val
     def StartStyling(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_StartStyling,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_StartStyling(self, *_args, **_kwargs)
         return val
     def SetStyling(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetStyling,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetStyling(self, *_args, **_kwargs)
         return val
     def GetBufferedDraw(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetBufferedDraw,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetBufferedDraw(self, *_args, **_kwargs)
         return val
     def SetBufferedDraw(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetBufferedDraw,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetBufferedDraw(self, *_args, **_kwargs)
         return val
     def SetTabWidth(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetTabWidth,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetTabWidth(self, *_args, **_kwargs)
         return val
     def GetTabWidth(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetTabWidth,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetTabWidth(self, *_args, **_kwargs)
         return val
     def SetCodePage(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetCodePage,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetCodePage(self, *_args, **_kwargs)
         return val
     def MarkerDefine(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_MarkerDefine,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_MarkerDefine(self, *_args, **_kwargs)
         return val
     def MarkerSetForeground(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_MarkerSetForeground,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_MarkerSetForeground(self, *_args, **_kwargs)
         return val
     def MarkerSetBackground(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_MarkerSetBackground,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_MarkerSetBackground(self, *_args, **_kwargs)
         return val
     def MarkerAdd(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_MarkerAdd,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_MarkerAdd(self, *_args, **_kwargs)
         return val
     def MarkerDelete(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_MarkerDelete,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_MarkerDelete(self, *_args, **_kwargs)
         return val
     def MarkerDeleteAll(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_MarkerDeleteAll,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_MarkerDeleteAll(self, *_args, **_kwargs)
         return val
     def MarkerGet(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_MarkerGet,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_MarkerGet(self, *_args, **_kwargs)
         return val
     def MarkerNext(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_MarkerNext,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_MarkerNext(self, *_args, **_kwargs)
         return val
     def MarkerPrevious(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_MarkerPrevious,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_MarkerPrevious(self, *_args, **_kwargs)
+        return val
+    def MarkerDefineBitmap(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_MarkerDefineBitmap(self, *_args, **_kwargs)
         return val
     def SetMarginType(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetMarginType,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetMarginType(self, *_args, **_kwargs)
         return val
     def GetMarginType(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetMarginType,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetMarginType(self, *_args, **_kwargs)
         return val
     def SetMarginWidth(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetMarginWidth,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetMarginWidth(self, *_args, **_kwargs)
         return val
     def GetMarginWidth(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetMarginWidth,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetMarginWidth(self, *_args, **_kwargs)
         return val
     def SetMarginMask(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetMarginMask,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetMarginMask(self, *_args, **_kwargs)
         return val
     def GetMarginMask(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetMarginMask,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetMarginMask(self, *_args, **_kwargs)
         return val
     def SetMarginSensitive(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetMarginSensitive,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetMarginSensitive(self, *_args, **_kwargs)
         return val
     def GetMarginSensitive(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetMarginSensitive,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetMarginSensitive(self, *_args, **_kwargs)
         return val
     def StyleClearAll(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_StyleClearAll,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_StyleClearAll(self, *_args, **_kwargs)
         return val
     def StyleSetForeground(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_StyleSetForeground,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_StyleSetForeground(self, *_args, **_kwargs)
         return val
     def StyleSetBackground(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_StyleSetBackground,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_StyleSetBackground(self, *_args, **_kwargs)
         return val
     def StyleSetBold(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_StyleSetBold,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_StyleSetBold(self, *_args, **_kwargs)
         return val
     def StyleSetItalic(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_StyleSetItalic,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_StyleSetItalic(self, *_args, **_kwargs)
         return val
     def StyleSetSize(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_StyleSetSize,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_StyleSetSize(self, *_args, **_kwargs)
         return val
     def StyleSetFaceName(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_StyleSetFaceName,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_StyleSetFaceName(self, *_args, **_kwargs)
         return val
     def StyleSetEOLFilled(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_StyleSetEOLFilled,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_StyleSetEOLFilled(self, *_args, **_kwargs)
         return val
     def StyleResetDefault(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_StyleResetDefault,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_StyleResetDefault(self, *_args, **_kwargs)
         return val
     def StyleSetUnderline(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_StyleSetUnderline,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_StyleSetUnderline(self, *_args, **_kwargs)
         return val
     def StyleSetCase(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_StyleSetCase,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_StyleSetCase(self, *_args, **_kwargs)
         return val
     def StyleSetCharacterSet(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_StyleSetCharacterSet,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_StyleSetCharacterSet(self, *_args, **_kwargs)
+        return val
+    def StyleSetHotSpot(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_StyleSetHotSpot(self, *_args, **_kwargs)
         return val
     def SetSelForeground(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetSelForeground,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetSelForeground(self, *_args, **_kwargs)
         return val
     def SetSelBackground(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetSelBackground,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetSelBackground(self, *_args, **_kwargs)
         return val
     def SetCaretForeground(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetCaretForeground,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetCaretForeground(self, *_args, **_kwargs)
         return val
     def CmdKeyAssign(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_CmdKeyAssign,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_CmdKeyAssign(self, *_args, **_kwargs)
         return val
     def CmdKeyClear(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_CmdKeyClear,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_CmdKeyClear(self, *_args, **_kwargs)
         return val
     def CmdKeyClearAll(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_CmdKeyClearAll,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_CmdKeyClearAll(self, *_args, **_kwargs)
         return val
     def SetStyleBytes(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetStyleBytes,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetStyleBytes(self, *_args, **_kwargs)
         return val
     def StyleSetVisible(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_StyleSetVisible,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_StyleSetVisible(self, *_args, **_kwargs)
         return val
     def GetCaretPeriod(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetCaretPeriod,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetCaretPeriod(self, *_args, **_kwargs)
         return val
     def SetCaretPeriod(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetCaretPeriod,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetCaretPeriod(self, *_args, **_kwargs)
         return val
     def SetWordChars(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetWordChars,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetWordChars(self, *_args, **_kwargs)
         return val
     def BeginUndoAction(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_BeginUndoAction,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_BeginUndoAction(self, *_args, **_kwargs)
         return val
     def EndUndoAction(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_EndUndoAction,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_EndUndoAction(self, *_args, **_kwargs)
         return val
     def IndicatorSetStyle(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_IndicatorSetStyle,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_IndicatorSetStyle(self, *_args, **_kwargs)
         return val
     def IndicatorGetStyle(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_IndicatorGetStyle,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_IndicatorGetStyle(self, *_args, **_kwargs)
         return val
     def IndicatorSetForeground(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_IndicatorSetForeground,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_IndicatorSetForeground(self, *_args, **_kwargs)
         return val
     def IndicatorGetForeground(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_IndicatorGetForeground,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_IndicatorGetForeground(self, *_args, **_kwargs)
         if val: val = wxColourPtr(val) ; val.thisown = 1
         return val
     def SetWhitespaceForeground(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetWhitespaceForeground,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetWhitespaceForeground(self, *_args, **_kwargs)
         return val
     def SetWhitespaceBackground(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetWhitespaceBackground,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetWhitespaceBackground(self, *_args, **_kwargs)
         return val
     def SetStyleBits(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetStyleBits,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetStyleBits(self, *_args, **_kwargs)
         return val
     def GetStyleBits(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetStyleBits,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetStyleBits(self, *_args, **_kwargs)
         return val
     def SetLineState(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetLineState,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetLineState(self, *_args, **_kwargs)
         return val
     def GetLineState(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetLineState,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetLineState(self, *_args, **_kwargs)
         return val
     def GetMaxLineState(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetMaxLineState,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetMaxLineState(self, *_args, **_kwargs)
         return val
     def GetCaretLineVisible(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetCaretLineVisible,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetCaretLineVisible(self, *_args, **_kwargs)
         return val
     def SetCaretLineVisible(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetCaretLineVisible,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetCaretLineVisible(self, *_args, **_kwargs)
         return val
     def GetCaretLineBack(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetCaretLineBack,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetCaretLineBack(self, *_args, **_kwargs)
         if val: val = wxColourPtr(val) ; val.thisown = 1
         return val
     def SetCaretLineBack(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetCaretLineBack,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetCaretLineBack(self, *_args, **_kwargs)
         return val
     def StyleSetChangeable(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_StyleSetChangeable,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_StyleSetChangeable(self, *_args, **_kwargs)
         return val
     def AutoCompShow(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_AutoCompShow,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_AutoCompShow(self, *_args, **_kwargs)
         return val
     def AutoCompCancel(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_AutoCompCancel,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_AutoCompCancel(self, *_args, **_kwargs)
         return val
     def AutoCompActive(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_AutoCompActive,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_AutoCompActive(self, *_args, **_kwargs)
         return val
     def AutoCompPosStart(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_AutoCompPosStart,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_AutoCompPosStart(self, *_args, **_kwargs)
         return val
     def AutoCompComplete(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_AutoCompComplete,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_AutoCompComplete(self, *_args, **_kwargs)
         return val
     def AutoCompStops(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_AutoCompStops,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_AutoCompStops(self, *_args, **_kwargs)
         return val
     def AutoCompSetSeparator(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_AutoCompSetSeparator,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_AutoCompSetSeparator(self, *_args, **_kwargs)
         return val
     def AutoCompGetSeparator(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_AutoCompGetSeparator,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_AutoCompGetSeparator(self, *_args, **_kwargs)
         return val
     def AutoCompSelect(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_AutoCompSelect,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_AutoCompSelect(self, *_args, **_kwargs)
         return val
     def AutoCompSetCancelAtStart(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_AutoCompSetCancelAtStart,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_AutoCompSetCancelAtStart(self, *_args, **_kwargs)
         return val
     def AutoCompGetCancelAtStart(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_AutoCompGetCancelAtStart,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_AutoCompGetCancelAtStart(self, *_args, **_kwargs)
         return val
     def AutoCompSetFillUps(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_AutoCompSetFillUps,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_AutoCompSetFillUps(self, *_args, **_kwargs)
         return val
     def AutoCompSetChooseSingle(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_AutoCompSetChooseSingle,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_AutoCompSetChooseSingle(self, *_args, **_kwargs)
         return val
     def AutoCompGetChooseSingle(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_AutoCompGetChooseSingle,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_AutoCompGetChooseSingle(self, *_args, **_kwargs)
         return val
     def AutoCompSetIgnoreCase(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_AutoCompSetIgnoreCase,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_AutoCompSetIgnoreCase(self, *_args, **_kwargs)
         return val
     def AutoCompGetIgnoreCase(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_AutoCompGetIgnoreCase,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_AutoCompGetIgnoreCase(self, *_args, **_kwargs)
         return val
     def UserListShow(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_UserListShow,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_UserListShow(self, *_args, **_kwargs)
         return val
     def AutoCompSetAutoHide(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_AutoCompSetAutoHide,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_AutoCompSetAutoHide(self, *_args, **_kwargs)
         return val
     def AutoCompGetAutoHide(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_AutoCompGetAutoHide,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_AutoCompGetAutoHide(self, *_args, **_kwargs)
         return val
     def AutoCompSetDropRestOfWord(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_AutoCompSetDropRestOfWord,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_AutoCompSetDropRestOfWord(self, *_args, **_kwargs)
         return val
     def AutoCompGetDropRestOfWord(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_AutoCompGetDropRestOfWord,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_AutoCompGetDropRestOfWord(self, *_args, **_kwargs)
+        return val
+    def RegisterImage(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_RegisterImage(self, *_args, **_kwargs)
+        return val
+    def ClearRegisteredImages(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_ClearRegisteredImages(self, *_args, **_kwargs)
+        return val
+    def AutoCompGetTypeSeparator(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_AutoCompGetTypeSeparator(self, *_args, **_kwargs)
+        return val
+    def AutoCompSetTypeSeparator(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_AutoCompSetTypeSeparator(self, *_args, **_kwargs)
         return val
     def SetIndent(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetIndent,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetIndent(self, *_args, **_kwargs)
         return val
     def GetIndent(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetIndent,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetIndent(self, *_args, **_kwargs)
         return val
     def SetUseTabs(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetUseTabs,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetUseTabs(self, *_args, **_kwargs)
         return val
     def GetUseTabs(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetUseTabs,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetUseTabs(self, *_args, **_kwargs)
         return val
     def SetLineIndentation(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetLineIndentation,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetLineIndentation(self, *_args, **_kwargs)
         return val
     def GetLineIndentation(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetLineIndentation,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetLineIndentation(self, *_args, **_kwargs)
         return val
     def GetLineIndentPosition(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetLineIndentPosition,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetLineIndentPosition(self, *_args, **_kwargs)
         return val
     def GetColumn(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetColumn,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetColumn(self, *_args, **_kwargs)
         return val
     def SetUseHorizontalScrollBar(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetUseHorizontalScrollBar,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetUseHorizontalScrollBar(self, *_args, **_kwargs)
         return val
     def GetUseHorizontalScrollBar(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetUseHorizontalScrollBar,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetUseHorizontalScrollBar(self, *_args, **_kwargs)
         return val
     def SetIndentationGuides(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetIndentationGuides,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetIndentationGuides(self, *_args, **_kwargs)
         return val
     def GetIndentationGuides(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetIndentationGuides,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetIndentationGuides(self, *_args, **_kwargs)
         return val
     def SetHighlightGuide(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetHighlightGuide,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetHighlightGuide(self, *_args, **_kwargs)
         return val
     def GetHighlightGuide(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetHighlightGuide,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetHighlightGuide(self, *_args, **_kwargs)
         return val
     def GetLineEndPosition(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetLineEndPosition,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetLineEndPosition(self, *_args, **_kwargs)
         return val
     def GetCodePage(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetCodePage,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetCodePage(self, *_args, **_kwargs)
         return val
     def GetCaretForeground(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetCaretForeground,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetCaretForeground(self, *_args, **_kwargs)
         if val: val = wxColourPtr(val) ; val.thisown = 1
         return val
     def GetReadOnly(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetReadOnly,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetReadOnly(self, *_args, **_kwargs)
         return val
     def SetCurrentPos(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetCurrentPos,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetCurrentPos(self, *_args, **_kwargs)
         return val
     def SetSelectionStart(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetSelectionStart,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetSelectionStart(self, *_args, **_kwargs)
         return val
     def GetSelectionStart(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetSelectionStart,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetSelectionStart(self, *_args, **_kwargs)
         return val
     def SetSelectionEnd(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetSelectionEnd,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetSelectionEnd(self, *_args, **_kwargs)
         return val
     def GetSelectionEnd(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetSelectionEnd,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetSelectionEnd(self, *_args, **_kwargs)
         return val
     def SetPrintMagnification(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetPrintMagnification,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetPrintMagnification(self, *_args, **_kwargs)
         return val
     def GetPrintMagnification(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetPrintMagnification,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetPrintMagnification(self, *_args, **_kwargs)
         return val
     def SetPrintColourMode(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetPrintColourMode,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetPrintColourMode(self, *_args, **_kwargs)
         return val
     def GetPrintColourMode(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetPrintColourMode,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetPrintColourMode(self, *_args, **_kwargs)
         return val
     def FindText(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_FindText,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_FindText(self, *_args, **_kwargs)
         return val
     def FormatRange(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_FormatRange,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_FormatRange(self, *_args, **_kwargs)
         return val
     def GetFirstVisibleLine(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetFirstVisibleLine,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetFirstVisibleLine(self, *_args, **_kwargs)
         return val
     def GetLine(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetLine,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetLine(self, *_args, **_kwargs)
         return val
     def GetLineCount(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetLineCount,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetLineCount(self, *_args, **_kwargs)
         return val
     def SetMarginLeft(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetMarginLeft,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetMarginLeft(self, *_args, **_kwargs)
         return val
     def GetMarginLeft(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetMarginLeft,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetMarginLeft(self, *_args, **_kwargs)
         return val
     def SetMarginRight(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetMarginRight,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetMarginRight(self, *_args, **_kwargs)
         return val
     def GetMarginRight(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetMarginRight,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetMarginRight(self, *_args, **_kwargs)
         return val
     def GetModify(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetModify,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetModify(self, *_args, **_kwargs)
         return val
     def SetSelection(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetSelection,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetSelection(self, *_args, **_kwargs)
         return val
     def GetSelectedText(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetSelectedText,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetSelectedText(self, *_args, **_kwargs)
         return val
     def GetTextRange(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetTextRange,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetTextRange(self, *_args, **_kwargs)
         return val
     def HideSelection(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_HideSelection,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_HideSelection(self, *_args, **_kwargs)
         return val
     def LineFromPosition(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_LineFromPosition,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_LineFromPosition(self, *_args, **_kwargs)
         return val
     def PositionFromLine(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_PositionFromLine,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_PositionFromLine(self, *_args, **_kwargs)
         return val
     def LineScroll(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_LineScroll,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_LineScroll(self, *_args, **_kwargs)
         return val
     def EnsureCaretVisible(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_EnsureCaretVisible,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_EnsureCaretVisible(self, *_args, **_kwargs)
         return val
     def ReplaceSelection(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_ReplaceSelection,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_ReplaceSelection(self, *_args, **_kwargs)
         return val
     def SetReadOnly(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetReadOnly,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetReadOnly(self, *_args, **_kwargs)
         return val
     def CanPaste(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_CanPaste,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_CanPaste(self, *_args, **_kwargs)
         return val
     def CanUndo(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_CanUndo,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_CanUndo(self, *_args, **_kwargs)
         return val
     def EmptyUndoBuffer(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_EmptyUndoBuffer,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_EmptyUndoBuffer(self, *_args, **_kwargs)
         return val
     def Undo(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_Undo,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_Undo(self, *_args, **_kwargs)
         return val
     def Cut(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_Cut,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_Cut(self, *_args, **_kwargs)
         return val
     def Copy(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_Copy,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_Copy(self, *_args, **_kwargs)
         return val
     def Paste(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_Paste,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_Paste(self, *_args, **_kwargs)
         return val
     def Clear(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_Clear,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_Clear(self, *_args, **_kwargs)
         return val
     def SetText(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetText,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetText(self, *_args, **_kwargs)
         return val
     def GetText(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetText,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetText(self, *_args, **_kwargs)
         return val
     def GetTextLength(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetTextLength,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetTextLength(self, *_args, **_kwargs)
         return val
     def SetOvertype(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetOvertype,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetOvertype(self, *_args, **_kwargs)
         return val
     def GetOvertype(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetOvertype,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetOvertype(self, *_args, **_kwargs)
         return val
     def SetCaretWidth(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetCaretWidth,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetCaretWidth(self, *_args, **_kwargs)
         return val
     def GetCaretWidth(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetCaretWidth,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetCaretWidth(self, *_args, **_kwargs)
         return val
     def SetTargetStart(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetTargetStart,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetTargetStart(self, *_args, **_kwargs)
         return val
     def GetTargetStart(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetTargetStart,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetTargetStart(self, *_args, **_kwargs)
         return val
     def SetTargetEnd(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetTargetEnd,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetTargetEnd(self, *_args, **_kwargs)
         return val
     def GetTargetEnd(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetTargetEnd,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetTargetEnd(self, *_args, **_kwargs)
         return val
     def ReplaceTarget(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_ReplaceTarget,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_ReplaceTarget(self, *_args, **_kwargs)
         return val
     def ReplaceTargetRE(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_ReplaceTargetRE,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_ReplaceTargetRE(self, *_args, **_kwargs)
         return val
     def SearchInTarget(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SearchInTarget,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SearchInTarget(self, *_args, **_kwargs)
         return val
     def SetSearchFlags(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetSearchFlags,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetSearchFlags(self, *_args, **_kwargs)
         return val
     def GetSearchFlags(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetSearchFlags,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetSearchFlags(self, *_args, **_kwargs)
         return val
     def CallTipShow(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_CallTipShow,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_CallTipShow(self, *_args, **_kwargs)
         return val
     def CallTipCancel(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_CallTipCancel,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_CallTipCancel(self, *_args, **_kwargs)
         return val
     def CallTipActive(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_CallTipActive,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_CallTipActive(self, *_args, **_kwargs)
         return val
     def CallTipPosAtStart(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_CallTipPosAtStart,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_CallTipPosAtStart(self, *_args, **_kwargs)
         return val
     def CallTipSetHighlight(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_CallTipSetHighlight,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_CallTipSetHighlight(self, *_args, **_kwargs)
         return val
     def CallTipSetBackground(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_CallTipSetBackground,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_CallTipSetBackground(self, *_args, **_kwargs)
+        return val
+    def CallTipSetForeground(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_CallTipSetForeground(self, *_args, **_kwargs)
+        return val
+    def CallTipSetForegroundHighlight(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_CallTipSetForegroundHighlight(self, *_args, **_kwargs)
         return val
     def VisibleFromDocLine(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_VisibleFromDocLine,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_VisibleFromDocLine(self, *_args, **_kwargs)
         return val
     def DocLineFromVisible(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_DocLineFromVisible,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_DocLineFromVisible(self, *_args, **_kwargs)
         return val
     def SetFoldLevel(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetFoldLevel,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetFoldLevel(self, *_args, **_kwargs)
         return val
     def GetFoldLevel(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetFoldLevel,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetFoldLevel(self, *_args, **_kwargs)
         return val
     def GetLastChild(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetLastChild,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetLastChild(self, *_args, **_kwargs)
         return val
     def GetFoldParent(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetFoldParent,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetFoldParent(self, *_args, **_kwargs)
         return val
     def ShowLines(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_ShowLines,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_ShowLines(self, *_args, **_kwargs)
         return val
     def HideLines(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_HideLines,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_HideLines(self, *_args, **_kwargs)
         return val
     def GetLineVisible(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetLineVisible,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetLineVisible(self, *_args, **_kwargs)
         return val
     def SetFoldExpanded(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetFoldExpanded,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetFoldExpanded(self, *_args, **_kwargs)
         return val
     def GetFoldExpanded(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetFoldExpanded,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetFoldExpanded(self, *_args, **_kwargs)
         return val
     def ToggleFold(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_ToggleFold,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_ToggleFold(self, *_args, **_kwargs)
         return val
     def EnsureVisible(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_EnsureVisible,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_EnsureVisible(self, *_args, **_kwargs)
         return val
     def SetFoldFlags(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetFoldFlags,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetFoldFlags(self, *_args, **_kwargs)
         return val
     def EnsureVisibleEnforcePolicy(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_EnsureVisibleEnforcePolicy,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_EnsureVisibleEnforcePolicy(self, *_args, **_kwargs)
         return val
     def SetTabIndents(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetTabIndents,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetTabIndents(self, *_args, **_kwargs)
         return val
     def GetTabIndents(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetTabIndents,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetTabIndents(self, *_args, **_kwargs)
         return val
     def SetBackSpaceUnIndents(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetBackSpaceUnIndents,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetBackSpaceUnIndents(self, *_args, **_kwargs)
         return val
     def GetBackSpaceUnIndents(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetBackSpaceUnIndents,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetBackSpaceUnIndents(self, *_args, **_kwargs)
         return val
     def SetMouseDwellTime(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetMouseDwellTime,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetMouseDwellTime(self, *_args, **_kwargs)
         return val
     def GetMouseDwellTime(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetMouseDwellTime,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetMouseDwellTime(self, *_args, **_kwargs)
         return val
     def WordStartPosition(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_WordStartPosition,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_WordStartPosition(self, *_args, **_kwargs)
         return val
     def WordEndPosition(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_WordEndPosition,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_WordEndPosition(self, *_args, **_kwargs)
         return val
     def SetWrapMode(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetWrapMode,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetWrapMode(self, *_args, **_kwargs)
         return val
     def GetWrapMode(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetWrapMode,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetWrapMode(self, *_args, **_kwargs)
         return val
     def SetLayoutCache(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetLayoutCache,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetLayoutCache(self, *_args, **_kwargs)
         return val
     def GetLayoutCache(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetLayoutCache,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetLayoutCache(self, *_args, **_kwargs)
         return val
     def SetScrollWidth(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetScrollWidth,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetScrollWidth(self, *_args, **_kwargs)
         return val
     def GetScrollWidth(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetScrollWidth,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetScrollWidth(self, *_args, **_kwargs)
         return val
     def TextWidth(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_TextWidth,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_TextWidth(self, *_args, **_kwargs)
         return val
     def SetEndAtLastLine(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetEndAtLastLine,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetEndAtLastLine(self, *_args, **_kwargs)
         return val
     def GetEndAtLastLine(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetEndAtLastLine,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetEndAtLastLine(self, *_args, **_kwargs)
         return val
     def TextHeight(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_TextHeight,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_TextHeight(self, *_args, **_kwargs)
+        return val
+    def SetUseVerticalScrollBar(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_SetUseVerticalScrollBar(self, *_args, **_kwargs)
+        return val
+    def GetUseVerticalScrollBar(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_GetUseVerticalScrollBar(self, *_args, **_kwargs)
+        return val
+    def AppendText(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_AppendText(self, *_args, **_kwargs)
+        return val
+    def GetTwoPhaseDraw(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_GetTwoPhaseDraw(self, *_args, **_kwargs)
+        return val
+    def SetTwoPhaseDraw(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_SetTwoPhaseDraw(self, *_args, **_kwargs)
+        return val
+    def TargetFromSelection(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_TargetFromSelection(self, *_args, **_kwargs)
+        return val
+    def LinesJoin(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_LinesJoin(self, *_args, **_kwargs)
+        return val
+    def LinesSplit(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_LinesSplit(self, *_args, **_kwargs)
+        return val
+    def SetFoldMarginColour(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_SetFoldMarginColour(self, *_args, **_kwargs)
+        return val
+    def SetFoldMarginHiColour(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_SetFoldMarginHiColour(self, *_args, **_kwargs)
+        return val
+    def LineDuplicate(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_LineDuplicate(self, *_args, **_kwargs)
         return val
     def HomeDisplay(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_HomeDisplay,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_HomeDisplay(self, *_args, **_kwargs)
         return val
     def HomeDisplayExtend(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_HomeDisplayExtend,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_HomeDisplayExtend(self, *_args, **_kwargs)
         return val
     def LineEndDisplay(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_LineEndDisplay,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_LineEndDisplay(self, *_args, **_kwargs)
         return val
     def LineEndDisplayExtend(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_LineEndDisplayExtend,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_LineEndDisplayExtend(self, *_args, **_kwargs)
         return val
     def MoveCaretInsideView(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_MoveCaretInsideView,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_MoveCaretInsideView(self, *_args, **_kwargs)
         return val
     def LineLength(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_LineLength,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_LineLength(self, *_args, **_kwargs)
         return val
     def BraceHighlight(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_BraceHighlight,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_BraceHighlight(self, *_args, **_kwargs)
         return val
     def BraceBadLight(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_BraceBadLight,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_BraceBadLight(self, *_args, **_kwargs)
         return val
     def BraceMatch(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_BraceMatch,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_BraceMatch(self, *_args, **_kwargs)
         return val
     def GetViewEOL(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetViewEOL,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetViewEOL(self, *_args, **_kwargs)
         return val
     def SetViewEOL(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetViewEOL,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetViewEOL(self, *_args, **_kwargs)
         return val
     def GetDocPointer(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetDocPointer,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetDocPointer(self, *_args, **_kwargs)
         return val
     def SetDocPointer(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetDocPointer,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetDocPointer(self, *_args, **_kwargs)
         return val
     def SetModEventMask(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetModEventMask,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetModEventMask(self, *_args, **_kwargs)
         return val
     def GetEdgeColumn(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetEdgeColumn,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetEdgeColumn(self, *_args, **_kwargs)
         return val
     def SetEdgeColumn(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetEdgeColumn,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetEdgeColumn(self, *_args, **_kwargs)
         return val
     def GetEdgeMode(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetEdgeMode,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetEdgeMode(self, *_args, **_kwargs)
         return val
     def SetEdgeMode(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetEdgeMode,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetEdgeMode(self, *_args, **_kwargs)
         return val
     def GetEdgeColour(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetEdgeColour,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetEdgeColour(self, *_args, **_kwargs)
         if val: val = wxColourPtr(val) ; val.thisown = 1
         return val
     def SetEdgeColour(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetEdgeColour,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetEdgeColour(self, *_args, **_kwargs)
         return val
     def SearchAnchor(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SearchAnchor,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SearchAnchor(self, *_args, **_kwargs)
         return val
     def SearchNext(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SearchNext,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SearchNext(self, *_args, **_kwargs)
         return val
     def SearchPrev(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SearchPrev,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SearchPrev(self, *_args, **_kwargs)
         return val
     def LinesOnScreen(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_LinesOnScreen,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_LinesOnScreen(self, *_args, **_kwargs)
         return val
     def UsePopUp(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_UsePopUp,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_UsePopUp(self, *_args, **_kwargs)
         return val
     def SelectionIsRectangle(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SelectionIsRectangle,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SelectionIsRectangle(self, *_args, **_kwargs)
         return val
     def SetZoom(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetZoom,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetZoom(self, *_args, **_kwargs)
         return val
     def GetZoom(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetZoom,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetZoom(self, *_args, **_kwargs)
         return val
     def CreateDocument(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_CreateDocument,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_CreateDocument(self, *_args, **_kwargs)
         return val
     def AddRefDocument(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_AddRefDocument,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_AddRefDocument(self, *_args, **_kwargs)
         return val
     def ReleaseDocument(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_ReleaseDocument,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_ReleaseDocument(self, *_args, **_kwargs)
         return val
     def GetModEventMask(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetModEventMask,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetModEventMask(self, *_args, **_kwargs)
         return val
     def SetSTCFocus(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetSTCFocus,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetSTCFocus(self, *_args, **_kwargs)
         return val
     def GetSTCFocus(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetSTCFocus,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetSTCFocus(self, *_args, **_kwargs)
         return val
     def SetStatus(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetStatus,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetStatus(self, *_args, **_kwargs)
         return val
     def GetStatus(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetStatus,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetStatus(self, *_args, **_kwargs)
         return val
     def SetMouseDownCaptures(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetMouseDownCaptures,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetMouseDownCaptures(self, *_args, **_kwargs)
         return val
     def GetMouseDownCaptures(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetMouseDownCaptures,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetMouseDownCaptures(self, *_args, **_kwargs)
         return val
     def SetCursor(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetCursor,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetCursor(self, *_args, **_kwargs)
         return val
     def GetCursor(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetCursor,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetCursor(self, *_args, **_kwargs)
         return val
     def SetControlCharSymbol(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetControlCharSymbol,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetControlCharSymbol(self, *_args, **_kwargs)
         return val
     def GetControlCharSymbol(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetControlCharSymbol,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetControlCharSymbol(self, *_args, **_kwargs)
         return val
     def WordPartLeft(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_WordPartLeft,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_WordPartLeft(self, *_args, **_kwargs)
         return val
     def WordPartLeftExtend(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_WordPartLeftExtend,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_WordPartLeftExtend(self, *_args, **_kwargs)
         return val
     def WordPartRight(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_WordPartRight,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_WordPartRight(self, *_args, **_kwargs)
         return val
     def WordPartRightExtend(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_WordPartRightExtend,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_WordPartRightExtend(self, *_args, **_kwargs)
         return val
     def SetVisiblePolicy(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetVisiblePolicy,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetVisiblePolicy(self, *_args, **_kwargs)
         return val
     def DelLineLeft(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_DelLineLeft,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_DelLineLeft(self, *_args, **_kwargs)
         return val
     def DelLineRight(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_DelLineRight,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_DelLineRight(self, *_args, **_kwargs)
         return val
     def SetXOffset(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetXOffset,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetXOffset(self, *_args, **_kwargs)
         return val
     def GetXOffset(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetXOffset,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetXOffset(self, *_args, **_kwargs)
+        return val
+    def ChooseCaretX(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_ChooseCaretX(self, *_args, **_kwargs)
         return val
     def SetXCaretPolicy(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetXCaretPolicy,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetXCaretPolicy(self, *_args, **_kwargs)
         return val
     def SetYCaretPolicy(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetYCaretPolicy,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetYCaretPolicy(self, *_args, **_kwargs)
+        return val
+    def SetPrintWrapMode(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_SetPrintWrapMode(self, *_args, **_kwargs)
+        return val
+    def GetPrintWrapMode(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_GetPrintWrapMode(self, *_args, **_kwargs)
+        return val
+    def SetHotspotActiveForeground(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_SetHotspotActiveForeground(self, *_args, **_kwargs)
+        return val
+    def SetHotspotActiveBackground(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_SetHotspotActiveBackground(self, *_args, **_kwargs)
+        return val
+    def SetHotspotActiveUnderline(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_SetHotspotActiveUnderline(self, *_args, **_kwargs)
         return val
     def StartRecord(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_StartRecord,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_StartRecord(self, *_args, **_kwargs)
         return val
     def StopRecord(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_StopRecord,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_StopRecord(self, *_args, **_kwargs)
         return val
     def SetLexer(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetLexer,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetLexer(self, *_args, **_kwargs)
         return val
     def GetLexer(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetLexer,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetLexer(self, *_args, **_kwargs)
         return val
     def Colourise(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_Colourise,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_Colourise(self, *_args, **_kwargs)
         return val
     def SetProperty(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetProperty,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetProperty(self, *_args, **_kwargs)
         return val
     def SetKeyWords(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetKeyWords,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetKeyWords(self, *_args, **_kwargs)
         return val
     def SetLexerLanguage(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetLexerLanguage,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetLexerLanguage(self, *_args, **_kwargs)
         return val
     def GetCurrentLine(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetCurrentLine,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetCurrentLine(self, *_args, **_kwargs)
         return val
     def StyleSetSpec(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_StyleSetSpec,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_StyleSetSpec(self, *_args, **_kwargs)
         return val
     def StyleSetFont(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_StyleSetFont,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_StyleSetFont(self, *_args, **_kwargs)
         return val
     def StyleSetFontAttr(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_StyleSetFontAttr,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_StyleSetFontAttr(self, *_args, **_kwargs)
         return val
     def CmdKeyExecute(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_CmdKeyExecute,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_CmdKeyExecute(self, *_args, **_kwargs)
         return val
     def SetMargins(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetMargins,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetMargins(self, *_args, **_kwargs)
         return val
     def GetSelection(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetSelection,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetSelection(self, *_args, **_kwargs)
         return val
     def PointFromPosition(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_PointFromPosition,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_PointFromPosition(self, *_args, **_kwargs)
         if val: val = wxPointPtr(val) ; val.thisown = 1
         return val
     def ScrollToLine(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_ScrollToLine,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_ScrollToLine(self, *_args, **_kwargs)
         return val
     def ScrollToColumn(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_ScrollToColumn,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_ScrollToColumn(self, *_args, **_kwargs)
         return val
     def SendMsg(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SendMsg,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SendMsg(self, *_args, **_kwargs)
         return val
     def SetVScrollBar(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetVScrollBar,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetVScrollBar(self, *_args, **_kwargs)
         return val
     def SetHScrollBar(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetHScrollBar,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetHScrollBar(self, *_args, **_kwargs)
         return val
     def GetLastKeydownProcessed(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_GetLastKeydownProcessed,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_GetLastKeydownProcessed(self, *_args, **_kwargs)
         return val
     def SetLastKeydownProcessed(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextCtrl_SetLastKeydownProcessed,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextCtrl_SetLastKeydownProcessed(self, *_args, **_kwargs)
+        return val
+    def SaveFile(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_SaveFile(self, *_args, **_kwargs)
+        return val
+    def LoadFile(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_LoadFile(self, *_args, **_kwargs)
         return val
     def __repr__(self):
-        return "<C wxStyledTextCtrl instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxStyledTextCtrl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxStyledTextCtrl(wxStyledTextCtrlPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(stc_c.new_wxStyledTextCtrl,_args,_kwargs)
+        self.this = stc_c.new_wxStyledTextCtrl(*_args,**_kwargs)
         self.thisown = 1
         self._setOORInfo(self)
 
@@ -1053,143 +1142,143 @@ class wxStyledTextEventPtr(wxCommandEventPtr):
             except:
                 pass
     def SetPosition(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextEvent_SetPosition,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextEvent_SetPosition(self, *_args, **_kwargs)
         return val
     def SetKey(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextEvent_SetKey,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextEvent_SetKey(self, *_args, **_kwargs)
         return val
     def SetModifiers(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextEvent_SetModifiers,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextEvent_SetModifiers(self, *_args, **_kwargs)
         return val
     def SetModificationType(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextEvent_SetModificationType,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextEvent_SetModificationType(self, *_args, **_kwargs)
         return val
     def SetText(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextEvent_SetText,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextEvent_SetText(self, *_args, **_kwargs)
         return val
     def SetLength(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextEvent_SetLength,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextEvent_SetLength(self, *_args, **_kwargs)
         return val
     def SetLinesAdded(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextEvent_SetLinesAdded,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextEvent_SetLinesAdded(self, *_args, **_kwargs)
         return val
     def SetLine(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextEvent_SetLine,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextEvent_SetLine(self, *_args, **_kwargs)
         return val
     def SetFoldLevelNow(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextEvent_SetFoldLevelNow,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextEvent_SetFoldLevelNow(self, *_args, **_kwargs)
         return val
     def SetFoldLevelPrev(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextEvent_SetFoldLevelPrev,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextEvent_SetFoldLevelPrev(self, *_args, **_kwargs)
         return val
     def SetMargin(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextEvent_SetMargin,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextEvent_SetMargin(self, *_args, **_kwargs)
         return val
     def SetMessage(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextEvent_SetMessage,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextEvent_SetMessage(self, *_args, **_kwargs)
         return val
     def SetWParam(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextEvent_SetWParam,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextEvent_SetWParam(self, *_args, **_kwargs)
         return val
     def SetLParam(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextEvent_SetLParam,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextEvent_SetLParam(self, *_args, **_kwargs)
         return val
     def SetListType(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextEvent_SetListType,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextEvent_SetListType(self, *_args, **_kwargs)
         return val
     def SetX(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextEvent_SetX,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextEvent_SetX(self, *_args, **_kwargs)
         return val
     def SetY(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextEvent_SetY,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextEvent_SetY(self, *_args, **_kwargs)
         return val
     def SetDragText(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextEvent_SetDragText,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextEvent_SetDragText(self, *_args, **_kwargs)
         return val
     def SetDragAllowMove(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextEvent_SetDragAllowMove,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextEvent_SetDragAllowMove(self, *_args, **_kwargs)
         return val
     def SetDragResult(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextEvent_SetDragResult,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextEvent_SetDragResult(self, *_args, **_kwargs)
         return val
     def GetPosition(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextEvent_GetPosition,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextEvent_GetPosition(self, *_args, **_kwargs)
         return val
     def GetKey(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextEvent_GetKey,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextEvent_GetKey(self, *_args, **_kwargs)
         return val
     def GetModifiers(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextEvent_GetModifiers,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextEvent_GetModifiers(self, *_args, **_kwargs)
         return val
     def GetModificationType(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextEvent_GetModificationType,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextEvent_GetModificationType(self, *_args, **_kwargs)
         return val
     def GetText(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextEvent_GetText,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextEvent_GetText(self, *_args, **_kwargs)
         return val
     def GetLength(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextEvent_GetLength,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextEvent_GetLength(self, *_args, **_kwargs)
         return val
     def GetLinesAdded(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextEvent_GetLinesAdded,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextEvent_GetLinesAdded(self, *_args, **_kwargs)
         return val
     def GetLine(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextEvent_GetLine,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextEvent_GetLine(self, *_args, **_kwargs)
         return val
     def GetFoldLevelNow(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextEvent_GetFoldLevelNow,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextEvent_GetFoldLevelNow(self, *_args, **_kwargs)
         return val
     def GetFoldLevelPrev(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextEvent_GetFoldLevelPrev,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextEvent_GetFoldLevelPrev(self, *_args, **_kwargs)
         return val
     def GetMargin(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextEvent_GetMargin,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextEvent_GetMargin(self, *_args, **_kwargs)
         return val
     def GetMessage(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextEvent_GetMessage,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextEvent_GetMessage(self, *_args, **_kwargs)
         return val
     def GetWParam(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextEvent_GetWParam,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextEvent_GetWParam(self, *_args, **_kwargs)
         return val
     def GetLParam(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextEvent_GetLParam,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextEvent_GetLParam(self, *_args, **_kwargs)
         return val
     def GetListType(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextEvent_GetListType,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextEvent_GetListType(self, *_args, **_kwargs)
         return val
     def GetX(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextEvent_GetX,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextEvent_GetX(self, *_args, **_kwargs)
         return val
     def GetY(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextEvent_GetY,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextEvent_GetY(self, *_args, **_kwargs)
         return val
     def GetDragText(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextEvent_GetDragText,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextEvent_GetDragText(self, *_args, **_kwargs)
         return val
     def GetDragAllowMove(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextEvent_GetDragAllowMove,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextEvent_GetDragAllowMove(self, *_args, **_kwargs)
         return val
     def GetDragResult(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextEvent_GetDragResult,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextEvent_GetDragResult(self, *_args, **_kwargs)
         return val
     def GetShift(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextEvent_GetShift,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextEvent_GetShift(self, *_args, **_kwargs)
         return val
     def GetControl(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextEvent_GetControl,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextEvent_GetControl(self, *_args, **_kwargs)
         return val
     def GetAlt(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextEvent_GetAlt,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextEvent_GetAlt(self, *_args, **_kwargs)
         return val
     def Clone(self, *_args, **_kwargs):
-        val = apply(stc_c.wxStyledTextEvent_Clone,(self,) + _args, _kwargs)
+        val = stc_c.wxStyledTextEvent_Clone(self, *_args, **_kwargs)
         if val: val = wxEventPtr(val) 
         return val
     def __repr__(self):
-        return "<C wxStyledTextEvent instance at %s>" % (self.this,)
+        return "<%s.%s instance; proxy of C++ wxStyledTextEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
 class wxStyledTextEvent(wxStyledTextEventPtr):
     def __init__(self,*_args,**_kwargs):
-        self.this = apply(stc_c.new_wxStyledTextEvent,_args,_kwargs)
+        self.this = stc_c.new_wxStyledTextEvent(*_args,**_kwargs)
         self.thisown = 1
 
 
@@ -1215,6 +1304,7 @@ wxSTC_EOL_CRLF = stc_c.wxSTC_EOL_CRLF
 wxSTC_EOL_CR = stc_c.wxSTC_EOL_CR
 wxSTC_EOL_LF = stc_c.wxSTC_EOL_LF
 wxSTC_CP_UTF8 = stc_c.wxSTC_CP_UTF8
+wxSTC_CP_DBCS = stc_c.wxSTC_CP_DBCS
 wxSTC_MARKER_MAX = stc_c.wxSTC_MARKER_MAX
 wxSTC_MARK_CIRCLE = stc_c.wxSTC_MARK_CIRCLE
 wxSTC_MARK_ROUNDRECT = stc_c.wxSTC_MARK_ROUNDRECT
@@ -1241,6 +1331,7 @@ wxSTC_MARK_CIRCLEMINUSCONNECTED = stc_c.wxSTC_MARK_CIRCLEMINUSCONNECTED
 wxSTC_MARK_BACKGROUND = stc_c.wxSTC_MARK_BACKGROUND
 wxSTC_MARK_DOTDOTDOT = stc_c.wxSTC_MARK_DOTDOTDOT
 wxSTC_MARK_ARROWS = stc_c.wxSTC_MARK_ARROWS
+wxSTC_MARK_PIXMAP = stc_c.wxSTC_MARK_PIXMAP
 wxSTC_MARK_CHARACTER = stc_c.wxSTC_MARK_CHARACTER
 wxSTC_MARKNUM_FOLDEREND = stc_c.wxSTC_MARKNUM_FOLDEREND
 wxSTC_MARKNUM_FOLDEROPENMID = stc_c.wxSTC_MARKNUM_FOLDEROPENMID
@@ -1301,10 +1392,21 @@ wxSTC_FIND_WHOLEWORD = stc_c.wxSTC_FIND_WHOLEWORD
 wxSTC_FIND_MATCHCASE = stc_c.wxSTC_FIND_MATCHCASE
 wxSTC_FIND_WORDSTART = stc_c.wxSTC_FIND_WORDSTART
 wxSTC_FIND_REGEXP = stc_c.wxSTC_FIND_REGEXP
+wxSTC_FIND_POSIX = stc_c.wxSTC_FIND_POSIX
 wxSTC_FOLDLEVELBASE = stc_c.wxSTC_FOLDLEVELBASE
 wxSTC_FOLDLEVELWHITEFLAG = stc_c.wxSTC_FOLDLEVELWHITEFLAG
 wxSTC_FOLDLEVELHEADERFLAG = stc_c.wxSTC_FOLDLEVELHEADERFLAG
+wxSTC_FOLDLEVELBOXHEADERFLAG = stc_c.wxSTC_FOLDLEVELBOXHEADERFLAG
+wxSTC_FOLDLEVELBOXFOOTERFLAG = stc_c.wxSTC_FOLDLEVELBOXFOOTERFLAG
+wxSTC_FOLDLEVELCONTRACTED = stc_c.wxSTC_FOLDLEVELCONTRACTED
+wxSTC_FOLDLEVELUNINDENT = stc_c.wxSTC_FOLDLEVELUNINDENT
 wxSTC_FOLDLEVELNUMBERMASK = stc_c.wxSTC_FOLDLEVELNUMBERMASK
+wxSTC_FOLDFLAG_LINEBEFORE_EXPANDED = stc_c.wxSTC_FOLDFLAG_LINEBEFORE_EXPANDED
+wxSTC_FOLDFLAG_LINEBEFORE_CONTRACTED = stc_c.wxSTC_FOLDFLAG_LINEBEFORE_CONTRACTED
+wxSTC_FOLDFLAG_LINEAFTER_EXPANDED = stc_c.wxSTC_FOLDFLAG_LINEAFTER_EXPANDED
+wxSTC_FOLDFLAG_LINEAFTER_CONTRACTED = stc_c.wxSTC_FOLDFLAG_LINEAFTER_CONTRACTED
+wxSTC_FOLDFLAG_LEVELNUMBERS = stc_c.wxSTC_FOLDFLAG_LEVELNUMBERS
+wxSTC_FOLDFLAG_BOX = stc_c.wxSTC_FOLDFLAG_BOX
 wxSTC_TIME_FOREVER = stc_c.wxSTC_TIME_FOREVER
 wxSTC_WRAP_NONE = stc_c.wxSTC_WRAP_NONE
 wxSTC_WRAP_WORD = stc_c.wxSTC_WRAP_WORD
@@ -1389,6 +1491,12 @@ wxSTC_LEX_PHP = stc_c.wxSTC_LEX_PHP
 wxSTC_LEX_BAAN = stc_c.wxSTC_LEX_BAAN
 wxSTC_LEX_MATLAB = stc_c.wxSTC_LEX_MATLAB
 wxSTC_LEX_SCRIPTOL = stc_c.wxSTC_LEX_SCRIPTOL
+wxSTC_LEX_ASM = stc_c.wxSTC_LEX_ASM
+wxSTC_LEX_CPPNOCASE = stc_c.wxSTC_LEX_CPPNOCASE
+wxSTC_LEX_FORTRAN = stc_c.wxSTC_LEX_FORTRAN
+wxSTC_LEX_F77 = stc_c.wxSTC_LEX_F77
+wxSTC_LEX_CSS = stc_c.wxSTC_LEX_CSS
+wxSTC_LEX_POV = stc_c.wxSTC_LEX_POV
 wxSTC_LEX_AUTOMATIC = stc_c.wxSTC_LEX_AUTOMATIC
 wxSTC_P_DEFAULT = stc_c.wxSTC_P_DEFAULT
 wxSTC_P_COMMENTLINE = stc_c.wxSTC_P_COMMENTLINE
@@ -1614,6 +1722,9 @@ wxSTC_ERR_DIFF_CHANGED = stc_c.wxSTC_ERR_DIFF_CHANGED
 wxSTC_ERR_DIFF_ADDITION = stc_c.wxSTC_ERR_DIFF_ADDITION
 wxSTC_ERR_DIFF_DELETION = stc_c.wxSTC_ERR_DIFF_DELETION
 wxSTC_ERR_DIFF_MESSAGE = stc_c.wxSTC_ERR_DIFF_MESSAGE
+wxSTC_ERR_PHP = stc_c.wxSTC_ERR_PHP
+wxSTC_ERR_ELF = stc_c.wxSTC_ERR_ELF
+wxSTC_ERR_IFC = stc_c.wxSTC_ERR_IFC
 wxSTC_BAT_DEFAULT = stc_c.wxSTC_BAT_DEFAULT
 wxSTC_BAT_COMMENT = stc_c.wxSTC_BAT_COMMENT
 wxSTC_BAT_WORD = stc_c.wxSTC_BAT_WORD
@@ -1650,22 +1761,29 @@ wxSTC_AVE_DEFAULT = stc_c.wxSTC_AVE_DEFAULT
 wxSTC_AVE_COMMENT = stc_c.wxSTC_AVE_COMMENT
 wxSTC_AVE_NUMBER = stc_c.wxSTC_AVE_NUMBER
 wxSTC_AVE_WORD = stc_c.wxSTC_AVE_WORD
-wxSTC_AVE_KEYWORD = stc_c.wxSTC_AVE_KEYWORD
-wxSTC_AVE_STATEMENT = stc_c.wxSTC_AVE_STATEMENT
 wxSTC_AVE_STRING = stc_c.wxSTC_AVE_STRING
 wxSTC_AVE_ENUM = stc_c.wxSTC_AVE_ENUM
 wxSTC_AVE_STRINGEOL = stc_c.wxSTC_AVE_STRINGEOL
 wxSTC_AVE_IDENTIFIER = stc_c.wxSTC_AVE_IDENTIFIER
 wxSTC_AVE_OPERATOR = stc_c.wxSTC_AVE_OPERATOR
+wxSTC_AVE_WORD1 = stc_c.wxSTC_AVE_WORD1
+wxSTC_AVE_WORD2 = stc_c.wxSTC_AVE_WORD2
+wxSTC_AVE_WORD3 = stc_c.wxSTC_AVE_WORD3
+wxSTC_AVE_WORD4 = stc_c.wxSTC_AVE_WORD4
+wxSTC_AVE_WORD5 = stc_c.wxSTC_AVE_WORD5
+wxSTC_AVE_WORD6 = stc_c.wxSTC_AVE_WORD6
 wxSTC_ADA_DEFAULT = stc_c.wxSTC_ADA_DEFAULT
-wxSTC_ADA_COMMENT = stc_c.wxSTC_ADA_COMMENT
-wxSTC_ADA_NUMBER = stc_c.wxSTC_ADA_NUMBER
 wxSTC_ADA_WORD = stc_c.wxSTC_ADA_WORD
-wxSTC_ADA_STRING = stc_c.wxSTC_ADA_STRING
-wxSTC_ADA_CHARACTER = stc_c.wxSTC_ADA_CHARACTER
-wxSTC_ADA_OPERATOR = stc_c.wxSTC_ADA_OPERATOR
 wxSTC_ADA_IDENTIFIER = stc_c.wxSTC_ADA_IDENTIFIER
+wxSTC_ADA_NUMBER = stc_c.wxSTC_ADA_NUMBER
+wxSTC_ADA_DELIMITER = stc_c.wxSTC_ADA_DELIMITER
+wxSTC_ADA_CHARACTER = stc_c.wxSTC_ADA_CHARACTER
+wxSTC_ADA_CHARACTEREOL = stc_c.wxSTC_ADA_CHARACTEREOL
+wxSTC_ADA_STRING = stc_c.wxSTC_ADA_STRING
 wxSTC_ADA_STRINGEOL = stc_c.wxSTC_ADA_STRINGEOL
+wxSTC_ADA_LABEL = stc_c.wxSTC_ADA_LABEL
+wxSTC_ADA_COMMENTLINE = stc_c.wxSTC_ADA_COMMENTLINE
+wxSTC_ADA_ILLEGAL = stc_c.wxSTC_ADA_ILLEGAL
 wxSTC_BAAN_DEFAULT = stc_c.wxSTC_BAAN_DEFAULT
 wxSTC_BAAN_COMMENT = stc_c.wxSTC_BAAN_COMMENT
 wxSTC_BAAN_COMMENTDOC = stc_c.wxSTC_BAAN_COMMENTDOC
@@ -1733,6 +1851,58 @@ wxSTC_SCRIPTOL_WORD2 = stc_c.wxSTC_SCRIPTOL_WORD2
 wxSTC_SCRIPTOL_COMMENTDOCKEYWORD = stc_c.wxSTC_SCRIPTOL_COMMENTDOCKEYWORD
 wxSTC_SCRIPTOL_COMMENTDOCKEYWORDERROR = stc_c.wxSTC_SCRIPTOL_COMMENTDOCKEYWORDERROR
 wxSTC_SCRIPTOL_COMMENTBASIC = stc_c.wxSTC_SCRIPTOL_COMMENTBASIC
+wxSTC_ASM_DEFAULT = stc_c.wxSTC_ASM_DEFAULT
+wxSTC_ASM_COMMENT = stc_c.wxSTC_ASM_COMMENT
+wxSTC_ASM_NUMBER = stc_c.wxSTC_ASM_NUMBER
+wxSTC_ASM_STRING = stc_c.wxSTC_ASM_STRING
+wxSTC_ASM_OPERATOR = stc_c.wxSTC_ASM_OPERATOR
+wxSTC_ASM_IDENTIFIER = stc_c.wxSTC_ASM_IDENTIFIER
+wxSTC_ASM_CPUINSTRUCTION = stc_c.wxSTC_ASM_CPUINSTRUCTION
+wxSTC_ASM_MATHINSTRUCTION = stc_c.wxSTC_ASM_MATHINSTRUCTION
+wxSTC_ASM_REGISTER = stc_c.wxSTC_ASM_REGISTER
+wxSTC_ASM_DIRECTIVE = stc_c.wxSTC_ASM_DIRECTIVE
+wxSTC_ASM_DIRECTIVEOPERAND = stc_c.wxSTC_ASM_DIRECTIVEOPERAND
+wxSTC_F_DEFAULT = stc_c.wxSTC_F_DEFAULT
+wxSTC_F_COMMENT = stc_c.wxSTC_F_COMMENT
+wxSTC_F_NUMBER = stc_c.wxSTC_F_NUMBER
+wxSTC_F_STRING1 = stc_c.wxSTC_F_STRING1
+wxSTC_F_STRING2 = stc_c.wxSTC_F_STRING2
+wxSTC_F_STRINGEOL = stc_c.wxSTC_F_STRINGEOL
+wxSTC_F_OPERATOR = stc_c.wxSTC_F_OPERATOR
+wxSTC_F_IDENTIFIER = stc_c.wxSTC_F_IDENTIFIER
+wxSTC_F_WORD = stc_c.wxSTC_F_WORD
+wxSTC_F_WORD2 = stc_c.wxSTC_F_WORD2
+wxSTC_F_WORD3 = stc_c.wxSTC_F_WORD3
+wxSTC_F_PREPROCESSOR = stc_c.wxSTC_F_PREPROCESSOR
+wxSTC_F_OPERATOR2 = stc_c.wxSTC_F_OPERATOR2
+wxSTC_F_LABEL = stc_c.wxSTC_F_LABEL
+wxSTC_F_CONTINUATION = stc_c.wxSTC_F_CONTINUATION
+wxSTC_CSS_DEFAULT = stc_c.wxSTC_CSS_DEFAULT
+wxSTC_CSS_TAG = stc_c.wxSTC_CSS_TAG
+wxSTC_CSS_CLASS = stc_c.wxSTC_CSS_CLASS
+wxSTC_CSS_PSEUDOCLASS = stc_c.wxSTC_CSS_PSEUDOCLASS
+wxSTC_CSS_UNKNOWN_PSEUDOCLASS = stc_c.wxSTC_CSS_UNKNOWN_PSEUDOCLASS
+wxSTC_CSS_OPERATOR = stc_c.wxSTC_CSS_OPERATOR
+wxSTC_CSS_IDENTIFIER = stc_c.wxSTC_CSS_IDENTIFIER
+wxSTC_CSS_UNKNOWN_IDENTIFIER = stc_c.wxSTC_CSS_UNKNOWN_IDENTIFIER
+wxSTC_CSS_VALUE = stc_c.wxSTC_CSS_VALUE
+wxSTC_CSS_COMMENT = stc_c.wxSTC_CSS_COMMENT
+wxSTC_CSS_ID = stc_c.wxSTC_CSS_ID
+wxSTC_CSS_IMPORTANT = stc_c.wxSTC_CSS_IMPORTANT
+wxSTC_CSS_DIRECTIVE = stc_c.wxSTC_CSS_DIRECTIVE
+wxSTC_CSS_DOUBLESTRING = stc_c.wxSTC_CSS_DOUBLESTRING
+wxSTC_CSS_SINGLESTRING = stc_c.wxSTC_CSS_SINGLESTRING
+wxSTC_POV_DEFAULT = stc_c.wxSTC_POV_DEFAULT
+wxSTC_POV_COMMENT = stc_c.wxSTC_POV_COMMENT
+wxSTC_POV_COMMENTLINE = stc_c.wxSTC_POV_COMMENTLINE
+wxSTC_POV_COMMENTDOC = stc_c.wxSTC_POV_COMMENTDOC
+wxSTC_POV_NUMBER = stc_c.wxSTC_POV_NUMBER
+wxSTC_POV_WORD = stc_c.wxSTC_POV_WORD
+wxSTC_POV_STRING = stc_c.wxSTC_POV_STRING
+wxSTC_POV_OPERATOR = stc_c.wxSTC_POV_OPERATOR
+wxSTC_POV_IDENTIFIER = stc_c.wxSTC_POV_IDENTIFIER
+wxSTC_POV_BRACE = stc_c.wxSTC_POV_BRACE
+wxSTC_POV_WORD2 = stc_c.wxSTC_POV_WORD2
 wxSTC_CMD_REDO = stc_c.wxSTC_CMD_REDO
 wxSTC_CMD_SELECTALL = stc_c.wxSTC_CMD_SELECTALL
 wxSTC_CMD_UNDO = stc_c.wxSTC_CMD_UNDO
@@ -1780,6 +1950,7 @@ wxSTC_CMD_DELWORDRIGHT = stc_c.wxSTC_CMD_DELWORDRIGHT
 wxSTC_CMD_LINECUT = stc_c.wxSTC_CMD_LINECUT
 wxSTC_CMD_LINEDELETE = stc_c.wxSTC_CMD_LINEDELETE
 wxSTC_CMD_LINETRANSPOSE = stc_c.wxSTC_CMD_LINETRANSPOSE
+wxSTC_CMD_LINEDUPLICATE = stc_c.wxSTC_CMD_LINEDUPLICATE
 wxSTC_CMD_LOWERCASE = stc_c.wxSTC_CMD_LOWERCASE
 wxSTC_CMD_UPPERCASE = stc_c.wxSTC_CMD_UPPERCASE
 wxSTC_CMD_LINESCROLLDOWN = stc_c.wxSTC_CMD_LINESCROLLDOWN
@@ -1789,12 +1960,22 @@ wxSTC_CMD_HOMEDISPLAY = stc_c.wxSTC_CMD_HOMEDISPLAY
 wxSTC_CMD_HOMEDISPLAYEXTEND = stc_c.wxSTC_CMD_HOMEDISPLAYEXTEND
 wxSTC_CMD_LINEENDDISPLAY = stc_c.wxSTC_CMD_LINEENDDISPLAY
 wxSTC_CMD_LINEENDDISPLAYEXTEND = stc_c.wxSTC_CMD_LINEENDDISPLAYEXTEND
+wxSTC_CMD_HOMEWRAP = stc_c.wxSTC_CMD_HOMEWRAP
+wxSTC_CMD_HOMEWRAPEXTEND = stc_c.wxSTC_CMD_HOMEWRAPEXTEND
+wxSTC_CMD_LINEENDWRAP = stc_c.wxSTC_CMD_LINEENDWRAP
+wxSTC_CMD_LINEENDWRAPEXTEND = stc_c.wxSTC_CMD_LINEENDWRAPEXTEND
+wxSTC_CMD_VCHOMEWRAP = stc_c.wxSTC_CMD_VCHOMEWRAP
+wxSTC_CMD_VCHOMEWRAPEXTEND = stc_c.wxSTC_CMD_VCHOMEWRAPEXTEND
 wxSTC_CMD_WORDPARTLEFT = stc_c.wxSTC_CMD_WORDPARTLEFT
 wxSTC_CMD_WORDPARTLEFTEXTEND = stc_c.wxSTC_CMD_WORDPARTLEFTEXTEND
 wxSTC_CMD_WORDPARTRIGHT = stc_c.wxSTC_CMD_WORDPARTRIGHT
 wxSTC_CMD_WORDPARTRIGHTEXTEND = stc_c.wxSTC_CMD_WORDPARTRIGHTEXTEND
 wxSTC_CMD_DELLINELEFT = stc_c.wxSTC_CMD_DELLINELEFT
 wxSTC_CMD_DELLINERIGHT = stc_c.wxSTC_CMD_DELLINERIGHT
+wxSTC_CMD_PARADOWN = stc_c.wxSTC_CMD_PARADOWN
+wxSTC_CMD_PARADOWNEXTEND = stc_c.wxSTC_CMD_PARADOWNEXTEND
+wxSTC_CMD_PARAUP = stc_c.wxSTC_CMD_PARAUP
+wxSTC_CMD_PARAUPEXTEND = stc_c.wxSTC_CMD_PARAUPEXTEND
 STC_USE_DND = stc_c.STC_USE_DND
 wxEVT_STC_CHANGE = stc_c.wxEVT_STC_CHANGE
 wxEVT_STC_STYLENEEDED = stc_c.wxEVT_STC_STYLENEEDED
@@ -1819,6 +2000,9 @@ wxEVT_STC_START_DRAG = stc_c.wxEVT_STC_START_DRAG
 wxEVT_STC_DRAG_OVER = stc_c.wxEVT_STC_DRAG_OVER
 wxEVT_STC_DO_DROP = stc_c.wxEVT_STC_DO_DROP
 wxEVT_STC_ZOOM = stc_c.wxEVT_STC_ZOOM
+wxEVT_STC_HOTSPOT_CLICK = stc_c.wxEVT_STC_HOTSPOT_CLICK
+wxEVT_STC_HOTSPOT_DCLICK = stc_c.wxEVT_STC_HOTSPOT_DCLICK
+wxEVT_STC_CALLTIP_CLICK = stc_c.wxEVT_STC_CALLTIP_CLICK
 
 
 #-------------- USER INCLUDE -----------------------

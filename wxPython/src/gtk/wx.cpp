@@ -2242,6 +2242,7 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxFRAME_FLOAT_ON_PARENT", PyInt_FromLong((long) wxFRAME_FLOAT_ON_PARENT));
 	 PyDict_SetItemString(d,"wxFRAME_NO_WINDOW_MENU", PyInt_FromLong((long) wxFRAME_NO_WINDOW_MENU));
 	 PyDict_SetItemString(d,"wxFRAME_NO_TASKBAR", PyInt_FromLong((long) wxFRAME_NO_TASKBAR));
+	 PyDict_SetItemString(d,"wxFRAME_SHAPED", PyInt_FromLong((long) wxFRAME_SHAPED));
 	 PyDict_SetItemString(d,"wxED_CLIENT_MARGIN", PyInt_FromLong((long) wxED_CLIENT_MARGIN));
 	 PyDict_SetItemString(d,"wxED_BUTTONS_BOTTOM", PyInt_FromLong((long) wxED_BUTTONS_BOTTOM));
 	 PyDict_SetItemString(d,"wxED_BUTTONS_RIGHT", PyInt_FromLong((long) wxED_BUTTONS_RIGHT));
@@ -2485,6 +2486,7 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxGROW", PyInt_FromLong((long) wxGROW));
 	 PyDict_SetItemString(d,"wxEXPAND", PyInt_FromLong((long) wxEXPAND));
 	 PyDict_SetItemString(d,"wxNB_FIXEDWIDTH", PyInt_FromLong((long) wxNB_FIXEDWIDTH));
+	 PyDict_SetItemString(d,"wxNB_TOP", PyInt_FromLong((long) wxNB_TOP));
 	 PyDict_SetItemString(d,"wxNB_LEFT", PyInt_FromLong((long) wxNB_LEFT));
 	 PyDict_SetItemString(d,"wxNB_RIGHT", PyInt_FromLong((long) wxNB_RIGHT));
 	 PyDict_SetItemString(d,"wxNB_BOTTOM", PyInt_FromLong((long) wxNB_BOTTOM));
@@ -2956,7 +2958,6 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_ENTER", PyInt_FromLong((long) wxEVT_COMMAND_ENTER));
 	 PyDict_SetItemString(d,"wxEVT_NAVIGATION_KEY", PyInt_FromLong((long) wxEVT_NAVIGATION_KEY));
 	 PyDict_SetItemString(d,"wxEVT_TIMER", PyInt_FromLong((long) wxEVT_TIMER));
-	 PyDict_SetItemString(d,"__version__", PyString_FromString("0.0.0"));
 	 PyDict_SetItemString(d,"cvar", SWIG_globals);
 	 SWIG_addvarlink(SWIG_globals,"wxDefaultPosition",_wrap_wxDefaultPosition_get, _wrap_wxDefaultPosition_set);
 	 SWIG_addvarlink(SWIG_globals,"wxDefaultSize",_wrap_wxDefaultSize_get, _wrap_wxDefaultSize_set);
@@ -3001,17 +3002,12 @@ SWIGEXPORT(void) initwxc() {
     initfontsc();
 
 
+    // Although these are redfined in __version__ they need to be here too so
+    // that an assert can be done to ensure that the wxPython and the wxWindows
+    // versions match.
     PyDict_SetItemString(d,"wxMAJOR_VERSION", PyInt_FromLong((long)wxMAJOR_VERSION ));
     PyDict_SetItemString(d,"wxMINOR_VERSION", PyInt_FromLong((long)wxMINOR_VERSION ));
-    PyDict_SetItemString(d,"wxRELEASE_NUMBER", PyInt_FromLong((long)wxRELEASE_NUMBER ));
-    PyDict_SetItemString(d,"wxVERSION_NUMBER", PyInt_FromLong((long)wxVERSION_NUMBER ));
-#if wxUSE_UNICODE
-    wxString tempStr(wxVERSION_STRING);
-    PyDict_SetItemString(d,"wxVERSION_STRING", PyUnicode_FromWideChar(tempStr.c_str(), tempStr.Len()));
-#else
-    PyDict_SetItemString(d,"wxVERSION_STRING", PyString_FromString(wxVERSION_STRING));
-#endif
-
+    PyDict_SetItemString(d,"wxRELEASE_VERSION", PyInt_FromLong((long)wxRELEASE_NUMBER ));
 
 {
    int i;

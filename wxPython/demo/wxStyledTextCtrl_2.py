@@ -1,7 +1,7 @@
 
 from wxPython.wx import *
 from wxPython.stc import *
-
+import images
 import keyword
 
 #----------------------------------------------------------------------
@@ -53,6 +53,7 @@ class PythonSTC(wxStyledTextCtrl):
 
         self.SetViewWhiteSpace(False)
         #self.SetBufferedDraw(False)
+        #self.SetViewEOL(True)
 
         self.SetEdgeMode(wxSTC_EDGE_BACKGROUND)
         self.SetEdgeColumn(78)
@@ -85,6 +86,7 @@ class PythonSTC(wxStyledTextCtrl):
 
         EVT_STC_UPDATEUI(self,    ID, self.OnUpdateUI)
         EVT_STC_MARGINCLICK(self, ID, self.OnMarginClick)
+        EVT_KEY_DOWN(self, self.OnKeyPressed)
 
 
         # Make some styles,  The lexer defines what each style is used for, we
@@ -108,9 +110,9 @@ class PythonSTC(wxStyledTextCtrl):
         # Number
         self.StyleSetSpec(wxSTC_P_NUMBER, "fore:#007F7F,size:%(size)d" % faces)
         # String
-        self.StyleSetSpec(wxSTC_P_STRING, "fore:#7F007F,italic,face:%(times)s,size:%(size)d" % faces)
+        self.StyleSetSpec(wxSTC_P_STRING, "fore:#7F007F,face:%(helv)s,size:%(size)d" % faces)
         # Single quoted string
-        self.StyleSetSpec(wxSTC_P_CHARACTER, "fore:#7F007F,italic,face:%(times)s,size:%(size)d" % faces)
+        self.StyleSetSpec(wxSTC_P_CHARACTER, "fore:#7F007F,face:%(helv)s,size:%(size)d" % faces)
         # Keyword
         self.StyleSetSpec(wxSTC_P_WORD, "fore:#00007F,bold,size:%(size)d" % faces)
         # Triple quotes
@@ -130,10 +132,15 @@ class PythonSTC(wxStyledTextCtrl):
         # End of line where string is not closed
         self.StyleSetSpec(wxSTC_P_STRINGEOL, "fore:#000000,face:%(mono)s,back:#E0C0E0,eol,size:%(size)d" % faces)
 
-
         self.SetCaretForeground("BLUE")
 
-        EVT_KEY_DOWN(self, self.OnKeyPressed)
+
+        # register some images for use in the AutoComplete box.
+        self.RegisterImage(1, images.getSmilesBitmap())
+        self.RegisterImage(2, images.getFile1Bitmap())
+        self.RegisterImage(3, images.getCopyBitmap())
+
+
 
 
     def OnKeyPressed(self, event):
@@ -145,7 +152,9 @@ class PythonSTC(wxStyledTextCtrl):
             # Tips
             if event.ShiftDown():
                 self.CallTipSetBackground("yellow")
-                self.CallTipShow(pos, 'param1, param2')
+                self.CallTipShow(pos, 'lots of of text: blah, blah, blah\n\n'
+                                 'show some suff, maybe parameters..\n\n'
+                                 'fubar(param1, param2)')
             # Code completion
             else:
                 #lst = []
@@ -156,16 +165,21 @@ class PythonSTC(wxStyledTextCtrl):
                 #self.AutoCompShow(0, st)
 
                 kw = keyword.kwlist[:]
-                kw.append("zzzzzz")
-                kw.append("aaaaa")
-                kw.append("__init__")
-                kw.append("zzaaaaa")
-                kw.append("zzbaaaa")
+                kw.append("zzzzzz?2")
+                kw.append("aaaaa?2")
+                kw.append("__init__?3")
+                kw.append("zzaaaaa?2")
+                kw.append("zzbaaaa?2")
                 kw.append("this_is_a_longer_value")
-                kw.append("this_is_a_much_much_much_much_much_much_much_longer_value")
+                #kw.append("this_is_a_much_much_much_much_much_much_much_longer_value")
 
                 kw.sort()  # Python sorts are case sensitive
                 self.AutoCompSetIgnoreCase(False)  # so this needs to match
+
+                # Images are specified with a appended "?type"
+                for i in range(len(kw)):
+                    if kw[i] in keyword.kwlist:
+                        kw[i] = kw[i] + "?1"
 
                 self.AutoCompShow(0, " ".join(kw))
         else:

@@ -26,7 +26,8 @@ class wxGenStaticText(wxPyControl):
                  pos = wxDefaultPosition, size = wxDefaultSize,
                  style = 0,
                  name = "genstattext"):
-        wxPyControl.__init__(self, parent, ID, pos, size, style, wxDefaultValidator, name)
+        wxPyControl.__init__(self, parent, ID, pos, size, style|wxNO_BORDER,
+                             wxDefaultValidator, name)
 
         wxPyControl.SetLabel(self, label) # don't check wxST_NO_AUTORESIZE yet
         self.SetPosition(pos)
@@ -35,10 +36,10 @@ class wxGenStaticText(wxPyControl):
             font = wxSystemSettings_GetSystemFont(wxSYS_DEFAULT_GUI_FONT)
         wxPyControl.SetFont(self, font) # same here
 
-        clr = parent.GetBackgroundColour()
-        if not clr.Ok():
-            clr = wxSystemSettings_GetSystemColour(wxSYS_COLOUR_BTNFACE)
-        self.SetBackgroundColour(clr)
+        self.defBackClr = parent.GetBackgroundColour()
+        if not self.defBackClr.Ok():
+            self.defBackClr = wxSystemSettings_GetSystemColour(wxSYS_COLOUR_3DFACE)
+        self.SetBackgroundColour(self.defBackClr)
 
         clr = parent.GetForegroundColour()
         if not clr.Ok():
@@ -105,7 +106,14 @@ class wxGenStaticText(wxPyControl):
         width, height = self.GetClientSize()
         if not width or not height:
             return
-        dc.SetBackground(wxBrush(self.GetBackgroundColour(), wxSOLID))
+
+        clr = self.GetBackgroundColour()
+        backBrush = wxBrush(clr, wxSOLID)
+        if wxPlatform == "__WXMAC__" and clr == self.defBackClr:
+            # if colour still the default the use the striped background on Mac
+            backBrush.SetMacTheme(1) # 1 == kThemeBrushDialogBackgroundActive
+        dc.SetBackground(backBrush)
+
         dc.SetTextForeground(self.GetForegroundColour())
         dc.Clear()
         dc.SetFont(self.GetFont())

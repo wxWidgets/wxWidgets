@@ -206,11 +206,38 @@ def runTest(frame, nb, log):
 
 
 
-overview = """\
-This demo shows some examples of data transfer through clipboard or drag and drop. In wxWindows, these two ways to transfer data (either between different applications or inside one and the same) are very similar which allows to implement both of them using almost the same code - or, in other words, if you implement drag and drop support for your application, you get clipboard support for free and vice versa.
-
-At the heart of both clipboard and drag and drop operations lies the wxDataObject class. The objects of this class (or, to be precise, classes derived from it) represent the data which is being carried by the mouse during drag and drop operation or copied to or pasted from the clipboard. wxDataObject is a "smart" piece of data because it knows which formats it supports (see GetFormatCount and GetAllFormats) and knows how to render itself in any of them (see GetDataHere). It can also receive its value from the outside in a format it supports if it implements the SetData method. Please see the documentation of this class for more details.
-
-Both clipboard and drag and drop operations have two sides: the source and target, the data provider and the data receiver. These which may be in the same application and even the same window when, for example, you drag some text from one position to another in a word processor. Let us describe what each of them should do.
-
+overview = """<html><body>\
+This demo shows some examples of data transfer through clipboard or
+drag and drop. In wxWindows, these two ways to transfer data (either
+between different applications or inside one and the same) are very
+similar which allows to implement both of them using almost the same
+code - or, in other words, if you implement drag and drop support for
+your application, you get clipboard support for free and vice versa.
+<p>
+At the heart of both clipboard and drag and drop operations lies the
+wxDataObject class. The objects of this class (or, to be precise,
+classes derived from it) represent the data which is being carried by
+the mouse during drag and drop operation or copied to or pasted from
+the clipboard. wxDataObject is a "smart" piece of data because it
+knows which formats it supports (see GetFormatCount and GetAllFormats)
+and knows how to render itself in any of them (see GetDataHere). It
+can also receive its value from the outside in a format it supports if
+it implements the SetData method. Please see the documentation of this
+class for more details.
+<p>
+Both clipboard and drag and drop operations have two sides: the source
+and target, the data provider and the data receiver. These which may
+be in the same application and even the same window when, for example,
+you drag some text from one position to another in a word
+processor. Let us describe what each of them should do.
+</body></html>
 """
+
+
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
+

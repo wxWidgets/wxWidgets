@@ -133,6 +133,7 @@ class ImageDialog(wxDialog):
         size = wxSize(80, 25)
 
         self.set_dir = os.getcwd()
+        self.set_file = None
 
         if set_dir != None:
             if os.path.exists(set_dir):     # set to working directory if nothing set

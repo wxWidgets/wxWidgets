@@ -2,10 +2,85 @@ CHANGES.txt for wxPython
 
 ----------------------------------------------------------------------
 
-?????
+2.4.1.x
 -------
 
-Added wxScrolledPanel from Wil Sadkin
+Use wxSTC in the demo for displaying the soucre code of the samples.
+
+
+
+
+
+2.4.1.2
+-------
+
+Added wxScrolledPanel from Will Sadkin
+
+Added SetShape method to top level windows (e.g. wxFrame.)
+
+Changed wxSWIG to not generate Python code using apply, (since it will
+be deprecated in the future) wxSWIG will use spam(*args, **kw) syntax
+instead.  Also changed the generated __repr__ methods to be a bit more
+informative.
+
+Made the version number information more robust and uh, informative.
+Also added asserts to check that the major.minor versions of wxPython
+and wxWindows match.
+
+Added the new wx "renamer" package that will dynamically import from
+the wxPython package and rename wxFooBar --> FooBar.  That means that
+people can do imports without "import *" and can use names like
+wx.Frame instead of wx.wxFrame.  This is phase 1 of a full transition
+to the new namespace.
+
+Updated Scintilla to 1.52.  I also changed it to use wxListCtrl
+instead of wxListBox for the AutoComplete window, added the ability to
+use custom bitmaps in the margin and in the AutoComplete windows, and
+worked out how to do proper clipping of child windows on wxGTK.
+
+Patrick O'Brien's PyCrust package has been renamed to Py and now
+includes several new tools.  As part of the change the location of the
+pacakge has changed as well, it is now accessible as "from wxPython
+import py" (or "from wx import py" using the new namespace.)  There
+are still some transition modules in the wxPython.lib.PyCrust package
+that will issue a warning and then import what is needed from the new
+package.  These will be removed in a future release.
+
+Added __nonzero__ method to wxTreeItemId, wxBitmap, wxImage, wxFont,
+and most other classes that have an Ok or IsOK method.  This allows
+code like "if obj: ..." to be the same as "if obj.IsOk(): ..."
+
+Toolbars on wxMac can now have controls on them.
+
+Added wxPython.lib.analogclock module based on samples that were
+passed back and forth on wxPython-users a while back.
+
+Added masked edit controls (wxPython.lib.maskededit) by Jeff Childers
+and Will Sadkin.  Updated wxTimeCtrl to use MaskedEdit.
+
+When the __class__ of a dead object is replaced with _wxPyDeadObject
+the __del__ of the original class is now called first.
+
+Added wxTreeListCtrl.  (Looks like a wxTreeCtrl embedded in a
+wxListCtrl, but actually is just giving multiple columns to a
+wxTreeCtrl.)
+
+Added wxFutureCall, a subclass of wxTimer that makes it easy to delay
+a call to any Python callable object.
+
+Added wxPy versions of wxPrintPreview, wxPreviewFrame, and
+wxPreviewControlBar so they can be derived from in Python and be able
+to override the C++ virtual methods.
+
+Simplified how the wxSizer methods are wrapped, changed the name of
+the "option" parameter to "proportion" to match the docs ("option" is
+still accepted for compatibility, but this will go away in a future
+release,) SetItemMinSize can now take a wxSize (or 2-tuple) parameter,
+and Spacers can be specified with a wxSize (or 2-tuple) parameter
+
+Added wxCursorFromBits.
+
+
 
 
 
@@ -408,6 +483,7 @@ example.
 Added wxPython.lib.mixins.rubberband module from Robb Shecter.
 
 Added wxTimeCtrl from Will Sadkin.
+
 
 
 

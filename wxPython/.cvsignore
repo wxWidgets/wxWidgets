@@ -5,8 +5,10 @@ MANIFEST
 _build_dmg
 _build_rpm
 build
+build-dbg
 build-gtk
 build-gtk2
+build-gtk2-dbg.unicode
 build-gtk2.unicode
 build-pkg
 build-pkg-debug

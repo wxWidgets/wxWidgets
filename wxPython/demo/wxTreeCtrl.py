@@ -167,7 +167,7 @@ class TestTreeCtrlPanel(wxPanel):
         event.Skip()
 
 
-    def OnActivate(self, evt):
+    def OnActivate(self, event):
         self.log.WriteText("OnActivate: %s\n" % self.tree.GetItemText(self.item))
 
 

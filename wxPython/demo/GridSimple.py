@@ -64,6 +64,11 @@ class SimpleGrid(wxGrid): ##, wxGridAutoEditMixin):
         self.SetCellValue(11, 1, "This cell is set to span 3 rows and 3 columns");
 
 
+        editor = wxGridCellTextEditor()
+        editor.SetParameters('10')
+        self.SetCellEditor(0, 4, editor)
+        self.SetCellValue(0, 4, "Limited text")
+
 
         # test all the events
         EVT_GRID_CELL_LEFT_CLICK(self, self.OnCellLeftClick)

@@ -179,17 +179,25 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
         icon->CopyFromBitmap(bmp);
         return icon;
     }
-                              // Alternate 'constructor'
+
     wxCursor* wxPyStockCursor(int id) {
         return new wxCursor(id);
     }
 
     wxCursor* wxCursorFromImage(const wxImage& image) {
-    #ifndef __WXMAC__
         return new wxCursor(image);
-    #else
-        return NULL;
-    #endif
+    }
+
+    wxCursor* wxCursorFromBits(PyObject* bits, int width, int  height,
+                               int hotSpotX=-1, int hotSpotY=-1,
+                               PyObject* maskBits=0) {
+        char* bitsbuf;
+        char* maskbuf = NULL;
+        int   length;
+        PyString_AsStringAndSize(bits, &bitsbuf, &length);
+        if (maskBits)
+            PyString_AsStringAndSize(maskBits, &maskbuf, &length);
+        return new wxCursor(bitsbuf, width, height, hotSpotX, hotSpotY, maskbuf);
     }
                                       // Alternate 'constructor'
     wxColour* wxNamedColour(const wxString& colorName) {
@@ -582,6 +590,46 @@ static PyObject *_wrap_wxCursorFromImage(PyObject *self, PyObject *args, PyObjec
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     _result = (wxCursor *)wxCursorFromImage(*_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxCursor_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxCursorFromBits(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxCursor * _result;
+    PyObject * _arg0;
+    int  _arg1;
+    int  _arg2;
+    int  _arg3 = (int ) -1;
+    int  _arg4 = (int ) -1;
+    PyObject * _arg5 = (PyObject *) 0;
+    PyObject * _obj0 = 0;
+    PyObject * _obj5 = 0;
+    char *_kwnames[] = { "bits","width","height","hotSpotX","hotSpotY","maskBits", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii|iiO:wxCursorFromBits",_kwnames,&_obj0,&_arg1,&_arg2,&_arg3,&_arg4,&_obj5)) 
+        return NULL;
+{
+  _arg0 = _obj0;
+}
+    if (_obj5)
+{
+  _arg5 = _obj5;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxCursor *)wxCursorFromBits(_arg0,_arg1,_arg2,_arg3,_arg4,_arg5);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -2744,6 +2792,54 @@ static void *SwigwxCursorTowxObject(void *ptr) {
     src = (wxCursor *) ptr;
     dest = (wxObject *) src;
     return (void *) dest;
+}
+
+static wxCursor *new_wxCursor(const wxString *cursorName,long flags,int hotSpotX,int hotSpotY) {
+#ifdef __WXGTK__
+            wxCHECK_MSG(FALSE, NULL,
+                        wxT("wxCursor constructor not implemented for wxGTK, use wxStockCursor, wxCursorFromImage, or wxCursorFromBits instead."));
+#else
+            return new wxCursor(*cursorName, flags, hotSpotX, hotSpotY);
+#endif
+        }
+
+static PyObject *_wrap_new_wxCursor(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxCursor * _result;
+    wxString * _arg0;
+    long  _arg1;
+    int  _arg2 = (int ) 0;
+    int  _arg3 = (int ) 0;
+    PyObject * _obj0 = 0;
+    char *_kwnames[] = { "cursorName","flags","hotSpotX","hotSpotY", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol|ii:new_wxCursor",_kwnames,&_obj0,&_arg1,&_arg2,&_arg3)) 
+        return NULL;
+{
+    _arg0 = wxString_in_helper(_obj0);
+    if (_arg0 == NULL)
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxCursor *)new_wxCursor(_arg0,_arg1,_arg2,_arg3);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxCursor_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+{
+    if (_obj0)
+        delete _arg0;
+}
+    return _resultobj;
 }
 
 #define delete_wxCursor(_swigobj) (delete _swigobj)
@@ -9408,6 +9504,50 @@ static PyObject *_wrap_new_wxRegionFromPoints(PyObject *self, PyObject *args, Py
     return _resultobj;
 }
 
+#define new_wxRegionFromBitmap(_swigarg0,_swigarg1,_swigarg2) (new wxRegion(_swigarg0,_swigarg1,_swigarg2))
+static PyObject *_wrap_new_wxRegionFromBitmap(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxRegion * _result;
+    wxBitmap * _arg0;
+    wxColour * _arg1 = (wxColour *) &wxNullColour;
+    int  _arg2 = (int ) 0;
+    PyObject * _argo0 = 0;
+    wxColour  temp;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "bmp","transColour","tolerance", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|Oi:new_wxRegionFromBitmap",_kwnames,&_argo0,&_obj1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxRegionFromBitmap. Expected _wxBitmap_p.");
+        return NULL;
+        }
+    }
+    if (_obj1)
+{
+    _arg1 = &temp;
+    if (! wxColour_helper(_obj1, &_arg1))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxRegion *)new_wxRegionFromBitmap(*_arg0,*_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxRegion_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
 #define delete_wxRegion(_swigobj) (delete _swigobj)
 static PyObject *_wrap_delete_wxRegion(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -10102,6 +10242,82 @@ static PyObject *_wrap_wxRegion_XorRegion(PyObject *self, PyObject *args, PyObje
     return _resultobj;
 }
 
+#define wxRegion_ConvertToBitmap(_swigobj)  (_swigobj->ConvertToBitmap())
+static PyObject *_wrap_wxRegion_ConvertToBitmap(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxBitmap * _result;
+    wxRegion * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxRegion_ConvertToBitmap",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxRegion_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxRegion_ConvertToBitmap. Expected _wxRegion_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxBitmap (wxRegion_ConvertToBitmap(_arg0));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxBitmap_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxRegion_UnionBitmap(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->Union(_swigarg0,_swigarg1,_swigarg2))
+static PyObject *_wrap_wxRegion_UnionBitmap(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxRegion * _arg0;
+    wxBitmap * _arg1;
+    wxColour * _arg2 = (wxColour *) &wxNullColour;
+    int  _arg3 = (int ) 0;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    wxColour  temp;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","bmp","transColour","tolerance", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|Oi:wxRegion_UnionBitmap",_kwnames,&_argo0,&_argo1,&_obj2,&_arg3)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxRegion_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxRegion_UnionBitmap. Expected _wxRegion_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxRegion_UnionBitmap. Expected _wxBitmap_p.");
+        return NULL;
+        }
+    }
+    if (_obj2)
+{
+    _arg2 = &temp;
+    if (! wxColour_helper(_obj2, &_arg2))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxRegion_UnionBitmap(_arg0,*_arg1,*_arg2,_arg3);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 static void *SwigwxRegionIteratorTowxObject(void *ptr) {
     wxRegionIterator *src;
     wxObject *dest;
@@ -10469,6 +10685,8 @@ static PyMethodDef gdicMethods[] = {
 	 { "wxRegionIterator_GetX", (PyCFunction) _wrap_wxRegionIterator_GetX, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxRegionIterator", (PyCFunction) _wrap_delete_wxRegionIterator, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxRegionIterator", (PyCFunction) _wrap_new_wxRegionIterator, METH_VARARGS | METH_KEYWORDS },
+	 { "wxRegion_UnionBitmap", (PyCFunction) _wrap_wxRegion_UnionBitmap, METH_VARARGS | METH_KEYWORDS },
+	 { "wxRegion_ConvertToBitmap", (PyCFunction) _wrap_wxRegion_ConvertToBitmap, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRegion_XorRegion", (PyCFunction) _wrap_wxRegion_XorRegion, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRegion_XorRect", (PyCFunction) _wrap_wxRegion_XorRect, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRegion_Xor", (PyCFunction) _wrap_wxRegion_Xor, METH_VARARGS | METH_KEYWORDS },
@@ -10490,6 +10708,7 @@ static PyMethodDef gdicMethods[] = {
 	 { "wxRegion_Offset", (PyCFunction) _wrap_wxRegion_Offset, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRegion_Clear", (PyCFunction) _wrap_wxRegion_Clear, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxRegion", (PyCFunction) _wrap_delete_wxRegion, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxRegionFromBitmap", (PyCFunction) _wrap_new_wxRegionFromBitmap, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxRegionFromPoints", (PyCFunction) _wrap_new_wxRegionFromPoints, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxRegion", (PyCFunction) _wrap_new_wxRegion, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImageList_GetSize", (PyCFunction) _wrap_wxImageList_GetSize, METH_VARARGS | METH_KEYWORDS },
@@ -10669,6 +10888,7 @@ static PyMethodDef gdicMethods[] = {
 	 { "new_wxColour", (PyCFunction) _wrap_new_wxColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCursor_Ok", (PyCFunction) _wrap_wxCursor_Ok, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxCursor", (PyCFunction) _wrap_delete_wxCursor, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxCursor", (PyCFunction) _wrap_new_wxCursor, METH_VARARGS | METH_KEYWORDS },
 	 { "wxIconBundle_GetIcon", (PyCFunction) _wrap_wxIconBundle_GetIcon, METH_VARARGS | METH_KEYWORDS },
 	 { "wxIconBundle_AddIconFromFile", (PyCFunction) _wrap_wxIconBundle_AddIconFromFile, METH_VARARGS | METH_KEYWORDS },
 	 { "wxIconBundle_AddIcon", (PyCFunction) _wrap_wxIconBundle_AddIcon, METH_VARARGS | METH_KEYWORDS },
@@ -10712,6 +10932,7 @@ static PyMethodDef gdicMethods[] = {
 	 { "new_wxGDIObject", (PyCFunction) _wrap_new_wxGDIObject, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMemoryDCFromDC", (PyCFunction) _wrap_wxMemoryDCFromDC, METH_VARARGS | METH_KEYWORDS },
 	 { "wxNamedColour", (PyCFunction) _wrap_wxNamedColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxCursorFromBits", (PyCFunction) _wrap_wxCursorFromBits, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCursorFromImage", (PyCFunction) _wrap_wxCursorFromImage, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStockCursor", (PyCFunction) _wrap_wxStockCursor, METH_VARARGS | METH_KEYWORDS },
 	 { "wxIconFromBitmap", (PyCFunction) _wrap_wxIconFromBitmap, METH_VARARGS | METH_KEYWORDS },

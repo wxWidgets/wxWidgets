@@ -146,7 +146,7 @@ void PYTHON::cpp_member_func(char *name, char *iname, DataType *t, ParmList *l) 
     if (docstring && doc_entry) {
       *pyclass << tab8 << "\"\"\"" << add_docstring(doc_entry) << "\"\"\"\n";
     }
-    *pyclass << tab8 << "val = apply(" << module << "." << name_member(realname,class_name) << ",(self,) + _args, _kwargs)\n";
+    *pyclass << tab8 << "val = " << module << "." << name_member(realname,class_name) << "(self, *_args, **_kwargs)\n";
 
     // Check to see if the return type is an object
     if ((hash.lookup(t->name)) && (t->is_pointer <= 1)) {
@@ -216,7 +216,7 @@ void PYTHON::cpp_constructor(char *name, char *iname, ParmList *l) {
       if (docstring && doc_entry)
 	*construct << tab8 << "\"\"\"" << add_docstring(doc_entry) << "\"\"\"\n";
 
-      *construct << tab8 << "self.this = apply(" << module << "." << name_construct(realname) << ",_args,_kwargs)\n";
+      *construct << tab8 << "self.this = " << module << "." << name_construct(realname) << "(*_args,**_kwargs)\n";
       *construct << tab8 << "self.thisown = 1\n";
       emitAddPragmas(*construct,"__init__",tab8);
       have_constructor = 1;
@@ -226,8 +226,8 @@ void PYTHON::cpp_constructor(char *name, char *iname, ParmList *l) {
       // function for it.
 
       *additional << "def " << realname << "(*_args,**_kwargs):\n";
-      *additional << tab4 << "val = " << class_name << "Ptr(apply("
-		  << module << "." << name_construct(realname) << ",_args,_kwargs))\n"
+      *additional << tab4 << "val = " << class_name << "Ptr("
+		  << module << "." << name_construct(realname) << "(*_args,**_kwargs))\n"
                   << tab4 << "val.thisown = 1\n";
       emitAddPragmas(*additional, realname, tab4);
       *additional << tab4 << "return val\n\n";
@@ -322,7 +322,7 @@ void PYTHON::cpp_close_class() {
     if (!have_repr) {
       // Supply a repr method for this class
       repr << tab4 << "def __repr__(self):\n"
-	   << tab8 << "return \"<C " << class_name <<" instance at %s>\" % (self.this,)\n";
+	   << tab8 << "return \"<%s.%s instance; proxy of C++ " << class_name <<" instance at %s>\" % (self.__class__.__module__, self.__class__.__name__, self.this)\n";
 
       classes << repr;
       emitAddPragmas(classes,"__class__",tab4);

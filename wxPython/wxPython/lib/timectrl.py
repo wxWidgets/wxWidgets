@@ -18,43 +18,240 @@
 #   cursor-position specific, so the control intercepts the key codes before the
 #   validator would fire.
 #
+#   wxTimeCtrl now also supports .SetValue() with either strings or wxDateTime
+#   values, as well as range limits, with the option of either enforcing them
+#   or simply coloring the text of the control if the limits are exceeded.
+#
+#   Note: this class now makes heavy use of wxDateTime for parsing and
+#   regularization, but it always does so with ephemeral instances of
+#   wxDateTime, as the C++/Python validity of these instances seems to not
+#   persist.  Because "today" can be a day for which an hour can "not exist"
+#   or be counted twice (1 day each per year, for DST adjustments), the date
+#   portion of all wxDateTimes used/returned have their date portion set to
+#   Jan 1, 1970 (the "epoch.")
+#
 
+"""<html><body>
+<P>
+<B>wxTimeCtrl</B> provides a multi-cell control that allows manipulation of a time
+value.  It supports 12 or 24 hour format, and you can use wxDateTime or mxDateTime
+to get/set values from the control.
+<P>
+Left/right/tab keys to switch cells within a wxTimeCtrl, and the up/down arrows act
+like a spin control.  wxTimeCtrl also allows for an actual spin button to be attached
+to the control, so that it acts like the up/down arrow keys.
+<P>
+The <B>!</B> or <B>c</B> key sets the value of the control to the current time.
+<P>
+Here's the API for wxTimeCtrl:
+<DL><PRE>
+    <B>wxTimeCtrl</B>(
+         parent, id = -1,
+         <B>value</B> = '12:00:00 AM',
+         pos = wxDefaultPosition,
+         size = wxDefaultSize,
+         <B>style</B> = wxTE_PROCESS_TAB,
+         <B>validator</B> = wxDefaultValidator,
+         name = "time",
+         <B>fmt24hr</B> = False,
+         <B>spinButton</B> = None,
+         <B>min</B> = None,
+         <B>max</B> = None,
+         <B>limited</B> = None,
+         <B>oob_color</B> = "Yellow"
+)
+</PRE>
+<UL>
+    <DT><B>value</B>
+    <DD>If no initial value is set, the default will be midnight; if an illegal string
+    is specified, a ValueError will result.  (You can always later set the initial time
+    with SetValue() after instantiation of the control.)
+    <DL><B>size</B>
+    <DD>The size of the control will be automatically adjusted for 12/24 hour format
+    if wxDefaultSize is specified.
+    <DT><B>style</B>
+    <DD>By default, wxTimeCtrl will process TAB events, by allowing tab to the
+    different cells within the control.
+    <DT><B>validator</B>
+    <DD>By default, wxTimeCtrl just uses the default (empty) validator, as all
+    of its validation for entry control is handled internally.  However, a validator
+    can be supplied to provide data transfer capability to the control.
+    <BR>
+    <DT><B>fmt24hr</B>
+    <DD>If True, control will display time in 24 hour time format; if False, it will
+    use 12 hour AM/PM format.  SetValue() will adjust values accordingly for the
+    control, based on the format specified.
+    <BR>
+    <DT><B>spinButton</B>
+    <DD>If specified, this button's events will be bound to the behavior of the
+    wxTimeCtrl, working like up/down cursor key events.  (See BindSpinButton.)
+    <BR>
+    <DT><B>min</B>
+    <DD>Defines the lower bound for "valid" selections in the control.
+    By default, wxTimeCtrl doesn't have bounds.  You must set both upper and lower
+    bounds to make the control pay attention to them, (as only one bound makes no sense
+    with times.) "Valid" times will fall between the min and max "pie wedge" of the
+    clock.
+    <DT><B>max</B>
+    <DD>Defines the upper bound for "valid" selections in the control.
+    "Valid" times will fall between the min and max "pie wedge" of the
+    clock. (This can be a "big piece", ie. <b>min = 11pm, max= 10pm</b>
+    means <I>all but the hour from 10:00pm to 11pm are valid times.</I>)
+    <DT><B>limited</B>
+    <DD>If True, the control will not permit entry of values that fall outside the
+    set bounds.
+    <BR>
+    <DT><B>oob_color</B>
+    <DD>Sets the background color used to indicate out-of-bounds values for the control
+    when the control is not limited.  This is set to "Yellow" by default.
+    </DL>
+</UL>
+<BR>
+<BR>
+<BR>
+<DT><B>EVT_TIMEUPDATE(win, id, func)</B>
+<DD>func is fired whenever the value of the control changes.
+<BR>
+<BR>
+<DT><B>SetValue(time_string | wxDateTime | wxTimeSpan | mx.DateTime | mx.DateTimeDelta)</B>
+<DD>Sets the value of the control to a particular time, given a valid
+value; raises ValueError on invalid value.
+<EM>NOTE:</EM> This will only allow mx.DateTime or mx.DateTimeDelta if mx.DateTime
+was successfully imported by the class module.
+<BR>
+<DT><B>GetValue(as_wxDateTime = False, as_mxDateTime = False, as_wxTimeSpan=False, as mxDateTimeDelta=False)</B>
+<DD>Retrieves the value of the time from the control.  By default this is
+returned as a string, unless one of the other arguments is set; args are
+searched in the order listed; only one value will be returned.
+<BR>
+<DT><B>GetWxDateTime(value=None)</B>
+<DD>When called without arguments, retrieves the value of the control, and applies
+it to the wxDateTimeFromHMS() constructor, and returns the resulting value.
+The date portion will always be set to Jan 1, 1970. This form is the same
+as GetValue(as_wxDateTime=True).  GetWxDateTime can also be called with any of the
+other valid time formats settable with SetValue, to regularize it to a single
+wxDateTime form.  The function will raise ValueError on an unconvertable argument.
+<BR>
+<DT><B>GetMxDateTime()</B>
+<DD>Retrieves the value of the control and applies it to the DateTime.Time()
+constructor,and returns the resulting value.  (The date portion will always be
+set to Jan 1, 1970.) (Same as GetValue(as_wxDateTime=True); provided for backward
+compatibility with previous release.)
+<BR>
+<BR>
+<DT><B>BindSpinButton(wxSpinBtton)</B>
+<DD>Binds an externally created spin button to the control, so that up/down spin
+events change the active cell or selection in the control (in addition to the
+up/down cursor keys.)  (This is primarily to allow you to create a "standard"
+interface to time controls, as seen in Windows.)
+<BR>
+<BR>
+<DT><B>SetMin(min=None)</B>
+<DD>Sets the expected minimum value, or lower bound, of the control.
+(The lower bound will only be enforced if the control is
+configured to limit its values to the set bounds.)
+If a value of <I>None</I> is provided, then the control will have
+explicit lower bound.  If the value specified is greater than
+the current lower bound, then the function returns False and the
+lower bound will not change from its current setting.  On success,
+the function returns True.  Even if set, if there is no corresponding
+upper bound, the control will behave as if it is unbounded.
+<DT><DD>If successful and the current value is outside the
+new bounds, if the control is limited the value will be
+automatically adjusted to the nearest bound; if not limited,
+the background of the control will be colored with the current
+out-of-bounds color.
+<BR>
+<DT><B>GetMin(as_string=False)</B>
+<DD>Gets the current lower bound value for the control, returning
+None, if not set, or a wxDateTime, unless the as_string parameter
+is set to True, at which point it will return the string
+representation of the lower bound.
+<BR>
+<BR>
+<DT><B>SetMax(max=None)</B>
+<DD>Sets the expected maximum value, or upper bound, of the control.
+(The upper bound will only be enforced if the control is
+configured to limit its values to the set bounds.)
+If a value of <I>None</I> is provided, then the control will
+have no explicit upper bound.  If the value specified is less
+than the current lower bound, then the function returns False and
+the maximum will not change from its current setting. On success,
+the function returns True.  Even if set, if there is no corresponding
+lower bound, the control will behave as if it is unbounded.
+<DT><DD>If successful and the current value is outside the
+new bounds, if the control is limited the value will be
+automatically adjusted to the nearest bound; if not limited,
+the background of the control will be colored with the current
+out-of-bounds color.
+<BR>
+<DT><B>GetMax(as_string = False)</B>
+<DD>Gets the current upper bound value for the control, returning
+None, if not set, or a wxDateTime, unless the as_string parameter
+is set to True, at which point it will return the string
+representation of the lower bound.
+
+<BR>
+<BR>
+<DT><B>SetBounds(min=None,max=None)</B>
+<DD>This function is a convenience function for setting the min and max
+values at the same time.  The function only applies the maximum bound
+if setting the minimum bound is successful, and returns True
+only if both operations succeed.  <B><I>Note: leaving out an argument
+will remove the corresponding bound, and result in the behavior of
+an unbounded control.</I></B>
+<BR>
+<DT><B>GetBounds(as_string = False)</B>
+<DD>This function returns a two-tuple (min,max), indicating the
+current bounds of the control.  Each value can be None if
+that bound is not set.  The values will otherwise be wxDateTimes
+unless the as_string argument is set to True, at which point they
+will be returned as string representations of the bounds.
+<BR>
+<BR>
+<DT><B>IsInBounds(value=None)</B>
+<DD>Returns <I>True</I> if no value is specified and the current value
+of the control falls within the current bounds.  This function can also
+be called with a value to see if that value would fall within the current
+bounds of the given control.  It will raise ValueError if the value
+specified is not a wxDateTime, mxDateTime (if available) or parsable string.
+<BR>
+<BR>
+<DT><B>IsValid(value)</B>
+<DD>Returns <I>True</I>if specified value is a legal time value and
+falls within the current bounds of the given control.
+<BR>
+<BR>
+<DT><B>SetLimited(bool)</B>
+<DD>If called with a value of True, this function will cause the control
+to limit the value to fall within the bounds currently specified.
+(Provided both bounds have been set.)
+If the control's value currently exceeds the bounds, it will then
+be set to the nearest bound.
+If called with a value of False, this function will disable value
+limiting, but coloring of out-of-bounds values will still take
+place if bounds have been set for the control.
+<DT><B>IsLimited()</B>
+<DD>Returns <I>True</I> if the control is currently limiting the
+value to fall within the current bounds.
+<BR>
+</DL>
+</body></html>
+"""
+
+import string, copy
 from wxPython.wx import *
-import string
+from wxPython.tools.dbg import Logger
+from wxPython.lib.maskededit import wxMaskedTextCtrl, Field
+import wxPython.utils
+dbg = Logger()
+dbg(enable=0)
 
-# wxWindows' wxTextCtrl translates Composite "control key"
-# events into single events before returning them to its OnChar
-# routine.  The doc says that this results in 1 for Ctrl-A, 2 for
-# Ctrl-B, etc. However, there are no wxPython or wxWindows
-# symbols for them, so I'm defining codes for Ctrl-X (cut) and
-# Ctrl-V (paste) here for readability:
-WXK_CTRL_X = (ord('X')+1) - ord('A')
-WXK_CTRL_V = (ord('V')+1) - ord('A')
-
-# The following bit of function is for debugging the subsequent code.
-# To turn on debugging output, set _debug to 1
-_debug = 0
-_indent = 0
-
-if _debug:
-    def _dbg(*args, **kwargs):
-        global _indent
-
-        if len(args):
-            if _indent:      print ' ' * 3 * _indent,
-            for arg in args: print arg,
-            print
-        # else do nothing
-
-        # post process args:
-        for kwarg, value in kwargs.items():
-            if kwarg == 'indent' and value:         _indent = _indent + 1
-            elif kwarg == 'indent' and value == 0:  _indent = _indent - 1
-            if _indent < 0: _indent = 0
-else:
-    def _dbg(*args, **kwargs):
-        pass
-
+try:
+    from mx import DateTime
+    accept_mx = True
+except ImportError:
+    accept_mx = False
 
 # This class of event fires whenever the value of the time changes in the control:
 wxEVT_TIMEVAL_UPDATED = wxNewId()
@@ -71,90 +268,165 @@ class TimeUpdatedEvent(wxPyCommandEvent):
         return self.value
 
 
-# Set up all the positions of the cells in the wxTimeCtrl (once at module import):
-# Format of control is:
-#               hh:mm:ss xM
-#                         1
-# positions:    01234567890
-_listCells = ['hour', 'minute', 'second', 'am_pm']
-_listCellRange =   [(0,1,2), (3,4,5), (6,7,8), (9,10,11)]
-_listDelimPos =  [2,5,8]
+class wxTimeCtrl(wxMaskedTextCtrl):
 
-# Create dictionary of cell ranges, indexed by name or position in the range:
-_dictCellRange = {}
-for i in range(4):
-    _dictCellRange[_listCells[i]] = _listCellRange[i]
-for cell in _listCells:
-    for i in _dictCellRange[cell]:
-        _dictCellRange[i] = _dictCellRange[cell]
+    valid_ctrl_params = {
+        'display_seconds' : True,   # by default, shows seconds
+        'min': None,                # by default, no bounds set
+        'max': None,
+        'limited': False,           # by default, no limiting even if bounds set
+        'useFixedWidthFont': True,  # by default, use a fixed-width font
+        'oob_color': "Yellow"       # by default, the default wxMaskedTextCtrl "invalid" color
+        }
 
-
-# Create lists of starting and ending positions for each range, and a dictionary of starting
-# positions indexed by name
-_listStartCellPos = []
-_listEndCellPos = []
-for tup in _listCellRange:
-    _listStartCellPos.append(tup[0])  # 1st char of cell
-    _listEndCellPos.append(tup[1])    # last char of cell (not including delimiter)
-
-_dictStartCellPos = {}
-for i in range(4):
-    _dictStartCellPos[_listCells[i]] = _listStartCellPos[i]
-
-
-class wxTimeCtrl(wxTextCtrl):
     def __init__ (
                 self, parent, id=-1, value = '12:00:00 AM',
                 pos = wxDefaultPosition, size = wxDefaultSize,
-                fmt24hr=0,
+                fmt24hr=False,
                 spinButton = None,
-                style = wxTE_PROCESS_TAB, name = "time"
-        ):
-        wxTextCtrl.__init__(self, parent, id, value='',
-                            pos=pos, size=size, style=style, name=name)
+                style = wxTE_PROCESS_TAB,
+                validator = wxDefaultValidator,
+                name = "time",
+                **kwargs ):
 
+        # set defaults for control:
+        dbg('setting defaults:')
+        for key, param_value in wxTimeCtrl.valid_ctrl_params.items():
+            # This is done this way to make setattr behave consistently with
+            # "private attribute" name mangling
+            setattr(self, "_wxTimeCtrl__" + key, copy.copy(param_value))
+
+        # create locals from current defaults, so we can override if
+        # specified in kwargs, and handle uniformly:
+        min = self.__min
+        max = self.__max
+        limited = self.__limited
+        self.__posCurrent = 0
+
+
+        # (handle positional args (from original release) differently from rest of kwargs:)
         self.__fmt24hr = fmt24hr
 
-        if size == wxDefaultSize:
-            # set appropriate default sizes depending on format:
-            if self.__fmt24hr:
-                testText = '00:00:00'
-            else:
-                testText = '00:00:00 MM'
-            _dbg(wxPlatform)
+        maskededit_kwargs = {}
 
-            if wxPlatform != "__WXMSW__":   # give it a little extra space
-                testText += 'M'
-            if wxPlatform == "__WXMAC__":   # give it even a little more...
-                testText += 'M'
+        # assign keyword args as appropriate:
+        for key, param_value in kwargs.items():
+            if key not in wxTimeCtrl.valid_ctrl_params.keys():
+                raise AttributeError('invalid keyword argument "%s"' % key)
 
-            w, h = self.GetTextExtent(testText)
-            self.SetClientSize( (w+4, self.GetClientSize().height) )
+            if key == "display_seconds":
+                self.__display_seconds = param_value
+
+            elif key == "min":      min = param_value
+            elif key == "max":      max = param_value
+            elif key == "limited":  limited = param_value
+
+            elif key == "useFixedWidthFont":
+                maskededit_kwargs[key] = param_value
+            elif key == "oob_color":
+                maskededit_kwargs['invalidBackgroundColor'] = param_value
+
+        if self.__fmt24hr:
+            if self.__display_seconds:  maskededit_kwargs['autoformat'] = 'MILTIMEHHMMSS'
+            else:                       maskededit_kwargs['autoformat'] = 'MILTIMEHHMM'
+
+            # Set hour field to zero-pad, right-insert, require explicit field change,
+            # select entire field on entry, and require a resultant valid entry
+            # to allow character entry:
+            hourfield = Field(formatcodes='0r<SV', validRegex='0\d|1\d|2[0123]', validRequired=True)
+        else:
+            if self.__display_seconds:  maskededit_kwargs['autoformat'] = 'TIMEHHMMSS'
+            else:                       maskededit_kwargs['autoformat'] = 'TIMEHHMM'
+
+            # Set hour field to allow spaces (at start), right-insert,
+            # require explicit field change, select entire field on entry,
+            # and require a resultant valid entry to allow character entry:
+            hourfield = Field(formatcodes='_0<rSV', validRegex='0[1-9]| [1-9]|1[012]', validRequired=True)
+            ampmfield = Field(formatcodes='S')
+
+        # Field 1 is always a zero-padded right-insert minute field,
+        # similarly configured as above:
+        minutefield = Field(formatcodes='0r<SV', validRegex='[0-5]\d', validRequired=True)
+
+        fields = [ hourfield, minutefield ]
+        if self.__display_seconds:
+            fields.append(copy.copy(minutefield))    # second field has same constraints as field 1
+
+        if not self.__fmt24hr:
+            fields.append(ampmfield)
+
+        # set fields argument:
+        maskededit_kwargs['fields'] = fields
+
+        # This allows range validation if set
+        maskededit_kwargs['validFunc'] = self.IsInBounds
+
+        # This allows range limits to affect insertion into control or not
+        # dynamically without affecting individual field constraint validation
+        maskededit_kwargs['retainFieldValidation'] = True
+
+        # allow control over font selection:
+        maskededit_kwargs['useFixedWidthFont'] = self.__useFixedWidthFont
+
+        # allow for explicit size specification:
+        if size != wxDefaultSize:
+            # override (and remove) "autofit" autoformat code in standard time formats:
+            maskededit_kwargs['formatcodes'] = 'T!'
+
+        # Now we can initialize the base control:
+        wxMaskedTextCtrl.__init__(
+                self, parent, id=id,
+                pos=pos, size=size,
+                style = style,
+                validator = validator,
+                name = name,
+                setupEventHandling = False,
+                **maskededit_kwargs)
 
 
-        if self.__fmt24hr:  self.__lastCell = 'second'
-        else:               self.__lastCell = 'am_pm'
+        # This makes ':' act like tab (after we fix each ':' key event to remove "shift")
+        self._SetKeyHandler(':', self._OnChangeField)
+
+
+        # This makes the up/down keys act like spin button controls:
+        self._SetKeycodeHandler(WXK_UP, self.__OnSpinUp)
+        self._SetKeycodeHandler(WXK_DOWN, self.__OnSpinDown)
+
+
+        # This allows ! and c/C to set the control to the current time:
+        self._SetKeyHandler('!', self.__OnSetToNow)
+        self._SetKeyHandler('c', self.__OnSetToNow)
+        self._SetKeyHandler('C', self.__OnSetToNow)
+
+
+        # Set up event handling ourselves, so we can insert special
+        # processing on the ":' key to remove the "shift" attribute
+        # *before* the default handlers have been installed, so
+        # that : takes you forward, not back, and so we can issue
+        # EVT_TIMEUPDATE events on changes:
+
+        EVT_SET_FOCUS( self, self._OnFocus )        ## defeat automatic full selection
+        EVT_KILL_FOCUS( self, self._OnKillFocus )   ## run internal validator
+        EVT_LEFT_UP(self, self.__LimitSelection)    ## limit selections to single field
+        EVT_LEFT_DCLICK(self, self._OnDoubleClick ) ## select field under cursor on dclick
+        EVT_KEY_DOWN( self, self._OnKeyDown )       ## capture control events not normally seen, eg ctrl-tab.
+        EVT_CHAR( self, self.__OnChar )             ## remove "shift" attribute from colon key event,
+                                                    ## then call wxMaskedTextCtrl._OnChar with
+                                                    ## the possibly modified event.
+        EVT_TEXT( self, self.GetId(), self.__OnTextChange ) ## color control appropriately and EVT_TIMEUPDATE events
+
 
         # Validate initial value and set if appropriate
         try:
+            self.SetBounds(min, max)
+            self.SetLimited(limited)
             self.SetValue(value)
         except:
             self.SetValue('12:00:00 AM')
 
-        # set initial position and selection state
-        self.__SetCurrentCell(_dictStartCellPos['hour'])
-        self.__OnChangePos(None)
-
-        # Set up internal event handlers to change the event reaction behavior of
-        # the base wxTextCtrl:
-        EVT_TEXT(self, self.GetId(), self.__OnTextChange)
-        EVT_SET_FOCUS(self, self.__OnFocus)
-        EVT_LEFT_UP(self, self.__OnChangePos)
-        EVT_LEFT_DCLICK(self, self.__OnDoubleClick)
-        EVT_CHAR(self, self.__OnChar)
-
         if spinButton:
             self.BindSpinButton(spinButton)     # bind spin button up/down events to this control
+
 
 
     def BindSpinButton(self, sb):
@@ -162,7 +434,7 @@ class wxTimeCtrl(wxTextCtrl):
         This function binds an externally created spin button to the control, so that
         up/down events from the button automatically change the control.
         """
-        _dbg('wxTimeCtrl::BindSpinButton')
+        dbg('wxTimeCtrl::BindSpinButton')
         self.__spinButton = sb
         if self.__spinButton:
             # bind event handlers to spin ctrl
@@ -170,235 +442,518 @@ class wxTimeCtrl(wxTextCtrl):
             EVT_SPIN_DOWN(self.__spinButton, self.__spinButton.GetId(), self.__OnSpinDown)
 
 
-
     def __repr__(self):
         return "<wxTimeCtrl: %s>" % self.GetValue()
 
 
-
     def SetValue(self, value):
         """
-        Validating SetValue function for time strings, doing 12/24 format conversion as appropriate.
+        Validating SetValue function for time values:
+        This function will do dynamic type checking on the value argument,
+        and convert wxDateTime, mxDateTime, or 12/24 format time string
+        into the appropriate format string for the control.
         """
-        _dbg('wxTimeCtrl::SetValue', indent=1)
-        dict_range = _dictCellRange             # (for brevity)
-        dict_start = _dictStartCellPos
-
-        fmt12len = dict_range['am_pm'][-1]
-        fmt24len = dict_range['second'][-1]
+        dbg('wxTimeCtrl::SetValue(%s)' % repr(value), indent=1)
         try:
-            separators_correct = value[2] == ':' and value[5] == ':'
-            len_ok = len(value) in (fmt12len, fmt24len)
+            strtime = self._toGUI(self.__validateValue(value))
+        except:
+            dbg('validation failed', indent=0)
+            raise
 
-            if len(value) > fmt24len:
-                separators_correct = separators_correct and value[8] == ' '
-            hour = int(value[dict_range['hour'][0]:dict_range['hour'][-1]])
-            hour_ok = ((hour in range(0,24) and len(value) == fmt24len)
-                       or (hour in range(1,13) and len(value) == fmt12len
-                           and value[dict_start['am_pm']:] in ('AM', 'PM')))
+        dbg('strtime:', strtime)
+        self._SetValue(strtime)
+        dbg(indent=0)
 
-            minute = int(value[dict_range['minute'][0]:dict_range['minute'][-1]])
-            min_ok  = minute in range(60)
-            second  = int(value[dict_range['second'][0]:dict_range['second'][-1]])
-            sec_ok  = second in range(60)
+    def GetValue(self,
+                 as_wxDateTime = False,
+                 as_mxDateTime = False,
+                 as_wxTimeSpan = False,
+                 as_mxDateTimeDelta = False):
 
-            _dbg('len_ok =', len_ok, 'separators_correct =', separators_correct)
-            _dbg('hour =', hour, 'hour_ok =', hour_ok, 'min_ok =', min_ok, 'sec_ok =', sec_ok)
 
-            if len_ok and hour_ok and min_ok and sec_ok and separators_correct:
-                _dbg('valid time string')
+        if as_wxDateTime or as_mxDateTime or as_wxTimeSpan or as_mxDateTimeDelta:
+            value = self.GetWxDateTime()
+            if as_wxDateTime:
+                pass
+            elif as_mxDateTime:
+                value = DateTime.DateTime(1970, 1, 1, value.GetHour(), value.GetMinute(), value.GetSecond())
+            elif as_wxTimeSpan:
+                value = wxTimeSpan(value.GetHour(), value.GetMinute(), value.GetSecond())
+            elif as_mxDateTimeDelta:
+                value = DateTime.DateTimeDelta(0, value.GetHour(), value.GetMinute(), value.GetSecond())
+        else:
+            value = wxMaskedTextCtrl.GetValue(self)
+        return value
 
-                self.__hour = hour
-                if len(value) == fmt12len:                      # handle 12 hour format conversion for actual hour:
-                    am = value[dict_start['am_pm']:] == 'AM'
-                    if hour != 12 and not am:
-                        self.__hour = hour = (hour+12) % 24
-                    elif hour == 12:
-                        if am: self.__hour = hour = 0
-
-                self.__minute = minute
-                self.__second = second
-
-                # valid time
-                need_to_convert = ((self.__fmt24hr and len(value) == fmt12len)
-                                   or (not self.__fmt24hr and len(value) == fmt24len))
-                _dbg('need_to_convert =', need_to_convert)
-
-                if need_to_convert:     #convert to 12/24 hour format as specified:
-                    if self.__fmt24hr and len(value) == fmt12len:
-                        text = '%.2d:%.2d:%.2d' % (hour, minute, second)
-                    else:
-                        if hour > 12:
-                            hour = hour - 12
-                            am_pm = 'PM'
-                        elif hour == 12:
-                            am_pm = 'PM'
-                        else:
-                            if hour == 0: hour = 12
-                            am_pm = 'AM'
-                        text = '%2d:%.2d:%.2d %s' % (hour, minute, second, am_pm)
-                else:
-                    text = value
-                _dbg('text=', text)
-                wxTextCtrl.SetValue(self, text)
-                _dbg('firing TimeUpdatedEvent...')
-                evt = TimeUpdatedEvent(self.GetId(), text)
-                evt.SetEventObject(self)
-                self.GetEventHandler().ProcessEvent(evt)
-            else:
-                _dbg('len_ok:', len_ok, 'separators_correct =', separators_correct)
-                _dbg('hour_ok:', hour_ok, 'min_ok:', min_ok, 'sec_ok:', sec_ok, indent=0)
-                raise ValueError, 'value is not a valid time string'
-
-        except (TypeError, ValueError):
-            _dbg(indent=0)
-            raise ValueError, 'value is not a valid time string'
-        _dbg(indent=0)
 
     def SetWxDateTime(self, wxdt):
-        value = '%2d:%.2d:%.2d' % (wxdt.GetHour(), wxdt.GetMinute(), wxdt.GetSecond())
-        self.SetValue(value)
+        """
+        Because SetValue can take a wxDateTime, this is now just an alias.
+        """
+        self.SetValue(wxdt)
 
-    def GetWxDateTime(self):
-        t = wxDateTimeFromHMS(self.__hour, self.__minute, self.__second)
-        return t
+
+    def GetWxDateTime(self, value=None):
+        """
+        This function is the conversion engine for wxTimeCtrl; it takes
+        one of the following types:
+            time string
+            wxDateTime
+            wxTimeSpan
+            mxDateTime
+            mxDateTimeDelta
+        and converts it to a wxDateTime that always has Jan 1, 1970 as its date
+        portion, so that range comparisons around values can work using
+        wxDateTime's built-in comparison function.  If a value is not
+        provided to convert, the string value of the control will be used.
+        If the value is not one of the accepted types, a ValueError will be
+        raised.
+        """
+        global accept_mx
+        dbg(suspend=1)
+        dbg('wxTimeCtrl::GetWxDateTime(%s)' % repr(value), indent=1)
+        if value is None:
+            dbg('getting control value')
+            value = self.GetValue()
+            dbg('value = "%s"' % value)
+
+        valid = True    # assume true
+        if type(value) == types.StringType:
+
+            # Construct constant wxDateTime, then try to parse the string:
+            wxdt = wxDateTimeFromDMY(1, 0, 1970)
+            dbg('attempting conversion')
+            value = value.strip()    # (parser doesn't like leading spaces)
+            checkTime    = wxdt.ParseTime(value)
+            valid = checkTime == len(value)     # entire string parsed?
+            dbg('checkTime == len(value)?', valid)
+
+            if not valid:
+                dbg(indent=0, suspend=0)
+                raise ValueError('cannot convert string "%s" to valid time' % value)
+
+        else:
+            if isinstance(value, wxPython.utils.wxDateTimePtr):
+                hour, minute, second = value.GetHour(), value.GetMinute(), value.GetSecond()
+            elif isinstance(value, wxPython.utils.wxTimeSpanPtr):
+                totalseconds = value.GetSeconds()
+                hour = totalseconds / 3600
+                minute = totalseconds / 60 - (hour * 60)
+                second = totalseconds - ((hour * 3600) + (minute * 60))
+
+            elif accept_mx and isinstance(value, DateTime.DateTimeType):
+                hour, minute, second = value.hour, value.minute, value.second
+            elif accept_mx and isinstance(value, DateTime.DateTimeDeltaType):
+                hour, minute, second = value.hour, value.minute, value.second
+            else:
+                # Not a valid function argument
+                if self.__accept_mx:
+                    error = 'GetWxDateTime requires wxDateTime, mxDateTime or parsable time string, passed %s'% repr(value)
+                else:
+                    error = 'GetWxDateTime requires wxDateTime or parsable time string, passed %s'% repr(value)
+                dbg(indent=0, suspend=0)
+                raise ValueError(error)
+
+            wxdt = wxDateTimeFromDMY(1, 0, 1970)
+            wxdt.SetHour(hour)
+            wxdt.SetMinute(minute)
+            wxdt.SetSecond(second)
+
+        dbg('wxdt:', wxdt, indent=0, suspend=0)
+        return wxdt
+
 
     def SetMxDateTime(self, mxdt):
-        from mx import DateTime
-        value = '%2d:%.2d:%.2d' % (mxdt.hour, mxdt.minute, mxdt.second)
+        """
+        Because SetValue can take an mxDateTime, (if DateTime is importable),
+        this is now just an alias.
+        """
         self.SetValue(value)
 
-    def GetMxDateTime(self):
-        from mx import DateTime
-        t = DateTime.Time(self.__hour, self.__minute, self.__second)
+
+    def GetMxDateTime(self, value=None):
+        if value is None:
+            t = self.GetValue(as_mxDateTime=True)
+        else:
+            # Convert string 1st to wxDateTime, then use components, since
+            # mx' DateTime.Parser.TimeFromString() doesn't handle AM/PM:
+            wxdt = self.GetWxDateTime(value)
+            hour, minute, second = wxdt.GetHour(), wxdt.GetMinute(), wxdt.GetSecond()
+            t = DateTime.DateTime(1970,1,1) + DateTimeDelta(0, hour, minute, second)
         return t
+
+
+    def SetMin(self, min=None):
+        """
+        Sets the minimum value of the control.  If a value of None
+        is provided, then the control will have no explicit minimum value.
+        If the value specified is greater than the current maximum value,
+        then the function returns 0 and the minimum will not change from
+        its current setting.  On success, the function returns 1.
+
+        If successful and the current value is lower than the new lower
+        bound, if the control is limited, the value will be automatically
+        adjusted to the new minimum value; if not limited, the value in the
+        control will be colored as invalid.
+        """
+        dbg('wxTimeCtrl::SetMin(%s)'% repr(min), indent=1)
+        if min is not None:
+            try:
+                min = self.GetWxDateTime(min)
+                self.__min = self._toGUI(min)
+            except:
+                dbg('exception occurred', indent=0)
+                return False
+        else:
+            self.__min = min
+
+        if self.IsLimited() and not self.IsInBounds():
+            self.SetLimited(self.__limited) # force limited value:
+        else:
+            self._CheckValid()
+        ret = True
+        dbg('ret:', ret, indent=0)
+        return ret
+
+
+    def GetMin(self, as_string = False):
+        """
+        Gets the minimum value of the control.
+        If None, it will return None.  Otherwise it will return
+        the current minimum bound on the control, as a wxDateTime
+        by default, or as a string if as_string argument is True.
+        """
+        dbg(suspend=1)
+        dbg('wxTimeCtrl::GetMin, as_string?', as_string, indent=1)
+        if self.__min is None:
+            dbg('(min == None)')
+            ret = self.__min
+        elif as_string:
+            ret = self.__min
+            dbg('ret:', ret)
+        else:
+            try:
+                ret = self.GetWxDateTime(self.__min)
+            except:
+                dbg(suspend=0)
+                dbg('exception occurred', indent=0)
+            dbg('ret:', repr(ret))
+        dbg(indent=0, suspend=0)
+        return ret
+
+
+    def SetMax(self, max=None):
+        """
+        Sets the maximum value of the control. If a value of None
+        is provided, then the control will have no explicit maximum value.
+        If the value specified is less than the current minimum value, then
+        the function returns False and the maximum will not change from its
+        current setting. On success, the function returns True.
+
+        If successful and the current value is greater than the new upper
+        bound, if the control is limited the value will be automatically
+        adjusted to this maximum value; if not limited, the value in the
+        control will be colored as invalid.
+        """
+        dbg('wxTimeCtrl::SetMax(%s)' % repr(max), indent=1)
+        if max is not None:
+            try:
+                max = self.GetWxDateTime(max)
+                self.__max = self._toGUI(max)
+            except:
+                dbg('exception occurred', indent=0)
+                return False
+        else:
+            self.__max = max
+        dbg('max:', repr(self.__max))
+        if self.IsLimited() and not self.IsInBounds():
+            self.SetLimited(self.__limited) # force limited value:
+        else:
+            self._CheckValid()
+        ret = True
+        dbg('ret:', ret, indent=0)
+        return ret
+
+
+    def GetMax(self, as_string = False):
+        """
+        Gets the minimum value of the control.
+        If None, it will return None.  Otherwise it will return
+        the current minimum bound on the control, as a wxDateTime
+        by default, or as a string if as_string argument is True.
+        """
+        dbg(suspend=1)
+        dbg('wxTimeCtrl::GetMin, as_string?', as_string, indent=1)
+        if self.__max is None:
+            dbg('(max == None)')
+            ret = self.__max
+        elif as_string:
+            ret = self.__max
+            dbg('ret:', ret)
+        else:
+            try:
+                ret = self.GetWxDateTime(self.__max)
+            except:
+                dbg(suspend=0)
+                dbg('exception occurred', indent=0)
+                raise
+            dbg('ret:', repr(ret))
+        dbg(indent=0, suspend=0)
+        return ret
+
+
+    def SetBounds(self, min=None, max=None):
+        """
+        This function is a convenience function for setting the min and max
+        values at the same time.  The function only applies the maximum bound
+        if setting the minimum bound is successful, and returns True
+        only if both operations succeed.
+        NOTE: leaving out an argument will remove the corresponding bound.
+        """
+        ret = self.SetMin(min)
+        return ret and self.SetMax(max)
+
+
+    def GetBounds(self, as_string = False):
+        """
+        This function returns a two-tuple (min,max), indicating the
+        current bounds of the control.  Each value can be None if
+        that bound is not set.
+        """
+        return (self.GetMin(as_string), self.GetMax(as_string))
+
+
+    def SetLimited(self, limited):
+        """
+        If called with a value of True, this function will cause the control
+        to limit the value to fall within the bounds currently specified.
+        If the control's value currently exceeds the bounds, it will then
+        be limited accordingly.
+
+        If called with a value of 0, this function will disable value
+        limiting, but coloring of out-of-bounds values will still take
+        place if bounds have been set for the control.
+        """
+        dbg('wxTimeCtrl::SetLimited(%d)' % limited, indent=1)
+        self.__limited = limited
+
+        if not limited:
+            self.SetMaskParameters(validRequired = False)
+            self._CheckValid()
+            dbg(indent=0)
+            return
+
+        dbg('requiring valid value')
+        self.SetMaskParameters(validRequired = True)
+
+        min = self.GetMin()
+        max = self.GetMax()
+        if min is None or max is None:
+            dbg('both bounds not set; no further action taken')
+            return  # can't limit without 2 bounds
+
+        elif not self.IsInBounds():
+            # set value to the nearest bound:
+            try:
+                value = self.GetWxDateTime()
+            except:
+                dbg('exception occurred', indent=0)
+                raise
+
+            if min <= max:   # valid range doesn't span midnight
+                dbg('min <= max')
+                # which makes the "nearest bound" computation trickier...
+
+                # determine how long the "invalid" pie wedge is, and cut
+                # this interval in half for comparison purposes:
+
+                # Note: relies on min and max and value date portions
+                # always being the same.
+                interval = (min + wxTimeSpan(24, 0, 0, 0)) - max
+
+                half_interval = wxTimeSpan(
+                                    0,      # hours
+                                    0,      # minutes
+                                    interval.GetSeconds() / 2,  # seconds
+                                    0)      # msec
+
+                if value < min: # min is on next day, so use value on
+                    # "next day" for "nearest" interval calculation:
+                    cmp_value = value + wxTimeSpan(24, 0, 0, 0)
+                else:   # "before midnight; ok
+                    cmp_value = value
+
+                if (cmp_value - max) > half_interval:
+                    dbg('forcing value to min (%s)' % min.FormatTime())
+                    self.SetValue(min)
+                else:
+                    dbg('forcing value to max (%s)' % max.FormatTime())
+                    self.SetValue(max)
+            else:
+                dbg('max < min')
+                # therefore  max < value < min guaranteed to be true,
+                # so "nearest bound" calculation is much easier:
+                if (value - max) >= (min - value):
+                    # current value closer to min; pick that edge of pie wedge
+                    dbg('forcing value to min (%s)' % min.FormatTime())
+                    self.SetValue(min)
+                else:
+                    dbg('forcing value to max (%s)' % max.FormatTime())
+                    self.SetValue(max)
+
+        dbg(indent=0)
+
+
+
+    def IsLimited(self):
+        """
+        Returns True if the control is currently limiting the
+        value to fall within any current bounds.  Note: can
+        be set even if there are no current bounds.
+        """
+        return self.__limited
+
+
+    def IsInBounds(self, value=None):
+        """
+        Returns True if no value is specified and the current value
+        of the control falls within the current bounds.  As the clock
+        is a "circle", both minimum and maximum bounds must be set for
+        a value to ever be considered "out of bounds".  This function can
+        also be called with a value to see if that value would fall within
+        the current bounds of the given control.
+        """
+        if value is not None:
+            try:
+                value = self.GetWxDateTime(value)   # try to regularize passed value
+            except ValueError:
+                dbg('ValueError getting wxDateTime for %s' % repr(value), indent=0)
+                raise
+
+        dbg('wxTimeCtrl::IsInBounds(%s)' % repr(value), indent=1)
+        if self.__min is None or self.__max is None:
+            dbg(indent=0)
+            return True
+
+        elif value is None:
+            try:
+                value = self.GetWxDateTime()
+            except:
+                dbg('exception occurred', indent=0)
+
+        dbg('value:', value.FormatTime())
+
+        # Get wxDateTime representations of bounds:
+        min = self.GetMin()
+        max = self.GetMax()
+
+        midnight = wxDateTimeFromDMY(1, 0, 1970)
+        if min <= max:   # they don't span midnight
+            ret = min <= value <= max
+
+        else:
+            # have to break into 2 tests; to be in bounds
+            # either "min" <= value (<= midnight of *next day*)
+            # or midnight <= value <= "max"
+            ret = min <= value or (midnight <= value <= max)
+        dbg('in bounds?', ret, indent=0)
+        return ret
+
+
+    def IsValid( self, value ):
+        """
+        Can be used to determine if a given value would be a legal and
+        in-bounds value for the control.
+        """
+        try:
+            self.__validateValue(value)
+            return True
+        except ValueError:
+            return False
+
 
 #-------------------------------------------------------------------------------------------------------------
 # these are private functions and overrides:
 
-    def __SetCurrentCell(self, pos):
-        """
-        Sets state variables that indicate the current cell and position within the control.
-        """
-        self.__posCurrent = pos
-        self.__cellStart, self.__cellEnd = _dictCellRange[pos][0], _dictCellRange[pos][-1]
+
+    def __OnTextChange(self, event=None):
+        dbg('wxTimeCtrl::OnTextChange', indent=1)
+
+        # Allow wxMaskedtext base control to color as appropriate,
+        # and Skip the EVT_TEXT event (if appropriate.)
+        ##! WS: For some inexplicable reason, every wxTextCtrl.SetValue()
+        ## call is generating two (2) EVT_TEXT events. (!)
+        ## The the only mechanism I can find to mask this problem is to
+        ## keep track of last value seen, and declare a valid EVT_TEXT
+        ## event iff the value has actually changed.  The masked edit
+        ## OnTextChange routine does this, and returns True on a valid event,
+        ## False otherwise.
+        if not wxMaskedTextCtrl._OnTextChange(self, event):
+            return
+
+        dbg('firing TimeUpdatedEvent...')
+        evt = TimeUpdatedEvent(self.GetId(), self.GetValue())
+        evt.SetEventObject(self)
+        self.GetEventHandler().ProcessEvent(evt)
+        dbg(indent=0)
 
 
     def SetInsertionPoint(self, pos):
         """
         Records the specified position and associated cell before calling base class' function.
+        This is necessary to handle the optional spin button, because the insertion
+        point is lost when the focus shifts to the spin button.
         """
-        _dbg('wxTimeCtrl::SetInsertionPoint', pos, indent=1)
-
-        # Adjust pos to legal value if not already
-        if pos < 0: pos = 0
-        elif pos in _listDelimPos + [_dictCellRange[self.__lastCell]]:
-            pos = pos - 1
-            if self.__lastCell == 'am_pm' and pos in _dictCellRange[self.__lastCell]:
-                pos = _dictStartCellPos[self.__lastCell]
-
-        self.__SetCurrentCell(pos)
-        wxTextCtrl.SetInsertionPoint(self, pos)                 # (causes EVT_TEXT event to fire)
-        _dbg(indent=0)
+        dbg('wxTimeCtrl::SetInsertionPoint', pos, indent=1)
+        wxMaskedTextCtrl.SetInsertionPoint(self, pos)                 # (causes EVT_TEXT event to fire)
+        self.__posCurrent = self.GetInsertionPoint()
+        dbg(indent=0)
 
 
     def SetSelection(self, sel_start, sel_to):
-        _dbg('wxTimeCtrl::SetSelection', sel_start, sel_to, indent=1)
+        dbg('wxTimeCtrl::SetSelection', sel_start, sel_to, indent=1)
 
         # Adjust selection range to legal extent if not already
         if sel_start < 0:
-            self.SetInsertionPoint(0)
-            sel_start = self.__posCurrent
-
-        elif sel_start in _listDelimPos + [_dictCellRange[self.__lastCell]]:
-            self.SetInsertionPoint(sel_start - 1)
-            sel_start = self.__posCurrent
+            sel_start = 0
 
         if self.__posCurrent != sel_start:                      # force selection and insertion point to match
             self.SetInsertionPoint(sel_start)
-
-        if sel_to not in _dictCellRange[sel_start]:
-            sel_to = _dictCellRange[sel_start][-1]              # limit selection to end of current cell
+        cell_start, cell_end = self._FindField(sel_start)._extent
+        if not cell_start <= sel_to <= cell_end:
+            sel_to = cell_end
 
         self.__bSelection = sel_start != sel_to
-        self.__posSelectTo = sel_to
-        wxTextCtrl.SetSelection(self, sel_start, sel_to)
-        _dbg(indent=0)
+        wxMaskedTextCtrl.SetSelection(self, sel_start, sel_to)
+        dbg(indent=0)
 
-
-    def __OnFocus(self,event):
-        """
-        This event handler is currently necessary to work around new default
-        behavior as of wxPython2.3.3;
-        The TAB key auto selects the entire contents of the wxTextCtrl *after*
-        the EVT_SET_FOCUS event occurs; therefore we can't query/adjust the selection
-        *here*, because it hasn't happened yet.  So to prevent this behavior, and
-        preserve the correct selection when the focus event is not due to tab,
-        we need to pull the following trick:
-        """
-        _dbg('wxTimeCtrl::OnFocus')
-        wxCallAfter(self.__FixSelection)
-        event.Skip()
-
-
-    def __FixSelection(self):
-        """
-        This gets called after the TAB traversal selection is made, if the
-        focus event was due to this, but before the EVT_LEFT_* events if
-        the focus shift was due to a mouse event.
-
-        The trouble is that, a priori, there's no explicit notification of
-        why the focus event we received.  However, the whole reason we need to
-        do this is because the default behavior on TAB traveral in a wxTextCtrl is
-        now to select the entire contents of the window, something we don't want.
-        So we can *now* test the selection range, and if it's "the whole text"
-        we can assume the cause, change the insertion point to the start of
-        the control, and deselect.
-        """
-        _dbg('wxTimeCtrl::FixSelection', indent=1)
-        sel_start, sel_to = self.GetSelection()
-        if sel_start == 0 and sel_to in _dictCellRange[self.__lastCell]:
-            # This isn't normally allowed, and so assume we got here by the new
-            # "tab traversal" behavior, so we need to reset the selection
-            # and insertion point:
-            _dbg('entire text selected; resetting selection to start of control')
-            self.SetInsertionPoint(0)
-            self.SetSelection(self.__cellStart, self.__cellEnd)
-        _dbg(indent=0)
-
-
-    def __OnTextChange(self, event):
-        """
-        This private event handler is required to retain the current position information of the cursor
-        after update to the underlying text control is done.
-        """
-        _dbg('wxTimeCtrl::OnTextChange', indent=1)
-        self.__SetCurrentCell(self.__posCurrent)                # ensure cell range vars are set
-
-        # Note: must call self.SetSelection here to preserve insertion point cursor after update!
-        # (I don't know why, but this does the trick!)
-        if self.__bSelection:
-            _dbg('reselecting from ', self.__posCurrent, 'to', self.__posSelectTo)
-            self.SetSelection(self.__posCurrent, self.__posSelectTo)
-        else:
-            self.SetSelection(self.__posCurrent, self.__posCurrent)
-        event.Skip()
-        _dbg(indent=0)
 
     def __OnSpin(self, key):
-        self.__IncrementValue(key, self.__posCurrent)
+        """
+        This is the function that gets called in response to up/down arrow or
+        bound spin button events.
+        """
+        self.__IncrementValue(key, self.__posCurrent)   # changes the value
+
+        # Ensure adjusted control regains focus and has adjusted portion
+        # selected:
         self.SetFocus()
-        self.SetInsertionPoint(self.__posCurrent)
-        self.SetSelection(self.__posCurrent, self.__posSelectTo)
+        start, end = self._FindField(self.__posCurrent)._extent
+        self.SetInsertionPoint(start)
+        self.SetSelection(start, end)
+        dbg('current position:', self.__posCurrent)
+
 
     def __OnSpinUp(self, event):
         """
         Event handler for any bound spin button on EVT_SPIN_UP;
         causes control to behave as if up arrow was pressed.
         """
-        _dbg('wxTimeCtrl::OnSpinUp', indent=1)
+        dbg('wxTimeCtrl::OnSpinUp', indent=1)
         self.__OnSpin(WXK_UP)
-        _dbg(indent=0)
+        keep_processing = False
+        dbg(indent=0)
+        return keep_processing
 
 
     def __OnSpinDown(self, event):
@@ -406,381 +961,146 @@ class wxTimeCtrl(wxTextCtrl):
         Event handler for any bound spin button on EVT_SPIN_DOWN;
         causes control to behave as if down arrow was pressed.
         """
-        _dbg('wxTimeCtrl::OnSpinDown', indent=1)
+        dbg('wxTimeCtrl::OnSpinDown', indent=1)
         self.__OnSpin(WXK_DOWN)
-        _dbg(indent=0)
-
-
-    def __OnChangePos(self, event):
-        """
-        Event handler for motion events; this handler
-        changes limits the selection to the new cell boundaries.
-        """
-        _dbg('wxTimeCtrl::OnChangePos', indent=1)
-        pos = self.GetInsertionPoint()
-        self.__SetCurrentCell(pos)
-        sel_start, sel_to = self.GetSelection()
-        selection = sel_start != sel_to
-        if not selection:
-            # disallow position at end of field:
-            if pos in _listDelimPos + [_dictCellRange[self.__lastCell][-1]]:
-                self.SetInsertionPoint(pos-1)
-            self.__posSelectTo = self.__cellEnd
-        else:
-            # only allow selection to end of current cell:
-            if sel_to < pos:   self.__posSelectTo = self.__cellStart
-            elif sel_to > pos: self.__posSelectTo = self.__cellEnd
-
-        _dbg('new pos =', self.__posCurrent, 'select to ', self.__posSelectTo)
-        self.SetSelection(self.__posCurrent, self.__posSelectTo)
-        if event: event.Skip()
-        _dbg(indent=0)
-
-
-    def __OnDoubleClick(self, event):
-        """
-        Event handler for left double-click mouse events; this handler
-        causes the cell at the double-click point to be selected.
-        """
-        _dbg('wxTimeCtrl::OnDoubleClick', indent=1)
-        pos = self.GetInsertionPoint()
-        self.__SetCurrentCell(pos)
-        if self.__posCurrent != self.__cellStart:
-            self.SetInsertionPoint(self.__cellStart)
-        self.SetSelection(self.__cellStart, self.__cellEnd)
-        _dbg(indent=0)
+        keep_processing = False
+        dbg(indent=0)
+        return keep_processing
 
 
     def __OnChar(self, event):
         """
-        This private event handler is the main control point for the wxTimeCtrl.
-        It governs whether input characters are accepted and if so, handles them
-        so as to provide appropriate cursor and selection behavior for the control.
+        Handler to explicitly look for ':' keyevents, and if found,
+        clear the m_shiftDown field, so it will behave as forward tab.
+        It then calls the base control's _OnChar routine with the modified
+        event instance.
         """
-        _dbg('wxTimeCtrl::OnChar', indent=1)
+        dbg('wxTimeCtrl::OnChar', indent=1)
+        keycode = event.GetKeyCode()
+        dbg('keycode:', keycode)
+        if keycode == ord(':'):
+            dbg('colon seen! removing shift attribute')
+            event.m_shiftDown = False
+        wxMaskedTextCtrl._OnChar(self, event )              ## handle each keypress
+        dbg(indent=0)
 
-        # NOTE: Returning without calling event.Skip() eats the event before it
-        # gets to the text control...
 
-        key = event.GetKeyCode()
-        text = self.GetValue()
+    def __OnSetToNow(self, event):
+        """
+        This is the key handler for '!' and 'c'; this allows the user to
+        quickly set the value of the control to the current time.
+        """
+        self.SetValue(wxDateTime_Now().FormatTime())
+        keep_processing = False
+        return keep_processing
+
+
+    def __LimitSelection(self, event):
+        """
+        Event handler for motion events; this handler
+        changes limits the selection to the new cell boundaries.
+        """
+        dbg('wxTimeCtrl::LimitSelection', indent=1)
         pos = self.GetInsertionPoint()
-        if pos != self.__posCurrent:
-            _dbg("insertion point has moved; resetting current cell")
-            self.__SetCurrentCell(pos)
-            self.SetSelection(self.__posCurrent, self.__posCurrent)
-
+        self.__posCurrent = pos
         sel_start, sel_to = self.GetSelection()
         selection = sel_start != sel_to
-        _dbg('sel_start=', sel_start, 'sel_to =', sel_to)
-        if not selection:
-            self.__bSelection = False                       # predict unselection of entire region
+        if selection:
+            # only allow selection to end of current cell:
+            start, end = self._FindField(sel_start)._extent
+            if sel_to < pos:   sel_to = start
+            elif sel_to > pos: sel_to = end
 
-        _dbg('keycode = ', key)
-        _dbg('pos = ', pos)
-
-        # don't allow deletion, cut or paste:
-        if key in (WXK_DELETE, WXK_BACK, WXK_CTRL_X, WXK_CTRL_V):
-            pass
-
-        elif key == WXK_TAB:                                # skip to next field if applicable:
-            _dbg('key == WXK_TAB')
-            dict_range = _dictCellRange                     # (for brevity)
-            dict_start = _dictStartCellPos
-            if event.ShiftDown():                           # tabbing backwords
-
-                ###(NOTE: doesn't work; wxTE_PROCESS_TAB doesn't appear to send us this event!)
-
-                _dbg('event.ShiftDown()')
-                if pos in dict_range['hour']:               # already in 1st field
-                    self.__SetCurrentCell(dict_start['hour']) # ensure we have our member vars set
-                    event.Skip()                            #then do normal tab processing for the form
-                    _dbg(indent=0)
-                    return
-
-                elif pos in dict_range['minute']:           # skip to hours field
-                    new_pos = dict_start['hour']
-                elif pos in dict_range['second']:           # skip to minutes field
-                    new_pos = dict_start['minute']
-                elif pos in dict_range['am_pm']:            # skip to seconds field
-                    new_pos = dict_start['second']
-
-                self.SetInsertionPoint(new_pos)             # force insert point to jump to next cell (swallowing TAB)
-                self.__OnChangePos(None)                    # update selection accordingly
-
-            else:
-                # Tabbing forwards through control...
-
-                if pos in dict_range[self.__lastCell]:      # already in last field; ensure we have our members set
-                    self.__SetCurrentCell(dict_start[self.__lastCell])
-                    _dbg('tab in last cell')
-                    event.Skip()                            # then do normal tab processing for the form
-                    _dbg(indent=0)
-                    return
-
-                if pos in dict_range['second']:             # skip to AM/PM field (if not last cell)
-                    new_pos = dict_start['am_pm']
-                elif pos in dict_range['minute']:           # skip to seconds field
-                    new_pos = dict_start['second']
-                elif pos in dict_range['hour']:             # skip to minutes field
-                    new_pos = dict_start['minute']
-
-                self.SetInsertionPoint(new_pos)             # force insert point to jump to next cell (swallowing TAB)
-                self.__OnChangePos(None)                    # update selection accordingly
-
-        elif key == WXK_LEFT:                               # move left; set insertion point as appropriate:
-            _dbg('key == WXK_LEFT')
-            if event.ShiftDown():                           # selecting a range...
-                _dbg('event.ShiftDown()')
-                if pos in _listStartCellPos:                # can't select pass delimiters
-                    if( sel_to == pos+2 and sel_to != _dictCellRange['am_pm'][-1]):
-                        self.SetSelection(pos, pos+1)       # allow deselection of 2nd char in cell if not am/pm
-                    # else ignore event
-
-                elif pos in _listEndCellPos:                # can't use normal selection, because position ends up
-                                                            # at delimeter
-                    _dbg('set selection from', pos-1, 'to', self.__posCurrent)
-                    self.SetInsertionPoint(pos-1)           # this selects the previous position
-                    self.SetSelection(self.__posCurrent, pos)
-                else:
-                    self.SetInsertionPoint(sel_to - 1)      # this unselects the last digit
-                    self.SetSelection(self.__posCurrent, pos)
-
-            else:   # ... not selecting
-                if pos == 0:                                # can't position before position 0
-                    pass
-                elif pos in _listStartCellPos:              # skip (left) OVER the colon/space:
-                    self.SetInsertionPoint(pos-2)
-                    self.__OnChangePos(None)                # set the selection appropriately
-                else:
-                    self.SetInsertionPoint(pos-1)           # reposition the cursor and
-                    self.__OnChangePos(None)                # set the selection appropriately
-
-
-        elif key == WXK_RIGHT:                              # move right
-            _dbg('key == WXK_RIGHT')
-            if event.ShiftDown():
-                _dbg('event.ShiftDown()')
-                if sel_to in _listDelimPos:                 # can't select pass delimiters
-                    pass
-                else:
-                    self.SetSelection(self.__posCurrent, sel_to+1)
-            else:
-                if( (self.__lastCell == 'second'
-                     and pos == _dictStartCellPos['second']+1)
-                    or (self.__lastCell == 'am_pm'
-                        and pos == _dictStartCellPos['am_pm']) ):
-                    pass                                    # don't allow cursor past last cell
-                elif pos in _listEndCellPos:                # skip (right) OVER the colon/space:
-                    self.SetInsertionPoint(pos+2)
-                    self.__OnChangePos(None)                # set the selection appropriately
-                else:
-                    self.SetInsertionPoint(pos+1)           # reposition the cursor and
-                    self.__OnChangePos(None)                # set the selection appropriately
-
-        elif key in (WXK_UP, WXK_DOWN):
-            _dbg('key in (WXK_UP, WXK_DOWN)')
-            self.__IncrementValue(key, pos)                   # increment/decrement as appropriate
-
-
-        elif key < WXK_SPACE or key == WXK_DELETE or key > 255:
-            event.Skip()                                    # non alphanumeric; process normally (Right thing to do?)
-
-        elif chr(key) in ['!', 'c', 'C']:                   # Special character; sets the value of the control to "now"
-            _dbg("key == '!'; setting time to 'now'")
-            now = wxDateTime_Now()
-            self.SetWxDateTime(now)
-
-        elif chr(key) in string.digits:                     # let ChangeValue validate and update current position
-            self.__ChangeValue(chr(key), pos)               # handle event (and swallow it)
-
-        elif chr(key) in ('a', 'A', 'p', 'P', ' '):         # let ChangeValue validate and update current position
-            self.__ChangeValue(chr(key), pos)               # handle event (and swallow it)
-
-        else:                                               # disallowed char; swallow event
-            pass
-        _dbg(indent=0)
+        dbg('new pos =', self.__posCurrent, 'select to ', sel_to)
+        self.SetInsertionPoint(self.__posCurrent)
+        self.SetSelection(self.__posCurrent, sel_to)
+        if event: event.Skip()
+        dbg(indent=0)
 
 
     def __IncrementValue(self, key, pos):
-        _dbg('wxTimeCtrl::IncrementValue', key, pos, indent=1)
+        dbg('wxTimeCtrl::IncrementValue', key, pos, indent=1)
         text = self.GetValue()
+        field = self._FindField(pos)
+        dbg('field: ', field._index)
+        start, end = field._extent
+        slice = text[start:end]
+        if key == WXK_UP: increment = 1
+        else:             increment = -1
 
-        sel_start, sel_to = self.GetSelection()
-        selection = sel_start != sel_to
-        cell_selected = selection and sel_to -1 != pos
+        if slice in ('A', 'P'):
+            if slice == 'A': newslice = 'P'
+            elif slice == 'P': newslice = 'A'
+            newvalue = text[:start] + newslice + text[end:]
 
-        dict_start = _dictStartCellPos                      # (for brevity)
+        elif field._index == 0:
+            # adjusting this field is trickier, as its value can affect the
+            # am/pm setting.  So, we use wxDateTime to generate a new value for us:
+            # (Use a fixed date not subject to DST variations:)
+            converter = wxDateTimeFromDMY(1, 0, 1970)
+            dbg('text: "%s"' % text)
+            converter.ParseTime(text.strip())
+            currenthour = converter.GetHour()
+            dbg('current hour:', currenthour)
+            newhour = (currenthour + increment) % 24
+            dbg('newhour:', newhour)
+            converter.SetHour(newhour)
+            dbg('converter.GetHour():', converter.GetHour())
+            newvalue = converter     # take advantage of auto-conversion for am/pm in .SetValue()
 
-        # Determine whether we should change the entire cell or just a portion of it:
-        if( cell_selected
-            or (pos in _listStartCellPos and not selection)
-            or (text[pos] == ' ' and text[pos+1] not in ('1', '2'))
-            or (text[pos] == '9' and text[pos-1] == ' ' and key == WXK_UP)
-            or (text[pos] == '1' and text[pos-1] == ' ' and key == WXK_DOWN)
-            or pos >= dict_start['am_pm']):
+        else:   # minute or second field; handled the same way:
+            newslice = "%02d" % ((int(slice) + increment) % 60)
+            newvalue = text[:start] + newslice + text[end:]
 
-            self.__IncrementCell(key, pos)
+        try:
+            self.SetValue(newvalue)
+
+        except ValueError:  # must not be in bounds:
+            if not wxValidator_IsSilent():
+                wxBell()
+        dbg(indent=0)
+
+
+    def _toGUI( self, wxdt ):
+        """
+        This function takes a wxdt as an unambiguous representation of a time, and
+        converts it to a string appropriate for the format of the control.
+        """
+        if self.__fmt24hr:
+            if self.__display_seconds: strval = wxdt.Format('%H:%M:%S')
+            else:                      strval = wxdt.Format('%H:%M')
         else:
-            if key == WXK_UP:   inc = 1
-            else:               inc = -1
+            if self.__display_seconds: strval = wxdt.Format('%I:%M:%S %p')
+            else:                      strval = wxdt.Format('%I:%M %p')
 
-            if pos == dict_start['hour'] and not self.__fmt24hr:
-                if text[pos] == ' ': digit = '1'                    # allow ' ' or 1 for 1st digit in 12hr format
-                else:                digit = ' '
-            else:
-                if pos == dict_start['hour']:
-                    if int(text[pos + 1]) >3:   mod = 2             # allow for 20-23
-                    else:                       mod = 3             # allow 00-19
-                elif pos == dict_start['hour'] + 1:
-                    if self.__fmt24hr:
-                        if text[pos - 1] == '2': mod = 4            # allow hours 20-23
-                        else:                    mod = 10           # allow hours 00-19
-                    else:
-                        if text[pos - 1] == '1': mod = 3            # allow hours 10-12
-                        else:                    mod = 10           # allow 0-9
-
-                elif pos in (dict_start['minute'],
-                             dict_start['second']): mod = 6         # allow minutes/seconds 00-59
-                else:                               mod = 10
-
-                digit = '%d' % ((int(text[pos]) + inc) % mod)
-
-            _dbg("new digit = \'%s\'" % digit)
-            self.__ChangeValue(digit, pos)
-        _dbg(indent=0)
+        return strval
 
 
-    def __IncrementCell(self, key, pos):
-        _dbg('wxTimeCtrl::IncrementCell', key, pos, indent=1)
-        self.__SetCurrentCell(pos)                                  # determine current cell
-        hour, minute, second = self.__hour, self.__minute, self.__second
-        text = self.GetValue()
-        dict_start = _dictStartCellPos                              # (for brevity)
-        if key == WXK_UP:   inc = 1
-        else:               inc = -1
-
-        if self.__cellStart == dict_start['am_pm']:
-            am = text[dict_start['am_pm']:] == 'AM'
-            if am: hour = hour + 12
-            else:  hour = hour - 12
-        else:
-            if self.__cellStart == dict_start['hour']:
-                hour = (hour + inc) % 24
-            elif self.__cellStart == dict_start['minute']:
-                minute = (minute + inc) % 60
-            elif self.__cellStart == dict_start['second']:
-                second = (second + inc) % 60
-
-        newvalue = '%.2d:%.2d:%.2d' % (hour, minute, second)
-
-        self.SetValue(newvalue)
-        self.SetInsertionPoint(self.__cellStart)
-        self.SetSelection(self.__cellStart, self.__cellEnd)
-        _dbg(indent=0)
-
-
-    def __ChangeValue(self, char, pos):
-        _dbg('wxTimeCtrl::ChangeValue', "\'" + char + "\'", pos, indent=1)
-        text = self.GetValue()
-
-        self.__SetCurrentCell(pos)
-        sel_start, sel_to = self.GetSelection()
-        self.__posSelectTo = sel_to
-        self.__bSelection = selection = sel_start != sel_to
-        cell_selected = selection and sel_to -1 != pos
-        _dbg('cell_selected =', cell_selected, indent=0)
-
-        dict_start = _dictStartCellPos                          # (for brevity)
-
-        if pos in _listDelimPos: return                         # don't allow change of punctuation
-
-        elif( 0 < pos < dict_start['am_pm'] and char not in string.digits):
-            return                                              # AM/PM not allowed in this position
-
-        # See if we're changing the hour cell, and validate/update appropriately:
-        #
-        hour_start = dict_start['hour']                         # (ie. 0)
-
-        if pos == hour_start:                                   # if at 1st position,
-            if self.__fmt24hr:                                  # and using 24 hour format
-                if cell_selected:                               # replace cell contents with hour represented by digit
-                    newtext = '%.2d' % int(char) + text[hour_start+2:]
-                elif char not in ('0', '1', '2'):               # return if digit not 0,1, or 2
-                    return
-                else:                                           # relace current position
-                    newtext = char + text[pos+1:]
-            else:                                               # (12 hour format)
-                if cell_selected:
-                    if char == ' ': return                      # can't erase entire cell
-                    elif char == '0':                           # treat 0 as '12'
-                        newtext = '12' + text[hour_start+2:]
-                    else:                                       # replace cell contents with hour represented by digit
-                        newtext = '%2d' % int(char) + text[hour_start+2:]
-                else:
-                    if char not in ('1', ' '):                  # can only type a 1 or space
-                        return
-                    if text[pos+1] not in ('0', '1', '2'):      # and then, only if other column is 0,1, or 2
-                        return
-                    if char == ' ' and text[pos+1] == '0':      # and char isn't space if 2nd column is 0
-                        return
-                    else:                                       # ok; replace current position
-                        newtext = char + text[pos+1:]
-                if char == ' ': self.SetInsertionPoint(pos+1)   # move insert point to legal position
-
-        elif pos == hour_start+1:                               # if editing 2nd position of hour
-            if( not self.__fmt24hr                              # and using 12 hour format
-                and text[hour_start] == '1'                     # if 1st char is 1,
-                and char not in ('0', '1', '2')):               # disallow anything bug 0,1, or 2
-                return
-            newtext = text[hour_start] + char + text[hour_start+2:]  # else any digit ok
-
-        # Do the same sort of validation for minute and second cells
-        elif pos in (dict_start['minute'], dict_start['second']):
-            if cell_selected:                                   # if cell selected, replace value
-                newtext = text[:pos] + '%.2d' % int(char) + text[pos+2:]
-            elif int(char) > 5: return                          # else disallow > 59 for minute and second fields
-            else:
-                newtext = text[:pos] + char + text[pos+1:]      # else ok
-
-        elif pos in (dict_start['minute']+1, dict_start['second']+1):
-            newtext = text[:pos] + char + text[pos+1:]          # all digits ok for 2nd digit of minute/second
-
-        # Process AM/PM cell
-        elif pos == dict_start['am_pm']:
-            char = char.upper()
-            if char not in ('A','P'): return                    # disallow all but A or P as 1st char of column
-            newtext = text[:pos] + char + text[pos+1:]
-        else: return    # not a valid position
-
-        _dbg(indent=1)
-        # update member position vars and set selection to character changed
-        if not cell_selected:
-            _dbg('reselecting current digit')
-            self.__posSelectTo = pos+1
-
-        _dbg('newtext=', newtext)
-        self.SetValue(newtext)
-        self.SetInsertionPoint(self.__posCurrent)
-        self.SetSelection(self.__posCurrent, self.__posSelectTo)
-        _dbg(indent=0)
-
-
-    def Cut(self):
+    def __validateValue( self, value ):
         """
-        Override wxTextCtrl::Cut() method, as this operation should not
-        be allowed for wxTimeCtrls.
+        This function converts the value to a wxDateTime if not already one,
+        does bounds checking and raises ValueError if argument is
+        not a valid value for the control as currently specified.
+        It is used by both the SetValue() and the IsValid() methods.
         """
-        return
+        dbg('wxTimeCtrl::__validateValue(%s)' % repr(value), indent=1)
+        if not value:
+            dbg(indent=0)
+            raise ValueError('%s not a valid time value' % repr(value))
 
+        valid = True    # assume true
+        try:
+            value = self.GetWxDateTime(value)   # regularize form; can generate ValueError if problem doing so
+        except:
+            dbg('exception occurred', indent=0)
+            raise
 
-    def Paste(self):
-        """
-        Override wxTextCtrl::Paste() method, as this operation should not
-        be allowed for wxTimeCtrls.
-        """
-        return
-
+        if self.IsLimited() and not self.IsInBounds(value):
+            dbg(indent=0)
+            raise ValueError (
+                'value %s is not within the bounds of the control' % str(value) )
+        dbg(indent=0)
+        return value
 
 #----------------------------------------------------------------------------
 # Test jig for wxTimeCtrl:
@@ -814,12 +1134,12 @@ if __name__ == '__main__':
             EVT_TIMEUPDATE(self, self.tc.GetId(), self.OnTimeChange)
 
         def OnTimeChange(self, event):
-            _dbg('OnTimeChange: value = ', event.GetValue())
+            dbg('OnTimeChange: value = ', event.GetValue())
             wxdt = self.tc.GetWxDateTime()
-            _dbg('wxdt =', wxdt.GetHour(), wxdt.GetMinute(), wxdt.GetSecond())
+            dbg('wxdt =', wxdt.GetHour(), wxdt.GetMinute(), wxdt.GetSecond())
             if self.test_mx:
                 mxdt = self.tc.GetMxDateTime()
-                _dbg('mxdt =', mxdt.hour, mxdt.minute, mxdt.second)
+                dbg('mxdt =', mxdt.hour, mxdt.minute, mxdt.second)
 
 
     class MyApp(wxApp):

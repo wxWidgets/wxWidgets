@@ -205,3 +205,12 @@ when the framework allows for it.
 
 """ % os.path.join(os.path.dirname(wxPython.lib.printout.__file__), "printout.py")
 
+
+
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
+

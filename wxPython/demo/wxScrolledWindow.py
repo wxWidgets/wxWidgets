@@ -64,7 +64,7 @@ class MyCanvas(wxScrolledWindow):
             self.DoDrawing(dc)
 
 
-    def DoDrawing(self, dc):
+    def DoDrawing(self, dc, printing=False):
         dc.BeginDrawing()
         dc.SetPen(wxPen('RED'))
         dc.DrawRectangle(5, 5, 50, 50)
@@ -92,6 +92,11 @@ class MyCanvas(wxScrolledWindow):
         dc.SetTextForeground(wxColour(0, 0xFF, 0x80))
         dc.DrawText("a bitmap", 200, 85)
 
+##         dc.SetFont(wxFont(14, wxSWISS, wxNORMAL, wxNORMAL))
+##         dc.SetTextForeground("BLACK")
+##         dc.DrawText("TEST this STRING", 10, 200)
+##         print dc.GetFullTextExtent("TEST this STRING")
+
         font = wxFont(20, wxSWISS, wxNORMAL, wxNORMAL)
         dc.SetFont(font)
         dc.SetTextForeground(wxBLACK)
@@ -106,16 +111,20 @@ class MyCanvas(wxScrolledWindow):
         dc.SetPen(wxPen('RED'))
         dc.DrawEllipticArc(200, 500, 50, 75, 0, 90)
 
-        y = 20
-        for style in [wxDOT, wxLONG_DASH, wxSHORT_DASH, wxDOT_DASH, wxUSER_DASH]:
-            pen = wxPen("DARK ORCHID", 1, style)
-            if style == wxUSER_DASH:
-                pen.SetCap(wxCAP_BUTT)
-                pen.SetDashes([1,2])
-                pen.SetColour("RED")
-            dc.SetPen(pen)
-            dc.DrawLine(300, y, 400, y)
-            y = y + 10
+        if not printing:
+            # This has troubles when used on a print preview in wxGTK,
+            # probably something to do with the pen styles and the scaling
+            # it does...
+            y = 20
+            for style in [wxDOT, wxLONG_DASH, wxSHORT_DASH, wxDOT_DASH, wxUSER_DASH]:
+                pen = wxPen("DARK ORCHID", 1, style)
+                if style == wxUSER_DASH:
+                    pen.SetCap(wxCAP_BUTT)
+                    pen.SetDashes([1,2])
+                    pen.SetColour("RED")
+                dc.SetPen(pen)
+                dc.DrawLine(300, y, 400, y)
+                y = y + 10
 
         dc.SetBrush(wxTRANSPARENT_BRUSH)
         dc.SetPen(wxPen(wxColour(0xFF, 0x20, 0xFF), 1, wxSOLID))

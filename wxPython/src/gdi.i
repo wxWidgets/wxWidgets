@@ -105,6 +105,7 @@ public:
     void SetQuality(int q);
 #endif
 
+    %pragma(python) addtoclass = "def __nonzero__(self): return self.Ok()"
 };
 
 
@@ -233,6 +234,7 @@ public:
 #endif
     void CopyFromBitmap(const wxBitmap& bmp);
 
+    %pragma(python) addtoclass = "def __nonzero__(self): return self.Ok()"
 };
 
 
@@ -302,9 +304,17 @@ public:
 class wxCursor : public wxGDIObject
 {
 public:
-#ifdef __WXMSW__
-    wxCursor(const wxString& cursorName, long flags, int hotSpotX=0, int hotSpotY=0);
+    %addmethods {
+        wxCursor(const wxString* cursorName, long flags, int hotSpotX=0, int hotSpotY=0) {
+#ifdef __WXGTK__
+            wxCHECK_MSG(FALSE, NULL,
+                        wxT("wxCursor constructor not implemented for wxGTK, use wxStockCursor, wxCursorFromImage, or wxCursorFromBits instead."));
+#else
+            return new wxCursor(*cursorName, flags, hotSpotX, hotSpotY);
 #endif
+        }
+    }
+
     ~wxCursor();
 
     // wxGDIImage methods
@@ -322,23 +332,34 @@ public:
     void SetDepth(int d);
     void SetSize(const wxSize& size);
 #endif
+    %pragma(python) addtoclass = "def __nonzero__(self): return self.Ok()"
 };
 
 %name(wxStockCursor) %new wxCursor* wxPyStockCursor(int id);
-%{                              // Alternate 'constructor'
+%new wxCursor* wxCursorFromImage(const wxImage& image);
+%new wxCursor* wxCursorFromBits(PyObject* bits, int width, int  height,
+                                int hotSpotX=-1, int hotSpotY=-1,
+                                PyObject* maskBits=0);
+
+%{
     wxCursor* wxPyStockCursor(int id) {
         return new wxCursor(id);
     }
-%}
 
-%new wxCursor* wxCursorFromImage(const wxImage& image);
-%{
     wxCursor* wxCursorFromImage(const wxImage& image) {
-    #ifndef __WXMAC__
         return new wxCursor(image);
-    #else
-        return NULL;
-    #endif
+    }
+
+    wxCursor* wxCursorFromBits(PyObject* bits, int width, int  height,
+                               int hotSpotX=-1, int hotSpotY=-1,
+                               PyObject* maskBits=0) {
+        char* bitsbuf;
+        char* maskbuf = NULL;
+        int   length;
+        PyString_AsStringAndSize(bits, &bitsbuf, &length);
+        if (maskBits)
+            PyString_AsStringAndSize(maskBits, &maskbuf, &length);
+        return new wxCursor(bitsbuf, width, height, hotSpotX, hotSpotY, maskbuf);
     }
 %}
 
@@ -481,6 +502,8 @@ public:
     wxBitmap* GetStipple();
     void SetStipple(wxBitmap& stipple);
 #endif
+
+    %pragma(python) addtoclass = "def __nonzero__(self): return self.Ok()"
 };
 
 
@@ -554,6 +577,13 @@ public:
     void SetColour(wxColour &colour);
     void SetStipple(wxBitmap& bitmap);
     void SetStyle(int style);
+
+#ifdef __WXMAC__
+    short GetMacTheme();
+    void SetMacTheme(short macThemeBrush);
+#endif
+
+    %pragma(python) addtoclass = "def __nonzero__(self): return self.Ok()"
 };
 
 
@@ -712,6 +742,8 @@ public:
         void GetBoundingBox(int* OUTPUT, int* OUTPUT, int* OUTPUT, int* OUTPUT);
         // See below for implementation
     }
+
+    %pragma(python) addtoclass = "def __nonzero__(self): return self.Ok()"
 
 #ifdef __WXMSW__
     long GetHDC();
@@ -967,6 +999,7 @@ public:
 
     const wxString& GetFileName() const { return m_filename; }
 
+    %pragma(python) addtoclass = "def __nonzero__(self): return self.Ok()"
 };
 
 // bool wxMakeMetaFilePlaceable(const wxString& filename,
@@ -993,6 +1026,8 @@ public:
     int GetPixel(byte red, byte green, byte blue);
     bool GetRGB(int pixel, byte* OUTPUT, byte* OUTPUT, byte* OUTPUT);
     bool Ok();
+
+    %pragma(python) addtoclass = "def __nonzero__(self): return self.Ok()"
 };
 
 //---------------------------------------------------------------------------
@@ -1083,7 +1118,7 @@ public:
     %name(XorRect)bool Xor(const wxRect& rect);
     %name(XorRegion)bool Xor(const wxRegion& region);
 
-    // Convert the region to a B&W bitmap with the black pixels being inside
+    // Convert the region to a B&W bitmap with the white pixels being inside
     // the region.
     wxBitmap ConvertToBitmap();
 

@@ -431,7 +431,7 @@ public:
     %pragma(python) addtoclass = "# replaces broken shadow method
     def GetCaret(self, *_args, **_kwargs):
         from misc2 import wxCaretPtr
-        val = apply(windowsc.wxWindow_GetCaret,(self,) + _args, _kwargs)
+        val = windowsc.wxWindow_GetCaret(self, *_args, **_kwargs)
         if val: val = wxCaretPtr(val)
         return val
     "
@@ -483,6 +483,9 @@ public:
 
     // does this window have the capture?
     bool HasCapture() const;
+
+    void SetThemeEnabled(bool enable);
+    bool GetThemeEnabled();
 };
 
 
@@ -613,17 +616,17 @@ public:
     %pragma(python) addtoclass = "
     def CalcScrolledPosition(self, *args):
         if len(args) == 1:
-            return apply(self.CalcScrolledPosition1, args)
+            return self.CalcScrolledPosition1(*args)
         elif len(args) == 2:
-            return apply(self.CalcScrolledPosition2, args)
+            return self.CalcScrolledPosition2(*args)
         else:
             raise TypeError, 'Invalid parameters: only (x,y) or (point) allowed'
 
     def CalcUnscrolledPosition(self, *args):
         if len(args) == 1:
-            return apply(self.CalcUnscrolledPosition1, args)
+            return self.CalcUnscrolledPosition1(*args)
         elif len(args) == 2:
-            return apply(self.CalcUnscrolledPosition2, args)
+            return self.CalcUnscrolledPosition2(*args)
         else:
             raise TypeError, 'Invalid parameters: only (x,y) or (point) allowed'
 "
@@ -730,8 +733,6 @@ public:
     %name(RemoveItem) wxMenuItem *Remove(wxMenuItem *item);
 
 
-
-
     %addmethods {
         void Destroy() { delete self; }
     }
@@ -809,6 +810,7 @@ public:
 
 
     wxMenu *GetMenu();
+    void SetMenu(wxMenu* menu);
     void SetId(int id);
     int  GetId();
     bool IsSeparator();

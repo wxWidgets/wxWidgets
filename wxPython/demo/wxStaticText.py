@@ -24,10 +24,9 @@ class TestPanel(wxPanel):
 
         str = "This is a different font."
         text = wxStaticText(self, -1, str, (20, 100))
-        font = wxFont(18, wxSWISS, wxNORMAL, wxNORMAL, False, "Arial")
-        w, h, d, e = self.GetFullTextExtent(str, font)
+        font = wxFont(18, wxSWISS, wxNORMAL, wxNORMAL)
         text.SetFont(font)
-        text.SetSize(wxSize(w, h))
+        #text.SetSize(text.GetBestSize())
 
         wxStaticText(self, -1, "Multi-line wxStaticText\nline 2\nline 3\n\nafter empty line", (20,150))
         wxStaticText(self, -1, "Align right multi-line\nline 2\nline 3\n\nafter empty line", (220,150), style=wxALIGN_RIGHT)

@@ -15,12 +15,14 @@ class TestPanel(wxScrolledPanel):
         desc = wxStaticText(self, -1,
                             "wxScrolledPanel extends wxScrolledWindow, adding all "
                             "the necessary bits to set up scroll handling for you.\n\n"
-                            "Here are three fixed size examples of its use, and the "
-                            "mail demo panel is also using it."
+                            "Here are three fixed size examples of its use. The "
+                            "demo panel for this sample is also using it -- the \nwxStaticLine"
+                            "below is intentionally made too long so a scrollbar will be "
+                            "activated."
                             )
         desc.SetForegroundColour("Blue")
         vbox.Add(desc, 0, wxALIGN_LEFT|wxALL, 5)
-        vbox.Add(wxStaticLine(self, -1), 0, wxEXPAND|wxALL, 5)
+        vbox.Add(wxStaticLine(self, -1, size=(1024,-1)), 0, wxALL, 5)
         vbox.AddSpacer(20,20)
 
         words = text.split()

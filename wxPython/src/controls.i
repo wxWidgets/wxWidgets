@@ -323,7 +323,7 @@ public:
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = 0,
-               const wxValidator& val = wxDefaultValidator,
+               const wxValidator& validator = wxDefaultValidator,
                const wxString& name = wxPyCheckBoxNameStr);
     %name(wxPreCheckBox)wxCheckBox();
 
@@ -331,7 +331,7 @@ public:
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = 0,
-               const wxValidator& val = wxDefaultValidator,
+               const wxValidator& validator = wxDefaultValidator,
                const wxString& name = wxPyCheckBoxNameStr);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
@@ -381,11 +381,11 @@ public:
 
 //----------------------------------------------------------------------
 
-// wxGTK's wxComboBox doesn't derive from wxChoice like wxMSW, or
-// even wxControlWithItems, so we have to duplicate the methods
-// here... <blech!>
+// wxGTK's wxComboBox doesn't derive from wxChoice like wxMSW, or even
+// wxControlWithItems, so we have to duplicate the methods here... <blech!>
+// wxMac's inheritace is weird too so we'll fake it with this one too.
 
-#ifdef __WXGTK__
+#ifndef __WXMSW__
 class wxComboBox : public wxControl
 {
 public:
@@ -477,8 +477,8 @@ public:
 
 
 
-#else  // For all but wxGTK
-
+#else
+// MSW's version derives from wxChoice
 
 class wxComboBox : public wxChoice {
 public:
@@ -1131,7 +1131,14 @@ public:
     int GetValue();
     void SetRange(int min, int max);
     void SetValue(int value);
-
+#ifdef __WXGTK__
+    %addmethods {
+        void SetSelection(long from, long to) {
+        }
+    }
+#else
+    void SetSelection(long from, long to);
+#endif
 };
 
 
