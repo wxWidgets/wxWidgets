@@ -1552,6 +1552,10 @@ static gint gtk_window_button_press_callback( GtkWidget *widget,
             case GDK_2BUTTON_PRESS:
                 event_type = wxEVT_LEFT_DCLICK;
                 break;
+
+            default:
+                // just to silence gcc warnings
+                ;
         }
     }
     else if (gdk_event->button == 2)
@@ -1565,6 +1569,9 @@ static gint gtk_window_button_press_callback( GtkWidget *widget,
             case GDK_2BUTTON_PRESS:
                 event_type = wxEVT_MIDDLE_DCLICK;
                 break;
+
+            default:
+                ;
         }
     }
     else if (gdk_event->button == 3)
@@ -1578,6 +1585,9 @@ static gint gtk_window_button_press_callback( GtkWidget *widget,
             case GDK_2BUTTON_PRESS:
                 event_type = wxEVT_RIGHT_DCLICK;
                 break;
+
+            default:
+                ;
         }
     }
     else if (gdk_event->button == 4 || gdk_event->button == 5)
