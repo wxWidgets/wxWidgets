@@ -43,6 +43,11 @@ VENDORTAG =
 !endif
 WXDEBUGFLAG =
 !ifeq BUILD debug
+!ifeq DEBUG_FLAG default
+WXDEBUGFLAG = d
+!endif
+!endif
+!ifeq DEBUG_FLAG 1
 WXDEBUGFLAG = d
 !endif
 WXDLLFLAG =
@@ -57,22 +62,47 @@ WXUNIVNAME =
 !ifeq WXUNIV 1
 WXUNIVNAME = univ
 !endif
-__DEBUGFLAG =
+__DEBUGINFO =
 !ifeq BUILD debug
-__DEBUGFLAG = -d2
+!ifeq DEBUG_INFO default
+__DEBUGINFO = -d2
+!endif
 !endif
 !ifeq BUILD release
-__DEBUGFLAG = -d0
+!ifeq DEBUG_INFO default
+__DEBUGINFO = -d0
 !endif
-__DEBUGFLAG_7 =
+!endif
+!ifeq DEBUG_INFO 0
+__DEBUGINFO = -d0
+!endif
+!ifeq DEBUG_INFO 1
+__DEBUGINFO = -d2
+!endif
+__DEBUGINFO_7 =
 !ifeq BUILD debug
-__DEBUGFLAG_7 = debug all
+!ifeq DEBUG_INFO default
+__DEBUGINFO_7 = debug all
+!endif
 !endif
 !ifeq BUILD release
-__DEBUGFLAG_7 = 
+!ifeq DEBUG_INFO default
+__DEBUGINFO_7 = 
+!endif
+!endif
+!ifeq DEBUG_INFO 0
+__DEBUGINFO_7 = 
+!endif
+!ifeq DEBUG_INFO 1
+__DEBUGINFO_7 = debug all
 !endif
 __DEBUG_DEFINE_p =
 !ifeq BUILD debug
+!ifeq DEBUG_FLAG default
+__DEBUG_DEFINE_p = -d__WXDEBUG__
+!endif
+!endif
+!ifeq DEBUG_FLAG 1
 __DEBUG_DEFINE_p = -d__WXDEBUG__
 !endif
 __LIB_JPEG_p =
@@ -127,6 +157,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 ____CORE_SRC_FILENAMES_1_OBJECTS =  &
+	$(OBJS)\monolib_taskbarcmn.obj &
 	$(OBJS)\monolib_app.obj &
 	$(OBJS)\monolib_bitmap.obj &
 	$(OBJS)\monolib_brush.obj &
@@ -156,12 +187,17 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_icon.obj &
 	$(OBJS)\monolib_joystick.obj &
 	$(OBJS)\monolib_minifram.obj &
+	$(OBJS)\monolib_automtn.obj &
+	$(OBJS)\monolib_dataobj.obj &
+	$(OBJS)\monolib_dropsrc.obj &
+	$(OBJS)\monolib_droptgt.obj &
+	$(OBJS)\monolib_oleutils.obj &
+	$(OBJS)\monolib_uuid.obj &
 	$(OBJS)\monolib_palette.obj &
 	$(OBJS)\monolib_pen.obj &
 	$(OBJS)\monolib_popupwin.obj &
 	$(OBJS)\monolib_region.obj &
 	$(OBJS)\monolib_settings.obj &
-	$(OBJS)\monolib_taskbarcmn.obj &
 	$(OBJS)\monolib_taskbar.obj &
 	$(OBJS)\monolib_timer.obj &
 	$(OBJS)\monolib_tooltip.obj &
@@ -169,15 +205,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_utilsgui.obj &
 	$(OBJS)\monolib_wave.obj &
 	$(OBJS)\monolib_window.obj &
-	$(OBJS)\monolib_automtn.obj &
-	$(OBJS)\monolib_dataobj.obj &
-	$(OBJS)\monolib_dropsrc.obj &
-	$(OBJS)\monolib_droptgt.obj &
-	$(OBJS)\monolib_oleutils.obj &
-	$(OBJS)\monolib_uuid.obj &
 	$(OBJS)\monolib_statusbr.obj &
-	$(OBJS)\monolib_uxtheme.obj &
-	$(OBJS)\monolib_access.obj &
 	$(OBJS)\monolib_accel.obj &
 	$(OBJS)\monolib_bmpbuttn.obj &
 	$(OBJS)\monolib_button.obj &
@@ -205,6 +233,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_msgdlg.obj &
 	$(OBJS)\monolib_nativdlg.obj &
 	$(OBJS)\monolib_notebook.obj &
+	$(OBJS)\monolib_access.obj &
 	$(OBJS)\monolib_ownerdrw.obj &
 	$(OBJS)\monolib_penwin.obj &
 	$(OBJS)\monolib_printdlg.obj &
@@ -226,6 +255,79 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_textctrl.obj &
 	$(OBJS)\monolib_tglbtn.obj &
 	$(OBJS)\monolib_treectrl.obj &
+	$(OBJS)\monolib_uxtheme.obj &
+	$(OBJS)\monolib_accesscmn.obj &
+	$(OBJS)\monolib_appcmn.obj &
+	$(OBJS)\monolib_artprov.obj &
+	$(OBJS)\monolib_artstd.obj &
+	$(OBJS)\monolib_bmpbase.obj &
+	$(OBJS)\monolib_choiccmn.obj &
+	$(OBJS)\monolib_clipcmn.obj &
+	$(OBJS)\monolib_cmdproc.obj &
+	$(OBJS)\monolib_cmndata.obj &
+	$(OBJS)\monolib_containr.obj &
+	$(OBJS)\monolib_cshelp.obj &
+	$(OBJS)\monolib_ctrlcmn.obj &
+	$(OBJS)\monolib_ctrlsub.obj &
+	$(OBJS)\monolib_datacmn.obj &
+	$(OBJS)\monolib_dbgrid.obj &
+	$(OBJS)\monolib_dcbase.obj &
+	$(OBJS)\monolib_dlgcmn.obj &
+	$(OBJS)\monolib_dndcmn.obj &
+	$(OBJS)\monolib_dobjcmn.obj &
+	$(OBJS)\monolib_docmdi.obj &
+	$(OBJS)\monolib_docview.obj &
+	$(OBJS)\monolib_dpycmn.obj &
+	$(OBJS)\monolib_dseldlg.obj &
+	$(OBJS)\monolib_effects.obj &
+	$(OBJS)\monolib_fddlgcmn.obj &
+	$(OBJS)\monolib_fldlgcmn.obj &
+	$(OBJS)\monolib_fontcmn.obj &
+	$(OBJS)\monolib_fontmap.obj &
+	$(OBJS)\monolib_framecmn.obj &
+	$(OBJS)\monolib_gaugecmn.obj &
+	$(OBJS)\monolib_gdicmn.obj &
+	$(OBJS)\monolib_geometry.obj &
+	$(OBJS)\monolib_gifdecod.obj &
+	$(OBJS)\monolib_helpbase.obj &
+	$(OBJS)\monolib_iconbndl.obj &
+	$(OBJS)\monolib_imagall.obj &
+	$(OBJS)\monolib_imagbmp.obj &
+	$(OBJS)\monolib_image.obj &
+	$(OBJS)\monolib_imagfill.obj &
+	$(OBJS)\monolib_imaggif.obj &
+	$(OBJS)\monolib_imagiff.obj &
+	$(OBJS)\monolib_imagjpeg.obj &
+	$(OBJS)\monolib_imagpcx.obj &
+	$(OBJS)\monolib_imagpng.obj &
+	$(OBJS)\monolib_imagpnm.obj &
+	$(OBJS)\monolib_imagtiff.obj &
+	$(OBJS)\monolib_imagxpm.obj &
+	$(OBJS)\monolib_layout.obj &
+	$(OBJS)\monolib_lboxcmn.obj &
+	$(OBJS)\monolib_matrix.obj &
+	$(OBJS)\monolib_menucmn.obj &
+	$(OBJS)\monolib_nbkbase.obj &
+	$(OBJS)\monolib_paper.obj &
+	$(OBJS)\monolib_popupcmn.obj &
+	$(OBJS)\monolib_prntbase.obj &
+	$(OBJS)\monolib_quantize.obj &
+	$(OBJS)\monolib_radiocmn.obj &
+	$(OBJS)\monolib_rendcmn.obj &
+	$(OBJS)\monolib_rgncmn.obj &
+	$(OBJS)\monolib_settcmn.obj &
+	$(OBJS)\monolib_sizer.obj &
+	$(OBJS)\monolib_statbar.obj &
+	$(OBJS)\monolib_tbarbase.obj &
+	$(OBJS)\monolib_textcmn.obj &
+	$(OBJS)\monolib_timercmn.obj &
+	$(OBJS)\monolib_toplvcmn.obj &
+	$(OBJS)\monolib_treebase.obj &
+	$(OBJS)\monolib_valgen.obj &
+	$(OBJS)\monolib_validate.obj &
+	$(OBJS)\monolib_valtext.obj &
+	$(OBJS)\monolib_wincmn.obj &
+	$(OBJS)\monolib_xpmdecod.obj &
 	$(OBJS)\monolib_busyinfo.obj &
 	$(OBJS)\monolib_calctrl.obj &
 	$(OBJS)\monolib_choicdgg.obj &
@@ -256,84 +358,13 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_treectlg.obj &
 	$(OBJS)\monolib_vlbox.obj &
 	$(OBJS)\monolib_vscroll.obj &
-	$(OBJS)\monolib_wizard.obj &
-	$(OBJS)\monolib_appcmn.obj &
-	$(OBJS)\monolib_fontmap.obj &
-	$(OBJS)\monolib_accesscmn.obj &
-	$(OBJS)\monolib_artprov.obj &
-	$(OBJS)\monolib_artstd.obj &
-	$(OBJS)\monolib_bmpbase.obj &
-	$(OBJS)\monolib_choiccmn.obj &
-	$(OBJS)\monolib_clipcmn.obj &
-	$(OBJS)\monolib_cmdproc.obj &
-	$(OBJS)\monolib_cmndata.obj &
-	$(OBJS)\monolib_containr.obj &
-	$(OBJS)\monolib_cshelp.obj &
-	$(OBJS)\monolib_ctrlcmn.obj &
-	$(OBJS)\monolib_ctrlsub.obj &
-	$(OBJS)\monolib_datacmn.obj &
-	$(OBJS)\monolib_dbgrid.obj &
-	$(OBJS)\monolib_dcbase.obj &
-	$(OBJS)\monolib_dlgcmn.obj &
-	$(OBJS)\monolib_dndcmn.obj &
-	$(OBJS)\monolib_dobjcmn.obj &
-	$(OBJS)\monolib_docmdi.obj &
-	$(OBJS)\monolib_docview.obj &
-	$(OBJS)\monolib_dpycmn.obj &
-	$(OBJS)\monolib_dseldlg.obj &
-	$(OBJS)\monolib_effects.obj &
-	$(OBJS)\monolib_fddlgcmn.obj &
-	$(OBJS)\monolib_fldlgcmn.obj &
-	$(OBJS)\monolib_fontcmn.obj &
-	$(OBJS)\monolib_framecmn.obj &
-	$(OBJS)\monolib_timercmn.obj &
-	$(OBJS)\monolib_toplvcmn.obj &
-	$(OBJS)\monolib_gaugecmn.obj &
-	$(OBJS)\monolib_gdicmn.obj &
-	$(OBJS)\monolib_geometry.obj &
-	$(OBJS)\monolib_gifdecod.obj &
-	$(OBJS)\monolib_helpbase.obj &
-	$(OBJS)\monolib_iconbndl.obj &
-	$(OBJS)\monolib_imagall.obj &
-	$(OBJS)\monolib_imagbmp.obj &
-	$(OBJS)\monolib_image.obj &
-	$(OBJS)\monolib_imaggif.obj &
-	$(OBJS)\monolib_imagiff.obj &
-	$(OBJS)\monolib_imagjpeg.obj &
-	$(OBJS)\monolib_imagpcx.obj &
-	$(OBJS)\monolib_imagpng.obj &
-	$(OBJS)\monolib_imagpnm.obj &
-	$(OBJS)\monolib_imagtiff.obj &
-	$(OBJS)\monolib_imagxpm.obj &
-	$(OBJS)\monolib_imagfill.obj &
-	$(OBJS)\monolib_layout.obj &
-	$(OBJS)\monolib_lboxcmn.obj &
-	$(OBJS)\monolib_matrix.obj &
-	$(OBJS)\monolib_menucmn.obj &
-	$(OBJS)\monolib_nbkbase.obj &
-	$(OBJS)\monolib_paper.obj &
-	$(OBJS)\monolib_popupcmn.obj &
-	$(OBJS)\monolib_prntbase.obj &
-	$(OBJS)\monolib_quantize.obj &
-	$(OBJS)\monolib_radiocmn.obj &
-	$(OBJS)\monolib_rendcmn.obj &
-	$(OBJS)\monolib_rgncmn.obj &
-	$(OBJS)\monolib_settcmn.obj &
-	$(OBJS)\monolib_sizer.obj &
-	$(OBJS)\monolib_statbar.obj &
-	$(OBJS)\monolib_tbarbase.obj &
-	$(OBJS)\monolib_textcmn.obj &
-	$(OBJS)\monolib_treebase.obj &
-	$(OBJS)\monolib_valgen.obj &
-	$(OBJS)\monolib_validate.obj &
-	$(OBJS)\monolib_valtext.obj &
-	$(OBJS)\monolib_wincmn.obj &
-	$(OBJS)\monolib_xpmdecod.obj
+	$(OBJS)\monolib_wizard.obj
 !endif
 !endif
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 ____CORE_SRC_FILENAMES_1_OBJECTS =  &
+	$(OBJS)\monolib_taskbarcmn.obj &
 	$(OBJS)\monolib_app.obj &
 	$(OBJS)\monolib_bitmap.obj &
 	$(OBJS)\monolib_brush.obj &
@@ -363,12 +394,17 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_icon.obj &
 	$(OBJS)\monolib_joystick.obj &
 	$(OBJS)\monolib_minifram.obj &
+	$(OBJS)\monolib_automtn.obj &
+	$(OBJS)\monolib_dataobj.obj &
+	$(OBJS)\monolib_dropsrc.obj &
+	$(OBJS)\monolib_droptgt.obj &
+	$(OBJS)\monolib_oleutils.obj &
+	$(OBJS)\monolib_uuid.obj &
 	$(OBJS)\monolib_palette.obj &
 	$(OBJS)\monolib_pen.obj &
 	$(OBJS)\monolib_popupwin.obj &
 	$(OBJS)\monolib_region.obj &
 	$(OBJS)\monolib_settings.obj &
-	$(OBJS)\monolib_taskbarcmn.obj &
 	$(OBJS)\monolib_taskbar.obj &
 	$(OBJS)\monolib_timer.obj &
 	$(OBJS)\monolib_tooltip.obj &
@@ -376,13 +412,19 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_utilsgui.obj &
 	$(OBJS)\monolib_wave.obj &
 	$(OBJS)\monolib_window.obj &
-	$(OBJS)\monolib_automtn.obj &
-	$(OBJS)\monolib_dataobj.obj &
-	$(OBJS)\monolib_dropsrc.obj &
-	$(OBJS)\monolib_droptgt.obj &
-	$(OBJS)\monolib_oleutils.obj &
-	$(OBJS)\monolib_uuid.obj &
 	$(OBJS)\monolib_textctrl.obj &
+	$(OBJS)\monolib_accel.obj &
+	$(OBJS)\monolib_colrdlgg.obj &
+	$(OBJS)\monolib_dirdlgg.obj &
+	$(OBJS)\monolib_fdrepdlg.obj &
+	$(OBJS)\monolib_filedlgg.obj &
+	$(OBJS)\monolib_fontdlgg.obj &
+	$(OBJS)\monolib_imaglist.obj &
+	$(OBJS)\monolib_listctrl.obj &
+	$(OBJS)\monolib_mdig.obj &
+	$(OBJS)\monolib_msgdlgg.obj &
+	$(OBJS)\monolib_prntdlgg.obj &
+	$(OBJS)\monolib_tabg.obj &
 	$(OBJS)\monolib_bmpbuttn.obj &
 	$(OBJS)\monolib_button.obj &
 	$(OBJS)\monolib_checkbox.obj &
@@ -393,7 +435,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_control.obj &
 	$(OBJS)\monolib_dialog.obj &
 	$(OBJS)\monolib_framuniv.obj &
-	$(OBJS)\monolib_topluniv.obj &
 	$(OBJS)\monolib_gauge.obj &
 	$(OBJS)\monolib_inpcons.obj &
 	$(OBJS)\monolib_inphand.obj &
@@ -413,24 +454,85 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_statline.obj &
 	$(OBJS)\monolib_stattext.obj &
 	$(OBJS)\monolib_statusbr.obj &
-	$(OBJS)\monolib_toolbar.obj &
 	$(OBJS)\monolib_theme.obj &
+	$(OBJS)\monolib_toolbar.obj &
+	$(OBJS)\monolib_topluniv.obj &
 	$(OBJS)\monolib_winuniv.obj &
-	$(OBJS)\monolib_mdig.obj &
-	$(OBJS)\monolib_imaglist.obj &
-	$(OBJS)\monolib_colrdlgg.obj &
-	$(OBJS)\monolib_listctrl.obj &
-	$(OBJS)\monolib_filedlgg.obj &
-	$(OBJS)\monolib_dirdlgg.obj &
-	$(OBJS)\monolib_prntdlgg.obj &
-	$(OBJS)\monolib_accel.obj &
-	$(OBJS)\monolib_msgdlgg.obj &
-	$(OBJS)\monolib_fdrepdlg.obj &
-	$(OBJS)\monolib_fontdlgg.obj &
-	$(OBJS)\monolib_tabg.obj &
 	$(OBJS)\monolib_gtk.obj &
-	$(OBJS)\monolib_win32.obj &
 	$(OBJS)\monolib_metal.obj &
+	$(OBJS)\monolib_win32.obj &
+	$(OBJS)\monolib_accesscmn.obj &
+	$(OBJS)\monolib_appcmn.obj &
+	$(OBJS)\monolib_artprov.obj &
+	$(OBJS)\monolib_artstd.obj &
+	$(OBJS)\monolib_bmpbase.obj &
+	$(OBJS)\monolib_choiccmn.obj &
+	$(OBJS)\monolib_clipcmn.obj &
+	$(OBJS)\monolib_cmdproc.obj &
+	$(OBJS)\monolib_cmndata.obj &
+	$(OBJS)\monolib_containr.obj &
+	$(OBJS)\monolib_cshelp.obj &
+	$(OBJS)\monolib_ctrlcmn.obj &
+	$(OBJS)\monolib_ctrlsub.obj &
+	$(OBJS)\monolib_datacmn.obj &
+	$(OBJS)\monolib_dbgrid.obj &
+	$(OBJS)\monolib_dcbase.obj &
+	$(OBJS)\monolib_dlgcmn.obj &
+	$(OBJS)\monolib_dndcmn.obj &
+	$(OBJS)\monolib_dobjcmn.obj &
+	$(OBJS)\monolib_docmdi.obj &
+	$(OBJS)\monolib_docview.obj &
+	$(OBJS)\monolib_dpycmn.obj &
+	$(OBJS)\monolib_dseldlg.obj &
+	$(OBJS)\monolib_effects.obj &
+	$(OBJS)\monolib_fddlgcmn.obj &
+	$(OBJS)\monolib_fldlgcmn.obj &
+	$(OBJS)\monolib_fontcmn.obj &
+	$(OBJS)\monolib_fontmap.obj &
+	$(OBJS)\monolib_framecmn.obj &
+	$(OBJS)\monolib_gaugecmn.obj &
+	$(OBJS)\monolib_gdicmn.obj &
+	$(OBJS)\monolib_geometry.obj &
+	$(OBJS)\monolib_gifdecod.obj &
+	$(OBJS)\monolib_helpbase.obj &
+	$(OBJS)\monolib_iconbndl.obj &
+	$(OBJS)\monolib_imagall.obj &
+	$(OBJS)\monolib_imagbmp.obj &
+	$(OBJS)\monolib_image.obj &
+	$(OBJS)\monolib_imagfill.obj &
+	$(OBJS)\monolib_imaggif.obj &
+	$(OBJS)\monolib_imagiff.obj &
+	$(OBJS)\monolib_imagjpeg.obj &
+	$(OBJS)\monolib_imagpcx.obj &
+	$(OBJS)\monolib_imagpng.obj &
+	$(OBJS)\monolib_imagpnm.obj &
+	$(OBJS)\monolib_imagtiff.obj &
+	$(OBJS)\monolib_imagxpm.obj &
+	$(OBJS)\monolib_layout.obj &
+	$(OBJS)\monolib_lboxcmn.obj &
+	$(OBJS)\monolib_matrix.obj &
+	$(OBJS)\monolib_menucmn.obj &
+	$(OBJS)\monolib_nbkbase.obj &
+	$(OBJS)\monolib_paper.obj &
+	$(OBJS)\monolib_popupcmn.obj &
+	$(OBJS)\monolib_prntbase.obj &
+	$(OBJS)\monolib_quantize.obj &
+	$(OBJS)\monolib_radiocmn.obj &
+	$(OBJS)\monolib_rendcmn.obj &
+	$(OBJS)\monolib_rgncmn.obj &
+	$(OBJS)\monolib_settcmn.obj &
+	$(OBJS)\monolib_sizer.obj &
+	$(OBJS)\monolib_statbar.obj &
+	$(OBJS)\monolib_tbarbase.obj &
+	$(OBJS)\monolib_textcmn.obj &
+	$(OBJS)\monolib_timercmn.obj &
+	$(OBJS)\monolib_toplvcmn.obj &
+	$(OBJS)\monolib_treebase.obj &
+	$(OBJS)\monolib_valgen.obj &
+	$(OBJS)\monolib_validate.obj &
+	$(OBJS)\monolib_valtext.obj &
+	$(OBJS)\monolib_wincmn.obj &
+	$(OBJS)\monolib_xpmdecod.obj &
 	$(OBJS)\monolib_busyinfo.obj &
 	$(OBJS)\monolib_calctrl.obj &
 	$(OBJS)\monolib_choicdgg.obj &
@@ -461,85 +563,14 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_treectlg.obj &
 	$(OBJS)\monolib_vlbox.obj &
 	$(OBJS)\monolib_vscroll.obj &
-	$(OBJS)\monolib_wizard.obj &
-	$(OBJS)\monolib_appcmn.obj &
-	$(OBJS)\monolib_fontmap.obj &
-	$(OBJS)\monolib_accesscmn.obj &
-	$(OBJS)\monolib_artprov.obj &
-	$(OBJS)\monolib_artstd.obj &
-	$(OBJS)\monolib_bmpbase.obj &
-	$(OBJS)\monolib_choiccmn.obj &
-	$(OBJS)\monolib_clipcmn.obj &
-	$(OBJS)\monolib_cmdproc.obj &
-	$(OBJS)\monolib_cmndata.obj &
-	$(OBJS)\monolib_containr.obj &
-	$(OBJS)\monolib_cshelp.obj &
-	$(OBJS)\monolib_ctrlcmn.obj &
-	$(OBJS)\monolib_ctrlsub.obj &
-	$(OBJS)\monolib_datacmn.obj &
-	$(OBJS)\monolib_dbgrid.obj &
-	$(OBJS)\monolib_dcbase.obj &
-	$(OBJS)\monolib_dlgcmn.obj &
-	$(OBJS)\monolib_dndcmn.obj &
-	$(OBJS)\monolib_dobjcmn.obj &
-	$(OBJS)\monolib_docmdi.obj &
-	$(OBJS)\monolib_docview.obj &
-	$(OBJS)\monolib_dpycmn.obj &
-	$(OBJS)\monolib_dseldlg.obj &
-	$(OBJS)\monolib_effects.obj &
-	$(OBJS)\monolib_fddlgcmn.obj &
-	$(OBJS)\monolib_fldlgcmn.obj &
-	$(OBJS)\monolib_fontcmn.obj &
-	$(OBJS)\monolib_framecmn.obj &
-	$(OBJS)\monolib_timercmn.obj &
-	$(OBJS)\monolib_toplvcmn.obj &
-	$(OBJS)\monolib_gaugecmn.obj &
-	$(OBJS)\monolib_gdicmn.obj &
-	$(OBJS)\monolib_geometry.obj &
-	$(OBJS)\monolib_gifdecod.obj &
-	$(OBJS)\monolib_helpbase.obj &
-	$(OBJS)\monolib_iconbndl.obj &
-	$(OBJS)\monolib_imagall.obj &
-	$(OBJS)\monolib_imagbmp.obj &
-	$(OBJS)\monolib_image.obj &
-	$(OBJS)\monolib_imaggif.obj &
-	$(OBJS)\monolib_imagiff.obj &
-	$(OBJS)\monolib_imagjpeg.obj &
-	$(OBJS)\monolib_imagpcx.obj &
-	$(OBJS)\monolib_imagpng.obj &
-	$(OBJS)\monolib_imagpnm.obj &
-	$(OBJS)\monolib_imagtiff.obj &
-	$(OBJS)\monolib_imagxpm.obj &
-	$(OBJS)\monolib_imagfill.obj &
-	$(OBJS)\monolib_layout.obj &
-	$(OBJS)\monolib_lboxcmn.obj &
-	$(OBJS)\monolib_matrix.obj &
-	$(OBJS)\monolib_menucmn.obj &
-	$(OBJS)\monolib_nbkbase.obj &
-	$(OBJS)\monolib_paper.obj &
-	$(OBJS)\monolib_popupcmn.obj &
-	$(OBJS)\monolib_prntbase.obj &
-	$(OBJS)\monolib_quantize.obj &
-	$(OBJS)\monolib_radiocmn.obj &
-	$(OBJS)\monolib_rendcmn.obj &
-	$(OBJS)\monolib_rgncmn.obj &
-	$(OBJS)\monolib_settcmn.obj &
-	$(OBJS)\monolib_sizer.obj &
-	$(OBJS)\monolib_statbar.obj &
-	$(OBJS)\monolib_tbarbase.obj &
-	$(OBJS)\monolib_textcmn.obj &
-	$(OBJS)\monolib_treebase.obj &
-	$(OBJS)\monolib_valgen.obj &
-	$(OBJS)\monolib_validate.obj &
-	$(OBJS)\monolib_valtext.obj &
-	$(OBJS)\monolib_wincmn.obj &
-	$(OBJS)\monolib_xpmdecod.obj
+	$(OBJS)\monolib_wizard.obj
 !endif
 !endif
 ____CORE_SRC_FILENAMES_2_OBJECTS =
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 ____CORE_SRC_FILENAMES_2_OBJECTS =  &
+	$(OBJS)\coredll_taskbarcmn.obj &
 	$(OBJS)\coredll_app.obj &
 	$(OBJS)\coredll_bitmap.obj &
 	$(OBJS)\coredll_brush.obj &
@@ -569,12 +600,17 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_icon.obj &
 	$(OBJS)\coredll_joystick.obj &
 	$(OBJS)\coredll_minifram.obj &
+	$(OBJS)\coredll_automtn.obj &
+	$(OBJS)\coredll_dataobj.obj &
+	$(OBJS)\coredll_dropsrc.obj &
+	$(OBJS)\coredll_droptgt.obj &
+	$(OBJS)\coredll_oleutils.obj &
+	$(OBJS)\coredll_uuid.obj &
 	$(OBJS)\coredll_palette.obj &
 	$(OBJS)\coredll_pen.obj &
 	$(OBJS)\coredll_popupwin.obj &
 	$(OBJS)\coredll_region.obj &
 	$(OBJS)\coredll_settings.obj &
-	$(OBJS)\coredll_taskbarcmn.obj &
 	$(OBJS)\coredll_taskbar.obj &
 	$(OBJS)\coredll_timer.obj &
 	$(OBJS)\coredll_tooltip.obj &
@@ -582,15 +618,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_utilsgui.obj &
 	$(OBJS)\coredll_wave.obj &
 	$(OBJS)\coredll_window.obj &
-	$(OBJS)\coredll_automtn.obj &
-	$(OBJS)\coredll_dataobj.obj &
-	$(OBJS)\coredll_dropsrc.obj &
-	$(OBJS)\coredll_droptgt.obj &
-	$(OBJS)\coredll_oleutils.obj &
-	$(OBJS)\coredll_uuid.obj &
 	$(OBJS)\coredll_statusbr.obj &
-	$(OBJS)\coredll_uxtheme.obj &
-	$(OBJS)\coredll_access.obj &
 	$(OBJS)\coredll_accel.obj &
 	$(OBJS)\coredll_bmpbuttn.obj &
 	$(OBJS)\coredll_button.obj &
@@ -618,6 +646,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_msgdlg.obj &
 	$(OBJS)\coredll_nativdlg.obj &
 	$(OBJS)\coredll_notebook.obj &
+	$(OBJS)\coredll_access.obj &
 	$(OBJS)\coredll_ownerdrw.obj &
 	$(OBJS)\coredll_penwin.obj &
 	$(OBJS)\coredll_printdlg.obj &
@@ -639,6 +668,79 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_textctrl.obj &
 	$(OBJS)\coredll_tglbtn.obj &
 	$(OBJS)\coredll_treectrl.obj &
+	$(OBJS)\coredll_uxtheme.obj &
+	$(OBJS)\coredll_accesscmn.obj &
+	$(OBJS)\coredll_appcmn.obj &
+	$(OBJS)\coredll_artprov.obj &
+	$(OBJS)\coredll_artstd.obj &
+	$(OBJS)\coredll_bmpbase.obj &
+	$(OBJS)\coredll_choiccmn.obj &
+	$(OBJS)\coredll_clipcmn.obj &
+	$(OBJS)\coredll_cmdproc.obj &
+	$(OBJS)\coredll_cmndata.obj &
+	$(OBJS)\coredll_containr.obj &
+	$(OBJS)\coredll_cshelp.obj &
+	$(OBJS)\coredll_ctrlcmn.obj &
+	$(OBJS)\coredll_ctrlsub.obj &
+	$(OBJS)\coredll_datacmn.obj &
+	$(OBJS)\coredll_dbgrid.obj &
+	$(OBJS)\coredll_dcbase.obj &
+	$(OBJS)\coredll_dlgcmn.obj &
+	$(OBJS)\coredll_dndcmn.obj &
+	$(OBJS)\coredll_dobjcmn.obj &
+	$(OBJS)\coredll_docmdi.obj &
+	$(OBJS)\coredll_docview.obj &
+	$(OBJS)\coredll_dpycmn.obj &
+	$(OBJS)\coredll_dseldlg.obj &
+	$(OBJS)\coredll_effects.obj &
+	$(OBJS)\coredll_fddlgcmn.obj &
+	$(OBJS)\coredll_fldlgcmn.obj &
+	$(OBJS)\coredll_fontcmn.obj &
+	$(OBJS)\coredll_fontmap.obj &
+	$(OBJS)\coredll_framecmn.obj &
+	$(OBJS)\coredll_gaugecmn.obj &
+	$(OBJS)\coredll_gdicmn.obj &
+	$(OBJS)\coredll_geometry.obj &
+	$(OBJS)\coredll_gifdecod.obj &
+	$(OBJS)\coredll_helpbase.obj &
+	$(OBJS)\coredll_iconbndl.obj &
+	$(OBJS)\coredll_imagall.obj &
+	$(OBJS)\coredll_imagbmp.obj &
+	$(OBJS)\coredll_image.obj &
+	$(OBJS)\coredll_imagfill.obj &
+	$(OBJS)\coredll_imaggif.obj &
+	$(OBJS)\coredll_imagiff.obj &
+	$(OBJS)\coredll_imagjpeg.obj &
+	$(OBJS)\coredll_imagpcx.obj &
+	$(OBJS)\coredll_imagpng.obj &
+	$(OBJS)\coredll_imagpnm.obj &
+	$(OBJS)\coredll_imagtiff.obj &
+	$(OBJS)\coredll_imagxpm.obj &
+	$(OBJS)\coredll_layout.obj &
+	$(OBJS)\coredll_lboxcmn.obj &
+	$(OBJS)\coredll_matrix.obj &
+	$(OBJS)\coredll_menucmn.obj &
+	$(OBJS)\coredll_nbkbase.obj &
+	$(OBJS)\coredll_paper.obj &
+	$(OBJS)\coredll_popupcmn.obj &
+	$(OBJS)\coredll_prntbase.obj &
+	$(OBJS)\coredll_quantize.obj &
+	$(OBJS)\coredll_radiocmn.obj &
+	$(OBJS)\coredll_rendcmn.obj &
+	$(OBJS)\coredll_rgncmn.obj &
+	$(OBJS)\coredll_settcmn.obj &
+	$(OBJS)\coredll_sizer.obj &
+	$(OBJS)\coredll_statbar.obj &
+	$(OBJS)\coredll_tbarbase.obj &
+	$(OBJS)\coredll_textcmn.obj &
+	$(OBJS)\coredll_timercmn.obj &
+	$(OBJS)\coredll_toplvcmn.obj &
+	$(OBJS)\coredll_treebase.obj &
+	$(OBJS)\coredll_valgen.obj &
+	$(OBJS)\coredll_validate.obj &
+	$(OBJS)\coredll_valtext.obj &
+	$(OBJS)\coredll_wincmn.obj &
+	$(OBJS)\coredll_xpmdecod.obj &
 	$(OBJS)\coredll_busyinfo.obj &
 	$(OBJS)\coredll_calctrl.obj &
 	$(OBJS)\coredll_choicdgg.obj &
@@ -669,84 +771,13 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_treectlg.obj &
 	$(OBJS)\coredll_vlbox.obj &
 	$(OBJS)\coredll_vscroll.obj &
-	$(OBJS)\coredll_wizard.obj &
-	$(OBJS)\coredll_appcmn.obj &
-	$(OBJS)\coredll_fontmap.obj &
-	$(OBJS)\coredll_accesscmn.obj &
-	$(OBJS)\coredll_artprov.obj &
-	$(OBJS)\coredll_artstd.obj &
-	$(OBJS)\coredll_bmpbase.obj &
-	$(OBJS)\coredll_choiccmn.obj &
-	$(OBJS)\coredll_clipcmn.obj &
-	$(OBJS)\coredll_cmdproc.obj &
-	$(OBJS)\coredll_cmndata.obj &
-	$(OBJS)\coredll_containr.obj &
-	$(OBJS)\coredll_cshelp.obj &
-	$(OBJS)\coredll_ctrlcmn.obj &
-	$(OBJS)\coredll_ctrlsub.obj &
-	$(OBJS)\coredll_datacmn.obj &
-	$(OBJS)\coredll_dbgrid.obj &
-	$(OBJS)\coredll_dcbase.obj &
-	$(OBJS)\coredll_dlgcmn.obj &
-	$(OBJS)\coredll_dndcmn.obj &
-	$(OBJS)\coredll_dobjcmn.obj &
-	$(OBJS)\coredll_docmdi.obj &
-	$(OBJS)\coredll_docview.obj &
-	$(OBJS)\coredll_dpycmn.obj &
-	$(OBJS)\coredll_dseldlg.obj &
-	$(OBJS)\coredll_effects.obj &
-	$(OBJS)\coredll_fddlgcmn.obj &
-	$(OBJS)\coredll_fldlgcmn.obj &
-	$(OBJS)\coredll_fontcmn.obj &
-	$(OBJS)\coredll_framecmn.obj &
-	$(OBJS)\coredll_timercmn.obj &
-	$(OBJS)\coredll_toplvcmn.obj &
-	$(OBJS)\coredll_gaugecmn.obj &
-	$(OBJS)\coredll_gdicmn.obj &
-	$(OBJS)\coredll_geometry.obj &
-	$(OBJS)\coredll_gifdecod.obj &
-	$(OBJS)\coredll_helpbase.obj &
-	$(OBJS)\coredll_iconbndl.obj &
-	$(OBJS)\coredll_imagall.obj &
-	$(OBJS)\coredll_imagbmp.obj &
-	$(OBJS)\coredll_image.obj &
-	$(OBJS)\coredll_imaggif.obj &
-	$(OBJS)\coredll_imagiff.obj &
-	$(OBJS)\coredll_imagjpeg.obj &
-	$(OBJS)\coredll_imagpcx.obj &
-	$(OBJS)\coredll_imagpng.obj &
-	$(OBJS)\coredll_imagpnm.obj &
-	$(OBJS)\coredll_imagtiff.obj &
-	$(OBJS)\coredll_imagxpm.obj &
-	$(OBJS)\coredll_imagfill.obj &
-	$(OBJS)\coredll_layout.obj &
-	$(OBJS)\coredll_lboxcmn.obj &
-	$(OBJS)\coredll_matrix.obj &
-	$(OBJS)\coredll_menucmn.obj &
-	$(OBJS)\coredll_nbkbase.obj &
-	$(OBJS)\coredll_paper.obj &
-	$(OBJS)\coredll_popupcmn.obj &
-	$(OBJS)\coredll_prntbase.obj &
-	$(OBJS)\coredll_quantize.obj &
-	$(OBJS)\coredll_radiocmn.obj &
-	$(OBJS)\coredll_rendcmn.obj &
-	$(OBJS)\coredll_rgncmn.obj &
-	$(OBJS)\coredll_settcmn.obj &
-	$(OBJS)\coredll_sizer.obj &
-	$(OBJS)\coredll_statbar.obj &
-	$(OBJS)\coredll_tbarbase.obj &
-	$(OBJS)\coredll_textcmn.obj &
-	$(OBJS)\coredll_treebase.obj &
-	$(OBJS)\coredll_valgen.obj &
-	$(OBJS)\coredll_validate.obj &
-	$(OBJS)\coredll_valtext.obj &
-	$(OBJS)\coredll_wincmn.obj &
-	$(OBJS)\coredll_xpmdecod.obj
+	$(OBJS)\coredll_wizard.obj
 !endif
 !endif
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 ____CORE_SRC_FILENAMES_2_OBJECTS =  &
+	$(OBJS)\coredll_taskbarcmn.obj &
 	$(OBJS)\coredll_app.obj &
 	$(OBJS)\coredll_bitmap.obj &
 	$(OBJS)\coredll_brush.obj &
@@ -776,12 +807,17 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_icon.obj &
 	$(OBJS)\coredll_joystick.obj &
 	$(OBJS)\coredll_minifram.obj &
+	$(OBJS)\coredll_automtn.obj &
+	$(OBJS)\coredll_dataobj.obj &
+	$(OBJS)\coredll_dropsrc.obj &
+	$(OBJS)\coredll_droptgt.obj &
+	$(OBJS)\coredll_oleutils.obj &
+	$(OBJS)\coredll_uuid.obj &
 	$(OBJS)\coredll_palette.obj &
 	$(OBJS)\coredll_pen.obj &
 	$(OBJS)\coredll_popupwin.obj &
 	$(OBJS)\coredll_region.obj &
 	$(OBJS)\coredll_settings.obj &
-	$(OBJS)\coredll_taskbarcmn.obj &
 	$(OBJS)\coredll_taskbar.obj &
 	$(OBJS)\coredll_timer.obj &
 	$(OBJS)\coredll_tooltip.obj &
@@ -789,13 +825,19 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_utilsgui.obj &
 	$(OBJS)\coredll_wave.obj &
 	$(OBJS)\coredll_window.obj &
-	$(OBJS)\coredll_automtn.obj &
-	$(OBJS)\coredll_dataobj.obj &
-	$(OBJS)\coredll_dropsrc.obj &
-	$(OBJS)\coredll_droptgt.obj &
-	$(OBJS)\coredll_oleutils.obj &
-	$(OBJS)\coredll_uuid.obj &
 	$(OBJS)\coredll_textctrl.obj &
+	$(OBJS)\coredll_accel.obj &
+	$(OBJS)\coredll_colrdlgg.obj &
+	$(OBJS)\coredll_dirdlgg.obj &
+	$(OBJS)\coredll_fdrepdlg.obj &
+	$(OBJS)\coredll_filedlgg.obj &
+	$(OBJS)\coredll_fontdlgg.obj &
+	$(OBJS)\coredll_imaglist.obj &
+	$(OBJS)\coredll_listctrl.obj &
+	$(OBJS)\coredll_mdig.obj &
+	$(OBJS)\coredll_msgdlgg.obj &
+	$(OBJS)\coredll_prntdlgg.obj &
+	$(OBJS)\coredll_tabg.obj &
 	$(OBJS)\coredll_bmpbuttn.obj &
 	$(OBJS)\coredll_button.obj &
 	$(OBJS)\coredll_checkbox.obj &
@@ -806,7 +848,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_control.obj &
 	$(OBJS)\coredll_dialog.obj &
 	$(OBJS)\coredll_framuniv.obj &
-	$(OBJS)\coredll_topluniv.obj &
 	$(OBJS)\coredll_gauge.obj &
 	$(OBJS)\coredll_inpcons.obj &
 	$(OBJS)\coredll_inphand.obj &
@@ -826,24 +867,85 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_statline.obj &
 	$(OBJS)\coredll_stattext.obj &
 	$(OBJS)\coredll_statusbr.obj &
-	$(OBJS)\coredll_toolbar.obj &
 	$(OBJS)\coredll_theme.obj &
+	$(OBJS)\coredll_toolbar.obj &
+	$(OBJS)\coredll_topluniv.obj &
 	$(OBJS)\coredll_winuniv.obj &
-	$(OBJS)\coredll_mdig.obj &
-	$(OBJS)\coredll_imaglist.obj &
-	$(OBJS)\coredll_colrdlgg.obj &
-	$(OBJS)\coredll_listctrl.obj &
-	$(OBJS)\coredll_filedlgg.obj &
-	$(OBJS)\coredll_dirdlgg.obj &
-	$(OBJS)\coredll_prntdlgg.obj &
-	$(OBJS)\coredll_accel.obj &
-	$(OBJS)\coredll_msgdlgg.obj &
-	$(OBJS)\coredll_fdrepdlg.obj &
-	$(OBJS)\coredll_fontdlgg.obj &
-	$(OBJS)\coredll_tabg.obj &
 	$(OBJS)\coredll_gtk.obj &
-	$(OBJS)\coredll_win32.obj &
 	$(OBJS)\coredll_metal.obj &
+	$(OBJS)\coredll_win32.obj &
+	$(OBJS)\coredll_accesscmn.obj &
+	$(OBJS)\coredll_appcmn.obj &
+	$(OBJS)\coredll_artprov.obj &
+	$(OBJS)\coredll_artstd.obj &
+	$(OBJS)\coredll_bmpbase.obj &
+	$(OBJS)\coredll_choiccmn.obj &
+	$(OBJS)\coredll_clipcmn.obj &
+	$(OBJS)\coredll_cmdproc.obj &
+	$(OBJS)\coredll_cmndata.obj &
+	$(OBJS)\coredll_containr.obj &
+	$(OBJS)\coredll_cshelp.obj &
+	$(OBJS)\coredll_ctrlcmn.obj &
+	$(OBJS)\coredll_ctrlsub.obj &
+	$(OBJS)\coredll_datacmn.obj &
+	$(OBJS)\coredll_dbgrid.obj &
+	$(OBJS)\coredll_dcbase.obj &
+	$(OBJS)\coredll_dlgcmn.obj &
+	$(OBJS)\coredll_dndcmn.obj &
+	$(OBJS)\coredll_dobjcmn.obj &
+	$(OBJS)\coredll_docmdi.obj &
+	$(OBJS)\coredll_docview.obj &
+	$(OBJS)\coredll_dpycmn.obj &
+	$(OBJS)\coredll_dseldlg.obj &
+	$(OBJS)\coredll_effects.obj &
+	$(OBJS)\coredll_fddlgcmn.obj &
+	$(OBJS)\coredll_fldlgcmn.obj &
+	$(OBJS)\coredll_fontcmn.obj &
+	$(OBJS)\coredll_fontmap.obj &
+	$(OBJS)\coredll_framecmn.obj &
+	$(OBJS)\coredll_gaugecmn.obj &
+	$(OBJS)\coredll_gdicmn.obj &
+	$(OBJS)\coredll_geometry.obj &
+	$(OBJS)\coredll_gifdecod.obj &
+	$(OBJS)\coredll_helpbase.obj &
+	$(OBJS)\coredll_iconbndl.obj &
+	$(OBJS)\coredll_imagall.obj &
+	$(OBJS)\coredll_imagbmp.obj &
+	$(OBJS)\coredll_image.obj &
+	$(OBJS)\coredll_imagfill.obj &
+	$(OBJS)\coredll_imaggif.obj &
+	$(OBJS)\coredll_imagiff.obj &
+	$(OBJS)\coredll_imagjpeg.obj &
+	$(OBJS)\coredll_imagpcx.obj &
+	$(OBJS)\coredll_imagpng.obj &
+	$(OBJS)\coredll_imagpnm.obj &
+	$(OBJS)\coredll_imagtiff.obj &
+	$(OBJS)\coredll_imagxpm.obj &
+	$(OBJS)\coredll_layout.obj &
+	$(OBJS)\coredll_lboxcmn.obj &
+	$(OBJS)\coredll_matrix.obj &
+	$(OBJS)\coredll_menucmn.obj &
+	$(OBJS)\coredll_nbkbase.obj &
+	$(OBJS)\coredll_paper.obj &
+	$(OBJS)\coredll_popupcmn.obj &
+	$(OBJS)\coredll_prntbase.obj &
+	$(OBJS)\coredll_quantize.obj &
+	$(OBJS)\coredll_radiocmn.obj &
+	$(OBJS)\coredll_rendcmn.obj &
+	$(OBJS)\coredll_rgncmn.obj &
+	$(OBJS)\coredll_settcmn.obj &
+	$(OBJS)\coredll_sizer.obj &
+	$(OBJS)\coredll_statbar.obj &
+	$(OBJS)\coredll_tbarbase.obj &
+	$(OBJS)\coredll_textcmn.obj &
+	$(OBJS)\coredll_timercmn.obj &
+	$(OBJS)\coredll_toplvcmn.obj &
+	$(OBJS)\coredll_treebase.obj &
+	$(OBJS)\coredll_valgen.obj &
+	$(OBJS)\coredll_validate.obj &
+	$(OBJS)\coredll_valtext.obj &
+	$(OBJS)\coredll_wincmn.obj &
+	$(OBJS)\coredll_xpmdecod.obj &
 	$(OBJS)\coredll_busyinfo.obj &
 	$(OBJS)\coredll_calctrl.obj &
 	$(OBJS)\coredll_choicdgg.obj &
@@ -874,85 +976,14 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_treectlg.obj &
 	$(OBJS)\coredll_vlbox.obj &
 	$(OBJS)\coredll_vscroll.obj &
-	$(OBJS)\coredll_wizard.obj &
-	$(OBJS)\coredll_appcmn.obj &
-	$(OBJS)\coredll_fontmap.obj &
-	$(OBJS)\coredll_accesscmn.obj &
-	$(OBJS)\coredll_artprov.obj &
-	$(OBJS)\coredll_artstd.obj &
-	$(OBJS)\coredll_bmpbase.obj &
-	$(OBJS)\coredll_choiccmn.obj &
-	$(OBJS)\coredll_clipcmn.obj &
-	$(OBJS)\coredll_cmdproc.obj &
-	$(OBJS)\coredll_cmndata.obj &
-	$(OBJS)\coredll_containr.obj &
-	$(OBJS)\coredll_cshelp.obj &
-	$(OBJS)\coredll_ctrlcmn.obj &
-	$(OBJS)\coredll_ctrlsub.obj &
-	$(OBJS)\coredll_datacmn.obj &
-	$(OBJS)\coredll_dbgrid.obj &
-	$(OBJS)\coredll_dcbase.obj &
-	$(OBJS)\coredll_dlgcmn.obj &
-	$(OBJS)\coredll_dndcmn.obj &
-	$(OBJS)\coredll_dobjcmn.obj &
-	$(OBJS)\coredll_docmdi.obj &
-	$(OBJS)\coredll_docview.obj &
-	$(OBJS)\coredll_dpycmn.obj &
-	$(OBJS)\coredll_dseldlg.obj &
-	$(OBJS)\coredll_effects.obj &
-	$(OBJS)\coredll_fddlgcmn.obj &
-	$(OBJS)\coredll_fldlgcmn.obj &
-	$(OBJS)\coredll_fontcmn.obj &
-	$(OBJS)\coredll_framecmn.obj &
-	$(OBJS)\coredll_timercmn.obj &
-	$(OBJS)\coredll_toplvcmn.obj &
-	$(OBJS)\coredll_gaugecmn.obj &
-	$(OBJS)\coredll_gdicmn.obj &
-	$(OBJS)\coredll_geometry.obj &
-	$(OBJS)\coredll_gifdecod.obj &
-	$(OBJS)\coredll_helpbase.obj &
-	$(OBJS)\coredll_iconbndl.obj &
-	$(OBJS)\coredll_imagall.obj &
-	$(OBJS)\coredll_imagbmp.obj &
-	$(OBJS)\coredll_image.obj &
-	$(OBJS)\coredll_imaggif.obj &
-	$(OBJS)\coredll_imagiff.obj &
-	$(OBJS)\coredll_imagjpeg.obj &
-	$(OBJS)\coredll_imagpcx.obj &
-	$(OBJS)\coredll_imagpng.obj &
-	$(OBJS)\coredll_imagpnm.obj &
-	$(OBJS)\coredll_imagtiff.obj &
-	$(OBJS)\coredll_imagxpm.obj &
-	$(OBJS)\coredll_imagfill.obj &
-	$(OBJS)\coredll_layout.obj &
-	$(OBJS)\coredll_lboxcmn.obj &
-	$(OBJS)\coredll_matrix.obj &
-	$(OBJS)\coredll_menucmn.obj &
-	$(OBJS)\coredll_nbkbase.obj &
-	$(OBJS)\coredll_paper.obj &
-	$(OBJS)\coredll_popupcmn.obj &
-	$(OBJS)\coredll_prntbase.obj &
-	$(OBJS)\coredll_quantize.obj &
-	$(OBJS)\coredll_radiocmn.obj &
-	$(OBJS)\coredll_rendcmn.obj &
-	$(OBJS)\coredll_rgncmn.obj &
-	$(OBJS)\coredll_settcmn.obj &
-	$(OBJS)\coredll_sizer.obj &
-	$(OBJS)\coredll_statbar.obj &
-	$(OBJS)\coredll_tbarbase.obj &
-	$(OBJS)\coredll_textcmn.obj &
-	$(OBJS)\coredll_treebase.obj &
-	$(OBJS)\coredll_valgen.obj &
-	$(OBJS)\coredll_validate.obj &
-	$(OBJS)\coredll_valtext.obj &
-	$(OBJS)\coredll_wincmn.obj &
-	$(OBJS)\coredll_xpmdecod.obj
+	$(OBJS)\coredll_wizard.obj
 !endif
 !endif
 ____CORE_SRC_FILENAMES_3_OBJECTS =
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 ____CORE_SRC_FILENAMES_3_OBJECTS =  &
+	$(OBJS)\corelib_taskbarcmn.obj &
 	$(OBJS)\corelib_app.obj &
 	$(OBJS)\corelib_bitmap.obj &
 	$(OBJS)\corelib_brush.obj &
@@ -982,12 +1013,17 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_icon.obj &
 	$(OBJS)\corelib_joystick.obj &
 	$(OBJS)\corelib_minifram.obj &
+	$(OBJS)\corelib_automtn.obj &
+	$(OBJS)\corelib_dataobj.obj &
+	$(OBJS)\corelib_dropsrc.obj &
+	$(OBJS)\corelib_droptgt.obj &
+	$(OBJS)\corelib_oleutils.obj &
+	$(OBJS)\corelib_uuid.obj &
 	$(OBJS)\corelib_palette.obj &
 	$(OBJS)\corelib_pen.obj &
 	$(OBJS)\corelib_popupwin.obj &
 	$(OBJS)\corelib_region.obj &
 	$(OBJS)\corelib_settings.obj &
-	$(OBJS)\corelib_taskbarcmn.obj &
 	$(OBJS)\corelib_taskbar.obj &
 	$(OBJS)\corelib_timer.obj &
 	$(OBJS)\corelib_tooltip.obj &
@@ -995,15 +1031,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_utilsgui.obj &
 	$(OBJS)\corelib_wave.obj &
 	$(OBJS)\corelib_window.obj &
-	$(OBJS)\corelib_automtn.obj &
-	$(OBJS)\corelib_dataobj.obj &
-	$(OBJS)\corelib_dropsrc.obj &
-	$(OBJS)\corelib_droptgt.obj &
-	$(OBJS)\corelib_oleutils.obj &
-	$(OBJS)\corelib_uuid.obj &
 	$(OBJS)\corelib_statusbr.obj &
-	$(OBJS)\corelib_uxtheme.obj &
-	$(OBJS)\corelib_access.obj &
 	$(OBJS)\corelib_accel.obj &
 	$(OBJS)\corelib_bmpbuttn.obj &
 	$(OBJS)\corelib_button.obj &
@@ -1031,6 +1059,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_msgdlg.obj &
 	$(OBJS)\corelib_nativdlg.obj &
 	$(OBJS)\corelib_notebook.obj &
+	$(OBJS)\corelib_access.obj &
 	$(OBJS)\corelib_ownerdrw.obj &
 	$(OBJS)\corelib_penwin.obj &
 	$(OBJS)\corelib_printdlg.obj &
@@ -1052,6 +1081,79 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_textctrl.obj &
 	$(OBJS)\corelib_tglbtn.obj &
 	$(OBJS)\corelib_treectrl.obj &
+	$(OBJS)\corelib_uxtheme.obj &
+	$(OBJS)\corelib_accesscmn.obj &
+	$(OBJS)\corelib_appcmn.obj &
+	$(OBJS)\corelib_artprov.obj &
+	$(OBJS)\corelib_artstd.obj &
+	$(OBJS)\corelib_bmpbase.obj &
+	$(OBJS)\corelib_choiccmn.obj &
+	$(OBJS)\corelib_clipcmn.obj &
+	$(OBJS)\corelib_cmdproc.obj &
+	$(OBJS)\corelib_cmndata.obj &
+	$(OBJS)\corelib_containr.obj &
+	$(OBJS)\corelib_cshelp.obj &
+	$(OBJS)\corelib_ctrlcmn.obj &
+	$(OBJS)\corelib_ctrlsub.obj &
+	$(OBJS)\corelib_datacmn.obj &
+	$(OBJS)\corelib_dbgrid.obj &
+	$(OBJS)\corelib_dcbase.obj &
+	$(OBJS)\corelib_dlgcmn.obj &
+	$(OBJS)\corelib_dndcmn.obj &
+	$(OBJS)\corelib_dobjcmn.obj &
+	$(OBJS)\corelib_docmdi.obj &
+	$(OBJS)\corelib_docview.obj &
+	$(OBJS)\corelib_dpycmn.obj &
+	$(OBJS)\corelib_dseldlg.obj &
+	$(OBJS)\corelib_effects.obj &
+	$(OBJS)\corelib_fddlgcmn.obj &
+	$(OBJS)\corelib_fldlgcmn.obj &
+	$(OBJS)\corelib_fontcmn.obj &
+	$(OBJS)\corelib_fontmap.obj &
+	$(OBJS)\corelib_framecmn.obj &
+	$(OBJS)\corelib_gaugecmn.obj &
+	$(OBJS)\corelib_gdicmn.obj &
+	$(OBJS)\corelib_geometry.obj &
+	$(OBJS)\corelib_gifdecod.obj &
+	$(OBJS)\corelib_helpbase.obj &
+	$(OBJS)\corelib_iconbndl.obj &
+	$(OBJS)\corelib_imagall.obj &
+	$(OBJS)\corelib_imagbmp.obj &
+	$(OBJS)\corelib_image.obj &
+	$(OBJS)\corelib_imagfill.obj &
+	$(OBJS)\corelib_imaggif.obj &
+	$(OBJS)\corelib_imagiff.obj &
+	$(OBJS)\corelib_imagjpeg.obj &
+	$(OBJS)\corelib_imagpcx.obj &
+	$(OBJS)\corelib_imagpng.obj &
+	$(OBJS)\corelib_imagpnm.obj &
+	$(OBJS)\corelib_imagtiff.obj &
+	$(OBJS)\corelib_imagxpm.obj &
+	$(OBJS)\corelib_layout.obj &
+	$(OBJS)\corelib_lboxcmn.obj &
+	$(OBJS)\corelib_matrix.obj &
+	$(OBJS)\corelib_menucmn.obj &
+	$(OBJS)\corelib_nbkbase.obj &
+	$(OBJS)\corelib_paper.obj &
+	$(OBJS)\corelib_popupcmn.obj &
+	$(OBJS)\corelib_prntbase.obj &
+	$(OBJS)\corelib_quantize.obj &
+	$(OBJS)\corelib_radiocmn.obj &
+	$(OBJS)\corelib_rendcmn.obj &
+	$(OBJS)\corelib_rgncmn.obj &
+	$(OBJS)\corelib_settcmn.obj &
+	$(OBJS)\corelib_sizer.obj &
+	$(OBJS)\corelib_statbar.obj &
+	$(OBJS)\corelib_tbarbase.obj &
+	$(OBJS)\corelib_textcmn.obj &
+	$(OBJS)\corelib_timercmn.obj &
+	$(OBJS)\corelib_toplvcmn.obj &
+	$(OBJS)\corelib_treebase.obj &
+	$(OBJS)\corelib_valgen.obj &
+	$(OBJS)\corelib_validate.obj &
+	$(OBJS)\corelib_valtext.obj &
+	$(OBJS)\corelib_wincmn.obj &
+	$(OBJS)\corelib_xpmdecod.obj &
 	$(OBJS)\corelib_busyinfo.obj &
 	$(OBJS)\corelib_calctrl.obj &
 	$(OBJS)\corelib_choicdgg.obj &
@@ -1082,84 +1184,13 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_treectlg.obj &
 	$(OBJS)\corelib_vlbox.obj &
 	$(OBJS)\corelib_vscroll.obj &
-	$(OBJS)\corelib_wizard.obj &
-	$(OBJS)\corelib_appcmn.obj &
-	$(OBJS)\corelib_fontmap.obj &
-	$(OBJS)\corelib_accesscmn.obj &
-	$(OBJS)\corelib_artprov.obj &
-	$(OBJS)\corelib_artstd.obj &
-	$(OBJS)\corelib_bmpbase.obj &
-	$(OBJS)\corelib_choiccmn.obj &
-	$(OBJS)\corelib_clipcmn.obj &
-	$(OBJS)\corelib_cmdproc.obj &
-	$(OBJS)\corelib_cmndata.obj &
-	$(OBJS)\corelib_containr.obj &
-	$(OBJS)\corelib_cshelp.obj &
-	$(OBJS)\corelib_ctrlcmn.obj &
-	$(OBJS)\corelib_ctrlsub.obj &
-	$(OBJS)\corelib_datacmn.obj &
-	$(OBJS)\corelib_dbgrid.obj &
-	$(OBJS)\corelib_dcbase.obj &
-	$(OBJS)\corelib_dlgcmn.obj &
-	$(OBJS)\corelib_dndcmn.obj &
-	$(OBJS)\corelib_dobjcmn.obj &
-	$(OBJS)\corelib_docmdi.obj &
-	$(OBJS)\corelib_docview.obj &
-	$(OBJS)\corelib_dpycmn.obj &
-	$(OBJS)\corelib_dseldlg.obj &
-	$(OBJS)\corelib_effects.obj &
-	$(OBJS)\corelib_fddlgcmn.obj &
-	$(OBJS)\corelib_fldlgcmn.obj &
-	$(OBJS)\corelib_fontcmn.obj &
-	$(OBJS)\corelib_framecmn.obj &
-	$(OBJS)\corelib_timercmn.obj &
-	$(OBJS)\corelib_toplvcmn.obj &
-	$(OBJS)\corelib_gaugecmn.obj &
-	$(OBJS)\corelib_gdicmn.obj &
-	$(OBJS)\corelib_geometry.obj &
-	$(OBJS)\corelib_gifdecod.obj &
-	$(OBJS)\corelib_helpbase.obj &
-	$(OBJS)\corelib_iconbndl.obj &
-	$(OBJS)\corelib_imagall.obj &
-	$(OBJS)\corelib_imagbmp.obj &
-	$(OBJS)\corelib_image.obj &
-	$(OBJS)\corelib_imaggif.obj &
-	$(OBJS)\corelib_imagiff.obj &
-	$(OBJS)\corelib_imagjpeg.obj &
-	$(OBJS)\corelib_imagpcx.obj &
-	$(OBJS)\corelib_imagpng.obj &
-	$(OBJS)\corelib_imagpnm.obj &
-	$(OBJS)\corelib_imagtiff.obj &
-	$(OBJS)\corelib_imagxpm.obj &
-	$(OBJS)\corelib_imagfill.obj &
-	$(OBJS)\corelib_layout.obj &
-	$(OBJS)\corelib_lboxcmn.obj &
-	$(OBJS)\corelib_matrix.obj &
-	$(OBJS)\corelib_menucmn.obj &
-	$(OBJS)\corelib_nbkbase.obj &
-	$(OBJS)\corelib_paper.obj &
-	$(OBJS)\corelib_popupcmn.obj &
-	$(OBJS)\corelib_prntbase.obj &
-	$(OBJS)\corelib_quantize.obj &
-	$(OBJS)\corelib_radiocmn.obj &
-	$(OBJS)\corelib_rendcmn.obj &
-	$(OBJS)\corelib_rgncmn.obj &
-	$(OBJS)\corelib_settcmn.obj &
-	$(OBJS)\corelib_sizer.obj &
-	$(OBJS)\corelib_statbar.obj &
-	$(OBJS)\corelib_tbarbase.obj &
-	$(OBJS)\corelib_textcmn.obj &
-	$(OBJS)\corelib_treebase.obj &
-	$(OBJS)\corelib_valgen.obj &
-	$(OBJS)\corelib_validate.obj &
-	$(OBJS)\corelib_valtext.obj &
-	$(OBJS)\corelib_wincmn.obj &
-	$(OBJS)\corelib_xpmdecod.obj
+	$(OBJS)\corelib_wizard.obj
 !endif
 !endif
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 ____CORE_SRC_FILENAMES_3_OBJECTS =  &
+	$(OBJS)\corelib_taskbarcmn.obj &
 	$(OBJS)\corelib_app.obj &
 	$(OBJS)\corelib_bitmap.obj &
 	$(OBJS)\corelib_brush.obj &
@@ -1189,12 +1220,17 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_icon.obj &
 	$(OBJS)\corelib_joystick.obj &
 	$(OBJS)\corelib_minifram.obj &
+	$(OBJS)\corelib_automtn.obj &
+	$(OBJS)\corelib_dataobj.obj &
+	$(OBJS)\corelib_dropsrc.obj &
+	$(OBJS)\corelib_droptgt.obj &
+	$(OBJS)\corelib_oleutils.obj &
+	$(OBJS)\corelib_uuid.obj &
 	$(OBJS)\corelib_palette.obj &
 	$(OBJS)\corelib_pen.obj &
 	$(OBJS)\corelib_popupwin.obj &
 	$(OBJS)\corelib_region.obj &
 	$(OBJS)\corelib_settings.obj &
-	$(OBJS)\corelib_taskbarcmn.obj &
 	$(OBJS)\corelib_taskbar.obj &
 	$(OBJS)\corelib_timer.obj &
 	$(OBJS)\corelib_tooltip.obj &
@@ -1202,13 +1238,19 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_utilsgui.obj &
 	$(OBJS)\corelib_wave.obj &
 	$(OBJS)\corelib_window.obj &
-	$(OBJS)\corelib_automtn.obj &
-	$(OBJS)\corelib_dataobj.obj &
-	$(OBJS)\corelib_dropsrc.obj &
-	$(OBJS)\corelib_droptgt.obj &
-	$(OBJS)\corelib_oleutils.obj &
-	$(OBJS)\corelib_uuid.obj &
 	$(OBJS)\corelib_textctrl.obj &
+	$(OBJS)\corelib_accel.obj &
+	$(OBJS)\corelib_colrdlgg.obj &
+	$(OBJS)\corelib_dirdlgg.obj &
+	$(OBJS)\corelib_fdrepdlg.obj &
+	$(OBJS)\corelib_filedlgg.obj &
+	$(OBJS)\corelib_fontdlgg.obj &
+	$(OBJS)\corelib_imaglist.obj &
+	$(OBJS)\corelib_listctrl.obj &
+	$(OBJS)\corelib_mdig.obj &
+	$(OBJS)\corelib_msgdlgg.obj &
+	$(OBJS)\corelib_prntdlgg.obj &
+	$(OBJS)\corelib_tabg.obj &
 	$(OBJS)\corelib_bmpbuttn.obj &
 	$(OBJS)\corelib_button.obj &
 	$(OBJS)\corelib_checkbox.obj &
@@ -1219,7 +1261,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_control.obj &
 	$(OBJS)\corelib_dialog.obj &
 	$(OBJS)\corelib_framuniv.obj &
-	$(OBJS)\corelib_topluniv.obj &
 	$(OBJS)\corelib_gauge.obj &
 	$(OBJS)\corelib_inpcons.obj &
 	$(OBJS)\corelib_inphand.obj &
@@ -1239,24 +1280,85 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_statline.obj &
 	$(OBJS)\corelib_stattext.obj &
 	$(OBJS)\corelib_statusbr.obj &
-	$(OBJS)\corelib_toolbar.obj &
 	$(OBJS)\corelib_theme.obj &
+	$(OBJS)\corelib_toolbar.obj &
+	$(OBJS)\corelib_topluniv.obj &
 	$(OBJS)\corelib_winuniv.obj &
-	$(OBJS)\corelib_mdig.obj &
-	$(OBJS)\corelib_imaglist.obj &
-	$(OBJS)\corelib_colrdlgg.obj &
-	$(OBJS)\corelib_listctrl.obj &
-	$(OBJS)\corelib_filedlgg.obj &
-	$(OBJS)\corelib_dirdlgg.obj &
-	$(OBJS)\corelib_prntdlgg.obj &
-	$(OBJS)\corelib_accel.obj &
-	$(OBJS)\corelib_msgdlgg.obj &
-	$(OBJS)\corelib_fdrepdlg.obj &
-	$(OBJS)\corelib_fontdlgg.obj &
-	$(OBJS)\corelib_tabg.obj &
 	$(OBJS)\corelib_gtk.obj &
-	$(OBJS)\corelib_win32.obj &
 	$(OBJS)\corelib_metal.obj &
+	$(OBJS)\corelib_win32.obj &
+	$(OBJS)\corelib_accesscmn.obj &
+	$(OBJS)\corelib_appcmn.obj &
+	$(OBJS)\corelib_artprov.obj &
+	$(OBJS)\corelib_artstd.obj &
+	$(OBJS)\corelib_bmpbase.obj &
+	$(OBJS)\corelib_choiccmn.obj &
+	$(OBJS)\corelib_clipcmn.obj &
+	$(OBJS)\corelib_cmdproc.obj &
+	$(OBJS)\corelib_cmndata.obj &
+	$(OBJS)\corelib_containr.obj &
+	$(OBJS)\corelib_cshelp.obj &
+	$(OBJS)\corelib_ctrlcmn.obj &
+	$(OBJS)\corelib_ctrlsub.obj &
+	$(OBJS)\corelib_datacmn.obj &
+	$(OBJS)\corelib_dbgrid.obj &
+	$(OBJS)\corelib_dcbase.obj &
+	$(OBJS)\corelib_dlgcmn.obj &
+	$(OBJS)\corelib_dndcmn.obj &
+	$(OBJS)\corelib_dobjcmn.obj &
+	$(OBJS)\corelib_docmdi.obj &
+	$(OBJS)\corelib_docview.obj &
+	$(OBJS)\corelib_dpycmn.obj &
+	$(OBJS)\corelib_dseldlg.obj &
+	$(OBJS)\corelib_effects.obj &
+	$(OBJS)\corelib_fddlgcmn.obj &
+	$(OBJS)\corelib_fldlgcmn.obj &
+	$(OBJS)\corelib_fontcmn.obj &
+	$(OBJS)\corelib_fontmap.obj &
+	$(OBJS)\corelib_framecmn.obj &
+	$(OBJS)\corelib_gaugecmn.obj &
+	$(OBJS)\corelib_gdicmn.obj &
+	$(OBJS)\corelib_geometry.obj &
+	$(OBJS)\corelib_gifdecod.obj &
+	$(OBJS)\corelib_helpbase.obj &
+	$(OBJS)\corelib_iconbndl.obj &
+	$(OBJS)\corelib_imagall.obj &
+	$(OBJS)\corelib_imagbmp.obj &
+	$(OBJS)\corelib_image.obj &
+	$(OBJS)\corelib_imagfill.obj &
+	$(OBJS)\corelib_imaggif.obj &
+	$(OBJS)\corelib_imagiff.obj &
+	$(OBJS)\corelib_imagjpeg.obj &
+	$(OBJS)\corelib_imagpcx.obj &
+	$(OBJS)\corelib_imagpng.obj &
+	$(OBJS)\corelib_imagpnm.obj &
+	$(OBJS)\corelib_imagtiff.obj &
+	$(OBJS)\corelib_imagxpm.obj &
+	$(OBJS)\corelib_layout.obj &
+	$(OBJS)\corelib_lboxcmn.obj &
+	$(OBJS)\corelib_matrix.obj &
+	$(OBJS)\corelib_menucmn.obj &
+	$(OBJS)\corelib_nbkbase.obj &
+	$(OBJS)\corelib_paper.obj &
+	$(OBJS)\corelib_popupcmn.obj &
+	$(OBJS)\corelib_prntbase.obj &
+	$(OBJS)\corelib_quantize.obj &
+	$(OBJS)\corelib_radiocmn.obj &
+	$(OBJS)\corelib_rendcmn.obj &
+	$(OBJS)\corelib_rgncmn.obj &
+	$(OBJS)\corelib_settcmn.obj &
+	$(OBJS)\corelib_sizer.obj &
+	$(OBJS)\corelib_statbar.obj &
+	$(OBJS)\corelib_tbarbase.obj &
+	$(OBJS)\corelib_textcmn.obj &
+	$(OBJS)\corelib_timercmn.obj &
+	$(OBJS)\corelib_toplvcmn.obj &
+	$(OBJS)\corelib_treebase.obj &
+	$(OBJS)\corelib_valgen.obj &
+	$(OBJS)\corelib_validate.obj &
+	$(OBJS)\corelib_valtext.obj &
+	$(OBJS)\corelib_wincmn.obj &
+	$(OBJS)\corelib_xpmdecod.obj &
 	$(OBJS)\corelib_busyinfo.obj &
 	$(OBJS)\corelib_calctrl.obj &
 	$(OBJS)\corelib_choicdgg.obj &
@@ -1287,85 +1389,14 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_treectlg.obj &
 	$(OBJS)\corelib_vlbox.obj &
 	$(OBJS)\corelib_vscroll.obj &
-	$(OBJS)\corelib_wizard.obj &
-	$(OBJS)\corelib_appcmn.obj &
-	$(OBJS)\corelib_fontmap.obj &
-	$(OBJS)\corelib_accesscmn.obj &
-	$(OBJS)\corelib_artprov.obj &
-	$(OBJS)\corelib_artstd.obj &
-	$(OBJS)\corelib_bmpbase.obj &
-	$(OBJS)\corelib_choiccmn.obj &
-	$(OBJS)\corelib_clipcmn.obj &
-	$(OBJS)\corelib_cmdproc.obj &
-	$(OBJS)\corelib_cmndata.obj &
-	$(OBJS)\corelib_containr.obj &
-	$(OBJS)\corelib_cshelp.obj &
-	$(OBJS)\corelib_ctrlcmn.obj &
-	$(OBJS)\corelib_ctrlsub.obj &
-	$(OBJS)\corelib_datacmn.obj &
-	$(OBJS)\corelib_dbgrid.obj &
-	$(OBJS)\corelib_dcbase.obj &
-	$(OBJS)\corelib_dlgcmn.obj &
-	$(OBJS)\corelib_dndcmn.obj &
-	$(OBJS)\corelib_dobjcmn.obj &
-	$(OBJS)\corelib_docmdi.obj &
-	$(OBJS)\corelib_docview.obj &
-	$(OBJS)\corelib_dpycmn.obj &
-	$(OBJS)\corelib_dseldlg.obj &
-	$(OBJS)\corelib_effects.obj &
-	$(OBJS)\corelib_fddlgcmn.obj &
-	$(OBJS)\corelib_fldlgcmn.obj &
-	$(OBJS)\corelib_fontcmn.obj &
-	$(OBJS)\corelib_framecmn.obj &
-	$(OBJS)\corelib_timercmn.obj &
-	$(OBJS)\corelib_toplvcmn.obj &
-	$(OBJS)\corelib_gaugecmn.obj &
-	$(OBJS)\corelib_gdicmn.obj &
-	$(OBJS)\corelib_geometry.obj &
-	$(OBJS)\corelib_gifdecod.obj &
-	$(OBJS)\corelib_helpbase.obj &
-	$(OBJS)\corelib_iconbndl.obj &
-	$(OBJS)\corelib_imagall.obj &
-	$(OBJS)\corelib_imagbmp.obj &
-	$(OBJS)\corelib_image.obj &
-	$(OBJS)\corelib_imaggif.obj &
-	$(OBJS)\corelib_imagiff.obj &
-	$(OBJS)\corelib_imagjpeg.obj &
-	$(OBJS)\corelib_imagpcx.obj &
-	$(OBJS)\corelib_imagpng.obj &
-	$(OBJS)\corelib_imagpnm.obj &
-	$(OBJS)\corelib_imagtiff.obj &
-	$(OBJS)\corelib_imagxpm.obj &
-	$(OBJS)\corelib_imagfill.obj &
-	$(OBJS)\corelib_layout.obj &
-	$(OBJS)\corelib_lboxcmn.obj &
-	$(OBJS)\corelib_matrix.obj &
-	$(OBJS)\corelib_menucmn.obj &
-	$(OBJS)\corelib_nbkbase.obj &
-	$(OBJS)\corelib_paper.obj &
-	$(OBJS)\corelib_popupcmn.obj &
-	$(OBJS)\corelib_prntbase.obj &
-	$(OBJS)\corelib_quantize.obj &
-	$(OBJS)\corelib_radiocmn.obj &
-	$(OBJS)\corelib_rendcmn.obj &
-	$(OBJS)\corelib_rgncmn.obj &
-	$(OBJS)\corelib_settcmn.obj &
-	$(OBJS)\corelib_sizer.obj &
-	$(OBJS)\corelib_statbar.obj &
-	$(OBJS)\corelib_tbarbase.obj &
-	$(OBJS)\corelib_textcmn.obj &
-	$(OBJS)\corelib_treebase.obj &
-	$(OBJS)\corelib_valgen.obj &
-	$(OBJS)\corelib_validate.obj &
-	$(OBJS)\corelib_valtext.obj &
-	$(OBJS)\corelib_wincmn.obj &
-	$(OBJS)\corelib_xpmdecod.obj
+	$(OBJS)\corelib_wizard.obj
 !endif
 !endif
 ____CORE_SRC_FILENAMES_OBJECTS =
 !ifeq USE_GUI 1
 !ifeq WXUNIV 0
 ____CORE_SRC_FILENAMES_OBJECTS =  &
+	$(OBJS)\monodll_taskbarcmn.obj &
 	$(OBJS)\monodll_app.obj &
 	$(OBJS)\monodll_bitmap.obj &
 	$(OBJS)\monodll_brush.obj &
@@ -1395,12 +1426,17 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_icon.obj &
 	$(OBJS)\monodll_joystick.obj &
 	$(OBJS)\monodll_minifram.obj &
+	$(OBJS)\monodll_automtn.obj &
+	$(OBJS)\monodll_dataobj.obj &
+	$(OBJS)\monodll_dropsrc.obj &
+	$(OBJS)\monodll_droptgt.obj &
+	$(OBJS)\monodll_oleutils.obj &
+	$(OBJS)\monodll_uuid.obj &
 	$(OBJS)\monodll_palette.obj &
 	$(OBJS)\monodll_pen.obj &
 	$(OBJS)\monodll_popupwin.obj &
 	$(OBJS)\monodll_region.obj &
 	$(OBJS)\monodll_settings.obj &
-	$(OBJS)\monodll_taskbarcmn.obj &
 	$(OBJS)\monodll_taskbar.obj &
 	$(OBJS)\monodll_timer.obj &
 	$(OBJS)\monodll_tooltip.obj &
@@ -1408,15 +1444,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_utilsgui.obj &
 	$(OBJS)\monodll_wave.obj &
 	$(OBJS)\monodll_window.obj &
-	$(OBJS)\monodll_automtn.obj &
-	$(OBJS)\monodll_dataobj.obj &
-	$(OBJS)\monodll_dropsrc.obj &
-	$(OBJS)\monodll_droptgt.obj &
-	$(OBJS)\monodll_oleutils.obj &
-	$(OBJS)\monodll_uuid.obj &
 	$(OBJS)\monodll_statusbr.obj &
-	$(OBJS)\monodll_uxtheme.obj &
-	$(OBJS)\monodll_access.obj &
 	$(OBJS)\monodll_accel.obj &
 	$(OBJS)\monodll_bmpbuttn.obj &
 	$(OBJS)\monodll_button.obj &
@@ -1444,6 +1472,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_msgdlg.obj &
 	$(OBJS)\monodll_nativdlg.obj &
 	$(OBJS)\monodll_notebook.obj &
+	$(OBJS)\monodll_access.obj &
 	$(OBJS)\monodll_ownerdrw.obj &
 	$(OBJS)\monodll_penwin.obj &
 	$(OBJS)\monodll_printdlg.obj &
@@ -1465,6 +1494,79 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_textctrl.obj &
 	$(OBJS)\monodll_tglbtn.obj &
 	$(OBJS)\monodll_treectrl.obj &
+	$(OBJS)\monodll_uxtheme.obj &
+	$(OBJS)\monodll_accesscmn.obj &
+	$(OBJS)\monodll_appcmn.obj &
+	$(OBJS)\monodll_artprov.obj &
+	$(OBJS)\monodll_artstd.obj &
+	$(OBJS)\monodll_bmpbase.obj &
+	$(OBJS)\monodll_choiccmn.obj &
+	$(OBJS)\monodll_clipcmn.obj &
+	$(OBJS)\monodll_cmdproc.obj &
+	$(OBJS)\monodll_cmndata.obj &
+	$(OBJS)\monodll_containr.obj &
+	$(OBJS)\monodll_cshelp.obj &
+	$(OBJS)\monodll_ctrlcmn.obj &
+	$(OBJS)\monodll_ctrlsub.obj &
+	$(OBJS)\monodll_datacmn.obj &
+	$(OBJS)\monodll_dbgrid.obj &
+	$(OBJS)\monodll_dcbase.obj &
+	$(OBJS)\monodll_dlgcmn.obj &
+	$(OBJS)\monodll_dndcmn.obj &
+	$(OBJS)\monodll_dobjcmn.obj &
+	$(OBJS)\monodll_docmdi.obj &
+	$(OBJS)\monodll_docview.obj &
+	$(OBJS)\monodll_dpycmn.obj &
+	$(OBJS)\monodll_dseldlg.obj &
+	$(OBJS)\monodll_effects.obj &
+	$(OBJS)\monodll_fddlgcmn.obj &
+	$(OBJS)\monodll_fldlgcmn.obj &
+	$(OBJS)\monodll_fontcmn.obj &
+	$(OBJS)\monodll_fontmap.obj &
+	$(OBJS)\monodll_framecmn.obj &
+	$(OBJS)\monodll_gaugecmn.obj &
+	$(OBJS)\monodll_gdicmn.obj &
+	$(OBJS)\monodll_geometry.obj &
+	$(OBJS)\monodll_gifdecod.obj &
+	$(OBJS)\monodll_helpbase.obj &
+	$(OBJS)\monodll_iconbndl.obj &
+	$(OBJS)\monodll_imagall.obj &
+	$(OBJS)\monodll_imagbmp.obj &
+	$(OBJS)\monodll_image.obj &
+	$(OBJS)\monodll_imagfill.obj &
+	$(OBJS)\monodll_imaggif.obj &
+	$(OBJS)\monodll_imagiff.obj &
+	$(OBJS)\monodll_imagjpeg.obj &
+	$(OBJS)\monodll_imagpcx.obj &
+	$(OBJS)\monodll_imagpng.obj &
+	$(OBJS)\monodll_imagpnm.obj &
+	$(OBJS)\monodll_imagtiff.obj &
+	$(OBJS)\monodll_imagxpm.obj &
+	$(OBJS)\monodll_layout.obj &
+	$(OBJS)\monodll_lboxcmn.obj &
+	$(OBJS)\monodll_matrix.obj &
+	$(OBJS)\monodll_menucmn.obj &
+	$(OBJS)\monodll_nbkbase.obj &
+	$(OBJS)\monodll_paper.obj &
+	$(OBJS)\monodll_popupcmn.obj &
+	$(OBJS)\monodll_prntbase.obj &
+	$(OBJS)\monodll_quantize.obj &
+	$(OBJS)\monodll_radiocmn.obj &
+	$(OBJS)\monodll_rendcmn.obj &
+	$(OBJS)\monodll_rgncmn.obj &
+	$(OBJS)\monodll_settcmn.obj &
+	$(OBJS)\monodll_sizer.obj &
+	$(OBJS)\monodll_statbar.obj &
+	$(OBJS)\monodll_tbarbase.obj &
+	$(OBJS)\monodll_textcmn.obj &
+	$(OBJS)\monodll_timercmn.obj &
+	$(OBJS)\monodll_toplvcmn.obj &
+	$(OBJS)\monodll_treebase.obj &
+	$(OBJS)\monodll_valgen.obj &
+	$(OBJS)\monodll_validate.obj &
+	$(OBJS)\monodll_valtext.obj &
+	$(OBJS)\monodll_wincmn.obj &
+	$(OBJS)\monodll_xpmdecod.obj &
 	$(OBJS)\monodll_busyinfo.obj &
 	$(OBJS)\monodll_calctrl.obj &
 	$(OBJS)\monodll_choicdgg.obj &
@@ -1495,84 +1597,13 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_treectlg.obj &
 	$(OBJS)\monodll_vlbox.obj &
 	$(OBJS)\monodll_vscroll.obj &
-	$(OBJS)\monodll_wizard.obj &
-	$(OBJS)\monodll_appcmn.obj &
-	$(OBJS)\monodll_fontmap.obj &
-	$(OBJS)\monodll_accesscmn.obj &
-	$(OBJS)\monodll_artprov.obj &
-	$(OBJS)\monodll_artstd.obj &
-	$(OBJS)\monodll_bmpbase.obj &
-	$(OBJS)\monodll_choiccmn.obj &
-	$(OBJS)\monodll_clipcmn.obj &
-	$(OBJS)\monodll_cmdproc.obj &
-	$(OBJS)\monodll_cmndata.obj &
-	$(OBJS)\monodll_containr.obj &
-	$(OBJS)\monodll_cshelp.obj &
-	$(OBJS)\monodll_ctrlcmn.obj &
-	$(OBJS)\monodll_ctrlsub.obj &
-	$(OBJS)\monodll_datacmn.obj &
-	$(OBJS)\monodll_dbgrid.obj &
-	$(OBJS)\monodll_dcbase.obj &
-	$(OBJS)\monodll_dlgcmn.obj &
-	$(OBJS)\monodll_dndcmn.obj &
-	$(OBJS)\monodll_dobjcmn.obj &
-	$(OBJS)\monodll_docmdi.obj &
-	$(OBJS)\monodll_docview.obj &
-	$(OBJS)\monodll_dpycmn.obj &
-	$(OBJS)\monodll_dseldlg.obj &
-	$(OBJS)\monodll_effects.obj &
-	$(OBJS)\monodll_fddlgcmn.obj &
-	$(OBJS)\monodll_fldlgcmn.obj &
-	$(OBJS)\monodll_fontcmn.obj &
-	$(OBJS)\monodll_framecmn.obj &
-	$(OBJS)\monodll_timercmn.obj &
-	$(OBJS)\monodll_toplvcmn.obj &
-	$(OBJS)\monodll_gaugecmn.obj &
-	$(OBJS)\monodll_gdicmn.obj &
-	$(OBJS)\monodll_geometry.obj &
-	$(OBJS)\monodll_gifdecod.obj &
-	$(OBJS)\monodll_helpbase.obj &
-	$(OBJS)\monodll_iconbndl.obj &
-	$(OBJS)\monodll_imagall.obj &
-	$(OBJS)\monodll_imagbmp.obj &
-	$(OBJS)\monodll_image.obj &
-	$(OBJS)\monodll_imaggif.obj &
-	$(OBJS)\monodll_imagiff.obj &
-	$(OBJS)\monodll_imagjpeg.obj &
-	$(OBJS)\monodll_imagpcx.obj &
-	$(OBJS)\monodll_imagpng.obj &
-	$(OBJS)\monodll_imagpnm.obj &
-	$(OBJS)\monodll_imagtiff.obj &
-	$(OBJS)\monodll_imagxpm.obj &
-	$(OBJS)\monodll_imagfill.obj &
-	$(OBJS)\monodll_layout.obj &
-	$(OBJS)\monodll_lboxcmn.obj &
-	$(OBJS)\monodll_matrix.obj &
-	$(OBJS)\monodll_menucmn.obj &
-	$(OBJS)\monodll_nbkbase.obj &
-	$(OBJS)\monodll_paper.obj &
-	$(OBJS)\monodll_popupcmn.obj &
-	$(OBJS)\monodll_prntbase.obj &
-	$(OBJS)\monodll_quantize.obj &
-	$(OBJS)\monodll_radiocmn.obj &
-	$(OBJS)\monodll_rendcmn.obj &
-	$(OBJS)\monodll_rgncmn.obj &
-	$(OBJS)\monodll_settcmn.obj &
-	$(OBJS)\monodll_sizer.obj &
-	$(OBJS)\monodll_statbar.obj &
-	$(OBJS)\monodll_tbarbase.obj &
-	$(OBJS)\monodll_textcmn.obj &
-	$(OBJS)\monodll_treebase.obj &
-	$(OBJS)\monodll_valgen.obj &
-	$(OBJS)\monodll_validate.obj &
-	$(OBJS)\monodll_valtext.obj &
-	$(OBJS)\monodll_wincmn.obj &
-	$(OBJS)\monodll_xpmdecod.obj
+	$(OBJS)\monodll_wizard.obj
 !endif
 !endif
 !ifeq USE_GUI 1
 !ifeq WXUNIV 1
 ____CORE_SRC_FILENAMES_OBJECTS =  &
+	$(OBJS)\monodll_taskbarcmn.obj &
 	$(OBJS)\monodll_app.obj &
 	$(OBJS)\monodll_bitmap.obj &
 	$(OBJS)\monodll_brush.obj &
@@ -1602,12 +1633,17 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_icon.obj &
 	$(OBJS)\monodll_joystick.obj &
 	$(OBJS)\monodll_minifram.obj &
+	$(OBJS)\monodll_automtn.obj &
+	$(OBJS)\monodll_dataobj.obj &
+	$(OBJS)\monodll_dropsrc.obj &
+	$(OBJS)\monodll_droptgt.obj &
+	$(OBJS)\monodll_oleutils.obj &
+	$(OBJS)\monodll_uuid.obj &
 	$(OBJS)\monodll_palette.obj &
 	$(OBJS)\monodll_pen.obj &
 	$(OBJS)\monodll_popupwin.obj &
 	$(OBJS)\monodll_region.obj &
 	$(OBJS)\monodll_settings.obj &
-	$(OBJS)\monodll_taskbarcmn.obj &
 	$(OBJS)\monodll_taskbar.obj &
 	$(OBJS)\monodll_timer.obj &
 	$(OBJS)\monodll_tooltip.obj &
@@ -1615,13 +1651,19 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_utilsgui.obj &
 	$(OBJS)\monodll_wave.obj &
 	$(OBJS)\monodll_window.obj &
-	$(OBJS)\monodll_automtn.obj &
-	$(OBJS)\monodll_dataobj.obj &
-	$(OBJS)\monodll_dropsrc.obj &
-	$(OBJS)\monodll_droptgt.obj &
-	$(OBJS)\monodll_oleutils.obj &
-	$(OBJS)\monodll_uuid.obj &
 	$(OBJS)\monodll_textctrl.obj &
+	$(OBJS)\monodll_accel.obj &
+	$(OBJS)\monodll_colrdlgg.obj &
+	$(OBJS)\monodll_dirdlgg.obj &
+	$(OBJS)\monodll_fdrepdlg.obj &
+	$(OBJS)\monodll_filedlgg.obj &
+	$(OBJS)\monodll_fontdlgg.obj &
+	$(OBJS)\monodll_imaglist.obj &
+	$(OBJS)\monodll_listctrl.obj &
+	$(OBJS)\monodll_mdig.obj &
+	$(OBJS)\monodll_msgdlgg.obj &
+	$(OBJS)\monodll_prntdlgg.obj &
+	$(OBJS)\monodll_tabg.obj &
 	$(OBJS)\monodll_bmpbuttn.obj &
 	$(OBJS)\monodll_button.obj &
 	$(OBJS)\monodll_checkbox.obj &
@@ -1632,7 +1674,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_control.obj &
 	$(OBJS)\monodll_dialog.obj &
 	$(OBJS)\monodll_framuniv.obj &
-	$(OBJS)\monodll_topluniv.obj &
 	$(OBJS)\monodll_gauge.obj &
 	$(OBJS)\monodll_inpcons.obj &
 	$(OBJS)\monodll_inphand.obj &
@@ -1652,24 +1693,85 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_statline.obj &
 	$(OBJS)\monodll_stattext.obj &
 	$(OBJS)\monodll_statusbr.obj &
-	$(OBJS)\monodll_toolbar.obj &
 	$(OBJS)\monodll_theme.obj &
+	$(OBJS)\monodll_toolbar.obj &
+	$(OBJS)\monodll_topluniv.obj &
 	$(OBJS)\monodll_winuniv.obj &
-	$(OBJS)\monodll_mdig.obj &
-	$(OBJS)\monodll_imaglist.obj &
-	$(OBJS)\monodll_colrdlgg.obj &
-	$(OBJS)\monodll_listctrl.obj &
-	$(OBJS)\monodll_filedlgg.obj &
-	$(OBJS)\monodll_dirdlgg.obj &
-	$(OBJS)\monodll_prntdlgg.obj &
-	$(OBJS)\monodll_accel.obj &
-	$(OBJS)\monodll_msgdlgg.obj &
-	$(OBJS)\monodll_fdrepdlg.obj &
-	$(OBJS)\monodll_fontdlgg.obj &
-	$(OBJS)\monodll_tabg.obj &
 	$(OBJS)\monodll_gtk.obj &
-	$(OBJS)\monodll_win32.obj &
 	$(OBJS)\monodll_metal.obj &
+	$(OBJS)\monodll_win32.obj &
+	$(OBJS)\monodll_accesscmn.obj &
+	$(OBJS)\monodll_appcmn.obj &
+	$(OBJS)\monodll_artprov.obj &
+	$(OBJS)\monodll_artstd.obj &
+	$(OBJS)\monodll_bmpbase.obj &
+	$(OBJS)\monodll_choiccmn.obj &
+	$(OBJS)\monodll_clipcmn.obj &
+	$(OBJS)\monodll_cmdproc.obj &
+	$(OBJS)\monodll_cmndata.obj &
+	$(OBJS)\monodll_containr.obj &
+	$(OBJS)\monodll_cshelp.obj &
+	$(OBJS)\monodll_ctrlcmn.obj &
+	$(OBJS)\monodll_ctrlsub.obj &
+	$(OBJS)\monodll_datacmn.obj &
+	$(OBJS)\monodll_dbgrid.obj &
+	$(OBJS)\monodll_dcbase.obj &
+	$(OBJS)\monodll_dlgcmn.obj &
+	$(OBJS)\monodll_dndcmn.obj &
+	$(OBJS)\monodll_dobjcmn.obj &
+	$(OBJS)\monodll_docmdi.obj &
+	$(OBJS)\monodll_docview.obj &
+	$(OBJS)\monodll_dpycmn.obj &
+	$(OBJS)\monodll_dseldlg.obj &
+	$(OBJS)\monodll_effects.obj &
+	$(OBJS)\monodll_fddlgcmn.obj &
+	$(OBJS)\monodll_fldlgcmn.obj &
+	$(OBJS)\monodll_fontcmn.obj &
+	$(OBJS)\monodll_fontmap.obj &
+	$(OBJS)\monodll_framecmn.obj &
+	$(OBJS)\monodll_gaugecmn.obj &
+	$(OBJS)\monodll_gdicmn.obj &
+	$(OBJS)\monodll_geometry.obj &
+	$(OBJS)\monodll_gifdecod.obj &
+	$(OBJS)\monodll_helpbase.obj &
+	$(OBJS)\monodll_iconbndl.obj &
+	$(OBJS)\monodll_imagall.obj &
+	$(OBJS)\monodll_imagbmp.obj &
+	$(OBJS)\monodll_image.obj &
+	$(OBJS)\monodll_imagfill.obj &
+	$(OBJS)\monodll_imaggif.obj &
+	$(OBJS)\monodll_imagiff.obj &
+	$(OBJS)\monodll_imagjpeg.obj &
+	$(OBJS)\monodll_imagpcx.obj &
+	$(OBJS)\monodll_imagpng.obj &
+	$(OBJS)\monodll_imagpnm.obj &
+	$(OBJS)\monodll_imagtiff.obj &
+	$(OBJS)\monodll_imagxpm.obj &
+	$(OBJS)\monodll_layout.obj &
+	$(OBJS)\monodll_lboxcmn.obj &
+	$(OBJS)\monodll_matrix.obj &
+	$(OBJS)\monodll_menucmn.obj &
+	$(OBJS)\monodll_nbkbase.obj &
+	$(OBJS)\monodll_paper.obj &
+	$(OBJS)\monodll_popupcmn.obj &
+	$(OBJS)\monodll_prntbase.obj &
+	$(OBJS)\monodll_quantize.obj &
+	$(OBJS)\monodll_radiocmn.obj &
+	$(OBJS)\monodll_rendcmn.obj &
+	$(OBJS)\monodll_rgncmn.obj &
+	$(OBJS)\monodll_settcmn.obj &
+	$(OBJS)\monodll_sizer.obj &
+	$(OBJS)\monodll_statbar.obj &
+	$(OBJS)\monodll_tbarbase.obj &
+	$(OBJS)\monodll_textcmn.obj &
+	$(OBJS)\monodll_timercmn.obj &
+	$(OBJS)\monodll_toplvcmn.obj &
+	$(OBJS)\monodll_treebase.obj &
+	$(OBJS)\monodll_valgen.obj &
+	$(OBJS)\monodll_validate.obj &
+	$(OBJS)\monodll_valtext.obj &
+	$(OBJS)\monodll_wincmn.obj &
+	$(OBJS)\monodll_xpmdecod.obj &
 	$(OBJS)\monodll_busyinfo.obj &
 	$(OBJS)\monodll_calctrl.obj &
 	$(OBJS)\monodll_choicdgg.obj &
@@ -1700,79 +1802,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_treectlg.obj &
 	$(OBJS)\monodll_vlbox.obj &
 	$(OBJS)\monodll_vscroll.obj &
-	$(OBJS)\monodll_wizard.obj &
-	$(OBJS)\monodll_appcmn.obj &
-	$(OBJS)\monodll_fontmap.obj &
-	$(OBJS)\monodll_accesscmn.obj &
-	$(OBJS)\monodll_artprov.obj &
-	$(OBJS)\monodll_artstd.obj &
-	$(OBJS)\monodll_bmpbase.obj &
-	$(OBJS)\monodll_choiccmn.obj &
-	$(OBJS)\monodll_clipcmn.obj &
-	$(OBJS)\monodll_cmdproc.obj &
-	$(OBJS)\monodll_cmndata.obj &
-	$(OBJS)\monodll_containr.obj &
-	$(OBJS)\monodll_cshelp.obj &
-	$(OBJS)\monodll_ctrlcmn.obj &
-	$(OBJS)\monodll_ctrlsub.obj &
-	$(OBJS)\monodll_datacmn.obj &
-	$(OBJS)\monodll_dbgrid.obj &
-	$(OBJS)\monodll_dcbase.obj &
-	$(OBJS)\monodll_dlgcmn.obj &
-	$(OBJS)\monodll_dndcmn.obj &
-	$(OBJS)\monodll_dobjcmn.obj &
-	$(OBJS)\monodll_docmdi.obj &
-	$(OBJS)\monodll_docview.obj &
-	$(OBJS)\monodll_dpycmn.obj &
-	$(OBJS)\monodll_dseldlg.obj &
-	$(OBJS)\monodll_effects.obj &
-	$(OBJS)\monodll_fddlgcmn.obj &
-	$(OBJS)\monodll_fldlgcmn.obj &
-	$(OBJS)\monodll_fontcmn.obj &
-	$(OBJS)\monodll_framecmn.obj &
-	$(OBJS)\monodll_timercmn.obj &
-	$(OBJS)\monodll_toplvcmn.obj &
-	$(OBJS)\monodll_gaugecmn.obj &
-	$(OBJS)\monodll_gdicmn.obj &
-	$(OBJS)\monodll_geometry.obj &
-	$(OBJS)\monodll_gifdecod.obj &
-	$(OBJS)\monodll_helpbase.obj &
-	$(OBJS)\monodll_iconbndl.obj &
-	$(OBJS)\monodll_imagall.obj &
-	$(OBJS)\monodll_imagbmp.obj &
-	$(OBJS)\monodll_image.obj &
-	$(OBJS)\monodll_imaggif.obj &
-	$(OBJS)\monodll_imagiff.obj &
-	$(OBJS)\monodll_imagjpeg.obj &
-	$(OBJS)\monodll_imagpcx.obj &
-	$(OBJS)\monodll_imagpng.obj &
-	$(OBJS)\monodll_imagpnm.obj &
-	$(OBJS)\monodll_imagtiff.obj &
-	$(OBJS)\monodll_imagxpm.obj &
-	$(OBJS)\monodll_imagfill.obj &
-	$(OBJS)\monodll_layout.obj &
-	$(OBJS)\monodll_lboxcmn.obj &
-	$(OBJS)\monodll_matrix.obj &
-	$(OBJS)\monodll_menucmn.obj &
-	$(OBJS)\monodll_nbkbase.obj &
-	$(OBJS)\monodll_paper.obj &
-	$(OBJS)\monodll_popupcmn.obj &
-	$(OBJS)\monodll_prntbase.obj &
-	$(OBJS)\monodll_quantize.obj &
-	$(OBJS)\monodll_radiocmn.obj &
-	$(OBJS)\monodll_rendcmn.obj &
-	$(OBJS)\monodll_rgncmn.obj &
-	$(OBJS)\monodll_settcmn.obj &
-	$(OBJS)\monodll_sizer.obj &
-	$(OBJS)\monodll_statbar.obj &
-	$(OBJS)\monodll_tbarbase.obj &
-	$(OBJS)\monodll_textcmn.obj &
-	$(OBJS)\monodll_treebase.obj &
-	$(OBJS)\monodll_valgen.obj &
-	$(OBJS)\monodll_validate.obj &
-	$(OBJS)\monodll_valtext.obj &
-	$(OBJS)\monodll_wincmn.obj &
-	$(OBJS)\monodll_xpmdecod.obj
+	$(OBJS)\monodll_wizard.obj
 !endif
 !endif
 ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =
@@ -1780,26 +1810,26 @@ ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =
 ____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS =  &
 	$(____CORE_SRC_FILENAMES_1_OBJECTS) &
 	$(OBJS)\monolib_helpbest.obj &
+	$(OBJS)\monolib_helpctrl.obj &
 	$(OBJS)\monolib_helpdata.obj &
 	$(OBJS)\monolib_helpfrm.obj &
-	$(OBJS)\monolib_helpctrl.obj &
 	$(OBJS)\monolib_htmlcell.obj &
 	$(OBJS)\monolib_htmlfilt.obj &
 	$(OBJS)\monolib_htmlpars.obj &
 	$(OBJS)\monolib_htmltag.obj &
 	$(OBJS)\monolib_htmlwin.obj &
-	$(OBJS)\monolib_winpars.obj &
+	$(OBJS)\monolib_htmprint.obj &
+	$(OBJS)\monolib_m_dflist.obj &
 	$(OBJS)\monolib_m_fonts.obj &
 	$(OBJS)\monolib_m_hline.obj &
 	$(OBJS)\monolib_m_image.obj &
 	$(OBJS)\monolib_m_layout.obj &
 	$(OBJS)\monolib_m_links.obj &
 	$(OBJS)\monolib_m_list.obj &
-	$(OBJS)\monolib_m_dflist.obj &
 	$(OBJS)\monolib_m_pre.obj &
-	$(OBJS)\monolib_m_tables.obj &
 	$(OBJS)\monolib_m_style.obj &
-	$(OBJS)\monolib_htmprint.obj &
+	$(OBJS)\monolib_m_tables.obj &
+	$(OBJS)\monolib_winpars.obj &
 	$(OBJS)\monolib_htmllbox.obj
 !endif
 ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =
@@ -1807,26 +1837,26 @@ ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =
 ____MONOLIB_GUI_SRC_FILENAMES_OBJECTS =  &
 	$(____CORE_SRC_FILENAMES_OBJECTS) &
 	$(OBJS)\monodll_helpbest.obj &
+	$(OBJS)\monodll_helpctrl.obj &
 	$(OBJS)\monodll_helpdata.obj &
 	$(OBJS)\monodll_helpfrm.obj &
-	$(OBJS)\monodll_helpctrl.obj &
 	$(OBJS)\monodll_htmlcell.obj &
 	$(OBJS)\monodll_htmlfilt.obj &
 	$(OBJS)\monodll_htmlpars.obj &
 	$(OBJS)\monodll_htmltag.obj &
 	$(OBJS)\monodll_htmlwin.obj &
-	$(OBJS)\monodll_winpars.obj &
+	$(OBJS)\monodll_htmprint.obj &
+	$(OBJS)\monodll_m_dflist.obj &
 	$(OBJS)\monodll_m_fonts.obj &
 	$(OBJS)\monodll_m_hline.obj &
 	$(OBJS)\monodll_m_image.obj &
 	$(OBJS)\monodll_m_layout.obj &
 	$(OBJS)\monodll_m_links.obj &
 	$(OBJS)\monodll_m_list.obj &
-	$(OBJS)\monodll_m_dflist.obj &
 	$(OBJS)\monodll_m_pre.obj &
-	$(OBJS)\monodll_m_tables.obj &
 	$(OBJS)\monodll_m_style.obj &
-	$(OBJS)\monodll_htmprint.obj &
+	$(OBJS)\monodll_m_tables.obj &
+	$(OBJS)\monodll_winpars.obj &
 	$(OBJS)\monodll_htmllbox.obj
 !endif
 __basedll___depname =
@@ -1954,13 +1984,13 @@ __xmllib___depname = &
 
 ### Variables: ###
 
-BASEDLL_CFLAGS = $(CPPFLAGS) -bd $(__DEBUGFLAG) $(__OPTIMIZEFLAG) -bm &
+BASEDLL_CFLAGS = $(CPPFLAGS) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=..\include -i=$(LIBDIRNAME) -i=..\src\tiff &
 	-i=..\src\jpeg -i=..\src\png -i=..\src\zlib -i=..\src\regex &
 	-i=..\src\expat\lib -dWXMAKINGDLL_BASE -dwxUSE_BASE=1 -dwxUSE_GUI=0 &
 	$(CFLAGS)
-BASEDLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGFLAG) $(__OPTIMIZEFLAG) -bm &
+BASEDLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=..\include -i=$(LIBDIRNAME) -i=..\src\tiff &
 	-i=..\src\jpeg -i=..\src\png -i=..\src\zlib -i=..\src\regex &
@@ -2021,6 +2051,7 @@ BASEDLL_OBJECTS =  &
 	$(OBJS)\basedll_zipstrm.obj &
 	$(OBJS)\basedll_zstream.obj &
 	$(OBJS)\basedll_basemsw.obj &
+	$(OBJS)\basedll_crashrpt.obj &
 	$(OBJS)\basedll_dde.obj &
 	$(OBJS)\basedll_dir.obj &
 	$(OBJS)\basedll_mimetype.obj &
@@ -2030,7 +2061,6 @@ BASEDLL_OBJECTS =  &
 	$(OBJS)\basedll_thread.obj &
 	$(OBJS)\basedll_utils.obj &
 	$(OBJS)\basedll_utilsexc.obj &
-	$(OBJS)\basedll_crashrpt.obj &
 	$(OBJS)\basedll_event.obj &
 	$(OBJS)\basedll_fs_mem.obj &
 	$(OBJS)\basedll_msgout.obj &
@@ -2038,12 +2068,12 @@ BASEDLL_OBJECTS =  &
 	$(OBJS)\basedll_main.obj &
 	$(OBJS)\basedll_mslu.obj &
 	$(OBJS)\basedll_volume.obj
-BASELIB_CFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) -bm &
+BASELIB_CFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=..\include -i=$(LIBDIRNAME) -i=..\src\tiff &
 	-i=..\src\jpeg -i=..\src\png -i=..\src\zlib -i=..\src\regex &
 	-i=..\src\expat\lib -dwxUSE_BASE=1 -dwxUSE_GUI=0 $(CFLAGS)
-BASELIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) -bm &
+BASELIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=..\include -i=$(LIBDIRNAME) -i=..\src\tiff &
 	-i=..\src\jpeg -i=..\src\png -i=..\src\zlib -i=..\src\regex &
@@ -2104,6 +2134,7 @@ BASELIB_OBJECTS =  &
 	$(OBJS)\baselib_zipstrm.obj &
 	$(OBJS)\baselib_zstream.obj &
 	$(OBJS)\baselib_basemsw.obj &
+	$(OBJS)\baselib_crashrpt.obj &
 	$(OBJS)\baselib_dde.obj &
 	$(OBJS)\baselib_dir.obj &
 	$(OBJS)\baselib_mimetype.obj &
@@ -2113,7 +2144,6 @@ BASELIB_OBJECTS =  &
 	$(OBJS)\baselib_thread.obj &
 	$(OBJS)\baselib_utils.obj &
 	$(OBJS)\baselib_utilsexc.obj &
-	$(OBJS)\baselib_crashrpt.obj &
 	$(OBJS)\baselib_event.obj &
 	$(OBJS)\baselib_fs_mem.obj &
 	$(OBJS)\baselib_msgout.obj &
@@ -2121,7 +2151,7 @@ BASELIB_OBJECTS =  &
 	$(OBJS)\baselib_main.obj &
 	$(OBJS)\baselib_mslu.obj &
 	$(OBJS)\baselib_volume.obj
-COREDLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGFLAG) $(__OPTIMIZEFLAG) -bm &
+COREDLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=..\include -i=$(LIBDIRNAME) -i=..\src\tiff &
 	-i=..\src\jpeg -i=..\src\png -i=..\src\zlib -i=..\src\regex &
@@ -2137,7 +2167,7 @@ COREDLL_OBJECTS =  &
 	$(OBJS)\coredll_mslu.obj &
 	$(OBJS)\coredll_volume.obj &
 	$(____CORE_SRC_FILENAMES_2_OBJECTS)
-CORELIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) -bm &
+CORELIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=..\include -i=$(LIBDIRNAME) -i=..\src\tiff &
 	-i=..\src\jpeg -i=..\src\png -i=..\src\zlib -i=..\src\regex &
@@ -2153,7 +2183,7 @@ CORELIB_OBJECTS =  &
 	$(OBJS)\corelib_mslu.obj &
 	$(OBJS)\corelib_volume.obj &
 	$(____CORE_SRC_FILENAMES_3_OBJECTS)
-GLDLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGFLAG) $(__OPTIMIZEFLAG) -bm &
+GLDLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=..\include -i=$(LIBDIRNAME) -i=..\src\tiff &
 	-i=..\src\jpeg -i=..\src\png -i=..\src\zlib -i=..\src\regex &
@@ -2162,7 +2192,7 @@ GLDLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGFLAG) $(__OPTIMIZEFLAG) -bm &
 GLDLL_OBJECTS =  &
 	$(OBJS)\gldll_dummy.obj &
 	$(OBJS)\gldll_glcanvas.obj
-GLLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) -bm &
+GLLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=..\include -i=$(LIBDIRNAME) -i=..\src\tiff &
 	-i=..\src\jpeg -i=..\src\png -i=..\src\zlib -i=..\src\regex &
@@ -2170,7 +2200,7 @@ GLLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) -bm &
 GLLIB_OBJECTS =  &
 	$(OBJS)\gllib_dummy.obj &
 	$(OBJS)\gllib_glcanvas.obj
-HTMLDLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGFLAG) $(__OPTIMIZEFLAG) -bm &
+HTMLDLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=..\include -i=$(LIBDIRNAME) -i=..\src\tiff &
 	-i=..\src\jpeg -i=..\src\png -i=..\src\zlib -i=..\src\regex &
@@ -2179,28 +2209,28 @@ HTMLDLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGFLAG) $(__OPTIMIZEFLAG) -bm &
 HTMLDLL_OBJECTS =  &
 	$(OBJS)\htmldll_dummy.obj &
 	$(OBJS)\htmldll_helpbest.obj &
+	$(OBJS)\htmldll_helpctrl.obj &
 	$(OBJS)\htmldll_helpdata.obj &
 	$(OBJS)\htmldll_helpfrm.obj &
-	$(OBJS)\htmldll_helpctrl.obj &
 	$(OBJS)\htmldll_htmlcell.obj &
 	$(OBJS)\htmldll_htmlfilt.obj &
 	$(OBJS)\htmldll_htmlpars.obj &
 	$(OBJS)\htmldll_htmltag.obj &
 	$(OBJS)\htmldll_htmlwin.obj &
-	$(OBJS)\htmldll_winpars.obj &
+	$(OBJS)\htmldll_htmprint.obj &
+	$(OBJS)\htmldll_m_dflist.obj &
 	$(OBJS)\htmldll_m_fonts.obj &
 	$(OBJS)\htmldll_m_hline.obj &
 	$(OBJS)\htmldll_m_image.obj &
 	$(OBJS)\htmldll_m_layout.obj &
 	$(OBJS)\htmldll_m_links.obj &
 	$(OBJS)\htmldll_m_list.obj &
-	$(OBJS)\htmldll_m_dflist.obj &
 	$(OBJS)\htmldll_m_pre.obj &
-	$(OBJS)\htmldll_m_tables.obj &
 	$(OBJS)\htmldll_m_style.obj &
-	$(OBJS)\htmldll_htmprint.obj &
+	$(OBJS)\htmldll_m_tables.obj &
+	$(OBJS)\htmldll_winpars.obj &
 	$(OBJS)\htmldll_htmllbox.obj
-HTMLLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) -bm &
+HTMLLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=..\include -i=$(LIBDIRNAME) -i=..\src\tiff &
 	-i=..\src\jpeg -i=..\src\png -i=..\src\zlib -i=..\src\regex &
@@ -2208,35 +2238,35 @@ HTMLLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) -bm &
 HTMLLIB_OBJECTS =  &
 	$(OBJS)\htmllib_dummy.obj &
 	$(OBJS)\htmllib_helpbest.obj &
+	$(OBJS)\htmllib_helpctrl.obj &
 	$(OBJS)\htmllib_helpdata.obj &
 	$(OBJS)\htmllib_helpfrm.obj &
-	$(OBJS)\htmllib_helpctrl.obj &
 	$(OBJS)\htmllib_htmlcell.obj &
 	$(OBJS)\htmllib_htmlfilt.obj &
 	$(OBJS)\htmllib_htmlpars.obj &
 	$(OBJS)\htmllib_htmltag.obj &
 	$(OBJS)\htmllib_htmlwin.obj &
-	$(OBJS)\htmllib_winpars.obj &
+	$(OBJS)\htmllib_htmprint.obj &
+	$(OBJS)\htmllib_m_dflist.obj &
 	$(OBJS)\htmllib_m_fonts.obj &
 	$(OBJS)\htmllib_m_hline.obj &
 	$(OBJS)\htmllib_m_image.obj &
 	$(OBJS)\htmllib_m_layout.obj &
 	$(OBJS)\htmllib_m_links.obj &
 	$(OBJS)\htmllib_m_list.obj &
-	$(OBJS)\htmllib_m_dflist.obj &
 	$(OBJS)\htmllib_m_pre.obj &
-	$(OBJS)\htmllib_m_tables.obj &
 	$(OBJS)\htmllib_m_style.obj &
-	$(OBJS)\htmllib_htmprint.obj &
+	$(OBJS)\htmllib_m_tables.obj &
+	$(OBJS)\htmllib_winpars.obj &
 	$(OBJS)\htmllib_htmllbox.obj
 LIBDIRNAME = &
 	..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
-MONODLL_CFLAGS = $(CPPFLAGS) -bd $(__DEBUGFLAG) $(__OPTIMIZEFLAG) -bm &
+MONODLL_CFLAGS = $(CPPFLAGS) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=..\include -i=$(LIBDIRNAME) -i=..\src\tiff &
 	-i=..\src\jpeg -i=..\src\png -i=..\src\zlib -i=..\src\regex &
 	-i=..\src\expat\lib -dwxUSE_BASE=1 -dWXMAKINGDLL $(CFLAGS)
-MONODLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGFLAG) $(__OPTIMIZEFLAG) -bm &
+MONODLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=..\include -i=$(LIBDIRNAME) -i=..\src\tiff &
 	-i=..\src\jpeg -i=..\src\png -i=..\src\zlib -i=..\src\regex &
@@ -2297,6 +2327,7 @@ MONODLL_OBJECTS =  &
 	$(OBJS)\monodll_zipstrm.obj &
 	$(OBJS)\monodll_zstream.obj &
 	$(OBJS)\monodll_basemsw.obj &
+	$(OBJS)\monodll_crashrpt.obj &
 	$(OBJS)\monodll_dde.obj &
 	$(OBJS)\monodll_dir.obj &
 	$(OBJS)\monodll_mimetype.obj &
@@ -2306,7 +2337,6 @@ MONODLL_OBJECTS =  &
 	$(OBJS)\monodll_thread.obj &
 	$(OBJS)\monodll_utils.obj &
 	$(OBJS)\monodll_utilsexc.obj &
-	$(OBJS)\monodll_crashrpt.obj &
 	$(OBJS)\monodll_event.obj &
 	$(OBJS)\monodll_fs_mem.obj &
 	$(OBJS)\monodll_msgout.obj &
@@ -2318,22 +2348,22 @@ MONODLL_OBJECTS =  &
 	$(OBJS)\monodll_ftp.obj &
 	$(OBJS)\monodll_http.obj &
 	$(OBJS)\monodll_protocol.obj &
-	$(OBJS)\monodll_url.obj &
-	$(OBJS)\monodll_sckfile.obj &
 	$(OBJS)\monodll_sckaddr.obj &
+	$(OBJS)\monodll_sckfile.obj &
 	$(OBJS)\monodll_sckipc.obj &
 	$(OBJS)\monodll_sckstrm.obj &
 	$(OBJS)\monodll_socket.obj &
+	$(OBJS)\monodll_url.obj &
 	$(OBJS)\monodll_gsocket.obj &
 	$(OBJS)\monodll_gsockmsw.obj &
 	$(____MONOLIB_GUI_SRC_FILENAMES_OBJECTS) &
 	$(OBJS)\monodll_xml.obj
-MONOLIB_CFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) -bm &
+MONOLIB_CFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=..\include -i=$(LIBDIRNAME) -i=..\src\tiff &
 	-i=..\src\jpeg -i=..\src\png -i=..\src\zlib -i=..\src\regex &
 	-i=..\src\expat\lib -dwxUSE_BASE=1 $(CFLAGS)
-MONOLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) -bm &
+MONOLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=..\include -i=$(LIBDIRNAME) -i=..\src\tiff &
 	-i=..\src\jpeg -i=..\src\png -i=..\src\zlib -i=..\src\regex &
@@ -2394,6 +2424,7 @@ MONOLIB_OBJECTS =  &
 	$(OBJS)\monolib_zipstrm.obj &
 	$(OBJS)\monolib_zstream.obj &
 	$(OBJS)\monolib_basemsw.obj &
+	$(OBJS)\monolib_crashrpt.obj &
 	$(OBJS)\monolib_dde.obj &
 	$(OBJS)\monolib_dir.obj &
 	$(OBJS)\monolib_mimetype.obj &
@@ -2403,7 +2434,6 @@ MONOLIB_OBJECTS =  &
 	$(OBJS)\monolib_thread.obj &
 	$(OBJS)\monolib_utils.obj &
 	$(OBJS)\monolib_utilsexc.obj &
-	$(OBJS)\monolib_crashrpt.obj &
 	$(OBJS)\monolib_event.obj &
 	$(OBJS)\monolib_fs_mem.obj &
 	$(OBJS)\monolib_msgout.obj &
@@ -2415,22 +2445,22 @@ MONOLIB_OBJECTS =  &
 	$(OBJS)\monolib_ftp.obj &
 	$(OBJS)\monolib_http.obj &
 	$(OBJS)\monolib_protocol.obj &
-	$(OBJS)\monolib_url.obj &
-	$(OBJS)\monolib_sckfile.obj &
 	$(OBJS)\monolib_sckaddr.obj &
+	$(OBJS)\monolib_sckfile.obj &
 	$(OBJS)\monolib_sckipc.obj &
 	$(OBJS)\monolib_sckstrm.obj &
 	$(OBJS)\monolib_socket.obj &
+	$(OBJS)\monolib_url.obj &
 	$(OBJS)\monolib_gsocket.obj &
 	$(OBJS)\monolib_gsockmsw.obj &
 	$(____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS) &
 	$(OBJS)\monolib_xml.obj
-NETDLL_CFLAGS = $(CPPFLAGS) -bd $(__DEBUGFLAG) $(__OPTIMIZEFLAG) -bm &
+NETDLL_CFLAGS = $(CPPFLAGS) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=..\include -i=$(LIBDIRNAME) -i=..\src\tiff &
 	-i=..\src\jpeg -i=..\src\png -i=..\src\zlib -i=..\src\regex &
 	-i=..\src\expat\lib -dWXUSINGDLL -dWXMAKINGDLL_NET $(CFLAGS)
-NETDLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGFLAG) $(__OPTIMIZEFLAG) -bm &
+NETDLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=..\include -i=$(LIBDIRNAME) -i=..\src\tiff &
 	-i=..\src\jpeg -i=..\src\png -i=..\src\zlib -i=..\src\regex &
@@ -2442,20 +2472,20 @@ NETDLL_OBJECTS =  &
 	$(OBJS)\netdll_ftp.obj &
 	$(OBJS)\netdll_http.obj &
 	$(OBJS)\netdll_protocol.obj &
-	$(OBJS)\netdll_url.obj &
-	$(OBJS)\netdll_sckfile.obj &
 	$(OBJS)\netdll_sckaddr.obj &
+	$(OBJS)\netdll_sckfile.obj &
 	$(OBJS)\netdll_sckipc.obj &
 	$(OBJS)\netdll_sckstrm.obj &
 	$(OBJS)\netdll_socket.obj &
+	$(OBJS)\netdll_url.obj &
 	$(OBJS)\netdll_gsocket.obj &
 	$(OBJS)\netdll_gsockmsw.obj
-NETLIB_CFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) -bm &
+NETLIB_CFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=..\include -i=$(LIBDIRNAME) -i=..\src\tiff &
 	-i=..\src\jpeg -i=..\src\png -i=..\src\zlib -i=..\src\regex &
 	-i=..\src\expat\lib -dWXUSINGDLL -dWXMAKINGDLL_NET $(CFLAGS)
-NETLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) -bm &
+NETLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=..\include -i=$(LIBDIRNAME) -i=..\src\tiff &
 	-i=..\src\jpeg -i=..\src\png -i=..\src\zlib -i=..\src\regex &
@@ -2467,23 +2497,23 @@ NETLIB_OBJECTS =  &
 	$(OBJS)\netlib_ftp.obj &
 	$(OBJS)\netlib_http.obj &
 	$(OBJS)\netlib_protocol.obj &
-	$(OBJS)\netlib_url.obj &
-	$(OBJS)\netlib_sckfile.obj &
 	$(OBJS)\netlib_sckaddr.obj &
+	$(OBJS)\netlib_sckfile.obj &
 	$(OBJS)\netlib_sckipc.obj &
 	$(OBJS)\netlib_sckstrm.obj &
 	$(OBJS)\netlib_socket.obj &
+	$(OBJS)\netlib_url.obj &
 	$(OBJS)\netlib_gsocket.obj &
 	$(OBJS)\netlib_gsockmsw.obj
 OBJS = &
 	wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
-WXEXPAT_CFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) -bm &
+WXEXPAT_CFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -i=$(LIBDIRNAME) -dCOMPILED_FROM_DSP $(CFLAGS)
 WXEXPAT_OBJECTS =  &
 	$(OBJS)\wxexpat_xmlparse.obj &
 	$(OBJS)\wxexpat_xmlrole.obj &
 	$(OBJS)\wxexpat_xmltok.obj
-WXJPEG_CFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) -bm &
+WXJPEG_CFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -i=$(LIBDIRNAME) $(CFLAGS)
 WXJPEG_OBJECTS =  &
 	$(OBJS)\wxjpeg_jcomapi.obj &
@@ -2532,7 +2562,7 @@ WXJPEG_OBJECTS =  &
 	$(OBJS)\wxjpeg_jquant1.obj &
 	$(OBJS)\wxjpeg_jquant2.obj &
 	$(OBJS)\wxjpeg_jdmerge.obj
-WXPNG_CFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) -bm &
+WXPNG_CFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -i=..\src\zlib $(CFLAGS)
 WXPNG_OBJECTS =  &
 	$(OBJS)\wxpng_png.obj &
@@ -2552,14 +2582,14 @@ WXPNG_OBJECTS =  &
 	$(OBJS)\wxpng_pngwrite.obj &
 	$(OBJS)\wxpng_pngwtran.obj &
 	$(OBJS)\wxpng_pngwutil.obj
-WXREGEX_CFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) -bm &
+WXREGEX_CFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) $(CFLAGS)
 WXREGEX_OBJECTS =  &
 	$(OBJS)\wxregex_regcomp.obj &
 	$(OBJS)\wxregex_regexec.obj &
 	$(OBJS)\wxregex_regerror.obj &
 	$(OBJS)\wxregex_regfree.obj
-WXTIFF_CFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) -bm &
+WXTIFF_CFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) $(CFLAGS)
 WXTIFF_OBJECTS =  &
 	$(OBJS)\wxtiff_tif_win32.obj &
@@ -2595,7 +2625,7 @@ WXTIFF_OBJECTS =  &
 	$(OBJS)\wxtiff_tif_warning.obj &
 	$(OBJS)\wxtiff_tif_write.obj &
 	$(OBJS)\wxtiff_tif_zip.obj
-WXZLIB_CFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) -bm &
+WXZLIB_CFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) $(CFLAGS)
 WXZLIB_OBJECTS =  &
 	$(OBJS)\wxzlib_adler32.obj &
@@ -2612,7 +2642,7 @@ WXZLIB_OBJECTS =  &
 	$(OBJS)\wxzlib_infcodes.obj &
 	$(OBJS)\wxzlib_infutil.obj &
 	$(OBJS)\wxzlib_inffast.obj
-XMLDLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGFLAG) $(__OPTIMIZEFLAG) -bm &
+XMLDLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=..\include -i=$(LIBDIRNAME) -i=..\src\tiff &
 	-i=..\src\jpeg -i=..\src\png -i=..\src\zlib -i=..\src\regex &
@@ -2621,7 +2651,7 @@ XMLDLL_CXXFLAGS = $(CPPFLAGS) -bd $(__DEBUGFLAG) $(__OPTIMIZEFLAG) -bm &
 XMLDLL_OBJECTS =  &
 	$(OBJS)\xmldll_dummy.obj &
 	$(OBJS)\xmldll_xml.obj
-XMLLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGFLAG) $(__OPTIMIZEFLAG) -bm &
+XMLLIB_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG) -bm &
 	$(__RUNTIME_LIBS) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=..\include -i=$(LIBDIRNAME) -i=..\src\tiff &
 	-i=..\src\jpeg -i=..\src\png -i=..\src\zlib -i=..\src\regex &
@@ -9400,7 +9430,7 @@ $(LIBDIRNAME)\wxbase250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_wat$(VENDORTAG).dll :  $(B
 	@%append $(OBJS)\basedll.lbc option quiet
 	@%append $(OBJS)\basedll.lbc name $^@
 	@%append $(OBJS)\basedll.lbc option incremental
-	@%append $(OBJS)\basedll.lbc $(LDFLAGS) $(__DEBUGFLAG_7)  libpath $(LIBDIRNAME)
+	@%append $(OBJS)\basedll.lbc $(LDFLAGS) $(__DEBUGINFO_7)  libpath $(LIBDIRNAME)
 	@for %i in ($(BASEDLL_OBJECTS)) do @%append $(OBJS)\basedll.lbc file %i
 	@for %i in ( $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib) do @%append $(OBJS)\basedll.lbc library %i
 	@%append $(OBJS)\basedll.lbc
@@ -9460,7 +9490,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core_w
 	@%append $(OBJS)\coredll.lbc option quiet
 	@%append $(OBJS)\coredll.lbc name $^@
 	@%append $(OBJS)\coredll.lbc option incremental
-	@%append $(OBJS)\coredll.lbc $(LDFLAGS) $(__DEBUGFLAG_7)  libpath $(LIBDIRNAME)
+	@%append $(OBJS)\coredll.lbc $(LDFLAGS) $(__DEBUGINFO_7)  libpath $(LIBDIRNAME)
 	@for %i in ($(COREDLL_OBJECTS)) do @%append $(OBJS)\coredll.lbc file %i
 	@for %i in ( $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib  $(LIBDIRNAME)\wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib) do @%append $(OBJS)\coredll.lbc library %i
 	@%append $(OBJS)\coredll.lbc
@@ -9490,7 +9520,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl_wat
 	@%append $(OBJS)\gldll.lbc option quiet
 	@%append $(OBJS)\gldll.lbc name $^@
 	@%append $(OBJS)\gldll.lbc option incremental
-	@%append $(OBJS)\gldll.lbc $(LDFLAGS) $(__DEBUGFLAG_7)  libpath $(LIBDIRNAME)
+	@%append $(OBJS)\gldll.lbc $(LDFLAGS) $(__DEBUGINFO_7)  libpath $(LIBDIRNAME)
 	@for %i in ($(GLDLL_OBJECTS)) do @%append $(OBJS)\gldll.lbc file %i
 	@for %i in ( $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib  $(__WXLIBGLDEP_CORE_p) $(__WXLIBGLDEP_BASE_p) $(__WXLIB_MONO_p) opengl32.lib glu32.lib) do @%append $(OBJS)\gldll.lbc library %i
 	@%append $(OBJS)\gldll.lbc
@@ -9520,7 +9550,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html_w
 	@%append $(OBJS)\htmldll.lbc option quiet
 	@%append $(OBJS)\htmldll.lbc name $^@
 	@%append $(OBJS)\htmldll.lbc option incremental
-	@%append $(OBJS)\htmldll.lbc $(LDFLAGS) $(__DEBUGFLAG_7)  libpath $(LIBDIRNAME)
+	@%append $(OBJS)\htmldll.lbc $(LDFLAGS) $(__DEBUGINFO_7)  libpath $(LIBDIRNAME)
 	@for %i in ($(HTMLDLL_OBJECTS)) do @%append $(OBJS)\htmldll.lbc file %i
 	@for %i in ( $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib  $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core.lib $(LIBDIRNAME)\wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib) do @%append $(OBJS)\htmldll.lbc library %i
 	@%append $(OBJS)\htmldll.lbc
@@ -9555,7 +9585,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_wat$(V
 	@%append $(OBJS)\monodll.lbc option quiet
 	@%append $(OBJS)\monodll.lbc name $^@
 	@%append $(OBJS)\monodll.lbc option incremental
-	@%append $(OBJS)\monodll.lbc $(LDFLAGS) $(__DEBUGFLAG_7)  libpath $(LIBDIRNAME)
+	@%append $(OBJS)\monodll.lbc $(LDFLAGS) $(__DEBUGINFO_7)  libpath $(LIBDIRNAME)
 	@for %i in ($(MONODLL_OBJECTS)) do @%append $(OBJS)\monodll.lbc file %i
 	@for %i in ( $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib  ) do @%append $(OBJS)\monodll.lbc library %i
 	@%append $(OBJS)\monodll.lbc
@@ -9584,7 +9614,7 @@ $(LIBDIRNAME)\wxbase250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net_wat$(VENDORTAG).dll : 
 	@%append $(OBJS)\netdll.lbc option quiet
 	@%append $(OBJS)\netdll.lbc name $^@
 	@%append $(OBJS)\netdll.lbc option incremental
-	@%append $(OBJS)\netdll.lbc $(LDFLAGS) $(__DEBUGFLAG_7)  libpath $(LIBDIRNAME)
+	@%append $(OBJS)\netdll.lbc $(LDFLAGS) $(__DEBUGINFO_7)  libpath $(LIBDIRNAME)
 	@for %i in ($(NETDLL_OBJECTS)) do @%append $(OBJS)\netdll.lbc file %i
 	@for %i in ( $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib $(LIBDIRNAME)\wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib) do @%append $(OBJS)\netdll.lbc library %i
 	@%append $(OBJS)\netdll.lbc
@@ -9651,7 +9681,7 @@ $(LIBDIRNAME)\wxbase250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xml_wat$(VENDORTAG).dll : 
 	@%append $(OBJS)\xmldll.lbc option quiet
 	@%append $(OBJS)\xmldll.lbc name $^@
 	@%append $(OBJS)\xmldll.lbc option incremental
-	@%append $(OBJS)\xmldll.lbc $(LDFLAGS) $(__DEBUGFLAG_7)  libpath $(LIBDIRNAME)
+	@%append $(OBJS)\xmldll.lbc $(LDFLAGS) $(__DEBUGINFO_7)  libpath $(LIBDIRNAME)
 	@for %i in ($(XMLDLL_OBJECTS)) do @%append $(OBJS)\xmldll.lbc file %i
 	@for %i in ( $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib $(LIBDIRNAME)\wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib ) do @%append $(OBJS)\xmldll.lbc library %i
 	@%append $(OBJS)\xmldll.lbc

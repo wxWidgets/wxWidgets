@@ -232,26 +232,26 @@ HTMLDLL_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-DWXUSINGDLL -DWXMAKINGDLL_HTML $(CXXFLAGS) $(PIC_FLAG)
 HTMLDLL_OBJECTS =  \
 	$(__HTML_SRC_PLATFORM_OBJECTS_2) \
+	htmldll_helpctrl.o \
 	htmldll_helpdata.o \
 	htmldll_helpfrm.o \
-	htmldll_helpctrl.o \
 	htmldll_htmlcell.o \
 	htmldll_htmlfilt.o \
 	htmldll_htmlpars.o \
 	htmldll_htmltag.o \
 	htmldll_htmlwin.o \
-	htmldll_winpars.o \
+	htmldll_htmprint.o \
+	htmldll_m_dflist.o \
 	htmldll_m_fonts.o \
 	htmldll_m_hline.o \
 	htmldll_m_image.o \
 	htmldll_m_layout.o \
 	htmldll_m_links.o \
 	htmldll_m_list.o \
-	htmldll_m_dflist.o \
 	htmldll_m_pre.o \
-	htmldll_m_tables.o \
 	htmldll_m_style.o \
-	htmldll_htmprint.o \
+	htmldll_m_tables.o \
+	htmldll_winpars.o \
 	htmldll_htmllbox.o
 HTMLLIB_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
@@ -259,26 +259,26 @@ HTMLLIB_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(CXXFLAGS)
 HTMLLIB_OBJECTS =  \
 	$(__HTML_SRC_PLATFORM_OBJECTS_3) \
+	htmllib_helpctrl.o \
 	htmllib_helpdata.o \
 	htmllib_helpfrm.o \
-	htmllib_helpctrl.o \
 	htmllib_htmlcell.o \
 	htmllib_htmlfilt.o \
 	htmllib_htmlpars.o \
 	htmllib_htmltag.o \
 	htmllib_htmlwin.o \
-	htmllib_winpars.o \
+	htmllib_htmprint.o \
+	htmllib_m_dflist.o \
 	htmllib_m_fonts.o \
 	htmllib_m_hline.o \
 	htmllib_m_image.o \
 	htmllib_m_layout.o \
 	htmllib_m_links.o \
 	htmllib_m_list.o \
-	htmllib_m_dflist.o \
 	htmllib_m_pre.o \
-	htmllib_m_tables.o \
 	htmllib_m_style.o \
-	htmllib_htmprint.o \
+	htmllib_m_tables.o \
+	htmllib_winpars.o \
 	htmllib_htmllbox.o
 LIBDIRNAME = $(top_builddir)lib
 MONODLL_CFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
@@ -352,12 +352,12 @@ MONODLL_OBJECTS =  \
 	monodll_ftp.o \
 	monodll_http.o \
 	monodll_protocol.o \
-	monodll_url.o \
-	monodll_sckfile.o \
 	monodll_sckaddr.o \
+	monodll_sckfile.o \
 	monodll_sckipc.o \
 	monodll_sckstrm.o \
 	monodll_socket.o \
+	monodll_url.o \
 	$(__NET_PLATFORM_SRC_OBJECTS) \
 	$(__MONOLIB_GUI_SRC_OBJECTS) \
 	monodll_xml.o
@@ -432,12 +432,12 @@ MONOLIB_OBJECTS =  \
 	monolib_ftp.o \
 	monolib_http.o \
 	monolib_protocol.o \
-	monolib_url.o \
-	monolib_sckfile.o \
 	monolib_sckaddr.o \
+	monolib_sckfile.o \
 	monolib_sckipc.o \
 	monolib_sckstrm.o \
 	monolib_socket.o \
+	monolib_url.o \
 	$(__NET_PLATFORM_SRC_OBJECTS_1) \
 	$(__MONOLIB_GUI_SRC_OBJECTS_1) \
 	monolib_xml.o
@@ -454,12 +454,12 @@ NETDLL_OBJECTS =  \
 	netdll_ftp.o \
 	netdll_http.o \
 	netdll_protocol.o \
-	netdll_url.o \
-	netdll_sckfile.o \
 	netdll_sckaddr.o \
+	netdll_sckfile.o \
 	netdll_sckipc.o \
 	netdll_sckstrm.o \
 	netdll_socket.o \
+	netdll_url.o \
 	$(__NET_PLATFORM_SRC_OBJECTS_2)
 NETLIB_CFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(top_srcdir)/include $(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) \
@@ -474,12 +474,12 @@ NETLIB_OBJECTS =  \
 	netlib_ftp.o \
 	netlib_http.o \
 	netlib_protocol.o \
-	netlib_url.o \
-	netlib_sckfile.o \
 	netlib_sckaddr.o \
+	netlib_sckfile.o \
 	netlib_sckipc.o \
 	netlib_sckstrm.o \
 	netlib_socket.o \
+	netlib_url.o \
 	$(__NET_PLATFORM_SRC_OBJECTS_3)
 WXEXPAT_CFLAGS = $(CPPFLAGS)   -I./src/expat $(CFLAGS)
 WXEXPAT_OBJECTS =  \
@@ -643,75 +643,44 @@ XMLLIB_OBJECTS =  \
 ### Conditionally set variables: ###
 
 COND_USE_GUI_1_WXUNIV_0_ALL_GUI_HEADERS =  \
-	wx/gdicmn.h \
+	wx/bmpbuttn.h \
+	wx/brush.h \
+	wx/button.h \
+	wx/checkbox.h \
+	wx/checklst.h \
+	wx/choicdlg.h \
+	wx/choice.h \
+	wx/cmndata.h \
+	wx/combobox.h \
+	wx/control.h \
+	wx/ctrlsub.h \
 	wx/cursor.h \
-	wx/window.h \
-	wx/panel.h \
-	wx/frame.h \
 	wx/dc.h \
 	wx/dcclient.h \
 	wx/dcmemory.h \
 	wx/dcprint.h \
 	wx/dcscreen.h \
-	wx/button.h \
-	wx/menu.h \
-	wx/pen.h \
-	wx/brush.h \
-	wx/palette.h \
-	wx/icon.h \
 	wx/dialog.h \
-	wx/timer.h \
-	wx/settings.h \
-	wx/msgdlg.h \
-	wx/cmndata.h \
-	wx/control.h \
-	wx/ctrlsub.h \
-	wx/bmpbuttn.h \
-	wx/checkbox.h \
-	wx/checklst.h \
-	wx/choice.h \
-	wx/scrolbar.h \
-	wx/stattext.h \
-	wx/statbmp.h \
-	wx/statbox.h \
-	wx/listbox.h \
-	wx/radiobox.h \
-	wx/radiobut.h \
-	wx/renderer.h \
-	wx/textctrl.h \
-	wx/slider.h \
-	wx/gauge.h \
-	wx/scrolwin.h \
 	wx/dirdlg.h \
-	wx/toolbar.h \
-	wx/combobox.h \
-	wx/layout.h \
-	wx/sizer.h \
-	wx/mdi.h \
-	wx/statusbr.h \
-	wx/scrolbar.h \
-	wx/choicdlg.h \
-	wx/textdlg.h \
 	wx/filedlg.h \
-	wx/validate.h \
-	wx/valtext.h \
-	wx/selstore.h \
+	wx/frame.h \
+	wx/gauge.h \
+	wx/gdicmn.h \
 	wx/generic/accel.h \
 	wx/generic/calctrl.h \
 	wx/generic/choicdgg.h \
 	wx/generic/colrdlgg.h \
 	wx/generic/dcpsg.h \
 	wx/generic/dirctrlg.h \
-	wx/generic/fontdlgg.h \
 	wx/generic/filedlgg.h \
+	wx/generic/fontdlgg.h \
+	wx/generic/grid.h \
 	wx/generic/grid.h \
 	wx/generic/gridctrl.h \
-	wx/generic/grid.h \
 	wx/generic/helpext.h \
-	wx/generic/logg.h \
-	wx/helphtml.h \
 	wx/generic/imaglist.h \
 	wx/generic/laywin.h \
+	wx/generic/logg.h \
 	wx/generic/msgdlgg.h \
 	wx/generic/notebook.h \
 	wx/generic/panelg.h \
@@ -724,8 +693,39 @@ COND_USE_GUI_1_WXUNIV_0_ALL_GUI_HEADERS =  \
 	wx/generic/splitter.h \
 	wx/generic/textdlgg.h \
 	wx/generic/timer.h \
-	wx/generic/wizard.h \
 	wx/generic/treectlg.h \
+	wx/generic/wizard.h \
+	wx/helphtml.h \
+	wx/icon.h \
+	wx/layout.h \
+	wx/listbox.h \
+	wx/mdi.h \
+	wx/menu.h \
+	wx/msgdlg.h \
+	wx/palette.h \
+	wx/panel.h \
+	wx/pen.h \
+	wx/radiobox.h \
+	wx/radiobut.h \
+	wx/renderer.h \
+	wx/scrolbar.h \
+	wx/scrolbar.h \
+	wx/scrolwin.h \
+	wx/selstore.h \
+	wx/settings.h \
+	wx/sizer.h \
+	wx/slider.h \
+	wx/statbmp.h \
+	wx/statbox.h \
+	wx/stattext.h \
+	wx/statusbr.h \
+	wx/textctrl.h \
+	wx/textdlg.h \
+	wx/timer.h \
+	wx/toolbar.h \
+	wx/validate.h \
+	wx/valtext.h \
+	wx/window.h \
 	wx/accel.h \
 	wx/access.h \
 	wx/afterstd.h \
@@ -833,75 +833,44 @@ COND_USE_GUI_1_WXUNIV_0_ALL_GUI_HEADERS =  \
 	$(GUI_HDR)
 @COND_USE_GUI_1_WXUNIV_0@ALL_GUI_HEADERS = $(COND_USE_GUI_1_WXUNIV_0_ALL_GUI_HEADERS)
 COND_USE_GUI_1_WXUNIV_1_ALL_GUI_HEADERS =  \
-	wx/gdicmn.h \
+	wx/bmpbuttn.h \
+	wx/brush.h \
+	wx/button.h \
+	wx/checkbox.h \
+	wx/checklst.h \
+	wx/choicdlg.h \
+	wx/choice.h \
+	wx/cmndata.h \
+	wx/combobox.h \
+	wx/control.h \
+	wx/ctrlsub.h \
 	wx/cursor.h \
-	wx/window.h \
-	wx/panel.h \
-	wx/frame.h \
 	wx/dc.h \
 	wx/dcclient.h \
 	wx/dcmemory.h \
 	wx/dcprint.h \
 	wx/dcscreen.h \
-	wx/button.h \
-	wx/menu.h \
-	wx/pen.h \
-	wx/brush.h \
-	wx/palette.h \
-	wx/icon.h \
 	wx/dialog.h \
-	wx/timer.h \
-	wx/settings.h \
-	wx/msgdlg.h \
-	wx/cmndata.h \
-	wx/control.h \
-	wx/ctrlsub.h \
-	wx/bmpbuttn.h \
-	wx/checkbox.h \
-	wx/checklst.h \
-	wx/choice.h \
-	wx/scrolbar.h \
-	wx/stattext.h \
-	wx/statbmp.h \
-	wx/statbox.h \
-	wx/listbox.h \
-	wx/radiobox.h \
-	wx/radiobut.h \
-	wx/renderer.h \
-	wx/textctrl.h \
-	wx/slider.h \
-	wx/gauge.h \
-	wx/scrolwin.h \
 	wx/dirdlg.h \
-	wx/toolbar.h \
-	wx/combobox.h \
-	wx/layout.h \
-	wx/sizer.h \
-	wx/mdi.h \
-	wx/statusbr.h \
-	wx/scrolbar.h \
-	wx/choicdlg.h \
-	wx/textdlg.h \
 	wx/filedlg.h \
-	wx/validate.h \
-	wx/valtext.h \
-	wx/selstore.h \
+	wx/frame.h \
+	wx/gauge.h \
+	wx/gdicmn.h \
 	wx/generic/accel.h \
 	wx/generic/calctrl.h \
 	wx/generic/choicdgg.h \
 	wx/generic/colrdlgg.h \
 	wx/generic/dcpsg.h \
 	wx/generic/dirctrlg.h \
-	wx/generic/fontdlgg.h \
 	wx/generic/filedlgg.h \
+	wx/generic/fontdlgg.h \
+	wx/generic/grid.h \
 	wx/generic/grid.h \
 	wx/generic/gridctrl.h \
-	wx/generic/grid.h \
 	wx/generic/helpext.h \
-	wx/generic/logg.h \
-	wx/helphtml.h \
 	wx/generic/imaglist.h \
 	wx/generic/laywin.h \
+	wx/generic/logg.h \
 	wx/generic/msgdlgg.h \
 	wx/generic/notebook.h \
 	wx/generic/panelg.h \
@@ -914,8 +883,39 @@ COND_USE_GUI_1_WXUNIV_1_ALL_GUI_HEADERS =  \
 	wx/generic/splitter.h \
 	wx/generic/textdlgg.h \
 	wx/generic/timer.h \
-	wx/generic/wizard.h \
 	wx/generic/treectlg.h \
+	wx/generic/wizard.h \
+	wx/helphtml.h \
+	wx/icon.h \
+	wx/layout.h \
+	wx/listbox.h \
+	wx/mdi.h \
+	wx/menu.h \
+	wx/msgdlg.h \
+	wx/palette.h \
+	wx/panel.h \
+	wx/pen.h \
+	wx/radiobox.h \
+	wx/radiobut.h \
+	wx/renderer.h \
+	wx/scrolbar.h \
+	wx/scrolbar.h \
+	wx/scrolwin.h \
+	wx/selstore.h \
+	wx/settings.h \
+	wx/sizer.h \
+	wx/slider.h \
+	wx/statbmp.h \
+	wx/statbox.h \
+	wx/stattext.h \
+	wx/statusbr.h \
+	wx/textctrl.h \
+	wx/textdlg.h \
+	wx/timer.h \
+	wx/toolbar.h \
+	wx/validate.h \
+	wx/valtext.h \
+	wx/window.h \
 	wx/accel.h \
 	wx/access.h \
 	wx/afterstd.h \
@@ -1020,6 +1020,14 @@ COND_USE_GUI_1_WXUNIV_1_ALL_GUI_HEADERS =  \
 	wx/generic/dragimgg.h \
 	wx/generic/gridsel.h \
 	$(LOWLEVEL_HDR) \
+	wx/generic/accel.h \
+	wx/generic/dirdlgg.h \
+	wx/generic/fdrepdlg.h \
+	wx/generic/fontdlgg.h \
+	wx/generic/listctrl.h \
+	wx/generic/mdig.h \
+	wx/generic/statusbr.h \
+	wx/generic/tabg.h \
 	wx/univ/app.h \
 	wx/univ/bmpbuttn.h \
 	wx/univ/button.h \
@@ -1031,7 +1039,6 @@ COND_USE_GUI_1_WXUNIV_1_ALL_GUI_HEADERS =  \
 	wx/univ/control.h \
 	wx/univ/dialog.h \
 	wx/univ/frame.h \
-	wx/univ/toplevel.h \
 	wx/univ/gauge.h \
 	wx/univ/inpcons.h \
 	wx/univ/inphand.h \
@@ -1046,7 +1053,6 @@ COND_USE_GUI_1_WXUNIV_1_ALL_GUI_HEADERS =  \
 	wx/univ/scrolbar.h \
 	wx/univ/scrthumb.h \
 	wx/univ/scrtimer.h \
-	wx/univ/setup.h \
 	wx/univ/slider.h \
 	wx/univ/spinbutt.h \
 	wx/univ/statbmp.h \
@@ -1057,25 +1063,18 @@ COND_USE_GUI_1_WXUNIV_1_ALL_GUI_HEADERS =  \
 	wx/univ/textctrl.h \
 	wx/univ/theme.h \
 	wx/univ/toolbar.h \
-	wx/univ/window.h \
-	wx/generic/mdig.h \
-	wx/generic/fdrepdlg.h \
-	wx/generic/fontdlgg.h \
-	wx/generic/tabg.h \
-	wx/generic/dirdlgg.h \
-	wx/generic/statusbr.h \
-	wx/generic/accel.h \
-	wx/generic/listctrl.h
+	wx/univ/toplevel.h \
+	wx/univ/window.h
 @COND_USE_GUI_1_WXUNIV_1@ALL_GUI_HEADERS = $(COND_USE_GUI_1_WXUNIV_1_ALL_GUI_HEADERS)
 @COND_PLATFORM_UNIX_1@BASE_PLATFORM_HDR = wx/unix/mimetype.h
 COND_PLATFORM_WIN32_1_BASE_PLATFORM_HDR =  \
+	wx/msw/chkconf.h \
+	wx/msw/crashrpt.h \
 	wx/msw/dde.h \
 	wx/msw/gccpriv.h \
 	wx/msw/mimetype.h \
 	wx/msw/winundef.h \
-	wx/msw/wrapwin.h \
-	wx/msw/chkconf.h \
-	wx/msw/crashrpt.h
+	wx/msw/wrapwin.h
 @COND_PLATFORM_WIN32_1@BASE_PLATFORM_HDR = $(COND_PLATFORM_WIN32_1_BASE_PLATFORM_HDR)
 @COND_TOOLKIT_COCOA@BASE_PLATFORM_HDR = 
 @COND_TOOLKIT_MAC@BASE_PLATFORM_HDR = 
@@ -1137,17 +1136,22 @@ COND_TOOLKIT_COCOA_GUI_HDR =  \
 	wx/cocoa/textctrl.h \
 	wx/cocoa/toplevel.h \
 	wx/cocoa/window.h \
-	wx/generic/statusbr.h \
+	wx/generic/caret.h \
+	wx/generic/fdrepdlg.h \
 	wx/generic/fontdlgg.h \
 	wx/generic/imaglist.h \
 	wx/generic/listctrl.h \
-	wx/generic/fdrepdlg.h \
-	wx/generic/tabg.h \
-	wx/generic/caret.h \
 	wx/generic/mdig.h \
-	wx/generic/paletteg.h
+	wx/generic/paletteg.h \
+	wx/generic/statusbr.h \
+	wx/generic/tabg.h
 @COND_TOOLKIT_COCOA@GUI_HDR = $(COND_TOOLKIT_COCOA_GUI_HDR)
 COND_TOOLKIT_GTK_GUI_HDR =  \
+	wx/generic/dirdlgg.h \
+	wx/generic/fdrepdlg.h \
+	wx/generic/listctrl.h \
+	wx/generic/statusbr.h \
+	wx/generic/tabg.h \
 	wx/gtk/accel.h \
 	wx/gtk/app.h \
 	wx/gtk/bitmap.h \
@@ -1175,7 +1179,6 @@ COND_TOOLKIT_GTK_GUI_HDR =  \
 	wx/gtk/font.h \
 	wx/gtk/fontdlg.h \
 	wx/gtk/frame.h \
-	wx/gtk/toplevel.h \
 	wx/gtk/gauge.h \
 	wx/gtk/gdiobj.h \
 	wx/gtk/icon.h \
@@ -1206,18 +1209,13 @@ COND_TOOLKIT_GTK_GUI_HDR =  \
 	wx/gtk/tglbtn.h \
 	wx/gtk/timer.h \
 	wx/gtk/tooltip.h \
+	wx/gtk/toplevel.h \
 	wx/gtk/treectrl.h \
 	wx/gtk/wave.h \
 	wx/gtk/win_gtk.h \
-	wx/gtk/window.h \
-	wx/generic/fdrepdlg.h \
-	wx/generic/tabg.h \
-	wx/generic/dirdlgg.h \
-	wx/generic/statusbr.h \
-	wx/generic/listctrl.h
+	wx/gtk/window.h
 @COND_TOOLKIT_GTK@GUI_HDR = $(COND_TOOLKIT_GTK_GUI_HDR)
 COND_TOOLKIT_MAC_GUI_HDR =  \
-	wx/mac/chkconf.h \
 	wx/mac/accel.h \
 	wx/mac/aga.h \
 	wx/mac/app.h \
@@ -1227,6 +1225,7 @@ COND_TOOLKIT_MAC_GUI_HDR =  \
 	wx/mac/button.h \
 	wx/mac/checkbox.h \
 	wx/mac/checklst.h \
+	wx/mac/chkconf.h \
 	wx/mac/choice.h \
 	wx/mac/clipbrd.h \
 	wx/mac/colordlg.h \
@@ -1297,15 +1296,26 @@ COND_TOOLKIT_MAC_GUI_HDR =  \
 	wx/mac/uma.h \
 	wx/mac/wave.h \
 	wx/mac/window.h \
-	wx/generic/statusbr.h \
+	wx/generic/caret.h \
+	wx/generic/fdrepdlg.h \
 	wx/generic/fontdlgg.h \
 	wx/generic/imaglist.h \
 	wx/generic/listctrl.h \
-	wx/generic/fdrepdlg.h \
-	wx/generic/tabg.h \
-	wx/generic/caret.h
+	wx/generic/statusbr.h \
+	wx/generic/tabg.h
 @COND_TOOLKIT_MAC@GUI_HDR = $(COND_TOOLKIT_MAC_GUI_HDR)
 COND_TOOLKIT_MOTIF_GUI_HDR =  \
+	wx/generic/colrdlgg.h \
+	wx/generic/dirdlgg.h \
+	wx/generic/fdrepdlg.h \
+	wx/generic/fontdlgg.h \
+	wx/generic/imaglist.h \
+	wx/generic/listctrl.h \
+	wx/generic/notebook.h \
+	wx/generic/prntdlgg.h \
+	wx/generic/statline.h \
+	wx/generic/statusbr.h \
+	wx/generic/tabg.h \
 	wx/motif/accel.h \
 	wx/motif/app.h \
 	wx/motif/bmpbuttn.h \
@@ -1358,18 +1368,7 @@ COND_TOOLKIT_MOTIF_GUI_HDR =  \
 	wx/motif/timer.h \
 	wx/motif/toolbar.h \
 	wx/motif/toplevel.h \
-	wx/motif/window.h \
-	wx/generic/fdrepdlg.h \
-	wx/generic/listctrl.h \
-	wx/generic/imaglist.h \
-	wx/generic/notebook.h \
-	wx/generic/fontdlgg.h \
-	wx/generic/colrdlgg.h \
-	wx/generic/statline.h \
-	wx/generic/tabg.h \
-	wx/generic/dirdlgg.h \
-	wx/generic/prntdlgg.h \
-	wx/generic/statusbr.h
+	wx/motif/window.h
 @COND_TOOLKIT_MOTIF@GUI_HDR = $(COND_TOOLKIT_MOTIF_GUI_HDR)
 COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/msw/accel.h \
@@ -1406,6 +1405,7 @@ COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/msw/gauge95.h \
 	wx/msw/gdiimage.h \
 	wx/msw/gdiobj.h \
+	wx/msw/helpbest.h \
 	wx/msw/helpchm.h \
 	wx/msw/helpwin.h \
 	wx/msw/icon.h \
@@ -1424,6 +1424,15 @@ COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/msw/mslu.h \
 	wx/msw/msvcrt.h \
 	wx/msw/notebook.h \
+	wx/msw/ole/access.h \
+	wx/msw/ole/automtn.h \
+	wx/msw/ole/dataform.h \
+	wx/msw/ole/dataobj.h \
+	wx/msw/ole/dataobj2.h \
+	wx/msw/ole/dropsrc.h \
+	wx/msw/ole/droptgt.h \
+	wx/msw/ole/oleutils.h \
+	wx/msw/ole/uuid.h \
 	wx/msw/palette.h \
 	wx/msw/pen.h \
 	wx/msw/printdlg.h \
@@ -1438,8 +1447,8 @@ COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/msw/setup0.h \
 	wx/msw/slider95.h \
 	wx/msw/slidrmsw.h \
-	wx/msw/spinctrl.h \
 	wx/msw/spinbutt.h \
+	wx/msw/spinctrl.h \
 	wx/msw/statbmp.h \
 	wx/msw/statbox.h \
 	wx/msw/statbr95.h \
@@ -1457,19 +1466,9 @@ COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/msw/treectrl.h \
 	wx/msw/wave.h \
 	wx/msw/window.h \
-	wx/msw/ole/access.h \
-	wx/msw/ole/automtn.h \
-	wx/msw/ole/dataform.h \
-	wx/msw/ole/dataobj.h \
-	wx/msw/ole/dataobj2.h \
-	wx/msw/ole/dropsrc.h \
-	wx/msw/ole/droptgt.h \
-	wx/msw/ole/oleutils.h \
-	wx/msw/ole/uuid.h \
-	wx/msw/helpbest.h \
-	wx/msw/wx.rc \
-	wx/msw/wx.manifest \
 	wx/msw/gnuwin32/winresrc.h \
+	wx/msw/wx.manifest \
+	wx/msw/wx.rc \
 	wx/msw/colours.bmp \
 	wx/msw/csquery.bmp \
 	wx/msw/disable.bmp \
@@ -1506,89 +1505,91 @@ COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/msw/warning.ico
 @COND_TOOLKIT_MSW@GUI_HDR = $(COND_TOOLKIT_MSW_GUI_HDR)
 COND_TOOLKIT_OS2_GUI_HDR =  \
+	wx/generic/caret.h \
 	wx/os2/accel.h \
-	wx/os2/dataobj.h \
-	wx/os2/helpwin.h \
-	wx/os2/pngread.h \
-	wx/os2/statline.h \
 	wx/os2/app.h \
-	wx/os2/dataobj2.h \
-	wx/os2/icon.h \
-	wx/os2/stattext.h \
 	wx/os2/bitmap.h \
-	wx/os2/dc.h \
-	wx/os2/tabctrl.h \
-	wx/os2/dcclient.h \
-	wx/os2/print.h \
 	wx/os2/bmpbuttn.h \
-	wx/os2/dcmemory.h \
-	wx/os2/iniconf.h \
-	wx/os2/private.h \
-	wx/os2/textctrl.h \
 	wx/os2/brush.h \
-	wx/os2/dcprint.h \
-	wx/os2/joystick.h \
-	wx/os2/timer.h \
-	wx/os2/dcscreen.h \
-	wx/os2/listbox.h \
 	wx/os2/button.h \
-	wx/os2/dialog.h \
-	wx/os2/radiobox.h \
-	wx/os2/toolbar.h \
 	wx/os2/checkbox.h \
-	wx/os2/radiobut.h \
-	wx/os2/tooltip.h \
 	wx/os2/checklst.h \
-	wx/os2/dnd.h \
-	wx/os2/menu.h \
-	wx/os2/region.h \
-	wx/os2/menuitem.h \
 	wx/os2/choice.h \
-	wx/os2/filedlg.h \
-	wx/os2/metafile.h \
-	wx/os2/scrolbar.h \
-	wx/os2/wave.h \
 	wx/os2/clipbrd.h \
-	wx/os2/font.h \
-	wx/os2/minifram.h \
-	wx/os2/settings.h \
-	wx/os2/window.h \
-	wx/os2/fontdlg.h \
-	wx/os2/msgdlg.h \
 	wx/os2/colour.h \
-	wx/os2/frame.h \
-	wx/os2/setup0.h \
 	wx/os2/combobox.h \
-	wx/os2/gauge.h \
-	wx/os2/notebook.h \
 	wx/os2/control.h \
-	wx/os2/gdiimage.h \
-	wx/os2/palette.h \
-	wx/os2/slider.h \
 	wx/os2/cursor.h \
+	wx/os2/dataform.h \
+	wx/os2/dataobj.h \
+	wx/os2/dataobj2.h \
+	wx/os2/dc.h \
+	wx/os2/dcclient.h \
+	wx/os2/dcmemory.h \
+	wx/os2/dcprint.h \
+	wx/os2/dcscreen.h \
+	wx/os2/dialog.h \
+	wx/os2/dnd.h \
+	wx/os2/filedlg.h \
+	wx/os2/font.h \
+	wx/os2/fontdlg.h \
+	wx/os2/frame.h \
+	wx/os2/gauge.h \
+	wx/os2/gdiimage.h \
 	wx/os2/gdiobj.h \
-	wx/os2/spinbutt.h \
 	wx/os2/gsockos2.h \
+	wx/os2/helpwin.h \
+	wx/os2/icon.h \
+	wx/os2/iniconf.h \
+	wx/os2/joystick.h \
+	wx/os2/listbox.h \
+	wx/os2/menu.h \
+	wx/os2/menuitem.h \
+	wx/os2/metafile.h \
+	wx/os2/minifram.h \
+	wx/os2/msgdlg.h \
+	wx/os2/notebook.h \
+	wx/os2/palette.h \
 	wx/os2/pen.h \
+	wx/os2/pnghand.h \
+	wx/os2/pngread.h \
+	wx/os2/print.h \
+	wx/os2/private.h \
+	wx/os2/radiobox.h \
+	wx/os2/radiobut.h \
+	wx/os2/region.h \
+	wx/os2/scrolbar.h \
+	wx/os2/settings.h \
+	wx/os2/setup0.h \
+	wx/os2/slider.h \
+	wx/os2/spinbutt.h \
 	wx/os2/spinctrl.h \
 	wx/os2/statbmp.h \
-	wx/os2/dataform.h \
-	wx/os2/pnghand.h \
 	wx/os2/statbox.h \
+	wx/os2/statline.h \
+	wx/os2/stattext.h \
+	wx/os2/tabctrl.h \
+	wx/os2/textctrl.h \
+	wx/os2/timer.h \
+	wx/os2/toolbar.h \
+	wx/os2/tooltip.h \
 	wx/os2/toplevel.h \
-	wx/generic/caret.h
+	wx/os2/wave.h \
+	wx/os2/window.h
 @COND_TOOLKIT_OS2@GUI_HDR = $(COND_TOOLKIT_OS2_GUI_HDR)
 @COND_TOOLKIT_COCOA@LOWLEVEL_HDR = 
 COND_TOOLKIT_GTK_LOWLEVEL_HDR =  \
-	wx/unix/fontutil.h \
-	wx/unix/utilsx11.h \
-	wx/unix/taskbarx11.h \
-	wx/generic/printps.h \
 	wx/generic/caret.h \
+	wx/generic/printps.h \
+	wx/unix/fontutil.h \
+	wx/unix/taskbarx11.h \
+	wx/unix/utilsx11.h \
 	wx/generic/paletteg.h
 @COND_TOOLKIT_GTK@LOWLEVEL_HDR = $(COND_TOOLKIT_GTK_LOWLEVEL_HDR)
 @COND_TOOLKIT_MAC@LOWLEVEL_HDR = 
 COND_TOOLKIT_MGL_LOWLEVEL_HDR =  \
+	wx/generic/caret.h \
+	wx/generic/timer.h \
 	wx/mgl/app.h \
 	wx/mgl/bitmap.h \
 	wx/mgl/brush.h \
@@ -1609,25 +1610,24 @@ COND_TOOLKIT_MGL_LOWLEVEL_HDR =  \
 	wx/mgl/private.h \
 	wx/mgl/region.h \
 	wx/mgl/toplevel.h \
-	wx/mgl/window.h \
-	wx/generic/timer.h \
-	wx/generic/caret.h
+	wx/mgl/window.h
 @COND_TOOLKIT_MGL@LOWLEVEL_HDR = $(COND_TOOLKIT_MGL_LOWLEVEL_HDR)
 COND_TOOLKIT_MOTIF_LOWLEVEL_HDR =  \
-	wx/unix/fontutil.h \
-	wx/unix/utilsx11.h \
-	wx/unix/taskbarx11.h \
+	wx/generic/caret.h \
 	wx/generic/printps.h \
-	wx/generic/caret.h
+	wx/unix/fontutil.h \
+	wx/unix/taskbarx11.h \
+	wx/unix/utilsx11.h
 @COND_TOOLKIT_MOTIF@LOWLEVEL_HDR = $(COND_TOOLKIT_MOTIF_LOWLEVEL_HDR)
 @COND_TOOLKIT_MSW@LOWLEVEL_HDR = 
 @COND_TOOLKIT_OS2@LOWLEVEL_HDR = 
 COND_TOOLKIT_X11_LOWLEVEL_HDR =  \
-	wx/unix/fontutil.h \
-	wx/unix/utilsx11.h \
-	wx/unix/taskbarx11.h \
-	wx/generic/printps.h \
 	wx/generic/caret.h \
+	wx/generic/printps.h \
+	wx/unix/fontutil.h \
+	wx/unix/taskbarx11.h \
+	wx/unix/utilsx11.h \
+	src/generic/timer.h \
 	wx/x11/app.h \
 	wx/x11/bitmap.h \
 	wx/x11/brush.h \
@@ -1657,8 +1657,7 @@ COND_TOOLKIT_X11_LOWLEVEL_HDR =  \
 	wx/x11/reparent.h \
 	wx/x11/textctrl.h \
 	wx/x11/toplevel.h \
-	wx/x11/window.h \
-	src/generic/timer.h
+	wx/x11/window.h
 @COND_TOOLKIT_X11@LOWLEVEL_HDR = $(COND_TOOLKIT_X11_LOWLEVEL_HDR)
 @COND_PLATFORM_UNIX_1@NET_PLATFORM_HDR = wx/unix/gsockunx.h
 @COND_PLATFORM_WIN32_1@NET_PLATFORM_HDR = wx/msw/gsockmsw.h
@@ -1675,7 +1674,8 @@ COND_TOOLKIT_X11_LOWLEVEL_HDR =  \
 @COND_OFFICIAL_BUILD_1_PLATFORM_WIN32_1@VENDORTAG = 
 @COND_TOOLKIT_MAC@WXBASEPORT = _carbon
 @COND_PLATFORM_WIN32_1@WXCOMPILER = _gcc
-@COND_BUILD_DEBUG@WXDEBUGFLAG = d
+@COND_BUILD_DEBUG_DEBUG_FLAG_DEFAULT@WXDEBUGFLAG = d
+@COND_DEBUG_FLAG_1@WXDEBUGFLAG = d
 @COND_PLATFORM_WIN32_0@WXDLLNAMEPREFIX = wx_base$(WXBASEPORT)
 @COND_PLATFORM_WIN32_1@WXDLLNAMEPREFIX = wxbase$(WXBASEPORT)250
 @COND_PLATFORM_WIN32_0@WXDLLNAMEPREFIXGUI = wx_$(PORTNAME)$(WXUNIVNAME)
@@ -1735,11 +1735,11 @@ COND_TOOLKIT_GTK___BASE_MACOSX_SRC_OBJECTS =  \
 	monodll_threadpsx.o
 @COND_TOOLKIT_GTK@__BASE_MACOSX_SRC_OBJECTS = $(COND_TOOLKIT_GTK___BASE_MACOSX_SRC_OBJECTS)
 COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS =  \
-	monodll_baseunix.o \
 	monodll_dirmac.o \
 	monodll_mimetmac.o \
 	monodll_utils.o \
-	monodll_utilsexc.o
+	monodll_utilsexc.o \
+	monodll_baseunix.o
 @COND_TOOLKIT_MAC@__BASE_MACOSX_SRC_OBJECTS = $(COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS)
 COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS_1 =  \
 	monolib_baseunix.o \
@@ -1756,11 +1756,11 @@ COND_TOOLKIT_GTK___BASE_MACOSX_SRC_OBJECTS_1 =  \
 	monolib_threadpsx.o
 @COND_TOOLKIT_GTK@__BASE_MACOSX_SRC_OBJECTS_1 = $(COND_TOOLKIT_GTK___BASE_MACOSX_SRC_OBJECTS_1)
 COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS_1 =  \
-	monolib_baseunix.o \
 	monolib_dirmac.o \
 	monolib_mimetmac.o \
 	monolib_utils.o \
-	monolib_utilsexc.o
+	monolib_utilsexc.o \
+	monolib_baseunix.o
 @COND_TOOLKIT_MAC@__BASE_MACOSX_SRC_OBJECTS_1 = $(COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS_1)
 COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS_2 =  \
 	basedll_baseunix.o \
@@ -1777,11 +1777,11 @@ COND_TOOLKIT_GTK___BASE_MACOSX_SRC_OBJECTS_2 =  \
 	basedll_threadpsx.o
 @COND_TOOLKIT_GTK@__BASE_MACOSX_SRC_OBJECTS_2 = $(COND_TOOLKIT_GTK___BASE_MACOSX_SRC_OBJECTS_2)
 COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS_2 =  \
-	basedll_baseunix.o \
 	basedll_dirmac.o \
 	basedll_mimetmac.o \
 	basedll_utils.o \
-	basedll_utilsexc.o
+	basedll_utilsexc.o \
+	basedll_baseunix.o
 @COND_TOOLKIT_MAC@__BASE_MACOSX_SRC_OBJECTS_2 = $(COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS_2)
 COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS_3 =  \
 	baselib_baseunix.o \
@@ -1798,11 +1798,11 @@ COND_TOOLKIT_GTK___BASE_MACOSX_SRC_OBJECTS_3 =  \
 	baselib_threadpsx.o
 @COND_TOOLKIT_GTK@__BASE_MACOSX_SRC_OBJECTS_3 = $(COND_TOOLKIT_GTK___BASE_MACOSX_SRC_OBJECTS_3)
 COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS_3 =  \
-	baselib_baseunix.o \
 	baselib_dirmac.o \
 	baselib_mimetmac.o \
 	baselib_utils.o \
-	baselib_utilsexc.o
+	baselib_utilsexc.o \
+	baselib_baseunix.o
 @COND_TOOLKIT_MAC@__BASE_MACOSX_SRC_OBJECTS_3 = $(COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS_3)
 @COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS \
 @COND_PLATFORM_MACOSX_1@	= $(__BASE_MACOSX_SRC_OBJECTS)
@@ -1815,6 +1815,7 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS =  \
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_basemsw.o \
+	monodll_crashrpt.o \
 	monodll_dde.o \
 	monodll_dir.o \
 	monodll_mimetype.o \
@@ -1823,8 +1824,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_snglinst.o \
 	monodll_thread.o \
 	monodll_utils.o \
-	monodll_utilsexc.o \
-	monodll_crashrpt.o
+	monodll_utilsexc.o
 @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS = $(COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS)
 @COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS_1 \
 @COND_PLATFORM_MACOSX_1@	= $(__BASE_MACOSX_SRC_OBJECTS_1)
@@ -1837,6 +1837,7 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_1 = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_1)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_basemsw.o \
+	monolib_crashrpt.o \
 	monolib_dde.o \
 	monolib_dir.o \
 	monolib_mimetype.o \
@@ -1845,8 +1846,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_snglinst.o \
 	monolib_thread.o \
 	monolib_utils.o \
-	monolib_utilsexc.o \
-	monolib_crashrpt.o
+	monolib_utilsexc.o
 @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS_1 = $(COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1)
 @COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS_2 \
 @COND_PLATFORM_MACOSX_1@	= $(__BASE_MACOSX_SRC_OBJECTS_2)
@@ -1859,6 +1859,7 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_2 = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_2)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_basemsw.o \
+	basedll_crashrpt.o \
 	basedll_dde.o \
 	basedll_dir.o \
 	basedll_mimetype.o \
@@ -1867,8 +1868,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_snglinst.o \
 	basedll_thread.o \
 	basedll_utils.o \
-	basedll_utilsexc.o \
-	basedll_crashrpt.o
+	basedll_utilsexc.o
 @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS_2 = $(COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2)
 @COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS_3 \
 @COND_PLATFORM_MACOSX_1@	= $(__BASE_MACOSX_SRC_OBJECTS_3)
@@ -1881,6 +1881,7 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_3 = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_3)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_basemsw.o \
+	baselib_crashrpt.o \
 	baselib_dde.o \
 	baselib_dir.o \
 	baselib_mimetype.o \
@@ -1889,12 +1890,83 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_snglinst.o \
 	baselib_thread.o \
 	baselib_utils.o \
-	baselib_utilsexc.o \
-	baselib_crashrpt.o
+	baselib_utilsexc.o
 @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS_3 = $(COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_3)
 COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	$(__LOWLEVEL_SRC_OBJECTS) \
 	$(__GUI_SRC_OBJECTS) \
+	monodll_accesscmn.o \
+	monodll_appcmn.o \
+	monodll_artprov.o \
+	monodll_artstd.o \
+	monodll_bmpbase.o \
+	monodll_choiccmn.o \
+	monodll_clipcmn.o \
+	monodll_cmdproc.o \
+	monodll_cmndata.o \
+	monodll_containr.o \
+	monodll_cshelp.o \
+	monodll_ctrlcmn.o \
+	monodll_ctrlsub.o \
+	monodll_datacmn.o \
+	monodll_dbgrid.o \
+	monodll_dcbase.o \
+	monodll_dlgcmn.o \
+	monodll_dndcmn.o \
+	monodll_dobjcmn.o \
+	monodll_docmdi.o \
+	monodll_docview.o \
+	monodll_dpycmn.o \
+	monodll_dseldlg.o \
+	monodll_effects.o \
+	monodll_fddlgcmn.o \
+	monodll_fldlgcmn.o \
+	monodll_fontcmn.o \
+	monodll_fontmap.o \
+	monodll_framecmn.o \
+	monodll_gaugecmn.o \
+	monodll_gdicmn.o \
+	monodll_geometry.o \
+	monodll_gifdecod.o \
+	monodll_helpbase.o \
+	monodll_iconbndl.o \
+	monodll_imagall.o \
+	monodll_imagbmp.o \
+	monodll_image.o \
+	monodll_imagfill.o \
+	monodll_imaggif.o \
+	monodll_imagiff.o \
+	monodll_imagjpeg.o \
+	monodll_imagpcx.o \
+	monodll_imagpng.o \
+	monodll_imagpnm.o \
+	monodll_imagtiff.o \
+	monodll_imagxpm.o \
+	monodll_layout.o \
+	monodll_lboxcmn.o \
+	monodll_matrix.o \
+	monodll_menucmn.o \
+	monodll_nbkbase.o \
+	monodll_paper.o \
+	monodll_popupcmn.o \
+	monodll_prntbase.o \
+	monodll_quantize.o \
+	monodll_radiocmn.o \
+	monodll_rendcmn.o \
+	monodll_rgncmn.o \
+	monodll_settcmn.o \
+	monodll_sizer.o \
+	monodll_statbar.o \
+	monodll_tbarbase.o \
+	monodll_textcmn.o \
+	monodll_timercmn.o \
+	monodll_toplvcmn.o \
+	monodll_treebase.o \
+	monodll_valgen.o \
+	monodll_validate.o \
+	monodll_valtext.o \
+	monodll_wincmn.o \
+	monodll_xpmdecod.o \
 	monodll_busyinfo.o \
 	monodll_calctrl.o \
 	monodll_choicdgg.o \
@@ -1925,83 +1997,23 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_treectlg.o \
 	monodll_vlbox.o \
 	monodll_vscroll.o \
-	monodll_wizard.o \
-	monodll_appcmn.o \
-	monodll_fontmap.o \
-	monodll_accesscmn.o \
-	monodll_artprov.o \
-	monodll_artstd.o \
-	monodll_bmpbase.o \
-	monodll_choiccmn.o \
-	monodll_clipcmn.o \
-	monodll_cmdproc.o \
-	monodll_cmndata.o \
-	monodll_containr.o \
-	monodll_cshelp.o \
-	monodll_ctrlcmn.o \
-	monodll_ctrlsub.o \
-	monodll_datacmn.o \
-	monodll_dbgrid.o \
-	monodll_dcbase.o \
-	monodll_dlgcmn.o \
-	monodll_dndcmn.o \
-	monodll_dobjcmn.o \
-	monodll_docmdi.o \
-	monodll_docview.o \
-	monodll_dpycmn.o \
-	monodll_dseldlg.o \
-	monodll_effects.o \
-	monodll_fddlgcmn.o \
-	monodll_fldlgcmn.o \
-	monodll_fontcmn.o \
-	monodll_framecmn.o \
-	monodll_timercmn.o \
-	monodll_toplvcmn.o \
-	monodll_gaugecmn.o \
-	monodll_gdicmn.o \
-	monodll_geometry.o \
-	monodll_gifdecod.o \
-	monodll_helpbase.o \
-	monodll_iconbndl.o \
-	monodll_imagall.o \
-	monodll_imagbmp.o \
-	monodll_image.o \
-	monodll_imaggif.o \
-	monodll_imagiff.o \
-	monodll_imagjpeg.o \
-	monodll_imagpcx.o \
-	monodll_imagpng.o \
-	monodll_imagpnm.o \
-	monodll_imagtiff.o \
-	monodll_imagxpm.o \
-	monodll_imagfill.o \
-	monodll_layout.o \
-	monodll_lboxcmn.o \
-	monodll_matrix.o \
-	monodll_menucmn.o \
-	monodll_nbkbase.o \
-	monodll_paper.o \
-	monodll_popupcmn.o \
-	monodll_prntbase.o \
-	monodll_quantize.o \
-	monodll_radiocmn.o \
-	monodll_rendcmn.o \
-	monodll_rgncmn.o \
-	monodll_settcmn.o \
-	monodll_sizer.o \
-	monodll_statbar.o \
-	monodll_tbarbase.o \
-	monodll_textcmn.o \
-	monodll_treebase.o \
-	monodll_valgen.o \
-	monodll_validate.o \
-	monodll_valtext.o \
-	monodll_wincmn.o \
-	monodll_xpmdecod.o
+	monodll_wizard.o
 @COND_USE_GUI_1_WXUNIV_0@__CORE_SRC_OBJECTS = $(COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS)
 COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	$(__LOWLEVEL_SRC_OBJECTS) \
 	$(__UNIV_TEXTCTRL_OBJECTS) \
+	monodll_accel.o \
+	monodll_colrdlgg.o \
+	monodll_dirdlgg.o \
+	monodll_fdrepdlg.o \
+	monodll_filedlgg.o \
+	monodll_fontdlgg.o \
+	monodll_imaglist.o \
+	monodll_listctrl.o \
+	monodll_mdig.o \
+	monodll_msgdlgg.o \
+	monodll_prntdlgg.o \
+	monodll_tabg.o \
 	monodll_bmpbuttn.o \
 	monodll_button.o \
 	monodll_checkbox.o \
@@ -2012,7 +2024,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_control.o \
 	monodll_dialog.o \
 	monodll_framuniv.o \
-	monodll_topluniv.o \
 	monodll_gauge.o \
 	monodll_inpcons.o \
 	monodll_inphand.o \
@@ -2032,24 +2043,85 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_statline.o \
 	monodll_stattext.o \
 	monodll_statusbr.o \
-	monodll_toolbar.o \
 	monodll_theme.o \
+	monodll_toolbar.o \
+	monodll_topluniv.o \
 	monodll_winuniv.o \
-	monodll_mdig.o \
-	monodll_imaglist.o \
-	monodll_colrdlgg.o \
-	monodll_listctrl.o \
-	monodll_filedlgg.o \
-	monodll_dirdlgg.o \
-	monodll_prntdlgg.o \
-	monodll_accel.o \
-	monodll_msgdlgg.o \
-	monodll_fdrepdlg.o \
-	monodll_fontdlgg.o \
-	monodll_tabg.o \
 	monodll_gtk.o \
-	monodll_win32.o \
 	monodll_metal.o \
+	monodll_win32.o \
+	monodll_accesscmn.o \
+	monodll_appcmn.o \
+	monodll_artprov.o \
+	monodll_artstd.o \
+	monodll_bmpbase.o \
+	monodll_choiccmn.o \
+	monodll_clipcmn.o \
+	monodll_cmdproc.o \
+	monodll_cmndata.o \
+	monodll_containr.o \
+	monodll_cshelp.o \
+	monodll_ctrlcmn.o \
+	monodll_ctrlsub.o \
+	monodll_datacmn.o \
+	monodll_dbgrid.o \
+	monodll_dcbase.o \
+	monodll_dlgcmn.o \
+	monodll_dndcmn.o \
+	monodll_dobjcmn.o \
+	monodll_docmdi.o \
+	monodll_docview.o \
+	monodll_dpycmn.o \
+	monodll_dseldlg.o \
+	monodll_effects.o \
+	monodll_fddlgcmn.o \
+	monodll_fldlgcmn.o \
+	monodll_fontcmn.o \
+	monodll_fontmap.o \
+	monodll_framecmn.o \
+	monodll_gaugecmn.o \
+	monodll_gdicmn.o \
+	monodll_geometry.o \
+	monodll_gifdecod.o \
+	monodll_helpbase.o \
+	monodll_iconbndl.o \
+	monodll_imagall.o \
+	monodll_imagbmp.o \
+	monodll_image.o \
+	monodll_imagfill.o \
+	monodll_imaggif.o \
+	monodll_imagiff.o \
+	monodll_imagjpeg.o \
+	monodll_imagpcx.o \
+	monodll_imagpng.o \
+	monodll_imagpnm.o \
+	monodll_imagtiff.o \
+	monodll_imagxpm.o \
+	monodll_layout.o \
+	monodll_lboxcmn.o \
+	monodll_matrix.o \
+	monodll_menucmn.o \
+	monodll_nbkbase.o \
+	monodll_paper.o \
+	monodll_popupcmn.o \
+	monodll_prntbase.o \
+	monodll_quantize.o \
+	monodll_radiocmn.o \
+	monodll_rendcmn.o \
+	monodll_rgncmn.o \
+	monodll_settcmn.o \
+	monodll_sizer.o \
+	monodll_statbar.o \
+	monodll_tbarbase.o \
+	monodll_textcmn.o \
+	monodll_timercmn.o \
+	monodll_toplvcmn.o \
+	monodll_treebase.o \
+	monodll_valgen.o \
+	monodll_validate.o \
+	monodll_valtext.o \
+	monodll_wincmn.o \
+	monodll_xpmdecod.o \
 	monodll_busyinfo.o \
 	monodll_calctrl.o \
 	monodll_choicdgg.o \
@@ -2080,83 +2152,83 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_treectlg.o \
 	monodll_vlbox.o \
 	monodll_vscroll.o \
-	monodll_wizard.o \
-	monodll_appcmn.o \
-	monodll_fontmap.o \
-	monodll_accesscmn.o \
-	monodll_artprov.o \
-	monodll_artstd.o \
-	monodll_bmpbase.o \
-	monodll_choiccmn.o \
-	monodll_clipcmn.o \
-	monodll_cmdproc.o \
-	monodll_cmndata.o \
-	monodll_containr.o \
-	monodll_cshelp.o \
-	monodll_ctrlcmn.o \
-	monodll_ctrlsub.o \
-	monodll_datacmn.o \
-	monodll_dbgrid.o \
-	monodll_dcbase.o \
-	monodll_dlgcmn.o \
-	monodll_dndcmn.o \
-	monodll_dobjcmn.o \
-	monodll_docmdi.o \
-	monodll_docview.o \
-	monodll_dpycmn.o \
-	monodll_dseldlg.o \
-	monodll_effects.o \
-	monodll_fddlgcmn.o \
-	monodll_fldlgcmn.o \
-	monodll_fontcmn.o \
-	monodll_framecmn.o \
-	monodll_timercmn.o \
-	monodll_toplvcmn.o \
-	monodll_gaugecmn.o \
-	monodll_gdicmn.o \
-	monodll_geometry.o \
-	monodll_gifdecod.o \
-	monodll_helpbase.o \
-	monodll_iconbndl.o \
-	monodll_imagall.o \
-	monodll_imagbmp.o \
-	monodll_image.o \
-	monodll_imaggif.o \
-	monodll_imagiff.o \
-	monodll_imagjpeg.o \
-	monodll_imagpcx.o \
-	monodll_imagpng.o \
-	monodll_imagpnm.o \
-	monodll_imagtiff.o \
-	monodll_imagxpm.o \
-	monodll_imagfill.o \
-	monodll_layout.o \
-	monodll_lboxcmn.o \
-	monodll_matrix.o \
-	monodll_menucmn.o \
-	monodll_nbkbase.o \
-	monodll_paper.o \
-	monodll_popupcmn.o \
-	monodll_prntbase.o \
-	monodll_quantize.o \
-	monodll_radiocmn.o \
-	monodll_rendcmn.o \
-	monodll_rgncmn.o \
-	monodll_settcmn.o \
-	monodll_sizer.o \
-	monodll_statbar.o \
-	monodll_tbarbase.o \
-	monodll_textcmn.o \
-	monodll_treebase.o \
-	monodll_valgen.o \
-	monodll_validate.o \
-	monodll_valtext.o \
-	monodll_wincmn.o \
-	monodll_xpmdecod.o
+	monodll_wizard.o
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS)
 COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_9) \
 	$(__GUI_SRC_OBJECTS_1) \
+	monolib_accesscmn.o \
+	monolib_appcmn.o \
+	monolib_artprov.o \
+	monolib_artstd.o \
+	monolib_bmpbase.o \
+	monolib_choiccmn.o \
+	monolib_clipcmn.o \
+	monolib_cmdproc.o \
+	monolib_cmndata.o \
+	monolib_containr.o \
+	monolib_cshelp.o \
+	monolib_ctrlcmn.o \
+	monolib_ctrlsub.o \
+	monolib_datacmn.o \
+	monolib_dbgrid.o \
+	monolib_dcbase.o \
+	monolib_dlgcmn.o \
+	monolib_dndcmn.o \
+	monolib_dobjcmn.o \
+	monolib_docmdi.o \
+	monolib_docview.o \
+	monolib_dpycmn.o \
+	monolib_dseldlg.o \
+	monolib_effects.o \
+	monolib_fddlgcmn.o \
+	monolib_fldlgcmn.o \
+	monolib_fontcmn.o \
+	monolib_fontmap.o \
+	monolib_framecmn.o \
+	monolib_gaugecmn.o \
+	monolib_gdicmn.o \
+	monolib_geometry.o \
+	monolib_gifdecod.o \
+	monolib_helpbase.o \
+	monolib_iconbndl.o \
+	monolib_imagall.o \
+	monolib_imagbmp.o \
+	monolib_image.o \
+	monolib_imagfill.o \
+	monolib_imaggif.o \
+	monolib_imagiff.o \
+	monolib_imagjpeg.o \
+	monolib_imagpcx.o \
+	monolib_imagpng.o \
+	monolib_imagpnm.o \
+	monolib_imagtiff.o \
+	monolib_imagxpm.o \
+	monolib_layout.o \
+	monolib_lboxcmn.o \
+	monolib_matrix.o \
+	monolib_menucmn.o \
+	monolib_nbkbase.o \
+	monolib_paper.o \
+	monolib_popupcmn.o \
+	monolib_prntbase.o \
+	monolib_quantize.o \
+	monolib_radiocmn.o \
+	monolib_rendcmn.o \
+	monolib_rgncmn.o \
+	monolib_settcmn.o \
+	monolib_sizer.o \
+	monolib_statbar.o \
+	monolib_tbarbase.o \
+	monolib_textcmn.o \
+	monolib_timercmn.o \
+	monolib_toplvcmn.o \
+	monolib_treebase.o \
+	monolib_valgen.o \
+	monolib_validate.o \
+	monolib_valtext.o \
+	monolib_wincmn.o \
+	monolib_xpmdecod.o \
 	monolib_busyinfo.o \
 	monolib_calctrl.o \
 	monolib_choicdgg.o \
@@ -2187,83 +2259,23 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_treectlg.o \
 	monolib_vlbox.o \
 	monolib_vscroll.o \
-	monolib_wizard.o \
-	monolib_appcmn.o \
-	monolib_fontmap.o \
-	monolib_accesscmn.o \
-	monolib_artprov.o \
-	monolib_artstd.o \
-	monolib_bmpbase.o \
-	monolib_choiccmn.o \
-	monolib_clipcmn.o \
-	monolib_cmdproc.o \
-	monolib_cmndata.o \
-	monolib_containr.o \
-	monolib_cshelp.o \
-	monolib_ctrlcmn.o \
-	monolib_ctrlsub.o \
-	monolib_datacmn.o \
-	monolib_dbgrid.o \
-	monolib_dcbase.o \
-	monolib_dlgcmn.o \
-	monolib_dndcmn.o \
-	monolib_dobjcmn.o \
-	monolib_docmdi.o \
-	monolib_docview.o \
-	monolib_dpycmn.o \
-	monolib_dseldlg.o \
-	monolib_effects.o \
-	monolib_fddlgcmn.o \
-	monolib_fldlgcmn.o \
-	monolib_fontcmn.o \
-	monolib_framecmn.o \
-	monolib_timercmn.o \
-	monolib_toplvcmn.o \
-	monolib_gaugecmn.o \
-	monolib_gdicmn.o \
-	monolib_geometry.o \
-	monolib_gifdecod.o \
-	monolib_helpbase.o \
-	monolib_iconbndl.o \
-	monolib_imagall.o \
-	monolib_imagbmp.o \
-	monolib_image.o \
-	monolib_imaggif.o \
-	monolib_imagiff.o \
-	monolib_imagjpeg.o \
-	monolib_imagpcx.o \
-	monolib_imagpng.o \
-	monolib_imagpnm.o \
-	monolib_imagtiff.o \
-	monolib_imagxpm.o \
-	monolib_imagfill.o \
-	monolib_layout.o \
-	monolib_lboxcmn.o \
-	monolib_matrix.o \
-	monolib_menucmn.o \
-	monolib_nbkbase.o \
-	monolib_paper.o \
-	monolib_popupcmn.o \
-	monolib_prntbase.o \
-	monolib_quantize.o \
-	monolib_radiocmn.o \
-	monolib_rendcmn.o \
-	monolib_rgncmn.o \
-	monolib_settcmn.o \
-	monolib_sizer.o \
-	monolib_statbar.o \
-	monolib_tbarbase.o \
-	monolib_textcmn.o \
-	monolib_treebase.o \
-	monolib_valgen.o \
-	monolib_validate.o \
-	monolib_valtext.o \
-	monolib_wincmn.o \
-	monolib_xpmdecod.o
+	monolib_wizard.o
 @COND_USE_GUI_1_WXUNIV_0@__CORE_SRC_OBJECTS_1 = $(COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1)
 COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_9) \
 	$(__UNIV_TEXTCTRL_OBJECTS_1) \
+	monolib_accel.o \
+	monolib_colrdlgg.o \
+	monolib_dirdlgg.o \
+	monolib_fdrepdlg.o \
+	monolib_filedlgg.o \
+	monolib_fontdlgg.o \
+	monolib_imaglist.o \
+	monolib_listctrl.o \
+	monolib_mdig.o \
+	monolib_msgdlgg.o \
+	monolib_prntdlgg.o \
+	monolib_tabg.o \
 	monolib_bmpbuttn.o \
 	monolib_button.o \
 	monolib_checkbox.o \
@@ -2274,7 +2286,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_control.o \
 	monolib_dialog.o \
 	monolib_framuniv.o \
-	monolib_topluniv.o \
 	monolib_gauge.o \
 	monolib_inpcons.o \
 	monolib_inphand.o \
@@ -2294,24 +2305,85 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_statline.o \
 	monolib_stattext.o \
 	monolib_statusbr.o \
-	monolib_toolbar.o \
 	monolib_theme.o \
+	monolib_toolbar.o \
+	monolib_topluniv.o \
 	monolib_winuniv.o \
-	monolib_mdig.o \
-	monolib_imaglist.o \
-	monolib_colrdlgg.o \
-	monolib_listctrl.o \
-	monolib_filedlgg.o \
-	monolib_dirdlgg.o \
-	monolib_prntdlgg.o \
-	monolib_accel.o \
-	monolib_msgdlgg.o \
-	monolib_fdrepdlg.o \
-	monolib_fontdlgg.o \
-	monolib_tabg.o \
 	monolib_gtk.o \
-	monolib_win32.o \
 	monolib_metal.o \
+	monolib_win32.o \
+	monolib_accesscmn.o \
+	monolib_appcmn.o \
+	monolib_artprov.o \
+	monolib_artstd.o \
+	monolib_bmpbase.o \
+	monolib_choiccmn.o \
+	monolib_clipcmn.o \
+	monolib_cmdproc.o \
+	monolib_cmndata.o \
+	monolib_containr.o \
+	monolib_cshelp.o \
+	monolib_ctrlcmn.o \
+	monolib_ctrlsub.o \
+	monolib_datacmn.o \
+	monolib_dbgrid.o \
+	monolib_dcbase.o \
+	monolib_dlgcmn.o \
+	monolib_dndcmn.o \
+	monolib_dobjcmn.o \
+	monolib_docmdi.o \
+	monolib_docview.o \
+	monolib_dpycmn.o \
+	monolib_dseldlg.o \
+	monolib_effects.o \
+	monolib_fddlgcmn.o \
+	monolib_fldlgcmn.o \
+	monolib_fontcmn.o \
+	monolib_fontmap.o \
+	monolib_framecmn.o \
+	monolib_gaugecmn.o \
+	monolib_gdicmn.o \
+	monolib_geometry.o \
+	monolib_gifdecod.o \
+	monolib_helpbase.o \
+	monolib_iconbndl.o \
+	monolib_imagall.o \
+	monolib_imagbmp.o \
+	monolib_image.o \
+	monolib_imagfill.o \
+	monolib_imaggif.o \
+	monolib_imagiff.o \
+	monolib_imagjpeg.o \
+	monolib_imagpcx.o \
+	monolib_imagpng.o \
+	monolib_imagpnm.o \
+	monolib_imagtiff.o \
+	monolib_imagxpm.o \
+	monolib_layout.o \
+	monolib_lboxcmn.o \
+	monolib_matrix.o \
+	monolib_menucmn.o \
+	monolib_nbkbase.o \
+	monolib_paper.o \
+	monolib_popupcmn.o \
+	monolib_prntbase.o \
+	monolib_quantize.o \
+	monolib_radiocmn.o \
+	monolib_rendcmn.o \
+	monolib_rgncmn.o \
+	monolib_settcmn.o \
+	monolib_sizer.o \
+	monolib_statbar.o \
+	monolib_tbarbase.o \
+	monolib_textcmn.o \
+	monolib_timercmn.o \
+	monolib_toplvcmn.o \
+	monolib_treebase.o \
+	monolib_valgen.o \
+	monolib_validate.o \
+	monolib_valtext.o \
+	monolib_wincmn.o \
+	monolib_xpmdecod.o \
 	monolib_busyinfo.o \
 	monolib_calctrl.o \
 	monolib_choicdgg.o \
@@ -2342,83 +2414,83 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_treectlg.o \
 	monolib_vlbox.o \
 	monolib_vscroll.o \
-	monolib_wizard.o \
-	monolib_appcmn.o \
-	monolib_fontmap.o \
-	monolib_accesscmn.o \
-	monolib_artprov.o \
-	monolib_artstd.o \
-	monolib_bmpbase.o \
-	monolib_choiccmn.o \
-	monolib_clipcmn.o \
-	monolib_cmdproc.o \
-	monolib_cmndata.o \
-	monolib_containr.o \
-	monolib_cshelp.o \
-	monolib_ctrlcmn.o \
-	monolib_ctrlsub.o \
-	monolib_datacmn.o \
-	monolib_dbgrid.o \
-	monolib_dcbase.o \
-	monolib_dlgcmn.o \
-	monolib_dndcmn.o \
-	monolib_dobjcmn.o \
-	monolib_docmdi.o \
-	monolib_docview.o \
-	monolib_dpycmn.o \
-	monolib_dseldlg.o \
-	monolib_effects.o \
-	monolib_fddlgcmn.o \
-	monolib_fldlgcmn.o \
-	monolib_fontcmn.o \
-	monolib_framecmn.o \
-	monolib_timercmn.o \
-	monolib_toplvcmn.o \
-	monolib_gaugecmn.o \
-	monolib_gdicmn.o \
-	monolib_geometry.o \
-	monolib_gifdecod.o \
-	monolib_helpbase.o \
-	monolib_iconbndl.o \
-	monolib_imagall.o \
-	monolib_imagbmp.o \
-	monolib_image.o \
-	monolib_imaggif.o \
-	monolib_imagiff.o \
-	monolib_imagjpeg.o \
-	monolib_imagpcx.o \
-	monolib_imagpng.o \
-	monolib_imagpnm.o \
-	monolib_imagtiff.o \
-	monolib_imagxpm.o \
-	monolib_imagfill.o \
-	monolib_layout.o \
-	monolib_lboxcmn.o \
-	monolib_matrix.o \
-	monolib_menucmn.o \
-	monolib_nbkbase.o \
-	monolib_paper.o \
-	monolib_popupcmn.o \
-	monolib_prntbase.o \
-	monolib_quantize.o \
-	monolib_radiocmn.o \
-	monolib_rendcmn.o \
-	monolib_rgncmn.o \
-	monolib_settcmn.o \
-	monolib_sizer.o \
-	monolib_statbar.o \
-	monolib_tbarbase.o \
-	monolib_textcmn.o \
-	monolib_treebase.o \
-	monolib_valgen.o \
-	monolib_validate.o \
-	monolib_valtext.o \
-	monolib_wincmn.o \
-	monolib_xpmdecod.o
+	monolib_wizard.o
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS_1 = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1)
 COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_0) \
 	$(__GUI_SRC_OBJECTS_2) \
+	coredll_accesscmn.o \
+	coredll_appcmn.o \
+	coredll_artprov.o \
+	coredll_artstd.o \
+	coredll_bmpbase.o \
+	coredll_choiccmn.o \
+	coredll_clipcmn.o \
+	coredll_cmdproc.o \
+	coredll_cmndata.o \
+	coredll_containr.o \
+	coredll_cshelp.o \
+	coredll_ctrlcmn.o \
+	coredll_ctrlsub.o \
+	coredll_datacmn.o \
+	coredll_dbgrid.o \
+	coredll_dcbase.o \
+	coredll_dlgcmn.o \
+	coredll_dndcmn.o \
+	coredll_dobjcmn.o \
+	coredll_docmdi.o \
+	coredll_docview.o \
+	coredll_dpycmn.o \
+	coredll_dseldlg.o \
+	coredll_effects.o \
+	coredll_fddlgcmn.o \
+	coredll_fldlgcmn.o \
+	coredll_fontcmn.o \
+	coredll_fontmap.o \
+	coredll_framecmn.o \
+	coredll_gaugecmn.o \
+	coredll_gdicmn.o \
+	coredll_geometry.o \
+	coredll_gifdecod.o \
+	coredll_helpbase.o \
+	coredll_iconbndl.o \
+	coredll_imagall.o \
+	coredll_imagbmp.o \
+	coredll_image.o \
+	coredll_imagfill.o \
+	coredll_imaggif.o \
+	coredll_imagiff.o \
+	coredll_imagjpeg.o \
+	coredll_imagpcx.o \
+	coredll_imagpng.o \
+	coredll_imagpnm.o \
+	coredll_imagtiff.o \
+	coredll_imagxpm.o \
+	coredll_layout.o \
+	coredll_lboxcmn.o \
+	coredll_matrix.o \
+	coredll_menucmn.o \
+	coredll_nbkbase.o \
+	coredll_paper.o \
+	coredll_popupcmn.o \
+	coredll_prntbase.o \
+	coredll_quantize.o \
+	coredll_radiocmn.o \
+	coredll_rendcmn.o \
+	coredll_rgncmn.o \
+	coredll_settcmn.o \
+	coredll_sizer.o \
+	coredll_statbar.o \
+	coredll_tbarbase.o \
+	coredll_textcmn.o \
+	coredll_timercmn.o \
+	coredll_toplvcmn.o \
+	coredll_treebase.o \
+	coredll_valgen.o \
+	coredll_validate.o \
+	coredll_valtext.o \
+	coredll_wincmn.o \
+	coredll_xpmdecod.o \
 	coredll_busyinfo.o \
 	coredll_calctrl.o \
 	coredll_choicdgg.o \
@@ -2449,83 +2521,23 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_treectlg.o \
 	coredll_vlbox.o \
 	coredll_vscroll.o \
-	coredll_wizard.o \
-	coredll_appcmn.o \
-	coredll_fontmap.o \
-	coredll_accesscmn.o \
-	coredll_artprov.o \
-	coredll_artstd.o \
-	coredll_bmpbase.o \
-	coredll_choiccmn.o \
-	coredll_clipcmn.o \
-	coredll_cmdproc.o \
-	coredll_cmndata.o \
-	coredll_containr.o \
-	coredll_cshelp.o \
-	coredll_ctrlcmn.o \
-	coredll_ctrlsub.o \
-	coredll_datacmn.o \
-	coredll_dbgrid.o \
-	coredll_dcbase.o \
-	coredll_dlgcmn.o \
-	coredll_dndcmn.o \
-	coredll_dobjcmn.o \
-	coredll_docmdi.o \
-	coredll_docview.o \
-	coredll_dpycmn.o \
-	coredll_dseldlg.o \
-	coredll_effects.o \
-	coredll_fddlgcmn.o \
-	coredll_fldlgcmn.o \
-	coredll_fontcmn.o \
-	coredll_framecmn.o \
-	coredll_timercmn.o \
-	coredll_toplvcmn.o \
-	coredll_gaugecmn.o \
-	coredll_gdicmn.o \
-	coredll_geometry.o \
-	coredll_gifdecod.o \
-	coredll_helpbase.o \
-	coredll_iconbndl.o \
-	coredll_imagall.o \
-	coredll_imagbmp.o \
-	coredll_image.o \
-	coredll_imaggif.o \
-	coredll_imagiff.o \
-	coredll_imagjpeg.o \
-	coredll_imagpcx.o \
-	coredll_imagpng.o \
-	coredll_imagpnm.o \
-	coredll_imagtiff.o \
-	coredll_imagxpm.o \
-	coredll_imagfill.o \
-	coredll_layout.o \
-	coredll_lboxcmn.o \
-	coredll_matrix.o \
-	coredll_menucmn.o \
-	coredll_nbkbase.o \
-	coredll_paper.o \
-	coredll_popupcmn.o \
-	coredll_prntbase.o \
-	coredll_quantize.o \
-	coredll_radiocmn.o \
-	coredll_rendcmn.o \
-	coredll_rgncmn.o \
-	coredll_settcmn.o \
-	coredll_sizer.o \
-	coredll_statbar.o \
-	coredll_tbarbase.o \
-	coredll_textcmn.o \
-	coredll_treebase.o \
-	coredll_valgen.o \
-	coredll_validate.o \
-	coredll_valtext.o \
-	coredll_wincmn.o \
-	coredll_xpmdecod.o
+	coredll_wizard.o
 @COND_USE_GUI_1_WXUNIV_0@__CORE_SRC_OBJECTS_2 = $(COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2)
 COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_0) \
 	$(__UNIV_TEXTCTRL_OBJECTS_2) \
+	coredll_accel.o \
+	coredll_colrdlgg.o \
+	coredll_dirdlgg.o \
+	coredll_fdrepdlg.o \
+	coredll_filedlgg.o \
+	coredll_fontdlgg.o \
+	coredll_imaglist.o \
+	coredll_listctrl.o \
+	coredll_mdig.o \
+	coredll_msgdlgg.o \
+	coredll_prntdlgg.o \
+	coredll_tabg.o \
 	coredll_bmpbuttn.o \
 	coredll_button.o \
 	coredll_checkbox.o \
@@ -2536,7 +2548,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_control.o \
 	coredll_dialog.o \
 	coredll_framuniv.o \
-	coredll_topluniv.o \
 	coredll_gauge.o \
 	coredll_inpcons.o \
 	coredll_inphand.o \
@@ -2556,24 +2567,85 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_statline.o \
 	coredll_stattext.o \
 	coredll_statusbr.o \
-	coredll_toolbar.o \
 	coredll_theme.o \
+	coredll_toolbar.o \
+	coredll_topluniv.o \
 	coredll_winuniv.o \
-	coredll_mdig.o \
-	coredll_imaglist.o \
-	coredll_colrdlgg.o \
-	coredll_listctrl.o \
-	coredll_filedlgg.o \
-	coredll_dirdlgg.o \
-	coredll_prntdlgg.o \
-	coredll_accel.o \
-	coredll_msgdlgg.o \
-	coredll_fdrepdlg.o \
-	coredll_fontdlgg.o \
-	coredll_tabg.o \
 	coredll_gtk.o \
-	coredll_win32.o \
 	coredll_metal.o \
+	coredll_win32.o \
+	coredll_accesscmn.o \
+	coredll_appcmn.o \
+	coredll_artprov.o \
+	coredll_artstd.o \
+	coredll_bmpbase.o \
+	coredll_choiccmn.o \
+	coredll_clipcmn.o \
+	coredll_cmdproc.o \
+	coredll_cmndata.o \
+	coredll_containr.o \
+	coredll_cshelp.o \
+	coredll_ctrlcmn.o \
+	coredll_ctrlsub.o \
+	coredll_datacmn.o \
+	coredll_dbgrid.o \
+	coredll_dcbase.o \
+	coredll_dlgcmn.o \
+	coredll_dndcmn.o \
+	coredll_dobjcmn.o \
+	coredll_docmdi.o \
+	coredll_docview.o \
+	coredll_dpycmn.o \
+	coredll_dseldlg.o \
+	coredll_effects.o \
+	coredll_fddlgcmn.o \
+	coredll_fldlgcmn.o \
+	coredll_fontcmn.o \
+	coredll_fontmap.o \
+	coredll_framecmn.o \
+	coredll_gaugecmn.o \
+	coredll_gdicmn.o \
+	coredll_geometry.o \
+	coredll_gifdecod.o \
+	coredll_helpbase.o \
+	coredll_iconbndl.o \
+	coredll_imagall.o \
+	coredll_imagbmp.o \
+	coredll_image.o \
+	coredll_imagfill.o \
+	coredll_imaggif.o \
+	coredll_imagiff.o \
+	coredll_imagjpeg.o \
+	coredll_imagpcx.o \
+	coredll_imagpng.o \
+	coredll_imagpnm.o \
+	coredll_imagtiff.o \
+	coredll_imagxpm.o \
+	coredll_layout.o \
+	coredll_lboxcmn.o \
+	coredll_matrix.o \
+	coredll_menucmn.o \
+	coredll_nbkbase.o \
+	coredll_paper.o \
+	coredll_popupcmn.o \
+	coredll_prntbase.o \
+	coredll_quantize.o \
+	coredll_radiocmn.o \
+	coredll_rendcmn.o \
+	coredll_rgncmn.o \
+	coredll_settcmn.o \
+	coredll_sizer.o \
+	coredll_statbar.o \
+	coredll_tbarbase.o \
+	coredll_textcmn.o \
+	coredll_timercmn.o \
+	coredll_toplvcmn.o \
+	coredll_treebase.o \
+	coredll_valgen.o \
+	coredll_validate.o \
+	coredll_valtext.o \
+	coredll_wincmn.o \
+	coredll_xpmdecod.o \
 	coredll_busyinfo.o \
 	coredll_calctrl.o \
 	coredll_choicdgg.o \
@@ -2604,83 +2676,83 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_treectlg.o \
 	coredll_vlbox.o \
 	coredll_vscroll.o \
-	coredll_wizard.o \
-	coredll_appcmn.o \
-	coredll_fontmap.o \
-	coredll_accesscmn.o \
-	coredll_artprov.o \
-	coredll_artstd.o \
-	coredll_bmpbase.o \
-	coredll_choiccmn.o \
-	coredll_clipcmn.o \
-	coredll_cmdproc.o \
-	coredll_cmndata.o \
-	coredll_containr.o \
-	coredll_cshelp.o \
-	coredll_ctrlcmn.o \
-	coredll_ctrlsub.o \
-	coredll_datacmn.o \
-	coredll_dbgrid.o \
-	coredll_dcbase.o \
-	coredll_dlgcmn.o \
-	coredll_dndcmn.o \
-	coredll_dobjcmn.o \
-	coredll_docmdi.o \
-	coredll_docview.o \
-	coredll_dpycmn.o \
-	coredll_dseldlg.o \
-	coredll_effects.o \
-	coredll_fddlgcmn.o \
-	coredll_fldlgcmn.o \
-	coredll_fontcmn.o \
-	coredll_framecmn.o \
-	coredll_timercmn.o \
-	coredll_toplvcmn.o \
-	coredll_gaugecmn.o \
-	coredll_gdicmn.o \
-	coredll_geometry.o \
-	coredll_gifdecod.o \
-	coredll_helpbase.o \
-	coredll_iconbndl.o \
-	coredll_imagall.o \
-	coredll_imagbmp.o \
-	coredll_image.o \
-	coredll_imaggif.o \
-	coredll_imagiff.o \
-	coredll_imagjpeg.o \
-	coredll_imagpcx.o \
-	coredll_imagpng.o \
-	coredll_imagpnm.o \
-	coredll_imagtiff.o \
-	coredll_imagxpm.o \
-	coredll_imagfill.o \
-	coredll_layout.o \
-	coredll_lboxcmn.o \
-	coredll_matrix.o \
-	coredll_menucmn.o \
-	coredll_nbkbase.o \
-	coredll_paper.o \
-	coredll_popupcmn.o \
-	coredll_prntbase.o \
-	coredll_quantize.o \
-	coredll_radiocmn.o \
-	coredll_rendcmn.o \
-	coredll_rgncmn.o \
-	coredll_settcmn.o \
-	coredll_sizer.o \
-	coredll_statbar.o \
-	coredll_tbarbase.o \
-	coredll_textcmn.o \
-	coredll_treebase.o \
-	coredll_valgen.o \
-	coredll_validate.o \
-	coredll_valtext.o \
-	coredll_wincmn.o \
-	coredll_xpmdecod.o
+	coredll_wizard.o
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS_2 = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2)
 COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_8) \
 	$(__GUI_SRC_OBJECTS_3) \
+	corelib_accesscmn.o \
+	corelib_appcmn.o \
+	corelib_artprov.o \
+	corelib_artstd.o \
+	corelib_bmpbase.o \
+	corelib_choiccmn.o \
+	corelib_clipcmn.o \
+	corelib_cmdproc.o \
+	corelib_cmndata.o \
+	corelib_containr.o \
+	corelib_cshelp.o \
+	corelib_ctrlcmn.o \
+	corelib_ctrlsub.o \
+	corelib_datacmn.o \
+	corelib_dbgrid.o \
+	corelib_dcbase.o \
+	corelib_dlgcmn.o \
+	corelib_dndcmn.o \
+	corelib_dobjcmn.o \
+	corelib_docmdi.o \
+	corelib_docview.o \
+	corelib_dpycmn.o \
+	corelib_dseldlg.o \
+	corelib_effects.o \
+	corelib_fddlgcmn.o \
+	corelib_fldlgcmn.o \
+	corelib_fontcmn.o \
+	corelib_fontmap.o \
+	corelib_framecmn.o \
+	corelib_gaugecmn.o \
+	corelib_gdicmn.o \
+	corelib_geometry.o \
+	corelib_gifdecod.o \
+	corelib_helpbase.o \
+	corelib_iconbndl.o \
+	corelib_imagall.o \
+	corelib_imagbmp.o \
+	corelib_image.o \
+	corelib_imagfill.o \
+	corelib_imaggif.o \
+	corelib_imagiff.o \
+	corelib_imagjpeg.o \
+	corelib_imagpcx.o \
+	corelib_imagpng.o \
+	corelib_imagpnm.o \
+	corelib_imagtiff.o \
+	corelib_imagxpm.o \
+	corelib_layout.o \
+	corelib_lboxcmn.o \
+	corelib_matrix.o \
+	corelib_menucmn.o \
+	corelib_nbkbase.o \
+	corelib_paper.o \
+	corelib_popupcmn.o \
+	corelib_prntbase.o \
+	corelib_quantize.o \
+	corelib_radiocmn.o \
+	corelib_rendcmn.o \
+	corelib_rgncmn.o \
+	corelib_settcmn.o \
+	corelib_sizer.o \
+	corelib_statbar.o \
+	corelib_tbarbase.o \
+	corelib_textcmn.o \
+	corelib_timercmn.o \
+	corelib_toplvcmn.o \
+	corelib_treebase.o \
+	corelib_valgen.o \
+	corelib_validate.o \
+	corelib_valtext.o \
+	corelib_wincmn.o \
+	corelib_xpmdecod.o \
 	corelib_busyinfo.o \
 	corelib_calctrl.o \
 	corelib_choicdgg.o \
@@ -2711,83 +2783,23 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_treectlg.o \
 	corelib_vlbox.o \
 	corelib_vscroll.o \
-	corelib_wizard.o \
-	corelib_appcmn.o \
-	corelib_fontmap.o \
-	corelib_accesscmn.o \
-	corelib_artprov.o \
-	corelib_artstd.o \
-	corelib_bmpbase.o \
-	corelib_choiccmn.o \
-	corelib_clipcmn.o \
-	corelib_cmdproc.o \
-	corelib_cmndata.o \
-	corelib_containr.o \
-	corelib_cshelp.o \
-	corelib_ctrlcmn.o \
-	corelib_ctrlsub.o \
-	corelib_datacmn.o \
-	corelib_dbgrid.o \
-	corelib_dcbase.o \
-	corelib_dlgcmn.o \
-	corelib_dndcmn.o \
-	corelib_dobjcmn.o \
-	corelib_docmdi.o \
-	corelib_docview.o \
-	corelib_dpycmn.o \
-	corelib_dseldlg.o \
-	corelib_effects.o \
-	corelib_fddlgcmn.o \
-	corelib_fldlgcmn.o \
-	corelib_fontcmn.o \
-	corelib_framecmn.o \
-	corelib_timercmn.o \
-	corelib_toplvcmn.o \
-	corelib_gaugecmn.o \
-	corelib_gdicmn.o \
-	corelib_geometry.o \
-	corelib_gifdecod.o \
-	corelib_helpbase.o \
-	corelib_iconbndl.o \
-	corelib_imagall.o \
-	corelib_imagbmp.o \
-	corelib_image.o \
-	corelib_imaggif.o \
-	corelib_imagiff.o \
-	corelib_imagjpeg.o \
-	corelib_imagpcx.o \
-	corelib_imagpng.o \
-	corelib_imagpnm.o \
-	corelib_imagtiff.o \
-	corelib_imagxpm.o \
-	corelib_imagfill.o \
-	corelib_layout.o \
-	corelib_lboxcmn.o \
-	corelib_matrix.o \
-	corelib_menucmn.o \
-	corelib_nbkbase.o \
-	corelib_paper.o \
-	corelib_popupcmn.o \
-	corelib_prntbase.o \
-	corelib_quantize.o \
-	corelib_radiocmn.o \
-	corelib_rendcmn.o \
-	corelib_rgncmn.o \
-	corelib_settcmn.o \
-	corelib_sizer.o \
-	corelib_statbar.o \
-	corelib_tbarbase.o \
-	corelib_textcmn.o \
-	corelib_treebase.o \
-	corelib_valgen.o \
-	corelib_validate.o \
-	corelib_valtext.o \
-	corelib_wincmn.o \
-	corelib_xpmdecod.o
+	corelib_wizard.o
 @COND_USE_GUI_1_WXUNIV_0@__CORE_SRC_OBJECTS_3 = $(COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3)
 COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_8) \
 	$(__UNIV_TEXTCTRL_OBJECTS_3) \
+	corelib_accel.o \
+	corelib_colrdlgg.o \
+	corelib_dirdlgg.o \
+	corelib_fdrepdlg.o \
+	corelib_filedlgg.o \
+	corelib_fontdlgg.o \
+	corelib_imaglist.o \
+	corelib_listctrl.o \
+	corelib_mdig.o \
+	corelib_msgdlgg.o \
+	corelib_prntdlgg.o \
+	corelib_tabg.o \
 	corelib_bmpbuttn.o \
 	corelib_button.o \
 	corelib_checkbox.o \
@@ -2798,7 +2810,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_control.o \
 	corelib_dialog.o \
 	corelib_framuniv.o \
-	corelib_topluniv.o \
 	corelib_gauge.o \
 	corelib_inpcons.o \
 	corelib_inphand.o \
@@ -2818,24 +2829,85 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_statline.o \
 	corelib_stattext.o \
 	corelib_statusbr.o \
-	corelib_toolbar.o \
 	corelib_theme.o \
+	corelib_toolbar.o \
+	corelib_topluniv.o \
 	corelib_winuniv.o \
-	corelib_mdig.o \
-	corelib_imaglist.o \
-	corelib_colrdlgg.o \
-	corelib_listctrl.o \
-	corelib_filedlgg.o \
-	corelib_dirdlgg.o \
-	corelib_prntdlgg.o \
-	corelib_accel.o \
-	corelib_msgdlgg.o \
-	corelib_fdrepdlg.o \
-	corelib_fontdlgg.o \
-	corelib_tabg.o \
 	corelib_gtk.o \
-	corelib_win32.o \
 	corelib_metal.o \
+	corelib_win32.o \
+	corelib_accesscmn.o \
+	corelib_appcmn.o \
+	corelib_artprov.o \
+	corelib_artstd.o \
+	corelib_bmpbase.o \
+	corelib_choiccmn.o \
+	corelib_clipcmn.o \
+	corelib_cmdproc.o \
+	corelib_cmndata.o \
+	corelib_containr.o \
+	corelib_cshelp.o \
+	corelib_ctrlcmn.o \
+	corelib_ctrlsub.o \
+	corelib_datacmn.o \
+	corelib_dbgrid.o \
+	corelib_dcbase.o \
+	corelib_dlgcmn.o \
+	corelib_dndcmn.o \
+	corelib_dobjcmn.o \
+	corelib_docmdi.o \
+	corelib_docview.o \
+	corelib_dpycmn.o \
+	corelib_dseldlg.o \
+	corelib_effects.o \
+	corelib_fddlgcmn.o \
+	corelib_fldlgcmn.o \
+	corelib_fontcmn.o \
+	corelib_fontmap.o \
+	corelib_framecmn.o \
+	corelib_gaugecmn.o \
+	corelib_gdicmn.o \
+	corelib_geometry.o \
+	corelib_gifdecod.o \
+	corelib_helpbase.o \
+	corelib_iconbndl.o \
+	corelib_imagall.o \
+	corelib_imagbmp.o \
+	corelib_image.o \
+	corelib_imagfill.o \
+	corelib_imaggif.o \
+	corelib_imagiff.o \
+	corelib_imagjpeg.o \
+	corelib_imagpcx.o \
+	corelib_imagpng.o \
+	corelib_imagpnm.o \
+	corelib_imagtiff.o \
+	corelib_imagxpm.o \
+	corelib_layout.o \
+	corelib_lboxcmn.o \
+	corelib_matrix.o \
+	corelib_menucmn.o \
+	corelib_nbkbase.o \
+	corelib_paper.o \
+	corelib_popupcmn.o \
+	corelib_prntbase.o \
+	corelib_quantize.o \
+	corelib_radiocmn.o \
+	corelib_rendcmn.o \
+	corelib_rgncmn.o \
+	corelib_settcmn.o \
+	corelib_sizer.o \
+	corelib_statbar.o \
+	corelib_tbarbase.o \
+	corelib_textcmn.o \
+	corelib_timercmn.o \
+	corelib_toplvcmn.o \
+	corelib_treebase.o \
+	corelib_valgen.o \
+	corelib_validate.o \
+	corelib_valtext.o \
+	corelib_wincmn.o \
+	corelib_xpmdecod.o \
 	corelib_busyinfo.o \
 	corelib_calctrl.o \
 	corelib_choicdgg.o \
@@ -2866,79 +2938,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_treectlg.o \
 	corelib_vlbox.o \
 	corelib_vscroll.o \
-	corelib_wizard.o \
-	corelib_appcmn.o \
-	corelib_fontmap.o \
-	corelib_accesscmn.o \
-	corelib_artprov.o \
-	corelib_artstd.o \
-	corelib_bmpbase.o \
-	corelib_choiccmn.o \
-	corelib_clipcmn.o \
-	corelib_cmdproc.o \
-	corelib_cmndata.o \
-	corelib_containr.o \
-	corelib_cshelp.o \
-	corelib_ctrlcmn.o \
-	corelib_ctrlsub.o \
-	corelib_datacmn.o \
-	corelib_dbgrid.o \
-	corelib_dcbase.o \
-	corelib_dlgcmn.o \
-	corelib_dndcmn.o \
-	corelib_dobjcmn.o \
-	corelib_docmdi.o \
-	corelib_docview.o \
-	corelib_dpycmn.o \
-	corelib_dseldlg.o \
-	corelib_effects.o \
-	corelib_fddlgcmn.o \
-	corelib_fldlgcmn.o \
-	corelib_fontcmn.o \
-	corelib_framecmn.o \
-	corelib_timercmn.o \
-	corelib_toplvcmn.o \
-	corelib_gaugecmn.o \
-	corelib_gdicmn.o \
-	corelib_geometry.o \
-	corelib_gifdecod.o \
-	corelib_helpbase.o \
-	corelib_iconbndl.o \
-	corelib_imagall.o \
-	corelib_imagbmp.o \
-	corelib_image.o \
-	corelib_imaggif.o \
-	corelib_imagiff.o \
-	corelib_imagjpeg.o \
-	corelib_imagpcx.o \
-	corelib_imagpng.o \
-	corelib_imagpnm.o \
-	corelib_imagtiff.o \
-	corelib_imagxpm.o \
-	corelib_imagfill.o \
-	corelib_layout.o \
-	corelib_lboxcmn.o \
-	corelib_matrix.o \
-	corelib_menucmn.o \
-	corelib_nbkbase.o \
-	corelib_paper.o \
-	corelib_popupcmn.o \
-	corelib_prntbase.o \
-	corelib_quantize.o \
-	corelib_radiocmn.o \
-	corelib_rendcmn.o \
-	corelib_rgncmn.o \
-	corelib_settcmn.o \
-	corelib_sizer.o \
-	corelib_statbar.o \
-	corelib_tbarbase.o \
-	corelib_textcmn.o \
-	corelib_treebase.o \
-	corelib_valgen.o \
-	corelib_validate.o \
-	corelib_valtext.o \
-	corelib_wincmn.o \
-	corelib_xpmdecod.o
+	corelib_wizard.o
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS_3 = $(COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3)
 COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS =  \
 	monodll_NSBox.o \
@@ -2950,8 +2950,8 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS =  \
 	monodll_NSView.o \
 	monodll_NSWindow.o \
 	monodll_app.o \
-	monodll_bmpbuttn.o \
 	monodll_bitmap.o \
+	monodll_bmpbuttn.o \
 	monodll_brush.o \
 	monodll_button.o \
 	monodll_checkbox.o \
@@ -2996,35 +2996,35 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS =  \
 	monodll_utils.o \
 	monodll_utilsexc.o \
 	monodll_window.o \
-	monodll_statusbr.o \
+	monodll_accel.o \
+	monodll_caret.o \
+	monodll_colrdlgg.o \
+	monodll_dirdlgg.o \
+	monodll_fdrepdlg.o \
+	monodll_filedlgg.o \
+	monodll_fontdlgg.o \
 	monodll_imaglist.o \
 	monodll_listctrl.o \
-	monodll_fdrepdlg.o \
-	monodll_tabg.o \
-	monodll_fontdlgg.o \
-	monodll_colrdlgg.o \
+	monodll_mdig.o \
 	monodll_msgdlgg.o \
-	monodll_dirdlgg.o \
-	monodll_filedlgg.o \
 	monodll_notebook.o \
-	monodll_accel.o \
 	monodll_paletteg.o \
-	monodll_timer.o \
-	monodll_caret.o \
-	monodll_mdig.o
+	monodll_statusbr.o \
+	monodll_tabg.o \
+	monodll_timer.o
 @COND_TOOLKIT_COCOA@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS)
 COND_TOOLKIT_GTK___GUI_SRC_OBJECTS =  \
-	monodll_imaglist.o \
-	monodll_colrdlgg.o \
-	monodll_listctrl.o \
-	monodll_filedlgg.o \
-	monodll_dirdlgg.o \
-	monodll_prntdlgg.o \
 	monodll_accel.o \
-	monodll_msgdlgg.o \
+	monodll_colrdlgg.o \
+	monodll_dirdlgg.o \
 	monodll_fdrepdlg.o \
-	monodll_tabg.o \
+	monodll_filedlgg.o \
+	monodll_imaglist.o \
+	monodll_listctrl.o \
+	monodll_msgdlgg.o \
+	monodll_prntdlgg.o \
 	monodll_statusbr.o \
+	monodll_tabg.o \
 	monodll_bmpbuttn.o \
 	monodll_button.o \
 	monodll_checkbox.o \
@@ -3105,6 +3105,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS =  \
 	monodll_menuitem.o \
 	monodll_metafile.o \
 	monodll_minifram.o \
+	monodll_MoreFilesX.o \
 	monodll_msgdlg.o \
 	monodll_notebmac.o \
 	monodll_palette.o \
@@ -3129,24 +3130,22 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS =  \
 	monodll_textctrl.o \
 	monodll_thread.o \
 	monodll_timer.o \
-	monodll_toplevel.o \
 	monodll_toolbar.o \
 	monodll_tooltip.o \
+	monodll_toplevel.o \
 	monodll_uma.o \
 	monodll_wave.o \
 	monodll_window.o \
-	monodll_MoreFilesX.o \
-	monodll_statusbr.o \
+	monodll_caret.o \
+	monodll_fdrepdlg.o \
+	monodll_fontdlgg.o \
 	monodll_imaglist.o \
 	monodll_listctrl.o \
-	monodll_fdrepdlg.o \
+	monodll_statusbr.o \
 	monodll_tabg.o \
-	monodll_fontdlgg.o \
-	monodll_caret.o \
 	monodll_snglinst.o
 @COND_TOOLKIT_MAC@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_MAC___GUI_SRC_OBJECTS)
 COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS =  \
-	monodll_gsockmot.o \
 	monodll_accel.o \
 	monodll_app.o \
 	monodll_bmpbuttn.o \
@@ -3174,6 +3173,7 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS =  \
 	monodll_frame.o \
 	monodll_gauge.o \
 	monodll_gdiobj.o \
+	monodll_gsockmot.o \
 	monodll_icon.o \
 	monodll_listbox.o \
 	monodll_main.o \
@@ -3192,28 +3192,26 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS =  \
 	monodll_statbmp.o \
 	monodll_statbox.o \
 	monodll_stattext.o \
-	monodll_toolbar.o \
 	monodll_textctrl.o \
 	monodll_timer.o \
+	monodll_toolbar.o \
 	monodll_toplevel.o \
 	monodll_utils.o \
 	monodll_window.o \
-	monodll_fdrepdlg.o \
-	monodll_listctrl.o \
-	monodll_imaglist.o \
-	monodll_notebook.o \
-	monodll_fontdlgg.o \
 	monodll_colrdlgg.o \
-	monodll_statline.o \
-	monodll_tabg.o \
 	monodll_dirdlgg.o \
+	monodll_fdrepdlg.o \
+	monodll_fontdlgg.o \
+	monodll_imaglist.o \
+	monodll_listctrl.o \
+	monodll_notebook.o \
 	monodll_prntdlgg.o \
-	monodll_statusbr.o
+	monodll_statline.o \
+	monodll_statusbr.o \
+	monodll_tabg.o
 @COND_TOOLKIT_MOTIF@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS)
 COND_TOOLKIT_MSW___GUI_SRC_OBJECTS =  \
 	monodll_statusbr.o \
-	monodll_uxtheme.o \
-	monodll_access.o \
 	monodll_accel.o \
 	monodll_bmpbuttn.o \
 	monodll_button.o \
@@ -3241,6 +3239,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS =  \
 	monodll_msgdlg.o \
 	monodll_nativdlg.o \
 	monodll_notebook.o \
+	monodll_access.o \
 	monodll_ownerdrw.o \
 	monodll_penwin.o \
 	monodll_printdlg.o \
@@ -3261,9 +3260,11 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS =  \
 	monodll_tbar95.o \
 	monodll_textctrl.o \
 	monodll_tglbtn.o \
-	monodll_treectrl.o
+	monodll_treectrl.o \
+	monodll_uxtheme.o
 @COND_TOOLKIT_MSW@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_MSW___GUI_SRC_OBJECTS)
 COND_TOOLKIT_OS2___GUI_SRC_OBJECTS =  \
+	monodll_caret.o \
 	monodll_accel.o \
 	monodll_app.o \
 	monodll_bitmap.o \
@@ -3296,6 +3297,8 @@ COND_TOOLKIT_OS2___GUI_SRC_OBJECTS =  \
 	monodll_gauge.o \
 	monodll_gdiimage.o \
 	monodll_gdiobj.o \
+	monodll_gsocket.o \
+	monodll_gsockpm.o \
 	monodll_helpwin.o \
 	monodll_icon.o \
 	monodll_iniconf.o \
@@ -3327,16 +3330,13 @@ COND_TOOLKIT_OS2___GUI_SRC_OBJECTS =  \
 	monodll_stattext.o \
 	monodll_tabctrl.o \
 	monodll_textctrl.o \
-	monodll_timer.o \
 	monodll_thread.o \
+	monodll_timer.o \
 	monodll_toolbar.o \
 	monodll_tooltip.o \
 	monodll_toplevel.o \
 	monodll_wave.o \
-	monodll_window.o \
-	monodll_gsocket.o \
-	monodll_gsockpm.o \
-	monodll_caret.o
+	monodll_window.o
 @COND_TOOLKIT_OS2@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_OS2___GUI_SRC_OBJECTS)
 COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_1 =  \
 	monolib_NSBox.o \
@@ -3348,8 +3348,8 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_1 =  \
 	monolib_NSView.o \
 	monolib_NSWindow.o \
 	monolib_app.o \
-	monolib_bmpbuttn.o \
 	monolib_bitmap.o \
+	monolib_bmpbuttn.o \
 	monolib_brush.o \
 	monolib_button.o \
 	monolib_checkbox.o \
@@ -3394,35 +3394,35 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_1 =  \
 	monolib_utils.o \
 	monolib_utilsexc.o \
 	monolib_window.o \
-	monolib_statusbr.o \
+	monolib_accel.o \
+	monolib_caret.o \
+	monolib_colrdlgg.o \
+	monolib_dirdlgg.o \
+	monolib_fdrepdlg.o \
+	monolib_filedlgg.o \
+	monolib_fontdlgg.o \
 	monolib_imaglist.o \
 	monolib_listctrl.o \
-	monolib_fdrepdlg.o \
-	monolib_tabg.o \
-	monolib_fontdlgg.o \
-	monolib_colrdlgg.o \
+	monolib_mdig.o \
 	monolib_msgdlgg.o \
-	monolib_dirdlgg.o \
-	monolib_filedlgg.o \
 	monolib_notebook.o \
-	monolib_accel.o \
 	monolib_paletteg.o \
-	monolib_timer.o \
-	monolib_caret.o \
-	monolib_mdig.o
+	monolib_statusbr.o \
+	monolib_tabg.o \
+	monolib_timer.o
 @COND_TOOLKIT_COCOA@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_GTK___GUI_SRC_OBJECTS_1 =  \
-	monolib_imaglist.o \
-	monolib_colrdlgg.o \
-	monolib_listctrl.o \
-	monolib_filedlgg.o \
-	monolib_dirdlgg.o \
-	monolib_prntdlgg.o \
 	monolib_accel.o \
-	monolib_msgdlgg.o \
+	monolib_colrdlgg.o \
+	monolib_dirdlgg.o \
 	monolib_fdrepdlg.o \
-	monolib_tabg.o \
+	monolib_filedlgg.o \
+	monolib_imaglist.o \
+	monolib_listctrl.o \
+	monolib_msgdlgg.o \
+	monolib_prntdlgg.o \
 	monolib_statusbr.o \
+	monolib_tabg.o \
 	monolib_bmpbuttn.o \
 	monolib_button.o \
 	monolib_checkbox.o \
@@ -3503,6 +3503,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_1 =  \
 	monolib_menuitem.o \
 	monolib_metafile.o \
 	monolib_minifram.o \
+	monolib_MoreFilesX.o \
 	monolib_msgdlg.o \
 	monolib_notebmac.o \
 	monolib_palette.o \
@@ -3527,24 +3528,22 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_1 =  \
 	monolib_textctrl.o \
 	monolib_thread.o \
 	monolib_timer.o \
-	monolib_toplevel.o \
 	monolib_toolbar.o \
 	monolib_tooltip.o \
+	monolib_toplevel.o \
 	monolib_uma.o \
 	monolib_wave.o \
 	monolib_window.o \
-	monolib_MoreFilesX.o \
-	monolib_statusbr.o \
+	monolib_caret.o \
+	monolib_fdrepdlg.o \
+	monolib_fontdlgg.o \
 	monolib_imaglist.o \
 	monolib_listctrl.o \
-	monolib_fdrepdlg.o \
+	monolib_statusbr.o \
 	monolib_tabg.o \
-	monolib_fontdlgg.o \
-	monolib_caret.o \
 	monolib_snglinst.o
 @COND_TOOLKIT_MAC@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_1 =  \
-	monolib_gsockmot.o \
 	monolib_accel.o \
 	monolib_app.o \
 	monolib_bmpbuttn.o \
@@ -3572,6 +3571,7 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_1 =  \
 	monolib_frame.o \
 	monolib_gauge.o \
 	monolib_gdiobj.o \
+	monolib_gsockmot.o \
 	monolib_icon.o \
 	monolib_listbox.o \
 	monolib_main.o \
@@ -3590,28 +3590,26 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_1 =  \
 	monolib_statbmp.o \
 	monolib_statbox.o \
 	monolib_stattext.o \
-	monolib_toolbar.o \
 	monolib_textctrl.o \
 	monolib_timer.o \
+	monolib_toolbar.o \
 	monolib_toplevel.o \
 	monolib_utils.o \
 	monolib_window.o \
-	monolib_fdrepdlg.o \
-	monolib_listctrl.o \
-	monolib_imaglist.o \
-	monolib_notebook.o \
-	monolib_fontdlgg.o \
 	monolib_colrdlgg.o \
-	monolib_statline.o \
-	monolib_tabg.o \
 	monolib_dirdlgg.o \
+	monolib_fdrepdlg.o \
+	monolib_fontdlgg.o \
+	monolib_imaglist.o \
+	monolib_listctrl.o \
+	monolib_notebook.o \
 	monolib_prntdlgg.o \
-	monolib_statusbr.o
+	monolib_statline.o \
+	monolib_statusbr.o \
+	monolib_tabg.o
 @COND_TOOLKIT_MOTIF@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_1 =  \
 	monolib_statusbr.o \
-	monolib_uxtheme.o \
-	monolib_access.o \
 	monolib_accel.o \
 	monolib_bmpbuttn.o \
 	monolib_button.o \
@@ -3639,6 +3637,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_1 =  \
 	monolib_msgdlg.o \
 	monolib_nativdlg.o \
 	monolib_notebook.o \
+	monolib_access.o \
 	monolib_ownerdrw.o \
 	monolib_penwin.o \
 	monolib_printdlg.o \
@@ -3659,9 +3658,11 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_1 =  \
 	monolib_tbar95.o \
 	monolib_textctrl.o \
 	monolib_tglbtn.o \
-	monolib_treectrl.o
+	monolib_treectrl.o \
+	monolib_uxtheme.o
 @COND_TOOLKIT_MSW@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_OS2___GUI_SRC_OBJECTS_1 =  \
+	monolib_caret.o \
 	monolib_accel.o \
 	monolib_app.o \
 	monolib_bitmap.o \
@@ -3694,6 +3695,8 @@ COND_TOOLKIT_OS2___GUI_SRC_OBJECTS_1 =  \
 	monolib_gauge.o \
 	monolib_gdiimage.o \
 	monolib_gdiobj.o \
+	monolib_gsocket.o \
+	monolib_gsockpm.o \
 	monolib_helpwin.o \
 	monolib_icon.o \
 	monolib_iniconf.o \
@@ -3725,16 +3728,13 @@ COND_TOOLKIT_OS2___GUI_SRC_OBJECTS_1 =  \
 	monolib_stattext.o \
 	monolib_tabctrl.o \
 	monolib_textctrl.o \
-	monolib_timer.o \
 	monolib_thread.o \
+	monolib_timer.o \
 	monolib_toolbar.o \
 	monolib_tooltip.o \
 	monolib_toplevel.o \
 	monolib_wave.o \
-	monolib_window.o \
-	monolib_gsocket.o \
-	monolib_gsockpm.o \
-	monolib_caret.o
+	monolib_window.o
 @COND_TOOLKIT_OS2@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_OS2___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_2 =  \
 	coredll_NSBox.o \
@@ -3746,8 +3746,8 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_2 =  \
 	coredll_NSView.o \
 	coredll_NSWindow.o \
 	coredll_app.o \
-	coredll_bmpbuttn.o \
 	coredll_bitmap.o \
+	coredll_bmpbuttn.o \
 	coredll_brush.o \
 	coredll_button.o \
 	coredll_checkbox.o \
@@ -3792,35 +3792,35 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_2 =  \
 	coredll_utils.o \
 	coredll_utilsexc.o \
 	coredll_window.o \
-	coredll_statusbr.o \
+	coredll_accel.o \
+	coredll_caret.o \
+	coredll_colrdlgg.o \
+	coredll_dirdlgg.o \
+	coredll_fdrepdlg.o \
+	coredll_filedlgg.o \
+	coredll_fontdlgg.o \
 	coredll_imaglist.o \
 	coredll_listctrl.o \
-	coredll_fdrepdlg.o \
-	coredll_tabg.o \
-	coredll_fontdlgg.o \
-	coredll_colrdlgg.o \
+	coredll_mdig.o \
 	coredll_msgdlgg.o \
-	coredll_dirdlgg.o \
-	coredll_filedlgg.o \
 	coredll_notebook.o \
-	coredll_accel.o \
 	coredll_paletteg.o \
-	coredll_timer.o \
-	coredll_caret.o \
-	coredll_mdig.o
+	coredll_statusbr.o \
+	coredll_tabg.o \
+	coredll_timer.o
 @COND_TOOLKIT_COCOA@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_GTK___GUI_SRC_OBJECTS_2 =  \
-	coredll_imaglist.o \
-	coredll_colrdlgg.o \
-	coredll_listctrl.o \
-	coredll_filedlgg.o \
-	coredll_dirdlgg.o \
-	coredll_prntdlgg.o \
 	coredll_accel.o \
-	coredll_msgdlgg.o \
+	coredll_colrdlgg.o \
+	coredll_dirdlgg.o \
 	coredll_fdrepdlg.o \
-	coredll_tabg.o \
+	coredll_filedlgg.o \
+	coredll_imaglist.o \
+	coredll_listctrl.o \
+	coredll_msgdlgg.o \
+	coredll_prntdlgg.o \
 	coredll_statusbr.o \
+	coredll_tabg.o \
 	coredll_bmpbuttn.o \
 	coredll_button.o \
 	coredll_checkbox.o \
@@ -3901,6 +3901,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_2 =  \
 	coredll_menuitem.o \
 	coredll_metafile.o \
 	coredll_minifram.o \
+	coredll_MoreFilesX.o \
 	coredll_msgdlg.o \
 	coredll_notebmac.o \
 	coredll_palette.o \
@@ -3925,24 +3926,22 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_2 =  \
 	coredll_textctrl.o \
 	coredll_thread.o \
 	coredll_timer.o \
-	coredll_toplevel.o \
 	coredll_toolbar.o \
 	coredll_tooltip.o \
+	coredll_toplevel.o \
 	coredll_uma.o \
 	coredll_wave.o \
 	coredll_window.o \
-	coredll_MoreFilesX.o \
-	coredll_statusbr.o \
+	coredll_caret.o \
+	coredll_fdrepdlg.o \
+	coredll_fontdlgg.o \
 	coredll_imaglist.o \
 	coredll_listctrl.o \
-	coredll_fdrepdlg.o \
+	coredll_statusbr.o \
 	coredll_tabg.o \
-	coredll_fontdlgg.o \
-	coredll_caret.o \
 	coredll_snglinst.o
 @COND_TOOLKIT_MAC@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_2 =  \
-	coredll_gsockmot.o \
 	coredll_accel.o \
 	coredll_app.o \
 	coredll_bmpbuttn.o \
@@ -3970,6 +3969,7 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_2 =  \
 	coredll_frame.o \
 	coredll_gauge.o \
 	coredll_gdiobj.o \
+	coredll_gsockmot.o \
 	coredll_icon.o \
 	coredll_listbox.o \
 	coredll_main.o \
@@ -3988,28 +3988,26 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_2 =  \
 	coredll_statbmp.o \
 	coredll_statbox.o \
 	coredll_stattext.o \
-	coredll_toolbar.o \
 	coredll_textctrl.o \
 	coredll_timer.o \
+	coredll_toolbar.o \
 	coredll_toplevel.o \
 	coredll_utils.o \
 	coredll_window.o \
-	coredll_fdrepdlg.o \
-	coredll_listctrl.o \
-	coredll_imaglist.o \
-	coredll_notebook.o \
-	coredll_fontdlgg.o \
 	coredll_colrdlgg.o \
-	coredll_statline.o \
-	coredll_tabg.o \
 	coredll_dirdlgg.o \
+	coredll_fdrepdlg.o \
+	coredll_fontdlgg.o \
+	coredll_imaglist.o \
+	coredll_listctrl.o \
+	coredll_notebook.o \
 	coredll_prntdlgg.o \
-	coredll_statusbr.o
+	coredll_statline.o \
+	coredll_statusbr.o \
+	coredll_tabg.o
 @COND_TOOLKIT_MOTIF@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_2 =  \
 	coredll_statusbr.o \
-	coredll_uxtheme.o \
-	coredll_access.o \
 	coredll_accel.o \
 	coredll_bmpbuttn.o \
 	coredll_button.o \
@@ -4037,6 +4035,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_2 =  \
 	coredll_msgdlg.o \
 	coredll_nativdlg.o \
 	coredll_notebook.o \
+	coredll_access.o \
 	coredll_ownerdrw.o \
 	coredll_penwin.o \
 	coredll_printdlg.o \
@@ -4057,9 +4056,11 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_2 =  \
 	coredll_tbar95.o \
 	coredll_textctrl.o \
 	coredll_tglbtn.o \
-	coredll_treectrl.o
+	coredll_treectrl.o \
+	coredll_uxtheme.o
 @COND_TOOLKIT_MSW@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_OS2___GUI_SRC_OBJECTS_2 =  \
+	coredll_caret.o \
 	coredll_accel.o \
 	coredll_app.o \
 	coredll_bitmap.o \
@@ -4092,6 +4093,8 @@ COND_TOOLKIT_OS2___GUI_SRC_OBJECTS_2 =  \
 	coredll_gauge.o \
 	coredll_gdiimage.o \
 	coredll_gdiobj.o \
+	coredll_gsocket.o \
+	coredll_gsockpm.o \
 	coredll_helpwin.o \
 	coredll_icon.o \
 	coredll_iniconf.o \
@@ -4123,16 +4126,13 @@ COND_TOOLKIT_OS2___GUI_SRC_OBJECTS_2 =  \
 	coredll_stattext.o \
 	coredll_tabctrl.o \
 	coredll_textctrl.o \
-	coredll_timer.o \
 	coredll_thread.o \
+	coredll_timer.o \
 	coredll_toolbar.o \
 	coredll_tooltip.o \
 	coredll_toplevel.o \
 	coredll_wave.o \
-	coredll_window.o \
-	coredll_gsocket.o \
-	coredll_gsockpm.o \
-	coredll_caret.o
+	coredll_window.o
 @COND_TOOLKIT_OS2@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_OS2___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_3 =  \
 	corelib_NSBox.o \
@@ -4144,8 +4144,8 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_3 =  \
 	corelib_NSView.o \
 	corelib_NSWindow.o \
 	corelib_app.o \
-	corelib_bmpbuttn.o \
 	corelib_bitmap.o \
+	corelib_bmpbuttn.o \
 	corelib_brush.o \
 	corelib_button.o \
 	corelib_checkbox.o \
@@ -4190,35 +4190,35 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_3 =  \
 	corelib_utils.o \
 	corelib_utilsexc.o \
 	corelib_window.o \
-	corelib_statusbr.o \
+	corelib_accel.o \
+	corelib_caret.o \
+	corelib_colrdlgg.o \
+	corelib_dirdlgg.o \
+	corelib_fdrepdlg.o \
+	corelib_filedlgg.o \
+	corelib_fontdlgg.o \
 	corelib_imaglist.o \
 	corelib_listctrl.o \
-	corelib_fdrepdlg.o \
-	corelib_tabg.o \
-	corelib_fontdlgg.o \
-	corelib_colrdlgg.o \
+	corelib_mdig.o \
 	corelib_msgdlgg.o \
-	corelib_dirdlgg.o \
-	corelib_filedlgg.o \
 	corelib_notebook.o \
-	corelib_accel.o \
 	corelib_paletteg.o \
-	corelib_timer.o \
-	corelib_caret.o \
-	corelib_mdig.o
+	corelib_statusbr.o \
+	corelib_tabg.o \
+	corelib_timer.o
 @COND_TOOLKIT_COCOA@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_GTK___GUI_SRC_OBJECTS_3 =  \
-	corelib_imaglist.o \
-	corelib_colrdlgg.o \
-	corelib_listctrl.o \
-	corelib_filedlgg.o \
-	corelib_dirdlgg.o \
-	corelib_prntdlgg.o \
 	corelib_accel.o \
-	corelib_msgdlgg.o \
+	corelib_colrdlgg.o \
+	corelib_dirdlgg.o \
 	corelib_fdrepdlg.o \
-	corelib_tabg.o \
+	corelib_filedlgg.o \
+	corelib_imaglist.o \
+	corelib_listctrl.o \
+	corelib_msgdlgg.o \
+	corelib_prntdlgg.o \
 	corelib_statusbr.o \
+	corelib_tabg.o \
 	corelib_bmpbuttn.o \
 	corelib_button.o \
 	corelib_checkbox.o \
@@ -4299,6 +4299,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_3 =  \
 	corelib_menuitem.o \
 	corelib_metafile.o \
 	corelib_minifram.o \
+	corelib_MoreFilesX.o \
 	corelib_msgdlg.o \
 	corelib_notebmac.o \
 	corelib_palette.o \
@@ -4323,24 +4324,22 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_3 =  \
 	corelib_textctrl.o \
 	corelib_thread.o \
 	corelib_timer.o \
-	corelib_toplevel.o \
 	corelib_toolbar.o \
 	corelib_tooltip.o \
+	corelib_toplevel.o \
 	corelib_uma.o \
 	corelib_wave.o \
 	corelib_window.o \
-	corelib_MoreFilesX.o \
-	corelib_statusbr.o \
+	corelib_caret.o \
+	corelib_fdrepdlg.o \
+	corelib_fontdlgg.o \
 	corelib_imaglist.o \
 	corelib_listctrl.o \
-	corelib_fdrepdlg.o \
+	corelib_statusbr.o \
 	corelib_tabg.o \
-	corelib_fontdlgg.o \
-	corelib_caret.o \
 	corelib_snglinst.o
 @COND_TOOLKIT_MAC@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_3 =  \
-	corelib_gsockmot.o \
 	corelib_accel.o \
 	corelib_app.o \
 	corelib_bmpbuttn.o \
@@ -4368,6 +4367,7 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_3 =  \
 	corelib_frame.o \
 	corelib_gauge.o \
 	corelib_gdiobj.o \
+	corelib_gsockmot.o \
 	corelib_icon.o \
 	corelib_listbox.o \
 	corelib_main.o \
@@ -4386,28 +4386,26 @@ COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_3 =  \
 	corelib_statbmp.o \
 	corelib_statbox.o \
 	corelib_stattext.o \
-	corelib_toolbar.o \
 	corelib_textctrl.o \
 	corelib_timer.o \
+	corelib_toolbar.o \
 	corelib_toplevel.o \
 	corelib_utils.o \
 	corelib_window.o \
-	corelib_fdrepdlg.o \
-	corelib_listctrl.o \
-	corelib_imaglist.o \
-	corelib_notebook.o \
-	corelib_fontdlgg.o \
 	corelib_colrdlgg.o \
-	corelib_statline.o \
-	corelib_tabg.o \
 	corelib_dirdlgg.o \
+	corelib_fdrepdlg.o \
+	corelib_fontdlgg.o \
+	corelib_imaglist.o \
+	corelib_listctrl.o \
+	corelib_notebook.o \
 	corelib_prntdlgg.o \
-	corelib_statusbr.o
+	corelib_statline.o \
+	corelib_statusbr.o \
+	corelib_tabg.o
 @COND_TOOLKIT_MOTIF@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_3 =  \
 	corelib_statusbr.o \
-	corelib_uxtheme.o \
-	corelib_access.o \
 	corelib_accel.o \
 	corelib_bmpbuttn.o \
 	corelib_button.o \
@@ -4435,6 +4433,7 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_3 =  \
 	corelib_msgdlg.o \
 	corelib_nativdlg.o \
 	corelib_notebook.o \
+	corelib_access.o \
 	corelib_ownerdrw.o \
 	corelib_penwin.o \
 	corelib_printdlg.o \
@@ -4455,9 +4454,11 @@ COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_3 =  \
 	corelib_tbar95.o \
 	corelib_textctrl.o \
 	corelib_tglbtn.o \
-	corelib_treectrl.o
+	corelib_treectrl.o \
+	corelib_uxtheme.o
 @COND_TOOLKIT_MSW@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_MSW___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_OS2___GUI_SRC_OBJECTS_3 =  \
+	corelib_caret.o \
 	corelib_accel.o \
 	corelib_app.o \
 	corelib_bitmap.o \
@@ -4490,6 +4491,8 @@ COND_TOOLKIT_OS2___GUI_SRC_OBJECTS_3 =  \
 	corelib_gauge.o \
 	corelib_gdiimage.o \
 	corelib_gdiobj.o \
+	corelib_gsocket.o \
+	corelib_gsockpm.o \
 	corelib_helpwin.o \
 	corelib_icon.o \
 	corelib_iniconf.o \
@@ -4521,16 +4524,13 @@ COND_TOOLKIT_OS2___GUI_SRC_OBJECTS_3 =  \
 	corelib_stattext.o \
 	corelib_tabctrl.o \
 	corelib_textctrl.o \
-	corelib_timer.o \
 	corelib_thread.o \
+	corelib_timer.o \
 	corelib_toolbar.o \
 	corelib_tooltip.o \
 	corelib_toplevel.o \
 	corelib_wave.o \
-	corelib_window.o \
-	corelib_gsocket.o \
-	corelib_gsockpm.o \
-	corelib_caret.o
+	corelib_window.o
 @COND_TOOLKIT_OS2@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_OS2___GUI_SRC_OBJECTS_3)
 @COND_TOOLKIT_MSW@__HTML_SRC_PLATFORM_OBJECTS = monodll_helpbest.o
 @COND_TOOLKIT_MSW@__HTML_SRC_PLATFORM_OBJECTS_1 = monolib_helpbest.o
@@ -4562,16 +4562,15 @@ COND_TOOLKIT_OS2___GUI_SRC_OBJECTS_3 =  \
 @COND_WXUSE_ZLIB_BUILTIN@	-lwxzlib$(WXDEBUGFLAG)$(HOST_SUFFIX)
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS = 
 COND_TOOLKIT_GTK___LOWLEVEL_SRC_OBJECTS =  \
+	monodll_taskbarcmn.o \
+	monodll_caret.o \
+	monodll_printps.o \
+	monodll_dialup.o \
 	monodll_fontenum.o \
 	monodll_fontutil.o \
-	monodll_utilsx11.o \
-	monodll_taskbarcmn.o \
 	monodll_taskbarx11.o \
-	monodll_printps.o \
-	monodll_caret.o \
-	monodll_dialup.o \
-	monodll_gsockgtk.o \
-	monodll_win_gtk.o \
+	monodll_utilsx11.o \
+	monodll_paletteg.o \
 	monodll_app.o \
 	monodll_bitmap.o \
 	monodll_brush.o \
@@ -4587,8 +4586,8 @@ COND_TOOLKIT_GTK___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_dnd.o \
 	monodll_evtloop.o \
 	monodll_font.o \
-	monodll_toplevel.o \
 	monodll_gdiobj.o \
+	monodll_gsockgtk.o \
 	monodll_icon.o \
 	monodll_main.o \
 	monodll_pen.o \
@@ -4597,56 +4596,58 @@ COND_TOOLKIT_GTK___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_settings.o \
 	monodll_timer.o \
 	monodll_tooltip.o \
+	monodll_toplevel.o \
 	monodll_utilsgtk.o \
-	monodll_window.o \
-	monodll_paletteg.o
+	monodll_win_gtk.o \
+	monodll_window.o
 @COND_TOOLKIT_GTK@__LOWLEVEL_SRC_OBJECTS = $(COND_TOOLKIT_GTK___LOWLEVEL_SRC_OBJECTS)
 @COND_TOOLKIT_MAC@__LOWLEVEL_SRC_OBJECTS = 
 COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS =  \
-	monodll_colour.o \
-	monodll_dc.o \
-	monodll_gdiobj.o \
-	monodll_palette.o \
-	monodll_region.o \
-	monodll_brush.o \
-	monodll_pen.o \
-	monodll_font.o \
-	monodll_data.o \
-	monodll_fontenum.o \
-	monodll_fontutil.o \
-	monodll_evtloop.o \
+	monodll_caret.o \
+	monodll_timer.o \
 	monodll_app.o \
 	monodll_bitmap.o \
-	monodll_dirmgl.o \
+	monodll_brush.o \
 	monodll_clipbrd.o \
+	monodll_colour.o \
 	monodll_cursor.o \
+	monodll_data.o \
+	monodll_dc.o \
 	monodll_dcclient.o \
 	monodll_dcmemory.o \
 	monodll_dcscreen.o \
-	monodll_toplevel.o \
-	monodll_icon.o \
-	monodll_settings.o \
-	monodll_window.o \
-	monodll_utils.o \
-	monodll_timer.o \
-	monodll_caret.o
-@COND_TOOLKIT_MGL@__LOWLEVEL_SRC_OBJECTS = $(COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS)
-COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS =  \
+	monodll_dirmgl.o \
+	monodll_evtloop.o \
+	monodll_font.o \
 	monodll_fontenum.o \
 	monodll_fontutil.o \
-	monodll_utilsx11.o \
-	monodll_taskbarcmn.o \
-	monodll_taskbarx11.o \
-	monodll_printps.o \
-	monodll_caret.o \
-	monodll_dialup.o \
-	monodll_region.o \
+	monodll_gdiobj.o \
+	monodll_icon.o \
+	monodll_palette.o \
 	monodll_pen.o \
-	monodll_brush.o \
+	monodll_region.o \
+	monodll_settings.o \
+	monodll_toplevel.o \
+	monodll_utils.o \
+	monodll_window.o
+@COND_TOOLKIT_MGL@__LOWLEVEL_SRC_OBJECTS = $(COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS)
+COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS =  \
+	monodll_taskbarcmn.o \
+	monodll_caret.o \
+	monodll_printps.o \
+	monodll_dialup.o \
+	monodll_fontenum.o \
+	monodll_fontutil.o \
+	monodll_taskbarx11.o \
+	monodll_utilsx11.o \
 	monodll_bitmap.o \
+	monodll_brush.o \
+	monodll_pen.o \
+	monodll_region.o \
 	monodll_utilsx.o
 @COND_TOOLKIT_MOTIF@__LOWLEVEL_SRC_OBJECTS = $(COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS)
 COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS =  \
+	monodll_taskbarcmn.o \
 	monodll_app.o \
 	monodll_bitmap.o \
 	monodll_brush.o \
@@ -4676,38 +4677,36 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_icon.o \
 	monodll_joystick.o \
 	monodll_minifram.o \
+	monodll_automtn.o \
+	monodll_dataobj.o \
+	monodll_dropsrc.o \
+	monodll_droptgt.o \
+	monodll_oleutils.o \
+	monodll_uuid.o \
 	monodll_palette.o \
 	monodll_pen.o \
 	monodll_popupwin.o \
 	monodll_region.o \
 	monodll_settings.o \
-	monodll_taskbarcmn.o \
 	monodll_taskbar.o \
 	monodll_timer.o \
 	monodll_tooltip.o \
 	monodll_toplevel.o \
 	monodll_utilsgui.o \
 	monodll_wave.o \
-	monodll_window.o \
-	monodll_automtn.o \
-	monodll_dataobj.o \
-	monodll_dropsrc.o \
-	monodll_droptgt.o \
-	monodll_oleutils.o \
-	monodll_uuid.o
+	monodll_window.o
 @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS)
 @COND_TOOLKIT_OS2@__LOWLEVEL_SRC_OBJECTS = 
 COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS =  \
+	monodll_taskbarcmn.o \
+	monodll_caret.o \
+	monodll_printps.o \
+	monodll_dialup.o \
 	monodll_fontenum.o \
 	monodll_fontutil.o \
-	monodll_utilsx11.o \
-	monodll_taskbarcmn.o \
 	monodll_taskbarx11.o \
-	monodll_printps.o \
-	monodll_caret.o \
-	monodll_dialup.o \
-	monodll_gsockx11.o \
-	monodll_nanox.o \
+	monodll_utilsx11.o \
+	monodll_timer.o \
 	monodll_app.o \
 	monodll_bitmap.o \
 	monodll_brush.o \
@@ -4723,10 +4722,12 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_evtloop.o \
 	monodll_font.o \
 	monodll_gdiobj.o \
+	monodll_gsockx11.o \
 	monodll_icon.o \
 	monodll_joystick.o \
 	monodll_main.o \
 	monodll_minifram.o \
+	monodll_nanox.o \
 	monodll_palette.o \
 	monodll_pen.o \
 	monodll_popupwin.o \
@@ -4736,21 +4737,19 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_toplevel.o \
 	monodll_utils.o \
 	monodll_utilsx.o \
-	monodll_window.o \
-	monodll_timer.o
+	monodll_window.o
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS = $(COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS)
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_0 = 
 COND_TOOLKIT_GTK___LOWLEVEL_SRC_OBJECTS_0 =  \
+	coredll_taskbarcmn.o \
+	coredll_caret.o \
+	coredll_printps.o \
+	coredll_dialup.o \
 	coredll_fontenum.o \
 	coredll_fontutil.o \
-	coredll_utilsx11.o \
-	coredll_taskbarcmn.o \
 	coredll_taskbarx11.o \
-	coredll_printps.o \
-	coredll_caret.o \
-	coredll_dialup.o \
-	coredll_gsockgtk.o \
-	coredll_win_gtk.o \
+	coredll_utilsx11.o \
+	coredll_paletteg.o \
 	coredll_app.o \
 	coredll_bitmap.o \
 	coredll_brush.o \
@@ -4766,8 +4765,8 @@ COND_TOOLKIT_GTK___LOWLEVEL_SRC_OBJECTS_0 =  \
 	coredll_dnd.o \
 	coredll_evtloop.o \
 	coredll_font.o \
-	coredll_toplevel.o \
 	coredll_gdiobj.o \
+	coredll_gsockgtk.o \
 	coredll_icon.o \
 	coredll_main.o \
 	coredll_pen.o \
@@ -4776,56 +4775,58 @@ COND_TOOLKIT_GTK___LOWLEVEL_SRC_OBJECTS_0 =  \
 	coredll_settings.o \
 	coredll_timer.o \
 	coredll_tooltip.o \
+	coredll_toplevel.o \
 	coredll_utilsgtk.o \
-	coredll_window.o \
-	coredll_paletteg.o
+	coredll_win_gtk.o \
+	coredll_window.o
 @COND_TOOLKIT_GTK@__LOWLEVEL_SRC_OBJECTS_0 = $(COND_TOOLKIT_GTK___LOWLEVEL_SRC_OBJECTS_0)
 @COND_TOOLKIT_MAC@__LOWLEVEL_SRC_OBJECTS_0 = 
 COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_0 =  \
-	coredll_colour.o \
-	coredll_dc.o \
-	coredll_gdiobj.o \
-	coredll_palette.o \
-	coredll_region.o \
-	coredll_brush.o \
-	coredll_pen.o \
-	coredll_font.o \
-	coredll_data.o \
-	coredll_fontenum.o \
-	coredll_fontutil.o \
-	coredll_evtloop.o \
+	coredll_caret.o \
+	coredll_timer.o \
 	coredll_app.o \
 	coredll_bitmap.o \
-	coredll_dirmgl.o \
+	coredll_brush.o \
 	coredll_clipbrd.o \
+	coredll_colour.o \
 	coredll_cursor.o \
+	coredll_data.o \
+	coredll_dc.o \
 	coredll_dcclient.o \
 	coredll_dcmemory.o \
 	coredll_dcscreen.o \
-	coredll_toplevel.o \
-	coredll_icon.o \
-	coredll_settings.o \
-	coredll_window.o \
-	coredll_utils.o \
-	coredll_timer.o \
-	coredll_caret.o
-@COND_TOOLKIT_MGL@__LOWLEVEL_SRC_OBJECTS_0 = $(COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_0)
-COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_0 =  \
+	coredll_dirmgl.o \
+	coredll_evtloop.o \
+	coredll_font.o \
 	coredll_fontenum.o \
 	coredll_fontutil.o \
-	coredll_utilsx11.o \
-	coredll_taskbarcmn.o \
-	coredll_taskbarx11.o \
-	coredll_printps.o \
-	coredll_caret.o \
-	coredll_dialup.o \
-	coredll_region.o \
+	coredll_gdiobj.o \
+	coredll_icon.o \
+	coredll_palette.o \
 	coredll_pen.o \
-	coredll_brush.o \
+	coredll_region.o \
+	coredll_settings.o \
+	coredll_toplevel.o \
+	coredll_utils.o \
+	coredll_window.o
+@COND_TOOLKIT_MGL@__LOWLEVEL_SRC_OBJECTS_0 = $(COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_0)
+COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_0 =  \
+	coredll_taskbarcmn.o \
+	coredll_caret.o \
+	coredll_printps.o \
+	coredll_dialup.o \
+	coredll_fontenum.o \
+	coredll_fontutil.o \
+	coredll_taskbarx11.o \
+	coredll_utilsx11.o \
 	coredll_bitmap.o \
+	coredll_brush.o \
+	coredll_pen.o \
+	coredll_region.o \
 	coredll_utilsx.o
 @COND_TOOLKIT_MOTIF@__LOWLEVEL_SRC_OBJECTS_0 = $(COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_0)
 COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_0 =  \
+	coredll_taskbarcmn.o \
 	coredll_app.o \
 	coredll_bitmap.o \
 	coredll_brush.o \
@@ -4855,38 +4856,36 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_0 =  \
 	coredll_icon.o \
 	coredll_joystick.o \
 	coredll_minifram.o \
+	coredll_automtn.o \
+	coredll_dataobj.o \
+	coredll_dropsrc.o \
+	coredll_droptgt.o \
+	coredll_oleutils.o \
+	coredll_uuid.o \
 	coredll_palette.o \
 	coredll_pen.o \
 	coredll_popupwin.o \
 	coredll_region.o \
 	coredll_settings.o \
-	coredll_taskbarcmn.o \
 	coredll_taskbar.o \
 	coredll_timer.o \
 	coredll_tooltip.o \
 	coredll_toplevel.o \
 	coredll_utilsgui.o \
 	coredll_wave.o \
-	coredll_window.o \
-	coredll_automtn.o \
-	coredll_dataobj.o \
-	coredll_dropsrc.o \
-	coredll_droptgt.o \
-	coredll_oleutils.o \
-	coredll_uuid.o
+	coredll_window.o
 @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_0 = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_0)
 @COND_TOOLKIT_OS2@__LOWLEVEL_SRC_OBJECTS_0 = 
 COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_0 =  \
+	coredll_taskbarcmn.o \
+	coredll_caret.o \
+	coredll_printps.o \
+	coredll_dialup.o \
 	coredll_fontenum.o \
 	coredll_fontutil.o \
-	coredll_utilsx11.o \
-	coredll_taskbarcmn.o \
 	coredll_taskbarx11.o \
-	coredll_printps.o \
-	coredll_caret.o \
-	coredll_dialup.o \
-	coredll_gsockx11.o \
-	coredll_nanox.o \
+	coredll_utilsx11.o \
+	coredll_timer.o \
 	coredll_app.o \
 	coredll_bitmap.o \
 	coredll_brush.o \
@@ -4902,10 +4901,12 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_0 =  \
 	coredll_evtloop.o \
 	coredll_font.o \
 	coredll_gdiobj.o \
+	coredll_gsockx11.o \
 	coredll_icon.o \
 	coredll_joystick.o \
 	coredll_main.o \
 	coredll_minifram.o \
+	coredll_nanox.o \
 	coredll_palette.o \
 	coredll_pen.o \
 	coredll_popupwin.o \
@@ -4915,21 +4916,19 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_0 =  \
 	coredll_toplevel.o \
 	coredll_utils.o \
 	coredll_utilsx.o \
-	coredll_window.o \
-	coredll_timer.o
+	coredll_window.o
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_0 = $(COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_0)
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_8 = 
 COND_TOOLKIT_GTK___LOWLEVEL_SRC_OBJECTS_8 =  \
+	corelib_taskbarcmn.o \
+	corelib_caret.o \
+	corelib_printps.o \
+	corelib_dialup.o \
 	corelib_fontenum.o \
 	corelib_fontutil.o \
-	corelib_utilsx11.o \
-	corelib_taskbarcmn.o \
 	corelib_taskbarx11.o \
-	corelib_printps.o \
-	corelib_caret.o \
-	corelib_dialup.o \
-	corelib_gsockgtk.o \
-	corelib_win_gtk.o \
+	corelib_utilsx11.o \
+	corelib_paletteg.o \
 	corelib_app.o \
 	corelib_bitmap.o \
 	corelib_brush.o \
@@ -4945,8 +4944,8 @@ COND_TOOLKIT_GTK___LOWLEVEL_SRC_OBJECTS_8 =  \
 	corelib_dnd.o \
 	corelib_evtloop.o \
 	corelib_font.o \
-	corelib_toplevel.o \
 	corelib_gdiobj.o \
+	corelib_gsockgtk.o \
 	corelib_icon.o \
 	corelib_main.o \
 	corelib_pen.o \
@@ -4955,56 +4954,58 @@ COND_TOOLKIT_GTK___LOWLEVEL_SRC_OBJECTS_8 =  \
 	corelib_settings.o \
 	corelib_timer.o \
 	corelib_tooltip.o \
+	corelib_toplevel.o \
 	corelib_utilsgtk.o \
-	corelib_window.o \
-	corelib_paletteg.o
+	corelib_win_gtk.o \
+	corelib_window.o
 @COND_TOOLKIT_GTK@__LOWLEVEL_SRC_OBJECTS_8 = $(COND_TOOLKIT_GTK___LOWLEVEL_SRC_OBJECTS_8)
 @COND_TOOLKIT_MAC@__LOWLEVEL_SRC_OBJECTS_8 = 
 COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_8 =  \
-	corelib_colour.o \
-	corelib_dc.o \
-	corelib_gdiobj.o \
-	corelib_palette.o \
-	corelib_region.o \
-	corelib_brush.o \
-	corelib_pen.o \
-	corelib_font.o \
-	corelib_data.o \
-	corelib_fontenum.o \
-	corelib_fontutil.o \
-	corelib_evtloop.o \
+	corelib_caret.o \
+	corelib_timer.o \
 	corelib_app.o \
 	corelib_bitmap.o \
-	corelib_dirmgl.o \
+	corelib_brush.o \
 	corelib_clipbrd.o \
+	corelib_colour.o \
 	corelib_cursor.o \
+	corelib_data.o \
+	corelib_dc.o \
 	corelib_dcclient.o \
 	corelib_dcmemory.o \
 	corelib_dcscreen.o \
-	corelib_toplevel.o \
-	corelib_icon.o \
-	corelib_settings.o \
-	corelib_window.o \
-	corelib_utils.o \
-	corelib_timer.o \
-	corelib_caret.o
-@COND_TOOLKIT_MGL@__LOWLEVEL_SRC_OBJECTS_8 = $(COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_8)
-COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_8 =  \
+	corelib_dirmgl.o \
+	corelib_evtloop.o \
+	corelib_font.o \
 	corelib_fontenum.o \
 	corelib_fontutil.o \
-	corelib_utilsx11.o \
-	corelib_taskbarcmn.o \
-	corelib_taskbarx11.o \
-	corelib_printps.o \
-	corelib_caret.o \
-	corelib_dialup.o \
-	corelib_region.o \
+	corelib_gdiobj.o \
+	corelib_icon.o \
+	corelib_palette.o \
 	corelib_pen.o \
-	corelib_brush.o \
+	corelib_region.o \
+	corelib_settings.o \
+	corelib_toplevel.o \
+	corelib_utils.o \
+	corelib_window.o
+@COND_TOOLKIT_MGL@__LOWLEVEL_SRC_OBJECTS_8 = $(COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_8)
+COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_8 =  \
+	corelib_taskbarcmn.o \
+	corelib_caret.o \
+	corelib_printps.o \
+	corelib_dialup.o \
+	corelib_fontenum.o \
+	corelib_fontutil.o \
+	corelib_taskbarx11.o \
+	corelib_utilsx11.o \
 	corelib_bitmap.o \
+	corelib_brush.o \
+	corelib_pen.o \
+	corelib_region.o \
 	corelib_utilsx.o
 @COND_TOOLKIT_MOTIF@__LOWLEVEL_SRC_OBJECTS_8 = $(COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_8)
 COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_8 =  \
+	corelib_taskbarcmn.o \
 	corelib_app.o \
 	corelib_bitmap.o \
 	corelib_brush.o \
@@ -5034,38 +5035,36 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_8 =  \
 	corelib_icon.o \
 	corelib_joystick.o \
 	corelib_minifram.o \
+	corelib_automtn.o \
+	corelib_dataobj.o \
+	corelib_dropsrc.o \
+	corelib_droptgt.o \
+	corelib_oleutils.o \
+	corelib_uuid.o \
 	corelib_palette.o \
 	corelib_pen.o \
 	corelib_popupwin.o \
 	corelib_region.o \
 	corelib_settings.o \
-	corelib_taskbarcmn.o \
 	corelib_taskbar.o \
 	corelib_timer.o \
 	corelib_tooltip.o \
 	corelib_toplevel.o \
 	corelib_utilsgui.o \
 	corelib_wave.o \
-	corelib_window.o \
-	corelib_automtn.o \
-	corelib_dataobj.o \
-	corelib_dropsrc.o \
-	corelib_droptgt.o \
-	corelib_oleutils.o \
-	corelib_uuid.o
+	corelib_window.o
 @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_8 = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_8)
 @COND_TOOLKIT_OS2@__LOWLEVEL_SRC_OBJECTS_8 = 
 COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_8 =  \
+	corelib_taskbarcmn.o \
+	corelib_caret.o \
+	corelib_printps.o \
+	corelib_dialup.o \
 	corelib_fontenum.o \
 	corelib_fontutil.o \
-	corelib_utilsx11.o \
-	corelib_taskbarcmn.o \
 	corelib_taskbarx11.o \
-	corelib_printps.o \
-	corelib_caret.o \
-	corelib_dialup.o \
-	corelib_gsockx11.o \
-	corelib_nanox.o \
+	corelib_utilsx11.o \
+	corelib_timer.o \
 	corelib_app.o \
 	corelib_bitmap.o \
 	corelib_brush.o \
@@ -5081,10 +5080,12 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_8 =  \
 	corelib_evtloop.o \
 	corelib_font.o \
 	corelib_gdiobj.o \
+	corelib_gsockx11.o \
 	corelib_icon.o \
 	corelib_joystick.o \
 	corelib_main.o \
 	corelib_minifram.o \
+	corelib_nanox.o \
 	corelib_palette.o \
 	corelib_pen.o \
 	corelib_popupwin.o \
@@ -5094,21 +5095,19 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_8 =  \
 	corelib_toplevel.o \
 	corelib_utils.o \
 	corelib_utilsx.o \
-	corelib_window.o \
-	corelib_timer.o
+	corelib_window.o
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_8 = $(COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_8)
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_9 = 
 COND_TOOLKIT_GTK___LOWLEVEL_SRC_OBJECTS_9 =  \
+	monolib_taskbarcmn.o \
+	monolib_caret.o \
+	monolib_printps.o \
+	monolib_dialup.o \
 	monolib_fontenum.o \
 	monolib_fontutil.o \
-	monolib_utilsx11.o \
-	monolib_taskbarcmn.o \
 	monolib_taskbarx11.o \
-	monolib_printps.o \
-	monolib_caret.o \
-	monolib_dialup.o \
-	monolib_gsockgtk.o \
-	monolib_win_gtk.o \
+	monolib_utilsx11.o \
+	monolib_paletteg.o \
 	monolib_app.o \
 	monolib_bitmap.o \
 	monolib_brush.o \
@@ -5124,8 +5123,8 @@ COND_TOOLKIT_GTK___LOWLEVEL_SRC_OBJECTS_9 =  \
 	monolib_dnd.o \
 	monolib_evtloop.o \
 	monolib_font.o \
-	monolib_toplevel.o \
 	monolib_gdiobj.o \
+	monolib_gsockgtk.o \
 	monolib_icon.o \
 	monolib_main.o \
 	monolib_pen.o \
@@ -5134,56 +5133,58 @@ COND_TOOLKIT_GTK___LOWLEVEL_SRC_OBJECTS_9 =  \
 	monolib_settings.o \
 	monolib_timer.o \
 	monolib_tooltip.o \
+	monolib_toplevel.o \
 	monolib_utilsgtk.o \
-	monolib_window.o \
-	monolib_paletteg.o
+	monolib_win_gtk.o \
+	monolib_window.o
 @COND_TOOLKIT_GTK@__LOWLEVEL_SRC_OBJECTS_9 = $(COND_TOOLKIT_GTK___LOWLEVEL_SRC_OBJECTS_9)
 @COND_TOOLKIT_MAC@__LOWLEVEL_SRC_OBJECTS_9 = 
 COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_9 =  \
-	monolib_colour.o \
-	monolib_dc.o \
-	monolib_gdiobj.o \
-	monolib_palette.o \
-	monolib_region.o \
-	monolib_brush.o \
-	monolib_pen.o \
-	monolib_font.o \
-	monolib_data.o \
-	monolib_fontenum.o \
-	monolib_fontutil.o \
-	monolib_evtloop.o \
+	monolib_caret.o \
+	monolib_timer.o \
 	monolib_app.o \
 	monolib_bitmap.o \
-	monolib_dirmgl.o \
+	monolib_brush.o \
 	monolib_clipbrd.o \
+	monolib_colour.o \
 	monolib_cursor.o \
+	monolib_data.o \
+	monolib_dc.o \
 	monolib_dcclient.o \
 	monolib_dcmemory.o \
 	monolib_dcscreen.o \
-	monolib_toplevel.o \
-	monolib_icon.o \
-	monolib_settings.o \
-	monolib_window.o \
-	monolib_utils.o \
-	monolib_timer.o \
-	monolib_caret.o
-@COND_TOOLKIT_MGL@__LOWLEVEL_SRC_OBJECTS_9 = $(COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_9)
-COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_9 =  \
+	monolib_dirmgl.o \
+	monolib_evtloop.o \
+	monolib_font.o \
 	monolib_fontenum.o \
 	monolib_fontutil.o \
-	monolib_utilsx11.o \
-	monolib_taskbarcmn.o \
-	monolib_taskbarx11.o \
-	monolib_printps.o \
-	monolib_caret.o \
-	monolib_dialup.o \
-	monolib_region.o \
+	monolib_gdiobj.o \
+	monolib_icon.o \
+	monolib_palette.o \
 	monolib_pen.o \
-	monolib_brush.o \
+	monolib_region.o \
+	monolib_settings.o \
+	monolib_toplevel.o \
+	monolib_utils.o \
+	monolib_window.o
+@COND_TOOLKIT_MGL@__LOWLEVEL_SRC_OBJECTS_9 = $(COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_9)
+COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_9 =  \
+	monolib_taskbarcmn.o \
+	monolib_caret.o \
+	monolib_printps.o \
+	monolib_dialup.o \
+	monolib_fontenum.o \
+	monolib_fontutil.o \
+	monolib_taskbarx11.o \
+	monolib_utilsx11.o \
 	monolib_bitmap.o \
+	monolib_brush.o \
+	monolib_pen.o \
+	monolib_region.o \
 	monolib_utilsx.o
 @COND_TOOLKIT_MOTIF@__LOWLEVEL_SRC_OBJECTS_9 = $(COND_TOOLKIT_MOTIF___LOWLEVEL_SRC_OBJECTS_9)
 COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_9 =  \
+	monolib_taskbarcmn.o \
 	monolib_app.o \
 	monolib_bitmap.o \
 	monolib_brush.o \
@@ -5213,38 +5214,36 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_9 =  \
 	monolib_icon.o \
 	monolib_joystick.o \
 	monolib_minifram.o \
+	monolib_automtn.o \
+	monolib_dataobj.o \
+	monolib_dropsrc.o \
+	monolib_droptgt.o \
+	monolib_oleutils.o \
+	monolib_uuid.o \
 	monolib_palette.o \
 	monolib_pen.o \
 	monolib_popupwin.o \
 	monolib_region.o \
 	monolib_settings.o \
-	monolib_taskbarcmn.o \
 	monolib_taskbar.o \
 	monolib_timer.o \
 	monolib_tooltip.o \
 	monolib_toplevel.o \
 	monolib_utilsgui.o \
 	monolib_wave.o \
-	monolib_window.o \
-	monolib_automtn.o \
-	monolib_dataobj.o \
-	monolib_dropsrc.o \
-	monolib_droptgt.o \
-	monolib_oleutils.o \
-	monolib_uuid.o
+	monolib_window.o
 @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_9 = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_9)
 @COND_TOOLKIT_OS2@__LOWLEVEL_SRC_OBJECTS_9 = 
 COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_9 =  \
+	monolib_taskbarcmn.o \
+	monolib_caret.o \
+	monolib_printps.o \
+	monolib_dialup.o \
 	monolib_fontenum.o \
 	monolib_fontutil.o \
-	monolib_utilsx11.o \
-	monolib_taskbarcmn.o \
 	monolib_taskbarx11.o \
-	monolib_printps.o \
-	monolib_caret.o \
-	monolib_dialup.o \
-	monolib_gsockx11.o \
-	monolib_nanox.o \
+	monolib_utilsx11.o \
+	monolib_timer.o \
 	monolib_app.o \
 	monolib_bitmap.o \
 	monolib_brush.o \
@@ -5260,10 +5259,12 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_9 =  \
 	monolib_evtloop.o \
 	monolib_font.o \
 	monolib_gdiobj.o \
+	monolib_gsockx11.o \
 	monolib_icon.o \
 	monolib_joystick.o \
 	monolib_main.o \
 	monolib_minifram.o \
+	monolib_nanox.o \
 	monolib_palette.o \
 	monolib_pen.o \
 	monolib_popupwin.o \
@@ -5273,57 +5274,56 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_9 =  \
 	monolib_toplevel.o \
 	monolib_utils.o \
 	monolib_utilsx.o \
-	monolib_window.o \
-	monolib_timer.o
+	monolib_window.o
 @COND_TOOLKIT_X11@__LOWLEVEL_SRC_OBJECTS_9 = $(COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_9)
 COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 	$(__CORE_SRC_OBJECTS) \
 	$(__HTML_SRC_PLATFORM_OBJECTS) \
+	monodll_helpctrl.o \
 	monodll_helpdata.o \
 	monodll_helpfrm.o \
-	monodll_helpctrl.o \
 	monodll_htmlcell.o \
 	monodll_htmlfilt.o \
 	monodll_htmlpars.o \
 	monodll_htmltag.o \
 	monodll_htmlwin.o \
-	monodll_winpars.o \
+	monodll_htmprint.o \
+	monodll_m_dflist.o \
 	monodll_m_fonts.o \
 	monodll_m_hline.o \
 	monodll_m_image.o \
 	monodll_m_layout.o \
 	monodll_m_links.o \
 	monodll_m_list.o \
-	monodll_m_dflist.o \
 	monodll_m_pre.o \
-	monodll_m_tables.o \
 	monodll_m_style.o \
-	monodll_htmprint.o \
+	monodll_m_tables.o \
+	monodll_winpars.o \
 	monodll_htmllbox.o
 @COND_USE_GUI_1@__MONOLIB_GUI_SRC_OBJECTS = $(COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS)
 COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	$(__CORE_SRC_OBJECTS_1) \
 	$(__HTML_SRC_PLATFORM_OBJECTS_1) \
+	monolib_helpctrl.o \
 	monolib_helpdata.o \
 	monolib_helpfrm.o \
-	monolib_helpctrl.o \
 	monolib_htmlcell.o \
 	monolib_htmlfilt.o \
 	monolib_htmlpars.o \
 	monolib_htmltag.o \
 	monolib_htmlwin.o \
-	monolib_winpars.o \
+	monolib_htmprint.o \
+	monolib_m_dflist.o \
 	monolib_m_fonts.o \
 	monolib_m_hline.o \
 	monolib_m_image.o \
 	monolib_m_layout.o \
 	monolib_m_links.o \
 	monolib_m_list.o \
-	monolib_m_dflist.o \
 	monolib_m_pre.o \
-	monolib_m_tables.o \
 	monolib_m_style.o \
-	monolib_htmprint.o \
+	monolib_m_tables.o \
+	monolib_winpars.o \
 	monolib_htmllbox.o
 @COND_USE_GUI_1@__MONOLIB_GUI_SRC_OBJECTS_1 = $(COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1)
 @COND_TOOLKIT_COCOA@__NET_MACOSX_SRC_OBJECTS = monodll_gsocket.o
@@ -10824,7 +10824,7 @@ install: all $(__install_wxregex___depname) $(__install_wxzlib___depname) $(__in
 	$(INSTALL_DIR) $(libdir)/wx/include/$(TOOLCHAIN_NAME)/wx
 	(cd ./ ; $(INSTALL_DATA)  lib/wx/include/$(TOOLCHAIN_NAME)/wx/setup.h $(libdir)/wx/include/$(TOOLCHAIN_NAME)/wx)
 	$(INSTALL_DIR) $(includedir)
-	for f in wx/apptrait.h wx/beforestd.h wx/containr.h wx/msgout.h wx/types.h wx/init.h wx/arrimpl.cpp wx/listimpl.cpp wx/app.h wx/buffer.h wx/build.h wx/chkconf.h wx/clntdata.h wx/cmdline.h wx/confbase.h wx/config.h wx/datetime.h wx/datetime.inl wx/datstrm.h wx/db.h wx/dbkeyg.h wx/dbtable.h wx/dde.h wx/debug.h wx/defs.h wx/dir.h wx/dynarray.h wx/arrstr.h wx/dynlib.h wx/dynload.h wx/encconv.h wx/event.h wx/features.h wx/ffile.h wx/file.h wx/fileconf.h wx/filefn.h wx/filename.h wx/filesys.h wx/fontenc.h wx/fontmap.h wx/fs_zip.h wx/fs_mem.h wx/hash.h wx/hashmap.h wx/iconloc.h wx/intl.h wx/iosfwrap.h wx/ioswrap.h wx/ipc.h wx/ipcbase.h wx/isql.h wx/isqlext.h wx/list.h wx/log.h wx/longlong.h wx/math.h wx/memory.h wx/memconf.h wx/memtext.h wx/mimetype.h wx/module.h wx/msgout.h wx/mstream.h wx/object.h wx/platform.h wx/process.h wx/regex.h wx/snglinst.h wx/stopwatch.h wx/strconv.h wx/stream.h wx/string.h wx/sysopt.h wx/textbuf.h wx/textfile.h wx/thread.h wx/thrimpl.cpp wx/tokenzr.h wx/txtstrm.h wx/utils.h wx/variant.h wx/vector.h wx/version.h wx/volume.h wx/wfstream.h wx/wx.h wx/wxchar.h wx/wxprec.h wx/zipstrm.h wx/zstream.h $(BASE_PLATFORM_HDR) wx/fs_inet.h wx/url.h wx/protocol/protocol.h wx/protocol/http.h wx/protocol/ftp.h wx/protocol/file.h wx/gsocket.h wx/sckaddr.h wx/sckipc.h wx/sckstrm.h wx/socket.h $(NET_PLATFORM_HDR) $(ALL_GUI_HEADERS) wx/wxhtml.h wx/html/forcelnk.h wx/html/helpctrl.h wx/html/helpdata.h wx/html/helpfrm.h wx/html/htmlcell.h wx/html/htmldefs.h wx/html/htmlfilt.h wx/html/htmlpars.h wx/html/htmlproc.h wx/html/htmltag.h wx/html/htmlwin.h wx/html/htmprint.h wx/html/m_templ.h wx/html/winpars.h wx/htmllbox.h wx/xml/xml.h $(OPENGL_HDR); do \
+	for f in wx/app.h wx/apptrait.h wx/arrimpl.cpp wx/arrstr.h wx/beforestd.h wx/buffer.h wx/build.h wx/chkconf.h wx/clntdata.h wx/cmdline.h wx/confbase.h wx/config.h wx/containr.h wx/datetime.h wx/datetime.inl wx/datstrm.h wx/db.h wx/dbkeyg.h wx/dbtable.h wx/dde.h wx/debug.h wx/defs.h wx/dir.h wx/dynarray.h wx/dynlib.h wx/dynload.h wx/encconv.h wx/event.h wx/features.h wx/ffile.h wx/file.h wx/fileconf.h wx/filefn.h wx/filename.h wx/filesys.h wx/fontenc.h wx/fontmap.h wx/fs_mem.h wx/fs_zip.h wx/hash.h wx/hashmap.h wx/iconloc.h wx/init.h wx/intl.h wx/iosfwrap.h wx/ioswrap.h wx/ipc.h wx/ipcbase.h wx/isql.h wx/isqlext.h wx/list.h wx/listimpl.cpp wx/log.h wx/longlong.h wx/math.h wx/memconf.h wx/memory.h wx/memtext.h wx/mimetype.h wx/module.h wx/msgout.h wx/msgout.h wx/mstream.h wx/object.h wx/platform.h wx/process.h wx/regex.h wx/snglinst.h wx/stopwatch.h wx/strconv.h wx/stream.h wx/string.h wx/sysopt.h wx/textbuf.h wx/textfile.h wx/thread.h wx/thrimpl.cpp wx/tokenzr.h wx/txtstrm.h wx/types.h wx/utils.h wx/variant.h wx/vector.h wx/version.h wx/volume.h wx/wfstream.h wx/wx.h wx/wxchar.h wx/wxprec.h wx/zipstrm.h wx/zstream.h $(BASE_PLATFORM_HDR) wx/fs_inet.h wx/gsocket.h wx/protocol/file.h wx/protocol/ftp.h wx/protocol/http.h wx/protocol/protocol.h wx/sckaddr.h wx/sckipc.h wx/sckstrm.h wx/socket.h wx/url.h $(NET_PLATFORM_HDR) $(ALL_GUI_HEADERS) wx/html/forcelnk.h wx/html/helpctrl.h wx/html/helpdata.h wx/html/helpfrm.h wx/html/htmlcell.h wx/html/htmldefs.h wx/html/htmlfilt.h wx/html/htmlpars.h wx/html/htmlproc.h wx/html/htmltag.h wx/html/htmlwin.h wx/html/htmprint.h wx/html/m_templ.h wx/html/winpars.h wx/wxhtml.h wx/htmllbox.h wx/xml/xml.h $(OPENGL_HDR); do \
 	if test ! -d $(includedir)/`dirname $$f` ; then \
 	$(INSTALL_DIR) $(includedir)/`dirname $$f`; \
 	fi; \
