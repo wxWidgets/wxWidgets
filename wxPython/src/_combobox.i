@@ -155,6 +155,15 @@ combobox text field.", "");
         "Selects the text between the two positions in the combobox text field.", "",
         SetMark);    
 
+#ifdef __WXMSW__
+    DocDeclAStrName(
+        virtual void , GetSelection(long* OUTPUT, long* OUTPUT),
+        "GetMark(self) -> (from, to)",
+        "Gets the positions of the begining and ending of the selection mark in
+the combobox text field.", "",
+        GetMark);
+#endif
+
     DocDeclStr(
         bool , SetStringSelection(const wxString& string),
         "Select the item with the specifed string", "");
