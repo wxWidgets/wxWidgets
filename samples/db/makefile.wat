@@ -168,6 +168,10 @@ __WXUNIV_DEFINE_p =
 !ifeq WXUNIV 1
 __WXUNIV_DEFINE_p = -d__WXUNIVERSAL__
 !endif
+__dbtest___depname =
+!ifeq USE_ODBC 1
+__dbtest___depname = $(OBJS)\dbtest.exe
+!endif
 
 ### Variables: ###
 
@@ -190,7 +194,7 @@ $(OBJS) :
 
 ### Targets: ###
 
-all : .SYMBOLIC $(OBJS)\dbtest.exe
+all : .SYMBOLIC $(__dbtest___depname)
 
 $(OBJS)\dbtest_dbtest.obj :  .AUTODEPEND .\dbtest.cpp
 	$(CXX) -zq -fo=$^@ $(DBTEST_CXXFLAGS) $<
@@ -208,6 +212,7 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\*.ilk del $(OBJS)\*.ilk
 	-if exist $(OBJS)\dbtest.exe del $(OBJS)\dbtest.exe
 
+!ifeq USE_ODBC 1
 $(OBJS)\dbtest.exe :  $(DBTEST_OBJECTS) $(OBJS)\dbtest_dbtest.res
 	@%create $(OBJS)\dbtest.lbc
 	@%append $(OBJS)\dbtest.lbc option quiet
@@ -218,3 +223,4 @@ $(OBJS)\dbtest.exe :  $(DBTEST_OBJECTS) $(OBJS)\dbtest_dbtest.res
 	@for %i in ( $(__WXLIB_ODBC_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\dbtest.lbc library %i
 	@%append $(OBJS)\dbtest.lbc option resource=$(OBJS)\dbtest_dbtest.res
 	wlink @$(OBJS)\dbtest.lbc
+!endif

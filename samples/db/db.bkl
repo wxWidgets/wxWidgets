@@ -3,7 +3,9 @@
 
     <include file="../../build/bakefiles/common_samples.bkl"/>
 
-    <exe id="dbtest" template="wx_sample" template_append="wx_append">
+    <exe id="dbtest" 
+         cond="USE_ODBC=='1'"
+         template="wx_sample" template_append="wx_append">
         <sources>dbtest.cpp listdb.cpp</sources>
         <wx-lib>odbc</wx-lib>
         <wx-lib>core</wx-lib>
