@@ -102,7 +102,7 @@ jaguarTask =  Task( Job(config.OSX_HOST_jaguar,
 pantherTask =  Task( Job(config.OSX_HOST_panther,
                          ["distrib/all/build-osx", CFGFILE, config.OSX_HOST_panther, "panther"]) )
 
-rpmTask = Task([ Job("co-rh9",    ["distrib/all/build-rpm", CFGFILE, "beast", "co-rh9",   "rh9",   config.PYVER]),
+rpmTask = Task([ Job("co-rh9",    ["distrib/all/build-rpm", CFGFILE, "beast", "co-rh9",   "rh9",   "config"]),
                  Job("co-fc2",    ["distrib/all/build-rpm", CFGFILE, "beast", "co-fc2",   "fc2",   "2.3"]),
                  Job("co-mdk92",  ["distrib/all/build-rpm", CFGFILE, "beast", "co-mdk92", "mdk92", "2.3"]),
                  Job("co-mdk101", ["distrib/all/build-rpm", CFGFILE, "beast", "co-mdk101","mdk101","2.3"]),
@@ -115,7 +115,7 @@ buildTasks = [ windowsTask,
                ]
 
 # Finalization.  This is for things that must wait until all the
-# builds are done, such as copying the isntallers someplace, sending
+# builds are done, such as copying the installers someplace, sending
 # emails, etc.
 finalizationTask = Task( Job("", ["distrib/all/build-finalize", CFGFILE]) )
 

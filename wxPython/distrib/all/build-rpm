@@ -12,6 +12,10 @@ reltag=$4
 shift;shift;shift;shift
 pyver=$@
 
+if [ $pyver = config ]; then
+    pyver=$PYVER
+fi
+
 
 function TestOnline {
     local host=$1
