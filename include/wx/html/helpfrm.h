@@ -95,7 +95,7 @@ class WXDLLEXPORT wxHtmlHelpFrame : public wxFrame
 
     public:
         wxHtmlHelpFrame(wxHtmlHelpData* data = NULL) { Init(data); }
-        wxHtmlHelpFrame(wxWindow* parent, int wxWindowID,
+        wxHtmlHelpFrame(wxWindow* parent, wxWindowID wxWindowID,
                         const wxString& title = wxEmptyString,
                         int style = wxHF_DEFAULTSTYLE, wxHtmlHelpData* data = NULL);
         bool Create(wxWindow* parent, wxWindowID id, const wxString& title = wxEmptyString,
