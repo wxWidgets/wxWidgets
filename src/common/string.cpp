@@ -1011,15 +1011,21 @@ inline size_t wxMbstr(char* szBuffer, const wchar_t* szString,
         //Get the length of the current (sub)string
         size_t nLen = conv.WC2MB(NULL, szPos, 0);
 
+        //Invalid conversion?
+        if( nLen == (size_t)-1 )
+        {
+            szBuffer[0] = '\0';
+            return 0;
+        }
+
 //        wxASSERT(nLen != (size_t)-1); //should not be true!  If it is system wctomb could be bad
 
         nActualLength += nLen + 1;
 
-        wxASSERT(nActualLength <= (nStringLen<<1) + 1); //If this is true it means buffer overflow
+        wxASSERT( nActualLength <= (nStringLen<<2) + 1 ); //If this is true it means buffer overflow
 
         //Convert the current (sub)string
-        if ( nLen == (size_t)-1 ||
-             conv.WC2MB(&szBuffer[szPos - szStart], szPos, nLen + 1) == (size_t)-1 )
+        if(conv.WC2MB(&szBuffer[szPos - szStart], szPos, nLen + 1) == (size_t)-1 )
         {
             //error - return empty buffer
             wxFAIL_MSG(wxT("Error converting wide-character string to a multi-byte string"));
@@ -1058,6 +1064,13 @@ inline size_t wxWcstr( wchar_t* szBuffer, const char* szString,
         //Get the length of the current (sub)string
         size_t nLen = conv.MB2WC(NULL, szPos, 0);
 
+        //Invalid conversion?
+        if( nLen == (size_t)-1 )
+        {
+            szBuffer[0] = '\0';
+            return 0;
+        }
+
 //        wxASSERT(nLen != (size_t)-1); //If true, conversion was invalid, or system mbtowc could be bad
 
         nActualLength += nLen + 1;
@@ -1065,8 +1078,7 @@ inline size_t wxWcstr( wchar_t* szBuffer, const char* szString,
         wxASSERT(nActualLength <= nStringLen + 1); //If this is true it means buffer overflow
 
         //Convert the current (sub)string
-        if ( nLen == (size_t)-1 ||
-             conv.MB2WC(&szBuffer[szPos - szStart], szPos, nLen + 1) == (size_t)-1 )
+        if ( conv.MB2WC(&szBuffer[szPos - szStart], szPos, nLen + 1) == (size_t)-1 )
         {
             //error - return empty buffer
             wxFAIL_MSG(wxT("Error converting multi-byte string to a wide-character string"));
@@ -1156,6 +1168,8 @@ wxWCharBuffer buffer(nLen + 1);
 //Convert wxString in Unicode mode to a multi-byte string
 const wxCharBuffer wxString::mb_str(wxMBConv& conv) const
 {
+    //FIXME:  This may be invalid for UTF7 and other charsets
+
     //*4 is the worst case - for UTF8
     wxCharBuffer buffer((length() << 2) + 1);
 
@@ -1204,6 +1218,8 @@ wxString::wxString(const wchar_t *pwz, wxMBConv& conv, size_t nLength)
     // anything to do?
     if ( (nLen != 0) && (nLen != (size_t)-1) )
     {
+        //FIXME:  This may be invalid for UTF7 and other charsets
+
         //*4 is the worst case - for UTF8
         wxStringBufferLength internalBuffer(*this, (nLen << 2) + 1);
 

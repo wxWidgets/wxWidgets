@@ -185,6 +185,14 @@ void StringTestCase::ConstructorsWithConversion()
 
     CPPUNIT_ASSERT( s3 == sub );
     CPPUNIT_ASSERT( s4 == sub );
+
+#if wxUSE_UNICODE
+    CPPUNIT_ASSERT ( wxString("\t[pl]open.format.Sformatuj dyskietkê=gfloppy %f", 
+                               wxConvUTF8) == wxT("") ); //Pos 35 (funky e) is invalid UTF8
+#else
+    CPPUNIT_ASSERT ( wxString(L"\t[pl]open.format.Sformatuj dyskietkê=gfloppy %f", 
+                               wxConvUTF8) == wxT("") ); //Pos 35 (funky e) is invalid UTF8
+#endif
 }
 
 void StringTestCase::Conversion()
