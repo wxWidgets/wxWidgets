@@ -34,11 +34,11 @@
     #include "wx/wx.h"
 #endif
 
-#include "emulator.h"
-
 #ifdef __WXX11__    
 #include "wx/x11/reparent.h"
 #endif
+
+#include "emulator.h"
 
 // ----------------------------------------------------------------------------
 // resources
@@ -113,8 +113,9 @@ bool wxEmulatorApp::OnInit()
     m_xnestWindow = new wxAdoptedWindow;
 
     wxString cmd;
-    cmd.Printf(wxT("Xnest :100 -geometry %dx%d+50+50"),
-        (int) m_emulatorScreenSize.x, (int) m_emulatorScreenSize.y);
+    //    cmd.Printf(wxT("Xnest :100 -geometry %dx%d+50+50"),
+    cmd.Printf(wxT("Xnest :100 -geometry %dx%d"),
+        (int) m_emulatorInfo.m_emulatorScreenSize.x, (int) m_emulatorInfo.m_emulatorScreenSize.y);
 
     // Asynchronously executes Xnest    
     if (0 == wxExecute(cmd))
@@ -131,6 +132,8 @@ bool wxEmulatorApp::OnInit()
         frame->Destroy();
         return FALSE;
     }
+
+    m_containerWindow->DoResize();
 #endif
 
     // success: wxApp::OnRun() will be called which will enter the main message
@@ -150,7 +153,7 @@ bool wxEmulatorApp::LoadEmulator()
     // The offset from the top-left of the main emulator
     // bitmap and the virtual screen (where Xnest is
     // positioned)
-    m_emulatorInfo.m_emulatorScreenPosition = wxPoint(45, 57);
+    m_emulatorInfo.m_emulatorScreenPosition = wxPoint(56, 69);
 
     // The emulated screen size
     m_emulatorInfo.m_emulatorScreenSize = wxSize(240, 320);
@@ -231,6 +234,11 @@ wxEmulatorContainer::wxEmulatorContainer(wxWindow* parent, wxWindowID id):
 
 void wxEmulatorContainer::OnSize(wxSizeEvent& event)
 {
+    DoResize();
+}
+
+void wxEmulatorContainer::DoResize()
+{
     wxSize sz = GetClientSize();
     if (wxGetApp().m_emulatorInfo.m_emulatorBackgroundBitmap.Ok() &&
         wxGetApp().m_xnestWindow)
@@ -238,8 +246,8 @@ void wxEmulatorContainer::OnSize(wxSizeEvent& event)
         int bitmapWidth = wxGetApp().m_emulatorInfo.m_emulatorBackgroundBitmap.GetWidth();
         int bitmapHeight = wxGetApp().m_emulatorInfo.m_emulatorBackgroundBitmap.GetHeight();
         
-        int x = wxMax(0, (sz.x - bitmapWidth)/2.0);
-        int y = wxMax(0, (sz.y - bitmapHeight)/2.0);
+        int x = wxMax(0, (int) ((sz.x - bitmapWidth)/2.0));
+        int y = wxMax(0, (int) ((sz.y - bitmapHeight)/2.0));
         
         x += wxGetApp().m_emulatorInfo.m_emulatorScreenPosition.x;
         y += wxGetApp().m_emulatorInfo.m_emulatorScreenPosition.y;
@@ -259,8 +267,8 @@ void wxEmulatorContainer::OnPaint(wxPaintEvent& event)
         int bitmapWidth = wxGetApp().m_emulatorInfo.m_emulatorBackgroundBitmap.GetWidth();
         int bitmapHeight = wxGetApp().m_emulatorInfo.m_emulatorBackgroundBitmap.GetHeight();
         
-        int x = wxMax(0, (sz.x - bitmapWidth)/2.0);
-        int y = wxMax(0, (sz.y - bitmapHeight)/2.0);
+        int x = wxMax(0, (int) ((sz.x - bitmapWidth)/2.0));
+        int y = wxMax(0, (int) ((sz.y - bitmapHeight)/2.0));
         
         dc.DrawBitmap(wxGetApp().m_emulatorInfo.m_emulatorBackgroundBitmap, x, y);
     }

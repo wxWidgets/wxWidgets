@@ -88,6 +88,8 @@ public:
 
     wxEmulatorContainer(wxWindow* parent, wxWindowID id);
 
+    void DoResize();
+
     void OnSize(wxSizeEvent& event);
     void OnPaint(wxPaintEvent& event);
     void OnEraseBackground(wxEraseEvent& event);
