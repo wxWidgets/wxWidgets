@@ -4496,19 +4496,21 @@ dnl the library may be built without GUI classes at all
 dnl ---------------------------------------------------------------------------
 
 if test "$wxUSE_GUI" = "yes"; then
-  AC_DEFINE(wxUSE_GUI)
+    AC_DEFINE(wxUSE_GUI)
 
-  dnl the things we always pull in the GUI version of the library:
-  dnl 1. basic things like wxApp, wxWindow, wxControl, wxFrame, wxDialog (the
-  dnl    library really can't be built without those)
-  dnl 2. basic controls: wxButton, wxStaticText, wxTextCtrl (these are used in
-  dnl    almost any program and the first 2 are needed to show a message box
-  dnl    which want to be always able to do)
-  dnl 3. GDI stuff: icon, cursors and all that. Although it would be very nice
-  dnl    to compile without them (if the app doesn't do any drawing, it doesn't
-  dnl    need the dcs, pens, brushes, ...), this just can't be done now
-  dnl 4. menu stuff: wxMenu, wxMenuBar, wxMenuItem
-  dnl 5. misc stuff: timers, settings, message box
+    dnl the things we always pull in the GUI version of the library:
+    dnl 1. basic things like wxApp, wxWindow, wxControl, wxFrame, wxDialog (the
+    dnl    library really can't be built without those)
+    dnl 2. basic controls: wxButton, wxStaticText, wxTextCtrl (these are used in
+    dnl    almost any program and the first 2 are needed to show a message box
+    dnl    which want to be always able to do)
+    dnl 3. GDI stuff: icon, cursors and all that. Although it would be very nice
+    dnl    to compile without them (if the app doesn't do any drawing, it doesn't
+    dnl    need the dcs, pens, brushes, ...), this just can't be done now
+    dnl 4. menu stuff: wxMenu, wxMenuBar, wxMenuItem
+    dnl 5. misc stuff: timers, settings, message box
+else
+    AC_DEFINE(wxUSE_GUI, 0)
 fi
 
 dnl ---------------------------------------------------------------------------
