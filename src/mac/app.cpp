@@ -219,7 +219,7 @@ short wxApp::MacHandleAEOApp(const WXEVENTREF WXUNUSED(event) , WXEVENTREF WXUNU
     return noErr ;
 }
 
-// AEQuit attempts to quite the application
+// AEQuit attempts to quit the application
 
 short wxApp::MacHandleAEQuit(const WXEVENTREF WXUNUSED(event) , WXEVENTREF WXUNUSED(reply))
 {
