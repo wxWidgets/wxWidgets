@@ -676,8 +676,9 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
 {
     if ( ms_details.IsEmpty() )
     {
-        // ensure that we won't try to call wxGetTranslation() twice
-        ms_details = _T("&Details");
+        // ensure that we won't loop here if wxGetTranslation()
+        // happens to pop up a Log message while translating this :-)
+        ms_details = wxTRANSLATE("&Details");
         ms_details = wxGetTranslation(ms_details);
     }
 
