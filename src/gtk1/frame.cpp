@@ -655,10 +655,7 @@ void wxFrame::Command( int id )
         bar->Check(id,!bar->Checked(id)) ;
     }
 
-    // Process events starting with the window with the focus, if any.
-    wxWindow* focusWin = wxFindFocusDescendant(this);
-
-    wxEvtHandler* evtHandler = focusWin ? focusWin->GetEventHandler() : GetEventHandler();
+    wxEvtHandler* evtHandler = GetEventHandler();
 
     evtHandler->ProcessEvent(commandEvent);
 }

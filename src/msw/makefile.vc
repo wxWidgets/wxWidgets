@@ -191,6 +191,7 @@ MSWOBJS = \
   ..\msw\$D\dib.obj \
   ..\msw\$D\dibutils.obj \
   ..\msw\$D\dirdlg.obj \
+  ..\msw\$D\dragimag.obj \
   ..\msw\$D\filedlg.obj \
   ..\msw\$D\font.obj \
   ..\msw\$D\fontdlg.obj \

@@ -149,28 +149,6 @@ bool wxToolBarBase::OnLeftClick(int toolIndex, bool toggleDown)
     event.SetEventObject(this);
     event.SetExtraLong((long) toggleDown);
 
-    // First try sending the command to a window that has the focus, within a frame that
-    // also contains this toolbar.
-    wxFrame* frame = (wxFrame*) NULL;
-    wxWindow* win = this;
-    wxWindow* focusWin = (wxWindow*) NULL;
-
-    while (win)
-    {
-        if (win->IsKindOf(CLASSINFO(wxFrame)))
-        {
-            frame = (wxFrame*) win;
-            break;
-        }
-        else
-            win = win->GetParent();
-    }
-    if (frame)
-        focusWin = wxFindFocusDescendant(frame);
-
-    if (focusWin && focusWin->GetEventHandler()->ProcessEvent(event))
-        return TRUE;
-
     // Send events to this toolbar instead (and thence up the window hierarchy)
     GetEventHandler()->ProcessEvent(event);
 
@@ -757,27 +735,7 @@ void wxToolBarBase::OnIdle(wxIdleEvent& event)
 // Do the toolbar button updates (check for EVT_UPDATE_UI handlers)
 void wxToolBarBase::DoToolbarUpdates()
 {
-    // First try sending the command to a window that has the focus, within a frame that
-    // also contains this toolbar.
-    wxFrame* frame = (wxFrame*) NULL;
-    wxWindow* win = this;
-    wxWindow* focusWin = (wxWindow*) NULL;
-
-    while (win)
-    {
-        if (win->IsKindOf(CLASSINFO(wxFrame)))
-        {
-            frame = (wxFrame*) win;
-            break;
-        }
-        else
-            win = win->GetParent();
-    }
-    if (frame)
-        focusWin = wxFindFocusDescendant(frame);
-
-
-    wxEvtHandler* evtHandler = focusWin ? focusWin->GetEventHandler() : GetEventHandler() ;
+    wxEvtHandler* evtHandler = GetEventHandler() ;
 
     wxNode* node = GetTools().First();
     while (node)
