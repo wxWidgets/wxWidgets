@@ -9,8 +9,16 @@ URL: http://www.freiburg.linux.de/~wxxt/docs.html
 Packager: Robert Roebling <roebling@ruf.uni-freiburg.de>
 Requires: gtk+ >= 1.0.4
 
+# all packages providing an implementation of wxWindows library (regardless of
+# the toolkit used) should provide the (virtual) wxwin package, this makes it
+# possible to require wxwin instead of requiring "wxgtk or wxmotif or wxqt..."
+Provides: wxwin
+
 %description
-wxWindows is a free C++ library for cross-platform GUI development. With wxWindows, you can create applications for different GUIs from the same source code. This package also contains a dialog editor.
+wxWindows is a free C++ library for cross-platform GUI development.
+With wxWindows, you can create applications for different GUIs (GTK+,
+Motif/LessTif, MS Windows, Mac) from the same source code.
+This package also contains a dialog editor.
 
 %prep
 %setup -n wxGTK
