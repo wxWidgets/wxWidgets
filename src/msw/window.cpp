@@ -1473,7 +1473,7 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
 
         // here we try to do all the job which ::IsDialogMessage() usually does
         // internally
-#if 0
+#if 1
         bool bProcess = TRUE;
         if ( msg->message != WM_KEYDOWN )
             bProcess = FALSE;

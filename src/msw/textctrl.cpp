@@ -902,7 +902,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
                 eventNav.SetWindowChange(FALSE);
                 eventNav.SetEventObject(this);
 
-                if ( GetEventHandler()->ProcessEvent(eventNav) )
+                if ( GetParent()->GetEventHandler()->ProcessEvent(eventNav) )
                     return;
             }
             break;

@@ -282,6 +282,29 @@ void wxNotebook::SetImageList(wxImageList* imageList)
   TabCtrl_SetImageList(m_hwnd, (HIMAGELIST)imageList->GetHIMAGELIST());
 }
 
+// ----------------------------------------------------------------------------
+// wxNotebook size settings
+// ----------------------------------------------------------------------------
+
+void wxNotebook::SetPageSize(const wxSize& size)
+{
+    // transform the page size into the notebook size
+    RECT rc;
+    rc.left =
+    rc.top = 0;
+    rc.right = size.x;
+    rc.bottom = size.y;
+
+    TabCtrl_AdjustRect(GetHwnd(), TRUE, &rc);
+
+    // and now set it
+    SetSize(rc.right - rc.left, rc.bottom - rc.top);
+}
+
+void wxNotebook::SetPadding(const wxSize& padding)
+{
+    TabCtrl_SetPadding(GetHwnd(), padding.x, padding.y);
+}
 
 // Windows-only at present. Also, you must use the wxNB_FIXEDWIDTH
 // style.
@@ -423,7 +446,6 @@ bool wxNotebook::InsertPage(int nPage,
   TabCtrl_AdjustRect(m_hwnd, FALSE, &rc);
   pPage->SetSize(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
 
-
   // some page should be selected: either this one or the first one if there is
   // still no selection
   int selNew = -1;
@@ -488,26 +510,71 @@ void wxNotebook::OnSelChange(wxNotebookEvent& event)
 
 void wxNotebook::OnSetFocus(wxFocusEvent& event)
 {
-  // set focus to the currently selected page if any
-  if ( m_nSelection != -1 )
-    m_aPages[m_nSelection]->SetFocus();
+    // this function is only called when the focus is explicitly set (i.e. from
+    // the program) to the notebook - in this case we don't need the
+    // complicated OnNavigationKey() logic because the programmer knows better
+    // what [s]he wants
 
-  event.Skip();
+    // set focus to the currently selected page if any
+    if ( m_nSelection != -1 )
+        m_aPages[m_nSelection]->SetFocus();
+
+    event.Skip();
 }
 
 void wxNotebook::OnNavigationKey(wxNavigationKeyEvent& event)
 {
-  if ( event.IsWindowChange() ) {
-    // change pages
-    AdvanceSelection(event.GetDirection());
-  }
-  else {
-    // pass to the parent
-    if ( GetParent() ) {
-      event.SetCurrentFocus(this);
-      GetParent()->GetEventHandler()->ProcessEvent(event);
+    if ( event.IsWindowChange() ) {
+        // change pages
+        AdvanceSelection(event.GetDirection());
     }
-  }
+    else {
+        // we get this event in 2 cases
+        //
+        // a) one of our pages might have generated it because the user TABbed
+        // out from it in which case we should propagate the event upwards and
+        // our parent will take care of setting the focus to prev/next sibling
+        //
+        // or
+        //
+        // b) the parent panel wants to give the focus to us so that we
+        // forward it to our selected page. We can't deal with this in
+        // OnSetFocus() because we don't know which direction the focus came
+        // from in this case and so can't choose between setting the focus to
+        // first or last panel child
+
+        wxWindow *parent = GetParent();
+        if ( event.GetEventObject() == parent )
+        {
+            // no, it doesn't come from child, case (b): forward to a page
+            if ( m_nSelection != -1 )
+            {
+                // so that the page knows that the event comes from it's parent
+                // and is being propagated downwards
+                event.SetEventObject(this);
+
+                wxWindow *page = m_aPages[m_nSelection];
+                if ( !page->GetEventHandler()->ProcessEvent(event) )
+                {
+                    page->SetFocus();
+                }
+                //else: page manages focus inside it itself
+            }
+            else
+            {
+                // we have no pages - still have to give focus to _something_
+                SetFocus();
+            }
+        }
+        else
+        {
+            // it comes from our child, case (a), pass to the parent
+            if ( parent ) {
+                event.SetCurrentFocus(this);
+                parent->GetEventHandler()->ProcessEvent(event);
+            }
+        }
+    }
 }
 
 // ----------------------------------------------------------------------------
