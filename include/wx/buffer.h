@@ -126,6 +126,93 @@ private:
     #define wxWX2WCbuf wxWCharBuffer
 #endif // Unicode/ANSI
 
+
+
+// ----------------------------------------------------------------------------
+// A class for holding growable data buffers (not necessarily strings)
+// ----------------------------------------------------------------------------
+
+class wxMemoryBuffer
+{
+public:
+    enum { BLOCK_SIZE = 1024 };
+    wxMemoryBuffer(size_t size=wxMemoryBuffer::BLOCK_SIZE)
+    {
+        wxASSERT(size > 0);
+        m_data = malloc(size);
+        wxASSERT(m_data != NULL);
+        m_size = size;
+        m_len  = 0;
+    }
+
+    ~wxMemoryBuffer() { free(m_data); }
+
+    // Accessors
+    void*  GetData()    { return m_data; }
+    size_t GetBufSize() { return m_size; }
+    size_t GetDataLen() { return m_len; }
+
+    void   SetBufSize(size_t size) { ResizeIfNeeded(size); }
+    void   SetDataLen(size_t len)
+    {
+        wxASSERT(len <= m_size);
+        m_len = len;
+    }
+
+    // Ensure the buffer is big enough and return a pointer to it
+    void* GetWriteBuf(size_t sizeNeeded)
+    {
+        ResizeIfNeeded(sizeNeeded);
+        return m_data;
+    }
+    // Update the length after the write
+    void  UngetWriteBuf(size_t sizeUsed) { SetDataLen(sizeUsed); }
+
+    // Like the above, but appends to the buffer
+    void* GetAppendBuf(size_t sizeNeeded)
+    {
+        ResizeIfNeeded(m_len + sizeNeeded);
+        return (char*)m_data + m_len;
+    }
+    void  UngetAppendBuf(size_t sizeUsed) { SetDataLen(m_len + sizeUsed); }
+
+    // Other ways to append to the buffer
+    void  AppendByte(char data) {
+        ResizeIfNeeded(m_len + 1);
+        *((char*)m_data) = data;
+        m_len += 1;
+    }
+    void  AppendData(void* data, size_t len)
+    {
+        memcpy(GetAppendBuf(len), data, len);
+        UngetAppendBuf(len);
+    }
+
+    operator const char *() const { return (const char*)m_data; }
+
+protected:
+    // Don't allow copy or assignment
+    wxMemoryBuffer(const wxMemoryBuffer&) {}
+    wxMemoryBuffer& operator=(const wxCharBuffer& src) {}
+
+    void ResizeIfNeeded(size_t newSize)
+    {
+        if (newSize > m_size)
+        {
+            m_data = realloc(m_data, newSize + wxMemoryBuffer::BLOCK_SIZE);
+            wxASSERT(m_data != NULL);
+            m_size = newSize + wxMemoryBuffer::BLOCK_SIZE;
+        }
+    }
+
+private:
+    void*       m_data;
+    size_t      m_size;
+    size_t      m_len;
+};
+
+
+
 // ----------------------------------------------------------------------------
 // template class for any kind of data
 // ----------------------------------------------------------------------------
