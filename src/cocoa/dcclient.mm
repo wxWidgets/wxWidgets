@@ -30,28 +30,66 @@ IMPLEMENT_DYNAMIC_CLASS(wxWindowDC, wxDC)
 
 wxWindowDC::wxWindowDC(void)
 :   m_window(NULL)
+,   m_lockedNSView(NULL)
 {
 };
 
 wxWindowDC::wxWindowDC( wxWindow *window )
 :   m_window(window)
+,   m_lockedNSView(NULL)
 {
-    wxFAIL_MSG("non-client window DC's are not supported");
+    wxLogDebug("non-client window DC's are not supported, oh well");
 };
 
 wxWindowDC::~wxWindowDC(void)
 {
+    CocoaUnwindStackAndLoseFocus();
 };
+
+bool wxWindowDC::CocoaLockFocusOnNSView(WX_NSView nsview)
+{
+    if([nsview lockFocusIfCanDraw])
+    {
+        sm_cocoaDCStack.Insert(this);
+        m_cocoaFlipped = [nsview isFlipped];
+        m_cocoaHeight = [nsview bounds].size.height;
+        CocoaApplyTransformations();
+        m_lockedNSView = nsview;
+        return true;
+    }
+    wxLogDebug("focus lock failed!");
+    return false;
+}
+
+bool wxWindowDC::CocoaUnlockFocusOnNSView()
+{
+    [[m_lockedNSView window] flushWindow];
+    [m_lockedNSView unlockFocus];
+    m_lockedNSView = NULL;
+    return true;
+}
+
+bool wxWindowDC::CocoaLockFocus()
+{
+    wxLogDebug("Locking focus on wxWindowDC=%p, NSView=%p",this, m_window->GetNonClientNSView());
+    return CocoaLockFocusOnNSView(m_window->GetNonClientNSView());
+}
+
+bool wxWindowDC::CocoaUnlockFocus()
+{
+    wxLogDebug("Unlocking focus on wxWindowDC=%p, NSView=%p",this, m_window->GetNonClientNSView());
+    return CocoaUnlockFocusOnNSView();
+}
 
 void wxWindowDC::Clear()
 {
-    wxASSERT(m_window);
+    if(!CocoaTakeFocus()) return;
 
     NSGraphicsContext *context = [NSGraphicsContext currentContext];
     [context saveGraphicsState];
 
     [m_backgroundBrush.GetNSColor() set];
-    [NSBezierPath fillRect:[m_window->GetNSView() bounds]];
+    [NSBezierPath fillRect:[m_lockedNSView bounds]];
 
     [context restoreGraphicsState];
 }
@@ -78,24 +116,13 @@ wxClientDC::~wxClientDC(void)
 bool wxClientDC::CocoaLockFocus()
 {
     wxLogDebug("Locking focus on wxClientDC=%p, NSView=%p",this, m_window->GetNSView());
-    if([m_window->GetNSView() lockFocusIfCanDraw])
-    {
-        sm_cocoaDCStack.Insert(this);
-        m_cocoaFlipped = [m_window->GetNSView() isFlipped];
-        m_cocoaHeight = [m_window->GetNSView() bounds].size.height;
-        CocoaApplyTransformations();
-        return true;
-    }
-    wxLogDebug("focus lock failed!");
-    return false;
+    return CocoaLockFocusOnNSView(m_window->GetNSView());
 }
 
 bool wxClientDC::CocoaUnlockFocus()
 {
     wxLogDebug("Unlocking focus on wxClientDC=%p, NSView=%p",this, m_window->GetNSView());
-    [[m_window->GetNSView() window] flushWindow];
-    [m_window->GetNSView() unlockFocus];
-    return true;
+    return CocoaUnlockFocusOnNSView();
 }
 
 /*
@@ -112,6 +139,7 @@ wxPaintDC::wxPaintDC( wxWindow *window )
     m_window = window;
     wxASSERT_MSG([NSView focusView]==window->GetNSView(), "PaintDC's NSView does not have focus.  Please use wxPaintDC only as the first DC created in a paint handler");
     sm_cocoaDCStack.Insert(this);
+    m_lockedNSView = window->GetNSView();
     m_cocoaFlipped = [window->GetNSView() isFlipped];
     m_cocoaHeight = [window->GetNSView() bounds].size.height;
     CocoaApplyTransformations();
