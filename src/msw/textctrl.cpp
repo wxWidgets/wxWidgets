@@ -633,7 +633,7 @@ void wxTextCtrl::DoWriteText(const wxString& value, bool selectionOnly)
 #if wxUSE_UNICODE_MSLU
         // RichEdit doesn't have Unicode version of EM_REPLACESEL on Win9x,
         // but EM_STREAMIN works
-        if ( wxGetOsVersion() == wxWIN95 && GetRichVersion() > 1 )
+        if ( wxUsingUnicowsDll() && GetRichVersion() > 1 )
         {
            done = StreamIn(valueDos, wxFONTENCODING_SYSTEM, selectionOnly);
         }
@@ -1718,7 +1718,7 @@ bool wxRichEditModule::OnInit()
 
 void wxRichEditModule::OnExit()
 {
-    for ( int i = 0; i < WXSIZEOF(ms_hRichEdit); i++ )
+    for ( size_t i = 0; i < WXSIZEOF(ms_hRichEdit); i++ )
     {
         if ( ms_hRichEdit[i] )
         {

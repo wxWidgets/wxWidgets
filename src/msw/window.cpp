@@ -998,15 +998,20 @@ bool wxCheckWindowWndProc(WXHWND hWnd, WXFARPROC wndProc)
     //     FIXME: Doesn't handle wnd procs set by SetWindowLong, only these set
     //            with RegisterClass!!
 
-    static wxChar buffer[512];
-    WNDCLASS cls;
+    if ( wxUsingUnicowsDll() )
+    {
+        static wxChar buffer[512];
+        WNDCLASS cls;
 
-    ::GetClassName((HWND)hWnd, buffer, 512);
-    ::GetClassInfo(wxGetInstance(), buffer, &cls);
-    return wndProc == (WXFARPROC)cls.lpfnWndProc;
-#else
-    return wndProc == (WXFARPROC)::GetWindowLong((HWND)hWnd, GWL_WNDPROC);
+        ::GetClassName((HWND)hWnd, buffer, 512);
+        ::GetClassInfo(wxGetInstance(), buffer, &cls);
+        return wndProc == (WXFARPROC)cls.lpfnWndProc;
+    }
+    else
 #endif
+    {
+        return wndProc == (WXFARPROC)::GetWindowLong((HWND)hWnd, GWL_WNDPROC);
+    }
 }
 
 // ----------------------------------------------------------------------------

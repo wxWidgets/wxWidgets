@@ -23,7 +23,7 @@
 
 #ifndef WX_PRECOMP
   #include "wx/window.h"
-//  #include "wx/msw/private.h"
+  #include "wx/msw/private.h"
   #include "wx/font.h"
   #include "wx/bitmap.h"
   #include "wx/dcmemory.h"
@@ -191,29 +191,12 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
 
     HFONT hPrevFont = (HFONT) ::SelectObject(hdc, hfont);
    
-
-#if wxUSE_UNICODE_MSLU
-	if ( wxGetOsVersion() == wxWIN95 /* using unicows.dll */ )
-	{
-		// VS: There's yet another bug in MSLU: DrawStateW behaves
-		//     like if it was expecting char*, not wchar_t* input.
-		//     We have to use DrawStateA explicitly.
-		DrawStateA(hdc, NULL, NULL,
-				   (LPARAM)(const char*)m_strName.mb_str(wxConvLocal),
-				   m_strName.length(),
-                   x, rc.y, rc.GetWidth(), rc.GetHeight(),
-                   DST_PREFIXTEXT | 
-					   (st & wxODDisabled ? DSS_DISABLED : 0));
-	}
-	else
-#else
 	DrawState(hdc, NULL, NULL,
               (LPARAM)m_strName.c_str(), m_strName.length(),
               x, rc.y, rc.GetWidth(), rc.GetHeight(),
               DST_PREFIXTEXT | (st & wxODDisabled ? DSS_DISABLED : 0));
-#endif
 
-	 if ( !m_strAccel.empty() )
+    if ( !m_strAccel.empty() )
     {
         RECT r;
         r.top = rc.GetTop();

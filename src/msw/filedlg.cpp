@@ -398,29 +398,6 @@ int wxFileDialog::ShowModal()
                                             : (GetOpenFileName(&of) != 0);
         }
     }
-
-#if wxUSE_UNICODE_MSLU && defined(OFN_EXPLORER)
-    // VS: there's a bug in unicows.dll - when multiple files are selected, 
-    //     of.nFileOffset doesn't point to the first filename but rather to 
-    //     the last component of directory name. This bug is known to MSLU
-    //     developers, but they are not going to fix it: "this is a true 
-    //     limitation, that we have decided to live with" and "working
-    //     harder on this case just did not seem worth the effort"...
-    //
-    //     Our only option is to try to fix it ourselves:
-
-    if ( (m_dialogStyle & wxMULTIPLE) &&
-         (fileNameBuffer[of.nFileOffset-1] != wxT('\0')) &&
-         wxGetOsVersion() == wxWIN95 /*using unicows.dll*/)
-    {
-        if ( wxDirExists(fileNameBuffer) )
-        {
-            // 1st component is dir => multiple files selected
-            of.nFileOffset = wxStrlen(fileNameBuffer)+1;
-        }
-    }
-#endif // wxUSE_UNICODE_MSLU
-
 #endif // __WIN32__
 
     if ( success )
