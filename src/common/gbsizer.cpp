@@ -46,7 +46,7 @@ wxGBSizerItem::wxGBSizerItem( int width,
     : wxSizerItem(width, height, 0, flag, border, userData),
       m_pos(pos),
       m_span(span),
-      m_sizer(NULL)
+      m_gbsizer(NULL)
 {
 }
 
@@ -60,7 +60,7 @@ wxGBSizerItem::wxGBSizerItem( wxWindow *window,
     : wxSizerItem(window, 0, flag, border, userData),
       m_pos(pos),
       m_span(span),
-      m_sizer(NULL)
+      m_gbsizer(NULL)
 {
 }
 
@@ -74,7 +74,7 @@ wxGBSizerItem::wxGBSizerItem( wxSizer *sizer,
     : wxSizerItem(sizer, 0, flag, border, userData),
       m_pos(pos),
       m_span(span),
-      m_sizer(NULL)
+      m_gbsizer(NULL)
 {
 }
 
@@ -82,7 +82,7 @@ wxGBSizerItem::wxGBSizerItem()
     : wxSizerItem(),
       m_pos(-1,-1),
       m_span(-1,-1),
-      m_sizer(NULL)
+      m_gbsizer(NULL)
 {
 }
 
@@ -104,9 +104,9 @@ void wxGBSizerItem::GetSpan(int& rowspan, int& colspan) const
 
 bool wxGBSizerItem::SetPos( const wxGBPosition& pos )
 {
-    if (m_sizer)
+    if (m_gbsizer)
     {
-        wxCHECK_MSG( !m_sizer->CheckForIntersection(pos, m_span, this), false,
+        wxCHECK_MSG( !m_gbsizer->CheckForIntersection(pos, m_span, this), false,
                  wxT("An item is already at that position") );
     }
     m_pos = pos;
@@ -115,9 +115,9 @@ bool wxGBSizerItem::SetPos( const wxGBPosition& pos )
 
 bool wxGBSizerItem::SetSpan( const wxGBSpan& span )
 {
-    if (m_sizer)
+    if (m_gbsizer)
     {
-        wxCHECK_MSG( !m_sizer->CheckForIntersection(m_pos, span, this), false,
+        wxCHECK_MSG( !m_gbsizer->CheckForIntersection(m_pos, span, this), false,
                  wxT("An item is already at that position") );
     }
     m_span = span;
@@ -226,8 +226,10 @@ bool wxGridBagSizer::Add( int width, int height,
 
 bool wxGridBagSizer::Add( wxGBSizerItem *item )
 {
-        m_children.Append(item);
-    item->SetSizer(this);
+    wxCHECK_MSG( !CheckForIntersection(item), false,
+                 wxT("An item is already at that position") );
+    m_children.Append(item);
+    item->SetGBSizer(this);
     if ( item->GetWindow() )
         item->GetWindow()->SetContainingSizer( this );
 

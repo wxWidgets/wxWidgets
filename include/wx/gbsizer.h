@@ -148,14 +148,14 @@ public:
     void GetEndPos(int& row, int& col);
 
     
-    wxGridBagSizer* GetSizer() const { return m_sizer; }
-    void SetSizer(wxGridBagSizer* sizer) { m_sizer = sizer; }
+    wxGridBagSizer* GetGBSizer() const { return m_gbsizer; }
+    void SetGBSizer(wxGridBagSizer* sizer) { m_gbsizer = sizer; }
     
     
 protected:
     wxGBPosition    m_pos;
     wxGBSpan        m_span;
-    wxGridBagSizer* m_sizer;
+    wxGridBagSizer* m_gbsizer;  // so SetPos/SetSpan can check for intersects
 
     
 private:    
