@@ -496,14 +496,21 @@ wxString wxDynamicLibrary::GetPluginsDirectory()
 {
 #ifdef __UNIX__
     wxString format = wxGetInstallPrefix();
+    wxString dir;
     format << wxFILE_SEP_PATH
            << wxT("lib") << wxFILE_SEP_PATH
            << wxT("wx") << wxFILE_SEP_PATH
+#if (wxMINOR_VERSION % 2) == 0
            << wxT("%i.%i");
-    wxString dir;
     dir.Printf(format.c_str(), wxMAJOR_VERSION, wxMINOR_VERSION);
-    return dir;
 #else
+           << wxT("%i.%i.%i");
+    dir.Printf(format.c_str(),
+               wxMAJOR_VERSION, wxMINOR_VERSION, wxRELEASE_NUMBER);
+#endif
+    return dir;
+
+#else // ! __UNIX__
     return wxEmptyString;
 #endif
 }
