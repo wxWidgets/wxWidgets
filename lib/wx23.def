@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  G:\DEV\WX2\WXWINDOWS\LIB\wx.lib
+;From library:  G:\DEV\WX2\WXWINDOWS\lib\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -2264,6 +2264,7 @@ EXPORTS
       GetOutputStream__5wxFTPFRC8wxString
       ;wxFTP::GetList(wxArrayString&,const wxString&,unsigned long)
       GetList__5wxFTPFR13wxArrayStringRC8wxStringUl
+      wxProtocolUsewxFTP
       ;wxFTP::sm_classwxFTP
       sm_classwxFTP__5wxFTP
   ;From object file:  ..\common\gdicmn.cpp
@@ -2452,10 +2453,12 @@ EXPORTS
       Get__11wxHashTableCFl
       ;wxHashTable::DeleteContents(unsigned long)
       DeleteContents__11wxHashTableFUl
-      ;wxHashTableLong::Put(long,long)
-      Put__15wxHashTableLongFlT1
+      ;wxHashTableLong::Create(unsigned int)
+      Create__15wxHashTableLongFUi
       ;wxHashTable::sm_classwxHashTable
       sm_classwxHashTable__11wxHashTable
+      ;wxHashTableLong::Put(long,long)
+      Put__15wxHashTableLongFlT1
       ;wxHashTable::Create(int,int)
       Create__11wxHashTableFiT1
       ;wxConstructorForwxHashTable()
@@ -2518,6 +2521,7 @@ EXPORTS
     ;PUBDEFs (Symbols available from object file):
       ;wxHTTP::sm_classwxHTTP
       sm_classwxHTTP__6wxHTTP
+      wxProtocolUsewxHTTP
       ;wxHTTP::wxHTTP()
       __ct__6wxHTTPFv
       ;wxHTTP::SendHeaders()
@@ -4080,6 +4084,7 @@ EXPORTS
       sm_classwxFileProto__11wxFileProto
       ;wxFileProto::wxFileProto()
       __ct__11wxFileProtoFv
+      wxProtocolUsewxFileProto
       ;wxFileProto::~wxFileProto()
       __dt__11wxFileProtoFv
       ;wxFileProto::GetInputStream(const wxString&)
@@ -5727,6 +5732,8 @@ EXPORTS
       sm_classwxVariantDataTime__17wxVariantDataTime
       ;wxDate::sm_classwxDate
       sm_classwxDate__6wxDate
+      ;wxTime::ms_bufTime
+      ms_bufTime__6wxTime
       ;wxTime::ms_Precision
       ms_Precision__6wxTime
       ;wxTime::ms_Format
@@ -6157,43 +6164,43 @@ EXPORTS
   ;From object file:  ..\common\y_tab.c
     ;PUBDEFs (Symbols available from object file):
       wxExprCleanUp
-      PROIO_yydefred
-      PROIO_yytable
-      PROIO_yyin
-      PROIO_yylhs
-      PROIO_yydgoto
-      PROIO_yywrap
-      PROIO_yyrestart
-      PROIO_yyout
-      PROIO_yylex
+      yygindex
+      yy_load_buffer_state
+      yy_init_buffer
+      yyin
+      yy_create_buffer
+      yywrap
+      yyrestart
+      yydefred
+      yyerror
+      yylen
       LexFromString
-      PROIO_yyrindex
+      yydgoto
       PROIO_yyparse
-      PROIO_yy_create_buffer
+      yy_delete_buffer
       os2var
-      PROIO_yy_delete_buffer
-      PROIO_yycheck
-      PROIO_yysindex
-      PROIO_yy_load_buffer_state
-      PROIO_yy_init_buffer
-      PROIO_yy_switch_to_buffer
-      PROIO_yygindex
+      yycheck
+      yysindex
+      yy_switch_to_buffer
+      yylex
+      yyrindex
+      yyout
       LexFromFile
-      PROIO_yyerror
-      PROIO_yylen
+      yytable
+      yylhs
     ;COMDEFs (Symbols available from object file):
-      PROIO_yyvsp
-      PROIO_yyssp
-      PROIO_yychar
-      PROIO_yyvs
-      PROIO_yyss
-      PROIO_yyleng
-      PROIO_yyerrflag
-      PROIO_yylval
-      PROIO_yyval
-      PROIO_yynerrs
-      PROIO_yydebug
-      PROIO_yytext
+      yyval
+      yytext
+      yyssp
+      yychar
+      yyss
+      yylval
+      yyerrflag
+      yyvsp
+      yydebug
+      yyvs
+      yynerrs
+      yyleng
   ;From object file:  ..\common\zipstrm.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxZipInputStream::OnSysSeek(long,wxSeekMode)
@@ -8712,6 +8719,7 @@ EXPORTS
       DrawSash__12wxSashWindowF18wxSashEdgePositionR4wxDC
       ;wxSashWindow::DrawBorders(wxDC&)
       DrawBorders__12wxSashWindowFR4wxDC
+      wxEVT_SASH_DRAGGED
       ;wxSashWindow::Init()
       Init__12wxSashWindowFv
       ;wxConstructorForwxSashWindow()
@@ -9062,23 +9070,38 @@ EXPORTS
     ;PUBDEFs (Symbols available from object file):
       ;wxTipWindow::OnKillFocus(wxFocusEvent&)
       OnKillFocus__11wxTipWindowFR12wxFocusEvent
+      ;wxTipWindow::wxTipWindow(wxWindow*,const wxString&,int,wxTipWindow**)
+      __ct__11wxTipWindowFP8wxWindowRC8wxStringiPP11wxTipWindow
+      ;wxTipWindowView::sm_eventTable
+      sm_eventTable__15wxTipWindowView
+      ;wxTipWindowView::OnMouseClick(wxMouseEvent&)
+      OnMouseClick__15wxTipWindowViewFR12wxMouseEvent
       __vft11wxTipWindow8wxObject
-      ;wxTipWindow::Adjust(const wxString&,int)
-      Adjust__11wxTipWindowFRC8wxStringi
+      ;wxTipWindowView::GetEventTable() const
+      GetEventTable__15wxTipWindowViewCFv
       ;wxTipWindow::OnMouseClick(wxMouseEvent&)
       OnMouseClick__11wxTipWindowFR12wxMouseEvent
-      ;wxTipWindow::wxTipWindow(wxWindow*,const wxString&,int)
-      __ct__11wxTipWindowFP8wxWindowRC8wxStringi
+      ;wxTipWindowView::OnKillFocus(wxFocusEvent&)
+      OnKillFocus__15wxTipWindowViewFR12wxFocusEvent
       ;wxTipWindow::GetEventTable() const
       GetEventTable__11wxTipWindowCFv
+      ;wxTipWindow::~wxTipWindow()
+      __dt__11wxTipWindowFv
       ;wxTipWindow::sm_eventTable
       sm_eventTable__11wxTipWindow
+      ;wxTipWindowView::OnPaint(wxPaintEvent&)
+      OnPaint__15wxTipWindowViewFR12wxPaintEvent
+      __vft15wxTipWindowView8wxObject
+      ;wxTipWindowView::wxTipWindowView(wxWindow*)
+      __ct__15wxTipWindowViewFP8wxWindow
       ;wxTipWindow::sm_eventTableEntries
       sm_eventTableEntries__11wxTipWindow
-      ;wxTipWindow::OnPaint(wxPaintEvent&)
-      OnPaint__11wxTipWindowFR12wxPaintEvent
       ;wxTipWindow::OnActivate(wxActivateEvent&)
       OnActivate__11wxTipWindowFR15wxActivateEvent
+      ;wxTipWindowView::Adjust(const wxString&,int)
+      Adjust__15wxTipWindowViewFRC8wxStringi
+      ;wxTipWindowView::sm_eventTableEntries
+      sm_eventTableEntries__15wxTipWindowView
   ;From object file:  ..\generic\treectlg.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxTreeRenameTimer::wxTreeRenameTimer(wxGenericTreeCtrl*)
@@ -10152,6 +10175,8 @@ EXPORTS
       Insert__10wxMsgArrayFRC5_QMSGUi
       ;wxApp::wxApp()
       __ct__5wxAppFv
+      ;wxYieldIfNeeded()
+      wxYieldIfNeeded__Fv
       wxDEFAULT_MDIPARENTFRAME_ICON
       ;wxApp::SendIdleEvents()
       SendIdleEvents__5wxAppFv
