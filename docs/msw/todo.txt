@@ -100,6 +100,15 @@ Simplify the toolbar samples.
 
 Add a wxTabCtrl sample.
 
+EVT_ENTER/LEAVE_WINDOW: Perhaps one approach to reliable implementation of
+EVT_LEAVE_WINDOW is to set a flag when the mouse pointer is in a window,
+then in idle time, check this window.
+If the flag is set but the mouse pointer is outside the window, then
+it's time to generate an EVT_LEAVE_WINDOW. This would be necessary at
+least for the case when the mouse cursor goes off the application windows,
+and no motion event was generated (i.e. you moved the mouse quickly!).
+If it goes from one app window to another, you could generate the event sooner.
+
 LOW PRIORITY
 ------------
 
