@@ -29,7 +29,12 @@
 #include "wx/stream.h"
 
 #ifdef HAVE_STATFS
-    #include <sys/vfs.h>
+#  ifdef __DARWIN__
+#    include <sys/param.h>
+#    include <sys/mount.h>
+#  else
+#    include <sys/vfs.h>
+#  endif
 #endif // HAVE_STATFS
 
 #if wxUSE_GUI
