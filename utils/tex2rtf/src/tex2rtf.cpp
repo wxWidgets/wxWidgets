@@ -1082,15 +1082,14 @@ char *Tex2RTFConnection::OnRequest(const wxString& topic, const wxString& item, 
 
 #endif
 
-
 #ifndef NO_GUI
 #ifndef __WXGTK__
-void wxObject::Dump(ostream& str)
-{
-  if (GetClassInfo() && GetClassInfo()->GetClassName())
-    str << GetClassInfo()->GetClassName();
-  else
-    str << "unknown object class";
-}
+//void wxObject::Dump(ostream& str)
+//{
+//  if (GetClassInfo() && GetClassInfo()->GetClassName())
+//    str << GetClassInfo()->GetClassName();
+//  else
+//    str << "unknown object class";
+//}
 #endif
 #endif
