@@ -58,7 +58,7 @@
 
 wxResourceManager *wxResourceManager::sm_currentResourceManager = NULL;
 
-#if defined(__WXGTK__) || defined(__WXMOTIF__)
+#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__)
 #include "bitmaps/load.xpm"
 #include "bitmaps/save.xpm"
 #include "bitmaps/new.xpm"
@@ -769,7 +769,7 @@ wxToolBar *wxResourceManager::OnCreateToolBar(wxFrame *parent)
     wxBitmap ToolbarDistributeHorizBitmap("DISTHORIZTOOL");
     wxBitmap ToolbarDistributeVertBitmap("DISTVERTTOOL");
 #endif
-#if defined(__WXGTK__) || defined(__WXMOTIF__)
+#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__)
     wxBitmap ToolbarLoadBitmap( load_xpm );
     wxBitmap ToolbarSaveBitmap( save_xpm);
     wxBitmap ToolbarNewBitmap( new_xpm );
@@ -2382,7 +2382,7 @@ void wxResourceEditorScrolledWindow::DrawTitle(wxDC& dc)
         {
             wxString str(res->GetTitle());
             int x, y;
-            ViewStart(& x, & y);
+            GetViewStart(& x, & y);
             
             wxFont font(10, wxSWISS, wxNORMAL, wxBOLD);
             dc.SetFont(font);
