@@ -136,7 +136,7 @@ class WXDLLEXPORT wxTabEvent: public wxCommandEvent
   DECLARE_DYNAMIC_CLASS(wxTabEvent)
 
  public:
-  wxTabEvent(WXTYPE commandType = 0, int id = 0);
+  wxTabEvent(wxEventType commandType = wxEVT_NULL, int id = 0);
 };
 
 typedef void (wxEvtHandler::*wxTabEventFunction)(wxTabEvent&);

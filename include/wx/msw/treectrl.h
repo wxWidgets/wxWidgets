@@ -96,6 +96,27 @@ public:
     long            m_data;
 
     wxTreeItem(void);
+
+// Accessors
+    inline long GetMask() const { return m_mask; }
+    inline long GetItemId() const { return m_itemId; }
+    inline long GetState() const { return m_state; }
+    inline long GetStateMask() const { return m_stateMask; }
+    inline wxString GetText() const { return m_text; }
+    inline int GetImage() const { return m_image; }
+    inline int GetSelectedImage() const { return m_selectedImage; }
+    inline int GetChildren() const { return m_children; }
+    inline long GetData() const { return m_data; }
+
+    inline void SetMask(long mask) { m_mask = mask; }
+    inline void SetItemId(long id) { m_itemId = m_itemId = id; }
+    inline void GetState(long state) { m_state = state; }
+    inline void SetStateMask(long stateMask) { m_stateMask = stateMask; }
+    inline void GetText(const wxString& text) { m_text = text; }
+    inline void SetImage(int image) { m_image = image; }
+    inline void GetSelectedImage(int selImage) { m_selectedImage = selImage; }
+    inline void SetChildren(int children) { m_children = children; }
+    inline void SetData(long data) { m_data = data; }
 };
 
 class WXDLLEXPORT wxTreeCtrl: public wxControl
@@ -111,7 +132,7 @@ class WXDLLEXPORT wxTreeCtrl: public wxControl
   inline wxTreeCtrl(wxWindow *parent, const wxWindowID id = -1,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
-            const long style = wxTR_HAS_BUTTONS,
+            const long style = wxTR_HAS_BUTTONS|wxTR_LINES_AT_ROOT,
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = "wxTreeCtrl")
   {
@@ -122,7 +143,7 @@ class WXDLLEXPORT wxTreeCtrl: public wxControl
   bool Create(wxWindow *parent, const wxWindowID id = -1,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
-            const long style = wxTR_HAS_BUTTONS,
+            const long style = wxTR_HAS_BUTTONS|wxTR_LINES_AT_ROOT,
             const wxValidator& validator = wxDefaultValidator,
             const wxString& name = "wxTreeCtrl");
 
@@ -201,12 +222,17 @@ class WXDLLEXPORT wxTreeEvent: public wxCommandEvent
   DECLARE_DYNAMIC_CLASS(wxTreeEvent)
 
  public:
-  wxTreeEvent(WXTYPE commandType = 0, int id = 0);
+  wxTreeEvent(wxEventType commandType = wxEVT_NULL, int id = 0);
 
   int           m_code;
   wxTreeItem    m_item;
   long          m_oldItem;
   wxPoint       m_pointDrag;
+
+  inline long GetOldItem() const { return m_oldItem; }
+  inline wxTreeItem& GetItem() const { return (wxTreeItem&) m_item; }
+  inline wxPoint GetPoint() const { return m_pointDrag; }
+  inline int GetCode() const { return m_code; }
 };
 
 typedef void (wxEvtHandler::*wxTreeEventFunction)(wxTreeEvent&);

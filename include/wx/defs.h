@@ -309,7 +309,7 @@ typedef void (*wxFunction) (wxObject&, wxEvent&);
 #define wxUSER_COLOURS      0x00800000
                                  // Override CTL3D etc. control colour processing to
                                  // allow own background colour
-                                 // OBSOLETE - use wxNO_CTL3D instead
+                                 // OBSOLETE - use wxNO_3D instead
 #define wxNO_3D             0x00800000
                                  // Override CTL3D or native 3D styles for children
 #define wxCLIP_CHILDREN     0x00400000
@@ -478,6 +478,7 @@ typedef void (*wxFunction) (wxObject&, wxEvent&);
 
 #define wxTR_HAS_BUTTONS     0x0004
 #define wxTR_EDIT_LABELS     0x0008
+#define wxTR_LINES_AT_ROOT   0x0010
 
 /*
  * wxListCtrl flags

@@ -202,7 +202,7 @@ class WXDLLEXPORT wxListEvent: public wxCommandEvent
   DECLARE_DYNAMIC_CLASS(wxListEvent)
 
  public:
-  wxListEvent(WXTYPE commandType = 0, int id = 0);
+  wxListEvent(wxEventType commandType = wxEVT_NULL, int id = 0);
 
   int           m_code;
   long          m_itemIndex;
@@ -495,7 +495,7 @@ class wxListMainWindow: public wxScrolledWindow
     void OnPaint( wxPaintEvent &event );
     void HilightAll( const bool on );
     void ActivateLine( wxListLineData *line );
-    void SendNotify( wxListLineData *line, long command );
+    void SendNotify( wxListLineData *line, wxEventType command );
     void FocusLine( wxListLineData *line );
     void UnfocusLine( wxListLineData *line );
     void SelectLine( wxListLineData *line );

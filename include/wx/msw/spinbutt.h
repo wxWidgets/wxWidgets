@@ -82,7 +82,7 @@ class WXDLLEXPORT wxSpinEvent: public wxScrollEvent
   DECLARE_DYNAMIC_CLASS(wxSpinEvent)
 
  public:
-  wxSpinEvent(WXTYPE commandType = 0, int id = 0);
+  wxSpinEvent(wxEventType commandType = wxEVT_NULL, int id = 0);
 };
 
 typedef void (wxEvtHandler::*wxSpinEventFunction)(wxSpinEvent&);

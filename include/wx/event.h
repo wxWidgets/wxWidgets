@@ -24,7 +24,9 @@
  * Event types
  *
  */
-enum {
+
+enum wxEventType {
+ wxEVT_NULL = 0,
  wxEVT_FIRST = 10000,
 
  // New names
@@ -245,8 +247,8 @@ public:
   wxEvent(int id = 0);
   inline ~wxEvent(void) {}
 
-  inline void SetEventType(WXTYPE typ) { m_eventType = typ; }
-  inline WXTYPE GetEventType(void) const { return m_eventType; }
+  inline void SetEventType(wxEventType typ) { m_eventType = typ; }
+  inline wxEventType GetEventType(void) const { return m_eventType; }
   inline wxObject *GetEventObject(void) const { return m_eventObject; }
   inline void SetEventObject(wxObject *obj) { m_eventObject = obj; }
   inline long GetTimestamp(void) const { return m_timeStamp; }
@@ -263,7 +265,7 @@ public:
   bool              m_skipped;
   wxObject*         m_eventObject;
   char*             m_eventHandle;         // Handle of an underlying windowing system event
-  WXTYPE            m_eventType;
+  wxEventType            m_eventType;
   long              m_timeStamp;
   int               m_id;
   wxObject*         m_callbackUserData;
@@ -292,7 +294,7 @@ class WXDLLEXPORT wxCommandEvent: public wxEvent
 {
   DECLARE_DYNAMIC_CLASS(wxCommandEvent)
 
-  wxCommandEvent(WXTYPE commandType = 0, int id = 0);
+  wxCommandEvent(wxEventType commandType = wxEVT_NULL, int id = 0);
   inline ~wxCommandEvent(void) {}
 
   /*
@@ -346,7 +348,7 @@ class WXDLLEXPORT wxScrollEvent: public wxCommandEvent
   DECLARE_DYNAMIC_CLASS(wxScrollEvent)
 
  public:
-  wxScrollEvent(WXTYPE commandType = 0, int id = 0, int pos = 0, int orient = 0);
+  wxScrollEvent(wxEventType commandType = wxEVT_NULL, int id = 0, int pos = 0, int orient = 0);
   inline ~wxScrollEvent(void) {}
 
   /*
@@ -394,7 +396,7 @@ class WXDLLEXPORT wxMouseEvent: public wxEvent
   DECLARE_DYNAMIC_CLASS(wxMouseEvent)
 
  public:
-  wxMouseEvent(WXTYPE mouseType = 0);
+  wxMouseEvent(wxEventType mouseType = wxEVT_NULL);
 
   // Was it a button event? (*doesn't* mean: is any button *down*?)
   inline bool IsButton(void) const { return Button(-1); }
@@ -496,7 +498,7 @@ class WXDLLEXPORT wxKeyEvent: public wxEvent
   DECLARE_DYNAMIC_CLASS(wxKeyEvent)
 
 public:
-  wxKeyEvent(WXTYPE keyType = 0);
+  wxKeyEvent(wxEventType keyType = wxEVT_NULL);
 
   // Find state of shift/control keys
   inline bool ControlDown(void) const { return m_controlDown; }
@@ -605,7 +607,7 @@ class WXDLLEXPORT wxFocusEvent: public wxEvent
   DECLARE_DYNAMIC_CLASS(wxFocusEvent)
 
  public:
-  inline wxFocusEvent(WXTYPE type = 0, int Id = 0) { m_eventType = type; m_id = Id; }
+  inline wxFocusEvent(wxEventType type = wxEVT_NULL, int Id = 0) { m_eventType = type; m_id = Id; }
 };
 
 // Activate event class
@@ -620,7 +622,7 @@ class WXDLLEXPORT wxActivateEvent: public wxEvent
 
  public:
   bool m_active;
-  inline wxActivateEvent(WXTYPE type = 0, bool active = TRUE, int Id = 0) { m_eventType = type; m_active = active; m_id = Id; }
+  inline wxActivateEvent(wxEventType type = wxEVT_NULL, bool active = TRUE, int Id = 0) { m_eventType = type; m_active = active; m_id = Id; }
   inline bool GetActive(void) const { return m_active; }
 };
 
@@ -653,7 +655,7 @@ class WXDLLEXPORT wxMenuEvent: public wxEvent
 public:
   int m_menuId;
 
-  inline wxMenuEvent(WXTYPE type = 0, int id = 0) { m_eventType = type; m_menuId = id; }
+  inline wxMenuEvent(wxEventType type = wxEVT_NULL, int id = 0) { m_eventType = type; m_menuId = id; }
 
   inline int GetMenuId(void) const { return m_menuId; }
 };
@@ -670,7 +672,7 @@ class WXDLLEXPORT wxCloseEvent: public wxEvent
   DECLARE_DYNAMIC_CLASS(wxCloseEvent)
 public:
 
-  inline wxCloseEvent(WXTYPE type = 0, int id = 0)
+  inline wxCloseEvent(wxEventType type = wxEVT_NULL, int id = 0)
      { m_eventType = type; m_sessionEnding = TRUE; m_loggingOff = TRUE; m_veto = FALSE;
        m_id = id; m_force = FALSE; }
 
@@ -764,7 +766,7 @@ class WXDLLEXPORT wxJoystickEvent: public wxEvent
   int       m_buttonState; // Which buttons are down?
   int       m_joyStick; // Which joystick?
 
-  inline wxJoystickEvent(WXTYPE type = 0, int state = 0, int joystick = wxJOYSTICK1, int change = 0)
+  inline wxJoystickEvent(wxEventType type = wxEVT_NULL, int state = 0, int joystick = wxJOYSTICK1, int change = 0)
      { m_eventType = type; m_buttonState = state; m_pos = wxPoint(0,0); m_zPosition = 0;
        m_joyStick = joystick; m_buttonChange = change; }
 
@@ -820,7 +822,7 @@ class WXDLLEXPORT wxDropFilesEvent: public wxEvent
   wxPoint   m_pos;
   wxString* m_files;        // Memory (de)allocated by code calling ProcessEvent
 
-  inline wxDropFilesEvent(WXTYPE type = 0, int noFiles = 0, wxString *files = NULL)
+  inline wxDropFilesEvent(wxEventType type = wxEVT_NULL, int noFiles = 0, wxString *files = NULL)
      { m_eventType = type; m_noFiles = noFiles; m_files = files; }
 
   inline wxPoint GetPosition(void) const { return m_pos; }

@@ -444,7 +444,7 @@ class WXDLLEXPORT wxListEvent: public wxCommandEvent
   DECLARE_DYNAMIC_CLASS(wxListEvent)
 
  public:
-  wxListEvent(WXTYPE commandType = 0, int id = 0);
+  wxListEvent(wxEventType commandType = wxEVT_NULL, int id = 0);
 
   int           m_code;
   long          m_itemIndex;
