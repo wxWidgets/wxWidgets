@@ -174,7 +174,7 @@ LIB_C_SRC=\
 EXTRA_C_SRC=\
   xmcombo/xmcombo.c
 
-EXTRA_CPP_SRC=\
+EXTRA_CPP_SRC=
 
 #  mdi/lib/XsComponent.C\
 #  mdi/lib/XsMDICanvas.C\
