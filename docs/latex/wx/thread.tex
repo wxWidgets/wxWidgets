@@ -26,7 +26,9 @@ heap because the thread will call {\tt delete this;} upon termination. Joinable
 threads may be created on the stack although more usually they will be created
 on the heap as well. Don't create global thread objects because they allocate
 memory in their constructor, which will cause problems for the memory checking
-system.
+system. Finally, another consequence of the handling of the above is that you
+should never delete a detached thread yourself, as this will be done by the
+thread itself when it terminates.
 
 \wxheading{Derived from}
 
