@@ -231,10 +231,6 @@ public:
     virtual wxSize CalcSizeFromPage(const wxSize& sizePage) const;
 
 #ifdef __WXMSW__
-    // Windows-only at present. Also, you must use the wxNB_FIXEDWIDTH
-    // style.
-  void SetTabSize(const wxSize& sz);
-
     // Windows only: attempts to apply the UX theme page background to this page
   void ApplyThemeBackground(wxWindow* window, const wxColour& colour);
 #endif
