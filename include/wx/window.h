@@ -172,8 +172,8 @@ public:
 
         // the title (or label, see below) of the window: the text which the
         // window shows
-    virtual void SetTitle( const wxString& title ) = 0;
-    virtual wxString GetTitle() const = 0;
+    virtual void SetTitle( const wxString& WXUNUSED(title) ) {}
+    virtual wxString GetTitle() const { return wxEmptyString; }
 
         // label is just the same as the title (but for, e.g., buttons it
         // makes more sense to speak about labels)
