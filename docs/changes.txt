@@ -271,6 +271,12 @@ wxGTK:
 - fixed bad memory leak in wxFileDialog (Chris Elliott)
 - made internal GC pool dynamically growable
 
+wxMotif:
+
+- improved colour settings return values (Ian Brown)
+- improved border style handling for wxStaticText (Ian Brown)
+- improved toolbar control alignment
+
 wxHTML:
 
 - fixed wxHtmlHelpController's cache files handling on big endian machines
