@@ -145,7 +145,7 @@ added, if needed.", "");
     DocStr(SetRatio,
            "Set the ratio item attribute.", "");
     %Rename(SetRatioWH, void, SetRatio( int width, int height ));
-    %Rename(SetRatioSize, void, SetRatio( wxSize size ));
+    %Rename(SetRatioSize, void, SetRatio( const wxSize& size ));
     void SetRatio( float ratio );
 
     DocDeclStr(
@@ -926,7 +926,7 @@ the item.", "");
     %pythoncode {
     def Hide(self, item, recursive=False):
         """
-        A convenience method for Show(item, False, recursive).
+        A convenience method for `Show`(item, False, recursive).
         """
         return self.Show(item, False, recursive)
     }
@@ -936,6 +936,10 @@ the item.", "");
         void , ShowItems(bool show),
         "Recursively call `wx.SizerItem.Show` on all sizer items.", "");
 
+    // TODO:
+    //          void Show(bool show);
+    //          bool IsShown();
+    
 };
 
 

@@ -276,7 +276,7 @@ showing the top-level window.", "");
 
     DocDeclStr(
         void , SetSashSize(int width),
-        "Sets the sash size.  Currently a NOP.", "");
+        "Sets the sash size.", "");
     
 
     DocDeclStr(
