@@ -218,5 +218,19 @@ WXDLLEXPORT_DATA(extern const bool) wxFalse;
     wxCOMPILE_TIME_ASSERT(sizeof(type) * CHAR_BIT >= size, \
                           wxMAKE_BITSIZE_MSG(type, size))
 
+// ----------------------------------------------------------------------------
+// other miscellaneous debugger-related functions
+// ----------------------------------------------------------------------------
+
+// return true if we're running under debugger
+//
+// currently this only really works under Mac in CodeWarrior builds, it always
+// returns false otherwise
+#ifdef __WXMAC__
+    extern bool WXDLLEXPORT wxIsDebuggerRunning();
+#else // !Mac
+    inline bool WXDLLEXPORT wxIsDebuggerRunning() { return false; }
+#endif // Mac/!Mac
+
 #endif  // _WX_DEBUG_H_
 

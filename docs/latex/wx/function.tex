@@ -144,6 +144,7 @@ the corresponding topic.
 \helpref{wxIsAbsolutePath}{wxisabsolutepath}\\
 \helpref{wxIsBusy}{wxisbusy}\\
 \helpref{wxIsClipboardFormatAvailable}{wxisclipboardformatavailable}\\
+\helpref{wxIsDebuggerRunning}{wxisdebuggerrunning}\\
 \helpref{wxIsEmpty}{wxisempty}\\
 \helpref{wxIsNaN}{wxisnan}\\
 \helpref{wxIsWild}{wxiswild}\\
@@ -451,7 +452,7 @@ the corresponding functions \helpref{::wxPostEvent}{wxpostevent} and
 
 \wxheading{Include files}
 
-<wx/app.h>
+<wx/event.h>
 
 \section{Process control functions}\label{processfunctions}
 
@@ -3614,6 +3615,18 @@ In release mode this function does nothing.
 \wxheading{Include files}
 
 <wx/debug.h>
+
+
+\membersection{::wxIsDebuggerRunning}\label{wxisdebuggerrunning}
+
+\func{bool}{wxIsDebuggerRunning}{\void}
+
+Returns {\tt true} if the program is running under debugger, {\tt false} 
+otherwise.
+
+Please note that this function is currently only implemented for Mac builds
+using CodeWarrior and always returns {\tt false} elsewhere.
+
 
 \section{Environment access functions}\label{environfunctions}
 
