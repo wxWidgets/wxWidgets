@@ -5,6 +5,9 @@ include licence/*.txt
 include b
 include b.bat
 
+include SWIG/*
+exclude SWIG/CVS/*
+
 include demo/*.py
 include demo/bitmaps/*.bmp
 include demo/bitmaps/*.ico
@@ -22,6 +25,16 @@ include demo/data/*.i
 include demo/data/*.h
 include demo/data/*.py
 
+include samples/doodle/*.txt
+include samples/doodle/*.py
+include samples/doodle/sample.ddl
+include samples/stxview/*.txt
+include samples/stxview/*.py
+include samples/stxview/*.stx
+include samples/stxview/StructuredText/*.py
+include samples/wxProject/*.txt
+include samples/wxProject/*.py
+
 include wxPython/lib/*.py
 include wxPython/lib/*.txt
 include wxPython/lib/editor/*.py
@@ -29,7 +42,6 @@ include wxPython/lib/editor/*.txt
 
 exclude wxPython/*
 exclude tests
-exclude SWIG
 
 include src/*.i
 include src/*.py

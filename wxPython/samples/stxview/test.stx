@@ -1,0 +1,127 @@
+Structured Text Manipulation
+
+  Parse a structured text string into a form that can be used with
+  structured formats, like html.
+
+  Structured text is text that uses indentation and simple
+  symbology to indicate the structure of a document.
+
+  A structured string consists of a sequence of paragraphs separated by
+  one or more blank lines.  Each paragraph has a level which is defined
+  as the minimum indentation of the paragraph.  A paragraph is a
+  sub-paragraph of another paragraph if the other paragraph is the last
+  preceding paragraph that has a lower level.
+
+Special symbology is used to indicate special constructs:
+
+    - A single-line paragraph whose immediately succeeding paragraphs are lower
+    level is treated as a header.
+
+    - A paragraph that begins with a '-', '*', or 'o' is treated as an
+    unordered list (bullet) element.
+
+    - A paragraph that begins with a sequence of digits followed by a
+    white-space character is treated as an ordered list element.
+
+    - A paragraph that begins with a sequence of sequences, where each
+    sequence is a sequence of digits or a sequence of letters followed
+    by a period, is treated as an ordered list element.  If the sequence is
+    made up of lower-case i's and v's, a lower-case roman-numeral list is
+    generated.  If the sequence is made up of upper-case I's and V's, an
+    upper-case roman-numeral list is generated.  If the sequence is made
+    up of other lower case letters (typically a,b,c) a lowercase alphabetic
+    list is generated.  If the sequence is made of of other upper case
+    letters (typically, A,B,C) an uppercase alphabetic list is generated.
+    If the sequence is something else (typically, 1,2,3), a arabic-numeral
+    list is generated.
+
+    - A paragraph with a first line that contains some text, followed by
+    some white-space and '--' is treated as a descriptive list element.
+    The leading text is treated as the element title.
+
+    - Sub-paragraphs of a paragraph that ends in the word 'example' or the
+    word 'examples', or '::' is treated as example code and is output as is.
+
+    - Text enclosed single quotes (with white-space to the left of the
+    first quote and whitespace or puctuation to the right of the second quote)
+    is treated as example code.
+
+    - Text surrounded by '*' characters (with white-space to the left of the
+    first '*' and whitespace or puctuation to the right of the second '*')
+    is *emphasized*.
+
+    - Text surrounded by '**' characters (with white-space to the left of the
+    first '**' and whitespace or puctuation to the right of the second '**')
+    is made **strong**.
+
+    - Text surrounded by '_' underscore characters (with whitespace to the left
+    and whitespace or punctuation to the right) is made _underlined_.
+
+    - Text encloded by double quotes followed by a colon, a URL, and concluded
+    by punctuation plus white space, *or* just white space, is treated as a
+    hyper link. For example:
+
+    '"Zope":http://www.zope.org/ is ...'
+
+    Is interpreted as '<a href="http://www.zope.org/">Zope</a> is ...'
+    Note: This works for relative as well as absolute URLs.
+
+    - Text enclosed by double quotes followed by a comma, one or more spaces,
+    an absolute URL and concluded by punctuation plus white space, or just
+    white space, is treated as a hyper link. For example:
+
+    "mail me", mailto:amos@digicool.com.
+
+    Is interpreted as '<a href="mailto:amos@digicool.com">mail me</a>.'
+
+    - Text enclosed in brackets which consists only of letters, digits,
+    underscores and dashes is treated as hyper links within the document.
+    For example:
+
+    As demonstrated by Smith [12] this technique is quite effective.
+
+    Is interpreted as '... by Smith <a href="#12">[12]</a> this ...'. Together
+    with the next rule this allows easy coding of references or end notes.
+
+    - Text enclosed in brackets which is preceded by the start of a line, two
+    periods and a space is treated as a named link. For example:
+
+    .. [12] "Effective Techniques" Smith, Joe ...
+
+    Is interpreted as '<a name="12">[12]</a> "Effective Techniques" ...'.
+    Together with the previous rule this allows easy coding of references or
+    end notes.
+
+
+    - A paragraph that has blocks of text enclosed in '||' is treated as a
+    table. The text blocks correspond to table cells and table rows are
+    denoted by newlines. By default the cells are center aligned. A cell
+    can span more than one column by preceding a block of text with an
+    equivalent number of cell separators '||'. Newlines and '|' cannot
+    be a part of the cell text. For example:
+
+    |||| **Ingredients** ||
+    || *Name* || *Amount* ||
+    ||Spam||10||
+    ||Eggs||3||
+
+    is interpreted as::
+
+    <TABLE BORDER=1 CELLPADDING=2>
+    <TR>
+    <TD ALIGN=CENTER COLSPAN=2> <strong>Ingredients</strong> </TD>
+    </TR>
+    <TR>
+    <TD ALIGN=CENTER COLSPAN=1> <em>Name</em> </TD>
+    <TD ALIGN=CENTER COLSPAN=1> <em>Amount</em> </TD>
+    </TR>
+    <TR>
+    <TD ALIGN=CENTER COLSPAN=1>Spam</TD>
+    <TD ALIGN=CENTER COLSPAN=1>10</TD>
+    </TR>
+    <TR>
+    <TD ALIGN=CENTER COLSPAN=1>Eggs</TD>
+    <TD ALIGN=CENTER COLSPAN=1>3</TD>
+    </TR>
+    </TABLE>
+
