@@ -43,7 +43,7 @@ class WXDLLEXPORT wxDisplay : public wxDisplayBase
   private:
     wxDisplayUnixPriv *m_priv;
 
-    DECLARE_NO_COPY_CLASS(wxDisplay);
+    DECLARE_NO_COPY_CLASS(wxDisplay)
 };
 
 #endif // wxUSE_DISPLAY

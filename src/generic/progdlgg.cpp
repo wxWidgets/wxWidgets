@@ -335,7 +335,7 @@ wxProgressDialog::Update(int value, const wxString& newmsg)
             }
         }
 
-        unsigned long display_remaining = m_display_estimated - elapsed;
+        long display_remaining = m_display_estimated - elapsed;
         if ( display_remaining < 0 )
         {
             display_remaining = 0;
