@@ -259,7 +259,7 @@ int wxParseFileFilter(const wxString& filterStr,
             // string as filter
             if ( filters.IsEmpty() )
             {
-                description.Add(wxEmptyString);
+                descriptions.Add(wxEmptyString);
                 filters.Add(filterStr);
             }
             else
