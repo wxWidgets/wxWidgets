@@ -208,25 +208,29 @@ typedef unsigned int JDIMENSION;
  * or code profilers that require it.
  */
 
-#if defined(__VISAGECPP__) /* need this for /common/imagjpeg.obj but not loclly */
-/* a function called through method pointers: */
-#define METHODDEF(type)		static type _Optlink
-/* a function used only in its module: */
-#define LOCAL(type)		static type _Optlink
-/* a function referenced thru EXTERNs: */
-#define GLOBAL(type)		type
-/* a reference to a GLOBAL function: */
-#define EXTERN(type)		extern type _Optlink
-#else
-/* a function called through method pointers: */
-#define METHODDEF(type)		static type
-/* a function used only in its module: */
-#define LOCAL(type)		static type
-/* a function referenced thru EXTERNs: */
-#define GLOBAL(type)		type
-/* a reference to a GLOBAL function: */
-#define EXTERN(type)		extern type
+#if defined(__VISAGECPP__)
+#define JPEG_CALLING_CONV _Optlink
+#else /* !Visual Age C++ */
+#define JPEG_CALLING_CONV
 #endif
+
+/* We can't declare a static function as extern "C" as we need to do in C++
+ * programs, so suppress static in METHODDEF when using C++.
+ */
+#if defined(__cplusplus)
+#define JPEG_METHOD_LINKAGE
+#else /* !__cplusplus */
+#define JPEG_METHOD_LINKAGE static
+#endif
+
+/* a function called through method pointers: */
+#define METHODDEF(type)		JPEG_METHOD_LINKAGE type JPEG_CALLING_CONV
+/* a function used only in its module: */
+#define LOCAL(type)		static type JPEG_CALLING_CONV
+/* a function referenced thru EXTERNs: */
+#define GLOBAL(type)		type
+/* a reference to a GLOBAL function: */
+#define EXTERN(type)		extern type JPEG_CALLING_CONV
 
 /* This macro is used to declare a "method", that is, a function pointer.
  * We want to supply prototype parameters if the compiler can cope.

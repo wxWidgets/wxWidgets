@@ -53,15 +53,26 @@ extern "C"
 #include <setjmp.h>
 
 #ifdef __SALFORDC__
-#ifdef FAR
 #undef FAR
 #endif
-#endif
 
-// we can't use METHODDEF here as it includes static yet the functions must be
-// extern "C" and these can't be used together!
-#undef METHODDEF
-#define METHODDEF(type) extern "C" type wxC_CALLING_CONV
+// ----------------------------------------------------------------------------
+// types
+// ----------------------------------------------------------------------------
+
+// the standard definition of METHODDEF(type) from jmorecfg.h is "static type"
+// which means that we can't declare the method functions as extern "C" - the
+// compiler (rightfully) complains about the multiple storage classes in
+// declaration
+//
+// so we only add extern "C" when using our own, modified, jmorecfg.h - and use
+// whatever we have in the system headers if this is what we use hoping that it
+// should be ok (can't do anything else)
+#ifdef JPEG_METHOD_LINKAGE
+    #define CPP_METHODDEF(type) extern "C" METHODDEF(type)
+#else // not using our jmorecfg.h header
+    #define CPP_METHODDEF(type) METHODDEF(type)
+#endif
 
 //-----------------------------------------------------------------------------
 // wxJPEGHandler
@@ -84,11 +95,11 @@ typedef struct {
 
 typedef my_source_mgr * my_src_ptr;
 
-METHODDEF(void) my_init_source ( j_decompress_ptr WXUNUSED(cinfo) )
+CPP_METHODDEF(void) my_init_source ( j_decompress_ptr WXUNUSED(cinfo) )
 {
 }
 
-METHODDEF(boolean) my_fill_input_buffer ( j_decompress_ptr cinfo )
+CPP_METHODDEF(boolean) my_fill_input_buffer ( j_decompress_ptr cinfo )
 {
     my_src_ptr src = (my_src_ptr) cinfo->src;
 
@@ -105,7 +116,7 @@ METHODDEF(boolean) my_fill_input_buffer ( j_decompress_ptr cinfo )
     return TRUE;
 }
 
-METHODDEF(void) my_skip_input_data ( j_decompress_ptr cinfo, long num_bytes )
+CPP_METHODDEF(void) my_skip_input_data ( j_decompress_ptr cinfo, long num_bytes )
 {
     if (num_bytes > 0)
     {
@@ -121,7 +132,7 @@ METHODDEF(void) my_skip_input_data ( j_decompress_ptr cinfo, long num_bytes )
     }
 }
 
-METHODDEF(void) my_term_source ( j_decompress_ptr cinfo )
+CPP_METHODDEF(void) my_term_source ( j_decompress_ptr cinfo )
 {
     my_src_ptr src = (my_src_ptr) cinfo->src;
 
@@ -145,7 +156,7 @@ typedef struct my_error_mgr * my_error_ptr;
  * Here's the routine that will replace the standard error_exit method:
  */
 
-METHODDEF(void) my_error_exit (j_common_ptr cinfo)
+CPP_METHODDEF(void) my_error_exit (j_common_ptr cinfo)
 {
   /* cinfo->err really points to a my_error_mgr struct, so coerce pointer */
   my_error_ptr myerr = (my_error_ptr) cinfo->err;
@@ -254,7 +265,7 @@ typedef my_destination_mgr * my_dest_ptr;
 
 #define OUTPUT_BUF_SIZE  4096    /* choose an efficiently fwrite'able size */
 
-METHODDEF(void) init_destination (j_compress_ptr cinfo)
+CPP_METHODDEF(void) init_destination (j_compress_ptr cinfo)
 {
     my_dest_ptr dest = (my_dest_ptr) cinfo->dest;
 
@@ -266,7 +277,7 @@ METHODDEF(void) init_destination (j_compress_ptr cinfo)
     dest->pub.free_in_buffer = OUTPUT_BUF_SIZE;
 }
 
-METHODDEF(boolean) empty_output_buffer (j_compress_ptr cinfo)
+CPP_METHODDEF(boolean) empty_output_buffer (j_compress_ptr cinfo)
 {
     my_dest_ptr dest = (my_dest_ptr) cinfo->dest;
 
@@ -276,7 +287,7 @@ METHODDEF(boolean) empty_output_buffer (j_compress_ptr cinfo)
     return TRUE;
 }
 
-METHODDEF(void) term_destination (j_compress_ptr cinfo)
+CPP_METHODDEF(void) term_destination (j_compress_ptr cinfo)
 {
     my_dest_ptr dest = (my_dest_ptr) cinfo->dest;
     size_t datacount = OUTPUT_BUF_SIZE - dest->pub.free_in_buffer;
