@@ -16,8 +16,12 @@
 #pragma interface "thread.h"
 #endif
 
-#include "wx/object.h"
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
 #include "wx/setup.h"
+
+#if wxUSE_THREADS
 #include "wx/module.h"
 
 // ----------------------------------------------------------------------------
@@ -48,16 +52,14 @@ typedef enum
 #define WXTHREAD_MAX_PRIORITY     100
 
 // ----------------------------------------------------------------------------
-// GUI mutex handling.
+// A mutex object is a synchronization object whose state is set to signaled
+// when it is not owned by any thread, and nonsignaled when it is owned. Its
+// name comes from its usefulness in coordinating mutually-exclusive access to
+// a shared resource. Only one thread at a time can own a mutex object.
 // ----------------------------------------------------------------------------
 
-void WXDLLEXPORT wxMutexGuiEnter();
-void WXDLLEXPORT wxMutexGuiLeave();
-
-// ----------------------------------------------------------------------------
-// Mutex handler
-// ----------------------------------------------------------------------------
-
+// you should consider wxMutexLocker whenever possible instead of directly
+// working with wxMutex class - it is safer
 class WXDLLEXPORT wxMutexInternal;
 class WXDLLEXPORT wxMutex 
 {
@@ -81,6 +83,67 @@ protected:
 
   int m_locked;
   wxMutexInternal *p_internal;
+};
+
+// a helper class which locks the mutex in the ctor and unlocks it in the dtor:
+// this ensures that mutex is always unlocked, even if the function returns or
+// throws an exception before it reaches the end
+class WXDLLEXPORT wxMutexLocker
+{
+public:
+    // lock the mutex in the ctor
+    wxMutexLocker(wxMutex *mutex)
+        { m_isOk = mutex && ((m_mutex = mutex)->Lock() == wxMUTEX_NO_ERROR); }
+
+    // returns TRUE if mutex was successfully locked in ctor
+    bool IsOk() const { return m_isOk; }
+
+    // unlock the mutex in dtor
+    ~wxMutexLocker() { if ( IsOk() ) m_mutex->Unlock(); }
+
+private:
+    bool     m_isOk;
+    wxMutex *m_mutex;
+};
+
+// ----------------------------------------------------------------------------
+// Critical section: this is the same as mutex but is only visible to the
+// threads of the same process. For the platforms which don't have native
+// support for critical sections, they're implemented entirely in terms of
+// mutexes
+// ----------------------------------------------------------------------------
+
+// you should consider wxCriticalSectionLocker whenever possible instead of
+// directly working with wxCriticalSection class - it is safer
+class WXDLLEXPORT wxCriticalSectionInternal;
+class WXDLLEXPORT wxCriticalSection
+{
+public:
+    // ctor & dtor
+    wxCriticalSection();
+    ~wxCriticalSection();
+
+    // enter the section (the same as locking a mutex)
+    void Enter();
+    // leave the critical section (same as unlocking a mutex)
+    void Leave();
+
+private:
+    wxCriticalSectionInternal *m_critsect;
+};
+
+// wxCriticalSectionLocker is the same to critical sections as wxMutexLocker is
+// to th mutexes
+class WXDLLEXPORT wxCriticalSectionLocker
+{
+public:
+    wxCriticalSectionLocker(wxCriticalSection *critsect)
+        { (m_critsect = critsect)->Enter(); }
+    ~wxCriticalSectionLocker()
+        { m_critsect->Leave(); }
+
+private:
+    wxCriticalSection *m_critsect;
 };
 
 // ----------------------------------------------------------------------------
@@ -155,15 +218,16 @@ public:
   // Returns true if the thread is suspended
   bool IsPaused() const { return IsAlive() && !IsRunning(); }
 
-  // Returns true if the thread is the main thread (aka the GUI thread).
+  // Returns true if current thread is the main thread (aka the GUI thread)
   static bool IsMain();
 
   // Called when thread exits.
   virtual void OnExit();
 
 protected:
-  // In case, the DIFFER flag is true, enables another thread to kill this one.
-  void TestDestroy();
+  // Returns TRUE if the thread was asked to terminate
+  bool TestDestroy();
+
   // Exits from the current thread.
   void Exit(void *status = NULL);
 
@@ -181,17 +245,16 @@ private:
 // Automatic initialization
 // ----------------------------------------------------------------------------
 
-class wxThreadModule : public wxModule 
-{
-  DECLARE_DYNAMIC_CLASS(wxThreadModule)
-  
-public:
-  wxThreadModule() {}
+// GUI mutex handling.
+void WXDLLEXPORT wxMutexGuiEnter();
+void WXDLLEXPORT wxMutexGuiLeave();
 
-  virtual bool OnInit();
-  virtual void OnExit();
-};
+#else // !wxUSE_THREADS
 
+// no thread support
+inline void WXDLLEXPORT wxMutexGuiEnter() { }
+inline void WXDLLEXPORT wxMutexGuiLeave() { }
 
+#endif // wxUSE_THREADS
 
 #endif // __THREADH__
