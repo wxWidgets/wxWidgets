@@ -194,7 +194,7 @@ private:
 // private functions
 // ----------------------------------------------------------------------------
 
-#if defined(__WIN32__) && !defined(__WXMICROWIN__)
+#if wxUSE_DATETIME && defined(__WIN32__) && !defined(__WXMICROWIN__)
 
 // convert between wxDateTime and FILETIME which is a 64-bit value representing
 // the number of 100-nanosecond intervals since January 1, 1601.
@@ -241,7 +241,7 @@ static void ConvertWxToFileTime(FILETIME *ft, const wxDateTime& dt)
     }
 }
 
-#endif // __WIN32__
+#endif // wxUSE_DATETIME && __WIN32__
 
 // return a string with the volume par
 static wxString wxGetVolumeString(const wxString& volume, wxPathFormat format)
@@ -1612,6 +1612,8 @@ void wxFileName::SplitPath(const wxString& fullpath,
 // time functions
 // ----------------------------------------------------------------------------
 
+#if wxUSE_DATETIME
+
 bool wxFileName::SetTimes(const wxDateTime *dtAccess,
                           const wxDateTime *dtMod,
                           const wxDateTime *dtCreate)
@@ -1759,6 +1761,8 @@ bool wxFileName::GetTimes(wxDateTime *dtAccess,
 
     return FALSE;
 }
+
+#endif // wxUSE_DATETIME
 
 #ifdef __WXMAC__
 

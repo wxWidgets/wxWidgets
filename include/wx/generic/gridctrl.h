@@ -25,6 +25,8 @@
 #define wxGRID_VALUE_CHOICEINT    _T("choiceint")
 #define wxGRID_VALUE_DATETIME     _T("datetime")
 
+#if wxUSE_DATETIME
+
 // the default renderer for the cells containing Time and dates..
 class WXDLLEXPORT wxGridCellDateTimeRenderer : public wxGridCellStringRenderer
 {
@@ -59,6 +61,7 @@ protected:
     wxDateTime::TimeZone m_tz;
 };
 
+#endif // wxUSE_DATETIME
 
 // the default renderer for the cells containing Time and dates..
 class WXDLLEXPORT wxGridCellEnumRenderer : public wxGridCellStringRenderer

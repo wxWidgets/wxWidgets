@@ -46,15 +46,21 @@ class WXDLLEXPORT wxFSFile : public wxObject
 {
 public:
     wxFSFile(wxInputStream *stream, const wxString& loc,
-             const wxString& mimetype, const wxString& anchor,
-             wxDateTime modif)
+             const wxString& mimetype, const wxString& anchor
+#if wxUSE_DATETIME
+             , wxDateTime modif
+#endif // wxUSE_DATETIME
+             )
     {
         m_Stream = stream;
         m_Location = loc;
         m_MimeType = mimetype; m_MimeType.MakeLower();
         m_Anchor = anchor;
+#if wxUSE_DATETIME
         m_Modif = modif;
+#endif // wxUSE_DATETIME
     }
+
     virtual ~wxFSFile() { if (m_Stream) delete m_Stream; }
 
     // returns stream. This doesn't _create_ stream, it only returns
@@ -69,14 +75,18 @@ public:
 
     const wxString& GetAnchor() const {return m_Anchor;}
 
+#if wxUSE_DATETIME
     wxDateTime GetModificationTime() const {return m_Modif;}
+#endif // wxUSE_DATETIME
 
 private:
     wxInputStream *m_Stream;
     wxString m_Location;
     wxString m_MimeType;
     wxString m_Anchor;
+#if wxUSE_DATETIME
     wxDateTime m_Modif;
+#endif // wxUSE_DATETIME
 
     DECLARE_ABSTRACT_CLASS(wxFSFile)
     DECLARE_NO_COPY_CLASS(wxFSFile)

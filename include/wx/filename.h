@@ -185,7 +185,7 @@ public:
         // VZ: also need: IsDirWritable(), IsFileExecutable() &c (TODO)
 
     // time functions
-
+#if wxUSE_DATETIME
         // set the file last access/mod and creation times
         // (any of the pointers may be NULL)
     bool SetTimes(const wxDateTime *dtAccess,
@@ -208,6 +208,7 @@ public:
         (void)GetTimes(NULL, &dtMod, NULL);
         return dtMod;
     }
+#endif // wxUSE_DATETIME
 
 #ifdef __WXMAC__
     bool MacSetTypeAndCreator( wxUint32 type , wxUint32 creator ) ;

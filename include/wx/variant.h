@@ -26,7 +26,9 @@
     #include "wx/date.h"
 #endif // time/date
 
-#include "wx/datetime.h"
+#if wxUSE_DATETIME
+    #include "wx/datetime.h"
+#endif // wxUSE_DATETIME
 
 #if wxUSE_ODBC
     #include "wx/db.h"  // will #include sqltypes.h
@@ -105,7 +107,9 @@ public:
     wxVariant(void* ptr, const wxString& name = wxEmptyString); // void* (general purpose)
     wxVariant(wxVariantData* data, const wxString& name = wxEmptyString); // User-defined data
 //TODO: Need to document
+#if wxUSE_DATETIME
     wxVariant(const wxDateTime& val, const wxString& name = wxEmptyString); // Date
+#endif // wxUSE_DATETIME
     wxVariant(const wxArrayString& val, const wxString& name = wxEmptyString); // String array
 #if wxUSE_ODBC
     wxVariant(const DATE_STRUCT* valptr, const wxString& name = wxEmptyString); // DateTime
@@ -122,9 +126,11 @@ public:
     void operator= (const wxVariant& variant);
 
 //TODO: Need to document
+#if wxUSE_DATETIME
     bool operator== (const wxDateTime& value) const;
     bool operator!= (const wxDateTime& value) const;
     void operator= (const wxDateTime& value) ;
+#endif // wxUSE_DATETIME
 
     bool operator== (const wxArrayString& value) const;
     bool operator!= (const wxArrayString& value) const;
@@ -200,7 +206,9 @@ public:
 #endif
     inline operator void* () const {  return GetVoidPtr(); }
 //TODO: Need to document
+#if wxUSE_DATETIME
     inline operator wxDateTime () const { return GetDateTime(); }
+#endif // wxUSE_DATETIME
 //TODO: End of Need to document
 
 // Accessors
@@ -241,7 +249,9 @@ public:
 #endif
     void* GetVoidPtr() const ;
 //TODO: Need to document
+#if wxUSE_DATETIME
     wxDateTime GetDateTime() const ;
+#endif // wxUSE_DATETIME
     wxArrayString GetArrayString() const;
 //TODO: End of Need to document
 
@@ -281,7 +291,9 @@ public:
     bool Convert(wxDate* value) const;
 #endif
 //TODO: Need to document
+#if wxUSE_DATETIME
     bool Convert(wxDateTime* value) const;
+#endif // wxUSE_DATETIME
 //TODO: End of Need to document
 
 // Attributes

@@ -33,6 +33,8 @@
 // wxGridCellDateTimeRenderer
 // ----------------------------------------------------------------------------
 
+#if wxUSE_DATETIME
+
 // Enables a grid cell to display a formated date and or time
 
 wxGridCellDateTimeRenderer::wxGridCellDateTimeRenderer(wxString outformat, wxString informat)
@@ -120,6 +122,8 @@ void wxGridCellDateTimeRenderer::SetParameters(const wxString& params){
     if (!params.IsEmpty())
         m_oformat=params;
 }
+
+#endif // wxUSE_DATETIME
 
 // ----------------------------------------------------------------------------
 // wxGridCellChoiceNumberRenderer

@@ -1084,6 +1084,8 @@ bool wxVariantDataVoidPtr::Read(wxString& WXUNUSED(str))
  * wxVariantDataDateTime
  */
 
+#if wxUSE_DATETIME
+
 class wxVariantDataDateTime: public wxVariantData
 {
     DECLARE_DYNAMIC_CLASS(wxVariantDataDateTime)
@@ -1175,6 +1177,8 @@ bool wxVariantDataDateTime::Read(wxString& str)
         return FALSE;
     return TRUE;
 }
+
+#endif // wxUSE_DATETIME
 
 // ----------------------------------------------------------------------------
 // wxVariantDataArrayString
@@ -1359,11 +1363,13 @@ wxVariant::wxVariant(void* val, const wxString& name) // Void ptr
     m_name = name;
 }
 
+#if wxUSE_DATETIME
 wxVariant::wxVariant(const wxDateTime& val, const wxString& name) // Date
 {
     m_data = new wxVariantDataDateTime(val);
     m_name = name;
 }
+#endif // wxUSE_DATETIME
 
 #if wxUSE_ODBC
 wxVariant::wxVariant(const TIME_STRUCT* valptr, const wxString& name) // Date
@@ -1761,6 +1767,7 @@ void wxVariant::operator= (void* value)
     }
 }
 
+#if wxUSE_DATETIME
 bool wxVariant::operator== (const wxDateTime& value) const
 {
     wxDateTime thisValue;
@@ -1788,6 +1795,7 @@ void wxVariant::operator= (const wxDateTime& value)
         m_data = new wxVariantDataDateTime(value);
     }
 }
+#endif // wxUSE_DATETIME
 
 #if wxUSE_ODBC
 void wxVariant::operator= (const DATE_STRUCT* value)
@@ -2031,6 +2039,7 @@ void* wxVariant::GetVoidPtr() const
     return (void*) ((wxVariantDataVoidPtr*) m_data)->GetValue();
 }
 
+#if wxUSE_DATETIME
 wxDateTime wxVariant::GetDateTime() const
 {
     wxDateTime value;
@@ -2041,6 +2050,7 @@ wxDateTime wxVariant::GetDateTime() const
 
     return value;
 }
+#endif // wxUSE_DATETIME
 
 wxList& wxVariant::GetList() const
 {
@@ -2242,6 +2252,7 @@ bool wxVariant::Convert(wxDate* value) const
 }
 #endif // wxUSE_TIMEDATE
 
+#if wxUSE_DATETIME
 bool wxVariant::Convert(wxDateTime* value) const
 {
     wxString type(GetType());
@@ -2254,3 +2265,4 @@ bool wxVariant::Convert(wxDateTime* value) const
     wxString val;
     return Convert(&val) && (value->ParseDate(val));
 }
+#endif // wxUSE_DATETIME

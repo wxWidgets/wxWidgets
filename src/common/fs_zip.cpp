@@ -97,8 +97,11 @@ wxFSFile* wxZipFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString& l
         return new wxFSFile(s,
                             left + wxT("#zip:") + right,
                             GetMimeTypeFromExt(location),
-                            GetAnchor(location),
-                            wxDateTime(wxFileModificationTime(left)));
+                            GetAnchor(location)
+#if wxUSE_DATETIME
+                            , wxDateTime(wxFileModificationTime(left))
+#endif // wxUSE_DATETIME
+                            );
     }
 
     delete s;

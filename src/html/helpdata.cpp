@@ -509,13 +509,17 @@ bool wxHtmlHelpData::AddBookParam(const wxFSFile& bookfile,
     fi = fsys.OpenFile(bookfile.GetLocation() + wxT(".cached"));
 
     if (fi == NULL ||
+#if wxUSE_DATETIME
           fi->GetModificationTime() < bookfile.GetModificationTime() ||
+#endif // wxUSE_DATETIME
           !LoadCachedBook(bookr, fi->GetStream()))
     {
         if (fi != NULL) delete fi;
         fi = fsys.OpenFile(m_TempPath + wxFileNameFromPath(bookfile.GetLocation()) + wxT(".cached"));
         if (m_TempPath == wxEmptyString || fi == NULL ||
+#if wxUSE_DATETIME
             fi->GetModificationTime() < bookfile.GetModificationTime() ||
+#endif // wxUSE_DATETIME
             !LoadCachedBook(bookr, fi->GetStream()))
         {
             LoadMSProject(bookr, fsys, indexfile, contfile);

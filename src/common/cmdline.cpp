@@ -114,15 +114,19 @@ struct wxCmdLineOption
         { Check(wxCMD_LINE_VAL_NUMBER); return m_longVal; }
     const wxString& GetStrVal() const
         { Check(wxCMD_LINE_VAL_STRING); return m_strVal;  }
+#if wxUSE_DATETIME
     const wxDateTime& GetDateVal() const
         { Check(wxCMD_LINE_VAL_DATE);   return m_dateVal; }
+#endif // wxUSE_DATETIME
 
     void SetLongVal(long val)
         { Check(wxCMD_LINE_VAL_NUMBER); m_longVal = val; m_hasVal = TRUE; }
     void SetStrVal(const wxString& val)
         { Check(wxCMD_LINE_VAL_STRING); m_strVal = val; m_hasVal = TRUE; }
+#if wxUSE_DATETIME
     void SetDateVal(const wxDateTime val)
         { Check(wxCMD_LINE_VAL_DATE); m_dateVal = val; m_hasVal = TRUE; }
+#endif // wxUSE_DATETIME
 
     void SetHasValue(bool hasValue = TRUE) { m_hasVal = hasValue; }
     bool HasValue() const { return m_hasVal; }
@@ -140,7 +144,9 @@ private:
 
     long m_longVal;
     wxString m_strVal;
+#if wxUSE_DATETIME
     wxDateTime m_dateVal;
+#endif // wxUSE_DATETIME
 };
 
 struct wxCmdLineParam
@@ -459,6 +465,7 @@ bool wxCmdLineParser::Found(const wxString& name, long *value) const
     return TRUE;
 }
 
+#if wxUSE_DATETIME
 bool wxCmdLineParser::Found(const wxString& name, wxDateTime *value) const
 {
     int i = m_data->FindOption(name);
@@ -477,6 +484,7 @@ bool wxCmdLineParser::Found(const wxString& name, wxDateTime *value) const
 
     return TRUE;
 }
+#endif // wxUSE_DATETIME
 
 size_t wxCmdLineParser::GetParamCount() const
 {
@@ -739,6 +747,7 @@ int wxCmdLineParser::Parse(bool showUsage)
                             }
                             break;
 
+#if wxUSE_DATETIME
                         case wxCMD_LINE_VAL_DATE:
                             {
                                 wxDateTime dt;
@@ -756,6 +765,7 @@ int wxCmdLineParser::Parse(bool showUsage)
                                 }
                             }
                             break;
+#endif // wxUSE_DATETIME
                     }
                 }
             }

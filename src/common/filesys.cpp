@@ -190,8 +190,11 @@ wxFSFile* wxLocalFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString&
     return new wxFSFile(new wxFFileInputStream(fullpath),
                         right,
                         GetMimeTypeFromExt(location),
-                        GetAnchor(location),
-                        wxDateTime(wxFileModificationTime(fullpath)));
+                        GetAnchor(location)
+#if wxUSE_DATETIME
+                        ,wxDateTime(wxFileModificationTime(fullpath))
+#endif // wxUSE_DATETIME
+                        );
 }
 
 wxString wxLocalFSHandler::FindFirst(const wxString& spec, int flags)

@@ -1047,6 +1047,15 @@
 #           define wxUSE_COMBOBOX 1
 #       endif
 #   endif
+
+#   if !wxUSE_DATETIME
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxCalendarCtrl requires wxUSE_DATETIME"
+#       else
+#           undef wxUSE_DATETIME
+#           define wxUSE_DATETIME 1
+#       endif
+#   endif
 #endif /* wxUSE_CALENDARCTRL */
 
 #if wxUSE_CHECKLISTBOX
