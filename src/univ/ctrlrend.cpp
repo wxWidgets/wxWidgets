@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        univ/renderer.cpp
+// Name:        univ/ctrlrend.cpp
 // Purpose:     wxControlRenderer implementation
 // Author:      Vadim Zeitlin
 // Modified by:
