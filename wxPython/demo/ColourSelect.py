@@ -59,13 +59,13 @@ class TestColourSelect(wxPanel):
     def OnClick(self, event):
         result = []
         colour = self.colour_def.GetColour()        # default control value
-        result.append("Default: " + str(colour))
+        result.append("%s: #%02x%02x%02x" % ("Default", colour[0], colour[1], colour[2]))
 
         for i in range(len(self.set_val)):
             val = self.set_val[i]
             colour = val.GetColour()        # get the colour selection button result
             name = self.names[i]
-            result.append(name + ": " + str(colour))        # create string list for easy viewing of results
+            result.append("%s: #%02x%02x%02x" % (name, colour[0], colour[1], colour[2]))
         out_result = string.joinfields(result, ',  ')
         self.log.WriteText("Colour Results :" + out_result + "\n")
 
