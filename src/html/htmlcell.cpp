@@ -427,11 +427,8 @@ void wxHtmlContainerCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2)
             wxPen mypen1(m_BorderColour1, 1, wxSOLID);
             wxPen mypen2(m_BorderColour2, 1, wxSOLID);
 
-            int subtractMe = 1;
             // We get a missing pixel if subtract 1.
-#if defined(__WXMSW__) || defined(__WXGTK__)
-            subtractMe = 0;
-#endif
+            int subtractMe = 0;
             dc.SetPen(mypen1);
             dc.DrawLine(x + m_PosX, y + m_PosY, x + m_PosX, y + m_PosY + m_Height - 1);
             dc.DrawLine(x + m_PosX, y + m_PosY, x + m_PosX + m_Width - subtractMe, y + m_PosY);
