@@ -32,7 +32,7 @@ Supply correct ctl3d/odbc lib files for BC++, Watcom (corrupt?)
 
 Implement new wxClipboard and DnD (Vadim)
 
-Implement wxToolTip (Vadim)
+wxToolTip::Enable should be static for wxGTK compatibility (VZ)
 
 LOW PRIORITY (MEDIUM TERM)
 --------------------------
