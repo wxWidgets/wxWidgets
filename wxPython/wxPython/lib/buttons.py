@@ -133,6 +133,11 @@ class wxGenButton(wxPyControl):
         return self.IsShown() and self.IsEnabled()
 
 
+    def Enable(self, enable=true):
+        wxPyControl.Enable(self, enable)
+        self.Refresh()
+
+
     def SetBezelWidth(self, width):
         """Set the width of the 3D effect"""
         self.bezelWidth = width
