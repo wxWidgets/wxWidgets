@@ -17665,7 +17665,7 @@ ALL_DIST: distrib_clean
 	cp $(REGEXDIR)/README $(DISTDIR)/src/regex
 	cp $(REGEXDIR)/WHATSNEW $(DISTDIR)/src/regex
 	cp $(REGEXDIR)/mkh $(DISTDIR)/src/regex
-	cp $(REGEXDIR)/tests $(DISTDIR)/src/regex
+#	cp $(REGEXDIR)/tests $(DISTDIR)/src/regex
 	cp -Rf $(EXPATDIR) $(DISTDIR)/src
 	(cd $(DISTDIR)/src/expat ; rm -rf `find -name CVS`)
 	mkdir $(DISTDIR)/src/iodbc
