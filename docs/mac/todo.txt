@@ -1,0 +1,4 @@
+in the carbon targets the following items are still missing
+
+- printing support
+- navigation services support
