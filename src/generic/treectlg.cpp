@@ -881,7 +881,12 @@ bool wxGenericTreeCtrl::ItemHasChildren(const wxTreeItemId& item) const
 {
     wxCHECK_MSG( item.IsOk(), FALSE, wxT("invalid tree item") );
 
-    return !((wxGenericTreeItem*) item.m_pItem)->GetChildren().IsEmpty();
+    // consider that the item does have children if it has the "+" button: it
+    // might not have them (if it had never been expanded yet) but then it
+    // could have them as well and it's better to err on this side rather than
+    // disabling some operations which are restricted to the items with
+    // children for an item which does have them
+    return !((wxGenericTreeItem*) item.m_pItem)->HasPlus();
 }
 
 bool wxGenericTreeCtrl::IsExpanded(const wxTreeItemId& item) const
