@@ -110,7 +110,7 @@ public:
    /// constructor
    wxLayoutObjectBase() { m_UserData = NULL; }
    /// delete the user data
-   virtual ~wxLayoutObjectBase() { delete m_UserData; }
+   virtual ~wxLayoutObjectBase() { if(m_UserData) delete m_UserData; }
 
 #ifdef WXLAYOUT_DEBUG
    virtual void Debug(void);
