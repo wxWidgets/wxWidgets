@@ -90,7 +90,7 @@ wxMessageDialog::wxMessageDialog(wxWindow *parent,
             gtk_dialog_set_default_response(GTK_DIALOG(m_widget), GTK_RESPONSE_YES);
     }
 
-    if (parent)
+    if (m_parent)
         gtk_window_set_transient_for(GTK_WINDOW(m_widget),
                                      GTK_WINDOW(m_parent->m_widget));
 }
@@ -101,6 +101,11 @@ wxMessageDialog::~wxMessageDialog()
 
 int wxMessageDialog::ShowModal()
 {
+    // This should be necessary, but otherwise the
+    // parent TLW will disappear..
+    if (m_parent)
+        gtk_window_present( GTK_WINDOW(m_parent->m_widget) );
+        
     gint result = gtk_dialog_run(GTK_DIALOG(m_widget));
     gtk_widget_destroy(m_widget);
     m_widget = NULL;
