@@ -110,9 +110,12 @@ bool wxSlider::Create(wxWindow *parent,
                                validator, name) )
         return FALSE;
 
-    SetBestSize(size);
     SetRange(minValue, maxValue);
     SetValue(value);
+
+    // call this after setting the range as the best size depends (at least if
+    // we have wxSL_LABELS style) on the range
+    SetBestSize(size);
 
     CreateInputHandler(wxINP_HANDLER_SLIDER);
 
@@ -189,13 +192,23 @@ void wxSlider::SetRange(int minValue, int maxValue)
         maxValue = tmp;
     }
 
-    m_min = minValue;
-    m_max = maxValue;
+    if ( m_min != minValue || m_max != maxValue )
+    {
+        m_min = minValue;
+        m_max = maxValue;
 
-    // reset the value to make sure it is in the new range
-    SetValue(m_value);
+        // reset the value to make sure it is in the new range
+        SetValue(m_value);
 
-    Refresh();
+        // the size of the label rect might have changed
+        if ( HasLabels() )
+        {
+            CalcGeometry();
+        }
+
+        Refresh();
+    }
+    //else: nothing changed
 }
 
 int wxSlider::GetMin() const
@@ -281,20 +294,16 @@ wxSize wxSlider::CalcLabelSize() const
 {
     wxSize size;
 
-    if ( HasLabels() )
-    {
-        wxCoord w1, h1, w2, h2;
-        GetTextExtent(FormatValue(m_min), &w1, &h1);
-        GetTextExtent(FormatValue(m_max), &w2, &h2);
+    // there is no sense in trying to calc the labels size if we haven't got
+    // any, the caller must check for it
+    wxCHECK_MSG( HasLabels(), size, _T("shouldn't be called") );
 
-        size.x = wxMax(w1, w2);
-        size.y = wxMax(h1, h2);
-    }
-    else // no labels
-    {
-        size.x =
-        size.y = 0;
-    }
+    wxCoord w1, h1, w2, h2;
+    GetTextExtent(FormatValue(m_min), &w1, &h1);
+    GetTextExtent(FormatValue(m_max), &w2, &h2);
+
+    size.x = wxMax(w1, w2);
+    size.y = wxMax(h1, h2);
 
     return size;
 }
@@ -339,6 +348,13 @@ wxSize wxSlider::DoGetBestClientSize() const
 }
 
 void wxSlider::OnSize(wxSizeEvent& event)
+{
+    CalcGeometry();
+
+    event.Skip();
+}
+
+void wxSlider::CalcGeometry()
 {
     /*
        recalc the label and slider positions, this looks like this for
@@ -420,8 +436,6 @@ void wxSlider::OnSize(wxSizeEvent& event)
         // the slider takes the whole client rect
         m_rectSlider = rectTotal;
     }
-
-    event.Skip();
 }
 
 // ----------------------------------------------------------------------------
@@ -447,6 +461,7 @@ void wxSlider::DoDraw(wxControlRenderer *renderer)
 
     // calculate the thumb position in pixels and draw it
     wxSize sizeThumb = rend->GetSliderThumbSize();
+    wxCoord lenThumb = sizeThumb.x;
     if ( IsVertical() )
     {
         wxCoord tmp = sizeThumb.x;
@@ -454,17 +469,27 @@ void wxSlider::DoDraw(wxControlRenderer *renderer)
         sizeThumb.y = tmp;
     }
 
+    wxCoord lenShaft,
+           *p;
     wxRect rectThumb(rectShaft.GetPosition(), sizeThumb);
     if ( isVertical )
     {
         rectThumb.x += (rectShaft.width - rectThumb.width) / 2;
-        rectThumb.y += (rectShaft.height*(m_value - m_min))/(m_max - m_min);
+
+        lenShaft = rectShaft.height;
+        p = &rectThumb.y;
     }
     else // horz
     {
-        rectThumb.x += (rectShaft.width*(m_value - m_min))/(m_max - m_min);
         rectThumb.y += (rectShaft.height - rectThumb.height) / 2;
+
+        lenShaft = rectShaft.width;
+        p = &rectThumb.x;
     }
+
+    // the thumb must always be entirely inside the shaft limits, so the max
+    // position is not at lenShaft but at lenShaft - thumbSize - account for it
+    *p += ((lenShaft - lenThumb)*(m_value - m_min))/(m_max - m_min);
 
     rend->DrawSliderThumb(dc, rectThumb, orient, flags);
 
@@ -473,14 +498,22 @@ void wxSlider::DoDraw(wxControlRenderer *renderer)
     {
         wxRect rectLabel = m_rectLabel;
 
-        // centre the label relatively to the thumb position
+        // centre the label relatively to the thumb position and align it to be
+        // close to the shaft
+        int align;
         if ( IsVertical() )
         {
+            align = wxALIGN_CENTRE_VERTICAL |
+                    (GetWindowStyle() & wxSL_RIGHT ? wxALIGN_LEFT
+                                                   : wxALIGN_RIGHT);
+
             rectLabel.y =
                 rectThumb.y + (rectThumb.height - m_rectLabel.height)/2;
         }
         else // horz
         {
+            align = wxALIGN_CENTRE;
+
             rectLabel.x =
                 rectThumb.x + (rectThumb.width - m_rectLabel.width)/2;
         }
@@ -490,7 +523,7 @@ void wxSlider::DoDraw(wxControlRenderer *renderer)
 
         // the slider label is never drawn focused
         rend->DrawLabel(dc, FormatValue(m_value), rectLabel,
-                        flags & ~wxCONTROL_FOCUSED, wxALIGN_CENTRE);
+                        flags & ~wxCONTROL_FOCUSED, align);
     }
 
     // TODO TICKS: draw them

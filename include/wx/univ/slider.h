@@ -126,6 +126,9 @@ protected:
     // calculate max label size
     wxSize CalcLabelSize() const;
 
+    // calculate m_rectLabel/Slider
+    void CalcGeometry();
+
 private:
     // the slider range and value
     int m_min,

@@ -44,6 +44,7 @@
     #include "wx/radiobut.h"
     #include "wx/scrolbar.h"
     #include "wx/scrolwin.h"
+    #include "wx/slider.h"
     #include "wx/statbox.h"
     #include "wx/stattext.h"
     #include "wx/textctrl.h"
@@ -51,7 +52,6 @@
 
 #include "wx/imaglist.h"
 #include "wx/notebook.h"
-#include "wx/slider.h"
 #include "wx/spinbutt.h"
 #include "wx/spinctrl.h"
 #include "wx/statbmp.h"
