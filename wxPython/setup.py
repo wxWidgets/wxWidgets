@@ -692,6 +692,7 @@ if __name__ == "__main__":
               packages = [PKGDIR,
                           PKGDIR+'.lib',
                           PKGDIR+'.lib.editor',
+                          PKGDIR+'.lib.mixins'
                           ],
 
               ext_package = PKGDIR,
