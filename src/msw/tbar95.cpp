@@ -350,6 +350,7 @@ wxSize wxToolBar::DoGetBestSize() const
         // maybe an old (< 0x400) Windows version? try to approximate the
         // toolbar size ourselves
         sizeBest = GetToolSize();
+        sizeBest.y += 2 * ::GetSystemMetrics(SM_CYBORDER); // Add borders
         sizeBest.x *= GetToolsCount();
 
         // reverse horz and vertical components if necessary
