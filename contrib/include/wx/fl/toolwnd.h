@@ -144,10 +144,10 @@ public:
 
         // Called when a mini button is clicked.
         // By default, does nothing.
-    virtual void OnMiniButtonClicked( int btnIdx ) {}
+    virtual void OnMiniButtonClicked( int WXUNUSED(btnIdx) ) {}
 
         // Handles clicking on the title. By default, does nothing.
-    virtual bool HandleTitleClick( wxMouseEvent& event ) { return FALSE; }
+    virtual bool HandleTitleClick( wxMouseEvent& WXUNUSED(event) ) { return false; }
 
     DECLARE_EVENT_TABLE()
 };

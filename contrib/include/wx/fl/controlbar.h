@@ -1498,25 +1498,25 @@ public:
         // they would usually be invoked). Custom updates-managers may utilize
         // these notifications to implement a more fine-grained updating strategy.
 
-    virtual void OnRowWillChange( cbRowInfo* pRow, cbDockPane* pInPane ) {}
+    virtual void OnRowWillChange( cbRowInfo* WXUNUSED(pRow), cbDockPane* WXUNUSED(pInPane) ) {}
 
         // This function receives a notification from the frame layout (in the order in which
         // they would usually be invoked). Custom updates-managers may utilize
         // these notifications to implement a more fine-grained updating strategy.
 
-    virtual void OnBarWillChange( cbBarInfo* pBar, cbRowInfo* pInRow, cbDockPane* pInPane ) {}
+    virtual void OnBarWillChange( cbBarInfo* WXUNUSED(pBar), cbRowInfo* WXUNUSED(pInRow), cbDockPane* WXUNUSED(pInPane) ) {}
 
         // This function receives a notification from the frame layout (in the order in which
         // they would usually be invoked). Custom updates-managers may utilize
         // these notifications to implement a more fine-grained updating strategy.
 
-    virtual void OnPaneMarginsWillChange( cbDockPane* pPane ) {}
+    virtual void OnPaneMarginsWillChange( cbDockPane* WXUNUSED(pPane) ) {}
 
         // This function receives a notification from the frame layout (in the order in which
         // they would usually be invoked). Custom updates-managers may utilize
         // these notifications to implement a more fine-grained updating strategy.
 
-    virtual void OnPaneWillChange( cbDockPane* pPane ) {}
+    virtual void OnPaneWillChange( cbDockPane* WXUNUSED(pPane) ) {}
 
         // This function receives a notification from the frame layout (in the order in which
         // they would usually be invoked). Custom updates-managers may utilize

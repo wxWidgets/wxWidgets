@@ -70,7 +70,7 @@ public:
 
     virtual void OnInit() {}
 
-    virtual void OnSerialize( wxObjectStorage& store ) {}
+    virtual void OnSerialize( wxObjectStorage& WXUNUSED(store) ) {}
     virtual void OnActiveate() {}
     virtual void OnDeactivate() {}
 
