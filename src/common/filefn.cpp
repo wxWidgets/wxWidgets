@@ -115,11 +115,11 @@
 
 extern wxChar *wxBuffer;
 
-#if defined(__WXMAC__) && !defined(__UNIX__)
-    #include "morefile.h"
-    #include "moreextr.h"
-    #include "fullpath.h"
-    #include "fspcompa.h"
+#ifdef __WXMAC__
+#    include "MoreFiles.h"
+#    include "MoreFilesExtras.h"
+#    include "FullPath.h"
+#    include "FSpCompat.h"
 #endif
 
 IMPLEMENT_DYNAMIC_CLASS(wxPathList, wxStringList)
@@ -143,7 +143,11 @@ const off_t wxInvalidOffset = (off_t)-1;
 // ----------------------------------------------------------------------------
 
 // we need to translate Mac filenames before passing them to OS functions
+#if defined(__WXMAC__) && defined(__DARWIN__)
+    #define OS_FILENAME(s) wxMac2UnixFilename(s.fn_str())
+#else
     #define OS_FILENAME(s) (s.fn_str())
+#endif
 
 // ============================================================================
 // implementation
@@ -829,7 +833,7 @@ wxString wxPathOnly (const wxString& path)
 // and back again - or we get nasty problems with delimiters.
 // Also, convert to lower case, since case is significant in UNIX.
 
-#if defined(__WXMAC__) && !defined(__UNIX__)
+#if defined(__WXMAC__)
 wxString wxMacFSSpec2MacFilename( const FSSpec *spec )
 {
     Handle    myPath ;
@@ -1703,7 +1707,7 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
   char *cbuf = new char[sz+1];
 #ifdef _MSC_VER
   if (_getcwd(cbuf, sz) == NULL) {
-#elif defined(__WXMAC__) && !defined(__UNIX__)
+#elif defined(__WXMAC__)
     enum
     {
         SFSaveDisk = 0x214, CurDirStore = 0x398

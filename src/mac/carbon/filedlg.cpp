@@ -34,10 +34,8 @@ IMPLEMENT_CLASS(wxFileDialog, wxDialog)
   #include <Navigation.h>
 #endif
 
-#ifndef __DARWIN__
-  #include "MoreFiles.h"
-  #include "MoreFilesExtras.h"
-#endif
+#include "MoreFiles.h"
+#include "MoreFilesExtras.h"
 
 extern bool gUseNavServices ;
 
@@ -302,6 +300,8 @@ void MakeUserDataRec(OpenUserDataRec	*myData , const wxString& filter )
 	}
 
 }
+
+#if !TARGET_CARBON
 void ExtendedOpenFile( ConstStr255Param message , ConstStr255Param path , const char *filter , FileFilterYDUPP fileFilter, StandardFileReply *theSFR )
 {
 	Point 				thePt;
@@ -313,7 +313,6 @@ void ExtendedOpenFile( ConstStr255Param message , ConstStr255Param path , const 
 	ModalFilterYDUPP	myModalFilterUPP;
 	OSErr				err;
 	SFTypeList			types ;
-	
 	
 	// presumably we're running System 7 or later so CustomGetFile is
 	// available
@@ -327,8 +326,6 @@ void ExtendedOpenFile( ConstStr255Param message , ConstStr255Param path , const 
 	MakeUserDataRec( &myData , filter ) ;
 	// display the dialog
 
-#if !TARGET_CARBON
-	
 	dlgHookUPP = NULL ;
 //	dlgHookUPP = NewDlgHookYDProc(SFGetFolderDialogHook);
 	myModalFilterUPP = NewModalFilterYDProc(SFGetFolderModalDialogFilter);
@@ -338,21 +335,20 @@ void ExtendedOpenFile( ConstStr255Param message , ConstStr255Param path , const 
 	ParamText( message , NULL , NULL , NULL ) ;
 	
 	CustomGetFile(	fileFilter, 
-					-1,					// show all types
-					NULL,
-					theSFR,
-					kSFGetFileDlgID,
-					thePt,				// top left point
-					dlgHookUPP,
-					myModalFilterUPP,
-					nil,				// activate list
-					nil,				// activate proc
-					&myData);
+			-1,		       		// show all types
+			NULL,
+			theSFR,
+			kSFGetFileDlgID,
+			thePt,				// top left point
+			dlgHookUPP,
+			myModalFilterUPP,
+			nil,				// activate list
+			nil,				// activate proc
+			&myData);
 					
 	DisposeRoutineDescriptor(dlgHookUPP);
 	DisposeRoutineDescriptor(myModalFilterUPP);
-#else
-#endif	
+
 	// if cancel wasn't pressed and no fatal error occurred...
 	
 	if (theSFR->sfGood)
@@ -363,7 +359,7 @@ void ExtendedOpenFile( ConstStr255Param message , ConstStr255Param path , const 
 		if (theSFR->sfFile.name[0] == '\0')
 		{
 			err = FSMakeFSSpec(theSFR->sfFile.vRefNum, theSFR->sfFile.parID,
-								"\p", &tempSpec);
+					   "\p", &tempSpec);
 			if (err == noErr)
 			{
 				theSFR->sfFile = tempSpec;
@@ -406,38 +402,45 @@ void ExtendedOpenFile( ConstStr255Param message , ConstStr255Param path , const 
 		}
 	}
 }
+#endif
 
 static Boolean CheckFile( ConstStr255Param name , OSType type , OpenUserDataRecPtr data)
 {
-	  Str255 			filename ;
-		PLstrcpy( filename , name ) ;
+    Str255 			filename ;
+    
+#if TARGET_CARBON
+    p2cstrcpy((char *)filename, name) ;
+#else
+    PLstrcpy( filename , name ) ;
     p2cstr( filename ) ;
+#endif
     wxString file(filename) ;
     file.MakeUpper() ;
     
-		if ( data->numfilters > 0 )
-		{
-  		//for ( int i = 0 ; i < data->numfilters ; ++i )
-  		int i = data->currentfilter ;
-  		if ( data->extensions[i].Right(2) == ".*" )
-  		  return true ;
-  		  
-  		{
-  			if ( type == data->filtermactypes[i] )
-  				return true ;
-
-        wxString extension = data->extensions[i] ;
-        if ( extension.GetChar(0) == '*' )
-          extension = extension.Mid(1) ;
-
-  			if ( file.Len() >= extension.Len() && extension == file.Right(extension.Len() ) )
-  					return true ;
-  		}
-  		return false ;
-  	}
-  	return true ;
+    if ( data->numfilters > 0 )
+    {
+	//for ( int i = 0 ; i < data->numfilters ; ++i )
+	int i = data->currentfilter ;
+	if ( data->extensions[i].Right(2) == ".*" )
+	    return true ;
+	
+	{
+	    if ( type == data->filtermactypes[i] )
+		return true ;
+	    
+	    wxString extension = data->extensions[i] ;
+	    if ( extension.GetChar(0) == '*' )
+		extension = extension.Mid(1) ;
+	    
+	    if ( file.Len() >= extension.Len() && extension == file.Right(extension.Len() ) )
+		return true ;
+	}
+	return false ;
+    }
+    return true ;
 }
 
+#if !TARGET_CARBON
 static pascal Boolean CrossPlatformFileFilter(CInfoPBPtr myCInfoPBPtr, void *dataPtr)
 {	
 	OpenUserDataRecPtr data = (OpenUserDataRecPtr) dataPtr ;
@@ -462,6 +465,7 @@ static pascal Boolean CrossPlatformFileFilter(CInfoPBPtr myCInfoPBPtr, void *dat
 		
 	return false ;
 }
+#endif
 
 // end wxmac
 
@@ -571,7 +575,7 @@ pascal Boolean CrossPlatformFilterCallback (
 
 int wxFileDialog::ShowModal()
 {
-	#if !TARGET_CARBON
+#if !TARGET_CARBON
 	if ( !gUseNavServices )
 	{
 	if ( m_dialogStyle & wxSAVE )
@@ -580,25 +584,12 @@ int wxFileDialog::ShowModal()
 		Str255				prompt ;
 		Str255				filename ;
 
-#if TARGET_CARBON
-		c2pstrcpy((StringPtr)prompt, m_message) ;
-#else
 		strcpy((char *)prompt, m_message) ;
 		c2pstr((char *)prompt ) ;
-#endif
-#if TARGET_CARBON
-		c2pstrcpy((StringPtr)filename, m_fileName) ;
-#else
 		strcpy((char *)filename, m_fileName) ;
 		c2pstr((char *)filename ) ;
-#endif
 
-		#if !TARGET_CARBON
-		
 		StandardPutFile( prompt , filename , &reply ) ;
-	
-		#else
-		#endif
 		if ( reply.sfGood == false )
 		{
 			m_path = "" ;
@@ -616,30 +607,17 @@ int wxFileDialog::ShowModal()
 		Str255				prompt ;
 		Str255				path ;
 
-#if TARGET_CARBON
-		c2pstrcpy((StringPtr)prompt, m_message) ;
-#else
 		strcpy((char *)prompt, m_message) ;
 		c2pstr((char *)prompt ) ;
-#endif
-#if TARGET_CARBON
-		c2pstrcpy((StringPtr)path, m_dir ) ;
-#else
 		strcpy((char *)path, m_dir ) ;
 		c2pstr((char *)path ) ;
-#endif
 
 		StandardFileReply	reply ;
 		FileFilterYDUPP crossPlatformFileFilterUPP = 0 ;
-		#if !TARGET_CARBON
 		crossPlatformFileFilterUPP = 
 			NewFileFilterYDProc(CrossPlatformFileFilter);
-		#endif
-
 		ExtendedOpenFile( prompt , path , m_wildCard , crossPlatformFileFilterUPP, &reply);
-		#if !TARGET_CARBON
 		DisposeFileFilterYDUPP(crossPlatformFileFilterUPP);
-		#endif
 		if ( reply.sfGood == false )
 		{
 			m_path = "" ;

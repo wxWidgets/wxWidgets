@@ -27,10 +27,8 @@
 #include <string.h>
 #include <stdarg.h>
 
-#ifndef __DARWIN__
-  #include "MoreFiles.h"
-  #include "MoreFilesExtras.h"
-#endif
+#include "MoreFiles.h"
+#include "MoreFilesExtras.h"
 
 #ifndef __DARWIN__
 // defined in unix/utilsunx.cpp for Mac OS X
@@ -320,7 +318,6 @@ bool wxIsBusy()
   return (wxBusyCursorCount > 0);
 }
 
-#ifndef __DARWIN__
 wxString wxMacFindFolder( short 					vol,
 								 OSType 				folderType,
 								 Boolean 				createFolder)
@@ -339,7 +336,6 @@ wxString wxMacFindFolder( short 					vol,
 	}
 	return strDir ;
 }
-#endif
 
 #ifndef __DARWIN__
 char *wxGetUserHome (const wxString& user)
@@ -349,7 +345,6 @@ char *wxGetUserHome (const wxString& user)
 }
 #endif
 
-#ifndef __DARWIN__
 bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
 {
     if ( path.empty() )
@@ -383,7 +378,6 @@ bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
 
     return err == noErr ;
 }
-#endif
 
 // Check whether this window wants to process messages, e.g. Stop button
 // in long calculations.
