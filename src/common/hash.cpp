@@ -329,7 +329,7 @@ void wxHashTable::Put (long key, const wxChar *value, wxObject * object)
 
   if (!hash_table[position])
   {
-    hash_table[position] = new wxList (wxKEY_INTEGER);
+    hash_table[position] = new wxList (wxKEY_STRING);
     if (m_deleteContents) hash_table[position]->DeleteContents(TRUE);
   }
 
