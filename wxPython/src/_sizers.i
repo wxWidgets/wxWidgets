@@ -872,7 +872,7 @@ the item.", "");
     
     DocDeclStr(
         void , ShowItems(bool show),
-        "Recursively call `wx.Window.Show` on all sizer items.", "");
+        "Recursively call `wx.SizerItem.Show` on all sizer items.", "");
     
 };
 
