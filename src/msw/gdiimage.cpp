@@ -323,27 +323,26 @@ bool wxBMPResourceHandler::LoadFile(wxBitmap *bitmap,
     // TODO: load colourmap.
     bitmap->SetHBITMAP((WXHBITMAP)::LoadBitmap(wxGetInstance(), name));
 
-    wxBitmapRefData *data = bitmap->GetBitmapData();
-    if ( bitmap->Ok() )
-    {
-        BITMAP bm;
-        if ( !::GetObject(GetHbitmapOf(*bitmap), sizeof(BITMAP), (LPSTR) &bm) )
-        {
-            wxLogLastError(wxT("GetObject(HBITMAP)"));
-        }
-
-        data->m_width = bm.bmWidth;
-        data->m_height = bm.bmHeight;
-        data->m_depth = bm.bmBitsPixel;
-    }
-    else
+    if ( !bitmap->Ok() )
     {
         // it's probably not found
         wxLogError(wxT("Can't load bitmap '%s' from resources! Check .rc file."),
                    name.c_str());
+
+        return FALSE;
     }
 
-    return bitmap->Ok();
+    BITMAP bm;
+    if ( !::GetObject(GetHbitmapOf(*bitmap), sizeof(BITMAP), (LPSTR) &bm) )
+    {
+        wxLogLastError(wxT("GetObject(HBITMAP)"));
+    }
+
+    bitmap->SetWidth(bm.bmWidth);
+    bitmap->SetHeight(bm.bmHeight);
+    bitmap->SetDepth(bm.bmBitsPixel);
+
+    return TRUE;
 }
 
 bool wxBMPFileHandler::LoadFile(wxBitmap *bitmap,

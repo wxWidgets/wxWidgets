@@ -40,8 +40,6 @@
     #include "wx/icon.h"
 #endif
 
-//#include "device.h"
-
 #include "wx/msw/private.h"
 #include "wx/log.h"
 
@@ -56,6 +54,60 @@
 #ifndef CLR_INVALID
     #define CLR_INVALID ((COLORREF)-1)
 #endif // no CLR_INVALID
+
+// ----------------------------------------------------------------------------
+// Bitmap data
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxBitmapRefData : public wxGDIImageRefData
+{
+public:
+    wxBitmapRefData();
+    virtual ~wxBitmapRefData() { Free(); }
+
+    virtual void Free();
+
+    // set the mask object to use as the mask, we take ownership of it
+    void SetMask(wxMask *mask)
+    {
+        delete m_bitmapMask;
+        m_bitmapMask = mask;
+    }
+
+    // set the HBITMAP to use as the mask
+    void SetMask(HBITMAP hbmpMask)
+    {
+        SetMask(new wxMask((WXHBITMAP)hbmpMask));
+    }
+
+    // return the mask
+    wxMask *GetMask() const { return m_bitmapMask; }
+
+public:
+    int           m_numColors;
+#if wxUSE_PALETTE
+    wxPalette     m_bitmapPalette;
+#endif // wxUSE_PALETTE
+
+    // MSW-specific
+    // ------------
+
+    // this field is solely for error checking: we detect selecting a bitmap
+    // into more than one DC at once or deleting a bitmap still selected into a
+    // DC (both are serious programming errors under Windows)
+    wxDC         *m_selectedInto;
+
+#if wxUSE_DIB_FOR_BITMAP
+    // file mapping handle for large DIB's
+    HANDLE        m_hFileMap;
+#endif // wxUSE_DIB_FOR_BITMAP
+
+private:
+    // optional mask for transparent drawing
+    wxMask       *m_bitmapMask;
+
+    DECLARE_NO_COPY_CLASS(wxBitmapRefData)
+};
 
 // ----------------------------------------------------------------------------
 // macros
@@ -76,14 +128,13 @@ IMPLEMENT_DYNAMIC_CLASS(wxBitmapHandler, wxObject)
 
 wxBitmapRefData::wxBitmapRefData()
 {
-    m_quality = 0;
     m_selectedInto = NULL;
     m_numColors = 0;
     m_bitmapMask = NULL;
     m_hBitmap = (WXHBITMAP) NULL;
 #if wxUSE_DIB_FOR_BITMAP
     m_hFileMap = 0;
-#endif
+#endif // wxUSE_DIB_FOR_BITMAP
 }
 
 void wxBitmapRefData::Free()
@@ -93,22 +144,20 @@ void wxBitmapRefData::Free()
 
     if ( m_hBitmap)
     {
-        //        printf("About to delete bitmap %d\n", (int) (HBITMAP) m_hBitmap);
-#if 1
         if ( !::DeleteObject((HBITMAP)m_hBitmap) )
         {
             wxLogLastError(wxT("DeleteObject(hbitmap)"));
         }
-#endif
     }
 
 #if wxUSE_DIB_FOR_BITMAP
-    if(m_hFileMap)
+    if ( m_hFileMap )
     {
-      ::CloseHandle((void*)m_hFileMap);
+      ::CloseHandle(m_hFileMap);
+
       m_hFileMap = 0;
     }
-#endif
+#endif // wxUSE_DIB_FOR_BITMAP
 
     delete m_bitmapMask;
     m_bitmapMask = NULL;
@@ -123,6 +172,11 @@ void wxBitmap::Init()
 {
     // m_refData = NULL; done in the base class ctor
 
+}
+
+wxGDIImageRefData *wxBitmap::CreateData() const
+{
+    return new wxBitmapRefData;
 }
 
 #ifdef __WIN32__
@@ -155,8 +209,7 @@ bool wxBitmap::CopyFromIconOrCursor(const wxGDIImage& icon)
 
     // the mask returned by GetIconInfo() is inversed compared to the usual
     // wxWin convention
-    refData->m_bitmapMask = new wxMask((WXHBITMAP)
-                                        wxInvertMask(iconInfo.hbmMask, w, h));
+    refData->SetMask(wxInvertMask(iconInfo.hbmMask, w, h));
 
 
     // delete the old one now as we don't need it any more
@@ -423,16 +476,15 @@ void *wxBitmap::CreateDIB(int width, int height, int depth)
         info->bmiHeader.biYPelsPerMeter = 0;
         info->bmiHeader.biClrUsed = 0;
         info->bmiHeader.biClrImportant = 0;
-        GetBitmapData()->m_hFileMap =
-            (WXHANDLE)::CreateFileMapping
-                        (
-                            INVALID_HANDLE_VALUE,
-                            0,
-                            PAGE_READWRITE | SEC_COMMIT,
-                            0,
-                            info->bmiHeader.biSizeImage,
-                            0
-                        );
+        GetBitmapData()->m_hFileMap = ::CreateFileMapping
+                                        (
+                                            INVALID_HANDLE_VALUE,
+                                            0,
+                                            PAGE_READWRITE | SEC_COMMIT,
+                                            0,
+                                            info->bmiHeader.biSizeImage,
+                                            0
+                                        );
 
         // No need to report an error here.  If it fails, we just won't use a
         // file mapping and CreateDIBSection will just allocate memory for us.
@@ -443,7 +495,7 @@ void *wxBitmap::CreateDIB(int width, int height, int depth)
                             info,
                             DIB_RGB_COLORS,
                             &dibBits,
-                            (HANDLE)GetBitmapData()->m_hFileMap,
+                            GetBitmapData()->m_hFileMap,
                             0
                         );
 
@@ -574,7 +626,7 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
         ::SelectObject(hMaskDC, hOldMaskBitmap);
         ::DeleteDC(hMaskDC);
 
-        ((wxBitmapRefData*)m_refData)->m_bitmapMask = new wxMask((WXHBITMAP) hMaskBitmap);
+        ((wxBitmapRefData*)m_refData)->SetMask(hMaskBitmap);
     }
 
     SetWidth(image.GetWidth());
@@ -1188,21 +1240,49 @@ wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect) const
 // wxBitmap accessors
 // ----------------------------------------------------------------------------
 
-void wxBitmap::SetQuality(int q)
+wxPalette* wxBitmap::GetPalette() const
 {
-    EnsureHasData();
-
-    GetBitmapData()->m_quality = q;
+    return GetBitmapData() ? &GetBitmapData()->m_bitmapPalette
+                           : (wxPalette *) NULL;
 }
 
-#if WXWIN_COMPATIBILITY_2
-void wxBitmap::SetOk(bool isOk)
+wxMask *wxBitmap::GetMask() const
 {
-    EnsureHasData();
-
-    GetBitmapData()->m_ok = isOk;
+    return GetBitmapData() ? GetBitmapData()->GetMask() : (wxMask *) NULL;
 }
-#endif // WXWIN_COMPATIBILITY_2
+
+wxDC *wxBitmap::GetSelectedInto() const
+{
+    return GetBitmapData() ? GetBitmapData()->m_selectedInto : (wxDC *) NULL;
+}
+
+#if wxUSE_DIB_FOR_BITMAP
+
+bool wxBitmap::IsDIB() const
+{
+    return GetBitmapData() && GetBitmapData()->m_hFileMap != NULL;
+}
+
+#endif // wxUSE_DIB_FOR_BITMAP
+
+#if WXWIN_COMPATIBILITY_2_4
+
+int wxBitmap::GetQuality() const
+{
+    return 0;
+}
+
+#endif // WXWIN_COMPATIBILITY_2_4
+
+// ----------------------------------------------------------------------------
+// wxBitmap setters
+// ----------------------------------------------------------------------------
+
+void wxBitmap::SetSelectedInto(wxDC *dc)
+{
+    if ( GetBitmapData() )
+        GetBitmapData()->m_selectedInto = dc;
+}
 
 #if wxUSE_PALETTE
 
@@ -1219,8 +1299,31 @@ void wxBitmap::SetMask(wxMask *mask)
 {
     EnsureHasData();
 
-    GetBitmapData()->m_bitmapMask = mask;
+    GetBitmapData()->SetMask(mask);
 }
+
+#if WXWIN_COMPATIBILITY_2
+
+void wxBitmap::SetOk(bool isOk)
+{
+    EnsureHasData();
+
+    GetBitmapData()->m_ok = isOk;
+}
+
+#endif // WXWIN_COMPATIBILITY_2
+
+#if WXWIN_COMPATIBILITY_2_4
+
+void wxBitmap::SetQuality(int WXUNUSED(quality))
+{
+}
+
+#endif // WXWIN_COMPATIBILITY_2_4
+
+// ----------------------------------------------------------------------------
+// TODO: to be replaced by something better
+// ----------------------------------------------------------------------------
 
 // Creates a bitmap that matches the device context, from
 // an arbitray bitmap. At present, the original bitmap must have an

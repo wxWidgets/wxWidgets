@@ -432,7 +432,7 @@ void wxPrinterDC::DoDrawBitmap(const wxBitmap &bmp,
     if ( ::GetDeviceCaps(GetHdc(), RASTERCAPS) & RC_STRETCHDIB )
     {
 #if wxUSE_DIB_FOR_BITMAP
-        if(bmp.GetHFileMap())   // we already have a dib
+        if ( bmp.IsDIB() )
         {
             DIBSECTION dib;
             if ( ::GetObject(GetHbitmapOf(bmp),
@@ -561,7 +561,7 @@ bool wxPrinterDC::DoBlit(wxCoord xdest, wxCoord ydest,
             int width = bmp.GetWidth(),
                 height = bmp.GetHeight();
 #if wxUSE_DIB_FOR_BITMAP
-            if(bmp.GetHFileMap())   // we already have a dib
+            if ( bmp.IsDIB() )
             {
                 DIBSECTION dib;
                 if( ::GetObject(GetHbitmapOf(bmp),
