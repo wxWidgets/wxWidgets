@@ -1,0 +1,58 @@
+
+HelpHTML : Support scripts for generating external HTML help files
+------------------------------------------------------------------
+
+The scripts in this directory can be used to generate external HTML
+help files for use with wxHTMLHelpControllerBase derived help implemen-
+tations. Currently the only implementation using this is the
+wxExtHelpController class, using an external HTML browser. I hope to 
+add a class using a wxWindows-built-in HTML viewer soon.
+
+These viewers need a "wxhelp.map" file in the help directory which
+maps numeric help IDs to relative URLs, having entries like:
+
+1000		overview.html;Overview
+1010            mainmanu.html;Main Menu
+...
+
+The numeric help ids are used to refer to the help in the application,
+the URL specifies the file to be displayed, relative to the help base
+directory (extended by the locale name if that directory exists) and the
+text behind the semicolon is used to display and search a list of all help
+topics.
+
+html2wxhelp:
+------------
+The html2wxhelp script in this directory allow you to automatically generate
+this file from a set of HTML pages. All you need is to append the numeric ID
+to the section header in the HTML file like this:
+<H1>Overview_1000_</H1>
+
+html2wxhelp will scan all html files in the directory in which it is called
+and find these lines. It will create a wxhelp.map file and strip the help 
+IDs from the HTML files. So you should have a backup of the files before
+running it, or a way to regenerate them.
+
+striphelpids:
+-------------
+
+Called with the name of a .tex file, it will strip the help IDs from the file,
+so the IDs do not show up in the printed documentation.
+
+
+How to use them:
+----------------
+
+I use LyX to generate the docs, export the text as LaTeX. I then use
+latex2html to generate the set of HTML pages and html2wxhelp to generate
+the map file from them. Then I run striphelpids on the .tex file before
+generating PostScript documentation from that.
+The whole process can easily be automated with a Makefile. For an example
+of how to do this, see the source of my mail program, available from
+http://www.phy.hw.ac.uk/~karsten/M/
+
+
+Karsten Ballueder	<Ballueder@usa.net>
+
+
+
