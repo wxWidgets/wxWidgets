@@ -15,6 +15,8 @@
 
 #include "wx/wxprec.h"
 
+#if wxUSE_PRINTING_ARCHITECTURE
+
 #include "wx/object.h"
 #include "wx/printdlg.h"
 #include "wx/mac/printdlg.h"
@@ -124,4 +126,6 @@ int wxMacPageSetupDialog::ShowModal()
         
     return result;
 }
+
+#endif
 

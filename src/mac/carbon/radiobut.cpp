@@ -15,6 +15,8 @@
 
 #include "wx/wxprec.h"
 
+#if wxUSE_RADIOBTN
+
 #include "wx/radiobut.h"
 
 #if !USE_SHARED_LIBRARY
@@ -154,3 +156,5 @@ wxRadioButton *wxRadioButton::AddInCycle(wxRadioButton *cycle)
           return(cycle);
       }
 }  
+
+#endif

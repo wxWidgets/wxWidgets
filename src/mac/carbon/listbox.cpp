@@ -15,6 +15,8 @@
 
 #include "wx/wxprec.h"
 
+#if wxUSE_LISTBOX
+
 #include "wx/app.h"
 #include "wx/listbox.h"
 #include "wx/button.h"
@@ -901,4 +903,6 @@ void wxListBox::OnChar(wxKeyEvent& event)
 }
 
 #endif // !TARGET_API_MAC_OSX
+
+#endif
 

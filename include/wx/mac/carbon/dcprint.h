@@ -24,9 +24,9 @@ class wxNativePrinterDC ;
 class WXDLLEXPORT wxPrinterDC: public wxDC
 {
  public:
+#if wxUSE_PRINTING_ARCHITECTURE
   DECLARE_CLASS(wxPrinterDC)
 
-#if wxUSE_PRINTING_ARCHITECTURE
   // Create a printer DC
   wxPrinterDC(const wxPrintData& printdata );
   ~wxPrinterDC();

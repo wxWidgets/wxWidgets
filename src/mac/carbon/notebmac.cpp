@@ -22,6 +22,8 @@
 // ----------------------------------------------------------------------------
 #include "wx/wxprec.h"
 
+#if wxUSE_NOTEBOOK
+
 #include "wx/app.h"
 #include "wx/string.h"
 #include "wx/log.h"
@@ -546,4 +548,6 @@ wxInt32 wxNotebook::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTR
     }
     return status ;
 }
+
+#endif
 

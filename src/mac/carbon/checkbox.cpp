@@ -15,6 +15,8 @@
 
 #include "wx/wxprec.h"
 
+#if wxUSE_CHECKBOX
+
 #include "wx/checkbox.h"
 
 #if !USE_SHARED_LIBRARY
@@ -178,4 +180,4 @@ bool wxBitmapCheckBox::GetValue() const
     return FALSE;
 }
 
-
+#endif

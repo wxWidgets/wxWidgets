@@ -24,6 +24,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_FONTMAP
+
 #ifdef __BORLANDC__
   #pragma hdrstop
 #endif
@@ -171,3 +173,5 @@ bool wxFontEnumerator::EnumerateEncodings(const wxString& family)
 
     return TRUE;
 }
+
+#endif

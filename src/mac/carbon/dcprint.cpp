@@ -16,6 +16,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_PRINTING_ARCHITECTURE
+
 #ifdef __BORLANDC__
 #pragma hdrstop
 #endif
@@ -449,4 +451,4 @@ void wxPrinterDC::DoGetSize(int *width, int *height) const
         * height = m_nativePrinterDC->GetMaxY() ;
 }
 
-
+#endif

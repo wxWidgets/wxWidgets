@@ -15,6 +15,8 @@
 
 #include "wx/wxprec.h"
 
+#if wxUSE_DIRDLG
+
 #include "wx/utils.h"
 #include "wx/dialog.h"
 #include "wx/dirdlg.h"
@@ -118,3 +120,4 @@ int wxDirDialog::ShowModal()
     return wxID_CANCEL;
 }
 
+#endif

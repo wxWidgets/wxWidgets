@@ -24,6 +24,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_DATAOBJ
+
 #ifndef WX_PRECOMP
 #include "wx/intl.h"
 #endif
@@ -331,3 +333,5 @@ bool wxBitmapDataObject::SetData(
     
     return m_bitmap.Ok();
 }
+
+#endif

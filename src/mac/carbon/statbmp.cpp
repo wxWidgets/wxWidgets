@@ -15,6 +15,8 @@
 
 #include "wx/wxprec.h"
 
+#if wxUSE_STATBMP
+
 #include "wx/statbmp.h"
 #include "wx/dcclient.h"
 
@@ -80,4 +82,6 @@ wxSize wxStaticBitmap::DoGetBestSize() const
     // this is completely arbitrary
     return DoGetSizeFromClientSize( wxSize(16, 16) ); 
 }
+
+#endif
 

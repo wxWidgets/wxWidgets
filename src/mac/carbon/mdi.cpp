@@ -15,6 +15,8 @@
 
 #include "wx/wxprec.h"
 
+#if wxUSE_MDI
+
 #include "wx/mdi.h"
 #include "wx/menu.h"
 #include "wx/settings.h"
@@ -393,4 +395,6 @@ void wxMDIClientWindow::DoGetClientSize(int *x, int *y) const
 void wxMDIClientWindow::OnScroll(wxScrollEvent& event)
 {
 }
+
+#endif
 

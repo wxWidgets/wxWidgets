@@ -16,6 +16,8 @@
 #pragma interface "tabctrl.h"
 #endif
 
+#include "wx/control.h"
+
 class wxImageList;
 
 /*

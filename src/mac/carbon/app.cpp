@@ -266,19 +266,26 @@ short wxApp::MacHandleAERApp(const WXEVENTREF WXUNUSED(event) , WXEVENTREF WXUNU
 }
 
 
+
 //----------------------------------------------------------------------
 // Support Routines linking the Mac...File Calls to the Document Manager
 //----------------------------------------------------------------------
 
 void wxApp::MacOpenFile(const wxString & fileName )
 {
+#if wxUSE_DOC_VIEW_ARCHITECTURE
     wxDocManager* dm = wxDocManager::GetDocumentManager() ;
     if ( dm )
         dm->CreateDocument(fileName , wxDOC_SILENT ) ;
+#endif
 }
+
 
 void wxApp::MacPrintFile(const wxString & fileName )
 {
+#if wxUSE_DOC_VIEW_ARCHITECTURE
+
+#if wxUSE_PRINTING_ARCHITECTURE
     wxDocManager* dm = wxDocManager::GetDocumentManager() ;
     if ( dm )
     {
@@ -303,7 +310,12 @@ void wxApp::MacPrintFile(const wxString & fileName )
             }
         }
     }
+#endif //print
+
+#endif //docview
 }
+
+
 
 void wxApp::MacNewFile()
 {

@@ -1025,10 +1025,14 @@ int wxBitmap::GetDepth() const
    return M_BITMAPDATA->GetDepth();
 }
 
+#if WXWIN_COMPATIBILITY_2_4
+
 int wxBitmap::GetQuality() const
 {
     return 0;
 }
+
+#endif
 
 wxMask *wxBitmap::GetMask() const
 {
@@ -1068,9 +1072,13 @@ void wxBitmap::SetDepth(int d)
     M_BITMAPDATA->SetDepth(d);
 }
 
+#if WXWIN_COMPATIBILITY_2_4
+
 void wxBitmap::SetQuality(int WXUNUSED(quality))
 {
 }
+
+#endif
 
 void wxBitmap::SetOk(bool isOk)
 {
@@ -1299,9 +1307,11 @@ public:
 };
 IMPLEMENT_DYNAMIC_CLASS(wxPICTResourceHandler, wxBitmapHandler)
 
+
 bool  wxPICTResourceHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
           int desiredWidth, int desiredHeight)
 {
+#if wxUSE_METAFILE
     Str255 theName ;
     wxMacStringToPascal( name , theName ) ;
 
@@ -1317,8 +1327,10 @@ bool  wxPICTResourceHandler::LoadFile(wxBitmap *bitmap, const wxString& name, lo
         dc.SelectObject( wxNullBitmap ) ;
         return TRUE ;
     }
+#endif //wxUSE_METAFILE
     return FALSE ;
 }
+
 
 void wxBitmap::InitStandardHandlers()
 {

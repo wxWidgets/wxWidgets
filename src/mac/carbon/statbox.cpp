@@ -15,6 +15,8 @@
 
 #include "wx/wxprec.h"
 
+#if wxUSE_STATBOX
+
 #include "wx/statbox.h"
 #include "wx/mac/uma.h"
 
@@ -51,3 +53,5 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
     
     return TRUE;
 }
+
+#endif

@@ -15,6 +15,8 @@
 
 #include "wx/wxprec.h"
 
+#if wxUSE_CLIPBOARD
+
 #include "wx/app.h"
 #include "wx/frame.h"
 #include "wx/bitmap.h"
@@ -401,3 +403,5 @@ bool wxClipboard::GetData( wxDataObject& data )
     delete[] array ;
     return transferred ;
 }
+
+#endif

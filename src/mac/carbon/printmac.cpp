@@ -16,6 +16,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_PRINTING_ARCHITECTURE
+
 #ifdef __BORLANDC__
 #pragma hdrstop
 #endif
@@ -779,3 +781,5 @@ void wxMacPrintPreview::DetermineScaling(void)
     
     m_previewScale = 1 ;
 }
+
+#endif

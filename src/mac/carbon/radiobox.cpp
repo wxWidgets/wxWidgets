@@ -20,6 +20,8 @@
 
 #include "wx/wxprec.h"
 
+#if wxUSE_RADIOBOX
+
 #include "wx/arrstr.h"
 
 #include "wx/radiobox.h"
@@ -580,7 +582,7 @@ int wxRadioBox::GetColumnCount() const
     }
 }
 
-
+#endif
 
 
 

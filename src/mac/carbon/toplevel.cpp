@@ -36,6 +36,7 @@
     #include "wx/log.h"
     #include "wx/intl.h"
     #include "wx/settings.h"
+    #include "wx/control.h"
 #endif //WX_PRECOMP
 
 #include "wx/mac/uma.h"
@@ -449,6 +450,7 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
                 currentMouseWindow = wxFindControlFromMacControl( control ) ;
                 if ( currentMouseWindow == NULL && cEvent.GetKind() == kEventMouseMoved )
                 {
+#if wxUSE_TOOLBAR
                 	// for wxToolBar to function we have to send certaint events to it
                 	// instead of its children (wxToolBarTools)	
                     ControlRef parent ;
@@ -456,6 +458,7 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
                     wxWindow *wxParent = wxFindControlFromMacControl( parent ) ;
                     if ( wxParent && wxParent->IsKindOf( CLASSINFO( wxToolBar ) ) )
                         currentMouseWindow = wxParent ;
+#endif
                 }
             }
         }        

@@ -15,6 +15,8 @@
 
 #include "wx/wxprec.h"
 
+#if wxUSE_COMBOBOX
+
 #include "wx/combobox.h"
 #include "wx/button.h"
 #include "wx/menu.h"
@@ -645,3 +647,4 @@ wxInt32 wxComboBox::MacControlHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTR
     return noErr ;
 }
 
+#endif

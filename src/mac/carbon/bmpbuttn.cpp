@@ -15,6 +15,8 @@
 
 #include "wx/wxprec.h"
 
+#if wxUSE_BMPBUTTON
+
 #include "wx/window.h"
 #include "wx/bmpbuttn.h"
 
@@ -108,3 +110,5 @@ wxSize wxBitmapButton::DoGetBestSize() const
     }
     return best;
 }
+
+#endif

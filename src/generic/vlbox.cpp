@@ -24,6 +24,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_LISTBOX
+
 #ifndef WX_PRECOMP
     #include "wx/settings.h"
     #include "wx/dcclient.h"
@@ -623,3 +625,5 @@ wxVListBox::GetClassDefaultAttributes(wxWindowVariant variant)
 {
     return wxListBox::GetClassDefaultAttributes(variant);
 }
+
+#endif

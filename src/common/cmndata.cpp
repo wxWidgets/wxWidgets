@@ -63,11 +63,12 @@
     #endif
 #endif // MSW
 
-#ifdef __WXMAC__
+    #if wxUSE_PRINTING_ARCHITECTURE
+
+#if defined(__WXMAC__)
     #include "wx/mac/private/print.h"
 #endif
 
-    #if wxUSE_PRINTING_ARCHITECTURE
         IMPLEMENT_DYNAMIC_CLASS(wxPrintData, wxObject)
         IMPLEMENT_DYNAMIC_CLASS(wxPrintDialogData, wxObject)
         IMPLEMENT_DYNAMIC_CLASS(wxPageSetupDialogData, wxObject)
