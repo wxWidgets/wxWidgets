@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_MOTIF_DATAFORM_H
-#define _WX_MOTIF_DATAFORM_H
+#ifndef _WX_X11_DATAFORM_H
+#define _WX_X11_DATAFORM_H
 
 class wxDataFormat
 {
@@ -25,17 +25,17 @@ public:
     wxDataFormat( NativeFormat format );
     
     wxDataFormat& operator=(NativeFormat format)
-    { SetId(format); return *this; }
+        { SetId(format); return *this; }
     
     // comparison (must have both versions)
     bool operator==(NativeFormat format) const
-    { return m_format == (NativeFormat)format; }
+        { return m_format == (NativeFormat)format; }
     bool operator!=(NativeFormat format) const
-    { return m_format != (NativeFormat)format; }
+        { return m_format != (NativeFormat)format; }
     bool operator==(wxDataFormatId format) const
-    { return m_type == (wxDataFormatId)format; }
+        { return m_type == (wxDataFormatId)format; }
     bool operator!=(wxDataFormatId format) const
-    { return m_type != (wxDataFormatId)format; }
+        { return m_type != (wxDataFormatId)format; }
     
     // explicit and implicit conversions to NativeFormat which is one of
     // standard data types (implicit conversion is useful for preserving the
@@ -62,5 +62,5 @@ private:
 };
 
 
-#endif // _WX_MOTIF_DATAFORM_H
+#endif // _WX_X11_DATAFORM_H
 

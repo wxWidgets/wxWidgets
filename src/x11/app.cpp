@@ -435,7 +435,7 @@ void wxApp::ProcessXEvent(WXEvent* _event)
                     wxKeyEvent keyEvent(wxEVT_KEY_DOWN);
                     wxTranslateKeyEvent(keyEvent, win, window, event);
                     
-                    wxLogDebug( "OnKey from %s", win->GetName().c_str() );
+                    // wxLogDebug( "OnKey from %s", win->GetName().c_str() );
         
                     // We didn't process wxEVT_KEY_DOWN, so send
                     // wxEVT_CHAR
@@ -598,14 +598,20 @@ void wxApp::ProcessXEvent(WXEvent* _event)
                 
             if (!win->IsEnabled())
                 return;
+                
+            // Here we check if the top level window is
+            // disabled, which is one aspect of modality.
+            wxWindow *tlw = win;
+            while (tlw && !tlw->IsTopLevel())
+                tlw = tlw->GetParent();
+            if (tlw && !tlw->IsEnabled())
+                return;
             
-#if 1
             if (event->type == ButtonPress)
             {
                 if ((win != wxWindow::FindFocus()) && win->AcceptsFocus())
                    win->SetFocus();
             }
-#endif
 
             wxMouseEvent wxevent;
             wxTranslateMouseEvent(wxevent, win, window, event);
@@ -618,7 +624,7 @@ void wxApp::ProcessXEvent(WXEvent* _event)
                 if (win && event->xfocus.detail != NotifyPointer)
 #endif
                 {
-                    wxLogDebug( "FocusIn from %s", win->GetName().c_str() );
+                    // wxLogDebug( "FocusIn from %s", win->GetName().c_str() );
                     
                     wxFocusEvent focusEvent(wxEVT_SET_FOCUS, win->GetId());
                     focusEvent.SetEventObject(win);
@@ -632,7 +638,7 @@ void wxApp::ProcessXEvent(WXEvent* _event)
                 if (win && event->xfocus.detail != NotifyPointer)
 #endif
                 {
-                    wxLogDebug( "FocusOut from %s", win->GetName().c_str() );
+                    // wxLogDebug( "FocusOut from %s", win->GetName().c_str() );
                     
                     wxFocusEvent focusEvent(wxEVT_KILL_FOCUS, win->GetId());
                     focusEvent.SetEventObject(win);

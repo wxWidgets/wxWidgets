@@ -447,14 +447,14 @@ bool wxSetWMDecorations(Window w, long style)
 
     if (style & wxRESIZE_BORDER)
     {
-	wxLogDebug("MWM_DECOR_RESIZEH");
+        // wxLogDebug("MWM_DECOR_RESIZEH");
         hints.flags |= MWM_HINTS_DECORATIONS;
         hints.decorations |= MWM_DECOR_RESIZEH;
     }
 
     if (style & wxSYSTEM_MENU)
     {
-	wxLogDebug("MWM_DECOR_MENU");
+        // wxLogDebug("MWM_DECOR_MENU");
         hints.flags |= MWM_HINTS_DECORATIONS;
         hints.decorations |= MWM_DECOR_MENU;
     }
@@ -463,28 +463,28 @@ bool wxSetWMDecorations(Window w, long style)
         (style & wxTINY_CAPTION_HORIZ) ||
         (style & wxTINY_CAPTION_VERT))
     {
-	wxLogDebug("MWM_DECOR_TITLE");
+        // wxLogDebug("MWM_DECOR_TITLE");
         hints.flags |= MWM_HINTS_DECORATIONS;
         hints.decorations |= MWM_DECOR_TITLE;
     }
 
     if ((style & wxTHICK_FRAME) || (style & wxSIMPLE_BORDER) || (style & wxCAPTION))
     {
-	wxLogDebug("MWM_DECOR_BORDER");
+        // wxLogDebug("MWM_DECOR_BORDER");
         hints.flags |= MWM_HINTS_DECORATIONS;
         hints.decorations |= MWM_DECOR_BORDER;
     }
 
     if (style & wxMINIMIZE_BOX)
     {
-	wxLogDebug("MWM_DECOR_MINIMIZE");
+        // wxLogDebug("MWM_DECOR_MINIMIZE");
         hints.flags |= MWM_HINTS_DECORATIONS;
         hints.decorations |= MWM_DECOR_MINIMIZE;
     }
 
     if (style & wxMAXIMIZE_BOX)
     {
-	wxLogDebug("MWM_DECOR_MAXIMIZE");
+        // wxLogDebug("MWM_DECOR_MAXIMIZE");
         hints.flags |= MWM_HINTS_DECORATIONS;
         hints.decorations |= MWM_DECOR_MAXIMIZE;
     }
@@ -585,14 +585,11 @@ void wxTopLevelWindowX11::DoSetClientSize(int width, int height)
 
 void wxTopLevelWindowX11::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
-    wxString msg;
-    msg.Printf("Setting pos: %d, %d", x, y);
-    wxLogDebug(msg);
+    wxLogDebug( "Setting pos: %d, %d", x, y );
     wxWindowX11::DoSetSize(x, y, width, height, sizeFlags);
 
     wxPoint pt = GetPosition();
-    msg.Printf("After, pos: %d, %d", pt.x, pt.y);
-    wxLogDebug(msg);
+    wxLogDebug( "After, pos: %d, %d", pt.x, pt.y );
 #if 0
     XSync(wxGlobalDisplay(), False);
     int w, h;
@@ -646,8 +643,8 @@ void wxTopLevelWindowX11::DoGetPosition(int *x, int *y) const
     Window window = (Window) m_mainWidget;
     if (window)
     {
-	int offsetX = 0;
-	int offsetY = 0;
+        int offsetX = 0;
+        int offsetY = 0;
 	
 #if !wxUSE_NANOX
         wxLogDebug("Translating...");
@@ -655,9 +652,7 @@ void wxTopLevelWindowX11::DoGetPosition(int *x, int *y) const
         XTranslateCoordinates(wxGlobalDisplay(), window, XDefaultRootWindow(wxGlobalDisplay()),
 				  0, 0, & offsetX, & offsetY, & childWindow);
 
-	wxString msg;
-	msg.Printf("Offset: %d, %d", offsetX, offsetY);
-	wxLogDebug(msg);
+        wxLogDebug("Offset: %d, %d", offsetX, offsetY);
 #endif
 	
         XWindowAttributes attr;

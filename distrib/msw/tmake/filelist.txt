@@ -1186,6 +1186,7 @@ colour.h	X11H
 cursor.h	X11H
 dataform.h	X11H
 dataobj.h	X11H
+dataobj2.h	X11H
 dc.h	X11H
 dcclient.h	X11H
 dcmemory.h	X11H

@@ -473,6 +473,7 @@ ALL_HEADERS = \
 		x11/cursor.h \
 		x11/dataform.h \
 		x11/dataobj.h \
+		x11/dataobj2.h \
 		x11/dc.h \
 		x11/dcclient.h \
 		x11/dcmemory.h \

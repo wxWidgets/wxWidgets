@@ -460,6 +460,8 @@ private:
 #else // !__WXMSW__
     #if defined(__WXGTK__)
         #include "wx/gtk/dataobj2.h"
+    #elif defined(__WXX11__)
+        #include "wx/x11/dataobj2.h"
     #elif defined(__WXMAC__)
         #include "wx/mac/dataobj2.h"
     #elif defined(__WXPM__)

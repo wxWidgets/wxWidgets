@@ -19604,22 +19604,15 @@ EOF
 fi
 
 if test "$wxUSE_CLIPBOARD" = "yes"; then
-    if test "$wxUSE_X11" = 1; then
-        echo "configure: warning: Clipboard not yet supported under X11... disabled" 1>&2
-        wxUSE_CLIPBOARD=no
-    fi
-
-    if test "$wxUSE_CLIPBOARD" = "yes"; then
-        cat >> confdefs.h <<\EOF
+    cat >> confdefs.h <<\EOF
 #define wxUSE_CLIPBOARD 1
 EOF
 
 
-                cat >> confdefs.h <<\EOF
+        cat >> confdefs.h <<\EOF
 #define wxUSE_DATAOBJ 1
 EOF
 
-    fi
 fi
 
 if test "$wxUSE_DRAG_AND_DROP" = "yes" ; then
@@ -20509,7 +20502,7 @@ SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq 
 
 
 echo $ac_n "checking whether ${MAKE-make} sets \${MAKE}""... $ac_c" 1>&6
-echo "configure:20513: checking whether ${MAKE-make} sets \${MAKE}" >&5
+echo "configure:20506: checking whether ${MAKE-make} sets \${MAKE}" >&5
 set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_prog_make_${ac_make}_set'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6

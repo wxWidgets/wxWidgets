@@ -383,7 +383,7 @@ void wxWindowX11::DoCaptureMouse()
             return;
         }
 
-        wxLogDebug("Grabbed pointer in %s", GetName().c_str() );
+        // wxLogDebug("Grabbed pointer in %s", GetName().c_str() );
 
 #if 0
         res = XGrabButton(wxGlobalDisplay(), AnyButton, AnyModifier,
@@ -443,7 +443,7 @@ void wxWindowX11::DoReleaseMouse()
 #endif
     }
     
-    wxLogDebug( "Ungrabbed pointer in %s", GetName().c_str() );
+    // wxLogDebug( "Ungrabbed pointer in %s", GetName().c_str() );
 
     m_winCaptured = FALSE;
 }

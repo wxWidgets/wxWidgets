@@ -8,22 +8,16 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation "dataobj.h"
+    #pragma implementation "dataobj.h"
 #endif
 
 #include "wx/defs.h"
 
-#if wxUSE_CLIPBOARD
-
 #include "wx/dataobj.h"
+#include "wx/mstream.h"
 #include "wx/app.h"
+#include "wx/image.h"
 
-#ifdef __VMS__
-#pragma message disable nosimpint
-#endif
-#ifdef __VMS__
-#pragma message enable nosimpint
-#endif
 #include "wx/utils.h"
 #include "wx/x11/private.h"
 
@@ -142,59 +136,237 @@ void wxDataFormat::PrepareFormats()
     if (!g_pngAtom)
         g_pngAtom = XInternAtom( (Display*) wxGetDisplay(), "image/png", FALSE );
     if (!g_fileAtom)
-        g_fileAtom = XInternAtom( (Display*) wxGetDisplay(), "file:ALL", FALSE );
+        g_fileAtom = XInternAtom( (Display*) wxGetDisplay(), "text/uri-list", FALSE );
 }
 
+//-------------------------------------------------------------------------
+// wxDataObject
+//-------------------------------------------------------------------------
+
+wxDataObject::wxDataObject()
+{
+}
+
+bool wxDataObject::IsSupportedFormat(const wxDataFormat& format, Direction dir) const
+{
+    size_t nFormatCount = GetFormatCount(dir);
+    if ( nFormatCount == 1 ) 
+    {
+        return format == GetPreferredFormat();
+    }
+    else 
+    {
+        wxDataFormat *formats = new wxDataFormat[nFormatCount];
+        GetAllFormats(formats,dir);
+
+        size_t n;
+        for ( n = 0; n < nFormatCount; n++ ) 
+        {
+            if ( formats[n] == format )
+                break;
+        }
+
+        delete [] formats;
+
+        // found?
+        return n < nFormatCount;
+    }
+}
+
+// ----------------------------------------------------------------------------
+// wxFileDataObject
+// ----------------------------------------------------------------------------
+
+bool wxFileDataObject::GetDataHere(void *buf) const
+{
+    wxString filenames;
+
+    for (size_t i = 0; i < m_filenames.GetCount(); i++)
+    {
+        filenames += m_filenames[i];
+        filenames += (wxChar) 0;
+    }
+
+    memcpy( buf, filenames.mbc_str(), filenames.Len() + 1 );
+
+    return TRUE;
+}
+
+size_t wxFileDataObject::GetDataSize() const
+{
+    size_t res = 0;
+
+    for (size_t i = 0; i < m_filenames.GetCount(); i++)
+    {
+        res += m_filenames[i].Len();
+        res += 1;
+    }
+
+    return res + 1;
+}
+
+bool wxFileDataObject::SetData(size_t WXUNUSED(size), const void *buf)
+{
+    // VZ: old format
 #if 0
+    // filenames are stores as a string with #0 as deliminators
+    const char *filenames = (const char*) buf;
+    size_t pos = 0;
+    for(;;)
+    {
+        if (filenames[0] == 0)
+            break;
+        if (pos >= size)
+            break;
+        wxString file( filenames );  // this returns the first file
+        AddFile( file );
+        pos += file.Len()+1;
+        filenames += file.Len()+1;
+    }
+#else // 1
+    m_filenames.Empty();
+
+    // the text/uri-list format is a sequence of URIs (filenames prefixed by
+    // "file:" as far as I see) delimited by "\r\n" of total length size
+    // (I wonder what happens if the file has '\n' in its filename??)
+    wxString filename;
+    for ( const char *p = (const char *)buf; ; p++ )
+    {
+        // some broken programs (testdnd GTK+ sample!) omit the trailing
+        // "\r\n", so check for '\0' explicitly here instead of doing it in
+        // the loop statement to account for it
+        if ( (*p == '\r' && *(p+1) == '\n') || !*p )
+        {
+            size_t lenPrefix = 5; // strlen("file:")
+            if ( filename.Left(lenPrefix).MakeLower() == _T("file:") )
+            {
+                // sometimes the syntax is "file:filename", sometimes it's
+                // URL-like: "file://filename" - deal with both
+                if ( filename[lenPrefix] == _T('/') &&
+                     filename[lenPrefix + 1] == _T('/') )
+                {
+                    // skip the slashes
+                    lenPrefix += 2;
+                }
+
+                AddFile(filename.c_str() + lenPrefix);
+                filename.Empty();
+            }
+            else
+            {
+                wxLogDebug(_T("Unsupported URI '%s' in wxFileDataObject"),
+                           filename.c_str());
+            }
+
+            if ( !*p )
+                break;
+
+            // skip '\r'
+            p++;
+        }
+        else
+        {
+            filename += *p;
+        }
+    }
+#endif // 0/1
+
+    return TRUE;
+}
+
+void wxFileDataObject::AddFile( const wxString &filename )
+{
+   m_filenames.Add( filename );
+}
 
 // ----------------------------------------------------------------------------
-// wxPrivateDataObject
+// wxBitmapDataObject
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS( wxPrivateDataObject, wxDataObject )
-
-void wxPrivateDataObject::Free()
+wxBitmapDataObject::wxBitmapDataObject()
 {
-    if ( m_data )
-        free(m_data);
+    Init();
 }
 
-wxPrivateDataObject::wxPrivateDataObject()
+wxBitmapDataObject::wxBitmapDataObject( const wxBitmap& bitmap )
+                  : wxBitmapDataObjectBase(bitmap)
 {
-    wxString id = wxT("application/");
-    id += wxTheApp->GetAppName();
+    Init();
 
-    m_format.SetId( id );
-
-    m_size = 0;
-    m_data = (void *)NULL;
+    DoConvertToPng();
 }
 
-void wxPrivateDataObject::SetData( const void *data, size_t size )
+wxBitmapDataObject::~wxBitmapDataObject()
 {
-    Free();
-
-    m_size = size;
-    m_data = malloc(size);
-
-    memcpy( m_data, data, size );
+    Clear();
 }
 
-void wxPrivateDataObject::WriteData( void *dest ) const
+void wxBitmapDataObject::SetBitmap( const wxBitmap &bitmap )
 {
-    WriteData( m_data, dest );
+    ClearAll();
+
+    wxBitmapDataObjectBase::SetBitmap(bitmap);
+
+    DoConvertToPng();
 }
 
-size_t wxPrivateDataObject::GetSize() const
+bool wxBitmapDataObject::GetDataHere(void *buf) const
 {
-    return m_size;
+    if ( !m_pngSize )
+    {
+        wxFAIL_MSG( wxT("attempt to copy empty bitmap failed") );
+
+        return FALSE;
+    }
+
+    memcpy(buf, m_pngData, m_pngSize);
+
+    return TRUE;
 }
 
-void wxPrivateDataObject::WriteData( const void *data, void *dest ) const
+bool wxBitmapDataObject::SetData(size_t size, const void *buf)
 {
-    memcpy( dest, data, GetSize() );
+    Clear();
+
+#if wxUSE_LIBPNG
+    m_pngSize = size;
+    m_pngData = malloc(m_pngSize);
+
+    memcpy( m_pngData, buf, m_pngSize );
+
+    wxMemoryInputStream mstream( (char*) m_pngData, m_pngSize );
+    wxImage image;
+    wxPNGHandler handler;
+    if ( !handler.LoadFile( &image, mstream ) )
+    {
+        return FALSE;
+    }
+
+    m_bitmap = image.ConvertToBitmap();
+
+    return m_bitmap.Ok();
+#else
+    return FALSE;
+#endif
 }
 
-#endif // 0
+void wxBitmapDataObject::DoConvertToPng()
+{
+#if wxUSE_LIBPNG
+    if (!m_bitmap.Ok())
+        return;
 
-#endif // wxUSE_CLIPBOARD
+    wxImage image( m_bitmap );
+    wxPNGHandler handler;
+
+    wxCountingOutputStream count;
+    handler.SaveFile( &image, count );
+
+    m_pngSize = count.GetSize() + 100; // sometimes the size seems to vary ???
+    m_pngData = malloc(m_pngSize);
+
+    wxMemoryOutputStream mstream( (char*) m_pngData, m_pngSize );
+    handler.SaveFile( &image, mstream );
+#endif
+}
+
