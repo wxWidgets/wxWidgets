@@ -11,6 +11,15 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
+//---------------------------------------------------------------------------
+// Tell SWIG to wrap all the wrappers with Python's thread macros
+
+%except(python) {
+    wxPy_BEGIN_ALLOW_THREADS;
+    $function
+    wxPy_END_ALLOW_THREADS;
+}
+
 //----------------------------------------------------------------------
 // Here are some to map (int LCOUNT, int* LIST), etc. from a python list
 
@@ -203,7 +212,14 @@ static char* wxStringErrorMsg = "string type is required for parameter";
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.4.4.2  1999/03/28 06:35:01  RD
+// wxPython 2.0b8
+//     Python thread support
+//     various minor additions
+//     various minor fixes
+//
 // Revision 1.4.4.1  1999/03/16 06:04:03  RD
+//
 // wxPython 2.0b7
 //
 // Revision 1.4  1998/11/25 08:45:27  RD

@@ -47,7 +47,7 @@
 
 //---------------------------------------------------------------------------
 
-#define __version__ "2.0b7"
+#define __version__ "2.0b8"
 
 wxPoint     wxPyDefaultPosition;
 wxSize      wxPyDefaultSize;
@@ -158,7 +158,14 @@ extern "C" SWIGEXPORT(void,initutilsc)();
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.8.2.2  1999/03/28 06:35:01  RD
+// wxPython 2.0b8
+//     Python thread support
+//     various minor additions
+//     various minor fixes
+//
 // Revision 1.8.2.1  1999/03/16 06:04:07  RD
+//
 // wxPython 2.0b7
 //
 // Revision 1.8  1999/03/05 07:22:32  RD

@@ -33,7 +33,7 @@
  * and things like that.
  *
  * $Log$
- * Revision 1.3.4.2  1999/03/27 23:29:50  RD
+ * Revision 1.3.4.3  1999/03/28 06:35:38  RD
  * wxPython 2.0b8
  *     Python thread support
  *     various minor additions
@@ -684,8 +684,12 @@ static PyObject *_wrap_new_wxConfig(PyObject *self, PyObject *args) {
     }
     _arg3 = new wxString(PyString_AsString(_obj3));
 }
-    _result = (wxConfig *)new_wxConfig(*_arg0,*_arg1,*_arg2,*_arg3,_arg4);
-    SWIG_MakePtr(_ptemp, (char *) _result,"_wxConfig_p");
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxConfig *)new_wxConfig(*_arg0,*_arg1,*_arg2,*_arg3,_arg4);
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxConfig_p");
     _resultobj = Py_BuildValue("s",_ptemp);
 {
     if (_obj0)
@@ -721,8 +725,12 @@ static PyObject *_wrap_delete_wxConfig(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    delete_wxConfig(_arg0);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        delete_wxConfig(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -742,8 +750,12 @@ static PyObject *_wrap_wxConfig_DontCreateOnDemand(PyObject *self, PyObject *arg
         return NULL;
         }
     }
-    wxConfig_DontCreateOnDemand(_arg0);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxConfig_DontCreateOnDemand(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -764,8 +776,12 @@ static PyObject *_wrap_wxConfig_DeleteAll(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (bool )wxConfig_DeleteAll(_arg0);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxConfig_DeleteAll(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -797,8 +813,12 @@ static PyObject *_wrap_wxConfig_DeleteEntry(PyObject *self, PyObject *args) {
     _arg1 = new wxString(PyString_AsString(_obj1));
 }
     _arg2 = (bool ) tempbool2;
-    _result = (bool )wxConfig_DeleteEntry(_arg0,*_arg1,_arg2);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxConfig_DeleteEntry(_arg0,*_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
 {
     if (_obj1)
         delete _arg1;
@@ -831,8 +851,12 @@ static PyObject *_wrap_wxConfig_DeleteGroup(PyObject *self, PyObject *args) {
     }
     _arg1 = new wxString(PyString_AsString(_obj1));
 }
-    _result = (bool )wxConfig_DeleteGroup(_arg0,*_arg1);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxConfig_DeleteGroup(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
 {
     if (_obj1)
         delete _arg1;
@@ -865,8 +889,12 @@ static PyObject *_wrap_wxConfig_Exists(PyObject *self, PyObject *args) {
     }
     _arg1 = new wxString(PyString_AsString(_obj1));
 }
-    _result = (bool )wxConfig_Exists(_arg0,*_arg1);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxConfig_Exists(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
 {
     if (_obj1)
         delete _arg1;
@@ -893,8 +921,12 @@ static PyObject *_wrap_wxConfig_Flush(PyObject *self, PyObject *args) {
         }
     }
     _arg1 = (bool ) tempbool1;
-    _result = (bool )wxConfig_Flush(_arg0,_arg1);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxConfig_Flush(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -914,8 +946,12 @@ static PyObject *_wrap_wxConfig_GetAppName(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = new wxString (wxConfig_GetAppName(_arg0));
 {
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxConfig_GetAppName(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}{
     _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
 }
 {
@@ -947,8 +983,12 @@ static PyObject *_wrap_wxConfig_GetFirstGroup(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (PyObject *)wxConfig_GetFirstGroup(_arg0);
 {
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (PyObject *)wxConfig_GetFirstGroup(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}{
   _resultobj = _result;
 }
     return _resultobj;
@@ -977,8 +1017,12 @@ static PyObject *_wrap_wxConfig_GetFirstEntry(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (PyObject *)wxConfig_GetFirstEntry(_arg0);
 {
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (PyObject *)wxConfig_GetFirstEntry(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}{
   _resultobj = _result;
 }
     return _resultobj;
@@ -1007,8 +1051,12 @@ static PyObject *_wrap_wxConfig_GetNextGroup(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (PyObject *)wxConfig_GetNextGroup(_arg0,_arg1);
 {
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (PyObject *)wxConfig_GetNextGroup(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}{
   _resultobj = _result;
 }
     return _resultobj;
@@ -1037,8 +1085,12 @@ static PyObject *_wrap_wxConfig_GetNextEntry(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (PyObject *)wxConfig_GetNextEntry(_arg0,_arg1);
 {
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (PyObject *)wxConfig_GetNextEntry(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}{
   _resultobj = _result;
 }
     return _resultobj;
@@ -1063,8 +1115,12 @@ static PyObject *_wrap_wxConfig_GetNumberOfEntries(PyObject *self, PyObject *arg
         }
     }
     _arg1 = (bool ) tempbool1;
-    _result = (int )wxConfig_GetNumberOfEntries(_arg0,_arg1);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxConfig_GetNumberOfEntries(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -1087,8 +1143,12 @@ static PyObject *_wrap_wxConfig_GetNumberOfGroups(PyObject *self, PyObject *args
         }
     }
     _arg1 = (bool ) tempbool1;
-    _result = (int )wxConfig_GetNumberOfGroups(_arg0,_arg1);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxConfig_GetNumberOfGroups(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -1108,8 +1168,12 @@ static PyObject *_wrap_wxConfig_GetPath(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = new wxString (wxConfig_GetPath(_arg0));
 {
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxConfig_GetPath(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}{
     _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
 }
 {
@@ -1134,8 +1198,12 @@ static PyObject *_wrap_wxConfig_GetVendorName(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = new wxString (wxConfig_GetVendorName(_arg0));
 {
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxConfig_GetVendorName(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}{
     _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
 }
 {
@@ -1169,8 +1237,12 @@ static PyObject *_wrap_wxConfig_HasEntry(PyObject *self, PyObject *args) {
     }
     _arg1 = new wxString(PyString_AsString(_obj1));
 }
-    _result = (bool )wxConfig_HasEntry(_arg0,*_arg1);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxConfig_HasEntry(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
 {
     if (_obj1)
         delete _arg1;
@@ -1203,8 +1275,12 @@ static PyObject *_wrap_wxConfig_HasGroup(PyObject *self, PyObject *args) {
     }
     _arg1 = new wxString(PyString_AsString(_obj1));
 }
-    _result = (bool )wxConfig_HasGroup(_arg0,*_arg1);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxConfig_HasGroup(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
 {
     if (_obj1)
         delete _arg1;
@@ -1228,8 +1304,12 @@ static PyObject *_wrap_wxConfig_IsExpandingEnvVars(PyObject *self, PyObject *arg
         return NULL;
         }
     }
-    _result = (bool )wxConfig_IsExpandingEnvVars(_arg0);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxConfig_IsExpandingEnvVars(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -1249,8 +1329,12 @@ static PyObject *_wrap_wxConfig_IsRecordingDefaults(PyObject *self, PyObject *ar
         return NULL;
         }
     }
-    _result = (bool )wxConfig_IsRecordingDefaults(_arg0);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxConfig_IsRecordingDefaults(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -1289,8 +1373,12 @@ static PyObject *_wrap_wxConfig_Read(PyObject *self, PyObject *args) {
     }
     _arg2 = new wxString(PyString_AsString(_obj2));
 }
-    _result = new wxString (wxConfig_Read(_arg0,*_arg1,*_arg2));
 {
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxConfig_Read(_arg0,*_arg1,*_arg2));
+
+    wxPy_END_ALLOW_THREADS;
+}{
     _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
 }
 {
@@ -1333,8 +1421,12 @@ static PyObject *_wrap_wxConfig_ReadInt(PyObject *self, PyObject *args) {
     }
     _arg1 = new wxString(PyString_AsString(_obj1));
 }
-    _result = (long )wxConfig_ReadInt(_arg0,*_arg1,_arg2);
-    _resultobj = Py_BuildValue("l",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (long )wxConfig_ReadInt(_arg0,*_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("l",_result);
 {
     if (_obj1)
         delete _arg1;
@@ -1368,8 +1460,12 @@ static PyObject *_wrap_wxConfig_ReadFloat(PyObject *self, PyObject *args) {
     }
     _arg1 = new wxString(PyString_AsString(_obj1));
 }
-    _result = (double )wxConfig_ReadFloat(_arg0,*_arg1,_arg2);
-    _resultobj = Py_BuildValue("d",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (double )wxConfig_ReadFloat(_arg0,*_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("d",_result);
 {
     if (_obj1)
         delete _arg1;
@@ -1401,8 +1497,12 @@ static PyObject *_wrap_wxConfig_SetAppName(PyObject *self, PyObject *args) {
     }
     _arg1 = new wxString(PyString_AsString(_obj1));
 }
-    wxConfig_SetAppName(_arg0,*_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxConfig_SetAppName(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
 {
     if (_obj1)
@@ -1429,8 +1529,12 @@ static PyObject *_wrap_wxConfig_SetExpandEnvVars(PyObject *self, PyObject *args)
         }
     }
     _arg1 = (bool ) tempbool1;
-    wxConfig_SetExpandEnvVars(_arg0,_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxConfig_SetExpandEnvVars(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -1459,8 +1563,12 @@ static PyObject *_wrap_wxConfig_SetPath(PyObject *self, PyObject *args) {
     }
     _arg1 = new wxString(PyString_AsString(_obj1));
 }
-    wxConfig_SetPath(_arg0,*_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxConfig_SetPath(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
 {
     if (_obj1)
@@ -1487,8 +1595,12 @@ static PyObject *_wrap_wxConfig_SetRecordDefaults(PyObject *self, PyObject *args
         }
     }
     _arg1 = (bool ) tempbool1;
-    wxConfig_SetRecordDefaults(_arg0,_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxConfig_SetRecordDefaults(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
@@ -1517,8 +1629,12 @@ static PyObject *_wrap_wxConfig_SetVendorName(PyObject *self, PyObject *args) {
     }
     _arg1 = new wxString(PyString_AsString(_obj1));
 }
-    wxConfig_SetVendorName(_arg0,*_arg1);
-    Py_INCREF(Py_None);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxConfig_SetVendorName(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
     _resultobj = Py_None;
 {
     if (_obj1)
@@ -1561,8 +1677,12 @@ static PyObject *_wrap_wxConfig_Write(PyObject *self, PyObject *args) {
     }
     _arg2 = new wxString(PyString_AsString(_obj2));
 }
-    _result = (bool )wxConfig_Write(_arg0,*_arg1,*_arg2);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxConfig_Write(_arg0,*_arg1,*_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
 {
     if (_obj1)
         delete _arg1;
@@ -1600,8 +1720,12 @@ static PyObject *_wrap_wxConfig_WriteInt(PyObject *self, PyObject *args) {
     }
     _arg1 = new wxString(PyString_AsString(_obj1));
 }
-    _result = (bool )wxConfig_WriteInt(_arg0,*_arg1,_arg2);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxConfig_WriteInt(_arg0,*_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
 {
     if (_obj1)
         delete _arg1;
@@ -1635,8 +1759,12 @@ static PyObject *_wrap_wxConfig_WriteFloat(PyObject *self, PyObject *args) {
     }
     _arg1 = new wxString(PyString_AsString(_obj1));
 }
-    _result = (bool )wxConfig_WriteFloat(_arg0,*_arg1,_arg2);
-    _resultobj = Py_BuildValue("i",_result);
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxConfig_WriteFloat(_arg0,*_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
 {
     if (_obj1)
         delete _arg1;

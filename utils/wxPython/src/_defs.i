@@ -144,15 +144,6 @@ class wxPyTimer;
 
 
 //---------------------------------------------------------------------------
-// Tell SWIG to wrap all the wrappers with Python's thread macros
-
-%except(python) {
-    wxPy_BEGIN_ALLOW_THREADS;
-    $function
-    wxPy_END_ALLOW_THREADS;
-}
-
-//---------------------------------------------------------------------------
 
 // some definitions for SWIG only
 typedef unsigned char   byte;
@@ -765,7 +756,14 @@ enum wxEventType {
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.12.4.2  1999/03/28 06:35:01  RD
+// wxPython 2.0b8
+//     Python thread support
+//     various minor additions
+//     various minor fixes
+//
 // Revision 1.12.4.1  1999/03/27 23:29:13  RD
+//
 // wxPython 2.0b8
 //     Python thread support
 //     various minor additions

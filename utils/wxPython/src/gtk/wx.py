@@ -24,8 +24,6 @@ from windows2 import *
 from cmndlgs import *
 
 from windows3 import *
-
-from utils import *
 class wxPyAppPtr(wxEvtHandlerPtr):
     def __init__(self,this):
         self.this = this
@@ -321,10 +319,6 @@ wxOVERWRITE_PROMPT = wxc.wxOVERWRITE_PROMPT
 wxACCEL_ALT = wxc.wxACCEL_ALT
 wxACCEL_CTRL = wxc.wxACCEL_CTRL
 wxACCEL_SHIFT = wxc.wxACCEL_SHIFT
-ERR_PARAM = wxc.ERR_PARAM
-ERR_NODATA = wxc.ERR_NODATA
-ERR_CANCEL = wxc.ERR_CANCEL
-ERR_SUCCESS = wxc.ERR_SUCCESS
 wxDEFAULT = wxc.wxDEFAULT
 wxDECORATIVE = wxc.wxDECORATIVE
 wxROMAN = wxc.wxROMAN
@@ -679,7 +673,7 @@ def _StdDialogCallbacks(win):
     _checkForCallback(win, "OnCharHook",    wxEVT_CHAR_HOOK)
 
 
-def _StdOnScrollCallback(win):
+def _StdOnScrollCallbacks(win):
     try:    cb = getattr(win, "OnScroll")
     except: pass
     else:   EVT_SCROLL(win, cb)
@@ -1249,8 +1243,18 @@ class wxApp(wxPyApp):
 #----------------------------------------------------------------------------
 #
 # $Log$
-# Revision 1.8.2.1  1999/03/16 06:27:37  RD
-# wxPython 2.0b7
+# Revision 1.8.2.2  1999/03/28 06:35:25  RD
+# wxPython 2.0b8
+#     Python thread support
+#     various minor additions
+#     various minor fixes
+#
+# Revision 1.11.4.1  1999/03/27 23:29:13  RD
+#
+# wxPython 2.0b8
+#     Python thread support
+#     various minor additions
+#     various minor fixes
 #
 # Revision 1.11  1999/02/20 09:02:55  RD
 # Added wxWindow_FromHWND(hWnd) for wxMSW to construct a wxWindow from a

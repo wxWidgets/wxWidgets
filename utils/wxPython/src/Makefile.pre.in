@@ -325,7 +325,7 @@ distclean:	clobber
 #
 
 
-SWIGFLAGS=-c++ -shadow -python -dnone -D__WXGTK__
+SWIGFLAGS=-c++ -shadow -python -dnone -D__WXGTK__ $(SEPARATE)
 
 
 PYMODULES = $(GENCODEDIR)/wx.py        $(GENCODEDIR)/events.py    \
@@ -350,6 +350,12 @@ $(GENCODEDIR)/%.py : %.i
 $(GENCODEDIR)/wx.cpp $(GENCODEDIR)/wx.py : wx.i my_typemaps.i _defs.i _extras.py
 	swig $(SWIGFLAGS) -o $(GENCODEDIR)/wx.cpp wx.i
 
+ifdef SEPARATE
+$(GENCODEDIR)/utils.cpp $(GENCODEDIR)/utils.py : utils.i my_typemaps.i
+	swig $(SWIGFLAGS) -o $(GENCODEDIR)/utils.cpp utils.i
+else
+$(GENCODEDIR)/utils.cpp     $(GENCODEDIR)/utils.py     : utils.i      my_typemaps.i _defs.i
+endif
 
 # define some dependencies
 $(GENCODEDIR)/windows.cpp   $(GENCODEDIR)/windows.py   : windows.i    my_typemaps.i _defs.i

@@ -1190,26 +1190,31 @@ class wxAcceleratorTable(wxAcceleratorTablePtr):
 
 #----------------------------------------------------------------------
 
-## class wxPyStdOutWindow(wxFrame):
-##     def __init__(self, title = "wxPython: stdout/stderr"):
-##         wxFrame.__init__(self, NULL, title)
-##         self.title = title
-##         self.text = wxTextWindow(self)
-##         self.text.SetFont(wxFont(10, wxMODERN, wxNORMAL, wxBOLD))
-##         self.SetSize(-1,-1,400,200)
-##         self.Show(false)
-##         self.isShown = false
+##  class wxPyStdOutWindow:
+##       def __init__(self, title = "wxPython: stdout/stderr"):
+##          self.frame = None
+##          self.title = title
 
-##     def write(self, str):  # with this method,
-##         if not self.isShown:
-##             self.Show(true)
-##             self.isShown = true
-##         self.text.WriteText(str)
+##      def write(self, str):
+##          if not self.frame:
+##              self.frame = wxFrame(NULL, -1, self.title)
+##              self.text  = wxTextCtrl(self.frame, -1, "", wxPoint(0,0), wxDefaultSize,
+##                                      wxTE_MULTILINE|wxTE_READONLY)
+##              self.frame.SetSize(wxSize(450, 300))
+##              self.frame.Show(true)
+##              EVT_CLOSE(self.frame, self.OnCloseWindow)
+##          self.text.AppendText(str)
 
-##     def OnCloseWindow(self, event): # doesn't allow the window to close, just hides it
-##         self.Show(false)
-##         self.isShown = false
+##      def OnCloseWindow(self, event):
+##          wxBell()
+##          self.frame.Destroy()
+##          self.frame = None
+##          self.text  = None
 
+
+##      def close(self):
+##          if self.frame:
+##              self.frame.Close(true)
 
 _defRedirect = (wxPlatform == '__WXMSW__')
 
@@ -1241,21 +1246,26 @@ class wxApp(wxPyApp):
         if filename:
             sys.stdout = sys.stderr = open(filename, 'a')
         else:
-            raise self.error, 'wxPyStdOutWindow not yet implemented.'
-            #self.stdioWin = sys.stdout = sys.stderr = wxPyStdOutWindow()
+            #raise self.error, 'wxPyStdOutWindow not yet implemented.'
+            self.stdioWin = sys.stdout = sys.stderr = wxPyStdOutWindow()
 
     def RestoreStdio(self):
         sys.stdout, sys.stderr = self.saveStdio
         if self.stdioWin != None:
-            self.stdioWin.Show(false)
-            self.stdioWin.Destroy()
-            self.stdioWin = None
+            self.stdioWin.close()
 
 
 #----------------------------------------------------------------------------
 #
 # $Log$
-# Revision 1.8.2.2  1999/03/27 23:29:52  RD
+# Revision 1.8.2.3  1999/03/28 06:35:38  RD
+# wxPython 2.0b8
+#     Python thread support
+#     various minor additions
+#     various minor fixes
+#
+# Revision 1.11.4.1  1999/03/27 23:29:13  RD
+#
 # wxPython 2.0b8
 #     Python thread support
 #     various minor additions

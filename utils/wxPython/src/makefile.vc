@@ -9,7 +9,7 @@
 # Copyright:    (c) 1998 by Total Control Software
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------
-VERSION=2.0b7
+VERSION=2.0b8
 
 # Set WXDIR to the root wxWindows directory for your system
 WXDIR = $(WXWIN)
@@ -288,7 +288,14 @@ dist:
 #------------------------------------------------------------------------
 #
 # $Log$
+# Revision 1.4.2.3  1999/03/28 06:37:12  RD
+# wxPython 2.0b8
+#     Python thread support
+#     various minor additions
+#     various minor fixes
+#
 # Revision 1.4.2.2  1999/03/27 23:29:15  RD
+#
 # wxPython 2.0b8
 #     Python thread support
 #     various minor additions
