@@ -1896,10 +1896,12 @@ public:
         Init(CFStringGetSystemEncoding()) ;
     }
 
+#if wxUSE_FONTMAP
     wxMBConv_cocoa(const wxChar* name)
     {
         Init( wxCFStringEncFromFontEnc(wxFontMapper::Get()->CharsetToEncoding(name, false) ) ) ;
     }
+#endif
 
     wxMBConv_cocoa(wxFontEncoding encoding)
     {
@@ -2415,8 +2417,12 @@ wxMBConv *wxCSConv::DoCreate() const
         if ( m_name || ( m_encoding <= wxFONTENCODING_UTF16 ) )
         {
 
+#if wxUSE_FONTMAP
             wxMBConv_cocoa *conv = m_name ? new wxMBConv_cocoa(m_name)
                                           : new wxMBConv_cocoa(m_encoding);
+#else
+            wxMBConv_cocoa *conv = new wxMBConv_cocoa(m_encoding);
+#endif
             if ( conv->IsOk() )
                  return conv;
 
