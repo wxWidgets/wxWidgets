@@ -2381,7 +2381,11 @@ void wxWin32Renderer::DrawToolBarButton(wxDC& dc,
     }
     else // a separator
     {
-        // TODO
+        // leave a small gap aroudn the line, also account for the toolbar
+        // border itself
+        DrawVerticalLine(dc, rectOrig.x + rectOrig.width/2,
+                         rectOrig.y + 2*BORDER_THICKNESS,
+                         rectOrig.GetBottom() - BORDER_THICKNESS);
     }
 }
 
