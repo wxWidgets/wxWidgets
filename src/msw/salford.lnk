@@ -46,7 +46,6 @@ addobj fontdlg.obj
 addobj frame.obj
 addobj framecmn.obj
 addobj gauge95.obj
-addobj gaugemsw.obj
 addobj gdicmn.obj
 addobj gdiobj.obj
 addobj gridg.obj

@@ -179,7 +179,6 @@ MSWOBJS = \
   font.$(OBJSUFF) \
   fontdlg.$(OBJSUFF) \
   frame.$(OBJSUFF) \
-  gaugemsw.$(OBJSUFF) \
   gauge95.$(OBJSUFF) \
   gdiobj.$(OBJSUFF) \
   helpwin.$(OBJSUFF) \

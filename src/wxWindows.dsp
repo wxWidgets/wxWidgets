@@ -2651,10 +2651,6 @@ SOURCE=..\include\wx\msw\gauge95.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\wx\msw\gaugemsw.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\wx\msw\gccpriv.h
 # End Source File
 # Begin Source File

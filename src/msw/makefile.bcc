@@ -256,7 +256,6 @@ MSWOBJS = $(MSWDIR)\accel.obj \
 		$(MSWDIR)\fontenum.obj \
 		$(MSWDIR)\fontutil.obj \
 		$(MSWDIR)\frame.obj \
-		$(MSWDIR)\gaugemsw.obj \
 		$(MSWDIR)\gdiimage.obj \
 		$(MSWDIR)\gdiobj.obj \
 		$(MSWDIR)\glcanvas.obj \
@@ -409,8 +408,6 @@ $(MSWDIR)\fontenum.obj: $(MSWDIR)\fontenum.$(SRCSUFF)
 $(MSWDIR)\fontutil.obj: $(MSWDIR)\fontutil.$(SRCSUFF)
 
 $(MSWDIR)\frame.obj: $(MSWDIR)\frame.$(SRCSUFF)
-
-$(MSWDIR)\gaugemsw.obj: $(MSWDIR)\gaugemsw.$(SRCSUFF)
 
 $(MSWDIR)\gdiimage.obj: $(MSWDIR)\gdiimage.$(SRCSUFF)
 

@@ -576,7 +576,6 @@ ALL_HEADERS = \
 		msw/fontdlg.h \
 		msw/frame.h \
 		msw/gauge95.h \
-		msw/gaugemsw.h \
 		msw/gccpriv.h \
 		msw/gdiimage.h \
 		msw/gdiobj.h \

@@ -244,7 +244,6 @@ MSWOBJS1 = $(MSWDIR)\accel.obj \
 		$(MSWDIR)\fontenum.obj \
 		$(MSWDIR)\fontutil.obj \
 		$(MSWDIR)\frame.obj \
-		$(MSWDIR)\gaugemsw.obj \
 		$(MSWDIR)\gdiimage.obj \
 		$(MSWDIR)\gdiobj.obj \
 		$(MSWDIR)\glcanvas.obj \
@@ -539,11 +538,6 @@ $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
 $(MSWDIR)/frame.obj:     $*.$(SRCSUFF)
-        cl @<<
-$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
-<<
-
-$(MSWDIR)/gaugemsw.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<

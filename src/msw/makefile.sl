@@ -141,7 +141,6 @@ MSWOBJS = \
   fontdlg.obj \
   frame.obj \
   gauge95.obj \
-  gaugemsw.obj \
   gdiobj.obj \
   helpwin.obj \
   icon.obj \
@@ -325,9 +324,6 @@ frame.obj:     $(MSWDIR)\frame.cpp
 
 gauge95.obj:     $(MSWDIR)\gauge95.cpp
   $(CCC) $(CPPFLAGS) $(IFLAGS) $(MSWDIR)\gauge95.cpp /BINARY gauge95.obj
-
-gaugemsw.obj:     $(MSWDIR)\gaugemsw.cpp
-  $(CCC) $(CPPFLAGS) $(IFLAGS) $(MSWDIR)\gaugemsw.cpp /BINARY gaugemsw.obj
 
 gdiobj.obj:     $(MSWDIR)\gdiobj.cpp
   $(CCC) $(CPPFLAGS) $(IFLAGS) $(MSWDIR)\gdiobj.cpp /BINARY gdiobj.obj
