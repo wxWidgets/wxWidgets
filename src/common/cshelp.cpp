@@ -119,6 +119,15 @@ bool wxContextHelp::BeginContextHelp(wxWindow* win)
     {
         wxPoint pt;
         wxWindow* winAtPtr = wxFindWindowAtPointer(pt);
+	/*
+        if (winAtPtr)
+        {
+	wxString msg;
+        msg.Printf("Picked %s (%d)", (const char*) winAtPtr->GetName(), winAtPtr->GetId());
+        cout << msg << '\n';
+        }
+	*/
+
         if (winAtPtr)
             DispatchEvent(winAtPtr, pt);
     }
