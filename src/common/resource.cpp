@@ -2173,7 +2173,7 @@ wxBitmap wxResourceCreateBitmap(const wxString& resource, wxResourceTable *table
                          "Forgot to use wxResourceLoadBitmapData?"), (const char*) name);
           return wxNullBitmap;
         }
-        return wxBitmap((const char **)item->GetValue1());
+        return wxBitmap((char **)item->GetValue1());
 #else
         wxLogWarning(_("No XPM facility available!"));
 #endif

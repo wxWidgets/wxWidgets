@@ -1474,7 +1474,7 @@ bool wxPostScriptDC::Blit( long xdest, long ydest,
                            long fwidth, long fheight,
                            wxDC *source, 
                            long xsrc, long ysrc, 
-                           int WXUNUSED(rop), bool WXUNUSED(useMask) )
+                           int rop, bool WXUNUSED(useMask) )
 {
     wxCHECK_MSG( m_ok && m_pstream, FALSE, "invalid postscript dc" );
     
@@ -1495,6 +1495,12 @@ bool wxPostScriptDC::Blit( long xdest, long ydest,
     gdk_window_copy_area( bitmap.GetPixmap(), gc, 0, 0, 
                           srcDC->GetWindow(),
 	                  xsrc, ysrc, fwidth, fheight );
+#else
+    wxMemoryDC memDC;
+    memDC.SelectObject(bitmap);
+    // TODO: Do we want to blit transparently?
+    memDC.Blit(0, 0, fwidth, fheight, source, xsrc, ysrc, rop);
+    memDC.SelectObject(wxNullBitmap);
 #endif
 
     /* draw bitmap. scaling and positioning is done there */
