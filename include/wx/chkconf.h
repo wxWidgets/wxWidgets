@@ -842,6 +842,15 @@
 #   endif
 #endif /* wxUSE_ODBC */
 
+#if wxUSE_XML && !wxUSE_WCHAR_T
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_XML requires wxUSE_WCHAR_T"
+#   else
+#       undef wxUSE_XML
+#       define wxUSE_XML 0
+#   endif
+#endif /* wxUSE_UNICODE_MSLU */
+
 /* the rest of the tests is for the GUI settings only */
 #if wxUSE_GUI
 
