@@ -128,11 +128,11 @@ public:
 
     ~wxMenu();
 
-    // operations
-        // title
+    // title
     void SetTitle(const wxString& label);
     const wxString GetTitle() const;
-        // menu creation
+    
+    // menu creation
     void AppendSeparator();
     void Append(int id, const wxString &item,
                 const wxString &helpStr = "", bool checkable = FALSE);
@@ -140,6 +140,9 @@ public:
                 wxMenu *subMenu, const wxString &helpStr = "" );
     void Append(wxMenuItem *pItem);
     void Break() { }
+
+    // delete item. don't delete the wxMenu if it's a submenu
+    void Delete( int id );
 
     // find item by name/id
     int FindItem( const wxString itemString ) const;

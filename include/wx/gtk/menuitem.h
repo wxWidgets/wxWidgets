@@ -40,6 +40,7 @@ DECLARE_DYNAMIC_CLASS(wxMenuItem)
 
 public:
     wxMenuItem();
+    ~wxMenuItem();
 
     // accessors
         // id

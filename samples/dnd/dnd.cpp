@@ -133,7 +133,9 @@ enum
     Menu_CopyBitmap,
     Menu_PasteBitmap,
     Menu_HasText,
-    Menu_HasBitmap
+    Menu_HasBitmap,
+    Menu_ToBeGreyed,   /* for testing */
+    Menu_ToBeDeleted   /* for testing */
 };
 
 BEGIN_EVENT_TABLE(DnDFrame, wxFrame)
@@ -184,11 +186,19 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
 
     CreateStatusBar();
 
+    // construct sub menu for testing
+    wxMenu *sub_menu = new wxMenu;
+    sub_menu->Append(Menu_Quit, "E&xit");
+    sub_menu->Append(Menu_Quit, "E&xit");
+    sub_menu->Append(Menu_Quit, "E&xit");
+
     // construct menu
     wxMenu *file_menu = new wxMenu;
     file_menu->Append(Menu_Drag, "&Test drag...");
     file_menu->AppendSeparator();
     file_menu->Append(Menu_Quit, "E&xit");
+    file_menu->AppendSeparator();
+    file_menu->Append( 0, "More exit menus", sub_menu);
 
     wxMenu *log_menu = new wxMenu;
     log_menu->Append(Menu_Clear, "Clear");
@@ -417,6 +427,11 @@ void DnDFrame::OnRightDown(wxMouseEvent &event )
     menu->Append(Menu_Drag, "&Test drag...");
     menu->Append(Menu_About, "&About");
     menu->Append(Menu_Quit, "E&xit");
+    menu->Append(Menu_ToBeDeleted, "To be deleted");
+    menu->Append(Menu_ToBeGreyed, "To be greyed");
+    
+    menu->Delete( Menu_ToBeDeleted );
+    menu->Enable( Menu_ToBeGreyed, FALSE );
 
     PopupMenu( menu, event.GetX(), event.GetY() );
 }

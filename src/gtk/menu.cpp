@@ -104,7 +104,7 @@ wxMenuBar::wxMenuBar()
 
 wxMenuBar::~wxMenuBar()
 {
-   // how to destroy a GtkItemFactory ?
+//    gtk_object_unref( GTK_OBJECT(m_factory) );  why not ?
 }
 
 static void wxMenubarUnsetInvokingWindow( wxMenu *menu, wxWindow *win )
@@ -584,6 +584,11 @@ wxMenuItem::wxMenuItem()
     m_menuItem = (GtkWidget *) NULL;
 }
 
+wxMenuItem::~wxMenuItem()
+{
+   // don't delete menu items, the menus take care of that
+}
+
 // it's valid for this function to be called even if m_menuItem == NULL
 void wxMenuItem::SetName( const wxString& str )
 {
@@ -717,9 +722,19 @@ wxMenu::Init( const wxString& title,
 
 wxMenu::~wxMenu()
 {
-   /* how do we delete an item-factory ? */
-   gtk_widget_destroy( m_menu );
+    wxNode *node = m_items.First();
+    while (node)
+    {
+        wxMenuItem *item = (wxMenuItem*)node->Data();
+	wxMenu *submenu = item->GetSubMenu();
+	if (submenu)
+	   delete submenu;
+        node = node->Next();
+    }
 
+   gtk_widget_destroy( m_menu );
+   
+   gtk_object_unref( GTK_OBJECT(m_factory) );
 }
 
 void wxMenu::SetTitle( const wxString& title )
@@ -962,6 +977,22 @@ void wxMenu::Append( wxMenuItem *item )
     gtk_menu_append( GTK_MENU(m_menu), menuItem );
     gtk_widget_show( menuItem );
     item->SetMenuItem(menuItem);
+}
+
+void wxMenu::Delete( int id )
+{
+    wxNode *node = m_items.First();
+    while (node)
+    {
+        wxMenuItem *item = (wxMenuItem*)node->Data();
+        if (item->GetId() == id)
+        {
+	    gtk_widget_destroy( item->GetMenuItem() );
+	    m_items.DeleteNode( node );
+            return;
+        }
+        node = node->Next();
+    }
 }
 
 int wxMenu::FindItem( const wxString itemString ) const
