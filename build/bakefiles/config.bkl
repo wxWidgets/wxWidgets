@@ -37,6 +37,22 @@
             Build GUI libraries?
         </description>
     </option>
+    
+    <option name="USE_HTML">
+        <values>0 1</values>
+        <default-value>1</default-value>
+        <description>
+            Build wxHTML library (USE_GUI must be 1)?
+        </description>
+    </option>
+    
+    <option name="USE_OPENGL">
+        <values>0 1</values>
+        <default-value>1</default-value>
+        <description>
+            Build OpenGL canvas library (USE_GUI must be 1)?
+        </description>
+    </option>
 
     <option name="WXUNIV">
         <values>0 1</values>
@@ -84,6 +100,7 @@
         <option name="TOOLCHAIN_NAME"/>
         <option name="EXTRALIBS"/>
         <option name="EXTRALIBS_GUI"/>
+        <option name="OPENGL_LIBS"/>
         <option name="SAMPLES_RPATH_FLAG"/>
         
         <set var="TOP_SRCDIR">$(top_srcdir)/</set>

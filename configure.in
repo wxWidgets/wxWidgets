@@ -2785,6 +2785,7 @@ dnl ---------------------------------------------------------------------------
 dnl OpenGL libraries
 dnl ---------------------------------------------------------------------------
 
+USE_OPENGL=0
 if test "$wxUSE_OPENGL" = "yes"; then
     if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = "1"; then
         OPENGL_LIBS="-framework OpenGL -framework AGL"
@@ -2857,6 +2858,7 @@ if test "$wxUSE_OPENGL" = "yes"; then
     fi
 
     if test "$wxUSE_OPENGL" = "yes"; then
+        USE_OPENGL=1
         AC_DEFINE(wxUSE_OPENGL)
         AC_DEFINE(wxUSE_GLCANVAS)
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS opengl"
@@ -5144,8 +5146,10 @@ if test "$wxUSE_MINIFRAME" = "yes"; then
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS minifram"
 fi
 
+USE_HTML=0
 if test "$wxUSE_HTML" = "yes"; then
     AC_DEFINE(wxUSE_HTML)
+    USE_HTML=1
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS html html/about html/help html/helpview html/printing html/test html/virtual html/widget html/zip htlbox"
 fi
 

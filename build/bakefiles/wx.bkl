@@ -18,6 +18,8 @@
     <include file="monolithic.bkl"/>
     <!-- ...and when there are multiple libraries: -->
     <include file="multilib.bkl"/>
+    <!-- OpenGL canvas is built as separate library in both cases: -->
+    <include file="opengl.bkl"/>
     
     
     <!-- Samples target (not dependency of 'all'): -->

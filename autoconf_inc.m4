@@ -394,3 +394,27 @@ dnl ### begin block COND_PLATFORM_MACOSX_1_TOOLKIT_MAC ###
         COND_PLATFORM_MACOSX_1_TOOLKIT_MAC=""
     fi
     AC_SUBST(COND_PLATFORM_MACOSX_1_TOOLKIT_MAC)
+dnl ### begin block COND_MONOLITHIC_0_SHARED_0_USE_HTML_1 ###
+    COND_MONOLITHIC_0_SHARED_0_USE_HTML_1="#"
+    if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x0" -a "x$USE_HTML" = "x1" ; then
+        COND_MONOLITHIC_0_SHARED_0_USE_HTML_1=""
+    fi
+    AC_SUBST(COND_MONOLITHIC_0_SHARED_0_USE_HTML_1)
+dnl ### begin block COND_MONOLITHIC_0_SHARED_1_USE_HTML_1 ###
+    COND_MONOLITHIC_0_SHARED_1_USE_HTML_1="#"
+    if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x1" -a "x$USE_HTML" = "x1" ; then
+        COND_MONOLITHIC_0_SHARED_1_USE_HTML_1=""
+    fi
+    AC_SUBST(COND_MONOLITHIC_0_SHARED_1_USE_HTML_1)
+dnl ### begin block COND_SHARED_0_USE_GUI_1_USE_OPENGL_1 ###
+    COND_SHARED_0_USE_GUI_1_USE_OPENGL_1="#"
+    if test "x$SHARED" = "x0" -a "x$USE_GUI" = "x1" -a "x$USE_OPENGL" = "x1" ; then
+        COND_SHARED_0_USE_GUI_1_USE_OPENGL_1=""
+    fi
+    AC_SUBST(COND_SHARED_0_USE_GUI_1_USE_OPENGL_1)
+dnl ### begin block COND_SHARED_1_USE_GUI_1_USE_OPENGL_1 ###
+    COND_SHARED_1_USE_GUI_1_USE_OPENGL_1="#"
+    if test "x$SHARED" = "x1" -a "x$USE_GUI" = "x1" -a "x$USE_OPENGL" = "x1" ; then
+        COND_SHARED_1_USE_GUI_1_USE_OPENGL_1=""
+    fi
+    AC_SUBST(COND_SHARED_1_USE_GUI_1_USE_OPENGL_1)
