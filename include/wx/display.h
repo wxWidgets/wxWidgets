@@ -21,6 +21,9 @@
 #include "wx/dynarray.h"
 
 class WXDLLEXPORT wxWindow;
+class WXDLLEXPORT wxPoint;
+class WXDLLEXPORT wxRect;
+class WXDLLEXPORT wxString; 
 
 // ----------------------------------------------------------------------------
 // wxVideoMode: contains video mode parameters for a display
