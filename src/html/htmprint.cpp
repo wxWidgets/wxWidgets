@@ -405,16 +405,13 @@ wxHtmlEasyPrinting::wxHtmlEasyPrinting(const wxString& name, wxFrame *parent_fra
     m_Frame = parent_frame;
     m_Name = name;
     m_PrintData = new wxPrintData;
+    (*m_PrintData) = (*wxThePrintSetupData);
     m_PageSetupData = new wxPageSetupDialogData;
     m_Headers[0] = m_Headers[1] = m_Footers[0] = m_Footers[1] = wxEmptyString;
     
     m_PageSetupData -> EnableMargins(TRUE);
     m_PageSetupData -> SetMarginTopLeft(wxPoint(25, 25));    
     m_PageSetupData -> SetMarginBottomRight(wxPoint(25, 25));
-
-#if defined(__WXGTK__) || defined(__WXMOTIF__)
-    m_PrintData -> SetPrinterCommand("lpr");
-#endif
 }
 
 
