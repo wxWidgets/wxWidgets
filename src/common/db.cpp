@@ -1658,7 +1658,7 @@ void wxDb::Close(void)
 
 #ifdef __WXDEBUG__
     wxTablesInUse *tiu;
-    wxNode *pNode;
+    wxList::compatibility_iterator pNode;
     pNode = TablesInUse.GetFirst();
     wxString s,s2;
     while (pNode)

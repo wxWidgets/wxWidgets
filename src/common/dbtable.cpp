@@ -321,18 +321,17 @@ void wxDbTable::cleanup()
 #ifdef __WXDEBUG__
     if (tableID)
     {
-        TablesInUse.DeleteContents(TRUE);
         bool found = FALSE;
 
-        wxNode *pNode;
+        wxList::compatibility_iterator pNode;
         pNode = TablesInUse.GetFirst();
         while (pNode && !found)
         {
             if (((wxTablesInUse *)pNode->GetData())->tableID == tableID)
             {
                 found = TRUE;
-                if (!TablesInUse.DeleteNode(pNode))
-                    wxLogDebug (s,wxT("Unable to delete node!"));
+                delete (wxTablesInUse *)pNode->GetData();
+                TablesInUse.Erase(pNode);
             }
             else
                 pNode = pNode->GetNext();
