@@ -221,7 +221,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
         style |= wxALWAYS_SHOW_SB;
         
     wxTextCtrlBase::Create( parent, id, pos /* wxDefaultPosition */, size,
-                              style|wxVSCROLL|wxHSCROLL|wxNO_FULL_REPAINT_ON_RESIZE );
+                            style | wxVSCROLL | wxHSCROLL);
                               
     SetBackgroundColour( *wxWHITE );
     

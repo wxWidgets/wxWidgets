@@ -139,7 +139,7 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
         xattributes.override_redirect = True;
     }
     
-    if (HasFlag( wxNO_FULL_REPAINT_ON_RESIZE ))
+    if (!HasFlag( wxFULL_REPAINT_ON_RESIZE ))
     {
         xattributes_mask |= CWBitGravity;
         xattributes.bit_gravity = NorthWestGravity;

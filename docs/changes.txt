@@ -5,6 +5,19 @@ wxWindows 2.5/2.6 Change Log
 INCOMPATIBLE CHANGES SINCE 2.4.x
 ================================
 
+    Please take a few minutes to read the following list, especially
+    paying attention to the most important changes which are marked
+    with '!' in the first column.
+
+    Also please note that you should ensure that WXWIN_COMPATIBILITY_2_4
+    is defined to 1 if you wish to retain maximal compatibility with 2.4
+    series.
+
+! windows are no longer fully repainted when resized, use new style
+  wxFULL_REPAINT_ON_RESIZE to force this (wxNO_FULL_REPAINT_ON_RESIZE stll
+  exists but doesn't do anything any more, this behaviour is default now)
+
+
 - no initialization/cleanup can be done in wxApp/~wxApp because they are
   now called much earlier/later than before; please move any exiting code
   from there to wxApp::OnInit()/OnExit()

@@ -123,7 +123,7 @@ class wxPopupMenuWindow : public wxPopupTransientWindow
 {
 public:
     wxPopupMenuWindow(wxWindow *parent, wxMenu *menu);
-    
+
     ~wxPopupMenuWindow();
 
     // override the base class version to select the first item initially
@@ -259,7 +259,7 @@ public:
         else
         {
             // return FALSE;
-            
+
             return wxEvtHandler::ProcessEvent(event);
         }
     }
@@ -376,7 +376,7 @@ wxMenuItemList::compatibility_iterator wxPopupMenuWindow::GetPrevNode() const
                          : m_menu->GetMenuItems().GetLast();
 }
 
-wxMenuItemList::compatibility_iterator 
+wxMenuItemList::compatibility_iterator
 wxPopupMenuWindow::GetPrevNode(wxMenuItemList::compatibility_iterator node) const
 {
     if ( node )
@@ -399,7 +399,7 @@ wxMenuItemList::compatibility_iterator wxPopupMenuWindow::GetNextNode() const
                          : m_menu->GetMenuItems().GetFirst();
 }
 
-wxMenuItemList::compatibility_iterator 
+wxMenuItemList::compatibility_iterator
 wxPopupMenuWindow::GetNextNode(wxMenuItemList::compatibility_iterator node) const
 {
     if ( node )
@@ -620,7 +620,7 @@ void wxPopupMenuWindow::ClickItem(wxMenuItem *item)
 
     // close all menus
     DismissAndNotify();
-    
+
     menu->ClickItem(item);
 }
 
@@ -685,7 +685,7 @@ bool wxPopupMenuWindow::ProcessLeftDown(wxMouseEvent& event)
             wxPopupMenuWindow *win = menu->m_popupMenu;
 
             wxCHECK_MSG( win, FALSE, _T("parent menu not shown?") );
-            
+
             pos = ClientToScreen(pos);
             if ( win->GetMenuItemFromPoint(win->ScreenToClient(pos)) )
             {
@@ -1245,7 +1245,7 @@ wxWindow *wxMenu::GetRootWindow() const
         // We are a submenu of a menu of a menubar
         if (menu->GetMenuBar())
            return menu->GetMenuBar();
-    
+
         win = menu->GetInvokingWindow();
         if ( win )
             break;
@@ -1256,7 +1256,7 @@ wxWindow *wxMenu::GetRootWindow() const
     // we're probably going to crash in the caller anyhow, but try to detect
     // this error as soon as possible
     wxASSERT_MSG( win, _T("menu without any associated window?") );
-    
+
     // also remember it in this menu so that we don't have to search for it the
     // next time
     wxConstCast(this, wxMenu)->m_invokingWindow = win;
@@ -1333,7 +1333,7 @@ void wxMenu::OnDismiss(bool dismissParent)
             wxCHECK_RET( m_invokingWindow, _T("what kind of menu is this?") );
 
             m_invokingWindow->DismissPopupMenu();
-            
+
             // Why reset it here? We need it for sending the event to...
             // SetInvokingWindow(NULL);
         }
@@ -1353,7 +1353,7 @@ void wxMenu::Popup(const wxPoint& pos, const wxSize& size, bool selectFirst)
     {
         m_popupMenu->SelectFirst();
     }
-    
+
     // the geometry might have changed since the last time we were shown, so
     // always resize
     m_popupMenu->SetClientSize(GetGeometryInfo().GetSize());
@@ -1405,7 +1405,7 @@ bool wxMenu::ClickItem(wxMenuItem *item)
         // not applicabled
         isChecked = -1;
     }
-    
+
     return SendEvent(item->GetId(), isChecked);
 }
 
@@ -1664,8 +1664,6 @@ void wxMenuBar::Init()
     m_menuShown = NULL;
 
     m_shouldShowMenu = FALSE;
-    
-    m_windowStyle |= wxNO_FULL_REPAINT_ON_RESIZE;
 }
 
 void wxMenuBar::Attach(wxFrame *frame)
@@ -2500,9 +2498,9 @@ bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
 #endif // 0
 
     menu->SetInvokingWindow(this);
-    
+
     // wxLogDebug( "Name of invoking window %s", menu->GetInvokingWindow()->GetName().c_str() );
-    
+
     menu->Popup(ClientToScreen(wxPoint(x, y)), wxSize(0, 0));
 
     // this is not very useful if the menu was popped up because of the mouse
@@ -2537,7 +2535,7 @@ bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
 void wxWindow::DismissPopupMenu()
 {
     wxCHECK_RET( ms_evtLoopPopup, _T("no popup menu shown") );
-    
+
     ms_evtLoopPopup->Exit();
 }
 

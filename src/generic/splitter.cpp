@@ -87,10 +87,6 @@ bool wxSplitterWindow::Create(wxWindow *parent, wxWindowID id,
     style &= ~wxBORDER_MASK;
     style |= wxBORDER_NONE;
 
-    // we don't need to be completely repainted after resize and doing it
-    // results in horrible flicker
-    style |= wxNO_FULL_REPAINT_ON_RESIZE;
-
     if ( !wxWindow::Create(parent, id, pos, size, style, name) )
         return FALSE;
 

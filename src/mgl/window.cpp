@@ -624,7 +624,7 @@ bool wxWindowMGL::Create(wxWindow *parent,
     long mgl_style = 0;
     window_t *wnd_parent = parent ? parent->GetHandle() : NULL;
 
-    if ( !(style & wxNO_FULL_REPAINT_ON_RESIZE) )
+    if ( style & wxFULL_REPAINT_ON_RESIZE )
     {
         mgl_style |= MGL_WM_FULL_REPAINT_ON_RESIZE;
     }

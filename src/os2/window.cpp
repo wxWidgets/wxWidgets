@@ -3188,7 +3188,7 @@ bool wxWindowOS2::OS2Create(
     // which is the same but without CS_[HV]REDRAW class styles so using it
     // ensures that the window is not fully repainted on each resize
     //
-    if (GetWindowStyleFlag() & wxNO_FULL_REPAINT_ON_RESIZE)
+    if (!HasStyle(wxFULL_REPAINT_ON_RESIZE))
     {
         sClassName += wxT("NR");
     }

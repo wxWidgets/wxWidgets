@@ -1219,9 +1219,15 @@ enum wxBorder
 // mouse is clicked outside of it or if it loses focus in any other way
 #define wxPOPUP_WINDOW          0x00020000
 
+// force a full repaint when the window is resized (instead of repainting just
+// the invalidated area)
+#define wxFULL_REPAINT_ON_RESIZE 0x00010000
+
+// obsolete: now this is the default behaviour
+//
 // don't invalidate the whole window (resulting in a PAINT event) when the
 // window is resized (currently, makes sense for wxMSW only)
-#define wxNO_FULL_REPAINT_ON_RESIZE 0x00010000
+#define wxNO_FULL_REPAINT_ON_RESIZE 0
 
 /*
  * Extra window style flags (use wxWS_EX prefix to make it clear that they

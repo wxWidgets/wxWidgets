@@ -1088,7 +1088,7 @@ void wxTopLevelWindowMac::DoMoveWindow(int x, int y, int width, int height)
         // the OS takes care of invalidating and erasing the new area so we only have to
         // take care of refreshing for full repaints
 
-        if ( doResize && !HasFlag(wxNO_FULL_REPAINT_ON_RESIZE) )
+        if ( doResize && HasFlag(wxFULL_REPAINT_ON_RESIZE) )
             Refresh() ;
 
 

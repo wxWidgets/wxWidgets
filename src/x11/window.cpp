@@ -224,7 +224,7 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
             KeymapStateMask | FocusChangeMask | ColormapChangeMask | StructureNotifyMask |
             PropertyChangeMask | VisibilityChangeMask ;
 
-        if (HasFlag( wxNO_FULL_REPAINT_ON_RESIZE ))
+        if (!HasFlag( wxFULL_REPAINT_ON_RESIZE ))
         {
             xattributes_mask |= CWBitGravity;
             xattributes.bit_gravity = StaticGravity;
@@ -304,7 +304,7 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
             KeymapStateMask | FocusChangeMask | ColormapChangeMask | StructureNotifyMask |
             PropertyChangeMask | VisibilityChangeMask ;
 
-        if (HasFlag( wxNO_FULL_REPAINT_ON_RESIZE ))
+        if (!HasFlag( wxFULL_REPAINT_ON_RESIZE ))
         {
             xattributes_mask |= CWBitGravity;
             xattributes.bit_gravity = NorthWestGravity;

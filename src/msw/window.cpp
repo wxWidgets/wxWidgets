@@ -3021,7 +3021,7 @@ bool wxWindowMSW::MSWCreate(const wxChar *wclass,
     // which is the same but without CS_[HV]REDRAW class styles so using it
     // ensures that the window is not fully repainted on each resize
     wxString className(wclass);
-    if ( GetWindowStyleFlag() & wxNO_FULL_REPAINT_ON_RESIZE )
+    if ( !HasFlag(wxFULL_REPAINT_ON_RESIZE) )
     {
         className += wxT("NR");
     }

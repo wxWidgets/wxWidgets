@@ -502,7 +502,7 @@ long wxDialog::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
             // creates flicker but at least doesn't show garbage on the screen
             rc = wxWindow::MSWWindowProc(message, wParam, lParam);
             processed = TRUE;
-            if ( !HasFlag(wxNO_FULL_REPAINT_ON_RESIZE) )
+            if ( HasFlag(wxFULL_REPAINT_ON_RESIZE) )
             {
                 ::InvalidateRect(GetHwnd(), NULL, FALSE /* erase bg */);
             }

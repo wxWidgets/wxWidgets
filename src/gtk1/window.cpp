@@ -611,10 +611,11 @@ static void gtk_window_draw_callback( GtkWidget *widget,
     if (g_isIdle)
         wxapp_install_idle_handler();
 
-    // The wxNO_FULL_REPAINT_ON_RESIZE flag only works if
-    // there are no child windows.
-    if ((win->HasFlag(wxNO_FULL_REPAINT_ON_RESIZE)) &&
-        (win->GetChildren().GetCount() == 0))
+    // if there are any children we must refresh everything
+    //
+    // VZ: why?
+    if ( !win->HasFlag(wxFULL_REPAINT_ON_RESIZE) &&
+            win->GetChildren().IsEmpty() )
     {
         return;
     }
@@ -2748,13 +2749,13 @@ void wxWindowGTK::PostCreation()
             gtk_signal_connect( GTK_OBJECT(m_wxwindow), "draw",
                 GTK_SIGNAL_FUNC(gtk_window_draw_callback), (gpointer)this );
 
-            if (HasFlag(wxNO_FULL_REPAINT_ON_RESIZE))
+            if (!HasFlag(wxFULL_REPAINT_ON_RESIZE))
             {
                 gtk_signal_connect( GTK_OBJECT(m_wxwindow), "event",
                     GTK_SIGNAL_FUNC(gtk_window_event_event_callback), (gpointer)this );
             }
 #else
-            // gtk_widget_set_redraw_on_allocate( GTK_WIDGET(m_wxwindow), HasFlag( wxNO_FULL_REPAINT_ON_RESIZE ) );
+            // gtk_widget_set_redraw_on_allocate( GTK_WIDGET(m_wxwindow), !HasFlag( wxFULL_REPAINT_ON_RESIZE ) );
 #endif
 
 #ifdef __WXGTK20__

@@ -627,7 +627,7 @@ void wxWindowMac::DoMoveWindow(int x, int y, int width, int height)
 
         bool partialRepaint = false ;
 
-        if ( HasFlag(wxNO_FULL_REPAINT_ON_RESIZE) )
+        if ( !HasFlag(wxFULL_REPAINT_ON_RESIZE) )
         {
             wxPoint oldPos( m_x , m_y ) ;
             wxPoint newPos( actualX , actualY ) ;

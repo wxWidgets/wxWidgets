@@ -671,9 +671,9 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
 
   MDICREATESTRUCT mcs;
 
-  mcs.szClass = style & wxNO_FULL_REPAINT_ON_RESIZE
-                    ? wxMDIChildFrameClassNameNoRedraw
-                    : wxMDIChildFrameClassName;
+  mcs.szClass = style & wxFULL_REPAINT_ON_RESIZE
+                    ? wxMDIChildFrameClassName
+                    : wxMDIChildFrameClassNameNoRedraw;
   mcs.szTitle = title;
   mcs.hOwner = wxGetInstance();
   if (x > -1)

@@ -53,6 +53,11 @@ This style is currently only implemented for wxMSW and wxUniversal and does
 nothing on the other platforms.}
 \twocolitem{\windowstyle{wxCLIP\_CHILDREN}}{Use this style to eliminate flicker caused by the background being
 repainted, then children being painted over them. Windows only.}
+\twocolitem{\windowstyle{wxFULL\_REPAINT\_ON\_RESIZE}}{Use this style to force
+a complete redraw of the window whenever it is resized instead of redrawing
+just the part of the window affected by resizing. Note that this was the
+behaviour by default before 2.5.1 release and that if you experience redraw
+problems with the code which previously used to work you may want to try this.}
 \end{twocollist}
 
 See also \helpref{window styles overview}{windowstyles}.

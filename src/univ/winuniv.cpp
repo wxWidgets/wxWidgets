@@ -533,7 +533,7 @@ void wxWindow::OnSize(wxSizeEvent& event)
 #if 0   // ndef __WXMSW__
     // Refresh the area (strip) previously occupied by the border
 
-    if (HasFlag( wxNO_FULL_REPAINT_ON_RESIZE ) && IsShown())
+    if ( !HasFlag(wxFULL_REPAINT_ON_RESIZE) && IsShown() )
     {
         // This code assumes that wxSizeEvent.GetSize() returns
         // the area of the entire window, not just the client
