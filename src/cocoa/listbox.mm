@@ -197,10 +197,6 @@ int wxListBox::FindString(const wxString& s) const
 }
 
     // selection
-void wxListBox::SetSelection(int n)
-{
-}
-
 int wxListBox::GetSelection() const
 {
     return 0;
