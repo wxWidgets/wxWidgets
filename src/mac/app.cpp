@@ -1377,6 +1377,17 @@ void wxApp::MacDoOneEvent()
 void wxApp::MacHandleModifierEvents( WXEVENTREF evr )
 {
     EventRecord* ev = (EventRecord*) evr ;
+#if TARGET_CARBON
+    if ( ev->what == mouseDown || ev->what == mouseUp || ev->what == activateEvt ||
+        ev->what == keyDown || ev->what == autoKey || ev->what == keyUp || ev->what == nullEvent )
+    {
+        // in these cases the modifiers are already correctly setup by carbon
+    }
+    else
+    {
+        ev->modifiers = GetCurrentKeyModifiers() ;
+    }
+#endif
     if ( ev->modifiers != s_lastModifiers && wxWindow::FindFocus() != NULL )
     {
         wxKeyEvent event(wxEVT_KEY_DOWN);
@@ -2142,20 +2153,6 @@ void wxApp::MacHandleOSEvent( WXEVENTREF evr )
                         break ;
                     default:
                         {
-                            // if ( s_lastMouseDown == 0 )
-                            //     ev->modifiers |= btnState ;
-                                
-                            // Calling GetNextEvent with a zero event mask will always
-                            // pass back a null event. However, it fills the EventRecord
-                            // with the state of the modifier keys. This is needed since
-                            // the modifier state returned by WaitForNextEvent often is
-                            // wrong mouse move events. The attempt above to correct this
-                            // didn't always work (under OS X at least).
-            
-                            EventRecord tmp;
-                            ::GetNextEvent(0, &tmp);
-                            ev->modifiers = tmp.modifiers;
-                            
                             wxTopLevelWindowMac* win = wxFindWinFromMacWindow( window ) ;
                             if ( win )
                                 win->MacMouseMoved( ev , windowPart ) ;
