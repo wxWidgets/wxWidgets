@@ -350,7 +350,9 @@ public:
 
     %extend {
         void Show(PyObject* item, bool show = True) {
+            bool blocked = wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, False, False);
+            wxPyEndBlockThreads(blocked);
             if ( info.window )
                 self->Show(info.window, show);
             else if ( info.sizer )
@@ -359,7 +361,9 @@ public:
 
         
         void Hide(PyObject* item) {
+            bool blocked = wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, False, False);
+            wxPyEndBlockThreads(blocked);
             if ( info.window )
                 self->Hide(info.window);
             else if ( info.sizer )
@@ -368,7 +372,9 @@ public:
 
         
         bool IsShown(PyObject* item) {
+            bool blocked = wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, False, False);
+            wxPyEndBlockThreads(blocked);
             if ( info.window ) 
                 return self->IsShown(info.window);
             else if ( info.sizer ) 
