@@ -26,6 +26,7 @@
 
 #include  "wx/ownerdrw.h"
 #include  "wx/menuitem.h"
+#include  "wx/image.h"
 #include  "wx/msw/checklst.h"
 
 // Define a new application type
@@ -83,6 +84,7 @@ IMPLEMENT_APP(OwnerDrawnApp);
 // init our app: create windows
 bool OwnerDrawnApp::OnInit(void)
 {
+    wxInitAllImageHandlers();
     OwnerDrawnFrame *pFrame
         = new OwnerDrawnFrame(NULL, _T("wxWindows Ownerdraw Sample"),
                               50, 50, 450, 340);
@@ -108,7 +110,9 @@ void OwnerDrawnFrame::InitMenu()
            fontBmp(14, wxDEFAULT, wxNORMAL, wxNORMAL, FALSE);
 
     // sorry for my artistic skills...
-    wxBitmap bmpBell(_T("bell")), bmpSound(_T("sound")), bmpNoSound(_T("nosound"));
+    wxBitmap bmpBell(_T("bell"));
+    wxBitmap bmpSound(_T("sound.png"), wxBITMAP_TYPE_PNG);
+    wxBitmap bmpNoSound(_T("nosound.png"), wxBITMAP_TYPE_PNG);
 
     // construct submenu
     pItem = new wxMenuItem(sub_menu, Menu_Sub1, _T("Submenu &first"), _T("large"));
