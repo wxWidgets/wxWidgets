@@ -65,24 +65,24 @@
 // forward declarations
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxGrid;
-class WXDLLEXPORT wxGridCellAttr;
-class WXDLLEXPORT wxGridCellAttrProviderData;
-class WXDLLEXPORT wxGridColLabelWindow;
-class WXDLLEXPORT wxGridCornerLabelWindow;
-class WXDLLEXPORT wxGridRowLabelWindow;
-class WXDLLEXPORT wxGridTableBase;
-class WXDLLEXPORT wxGridWindow;
-class WXDLLEXPORT wxGridTypeRegistry;
-class WXDLLEXPORT wxGridSelection;
+class WXDLLIMPEXP_ADV wxGrid;
+class WXDLLIMPEXP_ADV wxGridCellAttr;
+class WXDLLIMPEXP_ADV wxGridCellAttrProviderData;
+class WXDLLIMPEXP_ADV wxGridColLabelWindow;
+class WXDLLIMPEXP_ADV wxGridCornerLabelWindow;
+class WXDLLIMPEXP_ADV wxGridRowLabelWindow;
+class WXDLLIMPEXP_ADV wxGridTableBase;
+class WXDLLIMPEXP_ADV wxGridWindow;
+class WXDLLIMPEXP_ADV wxGridTypeRegistry;
+class WXDLLIMPEXP_ADV wxGridSelection;
 
 class WXDLLEXPORT wxCheckBox;
 class WXDLLEXPORT wxComboBox;
 class WXDLLEXPORT wxTextCtrl;
 class WXDLLEXPORT wxSpinCtrl;
 
-WX_DECLARE_EXPORTED_HASH_MAP( long, long, wxIntegerHash, wxIntegerEqual,
-                              wxLongToLongHashMap );
+WX_DECLARE_HASH_MAP_WITH_DECL( long, long, wxIntegerHash, wxIntegerEqual,
+                               wxLongToLongHashMap, class WXDLLIMPEXP_ADV );
 
 // ----------------------------------------------------------------------------
 // macros
@@ -99,7 +99,7 @@ WX_DECLARE_EXPORTED_HASH_MAP( long, long, wxIntegerHash, wxIntegerEqual,
 //     class is not documented and is not public at all
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxGridCellWorker : public wxClientDataContainer
+class WXDLLIMPEXP_ADV wxGridCellWorker : public wxClientDataContainer
 {
 public:
     wxGridCellWorker() { m_nRef = 1; }
@@ -135,7 +135,7 @@ private:
 // predefined derived classes or derive your own class from it.
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxGridCellRenderer : public wxGridCellWorker
+class WXDLLIMPEXP_ADV wxGridCellRenderer : public wxGridCellWorker
 {
 public:
     // draw the given cell on the provided DC inside the given rectangle
@@ -163,7 +163,7 @@ public:
 };
 
 // the default renderer for the cells containing string data
-class WXDLLEXPORT wxGridCellStringRenderer : public wxGridCellRenderer
+class WXDLLIMPEXP_ADV wxGridCellStringRenderer : public wxGridCellRenderer
 {
 public:
     // draw the string
@@ -197,7 +197,7 @@ protected:
 };
 
 // the default renderer for the cells containing numeric (long) data
-class WXDLLEXPORT wxGridCellNumberRenderer : public wxGridCellStringRenderer
+class WXDLLIMPEXP_ADV wxGridCellNumberRenderer : public wxGridCellStringRenderer
 {
 public:
     // draw the string right aligned
@@ -220,7 +220,7 @@ protected:
     wxString GetString(wxGrid& grid, int row, int col);
 };
 
-class WXDLLEXPORT wxGridCellFloatRenderer : public wxGridCellStringRenderer
+class WXDLLIMPEXP_ADV wxGridCellFloatRenderer : public wxGridCellStringRenderer
 {
 public:
     wxGridCellFloatRenderer(int width = -1, int precision = -1);
@@ -261,7 +261,7 @@ private:
 };
 
 // renderer for boolean fields
-class WXDLLEXPORT wxGridCellBoolRenderer : public wxGridCellRenderer
+class WXDLLIMPEXP_ADV wxGridCellBoolRenderer : public wxGridCellRenderer
 {
 public:
     // draw a check mark or nothing
@@ -293,7 +293,7 @@ private:
 // even for the entire grid.
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxGridCellEditor : public wxGridCellWorker
+class WXDLLIMPEXP_ADV wxGridCellEditor : public wxGridCellWorker
 {
 public:
     wxGridCellEditor();
@@ -391,7 +391,7 @@ protected:
 #if wxUSE_TEXTCTRL
 
 // the editor for string/text data
-class WXDLLEXPORT wxGridCellTextEditor : public wxGridCellEditor
+class WXDLLIMPEXP_ADV wxGridCellTextEditor : public wxGridCellEditor
 {
 public:
     wxGridCellTextEditor();
@@ -435,7 +435,7 @@ private:
 };
 
 // the editor for numeric (long) data
-class WXDLLEXPORT wxGridCellNumberEditor : public wxGridCellTextEditor
+class WXDLLIMPEXP_ADV wxGridCellNumberEditor : public wxGridCellTextEditor
 {
 public:
     // allows to specify the range - if min == max == -1, no range checking is
@@ -482,7 +482,7 @@ private:
 };
 
 // the editor for floating point numbers (double) data
-class WXDLLEXPORT wxGridCellFloatEditor : public wxGridCellTextEditor
+class WXDLLIMPEXP_ADV wxGridCellFloatEditor : public wxGridCellTextEditor
 {
 public:
     wxGridCellFloatEditor(int width = -1, int precision = -1);
@@ -521,7 +521,7 @@ private:
 #if wxUSE_CHECKBOX
 
 // the editor for boolean data
-class WXDLLEXPORT wxGridCellBoolEditor : public wxGridCellEditor
+class WXDLLIMPEXP_ADV wxGridCellBoolEditor : public wxGridCellEditor
 {
 public:
     wxGridCellBoolEditor() { }
@@ -560,7 +560,7 @@ private:
 #if wxUSE_COMBOBOX
 
 // the editor for string data allowing to choose from the list of strings
-class WXDLLEXPORT wxGridCellChoiceEditor : public wxGridCellEditor
+class WXDLLIMPEXP_ADV wxGridCellChoiceEditor : public wxGridCellEditor
 {
 public:
     // if !allowOthers, user can't type a string not in choices array
@@ -608,7 +608,7 @@ protected:
 // class may be returned by wxGridTable::GetAttr().
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxGridCellAttr : public wxClientDataContainer
+class WXDLLIMPEXP_ADV wxGridCellAttr : public wxClientDataContainer
 {
 public:
     enum wxAttrKind
@@ -768,7 +768,7 @@ private:
 // the default implementation is reasonably efficient for the generic case,
 // but you might still wish to implement your own for some specific situations
 // if you have performance problems with the stock one
-class WXDLLEXPORT wxGridCellAttrProvider : public wxClientDataContainer
+class WXDLLIMPEXP_ADV wxGridCellAttrProvider : public wxClientDataContainer
 {
 public:
     wxGridCellAttrProvider();
@@ -804,7 +804,7 @@ private:
 //////////////////////////////////////////////////////////////////////
 
 
-class WXDLLEXPORT wxGridTableBase : public wxObject, public wxClientDataContainer
+class WXDLLIMPEXP_ADV wxGridTableBase : public wxObject, public wxClientDataContainer
 {
 public:
     wxGridTableBase();
@@ -905,7 +905,7 @@ enum wxGridTableRequest
     wxGRIDTABLE_NOTIFY_COLS_DELETED
 };
 
-class WXDLLEXPORT wxGridTableMessage
+class WXDLLIMPEXP_ADV wxGridTableMessage
 {
 public:
     wxGridTableMessage();
@@ -947,7 +947,7 @@ WX_DECLARE_EXPORTED_OBJARRAY(wxArrayString, wxGridStringArray);
 // that are stored in memory
 //
 
-class WXDLLEXPORT wxGridStringTable : public wxGridTableBase
+class WXDLLIMPEXP_ADV wxGridStringTable : public wxGridTableBase
 {
 public:
     wxGridStringTable();
@@ -999,7 +999,7 @@ private:
 // wxGridCellCoords: location of a cell in the grid
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxGridCellCoords
+class WXDLLIMPEXP_ADV wxGridCellCoords
 {
 public:
     wxGridCellCoords() { m_row = m_col = -1; }
@@ -1046,8 +1046,8 @@ private:
 
 // For comparisons...
 //
-extern WXDLLEXPORT wxGridCellCoords wxGridNoCellCoords;
-extern WXDLLEXPORT wxRect           wxGridNoCellRect;
+extern WXDLLIMPEXP_ADV wxGridCellCoords wxGridNoCellCoords;
+extern WXDLLIMPEXP_ADV wxRect           wxGridNoCellRect;
 
 // An array of cell coords...
 //
@@ -1057,7 +1057,7 @@ WX_DECLARE_EXPORTED_OBJARRAY(wxGridCellCoords, wxGridCellCoordsArray);
 // wxGrid
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxGrid : public wxScrolledWindow
+class WXDLLIMPEXP_ADV wxGrid : public wxScrolledWindow
 {
 public:
     wxGrid()
@@ -1904,7 +1904,7 @@ protected:
     bool GetModelValues();
     bool SetModelValues();
 
-    friend class WXDLLEXPORT wxGridSelection;
+    friend class WXDLLIMPEXP_ADV wxGridSelection;
 
     DECLARE_DYNAMIC_CLASS( wxGrid )
     DECLARE_EVENT_TABLE()
@@ -1916,7 +1916,7 @@ protected:
 // Grid event class and event types
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxGridEvent : public wxNotifyEvent
+class WXDLLIMPEXP_ADV wxGridEvent : public wxNotifyEvent
 {
 public:
     wxGridEvent()
@@ -1952,7 +1952,7 @@ protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxGridEvent)
 };
 
-class WXDLLEXPORT wxGridSizeEvent : public wxNotifyEvent
+class WXDLLIMPEXP_ADV wxGridSizeEvent : public wxNotifyEvent
 {
 public:
     wxGridSizeEvent()
@@ -1985,7 +1985,7 @@ protected:
 };
 
 
-class WXDLLEXPORT wxGridRangeSelectEvent : public wxNotifyEvent
+class WXDLLIMPEXP_ADV wxGridRangeSelectEvent : public wxNotifyEvent
 {
 public:
     wxGridRangeSelectEvent()
@@ -2032,7 +2032,7 @@ protected:
 };
 
 
-class WXDLLEXPORT wxGridEditorCreatedEvent : public wxCommandEvent {
+class WXDLLIMPEXP_ADV wxGridEditorCreatedEvent : public wxCommandEvent {
 public:
     wxGridEditorCreatedEvent()
         : wxCommandEvent()
@@ -2063,22 +2063,22 @@ private:
 
 
 BEGIN_DECLARE_EVENT_TYPES()
-    DECLARE_EVENT_TYPE(wxEVT_GRID_CELL_LEFT_CLICK, 1580)
-    DECLARE_EVENT_TYPE(wxEVT_GRID_CELL_RIGHT_CLICK, 1581)
-    DECLARE_EVENT_TYPE(wxEVT_GRID_CELL_LEFT_DCLICK, 1582)
-    DECLARE_EVENT_TYPE(wxEVT_GRID_CELL_RIGHT_DCLICK, 1583)
-    DECLARE_EVENT_TYPE(wxEVT_GRID_LABEL_LEFT_CLICK, 1584)
-    DECLARE_EVENT_TYPE(wxEVT_GRID_LABEL_RIGHT_CLICK, 1585)
-    DECLARE_EVENT_TYPE(wxEVT_GRID_LABEL_LEFT_DCLICK, 1586)
-    DECLARE_EVENT_TYPE(wxEVT_GRID_LABEL_RIGHT_DCLICK, 1587)
-    DECLARE_EVENT_TYPE(wxEVT_GRID_ROW_SIZE, 1588)
-    DECLARE_EVENT_TYPE(wxEVT_GRID_COL_SIZE, 1589)
-    DECLARE_EVENT_TYPE(wxEVT_GRID_RANGE_SELECT, 1590)
-    DECLARE_EVENT_TYPE(wxEVT_GRID_CELL_CHANGE, 1591)
-    DECLARE_EVENT_TYPE(wxEVT_GRID_SELECT_CELL, 1592)
-    DECLARE_EVENT_TYPE(wxEVT_GRID_EDITOR_SHOWN, 1593)
-    DECLARE_EVENT_TYPE(wxEVT_GRID_EDITOR_HIDDEN, 1594)
-    DECLARE_EVENT_TYPE(wxEVT_GRID_EDITOR_CREATED, 1595)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_GRID_CELL_LEFT_CLICK, 1580)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_GRID_CELL_RIGHT_CLICK, 1581)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_GRID_CELL_LEFT_DCLICK, 1582)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_GRID_CELL_RIGHT_DCLICK, 1583)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_GRID_LABEL_LEFT_CLICK, 1584)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_GRID_LABEL_RIGHT_CLICK, 1585)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_GRID_LABEL_LEFT_DCLICK, 1586)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_GRID_LABEL_RIGHT_DCLICK, 1587)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_GRID_ROW_SIZE, 1588)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_GRID_COL_SIZE, 1589)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_GRID_RANGE_SELECT, 1590)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_GRID_CELL_CHANGE, 1591)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_GRID_SELECT_CELL, 1592)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_GRID_EDITOR_SHOWN, 1593)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_GRID_EDITOR_HIDDEN, 1594)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_GRID_EDITOR_CREATED, 1595)
 END_DECLARE_EVENT_TYPES()
 
 

@@ -29,7 +29,7 @@
 #if wxUSE_DATETIME
 
 // the default renderer for the cells containing Time and dates..
-class WXDLLEXPORT wxGridCellDateTimeRenderer : public wxGridCellStringRenderer
+class WXDLLIMPEXP_ADV wxGridCellDateTimeRenderer : public wxGridCellStringRenderer
 {
 public:
     wxGridCellDateTimeRenderer(wxString outformat =  _T("%c"),
@@ -65,7 +65,7 @@ protected:
 #endif // wxUSE_DATETIME
 
 // the default renderer for the cells containing Time and dates..
-class WXDLLEXPORT wxGridCellEnumRenderer : public wxGridCellStringRenderer
+class WXDLLIMPEXP_ADV wxGridCellEnumRenderer : public wxGridCellStringRenderer
 {
 public:
     wxGridCellEnumRenderer( const wxString& choices = wxEmptyString );
@@ -97,7 +97,7 @@ protected:
 
 #if wxUSE_COMBOBOX
 
-class WXDLLEXPORT wxGridCellEnumEditor : public wxGridCellChoiceEditor
+class WXDLLIMPEXP_ADV wxGridCellEnumEditor : public wxGridCellChoiceEditor
 {
 public:
     wxGridCellEnumEditor( const wxString& choices = wxEmptyString );
@@ -116,7 +116,7 @@ private:
 
 #endif // wxUSE_COMBOBOX
 
-class WXDLLEXPORT wxGridCellAutoWrapStringEditor : public wxGridCellTextEditor
+class WXDLLIMPEXP_ADV wxGridCellAutoWrapStringEditor : public wxGridCellTextEditor
 {
 public:
     wxGridCellAutoWrapStringEditor() : wxGridCellTextEditor() { }
@@ -130,7 +130,7 @@ public:
     DECLARE_NO_COPY_CLASS(wxGridCellAutoWrapStringEditor)
 };
 
-class WXDLLEXPORT wxGridCellAutoWrapStringRenderer : public wxGridCellStringRenderer
+class WXDLLIMPEXP_ADV wxGridCellAutoWrapStringRenderer : public wxGridCellStringRenderer
 {
 public:
     wxGridCellAutoWrapStringRenderer() : wxGridCellStringRenderer() { }

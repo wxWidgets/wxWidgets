@@ -123,7 +123,7 @@ DEFINE_EVENT_TYPE(wxEVT_GRID_EDITOR_CREATED)
 // private classes
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxGridRowLabelWindow : public wxWindow
+class WXDLLIMPEXP_ADV wxGridRowLabelWindow : public wxWindow
 {
 public:
     wxGridRowLabelWindow() { m_owner = (wxGrid *)NULL; }
@@ -145,7 +145,7 @@ private:
 };
 
 
-class WXDLLEXPORT wxGridColLabelWindow : public wxWindow
+class WXDLLIMPEXP_ADV wxGridColLabelWindow : public wxWindow
 {
 public:
     wxGridColLabelWindow() { m_owner = (wxGrid *)NULL; }
@@ -167,7 +167,7 @@ private:
 };
 
 
-class WXDLLEXPORT wxGridCornerLabelWindow : public wxWindow
+class WXDLLIMPEXP_ADV wxGridCornerLabelWindow : public wxWindow
 {
 public:
     wxGridCornerLabelWindow() { m_owner = (wxGrid *)NULL; }
@@ -188,7 +188,7 @@ private:
     DECLARE_NO_COPY_CLASS(wxGridCornerLabelWindow)
 };
 
-class WXDLLEXPORT wxGridWindow : public wxWindow
+class WXDLLIMPEXP_ADV wxGridWindow : public wxWindow
 {
 public:
     wxGridWindow()
@@ -263,7 +263,7 @@ END_EVENT_TABLE()
 // ----------------------------------------------------------------------------
 
 // this class stores attributes set for cells
-class WXDLLEXPORT wxGridCellAttrData
+class WXDLLIMPEXP_ADV wxGridCellAttrData
 {
 public:
     void SetAttr(wxGridCellAttr *attr, int row, int col);
@@ -279,7 +279,7 @@ private:
 };
 
 // this class stores attributes set for rows or columns
-class WXDLLEXPORT wxGridRowOrColAttrData
+class WXDLLIMPEXP_ADV wxGridRowOrColAttrData
 {
 public:
     // empty ctor to suppress warnings
@@ -297,7 +297,7 @@ private:
 
 // NB: this is just a wrapper around 3 objects: one which stores cell
 //     attributes, and 2 others for row/col ones
-class WXDLLEXPORT wxGridCellAttrProviderData
+class WXDLLIMPEXP_ADV wxGridCellAttrProviderData
 {
 public:
     wxGridCellAttrData m_cellAttrs;
@@ -335,7 +335,7 @@ struct wxGridDataTypeInfo
 WX_DEFINE_EXPORTED_ARRAY_NO_PTR(wxGridDataTypeInfo*, wxGridDataTypeInfoArray);
 
 
-class WXDLLEXPORT wxGridTypeRegistry
+class WXDLLIMPEXP_ADV wxGridTypeRegistry
 {
 public:
   wxGridTypeRegistry() {}

@@ -22,7 +22,7 @@
 
 #include "wx/grid.h"
 
-class WXDLLEXPORT wxGridSelection{
+class WXDLLIMPEXP_ADV wxGridSelection{
 public:
     wxGridSelection( wxGrid * grid, wxGrid::wxGridSelectionModes sel =
                      wxGrid::wxGridSelectCells );
@@ -82,7 +82,7 @@ private:
     wxGrid                              *m_grid;
     wxGrid::wxGridSelectionModes        m_selectionMode;
 
-    friend class WXDLLEXPORT wxGrid;
+    friend class WXDLLIMPEXP_ADV wxGrid;
 
     DECLARE_NO_COPY_CLASS(wxGridSelection)
 };

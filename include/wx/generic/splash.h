@@ -34,13 +34,13 @@
 #define wxSPLASH_TIMEOUT            0x04
 #define wxSPLASH_NO_TIMEOUT         0x00
 
-class WXDLLEXPORT wxSplashScreenWindow;
+class WXDLLIMPEXP_ADV wxSplashScreenWindow;
 
 /*
  * wxSplashScreen
  */
 
-class WXDLLEXPORT wxSplashScreen: public wxFrame
+class WXDLLIMPEXP_ADV wxSplashScreen: public wxFrame
 {
 public:
     // for RTTI macros only
@@ -65,8 +65,8 @@ protected:
     int                     m_milliseconds;
     wxTimer                 m_timer;
 
-DECLARE_DYNAMIC_CLASS(wxSplashScreen)
-DECLARE_EVENT_TABLE()
+    DECLARE_DYNAMIC_CLASS(wxSplashScreen)
+    DECLARE_EVENT_TABLE()
     DECLARE_NO_COPY_CLASS(wxSplashScreen)
 };
 
@@ -74,7 +74,7 @@ DECLARE_EVENT_TABLE()
  * wxSplashScreenWindow
  */
 
-class WXDLLEXPORT wxSplashScreenWindow: public wxWindow
+class WXDLLIMPEXP_ADV wxSplashScreenWindow: public wxWindow
 {
 public:
     wxSplashScreenWindow(const wxBitmap& bitmap, wxWindow* parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxNO_BORDER);

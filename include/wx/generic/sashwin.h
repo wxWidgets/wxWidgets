@@ -40,7 +40,7 @@ enum wxSashEdgePosition {
  * wxSashEdge represents one of the four edges of a window.
  */
 
-class WXDLLEXPORT wxSashEdge
+class WXDLLIMPEXP_ADV wxSashEdge
 {
 public:
     wxSashEdge() { m_show = FALSE; m_border = FALSE; m_margin = 0; }
@@ -67,7 +67,7 @@ public:
  * of wxSashWindow.
  */
 
-class WXDLLEXPORT wxSashWindow: public wxWindow
+class WXDLLIMPEXP_ADV wxSashWindow: public wxWindow
 {
 public:
     // Default constructor
@@ -197,7 +197,8 @@ private:
 };
 
 BEGIN_DECLARE_EVENT_TYPES()
-    DECLARE_EVENT_TYPE(wxEVT_SASH_DRAGGED, wxEVT_FIRST + 1200)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV,
+                                wxEVT_SASH_DRAGGED, wxEVT_FIRST + 1200)
 END_DECLARE_EVENT_TYPES()
 
 // #define wxEVT_SASH_DRAGGED (wxEVT_FIRST + 1200)
@@ -208,7 +209,7 @@ enum wxSashDragStatus
     wxSASH_STATUS_OUT_OF_RANGE
 };
 
-class WXDLLEXPORT wxSashEvent: public wxCommandEvent
+class WXDLLIMPEXP_ADV wxSashEvent: public wxCommandEvent
 {
 public:
     inline wxSashEvent(int id = 0, wxSashEdgePosition edge = wxSASH_NONE) {

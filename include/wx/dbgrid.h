@@ -33,7 +33,7 @@ WX_DECLARE_EXPORTED_OBJARRAY(GenericKey,keyarray);
 
 static const int wxUSE_QUERY = -1;
 
-class WXDLLEXPORT wxDbGridColInfoBase
+class WXDLLIMPEXP_ADV wxDbGridColInfoBase
 {
 public:
     //Default ctor
@@ -60,7 +60,7 @@ public:
 };
 
 
-class WXDLLEXPORT wxDbGridColInfo
+class WXDLLIMPEXP_ADV wxDbGridColInfo
 {
 public:
     wxDbGridColInfo(int colNo,
@@ -98,7 +98,7 @@ public:
 };
 
 
-class WXDLLEXPORT wxDbGridCellAttrProvider : public wxGridCellAttrProvider
+class WXDLLIMPEXP_ADV wxDbGridCellAttrProvider : public wxGridCellAttrProvider
 {
 public:
     wxDbGridCellAttrProvider();
@@ -114,7 +114,7 @@ private:
 };
 
 
-class WXDLLEXPORT wxDbGridTableBase : public wxGridTableBase
+class WXDLLIMPEXP_ADV wxDbGridTableBase : public wxGridTableBase
 {
 public:
     wxDbGridTableBase(wxDbTable *tab, wxDbGridColInfo *ColInfo,

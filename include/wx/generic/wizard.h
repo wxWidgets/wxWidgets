@@ -19,11 +19,11 @@
 
 class WXDLLEXPORT wxButton;
 class WXDLLEXPORT wxStaticBitmap;
-class WXDLLEXPORT wxWizardEvent;
+class WXDLLIMPEXP_ADV wxWizardEvent;
 class WXDLLEXPORT wxBoxSizer;
-class WXDLLEXPORT wxWizardSizer;
+class WXDLLIMPEXP_ADV wxWizardSizer;
 
-class WXDLLEXPORT wxWizard : public wxWizardBase
+class WXDLLIMPEXP_ADV wxWizard : public wxWizardBase
 {
 public:
     // ctor

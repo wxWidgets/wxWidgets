@@ -36,7 +36,7 @@
 #define wxWIZARD_EX_HELPBUTTON   0x00000010
 
 // forward declarations
-class WXDLLEXPORT wxWizard;
+class WXDLLIMPEXP_ADV wxWizard;
 
 // ----------------------------------------------------------------------------
 // wxWizardPage is one of the wizards screen: it must know what are the
@@ -46,7 +46,7 @@ class WXDLLEXPORT wxWizard;
 // used as such (i.e. controls may be placed directly on it &c).
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxWizardPage : public wxPanel
+class WXDLLIMPEXP_ADV wxWizardPage : public wxPanel
 {
 public:
     wxWizardPage() { Init(); }
@@ -93,7 +93,7 @@ private:
 // this, you must derive from wxWizardPage directly.
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxWizardPageSimple : public wxWizardPage
+class WXDLLIMPEXP_ADV wxWizardPageSimple : public wxWizardPage
 {
 public:
     wxWizardPageSimple() { Init(); }
@@ -156,7 +156,7 @@ private:
 // wxWizard
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxWizardBase : public wxDialog
+class WXDLLIMPEXP_ADV wxWizardBase : public wxDialog
 {
 public:
     /*
@@ -235,7 +235,7 @@ private:
 // window hierarchy as usual
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxWizardEvent : public wxNotifyEvent
+class WXDLLIMPEXP_ADV wxWizardEvent : public wxNotifyEvent
 {
 public:
     wxWizardEvent(wxEventType type = wxEVT_NULL,

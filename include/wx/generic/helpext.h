@@ -26,7 +26,7 @@
 #define WXEXTHELP_SEPARATOR _T('/')
 #endif
 
-class WXDLLEXPORT wxExtHelpMapList;
+class WXDLLIMPEXP_ADV wxExtHelpMapList;
 
 #ifndef WXEXTHELP_DEFAULTBROWSER
 /// Default browser name.
@@ -54,7 +54,7 @@ class WXDLLEXPORT wxExtHelpMapList;
    Lines starting with ';' will be ignored.
 */
 
-class WXDLLEXPORT wxExtHelpController : public wxHelpControllerBase
+class WXDLLIMPEXP_ADV wxExtHelpController : public wxHelpControllerBase
 {      
 DECLARE_CLASS(wxExtHelpController)
    public:

@@ -36,7 +36,7 @@
 // wxTipProvider evidently needs some internal state which is the tip "index"
 // and which should be saved/restored by the program to not always show one and
 // the same tip (of course, you may use random starting position as well...)
-class WXDLLEXPORT wxTipProvider
+class WXDLLIMPEXP_ADV wxTipProvider
 {
 public:
     wxTipProvider(size_t currentTip) { m_currentTip = currentTip; }
@@ -65,8 +65,8 @@ protected:
 // specified text file as the source of tips (each line is a tip).
 //
 // NB: the caller is responsible for deleting the pointer!
-WXDLLEXPORT wxTipProvider *wxCreateFileTipProvider(const wxString& filename,
-                                                   size_t currentTip);
+WXDLLIMPEXP_ADV wxTipProvider *wxCreateFileTipProvider(const wxString& filename,
+                                                       size_t currentTip);
 
 // ----------------------------------------------------------------------------
 // wxTipDialog
@@ -79,9 +79,9 @@ WXDLLEXPORT wxTipProvider *wxCreateFileTipProvider(const wxString& filename,
 // not, the dialog on startup depending on its value, not this class).
 //
 // The function returns TRUE if this checkbox is checked, FALSE otherwise.
-WXDLLEXPORT bool wxShowTip(wxWindow *parent,
-                           wxTipProvider *tipProvider,
-                           bool showAtStartup = TRUE);
+WXDLLIMPEXP_ADV bool wxShowTip(wxWindow *parent,
+                               wxTipProvider *tipProvider,
+                               bool showAtStartup = TRUE);
 
 #endif // wxUSE_STARTUP_TIPS
 

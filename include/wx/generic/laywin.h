@@ -24,8 +24,8 @@
 #endif // wxUSE_SASH
 
 BEGIN_DECLARE_EVENT_TYPES()
-    DECLARE_EVENT_TYPE(wxEVT_QUERY_LAYOUT_INFO, 1500)
-    DECLARE_EVENT_TYPE(wxEVT_CALCULATE_LAYOUT, 1501)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_QUERY_LAYOUT_INFO, 1500)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_CALCULATE_LAYOUT, 1501)
 END_DECLARE_EVENT_TYPES()
 
 enum wxLayoutOrientation
@@ -59,7 +59,7 @@ enum wxLayoutAlignment
  * orientation and size.
  */
 
-class WXDLLEXPORT wxQueryLayoutInfoEvent: public wxEvent
+class WXDLLIMPEXP_ADV wxQueryLayoutInfoEvent: public wxEvent
 {
 public:
     wxQueryLayoutInfoEvent(wxWindowID id = 0)
@@ -111,7 +111,7 @@ typedef void (wxEvtHandler::*wxQueryLayoutInfoEventFunction)(wxQueryLayoutInfoEv
  * This event is used to take a bite out of the available client area.
  */
 
-class WXDLLEXPORT wxCalculateLayoutEvent: public wxEvent
+class WXDLLIMPEXP_ADV wxCalculateLayoutEvent: public wxEvent
 {
 public:
     wxCalculateLayoutEvent(wxWindowID id = 0)
@@ -149,7 +149,7 @@ typedef void (wxEvtHandler::*wxCalculateLayoutEventFunction)(wxCalculateLayoutEv
 // This is window that can remember alignment/orientation, does its own layout,
 // and can provide sashes too. Useful for implementing docked windows with sashes in
 // an IDE-style interface.
-class WXDLLEXPORT wxSashLayoutWindow: public wxSashWindow
+class WXDLLIMPEXP_ADV wxSashLayoutWindow: public wxSashWindow
 {
 public:
     wxSashLayoutWindow()
@@ -202,7 +202,7 @@ class WXDLLEXPORT wxMDIParentFrame;
 class WXDLLEXPORT wxFrame;
 
 // This class implements the layout algorithm
-class WXDLLEXPORT wxLayoutAlgorithm: public wxObject
+class WXDLLIMPEXP_ADV wxLayoutAlgorithm: public wxObject
 {
 public:
     wxLayoutAlgorithm() {}

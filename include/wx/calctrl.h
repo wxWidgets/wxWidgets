@@ -83,7 +83,7 @@ enum wxCalendarDateBorder
 // wxCalendarDateAttr: custom attributes for a calendar date
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxCalendarDateAttr
+class WXDLLIMPEXP_ADV wxCalendarDateAttr
 {
 #if !defined(__VISAGECPP__)
 protected:
@@ -159,9 +159,9 @@ private:
 // wxCalendarCtrl events
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxCalendarCtrl;
+class WXDLLIMPEXP_ADV wxCalendarCtrl;
 
-class WXDLLEXPORT wxCalendarEvent : public wxCommandEvent
+class WXDLLIMPEXP_ADV wxCalendarEvent : public wxCommandEvent
 {
 friend class wxCalendarCtrl;
 public:

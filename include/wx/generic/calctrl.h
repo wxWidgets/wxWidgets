@@ -29,7 +29,7 @@ class WXDLLEXPORT wxSpinCtrl;
 // wxCalendarCtrl: a control allowing the user to pick a date interactively
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxCalendarCtrl : public wxControl
+class WXDLLIMPEXP_ADV wxCalendarCtrl : public wxControl
 {
 friend class wxMonthComboBox;
 friend class wxYearSpinCtrl;
