@@ -1144,14 +1144,6 @@ dnl Path separator; ':' for unix, ';' for OS/2
 case "${host}" in
   *-pc-os2_emx | *-pc-os2-emx )
     PATH_IFS=';'
-    dnl Handle OMF support
-    if test "$wxUSE_OMF" = "yes"; then
-      AR=emxomfar
-      RANLIB=:
-      LDFLAGS="-Zomf $LDFLAGS"
-      CFLAGS="-Zomf $CFLAGS"
-      CXXFLAGS="-Zomf $CXXFLAGS"
-    fi
   ;;
   *)
     PATH_IFS=':'
