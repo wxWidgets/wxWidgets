@@ -125,6 +125,10 @@ WXHWND wxToolTip::GetToolTipCtrl()
                                 NULL, (HMENU)NULL,
                                 wxGetInstance(),
                                 NULL);
+       if ( hwndTT )
+        SetWindowPos(hwndTT, HWND_TOPMOST,0, 0, 0, 0,
+             SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+
     }
 
     return (WXHWND)hwndTT;
