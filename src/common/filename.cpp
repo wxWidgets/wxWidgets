@@ -1012,7 +1012,7 @@ void wxFileName::SplitPath(const wxString& fullpathWithVolume,
 
     // under VMS the end of the path is ']', not the path separator used to
     // separate the components
-    wxString sepPath = format == wxPATH_VMS ? _T(']')
+    wxString sepPath = format == wxPATH_VMS ? wxString(_T(']'))
                                             : GetPathSeparators(format);
 
     // special Windows UNC paths hack: transform \\share\path into share:path
