@@ -16,6 +16,8 @@
     #pragma interface "univstatusbr.h"
 #endif
 
+#include "wx/univ/inpcons.h"
+
 // ----------------------------------------------------------------------------
 // wxStatusBar: a window near the bottom of the frame used for status info
 // ----------------------------------------------------------------------------

@@ -30,6 +30,8 @@
 #if wxUSE_STATUSBAR
 
 #ifndef WX_PRECOMP
+    #include "wx/settings.h"
+    #include "wx/dcclient.h"
 #endif
 
 #include "wx/statusbr.h"
@@ -83,9 +85,6 @@ bool wxStatusBarUniv::Create(wxWindow *parent,
 
 wxRect wxStatusBarUniv::GetTotalFieldRect(wxCoord *borderBetweenFields)
 {
-    // determine the space we have for the fields
-    wxSize sizeBorders = m_renderer->GetStatusBarBorders(borderBetweenFields);
-
     wxRect rect = GetClientRect();
 
     // no, don't do this - the borders are meant to be inside this rect
