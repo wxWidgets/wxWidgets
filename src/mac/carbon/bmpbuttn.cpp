@@ -52,14 +52,18 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
 
 	Rect bounds ;
 	Str255 title ;
-        m_bmpNormal = bitmap;
-	wxBitmapRefData * bmap = (wxBitmapRefData*) ( m_bmpNormal.GetRefData()) ;
+    m_bmpNormal = bitmap;
+	wxBitmapRefData * bmap = NULL ;
+	
+	if ( m_bmpNormal.Ok() )
+		bmap = (wxBitmapRefData*) ( m_bmpNormal.GetRefData()) ;
 	
 	MacPreControlCreate( parent , id ,  "" , pos , wxSize( width , height ) ,style, validator , name , &bounds , title ) ;
 
 	m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , 
 		kControlBehaviorOffsetContents + 
-		    ( bmap->m_bitmapType == kMacBitmapTypeIcon ? kControlContentCIconHandle : kControlContentPictHandle ) , 0, 
+		    ( bmap && bmap->m_bitmapType == kMacBitmapTypeIcon ? 
+		    kControlContentCIconHandle : kControlContentPictHandle ) , 0, 
 	  	(( style & wxBU_AUTODRAW ) ? kControlBevelButtonSmallBevelProc : kControlBevelButtonNormalBevelProc ), (long) this ) ;
 	wxASSERT_MSG( (ControlHandle) m_macControl != NULL , "No valid mac control" ) ;
 	
