@@ -25,18 +25,31 @@
 
 
 wxInfoFrame::wxInfoFrame(wxWindow *parent, const wxString& message)
-    : wxFrame(parent, -1, wxT(""), wxPoint(0, 0), wxSize(400, 80), wxTHICK_FRAME | wxSIMPLE_BORDER | wxFRAME_TOOL_WINDOW)
+           : wxFrame(parent, -1, wxT(""),
+                     wxDefaultPosition, wxDefaultSize,
+                     wxSIMPLE_BORDER | wxFRAME_TOOL_WINDOW)
 {
-    wxPanel *p = new wxPanel( this );
-    wxStaticText *s = new wxStaticText( p, -1, message, wxPoint(20, 20), wxSize(360, 40), wxALIGN_CENTER );
+    wxPanel *panel = new wxPanel( this );
+    wxStaticText *text = new wxStaticText(panel, -1, message);
+
+    panel->SetCursor(*wxHOURGLASS_CURSOR);
+    text->SetCursor(*wxHOURGLASS_CURSOR);
+
+    // make the frame of at least the standard size (400*80) but big enough
+    // for the text we show
+    wxSize sizeText = text->GetBestSize();
+    SetClientSize(wxMax(sizeText.x, 340) + 60, wxMax(sizeText.y, 40) + 40);
+
+    // need to size the panel correctly first so that text->Centre() works
+    panel->SetSize(GetClientSize());
+
+    text->Centre(wxBOTH);
     Centre(wxBOTH);
-    p->SetCursor(*wxHOURGLASS_CURSOR);
-    s->SetCursor(*wxHOURGLASS_CURSOR);
 }
 
-wxBusyInfo::wxBusyInfo(const wxString& message) : wxObject()
+wxBusyInfo::wxBusyInfo(const wxString& message, wxWindow *parent)
 {
-    m_InfoFrame = new wxInfoFrame( (wxWindow*) NULL, message);
+    m_InfoFrame = new wxInfoFrame( parent, message);
     m_InfoFrame->Show(TRUE);
     wxYield();
     m_InfoFrame->Refresh();

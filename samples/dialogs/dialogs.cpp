@@ -641,7 +641,9 @@ void MyFrame::ShowProgress( wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::ShowBusyInfo(wxCommandEvent& WXUNUSED(event))
 {
-    wxBusyInfo info("Sleep^H^H^H^H^HWorkiing, please wait...\n... a bit more");
+    wxWindowDisabler disableAll;
+
+    wxBusyInfo info("Sleep^H^H^H^H^HWorkiing, please wait...", this);
 
     for ( int i = 0; i < 30; i++ )
     {
