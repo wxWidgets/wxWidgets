@@ -1639,29 +1639,6 @@ wxPoint wxWindowOS2::GetClientAreaOrigin() const
     return wxPoint(0, 0);
 } // end of wxWindowOS2::GetClientAreaOrigin
 
-void wxWindowOS2::AdjustForParentClientOrigin(
-  int&                              rX
-, int&                              rY
-, int                               nSizeFlags
-)
-{
-    //
-    // Don't do it for the dialogs/frames - they float independently of their
-    // parent
-    //
-    if (!IsTopLevel())
-    {
-        wxWindow*                   pParent = GetParent();
-
-        if (!(nSizeFlags & wxSIZE_NO_ADJUSTMENTS) && pParent)
-        {
-            wxPoint                 vPoint(pParent->GetClientAreaOrigin());
-            rX += vPoint.x;
-            rY += vPoint.y;
-        }
-    }
-} // end of wxWindowOS2::AdjustForParentClientOrigin
-
 // ---------------------------------------------------------------------------
 // text metrics
 // ---------------------------------------------------------------------------

@@ -975,6 +975,10 @@ protected:
 
     virtual void DoSetClientData( void *data );
     virtual void *DoGetClientData() const;
+    
+    // Makes an adjustment to the window position (for example, a frame that has
+    // a toolbar that it manages itself).
+    virtual void AdjustForParentClientOrigin(int& x, int& y, int sizeFlags);
 
     // what kind of data do we have?
     wxClientDataType m_clientDataType;

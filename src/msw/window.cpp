@@ -1554,24 +1554,6 @@ wxPoint wxWindowMSW::GetClientAreaOrigin() const
     return wxPoint(0, 0);
 }
 
-// Makes an adjustment to the window position (for example, a frame that has
-// a toolbar that it manages itself).
-void wxWindowMSW::AdjustForParentClientOrigin(int& x, int& y, int sizeFlags)
-{
-    // don't do it for the dialogs/frames - they float independently of their
-    // parent
-    if ( !IsTopLevel() )
-    {
-        wxWindow *parent = GetParent();
-        if ( !(sizeFlags & wxSIZE_NO_ADJUSTMENTS) && parent )
-        {
-            wxPoint pt(parent->GetClientAreaOrigin());
-            x += pt.x;
-            y += pt.y;
-        }
-    }
-}
-
 // ---------------------------------------------------------------------------
 // text metrics
 // ---------------------------------------------------------------------------

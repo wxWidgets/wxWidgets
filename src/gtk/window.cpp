@@ -2690,6 +2690,12 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
     if (m_resizing) return; /* I don't like recursions */
     m_resizing = TRUE;
 
+    if (x == -1) 
+        x = m_x;
+    if (y == -1)
+        y = m_y;
+    AdjustForParentClientOrigin(x, y, sizeFlags);
+
     if (m_parent->m_wxwindow == NULL) /* i.e. wxNotebook */
     {
         /* don't set the size for children of wxNotebook, just take the values. */

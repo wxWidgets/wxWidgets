@@ -215,13 +215,6 @@ public:
     // smaller
     virtual wxPoint GetClientAreaOrigin(void) const;
 
-    // Makes an adjustment to the window position (for example, a frame that has
-    // a toolbar that it manages itself).
-    virtual void AdjustForParentClientOrigin( int& rX
-                                             ,int& rY
-                                             ,int  nSizeFlags
-                                            );
-
     // Windows subclassing
     void SubclassWin(WXHWND hWnd);
     void UnsubclassWin(void);

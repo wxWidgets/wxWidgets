@@ -180,6 +180,8 @@ static ibool wxWindowMouseHandler(window_t *wnd, event_t *e)
     wxWindowMGL *win = (wxWindowMGL*)MGL_wmGetWindowUserData(wnd);
     wxPoint where = win->ScreenToClient(wxPoint(e->where_x, e->where_y));
     
+    if ( !win->IsEnabled() ) return FALSE;
+    
     wxEventType type = wxEVT_NULL;
     wxMouseEvent event;
     event.SetEventObject(win);
@@ -387,6 +389,9 @@ static ibool wxWindowKeybHandler(window_t *wnd, event_t *e)
 {
     wxEventType type = wxEVT_NULL;
     wxWindowMGL *win = (wxWindowMGL*)MGL_wmGetWindowUserData(wnd);
+
+    if ( !win->IsEnabled() ) return FALSE;
+
     wxPoint where = win->ScreenToClient(wxPoint(e->where_x, e->where_y));
     
     wxKeyEvent event;
@@ -847,9 +852,7 @@ void wxWindowMGL::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     if ( y == -1 && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE) )
         y = currentY;
 
-#if 0 // FIXME_MGL -- what's this good for?
     AdjustForParentClientOrigin(x, y, sizeFlags);
-#endif
 
     wxSize size(-1, -1);
     if ( width == -1 )
