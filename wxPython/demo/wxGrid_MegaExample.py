@@ -96,7 +96,7 @@ class MegaTable(wxPyGridTableBase):
                     grid.SetColSize(col, renderer.colSize)
                 if renderer.rowSize:
                     grid.SetDefaultRowSize(renderer.rowSize)
-                attr.SetReadOnly(true)
+                attr.SetReadOnly(True)
                 attr.SetRenderer(renderer)
             grid.SetColAttr(col, attr)
             col += 1

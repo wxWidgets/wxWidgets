@@ -20,6 +20,9 @@ on the command line.
 import wx                  # This module uses the new wx namespace
 print "wx.VERSION_STRING = ", wx.VERSION_STRING
 
+assertMode = wx.PYAPP_ASSERT_DIALOG
+##assertMode = wx.PYAPP_ASSERT_EXCEPTION
+
 import sys, os
 
 #----------------------------------------------------------------------------
@@ -43,7 +46,7 @@ class RunDemoApp(wx.App):
         wx.InitAllImageHandlers()
         wx.Log_SetActiveTarget(wx.LogStderr())
 
-        #self.SetAssertMode(wx.PYAPP_ASSERT_DIALOG)
+        self.SetAssertMode(assertMode)
 
         frame = wx.Frame(None, -1, "RunDemo: " + self.name, pos=(50,50), size=(0,0),
                         style=wx.NO_FULL_REPAINT_ON_RESIZE|wx.DEFAULT_FRAME_STYLE)
@@ -71,8 +74,11 @@ class RunDemoApp(wx.App):
             # otherwise the demo made its own frame, so just put a
             # button in this one
             if hasattr(frame, 'otherWin'):
-                b = wx.Button(frame, -1, " Exit ")
-                frame.SetSize((200, 100))
+                p = wx.Panel(frame, -1)
+                b = wx.Button(p, -1, " Exit ", (10,10))
+                p.Fit()
+                frame.SetClientSize(p.GetSize())
+                #frame.SetSize((200, 100))
                 wx.EVT_BUTTON(frame, b.GetId(), self.OnButton)
             else:
                 # It was probably a dialog or something that is already

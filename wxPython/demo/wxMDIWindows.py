@@ -15,7 +15,7 @@ class TestPanel(wxPanel):
         EVT_BUTTON(self, b2.GetId(), self.ShowMDISashDemo)
 
         box = wxBoxSizer(wxVERTICAL)
-        box.Add(20, 30)
+        box.Add((20, 30))
         box.Add(b1, 0, wxALIGN_CENTER|wxALL, 15)
         box.Add(b2, 0, wxALIGN_CENTER|wxALL, 15)
         self.SetAutoLayout(True)

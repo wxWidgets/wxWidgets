@@ -5,19 +5,22 @@
 #
 # Author:       Robin Dunn
 #
-# Created:      8/8/98
+# Created:      8-Aug-1998
 # RCS-ID:       $Id$
 # Copyright:    (c) 1998 by Total Control Software
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------
 
 import __version__
-__version__ = __version__.wxVERSION_STRING
+__version__ = __version__.VERSION_STRING
 
 
-# Ensure the main extension module is loaded, in case the add-on modules
-# (such as utils,) are used standalone.
-import wxc
+# Load the package namespace with the core classes and such
+from wx.core import *
+
+# wx.core has a 'wx' symbol for internal use.  That's kinda silly for
+# this namespace so get rid of it.
+del wx
 
 #----------------------------------------------------------------------------
 

@@ -1,49 +1,7 @@
-#----------------------------------------------------------------------
-# Name:        wxPython.tools.img2png
-# Purpose:     Convert an image to PNG format
-#
-# Author:      Robin Dunn
-#
-# RCS-ID:      $Id$
-# Copyright:   (c) 2002 by Total Control Software
-# Licence:     wxWindows license
-#----------------------------------------------------------------------
+## This file imports items from the wx package into the wxPython package for
+## backwards compatibility.  Some names will also have a 'wx' added on if
+## that is how they used to be named in the old wxPython package.
 
-"""
-img2png.py  -- convert several image formats to PNG format
+import wx.tools.img2png
 
-Usage:
-
-    img2png.py [options] image_files...
-
-Options:
-
-    -o <dir>       The directory to place the .png file(s), defaults to
-                   the current directory.
-
-    -m <#rrggbb>   If the original image has a mask or transparency defined
-                   it will be used by default.  You can use this option to
-                   override the default or provide a new mask by specifying
-                   a colour in the image to mark as transparent.
-
-    -n <name>      A filename to write the .png data to.  Defaults to the
-                   basename of the image file + '.png'  This option overrides
-                   the -o option.
-"""
-
-
-import sys
-import img2img
-from wxPython import wx
-
-def main():
-    # some bitmap related things need to have a wxApp initialized...
-    if wx.wxGetApp() is None:
-        app = wx.wxPySimpleApp()
-    img2img.main(sys.argv[1:], wx.wxBITMAP_TYPE_PNG, ".png", __doc__)
-
-if __name__ == '__main__':
-    main()
-
-
-
+main = wx.tools.img2png.main

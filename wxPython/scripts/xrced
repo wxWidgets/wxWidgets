@@ -1,4 +1,4 @@
 #!/usr/bin/env python
 
-from wxPython.tools.XRCed.xrced import main
+from wx.tools.XRCed.xrced import main
 main()

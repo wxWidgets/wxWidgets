@@ -1,439 +1,681 @@
-/***********************************************************************
- * $Header$
- * swig_lib/python/python.cfg
+/*************************************************************** -*- c -*-
+ * python/precommon.swg
  *
- * Contains variable linking and pointer type-checking code.
+ * Rename all exported symbols from common.swg, to avoid symbol
+ * clashes if multiple interpreters are included
+ *
+ ************************************************************************/
+
+#define SWIG_TypeRegister    SWIG_Python_TypeRegister
+#define SWIG_TypeCheck       SWIG_Python_TypeCheck
+#define SWIG_TypeCast        SWIG_Python_TypeCast
+#define SWIG_TypeDynamicCast SWIG_Python_TypeDynamicCast
+#define SWIG_TypeName        SWIG_Python_TypeName
+#define SWIG_TypeQuery       SWIG_Python_TypeQuery
+#define SWIG_TypeClientData  SWIG_Python_TypeClientData
+
+/***********************************************************************
+ * common.swg
+ *
+ *     This file contains generic SWIG runtime support for pointer
+ *     type checking as well as a few commonly used macros to control
+ *     external linkage.
+ *
+ * Author : David Beazley (beazley@cs.uchicago.edu)
+ *
+ * Copyright (c) 1999-2000, The University of Chicago
+ * 
+ * This file may be freely redistributed without license or fee provided
+ * this copyright message remains intact.
  ************************************************************************/
 
 #include "Python.h"
-
 #include <string.h>
-#include <stdlib.h>
+
+#if defined(_WIN32) || defined(__WIN32__)
+#       if defined(_MSC_VER)
+#               if defined(STATIC_LINKED)
+#                       define SWIGEXPORT(a) a
+#                       define SWIGIMPORT(a) extern a
+#               else
+#                       define SWIGEXPORT(a) __declspec(dllexport) a
+#                       define SWIGIMPORT(a) extern a
+#               endif
+#       else
+#               if defined(__BORLANDC__)
+#                       define SWIGEXPORT(a) a _export
+#                       define SWIGIMPORT(a) a _export
+#               else
+#                       define SWIGEXPORT(a) a
+#                       define SWIGIMPORT(a) a
+#               endif
+#       endif
+#else
+#       define SWIGEXPORT(a) a
+#       define SWIGIMPORT(a) a
+#endif
+
+#ifdef SWIG_GLOBAL
+#define SWIGRUNTIME(a) SWIGEXPORT(a)
+#else
+#define SWIGRUNTIME(a) static a
+#endif
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/* Definitions for Windows/Unix exporting */
-#if defined(_WIN32) || defined(__WIN32__)
-#   if defined(_MSC_VER)
-#	define SWIGEXPORT(a) __declspec(dllexport) a
-#   else
-#	if defined(__BORLANDC__)
-#	    define SWIGEXPORT(a) a _export
-#	else
-#	    define SWIGEXPORT(a) a
-#	endif
-#   endif
+typedef void *(*swig_converter_func)(void *);
+typedef struct swig_type_info *(*swig_dycast_func)(void **);
+
+typedef struct swig_type_info {
+  const char             *name;                 
+  swig_converter_func     converter;
+  const char             *str;
+  void                   *clientdata;	
+  swig_dycast_func        dcast;
+  struct swig_type_info  *next;
+  struct swig_type_info  *prev;
+} swig_type_info;
+
+#ifdef SWIG_NOINCLUDE
+
+SWIGIMPORT(swig_type_info *) SWIG_TypeRegister(swig_type_info *);
+SWIGIMPORT(swig_type_info *) SWIG_TypeCheck(char *c, swig_type_info *);
+SWIGIMPORT(void *)           SWIG_TypeCast(swig_type_info *, void *);
+SWIGIMPORT(swig_type_info *) SWIG_TypeDynamicCast(swig_type_info *, void **);
+SWIGIMPORT(const char *)     SWIG_TypeName(const swig_type_info *);
+SWIGIMPORT(swig_type_info *) SWIG_TypeQuery(const char *);
+SWIGIMPORT(void)             SWIG_TypeClientData(swig_type_info *, void *);
+
 #else
-#   define SWIGEXPORT(a) a
+
+static swig_type_info *swig_type_list = 0;
+
+/* Register a type mapping with the type-checking */
+SWIGRUNTIME(swig_type_info *)
+SWIG_TypeRegister(swig_type_info *ti)
+{
+  swig_type_info *tc, *head, *ret, *next;
+  /* Check to see if this type has already been registered */
+  tc = swig_type_list;
+  while (tc) {
+    if (strcmp(tc->name, ti->name) == 0) {
+      /* Already exists in the table.  Just add additional types to the list */
+      if (tc->clientdata) ti->clientdata = tc->clientdata;	
+      head = tc;
+      next = tc->next;
+      goto l1;
+    }
+    tc = tc->prev;
+  }
+  head = ti;
+  next = 0;
+
+  /* Place in list */
+  ti->prev = swig_type_list;
+  swig_type_list = ti;
+
+  /* Build linked lists */
+ l1:
+  ret = head;
+  tc = ti + 1;
+  /* Patch up the rest of the links */
+  while (tc->name) {
+    head->next = tc;
+    tc->prev = head;
+    head = tc;
+    tc++;
+  }
+  if (next) next->prev = head;  /**/
+  head->next = next;
+  return ret;
+}
+
+/* Check the typename */
+SWIGRUNTIME(swig_type_info *) 
+SWIG_TypeCheck(char *c, swig_type_info *ty)
+{
+  swig_type_info *s;
+  if (!ty) return 0;        /* Void pointer */
+  s = ty->next;             /* First element always just a name */
+  do {
+    if (strcmp(s->name,c) == 0) {
+      if (s == ty->next) return s;
+      /* Move s to the top of the linked list */
+      s->prev->next = s->next;
+      if (s->next) {
+	s->next->prev = s->prev;
+      }
+      /* Insert s as second element in the list */
+      s->next = ty->next;
+      if (ty->next) ty->next->prev = s;
+      ty->next = s;
+      s->prev = ty;  /**/
+      return s;
+    }
+    s = s->next;
+  } while (s && (s != ty->next));
+  return 0;
+}
+
+/* Cast a pointer up an inheritance hierarchy */
+SWIGRUNTIME(void *) 
+SWIG_TypeCast(swig_type_info *ty, void *ptr) 
+{
+  if ((!ty) || (!ty->converter)) return ptr;
+  return (*ty->converter)(ptr);
+}
+
+/* Dynamic pointer casting. Down an inheritance hierarchy */
+SWIGRUNTIME(swig_type_info *) 
+SWIG_TypeDynamicCast(swig_type_info *ty, void **ptr) 
+{
+  swig_type_info *lastty = ty;
+  if (!ty || !ty->dcast) return ty;
+  while (ty && (ty->dcast)) {
+     ty = (*ty->dcast)(ptr);
+     if (ty) lastty = ty;
+  }
+  return lastty;
+}
+
+/* Return the name associated with this type */
+SWIGRUNTIME(const char *)
+SWIG_TypeName(const swig_type_info *ty) {
+  return ty->name;
+}
+
+/* Search for a swig_type_info structure */
+SWIGRUNTIME(swig_type_info *)
+SWIG_TypeQuery(const char *name) {
+  swig_type_info *ty = swig_type_list;
+  while (ty) {
+    if (ty->str && (strcmp(name,ty->str) == 0)) return ty;
+    if (ty->name && (strcmp(name,ty->name) == 0)) return ty;
+    ty = ty->prev;
+  }
+  return 0;
+}
+
+/* Set the clientdata field for a type */
+SWIGRUNTIME(void)
+SWIG_TypeClientData(swig_type_info *ti, void *clientdata) {
+  swig_type_info *tc, *equiv;
+  if (ti->clientdata == clientdata) return;
+  ti->clientdata = clientdata;
+  equiv = ti->next;
+  while (equiv) {
+    if (!equiv->converter) {
+      tc = swig_type_list;
+      while (tc) {
+	if ((strcmp(tc->name, equiv->name) == 0))
+	  SWIG_TypeClientData(tc,clientdata);
+	tc = tc->prev;
+      }
+    }
+    equiv = equiv->next;
+  }
+}
 #endif
 
-#ifdef SWIG_GLOBAL
-#define SWIGSTATICRUNTIME(a) SWIGEXPORT(a)
-#else
-#define SWIGSTATICRUNTIME(a) static a
+#ifdef __cplusplus
+}
+
+#endif
+/***********************************************************************
+ * python.swg
+ *
+ *     This file contains the runtime support for Python modules
+ *     and includes code for managing global variables and pointer
+ *     type checking.
+ *
+ * Author : David Beazley (beazley@cs.uchicago.edu)
+ ************************************************************************/
+
+
+#ifdef __cplusplus
+extern "C" {
 #endif
 
-typedef struct {
-  char  *name;
-  PyObject *(*get_attr)(void);
-  int (*set_attr)(PyObject *);
+#define SWIG_PY_INT     1
+#define SWIG_PY_FLOAT   2
+#define SWIG_PY_STRING  3
+#define SWIG_PY_POINTER 4
+#define SWIG_PY_BINARY  5
+
+/* Flags for pointer conversion */
+
+#define SWIG_POINTER_EXCEPTION     0x1
+#define SWIG_POINTER_DISOWN        0x2
+
+/* Exception handling in wrappers */
+#define SWIG_fail   goto fail
+
+/* Constant information structure */
+typedef struct swig_const_info {
+    int type;
+    char *name;
+    long lvalue;
+    double dvalue;
+    void   *pvalue;
+    swig_type_info **ptype;
+} swig_const_info;
+
+/* Common SWIG API */
+#define SWIG_ConvertPtr(obj, pp, type, flags) \
+  SWIG_Python_ConvertPtr(obj, pp, type, flags)
+#define SWIG_NewPointerObj(p, type, flags) \
+  SWIG_Python_NewPointerObj(p, type, flags)
+#define SWIG_MustGetPtr(p, type, argnum, flags) \
+  SWIG_Python_MustGetPtr(p, type, argnum, flags)
+
+/* Python-specific SWIG API */
+#define SWIG_newvarlink() \
+  SWIG_Python_newvarlink()
+#define SWIG_addvarlink(p, name, get_attr, set_attr) \
+  SWIG_Python_addvarlink(p, name, get_attr, set_attr)
+#define SWIG_ConvertPacked(obj, ptr, sz, ty, flags) \
+  SWIG_Python_ConvertPacked(obj, ptr, sz, ty, flags)
+#define SWIG_PackData(c, ptr, sz) \
+  SWIG_Python_PackData(c, ptr, sz)
+#define SWIG_UnpackData(c, ptr, sz) \
+  SWIG_Python_UnpackData(c, ptr, sz)
+#define SWIG_NewPackedObj(ptr, sz, type) \
+  SWIG_Python_NewPackedObj(ptr, sz, type)
+#define SWIG_InstallConstants(d, constants) \
+  SWIG_Python_InstallConstants(d, constants)
+
+#ifdef SWIG_NOINCLUDE
+
+SWIGEXPORT(int)               SWIG_Python_ConvertPtr(PyObject *, void **, swig_type_info *, int);
+SWIGEXPORT(PyObject *)        SWIG_Python_NewPointerObj(void *, swig_type_info *,int own);
+SWIGEXPORT(void *)	      SWIG_Python_MustGetPtr(PyObject *, swig_type_info *, int, int);
+
+SWIGEXPORT(PyObject *)        SWIG_Python_newvarlink(void);
+SWIGEXPORT(void)              SWIG_Python_addvarlink(PyObject *, char *, PyObject *(*)(void), int (*)(PyObject *));
+SWIGEXPORT(int)               SWIG_Python_ConvertPacked(PyObject *, void *, int sz, swig_type_info *, int);
+SWIGEXPORT(char *)            SWIG_Python_PackData(char *c, void *, int);
+SWIGEXPORT(char *)            SWIG_Python_UnpackData(char *c, void *, int);
+SWIGEXPORT(PyObject *)        SWIG_Python_NewPackedObj(void *, int sz, swig_type_info *);
+SWIGEXPORT(void)              SWIG_Python_InstallConstants(PyObject *d, swig_const_info constants[]);
+#else
+
+/* -----------------------------------------------------------------------------
+ * global variable support code.
+ * ----------------------------------------------------------------------------- */
+
+typedef struct swig_globalvar {   
+  char       *name;                  /* Name of global variable */
+  PyObject *(*get_attr)(void);       /* Return the current value */
+  int       (*set_attr)(PyObject *); /* Set the value */
+  struct swig_globalvar *next;
 } swig_globalvar;
 
 typedef struct swig_varlinkobject {
   PyObject_HEAD
-  swig_globalvar **vars;
-  int      nvars;
-  int      maxvars;
+  swig_globalvar *vars;
 } swig_varlinkobject;
 
-/* ----------------------------------------------------------------------
-   swig_varlink_repr()
-
-   Function for python repr method
-   ---------------------------------------------------------------------- */
-
 static PyObject *
-swig_varlink_repr(swig_varlinkobject *v)
-{
+swig_varlink_repr(swig_varlinkobject *v) {
   v = v;
   return PyString_FromString("<Global variables>");
 }
 
-/* ---------------------------------------------------------------------
-   swig_varlink_print()
-
-   Print out all of the global variable names
-   --------------------------------------------------------------------- */
-
 static int
-swig_varlink_print(swig_varlinkobject *v, FILE *fp, int flags)
-{
-
-  int i = 0;
+swig_varlink_print(swig_varlinkobject *v, FILE *fp, int flags) {
+  swig_globalvar  *var;
   flags = flags;
   fprintf(fp,"Global variables { ");
-  while (v->vars[i]) {
-    fprintf(fp,"%s", v->vars[i]->name);
-    i++;
-    if (v->vars[i]) fprintf(fp,", ");
+  for (var = v->vars; var; var=var->next) {
+    fprintf(fp,"%s", var->name);
+    if (var->next) fprintf(fp,", ");
   }
   fprintf(fp," }\n");
   return 0;
 }
 
-/* --------------------------------------------------------------------
-   swig_varlink_getattr
-
-   This function gets the value of a variable and returns it as a
-   PyObject.   In our case, we'll be looking at the datatype and
-   converting into a number or string
-   -------------------------------------------------------------------- */
-
 static PyObject *
-swig_varlink_getattr(swig_varlinkobject *v, char *n)
-{
-  int i = 0;
-  char temp[128];
-
-  while (v->vars[i]) {
-    if (strcmp(v->vars[i]->name,n) == 0) {
-      return (*v->vars[i]->get_attr)();
+swig_varlink_getattr(swig_varlinkobject *v, char *n) {
+  swig_globalvar *var = v->vars;
+  while (var) {
+    if (strcmp(var->name,n) == 0) {
+      return (*var->get_attr)();
     }
-    i++;
+    var = var->next;
   }
-  sprintf(temp,"C global variable %s not found.", n);
-  PyErr_SetString(PyExc_NameError,temp);
+  PyErr_SetString(PyExc_NameError,"Unknown C global variable");
   return NULL;
 }
 
-/* -------------------------------------------------------------------
-   swig_varlink_setattr()
-
-   This function sets the value of a variable.
-   ------------------------------------------------------------------- */
-
 static int
-swig_varlink_setattr(swig_varlinkobject *v, char *n, PyObject *p)
-{
-  char temp[128];
-  int i = 0;
-  while (v->vars[i]) {
-    if (strcmp(v->vars[i]->name,n) == 0) {
-      return (*v->vars[i]->set_attr)(p);
+swig_varlink_setattr(swig_varlinkobject *v, char *n, PyObject *p) {
+  swig_globalvar *var = v->vars;
+  while (var) {
+    if (strcmp(var->name,n) == 0) {
+      return (*var->set_attr)(p);
     }
-    i++;
+    var = var->next;
   }
-  sprintf(temp,"C global variable %s not found.", n);
-  PyErr_SetString(PyExc_NameError,temp);
+  PyErr_SetString(PyExc_NameError,"Unknown C global variable");
   return 1;
 }
 
 statichere PyTypeObject varlinktype = {
-/*  PyObject_HEAD_INIT(&PyType_Type)  Note : This doesn't work on some machines */
-  PyObject_HEAD_INIT(0)
+  PyObject_HEAD_INIT(0)              
   0,
-  "varlink",                          /* Type name    */
+  (char *)"swigvarlink",              /* Type name    */
   sizeof(swig_varlinkobject),         /* Basic size   */
   0,                                  /* Itemsize     */
-  0,                                  /* Deallocator  */
+  0,                                  /* Deallocator  */ 
   (printfunc) swig_varlink_print,     /* Print        */
   (getattrfunc) swig_varlink_getattr, /* get attr     */
   (setattrfunc) swig_varlink_setattr, /* Set attr     */
   0,                                  /* tp_compare   */
-  (reprfunc) swig_varlink_repr,       /* tp_repr      */
+  (reprfunc) swig_varlink_repr,       /* tp_repr      */    
   0,                                  /* tp_as_number */
   0,                                  /* tp_as_mapping*/
   0,                                  /* tp_hash      */
 };
 
 /* Create a variable linking object for use later */
-
-SWIGSTATICRUNTIME(PyObject *)
-SWIG_newvarlink(void)
-{
+SWIGRUNTIME(PyObject *)
+SWIG_Python_newvarlink(void) {
   swig_varlinkobject *result = 0;
   result = PyMem_NEW(swig_varlinkobject,1);
   varlinktype.ob_type = &PyType_Type;    /* Patch varlinktype into a PyType */
   result->ob_type = &varlinktype;
-  /*  _Py_NewReference(result);  Does not seem to be necessary */
-  result->nvars = 0;
-  result->maxvars = 64;
-  result->vars = (swig_globalvar **) malloc(64*sizeof(swig_globalvar *));
-  result->vars[0] = 0;
+  result->vars = 0;
   result->ob_refcnt = 0;
   Py_XINCREF((PyObject *) result);
   return ((PyObject*) result);
 }
 
-SWIGSTATICRUNTIME(void)
-SWIG_addvarlink(PyObject *p, char *name,
-	   PyObject *(*get_attr)(void), int (*set_attr)(PyObject *p))
-{
+SWIGRUNTIME(void)
+SWIG_Python_addvarlink(PyObject *p, char *name,
+	   PyObject *(*get_attr)(void), int (*set_attr)(PyObject *p)) {
   swig_varlinkobject *v;
+  swig_globalvar *gv;
   v= (swig_varlinkobject *) p;
-
-  if (v->nvars >= v->maxvars -1) {
-    v->maxvars = 2*v->maxvars;
-    v->vars = (swig_globalvar **) realloc(v->vars,v->maxvars*sizeof(swig_globalvar *));
-    if (v->vars == NULL) {
-      fprintf(stderr,"SWIG : Fatal error in initializing Python module.\n");
-      exit(1);
-    }
-  }
-  v->vars[v->nvars] = (swig_globalvar *) malloc(sizeof(swig_globalvar));
-  v->vars[v->nvars]->name = (char *) malloc(strlen(name)+1);
-  strcpy(v->vars[v->nvars]->name,name);
-  v->vars[v->nvars]->get_attr = get_attr;
-  v->vars[v->nvars]->set_attr = set_attr;
-  v->nvars++;
-  v->vars[v->nvars] = 0;
+  gv = (swig_globalvar *) malloc(sizeof(swig_globalvar));
+  gv->name = (char *) malloc(strlen(name)+1);
+  strcpy(gv->name,name);
+  gv->get_attr = get_attr;
+  gv->set_attr = set_attr;
+  gv->next = v->vars;
+  v->vars = gv;
 }
 
-/* -----------------------------------------------------------------------------
- * Pointer type-checking
- * ----------------------------------------------------------------------------- */
-
-/* SWIG pointer structure */
-typedef struct SwigPtrType {
-  char               *name;               /* Datatype name                  */
-  int                 len;                /* Length (used for optimization) */
-  void               *(*cast)(void *);    /* Pointer casting function       */
-  struct SwigPtrType *next;               /* Linked list pointer            */
-} SwigPtrType;
-
-/* Pointer cache structure */
-typedef struct {
-  int                 stat;               /* Status (valid) bit             */
-  SwigPtrType        *tp;                 /* Pointer to type structure      */
-  char                name[256];          /* Given datatype name            */
-  char                mapped[256];        /* Equivalent name                */
-} SwigCacheType;
-
-static int SwigPtrMax  = 64;           /* Max entries that can be currently held */
-static int SwigPtrN    = 0;            /* Current number of entries              */
-static int SwigPtrSort = 0;            /* Status flag indicating sort            */
-static int SwigStart[256];             /* Starting positions of types            */
-static SwigPtrType *SwigPtrTable = 0;  /* Table containing pointer equivalences  */
-
-/* Cached values */
-#define SWIG_CACHESIZE  8
-#define SWIG_CACHEMASK  0x7
-static SwigCacheType SwigCache[SWIG_CACHESIZE];
-static int SwigCacheIndex = 0;
-static int SwigLastCache = 0;
-
-/* Sort comparison function */
-static int swigsort(const void *data1, const void *data2) {
-	SwigPtrType *d1 = (SwigPtrType *) data1;
-	SwigPtrType *d2 = (SwigPtrType *) data2;
-	return strcmp(d1->name,d2->name);
-}
-
-/* Register a new datatype with the type-checker */
-SWIGSTATICRUNTIME(void)
-SWIG_RegisterMapping(char *origtype, char *newtype, void *(*cast)(void *)) {
-  int i;
-  SwigPtrType *t = 0,*t1;
-
-  /* Allocate the pointer table if necessary */
-  if (!SwigPtrTable) {
-    SwigPtrTable = (SwigPtrType *) malloc(SwigPtrMax*sizeof(SwigPtrType));
-  }
-
-  /* Grow the table */
-  if (SwigPtrN >= SwigPtrMax) {
-    SwigPtrMax = 2*SwigPtrMax;
-    SwigPtrTable = (SwigPtrType *) realloc((char *) SwigPtrTable,SwigPtrMax*sizeof(SwigPtrType));
-  }
-  for (i = 0; i < SwigPtrN; i++) {
-    if (strcmp(SwigPtrTable[i].name,origtype) == 0) {
-      t = &SwigPtrTable[i];
-      break;
-    }
-  }
-  if (!t) {
-    t = &SwigPtrTable[SwigPtrN++];
-    t->name = origtype;
-    t->len = strlen(t->name);
-    t->cast = 0;
-    t->next = 0;
-  }
-
-  /* Check for existing entries */
-  while (t->next) {
-    if ((strcmp(t->name,newtype) == 0)) {
-      if (cast) t->cast = cast;
-      return;
-    }
-    t = t->next;
-  }
-  t1 = (SwigPtrType *) malloc(sizeof(SwigPtrType));
-  t1->name = newtype;
-  t1->len = strlen(t1->name);
-  t1->cast = cast;
-  t1->next = 0;
-  t->next = t1;
-  SwigPtrSort = 0;
-}
-
-/* Make a pointer value string */
-SWIGSTATICRUNTIME(void)
-SWIG_MakePtr(char *c, const void *ptr, char *type) {
+/* Pack binary data into a string */
+SWIGRUNTIME(char *)
+SWIG_Python_PackData(char *c, void *ptr, int sz) {
   static char hex[17] = "0123456789abcdef";
-  unsigned long p, s;
-  char result[24], *r;
-  r = result;
-  p = (unsigned long) ptr;
-  if (p > 0) {
-    while (p > 0) {
-      s = p & 0xf;
-      *(r++) = hex[s];
-      p = p >> 4;
-    }
-    *r = '_';
-    while (r >= result)
-      *(c++) = *(r--);
-    strcpy (c, type);
-  } else {
-    strcpy (c, "NULL");
-  }
-}
-
-/* Function for getting a pointer value */
-SWIGSTATICRUNTIME(char *)
-SWIG_GetPtr(char *c, void **ptr, char *t)
-{
-  unsigned long p;
-  char temp_type[256], *name;
-  int  i, len, start, end;
-  SwigPtrType *sp,*tp;
-  SwigCacheType *cache;
-  register int d;
-
-  p = 0;
-  /* Pointer values must start with leading underscore */
-  if (*c != '_') {
-    *ptr = (void *) 0;
-    if (strcmp(c,"NULL") == 0) return (char *) 0;
-    else return c;
-  }
-  c++;
-  /* Extract hex value from pointer */
-  while ((d = *c) != 0) {
-    if ((d >= '0') && (d <= '9'))
-      p = (p << 4) + (d - '0');
-    else if ((d >= 'a') && (d <= 'f'))
-      p = (p << 4) + (d - ('a'-10));
-    else
-      break;
-    c++;
-  }
-  *ptr = (void *) p;
-  if ((!t) || (strcmp(t,c)==0)) return (char *) 0;
-
-  if (!SwigPtrSort) {
-    qsort((void *) SwigPtrTable, SwigPtrN, sizeof(SwigPtrType), swigsort);
-    for (i = 0; i < 256; i++) SwigStart[i] = SwigPtrN;
-    for (i = SwigPtrN-1; i >= 0; i--) SwigStart[(int) (SwigPtrTable[i].name[1])] = i;
-    for (i = 255; i >= 1; i--) {
-      if (SwigStart[i-1] > SwigStart[i])
-	SwigStart[i-1] = SwigStart[i];
-    }
-    SwigPtrSort = 1;
-    for (i = 0; i < SWIG_CACHESIZE; i++) SwigCache[i].stat = 0;
-  }
-  /* First check cache for matches.  Uses last cache value as starting point */
-  cache = &SwigCache[SwigLastCache];
-  for (i = 0; i < SWIG_CACHESIZE; i++) {
-    if (cache->stat && (strcmp(t,cache->name) == 0) && (strcmp(c,cache->mapped) == 0)) {
-      cache->stat++;
-      if (cache->tp->cast) *ptr = (*(cache->tp->cast))(*ptr);
-      return (char *) 0;
-    }
-    SwigLastCache = (SwigLastCache+1) & SWIG_CACHEMASK;
-    if (!SwigLastCache) cache = SwigCache;
-    else cache++;
-  }
-  /* Type mismatch.  Look through type-mapping table */
-  start = SwigStart[(int) t[1]];
-  end = SwigStart[(int) t[1]+1];
-  sp = &SwigPtrTable[start];
-
-  /* Try to find a match */
-  while (start < end) {               /* was "<="     --robin */
-    if (strncmp(t,sp->name,sp->len) == 0) {
-      name = sp->name;
-      len = sp->len;
-      tp = sp->next;
-      /* Try to find entry for our given datatype */
-      while(tp) {
-	if (tp->len >= 255) {
-	  return c;
-	}
-	strcpy(temp_type,tp->name);
-	strncat(temp_type,t+len,255-tp->len);
-	if (strcmp(c,temp_type) == 0) {
-	  strcpy(SwigCache[SwigCacheIndex].mapped,c);
-	  strcpy(SwigCache[SwigCacheIndex].name,t);
-	  SwigCache[SwigCacheIndex].stat = 1;
-	  SwigCache[SwigCacheIndex].tp = tp;
-	  SwigCacheIndex = SwigCacheIndex & SWIG_CACHEMASK;
-	  /* Get pointer value */
-	  *ptr = (void *) p;
-	  if (tp->cast) *ptr = (*(tp->cast))(*ptr);
-	  return (char *) 0;
-	}
-	tp = tp->next;
-      }
-    }
-    sp++;
-    start++;
+  int i;
+  unsigned char *u = (unsigned char *) ptr;
+  register unsigned char uu;
+  for (i = 0; i < sz; i++,u++) {
+    uu = *u;
+    *(c++) = hex[(uu & 0xf0) >> 4];
+    *(c++) = hex[uu & 0xf];
   }
   return c;
 }
 
-/* New object-based GetPointer function. This uses the Python abstract
- * object interface to automatically dereference the 'this' attribute
- * of shadow objects. */
-
-SWIGSTATICRUNTIME(char *)
-SWIG_GetPtrObj(PyObject *obj, void **ptr, char *type) {
-  PyObject *sobj = obj;
-  char     *str;
-
-  if (!PyString_Check(obj)) {
-      if (!PyInstance_Check(obj) || !(sobj = PyObject_GetAttrString(obj,"this")))
-          return "";
-      // PyObject_GetAttrString increases sobj refcout !
-      Py_DECREF(sobj);
+/* Unpack binary data from a string */
+SWIGRUNTIME(char *)
+SWIG_Python_UnpackData(char *c, void *ptr, int sz) {
+  register unsigned char uu = 0;
+  register int d;
+  unsigned char *u = (unsigned char *) ptr;
+  int i;
+  for (i = 0; i < sz; i++, u++) {
+    d = *(c++);
+    if ((d >= '0') && (d <= '9'))
+      uu = ((d - '0') << 4);
+    else if ((d >= 'a') && (d <= 'f'))
+      uu = ((d - ('a'-10)) << 4);
+    d = *(c++);
+    if ((d >= '0') && (d <= '9'))
+      uu |= (d - '0');
+    else if ((d >= 'a') && (d <= 'f'))
+      uu |= (d - ('a'-10));
+    *u = uu;
   }
-  str = PyString_AsString(sobj);
-  if (str == NULL)
-      return "";
-  return SWIG_GetPtr(str,ptr,type);
+  return c;
 }
 
+/* Convert a pointer value */
+SWIGRUNTIME(int)
+SWIG_Python_ConvertPtr(PyObject *obj, void **ptr, swig_type_info *ty, int flags) {
+  swig_type_info *tc;
+  char  *c = 0;
+  static PyObject *SWIG_this = 0;
+  int    newref = 0;
+  PyObject  *pyobj = 0;
+
+  if (!obj) return 0;
+  if (obj == Py_None) {
+    *ptr = 0;
+    return 0;
+  }
+#ifdef SWIG_COBJECT_TYPES
+  if (!(PyCObject_Check(obj))) {
+    if (!SWIG_this)
+      SWIG_this = PyString_FromString("this");
+    pyobj = obj;
+    obj = PyObject_GetAttr(obj,SWIG_this);
+    newref = 1;
+    if (!obj) goto type_error;
+    if (!PyCObject_Check(obj)) {
+      Py_DECREF(obj);
+      goto type_error;
+    }
+  }  
+  *ptr = PyCObject_AsVoidPtr(obj);
+  c = (char *) PyCObject_GetDesc(obj);
+  if (newref) Py_DECREF(obj);
+  goto cobject;
+#else
+  if (!(PyString_Check(obj))) {
+    if (!SWIG_this)
+      SWIG_this = PyString_FromString("this");
+    pyobj = obj;
+    obj = PyObject_GetAttr(obj,SWIG_this);
+    newref = 1;
+    if (!obj) goto type_error;
+    if (!PyString_Check(obj)) {
+      Py_DECREF(obj);
+      goto type_error;
+    }
+  } 
+  c = PyString_AsString(obj);
+  /* Pointer values must start with leading underscore */
+  if (*c != '_') {
+    *ptr = (void *) 0;
+    if (strcmp(c,"NULL") == 0) {
+      if (newref) { Py_DECREF(obj); }
+      return 0;
+    } else {
+      if (newref) { Py_DECREF(obj); }
+      goto type_error;
+    }
+  }
+  c++;
+  c = SWIG_UnpackData(c,ptr,sizeof(void *));
+  if (newref) { Py_DECREF(obj); }
+#endif
+
+#ifdef SWIG_COBJECT_TYPES
+cobject:
+#endif
+
+  if (ty) {
+    tc = SWIG_TypeCheck(c,ty);
+    if (!tc) goto type_error;
+    *ptr = SWIG_TypeCast(tc,(void*) *ptr);
+  }
+
+  if ((pyobj) && (flags & SWIG_POINTER_DISOWN)) {
+      PyObject *zero = PyInt_FromLong(0);
+      PyObject_SetAttrString(pyobj,(char*)"thisown",zero);
+      Py_DECREF(zero);
+  }
+  return 0;
+
+type_error:
+  if (flags & SWIG_POINTER_EXCEPTION) {
+    if (ty && c) {
+      char *temp = (char *) malloc(64+strlen(ty->name)+strlen(c));
+      sprintf(temp,"Type error. Got %s, expected %s", c, ty->name);
+      PyErr_SetString(PyExc_TypeError, temp);
+      free((char *) temp);
+    } else {
+      PyErr_SetString(PyExc_TypeError,"Expected a pointer");
+    }
+  }
+  return -1;
+}
+
+/* Convert a pointer value, signal an exception on a type mismatch */
+SWIGRUNTIME(void *)
+SWIG_Python_MustGetPtr(PyObject *obj, swig_type_info *ty, int argnum, int flags)
+{
+  void *result;
+  SWIG_Python_ConvertPtr(obj, &result, ty, flags | SWIG_POINTER_EXCEPTION);
+  return result;
+}
+
+/* Convert a packed value value */
+SWIGRUNTIME(int)
+SWIG_Python_ConvertPacked(PyObject *obj, void *ptr, int sz, swig_type_info *ty, int flags) {
+  swig_type_info *tc;
+  char  *c = 0;
+
+  if ((!obj) || (!PyString_Check(obj))) goto type_error;
+  c = PyString_AsString(obj);
+  /* Pointer values must start with leading underscore */
+  if (*c != '_') goto type_error;
+  c++;
+  c = SWIG_UnpackData(c,ptr,sz);
+  if (ty) {
+    tc = SWIG_TypeCheck(c,ty);
+    if (!tc) goto type_error;
+  }
+  return 0;
+
+type_error:
+
+  if (flags) {
+    if (ty && c) {
+      char *temp = (char *) malloc(64+strlen(ty->name)+strlen(c));
+      sprintf(temp,"Type error. Got %s, expected %s", c, ty->name);
+      PyErr_SetString(PyExc_TypeError, temp);
+      free((char *) temp);
+    } else {
+      PyErr_SetString(PyExc_TypeError,"Expected a pointer");
+    }
+  }
+  return -1;
+}
+
+/* Create a new pointer object */
+SWIGRUNTIME(PyObject *)
+SWIG_Python_NewPointerObj(void *ptr, swig_type_info *type, int own) {
+  PyObject *robj;
+  if (!ptr) {
+    Py_INCREF(Py_None);
+    return Py_None;
+  }
+#ifdef SWIG_COBJECT_TYPES
+  robj = PyCObject_FromVoidPtrAndDesc((void *) ptr, (char *) type->name, NULL);
+#else
+  {
+    char result[1024];
+    char *r = result;
+    *(r++) = '_';
+    r = SWIG_PackData(r,&ptr,sizeof(void *));
+    strcpy(r,type->name);
+    robj = PyString_FromString(result);
+  }
+#endif
+  if (!robj || (robj == Py_None)) return robj;
+  if (type->clientdata) {
+    PyObject *inst;
+    PyObject *args = Py_BuildValue((char*)"(O)", robj);
+    Py_DECREF(robj);
+    inst = PyObject_CallObject((PyObject *) type->clientdata, args);
+    Py_DECREF(args);
+    if (inst) {
+      if (own) {
+        PyObject *n = PyInt_FromLong(1);
+        PyObject_SetAttrString(inst,(char*)"thisown",n);
+        Py_DECREF(n);
+      }
+      robj = inst;
+    }
+  }
+  return robj;
+}
+
+SWIGRUNTIME(PyObject *)
+SWIG_Python_NewPackedObj(void *ptr, int sz, swig_type_info *type) {
+  char result[1024];
+  char *r = result;
+  if ((2*sz + 1 + strlen(type->name)) > 1000) return 0;
+  *(r++) = '_';
+  r = SWIG_PackData(r,ptr,sz);
+  strcpy(r,type->name);
+  return PyString_FromString(result);
+}
+
+/* Install Constants */
+SWIGRUNTIME(void)
+SWIG_Python_InstallConstants(PyObject *d, swig_const_info constants[]) {
+  int i;
+  PyObject *obj;
+  for (i = 0; constants[i].type; i++) {
+    switch(constants[i].type) {
+    case SWIG_PY_INT:
+      obj = PyInt_FromLong(constants[i].lvalue);
+      break;
+    case SWIG_PY_FLOAT:
+      obj = PyFloat_FromDouble(constants[i].dvalue);
+      break;
+    case SWIG_PY_STRING:
+      obj = PyString_FromString((char *) constants[i].pvalue);
+      break;
+    case SWIG_PY_POINTER:
+      obj = SWIG_NewPointerObj(constants[i].pvalue, *(constants[i]).ptype,0);
+      break;
+    case SWIG_PY_BINARY:
+      obj = SWIG_NewPackedObj(constants[i].pvalue, constants[i].lvalue, *(constants[i].ptype));
+      break;
+    default:
+      obj = 0;
+      break;
+    }
+    if (obj) {
+      PyDict_SetItemString(d,constants[i].name,obj);
+      Py_DECREF(obj);
+    }
+  }
+}
+
+#endif
+
+/* Contract support */
+
+#define SWIG_preassert(expr, msg)  if (!(expr)) { PyErr_SetString(PyExc_RuntimeError, msg #expr ); goto fail; } else
+#define SWIG_postassert(expr, msg) if (!(expr)) { PyErr_SetString(PyExc_RuntimeError, msg #expr ); goto fail; } else
+
+#define SWIG_inherit_preassert(expr, msg)  if (!(expr)) { PyErr_SetString(PyExc_RuntimeError, msg #expr ); goto fail; } else
+#define SWIG_inherit_postassert(expr, msg) if (!(expr)) { PyErr_SetString(PyExc_RuntimeError, msg #expr ); goto fail; } else
+
+#define SWIG_invariant(expr, msg)       if (!(expr)) { PyErr_SetString(PyExc_RuntimeError, msg #expr ); goto fail; } else
+#define SWIG_invariant_begin(expr, msg) if (!(expr)) { PyErr_SetString(PyExc_RuntimeError, msg #expr ); goto fail; } else
+#define SWIG_invariant_end(expr, msg)   if (!(expr)) { PyErr_SetString(PyExc_RuntimeError, msg #expr ); goto fail; } else
 
 #ifdef __cplusplus
 }
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

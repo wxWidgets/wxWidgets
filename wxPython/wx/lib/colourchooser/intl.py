@@ -1,8 +1,24 @@
+"""
+wxPyColourChooser
+Copyright (C) 2002 Michael Gilfix <mgilfix@eecs.tufts.edu>
 
-"""Renamer stub: provides a way to drop the wx prefix from wxPython objects."""
+This file is part of wxPyColourChooser.
 
-from wx import _rename
-from wxPython.lib.colourchooser import intl
-_rename(globals(), intl.__dict__, modulename='lib.colourchooser.intl')
-del intl
-del _rename
+This version of wxPyColourChooser is open source; you can redistribute it
+and/or modify it under the licensed terms.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+"""
+
+try:
+    import gettext
+
+    gettext.bindtextdomain('wxpycolourchooser')
+    gettext.textdomain('wxpycolourchooser')
+    _ = gettext.gettext
+except Exception, strerror:
+    print "Warning: Couldn't import translation function: %(str)s" %{ 'str' : strerror }
+    print "Defaulting to En"
+    _ = lambda x: x

@@ -6,6 +6,10 @@
 #----------------------------------------------------------------------
 
 import wx                  # This module uses the new wx namespace
+print "wx.VERSION_STRING = ", wx.VERSION_STRING
+
+
+#import os; print os.getpid(); raw_input("press a key...")
 
 class MyFrame(wx.Frame):
     """

@@ -14,24 +14,18 @@
 
 
 %{
-#include "wxPython.h"
+#include "wx/wxPython/wxPython.h"
+#include "wx/wxPython/pyclasses.h"
+
 #include <wx/calctrl.h>
 %}
 
 //----------------------------------------------------------------------
 
-%include typemaps.i
-%include my_typemaps.i
-
-// Import some definitions of other classes, etc.
-%import _defs.i
 %import misc.i
-%import windows.i
-%import controls.i
-%import events.i
-%import utils.i
+%pythoncode { wx = core }
 
-%pragma(python) code = "import wx"
+%include _calendar_rename.i
 
 //---------------------------------------------------------------------------
 
@@ -77,7 +71,7 @@ public:
                        const wxFont& font = wxNullFont,
                        wxCalendarDateBorder border = wxCAL_BORDER_NONE);
 
-    %name(wxCalendarDateAttrBorder)
+    %name(CalendarDateAttrBorder)
         wxCalendarDateAttr(wxCalendarDateBorder border,
                            const wxColour& colBorder = wxNullColour);
 
@@ -119,47 +113,39 @@ public:
 
 };
 
-enum {
-    wxEVT_CALENDAR_DOUBLECLICKED,
-    wxEVT_CALENDAR_SEL_CHANGED,
-    wxEVT_CALENDAR_DAY_CHANGED,
-    wxEVT_CALENDAR_MONTH_CHANGED,
-    wxEVT_CALENDAR_YEAR_CHANGED,
-    wxEVT_CALENDAR_WEEKDAY_CLICKED,
-};
 
-%pragma(python) code = "
-def EVT_CALENDAR(win, id, fn):
-    win.Connect(id, -1, wxEVT_CALENDAR_DOUBLECLICKED, fn)
+%constant wxEventType wxEVT_CALENDAR_DOUBLECLICKED;
+%constant wxEventType wxEVT_CALENDAR_SEL_CHANGED;
+%constant wxEventType wxEVT_CALENDAR_DAY_CHANGED;
+%constant wxEventType wxEVT_CALENDAR_MONTH_CHANGED;
+%constant wxEventType wxEVT_CALENDAR_YEAR_CHANGED;
+%constant wxEventType wxEVT_CALENDAR_WEEKDAY_CLICKED;
 
-def EVT_CALENDAR_SEL_CHANGED(win, id, fn):
-    win.Connect(id, -1, wxEVT_CALENDAR_SEL_CHANGED, fn)
 
-def EVT_CALENDAR_DAY(win, id, fn):
-    win.Connect(id, -1, wxEVT_CALENDAR_DAY_CHANGED, fn)
+%pythoncode {
+EVT_CALENDAR =                 wx.PyEventBinder( wxEVT_CALENDAR_DOUBLECLICKED, 1)
+EVT_CALENDAR_SEL_CHANGED =     wx.PyEventBinder( wxEVT_CALENDAR_SEL_CHANGED, 1)
+EVT_CALENDAR_DAY =             wx.PyEventBinder( wxEVT_CALENDAR_DAY_CHANGED, 1)
+EVT_CALENDAR_MONTH =           wx.PyEventBinder( wxEVT_CALENDAR_MONTH_CHANGED, 1)
+EVT_CALENDAR_YEAR =            wx.PyEventBinder( wxEVT_CALENDAR_YEAR_CHANGED, 1)
+EVT_CALENDAR_WEEKDAY_CLICKED = wx.PyEventBinder( wxEVT_CALENDAR_WEEKDAY_CLICKED, 1)
+}
 
-def EVT_CALENDAR_MONTH(win, id, fn):
-    win.Connect(id, -1, wxEVT_CALENDAR_MONTH_CHANGED, fn)
-
-def EVT_CALENDAR_YEAR(win, id, fn):
-    win.Connect(id, -1, wxEVT_CALENDAR_YEAR_CHANGED, fn)
-
-def EVT_CALENDAR_WEEKDAY_CLICKED(win, id, fn):
-    win.Connect(id, -1, wxEVT_CALENDAR_WEEKDAY_CLICKED, fn)
-
-"
 
 //---------------------------------------------------------------------------
 
 %{
-    // Put some wx default wxChar* values into wxStrings.
     DECLARE_DEF_STRING(CalendarNameStr);
 %}
+
+
 
 class wxCalendarCtrl : public wxControl
 {
 public:
-    // construction
+    %addtofunc wxCalendarCtrl      "self._setOORInfo(self)"
+    %addtofunc wxCalendarCtrl()    ""
+
     wxCalendarCtrl(wxWindow *parent,
                    wxWindowID id,
                    const wxDateTime& date = wxDefaultDateTime,
@@ -167,7 +153,7 @@ public:
                    const wxSize& size = wxDefaultSize,
                    long style = wxCAL_SHOW_HOLIDAYS | wxWANTS_CHARS,
                    const wxString& name = wxPyCalendarNameStr);
-    %name(wxPreCalendarCtrl)wxCalendarCtrl();
+    %name(PreCalendarCtrl)wxCalendarCtrl();
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -177,8 +163,6 @@ public:
                 long style = wxCAL_SHOW_HOLIDAYS | wxWANTS_CHARS,
                 const wxString& name = wxPyCalendarNameStr);
 
-    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
-    %pragma(python) addtomethod = "wxPreCalendarCtrl:val._setOORInfo(val)"
 
     // set/get the current date
     // ------------------------
@@ -264,10 +248,6 @@ public:
 
 %init %{
 %}
-
-//---------------------------------------------------------------------------
-
-%pragma(python) include="_calextras.py";
 
 //---------------------------------------------------------------------------
 

@@ -1,8 +1,9 @@
+"""Provides an object representing the current 'version' or 'release'
+of Py as a whole.  Individual classes, such as the shell, filling and
+interpreter, each have a revision property based on the CVS Revision."""
 
-"""Renamer stub: provides a way to drop the wx prefix from wxPython objects."""
+__author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"
+__cvsid__ = "$Id$"
+__revision__ = "$Revision$"[11:-2]
 
-from wx import _rename
-from wxPython.py import version
-_rename(globals(), version.__dict__, modulename='py.version')
-del version
-del _rename
+VERSION = '0.9.3'

@@ -12,46 +12,35 @@
 
 %module grid
 
-#ifndef OLD_GRID
-
 %{
-#include "wxPython.h"
+#include "wx/wxPython/wxPython.h"
+#include "wx/wxPython/pyclasses.h"
+#include "wx/wxPython/printfw.h"
+
 #include <wx/grid.h>
 #include <wx/generic/gridctrl.h>
-%}
 
-//----------------------------------------------------------------------
-
-%include typemaps.i
-%include my_typemaps.i
-
-// Import some definitions of other classes, etc.
-%import _defs.i
-%import misc.i
-%import gdi.i
-%import windows.i
-%import controls.i
-%import events.i
-
-%pragma(python) code = "import wx"
-
-//----------------------------------------------------------------------
-
-%{
-    // Put some wx default wxChar* values into wxStrings.
     DECLARE_DEF_STRING(PanelNameStr);
     DECLARE_DEF_STRING2(DateTimeFormatStr, wxT("%c"));
     static const wxString wxPyEmptyString(wxT(""));
 %}
 
+
+//---------------------------------------------------------------------------
+
+%import windows.i
+%pythoncode { wx = core }
+
+%include _grid_rename.i
+
 //---------------------------------------------------------------------------
 // OOR related typemaps and helper functions
 
-%typemap(python, out) wxGridCellRenderer*     { $target = wxPyMake_wxGridCellRenderer($source); }
-%typemap(python, out) wxGridCellEditor*       { $target = wxPyMake_wxGridCellEditor($source); }
-%typemap(python, out) wxGridCellAttr*         { $target = wxPyMake_wxGridCellAttr($source); }
-%typemap(python, out) wxGridCellAttrProvider* { $target = wxPyMake_wxGridCellAttrProvider($source); }
-%typemap(python, out) wxGridTableBase*        { $target = wxPyMake_wxGridTableBase($source); }
+%typemap(out) wxGridCellRenderer*     { $result = wxPyMake_wxGridCellRenderer($1); }
+%typemap(out) wxGridCellEditor*       { $result = wxPyMake_wxGridCellEditor($1); }
+%typemap(out) wxGridCellAttr*         { $result = wxPyMake_wxGridCellAttr($1); }
+%typemap(out) wxGridCellAttrProvider* { $result = wxPyMake_wxGridCellAttrProvider($1); }
+%typemap(out) wxGridTableBase*        { $result = wxPyMake_wxGridTableBase($1); }
 
 
 %{
@@ -107,7 +96,7 @@ wxPyMake_TEMPLATE(wxGridTableBase)
             wxGridCellAttr* ptr;                                                \
             ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(iii)", a, b, c)); \
             if (ro) {                                                           \
-                if (!SWIG_GetPtrObj(ro, (void **)&ptr, "_wxGridCellAttr_p"))    \
+                if (wxPyConvertSwigPtr(ro, (void **)&ptr, wxT("wxGridCellAttr")))    \
                     rval = ptr;                                                 \
                 Py_DECREF(ro);                                                  \
             }                                                                   \
@@ -517,10 +506,10 @@ class wxGridCellAttr;
 #define wxGRID_VALUE_DATETIME   "datetime"
 
 
-%readonly
-wxGridCellCoords wxGridNoCellCoords;
-wxRect           wxGridNoCellRect;
-%readwrite
+%immutable;
+const wxGridCellCoords wxGridNoCellCoords;
+const wxRect           wxGridNoCellRect;
+%mutable;
 
 
 //---------------------------------------------------------------------------
@@ -531,7 +520,7 @@ wxRect           wxGridNoCellRect;
 class wxGridCellRenderer
 {
 public:
-    %addmethods {
+    %extend {
         void _setOORInfo(PyObject* _self) {
             self->SetClientObject(new wxPyOORClientData(_self));
         }
@@ -546,12 +535,12 @@ public:
                       wxDC& dc,
                       const wxRect& rect,
                       int row, int col,
-                      bool isSelected) = 0;
+                      bool isSelected);
     virtual wxSize GetBestSize(wxGrid& grid,
                                wxGridCellAttr& attr,
                                wxDC& dc,
-                               int row, int col) = 0;
-    virtual wxGridCellRenderer *Clone() const = 0;
+                               int row, int col);
+    virtual wxGridCellRenderer *Clone() const;
 };
 
 
@@ -603,7 +592,7 @@ public:
 
             if (ro) {
                 const char* errmsg = "GetBestSize should return a 2-tuple of integers or a wxSize object.";
-                if (!SWIG_GetPtrObj(ro, (void **)&ptr, "_wxSize_p")) {
+                if (wxPyConvertSwigPtr(ro, (void **)&ptr, wxT("wxSize"))) {
                     rval = *ptr;
                 }
                 else if (PySequence_Check(ro) && PyObject_Length(ro) == 2) {
@@ -635,7 +624,7 @@ public:
             wxGridCellRenderer* ptr;
             ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("()"));
             if (ro) {
-                if (!SWIG_GetPtrObj(ro, (void **)&ptr, "_wxGridCellRenderer_p"))
+                if (wxPyConvertSwigPtr(ro, (void **)&ptr, wxT("wxGridCellRenderer")))
                     rval = ptr;
                 Py_DECREF(ro);
             }
@@ -657,10 +646,10 @@ IMP_PYCALLBACK__STRING( wxPyGridCellRenderer, wxGridCellRenderer, SetParameters)
 // Let SWIG know about it so it can create the Python version
 class wxPyGridCellRenderer : public wxGridCellRenderer {
 public:
+    %addtofunc wxPyGridCellRenderer  "self._setCallbackInfo(self, PyGridCellRenderer);self._setOORInfo(self)"
+
     wxPyGridCellRenderer();
     void _setCallbackInfo(PyObject* self, PyObject* _class);
-    %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxPyGridCellRenderer)"
-    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 
     void base_SetParameters(const wxString& params);
 };
@@ -671,24 +660,24 @@ public:
 class wxGridCellStringRenderer : public wxGridCellRenderer
 {
 public:
+    %addtofunc wxGridCellStringRenderer "self._setOORInfo(self)"
     wxGridCellStringRenderer();
-    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 };
 
 
 class  wxGridCellNumberRenderer : public wxGridCellStringRenderer
 {
 public:
+    %addtofunc wxGridCellNumberRenderer "self._setOORInfo(self)"
     wxGridCellNumberRenderer();
-    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 };
 
 
 class  wxGridCellFloatRenderer : public wxGridCellStringRenderer
 {
 public:
+    %addtofunc wxGridCellFloatRenderer "self._setOORInfo(self)"
     wxGridCellFloatRenderer(int width = -1, int precision = -1);
-    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 
     int GetWidth() const;
     void SetWidth(int width);
@@ -700,33 +689,33 @@ public:
 class  wxGridCellBoolRenderer : public wxGridCellRenderer
 {
 public:
+    %addtofunc wxGridCellBoolRenderer "self._setOORInfo(self)"
     wxGridCellBoolRenderer();
-    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 };
 
 
 class wxGridCellDateTimeRenderer : public wxGridCellStringRenderer
 {
 public:
+    %addtofunc wxGridCellDateTimeRenderer "self._setOORInfo(self)"
     wxGridCellDateTimeRenderer(wxString outformat = wxPyDateTimeFormatStr,
                                wxString informat =  wxPyDateTimeFormatStr);
-    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 };
 
 
 class wxGridCellEnumRenderer : public wxGridCellStringRenderer
 {
 public:
+    %addtofunc wxGridCellEnumRenderer "self._setOORInfo(self)"
     wxGridCellEnumRenderer( const wxString& choices = wxPyEmptyString );
-    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 };
 
 
 class wxGridCellAutoWrapStringRenderer : public wxGridCellStringRenderer
 {
 public:
+    %addtofunc wxGridCellAutoWrapStringRenderer "self._setOORInfo(self)"
     wxGridCellAutoWrapStringRenderer();
-    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 };
 
 
@@ -737,7 +726,7 @@ public:
 class  wxGridCellEditor
 {
 public:
-    %addmethods {
+    %extend {
         void _setOORInfo(PyObject* _self) {
             self->SetClientObject(new wxPyOORClientData(_self));
         }
@@ -756,11 +745,11 @@ public:
 
     virtual void Create(wxWindow* parent,
                         wxWindowID id,
-                        wxEvtHandler* evtHandler) = 0;
-    virtual void BeginEdit(int row, int col, wxGrid* grid) = 0;
-    virtual bool EndEdit(int row, int col, wxGrid* grid) = 0;
-    virtual void Reset() = 0;
-    virtual wxGridCellEditor *Clone() const = 0;
+                        wxEvtHandler* evtHandler);
+    virtual void BeginEdit(int row, int col, wxGrid* grid);
+    virtual bool EndEdit(int row, int col, wxGrid* grid);
+    virtual void Reset();
+    virtual wxGridCellEditor *Clone() const;
 
     virtual void SetSize(const wxRect& rect);
     virtual void Show(bool show, wxGridCellAttr *attr = NULL);
@@ -827,7 +816,7 @@ public:
             wxGridCellEditor* ptr;
             ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("()"));
             if (ro) {
-                if (!SWIG_GetPtrObj(ro, (void **)&ptr, "_wxGridCellEditor_p"))
+                if (wxPyConvertSwigPtr(ro, (void **)&ptr, wxT("wxGridCellEditor")))
                     rval = ptr;
                 Py_DECREF(ro);
             }
@@ -905,10 +894,10 @@ IMP_PYCALLBACK_STRING__constpure(wxPyGridCellEditor, wxGridCellEditor, GetValue)
 // Let SWIG know about it so it can create the Python version
 class wxPyGridCellEditor : public wxGridCellEditor {
 public:
+    %addtofunc wxPyGridCellEditor  "self._setCallbackInfo(self, PyGridCellEditor);self._setOORInfo(self)"
+    
     wxPyGridCellEditor();
     void _setCallbackInfo(PyObject* self, PyObject* _class);
-    %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxPyGridCellEditor)"
-    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 
     void base_SetSize(const wxRect& rect);
     void base_Show(bool show, wxGridCellAttr *attr = NULL);
@@ -927,8 +916,8 @@ public:
 class wxGridCellTextEditor : public wxGridCellEditor
 {
 public:
+    %addtofunc wxGridCellTextEditor  "self._setOORInfo(self)"
     wxGridCellTextEditor();
-    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     virtual wxString GetValue();
 };
 
@@ -936,8 +925,8 @@ public:
 class wxGridCellNumberEditor : public wxGridCellTextEditor
 {
 public:
+    %addtofunc wxGridCellNumberEditor  "self._setOORInfo(self)"
     wxGridCellNumberEditor(int min = -1, int max = -1);
-    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     virtual wxString GetValue();
 };
 
@@ -945,8 +934,8 @@ public:
 class wxGridCellFloatEditor : public wxGridCellTextEditor
 {
 public:
+    %addtofunc wxGridCellFloatEditor  "self._setOORInfo(self)"
     wxGridCellFloatEditor();
-    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     virtual wxString GetValue();
 };
 
@@ -954,18 +943,18 @@ public:
 class wxGridCellBoolEditor : public wxGridCellEditor
 {
 public:
+    %addtofunc wxGridCellBoolEditor  "self._setOORInfo(self)"
     wxGridCellBoolEditor();
-    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     virtual wxString GetValue();
 };
 
 class wxGridCellChoiceEditor : public wxGridCellEditor
 {
 public:
+    %addtofunc wxGridCellChoiceEditor  "self._setOORInfo(self)"
     wxGridCellChoiceEditor(int LCOUNT = 0,
                            const wxString* choices = NULL,
                            bool allowOthers = FALSE);
-    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     virtual wxString GetValue();
 };
 
@@ -973,8 +962,8 @@ public:
 class wxGridCellEnumEditor : public wxGridCellChoiceEditor
 {
 public:
+    %addtofunc wxGridCellEnumEditor  "self._setOORInfo(self)"
     wxGridCellEnumEditor( const wxString& choices = wxPyEmptyString );
-    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     virtual wxString GetValue();
 };
 
@@ -982,8 +971,8 @@ public:
 class wxGridCellAutoWrapStringEditor : public wxGridCellTextEditor
 {
 public:
+    %addtofunc wxGridCellAutoWrapStringEditor  "self._setOORInfo(self)"
     wxGridCellAutoWrapStringEditor();
-    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     virtual wxString GetValue();
 };
 
@@ -1005,14 +994,15 @@ public:
         Merged
     };
 
-    %addmethods {
+    %extend {
         void _setOORInfo(PyObject* _self) {
             self->SetClientObject(new wxPyOORClientData(_self));
         }
     }
+    
+    %addtofunc wxGridCellAttr  "self._setOORInfo(self)"
 
     wxGridCellAttr(wxGridCellAttr *attrDefault = NULL);
-    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 
     wxGridCellAttr *Clone() const;
     void MergeWith(wxGridCellAttr *mergefrom);
@@ -1057,11 +1047,11 @@ public:
 class wxGridCellAttrProvider
 {
 public:
+    %addtofunc wxGridCellAttrProvider "self._setOORInfo(self)"
     wxGridCellAttrProvider();
     // ???? virtual ~wxGridCellAttrProvider();
-    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 
-    %addmethods {
+    %extend {
         void _setOORInfo(PyObject* _self) {
             self->SetClientObject(new wxPyOORClientData(_self));
         }
@@ -1100,9 +1090,9 @@ public:
 class wxPyGridCellAttrProvider : public wxGridCellAttrProvider
 {
 public:
+    %addtofunc wxPyGridCellAttrProvider  "self._setCallbackInfo(self, PyGridCellAttrProvider)"
     wxPyGridCellAttrProvider();
     void _setCallbackInfo(PyObject* self, PyObject* _class);
-    %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxPyGridCellAttrProvider)"
 
     wxGridCellAttr *base_GetAttr(int row, int col,
                                  wxGridCellAttr::wxAttrKind kind);
@@ -1122,7 +1112,7 @@ public:
     // wxGridTableBase();   This is an ABC
     //~wxGridTableBase();
 
-    %addmethods {
+    %extend {
         void _setOORInfo(PyObject* _self) {
             self->SetClientObject(new wxPyOORClientData(_self));
         }
@@ -1135,11 +1125,11 @@ public:
 
 
     // pure virtuals
-    virtual int GetNumberRows() = 0;
-    virtual int GetNumberCols() = 0;
-    virtual bool IsEmptyCell( int row, int col ) = 0;
-    virtual wxString GetValue( int row, int col ) = 0;
-    virtual void SetValue( int row, int col, const wxString& value ) = 0;
+    virtual int GetNumberRows();
+    virtual int GetNumberCols();
+    virtual bool IsEmptyCell( int row, int col );
+    virtual wxString GetValue( int row, int col );
+    virtual void SetValue( int row, int col, const wxString& value );
 
     // virtuals overridable in wxPyGridTableBase
     virtual wxString GetTypeName( int row, int col );
@@ -1314,12 +1304,11 @@ public:
 class wxPyGridTableBase : public wxGridTableBase
 {
 public:
+    %addtofunc wxPyGridTableBase "self._setCallbackInfo(self, PyGridTableBase);self._setOORInfo(self)"
     wxPyGridTableBase();
     void _setCallbackInfo(PyObject* self, PyObject* _class);
-    %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxPyGridTableBase)"
-    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 
-    %addmethods { void Destroy() { delete self; } }
+    %extend { void Destroy() { delete self; } }
 
     wxString base_GetTypeName( int row, int col );
     bool base_CanGetValueAs( int row, int col, const wxString& typeName );
@@ -1350,8 +1339,8 @@ public:
 class  wxGridStringTable : public wxGridTableBase
 {
 public:
+    %addtofunc wxGridStringTable "self._setOORInfo(self)"
     wxGridStringTable( int numRows=0, int numCols=0 );
-    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 };
 
 //---------------------------------------------------------------------------
@@ -1392,31 +1381,32 @@ public:
 
 //---------------------------------------------------------------------------
 
+%noautorepr wxGridCellCoords;
+
 class wxGridCellCoords
 {
 public:
     wxGridCellCoords( int r=-1, int c=-1 );
     ~wxGridCellCoords();
 
-    int GetRow() const { return m_row; }
-    void SetRow( int n ) { m_row = n; }
-    int GetCol() const { return m_col; }
-    void SetCol( int n ) { m_col = n; }
-    void Set( int row, int col ) { m_row = row; m_col = col; }
+    int GetRow() const;
+    void SetRow( int n );
+    int GetCol() const;
+    void SetCol( int n );
+    void Set( int row, int col );
 
-    %addmethods {
+    bool operator==( const wxGridCellCoords& other ) const;
+    bool operator!=( const wxGridCellCoords& other ) const;
+
+    %extend {
         PyObject* asTuple() {
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(self->GetRow()));
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(self->GetCol()));
             return tup;
         }
-
-        int __cmp__( const wxGridCellCoords& other ) {
-            return *self != other;
-        }
     }
-    %pragma(python) addtoclass = "
+    %pythoncode {
     def __str__(self):                   return str(self.asTuple())
     def __repr__(self):                  return 'wxGridCellCoords'+str(self.asTuple())
     def __len__(self):                   return len(self.asTuple())
@@ -1425,25 +1415,28 @@ public:
         if index == 0: self.SetRow(val)
         elif index == 1: self.SetCol(val)
         else: raise IndexError
-    "
+    }
 
 };
 
 // Typemap to allow conversion of sequence objects to wxGridCellCoords...
-%typemap(python,in) wxGridCellCoords& (wxGridCellCoords temp) {
-    $target = &temp;
-    if (! wxGridCellCoords_helper($source, &$target))
-        return NULL;
+%typemap(in) wxGridCellCoords& (wxGridCellCoords temp) {
+    $1 = &temp;
+    if (! wxGridCellCoords_helper($input, &$1)) SWIG_fail;
 }
+%typemap(typecheck, precedence=SWIG_TYPECHECK_POINTER) wxGridCellCoords& {
+    $1 = wxGridCellCoords_typecheck($input);
+}
+
 
 // ...and here is the associated helper.
 %{
 bool wxGridCellCoords_helper(PyObject* source, wxGridCellCoords** obj) {
 
     // If source is an object instance then it may already be the right type
-    if (PyInstance_Check(source)) {
+    if (wxPySwigInstance_Check(source)) {
         wxGridCellCoords* ptr;
-        if (SWIG_GetPtrObj(source, (void **)&ptr, "_wxGridCellCoords_p"))
+        if (! wxPyConvertSwigPtr(source, (void **)&ptr, wxT("wxGridCellCoords")))
             goto error;
         *obj = ptr;
         return TRUE;
@@ -1452,7 +1445,14 @@ bool wxGridCellCoords_helper(PyObject* source, wxGridCellCoords** obj) {
     else if (PySequence_Check(source) && PyObject_Length(source) == 2) {
         PyObject* o1 = PySequence_GetItem(source, 0);
         PyObject* o2 = PySequence_GetItem(source, 1);
+        if (!PyNumber_Check(o1) || !PyNumber_Check(o2)) {
+            Py_DECREF(o1);
+            Py_DECREF(o2);
+            goto error;
+        }
         **obj = wxGridCellCoords(PyInt_AsLong(o1), PyInt_AsLong(o2));
+        Py_DECREF(o1);
+        Py_DECREF(o2);
         return TRUE;
     }
 
@@ -1460,28 +1460,42 @@ bool wxGridCellCoords_helper(PyObject* source, wxGridCellCoords** obj) {
     PyErr_SetString(PyExc_TypeError, "Expected a 2-tuple of integers or a wxGridCellCoords object.");
     return FALSE;
 }
+
+
+bool wxGridCellCoords_typecheck(PyObject* source) {
+    void* ptr;
+    
+    if (wxPySwigInstance_Check(source) &&
+        wxPyConvertSwigPtr(source, (void **)&ptr, wxT("wxGridCellCoords")))
+        return true;
+
+    PyErr_Clear();
+    if (PySequence_Check(source) && PySequence_Length(source) == 2)
+        return true;
+    
+    return false;
+}
 %}
 
 
-
 // Typemap to convert an array of cells coords to a list of tuples...
-%typemap(python, out) wxGridCellCoordsArray {
-    $target = wxGridCellCoordsArray_helper($source);
+%typemap(out) wxGridCellCoordsArray {
+    $result = wxGridCellCoordsArray_helper($1);
 }
 
-%typemap(python, ret) wxGridCellCoordsArray {
-    delete $source;
-}
+// %typemap(ret) wxGridCellCoordsArray {
+//     delete $1;
+// }
 
 
 // ...and the helper function for the above typemap.
 %{
-PyObject* wxGridCellCoordsArray_helper(const wxGridCellCoordsArray* source)
+PyObject* wxGridCellCoordsArray_helper(const wxGridCellCoordsArray& source)
 {
     PyObject* list = PyList_New(0);
     size_t idx;
-    for (idx = 0; idx < source->GetCount(); idx += 1) {
-        wxGridCellCoords& coord = source->Item(idx);
+    for (idx = 0; idx < source.GetCount(); idx += 1) {
+        wxGridCellCoords& coord = source.Item(idx);
         PyObject* tup = PyTuple_New(2);
         PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(coord.GetRow()));
         PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(coord.GetCol()));
@@ -1510,6 +1524,8 @@ typedef wxGrid::wxGridSelectionModes WXGRIDSELECTIONMODES;
 class wxGrid : public wxScrolledWindow
 {
 public:
+    %addtofunc wxGrid "self._setOORInfo(self)"
+
     wxGrid( wxWindow *parent,
             wxWindowID id,
             const wxPoint& pos = wxDefaultPosition,
@@ -1517,7 +1533,6 @@ public:
             long style = wxWANTS_CHARS,
             const wxString& name = wxPyPanelNameStr);
 
-    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 
     enum wxGridSelectionModes {wxGridSelectCells,
                                wxGridSelectRows,
@@ -1611,11 +1626,11 @@ public:
     //
 
     //void XYToCell( int x, int y, wxGridCellCoords& );
-    %addmethods {
-        %new wxGridCellCoords* XYToCell(int x, int y) {
+    %extend {
+        wxGridCellCoords XYToCell(int x, int y) {
             wxGridCellCoords rv;
             self->XYToCell(x, y, rv);
-            return new wxGridCellCoords(rv);
+            return rv;
         }
     }
 
@@ -1963,77 +1978,43 @@ public:
 
 
 
-enum {
-    wxEVT_GRID_CELL_LEFT_CLICK,
-    wxEVT_GRID_CELL_RIGHT_CLICK,
-    wxEVT_GRID_CELL_LEFT_DCLICK,
-    wxEVT_GRID_CELL_RIGHT_DCLICK,
-    wxEVT_GRID_LABEL_LEFT_CLICK,
-    wxEVT_GRID_LABEL_RIGHT_CLICK,
-    wxEVT_GRID_LABEL_LEFT_DCLICK,
-    wxEVT_GRID_LABEL_RIGHT_DCLICK,
-    wxEVT_GRID_ROW_SIZE,
-    wxEVT_GRID_COL_SIZE,
-    wxEVT_GRID_RANGE_SELECT,
-    wxEVT_GRID_CELL_CHANGE,
-    wxEVT_GRID_SELECT_CELL,
-    wxEVT_GRID_EDITOR_SHOWN,
-    wxEVT_GRID_EDITOR_HIDDEN,
-    wxEVT_GRID_EDITOR_CREATED,
-};
+%constant wxEventType wxEVT_GRID_CELL_LEFT_CLICK;
+%constant wxEventType wxEVT_GRID_CELL_RIGHT_CLICK;
+%constant wxEventType wxEVT_GRID_CELL_LEFT_DCLICK;
+%constant wxEventType wxEVT_GRID_CELL_RIGHT_DCLICK;
+%constant wxEventType wxEVT_GRID_LABEL_LEFT_CLICK;
+%constant wxEventType wxEVT_GRID_LABEL_RIGHT_CLICK;
+%constant wxEventType wxEVT_GRID_LABEL_LEFT_DCLICK;
+%constant wxEventType wxEVT_GRID_LABEL_RIGHT_DCLICK;
+%constant wxEventType wxEVT_GRID_ROW_SIZE;
+%constant wxEventType wxEVT_GRID_COL_SIZE;
+%constant wxEventType wxEVT_GRID_RANGE_SELECT;
+%constant wxEventType wxEVT_GRID_CELL_CHANGE;
+%constant wxEventType wxEVT_GRID_SELECT_CELL;
+%constant wxEventType wxEVT_GRID_EDITOR_SHOWN;
+%constant wxEventType wxEVT_GRID_EDITOR_HIDDEN;
+%constant wxEventType wxEVT_GRID_EDITOR_CREATED;
 
 
 
-%pragma(python) code = "
-def EVT_GRID_CELL_LEFT_CLICK(win, fn):
-    win.Connect(-1, -1, wxEVT_GRID_CELL_LEFT_CLICK, fn)
-
-def EVT_GRID_CELL_RIGHT_CLICK(win, fn):
-    win.Connect(-1, -1, wxEVT_GRID_CELL_RIGHT_CLICK, fn)
-
-def EVT_GRID_CELL_LEFT_DCLICK(win, fn):
-    win.Connect(-1, -1, wxEVT_GRID_CELL_LEFT_DCLICK, fn)
-
-def EVT_GRID_CELL_RIGHT_DCLICK(win, fn):
-    win.Connect(-1, -1, wxEVT_GRID_CELL_RIGHT_DCLICK, fn)
-
-def EVT_GRID_LABEL_LEFT_CLICK(win, fn):
-    win.Connect(-1, -1, wxEVT_GRID_LABEL_LEFT_CLICK, fn)
-
-def EVT_GRID_LABEL_RIGHT_CLICK(win, fn):
-    win.Connect(-1, -1, wxEVT_GRID_LABEL_RIGHT_CLICK, fn)
-
-def EVT_GRID_LABEL_LEFT_DCLICK(win, fn):
-    win.Connect(-1, -1, wxEVT_GRID_LABEL_LEFT_DCLICK, fn)
-
-def EVT_GRID_LABEL_RIGHT_DCLICK(win, fn):
-    win.Connect(-1, -1, wxEVT_GRID_LABEL_RIGHT_DCLICK, fn)
-
-def EVT_GRID_ROW_SIZE(win, fn):
-    win.Connect(-1, -1, wxEVT_GRID_ROW_SIZE, fn)
-
-def EVT_GRID_COL_SIZE(win, fn):
-    win.Connect(-1, -1, wxEVT_GRID_COL_SIZE, fn)
-
-def EVT_GRID_RANGE_SELECT(win, fn):
-    win.Connect(-1, -1, wxEVT_GRID_RANGE_SELECT, fn)
-
-def EVT_GRID_CELL_CHANGE(win, fn):
-    win.Connect(-1, -1, wxEVT_GRID_CELL_CHANGE, fn)
-
-def EVT_GRID_SELECT_CELL(win, fn):
-    win.Connect(-1, -1, wxEVT_GRID_SELECT_CELL, fn)
-
-def EVT_GRID_EDITOR_SHOWN(win, fn):
-    win.Connect(-1, -1, wxEVT_GRID_EDITOR_SHOWN, fn)
-
-def EVT_GRID_EDITOR_HIDDEN(win, fn):
-    win.Connect(-1, -1, wxEVT_GRID_EDITOR_HIDDEN, fn)
-
-def EVT_GRID_EDITOR_CREATED(win, fn):
-    win.Connect(-1, -1, wxEVT_GRID_EDITOR_CREATED, fn)
-
-"
+%pythoncode {
+EVT_GRID_CELL_LEFT_CLICK = wx.PyEventBinder( wxEVT_GRID_CELL_LEFT_CLICK )
+EVT_GRID_CELL_RIGHT_CLICK = wx.PyEventBinder( wxEVT_GRID_CELL_RIGHT_CLICK )
+EVT_GRID_CELL_LEFT_DCLICK = wx.PyEventBinder( wxEVT_GRID_CELL_LEFT_DCLICK )
+EVT_GRID_CELL_RIGHT_DCLICK = wx.PyEventBinder( wxEVT_GRID_CELL_RIGHT_DCLICK )
+EVT_GRID_LABEL_LEFT_CLICK = wx.PyEventBinder( wxEVT_GRID_LABEL_LEFT_CLICK )
+EVT_GRID_LABEL_RIGHT_CLICK = wx.PyEventBinder( wxEVT_GRID_LABEL_RIGHT_CLICK )
+EVT_GRID_LABEL_LEFT_DCLICK = wx.PyEventBinder( wxEVT_GRID_LABEL_LEFT_DCLICK )
+EVT_GRID_LABEL_RIGHT_DCLICK = wx.PyEventBinder( wxEVT_GRID_LABEL_RIGHT_DCLICK )
+EVT_GRID_ROW_SIZE = wx.PyEventBinder( wxEVT_GRID_ROW_SIZE )
+EVT_GRID_COL_SIZE = wx.PyEventBinder( wxEVT_GRID_COL_SIZE )
+EVT_GRID_RANGE_SELECT = wx.PyEventBinder( wxEVT_GRID_RANGE_SELECT )
+EVT_GRID_CELL_CHANGE = wx.PyEventBinder( wxEVT_GRID_CELL_CHANGE )
+EVT_GRID_SELECT_CELL = wx.PyEventBinder( wxEVT_GRID_SELECT_CELL )
+EVT_GRID_EDITOR_SHOWN = wx.PyEventBinder( wxEVT_GRID_EDITOR_SHOWN )
+EVT_GRID_EDITOR_HIDDEN = wx.PyEventBinder( wxEVT_GRID_EDITOR_HIDDEN )
+EVT_GRID_EDITOR_CREATED = wx.PyEventBinder( wxEVT_GRID_EDITOR_CREATED )
+}
 
 //---------------------------------------------------------------------------
 
@@ -2041,10 +2022,5 @@ def EVT_GRID_EDITOR_CREATED(win, fn):
 %}
 
 //---------------------------------------------------------------------------
-
-%pragma(python) include="_gridextras.py";
-
 //---------------------------------------------------------------------------
 
-
-#endif

@@ -5,8 +5,7 @@ REM ----------------------------------------------------------------------
 call wxset.btm
 setlocal
 
-set FLAGS=USE_SWIG=1 IN_CVS_TREE=1
-
+set FLAGS=USE_SWIG=1 SWIG=e:/projects/SWIG-cvs/swig.exe
 
 rem  Use non-default python?
 iff "%1" == "15" .or. "%1" == "20" .or. "%1" == "21" .or. "%1" == "22" .or. "%1" == "23" then
@@ -28,13 +27,13 @@ rem "c" --> clean
 iff "%1" == "c" then
 	shift
 	set CMD=%SETUP% %FLAGS% clean %1 %2 %3 %4 %5 %6 %7 %8 %9
-	set OTHERCMD=del wxPython\*.pyd
+	set OTHERCMD=del wx\*.pyd
 
 rem just remove the *.pyd's
 elseiff "%1" == "d" then
 	shift
-	set CMD=del wxPython\*.pyd
-	set OTHERCMD=del wxPython\*.pdb
+	set CMD=del wx\*.pyd
+	set OTHERCMD=del wx\*.pdb
 
 rem touch all the *.i files so swig will regenerate
 elseiff "%1" == "t" then

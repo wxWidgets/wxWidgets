@@ -30,7 +30,7 @@ class TestPanel(wxPanel):
         box.Add(t, 0, wxCENTER|wxALL, 5)
 
         box.Add(wxStaticLine(self, -1), 0, wxEXPAND)
-        box.Add(10,20)
+        box.Add((10,20))
 
         t = wxStaticText(self, -1, text)
         t.SetFont(nf)

@@ -24,21 +24,20 @@ python$PYVER -c "import sys;print '\n', sys.version, '\n'"
 
 
 SETUP="python$PYVER -u setup.py"
-FLAGS="USE_SWIG=1 IN_CVS_TREE=1" # BUILD_GLCANVAS=0"
+FLAGS="USE_SWIG=1 SWIG=/opt/swig/bin/swig" # BUILD_GLCANVAS=0"
 OTHERFLAGS=""
-
 
 
 # "c" --> clean
 if [ "$1" =  "c" ]; then
     shift
     CMD="$SETUP $FLAGS $OTHERFLAGS clean $*"
-    OTHERCMD="rm -f wxPython/*.so"
+    OTHERCMD="rm -f wx/*.so"
 
 # "d" --> clean extension modules only
 elif [ "$1" = "d" ]; then
     shift
-    CMD="rm -f wxPython/*.so"
+    CMD="rm -f wx/*.so"
 
 # "t" --> touch *.i files
 elif [ "$1" = "t" ]; then

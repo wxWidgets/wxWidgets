@@ -13,155 +13,58 @@
 
 
 //---------------------------------------------------------------------------
-// Forward declares...
+// some type definitions to simplify things for SWIG
 
-class wxAcceleratorEntry;
-class wxAcceleratorTable;
-class wxActivateEvent;
-class wxBitmapButton;
-class wxBitmap;
-class wxBrush;
-class wxButton;
-class wxCalculateLayoutEvent;
-class wxCaret;
-class wxCheckBox;
-class wxCheckListBox;
-class wxChoice;
-class wxClientDC;
-class wxCloseEvent;
-class wxColourData;
-class wxColourDialog;
-class wxColour;
-class wxComboBox;
-class wxCommandEvent;
-class wxConfig;
-class wxControl;
-class wxCursor;
-class wxDC;
-class wxDialog;
-class wxDirDialog;
-class wxDropFilesEvent;
-class wxEraseEvent;
-class wxEvent;
-class wxEvtHandler;
-class wxFileDialog;
-class wxFocusEvent;
-class wxFontData;
-class wxFontDialog;
-class wxFont;
-class wxFrame;
-class wxGauge;
-class wxGridCell;
-class wxGridEvent;
-class wxGrid;
-class wxIconizeEvent;
-class wxIcon;
-class wxIdleEvent;
-class wxImageList;
-class wxIndividualLayoutConstraint;
-class wxInitDialogEvent;
-class wxJoystickEvent;
-class wxKeyEvent;
-class wxLayoutAlgorithm;
-class wxLayoutConstraints;
-class wxListBox;
-class wxListCtrl;
-class wxListEvent;
-class wxListItem;
-class wxMDIChildFrame;
-class wxMDIClientWindow;
-class wxMDIParentFrame;
-class wxMask;
-class wxMaximizeEvent;
-class wxMemoryDC;
-class wxMenuBar;
-class wxMenuEvent;
-class wxMenuItem;
-class wxMenu;
-class wxMessageDialog;
-class wxMetaFileDC;
-class wxMiniFrame;
-class wxMouseEvent;
-class wxMoveEvent;
-class wxNotebookEvent;
-class wxNotebook;
-class wxPageSetupData;
-class wxPageSetupDialog;
-class wxPaintDC;
-class wxPaintEvent;
-class wxPalette;
-class wxPanel;
-class wxPen;
-class wxPoint;
-class wxPostScriptDC;
-class wxPrintData;
-class wxPrintDialog;
-class wxPrinterDC;
-class wxQueryLayoutInfoEvent;
-class wxRadioBox;
-class wxRadioButton;
-class wxRealPoint;
-class wxRect;
-class wxRegionIterator;
-class wxRegion;
-class wxSashEvent;
-class wxSashLayoutWindow;
-class wxSashWindow;
-class wxScreenDC;
-class wxScrollBar;
-class wxScrollEvent;
-class wxScrollWinEvent;
-class wxScrolledWindow;
-class wxShowEvent;
-class wxSingleChoiceDialog;
-class wxSizeEvent;
-class wxSize;
-class wxSlider;
-class wxSpinButton;
-class wxSpinEvent;
-class wxSplitterWindow;
-class wxStaticBitmap;
-class wxStaticBox;
-class wxStaticText;
-class wxStatusBar;
-class wxSysColourChangedEvent;
-class wxTaskBarIcon;
-class wxTextCtrl;
-class wxTextEntryDialog;
-class wxTimer;
-class wxToolBarTool;
-class wxToolBar;
-class wxToolTip;
-class wxTreeCtrl;
-class wxTreeEvent;
-class wxTreeItemData;
-class wxTreeItemId;
-class wxUpdateUIEvent;
-class wxWindowDC;
-class wxWindow;
-class wxSizer;
-class wxBoxSizer;
-class wxStaticBoxSizer;
-
-class wxPyApp;
-class wxPyMenu;
-class wxPyTimer;
-
-
-//---------------------------------------------------------------------------
-
-// some definitions for SWIG only
-typedef unsigned char   byte;
-typedef short int       WXTYPE;
 typedef int             wxWindowID;
-typedef unsigned int    uint;
-typedef signed   int    EBool;
-typedef unsigned int    size_t
-typedef unsigned int    time_t
-typedef int             wxPrintQuality;
 typedef int             wxCoord;
-typedef char            wxChar;
+typedef int             wxInt32;
+typedef unsigned int    wxUint32;
+typedef int             wxEventType;
+typedef unsigned int    size_t;
+typedef unsigned int    time_t;
+typedef unsigned char   byte;
 
+
+//----------------------------------------------------------------------
+// Various SWIG macros and such
+
+#define %addtofunc      %feature("addtofunc")
+#define %kwargs         %feature("kwargs")
+#define %nokwargs       %feature("nokwargs")
+#define %noautorepr     %feature("noautorepr")
+
+#ifndef %shadow
+#define %shadow         %insert("shadow")
+#endif
+
+#ifndef %pythoncode
+#define %pythoncode     %insert("python")
+#endif 
+
+#define WXUNUSED(x)     x
+
+
+// Given the name of a wxChar (or wxString) constant in C++, make
+// a static wxString for wxPython, and also let SWIG wrap it.
+%define MAKE_CONST_WXSTRING(strname)
+    %{ static const wxString wxPy##strname(wx##strname); %}
+    %immutable;
+    %name(strname) const wxString wxPy##strname;
+    %mutable;
+%enddef
+
+
+// Generate code in the module init for the event types, since they may not be
+// initialized yet when they are used in the static swig_const_table.
+%typemap(consttab) wxEventType; // TODO: how to prevent code inserted into the consttab?
+%typemap(constcode) wxEventType "PyDict_SetItemString(d, \"$symname\", PyInt_FromLong($value));";
+
+
+%define %newgroup
+%pythoncode {
+%#---------------------------------------------------------------------------
+} 
+%enddef
 
 //---------------------------------------------------------------------------
 
@@ -169,9 +72,9 @@ typedef char            wxChar;
 // real macro when making the Python Int
 
 enum {
-    wxMAJOR_VERSION,
-    wxMINOR_VERSION,
-    wxRELEASE_NUMBER,
+//     wxMAJOR_VERSION,
+//     wxMINOR_VERSION,
+//     wxRELEASE_NUMBER,
 
     wxNOT_FOUND,
 
@@ -192,9 +95,6 @@ enum {
     wxTAB_TRAVERSAL,
     wxWANTS_CHARS,
     wxPOPUP_WINDOW,
-    wxHORIZONTAL,
-    wxVERTICAL,
-    wxBOTH,
     wxCENTER_FRAME,
     wxCENTRE_ON_SCREEN,
     wxCENTER_ON_SCREEN,
@@ -238,18 +138,6 @@ enum {
 
     wxCOLOURED,
     wxFIXED_LENGTH,
-    wxALIGN_LEFT,
-    wxALIGN_CENTER_HORIZONTAL,
-    wxALIGN_CENTRE_HORIZONTAL,
-    wxALIGN_RIGHT,
-    wxALIGN_BOTTOM,
-    wxALIGN_CENTER_VERTICAL,
-    wxALIGN_CENTRE_VERTICAL,
-    wxALIGN_TOP,
-    wxALIGN_CENTER,
-    wxALIGN_CENTRE,
-    wxSHAPED,
-    wxADJUST_MINSIZE,
 
     wxLB_NEEDED_SB,
     wxLB_ALWAYS_SB,
@@ -272,10 +160,6 @@ enum {
     wxRA_SPECIFY_COLS,
     wxRB_GROUP,
     wxRB_SINGLE,
-    wxGA_PROGRESSBAR,
-    wxGA_HORIZONTAL,
-    wxGA_VERTICAL,
-    wxGA_SMOOTH,
     wxSL_HORIZONTAL,
     wxSL_VERTICAL,
     wxSL_AUTOTICKS,
@@ -290,14 +174,6 @@ enum {
     wxSB_VERTICAL,
     wxST_SIZEGRIP,
     wxST_NO_AUTORESIZE,
-
-    wxBU_NOAUTODRAW,
-    wxBU_AUTODRAW,
-    wxBU_LEFT,
-    wxBU_TOP,
-    wxBU_RIGHT,
-    wxBU_BOTTOM,
-    wxBU_EXACTFIT,
 
     wxFLOOD_SURFACE,
     wxFLOOD_BORDER,
@@ -332,8 +208,6 @@ enum {
     wxSETUP,
 
 
-    wxCENTRE,
-    wxCENTER,
     wxSIZE_AUTO_WIDTH,
     wxSIZE_AUTO_HEIGHT,
     wxSIZE_AUTO,
@@ -349,6 +223,7 @@ enum {
     wxID_ANY,
     wxID_SEPARATOR,
 
+    wxID_LOWEST,
     wxID_OPEN,
     wxID_CLOSE,
     wxID_NEW,
@@ -421,6 +296,8 @@ enum {
     wxID_RETRY,
     wxID_IGNORE,
 
+    wxID_HIGHEST,
+    
     wxOPEN,
     wxSAVE,
     wxHIDE_READONLY,
@@ -447,36 +324,9 @@ enum {
     wxMENU_TEAROFF,
     wxMB_DOCKABLE,
     wxNO_FULL_REPAINT_ON_RESIZE,
-    wxFULL_REPAINT_ON_RESIZE,
-
-    wxLEFT,
-    wxRIGHT,
-    wxUP,
-    wxDOWN,
-    wxALL,
-    wxTOP,
-    wxBOTTOM,
-
-    wxNORTH,
-    wxSOUTH,
-    wxEAST,
-    wxWEST,
-
-    wxSTRETCH_NOT,
-    wxSHRINK,
-    wxGROW,
-    wxEXPAND,
 
     wxLI_HORIZONTAL,
     wxLI_VERTICAL,
-
-    wxJOYSTICK1,
-    wxJOYSTICK2,
-    wxJOY_BUTTON1,
-    wxJOY_BUTTON2,
-    wxJOY_BUTTON3,
-    wxJOY_BUTTON4,
-    wxJOY_BUTTON_ANY,
 
     wxWS_EX_VALIDATE_RECURSIVELY,
     wxWS_EX_BLOCK_EVENTS,
@@ -499,15 +349,6 @@ enum {
     wxMM_POINTS,
     wxMM_METRIC,
 
-    wxTIMER_CONTINUOUS,
-    wxTIMER_ONE_SHOT,
-
-    // the symbolic names for the mouse buttons
-    wxMOUSE_BTN_ANY,
-    wxMOUSE_BTN_NONE,
-    wxMOUSE_BTN_LEFT,
-    wxMOUSE_BTN_MIDDLE,
-    wxMOUSE_BTN_RIGHT,
 
     // It looks like wxTabCtrl may rise from the dead.  Uncomment these if
     // it gets an implementation for all platforms...
@@ -523,6 +364,69 @@ enum {
 };
 
 
+
+enum wxGeometryCentre
+{
+    wxCENTRE                  = 0x0001,
+    wxCENTER                  = wxCENTRE
+};
+
+
+enum wxOrientation
+{
+    wxHORIZONTAL,
+    wxVERTICAL,
+    wxBOTH
+};
+
+enum wxDirection
+{
+    wxLEFT,
+    wxRIGHT,
+    wxUP,
+    wxDOWN,
+
+    wxTOP,
+    wxBOTTOM,
+
+    wxNORTH,
+    wxSOUTH,
+    wxWEST,
+    wxEAST,
+
+    wxALL
+};
+
+enum wxAlignment
+{
+    wxALIGN_NOT,
+    wxALIGN_CENTER_HORIZONTAL,
+    wxALIGN_CENTRE_HORIZONTAL,
+    wxALIGN_LEFT,
+    wxALIGN_TOP,
+    wxALIGN_RIGHT,
+    wxALIGN_BOTTOM,
+    wxALIGN_CENTER_VERTICAL,
+    wxALIGN_CENTRE_VERTICAL,
+
+    wxALIGN_CENTER,
+    wxALIGN_CENTRE,
+
+    wxALIGN_MASK,
+};
+
+enum wxStretch
+{
+    wxSTRETCH_NOT,
+    wxSHRINK,
+    wxGROW,
+    wxEXPAND,
+    wxSHAPED,
+    wxADJUST_MINSIZE,
+    wxTILE,
+};
+
+
 enum wxBorder
 {
     wxBORDER_DEFAULT,
@@ -534,16 +438,6 @@ enum wxBorder
     wxBORDER_DOUBLE,
     wxBORDER_MASK,
 };
-
-
-//  // Standard error codes
-//  enum  ErrCode
-//  {
-//    ERR_PARAM = (-4000),
-//    ERR_NODATA,
-//    ERR_CANCEL,
-//    ERR_SUCCESS = 0
-//  };
 
 
 enum {
@@ -718,83 +612,6 @@ enum wxKeyCode {
 };
 
 
-// Bitmap flags
-enum wxBitmapType
-{
-    wxBITMAP_TYPE_INVALID,          // should be == 0 for compatibility!
-    wxBITMAP_TYPE_BMP,
-    wxBITMAP_TYPE_BMP_RESOURCE,
-    wxBITMAP_TYPE_RESOURCE = wxBITMAP_TYPE_BMP_RESOURCE,
-    wxBITMAP_TYPE_ICO,
-    wxBITMAP_TYPE_ICO_RESOURCE,
-    wxBITMAP_TYPE_CUR,
-    wxBITMAP_TYPE_CUR_RESOURCE,
-    wxBITMAP_TYPE_XBM,
-    wxBITMAP_TYPE_XBM_DATA,
-    wxBITMAP_TYPE_XPM,
-    wxBITMAP_TYPE_XPM_DATA,
-    wxBITMAP_TYPE_TIF,
-    wxBITMAP_TYPE_TIF_RESOURCE,
-    wxBITMAP_TYPE_GIF,
-    wxBITMAP_TYPE_GIF_RESOURCE,
-    wxBITMAP_TYPE_PNG,
-    wxBITMAP_TYPE_PNG_RESOURCE,
-    wxBITMAP_TYPE_JPEG,
-    wxBITMAP_TYPE_JPEG_RESOURCE,
-    wxBITMAP_TYPE_PNM,
-    wxBITMAP_TYPE_PNM_RESOURCE,
-    wxBITMAP_TYPE_PCX,
-    wxBITMAP_TYPE_PCX_RESOURCE,
-    wxBITMAP_TYPE_PICT,
-    wxBITMAP_TYPE_PICT_RESOURCE,
-    wxBITMAP_TYPE_ICON,
-    wxBITMAP_TYPE_ICON_RESOURCE,
-    wxBITMAP_TYPE_ANI,
-    wxBITMAP_TYPE_IFF,
-    wxBITMAP_TYPE_MACCURSOR,
-    wxBITMAP_TYPE_MACCURSOR_RESOURCE,
-    wxBITMAP_TYPE_ANY = 50
-};
-
-
-
-
-// Standard cursors
-enum wxStockCursor
-{
-    wxCURSOR_NONE,
-    wxCURSOR_ARROW,
-    wxCURSOR_RIGHT_ARROW,
-    wxCURSOR_BULLSEYE,
-    wxCURSOR_CHAR,
-    wxCURSOR_CROSS,
-    wxCURSOR_HAND,
-    wxCURSOR_IBEAM,
-    wxCURSOR_LEFT_BUTTON,
-    wxCURSOR_MAGNIFIER,
-    wxCURSOR_MIDDLE_BUTTON,
-    wxCURSOR_NO_ENTRY,
-    wxCURSOR_PAINT_BRUSH,
-    wxCURSOR_PENCIL,
-    wxCURSOR_POINT_LEFT,
-    wxCURSOR_POINT_RIGHT,
-    wxCURSOR_QUESTION_ARROW,
-    wxCURSOR_RIGHT_BUTTON,
-    wxCURSOR_SIZENESW,
-    wxCURSOR_SIZENS,
-    wxCURSOR_SIZENWSE,
-    wxCURSOR_SIZEWE,
-    wxCURSOR_SIZING,
-    wxCURSOR_SPRAYCAN,
-    wxCURSOR_WAIT,
-    wxCURSOR_WATCH,
-    wxCURSOR_BLANK,
-    wxCURSOR_DEFAULT,
-    wxCURSOR_ARROWWAIT,
-    wxCURSOR_MAX
-};
-
-
 
 typedef enum {
     wxPAPER_NONE,               // Use specific dimensions
@@ -946,167 +763,4 @@ enum wxUpdateUI
 
 
 //---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
 
-/*
- * Event types
- *
- */
-enum wxEventType {
- wxEVT_NULL = 0,
- wxEVT_FIRST = 10000,
-
- // New names
- wxEVT_COMMAND_BUTTON_CLICKED,
- wxEVT_COMMAND_CHECKBOX_CLICKED,
- wxEVT_COMMAND_CHOICE_SELECTED,
- wxEVT_COMMAND_LISTBOX_SELECTED,
- wxEVT_COMMAND_LISTBOX_DOUBLECLICKED,
- wxEVT_COMMAND_CHECKLISTBOX_TOGGLED,
- wxEVT_COMMAND_SPINCTRL_UPDATED,
- wxEVT_COMMAND_TEXT_UPDATED,
- wxEVT_COMMAND_TEXT_ENTER,
- wxEVT_COMMAND_TEXT_URL,
- wxEVT_COMMAND_TEXT_MAXLEN,
- wxEVT_COMMAND_MENU_SELECTED,
- wxEVT_COMMAND_SLIDER_UPDATED,
- wxEVT_COMMAND_RADIOBOX_SELECTED,
- wxEVT_COMMAND_RADIOBUTTON_SELECTED,
-// wxEVT_COMMAND_SCROLLBAR_UPDATED is now obsolete since we use wxEVT_SCROLL... events
- wxEVT_COMMAND_SCROLLBAR_UPDATED,
- wxEVT_COMMAND_VLBOX_SELECTED,
- wxEVT_COMMAND_COMBOBOX_SELECTED,
- wxEVT_COMMAND_TOOL_CLICKED,
- wxEVT_COMMAND_TOOL_RCLICKED,
- wxEVT_COMMAND_TOOL_ENTER,
- wxEVT_SET_FOCUS,
- wxEVT_KILL_FOCUS,
- wxEVT_CHILD_FOCUS,
- wxEVT_MOUSEWHEEL,
-
-/* Mouse event types */
- wxEVT_LEFT_DOWN,
- wxEVT_LEFT_UP,
- wxEVT_MIDDLE_DOWN,
- wxEVT_MIDDLE_UP,
- wxEVT_RIGHT_DOWN,
- wxEVT_RIGHT_UP,
- wxEVT_MOTION,
- wxEVT_ENTER_WINDOW,
- wxEVT_LEAVE_WINDOW,
- wxEVT_LEFT_DCLICK,
- wxEVT_MIDDLE_DCLICK,
- wxEVT_RIGHT_DCLICK,
-
- wxEVT_MOUSE_CAPTURE_CHANGED,
-
- // Non-client mouse events
- wxEVT_NC_LEFT_DOWN,
- wxEVT_NC_LEFT_UP,
- wxEVT_NC_MIDDLE_DOWN,
- wxEVT_NC_MIDDLE_UP,
- wxEVT_NC_RIGHT_DOWN,
- wxEVT_NC_RIGHT_UP,
- wxEVT_NC_MOTION,
- wxEVT_NC_ENTER_WINDOW,
- wxEVT_NC_LEAVE_WINDOW,
- wxEVT_NC_LEFT_DCLICK,
- wxEVT_NC_MIDDLE_DCLICK,
- wxEVT_NC_RIGHT_DCLICK,
-
- wxEVT_SET_CURSOR,
-
-/* Character input event type  */
- wxEVT_CHAR,
- wxEVT_KEY_DOWN,
- wxEVT_KEY_UP,
- wxEVT_CHAR_HOOK,
- wxEVT_HOTKEY,
-
- /*
-  * Scrollbar event identifiers
-  */
- wxEVT_SCROLL_TOP,
- wxEVT_SCROLL_BOTTOM,
- wxEVT_SCROLL_LINEUP,
- wxEVT_SCROLL_LINEDOWN,
- wxEVT_SCROLL_PAGEUP,
- wxEVT_SCROLL_PAGEDOWN,
- wxEVT_SCROLL_THUMBTRACK,
- wxEVT_SCROLL_THUMBRELEASE,
- wxEVT_SCROLL_ENDSCROLL,
-
- /*
-  * Scrolled Window
-  */
- wxEVT_SCROLLWIN_TOP,
- wxEVT_SCROLLWIN_BOTTOM,
- wxEVT_SCROLLWIN_LINEUP,
- wxEVT_SCROLLWIN_LINEDOWN,
- wxEVT_SCROLLWIN_PAGEUP,
- wxEVT_SCROLLWIN_PAGEDOWN,
- wxEVT_SCROLLWIN_THUMBTRACK,
- wxEVT_SCROLLWIN_THUMBRELEASE,
-
- wxEVT_SIZE = wxEVT_FIRST + 200,
- wxEVT_MOVE,
- wxEVT_SIZING,
- wxEVT_MOVING,
- wxEVT_CLOSE_WINDOW,
- wxEVT_END_SESSION,
- wxEVT_QUERY_END_SESSION,
- wxEVT_ACTIVATE_APP,
- wxEVT_POWER,
- wxEVT_ACTIVATE,
- wxEVT_CREATE,
- wxEVT_DESTROY,
- wxEVT_SHOW,
- wxEVT_ICONIZE,
- wxEVT_MAXIMIZE,
- wxEVT_PAINT,
- wxEVT_ERASE_BACKGROUND,
- wxEVT_NC_PAINT,
- wxEVT_PAINT_ICON,
- wxEVT_MENU_OPEN,
- wxEVT_MENU_CLOSE,
- wxEVT_MENU_HIGHLIGHT,
- wxEVT_CONTEXT_MENU,
- wxEVT_SYS_COLOUR_CHANGED,
- wxEVT_DISPLAY_CHANGED,
- wxEVT_SETTING_CHANGED,
- wxEVT_QUERY_NEW_PALETTE,
- wxEVT_PALETTE_CHANGED,
- wxEVT_JOY_BUTTON_DOWN,
- wxEVT_JOY_BUTTON_UP,
- wxEVT_JOY_MOVE,
- wxEVT_JOY_ZMOVE,
- wxEVT_DROP_FILES,
- wxEVT_DRAW_ITEM,
- wxEVT_MEASURE_ITEM,
- wxEVT_COMPARE_ITEM,
- wxEVT_INIT_DIALOG,
- wxEVT_IDLE,
- wxEVT_UPDATE_UI,
-
-
- /* Generic command events */
- // Note: a click is a higher-level event
- // than button down/up
- wxEVT_COMMAND_LEFT_CLICK,
- wxEVT_COMMAND_LEFT_DCLICK,
- wxEVT_COMMAND_RIGHT_CLICK,
- wxEVT_COMMAND_RIGHT_DCLICK,
- wxEVT_COMMAND_SET_FOCUS,
- wxEVT_COMMAND_KILL_FOCUS,
- wxEVT_COMMAND_ENTER,
-
- wxEVT_NAVIGATION_KEY,
-
- wxEVT_TIMER,
-
-};
-
-
-
-
-//----------------------------------------------------------------------

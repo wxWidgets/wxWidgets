@@ -1,47 +1,81 @@
 # This file was created automatically by SWIG.
-import xrcc
+# Don't modify this file, modify the SWIG interface instead.
 
-from misc import *
+import _xrc
 
-from misc2 import *
+import core
+wx = core 
+#---------------------------------------------------------------------------
 
-from windows import *
+WX_XMLRES_CURRENT_VERSION_MAJOR = _xrc.WX_XMLRES_CURRENT_VERSION_MAJOR
+WX_XMLRES_CURRENT_VERSION_MINOR = _xrc.WX_XMLRES_CURRENT_VERSION_MINOR
+WX_XMLRES_CURRENT_VERSION_RELEASE = _xrc.WX_XMLRES_CURRENT_VERSION_RELEASE
+WX_XMLRES_CURRENT_VERSION_REVISION = _xrc.WX_XMLRES_CURRENT_VERSION_REVISION
+XRC_USE_LOCALE = _xrc.XRC_USE_LOCALE
+XRC_NO_SUBCLASSING = _xrc.XRC_NO_SUBCLASSING
+class XmlResource(core.Object):
+    def __init__(self, *args, **kwargs):
+        newobj = _xrc.new_XmlResource(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+        self.InitAllHandlers()
+    def __del__(self, destroy=_xrc.delete_XmlResource):
+        try:
+            if self.thisown: destroy(self)
+        except: pass
+    def Load(*args, **kwargs): return _xrc.XmlResource_Load(*args, **kwargs)
+    def LoadFromString(*args, **kwargs): return _xrc.XmlResource_LoadFromString(*args, **kwargs)
+    def InitAllHandlers(*args, **kwargs): return _xrc.XmlResource_InitAllHandlers(*args, **kwargs)
+    def AddHandler(*args, **kwargs): return _xrc.XmlResource_AddHandler(*args, **kwargs)
+    def InsertHandler(*args, **kwargs): return _xrc.XmlResource_InsertHandler(*args, **kwargs)
+    def ClearHandlers(*args, **kwargs): return _xrc.XmlResource_ClearHandlers(*args, **kwargs)
+    AddSubclassFactory = staticmethod(_xrc.XmlResource_AddSubclassFactory)
+    def LoadMenu(*args, **kwargs): return _xrc.XmlResource_LoadMenu(*args, **kwargs)
+    def LoadMenuBar(*args, **kwargs): return _xrc.XmlResource_LoadMenuBar(*args, **kwargs)
+    def LoadMenuBarOnFrame(*args, **kwargs): return _xrc.XmlResource_LoadMenuBarOnFrame(*args, **kwargs)
+    def LoadToolBar(*args, **kwargs): return _xrc.XmlResource_LoadToolBar(*args, **kwargs)
+    def LoadDialog(*args, **kwargs): return _xrc.XmlResource_LoadDialog(*args, **kwargs)
+    def LoadOnDialog(*args, **kwargs): return _xrc.XmlResource_LoadOnDialog(*args, **kwargs)
+    def LoadPanel(*args, **kwargs): return _xrc.XmlResource_LoadPanel(*args, **kwargs)
+    def LoadOnPanel(*args, **kwargs): return _xrc.XmlResource_LoadOnPanel(*args, **kwargs)
+    def LoadFrame(*args, **kwargs): return _xrc.XmlResource_LoadFrame(*args, **kwargs)
+    def LoadOnFrame(*args, **kwargs): return _xrc.XmlResource_LoadOnFrame(*args, **kwargs)
+    def LoadObject(*args, **kwargs): return _xrc.XmlResource_LoadObject(*args, **kwargs)
+    def LoadOnObject(*args, **kwargs): return _xrc.XmlResource_LoadOnObject(*args, **kwargs)
+    def LoadBitmap(*args, **kwargs): return _xrc.XmlResource_LoadBitmap(*args, **kwargs)
+    def LoadIcon(*args, **kwargs): return _xrc.XmlResource_LoadIcon(*args, **kwargs)
+    def AttachUnknownControl(*args, **kwargs): return _xrc.XmlResource_AttachUnknownControl(*args, **kwargs)
+    GetXRCID = staticmethod(_xrc.XmlResource_GetXRCID)
+    def GetVersion(*args, **kwargs): return _xrc.XmlResource_GetVersion(*args, **kwargs)
+    def CompareVersion(*args, **kwargs): return _xrc.XmlResource_CompareVersion(*args, **kwargs)
+    Get = staticmethod(_xrc.XmlResource_Get)
+    Set = staticmethod(_xrc.XmlResource_Set)
+    def GetFlags(*args, **kwargs): return _xrc.XmlResource_GetFlags(*args, **kwargs)
+    def SetFlags(*args, **kwargs): return _xrc.XmlResource_SetFlags(*args, **kwargs)
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxXmlResource instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
 
-from gdi import *
+class XmlResourcePtr(XmlResource):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = XmlResource
+_xrc.XmlResource_swigregister(XmlResourcePtr)
 
-from fonts import *
+def EmptyXmlResource(*args, **kwargs):
+    val = _xrc.new_EmptyXmlResource(*args, **kwargs)
+    val.thisown = 1
+    val.InitAllHandlers()
+    return val
 
-from clip_dnd import *
+XmlResource_AddSubclassFactory = _xrc.XmlResource_AddSubclassFactory
 
-from events import *
+XmlResource_GetXRCID = _xrc.XmlResource_GetXRCID
 
-from streams import *
+XmlResource_Get = _xrc.XmlResource_Get
 
-from utils import *
-
-from mdi import *
-
-from frames import *
-
-from stattool import *
-
-from controls import *
-
-from controls2 import *
-
-from windows2 import *
-
-from cmndlgs import *
-
-from windows3 import *
-
-from image import *
-
-from printfw import *
-
-from sizers import *
-
-from filesys import *
+XmlResource_Set = _xrc.XmlResource_Set
 
 def XRCID(str_id):
     return wxXmlResource_GetXRCID(str_id)
@@ -49,512 +83,213 @@ def XRCID(str_id):
 def XRCCTRL(window, str_id, *ignoreargs):
     return window.FindWindowById(XRCID(str_id))
 
-XMLID = XRCID
-XMLCTRL = XRCCTRL
+#---------------------------------------------------------------------------
 
-class wxXmlResourcePtr(wxObjectPtr):
-    def __init__(self,this):
-        self.this = this
-        self.thisown = 0
-    def __del__(self, delfunc=xrcc.delete_wxXmlResource):
-        if self.thisown == 1:
-            try:
-                delfunc(self)
-            except:
-                pass
-    def Load(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResource_Load(self, *_args, **_kwargs)
-        return val
-    def LoadFromString(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResource_LoadFromString(self, *_args, **_kwargs)
-        return val
-    def InitAllHandlers(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResource_InitAllHandlers(self, *_args, **_kwargs)
-        return val
-    def AddHandler(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResource_AddHandler(self, *_args, **_kwargs)
-        return val
-    def InsertHandler(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResource_InsertHandler(self, *_args, **_kwargs)
-        return val
-    def ClearHandlers(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResource_ClearHandlers(self, *_args, **_kwargs)
-        return val
-    def LoadMenu(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResource_LoadMenu(self, *_args, **_kwargs)
-        return val
-    def LoadMenuBar(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResource_LoadMenuBar(self, *_args, **_kwargs)
-        return val
-    def LoadMenuBarOnFrame(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResource_LoadMenuBarOnFrame(self, *_args, **_kwargs)
-        return val
-    def LoadToolBar(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResource_LoadToolBar(self, *_args, **_kwargs)
-        return val
-    def LoadDialog(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResource_LoadDialog(self, *_args, **_kwargs)
-        if val: val = wxDialogPtr(val) 
-        return val
-    def LoadOnDialog(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResource_LoadOnDialog(self, *_args, **_kwargs)
-        return val
-    def LoadPanel(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResource_LoadPanel(self, *_args, **_kwargs)
-        if val: val = wxPanelPtr(val) 
-        return val
-    def LoadOnPanel(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResource_LoadOnPanel(self, *_args, **_kwargs)
-        return val
-    def LoadFrame(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResource_LoadFrame(self, *_args, **_kwargs)
-        return val
-    def LoadOnFrame(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResource_LoadOnFrame(self, *_args, **_kwargs)
-        return val
-    def LoadObject(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResource_LoadObject(self, *_args, **_kwargs)
-        return val
-    def LoadOnObject(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResource_LoadOnObject(self, *_args, **_kwargs)
-        return val
-    def LoadBitmap(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResource_LoadBitmap(self, *_args, **_kwargs)
-        if val: val = wxBitmapPtr(val) ; val.thisown = 1
-        return val
-    def LoadIcon(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResource_LoadIcon(self, *_args, **_kwargs)
-        if val: val = wxIconPtr(val) ; val.thisown = 1
-        return val
-    def AttachUnknownControl(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResource_AttachUnknownControl(self, *_args, **_kwargs)
-        return val
-    def GetVersion(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResource_GetVersion(self, *_args, **_kwargs)
-        return val
-    def CompareVersion(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResource_CompareVersion(self, *_args, **_kwargs)
-        return val
-    def GetFlags(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResource_GetFlags(self, *_args, **_kwargs)
-        return val
-    def SetFlags(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResource_SetFlags(self, *_args, **_kwargs)
-        return val
-    def __repr__(self):
-        return "<%s.%s instance; proxy of C++ wxXmlResource instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
-class wxXmlResource(wxXmlResourcePtr):
-    def __init__(self,*_args,**_kwargs):
-        self.this = xrcc.new_wxXmlResource(*_args,**_kwargs)
+class XmlSubclassFactory(object):
+    def __init__(self, *args, **kwargs):
+        newobj = _xrc.new_XmlSubclassFactory(*args, **kwargs)
+        self.this = newobj.this
         self.thisown = 1
-        self.InitAllHandlers()
-
-
-
-def wxEmptyXmlResource(*_args,**_kwargs):
-    val = wxXmlResourcePtr(xrcc.new_wxEmptyXmlResource(*_args,**_kwargs))
-    val.thisown = 1
-    val.InitAllHandlers()
-    return val
-
-
-class wxXmlSubclassFactoryPtr :
-    def __init__(self,this):
-        self.this = this
-        self.thisown = 0
-    def _setCallbackInfo(self, *_args, **_kwargs):
-        val = xrcc.wxXmlSubclassFactory__setCallbackInfo(self, *_args, **_kwargs)
-        return val
+        del newobj.thisown
+        self._setCallbackInfo(self, XmlSubclassFactory)
+    def _setCallbackInfo(*args, **kwargs): return _xrc.XmlSubclassFactory__setCallbackInfo(*args, **kwargs)
     def __repr__(self):
-        return "<%s.%s instance; proxy of C++ wxXmlSubclassFactory instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
-class wxXmlSubclassFactory(wxXmlSubclassFactoryPtr):
-    def __init__(self,*_args,**_kwargs):
-        self.this = xrcc.new_wxXmlSubclassFactory(*_args,**_kwargs)
-        self.thisown = 1
-        self._setCallbackInfo(self, wxXmlSubclassFactory)
+        return "<%s.%s; proxy of C++ wxPyXmlSubclassFactory instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
 
-
-
-
-class wxXmlPropertyPtr :
-    def __init__(self,this):
+class XmlSubclassFactoryPtr(XmlSubclassFactory):
+    def __init__(self, this):
         self.this = this
-        self.thisown = 0
-    def GetName(self, *_args, **_kwargs):
-        val = xrcc.wxXmlProperty_GetName(self, *_args, **_kwargs)
-        return val
-    def GetValue(self, *_args, **_kwargs):
-        val = xrcc.wxXmlProperty_GetValue(self, *_args, **_kwargs)
-        return val
-    def GetNext(self, *_args, **_kwargs):
-        val = xrcc.wxXmlProperty_GetNext(self, *_args, **_kwargs)
-        if val: val = wxXmlPropertyPtr(val) 
-        return val
-    def SetName(self, *_args, **_kwargs):
-        val = xrcc.wxXmlProperty_SetName(self, *_args, **_kwargs)
-        return val
-    def SetValue(self, *_args, **_kwargs):
-        val = xrcc.wxXmlProperty_SetValue(self, *_args, **_kwargs)
-        return val
-    def SetNext(self, *_args, **_kwargs):
-        val = xrcc.wxXmlProperty_SetNext(self, *_args, **_kwargs)
-        return val
-    def __repr__(self):
-        return "<%s.%s instance; proxy of C++ wxXmlProperty instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
-class wxXmlProperty(wxXmlPropertyPtr):
-    def __init__(self,*_args,**_kwargs):
-        self.this = xrcc.new_wxXmlProperty(*_args,**_kwargs)
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = XmlSubclassFactory
+_xrc.XmlSubclassFactory_swigregister(XmlSubclassFactoryPtr)
+
+#---------------------------------------------------------------------------
+
+XML_ELEMENT_NODE = _xrc.XML_ELEMENT_NODE
+XML_ATTRIBUTE_NODE = _xrc.XML_ATTRIBUTE_NODE
+XML_TEXT_NODE = _xrc.XML_TEXT_NODE
+XML_CDATA_SECTION_NODE = _xrc.XML_CDATA_SECTION_NODE
+XML_ENTITY_REF_NODE = _xrc.XML_ENTITY_REF_NODE
+XML_ENTITY_NODE = _xrc.XML_ENTITY_NODE
+XML_PI_NODE = _xrc.XML_PI_NODE
+XML_COMMENT_NODE = _xrc.XML_COMMENT_NODE
+XML_DOCUMENT_NODE = _xrc.XML_DOCUMENT_NODE
+XML_DOCUMENT_TYPE_NODE = _xrc.XML_DOCUMENT_TYPE_NODE
+XML_DOCUMENT_FRAG_NODE = _xrc.XML_DOCUMENT_FRAG_NODE
+XML_NOTATION_NODE = _xrc.XML_NOTATION_NODE
+XML_HTML_DOCUMENT_NODE = _xrc.XML_HTML_DOCUMENT_NODE
+class XmlProperty(object):
+    def __init__(self, *args, **kwargs):
+        newobj = _xrc.new_XmlProperty(*args, **kwargs)
+        self.this = newobj.this
         self.thisown = 1
+        del newobj.thisown
+    def GetName(*args, **kwargs): return _xrc.XmlProperty_GetName(*args, **kwargs)
+    def GetValue(*args, **kwargs): return _xrc.XmlProperty_GetValue(*args, **kwargs)
+    def GetNext(*args, **kwargs): return _xrc.XmlProperty_GetNext(*args, **kwargs)
+    def SetName(*args, **kwargs): return _xrc.XmlProperty_SetName(*args, **kwargs)
+    def SetValue(*args, **kwargs): return _xrc.XmlProperty_SetValue(*args, **kwargs)
+    def SetNext(*args, **kwargs): return _xrc.XmlProperty_SetNext(*args, **kwargs)
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxXmlProperty instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
 
-
-
-
-class wxXmlNodePtr :
-    def __init__(self,this):
+class XmlPropertyPtr(XmlProperty):
+    def __init__(self, this):
         self.this = this
-        self.thisown = 0
-    def __del__(self, delfunc=xrcc.delete_wxXmlNode):
-        if self.thisown == 1:
-            try:
-                delfunc(self)
-            except:
-                pass
-    def AddChild(self, *_args, **_kwargs):
-        val = xrcc.wxXmlNode_AddChild(self, *_args, **_kwargs)
-        return val
-    def InsertChild(self, *_args, **_kwargs):
-        val = xrcc.wxXmlNode_InsertChild(self, *_args, **_kwargs)
-        return val
-    def RemoveChild(self, *_args, **_kwargs):
-        val = xrcc.wxXmlNode_RemoveChild(self, *_args, **_kwargs)
-        return val
-    def AddProperty(self, *_args, **_kwargs):
-        val = xrcc.wxXmlNode_AddProperty(self, *_args, **_kwargs)
-        return val
-    def AddPropertyName(self, *_args, **_kwargs):
-        val = xrcc.wxXmlNode_AddPropertyName(self, *_args, **_kwargs)
-        return val
-    def DeleteProperty(self, *_args, **_kwargs):
-        val = xrcc.wxXmlNode_DeleteProperty(self, *_args, **_kwargs)
-        return val
-    def GetType(self, *_args, **_kwargs):
-        val = xrcc.wxXmlNode_GetType(self, *_args, **_kwargs)
-        return val
-    def GetName(self, *_args, **_kwargs):
-        val = xrcc.wxXmlNode_GetName(self, *_args, **_kwargs)
-        return val
-    def GetContent(self, *_args, **_kwargs):
-        val = xrcc.wxXmlNode_GetContent(self, *_args, **_kwargs)
-        return val
-    def GetParent(self, *_args, **_kwargs):
-        val = xrcc.wxXmlNode_GetParent(self, *_args, **_kwargs)
-        if val: val = wxXmlNodePtr(val) 
-        return val
-    def GetNext(self, *_args, **_kwargs):
-        val = xrcc.wxXmlNode_GetNext(self, *_args, **_kwargs)
-        if val: val = wxXmlNodePtr(val) 
-        return val
-    def GetChildren(self, *_args, **_kwargs):
-        val = xrcc.wxXmlNode_GetChildren(self, *_args, **_kwargs)
-        if val: val = wxXmlNodePtr(val) 
-        return val
-    def GetProperties(self, *_args, **_kwargs):
-        val = xrcc.wxXmlNode_GetProperties(self, *_args, **_kwargs)
-        if val: val = wxXmlPropertyPtr(val) 
-        return val
-    def GetPropVal(self, *_args, **_kwargs):
-        val = xrcc.wxXmlNode_GetPropVal(self, *_args, **_kwargs)
-        return val
-    def HasProp(self, *_args, **_kwargs):
-        val = xrcc.wxXmlNode_HasProp(self, *_args, **_kwargs)
-        return val
-    def SetType(self, *_args, **_kwargs):
-        val = xrcc.wxXmlNode_SetType(self, *_args, **_kwargs)
-        return val
-    def SetName(self, *_args, **_kwargs):
-        val = xrcc.wxXmlNode_SetName(self, *_args, **_kwargs)
-        return val
-    def SetContent(self, *_args, **_kwargs):
-        val = xrcc.wxXmlNode_SetContent(self, *_args, **_kwargs)
-        return val
-    def SetParent(self, *_args, **_kwargs):
-        val = xrcc.wxXmlNode_SetParent(self, *_args, **_kwargs)
-        return val
-    def SetNext(self, *_args, **_kwargs):
-        val = xrcc.wxXmlNode_SetNext(self, *_args, **_kwargs)
-        return val
-    def SetChildren(self, *_args, **_kwargs):
-        val = xrcc.wxXmlNode_SetChildren(self, *_args, **_kwargs)
-        return val
-    def SetProperties(self, *_args, **_kwargs):
-        val = xrcc.wxXmlNode_SetProperties(self, *_args, **_kwargs)
-        return val
-    def __repr__(self):
-        return "<%s.%s instance; proxy of C++ wxXmlNode instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
-class wxXmlNode(wxXmlNodePtr):
-    def __init__(self,*_args,**_kwargs):
-        self.this = xrcc.new_wxXmlNode(*_args,**_kwargs)
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = XmlProperty
+_xrc.XmlProperty_swigregister(XmlPropertyPtr)
+
+class XmlNode(object):
+    def __init__(self, *args, **kwargs):
+        newobj = _xrc.new_XmlNode(*args, **kwargs)
+        self.this = newobj.this
         self.thisown = 1
+        del newobj.thisown
+    def __del__(self, destroy=_xrc.delete_XmlNode):
+        try:
+            if self.thisown: destroy(self)
+        except: pass
+    def AddChild(*args, **kwargs): return _xrc.XmlNode_AddChild(*args, **kwargs)
+    def InsertChild(*args, **kwargs): return _xrc.XmlNode_InsertChild(*args, **kwargs)
+    def RemoveChild(*args, **kwargs): return _xrc.XmlNode_RemoveChild(*args, **kwargs)
+    def AddProperty(*args, **kwargs): return _xrc.XmlNode_AddProperty(*args, **kwargs)
+    def AddPropertyName(*args, **kwargs): return _xrc.XmlNode_AddPropertyName(*args, **kwargs)
+    def DeleteProperty(*args, **kwargs): return _xrc.XmlNode_DeleteProperty(*args, **kwargs)
+    def GetType(*args, **kwargs): return _xrc.XmlNode_GetType(*args, **kwargs)
+    def GetName(*args, **kwargs): return _xrc.XmlNode_GetName(*args, **kwargs)
+    def GetContent(*args, **kwargs): return _xrc.XmlNode_GetContent(*args, **kwargs)
+    def GetParent(*args, **kwargs): return _xrc.XmlNode_GetParent(*args, **kwargs)
+    def GetNext(*args, **kwargs): return _xrc.XmlNode_GetNext(*args, **kwargs)
+    def GetChildren(*args, **kwargs): return _xrc.XmlNode_GetChildren(*args, **kwargs)
+    def GetProperties(*args, **kwargs): return _xrc.XmlNode_GetProperties(*args, **kwargs)
+    def GetPropVal(*args, **kwargs): return _xrc.XmlNode_GetPropVal(*args, **kwargs)
+    def HasProp(*args, **kwargs): return _xrc.XmlNode_HasProp(*args, **kwargs)
+    def SetType(*args, **kwargs): return _xrc.XmlNode_SetType(*args, **kwargs)
+    def SetName(*args, **kwargs): return _xrc.XmlNode_SetName(*args, **kwargs)
+    def SetContent(*args, **kwargs): return _xrc.XmlNode_SetContent(*args, **kwargs)
+    def SetParent(*args, **kwargs): return _xrc.XmlNode_SetParent(*args, **kwargs)
+    def SetNext(*args, **kwargs): return _xrc.XmlNode_SetNext(*args, **kwargs)
+    def SetChildren(*args, **kwargs): return _xrc.XmlNode_SetChildren(*args, **kwargs)
+    def SetProperties(*args, **kwargs): return _xrc.XmlNode_SetProperties(*args, **kwargs)
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxXmlNode instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
 
+class XmlNodePtr(XmlNode):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = XmlNode
+_xrc.XmlNode_swigregister(XmlNodePtr)
 
-
-def wxXmlNodeEasy(*_args,**_kwargs):
-    val = wxXmlNodePtr(xrcc.new_wxXmlNodeEasy(*_args,**_kwargs))
+def XmlNodeEasy(*args, **kwargs):
+    val = _xrc.new_XmlNodeEasy(*args, **kwargs)
     val.thisown = 1
     return val
 
-
-class wxXmlDocumentPtr(wxObjectPtr):
-    def __init__(self,this):
-        self.this = this
-        self.thisown = 0
-    def __del__(self, delfunc=xrcc.delete_wxXmlDocument):
-        if self.thisown == 1:
-            try:
-                delfunc(self)
-            except:
-                pass
-    def Load(self, *_args, **_kwargs):
-        val = xrcc.wxXmlDocument_Load(self, *_args, **_kwargs)
-        return val
-    def LoadFromStream(self, *_args, **_kwargs):
-        val = xrcc.wxXmlDocument_LoadFromStream(self, *_args, **_kwargs)
-        return val
-    def Save(self, *_args, **_kwargs):
-        val = xrcc.wxXmlDocument_Save(self, *_args, **_kwargs)
-        return val
-    def SaveToStream(self, *_args, **_kwargs):
-        val = xrcc.wxXmlDocument_SaveToStream(self, *_args, **_kwargs)
-        return val
-    def IsOk(self, *_args, **_kwargs):
-        val = xrcc.wxXmlDocument_IsOk(self, *_args, **_kwargs)
-        return val
-    def GetRoot(self, *_args, **_kwargs):
-        val = xrcc.wxXmlDocument_GetRoot(self, *_args, **_kwargs)
-        if val: val = wxXmlNodePtr(val) 
-        return val
-    def GetVersion(self, *_args, **_kwargs):
-        val = xrcc.wxXmlDocument_GetVersion(self, *_args, **_kwargs)
-        return val
-    def GetFileEncoding(self, *_args, **_kwargs):
-        val = xrcc.wxXmlDocument_GetFileEncoding(self, *_args, **_kwargs)
-        return val
-    def SetRoot(self, *_args, **_kwargs):
-        val = xrcc.wxXmlDocument_SetRoot(self, *_args, **_kwargs)
-        return val
-    def SetVersion(self, *_args, **_kwargs):
-        val = xrcc.wxXmlDocument_SetVersion(self, *_args, **_kwargs)
-        return val
-    def SetFileEncoding(self, *_args, **_kwargs):
-        val = xrcc.wxXmlDocument_SetFileEncoding(self, *_args, **_kwargs)
-        return val
-    def GetEncoding(self, *_args, **_kwargs):
-        val = xrcc.wxXmlDocument_GetEncoding(self, *_args, **_kwargs)
-        return val
-    def SetEncoding(self, *_args, **_kwargs):
-        val = xrcc.wxXmlDocument_SetEncoding(self, *_args, **_kwargs)
-        return val
-    def __repr__(self):
-        return "<%s.%s instance; proxy of C++ wxXmlDocument instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
-class wxXmlDocument(wxXmlDocumentPtr):
-    def __init__(self,*_args,**_kwargs):
-        self.this = xrcc.new_wxXmlDocument(*_args,**_kwargs)
+class XmlDocument(core.Object):
+    def __init__(self, *args, **kwargs):
+        newobj = _xrc.new_XmlDocument(*args, **kwargs)
+        self.this = newobj.this
         self.thisown = 1
+        del newobj.thisown
+    def __del__(self, destroy=_xrc.delete_XmlDocument):
+        try:
+            if self.thisown: destroy(self)
+        except: pass
+    def Load(*args, **kwargs): return _xrc.XmlDocument_Load(*args, **kwargs)
+    def LoadFromStream(*args, **kwargs): return _xrc.XmlDocument_LoadFromStream(*args, **kwargs)
+    def Save(*args, **kwargs): return _xrc.XmlDocument_Save(*args, **kwargs)
+    def SaveToStream(*args, **kwargs): return _xrc.XmlDocument_SaveToStream(*args, **kwargs)
+    def IsOk(*args, **kwargs): return _xrc.XmlDocument_IsOk(*args, **kwargs)
+    def GetRoot(*args, **kwargs): return _xrc.XmlDocument_GetRoot(*args, **kwargs)
+    def GetVersion(*args, **kwargs): return _xrc.XmlDocument_GetVersion(*args, **kwargs)
+    def GetFileEncoding(*args, **kwargs): return _xrc.XmlDocument_GetFileEncoding(*args, **kwargs)
+    def SetRoot(*args, **kwargs): return _xrc.XmlDocument_SetRoot(*args, **kwargs)
+    def SetVersion(*args, **kwargs): return _xrc.XmlDocument_SetVersion(*args, **kwargs)
+    def SetFileEncoding(*args, **kwargs): return _xrc.XmlDocument_SetFileEncoding(*args, **kwargs)
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxXmlDocument instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
 
+class XmlDocumentPtr(XmlDocument):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = XmlDocument
+_xrc.XmlDocument_swigregister(XmlDocumentPtr)
 
-
-def wxXmlDocumentFromStream(*_args,**_kwargs):
-    val = wxXmlDocumentPtr(xrcc.new_wxXmlDocumentFromStream(*_args,**_kwargs))
+def XmlDocumentFromStream(*args, **kwargs):
+    val = _xrc.new_XmlDocumentFromStream(*args, **kwargs)
     val.thisown = 1
     return val
 
-def wxEmptyXmlDocument(*_args,**_kwargs):
-    val = wxXmlDocumentPtr(xrcc.new_wxEmptyXmlDocument(*_args,**_kwargs))
+def EmptyXmlDocument(*args, **kwargs):
+    val = _xrc.new_EmptyXmlDocument(*args, **kwargs)
     val.thisown = 1
     return val
 
+#---------------------------------------------------------------------------
 
-class wxXmlResourceHandlerPtr(wxObjectPtr):
-    def __init__(self,this):
-        self.this = this
-        self.thisown = 0
-    def _setCallbackInfo(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResourceHandler__setCallbackInfo(self, *_args, **_kwargs)
-        return val
-    def CreateResource(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResourceHandler_CreateResource(self, *_args, **_kwargs)
-        return val
-    def SetParentResource(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResourceHandler_SetParentResource(self, *_args, **_kwargs)
-        return val
-    def GetResource(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResourceHandler_GetResource(self, *_args, **_kwargs)
-        if val: val = wxXmlResourcePtr(val) 
-        return val
-    def GetNode(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResourceHandler_GetNode(self, *_args, **_kwargs)
-        if val: val = wxXmlNodePtr(val) 
-        return val
-    def GetClass(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResourceHandler_GetClass(self, *_args, **_kwargs)
-        return val
-    def GetParent(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResourceHandler_GetParent(self, *_args, **_kwargs)
-        return val
-    def GetInstance(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResourceHandler_GetInstance(self, *_args, **_kwargs)
-        return val
-    def GetParentAsWindow(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResourceHandler_GetParentAsWindow(self, *_args, **_kwargs)
-        return val
-    def GetInstanceAsWindow(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResourceHandler_GetInstanceAsWindow(self, *_args, **_kwargs)
-        return val
-    def IsOfClass(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResourceHandler_IsOfClass(self, *_args, **_kwargs)
-        return val
-    def GetNodeContent(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResourceHandler_GetNodeContent(self, *_args, **_kwargs)
-        return val
-    def HasParam(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResourceHandler_HasParam(self, *_args, **_kwargs)
-        return val
-    def GetParamNode(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResourceHandler_GetParamNode(self, *_args, **_kwargs)
-        if val: val = wxXmlNodePtr(val) 
-        return val
-    def GetParamValue(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResourceHandler_GetParamValue(self, *_args, **_kwargs)
-        return val
-    def AddStyle(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResourceHandler_AddStyle(self, *_args, **_kwargs)
-        return val
-    def AddWindowStyles(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResourceHandler_AddWindowStyles(self, *_args, **_kwargs)
-        return val
-    def GetStyle(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResourceHandler_GetStyle(self, *_args, **_kwargs)
-        return val
-    def GetText(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResourceHandler_GetText(self, *_args, **_kwargs)
-        return val
-    def GetID(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResourceHandler_GetID(self, *_args, **_kwargs)
-        return val
-    def GetName(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResourceHandler_GetName(self, *_args, **_kwargs)
-        return val
-    def GetBool(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResourceHandler_GetBool(self, *_args, **_kwargs)
-        return val
-    def GetLong(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResourceHandler_GetLong(self, *_args, **_kwargs)
-        return val
-    def GetColour(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResourceHandler_GetColour(self, *_args, **_kwargs)
-        if val: val = wxColourPtr(val) ; val.thisown = 1
-        return val
-    def GetSize(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResourceHandler_GetSize(self, *_args, **_kwargs)
-        if val: val = wxSizePtr(val) ; val.thisown = 1
-        return val
-    def GetPosition(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResourceHandler_GetPosition(self, *_args, **_kwargs)
-        if val: val = wxPointPtr(val) ; val.thisown = 1
-        return val
-    def GetDimension(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResourceHandler_GetDimension(self, *_args, **_kwargs)
-        return val
-    def GetBitmap(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResourceHandler_GetBitmap(self, *_args, **_kwargs)
-        if val: val = wxBitmapPtr(val) ; val.thisown = 1
-        return val
-    def GetIcon(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResourceHandler_GetIcon(self, *_args, **_kwargs)
-        if val: val = wxIconPtr(val) ; val.thisown = 1
-        return val
-    def GetFont(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResourceHandler_GetFont(self, *_args, **_kwargs)
-        if val: val = wxFontPtr(val) ; val.thisown = 1
-        return val
-    def SetupWindow(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResourceHandler_SetupWindow(self, *_args, **_kwargs)
-        return val
-    def CreateChildren(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResourceHandler_CreateChildren(self, *_args, **_kwargs)
-        return val
-    def CreateChildrenPrivately(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResourceHandler_CreateChildrenPrivately(self, *_args, **_kwargs)
-        return val
-    def CreateResFromNode(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResourceHandler_CreateResFromNode(self, *_args, **_kwargs)
-        return val
-    def GetCurFileSystem(self, *_args, **_kwargs):
-        val = xrcc.wxXmlResourceHandler_GetCurFileSystem(self, *_args, **_kwargs)
-        return val
-    def __repr__(self):
-        return "<%s.%s instance; proxy of C++ wxXmlResourceHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
-class wxXmlResourceHandler(wxXmlResourceHandlerPtr):
-    def __init__(self,*_args,**_kwargs):
-        self.this = xrcc.new_wxXmlResourceHandler(*_args,**_kwargs)
+class XmlResourceHandler(core.Object):
+    def __init__(self, *args, **kwargs):
+        newobj = _xrc.new_XmlResourceHandler(*args, **kwargs)
+        self.this = newobj.this
         self.thisown = 1
-        self._setCallbackInfo(self, wxXmlResourceHandler)
+        del newobj.thisown
+        self._setCallbackInfo(self, XmlResourceHandler)
+    def _setCallbackInfo(*args, **kwargs): return _xrc.XmlResourceHandler__setCallbackInfo(*args, **kwargs)
+    def CreateResource(*args, **kwargs): return _xrc.XmlResourceHandler_CreateResource(*args, **kwargs)
+    def SetParentResource(*args, **kwargs): return _xrc.XmlResourceHandler_SetParentResource(*args, **kwargs)
+    def GetResource(*args, **kwargs): return _xrc.XmlResourceHandler_GetResource(*args, **kwargs)
+    def GetNode(*args, **kwargs): return _xrc.XmlResourceHandler_GetNode(*args, **kwargs)
+    def GetClass(*args, **kwargs): return _xrc.XmlResourceHandler_GetClass(*args, **kwargs)
+    def GetParent(*args, **kwargs): return _xrc.XmlResourceHandler_GetParent(*args, **kwargs)
+    def GetInstance(*args, **kwargs): return _xrc.XmlResourceHandler_GetInstance(*args, **kwargs)
+    def GetParentAsWindow(*args, **kwargs): return _xrc.XmlResourceHandler_GetParentAsWindow(*args, **kwargs)
+    def GetInstanceAsWindow(*args, **kwargs): return _xrc.XmlResourceHandler_GetInstanceAsWindow(*args, **kwargs)
+    def IsOfClass(*args, **kwargs): return _xrc.XmlResourceHandler_IsOfClass(*args, **kwargs)
+    def GetNodeContent(*args, **kwargs): return _xrc.XmlResourceHandler_GetNodeContent(*args, **kwargs)
+    def HasParam(*args, **kwargs): return _xrc.XmlResourceHandler_HasParam(*args, **kwargs)
+    def GetParamNode(*args, **kwargs): return _xrc.XmlResourceHandler_GetParamNode(*args, **kwargs)
+    def GetParamValue(*args, **kwargs): return _xrc.XmlResourceHandler_GetParamValue(*args, **kwargs)
+    def AddStyle(*args, **kwargs): return _xrc.XmlResourceHandler_AddStyle(*args, **kwargs)
+    def AddWindowStyles(*args, **kwargs): return _xrc.XmlResourceHandler_AddWindowStyles(*args, **kwargs)
+    def GetStyle(*args, **kwargs): return _xrc.XmlResourceHandler_GetStyle(*args, **kwargs)
+    def GetText(*args, **kwargs): return _xrc.XmlResourceHandler_GetText(*args, **kwargs)
+    def GetID(*args, **kwargs): return _xrc.XmlResourceHandler_GetID(*args, **kwargs)
+    def GetName(*args, **kwargs): return _xrc.XmlResourceHandler_GetName(*args, **kwargs)
+    def GetBool(*args, **kwargs): return _xrc.XmlResourceHandler_GetBool(*args, **kwargs)
+    def GetLong(*args, **kwargs): return _xrc.XmlResourceHandler_GetLong(*args, **kwargs)
+    def GetColour(*args, **kwargs): return _xrc.XmlResourceHandler_GetColour(*args, **kwargs)
+    def GetSize(*args, **kwargs): return _xrc.XmlResourceHandler_GetSize(*args, **kwargs)
+    def GetPosition(*args, **kwargs): return _xrc.XmlResourceHandler_GetPosition(*args, **kwargs)
+    def GetDimension(*args, **kwargs): return _xrc.XmlResourceHandler_GetDimension(*args, **kwargs)
+    def GetBitmap(*args, **kwargs): return _xrc.XmlResourceHandler_GetBitmap(*args, **kwargs)
+    def GetIcon(*args, **kwargs): return _xrc.XmlResourceHandler_GetIcon(*args, **kwargs)
+    def GetFont(*args, **kwargs): return _xrc.XmlResourceHandler_GetFont(*args, **kwargs)
+    def SetupWindow(*args, **kwargs): return _xrc.XmlResourceHandler_SetupWindow(*args, **kwargs)
+    def CreateChildren(*args, **kwargs): return _xrc.XmlResourceHandler_CreateChildren(*args, **kwargs)
+    def CreateChildrenPrivately(*args, **kwargs): return _xrc.XmlResourceHandler_CreateChildrenPrivately(*args, **kwargs)
+    def CreateResFromNode(*args, **kwargs): return _xrc.XmlResourceHandler_CreateResFromNode(*args, **kwargs)
+    def GetCurFileSystem(*args, **kwargs): return _xrc.XmlResourceHandler_GetCurFileSystem(*args, **kwargs)
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxPyXmlResourceHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
 
+class XmlResourceHandlerPtr(XmlResourceHandler):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = XmlResourceHandler
+_xrc.XmlResourceHandler_swigregister(XmlResourceHandlerPtr)
 
-
-
-
-
-#-------------- FUNCTION WRAPPERS ------------------
-
-wxXmlResource_AddSubclassFactory = xrcc.wxXmlResource_AddSubclassFactory
-
-wxXmlResource_GetXRCID = xrcc.wxXmlResource_GetXRCID
-
-def wxXmlResource_Get(*_args, **_kwargs):
-    val = xrcc.wxXmlResource_Get(*_args,**_kwargs)
-    if val: val = wxXmlResourcePtr(val)
-    return val
-
-def wxXmlResource_Set(*_args, **_kwargs):
-    val = xrcc.wxXmlResource_Set(*_args,**_kwargs)
-    if val: val = wxXmlResourcePtr(val)
-    return val
-
-
-
-#-------------- VARIABLE WRAPPERS ------------------
-
-wxXRC_USE_LOCALE = xrcc.wxXRC_USE_LOCALE
-wxXRC_NO_SUBCLASSING = xrcc.wxXRC_NO_SUBCLASSING
-wxXML_ELEMENT_NODE = xrcc.wxXML_ELEMENT_NODE
-wxXML_ATTRIBUTE_NODE = xrcc.wxXML_ATTRIBUTE_NODE
-wxXML_TEXT_NODE = xrcc.wxXML_TEXT_NODE
-wxXML_CDATA_SECTION_NODE = xrcc.wxXML_CDATA_SECTION_NODE
-wxXML_ENTITY_REF_NODE = xrcc.wxXML_ENTITY_REF_NODE
-wxXML_ENTITY_NODE = xrcc.wxXML_ENTITY_NODE
-wxXML_PI_NODE = xrcc.wxXML_PI_NODE
-wxXML_COMMENT_NODE = xrcc.wxXML_COMMENT_NODE
-wxXML_DOCUMENT_NODE = xrcc.wxXML_DOCUMENT_NODE
-wxXML_DOCUMENT_TYPE_NODE = xrcc.wxXML_DOCUMENT_TYPE_NODE
-wxXML_DOCUMENT_FRAG_NODE = xrcc.wxXML_DOCUMENT_FRAG_NODE
-wxXML_NOTATION_NODE = xrcc.wxXML_NOTATION_NODE
-wxXML_HTML_DOCUMENT_NODE = xrcc.wxXML_HTML_DOCUMENT_NODE
-
-
-#-------------- USER INCLUDE -----------------------
-
-
+#----------------------------------------------------------------------------
 # The global was removed  in favor of static accessor functions.  This is for
 # backwards compatibility:
-wxTheXmlResource = wxXmlResource_Get()
 
-wx.wxXmlNodePtr = wxXmlNodePtr
-
+TheXmlResource = XmlResource_Get()
 
 
-
-#----------------------------------------------------------------------
+#----------------------------------------------------------------------------
 #  Create a factory for handling the subclass property of the object tag.
 
 
@@ -566,9 +301,9 @@ def _my_import(name):
     return mod
 
 
-class wxXmlSubclassFactory_Python(wxXmlSubclassFactory):
+class XmlSubclassFactory_Python(XmlSubclassFactory):
     def __init__(self):
-        wxXmlSubclassFactory.__init__(self)
+        XmlSubclassFactory.__init__(self)
 
     def Create(self, className):
         assert className.find('.') != -1, "Module name must be specified!"
@@ -580,5 +315,8 @@ class wxXmlSubclassFactory_Python(wxXmlSubclassFactory):
         return inst
 
 
-wxXmlResource_AddSubclassFactory(wxXmlSubclassFactory_Python())
+XmlResource_AddSubclassFactory(XmlSubclassFactory_Python())
+
+#----------------------------------------------------------------------------
+
 

@@ -1,0 +1,6 @@
+# Other names that need to be reverse-renamed for the old namespace
+
+XRCID   = wx.xrc.XRCID
+XRCCTRL = wx.xrc.XRCCTRL
+
+TheXmlResource

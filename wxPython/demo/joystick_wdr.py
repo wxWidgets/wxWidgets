@@ -47,7 +47,7 @@ ID_U_Max_Ctrl = 10035
 ID_V_Min_Ctrl = 10036
 ID_V_Max_Ctrl = 10037
 
-def MakeJoystickTestPanel( parent, call_fit = true, set_sizer = true ):
+def MakeJoystickTestPanel( parent, call_fit = True, set_sizer = True ):
     item0 = wxBoxSizer( wxVERTICAL )
 
     item1 = wxFlexGridSizer( 0, 8, 0, 0 )
@@ -288,10 +288,10 @@ def MakeJoystickTestPanel( parent, call_fit = true, set_sizer = true ):
 
     item0.AddSizer( item1, 0, wxALIGN_CENTER_VERTICAL|wxALL, 15 )
 
-    if set_sizer == true:
-        parent.SetAutoLayout( true )
+    if set_sizer == True:
+        parent.SetAutoLayout( True )
         parent.SetSizer( item0 )
-        if call_fit == true:
+        if call_fit == True:
             item0.Fit( parent )
             item0.SetSizeHints( parent )
 

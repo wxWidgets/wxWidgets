@@ -23,7 +23,7 @@ class TestCheckBox(wxPanel):
 
 
     def EvtCheckBox(self, event):
-        self.log.WriteText('EvtCheckBox: %d\n' % event.Checked())
+        self.log.WriteText('EvtCheckBox: %d\n' % event.IsChecked())
 
 #---------------------------------------------------------------------------
 

@@ -2,7 +2,7 @@
 // Name:        drawlist.cpp
 // Purpose:     Helper functions for optimized list drawing on a wxDC
 //
-// Author:      Robin Dunn Chris Barker
+// Author:      Robin Dunn,  Chris Barker
 //
 // Created:
 // RCS-ID:      $Id$
@@ -13,7 +13,8 @@
 
 #undef DEBUG
 #include <Python.h>
-#include "helpers.h"
+#include "wx/wxPython/wxPython.h"
+#include "wx/wxPython/pydrawxxx.h"
 
 
 //----------------------------------------------------------------------
@@ -23,8 +24,11 @@
 PyObject* wxPyDrawXXXList(wxDC& dc, wxPyDrawListOp_t doDraw,
                           PyObject* pyCoords, PyObject* pyPens, PyObject* pyBrushes) {
 
-    wxPyBeginBlockThreads(); // _DrawXXXList
+    wxPyBeginBlockThreads(); 
 
+    if ( !wxPyCoreAPIPtr)
+        wxPyCoreAPI_IMPORT();
+    
     bool      isFastSeq  = PyList_Check(pyCoords) || PyTuple_Check(pyCoords);
     bool      isFastPens = PyList_Check(pyPens) || PyTuple_Check(pyPens);
     bool      isFastBrushes = PyList_Check(pyBrushes) || PyTuple_Check(pyBrushes);
@@ -59,7 +63,7 @@ PyObject* wxPyDrawXXXList(wxDC& dc, wxPyDrawListOp_t doDraw,
             else {
                 obj = PySequence_GetItem(pyPens, i);
             }
-            if (SWIG_GetPtrObj(obj, (void **) &pen, "_wxPen_p")) {
+            if (! wxPyConvertSwigPtr(obj, (void **) &pen, wxT("wxPen"))) {
                 if (!isFastPens)
                     Py_DECREF(obj);
                 goto err1;
@@ -77,7 +81,7 @@ PyObject* wxPyDrawXXXList(wxDC& dc, wxPyDrawListOp_t doDraw,
             else {
                 obj = PySequence_GetItem(pyBrushes, i);
             }
-            if (SWIG_GetPtrObj(obj, (void **) &brush, "_wxBrush_p")) {
+            if (!wxPyConvertSwigPtr(obj, (void **) &brush, wxT("wxBrush"))) {
                 if (!isFastBrushes)
                     Py_DECREF(obj);
                 goto err2;
@@ -203,6 +207,9 @@ bool wxPyDrawXXXPolygon(wxDC& dc, PyObject* coords) {
 PyObject* wxPyDrawTextList(wxDC& dc, PyObject* textList, PyObject* pyPoints, PyObject* foregroundList, PyObject* backgroundList) {
     wxPyBeginBlockThreads();
 
+    if ( !wxPyCoreAPIPtr)
+        wxPyCoreAPI_IMPORT();
+    
     bool      isFastSeq  = PyList_Check(pyPoints) || PyTuple_Check(pyPoints);
     bool      isFastText = PyList_Check(textList) || PyTuple_Check(textList);
     bool      isFastForeground = PyList_Check(foregroundList) || PyTuple_Check(foregroundList);
@@ -261,7 +268,7 @@ PyObject* wxPyDrawTextList(wxDC& dc, PyObject* textList, PyObject* pyPoints, PyO
             else {
                 obj = PySequence_GetItem(foregroundList, i);
             }
-            if (SWIG_GetPtrObj(obj, (void **) &color, "_wxColour_p")) {
+            if (! wxPyConvertSwigPtr(obj, (void **) &color, wxT("wxColour_p"))) {
                 if (!isFastForeground)
                     Py_DECREF(obj);
                 goto err2;
@@ -279,7 +286,7 @@ PyObject* wxPyDrawTextList(wxDC& dc, PyObject* textList, PyObject* pyPoints, PyO
             else {
                 obj = PySequence_GetItem(backgroundList, i);
             }
-            if (SWIG_GetPtrObj(obj, (void **) &color, "_wxColour_p")) {
+            if (! wxPyConvertSwigPtr(obj, (void **) &color, wxT("wxColour"))) {
                 if (!isFastBackground)
                     Py_DECREF(obj);
                 goto err3;

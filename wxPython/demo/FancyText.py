@@ -20,10 +20,10 @@ class TestPanel(wxPanel):
     def OnPaint(self, evt):
         dc = wxPaintDC(self)
 
-        sz = fancytext.getExtent(test_str, dc)
-        fancytext.renderToDC(test_str, dc, 20, 20)
+        w, h = fancytext.GetExtent(test_str, dc)
+        fancytext.RenderToDC(test_str, dc, 20, 20)
 
-        fancytext.renderToDC(test_str2, dc, 20, 20 + sz.height + 10)
+        fancytext.RenderToDC(test_str2, dc, 20, 20 + h + 10)
 
 
 #----------------------------------------------------------------------

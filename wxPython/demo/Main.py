@@ -18,16 +18,17 @@ import wx.html
 
 import images
 
-##wx.Trap()
-##raw_input("Press a key...")
+# For debugging
+##wx.Trap();
+##print os.getpid(); raw_input("Press a key...")
 
 
 # Use Python's bool constants if available, make aliases if not
 try:
     True
 except NameError:
-    True = 1==1
-    False = 1==0
+    __builtins__.True = 1==1
+    __builtins__.False = 1==0
 
 #---------------------------------------------------------------------------
 
@@ -40,6 +41,7 @@ _treeList = [
         'wxMaskedNumCtrl',
         'FloatCanvas',
         'wxXmlResourceSubclass',
+        'wxGridBagSizer',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -84,7 +86,6 @@ _treeList = [
         'wxChoice',
         'wxComboBox',
         'wxGauge',
-        'wxGenericDirCtrl',
         'wxGrid',
         'wxGrid_MegaExample',
         'wxListbook',
@@ -112,18 +113,28 @@ _treeList = [
         'wxValidator',
         ]),
 
+    ('Custom Controls', [
+        'AnalogClockWindow',
+        'ColourSelect',
+        'GenericButtons',
+        'wxEditor',
+        'wxGenericDirCtrl',
+        'wxLEDNumberCtrl',
+        'wxMultiSash',
+        'wxPopupControl',
+        'wxPyColourChooser',
+        'wxTreeListCtrl',
+    ]),
+    
     # controls coming from other libraries
     ('More Windows/Controls', [
         #'wxFloatBar',          deprecated
         #'wxMVCTree',           deprecated
         #'wxRightTextCtrl',     deprecated as we have wxTE_RIGHT now.
-        'AnalogClockWindow',
-        'ColourSelect',
         'ContextHelp',
         'FancyText',
         'FloatCanvas',
         'FileBrowseButton',
-        'GenericButtons',
         'MaskedEditControls',
         'PyShell',
         'PyCrust',
@@ -132,22 +143,16 @@ _treeList = [
         'Throbber',
         'wxCalendar',
         'wxCalendarCtrl',
-        'wxPyColourChooser',
         'wxDynamicSashWindow',
         'wxEditableListBox',
-        'wxEditor',
         'wxHtmlWindow',
         'wxIEHtmlWin',
         'wxIntCtrl',
-        'wxLEDNumberCtrl',
         'wxMimeTypesManager',
         'wxMaskedNumCtrl',
-        'wxMultiSash',
-        'wxPopupControl',
         'wxStyledTextCtrl_1',
         'wxStyledTextCtrl_2',
         'wxTimeCtrl',
-        'wxTreeListCtrl',
         'wxVListBox',
         ]),
 
@@ -157,6 +162,7 @@ _treeList = [
         'Layoutf',
         'RowColSizer',
         'Sizers',
+        'wxGridBagSizer',
         'wxLayoutConstraints',
         'wxScrolledPanel',
         'wxXmlResource',
@@ -809,7 +815,7 @@ def main():
         os.chdir(demoPath)
     except:
         pass
-    app = MyApp(wx.Platform == "__WXMAC__")
+    app = MyApp(0) #wx.Platform == "__WXMAC__")
     app.MainLoop()
 
 

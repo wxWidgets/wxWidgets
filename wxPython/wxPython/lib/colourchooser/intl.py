@@ -1,24 +1,8 @@
-"""
-wxPyColourChooser
-Copyright (C) 2002 Michael Gilfix <mgilfix@eecs.tufts.edu>
+## This file imports items from the wx package into the wxPython package for
+## backwards compatibility.  Some names will also have a 'wx' added on if
+## that is how they used to be named in the old wxPython package.
 
-This file is part of wxPyColourChooser.
+import wx.lib.colourchooser.intl
 
-This version of wxPyColourChooser is open source; you can redistribute it
-and/or modify it under the licensed terms.
+__doc__ =  wx.lib.colourchooser.intl.__doc__
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-"""
-
-try:
-    import gettext
-
-    gettext.bindtextdomain('wxpycolourchooser')
-    gettext.textdomain('wxpycolourchooser')
-    _ = gettext.gettext
-except Exception, strerror:
-    print "Warning: Couldn't import translation function: %(str)s" %{ 'str' : strerror }
-    print "Defaulting to En"
-    _ = lambda x: x

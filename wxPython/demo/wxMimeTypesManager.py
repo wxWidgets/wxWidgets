@@ -10,7 +10,7 @@ from Main import opj
 
 class MimeTypesTestPanel(wxPanel):
     def __init__(self, parent, id,
-        pos = wxPyDefaultPosition, size = wxPyDefaultSize,
+        pos = wxDefaultPosition, size = wxDefaultSize,
         style = wxTAB_TRAVERSAL ):
         wxPanel.__init__(self, parent, id, pos, size, style)
 
@@ -102,7 +102,7 @@ class MimeTypesTestPanel(wxPanel):
     # WDR: methods for MimeTypesTestPanel
 
     def GetListbox(self):
-        return wxPyTypeCast( self.FindWindowById(ID_LISTBOX), "wxListBox" )
+        return self.FindWindowById(ID_LISTBOX)
 
     def GetIconIndexTxt(self):
         return self.FindWindowById(ID_ICON_INDEX_TXT)

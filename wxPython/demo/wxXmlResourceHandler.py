@@ -11,7 +11,7 @@ resourceText = r'''<?xml version="1.0"?>
 
 <object class="MyBluePanel" name="MyPanel">
     <size>200,100</size>
-    <object class="wxStaticText" name="label1" subclass="wxPython.wx.wxPreStaticText">
+    <object class="wxStaticText" name="label1">
         <label>This blue panel is a class derived from wxPanel,\nand is loaded by a custom wxXmlResourceHandler.</label>
         <pos>10,10</pos>
     </object>
@@ -39,7 +39,7 @@ class MyBluePanel(wxPanel):
 class PreMyBluePanel(wxPanel):
     def __init__(self):
         p = wxPrePanel()
-        self.this = p.this
+        self.PostCreate(p)
 
     def Create(self, parent, id, pos, size, style, name):
         wxPanel.Create(self, parent, id, pos, size, style, name)
