@@ -490,8 +490,8 @@ bool wxMetafileDataObject::SetData(size_t WXUNUSED(len), const void *buf)
     wxMetafile mf;
     mf.SetWindowsMappingMode(mfpict->mm);
 
-    int w = mfpict->xExt,
-        h = mfpict->yExt;
+    LONG w = mfpict->xExt,
+         h = mfpict->yExt;
     if ( mfpict->mm == MM_ANISOTROPIC )
     {
         // in this case xExt and yExt contain suggested size in HIMETRIC units
