@@ -106,22 +106,6 @@ rm -rf $RPM_BUILD_ROOT
 %postun
 /sbin/ldconfig
 
-%post devel
-# Install wx-config if there isn't any
-if test ! -f %{_bindir}/wx-config ; then
-    ln -sf wxbase-%{ver2}-config %{_bindir}/wx-config
-fi
-
-%preun devel
-# Remove wx-config if it points to this package
-if test -f %{_bindir}/wx-config -a -f /usr/bin/md5sum ; then
-  SUM1=`md5sum %{_bindir}/wxbase-%{ver2}-config | cut -c 0-32`
-  SUM2=`md5sum %{_bindir}/wx-config | cut -c 0-32`
-  if test "x$SUM1" = "x$SUM2" ; then
-    rm -f %{_bindir}/wx-config
-  fi
-fi
-
 %files -f wxstd.lang
 %defattr (-,root,root)
 %doc COPYING.LIB *.txt
@@ -129,12 +113,13 @@ fi
 
 %files devel
 %defattr (-,root,root)
-%dir %{_includedir}/wx
-%{_includedir}/wx/*
+%dir %{_includedir}/wx-*
+%{_includedir}/wx-*/*
 %{_libdir}/libwx_base*.so
 %dir %{_libdir}/wx
 %{_libdir}/wx/*
 %{_bindir}/wxbase*-%{ver2}-config
+%{_bindir}/wx-config
 %{_datadir}/aclocal/*.m4
 
 %files static

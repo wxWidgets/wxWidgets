@@ -286,7 +286,7 @@ wx/dbtable.h
 EOF
 # --- wxBase headers list ends here ---
 for f in `cat wxbase-headers-list` ; do
-  rm -f $RPM_BUILD_ROOT%{_includedir}/$f
+  rm -f $RPM_BUILD_ROOT%{_includedir}/wx-*/$f
 done
 
 # list of all core headers:
@@ -315,22 +315,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %postun gl
 /sbin/ldconfig
-
-%post devel
-# Install wx-config if there isn't any
-if test ! -f %{_bindir}/wx-config ; then
-    ln -sf %{wxconfigname} %{_bindir}/wx-config
-fi
-
-%preun devel
-# Remove wx-config if it points to this package
-if test -f %{_bindir}/wx-config -a -f /usr/bin/md5sum ; then
-  SUM1=`md5sum %{_bindir}/%{wxconfigname} | cut -c 0-32`
-  SUM2=`md5sum %{_bindir}/wx-config | cut -c 0-32`
-  if test "x$SUM1" = "x$SUM2" ; then
-    rm -f %{_bindir}/wx-config
-  fi
-fi
 
 
 %files
@@ -382,42 +366,42 @@ fi
 %files contrib-devel
 %defattr(-,root,root)
 %{_bindir}/wxrc
-%dir %{_includedir}/wx/animate
-%{_includedir}/wx/animate/*
+%dir %{_includedir}/wx-*/wx/animate
+%{_includedir}/wx-*/wx/animate/*
 %{_libdir}/libwx_%{portname}*_animate*.so
 
-%dir %{_includedir}/wx/deprecated
-%{_includedir}/wx/deprecated/*
+%dir %{_includedir}/wx-*/wx/deprecated
+%{_includedir}/wx-*/wx/deprecated/*
 %{_libdir}/libwx_%{portname}*_deprecated*.so
 
-%dir %{_includedir}/wx/fl
-%{_includedir}/wx/fl/*
+%dir %{_includedir}/wx-*/wx/fl
+%{_includedir}/wx-*/wx/fl/*
 %{_libdir}/libwx_%{portname}*_fl*.so
 
-%dir %{_includedir}/wx/gizmos
-%{_includedir}/wx/gizmos/*
+%dir %{_includedir}/wx-*/wx/gizmos
+%{_includedir}/wx-*/wx/gizmos/*
 %{_libdir}/libwx_%{portname}*_gizmos*.so
 
-%dir %{_includedir}/wx/mmedia
-%{_includedir}/wx/mmedia/*
+%dir %{_includedir}/wx-*/wx/mmedia
+%{_includedir}/wx-*/wx/mmedia/*
 %{_libdir}/libwx_%{portname}*_mmedia*.so
 
-%dir %{_includedir}/wx/ogl
-%{_includedir}/wx/ogl/*
+%dir %{_includedir}/wx-*/wx/ogl
+%{_includedir}/wx-*/wx/ogl/*
 %{_libdir}/libwx_%{portname}*_ogl*.so
 
-%dir %{_includedir}/wx/plot
-%{_includedir}/wx/plot/*
+%dir %{_includedir}/wx-*/wx/plot
+%{_includedir}/wx-*/wx/plot/*
 %{_libdir}/libwx_%{portname}*_plot*.so
 
-%dir %{_includedir}/wx/stc
-%{_includedir}/wx/stc/*
+%dir %{_includedir}/wx-*/wx/stc
+%{_includedir}/wx-*/wx/stc/*
 %{_libdir}/libwx_%{portname}*_stc*.so
 
-%dir %{_includedir}/wx/svg
-%{_includedir}/wx/svg/*
+%dir %{_includedir}/wx-*/wx/svg
+%{_includedir}/wx-*/wx/svg/*
 %{_libdir}/libwx_%{portname}*_svg*.so
 
-%dir %{_includedir}/wx/xrc
-%{_includedir}/wx/xrc/*
+%dir %{_includedir}/wx-*/wx/xrc
+%{_includedir}/wx-*/wx/xrc/*
 %{_libdir}/libwx_%{portname}*_xrc*.so

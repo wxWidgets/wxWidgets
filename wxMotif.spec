@@ -220,7 +220,7 @@ wx/dbtable.h
 EOF
 # --- wxBase headers list ends here ---
 for f in `cat wxbase-headers-list` ; do
-  rm -f $RPM_BUILD_ROOT%{_includedir}/$f
+  rm -f $RPM_BUILD_ROOT%{_includedir}/wx-*/$f
 done
 
 # list of all core headers:
@@ -246,22 +246,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %postun gl
 /sbin/ldconfig
-
-%post devel
-# Install wx-config if there isn't any
-if test ! -f %{_bindir}/wx-config ; then
-    ln -sf %{wxconfigname} %{_bindir}/wx-config
-fi
-
-%preun devel
-# Remove wx-config if it points to this package
-if test -f %{_bindir}/wx-config -a -f /usr/bin/md5sum ; then
-  SUM1=`md5sum %{_bindir}/%{wxconfigname} | cut -c 0-32`
-  SUM2=`md5sum %{_bindir}/wx-config | cut -c 0-32`
-  if test "x$SUM1" = "x$SUM2" ; then
-    rm -f %{_bindir}/wx-config
-  fi
-fi
 
 
 %files
