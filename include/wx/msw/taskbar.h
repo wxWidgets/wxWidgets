@@ -92,14 +92,15 @@ public:
     virtual wxEvent *Clone() const { return new wxTaskBarIconEvent(*this); }
 };
 
-const wxEventType wxEVT_TASKBAR_MOVE =                  wxEVT_FIRST + 1550;
-const wxEventType wxEVT_TASKBAR_LEFT_DOWN =             wxEVT_FIRST + 1551;
-const wxEventType wxEVT_TASKBAR_LEFT_UP =               wxEVT_FIRST + 1552;
-const wxEventType wxEVT_TASKBAR_RIGHT_DOWN =            wxEVT_FIRST + 1553;
-const wxEventType wxEVT_TASKBAR_RIGHT_UP =              wxEVT_FIRST + 1554;
-const wxEventType wxEVT_TASKBAR_LEFT_DCLICK =           wxEVT_FIRST + 1555;
-const wxEventType wxEVT_TASKBAR_RIGHT_DCLICK =          wxEVT_FIRST + 1556;
-
+BEGIN_DECLARE_EVENT_TYPES()
+DECLARE_EVENT_TYPE( wxEVT_TASKBAR_MOVE, 1550 )
+DECLARE_EVENT_TYPE( wxEVT_TASKBAR_LEFT_DOWN, 1551 )
+DECLARE_EVENT_TYPE( wxEVT_TASKBAR_LEFT_UP, 1552 )
+DECLARE_EVENT_TYPE( wxEVT_TASKBAR_RIGHT_DOWN, 1553 )
+DECLARE_EVENT_TYPE( wxEVT_TASKBAR_RIGHT_UP, 1554 )
+DECLARE_EVENT_TYPE( wxEVT_TASKBAR_LEFT_DCLICK, 1555 )
+DECLARE_EVENT_TYPE( wxEVT_TASKBAR_RIGHT_DCLICK, 1556 )
+END_DECLARE_EVENT_TYPES()
 
 #define EVT_TASKBAR_MOVE(fn)         DECLARE_EVENT_TABLE_ENTRY(wxEVT_TASKBAR_MOVE, -1, -1, (wxObjectEventFunction) (wxEventFunction) &fn, NULL),
 #define EVT_TASKBAR_LEFT_DOWN(fn)    DECLARE_EVENT_TABLE_ENTRY(wxEVT_TASKBAR_LEFT_DOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) &fn, NULL),
