@@ -1,3 +1,14 @@
+wxwindows2.4 (2.4.2.4) unstable; urgency=low
+
+  * Modified build scripts to use pythonX.Y instead of python(>=X.Y)
+  * Removed bogus hard coded python2.2-xml.  Closes: #216182
+  * Enabled iostream support despite my opinion of this c++ 'feature'.
+    Closes: #211050
+  * Event handling for menus with bitmaps fixed.  Closes: #214788
+  * Includes fixed from cvs for wxHTTP and wxURL. Closes: #211023, #213600
+
+ -- Ron Lee <ron@debian.org>  Sat, 25 Oct 2003 13:48:07 +0930
+
 wxwindows2.4 (2.4.1.2) unstable; urgency=low
 
   * New stable release.  Closes: #198622

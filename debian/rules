@@ -11,7 +11,7 @@ export DH_COMPAT=2
 export DH_OPTIONS
 
 release:=$(shell dpkg-parsechangelog | sed -n 's/^Source: wxwindows//p')
-python_dir:=python$(shell python -c "import sys;print sys.version[:3]")
+python_ver:=python$(shell python -c "import sys;print sys.version[:3]")
 
 cross_host=i586-mingw32msvc
 cross_build=$(shell ./config.guess)
@@ -125,7 +125,7 @@ wxconfig:=$(shell pwd)/$(objdir_gtk_shared)/wx-config \
 # The Rules:
 
 debian/control: debian/control.in
-	sed -e 's/=V/$(release)/g' < debian/control.in > debian/control
+	sed -e 's/=V/$(release)/g;s/=PY/$(python_ver)/g' < debian/control.in > debian/control
 
 control-files-stamp: debian/control
 	dh_testdir
@@ -159,7 +159,7 @@ control-files-stamp: debian/control
 	done;
 	@for f in dirs docs menu postinst prerm; do \
 		echo "generating control file $(package_gtk_py).$$f"; \
-		sed -e 's/=PY/$(python_dir)/g;s/=V/$(release)/g' < debian/libwxgtk-python.$$f \
+		sed -e 's/=PY/$(python_ver)/g;s/=V/$(release)/g' < debian/libwxgtk-python.$$f \
 			> debian/$(package_gtk_py).$$f; \
 	done;
 	@for f in dirs postinst; do \
@@ -234,12 +234,13 @@ build: build_arch
 configure-wxbase-shared-stamp:
 	dh_testdir
 	mkdir -p $(objdir_wxbase_shared)
-	cd $(objdir_wxbase_shared) \
-		&& ../configure --prefix=/usr \
-				--cache-file=$(config_cache) \
-				--disable-gui \
-				--enable-soname \
-				--with-zlib=sys
+	cd $(objdir_wxbase_shared) 				\
+		&& ../configure --prefix=/usr 			\
+				--cache-file=$(config_cache) 	\
+				--disable-gui 			\
+				--enable-soname 		\
+				--with-zlib=sys			\
+				--enable-std_iostreams
 	touch $@
 
 build-wxbase-shared-stamp: configure-wxbase-shared-stamp
@@ -250,12 +251,13 @@ build-wxbase-shared-stamp: configure-wxbase-shared-stamp
 configure-wxbase-static-stamp:
 	dh_testdir
 	mkdir -p $(objdir_wxbase_static)
-	cd $(objdir_wxbase_static) \
-		&& ../configure --prefix=/usr \
-				--cache-file=$(config_cache) \
-				--disable-gui \
-				--disable-shared \
-				--with-zlib=sys
+	cd $(objdir_wxbase_static) 				\
+		&& ../configure --prefix=/usr 			\
+				--cache-file=$(config_cache) 	\
+				--disable-gui 			\
+				--disable-shared 		\
+				--with-zlib=sys			\
+				--enable-std_iostreams
 	touch $@
 
 build-wxbase-static-stamp: configure-wxbase-static-stamp
@@ -266,13 +268,14 @@ build-wxbase-static-stamp: configure-wxbase-static-stamp
 configure-wxbase-debug-stamp:
 	dh_testdir
 	mkdir -p $(objdir_wxbase_debug)
-	cd $(objdir_wxbase_debug) \
-		&& ../configure --prefix=/usr \
-				--cache-file=$(config_cache) \
-				--disable-gui \
-				--enable-debug \
-				--enable-soname \
-				--with-zlib=sys
+	cd $(objdir_wxbase_debug) 				\
+		&& ../configure --prefix=/usr 			\
+				--cache-file=$(config_cache) 	\
+				--disable-gui 			\
+				--enable-debug 			\
+				--enable-soname 		\
+				--with-zlib=sys			\
+				--enable-std_iostreams
 	touch $@
 
 build-wxbase-debug-stamp: configure-wxbase-debug-stamp
@@ -283,17 +286,18 @@ build-wxbase-debug-stamp: configure-wxbase-debug-stamp
 configure-gtk-shared-stamp:
 	dh_testdir
 	mkdir -p $(objdir_gtk_shared)
-	cd $(objdir_gtk_shared) \
-		&& ../configure --prefix=/usr \
-				--cache-file=$(config_cache) \
-				--with-gtk \
-				--with-opengl \
-				--enable-soname \
-				--with-zlib=sys \
-				--with-libjpeg=sys \
-				--with-libpng=sys \
-				--with-libtiff=sys \
-				--enable-dynamic-loader
+	cd $(objdir_gtk_shared) 				\
+		&& ../configure --prefix=/usr 			\
+				--cache-file=$(config_cache) 	\
+				--with-gtk 			\
+				--with-opengl 			\
+				--enable-soname 		\
+				--with-zlib=sys 		\
+				--with-libjpeg=sys 		\
+				--with-libpng=sys 		\
+				--with-libtiff=sys 		\
+				--enable-dynamic-loader		\
+				--enable-std_iostreams
 	touch $@
 
 build-gtk-shared-stamp: configure-gtk-shared-stamp
@@ -304,17 +308,18 @@ build-gtk-shared-stamp: configure-gtk-shared-stamp
 configure-gtk-static-stamp:
 	dh_testdir
 	mkdir -p $(objdir_gtk_static)
-	cd $(objdir_gtk_static) \
-		&& ../configure --prefix=/usr \
-				--cache-file=$(config_cache) \
-				--with-gtk \
-				--with-opengl \
-				--disable-shared \
-				--with-zlib=sys \
-				--with-libjpeg=sys \
-				--with-libpng=sys \
-				--with-libtiff=sys \
-				--enable-dynamic-loader
+	cd $(objdir_gtk_static) 				\
+		&& ../configure --prefix=/usr 			\
+				--cache-file=$(config_cache) 	\
+				--with-gtk 			\
+				--with-opengl 			\
+				--disable-shared 		\
+				--with-zlib=sys 		\
+				--with-libjpeg=sys 		\
+				--with-libpng=sys 		\
+				--with-libtiff=sys 		\
+				--enable-dynamic-loader		\
+				--enable-std_iostreams
 	touch $@
 
 build-gtk-static-stamp: configure-gtk-static-stamp
@@ -325,18 +330,19 @@ build-gtk-static-stamp: configure-gtk-static-stamp
 configure-gtk-debug-stamp:
 	dh_testdir
 	mkdir -p $(objdir_gtk_debug)
-	cd $(objdir_gtk_debug) \
-		&& ../configure --prefix=/usr \
-				--cache-file=$(config_cache) \
-				--with-gtk \
-				--with-opengl \
-				--enable-debug \
-				--enable-soname \
-				--with-zlib=sys \
-				--with-libjpeg=sys \
-				--with-libpng=sys \
-				--with-libtiff=sys \
-				--enable-dynamic-loader
+	cd $(objdir_gtk_debug) 					\
+		&& ../configure --prefix=/usr 			\
+				--cache-file=$(config_cache) 	\
+				--with-gtk 			\
+				--with-opengl 			\
+				--enable-debug 			\
+				--enable-soname 		\
+				--with-zlib=sys 		\
+				--with-libjpeg=sys 		\
+				--with-libpng=sys 		\
+				--with-libtiff=sys 		\
+				--enable-dynamic-loader		\
+				--enable-std_iostreams
 	touch $@
 
 build-gtk-debug-stamp: configure-gtk-debug-stamp
@@ -347,18 +353,19 @@ build-gtk-debug-stamp: configure-gtk-debug-stamp
 configure-gtk-univ-stamp:
 	dh_testdir
 	mkdir -p $(objdir_gtk_univ)
-	cd $(objdir_gtk_univ) \
-		&& ../configure --prefix=/usr \
-				--cache-file=$(config_cache) \
-				--with-gtk \
-				--with-opengl \
-				--enable-universal \
-				--enable-soname \
-				--with-zlib=sys \
-				--with-libjpeg=sys \
-				--with-libpng=sys \
-				--with-libtiff=sys \
-				--enable-dynamic-loader
+	cd $(objdir_gtk_univ) 					\
+		&& ../configure --prefix=/usr 			\
+				--cache-file=$(config_cache) 	\
+				--with-gtk 			\
+				--with-opengl 			\
+				--enable-universal 		\
+				--enable-soname 		\
+				--with-zlib=sys 		\
+				--with-libjpeg=sys 		\
+				--with-libpng=sys 		\
+				--with-libtiff=sys 		\
+				--enable-dynamic-loader		\
+				--enable-std_iostreams
 	touch $@
 
 build-gtk-univ-stamp: configure-gtk-univ-stamp
@@ -382,7 +389,7 @@ build-gtk-py-stamp: build-gtk-shared-stamp
 	dh_testdir
 	touch docs/lgpl.txt
 	cd wxPython \
-		&& ./setup.py build IN_CVS_TREE=1 WX_CONFIG='$(wxconfig)'
+		&& $(python_ver) ./setup.py build IN_CVS_TREE=1 WX_CONFIG='$(wxconfig)'
 	touch $@
 
 build-doc-stamp: build-gtk-shared-stamp
@@ -689,11 +696,12 @@ install-gtk-py: build-gtk-py-stamp
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
-	cd wxPython \
-		&& ./setup.py install \
-			      --prefix=`pwd`/../debian/$(package_gtk_py)/usr \
+	cd wxPython 								\
+		&& $(python_ver) ./setup.py install 				\
+			      --prefix=`pwd`/../debian/$(package_gtk_py)/usr 	\
 			      WX_CONFIG='$(wxconfig)'
-	find debian/$(package_gtk_py)/usr/lib/$(python_dir)/site-packages/wxPython \
+
+	find debian/$(package_gtk_py)/usr/lib/$(python_ver)/site-packages/wxPython \
 		-name '*.py?' -exec rm '{}' ';'
 
 	dh_installman debian/wxPython-tools.1
@@ -709,7 +717,7 @@ install-gtk-py: build-gtk-py-stamp
 		usr/share/man/man1/wxPython-tools.1 usr/share/man/man1/pywrap.1
 
 	# This is rather bogus, its included in the main copyright file now though.
-	rm -f debian/$(package_gtk_py)/usr/lib/$(python_dir)/site-packages/wxPython/tools/XRCed/license.txt
+	rm -f debian/$(package_gtk_py)/usr/lib/$(python_ver)/site-packages/wxPython/tools/XRCed/license.txt
 
 install-headers: DH_OPTIONS=-p$(package_headers)
 install-headers: install-gtk-shared-stamp

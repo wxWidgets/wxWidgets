@@ -1,7 +1,7 @@
 Source: wxwindows=V
 Section: libs
 Priority: optional
-Build-Depends: debhelper (>=2.0), flex, bison, gettext, libgtk1.2-dev, python (>=2.3), python (<<2.4), python2.3-dev, zlib1g-dev, libjpeg62-dev, libpng2-dev, libtiff3g-dev, xlibmesa-gl-dev | libgl-dev, xlibmesa-glu-dev | libglu-dev, libesd0-dev
+Build-Depends: debhelper (>=2.0), flex, bison, gettext, libgtk1.2-dev, =PY, =PY-dev, zlib1g-dev, libjpeg62-dev, libpng2-dev, libtiff3g-dev, xlibmesa-gl-dev | libgl-dev, xlibmesa-glu-dev | libglu-dev, libesd0-dev
 Maintainer: Ron Lee <ron@debian.org>
 Standards-Version: 3.6.1.0
 
@@ -117,8 +117,8 @@ Description: wxWindows Cross-platform C++ GUI toolkit (GTK+ development)
 Package: libwxgtk=V-python
 Architecture: any
 Section: python
-Depends: python (>=2.3), python (<<2.4), ${shlibs:Depends}
-Suggests: wxwin=V-doc, wxwin=V-examples, python2.2-xml
+Depends: =PY, ${shlibs:Depends}
+Suggests: wxwin=V-doc, wxwin=V-examples, =PY-xml
 Conflicts: libwxgtk-python, python-wxwin, libwxgtk2.2-python-contrib, libwxgtk2.2-python, libwxgtk2.3-python
 Replaces: libwxgtk-python, python-wxwin, libwxgtk2.2-python-contrib, libwxgtk2.2-python, libwxgtk2.3-python
 Provides: libwxgtk-python
