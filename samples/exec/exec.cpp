@@ -34,6 +34,9 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/frame.h"
+    #include "wx/panel.h"
+
+    #include "wx/timer.h"
 
     #include "wx/utils.h"
     #include "wx/menu.h"
@@ -108,6 +111,7 @@ public:
     void OnAbout(wxCommandEvent& event);
 
     // polling output of async processes
+    void OnTimer(wxTimerEvent& event);
     void OnIdle(wxIdleEvent& event);
 
     // for MyPipedProcess
@@ -120,6 +124,31 @@ private:
                     const wxString& title);
 
     void DoAsyncExec(const wxString& cmd);
+
+    void AddAsyncProcess(MyPipedProcess *process)
+    {
+        if ( m_running.IsEmpty() )
+        {
+            // we want to start getting the timer events to ensure that a
+            // steady stream of idle events comes in -- otherwise we
+            // wouldn't be able to poll the child process input
+            m_timerIdleWakeUp.Start(100);
+        }
+        //else: the timer is already running
+
+        m_running.Add(process);
+    }
+
+    void RemoveAsyncProcess(MyPipedProcess *process)
+    {
+        m_running.Remove(process);
+
+        if ( m_running.IsEmpty() )
+        {
+            // we don't need to get idle events all the time any more
+            m_timerIdleWakeUp.Stop();
+        }
+    }
 
     // the PID of the last process we launched asynchronously
     long m_pidLast;
@@ -142,6 +171,9 @@ private:
     wxListBox *m_lbox;
 
     MyProcessesArray m_running;
+
+    // the idle event wake up timer
+    wxTimer m_timerIdleWakeUp;
 
     // any class wishing to process wxWindows events must use this macro
     DECLARE_EVENT_TABLE()
@@ -303,6 +335,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Exec_About, MyFrame::OnAbout)
 
     EVT_IDLE(MyFrame::OnIdle)
+
+    EVT_TIMER(-1, MyFrame::OnTimer)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyPipeFrame, wxFrame)
@@ -354,7 +388,8 @@ bool MyApp::OnInit()
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
-       : wxFrame((wxFrame *)NULL, -1, title, pos, size)
+       : wxFrame((wxFrame *)NULL, -1, title, pos, size),
+         m_timerIdleWakeUp(this)
 {
     m_pidLast = 0;
 
@@ -441,7 +476,7 @@ void MyFrame::OnClear(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    wxMessageBox(_T("Exec wxWindows Sample\n© 2000-2001 Vadim Zeitlin"),
+    wxMessageBox(_T("Exec wxWindows Sample\n© 2000-2002 Vadim Zeitlin"),
                  _T("About Exec"), wxOK | wxICON_INFORMATION, this);
 }
 
@@ -663,7 +698,7 @@ void MyFrame::OnExecWithRedirect(wxCommandEvent& WXUNUSED(event))
         }
         else
         {
-            m_running.Add(process);
+            AddAsyncProcess(process);
         }
     }
 
@@ -694,7 +729,7 @@ void MyFrame::OnExecWithPipe(wxCommandEvent& WXUNUSED(event))
     {
         wxLogStatus( _T("Process %ld (%s) launched."), pid, cmd.c_str() );
 
-        m_running.Add(process);
+        AddAsyncProcess(process);
     }
     else
     {
@@ -872,9 +907,14 @@ void MyFrame::OnIdle(wxIdleEvent& event)
     }
 }
 
+void MyFrame::OnTimer(wxTimerEvent& WXUNUSED(event))
+{
+    wxWakeUpIdle();
+}
+
 void MyFrame::OnProcessTerminated(MyPipedProcess *process)
 {
-    m_running.Remove(process);
+    RemoveAsyncProcess(process);
 }
 
 
@@ -919,10 +959,9 @@ bool MyPipedProcess::HasInput()
 {
     bool hasInput = FALSE;
 
-    wxInputStream& is = *GetInputStream();
-    if ( !is.Eof() )
+    if ( IsInputAvailable() )
     {
-        wxTextInputStream tis(is);
+        wxTextInputStream tis(*GetInputStream());
 
         // this assumes that the output is always line buffered
         wxString msg;
@@ -933,10 +972,9 @@ bool MyPipedProcess::HasInput()
         hasInput = TRUE;
     }
 
-    wxInputStream& es = *GetErrorStream();
-    if ( !es.Eof() )
+    if ( IsErrorAvailable() )
     {
-        wxTextInputStream tis(es);
+        wxTextInputStream tis(*GetErrorStream());
 
         // this assumes that the output is always line buffered
         wxString msg;
