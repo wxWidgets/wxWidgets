@@ -218,7 +218,12 @@ enum wxSeekMode
                   _write(fd, (const char *)buf, nCount)
         #endif
     #else
-        #if defined(__DMC__) || defined(__WATCOMC__)
+        #if defined(__WATCOMC__)
+            inline wxFileSize_t wxRead( int handle, void *buffer, wxFileSize_t len )
+                                { return ::read( handle, buffer, (unsigned int)len ); }
+            inline wxFileSize_t wxWrite( int handle, const void *buffer, wxFileSize_t len )
+                                { return ::write( handle, buffer, (unsigned int)len ); }
+        #elif defined(__DMC__)
             #define wxRead        ::read
             #define wxWrite       ::write
         #else
