@@ -89,10 +89,10 @@ $(WXDIR)/src/x11/files.lst: x11.t filelist.txt wxwin.pro
 	$(TMAKE) -t x11 wxwin.pro -o $@
 
 $(WXDIR)/src/wxBase.dsp: vc6base.t filelist.txt wxwin.pro
-	$(TMAKE) -t vc6base wxwin.pro -o $@
+	WXWIN=$(WXDIR) $(TMAKE) -t vc6base wxwin.pro -o $@
 
 $(WXDIR)/src/wxWindows.dsp: vc6msw.t filelist.txt wxwin.pro
-	$(TMAKE) -t vc6msw wxwin.pro -o $@
+	WXWIN=$(WXDIR) $(TMAKE) -t vc6msw wxwin.pro -o $@
 
 $(WXDIR)/src/wxUniv.dsp: vc6univ.t filelist.txt wxwin.pro
 	$(TMAKE) -t vc6univ wxwin.pro -o $@
