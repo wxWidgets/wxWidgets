@@ -19,6 +19,7 @@ HEADERS = \
             cbcustom.h \
             dynbarhnd.h \
             dyntbarhnd.h \
+            fldefs.h \
             garbagec.h \
             hintanimpl.h \
             panedrawpl.h \
