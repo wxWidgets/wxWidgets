@@ -15,7 +15,7 @@
 
 #include "wx/defs.h"
 
-#include "statpict.h"
+#include "wx/gizmos/statpict.h"
 #include "wx/dcclient.h"
 
 #if !USE_SHARED_LIBRARY
