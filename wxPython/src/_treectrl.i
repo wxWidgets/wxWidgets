@@ -98,8 +98,14 @@ public:
     bool IsOk() const;
 
     %extend {
-        bool operator==(const wxTreeItemId& other) {
-            return *self == other;
+        bool operator==(const wxTreeItemId* other) {
+            if (!other) return false;
+            return *self == *other;
+        }
+
+        bool operator!=(const wxTreeItemId* other) {
+            if (!other) return true;
+            return *self != *other;
         }
     }
 
@@ -578,20 +584,20 @@ public:
     // add the root node to the tree
     wxTreeItemId AddRoot(const wxString& text,
                          int image = -1, int selectedImage = -1,
-                         wxTreeItemData *data = NULL);
+                         wxPyTreeItemData *data = NULL);
 
     // insert a new item in as the first child of the parent
     wxTreeItemId PrependItem(const wxTreeItemId& parent,
                              const wxString& text,
                              int image = -1, int selectedImage = -1,
-                             wxTreeItemData *data = NULL);
+                             wxPyTreeItemData *data = NULL);
 
     // insert a new item after a given one
     wxTreeItemId InsertItem(const wxTreeItemId& parent,
                             const wxTreeItemId& idPrevious,
                             const wxString& text,
                             int image = -1, int selectedImage = -1,
-                            wxTreeItemData *data = NULL);
+                            wxPyTreeItemData *data = NULL);
 
     // insert a new item before the one with the given index
     %name(InsertItemBefore)
@@ -599,13 +605,13 @@ public:
                             size_t index,
                             const wxString& text,
                             int image = -1, int selectedImage = -1,
-                            wxTreeItemData *data = NULL);
+                            wxPyTreeItemData *data = NULL);
 
         // insert a new item in as the last child of the parent
     wxTreeItemId AppendItem(const wxTreeItemId& parent,
                             const wxString& text,
                             int image = -1, int selectedImage = -1,
-                            wxTreeItemData *data = NULL);
+                            wxPyTreeItemData *data = NULL);
 
 
 
