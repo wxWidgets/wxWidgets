@@ -7,7 +7,8 @@
         <if cond="MONOLITHIC=='0'">wxUSE_GUI=0</if>
     </set>
     
-    <exe id="console" template="wx_sample" template_append="wx_append">
+    <exe id="console" template="wx_sample_console" template_append="wx_append">
+        <app-type>console</app-type>
         <define>$(MULTILIB_FLAG)</define>
         <sources>console.cpp</sources>
         <wx-lib>base</wx-lib>
