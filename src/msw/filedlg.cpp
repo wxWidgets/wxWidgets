@@ -35,6 +35,7 @@
     #include "wx/filedlg.h"
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/app.h"
 #endif
 
 #include "wx/msw/private.h"
