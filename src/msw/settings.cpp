@@ -377,7 +377,7 @@ static const int gs_metricsMap[] =
 };
 
 // Get a system metric, e.g. scrollbar size
-int wxSystemSettingsNative::GetMetric(wxSystemMetric index)
+int wxSystemSettingsNative::GetMetric(wxSystemMetric index, wxWindow* WXUNUSED(win))
 {
 #ifdef __WXMICROWIN__
     // TODO: probably use wxUniv themes functionality

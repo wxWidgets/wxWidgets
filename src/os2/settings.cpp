@@ -251,6 +251,7 @@ wxFont wxSystemSettingsNative::GetFont(
 // Get a system metric, e.g. scrollbar size
 int wxSystemSettingsNative::GetMetric(
   wxSystemMetric                    index
+, wxWindow*                         WXUNUSED(win)
 )
 {
     switch ( index)

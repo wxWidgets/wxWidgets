@@ -81,7 +81,7 @@ enum wxSystemColour
     wxSYS_COLOUR_MAX
 };
 
-// possible values for wxSystemSettings::GetMetric() parameter
+// possible values for wxSystemSettings::GetMetric() index parameter
 //
 // NB: update the conversion table in msw/settings.cpp if you change the values
 //     of the elements of this enum
@@ -165,7 +165,7 @@ public:
     static wxFont GetFont(wxSystemFont index);
 
     // get a system-dependent metric
-    static int GetMetric(wxSystemMetric index);
+    static int GetMetric(wxSystemMetric index, wxWindow * win = NULL);
 
     // return true if the port has certain feature
     static bool HasFeature(wxSystemFeature index);

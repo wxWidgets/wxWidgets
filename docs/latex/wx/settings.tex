@@ -97,10 +97,13 @@ standalone function named {\tt wxSystemSettings\_GetFont}}
 
 \membersection{wxSystemSettings::GetMetric}\label{wxsystemsettingsgetmetric}
 
-\func{static int}{GetMetric}{\param{wxSystemMetric}{ index}}
+\func{static int}{GetMetric}{\param{wxSystemMetric}{ index}, \param{wxWindow*}{ win = NULL}}
 
-Returns the value of a system metric, or -1 if the metric is not
-supported on the current platform.
+Returns the value of a system metric, or -1 if the metric is not supported on the current system.
+The value of {\it win} determines if the metric returned is a global value or
+a \helpref{wxWindow}{wxwindow} based value, in which case it might determine the widget, the
+display the window is on, or something similar. The window given should be as close to the
+metric as possible (e.g a wxTopLevelWindow in case of the wxSYS_CAPTION_Y metric).
 
 {\it index} can be one of:
 
@@ -151,6 +154,12 @@ in pixels. Each item fits into a rectangle of this size when arranged.}
 where it would otherwise present the information only in audible form; zero otherwise.}
 \twocolitem{{\bf wxSYS\_SWAP\_BUTTONS}}{Non-zero if the meanings of the left and right mouse buttons are swapped; zero otherwise.}
 \end{twocollist}
+
+{\it win} is a pointer to the window for which the metric is requested.
+Specifying the {\it win} parameter is encouraged, because some metrics on some ports are not supported without one,
+or they might be capable of reporting better values if given one. If a window does not make sense for a metric,
+one should still be given, as for example it might determine which displays cursor width is requested with
+wxSYS_CURSOR_X.
 
 \pythonnote{This static method is implemented in Python as a
 standalone function named {\tt wxSystemSettings\_GetMetric}}
