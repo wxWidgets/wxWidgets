@@ -301,15 +301,13 @@ WXDLLIMPEXP_BASE bool wxRmdir(const wxString& dir, int flags = 0);
 #define wxPATH_SEP_MAC        wxT(";")
 
 // platform independent versions
-#if defined(__UNIX__) && !defined(__CYGWIN__) && !defined(__OS2__)
+#if defined(__UNIX__) && !defined(__OS2__)
+  // CYGWIN also uses UNIX settings
   #define wxFILE_SEP_PATH     wxFILE_SEP_PATH_UNIX
   #define wxPATH_SEP          wxPATH_SEP_UNIX
 #elif defined(__MAC__)
   #define wxFILE_SEP_PATH     wxFILE_SEP_PATH_MAC
   #define wxPATH_SEP          wxPATH_SEP_MAC
-#elif defined(__CYGWIN__) // Cygwin
-  #define wxFILE_SEP_PATH     wxFILE_SEP_PATH_DOS
-  #define wxPATH_SEP          wxPATH_SEP_UNIX
 #else   // Windows and OS/2
   #define wxFILE_SEP_PATH     wxFILE_SEP_PATH_DOS
   #define wxPATH_SEP          wxPATH_SEP_DOS
