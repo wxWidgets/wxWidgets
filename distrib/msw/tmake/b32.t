@@ -368,14 +368,11 @@ $(WIN95FLAG)
 ! $(CFG)
 
 clean: $(PERIPH_CLEAN_TARGET)
-    -erase $(LIBTARGET)
-    -erase $(WXLIBDIR)\wx.dll
     -erase $(WXLIBDIR)\wx.tds
     -erase $(WXLIBDIR)\wx.il?
     -erase *.obj
     -erase *.pch
     -erase *.csm
-    -erase *.cfg
     -erase "wx32.#??"
     -erase ..\common\y_tab.c
     -erase ..\common\lex_yy.c
