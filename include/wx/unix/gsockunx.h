@@ -89,11 +89,11 @@ void _GSocket_Uninstall_Callback(GSocket *socket, GSocketEvent event);
 
 GSocketError _GAddress_translate_from(GAddress *address,
                                       struct sockaddr *addr, int len);
-GSocketError _GAddress_translate_to(GAddress *address,
-                                    struct sockaddr **addr, int *len);
-
+GSocketError _GAddress_translate_to  (GAddress *address,
+                                      struct sockaddr **addr, int *len);
 GSocketError _GAddress_Init_INET(GAddress *address);
 GSocketError _GAddress_Init_UNIX(GAddress *address);
+
 
 #ifdef __cplusplus
 }

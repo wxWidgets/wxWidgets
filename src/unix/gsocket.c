@@ -1,54 +1,58 @@
 /* -------------------------------------------------------------------------
  * Project: GSocket (Generic Socket) for WX
  * Name:    gsocket.c
+ * Authors: Guilhem Lavaux,
+ *          Guillermo Rodriguez Garcia <guille@iies.es> (maintainer)
  * Purpose: GSocket main Unix file
  * CVSID:   $Id$
  * -------------------------------------------------------------------------
  */
 
-#include "wx/setup.h"
+/*
+ * PLEASE don't put C++ comments here - this is a C source file.
+ */
 
-#if wxUSE_SOCKETS
+#ifndef __GSOCKET_STANDALONE__
+#include "wx/setup.h"
+#endif
+
+#if wxUSE_SOCKETS || defined(__GSOCKET_STANDALONE__)
 
 #include <assert.h>
 #include <sys/types.h>
 #include <netdb.h>
 #include <sys/ioctl.h>
+
 #ifdef __VMS__
 #include <socket.h>
 struct	sockaddr_un {
-	u_char	sun_len;		/* sockaddr len including null */
-	u_char	sun_family;		/* AF_UNIX */
-	char	sun_path[108];		/* path name (gag) */
+    u_char  sun_len;        /* sockaddr len including null */
+    u_char  sun_family;     /* AF_UNIX */
+    char    sun_path[108];  /* path name (gag) */
 };
 #else
 #include <sys/socket.h>
 #include <sys/un.h>
 #endif
+
 #include <sys/time.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <errno.h>
-
 #include <string.h>
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>
 #include <ctype.h>
-
 #ifdef sun
-#    include <sys/filio.h>
+#  include <sys/filio.h>
 #endif
-
 #ifdef sgi
-#    include <bstring.h>
+#  include <bstring.h>
 #endif
-
 #include <signal.h>
 
-#include "wx/gsocket.h"
-#include "wx/unix/gsockunx.h"
 
 #ifndef SOCKLEN_T
 
@@ -66,6 +70,15 @@ struct	sockaddr_un {
 
 #endif /* SOCKLEN_T */
 
+
+/*
+ * INADDR_BROADCAST is identical to INADDR_NONE which is not defined
+ * on all unices. INADDR_BROADCAST should be fine to indicate an error.
+ */
+#ifndef INADDR_NONE
+#define INADDR_NONE INADDR_BROADCAST
+#endif
+
 #define MASK_SIGNAL()                       \
 {                                           \
   void (*old_handler)(int);                 \
@@ -75,6 +88,19 @@ struct	sockaddr_un {
 #define UNMASK_SIGNAL()                     \
   signal(SIGPIPE, old_handler);             \
 }
+
+
+#ifndef __GSOCKET_STANDALONE__
+
+#include "wx/gsocket.h"
+#include "wx/unix/gsockunx.h"
+
+#else
+
+#include "gsocket.h"
+#include "gsockunx.h"
+
+#endif /* __GSOCKET_STANDALONE__ */
 
 
 /* Global initialisers */
@@ -88,7 +114,7 @@ void GSocket_Cleanup()
 {
 }
 
-/* Constructors / Destructors */
+/* Constructors / Destructors for GSocket */
 
 GSocket *GSocket_new()
 {
@@ -127,31 +153,35 @@ void GSocket_destroy(GSocket *socket)
 {
   assert(socket != NULL);
 
-  /* First, we check that the socket is really shutdowned */
+  /* Check that the socket is really shutdowned */
   if (socket->m_fd != -1)
     GSocket_Shutdown(socket);
 
   /* We destroy GUI specific variables */
   _GSocket_GUI_Destroy(socket);
 
-  /* We destroy private addresses */
+  /* Destroy private addresses */
   if (socket->m_local)
     GAddress_destroy(socket->m_local);
 
   if (socket->m_peer)
     GAddress_destroy(socket->m_peer);
 
-  /* We destroy socket itself */
+  /* Destroy the socket itself */
   free(socket);
 }
 
+/* GSocket_Shutdown:
+ *  Disallow further read/write operations on this socket, close
+ *  the fd and disable all callbacks.
+ */
 void GSocket_Shutdown(GSocket *socket)
 {
   int evt;
 
   assert(socket != NULL);
 
-  /* If socket has been created, we shutdown it */
+  /* If socket has been created, shutdown it */
   if (socket->m_fd != -1)
   {
     shutdown(socket->m_fd, 2);
@@ -159,7 +189,7 @@ void GSocket_Shutdown(GSocket *socket)
     socket->m_fd = -1;
   }
 
-  /* We also disable GUI callbacks */
+  /* Disable GUI callbacks */
   for (evt = 0; evt < GSOCK_MAX_EVENT; evt++)
     socket->m_cbacks[evt] = NULL;
 
@@ -169,16 +199,34 @@ void GSocket_Shutdown(GSocket *socket)
 
 /* Address handling */
 
+/* GSocket_SetLocal:
+ * GSocket_GetLocal:
+ * GSocket_SetPeer:
+ * GSocket_GetPeer:
+ *  Set or get the local or peer address for this socket. The 'set'
+ *  functions return GSOCK_NOERROR on success, an error code otherwise.
+ *  The 'get' functions return a pointer to a GAddress object on success,
+ *  or NULL otherwise, in which case they set the error code of the
+ *  corresponding GSocket.
+ *
+ *  Error codes:
+ *    GSOCK_INVSOCK - the socket is not valid.
+ *    GSOCK_INVADDR - the address is not valid.
+ */
 GSocketError GSocket_SetLocal(GSocket *socket, GAddress *address)
 {
   assert(socket != NULL);
 
-  if ((socket->m_fd != -1 && !socket->m_server)) {
+  /* the socket must be initialized, or it must be a server */
+  if ((socket->m_fd != -1 && !socket->m_server))
+  {
     socket->m_error = GSOCK_INVSOCK;
     return GSOCK_INVSOCK;
   }
 
-  if (address == NULL || address->m_family == GSOCK_NOFAMILY) {
+  /* check address */
+  if (address == NULL || address->m_family == GSOCK_NOFAMILY)
+  {
     socket->m_error = GSOCK_INVADDR;
     return GSOCK_INVADDR;
   }
@@ -195,7 +243,9 @@ GSocketError GSocket_SetPeer(GSocket *socket, GAddress *address)
 {
   assert(socket != NULL);
 
-  if (address == NULL || address->m_family == GSOCK_NOFAMILY) {
+  /* check address */
+  if (address == NULL || address->m_family == GSOCK_NOFAMILY)
+  {
     socket->m_error = GSOCK_INVADDR;
     return GSOCK_INVADDR;
   }
@@ -217,28 +267,34 @@ GAddress *GSocket_GetLocal(GSocket *socket)
 
   assert(socket != NULL);
 
+  /* try to get it from the m_local var first */
   if (socket->m_local)
     return GAddress_copy(socket->m_local);
 
-  if (socket->m_fd == -1) {
+  /* else, if the socket is initialized, try getsockname */
+  if (socket->m_fd == -1)
+  {
     socket->m_error = GSOCK_INVSOCK;
     return NULL;
   }
 
-  size = sizeof(addr);
-
-  if (getsockname(socket->m_fd, &addr, (SOCKLEN_T *) &size) < 0) {
+  if (getsockname(socket->m_fd, &addr, (SOCKLEN_T *) &size) < 0)
+  {
     socket->m_error = GSOCK_IOERR;
     return NULL;
   }
 
+  /* got a valid address from getsockname, create a GAddress object */
   address = GAddress_new();
-  if (address == NULL) {
+  if (address == NULL)
+  {
     socket->m_error = GSOCK_MEMERR;
     return NULL;
   }
-  err = _GAddress_translate_from(address, &addr, size); /*xxx*/
-  if (err != GSOCK_NOERROR) {
+
+  err = _GAddress_translate_from(address, &addr, size);
+  if (err != GSOCK_NOERROR)
+  {
     GAddress_destroy(address);
     socket->m_error = err;
     return NULL;
@@ -251,6 +307,7 @@ GAddress *GSocket_GetPeer(GSocket *socket)
 {
   assert(socket != NULL);
 
+  /* try to get it from the m_peer var */
   if (socket->m_peer)
     return GAddress_copy(socket->m_peer);
 
@@ -260,11 +317,14 @@ GAddress *GSocket_GetPeer(GSocket *socket)
 /* Server specific parts */
 
 /* GSocket_SetServer:
- *  Sets up the socket as a server. It uses the "Local" field of GSocket.
- *  "Local" must be set by GSocket_SetLocal() before GSocket_SetServer()
- *  is called. Possible error codes are: GSOCK_INVSOCK if socket has not
- *  been initialized, GSOCK_INVADDR if the local address has not been
- *  defined and GSOCK_IOERR for other internal errors.
+ *  Sets up this socket as a server. The local address must have been
+ *  set with GSocket_SetLocal() before GSocket_SetServer() is called.
+ *  Returns GSOCK_NOERROR on success, one of the following otherwise:
+ * 
+ *  Error codes:
+ *    GSOCK_INVSOCK - the socket is in use.
+ *    GSOCK_INVADDR - the local address has not been set.
+ *    GSOCK_IOERR   - low-level error. 
  */
 GSocketError GSocket_SetServer(GSocket *sck)
 {
@@ -273,24 +333,30 @@ GSocketError GSocket_SetServer(GSocket *sck)
 
   assert(sck != NULL);
 
-  if (sck->m_fd != -1) {
+  /* must not be in use */
+  if (sck->m_fd != -1)
+  {
     sck->m_error = GSOCK_INVSOCK;
     return GSOCK_INVSOCK;
   }
 
-  if (!sck->m_local) {
+  /* the local addr must have been set */
+  if (!sck->m_local)
+  {
     sck->m_error = GSOCK_INVADDR;
     return GSOCK_INVADDR;
   }
 
-  /* We always have a stream here  */
-  sck->m_stream = TRUE;
-  sck->m_server = TRUE;
+  /* Initialize all fields */
+  sck->m_stream   = TRUE;
+  sck->m_server   = TRUE;
+  sck->m_oriented = TRUE;
 
   /* Create the socket */
   sck->m_fd = socket(sck->m_local->m_realfamily, SOCK_STREAM, 0);
 
-  if (sck->m_fd == -1) {
+  if (sck->m_fd == -1)
+  {
     sck->m_error = GSOCK_IOERR;
     return GSOCK_IOERR;
   }
@@ -298,16 +364,16 @@ GSocketError GSocket_SetServer(GSocket *sck)
   ioctl(sck->m_fd, FIONBIO, &arg);
   _GSocket_Enable_Events(sck);
 
-  /* Bind the socket to the LOCAL address */
-  if (bind(sck->m_fd, sck->m_local->m_addr, sck->m_local->m_len) < 0) {
-    close(sck->m_fd);
-    sck->m_fd = -1;
-    sck->m_error = GSOCK_IOERR;
-    return GSOCK_IOERR;
-  }
-
-  /* Enable listening up to 5 connections */
-  if (listen(sck->m_fd, 5) < 0) {
+  /* Bind to the local address,
+   * retrieve the actual address bound,
+   * and listen up to 5 connections.
+   */
+  if ((bind(sck->m_fd, sck->m_local->m_addr, sck->m_local->m_len) != 0) ||
+      (getsockname(sck->m_fd,
+                   sck->m_local->m_addr,
+                   (SOCKLEN_T *) &sck->m_local->m_len) != 0) ||
+      (listen(sck->m_fd, 5) != 0))
+  {
     close(sck->m_fd);
     sck->m_fd = -1;
     sck->m_error = GSOCK_IOERR;
@@ -318,7 +384,16 @@ GSocketError GSocket_SetServer(GSocket *sck)
 }
 
 /* GSocket_WaitConnection:
- *  Waits for an incoming client connection.
+ *  Waits for an incoming client connection. Returns a pointer to
+ *  a GSocket object, or NULL if there was an error, in which case
+ *  the last error field will be updated for the calling GSocket.
+ *
+ *  Error codes (set in the calling GSocket)
+ *    GSOCK_INVSOCK    - the socket is not valid or not a server.
+ *    GSOCK_TIMEDOUT   - timeout, no incoming connections.
+ *    GSOCK_WOULDBLOCK - the call would block and the socket is nonblocking.
+ *    GSOCK_MEMERR     - couldn't allocate memory.
+ *    GSOCK_IOERR      - low-level error. 
  */
 GSocket *GSocket_WaitConnection(GSocket *socket)
 {
@@ -342,13 +417,14 @@ GSocket *GSocket_WaitConnection(GSocket *socket)
 
   /* Create a GSocket object for the new connection */
   connection = GSocket_new();
+
   if (!connection)
   {
     socket->m_error = GSOCK_MEMERR;
     return NULL;
   }
 
-  /* Accept the incoming connection */
+  /* Wait for a connection (with timeout) */
   if (_GSocket_Input_Timeout(socket) == GSOCK_TIMEDOUT)
   {
     GSocket_destroy(connection);
@@ -374,7 +450,7 @@ GSocket *GSocket_WaitConnection(GSocket *socket)
   connection->m_stream   = TRUE;
   connection->m_oriented = TRUE;
 
-  /* Setup the peer address field */ /*xxx*/
+  /* Setup the peer address field */
   connection->m_peer = GAddress_new();
   if (!connection->m_peer)
   {
@@ -397,24 +473,38 @@ GSocket *GSocket_WaitConnection(GSocket *socket)
   return connection;
 }
 
-/* Non oriented connections */
+/* Datagram sockets */
 
+/* GSocket_SetNonOriented:
+ *  Sets up this socket as a non-connection oriented (datagram) socket.
+ *  Before using this function, the local address must have been set
+ *  with GSocket_SetLocal(), or the call will fail. Returns GSOCK_NOERROR
+ *  on success, or one of the following otherwise.
+ *
+ *  Error codes:
+ *    GSOCK_INVSOCK - the socket is in use.
+ *    GSOCK_INVADDR - the local address has not been set.
+ *    GSOCK_IOERR   - low-level error.
+ */
 GSocketError GSocket_SetNonOriented(GSocket *sck)
 {
   int arg = 1;
 
   assert(sck != NULL);
 
-  if (sck->m_fd != -1) {
+  if (sck->m_fd != -1)
+  {
     sck->m_error = GSOCK_INVSOCK;
     return GSOCK_INVSOCK;
   }
 
-  if (!sck->m_local) {
+  if (!sck->m_local)
+  {
     sck->m_error = GSOCK_INVADDR;
     return GSOCK_INVADDR;
   }
 
+  /* Initialize all fields */
   sck->m_stream   = FALSE;
   sck->m_server   = FALSE;
   sck->m_oriented = FALSE;
@@ -422,7 +512,8 @@ GSocketError GSocket_SetNonOriented(GSocket *sck)
   /* Create the socket */
   sck->m_fd = socket(sck->m_local->m_realfamily, SOCK_DGRAM, 0);
 
-  if (sck->m_fd < 0) {
+  if (sck->m_fd < 0)
+  {
     sck->m_error = GSOCK_IOERR;
     return GSOCK_IOERR;
   }
@@ -430,8 +521,14 @@ GSocketError GSocket_SetNonOriented(GSocket *sck)
   ioctl(sck->m_fd, FIONBIO, &arg);
   _GSocket_Enable_Events(sck);
 
-  /* Bind it to the LOCAL address */
-  if (bind(sck->m_fd, sck->m_local->m_addr, sck->m_local->m_len) < 0) {
+  /* Bind to the local address,
+   * and retrieve the actual address bound.
+   */
+  if ((bind(sck->m_fd, sck->m_local->m_addr, sck->m_local->m_len) != 0) ||
+      (getsockname(sck->m_fd,
+                   sck->m_local->m_addr,
+                   (SOCKLEN_T *) &sck->m_local->m_len) != 0))
+  {
     close(sck->m_fd);
     sck->m_fd    = -1;
     sck->m_error = GSOCK_IOERR;
@@ -444,17 +541,31 @@ GSocketError GSocket_SetNonOriented(GSocket *sck)
 /* Client specific parts */
 
 /* GSocket_Connect:
- *  Establishes a client connection to a server using the "Peer"
- *  field of GSocket. "Peer" must be set by GSocket_SetPeer() before
- *  GSocket_Connect() is called. Possible error codes are GSOCK_INVSOCK,
- *  GSOCK_INVADDR, GSOCK_TIMEDOUT, GSOCK_WOULDBLOCK and GSOCK_IOERR.
- *  If a socket is nonblocking and Connect() returns GSOCK_WOULDBLOCK,
- *  the connection request can be completed later. Use GSocket_Select()
- *  to check or wait for a GSOCK_CONNECTION event.
+ *  For stream (connection oriented) sockets, GSocket_Connect() tries
+ *  to establish a client connection to a server using the peer address
+ *  as established with GSocket_SetPeer(). Returns GSOCK_NOERROR if the
+ *  connection has been succesfully established, or one of the error
+ *  codes listed below. Note that for nonblocking sockets, a return
+ *  value of GSOCK_WOULDBLOCK doesn't mean a failure. The connection
+ *  request can be completed later; you should use GSocket_Select()
+ *  to poll for GSOCK_CONNECTION | GSOCK_LOST, or wait for the
+ *  corresponding asynchronous events.
+ *
+ *  For datagram (non connection oriented) sockets, GSocket_Connect()
+ *  just sets the peer address established with GSocket_SetPeer() as
+ *  default destination.
+ *
+ *  Error codes:
+ *    GSOCK_INVSOCK    - the socket is in use or not valid.
+ *    GSOCK_INVADDR    - the peer address has not been established.
+ *    GSOCK_TIMEDOUT   - timeout, the connection failed.
+ *    GSOCK_WOULDBLOCK - connection in progress (nonblocking sockets only)
+ *    GSOCK_MEMERR     - couldn't allocate memory.
+ *    GSOCK_IOERR      - low-level error. 
  */
 GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
 {
-  int type, err, ret;
+  int err, ret;
   int arg = 1;
 
   assert(sck != NULL);
@@ -474,21 +585,18 @@ GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
     return GSOCK_INVADDR;
   }
 
-  /* Test whether we want the socket to be a stream (e.g. TCP) */
+  /* Streamed or dgram socket? */
   sck->m_stream   = (stream == GSOCK_STREAMED);
   sck->m_oriented = TRUE;
   sck->m_server   = FALSE;
   sck->m_establishing = FALSE;
 
-  if (sck->m_stream)
-    type = SOCK_STREAM;
-  else
-    type = SOCK_DGRAM;
-
   /* Create the socket */
-  sck->m_fd = socket(sck->m_peer->m_realfamily, type, 0);
+  sck->m_fd = socket(sck->m_peer->m_realfamily,
+                     sck->m_stream? SOCK_STREAM : SOCK_DGRAM, 0);
 
-  if (sck->m_fd == -1) {
+  if (sck->m_fd == -1)
+  {
     sck->m_error = GSOCK_IOERR;
     return GSOCK_IOERR;
   }
@@ -496,7 +604,7 @@ GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
   ioctl(sck->m_fd, FIONBIO, &arg);
   _GSocket_Enable_Events(sck);
 
-  /* Connect it to the PEER address */
+  /* Connect it to the peer address, with a timeout (see below) */
   ret = connect(sck->m_fd, sck->m_peer->m_addr, sck->m_peer->m_len);
 
   if (ret == -1)
@@ -519,7 +627,13 @@ GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
       }
       else
       {
-        return GSOCK_NOERROR;
+        int error;
+        SOCKLEN_T len = sizeof(error);
+
+        getsockopt(sck->m_fd, SOL_SOCKET, SO_ERROR, (void*) &error, &len);
+
+        if (!error)
+          return GSOCK_NOERROR;
       }
     }
 
@@ -531,9 +645,8 @@ GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
      */
     if ((err == EINPROGRESS) && (sck->m_non_blocking))
     {
-      sck->m_error = GSOCK_WOULDBLOCK;
       sck->m_establishing = TRUE;
-
+      sck->m_error = GSOCK_WOULDBLOCK;
       return GSOCK_WOULDBLOCK;
     }
 
@@ -543,7 +656,6 @@ GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
     close(sck->m_fd);
     sck->m_fd = -1;
     sck->m_error = GSOCK_IOERR;
-
     return GSOCK_IOERR;
   }
 
@@ -568,9 +680,11 @@ int GSocket_Read(GSocket *socket, char *buffer, int size)
     return -1;
   }
 
+  /* If the socket is blocking, wait for data (with a timeout) */
   if (_GSocket_Input_Timeout(socket) == GSOCK_TIMEDOUT)
     return -1;
 
+  /* Read the data */
   if (socket->m_stream)
     ret = _GSocket_Recv_Stream(socket, buffer, size);
   else
@@ -587,9 +701,8 @@ int GSocket_Read(GSocket *socket, char *buffer, int size)
   return ret;
 }
 
-int GSocket_Write(GSocket *socket, const char *buffer,
-		  int size)
-{
+int GSocket_Write(GSocket *socket, const char *buffer, int size)
+{                        
   int ret;
 
   assert(socket != NULL);
@@ -600,9 +713,11 @@ int GSocket_Write(GSocket *socket, const char *buffer,
     return -1;
   }
 
+  /* If the socket is blocking, wait for writability (with a timeout) */
   if (_GSocket_Output_Timeout(socket) == GSOCK_TIMEDOUT)
     return -1;
 
+  /* Write the data */
   if (socket->m_stream)
     ret = _GSocket_Send_Stream(socket, buffer, size);
   else
@@ -621,6 +736,7 @@ int GSocket_Write(GSocket *socket, const char *buffer,
      * will further OUTPUT events be posted.
      */
     _GSocket_Enable(socket, GSOCK_OUTPUT);
+    return -1;
   }
   
   return ret;
@@ -631,7 +747,7 @@ int GSocket_Write(GSocket *socket, const char *buffer,
  *  check for the events specified in the 'flags' parameter, and
  *  it will return a mask indicating which operations can be
  *  performed. This function won't block, regardless of the
- *  mode (blocking|nonblocking) of the socket.
+ *  mode (blocking | nonblocking) of the socket.
  */
 GSocketEventFlags GSocket_Select(GSocket *socket, GSocketEventFlags flags)
 {
@@ -643,8 +759,8 @@ GSocketEventFlags GSocket_Select(GSocket *socket, GSocketEventFlags flags)
 /* Flags */
 
 /* GSocket_SetNonBlocking:
- *  Sets the socket to non-blocking mode. This is useful if
- *  we don't want to wait.
+ *  Sets the socket to non-blocking mode. All IO calls will return
+ *  immediately.
  */
 void GSocket_SetNonBlocking(GSocket *socket, bool non_block)
 {
@@ -654,8 +770,8 @@ void GSocket_SetNonBlocking(GSocket *socket, bool non_block)
 }
 
 /* GSocket_SetTimeout:
- *  Sets the timeout for blocking calls. Time is
- *  expressed in milliseconds.
+ *  Sets the timeout for blocking calls. Time is expressed in
+ *  milliseconds.
  */
 void GSocket_SetTimeout(GSocket *socket, unsigned long millisec)
 {
@@ -665,7 +781,9 @@ void GSocket_SetTimeout(GSocket *socket, unsigned long millisec)
 }
 
 /* GSocket_GetError:
- *  Returns the last error occured for this socket.
+ *  Returns the last error occured for this socket. Note that successful
+ *  operations do not clear this back to GSOCK_NOERROR, so use it only
+ *  after an error.
  */
 GSocketError GSocket_GetError(GSocket *socket)
 {
@@ -676,20 +794,24 @@ GSocketError GSocket_GetError(GSocket *socket)
 
 /* Callbacks */
 
-/* Only one callback is possible for each event (INPUT, OUTPUT, CONNECTION
- * and LOST). The callbacks are called in the following situations:
- *
- * INPUT: There is at least one byte in the input buffer
- * OUTPUT: The system is sure that the next write call will not block
- * CONNECTION: Two cases are possible:
- *           Client socket -> the connection is established
- *           Server socket -> a client requests a connection
- * LOST: The connection is lost
- *
- * An event is generated only once and its state is reseted when the
- * relative IO call is requested.
- * For example: INPUT -> GSocket_Read()
- *              CONNECTION -> GSocket_Accept()
+/* GSOCK_INPUT:
+ *   There is data to be read in the input buffer. If, after a read
+ *   operation, there is still data available, the callback function will
+ *   be called again.
+ * GSOCK_OUTPUT:
+ *   The socket is available for writing. That is, the next write call 
+ *   won't block. This event is generated only once, when the connection is
+ *   first established, and then only if a call failed with GSOCK_WOULDBLOCK,
+ *   when the output buffer empties again. This means that the app should
+ *   assume that it can write since the first OUTPUT event, and no more
+ *   OUTPUT events will be generated unless an error occurs.
+ * GSOCK_CONNECTION:
+ *   Connection succesfully established, for client sockets, or incoming
+ *   client connection, for server sockets. Wait for this event (also watch
+ *   out for GSOCK_LOST) after you issue a nonblocking GSocket_Connect() call.
+ * GSOCK_LOST:
+ *   The connection is lost (or a connection request failed); this could
+ *   be due to a failure, or due to the peer closing it gracefully.
  */
 
 /* GSocket_SetCallback:
@@ -701,7 +823,7 @@ GSocketError GSocket_GetError(GSocket *socket)
  *  void function(GSocket *socket, GSocketEvent event, char *cdata)
  */
 void GSocket_SetCallback(GSocket *socket, GSocketEventFlags flags,
-			 GSocketCallback callback, char *cdata)
+                         GSocketCallback callback, char *cdata)
 {
   int count;
 
@@ -736,6 +858,7 @@ void GSocket_UnsetCallback(GSocket *socket, GSocketEventFlags flags)
     }
   }
 }
+
 
 #define CALL_CALLBACK(socket, event) {                                  \
   _GSocket_Disable(socket, event);                                      \
@@ -874,13 +997,15 @@ int _GSocket_Send_Dgram(GSocket *socket, const char *buffer, int size)
   int len, ret;
   GSocketError err;
 
-  if (!socket->m_peer) {
+  if (!socket->m_peer)
+  {
     socket->m_error = GSOCK_INVADDR;
     return -1;
   }
 
   err = _GAddress_translate_to(socket->m_peer, &addr, &len);
-  if (err != GSOCK_NOERROR) {
+  if (err != GSOCK_NOERROR)
+  {
     socket->m_error = err;
     return -1;
   }
@@ -900,24 +1025,24 @@ void _GSocket_Detected_Read(GSocket *socket)
   char c;
   int ret;
 
+  ret = recv(socket->m_fd, &c, 1, MSG_PEEK);
+
   if (socket->m_stream)
   {
-    ret = recv(socket->m_fd, &c, 1, MSG_PEEK);
-
     if (ret < 0 && socket->m_server)
     {
       CALL_CALLBACK(socket, GSOCK_CONNECTION);
       return;
     }
+  }
 
-    if (ret > 0)
-    {
-      CALL_CALLBACK(socket, GSOCK_INPUT);
-    }
-    else
-    {
-      CALL_CALLBACK(socket, GSOCK_LOST);
-    }
+  if (ret > 0)
+  {
+    CALL_CALLBACK(socket, GSOCK_INPUT);
+  }
+  else
+  {
+    CALL_CALLBACK(socket, GSOCK_LOST);
   }
 }
 
@@ -925,13 +1050,12 @@ void _GSocket_Detected_Write(GSocket *socket)
 {
   if (socket->m_establishing && !socket->m_server)
   {
-    int error, len;
+    int error;
+    SOCKLEN_T len = sizeof(error);
 
     socket->m_establishing = FALSE;
 
-    len = sizeof(error);
-    getsockopt(socket->m_fd, SOL_SOCKET, SO_ERROR, (void*) &error,
-           (SOCKLEN_T *) &len);
+    getsockopt(socket->m_fd, SOL_SOCKET, SO_ERROR, (void*) &error, &len);
 
     if (error)
     {
@@ -959,29 +1083,27 @@ void _GSocket_Detected_Write(GSocket *socket)
  * -------------------------------------------------------------------------
  */
 
-/* CHECK_ADDRESS verifies that the current family is either GSOCK_NOFAMILY or
- * GSOCK_*family*. In case it is GSOCK_NOFAMILY, it initializes address to be
- * a GSOCK_*family*. In other cases, it returns GSOCK_INVADDR.
+/* CHECK_ADDRESS verifies that the current family is either GSOCK_NOFAMILY
+ * or GSOCK_*family*, and if it is GSOCK_NOFAMILY, it initalizes address
+ * to be a GSOCK_*family*. In other cases, it returns GSOCK_INVADDR.
  */
-#define CHECK_ADDRESS(address, family, retval) \
-{ \
-  if (address->m_family == GSOCK_NOFAMILY) \
-    if (_GAddress_Init_##family(address) != GSOCK_NOERROR) {\
-      return address->m_error; \
-    }\
-  if (address->m_family != GSOCK_##family) {\
-    address->m_error = GSOCK_INVADDR; \
-    return retval; \
-  } \
+#define CHECK_ADDRESS(address, family, retval)                      \
+{                                                                   \
+  if (address->m_family == GSOCK_NOFAMILY)                          \
+    if (_GAddress_Init_##family(address) != GSOCK_NOERROR)          \
+      return address->m_error;                                      \
+  if (address->m_family != GSOCK_##family)                          \
+  {                                                                 \
+    address->m_error = GSOCK_INVADDR;                               \
+    return retval;                                                  \
+  }                                                                 \
 }
 
 GAddress *GAddress_new()
 {
   GAddress *address;
 
-  address = (GAddress *)malloc(sizeof(GAddress));
-
-  if (address == NULL)
+  if ((address = (GAddress *) malloc(sizeof(GAddress))) == NULL)
     return NULL;
 
   address->m_family  = GSOCK_NOFAMILY;
@@ -997,16 +1119,16 @@ GAddress *GAddress_copy(GAddress *address)
 
   assert(address != NULL);
 
-  addr2 = (GAddress *)malloc(sizeof(GAddress));
-
-  if (addr2 == NULL)
+  if ((addr2 = (GAddress *) malloc(sizeof(GAddress))) == NULL)
     return NULL;
 
   memcpy(addr2, address, sizeof(GAddress));
 
-  if (address->m_addr) {
+  if (address->m_addr)
+  {
     addr2->m_addr = (struct sockaddr *)malloc(addr2->m_len);
-    if (addr2->m_addr == NULL) {
+    if (addr2->m_addr == NULL)
+    {
       free(addr2);
       return NULL;
     }
@@ -1037,24 +1159,27 @@ GAddressType GAddress_GetFamily(GAddress *address)
   return address->m_family;
 }
 
-GSocketError _GAddress_translate_from(GAddress *address, struct sockaddr *addr, int len){
+GSocketError _GAddress_translate_from(GAddress *address,
+                                      struct sockaddr *addr, int len)
+{
   address->m_realfamily = addr->sa_family;
-  switch (addr->sa_family) {
-  case AF_INET:
-    address->m_family = GSOCK_INET;
-    break;
-  case AF_UNIX:
-    address->m_family = GSOCK_UNIX;
-    break;
+  switch (addr->sa_family)
+  {
+    case AF_INET:
+      address->m_family = GSOCK_INET;
+      break;
+    case AF_UNIX:
+      address->m_family = GSOCK_UNIX;
+      break;
 #ifdef AF_INET6
-  case AF_INET6:
-    address->m_family = GSOCK_INET6;
-    break;
+    case AF_INET6:
+      address->m_family = GSOCK_INET6;
+      break;
 #endif
-  default:
+    default:
     {
-    address->m_error = GSOCK_INVOP;
-    return GSOCK_INVOP;
+      address->m_error = GSOCK_INVOP;
+      return GSOCK_INVOP;
     }
   }
 
@@ -1063,7 +1188,9 @@ GSocketError _GAddress_translate_from(GAddress *address, struct sockaddr *addr, 
 
   address->m_len  = len;
   address->m_addr = (struct sockaddr *)malloc(len);
-  if (address->m_addr == NULL) {
+
+  if (address->m_addr == NULL)
+  {
     address->m_error = GSOCK_MEMERR;
     return GSOCK_MEMERR;
   }
@@ -1075,7 +1202,8 @@ GSocketError _GAddress_translate_from(GAddress *address, struct sockaddr *addr, 
 GSocketError _GAddress_translate_to(GAddress *address,
                                     struct sockaddr **addr, int *len)
 {
-  if (!address->m_addr) {
+  if (!address->m_addr)
+  {
     address->m_error = GSOCK_INVADDR;
     return GSOCK_INVADDR;
   }
@@ -1100,7 +1228,7 @@ GSocketError _GAddress_translate_to(GAddress *address,
 GSocketError _GAddress_Init_INET(GAddress *address)
 {
   address->m_len  = sizeof(struct sockaddr_in);
-  address->m_addr = (struct sockaddr *)malloc(address->m_len);
+  address->m_addr = (struct sockaddr *) malloc(address->m_len);
   if (address->m_addr == NULL)
   {
     address->m_error = GSOCK_MEMERR;
@@ -1110,11 +1238,7 @@ GSocketError _GAddress_Init_INET(GAddress *address)
   address->m_family = GSOCK_INET;
   address->m_realfamily = PF_INET;
   ((struct sockaddr_in *)address->m_addr)->sin_family = AF_INET;
-  /*
-     INADDR_BROADCAST is identical to INADDR_NONE which is not defined
-     on all unices. INADDR_BROADCAST should be fine to indicate an error.
-   */
-  ((struct sockaddr_in *)address->m_addr)->sin_addr.s_addr = INADDR_BROADCAST;
+  ((struct sockaddr_in *)address->m_addr)->sin_addr.s_addr = INADDR_ANY;
 
   return GSOCK_NOERROR;
 }
@@ -1135,7 +1259,6 @@ GSocketError GAddress_INET_SetHostName(GAddress *address, const char *hostname)
   if (inet_aton(hostname, addr) == 0)
   {
 #elif defined(HAVE_INET_ADDR)
-  /* Fix from Guillermo Rodriguez Garcia <guille@iies.es> */
   if ( (addr->s_addr = inet_addr(hostname)) == -1 )
   {
 #else
@@ -1148,6 +1271,8 @@ GSocketError GAddress_INET_SetHostName(GAddress *address, const char *hostname)
     /* It is a real name, we solve it */
     if ((he = gethostbyname(hostname)) == NULL)
     {
+      /* Reset to invalid address */
+      addr->s_addr = INADDR_NONE;
       address->m_error = GSOCK_NOHOST;
       return GSOCK_NOHOST;
     }
@@ -1155,6 +1280,11 @@ GSocketError GAddress_INET_SetHostName(GAddress *address, const char *hostname)
     addr->s_addr = array_addr[0].s_addr;
   }
   return GSOCK_NOERROR;
+}
+
+GSocketError GAddress_INET_SetAnyAddress(GAddress *address)
+{
+  return GAddress_INET_SetHostAddress(address, INADDR_ANY);
 }
 
 GSocketError GAddress_INET_SetHostAddress(GAddress *address,
@@ -1188,7 +1318,8 @@ GSocketError GAddress_INET_SetPortName(GAddress *address, const char *port,
   }
  
   se = getservbyname(port, protocol);
-  if (!se) {
+  if (!se)
+  {
     if (isdigit(port[0]))
     {
       int port_int;
@@ -1321,6 +1452,5 @@ GSocketError GAddress_UNIX_GetPath(GAddress *address, char *path, size_t sbuf)
   return GSOCK_NOERROR;
 }
 
-#endif
-  /* wxUSE_SOCKETS */
+#endif  /* wxUSE_SOCKETS || defined(__GSOCKET_STANDALONE__) */
 
