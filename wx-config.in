@@ -339,6 +339,9 @@ get_mask()
     eval echo "\${$1_host}\${$1_toolkit}\${$1_widgetset}-\${$1_chartype}-\${$1_debugtype}\${$1_linkage}-\${$1_version}\${$1_flavour}"
 }
 
+# Returns true if this script is for a cross compiled config.
+is_cross()  { [ "x@cross_compiling@" = "xyes" ]; }
+
 
 # Determine the base directories we require.
 prefix=${input_option_prefix-${this_prefix:-@prefix@}}
@@ -347,7 +350,7 @@ wxconfdir="@libdir@/wx/config"
 
 installed_configs=$( cd "$wxconfdir" 2> /dev/null && ls | grep -v "^inplace-" )
 
-target="@host_alias@"
+is_cross && target="@host_alias@"
 
 # Define a pseudo-hash to contain the specification of this wx-config
 # instance and its associated library.
@@ -784,9 +787,23 @@ if ! user_mask_fits "$this_config" ; then
             exit
 
         else
-            # silently exit with error: we shouldn't give any messages here as
-            # we may be called from a configure script where this would really
-            # mess things up
+
+            cat 1>&2 <<-EOF
+
+	  Warning: No config found to match: $config_spec
+	           in $wxconfdir
+	  If you require this configuration, please install the desired
+	  library build.  If this is part of an automated configuration
+	  test and no other errors occur, you may safely ignore it.
+	  You may use wx-config --list to see all configs available in
+	  the default prefix.
+
+	EOF
+
+            # PIPEDREAM: from here we are actually just a teensy step
+            # from simply building the missing config for the user
+            # on the fly if this is an in tree wx-config.
+
             exit 1
         fi
     fi
@@ -866,7 +883,6 @@ bindir="@bindir@"
 # The rest are going to need a little more work.
 # --------------------------------------------------------------
 
-is_cross()      { [ "x@cross_compiling@" = "xyes" ]; }
 is_monolithic() { [ "x@MONOLITHIC@" = "x1" ]; }
 is_static()     { [ -n "$this_linkage" ]; }
 is_installed()  { [ -z "$this_prefix" ]; }
