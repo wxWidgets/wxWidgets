@@ -770,10 +770,17 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                 m_horizontal->SetValue("®lu»ouèký kùò zbìsile èe¹tina «»");
                 break;
 
-            default:
+            case '1':
                 m_horizontal->SetFont(wxFont(18, wxSWISS, wxNORMAL, wxNORMAL,
                                              FALSE, "",
-                                             wxFONTENCODING_KOI8));
+                                             wxFONTENCODING_CP1251));
+                m_horizontal->SetValue("Ïðèâåò!");
+                break;
+
+            case '8':
+                m_horizontal->SetFont(wxFont(18, wxSWISS, wxNORMAL, wxNORMAL,
+                                             FALSE, "",
+                                             wxFONTENCODING_CP1251));
                 m_horizontal->SetValue("ËÁÖÅÔÓÑ ÕÄÁÞÎÙÍ");
         }
     }
@@ -813,7 +820,6 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                                 wxTE_MULTILINE |
                                 wxTE_AUTO_URL |
                                 wxHSCROLL);
-
 
 #if 1
     m_textrich->SetStyle(0, 10, *wxRED);
