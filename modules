@@ -1,0 +1,75 @@
+wxGTK -a wxWindows !wxWindows/docs/latex \
+	!wxWindows/docs/msw !wxWindows/docs/motif  wxWindows/include/wx \
+	!wxWindows/include/wx/msw !wxWindows/include/wx/motif  !wxWindows/include/wx/qt \
+	!wxWindows/include/wx/stubs !wxWindows/src/msw !wxWindows/src/qt !wxWindows/src/motif \
+	!wxWindows/include/wx/mac wxWindows/src/jpeg \
+	!wxWindows/src/stubs wxWindows/src/gdk_imlib wxWindows/src/generic wxWindows/src/common \
+	wxWindows/src/png wxWindows/src/zlib wxWindows/src/gtk wxWindows/src/unix \
+	wxWindows/lib wxWindows/src/gtk.inc wxWindows/setup \
+	wxWindows/configure.in wxWindows/configure wxWindows/config.sub \
+	wxWindows/config.guess wxWindows/wx-config.in wxWindows/src/Makefile wxWindows/src/Makefile.in \
+	!wxWindows/misc !wxWindows/user !wxWindows/samples !wxWindows/utils 
+
+wxQt -a wxWindows/Makefile wxWindows/install/unix wxWindows/install-sh \
+	wxWindows/template.mak wxWindows/docs !wxWindows/docs/latex !wxWindows/docs/msw \
+	!wxWindows/docs/gtk !wxWindows/docs/motif  wxWindows/include/wx \
+	!wxWindows/include/wx/msw !wxWindows/include/wx/gtk  !wxWindows/include/wx/qt \
+	!wxWindows/include/wx/stubs !wxWindows/src/stubs wxWindows/src/unix \
+	wxWindows/src/Makefile wxWindows/src/Makefile.in wxWindows/src/qt \
+	wxWindows/src/gdk_imlib wxWindows/src/generic wxWindows/src/common \
+	wxWindows/src/png wxWindows/src/zlib wxWindows/src/mkdirs \
+	wxWindows/lib wxWindows/src/qt.inc wxWindows/setup wxWindows/mkinstalldirs \
+	wxWindows/misc wxWindows/user wxWindows/samples wxWindows/utils
+
+wxMac -a wxWindows/include/wx_cw.pch wxWindows/include/wx_cw.pch++ \
+	wxWindows/include/wx_cw_d.pch wxWindows/include/wx_cw_d.pch++ \
+	wxWindows/include/wx/mac wxWindows/src/mac
+
+wxMotif -a wxWindows/Makefile wxWindows/install/unix \
+	wxWindows/template.mak wxWindows/docs !wxWindows/docs/latex !wxWindows/docs/msw \
+	!wxWindows/docs/gtk !wxWindows/docs/qt !wxWindows/docs/word \
+	wxWindows/include/wx \
+	!wxWindows/include/wx/msw !wxWindows/include/wx/gtk !wxWindows/include/wx/qt \
+	!wxWindows/include/wx/stubs \
+	wxWindows/src/Makefile wxWindows/src/Makefile.in wxWindows/src/motif \
+	wxWindows/src/generic wxWindows/src/common wxWindows/src/unix \
+	wxWindows/src/png wxWindows/src/zlib wxWindows/src/mkdirs \
+	wxWindows/lib wxWindows/src/motif.inc wxWindows/setup \
+	!wxWindows/misc !wxWindows/user !wxWindows/samples !wxWindows/utils \
+	wxWindows/configure wxWindows/configure.in wxWindows/wx-config.in \
+	wxWindows/install-sh wxWindows/config.sub wxWindows/mkinstalldirs
+
+wxMSW -a wxWindows/docs !wxWindows/docs/latex !wxWindows/docs/gtk !wxWindows/docs/qt \
+	!wxWindows/docs/motif wxWindows/install !wxWindows/install/unix \
+	wxWindows/include !wxWindows/include/wx/gtk !wxWindows/include/wx/qt !wxWindows/include/wx/motif \
+	wxWindows/src !wxWindows/src/Makefile \
+	!wxWindows/src/Makefile.in !wxWindows/src/gtk !wxWindows/src/qt !wxWindows/src/motif \
+	!wxWindows/src/gdk_imlib \
+	!wxWindows/src/png !wxWindows/src/zlib !wxWindows/src/mkdirs \
+	!wxWindows/include/wx/stubs !wxWindows/src/stubs \
+	wxWindows/lib \
+	wxWindows/misc !wxWindows/misc/imlib \
+	wxWindows/template.mak
+
+wxEtc -a wxWindows/misc wxWindows/user wxWindows/samples wxWindows/utils
+
+wxDocs -a wxWindows/docs
+
+wxDoc -a wxWindows/docs
+
+
+wxOS2 -a wxWindows wxWindows/docs !wxWindows/docs/latex !wxWindows/docs/motif \
+      !wxWindows/docs/gtk !wxWindows/docs/motif2 !wxWindows/docs/msw !wxWindows/docs/word \
+      wxWindows/include wxWindows/include/wx !wxWindows/include/wx/gtk \
+      !wxWindows/include/wx/mac !wxWindows/include/wx/motif !wxWindows/include/wx/msw \
+      !wxWindows/include/wx/qt !wxWindows/include/wx/stubs !wxWindows/include/wx/unix \
+      wxWindows/include/wx/generic wxWindows/include/wx/os2 wxWindows/include/wx/protocol
+      wxWindows/include/wx/html \
+      wxWindows/src !wxWindows/src/Makefile !wxWindows/src/Makefile.in !wxWindows/src/gdk_implib \
+      !wxWindows/src/mac !wxWindows/src/motif !wxWindows/src/msw !wxWindows/src/png \
+      !wxWindows/src/qt !wxWindows/src/stubs !wxWindows/src/unix !wxWindows/src/zlib \
+      !wxWindows/src/iodbc
+      wxWindows/src/generic wxWindows/src/html wxWindows/src/common wxWindows/src/os2 \
+      wxWindows/src/xpm 
+      wxWindows/lib wxWindows\samples wxWindows/misc !wxWindows/misc/implib \
+      wxWindows/testconf 
