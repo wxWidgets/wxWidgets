@@ -1,0 +1,17 @@
+#
+# File:         makefile.g95
+# Author:       Julian Smart
+# Created:      1999
+# Updated:
+# Copyright:    (c) Julian Smart, 1999
+#
+# Makefile for wxWindows sample (Cygwin/Mingw32).
+
+WXDIR = ../..
+
+TARGET=widgets
+OBJECTS = $(TARGET).o button.o combobox.o gauge.o listbox.o\
+ notebook.o radiobox.o slider.o spinbtn.o static.o textctrl.o
+
+include $(WXDIR)/src/makeprog.g95
+

@@ -160,6 +160,8 @@ all:
         nmake -f makefile.vc $(MAKEFLAGS)
         cd $(WXDIR)\samples\wizard
         nmake -f makefile.vc $(MAKEFLAGS)
+        cd $(WXDIR)\samples\widgets
+        nmake -f makefile.vc $(MAKEFLAGS)
         cd $(WXDIR)\samples\sockets
         nmake -f makefile.vc $(MAKEFLAGS)
 
@@ -275,6 +277,8 @@ clean:
         cd $(WXDIR)\samples\validate
         nmake -f makefile.vc clean
         cd $(WXDIR)\samples\wizard
+        nmake -f makefile.vc clean
+        cd $(WXDIR)\samples\widgets
         nmake -f makefile.vc clean
         cd $(WXDIR)\samples\sockets
         nmake -f makefile.vc clean
