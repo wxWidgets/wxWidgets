@@ -2,6 +2,7 @@
 <makefile>
 
     <include file="../../../../build/bakefiles/common_samples.bkl"/>
+    <set var="CONTRIB_HDR_DIR">$(SRCDIR)/../../../include</set>
     <include file="../../../../build/bakefiles/common_contrib.bkl"/>
 
     <exe id="ogledit" template="wx_contrib_sample" template_append="wx_append">
