@@ -85,7 +85,7 @@ under GTK+ 2.", "
 
 The stock IDs and coresponding labels are
 
-    ==================      ====================
+    =====================   ======================
     wx.ID_ADD               'Add'
     wx.ID_APPLY             '\&Apply'
     wx.ID_BOLD              '\&Bold'
@@ -136,7 +136,7 @@ The stock IDs and coresponding labels are
     wx.ID_ZOOM_FIT          'Zoom to \&Fit'
     wx.ID_ZOOM_IN           'Zoom \&In'
     wx.ID_ZOOM_OUT          'Zoom \&Out'
-    ==================      ====================
+    =====================   ======================
 ");
 
     DocCtorStrName(

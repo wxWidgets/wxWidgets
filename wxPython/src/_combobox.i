@@ -50,6 +50,8 @@ Events
 -------
     ================    ===============================================
     EVT_COMBOBOX        Sent when an item on the list is selected.
+                        Note that calling `GetValue` in this handler 
+                        will return the newly selected value.
     EVT_TEXT            Sent when the combobox text changes.
     ================    ===============================================
 ");
