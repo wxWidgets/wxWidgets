@@ -454,11 +454,12 @@ $(WXDIR)\lib\$(WXLIBNAME).dll: $(DUMMYOBJ) $(OBJECTS)
 	delayimp.lib
 	/delayload:ws2_32.dll /delayload:advapi32.dll /delayload:user32.dll /delayload:gdi32.dll
 	/delayload:comdlg32.dll /delayload:shell32.dll /delayload:comctl32.dll /delayload:ole32.dll
-	/delayload:oleaut32.dll /delayload:rpcrt4.dll /delayload:winmm.dll $(GL_LIBS_DELAY)
+	/delayload:oleaut32.dll /delayload:rpcrt4.dll $(GL_LIBS_DELAY)
 <<
 
 !endif
 
+# /delayload:winmm.dll # Removed because it can cause a crash for some people
 
 ########################################################
 # Windows-specific objects
