@@ -240,7 +240,7 @@ bool wxToolBar::Create(wxWindow *parent,
     wxSetCCUnicodeFormat(GetHwnd());
 
     // set up the colors and fonts
-    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_MENUBAR));
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
     SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 
     // workaround for flat toolbar on Windows XP classic style
