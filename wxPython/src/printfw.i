@@ -23,6 +23,16 @@
 
 //----------------------------------------------------------------------
 
+%{
+    // Put some wx default wxChar* values into wxStrings.
+    static const wxChar* wxPrintoutTitleStr = wxT("Printout");
+    DECLARE_DEF_STRING(PrintoutTitleStr);
+
+    DECLARE_DEF_STRING(FrameNameStr);
+%}
+
+//----------------------------------------------------------------------
+
 %include typemaps.i
 %include my_typemaps.i
 
@@ -294,7 +304,7 @@ IMP_PYCALLBACK_BOOL_INT(wxPyPrintout, wxPrintout, HasPage);
 // Now define the custom class for SWIGging
 %name(wxPrintout) class wxPyPrintout  : public wxObject {
 public:
-    wxPyPrintout(const char* title = "Printout");
+    wxPyPrintout(const wxString& title = wxPyPrintoutTitleStr);
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
     %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxPrintout)"
@@ -331,7 +341,7 @@ public:
     wxPrintDialogData& GetPrintDialogData();
     bool Print(wxWindow *parent, wxPyPrintout *printout, int prompt=TRUE);
     wxDC* PrintDialog(wxWindow *parent);
-    void ReportError(wxWindow *parent, wxPyPrintout *printout, char* message);
+    void ReportError(wxWindow *parent, wxPyPrintout *printout, const wxString& message);
     bool Setup(wxWindow *parent);
 };
 
@@ -368,7 +378,7 @@ public:
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize&  size = wxDefaultSize,
                    long style = wxDEFAULT_FRAME_STYLE,
-                   char* name = "frame");
+                   const wxString& name = wxPyFrameNameStr);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 

@@ -27,6 +27,17 @@
 
 //----------------------------------------------------------------------
 
+%{
+    // Put some wx default wxChar* values into wxStrings.
+    DECLARE_DEF_STRING(NOTEBOOK_NAME);
+
+    static const wxChar* wxSplitterNameStr = wxT("splitter");
+    DECLARE_DEF_STRING(SplitterNameStr);
+    static const wxString wxPyEmptyString(wxT(""));
+%}
+
+//----------------------------------------------------------------------
+
 %include typemaps.i
 %include my_typemaps.i
 
@@ -69,7 +80,7 @@ public:
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = 0,
-               char* name = "notebook");
+               const wxString& name = wxPyNOTEBOOK_NAME);
     %name(wxPreNotebook)wxNotebook();
 
     bool Create(wxWindow *parent,
@@ -77,7 +88,7 @@ public:
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = 0,
-               char* name = "notebook");
+               const wxString& name = wxPyNOTEBOOK_NAME);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreNotebook:val._setOORInfo(val)"
@@ -167,14 +178,14 @@ public:
                      const wxPoint& point = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      long style=wxSP_3D|wxCLIP_CHILDREN,
-                     char* name = "splitterWindow");
+                     const wxString& name = wxPySplitterNameStr);
     %name(wxPreSplitterWindow)wxSplitterWindow();
 
     bool Create(wxWindow* parent, wxWindowID id,
                 const wxPoint& point = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style=wxSP_3D|wxCLIP_CHILDREN,
-                char* name = "splitterWindow");
+                const wxString& name = wxPySplitterNameStr);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreSplitterWindow:val._setOORInfo(val)"
@@ -273,7 +284,7 @@ public:
     %pragma(python) addtomethod = "__init__:wx._checkForCallback(self, 'OnLButtonDClick',wxEVT_TASKBAR_LEFT_DCLICK)"
     %pragma(python) addtomethod = "__init__:wx._checkForCallback(self, 'OnRButtonDClick',wxEVT_TASKBAR_RIGHT_DCLICK)"
 
-    bool SetIcon(const wxIcon& icon, const char* tooltip = "");
+    bool SetIcon(const wxIcon& icon, const wxString& tooltip = wxPyEmptyString);
     bool RemoveIcon(void);
     bool PopupMenu(wxMenu *menu);
     bool IsIconInstalled();

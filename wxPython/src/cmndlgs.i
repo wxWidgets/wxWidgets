@@ -38,6 +38,18 @@
 
 //----------------------------------------------------------------------
 
+%{
+    // Put some wx default wxChar* values into wxStrings.
+    DECLARE_DEF_STRING(FileSelectorPromptStr);
+    DECLARE_DEF_STRING(FileSelectorDefaultWildcardStr);
+    DECLARE_DEF_STRING(GetTextFromUserPromptStr);
+    DECLARE_DEF_STRING(MessageBoxCaptionStr);
+    static const wxString wxPyEmptyString(wxT(""));
+
+%}
+
+//----------------------------------------------------------------------
+
 class wxColourData : public wxObject {
 public:
     wxColourData();
@@ -68,8 +80,8 @@ public:
 class wxDirDialog : public wxDialog {
 public:
     wxDirDialog(wxWindow* parent,
-                char* message = "Choose a directory",
-                char* defaultPath = "",
+                const wxString& message = wxPyFileSelectorPromptStr,
+                const wxString& defaultPath = wxPyEmptyString,
                 long style = 0,
                 const wxPoint& pos = wxDefaultPosition);
 
@@ -89,10 +101,10 @@ public:
 class wxFileDialog : public wxDialog {
 public:
     wxFileDialog(wxWindow* parent,
-                 char* message = "Choose a file",
-                 char* defaultDir = "",
-                 char* defaultFile = "",
-                 char* wildcard = "*.*",
+                 const wxString& message = wxPyFileSelectorPromptStr,
+                 const wxString& defaultDir = wxPyEmptyString,
+                 const wxString& defaultFile = wxPyEmptyString,
+                 const wxString& wildcard = wxPyFileSelectorDefaultWildcardStr,
                  long style = 0,
                  const wxPoint& pos = wxDefaultPosition);
 
@@ -190,9 +202,9 @@ public:
 class wxTextEntryDialog : public wxDialog {
 public:
     wxTextEntryDialog(wxWindow* parent,
-                      char* message,
-                      char* caption = "Input Text",
-                      char* defaultValue = "",
+                      const wxString& message,
+                      const wxString& caption = wxPyGetTextFromUserPromptStr,
+                      const wxString& defaultValue = wxPyEmptyString,
                       long style = wxOK | wxCANCEL | wxCENTRE,
                       const wxPoint& pos = wxDefaultPosition);
 
@@ -241,8 +253,8 @@ public:
 class wxMessageDialog : public wxDialog {
 public:
     wxMessageDialog(wxWindow* parent,
-                    char* message,
-                    char* caption = "Message box",
+                    const wxString& message,
+                    const wxString& caption = wxPyMessageBoxCaptionStr,
                     long style = wxOK | wxCANCEL | wxCENTRE,
                     const wxPoint& pos = wxDefaultPosition);
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
@@ -261,7 +273,7 @@ public:
                      int style = wxPD_AUTO_HIDE | wxPD_APP_MODAL );
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 
-    bool Update(int value = -1, const char* newmsg = NULL);
+    bool Update(int value, const wxString& newmsg = wxPyEmptyString);
     void Resume();
 }
 

@@ -151,6 +151,11 @@ def EVT_CALENDAR_WEEKDAY_CLICKED(win, id, fn):
 
 //---------------------------------------------------------------------------
 
+%{
+    // Put some wx default wxChar* values into wxStrings.
+    DECLARE_DEF_STRING(CalendarNameStr);
+%}
+
 class wxCalendarCtrl : public wxControl
 {
 public:
@@ -161,7 +166,7 @@ public:
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    long style = wxCAL_SHOW_HOLIDAYS | wxWANTS_CHARS,
-                   const char* name = "calendar");
+                   const wxString& name = wxPyCalendarNameStr);
     %name(wxPreCalendarCtrl)wxCalendarCtrl();
 
     bool Create(wxWindow *parent,
@@ -170,7 +175,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxCAL_SHOW_HOLIDAYS | wxWANTS_CHARS,
-                const char* name = "calendar");
+                const wxString& name = wxPyCalendarNameStr);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreCalendarCtrl:val._setOORInfo(val)"

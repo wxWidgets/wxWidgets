@@ -24,6 +24,11 @@
 %}
 
 //---------------------------------------------------------------------------
+%{
+    // Put some wx default wxChar* values into wxStrings.
+    static const wxString wxPyEmptyString(wxT(""));
+%}
+//---------------------------------------------------------------------------
 
 %include typemaps.i
 %include my_typemaps.i
@@ -39,15 +44,6 @@
 %extern utils.i
 %extern html.i
 
-//  #ifdef wxUSE_UNICODE
-//  %typemap(python, memberin) wxChar* {
-//      if ($target) delete [] $target;
-//      wxString *tempStr = new wxString($source);
-//      $target = new wxChar[tempStr->Len()+1];
-//      memcpy($target, tempStr->c_str(), (sizeof(wxChar)*tempStr->Len())+sizeof(wxChar));
-//      delete tempStr;
-//  }
-//  #endif
 
 //---------------------------------------------------------------------------
 
@@ -76,13 +72,13 @@ public:
 
 struct wxHtmlContentsItem
 {
-%readonly
-    short int m_Level;
-    int m_ID;
-    wxChar* m_Name;
-    wxChar* m_Page;
-    wxHtmlBookRecord *m_Book;
-%readwrite
+    %addmethods {
+        int GetLevel() { return self->m_Level; }
+        int GetID() { return self->m_ID; }
+        wxString GetName() { return self->m_Name; }
+        wxString GetPage() { return self->m_Page; }
+        wxHtmlBookRecord* GetBook() { return self->m_Book; }
+    }
 };
 
 //---------------------------------------------------------------------------
@@ -91,7 +87,7 @@ class wxHtmlSearchStatus
 {
 public:
     //wxHtmlSearchStatus(wxHtmlHelpData* base, const wxString& keyword,
-    //                   const wxString& book = wxEmptyString);
+    //                   const wxString& book = wxPyEmptyString);
     bool Search();
     bool IsActive();
     int GetCurIndex();
@@ -110,9 +106,9 @@ public:
     void SetTempDir(const wxString& path);
     bool AddBook(const wxString& book);
 //      bool AddBookParam(const wxString& title, const wxString& contfile,
-//  		      const wxString& indexfile=wxEmptyString,
-//  		      const wxString& deftopic=wxEmptyString,
-//  		      const wxString& path=wxEmptyString);
+//  		      const wxString& indexfile=wxPyEmptyString,
+//  		      const wxString& deftopic=wxPyEmptyString,
+//  		      const wxString& path=wxPyEmptyString);
 
     wxString FindPageByName(const wxString& page);
     wxString FindPageById(int id);
@@ -131,7 +127,7 @@ public:
 class wxHtmlHelpFrame : public wxFrame {
 public:
     wxHtmlHelpFrame(wxWindow* parent, int wxWindowID,
-		    const wxString& title = wxEmptyString,
+		    const wxString& title = wxPyEmptyString,
 		    int style = wxHF_DEFAULTSTYLE, wxHtmlHelpData* data = NULL);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
@@ -143,9 +139,9 @@ public:
     void DisplayContents();
     void DisplayIndex();
     bool KeywordSearch(const wxString& keyword);
-    void UseConfig(wxConfigBase *config, const wxString& rootpath = wxEmptyString);
-    void ReadCustomization(wxConfigBase *cfg, wxString path = wxEmptyString);
-    void WriteCustomization(wxConfigBase *cfg, wxString path = wxEmptyString);
+    void UseConfig(wxConfigBase *config, const wxString& rootpath = wxPyEmptyString);
+    void ReadCustomization(wxConfigBase *cfg, wxString path = wxPyEmptyString);
+    void WriteCustomization(wxConfigBase *cfg, wxString path = wxPyEmptyString);
 };
 
 
@@ -180,9 +176,9 @@ public:
     void DisplayContents();
     void DisplayIndex();
     bool KeywordSearch(const wxString& keyword);
-    void UseConfig(wxConfigBase *config, const wxString& rootpath = wxEmptyString);
-    void ReadCustomization(wxConfigBase *cfg, wxString path = wxEmptyString);
-    void WriteCustomization(wxConfigBase *cfg, wxString path = wxEmptyString);
+    void UseConfig(wxConfigBase *config, const wxString& rootpath = wxPyEmptyString);
+    void ReadCustomization(wxConfigBase *cfg, wxString path = wxPyEmptyString);
+    void WriteCustomization(wxConfigBase *cfg, wxString path = wxPyEmptyString);
     wxHtmlHelpFrame* GetFrame();
 };
 

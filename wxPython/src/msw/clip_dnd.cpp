@@ -86,6 +86,9 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     }
     return target;
 }
+
+    // Put some wx default wxChar* values into wxStrings.
+    static const wxString wxPyEmptyString(wxT(""));
   // An alternate constructor...
     wxDataFormat* wxCustomDataFormat(const wxString &id) {
         return new wxDataFormat(id);
@@ -144,7 +147,7 @@ bool wxPyDataObjectSimple::SetData(size_t len, const void *buf) {
   // Create a new class for wxPython to use
 class wxPyTextDataObject : public wxTextDataObject {
 public:
-    wxPyTextDataObject(const wxString& text = wxEmptyString)
+    wxPyTextDataObject(const wxString& text = wxPyEmptyString)
         : wxTextDataObject(text) {}
 
     DEC_PYCALLBACK_SIZET_(GetTextLength);
@@ -547,12 +550,13 @@ static PyObject *_wrap_wxDataFormat_GetId(PyObject *self, PyObject *args, PyObje
 static PyObject *_wrap_wxDataFormat_SetId(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxDataFormat * _arg0;
-    wxChar * _arg1;
+    wxString * _arg1;
     PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","format", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Os:wxDataFormat_SetId",_kwnames,&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxDataFormat_SetId",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -562,13 +566,22 @@ static PyObject *_wrap_wxDataFormat_SetId(PyObject *self, PyObject *args, PyObje
         }
     }
 {
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
+        return NULL;
+}
+{
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxDataFormat_SetId(_arg0,_arg1);
+    wxDataFormat_SetId(_arg0,*_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
     return _resultobj;
 }
 
@@ -1162,7 +1175,7 @@ static void *SwigwxTextDataObjectTowxDataObject(void *ptr) {
 static PyObject *_wrap_new_wxTextDataObject(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxTextDataObject * _result;
-    wxString * _arg0 = (wxString *) &wxEmptyString;
+    wxString * _arg0 = (wxString *) &wxPyEmptyString;
     PyObject * _obj0 = 0;
     char *_kwnames[] = { "text", NULL };
     char _ptemp[128];
@@ -1328,7 +1341,7 @@ static void *SwigwxPyTextDataObjectTowxDataObject(void *ptr) {
 static PyObject *_wrap_new_wxPyTextDataObject(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyTextDataObject * _result;
-    wxString * _arg0 = (wxString *) &wxEmptyString;
+    wxString * _arg0 = (wxString *) &wxPyEmptyString;
     PyObject * _obj0 = 0;
     char *_kwnames[] = { "text", NULL };
     char _ptemp[128];

@@ -85,6 +85,9 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     return target;
 }
 
+    // Put some wx default wxChar* values into wxStrings.
+    static const wxString wxPyEmptyString(wxT(""));
+
     WXSHAPE_IMP_CALLBACKS(wxPyEllipseShape, wxEllipseShape);
 
     WXSHAPE_IMP_CALLBACKS(wxPyCircleShape, wxCircleShape);
@@ -2330,16 +2333,23 @@ static PyObject *_wrap_new_wxArrowHead(PyObject *self, PyObject *args, PyObject 
     int  _arg1 = (int ) 0;
     double  _arg2 = (double ) 0.0;
     double  _arg3 = (double ) 0.0;
-    char * _arg4 = (char *) "";
+    wxString * _arg4 = (wxString *) &wxPyEmptyString;
     wxPseudoMetaFile * _arg5 = (wxPseudoMetaFile *) NULL;
     long  _arg6 = (long ) -1;
+    PyObject * _obj4 = 0;
     PyObject * _argo5 = 0;
     char *_kwnames[] = { "type","end","size","dist","name","mf","arrowId", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|iiddsOl:new_wxArrowHead",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_argo5,&_arg6)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|iiddOOl:new_wxArrowHead",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3,&_obj4,&_argo5,&_arg6)) 
         return NULL;
+    if (_obj4)
+{
+    _arg4 = wxString_in_helper(_obj4);
+    if (_arg4 == NULL)
+        return NULL;
+}
     if (_argo5) {
         if (_argo5 == Py_None) { _arg5 = NULL; }
         else if (SWIG_GetPtrObj(_argo5,(void **) &_arg5,"_wxPseudoMetaFile_p")) {
@@ -2349,7 +2359,7 @@ static PyObject *_wrap_new_wxArrowHead(PyObject *self, PyObject *args, PyObject 
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxArrowHead *)new_wxArrowHead(_arg0,_arg1,_arg2,_arg3,_arg4,_arg5,_arg6);
+    _result = (wxArrowHead *)new_wxArrowHead(_arg0,_arg1,_arg2,_arg3,*_arg4,_arg5,_arg6);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -2360,6 +2370,10 @@ static PyObject *_wrap_new_wxArrowHead(PyObject *self, PyObject *args, PyObject 
         Py_INCREF(Py_None);
         _resultobj = Py_None;
     }
+{
+    if (_obj4)
+        delete _arg4;
+}
     return _resultobj;
 }
 
@@ -2949,15 +2963,16 @@ static PyObject *_wrap_wxPyLineShape_AddArrow(PyObject *self, PyObject *args, Py
     int  _arg2 = (int ) ARROW_POSITION_END;
     double  _arg3 = (double ) 10.0;
     double  _arg4 = (double ) 0.0;
-    char * _arg5 = (char *) "";
+    wxString * _arg5 = (wxString *) &wxPyEmptyString;
     wxPseudoMetaFile * _arg6 = (wxPseudoMetaFile *) NULL;
     long  _arg7 = (long ) -1;
     PyObject * _argo0 = 0;
+    PyObject * _obj5 = 0;
     PyObject * _argo6 = 0;
     char *_kwnames[] = { "self","type","end","arrowSize","xOffset","name","mf","arrowId", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|iddsOl:wxPyLineShape_AddArrow",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5,&_argo6,&_arg7)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|iddOOl:wxPyLineShape_AddArrow",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3,&_arg4,&_obj5,&_argo6,&_arg7)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2966,6 +2981,12 @@ static PyObject *_wrap_wxPyLineShape_AddArrow(PyObject *self, PyObject *args, Py
         return NULL;
         }
     }
+    if (_obj5)
+{
+    _arg5 = wxString_in_helper(_obj5);
+    if (_arg5 == NULL)
+        return NULL;
+}
     if (_argo6) {
         if (_argo6 == Py_None) { _arg6 = NULL; }
         else if (SWIG_GetPtrObj(_argo6,(void **) &_arg6,"_wxPseudoMetaFile_p")) {
@@ -2975,12 +2996,16 @@ static PyObject *_wrap_wxPyLineShape_AddArrow(PyObject *self, PyObject *args, Py
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxPyLineShape_AddArrow(_arg0,_arg1,_arg2,_arg3,_arg4,_arg5,_arg6,_arg7);
+    wxPyLineShape_AddArrow(_arg0,_arg1,_arg2,_arg3,_arg4,*_arg5,_arg6,_arg7);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
+{
+    if (_obj5)
+        delete _arg5;
+}
     return _resultobj;
 }
 

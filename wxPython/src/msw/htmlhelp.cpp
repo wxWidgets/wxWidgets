@@ -63,6 +63,9 @@ extern PyObject *SWIG_newvarlink(void);
 #include <wx/fs_inet.h>
 #include <wx/wfstream.h>
 
+    // Put some wx default wxChar* values into wxStrings.
+    static const wxString wxPyEmptyString(wxT(""));
+
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
@@ -569,36 +572,8 @@ static PyObject *_wrap_wxHtmlBookRecord_GetFullPath(PyObject *self, PyObject *ar
     return _resultobj;
 }
 
-#define wxHtmlContentsItem_m_Level_get(_swigobj) ((short ) _swigobj->m_Level)
-static PyObject *_wrap_wxHtmlContentsItem_m_Level_get(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    short  _result;
-    wxHtmlContentsItem * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxHtmlContentsItem_m_Level_get",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlContentsItem_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlContentsItem_m_Level_get. Expected _wxHtmlContentsItem_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (short )wxHtmlContentsItem_m_Level_get(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("h",_result);
-    return _resultobj;
-}
-
-#define wxHtmlContentsItem_m_ID_get(_swigobj) ((int ) _swigobj->m_ID)
-static PyObject *_wrap_wxHtmlContentsItem_m_ID_get(PyObject *self, PyObject *args, PyObject *kwargs) {
+static int  wxHtmlContentsItem_GetLevel(wxHtmlContentsItem *self) { return self->m_Level; }
+static PyObject *_wrap_wxHtmlContentsItem_GetLevel(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
     wxHtmlContentsItem * _arg0;
@@ -606,18 +581,18 @@ static PyObject *_wrap_wxHtmlContentsItem_m_ID_get(PyObject *self, PyObject *arg
     char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxHtmlContentsItem_m_ID_get",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxHtmlContentsItem_GetLevel",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlContentsItem_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlContentsItem_m_ID_get. Expected _wxHtmlContentsItem_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlContentsItem_GetLevel. Expected _wxHtmlContentsItem_p.");
         return NULL;
         }
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (int )wxHtmlContentsItem_m_ID_get(_arg0);
+    _result = (int )wxHtmlContentsItem_GetLevel(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -625,64 +600,110 @@ static PyObject *_wrap_wxHtmlContentsItem_m_ID_get(PyObject *self, PyObject *arg
     return _resultobj;
 }
 
-#define wxHtmlContentsItem_m_Name_get(_swigobj) ((wxChar *) _swigobj->m_Name)
-static PyObject *_wrap_wxHtmlContentsItem_m_Name_get(PyObject *self, PyObject *args, PyObject *kwargs) {
+static int  wxHtmlContentsItem_GetID(wxHtmlContentsItem *self) { return self->m_ID; }
+static PyObject *_wrap_wxHtmlContentsItem_GetID(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    wxChar * _result;
+    int  _result;
     wxHtmlContentsItem * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxHtmlContentsItem_m_Name_get",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxHtmlContentsItem_GetID",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlContentsItem_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlContentsItem_m_Name_get. Expected _wxHtmlContentsItem_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlContentsItem_GetID. Expected _wxHtmlContentsItem_p.");
         return NULL;
         }
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxChar *)wxHtmlContentsItem_m_Name_get(_arg0);
+    _result = (int )wxHtmlContentsItem_GetID(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("s", _result);
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
-#define wxHtmlContentsItem_m_Page_get(_swigobj) ((wxChar *) _swigobj->m_Page)
-static PyObject *_wrap_wxHtmlContentsItem_m_Page_get(PyObject *self, PyObject *args, PyObject *kwargs) {
+static wxString  wxHtmlContentsItem_GetName(wxHtmlContentsItem *self) { return self->m_Name; }
+static PyObject *_wrap_wxHtmlContentsItem_GetName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    wxChar * _result;
+    wxString * _result;
     wxHtmlContentsItem * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxHtmlContentsItem_m_Page_get",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxHtmlContentsItem_GetName",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlContentsItem_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlContentsItem_m_Page_get. Expected _wxHtmlContentsItem_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlContentsItem_GetName. Expected _wxHtmlContentsItem_p.");
         return NULL;
         }
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxChar *)wxHtmlContentsItem_m_Page_get(_arg0);
+    _result = new wxString (wxHtmlContentsItem_GetName(_arg0));
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("s", _result);
+}{
+#if wxUSE_UNICODE
+    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+#else
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+#endif
+}
+{
+    delete _result;
+}
     return _resultobj;
 }
 
-#define wxHtmlContentsItem_m_Book_get(_swigobj) ((wxHtmlBookRecord *) _swigobj->m_Book)
-static PyObject *_wrap_wxHtmlContentsItem_m_Book_get(PyObject *self, PyObject *args, PyObject *kwargs) {
+static wxString  wxHtmlContentsItem_GetPage(wxHtmlContentsItem *self) { return self->m_Page; }
+static PyObject *_wrap_wxHtmlContentsItem_GetPage(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxHtmlContentsItem * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxHtmlContentsItem_GetPage",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlContentsItem_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlContentsItem_GetPage. Expected _wxHtmlContentsItem_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxString (wxHtmlContentsItem_GetPage(_arg0));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{
+#if wxUSE_UNICODE
+    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+#else
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+#endif
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+static wxHtmlBookRecord * wxHtmlContentsItem_GetBook(wxHtmlContentsItem *self) { return self->m_Book; }
+static PyObject *_wrap_wxHtmlContentsItem_GetBook(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxHtmlBookRecord * _result;
     wxHtmlContentsItem * _arg0;
@@ -691,18 +712,18 @@ static PyObject *_wrap_wxHtmlContentsItem_m_Book_get(PyObject *self, PyObject *a
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxHtmlContentsItem_m_Book_get",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxHtmlContentsItem_GetBook",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlContentsItem_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlContentsItem_m_Book_get. Expected _wxHtmlContentsItem_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlContentsItem_GetBook. Expected _wxHtmlContentsItem_p.");
         return NULL;
         }
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxHtmlBookRecord *)wxHtmlContentsItem_m_Book_get(_arg0);
+    _result = (wxHtmlBookRecord *)wxHtmlContentsItem_GetBook(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -1324,7 +1345,7 @@ static PyObject *_wrap_new_wxHtmlHelpFrame(PyObject *self, PyObject *args, PyObj
     wxHtmlHelpFrame * _result;
     wxWindow * _arg0;
     int  _arg1;
-    wxString * _arg2 = (wxString *) &wxEmptyString;
+    wxString * _arg2 = (wxString *) &wxPyEmptyString;
     int  _arg3 = (int ) wxHF_DEFAULTSTYLE;
     wxHtmlHelpData * _arg4 = (wxHtmlHelpData *) NULL;
     PyObject * _argo0 = 0;
@@ -1618,7 +1639,7 @@ static PyObject *_wrap_wxHtmlHelpFrame_UseConfig(PyObject *self, PyObject *args,
     PyObject * _resultobj;
     wxHtmlHelpFrame * _arg0;
     wxConfigBase * _arg1;
-    wxString * _arg2 = (wxString *) &wxEmptyString;
+    wxString * _arg2 = (wxString *) &wxPyEmptyString;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
     PyObject * _obj2 = 0;
@@ -1667,7 +1688,7 @@ static PyObject *_wrap_wxHtmlHelpFrame_ReadCustomization(PyObject *self, PyObjec
     PyObject * _resultobj;
     wxHtmlHelpFrame * _arg0;
     wxConfigBase * _arg1;
-    wxString * _arg2 = (wxString *) &wxEmptyString;
+    wxString * _arg2 = (wxString *) &wxPyEmptyString;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
     PyObject * _obj2 = 0;
@@ -1716,7 +1737,7 @@ static PyObject *_wrap_wxHtmlHelpFrame_WriteCustomization(PyObject *self, PyObje
     PyObject * _resultobj;
     wxHtmlHelpFrame * _arg0;
     wxConfigBase * _arg1;
-    wxString * _arg2 = (wxString *) &wxEmptyString;
+    wxString * _arg2 = (wxString *) &wxPyEmptyString;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
     PyObject * _obj2 = 0;
@@ -2117,7 +2138,7 @@ static PyObject *_wrap_wxHtmlHelpController_UseConfig(PyObject *self, PyObject *
     PyObject * _resultobj;
     wxHtmlHelpController * _arg0;
     wxConfigBase * _arg1;
-    wxString * _arg2 = (wxString *) &wxEmptyString;
+    wxString * _arg2 = (wxString *) &wxPyEmptyString;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
     PyObject * _obj2 = 0;
@@ -2166,7 +2187,7 @@ static PyObject *_wrap_wxHtmlHelpController_ReadCustomization(PyObject *self, Py
     PyObject * _resultobj;
     wxHtmlHelpController * _arg0;
     wxConfigBase * _arg1;
-    wxString * _arg2 = (wxString *) &wxEmptyString;
+    wxString * _arg2 = (wxString *) &wxPyEmptyString;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
     PyObject * _obj2 = 0;
@@ -2215,7 +2236,7 @@ static PyObject *_wrap_wxHtmlHelpController_WriteCustomization(PyObject *self, P
     PyObject * _resultobj;
     wxHtmlHelpController * _arg0;
     wxConfigBase * _arg1;
-    wxString * _arg2 = (wxString *) &wxEmptyString;
+    wxString * _arg2 = (wxString *) &wxPyEmptyString;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
     PyObject * _obj2 = 0;
@@ -2337,11 +2358,11 @@ static PyMethodDef htmlhelpcMethods[] = {
 	 { "wxHtmlSearchStatus_GetCurIndex", (PyCFunction) _wrap_wxHtmlSearchStatus_GetCurIndex, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlSearchStatus_IsActive", (PyCFunction) _wrap_wxHtmlSearchStatus_IsActive, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlSearchStatus_Search", (PyCFunction) _wrap_wxHtmlSearchStatus_Search, METH_VARARGS | METH_KEYWORDS },
-	 { "wxHtmlContentsItem_m_Book_get", (PyCFunction) _wrap_wxHtmlContentsItem_m_Book_get, METH_VARARGS | METH_KEYWORDS },
-	 { "wxHtmlContentsItem_m_Page_get", (PyCFunction) _wrap_wxHtmlContentsItem_m_Page_get, METH_VARARGS | METH_KEYWORDS },
-	 { "wxHtmlContentsItem_m_Name_get", (PyCFunction) _wrap_wxHtmlContentsItem_m_Name_get, METH_VARARGS | METH_KEYWORDS },
-	 { "wxHtmlContentsItem_m_ID_get", (PyCFunction) _wrap_wxHtmlContentsItem_m_ID_get, METH_VARARGS | METH_KEYWORDS },
-	 { "wxHtmlContentsItem_m_Level_get", (PyCFunction) _wrap_wxHtmlContentsItem_m_Level_get, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlContentsItem_GetBook", (PyCFunction) _wrap_wxHtmlContentsItem_GetBook, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlContentsItem_GetPage", (PyCFunction) _wrap_wxHtmlContentsItem_GetPage, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlContentsItem_GetName", (PyCFunction) _wrap_wxHtmlContentsItem_GetName, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlContentsItem_GetID", (PyCFunction) _wrap_wxHtmlContentsItem_GetID, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlContentsItem_GetLevel", (PyCFunction) _wrap_wxHtmlContentsItem_GetLevel, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlBookRecord_GetFullPath", (PyCFunction) _wrap_wxHtmlBookRecord_GetFullPath, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlBookRecord_SetStart", (PyCFunction) _wrap_wxHtmlBookRecord_SetStart, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlBookRecord_SetBasePath", (PyCFunction) _wrap_wxHtmlBookRecord_SetBasePath, METH_VARARGS | METH_KEYWORDS },

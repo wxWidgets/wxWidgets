@@ -31,6 +31,12 @@
 
 
 //----------------------------------------------------------------------
+
+%{
+    // Put some wx default wxChar* values into wxStrings.
+    DECLARE_DEF_STRING(STCNameStr);
+%}
+//----------------------------------------------------------------------
 // Get all our defs from the REAL header file.
 
 %include stc.h

@@ -114,7 +114,8 @@ PyObject* wxArrayString2PyList_helper(const wxArrayString& arr);
 PyObject* wxArrayInt2PyList_helper(const wxArrayInt& arr);
 
 
-#define RETURN_NONE()   { Py_INCREF(Py_None); return Py_None; }
+#define RETURN_NONE()               { Py_INCREF(Py_None); return Py_None; }
+#define DECLARE_DEF_STRING(name)    static wxString wxPy##name(wx##name)
 
 //----------------------------------------------------------------------
 

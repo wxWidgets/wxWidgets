@@ -89,6 +89,9 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     }
     return target;
 }
+
+    // Put some wx default wxChar* values into wxStrings.
+    static const wxString wxPyEmptyString(wxT(""));
  // Implementations of some alternate "constructors"
 
     wxBitmap* wxEmptyBitmap(int width, int height, int depth=-1) {
@@ -3867,7 +3870,7 @@ static PyObject *_wrap_wxFontMapper_GetAltForEncoding(PyObject *self, PyObject *
     PyObject * _result;
     wxFontMapper * _arg0;
     wxFontEncoding  _arg1;
-    wxString * _arg2 = (wxString *) &wxEmptyString;
+    wxString * _arg2 = (wxString *) &wxPyEmptyString;
     bool  _arg3 = (bool ) TRUE;
     PyObject * _argo0 = 0;
     PyObject * _obj2 = 0;
@@ -3913,7 +3916,7 @@ static PyObject *_wrap_wxFontMapper_IsEncodingAvailable(PyObject *self, PyObject
     bool  _result;
     wxFontMapper * _arg0;
     wxFontEncoding  _arg1;
-    wxString * _arg2 = (wxString *) &wxEmptyString;
+    wxString * _arg2 = (wxString *) &wxPyEmptyString;
     PyObject * _argo0 = 0;
     PyObject * _obj2 = 0;
     char *_kwnames[] = { "self","encoding","facename", NULL };
@@ -4200,7 +4203,7 @@ static PyObject *_wrap_wxFontMapper_SetConfigPath(PyObject *self, PyObject *args
 
 static PyObject *_wrap_wxFontMapper_GetDefaultConfigPath(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    wxChar * _result;
+    wxString * _result;
     char *_kwnames[] = {  NULL };
 
     self = self;
@@ -4208,11 +4211,20 @@ static PyObject *_wrap_wxFontMapper_GetDefaultConfigPath(PyObject *self, PyObjec
         return NULL;
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxChar *)wxFontMapper::GetDefaultConfigPath();
+    _result = new wxString (wxFontMapper::GetDefaultConfigPath());
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("s", _result);
+}{
+#if wxUSE_UNICODE
+    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+#else
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+#endif
+}
+{
+    delete _result;
+}
     return _resultobj;
 }
 
@@ -4241,17 +4253,24 @@ static PyObject *_wrap_new_wxFont(PyObject *self, PyObject *args, PyObject *kwar
     int  _arg2;
     int  _arg3;
     int  _arg4 = (int ) FALSE;
-    char * _arg5 = (char *) "";
+    wxString * _arg5 = (wxString *) &wxPyEmptyString;
     wxFontEncoding  _arg6 = (wxFontEncoding ) (wxFONTENCODING_DEFAULT);
+    PyObject * _obj5 = 0;
     char *_kwnames[] = { "pointSize","family","style","weight","underline","faceName","encoding", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiii|isi:new_wxFont",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5,&_arg6)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"iiii|iOi:new_wxFont",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_obj5,&_arg6)) 
         return NULL;
+    if (_obj5)
+{
+    _arg5 = wxString_in_helper(_obj5);
+    if (_arg5 == NULL)
+        return NULL;
+}
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxFont *)new_wxFont(_arg0,_arg1,_arg2,_arg3,_arg4,_arg5,_arg6);
+    _result = (wxFont *)new_wxFont(_arg0,_arg1,_arg2,_arg3,_arg4,*_arg5,_arg6);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -4262,6 +4281,10 @@ static PyObject *_wrap_new_wxFont(PyObject *self, PyObject *args, PyObject *kwar
         Py_INCREF(Py_None);
         _resultobj = Py_None;
     }
+{
+    if (_obj5)
+        delete _arg5;
+}
     return _resultobj;
 }
 
@@ -5192,15 +5215,16 @@ static PyObject *_wrap_wxFontList_FindOrCreateFont(PyObject *self, PyObject *arg
     int  _arg3;
     int  _arg4;
     bool  _arg5 = (bool ) FALSE;
-    char * _arg6 = (char *) NULL;
+    wxString * _arg6 = (wxString *) &wxPyEmptyString;
     wxFontEncoding  _arg7 = (wxFontEncoding ) (wxFONTENCODING_DEFAULT);
     PyObject * _argo0 = 0;
     int tempbool5 = (int) FALSE;
+    PyObject * _obj6 = 0;
     char *_kwnames[] = { "self","point_size","family","style","weight","underline","facename","encoding", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oiiii|isi:wxFontList_FindOrCreateFont",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3,&_arg4,&tempbool5,&_arg6,&_arg7)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oiiii|iOi:wxFontList_FindOrCreateFont",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3,&_arg4,&tempbool5,&_obj6,&_arg7)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5210,9 +5234,15 @@ static PyObject *_wrap_wxFontList_FindOrCreateFont(PyObject *self, PyObject *arg
         }
     }
     _arg5 = (bool ) tempbool5;
+    if (_obj6)
+{
+    _arg6 = wxString_in_helper(_obj6);
+    if (_arg6 == NULL)
+        return NULL;
+}
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxFont *)wxFontList_FindOrCreateFont(_arg0,_arg1,_arg2,_arg3,_arg4,_arg5,_arg6,_arg7);
+    _result = (wxFont *)wxFontList_FindOrCreateFont(_arg0,_arg1,_arg2,_arg3,_arg4,_arg5,*_arg6,_arg7);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -5223,6 +5253,10 @@ static PyObject *_wrap_wxFontList_FindOrCreateFont(PyObject *self, PyObject *arg
         Py_INCREF(Py_None);
         _resultobj = Py_None;
     }
+{
+    if (_obj6)
+        delete _arg6;
+}
     return _resultobj;
 }
 
@@ -10923,7 +10957,7 @@ static void *SwigwxMetaFileTowxObject(void *ptr) {
 static PyObject *_wrap_new_wxMetaFile(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxMetaFile * _result;
-    wxString * _arg0 = (wxString *) &wxEmptyString;
+    wxString * _arg0 = (wxString *) &wxPyEmptyString;
     PyObject * _obj0 = 0;
     char *_kwnames[] = { "filename", NULL };
     char _ptemp[128];
@@ -11184,10 +11218,10 @@ static void *SwigwxMetaFileDCTowxObject(void *ptr) {
 static PyObject *_wrap_new_wxMetaFileDC(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxMetaFileDC * _result;
-    wxString * _arg0 = (wxString *) &wxEmptyString;
+    wxString * _arg0 = (wxString *) &wxPyEmptyString;
     int  _arg1 = (int ) 0;
     int  _arg2 = (int ) 0;
-    wxString * _arg3 = (wxString *) &wxEmptyString;
+    wxString * _arg3 = (wxString *) &wxPyEmptyString;
     PyObject * _obj0 = 0;
     PyObject * _obj3 = 0;
     char *_kwnames[] = { "filename","width","height","description", NULL };

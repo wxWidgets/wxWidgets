@@ -86,6 +86,10 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     return target;
 }
 
+    // Put some wx default wxChar* values into wxStrings.
+    DECLARE_DEF_STRING(PanelNameStr);
+    static const wxString wxPyEmptyString(wxT(""));
+
 class wxPyValidator : public wxValidator {
     DECLARE_DYNAMIC_CLASS(wxPyValidator);
 public:
@@ -864,17 +868,18 @@ static PyObject *_wrap_new_wxWindow(PyObject *self, PyObject *args, PyObject *kw
     wxPoint * _arg2 = (wxPoint *) &wxDefaultPosition;
     wxSize * _arg3 = (wxSize *) &wxDefaultSize;
     long  _arg4 = (long ) 0;
-    char * _arg5 = (char *) "panel";
+    wxString * _arg5 = (wxString *) &wxPyPanelNameStr;
     PyObject * _argo0 = 0;
     wxPoint  temp;
     PyObject * _obj2 = 0;
     wxSize  temp0;
     PyObject * _obj3 = 0;
+    PyObject * _obj5 = 0;
     char *_kwnames[] = { "parent","id","pos","size","style","name", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|OOls:new_wxWindow",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_arg4,&_arg5)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|OOlO:new_wxWindow",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_arg4,&_obj5)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -895,9 +900,15 @@ static PyObject *_wrap_new_wxWindow(PyObject *self, PyObject *args, PyObject *kw
     if (! wxSize_helper(_obj3, &_arg3))
         return NULL;
 }
+    if (_obj5)
+{
+    _arg5 = wxString_in_helper(_obj5);
+    if (_arg5 == NULL)
+        return NULL;
+}
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxWindow *)new_wxWindow(_arg0,_arg1,*_arg2,*_arg3,_arg4,_arg5);
+    _result = (wxWindow *)new_wxWindow(_arg0,_arg1,*_arg2,*_arg3,_arg4,*_arg5);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -908,6 +919,10 @@ static PyObject *_wrap_new_wxWindow(PyObject *self, PyObject *args, PyObject *kw
         Py_INCREF(Py_None);
         _resultobj = Py_None;
     }
+{
+    if (_obj5)
+        delete _arg5;
+}
     return _resultobj;
 }
 
@@ -947,17 +962,18 @@ static PyObject *_wrap_wxWindow_Create(PyObject *self, PyObject *args, PyObject 
     wxPoint * _arg3 = (wxPoint *) &wxDefaultPosition;
     wxSize * _arg4 = (wxSize *) &wxDefaultSize;
     long  _arg5 = (long ) 0;
-    char * _arg6 = (char *) "panel";
+    wxString * _arg6 = (wxString *) &wxPyPanelNameStr;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
     wxPoint  temp;
     PyObject * _obj3 = 0;
     wxSize  temp0;
     PyObject * _obj4 = 0;
+    PyObject * _obj6 = 0;
     char *_kwnames[] = { "self","parent","id","pos","size","style","name", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOi|OOls:wxWindow_Create",_kwnames,&_argo0,&_argo1,&_arg2,&_obj3,&_obj4,&_arg5,&_arg6)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOi|OOlO:wxWindow_Create",_kwnames,&_argo0,&_argo1,&_arg2,&_obj3,&_obj4,&_arg5,&_obj6)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -985,13 +1001,23 @@ static PyObject *_wrap_wxWindow_Create(PyObject *self, PyObject *args, PyObject 
     if (! wxSize_helper(_obj4, &_arg4))
         return NULL;
 }
+    if (_obj6)
+{
+    _arg6 = wxString_in_helper(_obj6);
+    if (_arg6 == NULL)
+        return NULL;
+}
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxWindow_Create(_arg0,_arg1,_arg2,*_arg3,*_arg4,_arg5,_arg6);
+    _result = (bool )wxWindow_Create(_arg0,_arg1,_arg2,*_arg3,*_arg4,_arg5,*_arg6);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
+{
+    if (_obj6)
+        delete _arg6;
+}
     return _resultobj;
 }
 
@@ -6171,17 +6197,18 @@ static PyObject *_wrap_new_wxPanel(PyObject *self, PyObject *args, PyObject *kwa
     wxPoint * _arg2 = (wxPoint *) &wxDefaultPosition;
     wxSize * _arg3 = (wxSize *) &wxDefaultSize;
     long  _arg4 = (long ) wxTAB_TRAVERSAL;
-    char * _arg5 = (char *) "panel";
+    wxString * _arg5 = (wxString *) &wxPyPanelNameStr;
     PyObject * _argo0 = 0;
     wxPoint  temp;
     PyObject * _obj2 = 0;
     wxSize  temp0;
     PyObject * _obj3 = 0;
+    PyObject * _obj5 = 0;
     char *_kwnames[] = { "parent","id","pos","size","style","name", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|OOls:new_wxPanel",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_arg4,&_arg5)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|OOlO:new_wxPanel",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_arg4,&_obj5)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -6202,9 +6229,15 @@ static PyObject *_wrap_new_wxPanel(PyObject *self, PyObject *args, PyObject *kwa
     if (! wxSize_helper(_obj3, &_arg3))
         return NULL;
 }
+    if (_obj5)
+{
+    _arg5 = wxString_in_helper(_obj5);
+    if (_arg5 == NULL)
+        return NULL;
+}
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxPanel *)new_wxPanel(_arg0,_arg1,*_arg2,*_arg3,_arg4,_arg5);
+    _result = (wxPanel *)new_wxPanel(_arg0,_arg1,*_arg2,*_arg3,_arg4,*_arg5);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -6215,6 +6248,10 @@ static PyObject *_wrap_new_wxPanel(PyObject *self, PyObject *args, PyObject *kwa
         Py_INCREF(Py_None);
         _resultobj = Py_None;
     }
+{
+    if (_obj5)
+        delete _arg5;
+}
     return _resultobj;
 }
 
@@ -6254,17 +6291,18 @@ static PyObject *_wrap_wxPanel_Create(PyObject *self, PyObject *args, PyObject *
     wxPoint * _arg3 = (wxPoint *) &wxDefaultPosition;
     wxSize * _arg4 = (wxSize *) &wxDefaultSize;
     long  _arg5 = (long ) wxTAB_TRAVERSAL;
-    char * _arg6 = (char *) "panel";
+    wxString * _arg6 = (wxString *) &wxPyPanelNameStr;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
     wxPoint  temp;
     PyObject * _obj3 = 0;
     wxSize  temp0;
     PyObject * _obj4 = 0;
+    PyObject * _obj6 = 0;
     char *_kwnames[] = { "self","parent","id","pos","size","style","name", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOi|OOls:wxPanel_Create",_kwnames,&_argo0,&_argo1,&_arg2,&_obj3,&_obj4,&_arg5,&_arg6)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOi|OOlO:wxPanel_Create",_kwnames,&_argo0,&_argo1,&_arg2,&_obj3,&_obj4,&_arg5,&_obj6)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -6292,13 +6330,23 @@ static PyObject *_wrap_wxPanel_Create(PyObject *self, PyObject *args, PyObject *
     if (! wxSize_helper(_obj4, &_arg4))
         return NULL;
 }
+    if (_obj6)
+{
+    _arg6 = wxString_in_helper(_obj6);
+    if (_arg6 == NULL)
+        return NULL;
+}
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxPanel_Create(_arg0,_arg1,_arg2,*_arg3,*_arg4,_arg5,_arg6);
+    _result = (bool )wxPanel_Create(_arg0,_arg1,_arg2,*_arg3,*_arg4,_arg5,*_arg6);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
+{
+    if (_obj6)
+        delete _arg6;
+}
     return _resultobj;
 }
 
@@ -6371,17 +6419,18 @@ static PyObject *_wrap_new_wxScrolledWindow(PyObject *self, PyObject *args, PyOb
     wxPoint * _arg2 = (wxPoint *) &wxDefaultPosition;
     wxSize * _arg3 = (wxSize *) &wxDefaultSize;
     long  _arg4 = (long ) wxHSCROLL|wxVSCROLL;
-    char * _arg5 = (char *) "scrolledWindow";
+    wxString * _arg5 = (wxString *) &wxPyPanelNameStr;
     PyObject * _argo0 = 0;
     wxPoint  temp;
     PyObject * _obj2 = 0;
     wxSize  temp0;
     PyObject * _obj3 = 0;
+    PyObject * _obj5 = 0;
     char *_kwnames[] = { "parent","id","pos","size","style","name", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|iOOls:new_wxScrolledWindow",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_arg4,&_arg5)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|iOOlO:new_wxScrolledWindow",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_arg4,&_obj5)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -6402,9 +6451,15 @@ static PyObject *_wrap_new_wxScrolledWindow(PyObject *self, PyObject *args, PyOb
     if (! wxSize_helper(_obj3, &_arg3))
         return NULL;
 }
+    if (_obj5)
+{
+    _arg5 = wxString_in_helper(_obj5);
+    if (_arg5 == NULL)
+        return NULL;
+}
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxScrolledWindow *)new_wxScrolledWindow(_arg0,_arg1,*_arg2,*_arg3,_arg4,_arg5);
+    _result = (wxScrolledWindow *)new_wxScrolledWindow(_arg0,_arg1,*_arg2,*_arg3,_arg4,*_arg5);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -6415,6 +6470,10 @@ static PyObject *_wrap_new_wxScrolledWindow(PyObject *self, PyObject *args, PyOb
         Py_INCREF(Py_None);
         _resultobj = Py_None;
     }
+{
+    if (_obj5)
+        delete _arg5;
+}
     return _resultobj;
 }
 
@@ -6454,17 +6513,18 @@ static PyObject *_wrap_wxScrolledWindow_Create(PyObject *self, PyObject *args, P
     wxPoint * _arg3 = (wxPoint *) &wxDefaultPosition;
     wxSize * _arg4 = (wxSize *) &wxDefaultSize;
     long  _arg5 = (long ) wxHSCROLL|wxVSCROLL;
-    char * _arg6 = (char *) "scrolledWindow";
+    wxString * _arg6 = (wxString *) &wxPyPanelNameStr;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
     wxPoint  temp;
     PyObject * _obj3 = 0;
     wxSize  temp0;
     PyObject * _obj4 = 0;
+    PyObject * _obj6 = 0;
     char *_kwnames[] = { "self","parent","id","pos","size","style","name", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|iOOls:wxScrolledWindow_Create",_kwnames,&_argo0,&_argo1,&_arg2,&_obj3,&_obj4,&_arg5,&_arg6)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|iOOlO:wxScrolledWindow_Create",_kwnames,&_argo0,&_argo1,&_arg2,&_obj3,&_obj4,&_arg5,&_obj6)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -6492,13 +6552,23 @@ static PyObject *_wrap_wxScrolledWindow_Create(PyObject *self, PyObject *args, P
     if (! wxSize_helper(_obj4, &_arg4))
         return NULL;
 }
+    if (_obj6)
+{
+    _arg6 = wxString_in_helper(_obj6);
+    if (_arg6 == NULL)
+        return NULL;
+}
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxScrolledWindow_Create(_arg0,_arg1,_arg2,*_arg3,*_arg4,_arg5,_arg6);
+    _result = (bool )wxScrolledWindow_Create(_arg0,_arg1,_arg2,*_arg3,*_arg4,_arg5,*_arg6);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
+{
+    if (_obj6)
+        delete _arg6;
+}
     return _resultobj;
 }
 
@@ -7272,7 +7342,7 @@ static void *SwigwxMenuTowxObject(void *ptr) {
 static PyObject *_wrap_new_wxMenu(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxMenu * _result;
-    wxString * _arg0 = (wxString *) &wxEmptyString;
+    wxString * _arg0 = (wxString *) &wxPyEmptyString;
     long  _arg1 = (long ) 0;
     PyObject * _obj0 = 0;
     char *_kwnames[] = { "title","style", NULL };
@@ -7313,7 +7383,7 @@ static PyObject *_wrap_wxMenu_Append(PyObject *self, PyObject *args, PyObject *k
     wxMenu * _arg0;
     int  _arg1;
     wxString * _arg2;
-    wxString * _arg3 = (wxString *) &wxEmptyString;
+    wxString * _arg3 = (wxString *) &wxPyEmptyString;
     wxItemKind  _arg4 = (wxItemKind ) wxItem_Normal;
     PyObject * _argo0 = 0;
     PyObject * _obj2 = 0;
@@ -7367,7 +7437,7 @@ static PyObject *_wrap_wxMenu_AppendMenu(PyObject *self, PyObject *args, PyObjec
     int  _arg1;
     wxString * _arg2;
     wxMenu * _arg3;
-    wxString * _arg4 = (wxString *) &wxEmptyString;
+    wxString * _arg4 = (wxString *) &wxPyEmptyString;
     PyObject * _argo0 = 0;
     PyObject * _obj2 = 0;
     PyObject * _argo3 = 0;
@@ -7464,7 +7534,7 @@ static PyObject *_wrap_wxMenu_AppendCheckItem(PyObject *self, PyObject *args, Py
     wxMenu * _arg0;
     int  _arg1;
     wxString * _arg2;
-    wxString * _arg3 = (wxString *) &wxEmptyString;
+    wxString * _arg3 = (wxString *) &wxPyEmptyString;
     PyObject * _argo0 = 0;
     PyObject * _obj2 = 0;
     PyObject * _obj3 = 0;
@@ -7516,7 +7586,7 @@ static PyObject *_wrap_wxMenu_AppendRadioItem(PyObject *self, PyObject *args, Py
     wxMenu * _arg0;
     int  _arg1;
     wxString * _arg2;
-    wxString * _arg3 = (wxString *) &wxEmptyString;
+    wxString * _arg3 = (wxString *) &wxPyEmptyString;
     PyObject * _argo0 = 0;
     PyObject * _obj2 = 0;
     PyObject * _obj3 = 0;
@@ -7597,7 +7667,7 @@ static PyObject *_wrap_wxMenu_Insert(PyObject *self, PyObject *args, PyObject *k
     size_t  _arg1;
     int  _arg2;
     wxString * _arg3;
-    wxString * _arg4 = (wxString *) &wxEmptyString;
+    wxString * _arg4 = (wxString *) &wxPyEmptyString;
     wxItemKind  _arg5 = (wxItemKind ) wxItem_Normal;
     PyObject * _argo0 = 0;
     PyObject * _obj3 = 0;
@@ -7680,7 +7750,7 @@ static PyObject *_wrap_wxMenu_InsertCheckItem(PyObject *self, PyObject *args, Py
     size_t  _arg1;
     int  _arg2;
     wxString * _arg3;
-    wxString * _arg4 = (wxString *) &wxEmptyString;
+    wxString * _arg4 = (wxString *) &wxPyEmptyString;
     PyObject * _argo0 = 0;
     PyObject * _obj3 = 0;
     PyObject * _obj4 = 0;
@@ -7733,7 +7803,7 @@ static PyObject *_wrap_wxMenu_InsertRadioItem(PyObject *self, PyObject *args, Py
     size_t  _arg1;
     int  _arg2;
     wxString * _arg3;
-    wxString * _arg4 = (wxString *) &wxEmptyString;
+    wxString * _arg4 = (wxString *) &wxPyEmptyString;
     PyObject * _argo0 = 0;
     PyObject * _obj3 = 0;
     PyObject * _obj4 = 0;
@@ -7787,7 +7857,7 @@ static PyObject *_wrap_wxMenu_InsertMenu(PyObject *self, PyObject *args, PyObjec
     int  _arg2;
     wxString * _arg3;
     wxMenu * _arg4;
-    wxString * _arg5 = (wxString *) &wxEmptyString;
+    wxString * _arg5 = (wxString *) &wxPyEmptyString;
     PyObject * _argo0 = 0;
     PyObject * _obj3 = 0;
     PyObject * _argo4 = 0;
@@ -7885,7 +7955,7 @@ static PyObject *_wrap_wxMenu_Prepend(PyObject *self, PyObject *args, PyObject *
     wxMenu * _arg0;
     int  _arg1;
     wxString * _arg2;
-    wxString * _arg3 = (wxString *) &wxEmptyString;
+    wxString * _arg3 = (wxString *) &wxPyEmptyString;
     wxItemKind  _arg4 = (wxItemKind ) wxItem_Normal;
     PyObject * _argo0 = 0;
     PyObject * _obj2 = 0;
@@ -7966,7 +8036,7 @@ static PyObject *_wrap_wxMenu_PrependCheckItem(PyObject *self, PyObject *args, P
     wxMenu * _arg0;
     int  _arg1;
     wxString * _arg2;
-    wxString * _arg3 = (wxString *) &wxEmptyString;
+    wxString * _arg3 = (wxString *) &wxPyEmptyString;
     PyObject * _argo0 = 0;
     PyObject * _obj2 = 0;
     PyObject * _obj3 = 0;
@@ -8018,7 +8088,7 @@ static PyObject *_wrap_wxMenu_PrependRadioItem(PyObject *self, PyObject *args, P
     wxMenu * _arg0;
     int  _arg1;
     wxString * _arg2;
-    wxString * _arg3 = (wxString *) &wxEmptyString;
+    wxString * _arg3 = (wxString *) &wxPyEmptyString;
     PyObject * _argo0 = 0;
     PyObject * _obj2 = 0;
     PyObject * _obj3 = 0;
@@ -8071,7 +8141,7 @@ static PyObject *_wrap_wxMenu_PrependMenu(PyObject *self, PyObject *args, PyObje
     int  _arg1;
     wxString * _arg2;
     wxMenu * _arg3;
-    wxString * _arg4 = (wxString *) &wxEmptyString;
+    wxString * _arg4 = (wxString *) &wxPyEmptyString;
     PyObject * _argo0 = 0;
     PyObject * _obj2 = 0;
     PyObject * _argo3 = 0;
@@ -9990,8 +10060,8 @@ static PyObject *_wrap_new_wxMenuItem(PyObject *self, PyObject *args, PyObject *
     wxMenuItem * _result;
     wxMenu * _arg0 = (wxMenu *) NULL;
     int  _arg1 = (int ) wxID_SEPARATOR;
-    wxString * _arg2 = (wxString *) &wxEmptyString;
-    wxString * _arg3 = (wxString *) &wxEmptyString;
+    wxString * _arg2 = (wxString *) &wxPyEmptyString;
+    wxString * _arg3 = (wxString *) &wxPyEmptyString;
     wxItemKind  _arg4 = (wxItemKind ) wxItem_Normal;
     wxMenu * _arg5 = (wxMenu *) NULL;
     PyObject * _argo0 = 0;

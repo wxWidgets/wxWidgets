@@ -4,7 +4,7 @@ from wxPython.wx import *
 #---------------------------------------------------------------------------
 
 def runTest(frame, nb, log):
-    dlg = wxDirDialog(frame)
+    dlg = wxDirDialog(frame, "Choose a directory:")
     if dlg.ShowModal() == wxID_OK:
         log.WriteText('You selected: %s\n' % dlg.GetPath())
     dlg.Destroy()

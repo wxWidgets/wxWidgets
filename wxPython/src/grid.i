@@ -35,6 +35,13 @@
 
 %pragma(python) code = "import wx"
 
+//----------------------------------------------------------------------
+
+%{
+    // Put some wx default wxChar* values into wxStrings.
+    DECLARE_DEF_STRING(PanelNameStr);
+%}
+
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 // Macros, similar to what's in helpers.h, to aid in the creation of
@@ -1315,7 +1322,7 @@ public:
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
             long style = wxWANTS_CHARS,
-            const char* name = wxPanelNameStr );
+            const wxString& name = wxPyPanelNameStr);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 

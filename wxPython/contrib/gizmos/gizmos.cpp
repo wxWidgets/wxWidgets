@@ -88,6 +88,10 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     return target;
 }
 
+    // Put some wx default wxChar* values into wxStrings.
+    static const wxString wxPyDynamicSashNameStr(wxT("dynamicSashWindow"));
+    static const wxString wxPyEditableListBoxNameStr(wxT("editableListBox"));
+
     typedef wxTreeCtrl wxPyTreeCtrl;
 
 class wxPyTreeCompanionWindow: public wxTreeCompanionWindow
@@ -273,17 +277,18 @@ static PyObject *_wrap_new_wxDynamicSashWindow(PyObject *self, PyObject *args, P
     wxPoint * _arg2 = (wxPoint *) &wxDefaultPosition;
     wxSize * _arg3 = (wxSize *) &wxDefaultSize;
     long  _arg4 = (long ) wxCLIP_CHILDREN|(wxDS_MANAGE_SCROLLBARS)|(wxDS_DRAG_CORNER);
-    char * _arg5 = (char *) "dynamicSashWindow";
+    wxString * _arg5 = (wxString *) &wxPyDynamicSashNameStr;
     PyObject * _argo0 = 0;
     wxPoint  temp;
     PyObject * _obj2 = 0;
     wxSize  temp0;
     PyObject * _obj3 = 0;
+    PyObject * _obj5 = 0;
     char *_kwnames[] = { "parent","id","pos","size","style","name", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|OOls:new_wxDynamicSashWindow",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_arg4,&_arg5)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|OOlO:new_wxDynamicSashWindow",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_arg4,&_obj5)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -304,9 +309,15 @@ static PyObject *_wrap_new_wxDynamicSashWindow(PyObject *self, PyObject *args, P
     if (! wxSize_helper(_obj3, &_arg3))
         return NULL;
 }
+    if (_obj5)
+{
+    _arg5 = wxString_in_helper(_obj5);
+    if (_arg5 == NULL)
+        return NULL;
+}
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxDynamicSashWindow *)new_wxDynamicSashWindow(_arg0,_arg1,*_arg2,*_arg3,_arg4,_arg5);
+    _result = (wxDynamicSashWindow *)new_wxDynamicSashWindow(_arg0,_arg1,*_arg2,*_arg3,_arg4,*_arg5);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -317,6 +328,10 @@ static PyObject *_wrap_new_wxDynamicSashWindow(PyObject *self, PyObject *args, P
         Py_INCREF(Py_None);
         _resultobj = Py_None;
     }
+{
+    if (_obj5)
+        delete _arg5;
+}
     return _resultobj;
 }
 
@@ -356,17 +371,18 @@ static PyObject *_wrap_wxDynamicSashWindow_Create(PyObject *self, PyObject *args
     wxPoint * _arg3 = (wxPoint *) &wxDefaultPosition;
     wxSize * _arg4 = (wxSize *) &wxDefaultSize;
     long  _arg5 = (long ) wxCLIP_CHILDREN|(wxDS_MANAGE_SCROLLBARS)|(wxDS_DRAG_CORNER);
-    char * _arg6 = (char *) "dynamicSashWindow";
+    wxString * _arg6 = (wxString *) &wxPyDynamicSashNameStr;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
     wxPoint  temp;
     PyObject * _obj3 = 0;
     wxSize  temp0;
     PyObject * _obj4 = 0;
+    PyObject * _obj6 = 0;
     char *_kwnames[] = { "self","parent","id","pos","size","style","name", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOi|OOls:wxDynamicSashWindow_Create",_kwnames,&_argo0,&_argo1,&_arg2,&_obj3,&_obj4,&_arg5,&_arg6)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOi|OOlO:wxDynamicSashWindow_Create",_kwnames,&_argo0,&_argo1,&_arg2,&_obj3,&_obj4,&_arg5,&_obj6)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -394,13 +410,23 @@ static PyObject *_wrap_wxDynamicSashWindow_Create(PyObject *self, PyObject *args
     if (! wxSize_helper(_obj4, &_arg4))
         return NULL;
 }
+    if (_obj6)
+{
+    _arg6 = wxString_in_helper(_obj6);
+    if (_arg6 == NULL)
+        return NULL;
+}
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxDynamicSashWindow_Create(_arg0,_arg1,_arg2,*_arg3,*_arg4,_arg5,_arg6);
+    _result = (bool )wxDynamicSashWindow_Create(_arg0,_arg1,_arg2,*_arg3,*_arg4,_arg5,*_arg6);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
+{
+    if (_obj6)
+        delete _arg6;
+}
     return _resultobj;
 }
 
@@ -534,18 +560,19 @@ static PyObject *_wrap_new_wxEditableListBox(PyObject *self, PyObject *args, PyO
     wxPoint * _arg3 = (wxPoint *) &wxDefaultPosition;
     wxSize * _arg4 = (wxSize *) &wxDefaultSize;
     long  _arg5 = (long ) (wxEL_ALLOW_NEW)|(wxEL_ALLOW_EDIT)|(wxEL_ALLOW_DELETE);
-    char * _arg6 = (char *) "editableListBox";
+    wxString * _arg6 = (wxString *) &wxPyEditableListBoxNameStr;
     PyObject * _argo0 = 0;
     PyObject * _obj2 = 0;
     wxPoint  temp;
     PyObject * _obj3 = 0;
     wxSize  temp0;
     PyObject * _obj4 = 0;
+    PyObject * _obj6 = 0;
     char *_kwnames[] = { "parent","id","label","pos","size","style","name", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO|OOls:new_wxEditableListBox",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_obj4,&_arg5,&_arg6)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO|OOlO:new_wxEditableListBox",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_obj4,&_arg5,&_obj6)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -571,9 +598,15 @@ static PyObject *_wrap_new_wxEditableListBox(PyObject *self, PyObject *args, PyO
     if (! wxSize_helper(_obj4, &_arg4))
         return NULL;
 }
+    if (_obj6)
+{
+    _arg6 = wxString_in_helper(_obj6);
+    if (_arg6 == NULL)
+        return NULL;
+}
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxEditableListBox *)new_wxEditableListBox(_arg0,_arg1,*_arg2,*_arg3,*_arg4,_arg5,_arg6);
+    _result = (wxEditableListBox *)new_wxEditableListBox(_arg0,_arg1,*_arg2,*_arg3,*_arg4,_arg5,*_arg6);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -587,6 +620,10 @@ static PyObject *_wrap_new_wxEditableListBox(PyObject *self, PyObject *args, PyO
 {
     if (_obj2)
         delete _arg2;
+}
+{
+    if (_obj6)
+        delete _arg6;
 }
     return _resultobj;
 }

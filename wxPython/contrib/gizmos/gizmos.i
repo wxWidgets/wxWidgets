@@ -35,6 +35,14 @@
 
 //----------------------------------------------------------------------
 
+%{
+    // Put some wx default wxChar* values into wxStrings.
+    static const wxString wxPyDynamicSashNameStr(wxT("dynamicSashWindow"));
+    static const wxString wxPyEditableListBoxNameStr(wxT("editableListBox"));
+%}
+
+///----------------------------------------------------------------------
+
 enum {
     wxEVT_DYNAMIC_SASH_SPLIT,
     wxEVT_DYNAMIC_SASH_UNIFY,
@@ -124,13 +132,13 @@ public:
     wxDynamicSashWindow(wxWindow *parent, wxWindowID id,
                         const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
                         long style = wxCLIP_CHILDREN | wxDS_MANAGE_SCROLLBARS | wxDS_DRAG_CORNER,
-                        const char* name = "dynamicSashWindow");
+                        const wxString& name = wxPyDynamicSashNameStr);
     %name(wxPreDynamicSashWindow)wxDynamicSashWindow();
 
     bool Create(wxWindow *parent, wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
                 long style = wxCLIP_CHILDREN | wxDS_MANAGE_SCROLLBARS | wxDS_DRAG_CORNER,
-                const char* name = "dynamicSashWindow");
+                const wxString& name = wxPyDynamicSashNameStr);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreDynamicSashWindow:val._setOORInfo(val)"
@@ -171,7 +179,7 @@ public:
                       const wxPoint& pos = wxDefaultPosition,
                       const wxSize& size = wxDefaultSize,
                       long style = wxEL_ALLOW_NEW | wxEL_ALLOW_EDIT | wxEL_ALLOW_DELETE,
-                      const char* name = "editableListBox");
+                      const wxString& name = wxPyEditableListBoxNameStr);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 

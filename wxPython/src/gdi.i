@@ -34,6 +34,11 @@
 
 
 //---------------------------------------------------------------------------
+%{
+    // Put some wx default wxChar* values into wxStrings.
+    static const wxString wxPyEmptyString(wxT(""));
+%}
+//---------------------------------------------------------------------------
 
 class wxGDIObject : public wxObject {
 public:
@@ -482,7 +487,7 @@ public:
     // that can be used it wxFont ctor otherwise return FALSE
     //bool GetAltForEncoding(wxFontEncoding encoding,
     //                       wxFontEncoding *alt_encoding,
-    //                       const wxString& facename = wxEmptyString,
+    //                       const wxString& facename = wxPyEmptyString,
     //                       bool interactive = TRUE);
 
 
@@ -491,7 +496,7 @@ public:
     // returns None.
     %addmethods {
         PyObject* GetAltForEncoding(wxFontEncoding encoding,
-                                    const wxString& facename = wxEmptyString,
+                                    const wxString& facename = wxPyEmptyString,
                                     bool interactive = TRUE) {
             wxFontEncoding alt_enc;
             if (self->GetAltForEncoding(encoding, &alt_enc, facename, interactive))
@@ -507,7 +512,7 @@ public:
     // checks whether given encoding is available in given face or not.
     // If no facename is given,
     bool IsEncodingAvailable(wxFontEncoding encoding,
-                             const wxString& facename = wxEmptyString);
+                             const wxString& facename = wxPyEmptyString);
 
     // returns the encoding for the given charset (in the form of RFC 2046) or
     // wxFONTENCODING_SYSTEM if couldn't decode it
@@ -542,7 +547,7 @@ public:
     void SetConfigPath(const wxString& prefix);
 
     // return default config path
-    static const wxChar *GetDefaultConfigPath();
+    static wxString GetDefaultConfigPath();
 };
 
 
@@ -551,7 +556,7 @@ public:
 class wxFont : public wxGDIObject {
 public:
     wxFont( int pointSize, int family, int style, int weight,
-            int underline=FALSE, char* faceName = "",
+            int underline=FALSE, const wxString& faceName = wxPyEmptyString,
             wxFontEncoding encoding=wxFONTENCODING_DEFAULT);
 
     %name(wxFontFromNativeInfo)wxFont(const wxNativeFontInfo& info);
@@ -599,7 +604,7 @@ public:
 
     void AddFont(wxFont* font);
     wxFont * FindOrCreateFont(int point_size, int family, int style, int weight,
-                              bool underline = FALSE, const char* facename = NULL,
+                              bool underline = FALSE, const wxString& facename = wxPyEmptyString,
                               wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
     void RemoveFont(wxFont *font);
 
@@ -1203,7 +1208,7 @@ public:
 
 class wxMetaFile : public wxObject {
 public:
-    wxMetaFile(const wxString& filename = wxEmptyString);
+    wxMetaFile(const wxString& filename = wxPyEmptyString);
     ~wxMetaFile();
 
     bool Ok();
@@ -1223,9 +1228,9 @@ public:
 
 class wxMetaFileDC : public wxDC {
 public:
-    wxMetaFileDC(const wxString& filename = wxEmptyString,
+    wxMetaFileDC(const wxString& filename = wxPyEmptyString,
                  int width = 0, int height = 0,
-                 const wxString& description = wxEmptyString);
+                 const wxString& description = wxPyEmptyString);
     wxMetaFile* Close();
 };
 

@@ -38,7 +38,14 @@
 %pragma(python) code = "import wx"
 
 //---------------------------------------------------------------------------
+
+%{
+    // Put some wx default wxChar* values into wxStrings.
+    static const wxString wxPyEmptyString(wxT(""));
+%}
+
 //---------------------------------------------------------------------------
+
 %{
     WXSHAPE_IMP_CALLBACKS(wxPyEllipseShape, wxEllipseShape);
 %}
@@ -133,7 +140,7 @@ public:
                 int end = 0,
                 double size = 0.0,
                 double dist = 0.0,
-                const char * name = "",
+                const wxString& name = wxPyEmptyString,
                 wxPseudoMetaFile *mf = NULL,
                 long arrowId = -1);
     ~wxArrowHead();
@@ -170,7 +177,7 @@ public:
 
     void AddArrow(int type, int end = ARROW_POSITION_END,
                   double arrowSize = 10.0, double xOffset = 0.0,
-                  char* name = "", wxPseudoMetaFile *mf = NULL,
+                  const wxString& name = wxPyEmptyString, wxPseudoMetaFile *mf = NULL,
                   long arrowId = -1);
 
     //void AddArrowOrdered(wxArrowHead *arrow, wxList& referenceList, int end);

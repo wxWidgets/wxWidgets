@@ -38,6 +38,15 @@
 
 %pragma(python) code = "import wx"
 
+//----------------------------------------------------------------------
+
+%{
+    // Put some wx default wxChar* values into wxStrings.
+    static const wxChar* wxSashNameStr = wxT("sashWindow");
+    DECLARE_DEF_STRING(SashNameStr);
+    static const wxChar* wxSashLayoutNameStr = wxT("layoutWindow");
+    DECLARE_DEF_STRING(SashLayoutNameStr);
+%}
 //---------------------------------------------------------------------------
 
 enum wxSashEdgePosition {
@@ -83,14 +92,14 @@ public:
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = wxCLIP_CHILDREN | wxSW_3D,
-                 const char* name = "sashWindow");
+                 const wxString& name = wxPySashNameStr);
     %name(wxPreSashWindow)wxSashWindow();
 
     bool Create(wxWindow* parent, wxWindowID id,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = wxCLIP_CHILDREN | wxSW_3D,
-                 const char* name = "sashWindow");
+                 const wxString& name = wxPySashNameStr);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreSashWindow:val._setOORInfo(val)"
@@ -173,14 +182,14 @@ public:
                        const wxPoint& pos = wxDefaultPosition,
                        const wxSize& size = wxDefaultSize,
                        long style = wxCLIP_CHILDREN | wxSW_3D,
-                       const char* name = "layoutWindow");
+                       const wxString& name = wxPySashLayoutNameStr);
     %name(wxPreSashLayoutWindow)wxSashLayoutWindow();
 
     bool Create(wxWindow* parent, wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxCLIP_CHILDREN | wxSW_3D,
-                const char* name = "layoutWindow");
+                const wxString& name = wxPySashLayoutNameStr);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreSashLayoutWindow:val._setOORInfo(val)"

@@ -54,6 +54,34 @@ wxValidator wxDefaultValidator;
 
 //----------------------------------------------------------------------
 
+%{
+//#define DECLARE_DEF_STRING(name)  static wxString* wxPy##name
+
+    // Put some wx default wxChar* values into wxStrings.
+    DECLARE_DEF_STRING(ControlNameStr);
+    DECLARE_DEF_STRING(ButtonNameStr);
+    DECLARE_DEF_STRING(CheckBoxNameStr);
+    DECLARE_DEF_STRING(ChoiceNameStr);
+    DECLARE_DEF_STRING(ComboBoxNameStr);
+    DECLARE_DEF_STRING(GaugeNameStr);
+    DECLARE_DEF_STRING(StaticBoxNameStr);
+    DECLARE_DEF_STRING(StaticTextNameStr);
+    DECLARE_DEF_STRING(ListBoxNameStr);
+    DECLARE_DEF_STRING(TextCtrlNameStr);
+    DECLARE_DEF_STRING(ScrollBarNameStr);
+    DECLARE_DEF_STRING(SPIN_BUTTON_NAME);
+    DECLARE_DEF_STRING(StaticBitmapNameStr);
+    DECLARE_DEF_STRING(RadioBoxNameStr);
+    DECLARE_DEF_STRING(RadioButtonNameStr);
+    DECLARE_DEF_STRING(SliderNameStr);
+
+    wxChar* wxSpinCtrlNameStr = _T("wxSpinCtrl");
+    DECLARE_DEF_STRING(SpinCtrlNameStr);
+
+    static const wxString wxPyEmptyString(wxT(""));
+%}
+
+//----------------------------------------------------------------------
 
 //  This is the base class for a control or 'widget'.
 //
@@ -69,7 +97,7 @@ public:
                        const wxSize& size=wxDefaultSize,
                        long style=0,
                        const wxValidator& validator=wxDefaultValidator,
-                       const char* name="control");
+                       const wxString& name=wxPyControlNameStr);
 
     //
     %name(wxPreControl)wxControl();
@@ -81,7 +109,7 @@ public:
                        const wxSize& size=wxDefaultSize,
                        long style=0,
                        const wxValidator& validator=wxDefaultValidator,
-                       const char* name="control");
+                       const wxString& name=wxPyControlNameStr);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreControl:val._setOORInfo(val)"
@@ -209,7 +237,7 @@ public:
              const wxSize& size = wxDefaultSize,
              long style = 0,
              const wxValidator& validator = wxDefaultValidator,
-             char* name = "button");
+             const wxString& name = wxPyButtonNameStr);
 
     // Default constructor
     %name(wxPreButton)wxButton();
@@ -220,7 +248,7 @@ public:
              const wxSize& size = wxDefaultSize,
              long style = 0,
              const wxValidator& validator = wxDefaultValidator,
-             char* name = "button");
+             const wxString& name = wxPyButtonNameStr);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreButton:val._setOORInfo(val)"
@@ -260,7 +288,7 @@ public:
                    const wxSize& size = wxDefaultSize,
                    long style = wxBU_AUTODRAW,
                    const wxValidator& validator = wxDefaultValidator,
-                   char* name = "button");
+                   const wxString& name = wxPyButtonNameStr);
     %name(wxPreBitmapButton)wxBitmapButton();
 
     bool Create(wxWindow* parent, wxWindowID id, const wxBitmap& bitmap,
@@ -268,7 +296,7 @@ public:
                    const wxSize& size = wxDefaultSize,
                    long style = wxBU_AUTODRAW,
                    const wxValidator& validator = wxDefaultValidator,
-                   char* name = "button");
+                const wxString& name = wxPyButtonNameStr);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreBitmapButton:val._setOORInfo(val)"
@@ -296,7 +324,7 @@ public:
                const wxSize& size = wxDefaultSize,
                long style = 0,
                const wxValidator& val = wxDefaultValidator,
-               char* name = "checkBox");
+               const wxString& name = wxPyCheckBoxNameStr);
     %name(wxPreCheckBox)wxCheckBox();
 
     bool Create(wxWindow* parent, wxWindowID id, const wxString& label,
@@ -304,7 +332,7 @@ public:
                const wxSize& size = wxDefaultSize,
                long style = 0,
                const wxValidator& val = wxDefaultValidator,
-               char* name = "checkBox");
+               const wxString& name = wxPyCheckBoxNameStr);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreCheckBox:val._setOORInfo(val)"
@@ -323,7 +351,7 @@ public:
              int LCOUNT=0, wxString* choices=NULL,
              long style = 0,
              const wxValidator& validator = wxDefaultValidator,
-             char* name = "choice");
+             const wxString& name = wxPyChoiceNameStr);
     %name(wxPreChoice)wxChoice();
 
     bool Create(wxWindow *parent, wxWindowID id,
@@ -332,7 +360,7 @@ public:
              int LCOUNT=0, wxString* choices=NULL,
              long style = 0,
              const wxValidator& validator = wxDefaultValidator,
-             char* name = "choice");
+             const wxString& name = wxPyChoiceNameStr);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreChoice:val._setOORInfo(val)"
@@ -360,22 +388,24 @@ public:
 class wxComboBox : public wxControl
 {
 public:
-    wxComboBox(wxWindow* parent, wxWindowID id, char* value = "",
+    wxComboBox(wxWindow* parent, wxWindowID id,
+               const wxString& value = wxPyEmptyString,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                int LCOUNT=0, wxString* choices=NULL,
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
-               char* name = "comboBox");
+               const wxString& name = wxPyComboBoxNameStr);
     %name(wxPreComboBox)wxComboBox();
 
-    bool Create(wxWindow* parent, wxWindowID id, char* value = "",
-               const wxPoint& pos = wxDefaultPosition,
-               const wxSize& size = wxDefaultSize,
-               int LCOUNT=0, wxString* choices=NULL,
-               long style = 0,
-               const wxValidator& validator = wxDefaultValidator,
-               char* name = "comboBox");
+    bool Create(wxWindow* parent, wxWindowID id,
+                const wxString& value = wxPyEmptyString,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                int LCOUNT=0, wxString* choices=NULL,
+                long style = 0,
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = wxPyComboBoxNameStr);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreComboBox:val._setOORInfo(val)"
@@ -451,22 +481,24 @@ public:
 
 class wxComboBox : public wxChoice {
 public:
-    wxComboBox(wxWindow* parent, wxWindowID id, char* value = "",
+    wxComboBox(wxWindow* parent, wxWindowID id,
+               const wxString& value = wxPyEmptyString,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                int LCOUNT=0, wxString* choices=NULL,
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
-               char* name = "comboBox");
+               const wxString& name = wxPyComboBoxNameStr);
     %name(wxPreComboBox)wxComboBox();
 
-    bool Create(wxWindow* parent, wxWindowID id, char* value = "",
+    bool Create(wxWindow* parent, wxWindowID id,
+               const wxString& value = wxPyEmptyString,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                int LCOUNT=0, wxString* choices=NULL,
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
-               char* name = "comboBox");
+               const wxString& name = wxPyComboBoxNameStr);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreComboBox:val._setOORInfo(val)"
@@ -498,7 +530,7 @@ public:
             const wxSize& size = wxDefaultSize,
             long style = wxGA_HORIZONTAL,
             const wxValidator& validator = wxDefaultValidator,
-            char* name = "gauge");
+            const wxString& name = wxPyGaugeNameStr);
     %name(wxPreGauge)wxGauge();
 
     bool Create(wxWindow* parent, wxWindowID id, int range,
@@ -506,7 +538,7 @@ public:
             const wxSize& size = wxDefaultSize,
             long style = wxGA_HORIZONTAL,
             const wxValidator& validator = wxDefaultValidator,
-            char* name = "gauge");
+            const wxString& name = wxPyGaugeNameStr);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreGauge:val._setOORInfo(val)"
@@ -529,14 +561,14 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                char* name = "staticBox");
+                const wxString& name = wxPyStaticBoxNameStr);
     %name(wxPreStaticBox)wxStaticBox();
 
     bool Create(wxWindow* parent, wxWindowID id, const wxString& label,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                char* name = "staticBox");
+                const wxString& name = wxPyStaticBoxNameStr);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreStaticBox:val._setOORInfo(val)"
@@ -552,14 +584,14 @@ public:
                   const wxPoint &pos = wxDefaultPosition,
                   const wxSize &size = wxDefaultSize,
                   long style = wxLI_HORIZONTAL,
-                  const char* name = "staticLine" );
+                  const wxString& name = wxPyStaticTextNameStr);
     %name(wxPreStaticLine)wxStaticLine();
 
     bool Create( wxWindow *parent, wxWindowID id,
                   const wxPoint &pos = wxDefaultPosition,
                   const wxSize &size = wxDefaultSize,
                   long style = wxLI_HORIZONTAL,
-                  const char* name = "staticLine" );
+                  const wxString& name = wxPyStaticTextNameStr);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreStaticLine:val._setOORInfo(val)"
@@ -574,14 +606,14 @@ public:
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = 0,
-                 char* name = "staticText");
+                 const wxString& name = wxPyStaticTextNameStr);
     %name(wxPreStaticText)wxStaticText();
 
     bool Create(wxWindow* parent, wxWindowID id, const wxString& label,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = 0,
-                 char* name = "staticText");
+                 const wxString& name = wxPyStaticTextNameStr);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreStaticText:val._setOORInfo(val)"
@@ -600,7 +632,7 @@ public:
               int LCOUNT, wxString* choices = NULL,
               long style = 0,
               const wxValidator& validator = wxDefaultValidator,
-              char* name = "listBox");
+              const wxString& name = wxPyListBoxNameStr);
     %name(wxPreListBox)wxListBox();
 
     bool Create(wxWindow* parent, wxWindowID id,
@@ -609,7 +641,7 @@ public:
               int LCOUNT, wxString* choices = NULL,
               long style = 0,
               const wxValidator& validator = wxDefaultValidator,
-              char* name = "listBox");
+              const wxString& name = wxPyListBoxNameStr);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreListBox:val._setOORInfo(val)"
@@ -655,7 +687,7 @@ public:
                    wxString* choices = NULL,
                    long style = 0,
                    const wxValidator& validator = wxDefaultValidator,
-                   char* name = "listBox");
+                   const wxString& name = wxPyListBoxNameStr);
     %name(wxPreCheckListBox)wxCheckListBox();
 
     bool Create(wxWindow *parent, wxWindowID id,
@@ -665,7 +697,7 @@ public:
                    wxString* choices = NULL,
                    long style = 0,
                    const wxValidator& validator = wxDefaultValidator,
-                   char* name = "listBox");
+                   const wxString& name = wxPyListBoxNameStr);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreCheckListBox:val._setOORInfo(val)"
@@ -720,20 +752,22 @@ public:
 
 class wxTextCtrl : public wxControl {
 public:
-    wxTextCtrl(wxWindow* parent, wxWindowID id, char* value = "",
+    wxTextCtrl(wxWindow* parent, wxWindowID id,
+               const wxString& value = wxPyEmptyString,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
-               char* name = "text");
+               const wxString& name = wxPyTextCtrlNameStr);
     %name(wxPreTextCtrl)wxTextCtrl();
 
-    bool Create(wxWindow* parent, wxWindowID id, char* value = "",
+    bool Create(wxWindow* parent, wxWindowID id,
+               const wxString& value = wxPyEmptyString,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = 0,
                const wxValidator& validator = wxDefaultValidator,
-               char* name = "text");
+               const wxString& name = wxPyTextCtrlNameStr);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreTextCtrl:val._setOORInfo(val)"
@@ -761,7 +795,7 @@ public:
 
     // load/save the controls contents from/to the file
     bool LoadFile(const wxString& file);
-    bool SaveFile(const wxString& file = wxEmptyString);
+    bool SaveFile(const wxString& file = wxPyEmptyString);
 
     // clears the dirty flag
     void DiscardEdits();
@@ -842,7 +876,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxSB_HORIZONTAL,
                 const wxValidator& validator = wxDefaultValidator,
-                char* name = "scrollBar");
+                const wxString& name = wxPyScrollBarNameStr);
     %name(wxPreScrollBar)wxScrollBar();
 
     bool Create(wxWindow* parent, wxWindowID id = -1,
@@ -850,7 +884,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxSB_HORIZONTAL,
                 const wxValidator& validator = wxDefaultValidator,
-                char* name = "scrollBar");
+                const wxString& name = wxPyScrollBarNameStr);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreScrollBar:val._setOORInfo(val)"
@@ -877,14 +911,14 @@ public:
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = wxSP_HORIZONTAL,
-                 char* name = "spinButton");
+                 const wxString& name = wxPySPIN_BUTTON_NAME);
     %name(wxPreSpinButton)wxSpinButton();
 
     bool Create(wxWindow* parent, wxWindowID id = -1,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = wxSP_HORIZONTAL,
-                 char* name = "spinButton");
+                 const wxString& name = wxPySPIN_BUTTON_NAME);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreSpinButton:val._setOORInfo(val)"
@@ -905,7 +939,7 @@ public:
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
-                   char* name = "staticBitmap");
+                   const wxString& name = wxPyStaticBitmapNameStr);
     %name(wxPreStaticBitmap)wxStaticBitmap();
 
     bool Create(wxWindow* parent, wxWindowID id,
@@ -913,7 +947,7 @@ public:
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
-                   char* name = "staticBitmap");
+                   const wxString& name = wxPyStaticBitmapNameStr);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreStaticBitmap:val._setOORInfo(val)"
@@ -935,7 +969,7 @@ public:
                int majorDimension = 0,
                long style = wxRA_HORIZONTAL,
                const wxValidator& validator = wxDefaultValidator,
-               char* name = "radioBox");
+               const wxString& name = wxPyRadioBoxNameStr);
     %name(wxPreRadioBox)wxRadioBox();
 
     bool Create(wxWindow* parent, wxWindowID id,
@@ -946,7 +980,7 @@ public:
                int majorDimension = 0,
                long style = wxRA_HORIZONTAL,
                const wxValidator& validator = wxDefaultValidator,
-               char* name = "radioBox");
+               const wxString& name = wxPyRadioBoxNameStr);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreRadioBox:val._setOORInfo(val)"
@@ -991,7 +1025,7 @@ public:
                   const wxSize& size = wxDefaultSize,
                   long style = 0,
                   const wxValidator& validator = wxDefaultValidator,
-                  char* name = "radioButton");
+                  const wxString& name = wxPyRadioButtonNameStr);
     %name(wxPreRadioButton)wxRadioButton();
 
     bool Create(wxWindow* parent, wxWindowID id,
@@ -1000,7 +1034,7 @@ public:
                   const wxSize& size = wxDefaultSize,
                   long style = 0,
                   const wxValidator& validator = wxDefaultValidator,
-                  char* name = "radioButton");
+                  const wxString& name = wxPyRadioButtonNameStr);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreRadioButton:val._setOORInfo(val)"
@@ -1019,7 +1053,7 @@ public:
              const wxSize& size = wxDefaultSize,
              long style = wxSL_HORIZONTAL,
              const wxValidator& validator = wxDefaultValidator,
-             char* name = "slider");
+             const wxString& name = wxPySliderNameStr);
     %name(wxPreSlider)wxSlider();
 
     bool Create(wxWindow* parent, wxWindowID id,
@@ -1028,7 +1062,7 @@ public:
              const wxSize& size = wxDefaultSize,
              long style = wxSL_HORIZONTAL,
              const wxValidator& validator = wxDefaultValidator,
-             char* name = "slider");
+             const wxString& name = wxPySliderNameStr);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreSlider:val._setOORInfo(val)"
@@ -1061,22 +1095,22 @@ class wxSpinCtrl : public wxSpinButton {
 public:
     wxSpinCtrl(wxWindow *parent,
                wxWindowID id = -1,
-               const char* value = "",
+               const wxString& value = wxPyEmptyString,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = wxSP_ARROW_KEYS,
                int min = 0, int max = 100, int initial = 0,
-               const char* name = "wxSpinCtrl");
+               const wxString& name = wxPySpinCtrlNameStr);
     %name(wxPreSpinCtrl)wxSpinCtrl();
 
     bool Create(wxWindow *parent,
                wxWindowID id = -1,
-               const char* value = "",
+               const wxString& value = wxPyEmptyString,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = wxSP_ARROW_KEYS,
                int min = 0, int max = 100, int initial = 0,
-               const char* name = "wxSpinCtrl");
+               const wxString& name = wxPySpinCtrlNameStr);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreSpinCtrl:val._setOORInfo(val)"
@@ -1104,7 +1138,7 @@ public:
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
                    const wxValidator& validator = wxDefaultValidator,
-                   const char* name = "toggle");
+                   const wxString& name = wxPyCheckBoxNameStr);
     %name(wxPreToggleButton)wxToggleButton();
 
     bool Create(wxWindow *parent,
@@ -1114,7 +1148,7 @@ public:
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
                    const wxValidator& validator = wxDefaultValidator,
-                   const char* name = "toggle");
+                   const wxString& name = wxPyCheckBoxNameStr);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreToggleButton:val._setOORInfo(val)"

@@ -84,6 +84,9 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     }
     return target;
 }
+
+    // Put some wx default wxChar* values into wxStrings.
+    static const wxString wxPyEmptyString(wxT(""));
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -125,8 +128,8 @@ static PyObject *_wrap_new_wxDllWidget(PyObject *self, PyObject *args, PyObject 
     wxDllWidget * _result;
     wxWindow * _arg0;
     wxWindowID  _arg1 = (wxWindowID ) -1;
-    wxString * _arg2 = (wxString *) &wxEmptyString;
-    wxString * _arg3 = (wxString *) &wxEmptyString;
+    wxString * _arg2 = (wxString *) &wxPyEmptyString;
+    wxString * _arg3 = (wxString *) &wxPyEmptyString;
     wxPoint * _arg4 = (wxPoint *) &wxDefaultPosition;
     wxSize * _arg5 = (wxSize *) &wxDefaultSize;
     long  _arg6 = (long ) 0;
@@ -232,7 +235,7 @@ static PyObject *_wrap_wxDllWidget_SendCommand(PyObject *self, PyObject *args, P
     int  _result;
     wxDllWidget * _arg0;
     int  _arg1;
-    wxString * _arg2 = (wxString *) &wxEmptyString;
+    wxString * _arg2 = (wxString *) &wxPyEmptyString;
     PyObject * _argo0 = 0;
     PyObject * _obj2 = 0;
     char *_kwnames[] = { "self","cmd","param", NULL };

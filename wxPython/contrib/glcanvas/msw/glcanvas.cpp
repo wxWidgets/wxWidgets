@@ -89,6 +89,10 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     }
     return target;
 }
+
+    // Put some wx default wxChar* values into wxStrings.
+    static const wxString wxPyGLCanvasNameStr(wxT("GLCanvas"));
+    static const wxString wxPyEmptyString(wxT(""));
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -321,7 +325,7 @@ static PyObject *_wrap_new_wxGLCanvas(PyObject *self, PyObject *args, PyObject *
     wxPoint * _arg2 = (wxPoint *) &wxDefaultPosition;
     wxSize * _arg3 = (wxSize *) &wxDefaultSize;
     long  _arg4 = (long ) 0;
-    char * _arg5 = (char *) "GLCanvas";
+    wxString * _arg5 = (wxString *) &wxPyGLCanvasNameStr;
     int * _arg6 = (int *) NULL;
     wxPalette * _arg7 = (wxPalette *) &wxNullPalette;
     PyObject * _argo0 = 0;
@@ -329,6 +333,7 @@ static PyObject *_wrap_new_wxGLCanvas(PyObject *self, PyObject *args, PyObject *
     PyObject * _obj2 = 0;
     wxSize  temp0;
     PyObject * _obj3 = 0;
+    PyObject * _obj5 = 0;
     int * temp1;
     PyObject * _obj6 = 0;
     PyObject * _argo7 = 0;
@@ -336,7 +341,7 @@ static PyObject *_wrap_new_wxGLCanvas(PyObject *self, PyObject *args, PyObject *
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|iOOlsOO:new_wxGLCanvas",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_arg4,&_arg5,&_obj6,&_argo7)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|iOOlOOO:new_wxGLCanvas",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_arg4,&_obj5,&_obj6,&_argo7)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -355,6 +360,12 @@ static PyObject *_wrap_new_wxGLCanvas(PyObject *self, PyObject *args, PyObject *
 {
     _arg3 = &temp0;
     if (! wxSize_helper(_obj3, &_arg3))
+        return NULL;
+}
+    if (_obj5)
+{
+    _arg5 = wxString_in_helper(_obj5);
+    if (_arg5 == NULL)
         return NULL;
 }
     if (_obj6)
@@ -379,7 +390,7 @@ static PyObject *_wrap_new_wxGLCanvas(PyObject *self, PyObject *args, PyObject *
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxGLCanvas *)new_wxGLCanvas(_arg0,_arg1,*_arg2,*_arg3,_arg4,_arg5,_arg6,*_arg7);
+    _result = (wxGLCanvas *)new_wxGLCanvas(_arg0,_arg1,*_arg2,*_arg3,_arg4,*_arg5,_arg6,*_arg7);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -390,6 +401,10 @@ static PyObject *_wrap_new_wxGLCanvas(PyObject *self, PyObject *args, PyObject *
         Py_INCREF(Py_None);
         _resultobj = Py_None;
     }
+{
+    if (_obj5)
+        delete _arg5;
+}
 {
     delete [] _arg6;
 }
@@ -406,7 +421,7 @@ static PyObject *_wrap_new_wxGLCanvasWithContext(PyObject *self, PyObject *args,
     wxPoint * _arg3 = (wxPoint *) &wxDefaultPosition;
     wxSize * _arg4 = (wxSize *) &wxDefaultSize;
     long  _arg5 = (long ) 0;
-    char * _arg6 = (char *) "GLCanvas";
+    wxString * _arg6 = (wxString *) &wxPyGLCanvasNameStr;
     int * _arg7 = (int *) NULL;
     wxPalette * _arg8 = (wxPalette *) &wxNullPalette;
     PyObject * _argo0 = 0;
@@ -415,6 +430,7 @@ static PyObject *_wrap_new_wxGLCanvasWithContext(PyObject *self, PyObject *args,
     PyObject * _obj3 = 0;
     wxSize  temp0;
     PyObject * _obj4 = 0;
+    PyObject * _obj6 = 0;
     int * temp1;
     PyObject * _obj7 = 0;
     PyObject * _argo8 = 0;
@@ -422,7 +438,7 @@ static PyObject *_wrap_new_wxGLCanvasWithContext(PyObject *self, PyObject *args,
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|OiOOlsOO:new_wxGLCanvasWithContext",_kwnames,&_argo0,&_argo1,&_arg2,&_obj3,&_obj4,&_arg5,&_arg6,&_obj7,&_argo8)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|OiOOlOOO:new_wxGLCanvasWithContext",_kwnames,&_argo0,&_argo1,&_arg2,&_obj3,&_obj4,&_arg5,&_obj6,&_obj7,&_argo8)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -450,6 +466,12 @@ static PyObject *_wrap_new_wxGLCanvasWithContext(PyObject *self, PyObject *args,
     if (! wxSize_helper(_obj4, &_arg4))
         return NULL;
 }
+    if (_obj6)
+{
+    _arg6 = wxString_in_helper(_obj6);
+    if (_arg6 == NULL)
+        return NULL;
+}
     if (_obj7)
 {
     int i;
@@ -472,7 +494,7 @@ static PyObject *_wrap_new_wxGLCanvasWithContext(PyObject *self, PyObject *args,
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxGLCanvas *)new_wxGLCanvasWithContext(_arg0,_arg1,_arg2,*_arg3,*_arg4,_arg5,_arg6,_arg7,*_arg8);
+    _result = (wxGLCanvas *)new_wxGLCanvasWithContext(_arg0,_arg1,_arg2,*_arg3,*_arg4,_arg5,*_arg6,_arg7,*_arg8);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -483,6 +505,10 @@ static PyObject *_wrap_new_wxGLCanvasWithContext(PyObject *self, PyObject *args,
         Py_INCREF(Py_None);
         _resultobj = Py_None;
     }
+{
+    if (_obj6)
+        delete _arg6;
+}
 {
     delete [] _arg7;
 }

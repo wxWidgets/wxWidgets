@@ -92,6 +92,18 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     return target;
 }
 
+    // Put some wx default wxChar* values into wxStrings.
+    static const wxChar* wxHtmlWindowNameStr = wxT("htmlWindow");
+    DECLARE_DEF_STRING(HtmlWindowNameStr);
+
+    static const wxChar* wxHtmlPrintoutTitleStr = wxT("Printout");
+    DECLARE_DEF_STRING(HtmlPrintoutTitleStr);
+
+    static const wxChar* wxHtmlPrintingTitleStr = wxT("Printing");
+    DECLARE_DEF_STRING(HtmlPrintingTitleStr);
+
+    static const wxString wxPyEmptyString(wxT(""));
+
 class wxPyHtmlTagHandler : public wxHtmlTagHandler {
     DECLARE_DYNAMIC_CLASS(wxPyHtmlTagHandler);
 public:
@@ -347,7 +359,7 @@ static PyObject *_wrap_new_wxHtmlLinkInfo(PyObject *self, PyObject *args, PyObje
     PyObject * _resultobj;
     wxHtmlLinkInfo * _result;
     wxString * _arg0;
-    wxString * _arg1 = (wxString *) &wxEmptyString;
+    wxString * _arg1 = (wxString *) &wxPyEmptyString;
     PyObject * _obj0 = 0;
     PyObject * _obj1 = 0;
     char *_kwnames[] = { "href","target", NULL };
@@ -4047,17 +4059,18 @@ static PyObject *_wrap_new_wxHtmlWindow(PyObject *self, PyObject *args, PyObject
     wxPoint * _arg2 = (wxPoint *) &wxDefaultPosition;
     wxSize * _arg3 = (wxSize *) &wxDefaultSize;
     int  _arg4 = (int ) (wxHW_SCROLLBAR_AUTO);
-    char * _arg5 = (char *) "htmlWindow";
+    wxString * _arg5 = (wxString *) &wxPyHtmlWindowNameStr;
     PyObject * _argo0 = 0;
     wxPoint  temp;
     PyObject * _obj2 = 0;
     wxSize  temp0;
     PyObject * _obj3 = 0;
+    PyObject * _obj5 = 0;
     char *_kwnames[] = { "parent","id","pos","size","flags","name", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|iOOis:new_wxHtmlWindow",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_arg4,&_arg5)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|iOOiO:new_wxHtmlWindow",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_arg4,&_obj5)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4078,9 +4091,15 @@ static PyObject *_wrap_new_wxHtmlWindow(PyObject *self, PyObject *args, PyObject
     if (! wxSize_helper(_obj3, &_arg3))
         return NULL;
 }
+    if (_obj5)
+{
+    _arg5 = wxString_in_helper(_obj5);
+    if (_arg5 == NULL)
+        return NULL;
+}
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxPyHtmlWindow *)new_wxHtmlWindow(_arg0,_arg1,*_arg2,*_arg3,_arg4,_arg5);
+    _result = (wxPyHtmlWindow *)new_wxHtmlWindow(_arg0,_arg1,*_arg2,*_arg3,_arg4,*_arg5);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -4091,6 +4110,10 @@ static PyObject *_wrap_new_wxHtmlWindow(PyObject *self, PyObject *args, PyObject
         Py_INCREF(Py_None);
         _resultobj = Py_None;
     }
+{
+    if (_obj5)
+        delete _arg5;
+}
     return _resultobj;
 }
 
@@ -4130,17 +4153,18 @@ static PyObject *_wrap_wxHtmlWindow_Create(PyObject *self, PyObject *args, PyObj
     wxPoint * _arg3 = (wxPoint *) &wxDefaultPosition;
     wxSize * _arg4 = (wxSize *) &wxDefaultSize;
     int  _arg5 = (int ) (wxHW_SCROLLBAR_AUTO);
-    char * _arg6 = (char *) "htmlWindow";
+    wxString * _arg6 = (wxString *) &wxPyHtmlWindowNameStr;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
     wxPoint  temp;
     PyObject * _obj3 = 0;
     wxSize  temp0;
     PyObject * _obj4 = 0;
+    PyObject * _obj6 = 0;
     char *_kwnames[] = { "self","parent","id","pos","size","flags","name", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|iOOis:wxHtmlWindow_Create",_kwnames,&_argo0,&_argo1,&_arg2,&_obj3,&_obj4,&_arg5,&_arg6)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|iOOiO:wxHtmlWindow_Create",_kwnames,&_argo0,&_argo1,&_arg2,&_obj3,&_obj4,&_arg5,&_obj6)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4168,13 +4192,23 @@ static PyObject *_wrap_wxHtmlWindow_Create(PyObject *self, PyObject *args, PyObj
     if (! wxSize_helper(_obj4, &_arg4))
         return NULL;
 }
+    if (_obj6)
+{
+    _arg6 = wxString_in_helper(_obj6);
+    if (_arg6 == NULL)
+        return NULL;
+}
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxHtmlWindow_Create(_arg0,_arg1,_arg2,*_arg3,*_arg4,_arg5,_arg6);
+    _result = (bool )wxHtmlWindow_Create(_arg0,_arg1,_arg2,*_arg3,*_arg4,_arg5,*_arg6);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
+{
+    if (_obj6)
+        delete _arg6;
+}
     return _resultobj;
 }
 
@@ -4449,13 +4483,14 @@ static PyObject *_wrap_wxHtmlWindow_SetRelatedFrame(PyObject *self, PyObject *ar
     PyObject * _resultobj;
     wxPyHtmlWindow * _arg0;
     wxFrame * _arg1;
-    char * _arg2;
+    wxString * _arg2;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
+    PyObject * _obj2 = 0;
     char *_kwnames[] = { "self","frame","format", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOs:wxHtmlWindow_SetRelatedFrame",_kwnames,&_argo0,&_argo1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxHtmlWindow_SetRelatedFrame",_kwnames,&_argo0,&_argo1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4472,13 +4507,22 @@ static PyObject *_wrap_wxHtmlWindow_SetRelatedFrame(PyObject *self, PyObject *ar
         }
     }
 {
+    _arg2 = wxString_in_helper(_obj2);
+    if (_arg2 == NULL)
+        return NULL;
+}
+{
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxHtmlWindow_SetRelatedFrame(_arg0,_arg1,_arg2);
+    wxHtmlWindow_SetRelatedFrame(_arg0,_arg1,*_arg2);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
+{
+    if (_obj2)
+        delete _arg2;
+}
     return _resultobj;
 }
 
@@ -4673,7 +4717,7 @@ static PyObject *_wrap_wxHtmlWindow_ReadCustomization(PyObject *self, PyObject *
     PyObject * _resultobj;
     wxPyHtmlWindow * _arg0;
     wxConfigBase * _arg1;
-    wxString * _arg2 = (wxString *) &wxEmptyString;
+    wxString * _arg2 = (wxString *) &wxPyEmptyString;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
     PyObject * _obj2 = 0;
@@ -4722,7 +4766,7 @@ static PyObject *_wrap_wxHtmlWindow_WriteCustomization(PyObject *self, PyObject 
     PyObject * _resultobj;
     wxPyHtmlWindow * _arg0;
     wxConfigBase * _arg1;
-    wxString * _arg2 = (wxString *) &wxEmptyString;
+    wxString * _arg2 = (wxString *) &wxPyEmptyString;
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
     PyObject * _obj2 = 0;
@@ -5095,12 +5139,13 @@ static PyObject *_wrap_wxHtmlWindow_base_OnLinkClicked(PyObject *self, PyObject 
 static PyObject *_wrap_wxHtmlWindow_base_OnSetTitle(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyHtmlWindow * _arg0;
-    char * _arg1;
+    wxString * _arg1;
     PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
     char *_kwnames[] = { "self","title", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Os:wxHtmlWindow_base_OnSetTitle",_kwnames,&_argo0,&_arg1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxHtmlWindow_base_OnSetTitle",_kwnames,&_argo0,&_obj1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -5110,13 +5155,22 @@ static PyObject *_wrap_wxHtmlWindow_base_OnSetTitle(PyObject *self, PyObject *ar
         }
     }
 {
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
+        return NULL;
+}
+{
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxHtmlWindow_base_OnSetTitle(_arg0,_arg1);
+    wxHtmlWindow_base_OnSetTitle(_arg0,*_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
     return _resultobj;
 }
 
@@ -5342,7 +5396,7 @@ static PyObject *_wrap_wxHtmlDCRenderer_SetHtmlText(PyObject *self, PyObject *ar
     PyObject * _resultobj;
     wxHtmlDCRenderer * _arg0;
     wxString * _arg1;
-    wxString * _arg2 = (wxString *) &wxEmptyString;
+    wxString * _arg2 = (wxString *) &wxPyEmptyString;
     bool  _arg3 = (bool ) TRUE;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
@@ -5471,16 +5525,23 @@ static void *SwigwxHtmlPrintoutTowxObject(void *ptr) {
 static PyObject *_wrap_new_wxHtmlPrintout(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxHtmlPrintout * _result;
-    char * _arg0 = (char *) "Printout";
+    wxString * _arg0 = (wxString *) &wxPyHtmlPrintoutTitleStr;
+    PyObject * _obj0 = 0;
     char *_kwnames[] = { "title", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|s:new_wxHtmlPrintout",_kwnames,&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|O:new_wxHtmlPrintout",_kwnames,&_obj0)) 
         return NULL;
+    if (_obj0)
+{
+    _arg0 = wxString_in_helper(_obj0);
+    if (_arg0 == NULL)
+        return NULL;
+}
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxHtmlPrintout *)new_wxHtmlPrintout(_arg0);
+    _result = (wxHtmlPrintout *)new_wxHtmlPrintout(*_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -5491,6 +5552,10 @@ static PyObject *_wrap_new_wxHtmlPrintout(PyObject *self, PyObject *args, PyObje
         Py_INCREF(Py_None);
         _resultobj = Py_None;
     }
+{
+    if (_obj0)
+        delete _arg0;
+}
     return _resultobj;
 }
 
@@ -5499,7 +5564,7 @@ static PyObject *_wrap_wxHtmlPrintout_SetHtmlText(PyObject *self, PyObject *args
     PyObject * _resultobj;
     wxHtmlPrintout * _arg0;
     wxString * _arg1;
-    wxString * _arg2 = (wxString *) &wxEmptyString;
+    wxString * _arg2 = (wxString *) &wxPyEmptyString;
     bool  _arg3 = (bool ) TRUE;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
@@ -5712,15 +5777,22 @@ static void *SwigwxHtmlEasyPrintingTowxObject(void *ptr) {
 static PyObject *_wrap_new_wxHtmlEasyPrinting(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxHtmlEasyPrinting * _result;
-    char * _arg0 = (char *) "Printing";
+    wxString * _arg0 = (wxString *) &wxPyHtmlPrintingTitleStr;
     wxFrame * _arg1 = (wxFrame *) NULL;
+    PyObject * _obj0 = 0;
     PyObject * _argo1 = 0;
     char *_kwnames[] = { "name","parent_frame", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|sO:new_wxHtmlEasyPrinting",_kwnames,&_arg0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|OO:new_wxHtmlEasyPrinting",_kwnames,&_obj0,&_argo1)) 
         return NULL;
+    if (_obj0)
+{
+    _arg0 = wxString_in_helper(_obj0);
+    if (_arg0 == NULL)
+        return NULL;
+}
     if (_argo1) {
         if (_argo1 == Py_None) { _arg1 = NULL; }
         else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFrame_p")) {
@@ -5730,7 +5802,7 @@ static PyObject *_wrap_new_wxHtmlEasyPrinting(PyObject *self, PyObject *args, Py
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxHtmlEasyPrinting *)new_wxHtmlEasyPrinting(_arg0,_arg1);
+    _result = (wxHtmlEasyPrinting *)new_wxHtmlEasyPrinting(*_arg0,_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -5741,6 +5813,10 @@ static PyObject *_wrap_new_wxHtmlEasyPrinting(PyObject *self, PyObject *args, Py
         Py_INCREF(Py_None);
         _resultobj = Py_None;
     }
+{
+    if (_obj0)
+        delete _arg0;
+}
     return _resultobj;
 }
 
@@ -5816,7 +5892,7 @@ static PyObject *_wrap_wxHtmlEasyPrinting_PreviewText(PyObject *self, PyObject *
     PyObject * _resultobj;
     wxHtmlEasyPrinting * _arg0;
     wxString * _arg1;
-    wxString * _arg2 = (wxString *) &wxEmptyString;
+    wxString * _arg2 = (wxString *) &wxPyEmptyString;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
     PyObject * _obj2 = 0;
@@ -5906,7 +5982,7 @@ static PyObject *_wrap_wxHtmlEasyPrinting_PrintText(PyObject *self, PyObject *ar
     PyObject * _resultobj;
     wxHtmlEasyPrinting * _arg0;
     wxString * _arg1;
-    wxString * _arg2 = (wxString *) &wxEmptyString;
+    wxString * _arg2 = (wxString *) &wxPyEmptyString;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
     PyObject * _obj2 = 0;

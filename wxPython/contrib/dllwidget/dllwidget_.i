@@ -27,6 +27,13 @@
 %extern windows.i
 %extern _defs.i
 
+//----------------------------------------------------------------------
+
+%{
+    // Put some wx default wxChar* values into wxStrings.
+    static const wxString wxPyEmptyString(wxT(""));
+%}
+
 //---------------------------------------------------------------------------
 
 /*
@@ -82,8 +89,8 @@ class wxDllWidget : public wxPanel
 public:
     wxDllWidget(wxWindow *parent,
                 wxWindowID id = -1,
-                const wxString& dllName = wxEmptyString,
-                const wxString& className = wxEmptyString,
+                const wxString& dllName = wxPyEmptyString,
+                const wxString& className = wxPyEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0);
@@ -92,7 +99,7 @@ public:
 
     bool Ok();
 
-    int SendCommand(int cmd, const wxString& param = wxEmptyString);
+    int SendCommand(int cmd, const wxString& param = wxPyEmptyString);
     wxWindow* GetWidgetWindow();
 
     static wxString GetDllExt();

@@ -33,18 +33,27 @@
 %pragma(python) code = "import wx"
 
 
+//----------------------------------------------------------------------
+
+%{
+    // Put some wx default wxChar* values into wxStrings.
+    DECLARE_DEF_STRING(StatusLineNameStr);
+    DECLARE_DEF_STRING(ToolBarNameStr);
+    static const wxString wxPyEmptyString(wxT(""));
+%}
+
 //---------------------------------------------------------------------------
 
 class wxStatusBar : public wxWindow {
 public:
     wxStatusBar(wxWindow* parent, wxWindowID id = -1,
                 long style = wxST_SIZEGRIP,
-                char* name = "statusBar");
+                const wxString& name = wxPyStatusLineNameStr);
     %name(wxPreStatusBar)wxStatusBar();
 
     bool Create(wxWindow* parent, wxWindowID id,
                 long style = wxST_SIZEGRIP,
-                char* name = "statusBar");
+                const wxString& name = wxPyStatusLineNameStr);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreStatusBar:val._setOORInfo(val)"
@@ -89,8 +98,8 @@ public:
 //                        const wxBitmap& bitmap2 = wxNullBitmap,
 //                        bool toggle = FALSE,
 //                        wxObject *clientData = (wxObject *) NULL,
-//                        const wxString& shortHelpString = wxEmptyString,
-//                        const wxString& longHelpString = wxEmptyString);
+//                        const wxString& shortHelpString = wxPyEmptyString,
+//                        const wxString& longHelpString = wxPyEmptyString);
 //      wxToolBarToolBase(wxToolBarBase *tbar, wxControl *control);
 //      ~wxToolBarToolBase();
 
@@ -164,8 +173,8 @@ public:
                                    const wxBitmap& pushedBitmap = wxNullBitmap,
                                    int isToggle = FALSE,
                                    PyObject *clientData = NULL,
-                                   const wxString& shortHelpString = wxEmptyString,
-                                   const wxString& longHelpString = wxEmptyString) {
+                                   const wxString& shortHelpString = wxPyEmptyString,
+                                   const wxString& longHelpString = wxPyEmptyString) {
             wxPyUserData* udata = NULL;
             if (clientData)
                 udata = new wxPyUserData(clientData);
@@ -176,8 +185,8 @@ public:
         // This one is easier to use...
         wxToolBarToolBase *AddSimpleTool(int id,
                                          const wxBitmap& bitmap,
-                                         const wxString& shortHelpString = wxEmptyString,
-                                         const wxString& longHelpString = wxEmptyString,
+                                         const wxString& shortHelpString = wxPyEmptyString,
+                                         const wxString& longHelpString = wxPyEmptyString,
                                          int isToggle = FALSE) {
             return self->AddTool(id, bitmap, wxNullBitmap, isToggle, NULL,
                                  shortHelpString, longHelpString);
@@ -191,8 +200,8 @@ public:
                                       const wxBitmap& pushedBitmap = wxNullBitmap,
                                       int isToggle = FALSE,
                                       PyObject *clientData = NULL,
-                                      const wxString& shortHelpString = wxEmptyString,
-                                      const wxString& longHelpString = wxEmptyString) {
+                                      const wxString& shortHelpString = wxPyEmptyString,
+                                      const wxString& longHelpString = wxPyEmptyString) {
             wxPyUserData* udata = NULL;
             if (clientData)
                 udata = new wxPyUserData(clientData);
@@ -204,8 +213,8 @@ public:
         wxToolBarToolBase *InsertSimpleTool(size_t pos,
                                             int id,
                                             const wxBitmap& bitmap,
-                                            const wxString& shortHelpString = wxEmptyString,
-                                            const wxString& longHelpString = wxEmptyString,
+                                            const wxString& shortHelpString = wxPyEmptyString,
+                                            const wxString& longHelpString = wxPyEmptyString,
                                             int isToggle = FALSE) {
             return self->InsertTool(pos, id, bitmap, wxNullBitmap, isToggle, NULL,
                                     shortHelpString, longHelpString);
@@ -293,7 +302,7 @@ public:
               const wxPoint& pos = wxDefaultPosition,
               const wxSize& size = wxDefaultSize,
               long style = wxNO_BORDER | wxTB_HORIZONTAL,
-              const char* name = wxToolBarNameStr);
+              const wxString& name = wxPyToolBarNameStr);
     %name(wxPreToolBar)wxToolBar();
 
     bool Create(wxWindow *parent,
@@ -301,7 +310,7 @@ public:
               const wxPoint& pos = wxDefaultPosition,
               const wxSize& size = wxDefaultSize,
               long style = wxNO_BORDER | wxTB_HORIZONTAL,
-              const char* name = wxToolBarNameStr);
+              const wxString& name = wxPyToolBarNameStr);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreToolBar:val._setOORInfo(val)"
@@ -319,7 +328,7 @@ public:
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
                     long style = wxNO_BORDER | wxTB_HORIZONTAL,
-                    const char* name = wxToolBarNameStr);
+                    const wxString& name = wxPyToolBarNameStr);
     %name(wxPreToolBarSimple)wxToolBarSimple();
 
     bool Create(wxWindow *parent,
@@ -327,7 +336,7 @@ public:
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
                     long style = wxNO_BORDER | wxTB_HORIZONTAL,
-                    const char* name = wxToolBarNameStr);
+                    const wxString& name = wxPyToolBarNameStr);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreToolBarSimple:val._setOORInfo(val)"

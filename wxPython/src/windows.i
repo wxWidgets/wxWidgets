@@ -33,6 +33,14 @@
 %pragma(python) code = "import wx"
 
 
+//----------------------------------------------------------------------
+
+%{
+    // Put some wx default wxChar* values into wxStrings.
+    DECLARE_DEF_STRING(PanelNameStr);
+    static const wxString wxPyEmptyString(wxT(""));
+%}
+
 //---------------------------------------------------------------------------
 
 class wxEvtHandler : public wxObject {
@@ -174,14 +182,14 @@ public:
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize,
              long style = 0,
-             char* name = "panel");
+             const wxString& name = wxPyPanelNameStr);
     %name(wxPreWindow)wxWindow();
 
     bool Create(wxWindow* parent, const wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
-                char* name = "panel");
+                const wxString& name = wxPyPanelNameStr);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreWindow:val._setOORInfo(val)"
@@ -471,7 +479,7 @@ public:
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
             long style = wxTAB_TRAVERSAL,
-            const char* name = "panel");
+            const wxString& name = wxPyPanelNameStr);
     %name(wxPrePanel)wxPanel();
 
     bool Create(wxWindow* parent,
@@ -479,7 +487,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxTAB_TRAVERSAL,
-                const char* name = "panel");
+                const wxString& name = wxPyPanelNameStr);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPrePanel:val._setOORInfo(val)"
@@ -502,7 +510,7 @@ public:
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      long style = wxHSCROLL | wxVSCROLL,
-                     char* name = "scrolledWindow");
+                     const wxString& name = wxPyPanelNameStr);
     %name(wxPreScrolledWindow)wxScrolledWindow();
 
     bool Create(wxWindow* parent,
@@ -510,7 +518,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxHSCROLL | wxVSCROLL,
-                char* name = "scrolledWindow");
+                const wxString& name = wxPyPanelNameStr);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreScrolledWindow:val._setOORInfo(val)"
@@ -569,62 +577,62 @@ public:
 
 class wxMenu : public wxEvtHandler {
 public:
-    wxMenu(const wxString& title = wxEmptyString, long style = 0);
+    wxMenu(const wxString& title = wxPyEmptyString, long style = 0);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 
     void Append(int id, const wxString& item,
-                const wxString& helpString = wxEmptyString,
+                const wxString& helpString = wxPyEmptyString,
                 wxItemKind kind = wxItem_Normal);
     %name(AppendMenu)void Append(int id, const wxString& item, wxMenu *subMenu,
-                                 const wxString& helpString = wxEmptyString);
+                                 const wxString& helpString = wxPyEmptyString);
     %name(AppendItem)void Append(const wxMenuItem* item);
     void AppendCheckItem(int id,
                          const wxString& text,
-                         const wxString& help = wxEmptyString);
+                         const wxString& help = wxPyEmptyString);
     void AppendRadioItem(int id,
                          const wxString& text,
-                         const wxString& help = wxEmptyString);
+                         const wxString& help = wxPyEmptyString);
     void AppendSeparator();
 
 
     void Insert(size_t pos,
                 int id,
                 const wxString& text,
-                const wxString& help = wxEmptyString,
+                const wxString& help = wxPyEmptyString,
                 wxItemKind kind = wxItem_Normal);
     void InsertSeparator(size_t pos);
     void InsertCheckItem(size_t pos,
                          int id,
                          const wxString& text,
-                         const wxString& help = wxEmptyString);
+                         const wxString& help = wxPyEmptyString);
     void InsertRadioItem(size_t pos,
                          int id,
                          const wxString& text,
-                         const wxString& help = wxEmptyString);
+                         const wxString& help = wxPyEmptyString);
     %name(InsertMenu)void Insert(size_t pos,
                                  int id,
                                  const wxString& text,
                                  wxMenu *submenu,
-                                 const wxString& help = wxEmptyString);
+                                 const wxString& help = wxPyEmptyString);
     %name(InsertItem)bool Insert(size_t pos, wxMenuItem *item);
 
 
     void Prepend(int id,
                  const wxString& text,
-                 const wxString& help = wxEmptyString,
+                 const wxString& help = wxPyEmptyString,
                  wxItemKind kind = wxItem_Normal);
     void PrependSeparator();
     void PrependCheckItem(int id,
                           const wxString& text,
-                          const wxString& help = wxEmptyString);
+                          const wxString& help = wxPyEmptyString);
     void PrependRadioItem(int id,
                           const wxString& text,
-                          const wxString& help = wxEmptyString);
+                          const wxString& help = wxPyEmptyString);
     %name(PrependMenu)void Prepend(int id,
                                    const wxString& text,
                                    wxMenu *submenu,
-                                   const wxString& help = wxEmptyString);
+                                   const wxString& help = wxPyEmptyString);
     %name(PrependItem)void Prepend(wxMenuItem *item);
 
 
@@ -724,8 +732,8 @@ public:
 class wxMenuItem : public wxObject {
 public:
     wxMenuItem(wxMenu* parentMenu=NULL, int id=wxID_SEPARATOR,
-               const wxString& text = wxEmptyString,
-               const wxString& help = wxEmptyString,
+               const wxString& text = wxPyEmptyString,
+               const wxString& help = wxPyEmptyString,
                wxItemKind kind = wxItem_Normal,
                wxMenu* subMenu = NULL);
 

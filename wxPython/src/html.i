@@ -43,6 +43,22 @@
 %pragma(python) code = "import wx"
 
 
+//----------------------------------------------------------------------
+
+%{
+    // Put some wx default wxChar* values into wxStrings.
+    static const wxChar* wxHtmlWindowNameStr = wxT("htmlWindow");
+    DECLARE_DEF_STRING(HtmlWindowNameStr);
+
+    static const wxChar* wxHtmlPrintoutTitleStr = wxT("Printout");
+    DECLARE_DEF_STRING(HtmlPrintoutTitleStr);
+
+    static const wxChar* wxHtmlPrintingTitleStr = wxT("Printing");
+    DECLARE_DEF_STRING(HtmlPrintingTitleStr);
+
+    static const wxString wxPyEmptyString(wxT(""));
+%}
+
 //---------------------------------------------------------------------------
 
 enum {
@@ -98,7 +114,7 @@ enum wxHtmlURLType
 
 class wxHtmlLinkInfo : public wxObject {
 public:
-    wxHtmlLinkInfo(const wxString& href, const wxString& target = wxEmptyString);
+    wxHtmlLinkInfo(const wxString& href, const wxString& target = wxPyEmptyString);
     wxString GetHref();
     wxString GetTarget();
     wxMouseEvent* GetEvent();
@@ -531,14 +547,14 @@ public:
                  wxPoint& pos = wxDefaultPosition,
                  wxSize& size = wxDefaultSize,
                  int flags=wxHW_SCROLLBAR_AUTO,
-                 char* name = "htmlWindow");
+                 const wxString& name = wxPyHtmlWindowNameStr);
     %name(wxPreHtmlWindow)wxPyHtmlWindow();
 
     bool Create(wxWindow *parent, int id = -1,
                 wxPoint& pos = wxDefaultPosition,
                 wxSize& size = wxDefaultSize,
                 int flags=wxHW_SCROLLBAR_AUTO,
-                char* name = "htmlWindow");
+                const wxString& name = wxPyHtmlWindowNameStr);
 
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
@@ -553,7 +569,7 @@ public:
     wxString GetOpenedAnchor();
     wxString GetOpenedPageTitle();
 
-    void SetRelatedFrame(wxFrame* frame, const char* format);
+    void SetRelatedFrame(wxFrame* frame, const wxString& format);
     wxFrame* GetRelatedFrame();
     void SetRelatedStatusBar(int bar);
 
@@ -570,8 +586,8 @@ public:
 
     void SetTitle(const wxString& title);
     void SetBorders(int b);
-    void ReadCustomization(wxConfigBase *cfg, wxString path = wxEmptyString);
-    void WriteCustomization(wxConfigBase *cfg, wxString path = wxEmptyString);
+    void ReadCustomization(wxConfigBase *cfg, wxString path = wxPyEmptyString);
+    void WriteCustomization(wxConfigBase *cfg, wxString path = wxPyEmptyString);
     bool HistoryBack();
     bool HistoryForward();
     bool HistoryCanBack();
@@ -584,7 +600,7 @@ public:
     bool HasAnchor(const wxString& anchor);
 
     void base_OnLinkClicked(const wxHtmlLinkInfo& link);
-    void base_OnSetTitle(const char* title);
+    void base_OnSetTitle(const wxString& title);
     void base_OnCellMouseHover(wxHtmlCell *cell, wxCoord x, wxCoord y);
     void base_OnCellClicked(wxHtmlCell *cell,
                             wxCoord x, wxCoord y,
@@ -611,7 +627,7 @@ public:
     void SetDC(wxDC *dc, int maxwidth);
     void SetSize(int width, int height);
     void SetHtmlText(const wxString& html,
-                     const wxString& basepath = wxEmptyString,
+                     const wxString& basepath = wxPyEmptyString,
                      bool isdir = TRUE);
     int Render(int x, int y, int from = 0, int dont_render = FALSE);
     int GetTotalHeight();
@@ -628,11 +644,11 @@ enum {
 
 class wxHtmlPrintout : public wxPyPrintout {
 public:
-    wxHtmlPrintout(const char* title = "Printout");
+    wxHtmlPrintout(const wxString& title = wxPyHtmlPrintoutTitleStr);
     //~wxHtmlPrintout();   wxPrintPreview object takes ownership...
 
     void SetHtmlText(const wxString& html,
-                     const wxString &basepath = wxEmptyString,
+                     const wxString &basepath = wxPyEmptyString,
                      bool isdir = TRUE);
     void SetHtmlFile(const wxString &htmlfile);
     void SetHeader(const wxString& header, int pg = wxPAGE_ALL);
@@ -646,14 +662,14 @@ public:
 
 class wxHtmlEasyPrinting : public wxObject {
 public:
-    wxHtmlEasyPrinting(const char* name = "Printing",
+    wxHtmlEasyPrinting(const wxString& name = wxPyHtmlPrintingTitleStr,
                        wxFrame *parent_frame = NULL);
     ~wxHtmlEasyPrinting();
 
     void PreviewFile(const wxString &htmlfile);
-    void PreviewText(const wxString &htmltext, const wxString& basepath = wxEmptyString);
+    void PreviewText(const wxString &htmltext, const wxString& basepath = wxPyEmptyString);
     void PrintFile(const wxString &htmlfile);
-    void PrintText(const wxString &htmltext, const wxString& basepath = wxEmptyString);
+    void PrintText(const wxString &htmltext, const wxString& basepath = wxPyEmptyString);
     void PrinterSetup();
     void PageSetup();
     void SetHeader(const wxString& header, int pg = wxPAGE_ALL);

@@ -42,6 +42,14 @@
 
 %pragma(python) code = "import wx"
 
+//----------------------------------------------------------------------
+
+%{
+    // Put some wx default wxChar* values into wxStrings.
+    static const wxString wxPyGLCanvasNameStr(wxT("GLCanvas"));
+    static const wxString wxPyEmptyString(wxT(""));
+%}
+
 //---------------------------------------------------------------------------
 
 class wxPalette;
@@ -121,7 +129,7 @@ public:
     wxGLCanvas(wxWindow *parent, wxWindowID id = -1,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize, long style = 0,
-               const char* name = "GLCanvas",
+               const wxString& name = wxPyGLCanvasNameStr,
                int *attribList = NULL,
                const wxPalette& palette = wxNullPalette);
 
@@ -132,7 +140,7 @@ public:
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
                     long style = 0,
-                    const char* name = "GLCanvas",
+                    const wxString& name = wxPyGLCanvasNameStr,
                     int *attribList = NULL,
                     const wxPalette& palette = wxNullPalette );
 

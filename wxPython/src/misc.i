@@ -29,6 +29,11 @@
 
 
 //---------------------------------------------------------------------------
+%{
+    // Put some wx default wxChar* values into wxStrings.
+    static const wxString wxPyEmptyString(wxT(""));
+%}
+//---------------------------------------------------------------------------
 
 
 class wxObject {
@@ -345,7 +350,7 @@ long wxGetFreeMemory();
 void wxGetMousePosition(int* OUTPUT, int* OUTPUT);
 bool wxIsBusy();
 wxString wxNow();
-bool wxShell(const wxString& command = wxEmptyString);
+bool wxShell(const wxString& command = wxPyEmptyString);
 void wxStartTimer();
 int wxGetOsVersion(int *OUTPUT, int *OUTPUT);
 wxString wxGetOsDescription();
@@ -358,7 +363,7 @@ void wxEnableTopLevelWindows(bool enable);
 
 %inline %{
     wxString wxGetResource(const wxString& section, const wxString& entry,
-                          const wxString& file = wxEmptyString) {
+                           const wxString& file = wxPyEmptyString) {
         wxChar * retval;
         wxGetResource(section, entry, &retval, file);
         return retval;
@@ -374,7 +379,7 @@ wxString wxGetFullHostName();
 wxString wxGetUserId();
 wxString wxGetUserName();
 wxString wxGetHomeDir();
-wxString wxGetUserHome(const char* user = "");
+wxString wxGetUserHome(const wxString& user = wxPyEmptyString);
 
 
 // When wxApp gets the virtual method magic then enable this.

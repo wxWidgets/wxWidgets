@@ -50,40 +50,50 @@
 %import utils.i
 
 
+//----------------------------------------------------------------------
+
+%{
+    // Put some wx default wxChar* values into wxStrings.
+    DECLARE_DEF_STRING(FileSelectorPromptStr);
+    DECLARE_DEF_STRING(FileSelectorDefaultWildcardStr);
+
+    static const wxString wxPyEmptyString(wxT(""));
+%}
+
 //---------------------------------------------------------------------------
 // Dialog Functions
 
-wxString wxFileSelector(const wxChar* message = wxFileSelectorPromptStr,
-                        const wxChar* default_path = NULL,
-                        const wxChar* default_filename = NULL,
-                        const wxChar* default_extension = NULL,
-                        const wxChar* wildcard = wxFileSelectorDefaultWildcardStr,
+wxString wxFileSelector(const wxString& message = wxPyFileSelectorPromptStr,
+                        const wxString& default_path = wxPyEmptyString,
+                        const wxString& default_filename = wxPyEmptyString,
+                        const wxString& default_extension = wxPyEmptyString,
+                        const wxString& wildcard = wxPyFileSelectorDefaultWildcardStr,
                         int flags = 0,
                         wxWindow *parent = NULL,
                         int x = -1, int y = -1);
 
 // Ask for filename to load
-wxString wxLoadFileSelector(const wxChar *what,
-                            const wxChar *extension,
-                            const wxChar *default_name = NULL,
+wxString wxLoadFileSelector(const wxString& what,
+                            const wxString& extension,
+                            const wxString& default_name = wxPyEmptyString,
                             wxWindow *parent = NULL);
 
 // Ask for filename to save
-wxString wxSaveFileSelector(const wxChar *what,
-                            const wxChar *extension,
-                            const wxChar *default_name = NULL,
+wxString wxSaveFileSelector(const wxString& what,
+                            const wxString& extension,
+                            const wxString& default_name = wxPyEmptyString,
                             wxWindow *parent = NULL);
 
 wxString wxGetTextFromUser(const wxString& message,
-                           const wxString& caption = wxEmptyString,
-                           const wxString& default_value = wxEmptyString,
+                           const wxString& caption = wxPyEmptyString,
+                           const wxString& default_value = wxPyEmptyString,
                            wxWindow *parent = NULL,
                            int x = -1, int y = -1,
                            bool centre = TRUE);
 
 wxString wxGetPasswordFromUser(const wxString& message,
-                               const wxString& caption = wxEmptyString,
-                               const wxString& default_value = wxEmptyString,
+                               const wxString& caption = wxPyEmptyString,
+                               const wxString& default_value = wxPyEmptyString,
                                wxWindow *parent = NULL);
 
 
@@ -111,7 +121,7 @@ int wxGetSingleChoiceIndex(const wxString& message, const wxString& caption,
 
 
 int wxMessageBox(const wxString& message,
-                 const wxString& caption = wxEmptyString,
+                 const wxString& caption = wxPyEmptyString,
                  int style = wxOK | wxCENTRE,
                  wxWindow *parent = NULL,
                  int x = -1, int y = -1);
@@ -163,15 +173,15 @@ void wxFlushEvents();
 //---------------------------------------------------------------------------
 // Resource System
 
-bool wxResourceAddIdentifier(char *name, int value);
+bool wxResourceAddIdentifier(char* name, int value);
 void wxResourceClear(void);
-wxBitmap  wxResourceCreateBitmap(char *resource);
-wxIcon  wxResourceCreateIcon(char *resource);
-wxMenuBar * wxResourceCreateMenuBar(char *resource);
-int wxResourceGetIdentifier(char *name);
-bool wxResourceParseData(char *resource, wxResourceTable *table = NULL);
-bool wxResourceParseFile(char *filename, wxResourceTable *table = NULL);
-bool wxResourceParseString(char *resource, wxResourceTable *table = NULL);
+wxBitmap  wxResourceCreateBitmap(char* resource);
+wxIcon  wxResourceCreateIcon(char* resource);
+wxMenuBar * wxResourceCreateMenuBar(char* resource);
+int wxResourceGetIdentifier(char* name);
+bool wxResourceParseData(char* resource, wxResourceTable *table = NULL);
+bool wxResourceParseFile(char* filename, wxResourceTable *table = NULL);
+bool wxResourceParseString(char* resource, wxResourceTable *table = NULL);
 
 //---------------------------------------------------------------------------
 // System Settings
@@ -382,7 +392,7 @@ public:
     bool EnumerateFacenames(
         wxFontEncoding encoding = wxFONTENCODING_SYSTEM, // all
         bool fixedWidthOnly = FALSE);
-    bool EnumerateEncodings(const char* facename = "");
+    bool EnumerateEncodings(const wxString& facename = wxPyEmptyString);
 
     //wxArrayString* GetEncodings();
     //wxArrayString* GetFacenames();
@@ -606,8 +616,8 @@ public:
     static void RemoveTraceMask(const wxString& str);
     static void ClearTraceMasks();
 
-    static void SetTimestamp(const wxChar *ts);
-    static const wxChar *GetTimestamp();
+    static void SetTimestamp(const wxString& ts);
+    static const wxString& GetTimestamp();
 
     bool GetVerbose() const { return m_bVerbose; }
 
@@ -980,10 +990,10 @@ class wxFileTypeInfo
 public:
     // ctors
         // a normal item
-    wxFileTypeInfo(const char *mimeType,
-                   const char *openCmd,
-                   const char *printCmd,
-                   const char *desc);
+    wxFileTypeInfo(const char* mimeType,
+                   const char* openCmd,
+                   const char* printCmd,
+                   const char* desc);
 
 
         // the array elements correspond to the parameters of the ctor above in
@@ -1051,8 +1061,8 @@ public:
     {
     public:
         // ctors
-        MessageParameters(const wxString& filename=wxEmptyString,
-                          const wxString& mimetype=wxEmptyString);
+        MessageParameters(const wxString& filename=wxPyEmptyString,
+                          const wxString& mimetype=wxPyEmptyString);
 
         // accessors (called by GetOpenCommand)
             // filename
@@ -1161,7 +1171,7 @@ public:
     // get the command to open/execute the file of given type
     %addmethods {
         PyObject* GetOpenCommand(const wxString& filename,
-                                 const wxString& mimetype=wxEmptyString) {
+                                 const wxString& mimetype=wxPyEmptyString) {
             wxString str;
             if (self->GetOpenCommand(&str, wxFileType::MessageParameters(filename, mimetype))) {
 #if  wxUSE_UNICODE
@@ -1178,7 +1188,7 @@ public:
     // get the command to print the file of given type
     %addmethods {
         PyObject* GetPrintCommand(const wxString& filename,
-                                  const wxString& mimetype=wxEmptyString) {
+                                  const wxString& mimetype=wxPyEmptyString) {
             wxString str;
             if (self->GetPrintCommand(&str, wxFileType::MessageParameters(filename, mimetype))) {
 #if wxUSE_UNICODE
@@ -1195,7 +1205,7 @@ public:
     // Get all commands defined for this file type
     %addmethods {
         PyObject* GetAllCommands(const wxString& filename,
-                                 const wxString& mimetype=wxEmptyString) {
+                                 const wxString& mimetype=wxPyEmptyString) {
             wxArrayString verbs;
             wxArrayString commands;
             if (self->GetAllCommands(&verbs, &commands,
@@ -1218,7 +1228,7 @@ public:
     bool SetCommand(const wxString& cmd, const wxString& verb,
                     bool overwriteprompt = TRUE);
 
-    bool SetDefaultIcon(const wxString& cmd = wxEmptyString, int index = 0);
+    bool SetDefaultIcon(const wxString& cmd = wxPyEmptyString, int index = 0);
 
 
     // remove the association for this filetype from the system MIME database:
@@ -1262,7 +1272,7 @@ public:
     // use the extraDir parameter if you want to look for files in another
     // directory
     void Initialize(int mailcapStyle = wxMAILCAP_STANDARD,
-                    const wxString& extraDir = wxEmptyString);
+                    const wxString& extraDir = wxPyEmptyString);
 
     // and this function clears all the data from the manager
     void ClearData();

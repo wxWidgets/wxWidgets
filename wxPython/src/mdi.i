@@ -32,6 +32,13 @@
 
 //----------------------------------------------------------------------
 
+%{
+    // Put some wx default wxChar* values into wxStrings.
+    DECLARE_DEF_STRING(FrameNameStr);
+%}
+
+//----------------------------------------------------------------------
+
 const int IDM_WINDOWTILE  = 4001;
 const int IDM_WINDOWTILEHOR  = 4001;
 const int IDM_WINDOWCASCADE = 4002;
@@ -51,7 +58,7 @@ public:
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
-                     const char* name = "frame");
+                     const wxString& name = wxPyFrameNameStr);
     %name(wxPreMDIParentFrame)wxMDIParentFrame();
 
     bool Create(wxWindow *parent,
@@ -60,7 +67,7 @@ public:
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
-                     const char* name = "frame");
+                     const wxString& name = wxPyFrameNameStr);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreMDIParentFrame:val._setOORInfo(val)"
@@ -95,7 +102,7 @@ public:
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
                     long style = wxDEFAULT_FRAME_STYLE,
-                    const char* name = "frame");
+                    const wxString& name = wxPyFrameNameStr);
     %name(wxPreMDIChildFrame)wxMDIChildFrame();
 
     bool Create(wxMDIParentFrame* parent,
@@ -104,7 +111,7 @@ public:
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize,
                     long style = wxDEFAULT_FRAME_STYLE,
-                    const char* name = "frame");
+                    const wxString& name = wxPyFrameNameStr);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreMDIChildFrame:val._setOORInfo(val)"

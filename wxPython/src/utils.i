@@ -21,6 +21,14 @@
 %}
 
 //---------------------------------------------------------------------------
+%{
+    // Put some wx default wxChar* values into wxStrings.
+    static const wxChar* wxDateFormatStr = wxT("sashWindow");
+    DECLARE_DEF_STRING(DateFormatStr);
+    static const wxString wxPyEmptyString(wxT(""));
+
+%}
+//---------------------------------------------------------------------------
 
 %include typemaps.i
 %include my_typemaps.i
@@ -62,10 +70,10 @@ enum
 
 class wxConfigBase {
 public:
-//      wxConfigBase(const wxString& appName = wxEmptyString,       **** An ABC
-//                   const wxString& vendorName = wxEmptyString,
-//                   const wxString& localFilename = wxEmptyString,
-//                   const wxString& globalFilename = wxEmptyString,
+//      wxConfigBase(const wxString& appName = wxPyEmptyString,       **** An ABC
+//                   const wxString& vendorName = wxPyEmptyString,
+//                   const wxString& localFilename = wxPyEmptyString,
+//                   const wxString& globalFilename = wxPyEmptyString,
 //                   long style = 0);
     ~wxConfigBase();
 
@@ -150,7 +158,7 @@ public:
     bool IsExpandingEnvVars();
     bool IsRecordingDefaults();
 
-    wxString Read(const wxString& key, const wxString& defaultVal = wxEmptyString);
+    wxString Read(const wxString& key, const wxString& defaultVal = wxPyEmptyString);
 
     %addmethods {
         long ReadInt(const wxString& key, long defaultVal = 0) {
@@ -200,10 +208,10 @@ public:
 // This will be a wxRegConfig on Win32 and wxFileConfig otherwise.
 class wxConfig : public wxConfigBase {
 public:
-    wxConfig(const wxString& appName = wxEmptyString,
-             const wxString& vendorName = wxEmptyString,
-             const wxString& localFilename = wxEmptyString,
-             const wxString& globalFilename = wxEmptyString,
+    wxConfig(const wxString& appName = wxPyEmptyString,
+             const wxString& vendorName = wxPyEmptyString,
+             const wxString& localFilename = wxPyEmptyString,
+             const wxString& globalFilename = wxPyEmptyString,
              long style = 0);
     ~wxConfig();
 };
@@ -212,10 +220,10 @@ public:
 // Sometimes it's nice to explicitly have a wxFileConfig too.
 class wxFileConfig : public wxConfigBase {
 public:
-    wxFileConfig(const wxString& appName = wxEmptyString,
-                 const wxString& vendorName = wxEmptyString,
-                 const wxString& localFilename = wxEmptyString,
-                 const wxString& globalFilename = wxEmptyString,
+    wxFileConfig(const wxString& appName = wxPyEmptyString,
+                 const wxString& vendorName = wxPyEmptyString,
+                 const wxString& localFilename = wxPyEmptyString,
+                 const wxString& globalFilename = wxPyEmptyString,
                  long style = 0);
     ~wxFileConfig();
 };
@@ -771,32 +779,32 @@ public:
 
         // parse a string in RFC 822 format (found e.g. in mail headers and
         // having the form "Wed, 10 Feb 1999 19:07:07 +0100")
-    const char *ParseRfc822Date(const wxChar* date);
+    wxString ParseRfc822Date(const wxString& date);
 
         // parse a date/time in the given format (see strptime(3)), fill in
         // the missing (in the string) fields with the values of dateDef (by
         // default, they will not change if they had valid values or will
         // default to Today() otherwise)
-    const char *ParseFormat(const wxChar *date,
-                              const wxChar *format = "%c",
-                              const wxDateTime& dateDef = wxDefaultDateTime);
+    wxString ParseFormat(const wxString& date,
+                            const wxString& format = wxPyDateFormatStr,
+                            const wxDateTime& dateDef = wxDefaultDateTime);
 
         // parse a string containing the date/time in "free" format, this
         // function will try to make an educated guess at the string contents
-    const char *ParseDateTime(const wxChar *datetime);
+    wxString ParseDateTime(const wxString& datetime);
 
         // parse a string containing the date only in "free" format (less
         // flexible than ParseDateTime)
-    const char *ParseDate(const wxChar *date);
+    wxString ParseDate(const wxString& date);
 
         // parse a string containing the time only in "free" format
-    const char *ParseTime(const wxChar *time);
+    wxString ParseTime(const wxString& time);
 
         // this function accepts strftime()-like format string (default
         // argument corresponds to the preferred date and time representation
         // for the current locale) and returns the string containing the
         // resulting text representation
-    wxString Format(const wxChar *format = "%c",
+    wxString Format(const wxString& format = wxPyDateFormatStr,
                     const wxDateTime::TimeZone& tz = LOCAL) const;
 
         // preferred date representation for the current locale
@@ -946,7 +954,7 @@ public:
         // resulting text representation. Notice that only some of format
         // specifiers valid for wxDateTime are valid for wxTimeSpan: hours,
         // minutes and seconds make sense, but not "PM/AM" string for example.
-    wxString Format(const wxChar *format = "%c") const;
+    wxString Format(const wxString& format = wxPyDateFormatStr) const;
 
 //          // preferred date representation for the current locale
 //      wxString FormatDate() const;

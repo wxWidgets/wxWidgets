@@ -40,6 +40,18 @@
 
 
 //----------------------------------------------------------------------
+%{
+    // Put some wx default wxChar* values into wxStrings.
+    const wxChar* wxListCtrlNameStr = _T("wxListCtrl");
+    DECLARE_DEF_STRING(ListCtrlNameStr);
+
+    const wxChar* wx_TreeCtrlNameStr = _T("wxListCtrl");
+    DECLARE_DEF_STRING(_TreeCtrlNameStr);
+    DECLARE_DEF_STRING(DirDialogDefaultFolderStr);
+
+    static const wxString wxPyEmptyString(wxT(""));
+%}
+
 //----------------------------------------------------------------------
 
 enum {
@@ -365,7 +377,7 @@ public:
                  const wxSize& size,
                  long style,
                  const wxValidator& validator,
-                 char* name) :
+                 const wxString& name) :
         wxListCtrl(parent, id, pos, size, style, validator, name) {}
 
     bool Create(wxWindow* parent, wxWindowID id,
@@ -373,7 +385,7 @@ public:
                 const wxSize& size,
                 long style,
                 const wxValidator& validator,
-                char* name) {
+                const wxString& name) {
         return wxListCtrl::Create(parent, id, pos, size, style, validator, name);
     }
 
@@ -400,7 +412,7 @@ public:
                  const wxSize& size = wxDefaultSize,
                  long style = wxLC_ICON,
                  const wxValidator& validator = wxDefaultValidator,
-                 char* name = "listCtrl");
+                 const wxString& name = wxPyListCtrlNameStr);
     %name(wxPreListCtrl)wxPyListCtrl();
 
     bool Create(wxWindow* parent, wxWindowID id = -1,
@@ -408,7 +420,7 @@ public:
                  const wxSize& size = wxDefaultSize,
                  long style = wxLC_ICON,
                  const wxValidator& validator = wxDefaultValidator,
-                 char* name = "listCtrl");
+                 const wxString& name = wxPyListCtrlNameStr);
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
     %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxListCtrl)"
@@ -747,7 +759,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxLC_REPORT,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString &name = "listctrl" );
+                const wxString& name = wxPyListCtrlNameStr);
     %name(wxPreListView)wxListView();
 
     bool Create( wxWindow *parent,
@@ -756,7 +768,7 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = wxLC_REPORT,
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString &name = "listctrl" );
+                const wxString& name = wxPyListCtrlNameStr);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreListView:val._setOORInfo(val)"
@@ -1031,7 +1043,7 @@ public:
                  const wxSize& size,
                  long style,
                  const wxValidator& validator,
-                 char* name) :
+                 const wxString& name) :
         wxTreeCtrl(parent, id, pos, size, style, validator, name) {}
 
     bool Create(wxWindow *parent, wxWindowID id,
@@ -1039,7 +1051,7 @@ public:
                 const wxSize& size,
                 long style,
                 const wxValidator& validator,
-                char* name) {
+                const wxString& name) {
         return wxTreeCtrl::Create(parent, id, pos, size, style, validator, name);
     }
 
@@ -1078,7 +1090,7 @@ public:
                const wxSize& size = wxDefaultSize,
                long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT,
                const wxValidator& validator = wxDefaultValidator,
-               char* name = "wxTreeCtrl");
+               const wxString& name = wxPy_TreeCtrlNameStr);
     %name(wxPreTreeCtrl)wxPyTreeCtrl();
 
     bool Create(wxWindow *parent, wxWindowID id = -1,
@@ -1086,7 +1098,7 @@ public:
                const wxSize& size = wxDefaultSize,
                long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT,
                const wxValidator& validator = wxDefaultValidator,
-               char* name = "wxTreeCtrl");
+               const wxString& name = wxPy_TreeCtrlNameStr);
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
     %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxTreeCtrl)"
@@ -1333,26 +1345,26 @@ class wxGenericDirCtrl: public wxControl
 {
 public:
     wxGenericDirCtrl(wxWindow *parent, const wxWindowID id = -1,
-                     const char* dir = wxDirDialogDefaultFolderStr,
+                     const wxString& dir = wxPyDirDialogDefaultFolderStr,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      long style = wxDIRCTRL_3D_INTERNAL|wxSUNKEN_BORDER,
-                     const char* filter = wxEmptyString,
+                     const wxString& filter = wxPyEmptyString,
                      int defaultFilter = 0,
-                     const char* name = "dirCtrl" );
+                     const wxString& name = wxPy_TreeCtrlNameStr);
     %name(wxPreGenericDirCtrl)wxGenericDirCtrl();
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreGenericDirCtrl:val._setOORInfo(val)"
 
     bool Create(wxWindow *parent, const wxWindowID id = -1,
-                const char* dir = wxDirDialogDefaultFolderStr,
+                const wxString& dir = wxPyDirDialogDefaultFolderStr,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDIRCTRL_3D_INTERNAL|wxSUNKEN_BORDER,
-                const char* filter = wxEmptyString,
+                const wxString& filter = wxPyEmptyString,
                 int defaultFilter = 0,
-                const char* name = "dirCtrl" );
+                const wxString& name = wxPy_TreeCtrlNameStr);
 
 
     // Try to expand as much of the given path as possible.

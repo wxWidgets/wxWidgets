@@ -35,6 +35,11 @@
 
 %pragma(python) code = "import wx"
 
+//---------------------------------------------------------------------------
+%{
+    // Put some wx default wxChar* values into wxStrings.
+    static const wxString wxPyEmptyString(wxT(""));
+%}
 //----------------------------------------------------------------------
 
 
@@ -72,7 +77,7 @@ public:
     wxDataFormatId GetType() const;
 
     wxString GetId() const;
-    void SetId(const wxChar *format);
+    void SetId(const wxString& format);
 };
 
 %new wxDataFormat* wxCustomDataFormat(const wxString &id);
@@ -205,7 +210,7 @@ public:
 
 class wxTextDataObject : public wxDataObjectSimple {
 public:
-    wxTextDataObject(const wxString& text = wxEmptyString);
+    wxTextDataObject(const wxString& text = wxPyEmptyString);
 
     size_t GetTextLength();
     wxString GetText();
@@ -217,7 +222,7 @@ public:
 %{  // Create a new class for wxPython to use
 class wxPyTextDataObject : public wxTextDataObject {
 public:
-    wxPyTextDataObject(const wxString& text = wxEmptyString)
+    wxPyTextDataObject(const wxString& text = wxPyEmptyString)
         : wxTextDataObject(text) {}
 
     DEC_PYCALLBACK_SIZET_(GetTextLength);
@@ -236,7 +241,7 @@ IMP_PYCALLBACK__STRING(wxPyTextDataObject, wxTextDataObject, SetText);
 // Now define it for SWIG
 class wxPyTextDataObject : public wxTextDataObject {
 public:
-    wxPyTextDataObject(const wxString& text = wxEmptyString);
+    wxPyTextDataObject(const wxString& text = wxPyEmptyString);
     void _setCallbackInfo(PyObject* self, PyObject* _class);
     %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxPyTextDataObject)"
 };

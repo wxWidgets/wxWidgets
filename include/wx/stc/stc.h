@@ -817,7 +817,7 @@ public:
     wxStyledTextCtrl(wxWindow *parent, wxWindowID id,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize, long style = 0,
-                     const char* name = "styledtext");
+                     const wxString& name = wxPySTCNameStr);
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 
 #else

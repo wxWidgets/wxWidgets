@@ -35,6 +35,16 @@
 
 //----------------------------------------------------------------------
 
+%{
+    // Put some wx default wxChar* values into wxStrings.
+    DECLARE_DEF_STRING(FrameNameStr);
+    DECLARE_DEF_STRING(DialogNameStr);
+    DECLARE_DEF_STRING(StatusLineNameStr);
+    DECLARE_DEF_STRING(ToolBarNameStr);
+%}
+
+//----------------------------------------------------------------------
+
 enum {
     wxFULLSCREEN_NOMENUBAR,
     wxFULLSCREEN_NOTOOLBAR,
@@ -60,7 +70,7 @@ public:
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      long style = wxDEFAULT_FRAME_STYLE,
-                     const char* name = "frame");
+                     const wxString& name = wxPyFrameNameStr);
     %name(wxPreTopLevelWindow)wxTopLevelWindow();
 
     bool Create(wxWindow *parent,
@@ -69,7 +79,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE,
-                const char* name = "frame");
+                const wxString& name = wxPyFrameNameStr);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreTopLevelWindow:val._setOORInfo(val)"
@@ -115,14 +125,14 @@ public:
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
             long style = wxDEFAULT_FRAME_STYLE,
-            char* name = "frame");
+            const wxString& name = wxPyFrameNameStr);
     %name(wxPreFrame)wxFrame();
 
     bool Create(wxWindow* parent, const wxWindowID id, const wxString& title,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE,
-                char* name = "frame");
+                const wxString& name = wxPyFrameNameStr);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreFrame:val._setOORInfo(val)"
@@ -143,7 +153,7 @@ public:
     wxStatusBar* CreateStatusBar(int number = 1,
                                  long style = wxST_SIZEGRIP,
                                  wxWindowID id = -1,
-                                 char* name = "statusBar");
+                                 const wxString& name = wxPyStatusLineNameStr);
 
     // get the main status bar
     wxStatusBar *GetStatusBar();
@@ -159,7 +169,7 @@ public:
     // create main toolbar
     virtual wxToolBar* CreateToolBar(long style = wxNO_BORDER|wxTB_HORIZONTAL,
                                      wxWindowID id = -1,
-                                     const char* name = "toolBar");
+                                     const wxString& name = wxPyToolBarNameStr);
 
     // get/set the main toolbar
     virtual wxToolBar *GetToolBar() const { return m_frameToolBar; }
@@ -177,7 +187,7 @@ public:
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize,
              long style = wxDEFAULT_DIALOG_STYLE,
-             const char* name = "dialogBox");
+             const wxString& name = wxPyDialogNameStr);
     %name(wxPreDialog)wxDialog();
 
     bool Create(wxWindow* parent,
@@ -186,7 +196,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_DIALOG_STYLE,
-                const char* name = "dialogBox");
+                const wxString& name = wxPyDialogNameStr);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreDialog:val._setOORInfo(val)"
@@ -214,14 +224,14 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE,
-                char* name = "frame");
+                const wxString& name = wxPyFrameNameStr);
     %name(wxPreMiniFrame)wxMiniFrame();
 
     bool Create(wxWindow* parent, const wxWindowID id, const wxString& title,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxDEFAULT_FRAME_STYLE,
-                char* name = "frame");
+                const wxString& name = wxPyFrameNameStr);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreMiniFrame:val._setOORInfo(val)"
