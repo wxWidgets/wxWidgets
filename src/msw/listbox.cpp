@@ -50,7 +50,7 @@
 #ifndef __TWIN32__
     #if defined(__GNUWIN32__)
         #ifndef wxUSE_NORLANDER_HEADERS
-            #include <wx/msw/gnuwin32/extra.h>
+            #include "wx/msw/gnuwin32/extra.h"
         #endif
     #endif
 #endif

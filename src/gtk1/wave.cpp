@@ -13,7 +13,7 @@
 #pragma implementation "wave.h"
 #endif
 
-#include <wx/setup.h>
+#include "wx/setup.h"
 
 #if wxUSE_WAVE
 

@@ -30,7 +30,7 @@
 #include <time.h>
 
 #ifdef __WXMSW__
-#include <wx/msw/private.h>
+#include "wx/msw/private.h"
 #endif
 
 #include <string.h>

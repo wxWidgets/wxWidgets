@@ -23,8 +23,8 @@
 #if wxUSE_STREAMS
 
 #include <stdlib.h>
-#include <wx/stream.h>
-#include <wx/mstream.h>
+#include "wx/stream.h"
+#include "wx/mstream.h"
 
 // ----------------------------------------------------------------------------
 // wxMemoryInputStream

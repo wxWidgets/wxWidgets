@@ -35,7 +35,7 @@
 #include "wx/app.h"
 #endif
 
-#include <wx/log.h>
+#include "wx/log.h"
 #include <stdlib.h>
 
 #include "wx/ioswrap.h"

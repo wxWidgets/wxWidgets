@@ -30,11 +30,11 @@
 #include <memory.h>
 #endif
 
-#include <wx/defs.h>
-#include <wx/object.h>
-#include <wx/log.h>
-#include <wx/gsocket.h>
-#include <wx/sckaddr.h>
+#include "wx/defs.h"
+#include "wx/object.h"
+#include "wx/log.h"
+#include "wx/gsocket.h"
+#include "wx/sckaddr.h"
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_ABSTRACT_CLASS(wxSockAddress, wxObject)

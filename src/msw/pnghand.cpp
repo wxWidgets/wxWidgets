@@ -765,7 +765,7 @@ bool wxPNGReader::SaveXPM(wxChar *filename, wxChar *name)
     return TRUE;
 }
 
-#include <wx/msw/pnghand.h>
+#include "wx/msw/pnghand.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxPNGFileHandler, wxBitmapHandler)
 

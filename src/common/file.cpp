@@ -132,10 +132,10 @@
 #endif
 
 // wxWindows
-#include  <wx/string.h>
-#include  <wx/intl.h>
-#include  <wx/file.h>
-#include  <wx/log.h>
+#include  "wx/string.h"
+#include  "wx/intl.h"
+#include  "wx/file.h"
+#include  "wx/log.h"
 
 #ifndef MAX_PATH
     #define MAX_PATH 512

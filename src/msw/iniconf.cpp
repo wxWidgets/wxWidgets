@@ -21,18 +21,18 @@
 #endif
 
 #ifndef   WX_PRECOMP
-  #include  <wx/string.h>
-  #include  <wx/intl.h>
-  #include  <wx/event.h>
-  #include  <wx/app.h>
-  #include  <wx/utils.h>
+  #include  "wx/string.h"
+  #include  "wx/intl.h"
+  #include  "wx/event.h"
+  #include  "wx/app.h"
+  #include  "wx/utils.h"
 #endif  //WX_PRECOMP
 
-#include  <wx/dynarray.h>
-#include  <wx/log.h>
-#include  <wx/config.h>
+#include  "wx/dynarray.h"
+#include  "wx/log.h"
+#include  "wx/config.h"
 
-#include  <wx/msw/iniconf.h>
+#include  "wx/msw/iniconf.h"
 
 // _WINDOWS_ is defined when windows.h is included,
 // __WXMSW__ is defined for MS Windows compilation

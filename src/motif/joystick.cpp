@@ -13,7 +13,7 @@
 #pragma implementation "joystick.h"
 #endif
 
-#include <wx/joystick.h>
+#include "wx/joystick.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxJoystick, wxObject)
 

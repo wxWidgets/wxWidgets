@@ -25,7 +25,7 @@
 #if wxUSE_HTML
 
 #ifndef WXPRECOMP
-#include <wx/wx.h>
+#include "wx/wx.h"
 #endif
 
 #include "wx/html/helpfrm.h"

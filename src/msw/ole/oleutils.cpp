@@ -28,14 +28,14 @@
 #pragma hdrstop
 #endif
 
-#include  <wx/setup.h>
-#include  <wx/log.h>
+#include  "wx/setup.h"
+#include  "wx/log.h"
 
 #include <windows.h>
 
 // OLE
-#include  <wx/msw/ole/uuid.h>
-#include  <wx/msw/ole/oleutils.h>
+#include  "wx/msw/ole/uuid.h"
+#include  "wx/msw/ole/oleutils.h"
 
 #if defined(__VISUALC__) && (__VISUALC__ > 1000)
     #include  <docobj.h>

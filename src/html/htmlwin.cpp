@@ -12,7 +12,7 @@
 #pragma implementation
 #endif
 
-#include <wx/wxprec.h>
+#include "wx/wxprec.h"
 
 #include "wx/defs.h"
 #if wxUSE_HTML
@@ -22,7 +22,7 @@
 #endif
 
 #ifndef WXPRECOMP
-#include <wx/wx.h>
+#include "wx/wx.h"
 #endif
 
 #include "wx/html/htmlwin.h"
@@ -37,7 +37,7 @@
 
 
 
-#include <wx/arrimpl.cpp>
+#include "wx/arrimpl.cpp"
 WX_DEFINE_OBJARRAY(HtmlHistoryArray)
 
 

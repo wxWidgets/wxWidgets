@@ -31,7 +31,7 @@
 #include "wx/dcclient.h"
 #include "wx/choice.h"
 #include "wx/checkbox.h"
-#include <wx/intl.h>
+#include "wx/intl.h"
 #endif
 
 #include <string.h>

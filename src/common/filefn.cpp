@@ -34,7 +34,7 @@
 #endif
 
 #include "wx/utils.h"
-#include <wx/intl.h>
+#include "wx/intl.h"
 
 // there are just too many of those...
 #ifdef __VISUALC__

@@ -20,7 +20,7 @@
 #include <Xm/RowColumn.h>
 #include <Xm/ScrollBar.h>
 
-#include <wx/motif/private.h>
+#include "wx/motif/private.h"
 
 static void wxScrollBarCallback(Widget widget, XtPointer clientData,
                         XmScaleCallbackStruct *cbs);

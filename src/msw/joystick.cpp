@@ -35,7 +35,7 @@ typedef UINT MMRESULT;
 #ifndef __TWIN32__
 #ifdef __GNUWIN32__
 #ifndef wxUSE_NORLANDER_HEADERS
-#include <wx/msw/gnuwin32/extra.h>
+#include "wx/msw/gnuwin32/extra.h"
 #endif
 #endif
 #endif
@@ -45,8 +45,8 @@ typedef UINT MMRESULT;
 #define NO_JOYGETPOSEX
 #endif
 
-#include <wx/window.h>
-#include <wx/msw/joystick.h>
+#include "wx/window.h"
+#include "wx/msw/joystick.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxJoystick, wxObject)
 

@@ -22,7 +22,7 @@
 #include <Xm/RowColumn.h>
 #include <Xm/Scale.h>
 
-#include <wx/motif/private.h>
+#include "wx/motif/private.h"
 
 void wxSliderCallback (Widget widget, XtPointer clientData, XmScaleCallbackStruct * cbs);
 

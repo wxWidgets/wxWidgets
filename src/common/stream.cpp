@@ -27,9 +27,9 @@
 #if wxUSE_STREAMS
 
 #include <ctype.h>
-#include <wx/stream.h>
-#include <wx/datstrm.h>
-#include <wx/objstrm.h>
+#include "wx/stream.h"
+#include "wx/datstrm.h"
+#include "wx/objstrm.h"
 
 #define BUF_TEMP_SIZE 10000
 

@@ -24,7 +24,7 @@
 #include <Xm/Form.h>
 #include <Xm/Frame.h>
 
-#include <wx/motif/private.h>
+#include "wx/motif/private.h"
 
 void wxRadioBoxCallback (Widget w, XtPointer clientData,
                     XmToggleButtonCallbackStruct * cbs);

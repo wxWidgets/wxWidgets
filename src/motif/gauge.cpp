@@ -16,7 +16,7 @@
 #include "wx/gauge.h"
 
 #include <Xm/Xm.h>
-#include <wx/motif/private.h>
+#include "wx/motif/private.h"
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxGauge, wxControl)

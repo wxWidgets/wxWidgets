@@ -40,7 +40,7 @@ FORCE_LINK_ME(mod_image)
 
 
 WX_DECLARE_OBJARRAY(int, CoordArray);
-#include <wx/arrimpl.cpp> // this is a magic incantation which must be done!
+#include "wx/arrimpl.cpp" // this is a magic incantation which must be done!
 WX_DEFINE_OBJARRAY(CoordArray);
 
 

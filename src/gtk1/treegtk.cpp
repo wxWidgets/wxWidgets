@@ -25,7 +25,7 @@
 #endif
 
 #include "wx/gtk/treectrl.h"
-#include <wx/textctrl.h>
+#include "wx/textctrl.h"
 #include "wx/log.h"
 
 #include <gtk/gtk.h>

@@ -24,14 +24,14 @@
 #pragma hdrstop
 #endif
 
-#include  <wx/setup.h>
+#include  "wx/setup.h"
 
 #if wxUSE_DRAG_AND_DROP
 
 // standard headers
 #include  <rpc.h>                       // UUID related functions
 
-#include  <wx/msw/ole/uuid.h>
+#include  "wx/msw/ole/uuid.h"
 
 
 

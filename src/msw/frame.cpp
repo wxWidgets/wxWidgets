@@ -38,7 +38,7 @@
 #include "wx/log.h"
 
 #if wxUSE_NATIVE_STATUSBAR
-    #include <wx/msw/statbr95.h>
+    #include "wx/msw/statbr95.h"
 #endif
 
 extern wxWindowList wxModelessWindows;

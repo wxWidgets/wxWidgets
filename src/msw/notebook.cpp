@@ -22,16 +22,16 @@
 
 // wxWindows
 #ifndef WX_PRECOMP
-  #include  <wx/string.h>
+  #include  "wx/string.h"
 #endif  // WX_PRECOMP
 
-#include  <wx/log.h>
-#include  <wx/imaglist.h>
-#include  <wx/event.h>
-#include  <wx/control.h>
-#include  <wx/notebook.h>
+#include  "wx/log.h"
+#include  "wx/imaglist.h"
+#include  "wx/event.h"
+#include  "wx/control.h"
+#include  "wx/notebook.h"
 
-#include  <wx/msw/private.h>
+#include  "wx/msw/private.h"
 
 // Windows standard headers
 #ifndef   __WIN95__

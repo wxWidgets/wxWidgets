@@ -24,8 +24,8 @@
 #endif
 
 #include <stdio.h>
-#include <wx/wfstream.h>
-#include <wx/protocol/file.h>
+#include "wx/wfstream.h"
+#include "wx/protocol/file.h"
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxFileProto, wxProtocol)

@@ -17,7 +17,7 @@
 
 #include "wx/dialog.h"
 #include "wx/menu.h"
-#include <wx/intl.h>
+#include "wx/intl.h"
 
 #include "glib.h"
 #include "gdk/gdk.h"

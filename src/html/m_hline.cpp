@@ -11,7 +11,7 @@
 #pragma implementation
 #endif
 
-#include <wx/wxprec.h>
+#include "wx/wxprec.h"
 
 
 #include "wx/defs.h"
@@ -21,7 +21,7 @@
 #endif
 
 #ifndef WXPRECOMP
-#include <wx/wx.h>
+#include "wx/wx.h"
 #endif
 
 

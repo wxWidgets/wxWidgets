@@ -23,7 +23,7 @@
 #include <Xm/RowColumn.h>
 #include <Xm/Form.h>
 
-#include <wx/motif/private.h>
+#include "wx/motif/private.h"
 
 void wxRadioButtonCallback (Widget w, XtPointer clientData,
                             XmToggleButtonCallbackStruct * cbs);

@@ -33,13 +33,13 @@
 
 #include <windows.h>
 #include <string.h>
-#include <wx/msw/taskbar.h>
-#include <wx/msw/private.h>
+#include "wx/msw/taskbar.h"
+#include "wx/msw/private.h"
 
 #ifndef __TWIN32__
 #ifdef __GNUWIN32__
 #ifndef wxUSE_NORLANDER_HEADERS
-#include <wx/msw/gnuwin32/extra.h>
+#include "wx/msw/gnuwin32/extra.h"
 #endif
 #endif
 #endif

@@ -23,10 +23,10 @@
 #include <string.h>
 #include <ctype.h>
 
-#include <wx/string.h>
-#include <wx/list.h>
-#include <wx/utils.h>
-#include <wx/url.h>
+#include "wx/string.h"
+#include "wx/list.h"
+#include "wx/utils.h"
+#include "wx/url.h"
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_CLASS(wxProtoInfo, wxObject)

@@ -45,7 +45,7 @@
 #include "wx/msw/private.h"
 
 #if wxUSE_NATIVE_STATUSBAR
-    #include <wx/msw/statbr95.h>
+    #include "wx/msw/statbr95.h"
 #endif
 
 #include <string.h>

@@ -54,7 +54,7 @@
 
 #ifdef __WXMSW__
     #include <windows.h>
-    #include <wx/msw/private.h>
+    #include "wx/msw/private.h"
 
     #if !defined(__WIN32__)
         #include <print.h>
