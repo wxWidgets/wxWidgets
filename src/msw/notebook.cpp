@@ -274,10 +274,21 @@ bool wxNotebook::DeletePage(int nPage)
 {
   wxCHECK_MSG( IS_VALID_PAGE(nPage), FALSE, _T("notebook page out of range") );
 
+  if ( m_nSelection == nPage ) {
+      // advance selection backwards - the page being deleted shouldn't be left
+      // selected
+      AdvanceSelection(FALSE);
+  }
+
   TabCtrl_DeleteItem(m_hwnd, nPage);
 
   delete m_aPages[nPage];
   m_aPages.Remove(nPage);
+
+  if ( m_aPages.IsEmpty() ) {
+      // no selection if the notebook became empty
+      m_nSelection = -1;
+  }
 
   return TRUE;
 }
@@ -369,6 +380,11 @@ bool wxNotebook::InsertPage(int nPage,
 
   // this updates internal flag too - otherwise it will get out of sync
   pPage->Show(FALSE);
+
+  // FIXME this is ugly, I'm breaking my own rules... but needed to get display
+  //       right (why?)
+  wxSizeEvent event;
+  OnSize(event);
 
   return TRUE;
 }

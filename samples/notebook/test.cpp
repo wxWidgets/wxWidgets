@@ -162,6 +162,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_BUTTON(ID_DELETE_PAGE, MyFrame::OnDeletePage)
     EVT_BUTTON(ID_ADD_PAGE, MyFrame::OnAddPage)
     EVT_SIZE(MyFrame::OnSize)
+    EVT_IDLE(MyFrame::OnIdle)
 END_EVENT_TABLE()
 
 MyFrame::MyFrame(wxFrame* parent, const wxWindowID id, const wxString& title,
@@ -183,17 +184,17 @@ void MyFrame::OnAddPage(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnDeletePage(wxCommandEvent& WXUNUSED(event))
 {
-  m_notebook->DeletePage( m_notebook->GetPageCount()-1 );
+    m_notebook->DeletePage( m_notebook->GetPageCount()-1 );
 }
 
 void MyFrame::OnOK(wxCommandEvent& WXUNUSED(event) )
 {
-    this->Destroy();
+    Destroy();
 }
 
 void MyFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event) )
 {
-    this->Destroy();
+    Destroy();
 }
 
 void MyFrame::Init(void)
@@ -229,3 +230,21 @@ void MyFrame::OnSize(wxSizeEvent& event)
     m_panel->Layout();
 }
 
+void MyFrame::OnIdle(wxIdleEvent& WXUNUSED(event))
+{
+    static int s_nPages = -1;
+    static int s_nSel = -1;
+
+    int nPages = m_notebook->GetPageCount();
+    int nSel = m_notebook->GetSelection();
+    if ( nPages != s_nPages || nSel != s_nSel )
+    {
+        s_nPages = nPages;
+        s_nSel = nSel;
+
+        wxString title;
+        title.Printf("Notebook (%d pages, selection: %d)", nPages, nSel);
+
+        SetTitle(title);
+    }
+}

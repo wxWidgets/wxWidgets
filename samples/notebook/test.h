@@ -52,7 +52,10 @@ public:
     void OnAddPage(wxCommandEvent& event);
     void OnDeletePage(wxCommandEvent& event);
     void OnSize(wxSizeEvent& event);
-    void Init(void);
+    void OnIdle(wxIdleEvent& event);
+
+    void Init();
+
 protected:
     wxNotebook*     m_notebook;
     wxPanel*        m_panel; // Panel containing notebook and OK/Cancel/Help
