@@ -163,7 +163,7 @@ To cross compile the windows library, do
 (or whatever you called it)
 Now run configure. There are two ways to do this
 -> ../configure --host=i586-mingw32 --build=i586-linux --with-mingw \
-   --enable-dnd=no
+   --enable-dnd=no --without-odbc
 where --build= should read whatever platform you're building on. Configure
 will notice that build and host platforms differ, and automatically prepend
 i586-mingw32- to gcc, ar, ld, etc (make sure they're in the PATH!).
@@ -178,6 +178,9 @@ Drag'n'drop is disabled because mingw32 lacks (AFAIK) OLE headers.
 
 [ Update: some new mingw32 versions now have a new set of windows header
 files, which apparently can handle ole. Untested at the moment ]
+
+ODBC files don't compile as of 13.10.99 - may be this will be fixed by the
+moment you're reading these lines.
 
 Configure will conclude that shared libraries are out of the question and
 opt for a static one. I haven't looked into DLL creation yet.

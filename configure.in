@@ -1679,7 +1679,7 @@ dnl the name of the (libtool) library
 WX_LIBRARY="wx_${TOOLKIT_DIR}"
 
     dnl the sources, their dependenices and the headers
-    ALL_OBJECTS="\$(GUIOBJS) \$(COMMONOBJS) \$(GENERICOBJS) \$(UNIXOBJS) \$(HTMLOBJS) \$(JPEGOBJS) \$(PNGOBJS) \$(ZLIBOBJS)"
+    ALL_OBJECTS="\$(GUIOBJS) \$(COMMONOBJS) \$(GENERICOBJS) \$(UNIXOBJS) \$(HTMLOBJS) \$(JPEGOBJS) \$(PNGOBJS) \$(ZLIBOBJS) \$(IODBCOBJS)"
     ALL_DEPFILES="\$(GUIDEPS) \$(COMMONDEPS) \$(GENERICDEPS) \$(UNIXDEPS) \$(HTMLDEPS)"
     ALL_HEADERS="\$(GUIHEADERS) \$(HTML_HEADERS) \$(UNIX_HEADERS) \$(PROTOCOL_HEADERS) \$(GENERIC_HEADERS) \$(WX_HEADERS)"
 else
@@ -1945,6 +1945,8 @@ AC_CACHE_CHECK([for vsscanf], wx_cv_func_vsscanf,
 
 AC_LANG_RESTORE
 
+if test "$USE_UNIX" = 1; then
+
 dnl check for vfork() (even if it's the same as fork() in modern Unices)
 AC_CHECK_FUNCS(vfork)
 
@@ -1970,6 +1972,9 @@ dnl check for inet_addr, inet_aton, ...
 AC_CHECK_FUNCS(inet_addr)
 AC_CHECK_FUNCS(inet_aton)
 AC_CHECK_LIB(resolv, inet_aton)
+
+fi
+dnl Unix
 
 dnl ===========================================================================
 dnl Now we have all the info we need - use it!
@@ -2459,9 +2464,12 @@ dnl ----------------------------------------------------------------
 
 IODBC_C_SRC=""
 if test "$wxUSE_ODBC" = "yes" ; then
-  AC_DEFINE(wxUSE_ODBC)
-  WXODBCFLAG="-D_IODBC_"
-  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS db"
+    AC_DEFINE(wxUSE_ODBC)
+    WXODBCFLAG="-D_IODBC_"
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS db"
+    IODBCOBJS="\$(IODBC_OBJS)"
+else
+    IODBCOBJS=
 fi
 
 dnl ----------------------------------------------------------------
@@ -2879,6 +2887,7 @@ AC_SUBST(GENERICOBJS)
 AC_SUBST(GUIDEPS)
 AC_SUBST(COMMONDEPS)
 AC_SUBST(GENERICDEPS)
+AC_SUBST(IODBCOBJS)
 AC_SUBST(UNIXOBJS)
 AC_SUBST(UNIXDEPS)
 AC_SUBST(ALL_OBJECTS)
