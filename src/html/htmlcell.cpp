@@ -264,8 +264,17 @@ wxHtmlWordCell::wxHtmlWordCell(const wxString& word, wxDC& dc) : wxHtmlCell()
     m_Word = word;
     dc.GetTextExtent(m_Word, &m_Width, &m_Height, &m_Descent);
     SetCanLiveOnPagebreak(FALSE);
+    m_allowLinebreak = true;
 }
 
+void wxHtmlWordCell::SetPreviousWord(wxHtmlWordCell *cell)
+{
+    if ( cell && m_Parent == cell->m_Parent &&
+         !wxIsspace(cell->m_Word.Last()) && !wxIsspace(m_Word[0u]) )
+    {
+        m_allowLinebreak = false;
+    }
+}
 
 // Splits m_Word into up to three parts according to selection, returns
 // substring before, in and after selection and the points (in relative coords)
@@ -629,9 +638,10 @@ void wxHtmlContainerCell::Layout(int w)
     }
 
     wxHtmlCell *cell = m_Cells, *line = m_Cells;
+    wxHtmlCell *nextCell;
     long xpos = 0, ypos = m_IndentTop;
     int xdelta = 0, ybasicpos = 0, ydiff;
-    int s_width, s_indent;
+    int s_width, nextWordWidth, s_indent;
     int ysizeup = 0, ysizedown = 0;
     int MaxLineWidth = 0;
     int xcnt = 0;
@@ -686,13 +696,27 @@ void wxHtmlContainerCell::Layout(int w)
         if (cell->GetDescent() + ydiff > ysizedown) ysizedown = cell->GetDescent() + ydiff;
         if (ybasicpos + cell->GetDescent() < -ysizeup) ysizeup = - (ybasicpos + cell->GetDescent());
 
+        // layout nonbreakable run of cells:
         cell->SetPos(xpos, ybasicpos + cell->GetDescent());
         xpos += cell->GetWidth();
         cell = cell->GetNext();
         xcnt++;
-
+            
+        // compute length of the next word that would be added:
+        nextWordWidth = 0;
+        if (cell)
+        {
+            nextCell = cell;
+            do
+            {
+                nextWordWidth += nextCell->GetWidth();
+                nextCell = nextCell->GetNext();
+            } while (nextCell && !nextCell->IsLinebreakAllowed());
+        }
+        
         // force new line if occured:
-        if ((cell == NULL) || (xpos + cell->GetWidth() > s_width))
+        if ((cell == NULL) || 
+            (xpos + nextWordWidth > s_width && cell->IsLinebreakAllowed()))
         {
             if (xpos > MaxLineWidth) MaxLineWidth = xpos;
             if (ysizeup < 0) ysizeup = 0;

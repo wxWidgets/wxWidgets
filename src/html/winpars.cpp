@@ -54,6 +54,7 @@ wxHtmlWinParser::wxHtmlWinParser(wxHtmlWindow *wnd) : wxHtmlParser()
     m_InputEnc = wxFONTENCODING_ISO8859_1;
     m_OutputEnc = wxFONTENCODING_DEFAULT;
 #endif
+    m_lastWordCell = NULL;
 
     {
         int i, j, k, l, m;
@@ -170,6 +171,7 @@ void wxHtmlWinParser::InitParser(const wxString& source)
     m_ActualColor.Set(0, 0, 0);
     m_Align = wxHTML_ALIGN_LEFT;
     m_tmpLastWasSpace = FALSE;
+    m_lastWordCell = NULL;
 
     OpenContainer();
     OpenContainer();
@@ -278,9 +280,6 @@ void wxHtmlWinParser::AddText(const wxChar* txt)
         {
             temp[templen-1] = wxT(' ');
             temp[templen] = 0;
-#if 0 // VS - WHY was this here?!
-            if (templen == 1) continue;
-#endif
             templen = 0;
 #if !wxUSE_UNICODE
             if (m_EncConv)
@@ -294,6 +293,8 @@ void wxHtmlWinParser::AddText(const wxChar* txt)
             if (m_UseLink)
                 c->SetLink(m_Link);
             m_Container->InsertCell(c);
+            ((wxHtmlWordCell*)c)->SetPreviousWord(m_lastWordCell);
+            m_lastWordCell = (wxHtmlWordCell*)c;
             m_tmpLastWasSpace = TRUE;
         }
     }
@@ -313,6 +314,8 @@ void wxHtmlWinParser::AddText(const wxChar* txt)
         if (m_UseLink)
             c->SetLink(m_Link);
         m_Container->InsertCell(c);
+        ((wxHtmlWordCell*)c)->SetPreviousWord(m_lastWordCell);
+        m_lastWordCell = (wxHtmlWordCell*)c;
         m_tmpLastWasSpace = FALSE;
     }
 }
