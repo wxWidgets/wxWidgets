@@ -1,0 +1,370 @@
+#!/bin/bash
+# ---------------------------------------------------------------------------
+# Master build script for building all the installers and such on all the 
+# build machines in my lab, and then distributing the results as needed.
+# ---------------------------------------------------------------------------
+
+set -o errexit
+#set -o xtrace
+
+# ---------------------------------------------------------------------------
+# Some control variables...
+
+# the local spot that we put everything when done, before possibly copying 
+# to remote hosts
+STAGING_DIR=./BUILD
+
+# host name of the machine to use for windows builds
+WIN_HOST=cyclops
+
+# local dir (from the poerspecitve of the master machine) of the shared 
+# build dir on the windows machine, plus how to mount it there.  If the 
+# [u]mount commands are empty then WIN_SHARED will be used directly.
+WIN_SHARED=./tmp/mnt
+WIN_MOUNT="smbmount //$WIN_HOST/BUILD $WIN_SHARED -o credentials=/etc/samba/auth.cyclops.robind,dmask=755,fmask=644"
+WIN_UMOUNT="smbumount $WIN_SHARED"
+
+# Where is that dir from the remote machine's perspective?
+WIN_SHARED_REMOTE=/c/BUILD
+
+
+
+# Same as the above
+OSX_HOST=bigmac
+OSX_SHARED=./tmp/mnt/BUILD
+OSX_MOUNT="smbmount //$OSX_HOST/robind ./tmp/mnt -o credentials=/etc/samba/auth.bigmac.robind,dmask=755,fmask=644"
+OSX_UMOUNT="smbumount ./tmp/mnt"
+OSX_SHARED_REMOTE=/Users/robind/BUILD
+
+
+
+# Alsmost the same...  See below
+LINUX_HOST=rh9
+LINUX_SHARED=/stuff/temp/BUILD
+LINUX_MOUNT=
+LINUX_UMOUNT=
+LINUX_SHARED_REMOTE=/stuff/temp/BUILD
+
+
+# Upload server locations
+UPLOAD_HOST=starship.python.net
+UPLOAD_DAILY_ROOT=/home/crew/robind/public_html/wxPython/daily
+UPLOAD_PREVIEW_ROOT=/home/crew/robind/public_html/wxPython/preview
+
+
+
+# ---------------------------------------------------------------------------
+# functions
+
+function usage {
+    echo ""
+    echo "Usage: $0 [command flags...]"
+    echo ""
+    echo "build types:"
+    echo "   dryrun       Do the build, but don't copy anywhere (default)"
+    echo "   daily        Do a daily build, copy to starship"
+    echo "   release      Do a normal release build, copy to starship"
+    echo ""
+    echo "optional command flags:"
+    echo "   2.2          Build for Python 2.2 (default=off)"
+    echo "   2.3          Build for Python 2.3 (default=on)"
+    echo "   all          Build for all supported Python versions"
+    echo ""
+    echo "   skipsource   Don't build the source archives, use the ones"
+    echo "                already in the staging dir."
+    echo "   onlysource   Exit after building the source archives"
+    echo "   skipwin      Don't do the remote Windows build"
+    echo "   skiposx      Don't do the remote OSX build"
+    echo "   skiplinux    Don't do the remote Linux build"
+    echo "   skipclean    Don't do the cleanup step on the remote builds"
+    echo ""
+
+
+}
+
+# ---------------------------------------------------------------------------
+
+# Make sure we are running in the right directory.  TODO: make this
+# test more robust.  Currenly we just test for the presence of
+# 'wxPython' and 'wx' subdirs.
+if [ ! -d wxPython -o ! -d wx ]; then  
+    echo "Please run this script from the root wxPython directory."
+    exit 1
+fi
+
+
+
+# Set defaults and check the command line options
+KIND=dryrun
+PYVER=2.3
+skipsource=no
+onlysource=no
+skipwin=no
+skiposx=no
+skiplinux=no
+skipclean=no
+
+for flag in $*; do
+    case $flag in 
+	dryrun)   KIND=dryrun                    ;;
+	daily)    KIND=daily                     ;;
+	release)  KIND=release                   ;;
+
+	2.2)      PYVER=2.2                      ;;
+	2.3)      PYVER=2.3                      ;;
+	all)      PYVER="2.2 2.3"                ;;
+
+	skipsource)  skipsource=yes              ;;
+	onlysource)  onlysource=yes              ;;
+	skipwin)     skipwin=yes                 ;;
+	skiposx)     skiposx=yes                 ;;
+	skiplinux)   skiplinux=yes               ;;
+	skipclean)   skipclean=yes               ;;
+
+	help) usage; exit 1                      ;;
+	*)    echo "Unknown flag \"$flag\""
+	      usage
+	      exit 1
+    esac
+done
+
+
+# ensure the staging area exists
+if [ ! -d $STAGING_DIR ]; then 
+    mkdir -p $STAGING_DIR
+fi
+
+# Figure out the wxPython version number, possibly adjusted for being a daily build
+if [ $KIND = daily ]; then
+    DAILY=`date +%Y%m%d`   # should it include the hour too?  2-digit year?
+    echo $DAILY > DAILY_BUILD
+fi
+VERSION=`python -c "import setup;print setup.VERSION"`
+
+
+#echo VERSION=$VERSION
+#exit 0
+
+# ---------------------------------------------------------------------------
+# Make the sources and other basic stuff.
+
+if [ $skipsource != yes -o $onlysource = yes ]; then
+
+    # clean out the local dist dir
+    rm -f dist/*
+
+    # Regenerate the reST docs
+    echo "Regenerating the reST docs..."
+    cd docs
+    for x in *.txt; do
+	docutils-html $x `basename $x .txt`.html
+    done
+    cd -
+       
+    # build the doc and demo tarballs
+    distrib/makedemo
+    distrib/makedocs
+
+    # make the source tarball
+    distrib/makerpm 2.3 skipclean skiprpm gtk2
+
+    # make the source RPMs
+    for ver in $PYVER; do 
+	distrib/makerpm $ver skipclean skipcopy skiptar srpm
+	distrib/makerpm $ver skipclean skipcopy skiptar srpm gtk2
+    done
+
+    # Copy everything to the staging dir
+    echo "Moving stuff to $STAGING_DIR..."
+    rm -f dist/*.spec
+    mv dist/* $STAGING_DIR
+    for doc in CHANGES BUILD INSTALL MigrationGuide default; do
+	cp docs/$doc.* $STAGING_DIR
+    done
+
+    # cleanup
+    echo "Cleaning up..."
+    rm -f dist/*
+    rm -rf _build_rpm
+fi 
+
+if [ $KIND = daily ]; then
+    rm DAILY_BUILD
+fi
+
+if [ $onlysource = yes ]; then
+    exit 0
+fi
+
+# ---------------------------------------------------------------------------
+# Windows build
+
+if [ $skipwin != yes ]; then
+    echo "-=-=- Starting Windows build..."
+
+    # mount the shared folder?
+    if [ -n "$WIN_MOUNT" ]; then 
+	echo "Mounting shared folder..."
+	$WIN_MOUNT
+    fi
+
+    # Copy the src file 
+    echo "Copying source file..."
+    cp $STAGING_DIR/wxPythonSrc-$VERSION.tar.gz $WIN_SHARED
+
+    # Untar it on the remote machine, and then run the build script
+    echo "Unarchiving source file on $WIN_HOST..."
+    ssh $WIN_HOST "cd $WIN_SHARED_REMOTE && tar xzf wxPythonSrc-$VERSION.tar.gz && rm wxPythonSrc-$VERSION.tar.gz"
+
+    echo "Running build script on $WIN_HOST..."
+    wxdir=$WIN_SHARED_REMOTE/wxPythonSrc-$VERSION
+    cmd=$wxdir/wxPython/distrib/all/build-windows
+    ssh $WIN_HOST "cd $wxdir && $cmd $wxdir $WIN_SHARED_REMOTE $skipclean $VERSION $PYVER"
+    
+    echo "Fetching the results..."
+    cp $WIN_SHARED/wxPythonWIN32*  $STAGING_DIR
+    ssh $WIN_HOST "cd $WIN_SHARED_REMOTE && rm wxPythonWIN32*"
+
+    # unmount?
+    if [ -n "$WIN_UMOUNT" ]; then 
+	echo "Unmounting shared folder..."
+	$WIN_UMOUNT
+    fi
+fi
+
+
+# ---------------------------------------------------------------------------
+# OSX build
+
+if [ $skiposx != yes ]; then
+    echo "-=-=- Starting OSX build..."
+
+    # mount the shared folder?
+    if [ -n "$OSX_MOUNT" ]; then 
+	echo "Mounting shared folder..."
+	$OSX_MOUNT
+    fi
+
+    # Copy the src file 
+    echo "Copying source files..."
+    cp $STAGING_DIR/wxPythonSrc-$VERSION.tar.gz $OSX_SHARED
+    cp $STAGING_DIR/wxPythonDocs-$VERSION.tar.gz $OSX_SHARED
+    cp $STAGING_DIR/wxPythonDemo-$VERSION.tar.gz $OSX_SHARED
+
+    # Untar it on the remote machine, and then run the build script
+    echo "Unarchiving source file on $OSX_HOST..."
+    ssh $OSX_HOST "cd $OSX_SHARED_REMOTE && tar xzf wxPythonSrc-$VERSION.tar.gz && rm wxPythonSrc-$VERSION.tar.gz"
+
+    echo "Running build script on $OSX_HOST..."
+    wxdir=$OSX_SHARED_REMOTE/wxPythonSrc-$VERSION
+    cmd=$wxdir/wxPython/distrib/all/build-osx
+    ssh $OSX_HOST "cd $wxdir && $cmd $wxdir $OSX_SHARED_REMOTE $skipclean $VERSION $PYVER"
+    
+    echo "Fetching the results..."
+    cp $OSX_SHARED/wxPythonOSX*  $STAGING_DIR
+    ssh $OSX_HOST "cd $OSX_SHARED_REMOTE && rm wxPythonOSX*"
+
+    # unmount?
+    if [ -n "$OSX_UMOUNT" ]; then 
+	echo "Unmounting shared folder..."
+	$OSX_UMOUNT
+    fi
+fi
+
+
+# ---------------------------------------------------------------------------
+# Linux build
+
+# This build is optional, check if the target machine is up and
+# running
+if [ $skiplinux != yes ]; then
+    if  ping -q -c1 -w1 $LINUX_HOST > /dev/null; then
+        # the ping succeeded
+	skiplinux=no
+    else
+        # the ping failed, skip the build
+	skiplinux=yes
+	echo "-----------------------------------------------------------------"
+	echo "The $LINUX_HOST machine is offline, skipping the binary RPM build."
+	echo "-----------------------------------------------------------------"
+    fi
+fi
+
+
+if [ $skiplinux != yes ]; then
+    echo "-=-=- Starting Linux build..."
+
+    # The remote linux build is a bit different than the others.  The
+    # SRPMs will have already been built in the initial source
+    # building steps, the only  thing that the remote build needs to
+    # do is an "rpmbuild --rebuild"  for each package.  So we'll just
+    # copy the build script over and  execute it, there is no need to
+    # unpack the tarball and most of the  other steps...
+
+    
+    echo "Copying source files..."
+    mkdir -p $LINUX_SHARED
+    cp $STAGING_DIR/wxPython*.src.rpm $LINUX_SHARED
+    
+    scp distrib/all/build-linux root@$LINUX_HOST:/tmp > /dev/null
+    ssh root@$LINUX_HOST "cd /tmp && ./build-linux /tmp/wx $LINUX_SHARED_REMOTE $skipclean $VERSION $PYVER"
+    
+    echo "Fetching the results..."
+    cp $LINUX_SHARED/wxPythonGTK*.i[0-9]86.rpm  $STAGING_DIR
+    rm -r $LINUX_SHARED
+fi
+
+
+
+
+# ---------------------------------------------------------------------------
+# Final disposition of build results...
+
+
+if [ $KIND = dryrun ]; then
+    # we're done
+    exit 0
+fi
+
+
+if [ $KIND = daily ]; then 
+
+    destdir=$UPLOAD_PREVIEW_ROOT/$DAILY
+    echo "Copying to the starship at $destdir..."
+    ssh $UPLOAD_HOST "mkdir -p $destdir"
+    scp $STAGING_DIR/* $UPLOAD_HOST:/$destdir
+
+    echo "Cleaning up staging dir..."
+    rm $STAGING_DIR/*
+    rmdir $STAGING_DIR
+
+    # TODO: something to remove old builds from starship, keeping 
+    # only N days worth
+
+    # TODO:  Send email to wxPython-dev?
+
+    exit 0
+fi
+
+
+if [ $KIND = release ]; then 
+
+    echo "Copying to the local file server..."
+    destdir=/stuff/Development/wxPython/dist/$VERSION
+    mkdir -p $destdir
+    cp $STAGING_DIR/* $destdir
+
+    echo "Copying to the starship..."
+    destdir=$UPLOAD_PREVIEW_ROOT/$VERSION
+    ssh $UPLOAD_HOST "mkdir -p $destdir"
+    scp $STAGING_DIR/* $UPLOAD_HOST:/$destdir
+
+    echo "Cleaning up staging dir..."
+    rm $STAGING_DIR/*
+    rmdir $STAGING_DIR
+
+    exit 0
+fi
+
+
+# ---------------------------------------------------------------------------

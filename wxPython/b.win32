@@ -2,7 +2,7 @@
 # ----------------------------------------------------------------------
 
 
-FLAGS="USE_SWIG=1 SWIG=e:/projects/SWIG-cvs/swig.exe"
+FLAGS="USE_SWIG=1 SWIG=$PROJECTS/SWIG-cvs/swig.exe"
 
 #  Use non-default python?
 case $1 in

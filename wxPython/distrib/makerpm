@@ -150,6 +150,12 @@ if [ -z "${skipcopy}" ]; then
 	    cp -Rpf --link ${wxdir}/$d ${tarver} #> /dev/null 2>&1
 	fi
     done
+#     # and tex2rtf too
+#     mkdir ${tarver}/utils
+#     cp -Rpf --link ${wxdir}/utils/tex2rtf ${tarver}/utils
+#     # tex2rtf needs these files
+#     mkdir ${tarver}/samples
+#     cp -Rpf --link ${wxdir}/samples/sample.* ${tarver}/samples
 
     # now do the same thing for wxPython, skipping it's build dirs and such
     for dir in `grep -v '#' ${wxdir}/wxPython/distrib/DIRLIST`; do

@@ -1,0 +1,64 @@
+#!/bin/bash
+# ---------------------------------------------------------------------------
+# Build the wxPython source RPMs on a Linux box.  This is normally called 
+# from build-all but it should be able to be used standalone too...
+# 
+# The command line must have the following parameters:
+#
+#    1. the path to the base of the wx source tree
+#    2. the path of where to put the resulting RPMs
+#    3. skipclean flag (yes|no)
+#    4. the VERSION
+#    5. the remaining args are the versions of Python to build for
+#
+# ---------------------------------------------------------------------------
+
+set -o errexit
+#set -o xtrace
+
+echo "-=-=-=-  Hello from $HOSTNAME  -=-=-=-"
+
+if [ $# -lt 5 ]; then
+    echo "Usage: $0 WXDIR DESTDIR SKIPCLEAN VERSION PYVER..."
+    exit 1
+fi
+
+WXDIR=$1
+DESTDIR=$2
+SKIPCLEAN=$3
+VERSION=$4
+shift;shift;shift;shift
+PYVER=$@
+
+# Since this is probably a VMWare guest, make sure that the date and
+# time are correct
+ntpdate gate.alldunn.com
+
+
+# In this case $WXDIR is where we will build at, but the source tree
+# won't be there like the other builds.  The source RPMs will be in
+# $DESTDIR, and we'll put the binary RPMs back there when done.
+
+echo "Preparing $WXDIR..."
+mkdir -p $WXDIR
+cd $WXDIR
+rm -rf * 
+
+for ver in $PYVER; do 
+    echo "Building the RPMs for Python $ver..."
+    myrpmbuild --rebuild $DESTDIR/wxPythonGTK-py$ver-$VERSION-1.src.rpm
+    myrpmbuild --rebuild $DESTDIR/wxPythonGTK2-py$ver-$VERSION-1.src.rpm
+done
+
+
+echo "Copying RPMs to $DESTDIR..."
+cp  wxPythonGTK*.i[0-9]86.rpm $DESTDIR
+cd $DESTDIR
+
+
+if [ $SKIPCLEAN != yes ]; then 
+    echo "Cleaning up..."
+    rm -rf $WXDIR
+fi
+
+echo "-=-=-=-  Goodbye!  -=-=-=-"

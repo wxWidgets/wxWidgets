@@ -11,8 +11,8 @@ nmake -f makefile.vc BUILD=release $@
 cp vc_msw/wxrc.exe $WXWIN/lib/vc_dll/wxrc.exe
 
 
-cd $WXWIN/utils/tex2rtf/src
-nmake -f makefile.vc BUILD=release $@
-cp vc_msw/tex2rtf.exe $WXWIN/lib/vc_dll/tex2rtf.exe
+# cd $WXWIN/utils/tex2rtf/src
+# nmake -f makefile.vc BUILD=release $@
+# cp vc_msw/tex2rtf.exe $WXWIN/lib/vc_dll/tex2rtf.exe
 
 

@@ -46,6 +46,7 @@ wxPython/demo/bmp_source
 wxPython/demo/data
 wxPython/demo/dllwidget
 wxPython/distrib
+wxPython/distrib/all
 wxPython/distrib/mac
 wxPython/distrib/mac/wxPythonOSX
 wxPython/distrib/mac/wxPythonOSX/resources

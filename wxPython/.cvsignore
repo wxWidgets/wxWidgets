@@ -1,6 +1,7 @@
 .DS_Store
 .emacs.desktop
 .gdb_history
+BUILD
 MANIFEST
 _build_dmg
 _build_rpm
