@@ -171,9 +171,14 @@ void BombsCanvas::DrawField(wxDC *dc, int xc1, int yc1, int xc2, int yc2)
     }
     dc->SetFont(wxNullFont);
 
-#if wxUSE_LOG
-    wxLogStatus(wxT("%d bombs  %d remaining cells"),
+    wxString msg;
+    msg.Printf(wxT("%d bombs  %d remaining cells"),
         m_game->GetNumBombs(), m_game->GetNumRemainingCells() );
+
+#if wxUSE_LOG && wxUSE_STATUSBAR
+    wxLogStatus(msg);
+#else
+    this->GetParent()->SetTitle(msg);
 #endif
 }
 
