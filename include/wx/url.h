@@ -58,12 +58,9 @@ public:
     wxURL& operator = (const wxString& url);
     wxURL& operator = (const wxURI& url);
 
-    wxString GetProtocolName() const { return m_scheme; }
-    wxString GetHostName() const     { return m_server; }
-    wxString GetURL() const          { return m_url; }
     wxProtocol& GetProtocol()        { return *m_protocol; }
     wxURLError GetError() const      { return m_error; }
-    wxString GetPath() const         { return m_path; }
+    wxString GetURL() const          { return m_url; }
 
     wxInputStream *GetInputStream();
 
@@ -73,6 +70,11 @@ public:
 #endif // wxUSE_SOCKETS
 
 #if WXWIN_COMPATIBILITY_2_4
+    //Use the proper wxURI accessors instead
+    wxString GetProtocolName() const { return m_scheme; }
+    wxString GetHostName() const     { return m_server; }
+    wxString GetPath() const         { return m_path; }
+
     //Use wxURI instead - delims is ignored
     static wxString ConvertToValidURI(
                         const wxString& uri,

@@ -19,13 +19,13 @@
 #include "wx/object.h"
 #include "wx/string.h"
 
-// Host Type that the server can be
+// Host Type that the server component can be
 enum wxURIHostType
 {
-    wxURI_REGNAME,		
-    wxURI_IPV4ADDRESS,	
-    wxURI_IPV6ADDRESS,  
-    wxURI_IPVFUTURE		
+    wxURI_REGNAME,		// Host is a normal register name (www.mysite.com etc.)
+    wxURI_IPV4ADDRESS,	// Host is a version 4 ip address (192.168.1.100)
+    wxURI_IPV6ADDRESS,  // Host is a version 6 ip address [aa:aa:aa:aa::aa:aa]:5050
+    wxURI_IPVFUTURE		// Host is a future ip address (wxURI is unsure what kind)
 };
 
 // Component Flags
@@ -70,7 +70,7 @@ public:
     bool HasPath() const        {   return (m_fields & wxURI_PATH) == wxURI_PATH;           }
     bool HasQuery() const       {   return (m_fields & wxURI_QUERY) == wxURI_QUERY;         }
     bool HasFragment() const    {   return (m_fields & wxURI_FRAGMENT) == wxURI_FRAGMENT;   }
-
+    
     const wxString& GetScheme() const           {   return m_scheme;    }
     const wxString& GetPath() const             {   return m_path;      }
     const wxString& GetQuery() const            {   return m_query;     }

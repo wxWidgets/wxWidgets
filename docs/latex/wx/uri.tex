@@ -22,6 +22,9 @@ In short, a URL \em{is} a URI.  In other
 words, URL is a subset of a URI - all 
 acceptable URLs are also acceptable URIs.
 
+wxURI automatically escapes invalid characters in a string,
+so there is no chance of wxURI "failing" on construction/creation.
+
 wxURI supports copy construction and standard assignment
 operators.  wxURI can also be inherited from to provide
 furthur functionality.
@@ -39,7 +42,7 @@ furthur functionality.
 \membersection{Obtaining individual components}\label{obtainingwxuricomponents}
 
 To obtain individual components you can use 
-one of the following methods:
+one of the following methods
 
 \helpref{GetScheme}{wxurigetscheme}\\
 \helpref{GetUser}{wxurigetuser}\\
@@ -50,8 +53,12 @@ one of the following methods:
 \helpref{GetFragment}{wxurigetfragment}
 
 However, you should check HasXXX before
-calling a get method:\\
- 
+calling a get method, which determines whether or not the component referred
+to by the method is defined according to RFC 2396.
+
+Consider an undefined component equivilent to a 
+NULL C string.\\
+\\ 
 \helpref{HasScheme}{wxurihasscheme}\\
 \helpref{HasUser}{wxurihasuser}\\
 \helpref{HasServer}{wxurihasserver}\\
@@ -112,9 +119,12 @@ BuildUnescapedURI performs some optimizations over the plain method.
 
 \membersection{wxURI::Create}\label{wxuricreate}
 
-\func{void}{Create}{\param{const wxChar* }{uri}}
+\func{const wxChar*}{Create}{\param{const wxChar* }{uri}}
 
 Creates this URI from the string \arg{uri}.
+
+Returns the position at which parsing stopped (there 
+is no such thing as an "invalid" wxURI).
 
 \docparam{uri}{string to initialize from}
 

@@ -17,16 +17,6 @@ and comparison operators.
 
 \helpref{wxSocketBase}{wxsocketbase}, \helpref{wxProtocol}{wxprotocol}
 
-\wxheading{Example}
-
-\begin{verbatim}
-  wxURL url("http://a.host/a.dir/a.file");
-  wxInputStream *in_stream;
-
-  in_stream = url.GetInputStream();
-  // Then, you can use all IO calls of in_stream (See wxStream)
-\end{verbatim}
-
 % ----------------------------------------------------------------------------
 % Members
 % ----------------------------------------------------------------------------
@@ -54,15 +44,6 @@ contain three consecutive slashes.
 Destroys the URL object.
 
 %
-% GetProtocolName
-%
-\membersection{wxURL::GetProtocolName}\label{wxurlgetprotocolname}
-
-\constfunc{wxString}{GetProtocolName}{\void}
-
-Returns the name of the protocol which will be used to get the URL.
-
-%
 % GetProtocol
 %
 \membersection{wxURL::GetProtocol}\label{wxurlgetprotocol}
@@ -70,15 +51,6 @@ Returns the name of the protocol which will be used to get the URL.
 \func{wxProtocol\&}{GetProtocol}{\void}
 
 Returns a reference to the protocol which will be used to get the URL.
-
-%
-% GetPath
-%
-\membersection{wxURL::GetPath}\label{wxurlgetpath}
-
-\func{wxString}{GetPath}{\void}
-
-Returns the path of the file to fetch. This path was encoded in the URL.
 
 %
 % GetError
@@ -111,6 +83,22 @@ It can be one of these errors:
 Creates a new input stream on the the specified URL. You can use all but seek
 functionality of wxStream. Seek isn't available on all stream. For example,
 http or ftp streams doesn't deal with it.
+
+Note that this method is somewhat depreciated, all future wxWidgets applications
+should really use \helpref{wxFileSystem}{wxfilesystem} instead.
+
+Example:
+
+\begin{verbatim}
+  wxURL url("http://a.host/a.dir/a.file");
+  if (url.GetError() == wxURL_NOERR)
+  {
+      wxInputStream *in_stream;
+
+      in_stream = url.GetInputStream();
+      // Then, you can use all IO calls of in_stream (See wxStream)
+  }
+\end{verbatim}
 
 \wxheading{Return value}
 

@@ -54,6 +54,10 @@ USE_PROTOCOL(wxFTP)
 //
 // --------------------------------------------------------------
 
+// --------------------------------------------------------------
+// Construction
+// --------------------------------------------------------------
+
 wxURL::wxURL(const wxString& url) : wxURI(url)
 {
     Init(url);
@@ -64,21 +68,6 @@ wxURL::wxURL(const wxURI& url) : wxURI(url)
 {
     Init(url.BuildURI());
     ParseURL();
-}
-
-wxURL& wxURL::operator = (const wxURI& url)
-{
-    wxURI::operator = (url);
-    Init(url.BuildURI());
-    ParseURL();
-    return *this;
-}
-wxURL& wxURL::operator = (const wxString& url)
-{
-    wxURI::operator = (url);
-    Init(url);
-    ParseURL();
-    return *this;
 }
 
 void wxURL::Init(const wxString& url)
@@ -107,6 +96,26 @@ void wxURL::Init(const wxString& url)
 #endif // wxUSE_SOCKETS
 
 }
+
+// --------------------------------------------------------------
+// Assignment
+// --------------------------------------------------------------
+
+wxURL& wxURL::operator = (const wxURI& url)
+{
+    wxURI::operator = (url);
+    Init(url.BuildURI());
+    ParseURL();
+    return *this;
+}
+wxURL& wxURL::operator = (const wxString& url)
+{
+    wxURI::operator = (url);
+    Init(url);
+    ParseURL();
+    return *this;
+}
+
 // --------------------------------------------------------------
 // ParseURL
 //
@@ -167,6 +176,10 @@ bool wxURL::ParseURL()
   return true;
 }
 
+// --------------------------------------------------------------
+// Destruction/Cleanup
+// --------------------------------------------------------------
+
 void wxURL::CleanData()
 {
 #if wxUSE_SOCKETS
@@ -187,6 +200,9 @@ wxURL::~wxURL()
 #endif
 }
 
+// --------------------------------------------------------------
+// FetchProtocol
+// --------------------------------------------------------------
 
 bool wxURL::FetchProtocol()
 {
@@ -208,7 +224,7 @@ bool wxURL::FetchProtocol()
 }
 
 // --------------------------------------------------------------
-// --------- wxURL get ------------------------------------------
+// GetInputStream
 // --------------------------------------------------------------
 
 wxInputStream *wxURL::GetInputStream()
@@ -365,6 +381,8 @@ void wxURL::SetProxy(const wxString& url_proxy)
 #endif // wxUSE_SOCKETS
 
 // ----------------------------------------------------------------------
+// wxURLModule
+//
 // A module which deletes the default proxy if we created it
 // ----------------------------------------------------------------------
 
