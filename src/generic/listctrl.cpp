@@ -956,7 +956,7 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
     {
         xpos += m_owner->GetColumnWidth( j );
         m_column = j;
-        if ((abs(x-xpos) < 3) && (y < 22))
+        if ((abs(x-xpos) < 3) && (y < 22) && (m_column < m_owner->GetColumnCount()-1))
         {
             hit_border = TRUE;
             break;
