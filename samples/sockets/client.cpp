@@ -486,7 +486,8 @@ void MyFrame::OnTest3(wxCommandEvent& WXUNUSED(event))
   m_sock->SetFlags(wxSOCKET_WAITALL);
 
   // Note that len is in kbytes here!
-  len  = 32;
+  // Also note that Linux kernel 2.0.36 gives up at len > 27.
+  len  = 28;
   buf1 = new char[len * 1024];
   buf2 = new char[len * 1024];
 

@@ -17,7 +17,7 @@ PROGRAM=help
 
 OBJECTS=demo.o
 
-DATAFILES=doc
+DATAFILES=doc.cnt doc.hlp doc.hpj doc.tex doc.zip back.gif forward.gif books.gif contents.gif
 
 include ../../src/makeprog.env
 

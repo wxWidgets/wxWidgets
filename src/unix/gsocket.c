@@ -714,6 +714,8 @@ int GSocket_Write(GSocket *socket, const char *buffer, int size)
   int ret;
 
   assert(socket != NULL);
+  
+  printf( "GSocket_Write #1, size %d\n", size );
 
   if (socket->m_fd == -1 || socket->m_server)
   {
@@ -721,9 +723,13 @@ int GSocket_Write(GSocket *socket, const char *buffer, int size)
     return -1;
   }
 
+  printf( "GSocket_Write #2, size %d\n", size );
+
   /* If the socket is blocking, wait for writability (with a timeout) */
   if (_GSocket_Output_Timeout(socket) == GSOCK_TIMEDOUT)
     return -1;
+
+  printf( "GSocket_Write #3, size %d\n", size );
 
   /* Write the data */
   if (socket->m_stream)
@@ -731,6 +737,8 @@ int GSocket_Write(GSocket *socket, const char *buffer, int size)
   else
     ret = _GSocket_Send_Dgram(socket, buffer, size);
     
+  printf( "GSocket_Write #4, size %d\n", size );
+
   if (ret == -1)
   {
     if (errno == EWOULDBLOCK)
@@ -747,6 +755,8 @@ int GSocket_Write(GSocket *socket, const char *buffer, int size)
     return -1;
   }
   
+  printf( "GSocket_Write #5, size %d ret %d\n", size, ret );
+
   return ret;
 }
 

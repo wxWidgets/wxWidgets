@@ -466,7 +466,7 @@ wxUint32 wxSocketBase::_Write(const void *buffer, wxUint32 nbytes)
           break;
 
       ret = GSocket_Write(m_socket, (const char *)buffer, nbytes);
-
+      
       if (ret > 0)
       {
         total  += ret;

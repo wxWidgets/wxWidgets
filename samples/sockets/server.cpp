@@ -287,6 +287,7 @@ void MyFrame::Test3(wxSocketBase *sock)
   sock->SetFlags(wxSOCKET_WAITALL);
 
   sock->Read(&len, 1);
+  
   buf = new char[len * 1024];
   sock->Read(buf, len * 1024);
   sock->Write(buf, len * 1024);
