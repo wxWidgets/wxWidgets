@@ -455,8 +455,6 @@ void wxGenericPrintSetupDialog::Init(wxPrintData* data)
     okButton->SetDefault();
     okButton->SetFocus();
     
-    printf( "Hello generic\n" );
-
     Fit();
     Centre(wxBOTH);
 

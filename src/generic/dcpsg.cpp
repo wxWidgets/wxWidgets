@@ -1776,6 +1776,8 @@ bool wxPostScriptDC::StartDoc( const wxString& message )
     else
         fprintf( m_pstream, "%%%%Orientation: Portrait\n" );
     
+    // fprintf( m_pstream, "%%%%Pages: %d\n", (wxPageNumber - 1) );
+    
     // wxPaperSize ps = m_printData.GetPaperId();
     // if (ps == ...)
     fprintf( m_pstream, "%%%%DocumentPaperSizes: %s\n", "A4" );
@@ -1822,9 +1824,7 @@ void wxPostScriptDC::EndDoc ()
     m_pstream = (FILE *) NULL;
 
 #if 0    
-
     // THE FOLLOWING HAS BEEN CONTRIBUTED BY Andy Fyfe <andy@hyperparallel.com>
-
     wxCoord wx_printer_translate_x, wx_printer_translate_y;
     double wx_printer_scale_x, wx_printer_scale_y;
 
@@ -1876,7 +1876,6 @@ void wxPostScriptDC::EndDoc ()
             "%%%%BoundingBox: %d %d %d %d\n",
             (wxCoord)floor((double)llx), (wxCoord)floor((double)lly),
             (wxCoord)ceil((double)urx), (wxCoord)ceil((double)ury) );
-    fprintf( m_pstream, "%%%%Pages: %d\n", (wxPageNumber - 1) );
 
     // To check the correctness of the bounding box, postscript commands
     // to draw a box corresponding to the bounding box are generated below.
@@ -1889,58 +1888,19 @@ void wxPostScriptDC::EndDoc ()
     fprintf( m_pstream, "%% %d %d lineto\n", urx, lly );
     fprintf( m_pstream, "%% %d %d lineto\n", urx, ury );
     fprintf( m_pstream, "%% %d %d lineto closepath stroke\n", llx, ury );
+#endif
 
 #if defined(__X__) || defined(__WXGTK__)
     if (m_ok)
     {
-        wxString previewCommand(m_printData.GetPreviewCommand());
-        wxString printerCommand(m_printData.GetPrinterCommand());
-        wxString printerOptions(m_printData.GetPrinterOptions());
-        wxString filename(m_printData.GetFilename());
+        wxString command;
+        command += m_printData.GetPrinterCommand();
+        command += wxT(" ");
+        command += m_printData.GetFilename();
 
-        switch (m_printData.GetPrintMode())
-        {
-            case wxPRINT_MODE_PREVIEW:
-            {
-                wxChar *argv[3];
-                argv[0] = WXSTRINGCAST previewCommand;
-                argv[1] = WXSTRINGCAST filename;
-                argv[2] = (wxChar*) NULL;
-#if defined(__WXGTK20__) && wxUSE_UNICODE
-#else
-                wxExecute( argv, TRUE );
-#endif
-                wxRemoveFile( m_printData.GetFilename() );
-            }
-            break;
-            case wxPRINT_MODE_PRINTER:
-            {
-                wxChar *argv[4];
-                int argc = 0;
-                argv[argc++] = WXSTRINGCAST printerCommand;
-
-                // !SM! If we simply assign to argv[1] here, if printer options
-                // are blank, we get an annoying and confusing message from lpr.
-                wxChar *opts = WXSTRINGCAST printerOptions;
-                if (opts && *opts)
-                    argv[argc++] = opts;
-
-                argv[argc++] = WXSTRINGCAST filename;
-                argv[argc++] = (wxChar *) NULL;
-#if defined(__WXGTK20__) && wxUSE_UNICODE
-#else
-                wxExecute( argv, TRUE );
-#endif
-                wxRemoveFile( filename );
-            }
-            break;
-            case wxPRINT_MODE_FILE:
-            case wxPRINT_MODE_NONE:
-            break;
-        }
+        wxExecute( command, TRUE );
+        wxRemoveFile( m_printData.GetFilename() );
     }
-#endif
-
 #endif
 }
 
