@@ -1001,6 +1001,8 @@ public:
     bool ButtonIsDown(int but =  wxJOY_BUTTON_ANY) const
     { return (((but == wxJOY_BUTTON_ANY) && (m_buttonState != 0)) ||
             ((m_buttonState & but) == but)); }
+
+    void CopyObject(wxObject& obj) const;
 };
 
 // Drop files event class
@@ -1025,6 +1027,8 @@ public:
     wxPoint GetPosition() const { return m_pos; }
     int GetNumberOfFiles() const { return m_noFiles; }
     wxString *GetFiles() const { return m_files; }
+
+    void CopyObject(wxObject& obj) const;
 };
 
 // Idle event
@@ -1042,6 +1046,8 @@ public:
 
     void RequestMore(bool needMore = TRUE) { m_requestMore = needMore; }
     bool MoreRequested() const { return m_requestMore; }
+
+    void CopyObject(wxObject& obj) const;
 
 protected:
     bool m_requestMore;
@@ -1082,6 +1088,8 @@ public:
     void Check(bool check) { m_checked = check; m_setChecked = TRUE; }
     void Enable(bool enable) { m_enabled = enable; m_setEnabled = TRUE; }
     void SetText(const wxString& text) { m_text = text; m_setText = TRUE; }
+
+    void CopyObject(wxObject& obj) const;
 
 protected:
     bool          m_checked;
@@ -1124,6 +1132,8 @@ public:
     void SetChangedWindow(wxWindow* win) { m_changedWindow = win; }
     wxWindow* GetChangedWindow() const { return m_changedWindow; }
 
+    void CopyObject(wxObject& obj) const;
+
 protected:
     wxWindow*     m_changedWindow;
 };
@@ -1144,6 +1154,8 @@ public:
     // App sets this if it changes the palette.
     void SetPaletteRealized(bool realized) { m_paletteRealized = realized; }
     bool GetPaletteRealized() const { return m_paletteRealized; }
+
+    void CopyObject(wxObject& obj) const;
 
 protected:
     bool m_paletteRealized;

@@ -406,7 +406,66 @@ void wxShowEvent::CopyObject(wxObject& obj_d) const
 
     obj->m_show = m_show;
 }
- 
+
+void wxJoystickEvent::CopyObject(wxObject& obj_d) const
+{
+    wxJoystickEvent *obj = (wxJoystickEvent *)&obj_d;
+    wxEvent::CopyObject(obj_d);
+
+    obj->m_pos = m_pos;
+    obj->m_zPosition = m_zPosition;
+    obj->m_buttonChange = m_buttonChange;
+    obj->m_buttonState = m_buttonState;
+    obj->m_joyStick = m_joyStick;
+} 
+
+void wxDropFilesEvent::CopyObject(wxObject& obj_d) const
+{
+    wxDropFilesEvent *obj = (wxDropFilesEvent *)&obj_d;
+    wxEvent::CopyObject(obj_d);
+
+    obj->m_noFiles = m_noFiles;
+    obj->m_pos = m_pos;
+    // TODO: Problem with obj->m_files. It should be deallocated by the
+    // destructor of the event. 
+}
+
+void wxIdleEvent::CopyObject(wxObject& obj_d) const
+{
+    wxIdleEvent *obj = (wxIdleEvent *)&obj_d;
+    wxEvent::CopyObject(obj_d);
+
+    obj->m_requestMore = m_requestMore;
+}
+
+void wxUpdateUIEvent::CopyObject(wxObject &obj_d) const
+{
+    wxUpdateUIEvent *obj = (wxUpdateUIEvent *)&obj_d;
+    wxEvent::CopyObject(obj_d);
+
+    obj->m_checked = m_checked;
+    obj->m_enabled = m_enabled;
+    obj->m_text = m_text;
+    obj->m_setText = m_setText;
+    obj->m_setChecked = m_setChecked;
+    obj->m_setEnabled = m_setEnabled;
+}
+
+void wxPaletteChangedEvent::CopyObject(wxObject &obj_d) const
+{
+    wxPaletteChangedEvent *obj = (wxPaletteChangedEvent *)&obj_d;
+    wxEvent::CopyObject(obj_d);
+
+    obj->m_changedWindow = m_changedWindow;
+}
+
+void wxQueryNewPaletteEvent::CopyObject(wxObject& obj_d) const
+{
+    wxQueryNewPaletteEvent *obj = (wxQueryNewPaletteEvent *)&obj_d;
+    wxEvent::CopyObject(obj_d);
+
+    obj->m_paletteRealized = m_paletteRealized;
+}
 
 /*
  * Event handler
