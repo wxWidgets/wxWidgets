@@ -285,7 +285,10 @@ bool wxToolBar::Realize()
                 wxControl* control = tool->GetControl();
                 wxSize sz = control->GetSize();
                 wxPoint pos = control->GetPosition();
-                control->Move(currentX, pos.y);
+                // Allow a control to specify a y-offset by setting its initial position,
+                // but still don't allow it to position itself above the top margin.
+                int controlY = (pos.y > 0) ? currentY + pos.y : currentY;
+                control->Move(currentX, controlY);
                 currentX += sz.x + packing;
 
                 break;
