@@ -65,7 +65,7 @@ public:
 private:
     wxDialUpManager *m_dial;
 
-    DECLARE_EVENT_TABLE();
+    DECLARE_EVENT_TABLE()
 };
 
 // Define a new frame type: this is going to be our main frame

@@ -345,6 +345,7 @@ class WXDLLEXPORT wxPropertyListFrame: public wxFrame
   virtual bool Initialize(void);
   virtual wxPropertyListPanel *OnCreatePanel(wxFrame *parent, wxPropertyListView *v);
   inline virtual wxPropertyListPanel *GetPropertyPanel(void) const { return m_propertyPanel; }
+  inline wxPropertyListView* GetView() const { return m_view; }
 
  private:
   wxPropertyListView*       m_view;

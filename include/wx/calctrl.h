@@ -47,6 +47,14 @@ enum wxCalendarDateBorder
 
 class WXDLLEXPORT wxCalendarDateAttr
 {
+protected:
+    // This has to be before the use of Init(), for MSVC++ 1.5
+    void Init(wxCalendarDateBorder border = wxCAL_BORDER_NONE)
+    {
+        m_border = border;
+        m_holiday = FALSE;
+    }
+
 public:
     // ctors
     wxCalendarDateAttr() { Init(); }
@@ -89,13 +97,6 @@ public:
     const wxColour& GetBorderColour() const { return m_colBorder; }
     const wxFont& GetFont() const { return m_font; }
     wxCalendarDateBorder GetBorder() const { return m_border; }
-
-protected:
-    void Init(wxCalendarDateBorder border = wxCAL_BORDER_NONE)
-    {
-        m_border = border;
-        m_holiday = FALSE;
-    }
 
 private:
     wxColour m_colText,

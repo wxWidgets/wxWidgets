@@ -95,10 +95,10 @@ public:
     inline void      SetBorderWrap(bool on)  { m_wrap = on; };
 
     // cells
-    inline bool      IsAlive(int i, int j) const;
-    inline bool      IsAlive(Cell c) const;
-    inline int       GetX(Cell c) const;
-    inline int       GetY(Cell c) const;
+    bool             IsAlive(int i, int j) const;
+    bool             IsAlive(Cell c) const;
+    int              GetX(Cell c) const;
+    int              GetY(Cell c) const;
     const CellArray* GetCells() const        { return &m_cells; };
     const CellArray* GetChangedCells() const { return &m_changed; };
 

@@ -433,7 +433,7 @@ bool wxPropertyListView::CreateControls()
     wxFont guiFont = settings.GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
 
 #ifdef __WXMSW__
-    wxFont *boringFont = wxTheFontList->FindOrCreateFont(guiFont.GetPointSize(), wxMODERN, wxNORMAL, wxNORMAL, FALSE, "Courier New");
+    wxFont *boringFont = wxTheFontList->FindOrCreateFont(guiFont.GetPointSize()+1, wxMODERN, wxNORMAL, wxNORMAL, FALSE, "Courier New");
 #else
     wxFont *boringFont = wxTheFontList->FindOrCreateFont(guiFont.GetPointSize(), wxTELETYPE, wxNORMAL, wxNORMAL);
 #endif

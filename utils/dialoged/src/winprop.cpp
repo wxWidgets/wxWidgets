@@ -100,7 +100,8 @@ wxDialogEditorPropertyListFrame::~wxDialogEditorPropertyListFrame()
 {
     delete m_propSheet;
     delete m_propInfo;
-    wxPropertyInfo::sm_propertyWindow = NULL;
+    if (wxPropertyInfo::sm_propertyWindow == this)
+        wxPropertyInfo::sm_propertyWindow = NULL;
 }
 
 /*
@@ -111,11 +112,31 @@ wxDialogEditorPropertyListFrame::~wxDialogEditorPropertyListFrame()
 // might be.
 bool wxPropertyInfo::Edit(wxWindow *WXUNUSED(parent), const wxString& title)
 {
-    if (sm_propertyWindow)
-    {
+  if (sm_propertyWindow)
+  {
+      wxWindowPropertyInfo* thisProp = (wxWindowPropertyInfo*) this;
+      wxWindowPropertyInfo* oldProp = (wxWindowPropertyInfo*) (((wxDialogEditorPropertyListFrame *) sm_propertyWindow)->GetInfo());
+      if (oldProp->GetWindow() == thisProp->GetWindow())
+      {
         sm_propertyWindow->Raise();
         return TRUE;
-    }
+      }
+      else
+      {
+        int w, h, x, y;
+        sm_propertyWindow->GetSize(& w, & h);
+        sm_propertyWindow->GetPosition(& x, & y);
+
+        wxResourceManager::GetCurrentResourceManager()->GetPropertyWindowSize().width = w;
+        wxResourceManager::GetCurrentResourceManager()->GetPropertyWindowSize().height = h;
+        wxResourceManager::GetCurrentResourceManager()->GetPropertyWindowSize().x = x;
+        wxResourceManager::GetCurrentResourceManager()->GetPropertyWindowSize().y = y;
+
+        // Close the window, so we can create a new one for the different window
+        sm_propertyWindow->Destroy();
+        sm_propertyWindow = (wxDialogEditorPropertyListFrame *) NULL;
+      }
+  }
 
   int width = wxResourceManager::GetCurrentResourceManager()->GetPropertyWindowSize().width;
   int height = wxResourceManager::GetCurrentResourceManager()->GetPropertyWindowSize().height;
@@ -665,7 +686,9 @@ bool wxWindowPropertyInfo::InstantiateResource(wxItemResource *resource)
   wxString str(m_propertyWindow->GetName());
   resource->SetName(str);
 
-#if 0
+#if 0 // Why did we comment this out? Possibly because of rounding errors
+  // that will build up as the conversion is repeatedly done.
+  // so only do the conversion when a resize happens.
   int x, y, w, h;
 
   if (m_propertyWindow->IsKindOf(CLASSINFO(wxPanel)))
@@ -900,7 +923,37 @@ wxProperty *wxStaticTextPropertyInfo::GetProperty(wxString& name)
 
 bool wxStaticTextPropertyInfo::SetProperty(wxString& name, wxProperty *property)
 {
-  return wxItemPropertyInfo::SetProperty(name, property);
+  wxStaticText* itemWindow = (wxStaticText*) m_propertyWindow;
+  if (name == "label")
+  {
+    // Because setting a wxStaticText control's label may change the
+    // size, we must get the size and instantiate the resource immediately.
+    itemWindow->SetLabel(property->GetValue().StringValue());
+    int w, h;
+
+    wxItemResource *resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(itemWindow);
+
+    m_propertyWindow->GetSize(&w, &h);
+    // m_propertyWindow->GetPosition(&x, &y);
+
+    // We need to convert to dialog units if 
+    // the parent resource specifies dialog units.
+    if (m_propertyWindow->GetParent())
+    {
+        wxItemResource* parentResource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(m_propertyWindow->GetParent());
+        if (parentResource->GetResourceStyle() & wxRESOURCE_DIALOG_UNITS)
+        {
+            // wxPoint pt = m_propertyWindow->GetParent()->ConvertPixelsToDialog(wxPoint(x, y));
+            // x = pt.x; y = pt.y;
+            wxSize sz = m_propertyWindow->GetParent()->ConvertPixelsToDialog(wxSize(w, h));
+            w = sz.x; h = sz.y;
+        }
+    }
+    resource->SetSize(resource->GetX(), resource->GetY(), w, h);
+    return TRUE;
+  }
+  else
+    return wxItemPropertyInfo::SetProperty(name, property);
 }
 
 void wxStaticTextPropertyInfo::GetPropertyNames(wxStringList& names)

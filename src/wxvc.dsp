@@ -801,6 +801,10 @@ SOURCE=.\msw\dummy.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\enhmeta.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\filedlg.cpp
 # End Source File
 # Begin Source File

@@ -527,22 +527,48 @@ void wxResourceManager::AssociateResource(wxItemResource *resource, wxWindow *wi
     m_resourceAssociations.Put((long)resource, win);
 
   wxNode *node = resource->GetChildren().First();
-  while (node)
+  wxNode* node2 = win->GetChildren().First();
+  while (node && node2)
   {
     wxItemResource *child = (wxItemResource *)node->Data();
+    wxWindow* childWindow = (wxWindow*) node2->Data();
+
+    if (child->GetId() != childWindow->GetId())
+    {
+      wxString msg;
+      msg.Printf("AssociateResource: error when associating child window %ld with resource %ld", child->GetId(), childWindow->GetId());
+      wxMessageBox(msg, "Dialog Editor problem", wxOK);
+    }
+    else if (childWindow->GetName() != child->GetName())
+    {
+      wxString msg;
+      msg.Printf("AssociateResource: error when associating child window with resource %s", child->GetName() ? (const char*) child->GetName() : "(unnamed)");
+      wxMessageBox(msg, "Dialog Editor problem", wxOK);
+    }
+    else
+    {
+      AssociateResource(child, childWindow);
+    }
+
+    // New code to avoid the problem of duplicate ids and names. We simply
+    // traverse the child windows and child resources in parallel,
+    // checking for any mismatch.
+#if 0
     wxWindow *childWindow = (wxWindow *)m_resourceAssociations.Get((long)child);
     if (!childWindow)
-      childWindow = win->FindWindow(child->GetName());
+      // childWindow = win->FindWindow(child->GetName());
+      childWindow = win->FindWindow(child->GetId());
     if (childWindow)
       AssociateResource(child, childWindow);
     else
     {
-      char buf[200];
-      sprintf(buf, "AssociateResource: cannot find child window %s", child->GetName() ? (const char*) child->GetName() : "(unnamed)");
-      wxMessageBox(buf, "Dialog Editor problem", wxOK);
+      wxString msg;
+      msg.Printf("AssociateResource: cannot find child window %s", child->GetName() ? (const char*) child->GetName() : "(unnamed)");
+      wxMessageBox(msg, "Dialog Editor problem", wxOK);
     }
-
+#endif
     node = node->Next();
+    node2 = node2->Next();
   }
 }
 
@@ -1363,6 +1389,9 @@ void wxResourceManager::CopySize()
 	{
       item->SetSize(-1, -1, firstW, firstH);
 
+      int fw = firstW;
+      int fh = firstH;
+
       wxItemResource* resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(item);
       wxItemResource* parentResource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(item->GetParent());
 
@@ -1372,9 +1401,9 @@ void wxResourceManager::CopySize()
 	  if (parentResource->GetResourceStyle() & wxRESOURCE_DIALOG_UNITS)
       {
         wxSize sz = item->GetParent()->ConvertPixelsToDialog(wxSize(firstW, firstH));
-        firstW = sz.x; firstH = sz.y;
+        fw = sz.x; fh = sz.y;
       }
-      resource->SetSize(resource->GetX(), resource->GetY(), firstW, firstH);
+      resource->SetSize(resource->GetX(), resource->GetY(), fw, fh);
 
 	}
   }

@@ -29,6 +29,8 @@ public:
         long style = wxDEFAULT_FRAME_STYLE, const wxString& name = "frame");
     ~wxDialogEditorPropertyListFrame();
 
+    wxPropertyInfo* GetInfo() const { return m_propInfo; }
+
 private:
     wxPropertySheet*            m_propSheet;
     wxPropertyValidatorRegistry m_registry;
@@ -98,6 +100,9 @@ class wxWindowPropertyInfo: public wxPropertyInfo
 
   // Set the window style
   void SetWindowStyle(wxWindow* win, long style, bool set);
+
+  wxWindow* GetWindow() const { return m_propertyWindow; }
+  wxItemResource* GetResource() const { return m_propertyResource; }
 
  protected:
   wxWindow*         m_propertyWindow;

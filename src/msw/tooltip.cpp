@@ -162,7 +162,7 @@ LRESULT APIENTRY wxToolTipWndProc(HWND hwndTT,
         }
     }
 
-    return ::CallWindowProc(gs_wndprocToolTip, hwndTT, msg, wParam, lParam);
+    return ::CallWindowProc(CASTWNDPROC gs_wndprocToolTip, hwndTT, msg, wParam, lParam);
 }
 
 #endif // wxUSE_TTM_WINDOWFROMPOINT
