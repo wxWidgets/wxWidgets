@@ -66,6 +66,42 @@ typedef struct
     } HtmlContentsItem;
 
 
+//-----------------------------------------------------------------------------
+// Helper constants
+//-----------------------------------------------------------------------------
+
+
+// Command IDs :
+
+enum {
+    wxID_HTML_PANEL = wxID_HIGHEST + 1,
+    wxID_HTML_BACK,
+    wxID_HTML_FORWARD,
+    wxID_HTML_TREECTRL,
+    wxID_HTML_INDEXPAGE,
+    wxID_HTML_INDEXLIST,
+    wxID_HTML_NOTEBOOK,
+    wxID_HTML_SEARCHPAGE,
+    wxID_HTML_SEARCHTEXT,
+    wxID_HTML_SEARCHLIST,
+    wxID_HTML_SEARCHBUTTON
+};
+
+
+//--------------------------------------------------------------------------------
+// HtmlHelpTreeItemData 
+//                  Stores the location of a contents item in a tree item
+//--------------------------------------------------------------------------------
+
+class wxHtmlHelpTreeItemData : public wxTreeItemData
+{
+    private:
+        wxString m_Page;
+
+    public:
+        wxHtmlHelpTreeItemData(HtmlContentsItem *it) : wxTreeItemData() {m_Page = it -> m_Book -> GetBasePath() + it -> m_Page;}
+        const wxString& GetPage() {return m_Page;}
+};
 
 
 //--------------------------------------------------------------------------------
@@ -122,6 +158,13 @@ class WXDLLEXPORT wxHtmlHelpController : public wxEvtHandler
     public:
         wxHtmlHelpController();
         ~wxHtmlHelpController();
+
+	// Images:
+	enum {
+	    IMG_Book = 0,
+	    IMG_Folder,
+	    IMG_Page
+	};
 
         void SetTitleFormat(const wxString& format) {m_TitleFormat = format;}
                 // Sets format of title of the frame. Must contain exactly one "%s"

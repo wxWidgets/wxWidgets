@@ -52,54 +52,6 @@
 
 
 
-//-----------------------------------------------------------------------------
-// Helper constants
-//-----------------------------------------------------------------------------
-
-
-// Command IDs :
-
-enum {
-    wxID_HTML_PANEL = wxID_HIGHEST + 1,
-    wxID_HTML_BACK,
-    wxID_HTML_FORWARD,
-    wxID_HTML_TREECTRL,
-    wxID_HTML_INDEXPAGE,
-    wxID_HTML_INDEXLIST,
-    wxID_HTML_NOTEBOOK,
-    wxID_HTML_SEARCHPAGE,
-    wxID_HTML_SEARCHTEXT,
-    wxID_HTML_SEARCHLIST,
-    wxID_HTML_SEARCHBUTTON
-};
-
-
-// Images:
-
-enum {
-    IMG_Book = 0,
-    IMG_Folder,
-    IMG_Page
-};
-
-
-
-
-
-
-class HtmlHelpTreeItemData : public wxTreeItemData
-{
-    private:
-        wxString m_Page;
-
-    public:
-        HtmlHelpTreeItemData(HtmlContentsItem *it) : wxTreeItemData() {m_Page = it -> m_Book -> GetBasePath() + it -> m_Page;}
-        const wxString& GetPage() {return m_Page;}
-};
-
-
-
-
 
 #include <wx/arrimpl.cpp>
 WX_DEFINE_OBJARRAY(HtmlBookRecArray)
@@ -142,6 +94,15 @@ wxHtmlHelpController::wxHtmlHelpController() : wxEvtHandler()
     m_ContentsCnt = 0;
     m_Index = NULL;
     m_IndexCnt = 0;
+
+    m_IndexBox = NULL;
+    m_ContentsBox = NULL;
+    m_SearchList = NULL;
+    m_SearchText = NULL;
+    m_SearchButton = NULL;
+    m_HtmlWin = NULL;
+    m_Splitter = NULL;
+    m_NavigPan = NULL;
 }
 
 
@@ -433,19 +394,22 @@ END_EVENT_TABLE()
 bool wxHtmlHelpController::KeywordSearch(const wxString& keyword)
 {
     int foundcnt = 0;
-
     CreateHelpWindow();
+    // if these are not set, we can't continue
+    if (! (m_SearchList && m_HtmlWin))
+       return FALSE;
     m_Frame -> Raise();
-    if (!m_Splitter -> IsSplit()) {
-       m_NavigPan -> Show(TRUE);
-       m_HtmlWin -> Show(TRUE);
-       m_Splitter -> SplitVertically(m_NavigPan, m_HtmlWin, m_Cfg.sashpos);
+    if (m_Splitter && m_NavigPan && m_SearchButton) {
+       if (!m_Splitter -> IsSplit()) {
+          m_NavigPan -> Show(TRUE);
+          m_HtmlWin -> Show(TRUE);
+          m_Splitter -> SplitVertically(m_NavigPan, m_HtmlWin, m_Cfg.sashpos);
+       }
+       m_NavigPan -> SetSelection(2);
+       m_SearchList -> Clear();
+       m_SearchText -> SetValue(keyword);
+       m_SearchButton -> Enable(FALSE);
     }
-    m_NavigPan -> SetSelection(2);
-    m_SearchList -> Clear();
-    m_SearchText -> SetValue(keyword);
-    m_SearchButton -> Enable(FALSE);
-
     {
         int cnt = m_ContentsCnt;
         wxSearchEngine engine;
@@ -503,10 +467,12 @@ bool wxHtmlHelpController::KeywordSearch(const wxString& keyword)
         progress.Close(TRUE);
 #endif
     }
-
-    m_SearchButton -> Enable(TRUE);
-    m_SearchText -> SetSelection(0, keyword.Length());
-    m_SearchText -> SetFocus();
+    if (m_SearchButton)
+	m_SearchButton -> Enable(TRUE);
+    if (m_SearchText) {
+	m_SearchText -> SetSelection(0, keyword.Length());
+	m_SearchText -> SetFocus();
+    }
     if (foundcnt) {
         HtmlContentsItem *it = (HtmlContentsItem*) m_SearchList -> GetClientData(0);
         if (it) m_HtmlWin -> LoadPage(it -> m_Book -> GetBasePath() + it -> m_Page);
@@ -666,7 +632,7 @@ void wxHtmlHelpController::CreateContents()
 
     for (int i = 0; i < count; i++) {
         it = m_Contents + i;
-        roots[it -> m_Level + 1] = m_ContentsBox -> AppendItem(roots[it -> m_Level], it -> m_Name, IMG_Page, -1, new HtmlHelpTreeItemData(it));
+        roots[it -> m_Level + 1] = m_ContentsBox -> AppendItem(roots[it -> m_Level], it -> m_Name, IMG_Page, -1, new wxHtmlHelpTreeItemData(it));
         if (it -> m_Level == 0) {
             m_ContentsBox -> SetItemBold(roots[1], TRUE);
             m_ContentsBox -> SetItemImage(roots[1], IMG_Book);
@@ -793,9 +759,9 @@ void wxHtmlHelpController::OnToolbar(wxCommandEvent& event)
 
 void wxHtmlHelpController::OnContentsSel(wxTreeEvent& event)
 {
-    HtmlHelpTreeItemData *pg;
+    wxHtmlHelpTreeItemData *pg;
 
-    pg = (HtmlHelpTreeItemData*) m_ContentsBox -> GetItemData(event.GetItem());
+    pg = (wxHtmlHelpTreeItemData*) m_ContentsBox -> GetItemData(event.GetItem());
     if (pg) m_HtmlWin -> LoadPage(pg -> GetPage());
 }
 
