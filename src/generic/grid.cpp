@@ -2020,7 +2020,7 @@ wxGridCellRenderer* wxGridCellAttr::GetRenderer(wxGrid* grid, int row, int col) 
 {
     wxGridCellRenderer* renderer = NULL;
 
-    if ( m_defGridAttr != this || grid == NULL )
+    if ( m_defGridAttr == this || grid == NULL )
     {
         renderer = m_renderer;      // use local attribute
         if ( renderer )
