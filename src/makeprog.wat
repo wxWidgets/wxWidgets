@@ -20,9 +20,9 @@ $(LNK) : makefile.wat
     @%append $(LNK) system $(LINKOPTION)
     @%append $(LNK) $(STACK)
     @%append $(LNK) name $(PROGRAM).exe
-    @for %i in ($(LIBS)) do @%append $(LNK) file %i
-    @for %i in ($(EXTRALIBS)) do @%append $(LNK) file %i
     @for %i in ($(OBJECTS)) do @%append $(LNK) file %i
+    @for %i in ($(LIBS)) do @%append $(LNK) lib %i
+    @for %i in ($(EXTRALIBS)) do @%append $(LNK) lib %i
 #    @%append $(LNK) $(MINDATA)
 #    @%append $(LNK) $(MAXDATA)
 

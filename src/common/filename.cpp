@@ -38,6 +38,12 @@
 #include "wx/config.h"          // for wxExpandEnvVars
 #include "wx/utils.h"
 
+// For GetShort/LongPathName
+#ifdef __WIN32__
+#include <windows.h>
+#include "wx/msw/winundef.h"
+#endif
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -316,6 +322,13 @@ bool wxFileName::Normalize(wxPathNormalize flags,
         m_ext.MakeLower();
     }
 
+#if defined(__WXMSW__) && defined(__WIN32__)
+    if (flags & wxPATH_NORM_LONG)
+    {
+        Assign(GetLongPath());
+    }
+#endif
+
     return TRUE;
 }
 
@@ -358,9 +371,15 @@ bool wxFileName::IsAbsolute( wxPathFormat format )
 {
     wxChar ch = m_dirs.IsEmpty() ? _T('\0') : m_dirs[0u][0u];
 
+    // Hack to cope with e.g. c:\thing - need something better
+    wxChar driveSep = _T('\0');
+    if (!m_dirs.IsEmpty() && m_dirs[0].Length() > 1)
+        driveSep = m_dirs[0u][1u];
+
     // the path is absolute if it starts with a path separator or, only for
     // Unix filenames, with "~" or "~user"
     return IsPathSeparator(ch, format) ||
+           driveSep == _T(':') ||
            (GetFormat(format) == wxPATH_UNIX && ch == _T('~') );
 }
 
@@ -467,6 +486,58 @@ wxString wxFileName::GetPath( bool add_separator, wxPathFormat format ) const
 wxString wxFileName::GetFullPath( wxPathFormat format ) const
 {
     return GetPathWithSep() + GetFullName();
+}
+
+// Return the short form of the path (returns identity on non-Windows platforms)
+wxString wxFileName::GetShortPath() const
+{
+#if defined(__WXMSW__) && defined(__WIN32__)
+    wxString path(GetFullPath());
+
+    wxChar outBuf[MAX_PATH];
+
+    // TODO: can't work out how to determine if the function failed
+    // (positive value if either it succeeded or the buffer was too small)
+
+    int bufSz = ::GetShortPathName((const wxChar*) path, outBuf, MAX_PATH*sizeof(wxChar));
+
+    if (bufSz == 0)
+    {
+        return wxEmptyString;
+    }
+    else
+    {
+        return wxString(outBuf);
+    }
+#else
+    return GetFullPath();
+#endif
+}
+
+// Return the long form of the path (returns identity on non-Windows platforms)
+wxString wxFileName::GetLongPath() const
+{
+#if defined(__WXMSW__) && defined(__WIN32__)
+    wxString path(GetFullPath());
+
+    wxChar outBuf[MAX_PATH];
+
+    // TODO: can't work out how to determine if the function failed
+    // (positive value if either it succeeded or the buffer was too small)
+
+    int bufSz = ::GetLongPathName((const wxChar*) path, outBuf, MAX_PATH*sizeof(wxChar));
+
+    if (bufSz == 0)
+    {
+        return wxEmptyString;
+    }
+    else
+    {
+        return wxString(outBuf);
+    }
+#else
+    return GetFullPath();
+#endif
 }
 
 wxPathFormat wxFileName::GetFormat( wxPathFormat format )

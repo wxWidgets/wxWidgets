@@ -65,7 +65,8 @@ enum wxPathNormalize
     wxPATH_NORM_TILDE    = 0x0004,  // Unix only: replace ~ and ~user
     wxPATH_NORM_CASE     = 0x0008,  // if case insensitive => tolower
     wxPATH_NORM_ABSOLUTE = 0x0010,  // make the path absolute
-    wxPATH_NORM_ALL      = 0x001f
+    wxPATH_NORM_LONG =     0x0020,  // make the path the long form
+    wxPATH_NORM_ALL      = 0x003f
 };
 
 // ----------------------------------------------------------------------------
@@ -240,6 +241,12 @@ public:
 
     // Construct full path with name and ext
     wxString GetFullPath( wxPathFormat format = wxPATH_NATIVE ) const;
+
+    // Return the short form of the path (returns identity on non-Windows platforms)
+    wxString GetShortPath() const;
+
+    // Return the long form of the path (returns identity on non-Windows platforms)
+    wxString GetLongPath() const;
 
     // various helpers
 
