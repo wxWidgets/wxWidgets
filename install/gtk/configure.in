@@ -951,7 +951,7 @@ fi
 
 WXDEBUG=
 if test "$USE_DEBUG_INFO" = 1 ; then
-  WXDEBUG="-g"
+  WXDEBUG="-g -O0"
 fi
 AC_SUBST(WXDEBUG)
 
