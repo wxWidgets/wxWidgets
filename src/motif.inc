@@ -25,7 +25,6 @@ LIB_CPP_SRC=\
  common/hash.cpp \
  common/helpbase.cpp \
  common/intl.cpp \
- common/image.cpp \
  common/ipcbase.cpp \
  common/layout.cpp \
  common/list.cpp \
@@ -39,8 +38,9 @@ LIB_CPP_SRC=\
  common/resource.cpp \
  common/serbase.cpp \
  common/string.cpp \
- common/tbarbase.cpp \
  common/textfile.cpp \
+ common/tbarbase.cpp \
+ common/tbarsmpl.cpp \
  common/time.cpp \
  common/timercmn.cpp \
  common/utilscmn.cpp \
@@ -74,8 +74,9 @@ LIB_CPP_SRC=\
  motif/button.cpp \
  motif/checkbox.cpp \
  motif/choice.cpp \
- motif/colordlg.cpp \
+ motif/clipbrd.cpp \
  motif/colour.cpp \
+ motif/colordlg.cpp \
  motif/control.cpp \
  motif/combobox.cpp \
  motif/cursor.cpp \
@@ -85,39 +86,47 @@ LIB_CPP_SRC=\
  motif/dcmemory.cpp \
  motif/dcscreen.cpp \
  motif/dialog.cpp \
+ motif/dirdlg.cpp \
+ motif/dnd.cpp \
  motif/filedlg.cpp \
  motif/font.cpp \
  motif/fontdlg.cpp \
  motif/frame.cpp \
  motif/gauge.cpp \
  motif/gdiobj.cpp \
+ motif/helpxxxx.cpp \
  motif/icon.cpp \
  motif/listbox.cpp \
+ motif/joystick.cpp \
  motif/main.cpp \
  motif/mdi.cpp \
  motif/menu.cpp \
  motif/menuitem.cpp \
+ motif/metafile.cpp \
+ motif/minifram.cpp \
  motif/msgdlg.cpp \
  motif/notebook.cpp \
  motif/palette.cpp \
  motif/pen.cpp \
  motif/print.cpp \
- motif/printdlg.cpp \
  motif/radiobox.cpp \
  motif/radiobut.cpp \
  motif/region.cpp \
  motif/scrolbar.cpp \
  motif/settings.cpp \
- motif/spinbutt.cpp \
  motif/slider.cpp \
+ motif/spinbutt.cpp \
  motif/statbox.cpp \
  motif/statbmp.cpp \
  motif/stattext.cpp \
- motif/toolbar.cpp \
+ motif/taskbar.cpp \
  motif/textctrl.cpp \
+ motif/thread.cpp \
  motif/timer.cpp \
+ motif/toolbar.cpp \
  motif/utils.cpp \
  motif/utilsexc.cpp \
+ motif/wave.cpp \
  motif/window.cpp \
 \
  generic/choicdgg.cpp \

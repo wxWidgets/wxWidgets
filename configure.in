@@ -671,7 +671,7 @@ dnl ------------------------------------------------------------------------
 
 AC_OVERRIDES_PREPARE
 
-DEFAULT_wxUSE_GTK=1
+DEFAULT_wxUSE_GTK=0
 DEFAULT_wxUSE_QT=0
 DEFAULT_wxUSE_MOTIF=0
 
@@ -1088,10 +1088,11 @@ if test "$wxUSE_MOTIF" = 1; then
   else
      AC_MSG_ERROR(no)
   fi
-  GUI_TK_LINK="-lXt -lXmu -lXpm -lX11 -lXm -lm"
+  
+  GUI_TK_LINK="-lXm -lXmu -lXt -lXpm -lX11 -lm"
   GUI_TK_LINK="$CHECK_LINK $GUI_TK_LINK"
   TOOLKIT=MOTIF
-  TOOLKIT_DEF=__WXMOTIF__
+  TOOLKIT_DEF="__WXMOTIF__ -D__LINUX__ -D__UNIX__"
   WX_LINK=-lwx_motif
   MAKEINCLUDE=../motif.inc
 fi
@@ -1117,7 +1118,8 @@ dnl ----------------------------------------------------------------
 
 WXDEBUG=
 if test "$wxUSE_DEBUG_INFO" = 1 ; then
-  WXDEBUG="-g -O0"
+  WXDEBUG="-ggdb"
+  wxUSE_OPTIMISE=0
 fi
 AC_SUBST(WXDEBUG)
 
@@ -1621,7 +1623,11 @@ if test "x$GCC" = xyes; then
 fi
 
 if test "x$GXX" = xyes; then
-  CXXFLAGS="${CXXFLAGS} -Wall"
+  if test "$wxUSE_MOTIF" = 1; then
+    CXXFLAGS="${CXXFLAGS} -Wall -Wno-unused"
+  else
+    CXXFLAGS="${CXXFLAGS} -Wall"
+  fi
 fi
 
 if test "$wxUSE_SHARED" != 1; then

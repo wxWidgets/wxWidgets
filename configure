@@ -4522,7 +4522,7 @@ touch ${OSTYPE}.system.cache.tmp
 touch ${OSTYPE}.system.cache
 
 
-DEFAULT_wxUSE_GTK=1
+DEFAULT_wxUSE_GTK=0
 DEFAULT_wxUSE_QT=0
 DEFAULT_wxUSE_MOTIF=0
 
@@ -6407,10 +6407,11 @@ for ac_dir in $SEARCH_LIB;
   else
      { echo "configure: error: no" 1>&2; exit 1; }
   fi
-  GUI_TK_LINK="-lXt -lXmu -lXpm -lX11 -lXm -lm"
+  
+  GUI_TK_LINK="-lXm -lXmu -lXt -lXpm -lX11 -lm"
   GUI_TK_LINK="$CHECK_LINK $GUI_TK_LINK"
   TOOLKIT=MOTIF
-  TOOLKIT_DEF=__WXMOTIF__
+  TOOLKIT_DEF="__WXMOTIF__ -D__LINUX__ -D__UNIX__"
   WX_LINK=-lwx_motif
   MAKEINCLUDE=../motif.inc
 fi
@@ -6433,7 +6434,8 @@ fi
 
 WXDEBUG=
 if test "$wxUSE_DEBUG_INFO" = 1 ; then
-  WXDEBUG="-g -O0"
+  WXDEBUG="-ggdb"
+  wxUSE_OPTIMISE=0
 fi
 
 
@@ -6812,7 +6814,7 @@ fi
 
 
 echo $ac_n "checking for main in -ldl""... $ac_c" 1>&6
-echo "configure:6816: checking for main in -ldl" >&5
+echo "configure:6818: checking for main in -ldl" >&5
 ac_lib_var=`echo dl'_'main | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -6820,14 +6822,14 @@ else
   ac_save_LIBS="$LIBS"
 LIBS="-ldl  $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 6824 "configure"
+#line 6826 "configure"
 #include "confdefs.h"
 
 int main() {
 main()
 ; return 0; }
 EOF
-if { (eval echo configure:6831: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
+if { (eval echo configure:6833: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
@@ -6857,7 +6859,7 @@ UNIX_THREAD="gtk/threadno.cpp"
 
 
 echo $ac_n "checking "for threads"""... $ac_c" 1>&6
-echo "configure:6861: checking "for threads"" >&5
+echo "configure:6863: checking "for threads"" >&5
 # Check whether --with-threads or --without-threads was given.
 if test "${with_threads+set}" = set; then
   withval="$with_threads"
@@ -6891,7 +6893,7 @@ if test "$wxUSE_THREADS" = "1"; then
 
   
   echo $ac_n "checking for pthread_create in -lpthread-0.7""... $ac_c" 1>&6
-echo "configure:6895: checking for pthread_create in -lpthread-0.7" >&5
+echo "configure:6897: checking for pthread_create in -lpthread-0.7" >&5
 ac_lib_var=`echo pthread-0.7'_'pthread_create | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -6899,7 +6901,7 @@ else
   ac_save_LIBS="$LIBS"
 LIBS="-lpthread-0.7  $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 6903 "configure"
+#line 6905 "configure"
 #include "confdefs.h"
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
@@ -6910,7 +6912,7 @@ int main() {
 pthread_create()
 ; return 0; }
 EOF
-if { (eval echo configure:6914: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
+if { (eval echo configure:6916: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
@@ -6934,17 +6936,17 @@ else
 
     ac_safe=`echo "sys/prctl.h" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for sys/prctl.h""... $ac_c" 1>&6
-echo "configure:6938: checking for sys/prctl.h" >&5
+echo "configure:6940: checking for sys/prctl.h" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 6943 "configure"
+#line 6945 "configure"
 #include "confdefs.h"
 #include <sys/prctl.h>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:6948: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:6950: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -6970,7 +6972,7 @@ fi
 
         
     echo $ac_n "checking for pthread_setcanceltype in -lpthread""... $ac_c" 1>&6
-echo "configure:6974: checking for pthread_setcanceltype in -lpthread" >&5
+echo "configure:6976: checking for pthread_setcanceltype in -lpthread" >&5
 ac_lib_var=`echo pthread'_'pthread_setcanceltype | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -6978,7 +6980,7 @@ else
   ac_save_LIBS="$LIBS"
 LIBS="-lpthread  $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 6982 "configure"
+#line 6984 "configure"
 #include "confdefs.h"
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
@@ -6989,7 +6991,7 @@ int main() {
 pthread_setcanceltype()
 ; return 0; }
 EOF
-if { (eval echo configure:6993: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
+if { (eval echo configure:6995: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
@@ -7016,7 +7018,7 @@ fi
 fi
 
   echo $ac_n "checking for pthread_setcanceltype in -lpthreads""... $ac_c" 1>&6
-echo "configure:7020: checking for pthread_setcanceltype in -lpthreads" >&5
+echo "configure:7022: checking for pthread_setcanceltype in -lpthreads" >&5
 ac_lib_var=`echo pthreads'_'pthread_setcanceltype | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -7024,7 +7026,7 @@ else
   ac_save_LIBS="$LIBS"
 LIBS="-lpthreads  $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 7028 "configure"
+#line 7030 "configure"
 #include "confdefs.h"
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
@@ -7035,7 +7037,7 @@ int main() {
 pthread_setcanceltype()
 ; return 0; }
 EOF
-if { (eval echo configure:7039: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
+if { (eval echo configure:7041: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
@@ -7083,7 +7085,7 @@ OPENGL_LINK=
 
 if test "$wxUSE_OPENGL" = 1; then
     echo $ac_n "checking for OpenGL includes""... $ac_c" 1>&6
-echo "configure:7087: checking for OpenGL includes" >&5
+echo "configure:7089: checking for OpenGL includes" >&5
   
 ac_find_includes=
 for ac_dir in $SEARCH_INCLUDE;
@@ -7098,7 +7100,7 @@ for ac_dir in $SEARCH_INCLUDE;
     OPENGL_INCLUDE="-I$ac_find_includes"
     echo "$ac_t""found $ac_find_includes" 1>&6
         echo $ac_n "checking for OpenGL library""... $ac_c" 1>&6
-echo "configure:7102: checking for OpenGL library" >&5
+echo "configure:7104: checking for OpenGL library" >&5
     
 ac_find_libraries=
 for ac_dir in $SEARCH_LIB;
@@ -7325,7 +7327,11 @@ if test "x$GCC" = xyes; then
 fi
 
 if test "x$GXX" = xyes; then
-  CXXFLAGS="${CXXFLAGS} -Wall"
+  if test "$wxUSE_MOTIF" = 1; then
+    CXXFLAGS="${CXXFLAGS} -Wall -Wno-unused"
+  else
+    CXXFLAGS="${CXXFLAGS} -Wall"
+  fi
 fi
 
 if test "$wxUSE_SHARED" != 1; then
