@@ -242,8 +242,11 @@ class wxPyTimerPtr :
     def __del__(self,miscc=miscc):
         if self.thisown == 1 :
             miscc.delete_wxPyTimer(self)
-    def Interval(self, *_args, **_kwargs):
-        val = apply(miscc.wxPyTimer_Interval,(self,) + _args, _kwargs)
+    def GetInterval(self, *_args, **_kwargs):
+        val = apply(miscc.wxPyTimer_GetInterval,(self,) + _args, _kwargs)
+        return val
+    def IsOneShot(self, *_args, **_kwargs):
+        val = apply(miscc.wxPyTimer_IsOneShot,(self,) + _args, _kwargs)
         return val
     def Start(self, *_args, **_kwargs):
         val = apply(miscc.wxPyTimer_Start,(self,) + _args, _kwargs)
@@ -564,6 +567,8 @@ wxSafeYield = miscc.wxSafeYield
 wxEnableTopLevelWindows = miscc.wxEnableTopLevelWindows
 
 wxGetResource = miscc.wxGetResource
+
+wxStripMenuCodes = miscc.wxStripMenuCodes
 
 
 

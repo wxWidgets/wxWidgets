@@ -1136,6 +1136,23 @@ static PyObject *_wrap_wxPostEvent(PyObject *self, PyObject *args, PyObject *kwa
     return _resultobj;
 }
 
+static PyObject *_wrap_wxWakeUpIdle(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxWakeUpIdle",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxWakeUpIdle();
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define new_wxToolTip(_swigarg0) (new wxToolTip(_swigarg0))
 static PyObject *_wrap_new_wxToolTip(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -2065,6 +2082,7 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxToolTip_GetTip", (PyCFunction) _wrap_wxToolTip_GetTip, METH_VARARGS | METH_KEYWORDS },
 	 { "wxToolTip_SetTip", (PyCFunction) _wrap_wxToolTip_SetTip, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxToolTip", (PyCFunction) _wrap_new_wxToolTip, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWakeUpIdle", (PyCFunction) _wrap_wxWakeUpIdle, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPostEvent", (PyCFunction) _wrap_wxPostEvent, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCaret_SetBlinkTime", (PyCFunction) _wrap_wxCaret_SetBlinkTime, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCaret_GetBlinkTime", (PyCFunction) _wrap_wxCaret_GetBlinkTime, METH_VARARGS | METH_KEYWORDS },

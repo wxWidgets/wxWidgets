@@ -405,6 +405,9 @@ class wxCheckListBoxPtr(wxListBoxPtr):
     def Check(self, *_args, **_kwargs):
         val = apply(controlsc.wxCheckListBox_Check,(self,) + _args, _kwargs)
         return val
+    def InsertItems(self, *_args, **_kwargs):
+        val = apply(controlsc.wxCheckListBox_InsertItems,(self,) + _args, _kwargs)
+        return val
     def GetItemHeight(self, *_args, **_kwargs):
         val = apply(controlsc.wxCheckListBox_GetItemHeight,(self,) + _args, _kwargs)
         return val

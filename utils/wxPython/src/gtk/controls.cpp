@@ -3650,13 +3650,12 @@ static PyObject *_wrap_wxCheckListBox_Check(PyObject *self, PyObject *args, PyOb
     PyObject * _resultobj;
     wxCheckListBox * _arg0;
     int  _arg1;
-    bool  _arg2 = (bool ) TRUE;
+    int  _arg2 = (int ) TRUE;
     PyObject * _argo0 = 0;
-    int tempbool2 = (int) TRUE;
     char *_kwnames[] = { "self","uiIndex","bCheck", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|i:wxCheckListBox_Check",_kwnames,&_argo0,&_arg1,&tempbool2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|i:wxCheckListBox_Check",_kwnames,&_argo0,&_arg1,&_arg2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3665,7 +3664,6 @@ static PyObject *_wrap_wxCheckListBox_Check(PyObject *self, PyObject *args, PyOb
         return NULL;
         }
     }
-    _arg2 = (bool ) tempbool2;
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxCheckListBox_Check(_arg0,_arg1,_arg2);
@@ -3673,6 +3671,54 @@ static PyObject *_wrap_wxCheckListBox_Check(PyObject *self, PyObject *args, PyOb
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
     _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxCheckListBox_InsertItems(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->InsertItems(_swigarg0,_swigarg1,_swigarg2))
+static PyObject *_wrap_wxCheckListBox_InsertItems(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxCheckListBox * _arg0;
+    int  _arg1;
+    wxString * _arg2;
+    int  _arg3;
+    PyObject * _argo0 = 0;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","LIST","pos", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOi:wxCheckListBox_InsertItems",_kwnames,&_argo0,&_obj2,&_arg3)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxCheckListBox_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCheckListBox_InsertItems. Expected _wxCheckListBox_p.");
+        return NULL;
+        }
+    }
+{
+    _arg2 = wxString_LIST_helper(_obj2);
+    if (_arg2 == NULL) {
+        return NULL;
+    }
+}
+{
+    if (_obj2) {
+        _arg1 = PyList_Size(_obj2);
+    }
+    else {
+        _arg1 = 0;
+    }
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxCheckListBox_InsertItems(_arg0,_arg1,_arg2,_arg3);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    delete [] _arg2;
+}
     return _resultobj;
 }
 
@@ -7005,6 +7051,7 @@ static PyMethodDef controlscMethods[] = {
 	 { "wxTextCtrl_Clear", (PyCFunction) _wrap_wxTextCtrl_Clear, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxTextCtrl", (PyCFunction) _wrap_new_wxTextCtrl, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCheckListBox_GetItemHeight", (PyCFunction) _wrap_wxCheckListBox_GetItemHeight, METH_VARARGS | METH_KEYWORDS },
+	 { "wxCheckListBox_InsertItems", (PyCFunction) _wrap_wxCheckListBox_InsertItems, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCheckListBox_Check", (PyCFunction) _wrap_wxCheckListBox_Check, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCheckListBox_IsChecked", (PyCFunction) _wrap_wxCheckListBox_IsChecked, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxCheckListBox", (PyCFunction) _wrap_new_wxCheckListBox, METH_VARARGS | METH_KEYWORDS },

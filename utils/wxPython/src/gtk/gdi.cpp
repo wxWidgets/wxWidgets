@@ -1943,7 +1943,7 @@ static PyObject *_wrap_wxCursor_Ok(PyObject *self, PyObject *args, PyObject *kwa
 static wxFont *new_wxFont(int pointSize,int family,int style,int weight,int underline,char *faceName,wxFontEncoding encoding) {
 
             return wxTheFontList->FindOrCreateFont(pointSize, family, style, weight,
-                                                   underline, faceName);
+                                                   underline, faceName, encoding);
         }
 
 static PyObject *_wrap_new_wxFont(PyObject *self, PyObject *args, PyObject *kwargs) {
@@ -1974,6 +1974,33 @@ static PyObject *_wrap_new_wxFont(PyObject *self, PyObject *args, PyObject *kwar
         Py_INCREF(Py_None);
         _resultobj = Py_None;
     }
+    return _resultobj;
+}
+
+#define wxFont_Ok(_swigobj)  (_swigobj->Ok())
+static PyObject *_wrap_wxFont_Ok(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxFont * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFont_Ok",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFont_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFont_Ok. Expected _wxFont_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxFont_Ok(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -6687,6 +6714,7 @@ static PyMethodDef gdicMethods[] = {
 	 { "wxFont_GetPointSize", (PyCFunction) _wrap_wxFont_GetPointSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFont_GetFamily", (PyCFunction) _wrap_wxFont_GetFamily, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFont_GetFaceName", (PyCFunction) _wrap_wxFont_GetFaceName, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFont_Ok", (PyCFunction) _wrap_wxFont_Ok, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxFont", (PyCFunction) _wrap_new_wxFont, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCursor_Ok", (PyCFunction) _wrap_wxCursor_Ok, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxCursor", (PyCFunction) _wrap_delete_wxCursor, METH_VARARGS | METH_KEYWORDS },

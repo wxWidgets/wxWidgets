@@ -3665,18 +3665,19 @@ static PyObject *_wrap_wxTreeCtrl_GetItemText(PyObject *self, PyObject *args, Py
     return _resultobj;
 }
 
-#define wxTreeCtrl_GetItemImage(_swigobj,_swigarg0)  (_swigobj->GetItemImage(_swigarg0))
+#define wxTreeCtrl_GetItemImage(_swigobj,_swigarg0,_swigarg1)  (_swigobj->GetItemImage(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxTreeCtrl_GetItemImage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
     wxTreeCtrl * _arg0;
     wxTreeItemId * _arg1;
+    wxTreeItemIcon  _arg2 = (wxTreeItemIcon ) (wxTreeItemIcon_Normal);
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
-    char *_kwnames[] = { "self","item", NULL };
+    char *_kwnames[] = { "self","item","which", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxTreeCtrl_GetItemImage",_kwnames,&_argo0,&_argo1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|i:wxTreeCtrl_GetItemImage",_kwnames,&_argo0,&_argo1,&_arg2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3694,7 +3695,7 @@ static PyObject *_wrap_wxTreeCtrl_GetItemImage(PyObject *self, PyObject *args, P
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxTreeCtrl_GetItemImage(_arg0,*_arg1);
+        _result = (int )wxTreeCtrl_GetItemImage(_arg0,*_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
 }    _resultobj = Py_BuildValue("i",_result);
@@ -3786,18 +3787,19 @@ static PyObject *_wrap_wxTreeCtrl_SetItemText(PyObject *self, PyObject *args, Py
     return _resultobj;
 }
 
-#define wxTreeCtrl_SetItemImage(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetItemImage(_swigarg0,_swigarg1))
+#define wxTreeCtrl_SetItemImage(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->SetItemImage(_swigarg0,_swigarg1,_swigarg2))
 static PyObject *_wrap_wxTreeCtrl_SetItemImage(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxTreeCtrl * _arg0;
     wxTreeItemId * _arg1;
     int  _arg2;
+    wxTreeItemIcon  _arg3 = (wxTreeItemIcon ) (wxTreeItemIcon_Normal);
     PyObject * _argo0 = 0;
     PyObject * _argo1 = 0;
-    char *_kwnames[] = { "self","item","image", NULL };
+    char *_kwnames[] = { "self","item","image","which", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOi:wxTreeCtrl_SetItemImage",_kwnames,&_argo0,&_argo1,&_arg2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOi|i:wxTreeCtrl_SetItemImage",_kwnames,&_argo0,&_argo1,&_arg2,&_arg3)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3815,7 +3817,7 @@ static PyObject *_wrap_wxTreeCtrl_SetItemImage(PyObject *self, PyObject *args, P
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxTreeCtrl_SetItemImage(_arg0,*_arg1,_arg2);
+        wxTreeCtrl_SetItemImage(_arg0,*_arg1,_arg2,_arg3);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -6134,6 +6136,11 @@ SWIGEXPORT(void) initcontrols2c() {
 	 PyDict_SetItemString(d,"wxLIST_FIND_DOWN", PyInt_FromLong((long) wxLIST_FIND_DOWN));
 	 PyDict_SetItemString(d,"wxLIST_FIND_LEFT", PyInt_FromLong((long) wxLIST_FIND_LEFT));
 	 PyDict_SetItemString(d,"wxLIST_FIND_RIGHT", PyInt_FromLong((long) wxLIST_FIND_RIGHT));
+	 PyDict_SetItemString(d,"wxTreeItemIcon_Normal", PyInt_FromLong((long) wxTreeItemIcon_Normal));
+	 PyDict_SetItemString(d,"wxTreeItemIcon_Selected", PyInt_FromLong((long) wxTreeItemIcon_Selected));
+	 PyDict_SetItemString(d,"wxTreeItemIcon_Expanded", PyInt_FromLong((long) wxTreeItemIcon_Expanded));
+	 PyDict_SetItemString(d,"wxTreeItemIcon_SelectedExpanded", PyInt_FromLong((long) wxTreeItemIcon_SelectedExpanded));
+	 PyDict_SetItemString(d,"wxTreeItemIcon_Max", PyInt_FromLong((long) wxTreeItemIcon_Max));
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)
