@@ -82,6 +82,7 @@ wxApp::wxApp()
   m_idleTag = 0;
   m_topWindow = NULL;
   m_exitOnFrameDelete = TRUE;
+  wxTheApp = this;
 }
 
 wxApp::~wxApp(void)
@@ -95,14 +96,14 @@ bool wxApp::OnInit(void)
 }
 
 bool wxApp::OnInitGui(void)
-{ 
+{
   m_idleTag = gtk_idle_add( wxapp_idle_callback, NULL );
-  return TRUE; 
+  return TRUE;
 }
 
-int wxApp::OnRun(void) 
-{ 
-  return MainLoop(); 
+int wxApp::OnRun(void)
+{
+  return MainLoop();
 }
 
 bool wxApp::ProcessIdle(void)
@@ -110,7 +111,7 @@ bool wxApp::ProcessIdle(void)
   wxIdleEvent event;
   event.SetEventObject( this );
   ProcessEvent( event );
-  
+
   return event.MoreRequested();
 }
 
@@ -200,12 +201,12 @@ bool wxApp::Initialized(void)
   return m_initialized;
 }
 
-bool wxApp::Pending(void) 
+bool wxApp::Pending(void)
 {
   return FALSE;
 }
 
-void wxApp::Dispatch(void) 
+void wxApp::Dispatch(void)
 {
 }
 
@@ -215,7 +216,7 @@ void wxApp::DeletePendingObjects(void)
   while (node)
   {
     wxObject *obj = (wxObject *)node->Data();
-    
+
     delete obj;
 
     if (wxPendingDelete.Member(obj))
@@ -259,7 +260,7 @@ void wxApp::CommonInit(void)
   wxInitializeStockObjects();
 
   wxInitializeResourceSystem();
-  
+
   // For PostScript printing
 #if USE_POSTSCRIPT
   wxInitializePrintSetupData();
@@ -282,7 +283,7 @@ void wxApp::CommonCleanUp(void)
   wxDELETE(wxThePrintSetupData);
   wxDELETE(wxTheFontNameDirectory);
   wxDeleteStockObjects();
-  
+
   wxFlushResources();
 
   wxDELETE(wxTheResourceCache);
@@ -290,10 +291,10 @@ void wxApp::CommonCleanUp(void)
   wxDeleteStockLists();
 
   wxCleanUpResourceSystem();
-  
+
   wxSystemSettings::Done();
 }
-    
+
 wxLog *wxApp::CreateLogTarget()
 {
   return new wxLogGui;
@@ -308,7 +309,7 @@ int wxEntry( int argc, char *argv[] )
   wxBuffer = new char[BUFSIZ + 512];
 
   wxClassInfo::InitializeClasses();
-  
+
 #if (WXDEBUG && USE_MEMORY_TRACING) || USE_DEBUG_CONTEXT
 
 #if !defined(_WINDLL)
@@ -320,7 +321,7 @@ int wxEntry( int argc, char *argv[] )
   wxDebugContext::SetStream(oStr, sBuf);
 
 #endif
-  
+
   if (!wxTheApp)
   {
     if (!wxApp::GetInitializerFunction())
@@ -328,15 +329,15 @@ int wxEntry( int argc, char *argv[] )
       printf( _("wxWindows error: No initializer - use IMPLEMENT_APP macro.\n") );
       return 0;
     }
-    
+
     wxAppInitializerFunction app_ini = wxApp::GetInitializerFunction();
-    
+
     wxObject *test_app = app_ini();
-    
+
     wxTheApp = (wxApp*) test_app;
   }
-  
-  if (!wxTheApp) 
+
+  if (!wxTheApp)
   {
     printf( _("wxWindows error: wxTheApp == NULL\n") );
     return 0;
@@ -344,19 +345,19 @@ int wxEntry( int argc, char *argv[] )
 
   wxTheApp->argc = argc;
   wxTheApp->argv = argv;
-  
+
   gtk_init( &argc, &argv );
 
 #ifdef USE_GDK_IMLIB
 
   gdk_imlib_init();
-  
+
   gtk_widget_push_visual(gdk_imlib_get_visual());
-  
+
   gtk_widget_push_colormap(gdk_imlib_get_colormap());
-  
-#endif  
-    
+
+#endif
+
   wxApp::CommonInit();
 
   wxTheApp->OnInitGui();
@@ -364,23 +365,23 @@ int wxEntry( int argc, char *argv[] )
   // Here frames insert themselves automatically
   // into wxTopLevelWindows by getting created
   // in OnInit().
-  
+
   if (!wxTheApp->OnInit()) return 0;
 
   wxTheApp->m_initialized = (wxTopLevelWindows.Number() > 0);
-  
+
   int retValue = 0;
-  
+
   if (wxTheApp->Initialized()) retValue = wxTheApp->OnRun();
-  
-  wxTheApp->DeletePendingObjects();  
-  
+
+  wxTheApp->DeletePendingObjects();
+
   wxTheApp->OnExit();
-  
+
   wxApp::CommonCleanUp();
 
   wxDELETE(wxTheApp);
-  
+
 #if (WXDEBUG && USE_MEMORY_TRACING) || USE_DEBUG_CONTEXT
   // At this point we want to check if there are any memory
   // blocks that aren't part of the wxDebugContext itself,
@@ -394,7 +395,7 @@ int wxEntry( int argc, char *argv[] )
   }
   wxDebugContext::SetStream(NULL, NULL);
 #endif
-  
+
   return retValue;
 }
 
@@ -402,7 +403,7 @@ int wxEntry( int argc, char *argv[] )
 // main()
 //-----------------------------------------------------------------------------
 
-#if defined(AIX) || defined(AIX4) || defined(____HPUX__)
+#if defined(AIX) || defined(AIX4) || defined(____HPUX__) || defined(NOMAIN)
 
  // main in IMPLEMENT_WX_MAIN in IMPLEMENT_APP in app.h
 
