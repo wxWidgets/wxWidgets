@@ -381,7 +381,7 @@ void wxInitializeStockObjects ()
 #else
 #endif
 */
-#if defined(__WXPM__)
+#if defined(__WXPM__) || defined(__WXMAC__)
   static const int sizeFont = 12;
   wxNORMAL_FONT = new wxFont (sizeFont, wxMODERN, wxNORMAL, wxNORMAL);
 #else
