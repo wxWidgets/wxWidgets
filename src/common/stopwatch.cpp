@@ -193,12 +193,7 @@ long wxGetLocalTime()
 // Get UTC time as seconds since 00:00:00, Jan 1st 1970
 long wxGetUTCTime()
 {
-#ifdef _MSC_VER
-	unsigned
-#endif
-    long timenow = 0;
-    time(&timenow);
-    return timenow;
+    return (long)time(NULL);
 }
 
 #if wxUSE_LONGLONG
