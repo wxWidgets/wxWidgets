@@ -187,18 +187,21 @@ Ensures this item is visible.
 
 \func{long}{FindItem}{\param{long }{start}, \param{const wxString\& }{str}, \param{const bool }{partial = FALSE}}
 
-Find an item whose label matches this string, starting from the item after {\it start} or
-the beginning if {\it start} is -1.
+Find an item whose label matches this string, starting from the item 
+{\it start}.
 
 \func{long}{FindItem}{\param{long }{start}, \param{long }{data}}
 
-Find an item whose data matches this data, starting from the item after {\it start} or
-the beginning if 'start' is -1.
+Find an item whose data matches this data, starting from the item {\it start}.
 
 \func{long}{FindItem}{\param{long }{start}, \param{const wxPoint\& }{pt}, \param{int }{direction}}
 
 Find an item nearest this position in the specified direction, starting from
-the item after {\it start} or the beginning if {\it start} is -1.
+the item {\it start}.
+
+{\bf NB:} The meaning of parameters {\it start} has changed in wxMSW
+version 2.2.0, previously the item with this index was excluded from the
+search but it is included now.
 
 \pythonnote{In place of a single overloaded method name, wxPython
 implements the following methods:\par
