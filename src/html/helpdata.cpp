@@ -971,7 +971,7 @@ void wxHtmlSearchEngine::LookFor(const wxString& keyword, bool case_sensitive, b
     m_WholeWords = whole_words_only;
     m_Keyword = keyword;
 
-    if (m_CaseSensitive)
+    if (!m_CaseSensitive)
         m_Keyword.LowerCase();
 }
 
