@@ -97,6 +97,7 @@ public:
     }
 
     void OnCloseWindow(wxCloseEvent& event);
+    void OnSize(wxSizeEvent& event);
 
     DECLARE_EVENT_TABLE()
 };

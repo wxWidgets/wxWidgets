@@ -205,7 +205,6 @@ void MyApp::PropertyFormTest(bool useDialog)
   if (m_childWindow)
     return;
 
-#if 0
   wxPropertySheet *sheet = new wxPropertySheet;
 
   sheet->AddProperty(new wxProperty("fred", 25.0, "real", new wxRealFormValidator(0.0, 100.0)));
@@ -217,58 +216,134 @@ void MyApp::PropertyFormTest(bool useDialog)
 
   wxPropertyFormView *view = new wxPropertyFormView(NULL);
 
-  wxDialogBox *propDialog = NULL;
+  wxDialog *propDialog = NULL;
   wxPropertyFormFrame *propFrame = NULL;
   if (useDialog)
   {
-    propDialog = new PropFormDialog(view, NULL, "Property Form Test", wxPoint(-1, -1), wxSize(380, 250),
-		wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL);
+    propDialog = new PropFormDialog(view, NULL, "Property Form Test",
+	  wxPoint(-1, -1), wxSize(380, 250), wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL);
     m_childWindow = propDialog;
   }
   else
   {
-    propFrame = new PropFormFrame(view, NULL, "Property Form Test", wxPoint(-1, -1), wxSize(280, 250));
+    propFrame = new PropFormFrame(view, NULL, "Property Form Test", wxPoint(-1,
+	  -1), wxSize(380, 250));
     propFrame->Initialize();
     m_childWindow = propFrame;
   }
   
   wxPanel *panel = propDialog ? propDialog : propFrame->GetPropertyPanel();
-  panel->SetLabelPosition(wxVERTICAL);
-  
+  wxLayoutConstraints* c;
+
+#if 0
+  if (!propDialog)
+  {
+    c = new wxLayoutConstraints;
+    c->left.SameAs(m_childWindow, wxLeft, 4);
+    c->right.SameAs(m_childWindow, wxRight, 4);
+    c->top.SameAs(m_childWindow, wxTop, 4);
+    c->bottom.SameAs(m_childWindow, wxBottom, 40);
+
+    panel->SetConstraints(c);
+  }
+#endif
+ 
   // Add items to the panel
-  
-  (void) new wxButton(panel, -1, "OK", -1, -1, -1, -1, 0, "ok");
-  (void) new wxButton(panel, -1, "Cancel", -1, -1, 80, -1, 0, "cancel");
-  (void) new wxButton(panel, -1, "Update", -1, -1, 80, -1, 0, "update");
-  (void) new wxButton(panel, -1, "Revert", -1, -1, -1, -1, 0, "revert");
-  panel->NewLine();
-  
+  wxButton *okButton = new wxButton(panel, wxID_OK, "OK", wxPoint(-1, -1),
+    wxSize(80, 26), 0, wxDefaultValidator, "ok");
+  wxButton *cancelButton = new wxButton(panel, wxID_CANCEL, "Cancel",  wxPoint(-1, -1),
+    wxSize(80, 26), 0, wxDefaultValidator, "cancel");
+  wxButton *updateButton = new wxButton(panel, wxID_PROP_UPDATE, "Update",  wxPoint(-1, -1),
+    wxSize(80, 26), 0, wxDefaultValidator, "update");
+  wxButton *revertButton = new wxButton(panel, wxID_PROP_REVERT, "Revert",  wxPoint(-1, -1),
+    wxSize(80, 26), 0, wxDefaultValidator, "revert");
+
+  c = new wxLayoutConstraints;
+  c->right.SameAs(panel, wxRight, 4);
+  c->bottom.SameAs(panel, wxBottom, 4);
+  c->height.AsIs();
+  c->width.AsIs();
+  revertButton->SetConstraints(c);
+ 
+  c = new wxLayoutConstraints;
+  c->right.SameAs(revertButton, wxLeft, 4);
+  c->bottom.SameAs(panel, wxBottom, 4);
+  c->height.AsIs();
+  c->width.AsIs();
+  updateButton->SetConstraints(c);
+
+  c = new wxLayoutConstraints;
+  c->right.SameAs(updateButton, wxLeft, 4);
+  c->bottom.SameAs(panel, wxBottom, 4);
+  c->height.AsIs();
+  c->width.AsIs();
+  cancelButton->SetConstraints(c);
+
+  c = new wxLayoutConstraints;
+  c->right.SameAs(cancelButton, wxLeft, 4);
+  c->bottom.SameAs(panel, wxBottom, 4);
+  c->height.AsIs();
+  c->width.AsIs();
+  okButton->SetConstraints(c);
+
   // The name of this text item matches the "fred" property
-  (void) new wxText(panel, -1, "Fred", "", -1, -1, 90, -1, 0, "fred");
-  (void) new wxCheckBox(panel, -1, "Yes or no", -1, -1, -1, -1, 0, "tough choice");
-  (void) new wxSlider(panel, -1, "Scale", 0, -50, 50, 150, -1, -1, wxHORIZONTAL, "ian");
-  panel->NewLine();
-  (void) new wxListBox(panel, -1, "Constrained", wxSINGLE, -1, -1, 100, 90, 0, NULL, 0, "constrained");
+  wxTextCtrl *text = new wxTextCtrl(panel, -1, "Fred", wxPoint(-1, -1), wxSize(
+    200, -1), 0, wxDefaultValidator, "fred");
+  
+  c = new wxLayoutConstraints;
+  c->left.SameAs(panel, wxLeft, 4);
+  c->top.SameAs(panel, wxTop, 4);
+  c->height.AsIs();
+  c->width.AsIs();
+  text->SetConstraints(c);
+
+  wxCheckBox *checkBox = new wxCheckBox(panel, -1, "Yes or no", wxPoint(-1, -1),
+    wxSize(-1, -1), 0, wxDefaultValidator, "tough choice");
+
+  c = new wxLayoutConstraints;
+  c->left.SameAs(text, wxRight, 20);
+  c->top.SameAs(panel, wxTop, 4);
+  c->height.AsIs();
+  c->width.AsIs();
+  checkBox->SetConstraints(c);
+  
+  wxSlider *slider = new wxSlider(panel, -1, -50, 50, 150, wxPoint(-1, -1),
+    wxSize(200,10), 0, wxDefaultValidator, "ian");
+
+  c = new wxLayoutConstraints;
+  c->left.SameAs(panel, wxLeft, 4);
+  c->top.SameAs(text, wxBottom, 10);
+  c->height.AsIs();
+  c->width.AsIs();
+  slider->SetConstraints(c);
+
+  wxListBox *listBox = new wxListBox(panel, -1, wxPoint(-1, -1), wxSize(200, 100),
+    0, NULL, 0, wxDefaultValidator, "constrained");
+
+  c = new wxLayoutConstraints;
+  c->left.SameAs(panel, wxLeft, 4);
+  c->top.SameAs(slider, wxBottom, 10);
+  c->height.AsIs();
+  c->width.AsIs();
+  listBox->SetConstraints(c);
 
   view->AddRegistry(&myFormValidatorRegistry);
 
-  if (useDialog)
-  {
-    view->ShowView(sheet, propDialog);
-    view->AssociateNames();
-    view->TransferToDialog();
+  panel->SetAutoLayout(TRUE);
+
+  view->ShowView(sheet, panel);
+  view->AssociateNames();
+  view->TransferToDialog();
+
+  if (useDialog) {
+    propDialog->Layout();
     propDialog->Centre(wxBOTH);
     propDialog->Show(TRUE);
-  }
-  else
-  {
-    view->ShowView(sheet, propFrame->GetPropertyPanel());
-    view->AssociateNames();
-    view->TransferToDialog();
+  } else {
+    // panel->Layout();
     propFrame->Centre(wxBOTH);
     propFrame->Show(TRUE);
   }
-#endif
 }
 
 BEGIN_EVENT_TABLE(PropListFrame, wxPropertyListFrame)
@@ -295,6 +370,7 @@ void PropListDialog::OnCloseWindow(wxCloseEvent& event)
 
 BEGIN_EVENT_TABLE(PropFormFrame, wxPropertyFormFrame)
     EVT_CLOSE(PropFormFrame::OnCloseWindow)
+    EVT_SIZE(PropFormFrame::OnSize)
 END_EVENT_TABLE()
 
 void PropFormFrame::OnCloseWindow(wxCloseEvent& event)
@@ -302,6 +378,12 @@ void PropFormFrame::OnCloseWindow(wxCloseEvent& event)
     wxGetApp().m_childWindow = NULL;
 
     wxPropertyFormFrame::OnCloseWindow(event);
+}
+
+void PropFormFrame::OnSize(wxSizeEvent& event)
+{
+    wxPropertyFormFrame::OnSize(event);
+    GetPropertyPanel()->Layout();
 }
 
 BEGIN_EVENT_TABLE(PropFormDialog, wxPropertyFormDialog)

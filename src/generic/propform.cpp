@@ -242,6 +242,20 @@ void wxPropertyFormView::OnCommand(wxWindow& win, wxCommandEvent& event)
   }
 }
 
+// Extend event processing to call OnCommand
+bool wxPropertyFormView::ProcessEvent(wxEvent& event)
+{
+    if (wxEvtHandler::ProcessEvent(event))
+        return TRUE;
+    else if (event.IsCommandEvent() && !event.IsKindOf(CLASSINFO(wxUpdateUIEvent)) && event.GetEventObject())
+    {
+        OnCommand(* ((wxWindow*) event.GetEventObject()), (wxCommandEvent&) event);
+        return TRUE;
+    }
+    else
+        return FALSE;
+}
+
 void wxPropertyFormView::OnDoubleClick(wxControl *item)
 {
   if (!m_propertySheet)

@@ -64,8 +64,12 @@ class WXDLLEXPORT wxPropertyFormView: public wxPropertyView
   virtual bool OnClose();
   virtual void OnDoubleClick(wxControl *item);
 
-  // TODO: does OnCommand still get called...???
+  // TODO: does OnCommand still get called...??? No,
+  // make ProcessEvent do it.
   virtual void OnCommand(wxWindow& win, wxCommandEvent& event);
+
+  // Extend event processing to process OnCommand
+  virtual bool ProcessEvent(wxEvent& event);
 
   inline virtual void AssociatePanel(wxWindow *win) { m_propertyWindow = win; }
   inline virtual wxWindow *GetPanel(void) const { return m_propertyWindow; }

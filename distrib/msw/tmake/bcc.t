@@ -302,7 +302,10 @@ cleanall: clean
 
 
 MFTYPE=bcc
-makefile.$(MFTYPE) : $(WXWIN)\distrib\msw\tmake\filelist.txt $(WXWIN)\distrib\msw\tmake\$(MFTYPE).t
+# Can't use this or we'll have to distribute all tmake files with wxWindows
+#makefile.$(MFTYPE) : $(WXWIN)\distrib\msw\tmake\filelist.txt $(WXWIN)\distrib\msw\tmake\$(MFTYPE).t
+
+self:
 	cd $(WXWIN)\distrib\msw\tmake
 	tmake -t $(MFTYPE) wxwin.pro -o makefile.$(MFTYPE)
 	copy makefile.$(MFTYPE) $(WXWIN)\src\msw
