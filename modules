@@ -68,6 +68,7 @@ wxOS2 -a wxWindows wxWindows/docs !wxWindows/docs/latex !wxWindows/docs/motif \
       wxWindows/testconf
 
 wxPython -a wxWindows wxWindows/utils wxWindows/utils/wxPython \
+	!wxWindows/docs \
 	!wxWindows/distrib !wxWindows/include !wxWindows/lib !wxWindows/locale \
 	!wxWindows/misc !wxWindows/samples !wxWindows/src !wxWindows/tests \
 	!wxWindows/user !wxWindows/utils/HelpGen !wxWindows/utils/HelpHTML \
