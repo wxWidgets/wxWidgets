@@ -352,7 +352,7 @@ enum wxFileKind
     #endif
 #endif // platforms
 
-#if defined __WXMSW__ && !defined __WXWINCE__
+#if defined(__WXMSW__) && !defined(__WXWINCE__)
     // get the HANDLE associated with a file descriptor
 #   ifdef __CYGWIN__
 #       include "wx/msw/private.h" // for HANDLE
