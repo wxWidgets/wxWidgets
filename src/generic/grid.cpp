@@ -5360,21 +5360,24 @@ void wxGrid::SetCurrentCell( const wxGridCellCoords& coords )
         HideCellEditControl();
         DisableCellEditControl();
 
-        // Clear the old current cell highlight
-        wxRect r = BlockToDeviceRect(m_currentCellCoords, m_currentCellCoords);
-
-        if ( !m_gridLinesEnabled )
+        wxRect r;
+        if ( IsVisible( m_currentCellCoords ) )
         {
-            r.x--;
-            r.y--;
-            r.width++;
-            r.height++;
+            r = BlockToDeviceRect(m_currentCellCoords, m_currentCellCoords);
+            CalcCellsExposed( r );
+        
+            if ( !m_gridLinesEnabled )
+            {
+                r.x--;
+                r.y--;
+                r.width++;
+                r.height++;
+            }
+    
+            // Otherwise refresh redraws the highlight!
+            m_currentCellCoords = coords;
         }
-
-        // Otherwise refresh redraws the highlight!
-        m_currentCellCoords = coords;
-
-        CalcCellsExposed( r );
+        
         DrawGridCellArea(dc);
         DrawAllGridLines( dc, r );
     }
