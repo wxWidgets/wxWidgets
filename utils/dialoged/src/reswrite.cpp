@@ -36,6 +36,8 @@
 
 #include "reseditr.h"
 
+static char wxBuffer[512];
+
 char *SafeString(char *s);
 char *SafeWord(const wxString& s);
 
