@@ -330,9 +330,9 @@ wxFont wxSystemSettingsNative::GetFont( wxSystemFont index )
 #ifdef __WXGTK20__
                 GtkWidget *widget = gtk_button_new();
                 GtkStyle *def = gtk_rc_get_style( widget );
-                if (!def)  
+                if ( !def || !def->font_desc )
                     def = gtk_widget_get_default_style();  
-                if (def)  
+                if ( def && def->font_desc )
                 {  
                     wxNativeFontInfo info;  
                     info.description = def->font_desc;  
