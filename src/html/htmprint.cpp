@@ -192,7 +192,7 @@ bool wxHtmlPrintout::OnBeginDocument(int startPage, int endPage)
     /* prepare headers/footers renderer: */
     
     m_RendererHdr->SetDC(GetDC(), (double)ppiPrinterY / (double)ppiScreenY);
-    m_RendererHdr->SetSize((int) (ppmm_h * (mm_w - m_MarginLeft - m_MarginTop)), 
+    m_RendererHdr->SetSize((int) (ppmm_h * (mm_w - m_MarginLeft - m_MarginRight)), 
                           (int) (ppmm_v * (mm_h - m_MarginTop - m_MarginBottom)));
     if (m_Headers[0] != wxEmptyString) 
     {
@@ -217,7 +217,7 @@ bool wxHtmlPrintout::OnBeginDocument(int startPage, int endPage)
     
     /* prepare main renderer: */
     m_Renderer->SetDC(GetDC(), (double)ppiPrinterY / (double)ppiScreenY);
-    m_Renderer->SetSize((int) (ppmm_h * (mm_w - m_MarginLeft - m_MarginTop)), 
+    m_Renderer->SetSize((int) (ppmm_h * (mm_w - m_MarginLeft - m_MarginRight)),
                           (int) (ppmm_v * (mm_h - m_MarginTop - m_MarginBottom) - 
                           m_FooterHeight - m_HeaderHeight -
                           ((m_HeaderHeight == 0) ? 0 : m_MarginSpace * ppmm_v) -
