@@ -56,8 +56,15 @@ else:
                 box.Add(btn, 0, wxALIGN_CENTER|wxALL, 15)
                 EVT_BUTTON(self, k, self.OnButton)
 
+            #** Enable this to show putting a wxGLCanvas on the wxPanel
+            if 0:
+                c = CubeCanvas(self)
+                c.SetSize((200, 200))
+                box.Add(c, 0, wxALIGN_CENTER|wxALL, 15)
+
             self.SetAutoLayout(true)
             self.SetSizer(box)
+
 
         def OnButton(self, evt):
             canvasClassName = buttonDefs[evt.GetId()][0]
