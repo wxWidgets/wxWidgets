@@ -55,15 +55,6 @@
 WX_DEFINE_LIST(wxGDIImageHandlerList);
 
 // ----------------------------------------------------------------------------
-// auxiliary functions
-// ----------------------------------------------------------------------------
-
-#ifdef __WXWINCE__
-// Used in wxBMPFileHandler::LoadFile
-HBITMAP wxLoadBMP(const wxString& filename) ;
-#endif
-
-// ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
 
@@ -372,14 +363,8 @@ bool wxBMPFileHandler::LoadFile(wxBitmap *bitmap,
 
     wxDIB dib(name);
 
-    bool ok = dib.IsOk() && bitmap->CopyFromDIB(dib);
-    return ok;
+    return dib.IsOk() && bitmap->CopyFromDIB(dib);
 #else
-  WXHBITMAP hBitmap = (WXHBITMAP)wxLoadBMP(name);
-  if(hBitmap) {
-      bitmap->SetHBITMAP(hBitmap);
-      return true;
-  }
     return false;
 #endif
 }
@@ -621,81 +606,4 @@ wxSize wxGetHiconSize(HICON hicon)
 }
 
 #endif // __WXMICROWIN__
-
-#ifdef __WXWINCE__
-// Used in wxBMPFileHandler::LoadFile
-HBITMAP wxLoadBMP(const wxString& filename)
-{
-  wxFile file;
-  if(!file.Open(filename))
-        return 0;
-
-    // The first part of the file contains the file header.
-  // This will tell us if it is a bitmap, how big the header is, and how big
-    // the file is. The header size in the file header includes the color table.
-  BITMAPFILEHEADER BmpFileHdr;
-  BITMAPINFO *pBmpInfo = (BITMAPINFO*)malloc(sizeof(BITMAPINFO)+255*sizeof(RGBQUAD));
-  BYTE* pBits = 0;
-  HBITMAP hBitmap = 0;
-
-  if(file.Read(&BmpFileHdr, sizeof(BmpFileHdr))==sizeof(BmpFileHdr)
-    && !strncmp((char*)&BmpFileHdr.bfType,"BM",2)
-    && file.Read(pBmpInfo, sizeof(BITMAPINFOHEADER))==sizeof(BITMAPINFOHEADER)
-    && pBmpInfo->bmiHeader.biSize == sizeof(BITMAPINFOHEADER)) {
-
-
-      unsigned int nColors = pBmpInfo->bmiHeader.biClrUsed ?
-      pBmpInfo->bmiHeader.biClrUsed : 1 << pBmpInfo->bmiHeader.biBitCount;
-    if (nColors < 1
-      || file.Read(pBmpInfo->bmiColors, nColors * sizeof(RGBQUAD))
-        == (ssize_t)(nColors * sizeof(RGBQUAD))) {
-
-      // So how big the bitmap surface is.
-      int nBitsSize = BmpFileHdr.bfSize - BmpFileHdr.bfOffBits;
-
-        // Allocate the memory for the bits and read the bits from the file.
-      pBits = (BYTE*) malloc(nBitsSize*2);
-      if (pBits) {
-        // Seek to the bits in the file.
-        file.Seek(BmpFileHdr.bfOffBits);
-
-        // read the bits
-        if(file.Read(pBits, nBitsSize)==nBitsSize) {
-          // Everything went OK.
-          pBmpInfo->bmiHeader.biSizeImage = nBitsSize;
-
-          //HBITMAP hBitmap=SetBitmap((LPBITMAPINFO)pBmpInfo, pBits);
-          //DWORD dwBitmapInfoSize = sizeof(BITMAPINFO) + nColors*sizeof(RGBQUAD);
-
-            // Create a DC which will be used to get DIB, then create DIBsection
-            HDC hDC = ::GetDC(NULL);
-          if (hDC) {
-            LPVOID bits;
-            hBitmap = CreateDIBSection(hDC, (const BITMAPINFO*) pBmpInfo,
-              DIB_RGB_COLORS, &bits, NULL, 0);
-            ReleaseDC(0,hDC);
-
-            if (hBitmap) {
-              DWORD dwImageSize = pBmpInfo->bmiHeader.biSizeImage;
-              if (dwImageSize == 0) {
-                int nBytesPerLine = pBmpInfo->bmiHeader.biWidth * pBmpInfo->bmiHeader.biBitCount;
-                nBytesPerLine = ( (nBytesPerLine + 31) & (~31) ) / 8;
-                dwImageSize = nBytesPerLine * pBmpInfo->bmiHeader.biHeight;
-              }
-              memcpy(bits, pBits, dwImageSize);
-            }
-          }
-        }
-      }
-    }
-  }
-
-  if(pBmpInfo)
-    free(pBmpInfo);
-  if(pBits)
-      free(pBits);
-
-  return hBitmap;
-}
-#endif
 
