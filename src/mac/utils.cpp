@@ -27,8 +27,10 @@
 #include <string.h>
 #include <stdarg.h>
 
-#include "morefile.h"
-#include "moreextr.h"
+#ifndef __DARWIN__
+#  include "morefile.h"
+#  include "moreextr.h"
+#endif
 
 #ifndef __DARWIN__
 // defined in unix/utilsunx.cpp for Mac OS X
@@ -347,6 +349,7 @@ char *wxGetUserHome (const wxString& user)
 }
 #endif
 
+#ifndef __DARWIN__
 bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
 {
     if ( path.empty() )
@@ -380,6 +383,7 @@ bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
 
     return err == noErr ;
 }
+#endif
 
 // Check whether this window wants to process messages, e.g. Stop button
 // in long calculations.
