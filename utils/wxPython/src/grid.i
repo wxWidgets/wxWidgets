@@ -596,8 +596,10 @@ class  wxGridCellEditor
 {
 public:
     bool IsCreated();
+#ifdef POST2115
     wxControl* GetControl();
     void SetControl(wxControl* control);
+#endif
 
     void SetParameters(const wxString& params);
 
@@ -783,15 +785,31 @@ public:
     wxGridCellBoolEditor();
 };
 
-
 class wxGridCellChoiceEditor : public wxGridCellEditor
 {
 public:
+#ifdef POST2115
     wxGridCellChoiceEditor(int LCOUNT = 0,
                            const wxString* choices = NULL,
                            bool allowOthers = FALSE);
-};
+#else
+    %addmethods {
+        wxGridCellChoiceEditor(PyObject* choices,
+                                bool allowOthers = FALSE) {
 
+            const char** temp = string_LIST_helper(choices);
+            if (temp) {
+                int count = PyList_Size(choices);
+                wxGridCellChoiceEditor* ret;
+                ret = new wxGridCellChoiceEditor(count, temp, allowOthers);
+                delete [] temp;
+                return ret;
+            }
+            return NULL;
+        }
+    }
+#endif
+};
 
 //---------------------------------------------------------------------------
 
@@ -1345,7 +1363,9 @@ public:
     void DisableCellEditControl();
     bool CanEnableCellControl() const;
     bool IsCellEditControlEnabled() const;
+#ifdef POST2115
     bool IsCellEditControlShown() const;
+#endif
 
     bool IsCurrentCellReadOnly() const;
 

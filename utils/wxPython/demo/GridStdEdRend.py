@@ -144,7 +144,9 @@ Renderers used together.
         self.SetColAttr(renCol, attr)
         self.SetColAttr(edCol, attr)
 
-        self.AutoSizeColumns(true)
+        # There is a bug in wxGTK for this method...
+        if wxPlatform != '__WXGTK__':
+            self.AutoSizeColumns(true)
         self.AutoSizeRows(true)
 
         EVT_GRID_CELL_LEFT_DCLICK(self, self.OnLeftDClick)
