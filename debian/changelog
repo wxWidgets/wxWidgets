@@ -1,5 +1,8 @@
-wxwindows2.4 (2.4.2.6) unstable; urgency=medium
+wxwindows2.4 (2.4.2.6) unstable; urgency=high
 
+  * High urgency so as not to reset the shotclock for getting wx and
+    its deps moving into testing.  All changes since the last release
+    are superficial.
   * Reapply HURD/K*BSD patch fragment that should not have been reverted.
     Closes: #217726    (Make a wish, the third time is lucky so I'm told.)
   * Updated .po files.
