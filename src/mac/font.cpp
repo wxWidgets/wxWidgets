@@ -58,6 +58,7 @@ void wxFontRefData::Init(int pointSize,
     m_macFontSize = 0;
     m_macFontStyle = 0;
     m_fontId = 0;
+    m_noAA = FALSE;
 }
 
 wxFontRefData::~wxFontRefData()
@@ -258,6 +259,15 @@ void wxFont::SetUnderlined(bool underlined)
     RealizeResource();
 }
 
+void wxFont::SetNoAntiAliasing( bool no )
+{
+    Unshare();
+
+    M_FONTDATA->SetNoAntiAliasing( no );
+
+    RealizeResource();
+}
+
 // ----------------------------------------------------------------------------
 // accessors
 // ----------------------------------------------------------------------------
@@ -298,5 +308,10 @@ wxString wxFont::GetFaceName() const
 wxFontEncoding wxFont::GetEncoding() const
 {
     return M_FONTDATA->m_encoding;
+}
+
+bool wxFont::GetNoAntiAliasing()
+{
+    return M_FONTDATA->m_noAA;
 }
 
