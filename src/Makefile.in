@@ -80,6 +80,7 @@ LIB_CPP_SRC=\
  gtk/listbox.cpp \
  gtk/mdi.cpp \
  gtk/menu.cpp \
+ gtk/notebook.cpp \
  gtk/palette.cpp \
  gtk/pen.cpp \
  gtk/radiobox.cpp \
