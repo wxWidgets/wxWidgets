@@ -1914,10 +1914,11 @@ Sets the accelerator table for this window. See \helpref{wxAcceleratorTable}{wxa
 \func{void}{SetAutoLayout}{\param{bool}{ autoLayout}}
 
 Determines whether the \helpref{wxWindow::Layout}{wxwindowlayout} function will
-be called automatically when the window is resized. Use in connection with
-\helpref{wxWindow::SetSizer}{wxwindowsetsizer} and
-\helpref{wxWindow::SetConstraints}{wxwindowsetconstraints} for laying out
-subwindows.
+be called automatically when the window is resized. It is called implicitly by 
+\helpref{wxWindow::SetSizer}{wxwindowsetsizer} but if you use 
+\helpref{wxWindow::SetConstraints}{wxwindowsetconstraints} you should call it
+manually or otherwise the window layout won't be correctly updated when its
+size changes.
 
 \wxheading{Parameters}
 
@@ -2480,6 +2481,10 @@ Sets the window to have the given layout sizer. The window
 will then own the object, and will take care of its deletion.
 If an existing layout constraints object is already owned by the
 window, it will be deleted if the deleteOld parameter is TRUE.
+
+Note that this function will also call 
+\helpref{SetAutoLayout}{wxwindowsetautolayout} implicitly with {\tt TRUE}
+parameter if the {\it sizer}\/ is non-NULL and {\tt FALSE} otherwise.
 
 \wxheading{Parameters}
 

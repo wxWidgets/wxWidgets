@@ -400,7 +400,7 @@ void wxSizer::DeleteWindows()
     }
 }
 
-void wxSizer::Fit( wxWindow *window )
+wxSize wxSizer::Fit( wxWindow *window )
 {
     wxSize size;
     if (window->IsTopLevel())
@@ -408,8 +408,9 @@ void wxSizer::Fit( wxWindow *window )
     else
         size = GetMinWindowSize( window );
 
-    //window->SetClientSize( size );
     window->SetSize( size );
+
+    return size;
 }
 
 void wxSizer::FitInside( wxWindow *window )
@@ -434,8 +435,8 @@ void wxSizer::SetSizeHints( wxWindow *window )
     // Preserve the window's max size hints, but set the
     // lower bound according to the sizer calculations.
 
-    Fit( window );
-    wxSize  size( window->GetSize() );
+    wxSize size = Fit( window );
+
     window->SetSizeHints( size.x,
                           size.y,
                           window->GetMaxWidth(),

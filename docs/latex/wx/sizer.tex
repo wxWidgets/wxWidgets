@@ -125,11 +125,11 @@ Here, the sizer will do the actual calculation of its children minimal sizes.
 
 \membersection{wxSizer::Fit}\label{wxsizerfit}
 
-\func{void}{Fit}{\param{wxWindow* }{window}}
+\func{wxSize}{Fit}{\param{wxWindow* }{window}}
 
 Tell the sizer to resize the {\it window} to match the sizer's minimal size. This
 is commonly done in the constructor of the window itself, see sample in the description
-of \helpref{wxBoxSizer}{wxboxsizer}.
+of \helpref{wxBoxSizer}{wxboxsizer}. Returns the new size.
 
 \membersection{wxSizer::FitInside}\label{wxsizerfitinside}
 
