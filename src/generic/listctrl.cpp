@@ -3976,7 +3976,7 @@ void wxListMainWindow::RecalculatePositions(bool noRefresh)
         ResetVisibleLinesRange();
 
         SetScrollbars( m_xScroll, m_yScroll,
-                       (GetHeaderWidth() + m_xScroll - 1)/m_xScroll,
+                       GetHeaderWidth() / m_xScroll,
                        (entireHeight + m_yScroll - 1)/m_yScroll,
                        GetScrollPos(wxHORIZONTAL),
                        GetScrollPos(wxVERTICAL),
