@@ -1175,7 +1175,7 @@ problem initializing the printer device context (current printer not set, for ex
 
 \membersection{wxPrintPreview::PaintPage}\label{wxprintpreviewpaintpage}
 
-\func{bool}{PaintPage}{\param{wxWindow* }{window}}
+\func{bool}{PaintPage}{\param{wxPreviewCanvas *}{canvas}, \param{wxDC& }{dc}}
 
 This refreshes the preview window with the preview image.
 It must be called from the preview window's OnPaint member.

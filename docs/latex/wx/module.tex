@@ -53,34 +53,6 @@ Constructs a wxModule object.
 
 Destructor.
 
-\membersection{wxModule::CleanupModules}\label{wxmodulecleanupmodules}
-
-\func{static void}{CleanupModules}{\void}
-
-Calls Exit for each module instance. Called by wxWidgets on exit, so there is no
-need for an application to call it.
-
-\membersection{wxModule::Exit}\label{wxmoduleexit}
-
-\func{void}{Exit}{\void}
-
-Calls OnExit. This function is called by wxWidgets and should not need to be called
-by an application.
-
-\membersection{wxModule::Init}\label{wxmoduleinit}
-
-\func{bool}{Init}{\void}
-
-Calls OnInit. This function is called by wxWidgets and should not need to be called
-by an application.
-
-\membersection{wxModule::InitializeModules}\label{wxmoduleinitializemodules}
-
-\func{static bool}{InitializeModules}{\void}
-
-Calls Init for each module instance. Called by wxWidgets on startup, so there is no
-need for an application to call it.
-
 \membersection{wxModule::OnExit}\label{wxmoduleonexit}
 
 \func{virtual void}{OnExit}{\void}
@@ -93,18 +65,4 @@ Provide this function with appropriate cleanup for your module.
 
 Provide this function with appropriate initialization for your module. If the function
 returns false, wxWidgets will exit immediately.
-
-\membersection{wxModule::RegisterModule}\label{wxmoduleregistermodule}
-
-\func{static void}{RegisterModule}{\param{wxModule*}{ module}}
-
-Registers this module with wxWidgets. Called by wxWidgets on startup, so there is no
-need for an application to call it.
-
-\membersection{wxModule::RegisterModules}\label{wxmoduleregistermodules}
-
-\func{static bool}{RegisterModules}{\void}
-
-Creates instances of and registers all modules. Called by wxWidgets on startup, so there is no
-need for an application to call it.
 

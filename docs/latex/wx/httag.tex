@@ -20,7 +20,9 @@ wxObject
 
 \membersection{wxHtmlTag::wxHtmlTag}\label{wxhtmltagwxhtmltag}
 
-\func{}{wxHtmlTag}{\param{const wxString\& }{source}, \param{int }{pos}, \param{int }{end\_pos}, \param{wxHtmlTagsCache* }{cache}}
+\func{}{wxHtmlTag}{\param{wxHtmlTag *}{parent}, \param{const wxString\& }{source}, 
+\param{int }{pos}, \param{int }{end\_pos}, 
+\param{wxHtmlTagsCache* }{cache}, \param{wxHtmlEntitiesParser *}{entParser}}
 
 Constructor. You will probably never have to construct a wxHtmlTag object
 yourself. Feel free to ignore the constructor parameters.
@@ -165,13 +167,6 @@ Example : {\tt <FONT SIZE=+2 COLOR="\#FF00FF">} has two parameters named
 \wxheading{Parameters}
 
 \docparam{par}{the parameter you're looking for.}
-
-\membersection{wxHtmlTag::IsEnding}\label{wxhtmltagisending}
-
-\constfunc{bool}{IsEnding}{\void}
-
-Returns true if this tag is ending one.
-({\tt </FONT>} is ending tag, {\tt <FONT>} is not)
 
 \membersection{wxHtmlTag::ScanParam}\label{wxhtmltagscanparam}
 

@@ -92,7 +92,7 @@ Destructor.
 
 \membersection{wxDocManager::ActivateView}\label{wxdocmanageractivateview}
 
-\func{void}{ActivateView}{\param{wxView* }{doc}, \param{bool}{ activate}, \param{bool}{ deleting}}
+\func{void}{ActivateView}{\param{wxView* }{doc}, \param{bool}{ activate = true}}
 
 Sets the current view.
 
@@ -329,24 +329,6 @@ Saves the current document by calling wxDocument::Save for the current document.
 
 Calls wxDocument::SaveAs for the current document.
 
-\membersection{wxDocManager::OnMenuCommand}\label{wxdocmanageronmenucommand}
-
-\func{void}{OnMenuCommand}{\param{int}{ cmd}}
-
-Processes menu commands routed from child or parent frames. This deals
-with the following predefined menu item identifiers:
-
-\begin{itemize}\itemsep=0pt
-\item wxID\_OPEN Creates a new document and opens a file into it.
-\item wxID\_CLOSE Closes the current document.
-\item wxID\_CLOSE\_ALL Closes all documents.
-\item wxID\_NEW Creates a new document.
-\item wxID\_SAVE Saves the document.
-\item wxID\_SAVE\_AS Saves the document into a specified filename.
-\end{itemize}
-
-Unrecognized commands are routed to the currently active wxView's OnMenuCommand.
-
 \membersection{wxDocManager::RemoveDocument}\label{wxdocmanagerremovedocument}
 
 \func{void}{RemoveDocument}{\param{wxDocument *}{doc}}
@@ -356,7 +338,7 @@ Removes the document from the list of documents.
 \membersection{wxDocManager::SelectDocumentPath}\label{wxdocmanagerselectdocumentpath}
 
 \func{wxDocTemplate *}{SelectDocumentPath}{\param{wxDocTemplate **}{templates},
- \param{int}{ noTemplates}, \param{const wxString\& }{path}, \param{const wxString\& }{bufSize},
+ \param{int}{ noTemplates}, \param{wxString\& }{path}, 
  \param{long}{ flags}, \param{bool}{ save}}
 
 Under Windows, pops up a file selector with a list of filters corresponding to document templates.

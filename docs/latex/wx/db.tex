@@ -2199,40 +2199,6 @@ WHERE and FROM clauses specified using \helpref{wxDbTable::SetWhereClause}{wxdbt
 and \helpref{wxDbTable::SetFromClause}{wxdbtablesetfromclause} are ignored by
 this function.
 
-\membersection{wxDbTable::BuildWhereStmt}\label{wxdbtablebuildwherestmt}
-
-\func{void}{BuildSelectStmt}{\param{wxString \&}{pWhereClause},
-\param{int }{typeOfWhere}, \param{const wxString \&}{qualTableName=""},
-\param{bool }{useLikeComparison=false}}
-
-Constructs the portion of a SQL statement which would follow the word 'WHERE'
-in a SQL statement to be passed to the datasource.  The returned string
-does NOT include the word 'WHERE'.
-
-\wxheading{Parameters}
-
-\docparam{pWhereClause}{Pointer to storage for the SQL statement retrieved.
-To be sure you have adequate space allocated for the SQL statement, allocate
-DB\_MAX\_STATEMENT\_LEN bytes.}
-\docparam{typeOfWhere}{The type of where clause to generate.  Can be one of
-two values:  DB\_WHERE\_KEYFIELDS or DB\_WHERE\_MATCHING.}
-\docparam{qualTableName}{{\it OPTIONAL}.  Prepended to all base table
-column names.  For use when a FROM clause has been specified with the
-\helpref{wxDbTable::SetFromClause}{wxdbtablesetfromclause},
-to clarify which table a column name reference belongs to.  Default is "".}
-\docparam{useLikeComparison}{{\it OPTIONAL}.  Should the constructed WHERE
-clause utilize the LIKE comparison operator.  If false, then the '='
-operator is used.  Default is false.}
-
-\wxheading{Remarks}
-
-This member function allows you to see what the SQL WHERE clause looks like
-that the ODBC class library builds.  This can be used for debugging purposes
-if you are having problems executing your own SQL statements.
-
-If using 'typeOfWhere' set to DB\_WHERE\_MATCHING, any bound columns currently
-containing a NULL value are not included in the WHERE clause's list of
-columns to use in the comparison.
 
 \membersection{wxDbTable::CanSelectForUpdate}\label{wxdbtablecanselectforupdate}
 
@@ -3618,7 +3584,7 @@ were to be copied over to another datasource or table.
 
 \membersection{wxDbTable::SetCursor}\label{wxdbtablesetcursor}
 
-\func{bool}{SetCursor}{\param{HSTMT *}{hstmtActivate = (void **) wxDB\_DEFAULT\_CURSOR}}
+\func{void}{SetCursor}{\param{HSTMT *}{hstmtActivate = (void **) wxDB\_DEFAULT\_CURSOR}}
 
 \wxheading{Parameters}
 

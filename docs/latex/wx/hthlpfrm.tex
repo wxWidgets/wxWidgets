@@ -62,15 +62,19 @@ for parameters description.
 
 \membersection{wxHtmlHelpFrame::CreateContents}\label{wxhtmlhelpframecreatecontents}
 
-\func{void}{CreateContents}{\param{bool }{show\_progress = false}}
+\func{void}{CreateContents}{\void}
 
 Creates contents panel. (May take some time.)
 
+Protected.
+
 \membersection{wxHtmlHelpFrame::CreateIndex}\label{wxhtmlhelpframecreateindex}
 
-\func{void}{CreateIndex}{\param{bool }{show\_progress = false}}
+\func{void}{CreateIndex}{\void}
 
 Creates index panel. (May take some time.)
+
+Protected.
 
 \membersection{wxHtmlHelpFrame::CreateSearch}\label{wxhtmlhelpframecreatesearch}
 
@@ -134,9 +138,11 @@ Reads user's settings for this frame (see \helpref{wxHtmlHelpController::ReadCus
 
 \membersection{wxHtmlHelpFrame::RefreshLists}\label{wxhtmlhelpframerefreshlists}
 
-\func{void}{RefreshLists}{\param{bool }{show\_progress = false}}
+\func{void}{RefreshLists}{\void}
 
 Refresh all panels. This is necessary if a new book was added.
+
+Protected.
 
 \membersection{wxHtmlHelpFrame::SetTitleFormat}\label{wxhtmlhelpframesettitleformat}
 

@@ -98,12 +98,14 @@ Destructor, destroying the choice item.
 \func{bool}{Create}{\param{wxWindow *}{parent}, \param{wxWindowID}{ id},\rtfsp
 \param{const wxPoint\& }{pos}, \param{const wxSize\&}{ size},\rtfsp
 \param{int}{ n}, \param{const wxString }{choices[]},\rtfsp
-\param{long}{ style = 0}, \param{const wxString\& }{name = ``choice"}}
+\param{long}{ style = 0}, \param{const wxValidator\& }{validator = wxDefaultValidator},\rtfsp
+\param{const wxString\& }{name = ``choice"}}
 
 \func{bool}{Create}{\param{wxWindow *}{parent}, \param{wxWindowID}{ id},\rtfsp
 \param{const wxPoint\& }{pos}, \param{const wxSize\&}{ size},\rtfsp
 \param{const wxArrayString\& }{choices},\rtfsp
-\param{long}{ style = 0}, \param{const wxString\& }{name = ``choice"}}
+\param{long}{ style = 0}, \param{const wxValidator\& }{validator = wxDefaultValidator},\rtfsp
+\param{const wxString\& }{name = ``choice"}}
 
 Creates the choice for two-step construction. See \helpref{wxChoice::wxChoice}{wxchoicector}.
 

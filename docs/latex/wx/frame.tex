@@ -157,16 +157,6 @@ Centres the frame on the display.
 
 \docparam{direction}{The parameter may be {\tt wxHORIZONTAL}, {\tt wxVERTICAL} or {\tt wxBOTH}.}
 
-\membersection{wxFrame::Command}\label{wxframecommand}
-
-\func{void}{Command}{\param{int }{id}}
-
-Simulate a menu command.
-
-\wxheading{Parameters}
-
-\docparam{id}{The identifier for a menu item.}
-
 \membersection{wxFrame::Create}\label{wxframecreate}
 
 \func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID }{id},\rtfsp
@@ -367,6 +357,18 @@ implementation returns an instance of \helpref{wxToolBar}{wxtoolbar}.
 \wxheading{See also}
 
 \helpref{wxFrame::CreateToolBar}{wxframecreatetoolbar}, \helpref{wxToolBar}{wxtoolbar}.
+
+
+\membersection{wxFrame::ProcessCommand}\label{wxframeprocesscommand}
+
+\func{void}{ProcessCommand}{\param{int }{id}}
+
+Simulate a menu command.
+
+\wxheading{Parameters}
+
+\docparam{id}{The identifier for a menu item.}
+
 
 \membersection{wxFrame::SendSizeEvent}\label{wxframesendsizeevent}
 

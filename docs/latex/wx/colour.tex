@@ -328,23 +328,11 @@ removed in the next wxWidgets version, please don't use it.
 
 \membersection{wxColourDatabase::Find}\label{wxcolourdatabasefind}
 
-\func{wxColour}{FindColour}{\param{const wxString\& }{colourName}}
+\func{wxColour}{Find}{\param{const wxString\& }{colourName}}
 
 Finds a colour given the name. Returns an invalid colour object (that is, such
 that its \helpref{Ok()}{wxcolourok} method returns \false) if the colour wasn't
 found in the database.
-
-
-\membersection{wxColourDatabase::FindColour}\label{wxcolourdatabasefindcolour}
-
-\func{wxColour*}{FindColour}{\param{const wxString\& }{colourName}}
-
-Finds a colour given the name. Returns {\tt NULL} if not found or a pointer which
-must be deleted by the caller otherwise.
-
-Please note that this method is deprecated and will be removed in the next
-wxWidgets version, please use \helpref{Find}{wxcolourdatabasefind} instead of
-it.
 
 
 \membersection{wxColourDatabase::FindName}\label{wxcolourdatabasefindname}
