@@ -32,7 +32,7 @@ def convert(file, maskClr, outputDir, outputName, outType, outExt):
     else:
         if maskClr:
             om = img.GetMask()
-            mask = wx.MaskColour(img, maskClr)
+            mask = wx.Mask(img, maskClr)
             img.SetMask(mask)
             if om is not None:
                 om.Destroy()
