@@ -67,6 +67,10 @@ Converts from Unicode to multibyte encoding. The semantics of this function
 (including the return value meaning) is the same as for 
 \helpref{MB2WC}{wxmbconvmb2wc}.
 
+Notice that when the function is called with a non-{\tt NULL} buffer, the 
+{\it n} parameter should be the size of the buffer and so it {\bf should} take
+into account the trailing NUL, which might take two or four bytes for some
+encodings (UTF-16 and UTF-32).
 
 \membersection{wxMBConv::cMB2WC}\label{wxmbconvcmb2wc}
 
