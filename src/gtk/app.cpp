@@ -645,8 +645,6 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     wxFont::SetDefaultEncoding(wxLocale::GetSystemEncoding());
 #endif
 
-    wxGetRootWindow();
-
     return true;
 }
 
