@@ -20,7 +20,9 @@
 #pragma hdrstop
 #endif
 
-#include <windows.h>
+#include "wx/string.h"
+#include "wx/window.h"
+#include "wx/msw/private.h"
 
 #ifndef __GNUWIN32__
 #include <mmsystem.h>

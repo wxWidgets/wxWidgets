@@ -20,6 +20,9 @@
     #pragma hdrstop
 #endif
 
+#include "wx/window.h"
+#include "wx/msw/private.h"
+
 #ifndef WX_PRECOMP
     #include "wx/setup.h"
     #include "wx/list.h"
@@ -31,7 +34,6 @@
 #include "wx/log.h"
 
 #include "wx/timer.h"
-#include "wx/msw/private.h"
 
 #include <time.h>
 #include <sys/types.h>

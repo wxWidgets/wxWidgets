@@ -29,6 +29,9 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include <windows.h>
+    #include "wx/msw/winundef.h"
+    #include "wx/accel.h"
     #include "wx/setup.h"
     #include "wx/menu.h"
     #include "wx/dc.h"
@@ -58,6 +61,8 @@
 #include "wx/menuitem.h"
 #include "wx/log.h"
 
+#include "wx/msw/private.h"
+
 #if wxUSE_TOOLTIPS
     #include "wx/tooltip.h"
 #endif
@@ -69,7 +74,6 @@
 #include "wx/intl.h"
 #include "wx/log.h"
 
-#include "wx/msw/private.h"
 
 #include "wx/textctrl.h"
 
@@ -93,8 +97,6 @@
         #include <wx/msw/gnuwin32/extra.h>
     #endif
 #endif
-
-#include "wx/msw/winundef.h"
 
 // ---------------------------------------------------------------------------
 // macros

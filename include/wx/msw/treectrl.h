@@ -23,16 +23,6 @@
 #include "wx/event.h"
 #include "wx/textctrl.h"
 
-#ifdef __GNUWIN32__
-#  ifdef GetFirstChild
-#    undef GetFirstChild
-#  endif
-
-#  ifdef GetNextSibling
-#    undef GetNextSibling
-#  endif
-#endif
-
 // the type for "untyped" data
 typedef long wxDataType;
 

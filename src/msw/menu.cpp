@@ -32,6 +32,7 @@
     #include "wx/frame.h"
     #include "wx/menu.h"
     #include "wx/utils.h"
+    #include "wx/intl.h"
 #endif
 
 #if wxUSE_OWNER_DRAWN

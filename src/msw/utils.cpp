@@ -645,7 +645,7 @@ char *wxGetUserHome (const wxString& user)
         if ((home = getenv("TMP")) != NULL ||
             (home = getenv("TMPDIR")) != NULL ||
             (home = getenv("TEMP")) != NULL)
-            return *home ? home : "\\";
+            return *home ? home : (char*)"\\";
       }
       if (Stricmp(tmp, WXSTRINGCAST user1) == 0)
         user1 = "";

@@ -21,7 +21,8 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/defs.h"
+   #include "wx/window.h"
+   #include "wx/msw/private.h"
 #endif
 
 #include "wx/dc.h"

@@ -28,12 +28,15 @@
     #pragma hdrstop
 #endif
 
+#include "wx/window.h"
+#include "wx/msw/private.h"
+
 #ifndef WX_PRECOMP
+    #include "wx/icon.h"
     #include "wx/statbmp.h"
 #endif
 
 #include <stdio.h>
-#include "wx/msw/private.h"
 
 // ---------------------------------------------------------------------------
 // macors

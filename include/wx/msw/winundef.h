@@ -117,6 +117,10 @@
 
 #ifdef StartDoc
    #undef StartDoc
+   #ifdef __MINGW32__
+      #define DOCINFOW DOCINFO
+      #define DOCINFOA DOCINFO
+   #endif
    #ifdef _UNICODE
    inline int StartDoc(HDC h, CONST DOCINFOW* info)
    {
@@ -159,11 +163,11 @@
 
 // GetNextSibling
 #ifdef GetNextSibling
-    #undef GetNextSibling
-    inline HWND GetNextSibling(HWND h)
-    {
-      return GetWindow(h, GW_HWNDNEXT);
-    }
+   #undef GetNextSibling
+   inline HWND GetNextSibling(HWND h)
+   {
+     return GetWindow(h, GW_HWNDNEXT);
+   }
 #endif
 
 // GetWindowProc

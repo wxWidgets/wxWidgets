@@ -31,10 +31,13 @@
 #include "wx/defs.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/window.h"
+    #include "wx/msw/private.h"
     #include "wx/utils.h"
     #include "wx/dc.h"
     #include "wx/app.h"
     #include "wx/msgdlg.h"
+    #include "wx/intl.h"
 #endif
 
 #include "wx/msw/printwin.h"

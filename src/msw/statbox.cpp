@@ -20,13 +20,15 @@
 #pragma hdrstop
 #endif
 
+#include "wx/window.h"
+#include "wx/msw/private.h"
+
 #ifndef WX_PRECOMP
-#include "wx/dcclient.h"
 #include "wx/app.h"
+#include "wx/dcclient.h"
 #endif
 
 #include "wx/statbox.h"
-#include "wx/msw/private.h"
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxStaticBox, wxControl)

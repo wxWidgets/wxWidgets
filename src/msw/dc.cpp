@@ -28,18 +28,20 @@
     #pragma hdrstop
 #endif
 
+#include "wx/frame.h"
+#include "wx/msw/private.h"
+
 #ifndef WX_PRECOMP
-    #include "wx/frame.h"
     #include "wx/dc.h"
     #include "wx/utils.h"
     #include "wx/dialog.h"
     #include "wx/app.h"
     #include "wx/bitmap.h"
     #include "wx/dcmemory.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/dcprint.h"
-#include "wx/msw/private.h"
 
 #include <string.h>
 #include <math.h>

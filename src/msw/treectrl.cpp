@@ -27,8 +27,19 @@
     #pragma hdrstop
 #endif
 
+#include "wx/window.h"
+#include "wx/msw/private.h"
+
 #ifndef WX_PRECOMP
-    #include "wx/wx.h"
+    #include "wx/settings.h"
+#endif
+
+// Mingw32 is a bit mental even though this is done in winundef
+#ifdef GetFirstChild
+#undef GetFirstChild
+#endif
+#ifdef GetNextSibling
+#undef GetNextSibling
 #endif
 
 #if defined(__WIN95__)
@@ -37,8 +48,6 @@
 #include "wx/dynarray.h"
 #include "wx/imaglist.h"
 #include "wx/msw/treectrl.h"
-
-#include "wx/msw/private.h"
 
 #ifdef __GNUWIN32__
 #include "wx/msw/gnuwin32/extra.h"

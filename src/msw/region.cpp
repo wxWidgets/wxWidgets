@@ -23,6 +23,7 @@
 #include "wx/msw/region.h"
 #include "wx/gdicmn.h"
 
+#include "wx/window.h"
 #include "wx/msw/private.h"
 
 #if !USE_SHARED_LIBRARY

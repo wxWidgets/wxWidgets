@@ -29,11 +29,14 @@
 #endif
 
 #ifndef WX_PRECOMP
-    #include "wx/menu.h"
     #include "wx/font.h"
     #include "wx/bitmap.h"
     #include "wx/settings.h"
     #include "wx/font.h"
+    #include "wx/accel.h"
+    #include "wx/menu.h"
+    #include "wx/string.h"
+    #include "wx/window.h"
 #endif
 
 #include "wx/ownerdrw.h"

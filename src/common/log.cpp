@@ -29,6 +29,8 @@
 
 // wxWindows
 #ifndef WX_PRECOMP
+  #include "wx/window.h"
+  #include "wx/msw/private.h"
   #include  <wx/event.h>
   #include  <wx/app.h>
   #include  <wx/string.h>

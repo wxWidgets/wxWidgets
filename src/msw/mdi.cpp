@@ -37,6 +37,8 @@
     #include "wx/dialog.h"
     #include "wx/statusbr.h"
     #include "wx/settings.h"
+    #include "wx/intl.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/mdi.h"

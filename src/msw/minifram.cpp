@@ -20,6 +20,9 @@
 #pragma hdrstop
 #endif
 
+#include "wx/window.h"
+#include "wx/msw/private.h"
+
 #ifndef WX_PRECOMP
 #include "wx/setup.h"
 #include "wx/event.h"
@@ -30,7 +33,6 @@
 #if wxUSE_ITSY_BITSY
 
 #include "wx/minifram.h"
-#include "wx/msw/private.h"
 
 #ifndef __TWIN32__
 #ifdef __GNUWIN32__
@@ -86,8 +88,8 @@ wxMiniFrame::~wxMiniFrame(void)
 //
 //////////////////////////////////////////////////////////////////////////
 
-#include <windows.h>
-#include <windowsx.h>
+#include "wx/window.h"
+#include "wx/msw/private.h"
 
 #include <string.h>
 

@@ -21,6 +21,8 @@
 #endif
 
 #ifndef WX_PRECOMP
+  #include "wx/window.h"
+  #include "wx/msw/private.h"
   #include "wx/font.h"
   #include "wx/bitmap.h"
   #include "wx/dcmemory.h"
@@ -31,7 +33,6 @@
 #include "wx/ownerdrw.h"
 #include "wx/menuitem.h"
 
-#include "wx/msw/private.h"
 
 // ============================================================================
 // implementation of wxOwnerDrawn class

@@ -27,6 +27,7 @@
 #include "wx/utils.h"
 #include "wx/app.h"
 #include "wx/cursor.h"
+#include "wx/icon.h"
 #endif
 
 #include "wx/msw/private.h"

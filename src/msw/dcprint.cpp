@@ -23,11 +23,12 @@
 #ifndef WX_PRECOMP
 #endif
 
-#include "wx/dcprint.h"
+#include "wx/string.h"
 #include "wx/log.h"
-#include "math.h"
-
+#include "wx/window.h"
 #include "wx/msw/private.h"
+#include "wx/dcprint.h"
+#include "math.h"
 
 #if wxUSE_COMMON_DIALOGS
 #include <commdlg.h>

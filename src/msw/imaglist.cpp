@@ -26,7 +26,9 @@
 #include <stdio.h>
 #include "wx/setup.h"
 #include "wx/window.h"
-#include "wx/dcclient.h"
+#include "wx/icon.h"
+#include "wx/dc.h"
+#include "wx/string.h"
 #endif
 
 #include "wx/log.h"

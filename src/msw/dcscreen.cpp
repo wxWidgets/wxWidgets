@@ -21,11 +21,13 @@
 #endif
 
 #ifndef WX_PRECOMP
+   #include "wx/string.h"
+   #include "wx/window.h"
+   #include "wx/msw/private.h"
 #endif
 
 #include "wx/dcscreen.h"
 
-#include <windows.h>
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxScreenDC, wxWindowDC)

@@ -20,18 +20,24 @@
     #pragma hdrstop
 #endif
 
-#ifndef WX_PRECOMP
-    #include "wx/listbox.h"
-    #include "wx/settings.h"
-    #include "wx/brush.h"
-    #include "wx/font.h"
-    #include "wx/dc.h"
-#endif
-
+#include <windowsx.h>
+#include "wx/window.h"
 #include "wx/msw/private.h"
 
-#include <windows.h>
-#include <windowsx.h>
+#ifndef WX_PRECOMP
+#include "wx/listbox.h"
+#include "wx/settings.h"
+#include "wx/brush.h"
+#include "wx/font.h"
+#include "wx/dc.h"
+#endif
+
+#include "wx/dynarray.h"
+#include "wx/log.h"
+
+#if wxUSE_OWNER_DRAWN
+    #include  "wx/ownerdrw.h"
+#endif
 
 #ifndef __TWIN32__
     #ifdef __GNUWIN32__
@@ -39,12 +45,6 @@
     #endif
 #endif
 
-#if wxUSE_OWNER_DRAWN
-    #include  "wx/ownerdrw.h"
-#endif
-
-#include "wx/dynarray.h"
-#include "wx/log.h"
 
 #if !USE_SHARED_LIBRARY
     IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControl)

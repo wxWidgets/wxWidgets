@@ -41,6 +41,7 @@
     #include "wx/frame.h"
     #include "wx/bitmap.h"
     #include "wx/utils.h"
+    #include "wx/intl.h"
 #endif
 
 #if wxUSE_METAFILE

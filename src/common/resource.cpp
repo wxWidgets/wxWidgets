@@ -45,6 +45,7 @@
 #include "wx/checkbox.h"
 #include "wx/settings.h"
 #include "wx/slider.h"
+#include "wx/icon.h"
 #include "wx/statbox.h"
 #include "wx/statbmp.h"
 #if wxUSE_GAUGE
