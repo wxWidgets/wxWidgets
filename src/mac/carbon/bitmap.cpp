@@ -363,9 +363,6 @@ IconRef wxBitmapRefData::GetIconRef()
         }
         else
         {
-            iconFamily = (IconFamilyHandle) NewHandle(8) ;
-            (**iconFamily).resourceType = kIconFamilyType ;
-            (**iconFamily).resourceSize = sizeof(OSType) + sizeof(Size);
             PicHandle pic = GetPictHandle() ;
             SetIconFamilyData( iconFamily, 'PICT' , (Handle) pic ) ;
         }
