@@ -284,6 +284,12 @@ dnl ### begin block 1_COND_PLATFORM_MACOSX_1_USE_SOVERSION_1 ###
         COND_PLATFORM_MACOSX_1_USE_SOVERSION_1=""
     fi
     AC_SUBST(COND_PLATFORM_MACOSX_1_USE_SOVERSION_1)
+dnl ### begin block 1_COND_PLATFORM_MACOS_1 ###
+    COND_PLATFORM_MACOS_1="#"
+    if test "x$PLATFORM_MACOS" = "x1" ; then
+        COND_PLATFORM_MACOS_1=""
+    fi
+    AC_SUBST(COND_PLATFORM_MACOS_1)
 dnl ### begin block 1_COND_PLATFORM_MAC_1 ###
     COND_PLATFORM_MAC_1="#"
     if test "x$PLATFORM_MAC" = "x1" ; then
