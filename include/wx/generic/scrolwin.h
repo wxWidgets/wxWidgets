@@ -27,7 +27,7 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxPanelNameStr;
 
 // default scrolled window style
 #ifndef wxScrolledWindowStyle
-#define wxScrolledWindowStyle (wxHSCROLL | wxVSCROLL)
+    #define wxScrolledWindowStyle (wxHSCROLL | wxVSCROLL)
 #endif
 
 // avoid triggering this stupid VC++ warning
@@ -66,10 +66,8 @@ public:
 
     virtual void PrepareDC(wxDC& dc) { DoPrepareDC(dc); }
 
-        // lay out the window and its children
+    // lay out the window and its children
     virtual bool Layout();
-
-    virtual void DoSetVirtualSize( int x, int y );
 
 protected:
     // this is needed for wxEVT_PAINT processing hack described in
@@ -94,4 +92,3 @@ private:
 #endif
     // _WX_GENERIC_SCROLLWIN_H_
 
-// vi:sts=4:sw=4:et
