@@ -98,6 +98,7 @@ wxMSW:
 - make it possible to give focus to the notebook tabs (Hajo Kirchhoff)
 - MDI child frames are not always resizeable any more (Andrei Fortuna)
 - fixed enumerating of entries/groups under '/' in wxRegConfig
+- added wxSYS_ICONTITLE_FONT (Andreas Pflug)
 
 wxGTK:
 

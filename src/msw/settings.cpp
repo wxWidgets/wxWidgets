@@ -250,6 +250,14 @@ wxFont wxCreateFontFromStockObject(int index)
 
 wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
 {
+    // this one is special: we don't get it from GetStockObject()
+    if ( index == wxSYS_ICONTITLE_FONT )
+    {
+        LOGFONT lf;
+        SystemParametersInfo(SPI_GETICONTITLELOGFONT, sizeof(lf), &lf, 0);
+        return wxCreateFontFromLogFont(&lf);
+    }
+
     // wxWindow ctor calls GetSystemFont(wxSYS_DEFAULT_GUI_FONT) so we're
     // called fairly often - this is why we cache this particular font
     bool isDefaultRequested = index == wxSYS_DEFAULT_GUI_FONT;
