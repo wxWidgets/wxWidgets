@@ -180,17 +180,17 @@ void wxMenuItem::Enable(
     if (m_isEnabled == bEnable)
         return;
     if (bEnable)
-        bOk = ::WinSendMsg( GetHMenuOf(m_parentMenu)
-                           ,MM_SETITEMATTR
-                           ,MPFROM2SHORT(GetRealId(), TRUE)
-                           ,MPFROM2SHORT(MIA_DISABLED, MIA_DISABLED)
-                          );
+        bOk = (bool)::WinSendMsg( GetHMenuOf(m_parentMenu)
+                                 ,MM_SETITEMATTR
+                                 ,MPFROM2SHORT(GetRealId(), TRUE)
+                                 ,MPFROM2SHORT(MIA_DISABLED, MIA_DISABLED)
+                                );
     else
-        bOk = ::WinSendMsg( GetHMenuOf(m_parentMenu)
-                           ,MM_SETITEMATTR
-                           ,MPFROM2SHORT(GetRealId(), TRUE)
-                           ,MPFROM2SHORT(MIA_DISABLED, FALSE)
-                          );
+        bOk = (bool)::WinSendMsg( GetHMenuOf(m_parentMenu)
+                                 ,MM_SETITEMATTR
+                                 ,MPFROM2SHORT(GetRealId(), TRUE)
+                                 ,MPFROM2SHORT(MIA_DISABLED, FALSE)
+                                );
     if (!bOk)
     {
         wxLogLastError("EnableMenuItem");
@@ -208,17 +208,17 @@ void wxMenuItem::Check(
     if (m_isChecked == bCheck)
         return;
     if (bCheck)
-        bOk = ::WinSendMsg( GetHMenuOf(m_parentMenu)
-                           ,MM_SETITEMATTR
-                           ,MPFROM2SHORT(GetRealId(), TRUE)
-                           ,MPFROM2SHORT(MIA_CHECKED, MIA_CHECKED)
-                          );
+        bOk = (bool)::WinSendMsg( GetHMenuOf(m_parentMenu)
+                                 ,MM_SETITEMATTR
+                                 ,MPFROM2SHORT(GetRealId(), TRUE)
+                                 ,MPFROM2SHORT(MIA_CHECKED, MIA_CHECKED)
+                                );
     else
-        bOk = ::WinSendMsg( GetHMenuOf(m_parentMenu)
-                           ,MM_SETITEMATTR
-                           ,MPFROM2SHORT(GetRealId(), TRUE)
-                           ,MPFROM2SHORT(MIA_CHECKED, FALSE)
-                          );
+        bOk = (bool)::WinSendMsg( GetHMenuOf(m_parentMenu)
+                                 ,MM_SETITEMATTR
+                                 ,MPFROM2SHORT(GetRealId(), TRUE)
+                                 ,MPFROM2SHORT(MIA_CHECKED, FALSE)
+                                );
     if (!bOk)
     {
         wxLogLastError("EnableMenuItem");
@@ -250,7 +250,7 @@ void wxMenuItem::SetText(
     USHORT                          uId = GetRealId();
     MENUITEM                        vItem;
     USHORT                          uFlagsOld;
-    
+
     if (!::WinSendMsg( hMenu
                       ,MM_QUERYITEM
                       ,MPFROM2SHORT(uId, TRUE)

@@ -2327,6 +2327,8 @@ bool wxWindow::OS2Create(
 , WXDWORD                           dwExtendedStyle // Port compatability only
 )
 {
+    ERRORID                         vError;
+    wxString                        sError;
     int                             nX1      = CW_USEDEFAULT;
     int                             nY1      = 0;
     int                             nWidth1  = CW_USEDEFAULT;
@@ -2350,6 +2352,8 @@ bool wxWindow::OS2Create(
         nWidth1  = vParentRect.xRight - vParentRect.xLeft;
         nHeight1 = vParentRect.yTop - vParentRect.yBottom;
     }
+    else
+        hParent = HWND_DESKTOP;
 
     if (nX > -1)
         nX1 = nX;
@@ -2373,7 +2377,7 @@ bool wxWindow::OS2Create(
         PDLGTEMPLATE                 pDlgt;
 
         ::DosGetResource(0L, RT_DIALOG, vId, (PPVOID)&pDlgt);
-        m_hWnd = (WXHWND)::WinCreateDlg( pParent->GetHWND()
+        m_hWnd = (WXHWND)::WinCreateDlg( hParent
                                         ,NULLHANDLE
                                         ,(PFNWP)wxDlgProc
                                         ,pDlgt
@@ -2381,8 +2385,11 @@ bool wxWindow::OS2Create(
                                        );
         if (m_hWnd == 0)
         {
-            wxLogError(_("Can't find dummy dialog template!\n"
-                         "Check resource include path for finding wx.rc."));
+            vError = ::WinGetLastError(vHabmain);
+            sError = wxPMErrorToStr(vError);
+            wxLogError("Can't find dummy dialog template!\n"
+                       "Check resource include path for finding wx.rc.\n"
+                       "Error: %s\n", sError);
             return FALSE;
         }
 
@@ -2398,7 +2405,9 @@ bool wxWindow::OS2Create(
                                ,SWP_MOVE | SWP_SIZE | SWP_NOREDRAW
                               ));
         {
-            wxLogLastError(wxT("MoveWindow"));
+            vError = ::WinGetLastError(vHabmain);
+            sError = wxPMErrorToStr(vError);
+            wxLogError("MoveWindow, error: %s\n", sError);
         }
     }
     else
@@ -2447,7 +2456,9 @@ bool wxWindow::OS2Create(
                                           );
         if (!m_hWnd)
         {
-            wxLogError("Can't create window of class %s!\n", zWclass);
+            vError = ::WinGetLastError(vHabmain);
+            sError = wxPMErrorToStr(vError);
+            wxLogError("Can't create window of class %s!. Error: %s\n", zWclass, sError);
             return FALSE;
         }
     }

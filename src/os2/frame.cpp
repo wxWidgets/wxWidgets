@@ -727,70 +727,63 @@ bool wxFrame::OS2Create(
 , long                              ulStyle
 )
 {
-    ULONG                           ulPmFlags = 0;
-    ULONG                           ulExtraFlags = 0;
-    ULONG                           ulTempFlags = FCF_TITLEBAR |
-                                                  FCF_SYSMENU |
-                                                  FCF_MINBUTTON |
-                                                  FCF_MAXBUTTON |
-                                                  FCF_SIZEBORDER |
-                                                  FCF_ICON |
-                                                  FCF_MENU |
-                                                  FCF_ACCELTABLE |
-                                                  FCF_SHELLPOSITION |
-                                                  FCF_TASKLIST;
+    ULONG                           ulPmFlags = 0L;
+    ULONG                           ulExtraFlags = 0L;
+    ULONG                           ulTempFlags = FCF_STANDARD;
 
     m_hDefaultIcon = (WXHICON) (wxSTD_FRAME_ICON ? wxSTD_FRAME_ICON : wxDEFAULT_FRAME_ICON);
 
-    if ((ulStyle & wxCAPTION) == wxCAPTION)
-        ulPmFlags = FCF_TASKLIST;
-    else
-        ulPmFlags = FCF_NOMOVEWITHOWNER;
-
-    if (ulStyle & wxMINIMIZE_BOX)
-        ulPmFlags |= FCF_MINBUTTON;
-    if (ulStyle & wxMAXIMIZE_BOX)
-        ulPmFlags |= FCF_MAXBUTTON;
-    if (ulStyle & wxTHICK_FRAME)
-        ulPmFlags |= FCF_DLGBORDER;
-    if (ulStyle & wxSYSTEM_MENU)
-        ulPmFlags |= FCF_SYSMENU;
-    if ((ulStyle & wxMINIMIZE) || (ulStyle & wxICONIZE))
-        ulPmFlags |= WS_MINIMIZED;
-    if (ulStyle & wxMAXIMIZE)
-        ulPmFlags |= WS_MAXIMIZED;
-    if (ulStyle & wxCAPTION)
-        ulPmFlags |= FCF_TASKLIST;
-    if (ulStyle & wxCLIP_CHILDREN)
-    {
-        // Invalid for frame windows under PM
-    }
-
-    //
-    // Keep this in wxFrame because it saves recoding this function
-    // in wxTinyFrame
-    //
-#if wxUSE_ITSY_BITSY
-    if (ulStyle & wxTINY_CAPTION_VERT)
-        ulExtraFlags |= kVertCaption;
-    if (ulStyle & wxTINY_CAPTION_HORIZ)
-        ulExtraFlags |= kHorzCaption;
-#else
-    if (ulStyle & wxTINY_CAPTION_VERT)
-        ulPmFlags |= FCF_TASKLIST;
-    if (ulStyle & wxTINY_CAPTION_HORIZ)
-        ulPmFlags |= FCF_TASKLIST;
-#endif
-    if ((ulStyle & wxTHICK_FRAME) == 0)
-        ulPmFlags |= FCF_BORDER;
-    if (ulStyle & wxFRAME_TOOL_WINDOW)
-        ulExtraFlags = kFrameToolWindow;
-
-    if (ulStyle & wxSTAY_ON_TOP)
-        ulPmFlags |= FCF_SYSMODAL;
-
-    if (ulPmFlags & ulTempFlags)
+    if (ulStyle == wxDEFAULT_FRAME_STYLE)
         ulPmFlags = FCF_STANDARD;
+    else
+    {
+        if ((ulStyle & wxCAPTION) == wxCAPTION)
+            ulPmFlags = FCF_TASKLIST;
+        else
+            ulPmFlags = FCF_NOMOVEWITHOWNER;
+
+        if (ulStyle & wxMINIMIZE_BOX)
+            ulPmFlags |= FCF_MINBUTTON;
+        if (ulStyle & wxMAXIMIZE_BOX)
+            ulPmFlags |= FCF_MAXBUTTON;
+        if (ulStyle & wxTHICK_FRAME)
+            ulPmFlags |= FCF_DLGBORDER;
+        if (ulStyle & wxSYSTEM_MENU)
+            ulPmFlags |= FCF_SYSMENU;
+        if ((ulStyle & wxMINIMIZE) || (ulStyle & wxICONIZE))
+            ulPmFlags |= WS_MINIMIZED;
+        if (ulStyle & wxMAXIMIZE)
+            ulPmFlags |= WS_MAXIMIZED;
+        if (ulStyle & wxCAPTION)
+            ulPmFlags |= FCF_TASKLIST;
+        if (ulStyle & wxCLIP_CHILDREN)
+        {
+            // Invalid for frame windows under PM
+        }
+
+        //
+        // Keep this in wxFrame because it saves recoding this function
+        // in wxTinyFrame
+        //
+#if wxUSE_ITSY_BITSY
+        if (ulStyle & wxTINY_CAPTION_VERT)
+            ulExtraFlags |= kVertCaption;
+        if (ulStyle & wxTINY_CAPTION_HORIZ)
+            ulExtraFlags |= kHorzCaption;
+#else
+        if (ulStyle & wxTINY_CAPTION_VERT)
+            ulPmFlags |= FCF_TASKLIST;
+        if (ulStyle & wxTINY_CAPTION_HORIZ)
+            ulPmFlags |= FCF_TASKLIST;
+#endif
+        if ((ulStyle & wxTHICK_FRAME) == 0)
+            ulPmFlags |= FCF_BORDER;
+        if (ulStyle & wxFRAME_TOOL_WINDOW)
+            ulExtraFlags = kFrameToolWindow;
+
+        if (ulStyle & wxSTAY_ON_TOP)
+            ulPmFlags |= FCF_SYSMODAL;
+    }
     //
     // Clear the visible flag, we always call show
     //

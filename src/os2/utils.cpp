@@ -817,3 +817,62 @@ WXWORD WXDLLEXPORT wxGetWindowId(
     return ::WinQueryWindowUShort((HWND)hWnd, QWS_ID);
 }
 
+wxString WXDLLEXPORT wxPMErrorToStr(
+  ERRORID                           vError
+)
+{
+    wxString                        sError;
+
+    //
+    // Remove the high order byte -- it is useless
+    //
+    vError &= 0x0000ffff;
+    switch(vError)
+    {
+        case PMERR_INVALID_HWND:
+            sError = wxT("Invalid window handle specified");
+            break;
+
+        case PMERR_INVALID_FLAG:
+            sError = wxT("Invalid flag bit set");
+            break;
+
+        case PMERR_NO_MSG_QUEUE:
+            sError = wxT("No message queue available");
+            break;
+
+        case PMERR_INVALID_PARM:
+            sError = wxT("Parameter contained invalid data");
+            break;
+
+        case PMERR_INVALID_PARAMETERS:
+            sError = wxT("Parameter value is out of range");
+            break;
+
+        case PMERR_PARAMETER_OUT_OF_RANGE:
+            sError = wxT("Parameter value is out of range");
+            break;
+
+        case PMERR_INVALID_INTEGER_ATOM:
+            sError = wxT("Not a valid atom");
+            break;
+
+        case PMERR_INVALID_HATOMTBL:
+            sError = wxT("Atom table handle is invalid");
+            break;
+
+        case PMERR_INVALID_ATOM_NAME:
+            sError = wxT("Not a valid atom name");
+            break;
+
+        case PMERR_ATOM_NAME_NOT_FOUND:
+            sError = wxT("Valid name format, but cannot find name in atom table");
+            break;
+
+        default:
+            sError = wxT("Unknown error");
+    }
+    return(sError);
+} // end of wxPMErrorToStr
+
+

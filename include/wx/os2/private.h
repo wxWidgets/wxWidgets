@@ -196,6 +196,9 @@ WXDLLEXPORT extern wxString wxGetWindowClass(WXHWND hWnd);
 // is, for mainly historical reasons, signed)
 WXDLLEXPORT extern WXWORD wxGetWindowId(WXHWND hWnd);
 
+// Convert a PM Error code to a string
+WXDLLEXPORT extern wxString wxPMErrorToStr(ERRORID vError);
+
 // Does this window style specify any border?
 inline bool wxStyleHasBorder(long style)
 {

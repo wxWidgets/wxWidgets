@@ -68,7 +68,15 @@ wxIcon::wxIcon(
 , int                               nDesiredHeight
 )
 {
-    LoadFile( rIconFile
+    //
+    // A very poor hack, but we have to have separate icon files from windows
+    // So we have a modified name where replace the last three characters
+    // with os2.  Also need the extension.
+    //
+    wxString                         sOs2Name = rIconFile.Mid(0, rIconFile.Length() - 3);
+
+    sOs2Name += "Os2.ico";
+    LoadFile( sOs2Name
              ,lFlags
              ,nDesiredWidth
              ,nDesiredHeight
