@@ -10,7 +10,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-    #pragma interface "gridctrl.h"
+    #pragma implementation "gridctrl.h"
 #endif
 
 #include "wx/wxprec.h"
