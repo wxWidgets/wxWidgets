@@ -128,14 +128,14 @@ bool wxIPV4address::Hostname(const wxString& name)
     return FALSE;
   
   if (!name.IsNumber()) {
-    if ((theHostent = gethostbyname(name.GetData())) == 0) {
+    if ((theHostent = gethostbyname(name.fn_str())) == 0) {
       return FALSE;
     }
   } else {
 #ifdef __WXMAC__
-    long len_addr = inet_addr(name.GetData()).s_addr ;
+    long len_addr = inet_addr(name.fn_str()).s_addr ;
 #else
-    long len_addr = inet_addr(name.GetData());
+    long len_addr = inet_addr(name.fn_str());
 #endif
     if (len_addr == -1)
       return FALSE;
@@ -163,11 +163,11 @@ bool wxIPV4address::Service(const wxString& name)
     return FALSE;
   
   if (!name.IsNumber()) {
-    if ((theServent = getservbyname(name, "tcp")) == 0)
+    if ((theServent = getservbyname(name.fn_str(), "tcp")) == 0)
       return FALSE;
   } else {
-    if ((theServent = getservbyport(atoi(name), "tcp")) == 0) {
-      m_addr->sin_port = htons(atoi(name));
+    if ((theServent = getservbyport(wxAtoi(name), "tcp")) == 0) {
+      m_addr->sin_port = htons(wxAtoi(name));
       return TRUE;
     }
   }
@@ -399,7 +399,7 @@ const wxSockAddress& wxUNIXaddress::operator =(const wxSockAddress& addr)
 
 void wxUNIXaddress::Filename(const wxString& fname)
 {
-  sprintf(m_addr->sun_path, "%s", WXSTRINGCAST fname);
+  sprintf(m_addr->sun_path, "%s", MBSTRINGCAST fname.mb_str());
 }
 
 wxString wxUNIXaddress::Filename()

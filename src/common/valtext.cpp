@@ -75,14 +75,14 @@ bool wxTextValidator::Copy(const wxTextValidator& val)
     wxNode *node = val.m_includeList.First() ;
     while ( node )
     {
-        char *s = (char *)node->Data();
+        wxChar *s = (wxChar *)node->Data();
         m_includeList.Add(s);
         node = node->Next();
     }
     node = val.m_excludeList.First() ;
     while ( node )
     {
-        char *s = (char *)node->Data();
+        wxChar *s = (wxChar *)node->Data();
         m_excludeList.Add(s);
         node = node->Next();
     }
@@ -137,7 +137,7 @@ bool wxTextValidator::Validate(wxWindow *parent)
     bool ok = TRUE;
 
     // this format string should contian exactly one '%s'
-    const char *errormsg = _("'%s' is invalid");
+    const wxChar *errormsg = _("'%s' is invalid");
 
     if ( m_validatorStyle & wxFILTER_INCLUDE_LIST )
     {
@@ -236,7 +236,7 @@ void wxTextValidator::SetIncludeList(const wxStringList& list)
     wxNode *node = list.First() ;
     while ( node )
     {
-        char *s = (char *)node->Data();
+        wxChar *s = (wxChar *)node->Data();
         m_includeList.Add(s);
         node = node->Next();
     }
@@ -254,7 +254,7 @@ void wxTextValidator::SetExcludeList(const wxStringList& list)
     wxNode *node = list.First() ;
     while ( node )
     {
-        char *s = (char *)node->Data();
+        wxChar *s = (wxChar *)node->Data();
         m_excludeList.Add(s);
         node = node->Next();
     }
