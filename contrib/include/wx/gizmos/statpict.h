@@ -32,8 +32,7 @@ enum
     wxSCALE_CUSTOM     = 0x8
 };
 
-//WXDLLEXPORT_DATA(extern const wxChar*) wxStaticBitmapNameStr;
-extern const wxChar* wxStaticPictureNameStr;
+WXDLLIMPEXP_GIZMOS extern const wxChar* wxStaticPictureNameStr;
 
 class WXDLLIMPEXP_GIZMOS wxStaticPicture : public wxControl
 {
