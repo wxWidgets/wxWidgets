@@ -90,7 +90,30 @@
     $1 = PyString_Check($input) || PyUnicode_Check($input);
 }
 
-   
+//---------------------------------------------------------------------------
+// wxMemoryBuffer  (needed for wxSTC)
+
+%typemap(in) wxMemoryBuffer& (bool temp=False) {
+    if (!PyString_Check($input)) {
+        PyErr_SetString(PyExc_TypeError, "String buffer expected");
+        SWIG_fail;
+    }
+    char* str = PyString_AS_STRING($input);
+    int   len = PyString_GET_SIZE($input);
+    $1 = new wxMemoryBuffer(len);
+    temp = True;
+    memcpy($1->GetData(), str, len);
+}
+
+%typemap(freearg) wxMemoryBuffer& {
+    if (temp$argnum) delete $1;
+}
+
+%typemap(out) wxMemoryBuffer {
+    $result = PyString_FromStringAndSize((char*)$1.GetData(), $1.GetDataLen());
+}
+
+
 
 //---------------------------------------------------------------------------
 // Typemaps to convert Python sequence objects (tuples, etc.) to
