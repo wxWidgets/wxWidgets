@@ -16,7 +16,6 @@
 //---------------------------------------------------------------------------
 %newgroup;
 
-%noautorepr wxColour;
 
 class wxColour : public wxObject {
 public:

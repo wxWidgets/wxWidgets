@@ -31,7 +31,6 @@ typedef unsigned char   byte;
 #define %addtofunc      %feature("addtofunc")
 #define %kwargs         %feature("kwargs")
 #define %nokwargs       %feature("nokwargs")
-#define %noautorepr     %feature("noautorepr")
 
 #ifndef %shadow
 #define %shadow         %insert("shadow")

@@ -53,7 +53,7 @@ bool wxGBSpan_helper(PyObject* source, wxGBSpan** obj)
 
 //---------------------------------------------------------------------------
 %newgroup;
-%noautorepr wxGBPosition;
+
 
 class wxGBPosition
 {
@@ -101,7 +101,6 @@ public:
 
 
 
-%noautorepr wxGBSpan;
 
 class wxGBSpan
 {

@@ -1381,7 +1381,6 @@ public:
 
 //---------------------------------------------------------------------------
 
-%noautorepr wxGridCellCoords;
 
 class wxGridCellCoords
 {
