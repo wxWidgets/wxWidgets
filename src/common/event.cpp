@@ -98,20 +98,19 @@ wxEvent::wxEvent(int theId)
     m_isCommandEvent = FALSE;
 }
 
-wxObject *wxEvent::Clone() const
+void wxEvent::CopyObject(wxObject& object_dest) const
 {
-    wxEvent *event = (wxEvent *)wxObject::Clone();
+    wxEvent *obj = (wxEvent *)&object_dest; 
+    wxObject::CopyObject(object_dest);
 
-    event->m_eventType = m_eventType;
-    event->m_eventObject = m_eventObject;
-    event->m_eventHandle = m_eventHandle;
-    event->m_timeStamp = m_timeStamp;
-    event->m_id = m_id;
-    event->m_skipped = m_skipped;
-    event->m_callbackUserData = m_callbackUserData;
-    event->m_isCommandEvent = m_isCommandEvent;
-
-    return event;
+    obj->m_eventType = m_eventType;
+    obj->m_eventObject = m_eventObject;
+    obj->m_eventHandle = m_eventHandle;
+    obj->m_timeStamp = m_timeStamp;
+    obj->m_id = m_id;
+    obj->m_skipped = m_skipped;
+    obj->m_callbackUserData = m_callbackUserData;
+    obj->m_isCommandEvent = m_isCommandEvent;
 }
 
 /*
@@ -131,6 +130,18 @@ wxCommandEvent::wxCommandEvent(wxEventType commandType, int theId)
     m_isCommandEvent = TRUE;
 }
 
+void wxCommandEvent::CopyObject(wxObject& obj_d) const
+{
+    wxCommandEvent *obj = (wxCommandEvent *)&obj_d; 
+
+    wxEvent::CopyObject(obj_d);
+
+    obj->m_clientData   = m_clientData;
+    obj->m_clientObject = m_clientObject;
+    obj->m_extraLong    = m_extraLong;
+    obj->m_commandInt   = m_commandInt;
+}
+
 /*
  * Scroll events
  */
@@ -144,7 +155,6 @@ wxScrollEvent::wxScrollEvent(wxEventType commandType,
     m_extraLong = orient;
     m_commandInt = pos;
 }
-
 
 /*
  * Mouse events
@@ -163,6 +173,23 @@ wxMouseEvent::wxMouseEvent(wxEventType commandType)
     m_middleDown = FALSE;
     m_x = 0;
     m_y = 0;
+}
+
+void wxMouseEvent::CopyObject(wxObject& obj_d) const
+{
+    wxMouseEvent *obj = (wxMouseEvent *)&obj_d;
+
+    wxEvent::CopyObject(obj_d);
+
+    obj->m_metaDown = m_metaDown;
+    obj->m_altDown = m_altDown;
+    obj->m_controlDown = m_controlDown;
+    obj->m_shiftDown = m_shiftDown;
+    obj->m_leftDown = m_leftDown;
+    obj->m_rightDown = m_rightDown;
+    obj->m_middleDown = m_middleDown;
+    obj->m_x = m_x;
+    obj->m_y = m_y;
 }
 
 // True if was a button dclick event (1 = left, 2 = middle, 3 = right)
@@ -287,6 +314,85 @@ wxKeyEvent::wxKeyEvent(wxEventType type)
     m_keyCode = 0;
 }
 
+void wxKeyEvent::CopyObject(wxObject& obj_d) const
+{
+    wxKeyEvent *obj = (wxKeyEvent *)&obj_d;
+    wxEvent::CopyObject(obj_d);
+
+    obj->m_shiftDown   = m_shiftDown;
+    obj->m_controlDown = m_controlDown;
+    obj->m_metaDown    = m_metaDown;
+    obj->m_altDown     = m_altDown;
+    obj->m_keyCode     = m_keyCode;
+}
+
+
+/*
+ * Misc events
+ */
+
+void wxSizeEvent::CopyObject(wxObject& obj_d) const
+{
+    wxSizeEvent *obj = (wxSizeEvent *)&obj_d;
+    wxEvent::CopyObject(obj_d);
+
+    obj->m_size = m_size;
+}
+
+void wxMoveEvent::CopyObject(wxObject& obj_d) const
+{
+    wxMoveEvent *obj = (wxMoveEvent *)&obj_d;
+    wxEvent::CopyObject(obj_d);
+
+    obj->m_pos = m_pos;
+}
+
+void wxEraseEvent::CopyObject(wxObject& obj_d) const
+{
+    wxEraseEvent *obj = (wxEraseEvent *)&obj_d;
+    wxEvent::CopyObject(obj_d);
+
+    obj->m_dc = m_dc;
+}
+
+void wxActivateEvent::CopyObject(wxObject& obj_d) const
+{
+    wxActivateEvent *obj = (wxActivateEvent *)&obj_d;
+    wxEvent::CopyObject(obj_d);
+
+    obj->m_active = m_active;
+}
+
+void wxMenuEvent::CopyObject(wxObject& obj_d) const
+{
+    wxMenuEvent *obj = (wxMenuEvent *)&obj_d;
+    wxEvent::CopyObject(obj_d);
+
+    obj->m_menuId = m_menuId;
+}
+
+void wxCloseEvent::CopyObject(wxObject& obj_d) const
+{
+    wxCloseEvent *obj = (wxCloseEvent *)&obj_d;
+    wxEvent::CopyObject(obj_d);
+
+    obj->m_loggingOff = m_loggingOff;
+    obj->m_veto = m_veto;
+#if WXWIN_COMPATIBILITY
+    obj->m_force = m_force;
+#endif
+    obj->m_canVeto = m_canVeto;
+}
+ 
+void wxShowEvent::CopyObject(wxObject& obj_d) const
+{
+    wxShowEvent *obj = (wxShowEvent *)&obj_d;
+    wxEvent::CopyObject(obj_d);
+
+    obj->m_show = m_show;
+}
+ 
+
 /*
  * Event handler
  */
@@ -335,10 +441,18 @@ wxEvtHandler::~wxEvtHandler()
 }
 
 #if wxUSE_THREADS
+
+#ifdef __WXGTK__
+extern bool g_isIdle;
+
+extern void wxapp_install_idle_handler();
+#endif
+
 bool wxEvtHandler::ProcessThreadEvent(wxEvent& event)
 {
     wxEvent *event_main;
     wxCriticalSectionLocker locker(*m_eventsLocker);
+
 
     // check that we are really in a child thread
     wxASSERT( !wxThread::IsMain() );
@@ -353,6 +467,10 @@ bool wxEvtHandler::ProcessThreadEvent(wxEvent& event)
     wxPendingEventsLocker->Enter();
     wxPendingEvents->Append(this);
     wxPendingEventsLocker->Leave();
+
+#ifdef __WXGTK__
+    if (g_isIdle) wxapp_install_idle_handler();
+#endif
 
     return TRUE;
 }

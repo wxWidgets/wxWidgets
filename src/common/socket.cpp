@@ -554,11 +554,14 @@ void wxSocketBase::SetNotify(wxRequestNotify flags)
 
 void wxSocketBase::Notify(bool notify)
 {
+  m_notify_state = notify;
+  if (m_fd == INVALID_SOCKET)
+    return;
+
   if (notify)
     m_internal->EnableWaiter();
   else
     m_internal->DisableWaiter();
-  m_notify_state = notify;
 }
 
 void wxSocketBase::OnRequest(wxRequestEvent req_evt)
@@ -586,14 +589,14 @@ wxSocketEvent::wxSocketEvent(int id)
   SetEventType(type);
 }
 
-wxObject *wxSocketEvent::Clone() const
+void wxSocketEvent::CopyObject(wxObject& obj_d) const
 {
-  wxSocketEvent *event = (wxSocketEvent *)wxEvent::Clone();
+  wxSocketEvent *event = (wxSocketEvent *)&obj_d;
+
+  wxEvent::CopyObject(obj_d);
 
   event->m_skevt = m_skevt;
   event->m_socket = m_socket;
-
-  return event;
 }
 
 void wxSocketBase::OldOnNotify(wxRequestEvent evt)
@@ -746,8 +749,12 @@ bool wxSocketServer::AcceptWith(wxSocketBase& sock)
 {
   int fd2;
 
-  if ((fd2 = accept(m_fd, 0, 0)) < 0)
+  m_internal->AcquireFD();
+  if ((fd2 = accept(m_fd, 0, 0)) < 0) {
+    m_internal->ReleaseFD();
     return FALSE;
+  }
+  m_internal->ReleaseFD();
 
   struct linger linger;
   linger.l_onoff = 0;

@@ -159,19 +159,15 @@ void *SocketWaiter::Entry()
 #ifdef Yield
 #undef Yield
 #endif
+#endif
 
-    if (ret == 0)
-      // If nothing happened, we wait for 100 ms.
-      wxThread::Sleep(10);
-    else
-      wxThread::Yield();
-#else
+/*
     if (ret == 0)
       // If nothing happened, we wait for 100 ms.
       wxUsleep(10);
     else
       wxYield();
-#endif
+*/
 
     // Check whether we should exit.
     if (TestDestroy())
@@ -331,7 +327,6 @@ wxSocketInternal::wxSocketInternal(wxSocketBase *socket)
 
 wxSocketInternal::~wxSocketInternal()
 {
-//  wxASSERT(!m_finalized); there is no m_finalized anywhere, RR
   m_request_locker.Unlock();
   delete m_thread_waiter;
   delete m_thread_requester;
@@ -387,8 +382,8 @@ void wxSocketInternal::ReleaseFD()
 // ----------------------------------------------------------------------
 void wxSocketInternal::InitializeSocket()
 {
-//  wxASSERT( ((m_thread_waiter->IsAlive() && !m_thread_waiter->IsPaused()) ||
-//	     (m_thread_requester->IsAlive() && !m_thread_requester->IsPaused())));
+  wxASSERT( ((!m_thread_waiter->IsAlive() || m_thread_waiter->IsPaused()) &&
+	     (!m_thread_requester->IsAlive() || m_thread_requester->IsPaused())));
 
   m_thread_waiter->m_fd = m_socket->m_fd;
   m_thread_requester->m_fd = m_socket->m_fd;
@@ -396,19 +391,17 @@ void wxSocketInternal::InitializeSocket()
   if (m_thread_waiter->IsPaused())
     ResumeSocket();
   else {
+    wxThreadError err;
 
-    if (m_thread_waiter->Create() != wxTHREAD_NO_ERROR) {
-      // Something should be done here.
-      return;
-    }
-    
-    if (m_thread_requester->Create() != wxTHREAD_NO_ERROR) {
-      // Something should be done here.
-      return;
-    }
- 
-    m_thread_waiter->Run();
-    m_thread_requester->Run();
+    err = m_thread_waiter->Create();
+    wxASSERT(err == wxTHREAD_NO_ERROR);
+    err = m_thread_requester->Create();
+    wxASSERT(err == wxTHREAD_NO_ERROR);
+
+    err = m_thread_waiter->Run();
+    wxASSERT(err == wxTHREAD_NO_ERROR);
+    err = m_thread_requester->Run();
+    wxASSERT(err == wxTHREAD_NO_ERROR);
   }
 }
 
@@ -418,41 +411,47 @@ void wxSocketInternal::InitializeSocket()
 // ----------------------------------------------------------------------
 void wxSocketInternal::FinalizeSocket()
 {
-  wxASSERT( (!m_thread_waiter->IsAlive() && !m_thread_requester->IsAlive()) );
-
   ResumeSocket();
 
   m_thread_waiter->Delete();
+
+  // Send a signal to the thread "requester".
+
   m_socket_locker.Lock();
   if (m_requests.Number() == 0)
     m_socket_cond.Signal();
   m_socket_locker.Unlock();
 
+  // Finish the destruction of the thread "requester".
   m_thread_requester->Delete();
 }
 
 void wxSocketInternal::PauseSocket()
 {
-  if (m_thread_waiter != NULL && !m_thread_waiter->IsPaused())
-    m_thread_waiter->Pause();
+  DisableWaiter();
 }
 
 void wxSocketInternal::ResumeSocket()
 {
-  if (m_thread_waiter != NULL && m_thread_waiter->IsPaused())
-    m_thread_waiter->Resume();
+  EnableWaiter();
 }
 
 void wxSocketInternal::EnableWaiter()
 {
-  if (m_thread_waiter != NULL && m_thread_waiter->IsPaused())
-    m_thread_waiter->Resume();
+  wxASSERT(m_thread_waiter != NULL);
+  if (!m_thread_waiter->IsAlive() || !m_thread_waiter->IsPaused())
+    return;
+
+  m_thread_waiter->Resume();
 }
 
 void wxSocketInternal::DisableWaiter()
 {
-  if (m_thread_waiter != NULL && !m_thread_waiter->IsPaused())
-    m_thread_waiter->Pause();
+  wxASSERT(m_thread_waiter != NULL); 
+  if (!m_thread_waiter->IsAlive() || m_thread_waiter->IsPaused())
+    return;
+
+  m_thread_waiter->Pause();
 }
 
 // ----------------------------------------------------------------------
@@ -464,10 +463,10 @@ void wxSocketInternal::QueueRequest(SockRequest *request, bool async)
     m_request_locker.Lock();
     request->done = FALSE;
     m_requests.Append((wxObject *)request);
+    m_socket_cond.Signal();
     m_request_locker.Unlock();
     
     // Wake up
-    m_socket_cond.Signal();
     
     if (request->wait) {
       if (wxThread::IsMain())
