@@ -48,8 +48,6 @@
 wxZlibInputStream::wxZlibInputStream(wxInputStream& stream)
   : wxFilterInputStream(stream)
 {
-  int err;
-
   // I need a private stream buffer.
   m_inflate = new z_stream_s;
 
@@ -57,7 +55,7 @@ wxZlibInputStream::wxZlibInputStream(wxInputStream& stream)
   m_inflate->zfree = (free_func)0;
   m_inflate->opaque = (voidpf)0;
 
-  err = inflateInit(m_inflate);
+  int err = inflateInit(m_inflate);
   if (err != Z_OK) {
     inflateEnd(m_inflate);
     delete m_inflate;
@@ -75,6 +73,8 @@ wxZlibInputStream::~wxZlibInputStream()
 {
   inflateEnd(m_inflate);
   delete m_inflate;
+
+  delete [] m_z_buffer;
 }
 
 size_t wxZlibInputStream::OnSysRead(void *buffer, size_t size)
