@@ -845,11 +845,12 @@ trap 'rm -fr `echo "
             samples/canvas/test/Makefile
             samples/canvas/simple/Makefile
             samples/gizmos/Makefile
-            samples/gizmos/multicell/Makefile
-            samples/gizmos/splittree/Makefile
             samples/gizmos/editlbox/Makefile
             samples/gizmos/dynsash/Makefile
             samples/gizmos/dynsash_switch/Makefile
+            samples/gizmos/multicell/Makefile
+            samples/gizmos/splittree/Makefile
+            samples/gizmos/led/Makefile
             samples/xrc/Makefile
             samples/plot/Makefile
             samples/applet/Makefile
@@ -969,11 +970,12 @@ CONFIG_FILES=\${CONFIG_FILES-"src/Makefile
             samples/canvas/test/Makefile
             samples/canvas/simple/Makefile
             samples/gizmos/Makefile
-            samples/gizmos/multicell/Makefile
-            samples/gizmos/splittree/Makefile
             samples/gizmos/editlbox/Makefile
             samples/gizmos/dynsash/Makefile
             samples/gizmos/dynsash_switch/Makefile
+            samples/gizmos/multicell/Makefile
+            samples/gizmos/splittree/Makefile
+            samples/gizmos/led/Makefile
             samples/xrc/Makefile
             samples/plot/Makefile
             samples/applet/Makefile
