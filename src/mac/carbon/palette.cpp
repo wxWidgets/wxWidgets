@@ -83,7 +83,7 @@ int wxPalette::GetPixel(const unsigned char red, const unsigned char green, cons
     
     for ( int i = 0  ; i < M_PALETTEDATA->m_count ; ++i )
     {
-        const wxColour& col = &M_PALETTEDATA->m_palette[i] ;
+        const wxColour& col = M_PALETTEDATA->m_palette[i] ;
         currentdiff = abs ( col.Red() - red ) + abs( col.Green() - green ) + abs ( col.Blue() - blue )  ;
         if ( currentdiff < bestdiff )
         {
@@ -105,7 +105,7 @@ bool wxPalette::GetRGB(int index, unsigned char *red, unsigned char *green, unsi
     if (index < 0 || index >= M_PALETTEDATA->m_count)
         return FALSE;
     
-    const wxColour& col = &M_PALETTEDATA->m_palette[index] ;
+    const wxColour& col = M_PALETTEDATA->m_palette[index] ;
     *red = col.Red() ;
     *green = col.Green() ;
     *blue = col.Blue() ;

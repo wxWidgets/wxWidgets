@@ -133,7 +133,7 @@ void wxStatusBarMac::OnPaint(wxPaintEvent& WXUNUSED(event) )
 
 	if ( MacIsReallyHilited() )
 	{
-		wxPen white( wxWHITE , 1 , wxSOLID ) ;
+		wxPen white( *wxWHITE , 1 , wxSOLID ) ;
         if (major >= 10 ) 
         {
             //Finder statusbar border color: (Project builder similar is 9B9B9B)
@@ -144,7 +144,7 @@ void wxStatusBarMac::OnPaint(wxPaintEvent& WXUNUSED(event) )
         }
         else
         {
-            wxPen black( wxBLACK , 1 , wxSOLID ) ;
+            wxPen black( *wxBLACK , 1 , wxSOLID ) ;
             dc.SetPen(black);
     	}
 		dc.DrawLine(0, 0 ,

@@ -40,7 +40,6 @@ public:
 
     // copy ctors and assignment operators
   wxColour( const wxColour& col );
-  wxColour( const wxColour* col );
   wxColour& operator = ( const wxColour& col );
 
     // dtor
