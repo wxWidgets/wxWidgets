@@ -79,6 +79,8 @@ public:
     {
         m_tbar = tbar;
         m_id = toolid;
+        if (m_id == wxID_ANY)
+            m_id = wxNewId();
         m_clientData = clientData;
 
         m_bmpNormal = bmpNormal;

@@ -1418,7 +1418,7 @@ enum
 /*  id for a separator line in the menu (invalid for normal item) */
 enum
 {
-    wxID_SEPARATOR = -1
+    wxID_SEPARATOR = -2
 };
 
 /*  Standard menu IDs */
