@@ -421,7 +421,22 @@ public:
     bool SetBackgroundColour(const wxColour& col);
 
     // Gets information about this column
-    bool GetColumn(int col, wxListItem& item) const;
+    // bool GetColumn(int col, wxListItem& item) const;
+    %addmethods {
+        %new wxListItem* GetColumn(int col) {
+            wxListItem item;
+            if (self->GetColumn(col, item))
+                return new wxListItem(item);
+            else
+                return NULL;
+        }
+    }  // The OOR typemaps don't know what to do with the %new, so fix it up.
+    %pragma(python) addtoclass = "
+    def GetItem(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_GetColumn,(self,) + _args, _kwargs)
+        if val is not None: val.thisown = 1
+        return val
+    "
 
     // Sets information about this column
     bool SetColumn(int col, wxListItem& item) ;
