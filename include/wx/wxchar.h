@@ -1,13 +1,13 @@
-/**
-*  Name:        wx/wxchar.h 
-*  Purpose:     Declarations common to wx char/wchar_t usage (wide chars) 
-*  Author:      Joel Farley, Ove Kåven 
-*  Modified by: Vadim Zeitlin, Robert Roebling 
-*  Created:     1998/06/12 
-*  RCS-ID:      $Id$ 
-*  Copyright:   (c) 1998-2002 wxWindows dev team 
-*  Licence:     wxWindows licence 
-*/
+/*
+ * Name:        wx/wxchar.h
+ * Purpose:     Declarations common to wx char/wchar_t usage (wide chars)
+ * Author:      Joel Farley, Ove Kåven
+ * Modified by: Vadim Zeitlin, Robert Roebling
+ * Created:     1998/06/12
+ * RCS-ID:      $Id$
+ * Copyright:   (c) 1998-2002 wxWindows dev team
+ * Licence:     wxWindows licence
+ */
 
 /* THIS IS A C FILE, DON'T USE C++ FEATURES (IN PARTICULAR COMMENTS) IN IT */
 
@@ -18,15 +18,12 @@
     #pragma interface "wxchar.h"
 #endif
 
-#include "wx/defs.h"        /*  for wxUSE_UNICODE */
+#include "wx/defs.h"        /* for wxUSE_UNICODE */
 
-/*  ---------------------------------------------------------------------------- */
-/*  check whether we have wchar_t and which size it is if we do */
-/*  ---------------------------------------------------------------------------- */
-
+/* check whether we have wchar_t and which size it is if we do */
 #if !defined(wxUSE_WCHAR_T)
     #if defined(__WIN16__)
-        /*  no wchar_t under Win16 regadrless of compiler used */
+        /* no wchar_t under Win16 regadrless of compiler used */
         #define wxUSE_WCHAR_T 0
     #elif defined(__UNIX__)
         #if defined(HAVE_WCSTR_H) || defined(HAVE_WCHAR_H) || defined(__FreeBSD__) || defined(__DARWIN__)
@@ -41,36 +38,39 @@
     #elif defined(__VISAGECPP__) && (__IBMCPP__ < 400)
         #define wxUSE_WCHAR_T 0
     #else
-        /*  add additional compiler checks if this fails */
+        /* add additional compiler checks if this fails */
         #define wxUSE_WCHAR_T 1
     #endif
-#endif /*  !defined(wxUSE_WCHAR_T) */
+#endif /* !defined(wxUSE_WCHAR_T) */
 
-/*  Unicode support requires wchar_t */
+/* Unicode support requires wchar_t */
 #if wxUSE_UNICODE && !wxUSE_WCHAR_T
     #error "wchar_t must be available in Unicode build"
-#endif /*  Unicode */
+#endif /* Unicode */
 
-/*  ---------------------------------------------------------------------------- */
-/*  standard headers we need here */
-/*  */
-/*  NB: don't include any wxWindows headers here because almost of them include */
-/*      this one! */
-/*  ---------------------------------------------------------------------------- */
+/*
+    Standard headers we need here.
 
-/*  Required for wxPrintf() etc */
+    NB: don't include any wxWindows headers here because almost of them include
+        this one!
+ */
+
+/* Required for wxPrintf() etc */
 #include <stdarg.h>
 
-/*  Almost all compiler have strdup(), but not quite all: CodeWarrior under Mac */
-/*  and VC++ for Windows CE don't provide it */
+/* Almost all compiler have strdup(), but not quite all: CodeWarrior under Mac */
+/* and VC++ for Windows CE don't provide it */
 #if !(defined(__MWERKS__) && defined(__WXMAC__)) && !defined(__WXWINCE__)
-    /*  use #define, not inline wrapper, as it is tested with #ifndef below */
+    /* use #define, not inline wrapper, as it is tested with #ifndef below */
     #define wxStrdupA strdup
 #endif
 
-/*  non Unix compilers which do have wchar.h (but not tchar.h which is included */
-/*  below and which includes wchar.h anyhow). */
-/*  Actually MinGW has tchar.h, but it does not include wchar.h */
+/*
+   non Unix compilers which do have wchar.h (but not tchar.h which is included
+   below and which includes wchar.h anyhow).
+
+   Actually MinGW has tchar.h, but it does not include wchar.h
+ */
 #if defined(__MWERKS__) || defined(__VISAGECPP__) || defined(__MINGW32__) || defined(__WATCOMC__)
     #ifndef HAVE_WCHAR_H
         #define HAVE_WCHAR_H
@@ -79,34 +79,34 @@
 
 #if wxUSE_WCHAR_T
     #ifdef HAVE_WCHAR_H
-        /*  the current (as of Nov 2002) version of cygwin has a bug in its */
-        /*  wchar.h -- there is no extern "C" around the declarations in it and */
-        /*  this results in linking errors later; also, at least on some */
-        /*  Cygwin versions, wchar.h requires sys/types.h */
+        /* the current (as of Nov 2002) version of cygwin has a bug in its */
+        /* wchar.h -- there is no extern "C" around the declarations in it and */
+        /* this results in linking errors later; also, at least on some */
+        /* Cygwin versions, wchar.h requires sys/types.h */
         #ifdef __CYGWIN__
             #include <sys/types.h>
             extern "C" {
-        #endif /*  Cygwin */
+        #endif /* Cygwin */
                 #include <wchar.h>
         #ifdef __CYGWIN__
             }
-        #endif /*  Cygwin */
+        #endif /* Cygwin */
     #elif defined(HAVE_WCSTR_H)
-        /*  old compilers have relevant declarations here */
+        /* old compilers have relevant declarations here */
         #include <wcstr.h>
     #elif defined(__FreeBSD__) || defined(__DARWIN__) || defined(__EMX__)
-        /*  include stdlib.h for wchar_t */
+        /* include stdlib.h for wchar_t */
         #include <stdlib.h>
-    #endif /*  HAVE_WCHAR_H */
-#endif /*  wxUSE_WCHAR_T */
+    #endif /* HAVE_WCHAR_H */
+#endif /* wxUSE_WCHAR_T */
 
-/*  ---------------------------------------------------------------------------- */
-/*  define wxHAVE_TCHAR_SUPPORT for the compilers which support the TCHAR type */
-/*  mapped to either char or wchar_t depending on the ASCII/Unicode mode and have */
-/*  the function mapping _tfoo() -> foo() or wfoo() */
-/*  ---------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------- */
+/* define wxHAVE_TCHAR_SUPPORT for the compilers which support the TCHAR type */
+/* mapped to either char or wchar_t depending on the ASCII/Unicode mode and have */
+/* the function mapping _tfoo() -> foo() or wfoo() */
+/* ---------------------------------------------------------------------------- */
 
-/*  VC++ and BC++ starting with 5.2 have TCHAR support */
+/* VC++ and BC++ starting with 5.2 have TCHAR support */
 #ifdef __VISUALC__
     #define wxHAVE_TCHAR_SUPPORT
 #elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x520)
@@ -120,98 +120,98 @@
     #include <string.h>
     #include <ctype.h>
 #elif 0 && defined(__VISAGECPP__) && (__IBMCPP__ >= 400)
-    /*  VZ: the old VisualAge definitions were completely wrong and had no */
-    /*      chance at all to work in Unicode build anyhow so let's pretend that */
-    /*      VisualAge does _not_ support TCHAR for the moment (as indicated by */
-    /*      "0 &&" above) until someone really has time to delve into Unicode */
-    /*      issues under OS/2 */
+    /* VZ: the old VisualAge definitions were completely wrong and had no */
+    /*     chance at all to work in Unicode build anyhow so let's pretend that */
+    /*     VisualAge does _not_ support TCHAR for the moment (as indicated by */
+    /*     "0 &&" above) until someone really has time to delve into Unicode */
+    /*     issues under OS/2 */
 
-    /*  VisualAge 4.0+ supports TCHAR */
+    /* VisualAge 4.0+ supports TCHAR */
     #define wxHAVE_TCHAR_SUPPORT
-#endif /*  compilers with (good) TCHAR support */
+#endif /* compilers with (good) TCHAR support */
 
 #ifdef __MWERKS__
     #define HAVE_WPRINTF
 #endif
 
 #ifdef wxHAVE_TCHAR_SUPPORT
-    /*  get TCHAR definition if we've got it */
+    /* get TCHAR definition if we've got it */
     #include <tchar.h>
 
-    /*  we surely do have wchar_t if we have TCHAR */
+    /* we surely do have wchar_t if we have TCHAR */
     #ifndef wxUSE_WCHAR_T
         #define wxUSE_WCHAR_T 1
-    #endif /*  !defined(wxUSE_WCHAR_T) */
+    #endif /* !defined(wxUSE_WCHAR_T) */
 
-    /*  and we also do have wcslen() */
+    /* and we also do have wcslen() */
     #ifndef HAVE_WCSLEN
         #define HAVE_WCSLEN
     #endif
-#endif /*  wxHAVE_TCHAR_SUPPORT */
+#endif /* wxHAVE_TCHAR_SUPPORT */
 
-/*  ---------------------------------------------------------------------------- */
-/*  define wxChar type */
-/*  ---------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------- */
+/* define wxChar type */
+/* ---------------------------------------------------------------------------- */
 
-/*  TODO: define wxCharInt to be equal to either int or wint_t? */
+/* TODO: define wxCharInt to be equal to either int or wint_t? */
 
 #if !wxUSE_UNICODE
     typedef char wxChar;
     typedef signed char wxSChar;
     typedef unsigned char wxUChar;
-#else /*  Unicode */
-    /*  VZ: note that VC++ defines _T[SU]CHAR simply as wchar_t and not as */
-    /*      signed/unsigned version of it which (a) makes sense to me (unlike */
-    /*      char wchar_t is always unsigned) and (b) was how the previous */
-    /*      definitions worked so keep it like this */
+#else /* Unicode */
+    /* VZ: note that VC++ defines _T[SU]CHAR simply as wchar_t and not as */
+    /*     signed/unsigned version of it which (a) makes sense to me (unlike */
+    /*     char wchar_t is always unsigned) and (b) was how the previous */
+    /*     definitions worked so keep it like this */
 
-    /*  GNU libc has __WCHAR_TYPE__ which requires special treatment, see */
-    /*  comment below */
+    /* GNU libc has __WCHAR_TYPE__ which requires special treatment, see */
+    /* comment below */
     #if !defined(__WCHAR_TYPE__) || \
         (!defined(__GNUC__) || wxCHECK_GCC_VERSION(2, 96))
-        /*  standard case */
+        /* standard case */
         typedef wchar_t wxChar;
         typedef wchar_t wxSChar;
         typedef wchar_t wxUChar;
-    #else /*  __WCHAR_TYPE__ and gcc < 2.96 */
-        /*  VS: wxWindows used to define wxChar as __WCHAR_TYPE__ here. However, */
-        /*      this doesn't work with new GCC 3.x compilers because wchar_t is */
-        /*      C++'s builtin type in the new standard. OTOH, old compilers (GCC */
-        /*      2.x) won't accept new definition of wx{S,U}Char, therefore we */
-        /*      have to define wxChar conditionally depending on detected */
-        /*      compiler & compiler version. */
-        /*      with old definition of wxChar. */
+    #else /* __WCHAR_TYPE__ and gcc < 2.96 */
+        /* VS: wxWindows used to define wxChar as __WCHAR_TYPE__ here. However, */
+        /*     this doesn't work with new GCC 3.x compilers because wchar_t is */
+        /*     C++'s builtin type in the new standard. OTOH, old compilers (GCC */
+        /*     2.x) won't accept new definition of wx{S,U}Char, therefore we */
+        /*     have to define wxChar conditionally depending on detected */
+        /*     compiler & compiler version. */
+        /*     with old definition of wxChar. */
         typedef __WCHAR_TYPE__ wxChar;
         typedef __WCHAR_TYPE__ wxSChar;
         typedef __WCHAR_TYPE__ wxUChar;
-    #endif /*  __WCHAR_TYPE__ */
-#endif /*  ASCII/Unicode */
+    #endif /* __WCHAR_TYPE__ */
+#endif /* ASCII/Unicode */
 
-/*  ---------------------------------------------------------------------------- */
-/*  define _T() and related macros */
-/*  ---------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------- */
+/* define _T() and related macros */
+/* ---------------------------------------------------------------------------- */
 
-/*  BSD systems define _T() to be something different in ctype.h, override it */
+/* BSD systems define _T() to be something different in ctype.h, override it */
 #if defined(__FreeBSD__) || defined(__DARWIN__)
     #include <ctype.h>
     #undef _T
 #endif
 
-/*  could already be defined by tchar.h (it's quasi standard) */
+/* could already be defined by tchar.h (it's quasi standard) */
 #ifndef _T
     #if !wxUSE_UNICODE
         #define _T(x) x
-    #else /*  Unicode */
+    #else /* Unicode */
         #define _T(x) L ## x
-    #endif /*  ASCII/Unicode */
-#endif /*  !defined(_T) */
+    #endif /* ASCII/Unicode */
+#endif /* !defined(_T) */
 
-/*  although global macros with such names are normally bad, we want to have */
-/*  another name for _T() which should be used to avoid confusion between _T() */
-/*  and _() in wxWindows sources */
+/* although global macros with such names are normally bad, we want to have */
+/* another name for _T() which should be used to avoid confusion between _T() */
+/* and _() in wxWindows sources */
 #define wxT(x)       _T(x)
 
-/*  Unicode-friendly __FILE__, __DATE__ and __TIME__ analogs */
+/* Unicode-friendly __FILE__, __DATE__ and __TIME__ analogs */
 #ifndef __TFILE__
     #define __XFILE__(x) wxT(x)
     #define __TFILE__ __XFILE__(__FILE__)
@@ -227,18 +227,18 @@
     #define __TTIME__ __XTIME__(__TIME__)
 #endif
 
-/*  ---------------------------------------------------------------------------- */
-/*  define wxFoo() function for each standard foo() function whose signature */
-/*  (exceptionally including the return type) includes any mention of char: */
-/*  wxFoo() is going to be a Unicode-friendly version of foo(), i.e. will have */
-/*  the same signature but with char replaced by wxChar which allows us to use */
-/*  it in Unicode build as well */
-/*  ---------------------------------------------------------------------------- */
+/*
+    define wxFoo() function for each standard foo() function whose signature
+    (exceptionally including the return type) includes any mention of char:
+    wxFoo() is going to be a Unicode-friendly version of foo(), i.e. will have
+    the same signature but with char replaced by wxChar which allows us to use
+    it in Unicode build as well
+ */
 
 #ifdef wxHAVE_TCHAR_SUPPORT
     #include <ctype.h>
 
-    /*  ctype.h functions */
+    /* ctype.h functions */
     #define  wxIsalnum   _istalnum
     #define  wxIsalpha   _istalpha
     #define  wxIscntrl   _istcntrl
@@ -253,21 +253,21 @@
     #define  wxTolower   _totlower
     #define  wxToupper   _totupper
 
-    /*  locale.h functons */
+    /* locale.h functons */
     #define  wxSetlocale _tsetlocale
 
-    /*  string.h functions */
+    /* string.h functions */
     #define  wxStrcat    _tcscat
     #define  wxStrchr    _tcschr
     #define  wxStrcmp    _tcscmp
     #define  wxStrcoll   _tcscoll
     #define  wxStrcpy    _tcscpy
     #define  wxStrcspn   _tcscspn
-    #define  wxStrdupW   _wcsdup        /*  notice the 'W'! */
+    #define  wxStrdupW   _wcsdup        /* notice the 'W'! */
     #define  wxStrftime  _tcsftime
     #define  wxStricmp   _tcsicmp
     #define  wxStrnicmp  _tcsnicmp
-    #define  wxStrlen_   _tcslen        /*  used in wxStrlen inline function */
+    #define  wxStrlen_   _tcslen        /* used in wxStrlen inline function */
     #define  wxStrncat   _tcsncat
     #define  wxStrncmp   _tcsncmp
     #define  wxStrncpy   _tcsncpy
@@ -280,7 +280,7 @@
     #define  wxStrtoul   _tcstoul
     #define  wxStrxfrm   _tcsxfrm
 
-    /*  stdio.h functions */
+    /* stdio.h functions */
     #define  wxFgetc     _fgettc
     #define  wxFgetchar  _fgettchar
     #define  wxFgets     _fgetts
@@ -309,15 +309,15 @@
     #define  wxVsscanf   _vstscanf
     #define  wxVsprintf  _vstprintf
 
-    /*  special case: not all TCHAR-aware compilers have those */
+    /* special case: not all TCHAR-aware compilers have those */
     #if defined(__VISUALC__) || \
             (defined(__BORLANDC__) && __BORLANDC__ >= 0x540)
         #define wxVsnprintf_    _vsntprintf
         #define wxSnprintf_     _sntprintf
     #endif
 
-    /*  special case: these functions are missing under Win9x with Unicows so we */
-    /*  have to implement them ourselves */
+    /* special case: these functions are missing under Win9x with Unicows so we */
+    /* have to implement them ourselves */
     #if wxUSE_UNICODE_MSLU
         #define  wxRemove    wxMSLU__tremove
         #define  wxRename    wxMSLU__trename
@@ -330,23 +330,23 @@
         #endif
     #endif
 
-    /*  stdlib.h functions */
+    /* stdlib.h functions */
     #define  wxAtoi      _ttoi
     #define  wxAtol      _ttol
-    /*  #define  wxAtof   _tttof -- notice that there is no such thing (why?) */
+    /* #define  wxAtof   _tttof -- notice that there is no such thing (why?) */
     #define  wxGetenv    _tgetenv
     #define  wxSystem    _tsystem
 
-    /*  time.h functions */
+    /* time.h functions */
     #define  wxAsctime   _tasctime
     #define  wxCtime     _tctime
-#else /*  !TCHAR-aware compilers */
+#else /* !TCHAR-aware compilers */
     #if wxUSE_UNICODE
         #include <wctype.h>
 
-        /*  this is probably glibc-specific */
+        /* this is probably glibc-specific */
         #if defined(__WCHAR_TYPE__)
-            /*  ctype.h functions (wctype.h) */
+            /* ctype.h functions (wctype.h) */
             #define  wxIsalnum   iswalnum
             #define  wxIsalpha   iswalpha
             #define  wxIscntrl   iswcntrl
@@ -360,24 +360,24 @@
             #define  wxIsxdigit  iswxdigit
 
             #if defined(__GLIBC__) && (__GLIBC__ == 2) && (__GLIBC_MINOR__ == 0)
-                /*  /usr/include/wctype.h incorrectly declares translations */
-                /*  tables which provokes tons of compile-time warnings -- try */
-                /*  to correct this */
+                /* /usr/include/wctype.h incorrectly declares translations */
+                /* tables which provokes tons of compile-time warnings -- try */
+                /* to correct this */
                 #define  wxTolower(wc)   towctrans((wc), (wctrans_t)__ctype_tolower)
                 #define  wxToupper(wc)   towctrans((wc), (wctrans_t)__ctype_toupper)
-            #else /*  !glibc 2.0 */
+            #else /* !glibc 2.0 */
                 #define  wxTolower   towlower
                 #define  wxToupper   towupper
-            #endif /*  gcc/!gcc */
+            #endif /* gcc/!gcc */
 
-            /*  string.h functions (wchar.h) */
+            /* string.h functions (wchar.h) */
             #define  wxStrcat    wcscat
             #define  wxStrchr    wcschr
             #define  wxStrcmp    wcscmp
             #define  wxStrcoll   wcscoll
             #define  wxStrcpy    wcscpy
             #define  wxStrcspn   wcscspn
-            #define  wxStrlen_   wxWcslen /*  wxStrlen_() is used in wxStrlen() */
+            #define  wxStrlen_   wxWcslen /* wxStrlen_() is used in wxStrlen() */
             #define  wxStrncat   wcsncat
             #define  wxStrncmp   wcsncmp
             #define  wxStrncpy   wcsncpy
@@ -417,16 +417,16 @@
                 #define wxPutchar(wch) wxPutc(wch, stdout)
             #endif
 
-            /*  we need %s to %ls conversion for printf and scanf etc */
+            /* we need %s to %ls conversion for printf and scanf etc */
             #define wxNEED_PRINTF_CONVERSION
 
-            /*  glibc doesn't have wide char equivalents of the other stuff so */
-            /*  use our own versions */
+            /* glibc doesn't have wide char equivalents of the other stuff so */
+            /* use our own versions */
             #define wxNEED_WX_STDIO_H
             #define wxNEED_WX_STDLIB_H
             #define wxNEED_WX_TIME_H
         #elif defined(__MWERKS__) && ( defined(macintosh) || defined(__MACH__) )
-            /*  ctype.h functions (wctype.h) */
+            /* ctype.h functions (wctype.h) */
             #define  wxIsalnum   iswalnum
             #define  wxIsalpha   iswalpha
             #define  wxIscntrl   iswcntrl
@@ -441,14 +441,14 @@
             #define  wxTolower   towlower
             #define  wxToupper   towupper
 
-            /*  string.h functions (wchar.h) */
+            /* string.h functions (wchar.h) */
             #define  wxStrcat    wcscat
             #define  wxStrchr    wcschr
             #define  wxStrcmp    wcscmp
             #define  wxStrcoll   wcscoll
             #define  wxStrcpy    wcscpy
             #define  wxStrcspn   wcscspn
-            #define  wxStrlen_   wxWcslen /*  wxStrlen_() is used in wxStrlen() */
+            #define  wxStrlen_   wxWcslen /* wxStrlen_() is used in wxStrlen() */
             #define  wxStrncat   wcsncat
             #define  wxStrncmp   wcsncmp
             #define  wxStrncpy   wcsncpy
@@ -476,22 +476,22 @@
             #define  wxPutc      putwc
             #define  wxPutchar   putwchar
             #define  wxFputs     fputws
-            
-            /*  stdio.h functions */
-            
+
+            /* stdio.h functions */
+
             #define wxNEED_WX_STDIO_H
 
-            /*  stdlib.h functions */
+            /* stdlib.h functions */
             #define  wxAtof      watof
             #define  wxAtoi      watoi
             #define  wxAtol      watol
             #define  wxGetenv(a)    ((wxChar*)NULL)
             #define  wxSystem(a)    ((int)NULL)
 
-            /*  time.h functions */
+            /* time.h functions */
             #define  wxAsctime   wasciitime
             #define  wxCtime     wctime
-            /*  #define  wxStrftime  wcsftime */
+            /* #define  wxStrftime  wcsftime */
 
             /*
             #define wxNEED_FPUTWC
@@ -509,14 +509,14 @@
             #define wxNEED_WX_STDLIB_H
             */
             #define wxNEED_WX_TIME_H
-        #else /*  !metrowerks for apple */
+        #else /* !metrowerks for apple */
             #error  "Please define wide character functions for your environment"
         #endif
-    #else /*  ASCII */
+    #else /* ASCII */
         #include <ctype.h>
         #include <string.h>
 
-        /*  ctype.h functions */
+        /* ctype.h functions */
         #define  wxIsalnum   isalnum
         #define  wxIsalpha   isalpha
         #define  wxIscntrl   iscntrl
@@ -531,10 +531,10 @@
         #define  wxTolower   tolower
         #define  wxToupper   toupper
 
-         /*  locale.h functons */
+         /* locale.h functons */
         #define  wxSetlocale setlocale
 
-         /*  string.h functions */
+         /* string.h functions */
         #define  wxStrcat    strcat
         #define  wxStrchr    strchr
         #define  wxStrcmp    strcmp
@@ -542,8 +542,8 @@
         #define  wxStrcpy    strcpy
         #define  wxStrcspn   strcspn
 
-        /*  wxStricmp and wxStrnicmp are defined below */
-        #define  wxStrlen_   strlen /*  used in wxStrlen inline function */
+        /* wxStricmp and wxStrnicmp are defined below */
+        #define  wxStrlen_   strlen /* used in wxStrlen inline function */
         #define  wxStrncat   strncat
         #define  wxStrncmp   strncmp
         #define  wxStrncpy   strncpy
@@ -559,7 +559,7 @@
         #define  wxStrtoul   strtoul
         #define  wxStrxfrm   strxfrm
 
-        /*  stdio.h functions */
+        /* stdio.h functions */
         #define  wxFopen     fopen
         #define  wxFreopen   freopen
         #define  wxRemove    remove
@@ -592,27 +592,27 @@
         #define  wxVsscanf   vsscanf
         #define  wxVsprintf  vsprintf
 
-        /*  stdlib.h functions */
+        /* stdlib.h functions */
         #define  wxAtof      atof
         #define  wxAtoi      atoi
         #define  wxAtol      atol
         #define  wxGetenv    getenv
         #define  wxSystem    system
 
-        /*  time.h functions */
+        /* time.h functions */
         #define  wxAsctime   asctime
         #define  wxCtime     ctime
         #define  wxStrftime  strftime
-    #endif /*  Unicode/ASCII */
-#endif /*  TCHAR-aware compilers/the others */
+    #endif /* Unicode/ASCII */
+#endif /* TCHAR-aware compilers/the others */
 
-/*  ---------------------------------------------------------------------------- */
-/*  various special cases */
-/*  ---------------------------------------------------------------------------- */
+/*
+    various special cases
+ */
 
-/*  define wxStricmp and wxStrnicmp for various compilers */
-/*  */
-/*  note that in Unicode mode we definitely are going to need our own version */
+/* define wxStricmp and wxStrnicmp for various compilers */
+
+/* note that in Unicode mode we definitely are going to need our own version */
 #if !defined(wxStricmp) && !wxUSE_UNICODE
     #if defined(__BORLANDC__) || defined(__WATCOMC__) || \
             defined(__SALFORDC__) || defined(__VISAGECPP__) || \
@@ -626,13 +626,13 @@
     #elif defined(__UNIX__) || defined(__GNUWIN32__)
         #define wxStricmp strcasecmp
         #define wxStrnicmp strncasecmp
-    /*  #else -- use wxWindows implementation */
+    /* #else -- use wxWindows implementation */
     #endif
-#endif /*  !defined(wxStricmp) */
+#endif /* !defined(wxStricmp) */
 
-/*  define wxWcslen() which should be always available if wxUSE_WCHAR_T == 1 (as */
-/*  it's used in wx/buffer.h -- and also might be used just below by wxStrlen() */
-/*  when wxStrlen_() is #define'd as wxWcslen so do it before defining wxStrlen) */
+/* define wxWcslen() which should be always available if wxUSE_WCHAR_T == 1 (as */
+/* it's used in wx/buffer.h -- and also might be used just below by wxStrlen() */
+/* when wxStrlen_() is #define'd as wxWcslen so do it before defining wxStrlen) */
 #if wxUSE_WCHAR_T
     #ifdef HAVE_WCSLEN
         #define wxWcslen wcslen
@@ -646,21 +646,23 @@
             return n;
         }
     #endif
-#endif /*  wxUSE_WCHAR_T */
+#endif /* wxUSE_WCHAR_T */
 
 #ifdef __cplusplus
-/*  checks whether the passed in pointer is NULL and if the string is empty */
+/* checks whether the passed in pointer is NULL and if the string is empty */
 inline bool wxIsEmpty(const wxChar *p) { return !p || !*p; }
 
-/*  safe version of strlen() (returns 0 if passed NULL pointer) */
+/* safe version of strlen() (returns 0 if passed NULL pointer) */
 inline size_t wxStrlen(const wxChar *psz) { return psz ? wxStrlen_(psz) : 0; }
 #endif
 
-/*  each of strdup() and wcsdup() may or may not be available but we need both */
-/*  of them anyhow for wx/buffer.h so we define the missing one(s) in */
-/*  wxchar.cpp and so we should always have both wxStrdupA and wxStrdupW */
-/*  defined -- if this is somehow not the case in some situations, please */
-/*  correct that and not the lines here */
+/*
+    each of strdup() and wcsdup() may or may not be available but we need both
+    of them anyhow for wx/buffer.h so we define the missing one(s) in
+    wxchar.cpp and so we should always have both wxStrdupA and wxStrdupW
+    defined -- if this is somehow not the case in some situations, please
+    correct that and not the lines here
+ */
 #if wxUSE_UNICODE
     #define wxStrdup wxStrdupW
 #else
@@ -668,11 +670,10 @@ inline size_t wxStrlen(const wxChar *psz) { return psz ? wxStrlen_(psz) : 0; }
 #endif
 
 #ifdef __cplusplus
-WXDLLIMPEXP_BASE bool wxOKlibc(); /*  for internal use */
+WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
 #endif
-/*  ---------------------------------------------------------------------------- */
-/*  printf() family saga */
-/*  ---------------------------------------------------------------------------- */
+
+/* printf() family saga */
 
 /*
    For some systems vsnprintf() exists in the system libraries but not in the
@@ -681,7 +682,7 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /*  for internal use */
 #if defined(HAVE_VSNPRINTF) && !defined(HAVE_VSNPRINTF_DECL)
     extern "C"
     int vsnprintf(char *str, size_t size, const char *format, va_list ap);
-#endif /*  !HAVE_VSNPRINTF_DECL */
+#endif /* !HAVE_VSNPRINTF_DECL */
 
 /*
    First of all, we always want to define safe snprintf() function to be used
@@ -708,19 +709,19 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /*  for internal use */
         #elif defined(HAVE_VSWPRINTF) && !defined(__MINGW32__)
             #define wxVsnprintf_    vswprintf
         #endif
-    #else /*  ASCII */
-        /*  all versions of CodeWarrior supported by wxWindows apparently have */
-        /*  vsnprintf() */
+    #else /* ASCII */
+        /* all versions of CodeWarrior supported by wxWindows apparently have */
+        /* vsnprintf() */
         #if defined(HAVE_VSNPRINTF) || defined(__MWERKS__) || defined(__WATCOMC__)
-            /*  assume we have snprintf() too if we have vsnprintf() */
+            /* assume we have snprintf() too if we have vsnprintf() */
             #define wxVsnprintf_    vsnprintf
             #define wxSnprintf_     snprintf
         #endif
     #endif
-#endif /*  wxVsnprintf_ not defined yet */
+#endif /* wxVsnprintf_ not defined yet */
 
 #ifndef wxSnprintf_
-    /*  no [v]snprintf(), cook our own */
+    /* no [v]snprintf(), cook our own */
     WXDLLIMPEXP_BASE int wxSnprintf_(wxChar *buf, size_t len, const wxChar *format,
                                 ...) ATTRIBUTE_PRINTF_3;
 #endif
@@ -757,11 +758,13 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /*  for internal use */
 #endif
 
 #if defined(wxNEED_PRINTF_CONVERSION) || defined(wxNEED_WPRINTF)
-    /*  we need to implement all wide character printf and scanf functions */
-    /*  either because we don't have them at all or because they don't have the */
-    /*  semantics we need */
+    /*
+        we need to implement all wide character printf and scanf functions
+        either because we don't have them at all or because they don't have the
+        semantics we need
+     */
 
-    #include <stdio.h>  /*  for FILE */
+    #include <stdio.h>  /* for FILE */
 
     int wxScanf( const wxChar *format, ... ) ATTRIBUTE_PRINTF_1;
     int wxSscanf( const wxChar *str, const wxChar *format, ... ) ATTRIBUTE_PRINTF_2;
@@ -773,10 +776,10 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /*  for internal use */
     int wxVfprintf( FILE *stream, const wxChar *format, va_list ap );
     int wxVprintf( const wxChar *format, va_list ap );
     int wxVsprintf( wxChar *str, const wxChar *format, va_list ap );
-#endif /*  wxNEED_PRINTF_CONVERSION */
+#endif /* wxNEED_PRINTF_CONVERSION */
 
-/*  these 2 can be simply mapped to the versions with underscore at the end */
-/*  if we don't have to do the conversion */
+/* these 2 can be simply mapped to the versions with underscore at the end */
+/* if we don't have to do the conversion */
 #ifdef wxNEED_PRINTF_CONVERSION
     int wxSnprintf( wxChar *str, size_t size, const wxChar *format, ... ) ATTRIBUTE_PRINTF_3;
     int wxVsnprintf( wxChar *str, size_t size, const wxChar *format, va_list ap );
@@ -785,14 +788,14 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /*  for internal use */
     #define wxVsnprintf wxVsnprintf_
 #endif
 
-/*  ---------------------------------------------------------------------------- */
-/*  various functions which might not be available in libc and for which we */
-/*  provide our own replacements in wxchar.cpp */
-/*  ---------------------------------------------------------------------------- */
+/*
+    various functions which might not be available in libc and for which we
+    provide our own replacements in wxchar.cpp
+ */
 
-/*  ctype.h functions */
-/*  */
-/*  VZ: note that this is never defined currently */
+/* ctype.h functions */
+
+/* VZ: note that this is never defined currently */
 #ifdef wxNEED_WX_CTYPE_H
     WXDLLIMPEXP_BASE int wxIsalnum(wxChar ch);
     WXDLLIMPEXP_BASE int wxIsalpha(wxChar ch);
@@ -807,14 +810,14 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /*  for internal use */
     WXDLLIMPEXP_BASE int wxIsxdigit(wxChar ch);
     WXDLLIMPEXP_BASE int wxTolower(wxChar ch);
     WXDLLIMPEXP_BASE int wxToupper(wxChar ch);
-#endif /*  wxNEED_WX_CTYPE_H */
+#endif /* wxNEED_WX_CTYPE_H */
 
-/*  under VC++ 6.0 isspace() returns 1 for 8 bit chars which completely breaks */
-/*  the file parsing -- this may be true for 5.0 as well, update #ifdef then */
+/* under VC++ 6.0 isspace() returns 1 for 8 bit chars which completely breaks */
+/* the file parsing -- this may be true for 5.0 as well, update #ifdef then */
 #if defined(__VISUALC__) && (__VISUALC__ >= 1200) && !wxUSE_UNICODE
     #undef wxIsspace
     #define wxIsspace(c) ((((unsigned)c) < 128) && isspace(c))
-#endif /*  VC++ */
+#endif /* VC++ */
 
 /*
    we had goofed and defined wxIctrl() instead of (correct) wxIscntrl() in the
@@ -824,9 +827,9 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /*  for internal use */
  */
 #define wxIsctrl wxIscntrl
 
-/*  string.h functions */
-/*  */
-/*  VZ: this is never defined neither currently */
+/* string.h functions */
+
+/* VZ: this is never defined neither currently */
 #ifdef wxNEED_WX_STRING_H
     WXDLLIMPEXP_BASE wxChar * wxStrcat(wxChar *dest, const wxChar *src);
     WXDLLIMPEXP_BASE const wxChar * wxStrchr(const wxChar *s, wxChar c);
@@ -854,7 +857,7 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /*  for internal use */
     WXDLLIMPEXP_BASE long int wxStrtol(const wxChar *nptr, wxChar **endptr, int base);
     WXDLLIMPEXP_BASE unsigned long int wxStrtoul(const wxChar *nptr, wxChar **endptr, int base);
     WXDLLIMPEXP_BASE size_t   wxStrxfrm(wxChar *dest, const wxChar *src, size_t n);
-#endif /*  wxNEED_WX_STRING_H */
+#endif /* wxNEED_WX_STRING_H */
 
 #ifndef wxStrdupA
 WXDLLIMPEXP_BASE char *wxStrdupA(const char *psz);
@@ -883,7 +886,7 @@ WXDLLIMPEXP_BASE wxWCharBuffer wxSetlocale(int category, const wxChar *locale);
 #endif
 #endif
 
-/*  stdio.h functions */
+/* stdio.h functions */
 #ifdef wxNEED_WX_STDIO_H
     #include <stdio.h>
     WXDLLIMPEXP_BASE FILE *   wxFopen(const wxChar *path, const wxChar *mode);
@@ -891,11 +894,11 @@ WXDLLIMPEXP_BASE wxWCharBuffer wxSetlocale(int category, const wxChar *locale);
     WXDLLIMPEXP_BASE int      wxRemove(const wxChar *path);
     WXDLLIMPEXP_BASE int      wxRename(const wxChar *oldpath, const wxChar *newpath);
 
-    /*  *printf() family is handled separately */
-#endif /*  wxNEED_WX_STDIO_H */
+    /* *printf() family is handled separately */
+#endif /* wxNEED_WX_STDIO_H */
 
 
-/*  stdlib.h functions */
+/* stdlib.h functions */
 #ifndef wxAtof
 WXDLLIMPEXP_BASE double   wxAtof(const wxChar *psz);
 #endif
@@ -908,16 +911,16 @@ WXDLLIMPEXP_BASE int      wxSystem(const wxChar *psz);
 #endif
 
 
-/*  time.h functions */
+/* time.h functions */
 #ifdef wxNEED_WX_TIME_H
 #if defined(__MWERKS__) && defined(macintosh)
-    #include <time.h> 
+    #include <time.h>
 #endif
     WXDLLIMPEXP_BASE size_t wxStrftime(wxChar *s, size_t max,
                                   const wxChar *fmt, const struct tm *tm);
-#endif /*  wxNEED_WX_TIME_H */
+#endif /* wxNEED_WX_TIME_H */
 
-/*  missing functions in some WinCE versions */
+/* missing functions in some WinCE versions */
 #ifdef _WIN32_WCE
 #if (_WIN32_WCE < 300)
 WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
@@ -930,12 +933,10 @@ WXDLLIMPEXP_BASE int isascii( int c );
 #endif
 #endif
 
-/*  ---------------------------------------------------------------------------- */
-/*  multibyte to wide char conversion functions and macros */
-/*  ---------------------------------------------------------------------------- */
+/* multibyte to wide char conversion functions and macros */
 
 #if wxUSE_WCHAR_T
-    /*  multibyte<->widechar conversion */
+    /* multibyte<->widechar conversion */
     WXDLLIMPEXP_BASE size_t wxMB2WC(wchar_t *buf, const char *psz, size_t n);
     WXDLLIMPEXP_BASE size_t wxWC2MB(char *buf, const wchar_t *psz, size_t n);
 
@@ -950,8 +951,8 @@ WXDLLIMPEXP_BASE int isascii( int c );
         #define wxWC2WX wxWC2MB
         #define wxWX2WC wxMB2WC
     #endif
-#else /*  !wxUSE_UNICODE */
-    /*  No wxUSE_WCHAR_T: we have to do something (JACS) */
+#else /* !wxUSE_UNICODE */
+    /* No wxUSE_WCHAR_T: we have to do something (JACS) */
     #define wxMB2WC wxStrncpy
     #define wxWC2MB wxStrncpy
     #define wxMB2WX wxStrncpy
