@@ -33,6 +33,7 @@
     #include "wx/button.h"
     #include "wx/checkbox.h"
     #include "wx/scrolbar.h"
+    #include "wx/textctrl.h"
 #endif // WX_PRECOMP
 
 #include "wx/univ/renderer.h"

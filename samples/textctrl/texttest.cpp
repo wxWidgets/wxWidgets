@@ -409,6 +409,11 @@ TextTestFrame::TextTestFrame(const wxString& title)
     sizerMiddle->Add(sizerMiddleUp, 1, wxGROW, 5);
     sizerMiddle->Add(sizerMiddleDown, 1, wxGROW | wxTOP, 5);
 
+    // I don't understand what's going on :-(
+#ifdef __WXGTK__
+    sizerMiddle->SetMinSize(320, 0);
+#endif
+
     // right pane
     wxStaticBox *box3 = new wxStaticBox(m_panel, -1, _T("&Text:"));
     m_sizerText = new wxStaticBoxSizer(box3, wxHORIZONTAL);

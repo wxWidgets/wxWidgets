@@ -21,6 +21,8 @@ class WXDLLEXPORT wxTextCtrlCommandProcessor;
 
 #include "wx/scrolwin.h"    // for wxScrollHelper
 
+#include "wx/univ/inphand.h"
+
 // ----------------------------------------------------------------------------
 // wxTextCtrl actions
 // ----------------------------------------------------------------------------
@@ -160,7 +162,7 @@ public:
 
     // translate between the position (which is just an index in the text ctrl
     // considering all its contents as a single strings) and (x, y) coordinates
-    // which represent column and line.
+    // which represent (logical, i.e. unwrapped) column and line.
     virtual wxTextPos XYToPosition(wxTextCoord x, wxTextCoord y) const;
     virtual bool PositionToXY(wxTextPos pos,
                               wxTextCoord *x, wxTextCoord *y) const;
@@ -474,6 +476,33 @@ private:
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxTextCtrl)
+};
+
+// ----------------------------------------------------------------------------
+// wxStdTextCtrlInputHandler: this control handles only the mouse/kbd actions
+// common to Win32 and GTK, platform-specific things are implemented elsewhere
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxStdTextCtrlInputHandler : public wxStdInputHandler
+{
+public:
+    wxStdTextCtrlInputHandler(wxInputHandler *inphand);
+
+    virtual bool HandleKey(wxControl *control,
+                           const wxKeyEvent& event,
+                           bool pressed);
+    virtual bool HandleMouse(wxControl *control,
+                             const wxMouseEvent& event);
+    virtual bool HandleMouseMove(wxControl *control,
+                                 const wxMouseEvent& event);
+    virtual bool HandleFocus(wxControl *control, const wxFocusEvent& event);
+
+protected:
+    // get the position of the mouse click
+    static wxTextPos HitTest(const wxTextCtrl *text, const wxPoint& pos);
+
+    // capture data
+    wxTextCtrl *m_winCapture;
 };
 
 #endif // _WX_UNIV_TEXTCTRL_H_

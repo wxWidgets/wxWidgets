@@ -40,7 +40,8 @@ MSW
 
 GTK
 
-*   listbox scrolling leaves unpainted areas
+?   listbox scrolling leaves unpainted areas
+*   focused textctrl doesn't have focus border
 
 ----------------------------------------------------------------------------
 DONE

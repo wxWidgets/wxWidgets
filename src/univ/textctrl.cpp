@@ -2888,10 +2888,14 @@ void wxTextCtrl::DoDrawTextInRect(wxDC& dc, const wxRect& rectUpdate)
 
     wxRect rectText;
     rectText.height = hLine;
-    if ( !IsSingleLine() )
+    wxCoord yClient = y - GetClientAreaOrigin().y;
+    if ( IsSingleLine() )
     {
-        CalcUnscrolledPosition(0, y - GetClientAreaOrigin().y,
-                               NULL, &rectText.y);
+        rectText.y = yClient;
+    }
+    else // multiline, adjust for scrolling
+    {
+        CalcUnscrolledPosition(0, yClient, NULL, &rectText.y);
     }
 
     // do draw the invalidated parts of each line: note that we iterate here
