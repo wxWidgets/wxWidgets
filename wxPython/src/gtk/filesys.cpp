@@ -329,6 +329,8 @@ static PyObject *_wrap_new_wxFSFile(PyObject *self, PyObject *args, PyObject *kw
     wxString * _arg2;
     wxString * _arg3;
     wxDateTime * _arg4;
+    wxPyInputStream * temp;
+    bool  created;
     PyObject * _obj0 = 0;
     PyObject * _obj1 = 0;
     PyObject * _obj2 = 0;
@@ -341,16 +343,16 @@ static PyObject *_wrap_new_wxFSFile(PyObject *self, PyObject *args, PyObject *kw
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOOOO:new_wxFSFile",_kwnames,&_obj0,&_obj1,&_obj2,&_obj3,&_argo4)) 
         return NULL;
 {
-    if (PyInstance_Check(_obj0)) {
-        wxPyInputStream* ptr;
-        if (SWIG_GetPtrObj(_obj0, (void **) &ptr,"_wxPyInputStream_p")) {
-            PyErr_SetString(PyExc_TypeError,"Expected _wxInputStream_p.");
+    if (SWIG_GetPtrObj(_obj0, (void **) &temp, "_wxPyInputStream_p") == 0) {
+        _arg0 = temp->m_wxis;
+        created = FALSE;
+    } else {
+        _arg0 = wxPyCBInputStream::create(_obj0, FALSE);
+        if (_arg0 == NULL) {
+            PyErr_SetString(PyExc_TypeError,"Expected _wxInputStream_p or Python file-like object.");
             return NULL;
         }
-        _arg0 = ptr->wxi;
-    } else {
-        PyErr_SetString(PyExc_TypeError,"Expected _wxInputStream_p.");
-        return NULL;
+        created = TRUE;
     }
 }
 {
@@ -427,6 +429,10 @@ static PyObject *_wrap_new_wxFSFile(PyObject *self, PyObject *args, PyObject *kw
         Py_INCREF(Py_None);
         _resultobj = Py_None;
     }
+{
+    if (created)
+        delete _arg0;
+}
 {
     if (_obj1)
         delete _arg1;

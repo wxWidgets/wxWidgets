@@ -5225,6 +5225,71 @@ static PyObject *_wrap_wxWindow_GetSizer(PyObject *self, PyObject *args, PyObjec
     return _resultobj;
 }
 
+#define wxWindow_SetContainingSizer(_swigobj,_swigarg0)  (_swigobj->SetContainingSizer(_swigarg0))
+static PyObject *_wrap_wxWindow_SetContainingSizer(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxWindow * _arg0;
+    wxSizer * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","sizer", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxWindow_SetContainingSizer",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_SetContainingSizer. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxSizer_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxWindow_SetContainingSizer. Expected _wxSizer_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxWindow_SetContainingSizer(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxWindow_GetContainingSizer(_swigobj)  (_swigobj->GetContainingSizer())
+static PyObject *_wrap_wxWindow_GetContainingSizer(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSizer * _result;
+    wxWindow * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxWindow_GetContainingSizer",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_GetContainingSizer. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (wxSizer *)wxWindow_GetContainingSizer(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{ _resultobj = wxPyMake_wxSizer(_result); }
+    return _resultobj;
+}
+
 #define wxWindow_GetValidator(_swigobj)  (_swigobj->GetValidator())
 static PyObject *_wrap_wxWindow_GetValidator(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -10341,6 +10406,8 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxWindow_SetDropTarget", (PyCFunction) _wrap_wxWindow_SetDropTarget, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_SetValidator", (PyCFunction) _wrap_wxWindow_SetValidator, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_GetValidator", (PyCFunction) _wrap_wxWindow_GetValidator, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWindow_GetContainingSizer", (PyCFunction) _wrap_wxWindow_GetContainingSizer, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWindow_SetContainingSizer", (PyCFunction) _wrap_wxWindow_SetContainingSizer, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_GetSizer", (PyCFunction) _wrap_wxWindow_GetSizer, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_SetSizer", (PyCFunction) _wrap_wxWindow_SetSizer, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_GetToolTip", (PyCFunction) _wrap_wxWindow_GetToolTip, METH_VARARGS | METH_KEYWORDS },
