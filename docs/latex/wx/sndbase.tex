@@ -1,0 +1,277 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        sndbase.tex
+%% Purpose:     wxMMedia docs
+%% Author:      Guilhem Lavaux <lavaux@easynet.fr>
+%% Modified by:
+%% Created:     2000
+%% RCS-ID:      $Id$
+%% Copyright:   (c) wxWindows team
+%% Licence:     wxWindows licence
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{\class{wxSoundStream}}\label{wxsoundstream}
+
+Base class for sound streams
+
+\wxheading{Derived from}
+
+No base class
+
+\wxheading{Include file}
+
+wx/mmedia/sndbase.h
+
+\wxheading{Data structures}
+
+%%
+%% wxSoundStream errors
+%%
+
+\wxheading{wxSoundStream errors}\label{wxsoundstreamerrors}
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf wxSOUND\_NOERR}}{No error occured}
+\twocolitem{{\bf wxSOUND\_IOERR}}{An input/output error occured, it may concern
+either a driver or a file}
+\twocolitem{{\bf wxSOUND\_INVFRMT}}{The sound format passed to the function is
+invalid. Generally, it means that you passed out of range values to the codec
+stream or you don't pass the right sound format object to the right sound codec
+stream.}
+\twocolitem{{\bf wxSOUND\_INVDEV}}{Invalid device. Generally, it means that the
+sound stream didn't manage to open the device driver due to an invalid parameter
+or to the fact that sound is not supported on this computer.}
+\twocolitem{{\bf wxSOUND\_NOEXACT}}{No exact matching sound codec has been found for
+this sound format. It means that the sound driver didn't manage to setup the sound
+card with the specified values.}
+\twocolitem{{\bf wxSOUND\_NOCODEC}}{No matching codec has been found. Generally, it 
+may happen when you call wxSoundRouterStream::SetSoundFormat().}
+\twocolitem{{\bf wxSOUND\_MEMERR}}{Not enough memory.}
+\end{twocollist}
+
+%%
+%% C callback
+%%
+
+\wxheading{C callback for wxSound event}
+
+When a sound event is generated, it may either call the internal sound event 
+processor (which can be inherited) or call a C function. Its definition is:
+\begin{verbatim}
+  typedef void (*wxSoundCallback)(wxSoundStream *stream, int evt,
+                                  void *cdata);
+\end{verbatim}
+
+The {\bf stream} parameter represents the current wxSoundStream.
+
+The {\bf evt} parameter represents the sound event which is the cause of the calling. (See \helpref{wxSound events}{wxsoundstreamevents})
+
+The {\bf cdata} parameter represents the user callback data which were specified
+when the user called \helpref{wxSoundStream::Register}{wxsoundstreamregister}.
+
+{\bf\it Note:} There is two other ways to catch sound events: you can inherit the
+sound stream and redefine \helpref{wxSoundStream::OnSoundEvent}{wxsoundstreamonsoundevent}, or you can reroute the events to another sound stream using \helpref{wxSoundStream::SetEventHandler}{wxsoundstreameventhandler}
+
+%%
+%% wxSoundStream streaming mode
+%%
+
+\wxheading{wxSound streaming mode}
+
+The wxSoundStream object can work in three different modes. These modes are specified
+at the call to \helpref{wxSoundStream::StartProduction}{wxsoundstreamstartproduction}
+and cannot be changed until you call
+\helpref{wxSoundStream::StopProduction}{wxsoundstreamstopproduction}.
+
+The {\bf wxSOUND\_INPUT} mode is the recording mode. It generates {\bf wxSOUND\_INPUT}
+events and you cannot use wxSoundStream::Write().
+
+The {\bf wxSOUND\_OUTPUT} mode is the playing mode. It generates {\bf wxSOUND\_OUTPUT}
+events and you cannot use wxSoundStream::Read().
+
+The {\bf wxSOUND\_DUPLEX} mode activates the full duplex mode. The full duplex needs
+you make synchronous call to \helpref{wxSoundStream::Read}{wxsoundstreamread} and
+\helpref{wxSoundStream::Write}{wxsoundstreamwrite}. This means that you must be
+careful with realtime problems. Each time you call Read you must call Write.
+
+%%
+%% wxSoundStream events
+%%
+
+\wxheading{wxSoundStream events}
+
+The sound events are generated when the sound driver (or the sound stream) completes
+a previous sound buffer. There are two possible sound events and two meanings.
+
+The {\bf wxSOUND\_INPUT} event is generated when the sound stream has a new input
+buffer ready to be read. You know that you can read a buffer of the size
+\helpref{GetBestSize()}{wxsoundstreamgetbestsize} without blocking. 
+
+The {\bf wxSOUND\_OUTPUT} event is generated when the sound stream has completed a
+previous buffer. This buffer has been sent to the sound driver and it is ready to
+process a new buffer. Consequently, \helpref{Write}{wxsoundstreamwrite} will not
+block too.
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+%% Ctor && Dtor
+
+\membersection{wxSoundStream::wxSoundStream}\label{wxsoundstreamwxsoundstream}
+
+\func{}{wxSoundStream}{\void}
+
+Default constructor.
+
+\membersection{wxSoundStream::\destruct{wxSoundStream}}\label{wxsoundstreamdtor}
+
+\func{}{\destruct{wxSoundStream}}{\void}
+
+Destructor. The destructor stops automatically all started production and destroys
+any temporary buffer.
+
+%%
+%% Read
+%%
+
+\membersection{wxSoundStream::Read}\label{wxsoundstreamread}
+
+\func{wxSoundStream\&}{Read}{\param{void* }{buffer}, \param{wxUint32 }{len}}
+
+Reads \it{len} bytes from the sound stream. This call may block the user so
+use it carefully when you need to intensively refresh the GUI. You may be
+interested by sound events: see
+\helpref{wxSoundStream::OnSoundEvent}{wxsoundstreamonsoundevent}.
+It is better to use the size returned by \helpref{wxSoundStream::GetBestSize}{wxsoundstreamgetbestsize}: this may improve performance or accuracy of the
+sound event system.
+
+\wxheading{Note on \it{len}}
+
+\it{len} is expressed in bytes. If you need to do conversions between bytes
+and seconds use wxSoundFormat.
+See \helpref{wxSoundFormatBase}{wxsoundformatbase}, \helpref{wxSoundStream::GetSoundFormat}{wxsoundstreamgetsoundformat}.
+
+\wxheading{Note on data}
+
+Data in \it{buffer} are coded using the sound format attached to this sound 
+stream. The format is specified with 
+\helpref{SetSoundFormat}{wxsoundstreamsetsoundformat}
+
+%%
+%% Write
+%%
+
+\membersection{wxSoundStream::Write}\label{wxsoundstreamwrite}
+\func{wxSoundStream\&}{Write}{\param{const void* }{buffer}, \param{wxUint32 }{len}}
+
+Writes \it{len} bytes to the sound stream. This call may block the user so
+use it carefully. You may be interested by sound events: see
+\helpref{wxSoundStream::OnSoundEvent}{wxsoundstreamonsoundevent}.
+
+It is better to use the size returned by \helpref{wxSoundStream::GetBestSize}{wxsoundstreamgetbestsize}: this may improve performance or accuracy of the
+sound event system.
+
+\wxheading{Note on \it{len}}
+
+\it{len} is expressed in bytes. If you need to do conversions between bytes
+and seconds use wxSoundFormat.
+See \helpref{wxSoundFormatBase}{wxsoundformatbase}, \helpref{wxSoundStream::GetSoundFormat}{wxsoundstreamgetsoundformat}.
+
+\wxheading{Note on data}
+
+Data in \it{buffer} are coded using the sound format attached to this sound 
+stream. The format is specified with 
+\helpref{SetSoundFormat}{wxsoundstreamsetsoundformat}
+
+%%
+%% GetBestSize
+%%
+
+\membersection{wxSoundStream::GetBestSize}\label{wxsoundstreamgetbestsize}
+
+\constfunc{wxUint32}{GetBestSize}{\void}
+
+This function returns the best size for IO calls. The best size provides you
+a good alignment for data to be written (or read) to (or from) the sound stream.
+So, when, for example, a sound event is sent, you are sure the sound stream
+will not block for this buffer size.
+
+%%
+%% wxSoundStream:SetSoundFormat
+%%
+
+\membersection{wxSoundStream::SetSoundFormat}\label{wxsoundstreamsetsoundformat}
+\func{bool}{SetSoundFormat}{\param{const wxSoundFormatBase\& }{format}}
+
+SetSoundFormat is one of the key function of the wxSoundStream object. It specifies
+the sound format the user needs. SetSoundFormat tries to apply the format to the
+current sound stream (it can be a sound file or a sound driver). 
+Then, either it manages to apply it and it returns {\bf TRUE}, or it could not and
+it returns {\bf FALSE}. In this case, you must check the error with
+\helpref{wxSoundStream::GetError}{wxsoundstreamgeterror}. See
+\helpref{wxSoundStream errors section}{wxsoundstreamerrors} for more details.
+
+\wxheading{Remark}
+
+The {\bf format} object can be destroyed after the call. The object does not need it.
+
+%%
+%% GetSoundFormat
+%%
+\membersection{wxSoundStream::GetSoundFormat}\label{wxsoundstreamgetsoundformat}
+\constfunc{wxSoundFormatBase\&}{GetSoundFormat}{\void}
+
+It returns a reference to the current sound format of the stream represented by a
+wxSoundFormatBase object. This object {\it must not} be destroyed by anyone except
+the stream itself.
+
+%%
+%% SetCallback
+%%
+\membersection{wxSoundStream::SetCallback}\label{wxsoundstreamregister}
+\func{void}{Register}{\param{int }{evt}, \param{wxSoundCallback }{cbk}, \param{void* }{cdata}}
+
+It installs a C callback for wxSoundStream events. The C callbacks are still useful
+to avoid hard inheritance. You can install only one callback per event. Each callback
+has its callback data.
+
+%%
+%% StartProduction
+%%
+\membersection{wxSoundStream::StartProduction}\label{wxsoundstreamstartproduction}
+
+\func{bool}{StartProduction}{\param{int }{evt}}
+
+Starts the async notifier. After this call, the stream begins either 
+recording or playing or the two at the same time.
+
+\membersection{wxSoundStream::StopProduction}\label{wxsoundstreamstopproduction}
+
+\func{bool}{StopProduction}{\void}
+
+Stops the async notifier.
+
+
+\membersection{wxSoundStream::SetEventHandler}\label{wxsoundstreamseteventhandler}
+
+\func{void}{SetEventHandler}{\param{wxSoundStream* }{handler}}
+
+Sets the event handler: if it is non-null, all events are routed to it.
+
+
+\membersection{wxSoundStream::GetError}\label{wxsoundstreamgeterror}
+\constfunc{wxSoundError}{GetError}{\void}
+
+
+\membersection{wxSoundStream::GetLastAccess}\label{wxsoundstreamgetlastaccess}
+\constfunc{wxUint32}{GetLastAccess}{\void}
+
+
+\membersection{wxSoundStream::QueueFilled}\label{wxsoundstreamqueuefilled}
+\constfunc{bool}{QueueFilled}{\void}
+
+This is only useful for device (I think).
+
+
+\membersection{wxSoundStream::OnSoundEvent}\label{wxsoundstreamonsoundevent}
+\func{void}{OnSoundEvent}{\param{int }{evt}}
+
+Handles event
