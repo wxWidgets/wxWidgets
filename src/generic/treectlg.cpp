@@ -2931,7 +2931,7 @@ bool wxGenericTreeCtrl::SetBackgroundColour(const wxColour& colour)
     return TRUE;
 }
 
-}bool wxGenericTreeCtrl::SetForegroundColour(const wxColour& colour)
+bool wxGenericTreeCtrl::SetForegroundColour(const wxColour& colour)
 {
     if ( !wxWindow::SetForegroundColour(colour) )
         return FALSE;
