@@ -282,11 +282,11 @@ cp ./tests/README.txt ~/wxgtk_dist/wxGTK/utils/wxPython/tests
 cp ./tests/*.py ~/wxgtk_dist/wxGTK/utils/wxPython/tests
 
 mkdir ~/wxgtk_dist/wxGTK/utils/wxPython/demo
-cp ./tests/README.txt ~/wxgtk_dist/wxGTK/utils/wxPython/demo
-cp ./tests/*.py ~/wxgtk_dist/wxGTK/utils/wxPython/demo
-cp ./tests/*.pyc ~/wxgtk_dist/wxGTK/utils/wxPython/demo
+cp ./demo/README.txt ~/wxgtk_dist/wxGTK/utils/wxPython/demo
+cp ./demo/*.py ~/wxgtk_dist/wxGTK/utils/wxPython/demo
+cp ./demo/*.pyc ~/wxgtk_dist/wxGTK/utils/wxPython/demo
 mkdir ~/wxgtk_dist/wxGTK/utils/wxPython/demo/bitmaps
-cp ./tests/bitmaps/* ~/wxgtk_dist/wxGTK/utils/wxPython/demo/bitmaps
+cp ./demo/bitmaps/* ~/wxgtk_dist/wxGTK/utils/wxPython/demo/bitmaps
 
 mkdir ~/wxgtk_dist/wxGTK/utils/wxPython/tests/bitmaps
 cp ./tests/bitmaps/* ~/wxgtk_dist/wxGTK/utils/wxPython/tests/bitmaps

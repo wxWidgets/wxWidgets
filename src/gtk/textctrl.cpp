@@ -158,6 +158,9 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
                       (GtkAttachOptions)(GTK_FILL | GTK_EXPAND | GTK_SHRINK),
                        0, 0);
 
+        /* always wrap words */
+        gtk_text_set_word_wrap( GTK_TEXT(m_text), TRUE );
+	
         /* put the horizontal scrollbar in the lower left hand corner */
         if (bHasHScrollbar)
         {
@@ -169,8 +172,13 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
                        GTK_FILL,
                        0, 0);
             gtk_widget_show(hscrollbar);
-        }
 
+#if (GTK_MINOR_VERSION > 0)
+	    /* don't wrap lines, otherwise we wouldn't need the scrollbar */
+	    gtk_text_set_line_wrap( GTK_TEXT(m_text), FALSE );
+#endif
+        }
+	
         /* finally, put the vertical scrollbar in the upper right corner */
         m_vScrollbar = gtk_vscrollbar_new( GTK_TEXT(m_text)->vadj );
         GTK_WIDGET_UNSET_FLAGS( m_vScrollbar, GTK_CAN_FOCUS );
