@@ -338,7 +338,7 @@ public:
     inline wxWindow *GetGrandParent() const;
 
         // is this window a top level one?
-    bool IsTopLevel() const;
+    virtual bool IsTopLevel() const;
 
         // it doesn't really change parent, use ReParent() instead
     void SetParent( wxWindowBase *parent ) { m_parent = (wxWindow *)parent; }

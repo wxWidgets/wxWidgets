@@ -56,7 +56,7 @@ bool MyApp::OnInit(void)
   m_canvasFont = *wxNORMAL_FONT;
 
   // Create the main frame window
-  MyFrame *frame = new MyFrame((wxFrame *) NULL, (char *) "wxWindows dialogs example", wxPoint(50, 50), wxSize(400, 300));
+  MyFrame *frame = new MyFrame((wxFrame *) NULL, (char *) "wxWindows dialogs example", wxPoint(20, 20), wxSize(400, 300));
 
   // Make a menubar
   wxMenu *file_menu = new wxMenu;

@@ -142,6 +142,8 @@ public:
                 long style = wxDEFAULT_FRAME_STYLE,
                 const wxString& name = wxFrameNameStr);
 
+    virtual bool IsTopLevel() const { return FALSE; }
+    
     // MDI operations
     virtual void Maximize(bool maximize = TRUE);
     virtual void Restore();

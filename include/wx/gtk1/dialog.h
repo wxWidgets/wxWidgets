@@ -85,6 +85,8 @@ public:
     virtual void Maximize() { }
     virtual void Restore() { }
 
+    virtual bool IsTopLevel() const { return TRUE; }
+    
     // implementation
 
     virtual void GtkOnSize( int x, int y, int width, int height );

@@ -44,25 +44,19 @@ extern const wxChar* wxStatusLineNameStr;
 
 class wxMDIParentFrame: public wxFrame
 {
-  DECLARE_DYNAMIC_CLASS(wxMDIParentFrame)
-
-  friend class wxMDIChildFrame;
-  
 public:
-
     wxMDIParentFrame();
     wxMDIParentFrame( wxWindow *parent,
-      wxWindowID id, const wxString& title,
-      const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-      long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
-      const wxString& name = wxFrameNameStr );
-  ~wxMDIParentFrame(void);
-   bool Create( wxWindow *parent,
-      wxWindowID id, const wxString& title,
-      const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-      long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
-      const wxString& name = wxFrameNameStr );
-
+        wxWindowID id, const wxString& title,
+        const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
+        long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
+        const wxString& name = wxFrameNameStr );
+    ~wxMDIParentFrame(void);
+    bool Create( wxWindow *parent,
+       wxWindowID id, const wxString& title,
+       const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
+       long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
+       const wxString& name = wxFrameNameStr );
 
     void GetClientSize(int *width, int *height) const;
     wxMDIChildFrame *GetActiveChild() const;
@@ -87,7 +81,11 @@ public:
     virtual void GtkOnSize( int x, int y, int width, int height );
     virtual void OnInternalIdle();
     
-  DECLARE_EVENT_TABLE()    
+private:
+    friend class wxMDIChildFrame;
+  
+    DECLARE_DYNAMIC_CLASS(wxMDIParentFrame)
+    DECLARE_EVENT_TABLE()    
 };
 
 //-----------------------------------------------------------------------------
@@ -96,10 +94,7 @@ public:
 
 class wxMDIChildFrame: public wxFrame
 {
-  DECLARE_DYNAMIC_CLASS(wxMDIChildFrame)
-  
-  public:
-
+public:
     wxMDIChildFrame();
     wxMDIChildFrame( wxMDIParentFrame *parent,
       wxWindowID id, const wxString& title,
@@ -111,51 +106,53 @@ class wxMDIChildFrame: public wxFrame
       const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
       long style = wxDEFAULT_FRAME_STYLE, const wxString& name = wxFrameNameStr );
       
-  virtual void SetMenuBar( wxMenuBar *menu_bar );
-  virtual wxMenuBar *GetMenuBar() const;
+    virtual void SetMenuBar( wxMenuBar *menu_bar );
+    virtual wxMenuBar *GetMenuBar() const;
 
-  virtual void GetClientSize( int *width, int *height ) const;
-  virtual void AddChild( wxWindowBase *child );
+    virtual void GetClientSize( int *width, int *height ) const;
+    virtual void AddChild( wxWindowBase *child );
 
-  virtual void Activate();
+    virtual void Activate();
     
 #if wxUSE_STATUSBAR
     // no status bars
-  virtual wxStatusBar* CreateStatusBar( int WXUNUSED(number) = 1,
+    virtual wxStatusBar* CreateStatusBar( int WXUNUSED(number) = 1,
                                         long WXUNUSED(style) = 1, 
                                         wxWindowID WXUNUSED(id) = 1,
                                         const wxString& WXUNUSED(name) = wxEmptyString)
-    { return (wxStatusBar*)NULL; }
+      { return (wxStatusBar*)NULL; }
 
-  virtual wxStatusBar *GetStatusBar() const { return (wxStatusBar*)NULL; }
-  virtual void SetStatusText( const wxString &WXUNUSED(text), int WXUNUSED(number)=0 ) {}
-  virtual void SetStatusWidths( int WXUNUSED(n), const int WXUNUSED(widths_field)[] ) {}
+    virtual wxStatusBar *GetStatusBar() const { return (wxStatusBar*)NULL; }
+    virtual void SetStatusText( const wxString &WXUNUSED(text), int WXUNUSED(number)=0 ) {}
+    virtual void SetStatusWidths( int WXUNUSED(n), const int WXUNUSED(widths_field)[] ) {}
 #endif
 
     // no size hints
-  virtual void SetSizeHints( int WXUNUSED(minW), int WXUNUSED(minH),
+    virtual void SetSizeHints( int WXUNUSED(minW), int WXUNUSED(minH),
                                int WXUNUSED(maxW), int WXUNUSED(maxH),
                                int WXUNUSED(incW), int WXUNUSED(incH) ) {}
   
 #if wxUSE_TOOLBAR
     // no toolbar bars
-  virtual wxToolBar* CreateToolBar( long WXUNUSED(style), wxWindowID WXUNUSED(id), 
-    const wxString& WXUNUSED(name) ) { return (wxToolBar*)NULL; }
-  virtual wxToolBar *GetToolBar() const { return (wxToolBar*)NULL; }
+    virtual wxToolBar* CreateToolBar( long WXUNUSED(style), wxWindowID WXUNUSED(id), 
+        const wxString& WXUNUSED(name) ) { return (wxToolBar*)NULL; }
+    virtual wxToolBar *GetToolBar() const { return (wxToolBar*)NULL; }
 #endif
   
     // no icon
-  void SetIcon( const wxIcon &icon ) { m_icon = icon; }
+    void SetIcon( const wxIcon &icon ) { m_icon = icon; }
     
     // no title 
-  void SetTitle( const wxString &title ) { m_title = title; }
-  wxString GetTitle() const { return m_title; }
+    void SetTitle( const wxString &title ) { m_title = title; }
+    wxString GetTitle() const { return m_title; }
   
     // no maximize etc
-  virtual void Maximize( bool WXUNUSED(maximize) ) {}
-  virtual void Restore() {}
+    virtual void Maximize( bool WXUNUSED(maximize) ) {}
+    virtual void Restore() {}
     
-  void OnActivate( wxActivateEvent &event );
+    virtual bool IsTopLevel() const { return FALSE; }
+    
+    void OnActivate( wxActivateEvent &event );
     
   // implementation
   
@@ -163,7 +160,9 @@ class wxMDIChildFrame: public wxFrame
     GtkNotebookPage   *m_page;
     bool               m_justInserted;
     
-  DECLARE_EVENT_TABLE()    
+private:
+    DECLARE_EVENT_TABLE()    
+    DECLARE_DYNAMIC_CLASS(wxMDIChildFrame)
 };
 
 //-----------------------------------------------------------------------------
@@ -172,14 +171,14 @@ class wxMDIChildFrame: public wxFrame
 
 class wxMDIClientWindow: public wxWindow
 {
-  DECLARE_DYNAMIC_CLASS(wxMDIClientWindow)
-  
 public:
-  
     wxMDIClientWindow();
     wxMDIClientWindow( wxMDIParentFrame *parent, long style = 0 );
     ~wxMDIClientWindow();
     virtual bool CreateClient( wxMDIParentFrame *parent, long style = wxVSCROLL | wxHSCROLL );
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxMDIClientWindow)
 };
 
 #endif // __MDIH__

@@ -135,6 +135,8 @@ public:
     // Compatibility
     bool Iconized() const { return IsIconized(); }
 
+    virtual bool IsTopLevel() const { return TRUE; }
+    
     virtual void Maximize(bool maximize);
     //  virtual bool LoadAccelerators(const wxString& table);
 

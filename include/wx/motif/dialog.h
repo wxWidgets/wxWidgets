@@ -66,6 +66,8 @@ public:
 
     virtual bool IsIconized() const;
 
+    virtual bool IsTopLevel() const { return TRUE; }
+    
     void SetTitle(const wxString& title);
     wxString GetTitle() const ;
 

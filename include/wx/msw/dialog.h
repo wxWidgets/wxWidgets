@@ -77,6 +77,8 @@ public:
     virtual bool IsIconized() const;
     void Fit();
 
+    virtual bool IsTopLevel() const { return TRUE; }
+    
     void SetTitle(const wxString& title);
     wxString GetTitle() const ;
 

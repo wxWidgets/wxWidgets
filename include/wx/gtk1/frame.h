@@ -96,6 +96,8 @@ public:
     virtual void Restore();
     virtual void Iconize( bool iconize );
     virtual bool IsIconized() const;
+    
+    virtual bool IsTopLevel() const { return TRUE; }
 
     virtual void Command( int id );
     

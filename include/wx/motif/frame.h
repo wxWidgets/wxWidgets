@@ -78,6 +78,8 @@ public:
     void SetTitle(const wxString& title);
     wxString GetTitle() const { return m_title; }
 
+    virtual bool IsTopLevel() const { return TRUE; }
+    
     void Centre(int direction = wxBOTH);
 
     // Call this to simulate a menu command

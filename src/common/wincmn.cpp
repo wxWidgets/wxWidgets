@@ -427,7 +427,7 @@ bool wxWindowBase::Enable(bool enable)
 
 bool wxWindowBase::IsTopLevel() const
 {
-    return wxDynamicCast(this, wxFrame) || wxDynamicCast(this, wxDialog);
+    return FALSE;
 }
 
 // ----------------------------------------------------------------------------

@@ -169,6 +169,8 @@ public:
     virtual void Activate();
     virtual bool IsIconized() const ;
 
+    virtual bool IsTopLevel() const { return FALSE; }
+    
     // Is the frame maximized? Returns TRUE for
     // wxMDIChildFrame due to the tabbed implementation.
     virtual bool IsMaximized(void) const ;

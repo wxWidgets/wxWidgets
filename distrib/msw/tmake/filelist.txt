@@ -481,8 +481,9 @@ filedlg.h	W
 filefn.h	W
 filesys.h	W
 font.h	W
-fontdlg.h	W
+fontenum.h	W
 fontmap.h	W
+fontdlg.h	W
 fontutil.h	W
 frame.h	W
 fs_inet.h	W
