@@ -651,6 +651,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_LOG=yes
   DEFAULT_wxUSE_LOGWINDOW=no
   DEFAULT_wxUSE_LOGGUI=no
+  DEFAULT_wxUSE_LOGDIALOG=no
 
   DEFAULT_wxUSE_GUI=yes
   DEFAULT_wxUSE_CONTROLS=no
@@ -814,6 +815,7 @@ else
   DEFAULT_wxUSE_LOG=yes
   DEFAULT_wxUSE_LOGWINDOW=yes
   DEFAULT_wxUSE_LOGGUI=yes
+  DEFAULT_wxUSE_LOGDIALOG=yes
 
   DEFAULT_wxUSE_GUI=yes
 
@@ -1084,7 +1086,7 @@ WX_ARG_ENABLE(zipstream,     [  --enable-zipstream      use wxZipInputStream], w
 WX_ARG_ENABLE(catch_segvs,   [  --enable-catch_segvs    catch signals and pass them to wxApp::OnFatalException], wxUSE_ON_FATAL_EXCEPTION)
 WX_ARG_ENABLE(snglinst,      [  --enable-snglinst       use wxSingleInstanceChecker class], wxUSE_SNGLINST_CHECKER)
 
-WX_ARG_ENABLE(mimetype,      [  --enable-mimetypes      use wxMimeTypesManager], wxUSE_MIMETYPE)
+WX_ARG_ENABLE(mimetype,      [  --enable-mimetype       use wxMimeTypesManager], wxUSE_MIMETYPE)
 WX_ARG_ENABLE(system_options,[  --enable-sysoptions     use wxSystemOptions], wxUSE_SYSTEM_OPTIONS)
 
 dnl ---------------------------------------------------------------------------
@@ -1110,6 +1112,7 @@ WX_ARG_ENABLE(printarch,   [  --enable-printarch      use printing architecture]
 WX_ARG_ENABLE(mdi,         [  --enable-mdi            use multiple document interface architecture], wxUSE_MDI_ARCHITECTURE)
 WX_ARG_ENABLE(loggui,      [  --enable-loggui         use standard GUI logger], wxUSE_LOGGUI)
 WX_ARG_ENABLE(logwin,      [  --enable-logwin         use wxLogWindow], wxUSE_LOGWINDOW)
+WX_ARG_ENABLE(logdialog,   [  --enable-logdialog      use wxLogDialog], wxUSE_LOGDIALOG)
 
 dnl ---------------------------------------------------------------------------
 dnl PostScript options
@@ -1273,7 +1276,7 @@ WX_ARG_ENABLE(commondlg,   [  --enable-commondlg      use all common dialogs], w
 WX_ARG_ENABLE(choicedlg,   [  --enable-choicedlg      use wxChoiceDialog], wxUSE_CHOICEDLG)
 WX_ARG_ENABLE(coldlg,      [  --enable-coldlg         use wxColourDialog], wxUSE_COLOURDLG)
 WX_ARG_ENABLE(filedlg,     [  --enable-filedlg        use wxFileDialog], wxUSE_FILEDLG)
-WX_ARG_ENABLE(filedlg,     [  --enable-finddlg        use wxFindReplaceDialog], wxUSE_FINDREPLDLG)
+WX_ARG_ENABLE(finddlg,     [  --enable-finddlg        use wxFindReplaceDialog], wxUSE_FINDREPLDLG)
 WX_ARG_ENABLE(fontdlg,     [  --enable-fontdlg        use wxFontDialog], wxUSE_FONTDLG)
 WX_ARG_ENABLE(dirdlg,      [  --enable-dirdlg         use wxDirDialog], wxUSE_DIRDLG)
 WX_ARG_ENABLE(msgdlg,      [  --enable-msgdlg         use wxMessageDialog], wxUSE_MSGDLG)
@@ -1307,7 +1310,7 @@ WX_ARG_ENABLE(image,       [  --enable-image          use wxImage class], wxUSE_
 WX_ARG_ENABLE(gif,         [  --enable-gif            use gif images (GIF file format)], wxUSE_GIF)
 WX_ARG_ENABLE(pcx,         [  --enable-pcx            use pcx images (PCX file format)], wxUSE_PCX)
 WX_ARG_ENABLE(pnm,         [  --enable-pnm            use pnm images (PNM file format)], wxUSE_PNM)
-WX_ARG_ENABLE(pnm,         [  --enable-xpm            use xpm images (XPM file format)], wxUSE_XPM)
+WX_ARG_ENABLE(xpm,         [  --enable-xpm            use xpm images (XPM file format)], wxUSE_XPM)
 
 fi
 dnl for GUI only
@@ -3680,6 +3683,10 @@ if test "$wxUSE_LOG" = "yes"; then
     if test "$wxUSE_LOGWINDOW" = "yes"; then
       AC_DEFINE(wxUSE_LOGWINDOW)
     fi
+
+    if test "$wxUSE_LOGDIALOG" = "yes"; then
+      AC_DEFINE(wxUSE_LOG_DIALOG)
+    fi
 fi
 
 if test "$wxUSE_LONGLONG" = "yes"; then
@@ -4450,12 +4457,16 @@ fi
 
 if test "$wxUSE_TOOLTIPS" = "yes"; then
     if test "$wxUSE_MOTIF" = 1; then
-        AC_MSG_WARN(wxTooltip not supported yet under Motif)
+        AC_MSG_WARN(wxTooltip not supported yet under Motif ... disabled)
     else
         if test "$wxUSE_WINE" = 1; then
-            AC_MSG_WARN(wxTooltip not supported under WINE)
+            AC_MSG_WARN(wxTooltip not supported under WINE ... disabled)
         else
-            AC_DEFINE(wxUSE_TOOLTIPS)
+            if test "$wxUSE_UNIVERSAL" = "yes"; then
+                AC_MSG_WARN(wxTooltip not supported yet in wxUNIVERSAL ... disabled)
+            else
+                AC_DEFINE(wxUSE_TOOLTIPS)
+            fi
         fi
     fi
 fi

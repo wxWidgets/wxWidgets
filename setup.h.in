@@ -517,7 +517,7 @@
 /*
  * Use old log dialog instead of new wxLogGui
  */
-#define wxUSE_LOG_DIALOG 1
+#define wxUSE_LOG_DIALOG 0
 /*
  * Use wxStopWatch
  */
