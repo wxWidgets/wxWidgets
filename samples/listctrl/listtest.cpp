@@ -64,6 +64,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(LIST_DESELECT_ALL, MyFrame::OnDeselectAll)
     EVT_MENU(LIST_SELECT_ALL, MyFrame::OnSelectAll)
     EVT_MENU(LIST_DELETE, MyFrame::OnDelete)
+    EVT_MENU(LIST_ADD, MyFrame::OnAdd)
     EVT_MENU(LIST_DELETE_ALL, MyFrame::OnDeleteAll)
     EVT_MENU(LIST_SORT, MyFrame::OnSort)
     EVT_MENU(LIST_SET_FG_COL, MyFrame::OnSetFgColour)
@@ -178,7 +179,8 @@ MyFrame::MyFrame(const wxChar *title, int x, int y, int w, int h)
     menuList->AppendSeparator();
     menuList->Append(LIST_SORT, _T("&Sort\tCtrl-S"));
     menuList->AppendSeparator();
-    menuList->Append(LIST_DELETE, _T("&Delete first item"));
+    menuList->Append(LIST_ADD, _T("&Append an item\tCtrl-P"));
+    menuList->Append(LIST_DELETE, _T("&Delete first item\tCtrl-X"));
     menuList->Append(LIST_DELETE_ALL, _T("Delete &all items"));
     menuList->AppendSeparator();
     menuList->Append(LIST_TOGGLE_MULTI_SEL, _T("&Multiple selection\tCtrl-M"),
@@ -197,7 +199,7 @@ MyFrame::MyFrame(const wxChar *title, int x, int y, int w, int h)
 
     m_listCtrl = new MyListCtrl(this, LIST_CTRL,
                                 wxDefaultPosition, wxDefaultSize,
-                                wxLC_LIST |
+                                wxLC_REPORT | //wxLC_LIST |
                                 wxSUNKEN_BORDER |
                                 wxLC_EDIT_LABELS |
                                 wxLC_SINGLE_SEL
@@ -209,11 +211,16 @@ MyFrame::MyFrame(const wxChar *title, int x, int y, int w, int h)
 
     m_logOld = wxLog::SetActiveTarget(new wxLogTextCtrl(m_logWindow));
 
+#if 0
     for ( int i = 0; i < 30; i++ )
     {
         long idx = m_listCtrl->InsertItem(i, wxString::Format(_T("Item %d"), i));
         m_listCtrl->SetItemData(idx, i*i);
     }
+#else
+    wxCommandEvent event;
+    OnReportView(event);
+#endif
 
     CreateStatusBar(3);
 }
@@ -410,7 +417,6 @@ void MyFrame::OnSmallIconTextView(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnVirtualView(wxCommandEvent& WXUNUSED(event))
 {
-#ifdef __WXMSW__
     m_logWindow->Clear();
 
     // we really have to recreate it
@@ -431,9 +437,8 @@ void MyFrame::OnVirtualView(wxCommandEvent& WXUNUSED(event))
 
     m_listCtrl->SetItemCount(1000000);
 
+#ifdef __WXMSW__
     SendSizeEvent();
-#else
-    wxLogError(_T("Sorry, not implemented"));
 #endif
 }
 
@@ -471,16 +476,16 @@ void MyFrame::OnToggleMultiSel(wxCommandEvent& WXUNUSED(event))
     long flags = m_listCtrl->GetWindowStyleFlag();
     if ( flags & wxLC_SINGLE_SEL )
     {
+        m_logWindow->WriteText("multiple\n");
         m_listCtrl->SetWindowStyleFlag(flags & ~wxLC_SINGLE_SEL);
-        m_logWindow->WriteText("multiple");
     }
     else
     {
+        m_logWindow->WriteText("single\n");
         m_listCtrl->SetWindowStyleFlag(flags | wxLC_SINGLE_SEL);
-        m_logWindow->WriteText("single");
     }
 
-    m_logWindow->WriteText("\nRecreate the control now\n");
+    m_logWindow->WriteText("Recreate the control now\n");
 }
 
 void MyFrame::OnSetFgColour(wxCommandEvent& WXUNUSED(event))
@@ -493,6 +498,11 @@ void MyFrame::OnSetBgColour(wxCommandEvent& WXUNUSED(event))
 {
     m_listCtrl->SetBackgroundColour(wxGetColourFromUser(this));
     m_listCtrl->Refresh();
+}
+
+void MyFrame::OnAdd(wxCommandEvent& WXUNUSED(event))
+{
+    m_listCtrl->InsertItem(m_listCtrl->GetItemCount(), _T("Appended item"));
 }
 
 void MyFrame::OnDelete(wxCommandEvent& WXUNUSED(event))

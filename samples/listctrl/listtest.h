@@ -76,6 +76,7 @@ public:
     void OnToggleFirstSel(wxCommandEvent& event);
     void OnDeselectAll(wxCommandEvent& event);
     void OnSelectAll(wxCommandEvent& event);
+    void OnAdd(wxCommandEvent& event);
     void OnDelete(wxCommandEvent& event);
     void OnDeleteAll(wxCommandEvent& event);
     void OnSort(wxCommandEvent& event);
@@ -99,20 +100,22 @@ private:
 // IDs for the menu commands
 enum
 {
+    LIST_ABOUT,
     LIST_QUIT,
+
     LIST_LIST_VIEW,
     LIST_ICON_VIEW,
     LIST_ICON_TEXT_VIEW,
     LIST_SMALL_ICON_VIEW,
     LIST_SMALL_ICON_TEXT_VIEW,
+    LIST_REPORT_VIEW,
     LIST_VIRTUAL_VIEW,
 
-    LIST_REPORT_VIEW,
     LIST_DESELECT_ALL,
     LIST_SELECT_ALL,
-    LIST_ABOUT,
     LIST_DELETE_ALL,
     LIST_DELETE,
+    LIST_ADD,
     LIST_SORT,
     LIST_SET_FG_COL,
     LIST_SET_BG_COL,

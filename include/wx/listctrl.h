@@ -32,10 +32,14 @@ typedef int (wxCALLBACK *wxListCtrlCompare)(long item1, long item2, long sortDat
 // style flags
 #define wxLC_VRULES          0x0001
 #define wxLC_HRULES          0x0002
+
 #define wxLC_ICON            0x0004
 #define wxLC_SMALL_ICON      0x0008
 #define wxLC_LIST            0x0010
 #define wxLC_REPORT          0x0020
+#define wxLC_MODE_MASK       \
+    (wxLC_ICON | wxLC_SMALL_ICON | wxLC_LIST | wxLC_REPORT)
+
 #define wxLC_ALIGN_TOP       0x0040
 #define wxLC_ALIGN_LEFT      0x0080
 #define wxLC_AUTOARRANGE     0x0100

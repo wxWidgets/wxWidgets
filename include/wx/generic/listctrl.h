@@ -189,6 +189,9 @@ protected:
     friend wxListMainWindow;
 
 private:
+    // create the header window
+    void CreateHeaderWindow();
+
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxListCtrl);
 };
