@@ -26,6 +26,8 @@
 
 #if wxUSE_POSTSCRIPT
 
+#include "wx/setup.h"
+
 #include "wx/window.h"
 #include "wx/dcmemory.h"
 #include "wx/utils.h"
@@ -1577,7 +1579,7 @@ bool wxPostScriptDC::StartDoc( const wxString& message )
         m_printData.SetFilename(filename);
     }
 
-    m_pstream = wxFopen( m_printData.GetFilename().fn_str(), wxT("w+") );
+    m_pstream = wxFopen( m_printData.GetFilename().c_str(), wxT("w+") );  // FIXME: use fn_str() here under Unicode?
 
     if (!m_pstream)
     {
@@ -1748,7 +1750,10 @@ void wxPostScriptDC::EndDoc ()
                 argv[0] = WXSTRINGCAST previewCommand;
                 argv[1] = WXSTRINGCAST filename;
                 argv[2] = (wxChar*) NULL;
+#if defined(__WXGTK20__) && wxUSE_UNICODE
+#else
                 wxExecute( argv, TRUE );
+#endif
                 wxRemoveFile( m_printData.GetFilename() );
             }
             break;
@@ -1766,7 +1771,10 @@ void wxPostScriptDC::EndDoc ()
 
                 argv[argc++] = WXSTRINGCAST filename;
                 argv[argc++] = (wxChar *) NULL;
+#if defined(__WXGTK20__) && wxUSE_UNICODE
+#else
                 wxExecute( argv, TRUE );
+#endif
                 wxRemoveFile( filename );
             }
             break;

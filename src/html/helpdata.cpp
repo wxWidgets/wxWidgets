@@ -29,6 +29,8 @@
     #include "wx/log.h"
 #endif
 
+#include <ctype.h>
+
 #include "wx/html/helpdata.h"
 #include "wx/tokenzr.h"
 #include "wx/wfstream.h"

@@ -455,7 +455,7 @@ wxNativeFont wxLoadQueryNearestFont(int pointSize,
 
         (void) tokenizer.NextToken();
 
-        newFontName += wxString::Format("%d-", pointSize);
+        newFontName += wxString::Format(wxT("%d-"), pointSize);
 
         while(tokenizer.HasMoreTokens())
           newFontName += tokenizer.GetNextToken();

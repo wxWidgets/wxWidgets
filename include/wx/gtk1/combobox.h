@@ -33,7 +33,7 @@ class wxComboBox;
 // global data
 //-----------------------------------------------------------------------------
 
-extern const char* wxComboBoxNameStr;
+extern const wxChar* wxComboBoxNameStr;
 extern const wxChar* wxEmptyString;
 
 //-----------------------------------------------------------------------------

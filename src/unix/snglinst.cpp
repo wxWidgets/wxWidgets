@@ -151,7 +151,7 @@ private:
 LockResult wxSingleInstanceCheckerImpl::CreateLockFile()
 {
     // try to open the file
-    m_fdLock = open(m_nameLock,
+    m_fdLock = open(m_nameLock.fn_str(),
                     O_WRONLY | O_CREAT | O_EXCL,
                     S_IRUSR | S_IWUSR);
 
@@ -192,7 +192,7 @@ LockResult wxSingleInstanceCheckerImpl::CreateLockFile()
                 wxLogSysError(_("Failed to lock the lock file '%s'"),
                               m_nameLock.c_str());
 
-                unlink(m_nameLock);
+                unlink(m_nameLock.fn_str());
 
                 return LOCK_ERROR;
             }
@@ -257,7 +257,7 @@ bool wxSingleInstanceCheckerImpl::Create(const wxString& name)
         {
             if ( kill(m_pidLocker, 0) != 0 )
             {
-                if ( unlink(name) != 0 )
+                if ( unlink(name.fn_str()) != 0 )
                 {
                     wxLogError(_("Failed to remove stale lock file '%s'."),
                                name.c_str());
@@ -291,7 +291,7 @@ void wxSingleInstanceCheckerImpl::Unlock()
 {
     if ( m_fdLock != -1 )
     {
-        if ( unlink(m_nameLock) != 0 )
+        if ( unlink(m_nameLock.fn_str()) != 0 )
         {
             wxLogSysError(_("Failed to remove lock file '%s'"),
                           m_nameLock.c_str());

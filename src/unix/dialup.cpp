@@ -719,10 +719,10 @@ wxDialUpManagerImpl::CheckIfconfig()
                     hasModem = strstr(output,"ipdptp") != (char *)NULL;
                     hasLAN = strstr(output, "hme") != (char *)NULL;
 #elif defined(__LINUX__) || defined (__FREEBSD__)
-                    hasModem = strstr(output,"ppp")    // ppp
-                        || strstr(output,"sl")  // slip
-                        || strstr(output,"pl"); // plip
-                    hasLAN = strstr(output, "eth") != NULL;
+                    hasModem = strstr(output.fn_str(),"ppp")    // ppp
+                        || strstr(output.fn_str(),"sl")  // slip
+                        || strstr(output.fn_str(),"pl"); // plip
+                    hasLAN = strstr(output.fn_str(), "eth") != NULL;
 #elif defined(__SGI__)  // IRIX
                     hasModem = strstr(output, "ppp") != NULL; // PPP
 #elif defined(__HPUX__)

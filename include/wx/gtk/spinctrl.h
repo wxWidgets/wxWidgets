@@ -59,8 +59,6 @@ public:
     virtual int GetMax() const;
 
     // implementation
-    // --------------
-    
     void OnChar( wxKeyEvent &event );
     
     bool IsOwnGtkWindow( GdkWindow *window );

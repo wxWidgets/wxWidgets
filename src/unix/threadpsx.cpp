@@ -210,7 +210,7 @@ wxMutexInternal::wxMutexInternal(wxMutexType mutexType)
     m_isOk = err == 0;
     if ( !m_isOk )
     {
-        wxLogApiError("pthread_mutex_init()", err);
+        wxLogApiError( wxT("pthread_mutex_init()"), err);
     }
 }
 
@@ -221,7 +221,7 @@ wxMutexInternal::~wxMutexInternal()
         int err = pthread_mutex_destroy(&m_mutex);
         if ( err != 0 )
         {
-            wxLogApiError("pthread_mutex_destroy()", err);
+            wxLogApiError( wxT("pthread_mutex_destroy()"), err);
         }
     }
 }

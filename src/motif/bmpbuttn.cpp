@@ -113,7 +113,19 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
         (XtPointer) this);
 
     SetCanAddEventHandler(TRUE);
-    AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, size.x, size.y);
+    
+    wxSize newSize = size;
+    
+    if (m_buttonBitmap.Ok())
+    {
+        int border = (style & wxNO_BORDER) ? 4 : 10;
+        if (newSize.x == -1)
+            newSize.x = m_buttonBitmap.GetWidth()+border;
+        if (newSize.y == -1)
+            newSize.y = m_buttonBitmap.GetHeight()+border;
+    }
+    
+    AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, newSize.x, newSize.y);
 
     return TRUE;
 }
@@ -262,3 +274,23 @@ void wxBitmapButton::ChangeBackgroundColour()
     // Must reset the bitmaps since the colours have changed.
     DoSetBitmap();
 }
+
+wxSize wxBitmapButton::DoGetBestSize() const
+{
+    wxSize ret( 30,30 );
+
+    if (m_buttonBitmap.Ok())
+    {
+        int border = (GetWindowStyle() & wxNO_BORDER) ? 4 : 10;
+        ret.x = m_buttonBitmap.GetWidth()+border;
+        ret.y = m_buttonBitmap.GetHeight()+border;
+    }
+
+    if (!HasFlag(wxBU_EXACTFIT))
+    {
+        if (ret.x < 80) ret.x = 80;
+    }
+
+    return ret;
+}
+

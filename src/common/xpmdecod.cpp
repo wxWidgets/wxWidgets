@@ -115,9 +115,7 @@ license is as follows:
 #include "wx/intl.h"
 #include <string.h>
 
-#ifdef __VISUALC__
 #include <ctype.h>
-#endif
 
 #include "wx/xpmdecod.h"
 

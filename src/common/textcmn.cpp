@@ -328,12 +328,12 @@ bool wxTextCtrlBase::EmulateKeyPress(const wxKeyEvent& event)
             break;
 
         default:
-            if ( keycode < 256 && keycode >= 0 && isprint(keycode) )
+            if ( keycode < 256 && keycode >= 0 && wxIsprint(keycode) )
             {
                 // FIXME this is not going to work for non letters...
                 if ( !event.ShiftDown() )
                 {
-                    keycode = tolower(keycode);
+                    keycode = wxTolower(keycode);
                 }
 
                 ch = (wxChar)keycode;

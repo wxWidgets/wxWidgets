@@ -260,7 +260,7 @@ bool wxTCPServer::Create(const wxString& serverName)
   {
       // ensure that the file doesn't exist as otherwise calling socket() would
       // fail
-      int rc = remove(serverName);
+      int rc = remove(serverName.fn_str());
       if ( rc < 0 && errno != ENOENT )
       {
           delete addr;
@@ -321,7 +321,7 @@ wxTCPServer::~wxTCPServer()
 #ifdef __UNIX_LIKE__
     if ( !m_filename.empty() )
     {
-        if ( remove(m_filename) != 0 )
+        if ( remove(m_filename.fn_str()) != 0 )
         {
             wxLogDebug(_T("Stale AF_UNIX file '%s' left."), m_filename.c_str());
         }

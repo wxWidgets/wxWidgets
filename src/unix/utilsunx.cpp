@@ -253,7 +253,11 @@ long wxExecute( const wxString& command, int flags, wxProcess *process )
     argv[argc] = NULL;
 
     // do execute the command
+#if wxUSE_UNICODE
+    long lRc = -1;
+#else
     long lRc = wxExecute(argv, flags, process);
+#endif
 
     // clean up
     argc = 0;
@@ -1105,9 +1109,9 @@ bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
 #if defined(HAVE_STATFS) || defined(HAVE_STATVFS)
     // the case to "char *" is needed for AIX 4.3
     wxStatFs fs;
-    if ( statfs((char *)path.fn_str(), &fs) != 0 )
+    if ( statfs((char *)(const char*)path.fn_str(), &fs) != 0 )
     {
-        wxLogSysError("Failed to get file system statistics");
+        wxLogSysError( wxT("Failed to get file system statistics") );
 
         return FALSE;
     }

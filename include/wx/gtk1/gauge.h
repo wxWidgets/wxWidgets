@@ -33,7 +33,7 @@ class wxGauge;
 // global data
 //-----------------------------------------------------------------------------
 
-extern const char* wxGaugeNameStr;
+extern const wxChar* wxGaugeNameStr;
 
 //-----------------------------------------------------------------------------
 // wxGaugeBox

@@ -107,7 +107,12 @@ static bool ProcessFamiliesFromFontList(wxFontEnumerator *This,
     {
         char *font = fonts[n];
 #if wxUSE_REGEX
+#if wxUSE_UNICODE
+        wxString sfont( wxConvLocal.cMB2WC( font ) );
+        if ( !re.Matches(sfont) )
+#else
         if ( !re.Matches(font) )
+#endif        
 #else // !wxUSE_REGEX
         if ( !wxString(font).Matches(wxT("-*-*-*-*-*-*-*-*-*-*-*-*-*-*")) )
 #endif // wxUSE_REGEX/!wxUSE_REGEX
@@ -120,7 +125,11 @@ static bool ProcessFamiliesFromFontList(wxFontEnumerator *This,
         char *family = dash + 1;
         dash = strchr(family, '-');
         *dash = '\0'; // !NULL because Matches() above succeeded
+#if wxUSE_UNICODE
+       wxString fam( wxConvLocal.cMB2WC( family ) );
+#else        
         wxString fam(family);
+#endif
 
         if ( families.Index(fam) == wxNOT_FOUND )
         {

@@ -83,7 +83,7 @@ void wxMessageOutputStderr::Printf(const wxChar* format, ...)
     out.PrintfV(format, args);
     va_end(args);
 
-    fprintf(stderr, "%s", out.mb_str());
+    fprintf(stderr, "%s", (const char*) out.mb_str());
 }
 
 // ----------------------------------------------------------------------------
@@ -102,7 +102,7 @@ void wxMessageOutputMessageBox::Printf(const wxChar* format, ...)
     va_end(args);
 
 #ifndef __WXMSW__
-    out.Replace("\t","        ");
+    out.Replace(wxT("\t"),wxT("        "));
 #endif
     ::wxMessageBox(out);
 }

@@ -70,6 +70,7 @@ public:
     // Implementation
     void DoSetBitmap();
     virtual void ChangeBackgroundColour();
+    virtual wxSize DoGetBestSize() const;
     
 protected:
     wxBitmap m_buttonBitmapFocus;

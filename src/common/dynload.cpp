@@ -36,6 +36,7 @@
 #endif
 
 #include "wx/filename.h"        // for SplitPath()
+#include "wx/strconv.h"
 
 #include "wx/dynload.h"
 #include "wx/module.h"
@@ -167,7 +168,7 @@ bool wxDynamicLibrary::Load(wxString libname, int flags)
 #endif
     }
 
-    m_handle = dlopen(libname.c_str(), rtldFlags);
+    m_handle = dlopen(libname.fn_str(), rtldFlags);
 #endif  // __VMS || __DARWIN__ ?
 
 #elif defined(HAVE_SHL_LOAD)
@@ -183,7 +184,7 @@ bool wxDynamicLibrary::Load(wxString libname, int flags)
     {
         shlFlags |= BIND_IMMEDIATE;
     }
-    m_handle = shl_load(libname.c_str(), BIND_DEFERRED, 0);
+    m_handle = shl_load(libname.fn_str(), BIND_DEFERRED, 0);
 
 #elif defined(__WINDOWS__)
     m_handle = ::LoadLibrary(libname.c_str());
@@ -195,7 +196,14 @@ bool wxDynamicLibrary::Load(wxString libname, int flags)
     {
         wxString msg(_("Failed to load shared library '%s'"));
 #if defined(HAVE_DLERROR) && !defined(__EMX__)
-        const wxChar  *err = dlerror();
+
+#if defined(__WXGTK__) && wxUSE_UNICODE
+        wxWCharBuffer buffer = wxConvLocal.cMB2WC( dlerror() );
+        const wxChar *err = buffer;
+#else
+        const wxChar *err = dlerror();
+#endif
+
         if( err )
             wxLogError( msg, err );
 #else
@@ -252,10 +260,10 @@ void *wxDynamicLibrary::GetSymbol(const wxString &name, bool *success) const
     DosQueryProcAddr( m_handle, 1L, name.c_str(), (PFN*)symbol );
 
 #elif defined(HAVE_DLOPEN) || defined(__DARWIN__)
-    symbol = dlsym( m_handle, name.c_str() );
+    symbol = dlsym( m_handle, name.fn_str() );
 
 #elif defined(HAVE_SHL_LOAD)
-    if( shl_findsym( &m_handle, name.c_str(), TYPE_UNDEFINED, &symbol ) != 0 )
+    if( shl_findsym( &m_handle, name.fn_str(), TYPE_UNDEFINED, &symbol ) != 0 )
         symbol = 0;
 
 #elif defined(__WINDOWS__)
@@ -269,7 +277,14 @@ void *wxDynamicLibrary::GetSymbol(const wxString &name, bool *success) const
     {
         wxString msg(_("wxDynamicLibrary failed to GetSymbol '%s'"));
 #if defined(HAVE_DLERROR) && !defined(__EMX__)
+
+#if defined(__WXGTK__) && wxUSE_UNICODE
+        wxWCharBuffer buffer = wxConvLocal.cMB2WC( dlerror() );
+        const wxChar *err = buffer;
+#else
         const wxChar *err = dlerror();
+#endif
+
         if( err )
         {
             failed = TRUE;

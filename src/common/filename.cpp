@@ -640,7 +640,7 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
 
     // can use the cast here because the length doesn't change and the string
     // is not shared
-    int fdTemp = mkstemp((char *)path.mb_str());
+    int fdTemp = mkstemp((char*)(const char *)path.mb_str());
     if ( fdTemp == -1 )
     {
         // this might be not necessary as mkstemp() on most systems should have
@@ -1601,7 +1601,7 @@ bool wxFileName::SetTimes(const wxDateTime *dtAccess,
     utimbuf utm;
     utm.actime = dtAccess ? dtAccess->GetTicks() : dtMod->GetTicks();
     utm.modtime = dtMod ? dtMod->GetTicks() : dtAccess->GetTicks();
-    if ( utime(GetFullPath(), &utm) == 0 )
+    if ( utime(GetFullPath().fn_str(), &utm) == 0 )
     {
         return TRUE;
     }
@@ -1639,7 +1639,7 @@ bool wxFileName::Touch()
 {
 #if defined(__UNIX_LIKE__)
     // under Unix touching file is simple: just pass NULL to utime()
-    if ( utime(GetFullPath(), NULL) == 0 )
+    if ( utime(GetFullPath().fn_str(), NULL) == 0 )
     {
         return TRUE;
     }
@@ -1660,7 +1660,7 @@ bool wxFileName::GetTimes(wxDateTime *dtAccess,
 {
 #if defined(__UNIX_LIKE__) || defined(__WXMAC__) || (defined(__DOS__) && defined(__WATCOMC__))
     wxStructStat stBuf;
-    if ( wxStat(GetFullPath(), &stBuf) == 0 )
+    if ( wxStat(GetFullPath().fn_str(), &stBuf) == 0 )
     {
         if ( dtAccess )
             dtAccess->Set(stBuf.st_atime);
