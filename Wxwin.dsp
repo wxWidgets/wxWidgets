@@ -74,7 +74,7 @@ LIB32=link.exe -lib
 
 # Name "wxWin - Win32 Release"
 # Name "wxWin - Win32 Debug"
-# Begin Group "Ressourcendateien"
+# Begin Group "Resources"
 
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;cnt;rtf;gif;jpg;jpeg;jpe"
 # Begin Source File
@@ -82,7 +82,7 @@ LIB32=link.exe -lib
 SOURCE=.\include\wx\msw\wx.rc
 # End Source File
 # End Group
-# Begin Group "win-dateien"
+# Begin Group "win-sources"
 
 # PROP Default_Filter ""
 # Begin Source File
@@ -1476,7 +1476,7 @@ SOURCE=.\include\wx\msw\wave.h
 SOURCE=.\include\wx\msw\window.h
 # End Source File
 # End Group
-# Begin Group "generic-datein"
+# Begin Group "generic-sources"
 
 # PROP Default_Filter ""
 # Begin Source File
@@ -1608,7 +1608,7 @@ SOURCE=.\include\wx\generic\textdlgg.h
 SOURCE=.\include\wx\generic\treectrl.h
 # End Source File
 # End Group
-# Begin Group "common-dateien"
+# Begin Group "common-sources"
 
 # PROP Default_Filter ""
 # Begin Source File
@@ -1803,7 +1803,7 @@ SOURCE=.\src\common\Y_tab.c
 SOURCE=.\src\common\zstream.cpp
 # End Source File
 # End Group
-# Begin Group "ole-dateien"
+# Begin Group "ole-sources"
 
 # PROP Default_Filter ""
 # Begin Source File

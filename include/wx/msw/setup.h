@@ -114,12 +114,12 @@
 #define wxUSE_DYNAMIC_CLASSES     1
                                   // If 1, enables provision of run-time type information.
                                   // NOW MANDATORY: don't change.
-#define wxUSE_MEMORY_TRACING      0
+#define wxUSE_MEMORY_TRACING      1
                                   // If 1, enables debugging versions of wxObject::new and
                                   // wxObject::delete *IF* WXDEBUG is also defined.
                                   // WARNING: this code may not work with all architectures, especially
                                   // if alignment is an issue.
-#define wxUSE_DEBUG_CONTEXT       0
+#define wxUSE_DEBUG_CONTEXT       1
                                   // If 1, enables wxDebugContext, for
                                   // writing error messages to file, etc. 
                                   // If WXDEBUG is not defined, will still use
@@ -128,7 +128,7 @@
                                   // since you may well need to output
                                   // an error log in a production
                                   // version (or non-debugging beta)
-#define wxUSE_GLOBAL_MEMORY_OPERATORS 0
+#define wxUSE_GLOBAL_MEMORY_OPERATORS 1
                                   // In debug mode, cause new and delete to be redefined globally.
                                   // If this causes problems (e.g. link errors), set this to 0.
 
@@ -139,7 +139,7 @@
 #define wxUSE_C_MAIN 0
                                   // Set to 1 to use main.c instead of main.cpp (UNIX only)
 
-#define wxUSE_ODBC                   0
+#define wxUSE_ODBC                   1
                                     // Define 1 to use ODBC classes
 
 #define wxUSE_IOSTREAMH     1
