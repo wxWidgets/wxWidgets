@@ -961,8 +961,9 @@ class DemoTaskBarIcon(wx.TaskBarIcon):
         self.frame = frame
 
         # Set the image
-        icon = self.MakeIcon(images.getMondrianImage())
+        icon = self.MakeIcon(images.getWXPdemoImage())
         self.SetIcon(icon, "wxPython Demo")
+        self.imgidx = 1
         
         # bind some events
         self.Bind(wx.EVT_TASKBAR_LEFT_DCLICK, self.OnTaskBarActivate)
@@ -994,10 +995,10 @@ class DemoTaskBarIcon(wx.TaskBarIcon):
         icon size...
         """
         if "wxMSW" in wx.PlatformInfo:
-            img.Scale(16, 16)
+            img = img.Scale(16, 16)
         elif "wxGTK" in wx.PlatformInfo:
-            img.Scale(20, 20)
-        # wxMac can be any size upto 128.128....
+            img = img.Scale(22, 22)
+        # wxMac can be any size upto 128x128, so leave the source img alone....
         icon = wx.IconFromBitmap(img.ConvertToBitmap() )
         return icon
     
@@ -1015,8 +1016,17 @@ class DemoTaskBarIcon(wx.TaskBarIcon):
 
 
     def OnTaskBarChange(self, evt):
-        icon = self.MakeIcon(images.getBlom10MaskedImage())
-        self.SetIcon(icon, "This is a new icon")
+        names = [ "WXPdemo", "WXP", "Mondrian", "Test2m",
+                  "Blom08m", "Blom10m", "Blom15m" ]
+        name = names[self.imgidx]
+        
+        getFunc = getattr(images, "get%sImage" % name)
+        self.imgidx += 1
+        if self.imgidx >= len(names):
+            self.imgidx = 0
+            
+        icon = self.MakeIcon(getFunc())
+        self.SetIcon(icon, "This is a new icon: " + name)
 
 
     def OnTaskBarRemove(self, evt):
@@ -1039,7 +1049,7 @@ class wxPythonDemo(wx.Frame):
         self.shell = None
         self.firstTime = True
 
-        icon = images.getMondrianIcon()
+        icon = images.getWXPdemoIcon()
         self.SetIcon(icon)
 
         self.tbicon = DemoTaskBarIcon(self)
