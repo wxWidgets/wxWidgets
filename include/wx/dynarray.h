@@ -304,7 +304,8 @@ public:                                                             \
   void Insert(const T* pItem, size_t uiIndex)                       \
     { wxBaseArray::Insert((long)pItem, uiIndex); }                  \
                                                                     \
-  void Empty();                                                     \
+  void Empty() { DoEmpty(); wxBaseArray::Empty(); }                 \
+  void Clear() { DoEmpty(); wxBaseArray::Clear(); }                 \
                                                                     \
   T*   Detach(size_t uiIndex)                                       \
     { T* p = (T*)wxBaseArray::Item(uiIndex);                        \
@@ -315,6 +316,7 @@ public:                                                             \
   void Sort(CMPFUNC##T fCmp) { wxBaseArray::Sort((CMPFUNC)fCmp); }  \
                                                                     \
 private:                                                            \
+  void DoEmpty();                                                   \
   void DoCopy(const name& src);                                     \
 }
 
