@@ -666,11 +666,22 @@ public:
             *rightCol  = m_selectedBottomRight.GetCol();
         }
 
+
+    // This function returns the rectangle that encloses the block of cells
+    // limited by TopLeft and BottomRight cell in device coords and clipped
+    //  to the client size of the grid window.
+    //
+    wxRect BlockToDeviceRect( const wxGridCellCoords & TopLeft,
+			      const wxGridCellCoords & BottomRight );
+
     // This function returns the rectangle that encloses the selected cells
     // in device coords and clipped to the client size of the grid window.
     //
-    wxRect SelectionToDeviceRect();
-
+    wxRect SelectionToDeviceRect()
+        {
+	    return BlockToDeviceRect( m_selectedTopLeft,
+				      m_selectedBottomRight );
+	}
 
 
     // ------ For compatibility with previous wxGrid only...
