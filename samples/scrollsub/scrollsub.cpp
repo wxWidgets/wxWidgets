@@ -112,6 +112,7 @@ public:
 
     void OnAbout( wxCommandEvent &event );
     void OnQuit( wxCommandEvent &event );
+    void OnFullScreen( wxCommandEvent &event );
 
     wxScrolledWindow   *m_scrolled;
     wxTextCtrl         *m_log;
@@ -340,13 +341,15 @@ void MyCanvas::ScrollWindow( int dx, int dy, const wxRect *rect )
 // MyFrame
 
 const int ID_QUIT  = 108;
-const int ID_ABOUT = 109;
+const int ID_FULL  = 109;
+const int ID_ABOUT = 110;
 
 IMPLEMENT_DYNAMIC_CLASS( MyFrame, wxFrame )
 
 BEGIN_EVENT_TABLE(MyFrame,wxFrame)
   EVT_MENU    (ID_ABOUT, MyFrame::OnAbout)
   EVT_MENU    (ID_QUIT,  MyFrame::OnQuit)
+  EVT_MENU    (ID_FULL,  MyFrame::OnFullScreen)
 END_EVENT_TABLE()
 
 MyFrame::MyFrame()
@@ -354,7 +357,8 @@ MyFrame::MyFrame()
                   wxPoint(20,20), wxSize(470,500) )
 {
     wxMenu *file_menu = new wxMenu();
-    file_menu->Append( ID_ABOUT, "&About..");
+    file_menu->Append( ID_ABOUT, "&About...");
+    file_menu->Append( ID_FULL, "&Full screen on/off");
     file_menu->Append( ID_QUIT, "E&xit\tAlt-X");
 
     wxMenuBar *menu_bar = new wxMenuBar();
@@ -384,6 +388,11 @@ MyFrame::MyFrame()
 void MyFrame::OnQuit( wxCommandEvent &WXUNUSED(event) )
 {
   Close( TRUE );
+}
+
+void MyFrame::OnFullScreen( wxCommandEvent &WXUNUSED(event) )
+{
+   ShowFullScreen( !IsFullScreen(), wxFULLSCREEN_NOBORDER|wxFULLSCREEN_NOCAPTION );
 }
 
 void MyFrame::OnAbout( wxCommandEvent &WXUNUSED(event) )

@@ -411,6 +411,7 @@ bool wxFrame::Create( wxWindow *parent,
     wxTopLevelWindows.Append( this );
 
     m_needParent = FALSE;
+    m_fsIsShowing = FALSE;
 
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
@@ -510,6 +511,48 @@ wxFrame::~wxFrame()
     {
         wxTheApp->ExitMainLoop();
     }
+}
+
+bool wxFrame::ShowFullScreen(bool show, long style )
+{
+    if (show == m_fsIsShowing) return FALSE; // return what?
+
+    m_fsIsShowing = show;
+    
+    if (show)
+    {
+        m_fsSaveStyle = m_windowStyle;
+        m_fsSaveFlag = style;
+        GetPosition( &m_fsSaveFrame.x, &m_fsSaveFrame.y );
+        GetSize( &m_fsSaveFrame.width, &m_fsSaveFrame.height );
+        
+        gtk_widget_hide( m_widget );
+        gtk_widget_unrealize( m_widget );
+        
+        m_windowStyle = wxSIMPLE_BORDER;
+        
+        int x;
+        int y;
+        wxDisplaySize( &x, &y );
+        SetSize( 0, 0, x, y );
+        
+        gtk_widget_realize( m_widget );
+        gtk_widget_show( m_widget );
+    }
+    else
+    {
+        gtk_widget_hide( m_widget );
+        gtk_widget_unrealize( m_widget );
+    
+        m_windowStyle = m_fsSaveStyle;
+        
+        SetSize( m_fsSaveFrame.x, m_fsSaveFrame.y, m_fsSaveFrame.width, m_fsSaveFrame.height );
+        
+        gtk_widget_realize( m_widget );
+        gtk_widget_show( m_widget );
+    }
+    
+    return TRUE;
 }
 
 // ----------------------------------------------------------------------------
