@@ -149,5 +149,5 @@ web site.
 
 Have fun!
 
-The wxWidgets Team, October 2004
+The wxWidgets Team, February 2005
 
