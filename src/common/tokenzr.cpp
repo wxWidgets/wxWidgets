@@ -2,7 +2,7 @@
 // Name:        tokenzr.cpp
 // Purpose:     String tokenizer
 // Author:      Guilhem Lavaux
-// Modified by:
+// Modified by: Gregory Pietsch
 // Created:     04/22/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Guilhem Lavaux
@@ -29,110 +29,79 @@ wxStringTokenizer::wxStringTokenizer(const wxString& to_tokenize,
     m_string = to_tokenize;
     m_delims = delims;
     m_retdelims = ret_delims;
+    m_pos = 0;
 }
 
 wxStringTokenizer::~wxStringTokenizer()
 {
 }
 
-off_t wxStringTokenizer::FindDelims(const wxString& str, const wxString& delims) const
-{
-    for ( size_t i = 0; i < str.Length(); i++ )
-    {
-        wxChar c = str[i];
-
-        for ( size_t j = 0; j < delims.Length() ; j++ )
-        {
-            if ( delims[j] == c )
-                return i;
-        }
-    }
-
-    return -1;
-}
-
 int wxStringTokenizer::CountTokens() const
 {
-    wxString p_string = m_string;
-    bool found = TRUE;
-    int pos, count = 1;
+    size_t pos = 0;
+    int count = 0;
+    bool at_delim;
 
-    if (p_string.Length() == 0)
-        return 0;
-
-    while (found)
-    {
-        pos = FindDelims(p_string, m_delims);
-        if (pos != -1)
+    while (pos < m_string.length()) {
+        // while we're still counting ...
+        at_delim = (m_delims.find(m_string.at(pos)) < m_delims.length());
+        // are we at a delimiter? if so, move to the next nondelimiter;
+        // if not, move to the next delimiter.  If the find_first_of
+        // and find_first_not_of methods fail, pos will be assigned
+        // npos (0xFFFFFFFF) which will terminate the loop on the next
+        // go-round unless we have a really long string, which is unlikely
+        pos = at_delim ? m_string.find_first_not_of(m_delims, pos)
+                       : m_string.find_first_of(m_delims, pos);
+        if (m_retdelims)
         {
+            // if we're retaining delimiters, increment count
             count++;
-            p_string = p_string(pos+1, p_string.Length());
         }
         else
         {
-            found = FALSE;
+            // if we're not retaining delimiters and at a token, inc count
+            count += (!at_delim);
         }
     }
-
     return count;
 }
 
 bool wxStringTokenizer::HasMoreTokens()
 {
-    return !m_string.IsEmpty();
-}
-
-// needed to fix leading whitespace / mult. delims bugs
-void wxStringTokenizer::EatLeadingDelims()
-{
-    int pos;
-
-    // while leading delims trim 'em from the left
-    while ( ( pos = FindDelims(m_string, m_delims)) == 0 )
-    {
-        m_string = m_string.Mid((size_t)1);
-    }
+    return (m_retdelims
+            ? !m_string.IsEmpty()
+            : m_string.find_first_not_of(m_delims) < m_string.length());
 }
 
 wxString wxStringTokenizer::NextToken()
 {
-    off_t pos, pos2;
+    size_t pos;
     wxString r_string;
 
     if ( m_string.IsEmpty() )
         return m_string;
-
-    if ( !m_retdelims )
-        EatLeadingDelims();
-
-    pos = FindDelims(m_string, m_delims);
-    if (pos == -1)
-    {
+        pos = m_string.find_first_not_of(m_delims);
+    if ( m_retdelims ) {
+        // we're retaining delimiters (unusual behavior, IMHO)
+        if (pos == 0)
+            // first char is a non-delimiter
+            pos = m_string.find_first_of(m_delims);
+    } else {
+        // we're not retaining delimiters
+        m_string.erase(0, pos);
+        m_pos += pos;
+        if (m_string.IsEmpty())
+            return m_string;
+        pos = m_string.find_first_of(m_delims);
+    }
+    if (pos <= m_string.length()) {
+        r_string = m_string.substr(0, pos);
+        m_string.erase(0, pos);
+        m_pos += pos;
+    } else {
         r_string = m_string;
-        m_string = wxEmptyString;
-
-        return r_string;
+        m_pos += m_string.length();
+        m_string.Empty();
     }
-
-    if (m_retdelims)
-    {
-        if (!pos)
-        {
-            pos++;
-            pos2 = 1;
-        }
-        else
-        {
-            pos2 = pos;
-        }
-    }
-    else
-    {
-        pos2 = pos + 1;
-    }
-
-    r_string = m_string.Left((size_t)pos);
-    m_string = m_string.Mid((size_t)pos2);
-
     return r_string;
 }
