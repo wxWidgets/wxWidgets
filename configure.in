@@ -464,11 +464,16 @@ dnl #######################
 dnl # check for functions #
 dnl #######################
 
-WCHAR_LINK=
 dnl check for wcslen
-AC_CHECK_LIB(c,wcslen,,
-	AC_CHECK_LIB(w,wcslen,
-	WCHAR_LINK="-lw" ,AC_MSG_ERROR("Cannot find wcslen function.")))
+AC_CHECK_LIB(c, wcslen, [
+            AC_DEFINE(HAVE_WCSLEN)
+            WCHAR_LINK=""
+        ], [
+            AC_CHECK_LIB(w, wcslen, [
+                AC_DEFINE(HAVE_WCSLEN)
+                WCHAR_LINK="-lw"
+            ])
+        ])
 AC_SUBST(WCHAR_LINK)
 
 dnl check for vprintf/vsprintf() which are GNU extensions
