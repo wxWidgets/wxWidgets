@@ -492,9 +492,9 @@ Here are the steps required:
   instructions with either of these packages.
 
 - If using Mingw32, you need some extra files to use the wxWindows
-  makefiles. You can find these files in ports/mingw32 on the ftp
-  site or CD-ROM, as extra.zip. These should be extracted to the Mingw32
-  directory. If you have alread downloaded bison, flex, make, rm, cp, mv
+  makefiles. You can find these files in ports/mingw32 on the
+  wxWindows ftp site or CD-ROM, as extra.zip. These should be extracted
+  to the Mingw32 directory. If you have alread downloaded rm, cp, mv
   from elsewhere, you won't need this.
 
   If using Mingw32 2.95 and below with wxWindows 2.1 or above, you
@@ -507,8 +507,8 @@ Here are the steps required:
   Run it before compiling.
 
 - For Cygwin, make sure there's a \tmp directory on your
-  Windows drive or bison will crash (actually you don't need this
-  for ordinary wxWindows compilation: a pre-generated .c file is
+  Windows drive or bison will crash (actually you don't need
+  bison for ordinary wxWindows compilation: a pre-generated .c file is
   supplied).
 
 - Edit wx/src/makeg95.env and set the MINGW32 variable at the top of
