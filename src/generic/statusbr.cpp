@@ -104,6 +104,8 @@ bool wxStatusBarGeneric::Create(wxWindow *parent,
 
   SetSize(-1, -1, -1, height);
 
+  SetFieldsCount(1);
+
   return TRUE;
 }
 
@@ -181,7 +183,7 @@ void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
     {
         int width, height;
         GetClientSize(&width, &height);
-        
+
         gtk_paint_resize_grip( m_widget->style,
                                GTK_PIZZA(m_wxwindow)->bin_window,
                                (GtkStateType) GTK_WIDGET_STATE (m_widget),
@@ -190,13 +192,13 @@ void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
                                "statusbar",
                                GDK_WINDOW_EDGE_SOUTH_EAST,
                                width-height-2, 1, height-2, height-3 );
-        
+
     }
 #endif
 
   if (GetFont().Ok())
         dc.SetFont(GetFont());
-    
+
   dc.SetBackgroundMode(wxTRANSPARENT);
 
 #ifdef __WXPM__
@@ -385,7 +387,7 @@ void wxStatusBarGeneric::OnLeftDown(wxMouseEvent& event)
 #ifdef __WXGTK20__
     int width, height;
     GetClientSize(&width, &height);
-    
+
     if (HasFlag( wxST_SIZEGRIP ) && (event.GetX() > width-height))
     {
         GtkWidget *ancestor = gtk_widget_get_toplevel( m_widget );
@@ -402,8 +404,8 @@ void wxStatusBarGeneric::OnLeftDown(wxMouseEvent& event)
         gtk_window_begin_resize_drag (GTK_WINDOW (ancestor),
                                   GDK_WINDOW_EDGE_SOUTH_EAST,
                                   1,
-                                  org_x + event.GetX(), 
-                                  org_y + event.GetY(), 
+                                  org_x + event.GetX(),
+                                  org_y + event.GetY(),
                                   0);
     }
     else
@@ -420,7 +422,7 @@ void wxStatusBarGeneric::OnRightDown(wxMouseEvent& event)
 #ifdef __WXGTK20__
     int width, height;
     GetClientSize(&width, &height);
-    
+
     if (HasFlag( wxST_SIZEGRIP ) && (event.GetX() > width-height))
     {
         GtkWidget *ancestor = gtk_widget_get_toplevel( m_widget );
@@ -433,11 +435,11 @@ void wxStatusBarGeneric::OnRightDown(wxMouseEvent& event)
         int org_x = 0;
         int org_y = 0;
         gdk_window_get_origin( source, &org_x, &org_y );
-    
+
         gtk_window_begin_move_drag (GTK_WINDOW (ancestor),
                                 2,
-                                org_x + event.GetX(), 
-                                org_y + event.GetY(), 
+                                org_x + event.GetX(),
+                                org_y + event.GetY(),
                                 0);
     }
     else
