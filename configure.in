@@ -452,7 +452,6 @@ dnl compile options
 dnl ---------------------------------------------------------------------------
 
 WX_ARG_ENABLE(optimise,    [  --enable-optimise       create optimised code], wxUSE_OPTIMISE)
-WX_ARG_ENABLE(optimize,    [  --enable-optimize       create optimized code], wxUSE_OPTIMISE)
 WX_ARG_ENABLE(debug,       [  --enable-debug          same as debug_flag and debug_info], wxUSE_DEBUG)
 
 if test "$wxUSE_DEBUG" = "yes"; then
