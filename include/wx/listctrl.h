@@ -304,7 +304,7 @@ public:
     }
 
     // [de]select an item
-    void Select(long n, bool on = true)
+    void Select(long n, bool on = TRUE)
     {
         SetItemState(n, on ? wxLIST_STATE_SELECTED : 0, wxLIST_STATE_SELECTED);
     }
