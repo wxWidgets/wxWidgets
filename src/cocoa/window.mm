@@ -409,7 +409,9 @@ void wxWindowCocoa::Cocoa_FrameChanged(void)
 
 bool wxWindow::Close(bool force)
 {
-    return false;
+    // The only reason this function exists is that it is virtual and
+    // wxTopLevelWindowCocoa will override it.
+    return wxWindowBase::Close(force);
 }
 
 void wxWindow::CocoaReplaceView(WX_NSView oldView, WX_NSView newView)
