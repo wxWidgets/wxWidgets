@@ -76,8 +76,13 @@ class ShellFrame(wx.wxFrame, ShellMenu):
         wx.EVT_CLOSE(self, self.OnCloseWindow)
 
     def OnCloseWindow(self, event):
-        self.shell.destroy()
-        self.Destroy()
+        """Event handler for closing."""
+        # This isn't working the way I want, but I'll leave it for now.
+        if self.shell.waiting:
+            event.Veto(True)
+        else:
+            self.shell.destroy()
+            self.Destroy()
 
 
 class ShellFacade:
@@ -244,7 +249,7 @@ class Shell(stc.wxStyledTextCtrl):
         except: pass
 
     def destroy(self):
-        # del self.interp
+        del self.interp
         pass
 
     def config(self):
@@ -364,7 +369,7 @@ Platform: %s""" % (VERSION, self.revision, self.interp.revision,
     def OnIdle(self, event):
         """Free the CPU to do other things."""
         if self.waiting:
-            time.sleep(0.1)
+            time.sleep(0.05)
 
     def OnUpdateUI(self, event):
         """Check for matching braces."""
@@ -821,32 +826,19 @@ Platform: %s""" % (VERSION, self.revision, self.interp.revision,
         self.prompt()
         try:
             while not reader.input:
-                time.sleep(0.1)  # Free up the CPU.
-                wx.wxYield()
+                wx.wxYieldIfNeeded()
             input = reader.input
         finally:
             reader.input = ''
             reader.isreading = 0
+        input = str(input)  # In case of Unicode.
         return input
 
     def readlines(self):
         """Replacement for stdin.readlines()."""
         lines = []
-        input = ''
-        reader = self.reader
-        reader.isreading = 1
-        try:
-            while lines[-1:] != ['\n']:
-                self.prompt()
-                while not reader.input:
-                    time.sleep(0.1)  # Free up the CPU.
-                    wx.wxYield()
-                input = reader.input
-                lines.append(input)
-                reader.input = ''
-        finally:
-            reader.input = ''
-            reader.isreading = 0
+        while lines[-1:] != ['\n']:
+            lines.append(self.readline())
         return lines
 
     def raw_input(self, prompt=''):

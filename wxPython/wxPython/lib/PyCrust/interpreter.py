@@ -51,6 +51,7 @@ class Interpreter(InteractiveInterpreter):
         If the passed in command is part of a multi-line command we keep 
         appending the pieces to the last list in commandBuffer until we 
         have a complete command. If not, we delete that last list."""
+        command = str(command)  # In case the command is unicode.
         if not self.more:
             try: del self.commandBuffer[-1]
             except IndexError: pass
@@ -63,9 +64,7 @@ class Interpreter(InteractiveInterpreter):
     def runsource(self, source):
         """Compile and run source code in the interpreter."""
         stdin, stdout, stderr = sys.stdin, sys.stdout, sys.stderr
-        sys.stdin = self.stdin
-        sys.stdout = self.stdout
-        sys.stderr = self.stderr
+        sys.stdin, sys.stdout, sys.stderr = self.stdin, self.stdout, self.stderr
         more = InteractiveInterpreter.runsource(self, source)
         # If sys.std* is still what we set it to, then restore it.
         # But, if the executed source changed sys.std*, assume it
@@ -86,7 +85,10 @@ class Interpreter(InteractiveInterpreter):
         """Return list of auto-completion options for a command.
         
         The list of options will be based on the locals namespace."""
+        stdin, stdout, stderr = sys.stdin, sys.stdout, sys.stderr
+        sys.stdin, sys.stdout, sys.stderr = self.stdin, self.stdout, self.stderr
         return introspect.getAutoCompleteList(command, self.locals, *args, **kwds)
+        sys.stdin, sys.stdout, sys.stderr = stdin, stdout, stderr
 
     def getCallTip(self, command='', *args, **kwds):
         """Return call tip text for a command.

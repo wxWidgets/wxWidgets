@@ -217,7 +217,7 @@ def getRoot(command, terminator=None):
             else:
                 # start represents the last known good point in the line.
                 start = token[2][1]
-        elif tokenstring in ('[({])}'):
+        elif len(tokenstring) == 1 and tokenstring in ('[({])}'):
             # Remember, we're working backwords.
             # So prefix += tokenstring would be wrong.
             if prefix in emptyTypes and tokenstring in ('[({'):
