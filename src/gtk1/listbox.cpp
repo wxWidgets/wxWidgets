@@ -82,6 +82,32 @@ extern wxCursor   g_globalCursor;
 static bool       g_hasDoubleClicked = FALSE;
 
 //-----------------------------------------------------------------------------
+// idle callback for SetFirstItem
+//-----------------------------------------------------------------------------
+
+struct wxlistbox_idle_struct
+{
+    wxListBox   *m_listbox;
+    int          m_item;
+    gint         m_tag;
+};
+
+static gint wxlistbox_idle_callback( wxlistbox_idle_struct *data )
+{
+    gdk_threads_enter();
+
+    gtk_idle_remove( data->m_tag );
+    
+    data->m_listbox->SetFirstItem( data->m_item );
+    
+    delete data;
+    
+    gdk_threads_leave();
+
+    return TRUE;
+}
+
+//-----------------------------------------------------------------------------
 // "button_release_event"
 //-----------------------------------------------------------------------------
 
@@ -818,6 +844,16 @@ void wxListBox::DoSetFirstItem( int n )
     
     GtkWidget *item = GTK_WIDGET(target->data);
     wxCHECK_RET( item, wxT("invalid listbox code") );
+
+    if (item->allocation.y == -1)
+    {
+        wxlistbox_idle_struct* data = new wxlistbox_idle_struct;
+        data->m_listbox = this;
+        data->m_item = n;
+        data->m_tag = gtk_idle_add_priority( 800, wxlistbox_idle_callback, (gpointer) data );
+        
+        return;
+    }
 
     float y = item->allocation.y;
     if (y > adjustment->upper - adjustment->page_size)
