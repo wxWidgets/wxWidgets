@@ -35,6 +35,7 @@ wxBase:
 
 All GUI ports:
 
+- added wxVScrolledWindow, wxVListBox and wxHtmlLbox classes
 - added alpha channel support to wxImage
 - added wxCLOSE_BOX style for dialogs and frames
 - added wxSplitterWindow and wxWizard handlers to XRC
@@ -67,8 +68,7 @@ All GUI ports:
             - use typesafe Get* instead
         wxListBase::operator wxList&()
             - use typesafe lists instead
-- Added wxTLW::SetShape with implementations for wxMSW and wxGTK (so
-  far)
+- Added wxTLW::SetShape with implementations for wxMSW and wxGTK (so far)
 - FL: rmoved const from EnableTool parameters
 - FL: signal child window when toolbar is closed
 - In various places, changed tests for pathsep on last char of string to call
@@ -81,8 +81,7 @@ All GUI ports:
   default extension for the template
 - Speeded up wxImage::Scale using fixed point arithmetic (Wade Brainerd)
 - Added BLOB support to wxDB (John Skiff)
-- Wizard now validates as well as doing data transfer when
-  pressing Back or Next
+- Wizard now validates when pressing Back or Next
 - Implemented wxNotebook::DoGetBestSize so Fit now works
 
 Unix:
@@ -103,6 +102,10 @@ wxGTK:
 - fixed bug in generic file selector causing incomplete file extensions to
   be appended to filenames with no extension
 - added SetSelection implementation for GTK+ 2
+
+wxMac:
+
+- generate wxEVT_SCROLL_THUMBRELEASE and wxEVT_SCROLLWIN_THUMBRELEASE events
 
 wxMSW:
 
