@@ -56,7 +56,7 @@ bool wxStaticLine::Create( wxWindow *parent,
         return false;
 
     Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
-    m_peer = new wxMacControl() ;
+    m_peer = new wxMacControl(this) ;
     verify_noerr(CreateSeparatorControl(MAC_WXHWND(parent->MacGetTopLevelWindowRef()),&bounds, m_peer->GetControlRefAddr() ) ) ;  
 
     MacPostControlCreate(pos,size) ;

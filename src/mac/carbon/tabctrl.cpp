@@ -59,7 +59,7 @@ bool wxTabCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, cons
             tabsize = kControlSizeSmall; 
     }
     
-    m_peer = new wxMacControl() ;
+    m_peer = new wxMacControl(this) ;
     verify_noerr ( CreateTabsControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds ,
      tabsize , tabstyle, 0, NULL,  m_peer->GetControlRefAddr() ) );
     

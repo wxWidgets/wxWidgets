@@ -51,7 +51,7 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
 
     Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
     wxMacCFStringHolder str(m_label,m_font.GetEncoding() ) ;
-    m_peer = new wxMacControl() ;
+    m_peer = new wxMacControl(this) ;
     verify_noerr(CreateStaticTextControl(MAC_WXHWND(parent->MacGetTopLevelWindowRef()),&bounds, str , 
         NULL , m_peer->GetControlRefAddr() ) ) ;  
 

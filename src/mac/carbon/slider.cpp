@@ -91,7 +91,7 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
     while (tickMarks > 20)
         tickMarks /= 5; //keep the number of tickmarks from becoming unwieldly
 
-    m_peer = new wxMacControl() ;
+    m_peer = new wxMacControl(this) ;
     verify_noerr ( CreateSliderControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds ,
         value , minValue , maxValue , kControlSliderPointsDownOrRight , tickMarks , true /* liveTracking */ ,
         wxMacLiveScrollbarActionUPP , m_peer->GetControlRefAddr() ) );

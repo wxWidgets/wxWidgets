@@ -411,19 +411,23 @@ Rect wxMacGetBoundsForControl( wxWindow* window , const wxPoint& pos , const wxS
 class wxMacControl
 {
 public :
-    wxMacControl()
+    wxMacControl(wxWindow* peer)
     {
+        m_peer = peer ;
         m_controlRef = NULL ;
     }
     
-    wxMacControl( ControlRef control ) 
+    wxMacControl( wxWindow* peer , ControlRef control ) 
     {
+        m_peer = peer ;
         m_controlRef = control ;
     }
-    wxMacControl( WXWidget control )
+    wxMacControl( wxWindow* peer , WXWidget control )
     {
+        m_peer = peer ;
         m_controlRef = (ControlRef) control ;
     }
+
     virtual ~wxMacControl()
     {
     }
@@ -513,9 +517,10 @@ public :
     // invalidates this control and all children
     virtual void InvalidateWithChildren() ;
     virtual void SetDrawingEnabled( bool enable ) ;
+#ifdef __WXMAC_OSX__
     virtual bool GetNeedsDisplay() const ;
     virtual void SetNeedsDisplay( bool needsDisplay , RgnHandle where = NULL ) ;
-
+#endif
     virtual void ScrollRect( const wxRect &rect , int dx , int dy ) ;
 
     virtual void GetRect( Rect *r ) ;
@@ -565,6 +570,7 @@ protected :
     ControlRef  m_controlRef ;
     wxFont      m_font ;
     long        m_windowStyle ; 
+    wxWindow*   m_peer ;
 } ;
 
 #if wxMAC_USE_CORE_GRAPHICS

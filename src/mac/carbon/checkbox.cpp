@@ -45,7 +45,7 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
         maxValue = 2 /* kControlCheckboxMixedValue */;
 
     Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
-    m_peer = new wxMacControl() ;
+    m_peer = new wxMacControl(this) ;
     verify_noerr( CreateCheckBoxControl(MAC_WXHWND(parent->MacGetTopLevelWindowRef()), &bounds ,
         CFSTR("") , 0 , false , m_peer->GetControlRefAddr() ) );
     

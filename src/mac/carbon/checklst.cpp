@@ -224,7 +224,7 @@ bool wxCheckListBox::Create(wxWindow *parent, wxWindowID id,
 
     Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
 
-    m_peer = new wxMacControl() ;
+    m_peer = new wxMacControl(this) ;
     verify_noerr( ::CreateDataBrowserControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()), &bounds, kDataBrowserListView , m_peer->GetControlRefAddr() ) );
     
 

@@ -47,7 +47,7 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
 
     Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
 
-    m_peer = new wxMacControl() ;
+    m_peer = new wxMacControl(this) ;
     verify_noerr ( CreateScrollBarControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , 
     0 , 0 , 100 , 1 , true /* liveTracking */ , wxMacLiveScrollbarActionUPP , m_peer->GetControlRefAddr() ) );
     

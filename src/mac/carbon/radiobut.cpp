@@ -41,7 +41,7 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
 
     Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
     
-    m_peer = new wxMacControl() ;
+    m_peer = new wxMacControl(this) ;
     verify_noerr ( CreateRadioButtonControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , CFSTR("") , 
         0 , false /* no autotoggle */ , m_peer->GetControlRefAddr() ) );
     

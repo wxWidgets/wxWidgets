@@ -383,7 +383,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
     //hiRect.size.height = bounds.bottom - bounds.top;
     //printf("left = %d, right = %d, top = %d, bottom = %d\n", bounds.left, bounds.right, bounds.top, bounds.bottom);
     //printf("x = %d, y = %d, width = %d, height = %d\n", hibounds.origin.x, hibounds.origin.y, hibounds.size.width, hibounds.size.height);
-    m_peer = new wxMacControl() ;
+    m_peer = new wxMacControl(this) ;
     verify_noerr( HIComboBoxCreate( &hiRect, CFSTR(""), NULL, NULL, kHIComboBoxStandardAttributes, *m_peer ) );
 
 

@@ -72,7 +72,7 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
     wxMacCreateBitmapButton( &info , m_bmpNormal ) ;
 
     Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
-    m_peer = new wxMacControl() ;
+    m_peer = new wxMacControl( this ) ;
     verify_noerr ( CreateBevelButtonControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , CFSTR("") , 
         (( style & wxBU_AUTODRAW ) ? kControlBevelButtonSmallBevel : kControlBevelButtonNormalBevel )  , 
         kControlBehaviorOffsetContents , &info , 0 , 0 , 0 , m_peer->GetControlRefAddr() ) );

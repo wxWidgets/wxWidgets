@@ -44,7 +44,7 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& lbl,
     m_label = label ;
 
     Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
-    m_peer = new wxMacControl() ;
+    m_peer = new wxMacControl(this) ;
     if ( id == wxID_HELP )
     {
         ControlButtonContentInfo info ;

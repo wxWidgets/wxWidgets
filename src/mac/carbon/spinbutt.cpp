@@ -58,7 +58,7 @@ bool wxSpinButton::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, c
 
     Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
 
-    m_peer = new wxMacControl() ;
+    m_peer = new wxMacControl(this) ;
     verify_noerr ( CreateLittleArrowsControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , 0 , m_min , m_max , 1 ,
      m_peer->GetControlRefAddr() ) );
 
