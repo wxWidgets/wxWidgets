@@ -609,6 +609,7 @@ class wxPanel(wxPanelPtr):
 def wxPrePanel(*_args,**_kwargs):
     val = wxPanelPtr(apply(windowsc.new_wxPrePanel,_args,_kwargs))
     val.thisown = 1
+    val._setOORInfo(val)
     return val
 
 

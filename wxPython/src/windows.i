@@ -336,7 +336,7 @@ public:
     void SetEventHandler(wxEvtHandler* handler);
     void SetExtraStyle(long exStyle);
     void SetTitle(const wxString& title);
-    bool Show(bool show);
+    bool Show(bool show=TRUE);
     bool TransferDataFromWindow();
     bool TransferDataToWindow();
     bool Validate();
@@ -452,7 +452,7 @@ public:
                 const char* name = "panel");
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
-    %pragma(python) addtomethod = "XXX:val._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPrePanel:val._setOORInfo(val)"
 
     void InitDialog();
     wxButton* GetDefaultItem();

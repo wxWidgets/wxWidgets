@@ -4595,13 +4595,13 @@ static PyObject *_wrap_wxWindow_Show(PyObject *self, PyObject *args, PyObject *k
     PyObject * _resultobj;
     bool  _result;
     wxWindow * _arg0;
-    bool  _arg1;
+    bool  _arg1 = (bool ) TRUE;
     PyObject * _argo0 = 0;
-    int tempbool1;
+    int tempbool1 = (int) TRUE;
     char *_kwnames[] = { "self","show", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxWindow_Show",_kwnames,&_argo0,&tempbool1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|i:wxWindow_Show",_kwnames,&_argo0,&tempbool1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }

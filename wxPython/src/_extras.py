@@ -75,6 +75,9 @@ def EVT_SET_FOCUS(win, func):
 def EVT_KILL_FOCUS(win, func):
     win.Connect(-1, -1, wxEVT_KILL_FOCUS, func)
 
+def EVT_CHILD_FOCUS(win, func):
+    win.Connect(-1, -1, wxEVT_CHILD_FOCUS, func)
+
 def EVT_ACTIVATE(win, func):
     win.Connect(-1, -1, wxEVT_ACTIVATE, func)
 

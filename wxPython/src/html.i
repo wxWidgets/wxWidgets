@@ -419,6 +419,7 @@ public:
                    long style = wxHW_SCROLLBAR_AUTO,
                    const wxString& name = "htmlWindow")
         : wxHtmlWindow(parent, id, pos, size, style, name)  {};
+    wxPyHtmlWindow() : wxHtmlWindow() {};
 
     void OnLinkClicked(const wxHtmlLinkInfo& link);
     void base_OnLinkClicked(const wxHtmlLinkInfo& link);
@@ -462,11 +463,19 @@ public:
                  wxSize& size = wxDefaultSize,
                  int flags=wxHW_SCROLLBAR_AUTO,
                  char* name = "htmlWindow");
+    %name(wxPreHtmlWindow)wxPyHtmlWindow();
+
+    bool Create(wxWindow *parent, int id = -1,
+                wxPoint& pos = wxDefaultPosition,
+                wxSize& size = wxDefaultSize,
+                int flags=wxHW_SCROLLBAR_AUTO,
+                char* name = "htmlWindow");
+
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
     %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxHtmlWindow)"
-
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
+    %pragma(python) addtomethod = "wxPreHtmlWindow:val._setOORInfo(val)"
 
     bool SetPage(const wxString& source);
     bool LoadPage(const wxString& location);

@@ -886,6 +886,7 @@ enum wxEventType {
  wxEVT_COMMAND_TOOL_ENTER,
  wxEVT_SET_FOCUS,
  wxEVT_KILL_FOCUS,
+ wxEVT_CHILD_FOCUS,
  wxEVT_MOUSEWHEEL,
 
 /* Mouse event types */

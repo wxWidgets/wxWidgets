@@ -201,6 +201,7 @@ public:
                    long style = wxHW_SCROLLBAR_AUTO,
                    const wxString& name = "htmlWindow")
         : wxHtmlWindow(parent, id, pos, size, style, name)  {};
+    wxPyHtmlWindow() : wxHtmlWindow() {};
 
     void OnLinkClicked(const wxHtmlLinkInfo& link);
     void base_OnLinkClicked(const wxHtmlLinkInfo& link);
@@ -4076,6 +4077,88 @@ static PyObject *_wrap_new_wxHtmlWindow(PyObject *self, PyObject *args, PyObject
     return _resultobj;
 }
 
+#define new_wxPreHtmlWindow() (new wxPyHtmlWindow())
+static PyObject *_wrap_new_wxPreHtmlWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyHtmlWindow * _result;
+    char *_kwnames[] = {  NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxPreHtmlWindow",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxPyHtmlWindow *)new_wxPreHtmlWindow();
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPyHtmlWindow_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxHtmlWindow_Create(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5)  (_swigobj->Create(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5))
+static PyObject *_wrap_wxHtmlWindow_Create(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPyHtmlWindow * _arg0;
+    wxWindow * _arg1;
+    int  _arg2 = (int ) -1;
+    wxPoint * _arg3 = (wxPoint *) &wxDefaultPosition;
+    wxSize * _arg4 = (wxSize *) &wxDefaultSize;
+    int  _arg5 = (int ) wxHW_SCROLLBAR_AUTO;
+    char * _arg6 = (char *) "htmlWindow";
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    wxPoint  temp;
+    PyObject * _obj3 = 0;
+    wxSize  temp0;
+    PyObject * _obj4 = 0;
+    char *_kwnames[] = { "self","parent","id","pos","size","flags","name", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|iOOis:wxHtmlWindow_Create",_kwnames,&_argo0,&_argo1,&_arg2,&_obj3,&_obj4,&_arg5,&_arg6)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyHtmlWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlWindow_Create. Expected _wxPyHtmlWindow_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxHtmlWindow_Create. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+    if (_obj3)
+{
+    _arg3 = &temp;
+    if (! wxPoint_helper(_obj3, &_arg3))
+        return NULL;
+}
+    if (_obj4)
+{
+    _arg4 = &temp0;
+    if (! wxSize_helper(_obj4, &_arg4))
+        return NULL;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxHtmlWindow_Create(_arg0,_arg1,_arg2,*_arg3,*_arg4,_arg5,_arg6);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxHtmlWindow__setCallbackInfo(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setCallbackInfo(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxHtmlWindow__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -6266,6 +6349,8 @@ static PyMethodDef htmlcMethods[] = {
 	 { "wxHtmlWindow_LoadPage", (PyCFunction) _wrap_wxHtmlWindow_LoadPage, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlWindow_SetPage", (PyCFunction) _wrap_wxHtmlWindow_SetPage, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlWindow__setCallbackInfo", (PyCFunction) _wrap_wxHtmlWindow__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
+	 { "wxHtmlWindow_Create", (PyCFunction) _wrap_wxHtmlWindow_Create, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxPreHtmlWindow", (PyCFunction) _wrap_new_wxPreHtmlWindow, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxHtmlWindow", (PyCFunction) _wrap_new_wxHtmlWindow, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxHtmlWidgetCell", (PyCFunction) _wrap_new_wxHtmlWidgetCell, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxHtmlFontCell", (PyCFunction) _wrap_new_wxHtmlFontCell, METH_VARARGS | METH_KEYWORDS },

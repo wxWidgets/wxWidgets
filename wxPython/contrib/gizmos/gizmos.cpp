@@ -57,6 +57,7 @@ extern PyObject *SWIG_newvarlink(void);
 
 #include "export.h"
 #include "wx/gizmos/dynamicsash.h"
+#include "wx/gizmos/editlbox.h"
 
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
@@ -456,7 +457,201 @@ static PyObject *_wrap_wxDynamicSashWindow_GetVScrollBar(PyObject *self, PyObjec
     return _resultobj;
 }
 
+static void *SwigwxEditableListBoxTowxPanel(void *ptr) {
+    wxEditableListBox *src;
+    wxPanel *dest;
+    src = (wxEditableListBox *) ptr;
+    dest = (wxPanel *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxEditableListBoxTowxWindow(void *ptr) {
+    wxEditableListBox *src;
+    wxWindow *dest;
+    src = (wxEditableListBox *) ptr;
+    dest = (wxWindow *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxEditableListBoxTowxEvtHandler(void *ptr) {
+    wxEditableListBox *src;
+    wxEvtHandler *dest;
+    src = (wxEditableListBox *) ptr;
+    dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxEditableListBoxTowxObject(void *ptr) {
+    wxEditableListBox *src;
+    wxObject *dest;
+    src = (wxEditableListBox *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
+#define new_wxEditableListBox(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5) (new wxEditableListBox(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5))
+static PyObject *_wrap_new_wxEditableListBox(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxEditableListBox * _result;
+    wxWindow * _arg0;
+    wxWindowID  _arg1;
+    wxString * _arg2;
+    wxPoint * _arg3 = (wxPoint *) &wxDefaultPosition;
+    wxSize * _arg4 = (wxSize *) &wxDefaultSize;
+    char * _arg5 = (char *) "editableListBox";
+    PyObject * _argo0 = 0;
+    PyObject * _obj2 = 0;
+    wxPoint  temp;
+    PyObject * _obj3 = 0;
+    wxSize  temp0;
+    PyObject * _obj4 = 0;
+    char *_kwnames[] = { "parent","id","label","pos","size","name", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO|OOs:new_wxEditableListBox",_kwnames,&_argo0,&_arg1,&_obj2,&_obj3,&_obj4,&_arg5)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxEditableListBox. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj2) && !PyUnicode_Check(_obj2)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj2, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg2 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj2)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg2 = new wxString(PyString_AS_STRING(_obj2), PyString_GET_SIZE(_obj2));
+#endif
+}
+    if (_obj3)
+{
+    _arg3 = &temp;
+    if (! wxPoint_helper(_obj3, &_arg3))
+        return NULL;
+}
+    if (_obj4)
+{
+    _arg4 = &temp0;
+    if (! wxSize_helper(_obj4, &_arg4))
+        return NULL;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxEditableListBox *)new_wxEditableListBox(_arg0,_arg1,*_arg2,*_arg3,*_arg4,_arg5);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxEditableListBox_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+{
+    if (_obj2)
+        delete _arg2;
+}
+    return _resultobj;
+}
+
+#define wxEditableListBox_SetStrings(_swigobj,_swigarg0)  (_swigobj->SetStrings(_swigarg0))
+static PyObject *_wrap_wxEditableListBox_SetStrings(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxEditableListBox * _arg0;
+    wxArrayString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","strings", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxEditableListBox_SetStrings",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxEditableListBox_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxEditableListBox_SetStrings. Expected _wxEditableListBox_p.");
+        return NULL;
+        }
+    }
+{
+    if (! PySequence_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, "Sequence of strings expected.");
+        return NULL;
+    }
+    _arg1 = new wxArrayString;
+    int i, len=PySequence_Length(_obj1);
+    for (i=0; i<len; i++) {
+        PyObject* item = PySequence_GetItem(_obj1, i);
+        PyObject* str  = PyObject_Str(item);
+        _arg1->Add(PyString_AsString(item));
+        Py_DECREF(item);
+        Py_DECREF(str);
+    }
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxEditableListBox_SetStrings(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+static PyObject * wxEditableListBox_GetStrings(wxEditableListBox *self) {
+            wxArrayString strings;
+            self->GetStrings(strings);
+            return wxArrayString2PyList_helper(strings);
+        }
+static PyObject *_wrap_wxEditableListBox_GetStrings(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    PyObject * _result;
+    wxEditableListBox * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxEditableListBox_GetStrings",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxEditableListBox_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxEditableListBox_GetStrings. Expected _wxEditableListBox_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (PyObject *)wxEditableListBox_GetStrings(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}{
+  _resultobj = _result;
+}
+    return _resultobj;
+}
+
 static PyMethodDef gizmoscMethods[] = {
+	 { "wxEditableListBox_GetStrings", (PyCFunction) _wrap_wxEditableListBox_GetStrings, METH_VARARGS | METH_KEYWORDS },
+	 { "wxEditableListBox_SetStrings", (PyCFunction) _wrap_wxEditableListBox_SetStrings, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxEditableListBox", (PyCFunction) _wrap_new_wxEditableListBox, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDynamicSashWindow_GetVScrollBar", (PyCFunction) _wrap_wxDynamicSashWindow_GetVScrollBar, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDynamicSashWindow_GetHScrollBar", (PyCFunction) _wrap_wxDynamicSashWindow_GetHScrollBar, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDynamicSashWindow_Create", (PyCFunction) _wrap_wxDynamicSashWindow_Create, METH_VARARGS | METH_KEYWORDS },
@@ -495,6 +690,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_size_t","_int",0},
     { "_size_t","_wxWindowID",0},
     { "_size_t","_uint",0},
+    { "_wxPanel","_wxEditableListBox",SwigwxEditableListBoxTowxPanel},
     { "_uint","_wxCoord",0},
     { "_uint","_wxPrintQuality",0},
     { "_uint","_time_t",0},
@@ -526,6 +722,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_unsigned_short","_wxDateTime_t",0},
     { "_unsigned_short","_WXTYPE",0},
     { "_unsigned_short","_short",0},
+    { "_wxObject","_wxEditableListBox",SwigwxEditableListBoxTowxObject},
     { "_wxObject","_wxDynamicSashWindow",SwigwxDynamicSashWindowTowxObject},
     { "_wxObject","_wxDynamicSashUnifyEvent",SwigwxDynamicSashUnifyEventTowxObject},
     { "_wxObject","_wxDynamicSashSplitEvent",SwigwxDynamicSashSplitEventTowxObject},
@@ -580,7 +777,9 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxCoord","_size_t",0},
     { "_wxCoord","_time_t",0},
     { "_wxCoord","_wxPrintQuality",0},
+    { "_wxEvtHandler","_wxEditableListBox",SwigwxEditableListBoxTowxEvtHandler},
     { "_wxEvtHandler","_wxDynamicSashWindow",SwigwxDynamicSashWindowTowxEvtHandler},
+    { "_wxWindow","_wxEditableListBox",SwigwxEditableListBoxTowxWindow},
     { "_wxWindow","_wxDynamicSashWindow",SwigwxDynamicSashWindowTowxWindow},
 {0,0,0}};
 

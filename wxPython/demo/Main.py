@@ -37,6 +37,7 @@ _treeList = [
                                 'wxMimeTypesManager',
                                 'wxPopupWindow',
                                 'wxDynamicSashWindow',
+                                'wxEditableListBox',
                                 ]),
 
     ('Windows', ['wxFrame', 'wxDialog', 'wxMiniFrame',
@@ -60,6 +61,7 @@ _treeList = [
                   'wxTreeCtrl', 'wxSpinButton', 'wxSpinCtrl', 'wxStaticText',
                   'wxStaticBitmap', 'wxRadioBox', 'wxSlider', 'wxToolBar',
                   'wxCalendarCtrl', 'wxToggleButton',
+                  'wxEditableListBox',
                   ]),
 
     ('Window Layout', ['wxLayoutConstraints', 'LayoutAnchors', 'Sizers', 'XML_Resource']),

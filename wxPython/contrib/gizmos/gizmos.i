@@ -16,6 +16,7 @@
 %{
 #include "export.h"
 #include "wx/gizmos/dynamicsash.h"
+#include "wx/gizmos/editlbox.h"
 %}
 
 //---------------------------------------------------------------------------
@@ -150,6 +151,35 @@ def EVT_DYNAMIC_SASH_UNIFY(win, id, func):
 "
 
 //----------------------------------------------------------------------
+//----------------------------------------------------------------------
+
+
+// This class provides a composite control that lets the
+// user easily enter list of strings
+class wxEditableListBox : public wxPanel
+{
+public:
+    wxEditableListBox(wxWindow *parent, wxWindowID id,
+                      const wxString& label,
+                      const wxPoint& pos = wxDefaultPosition,
+                      const wxSize& size = wxDefaultSize,
+                      const char* name = "editableListBox");
+
+    void SetStrings(const wxArrayString& strings);
+
+    //void GetStrings(wxArrayString& strings);
+    %addmethods {
+        PyObject* GetStrings() {
+            wxArrayString strings;
+            self->GetStrings(strings);
+            return wxArrayString2PyList_helper(strings);
+        }
+    }
+};
+
+
+
+//----------------------------------------------------------------------
 
 %init %{
 
@@ -158,8 +188,6 @@ def EVT_DYNAMIC_SASH_UNIFY(win, id, func):
 
 %}
 
-
-//----------------------------------------------------------------------
 
 %pragma(python) include="_gizmoextras.py";
 

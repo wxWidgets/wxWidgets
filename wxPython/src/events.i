@@ -271,6 +271,18 @@ public:
 
 //---------------------------------------------------------------------------
 
+// wxChildFocusEvent notifies the parent that a child has got the focus: unlike
+// wxFocusEvent it is propgated upwards the window chain
+class  wxChildFocusEvent : public wxCommandEvent
+{
+public:
+    wxChildFocusEvent(wxWindow *win = NULL);
+    wxWindow *GetWindow() const;
+};
+
+
+//---------------------------------------------------------------------------
+
 class wxActivateEvent: public wxEvent{
 public:
     wxActivateEvent(WXTYPE eventType = 0, int active = TRUE, int id = 0);
