@@ -5268,7 +5268,16 @@ void wxGrid::OnKeyDown( wxKeyEvent& event )
                 }
                 else
                 {
-                    MoveCursorDown( event.ShiftDown() );
+                    if ( GetGridCursorRow() < GetNumberRows()-1 )
+                    {
+                        MoveCursorDown( event.ShiftDown() );
+                    }
+                    else
+                    {
+                        // at the bottom of a column
+                        HideCellEditControl();
+                        SaveEditControlValue();
+                    }
                 }
                 break;
 
