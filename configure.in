@@ -2038,8 +2038,9 @@ dnl be found before the ones in lib64 for 32bit compilation -- of course, this
 dnl probably/surely breaks 64bit compilation... IMO the only real solution is to
 dnl stop using WX_PATH_FIND_LIBRARIES() at all and use AC_CHECK_LIB() instead
 dnl
-dnl add 64 bit versions for Linux on AMD (this is not perfect but well...)
-SEARCH_LIB="/usr/lib /usr/lib32 `echo "$SEARCH_INCLUDE" | sed s/include/lib/g` /usr/lib64 /usr/X11R6/lib64"
+dnl also put 64 bit versions for Linux on AMD, they must come before the usual
+dnl locations or 64 bit compilation failed
+SEARCH_LIB="/usr/lib /usr/lib32 /usr/lib64 /usr/X11R6/lib64 `echo "$SEARCH_INCLUDE" | sed s/include/lib/g`"
 
 dnl ------------------------------------------------------------------------
 dnl Check for libraries
