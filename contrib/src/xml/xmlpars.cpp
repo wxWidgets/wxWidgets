@@ -121,7 +121,10 @@ static void ReleaseLibxml()
 {
     if (gs_libxmlLoaded)
     {
-        gs_libxmlDLL.xmlCleanupParser();
+        // Check for CleanupParser ..may have failed before initialised 
+        // during LOAD_SYMBOL in LoadLibxml()
+        if (gs_libxmlDLL.xmlCleanupParser) 
+            gs_libxmlDLL.xmlCleanupParser();
         wxDllLoader::UnloadLibrary(gs_libxmlDLL.Handle);
     }
     gs_libxmlLoaded = FALSE;
