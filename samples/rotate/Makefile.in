@@ -17,5 +17,7 @@ PROGRAM=rotate
 
 OBJECTS=$(PROGRAM).o
 
+DATAFILES=kclub.bmp
+
 include ../../src/makeprog.env
 
