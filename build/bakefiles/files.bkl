@@ -99,9 +99,6 @@
     src/mac/utils.cpp
     src/mac/utilsexc.cpp
 </set>
-<set var="BASE_AND_GUI_MAC_SRC">
-    src/unix/utilsunx.cpp
-</set>
 <set var="BASE_MAC_HDR">
 </set>
 
@@ -1758,19 +1755,22 @@
 <!--                    Define sources for specific libraries:              -->
 <!-- ====================================================================== -->
 
+    <!-- Nested if would be nicer, but this works -->
+    <set var="BASE_MACOSX_SRC">
+        <if cond="TOOLKIT=='MAC'">$(BASE_MAC_SRC)</if>
+        <if cond="TOOLKIT=='COCOA'">$(BASE_DARWIN_SRC)</if>
+        <if cond="TOOLKIT=='GTK'">$(BASE_DARWIN_SRC)</if>
+        <!-- FIXME: TOOLKIT!='MAC' is what we really want -->
+    </set>
     <set var="BASE_PLATFORM_SRC">
         <if cond="PLATFORM_UNIX=='1'">$(BASE_UNIX_SRC)</if>
         <if cond="PLATFORM_WIN32=='1'">$(BASE_WIN32_SRC)</if>
-        <!-- FIXME: this should really be 
-                    PLATFORM_MACOSX==1 && TOOLKIT{=='MAC',!='MAC'} -->
-        <if cond="TOOLKIT=='MAC'">$(BASE_MAC_SRC)</if>
-        <if cond="TOOLKIT=='COCOA'">$(BASE_DARWIN_SRC)</if>
+        <if cond="PLATFORM_MACOSX=='1'">$(BASE_MACOSX_SRC)</if>
     </set>
     <set var="BASE_AND_GUI_PLATFORM_SRC">
         <if cond="PLATFORM_UNIX=='1'">$(BASE_AND_GUI_UNIX_SRC)</if>
         <if cond="PLATFORM_WIN32=='1'">$(BASE_AND_GUI_WIN32_SRC)</if>
-        <if cond="TOOLKIT=='MAC'">$(BASE_AND_GUI_MAC_SRC)</if>
-        <if cond="TOOLKIT=='COCOA'">$(BASE_AND_GUI_DARWIN_SRC)</if>
+        <if cond="PLATFORM_MACOSX=='1'">$(BASE_AND_GUI_DARWIN_SRC)</if>
     </set>
     <set var="BASE_PLATFORM_HDR">
         <if cond="PLATFORM_UNIX=='1'">$(BASE_UNIX_HDR)</if>
