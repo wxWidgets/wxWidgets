@@ -2072,6 +2072,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <if cond="TOOLKIT=='MSW'">src/msw/glcanvas.cpp</if>
     <if cond="TOOLKIT=='MOTIF'">src/motif/glcanvas.cpp</if>
     <if cond="TOOLKIT=='X11'">src/x11/glcanvas.cpp</if>
+    <if cond="TOOLKIT=='PM'">src/os2/glcanvas.cpp</if>
 </set>
 
 <set var="OPENGL_HDR" hints="files">
@@ -2080,6 +2081,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <if cond="TOOLKIT=='MSW'">wx/msw/glcanvas.h</if>
     <if cond="TOOLKIT=='MOTIF'">wx/motif/glcanvas.h</if>
     <if cond="TOOLKIT=='X11'">wx/x11/glcanvas.h</if>
+    <if cond="TOOLKIT=='PM'">wx/os2/glcanvas.h</if>
 </set>
 
 
@@ -2124,6 +2126,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="PLATFORM_UNIX=='1'">$(BASE_UNIX_SRC)</if>
         <if cond="PLATFORM_WIN32=='1'">$(BASE_WIN32_SRC)</if>
         <if cond="PLATFORM_MACOSX=='1'">$(BASE_MACOSX_SRC)</if>
+        <if cond="PLATFORM_OS2=='1'">$(BASE_OS2_SRC)</if>
     </set>
     <set var="BASE_AND_GUI_TOOLKIT_SRC" hints="files">
         <if cond="TOOLKIT=='MAC'">$(BASE_AND_GUI_MAC_SRC)</if>
@@ -2160,10 +2163,12 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="PLATFORM_UNIX=='1'">$(NET_UNIX_SRC)</if>
         <if cond="PLATFORM_WIN32=='1'">$(NET_WIN32_SRC)</if>
         <if cond="PLATFORM_MACOSX=='1'">$(NET_MACOSX_SRC)</if>
+        <if cond="PLATFORM_OS2=='1'">$(NET_OS2_SRC)</if>
     </set>
     <set var="NET_PLATFORM_HDR" hints="files">
         <if cond="PLATFORM_UNIX=='1'">$(NET_UNIX_HDR)</if>
         <if cond="PLATFORM_WIN32=='1'">$(NET_WIN32_HDR)</if>
+        <if cond="PLATFORM_OS2=='1'">$(NET_OS2_HDR)</if>
         <if cond="TOOLKIT=='MAC'">$(NET_MAC_HDR)</if>
         <if cond="TOOLKIT=='COCOA'">$(NET_DARWIN_HDR)</if>
     </set>
@@ -2181,7 +2186,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='MSW'">$(MSW_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='MAC'">$(MAC_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='COCOA'">$(COCOA_LOWLEVEL_SRC)</if>
-        <if cond="TOOLKIT=='OS2'">$(OS2_LOWLEVEL_SRC)</if>
+        <if cond="TOOLKIT=='PM'">$(OS2_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='X11'">$(X11_LOWLEVEL_SRC)</if>
         <if cond="TOOLKIT=='MGL'">$(MGL_LOWLEVEL_SRC)</if>
     </set>
@@ -2191,7 +2196,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='MSW'">$(MSW_LOWLEVEL_HDR)</if>
         <if cond="TOOLKIT=='MAC'">$(MAC_LOWLEVEL_HDR)</if>
         <if cond="TOOLKIT=='COCOA'">$(COCOA_LOWLEVEL_HDR)</if>
-        <if cond="TOOLKIT=='OS2'">$(OS2_LOWLEVEL_HDR)</if>
+        <if cond="TOOLKIT=='PM'">$(OS2_LOWLEVEL_HDR)</if>
         <if cond="TOOLKIT=='X11'">$(X11_LOWLEVEL_HDR)</if>
         <if cond="TOOLKIT=='MGL'">$(MGL_LOWLEVEL_HDR)</if>
     </set>
@@ -2202,7 +2207,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='MSW'">$(MSW_SRC)</if>
         <if cond="TOOLKIT=='MAC'">$(MAC_SRC)</if>
         <if cond="TOOLKIT=='COCOA'">$(COCOA_SRC)</if>
-        <if cond="TOOLKIT=='OS2'">$(OS2_SRC)</if>
+        <if cond="TOOLKIT=='PM'">$(OS2_SRC)</if>
     </set>
     <set var="GUI_HDR" hints="files">
         <if cond="TOOLKIT=='GTK'">$(GTK_HDR)</if>
@@ -2210,7 +2215,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='MSW'">$(MSW_HDR)</if>
         <if cond="TOOLKIT=='MAC'">$(MAC_HDR)</if>
         <if cond="TOOLKIT=='COCOA'">$(COCOA_HDR)</if>
-        <if cond="TOOLKIT=='OS2'">$(OS2_HDR)</if>
+        <if cond="TOOLKIT=='PM'">$(OS2_HDR)</if>
     </set>
 
     <set var="CORE_SRC" hints="files">
@@ -2229,7 +2234,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='MOTIF'">$(ADVANCED_UNIX_SRC)</if>
         <if cond="TOOLKIT=='GTK'">$(ADVANCED_UNIX_SRC)</if>
         <if cond="TOOLKIT=='X11'">$(ADVANCED_UNIX_SRC)</if>
-        <if cond="TOOLKIT=='OS2'">$(ADVANCED_OS2_SRC)</if>
+        <if cond="TOOLKIT=='PM'">$(ADVANCED_OS2_SRC)</if>
     </set>
     <set var="ADVANCED_PLATFORM_HDR" hints="files">
         <if cond="TOOLKIT=='MSW'">$(ADVANCED_MSW_HDR)</if>
@@ -2237,7 +2242,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='MOTIF'">$(ADVANCED_UNIX_HDR)</if>
         <if cond="TOOLKIT=='GTK'">$(ADVANCED_UNIX_HDR)</if>
         <if cond="TOOLKIT=='X11'">$(ADVANCED_UNIX_HDR)</if>
-        <if cond="TOOLKIT=='OS2'">$(ADVANCED_OS2_HDR)</if>
+        <if cond="TOOLKIT=='PM'">$(ADVANCED_OS2_HDR)</if>
     </set>
     <set var="ADVANCED_SRC">$(ADVANCED_CMN_SRC) $(ADVANCED_PLATFORM_SRC)</set>
     <set var="ADVANCED_HDR">$(ADVANCED_CMN_HDR) $(ADVANCED_PLATFORM_HDR)</set>

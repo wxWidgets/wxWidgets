@@ -1111,13 +1111,17 @@ AC_DEFUN(AC_BAKEFILE_PLATFORM,
     PLATFORM_MSDOS=0
     PLATFORM_MAC=0
     PLATFORM_MACOSX=0
+    PLATFORM_OS2=0
     
     case "${host}" in
         *-*-cygwin* | *-*-mingw32* )
             PLATFORM_WIN32=1
         ;;
-        *-pc-msdosdjgpp | *-pc-os2_emx | *-pc-os2-emx )
+        *-pc-msdosdjgpp )
             PLATFORM_MSDOS=1
+        ;;
+        *-pc-os2_emx | *-pc-os2-emx )
+            PLATFORM_OS2=1
         ;;
         powerpc-*-darwin* )
             PLATFORM_MAC=1
@@ -1133,6 +1137,7 @@ AC_DEFUN(AC_BAKEFILE_PLATFORM,
     AC_SUBST(PLATFORM_MSDOS)
     AC_SUBST(PLATFORM_MAC)
     AC_SUBST(PLATFORM_MACOSX)
+    AC_SUBST(PLATFORM_OS2)
 ])
 
 
