@@ -35,10 +35,10 @@ class WXDLLEXPORT wxHtmlFilter : public wxObject
     public:
         wxHtmlFilter() : wxObject() {}
 
-        virtual bool CanRead(const wxFSFile& file) = 0;
+        virtual bool CanRead(const wxFSFile& file) const = 0;
                 // returns TRUE if this filter is able to open&read given file
 
-        virtual wxString ReadFile(const wxFSFile& file) = 0;
+        virtual wxString ReadFile(const wxFSFile& file) const = 0;
                 // reads given file and returns HTML document.
                 // Returns empty string if opening failed
 };
@@ -58,8 +58,8 @@ class WXDLLEXPORT wxHtmlFilterPlainText : public wxHtmlFilter
     DECLARE_DYNAMIC_CLASS(wxHtmlFilterPlainText)
 
     public:
-        virtual bool CanRead(const wxFSFile& file);
-        virtual wxString ReadFile(const wxFSFile& file);
+        virtual bool CanRead(const wxFSFile& file) const;
+        virtual wxString ReadFile(const wxFSFile& file) const;
 };
 
 

@@ -43,14 +43,14 @@ IMPLEMENT_ABSTRACT_CLASS(wxHtmlFilter, wxObject)
 
 IMPLEMENT_DYNAMIC_CLASS(wxHtmlFilterPlainText, wxHtmlFilter)
 
-bool wxHtmlFilterPlainText::CanRead(const wxFSFile& file)
+bool wxHtmlFilterPlainText::CanRead(const wxFSFile& file) const
 {
     return TRUE;
 }
 
 
 
-wxString wxHtmlFilterPlainText::ReadFile(const wxFSFile& file)
+wxString wxHtmlFilterPlainText::ReadFile(const wxFSFile& file) const
 {
     wxInputStream *s = file.GetStream();
     char *src;
@@ -83,22 +83,22 @@ class wxHtmlFilterImage : public wxHtmlFilter
     DECLARE_DYNAMIC_CLASS(wxHtmlFilterImage)
 
     public:
-        virtual bool CanRead(const wxFSFile& file);
-        virtual wxString ReadFile(const wxFSFile& file);
+        virtual bool CanRead(const wxFSFile& file) const;
+        virtual wxString ReadFile(const wxFSFile& file) const;
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxHtmlFilterImage, wxHtmlFilter)
 
 
 
-bool wxHtmlFilterImage::CanRead(const wxFSFile& file)
+bool wxHtmlFilterImage::CanRead(const wxFSFile& file) const
 {
     return (file.GetMimeType().Left(6) == "image/");
 }
 
 
 
-wxString wxHtmlFilterImage::ReadFile(const wxFSFile& file)
+wxString wxHtmlFilterImage::ReadFile(const wxFSFile& file) const
 {
     return ("<HTML><BODY><IMG SRC=\"" + file.GetLocation() + "\"></BODY></HTML>");
 }
@@ -116,21 +116,21 @@ class wxHtmlFilterHTML : public wxHtmlFilter
     DECLARE_DYNAMIC_CLASS(wxHtmlFilterHTML)
 
     public:
-        virtual bool CanRead(const wxFSFile& file);
-        virtual wxString ReadFile(const wxFSFile& file);
+        virtual bool CanRead(const wxFSFile& file) const;
+        virtual wxString ReadFile(const wxFSFile& file) const;
 };
 
 
 IMPLEMENT_DYNAMIC_CLASS(wxHtmlFilterHTML, wxHtmlFilter)
 
-bool wxHtmlFilterHTML::CanRead(const wxFSFile& file)
+bool wxHtmlFilterHTML::CanRead(const wxFSFile& file) const
 {
     return (file.GetMimeType() == "text/html");
 }
 
 
 
-wxString wxHtmlFilterHTML::ReadFile(const wxFSFile& file)
+wxString wxHtmlFilterHTML::ReadFile(const wxFSFile& file) const
 {
     wxInputStream *s = file.GetStream();
     char *src;

@@ -52,7 +52,7 @@ IMPLEMENT_CLASS(wxHelpControllerHtml, wxHTMLHelpControllerBase)
 class wxForceHtmlFilter : public wxHtmlFilter
 {
 public:
-   virtual wxString ReadFile(const wxFSFile& file)
+   virtual wxString ReadFile(const wxFSFile& file) const
       {
          wxInputStream *s = file.GetStream();
          char *src;
@@ -67,7 +67,7 @@ public:
          return doc;
       }
    
-    virtual bool CanRead(const wxFSFile& file)
+    virtual bool CanRead(const wxFSFile& file) const
       {
          wxString filename = file.GetLocation();
          if(filename.Length() >= 5 &&
