@@ -1,0 +1,84 @@
+\section{\class{wxSetCursorEvent}}\label{wxsetcursorevent}
+
+A SetCursorEvent is generated when the mouse cursor is about to be set as a
+result of mouse motion. This event gives the application the chance to perform
+specific mouse cursor processing based on the current position of the mouse
+within the window. Use \helpref{SetCursor}{wxsetcursoreventsetcursor} to
+specify the cursor you want to be displayed.
+
+\wxheading{Derived from}
+
+\helpref{wxEvent}{wxevent}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/event.h>
+
+\wxheading{See also}
+
+\helpref{::wxSetCursor}{wxsetcursor}
+\helpref{wxWindow::wxSetCursor}{wxwindowsetcursor}
+
+\wxheading{Event table macros}
+
+To process a set cursor event, use this event handler macro to direct input to a member
+function that takes a wxSetCursorEvent argument.
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_SET\_CURSOR(func)}}{Process a wxEVT\_SET\_CURSOR event.}
+\end{twocollist}%
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+
+\membersection{wxSetCursorEvent::wxSetCursorEvent}\label{wxsetcursoreventctor}
+
+\func{}{wxSetCursorEvent}{\param{wxCoord}{x = 0}, \param{wxCoord}{y = 0}}
+
+Constructor, used by the library itself internally to initialize the event
+object.
+
+
+\membersection{wxSetCursorEvent::GetCursor}\label{wxsetcursoreventgetcursor}
+
+\constfunc{wxCursor&}{GetCursor}{\void}
+
+Returns a reference to the cursor specified by this event.
+
+
+\membersection{wxSetCursorEvent::GetX}\label{wxsetcursoreventgetx}
+
+\constfunc{wxCoord}{GetX}{\void}
+
+Returns the X coordinate of the mouse in client coordinates.
+
+
+\membersection{wxSetCursorEvent::GetY}\label{wxsetcursoreventgety}
+
+\constfunc{wxCoord}{GetY}{\void}
+
+Returns the Y coordinate of the mouse in client coordinates.
+
+
+\membersection{wxSetCursorEvent::HasCursor}\label{wxsetcursoreventhascursor}
+
+\constfunc{bool}{HasCursor}{\void}
+
+Returns \true if the cursor specified by this event is a valid cursor.
+
+\wxheading{Remarks}
+
+You cannot specify \texttt{wxNullCursor} with this event, as it is not
+considered a valid cursor.
+
+
+\membersection{wxSetCursorEvent::SetCursor}\label{wxsetcursoreventsetcursor}
+
+\func{void}{SetCursor}{\param{const wxCursor\&}{cursor}}
+
+Sets the cursor associated with this event.
+
+
