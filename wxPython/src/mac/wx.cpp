@@ -629,6 +629,7 @@ extern "C" SWIGEXPORT(void) initsizersc();
 extern "C" SWIGEXPORT(void) initclip_dndc();
 extern "C" SWIGEXPORT(void) initstreamsc();
 extern "C" SWIGEXPORT(void) initfilesysc();
+extern "C" SWIGEXPORT(void) initutilsc();
 
 
 
@@ -2450,6 +2451,22 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxDUPLEX_SIMPLEX", PyInt_FromLong((long) wxDUPLEX_SIMPLEX));
 	 PyDict_SetItemString(d,"wxDUPLEX_HORIZONTAL", PyInt_FromLong((long) wxDUPLEX_HORIZONTAL));
 	 PyDict_SetItemString(d,"wxDUPLEX_VERTICAL", PyInt_FromLong((long) wxDUPLEX_VERTICAL));
+	 PyDict_SetItemString(d,"wxHT_NOWHERE", PyInt_FromLong((long) wxHT_NOWHERE));
+	 PyDict_SetItemString(d,"wxHT_SCROLLBAR_FIRST", PyInt_FromLong((long) wxHT_SCROLLBAR_FIRST));
+	 PyDict_SetItemString(d,"wxHT_SCROLLBAR_ARROW_LINE_1", PyInt_FromLong((long) wxHT_SCROLLBAR_ARROW_LINE_1));
+	 PyDict_SetItemString(d,"wxHT_SCROLLBAR_ARROW_LINE_2", PyInt_FromLong((long) wxHT_SCROLLBAR_ARROW_LINE_2));
+	 PyDict_SetItemString(d,"wxHT_SCROLLBAR_ARROW_PAGE_1", PyInt_FromLong((long) wxHT_SCROLLBAR_ARROW_PAGE_1));
+	 PyDict_SetItemString(d,"wxHT_SCROLLBAR_ARROW_PAGE_2", PyInt_FromLong((long) wxHT_SCROLLBAR_ARROW_PAGE_2));
+	 PyDict_SetItemString(d,"wxHT_SCROLLBAR_THUMB", PyInt_FromLong((long) wxHT_SCROLLBAR_THUMB));
+	 PyDict_SetItemString(d,"wxHT_SCROLLBAR_BAR_1", PyInt_FromLong((long) wxHT_SCROLLBAR_BAR_1));
+	 PyDict_SetItemString(d,"wxHT_SCROLLBAR_BAR_2", PyInt_FromLong((long) wxHT_SCROLLBAR_BAR_2));
+	 PyDict_SetItemString(d,"wxHT_SCROLLBAR_LAST", PyInt_FromLong((long) wxHT_SCROLLBAR_LAST));
+	 PyDict_SetItemString(d,"wxHT_WINDOW_OUTSIDE", PyInt_FromLong((long) wxHT_WINDOW_OUTSIDE));
+	 PyDict_SetItemString(d,"wxHT_WINDOW_INSIDE", PyInt_FromLong((long) wxHT_WINDOW_INSIDE));
+	 PyDict_SetItemString(d,"wxHT_WINDOW_VERT_SCROLLBAR", PyInt_FromLong((long) wxHT_WINDOW_VERT_SCROLLBAR));
+	 PyDict_SetItemString(d,"wxHT_WINDOW_HORZ_SCROLLBAR", PyInt_FromLong((long) wxHT_WINDOW_HORZ_SCROLLBAR));
+	 PyDict_SetItemString(d,"wxHT_WINDOW_CORNER", PyInt_FromLong((long) wxHT_WINDOW_CORNER));
+	 PyDict_SetItemString(d,"wxHT_MAX", PyInt_FromLong((long) wxHT_MAX));
 	 PyDict_SetItemString(d,"FALSE", PyInt_FromLong((long) 0));
 	 PyDict_SetItemString(d,"false", PyInt_FromLong((long) 0));
 	 PyDict_SetItemString(d,"TRUE", PyInt_FromLong((long) 1));
@@ -2549,6 +2566,7 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxEVT_MENU_HIGHLIGHT", PyInt_FromLong((long) wxEVT_MENU_HIGHLIGHT));
 	 PyDict_SetItemString(d,"wxEVT_POPUP_MENU_INIT", PyInt_FromLong((long) wxEVT_POPUP_MENU_INIT));
 	 PyDict_SetItemString(d,"wxEVT_SYS_COLOUR_CHANGED", PyInt_FromLong((long) wxEVT_SYS_COLOUR_CHANGED));
+	 PyDict_SetItemString(d,"wxEVT_DISPLAY_CHANGED", PyInt_FromLong((long) wxEVT_DISPLAY_CHANGED));
 	 PyDict_SetItemString(d,"wxEVT_SETTING_CHANGED", PyInt_FromLong((long) wxEVT_SETTING_CHANGED));
 	 PyDict_SetItemString(d,"wxEVT_QUERY_NEW_PALETTE", PyInt_FromLong((long) wxEVT_QUERY_NEW_PALETTE));
 	 PyDict_SetItemString(d,"wxEVT_PALETTE_CHANGED", PyInt_FromLong((long) wxEVT_PALETTE_CHANGED));
@@ -2609,6 +2627,7 @@ SWIGEXPORT(void) initwxc() {
     initclip_dndc();
     initstreamsc();
     initfilesysc();
+    initutilsc();
 
 
     PyDict_SetItemString(d,"wxMAJOR_VERSION", PyInt_FromLong((long)wxMAJOR_VERSION ));

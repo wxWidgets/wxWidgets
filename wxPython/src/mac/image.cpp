@@ -98,13 +98,16 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
             return new wxImage(width, height);
     }
 
+
     wxImage* wxImageFromMime(const wxString& name, const wxString& mimetype, int index) {
         return new wxImage(name, mimetype, index);
     }
 
+
     wxImage* wxImageFromBitmap(const wxBitmap &bitmap) {
         return new wxImage(bitmap);
     }
+
 
     wxImage* wxImageFromData(int width, int height, unsigned char* data) {
         // Copy the source data so the wxImage can clean it up later
@@ -115,6 +118,18 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
         }
         memcpy(copy, data, width*height*3);
         return new wxImage(width, height, copy, FALSE);
+    }
+
+
+    wxImage* wxImageFromStream(wxInputStream& stream,
+                               long type = wxBITMAP_TYPE_ANY, int index = -1) {
+        return new wxImage(stream, type, index);
+    }
+
+
+    wxImage* wxImageFromStreamMime(wxInputStream& stream,
+                                   const wxString& mimetype, int index = -1 ) {
+        return new wxImage(stream, mimetype, index);
     }
 
 #if 0
@@ -297,6 +312,125 @@ static PyObject *_wrap_wxImageFromData(PyObject *self, PyObject *args, PyObject 
         Py_INCREF(Py_None);
         _resultobj = Py_None;
     }
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxImageFromStream(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxImage * _result;
+    wxInputStream * _arg0;
+    long  _arg1 = (long ) wxBITMAP_TYPE_ANY;
+    int  _arg2 = (int ) -1;
+    wxPyInputStream * temp;
+    bool  created;
+    PyObject * _obj0 = 0;
+    char *_kwnames[] = { "stream","type","index", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|li:wxImageFromStream",_kwnames,&_obj0,&_arg1,&_arg2)) 
+        return NULL;
+{
+    if (SWIG_GetPtrObj(_obj0, (void **) &temp, "_wxPyInputStream_p") == 0) {
+        _arg0 = temp->m_wxis;
+        created = FALSE;
+    } else {
+        _arg0 = wxPyCBInputStream::create(_obj0, FALSE);
+        if (_arg0 == NULL) {
+            PyErr_SetString(PyExc_TypeError,"Expected _wxInputStream_p or Python file-like object.");
+            return NULL;
+        }
+        created = TRUE;
+    }
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (wxImage *)wxImageFromStream(*_arg0,_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxImage_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+{
+    if (created)
+        delete _arg0;
+}
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxImageFromStreamMime(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxImage * _result;
+    wxInputStream * _arg0;
+    wxString * _arg1;
+    int  _arg2 = (int ) -1;
+    wxPyInputStream * temp;
+    bool  created;
+    PyObject * _obj0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "stream","mimetype","index", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|i:wxImageFromStreamMime",_kwnames,&_obj0,&_obj1,&_arg2)) 
+        return NULL;
+{
+    if (SWIG_GetPtrObj(_obj0, (void **) &temp, "_wxPyInputStream_p") == 0) {
+        _arg0 = temp->m_wxis;
+        created = FALSE;
+    } else {
+        _arg0 = wxPyCBInputStream::create(_obj0, FALSE);
+        if (_arg0 == NULL) {
+            PyErr_SetString(PyExc_TypeError,"Expected _wxInputStream_p or Python file-like object.");
+            return NULL;
+        }
+        created = TRUE;
+    }
+}
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (wxImage *)wxImageFromStreamMime(*_arg0,*_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxImage_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+{
+    if (created)
+        delete _arg0;
+}
+{
+    if (_obj1)
+        delete _arg1;
+}
     return _resultobj;
 }
 
@@ -1922,6 +2056,170 @@ static PyObject *_wrap_wxImage_SaveMimeFile(PyObject *self, PyObject *args, PyOb
     return _resultobj;
 }
 
+static PyObject *_wrap_wxImage_CanReadStream(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxInputStream * _arg0;
+    wxPyInputStream * temp;
+    bool  created;
+    PyObject * _obj0 = 0;
+    char *_kwnames[] = { "stream", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxImage_CanReadStream",_kwnames,&_obj0)) 
+        return NULL;
+{
+    if (SWIG_GetPtrObj(_obj0, (void **) &temp, "_wxPyInputStream_p") == 0) {
+        _arg0 = temp->m_wxis;
+        created = FALSE;
+    } else {
+        _arg0 = wxPyCBInputStream::create(_obj0, FALSE);
+        if (_arg0 == NULL) {
+            PyErr_SetString(PyExc_TypeError,"Expected _wxInputStream_p or Python file-like object.");
+            return NULL;
+        }
+        created = TRUE;
+    }
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (bool )wxImage::CanRead(*_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+{
+    if (created)
+        delete _arg0;
+}
+    return _resultobj;
+}
+
+#define wxImage_LoadStream(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->LoadFile(_swigarg0,_swigarg1,_swigarg2))
+static PyObject *_wrap_wxImage_LoadStream(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxImage * _arg0;
+    wxInputStream * _arg1;
+    long  _arg2 = (long ) wxBITMAP_TYPE_ANY;
+    int  _arg3 = (int ) -1;
+    PyObject * _argo0 = 0;
+    wxPyInputStream * temp;
+    bool  created;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","stream","type","index", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|li:wxImage_LoadStream",_kwnames,&_argo0,&_obj1,&_arg2,&_arg3)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxImage_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxImage_LoadStream. Expected _wxImage_p.");
+        return NULL;
+        }
+    }
+{
+    if (SWIG_GetPtrObj(_obj1, (void **) &temp, "_wxPyInputStream_p") == 0) {
+        _arg1 = temp->m_wxis;
+        created = FALSE;
+    } else {
+        _arg1 = wxPyCBInputStream::create(_obj1, FALSE);
+        if (_arg1 == NULL) {
+            PyErr_SetString(PyExc_TypeError,"Expected _wxInputStream_p or Python file-like object.");
+            return NULL;
+        }
+        created = TRUE;
+    }
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (bool )wxImage_LoadStream(_arg0,*_arg1,_arg2,_arg3);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+{
+    if (created)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxImage_LoadMimeStream(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->LoadFile(_swigarg0,_swigarg1,_swigarg2))
+static PyObject *_wrap_wxImage_LoadMimeStream(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxImage * _arg0;
+    wxInputStream * _arg1;
+    wxString * _arg2;
+    int  _arg3 = (int ) -1;
+    PyObject * _argo0 = 0;
+    wxPyInputStream * temp;
+    bool  created;
+    PyObject * _obj1 = 0;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","stream","mimetype","index", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO|i:wxImage_LoadMimeStream",_kwnames,&_argo0,&_obj1,&_obj2,&_arg3)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxImage_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxImage_LoadMimeStream. Expected _wxImage_p.");
+        return NULL;
+        }
+    }
+{
+    if (SWIG_GetPtrObj(_obj1, (void **) &temp, "_wxPyInputStream_p") == 0) {
+        _arg1 = temp->m_wxis;
+        created = FALSE;
+    } else {
+        _arg1 = wxPyCBInputStream::create(_obj1, FALSE);
+        if (_arg1 == NULL) {
+            PyErr_SetString(PyExc_TypeError,"Expected _wxInputStream_p or Python file-like object.");
+            return NULL;
+        }
+        created = TRUE;
+    }
+}
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj2) && !PyUnicode_Check(_obj2)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj2, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg2 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj2)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg2 = new wxString(PyString_AS_STRING(_obj2), PyString_GET_SIZE(_obj2));
+#endif
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (bool )wxImage_LoadMimeStream(_arg0,*_arg1,*_arg2,_arg3);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+{
+    if (created)
+        delete _arg1;
+}
+{
+    if (_obj2)
+        delete _arg2;
+}
+    return _resultobj;
+}
+
 #define wxImage_Ok(_swigobj)  (_swigobj->Ok())
 static PyObject *_wrap_wxImage_Ok(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -2994,6 +3292,9 @@ static PyMethodDef imagecMethods[] = {
 	 { "wxImage_GetHeight", (PyCFunction) _wrap_wxImage_GetHeight, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_GetWidth", (PyCFunction) _wrap_wxImage_GetWidth, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_Ok", (PyCFunction) _wrap_wxImage_Ok, METH_VARARGS | METH_KEYWORDS },
+	 { "wxImage_LoadMimeStream", (PyCFunction) _wrap_wxImage_LoadMimeStream, METH_VARARGS | METH_KEYWORDS },
+	 { "wxImage_LoadStream", (PyCFunction) _wrap_wxImage_LoadStream, METH_VARARGS | METH_KEYWORDS },
+	 { "wxImage_CanReadStream", (PyCFunction) _wrap_wxImage_CanReadStream, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_SaveMimeFile", (PyCFunction) _wrap_wxImage_SaveMimeFile, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_SaveFile", (PyCFunction) _wrap_wxImage_SaveFile, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_LoadMimeFile", (PyCFunction) _wrap_wxImage_LoadMimeFile, METH_VARARGS | METH_KEYWORDS },
@@ -3032,6 +3333,8 @@ static PyMethodDef imagecMethods[] = {
 	 { "wxImageHandler_GetName", (PyCFunction) _wrap_wxImageHandler_GetName, METH_VARARGS | METH_KEYWORDS },
 	 { "wxBitmapFromImage", (PyCFunction) _wrap_wxBitmapFromImage, METH_VARARGS | METH_KEYWORDS },
 	 { "wxInitAllImageHandlers", (PyCFunction) _wrap_wxInitAllImageHandlers, METH_VARARGS | METH_KEYWORDS },
+	 { "wxImageFromStreamMime", (PyCFunction) _wrap_wxImageFromStreamMime, METH_VARARGS | METH_KEYWORDS },
+	 { "wxImageFromStream", (PyCFunction) _wrap_wxImageFromStream, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImageFromData", (PyCFunction) _wrap_wxImageFromData, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImageFromBitmap", (PyCFunction) _wrap_wxImageFromBitmap, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImageFromMime", (PyCFunction) _wrap_wxImageFromMime, METH_VARARGS | METH_KEYWORDS },

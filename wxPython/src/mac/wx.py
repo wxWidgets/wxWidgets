@@ -738,6 +738,22 @@ wxPAPER_A3_EXTRA_TRANSVERSE = wxc.wxPAPER_A3_EXTRA_TRANSVERSE
 wxDUPLEX_SIMPLEX = wxc.wxDUPLEX_SIMPLEX
 wxDUPLEX_HORIZONTAL = wxc.wxDUPLEX_HORIZONTAL
 wxDUPLEX_VERTICAL = wxc.wxDUPLEX_VERTICAL
+wxHT_NOWHERE = wxc.wxHT_NOWHERE
+wxHT_SCROLLBAR_FIRST = wxc.wxHT_SCROLLBAR_FIRST
+wxHT_SCROLLBAR_ARROW_LINE_1 = wxc.wxHT_SCROLLBAR_ARROW_LINE_1
+wxHT_SCROLLBAR_ARROW_LINE_2 = wxc.wxHT_SCROLLBAR_ARROW_LINE_2
+wxHT_SCROLLBAR_ARROW_PAGE_1 = wxc.wxHT_SCROLLBAR_ARROW_PAGE_1
+wxHT_SCROLLBAR_ARROW_PAGE_2 = wxc.wxHT_SCROLLBAR_ARROW_PAGE_2
+wxHT_SCROLLBAR_THUMB = wxc.wxHT_SCROLLBAR_THUMB
+wxHT_SCROLLBAR_BAR_1 = wxc.wxHT_SCROLLBAR_BAR_1
+wxHT_SCROLLBAR_BAR_2 = wxc.wxHT_SCROLLBAR_BAR_2
+wxHT_SCROLLBAR_LAST = wxc.wxHT_SCROLLBAR_LAST
+wxHT_WINDOW_OUTSIDE = wxc.wxHT_WINDOW_OUTSIDE
+wxHT_WINDOW_INSIDE = wxc.wxHT_WINDOW_INSIDE
+wxHT_WINDOW_VERT_SCROLLBAR = wxc.wxHT_WINDOW_VERT_SCROLLBAR
+wxHT_WINDOW_HORZ_SCROLLBAR = wxc.wxHT_WINDOW_HORZ_SCROLLBAR
+wxHT_WINDOW_CORNER = wxc.wxHT_WINDOW_CORNER
+wxHT_MAX = wxc.wxHT_MAX
 FALSE = wxc.FALSE
 false = wxc.false
 TRUE = wxc.TRUE
@@ -837,6 +853,7 @@ wxEVT_MENU_INIT = wxc.wxEVT_MENU_INIT
 wxEVT_MENU_HIGHLIGHT = wxc.wxEVT_MENU_HIGHLIGHT
 wxEVT_POPUP_MENU_INIT = wxc.wxEVT_POPUP_MENU_INIT
 wxEVT_SYS_COLOUR_CHANGED = wxc.wxEVT_SYS_COLOUR_CHANGED
+wxEVT_DISPLAY_CHANGED = wxc.wxEVT_DISPLAY_CHANGED
 wxEVT_SETTING_CHANGED = wxc.wxEVT_SETTING_CHANGED
 wxEVT_QUERY_NEW_PALETTE = wxc.wxEVT_QUERY_NEW_PALETTE
 wxEVT_PALETTE_CHANGED = wxc.wxEVT_PALETTE_CHANGED
@@ -967,6 +984,9 @@ def EVT_INIT_DIALOG(win, func):
 
 def EVT_SYS_COLOUR_CHANGED(win, func):
     win.Connect(-1, -1, wxEVT_SYS_COLOUR_CHANGED, func)
+
+def EVT_DISPLAY_CHANGED(win, func):
+    win.Connect(-1, -1, wxEVT_DISPLAY_CHANGED, func)
 
 def EVT_SHOW(win, func):
     win.Connect(-1, -1, wxEVT_SHOW, func)
@@ -1648,7 +1668,15 @@ class __wxPyCleanup:
     def __del__(self):
         self.cleanup()
 
-__cleanMeUp = __wxPyCleanup()
+sys.__wxPythonCleanup = __wxPyCleanup()
+
+## # another possible solution, but it gets called too early...
+## if sys.version[0] == '2':
+##     import atexit
+##     atexit.register(wxc.wxApp_CleanUp)
+## else:
+##     sys.exitfunc = wxc.wxApp_CleanUp
+
 
 #----------------------------------------------------------------------------
 #----------------------------------------------------------------------------

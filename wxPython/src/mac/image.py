@@ -4,6 +4,8 @@ import imagec
 from misc import *
 
 from gdi import *
+
+from streams import *
 class wxImageHandlerPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
@@ -233,6 +235,12 @@ class wxImagePtr(wxObjectPtr):
     def SaveMimeFile(self, *_args, **_kwargs):
         val = apply(imagec.wxImage_SaveMimeFile,(self,) + _args, _kwargs)
         return val
+    def LoadStream(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_LoadStream,(self,) + _args, _kwargs)
+        return val
+    def LoadMimeStream(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_LoadMimeStream,(self,) + _args, _kwargs)
+        return val
     def Ok(self, *_args, **_kwargs):
         val = apply(imagec.wxImage_Ok,(self,) + _args, _kwargs)
         return val
@@ -348,6 +356,16 @@ def wxImageFromData(*_args, **_kwargs):
     if val: val = wxImagePtr(val); val.thisown = 1
     return val
 
+def wxImageFromStream(*_args, **_kwargs):
+    val = apply(imagec.wxImageFromStream,_args,_kwargs)
+    if val: val = wxImagePtr(val); val.thisown = 1
+    return val
+
+def wxImageFromStreamMime(*_args, **_kwargs):
+    val = apply(imagec.wxImageFromStreamMime,_args,_kwargs)
+    if val: val = wxImagePtr(val); val.thisown = 1
+    return val
+
 wxInitAllImageHandlers = imagec.wxInitAllImageHandlers
 
 def wxBitmapFromImage(*_args, **_kwargs):
@@ -358,6 +376,8 @@ def wxBitmapFromImage(*_args, **_kwargs):
 wxImage_CanRead = imagec.wxImage_CanRead
 
 wxImage_GetImageCount = imagec.wxImage_GetImageCount
+
+wxImage_CanReadStream = imagec.wxImage_CanReadStream
 
 wxImage_AddHandler = imagec.wxImage_AddHandler
 

@@ -3182,19 +3182,23 @@ static PyObject *_wrap_wxListCtrl_SetBackgroundColour(PyObject *self, PyObject *
     return _resultobj;
 }
 
-#define wxListCtrl_GetColumn(_swigobj,_swigarg0,_swigarg1)  (_swigobj->GetColumn(_swigarg0,_swigarg1))
+static wxListItem * wxPyListCtrl_GetColumn(wxPyListCtrl *self,int  col) {
+            wxListItem item;
+            if (self->GetColumn(col, item))
+                return new wxListItem(item);
+            else
+                return NULL;
+        }
 static PyObject *_wrap_wxListCtrl_GetColumn(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    bool  _result;
+    wxListItem * _result;
     wxPyListCtrl * _arg0;
     int  _arg1;
-    wxListItem * _arg2;
     PyObject * _argo0 = 0;
-    PyObject * _argo2 = 0;
-    char *_kwnames[] = { "self","col","item", NULL };
+    char *_kwnames[] = { "self","col", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiO:wxListCtrl_GetColumn",_kwnames,&_argo0,&_arg1,&_argo2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxListCtrl_GetColumn",_kwnames,&_argo0,&_arg1)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3203,20 +3207,13 @@ static PyObject *_wrap_wxListCtrl_GetColumn(PyObject *self, PyObject *args, PyOb
         return NULL;
         }
     }
-    if (_argo2) {
-        if (_argo2 == Py_None) { _arg2 = NULL; }
-        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxListItem_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxListCtrl_GetColumn. Expected _wxListItem_p.");
-        return NULL;
-        }
-    }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (bool )wxListCtrl_GetColumn(_arg0,_arg1,*_arg2);
+        _result = (wxListItem *)wxPyListCtrl_GetColumn(_arg0,_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
+}{ _resultobj = wxPyMake_wxObject(_result); }
     return _resultobj;
 }
 

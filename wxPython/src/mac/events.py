@@ -874,6 +874,20 @@ class wxNotifyEvent(wxNotifyEventPtr):
 
 
 
+class wxDisplayChangedEventPtr(wxEventPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __repr__(self):
+        return "<C wxDisplayChangedEvent instance at %s>" % (self.this,)
+class wxDisplayChangedEvent(wxDisplayChangedEventPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(eventsc.new_wxDisplayChangedEvent,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
 class wxPaletteChangedEventPtr(wxEventPtr):
     def __init__(self,this):
         self.this = this
