@@ -45,7 +45,9 @@
 //     further it might make sense to make it a real class with virtual methods
 struct WXDLLEXPORT wxNativeFontInfo
 {
-#if defined(__WXGTK__) || defined(__WXMOTIF__)
+#if defined(__WXGTK__) // || defined(__WXMOTIF__)
+                       // TODO: wxMotif should use this too but motif/font.cpp
+                       //       must be updated for this!
     // the components of the XLFD
     wxString     fontElements[14];
 
