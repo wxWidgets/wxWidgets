@@ -452,7 +452,8 @@ enum wxDBMS
     dbmsVIRTUOSO,
     dbmsDB2,
     dbmsINTERBASE,
-    dbmsPERVASIVE_SQL
+    dbmsPERVASIVE_SQL,
+    dbmsXBASE_SEQUITER
 };
 
 

@@ -1417,7 +1417,9 @@ bool wxDbTable::CreateTable(bool attemptDrop)
             break;
         }
     }
-    if (j && pDb->Dbms() != dbmsDBASE)  // Found a keyfield
+    if (j && (pDb->Dbms() != dbmsDBASE) 
+		  && (pDb->Dbms() != dbmsXBASE_SEQUITER)
+	   )  // Found a keyfield
     {
         switch (pDb->Dbms())
         {
@@ -1711,7 +1713,8 @@ bool wxDbTable::DropIndex(const wxString &idxName)
                        pDb->SQLTableName(idxName.c_str()).c_str(),
                        pDb->SQLTableName(tableName.c_str()).c_str());
     else if ((pDb->Dbms() == dbmsMS_SQL_SERVER) ||
-             (pDb->Dbms() == dbmsSYBASE_ASE))
+             (pDb->Dbms() == dbmsSYBASE_ASE) ||
+			 (pDb->Dbms() == dbmsXBASE_SEQUITER))
         sqlStmt.Printf(wxT("DROP INDEX %s.%s"),
                        pDb->SQLTableName(tableName.c_str()).c_str(),
                        pDb->SQLTableName(idxName.c_str()).c_str());

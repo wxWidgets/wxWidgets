@@ -562,7 +562,8 @@ const wxChar *wxDb::convertUserID(const wxChar *userID, wxString &UserID)
         UserID.Empty();
 
     // dBase does not use user names, and some drivers fail if you try to pass one
-    if (Dbms() == dbmsDBASE)
+    if ( Dbms() == dbmsDBASE
+         || Dbms() == dbmsXBASE_SEQUITER )
         UserID.Empty();
 
     // Oracle user names may only be in uppercase, so force
@@ -3498,6 +3499,9 @@ wxDBMS wxDb::Dbms(void)
     if (!wxStricmp(baseName,wxT("DBASE")))
         return((wxDBMS)(dbmsType = dbmsDBASE));
 
+    if (!wxStricmp(baseName,wxT("xBase")))
+        return((wxDBMS)(dbmsType = dbmsXBASE_SEQUITER));
+    
     if (!wxStricmp(baseName,wxT("MySQL")))
         return((wxDBMS)(dbmsType = dbmsMY_SQL));
 
@@ -3565,6 +3569,7 @@ bool wxDb::ModifyColumn(const wxString &tableName, const wxString &columnName,
         case dbmsPOSTGRES :
         case dbmsACCESS :
         case dbmsDBASE :
+        case dbmsXBASE_SEQUITER :
         default :
             alterSlashModify = "MODIFY";
             break;
