@@ -86,7 +86,7 @@ CleanUp() {
     # Kill result in case of failure as there is just to many stupid make/nmake
     # things out there which doesn't do this.
     if [ $# -eq 0 ]; then
-        rm -f "${outFile}.a" "${outFile}.def" "${outFile}.dll"
+        rm -f $arcFile $defFile $dllFile
     fi
 }
 
@@ -165,6 +165,7 @@ case $curDirS in
 esac
 # Parse commandline
 libsToLink=0
+omfLinking=0
 while [ $1 ]; do
     case $1 in
     -ord*)
@@ -203,15 +204,26 @@ while [ $1 ]; do
     -nolxl*)
         flag_USE_LXLITE=0
         ;;
-    -* | /* | *.dll)
+    -* | /*)
         case $1 in
         -L* | -l*)
             libsToLink=1
+            ;;
+        -Zomf)
+            omfLinking=1
             ;;
         *)
             ;;
         esac
         EXTRA_CFLAGS=${EXTRA_CFLAGS}" "$1
+        ;;
+    *.dll)
+        EXTRA_CFLAGS="${EXTRA_CFLAGS} `basnam $1 .dll`"
+        if [ $omfLinking -eq 1 ]; then
+            EXTRA_CFLAGS="${EXTRA_CFLAGS}.lib"
+	else
+            EXTRA_CFLAGS="${EXTRA_CFLAGS}.a"
+        fi
         ;;
     *)
         found=0;
@@ -327,8 +339,22 @@ case $outFile in
     ;;
 esac
 defFile="${outFile}.def"
-dllFile="${outFile}.dll"
 arcFile="${outFile}.a"
+
+#create $dllFile as something matching 8.3 restrictions,
+dllFile="$outFile"
+case $dllFile in
+*wx_base_*)
+    dllFile=`echo $dllFile | sed 's/base_\(...\)/b\1/'`
+    ;;
+*wx_*_*)
+    dllFile=`echo $dllFile | sed 's/_\(..\)[^_]*_\(..\)[^-]*-/\1\2/'`
+    ;;
+*)
+    ;;
+esac
+dllFile="`echo $dllFile | sed 's/\.//' | sed 's/_//' | sed 's/-//'`"
+
 
 if [ $do_backup -ne 0 -a -f $arcFile ] ; then
     doCommand "mv $arcFile ${outFile}_s.a"
@@ -349,8 +375,8 @@ done
 
 # Create the def file.
 rm -f $defFile
-libName=`basnam $outFile`
-echo "LIBRARY `echo $libName | sed 's/\./_/'` $library_flags" >> $defFile
+echo "LIBRARY `basnam $dllFile` $library_flags" >> $defFile
+dllFile="$dllFile.dll"
 if [ -n $description ]; then
     echo "DESCRIPTION  \"${description}\"" >> $defFile
 fi
@@ -393,6 +419,7 @@ for file in $inputFiles ; do
     esac
 done
 doCommand "$CC $CFLAGS -Zdll -o $dllFile $defFile $gccCmdl $EXTRA_CFLAGS"
+touch "${outFile}.dll"
 
 doCommand "emximp -o $arcFile $defFile"
 if [ $flag_USE_LXLITE -ne 0 ]; then
@@ -402,6 +429,7 @@ if [ $flag_USE_LXLITE -ne 0 ]; then
     fi
     doCommand "lxlite -cs -t: -mrn -mln $add_flags $dllFile"
 fi
+doCommand "emxomf -s -l $arcFile"
 
 # Successful exit.
 CleanUp 1
