@@ -68,10 +68,10 @@ static wxChar **ConvertToStandardCommandArgs(const wxChar *p, int& argc);
 // Windows-specific wxEntry
 // ----------------------------------------------------------------------------
 
-int wxEntry(HINSTANCE hInstance,
-            HINSTANCE WXUNUSED(hPrevInstance),
-            char *pCmdLine,
-            int nCmdShow)
+WXDLLEXPORT int wxEntry(HINSTANCE hInstance,
+                        HINSTANCE WXUNUSED(hPrevInstance),
+                        char *pCmdLine,
+                        int nCmdShow)
 {
     // remember the parameters Windows gave us
     wxSetInstance(hInstance);
