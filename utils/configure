@@ -524,6 +524,8 @@ fi
 
 
 GL_TOOLKIT_DIR=$wx_cv_path_glcanvas
+USE_GUI=$wx_cv_use_gui
+
 
 
 trap '' 1 2 15
@@ -685,6 +687,7 @@ s%@oldincludedir@%$oldincludedir%g
 s%@infodir@%$infodir%g
 s%@mandir@%$mandir%g
 s%@GL_TOOLKIT_DIR@%$GL_TOOLKIT_DIR%g
+s%@USE_GUI@%$USE_GUI%g
 
 CEOF
 EOF

@@ -4,7 +4,9 @@ AC_REVISION($Id$)dnl
 AC_INIT(Makefile.in)
 
 GL_TOOLKIT_DIR=$wx_cv_path_glcanvas
+USE_GUI=$wx_cv_use_gui
 AC_SUBST(GL_TOOLKIT_DIR)
+AC_SUBST(USE_GUI)
 
 AC_OUTPUT([
             Makefile

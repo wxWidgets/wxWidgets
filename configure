@@ -22260,11 +22260,12 @@ wx_cv_release=${WX_RELEASE}
 wx_cv_current=${WX_CURRENT}
 wx_cv_revision=${WX_REVISION}
 wx_cv_age=${WX_AGE}
+wx_cv_use_gui=${USE_GUI}
 export wx_cv_path_samplesubdirs wx_cv_if_gnu_make \
        wx_cv_path_ifs wx_cv_program_ext \
        wx_cv_target_library wx_cv_target_library_gl wx_cv_target_libtype \
-       wx_cv_library_basename wx_cv_release wx_cv_current wx_cv_revision wx_cv_age
-
+       wx_cv_library_basename wx_cv_release wx_cv_current wx_cv_revision wx_cv_age \
+       wx_cv_use_gui
 
 subdirs="demos samples utils contrib"
 

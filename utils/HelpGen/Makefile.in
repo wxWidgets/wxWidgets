@@ -1,6 +1,8 @@
 
+USE_GUI=@USE_GUI@
+
 all:
-	cd src; $(MAKE)
+	if test "$(USE_GUI)" = 0; then cd src; $(MAKE); fi
 
 clean:
 	cd src; $(MAKE) clean
