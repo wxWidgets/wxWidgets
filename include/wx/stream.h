@@ -76,11 +76,11 @@ public:
 
     // error testing
     wxStreamError GetLastError() const { return m_lasterror; }
-    bool IsOk() const { return GetLastError() == wxSTREAM_NOERROR; }
+    bool IsOk() const { return GetLastError() == wxSTREAM_NO_ERROR; }
     bool operator!() const { return !IsOk(); }
 
     // reset the stream state
-    void Reset() { m_lasterror = wxSTREAM_NOERROR; }
+    void Reset() { m_lasterror = wxSTREAM_NO_ERROR; }
 
     // deprecated (doesn't make sense!), don't use
     virtual size_t GetSize() const { return 0; }
