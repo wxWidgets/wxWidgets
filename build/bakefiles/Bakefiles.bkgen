@@ -154,6 +154,6 @@
 
 
     <!-- Personal customizations (not in CVS): -->
-    <include file="Makefiles.local.xml" ignore_missing="1"/>
+    <include file="Bakefiles.local.bkgen" ignore_missing="1"/>
 
 </bakefile-gen>
