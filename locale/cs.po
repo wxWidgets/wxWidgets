@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxWidgets-2.5.2\n"
 "POT-Creation-Date: 2004-05-07 14:03+0200\n"
-"PO-Revision-Date: 2004-06-11 12:01+0100\n"
+"PO-Revision-Date: 2004-08-14 15:36+0100\n"
 "Last-Translator: Herbert Breunung <herbert_breunung@web.de>\n"
 "Language-Team: wxWidgets translators <wx-translators@wxwidgets.org>\n"
 "MIME-Version: 1.0\n"
@@ -53,7 +53,7 @@ msgstr "%i z %i"
 #: ../src/generic/filedlgg.cpp:280
 #, c-format
 msgid "%ld bytes"
-msgstr ""
+msgstr "%ld bytů"
 
 #: ../src/common/cmdline.cpp:825
 #, c-format
@@ -705,9 +705,9 @@ msgid "Can't open registry key '%s'"
 msgstr "Nemohu otevřít registrový klíč '%s'"
 
 #: ../src/common/zstream.cpp:166
-#, fuzzy, c-format
+#, c-format
 msgid "Can't read from inflate stream: %s"
-msgstr "nemohu číst z deskriptoru %d"
+msgstr "nemohu číst z deskriptoru: %s"
 
 #: ../src/common/zstream.cpp:159
 msgid "Can't read inflate stream: unexpected EOF in underlying stream."
@@ -746,9 +746,9 @@ msgid "Can't set value of '%s'"
 msgstr "Nemohu nastavit hodnotu '%s'"
 
 #: ../src/common/zstream.cpp:316
-#, fuzzy, c-format
+#, c-format
 msgid "Can't write to deflate stream: %s"
-msgstr "nemohu zapisovat do deskriptoru %d"
+msgstr "nemohu zapisovat do deskriptoru: %s"
 
 #: ../src/common/dlgcmn.cpp:240
 #: ../src/generic/dirdlgg.cpp:155
@@ -980,9 +980,9 @@ msgid "Conversion to charset '%s' doesn't work."
 msgstr "Převod do znakové sady '%s' nefunguje."
 
 #: ../src/html/htmlwin.cpp:782
-#, fuzzy, c-format
+#, c-format
 msgid "Copied to clipboard:\"%s\""
-msgstr "Nemohu uložit data do schránky."
+msgstr "Nemohu uložit data do schránky: \"%s\""
 
 #: ../src/generic/prntdlgg.cpp:190
 msgid "Copies:"
@@ -1319,9 +1319,9 @@ msgid "Execution of command '%s' failed"
 msgstr "Chyba při volání příkazu '%s'"
 
 #: ../src/os2/utilsexc.cpp:169
-#, fuzzy, c-format
+#, c-format
 msgid "Execution of command '%s' failed with error: %ul"
-msgstr "Chyba při volání příkazu '%s'"
+msgstr "Volání příkazu '%s' selhalo s chybou: %ul"
 
 #: ../src/common/paper.cpp:124
 msgid "Executive, 7 1/4 x 10 1/2 in"
@@ -1332,9 +1332,9 @@ msgid "Extended Unix Codepage for Japanese (EUC-JP)"
 msgstr "Rozšířená unixová kódová stránka pro Japonštinu (EUC-JP)"
 
 #: ../src/html/chm.cpp:696
-#, fuzzy, c-format
+#, c-format
 msgid "Extraction of '%s' into '%s' failed."
-msgstr "Chyba při volání příkazu '%s'"
+msgstr "Extrakce '%s' do '%s' selhala."
 
 #: ../src/msw/dialup.cpp:844
 #, c-format
@@ -1460,9 +1460,8 @@ msgid "Failed to empty the clipboard."
 msgstr "Nemohu vyprázdnit shcránku."
 
 #: ../src/unix/displayx11.cpp:201
-#, fuzzy
 msgid "Failed to enumerate video modes"
-msgstr "Nelze vytvořit uživatelský %s/.gnome."
+msgstr "Nelze vyčíslít zobrazovací modus"
 
 #: ../src/msw/dde.cpp:668
 msgid "Failed to establish an advise loop with DDE server"
@@ -1557,9 +1556,9 @@ msgid "Failed to open '%s' for %s"
 msgstr "Nelze otevřít soubor '%s' pro %s"
 
 #: ../src/html/chm.cpp:142
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to open CHM archive '%s'."
-msgstr "Nelze otevřít soubor '%s' pro %s"
+msgstr "Nelze otevřít CHM archiv '%s'."
 
 #: ../src/common/filename.cpp:750
 msgid "Failed to open temporary file."
@@ -1633,9 +1632,9 @@ msgid "Failed to retrieve the supported clipboard formats"
 msgstr "Nelze zjistit formáty podporované schránkou"
 
 #: ../src/msw/dib.cpp:330
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save the bitmap image to file \"%s\"."
-msgstr "Selhalo načítání obrázku %d ze souboru '%s'."
+msgstr "Selhalo při uložení obrázku do souboru \"%s\"."
 
 #: ../src/msw/dde.cpp:713
 msgid "Failed to send DDE advise notification"
@@ -2834,9 +2833,9 @@ msgid "Streaming delegates for not already streamed objects not yet supported"
 msgstr ""
 
 #: ../src/msw/colour.cpp:38
-#, fuzzy, c-format
+#, c-format
 msgid "String To Colour : Incorrect colour specification : %s"
-msgstr "XRC zdroje: chybný popis barvy '%s' u vlastnosti '%s'."
+msgstr "Vlakno do Barvy: chybný popis barvy : %s"
 
 #: ../include/wx/xti.h:427
 #: ../include/wx/xti.h:431
@@ -3779,9 +3778,8 @@ msgid "out of memory"
 msgstr "nedostatek paměti."
 
 #: ../src/html/chm.cpp:334
-#, fuzzy
 msgid "read error"
-msgstr "Chyba souboru"
+msgstr "Chyba při čteni"
 
 #: ../src/common/filename.cpp:178
 msgid "reading"
@@ -3796,9 +3794,8 @@ msgid "second"
 msgstr "druhého"
 
 #: ../src/html/chm.cpp:338
-#, fuzzy
 msgid "seek error"
-msgstr "Chyba souboru"
+msgstr "Chyba při hledani"
 
 #: ../src/common/datetime.cpp:3482
 msgid "seventeenth"
@@ -3894,7 +3891,7 @@ msgid "unknown"
 msgstr "neznámý"
 
 #: ../src/common/xtixml.cpp:252
-#, fuzzy, c-format
+#, c-format
 msgid "unknown class %s"
 msgstr "neznámá třida %s"
 
@@ -3937,9 +3934,8 @@ msgid "using catalog '%s' from '%s'."
 msgstr "používám katalog '%s' z '%s'."
 
 #: ../src/html/chm.cpp:336
-#, fuzzy
 msgid "write error"
-msgstr "Chyba souboru"
+msgstr "Chyba při psanim"
 
 #: ../src/common/filename.cpp:178
 msgid "writing"
