@@ -548,11 +548,13 @@ bool wxTopLevelWindowMSW::Create(wxWindow *parent,
         );
     }
 
-    // Native look is full screen window on Smartphones and Standard SDK.
-    // TODO: check that we need this (if we're passing default values to ctor).
-    // Also check that there really is a difference between PocketPC and Smartphone in this regard.
+    // Note: if we include PocketPC in this test, dialogs can fail to show up,
+    // for example the text entry dialog in the dialogs sample. Problem with Maximise()?
 #if defined(__WXWINCE__) && (defined(__SMARTPHONE__) || defined(__WINCE_STANDARDSDK__))
+    // Smartphone dialogs should always be maximized.
+#if !defined(__SMARTPHONE__)
     if ( style & wxMAXIMIZE )
+#endif
     {
         this->Maximize();
     }
