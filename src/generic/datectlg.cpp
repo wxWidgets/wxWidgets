@@ -506,7 +506,7 @@ void wxDatePickerCtrlGeneric::DropDown(bool down)
         if (down)
         {
             wxDateTime dt;
-            if (!m_txt->GetValue().IsEmpty())
+            if (!m_txt->GetValue().empty())
                 dt.ParseFormat(m_txt->GetValue(), m_format);
 
             if (dt.IsValid())
@@ -588,7 +588,10 @@ void wxDatePickerCtrlGeneric::OnKillFocus(wxFocusEvent &ev)
             dt = m_currentDate;
     }
 
-    m_txt->SetValue(dt.IsValid()? dt.Format(m_format) : wxString());
+    if(dt.IsValid())
+        m_txt->SetValue(dt.Format(m_format));
+    else
+        m_txt->SetValue(wxEmptyString);
 
     // notify that we had to change the date after validation
     if ( (dt.IsValid() && m_currentDate != dt) ||
@@ -630,9 +633,9 @@ void wxDatePickerCtrlGeneric::OnText(wxCommandEvent &ev)
 
     // We'll create an additional event if the date is valid.
     // If the date isn't valid, the user's probably in the middle of typing
-    wxString txt=m_txt->GetValue();
+    wxString txt = m_txt->GetValue();
     wxDateTime dt;
-    if (!txt.IsEmpty())
+    if (!txt.empty())
     {
         dt.ParseFormat(txt, m_format);
         if (!dt.IsValid())

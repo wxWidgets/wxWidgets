@@ -96,7 +96,7 @@ public:
 
     void SetDate();
     void Today();
-    
+
 private:
     wxCalendarCtrl *m_calendar;
     wxStaticText   *m_date;
@@ -590,7 +590,7 @@ void MyPanel::Today()
 #if wxUSE_DATEPICKCTRL
 
 MyDialog::MyDialog(wxWindow *parent, const wxDateTime& dt, int dtpStyle)
-        : wxDialog(parent, -1, wxString(_T("Calendar: Choose a date")))
+        : wxDialog(parent, wxID_ANY, wxString(_T("Calendar: Choose a date")))
 {
     wxStdDialogButtonSizer *sizerBtns = new wxStdDialogButtonSizer;
     sizerBtns->AddButton(new wxButton(this, wxID_OK));
@@ -598,16 +598,16 @@ MyDialog::MyDialog(wxWindow *parent, const wxDateTime& dt, int dtpStyle)
     sizerBtns->Finalise();
 
     wxSizer *sizerText = new wxBoxSizer(wxHORIZONTAL);
-    sizerText->Add(new wxStaticText(this, -1, _T("Date in ISO format: ")),
+    sizerText->Add(new wxStaticText(this, wxID_ANY, _T("Date in ISO format: ")),
                     wxSizerFlags().Border().Align(wxALIGN_CENTRE_VERTICAL));
-    m_text = new wxTextCtrl(this, -1);
+    m_text = new wxTextCtrl(this, wxID_ANY);
     sizerText->Add(m_text, wxSizerFlags().
                         Expand().Border().Align(wxALIGN_CENTRE_VERTICAL));
 
     wxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
     sizerTop->Add(new wxStaticText
                       (
-                        this, -1,
+                        this, wxID_ANY,
                         _T("Enter your birthday date (not before 20th century):")
                       ),
                     wxSizerFlags().Border());
@@ -615,13 +615,13 @@ MyDialog::MyDialog(wxWindow *parent, const wxDateTime& dt, int dtpStyle)
 #if wxUSE_DATEPICKCTRL_GENERIC
     wxFrame *frame = (wxFrame *)wxGetTopLevelParent(parent);
     if ( frame && frame->GetMenuBar()->IsChecked(Calendar_DatePicker_Generic) )
-        m_datePicker = new wxDatePickerCtrlGeneric(this, -1, dt,
+        m_datePicker = new wxDatePickerCtrlGeneric(this, wxID_ANY, dt,
                                                    wxDefaultPosition,
                                                    wxDefaultSize,
                                                    dtpStyle);
     else
 #endif // wxUSE_DATEPICKCTRL_GENERIC
-    m_datePicker = new wxDatePickerCtrl(this, -1, dt,
+    m_datePicker = new wxDatePickerCtrl(this, wxID_ANY, dt,
                                         wxDefaultPosition, wxDefaultSize,
                                         dtpStyle);
     m_datePicker->SetRange(wxDateTime(1, wxDateTime::Jan, 1900),
@@ -640,7 +640,10 @@ MyDialog::MyDialog(wxWindow *parent, const wxDateTime& dt, int dtpStyle)
 void MyDialog::OnDateChange(wxDateEvent& event)
 {
     const wxDateTime dt = event.GetDate();
-    m_text->SetValue(dt.IsValid()? dt.FormatISODate() : wxString());
+    if(dt.IsValid())
+        m_text->SetValue(dt.FormatISODate());
+    else
+        m_text->SetValue(wxEmptyString);
 }
 
 #endif // wxUSE_DATEPICKCTRL
