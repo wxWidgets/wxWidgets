@@ -1,3 +1,6 @@
+Installing latest headers (and Carbon Support)
+----------------------------------------------
+
 the latest build for carbon support lead to a few changes you will have to follow, in order
 to successfully compile the code (also necessary if you don't want to build the carbon targets)
 
@@ -18,7 +21,8 @@ CodeWarrior Pro 5:Pre-Release:Carbon & MacOSX Development:Carbonized MSL and
 CodeWarrior Pro 5:Pre-Release:Carbon & MacOSX Development:Carbonized Runtimes 
 (consult the file CodeWarrior Pro 5:Pre-Release:Carbon & MacOSX Development:Carbon & MacOSX README)
 
-changing the type of the .xpm files
+Problems with .xpm files
+------------------------
 
 if you have downloaded all the files and get errors like :
 
@@ -28,3 +32,8 @@ tipdlg.cpp line 201   #include "wx/generic/tip.xpm"
 then your cvs has changed the type of the .xpm files to something other than text, in order to fix this
 either change the type by using a resource editor or drag the files from /include/wx/generic/..xpm on 
 the MakeMetrowerksText application that is included in this folder
+
+Missing PLStringFuncsLib
+------------------------
+
+You will have to build All Targets for MacOS Support:Libraries:Sources:PLStringFuncs:Glue:PLStringFuncsGlue.mcp
