@@ -5,8 +5,8 @@
 # Author:       Lorne White (email: lorne.white@telusplanet.net)
 #
 # Created:
-# Version       0.7
-# Date:         August 18, 2001
+# Version       0.72
+# Date:         Sept 8, 2001
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------
 
@@ -594,6 +594,7 @@ class PrintTable:
         self.row_line_colour = {}
 
         self.parentFrame = parentFrame
+        self.SetPreviewSize()
 
         self.printData = wxPrintData()
         self.scale = 1.0
@@ -608,6 +609,16 @@ class PrintTable:
         self.SetFooterValue()
         self.SetMargins()
         self.SetPortrait()
+
+    def SetPreviewSize(self, position = wxPoint(0, 0), size="Full"):
+        if size == "Full":
+            screenWidth = int(wx.wxSystemSettings_GetSystemMetric(wx.wxSYS_SCREEN_X))
+            screenHeight = int(wx.wxSystemSettings_GetSystemMetric(wx.wxSYS_SCREEN_Y))
+            self.preview_frame_size = wxSize(screenWidth, screenHeight)
+            self.preview_frame_pos = position
+        else:
+            self.preview_frame_size = size     
+            self.preview_frame_pos = position
 
     def SetPaperId(self, paper):
         self.printData.SetPaperId(paper)
@@ -843,8 +854,8 @@ class PrintTable:
 
         frame.Initialize()
         if self.parentFrame:
-            frame.SetPosition(self.parentFrame.GetPosition())
-            frame.SetSize(self.parentFrame.GetSize())
+            frame.SetPosition(self.preview_frame_pos)
+            frame.SetSize(self.preview_frame_size)
         frame.Show(true)
 
 

@@ -13,6 +13,9 @@ from wxPython.stc import *
 import keyword
 import os
 import sys
+from pseudo import PseudoFileIn
+from pseudo import PseudoFileOut
+from pseudo import PseudoFileErr
 from version import VERSION
 
 
@@ -48,6 +51,12 @@ class Shell(wxStyledTextCtrl):
                  locals=None, InterpClass=None, *args, **kwds):
         """Create a PyCrust Shell instance."""
         wxStyledTextCtrl.__init__(self, parent, id, pos, size, style)
+        # Grab these so they can be restored by self.redirect* methods.
+        self.stdin = sys.stdin
+        self.stdout = sys.stdout
+        self.stderr = sys.stderr
+        # Add the current working directory "." to the search path.
+        sys.path.insert(0, os.curdir)
         # Import a default interpreter class if one isn't provided.
         if InterpClass == None:
             from interpreter import Interpreter
@@ -61,7 +70,6 @@ class Shell(wxStyledTextCtrl):
         # Add the dictionary that was passed in.
         if locals:
             shellLocals.update(locals)
-        from pseudo import PseudoFileIn, PseudoFileOut, PseudoFileErr
         self.interp = Interpreter(locals=shellLocals, \
                                   rawin=self.readRaw, \
                                   stdin=PseudoFileIn(self.readIn), \
@@ -108,7 +116,7 @@ class Shell(wxStyledTextCtrl):
         # environment. They can override anything they want.
         try: self.execStartupScript(self.interp.startupScript)
         except: pass
-            
+
     def destroy(self):
         del self.interp
         
@@ -384,17 +392,6 @@ class Shell(wxStyledTextCtrl):
         endline = self.GetCurrentLine()
         # If they hit RETURN on the last line, execute the command.
         if theline == endline:
-            # Store the last-recalled command; see the main comment for
-            # self.lastCommandRecalled.
-            if command != '':
-                self.lastCommandRecalled = self.historyPos
-            # Reset the history position.
-            self.historyPos = -1
-            # Insert this command into the history, unless it's a blank line
-            # or the same as the last command.
-            if command != '' \
-            and (len(self.history) == 0 or command != self.history[0]):
-                self.history.insert(0, command)
             self.push(command)
         # Otherwise, replace the last line with the new line.
         else:
@@ -416,11 +413,6 @@ class Shell(wxStyledTextCtrl):
         The command may not necessarily be valid Python syntax."""
         if not text:
             text = self.GetCurLine()[0]
-## This is a hack due to a bug in the wxPython 2.3.2 beta. The following
-## two lines of code should go away once the bug has been fixed and the
-## line above should be restored.
-##            self.write(' ')
-##            text = self.GetCurLine()[0][:-1]
         # XXX Need to extract real prompts here. Need to keep track of the
         # prompt every time a command is issued.
         ps1 = str(sys.ps1)
@@ -439,6 +431,7 @@ class Shell(wxStyledTextCtrl):
     
     def push(self, command):
         """Send command to the interpreter for execution."""
+        self.addHistory(command)
         self.write(os.linesep)
         self.more = self.interp.push(command)
         self.prompt()
@@ -446,6 +439,20 @@ class Shell(wxStyledTextCtrl):
         # thing that can be undone is stuff typed after the prompt, before
         # hitting enter. After they hit enter it becomes permanent.
         self.EmptyUndoBuffer()
+
+    def addHistory(self, command):
+        """Add command to the command history."""
+        # Store the last-recalled command; see the main comment for
+        # self.lastCommandRecalled.
+        if command != '':
+            self.lastCommandRecalled = self.historyPos
+        # Reset the history position.
+        self.historyPos = -1
+        # Insert this command into the history, unless it's a blank
+        # line or the same as the last command.
+        if command != '' \
+        and (len(self.history) == 0 or command != self.history[0]):
+            self.history.insert(0, command)
 
     def write(self, text):
         """Display text in the shell.
@@ -571,6 +578,27 @@ class Shell(wxStyledTextCtrl):
         """Replacement for stderr."""
         self.write(text)
     
+    def redirectStdin(self, redirect=1):
+        """If redirect is true then sys.stdin will come from the shell."""
+        if redirect:
+            sys.stdin = PseudoFileIn(self.readIn)
+        else:
+            sys.stdin = self.stdin
+
+    def redirectStdout(self, redirect=1):
+        """If redirect is true then sys.stdout will go to the shell."""
+        if redirect:
+            sys.stdout = PseudoFileOut(self.writeOut)
+        else:
+            sys.stdout = self.stdout
+
+    def redirectStderr(self, redirect=1):
+        """If redirect is true then sys.stderr will go to the shell."""
+        if redirect:
+            sys.stderr = PseudoFileErr(self.writeErr)
+        else:
+            sys.stderr = self.stderr
+
     def CanCut(self):
         """Return true if text is selected and can be cut."""
         return self.GetSelectionStart() != self.GetSelectionEnd()
@@ -590,31 +618,9 @@ ID_CALLTIPS = NewId()
 ID_CALLTIPS_SHOW = NewId()
 
 
-class ShellFrame(wxFrame):
-    """Frame containing the PyCrust shell component."""
+class ShellMenu:
+    """Mixin class to add standard menu items."""
     
-    name = 'PyCrust Shell Frame'
-    revision = __version__
-    
-    def __init__(self, parent=None, id=-1, title='PyShell', \
-                 pos=wxDefaultPosition, size=wxDefaultSize, \
-                 style=wxDEFAULT_FRAME_STYLE, locals=None, \
-                 InterpClass=None, *args, **kwds):
-        """Create a PyCrust ShellFrame instance."""
-        wxFrame.__init__(self, parent, id, title, pos, size, style)
-        intro = 'Welcome To PyCrust %s - The Flakiest Python Shell' % VERSION
-        self.CreateStatusBar()
-        self.SetStatusText(intro)
-        if wxPlatform == '__WXMSW__':
-            icon = wxIcon('PyCrust.ico', wxBITMAP_TYPE_ICO)
-            self.SetIcon(icon)
-        self.createMenus()
-        self.shell = Shell(parent=self, id=-1, introText=intro, \
-                           locals=locals, InterpClass=InterpClass, \
-                           *args, **kwds)
-        # Override the shell so that status messages go to the status bar.
-        self.shell.setStatusText = self.SetStatusText
-
     def createMenus(self):
         m = self.fileMenu = wxMenu()
         m.AppendSeparator()
@@ -624,12 +630,12 @@ class ShellFrame(wxFrame):
         m.Append(wxID_UNDO, '&Undo \tCtrl+Z', 'Undo the last action')
         m.Append(wxID_REDO, '&Redo \tCtrl+Y', 'Redo the last undone action')
         m.AppendSeparator()
-        m.Append(wxID_CUT, 'Cu&t \tCtrl+X', 'Cut the selection')
-        m.Append(wxID_COPY, '&Copy \tCtrl+C', 'Copy the selection')
-        m.Append(wxID_PASTE, '&Paste \tCtrl+V', 'Paste')
+        m.Append(wxID_CUT, 'Cu&t', 'Cut the selection')
+        m.Append(wxID_COPY, '&Copy', 'Copy the selection')
+        m.Append(wxID_PASTE, '&Paste', 'Paste')
         m.AppendSeparator()
-        m.Append(wxID_CLEAR, 'Cle&ar \tDel', 'Delete the selection')
-        m.Append(wxID_SELECTALL, 'Select A&ll \tCtrl+A', 'Select all text')
+        m.Append(wxID_CLEAR, 'Cle&ar', 'Delete the selection')
+        m.Append(wxID_SELECTALL, 'Select A&ll', 'Select all text')
 
         m = self.autocompMenu = wxMenu()
         m.Append(ID_AUTOCOMP_SHOW, 'Show Auto Completion', \
@@ -780,4 +786,30 @@ class ShellFrame(wxFrame):
         elif id == ID_CALLTIPS_SHOW:
             event.Check(self.shell.autoCallTip)
             
+
+class ShellFrame(wxFrame, ShellMenu):
+    """Frame containing the PyCrust shell component."""
+    
+    name = 'PyCrust Shell Frame'
+    revision = __version__
+    
+    def __init__(self, parent=None, id=-1, title='PyShell', \
+                 pos=wxDefaultPosition, size=wxDefaultSize, \
+                 style=wxDEFAULT_FRAME_STYLE, locals=None, \
+                 InterpClass=None, *args, **kwds):
+        """Create a PyCrust ShellFrame instance."""
+        wxFrame.__init__(self, parent, id, title, pos, size, style)
+        intro = 'Welcome To PyCrust %s - The Flakiest Python Shell' % VERSION
+        self.CreateStatusBar()
+        self.SetStatusText(intro)
+        if wxPlatform == '__WXMSW__':
+            icon = wxIcon('PyCrust.ico', wxBITMAP_TYPE_ICO)
+            self.SetIcon(icon)
+        self.shell = Shell(parent=self, id=-1, introText=intro, \
+                           locals=locals, InterpClass=InterpClass, \
+                           *args, **kwds)
+        # Override the shell so that status messages go to the status bar.
+        self.shell.setStatusText = self.SetStatusText
+        self.createMenus()
+
 

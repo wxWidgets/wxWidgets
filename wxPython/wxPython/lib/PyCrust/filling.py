@@ -24,15 +24,17 @@ class FillingTree(wxTreeCtrl):
 
     def __init__(self, parent, id=-1, pos=wxDefaultPosition, \
                  size=wxDefaultSize, style=wxTR_HAS_BUTTONS, \
-                 ingredients=None, rootLabel=None):
+                 rootObject=None, rootLabel=None, rootIsNamespace=0):
         """Create a PyCrust FillingTree instance."""
         wxTreeCtrl.__init__(self, parent, id, pos, size)
-        if not ingredients:
+        self.rootIsNamespace = rootIsNamespace
+        if not rootObject:
             import __main__
-            ingredients = __main__
+            rootObject = __main__
+            self.rootIsNamespace = 1
         if not rootLabel: rootLabel = 'Ingredients'
-        rootdata = wxTreeItemData(ingredients)
-        self.root = self.AddRoot(rootLabel, -1, -1, rootdata)
+        rootData = wxTreeItemData(rootObject)
+        self.root = self.AddRoot(rootLabel, -1, -1, rootData)
         self.SetItemHasChildren(self.root, self.hasChildren(self.root))
         EVT_TREE_ITEM_EXPANDING(self, self.GetId(), self.OnItemExpanding)
         EVT_TREE_ITEM_COLLAPSED(self, self.GetId(), self.OnItemCollapsed)
@@ -75,10 +77,11 @@ class FillingTree(wxTreeCtrl):
         for item in list:
             itemtext = str(item)
             # Show string dictionary items with single quotes, except for
-            # the first level of items, which represent the local namespace.
+            # the first level of items, if they represent a namespace.
             if type(object) is types.DictType \
             and type(item) is types.StringType \
-            and selection != self.root:
+            and (selection != self.root \
+                 or (selection == self.root and not self.rootIsNamespace)):
                 itemtext = repr(item)
             child = self.AppendItem(selection, itemtext, -1, -1, \
                                     wxTreeItemData(children[item]))
@@ -128,9 +131,10 @@ class FillingTree(wxTreeCtrl):
         parentobject = self.GetPyData(parent)
         name = self.GetItemText(item)
         # Apply dictionary syntax to dictionary items, except the root
-        # and first level children.
-        if item != self.root and parent != self.root \
-        and type(parentobject) is types.DictType:
+        # and first level children of a namepace.
+        if type(parentobject) is types.DictType \
+        and ((item != self.root and parent != self.root) \
+        or (parent == self.root and not self.rootIsNamespace)):
             name = '[' + name + ']'
         # Apply dot syntax to multipart names.
         if partial:
@@ -138,8 +142,10 @@ class FillingTree(wxTreeCtrl):
                 name += partial
             else:
                 name += '.' + partial
-        # Repeat for everything but the root item and first level children.
-        if item != self.root and parent != self.root:
+        # Repeat for everything but the root item
+        # and first level children of a namespace.
+        if (item != self.root and parent != self.root) \
+        or (parent == self.root and not self.rootIsNamespace):
             name = self.getFullName(parent, partial=name)
         return name
 
@@ -243,13 +249,15 @@ class Filling(wxSplitterWindow):
     
     def __init__(self, parent, id=-1, pos=wxDefaultPosition, \
                  size=wxDefaultSize, style=wxSP_3D, name='Filling Window', \
-                 ingredients=None, rootLabel=None):
+                 rootObject=None, rootLabel=None, rootIsNamespace=0):
         """Create a PyCrust Filling instance."""
         wxSplitterWindow.__init__(self, parent, id, pos, size, style, name)
-        self.fillingTree = FillingTree(parent=self, ingredients=ingredients, \
-                                       rootLabel=rootLabel)
+        self.fillingTree = FillingTree(parent=self, rootObject=rootObject, \
+                                       rootLabel=rootLabel, \
+                                       rootIsNamespace=rootIsNamespace)
         self.fillingText = FillingText(parent=self)
         self.SplitVertically(self.fillingTree, self.fillingText, 200)
+        self.SetMinimumPaneSize(1)
         # Override the filling so that descriptions go to fillingText.
         self.fillingTree.setText = self.fillingText.SetText
         # Select the root item.
@@ -264,8 +272,8 @@ class FillingFrame(wxFrame):
     
     def __init__(self, parent=None, id=-1, title='PyFilling', \
                  pos=wxDefaultPosition, size=wxDefaultSize, \
-                 style=wxDEFAULT_FRAME_STYLE, ingredients=None, \
-                 rootLabel=None):
+                 style=wxDEFAULT_FRAME_STYLE, rootObject=None, \
+                 rootLabel=None, rootIsNamespace=0):
         """Create a PyCrust FillingFrame instance."""
         wxFrame.__init__(self, parent, id, title, pos, size, style)
         intro = 'Welcome To PyFilling - The Tastiest Namespace Inspector'
@@ -274,8 +282,9 @@ class FillingFrame(wxFrame):
         if wxPlatform == '__WXMSW__':
             icon = wxIcon('PyCrust.ico', wxBITMAP_TYPE_ICO)
             self.SetIcon(icon)
-        self.filling = Filling(parent=self, ingredients=ingredients, \
-                               rootLabel=rootLabel)
+        self.filling = Filling(parent=self, rootObject=rootObject, \
+                               rootLabel=rootLabel, \
+                               rootIsNamespace=rootIsNamespace)
         # Override the filling so that status messages go to the status bar.
         self.filling.fillingTree.setStatusText = self.SetStatusText
 

@@ -18,7 +18,7 @@ class App(wxApp):
         self.crustFrame = CrustFrame(locals=locals)
         self.crustFrame.Show(true)
         # Set focus to the shell editor.
-        self.crustFrame.crust.shell.SetFocus()
+        #self.crustFrame.crust.shell.SetFocus()
         self.SetTopWindow(self.crustFrame)
         # Add the application object to the sys module's namespace.
         # This allows a shell user to do:

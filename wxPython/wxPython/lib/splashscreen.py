@@ -22,6 +22,7 @@ def bitmapFromFile(filename):
         "bmp" :wxBITMAP_TYPE_BMP,
         "png" :wxBITMAP_TYPE_PNG,
         "jpeg":wxBITMAP_TYPE_JPEG,
+        "jpg" :wxBITMAP_TYPE_JPEG,
         "gif" :wxBITMAP_TYPE_GIF,
         "xbm" :wxBITMAP_TYPE_XBM,
     }
