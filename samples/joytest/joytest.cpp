@@ -44,7 +44,9 @@ bool MyApp::OnInit(void)
     wxMessageBox("No joystick detected!");
     return FALSE;
   }
+#if wxUSE_WAVE
   m_fire.Create("gun.wav");
+#endif // wxUSE_WAVE
 
   m_maxX = stick.GetXMax();
   m_maxY = stick.GetYMax();
@@ -133,10 +135,12 @@ void MyCanvas::OnJoystickEvent(wxJoystickEvent& event)
     sprintf(buf, "Joystick (%ld, %ld)", pt.x, pt.y);
   frame->SetStatusText(buf);
 
+#if wxUSE_WAVE
   if (event.ButtonDown() && wxGetApp().m_fire.IsOk())
   {
     wxGetApp().m_fire.Play();
   }
+#endif // wxUSE_WAVE
 }
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
