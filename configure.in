@@ -2163,7 +2163,7 @@ equivalent variable and GTK+ is version 1.2.3 or above.
     fi
 
     if test "$wxUSE_MGL" = 1; then
-        AC_MSG_CHECKING(for SciTech MGL library)
+       AC_MSG_CHECKING(for SciTech MGL library)
         if test "x$MGL_ROOT" = x ; then
             AC_MSG_RESULT(not found)
             AC_MSG_ERROR([Cannot find MGL library. Make sure MGL_ROOT is set.])
@@ -2171,36 +2171,52 @@ equivalent variable and GTK+ is version 1.2.3 or above.
             AC_MSG_RESULT($MGL_ROOT)
         fi
 
+        AC_MSG_CHECKING(for libmgl location)
         dnl Find MGL library that we want
         dnl FIXME_MGL - test for MGL variants for freebsd etc.
         case "${host}" in
             *-*-linux* )
-              mgl_os="linux/gcc/glibc*"
+              if test "x$wxUSE_SHARED" = xyes ; then
+                  mgl_os_candidates="linux/gcc/glibc.so linux/gcc/glibc"
+              else
+                  mgl_os_candidates="linux/gcc/glibc linux/gcc/glibc.so"
+              fi
               ;;
             *-pc-msdosdjgpp )
-              mgl_os=dos32/dj2
+              mgl_os_candidates="dos32/dj2"
               ;;
             *)
               AC_MSG_ERROR(This system type ${host} is not yet supported by wxMGL.)
         esac
 
         mgl_lib_type=""
+        mgl_os=""
 
-        if test "$wxUSE_DEBUG_FLAG" = yes ; then
-            if test -f $MGL_ROOT/lib/debug/$mgl_os/libmgl.a -o \
-                    -f $MGL_ROOT/lib/debug/$mgl_os/libmgl.so; then
-                mgl_lib_type=debug
+        for mgl_os_i in $mgl_os_candidates ; do
+            if test "x$mgl_os" = x ; then
+                if test "$wxUSE_DEBUG_FLAG" = yes ; then
+                    if test -f $MGL_ROOT/lib/debug/$mgl_os_i/libmgl.a -o \
+                            -f $MGL_ROOT/lib/debug/$mgl_os_i/libmgl.so; then
+                        mgl_lib_type=debug
+                        mgl_os=$mgl_os_i
+                    fi
+                fi
+                if test "x$mgl_lib_type" = x ; then
+                    if test -f $MGL_ROOT/lib/release/$mgl_os_i/libmgl.a -o \
+                            -f $MGL_ROOT/lib/release/$mgl_os_i/libmgl.so; then
+                        mgl_lib_type=release
+                        mgl_os=$mgl_os_i
+                    fi
+                fi
             fi
-        fi
-        if test "x$mgl_lib_type" = x ; then
-            if test -f $MGL_ROOT/lib/release/$mgl_os/libmgl.a -o \
-                    -f $MGL_ROOT/lib/release/$mgl_os/libmgl.so; then
-                mgl_lib_type=release
-            else
-                AC_MSG_ERROR([Cannot find MGL libraries, make sure they are compiled.])
-            fi
-        fi
+        done
 
+        if test "x$mgl_os" = x ; then
+            AC_MSG_RESULT(not found)
+            AC_MSG_ERROR([Cannot find MGL libraries, make sure they are compiled.])
+        fi
+        AC_MSG_RESULT("$MGL_ROOT/lib/$mgl_lib_type/$mgl_os")
+ 
         wxUSE_UNIVERSAL="yes"
 
         TOOLKIT_INCLUDE="-I$MGL_ROOT/include"
