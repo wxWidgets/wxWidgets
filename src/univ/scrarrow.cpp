@@ -134,17 +134,18 @@ void wxScrollArrows::DrawArrow(Arrow arrow,
         { wxUP,   wxDOWN  }
     };
 
-    void (wxRenderer::*pfn)(wxDC&, wxDirection, const wxRect&, int) =
-        scrollbarLike ? &wxRenderer::DrawScrollbarArrow
-                      : &wxRenderer::DrawArrow;
-
-    (m_control->GetRenderer()->*pfn)
-    (
-        dc,
-        arrowDirs[m_control->IsVertical()][arrow],
-        rect,
-        m_control->GetArrowState(arrow)
-    );
+    if ( scrollbarLike )
+        m_control->GetRenderer()->DrawScrollbarArrow(
+            dc,
+            arrowDirs[m_control->IsVertical()][arrow],
+            rect,
+            m_control->GetArrowState(arrow));
+    else
+        m_control->GetRenderer()->DrawArrow(
+            dc,
+            arrowDirs[m_control->IsVertical()][arrow],
+            rect,
+            m_control->GetArrowState(arrow));
 }
 
 // ----------------------------------------------------------------------------
