@@ -296,6 +296,7 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(LIBDIRNAME)\wx\setup.h
         </if>
     </define-tag>
 
+
     <!-- for GUI libs/samples: -->
     <template id="wx_append_nomono" template="wx_append_base_nomono">
         <ldlibs>$(EXTRALIBS_GUI)</ldlibs>
@@ -334,6 +335,20 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(LIBDIRNAME)\wx\setup.h
                 src/msw/gsocket.c
                 src/msw/gsockmsw.c
             </precomp-headers-exclude>
+        </if>
+        
+        <if cond="FORMAT=='msvc6prj' and BUILDING_LIB=='1'">
+            <msvc-file-group>Common Sources:src/common/*</msvc-file-group>
+            <msvc-file-group>MSW Sources:src/msw/*</msvc-file-group>
+            <msvc-file-group>Generic Sources:src/generic/*</msvc-file-group>
+            <msvc-file-group>wxUniv Sources:src/univ/*</msvc-file-group>
+            <msvc-file-group>wxHTML Sources:src/html/*</msvc-file-group>
+            <msvc-file-group>Setup Headers:*/setup.h</msvc-file-group>
+            <msvc-file-group>Common Headers:*wx/[!/]*.h</msvc-file-group>
+            <msvc-file-group>MSW Headers:*wx/msw/*.h</msvc-file-group>
+            <msvc-file-group>Generic Headers:*wx/generic/*.h</msvc-file-group>
+            <msvc-file-group>wxUniv Headers:*wx/univ/*.h</msvc-file-group>
+            <msvc-file-group>wxHTML Headers:*wx/html/*.h</msvc-file-group>
         </if>
     </template>
 
