@@ -1947,6 +1947,10 @@ else
     ALL_OBJECTS="\$(BASE_OBJS) \${BASE_UNIX_OBJS}"
     ALL_DEPFILES="\${BASE_DEPS} \${BASE_UNIX_DEPS}"
 
+    if test "$wxUSE_ZLIB" = "yes" ; then
+        ALL_OBJECTS="${ALL_OBJECTS} \$(ZLIBOBJS)"
+    fi
+
     dnl building wxBase only
     WX_LIBRARY="wxbase"
 
