@@ -1745,7 +1745,7 @@ bool wxPostScriptDC::StartDoc( const wxString& message )
     
     // fprintf( m_pstream, "%%%%Pages: %d\n", (wxPageNumber - 1) );
     
-    char *paper = "A4";
+    const char *paper;
     switch (m_printData.GetPaperId())
     {
        case wxPAPER_LETTER: paper = "Letter"; break;             // Letter: paper ""; 8 1/2 by 11 inches
