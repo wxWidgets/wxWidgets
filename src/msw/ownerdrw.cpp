@@ -29,6 +29,7 @@
   #include "wx/dcmemory.h"
   #include "wx/menu.h"
   #include "wx/utils.h"
+  #include "wx/module.h"
 #endif
 
 #include "wx/settings.h"
