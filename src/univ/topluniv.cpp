@@ -37,6 +37,7 @@
 #include "wx/bitmap.h"
 #include "wx/image.h"
 #include "wx/cshelp.h"
+#include "wx/evtloop.h"
 
 
 // ----------------------------------------------------------------------------
@@ -210,7 +211,15 @@ void wxTopLevelWindow::DoGetClientSize(int *width, int *height) const
     if ( ms_drawDecorations )
     {
         int w, h;
+        // VS: we can't use real client area size in 'rect', because
+        //     wxTLWNative::DoGetClientSize calls GetClientAreaOrigin
+        //     under wxMSW which in turn calls DoGetClientSize... 
+        //     inifinite recursion
+        #if 0
         wxTopLevelWindowNative::DoGetClientSize(&w, &h);
+        #else
+        w = h = 500;
+        #endif
         wxRect rect = wxRect(wxTopLevelWindowNative::GetClientAreaOrigin(),
                              wxSize(w, h));
         rect = m_renderer->GetFrameClientArea(rect,
@@ -298,6 +307,222 @@ void wxTopLevelWindow::SetIcon(const wxIcon& icon)
             }
         }
     }
+}
+
+// ----------------------------------------------------------------------------
+// interactive manipulation
+// ----------------------------------------------------------------------------
+
+#define wxINTERACTIVE_RESIZE_DIR \
+          (wxINTERACTIVE_RESIZE_W | wxINTERACTIVE_RESIZE_E | \
+           wxINTERACTIVE_RESIZE_S | wxINTERACTIVE_RESIZE_N)
+
+struct wxInteractiveMoveData
+{
+    wxTopLevelWindowBase *m_window;
+    wxEventLoop          *m_evtLoop;
+    int                   m_flags;
+    wxRect                m_rect;
+    wxRect                m_rectOrig;
+    wxPoint               m_pos;
+    wxSize                m_minSize, m_maxSize;
+};
+
+class wxInteractiveMoveHandler : public wxEvtHandler
+{
+public:
+    wxInteractiveMoveHandler(wxInteractiveMoveData& data) : m_data(data) {}
+    
+private:
+    DECLARE_EVENT_TABLE()
+    void OnMouseMove(wxMouseEvent& event);
+    void OnMouseDown(wxMouseEvent& event);
+    void OnMouseUp(wxMouseEvent& event);
+    void OnKeyDown(wxKeyEvent& event);
+
+    wxInteractiveMoveData& m_data;
+};
+
+BEGIN_EVENT_TABLE(wxInteractiveMoveHandler, wxEvtHandler)
+    EVT_MOTION(wxInteractiveMoveHandler::OnMouseMove)
+    EVT_LEFT_DOWN(wxInteractiveMoveHandler::OnMouseDown)
+    EVT_LEFT_UP(wxInteractiveMoveHandler::OnMouseUp)
+    EVT_KEY_DOWN(wxInteractiveMoveHandler::OnKeyDown)
+END_EVENT_TABLE()
+
+
+static inline LINKAGEMODE 
+void wxApplyResize(wxInteractiveMoveData& data, const wxPoint& diff)
+{
+    if ( data.m_flags & wxINTERACTIVE_RESIZE_W )
+    {
+        data.m_rect.x += diff.x;
+        data.m_rect.width -= diff.x;
+    }
+    else if ( data.m_flags & wxINTERACTIVE_RESIZE_E )
+    {
+        data.m_rect.width += diff.x;
+    }
+    if ( data.m_flags & wxINTERACTIVE_RESIZE_N )
+    {
+        data.m_rect.y += diff.y;
+        data.m_rect.height -= diff.y;
+    }
+    else if ( data.m_flags & wxINTERACTIVE_RESIZE_S )
+    {
+        data.m_rect.height += diff.y;
+    }
+    
+    if ( data.m_minSize.x != -1 && data.m_rect.width < data.m_minSize.x )
+    {
+        if ( data.m_flags & wxINTERACTIVE_RESIZE_W )
+            data.m_rect.x -= data.m_minSize.x - data.m_rect.width;
+        data.m_rect.width = data.m_minSize.x;
+    }
+    if ( data.m_maxSize.x != -1 && data.m_rect.width > data.m_maxSize.x )
+    {
+        if ( data.m_flags & wxINTERACTIVE_RESIZE_W )
+            data.m_rect.x -= data.m_minSize.x - data.m_rect.width;
+        data.m_rect.width = data.m_maxSize.x;
+    }
+    if ( data.m_minSize.y != -1 && data.m_rect.height < data.m_minSize.y )
+    {
+        if ( data.m_flags & wxINTERACTIVE_RESIZE_N )
+            data.m_rect.y -= data.m_minSize.y - data.m_rect.height;
+        data.m_rect.height = data.m_minSize.y;
+    }
+    if ( data.m_maxSize.y != -1 && data.m_rect.height > data.m_maxSize.y )
+    {
+        if ( data.m_flags & wxINTERACTIVE_RESIZE_N )
+            data.m_rect.y -= data.m_minSize.y - data.m_rect.height;
+        data.m_rect.height = data.m_maxSize.y;
+    }
+}
+
+void wxInteractiveMoveHandler::OnMouseMove(wxMouseEvent& event)
+{
+    if ( m_data.m_flags & wxINTERACTIVE_WAIT_FOR_INPUT )
+        event.Skip();
+
+    else if ( m_data.m_flags & wxINTERACTIVE_MOVE )
+    {
+        wxPoint diff = wxGetMousePosition() - m_data.m_pos;
+        m_data.m_rect = m_data.m_rectOrig;
+        m_data.m_rect.Offset(diff);
+        m_data.m_window->Move(m_data.m_rect.GetPosition());
+    }
+
+    else if ( m_data.m_flags & wxINTERACTIVE_RESIZE )
+    {
+        wxPoint diff = wxGetMousePosition() - m_data.m_pos;
+        m_data.m_rect = m_data.m_rectOrig;
+        wxApplyResize(m_data, diff);
+        m_data.m_window->SetSize(m_data.m_rect);
+    }
+}
+
+void wxInteractiveMoveHandler::OnMouseDown(wxMouseEvent& event)
+{
+    if ( m_data.m_flags & wxINTERACTIVE_WAIT_FOR_INPUT )
+    {
+        m_data.m_flags &= ~wxINTERACTIVE_WAIT_FOR_INPUT;
+        m_data.m_pos = wxGetMousePosition();
+    }
+}
+
+void wxInteractiveMoveHandler::OnKeyDown(wxKeyEvent& event)
+{
+    if ( m_data.m_flags & wxINTERACTIVE_WAIT_FOR_INPUT )
+    {
+        m_data.m_flags &= ~wxINTERACTIVE_WAIT_FOR_INPUT;
+        m_data.m_pos = wxGetMousePosition();
+    }
+    
+    wxPoint diff(-1,-1);
+    
+    switch ( event.GetKeyCode() )
+    {
+        case WXK_UP:    diff = wxPoint(0, -16); break;
+        case WXK_DOWN:  diff = wxPoint(0, 16);  break;
+        case WXK_LEFT:  diff = wxPoint(-16, 0); break;
+        case WXK_RIGHT: diff = wxPoint(16, 0);  break;
+        case WXK_ESCAPE:
+            m_data.m_window->SetSize(m_data.m_rectOrig);
+            m_data.m_evtLoop->Exit();
+            return;
+        case WXK_RETURN:
+            m_data.m_evtLoop->Exit();
+            return;
+    }
+    
+    if ( diff.x != -1 )
+    {
+        if ( m_data.m_flags & wxINTERACTIVE_MOVE )
+        {
+            m_data.m_rect.Offset(diff);
+            m_data.m_window->Move(m_data.m_rect.GetPosition());
+        }
+        else /* wxINTERACTIVE_RESIZE */
+        {
+            if ( !(m_data.m_flags & wxINTERACTIVE_RESIZE_DIR) )
+            {
+                if ( diff.y < 0 )
+                    m_data.m_flags |= wxINTERACTIVE_RESIZE_N;
+                else if ( diff.y > 0 )
+                    m_data.m_flags |= wxINTERACTIVE_RESIZE_S;
+                if ( diff.x < 0 )
+                    m_data.m_flags |= wxINTERACTIVE_RESIZE_W;
+                else if ( diff.x > 0 )
+                    m_data.m_flags |= wxINTERACTIVE_RESIZE_E;
+            }
+
+            wxApplyResize(m_data, diff);
+            m_data.m_window->SetSize(m_data.m_rect);
+        }
+    }
+}
+
+void wxInteractiveMoveHandler::OnMouseUp(wxMouseEvent& event)
+{
+    m_data.m_evtLoop->Exit();
+}
+
+
+void wxTopLevelWindow::InteractiveMove(int flags)
+{
+    wxASSERT_MSG( !((flags & wxINTERACTIVE_MOVE) && (flags & wxINTERACTIVE_RESIZE)),
+                  wxT("can't move and resize window at the same time") );
+
+    wxASSERT_MSG( !(flags & wxINTERACTIVE_RESIZE) || 
+                  (flags & wxINTERACTIVE_WAIT_FOR_INPUT) || 
+                  (flags & wxINTERACTIVE_RESIZE_DIR),
+                  wxT("direction of resizing not specified") );
+
+    wxInteractiveMoveData data;
+    wxEventLoop loop;
+    wxWindow *focus = FindFocus();
+    
+    // FIXME - display resize cursor if waiting for initial input
+
+    data.m_window = this;
+    data.m_evtLoop = &loop;
+    data.m_flags = flags;
+    data.m_rect = data.m_rectOrig = GetRect();
+    data.m_pos = wxGetMousePosition();
+    data.m_minSize = wxSize(GetMinWidth(), GetMinHeight());
+    data.m_maxSize = wxSize(GetMaxWidth(), GetMaxHeight());
+
+    this->PushEventHandler(new wxInteractiveMoveHandler(data));
+    if ( focus )
+        focus->PushEventHandler(new wxInteractiveMoveHandler(data));
+
+    CaptureMouse();
+    loop.Run();
+    ReleaseMouse();
+
+    this->PopEventHandler(TRUE/*delete*/);
+    if ( focus )
+        focus->PopEventHandler(TRUE/*delete*/);
 }
 
 // ----------------------------------------------------------------------------
