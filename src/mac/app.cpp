@@ -2320,12 +2320,26 @@ void wxApp::MacHandleMenuSelect( int macMenuId , int macMenuItemNum )
     {
         MenuCommand id ;
         GetMenuItemCommandID( GetMenuHandle(macMenuId) , macMenuItemNum , &id ) ;
+        wxMenuBar* mbar = wxMenuBar::MacGetInstalledMenuBar() ;
+        wxMenu* menu = NULL ;
+        wxMenuItem* item = NULL ;
+        if ( mbar )
+        {
+            item = mbar->FindItem( id , &menu ) ;
+        }
+        wxCHECK_RET( item != NULL && menu != NULL && mbar != NULL, wxT("error in menu item callback") );
+            
+        if (item->IsCheckable())
+        {
+            item->Check( !item->IsChecked() ) ;
+        }
+
         wxWindow* frontwindow = wxFindWinFromMacWindow( ::FrontWindow() )  ;
         wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED, id );
         event.m_timeStamp =  ((EventRecord*) MacGetCurrentEvent())->when ;
-        event.SetEventObject(frontwindow->GetEventHandler());
-        event.SetInt( id );
-        frontwindow->GetEventHandler()->ProcessEvent(event);
+        event.SetEventObject(menu);
+        event.SetInt(item->IsCheckable() ? item->IsChecked() : -1);
+        frontwindow->GetEventHandler()->ProcessEvent(event); 
     }
     HiliteMenu(0);
 }
