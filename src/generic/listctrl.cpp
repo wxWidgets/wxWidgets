@@ -978,8 +978,10 @@ bool wxSelectionStore::SelectRange(size_t itemFrom, size_t itemTo,
                             // stop counting (see comment below)
                             itemsChanged = NULL;
                         }
-
-                        itemsChanged->Add(m_itemsSel[i]);
+                        else
+                        {
+                            itemsChanged->Add(m_itemsSel[i]);
+                        }
                     }
 
                     m_itemsSel.RemoveAt(i);
