@@ -888,14 +888,12 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler)
         return pi.dwProcessId;
     }
 
-    wxAppTraits *traits = NULL;
+    wxAppTraits *traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
+    wxCHECK_MSG( traits, -1, _T("no wxAppTraits in wxExecute()?") );
+
     void *cookie = NULL;
     if ( !(flags & wxEXEC_NODISABLE) )
     {
-        if ( wxTheApp )
-            traits = wxTheApp->GetTraits();
-        wxCHECK_MSG( traits, -1, _T("no wxAppTraits in wxExecute()?") );
-
         // disable all app windows while waiting for the child process to finish
         cookie = traits->BeforeChildWaitLoop();
     }
@@ -916,8 +914,11 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler)
         traits->AlwaysYield();
     }
 
-    if ( traits )
+    if ( !(flags & wxEXEC_NODISABLE) )
+    {
+        // reenable disabled windows back
         traits->AfterChildWaitLoop(cookie);
+    }
 
     DWORD dwExitCode = data->dwExitCode;
     delete data;
