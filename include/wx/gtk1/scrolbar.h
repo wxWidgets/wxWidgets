@@ -41,7 +41,8 @@ extern const char *wxScrollBarNameStr;
 class wxScrollBar: public wxControl
 {
 public:
-    wxScrollBar(void) { m_adjust = (GtkAdjustment *) NULL; m_oldPos = 0.0; };
+    wxScrollBar() 
+       { m_adjust = (GtkAdjustment *) NULL; m_oldPos = 0.0; }
     inline wxScrollBar( wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
@@ -49,7 +50,7 @@ public:
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxScrollBarNameStr )
     {
-      Create( parent, id, pos, size, style, validator, name );
+        Create( parent, id, pos, size, style, validator, name );
     }
     bool Create( wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,
@@ -57,8 +58,8 @@ public:
            long style = wxSB_HORIZONTAL,
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxScrollBarNameStr );
-    ~wxScrollBar(void);
-    int GetThumbPosition(void) const;
+    ~wxScrollBar();
+    int GetThumbPosition() const;
     int GetThumbSize() const;
     int GetPageSize() const;
     int GetRange() const;
