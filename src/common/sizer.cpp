@@ -21,6 +21,11 @@
     #pragma hdrstop
 #endif
 
+#ifndef WX_PRECOMP
+    #include "wx/string.h"
+    #include "wx/intl.h"
+#endif // WX_PRECOMP
+
 #include "wx/sizer.h"
 #include "wx/utils.h"
 #include "wx/statbox.h"
