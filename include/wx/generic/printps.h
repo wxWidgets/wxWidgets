@@ -19,7 +19,7 @@
 
 #include "wx/prntbase.h"
 
-#if wxUSE_PRINTING_ARCHITECTURE
+#if wxUSE_PRINTING_ARCHITECTURE && wxUSE_POSTSCRIPT
 
 // ----------------------------------------------------------------------------
 // Represents the printer: manages printing a wxPrintout object
