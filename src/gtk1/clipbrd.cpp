@@ -153,7 +153,7 @@ selection_received( GtkWidget *WXUNUSED(widget),
         clipboard->m_waiting = FALSE;
         return;
     }
-    
+
     /* make sure we got the data in the correct form (selection type).
        if so, copy data to target object */
     
@@ -178,11 +178,15 @@ selection_received( GtkWidget *WXUNUSED(widget),
 	
 	case wxDF_BITMAP:
 	{
-            if (selection_data->type != GDK_SELECTION_TYPE_BITMAP)
+            if (selection_data->type != GDK_SELECTION_TYPE_STRING)
             {
                 clipboard->m_waiting = FALSE;
                 return;
             }
+	    
+	    wxBitmapDataObject *bitmap_object = (wxBitmapDataObject *) data_object;
+	    
+	    bitmap_object->SetPngData( (const char*) selection_data->data, (size_t) selection_data->length );
 	    
 	    break;
 	}
@@ -268,7 +272,7 @@ selection_handler( GtkWidget *WXUNUSED(widget), GtkSelectionData *selection_data
     while (node)
     {
         wxDataObject *data_object = (wxDataObject *)node->Data();
-    
+	
 	if (data_object->GetFormat().GetAtom() != selection_data->target)
 	{
 	    node = node->Next();
@@ -303,10 +307,17 @@ selection_handler( GtkWidget *WXUNUSED(widget), GtkSelectionData *selection_data
 	    
 	    case wxDF_BITMAP:
 	    {
-	        // wxBitmapDataObject *private_object = (wxBitmapDataObject*) data_object;
+	        wxBitmapDataObject *bitmap_object = (wxBitmapDataObject*) data_object;
 	    
-		// how do we do that ?
-		
+	        if (bitmap_object->GetSize() == 0) return;
+	    
+                gtk_selection_data_set( 
+                    selection_data, 
+		    GDK_SELECTION_TYPE_STRING, 
+		    8*sizeof(gchar), 
+		    (unsigned char*) bitmap_object->GetData(), 
+		    (int) bitmap_object->GetSize() );
+		    
 		break;
 	    }
 	    

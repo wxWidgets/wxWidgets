@@ -19,21 +19,22 @@
 #include "wx/wx.h"
 #endif
 
+#ifdef __WXMOTIF__
+    #error Sorry, drag and drop is not yet implemented on wxMotif.
+#endif
+
 #include "wx/intl.h"
 #include "wx/log.h"
 
 #include "wx/dnd.h"
 #include "wx/dirdlg.h"
-
-#ifdef __WXMOTIF__
-    #error Sorry, drag and drop is not yet implemented on wxMotif.
-#endif
+#include "wx/filedlg.h"
+#include "wx/image.h"
+#include "wx/clipbrd.h"
 
 #if defined(__WXGTK__) || defined(__WXMOTIF__)
     #include "mondrian.xpm"
 #endif
-
-#include "wx/clipbrd.h"
 
 // ----------------------------------------------------------------------------
 // Derive two simple classes which just put in the listbox the strings (text or
@@ -95,6 +96,10 @@ public:
     void OnLogClear(wxCommandEvent& event);
     void OnCopy(wxCommandEvent& event);
     void OnPaste(wxCommandEvent& event);
+    void OnCopyBitmap(wxCommandEvent& event);
+    void OnPasteBitmap(wxCommandEvent& event);
+    void OnClipboardHasText(wxCommandEvent& event);
+    void OnClipboardHasBitmap(wxCommandEvent& event);
 
     void OnLeftDown(wxMouseEvent& event);
     void OnRightDown(wxMouseEvent& event);
@@ -102,13 +107,14 @@ public:
     DECLARE_EVENT_TABLE()
 
 private:
-        wxListBox  *m_ctrlFile,
-        *m_ctrlText;
-        wxTextCtrl *m_ctrlLog;
+    wxListBox  *m_ctrlFile,
+    *m_ctrlText;
+    wxTextCtrl *m_ctrlLog;
 
-        wxLog *m_pLog, *m_pLogPrev;
+    wxLog *m_pLog, *m_pLogPrev;
 
-        wxString m_strText;
+    wxString  m_strText;
+    wxBitmap  m_bitmap;
 };
 
 // ----------------------------------------------------------------------------
@@ -123,26 +129,38 @@ enum
     Menu_Help,
     Menu_Clear,
     Menu_Copy,
-    Menu_Paste
+    Menu_Paste,
+    Menu_CopyBitmap,
+    Menu_PasteBitmap,
+    Menu_HasText,
+    Menu_HasBitmap
 };
 
 BEGIN_EVENT_TABLE(DnDFrame, wxFrame)
-    EVT_MENU(Menu_Quit,  DnDFrame::OnQuit)
-    EVT_MENU(Menu_About, DnDFrame::OnAbout)
-    EVT_MENU(Menu_Drag,  DnDFrame::OnDrag)
-    EVT_MENU(Menu_Help,  DnDFrame::OnHelp)
-    EVT_MENU(Menu_Clear, DnDFrame::OnLogClear)
-    EVT_MENU(Menu_Copy,  DnDFrame::OnCopy)
-    EVT_MENU(Menu_Paste, DnDFrame::OnPaste)
+    EVT_MENU(Menu_Quit,       DnDFrame::OnQuit)
+    EVT_MENU(Menu_About,      DnDFrame::OnAbout)
+    EVT_MENU(Menu_Drag,       DnDFrame::OnDrag)
+    EVT_MENU(Menu_Help,       DnDFrame::OnHelp)
+    EVT_MENU(Menu_Clear,      DnDFrame::OnLogClear)
+    EVT_MENU(Menu_Copy,       DnDFrame::OnCopy)
+    EVT_MENU(Menu_Paste,      DnDFrame::OnPaste)
+    EVT_MENU(Menu_CopyBitmap, DnDFrame::OnCopyBitmap)
+    EVT_MENU(Menu_PasteBitmap,DnDFrame::OnPasteBitmap)
+    EVT_MENU(Menu_HasText,    DnDFrame::OnClipboardHasText)
+    EVT_MENU(Menu_HasBitmap,  DnDFrame::OnClipboardHasBitmap)
 
-    EVT_LEFT_DOWN(       DnDFrame::OnLeftDown)
-    EVT_RIGHT_DOWN(      DnDFrame::OnRightDown)
-    EVT_PAINT(           DnDFrame::OnPaint)
+    EVT_LEFT_DOWN(            DnDFrame::OnLeftDown)
+    EVT_RIGHT_DOWN(           DnDFrame::OnRightDown)
+    EVT_PAINT(                DnDFrame::OnPaint)
 END_EVENT_TABLE()
 
     // `Main program' equivalent, creating windows and returning main app frame
 bool DnDApp::OnInit()
 {
+#if wxUSE_LIBPNG
+    wxImage::AddHandler( new wxPNGHandler );
+#endif
+
     // create the main frame window
     DnDFrame *frame = new DnDFrame((wxFrame  *) NULL,
                                    "Drag-and-Drop/Clipboard wxWindows Sample",
@@ -181,9 +199,15 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
     help_menu->Append(Menu_About, "&About");
 
     wxMenu *clip_menu = new wxMenu;
-    clip_menu->Append(Menu_Copy, "&Copy\tCtrl+C");
-    clip_menu->Append(Menu_Paste, "&Paste\tCtrl+V");
-
+    clip_menu->Append(Menu_Copy, "&Copy text\tCtrl+C");
+    clip_menu->Append(Menu_Paste, "&Paste text\tCtrl+V");
+    clip_menu->AppendSeparator();
+    clip_menu->Append(Menu_CopyBitmap, "&Copy bitmap");
+    clip_menu->Append(Menu_PasteBitmap, "&Paste bitmap");
+    clip_menu->AppendSeparator();
+    clip_menu->Append(Menu_HasText, "Clipboard has &text\tCtrl+T");
+    clip_menu->Append(Menu_HasBitmap, "Clipboard has a &bitmap\tCtrl+B");
+    
     wxMenuBar *menu_bar = new wxMenuBar;
     menu_bar->Append(file_menu, "&File");
     menu_bar->Append(log_menu,  "&Log");
@@ -198,58 +222,55 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
 
     wxString strFile("Drop files here!"), strText("Drop text on me");
 
-    m_ctrlFile  = new wxListBox(this, -1, pos, size, 1, &strFile, wxLB_HSCROLL);
-    m_ctrlText  = new wxListBox(this, -1, pos, size, 1, &strText, wxLB_HSCROLL);
+    m_ctrlFile  = new wxListBox(this, -1, pos, size, 1, &strFile, wxLB_HSCROLL | wxLB_ALWAYS_SB );
+    m_ctrlText  = new wxListBox(this, -1, pos, size, 1, &strText, wxLB_HSCROLL | wxLB_ALWAYS_SB );
 
     m_ctrlLog   = new wxTextCtrl(this, -1, "", pos, size,
                                wxTE_MULTILINE | wxTE_READONLY |
                                wxSUNKEN_BORDER );
+    // redirect log messages to the text window (don't forget to delete it!)
+    m_pLog = new wxLogTextCtrl(m_ctrlLog);
+    m_pLogPrev = wxLog::SetActiveTarget(m_pLog);
 
-#if wxUSE_STD_IOSTREAM  
-// redirect log messages to the text window (don't forget to delete it!)
-  m_pLog = new wxLogTextCtrl(m_ctrlLog);
-  m_pLogPrev = wxLog::SetActiveTarget(m_pLog);
-#endif
+    // associate drop targets with 2 text controls
+    m_ctrlFile->SetDropTarget(new DnDFile(m_ctrlFile));
+    m_ctrlText->SetDropTarget(new DnDText(m_ctrlText));
 
-  // associate drop targets with 2 text controls
-  m_ctrlFile->SetDropTarget(new DnDFile(m_ctrlFile));
-  m_ctrlText->SetDropTarget(new DnDText(m_ctrlText));
+    wxLayoutConstraints *c;
 
-  wxLayoutConstraints *c;
+    // Top-left listbox
+    c = new wxLayoutConstraints;
+    c->left.SameAs(this, wxLeft);
+    c->top.SameAs(this, wxTop);
+    c->right.PercentOf(this, wxRight, 50);
+    c->height.PercentOf(this, wxHeight, 30);
+    m_ctrlFile->SetConstraints(c);
 
-  // Top-left listbox
-  c = new wxLayoutConstraints;
-  c->left.SameAs(this, wxLeft);
-  c->top.SameAs(this, wxTop);
-  c->right.PercentOf(this, wxRight, 50);
-  c->height.PercentOf(this, wxHeight, 40);
-  m_ctrlFile->SetConstraints(c);
+    // Top-right listbox
+    c = new wxLayoutConstraints;
+    c->left.SameAs    (m_ctrlFile, wxRight);
+    c->top.SameAs     (this, wxTop);
+    c->right.SameAs   (this, wxRight);
+    c->height.PercentOf(this, wxHeight, 30);
+    m_ctrlText->SetConstraints(c);
 
-  // Top-right listbox
-  c = new wxLayoutConstraints;
-  c->left.SameAs    (m_ctrlFile, wxRight);
-  c->top.SameAs     (this, wxTop);
-  c->right.SameAs   (this, wxRight);
-  c->height.PercentOf(this, wxHeight, 40);
-  m_ctrlText->SetConstraints(c);
+    // Lower text control
+    c = new wxLayoutConstraints;
+    c->left.SameAs    (this, wxLeft);
+    c->right.SameAs   (this, wxRight);
+    c->height.PercentOf(this, wxHeight, 30);
+    c->top.SameAs(m_ctrlText, wxBottom);
+    m_ctrlLog->SetConstraints(c);
 
-  // Lower text control
-  c = new wxLayoutConstraints;
-  c->left.SameAs    (this, wxLeft);
-  c->right.SameAs   (this, wxRight);
-  c->height.PercentOf(this, wxHeight, 40);
-  c->top.SameAs(m_ctrlText, wxBottom);
-  m_ctrlLog->SetConstraints(c);
-
-  SetAutoLayout(TRUE);
+    SetAutoLayout(TRUE);
 }
 
-void DnDFrame::OnQuit(wxCommandEvent& /* event */)
+void DnDFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
     Close(TRUE);
 }
 
-void DnDFrame::OnPaint(wxPaintEvent& /*event*/)
+void DnDFrame::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     int w = 0;
     int h = 0;
@@ -257,10 +278,55 @@ void DnDFrame::OnPaint(wxPaintEvent& /*event*/)
 
     wxPaintDC dc(this);
     dc.SetFont( wxFont( 24, wxDECORATIVE, wxNORMAL, wxNORMAL, FALSE, "charter" ) );
-    dc.DrawText( "Drag text from here!", 20, h-35 );
+    dc.DrawText( "Drag text from here!", 20, h-50 );
+    
+    if (m_bitmap.Ok())
+        dc.DrawBitmap( m_bitmap, 280, h-120, TRUE );
 }
 
-void DnDFrame::OnDrag(wxCommandEvent& /* event */)
+void DnDFrame::OnClipboardHasText(wxCommandEvent& WXUNUSED(event))
+{
+    if ( !wxTheClipboard->Open() )
+    {
+        wxLogError( _T("Can't open clipboard.") );
+
+        return;
+    }
+
+    if ( !wxTheClipboard->IsSupported( wxDF_TEXT ) )
+    {
+        wxLogMessage( _T("No text is on the clipboard") );
+    }
+    else
+    {
+        wxLogMessage( _T("There is text is on the clipboard") );
+    }
+
+    wxTheClipboard->Close();
+}
+
+void DnDFrame::OnClipboardHasBitmap(wxCommandEvent& WXUNUSED(event))
+{
+    if ( !wxTheClipboard->Open() )
+    {
+        wxLogError( _T("Can't open clipboard.") );
+
+        return;
+    }
+
+    if ( !wxTheClipboard->IsSupported( wxDF_BITMAP ) )
+    {
+        wxLogMessage( _T("No bitmap is on the clipboard") );
+    }
+    else
+    {
+        wxLogMessage( _T("A bitmap is on the clipboard") );
+    }
+
+    wxTheClipboard->Close();
+}
+
+void DnDFrame::OnDrag(wxCommandEvent& WXUNUSED(event))
 {
     wxString strText = wxGetTextFromUser
         (
@@ -274,7 +340,7 @@ void DnDFrame::OnDrag(wxCommandEvent& /* event */)
     m_strText = strText;
 }
 
-void DnDFrame::OnAbout(wxCommandEvent& /* event */)
+void DnDFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxMessageBox("Drag-&-Drop Demo\n"
                  "Please see \"Help|Help...\" for details\n"
@@ -357,16 +423,108 @@ void DnDFrame::OnRightDown(wxMouseEvent &event )
 
 DnDFrame::~DnDFrame()
 {
-#if wxUSE_STD_IOSTREAM  
     if ( m_pLog != NULL ) {
         if ( wxLog::SetActiveTarget(m_pLogPrev) == m_pLog )
             delete m_pLog;
     }
-#endif
 }
 
 // ---------------------------------------------------------------------------
-// clipboard
+// bitmap clipboard
+// ---------------------------------------------------------------------------
+
+void DnDFrame::OnCopyBitmap(wxCommandEvent& WXUNUSED(event))
+{
+    wxFileDialog dialog(this, "Open a PNG file", "", "", "PNG files (*.png)|*.png", 0);
+
+    if (dialog.ShowModal() != wxID_OK)
+    { 
+        wxLogMessage( _T("Aborted file open") );
+        return;
+    }
+    
+    if (dialog.GetPath().IsEmpty())
+    { 
+        wxLogMessage( _T("Returned empty string.") );
+        return;
+    }
+    
+    if (!wxFileExists(dialog.GetPath()))
+    {
+        wxLogMessage( _T("File doesn't exist.") );
+        return;
+    }
+    
+    wxImage image;
+    image.LoadFile( dialog.GetPath(), wxBITMAP_TYPE_PNG );
+    if (!image.Ok())
+    {
+        wxLogMessage( _T("Invalid image file...") );
+        return;
+    }
+    
+    wxLogMessage( _T("Decoding image file...") );
+    wxYield();
+    
+    wxBitmap bitmap( image.ConvertToBitmap() );
+
+    if ( !wxTheClipboard->Open() )
+    {
+        wxLogError(_T("Can't open clipboard."));
+
+        return;
+    }
+
+    wxLogMessage( _T("Creating wxBitmapDataObject...") );
+    wxYield();
+    
+    if ( !wxTheClipboard->AddData(new wxBitmapDataObject(bitmap)) )
+    {
+        wxLogError(_T("Can't copy image to the clipboard."));
+    }
+    else
+    {
+        wxLogMessage(_T("Image has been put on the clipboard.") );
+        wxLogMessage(_T("You can paste it now and look at it.") );
+    }
+
+    wxTheClipboard->Close();
+}
+
+void DnDFrame::OnPasteBitmap(wxCommandEvent& WXUNUSED(event))
+{
+    if ( !wxTheClipboard->Open() )
+    {
+        wxLogError(_T("Can't open clipboard."));
+
+        return;
+    }
+
+    if ( !wxTheClipboard->IsSupported(wxDF_BITMAP) )
+    {
+        wxLogWarning(_T("No bitmap on clipboard"));
+
+        wxTheClipboard->Close();
+        return;
+    }
+
+    wxBitmapDataObject data;
+    if ( !wxTheClipboard->GetData(&data) )
+    {
+        wxLogError(_T("Can't paste bitmap from the clipboard"));
+    }
+    else
+    {
+        wxLogMessage(_T("Bitmap pasted from the clipboard") );
+	m_bitmap = data.GetBitmap();
+	Refresh();
+    }
+
+    wxTheClipboard->Close();
+}
+
+// ---------------------------------------------------------------------------
+// text clipboard
 // ---------------------------------------------------------------------------
 
 void DnDFrame::OnCopy(wxCommandEvent& WXUNUSED(event))
@@ -403,6 +561,7 @@ void DnDFrame::OnPaste(wxCommandEvent& WXUNUSED(event))
     {
         wxLogWarning(_T("No text data on clipboard"));
 
+        wxTheClipboard->Close();
         return;
     }
 
@@ -423,6 +582,7 @@ void DnDFrame::OnPaste(wxCommandEvent& WXUNUSED(event))
 // ----------------------------------------------------------------------------
 // Notifications called by the base class
 // ----------------------------------------------------------------------------
+
 bool DnDText::OnDropText( wxDropPointCoord, wxDropPointCoord, const wxChar *psz )
 {
     m_pOwner->Append(psz);

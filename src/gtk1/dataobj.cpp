@@ -14,6 +14,8 @@
 #include "wx/dataobj.h"
 #include "wx/app.h"
 #include "wx/debug.h"
+#include "wx/mstream.h"
+#include "wx/image.h"
 
 #include "gdk/gdk.h"
 
@@ -23,6 +25,7 @@
 //-------------------------------------------------------------------------
 
 GdkAtom  g_textAtom        = 0;
+GdkAtom  g_pngAtom         = 0;
 
 //-------------------------------------------------------------------------
 // wxDataFormat
@@ -32,7 +35,7 @@ IMPLEMENT_CLASS(wxDataFormat, wxObject)
 
 wxDataFormat::wxDataFormat()
 {
-    if (!g_textAtom) g_textAtom = gdk_atom_intern( "STRING", FALSE );
+    PrepareFormats();
     m_type = wxDF_INVALID;
     m_hasAtom = FALSE;
     m_atom = (GdkAtom) 0;
@@ -40,25 +43,25 @@ wxDataFormat::wxDataFormat()
 
 wxDataFormat::wxDataFormat( wxDataFormatId type )
 {
-    if (!g_textAtom) g_textAtom = gdk_atom_intern( "STRING", FALSE );
+    PrepareFormats();
     SetType( type );
 }
 
 wxDataFormat::wxDataFormat( const wxChar *id )
 {
-    if (!g_textAtom) g_textAtom = gdk_atom_intern( "STRING", FALSE );
+    PrepareFormats();
     SetId( id );
 }
 
 wxDataFormat::wxDataFormat( const wxString &id )
 {
-    if (!g_textAtom) g_textAtom = gdk_atom_intern( "STRING", FALSE );
+    PrepareFormats();
     SetId( id );
 }
 
 wxDataFormat::wxDataFormat( const wxDataFormat &format )
 {
-    if (!g_textAtom) g_textAtom = gdk_atom_intern( "STRING", FALSE );
+    PrepareFormats();
     m_type = format.GetType();
     m_id = format.GetId();
     m_hasAtom = TRUE;
@@ -67,7 +70,7 @@ wxDataFormat::wxDataFormat( const wxDataFormat &format )
 
 wxDataFormat::wxDataFormat( const GdkAtom atom )
 {
-    if (!g_textAtom) g_textAtom = gdk_atom_intern( "STRING", FALSE );
+    PrepareFormats();
     m_hasAtom = TRUE;
 
     m_atom = atom;
@@ -102,7 +105,7 @@ void wxDataFormat::SetType( wxDataFormatId type )
     else
     if (m_type == wxDF_BITMAP)
     {
-        m_id = _T("BITMAP");
+        m_id = _T("image/png");
     }
     else
     if (m_type == wxDF_FILENAME)
@@ -167,6 +170,12 @@ GdkAtom wxDataFormat::GetAtom()
     }
 
     return m_atom;
+}
+
+void wxDataFormat::PrepareFormats()
+{
+    if (!g_textAtom) g_textAtom = gdk_atom_intern( "STRING", FALSE );
+    if (!g_pngAtom) g_pngAtom = gdk_atom_intern( "image/png", FALSE );
 }
 
 //-------------------------------------------------------------------------
@@ -385,18 +394,28 @@ IMPLEMENT_DYNAMIC_CLASS( wxBitmapDataObject, wxDataObject )
 wxBitmapDataObject::wxBitmapDataObject()
 {
     m_format.SetType( wxDF_BITMAP );
+    m_pngData = (char*)NULL;
+    m_pngSize = 0;
 }
 
 wxBitmapDataObject::wxBitmapDataObject( const wxBitmap& bitmap )
 {
     m_format.SetType( wxDF_BITMAP );
-
+    m_pngData = (char*)NULL;
+    m_pngSize = 0;
     m_bitmap = bitmap;
+    DoConvertToPng();
+}
+
+wxBitmapDataObject::~wxBitmapDataObject()
+{
+    if (m_pngData) delete[] m_pngData;
 }
 
 void wxBitmapDataObject::SetBitmap( const wxBitmap &bitmap )
 {
     m_bitmap = bitmap;
+    DoConvertToPng();
 }
 
 wxBitmap wxBitmapDataObject::GetBitmap() const
@@ -411,12 +430,44 @@ void wxBitmapDataObject::WriteData( void *dest ) const
 
 size_t wxBitmapDataObject::GetSize() const
 {
-    return 0;
+    return m_pngSize;
 }
 
 void wxBitmapDataObject::WriteBitmap( const wxBitmap &bitmap, void *dest ) const
 {
-    memcpy( dest, m_bitmap.GetPixmap(), GetSize() );
+//    if (m_bitmap == bitmap)
+        memcpy( dest, m_pngData, m_pngSize );
+}
+
+void wxBitmapDataObject::SetPngData( const char *pngData, size_t pngSize )
+{
+    if (m_pngData) delete[] m_pngData;
+    m_pngData = (char*) NULL;
+    m_pngSize = pngSize;
+    m_pngData = new char[m_pngSize];
+    memcpy( m_pngData, pngData, m_pngSize );
+    
+    wxMemoryInputStream mstream( pngData, pngSize );
+    wxImage image;
+    wxPNGHandler handler;
+    handler.LoadFile( &image, mstream );
+    m_bitmap = image.ConvertToBitmap();
+}
+
+void wxBitmapDataObject::DoConvertToPng()
+{
+    if (m_pngData) delete[] m_pngData;
+    
+    wxImage image( m_bitmap );
+    wxPNGHandler handler;
+    
+    wxCountingOutputStream count;
+    handler.SaveFile( &image, count );
+    m_pngSize = count.GetSize() + 100; // sometimes the size seems to vary ???
+    m_pngData = new char[m_pngSize];
+    
+    wxMemoryOutputStream mstream( m_pngData, m_pngSize );
+    handler.SaveFile( &image, mstream );
 }
 
 // ----------------------------------------------------------------------------

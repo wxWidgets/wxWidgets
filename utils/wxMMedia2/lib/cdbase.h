@@ -17,6 +17,8 @@
 
 #include "wx/wxprec.h"
 
+#include "wx/object.h"
+
 typedef struct wxCDtime {
   wxUint8 track;
   wxUint8 hour, min, sec;

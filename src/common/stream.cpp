@@ -646,8 +646,55 @@ wxOutputStream& wxOutputStream::operator<<(wxObject& obj)
 #endif
 
 // ----------------------------------------------------------------------------
+// wxCountingOutputStream
+// ----------------------------------------------------------------------------
+
+wxCountingOutputStream::wxCountingOutputStream ()
+  : wxOutputStream()
+{
+   m_currentPos = 0;
+}
+
+size_t wxCountingOutputStream::GetSize() const
+{
+  return m_lastcount;
+}
+
+size_t wxCountingOutputStream::OnSysWrite(const void *buffer, size_t size)
+{
+  m_currentPos += size;
+  if (m_currentPos > m_lastcount) m_lastcount = m_currentPos;
+  return m_currentPos;
+}
+
+off_t wxCountingOutputStream::OnSysSeek(off_t pos, wxSeekMode mode)
+{
+  if (mode == wxFromStart)
+  {
+    m_currentPos = pos;
+  }
+  if (mode == wxFromEnd)
+  {
+    m_currentPos = m_lastcount + pos;
+  }
+  else
+  {
+    m_currentPos += pos;
+  }
+  if (m_currentPos > m_lastcount) m_lastcount = m_currentPos;
+  
+  return m_currentPos;  // ?
+}
+
+off_t wxCountingOutputStream::OnSysTell() const
+{
+  return m_currentPos;  // ?
+}
+  
+// ----------------------------------------------------------------------------
 // wxFilterInputStream
 // ----------------------------------------------------------------------------
+
 wxFilterInputStream::wxFilterInputStream()
   : wxInputStream()
 {

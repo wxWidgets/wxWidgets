@@ -137,6 +137,28 @@ class WXDLLEXPORT wxOutputStream: public wxStreamBase {
 };
 
 // ---------------------------------------------------------------------------
+// A stream for measuring streamed output
+// ---------------------------------------------------------------------------
+
+class wxCountingOutputStream: public wxOutputStream {
+ public:
+  wxCountingOutputStream();
+
+  size_t GetSize() const;
+  bool Ok() const { return TRUE; }
+
+ protected:
+
+  size_t OnSysWrite(const void *buffer, size_t size);
+  off_t OnSysSeek(off_t pos, wxSeekMode mode);
+  off_t OnSysTell() const;
+
+ protected:
+  size_t m_currentPos;
+};
+
+
+// ---------------------------------------------------------------------------
 // "Filter" streams
 // ---------------------------------------------------------------------------
 

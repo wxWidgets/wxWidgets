@@ -37,8 +37,6 @@ class wxFileDataObject;
 
 class wxDataFormat : public wxObject
 {
-    DECLARE_CLASS( wxDataFormat )
-
 public:
     wxDataFormat();
     wxDataFormat( wxDataFormatId type );
@@ -73,6 +71,11 @@ private:
     wxString    m_id;
     bool        m_hasAtom;
     GdkAtom     m_atom;
+    
+    void PrepareFormats();
+
+private:
+    DECLARE_CLASS( wxDataFormat )
 };
 
 //-------------------------------------------------------------------------
@@ -81,44 +84,41 @@ private:
 
 class wxDataBroker : public wxObject
 {
-  DECLARE_CLASS( wxDataBroker )
-
 public:
+    /* constructor */
+    wxDataBroker();
 
-  /* constructor */
-  wxDataBroker();
-
-  /* add data object */
-  void Add( wxDataObject *dataObject, bool preferred = FALSE );
+    /* add data object */
+    void Add( wxDataObject *dataObject, bool preferred = FALSE );
 
 private:
+    /* OLE implementation, the methods don't need to be overridden */
 
-  /* OLE implementation, the methods don't need to be overridden */
+    /* get number of supported formats */
+    virtual size_t GetFormatCount() const;
 
-  /* get number of supported formats */
-  virtual size_t GetFormatCount() const;
+    /* return nth supported format */
+    virtual wxDataFormat &GetNthFormat( size_t nth ) const;
 
-  /* return nth supported format */
-  virtual wxDataFormat &GetNthFormat( size_t nth ) const;
+    /* return preferrd/best supported format */
+    virtual wxDataFormatId GetPreferredFormat() const;
 
-  /* return preferrd/best supported format */
-  virtual wxDataFormatId GetPreferredFormat() const;
+    /* search through m_dataObjects, return TRUE if found */
+    virtual bool IsSupportedFormat( wxDataFormat &format ) const;
 
-  /* search through m_dataObjects, return TRUE if found */
-  virtual bool IsSupportedFormat( wxDataFormat &format ) const;
+    /* search through m_dataObjects and call child's GetSize() */
+    virtual size_t GetSize( wxDataFormat& format ) const;
 
-  /* search through m_dataObjects and call child's GetSize() */
-  virtual size_t GetSize( wxDataFormat& format ) const;
-
-  /* search through m_dataObjects and call child's WriteData(dest) */
-  virtual void WriteData( wxDataFormat& format, void *dest ) const;
-
-  /* implementation */
+    /* search through m_dataObjects and call child's WriteData(dest) */
+    virtual void WriteData( wxDataFormat& format, void *dest ) const;
 
 public:
-
-  wxList    m_dataObjects;
-  size_t    m_preferred;
+    /* implementation */
+    wxList    m_dataObjects;
+    size_t    m_preferred;
+  
+private:
+    DECLARE_CLASS( wxDataBroker )
 };
 
 //----------------------------------------------------------------------------
@@ -127,31 +127,31 @@ public:
 
 class wxDataObject : public wxObject
 {
-  DECLARE_DYNAMIC_CLASS( wxDataObject )
+public:
+    /* constructor */
+    wxDataObject();
+
+    /* destructor */
+    ~wxDataObject();
+
+    /* write data to dest */
+    virtual void WriteData( void *dest ) const = 0;
+
+    /* get size of data */
+    virtual size_t GetSize() const = 0;
 
 public:
+    /* implementation */
+    wxDataFormat m_format;
+    
+    wxDataFormat &GetFormat();
 
-  /* constructor */
-  wxDataObject();
+    wxDataFormatId GetFormatType() const;
+    wxString   GetFormatId() const;
+    GdkAtom    GetFormatAtom() const;
 
-  /* destructor */
-  ~wxDataObject();
-
-  /* write data to dest */
-  virtual void WriteData( void *dest ) const = 0;
-
-  /* get size of data */
-  virtual size_t GetSize() const = 0;
-
-  /* implementation */
-
-  wxDataFormat &GetFormat();
-
-  wxDataFormatId GetFormatType() const;
-  wxString   GetFormatId() const;
-  GdkAtom    GetFormatAtom() const;
-
-  wxDataFormat m_format;
+private:
+    DECLARE_DYNAMIC_CLASS( wxDataObject )
 };
 
 //----------------------------------------------------------------------------
@@ -160,37 +160,37 @@ public:
 
 class wxTextDataObject : public wxDataObject
 {
-  DECLARE_DYNAMIC_CLASS( wxTextDataObject )
+public:
+    /* default constructor. call SetText() later or override
+       WriteData() and GetSize() for working on-demand */
+    wxTextDataObject();
+
+    /* constructor */
+    wxTextDataObject( const wxString& data );
+
+    /* set current text data */
+    void SetText( const wxString& data );
+
+    /* get current text data */
+    wxString GetText() const;
+
+    /* by default calls WriteString() with string set by constructor or
+       by SetText(). can be overridden for working on-demand */
+    virtual void WriteData( void *dest ) const;
+
+    /* by default, returns length of string as set by constructor or
+       by SetText(). can be overridden for working on-demand */
+    virtual size_t GetSize() const;
+
+    /* write string to dest */
+    void WriteString( const wxString &str, void *dest ) const;
 
 public:
+    /* implementation */
+    wxString  m_data;
 
-  /* default constructor. call SetText() later or override
-     WriteData() and GetSize() for working on-demand */
-  wxTextDataObject();
-
-  /* constructor */
-  wxTextDataObject( const wxString& data );
-
-  /* set current text data */
-  void SetText( const wxString& data );
-
-  /* get current text data */
-  wxString GetText() const;
-
-  /* by default calls WriteString() with string set by constructor or
-     by SetText(). can be overridden for working on-demand */
-  virtual void WriteData( void *dest ) const;
-
-  /* by default, returns length of string as set by constructor or
-     by SetText(). can be overridden for working on-demand */
-  virtual size_t GetSize() const;
-
-  /* write string to dest */
-  void WriteString( const wxString &str, void *dest ) const;
-
-  /* implementation */
-
-  wxString  m_data;
+private:
+    DECLARE_DYNAMIC_CLASS( wxTextDataObject )
 };
 
 //----------------------------------------------------------------------------
@@ -199,29 +199,29 @@ public:
 
 class wxFileDataObject : public wxDataObject
 {
-  DECLARE_DYNAMIC_CLASS( wxFileDataObject )
+public:
+    /* default constructor */
+    wxFileDataObject();
+
+    /* add file name to list */
+    void AddFile( const wxString &file );
+
+    /* get all filename as one string. each file name is 0 terminated,
+       the list is double zero terminated */
+    wxString GetFiles() const;
+
+    /* write list of filenames */
+    virtual void WriteData( void *dest ) const;
+
+    /* return length of list of filenames */
+    virtual size_t GetSize() const;
 
 public:
-
-  /* default constructor */
-  wxFileDataObject();
-
-  /* add file name to list */
-  void AddFile( const wxString &file );
-
-  /* get all filename as one string. each file name is 0 terminated,
-     the list is double zero terminated */
-  wxString GetFiles() const;
-
-  /* write list of filenames */
-  virtual void WriteData( void *dest ) const;
-
-  /* return length of list of filenames */
-  virtual size_t GetSize() const;
-
-  /* implementation */
-
-  wxString  m_files;
+    /* implementation */
+    wxString  m_files;
+  
+private:
+    DECLARE_DYNAMIC_CLASS( wxFileDataObject )
 };
 
 //----------------------------------------------------------------------------
@@ -230,27 +230,32 @@ public:
 
 class wxBitmapDataObject : public wxDataObject
 {
-  DECLARE_DYNAMIC_CLASS( wxBitmapDataObject )
-
 public:
+    /* see wxTextDataObject for explanation */
+    wxBitmapDataObject();
+    wxBitmapDataObject( const wxBitmap& bitmap );
+    ~wxBitmapDataObject();
 
-  /* see wxTextDataObject for explanation */
+    void SetBitmap( const wxBitmap &bitmap );
+    wxBitmap GetBitmap() const;
 
-  wxBitmapDataObject();
-  wxBitmapDataObject( const wxBitmap& bitmap );
+    virtual void WriteData( void *dest ) const;
+    virtual size_t GetSize() const;
+    void *GetData() const { return (void*)m_pngData; }
 
-  void SetBitmap( const wxBitmap &bitmap );
-  wxBitmap GetBitmap() const;
+    void WriteBitmap( const wxBitmap &bitmap, void *dest ) const;
+    
+    void SetPngData( const char *pngData, size_t pngSize );
 
-  virtual void WriteData( void *dest ) const;
-  virtual size_t GetSize() const;
-
-  void WriteBitmap( const wxBitmap &bitmap, void *dest ) const;
-
-  // implementation
-
-  wxBitmap  m_bitmap;
-
+private: 
+    wxBitmap    m_bitmap;
+    size_t      m_pngSize;
+    char       *m_pngData;
+  
+    void DoConvertToPng();
+ 
+private: 
+    DECLARE_DYNAMIC_CLASS( wxBitmapDataObject );
 };
 
 #endif
