@@ -4,9 +4,6 @@
 wxTreeCtrl
   -> Make it compile. Keyboard handling, icon support.
 
-wxListCtrl
-  -> Icon support in list mode
-
 wxClipboard
   -> Urgh.
   

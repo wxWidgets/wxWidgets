@@ -435,7 +435,6 @@ class wxListMainWindow: public wxScrolledWindow
     int                  m_visibleLines;
     wxBrush             *m_hilightBrush;
     wxColour            *m_hilightColour;
-    wxFont              *m_myFont;
     int                  m_xScroll,m_yScroll;
     bool                 m_dirty;
     wxImageList         *m_small_image_list;
@@ -479,7 +478,6 @@ class wxListMainWindow: public wxScrolledWindow
     void OnSetFocus( wxFocusEvent &event );
     void OnKillFocus( wxFocusEvent &event );
     void OnSize( wxSizeEvent &event );
-    wxFont *GetMyFont( void );
     void DrawImage( int index, wxPaintDC *dc, int x, int y );
     void GetImageSize( int index, int &width, int &height );
     int GetIndexOfLine( const wxListLineData *line );
@@ -606,6 +604,10 @@ class wxListCtrl: public wxControl
     
     // We have to hand down a few functions
     
+    void SetBackgroundColour( const wxColour &colour );
+    void SetForegroundColour( const wxColour &colour );
+    void SetFont( const wxFont &font );
+    
     void SetDropTarget( wxDropTarget *dropTarget )
       { m_mainWin->SetDropTarget( dropTarget ); }
     wxDropTarget *GetDropTarget() const
@@ -614,12 +616,8 @@ class wxListCtrl: public wxControl
       { m_mainWin->SetCursor( cursor); }
     wxColour GetBackgroundColour() const
       { return m_mainWin->GetBackgroundColour(); }
-    void SetBackgroundColour( const wxColour &colour )
-      { m_mainWin->SetBackgroundColour( colour ); }
     wxColour GetForegroundColour() const
       { return m_mainWin->GetForegroundColour(); }
-    void SetForegroundColour( const wxColour &colour )
-      { m_mainWin->SetForegroundColour( colour ); }
     bool PopupMenu( wxMenu *menu, int x, int y )
       { return m_mainWin->PopupMenu( menu, x, y ); }
 

@@ -537,14 +537,25 @@ void wxListLineData::DoDraw( wxPaintDC *dc, bool hilight, bool paintBG )
     wxNode *node = m_items.First();
     while (node)
     {
-      wxListItemData *info = (wxListItemData*)node->Data();
-      dc->SetClippingRegion( info->GetX(), info->GetY(), info->GetWidth()-3, info->GetHeight() );
-      info->GetText( s );
+      wxListItemData *item = (wxListItemData*)node->Data();
+      dc->SetClippingRegion( item->GetX(), item->GetY(), item->GetWidth()-3, item->GetHeight() );
+      int x = item->GetX();
+      if (item->HasImage())
+      {
+        int y = 0;
+        m_owner->DrawImage( item->GetImage(), dc, x, item->GetY() );
+	m_owner->GetImageSize( item->GetImage(), x, y );
+	x += item->GetX() + 5;
+      }
+      if (item->HasText())
+      {
+        item->GetText( s );
 	if (hilight)
 	  dc->SetTextForeground( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_HIGHLIGHTTEXT ) );
 	else
-          dc->SetTextForeground( * info->GetColour() );
-      dc->DrawText( s, info->GetX()+2, info->GetY() );
+          dc->SetTextForeground( *item->GetColour() );
+        dc->DrawText( s, x, item->GetY() );
+      }
       dc->DestroyClippingRegion();
       node = node->Next();
     }
@@ -693,7 +704,7 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
   
   dc.BeginDrawing();
      
-  dc.SetFont( wxSystemSettings::GetSystemFont( wxSYS_SYSTEM_FONT ) );
+  dc.SetFont( m_font );
 
   int w = 0;
   int h = 0;
@@ -702,6 +713,7 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
   GetClientSize( &w, &h );
 
   dc.SetTextForeground( *wxBLACK );
+  if (m_foregroundColour.Ok()) dc.SetTextForeground( m_foregroundColour );
 
   x = 1;
   y = 1;
@@ -744,7 +756,7 @@ void wxListHeaderWindow::DrawCurrent()
   dc.SetLogicalFunction( wxCOPY );
 
   dc.SetPen( wxNullPen );
-  dc.SetBrush( wxNullBrush );   
+  dc.SetBrush( wxNullBrush );
 }
 
 void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
@@ -758,7 +770,6 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
     {
 //      wxScreenDC::EndDrawingOnTop();
       ReleaseMouse();
-      wxYield();  // for debugging
       m_isDraging = FALSE;
       m_owner->SetColumnWidth( m_column, m_currentX-m_minX );
     }
@@ -911,7 +922,6 @@ wxListMainWindow::wxListMainWindow( void )
   m_current = (wxListLineData *) NULL;
   m_visibleLines = 0;
   m_hilightBrush = (wxBrush *) NULL;
-  m_myFont = (wxFont *) NULL;
   m_xScroll = 0;
   m_yScroll = 0;
   m_dirty = TRUE;
@@ -944,7 +954,6 @@ wxListMainWindow::wxListMainWindow( wxWindow *parent, wxWindowID id,
   m_small_spacing = 30;
   m_normal_spacing = 40;
 //  AllowDoubleClick( TRUE );
-  m_myFont = wxNORMAL_FONT;
   m_hasFocus = FALSE;
   m_dragCount = 0;
   m_isCreated = FALSE;
@@ -978,7 +987,6 @@ wxListMainWindow::~wxListMainWindow( void )
   if (m_hilightBrush) delete m_hilightBrush;
   delete m_renameTimer;
 //  if (m_hilightColour) delete m_hilightColour;
-//  if (m_myFont) delete m_myFont;
 //  delete m_text;
 }
 
@@ -1011,8 +1019,7 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
   
   dc.BeginDrawing();
 
-//  dc.SetFont( *m_myFont );
-  dc.SetFont( wxSystemSettings::GetSystemFont( wxSYS_SYSTEM_FONT ) );
+  dc.SetFont( m_font );
 
   wxNode *node = m_lines.First();
   while (node) 
@@ -1488,11 +1495,6 @@ void wxListMainWindow::OnSize( wxSizeEvent &WXUNUSED(event) )
 */
 }
 
-wxFont *wxListMainWindow::GetMyFont( void )
-{
-  return m_myFont;
-}
-
 void wxListMainWindow::DrawImage( int index, wxPaintDC *dc, int x, int y )
 {
   if ((m_mode & wxLC_ICON) && (m_normal_image_list))
@@ -1504,6 +1506,11 @@ void wxListMainWindow::DrawImage( int index, wxPaintDC *dc, int x, int y )
   {
     m_small_image_list->Draw( index, *dc, x, y, wxIMAGELIST_DRAW_TRANSPARENT );
   }
+  if ((m_mode & wxLC_REPORT) && (m_small_image_list))
+  {
+    m_small_image_list->Draw( index, *dc, x, y, wxIMAGELIST_DRAW_TRANSPARENT );
+    return;
+  }
 }
 
 void wxListMainWindow::GetImageSize( int index, int &width, int &height )
@@ -1514,6 +1521,11 @@ void wxListMainWindow::GetImageSize( int index, int &width, int &height )
     return;
   }
   if ((m_mode & wxLC_SMALL_ICON) && (m_small_image_list))
+  {
+    m_small_image_list->GetSize( index, width, height );
+    return;
+  }
+  if ((m_mode & wxLC_REPORT) && (m_small_image_list))
   {
     m_small_image_list->GetSize( index, width, height );
     return;
@@ -1832,7 +1844,7 @@ long wxListMainWindow::GetMode( void ) const
 void wxListMainWindow::CalculatePositions( void )
 {
   wxPaintDC dc( this );
-  dc.SetFont( wxSystemSettings::GetSystemFont( wxSYS_SYSTEM_FONT ) );
+  dc.SetFont( m_font );
 
   int iconSpacing = 0;
   if (m_mode & wxLC_ICON) iconSpacing = m_normal_spacing;
@@ -2670,4 +2682,24 @@ void wxListCtrl::OnIdle( wxIdleEvent &WXUNUSED(event) )
   m_mainWin->Refresh();
 }
 
+void wxListCtrl::SetBackgroundColour( const wxColour &colour )
+{ 
+  m_mainWin->SetBackgroundColour( colour );
+  m_headerWin->SetBackgroundColour( colour ); 
+  m_mainWin->m_dirty = TRUE;
+}
+
+void wxListCtrl::SetForegroundColour( const wxColour &colour )
+{ 
+  m_mainWin->SetForegroundColour( colour ); 
+  m_headerWin->SetForegroundColour( colour ); 
+  m_mainWin->m_dirty = TRUE;
+}
+    
+void wxListCtrl::SetFont( const wxFont &font )
+{ 
+  m_mainWin->SetFont( font );
+  m_headerWin->SetFont( font ); 
+  m_mainWin->m_dirty = TRUE;
+}
 
