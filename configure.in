@@ -2673,7 +2673,8 @@ if test "$wxUSE_SHARED" = "yes"; then
       *-hp-hpux* )
         dnl default settings are good for gcc but not for the native HP-UX
         if test "$GCC" = "yes"; then
-            SHARED_LD="${SHARED_LD} ${PIC_FLAG}"
+            dnl -o flag must be after PIC flag
+            SHARED_LD="${CXX} -shared ${PIC_FLAG} -o"
         else
             dnl no idea why it wants it, but it does
             LDFLAGS="$LDFLAGS -L/usr/lib"
