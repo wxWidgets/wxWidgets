@@ -71,7 +71,7 @@ $(LIBS)
 
 
 clean:
-        -$(RM) $(OBJECTS)
+        -$(RM) *.obj
         -$(RM) *.exe
         -$(RM) *.res
         -$(RM) *.map
