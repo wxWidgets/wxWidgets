@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  H:\DEV\WX2\WXWINDOWS\LIB\wx.lib
+;From library:  F:\DEV\WX2\WXWINDOWS\LIB\WX.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -1758,7 +1758,7 @@ EXPORTS
       wxEVT_NC_LEFT_DCLICK
       wxEVT_INIT_DIALOG
       wxEVT_COMMAND_SET_FOCUS
-  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\extended.c
+  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\extended.c
     ;PUBDEFs (Symbols available from object file):
       ConvertToIeeeExtended
       ConvertFromIeeeExtended
@@ -2049,12 +2049,12 @@ EXPORTS
       IsWild__10wxFileNameF12wxPathFormat
       ;wxFileName::Assign(const wxString&,const wxString&,const wxString&,wxPathFormat)
       Assign__10wxFileNameFRC8wxStringN2112wxPathFormat
+      ;wxFileName::GetTimes(wxDateTime*,wxDateTime*,wxDateTime*) const
+      GetTimes__10wxFileNameCFP10wxDateTimeN21
       ;wxFileName::Clear()
       Clear__10wxFileNameFv
       ;wxFileName::wxFileExists()
       wxFileExists__10wxFileNameFv
-      ;wxFileName::GetModificationTime()
-      GetModificationTime__10wxFileNameFv
       ;wxFileName::GetFullName() const
       GetFullName__10wxFileNameCFv
       ;wxFileName::AssignHomeDir()
@@ -2073,6 +2073,8 @@ EXPORTS
       IsAbsolute__10wxFileNameF12wxPathFormat
       ;wxFileName::GetFullPath(wxPathFormat) const
       GetFullPath__10wxFileNameCF12wxPathFormat
+      ;wxFileName::Touch()
+      Touch__10wxFileNameFv
       ;wxFileName::FileName(const wxString&)
       FileName__10wxFileNameFRC8wxString
       ;wxFileName::wxPathExists(const wxString&)
@@ -2099,6 +2101,8 @@ EXPORTS
       Mkdir__10wxFileNameFiUl
       ;wxFileName::IsRelative(wxPathFormat)
       IsRelative__10wxFileNameF12wxPathFormat
+      ;wxFileName::SetTimes(const wxDateTime*,const wxDateTime*,const wxDateTime*)
+      SetTimes__10wxFileNameFPC10wxDateTimeN21
       ;wxFileName::Rmdir()
       Rmdir__10wxFileNameFv
       ;wxFileName::GetLongPath() const
@@ -5581,7 +5585,7 @@ EXPORTS
       Read32__17wxTextInputStreamFv
       ;wxTextInputStream::SkipIfEndOfLine(char)
       SkipIfEndOfLine__17wxTextInputStreamFc
-  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\unzip.c
+  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\unzip.c
     ;PUBDEFs (Symbols available from object file):
       unzReadCurrentFile
       unzGetCurrentFileInfo
@@ -6705,6 +6709,10 @@ EXPORTS
       __ct__15wxCalendarEventFP14wxCalendarCtrli
       ;wxCalendarCtrl::SetHoliday(unsigned int)
       SetHoliday__14wxCalendarCtrlFUi
+      ;wxCalendarCtrl::SetDateRange(const wxDateTime&,const wxDateTime&)
+      SetDateRange__14wxCalendarCtrlFRC10wxDateTimeT1
+      ;wxCalendarCtrl::ChangeMonth(wxDateTime*) const
+      ChangeMonth__14wxCalendarCtrlCFP10wxDateTime
       ;wxCalendarCtrl::Init()
       Init__14wxCalendarCtrlFv
       ;wxConstructorForwxCalendarCtrl()
@@ -6726,6 +6734,8 @@ EXPORTS
       OnDClick__14wxCalendarCtrlFR12wxMouseEvent
       ;wxCalendarCtrl::RefreshDate(const wxDateTime&)
       RefreshDate__14wxCalendarCtrlFRC10wxDateTime
+      ;wxCalendarCtrl::SetUpperDateLimit(const wxDateTime&)
+      SetUpperDateLimit__14wxCalendarCtrlFRC10wxDateTime
       ;wxCalendarCtrl::GetWeek(const wxDateTime&) const
       GetWeek__14wxCalendarCtrlCFRC10wxDateTime
       ;wxCalendarCtrl::DoSetSize(int,int,int,int,int)
@@ -6746,6 +6756,8 @@ EXPORTS
       GetYearControl__14wxCalendarCtrlCFv
       ;wxYearSpinCtrl::GetEventTable() const
       GetEventTable__14wxYearSpinCtrlCFv
+      ;wxCalendarCtrl::GetDateCoord(const wxDateTime&,int*,int*) const
+      GetDateCoord__14wxCalendarCtrlCFRC10wxDateTimePiT2
       ;wxCalendarCtrl::OnYearChange(wxSpinEvent&)
       OnYearChange__14wxCalendarCtrlFR11wxSpinEvent
       wxEVT_CALENDAR_DAY_CHANGED
@@ -6762,10 +6774,12 @@ EXPORTS
       __vft14wxCalendarCtrl8wxObject
       ;wxCalendarCtrl::OnPaint(wxPaintEvent&)
       OnPaint__14wxCalendarCtrlFR12wxPaintEvent
-      ;wxCalendarCtrl::DoGetPosition(int*,int*) const
-      DoGetPosition__14wxCalendarCtrlCFPiT1
+      ;wxCalendarCtrl::IsDateInRange(const wxDateTime&) const
+      IsDateInRange__14wxCalendarCtrlCFRC10wxDateTime
       ;wxCalendarCtrl::HitTest(const wxPoint&,wxDateTime*,wxDateTime::WeekDay*)
       HitTest__14wxCalendarCtrlFRC7wxPointP10wxDateTimePQ2_10wxDateTime7WeekDay
+      ;wxCalendarCtrl::DoGetPosition(int*,int*) const
+      DoGetPosition__14wxCalendarCtrlCFPiT1
       ;wxCalendarCtrl::Enable(unsigned long)
       Enable__14wxCalendarCtrlFUl
       wxEVT_CALENDAR_WEEKDAY_CLICKED
@@ -6781,6 +6795,8 @@ EXPORTS
       ChangeDay__14wxCalendarCtrlFRC10wxDateTime
       ;wxCalendarCtrl::SetDateAndNotify(const wxDateTime&)
       SetDateAndNotify__14wxCalendarCtrlFRC10wxDateTime
+      ;wxCalendarCtrl::ChangeYear(wxDateTime*) const
+      ChangeYear__14wxCalendarCtrlCFP10wxDateTime
       ;wxCalendarEvent::Init()
       Init__15wxCalendarEventFv
       ;wxCalendarCtrl::GetStartDate() const
@@ -6791,10 +6807,14 @@ EXPORTS
       sm_eventTable__15wxMonthComboBox
       ;wxYearSpinCtrl::wxYearSpinCtrl(wxCalendarCtrl*)
       __ct__14wxYearSpinCtrlFP14wxCalendarCtrl
+      ;wxCalendarCtrl::HighlightRange(wxPaintDC*,const wxDateTime&,const wxDateTime&,wxPen*,wxBrush*)
+      HighlightRange__14wxCalendarCtrlFP9wxPaintDCRC10wxDateTimeT2P5wxPenP7wxBrush
       ;wxCalendarCtrl::EnableYearChange(unsigned long)
       EnableYearChange__14wxCalendarCtrlFUl
       ;wxCalendarCtrl::SetDate(const wxDateTime&)
       SetDate__14wxCalendarCtrlFRC10wxDateTime
+      ;wxCalendarCtrl::SetLowerDateLimit(const wxDateTime&)
+      SetLowerDateLimit__14wxCalendarCtrlFRC10wxDateTime
       ;wxCalendarCtrl::IsDateShown(const wxDateTime&) const
       IsDateShown__14wxCalendarCtrlCFRC10wxDateTime
       ;wxCalendarCtrl::DoMoveWindow(int,int,int,int)
@@ -13361,6 +13381,8 @@ EXPORTS
       sm_optionNames__22wxSystemSettingsModule
       ;wxSystemSettingsModule::OnExit()
       OnExit__22wxSystemSettingsModuleFv
+      ;wxSystemSettings::GetCapability(int)
+      GetCapability__16wxSystemSettingsFi
       ;wxSystemSettingsModule::sm_optionValues
       sm_optionValues__22wxSystemSettingsModule
       ;wxConstructorForwxSystemSettingsModule()
