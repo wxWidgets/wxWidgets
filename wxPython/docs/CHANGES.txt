@@ -92,6 +92,9 @@ MigrationGuide_ file for details.
 
 .. _MigrationGuide: MigrationGuide.html
 
+EVT_STC_POSCHANGED has been removed as it has been deprecated in
+Scintilla for several releases now.
+
 
 
 

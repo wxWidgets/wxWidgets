@@ -2866,7 +2866,6 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_MACRORECORD,        1660)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_MARGINCLICK,        1661)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_NEEDSHOWN,          1662)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_POSCHANGED,         1663)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_PAINTED,            1664)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_USERLISTSELECTION,  1665)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_URIDROPPED,         1666)
@@ -2895,7 +2894,6 @@ END_DECLARE_EVENT_TYPES()
         wxEVT_STC_MACRORECORD,
         wxEVT_STC_MARGINCLICK,
         wxEVT_STC_NEEDSHOWN,
-        wxEVT_STC_POSCHANGED,
         wxEVT_STC_PAINTED,
         wxEVT_STC_USERLISTSELECTION,
         wxEVT_STC_URIDROPPED,
@@ -2929,7 +2927,6 @@ typedef void (wxEvtHandler::*wxStyledTextEventFunction)(wxStyledTextEvent&);
 #define EVT_STC_MACRORECORD(id, fn)        DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_MACRORECORD,           id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxStyledTextEventFunction, & fn ), (wxObject *) NULL ),
 #define EVT_STC_MARGINCLICK(id, fn)        DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_MARGINCLICK,           id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxStyledTextEventFunction, & fn ), (wxObject *) NULL ),
 #define EVT_STC_NEEDSHOWN(id, fn)          DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_NEEDSHOWN,             id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxStyledTextEventFunction, & fn ), (wxObject *) NULL ),
-#define EVT_STC_POSCHANGED(id, fn)         DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_POSCHANGED,            id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxStyledTextEventFunction, & fn ), (wxObject *) NULL ),
 #define EVT_STC_PAINTED(id, fn)            DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_PAINTED,               id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxStyledTextEventFunction, & fn ), (wxObject *) NULL ),
 #define EVT_STC_USERLISTSELECTION(id, fn)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_USERLISTSELECTION,     id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxStyledTextEventFunction, & fn ), (wxObject *) NULL ),
 #define EVT_STC_URIDROPPED(id, fn)         DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_URIDROPPED,            id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxStyledTextEventFunction, & fn ), (wxObject *) NULL ),
