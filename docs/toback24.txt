@@ -278,6 +278,34 @@ Checking in src/msw/tbar95.cpp;
 new revision: 1.121; previous revision: 1.120
 done
 
+
+38. Implement wxBitmapButton::DoGetBestSize
+
+Checking in include/wx/gtk/bmpbuttn.h;
+/pack/cvsroots/wxwidgets/wxWidgets/include/wx/gtk/bmpbuttn.h,v  <--  bmpbuttn.h
+new revision: 1.24; previous revision: 1.23
+done
+Checking in src/gtk/bmpbuttn.cpp;
+/pack/cvsroots/wxwidgets/wxWidgets/src/gtk/bmpbuttn.cpp,v  <--  bmpbuttn.cpp
+new revision: 1.46; previous revision: 1.45
+done
+Checking in include/wx/msw/bmpbuttn.h;
+/pack/cvsroots/wxwidgets/wxWidgets/include/wx/msw/bmpbuttn.h,v  <--  bmpbuttn.h
+new revision: 1.12; previous revision: 1.11
+done
+Checking in src/msw/bmpbuttn.cpp;
+/pack/cvsroots/wxwidgets/wxWidgets/src/msw/bmpbuttn.cpp,v  <--  bmpbuttn.cpp
+new revision: 1.45; previous revision: 1.44
+done
+Checking in include/wx/mac/bmpbuttn.h;
+/pack/cvsroots/wxwidgets/wxWidgets/include/wx/mac/bmpbuttn.h,v  <--  bmpbuttn.h
+new revision: 1.10; previous revision: 1.9
+done
+Checking in src/mac/bmpbuttn.cpp;
+/pack/cvsroots/wxwidgets/wxWidgets/src/mac/bmpbuttn.cpp,v  <--  bmpbuttn.cpp
+new revision: 1.26; previous revision: 1.25
+done
+
 =======
 
 

@@ -51,11 +51,14 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
     int width = size.x;
     int height = size.y;
 
-    if ( width == -1 && bitmap.Ok())
-        width = bitmap.GetWidth() + 2*m_marginX;
-
-    if ( height == -1 && bitmap.Ok())
-        height = bitmap.GetHeight() + 2*m_marginY;
+    if ( bitmap.Ok() )
+    {
+        wxSize newSize = DoGetBestSize();
+        if ( width == -1 )
+            width = newSize.x;
+        if ( height == -1 )
+            height = newSize.y;
+    }
 
     Rect bounds ;
     Str255 title ;
@@ -97,3 +100,14 @@ void wxBitmapButton::SetBitmapLabel(const wxBitmap& bitmap)
     }
 }
 
+
+wxSize wxBitmapButton::DoGetBestSize() const
+{
+    wxSize best;
+    if (m_bmpNormal.Ok())
+    {
+        best.x = m_bmpNormal.GetWidth() + 2*m_marginX;
+        best.y = m_bmpNormal.GetHeight() + 2*m_marginY;
+    }
+    return best;
+}
