@@ -60,6 +60,9 @@ protected:
     void OnSetFocus(wxFocusEvent& event);
     void OnKillFocus(wxFocusEvent& event);
 
+    // called when one of the bitmap is changed by user
+    virtual void OnSetBitmap();
+
     // set bitmap to the given one if it's ok or to m_bmpNormal and return
     // TRUE if the bitmap really changed
     bool ChangeBitmap(const wxBitmap& bmp);

@@ -353,13 +353,13 @@ void wxListBox::SetSelection(int n, bool select)
 {
     if ( select )
     {
-        if ( !HasMultipleSelection() )
-        {
-            DeselectAll();
-        }
-
         if ( m_selections.Index(n) == wxNOT_FOUND )
         {
+            if ( !HasMultipleSelection() )
+            {
+                DeselectAll();
+            }
+
             m_selections.Add(n);
 
             RefreshItem(n);

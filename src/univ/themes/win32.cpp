@@ -189,6 +189,10 @@ public:
                               int flags = 0);
     virtual void DrawLineWrapMark(wxDC& dc, const wxRect& rect);
 
+    virtual void GetComboBitmaps(wxBitmap *bmpNormal,
+                                 wxBitmap *bmpPressed,
+                                 wxBitmap *bmpDisabled);
+
     virtual void AdjustSize(wxSize *size, const wxWindow *window);
     virtual wxRect GetBorderDimensions(wxBorder border) const;
     virtual bool AreScrollbarsInsideBorder() const;
@@ -1524,41 +1528,43 @@ void wxWin32Renderer::DrawButtonLabel(wxDC& dc,
                                       int indexAccel,
                                       wxRect *rectBounds)
 {
-    // shift the label if a button is pressed
     wxRect rectLabel = rect;
-    if ( flags & wxCONTROL_PRESSED )
+    if ( !label.empty() )
     {
-        rectLabel.x++;
-        rectLabel.y++;
+        // shift the label if a button is pressed
+        if ( flags & wxCONTROL_PRESSED )
+        {
+            rectLabel.x++;
+            rectLabel.y++;
+        }
+
+        if ( flags & wxCONTROL_DISABLED )
+        {
+            DrawLabelShadow(dc, label, rectLabel, alignment, indexAccel);
+        }
+
+        // leave enough space for the focus rectangle
+        if ( flags & wxCONTROL_FOCUSED )
+        {
+            rectLabel.Inflate(-2);
+        }
     }
 
-    if ( flags & wxCONTROL_DISABLED )
-    {
-        DrawLabelShadow(dc, label, rectLabel, alignment, indexAccel);
-    }
+    dc.DrawLabel(label, image, rectLabel, alignment, indexAccel, rectBounds);
 
-    // leave enough space for the focus rectangle
-    wxRect rectText = rectLabel;
-    if ( flags & wxCONTROL_FOCUSED )
-    {
-        rectText.Inflate(-2);
-    }
-
-    dc.DrawLabel(label, image, rectText, alignment, indexAccel, rectBounds);
-
-    if ( flags & wxCONTROL_FOCUSED )
+    if ( !label.empty() && (flags & wxCONTROL_FOCUSED) )
     {
         if ( flags & wxCONTROL_PRESSED )
         {
             // the focus rectangle is never pressed, so undo the shift done
             // above
-            rectText.x--;
-            rectText.y--;
-            rectText.width--;
-            rectText.height--;
+            rectLabel.x--;
+            rectLabel.y--;
+            rectLabel.width--;
+            rectLabel.height--;
         }
 
-        DrawFocusRect(dc, rectText);
+        DrawFocusRect(dc, rectLabel);
     }
 }
 
@@ -1726,6 +1732,44 @@ void wxWin32Renderer::DrawTextLine(wxDC& dc,
 void wxWin32Renderer::DrawLineWrapMark(wxDC& dc, const wxRect& rect)
 {
     // we don't draw them
+}
+
+// ----------------------------------------------------------------------------
+// combobox
+// ----------------------------------------------------------------------------
+
+void wxWin32Renderer::GetComboBitmaps(wxBitmap *bmpNormal,
+                                      wxBitmap *bmpPressed,
+                                      wxBitmap *bmpDisabled)
+{
+    static const wxCoord widthCombo = 16;
+    static const wxCoord heightCombo = 17;
+
+    wxMemoryDC dcMem;
+
+    if ( bmpNormal )
+    {
+        bmpNormal->Create(widthCombo, heightCombo);
+        dcMem.SelectObject(*bmpNormal);
+        DrawArrowButton(dcMem, wxRect(0, 0, widthCombo, heightCombo),
+                        Arrow_Down, Arrow_Normal);
+    }
+
+    if ( bmpPressed )
+    {
+        bmpPressed->Create(widthCombo, heightCombo);
+        dcMem.SelectObject(*bmpPressed);
+        DrawArrowButton(dcMem, wxRect(0, 0, widthCombo, heightCombo),
+                        Arrow_Down, Arrow_Pressed);
+    }
+
+    if ( bmpDisabled )
+    {
+        bmpDisabled->Create(widthCombo, heightCombo);
+        dcMem.SelectObject(*bmpDisabled);
+        DrawArrowButton(dcMem, wxRect(0, 0, widthCombo, heightCombo),
+                        Arrow_Down, Arrow_Disabled);
+    }
 }
 
 // ----------------------------------------------------------------------------

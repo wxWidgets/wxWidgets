@@ -149,6 +149,10 @@ public:
                               int flags = 0);
     virtual void DrawLineWrapMark(wxDC& dc, const wxRect& rect);
 
+    virtual void GetComboBitmaps(wxBitmap *bmpNormal,
+                                 wxBitmap *bmpPressed,
+                                 wxBitmap *bmpDisabled);
+
     virtual void AdjustSize(wxSize *size, const wxWindow *window);
     virtual wxRect GetBorderDimensions(wxBorder border) const;
     virtual bool AreScrollbarsInsideBorder() const;
@@ -1411,6 +1415,17 @@ void wxGTKRenderer::DrawLineWrapMark(wxDC& dc, const wxRect& rect)
         // restore old colour
         dc.SetTextForeground(colFgOld);
     }
+}
+
+// ----------------------------------------------------------------------------
+// combobox
+// ----------------------------------------------------------------------------
+
+void wxGTKRenderer::GetComboBitmaps(wxBitmap *bmpNormal,
+                                    wxBitmap *bmpPressed,
+                                    wxBitmap *bmpDisabled)
+{
+    // TODO
 }
 
 // ----------------------------------------------------------------------------

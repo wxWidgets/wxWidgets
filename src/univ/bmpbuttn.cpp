@@ -70,6 +70,29 @@ bool wxBitmapButton::Create(wxWindow *parent,
     return TRUE;
 }
 
+void wxBitmapButton::OnSetBitmap()
+{
+    wxBitmap bmp;
+    if ( !IsEnabled() )
+    {
+        bmp = m_bmpDisabled;
+    }
+    else if ( IsPressed() )
+    {
+        bmp = m_bmpSelected;
+    }
+    else if ( IsFocused() )
+    {
+        bmp = m_bmpFocus;
+    }
+    else
+    {
+        bmp = m_bmpNormal;
+    }
+
+    ChangeBitmap(bmp);
+}
+
 bool wxBitmapButton::ChangeBitmap(const wxBitmap& bmp)
 {
     wxBitmap bitmap = bmp.Ok() ? bmp : m_bmpNormal;

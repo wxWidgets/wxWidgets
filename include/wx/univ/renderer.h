@@ -177,6 +177,11 @@ public:
     // draw a line wrap indicator
     virtual void DrawLineWrapMark(wxDC& dc, const wxRect& rect) = 0;
 
+    // return the bitmaps to use for combobox button
+    virtual void GetComboBitmaps(wxBitmap *bmpNormal,
+                                 wxBitmap *bmpPressed,
+                                 wxBitmap *bmpDisabled) = 0;
+
     // geometry functions
     // ------------------
 
@@ -395,6 +400,13 @@ public:
                               int selStart = -1,
                               int selEnd = -1)
         { m_renderer->DrawTextLine(dc, text, rect, selStart, selEnd); }
+    virtual void DrawLineWrapMark(wxDC& dc, const wxRect& rect)
+        { m_renderer->DrawLineWrapMark(dc, rect); }
+
+    virtual void GetComboBitmaps(wxBitmap *bmpNormal,
+                                 wxBitmap *bmpPressed,
+                                 wxBitmap *bmpDisabled)
+        { m_renderer->GetComboBitmaps(bmpNormal, bmpPressed, bmpDisabled); }
 
     virtual void AdjustSize(wxSize *size, const wxWindow *window)
         { m_renderer->AdjustSize(size, window); }

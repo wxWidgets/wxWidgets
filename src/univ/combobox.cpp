@@ -49,17 +49,31 @@
 // combobox and not its parent
 // ----------------------------------------------------------------------------
 
-class wxComboButton : public wxButton
+class wxComboButton : public wxBitmapButton
 {
 public:
     wxComboButton(wxComboControl *combo)
-        : wxButton(combo->GetParent(), -1, "\\/")
+        : wxBitmapButton(combo->GetParent(), -1, wxNullBitmap,
+                         wxDefaultPosition, wxDefaultSize,
+                         wxBORDER_NONE)
     {
         m_combo = combo;
+
+        wxBitmap bmpNormal, bmpPressed, bmpDisabled;
+
+        GetRenderer()->GetComboBitmaps(&bmpNormal, &bmpPressed, &bmpDisabled);
+        SetBitmapLabel(bmpNormal);
+        SetBitmapFocus(bmpNormal);
+        SetBitmapSelected(bmpPressed);
+        SetBitmapDisabled(bmpDisabled);
+
+        SetSize(bmpNormal.GetWidth(), bmpNormal.GetHeight());
     }
 
 protected:
     void OnButton(wxCommandEvent& event) { m_combo->ShowPopup(); }
+
+    virtual wxSize DoGetBestSize() const { return GetSize(); }
 
 private:
     wxComboControl *m_combo;
@@ -147,6 +161,8 @@ bool wxComboControl::Create(wxWindow *parent,
 {
     // first create our own window, i.e. the one which will contain all
     // subcontrols
+    style &= ~wxBORDER_NONE;
+    style |= wxBORDER_SUNKEN;
     if ( !wxControl::Create(parent, id, pos, size, style, validator, name) )
         return FALSE;
 
@@ -155,7 +171,8 @@ bool wxComboControl::Create(wxWindow *parent,
     m_btn = new wxComboButton(this);
     m_text = new wxTextCtrl(parent, -1, value,
                             wxDefaultPosition, wxDefaultSize,
-                            style & wxCB_READONLY ? wxTE_READONLY : 0,
+                            wxBORDER_NONE |
+                            (style & wxCB_READONLY ? wxTE_READONLY : 0),
                             validator);
 
     // for compatibility with the otherp orts, the height specified is the
@@ -190,7 +207,7 @@ wxComboControl::~wxComboControl()
 // geometry stuff
 // ----------------------------------------------------------------------------
 
-wxSize wxComboControl::DoGetBestSize() const
+wxSize wxComboControl::DoGetBestClientSize() const
 {
     wxSize sizeBtn = m_btn->GetBestSize(),
            sizeText = m_text->GetBestSize();
@@ -200,14 +217,21 @@ wxSize wxComboControl::DoGetBestSize() const
 
 void wxComboControl::DoMoveWindow(int x, int y, int width, int height)
 {
+    wxControl::DoMoveWindow(x, y, width, height);
+
+    // position the subcontrols inside the client area
+    wxRect rectBorders = GetRenderer()->GetBorderDimensions(GetBorder());
+    x += rectBorders.x;
+    y += rectBorders.y;
+    width -= rectBorders.x + rectBorders.width;
+    height -= rectBorders.y + rectBorders.height;
+
     wxSize sizeBtn = m_btn->GetSize(),
            sizeText = m_text->GetSize();
 
     wxCoord wText = width - sizeBtn.x;
-    m_text->SetSize(x, y + (height - sizeText.y)/2, wText, sizeText.y);
-    m_btn->Move(x + wText, y + (height - sizeBtn.y)/2);
-
-    wxControl::DoMoveWindow(x, y, width, height);
+    m_text->SetSize(x, y, wText, height);
+    m_btn->SetSize(x + wText, y, -1, height);
 }
 
 // ----------------------------------------------------------------------------
