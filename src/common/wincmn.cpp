@@ -326,10 +326,9 @@ void wxWindowBase::Fit()
     while ( node )
     {
         wxWindow *win = node->GetData();
-        if ( win->IsKindOf(CLASSINFO(wxFrame)) ||
-             win->IsKindOf(CLASSINFO(wxDialog)) )
+        if ( win->IsTopLevel() )
         {
-            // dialogs and frames line in different top level windows - don't
+            // dialogs and frames lie in different top level windows - don't
             // deal with them here
             continue;
         }
@@ -391,6 +390,14 @@ bool wxWindowBase::Enable(bool enable)
     {
         return FALSE;
     }
+}
+// ----------------------------------------------------------------------------
+// RTTI
+// ----------------------------------------------------------------------------
+
+bool wxWindowBase::IsTopLevel() const
+{
+    return wxDynamicCast(this, wxFrame) || wxDynamicCast(this, wxDialog);
 }
 
 // ----------------------------------------------------------------------------
@@ -618,9 +625,21 @@ wxWindow *wxWindowBase::FindWindow( const wxString& name )
 // dialog oriented functions
 // ----------------------------------------------------------------------------
 
-void wxWindowBase::MakeModal(bool WXUNUSED(modal))
+void wxWindowBase::MakeModal(bool modal)
 {
-    wxFAIL_MSG(_T("TODO"));
+    // Disable all other windows
+    if ( IsTopLevel() )
+    {
+        wxWindowList::Node *node = wxTopLevelWindows.GetFirst();
+        while (node)
+        {
+            wxWindow *win = node->GetData();
+            if (win != this)
+                win->Enable(!modal);
+
+            node = node->GetNext();
+        }
+    }
 }
 
 bool wxWindowBase::Validate()
@@ -914,7 +933,7 @@ bool wxWindowBase::DoPhase(int phase)
         while (node)
         {
             wxWindow *child = node->GetData();
-            if ( !child->IsKindOf(CLASSINFO(wxFrame)) && !child->IsKindOf(CLASSINFO(wxDialog)) )
+            if ( !child->IsTopLevel() )
             {
                 wxLayoutConstraints *constr = child->GetConstraints();
                 if ( constr )
@@ -958,7 +977,7 @@ void wxWindowBase::ResetConstraints()
     while (node)
     {
         wxWindow *win = node->GetData();
-        if ( !win->IsKindOf(CLASSINFO(wxFrame)) && !win->IsKindOf(CLASSINFO(wxDialog)) )
+        if ( !win->IsTopLevel() )
             win->ResetConstraints();
         node = node->GetNext();
     }
@@ -1015,7 +1034,7 @@ void wxWindowBase::SetConstraintSizes(bool recurse)
         while (node)
         {
             wxWindow *win = node->GetData();
-            if ( !win->IsKindOf(CLASSINFO(wxFrame)) && !win->IsKindOf(CLASSINFO(wxDialog)) )
+            if ( !win->IsTopLevel() )
                 win->SetConstraintSizes();
             node = node->GetNext();
         }
@@ -1026,8 +1045,7 @@ void wxWindowBase::SetConstraintSizes(bool recurse)
 // this window.
 void wxWindowBase::TransformSizerToActual(int *x, int *y) const
 {
-    if ( !m_sizerParent || m_sizerParent->IsKindOf(CLASSINFO(wxDialog) ) ||
-            m_sizerParent->IsKindOf(CLASSINFO(wxFrame)) )
+    if ( !m_sizerParent || m_sizerParent->IsTopLevel() )
         return;
 
     int xp, yp;
@@ -1159,22 +1177,28 @@ void wxWindowBase::UpdateWindowUI()
             if ( event.GetSetEnabled() )
                 Enable(event.GetEnabled());
 
-            if ( event.GetSetText() && IsKindOf(CLASSINFO(wxControl)) )
-                ((wxControl*)this)->SetLabel(event.GetText());
+            if ( event.GetSetText() )
+            {
+                wxControl *control = wxDynamicCast(this, wxControl);
+                if ( control )
+                    control->SetLabel(event.GetText());
+            }
 
 #if wxUSE_CHECKBOX
-            if ( IsKindOf(CLASSINFO(wxCheckBox)) )
+            wxCheckBox *checkbox = wxDynamicCast(this, wxCheckBox);
+            if ( checkbox )
             {
                 if ( event.GetSetChecked() )
-                    ((wxCheckBox *)this)->SetValue(event.GetChecked());
+                    checkbox->SetValue(event.GetChecked());
             }
 #endif // wxUSE_CHECKBOX
 
 #if wxUSE_RADIOBUTTON
-            if ( IsKindOf(CLASSINFO(wxRadioButton)) )
+            wxRadioButton *radiobtn = wxDynamicCast(this, wxRadioButton);
+            if ( radiobtn )
             {
                 if ( event.GetSetChecked() )
-                    ((wxRadioButton *) this)->SetValue(event.GetChecked());
+                    radiobtn->SetValue(event.GetChecked());
             }
 #endif // wxUSE_RADIOBUTTON
         }

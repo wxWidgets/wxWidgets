@@ -138,19 +138,19 @@ wxObject* WXDLLEXPORT_CTORFN wxConstructorFor##name(void) \
 // Single inheritance with one base class
 #define IMPLEMENT_ABSTRACT_CLASS(name, basename) \
  wxClassInfo name::sm_class##name((wxChar *) _T(#name), (wxChar *) _T(#basename), \
-		 (wxChar *) NULL, (int) sizeof(name), (wxObjectConstructorFn) NULL);
+         (wxChar *) NULL, (int) sizeof(name), (wxObjectConstructorFn) NULL);
 
 // Multiple inheritance with two base classes
 #define IMPLEMENT_ABSTRACT_CLASS2(name, basename1, basename2) \
  wxClassInfo name::sm_class##name((wxChar *) _T(#name), (wxChar *) _T(#basename1), \
-		 (wxChar *) _T(#basename2), (int) sizeof(name), (wxObjectConstructorFn) NULL);
+         (wxChar *) _T(#basename2), (int) sizeof(name), (wxObjectConstructorFn) NULL);
 
 #define IMPLEMENT_CLASS IMPLEMENT_ABSTRACT_CLASS
 #define IMPLEMENT_CLASS2 IMPLEMENT_ABSTRACT_CLASS2
 
 #define CLASSINFO(name) (&name::sm_class##name)
 
-#else
+#else // !wxUSE_DYNAMIC_CLASSES
 
 // No dynamic class system: so stub out the macros
 #define DECLARE_DYNAMIC_CLASS(name)
@@ -163,20 +163,26 @@ wxObject* WXDLLEXPORT_CTORFN wxConstructorFor##name(void) \
 #define IMPLEMENT_CLASS IMPLEMENT_ABSTRACT_CLASS
 #define IMPLEMENT_CLASS2 IMPLEMENT_ABSTRACT_CLASS2
 
-#endif
+#endif // wxUSE_DYNAMIC_CLASSES/!wxUSE_DYNAMIC_CLASSES
 
 #define wxIS_KIND_OF(obj, className) obj->IsKindOf(&className::sm_class##className)
 
 // Just seems a bit nicer-looking (pretend it's not a macro)
 #define wxIsKindOf(obj, className) obj->IsKindOf(&className::sm_class##className)
 
+// to be replaced by dynamic_cast<> in the future
+#define wxDynamicCast(obj, className) \
+        ((obj) && ((obj)->IsKindOf(&className::sm_class##className)) \
+        ? (className *)(obj) \
+        : (className *)0)
+
 // Unfortunately Borland seems to need this include.
 #ifdef __BORLANDC__
-#if wxUSE_IOSTREAMH
-#include <iostream.h>
-#else
-#include <iostream>
-#endif
+    #if wxUSE_IOSTREAMH
+        #include <iostream.h>
+    #else
+        #include <iostream>
+    #endif
 #endif
 
 class WXDLLEXPORT wxObjectRefData;

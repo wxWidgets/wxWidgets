@@ -2,13 +2,25 @@
 
 Classes: \helpref{wxObject}{wxobject}, \helpref{wxClassInfo}{wxclassinfo}.
 
-One of the failings of C++ is that no run-time information is provided
+One of the failings of C++ used to be that no run-time information was provided
 about a class and its position in the inheritance hierarchy.
-Another is that instances of a class cannot be created just by knowing the name of a class,
-which makes facilities such as persistent storage hard to implement.
+Another, which still persists, is that instances of a class cannot be created
+just by knowing the name of a class, which makes facilities such as persistent
+storage hard to implement.
 
 Most C++ GUI frameworks overcome these limitations by means of a set of
-macros and functions and wxWindows is no exception.
+macros and functions and wxWindows is no exception. As it originated before the
+addition of RTTI to the standard C++ and as support for it still missing from
+some (albeit old) compilers, wxWindows doesn't (yet) use it, but provides its
+own macro-based RTTI system.
+
+In the future, the standard C++ RTTI will be used though and you're encouraged
+to use whenever possible \helpref{wxDynamicCast()}{wxdynamiccast} macro which,
+for the implementations that support it, is defined just as dynamic\_cast<> and
+uses wxWindows RTTI for all the others. This macro is limited to wxWindows
+classes only and only works with pointers (unlike the real dynamic\_cast<> which
+also accepts referencies).
+
 Each class that you wish to be known the type system should have
 a macro such as DECLARE\_DYNAMIC\_CLASS just inside the class declaration.
 The macro IMPLEMENT\_DYNAMIC\_CLASS should be in the implementation file.
@@ -31,9 +43,9 @@ dynamic object of the class in question. A pointer to this function is
 stored in wxClassInfo, and is used when an object should be created
 dynamically.
 
-wxObject::IsKindOf uses the linked list of wxClassInfo. It takes
-a wxClassInfo argument, so use CLASSINFO(className) to return an
-appropriate wxClassInfo pointer to use in this function.
+\helpref{wxObject::IsKindOf}{wxobjectiskindof} uses the linked list of
+wxClassInfo. It takes a wxClassInfo argument, so use CLASSINFO(className)
+to return an appropriate wxClassInfo pointer to use in this function.
 
 The function \helpref{wxCreateDynamicObject}{wxcreatedynamicobject} can be used
 to construct a new object of a given type, by supplying a string name.
@@ -68,26 +80,27 @@ See also \helpref{wxObject}{wxobject} and \helpref{wxCreateDynamicObject}{wxcrea
 
 \subsection{Example}
 
-In a header file wx\_frame.h:
+In a header file frame.h:
 
 \begin{verbatim}
-class wxFrame: public wxWindow
+class wxFrame : public wxWindow
 {
-  DECLARE_DYNAMIC_CLASS(wxFrame)
+DECLARE_DYNAMIC_CLASS(wxFrame)
 
- private:
-  char *frameTitle;
- public:
-  ...
+private:
+    wxString m_title;
+
+public:
+    ...
 };
 \end{verbatim}
 
-In a C++ file wx\_frame.cc:
+In a C++ file frame.cpp:
 
 \begin{verbatim}
 IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxWindow)
 
-wxFrame::wxFrame(void)
+wxFrame::wxFrame()
 {
 ...
 }

@@ -144,7 +144,7 @@ public:
     virtual void OnDefaultAction(wxControl * WXUNUSED(initiatingItem)) { }
 #endif // WXWIN_COMPATIBILITY
 
-#if wxUSE_CARET
+#if wxUSE_CARET && WXWIN_COMPATIBILITY
     // caret manipulation (old MSW only functions, see wxCaret class for the
     // new API)
     void CreateCaret(int w, int h);

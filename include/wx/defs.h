@@ -523,9 +523,13 @@ typedef  wxUint16        wxWord;
 #define wxWANTS_CHARS       0x00040000
 
 // Orientations
-#define wxHORIZONTAL     0x01
-#define wxVERTICAL       0x02
-#define wxBOTH           (wxVERTICAL|wxHORIZONTAL)
+enum wxOrientation
+{
+    wxHORIZONTAL = 0x01,
+    wxVERTICAL   = 0x02,
+    wxBOTH       = (wxVERTICAL | wxHORIZONTAL)
+};
+
 #define wxCENTER_FRAME   0x04  /* centering into frame rather than screen */
 
 /*

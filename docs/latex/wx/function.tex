@@ -1596,23 +1596,6 @@ Returns a pointer to the wxClassInfo object associated with this class.
 
 <wx/object.h>
 
-\membersection{WXDEBUG\_NEW}\label{debugnew}
-
-\func{}{WXDEBUG\_NEW}{arg}
-
-This is defined in debug mode to be call the redefined new operator
-with filename and line number arguments. The definition is:
-
-\begin{verbatim}
-#define WXDEBUG_NEW new(__FILE__,__LINE__)
-\end{verbatim}
-
-In non-debug mode, this is defined as the normal new operator.
-
-\wxheading{Include files}
-
-<wx/object.h>
-
 \membersection{DECLARE\_ABSTRACT\_CLASS}
 
 \func{}{DECLARE\_ABSTRACT\_CLASS}{className}
@@ -1810,7 +1793,58 @@ base classes.
 
 <wx/object.h>
 
+\membersection{WXDEBUG\_NEW}\label{debugnew}
+
+\func{}{WXDEBUG\_NEW}{arg}
+
+This is defined in debug mode to be call the redefined new operator
+with filename and line number arguments. The definition is:
+
+\begin{verbatim}
+#define WXDEBUG_NEW new(__FILE__,__LINE__)
+\end{verbatim}
+
+In non-debug mode, this is defined as the normal new operator.
+
+\wxheading{Include files}
+
+<wx/object.h>
+
+\membersection{wxDynamicCast}\label{wxdynamiccast}
+
+\func{}{wxDynamicCast}{ptr, classname}
+
+This macro returns the pointer {\it ptr} cast to the type {\it classname *} if
+the pointer is of this type (the check is done during the run-time) or NULL
+otherwise. Usage of this macro is prefered over obsoleted wxObject::IsKindOf()
+function.
+
+The {\it ptr} argument may be NULL, in which case NULL will be returned.
+
+Example:
+
+\begin{verbatim}
+    wxWindow *win = wxWindow::FindFocus();
+    wxTextCtrl *text = wxDynamicCast(win, wxTextCtrl);
+    if ( text )
+    {
+        // a text control has the focus...
+    }
+    else
+    {
+        // no window has the focus or it's not a text control
+    }
+\end{verbatim}
+
+\wxheading{See also}
+
+\helpref{RTTI overview}{runtimeclassoverview}
+
 \membersection{WXTRACE}\label{trace}
+
+\wxheading{Include files}
+
+<wx/object.h>
 
 \func{}{WXTRACE}{formatString, ...}
 

@@ -1018,7 +1018,7 @@ void wxWindow::Refresh(bool eraseBack, const wxRect *rect)
 // drag and drop
 // ---------------------------------------------------------------------------
 
-#if    wxUSE_DRAG_AND_DROP
+#if wxUSE_DRAG_AND_DROP
 
 void wxWindow::SetDropTarget(wxDropTarget *pDropTarget)
 {
@@ -1272,7 +1272,8 @@ int wxWindow::GetCharWidth() const
     return lpTextMetric.tmAveCharWidth;
 }
 
-void wxWindow::GetTextExtent(const wxString& string, int *x, int *y,
+void wxWindow::GetTextExtent(const wxString& string,
+                             int *x, int *y,
                              int *descent, int *externalLeading,
                              const wxFont *theFont) const
 {
