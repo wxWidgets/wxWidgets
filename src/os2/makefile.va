@@ -1,0 +1,414 @@
+#
+# File:      makefile.va
+# Author:    Dave Webster
+# Created:   1999
+# Updated:
+# Copyright: (c) 1999, Dave Webster
+#
+# "%W% %G%"
+#
+# Makefile : Builds wxWindows library wx.lib for VisualAge C++
+# Arguments:
+#
+# FINAL=1 argument to nmake to build version with no debugging info.
+# dll builds a library (wxdll.lib) suitable for creating DLLs
+#
+!include <..\makeva.env>
+
+THISDIR=$(WXWIN)\src\os2
+
+!if "$(WXMAKINGDLL)" == "1"
+LIBTARGET=$(WXDIR)\lib\$(WXLIBNAME).dll
+DUMMYOBJ=$D\dummydll.obj
+!else
+LIBTARGET=$(WXLIB)
+DUMMYOBJ=$D\dummy.obj
+!endif
+
+# Please set these according to the settings in setup.h, so we can include
+# the appropriate libraries in wx.lib
+
+# This one overrides the others, to be consistent with the settings in wx_setup.h
+MINIMAL_WXWINDOWS_SETUP=0
+
+PERIPH_LIBS=
+PERIPH_TARGET=
+PERIPH_CLEAN_TARGET=
+
+# These are absolute paths, so that the compiler
+# generates correct __FILE__ symbols for debugging.
+# Otherwise you don't be able to double-click on a memory
+# error to load that file.
+GENDIR=$(WXDIR)\src\generic
+COMMDIR=$(WXDIR)\src\common
+OS2DIR=$(WXDIR)\src\os2
+HTMLDIR = $(WXDIR)\src\html
+
+{..\generic}.cpp{..\generic\$D}.obj:
+    @echo $<
+    icc @<<
+$(CPPFLAGS) /Fo$@ /Tp $<
+<<
+
+{..\common}.cpp{..\common\$D}.obj:
+    @echo $<
+    icc @<<
+$(CPPFLAGS) /Fo$@ /Tp $<
+<<
+
+{..\os2}.cpp{..\os2\$D}.obj:
+    icc @<<
+$(CPPFLAGS) /Fo$@ /Tp $<
+<<
+
+{..\html}.cpp{..\html\$D}.obj:
+    icc @<<
+$(CPPFLAGS) /Fo$@ /Tp $<
+<<
+
+GENERICOBJS= \
+  ..\generic\$D\choicdgg.obj \
+  ..\generic\$D\gridg.obj \
+  ..\generic\$D\laywin.obj \
+  ..\generic\$D\panelg.obj \
+  ..\generic\$D\progdlgg.obj \
+  ..\generic\$D\prop.obj \
+  ..\generic\$D\propform.obj \
+  ..\generic\$D\proplist.obj \
+  ..\generic\$D\sashwin.obj \
+  ..\generic\$D\scrolwin.obj \
+  ..\generic\$D\splitter.obj \
+  ..\generic\$D\statusbr.obj \
+  ..\generic\$D\tabg.obj \
+  ..\generic\$D\textdlgg.obj \
+  ..\generic\$D\extdlgg.obj \
+  ..\generic\$D\tipdlg.obj \
+  ..\generic\$D\busyinfo.obj
+
+#  ..\generic\$D\imaglist.obj \
+#  ..\generic\$D\treectrl.obj \
+#  ..\generic\$D\listctrl.obj \
+#  ..\generic\$D\notebook.obj \
+
+# These are generic things that don't need to be compiled on MSW,
+# but sometimes it's useful to do so for testing purposes.
+NONESSENTIALOBJS= \
+  ..\generic\$D\printps.obj \
+  ..\generic\$D\prntdlgg.obj \
+  ..\generic\$D\msgdlgg.obj \
+  ..\generic\$D\helpxlp.obj \
+  ..\generic\$D\colrdlgg.obj \
+  ..\generic\$D\fontdlgg.obj
+
+COMMONOBJS = \
+  ..\common\$D\cmndata.obj \
+  ..\common\$D\config.obj \
+  ..\common\$D\dcbase.obj \
+  ..\common\$D\db.obj \
+  ..\common\$D\dbtable.obj \
+  ..\common\$D\docview.obj \
+  ..\common\$D\docmdi.obj \
+  ..\common\$D\dynarray.obj \
+  ..\common\$D\dynlib.obj \
+  ..\common\$D\event.obj \
+  ..\common\$D\file.obj \
+  ..\common\$D\filefn.obj \
+  ..\common\$D\fileconf.obj \
+  ..\common\$D\framecmn.obj \
+  ..\common\$D\ftp.obj \
+  ..\common\$D\gdicmn.obj \
+  ..\common\$D\image.obj \
+  ..\common\$D\imagbmp.obj \
+  ..\common\$D\imagjpeg.obj \
+  ..\common\$D\imagpng.obj \
+  ..\common\$D\imaggif.obj \
+  ..\common\$D\intl.obj \
+  ..\common\$D\ipcbase.obj \
+  ..\common\$D\helpbase.obj \
+  ..\common\$D\layout.obj \
+  ..\common\$D\log.obj \
+  ..\common\$D\memory.obj \
+  ..\common\$D\mimetype.obj \
+  ..\common\$D\module.obj \
+  ..\common\$D\odbc.obj \
+  ..\common\$D\object.obj \
+  ..\common\$D\prntbase.obj \
+  ..\common\$D\resource.obj \
+  ..\common\$D\tbarbase.obj \
+  ..\common\$D\tbarsmpl.obj \
+  ..\common\$D\textfile.obj \
+  ..\common\$D\timercmn.obj \
+  ..\common\$D\utilscmn.obj \
+  ..\common\$D\validate.obj \
+  ..\common\$D\valgen.obj \
+  ..\common\$D\valtext.obj \
+  ..\common\$D\date.obj \
+  ..\common\$D\hash.obj \
+  ..\common\$D\list.obj \
+  ..\common\$D\paper.obj \
+  ..\common\$D\string.obj \
+  ..\common\$D\socket.obj \
+  ..\common\$D\sckaddr.obj \
+  ..\common\$D\sckint.obj \
+  ..\common\$D\sckfile.obj \
+  ..\common\$D\sckipc.obj \
+  ..\common\$D\sckstrm.obj \
+  ..\common\$D\url.obj \
+  ..\common\$D\http.obj \
+  ..\common\$D\protocol.obj \
+  ..\common\$D\time.obj \
+  ..\common\$D\tokenzr.obj \
+  ..\common\$D\wxexpr.obj \
+  ..\common\$D\y_tab.obj \
+  ..\common\$D\extended.obj \
+  ..\common\$D\process.obj \
+  ..\common\$D\wfstream.obj \
+  ..\common\$D\mstream.obj \
+  ..\common\$D\zstream.obj \
+  ..\common\$D\stream.obj \
+  ..\common\$D\datstrm.obj \
+  ..\common\$D\objstrm.obj \
+  ..\common\$D\variant.obj \
+  ..\common\$D\dlgcmn.obj \
+  ..\common\$D\wincmn.obj \
+  ..\common\$D\txtstrm.obj \
+  ..\common\$D\wxchar.obj \
+  ..\common\$D\unzip.obj \
+  ..\common\$D\zipstream.obj \
+  ..\common\$D\filesys.obj \
+  ..\common\$D\fs_inet.obj \
+  ..\common\$D\fs_zip.obj
+
+
+OS2OBJS = \
+  ..\os2\$D\accel.obj \
+  ..\os2\$D\app.obj \
+  ..\os2\$D\bitmap.obj \
+  ..\os2\$D\bmpbuttn.obj \
+  ..\os2\$D\brush.obj \
+  ..\os2\$D\button.obj \
+  ..\os2\$D\checkbox.obj \
+  ..\os2\$D\checklst.obj \
+  ..\os2\$D\choice.obj \
+  ..\os2\$D\clipbrd.obj \
+  ..\os2\$D\dcprint.obj \
+  ..\os2\$D\dcscreen.obj \
+  ..\os2\$D\dde.obj \
+  ..\os2\$D\dialog.obj \
+  ..\os2\$D\dib.obj \
+  ..\os2\$D\dibutils.obj \
+  ..\os2\$D\dirdlg.obj \
+  ..\os2\$D\filedlg.obj \
+  ..\os2\$D\font.obj \
+  ..\os2\$D\fontdlg.obj \
+  ..\os2\$D\frame.obj \
+  ..\os2\$D\gauge.obj \
+  ..\os2\$D\gdiobj.obj \
+  ..\os2\$D\helpwin.obj \
+  ..\os2\$D\icon.obj \
+  ..\os2\$D\iniconf.obj \
+  ..\os2\$D\joystick.obj \
+  ..\os2\$D\imaglist.obj \
+  ..\os2\$D\listbox.obj \
+  ..\os2\$D\listctrl.obj \
+  ..\os2\$D\main.obj \
+  ..\os2\$D\mdi.obj \
+  ..\os2\$D\menu.obj \
+  ..\os2\$D\menuitem.obj \
+  ..\os2\$D\metafile.obj \
+  ..\os2\$D\minifram.obj \
+  ..\os2\$D\msgdlg.obj \
+  ..\os2\$D\nativdlg.obj \
+  ..\os2\$D\notebook.obj \
+  ..\os2\$D\ownerdrw.obj \
+  ..\os2\$D\palette.obj \
+  ..\os2\$D\pen.obj \
+  ..\os2\$D\penwin.obj \
+  ..\os2\$D\pnghand.obj \
+  ..\os2\$D\printdlg.obj \
+  ..\os2\$D\printwin.obj \
+  ..\os2\$D\radiobox.obj \
+  ..\os2\$D\radiobut.obj \
+  ..\os2\$D\region.obj \
+  ..\os2\$D\registry.obj \
+  ..\os2\$D\regconf.obj \
+  ..\os2\$D\scrolbar.obj \
+  ..\os2\$D\settings.obj \
+  ..\os2\$D\slidrmsw.obj \
+  ..\os2\$D\slider95.obj \
+  ..\os2\$D\spinbutt.obj \
+  ..\os2\$D\statbmp.obj \
+  ..\os2\$D\statbox.obj \
+  ..\os2\$D\statusbr.obj \
+  ..\os2\$D\stattext.obj \
+  ..\os2\$D\tabctrl.obj \
+  ..\os2\$D\taskbar.obj \
+  ..\os2\$D\tbarmsw.obj \
+  ..\os2\$D\textctrl.obj \
+  ..\os2\$D\thread.obj \
+  ..\os2\$D\timer.obj \
+  ..\os2\$D\toolbar.obj \
+  ..\os2\$D\tooltip.obj \
+  ..\os2\$D\treectrl.obj \
+  ..\os2\$D\utils.obj \
+  ..\os2\$D\utilsexc.obj \
+  ..\os2\$D\wave.obj \
+  ..\os2\$D\window.obj \
+  ..\os2\$D\xpmhand.obj \
+
+HTMLOBJS = \
+  ..\html\$D\htmlcell.obj \
+  ..\html\$D\htmlfilter.obj \
+  ..\html\$D\htmlhelp.obj \
+  ..\html\$D\htmlhelp_io.obj \
+  ..\html\$D\htmlparser.obj \
+  ..\html\$D\htmltag.obj \
+  ..\html\$D\htmlwin.obj \
+  ..\html\$D\htmlwinparser.obj \
+  ..\html\$D\mod_fonts.obj \
+  ..\html\$D\mod_hline.obj \
+  ..\html\$D\mod_image.obj \
+  ..\html\$D\mod_layout.obj \
+  ..\html\$D\mod_links.obj \
+  ..\html\$D\mod_list.obj \
+  ..\html\$D\mod_pre.obj \
+  ..\html\$D\mod_tables.obj \
+  ..\html\$D\search.obj
+
+# Add $(NONESSENTIALOBJS) if wanting generic dialogs, PostScript etc.
+OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(NONESSENTIALOBJS) $(OS2OBJS)
+
+# Normal, static library
+all:    $(OBJECTS) $(PERIPH_TARGET) $(LIBTARGET)
+
+dirs: $(OS2DIR)\$D $(COMMDIR)\$D $(GENDIR)\$D $(HTMLDIR)\$D
+
+
+test:   $(OS2DIR)\$D\wave.obj
+test2:  ..\common\Debug\config.obj
+
+$D:
+    md $D
+
+$(COMMDIR)\$D:
+    md $(COMMDIR)\$D
+
+$(OS2DIR)\$D:
+    md $(OS2DIR)\$D
+
+$(GENDIR)\$D:
+    md $(GENDIR)\$D
+
+$(HTMLDIR)\$D:
+    md $(HTMLDIR)\$D
+
+# wxWindows library as DLL
+dll:
+        nmake -f makefile.va all FINAL=$(FINAL) DLL=1 WXMAKINGDLL=1 NEW_WXLIBNAME=$(NEW_WXLIBNAME)
+
+cleandll:
+        nmake -f makefile.va clean FINAL=$(FINAL) DLL=1 WXMAKINGDLL=1 NEW_WXLIBNAME=$(NEW_WXLIBNAME)
+
+# wxWindows + app as DLL. Only affects main.cpp.
+dllapp:
+        nmake -f makefile.va all FINAL=$(FINAL) DLL=1
+
+# wxWindows + app as DLL, for Netscape plugin - remove DllMain.
+dllnp:
+        nmake -f makefile.va all FINAL=$(FINAL) DLL=1
+
+# Use this to make dummy.obj and generate a PCH.
+# You might use the dll target, then the pch target, in order to
+# generate a DLL, then a PCH/dummy.obj for compiling your applications with.
+#
+# Explanation: Normally, when compiling a static version of wx.lib, your dummy.obj/PCH
+# are associated with wx.lib. When using a DLL version of wxWindows, however,
+# the DLL is compiled without a PCH, so you only need it for compiling the app.
+# In fact headers are compiled differently depending on whether a DLL is being made
+# or an app is calling the DLL exported functionality (WXDLLEXPORT is different
+# in each case) so you couldn't use the same PCH.
+pch:
+        nmake -f makefile.va pch1 WXUSINGDLL=1 FINAL=$(FINAL) NEW_WXLIBNAME=$(NEW_WXLIBNAME)
+
+pch1:   dirs $(DUMMYOBJ)
+    echo $(DUMMYOBJ)
+
+!if "$(WXMAKINGDLL)" != "1"
+
+### Static library
+
+$(WXDIR)\lib\wx.lib: $D\dummy.obj $(OBJECTS) $(PERIPH_LIBS)
+ del $(LIBTARGET)
+ ilib $(LINKFLAGS) $@ @<<
+    $**
+<<
+
+!else
+
+# Update the import library
+$(WXDIR)\lib\wx200.lib: $(OBJECTS)
+    implib $(WXDIR)\lib\wx200.lib $(WXDIR)\lib\wx200.def
+
+# Update the dynamic link library
+$(WXDIR)\lib\wx200.dll: $(OBJECTS) $(WXDIR)\lib\wx200.lib
+    icc @<<
+    /B" $(LINKFLAGS)" /Fe$@
+    $(LIBS)
+    $(OBJECTS)
+    $(WXDIR)\lib\wx200.def
+<<
+
+!endif
+
+$D\dummy.obj: dummy.$(SRCSUFF) $(WXDIR)\include\wx\wx.h $(WXDIR)\include\wx\os2\setup.h
+        icc $(CPPFLAGS) $(MAKEPRECOMP) /Fo$D\dummy.obj /Tp dummy.cpp
+
+$D\dummydll.obj: dummydll.$(SRCSUFF) $(WXDIR)\include\wx\wx.h $(WXDIR)\include\wx\os2\setup.h
+        icc @<<
+$(CPPFLAGS) $(MAKEPRECOMP) /Fo$D\dummydll.obj /c /Tp dummydll.cpp
+<<
+
+# If taking wxWindows from CVS, setup.h doesn't exist yet.
+$(WXDIR)\include\wx\os2\setup.h: $(WXDIR)\include\wx\os2\setup0.h
+    copy "$(WXDIR)"\include\wx\os2\setup.h "$(WXDIR)"\include\wx\os2\setup.bak
+    copy "$(WXDIR)"\include\wx\os2\setup0.h "$(WXDIR)"\include\wx\os2\setup.h
+
+..\common\$D\extended.obj:     ..\common\extended.c
+        icc @<<
+$(CPPFLAGS2) /Fo$@ $(COMMDIR)\extended.c
+<<
+
+..\common\$D\y_tab.obj:     ..\common\y_tab.c ..\common\lex_yy.c
+        icc @<<
+$(CPPFLAGS2) /DUSE_DEFINE /DYY_USE_PROTOS /Fo$@  ..\common\y_tab.c
+<<
+
+..\common\y_tab.c:     ..\common\dosyacc.c
+        copy "..\common"\dosyacc.c "..\common"\y_tab.c
+
+..\common\lex_yy.c:    ..\common\doslex.c
+    copy "..\common"\doslex.c "..\common"\lex_yy.c
+
+$(OBJECTS): $(WXDIR)/include/wx/setup.h
+
+..\common\$D\unzip.obj:     ..\common\unzip.c
+        icc @<<
+$(CPPFLAGS2) /Fo$@ $(COMMDIR)\unzip.c
+<<
+
+clean: $(PERIPH_CLEAN_TARGET) clean_png clean_zlib clean_jpeg clean_xpm
+        -erase $(LIBTARGET)
+        -erase ..\..\lib\wx200.dll
+        -erase ..\..\lib\wx200.lib
+        -erase $(GENDIR)\$D\*.obj
+        -erase $(COMMDIR)\$D\*.obj
+        -erase $(COMMDIR)\\y_tab.c
+        -erase $(COMMDIR)\lex_yy.c
+        -erase $(OS2DIR)\$D\*.obj
+        -rmdir $(D)
+        -rmdir ole\$(D)
+        -rmdir ..\generic\$(D)
+        -rmdir ..\common\$(D)
+
+cleanall: clean
+
