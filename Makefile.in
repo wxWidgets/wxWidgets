@@ -539,10 +539,13 @@ ALL_DIST: distclean
 	cp $(DOCDIR)/lgpl.txt $(DISTDIR)/COPYING.LIB
 	cp $(DOCDIR)/licence.txt $(DISTDIR)/LICENCE.txt
 	cp $(DOCDIR)/symbols.txt $(DISTDIR)/SYMBOLS.txt
+	cp $(DOCDIR)/changes.txt $(DISTDIR)/CHANGES.txt
+	cp $(DOCDIR)/readme.txt $(DISTDIR)/README.txt
 	mkdir $(DISTDIR)/lib
 	cp $(WXDIR)/lib/vms.opt $(DISTDIR)/lib
 	cp $(WXDIR)/lib/vms_gtk.opt $(DISTDIR)/lib
 	mkdir $(DISTDIR)/src
+	cp $(SRCDIR)/files.lst $(DISTDIR)/src/
 	mkdir $(DISTDIR)/src/zlib
 	cp $(ZLIBDIR)/*.h $(DISTDIR)/src/zlib
 	cp $(ZLIBDIR)/*.c $(DISTDIR)/src/zlib
@@ -564,9 +567,10 @@ ALL_DIST: distclean
 # but is not used when building wxBase distribution
 ALL_GUI_DIST: ALL_DIST
 	cp $(WXDIR)/wxBase.spec $(DISTDIR)
-	cp $(DOCDIR)/$(TOOLKITDIR)/install.txt $(DISTDIR)/INSTALL.txt
-	cp $(DOCDIR)/$(TOOLKITDIR)/changes.txt $(DISTDIR)/CHANGES.txt
-	cp $(DOCDIR)/$(TOOLKITDIR)/readme.txt $(DISTDIR)/README.txt
+	cp $(DOCDIR)/$(TOOLKITDIR)/install.txt $(DISTDIR)/INSTALL.txt        
+	if test -f $(DOCDIR)/$(TOOLKITDIR)/changes.txt ; then \
+	  cp $(DOCDIR)/$(TOOLKITDIR)/changes.txt $(DISTDIR)/CHANGES-$(TOOLKIT).txt ; fi
+	cp $(DOCDIR)/$(TOOLKITDIR)/readme.txt $(DISTDIR)/README-$(TOOLKIT).txt
 	cp $(DOCDIR)/$(TOOLKITDIR)/todo.txt $(DISTDIR)/TODO.txt
 	mkdir $(DISTDIR)/include
 	mkdir $(DISTDIR)/include/wx
@@ -593,7 +597,6 @@ ALL_GUI_DIST: ALL_DIST
 	mkdir $(DISTDIR)/src/tiff
 	mkdir $(DISTDIR)/src/iodbc
 	mkdir $(DISTDIR)/src/unix
-	cp $(SRCDIR)/files.lst $(DISTDIR)/src/
 	cp $(SRCDIR)/*.in $(DISTDIR)/src
 	cp $(COMMDIR)/*.cpp $(DISTDIR)/src/common
 	cp $(COMMDIR)/*.c $(DISTDIR)/src/common
@@ -636,11 +639,11 @@ BASE_DIST: ALL_DIST
 	mkdir $(DISTDIR)/include/wx/unix
 	mkdir $(DISTDIR)/src/common
 	mkdir $(DISTDIR)/src/unix
+	mkdir $(DISTDIR)/src/msw
 	cp $(WXDIR)/wxBase.spec $(DISTDIR)
 	cp @PORT_FILES@ $(DISTDIR)
-	cp $(WXDIR)/@RPM_FILES@ $(DISTDIR)/@RPM_FILES@
-	cp $(WXDIR)/wxBase*.dsp $(DISTDIR)
-	cp $(WXDIR)/wxBase*.dsw $(DISTDIR)
+	cp $(WXDIR)/src/wxBase*.dsp $(DISTDIR)
+	cp $(WXDIR)/src/wxBase*.dsw $(DISTDIR)
 	cp $(DOCDIR)/changes.txt $(DISTDIR)/CHANGES.txt
 	cp $(DOCDIR)/readme.txt $(DISTDIR)/README.txt
 	cp $(SRCDIR)/*.in $(DISTDIR)/src
@@ -678,10 +681,11 @@ GTK_DIST: ALL_GUI_DIST
 	cp -R $(WXDIR)/contrib $(DISTDIR)
 
 MOTIF_DIST: ALL_GUI_DIST
-	cp $(WXDIR)/wxMOTIF.spec $(DISTDIR)
+	cp $(WXDIR)/wxMotif.spec $(DISTDIR)
 	cp $(INCDIR)/wx/motif/*.h $(DISTDIR)/include/wx/motif
 	cp $(MOTIFDIR)/files.lst $(DISTDIR)/src/motif
 	cp $(MOTIFDIR)/*.cpp $(DISTDIR)/src/motif
+	cp $(MOTIFDIR)/*.c $(DISTDIR)/src/motif
 	cp $(MOTIFDIR)/*.xbm $(DISTDIR)/src/motif
 	mkdir $(DISTDIR)/src/motif/xmcombo
 	cp $(MOTIFDIR)/xmcombo/*.c $(DISTDIR)/src/motif/xmcombo

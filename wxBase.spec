@@ -1,5 +1,5 @@
 %define pref /usr
-%define ver 2.3.1
+%define ver 2.3.2
 %define ver2 2.3
 %define rel 1
 
@@ -43,6 +43,7 @@ else
   export MAKE="make"
 fi
 $MAKE
+(cd locale; make allmo)
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -57,18 +58,34 @@ rm -rf $RPM_BUILD_ROOT
 %postun
 /sbin/ldconfig
 
-%files
-%defattr (644, root, root, 755)
-%doc COPYING.LIB LICENCE.txt README.txt SYMBOLS.txt
-%attr(755, -, -) %{pref}/lib/libwx_base*
+%post devel
+# Install wx-config if there isn't any
+if test ! -f %{_bindir}/wx-config ; then
+    ln -sf wxbase-%{ver2}-config %{_bindir}/wx-config
+fi
 
-%files devel -f src/rpmfiles.lst
-%dir %{pref}/lib/wx
-%dir %{pref}/lib/wx/include
-%dir %{pref}/lib/wx/include/wx
-%dir %{pref}/lib/wx/include/wx/base
-%{pref}/lib/wx/include/wx/base/setup.h
-%defattr (644, root, root, 755)
-%attr(755, -, -) %{pref}/bin/wxbase-%{ver2}-config
-%attr(755, -, -) %{pref}/bin/wx-config
+%preun devel
+# Remove wx-config if it points to this package
+if test -f %{_bindir}/wx-config -a -f /usr/bin/md5sum ; then
+  SUM1=`md5sum %{_bindir}/wxbase-%{ver2}-config | cut -c 0-32`
+  SUM2=`md5sum %{_bindir}/wx-config | cut -c 0-32`
+  if test "x$SUM1" = "x$SUM2" ; then
+    rm -f %{_bindir}/wx-config
+  fi
+fi
+
+%files
+%defattr (-,root,root)
+%doc COPYING.LIB *.txt
+%{_libdir}/libwx_base*so.*
+%{_datadir}/locale/*/*/*.mo
+
+%files devel
+%defattr (-,root,root)
+%dir %{_includedir}/wx
+%{_includedir}/wx/*
+%{_libdir}/libwx_base*.so
+%dir %{_libdir}/wx
+%{_libdir}/wx/*
+%{_bindir}/wxbase-%{ver2}-config
 

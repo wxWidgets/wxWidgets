@@ -2,6 +2,7 @@
 /usr/include/wx/arrimpl.cpp
 /usr/include/wx/buffer.h
 /usr/include/wx/chkconf.h
+/usr/include/wx/clntdata.h
 /usr/include/wx/cmdline.h
 /usr/include/wx/confbase.h
 /usr/include/wx/config.h
@@ -47,6 +48,7 @@
 /usr/include/wx/mstream.h
 /usr/include/wx/object.h
 /usr/include/wx/objstrm.h
+/usr/include/wx/platform.h
 /usr/include/wx/process.h
 /usr/include/wx/regex.h
 /usr/include/wx/sckaddr.h

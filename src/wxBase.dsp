@@ -253,6 +253,10 @@ SOURCE=.\common\appcmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\clntdata.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\cmdline.cpp
 # End Source File
 # Begin Source File
@@ -661,6 +665,10 @@ SOURCE=..\include\wx\chkconf.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\clntdata.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\cmdline.h
 # End Source File
 # Begin Source File
@@ -834,6 +842,10 @@ SOURCE=..\include\wx\object.h
 # Begin Source File
 
 SOURCE=..\include\wx\objstrm.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\platform.h
 # End Source File
 # Begin Source File
 
