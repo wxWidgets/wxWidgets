@@ -166,7 +166,9 @@ public:
         PyObject* GetData() {
             unsigned char* data = self->GetData();
             int len = self->GetWidth() * self->GetHeight() * 3;
-            return PyString_FromStringAndSize((char*)data, len);
+            PyObject* rv;
+            wxPyBLOCK_THREADS( rv = PyString_FromStringAndSize((char*)data, len));
+            return rv;
         }
         void SetData(PyObject* data) {
             unsigned char* dataPtr;
@@ -178,7 +180,7 @@ public:
 
             size_t len = self->GetWidth() * self->GetHeight() * 3;
             dataPtr = (unsigned char*) malloc(len);
-            memcpy(dataPtr, PyString_AsString(data), len);
+            wxPyBLOCK_THREADS( memcpy(dataPtr, PyString_AsString(data), len) );
             self->SetData(dataPtr);
             // wxImage takes ownership of dataPtr...
         }
@@ -188,20 +190,25 @@ public:
         PyObject* GetDataBuffer() {
             unsigned char* data = self->GetData();
             int len = self->GetWidth() * self->GetHeight() * 3;
-            return PyBuffer_FromReadWriteMemory(data, len);
+            PyObject* rv;
+            wxPyBLOCK_THREADS( rv = PyBuffer_FromReadWriteMemory(data, len) );
+            return rv;
         }
         void SetDataBuffer(PyObject* data) {
             unsigned char* buffer;
             int size;
 
-            if (!PyArg_Parse(data, "w#", &buffer, &size))
-                return;
+            wxPyBeginBlockThreads();
+            if (!PyArg_Parse(data, "t#", &buffer, &size))
+                goto done;
 
             if (size != self->GetWidth() * self->GetHeight() * 3) {
                 PyErr_SetString(PyExc_TypeError, "Incorrect buffer size");
-                return;
+                goto done;
             }
             self->SetData(buffer);
+        done:
+            wxPyEndBlockThreads();
         }
 
 
@@ -212,7 +219,9 @@ public:
                 RETURN_NONE();
             } else {
                 int len = self->GetWidth() * self->GetHeight();
-                return PyString_FromStringAndSize((char*)data, len);
+                PyObject* rv;
+                wxPyBLOCK_THREADS( rv = PyString_FromStringAndSize((char*)data, len) );
+                return rv;
             }
         }
         void SetAlphaData(PyObject* data) {
@@ -225,7 +234,7 @@ public:
 
             size_t len = self->GetWidth() * self->GetHeight();
             dataPtr = (unsigned char*) malloc(len);
-            memcpy(dataPtr, PyString_AsString(data), len);
+            wxPyBLOCK_THREADS( memcpy(dataPtr, PyString_AsString(data), len) );
             self->SetAlpha(dataPtr);
             // wxImage takes ownership of dataPtr...
         }
@@ -235,20 +244,25 @@ public:
         PyObject* GetAlphaBuffer() {
             unsigned char* data = self->GetAlpha();
             int len = self->GetWidth() * self->GetHeight();
-            return PyBuffer_FromReadWriteMemory(data, len);
+            PyObject* rv;
+            wxPyBLOCK_THREADS( rv = PyBuffer_FromReadWriteMemory(data, len) );
+            return rv;
         }
         void SetAlphaBuffer(PyObject* data) {
             unsigned char* buffer;
             int size;
 
-            if (!PyArg_Parse(data, "w#", &buffer, &size))
-                return;
+            wxPyBeginBlockThreads();
+            if (!PyArg_Parse(data, "t#", &buffer, &size))
+                goto done;
 
             if (size != self->GetWidth() * self->GetHeight()) {
                 PyErr_SetString(PyExc_TypeError, "Incorrect buffer size");
-                return;
+                goto done;
             }
             self->SetAlpha(buffer);
+        done:
+            wxPyEndBlockThreads();
         }
     }
 
