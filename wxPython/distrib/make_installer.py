@@ -18,7 +18,7 @@ ISS_Template = r'''
 
 [Setup]
 AppName = wxPython
-AppVerName = wxPython %(VERSION)s
+AppVerName = wxPython %(VERSION)s for Python %(PYTHONVER)s
 OutputBaseFilename = wxPython-%(VERSION)s-%(PYVER)s
 AppCopyright = Copyright © 2001 Total Control Software
 DefaultDirName = {code:GetPythonDir|c:\DoNotInstallHere}
@@ -38,6 +38,8 @@ DisableReadyPage = true
 ;;DisableDirPage = true
 DisableProgramGroupPage = true
 DisableAppendDir = true
+UsePreviousAppDir = no
+UsePreviousGroup = no
 
 UninstallFilesDir = {app}\wxPython
 AppPublisherURL = http://wxPython.org/

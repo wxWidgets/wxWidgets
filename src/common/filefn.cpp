@@ -444,7 +444,7 @@ wxChar *wxExpandPath(wxChar *buf, const wxChar *name)
 {
     register wxChar *d, *s, *nm;
     wxChar          lnm[_MAXPATHLEN];
-    int             q;
+    int                                q;
 
     // Some compilers don't like this line.
 //    const wxChar    trimchars[] = wxT("\n \t");
@@ -500,7 +500,7 @@ wxChar *wxExpandPath(wxChar *buf, const wxChar *name)
       }
       else
 #else
-    while ((*d++ = *s) != 0) {
+    while ((*d++ = *s)) {
 #  ifndef __WXMSW__
         if (*s == wxT('\\')) {
             if ((*(d - 1) = *++s)) {
@@ -520,7 +520,13 @@ wxChar *wxExpandPath(wxChar *buf, const wxChar *name)
             register wxChar  *start = d;
             register int     braces = (*s == wxT('{') || *s == wxT('('));
             register wxChar  *value;
-            while ((*d++ = *s) != 0)
+#ifdef __VISAGECPP__
+    // VA gives assignment in logical expr warning
+            while (*d)
+               *d++ = *s;
+#else
+            while ((*d++ = *s))
+#endif
                 if (braces ? (*s == wxT('}') || *s == wxT(')')) : !(wxIsalnum(*s) || *s == wxT('_')) )
                     break;
                 else
@@ -528,7 +534,12 @@ wxChar *wxExpandPath(wxChar *buf, const wxChar *name)
             *--d = 0;
             value = wxGetenv(braces ? start + 1 : start);
             if (value) {
-                for ((d = start - 1); (*d++ = *value++) != 0;);
+#ifdef __VISAGECPP__
+    // VA gives assignment in logical expr warning
+                for ((d = start - 1); (*d); *d++ = *value++);
+#else
+                for ((d = start - 1); (*d++ = *value++););
+#endif
                 d--;
                 if (braces && *s)
                     s++;
@@ -580,7 +591,13 @@ wxChar *wxExpandPath(wxChar *buf, const wxChar *name)
           *(d - 1) = SEP;
     }
     s = nm;
-    while ((*d++ = *s++) != 0);
+#ifdef __VISAGECPP__
+    // VA gives assignment in logical expr warning
+    while (*d)
+       *d++ = *s++;
+#else
+    while ((*d++ = *s++));
+#endif
     delete[] nm_tmp; // clean up alloc
     /* Now clean up the buffer */
     return wxRealPath(buf);
@@ -950,9 +967,9 @@ wxConcatFiles (const wxString& file1, const wxString& file2, const wxString& fil
   FILE *fp2 = (FILE *) NULL;
   FILE *fp3 = (FILE *) NULL;
   // Open the inputs and outputs
-  if ((fp1 = wxFopen (OS_FILENAME( file1 ), wxT("rb"))) == NULL ||
-      (fp2 = wxFopen (OS_FILENAME( file2 ), wxT("rb"))) == NULL ||
-      (fp3 = wxFopen (OS_FILENAME( outfile ), wxT("wb"))) == NULL)
+  if ((fp1 = fopen (OS_FILENAME( file1 ), "rb")) == NULL ||
+      (fp2 = fopen (OS_FILENAME( file2 ), "rb")) == NULL ||
+      (fp3 = fopen (OS_FILENAME( outfile ), "wb")) == NULL)
     {
       if (fp1)
         fclose (fp1);
@@ -1110,7 +1127,6 @@ bool wxMkdir(const wxString& dir, int perm)
 #elif defined(__WXPM__)
     if (::DosCreateDir((PSZ)dirname, NULL) != 0) // enhance for EAB's??
 #else  // !MSW and !OS/2 VAC++
-	(void)perm;
     if ( wxMkDir(wxFNSTRINGCAST wxFNCONV(dirname)) != 0 )
 #endif // !MSW/MSW
     {
@@ -1692,7 +1708,7 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
 	pb.ioRefNum = LMGetCurApRefNum();
 	pb.ioFCBIndx = 0;
 	error = PBGetFCBInfoSync(&pb);
-	if ( error == noErr )
+	if ( error == noErr ) 
 	{
 		cwdSpec.vRefNum = pb.ioFCBVRefNum;
 		cwdSpec.parID = pb.ioFCBParID;
@@ -1706,9 +1722,9 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
 		buf[0] = 0 ;
 	/*
 	this version will not always give back the application directory on mac
-	enum
-	{
-		SFSaveDisk = 0x214, CurDirStore = 0x398
+	enum 
+	{ 
+		SFSaveDisk = 0x214, CurDirStore = 0x398 
 	};
 	FSSpec cwdSpec ;
 	
@@ -1936,7 +1952,7 @@ bool wxMatchWild( const wxString& pat, const wxString& text, bool dot_special )
             pattern++;
             ret_code = FALSE;
             while ((*str!=wxT('\0'))
-            && ((ret_code=wxMatchWild(pattern, str++, FALSE)) == 0))
+            && (!(ret_code=wxMatchWild(pattern, str++, FALSE))))
                 /*loop*/;
             if (ret_code) {
                 while (*str != wxT('\0'))
