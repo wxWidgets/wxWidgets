@@ -103,7 +103,19 @@ wxGenericDirDialog::wxGenericDirDialog(wxWindow* parent, const wxString& title,
     // Smartphone does not have buttons
 #if defined(__SMARTPHONE__)
 
-    // FIXME: make 'new dir' and 'home' in local dialog menu
+    wxMenu *dirMenu = new wxMenu;
+    dirMenu->Append(ID_GO_HOME, _("Home"));
+
+    if (style & wxDD_NEW_DIR_BUTTON)
+    {
+        dirMenu->Append(ID_NEW, _("New directory"));
+    }
+
+    dirMenu->AppendCheckItem(ID_SHOW_HIDDEN, _("Show hidden directories"));
+    dirMenu->AppendSeparator();
+    dirMenu->Append(wxID_CANCEL, _("Cancel"));
+
+    SetRightMenu(wxID_ANY, _("Options"), dirMenu);
 
 #else
 
@@ -170,11 +182,7 @@ wxGenericDirDialog::wxGenericDirDialog(wxWindow* parent, const wxString& title,
     m_input = new wxTextCtrl( this, ID_TEXTCTRL, m_path, wxDefaultPosition );
     topsizer->Add( m_input, 0, wxTOP|wxLEFT|wxRIGHT | wxEXPAND, wxLARGESMALL(10,0) );
 
-#ifdef __SMARTPHONE__
-
-    SetRightMenu(wxID_CANCEL, _("Cancel"));
-
-#else // __SMARTPHONE__/!__SMARTPHONE__
+#ifndef __SMARTPHONE__
 
 #if wxUSE_STATLINE
     // 3) Static line

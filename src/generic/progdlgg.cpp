@@ -46,11 +46,25 @@
 
 #include "wx/generic/progdlgg.h"
 
+// ---------------------------------------------------------------------------
+// macros
+// ---------------------------------------------------------------------------
+
+/* Macro for avoiding #ifdefs when value have to be different depending on size of
+   device we display on
+ */
+
+#if defined(__SMARTPHONE__)
+    #define wxLARGESMALL(large,small) small
+#else
+    #define wxLARGESMALL(large,small) large
+#endif
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
 
-#define LAYOUT_MARGIN 8
+#define LAYOUT_MARGIN wxLARGESMALL(8,2)
 
 // ----------------------------------------------------------------------------
 // private functions
@@ -105,6 +119,10 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
     }
 #endif // wxMSW
 
+#if defined(__SMARTPHONE__)
+    SetLeftMenu();
+#endif
+
     m_state = hasAbortButton ? Continue : Uncancelable;
     m_maximum = maximum;
 
@@ -123,7 +141,7 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
     dc.GetTextExtent(message, &widthText, NULL, NULL, NULL, NULL);
 
     wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
-	
+
     m_msg = new wxStaticText(this, wxID_ANY, message);
     sizer->Add(m_msg, 0, wxLEFT | wxTOP, 2*LAYOUT_MARGIN);
 
@@ -193,6 +211,10 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
 
     if ( hasAbortButton )
     {
+#if defined(__SMARTPHONE__)
+        SetLeftMenu(wxID_CANCEL, _("Cancel"));
+    }
+#else
         m_btnAbort = new wxButton(this, wxID_CANCEL);
 
         // Windows dialogs usually have buttons in the lower right corner
@@ -204,6 +226,7 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
         sizeDlg.y += 2*LAYOUT_MARGIN + wxButton::GetDefaultSize().y;
     }
     else // no "Cancel" button
+#endif // __SMARTPHONE__/!__SMARTPHONE__
     {
         m_btnAbort = (wxButton *)NULL;
     }
@@ -248,22 +271,28 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
 wxStaticText *wxProgressDialog::CreateLabel(const wxString& text,
                                             wxSizer *sizer)
 {
-    wxBoxSizer *locsizer = new wxBoxSizer(wxHORIZONTAL);
+    wxBoxSizer *locsizer = new wxBoxSizer(wxLARGESMALL(wxHORIZONTAL,wxVERTICAL));
 
-    wxStaticText *dummy = new wxStaticText(this, -1, text);
+    wxStaticText *dummy = new wxStaticText(this, wxID_ANY, text);
     wxStaticText *label = new wxStaticText(this, wxID_ANY, _("unknown"));
 
-    // VZ: I like the labels be centered - if the others don't mind, you may
-    //     remove "#ifdef __WXMSW__" and use it for all ports
-#if defined(__WXMSW__) || defined(__WXPM__) || defined(__WXMAC__)
-    locsizer->Add(dummy, 1, wxALIGN_RIGHT);
+    // select placement most native or nice on target GUI
+#if defined(__SMARTPHONE__)
+    // label and time to the left in two rows
+    locsizer->Add(dummy, 1, wxALIGN_LEFT);
+    locsizer->Add(label, 1, wxALIGN_LEFT);
+    sizer->Add(locsizer, 0, wxALIGN_LEFT | wxTOP | wxLEFT, LAYOUT_MARGIN);
+#elif defined(__WXMSW__) || defined(__WXPM__) || defined(__WXMAC__)
+    // label and time centered in one row
+    locsizer->Add(dummy, 1, wxLARGESMALL(wxALIGN_RIGHT,wxALIGN_LEFT));
     locsizer->Add(label, 1, wxALIGN_LEFT | wxLEFT, LAYOUT_MARGIN);
     sizer->Add(locsizer, 0, wxALIGN_CENTER_HORIZONTAL | wxTOP, LAYOUT_MARGIN);
-#else // !MSW
+#else
+    // label and time to the right in one row
     sizer->Add(locsizer, 0, wxALIGN_RIGHT | wxRIGHT | wxTOP, LAYOUT_MARGIN);
     locsizer->Add(dummy);
     locsizer->Add(label, 0, wxLEFT, LAYOUT_MARGIN);
-#endif // MSW/!MSW
+#endif
 
     return label;
 }
@@ -362,6 +391,9 @@ wxProgressDialog::Update(int value, const wxString& newmsg)
         m_state = Finished;
         if( !(GetWindowStyle() & wxPD_AUTO_HIDE) )
         {
+#if defined(__SMARTPHONE__)
+            SetLeftMenu(wxID_CANCEL, _("Close"));
+#endif
             if ( m_btnAbort )
             {
                 // tell the user what he should do...
@@ -415,7 +447,11 @@ void wxProgressDialog::Resume()
 
     // it may have been disabled by OnCancel(), so enable it back to let the
     // user interrupt us again if needed
-    m_btnAbort->Enable();
+    if(m_btnAbort)
+        m_btnAbort->Enable();
+#if defined(__SMARTPHONE__)
+    SetLeftMenu(wxID_CANCEL, _("Cancel"));
+#endif
 }
 
 bool wxProgressDialog::Show( bool show )
@@ -449,7 +485,12 @@ void wxProgressDialog::OnCancel(wxCommandEvent& event)
 
         // update the button state immediately so that the user knows that the
         // request has been noticed
-        m_btnAbort->Disable();
+        if(m_btnAbort)
+            m_btnAbort->Disable();
+
+#if defined(__SMARTPHONE__)
+        SetLeftMenu();
+#endif
 
         // save the time when the dialog was stopped
         m_timeStop = wxGetCurrentTime();
@@ -472,7 +513,11 @@ void wxProgressDialog::OnClose(wxCloseEvent& event)
     {
         // next Update() will notice it
         m_state = Canceled;
-        m_btnAbort->Disable();
+        if(m_btnAbort)
+            m_btnAbort->Disable();
+#if defined(__SMARTPHONE__)
+        SetLeftMenu();
+#endif
         m_timeStop = wxGetCurrentTime();
     }
 }

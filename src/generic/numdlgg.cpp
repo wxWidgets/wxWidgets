@@ -58,6 +58,20 @@
     #define wxSpinCtrl wxTextCtrl
 #endif
 
+// ---------------------------------------------------------------------------
+// macros
+// ---------------------------------------------------------------------------
+
+/* Macro for avoiding #ifdefs when value have to be different depending on size of
+   device we display on
+ */
+
+#if defined(__SMARTPHONE__)
+    #define wxLARGESMALL(large,small) small
+#else
+    #define wxLARGESMALL(large,small) large
+#endif
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -111,6 +125,12 @@ wxNumberEntryDialog::wxNumberEntryDialog(wxWindow *parent,
     // add both
     topsizer->Add( inputsizer, 1, wxEXPAND | wxLEFT|wxRIGHT, 5 );
 
+#ifdef __SMARTPHONE__
+
+    SetRightMenu(wxID_CANCEL, _("Cancel"));
+
+#else // __SMARTPHONE__/!__SMARTPHONE__
+
 #if wxUSE_STATLINE
     // 3) static line
     topsizer->Add( new wxStaticLine( this, wxID_ANY ), 0, wxEXPAND | wxLEFT|wxRIGHT|wxTOP, 10 );
@@ -118,6 +138,8 @@ wxNumberEntryDialog::wxNumberEntryDialog(wxWindow *parent,
 
     // 4) buttons
     topsizer->Add( CreateButtonSizer( wxOK|wxCANCEL ), 0, wxCENTRE | wxALL, 10 );
+
+#endif // !__SMARTPHONE__
 
     SetSizer( topsizer );
     SetAutoLayout( true );
