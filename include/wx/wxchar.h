@@ -357,7 +357,7 @@
         #include <wctype.h>
 
         /* this is probably glibc-specific */
-        #if defined(__WCHAR_TYPE__)
+        #if defined(__WCHAR_TYPE__) && !defined(__MWERKS__)
             /* ctype.h functions (wctype.h) */
             #define  wxIsalnum   iswalnum
             #define  wxIsalpha   iswalpha
@@ -505,21 +505,6 @@
             #define  wxCtime     wctime
             /* #define  wxStrftime  wcsftime */
 
-            /*
-            #define wxNEED_FPUTWC
-
-            #include <stdio.h>
-
-            int wxFputs(const wxChar *ch, FILE *stream);
-            int wxPutc(wxChar ch, FILE *stream);
-
-            #define wxPuts(ws) wxFputs(ws, stdout)
-            #define wxPutchar(wch) wxPutc(wch, stdout)
-
-            #define wxNEED_PRINTF_CONVERSION
-            #define wxNEED_WX_STDIO_H
-            #define wxNEED_WX_STDLIB_H
-            */
             #define wxNEED_WX_TIME_H
         #else /* !metrowerks for apple */
             #error  "Please define wide character functions for your environment"
