@@ -13,9 +13,10 @@ tn0009.htm   Creating and converting icons
 tn0010.htm   Compiling wxWindows applications in the VC++ IDE
 tn0011.txt   All about version numbers
 tn0012.txt   wxWindows platform, toolkit and library names
-tn0013.txt   how to make a wxGTK distribution
+tn0013.txt   How to make a wxGTK distribution
 tn0014.txt   XRC resources format specification
-tn0015.txt   how to add new bitmaps to wxWindows UI elements
+tn0015.txt   How to add new bitmaps to wxWindows UI elements
+tn0016.txt   How to add new files and libraries to wxWindows build system
 
 
 Version: $Id$

@@ -1,0 +1,75 @@
+         How to add new files and libraries to wxWindows build system
+         ============================================================
+
+
+1. Regenerating makefiles
+-------------------------
+
+
+2. Bakefile files organization
+------------------------------
+
+
+3. Adding files to existing library
+-----------------------------------
+
+
+4. Adding sample or contrib library
+-----------------------------------
+
+
+5. Adding new core library
+--------------------------
+
+When adding new library to the core set of libraries, the files must be
+added to both a newly added library in multilib build and into the single
+library built in monolithic mode. We will assume that the new library is
+called wxFoo.
+
+a) Add files to files.bkl                 FIXME
+
+b) Modify bakefile system in build/bakefiles/ to recognize wxFoo:
+   * Add 'foo'to MAIN_LIBS and LIBS_NOGUI or LIBS_GUI (depending on whether
+     the library depends on wxCore or not) to wxwin.py file.
+   * Add WXLIB_FOO definition to common.bkl (into the "Names of component
+     libraries" section). It looks like this:
+       <set var="WXLIB_FOO">
+          <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('foo')))</if>
+       </set>
+
+c) Add files to monolithic build          FIXME
+
+d) Add files to multilib build            FIXME
+
+e) Regenerate all makefiles (don't forget to run autoconf)
+
+f) Update wx-config.in to contain information about the library and needed
+   linker flags:
+   * Add "foo" to either CORE_BASE_LIBS or CORE_GUI_LIBS so that wxFoo is
+     not treated as contrib library in monolithic build.
+   * If wxFoo links against additional libraries, add neccessary linker
+     flags and libraries to ldflags_foo and ldlibs_foo variables (both are
+     optional).
+
+g) Update defs.h to define WXMAKINGDLL_FOO if WXMAKINGDLL is defined (add
+   #define WXMAKINGDLL_FOO inside first "#ifdef WXMAKINGDLL" block in defs.h)
+   and to define WXDLLIMPEXP_FOO and WXDLLIMPEXP_DATA_FOO. You can copy
+   e.g. WXDLLIMPEXP_NET definition, it is something like this:
+        #ifdef WXMAKINGDLL_NET
+            #define WXDLLIMPEXP_NET WXEXPORT
+            #define WXDLLIMPEXP_DATA_NET(type) WXEXPORT type
+        #elif defined(WXUSINGDLL)
+            #define WXDLLIMPEXP_NET WXIMPORT
+            #define WXDLLIMPEXP_DATA_NET(type) WXIMPORT type
+        #else // not making nor using DLL
+            #define WXDLLIMPEXP_NET
+            #define WXDLLIMPEXP_DATA_NET(type) type
+        #endif
+
+h) Add information about wxFoo to the manual
+   FIXME - where exactly
+
+
+=== EOF ===
+
+Version: $Id$

@@ -1,5 +1,6 @@
 #!/bin/sh
 
+# Generic configuration variables:
 prefix=@prefix@
 exec_prefix=@exec_prefix@
 exec_prefix_set=no
@@ -12,6 +13,64 @@ builddir=@top_builddir_wxconfig@
 cross_compiling=@cross_compiling@
 target=@host_alias@
 static_flag=@STATIC_FLAG@
+basename_nogui=@WX_LIBRARY_BASENAME_NOGUI@
+basename_gui=@WX_LIBRARY_BASENAME_GUI@
+release=@WX_MAJOR_VERSION_NUMBER@.@WX_MINOR_VERSION_NUMBER@
+is_monolithic=@MONOLITHIC@
+
+
+# Linker flags for sublibraries:
+CORE_BASE_LIBS="xml net base"
+CORE_GUI_LIBS="html core"
+
+ldlibs_base="@LIBS@"
+ldlibs_core="@EXTRALIBS_GUI@"
+ldlibs_xml="@EXTRALIBS_XML@"
+
+ldflags_gl="@LDFLAGS_GL@"
+ldlibs_gl="@OPENGL_LIBS@"
+
+
+# is $1 among the rest of arguments?
+isinlist()
+{
+    value=$1
+    shift
+    isin=no
+    for iii in $* ; do
+        if test $iii = $value ; then isin=yes ; fi
+    done
+    test $isin = yes
+}
+
+# output linker commands needed to link against libraries passed as arguments
+# (does not handle monolithic/multilib):
+output_libs()
+{
+    all_libs=""
+    all_ldflags=""
+    wxlibs=""
+      
+    for lib in $* ; do
+        eval xlibs=\$ldlibs_$lib
+        eval xflags=\$ldflags_$lib
+        if isinlist $lib $CORE_BASE_LIBS ; then
+            basename=$basename_nogui
+        else
+            basename=$basename_gui
+        fi
+
+        all_ldflags="$all_ldflags $xflags"
+        if test $static_flag = yes ; then
+            wxlibs="$wxlibs @libdir@/lib${basename}_${lib}-${release}.a"
+            all_libs="$all_libs $xlibs"
+        else
+            wxlibs="$wxlibs -l${basename}_${lib}-${release}"
+        fi
+    done
+
+    echo $all_ldflags $wxlibs $all_libs
+}
 
 # return the absolute path prepending builddir to it if needed
 makeabs()
@@ -34,7 +93,7 @@ usage()
 {
     cat <<EOF
 Usage: wx-config [--prefix[=DIR]] [--exec-prefix[=DIR]] [--version] [--release]
-                 [--basename] [--static] [--libs] [--gl-libs]
+                 [--basename] [--static] [--libs[=LIBS]] [--gl-libs]
                  [--cppflags] [--cflags] [--cxxflags] [--ldflags] [--rezflags]
                  [--cc] [--cxx] [--ld]
 
@@ -54,6 +113,12 @@ this:
 
 Note that any other options supplied must come *after* the prefix
 specification for it to take effect.
+
+--static must come before --libs and --gl-libs.
+
+--libs can take optional argument that contains comma-separated list of
+wxWindows libraries to link against. This list can include both core
+and contrib libraries.
 
 EOF
 
@@ -132,12 +197,10 @@ while test $# -gt 0; do
       echo @WX_MAJOR_VERSION_NUMBER@.@WX_MINOR_VERSION_NUMBER@.@WX_RELEASE_NUMBER@
       ;;
     --release)
-      # Should echo @WX_RELEASE@ instead, but that doesn't seem to be replaced after 
-      # configure has run on this file.
-      echo @WX_MAJOR_VERSION_NUMBER@.@WX_MINOR_VERSION_NUMBER@
+      echo $release
       ;;
     --basename)
-      echo @WX_LIBRARY_BASENAME@
+      echo $basename
       ;;
     --static)
       static_flag=yes
@@ -157,7 +220,19 @@ while test $# -gt 0; do
     --rezflags)
       echo @MACRESWXCONFIG@
       ;;
-    --libs)
+
+    --libs*)
+      # find if the argument was --libs=list,of,libs or --libs:
+      if test "x$optarg" = "x" ; then
+          if test "$is_monolithic" = "0" ; then
+              # link against all libs if none given explicitly:
+              libs_list="$CORE_GUI_LIBS $CORE_BASE_LIBS"
+          fi
+      else
+          libs_list=`echo "$optarg" | tr ',' ' '`
+      fi
+
+      # include install directory only if it is not default:
       if test "@libdir@" != "/usr/lib" \
               -a \( "${cross_compiling}" != "yes" \
                     -o "@libdir@" != "/usr/${target}/lib" \) ;
@@ -165,20 +240,35 @@ while test $# -gt 0; do
           libs="-L@libdir@"
       fi
 
-      if test $static_flag = yes ; then
-          echo "$libs @LDFLAGS@ @WXCONFIG_RPATH@ @libdir@/@WXCONFIG_LIBS_STATIC@ @EXTRALIBS_GUI@ @LIBS@ @DMALLOC_LIBS@"
+      # in monolithic build, link against the main library:
+      if test "$is_monolithic" = "1" ; then
+          # filter out core libs, leave only contrib in libs_list:
+          newlist=
+          for i in $libs_list ; do
+              if isinlist $i $CORE_BASE_LIBS $CORE_GUI_LIBS ; then
+                  libs_list="" # do nothing
+              else
+                  newlist="$newlist $i"
+              fi
+          done
+          libs_list="$newlist"
+          
+          # output link flags:
+          contrib_libs=`output_libs $libs_list`
+          if test $static_flag = yes ; then
+              echo "$libs @LDFLAGS@ @WXCONFIG_RPATH@ $contrib_libs @libdir@/@WXCONFIG_LIBS_STATIC@ @EXTRALIBS_GUI@ @LIBS@ @DMALLOC_LIBS@"
+          else
+              echo $libs @LDFLAGS@ @WXCONFIG_RPATH@ $contrib_libs @WXCONFIG_LIBS@ @DMALLOC_LIBS@
+          fi
       else
-          echo $libs @LDFLAGS@ @WXCONFIG_RPATH@ @WXCONFIG_LIBS@ @DMALLOC_LIBS@
+          # in multilib mode, link against all sublibraries:
+          wxlibs=`output_libs $libs_list`
+          echo $libs @WXCONFIG_RPATH@ $wxlibs @DMALLOC_LIBS@
       fi
 
       ;;
     --gl-libs)
-      if test $static_flag = yes -a "x" != "x@WXCONFIG_LIBS_STATIC_GL@" ; then
-          gllibs="@libdir@/@WXCONFIG_LIBS_STATIC_GL@"
-      else
-          gllibs="@WXCONFIG_LIBS_GL@"
-      fi
-      echo @LDFLAGS_GL@ $gllibs
+      output_libs gl
       ;;
     --cc)
       echo $CC

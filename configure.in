@@ -2741,6 +2741,9 @@ equivalent variable and GTK+ is version 1.2.3 or above.
         TOOLKIT=MAC
         dnl we can't call this MAC_DIST or autoconf thinks its a macro
         GUIDIST=MACX_DIST
+        dnl wxMac version of wxBase and wxCocoa or wxBase-only built on Darwin
+        dnl are different, so they need different names:
+        WXBASEPORT="_carbon"
     fi
 
     if test "$wxUSE_COCOA" = 1; then
@@ -3012,7 +3015,8 @@ fi
 dnl library link name
 WX_LIBRARY="wx_${TOOLCHAIN_NAME}"
 WX_LIBRARY_GL="wx_${TOOLCHAIN_NAME_GL}"
-WX_LIBRARY_BASENAME="wx_${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}"
+WX_LIBRARY_BASENAME_NOGUI="wx_base${WXBASEPORT}${lib_unicode_suffix}${lib_debug_suffix}"
+WX_LIBRARY_BASENAME_GUI="wx_${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}"
 
 dnl the name of the shared library
 WX_LIBRARY_NAME_SHARED="lib${WX_LIBRARY}.${SO_SUFFIX}.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}"
@@ -5541,6 +5545,7 @@ AC_SUBST(OFFICIAL_BUILD)
 
 AC_SUBST(WXUNIV)
 AC_SUBST(MONOLITHIC)
+AC_SUBST(LIBS)
 AC_SUBST(EXTRALIBS)
 AC_SUBST(EXTRALIBS_XML)
 AC_SUBST(EXTRALIBS_GUI)
@@ -5578,7 +5583,8 @@ AC_SUBST(WX_MINOR_VERSION_NUMBER)
 AC_SUBST(WX_RELEASE_NUMBER)
 AC_SUBST(WX_LIBRARY_NAME_STATIC)
 AC_SUBST(WX_LIBRARY_NAME_SHARED)
-AC_SUBST(WX_LIBRARY_BASENAME)
+AC_SUBST(WX_LIBRARY_BASENAME_NOGUI)
+AC_SUBST(WX_LIBRARY_BASENAME_GUI)
 AC_SUBST(WX_LIBRARY_IMPORTLIB)
 AC_SUBST(WX_TARGET_LIBRARY)
 AC_SUBST(WX_LIBRARY_LINK1)
