@@ -1052,6 +1052,9 @@ keypresses, then you will need to use \helpref{wxWindow::OnKeyDown}{wxwindowonke
 
 Most, but not all, windows allow keypresses to be intercepted.
 
+{\bf Tip:} be sure to call {\tt event.Skip()} for events that you don't process in this function,
+otherwise menu shortcuts may cease to work under Windows.
+
 \wxheading{See also}
 
 \helpref{wxWindow::OnKeyDown}{wxwindowonkeydown}, \helpref{wxWindow::OnKeyUp}{wxwindowonkeyup},\rtfsp
@@ -1251,6 +1254,9 @@ keys, such as shift, control, and function keys, then you will need to use \help
 \helpref{wxWindow::OnKeyUp}{wxwindowonkeyup}.
 
 Most, but not all, windows allow keypresses to be intercepted.
+
+{\bf Tip:} be sure to call {\tt event.Skip()} for events that you don't process in this function,
+otherwise menu shortcuts may cease to work under Windows.
 
 \wxheading{See also}
 

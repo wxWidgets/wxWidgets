@@ -481,6 +481,11 @@ then the events are sent directly to the frame. This allows command and UI updat
 handling to be processed by specific windows and controls, and not necessarily
 by the application frame.
 
+{\bf Tip:} under Windows, if you discover that menu shortcuts (for example, Alt-F to show the file menu)
+are not working, check any EVT\_CHAR events you are handling in child windows.
+If you are not calling {\tt event.Skip()} for events that you don't process in these event handlers,
+menu shortcuts may cease to work.
+
 \wxheading{See also}
 
 \helpref{wxMenu}{wxmenu}, \helpref{Event handling overview}{eventhandlingoverview}
