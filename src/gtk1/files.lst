@@ -23,7 +23,6 @@ ALL_SOURCES = \
 		generic/msgdlgg.cpp \
 		generic/numdlgg.cpp \
 		generic/panelg.cpp \
-		generic/plot.cpp \
 		generic/printps.cpp \
 		generic/prntdlgg.cpp \
 		generic/progdlgg.cpp \
@@ -369,7 +368,6 @@ ALL_HEADERS = \
 		panel.h \
 		paper.h \
 		pen.h \
-		plot.h \
 		print.h \
 		printdlg.h \
 		prntbase.h \
@@ -529,7 +527,6 @@ ALL_HEADERS = \
 		generic/msgdlgg.h \
 		generic/notebook.h \
 		generic/panelg.h \
-		generic/plot.h \
 		generic/printps.h \
 		generic/prntdlgg.h \
 		generic/progdlgg.h \
@@ -800,7 +797,6 @@ GENERICOBJS = \
 		msgdlgg.o \
 		numdlgg.o \
 		panelg.o \
-		plot.o \
 		printps.o \
 		prntdlgg.o \
 		progdlgg.o \
@@ -844,7 +840,6 @@ GENERICDEPS = \
 		msgdlgg.d \
 		numdlgg.d \
 		panelg.d \
-		plot.d \
 		printps.d \
 		prntdlgg.d \
 		progdlgg.d \

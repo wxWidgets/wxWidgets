@@ -1386,7 +1386,7 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
                 msgTitle = wxTheApp->GetAppName();
             else
                 msgTitle = wxString(_("File error"));
-            
+
             (void)wxMessageBox(_("Sorry, could not open this file."), msgTitle, wxOK | wxICON_EXCLAMATION,
                 parent);
 
@@ -2040,22 +2040,29 @@ wxFileHistory::~wxFileHistory()
 void wxFileHistory::AddFileToHistory(const wxString& file)
 {
     int i;
+
     // Check we don't already have this file
     for (i = 0; i < m_fileHistoryN; i++)
     {
-        if (m_fileHistory[i] && wxString(m_fileHistory[i]) == file)
+        if ( m_fileHistory[i] && (file == m_fileHistory[i]) )
+        {
+            // we do have it, move it to the top of the history
+            RemoveFileFromHistory (i);
+            AddFileToHistory (file);
             return;
+        }
+    }
+
+    // if we already have a full history, delete the one at the end
+    if ( m_fileMaxFiles == m_fileHistoryN )
+    {
+        RemoveFileFromHistory (m_fileHistoryN - 1);
+        AddFileToHistory (file);
+        return;
     }
 
     // Add to the project file history:
     // Move existing files (if any) down so we can insert file at beginning.
-
-    // First delete filename that has popped off the end of the array (if any)
-    if (m_fileHistoryN == m_fileMaxFiles)
-    {
-        delete[] m_fileHistory[m_fileMaxFiles-1];
-        m_fileHistory[m_fileMaxFiles-1] = (wxChar *) NULL;
-    }
     if (m_fileHistoryN < m_fileMaxFiles)
     {
         wxNode* node = m_fileMenus.First();
@@ -2076,19 +2083,40 @@ void wxFileHistory::AddFileToHistory(const wxString& file)
     }
     m_fileHistory[0] = copystring(file);
 
+    // this is the directory of the last opened file
+    wxString pathCurrent;
+    wxSplitPath( m_fileHistory[0], &pathCurrent, NULL, NULL );
     for (i = 0; i < m_fileHistoryN; i++)
-        if (m_fileHistory[i])
+    {
+        if ( m_fileHistory[i] )
         {
+            // if in same directory just show the filename; otherwise the full
+            // path
+            wxString pathInMenu, path, filename, ext;
+            wxSplitPath( m_fileHistory[i], &path, &filename, &ext );
+            if ( path == pathCurrent )
+            {
+                pathInMenu = filename;
+                if ( !ext.empty() )
+                    pathInMenu = pathInMenu + wxFILE_SEP_EXT + ext;
+            }
+            else
+            {
+                // absolute path; could also set relative path
+                pathInMenu = m_fileHistory[i];
+            }
+
             wxString buf;
-            buf.Printf(s_MRUEntryFormat, i+1, m_fileHistory[i]);
+            buf.Printf(s_MRUEntryFormat, i + 1, pathInMenu.c_str());
             wxNode* node = m_fileMenus.First();
             while (node)
             {
                 wxMenu* menu = (wxMenu*) node->Data();
-                menu->SetLabel(wxID_FILE1+i, buf);
+                menu->SetLabel(wxID_FILE1 + i, buf);
                 node = node->Next();
             }
         }
+    }
 }
 
 void wxFileHistory::RemoveFileFromHistory(int i)
