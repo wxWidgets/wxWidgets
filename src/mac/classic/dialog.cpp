@@ -44,9 +44,9 @@ END_EVENT_TABLE()
 
 #endif
 
-wxDialog::wxDialog()
+wxDialog::Init()
 {
-      m_isShown = FALSE;
+    m_isModalStyle = false;
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
 }
 
@@ -75,7 +75,7 @@ void wxDialog::SetModal(bool flag)
 {
     if ( flag )
     {
-        m_windowStyle |= wxDIALOG_MODAL;
+        m_isModalStyle = true;
 
         wxModelessWindows.DeleteObject(this);
 #if TARGET_CARBON
@@ -84,7 +84,7 @@ void wxDialog::SetModal(bool flag)
     }
     else
     {
-        m_windowStyle &= ~wxDIALOG_MODAL;
+        m_isModalStyle = false;
 
         wxModelessWindows.Append(this);
     }
@@ -117,7 +117,7 @@ void wxDialog::OnCharHook(wxKeyEvent& event)
 
 bool wxDialog::IsModal() const
 {
-    return (GetWindowStyleFlag() & wxDIALOG_MODAL) != 0;
+    return m_isModalStyle;
 }
 
 
