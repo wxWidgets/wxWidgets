@@ -505,10 +505,10 @@ wxSize wxBitmapButton::DoGetBestSize() const
     if ( !HasFlag(wxBU_EXACTFIT) )
     {
         wxSize sz = GetDefaultSize();
-        if (best.x > sz.x)
-            sz.x = best.x;
-        if (best.y > sz.y)
-            sz.y = best.y;
+        if ( best.x < sz.x )
+            best.x = sz.x;
+        if ( best.y < sz.y )
+            best.y = sz.y;
     }
 
     return best;
