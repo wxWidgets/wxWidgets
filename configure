@@ -11121,7 +11121,7 @@ echo "configure:11119: checking the type of the third argument of getsockname" >
 #include "confdefs.h"
 #include <sys/socket.h>
 int main() {
-socklen_t len; getsockname(0, NULL, &len);
+socklen_t len; getsockname(0, 0, &len);
 ; return 0; }
 EOF
 if { (eval echo configure:11128: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
@@ -11139,7 +11139,7 @@ else
 #include "confdefs.h"
 #include <sys/socket.h>
 int main() {
-size_t len; getsockname(0, NULL, &len);
+size_t len; getsockname(0, 0, &len);
 ; return 0; }
 EOF
 if { (eval echo configure:11146: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
@@ -11157,7 +11157,7 @@ else
 #include "confdefs.h"
 #include <sys/socket.h>
 int main() {
-int len; getsockname(0, NULL, &len);
+int len; getsockname(0, 0, &len);
 ; return 0; }
 EOF
 if { (eval echo configure:11164: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
