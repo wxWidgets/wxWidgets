@@ -59,12 +59,12 @@ OTHER CHANGES
 
 All:
 
+- added wxGzipInput/OutputStream, bug fixes in wxZlibStreams (M.J.Wetherell)
 - wxDateTime::ParseDateTime() implemented (Linus McCabe)
 - wxHTTP::GetResponse() added (David Nock)
 - added conversions to/from UTF 16/32 LE/BE (Andreas Pflug)
 - wxFileName::Normalize(wxPATH_NORM_ALL) doesn't lower filename case any more
 - added wxTextInputStream::ReadChar() (M.J.Wetherell)
-- several wxZlibStreams bug fixes enhancements (M.J.Wetherell)
 
 All (GUI):
 
@@ -72,6 +72,7 @@ All (GUI):
 - added wxListCtrl::GetViewRect()
 - added wxTextCtrl::MarkDirty()
 - wxToolBar::ToggleTool() now works for radio buttons (Dag Ågren)
+- bug in wxRect ctor from two [out of order] wxPoints fixed (Steve Cornett)
 
 wxMSW:
 

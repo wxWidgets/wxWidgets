@@ -97,24 +97,26 @@ wxCUSTOM_TYPE_INFO(wxSize, wxToStringConverter<wxSize> , wxFromStringConverter<w
 
 IMPLEMENT_ABSTRACT_CLASS(wxDCBase, wxObject)
 
-wxRect::wxRect(const wxPoint& topLeft, const wxPoint& bottomRight)
+wxRect::wxRect(const wxPoint& point1, const wxPoint& point2)
 {
-  x = topLeft.x;
-  y = topLeft.y;
-  width = bottomRight.x - topLeft.x + 1;
-  height = bottomRight.y - topLeft.y + 1;
+  x = point1.x;
+  y = point1.y;
+  width = point2.x - point1.x;
+  height = point2.y - point1.y;
 
   if (width < 0)
   {
     width = -width;
-    x -= width;
+    x = point2.x;
   }
+  width++;
 
   if (height < 0)
   {
     height = -height;
-    y -= height;
+    y = point2.y;
   }
+  height++;
 }
 
 wxRect::wxRect(const wxPoint& point, const wxSize& size)
