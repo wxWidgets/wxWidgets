@@ -40,7 +40,7 @@
         next if $wxMSW{$file} =~ /\b16\b/;
 
         if ( $file =~ /^automtn/ ) {
-            #! comment in old makefile.b32 seems to imply that this file can't
+            #! comment in old makefile.b32 seems to imply that this file can not
             #! be compiled with Borland (leads to crash in oleauto sample)
             next;
         }
@@ -163,7 +163,6 @@ OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS) $(HTMLOBJS)
 
 default:	wx
 
-#wx:    $(CFG) $(LNKCFG) $(DUMMY).obj $(OBJECTS) $(PERIPH_TARGET) $(LIBTARGET)
 wx:    $(CFG) $(DUMMY).obj $(OBJECTS) $(PERIPH_TARGET) $(LIBTARGET)
 
 all:	all_libs all_execs
@@ -367,11 +366,6 @@ $(OPT)
 $(DEBUG_FLAGS)
 $(WIN95FLAG)
 ! $(CFG)
-
-#$(LNKCFG): makefile.b32
-#	copy &&!
-#-L$(WXLIBDIR);$(WXLIBDIR2);$(BCCDIR)\lib;$(BCCDIR)\lib\psdk
-#! $(LNKCFG)
 
 clean: $(PERIPH_CLEAN_TARGET)
     -erase $(LIBTARGET)
