@@ -4320,7 +4320,7 @@ void wxListMainWindow::InsertItem( wxListItem &item )
 {
     wxASSERT_MSG( !IsVirtual(), _T("can't be used with virtual control") );
 
-    size_t count = GetItemCount();
+    int count = GetItemCount();
     wxCHECK_RET( item.m_itemId >= 0, _T("invalid item index") );
 
     if (item.m_itemId > count)
