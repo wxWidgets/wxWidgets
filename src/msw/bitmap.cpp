@@ -1292,6 +1292,11 @@ bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
         ok = FALSE;
     }
 
+    // VZ: I'm leaving the old code in for now in case it is needed under Win95
+    //     or any other broken Windows versions but it is horribly inefficient:
+    //     creating 100 masks for 80x80 bitmaps takes 7.8 seconds on my machine
+    //     but only 0.2 using the new code!
+#if 0
     // this is not very efficient, but I can't think of a better way of doing
     // it
     for ( int w = 0; ok && (w < width); w++ )
@@ -1319,6 +1324,15 @@ bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
             }
         }
     }
+#else
+    HBRUSH hbrMask = ::CreateSolidBrush(maskColour);
+    HGDIOBJ hbrOld = ::SelectObject(destDC, hbrMask);
+
+    // the ternary raster operation 0x3C004A is dest := src ^ brush
+    ::BitBlt(destDC, 0, 0, width, height, srcDC, 0, 0, 0x3C004A);
+
+    ::SelectObject(destDC, hbrOld);
+#endif
 
     ::SelectObject(srcDC, hbmpSrcOld);
     ::DeleteDC(srcDC);
