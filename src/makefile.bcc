@@ -51,7 +51,6 @@ BOR_VER = 4
 WXBASEINC = $(WXDIR)\include\base
 WXINC = $(WXDIR)\include\msw
 PROLOGIOINC = $(WXDIR)\utils\prologio\src
-XPMINC=$(WXDIR)\contrib\wxxpm\libxpm.34b\lib
 
 all:    wxwin.cfg
 	cd $(WXDIR)\src\msw
@@ -80,7 +79,7 @@ wxwin.cfg: makefile.bcc
 -WE
 -Fs-
 -Vf
--I$(WXBASEINC);$(WXINC);$(PROLOGIOINC);$(XPMINC);$(BCCDIR)\include;$(WXDIR)\contrib\fafa;$(WXDIR)\contrib\itsybits;$(WXDIR)\utils\rcparser\src
+-I$(WXBASEINC);$(WXINC);$(PROLOGIOINC);$(BCCDIR)\include;$(WXDIR)\contrib\fafa;$(WXDIR)\contrib\itsybits;$(WXDIR)\utils\rcparser\src
 
 -L$(BCCDIR)\lib
 -Dwx_msw
