@@ -477,7 +477,6 @@ bool wxTextCtrl::IsModified() const
 // Makes 'unmodified'
 void wxTextCtrl::DiscardEdits()
 {
-    XmTextSetString ((Widget) m_mainWidget, "");
     m_modified = FALSE;
 }
 
