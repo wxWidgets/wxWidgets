@@ -105,16 +105,28 @@ wxDocMDIChildFrame::~wxDocMDIChildFrame(void)
 // Extend event processing to search the view's event table
 bool wxDocMDIChildFrame::ProcessEvent(wxEvent& event)
 {
+    static wxEvent *ActiveEvent = NULL;
+
+    // Break recursion loops
+    if (ActiveEvent == &event)
+        return false;
+
+    ActiveEvent = &event;
+
+    bool ret;
 	if ( !m_childView || ! m_childView->ProcessEvent(event) )
     {
         // Only hand up to the parent if it's a menu command
         if (!event.IsKindOf(CLASSINFO(wxCommandEvent)) || !GetParent() || !GetParent()->ProcessEvent(event))
-		    return wxEvtHandler::ProcessEvent(event);
+            ret = wxEvtHandler::ProcessEvent(event);
         else
-            return TRUE;
+            ret = TRUE;
     }
 	else
-		return TRUE;
+        ret = TRUE;
+
+    ActiveEvent = NULL;
+    return ret;
 }
 
 void wxDocMDIChildFrame::OnActivate(wxActivateEvent& event)
