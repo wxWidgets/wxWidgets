@@ -56,7 +56,7 @@ enum {
 class WXDLLEXPORT wxGenericImageList: public wxObject
 {
 public:
-    wxGenericImageList() { }
+    wxGenericImageList() { m_width = m_height = 0; }
     wxGenericImageList( int width, int height, bool mask = TRUE, int initialCount = 1 );
     ~wxGenericImageList();
     bool Create( int width, int height, bool mask = TRUE, int initialCount = 1 );
