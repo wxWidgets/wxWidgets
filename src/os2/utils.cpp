@@ -418,7 +418,8 @@ bool wxGetResource(
 {
     HAB                             hab;
     HINI                            hIni;
-    static const wxChar             zDefunkt[] = _T("$$default");
+    wxChar                          zDefunkt[] = _T("$$default");
+    char                            zBuf[1000];
 
     if (rFile != "")
     {
@@ -429,11 +430,14 @@ bool wxGetResource(
                                               ,(PSZ)WXSTRINGCAST rSection
                                               ,(PSZ)WXSTRINGCAST rEntry
                                               ,(PSZ)zDefunkt
-                                              ,(void*)*ppValue
+                                              ,(PVOID)zBuf
                                               ,1000
                                              );
-            if (n != 0L || wxStrcmp(*ppValue, zDefunkt) == 0)
+            if (zBuf == NULL)
                 return FALSE;
+            if (n == 0L || wxStrcmp(zBuf, zDefunkt) == 0)
+                return FALSE;
+            zBuf[n-1] = '\0';
         }
         else
             return FALSE;
@@ -444,12 +448,16 @@ bool wxGetResource(
                                           ,(PSZ)WXSTRINGCAST rSection
                                           ,(PSZ)WXSTRINGCAST rEntry
                                           ,(PSZ)zDefunkt
-                                          ,(void*)*ppValue
+                                          ,(PVOID)zBuf
                                           ,1000
                                          );
-        if (n != 0L || wxStrcmp(*ppValue, zDefunkt) == 0)
+        if (zBuf == NULL)
             return FALSE;
+        if (n == 0L || wxStrcmp(zBuf, zDefunkt) == 0)
+            return FALSE;
+        zBuf[n-1] = '\0';
     }
+    strcpy((char*)*ppValue, zBuf);
     return TRUE;
 }
 
