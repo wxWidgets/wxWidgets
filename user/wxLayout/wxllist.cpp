@@ -48,6 +48,9 @@
 
 #define   BASELINESTRETCH   12
 
+// This should never really get created
+#define   WXLLIST_TEMPFILE   "__wxllist.tmp"
+
 #ifdef WXLAYOUT_DEBUG
 static const char *g_aTypeStrings[] = 
 { 
@@ -508,7 +511,6 @@ wxLayoutList::CalculateCursor(wxDC &dc)
 void
 wxLayoutList::DrawCursor(wxDC &dc, bool erase)
 {
-
    if(erase)
    {
       //dc.SetBrush(*wxWHITE_BRUSH);
@@ -526,7 +528,7 @@ wxLayoutList::DrawCursor(wxDC &dc, bool erase)
          Layout(dc);
       }
       // Save background:
-      wxBitmap bm(m_CursorSize.x,m_CursorSize.y);
+      wxBitmap bm(m_CursorSize.x+1,m_CursorSize.y+1);
       m_CursorMemDC.SelectObject(bm);
       m_CursorMemDC.Blit(0, 0, m_CursorSize.x, m_CursorSize.y,
                          &dc, m_CursorCoords.x,
@@ -1109,12 +1111,13 @@ bool wxLayoutPrintout::OnPrintPage(int page)
    wxDC *dc = GetDC();
    if (dc)
    {
+      DrawHeader(*dc,wxPoint(m_Margins.left,m_Margins.top/2),wxPoint(m_Margins.right,m_Margins.top),page);
       int top, bottom;
-      top = (page - 1)*m_PageHeight;
-      bottom = top + m_PageHeight;
+      top = (page - 1)*m_PrintoutHeight;
+      bottom = top + m_PrintoutHeight;
       // SetDeviceOrigin() doesn't work here, so we need to manually
       // translate all coordinates.
-      wxPoint translate(0,-top);
+      wxPoint translate(m_Margins.left,-top+m_Margins.top);
       m_llist->Draw(*dc,top,bottom,wxLayoutObjectList::iterator(NULL),translate);
       return true;
    }
@@ -1140,29 +1143,76 @@ wxLayoutPrintout::OnPreparePrinting(void)
 void wxLayoutPrintout::GetPageInfo(int *minPage, int *maxPage, int *selPageFrom, int *selPageTo)
 {
    // ugly hack to get number of pages
-   wxPostScriptDC psdc("tmp.ps",false);
+#ifdef __WXMSW__
+   wxPrinterDC psdc(WXLLIST_TEMPFILE,false);
+#else
+   wxPostScriptDC psdc(WXLLIST_TEMPFILE,false);
+#endif
    psdc.GetSize(&m_PageWidth, &m_PageHeight); // that's all we need it for
 
-   m_Margins.top = m_PageHeight / 10;      // 10%
-   m_Margins.bottom = m_PageHeight - m_PageHeight / 10;   // 90%
+   // We do 5% margins on top and bottom, and a 5% high header line.
+   m_Margins.top = m_PageHeight / 10 ;      // 10%, half of it header
+   m_Margins.bottom = m_PageHeight - m_PageHeight / 20;   // 95%
+   // On the sides we reserve 10% each for the margins.
    m_Margins.left = m_PageWidth / 10;
    m_Margins.right = m_PageWidth - m_PageWidth / 10;
 
-   m_PageHeight = m_Margins.bottom - m_Margins.top - m_Margins.bottom;
-   m_PageWidth = m_Margins.right - m_Margins.left - m_Margins.right;
+   // This is the length of the printable area.
+   m_PrintoutHeight = m_PageHeight - (int) (m_PageHeight * 0.15); 
 
-   m_NumOfPages = (int)( m_llist->GetSize().y / (float)(m_PageHeight) + 0.5);
+   //FIXME this is wrong but not used at the moment
+   m_PageWidth = m_Margins.right - m_Margins.left;
+
+   m_NumOfPages = (int)( m_llist->GetSize().y / (float)(m_PrintoutHeight) + 0.5);
    *minPage = 1;
-   *maxPage = m_NumOfPages-1;
+   *maxPage = m_NumOfPages;
 
    *selPageFrom = 1;
-   *selPageTo = m_NumOfPages-1;
-   
+   *selPageTo = m_NumOfPages;
+   wxRemoveFile(WXLLIST_TEMPFILE);
 }
 
 bool wxLayoutPrintout::HasPage(int pageNum)
 {
    return pageNum < m_NumOfPages;
+}
+
+
+void
+wxLayoutPrintout::DrawHeader(wxDC &dc,
+                             wxPoint topleft, wxPoint bottomright,
+                             int pageno)
+{
+   // make backups of all essential parameters
+   wxBrush *brush = dc.GetBrush();
+   wxPen   *pen = dc.GetPen();
+   wxFont  *font = dc.GetFont(),
+           *myfont;;
+   
+   dc.SetBrush(*wxWHITE_BRUSH);
+   dc.SetPen(wxPen(*wxBLACK,0,wxSOLID));
+   dc.DrawRoundedRectangle(topleft.x,
+                           topleft.y,bottomright.x-topleft.x,
+                           bottomright.y-topleft.y);  
+   dc.SetBrush(*wxBLACK_BRUSH);
+   myfont = new wxFont((WXLO_DEFAULTFONTSIZE*12)/10,wxSWISS,wxNORMAL,wxBOLD,false,"Helvetica");
+   dc.SetFont(*myfont);
+
+   wxString page;
+   page = "9999/9999  ";  // many pages...
+   long w,h;
+   dc.GetTextExtent(page,&w,&h);
+   page.Printf("%d/%d", pageno, (int) m_NumOfPages);
+   dc.DrawText(page,bottomright.x-w,topleft.y+h/2);
+   dc.GetTextExtent("XXXX", &w,&h);
+   dc.DrawText(m_title, topleft.x+w,topleft.y+h/2);
+
+   // restore settings
+   dc.SetPen(*pen);
+   dc.SetBrush(*brush);
+   dc.SetFont(*font);
+
+   delete myfont;
 }
 
 

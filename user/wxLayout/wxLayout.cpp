@@ -66,8 +66,8 @@ MyFrame::MyFrame(void) :
    wxMenu *file_menu = new wxMenu;
    file_menu->Append( ID_CLEAR, "Clear");
    file_menu->Append( ID_ADD_SAMPLE, "Example");
-   file_menu->Append( ID_EDIT, "Edit");
-   file_menu->Append( ID_WXLAYOUT_DEBUG, "Debug");
+//   file_menu->Append( ID_EDIT, "Edit");
+//   file_menu->Append( ID_WXLAYOUT_DEBUG, "Debug");
 
   file_menu->Append(ID_PRINT, "&Print...", "Print");
   file_menu->Append(ID_PRINT_SETUP, "Print &Setup...","Setup printer properties");
@@ -82,10 +82,10 @@ MyFrame::MyFrame(void) :
 #endif
   file_menu->AppendSeparator();
 
-   file_menu->Append( ID_DPRINT, "Direct Print");
+//   file_menu->Append( ID_DPRINT, "Direct Print");
    file_menu->Append( ID_TEXT, "Export Text");
    file_menu->Append( ID_HTML, "Export HTML");
-   file_menu->Append( ID_TEST, "Test");
+//   file_menu->Append( ID_TEST, "Test");
    file_menu->Append( ID_QUIT, "Exit");
   
    wxMenuBar *menu_bar = new wxMenuBar();
@@ -247,15 +247,6 @@ void MyFrame::OnCommand( wxCommandEvent &event )
    case ID_CLICK:
       cerr << "Received click event." << endl;
       break;
-   case ID_TEST:
-   {
-      Clear();
-      m_lwin->GetLayoutList().LineBreak();
-      m_lwin->GetLayoutList().Insert("abc");
-      m_lwin->GetLayoutList().LineBreak();
-      m_lwin->GetLayoutList().Insert("def");
-      break;
-   }
    case ID_HTML:
    {
       wxLayoutExportObject *export;
@@ -299,7 +290,7 @@ void MyFrame::OnPrint(wxCommandEvent& WXUNUSED(event))
       wxGetApp().SetPrintMode(wxPRINT_POSTSCRIPT);
 #endif
       wxPrinter printer;
-      wxLayoutPrintout printout( m_lwin->GetLayoutList(),"My printout");
+      wxLayoutPrintout printout( m_lwin->GetLayoutList(),"Printout from wxLayout");
       if (! printer.Print(this, &printout, TRUE))
          wxMessageBox(
             "There was a problem printing.\nPerhaps your current printer is not set correctly?",

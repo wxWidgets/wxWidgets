@@ -44,6 +44,8 @@
 #   define    Str(str) str
 #endif
 
+#define   WXLO_DEFAULTFONTSIZE 12
+
 /// Types of currently supported layout objects.
 enum wxLayoutObjectType
 { WXLO_TYPE_INVALID = 0, WXLO_TYPE_TEXT, WXLO_TYPE_CMD, WXLO_TYPE_ICON, WXLO_TYPE_LINEBREAK };
@@ -355,7 +357,7 @@ public:
    void Delete(CoordType count = 1);
    void Insert(String const &text);
    void Insert(wxLayoutObjectBase *obj);
-   void Clear(int family = wxROMAN, int size=12, int style=wxNORMAL, int weight=wxNORMAL,
+   void Clear(int family = wxROMAN, int size=WXLO_DEFAULTFONTSIZE, int style=wxNORMAL, int weight=wxNORMAL,
                     int underline=0, char const *fg="black", char const *bg="white");
 
    /// return a pointer to the default settings (dangerous, why?) FIXME:
@@ -432,18 +434,25 @@ private:
 class wxLayoutPrintout: public wxPrintout
 {
  public:
-   wxLayoutPrintout(wxLayoutList &llist, wxString const & title = "My printout")
+   wxLayoutPrintout(wxLayoutList &llist, wxString const & title =
+                    "wxLayout Printout")
       :wxPrintout(title)
-      { m_llist = &llist; }
+      { m_llist = &llist; m_title = title;}
    bool OnPrintPage(int page);
    bool HasPage(int page);
    bool OnBeginDocument(int startPage, int endPage);
    void GetPageInfo(int *minPage, int *maxPage, int *selPageFrom, int
                     *selPageTo);
    void OnPreparePrinting(void);
+protected:
+   virtual void DrawHeader(wxDC &dc, wxPoint topleft, wxPoint bottomright, int pageno);
+                           
 private:
    wxLayoutList *m_llist;
+   wxString      m_title;
    int           m_PageHeight, m_PageWidth;
+   // how much we actually print per page
+   int           m_PrintoutHeight;
    wxLayoutMargins m_Margins;
    int           m_NumOfPages;
 };
