@@ -557,14 +557,15 @@ build\msw\config.* file; more detailed description follows.
 Basic options
 -------------
 
-BUILD=debug
-  Builds debug version of the library (default is 'release'). This affects
-  name of the library ('d' is appended), __WXDEBUG__ is defined and debug
-  information compiled into object files and the executable.
+BUILD=release
+  Builds release version of the library. It differs from default 'debug' 
+  in lack of appended 'd' in name of library, does not define __WXDEBUG__
+  and not include debug information compiled into object files and the 
+  executable.
 
-SHARED=0
-  Build static libraries instead of DLLs. By default, DLLs are built
-  (SHARED=1).
+SHARED=1
+  Build shared libraries (DLLs). By default, DLLs are not built
+  (SHARED=0).
 
 UNICODE=1
   To build Unicode versions of the libraries, add UNICODE=1 to make invocation
