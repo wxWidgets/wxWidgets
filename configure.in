@@ -4729,11 +4729,11 @@ fi
 if test "$wxUSE_UNICODE" = "yes" ; then
   AC_DEFINE(wxUSE_UNICODE)
 
-  if test "$wxUSE_MSW" != 1; then
+  if test "$USE_WIN32" != 1; then
       wxUSE_UNICODE_MSLU=no
   fi
 
-  if test "$wxUSE_MSW" = 1 -a "$wxUSE_UNICODE_MSLU" = "yes"; then
+  if test "$USE_WIN32" = 1 -a "$wxUSE_UNICODE_MSLU" = "yes"; then
         AC_CHECK_LIB(unicows,main,
             [
                 AC_DEFINE(wxUSE_UNICODE_MSLU)
