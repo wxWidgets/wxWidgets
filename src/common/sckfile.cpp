@@ -43,7 +43,13 @@ wxFileProto::~wxFileProto()
 
 wxInputStream *wxFileProto::GetInputStream(const wxString& path)
 {
-  return new wxFileInputStream(wxURL::ConvertFromURI(path));
+  wxFileInputStream* retval = new wxFileInputStream(wxURL::ConvertFromURI(path));
+  if (retval->Ok()) {
+    return retval;
+  } else {
+    delete retval;
+    return 0;
+  }
 }
 
 #endif // wxUSE_STREAMS && wxUSE_PROTOCOL_FILE
