@@ -483,7 +483,7 @@ elif os.name == 'posix':
     libdirs = []
     libs = []
 
-    # If you get unresolved symbol errors on Solaris and are usign gcc, then
+    # If you get unresolved symbol errors on Solaris and are using gcc, then
     # uncomment this block to add the right flags to the link step and build
     # again.
     ## if os.uname()[0] == 'SunOS':

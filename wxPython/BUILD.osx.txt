@@ -8,11 +8,10 @@ that you know your way around a command line and that you know how to
 get things from various CVS repositories as needed.
 
 
-1. "MacPython-OSX" 2.3 is required.  There is a disk image with an
-   installer package in the wxPython Sourceforge download area, in
-   this group:
+1. "MacPython-OSX" 2.3 is required.  If you don't have it already there is a disk image with an
+   installer package at
 
-   http://sourceforge.net/project/showfiles.php?group_id=10718&release_id=84730
+   http://homepages.cwi.nl/~jack/macpython/download.html
 
    If, for some reason you need to build your own Python, get the
    source from www.python.org and follow the instructions in the
@@ -34,7 +33,16 @@ get things from various CVS repositories as needed.
 3. Run configure from that build directory.
 
         cd build
-	../configure --with-mac --with-opengl --enable-debug
+	../configure --with-mac
+		     --with-opengl \
+		     --enable-geometry \
+                     --enable-optimise \
+		     --with-libjpeg=builtin \
+		     --with-libpng=builtin \
+		     --with-libtiff=builtin \
+
+   If you want to add code that activates various runtime checks and
+   assertion exceptions then add --enable-debug_flag.
 
 4. Make and install wxMac.
 

@@ -130,7 +130,7 @@ Clear as mud?  Good.  Let's get started.
    wxPython and you are running on Solaris and building with gcc, then
    you may be able to work around the problem by uncommenting a bit of
    code in setup.py and building again.  Look for 'SunOS' in setup.py
-   and uncomment the block following it.  The problem is that Sun's ld
+   and uncomment the block containing it.  The problem is that Sun's ld
    does not automatically add libgcc to the link step.
 
 7. That's all, except for the having fun part!

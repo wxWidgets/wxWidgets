@@ -19,18 +19,18 @@ and to play with as a learning exercise.
 The next thing you should do is join the wxPython-users maillist where
 you can interact with a community of other users and developers who
 are willing to help you learn, answer questions and solve problems.
-To join the mail list just send an email message to the following
-address from the account you want to receive the mail messages from
-the list:
+To join the mail list just go to this web page and follow the
+instructions there:
 
-    wxPython-users-subscribe@lists.wxwindows.org
+	     http://wxpython.org/maillist.php
 
 There is also a good set of class reference documentation available
 for wxPython, but currently it is geared for the C++ user.  This may
 be a little daunting at first, but with a little practice you'll
-easily be able to "translate" from the C++ shown there to Python.  Not
-all classes documented are available in Python, but most of the GUI
-related classes are.
+easily be able to "mentally translate" from the C++ shown into Python.
+(See http://wiki.wxpython.org/index.cgi/C_2b_2bGuideForwxPythoneers
+for a little help on this process.) Not all classes documented are
+available in Python, but most of the GUI related classes are.
 
 
 Other Info

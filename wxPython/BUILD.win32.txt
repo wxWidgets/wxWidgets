@@ -19,13 +19,13 @@ I use a tool called SWIG (http://www.swig.org) to help generate the
 C++ sources used in the wxPython extension module.  However you don't
 need to have SWIG unless you want to modify the *.i files.  I've made
 several modifications to SWIG specific to wxPython's needs and so the
-modified sources are included in the wx CVS at.../wxPython/wxSWIG.
+modified sources are included in the wx CVS at .../wxPython/wxSWIG.
 But because of the size and since most people won't need it my SWIG is
 not included in the wxPythonSrc tarball.  You'll need to get it from
 CVS or a CVS snapshot.
 
-If you need to modify the *.i files for wxPython then change to this
-directory and run:
+If you need to modify the *.i files for wxPython then change to the
+.../wxPython/wxSWIG directory and run:
 
       nmake -f makefile.vc
 
@@ -119,7 +119,6 @@ C. Change to the %WXWIN%\include\wx\msw directory and copy setup0.h to
          wxUSE_TREELAYOUT		0
 	 wxUSE_MS_HTML_HELP		0
          wxUSE_POSTSCRIPT		1
-	 wxUSE_DYNLIB_CLASS		1
 
 
     ** NEW **
