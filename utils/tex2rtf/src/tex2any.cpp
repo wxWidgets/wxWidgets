@@ -594,17 +594,21 @@ bool read_a_line(char *buf)
 
     if (buf[j-1] == '}') buf[j-1] = 0; // Ignore final brace
 
+    // Remove backslashes from name
+    wxString fileNameStr(fileName);
+    fileNameStr.Replace("\\", "");
+
     // Ignore some types of input files (e.g. macro definition files)
-    char *fileOnly = FileNameFromPath(fileName);
+    char *fileOnly = FileNameFromPath((char*) (const char*) fileNameStr);
     currentFileName = fileOnly;
     if (IgnorableInputFiles.Member(fileOnly))
       return read_a_line(buf);
 
-    wxString actualFile = TexPathList.FindValidPath(fileName);
+    wxString actualFile = TexPathList.FindValidPath(fileNameStr);
     if (actualFile == "")
     {
       char buf2[400];
-      sprintf(buf2, "%s.tex", fileName);
+      sprintf(buf2, "%s.tex", (const char*) fileNameStr);
       actualFile = TexPathList.FindValidPath(buf2);
     }
     currentFileName = actualFile;
