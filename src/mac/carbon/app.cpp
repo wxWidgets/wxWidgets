@@ -298,6 +298,7 @@ void wxApp::MacNewFile()
         { kEventClassAppleEvent , kEventAppleEvent } ,
 
         { kEventClassMouse , kEventMouseDown } ,
+        { kEventClassMouse , kEventMouseMoved } ,
         { 'WXMC' , 'WXMC' }
     } ;
 
@@ -340,15 +341,30 @@ static pascal OSStatus MouseEventHandler( EventHandlerCallRef handler , EventRef
 {
     OSStatus result = eventNotHandledErr ;
 
+    Point point ;
+    UInt32 modifiers = 0;
+    EventMouseButton button = 0 ;
+    UInt32 click = 0 ;
+
+    GetEventParameter( event, kEventParamMouseLocation, typeQDPoint, NULL,
+        sizeof( Point ), NULL, &point );
+    GetEventParameter( event, kEventParamKeyModifiers, typeUInt32, NULL,
+        sizeof( UInt32 ), NULL, &modifiers );
+    GetEventParameter( event, kEventParamMouseButton, typeMouseButton, NULL,
+        sizeof( EventMouseButton ), NULL, &button );
+    GetEventParameter( event, kEventParamClickCount, typeUInt32, NULL,
+        sizeof( UInt32 ), NULL, &click );
+
+    if ( button == 0 || GetEventKind( event ) == kEventMouseUp )
+        modifiers += btnState ;
+
+
     switch( GetEventKind(event) )
     {
         case kEventMouseDown :
         {
-            Point point ;
             WindowRef window ;
 
-            GetEventParameter( event, kEventParamMouseLocation, typeQDPoint, NULL,
-                sizeof( Point ), NULL, &point );
             short windowPart = ::FindWindow(point, &window);
 
             if ( windowPart == inMenuBar )
@@ -356,6 +372,13 @@ static pascal OSStatus MouseEventHandler( EventHandlerCallRef handler , EventRef
                 MenuSelect( point ) ;
                 result = noErr ;
             }
+        }
+        break ;
+        case kEventMouseMoved :
+        {
+            wxTheApp->MacHandleMouseMovedEvent( point.h , point.v , modifiers , EventTimeToTicks( GetEventTime( event ) ) ) ;
+            result = noErr ;
+            break ;
         }
         break ;
     }
@@ -2097,6 +2120,111 @@ void wxApp::MacHandleOSEvent( WXEVENTREF evr )
             }
             break ;
 
+    }
+}
+#else
+
+void wxApp::MacHandleMouseMovedEvent(wxInt32 x , wxInt32 y ,wxUint32 modifiers , long timestamp)
+{
+    WindowRef window;
+
+    wxWindow* currentMouseWindow = NULL ;
+
+    if (s_captureWindow )
+    {
+        currentMouseWindow = s_captureWindow ;
+    }
+    else
+    {
+        wxWindow::MacGetWindowFromPoint( wxPoint( x, y ) , &currentMouseWindow ) ;
+    }
+
+    if ( currentMouseWindow != wxWindow::s_lastMouseWindow )
+    {
+        wxMouseEvent event ;
+
+        bool isDown = !(modifiers & btnState) ; // 1 is for up
+        bool controlDown = modifiers & controlKey ; // for simulating right mouse
+
+        event.m_leftDown = isDown && !controlDown;
+
+        event.m_middleDown = FALSE;
+        event.m_rightDown = isDown && controlDown;
+
+        event.m_shiftDown = modifiers & shiftKey;
+        event.m_controlDown = modifiers & controlKey;
+        event.m_altDown = modifiers & optionKey;
+        event.m_metaDown = modifiers & cmdKey;
+ 
+        event.m_x = x;
+        event.m_y = y;
+        event.m_timeStamp = timestamp;
+
+        if ( wxWindow::s_lastMouseWindow )
+        {
+            wxMouseEvent eventleave(event);
+            eventleave.SetEventType( wxEVT_LEAVE_WINDOW );
+            wxWindow::s_lastMouseWindow->ScreenToClient( &eventleave.m_x, &eventleave.m_y );
+            eventleave.SetEventObject( wxWindow::s_lastMouseWindow ) ;
+
+#if wxUSE_TOOLTIPS
+            wxToolTip::RelayEvent( wxWindow::s_lastMouseWindow , eventleave);
+#endif // wxUSE_TOOLTIPS
+            wxWindow::s_lastMouseWindow->GetEventHandler()->ProcessEvent(eventleave);
+        }
+        if ( currentMouseWindow )
+        {
+            wxMouseEvent evententer(event);
+            evententer.SetEventType( wxEVT_ENTER_WINDOW );
+            currentMouseWindow->ScreenToClient( &evententer.m_x, &evententer.m_y );
+            evententer.SetEventObject( currentMouseWindow ) ;
+#if wxUSE_TOOLTIPS
+            wxToolTip::RelayEvent( currentMouseWindow , evententer);
+#endif // wxUSE_TOOLTIPS
+            currentMouseWindow->GetEventHandler()->ProcessEvent(evententer);
+        }
+        wxWindow::s_lastMouseWindow = currentMouseWindow ;
+    }
+
+    short windowPart = inNoWindow ;
+
+    if ( s_captureWindow )
+    {
+        window = (WindowRef) s_captureWindow->MacGetRootWindow() ;
+        windowPart = inContent ;
+    }
+    else
+    {
+        Point pt= { y , x } ;
+        windowPart = ::FindWindow(pt , &window);
+    }
+
+    switch (windowPart)
+    {
+        case inContent :
+            {
+                wxTopLevelWindowMac* win = wxFindWinFromMacWindow( window ) ;
+                if ( win )
+                    win->MacFireMouseEvent( nullEvent , x , y , modifiers , timestamp ) ;
+                else
+                {
+                    if ( wxIsBusy() )
+                    {
+                    }
+                    else
+                        UMAShowArrowCursor();
+                 }
+            }
+            break;
+        default :
+            {
+                if ( wxIsBusy() )
+                {
+                }
+                else
+                    UMAShowArrowCursor();
+            }
+            break ;
     }
 }
 #endif

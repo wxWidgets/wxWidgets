@@ -280,7 +280,7 @@ static pascal OSStatus MouseEventHandler( EventHandlerCallRef handler , EventRef
                 result = noErr ;
                 break ;
             case kEventMouseMoved :
-                toplevelWindow->MacFireMouseEvent( nullEvent , point.h , point.v , modifiers , EventTimeToTicks( GetEventTime( event ) ) ) ;
+                wxTheApp->MacHandleMouseMovedEvent( point.h , point.v , modifiers , EventTimeToTicks( GetEventTime( event ) ) ) ;
                 result = noErr ;
                 break ;
             case kEventMouseDragged :
