@@ -13,7 +13,7 @@ from distutils.command.install_data import install_data
 # flags and values that affect this script
 #----------------------------------------------------------------------
 
-VERSION          = "2.4.0.4p"
+VERSION          = "2.4.0.4"
 DESCRIPTION      = "Cross platform GUI toolkit for Python"
 AUTHOR           = "Robin Dunn"
 AUTHOR_EMAIL     = "Robin Dunn <robin@alldunn.com>"
@@ -1180,6 +1180,7 @@ else:
                opj('scripts/xrced'),
                opj('scripts/pyshell'),
                opj('scripts/pycrust'),
+               opj('scripts/pycwrap'),
                ]
 
 
@@ -1204,6 +1205,7 @@ if __name__ == "__main__":
                           PKGDIR+'.lib.editor',
                           PKGDIR+'.lib.mixins',
                           PKGDIR+'.lib.PyCrust',
+                          PKGDIR+'.lib.PyCrust.decor',
                           PKGDIR+'.tools',
                           PKGDIR+'.tools.XRCed',
                           ],

@@ -190,6 +190,7 @@ for s in \
 	img2py \
 	img2xpm \
 	pycrust \
+	pycwrap \
 	pyshell \
 	xrced; do
     cp scripts/$s $RPM_BUILD_ROOT/%{pref}/bin

@@ -159,6 +159,7 @@ Source: "scripts\img2xpm";                  DestDir: "{code:GetPythonDir}\Script
 Source: "scripts\xrced";                    DestDir: "{code:GetPythonDir}\Scripts"; Components: tools
 Source: "scripts\pyshell";                  DestDir: "{code:GetPythonDir}\Scripts"; Components: tools
 Source: "scripts\pycrust";                  DestDir: "{code:GetPythonDir}\Scripts"; Components: tools
+Source: "scripts\pycwrap";                  DestDir: "{code:GetPythonDir}\Scripts"; Components: tools
 
 Source: "samples\doodle\*.py";              DestDir: "{app}\wxPython\samples\doodle"; Components: samples
 Source: "samples\doodle\*.txt";             DestDir: "{app}\wxPython\samples\doodle"; Components: samples

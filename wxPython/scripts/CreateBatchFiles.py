@@ -22,6 +22,7 @@ scripts = [ ("img2png", 0),
             ("xrced",   1),
             ("pyshell", 1),
             ("pycrust", 1),
+            ("pycwrap", 1),
             ("helpviewer", 1),
             ]
 
