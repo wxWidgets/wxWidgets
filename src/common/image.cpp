@@ -22,6 +22,7 @@
 #include "wx/debug.h"
 #include "wx/log.h"
 #include "../png/png.h"
+#include "wx/filefn.h"
 
 //-----------------------------------------------------------------------------
 // wxImage
@@ -191,6 +192,13 @@ int wxImage::GetHeight() const
 bool wxImage::LoadFile( const wxString& filename, long type )
 {
   UnRef();
+  
+  if (!wxFileExists(filename))
+  {
+    wxLogWarning( "Image file does not exist." );
+
+    return FALSE;
+  }
 
   m_refData = new wxImageRefData;
 

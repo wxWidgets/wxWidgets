@@ -43,46 +43,14 @@ class wxDropSource;
 class wxDataObject: public wxObject
 {
 public:
-  // all data formats (values are the same as in windows.h, do not change!)
-  enum StdFormat
-  {
-    Invalid,
-    Text,
-    Bitmap,
-    MetafilePict,
-    Sylk,
-    Dif,
-    Tiff,
-    OemText,
-    Dib,
-    Palette,
-    Pendata,
-    Riff,
-    Wave,
-    UnicodeText,
-    EnhMetafile,
-    Hdrop,
-    Locale,
-    Max
-  };
 
-  // function to return symbolic name of clipboard format (debug messages)
-  static const char *GetFormatName(wxDataFormat format);
-
-  // ctor & dtor
   wxDataObject() {};
   ~wxDataObject() {};
 
-  // pure virtuals to override
-    // get the best suited format for our data
   virtual wxDataFormat GetPreferredFormat() const = 0;
-    // decide if we support this format (should be one of values of
-    // StdFormat enumerations or a user-defined format)
-  virtual bool IsSupportedFormat(wxDataFormat format) const = 0;
-    // get the (total) size of data
+  virtual bool IsSupportedFormat( wxDataFormat format ) const = 0;
   virtual size_t GetDataSize() const = 0;
-    // copy raw data to provided pointer
-  virtual void GetDataHere(void *pBuf) const = 0;
+  virtual void GetDataHere( void *data ) const = 0;
 
 };
 
@@ -93,20 +61,22 @@ public:
 class wxTextDataObject : public wxDataObject
 {
 public:
-  // ctors
+
   wxTextDataObject() { }
   wxTextDataObject(const wxString& strText) : m_strText(strText) { }
   void Init(const wxString& strText) { m_strText = strText; }
 
-  // implement base class pure virtuals
   virtual wxDataFormat GetPreferredFormat() const
     { return wxDF_TEXT; }
+    
   virtual bool IsSupportedFormat(wxDataFormat format) const
     { return format == wxDF_TEXT; }
+
   virtual size_t GetDataSize() const
-    { return m_strText.Len() + 1; } // +1 for trailing '\0'of course
-  virtual void GetDataHere(void *pBuf) const
-    { memcpy(pBuf, m_strText.c_str(), GetDataSize()); }
+    { return m_strText.Len() + 1; } // +1 for trailing '\0'
+    
+  virtual void GetDataHere( void *data ) const
+    { memcpy(data, m_strText.c_str(), GetDataSize()); }
 
 private:
   wxString  m_strText;
@@ -125,15 +95,17 @@ public:
   void AddFile( const wxString &file )
     { m_files += file; m_files += '\0'; }
 
-  // implement base class pure virtuals
   virtual wxDataFormat GetPreferredFormat() const
     { return wxDF_FILENAME; }
-  virtual bool IsSupportedFormat(wxDataFormat format) const
+    
+  virtual bool IsSupportedFormat( wxDataFormat format ) const
     { return format == wxDF_FILENAME; }
+    
   virtual size_t GetDataSize() const
     { return m_files.Len(); } // no trailing '\0'
-  virtual void GetDataHere(void *pBuf) const
-    { memcpy(pBuf, m_files.c_str(), GetDataSize()); }
+    
+  virtual void GetDataHere( void *data ) const
+    { memcpy(data, m_files.c_str(), GetDataSize()); }
 
 private:
   wxString  m_files;
@@ -152,18 +124,15 @@ class wxDropTarget: public wxObject
     
     virtual void OnEnter() { }
     virtual void OnLeave() { }
-    virtual bool OnDrop( long x, long y, const void *pData ) = 0;
+    virtual bool OnDrop( long x, long y, const void *data, size_t size ) = 0;
 
-  // implementation
-      
-    int  m_size;    
-    
     // Override these to indicate what kind of data you support: 
   
     virtual size_t GetFormatCount() const = 0;
     virtual wxDataFormat GetFormat(size_t n) const = 0;
   
-    void Drop( GdkEventDropDataAvailable *event, int x, int y );
+  // implementation
+  
     void RegisterWidget( GtkWidget *widget );
     void UnregisterWidget( GtkWidget *widget );
 };
@@ -177,7 +146,7 @@ class wxTextDropTarget: public wxDropTarget
   public:
 
     wxTextDropTarget() {};
-    virtual bool OnDrop( long x, long y, const void *pData );
+    virtual bool OnDrop( long x, long y, const void *data, size_t size );
     virtual bool OnDropText( long x, long y, const char *psz );
     
   protected:
@@ -196,9 +165,9 @@ class wxFileDropTarget: public wxDropTarget
     
     wxFileDropTarget() {};
     
-    virtual bool OnDrop(long x, long y, const void *pData);
+    virtual bool OnDrop( long x, long y, const void *data, size_t size );
     virtual bool OnDropFiles( long x, long y, 
-                              size_t nFiles, const char * const aszFiles[]);
+                              size_t nFiles, const char * const aszFiles[] );
 
   protected:
   
@@ -210,14 +179,14 @@ class wxFileDropTarget: public wxDropTarget
 // wxDropSource
 //-------------------------------------------------------------------------
 
-  enum wxDragResult
-  {
-    wxDragError,    // error prevented the d&d operation from completing
-    wxDragNone,     // drag target didn't accept the data
-    wxDragCopy,     // the data was successfully copied
-    wxDragMove,     // the data was successfully moved
-    wxDragCancel    // the operation was cancelled by user (not an error)
-  };
+enum wxDragResult
+{
+  wxDragError,    // error prevented the d&d operation from completing
+  wxDragNone,     // drag target didn't accept the data
+  wxDragCopy,     // the data was successfully copied
+  wxDragMove,     // the data was successfully moved
+  wxDragCancel    // the operation was cancelled by user (not an error)
+};
 
 class wxDropSource: public wxObject
 {
@@ -232,11 +201,9 @@ class wxDropSource: public wxObject
     wxDragResult DoDragDrop( bool bAllowMove = FALSE );
     
     virtual bool GiveFeedback( wxDragResult WXUNUSED(effect), bool WXUNUSED(bScrolling) ) { return TRUE; };
-
-  protected:
   
-    friend void gtk_drag_callback( GtkWidget *widget, GdkEvent *event, wxDropSource *source );
-  
+  // implementation
+      
     void RegisterWindow(void);
     void UnregisterWindow(void);
   

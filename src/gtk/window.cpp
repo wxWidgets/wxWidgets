@@ -850,8 +850,10 @@ static void gtk_window_drop_callback( GtkWidget *widget, GdkEventDropDataAvailab
     int x = 0;
     int y = 0;
     gdk_window_get_pointer( widget->window, &x, &y, (GdkModifierType *) NULL );
-    win->GetDropTarget()->m_size = event->data_numbytes;
-    win->GetDropTarget()->Drop( event, x, y );
+
+    printf( "Drop data is of type %s.\n", event->data_type );
+  
+    win->GetDropTarget()->OnDrop( x, y, (const void*)event->data, (size_t)event->data_numbytes );
   }
 
 /*
@@ -1688,8 +1690,8 @@ void wxWindow::AddChild( wxWindow *child )
 
   // wxFrame and wxDialog as children aren't placed into the parents
 
-  if (( IS_KIND_OF(child,wxFrame) || IS_KIND_OF(child,wxDialog) ) &&
-      (!IS_KIND_OF(child,wxMDIChildFrame)))
+  if (( IS_KIND_OF(child,wxFrame) || IS_KIND_OF(child,wxDialog) ) /*&&
+      (!IS_KIND_OF(child,wxMDIChildFrame))*/)
   {
     m_children.Append( child );
 
@@ -1714,7 +1716,7 @@ void wxWindow::AddChild( wxWindow *child )
       }
     }
   }
-
+  
   // wxNotebook is very special, so it has a private AddChild()
 
   if (IS_KIND_OF(this,wxNotebook))

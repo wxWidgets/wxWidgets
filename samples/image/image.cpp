@@ -79,6 +79,18 @@ MyCanvas::MyCanvas( wxWindow *parent, const wxWindowID id, const wxPoint &pos, c
   wxImage image;
   image.LoadFile( "../horse.png", wxBITMAP_TYPE_PNG );
   my_horse = new wxBitmap( image );
+  
+  wxBitmap bitmap( 100, 100 );
+  
+  wxMemoryDC dc;
+  dc.SelectObject( bitmap );
+  dc.SetBrush( wxRED_BRUSH );
+  dc.SetPen( wxWHITE_PEN );
+  dc.DrawRectangle( 0, 0, 100, 100 );
+  dc.SelectObject( wxNullBitmap );
+  
+  image = bitmap.ConvertToImage();
+  image.SaveFile( "../test.png", wxBITMAP_TYPE_PNG );
 }
 
 MyCanvas::~MyCanvas(void)

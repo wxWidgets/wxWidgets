@@ -33,18 +33,10 @@ extern bool g_blockEventsOnDrag;
 
 wxDropTarget::wxDropTarget()
 {
-  m_size = 0;
 }
 
 wxDropTarget::~wxDropTarget()
 {
-}
-
-void wxDropTarget::Drop( GdkEventDropDataAvailable *event, int x, int y )
-{
-  printf( "Drop data is of type %s.\n", event->data_type );
-  
-  OnDrop( x, y, (char *)event->data);
 }
 
 void wxDropTarget::UnregisterWidget( GtkWidget *widget )
@@ -88,9 +80,9 @@ void wxDropTarget::RegisterWidget( GtkWidget *widget )
 // wxTextDropTarget
 // ----------------------------------------------------------------------------
 
-bool wxTextDropTarget::OnDrop( long x, long y, const void *pData )
+bool wxTextDropTarget::OnDrop( long x, long y, const void *data, size_t WXUNUSED(size) )
 {
-  OnDropText( x, y, (const char*)pData );
+  OnDropText( x, y, (const char*)data );
   return TRUE;
 }
 
@@ -127,18 +119,18 @@ bool wxFileDropTarget::OnDropFiles( long x, long y, size_t nFiles, const char * 
   return TRUE;
 }
 
-bool wxFileDropTarget::OnDrop(long x, long y, const void *pData )
+bool wxFileDropTarget::OnDrop(long x, long y, const void *data, size_t size )
 {
   size_t number = 0;
-  char *text = (char*) pData;
-  for (int i = 0; i < m_size; i++)
+  char *text = (char*) data;
+  for (size_t i = 0; i < size; i++)
     if (text[i] == 0) number++;
 
   if (number == 0) return TRUE;    
     
   char **files = new char*[number];
   
-  text = (char*) pData;
+  text = (char*) data;
   for (size_t i = 0; i < number; i++)
   {
     files[i] = text;
@@ -146,7 +138,7 @@ bool wxFileDropTarget::OnDrop(long x, long y, const void *pData )
     text += len+1;
   }
 
-  bool ret = OnDropFiles(x, y, 1, files ); 
+  bool ret = OnDropFiles( x, y, 1, files ); 
   
   free( files );
   

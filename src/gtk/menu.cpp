@@ -443,8 +443,10 @@ wxMenuItem *wxMenu::FindItem(int id) const
     node = node->Next();
   }
 
-  wxLogDebug( "wxMenu::FindItem: item %d not found.", id);
-
+  // Not finding anything here can be correct
+  // when search the entire menu system for
+  // an entry -> no error message.
+  
   return (wxMenuItem *) NULL;
 }
 

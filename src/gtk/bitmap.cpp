@@ -513,8 +513,12 @@ wxImage wxBitmap::ConvertToImage() const
   
   image.Create( M_BMPDATA->m_width, M_BMPDATA->m_height );
   char unsigned *data = image.GetData();
+
+
+  GdkVisual *visual = gdk_window_get_visual( M_BMPDATA->m_pixmap );
+  if (visual == NULL) visual = gdk_window_get_visual( (GdkWindow*) &gdk_root_parent );
+  int bpp = visual->depth;
   
-  int bpp = gdk_image->bpp;
   GdkColormap *cmap = gtk_widget_get_default_colormap();
   
   long pos = 0;
@@ -525,6 +529,11 @@ wxImage wxBitmap::ConvertToImage() const
       int pixel = gdk_image_get_pixel( gdk_image, i, j );
       if (bpp <= 8)
       {
+/*
+        int r = cmap->colors[pixel].red;    // debug code
+        int g = cmap->colors[pixel].green;
+        int b = cmap->colors[pixel].blue;
+*/
         data[pos] = cmap->colors[pixel].red >> 8;
         data[pos+1] = cmap->colors[pixel].green >> 8;
         data[pos+2] = cmap->colors[pixel].blue >> 8;
