@@ -46,6 +46,8 @@
 #pragma interface "proplist.h"
 #endif
 
+#if wxUSE_PROPSHEET
+
 #include "wx/prop.h"
 
 #define wxPROP_BUTTON_CLOSE       1
@@ -577,6 +579,9 @@ class WXDLLEXPORT wxListOfStringsListValidator: public wxPropertyListValidator
    // Called when the edit (...) button is pressed.
    void OnEdit(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
 };
+
+#endif
+  // wxUSE_PROPSHEET
 
 #endif
   // _WX_PROPLIST_H_

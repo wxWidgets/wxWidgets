@@ -16,6 +16,8 @@
 #pragma interface "prop.h"
 #endif
 
+#if wxUSE_PROPSHEET
+
 #include "wx/defs.h"
 #include "wx/string.h"
 #include "wx/hash.h"
@@ -333,6 +335,9 @@ class WXDLLEXPORT wxProperty: public wxObject
   inline void Enable(bool en) { m_enabled = en; }
   inline bool IsEnabled(void) const { return m_enabled; }
 };
+
+#endif
+  // wxUSE_PROPSHEET
 
 #endif
   // _WX_PROP_H_
