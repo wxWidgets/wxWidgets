@@ -15,7 +15,7 @@
 #pragma interface "htmprint.h"
 #endif
 
-#include <wx/defs.h>
+#include "wx/defs.h"
 
 #if wxUSE_HTML & wxUSE_PRINTING_ARCHITECTURE
 
