@@ -7,7 +7,7 @@
 *  RCS-ID:      $Id$ 
 *  Copyright:   (c) 
 *  Licence:     wxWindows licence 
-**/
+*/
 
 /* THIS IS A C FILE, DON'T USE C++ FEATURES (IN PARTICULAR COMMENTS) IN IT */
 
