@@ -232,6 +232,8 @@ wxGTK:
 - implemented wxFRAME_NO_TASKBAR style (GTK >= 2.2)
 - implemented support for wxSYS_DCLICK_?, wxSYS_DRAG_? and wxSYS_CURSOR_?
   in wxSystemSettings::GetMetric (Mart Raudsepp)
+- wxGTK uses GTK+ 2.x by default now, you have to pass --disable-gtk2 to
+  configure if you want to use GTK+ 1.2
 
 wxMotif:
 
