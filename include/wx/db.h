@@ -264,7 +264,7 @@ enum wxODBC_ERRORS
 #define SQL_MAX_AUTHSTR_LEN MAXNAME
 #endif
 
-class wxDbConnectInf
+class WXDLLEXPORT wxDbConnectInf
 {
     private:
         bool freeHenvOnDestroy;
@@ -326,7 +326,7 @@ class wxDbConnectInf
 };  // class wxDbConnectInf
 
 
-struct wxDbSqlTypeInfo
+struct WXDLLEXPORT wxDbSqlTypeInfo
 {
     wxString    TypeName;
     int         FsqlType;
