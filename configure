@@ -15866,7 +15866,7 @@ cat >> $CONFIG_STATUS <<\EOF
               mkdir lib/wx/include/wx/${TOOLKIT_NAME}
             fi
             if test -f setup.h; then
-                cp -f setup.h lib/wx/include/wx/${TOOLKIT_NAME}/setup.h
+                cp -fp setup.h lib/wx/include/wx/${TOOLKIT_NAME}/setup.h
             fi
 
             
@@ -15880,7 +15880,7 @@ cat >> $CONFIG_STATUS <<\EOF
               mkdir include/wx/${TOOLKIT_DIR}
             fi
             if test -f setup.h; then
-                mv -f setup.h include/wx/${TOOLKIT_DIR}/setup.h
+                cp -fp setup.h include/wx/${TOOLKIT_DIR}/setup.h
             fi
             
           
