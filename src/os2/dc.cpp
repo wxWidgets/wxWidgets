@@ -557,7 +557,7 @@ void wxDC::Clear()
     ::GpiErase(m_hPS);
 } // end of wxDC::Clear
 
-bool wxDC::DoFloodFill(
+void wxDC::DoFloodFill(
   wxCoord                           vX
 , wxCoord                           vY
 , const wxColour&                   rCol
@@ -577,8 +577,7 @@ bool wxDC::DoFloodFill(
         lOptions = FF_SURFACE;
 
     ::GpiFloodFill(m_hPS, lOptions, lColor);
-    
-    return TRUE;
+
 } // end of wxDC::DoFloodFill
 
 bool wxDC::DoGetPixel(
@@ -1226,6 +1225,9 @@ void wxDC::DoDrawBitmap(
 
         vY = OS2Y(vY,rBmp.GetHeight());
 
+        //
+        // Flip the picture as OS/2 is upside-down
+        //
         POINTL                      vPoint[4] = { vX, vY + rBmp.GetHeight()
                                                  ,vX + rBmp.GetWidth(), vY
                                                  ,0, 0
