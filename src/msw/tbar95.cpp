@@ -59,7 +59,6 @@
 
 #endif // __TWIN32__
 
-#include "wx/msw/dib.h"
 #include "wx/app.h"         // for GetComCtl32Version
 
 #if defined(__MWERKS__) && defined(__WXMSW__)

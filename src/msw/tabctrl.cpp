@@ -38,7 +38,6 @@
     #include "wx/msw/gnuwin32/extra.h"
 #endif
 
-#include "wx/msw/dib.h"
 #include "wx/tabctrl.h"
 #include "wx/app.h"
 #include "wx/msw/private.h"
