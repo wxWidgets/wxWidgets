@@ -425,6 +425,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_STOPWATCH=no
   DEFAULT_wxUSE_FILE=no
   DEFAULT_wxUSE_FFILE=no
+  DEFAULT_wxUSE_STDPATHS=no
   DEFAULT_wxUSE_TEXTBUFFER=no
   DEFAULT_wxUSE_TEXTFILE=no
   DEFAULT_wxUSE_SOUND=no
@@ -618,6 +619,7 @@ else
   DEFAULT_wxUSE_STOPWATCH=yes
   DEFAULT_wxUSE_FILE=yes
   DEFAULT_wxUSE_FFILE=yes
+  DEFAULT_wxUSE_STDPATHS=yes
   DEFAULT_wxUSE_TEXTBUFFER=yes
   DEFAULT_wxUSE_TEXTFILE=yes
   DEFAULT_wxUSE_SOUND=yes
@@ -906,9 +908,10 @@ WX_ARG_ENABLE(longlong,      [  --enable-longlong       use wxLongLong class], w
 WX_ARG_ENABLE(mimetype,      [  --enable-mimetype       use wxMimeTypesManager], wxUSE_MIMETYPE)
 WX_ARG_ENABLE(mslu,          [  --enable-mslu           use MS Layer for Unicode on Windows 9x (Win32 only)], wxUSE_UNICODE_MSLU)
 WX_ARG_ENABLE(snglinst,      [  --enable-snglinst       use wxSingleInstanceChecker class], wxUSE_SNGLINST_CHECKER)
-WX_ARG_ENABLE(streams,       [  --enable-streams        use wxStream etc classes], wxUSE_STREAMS)
 WX_ARG_ENABLE(std_iostreams, [  --enable-std_iostreams  use standard C++ stream classes], wxUSE_STD_IOSTREAM)
+WX_ARG_ENABLE(stdpaths,      [  --enable-stdpaths       use wxStandardPaths class], wxUSE_STDPATHS)
 WX_ARG_ENABLE(stopwatch,     [  --enable-stopwatch      use wxStopWatch class], wxUSE_STOPWATCH)
+WX_ARG_ENABLE(streams,       [  --enable-streams        use wxStream etc classes], wxUSE_STREAMS)
 WX_ARG_ENABLE(system_options,[  --enable-sysoptions     use wxSystemOptions], wxUSE_SYSTEM_OPTIONS)
 WX_ARG_ENABLE(textbuf,       [  --enable-textbuf        use wxTextBuffer class], wxUSE_TEXTBUFFER)
 WX_ARG_ENABLE(textfile,      [  --enable-textfile       use wxTextFile class], wxUSE_TEXTFILE)
@@ -4846,6 +4849,10 @@ fi
 
 if test "$wxUSE_STD_IOSTREAM" = "yes"; then
   AC_DEFINE(wxUSE_STD_IOSTREAM)
+fi
+
+if test "$wxUSE_STDPATHS" = "yes"; then
+  AC_DEFINE(wxUSE_STDPATHS)
 fi
 
 if test "$wxUSE_TEXTBUFFER" = "yes"; then

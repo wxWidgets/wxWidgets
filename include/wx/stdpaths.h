@@ -12,6 +12,10 @@
 #ifndef _WX_STDPATHS_H_
 #define _WX_STDPATHS_H_
 
+#include "wx/defs.h"
+
+#if wxUSE_STDPATHS
+
 #include "wx/string.h"
 
 // ----------------------------------------------------------------------------
@@ -92,6 +96,8 @@ protected:
 #elif defined(__PALMOS__)
     #include "wx/palmos/stdpaths.h"
 #endif
+
+#endif // wxUSE_STDPATHS
 
 #endif // _WX_STDPATHS_H_
 

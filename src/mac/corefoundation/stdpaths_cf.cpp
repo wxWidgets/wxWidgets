@@ -10,6 +10,9 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
+
+#if wxUSE_STDPATHS
+
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
 #endif //ndef WX_PRECOMP
@@ -107,3 +110,4 @@ wxString wxStandardPathsCF::GetPluginsDir() const
     return ret;
 }
 
+#endif // wxUSE_STDPATHS

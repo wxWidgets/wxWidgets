@@ -24,6 +24,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_STDPATHS
+
 #ifndef WX_PRECOMP
     #include "wx/app.h"
 #endif //WX_PRECOMP
@@ -115,3 +117,4 @@ wxString wxStandardPaths::GetPluginsDir() const
     return wxString();
 }
 
+#endif // wxUSE_STDPATHS

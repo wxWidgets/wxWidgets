@@ -170,6 +170,14 @@
 #   endif
 #endif /* !defined(wxUSE_REGEX) */
 
+#ifndef wxUSE_STDPATHS
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_STDPATHS must be defined."
+#   else
+#       define wxUSE_STDPATHS 1
+#   endif
+#endif /* !defined(wxUSE_STDPATHS) */
+
 #ifndef wxUSE_XML
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_XML must be defined."

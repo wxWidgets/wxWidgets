@@ -20,6 +20,8 @@
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_STDPATHS
+
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -54,7 +56,7 @@ wxString wxStandardPaths::GetInstallPrefix() const
     {
         wxStandardPaths *self = wx_const_cast(wxStandardPaths *, this);
 
-	self->m_prefix = _T("/usr/local");
+        self->m_prefix = _T("/usr/local");
     }
     return m_prefix;
 }
@@ -87,3 +89,5 @@ wxString wxStandardPaths::GetPluginsDir() const
 {
     return wxString();
 }
+
+#endif // wxUSE_STDPATHS

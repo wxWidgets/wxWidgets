@@ -205,6 +205,8 @@
 
 #define wxUSE_FSVOLUME      0
 
+#define wxUSE_STDPATHS      0
+
 #define wxUSE_TEXTBUFFER    0
 
 #define wxUSE_TEXTFILE      0

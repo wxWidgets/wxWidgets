@@ -80,9 +80,11 @@ public:
     // NB: returned pointer will be deleted by the caller
     virtual wxRendererNative *CreateRenderer() = 0;
 
+#if wxUSE_STDPATHS
     // wxStandardPaths object is normally the same for wxBase and wxGUI
     // except in the case of wxMac and wxCocoa
     virtual wxStandardPathsBase& GetStandardPaths();
+#endif // wxUSE_STDPATHS
 
     // functions abstracting differences between GUI and console modes
     // ------------------------------------------------------------------------
