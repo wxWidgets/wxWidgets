@@ -319,6 +319,8 @@ $(LIBTARGET): $(DUMMY).obj $(OBJECTS) $(PERIPH_LIBS)
 dummy.obj: dummy.$(SRCSUFF) $(LOCALHEADERS) $(BASEHEADERS) $(WXDIR)\include\wx\wx.h
 dummydll.obj: dummydll.$(SRCSUFF) $(LOCALHEADERS) $(BASEHEADERS) $(WXDIR)\include\wx\wx.h
 
+# $(OBJECTS):	$(WXDIR)\include\wx\setup.h
+
 $(MSWDIR)\accel.obj: $(MSWDIR)\accel.$(SRCSUFF)
 
 $(MSWDIR)\app.obj: $(MSWDIR)\app.$(SRCSUFF)

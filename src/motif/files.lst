@@ -43,7 +43,6 @@ ALL_SOURCES = \
 		generic/tipdlg.cpp \
 		generic/tipwin.cpp \
 		generic/treectlg.cpp \
-		generic/treelay.cpp \
 		generic/wizard.cpp \
 		common/accesscmn.cpp \
 		common/appcmn.cpp \
@@ -799,7 +798,6 @@ GENERICOBJS = \
 		tipdlg.o \
 		tipwin.o \
 		treectlg.o \
-		treelay.o \
 		wizard.o
 
 GUIOBJS = \

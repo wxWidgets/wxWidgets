@@ -171,7 +171,6 @@ COMMONOBJS2 = \
 		$(COMMDIR)\quantize.obj \
 		$(COMMDIR)\radiocmn.obj \
 		$(COMMDIR)\regex.obj \
-		$(COMMDIR)\resource.obj \
 		$(COMMDIR)\rgncmn.obj \
 		$(COMMDIR)\settcmn.obj \
 		$(COMMDIR)\sizer.obj \
@@ -198,7 +197,6 @@ COMMONOBJS2 = \
 		$(COMMDIR)\wfstream.obj \
 		$(COMMDIR)\wincmn.obj \
 		$(COMMDIR)\wxchar.obj \
-		$(COMMDIR)\wxexpr.obj \
 		$(COMMDIR)\xpmdecod.obj \
 		$(COMMDIR)\zipstrm.obj \
 		$(COMMDIR)\zstream.obj
@@ -1202,11 +1200,6 @@ $(COMMDIR)/regex.obj:     $*.$(SRCSUFF)
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
-$(COMMDIR)/resource.obj:     $*.$(SRCSUFF)
-        cl @<<
-$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
-<<
-
 $(COMMDIR)/rgncmn.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
@@ -1333,11 +1326,6 @@ $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
 $(COMMDIR)/wxchar.obj:     $*.$(SRCSUFF)
-        cl @<<
-$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
-<<
-
-$(COMMDIR)/wxexpr.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<

@@ -168,7 +168,6 @@ ALL_SOURCES = \
 		common/wfstream.cpp \
 		common/wincmn.cpp \
 		common/wxchar.cpp \
-		common/wxexpr.cpp \
 		common/xpmdecod.cpp \
 		common/zipstrm.cpp \
 		common/zstream.cpp \
@@ -343,7 +342,6 @@ ALL_HEADERS = \
 		effects.h \
 		encconv.h \
 		event.h \
-		expr.h \
 		fdrepdlg.h \
 		features.h \
 		ffile.h \
@@ -508,7 +506,6 @@ ALL_HEADERS = \
 		wx_cw_cm.h \
 		wx_cw_d.h \
 		wxchar.h \
-		wxexpr.h \
 		wxhtml.h \
 		wxprec.h \
 		xpmdecod.h \
@@ -788,7 +785,6 @@ COMMONOBJS = \
 		wfstream.o \
 		wincmn.o \
 		wxchar.o \
-		wxexpr.o \
 		xpmdecod.o \
 		zipstrm.o \
 		zstream.o

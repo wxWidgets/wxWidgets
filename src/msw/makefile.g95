@@ -615,36 +615,6 @@ $(REGEXLIB):
 
 $(OBJECTS):	$(WXINC)/wx/defs.h $(WXINC)/wx/object.h $(ARCHINCDIR)/wx/setup.h
 
-# Replace lex with flex if you run into compilation
-# problems with lex_yy.c. See also note about LEX_SCANNER
-# above.
-# $(COMMDIR)/lex_yy.c:	$(COMMDIR)/lexer.l
-#	$(LEX) -L -o$(COMMDIR)/lex_yy.c $(COMMDIR)/lexer.l
-#
-# Try one of these if the above line doesn't work.
-# Alternative syntax (1)
-#	$(LEX) -t -L $(COMMDIR)/lexer.l > $(COMMDIR)/lex_yy.c
-# Alternative syntax (2)
-#	$(LEX) -L -o$(COMMDIR)/lex_yy.c $(COMMDIR)/lexer.l
-#
-#	sed -e "s/BUFSIZ/5000/g" < lex.yy.c | \
-#	sed -e "s/yyoutput(c)/void yyoutput(c)/g" | \
-#       sed -e "s/YYLMAX 200/YYLMAX 5000/g" > lex_yy.c
-#	rm -f lex.yy.c
-#
-# Replace yacc with bison if you run into compilation
-# problems with y_tab.c.
-#
-# $(COMMDIR)/y_tab.c:	$(COMMDIR)/parser.y
-#	$(YACC) -o $(COMMDIR)/y_tab.c $(COMMDIR)/parser.y
-#
-# If you use e.g. gcc on Unix, uncomment these lines
-# and comment out the above.
-#
-# $(COMMDIR)/y_tab.c:	$(COMMDIR)/parser.y
-#	$(YACC) $(COMMDIR)/parser.y
-#	mv y.tab.c $(COMMDIR)/y_tab.c
-
 clean:
 	-$(RM) *.o
 	-$(RM) ole/*.o

@@ -40,9 +40,6 @@ GENERICOBJS= $(OUTPUTDIR)\busyinfo.obj &
 	$(OUTPUTDIR)\numdlgg.obj &
 	$(OUTPUTDIR)\panelg.obj &
 	$(OUTPUTDIR)\progdlgg.obj &
-	$(OUTPUTDIR)\prop.obj &
-	$(OUTPUTDIR)\propform.obj &
-	$(OUTPUTDIR)\proplist.obj &
 	$(OUTPUTDIR)\sashwin.obj &
 	$(OUTPUTDIR)\scrlwing.obj &
 	$(OUTPUTDIR)\spinctlg.obj &
@@ -54,7 +51,6 @@ GENERICOBJS= $(OUTPUTDIR)\busyinfo.obj &
 	$(OUTPUTDIR)\tipdlg.obj &
 	$(OUTPUTDIR)\tipwin.obj &
 	$(OUTPUTDIR)\treectlg.obj &
-	$(OUTPUTDIR)\treelay.obj &
 	$(OUTPUTDIR)\wizard.obj
 
 # These are generic things that don't need to be compiled on MSW,
@@ -176,7 +172,6 @@ COMMONOBJS = &
 	$(OUTPUTDIR)\quantize.obj &
 	$(OUTPUTDIR)\radiocmn.obj &
 	$(OUTPUTDIR)\regex.obj &
-	$(OUTPUTDIR)\resource.obj &
 	$(OUTPUTDIR)\rgncmn.obj &
 	$(OUTPUTDIR)\sckaddr.obj &
 	$(OUTPUTDIR)\sckfile.obj &
@@ -998,9 +993,6 @@ $(OUTPUTDIR)\radiocmn.obj:     $(COMMDIR)\radiocmn.cpp
 $(OUTPUTDIR)\regex.obj:     $(COMMDIR)\regex.cpp
   *$(CXX) $(CXXFLAGS) $<
 
-$(OUTPUTDIR)\resource.obj:     $(COMMDIR)\resource.cpp
-  *$(CXX) $(CXXFLAGS) $<
-
 $(OUTPUTDIR)\rgncmn.obj:     $(COMMDIR)\rgncmn.cpp
   *$(CXX) $(CXXFLAGS) $<
 
@@ -1107,6 +1099,7 @@ $(OUTPUTDIR)\zstream.obj:     $(COMMDIR)\zstream.cpp
   *$(CXX) $(CXXFLAGS) $<
 
 
+
 ########################################################
 # Generic objects (not always compiled, depending on
 # whether platforms have native implementations)
@@ -1187,9 +1180,6 @@ $(OUTPUTDIR)\tipwin.obj:     $(GENDIR)\tipwin.cpp
   *$(CXX) $(CXXFLAGS) $<
 
 $(OUTPUTDIR)\treectlg.obj:     $(GENDIR)\treectlg.cpp
-  *$(CXX) $(CXXFLAGS) $<
-
-$(OUTPUTDIR)\treelay.obj:     $(GENDIR)\treelay.cpp
   *$(CXX) $(CXXFLAGS) $<
 
 $(OUTPUTDIR)\wizard.obj:     $(GENDIR)\wizard.cpp
