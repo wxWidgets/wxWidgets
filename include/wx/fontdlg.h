@@ -15,7 +15,8 @@
 #   include "wx/os2/fontdlg.h"
 #endif
 
-// get the colour from user and return it
+// get the font from user and return it, returns wxNullFont if the dialog was
+// cancelled
 wxFont WXDLLEXPORT
 wxGetFontFromUser(wxWindow *parent = (wxWindow *)NULL,
                   const wxFont& fontInit = wxNullFont);
