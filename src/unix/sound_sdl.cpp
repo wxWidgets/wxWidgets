@@ -26,31 +26,16 @@
     #include "wx/event.h"
     #include "wx/intl.h"
     #include "wx/log.h"
-    #include "wx/list.h"
     #include "wx/utils.h"
 #endif
 
 #include "wx/thread.h"
 #include "wx/module.h"
 #include "wx/sound.h"
-#include "wx/listimpl.cpp"
 
 // ----------------------------------------------------------------------------
 // wxSoundBackendSDL, for Unix with libSDL
 // ----------------------------------------------------------------------------
-
-struct wxSoundBackendSDLQueueEntry
-{
-    wxSoundData       *m_data;
-    unsigned          m_pos;
-    SDL_AudioSpec     m_spec;
-    bool              m_loop;
-    bool              m_finished;
-};
-
-WX_DECLARE_LIST(wxSoundBackendSDLQueueEntry, wxSoundBackendSDLQueue);
-WX_DEFINE_LIST(wxSoundBackendSDLQueue);
-
 
 class wxSoundBackendSDLNotification : public wxEvent
 {
@@ -89,7 +74,8 @@ class wxSoundBackendSDL : public wxSoundBackend
 {
 public:
     wxSoundBackendSDL() 
-        : m_initialized(false), m_playing(false), m_evtHandler(NULL) {}
+        : m_initialized(false), m_playing(false), m_audioOpen(false),
+          m_evtHandler(NULL) {}
     virtual ~wxSoundBackendSDL();
     
     wxString GetName() const { return _T("Simple DirectMedia Layer"); }
@@ -99,12 +85,18 @@ public:
     bool Play(wxSoundData *data, unsigned flags);
 
     void FillAudioBuffer(Uint8 *stream, int len);
-    bool PlayNextSampleInQueue();
+    void Stop();
+    bool IsPlaying() const { return m_playing; }
     
 private:
     bool                        m_initialized;
-    bool                        m_playing;
-    wxSoundBackendSDLQueue       m_queue;
+    bool                        m_playing, m_audioOpen;
+    // playback information:
+    wxSoundData                 *m_data;
+    unsigned                     m_pos;
+    SDL_AudioSpec                m_spec;
+    bool                         m_loop;
+
     wxSoundBackendSDLEvtHandler *m_evtHandler;
 };
 
@@ -118,7 +110,7 @@ private:
     {
         wxLogTrace(_T("sound"),
                    _T("received playback status change notification"));
-        m_backend->PlayNextSampleInQueue();
+        m_backend->Stop();
     }
     wxSoundBackendSDL *m_backend;
 
@@ -131,12 +123,8 @@ END_EVENT_TABLE()
 
 wxSoundBackendSDL::~wxSoundBackendSDL()
 {
-    SDL_LockAudio();
-    if (m_playing)
-        SDL_CloseAudio();
-    SDL_UnlockAudio();
-    wxDELETE(m_evtHandler);
-    WX_CLEAR_LIST(wxSoundBackendSDLQueue, m_queue)
+    Stop();
+    delete m_evtHandler;
 }
 
 bool wxSoundBackendSDL::IsAvailable() const
@@ -161,13 +149,11 @@ extern "C" void wx_sdl_audio_callback(void *userdata, Uint8 *stream, int len)
 
 void wxSoundBackendSDL::FillAudioBuffer(Uint8 *stream, int len)
 {
-    wxSoundBackendSDLQueueEntry *e = m_queue.front();
-    if (!e->m_finished)
+    if (m_playing)
     {
         // finished playing the sample
-        if (e->m_pos == e->m_data->m_dataBytes)
+        if (m_pos == m_data->m_dataBytes)
         {
-            e->m_finished = true;
             m_playing = false;
             wxSoundBackendSDLNotification event;
             m_evtHandler->AddPendingEvent(event);
@@ -175,11 +161,11 @@ void wxSoundBackendSDL::FillAudioBuffer(Uint8 *stream, int len)
         // still something to play
         else
         {
-            unsigned size = ((len + e->m_pos) < e->m_data->m_dataBytes) ?
+            unsigned size = ((len + m_pos) < m_data->m_dataBytes) ?
                             len :
-                            (e->m_data->m_dataBytes - e->m_pos);
-            memcpy(stream, e->m_data->m_data + e->m_pos, size);
-            e->m_pos += size;
+                            (m_data->m_dataBytes - m_pos);
+            memcpy(stream, m_data->m_data + m_pos, size);
+            m_pos += size;
             len -= size;
             stream += size;
         }
@@ -188,53 +174,104 @@ void wxSoundBackendSDL::FillAudioBuffer(Uint8 *stream, int len)
     // the main thread to shut the playback down:
     if (len > 0)
     {
-        if (e->m_loop)
+        if (m_loop)
         {
-            e->m_pos = 0;
+            m_pos = 0;
             FillAudioBuffer(stream, len);
             return;
         }
         else
         {
-            memset(stream, e->m_spec.silence, len);
+            memset(stream, m_spec.silence, len);
         }
     }
 }
 
 bool wxSoundBackendSDL::Play(wxSoundData *data, unsigned flags)
 {
-    data->IncRef();
-
-    wxSoundBackendSDLQueueEntry *e = new wxSoundBackendSDLQueueEntry();
-    e->m_data = data;
-    e->m_pos = 0;
-    e->m_loop = (flags & wxSOUND_LOOP);
-    e->m_finished = false;
-    e->m_spec.freq = data->m_samplingRate;
-    e->m_spec.channels = data->m_channels;
-    e->m_spec.silence = 0;
-    e->m_spec.samples = 4096;
-    e->m_spec.size = 0;
-    e->m_spec.callback = wx_sdl_audio_callback;
-    e->m_spec.userdata = (void*)this;
-    
+    int format;
     if (data->m_bitsPerSample == 8)
-        e->m_spec.format = AUDIO_U8;
+        format = AUDIO_U8;
     else if (data->m_bitsPerSample == 16)
-        e->m_spec.format = AUDIO_S16LSB;
+        format = AUDIO_S16LSB;
     else
         return false;
+    
+    SDL_LockAudio();
 
-    m_queue.push_back(e);
-    wxLogTrace(_T("sound"), _T("queued sample %p for playback"), e);
+    if (!m_evtHandler)
+        m_evtHandler = new wxSoundBackendSDLEvtHandler(this);
 
-    if (!PlayNextSampleInQueue())
+    data->IncRef();
+
+    bool needsOpen = true;
+    if (m_audioOpen)
+    {
+        wxLogTrace(_T("sound"), _T("another sound playing, will be stopped"));
+        if (format == m_spec.format &&
+            m_spec.freq == (int)data->m_samplingRate &&
+            m_spec.channels == data->m_channels)
+        {
+            needsOpen = false;
+        }
+        else
+        {
+            SDL_CloseAudio();
+            m_audioOpen = false;
+            wxLogTrace(_T("sound"), _T("closed audio"));
+        }
+        m_data->DecRef();
+    }
+   
+    m_playing = true;
+    m_data = data;
+    m_pos = 0;
+    m_loop = (flags & wxSOUND_LOOP);
+    wxLogTrace(_T("sound"), _T("prepared sound for playback"));
+
+    bool status = true;
+
+    if (needsOpen)
+    {
+        m_spec.format = format;
+        m_spec.freq = data->m_samplingRate;
+        m_spec.channels = data->m_channels;
+        m_spec.silence = 0;
+        m_spec.samples = 4096;
+        m_spec.size = 0;
+        m_spec.callback = wx_sdl_audio_callback;
+        m_spec.userdata = (void*)this;
+                
+        wxLogTrace(_T("sound"), _T("opening SDL audio..."));
+        status = (SDL_OpenAudio(&m_spec, NULL) >= 0);
+        if (status)
+        {
+#if wxUSE_LOG_DEBUG
+            char driver[256];
+            SDL_AudioDriverName(driver, 256);                    
+            wxLogTrace(_T("sound"), _T("opened audio, driver '%s'"),
+                       wxString(driver, wxConvLocal).c_str());
+#endif
+            m_audioOpen = true;
+            SDL_PauseAudio(0);
+        }
+        else
+        {
+            wxString err(SDL_GetError(), wxConvLocal);
+            wxLogError(_("Couldn't open audio: %s"), err.c_str());
+        }
+    }
+
+    SDL_UnlockAudio();
+
+    if (!status)
         return false;
 
+    // wait until playback finishes if called in sync mode:
     if (!(flags & wxSOUND_ASYNC))
     {
         wxLogTrace(_T("sound"), _T("waiting for sample to finish"));
-        while (!m_queue.empty() && m_queue.front() == e && !e->m_finished)
+        while (m_playing)
         {
 #if wxUSE_THREADS
             // give the playback thread a chance to add event to pending
@@ -250,80 +287,23 @@ bool wxSoundBackendSDL::Play(wxSoundData *data, unsigned flags)
         }
         wxLogTrace(_T("sound"), _T("sample finished"));
     }
-   
+
     return true;
 }
-    
-bool wxSoundBackendSDL::PlayNextSampleInQueue()
-{
-    bool status = true;
 
+void wxSoundBackendSDL::Stop()
+{
     SDL_LockAudio();
 
-    if (!m_evtHandler)
-        m_evtHandler = new wxSoundBackendSDLEvtHandler(this);
-    
-    if (!m_playing && !m_queue.empty())
+    if (m_audioOpen)
     {
-        bool needsReopen = true;
-        // shut down playing of finished sound:
-        wxSoundBackendSDLQueueEntry *e = m_queue.front();
-        if (e->m_finished)
-        {
-            SDL_PauseAudio(1);
-            e->m_data->DecRef();
-            m_queue.pop_front();
-            if (!m_queue.empty() &&
-                e->m_spec.freq == m_queue.front()->m_spec.freq &&
-                e->m_spec.channels == m_queue.front()->m_spec.channels &&
-                e->m_spec.format == m_queue.front()->m_spec.format)
-            {
-                needsReopen = false;
-            }
-            else
-            {
-                SDL_CloseAudio();
-                wxLogTrace(_T("sound"), _T("closed audio"));
-            }
-            delete e;
-        }
-        // start playing another one:
-        if (!m_queue.empty())
-        {
-            wxSoundBackendSDLQueueEntry *e = m_queue.front();
-            m_playing = true;
-            wxLogTrace(_T("sound"), _T("playing sample %p"), e);
-            
-            if (needsReopen)
-            { 
-                wxLogTrace(_T("sound"), _T("opening SDL audio..."));
-                status = (SDL_OpenAudio(&e->m_spec, NULL) >= 0);
-                if (status)
-                {
-#if wxUSE_LOG_DEBUG
-                    char driver[256];
-                    SDL_AudioDriverName(driver, 256);                    
-                    wxLogTrace(_T("sound"), _T("opened audio, driver '%s'"),
-                               wxString(driver, wxConvLocal).c_str());
-#endif
-                    SDL_PauseAudio(0);
-                }
-                else
-                {
-                    wxString err(SDL_GetError(), wxConvLocal);
-                    wxLogError(_("Couldn't open audio: %s"), err.c_str());
-                    m_queue.pop_front();
-                    delete e;
-                }
-            }
-            else
-                SDL_PauseAudio(0);
-        }
+        SDL_CloseAudio();
+        m_audioOpen = false;
+        wxLogTrace(_T("sound"), _T("closed audio"));
+        m_data->DecRef();
     }
-    
-    SDL_UnlockAudio();
 
-    return status;
+    SDL_UnlockAudio();
 }
 
 extern "C" wxSoundBackend *wxCreateSoundBackendSDL()
