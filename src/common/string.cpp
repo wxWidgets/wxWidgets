@@ -2190,7 +2190,7 @@ static void wxLoadCharacterSets(void)
 	  // skip whitespace again
 	  while (wxIsEmpty(uni) && token.HasMoreTokens()) uni = token.GetNextToken();
 
-	  if ((hex.Len() > 2) && (hex.GetChar(0) == escchar) && (hex.GetChar(1) == _T('x')) &&
+	  if ((hex.Len() > 2) && (wxString(hex.GetChar(0)) == escchar) && (hex.GetChar(1) == _T('x')) &&
 	      (uni.Left(2) == _T("<U"))) {
 	    hex.MakeUpper(); uni.MakeUpper();
 	    int pos = ::wxHexToDec(hex.Mid(2,2));
