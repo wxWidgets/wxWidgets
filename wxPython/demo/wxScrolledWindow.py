@@ -12,6 +12,7 @@ class MyCanvas(wxScrolledWindow):
         self.lines = []
         self.maxWidth  = 1000
         self.maxHeight = 1000
+        self.count = 0
 
         self.SetBackgroundColour(wxNamedColor("WHITE"))
         EVT_LEFT_DOWN(self, self.OnLeftButtonEvent)
@@ -36,9 +37,12 @@ class MyCanvas(wxScrolledWindow):
 
 
     def OnPaint(self, event):
+        #self.count += 1
+        #print self.count, "begin paint...",
         dc = wxPaintDC(self)
         self.PrepareDC(dc)
         self.DoDrawing(dc)
+        #print "end paint"
 
 
     def DoDrawing(self, dc):
@@ -106,7 +110,6 @@ class MyCanvas(wxScrolledWindow):
 
         self.DrawSavedLines(dc)
         dc.EndDrawing()
-
 
 
     def DrawSavedLines(self, dc):

@@ -166,26 +166,24 @@ bool wxResourceParseString(char *resource, wxResourceTable *table = NULL);
 //---------------------------------------------------------------------------
 // System Settings
 
-enum {
-    wxSYS_WHITE_BRUSH,
-    wxSYS_LTGRAY_BRUSH,
-    wxSYS_GRAY_BRUSH,
-    wxSYS_DKGRAY_BRUSH,
-    wxSYS_BLACK_BRUSH,
-    wxSYS_NULL_BRUSH,
-    wxSYS_HOLLOW_BRUSH,
-    wxSYS_WHITE_PEN,
-    wxSYS_BLACK_PEN,
-    wxSYS_NULL_PEN,
-    wxSYS_OEM_FIXED_FONT,
+// possible values for wxSystemSettings::GetFont() parameter
+//
+enum wxSystemFont
+{
+    wxSYS_OEM_FIXED_FONT = 10,
     wxSYS_ANSI_FIXED_FONT,
     wxSYS_ANSI_VAR_FONT,
     wxSYS_SYSTEM_FONT,
     wxSYS_DEVICE_DEFAULT_FONT,
     wxSYS_DEFAULT_PALETTE,
     wxSYS_SYSTEM_FIXED_FONT,
-    wxSYS_DEFAULT_GUI_FONT,
+    wxSYS_DEFAULT_GUI_FONT
+};
 
+// possible values for wxSystemSettings::GetColour() parameter
+//
+enum wxSystemColour
+{
     wxSYS_COLOUR_SCROLLBAR,
     wxSYS_COLOUR_BACKGROUND,
     wxSYS_COLOUR_ACTIVECAPTION,
@@ -207,20 +205,25 @@ enum {
     wxSYS_COLOUR_BTNTEXT,
     wxSYS_COLOUR_INACTIVECAPTIONTEXT,
     wxSYS_COLOUR_BTNHIGHLIGHT,
-
     wxSYS_COLOUR_3DDKSHADOW,
     wxSYS_COLOUR_3DLIGHT,
     wxSYS_COLOUR_INFOTEXT,
     wxSYS_COLOUR_INFOBK,
+    wxSYS_COLOUR_LISTBOX,
 
-    wxSYS_COLOUR_DESKTOP,
-    wxSYS_COLOUR_3DFACE,
-    wxSYS_COLOUR_3DSHADOW,
-    wxSYS_COLOUR_3DHIGHLIGHT,
-    wxSYS_COLOUR_3DHILIGHT,
-    wxSYS_COLOUR_BTNHILIGHT,
+    wxSYS_COLOUR_DESKTOP = wxSYS_COLOUR_BACKGROUND,
+    wxSYS_COLOUR_3DFACE = wxSYS_COLOUR_BTNFACE,
+    wxSYS_COLOUR_3DSHADOW = wxSYS_COLOUR_BTNSHADOW,
+    wxSYS_COLOUR_3DHIGHLIGHT = wxSYS_COLOUR_BTNHIGHLIGHT,
+    wxSYS_COLOUR_3DHILIGHT = wxSYS_COLOUR_BTNHIGHLIGHT,
+    wxSYS_COLOUR_BTNHILIGHT = wxSYS_COLOUR_BTNHIGHLIGHT
+};
 
-    wxSYS_MOUSE_BUTTONS,
+// possible values for wxSystemSettings::GetMetric() parameter
+//
+enum wxSystemMetric
+{
+    wxSYS_MOUSE_BUTTONS = 1,
     wxSYS_BORDER_X,
     wxSYS_BORDER_Y,
     wxSYS_CURSOR_X,
@@ -256,25 +259,42 @@ enum {
     wxSYS_NETWORK_PRESENT,
     wxSYS_PENWINDOWS_PRESENT,
     wxSYS_SHOW_SOUNDS,
-    wxSYS_SWAP_BUTTONS,
+    wxSYS_SWAP_BUTTONS
+};
+
+// possible values for wxSystemSettings::HasFeature() parameter
+enum wxSystemFeature
+{
+    wxSYS_CAN_DRAW_FRAME_DECORATIONS = 1,
+    wxSYS_CAN_ICONIZE_FRAME
 };
 
 
 
-%inline %{
+class wxSystemSettings {
+public:
+    // get a standard system colour
+    static wxColour GetColour(wxSystemColour index);
 
-    wxColour wxSystemSettings_GetSystemColour(int index) {
-        return wxSystemSettings::GetSystemColour(index);
-    }
+    // get a standard system font
+    static wxFont GetFont(wxSystemFont index);
 
-    wxFont wxSystemSettings_GetSystemFont(int index) {
-        return wxSystemSettings::GetSystemFont(index);
-    }
+    // get a system-dependent metric
+    static int GetMetric(wxSystemMetric index);
 
-    int wxSystemSettings_GetSystemMetric(int index) {
-        return wxSystemSettings::GetSystemMetric(index);
-    }
-%}
+    // return true if the port has certain feature
+    static bool HasFeature(wxSystemFeature index);
+
+
+    // the backwards compatible versions, don't use these methods in the new
+    // code!
+    static wxColour GetSystemColour(int index);
+    static wxFont GetSystemFont(int index);
+    static int GetSystemMetric(int index);
+
+};
+
+
 
 //---------------------------------------------------------------------------
 // wxToolTip

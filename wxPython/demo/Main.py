@@ -480,24 +480,19 @@ class wxPythonDemo(wxFrame):
 #---------------------------------------------------------------------------
 #---------------------------------------------------------------------------
 
-class MyApp(wxApp):
-    def OnInit(self):
-        wxInitAllImageHandlers()
+class MySplashScreen(wxSplashScreen):
+    def __init__(self):
+        bmp = wxImage('bitmaps/splash.gif').ConvertToBitmap()
+        wxSplashScreen.__init__(self, bmp,
+                                wxSPLASH_CENTRE_ON_SCREEN|wxSPLASH_TIMEOUT,
+                                4000, None, -1)
+        EVT_CLOSE(self, self.OnClose)
 
-        self.splash = SplashScreen(None, bitmapfile='bitmaps/splash.gif',
-                                   duration=4000, callback=self.AfterSplash)
-        self.splash.Show(true)
-        wxYield()
-        return true
-
-
-    def AfterSplash(self):
-        self.splash.Close(true)
+    def OnClose(self, evt):
         frame = wxPythonDemo(None, -1, "wxPython: (A Demonstration)")
         frame.Show(true)
-        self.SetTopWindow(frame)
         self.ShowTip(frame)
-
+        evt.Skip()
 
     def ShowTip(self, frame):
         try:
@@ -505,12 +500,26 @@ class MyApp(wxApp):
             showTip, index = eval(showTipText)
         except IOError:
             showTip, index = (1, 0)
-        #print showTip, index
         if showTip:
             tp = wxCreateFileTipProvider("data/tips.txt", index)
             showTip = wxShowTip(frame, tp)
             index = tp.GetCurrentTip()
             open("data/showTips", "w").write(str( (showTip, index) ))
+
+
+
+class MyApp(wxApp):
+    def OnInit(self):
+        """
+        Create and show the splash screen.  It will then create and show 
+        the main frame when it is time to do so.
+        """
+        wxInitAllImageHandlers()
+        splash = MySplashScreen()
+        splash.Show()
+        wxYield()
+        return true
+
 
 
 #---------------------------------------------------------------------------

@@ -108,19 +108,6 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 
     static wxString wxPyEmptyStr("");
 
-
-    wxColour wxSystemSettings_GetSystemColour(int index) {
-        return wxSystemSettings::GetSystemColour(index);
-    }
-
-    wxFont wxSystemSettings_GetSystemFont(int index) {
-        return wxSystemSettings::GetSystemFont(index);
-    }
-
-    int wxSystemSettings_GetSystemMetric(int index) {
-        return wxSystemSettings::GetSystemMetric(index);
-    }
-
     int wxCaret_GetBlinkTime() {
         return wxCaret::GetBlinkTime();
     }
@@ -1683,67 +1670,6 @@ static PyObject *_wrap_wxResourceParseString(PyObject *self, PyObject *args, PyO
     return _resultobj;
 }
 
-static PyObject *_wrap_wxSystemSettings_GetSystemColour(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxColour * _result;
-    int  _arg0;
-    char *_kwnames[] = { "index", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:wxSystemSettings_GetSystemColour",_kwnames,&_arg0)) 
-        return NULL;
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = new wxColour (wxSystemSettings_GetSystemColour(_arg0));
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
-    return _resultobj;
-}
-
-static PyObject *_wrap_wxSystemSettings_GetSystemFont(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxFont * _result;
-    int  _arg0;
-    char *_kwnames[] = { "index", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:wxSystemSettings_GetSystemFont",_kwnames,&_arg0)) 
-        return NULL;
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = new wxFont (wxSystemSettings_GetSystemFont(_arg0));
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxFont_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
-    return _resultobj;
-}
-
-static PyObject *_wrap_wxSystemSettings_GetSystemMetric(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    int  _arg0;
-    char *_kwnames[] = { "index", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:wxSystemSettings_GetSystemMetric",_kwnames,&_arg0)) 
-        return NULL;
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (int )wxSystemSettings_GetSystemMetric(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
 static PyObject *_wrap_wxCaret_GetBlinkTime(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
@@ -2354,6 +2280,147 @@ static PyObject *_wrap_wxTheMimeTypesManager_get() {
     SWIG_MakePtr(ptemp, (char *) wxTheMimeTypesManager,"_wxMimeTypesManager_p");
     pyobj = PyString_FromString(ptemp);
     return pyobj;
+}
+
+static PyObject *_wrap_wxSystemSettings_GetColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxColour * _result;
+    wxSystemColour  _arg0;
+    char *_kwnames[] = { "index", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:wxSystemSettings_GetColour",_kwnames,&_arg0)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = new wxColour (wxSystemSettings::GetColour(_arg0));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxSystemSettings_GetFont(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFont * _result;
+    wxSystemFont  _arg0;
+    char *_kwnames[] = { "index", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:wxSystemSettings_GetFont",_kwnames,&_arg0)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = new wxFont (wxSystemSettings::GetFont(_arg0));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxFont_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxSystemSettings_GetMetric(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxSystemMetric  _arg0;
+    char *_kwnames[] = { "index", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:wxSystemSettings_GetMetric",_kwnames,&_arg0)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (int )wxSystemSettings::GetMetric(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxSystemSettings_HasFeature(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxSystemFeature  _arg0;
+    char *_kwnames[] = { "index", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:wxSystemSettings_HasFeature",_kwnames,&_arg0)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (bool )wxSystemSettings::HasFeature(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxSystemSettings_GetSystemColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxColour * _result;
+    int  _arg0;
+    char *_kwnames[] = { "index", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:wxSystemSettings_GetSystemColour",_kwnames,&_arg0)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = new wxColour (wxSystemSettings::GetSystemColour(_arg0));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxSystemSettings_GetSystemFont(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFont * _result;
+    int  _arg0;
+    char *_kwnames[] = { "index", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:wxSystemSettings_GetSystemFont",_kwnames,&_arg0)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = new wxFont (wxSystemSettings::GetSystemFont(_arg0));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxFont_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxSystemSettings_GetSystemMetric(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    int  _arg0;
+    char *_kwnames[] = { "index", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:wxSystemSettings_GetSystemMetric",_kwnames,&_arg0)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (int )wxSystemSettings::GetSystemMetric(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
 }
 
 static void *SwigwxToolTipTowxObject(void *ptr) {
@@ -10381,6 +10448,13 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxToolTip_GetTip", (PyCFunction) _wrap_wxToolTip_GetTip, METH_VARARGS | METH_KEYWORDS },
 	 { "wxToolTip_SetTip", (PyCFunction) _wrap_wxToolTip_SetTip, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxToolTip", (PyCFunction) _wrap_new_wxToolTip, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSystemSettings_GetSystemMetric", (PyCFunction) _wrap_wxSystemSettings_GetSystemMetric, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSystemSettings_GetSystemFont", (PyCFunction) _wrap_wxSystemSettings_GetSystemFont, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSystemSettings_GetSystemColour", (PyCFunction) _wrap_wxSystemSettings_GetSystemColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSystemSettings_HasFeature", (PyCFunction) _wrap_wxSystemSettings_HasFeature, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSystemSettings_GetMetric", (PyCFunction) _wrap_wxSystemSettings_GetMetric, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSystemSettings_GetFont", (PyCFunction) _wrap_wxSystemSettings_GetFont, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSystemSettings_GetColour", (PyCFunction) _wrap_wxSystemSettings_GetColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWaveData", (PyCFunction) _wrap_wxWaveData, METH_VARARGS | METH_KEYWORDS },
 	 { "wxExecute", (PyCFunction) _wrap_wxExecute, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLogSysError", (PyCFunction) _wrap_wxLogSysError, METH_VARARGS | METH_KEYWORDS },
@@ -10405,9 +10479,6 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxSafeYield", (PyCFunction) _wrap_wxSafeYield, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCaret_SetBlinkTime", (PyCFunction) _wrap_wxCaret_SetBlinkTime, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCaret_GetBlinkTime", (PyCFunction) _wrap_wxCaret_GetBlinkTime, METH_VARARGS | METH_KEYWORDS },
-	 { "wxSystemSettings_GetSystemMetric", (PyCFunction) _wrap_wxSystemSettings_GetSystemMetric, METH_VARARGS | METH_KEYWORDS },
-	 { "wxSystemSettings_GetSystemFont", (PyCFunction) _wrap_wxSystemSettings_GetSystemFont, METH_VARARGS | METH_KEYWORDS },
-	 { "wxSystemSettings_GetSystemColour", (PyCFunction) _wrap_wxSystemSettings_GetSystemColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxResourceParseString", (PyCFunction) _wrap_wxResourceParseString, METH_VARARGS | METH_KEYWORDS },
 	 { "wxResourceParseFile", (PyCFunction) _wrap_wxResourceParseFile, METH_VARARGS | METH_KEYWORDS },
 	 { "wxResourceParseData", (PyCFunction) _wrap_wxResourceParseData, METH_VARARGS | METH_KEYWORDS },
@@ -10579,16 +10650,6 @@ SWIGEXPORT(void) initmisc2c() {
 	 SWIG_globals = SWIG_newvarlink();
 	 m = Py_InitModule("misc2c", misc2cMethods);
 	 d = PyModule_GetDict(m);
-	 PyDict_SetItemString(d,"wxSYS_WHITE_BRUSH", PyInt_FromLong((long) wxSYS_WHITE_BRUSH));
-	 PyDict_SetItemString(d,"wxSYS_LTGRAY_BRUSH", PyInt_FromLong((long) wxSYS_LTGRAY_BRUSH));
-	 PyDict_SetItemString(d,"wxSYS_GRAY_BRUSH", PyInt_FromLong((long) wxSYS_GRAY_BRUSH));
-	 PyDict_SetItemString(d,"wxSYS_DKGRAY_BRUSH", PyInt_FromLong((long) wxSYS_DKGRAY_BRUSH));
-	 PyDict_SetItemString(d,"wxSYS_BLACK_BRUSH", PyInt_FromLong((long) wxSYS_BLACK_BRUSH));
-	 PyDict_SetItemString(d,"wxSYS_NULL_BRUSH", PyInt_FromLong((long) wxSYS_NULL_BRUSH));
-	 PyDict_SetItemString(d,"wxSYS_HOLLOW_BRUSH", PyInt_FromLong((long) wxSYS_HOLLOW_BRUSH));
-	 PyDict_SetItemString(d,"wxSYS_WHITE_PEN", PyInt_FromLong((long) wxSYS_WHITE_PEN));
-	 PyDict_SetItemString(d,"wxSYS_BLACK_PEN", PyInt_FromLong((long) wxSYS_BLACK_PEN));
-	 PyDict_SetItemString(d,"wxSYS_NULL_PEN", PyInt_FromLong((long) wxSYS_NULL_PEN));
 	 PyDict_SetItemString(d,"wxSYS_OEM_FIXED_FONT", PyInt_FromLong((long) wxSYS_OEM_FIXED_FONT));
 	 PyDict_SetItemString(d,"wxSYS_ANSI_FIXED_FONT", PyInt_FromLong((long) wxSYS_ANSI_FIXED_FONT));
 	 PyDict_SetItemString(d,"wxSYS_ANSI_VAR_FONT", PyInt_FromLong((long) wxSYS_ANSI_VAR_FONT));
@@ -10622,6 +10683,7 @@ SWIGEXPORT(void) initmisc2c() {
 	 PyDict_SetItemString(d,"wxSYS_COLOUR_3DLIGHT", PyInt_FromLong((long) wxSYS_COLOUR_3DLIGHT));
 	 PyDict_SetItemString(d,"wxSYS_COLOUR_INFOTEXT", PyInt_FromLong((long) wxSYS_COLOUR_INFOTEXT));
 	 PyDict_SetItemString(d,"wxSYS_COLOUR_INFOBK", PyInt_FromLong((long) wxSYS_COLOUR_INFOBK));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_LISTBOX", PyInt_FromLong((long) wxSYS_COLOUR_LISTBOX));
 	 PyDict_SetItemString(d,"wxSYS_COLOUR_DESKTOP", PyInt_FromLong((long) wxSYS_COLOUR_DESKTOP));
 	 PyDict_SetItemString(d,"wxSYS_COLOUR_3DFACE", PyInt_FromLong((long) wxSYS_COLOUR_3DFACE));
 	 PyDict_SetItemString(d,"wxSYS_COLOUR_3DSHADOW", PyInt_FromLong((long) wxSYS_COLOUR_3DSHADOW));
@@ -10665,6 +10727,8 @@ SWIGEXPORT(void) initmisc2c() {
 	 PyDict_SetItemString(d,"wxSYS_PENWINDOWS_PRESENT", PyInt_FromLong((long) wxSYS_PENWINDOWS_PRESENT));
 	 PyDict_SetItemString(d,"wxSYS_SHOW_SOUNDS", PyInt_FromLong((long) wxSYS_SHOW_SOUNDS));
 	 PyDict_SetItemString(d,"wxSYS_SWAP_BUTTONS", PyInt_FromLong((long) wxSYS_SWAP_BUTTONS));
+	 PyDict_SetItemString(d,"wxSYS_CAN_DRAW_FRAME_DECORATIONS", PyInt_FromLong((long) wxSYS_CAN_DRAW_FRAME_DECORATIONS));
+	 PyDict_SetItemString(d,"wxSYS_CAN_ICONIZE_FRAME", PyInt_FromLong((long) wxSYS_CAN_ICONIZE_FRAME));
 	 PyDict_SetItemString(d,"wxLOG_FatalError", PyInt_FromLong((long) wxLOG_FatalError));
 	 PyDict_SetItemString(d,"wxLOG_Error", PyInt_FromLong((long) wxLOG_Error));
 	 PyDict_SetItemString(d,"wxLOG_Warning", PyInt_FromLong((long) wxLOG_Warning));

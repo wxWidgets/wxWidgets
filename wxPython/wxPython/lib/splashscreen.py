@@ -11,6 +11,13 @@
 # Licence:     wxWindows license
 #----------------------------------------------------------------------
 
+"""
+A Splash Screen implemented in Python.
+
+NOTE: Now that wxWindows has a wxSplashScrren class and it is wrapped
+in wxPython this class is deprecated.  See the docs for more details.
+"""
+
 from wxPython.wx import *
 
 #----------------------------------------------------------------------
@@ -29,8 +36,10 @@ class SplashScreen(wxFrame):
         '''
         ### Loading bitmap
         self.bitmap = bmp = wxImage(bitmapfile, wxBITMAP_TYPE_ANY).ConvertToBitmap()
+
         ### Determine size of bitmap to size window...
         size = (bmp.GetWidth(), bmp.GetHeight())
+
         # size of screen
         width = wxSystemSettings_GetSystemMetric(wxSYS_SCREEN_X)
         height = wxSystemSettings_GetSystemMetric(wxSYS_SCREEN_Y)

@@ -57,6 +57,7 @@ extern PyObject *SWIG_newvarlink(void);
 
 #include "helpers.h"
 #include <wx/minifram.h>
+#include <wx/splash.h>
 
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
@@ -2062,7 +2063,372 @@ static PyObject *_wrap_wxMiniFrame_Create(PyObject *self, PyObject *args, PyObje
     return _resultobj;
 }
 
+static void *SwigwxSplashScreenWindowTowxWindow(void *ptr) {
+    wxSplashScreenWindow *src;
+    wxWindow *dest;
+    src = (wxSplashScreenWindow *) ptr;
+    dest = (wxWindow *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxSplashScreenWindowTowxEvtHandler(void *ptr) {
+    wxSplashScreenWindow *src;
+    wxEvtHandler *dest;
+    src = (wxSplashScreenWindow *) ptr;
+    dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxSplashScreenWindowTowxObject(void *ptr) {
+    wxSplashScreenWindow *src;
+    wxObject *dest;
+    src = (wxSplashScreenWindow *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
+#define new_wxSplashScreenWindow(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5) (new wxSplashScreenWindow(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5))
+static PyObject *_wrap_new_wxSplashScreenWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSplashScreenWindow * _result;
+    wxBitmap * _arg0;
+    wxWindow * _arg1;
+    wxWindowID  _arg2;
+    wxPoint * _arg3 = (wxPoint *) &wxDefaultPosition;
+    wxSize * _arg4 = (wxSize *) &wxDefaultSize;
+    long  _arg5 = (long ) wxNO_BORDER;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    wxPoint  temp;
+    PyObject * _obj3 = 0;
+    wxSize  temp0;
+    PyObject * _obj4 = 0;
+    char *_kwnames[] = { "bitmap","parent","id","pos","size","style", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOi|OOl:new_wxSplashScreenWindow",_kwnames,&_argo0,&_argo1,&_arg2,&_obj3,&_obj4,&_arg5)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxSplashScreenWindow. Expected _wxBitmap_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of new_wxSplashScreenWindow. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+    if (_obj3)
+{
+    _arg3 = &temp;
+    if (! wxPoint_helper(_obj3, &_arg3))
+        return NULL;
+}
+    if (_obj4)
+{
+    _arg4 = &temp0;
+    if (! wxSize_helper(_obj4, &_arg4))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (wxSplashScreenWindow *)new_wxSplashScreenWindow(*_arg0,_arg1,_arg2,*_arg3,*_arg4,_arg5);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxSplashScreenWindow_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxSplashScreenWindow_SetBitmap(_swigobj,_swigarg0)  (_swigobj->SetBitmap(_swigarg0))
+static PyObject *_wrap_wxSplashScreenWindow_SetBitmap(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSplashScreenWindow * _arg0;
+    wxBitmap * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","bitmap", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxSplashScreenWindow_SetBitmap",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSplashScreenWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSplashScreenWindow_SetBitmap. Expected _wxSplashScreenWindow_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxSplashScreenWindow_SetBitmap. Expected _wxBitmap_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxSplashScreenWindow_SetBitmap(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxSplashScreenWindow_GetBitmap(_swigobj)  (_swigobj->GetBitmap())
+static PyObject *_wrap_wxSplashScreenWindow_GetBitmap(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxBitmap * _result;
+    wxSplashScreenWindow * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxSplashScreenWindow_GetBitmap",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSplashScreenWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSplashScreenWindow_GetBitmap. Expected _wxSplashScreenWindow_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxBitmap & _result_ref = wxSplashScreenWindow_GetBitmap(_arg0);
+    _result = (wxBitmap *) &_result_ref;
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxBitmap_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+static void *SwigwxSplashScreenTowxFrame(void *ptr) {
+    wxSplashScreen *src;
+    wxFrame *dest;
+    src = (wxSplashScreen *) ptr;
+    dest = (wxFrame *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxSplashScreenTowxTopLevelWindow(void *ptr) {
+    wxSplashScreen *src;
+    wxTopLevelWindow *dest;
+    src = (wxSplashScreen *) ptr;
+    dest = (wxTopLevelWindow *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxSplashScreenTowxWindow(void *ptr) {
+    wxSplashScreen *src;
+    wxWindow *dest;
+    src = (wxSplashScreen *) ptr;
+    dest = (wxWindow *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxSplashScreenTowxEvtHandler(void *ptr) {
+    wxSplashScreen *src;
+    wxEvtHandler *dest;
+    src = (wxSplashScreen *) ptr;
+    dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxSplashScreenTowxObject(void *ptr) {
+    wxSplashScreen *src;
+    wxObject *dest;
+    src = (wxSplashScreen *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
+#define new_wxSplashScreen(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6,_swigarg7) (new wxSplashScreen(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6,_swigarg7))
+static PyObject *_wrap_new_wxSplashScreen(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSplashScreen * _result;
+    wxBitmap * _arg0;
+    long  _arg1;
+    int  _arg2;
+    wxWindow * _arg3;
+    wxWindowID  _arg4;
+    wxPoint * _arg5 = (wxPoint *) &wxDefaultPosition;
+    wxSize * _arg6 = (wxSize *) &wxDefaultSize;
+    long  _arg7 = (long ) wxSIMPLE_BORDER|wxFRAME_NO_TASKBAR|wxFRAME_FLOAT_ON_PARENT;
+    PyObject * _argo0 = 0;
+    PyObject * _argo3 = 0;
+    wxPoint  temp;
+    PyObject * _obj5 = 0;
+    wxSize  temp0;
+    PyObject * _obj6 = 0;
+    char *_kwnames[] = { "bitmap","splashStyle","milliseconds","parent","id","pos","size","style", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OliOi|OOl:new_wxSplashScreen",_kwnames,&_argo0,&_arg1,&_arg2,&_argo3,&_arg4,&_obj5,&_obj6,&_arg7)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxSplashScreen. Expected _wxBitmap_p.");
+        return NULL;
+        }
+    }
+    if (_argo3) {
+        if (_argo3 == Py_None) { _arg3 = NULL; }
+        else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of new_wxSplashScreen. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+    if (_obj5)
+{
+    _arg5 = &temp;
+    if (! wxPoint_helper(_obj5, &_arg5))
+        return NULL;
+}
+    if (_obj6)
+{
+    _arg6 = &temp0;
+    if (! wxSize_helper(_obj6, &_arg6))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (wxSplashScreen *)new_wxSplashScreen(*_arg0,_arg1,_arg2,_arg3,_arg4,*_arg5,*_arg6,_arg7);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxSplashScreen_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxSplashScreen_GetSplashStyle(_swigobj)  (_swigobj->GetSplashStyle())
+static PyObject *_wrap_wxSplashScreen_GetSplashStyle(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    long  _result;
+    wxSplashScreen * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxSplashScreen_GetSplashStyle",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSplashScreen_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSplashScreen_GetSplashStyle. Expected _wxSplashScreen_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (long )wxSplashScreen_GetSplashStyle(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("l",_result);
+    return _resultobj;
+}
+
+#define wxSplashScreen_GetSplashWindow(_swigobj)  (_swigobj->GetSplashWindow())
+static PyObject *_wrap_wxSplashScreen_GetSplashWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSplashScreenWindow * _result;
+    wxSplashScreen * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxSplashScreen_GetSplashWindow",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSplashScreen_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSplashScreen_GetSplashWindow. Expected _wxSplashScreen_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (wxSplashScreenWindow *)wxSplashScreen_GetSplashWindow(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxSplashScreenWindow_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxSplashScreen_GetTimeout(_swigobj)  (_swigobj->GetTimeout())
+static PyObject *_wrap_wxSplashScreen_GetTimeout(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxSplashScreen * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxSplashScreen_GetTimeout",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSplashScreen_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSplashScreen_GetTimeout. Expected _wxSplashScreen_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (int )wxSplashScreen_GetTimeout(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 static PyMethodDef framescMethods[] = {
+	 { "wxSplashScreen_GetTimeout", (PyCFunction) _wrap_wxSplashScreen_GetTimeout, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSplashScreen_GetSplashWindow", (PyCFunction) _wrap_wxSplashScreen_GetSplashWindow, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSplashScreen_GetSplashStyle", (PyCFunction) _wrap_wxSplashScreen_GetSplashStyle, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxSplashScreen", (PyCFunction) _wrap_new_wxSplashScreen, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSplashScreenWindow_GetBitmap", (PyCFunction) _wrap_wxSplashScreenWindow_GetBitmap, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSplashScreenWindow_SetBitmap", (PyCFunction) _wrap_wxSplashScreenWindow_SetBitmap, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxSplashScreenWindow", (PyCFunction) _wrap_new_wxSplashScreenWindow, METH_VARARGS | METH_KEYWORDS },
 	 { "wxMiniFrame_Create", (PyCFunction) _wrap_wxMiniFrame_Create, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPreMiniFrame", (PyCFunction) _wrap_new_wxPreMiniFrame, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxMiniFrame", (PyCFunction) _wrap_new_wxMiniFrame, METH_VARARGS | METH_KEYWORDS },
@@ -2137,6 +2503,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_size_t","_int",0},
     { "_size_t","_wxWindowID",0},
     { "_size_t","_uint",0},
+    { "_wxTopLevelWindow","_wxSplashScreen",SwigwxSplashScreenTowxTopLevelWindow},
     { "_wxTopLevelWindow","_wxMiniFrame",SwigwxMiniFrameTowxTopLevelWindow},
     { "_wxTopLevelWindow","_wxDialog",SwigwxDialogTowxTopLevelWindow},
     { "_wxTopLevelWindow","_wxFrame",SwigwxFrameTowxTopLevelWindow},
@@ -2167,6 +2534,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_WXTYPE","_unsigned_short",0},
     { "_unsigned_short","_WXTYPE",0},
     { "_unsigned_short","_short",0},
+    { "_wxObject","_wxSplashScreen",SwigwxSplashScreenTowxObject},
+    { "_wxObject","_wxSplashScreenWindow",SwigwxSplashScreenWindowTowxObject},
     { "_wxObject","_wxMiniFrame",SwigwxMiniFrameTowxObject},
     { "_wxObject","_wxDialog",SwigwxDialogTowxObject},
     { "_wxObject","_wxFrame",SwigwxFrameTowxObject},
@@ -2184,6 +2553,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_short","_WXTYPE",0},
     { "_short","_unsigned_short",0},
     { "_short","_signed_short",0},
+    { "_wxFrame","_wxSplashScreen",SwigwxSplashScreenTowxFrame},
     { "_wxFrame","_wxMiniFrame",SwigwxMiniFrameTowxFrame},
     { "_wxWindowID","_wxCoord",0},
     { "_wxWindowID","_wxPrintQuality",0},
@@ -2219,10 +2589,14 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxCoord","_size_t",0},
     { "_wxCoord","_time_t",0},
     { "_wxCoord","_wxPrintQuality",0},
+    { "_wxEvtHandler","_wxSplashScreen",SwigwxSplashScreenTowxEvtHandler},
+    { "_wxEvtHandler","_wxSplashScreenWindow",SwigwxSplashScreenWindowTowxEvtHandler},
     { "_wxEvtHandler","_wxMiniFrame",SwigwxMiniFrameTowxEvtHandler},
     { "_wxEvtHandler","_wxDialog",SwigwxDialogTowxEvtHandler},
     { "_wxEvtHandler","_wxFrame",SwigwxFrameTowxEvtHandler},
     { "_wxEvtHandler","_wxTopLevelWindow",SwigwxTopLevelWindowTowxEvtHandler},
+    { "_wxWindow","_wxSplashScreen",SwigwxSplashScreenTowxWindow},
+    { "_wxWindow","_wxSplashScreenWindow",SwigwxSplashScreenWindowTowxWindow},
     { "_wxWindow","_wxMiniFrame",SwigwxMiniFrameTowxWindow},
     { "_wxWindow","_wxDialog",SwigwxDialogTowxWindow},
     { "_wxWindow","_wxFrame",SwigwxFrameTowxWindow},
@@ -2245,6 +2619,11 @@ SWIGEXPORT(void) initframesc() {
 	 PyDict_SetItemString(d,"wxFULLSCREEN_NOCAPTION", PyInt_FromLong((long) wxFULLSCREEN_NOCAPTION));
 	 PyDict_SetItemString(d,"wxFULLSCREEN_ALL", PyInt_FromLong((long) wxFULLSCREEN_ALL));
 	 PyDict_SetItemString(d,"wxTOPLEVEL_EX_DIALOG", PyInt_FromLong((long) wxTOPLEVEL_EX_DIALOG));
+	 PyDict_SetItemString(d,"wxSPLASH_CENTRE_ON_PARENT", PyInt_FromLong((long) wxSPLASH_CENTRE_ON_PARENT));
+	 PyDict_SetItemString(d,"wxSPLASH_CENTRE_ON_SCREEN", PyInt_FromLong((long) wxSPLASH_CENTRE_ON_SCREEN));
+	 PyDict_SetItemString(d,"wxSPLASH_NO_CENTRE", PyInt_FromLong((long) wxSPLASH_NO_CENTRE));
+	 PyDict_SetItemString(d,"wxSPLASH_TIMEOUT", PyInt_FromLong((long) wxSPLASH_TIMEOUT));
+	 PyDict_SetItemString(d,"wxSPLASH_NO_TIMEOUT", PyInt_FromLong((long) wxSPLASH_NO_TIMEOUT));
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)

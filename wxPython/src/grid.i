@@ -880,7 +880,7 @@ public:
         Merged
     };
 
-    wxGridCellAttr();
+    wxGridCellAttr(wxGridCellAttr *attrDefault = NULL);
 
     wxGridCellAttr *Clone() const;
     void MergeWith(wxGridCellAttr *mergefrom);

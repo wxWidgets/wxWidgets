@@ -384,6 +384,7 @@ enum {
     wxID_HELP_COMMANDS,
     wxID_HELP_PROCEDURES,
     wxID_HELP_CONTEXT,
+    wxID_CLOSE_ALL,
     wxID_CUT,
     wxID_COPY,
     wxID_PASTE,

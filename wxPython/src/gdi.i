@@ -394,6 +394,36 @@ enum wxFontEncoding
 // ToString() and restore them using FromString())
 struct wxNativeFontInfo
 {
+#ifdef __WXGTK__
+    // init the elements from an XLFD, return TRUE if ok
+    bool FromXFontName(const wxString& xFontName);
+
+    // generate an XLFD using the fontElements
+    wxString GetXFontName() const;
+#endif
+
+    wxNativeFontInfo() { Init(); }
+
+    // reset to the default state
+    void Init();
+
+    // accessors and modifiers for the font elements
+    int GetPointSize() const;
+    wxFontStyle GetStyle() const;
+    wxFontWeight GetWeight() const;
+    bool GetUnderlined() const;
+    wxString GetFaceName() const;
+    wxFontFamily GetFamily() const;
+    wxFontEncoding GetEncoding() const;
+
+    void SetPointSize(int pointsize);
+    void SetStyle(wxFontStyle style);
+    void SetWeight(wxFontWeight weight);
+    void SetUnderlined(bool underlined);
+    void SetFaceName(wxString facename);
+    void SetFamily(wxFontFamily family);
+    void SetEncoding(wxFontEncoding encoding);
+
     // it is important to be able to serialize wxNativeFontInfo objects to be
     // able to store them (in config file, for example)
     bool FromString(const wxString& s);
@@ -404,6 +434,12 @@ struct wxNativeFontInfo
             return self->ToString();
         }
     }
+
+    // we also want to present the native font descriptions to the user in some
+    // human-readable form (it is not platform independent neither, but can
+    // hopefully be understood by the user)
+    bool FromUserString(const wxString& s);
+    wxString ToUserString() const;
 };
 
 
@@ -515,6 +551,8 @@ public:
     wxString GetFaceName() const;
     wxFontEncoding GetEncoding() const;
     wxNativeFontInfo* GetNativeFontInfo() const;
+    wxString GetNativeFontInfoDesc() const;
+    wxString GetNativeFontInfoUserDesc() const;
 
     void SetPointSize(int pointSize);
     void SetFamily(int family);
@@ -524,6 +562,8 @@ public:
     void SetUnderlined(bool underlined);
     void SetEncoding(wxFontEncoding encoding);
     void SetNativeFontInfo(const wxNativeFontInfo& info);
+    // void SetNativeFontInfo(const wxString& info);
+    void SetNativeFontInfoUserDesc(const wxString& info);
 
     wxString GetFamilyString() const;
     wxString GetStyleString() const;

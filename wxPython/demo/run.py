@@ -18,7 +18,7 @@ on the command line.
 """
 
 
-import sys
+import sys, os
 from wxPython.wx import *
 
 #----------------------------------------------------------------------------
@@ -60,9 +60,9 @@ class RunDemoApp(wxApp):
             # otherwise the demo made its own frame, so just put a
             # button in this one
             if hasattr(frame, 'otherWin'):
-                wxButton(frame, 1101, " Exit ")
+                b = wxButton(frame, -1, " Exit ")
                 frame.SetSize((200, 100))
-                EVT_BUTTON(frame, 1101, self.OnButton)
+                EVT_BUTTON(frame, b.GetId(), self.OnButton)
             else:
                 # It was probably a dialog or something that is already
                 # gone, so we're done.

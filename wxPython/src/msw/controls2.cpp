@@ -9991,9 +9991,11 @@ SWIGEXPORT(void) initcontrols2c() {
 	 PyDict_SetItemString(d,"wxTR_TWIST_BUTTONS", PyInt_FromLong((long) wxTR_TWIST_BUTTONS));
 	 PyDict_SetItemString(d,"wxTR_NO_LINES", PyInt_FromLong((long) wxTR_NO_LINES));
 	 PyDict_SetItemString(d,"wxTR_MAC_BUTTONS", PyInt_FromLong((long) wxTR_MAC_BUTTONS));
+	 PyDict_SetItemString(d,"wxTR_AQUA_BUTTONS", PyInt_FromLong((long) wxTR_AQUA_BUTTONS));
 	 PyDict_SetItemString(d,"wxTR_SINGLE", PyInt_FromLong((long) wxTR_SINGLE));
 	 PyDict_SetItemString(d,"wxTR_MULTIPLE", PyInt_FromLong((long) wxTR_MULTIPLE));
 	 PyDict_SetItemString(d,"wxTR_EXTENDED", PyInt_FromLong((long) wxTR_EXTENDED));
+	 PyDict_SetItemString(d,"wxTR_FULL_ROW_HIGHLIGHT", PyInt_FromLong((long) wxTR_FULL_ROW_HIGHLIGHT));
 	 PyDict_SetItemString(d,"wxTR_EDIT_LABELS", PyInt_FromLong((long) wxTR_EDIT_LABELS));
 	 PyDict_SetItemString(d,"wxTR_LINES_AT_ROOT", PyInt_FromLong((long) wxTR_LINES_AT_ROOT));
 	 PyDict_SetItemString(d,"wxTR_HIDE_ROOT", PyInt_FromLong((long) wxTR_HIDE_ROOT));

@@ -8,6 +8,10 @@
 from wxPython.wx import *
 
 class MyFrame(wxFrame):
+    """
+    This is MyFrame.  It just shows a few controls on a wxPanel, 
+    and has a simple menu.
+    """
     def __init__(self, parent, title):
         wxFrame.__init__(self, parent, -1, title, size=(350, 200))
 
@@ -20,7 +24,8 @@ class MyFrame(wxFrame):
 
         panel = wxPanel(self, -1)
         if wxPlatform == "__WXMAC__":
-            text = wxStaticText(panel, -1, "Hello World!\nWhere is my menu?")
+            text = wxStaticText(panel, -1, 
+                                "Hello World!\nWhere is my menu?")
         else:
             text = wxStaticText(panel, -1, "Hello World!")
         text.SetFont(wxFont(12, wxSWISS, wxNORMAL, wxBOLD))
@@ -39,6 +44,7 @@ class MyFrame(wxFrame):
 
 
     def OnButton(self, evt):
+        """Event handler for the button click."""
         print "OnButton"
         self.Close()
 

@@ -32,6 +32,13 @@
 
 //---------------------------------------------------------------------------
 
+enum wxXmlResourceFlags
+{
+    wxXRC_USE_LOCALE     = 1,
+    wxXRC_NO_SUBCLASSING = 2
+};
+
+
 // This class holds XML resources from one or more .xml files
 // (or derived forms, either binary or zipped -- see manual for
 // details).
@@ -39,14 +46,17 @@
 class wxXmlResource : public wxObject
 {
 public:
-    // Ctor. If use_locale is TRUE, translatable strings are
-    // translated via _(). You can disable it by passing use_locale=FALSE
-    // (for example if you provide resource file for each locale)
-    %name(wxXmlResourceEmpty)wxXmlResource(bool use_locale = TRUE);   // TODO, a better %name
+    // Ctor.
+    // Flags: wxXRC_USE_LOCALE
+    //              translatable strings will be translated via _()
+    //        wxXRC_NO_SUBCLASSING
+    //              subclass property of object nodes will be ignored
+    //              (useful for previews in XRC editors)
+    %name(wxXmlResourceEmpty)wxXmlResource(int flags = wxXRC_USE_LOCALE);   // TODO, a better %name
 
     %addmethods {
-        wxXmlResource(const wxString* filemask, bool use_locale = TRUE) {
-            wxXmlResource* res = new wxXmlResource(*filemask, use_locale);
+        wxXmlResource(const wxString* filemask, int flags = wxXRC_USE_LOCALE) {
+            wxXmlResource* res = new wxXmlResource(*filemask, flags);
             res->InitAllHandlers();
             return res;
         }

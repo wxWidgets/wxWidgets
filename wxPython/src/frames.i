@@ -16,6 +16,7 @@
 %{
 #include "helpers.h"
 #include <wx/minifram.h>
+#include <wx/splash.h>
 %}
 
 //----------------------------------------------------------------------
@@ -224,6 +225,45 @@ public:
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreMiniFrame:val._setOORInfo(val)"
+};
+
+
+//---------------------------------------------------------------------------
+
+enum {
+    wxSPLASH_CENTRE_ON_PARENT,
+    wxSPLASH_CENTRE_ON_SCREEN,
+    wxSPLASH_NO_CENTRE,
+    wxSPLASH_TIMEOUT,
+    wxSPLASH_NO_TIMEOUT,
+};
+
+
+class wxSplashScreenWindow: public wxWindow
+{
+public:
+    wxSplashScreenWindow(const wxBitmap& bitmap,
+                         wxWindow* parent, wxWindowID id,
+                         const wxPoint& pos = wxDefaultPosition,
+                         const wxSize& size = wxDefaultSize,
+                         long style = wxNO_BORDER);
+
+    void SetBitmap(const wxBitmap& bitmap);
+    wxBitmap& GetBitmap();
+};
+
+
+class wxSplashScreen : public wxFrame {
+public:
+    wxSplashScreen(const wxBitmap& bitmap, long splashStyle, int milliseconds,
+                   wxWindow* parent, wxWindowID id,
+                   const wxPoint& pos = wxDefaultPosition,
+                   const wxSize& size = wxDefaultSize,
+                   long style = wxSIMPLE_BORDER|wxFRAME_NO_TASKBAR|wxFRAME_FLOAT_ON_PARENT);
+
+    long GetSplashStyle() const;
+    wxSplashScreenWindow* GetSplashWindow() const;
+    int GetTimeout() const;
 };
 
 

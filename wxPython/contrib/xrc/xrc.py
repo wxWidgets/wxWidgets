@@ -135,5 +135,7 @@ wxXmlResource_GetXMLID = xrcc.wxXmlResource_GetXMLID
 
 #-------------- VARIABLE WRAPPERS ------------------
 
+wxXRC_USE_LOCALE = xrcc.wxXRC_USE_LOCALE
+wxXRC_NO_SUBCLASSING = xrcc.wxXRC_NO_SUBCLASSING
 cvar = xrcc.cvar
 wxTheXmlResource = wxXmlResourcePtr(xrcc.cvar.wxTheXmlResource)

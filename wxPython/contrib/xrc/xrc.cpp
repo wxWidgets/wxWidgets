@@ -120,15 +120,13 @@ static void *SwigwxXmlResourceTowxObject(void *ptr) {
 static PyObject *_wrap_new_wxXmlResourceEmpty(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxXmlResource * _result;
-    bool  _arg0 = (bool ) TRUE;
-    int tempbool0 = (int) TRUE;
-    char *_kwnames[] = { "use_locale", NULL };
+    int  _arg0 = (int ) (wxXRC_USE_LOCALE);
+    char *_kwnames[] = { "flags", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|i:new_wxXmlResourceEmpty",_kwnames,&tempbool0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|i:new_wxXmlResourceEmpty",_kwnames,&_arg0)) 
         return NULL;
-    _arg0 = (bool ) tempbool0;
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxXmlResource *)new_wxXmlResourceEmpty(_arg0);
@@ -145,8 +143,8 @@ static PyObject *_wrap_new_wxXmlResourceEmpty(PyObject *self, PyObject *args, Py
     return _resultobj;
 }
 
-static wxXmlResource *new_wxXmlResource(const wxString *filemask,bool use_locale) {
-            wxXmlResource* res = new wxXmlResource(*filemask, use_locale);
+static wxXmlResource *new_wxXmlResource(const wxString *filemask,int flags) {
+            wxXmlResource* res = new wxXmlResource(*filemask, flags);
             res->InitAllHandlers();
             return res;
         }
@@ -155,14 +153,13 @@ static PyObject *_wrap_new_wxXmlResource(PyObject *self, PyObject *args, PyObjec
     PyObject * _resultobj;
     wxXmlResource * _result;
     wxString * _arg0;
-    bool  _arg1 = (bool ) TRUE;
+    int  _arg1 = (int ) (wxXRC_USE_LOCALE);
     PyObject * _obj0 = 0;
-    int tempbool1 = (int) TRUE;
-    char *_kwnames[] = { "filemask","use_locale", NULL };
+    char *_kwnames[] = { "filemask","flags", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|i:new_wxXmlResource",_kwnames,&_obj0,&tempbool1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|i:new_wxXmlResource",_kwnames,&_obj0,&_arg1)) 
         return NULL;
 {
 #if PYTHON_API_VERSION >= 1009
@@ -182,7 +179,6 @@ static PyObject *_wrap_new_wxXmlResource(PyObject *self, PyObject *args, PyObjec
     _arg0 = new wxString(PyString_AS_STRING(_obj0), PyString_GET_SIZE(_obj0));
 #endif
 }
-    _arg1 = (bool ) tempbool1;
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (wxXmlResource *)new_wxXmlResource(_arg0,_arg1);
@@ -1287,6 +1283,8 @@ SWIGEXPORT(void) initxrcc() {
 	 SWIG_globals = SWIG_newvarlink();
 	 m = Py_InitModule("xrcc", xrccMethods);
 	 d = PyModule_GetDict(m);
+	 PyDict_SetItemString(d,"wxXRC_USE_LOCALE", PyInt_FromLong((long) wxXRC_USE_LOCALE));
+	 PyDict_SetItemString(d,"wxXRC_NO_SUBCLASSING", PyInt_FromLong((long) wxXRC_NO_SUBCLASSING));
 	 PyDict_SetItemString(d,"cvar", SWIG_globals);
 	 SWIG_addvarlink(SWIG_globals,"wxTheXmlResource",_wrap_wxTheXmlResource_get, _wrap_wxTheXmlResource_set);
 

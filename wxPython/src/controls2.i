@@ -765,10 +765,12 @@ enum {
     wxTR_TWIST_BUTTONS,
     wxTR_NO_LINES,
     wxTR_MAC_BUTTONS,
+    wxTR_AQUA_BUTTONS,
 
     wxTR_SINGLE,
     wxTR_MULTIPLE,
     wxTR_EXTENDED,
+    wxTR_FULL_ROW_HIGHLIGHT,
 
     wxTR_EDIT_LABELS,
     wxTR_LINES_AT_ROOT,

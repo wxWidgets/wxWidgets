@@ -149,8 +149,24 @@ public:
     bool IsRecordingDefaults();
 
     wxString Read(const wxString& key, const wxString& defaultVal = wxPyEmptyStr);
-    %name(ReadInt)long Read(const wxString& key, long defaultVal = 0);
-    %name(ReadFloat)double Read(const wxString& key, double defaultVal = 0.0);
+
+    %addmethods {
+        long ReadInt(const wxString& key, long defaultVal = 0) {
+            long rv;
+            self->Read(key, &rv, defaultVal);
+            return rv;
+        }
+        double ReadFloat(const wxString& key, double defaultVal = 0.0) {
+            double rv;
+            self->Read(key, &rv, defaultVal);
+            return rv;
+        }
+        bool ReadBool(const wxString& key, bool defaultVal = FALSE) {
+            bool rv;
+            self->Read(key, &rv, defaultVal);
+            return rv;
+        }
+    }
 
     void SetExpandEnvVars (bool bDoIt = TRUE);
     void SetPath(const wxString& strPath);
@@ -164,6 +180,7 @@ public:
     bool Write(const wxString& key, const wxString& value);
     %name(WriteInt)bool Write(const wxString& key, long value);
     %name(WriteFloat)bool Write(const wxString& key, double value);
+    %name(WriteBool)bool Write(const wxString& key, bool value);
 
     EntryType GetEntryType(const wxString& name);
     bool RenameEntry(const wxString& oldName,
@@ -175,8 +192,10 @@ public:
 
 };
 
+
 //---------------------------------------------------------------------------
 
+// This will be a wxRegConfig on Win32 and wxFileConfig otherwise.
 class wxConfig : public wxConfigBase {
 public:
     wxConfig(const wxString& appName = wxPyEmptyStr,
@@ -187,6 +206,8 @@ public:
     ~wxConfig();
 };
 
+
+// Sometimes it's nice to explicitly have a wxFileConfig too.
 class wxFileConfig : public wxConfigBase {
 public:
     wxFileConfig(const wxString& appName = wxPyEmptyStr,

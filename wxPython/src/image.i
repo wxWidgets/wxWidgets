@@ -40,6 +40,10 @@ public:
 
     //bool LoadFile(wxImage* image, wxInputStream& stream);
     //bool SaveFile(wxImage* image, wxOutputStream& stream);
+    //virtual int GetImageCount( wxInputStream& stream );
+    //bool CanRead( wxInputStream& stream );
+
+    bool CanRead( const wxString& name );
 
     void SetName(const wxString& name);
     void SetExtension(const wxString& extension);
@@ -66,6 +70,10 @@ public:
     wxBMPHandler();
 };
 
+class wxICOHandler : public wxBMPHandler {
+public:
+    wxICOHandler();
+};
 
 class wxGIFHandler : public wxImageHandler {
 public:
@@ -92,10 +100,10 @@ public:
 
 class wxImage : public wxObject {
 public:
-    wxImage( const wxString& name, long type = wxBITMAP_TYPE_ANY );
+    wxImage( const wxString& name, long type = wxBITMAP_TYPE_ANY, int index = -1 );
     ~wxImage();
 
-    wxBitmap ConvertToBitmap();
+    wxBitmap ConvertToBitmap(); // deprecated
 #ifdef __WXGTK__
     wxBitmap ConvertToMonoBitmap( unsigned char red, unsigned char green, unsigned char blue ) const;
 #endif
@@ -111,8 +119,10 @@ public:
     unsigned char GetBlue( int x, int y );
 
     static bool CanRead( const wxString& name );
-    bool LoadFile( const wxString& name, long type = wxBITMAP_TYPE_ANY );
-    %name(LoadMimeFile)bool LoadFile( const wxString& name, const wxString& mimetype );
+    static int GetImageCount( const wxString& name, long type = wxBITMAP_TYPE_ANY );
+
+    bool LoadFile( const wxString& name, long type = wxBITMAP_TYPE_ANY, int index = -1 );
+    %name(LoadMimeFile)bool LoadFile( const wxString& name, const wxString& mimetype, int index = -1 );
 
     bool SaveFile( const wxString& name, int type );
     %name(SaveMimeFile)bool SaveFile( const wxString& name, const wxString& mimetype );
@@ -185,8 +195,9 @@ public:
 
 // Alternate constructors
 %new wxImage* wxEmptyImage(int width=0, int height=0);
-%new wxImage* wxImageFromMime(const wxString& name, const wxString& mimetype);
+%new wxImage* wxImageFromMime(const wxString& name, const wxString& mimetype, int index = -1);
 %new wxImage* wxImageFromBitmap(const wxBitmap &bitmap);
+%new wxImage* wxImageFromData(int width, int height, unsigned char* data);
 %{
     wxImage* wxEmptyImage(int width=0, int height=0) {
         if (width == 0 && height == 0)
@@ -195,12 +206,23 @@ public:
             return new wxImage(width, height);
     }
 
-    wxImage* wxImageFromMime(const wxString& name, const wxString& mimetype) {
-        return new wxImage(name, mimetype);
+    wxImage* wxImageFromMime(const wxString& name, const wxString& mimetype, int index) {
+        return new wxImage(name, mimetype, index);
     }
 
     wxImage* wxImageFromBitmap(const wxBitmap &bitmap) {
         return new wxImage(bitmap);
+    }
+
+    wxImage* wxImageFromData(int width, int height, unsigned char* data) {
+        // Copy the source data so the wxImage can clean it up later
+        unsigned char* copy = (unsigned char*)malloc(width*height*3);
+        if (copy == NULL) {
+            PyErr_NoMemory();
+            return NULL;
+        }
+        memcpy(copy, data, width*height*3);
+        return new wxImage(width, height, copy, FALSE);
     }
 %}
 
