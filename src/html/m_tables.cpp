@@ -113,7 +113,7 @@ class wxHtmlTableCell : public wxHtmlContainerCell
 wxHtmlTableCell::wxHtmlTableCell(wxHtmlContainerCell *parent, const wxHtmlTag& tag)
  : wxHtmlContainerCell(parent)
 {
-    m_HasBorders = tag.HasParam("BORDER");
+    m_HasBorders = (tag.HasParam("BORDER") && tag.GetParam("BORDER") != "0");
     m_ColsInfo = NULL;
     m_NumCols = m_NumRows = 0;
     m_CellInfo = NULL;
