@@ -1270,7 +1270,16 @@ void wxApp::MacHandleMouseUpEvent( WXEVENTREF evr )
     EventRecord* ev = (EventRecord*) evr ;
     WindowRef window;
 
-    short windowPart = ::FindWindow(ev->where, &window);
+    short windowPart = inNoWindow ;
+	if ( wxTheApp->s_captureWindow )
+	{
+		window = (WindowRef) s_captureWindow->MacGetRootWindow() ;
+		windowPart = inContent ;
+	} 
+	else
+	{
+		windowPart = ::FindWindow(ev->where, &window) ;
+	}
 
     switch (windowPart)
     {
