@@ -1621,7 +1621,7 @@ void wxTreeCtrl::DoExpand(const wxTreeItemId& item, int flag)
                   wxT("Unknown flag in wxTreeCtrl::DoExpand") );
 
     // A hidden root can be neither expanded nor collapsed.
-    wxCHECK_RET( (HITEM(item) != TVI_ROOT) || (m_windowStyle & wxTR_HIDE_ROOT),
+    wxCHECK_RET( !(m_windowStyle & wxTR_HIDE_ROOT) || (HITEM(item) != TVI_ROOT),
                  wxT("Can't expand/collapse hidden root node!") )
 
     // TreeView_Expand doesn't send TVN_ITEMEXPAND(ING) messages, so we must
