@@ -36,6 +36,14 @@
     #include "mondrian.xpm"
 #endif
 
+// We test for wxUSE_DRAG_AND_DROP also, because data objects may not be
+// implemented for compilers that can't cope with the OLE parts in
+// wxUSE_DRAG_AND_DROP.
+#if !wxUSE_DRAG_AND_DROP
+    #undef wxUSE_CLIPBOARD
+    #define wxUSE_CLIPBOARD 0
+#endif
+
 //----------------------------------------------------------------------
 // class definitions
 //----------------------------------------------------------------------
@@ -71,32 +79,30 @@ class MyPanel: public wxPanel
 public:
     MyPanel(wxFrame *frame, int x, int y, int w, int h);
 
-    void OnPasteFromClipboard( wxCommandEvent &event );
-    void OnCopyToClipboard( wxCommandEvent &event );
-    void OnMoveToEndOfText( wxCommandEvent &event );
-    void OnMoveToEndOfEntry( wxCommandEvent &event );
+#if wxUSE_CLIPBOARD
+    void DoPasteFromClipboard();
+    void DoCopyToClipboard();
+#endif // wxUSE_CLIPBOARD
+
+    void DoMoveToEndOfText();
+    void DoMoveToEndOfEntry();
 
     MyTextCtrl    *m_text;
     MyTextCtrl    *m_password;
     MyTextCtrl    *m_enter;
     MyTextCtrl    *m_tab;
-    MyTextCtrl    *m_entertab;
     MyTextCtrl    *m_readonly;
 
     MyTextCtrl    *m_multitext;
     MyTextCtrl    *m_horizontal;
-    MyTextCtrl    *m_multitab;
 
     wxTextCtrl    *m_log;
-
-private:
-    DECLARE_EVENT_TABLE()
 };
 
 class MyFrame: public wxFrame
 {
 public:
-    MyFrame(wxFrame *frame, char *title, int x, int y, int w, int h);
+    MyFrame(wxFrame *frame, const char *title, int x, int y, int w, int h);
 
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
@@ -104,9 +110,26 @@ public:
     void OnSetTooltipDelay(wxCommandEvent& event);
     void OnToggleTooltips(wxCommandEvent& event);
 #endif // wxUSE_TOOLTIPS
+
+#if wxUSE_CLIPBOARD
+    void OnPasteFromClipboard( wxCommandEvent &event )
+        { m_panel->DoPasteFromClipboard(); }
+    void OnCopyToClipboard( wxCommandEvent &event )
+        { m_panel->DoCopyToClipboard(); }
+#endif // wxUSE_CLIPBOARD
+
+    void OnMoveToEndOfText( wxCommandEvent &event )
+        { m_panel->DoMoveToEndOfText(); }
+    void OnMoveToEndOfEntry( wxCommandEvent &event )
+        { m_panel->DoMoveToEndOfEntry(); }
+
+    void OnFileLoad(wxCommandEvent& event);
+
     void OnIdle( wxIdleEvent& event );
 
 private:
+    MyPanel *m_panel;
+
     DECLARE_EVENT_TABLE()
 };
 
@@ -122,13 +145,21 @@ IMPLEMENT_APP(MyApp)
 
 enum
 {
-    MINIMAL_QUIT   = 100,
-    MINIMAL_TEXT,
-    MINIMAL_ABOUT,
+    TEXT_QUIT = 100,
+    TEXT_ABOUT,
+    TEXT_LOAD,
+
+    // clipboard menu
+    TEXT_CLIPBOARD_COPY = 200,
+    TEXT_CLIPBOARD_PASTE,
 
     // tooltip menu
-    MINIMAL_SET_TOOLTIP_DELAY = 200,
-    MINIMAL_ENABLE_TOOLTIPS
+    TEXT_TOOLTIPS_SETDELAY = 300,
+    TEXT_TOOLTIPS_ENABLE,
+
+    // move menu
+    TEXT_MOVE_ENDTEXT = 400,
+    TEXT_MOVE_ENDENTRY
 };
 
 bool MyApp::OnInit()
@@ -138,28 +169,40 @@ bool MyApp::OnInit()
             "Text wxWindows App",
             50, 50, 640, 420);
 
-    // Give it an icon
-    // The wxICON() macros loads an icon from a resource under Windows
-    // and uses an #included XPM image under GTK+ and Motif
-
-    frame->SetIcon( wxICON(mondrian) );
-
     wxMenu *file_menu = new wxMenu;
-    file_menu->Append(MINIMAL_ABOUT, "&About\tAlt-A");
-    file_menu->Append(MINIMAL_QUIT, "E&xit\tAlt-X", "Quit controls sample");
+    file_menu->Append(TEXT_LOAD, "&Load file\tCtrl-O",
+                      "Load the sample file into text control");
+    file_menu->AppendSeparator();
+    file_menu->Append(TEXT_ABOUT, "&About\tAlt-A");
+    file_menu->AppendSeparator();
+    file_menu->Append(TEXT_QUIT, "E&xit\tAlt-X", "Quit controls sample");
 
     wxMenuBar *menu_bar = new wxMenuBar( wxMB_DOCKABLE );
     menu_bar->Append(file_menu, "&File");
 
 #if wxUSE_TOOLTIPS
     wxMenu *tooltip_menu = new wxMenu;
-    tooltip_menu->Append(MINIMAL_SET_TOOLTIP_DELAY, "Set &delay\tCtrl-D");
+    tooltip_menu->Append(TEXT_TOOLTIPS_SETDELAY, "Set &delay\tCtrl-D");
     tooltip_menu->AppendSeparator();
-    tooltip_menu->Append(MINIMAL_ENABLE_TOOLTIPS, "&Toggle tooltips\tCrtl-T",
+    tooltip_menu->Append(TEXT_TOOLTIPS_ENABLE, "&Toggle tooltips\tCtrl-T",
             "enable/disable tooltips", TRUE);
-    tooltip_menu->Check(MINIMAL_ENABLE_TOOLTIPS, TRUE);
+    tooltip_menu->Check(TEXT_TOOLTIPS_ENABLE, TRUE);
     menu_bar->Append(tooltip_menu, "&Tooltips");
 #endif // wxUSE_TOOLTIPS
+
+#if wxUSE_CLIPBOARD
+    wxMenu *menuClipboard = new wxMenu;
+    menuClipboard->Append(TEXT_CLIPBOARD_COPY, "&Copy\tCtrl-C",
+                          "Copy the first line to the clipboard");
+    menuClipboard->Append(TEXT_CLIPBOARD_PASTE, "&Paste\tCtrl-V",
+                          "Paste from clipboard to the text control");
+    menu_bar->Append(menuClipboard, "&Clipboard");
+#endif // wxUSE_CLIPBOARD
+
+    wxMenu *menuMove = new wxMenu;
+    menuMove->Append(TEXT_MOVE_ENDTEXT, "To the end of &text");
+    menuMove->Append(TEXT_MOVE_ENDENTRY, "To the end of &entry");
+    menu_bar->Append(menuMove, "&Move");
 
     frame->SetMenuBar(menu_bar);
 
@@ -312,7 +355,14 @@ void MyTextCtrl::OnChar(wxKeyEvent& event)
 {
     LogEvent( _T("Char"), event);
 
-    event.Skip();
+    if ( event.KeyCode() == WXK_TAB )
+    {
+        WriteText("\t");
+    }
+    else
+    {
+        event.Skip();
+    }
 }
 
 void MyTextCtrl::OnKeyUp(wxKeyEvent& event)
@@ -365,19 +415,6 @@ void MyTextCtrl::OnKeyDown(wxKeyEvent& event)
 // MyPanel
 //----------------------------------------------------------------------
 
-const int  ID_TEXT              = 150;
-const int  ID_PASTE_TEXT        = 151;
-const int  ID_COPY_TEXT         = 152;
-const int  ID_MOVE_END_ENTRY    = 153;
-const int  ID_MOVE_END_ZONE     = 154;
-
-BEGIN_EVENT_TABLE(MyPanel, wxPanel)
-EVT_BUTTON    (ID_PASTE_TEXT,           MyPanel::OnPasteFromClipboard)
-EVT_BUTTON    (ID_COPY_TEXT,            MyPanel::OnCopyToClipboard)
-EVT_BUTTON    (ID_MOVE_END_ZONE,        MyPanel::OnMoveToEndOfText)
-EVT_BUTTON    (ID_MOVE_END_ENTRY,       MyPanel::OnMoveToEndOfEntry)
-END_EVENT_TABLE()
-
 MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
        : wxPanel( frame, -1, wxPoint(x, y), wxSize(w, h) )
 {
@@ -401,11 +438,18 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     // multi line text controls
 
+<<<<<<< controls.cpp
+    m_horizontal = new MyTextCtrl( this, -1, "Multiline text control with a horizontal scrollbar.",
+      wxPoint(10,170), wxSize(140,70), wxTE_MULTILINE | wxHSCROLL );
+
+    m_multitext = new MyTextCtrl( this, -1, "Multi line.",
+=======
     m_horizontal = new MyTextCtrl( this, -1, "Multiline text control with a horizontal scrollbar.",
       wxPoint(10,170), wxSize(140,70), wxTE_MULTILINE | wxHSCROLL );
     m_horizontal->SetFont(wxFont(18, wxSWISS, wxNORMAL, wxBOLD));
 
     m_multitext = new MyTextCtrl( this, ID_TEXT, "Multi line.",
+>>>>>>> 1.3
       wxPoint(180,10), wxSize(240,70), wxTE_MULTILINE );
     (*m_multitext) << " Appended.";
     m_multitext->SetInsertionPoint(0);
@@ -418,6 +462,10 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_tab = new MyTextCtrl( this, -1, "Multiline, allow <TAB> processing.",
       wxPoint(180,90), wxSize(240,70), wxTE_MULTILINE |  wxTE_PROCESS_TAB );
 
+<<<<<<< controls.cpp
+    m_enter = new MyTextCtrl( this, -1, "Multiline, allow <ENTER> processing.",
+      wxPoint(180,170), wxSize(240,70), wxTE_MULTILINE);
+=======
     m_enter = new MyTextCtrl( this, -1, "Multiline, allow <ENTER> processing.",
       wxPoint(180,170), wxSize(240,70), wxTE_MULTILINE |  wxTE_PROCESS_ENTER );
 
@@ -442,16 +490,12 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 #if wxUSE_TOOLTIPS
     button->SetToolTip("Paste text from clipboard to the end of the multi-line text control.");
 #endif
+>>>>>>> 1.3
 }
 
-void MyPanel::OnPasteFromClipboard( wxCommandEvent &WXUNUSED(event) )
+#if wxUSE_CLIPBOARD
+void MyPanel::DoPasteFromClipboard()
 {
-    // We test for wxUSE_DRAG_AND_DROP also, because data objects
-    // may not be implemented for compilers that can't cope with the OLE
-    // parts in wxUSE_DRAG_AND_DROP.
-
-#if wxUSE_CLIPBOARD && wxUSE_DRAG_AND_DROP
-
     // On X11, we want to get the data from the primary selection instead
     // of the normal clipboard (which isn't normal under X11 at all). This
     // call has no effect under MSW.
@@ -491,14 +535,10 @@ void MyPanel::OnPasteFromClipboard( wxCommandEvent &WXUNUSED(event) )
     wxTheClipboard->Close();
 
     *m_log << "Closed the clipboard.\n";
-#else
-    wxLogError("Your version of wxWindows is compiled without clipboard support.");
-#endif
 }
 
-void MyPanel::OnCopyToClipboard( wxCommandEvent &WXUNUSED(event) )
+void MyPanel::DoCopyToClipboard()
 {
-#if wxUSE_CLIPBOARD && wxUSE_DRAG_AND_DROP
     wxString text( m_multitext->GetLineText(0) );
 
     if (text.IsEmpty())
@@ -533,18 +573,17 @@ void MyPanel::OnCopyToClipboard( wxCommandEvent &WXUNUSED(event) )
     wxTheClipboard->Close();
 
     *m_log << "Closed the clipboard.\n";
-#else
-    wxLogError("Your version of wxWindows is compiled without clipboard support.");
-#endif
 }
 
-void MyPanel::OnMoveToEndOfText( wxCommandEvent &event )
+#endif // wxUSE_CLIPBOARD
+
+void MyPanel::DoMoveToEndOfText()
 {
     m_multitext->SetInsertionPointEnd();
     m_multitext->SetFocus();
 }
 
-void MyPanel::OnMoveToEndOfEntry( wxCommandEvent &event )
+void MyPanel::DoMoveToEndOfEntry()
 {
     m_text->SetInsertionPointEnd();
     m_text->SetFocus();
@@ -555,21 +594,29 @@ void MyPanel::OnMoveToEndOfEntry( wxCommandEvent &event )
 //----------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-EVT_MENU(MINIMAL_QUIT,   MyFrame::OnQuit)
-EVT_MENU(MINIMAL_ABOUT,  MyFrame::OnAbout)
+    EVT_MENU(TEXT_QUIT,   MyFrame::OnQuit)
+    EVT_MENU(TEXT_ABOUT,  MyFrame::OnAbout)
+    EVT_MENU(TEXT_LOAD,   MyFrame::OnFileLoad)
+
 #if wxUSE_TOOLTIPS
-EVT_MENU(MINIMAL_SET_TOOLTIP_DELAY,  MyFrame::OnSetTooltipDelay)
-EVT_MENU(MINIMAL_ENABLE_TOOLTIPS,  MyFrame::OnToggleTooltips)
+    EVT_MENU(TEXT_TOOLTIPS_SETDELAY,  MyFrame::OnSetTooltipDelay)
+    EVT_MENU(TEXT_TOOLTIPS_ENABLE,    MyFrame::OnToggleTooltips)
 #endif // wxUSE_TOOLTIPS
-EVT_IDLE(MyFrame::OnIdle)
+
+    EVT_MENU(TEXT_CLIPBOARD_PASTE,    MyFrame::OnPasteFromClipboard)
+    EVT_MENU(TEXT_CLIPBOARD_COPY,     MyFrame::OnCopyToClipboard)
+    EVT_MENU(TEXT_MOVE_ENDTEXT,       MyFrame::OnMoveToEndOfText)
+    EVT_MENU(TEXT_MOVE_ENDENTRY,      MyFrame::OnMoveToEndOfEntry)
+
+    EVT_IDLE(MyFrame::OnIdle)
 END_EVENT_TABLE()
 
-MyFrame::MyFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
-: wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h), wxCAPTION )
+MyFrame::MyFrame(wxFrame *frame, const char *title, int x, int y, int w, int h)
+       : wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h) )
 {
     CreateStatusBar(2);
 
-    (void)new MyPanel( this, 10, 10, 300, 100 );
+    m_panel = new MyPanel( this, 10, 10, 300, 100 );
 }
 
 void MyFrame::OnQuit (wxCommandEvent& WXUNUSED(event) )
@@ -581,12 +628,24 @@ void MyFrame::OnAbout( wxCommandEvent& WXUNUSED(event) )
 {
     wxBeginBusyCursor();
 
+    wxMessageDialog dialog(this,
+        "This is a text control sample. It demonstrates the many different\n"
+        "text control styles, the use of the clipboard, setting and handling\n"
+        "tooltips and intercepting key and char events.\n"
+        "\n"
+        "Copyright (c) 1999, Robert Roebling, Julian Smart, Vadim Zeitlin",
+        "About Text Controls",
+        wxOK | wxICON_INFORMATION);
+
+<<<<<<< controls.cpp
+=======
     wxMessageDialog dialog(this, "This is a text control sample. It demonstrates the many different text control\n"
                                  "styles, the use of the clipboard, setting and handling tooltips and intercepting\n"
                                  "key and char events.\n"
                                  "\n"
                                  "Copyright (c) 1999, Robert Roebling, Julian Smart, Vadim Zeitlin",
                                  "About Text Controls", wxOK );
+>>>>>>> 1.3
     dialog.ShowModal();
 
     wxEndBusyCursor();
@@ -625,6 +684,11 @@ void MyFrame::OnToggleTooltips(wxCommandEvent& event)
     wxLogStatus(this, _T("Tooltips %sabled"), s_enabled ? _T("en") : _T("dis") );
 }
 #endif // tooltips
+
+void MyFrame::OnFileLoad(wxCommandEvent& event)
+{
+    m_panel->m_multitext->LoadFile("controls.cpp");
+}
 
 void MyFrame::OnIdle( wxIdleEvent& event )
 {
