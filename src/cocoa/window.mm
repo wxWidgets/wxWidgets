@@ -98,9 +98,8 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID winid,
         return false;
 
     // TODO: create the window
-    NSRect cocoaRect = NSMakeRect(10,10,20,20);
     m_cocoaNSView = NULL;
-    SetNSView([[NSView alloc] initWithFrame: cocoaRect]);
+    SetNSView([[NSView alloc] initWithFrame: MakeDefaultNSRect(size)]);
     [m_cocoaNSView release];
 
     if (m_parent)
@@ -108,6 +107,7 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID winid,
         m_parent->AddChild(this);
         m_parent->CocoaAddChild(this);
     }
+    SetInitialFrameRect(pos,size);
 
     return TRUE;
 }
@@ -384,6 +384,22 @@ void wxWindowCocoa::DoMoveWindow(int x, int y, int width, int height)
 
     NSRect cocoaRect = NSMakeRect(x,parentRect.size.height-(y+height),width,height);
     [nsview setFrame: cocoaRect];
+}
+
+void wxWindowCocoa::SetInitialFrameRect(const wxPoint& pos, const wxSize& size)
+{
+    NSView *nsview = GetNSViewForSuperview();
+    NSView *superview = [nsview superview];
+    wxCHECK_RET(superview,"NSView does not have a superview");
+    NSRect parentRect = [superview frame];
+    NSRect frameRect = [nsview frame];
+    if(size.x!=-1)
+        frameRect.size.width = size.x;
+    if(size.y!=-1)
+        frameRect.size.height = size.y;
+    frameRect.origin.x = pos.x;
+    frameRect.origin.y = parentRect.size.height-(pos.y+size.y);
+    [nsview setFrame: frameRect];
 }
 
 // Get total size

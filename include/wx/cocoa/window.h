@@ -14,6 +14,10 @@
 
 #include "wx/cocoa/NSView.h"
 
+#ifdef __OBJC__
+    #import <Foundation/NSGeometry.h>
+#endif //def __OBJC__
+
 class wxWindowCocoaHider;
 
 // ========================================================================
@@ -83,6 +87,14 @@ protected:
     bool m_isInPaint;
     static wxWindow *sm_capturedWindow;
     virtual void CocoaReplaceView(WX_NSView oldView, WX_NSView newView);
+    void SetInitialFrameRect(const wxPoint& pos, const wxSize& size);
+#ifdef __OBJC__
+    inline NSRect MakeDefaultNSRect(const wxSize& size)
+    {
+        // NOTE: position is 10,10 to make it "obvious" that it's out of place
+        return NSMakeRect(10.0,10.0,WidthDefault(size.x),HeightDefault(size.y));
+    }
+#endif //def __OBJC__
 // ------------------------------------------------------------------------
 // Implementation
 // ------------------------------------------------------------------------
