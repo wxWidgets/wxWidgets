@@ -82,7 +82,7 @@ public:
     static wxSize GetDefaultSize();
 
 protected:
-#ifndef __WXGTK20__
+#if !defined(__WXGTK20__) || defined(__WXUNIVERSAL__)
     // create stock button (generic implementation)
     bool CreateStock(wxWindow *parent, wxWindowID id, wxStockItemID stock,
                      const wxString& descriptiveLabel = wxEmptyString,

@@ -20,7 +20,7 @@
 #pragma hdrstop
 #endif
 
-#if wxUSE_MSGDLG && (!defined(__WXGTK20__) || defined(__WXGPE__))
+#if wxUSE_MSGDLG && (!defined(__WXGTK20__) || defined(__WXUNIVERSAL__) || defined(__WXGPE__))
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"

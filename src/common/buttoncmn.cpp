@@ -32,7 +32,7 @@
 
 #include "wx/button.h"
 
-#ifndef __WXGTK20__
+#if !defined(__WXGTK20__) || defined(__WXUNIVERSAL__)
 bool wxButtonBase::CreateStock(wxWindow *parent,
                                wxWindowID id,
                                wxStockItemID stock,
