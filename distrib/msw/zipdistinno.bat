@@ -85,7 +85,7 @@ zip32 -@ %dest\wxWindows-%version%-msw.zip < %src\distrib\msw\msw.rsp
 zip32 -@ -u %dest\wxWindows-%version%-msw.zip < %src\distrib\msw\makefile.rsp
 zip32 -@ %dest\wxWindows-%version%-gtk.zip < %src\distrib\msw\gtk.rsp
 zip32 -@ -u %dest\wxWindows-%version%-gtk.zip < %src\distrib\msw\makefile.rsp
-zip32 -@ %dest\wxWindows-%version%-stubs.zip < %src\distrib\msw\stubs.rsp
+Rem zip32 -@ %dest\wxWindows-%version%-stubs.zip < %src\distrib\msw\stubs.rsp
 zip32 -@ %dest\wxWindows-%version%-mot.zip < %src\distrib\msw\motif.rsp
 zip32 -@ -u %dest\wxWindows-%version%-mot.zip < %src\distrib\msw\makefile.rsp
 Rem (Obsolete) zip32 -@ %dest\wxWindows-%version%-user.zip < %src\distrib\msw\user.rsp

@@ -298,7 +298,8 @@ else
   PATH_SUBST:=$(BACKSLASH)
 endif
 
-ARCHINCDIR=$(subst $(PATH_SUBST),$(PATH_SEPARATOR),$(WXDIR)/lib/msw$(INCEXT))
+#ARCHINCDIR=$(subst $(PATH_SUBST),$(PATH_SEPARATOR),$(WXDIR)/lib/msw$(INCEXT))
+ARCHINCDIR=(WXDIR)/lib/msw$(INCEXT)
 
 SETUP_H=$(ARCHINCDIR)/wx/setup.h
 
@@ -313,7 +314,9 @@ $(ARCHINCDIR)/wx:
 	mkdir $(subst $(PATH_SUBST),$(PATH_SEPARATOR),$(ARCHINCDIR)/wx)
 
 $(SETUP_H): $(ARCHINCDIR)/wx
-	$(COPY) $(subst $(PATH_SUBST),$(PATH_SEPARATOR),$(WXDIR)/include/wx/msw/setup.h) $(subst $(PATH_SUBST),$(PATH_SEPARATOR),$@)
+	$(COPY) $(WXDIR)/include/wx/msw/setup.h $@
+
+#	$(COPY) $(subst $(PATH_SUBST),$(PATH_SEPARATOR),$(WXDIR)/include/wx/msw/setup.h) $(subst $(PATH_SUBST),$(PATH_SEPARATOR),$@)
 
 ifndef WXMAKINGDLL
 
