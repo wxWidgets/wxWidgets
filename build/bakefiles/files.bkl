@@ -1801,17 +1801,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/univ/themes/win32.cpp
 </set>
 
-<!-- don't ask... wxX11 must have something extra I guess -->
-<set var="UNIV_TEXTCTRL">
-<!--    <if cond="TOOLKIT=='X11'">src/x11/textctrl.cpp</if> -->
-    <if cond="TOOLKIT=='X11'">src/univ/textctrl.cpp</if>
-    <if cond="TOOLKIT=='MGL'">src/univ/textctrl.cpp</if>
-    <if cond="TOOLKIT=='GTK'">src/univ/textctrl.cpp</if>
-    <if cond="TOOLKIT=='MSW'">src/univ/textctrl.cpp</if>
-</set>
-
 <set var="UNIV_SRC" hints="files">
-    $(UNIV_TEXTCTRL)
     src/generic/accel.cpp
     src/generic/colrdlgg.cpp
     src/generic/dirdlgg.cpp
@@ -1853,6 +1843,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/univ/statline.cpp
     src/univ/stattext.cpp
     src/univ/statusbr.cpp
+    src/univ/textctrl.cpp
     src/univ/theme.cpp
     src/univ/toolbar.cpp
     src/univ/topluniv.cpp

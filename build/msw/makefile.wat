@@ -396,7 +396,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_utilsgui.obj &
 	$(OBJS)\monolib_uxtheme.obj &
 	$(OBJS)\monolib_window.obj &
-	$(OBJS)\monolib_textctrl.obj &
 	$(OBJS)\monolib_accel.obj &
 	$(OBJS)\monolib_colrdlgg.obj &
 	$(OBJS)\monolib_dirdlgg.obj &
@@ -438,6 +437,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_statline.obj &
 	$(OBJS)\monolib_stattext.obj &
 	$(OBJS)\monolib_statusbr.obj &
+	$(OBJS)\monolib_textctrl.obj &
 	$(OBJS)\monolib_theme.obj &
 	$(OBJS)\monolib_toolbar.obj &
 	$(OBJS)\monolib_topluniv.obj &
@@ -781,7 +781,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_utilsgui.obj &
 	$(OBJS)\coredll_uxtheme.obj &
 	$(OBJS)\coredll_window.obj &
-	$(OBJS)\coredll_textctrl.obj &
 	$(OBJS)\coredll_accel.obj &
 	$(OBJS)\coredll_colrdlgg.obj &
 	$(OBJS)\coredll_dirdlgg.obj &
@@ -823,6 +822,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_statline.obj &
 	$(OBJS)\coredll_stattext.obj &
 	$(OBJS)\coredll_statusbr.obj &
+	$(OBJS)\coredll_textctrl.obj &
 	$(OBJS)\coredll_theme.obj &
 	$(OBJS)\coredll_toolbar.obj &
 	$(OBJS)\coredll_topluniv.obj &
@@ -1166,7 +1166,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_utilsgui.obj &
 	$(OBJS)\corelib_uxtheme.obj &
 	$(OBJS)\corelib_window.obj &
-	$(OBJS)\corelib_textctrl.obj &
 	$(OBJS)\corelib_accel.obj &
 	$(OBJS)\corelib_colrdlgg.obj &
 	$(OBJS)\corelib_dirdlgg.obj &
@@ -1208,6 +1207,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_statline.obj &
 	$(OBJS)\corelib_stattext.obj &
 	$(OBJS)\corelib_statusbr.obj &
+	$(OBJS)\corelib_textctrl.obj &
 	$(OBJS)\corelib_theme.obj &
 	$(OBJS)\corelib_toolbar.obj &
 	$(OBJS)\corelib_topluniv.obj &
@@ -1551,7 +1551,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_utilsgui.obj &
 	$(OBJS)\monodll_uxtheme.obj &
 	$(OBJS)\monodll_window.obj &
-	$(OBJS)\monodll_textctrl.obj &
 	$(OBJS)\monodll_accel.obj &
 	$(OBJS)\monodll_colrdlgg.obj &
 	$(OBJS)\monodll_dirdlgg.obj &
@@ -1593,6 +1592,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_statline.obj &
 	$(OBJS)\monodll_stattext.obj &
 	$(OBJS)\monodll_statusbr.obj &
+	$(OBJS)\monodll_textctrl.obj &
 	$(OBJS)\monodll_theme.obj &
 	$(OBJS)\monodll_toolbar.obj &
 	$(OBJS)\monodll_topluniv.obj &
