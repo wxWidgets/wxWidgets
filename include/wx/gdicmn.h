@@ -311,6 +311,16 @@ public:
     wxSize GetSize() const { return wxSize(width, height); }
     void SetSize( const wxSize &s ) { width = s.GetWidth(); height = s.GetHeight(); }
 
+    wxPoint GetTopLeft() const { return GetPosition(); }
+    wxPoint GetLeftTop() const { return GetTopLeft(); }
+    void SetTopLeft(const wxPoint &p) { SetPosition(p); }
+    void SetLeftTop(const wxPoint &p) { SetTopLeft(p); }
+
+    wxPoint GetBottomRight() const { return wxPoint(GetRight(), GetBottom()); }
+    wxPoint GetRightBottom() const { return GetBottomRight(); }
+    void SetBottomRight(const wxPoint &p) { SetRight(p.x); SetBottom(p.y); }
+    void SetRightBottom(const wxPoint &p) { SetBottomRight(p); }
+
     int GetLeft()   const { return x; }
     int GetTop()    const { return y; }
     int GetBottom() const { return y + height - 1; }
