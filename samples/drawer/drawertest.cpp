@@ -34,10 +34,10 @@
 #endif
 
 //include this sample's header
-#include "tbtest.h"
+#include "drawertest.h"
 
 
-#if defined( __WXMAC__ ) && TARGET_API_MAC_OSX && ( MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_2 )
+#if USE_DRAWER_CODE
 
 //drawer
 #include "wx/dcclient.h"
@@ -46,25 +46,24 @@
 class MyDrawer : public wxDrawerWindow
 {
     public:
-    MyDrawer(wxWindow* p) : wxDrawerWindow(p, wxID_ANY, wxT(""), wxSize(200,200)) 
-    {	}
-    
+    MyDrawer(wxWindow* p) : wxDrawerWindow(p, wxID_ANY, wxT(""), wxSize(200,200))
+    { }
+
     void OnPaint(wxPaintEvent&)
     {
         wxPaintDC dc(this);
         dc.DrawRectangle(30,30,60,60);
     }
-    
-	DECLARE_EVENT_TABLE()
+
+    DECLARE_EVENT_TABLE()
 };
 
 BEGIN_EVENT_TABLE(MyDrawer, wxDrawerWindow)
     EVT_PAINT(MyDrawer::OnPaint)
 END_EVENT_TABLE()
 
-#endif 
-    //OSX 10.2+
-    
+#endif // USE_DRAWER_CODE
+
 MyDialog   *dialog = NULL;
 
 IMPLEMENT_APP(MyApp)
@@ -117,29 +116,70 @@ void MyDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 
 void MyDialog::Init(void)
 {
-  (void)new wxStaticText(this, wxID_ANY, _T("Press 'Hide me' to hide me, Exit to quit."),
-                         wxPoint(10, 20));
+    wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 
-  (void)new wxStaticText(this, wxID_ANY, _T("Double-click on the taskbar icon to show me again."),
-                         wxPoint(10, 40));
+    const int margin = 10;
+    sizer->Add( new wxStaticText(this,
+                                 wxID_ANY,
+                                 _T("Press 'Hide me' to hide me, Exit to quit.")
+                                ),
+                0,
+                wxALL | wxALIGN_LEFT ,
+                margin
+              );
 
-  (void)new wxButton(this, wxID_EXIT, _T("Exit"), wxPoint(185, 230), wxSize(80, 25));
-  (new wxButton(this, wxID_OK, _T("Hide me"), wxPoint(100, 230), wxSize(80, 25)))->SetDefault();
-  Centre(wxBOTH);
-   
-#if defined( __WXMAC__ ) && TARGET_API_MAC_OSX && ( MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_2 )
+    sizer->Add( new wxStaticText(this,
+                                 wxID_ANY,
+                                 _T("Double-click on the taskbar icon to show me again.")
+                                ),
+                0,
+                wxALL | wxALIGN_LEFT ,
+                margin
+              );
+
+    wxBoxSizer *sizer_bottom = new wxBoxSizer(wxHORIZONTAL);
+
+    sizer_bottom->Add( new wxButton(this,
+                                    wxID_EXIT,
+                                    _T("Exit")
+                                   ),
+                       0,
+                       wxALL | wxALIGN_RIGHT ,
+                       margin
+                     );
+
+    wxButton *ok = new wxButton(this, wxID_OK, _T("Hide me"));
+
+    sizer_bottom->Add( ok,
+                       0,
+                       wxALL | wxALIGN_LEFT ,
+                       margin
+                     );
+
+    sizer->Add( sizer_bottom, 0, wxALIGN_CENTER );
+
+    ok->SetDefault();
+
+    SetSizerAndFit(sizer);
+
+    Centre(wxBOTH);
+
+#if USE_DRAWER_CODE
 
     MacSetMetalAppearance(true);
     Show(TRUE);
- 
+
     MyDrawer* pMyDrawer = new MyDrawer(this);
     pMyDrawer->Open(true);
-   
-    m_taskBarIcon = new MyTaskBarIcon(pMyDrawer);    
+
+    m_taskBarIcon = new MyTaskBarIcon(pMyDrawer);
+
 #else
+
     m_taskBarIcon = new MyTaskBarIcon();
-#endif
-    
+
+#endif // USE_DRAWER_CODE/!USE_DRAWER_CODE
+
     if (!m_taskBarIcon->SetIcon(wxICON(sample), wxT("wxTaskBarIcon Sample")))
         wxMessageBox(wxT("Could not set icon."));
 }
@@ -147,18 +187,18 @@ void MyDialog::Init(void)
 
 enum {
     PU_RESTORE = 10001,
-    
+
     PU_NEW_ICON,
     PU_OLD_ICON,
-    
+
     PU_OPEN_DRAWER,
     PU_CLOSE_DRAWER,
-    
+
     PU_LEFT_DRAWER,
     PU_RIGHT_DRAWER,
     PU_TOP_DRAWER,
     PU_BOTTOM_DRAWER,
-    
+
     PU_EXIT,
 };
 
@@ -168,13 +208,15 @@ BEGIN_EVENT_TABLE(MyTaskBarIcon, wxTaskBarIcon)
     EVT_MENU(PU_EXIT,    MyTaskBarIcon::OnMenuExit)
     EVT_MENU(PU_NEW_ICON,MyTaskBarIcon::OnMenuSetNewIcon)
     EVT_MENU(PU_OLD_ICON,MyTaskBarIcon::OnMenuSetOldIcon)
+#if USE_DRAWER_CODE
     EVT_MENU(PU_OPEN_DRAWER,MyTaskBarIcon::OnMenuOpenDrawer)
     EVT_MENU(PU_CLOSE_DRAWER,MyTaskBarIcon::OnMenuCloseDrawer)
     EVT_MENU(PU_TOP_DRAWER,MyTaskBarIcon::OnMenuTopDrawer)
     EVT_MENU(PU_BOTTOM_DRAWER,MyTaskBarIcon::OnMenuBottomDrawer)
     EVT_MENU(PU_LEFT_DRAWER,MyTaskBarIcon::OnMenuLeftDrawer)
     EVT_MENU(PU_RIGHT_DRAWER,MyTaskBarIcon::OnMenuRightDrawer)
-    EVT_TASKBAR_LEFT_DCLICK  (MyTaskBarIcon::OnLButtonDClick)
+#endif // USE_DRAWER_CODE
+    EVT_TASKBAR_LEFT_DCLICK  (MyTaskBarIcon::OnLeftButtonDClick)
 END_EVENT_TABLE()
 
 void MyTaskBarIcon::OnMenuRestore(wxCommandEvent& )
@@ -203,7 +245,7 @@ void MyTaskBarIcon::OnMenuSetOldIcon(wxCommandEvent&)
         wxMessageBox(wxT("Could not restore old icon."));
 }
 
-#if defined( __WXMAC__ ) && TARGET_API_MAC_OSX && ( MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_2 )
+#if USE_DRAWER_CODE
 
 void MyTaskBarIcon::OnMenuOpenDrawer(wxCommandEvent&)
 {
@@ -234,17 +276,18 @@ void MyTaskBarIcon::OnMenuBottomDrawer(wxCommandEvent&)
 {
     m_pMyDrawer->SetPreferredEdge(wxBOTTOM);
 }
-#endif
+
+#endif // USE_DRAWER_CODE
 
 // Overridables
 wxMenu *MyTaskBarIcon::CreatePopupMenu()
 {
     wxMenu *menu = new wxMenu;
-    
+
     menu->Append(PU_RESTORE, _T("&Restore TBTest"));
     menu->Append(PU_NEW_ICON,_T("&Set New Icon"));
     menu->Append(PU_OLD_ICON,_T("&Restore Old Icon"));
-#if defined( __WXMAC__ ) && TARGET_API_MAC_OSX && ( MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_2 )
+#if USE_DRAWER_CODE
     menu->AppendSeparator();
     menu->Append(PU_OPEN_DRAWER,_T("Open Drawer"));
     menu->Append(PU_CLOSE_DRAWER,_T("Close Drawer"));
@@ -253,14 +296,14 @@ wxMenu *MyTaskBarIcon::CreatePopupMenu()
     menu->Append(PU_RIGHT_DRAWER,_T("Set Drawer to come out on the RIGHT side"));
     menu->Append(PU_TOP_DRAWER,_T("Set Drawer to come out on the TOP side"));
     menu->Append(PU_BOTTOM_DRAWER,_T("Set Drawer to come out on the BOTTOM side"));
-#else    
+#else
     menu->AppendSeparator();
     menu->Append(PU_EXIT,    _T("E&xit"));
-#endif
+#endif // USE_DRAWER_CODE / !USE_DRAWER_CODE
     return menu;
 }
 
-void MyTaskBarIcon::OnLButtonDClick(wxTaskBarIconEvent&)
+void MyTaskBarIcon::OnLeftButtonDClick(wxTaskBarIconEvent&)
 {
     dialog->Show(true);
 }

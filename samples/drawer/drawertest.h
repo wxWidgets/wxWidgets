@@ -9,19 +9,25 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#if defined( __WXMAC__ ) && TARGET_API_MAC_OSX && ( MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_2 )
+    #define USE_DRAWER_CODE 1
+#else
+    #define USE_DRAWER_CODE 0
+#endif
+
 class MyTaskBarIcon: public wxTaskBarIcon
 {
 public:
     MyTaskBarIcon() {};
 
-    void OnLButtonDClick(wxTaskBarIconEvent&);
+    void OnLeftButtonDClick(wxTaskBarIconEvent&);
     void OnMenuRestore(wxCommandEvent&);
     void OnMenuExit(wxCommandEvent&);
 
     void OnMenuSetNewIcon(wxCommandEvent&);
     void OnMenuSetOldIcon(wxCommandEvent&);
 
-#if defined( __WXMAC__ ) && TARGET_API_MAC_OSX && ( MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_2 )
+#if USE_DRAWER_CODE
     class MyDrawer* m_pMyDrawer;
     MyTaskBarIcon(class MyDrawer* p) {m_pMyDrawer = p;}
 
@@ -32,7 +38,7 @@ public:
     void OnMenuRightDrawer(wxCommandEvent&);
     void OnMenuTopDrawer(wxCommandEvent&);
     void OnMenuBottomDrawer(wxCommandEvent&);
-#endif //10.2+
+#endif // USE_DRAWER_CODE
 
     virtual wxMenu *CreatePopupMenu();
 
