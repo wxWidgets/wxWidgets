@@ -443,15 +443,18 @@ void wxHtmlWinParser::SetInputEncoding(wxFontEncoding enc)
 
 IMPLEMENT_ABSTRACT_CLASS(wxHtmlWinTagHandler, wxHtmlTagHandler)
 
-
-
 //-----------------------------------------------------------------------------
 // wxHtmlTagsModule
 //-----------------------------------------------------------------------------
 
+// NB: This is *NOT* winpars.cpp's initialization and shutdown code!!
+//     This module is an ancestor for tag handlers modules defined
+//     in m_*.cpp files with TAGS_MODULE_BEGIN...TAGS_MODULE_END construct.
+//
+//     Do not add any winpars.cpp shutdown or initialization code to it,
+//     create a new module instead!
 
 IMPLEMENT_DYNAMIC_CLASS(wxHtmlTagsModule, wxModule)
-
 
 bool wxHtmlTagsModule::OnInit()
 {
@@ -459,11 +462,10 @@ bool wxHtmlTagsModule::OnInit()
     return TRUE;
 }
 
-
-
 void wxHtmlTagsModule::OnExit()
 {
     wxHtmlWinParser::RemoveModule(this);
 }
+
 #endif
 
