@@ -519,13 +519,13 @@ extern "C"
 
 WXDLLIMPEXP_BASE void wxSetInstance(HINSTANCE hInst);
 
-// return the full name of the program file
-inline wxString wxGetFullModuleName()
+// return the full path of the given module
+inline wxString wxGetFullModuleName(HMODULE hmod)
 {
     wxString fullname;
     if ( !::GetModuleFileName
             (
-                (HMODULE)wxGetInstance(),
+                hmod,
                 wxStringBuffer(fullname, MAX_PATH),
                 MAX_PATH
             ) )
@@ -534,6 +534,12 @@ inline wxString wxGetFullModuleName()
     }
 
     return fullname;
+}
+
+// return the full path of the program file
+inline wxString wxGetFullModuleName()
+{
+    return wxGetFullModuleName((HMODULE)wxGetInstance());
 }
 
 #if wxUSE_GUI
