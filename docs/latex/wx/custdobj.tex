@@ -69,9 +69,6 @@ The default version just uses the operator new.
 
 \membersection{wxCustomDataObject::Free}\label{wxcustomdataobjectfree}
 
-\pythonnote{This method expects a string in wxPython.  You can pass
-nearly any object by pickling it first.}
-
 \func{virtual void}{Free}{\void}
 
 This function is called when the data is freed, you may override it to anything
@@ -97,6 +94,9 @@ Returns a pointer to the data.
 
 Set the data. The data object will make an internal copy.
 
+\pythonnote{This method expects a string in wxPython.  You can pass
+nearly any object by pickling it first.}
+
 \membersection{wxCustomDataObject::TakeData}\label{wxcustomdataobjecttakedata}
 
 \func{virtual void}{TakeData}{
@@ -104,4 +104,7 @@ Set the data. The data object will make an internal copy.
 
 Like \helpref{SetData}{wxcustomdataobjectsetdata}, but doesn't copy the data -
 instead the object takes ownership of the pointer.
+
+\pythonnote{This method expects a string in wxPython.  You can pass
+nearly any object by pickling it first.}
 
