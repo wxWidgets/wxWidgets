@@ -195,8 +195,8 @@ void wxChoice::DoSetItemClientData( int n, void* clientData )
 
 void *wxChoice::DoGetItemClientData(int n) const
 {
-    if ( n < 0 || (size_t)n >= m_datas.GetCount() )
-        return (void*)NULL;
+    wxCHECK_MSG( n >= 0 && (size_t)n < m_datas.GetCount(), NULL,
+                 "invalid index in wxChoice::GetClientData" );
 
     return (void *)m_datas[n];
 }
