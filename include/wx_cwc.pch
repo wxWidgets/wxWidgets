@@ -17,6 +17,5 @@
 #define wxUSE_GUI 1
 #define TARGET_CARBON 1
 #define OLDP2C 1
-#define PM_USE_SESSION_APIS 0
 
 #include "wx/wx_cw_cm.h"
