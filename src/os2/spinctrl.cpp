@@ -145,7 +145,8 @@ bool wxSpinCtrl::Create(
 
     int                             lSstyle = 0L;
 
-    lSstyle = WS_TABSTOP      |
+    lSstyle = WS_VISIBLE      |
+              WS_TABSTOP      |
               SPBS_MASTER     | // We use only single field spin buttons
               SPBS_NUMERICONLY; // We default to numeric data
 

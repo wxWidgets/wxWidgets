@@ -60,7 +60,7 @@ bool wxStaticText::Create(
 
     long                            lSstyle = 0L;
 
-    lSstyle = SS_TEXT | DT_VCENTER;
+    lSstyle = WS_VISIBLE | SS_TEXT | DT_VCENTER;
     if (m_windowStyle & wxALIGN_CENTRE)
         lSstyle |= DT_CENTER;
     else if (m_windowStyle & wxALIGN_RIGHT)

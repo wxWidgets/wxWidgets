@@ -61,7 +61,7 @@ bool wxButton::Create(
         m_windowId = NewControlId();
     else
         m_windowId = vId;
-    lStyle = WS_TABSTOP | BS_PUSHBUTTON;
+    lStyle = WS_VISIBLE | WS_TABSTOP | BS_PUSHBUTTON;
 
     //
     // OS/2 PM does not have Right/Left/Top/Bottom styles.

@@ -116,7 +116,8 @@ bool wxComboBox::Create(
     //
     long                            lSstyle = 0L;
 
-    lSstyle = WS_TABSTOP;
+    lSstyle = WS_TABSTOP   |
+              WS_VISIBLE;
 
     if (lStyle & wxCLIP_SIBLINGS )
         lSstyle |= WS_CLIPSIBLINGS;
