@@ -28,7 +28,7 @@ on.
 """
 
 
-BUILD_GLCANVAS = 1 # If true, build the contrib/glcanvas extension module
+BUILD_GLCANVAS = 0 #1 # If true, build the contrib/glcanvas extension module
 BUILD_OGL = 1      # If true, build the contrib/ogl extension module
 BUILD_STC = 1      # If true, build the contrib/stc extension module
 BUILD_IEWIN = 0    # Internet Explorer wrapper (experimental)
@@ -36,7 +36,7 @@ BUILD_XRC = 1      # XML based resource system
 
 
 CORE_ONLY = 0      # if true, don't build any of the above
-GL_ONLY = 0        # Only used when making the -gl RPM.  See the "b" script
+GL_ONLY = 0 #1 #0        # Only used when making the -gl RPM.  See the "b" script
                    # for the ugly details
 
 USE_SWIG = 0       # Should we actually execute SWIG, or just use the
@@ -68,6 +68,13 @@ WXDLLVER = '23_1'  # Version part of DLL name
 
 
 #----------------------------------------------------------------------
+
+def msg(text):
+    if __name__ == "__main__":
+        print text
+
+
+#----------------------------------------------------------------------
 # Some other globals
 #----------------------------------------------------------------------
 
@@ -80,7 +87,7 @@ debug = '--debug' in sys.argv or '-g' in sys.argv
 bcpp_compiling = '-c' in sys.argv and 'my_bcpp' in sys.argv # Bad heuristic
 
 if bcpp_compiling:
-    print "Compiling wxPython by Borland C/C++ Compiler"
+    msg("Compiling wxPython by Borland C/C++ Compiler")
     HYBRID=0
     WXBCPPLIBVER = string.replace(WXDLLVER,"_","")
     # Version part of BCPP build LIBRARY name
@@ -113,7 +120,7 @@ sys.argv = filter(None, sys.argv)
 
 
 if CORE_ONLY:
-    BUILD_GLCANVAS = 0
+    BUILD_GLCANVAS = 0 #0
     BUILD_OGL = 0
     BUILD_STC = 0
     BUILD_XRC = 0
@@ -270,7 +277,7 @@ swig_deps = ['src/my_typemaps.i']
 #----------------------------------------------------------------------
 
 if not GL_ONLY:
-    print 'Preparing CORE...'
+    msg('Preparing CORE...')
     swig_files = [ 'wx.i', 'windows.i', 'windows2.i', 'windows3.i', 'events.i',
                    'misc.i', 'misc2.i', 'gdi.i', 'mdi.i', 'controls.i',
                    'controls2.i', 'cmndlgs.i', 'stattool.i', 'frames.i', 'image.i',
@@ -375,7 +382,7 @@ if not GL_ONLY:
 #----------------------------------------------------------------------
 
 if BUILD_GLCANVAS or GL_ONLY:
-    print 'Preparing GLCANVAS...'
+    msg('Preparing GLCANVAS...')
     location = 'contrib/glcanvas'
     swig_files = ['glcanvas.i']
     other_sources = []
@@ -415,7 +422,7 @@ if BUILD_GLCANVAS or GL_ONLY:
 #----------------------------------------------------------------------
 
 if not GL_ONLY and BUILD_OGL:
-    print 'Preparing OGL...'
+    msg('Preparing OGL...')
     location = 'contrib/ogl'
     OGLLOC = location + '/contrib/src/ogl'
     OGLINC = location + '/contrib/include'
@@ -464,7 +471,7 @@ if not GL_ONLY and BUILD_OGL:
 #----------------------------------------------------------------------
 
 if not GL_ONLY and BUILD_STC:
-    print 'Preparing STC...'
+    msg('Preparing STC...')
     location = 'contrib/stc'
     STCLOC = location + '/contrib/src/stc'
     STCINC = location + '/contrib/include'
@@ -483,7 +490,7 @@ if not GL_ONLY and BUILD_STC:
                             [STC_H+'/stc.h'])
 
     # copy a project specific py module to the main package dir
-    copy_file(location+'/stc.py', PKGDIR, update=1, verbose=1)
+    copy_file(location+'/stc.py', PKGDIR, update=1, verbose=0)
 
     # add some include dirs to the standard set
     stc_includes = includes[:]
@@ -549,7 +556,7 @@ if not GL_ONLY and BUILD_STC:
 #----------------------------------------------------------------------
 
 if not GL_ONLY and BUILD_IEWIN:
-    print 'Preparing IEWIN...'
+    msg('Preparing IEWIN...')
     location = 'contrib/iewin'
 
     swig_files = ['iewin.i', ]
@@ -579,7 +586,7 @@ if not GL_ONLY and BUILD_IEWIN:
 #----------------------------------------------------------------------
 
 if not GL_ONLY and BUILD_XRC:
-    print 'Preparing XRC...'
+    msg('Preparing XRC...')
     location = 'contrib/xrc'
     XMLLOC = location + '/contrib/src/xrc'
     XMLINC = location + '/contrib/include'
