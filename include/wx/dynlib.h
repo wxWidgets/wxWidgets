@@ -81,13 +81,13 @@ enum wxDLFlags
 enum wxDynamicLibraryCategory
 {
     wxDL_LIBRARY,       // standard library
-    wxDL_MODULE,        // loadable module/plugin
+    wxDL_MODULE         // loadable module/plugin
 };
 
 enum wxPluginCategory
 {
     wxDL_PLUGIN_GUI,    // plugin that uses GUI classes
-    wxDL_PLUGIN_BASE,   // wxBase-only plugin
+    wxDL_PLUGIN_BASE    // wxBase-only plugin
 };
 
 // ----------------------------------------------------------------------------
