@@ -1,24 +1,42 @@
-/*-*- c++ -*-********************************************************
- * helpext.cpp - an external help controller for wxWindows          *
- *                                                                  *
- * (C) 1999 by Karsten Ballüder (Ballueder@usa.net)                 *
- *                                                                  *
- * $Id$
- *******************************************************************/
+/////////////////////////////////////////////////////////////////////////////
+// Name:        helpext.cpp
+// Purpose:     an external help controller for wxWindows
+// Author:      Karsten Ballueder
+// Modified by:
+// Created:     04/01/98
+// RCS-ID:      $Id$
+// Copyright:   (c) Karsten Ballueder
+// Licence:     wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
+
 #ifdef __GNUG__
 #   pragma implementation "wxexthlp.h"
 #endif
 
-#include   "wx/setup.h"
-#include   "wx/helpbase.h"
-#include   "wx/generic/helpext.h"
-#include   "wx/string.h"
-#include   "wx/utils.h"
-#include   "wx/list.h"
-#include   <stdio.h>
-#include   <ctype.h>
-#include   <sys/stat.h>
-#include   <unistd.h>
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
+#ifndef WX_PRECOMP
+    #include "wx/setup.h"
+    #include "wx/string.h"
+    #include "wx/utils.h"
+    #include "wx/list.h"
+    #include "wx/intl.h"
+#endif
+
+#include "wx/helpbase.h"
+#include "wx/generic/helpext.h"
+
+#include <stdio.h>
+#include <ctype.h>
+#include <sys/stat.h>
+
+#ifndef __WINDOWS__
+    #include   <unistd.h>
+#endif
 
 IMPLEMENT_CLASS(wxExtHelpController, wxHTMLHelpControllerBase)
    
@@ -63,8 +81,10 @@ wxExtHelpController::DisplayHelp(wxString const &relativeURL)
 
 
 #ifdef __WXMSW__
-   bool bOk = (int)ShellExecute(NULL, "open", relativeURL.c_str(),
-                           NULL, NULL, SW_SHOWNORMAL ) > 32;
+   wxString url;
+   url << m_MapFile << '\\' << relativeURL.BeforeFirst('#');
+   bool bOk = (int)ShellExecute(NULL, "open", url,
+                                NULL, NULL, SW_SHOWNORMAL ) > 32;
    if ( !bOk )
    {
       wxLogSysError(_("Cannot open URL '%s'"), relativeURL.c_str());

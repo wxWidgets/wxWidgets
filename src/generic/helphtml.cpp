@@ -1,27 +1,42 @@
-/*-*- c++ -*-********************************************************
- * helphtml.cpp - base class for html help systems                  *
- *                                                                  *
- * (C) 1999 by Karsten Ballüder (Ballueder@usa.net)                 *
- *                                                                  *
- * $Id$
- *******************************************************************/
+/////////////////////////////////////////////////////////////////////////////
+// Name:        helphtml.cpp
+// Purpose:     base class for html help systems
+// Author:      Karsten Ballueder
+// Modified by:
+// Created:     04/01/98
+// RCS-ID:      $Id$
+// Copyright:   (c) Karsten Ballueder
+// Licence:     wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
+
 #ifdef __GNUG__
 #   pragma implementation "helphtml.h"
 #endif
 
-#include   "wx/setup.h"
-#include   "wx/helpbase.h"
-#include   "wx/generic/helpext.h"
-#include   "wx/string.h"
-#include   "wx/utils.h"
-#include   "wx/list.h"
-#include   "wx/intl.h"
-#include   <stdio.h>
-#include   <ctype.h>
-#include   <sys/stat.h>
-#include   <unistd.h>
+#include "wx/wxprec.h"
 
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
 
+#ifndef WX_PRECOMP
+    #include "wx/setup.h"
+    #include "wx/string.h"
+    #include "wx/utils.h"
+    #include "wx/list.h"
+    #include "wx/intl.h"
+#endif
+
+#include "wx/helpbase.h"
+#include "wx/generic/helpext.h"
+
+#include <stdio.h>
+#include <ctype.h>
+#include <sys/stat.h>
+
+#ifndef __WINDOWS__
+    #include   <unistd.h>
+#endif
 
 class wxExtHelpMapEntry : public wxObject
 {

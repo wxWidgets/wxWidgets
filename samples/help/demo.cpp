@@ -16,6 +16,7 @@
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
+
 #ifdef __GNUG__
     #pragma implementation "demo.cpp"
     #pragma interface "demo.cpp"
@@ -34,7 +35,19 @@
     #include "wx/wx.h"
 #endif
 
-#include "wx/help.h"
+// defien this to 1 to use HTML help even under Windows (by default, Windows
+// version will HLP-based help)
+#define USE_HTML_HELP 1
+
+#if USE_HTML_HELP
+    #include "wx/helpbase.h"
+    #include "wx/generic/helpext.h"
+
+    #define wxHelpController wxExtHelpController
+    #define sm_classwxHelpController sm_classwxExtHelpController
+#else
+    #include "wx/help.h"
+#endif
 
 // ----------------------------------------------------------------------------
 // ressources
@@ -73,7 +86,8 @@ public:
     void OnHelp(wxCommandEvent& event);
 
 private:
-   wxHelpController  help;
+   wxHelpController m_help;
+
     // any class wishing to process wxWindows events must use this macro
    DECLARE_EVENT_TABLE()
 };
@@ -198,9 +212,10 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     // and a static control whose parent is the panel
     (void)new wxStaticText(panel, -1, "Hello, world!", wxPoint(10, 10));
 
-    // initialise the help system
-    help.Initialize("doc");
-   
+    // initialise the help system: this means that we'll use doc.hlp file under
+    // Windows and that the HTML docs are in the subdirectory doc for platforms
+    // using HTML help
+    m_help.Initialize("doc");
 }
 
 
@@ -221,25 +236,25 @@ void MyFrame::OnHelp(wxCommandEvent& event)
    // (on Unix). For WinHelp, we'd need to use different context ids.
 
    case HelpDemo_Help_Classes:
-      help.DisplaySection(1);
+      m_help.DisplaySection(1);
       break;
    case HelpDemo_Help_Functions:
-      help.DisplaySection(2);
+      m_help.DisplaySection(4);
       break;
    case HelpDemo_Help_Help:
-      help.DisplaySection(5);
+      m_help.DisplaySection(5);
       break;
 
    // These three calls are only used by wxExtHelpController
 
    case HelpDemo_Help_KDE:
-      help.SetViewer("kdehelp");
+      m_help.SetViewer("kdehelp");
       break;
    case HelpDemo_Help_GNOME:
-      help.SetViewer("gnome-help-browser");
+      m_help.SetViewer("gnome-help-browser");
       break;
    case HelpDemo_Help_Netscape:
-      help.SetViewer("netscape", wxHELP_NETSCAPE);
+      m_help.SetViewer("netscape", wxHELP_NETSCAPE);
       break;
 
    case HelpDemo_Help_Search:
@@ -249,12 +264,12 @@ void MyFrame::OnHelp(wxCommandEvent& event)
                                        "",
                                        this);
       if(! key.IsEmpty())
-         help.KeywordSearch(key);
+         m_help.KeywordSearch(key);
    }
    break;
    case HelpDemo_Help_Index:
    default:
-      help.DisplayContents();
+      m_help.DisplayContents();
       break;
    }
 }
