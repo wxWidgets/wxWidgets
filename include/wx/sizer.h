@@ -61,15 +61,15 @@ public:
         { m_ratio = (width && height) ? ((float) width / (float) height) : 1; }
     void SetRatio( wxSize size )
         { m_ratio = (size.x && size.y) ? ((float) size.x / (float) size.y) : 1; }
-    void SetRatio( float ratio ) 
+    void SetRatio( float ratio )
         { m_ratio = ratio; }
-    float GetRatio() const 
+    float GetRatio() const
         { return m_ratio; }
 
     bool IsWindow();
     bool IsSizer();
     bool IsSpacer();
-  
+
     void SetInitSize( int x, int y )
         { m_minSize.x = x; m_minSize.y = y; }
     void SetOption( int option )
@@ -112,7 +112,7 @@ protected:
     //      is shrinked.  it is safer to preserve initial value.
     float        m_ratio;
     wxObject    *m_userData;
-  
+
 private:
     DECLARE_CLASS(wxSizerItem);
 };
@@ -121,7 +121,7 @@ private:
 // wxSizer
 //---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxSizer: public wxObject
+class WXDLLEXPORT wxSizer: public wxObject, public wxClientDataContainer
 {
 public:
     wxSizer();

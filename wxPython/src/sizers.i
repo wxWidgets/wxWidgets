@@ -94,6 +94,12 @@ public:
     // ~wxSizer();
 
     %addmethods {
+        void _setOORInfo(PyObject* _self) {
+            self->SetClientObject(new wxPyClientData(_self));
+        }
+    }
+
+    %addmethods {
         void Destroy() { delete self; }
 
         void AddWindow(wxWindow *window, int option=0, int flag=0, int border=0,
@@ -268,6 +274,7 @@ public:
     wxPySizer();
     void _setCallbackInfo(PyObject* self, PyObject* _class);
     %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxPySizer)"
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 };
 
 
@@ -276,6 +283,7 @@ public:
 class  wxBoxSizer : public wxSizer {
 public:
     wxBoxSizer(int orient = wxHORIZONTAL);
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     int GetOrientation();
     void RecalcSizes();
     wxSize CalcMin();
@@ -286,6 +294,7 @@ public:
 class  wxStaticBoxSizer : public wxBoxSizer {
 public:
     wxStaticBoxSizer(wxStaticBox *box, int orient = wxHORIZONTAL);
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     wxStaticBox *GetStaticBox();
     void RecalcSizes();
     wxSize CalcMin();
@@ -296,10 +305,9 @@ public:
 class wxNotebookSizer: public wxSizer {
 public:
     wxNotebookSizer( wxNotebook *nb );
-
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     void RecalcSizes();
     wxSize CalcMin();
-
     wxNotebook *GetNotebook();
 };
 
@@ -309,6 +317,7 @@ class wxGridSizer: public wxSizer
 {
 public:
     wxGridSizer( int rows=1, int cols=0, int vgap=0, int hgap=0 );
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 
     void RecalcSizes();
     wxSize CalcMin();
@@ -329,6 +338,7 @@ class wxFlexGridSizer: public wxGridSizer
 {
 public:
     wxFlexGridSizer( int rows=1, int cols=0, int vgap=0, int hgap=0 );
+    %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 
     void RecalcSizes();
     wxSize CalcMin();

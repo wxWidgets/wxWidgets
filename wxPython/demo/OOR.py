@@ -32,6 +32,8 @@ class TestPanel(wxPanel):
         self.SetSizer(sizer)
         self.SetAutoLayout(true)
 
+        self.sizer = sizer  # save it for testing later
+
         EVT_BUTTON(self, BTN1, self.OnFindButton1)
         EVT_BUTTON(self, BTN2, self.OnFindButton2)
 
@@ -64,6 +66,15 @@ class TestPanel(wxPanel):
             self.log.write("***** OOPS! None returned...\n")
             return
         if win is self.btn2:
+            self.log.write("The objects are the same! <grin>\n")
+        else:
+            self.log.write("The objects are NOT the same! <frown>\n")
+
+        sizer = self.GetSizer()
+        if sizer is None:
+            self.log.write("***** OOPS! None returned...\n")
+            return
+        if sizer is self.sizer:
             self.log.write("The objects are the same! <grin>\n")
         else:
             self.log.write("The objects are NOT the same! <frown>\n")

@@ -294,6 +294,8 @@ PyObject*  wxPyMake_wxObject(wxObject* source) {
     bool      isEvtHandler = FALSE;
 
     if (source) {
+        // If it's derived from wxEvtHandler then there may
+        // already be a pointer to a Python objec that we can use.
         if (wxIsKindOf(source, wxEvtHandler)) {
             wxEvtHandler* eh = (wxEvtHandler*)source;
             wxPyClientData* data = (wxPyClientData*)eh->GetClientObject();
@@ -302,8 +304,19 @@ PyObject*  wxPyMake_wxObject(wxObject* source) {
                 Py_INCREF(target);
             }
         }
+        else if (wxIsKindOf(source, wxSizer)) {
+            // wxSizers also track the original object
+            wxSizer* sz = (wxSizer*)source;
+            wxPyClientData* data = (wxPyClientData*)sz->GetClientObject();
+            if (data) {
+                target = data->m_obj;
+                Py_INCREF(target);
+            }
+        }
 
         if (! target) {
+            // Otherwise make it the old fashioned way by making a
+            // new shadow object and putting this pointer in it.
             wxClassInfo* info = source->GetClassInfo();
             wxChar*      name = (wxChar*)info->GetClassName();
             PyObject*    klass = wxPyClassExists(name);
@@ -390,42 +403,6 @@ PyObject* wxPyConstructObject(void* ptr,
 }
 
 //---------------------------------------------------------------------------
-
-//  static PyThreadState* myPyThreadState_Get() {
-//      PyThreadState* current;
-//      current = PyThreadState_Swap(NULL);
-//      PyThreadState_Swap(current);
-//      return current;
-//  }
-
-
-//  bool wxPyRestoreThread() {
-//      // NOTE: The Python API docs state that if a thread already has the
-//      // interpreter lock and calls PyEval_RestoreThread again a deadlock
-//      // occurs, so I put in this code as a guard condition since there are
-//      // many possibilites for nested events and callbacks in wxPython.  If
-//      // The current thread is our thread, then we can assume that we
-//      // already have the lock.  (I hope!)
-//      //
-//  #ifdef WXP_WITH_THREAD
-//      if (wxPyEventThreadState != myPyThreadState_Get()) {
-//          PyEval_AcquireThread(wxPyEventThreadState);
-//          return TRUE;
-//      }
-//      else
-//  #endif
-//          return FALSE;
-//  }
-
-
-//  void wxPySaveThread(bool doSave) {
-//  #ifdef WXP_WITH_THREAD
-//      if (doSave) {
-//          PyEval_ReleaseThread(wxPyEventThreadState);
-//      }
-//  #endif
-//  }
-
 
 
 wxPyTState* wxPyBeginBlockThreads() {
@@ -619,7 +596,7 @@ void wxPyCBH_delete(wxPyCallbackHelper* cbh) {
 
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
-// These classes can be derived from in Python and passed through the event
+// These event classes can be derived from in Python and passed through the event
 // system without losing anything.  They do this by keeping a reference to
 // themselves and some special case handling in wxPyCallback::EventThunker.
 

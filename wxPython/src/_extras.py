@@ -637,7 +637,8 @@ def wxPyTypeCast(obj, typeStr):
     theClass = globals()[typeStr+"Ptr"]
     typeStr = __wxPyPtrTypeMap.get(typeStr, typeStr)
     if hasattr(obj, "this"):
-        if obj.__class__ is theClass:   # if already the right type then just return it
+        # if already the right type then just return it
+        if isinstance(obj, theClass) or obj.__class__ is theClass:
             return obj
         newPtr = ptrcast(obj.this, typeStr+"_p")
     else:

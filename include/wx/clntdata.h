@@ -50,12 +50,14 @@ private:
 
 
 
-#if 0
 // This class is a mixin that provides storage and management of "client
 // data."  The client data stored can either be a pointer to a wxClientData
 // object in which case it is managed by the container (i.e.  it will delete
 // the data when it's destroyed) or an untyped pointer which won't be deleted
-// by the window - but not both of them
+// by the container - but not both of them
+//
+// NOTE:  This functionality is currently duplicated in wxEvtHandler in order
+//        to avoid having more than one vtable in that class heirachy.
 
 class WXDLLEXPORT wxClientDataContainer
 {
@@ -92,7 +94,7 @@ protected:
     wxClientDataType m_clientDataType;
 
 };
-#endif
+
 // ----------------------------------------------------------------------------
 #endif
 

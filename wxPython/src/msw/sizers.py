@@ -103,6 +103,9 @@ class wxSizerPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def _setOORInfo(self, *_args, **_kwargs):
+        val = apply(sizersc.wxSizer__setOORInfo,(self,) + _args, _kwargs)
+        return val
     def Destroy(self, *_args, **_kwargs):
         val = apply(sizersc.wxSizer_Destroy,(self,) + _args, _kwargs)
         return val
@@ -252,6 +255,7 @@ class wxPySizer(wxPySizerPtr):
         self.this = apply(sizersc.new_wxPySizer,_args,_kwargs)
         self.thisown = 1
         self._setCallbackInfo(self, wxPySizer)
+        self._setOORInfo(self)
 
 
 
@@ -276,6 +280,7 @@ class wxBoxSizer(wxBoxSizerPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(sizersc.new_wxBoxSizer,_args,_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
 
 
 
@@ -300,6 +305,7 @@ class wxStaticBoxSizer(wxStaticBoxSizerPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(sizersc.new_wxStaticBoxSizer,_args,_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
 
 
 
@@ -324,6 +330,7 @@ class wxNotebookSizer(wxNotebookSizerPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(sizersc.new_wxNotebookSizer,_args,_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
 
 
 
@@ -369,6 +376,7 @@ class wxGridSizer(wxGridSizerPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(sizersc.new_wxGridSizer,_args,_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
 
 
 
@@ -402,6 +410,7 @@ class wxFlexGridSizer(wxFlexGridSizerPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(sizersc.new_wxFlexGridSizer,_args,_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
 
 
 
