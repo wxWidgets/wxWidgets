@@ -1824,6 +1824,12 @@ wxTextCtrl* wxTreeCtrl::EditLabel(const wxTreeItemId& item,
     m_textCtrl->SetHWND((WXHWND)hWnd);
     m_textCtrl->SubclassWin((WXHWND)hWnd);
 
+    // set wxTE_PROCESS_ENTER style for the text control to force it to process
+    // the Enter presses itself, otherwise they could be stolen from it by the
+    // dialog navigation code
+    m_textCtrl->
+        SetWindowStyle(m_textCtrl->GetWindowStyle() | wxTE_PROCESS_ENTER);
+
     return m_textCtrl;
 }
 
