@@ -2556,7 +2556,7 @@ void wxListMainWindow::RefreshSelected()
         to = GetItemCount() - 1;
     }
 
-    if ( HasCurrent() && m_current > from && m_current <= to )
+    if ( HasCurrent() && m_current >= from && m_current <= to )
     {
         RefreshLine(m_current);
     }
