@@ -97,7 +97,7 @@ wxAcceleratorTable::wxAcceleratorTable(const wxString& resource)
 extern int wxCharCodeWXToMSW(int id, bool *isVirtual);
 
 // Create from an array
-wxAcceleratorTable::wxAcceleratorTable(int n, wxAcceleratorEntry entries[])
+wxAcceleratorTable::wxAcceleratorTable(int n, const wxAcceleratorEntry entries[])
 {
     m_refData = new wxAcceleratorRefData;
 
