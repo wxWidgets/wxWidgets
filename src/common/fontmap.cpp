@@ -32,6 +32,7 @@
     #include "wx/app.h"
     #include "wx/log.h"
     #include "wx/intl.h"
+    #include "wx/fontutil.h"
 #endif // PCH
 
 #include "wx/fontmap.h"
@@ -685,10 +686,10 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
                 wxFont font = retData.GetChosenFont();
 
                 *info = retData.EncodingInfo();
-                info -> encoding = retData.GetEncoding();
+                info->encoding = retData.GetEncoding();
 
 #if wxUSE_CONFIG
-            // remember this in the config
+                // remember this in the config
                 if ( ChangePath(FONTMAPPER_FONT_FROM_ENCODING_PATH, &pathOld) )
                 {
                     GetConfig()->Write(configEntry, info->ToString());

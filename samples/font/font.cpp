@@ -415,22 +415,20 @@ void MyFrame::OnEnumerateFamiliesForEncoding(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnCheckNativeToFromString(wxCommandEvent& WXUNUSED(event))
 {
-    wxString fontInfo = m_canvas->GetTextFont().GetNativeFontInfo().ToString();
+    wxString fontInfo = m_canvas->GetTextFont().GetNativeFontInfoDesc();
 
-    if(fontInfo.IsEmpty())
-        wxMessageBox("Native font info string is empty!", "Font demo",
-                     wxOK);
+    if ( fontInfo.IsEmpty() )
+    {
+        wxLogError("Native font info string is empty!");
+    }
     else
     {
-        wxNativeFontInfo info;
-        info.FromString(fontInfo);
-        wxFont font(info);
-        if(fontInfo == font.GetNativeFontInfo().ToString())
-            wxMessageBox("wxNativeFontInfo ToString()/FromString() works!",
-                         "Font demo", wxOK);
+        wxFont *font = wxFont::New(fontInfo);
+        if ( fontInfo != font->GetNativeFontInfoDesc() )
+            wxLogError("wxNativeFontInfo ToString()/FromString() broken!");
         else
-            wxMessageBox("wxNativeFontInfo ToString()/FromString() doesn't work!",
-                         "Font demo", wxOK);
+            wxLogError("wxNativeFontInfo works: %s", fontInfo.c_str());
+        delete font;
      }
 }
 
@@ -678,11 +676,12 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
     dc.DrawText(fontInfo, 5, 5);
 
-    if(m_font.Ok())
+    if ( m_font.Ok() )
     {
-      dc.SetFont(wxFont(m_font.GetNativeFontInfo()));
-      fontInfo.Printf("Native font info: %s", m_font.GetNativeFontInfo().ToString().GetData());
-      dc.DrawText(fontInfo, 5, 5 + dc.GetCharHeight());
+        wxString fontDesc = m_font.GetNativeFontInfoDesc();
+        dc.SetFont(wxFont(fontDesc));
+        fontInfo.Printf("Native font info: %s", fontDesc.c_str());
+        dc.DrawText(fontInfo, 5, 5 + dc.GetCharHeight());
     }
 
     // prepare to draw the font

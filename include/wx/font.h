@@ -68,49 +68,18 @@ enum wxFontWeight
 };
 
 // ----------------------------------------------------------------------------
-// wxNativeFontInfo is platform-specific font representation
-// ----------------------------------------------------------------------------
-
-// this struct should be considered as opaque font description only used by
-// the native functions, the user code can only get the objects of this type
-// from somewhere and pass it somewhere else (possibly save them somewhere
-// using ToString() and restore them using FromString())
-struct WXDLLEXPORT wxNativeFontInfo
-{
-#if defined(__WXGTK__)
-    wxString     xFontName;
-#else // other platforms
-    //
-    //  This is a generic implementation that should work on all ports
-    //  without specific support by the port.
-    //
-    int           pointSize;
-    int           family;
-    int           style;
-    int           weight;
-    bool          underlined;
-    wxString      faceName;
-    wxFontEncoding encoding;
-#endif // platforms
-
-    // it is important to be able to serialize wxNativeFontInfo objects to be
-    // able to store them (in config file, for example)
-    bool FromString(const wxString& s);
-    wxString ToString() const;
-};
-
-WXDLLEXPORT_DATA(extern wxNativeFontInfo) wxNullNativeFontInfo;
-
-// ----------------------------------------------------------------------------
 // wxFontBase represents a font object
 // ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxFontRefData;
+class WXDLLEXPORT wxNativeFontInfo;
 
 class WXDLLEXPORT wxFontBase : public wxGDIObject
 {
 public:
     // creator function
+
+    // from the font components
     static wxFont *New(
         int pointSize,              // size of the font in points
         int family,                 // see wxFontFamily enum
@@ -119,7 +88,12 @@ public:
         bool underlined = FALSE,    // not underlined by default
         const wxString& face = wxEmptyString,              // facename
         wxFontEncoding encoding = wxFONTENCODING_DEFAULT); // ISO8859-X, ...
-    static wxFont *New(const wxNativeFontInfo& info);
+
+    // from the (opaque) native font description object
+    static wxFont *New(const wxNativeFontInfo& nativeFontDesc);
+
+    // from the string representation of wxNativeFontInfo
+    static wxFont *New(const wxString& strNativeFontDesc);
 
     // was the font successfully created?
     bool Ok() const { return m_refData != NULL; }
@@ -136,7 +110,8 @@ public:
     virtual bool GetUnderlined() const = 0;
     virtual wxString GetFaceName() const = 0;
     virtual wxFontEncoding GetEncoding() const = 0;
-    virtual wxNativeFontInfo GetNativeFontInfo() const;
+    virtual wxNativeFontInfo *GetNativeFontInfo() const;
+    wxString GetNativeFontInfoDesc() const;
 
     // change the font characteristics
     virtual void SetPointSize( int pointSize ) = 0;
@@ -147,6 +122,8 @@ public:
     virtual void SetUnderlined( bool underlined ) = 0;
     virtual void SetEncoding(wxFontEncoding encoding) = 0;
     virtual void SetNativeFontInfo(const wxNativeFontInfo& info);
+
+    // VZ: there is no void SetNativeFontInfo(const wxString& info), needed?
 
     // translate the fonts into human-readable string (i.e. GetStyleString()
     // will return "wxITALIC" for an italic font, ...)

@@ -30,6 +30,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/font.h"
+    #include "wx/fontutil.h"
 #endif // WX_PRECOMP
 
 #include "wx/tokenzr.h"
@@ -62,22 +63,32 @@ wxFont *wxFontBase::New(const wxNativeFontInfo& info)
     return new wxFont(info);
 }
 
-wxNativeFontInfo wxFontBase::GetNativeFontInfo() const
+/* static */
+wxFont *wxFontBase::New(const wxString& strNativeFontDesc)
+{
+    wxNativeFontInfo fontInfo;
+    if ( !fontInfo.FromString(strNativeFontDesc) )
+        return (wxFont *)NULL;
+
+    return New(fontInfo);
+}
+
+wxNativeFontInfo *wxFontBase::GetNativeFontInfo() const
 {
 #if !defined(__WXGTK__)
-    wxNativeFontInfo fontInfo;
+    wxNativeFontInfo *fontInfo = new wxNativeFontInfo;
 
-    fontInfo.pointSize = GetPointSize();
-    fontInfo.family = GetFamily();
-    fontInfo.style = GetStyle();
-    fontInfo.weight = GetWeight();
-    fontInfo.underlined = GetUnderlined();
-    fontInfo.faceName = GetFaceName();
-    fontInfo.encoding = GetEncoding();
+    fontInfo->pointSize = GetPointSize();
+    fontInfo->family = GetFamily();
+    fontInfo->style = GetStyle();
+    fontInfo->weight = GetWeight();
+    fontInfo->underlined = GetUnderlined();
+    fontInfo->faceName = GetFaceName();
+    fontInfo->encoding = GetEncoding();
 
     return fontInfo;
 #else
-    return wxNullNativeFontInfo;
+    return (wxNativeFontInfo *)NULL;
 #endif
 }
 
@@ -92,6 +103,19 @@ void wxFontBase::SetNativeFontInfo(const wxNativeFontInfo& info)
     SetFaceName(info.faceName);
     SetEncoding(info.encoding);
 #endif
+}
+
+wxString wxFontBase::GetNativeFontInfoDesc() const
+{
+    wxString fontDesc;
+    wxNativeFontInfo *fontInfo = GetNativeFontInfo();
+    if ( fontInfo )
+    {
+        fontDesc = fontInfo->ToString();
+        delete fontInfo;
+    }
+
+    return fontDesc;
 }
 
 wxFont& wxFont::operator=(const wxFont& font)
@@ -213,7 +237,7 @@ wxString wxNativeFontInfo::ToString() const
 {
     wxString s;
 
-    s.Printf("%d;%d;%d;%d;%d;%s;%d",
+    s.Printf(_T("%d;%d;%d;%d;%d;%s;%d"),
              pointSize,
              family,
              style,
@@ -225,5 +249,5 @@ wxString wxNativeFontInfo::ToString() const
     return s;
 }
 
-#endif
+#endif // generic wxNativeFontInfo implementation
 

@@ -11,6 +11,7 @@
 #pragma implementation "fontdlg.h"
 #endif
 
+#include "wx/fontutil.h"
 #include "wx/fontdlg.h"
 #include "wx/utils.h"
 #include "wx/intl.h"
@@ -64,7 +65,8 @@ void gtk_fontdialog_ok_callback( GtkWidget *WXUNUSED(widget), wxFontDialog *dial
 
     if (!gfont)
     {
-        wxMessageBox(_("Please choose a valid font."), _("Error"), wxOK);
+        wxMessageBox(_("Please choose a valid font."), _("Error"),
+                     wxOK | wxICON_ERROR);
         return;
     }
 
@@ -101,13 +103,12 @@ void gtk_fontdialog_ok_callback( GtkWidget *WXUNUSED(widget), wxFontDialog *dial
 
     // we ignore the facename here - should be enough to choose an arbitrary
     // one if the registry/encoding are specified
-    //  dialog->m_fontData.EncodingInfo().facename = xfamily;
     fontdata.EncodingInfo().xregistry = xregistry;
     fontdata.EncodingInfo().xencoding = xencoding;
 
     // pass fontdata to wxFont ctor so that it can get the encoding from there
     // if it is already known (otherwise it will try to deduce it itself)
-    dialog->m_fontData.SetChosenFont( wxFont(fontname, fontdata) );
+    dialog->m_fontData.SetChosenFont(wxFont(fontname, fontdata.GetEncoding()));
 
     g_free( fontname );
 
@@ -178,11 +179,21 @@ wxFontDialog::wxFontDialog( wxWindow *parent, wxFontData *fontdata )
     wxFont font = m_fontData.GetInitialFont();
     if( font.Ok() )
     {
-        wxNativeFontInfo info = font.GetNativeFontInfo();
+        wxNativeFontInfo *info = font.GetNativeFontInfo();
 
-        if( info.xFontName.IsEmpty() )
-            font.GetInternalFont();
-        gtk_font_selection_dialog_set_font_name(sel, wxConvCurrent->cWX2MB(info.xFontName.GetData()));
+        if ( info )
+        {
+            const wxString& fontname = info->xFontName;
+            if ( !fontname )
+                font.GetInternalFont();
+            gtk_font_selection_dialog_set_font_name(sel,
+                                                    wxConvCurrent->cWX2MB(fontname));
+        }
+        else
+        {
+            // this is not supposed to happen!
+            wxFAIL_MSG(_T("font is ok but no native font info?"));
+        }
     }
 }
 

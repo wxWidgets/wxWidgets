@@ -26,47 +26,35 @@
 
 #include "wx/font.h"        // for wxFont and wxFontEncoding
 
-// for our purposes here, GDK and X are identical
-#if defined(__WXGTK__) || defined(__X__)
-    #define _WX_X_FONTLIKE
-#endif
-
 // ----------------------------------------------------------------------------
 // types
 // ----------------------------------------------------------------------------
 
-// This private structure specifies all the parameters needed to create a font
-// with the given encoding on this platform.
-//
-// Under X, it contains the last 2 elements of the font specifications
-// (registry and encoding).
-//
-// Under Windows, it contains a number which is one of predefined CHARSET_XXX
-// values.
-//
-// Under all platforms it also contains a facename string which should be
-// used, if not empty, to create fonts in this encoding (this is the only way
-// to create a font of non-standard encoding (like KOI8) under Windows - the
-// facename specifies the encoding then)
-
-struct WXDLLEXPORT wxNativeEncodingInfo
+// wxNativeFontInfo is platform-specific font representation: this struct
+// should be considered as opaque font description only used by the native
+// functions, the user code can only get the objects of this type from
+// somewhere and pass it somewhere else (possibly save them somewhere using
+// ToString() and restore them using FromString())
+struct WXDLLEXPORT wxNativeFontInfo
 {
-    wxString facename;          // may be empty meaning "any"
-    wxFontEncoding encoding;    // so that we know what this struct represents
+#if defined(__WXGTK__)
+    wxString     xFontName;
+#else // other platforms
+    //
+    //  This is a generic implementation that should work on all ports
+    //  without specific support by the port.
+    //
+    int           pointSize;
+    int           family;
+    int           style;
+    int           weight;
+    bool          underlined;
+    wxString      faceName;
+    wxFontEncoding encoding;
+#endif // platforms
 
-#if defined(__WXMSW__) || defined(__WXPM__) || defined(__WXMAC__)
-    wxNativeEncodingInfo() { charset = 0; /* ANSI_CHARSET */ }
-
-    int      charset;
-#elif defined(_WX_X_FONTLIKE)
-    wxString xregistry,
-             xencoding;
-#else
-    #error "Unsupported toolkit"
-#endif
-
-    // this struct is saved in config by wxFontMapper, so it should know to
-    // serialise itself (implemented in platform-specific code)
+    // it is important to be able to serialize wxNativeFontInfo objects to be
+    // able to store them (in config file, for example)
     bool FromString(const wxString& s);
     wxString ToString() const;
 };

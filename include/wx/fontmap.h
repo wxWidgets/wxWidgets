@@ -21,9 +21,6 @@
 // ----------------------------------------------------------------------------
 
 #include "wx/fontenc.h"         // for wxFontEncoding
-#if wxUSE_GUI
-    #include "wx/fontutil.h"    // for wxNativeEncodingInfo
-#endif // wxUSE_GUI
 
 #if wxUSE_CONFIG
     class WXDLLEXPORT wxConfigBase;
