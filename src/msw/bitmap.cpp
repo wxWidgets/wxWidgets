@@ -1580,10 +1580,81 @@ void wxFreeDIB(LPBITMAPINFO lpDIBHeader)
 #endif
 
 // ----------------------------------------------------------------------------
-// other helper functions
+// global helper functions implemented here
 // ----------------------------------------------------------------------------
 
-extern HBITMAP wxInvertMask(HBITMAP hbmpMask, int w, int h)
+// helper of wxBitmapToHICON/HCURSOR
+static
+HICON wxBitmapToIconOrCursor(const wxBitmap& bmp,
+                             bool iconWanted,
+                             int hotSpotX,
+                             int hotSpotY)
+{
+    if ( !bmp.Ok() )
+    {
+        // we can't create an icon/cursor form nothing
+        return 0;
+    }
+
+    wxMask *mask = bmp.GetMask();
+    if ( !mask )
+    {
+        // we must have a mask for an icon, so even if it's probably incorrect,
+        // do create it (grey is the "standard" transparent colour)
+        mask = new wxMask(bmp, *wxLIGHT_GREY);
+    }
+
+    ICONINFO iconInfo;
+    iconInfo.fIcon = iconWanted;  // do we want an icon or a cursor?
+    if ( !iconWanted )
+    {
+        iconInfo.xHotspot = hotSpotX;
+        iconInfo.yHotspot = hotSpotY;
+    }
+
+    iconInfo.hbmMask = wxInvertMask((HBITMAP)mask->GetMaskBitmap());
+    iconInfo.hbmColor = GetHbitmapOf(bmp);
+
+    // black out the transparent area to preserve background colour, because
+    // Windows blits the original bitmap using SRCINVERT (XOR) after applying
+    // the mask to the dest rect.
+    {
+        MemoryHDC dcSrc, dcDst;
+        SelectInHDC selectMask(dcSrc, (HBITMAP)mask->GetMaskBitmap()),
+                    selectBitmap(dcDst, iconInfo.hbmColor);
+
+        if ( !::BitBlt(dcDst, 0, 0, bmp.GetWidth(), bmp.GetHeight(),
+                       dcSrc, 0, 0, SRCAND) )
+        {
+            wxLogLastError(_T("BitBlt"));
+        }
+    }
+
+    HICON hicon = ::CreateIconIndirect(&iconInfo);
+
+    if ( !bmp.GetMask() )
+    {
+        // we created the mask, now delete it
+        delete mask;
+    }
+
+    // delete the inverted mask bitmap we created as well
+    ::DeleteObject(iconInfo.hbmMask);
+
+    return hicon;
+}
+
+HICON wxBitmapToHICON(const wxBitmap& bmp)
+{
+    return wxBitmapToIconOrCursor(bmp, TRUE, 0, 0);
+}
+
+HCURSOR wxBitmapToHCURSOR(const wxBitmap& bmp, int hotSpotX, int hotSpotY)
+{
+    return (HCURSOR)wxBitmapToIconOrCursor(bmp, FALSE, hotSpotX, hotSpotY);
+}
+
+HBITMAP wxInvertMask(HBITMAP hbmpMask, int w, int h)
 {
 #ifndef __WXMICROWIN__
     wxCHECK_MSG( hbmpMask, 0, _T("invalid bitmap in wxInvertMask") );

@@ -279,6 +279,17 @@ extern void PixelToHIMETRIC(LONG *x, LONG *y);
 // to invert the mask each time we pass one/get one to/from Windows
 extern HBITMAP wxInvertMask(HBITMAP hbmpMask, int w = 0, int h = 0);
 
+// Creates an icon or cursor depending from a bitmap
+//
+// The bitmap must be valid and it should have a mask. If it doesn't, a default
+// mask is created using light grey as the transparent colour.
+extern HICON wxBitmapToHICON(const wxBitmap& bmp);
+
+// Same requirments as above apply and the bitmap must also have the correct
+// size.
+extern
+HCURSOR wxBitmapToHCURSOR(const wxBitmap& bmp, int hotSpotX, int hotSpotY);
+
 // get (x, y) from DWORD - notice that HI/LOWORD can *not* be used because they
 // will fail on system with multiple monitors where the coords may be negative
 //
