@@ -406,7 +406,7 @@ wxDbInf* BrowserDB::OnGetCatalog(int Quiet)
 }
 
 //----------------------------------------------------------------------------------------
-wxDbColInf* BrowserDB::OnGetColumns(char *tableName, int numCols, int Quiet)
+wxDbColInf* BrowserDB::OnGetColumns(char *tableName, UWORD numCols, int Quiet)
 {
     char UName[255];
     int i;
