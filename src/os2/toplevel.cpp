@@ -706,6 +706,14 @@ bool wxTopLevelWindowOS2::Show(
     SWP                             vSwp;
     RECTL                           vRect;
 
+    if (bShow != IsShown() )
+    {
+        m_isShown = bShow;
+    }
+    else
+    {
+        DBUG_RETURN(FALSE);
+    }
     if (bShow)
     {
         if (m_bMaximizeOnShow)
