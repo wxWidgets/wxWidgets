@@ -668,7 +668,7 @@ static int gtk_window_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_ev
     if (win->IsTopLevel())
     {
         gtk_paint_flat_box (parent->m_widget->style, pizza->bin_window, GTK_STATE_NORMAL,
-		    GTK_SHADOW_NONE, &gdk_event->area, parent->m_widget, "base", 0, 0, -1, -1);
+            GTK_SHADOW_NONE, &gdk_event->area, parent->m_widget, "base", 0, 0, -1, -1);
     } 
     else
     {
@@ -681,7 +681,7 @@ static int gtk_window_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_ev
                 if (frame->GetStatusBar() == win)
                 {
                     gtk_paint_flat_box (parent->m_widget->style, pizza->bin_window, GTK_STATE_NORMAL,
-		                GTK_SHADOW_NONE, &gdk_event->area, parent->m_widget, "base", 0, 0, -1, -1);
+                        GTK_SHADOW_NONE, &gdk_event->area, parent->m_widget, "base", 0, 0, -1, -1);
                 }
             }
             else
@@ -693,7 +693,7 @@ static int gtk_window_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_ev
                 if (!parent) parent = win;
                     
                 gtk_paint_flat_box (parent->m_widget->style, pizza->bin_window, GTK_STATE_NORMAL,
-		            GTK_SHADOW_NONE, &gdk_event->area, parent->m_widget, "base", 0, 0, -1, -1);
+                    GTK_SHADOW_NONE, &gdk_event->area, parent->m_widget, "base", 0, 0, -1, -1);
             }
         }
     }
@@ -1575,22 +1575,17 @@ static gint gtk_window_focus_in_callback( GtkWidget *widget, GdkEvent *WXUNUSED(
         wxActivateEvent event( wxEVT_ACTIVATE, TRUE, win->GetId() );
         event.SetEventObject( win );
 
-        if (win->GetEventHandler()->ProcessEvent( event ))
-        {
-            gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "focus_in_event" );
-            return TRUE;
-        }
+        // ignore return value
+        win->GetEventHandler()->ProcessEvent( event );
     }
-    else
-    {
-        wxFocusEvent event( wxEVT_SET_FOCUS, win->GetId() );
-        event.SetEventObject( win );
 
-        if (win->GetEventHandler()->ProcessEvent( event ))
-        {
-            gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "focus_in_event" );
-            return TRUE;
-        }
+    wxFocusEvent event( wxEVT_SET_FOCUS, win->GetId() );
+    event.SetEventObject( win );
+
+    if (win->GetEventHandler()->ProcessEvent( event ))
+    {
+       gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "focus_in_event" );
+       return TRUE;
     }
 
     return FALSE;
@@ -1647,22 +1642,17 @@ static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEvent *WXUNUSED
         wxActivateEvent event( wxEVT_ACTIVATE, FALSE, win->GetId() );
         event.SetEventObject( win );
 
-        if (win->GetEventHandler()->ProcessEvent( event ))
-        {
-            gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "focus_out_event" );
-            return TRUE;
-        }
+        // ignore return value
+        win->GetEventHandler()->ProcessEvent( event );
     }
-    else
-    {
-        wxFocusEvent event( wxEVT_KILL_FOCUS, win->GetId() );
-        event.SetEventObject( win );
 
-        if (win->GetEventHandler()->ProcessEvent( event ))
-        {
-            gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "focus_out_event" );
-            return TRUE;
-        }
+    wxFocusEvent event( wxEVT_KILL_FOCUS, win->GetId() );
+    event.SetEventObject( win );
+
+    if (win->GetEventHandler()->ProcessEvent( event ))
+    {
+        gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "focus_out_event" );
+        return TRUE;
     }
 
     return FALSE;
