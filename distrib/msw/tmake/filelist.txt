@@ -401,7 +401,7 @@ checklst.cpp	GTK
 choice.cpp	GTK	LowLevel
 clipbrd.cpp	GTK	LowLevel
 colour.cpp	GTK	LowLevel
-combobox.cpp	GTK	LowLevel
+combobox.cpp	GTK
 control.cpp	GTK
 cursor.cpp	GTK	LowLevel
 data.cpp	GTK	LowLevel
