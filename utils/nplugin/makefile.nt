@@ -1,0 +1,32 @@
+#
+# File:		makefile.nt
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile : Builds utilities for Win95, VC++ 4.0
+# Use FINAL=1 argument to nmake to build final version with no debugging
+# info
+
+# Set WXDIR for your system
+WXDIR = $(WXWIN)
+
+THISDIR=$(WXDIR)\utils\nplugin
+
+!include $(WXDIR)\src\ntwxwin.mak
+
+DEBUG_FLAGS="/Zi /FR"
+LINK_DEBUG_FLAGS="/RELEASE"
+
+clean:
+        cd $(WXDIR)\utils\nplugin\src
+        nmake -f makefile.nt clean
+        cd $(WXDIR)\utils\nplugin\samples\simple
+        nmake -f makefile.nt clean
+        cd $(WXDIR)\utils\nplugin\samples\gui
+        nmake -f makefile.nt clean
+        cd $(WXDIR)\utils\nplugin
+

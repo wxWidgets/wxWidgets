@@ -1,0 +1,97 @@
+#
+# File:		makefile.bcc
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile : Builds wxWindows library wx.lib for Windows 3.1
+# and Borland C++ 3.1. This makefile calls makefile.bcc in msw and
+# base subdirectories.
+
+!if "$(BCCDIR)" == ""
+!error You must define the BCCDIR variable in autoexec.bat, e.g. BCCDIR=d:\bc4
+!endif
+
+!if "$(WXWIN)" == ""
+!error You must define the WXWIN variable in autoexec.bat, e.g. WXWIN=c:\wx
+!endif
+
+!ifndef DEBUG
+DEBUG=0
+!endif
+
+!ifndef FINAL
+FINAL=0
+!endif
+
+# Change these if needed.
+WXDIR = $(WXWIN)
+
+!include $(WXDIR)\src\makebcc.env
+
+!if "$(FINAL)" == "0"
+OPT = -Od
+DEBUG_FLAGS= -v /DDEBUG=$(DEBUG) # -v # -v for debugging info
+!else
+OPT = -O2
+DEBUG_FLAGS = /DDEBUG=$(DEBUG)
+!endif
+
+BOR_VER = 4
+
+#!if "$(BOR_VER)" == "3.1"
+#BCCDIR = d:\bc3
+#!elif "$(BOR_VER)" == "4"
+#BCCDIR = d:\bc4
+#!endif
+
+WXBASEINC = $(WXDIR)\include\base
+WXINC = $(WXDIR)\include\msw
+PROLOGIOINC = $(WXDIR)\utils\prologio\src
+XPMINC=$(WXDIR)\contrib\wxxpm\libxpm.34b\lib
+
+all:    wxwin.cfg
+	cd $(WXDIR)\src\msw
+	make -f makefile.bcc -DCFG=$(CFG) -DWXDIR=$(WXDIR) DEBUG=$(DEBUG) -DDEBUG_FLAGS=$(DEBUG_FLAGS) -DOPT=$(OPT) -DFINAL=$(FINAL)
+	cd $(WXDIR)\src
+
+clean:
+        erase wxwin.cfg
+	cd $(WXDIR)\src\msw
+	make -f makefile.bcc clean
+	cd $(WXDIR)\src
+
+wxwin.cfg: makefile.bcc
+	copy &&!
+-H=$(WXDIR)\src\borland.pch
+-2
+-P
+-d
+-w-hid
+-w-par
+-w-pia
+-w-aus
+-w-rch
+-ml
+-Od
+-WE
+-Fs-
+-Vf
+-I$(WXBASEINC);$(WXINC);$(PROLOGIOINC);$(XPMINC);$(BCCDIR)\include;$(WXDIR)\contrib\fafa;$(WXDIR)\contrib\itsybits;$(WXDIR)\utils\rcparser\src
+
+-L$(BCCDIR)\lib
+-Dwx_msw
+! wxwin.cfg
+!if "$(BOR_VER)" == "3.1"
+	echo -Ff=4 >>wxwin.cfg
+!elif "$(BOR_VER)" == "4"
+	echo -Ff=512 >>wxwin.cfg
+	echo -dc >>wxwin.cfg
+!endif
+
+
+# -O was: -Oxt
+

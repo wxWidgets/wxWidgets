@@ -1,0 +1,128 @@
+
+Installing wxWindows 2.0
+------------------------
+
+Unarchiving
+-----------
+
+If there is a setup program, run the setup program that comes with the Windows version.
+Do not install into a path that contains spaces. The installation program should set the
+WXWIN environment variable, which will be activated when your machine is rebooted.
+
+If there is no setup program, it will come as a series of .zip
+files:
+
+wx200gen.zip            Generic source code and samples (required)
+wx200msw.zip            Windows-specific source code and samples (required)
+wx200doc.zip            Documentation source code (not required)
+wx200hlp.zip            WinHelp documentation
+wx200ps.zip             PostScript documentation (will probably
+                        disappear in favour of PDF)
+wx200pdf.zip            Acrobat PDF documentation
+wx200htm.zip            HTML documentation
+
+Unarchive the required files plus any optional documentation
+files into a suitable directory such as c:\wx. Alter your
+WXWIN environment variable to point to this directory.
+
+Compilation
+-----------
+
+At present, wxWindows compiles with VC++ 1.5, VC++ 4.0, VC++ 5.0,
+BC++ 4.5/5.0, Gnu-Win32 b19, and Mingw32.
+
+Visual C++ 4.0/5.0 compilation
+------------------------------
+
+1. Change directory to wx\src\msw. Type 'nmake -f makefile.nt' to
+   make the wxWindows core library.
+2. Change directory to wx\samples and type 'nmake -f makefile.nt'
+   to make all the samples. You can also make them individually.
+
+Visual C++ 1.5 compilation
+--------------------------
+
+1. Change directory to wx\src\msw. Type 'nmake -f makefile.dos' to
+   make the wxWindows core library.
+2. Change directory to wx\samples and type 'nmake -f makefile.b32'
+   to make all the samples. You can also make them individually.
+   NOTE: only a few samples have up-to-date makefiles, e.g.
+   minimal, docview, mdi. The utils makefile does not yet work.
+
+Borland C++ 4.5/5.0 compilation
+-------------------------------
+
+1. Change directory to wx\src\msw. Type 'make -f makefile.b32' to
+   make the wxWindows core library.
+2. Change directory to wx\samples and type 'make -f makefile.b32'
+   to make all the samples. You can also make them individually.
+   NOTE: only a few samples have up-to-date makefiles, e.g.
+   minimal, docview, mdi. The utils makefile does not yet work.
+
+Gnu-Win32 b19/Mingw32 compilation
+---------------------------------
+
+wxWindows 2.0 supports Gnu-Win32 b19, Mingw32, and Mingw32/EGCS.
+
+Thanks are due to Keith Garry Boyce (garp@opustel.com) and Cygnus for making
+it all possible.
+
+From wxWindows 2.0 beta 9, both Gnu-Win32 b19 and Mingw32 (the minimal
+distribution of Gnu-Win32) can be used with the same makefiles.
+
+Here are the steps required:
+
+- Retrieve and install the latest beta of Gnu-Win32, or Mingw32, as per the
+  instructions with either of these packages.
+
+- If using Mingw32 (including the EGCS variant), you need some
+  extra files to use the wxWindows makefiles. You can find these
+  files in ports/mingw32 on the ftp site or CD-ROM, as extra.zip.
+  These should be extracted to the Mingw32 directory.
+
+- Modify the file wx/src/cygnus.bat (or mingw32.bat or mingegcs.bat)
+  to set up appropriate variables, if necessary mounting drives.
+  Run it before compiling.
+
+- For Gnu-Win32, make sure there's a \tmp directory on your
+  Windows drive or bison will crash.
+
+- Edit wx/src/makeg95.env and search for MINGW32. Take note of
+  the comments for adjusting settings to suit Gnu-Win32 or
+  Mingw32. Basically, this is just a case of adding the __MINGW32__ symbol
+  to OPTIONS for Mingw32, or removing it for Cygnus Gnu-Win32.
+  For Mingw32/EGCS, add both __MINGW32__ and __EGCS__.
+
+- Use the makefile.g95 files for compiling wxWindows and samples,
+  e.g.:
+  > cd c:\wx\src\msw
+  > make -f makefile.g95
+  > cd c:\wx\samples\minimal
+  > make -f makefile.g95
+
+- Use the 'strip' command to reduce executable size.
+
+- With Cygnus Gnu-Win32, you can invoke gdb --nw myfile.exe to
+  debug an executable.
+
+- If using GnuWin32 b18, you will need to copy windres.exe
+  from e.g. the Mingw32 distribution, to a directory in your path.
+
+All targets have 'clean' targets to allow removal of object files
+and other intermediate compiler files.
+
+Gotchas:
+
+- libwx.a is 28 MB or more.
+- install.exe doesn't have built-in decompression because lzexpand.lib
+  isn't available with Gnu-Win32. However, you can use it with external
+  decompression utilities.
+
+References:
+
+ - The GNU-WIN32 site is at
+     http://www.cygnus.com/gnu-win32/
+ - Mingw32 is available at:
+     http://agnes.dida.physik.uni-essen.de/~janjaap/mingw32/index.html
+ - See also http://web.ukonline.co.uk/julian.smart/wxwin/gnuwin32.htm
+

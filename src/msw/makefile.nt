@@ -1,0 +1,1307 @@
+#
+# File:		makefile.nt
+# Author:	Julian Smart
+# Created:	1997
+# Updated:	
+# Copyright:	(c) 1997, Julian Smart
+#
+# "%W% %G%"
+#
+# Makefile : Builds wxWindows library wx.lib for VC++ (32-bit)
+# Arguments:
+#
+# FINAL=1 argument to nmake to build version with no debugging info.
+# dll builds a library (wxdll.lib) suitable for creating DLLs
+#    * Note that the dll target is experimental - see docs/dll.txt.
+#
+!include <..\ntwxwin.mak>
+
+THISDIR=$(WXWIN)\src\msw
+
+!if "$(WXMAKINGDLL)" == "1"
+LIBTARGET=$(WXDIR)\lib\wx200.dll
+DUMMYOBJ=dummydll.obj
+!else
+LIBTARGET=$(WXLIB)
+DUMMYOBJ=dummy.obj
+!endif
+
+# Please set these according to the settings in wx_setup.h, so we can include
+# the appropriate libraries in wx.lib
+
+# This one overrides the others, to be consistent with the settings in wx_setup.h
+MINIMAL_WXWINDOWS_SETUP=0
+
+USE_XPM_IN_MSW=0
+
+!if "$(MINIMAL_WXWINDOWS_SETUP)" == "1"
+USE_XPM_IN_MSW=0
+!endif
+
+PERIPH_LIBS=
+PERIPH_TARGET=
+PERIPH_CLEAN_TARGET=
+
+!if "$(USE_XPM_IN_MSW)" == "1"
+PERIPH_LIBS=$(WXDIR)\contrib\wxxpm\xpm.lib $(PERIPH_LIBS)
+PERIPH_TARGET=xpm $(PERIPH_TARGET)
+PERIPH_CLEAN_TARGET=clean_xpm $(PERIPH_CLEAN_TARGET)
+!endif
+
+GENDIR=..\generic
+COMMDIR=..\common
+OLEDIR=ole
+MSWDIR=.
+
+DOCDIR = $(WXDIR)\docs
+
+GENERICOBJS= \
+  $(GENDIR)\choicdgg.obj \
+  $(GENDIR)\colrdlgg.obj \
+  $(GENDIR)\fontdlgg.obj \
+  $(GENDIR)\gridg.obj \
+  $(GENDIR)\helpxlp.obj \
+  $(GENDIR)\msgdlgg.obj \
+  $(GENDIR)\panelg.obj \
+  $(GENDIR)\printps.obj \
+  $(GENDIR)\prntdlgg.obj \
+  $(GENDIR)\scrolwin.obj \
+  $(GENDIR)\splitter.obj \
+  $(GENDIR)\statusbr.obj \
+  $(GENDIR)\tabg.obj \
+  $(GENDIR)\textdlgg.obj
+
+COMMONOBJS = \
+  $(COMMDIR)\cmndata.obj \
+  $(COMMDIR)\config.obj \
+  $(COMMDIR)\docview.obj \
+  $(COMMDIR)\dynarray.obj \
+  $(COMMDIR)\event.obj \
+  $(COMMDIR)\file.obj \
+  $(COMMDIR)\fileconf.obj \
+  $(COMMDIR)\filefn.obj \
+  $(COMMDIR)\gdicmn.obj \
+  $(COMMDIR)\intl.obj \
+  $(COMMDIR)\ipcbase.obj \
+  $(COMMDIR)\helpbase.obj \
+  $(COMMDIR)\layout.obj \
+  $(COMMDIR)\log.obj \
+  $(COMMDIR)\memory.obj \
+  $(COMMDIR)\module.obj \
+  $(COMMDIR)\object.obj \
+  $(COMMDIR)\odbc.obj \
+  $(COMMDIR)\postscrp.obj \
+  $(COMMDIR)\prntbase.obj \
+  $(COMMDIR)\resource.obj \
+  $(COMMDIR)\tbarbase.obj \
+  $(COMMDIR)\tbarsmpl.obj \
+  $(COMMDIR)\textfile.obj \
+  $(COMMDIR)\timercmn.obj \
+  $(COMMDIR)\utilscmn.obj \
+  $(COMMDIR)\validate.obj \
+  $(COMMDIR)\valtext.obj \
+  $(COMMDIR)\date.obj \
+  $(COMMDIR)\hash.obj \
+  $(COMMDIR)\list.obj \
+  $(COMMDIR)\string.obj \
+  $(COMMDIR)\time.obj \
+  $(COMMDIR)\wxexpr.obj \
+  $(COMMDIR)\y_tab.obj
+
+#  $(COMMDIR)\wxstrgnu\wxstrgnu.obj \
+#  $(COMMDIR)\wxstrgnu\wxregex.obj \
+#  $(COMMDIR)\matrix.obj \
+
+MSWOBJS = \
+  $(MSWDIR)\app.obj \
+  $(MSWDIR)\bitmap.obj \
+  $(MSWDIR)\bmpbuttn.obj \
+  $(MSWDIR)\brush.obj \
+  $(MSWDIR)\button.obj \
+  $(MSWDIR)\checkbox.obj \
+  $(MSWDIR)\checklst.obj \
+  $(MSWDIR)\choice.obj \
+  $(MSWDIR)\clipbrd.obj \
+  $(MSWDIR)\colordlg.obj \
+  $(MSWDIR)\colour.obj \
+  $(MSWDIR)\combobox.obj \
+  $(MSWDIR)\control.obj \
+  $(MSWDIR)\curico.obj \
+  $(MSWDIR)\cursor.obj \
+  $(MSWDIR)\data.obj \
+  $(MSWDIR)\dc.obj \
+  $(MSWDIR)\dcmemory.obj \
+  $(MSWDIR)\dcclient.obj \
+  $(MSWDIR)\dcprint.obj \
+  $(MSWDIR)\dcscreen.obj \
+  $(MSWDIR)\dde.obj \
+  $(MSWDIR)\dialog.obj \
+  $(MSWDIR)\dib.obj \
+  $(MSWDIR)\dibutils.obj \
+  $(MSWDIR)\dirdlg.obj \
+  $(MSWDIR)\filedlg.obj \
+  $(MSWDIR)\font.obj \
+  $(MSWDIR)\fontdlg.obj \
+  $(MSWDIR)\frame.obj \
+  $(MSWDIR)\gauge.obj \
+  $(MSWDIR)\gdiobj.obj \
+  $(MSWDIR)\helpwin.obj \
+  $(MSWDIR)\icon.obj \
+  $(MSWDIR)\imaglist.obj \
+  $(MSWDIR)\joystick.obj \
+  $(MSWDIR)\listbox.obj \
+  $(MSWDIR)\listctrl.obj \
+  $(MSWDIR)\main.obj \
+  $(MSWDIR)\mdi.obj \
+  $(MSWDIR)\menu.obj \
+  $(MSWDIR)\menuitem.obj \
+  $(MSWDIR)\metafile.obj \
+  $(MSWDIR)\minifram.obj \
+  $(MSWDIR)\msgdlg.obj \
+  $(MSWDIR)\nativdlg.obj \
+  $(MSWDIR)\ownerdrw.obj \
+  $(MSWDIR)\palette.obj \
+  $(MSWDIR)\pen.obj \
+  $(MSWDIR)\penwin.obj \
+  $(MSWDIR)\pnghand.obj \
+  $(MSWDIR)\printdlg.obj \
+  $(MSWDIR)\printwin.obj \
+  $(MSWDIR)\radiobox.obj \
+  $(MSWDIR)\radiobut.obj \
+  $(MSWDIR)\region.obj \
+  $(MSWDIR)\registry.obj \
+  $(MSWDIR)\scrolbar.obj \
+  $(MSWDIR)\settings.obj \
+  $(MSWDIR)\slider.obj \
+  $(MSWDIR)\spinbutt.obj \
+  $(MSWDIR)\statbmp.obj \
+  $(MSWDIR)\statbox.obj \
+  $(MSWDIR)\statbr95.obj \
+  $(MSWDIR)\stattext.obj \
+  $(MSWDIR)\tabctrl.obj \
+  $(MSWDIR)\taskbar.obj \
+  $(MSWDIR)\tbar95.obj \
+  $(MSWDIR)\tbarmsw.obj \
+  $(MSWDIR)\textctrl.obj \
+  $(MSWDIR)\thread.obj \
+  $(MSWDIR)\timer.obj \
+  $(MSWDIR)\treectrl.obj \
+  $(MSWDIR)\utils.obj \
+  $(MSWDIR)\wave.obj \
+  $(MSWDIR)\window.obj \
+  $(OLEDIR)\droptgt.obj \
+  $(OLEDIR)\oleutils.obj \
+  $(OLEDIR)\uuid.obj
+
+OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS)
+
+# Normal, static library
+all:    $(DUMMYOBJ) $(OBJECTS) $(PERIPH_TARGET) $(LIBTARGET)
+
+# wxWindows library as DLL
+dll:
+        nmake -f makefile.nt all FINAL=$(FINAL) DLL=1 WXMAKINGDLL=1
+
+# wxWindows + app as DLL. Only affects main.cpp.
+dllapp:
+        nmake -f makefile.nt all FINAL=$(FINAL) DLL=1
+
+# wxWindows + app as DLL, for Netscape plugin - remove DllMain.
+dllnp:
+        nmake -f makefile.nt all NOMAIN=1 FINAL=$(FINAL) DLL=1
+
+# Use this to make dummy.obj and generate a PCH.
+# You might use the dll target, then the pch target, in order to
+# generate a DLL, then a PCH/dummy.obj for compiling your applications with.
+#
+# Explanation: Normally, when compiling a static version of wx.lib, your dummy.obj/PCH
+# are associated with wx.lib. When using a DLL version of wxWindows, however,
+# the DLL is compiled without a PCH, so you only need it for compiling the app.
+# In fact headers are compiled differently depending on whether a DLL is being made
+# or an app is calling the DLL exported functionality (WXDLLEXPORT is different
+# in each case) so you couldn't use the same PCH.
+pch:
+        nmake -f makefile.nt pch1 WXUSINGDLL=1
+
+pch1:   $(DUMMYOBJ)
+
+$(WXDIR)\lib\wx.lib:      dummy.obj $(OBJECTS) $(PERIPH_LIBS)
+	-erase $(LIBTARGET)
+	$(implib) @<<
+-out:$@
+-machine:$(CPU)
+$(OBJECTS) $(PERIPH_LIBS)
+<<
+
+# Update the import library
+$(WXDIR)\lib\wx200.lib: $(DUMMYOBJ) $(OBJECTS)
+    $(implib) @<<
+    -machine:$(CPU)
+    -def:wx.def
+    $(DUMMYOBJ) $(OBJECTS)
+    -out:$(WXDIR)\lib\wx200.lib
+<<
+
+# Update the dynamic link library
+$(WXDIR)\lib\wx200.dll: $(DUMMYOBJ) $(OBJECTS) $(WXDIR)\lib\wx200.lib
+    $(link) @<<
+    $(LINKFLAGS)
+    -out:$(WXDIR)\lib\wx200.dll
+    $(DUMMYOBJ) $(OBJECTS) $(guilibsdll) shell32.lib comctl32.lib ctl3d32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib
+<<
+
+########################################################
+# Windows-specific objects
+
+dummy.obj: dummy.$(SRCSUFF) $(WXDIR)\include\wx\wx.h
+        cl $(CPPFLAGS) $(MAKEPRECOMP) /c /Tp $*.$(SRCSUFF)
+
+dummydll.obj: dummydll.$(SRCSUFF) $(WXDIR)\include\wx\wx.h
+        cl @<<
+$(CPPFLAGS) $(MAKEPRECOMP) /c /Tp $*.$(SRCSUFF)
+<<
+
+$(MSWDIR)/app.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/bitmap.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/bmpbuttn.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/brush.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/button.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/choice.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/checkbox.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/checklst.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/clipbrd.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/colordlg.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/colour.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/combobox.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/control.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/curico.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/cursor.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/data.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/dde.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(MSWDIR)/dc.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/dcmemory.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/dcclient.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/dcprint.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/dcscreen.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/dialog.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/dib.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/dibutils.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/dirdlg.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/filedlg.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/font.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/fontdlg.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/frame.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/gauge.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/gdiobj.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/icon.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/imaglist.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/joystick.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/listbox.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(MSWDIR)/listctrl.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(MSWDIR)/main.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/mdi.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/menu.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/menuitem.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/metafile.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/minifram.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/msgdlg.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/nativdlg.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/ownerdrw.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/palette.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/pen.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/penwin.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/pnghand.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/printdlg.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/printwin.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/radiobox.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/radiobut.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/region.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/registry.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/scrolbar.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/settings.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/slider.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/spinbutt.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/statbmp.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/statbox.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/statbr95.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/stattext.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/tabctrl.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/taskbar.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/tbar95.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/tbarmsw.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/textctrl.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/thread.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/timer.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/treectrl.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/utils.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/wave.obj:     $*.$(SRCSUFF)
+        echo $(CPPFLAGS)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(MSWDIR)/window.obj:     $*.$(SRCSUFF)
+        echo $(CPPFLAGS)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(OLEDIR)/droptgt.obj:     $*.$(SRCSUFF)
+        echo $(CPPFLAGS)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(OLEDIR)/oleutils.obj:     $*.$(SRCSUFF)
+        echo $(CPPFLAGS)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(OLEDIR)/uuid.obj:     $*.$(SRCSUFF)
+        echo $(CPPFLAGS)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+########################################################
+# Common objects (always compiled)
+
+$(COMMDIR)/cmndata.obj:     $*.$(SRCSUFF)
+        echo $(CPPFLAGS)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/config.obj:     $*.$(SRCSUFF)
+        echo $(CPPFLAGS)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/docview.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/dynarray.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/event.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/file.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/fileconf.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/filefn.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/gdicmn.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/intl.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/ipcbase.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/helpbase.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/layout.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/log.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/memory.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/module.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/object.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/odbc.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/postscrp.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/prntbase.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/resource.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/tbarbase.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/tbarsmpl.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/textfile.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/timercmn.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/utilscmn.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/validate.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/valtext.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/date.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/wxexpr.obj:     $*.$(SRCSUFF)
+        echo $(CPPFLAGS)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/hash.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/list.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/string.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/matrix.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+#$(COMMDIR)/wxstrgnu/wxstrgnu.obj:     $*.$(SRCSUFF)
+#        cl @<<
+#$(CPPFLAGS2) /c /Tp $*.$(SRCSUFF) /Fo$@
+#<<
+
+#$(COMMDIR)/wxstrgnu/wxregex.obj:     $*.$(SRCSUFF)
+#        cl @<<
+#$(CPPFLAGS2) /c /Tp $*.$(SRCSUFF) /Fo$@
+#<<
+
+$(COMMDIR)/time.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/y_tab.obj:     $*.c $(COMMDIR)/lex_yy.c
+        cl @<<
+$(CPPFLAGS2) /c $*.c -DUSE_DEFINE -DYY_USE_PROTOS /Fo$@
+<<
+
+$(COMMDIR)/y_tab.c:     $(COMMDIR)/dosyacc.c
+        copy $(COMMDIR)\dosyacc.c $(COMMDIR)\y_tab.c
+
+$(COMMDIR)/lex_yy.c:    $(COMMDIR)/doslex.c
+    copy $(COMMDIR)\doslex.c $(COMMDIR)\lex_yy.c
+
+########################################################
+# Generic objects (not always compiled, depending on
+# whether platforms have native implementations)
+
+$(GENDIR)/choicdgg.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(GENDIR)/colrdlgg.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(GENDIR)/fontdlgg.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(GENDIR)/gridg.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(GENDIR)/helpxlp.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(GENDIR)/msgdlgg.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(GENDIR)/panelg.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(GENDIR)/printps.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(GENDIR)/prntdlgg.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(GENDIR)/scrolwin.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(GENDIR)/splitter.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(GENDIR)/statusbr.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(GENDIR)/tabg.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(GENDIR)/textdlgg.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+#test: $(DUMMYOBJ) $(COMMDIR)/string.obj
+
+
+$(OBJECTS):	$(WXDIR)/include/wx/setup.h
+
+# Peripheral components
+
+xpm:
+    cd $(WXDIR)\contrib\wxxpm
+    nmake -f makefile.nt FINAL=$(FINAL)
+    cd $(WXDIR)\src\msw
+
+clean_xpm:
+    cd $(WXDIR)\contrib\wxxpm
+    nmake -f makefile.nt clean
+    cd $(WXDIR)\src\msw
+
+rcparser:
+    cd $(WXDIR)\utils\rcparser\src
+    nmake -f makefile.nt FINAL=$(FINAL)
+    cd $(WXDIR)\src\msw
+
+wxstring:
+    cd $(WXDIR)\contrib\wxstring
+    nmake -f makefile.nt OPTIONS="$(OPTIONS)" DEBUG="$(DEBUG)" FINAL=$(FINAL)
+    cd $(WXDIR)\src\msw
+
+clean_wxstring:
+    cd $(WXDIR)\contrib\wxstring
+    nmake -f makefile.nt clean
+    cd $(WXDIR)\src\msw
+
+clean_rcp:
+    cd $(WXDIR)\utils\rcparser\src
+    nmake -f makefile.nt clean
+    cd $(WXDIR)\src\msw
+
+clean: $(PERIPH_CLEAN_TARGET)
+        -erase *.obj
+        -erase $(LIBTARGET)
+        -erase ..\..\lib\wx200.dll
+        -erase ..\..\lib\wx200.lib
+        -erase ..\..\lib\wx200.exp
+        -erase ..\..\lib\wx200.pdb
+        -erase ..\..\lib\wx200.ilk
+        -erase *.pdb
+        -erase *.sbr
+        -erase *.pch
+        cd $(WXDIR)\src\msw
+        cd $(GENDIR)
+        -erase *.pdb
+        -erase *.sbr
+        -erase *.obj
+        cd $(WXDIR)\src\msw
+        cd $(COMMDIR)
+        -erase *.pdb
+        -erase *.sbr
+        -erase *.obj
+        -erase y_tab.c
+        -erase lex_yy.c
+        cd $(WXDIR)\src\msw
+        cd $(OLEDIR)
+        -erase *.pdb
+        -erase *.sbr
+        -erase *.obj
+        cd $(WXDIR)\src\msw
+#        -erase ..\common\wxstrgnu\*.obj
+#        -erase ..\common\lex_yy.c
+#        -erase ..\common\y_tab.c
+
+cleanall: clean
+
+# Making documents
+docs:   hlp
+hlp:    wxhlp refhlp portinghlp # faqhlp
+wxhlp:  $(DOCDIR)/winhelp/wx.hlp
+faqhlp: $(DOCDIR)/winhelp/faq.hlp
+refhlp: $(DOCDIR)/winhelp/techref.hlp
+rtf:    $(DOCDIR)/winhelp/wx.rtf
+faqrtf: $(DOCDIR)/winhelp/faq.rtf
+pdfrtf:    $(DOCDIR)/pdf/wx.rtf
+faqpdfrtf: $(DOCDIR)/pdf/faq.rtf
+refpdfrtf: $(DOCDIR)/pdf/techref.rtf
+html:	wxhtml # faqhtml
+wxhtml:	$(DOCDIR)\html\wx\wx.htm
+faqhtml: $(DOCDIR)\html\faq\faq.htm
+ps:     wxps referencps # faqps
+wxps:	$(WXDIR)\docs\ps\wx.ps
+faqps:	$(WXDIR)\docs\ps\faq.ps
+referencps:	$(WXDIR)\docs\ps\referenc.ps
+
+portinghtml: $(DOCDIR)\html\porting\port.htm
+portingrtf: $(DOCDIR)/winhelp/porting.rtf
+portinghlp: $(DOCDIR)/winhelp/porting.hlp
+portingpdfrtf: $(DOCDIR)/pdf/porting.rtf
+portingps:	$(WXDIR)\docs\ps\porting.ps
+
+alldocs: allhlp allhtml allpdfrtf # allps # TeX can't cope with references!
+
+allhlp: wxhlp portinghlp # faqhlp
+        cd $(WXDIR)\utils\wxprop\src
+        nmake -f makefile.nt hlp
+        cd $(WXDIR)\utils\dialoged\src
+        nmake -f makefile.nt hlp
+        cd $(THISDIR)
+
+#        cd $(WXDIR)\utils\wxhelp\src
+#        nmake -f makefile.nt hlp
+#        cd $(WXDIR)\utils\wxhelp2\src
+#        nmake -f makefile.nt hlp
+#        cd $(WXDIR)\utils\prologio\src
+#        nmake -f makefile.nt hlp
+#        cd $(WXDIR)\utils\tex2rtf\src
+#        nmake -f makefile.nt hlp
+#        cd $(WXDIR)\utils\wxgraph\src
+#        nmake -f makefile.nt hlp
+#        cd $(WXDIR)\utils\wxchart\src
+#        nmake -f makefile.nt hlp
+#        cd $(WXDIR)\utils\wxtree\src
+#        nmake -f makefile.nt hlp
+#        cd $(WXDIR)\utils\wxbuild\src
+#        nmake -f makefile.nt hlp
+#        cd $(WXDIR)\utils\wxgrid\src
+#        nmake -f makefile.nt hlp
+#        cd $(WXDIR)\utils\wxtab\src
+#        nmake -f makefile.nt hlp
+
+#        cd $(WXDIR)\utils\wxclips\src
+#        nmake -f makefile.nt hlp
+#        cd $(WXDIR)\utils\clips2c\src
+#        nmake -f makefile.nt hlp
+
+allhtml: wxhtml portinghtml # faqhtml
+        cd $(WXDIR)\utils\wxprop\src
+        nmake -f makefile.nt html
+        cd $(WXDIR)\utils\dialoged\src
+        nmake -f makefile.nt html
+        cd $(THISDIR)
+
+#        nmake -f makefile.nt html
+#        cd $(WXDIR)\utils\dialoged\src
+#        nmake -f makefile.nt html
+#        cd $(WXDIR)\utils\hytext\src
+#        nmake -f makefile.nt html
+#        cd $(WXDIR)\utils\wxhelp\src
+#        nmake -f makefile.nt html
+#        cd $(WXDIR)\utils\wxhelp2\src
+#        nmake -f makefile.nt html
+#        cd $(WXDIR)\utils\prologio\src
+#        nmake -f makefile.nt html
+#        cd $(WXDIR)\utils\tex2rtf\src
+#        nmake -f makefile.nt html
+#        cd $(WXDIR)\utils\wxgraph\src
+#        nmake -f makefile.nt html
+#        cd $(WXDIR)\utils\wxchart\src
+#        nmake -f makefile.nt html
+#        cd $(WXDIR)\utils\wxtree\src
+#        nmake -f makefile.nt html
+#        cd $(WXDIR)\utils\wxtab\src
+#        nmake -f makefile.nt html
+
+#        cd $(WXDIR)\utils\wxclips\src
+#        nmake -f makefile.nt html
+#        cd $(WXDIR)\utils\clips2c\src
+#        nmake -f makefile.nt html
+
+allps: wxps referencps portingps # faqps
+        cd $(WXDIR)\utils\wxprop\src
+        nmake -f makefile.nt ps
+        cd $(WXDIR)\utils\dialoged\src
+        nmake -f makefile.nt ps
+        cd $(THISDIR)
+
+allpdfrtf: pdfrtf portingpdfrtf # faqpdfrtf
+        cd $(WXDIR)\utils\wxprop\src
+        nmake -f makefile.nt pdfrtf
+        cd $(WXDIR)\utils\dialoged\src
+        nmake -f makefile.nt pdfrtf
+        cd $(THISDIR)
+
+#        cd $(WXDIR)\utils\wxhelp\src
+#        nmake -f makefile.nt ps
+#        cd $(WXDIR)\utils\wxhelp2\src
+#        nmake -f makefile.nt ps
+#        cd $(WXDIR)\utils\tex2rtf\src
+#        nmake -f makefile.nt ps
+#        cd $(WXDIR)\utils\wxgraph\src
+#        nmake -f makefile.nt ps
+#        cd $(WXDIR)\utils\wxchart\src
+#        nmake -f makefile.nt ps
+#        cd $(WXDIR)\utils\wxtree\src
+#        nmake -f makefile.nt ps
+#        cd $(THISDIR)
+
+#        cd $(WXDIR)\utils\wxtab\src
+#        nmake -f makefile.nt ps
+#        cd $(WXDIR)\utils\prologio\src
+#        nmake -f makefile.nt ps
+#        cd $(WXDIR)\utils\wxclips\src
+#        nmake -f makefile.nt ps
+#        cd $(WXDIR)\utils\clips2c\src
+#        nmake -f makefile.nt ps
+
+$(DOCDIR)/winhelp/wx.hlp:         $(DOCDIR)/latex/wx/wx.rtf $(DOCDIR)/latex/wx/wx.hpj
+        cd $(DOCDIR)/latex/wx
+        -erase wx.ph
+        hc wx
+        move wx.hlp $(DOCDIR)\winhelp\wx.hlp
+        move wx.cnt $(DOCDIR)\winhelp\wx.cnt
+        cd $(THISDIR)
+
+$(DOCDIR)/winhelp/porting.hlp:         $(DOCDIR)/latex/porting/porting.rtf $(DOCDIR)/latex/porting/porting.hpj
+        cd $(DOCDIR)/latex/porting
+        -erase porting.ph
+        hc porting
+        move porting.hlp $(DOCDIR)\winhelp\porting.hlp
+        move porting.cnt $(DOCDIR)\winhelp\porting.cnt
+        cd $(THISDIR)
+
+$(DOCDIR)/winhelp/faq.hlp:         $(DOCDIR)/latex/faq/faq.rtf $(DOCDIR)/latex/faq/faq.hpj
+        cd $(DOCDIR)/latex/faq
+        -erase faq.ph
+        hc faq
+        move faq.hlp $(DOCDIR)\winhelp\faq.hlp
+        move faq.cnt $(DOCDIR)\winhelp\faq.cnt
+        cd $(THISDIR)
+
+$(DOCDIR)/winhelp/techref.hlp:         $(DOCDIR)/latex/techref/techref.rtf $(DOCDIR)/latex/techref/techref.hpj
+        cd $(DOCDIR)/latex/techref
+        -erase techref.ph
+        hc techref
+        move techref.hlp $(DOCDIR)\winhelp\techref.hlp
+        move techref.cnt $(DOCDIR)\winhelp\techref.cnt
+        cd $(THISDIR)
+
+$(DOCDIR)/latex/wx/wx.rtf:         $(DOCDIR)/latex/wx/classes.tex $(DOCDIR)/latex/wx/body.tex $(DOCDIR)/latex/wx/topics.tex $(DOCDIR)/latex/wx/manual.tex
+        cd $(DOCDIR)\latex\wx
+        -start /w tex2rtf $(DOCDIR)/latex/wx/manual.tex $(DOCDIR)/latex/wx/wx.rtf -twice -winhelp
+        cd $(THISDIR)
+
+$(DOCDIR)/latex/porting/porting.rtf:         $(DOCDIR)/latex/porting/porting.tex
+        cd $(DOCDIR)\latex\porting
+        -start /w tex2rtf $(DOCDIR)/latex/porting/porting.tex $(DOCDIR)/latex/porting/porting.rtf -twice -winhelp
+        cd $(THISDIR)
+
+$(DOCDIR)/latex/faq/faq.rtf:         $(DOCDIR)/latex/faq/faq.tex
+        cd $(DOCDIR)\latex\faq
+        -start /w tex2rtf $(DOCDIR)/latex/faq/faq.tex $(DOCDIR)/latex/faq/faq.rtf -twice -winhelp
+        cd $(THISDIR)
+
+$(DOCDIR)/latex/techref/techref.rtf:         $(DOCDIR)/latex/techref/techref.tex
+        cd $(DOCDIR)\latex\techref
+        -start /w tex2rtf $(DOCDIR)/latex/techref/techref.tex $(DOCDIR)/latex/techref/techref.rtf -twice -winhelp
+        cd $(THISDIR)
+
+$(DOCDIR)/pdf/wx.rtf:         $(DOCDIR)/latex/wx/classes.tex $(DOCDIR)/latex/wx/body.tex $(DOCDIR)/latex/wx/topics.tex $(DOCDIR)/latex/wx/manual.tex
+        cd $(DOCDIR)\latex\wx
+        -copy *.bmp *.wmf $(DOCDIR)\pdf
+        -start /w tex2rtf $(DOCDIR)/latex/wx/manual.tex $(DOCDIR)/pdf/wx.rtf -twice -rtf
+        cd $(THISDIR)
+
+$(DOCDIR)/pdf/porting.rtf:         $(DOCDIR)/latex/porting/porting.tex
+        cd $(DOCDIR)\latex\porting
+        -copy *.bmp *.wmf $(DOCDIR)\pdf
+        -start /w tex2rtf $(DOCDIR)/latex/porting/porting.tex $(DOCDIR)/pdf/porting.rtf -twice -rtf
+        cd $(THISDIR)
+
+$(DOCDIR)/pdf/faq.rtf:         $(DOCDIR)/latex/faq/faq.tex
+        cd $(DOCDIR)\latex\faq
+        -copy *.bmp *.wmf $(DOCDIR)\pdf
+        -start /w tex2rtf $(DOCDIR)/latex/faq/faq.tex $(DOCDIR)/pdf/faq.rtf -twice -rtf
+        cd $(THISDIR)
+
+$(DOCDIR)/pdf/techref.rtf:         $(DOCDIR)/latex/techref/techref.tex
+        cd $(DOCDIR)\latex\techref
+        -copy *.bmp *.wmf $(DOCDIR)\pdf
+        -start /w tex2rtf $(DOCDIR)/latex/techref/techref.tex $(DOCDIR)/pdf/techref.rtf -twice -rtf
+        cd $(THISDIR)
+
+$(DOCDIR)\html\wx\wx.htm:         $(DOCDIR)\latex\wx\classes.tex $(DOCDIR)\latex\wx\body.tex $(DOCDIR)/latex/wx/topics.tex $(DOCDIR)\latex\wx\manual.tex
+        cd $(DOCDIR)\latex\wx
+        -mkdir $(DOCDIR)\html\wx
+        -start /w tex2rtf $(DOCDIR)\latex\wx\manual.tex $(DOCDIR)\html\wx\wx.htm -twice -html
+        -erase $(DOCDIR)\html\wx\*.con
+        -erase $(DOCDIR)\html\wx\*.ref
+        -erase $(DOCDIR)\latex\wx\*.con
+        -erase $(DOCDIR)\latex\wx\*.ref
+        cd $(THISDIR)
+
+$(DOCDIR)\html\porting\port.htm:         $(DOCDIR)\latex\porting\porting.tex
+        cd $(DOCDIR)\latex\porting
+        -mkdir $(DOCDIR)\html\porting
+        -start /w tex2rtf $(DOCDIR)\latex\porting\porting.tex $(DOCDIR)\html\porting\port.htm -twice -html
+        -erase $(DOCDIR)\html\porting\*.con
+        -erase $(DOCDIR)\html\porting\*.ref
+        -erase $(DOCDIR)\latex\porting\*.con
+        -erase $(DOCDIR)\latex\porting\*.ref
+        cd $(THISDIR)
+
+$(DOCDIR)\html\faq\faq.htm:         $(DOCDIR)\latex\faq\faq.tex
+        cd $(DOCDIR)\latex\faq
+        -mkdir $(DOCDIR)\html\faq
+        -start /w tex2rtf $(DOCDIR)\latex\faq\faq.tex $(DOCDIR)\html\faq\faq.htm -twice -html
+        -erase $(DOCDIR)\html\faq\*.con
+        -erase $(DOCDIR)\html\faq\*.ref
+        -erase $(DOCDIR)\latex\faq\*.con
+        -erase $(DOCDIR)\latexfaq\*.ref
+        cd $(THISDIR)
+
+$(WXDIR)\docs\latex\wx\manual.dvi:	$(DOCDIR)/latex/wx/body.tex $(DOCDIR)/latex/wx/manual.tex
+	cd $(WXDIR)\docs\latex\wx
+        -latex manual
+        -latex manual
+        -makeindx manual
+        -bibtex manual
+        -latex manual
+        -latex manual
+        cd $(THISDIR)
+
+$(WXDIR)\docs\latex\porting\porting.dvi:	$(DOCDIR)/latex/porting/porting.tex
+	cd $(WXDIR)\docs\latex\porting
+        -latex porting
+        -latex porting
+        -makeindx porting
+        -bibtex porting
+        -latex porting
+        -latex porting
+        cd $(THISDIR)
+
+$(WXDIR)\docs\ps\wx.ps:	$(WXDIR)\docs\latex\wx\manual.dvi
+	cd $(WXDIR)\docs\latex\wx
+        -dvips32 -o wx.ps manual
+        move wx.ps $(WXDIR)\docs\ps\wx.ps
+        cd $(THISDIR)
+
+$(WXDIR)\docs\ps\porting.ps:	$(WXDIR)\docs\latex\porting\porting.dvi
+	cd $(WXDIR)\docs\latex\porting
+        -dvips32 -o porting.ps porting
+        move porting.ps $(WXDIR)\docs\ps\porting.ps
+        cd $(THISDIR)
+
+$(WXDIR)\docs\latex\wx\referenc.dvi:	$(DOCDIR)/latex/wx/classes.tex $(DOCDIR)/latex/wx/topics.tex $(DOCDIR)/latex/wx/referenc.tex
+	cd $(WXDIR)\docs\latex\wx
+        -latex referenc
+        -latex referenc
+        -makeindx referenc
+        -bibtex referenc
+        -latex referenc
+        -latex referenc
+        cd $(THISDIR)
+
+$(WXDIR)\docs\ps\referenc.ps:	$(WXDIR)\docs\latex\wx\referenc.dvi
+	cd $(WXDIR)\docs\latex\wx
+        -dvips32 -o referenc.ps referenc
+        move referenc.ps $(WXDIR)\docs\ps\referenc.ps
+        cd $(THISDIR)
+
+$(WXDIR)\docs\latex\faq\faq.dvi:	$(DOCDIR)/latex/faq/faq.tex
+	cd $(WXDIR)\docs\latex\faq
+        -latex faq
+        -latex faq
+        -makeindx faq
+        -latex faq
+        -latex faq
+        cd $(THISDIR)
+
+$(WXDIR)\docs\ps\faq.ps:	$(WXDIR)\docs\latex\faq\faq.dvi
+	cd $(WXDIR)\docs\latex\faq
+        -dvips32 -o faq.ps faq
+        move faq.ps $(WXDIR)\docs\ps\faq.ps
+        cd $(THISDIR)
+
+

@@ -1,0 +1,202 @@
+
+Todo on wxWin 2.0, Windows platform
+-----------------------------------
+
+HIGH PRIORITY
+-------------
+
+Integrate Robert's wxGrid enhancements.
+
+Find/add wxThread sample - Arthur T-D?
+
+wxControl dimensions should be optionally based on dialog font
+size for portability (dialog units as per Windows).
+
+Implement wxDC floating point transformations.
+
+Remove transformation from device to logical coordinates from
+events e.g. mouse events.
+
+Add wxDC::DeviceToLogical -> wxPoint etc (convenience accessors).
+
+Revamp Dialog Editor for new controls and properties (e.g.
+window id).
+
+Registry classes (check out wxConfig class - see issues.txt).
+
+Update manual.
+    wxApp changes       DONE
+    wxMenu changes      DONE
+    wxModule            DONE
+    wxRegion            DONE
+    wxFile              DONE
+    wxTempFile
+    wxMask              DONE
+    wxDC:Blit           DONE
+    wxTaskBarIcon       DONE
+    wxMsgCatalog etc.
+    wxLog
+    wxConfig, wxRegKey
+    wxTabCtrl
+    wxWave
+    wxJoystick
+    wxStatusBar95 and wxFrame status bar functions
+    wxListBox changes (for ownerdraw functionality)
+    wxThread
+    wxString
+    wxTString
+    Drag and drop (change API if required, e.g. const).
+    wxCheckListBox
+    wxBaseArray, other arrays
+    (wxOwnerDrawn)
+    Various events
+    Document the include file for each class
+
+Write tutorial.
+
+Other static classes.
+
+Makefiles for other compilers. Generic makefiles?
+Rewrite makefiles to maintain simultaneous debug/release
+objects.
+
+More wxSystemSettings (see comment in settings.cpp).
+
+wxSocket integration.
+
+wxListCtrl, wxTreeCtrl, wxImageList integration with Robert
+Roebling's classes.
+
+Convert OGL, other utilities and samples.
+
+Check TODO entries.
+
+Change #include "wx/xxx.h" to #include <wx/xxx.h>
+
+Tidy code further, e.g. formatting from DevStudio, plus
+standard header.
+
+Shell function to invoke a document with open, print, whatever...
+
+wxTextCtrl (and wxMultiText/wxTextWindow in wxWin 1.xx) - differences between Edit
+and RichEdit controls.
+
+Make use of Vadim's gettext implementation throughout wxWin code.
+Document it.
+
+Change wxUpdateIterator to use wxRegion; or scrap
+wxUpdateIterator? See wxGTK.
+
+Check WXWIN_COMPATIBILITY mode, remove any unnecessary #ifdefs.
+
+Retain callback functions; have semi-compatible callback function prototypes
+for all controls, at least in WXWIN_COMPATIBLE mode, but
+retain (Set)Callback for all compilations. This is following a
+panicky response to losing callbacks.
+
+Merge dib.cpp, dibutils.cpp.
+
+Simplify the toolbar samples.
+
+Add a wxTabCtrl sample.
+
+LOW PRIORITY
+------------
+
+Debug PNG support in wxBitmap (no 4-bit support), and possibly add a convertor from PNG
+to HICON. We could perhaps also support inclusion of PNGs into
+a .res file as a custom resource.
+
+Fonts: ability to enumerate them.
+
+Angled text.
+
+Eliminate Set/GetDefaultBackgroundColour? Just take background
+colour for child control instead.
+
+Think about reimplementing wxBitmapButton, wxStaticBitmap using
+BS_BITMAP, SS_BITMAP - but this may not allow wxBitmap
+argument, so instead just allow controls loaded from native
+resource to deal with this style and call default processing.
+
+Completion of drag and drop support (Vadim).
+
+Better clipboard support.
+
+Toolbars: use event tables not virtual functions.
+
+wxWizard class?
+
+Doc/view - have some standard views/docs e.g. wxTextView.
+
+wxClassWizard for generating files, chunks of code.
+
+Miscellaneous file/system function wrappers.
+
+wxImage or replacement; further wxBitmap/wxIcon etc. functions
+(load animated icos).
+
+Integrate existing multimedia classes.
+
+Rich text class?
+
+Optimize size further.
+
+wxThread integration.
+
+Look at WinCE stuff incl. database classes.
+
+Improve conversion guide, compatibility classes, tools?
+
+Bug database.
+
+ActiveX support?
+
+OpenGL integration.
+
+Menu bitmaps - document Vadim's enhancements.
+
+Enhance Tex2RTF to generate Microsoft HTML help, perhaps Netscape
+HTML help also.
+
+wxCreateDynamicObject is apparently slow: ~ 2000 calls to strcmp. Need to
+use some kind of hash table scheme.
+
+Write wxDisplay class for querying settings and passing
+to wxFrame to mirror the X situation (multiple displays).
+
+Write translator between old and new .wxr formats (including
+substituting static text for obsolete labels).
+
+Improve and expand wxSizer classes.
+
+Write more validators.
+
+Classes for file/OS utility functions.
+
+Add support for more static controls e.g. wxStaticLine.
+
+GDI objects could be optimised further in constructors by
+searching for a matching, pre-existing object, and assigning from
+that, thus sharing the internal handle. A problem with this
+arises if you wish to change the data. But this can be handled by
+un-refing and creating a new handle. So we could reuse many
+Windows GDI objects without troubling the programmer. We might
+wish to switch this off in certain circumstances, e.g.
+
+    wxEnableGDIReuse(FALSE);
+    wxBrush brush(...);
+    wxEnableGDIReuse(TRUE);
+
+or even
+
+    wxGDIReuse reuse(FALSE);
+    wxBrush brush(...);
+
+which lasts until its scope ends. This might be needed e.g. if we
+needed to ensure that the operation was maximally efficient
+(creating a new object rather than searching may or may not be
+more efficient).
+
+Perhaps rewrite wxFile to use FILE* descriptors, so Eof and Flush
+can work.

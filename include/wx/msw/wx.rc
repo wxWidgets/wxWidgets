@@ -1,0 +1,110 @@
+/////////////////////////////////////////////////////////////////////////////
+// File:     wx.rc
+// Purpose:  wxWindows resource definitions. ALWAYS include
+//           this in your application resource file.
+//
+//                     wxWindows version 1.50
+// Copyright (c) 1993 Artificial Intelligence Applications Institute,
+//                   The University of Edinburgh
+//
+//                     Author: Julian Smart
+//                       Date: 9-4-93
+//
+// Permission to use, copy, modify, and distribute this software and its
+// documentation for any purpose is hereby granted without fee, provided
+// that the above copyright notice, author statement and this permission
+// notice appear in all copies of this software and related documentation.
+//
+// THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, EXPRESS,
+// IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY WARRANTY OF
+// MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+//
+// IN NO EVENT SHALL THE ARTIFICIAL INTELLIGENCE APPLICATIONS INSTITUTE OR THE
+// UNIVERSITY OF EDINBURGH BE LIABLE FOR ANY SPECIAL, INCIDENTAL, INDIRECT OR
+// CONSEQUENTIAL DAMAGES OF ANY KIND, OR ANY DAMAGES WHATSOEVER RESULTING FROM
+// LOSS OF USE, DATA OR PROFITS, WHETHER OR NOT ADVISED OF THE POSSIBILITY OF
+// DAMAGE, AND ON ANY THEORY OF LIABILITY, ARISING OUT OF OR IN CONNECTION WITH
+// THE USE OR PERFORMANCE OF THIS SOFTWARE.
+/////////////////////////////////////////////////////////////////////////////
+//
+//
+
+#ifdef __GNUWIN32__
+#include <wx/msw/gnuwin32/winresrc.h>
+#else
+#include <windows.h>
+#endif
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// Dummy Dialog for all wxCAPTION Dialog boxes
+//
+
+wxCaptionDialog DIALOG DISCARDABLE  34, 22, 144, 75
+STYLE DS_MODALFRAME | WS_CAPTION | WS_SYSMENU
+CAPTION "Dummy dialog"
+BEGIN
+	LTEXT "", -1,-2,-2,1,1   //necessary for __WATCOMC__
+END
+
+//
+// Dummy dialog for dialog boxes without caption & with thin frame
+//
+wxNoCaptionDialog DIALOG 34, 22, 144, 75
+STYLE WS_POPUP
+BEGIN
+	LTEXT "", -1,-2,-2,1,1   //necessary for __WATCOMC__
+END
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// This is the MDI Window menu
+//
+
+wxWindowMenu MENU DISCARDABLE
+BEGIN
+    POPUP "&Window"
+    BEGIN
+        MENUITEM "&Cascade",                    4002
+        MENUITEM "&Tile",                       4001
+        MENUITEM "&Arrange icons",              4003
+        MENUITEM "&Next",                       4004
+    END
+END
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// Standard wxWindows Cursors
+//
+
+WXCURSOR_HAND           CURSOR  DISCARDABLE     "wx/msw/hand.cur"
+WXCURSOR_BULLSEYE       CURSOR  DISCARDABLE     "wx/msw/bullseye.cur"
+WXCURSOR_PENCIL         CURSOR  DISCARDABLE     "wx/msw/pencil.cur"
+WXCURSOR_MAGNIFIER      CURSOR  DISCARDABLE     "wx/msw/magnif1.cur"
+WXCURSOR_NO_ENTRY       CURSOR  DISCARDABLE     "wx/msw/noentry.cur"
+WXCURSOR_SIZING         CURSOR  DISCARDABLE     "wx/msw/size.cur"
+WXCURSOR_ROLLER         CURSOR  DISCARDABLE     "wx/msw/roller.cur"
+WXCURSOR_WATCH          CURSOR  DISCARDABLE     "wx/msw/watch1.cur"
+WXCURSOR_PBRUSH         CURSOR  DISCARDABLE     "wx/msw/pbrush.cur"
+WXCURSOR_PLEFT          CURSOR  DISCARDABLE     "wx/msw/pntleft.cur"
+WXCURSOR_PRIGHT         CURSOR  DISCARDABLE     "wx/msw/pntright.cur"
+WXCURSOR_QARROW         CURSOR  DISCARDABLE     "wx/msw/query.cur"
+WXCURSOR_BLANK          CURSOR  DISCARDABLE     "wx/msw/blank.cur"
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// Default Icons
+//
+
+wxDEFAULT_FRAME               ICON "wx/msw/std.ico"
+wxDEFAULT_MDIPARENTFRAME      ICON "wx/msw/mdi.ico"
+wxDEFAULT_MDICHILDFRAME       ICON "wx/msw/child.ico"
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// Bitmaps
+//
+
+wxDISABLE_BUTTON_BITMAP         BITMAP  "wx/msw/disable.bmp"
+
+

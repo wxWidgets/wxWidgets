@@ -1,0 +1,51 @@
+#
+# File:		makefile.dos
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile : Builds wxWindows library wx.lib for Windows 3.1
+# You can invoke the makefile in this directory, wx/src, or
+# equally from wx/src/msw. This makefile was created to be
+# consistent with other makefiles which were appearing this
+# directory.
+
+# Arguments:
+#
+# FINAL=1 argument to nmake to build version with no debugging info.
+# DEBUG=1 argument to nmake to build DEBUG version (memory checking, tracing)
+#
+# Set WXDIR to the wxWindows directory if env. variable WXWIN not set.
+#
+WXDIR = $(WXWIN)
+THISDIR = $(WXDIR)\src\msw
+WXLIB = $(WXDIR)\lib
+WXINC = $(WXDIR)\include\msw
+WXBASESRC = $(WXDIR)\src\base
+WXBASEINC = $(WXDIR)\include\base
+
+!ifndef FINAL
+FINAL=0
+!endif
+
+!ifndef DEBUG
+DEBUG=0
+!endif
+
+all:
+  cd $(WXDIR)\src\msw
+  nmake -f makefile.dos FINAL=$(FINAL) DEBUG=$(DEBUG)
+  cd $(THISDIR)
+
+clean:
+  cd $(WXDIR)\src\msw
+  nmake -f makefile.dos clean
+  cd $(THISDIR)
+
+cleanall:
+  cd $(WXDIR)\src\msw
+  nmake -f makefile.dos cleanall
+  cd $(THISDIR)

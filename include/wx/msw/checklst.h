@@ -1,0 +1,62 @@
+///////////////////////////////////////////////////////////////////////////////
+// Name:        checklst.h
+// Purpose:     wxCheckListBox class - a listbox with checkable items
+// Author:      Vadim Zeitlin
+// Modified by: 
+// Created:     16.11.97
+// RCS-ID:      $Id$
+// Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
+// Licence:     wxWindows license
+///////////////////////////////////////////////////////////////////////////////
+
+#ifndef   __CHECKLST_H__
+#define   __CHECKLST_H__
+
+typedef   unsigned int  uint;
+
+#if !USE_OWNER_DRAWN
+  #error  "wxCheckListBox class requires owner-drawn functionality."
+#endif
+
+class wxCheckListBoxItem; // fwd decl, define in checklst.cpp
+
+class wxCheckListBox : public wxListBox
+{
+  DECLARE_DYNAMIC_CLASS(wxCheckListBox)
+public:
+  // ctors
+  wxCheckListBox();
+  wxCheckListBox(wxWindow *parent, const wxWindowID id,
+                 const wxPoint& pos = wxDefaultPosition,
+                 const wxSize& size = wxDefaultSize,
+                 const int nStrings = 0, 
+                 const wxString choices[] = NULL,
+                 const long style = 0,
+                 const wxValidator& validator = wxDefaultValidator,
+                 const wxString& name = wxListBoxNameStr);
+//                 const wxFont& font = wxNullFont);
+
+  // items may be checked
+  bool  IsChecked(uint uiIndex) const;
+  void  Check(uint uiIndex, bool bCheck = TRUE);
+
+  // accessors
+  uint  GetItemHeight() const { return m_nItemHeight; }
+
+protected:
+  // we create our items ourselves and they have non-standard size,
+  // so we need to override these functions
+  virtual wxOwnerDrawn *CreateItem(uint n);
+  virtual bool          MSWOnMeasure(WXMEASUREITEMSTRUCT *item);
+
+  // pressing space or clicking the check box toggles the item
+  void OnChar(wxKeyEvent& event);
+  void OnLeftClick(wxMouseEvent& event);
+
+private:
+  uint    m_nItemHeight;  // height of checklistbox items (the same for all)
+
+  DECLARE_EVENT_TABLE()
+};
+
+#endif    //_CHECKLST_H

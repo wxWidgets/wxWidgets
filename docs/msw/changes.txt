@@ -1,0 +1,273 @@
+
+wxWindows 2.0 for Windows Change Log
+------------------------------------
+
+Alpha 11, May ??th 1998
+-----------------------
+
+- Added thread.h, thread.cpp.
+- Changed Enabled, Checked to IsEnabled, IsChecked in wxMenu,
+  wxMenuBar.
+- Changed wxMenuItem::SetBackColor to SetBackgroundColour,
+  SetTextColor to SetTextColour, and added or made public several
+  wxMenuItem accessors.
+- Added two overloads to wxRegion::Contains. Added
+  wxRegion::IsEmpty for a more consistent naming convention.
+
+Alpha 10, May 7th 1998
+----------------------
+
+- Added desiredWidth, desiredHeight parameters to wxBitmapHandler
+  and wxIcon functions so that you can specify what size of
+  icon should be loaded. Probably will remain a Windows-specific thing.
+- wxStatusBar95 now works for MDI frames.
+- Toolbars in MDI frames now behave normally. They still
+  require application-supplied positioning code though.
+- Changed installation instructions, makefiles and batch files
+  for compiling with Gnu-Win32/Mingw32/EGCS. Also timercmn.cpp
+  change to support Mingw32/EGCS. Bison now used by default.
+
+Alpha 9, April 27th 1998
+------------------------
+
+- Cured bug in wxStatusBar95 that caused a crash if multiple
+  fields were used.
+- Added Gnu-Win32 b19/Mingw32 support by changing resource
+  compilation and pragmas.
+- Cured wxMenu bug introduced in alpha 8 - didn't respond to
+  commands because VZ changed the id setting in wxMenu::MSWCommand.
+
+Alpha 8, April 17th 1998
+------------------------
+
+- Added IsNull to wxGDIObject to check if the ref data is present or not.
+- Added PNG handler and sample - doesn't work for 16-bit PNGs for
+  some reason :-(
+- Added wxJoystick class and event handling, and simple demo.
+- Added simple wxWave class. Needs Stop() function.
+- Added wxModule (module.h/module.cpp) to allow definition
+  of modules to be initialized and cleaned up on wxWindows
+  startup/exit.
+- Start of Mingw32 compatibility (see minimal and dialogs samples
+  makefile.m95 files, and install.txt).
+- Note: Windows printing has stopped working... will investigate.
+VADIM'S CHANGES:
+- Updated wxString: bug fixes, added wxArrayString, some
+  compatibility functions.
+- Updated log.h/cpp, added wxApp::CreateLogTarget.
+- file.h: new wxTempFile class.
+- defs.h: added wxSB_SIZE_GRIP for wxStatusBar95
+- statbr95: wxStatusBar95 control.
+- registry.h/cpp: wxRegKey class for Win95 registry.
+- listbox.cpp: corrected some bugs with owner-drawn listboxes.
+- wxConfig and wxFileConfig classes.
+
+Alpha 7, March 30th 1998
+------------------------
+
+- Added tab classes, tab sample.
+- Now can return FALSE from OnInit and windows will be
+  cleaned up properly before exit.
+- Improved border handling so panels don't get borders
+  automatically.
+- Debugged MDI activation from Window menu.
+- Changes to memory debug handling, including checking for
+  memory leaks on application exit - but see issues.txt for
+  unresolved issues.
+- Added wxTaskBarIcon (taskbar.cpp/h, plus samples/taskbar)
+  to allow maintenance of an icon in the Windows 95 taskbar
+  tray area.
+- Got MFC sample working (MFC and wxWindows in the same
+  application), partly by tweaking ntwxwin.mak settings.
+- Got DLL compilation working again (VC++).
+- Changed wxProp/Dialog Editor filenames.
+
+Alpha 6, March 10th 1998
+------------------------
+
+- Found stack error bug - stopped unwanted OnIdle recursion.
+- Removed bug in wxTreeCtrl::InsertItem I added in alpha 5.
+- Changed exit behaviour in wxApp/wxFrame/wxDialog. Now will
+  check if the number of top-level windows is zero before
+  exiting. Also, wxApp::GetTopWindow will return either
+  m_topWindow or the first member of wxTopLevelWindows, so you
+  don't have to call wxApp::SetTopWindow.
+- Added dynarray.h/dynarray.cpp (from Vadim).
+- Added first cut at OLE drag and drop (from Vadim). dnd sample
+  added. Drop target only at this stage. See src/msw/ole/*.cpp,
+  wx/include/msw/ole/*.h. WIN32 only because of UUID usage.
+  Doesn't work with GnuWin32 - no appropriate headers e.g. for
+  IUnknown.
+  Doesn't work with BC++ either - crashes on program startup.
+- Added Vadim's owner-draw modifications - will probably remain
+  Windows-only. This enhances wxMenu, wxListBox. See ownerdrw sample.
+- Added wxLB_OWNERDRAW for owner-draw listboxes.
+- Vadim's wxCheckListBox derives from wxListBox. See checklst sample.
+  Doesn't entirely work for WIN16.
+- Vadim has added wxMenuItem as a separate file menuitem.cpp. It
+  can also be used as an argument to wxMenu::Append, not just for
+  internal implementation.
+- Some #ifdefs done for MINGW32 compilation (just alter OPTIONS
+  in makeg95.env, together with mingw32.bat). However, resource
+  binding is not working yet so most apps with dialogs crash.
+
+Alpha 5, 14th February 1998
+---------------------------
+
+- GENERIC AND MSW-SPECIFIC CODE NOW TREATED AS TWO SEPARATE
+  DISTRIBUTIONS. This change log will therefore now refer to
+  the Windows-specific code only. See docs/changes.txt for generic
+  changes.
+- Removed Windows-specific reference counting system (GDI
+  resources were cleaned up in idle time) - minimal
+  advantages now we have a wxWin reference counting system.
+- Added missing WXDLLEXPORT keywords so DLL compilation works
+  again.
+- Removed most warnings for GnuWin32 compilation.
+- Added wxRegion/wxRegionIterator, but haven't yet used it in
+  e.g. wxDC.
+
+Alpha 4, 31st January 1998
+--------------------------
+
+- Changed wxDC functions to take longs instead of floats. GetSize now takes
+  integer pointers, plus a version that returns a wxSize.
+- const keyword added to various wxDC functions.
+- Under Windows, wxDC no longer has any knowledge of whether
+  an associated window is scrolled or not. Instead, the device
+  origin is set by wxScrolledWindow in wxScrolledWindow::PrepareDC.
+- wxScrolledWindow applications can optionally override the virtual OnDraw
+  function instead of using the OnPaint event handler. The wxDC passed to
+  OnDraw will be translated by PrepareDC to reflect scrolling.
+  When drawing outside of OnDraw, must call PrepareDC explicitly.
+- wxToolBarBase/wxToolBarSimple similarly changed to allow for
+  scrolling toolbars.
+- Integrated wxPostScriptDC patches for 1.xx by Chris Breeze,
+  to help printing with multiple pages.
+- IPC classes given base classes (wxConnectionBase etc.) which
+  define the API used by different implementations. DDE
+  implementation updated to use these base classes.
+- wxHelpInstance now separated into wxHelpControllerBase (base
+  for all implementations), wxWinHelpController (uses standard
+  WinHelp), wxXLPHelPController (talks to wxHelp by DDE or
+  TCP/IP). There will be others eventually, such as
+  wxHTMLHelpController for Microsoft (and Netscape?) HTML Help.
+- Added Vadim Zeitlin's wxString class plus
+  internationalization code (gettext simulation, wxLocale, etc.).
+  New files from Vadim:
+  include\wx\string.h
+  include\wx\debug.h
+  include\wx\file.h
+  include\wx\log.h
+  include\wx\intl.h
+  src\common\string.cpp
+  src\common\log.cpp
+  src\common\intl.cpp
+  src\common\file.cpp
+  No longer use GNU wxString files.
+- Split off file-related functions into include\wx\filefn.h and
+  src\common\filefn.cpp.
+- Borland C++ support (WIN32) for main library and
+  samples, using makefile.b32 files.
+- Preparation done for allowing BC++ to compile wxWin as a DLL,
+  including changes to defs.h.
+- wxIntPoint removed, wxPoint is now int, and wxRealPoint
+  introduced.
+- Added wxShowEvent (generated when window is being shown or
+  hidden).
+- Got minimal, docview, mdi samples working for 16-bit VC++ and
+  cured 16-bit problem with wxTextCtrl (removed global memory
+  trick).
+- Updated GnuWin32 makefiles, checked minimal, mdi, docview samples.
+
+Alpha 3, September 1997
+-----------------------
+
+- wxListCtrl, wxTreeCtrl, wxImageList classes done.
+- Instigated new file hierarchy, split files and classes up more logically.
+- PrologIO and some other utils now put into core library.
+- Revamped print/preview classes, added wxPageSetupDialog.
+- Started documentation.
+
+Alpha 2, 30th April 1997
+------------------------
+
+- EVT_... macros now have at least one argument, for conformance
+  with MetroWerks compiler.
+- Added ids to .wxr file format.
+- Got Dialog Editor compiled and running again but need
+  to extend functionality to be in line with new controls.
+  Added dialoged\test app to allow dynamic loading of .wxr files
+  for testing purposes.
+- Rewrote wxBitmap to allow installable file type
+  handlers.
+- Rewrote wxBitmapButton, wxStaticBitmap to not use Fafa.
+- Wrote most of wxTreeCtrl and sample (need wxImageList to implement it
+  fully).
+- Added back wxRadioBox.
+- Tidied up wx_main.cpp, wxApp class, putting PenWin code in
+  a separate file.
+
+Alpha 1, 5th April 1997
+-----------------------
+
+At this point, the following has been achieved:
+
+- A lot, but not all, of the code has been revamped for better
+  naming conventions, protection of data members, and use of
+  wxString instead of char *.
+- Obsolete functionality deleted (e.g. default wxPanel layout,
+  old system event system) and code size reduced.
+- Class hierarchy changed (see design doc) - base classes such
+  as wxbWindow now removed.
+- No longer includes windows.h in wxWin headers, by using stand-in
+  Windows types where needed e.g. WXHWND.
+- PrologIO revised.
+- wxScrolledWindow, wxStatusBar and new MDI classes added.
+  MDI is now achived using separate classes, not window styles.
+- wxSystemSettings added, and made use of to reflect standard
+  Windows settings.
+- SetButtonFont/SetLabelFont replaced by SetFont; font and colour
+  settings mucho rationalised.
+- All windows are now subclassed with the same window proc to make
+  event handling far more consistent. Old internal wxWnd and derived
+  classes removed.
+- API for controls revised, in particular addition of
+  wxValidator parameters and removal of labels for some controls.
+- 1 validator written: see examples/validate.
+- Event table system introduced (see most samples and
+  wx_event.cpp/ProcessEvent, wx_event.h). wxEvtHandler
+  made more flexible, with Push/PopEventHandler allowing a chain
+  of event handlers.
+- wxRadioBox removed - will be added back soon.
+- Toolbar class hierarchy revised:
+  wxToolBarBase
+  wxToolBarSimple (= old wxToolBar)
+  wxToolBar95 (= old wxButtonBar under Win95
+  wxToolBarMSW (= old wxButtonBar under WIN16/WIN32)
+- Constraint system debugged somewhat (sizers now work properly).
+- wxFileDialog, wxDirDialog added; other common dialogs now
+  have class equivalents. Generic colour and font dialogs
+  rewritten to not need obsolete panel layout.
+- .wxr resource system partially reinstated, though needs
+  an integer ID for controls. Hopefully the resource system
+  will be replaced by something better and more efficient
+  in the future.
+- Device contexts no longer stored with window and accessed
+  with GetDC - use wxClientDC, wxPaintDC, wxWindowDC stack
+  variables instead.
+- wxSlider uses trackbar class under Win95, and wxSL_LABELS flag
+  determines whether labels are shown. Other Win95-specific flags
+  introduced, e.g. for showing ticks.
+- Styles introduced for dealing with 3D effects per window, for
+  any window: all Win95 3D effects supported, plus transparent windows.
+- Major change to allow 3D effect support without CTL3D, under
+  Win95.
+- Bitmap versions of button and checkbox separated out into new
+  classes, but unimplemented as yet because I intend to remove
+  the need for Fafa - it apparently causes GPFs in Win95 OSR 2.
+- utils/wxprop classes working (except maybe wxPropertyFormView)
+  in preparation for use in Dialog Editor.
+- GNU-WIN32 compilation verified (a month or so ago).
+
+

@@ -1,0 +1,552 @@
+#
+# File:		makefile.b32
+# Author:	Julian Smart
+# Created:	1998
+# Updated:
+# Copyright:
+#
+# "%W% %G%"
+#
+# Makefile : Builds wxWindows library wx.lib for MS Windows,
+# and Borland C++ (32-bit).
+
+!if "$(BCCDIR)" == ""
+!error You must define the BCCDIR variable in autoexec.bat, e.g. BCCDIR=d:\bc4
+!endif
+
+!if "$(WXWIN)" == ""
+!error You must define the WXWIN variable in autoexec.bat, e.g. WXWIN=c:\wx
+!endif
+
+WXDIR = $(WXWIN)
+!include $(WXDIR)\src\makeb32.env
+
+# Please set these according to the settings in wx_setup.h, so we can include
+# the appropriate libraries in wx.lib
+USE_CTL3D=0
+USE_XPM_IN_MSW=0
+
+PERIPH_LIBS=
+PERIPH_TARGET=
+PERIPH_CLEAN_TARGET=
+
+!if "$(USE_CTL3D)" == "1"
+#Use WIN32S/WIN95 32 bit version ctl3d32.dll under win95 (Andre Beltman)
+PERIPH_LIBS=$(WXDIR)\lib\ctl3d32.lib $(PERIPH_LIBS)
+PERIPH_TARGET=ctl3d $(PERIPH_TARGET)
+PERIPH_CLEAN_TARGET=clean_ctl3d $(PERIPH_CLEAN_TARGET)
+!endif
+
+!if "$(USE_XPM_IN_MSW)" == "1"
+PERIPH_LIBS=$(WXLIB)\xpm.lib $(PERIPH_LIBS)
+PERIPH_TARGET=xpm $(PERIPH_TARGET)
+PERIPH_CLEAN_TARGET=clean_xpm $(PERIPH_CLEAN_TARGET)
+!endif
+
+LIBTARGET= $(WXLIBDIR)\wx32.lib
+DUMMY=dummy
+
+GENDIR=..\generic
+COMMDIR=..\common
+OLEDIR=.\ole
+MSWDIR=.
+
+DOCDIR = $(WXDIR)\docs
+
+GENERICOBJS= \
+  $(MSWDIR)\choicdgg.obj \
+  $(MSWDIR)\colrdlgg.obj \
+  $(MSWDIR)\fontdlgg.obj \
+  $(MSWDIR)\gridg.obj \
+  $(MSWDIR)\helpxlp.obj \
+  $(MSWDIR)\msgdlgg.obj \
+  $(MSWDIR)\panelg.obj \
+  $(MSWDIR)\printps.obj \
+  $(MSWDIR)\prntdlgg.obj \
+  $(MSWDIR)\scrolwin.obj \
+  $(MSWDIR)\splitter.obj \
+  $(MSWDIR)\statusbr.obj \
+  $(MSWDIR)\tabg.obj \
+  $(MSWDIR)\textdlgg.obj
+
+COMMONOBJS = \
+  $(MSWDIR)\config.obj \
+  $(MSWDIR)\cmndata.obj \
+  $(MSWDIR)\docview.obj \
+  $(MSWDIR)\dynarray.obj \
+  $(MSWDIR)\event.obj \
+  $(MSWDIR)\file.obj \
+  $(MSWDIR)\fileconf.obj \
+  $(MSWDIR)\filefn.obj \
+  $(MSWDIR)\gdicmn.obj \
+  $(MSWDIR)\helpbase.obj \
+  $(MSWDIR)\intl.obj \
+  $(MSWDIR)\ipcbase.obj \
+  $(MSWDIR)\log.obj \
+  $(MSWDIR)\layout.obj \
+  $(MSWDIR)\memory.obj \
+  $(MSWDIR)\module.obj \
+  $(MSWDIR)\object.obj \
+  $(MSWDIR)\odbc.obj \
+  $(MSWDIR)\postscrp.obj \
+  $(MSWDIR)\prntbase.obj \
+  $(MSWDIR)\resource.obj \
+  $(MSWDIR)\tbarbase.obj \
+  $(MSWDIR)\tbarsmpl.obj \
+  $(MSWDIR)\textfile.obj \
+  $(MSWDIR)\timercmn.obj \
+  $(MSWDIR)\utilscmn.obj \
+  $(MSWDIR)\validate.obj \
+  $(MSWDIR)\valtext.obj \
+  $(MSWDIR)\date.obj \
+  $(MSWDIR)\hash.obj \
+  $(MSWDIR)\list.obj \
+  $(MSWDIR)\string.obj \
+  $(MSWDIR)\time.obj \
+  $(MSWDIR)\wxexpr.obj \
+  $(MSWDIR)\y_tab.obj
+
+#  $(MSWDIR)\matrix.obj \
+
+MSWOBJS = \
+  $(MSWDIR)\app.obj \
+  $(MSWDIR)\bitmap.obj \
+  $(MSWDIR)\bmpbuttn.obj \
+  $(MSWDIR)\brush.obj \
+  $(MSWDIR)\button.obj \
+  $(MSWDIR)\checkbox.obj \
+  $(MSWDIR)\checklst.obj \
+  $(MSWDIR)\choice.obj \
+  $(MSWDIR)\clipbrd.obj \
+  $(MSWDIR)\colordlg.obj \
+  $(MSWDIR)\colour.obj \
+  $(MSWDIR)\combobox.obj \
+  $(MSWDIR)\control.obj \
+  $(MSWDIR)\curico.obj \
+  $(MSWDIR)\cursor.obj \
+  $(MSWDIR)\data.obj \
+  $(MSWDIR)\dc.obj \
+  $(MSWDIR)\dcmemory.obj \
+  $(MSWDIR)\dcclient.obj \
+  $(MSWDIR)\dcprint.obj \
+  $(MSWDIR)\dcscreen.obj \
+  $(MSWDIR)\dde.obj \
+  $(MSWDIR)\dialog.obj \
+  $(MSWDIR)\dib.obj \
+  $(MSWDIR)\dirdlg.obj \
+  $(MSWDIR)\filedlg.obj \
+  $(MSWDIR)\font.obj \
+  $(MSWDIR)\fontdlg.obj \
+  $(MSWDIR)\frame.obj \
+  $(MSWDIR)\gauge.obj \
+  $(MSWDIR)\gdiobj.obj \
+  $(MSWDIR)\helpwin.obj \
+  $(MSWDIR)\icon.obj \
+  $(MSWDIR)\imaglist.obj \
+  $(MSWDIR)\joystick.obj \
+  $(MSWDIR)\listbox.obj \
+  $(MSWDIR)\listctrl.obj \
+  $(MSWDIR)\main.obj \
+  $(MSWDIR)\mdi.obj \
+  $(MSWDIR)\menu.obj \
+  $(MSWDIR)\menuitem.obj \
+  $(MSWDIR)\metafile.obj \
+  $(MSWDIR)\minifram.obj \
+  $(MSWDIR)\msgdlg.obj \
+  $(MSWDIR)\nativdlg.obj \
+  $(MSWDIR)\ownerdrw.obj \
+  $(MSWDIR)\palette.obj \
+  $(MSWDIR)\pen.obj \
+  $(MSWDIR)\penwin.obj \
+  $(MSWDIR)\printdlg.obj \
+  $(MSWDIR)\printwin.obj \
+  $(MSWDIR)\radiobox.obj \
+  $(MSWDIR)\radiobut.obj \
+  $(MSWDIR)\region.obj \
+  $(MSWDIR)\registry.obj \
+  $(MSWDIR)\scrolbar.obj \
+  $(MSWDIR)\settings.obj \
+  $(MSWDIR)\slider.obj \
+  $(MSWDIR)\spinbutt.obj \
+  $(MSWDIR)\statbmp.obj \
+  $(MSWDIR)\statbox.obj \
+  $(MSWDIR)\statbr95.obj \
+  $(MSWDIR)\stattext.obj \
+  $(MSWDIR)\tabctrl.obj \
+  $(MSWDIR)\taskbar.obj \
+  $(MSWDIR)\tbar95.obj \
+  $(MSWDIR)\tbarmsw.obj \
+  $(MSWDIR)\textctrl.obj \
+  $(MSWDIR)\thread.obj \
+  $(MSWDIR)\timer.obj \
+  $(MSWDIR)\treectrl.obj \
+  $(MSWDIR)\utils.obj \
+  $(MSWDIR)\wave.obj \
+  $(MSWDIR)\window.obj \
+  $(MSWDIR)\droptgt.obj \
+  $(MSWDIR)\oleutils.obj \
+  $(MSWDIR)\uuid.obj
+
+OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS)
+
+default:	wx
+
+wx:    $(CFG) $(DUMMY).obj $(OBJECTS) $(PERIPH_TARGET) $(LIBTARGET)
+
+all:	all_libs all_execs
+
+$(LIBTARGET): $(DUMMY).obj $(OBJECTS) $(BASEOBJECTS)
+	erase $(LIBTARGET)
+	tlib $(LIBTARGET) /P512 @&&!
+-+$(OBJECTS:.obj =.obj -+) -+$(BASEOBJECTS:.obj =.obj -+) -+$(PERIPH_LIBS:.lib =.lib -+)
+!
+
+dummy.obj: dummy.$(SRCSUFF) $(LOCALHEADERS) $(BASEHEADERS) $(WXDIR)\include\wx\wx.h
+dummydll.obj: dummydll.$(SRCSUFF) $(LOCALHEADERS) $(BASEHEADERS) $(WXDIR)\include\wx\wx.h
+
+$(MSWDIR)\y_tab.obj:     $(COMMDIR)\y_tab.c $(COMMDIR)\lex_yy.c
+
+#        cl @<<
+#$(CPPFLAGS2) /c $*.c -DUSE_DEFINE -DYY_USE_PROTOS /Fo$@
+#<<
+
+$(COMMDIR)\y_tab.c:     $(COMMDIR)\dosyacc.c
+        copy $(COMMDIR)\dosyacc.c $(COMMDIR)\y_tab.c
+
+$(COMMDIR)\lex_yy.c:    $(COMMDIR)\doslex.c
+    copy $(COMMDIR)\doslex.c $(COMMDIR)\lex_yy.c
+
+#$(OBJECTS):	$(WXDIR)\include\wx\setup.h
+
+$(MSWDIR)\app.obj:     $(MSWDIR)\app.$(SRCSUFF)
+
+$(MSWDIR)\bitmap.obj:     $(MSWDIR)\bitmap.$(SRCSUFF)
+
+$(MSWDIR)\bmpbuttn.obj:     $(MSWDIR)\bmpbuttn.$(SRCSUFF)
+
+$(MSWDIR)\brush.obj:     $(MSWDIR)\brush.$(SRCSUFF)
+
+$(MSWDIR)\button.obj:     $(MSWDIR)\button.$(SRCSUFF)
+
+$(MSWDIR)\choice.obj:     $(MSWDIR)\choice.$(SRCSUFF)
+
+$(MSWDIR)\checkbox.obj:     $(MSWDIR)\checkbox.$(SRCSUFF)
+
+$(MSWDIR)\checklst.obj:     $(MSWDIR)\checklst.$(SRCSUFF)
+
+$(MSWDIR)\clipbrd.obj:     $(MSWDIR)\clipbrd.$(SRCSUFF)
+
+$(MSWDIR)\colordlg.obj:     $(MSWDIR)\colordlg.$(SRCSUFF)
+
+$(MSWDIR)\colour.obj:     $(MSWDIR)\colour.$(SRCSUFF)
+
+$(MSWDIR)\combobox.obj:     $(MSWDIR)\combobox.$(SRCSUFF)
+
+$(MSWDIR)\control.obj:     $(MSWDIR)\control.$(SRCSUFF)
+
+$(MSWDIR)\curico.obj:     $(MSWDIR)\curico.$(SRCSUFF)
+
+$(MSWDIR)\cursor.obj:     $(MSWDIR)\cursor.$(SRCSUFF)
+
+$(MSWDIR)\data.obj:     $(MSWDIR)\data.$(SRCSUFF)
+
+$(MSWDIR)\dde.obj:     $(MSWDIR)\dde.$(SRCSUFF)
+
+$(MSWDIR)\dc.obj:     $(MSWDIR)\dc.$(SRCSUFF)
+
+$(MSWDIR)\dcmemory.obj:     $(MSWDIR)\dcmemory.$(SRCSUFF)
+
+$(MSWDIR)\dcclient.obj:     $(MSWDIR)\dcclient.$(SRCSUFF)
+
+$(MSWDIR)\dcprint.obj:     $(MSWDIR)\dcprint.$(SRCSUFF)
+
+$(MSWDIR)\dcscreen.obj:     $(MSWDIR)\dcscreen.$(SRCSUFF)
+
+$(MSWDIR)\dialog.obj:     $(MSWDIR)\dialog.$(SRCSUFF)
+
+$(MSWDIR)\dib.obj:     $(MSWDIR)\dib.$(SRCSUFF)
+
+$(MSWDIR)\dirdlg.obj:     $(MSWDIR)\dirdlg.$(SRCSUFF)
+
+$(MSWDIR)\filedlg.obj:     $(MSWDIR)\filedlg.$(SRCSUFF)
+
+$(MSWDIR)\font.obj:     $(MSWDIR)\font.$(SRCSUFF)
+
+$(MSWDIR)\fontdlg.obj:     $(MSWDIR)\fontdlg.$(SRCSUFF)
+
+$(MSWDIR)\frame.obj:     $(MSWDIR)\frame.$(SRCSUFF)
+
+$(MSWDIR)\gauge.obj:     $(MSWDIR)\gauge.$(SRCSUFF)
+
+$(MSWDIR)\gdiobj.obj:     $(MSWDIR)\gdiobj.$(SRCSUFF)
+
+$(MSWDIR)\icon.obj:     $(MSWDIR)\icon.$(SRCSUFF)
+
+$(MSWDIR)\imaglist.obj:     $(MSWDIR)\imaglist.$(SRCSUFF)
+
+$(MSWDIR)\joystick.obj:     $(MSWDIR)\joystick.$(SRCSUFF)
+
+$(MSWDIR)\listbox.obj:     $(MSWDIR)\listbox.$(SRCSUFF)
+
+$(MSWDIR)\listctrl.obj:     $(MSWDIR)\listctrl.$(SRCSUFF)
+
+$(MSWDIR)\main.obj:     $(MSWDIR)\main.$(SRCSUFF)
+
+$(MSWDIR)\mdi.obj:     $(MSWDIR)\mdi.$(SRCSUFF)
+
+$(MSWDIR)\menu.obj:     $(MSWDIR)\menu.$(SRCSUFF)
+
+$(MSWDIR)\menuitem.obj:     $(MSWDIR)\menu.$(SRCSUFF)
+
+$(MSWDIR)\metafile.obj:     $(MSWDIR)\metafile.$(SRCSUFF)
+
+$(MSWDIR)\minifram.obj:     $(MSWDIR)\minifram.$(SRCSUFF)
+
+$(MSWDIR)\msgdlg.obj:     $(MSWDIR)\msgdlg.$(SRCSUFF)
+
+$(MSWDIR)\nativdlg.obj:     $(MSWDIR)\nativdlg.$(SRCSUFF)
+
+$(MSWDIR)\ownerdrw.obj:     $(MSWDIR)\ownerdrw.$(SRCSUFF)
+
+$(MSWDIR)\palette.obj:     $(MSWDIR)\palette.$(SRCSUFF)
+
+$(MSWDIR)\pen.obj:     $(MSWDIR)\pen.$(SRCSUFF)
+
+$(MSWDIR)\penwin.obj:     $(MSWDIR)\penwin.$(SRCSUFF)
+
+$(MSWDIR)\printdlg.obj:     $(MSWDIR)\printdlg.$(SRCSUFF)
+
+$(MSWDIR)\printwin.obj:     $(MSWDIR)\printwin.$(SRCSUFF)
+
+$(MSWDIR)\radiobox.obj:     $(MSWDIR)\radiobox.$(SRCSUFF)
+
+$(MSWDIR)\radiobut.obj:     $(MSWDIR)\radiobut.$(SRCSUFF)
+
+$(MSWDIR)\region.obj:     $(MSWDIR)\region.$(SRCSUFF)
+
+$(MSWDIR)\registry.obj:     $(MSWDIR)\registry.$(SRCSUFF)
+
+$(MSWDIR)\scrolbar.obj:     $(MSWDIR)\scrolbar.$(SRCSUFF)
+
+$(MSWDIR)\settings.obj:     $(MSWDIR)\settings.$(SRCSUFF)
+
+$(MSWDIR)\slider.obj:     $(MSWDIR)\slider.$(SRCSUFF)
+
+$(MSWDIR)\spinbutt.obj:     $(MSWDIR)\spinbutt.$(SRCSUFF)
+
+$(MSWDIR)\statbmp.obj:     $(MSWDIR)\statbmp.$(SRCSUFF)
+
+$(MSWDIR)\statbox.obj:     $(MSWDIR)\statbox.$(SRCSUFF)
+
+$(MSWDIR)\statbr95.obj:     $(MSWDIR)\statbr95.$(SRCSUFF)
+
+$(MSWDIR)\stattext.obj:     $(MSWDIR)\stattext.$(SRCSUFF)
+
+$(MSWDIR)\tabctrl.obj:     $(MSWDIR)\tabctrl.$(SRCSUFF)
+
+$(MSWDIR)\taskbar.obj:     $(MSWDIR)\taskbar.$(SRCSUFF)
+
+$(MSWDIR)\tbar95.obj:     $(MSWDIR)\tbar95.$(SRCSUFF)
+
+$(MSWDIR)\tbarmsw.obj:     $(MSWDIR)\tbarmsw.$(SRCSUFF)
+
+$(MSWDIR)\textctrl.obj:     $(MSWDIR)\textctrl.$(SRCSUFF)
+
+$(MSWDIR)\thread.obj:     $(MSWDIR)\thread.$(SRCSUFF)
+
+$(MSWDIR)\timer.obj:     $(MSWDIR)\timer.$(SRCSUFF)
+
+$(MSWDIR)\treectrl.obj:     $(MSWDIR)\treectrl.$(SRCSUFF)
+
+$(MSWDIR)\utils.obj:     $(MSWDIR)\utils.$(SRCSUFF)
+
+$(MSWDIR)\wave.obj:     $(MSWDIR)\wave.$(SRCSUFF)
+
+$(MSWDIR)\window.obj:     $(MSWDIR)\window.$(SRCSUFF)
+
+$(MSWDIR)\droptgt.obj:     $(OLEDIR)\droptgt.$(SRCSUFF)
+
+$(MSWDIR)\oleutils.obj:     $(OLEDIR)\oleutils.$(SRCSUFF)
+
+$(MSWDIR)\uuid.obj:     $(OLEDIR)\uuid.$(SRCSUFF)
+
+########################################################
+# Common objects (always compiled)
+
+$(MSWDIR)\config.obj:     $(COMMDIR)\config.$(SRCSUFF)
+
+$(MSWDIR)\cmndata.obj:     $(COMMDIR)\cmndata.$(SRCSUFF)
+
+$(MSWDIR)\docview.obj:     $(COMMDIR)\docview.$(SRCSUFF)
+
+$(MSWDIR)\dynarray.obj:     $(COMMDIR)\dynarray.$(SRCSUFF)
+
+$(MSWDIR)\event.obj:     $(COMMDIR)\event.$(SRCSUFF)
+
+$(MSWDIR)\file.obj:     $(COMMDIR)\file.$(SRCSUFF)
+
+$(MSWDIR)\fileconf.obj:     $(COMMDIR)\fileconf.$(SRCSUFF)
+
+$(MSWDIR)\filefn.obj:     $(COMMDIR)\filefn.$(SRCSUFF)
+
+$(MSWDIR)\gdicmn.obj:     $(COMMDIR)\gdicmn.$(SRCSUFF)
+
+$(MSWDIR)\intl.obj:     $(COMMDIR)\intl.$(SRCSUFF)
+
+$(MSWDIR)\ipcbase.obj:     $(COMMDIR)\ipcbase.$(SRCSUFF)
+
+$(MSWDIR)\helpbase.obj:     $(COMMDIR)\helpbase.$(SRCSUFF)
+
+$(MSWDIR)\layout.obj:     $(COMMDIR)\layout.$(SRCSUFF)
+
+$(MSWDIR)\log.obj:     $(COMMDIR)\log.$(SRCSUFF)
+
+$(MSWDIR)\memory.obj:     $(COMMDIR)\memory.$(SRCSUFF)
+
+$(MSWDIR)\module.obj:     $(COMMDIR)\module.$(SRCSUFF)
+
+$(MSWDIR)\object.obj:     $(COMMDIR)\object.$(SRCSUFF)
+
+$(MSWDIR)\odbc.obj:     $(COMMDIR)\odbc.$(SRCSUFF)
+
+$(MSWDIR)\postscrp.obj:     $(COMMDIR)\postscrp.$(SRCSUFF)
+
+$(MSWDIR)\prntbase.obj:     $(COMMDIR)\prntbase.$(SRCSUFF)
+
+$(MSWDIR)\resource.obj:     $(COMMDIR)\resource.$(SRCSUFF)
+
+$(MSWDIR)\tbarbase.obj:     $(COMMDIR)\tbarbase.$(SRCSUFF)
+
+$(MSWDIR)\tbarsmpl.obj:     $(COMMDIR)\tbarsmpl.$(SRCSUFF)
+
+$(MSWDIR)\textfile.obj:     $(COMMDIR)\textfile.$(SRCSUFF)
+
+$(MSWDIR)\timercmn.obj:     $(COMMDIR)\timercmn.$(SRCSUFF)
+
+$(MSWDIR)\utilscmn.obj:     $(COMMDIR)\utilscmn.$(SRCSUFF)
+
+$(MSWDIR)\validate.obj:     $(COMMDIR)\validate.$(SRCSUFF)
+
+$(MSWDIR)\valtext.obj:     $(COMMDIR)\valtext.$(SRCSUFF)
+
+$(MSWDIR)\date.obj:     $(COMMDIR)\date.$(SRCSUFF)
+
+$(MSWDIR)\wxexpr.obj:     $(COMMDIR)\wxexpr.$(SRCSUFF)
+
+$(MSWDIR)\hash.obj:     $(COMMDIR)\hash.$(SRCSUFF)
+
+$(MSWDIR)\list.obj:     $(COMMDIR)\list.$(SRCSUFF)
+
+$(MSWDIR)\string.obj:     $(COMMDIR)\string.$(SRCSUFF)
+
+$(MSWDIR)\matrix.obj:     $(COMMDIR)\matrix.$(SRCSUFF)
+
+$(MSWDIR)\time.obj:     $(COMMDIR)\time.$(SRCSUFF)
+
+########################################################
+# Generic objects (not always compiled, depending on
+# whether platforms have native implementations)
+
+$(MSWDIR)\choicdgg.obj:     $(GENDIR)\choicdgg.$(SRCSUFF)
+
+$(MSWDIR)\colrdlgg.obj:     $(GENDIR)\colrdlgg.$(SRCSUFF)
+
+$(MSWDIR)\fontdlgg.obj:     $(GENDIR)\fontdlgg.$(SRCSUFF)
+
+$(MSWDIR)\gridg.obj:     $(GENDIR)\gridg.$(SRCSUFF)
+
+$(MSWDIR)\helpxlp.obj:     $(GENDIR)\helpxlp.$(SRCSUFF)
+
+$(MSWDIR)\msgdlgg.obj:     $(GENDIR)\msgdlgg.$(SRCSUFF)
+
+$(MSWDIR)\panelg.obj:     $(GENDIR)\panelg.$(SRCSUFF)
+
+$(MSWDIR)\printps.obj:     $(GENDIR)\printps.$(SRCSUFF)
+
+$(MSWDIR)\prntdlgg.obj:     $(GENDIR)\prntdlgg.$(SRCSUFF)
+
+$(MSWDIR)\scrolwin.obj:     $(GENDIR)\scrolwin.$(SRCSUFF)
+
+$(MSWDIR)\splitter.obj:     $(GENDIR)\splitter.$(SRCSUFF)
+
+$(MSWDIR)\statusbr.obj:     $(GENDIR)\statusbr.$(SRCSUFF)
+
+$(MSWDIR)\textdlgg.obj:     $(GENDIR)\textdlgg.$(SRCSUFF)
+
+$(MSWDIR)\tabg.obj:     $(GENDIR)\tabg.$(SRCSUFF)
+
+all_utils:
+    cd $(WXDIR)\utils
+    make -f makefile.b32
+    cd $(WXDIR)\src\msw
+
+all_samples:
+    cd $(WXDIR)\samples
+    make -f makefile.b32
+    cd $(WXDIR)\src\msw
+
+all_execs:
+    cd $(WXDIR)\utils
+    make -f makefile.b32 all_execs
+    cd $(WXDIR)\src\msw
+
+all_libs:
+    cd $(WXDIR)\src\msw
+    make -f makefile.b32 ctl3d dib fafa gauge hytext itsy prologio rcparser wx wxgraph\
+          wxstring wxtree mfutils # wxxpm
+
+all_contribs:
+    cd $(WXDIR)\src\msw
+    make -f makefile.b32 ctl3d fafa wxstring itsy gauge # wxxpm
+
+# CONTRIB
+ctl3d:  $(CFG)
+        cd $(WXDIR)\src\msw\ctl3d\borland
+        make -f makefile.b32 -DCFG=$(CFG)
+        cd $(WXDIR)\src\msw
+
+wxxpm:	$(CFG)
+	cd $(WXDIR)\src\common\wxxpm
+	make -f makefile.b32 -DCFG=$(CFG) -DFINAL=$(FINAL) -DWXWIN=$(WXDIR) -DDEBUG=$(DEBUG)
+	cd $(WXDIR)\src\msw
+
+$(CFG): makefile.b32
+	copy &&!
+-H=$(WXDIR)\src\msw\wx32.csm
+-3
+-P
+-d
+-w-hid
+-w-par
+-w-pia
+-w-aus
+-w-rch
+-Oxt
+-WE
+
+-I$(WXINC);$(BCCDIR)\include
+-I$(WXDIR)\include\msw\gnuwin32
+
+-L$(BCCDIR)\lib
+-D__WXWIN__
+-D__WINDOWS__
+-DWIN32
+$(OPT)
+$(DEBUG_FLAGS)
+$(WIN95FLAG)
+! $(CFG)
+
+#-I$(WXDIR)\src\common\wxxpm\libxpm.34b\lib
+
+clean: $(PERIPH_CLEAN_TARGET)
+    erase $(LIBTARGET)
+    erase *.obj
+    erase *.pch
+    erase *.csm
+    erase *.cfg
+	erase ..\common\y_tab.c
+    erase ..\common\lex_yy.c
+
+cleanall: clean
+
+

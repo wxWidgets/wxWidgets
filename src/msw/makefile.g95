@@ -1,0 +1,303 @@
+#
+# File:		makefile.unx
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "@(#)makefile.unx	1.2 5/9/94"
+#
+# Makefile for libwx.a
+
+# Replace this with your own path if necessary
+WXDIR = ../..
+
+# All common UNIX compiler flags and options are now in
+# this central makefile.
+include $(WXDIR)/src/makeg95.env
+
+# IMPORTANT: if you want to link in subsidiary libraries,
+# required for some optional parts of wxWindows, you must
+# set EXTRATARGETS and EXTRAOBJS to match the settings in wx_setup.h.
+# Having done this, you won't have to worry about linking them
+# into each application.
+#
+# Here's the full list.
+#   prologio: Required if using the wxWindows resource facility
+#               USE_WX_RESOURCES should be 1
+#   xmgauge:  Gauge class (required for Motif only)
+#               USE_GAUGE should be 1
+#   xpm:      XPM pixmap support
+#               USE_XPM_IN_X should be 1
+#   image:    GIF, BMP image reading
+#               USE_IMAGE_LOADING_IN_X should be 1
+#   wxstring: string class
+#               USE_GNU_WXSTRING should be 1
+#
+# Unfortunately, 'ar' doesn't like combining objects and libraries,
+# so we must identify all the objects from the subordinate libraries. Yuck!
+XPMSRC=../../contrib/wxxpm/objects$(GUISUFFIX)
+XPMOBJS=$(XPMSRC)/crbuffri.$(OBJSUFF) $(XPMSRC)/crbuffrp.$(OBJSUFF) $(XPMSRC)/crdatfri.$(OBJSUFF) $(XPMSRC)/crdatfrp.$(OBJSUFF)\
+  $(XPMSRC)/create.$(OBJSUFF) $(XPMSRC)/crifrbuf.$(OBJSUFF) $(XPMSRC)/crifrdat.$(OBJSUFF) $(XPMSRC)/crpfrbuf.$(OBJSUFF) $(XPMSRC)/crpfrdat.$(OBJSUFF)\
+  $(XPMSRC)/data.$(OBJSUFF) $(XPMSRC)/hashtab.$(OBJSUFF) $(XPMSRC)/misc.$(OBJSUFF) $(XPMSRC)/parse.$(OBJSUFF) $(XPMSRC)/rdftodat.$(OBJSUFF)\
+  $(XPMSRC)/rdftoi.$(OBJSUFF) $(XPMSRC)/rdftop.$(OBJSUFF) $(XPMSRC)/rgb.$(OBJSUFF) $(XPMSRC)/scan.$(OBJSUFF) $(XPMSRC)/simx.$(OBJSUFF)\
+  $(XPMSRC)/wrffrdat.$(OBJSUFF) $(XPMSRC)/wrffri.$(OBJSUFF) $(XPMSRC)/wrffrp.$(OBJSUFF)
+
+# Subordinate library possibilities
+
+EXTRAOBJS=
+
+GENDIR=../generic
+COMMDIR=../common
+OLEDIR=ole
+MSWDIR=.
+
+GENERICOBJDIR=../generic/$(OBJDIR)
+COMMOBJDIR=../common/$(OBJDIR)
+OLEOBJDIR=ole/$(OBJDIR)
+MSWDIR=$(OBJDIR)
+
+DOCDIR = $(WXDIR)\docs
+
+GENERICOBJS= \
+  $(GENDIR)/choicdgg.$(OBJSUFF) \
+  $(GENDIR)/colrdlgg.$(OBJSUFF) \
+  $(GENDIR)/fontdlgg.$(OBJSUFF) \
+  $(GENDIR)/gridg.$(OBJSUFF) \
+  $(GENDIR)/helpxlp.$(OBJSUFF) \
+  $(GENDIR)/msgdlgg.$(OBJSUFF) \
+  $(GENDIR)/panelg.$(OBJSUFF) \
+  $(GENDIR)/printps.$(OBJSUFF) \
+  $(GENDIR)/prntdlgg.$(OBJSUFF) \
+  $(GENDIR)/scrolwin.$(OBJSUFF) \
+  $(GENDIR)/splitter.$(OBJSUFF) \
+  $(GENDIR)/statusbr.$(OBJSUFF) \
+  $(GENDIR)/tabg.$(OBJSUFF) \
+  $(GENDIR)/textdlgg.$(OBJSUFF)
+
+COMMONOBJS = \
+  $(COMMDIR)/config.$(OBJSUFF) \
+  $(COMMDIR)/cmndata.$(OBJSUFF) \
+  $(COMMDIR)/docview.$(OBJSUFF) \
+  $(COMMDIR)/dynarray.$(OBJSUFF) \
+  $(COMMDIR)/event.$(OBJSUFF) \
+  $(COMMDIR)/file.$(OBJSUFF) \
+  $(COMMDIR)/fileconf.$(OBJSUFF) \
+  $(COMMDIR)/filefn.$(OBJSUFF) \
+  $(COMMDIR)/gdicmn.$(OBJSUFF) \
+  $(COMMDIR)/helpbase.$(OBJSUFF) \
+  $(COMMDIR)/intl.$(OBJSUFF) \
+  $(COMMDIR)/layout.$(OBJSUFF) \
+  $(COMMDIR)/log.$(OBJSUFF) \
+  $(COMMDIR)/memory.$(OBJSUFF) \
+  $(COMMDIR)/module.$(OBJSUFF) \
+  $(COMMDIR)/object.$(OBJSUFF) \
+  $(COMMDIR)/odbc.$(OBJSUFF) \
+  $(COMMDIR)/postscrp.$(OBJSUFF) \
+  $(COMMDIR)/prntbase.$(OBJSUFF) \
+  $(COMMDIR)/resource.$(OBJSUFF) \
+  $(COMMDIR)/tbarbase.$(OBJSUFF) \
+  $(COMMDIR)/tbarsmpl.$(OBJSUFF) \
+  $(COMMDIR)/textfile.$(OBJSUFF) \
+  $(COMMDIR)/timercmn.$(OBJSUFF) \
+  $(COMMDIR)/utilscmn.$(OBJSUFF) \
+  $(COMMDIR)/validate.$(OBJSUFF) \
+  $(COMMDIR)/valtext.$(OBJSUFF) \
+  $(COMMDIR)/date.$(OBJSUFF) \
+  $(COMMDIR)/wxexpr.$(OBJSUFF) \
+  $(COMMDIR)/hash.$(OBJSUFF) \
+  $(COMMDIR)/list.$(OBJSUFF) \
+  $(COMMDIR)/string.$(OBJSUFF) \
+  $(COMMDIR)/time.$(OBJSUFF) \
+  $(COMMDIR)/y_tab.$(OBJSUFF)
+
+#  $(COMMDIR)/wxstrgnu/wxstrgnu.$(OBJSUFF) \
+#  $(COMMDIR)/wxstrgnu/wxregex.$(OBJSUFF)
+
+MSWOBJS = \
+  app.$(OBJSUFF) \
+  bitmap.$(OBJSUFF) \
+  bmpbuttn.$(OBJSUFF) \
+  brush.$(OBJSUFF) \
+  button.$(OBJSUFF) \
+  checkbox.$(OBJSUFF) \
+  checklst.$(OBJSUFF) \
+  choice.$(OBJSUFF) \
+  clipbrd.$(OBJSUFF) \
+  colordlg.$(OBJSUFF) \
+  colour.$(OBJSUFF) \
+  combobox.$(OBJSUFF) \
+  control.$(OBJSUFF) \
+  curico.$(OBJSUFF) \
+  cursor.$(OBJSUFF) \
+  data.$(OBJSUFF) \
+  dc.$(OBJSUFF) \
+  dcmemory.$(OBJSUFF) \
+  dcclient.$(OBJSUFF) \
+  dcprint.$(OBJSUFF) \
+  dcscreen.$(OBJSUFF) \
+  dde.$(OBJSUFF) \
+  dialog.$(OBJSUFF) \
+  dib.$(OBJSUFF) \
+  dirdlg.$(OBJSUFF) \
+  filedlg.$(OBJSUFF) \
+  font.$(OBJSUFF) \
+  fontdlg.$(OBJSUFF) \
+  frame.$(OBJSUFF) \
+  gauge.$(OBJSUFF) \
+  gdiobj.$(OBJSUFF) \
+  helpwin.$(OBJSUFF) \
+  icon.$(OBJSUFF) \
+  imaglist.$(OBJSUFF) \
+  joystick.$(OBJSUFF) \
+  listbox.$(OBJSUFF) \
+  listctrl.$(OBJSUFF) \
+  main.$(OBJSUFF) \
+  mdi.$(OBJSUFF) \
+  menu.$(OBJSUFF) \
+  menuitem.$(OBJSUFF) \
+  metafile.$(OBJSUFF) \
+  minifram.$(OBJSUFF) \
+  msgdlg.$(OBJSUFF) \
+  nativdlg.$(OBJSUFF) \
+  ownerdrw.$(OBJSUFF) \
+  palette.$(OBJSUFF) \
+  pen.$(OBJSUFF) \
+  penwin.$(OBJSUFF) \
+  printdlg.$(OBJSUFF) \
+  printwin.$(OBJSUFF) \
+  radiobox.$(OBJSUFF) \
+  radiobut.$(OBJSUFF) \
+  region.$(OBJSUFF) \
+  registry.$(OBJSUFF) \
+  scrolbar.$(OBJSUFF) \
+  settings.$(OBJSUFF) \
+  slider.$(OBJSUFF) \
+  spinbutt.$(OBJSUFF) \
+  statbmp.$(OBJSUFF) \
+  statbox.$(OBJSUFF) \
+  statbr95.$(OBJSUFF) \
+  stattext.$(OBJSUFF) \
+  tabctrl.$(OBJSUFF) \
+  taskbar.$(OBJSUFF) \
+  tbar95.$(OBJSUFF) \
+  tbarmsw.$(OBJSUFF) \
+  textctrl.$(OBJSUFF) \
+  thread.$(OBJSUFF) \
+  timer.$(OBJSUFF) \
+  treectrl.$(OBJSUFF) \
+  utils.$(OBJSUFF) \
+  wave.$(OBJSUFF) \
+  window.$(OBJSUFF) \
+  $(OLEDIR)/droptgt.$(OBJSUFF) \
+  $(OLEDIR)/oleutils.$(OBJSUFF) \
+  $(OLEDIR)/uuid.$(OBJSUFF)
+
+OBJECTS = $(MSWOBJS) $(COMMONOBJS) $(GENERICOBJS)
+
+all:    $(OBJECTS) $(WXLIB)
+
+base:
+	cd $(WXDIR)/src/common; $(MAKE) -f makefile.g95 GUI=$(GUI) GUISUFFIX=$(GUISUFFIX) CC=$(CC)\
+ OPTIONS='$(OPTIONS)' DEBUG='$(DEBUG)' DEBUGFLAGS='$(DEBUGFLAGS)' WARN='$(WARN)' XLIB='$(XLIB)' XINCLUDE='$(XINCLUDE)'
+
+
+$(WXLIB): $(OBJECTS) $(EXTRAOBJS)
+	ar $(AROPTIONS) $@ $(EXTRAOBJS) $(OBJECTS)
+	$(RANLIB) $@
+
+#$(MSWOBJDIR):
+#	mkdir $(OBJDIR)
+
+#$(COMMOBJDIR):
+#	mkdir $(COMMDIR)/$(OBJDIR)
+
+#$(GENERICOBJDIR):
+#	mkdir $(GENDIR)/$(OBJDIR)
+
+$(OBJECTS):	$(WXINC)/wx/defs.h $(WXINC)/wx/object.h $(WXINC)/wx/setup.h
+
+$(COMMDIR)/y_tab.$(OBJSUFF):    $(COMMDIR)/y_tab.c $(COMMDIR)/lex_yy.c
+	$(CCLEX) -c $(CPPFLAGS) -o $@ $(COMMDIR)/y_tab.c
+
+# Replace lex with flex if you run into compilation
+# problems with lex_yy.c. See also note about LEX_SCANNER
+# above.
+$(COMMDIR)/lex_yy.c:	$(COMMDIR)/lexer.l
+	$(LEX) $(COMMDIR)/lexer.l > $(COMMDIR)/lex_yy.c
+
+#	sed -e "s/BUFSIZ/5000/g" < lex.yy.c | \
+#	sed -e "s/yyoutput(c)/void yyoutput(c)/g" | \
+#       sed -e "s/YYLMAX 200/YYLMAX 5000/g" > lex_yy.c
+#	rm -f lex.yy.c
+
+# Replace yacc with bison if you run into compilation
+# problems with y_tab.c.
+$(COMMDIR)/y_tab.c:	$(COMMDIR)/parser.y
+	$(YACC) -o $(COMMDIR)/y_tab.c $(COMMDIR)/parser.y
+
+#	mv y.tab.c $(COMMDIR)/y_tab.c
+
+
+# Extra targets
+prologio:
+	cd $(WXDIR)/utils/prologio/src ; $(MAKE) -f makefile.g95
+	cd $(WXDIR)/src/msw
+
+clean_proio:
+	cd $(WXDIR)/utils/prologio/src; $(MAKE) -f makefile.g95 clean
+	cd $(WXDIR)/src/msw
+
+makedib:
+	cd $(WXDIR)/src/msw/dib ; $(MAKE) -f makefile.g95
+	cd $(WXDIR)/src/msw
+
+clean_dib:
+	cd $(WXDIR)/src/msw/dib; $(MAKE) -f makefile.g95 clean
+	cd $(WXDIR)/src/msw
+
+gauge:
+	cd $(WXDIR)/src/msw/gauge; $(MAKE) -f makefile.g95
+	cd $(WXDIR)/src/msw
+
+clean_gauge:
+	cd $(WXDIR)/src/msw/gauge; $(MAKE) -f makefile.g95 clean
+	cd $(WXDIR)/src/msw
+
+wxstring:
+	cd $(WXDIR)/contrib/wxstring; $(MAKE) -f makefile.g95 OPTIONS="$(OPTIONS)" DEBUG="$(DEBUG)"
+	cd $(WXDIR)/src/msw
+
+clean_wxstring:
+	cd $(WXDIR)/contrib/wxstring; $(MAKE) -f makefile.g95 clean
+	cd $(WXDIR)/src/msw
+
+itsy:
+	cd $(WXDIR)/src/msw/itsybits; $(MAKE) -f makefile.g95
+	cd $(WXDIR)/src/msw
+
+clean_itsy:
+	cd $(WXDIR)/contrib/itsybits; $(MAKE) -f makefile.g95 clean
+	cd $(WXDIR)/src/msw
+
+rcparser:
+	cd $(WXDIR)/utils/rcparser/src; $(MAKE)  -f makefile.g95
+	cd $(WXDIR)/src/msw
+
+clean_rcp:
+	cd $(WXDIR)/utils/rcparser/src; $(MAKE) -f makefile.g95 clean
+	cd $(WXDIR)/src/msw
+
+# +++start steve161(09.04.1995): added for wxString in \contrib\wxstring
+wxstring_ol:
+	cd ../../contrib/wxstring; $(MAKE) -f makefile.unx xview
+wxstring_motif:
+	cd ../../contrib/wxstring; $(MAKE) -f makefile.unx motif
+wxstring_hp:
+	cd ../../contrib/wxstring; $(MAKE) -f makefile.unx hp
+
+clean:
+	rm -f $(OBJECTS) $(EXTRAOBJS) ../common/y_tab.c ../common/lex_yy.c $(WXDIR)/lib/libwx$(GUISUFFIX).a core
+
+cleanall: clean
+
