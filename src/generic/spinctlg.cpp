@@ -109,7 +109,7 @@ public:
 protected:
     void OnSpinButton(wxSpinEvent& eventSpin)
     {
-#ifdef __WXMAC__
+#if defined(__WXMAC__) || defined(__WXMOTIF__)
       m_spin->SetTextValue(eventSpin.GetPosition());
 
       wxCommandEvent event(wxEVT_COMMAND_SPINCTRL_UPDATED, m_spin->GetId());
