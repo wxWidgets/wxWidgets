@@ -14,6 +14,7 @@ GetSelections.
 Fixed some problems in OGL.  Also wxShape.SetClientData and
 .GetClientData can now deal with Python objects.
 
+Added wxListCtrl.SortItems and changed the demo to show how to use it.
 
 
 

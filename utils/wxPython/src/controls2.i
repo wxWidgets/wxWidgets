@@ -223,10 +223,37 @@ public:
     void SetItemText(long item, const wxString& text);
     void SetSingleStyle(long style, bool add = TRUE);
     void SetWindowStyleFlag(long style);
-    // TODO:  bool SortItems(wxListCtrlCompare fn, long data);
+
+    // bool SortItems(wxListCtrlCompare fn, long data);
+    %addmethods {
+        bool SortItems(PyObject* func) {
+            if (!PyCallable_Check(func))
+                return FALSE;
+
+            return self->SortItems(wxPyTreeCtrl_SortItems, (long)func);
+        }
+    }
 };
 
+%{
+    int wxCALLBACK wxPyTreeCtrl_SortItems(long item1, long item2, long funcPtr) {
+        int retval = 0;
+        PyObject* func = (PyObject*)funcPtr;
+        bool doSave = wxPyRestoreThread();
 
+        PyObject* args = Py_BuildValue("(ii)", item1, item2);
+        PyObject* result = PyEval_CallObject(func, args);
+        Py_DECREF(args);
+        if (result) {
+            retval = PyInt_AsLong(result);
+            Py_DECREF(result);
+        }
+
+        wxPySaveThread(doSave);
+        return retval;
+    }
+
+%}
 
 //----------------------------------------------------------------------
 

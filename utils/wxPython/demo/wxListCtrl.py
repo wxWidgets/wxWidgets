@@ -15,6 +15,49 @@ from wxPython.wx import *
 
 #---------------------------------------------------------------------------
 
+musicdata = {
+1 : ("Bad English", "The Price Of Love", "Rock"),
+2 : ("DNA featuring Suzanne Vega", "Tom's Diner", "Rock"),
+3 : ("George Michael", "Praying For Time", "Rock"),
+4 : ("Gloria Estefan", "Here We Are", "Rock"),
+5 : ("Linda Ronstadt", "Don't Know Much", "Rock"),
+6 : ("Michael Bolton", "How Am I Supposed To Live Without You", "Blues"),
+7 : ("Paul Young", "Oh Girl", "Rock"),
+8 : ("Paula Abdul", "Opposites Attract", "Rock"),
+9 : ("Richard Marx", "Should've Known Better", "Rock"),
+10: ("Rod Stewart", "Forever Young", "Rock"),
+11: ("Roxette", "Dangerous", "Rock"),
+12: ("Sheena Easton", "The Lover In Me", "Rock"),
+13: ("Sinead O'Connor", "Nothing Compares 2 U", "Rock"),
+14: ("Stevie B.", "Because I Love You", "Rock"),
+15: ("Taylor Dayne", "Love Will Lead You Back", "Rock"),
+16: ("The Bangles", "Eternal Flame", "Rock"),
+17: ("Wilson Phillips", "Release Me", "Rock"),
+18: ("Billy Joel", "Blonde Over Blue", "Rock"),
+19: ("Billy Joel", "Famous Last Words", "Rock"),
+20: ("Billy Joel", "Lullabye (Goodnight, My Angel)", "Rock"),
+21: ("Billy Joel", "The River Of Dreams", "Rock"),
+22: ("Billy Joel", "Two Thousand Years", "Rock"),
+23: ("Janet Jackson", "Alright", "Rock"),
+24: ("Janet Jackson", "Black Cat", "Rock"),
+25: ("Janet Jackson", "Come Back To Me", "Rock"),
+26: ("Janet Jackson", "Escapade", "Rock"),
+27: ("Janet Jackson", "Love Will Never Do (Without You)", "Rock"),
+28: ("Janet Jackson", "Miss You Much", "Rock"),
+29: ("Janet Jackson", "Rhythm Nation", "Rock"),
+30: ("Janet Jackson", "State Of The World", "Rock"),
+31: ("Janet Jackson", "The Knowledge", "Rock"),
+32: ("Spyro Gyra", "End of Romanticism", "Jazz"),
+33: ("Spyro Gyra", "Heliopolis", "Jazz"),
+34: ("Spyro Gyra", "Jubilee", "Jazz"),
+35: ("Spyro Gyra", "Little Linda", "Jazz"),
+36: ("Spyro Gyra", "Morning Dance", "Jazz"),
+37: ("Spyro Gyra", "Song for Lorraine", "Jazz"),
+38: ("Yes", "Owner Of A Lonely Heart", "Rock"),
+39: ("Yes", "Rhythm Of Love", "Rock"),
+}
+
+
 class TestListCtrlPanel(wxPanel):
     def __init__(self, parent, log):
         wxPanel.__init__(self, parent, -1)
@@ -32,24 +75,27 @@ class TestListCtrlPanel(wxPanel):
         self.list.SetToolTip(wxToolTip("This is a ToolTip!"))
         wxToolTip_Enable(true)
 
-        self.list.InsertColumn(0, "Column 0")
-        self.list.InsertColumn(1, "Column 1")
-        self.list.InsertColumn(2, "One More Column (2)")
-        for x in range(50):
-            self.list.InsertImageStringItem(x, "This is item %d" % x, idx1)
-            self.list.SetStringItem(x, 1, "Col 1, item %d" % x)
-            self.list.SetStringItem(x, 2, "item %d in column 2" % x)
-            self.list.SetItemData(x, x*2)
+        self.list.InsertColumn(0, "Artist")
+        self.list.InsertColumn(1, "Title")
+        self.list.InsertColumn(2, "Genre")
+        items = musicdata.items()
+        for x in range(len(items)):
+            key, data = items[x]
+            self.list.InsertImageStringItem(x, data[0], idx1)
+            self.list.SetStringItem(x, 1, data[1])
+            self.list.SetStringItem(x, 2, data[2])
+            self.list.SetItemData(x, key)
 
         self.list.SetColumnWidth(0, wxLIST_AUTOSIZE)
         self.list.SetColumnWidth(1, wxLIST_AUTOSIZE)
-        self.list.SetColumnWidth(2, wxLIST_AUTOSIZE)
+        ##self.list.SetColumnWidth(2, wxLIST_AUTOSIZE)
 
         self.list.SetItemState(5, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED)
 
         self.currentItem = 0
         EVT_LIST_ITEM_SELECTED(self, tID, self.OnItemSelected)
         EVT_LIST_DELETE_ITEM(self, tID, self.OnItemDelete)
+        EVT_LIST_COL_CLICK(self, tID, self.OnColClick)
         EVT_LEFT_DCLICK(self.list, self.OnDoubleClick)
         EVT_RIGHT_DOWN(self.list, self.OnRightDown)
 
@@ -72,6 +118,18 @@ class TestListCtrlPanel(wxPanel):
 
     def OnItemDelete(self, event):
         self.log.WriteText("OnItemDelete\n")
+
+    def OnColClick(self, event):
+        self.log.WriteText("OnColClick: %d\n" % event.m_col)
+        self.col = event.m_col
+        self.list.SortItems(self.ColumnSorter)
+
+    def ColumnSorter(self, key1, key2):
+        item1 = musicdata[key1][self.col]
+        item2 = musicdata[key2][self.col]
+        if item1 == item2:  return 0
+        elif item1 < item2: return -1
+        else:               return 1
 
 
     def OnDoubleClick(self, event):

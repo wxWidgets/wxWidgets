@@ -666,7 +666,7 @@ enum {
 
 class wxImageList {
 public:
-    wxImageList(int width, int height, int mask=FALSE, int initialCount=1);
+    wxImageList(int width, int height, int mask=TRUE, int initialCount=1);
     ~wxImageList();
 
 #ifdef __WXMSW__

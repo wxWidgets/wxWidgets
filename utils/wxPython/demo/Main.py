@@ -21,9 +21,7 @@ _useSplitter       = true
 _useNestedSplitter = true
 
 _treeList = [
-    ('New since last release', ['wxMVCTree', 'wxVTKRenderWindow',
-                                'FileBrowseButton', 'GenericButtons',
-                                'wxMask', 'wxEditor']),
+    ('New since last release', []),
 
     ('Managed Windows', ['wxFrame', 'wxDialog', 'wxMiniFrame']),
 
@@ -275,12 +273,8 @@ class wxPythonDemo(wxFrame):
                 self.window = module.runTest(self, self.nb, self)
                 if self.window:
                     self.nb.AddPage(self.window, 'Demo')
-                    #self.nb.ResizeChildren()
+                    wxYield()
                     self.nb.SetSelection(2)
-                    #self.window.Refresh()
-                    #self.nb.ResizeChildren()
-                    #if self.window.GetAutoLayout():
-                    #    self.window.Layout()
 
             else:
                 self.ovr.Clear()

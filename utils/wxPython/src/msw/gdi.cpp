@@ -7530,7 +7530,7 @@ static PyObject *_wrap_new_wxImageList(PyObject *self, PyObject *args, PyObject 
     wxImageList * _result;
     int  _arg0;
     int  _arg1;
-    int  _arg2 = (int ) FALSE;
+    int  _arg2 = (int ) TRUE;
     int  _arg3 = (int ) 1;
     char *_kwnames[] = { "width","height","mask","initialCount", NULL };
     char _ptemp[128];

@@ -800,10 +800,12 @@ class wxMVCTree(wxScrolledWindow):
         e = wxMVCTreeEvent(wxEVT_MVCTREE_ADD_ITEM, self.GetId(), node = child, nodes = [parent, child])
         self.GetEventHandler().ProcessEvent(e)
         self.painter.ClearBuffer()
+
     def NodeRemoved(self, node):
         e = wxMVCTreeEvent(wxEVT_MVCTREE_DELETE_ITEM, self.GetId(), node = child, nodes = [parent, child])
         self.GetEventHandler().ProcessEvent(e)
         self.painter.ClearBuffer()
+
     def OnKeyDown(self, evt):
         e = wxMVCTreeEvent(wxEVT_MVCTREE_KEY_DOWN, self.GetId(), keyEvent = evt)
         self.GetEventHandler().ProcessEvent(e)
@@ -814,6 +816,7 @@ class wxMVCTree(wxScrolledWindow):
         dc.SetFont(font)
         self.layout.SetHeight(dc.GetTextExtent("")[1] + 18)
         self.painter.ClearBuffer()
+
     def GetFont(self):
         return self.painter.GetFont()
 
