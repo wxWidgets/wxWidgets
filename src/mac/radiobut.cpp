@@ -96,6 +96,7 @@ void wxRadioButton::MacHandleControlClick( ControlHandle control , SInt16 contro
 	SetValue(true) ;
     wxCommandEvent event(wxEVT_COMMAND_RADIOBUTTON_SELECTED, m_windowId );
     event.SetEventObject(this);
+    event.SetInt( GetValue() );
     ProcessCommand(event);
 }
 
