@@ -63,24 +63,19 @@ TAG_HANDLER_BEGIN(DEFLIST, "DL,DT,DD")
         }
         else if (tag.GetName() == wxT("DT"))
         {
-            if (!tag.IsEnding())
-            {
-                m_WParser->CloseContainer();
-                c = m_WParser->OpenContainer();
-                c->SetAlignHor(wxHTML_ALIGN_LEFT);
-                c->SetMinHeight(m_WParser->GetCharHeight());
-            }
+            m_WParser->CloseContainer();
+            c = m_WParser->OpenContainer();
+            c->SetAlignHor(wxHTML_ALIGN_LEFT);
+            c->SetMinHeight(m_WParser->GetCharHeight());
             return FALSE;
         }
-        else if (!tag.IsEnding()) // "DD"
+        else // "DD"
         {
             m_WParser->CloseContainer();
             c = m_WParser->OpenContainer();
             c->SetIndent(5 * m_WParser->GetCharWidth(), wxHTML_INDENT_LEFT);
             return FALSE;
         }
-
-        else return FALSE;
     }
 
 TAG_HANDLER_END(DEFLIST)

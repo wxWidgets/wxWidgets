@@ -146,19 +146,35 @@ void wxHtmlTagsCache::QueryTag(int at, int* end1, int* end2)
 
 IMPLEMENT_CLASS(wxHtmlTag,wxObject)
 
-wxHtmlTag::wxHtmlTag(const wxString& source, int pos, int end_pos, 
+wxHtmlTag::wxHtmlTag(wxHtmlTag *parent,
+                     const wxString& source, int pos, int end_pos, 
                      wxHtmlTagsCache *cache,
                      wxHtmlEntitiesParser *entParser) : wxObject()
 {
+    /* Setup DOM relations */
+
+    m_Next = NULL;
+    m_FirstChild = m_LastChild = NULL;
+    m_Parent = parent;
+    if (parent)
+    {
+        m_Prev = m_Parent->m_LastChild;
+        if (m_Prev == NULL)
+            m_Parent->m_FirstChild = this;
+        else
+            m_Prev->m_Next = this;
+        m_Parent->m_LastChild = this;
+    }
+    else
+        m_Prev = NULL;
+
+    /* Find parameters and their values: */
+    
     int i;
     wxChar c;
 
     // fill-in name, params and begin pos:
     i = pos+1;
-    if (source[i] == wxT('/')) 
-        { m_Ending = TRUE; i++; }
-    else 
-        m_Ending = FALSE;
 
     // find tag's name and convert it to uppercase:
     while ((i < end_pos) && 
@@ -282,6 +298,12 @@ wxHtmlTag::wxHtmlTag(const wxString& source, int pos, int end_pos,
    if (m_End2 > end_pos) m_End2 = end_pos;
 }
 
+wxHtmlTag::~wxHtmlTag()
+{
+    for (wxHtmlTag *t = m_FirstChild; t; t = t->GetNextSibling())
+        delete t;
+}
+
 bool wxHtmlTag::HasParam(const wxString& par) const
 {
     return (m_ParamNames.Index(par, FALSE) != wxNOT_FOUND);
@@ -376,6 +398,43 @@ wxString wxHtmlTag::GetAllParams() const
             s << wxT('"') << m_ParamValues[i] << wxT('"');
     }
     return s;
+}
+
+wxHtmlTag *wxHtmlTag::GetFirstSibling() const
+{
+    if (m_Parent)
+        return m_Parent->m_FirstChild;
+    else
+    {
+        wxHtmlTag *cur = (wxHtmlTag*)this;
+        while (cur->m_Prev) 
+            cur = cur->m_Prev;
+        return cur;
+    }
+}
+
+wxHtmlTag *wxHtmlTag::GetLastSibling() const
+{
+    if (m_Parent)
+        return m_Parent->m_LastChild;
+    else
+    {
+        wxHtmlTag *cur = (wxHtmlTag*)this;
+        while (cur->m_Next) 
+            cur = cur->m_Next;
+        return cur;
+    }
+}
+
+wxHtmlTag *wxHtmlTag::GetNextTag() const
+{
+    if (m_FirstChild) return m_FirstChild;
+    if (m_Next) return m_Next;
+    wxHtmlTag *cur = m_Parent;
+    if (!cur) return NULL;
+    while (cur->m_Parent && !cur->m_Next) 
+        cur = cur->m_Parent;
+    return cur->m_Next;
 }
 
 #endif

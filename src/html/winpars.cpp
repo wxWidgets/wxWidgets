@@ -42,6 +42,8 @@ wxList wxHtmlWinParser::m_Modules;
 
 wxHtmlWinParser::wxHtmlWinParser(wxWindow *wnd) : wxHtmlParser()
 {
+    m_tmpStrBuf = NULL;
+    m_tmpStrBufSize = 0;
     m_Window = wnd;
     m_Container = NULL;
     m_DC = NULL;
@@ -96,7 +98,8 @@ wxHtmlWinParser::~wxHtmlWinParser()
                         if (m_FontsTable[i][j][k][l][m] != NULL) 
                             delete m_FontsTable[i][j][k][l][m];
                     }
-    if (m_EncConv) delete m_EncConv;
+    delete m_EncConv;
+    delete[] m_tmpStrBuf;
 }
 
 
@@ -190,37 +193,43 @@ wxObject* wxHtmlWinParser::GetProduct()
 }
 
 
-
-void wxHtmlWinParser::AddText(const char* txt)
+void wxHtmlWinParser::AddText(const wxChar* txt)
 {
     wxHtmlCell *c;
-    int i = 0, x, lng = strlen(txt);
-    char temp[wxHTML_BUFLEN];
-    register char d;
+    int i = 0, x, lng = wxStrlen(txt);
+    register wxChar d;
     int templen = 0;
+
+    if (lng+1 > m_tmpStrBufSize)
+    {
+        delete[] m_tmpStrBuf;
+        m_tmpStrBuf = new wxChar[lng+1];
+        m_tmpStrBufSize = lng+1;
+    }
+    wxChar *temp = m_tmpStrBuf;
     
     if (m_tmpLastWasSpace) 
     {
         while ((i < lng) && 
-               ((txt[i] == '\n') || (txt[i] == '\r') || (txt[i] == ' ') || 
-                (txt[i] == '\t'))) i++;
+               ((txt[i] == wxT('\n')) || (txt[i] == wxT('\r')) || (txt[i] == wxT(' ')) || 
+                (txt[i] == wxT('\t')))) i++;
     }
 
     while (i < lng) 
     {
         x = 0;
         d = temp[templen++] = txt[i];
-        if ((d == '\n') || (d == '\r') || (d == ' ') || (d == '\t')) 
+        if ((d == wxT('\n')) || (d == wxT('\r')) || (d == wxT(' ')) || (d == wxT('\t'))) 
 	    {
             i++, x++;
-            while ((i < lng) && ((txt[i] == '\n') || (txt[i] == '\r') || 
-                                 (txt[i] == ' ') || (txt[i] == '\t'))) i++, x++;
+            while ((i < lng) && ((txt[i] == wxT('\n')) || (txt[i] == wxT('\r')) || 
+                                 (txt[i] == wxT(' ')) || (txt[i] == wxT('\t')))) i++, x++;
         }
         else i++;
 
         if (x) 
 	    {
-            temp[templen-1] = ' ';
+            temp[templen-1] = wxT(' ');
             temp[templen] = 0;
             templen = 0;
             if (m_EncConv) 
@@ -238,7 +247,7 @@ void wxHtmlWinParser::AddText(const char* txt)
         if (m_EncConv) 
             m_EncConv->Convert(temp);
         c = new wxHtmlWordCell(GetEntitiesParser()->Parse(temp), *(GetDC()));
-        if (m_UseLink) 
+        if (m_UseLink)
             c->SetLink(m_Link);
         m_Container->InsertCell(c);
         m_tmpLastWasSpace = FALSE;

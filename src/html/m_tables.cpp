@@ -496,7 +496,7 @@ TAG_HANDLER_BEGIN(TABLE, "TABLE,TR,TD,TH")
         }
 
 
-        else if (m_Table && !tag.IsEnding())
+        else if (m_Table)
         {
             // new row in table
             if (tag.GetName() == wxT("TR"))

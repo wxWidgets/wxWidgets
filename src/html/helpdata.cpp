@@ -73,9 +73,10 @@ static int LINKAGEMODE IndexCompareFunc(const void *a, const void *b)
 
 class HP_Parser : public wxHtmlParser
 {
-    public:
-        void AddText(const char* WXUNUSED(text)) { }
-        wxObject* GetProduct() { return NULL; }
+public:
+    wxObject* GetProduct() { return NULL; }
+protected:
+    virtual void AddText(const wxChar* WXUNUSED(txt)) {}
 };
 
 

@@ -60,20 +60,18 @@ TAG_HANDLER_BEGIN(PRE, "PRE")
         c = m_WParser->OpenContainer();
         c->SetAlignHor(wxHTML_ALIGN_LEFT);
 
-        wxString src, srcMid;
-
-        src = *m_WParser->GetSource();
-        srcMid = src.Mid(tag.GetBeginPos(),
-                         tag.GetEndPos1() - tag.GetBeginPos());
+        wxString srcMid = 
+            m_WParser->GetSource()->Mid(tag.GetBeginPos(),
+                                        tag.GetEndPos1() - tag.GetBeginPos());
         srcMid.Replace(wxT("\t"), wxT("        "));
         srcMid.Replace(wxT(" "), wxT("&nbsp;"));
         srcMid.Replace(wxT("\n"), wxT("<br>"));
 
         // It is safe to temporarily change the source being parsed,
         // provided we restore the state back after parsing
-        m_Parser->SetSource(srcMid);
+        m_Parser->SetSourceAndSaveState(srcMid);
         m_Parser->DoParsing();
-        m_Parser->SetSource(src);
+        m_Parser->RestoreState();
 
         m_WParser->CloseContainer();
         c = m_WParser->OpenContainer();

@@ -87,34 +87,32 @@ TAG_HANDLER_BEGIN(OLULLI, "OL,UL,LI")
         // List Item:
         if (tag.GetName() == wxT("LI"))
         {
-            if (!tag.IsEnding())
+            m_WParser->GetContainer()->SetIndent(0, wxHTML_INDENT_TOP);
+                // this is to prevent indetation in <li><p> case
+            m_WParser->CloseContainer();
+            m_WParser->CloseContainer();
+
+            c = m_WParser->OpenContainer();
+            c->SetWidthFloat(2 * m_WParser->GetCharWidth(), wxHTML_UNITS_PIXELS);
+            c->SetAlignHor(wxHTML_ALIGN_RIGHT);
+            if (m_Numbering == 0)
+                c->InsertCell(new wxHtmlListmarkCell(m_WParser->GetDC(), m_WParser->GetActualColor()));
+            else
             {
-                m_WParser->GetContainer()->SetIndent(0, wxHTML_INDENT_TOP);
-                    // this is to prevent indetation in <li><p> case
-                m_WParser->CloseContainer();
-                m_WParser->CloseContainer();
-
-                c = m_WParser->OpenContainer();
-                c->SetWidthFloat(2 * m_WParser->GetCharWidth(), wxHTML_UNITS_PIXELS);
-                c->SetAlignHor(wxHTML_ALIGN_RIGHT);
-                if (m_Numbering == 0)
-                    c->InsertCell(new wxHtmlListmarkCell(m_WParser->GetDC(), m_WParser->GetActualColor()));
-                else
-                {
-                    wxString mark;
-                    mark.Printf(wxT("%i."), m_Numbering);
-                    c->InsertCell(new wxHtmlWordCell(mark, *(m_WParser->GetDC())));
-                }
-                m_WParser->CloseContainer();
-
-                c = m_WParser->OpenContainer();
-                c->SetIndent(m_WParser->GetCharWidth() / 4, wxHTML_INDENT_LEFT);
-                c->SetWidthFloat(-2 * m_WParser->GetCharWidth(), wxHTML_UNITS_PIXELS);
-
-                m_WParser->OpenContainer();
-
-                if (m_Numbering != 0) m_Numbering++;
+                wxString mark;
+                mark.Printf(wxT("%i."), m_Numbering);
+                c->InsertCell(new wxHtmlWordCell(mark, *(m_WParser->GetDC())));
             }
+            m_WParser->CloseContainer();
+
+            c = m_WParser->OpenContainer();
+            c->SetIndent(m_WParser->GetCharWidth() / 4, wxHTML_INDENT_LEFT);
+            c->SetWidthFloat(-2 * m_WParser->GetCharWidth(), wxHTML_UNITS_PIXELS);
+
+            m_WParser->OpenContainer();
+
+            if (m_Numbering != 0) m_Numbering++;
+
             return FALSE;
         }
 
