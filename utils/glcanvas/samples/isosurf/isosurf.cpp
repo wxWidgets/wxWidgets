@@ -254,11 +254,7 @@ bool MyApp::OnInit(void)
 			GLX_DOUBLEBUFFER, None };
 #endif
 
-  if(!doubleBuffer
-#ifdef __WXGTK__ // JACS
-   || !wxGLCanvas::HaveVisual(gl_attrib)
-#endif
-   )
+  if(!doubleBuffer)
    {
       printf("don't have double buffer, disabling\n");
 #ifdef __WXGTK__

@@ -120,7 +120,8 @@ void wxPanel::OnNavigationKey( wxNavigationKeyEvent& event )
     {
         if (!node)
         {
-//#if 0 // FIXME seems to enter in an infinite loop - how is this possible?
+#ifndef __WXGTK__
+     // FIXME seems to enter in an infinite loop - how is this possible?
             // we arrived at the last/first of our children - but may be this
             // panel is inside another panel, so make focus go to the next/prev
             // control in the parent (if we have one)
@@ -136,7 +137,7 @@ void wxPanel::OnNavigationKey( wxNavigationKeyEvent& event )
                     return;
                 }
             }
-//#endif // 0
+#endif
 
             node = event.GetDirection() ? GetChildren().First()
                                         : GetChildren().Last();

@@ -22,8 +22,8 @@ isosurf: isosurf.o glcanvas.o
 isosurf.o: isosurf.cpp
 	$(CC) `wx-config --cflags` -I../../gtk -c isosurf.cpp
 
-glcanvas.o: ../..gtk/glcanvas.cpp
+glcanvas.o: ../../gtk/glcanvas.cpp
 	$(CC) `wx-config --cflags` `gtk-config --cflags` -I../../gtk -c ../../gtk/glcanvas.cpp
 
 clean: 
-	rm -f *.o cube
+	rm -f *.o isosurf
