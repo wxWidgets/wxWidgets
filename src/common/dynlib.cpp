@@ -88,32 +88,19 @@
 
 wxLibraries wxTheLibraries;
 
-// ----------------------------------------------------------------------------
-// private functions
-// ----------------------------------------------------------------------------
+// ============================================================================
+// implementation
+// ============================================================================
 
 // construct the full name from the base shared object name: adds a .dll
 // suffix under Windows or .so under Unix
 static wxString ConstructLibraryName(const wxString& basename)
 {
-    wxString fullname(basename);
-
-#if defined(__WINDOWS__) || defined(__WXPM__) || defined(__EMX__)
-    fullname << ".dll";
-#elif defined(__UNIX__)
-#   if defined(__HPUX__)
-        fullname << ".sl";
-#   else //__HPUX__
-        fullname << ".so";
-#   endif //__HPUX__
-#endif
+    wxString fullname;
+    fullname << basename << wxDllLoader::GetDllExt();
 
     return fullname;
 }
-
-// ============================================================================
-// implementation
-// ============================================================================
 
 
 // ---------------------------------------------------------------------------
@@ -183,6 +170,24 @@ void *wxLibrary::GetSymbol(const wxString& symbname)
 // ---------------------------------------------------------------------------
 // wxDllLoader
 // ---------------------------------------------------------------------------
+
+/* static */
+wxString wxDllLoader::GetDllExt()
+{
+    wxString ext;
+
+#if defined(__WINDOWS__) || defined(__WXPM__) || defined(__EMX__)
+    ext = _T(".dll");
+#elif defined(__UNIX__)
+#   if defined(__HPUX__)
+        ext = _T(".sl");
+#   else //__HPUX__
+        ext = _T(".so");
+#   endif //__HPUX__
+#endif
+
+    return ext;
+}
 
 /* static */
 wxDllType
