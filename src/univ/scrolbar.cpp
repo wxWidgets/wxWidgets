@@ -301,6 +301,12 @@ wxScrollArrows::Arrow wxScrollBar::HitTest(const wxPoint& pt) const
 
 void wxScrollBar::OnIdle(wxIdleEvent& event)
 {
+    UpdateThumb();
+    event.Skip();
+}
+
+void wxScrollBar::UpdateThumb()
+{
     if ( m_dirty )
     {
         for ( size_t n = 0; n < WXSIZEOF(m_elementsState); n++ )
@@ -373,8 +379,6 @@ void wxScrollBar::OnIdle(wxIdleEvent& event)
 
         m_dirty = FALSE;
     }
-
-    event.Skip();
 }
 
 void wxScrollBar::DoDraw(wxControlRenderer *renderer)
@@ -463,6 +467,10 @@ bool wxScrollBar::PerformAction(const wxControlAction& action,
     if ( action == wxACTION_SCROLL_THUMB_MOVE )
     {
         DoSetThumb(numArg);
+
+        // VS: we have to force redraw here, otherwise the thumb will lack
+        //     behind mouse cursor
+        UpdateThumb();
 
         scrollType = wxEVT_SCROLLWIN_THUMBTRACK;
     }

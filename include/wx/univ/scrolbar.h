@@ -122,6 +122,9 @@ protected:
 
     // event handlers
     void OnIdle(wxIdleEvent& event);
+    
+    // forces update of thumb's visual appearence (does nothing if m_dirty=FALSE)
+    void UpdateThumb();
 
     // SetThumbPosition() helper
     void DoSetThumb(int thumbPos);
