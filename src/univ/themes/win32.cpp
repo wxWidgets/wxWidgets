@@ -1261,7 +1261,7 @@ wxColour wxWin32ColourScheme::GetBackground(wxWindow *win) const
 
         // the colour set by the user should be used for the normal state
         // and for the states for which we don't have any specific colours
-        if ( !col.Ok() || (flags != 0) )
+        if ( !col.Ok() || (flags & wxCONTROL_PRESSED) != 0 )
         {
             if ( wxDynamicCast(win, wxScrollBar) )
                 col = Get(flags & wxCONTROL_PRESSED ? SCROLLBAR_PRESSED
