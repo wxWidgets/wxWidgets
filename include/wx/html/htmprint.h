@@ -81,7 +81,8 @@ public:
     // set the same pagebreak twice.
     //
     // CAUTION! Render() changes DC's user scale and does NOT restore it!
-    int Render(int x, int y, int from = 0, int dont_render = FALSE, int to = INT_MAX,
+    int Render(int x, int y, int from = 0, int dont_render = FALSE,
+               int maxHeight = INT_MAX,
                int *known_pagebreaks = NULL, int number_of_pages = 0);
 
     // returns total height of the html document

@@ -112,7 +112,9 @@ void wxHtmlDCRenderer::SetStandardFonts(int size,
 }
 
 
-int wxHtmlDCRenderer::Render(int x, int y, int from, int dont_render, int to, int *known_pagebreaks, int number_of_pages)
+int wxHtmlDCRenderer::Render(int x, int y, int from, int dont_render,
+                             int maxHeight,
+                             int *known_pagebreaks, int number_of_pages)
 {
     int pbreak, hght;
 
@@ -121,8 +123,8 @@ int wxHtmlDCRenderer::Render(int x, int y, int from, int dont_render, int to, in
     pbreak = (int)(from + m_Height);
     while (m_Cells->AdjustPagebreak(&pbreak, known_pagebreaks, number_of_pages)) {}
     hght = pbreak - from;
-    if(to < hght)
-        hght = to;
+    if (maxHeight < hght)
+        hght = maxHeight;
 
     if (!dont_render)
     {
