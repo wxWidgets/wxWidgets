@@ -20,9 +20,11 @@ characters from languages other than English.
 Starting with release 2.1 wxWindows has support for compiling in Unicode mode
 on the platforms which support it. Unicode is a standard for character
 encoding which addresses the shortcomings of the previous, 8 bit standards, by
-using 16 bit for encoding each character. This allows to have 65536 characters
-instead of the usual 256 and is sufficient to encode all of the world
-languages at once. More details about Unicode may be found at {\tt www.unicode.org}.
+using at least 16 (and possibly 32) bits for encoding each character. This
+allows to have at least 65536 characters (what is called the BMP, or basic
+multilingual plane) and possible $2^{32}$ of them instead of the usual 256 and
+is sufficient to encode all of the world languages at once. More details about
+Unicode may be found at {\tt www.unicode.org}.
 
 % TODO expand on it, say that Unicode extends ASCII, mention ISO8859, ...
 
@@ -52,6 +54,8 @@ Basically, there are only a few things to watch out for:
 \item Character type ({\tt char} or {\tt wchar\_t})
 \item Literal strings (i.e. {\tt "Hello, world!"} or {\tt '*'})
 \item String functions ({\tt strlen()}, {\tt strcpy()}, ...)
+\item Special preprocessor tokens ({\tt \_\_FILE\_\_}, {\tt \_\_DATE\_\_} 
+and {\tt \_\_TIME\_\_})
 \end{itemize}
 
 Let's look at them in order. First of all, each character in an Unicode
@@ -59,20 +63,27 @@ program takes 2 bytes instead of usual one, so another type should be used to
 store the characters ({\tt char} only holds 1 byte usually). This type is
 called {\tt wchar\_t} which stands for {\it wide-character type}.
 
-Also, the string and character constants should be encoded on 2 bytes instead
-of one. This is achieved by using the standard C (and C++) way: just put the
-letter {\tt 'L'} after any string constant and it becomes a {\it long}
-constant, i.e. a wide character one. To make things a bit more readable, you
-are also allowed to prefix the constant with {\tt 'L'} instead of putting it
-after it.
+Also, the string and character constants should be encoded using wide
+characters ({\tt wchar\_t} type) which typically take $2$ or $4$ bytes instead
+of {\tt char} which only takes one. This is achieved by using the standard C
+(and C++) way: just put the letter {\tt 'L'} after any string constant and it
+becomes a {\it long} constant, i.e. a wide character one. To make things a bit
+more readable, you are also allowed to prefix the constant with {\tt 'L'}
+instead of putting it after it.
 
-Finally, the standard C functions don't work with {\tt wchar\_t} strings, so
-another set of functions exists which do the same thing but accept 
+Of course, the usual standard C functions don't work with {\tt wchar\_t}
+strings, so another set of functions exists which do the same thing but accept
 {\tt wchar\_t *} instead of {\tt char *}. For example, a function to get the
 length of a wide-character string is called {\tt wcslen()} (compare with 
 {\tt strlen()} - you see that the only difference is that the "str" prefix
-standing for "string" has been replaced with "wcs" standing for
-"wide-character string").
+standing for "string" has been replaced with "wcs" standing for "wide-character
+string").
+
+And finally, the standard preprocessor tokens enumerated above expand to ANSI
+strings but it is more likely that Unicode strings are wanted in the Unicode
+build. wxWindows provides the macros {\tt \_\_TFILE\_\_}, {\tt \_\_TDATE\_\_} 
+and {\tt \_\_TTIME\_\_} which behave exactly as the standard ones except that
+they produce ANSI strings in ANSI build and Unicode ones in the Unicode build.
 
 To summarize, here is a brief example of how a program which can be compiled
 in both ANSI and Unicode modes could look like:
@@ -82,10 +93,14 @@ in both ANSI and Unicode modes could look like:
     wchar_t wch = L'*';
     const wchar_t *ws = L"Hello, world!";
     int len = wcslen(ws);
+
+    wprintf(L"Compiled at %s\n", __TDATE__);
 #else // ANSI
     char ch = '*';
     const char *s = "Hello, world!";
     int len = strlen(s);
+
+    printf("Compiled at %s\n", __DATE__);
 #endif // Unicode/ANSI
 \end{verbatim}
 
