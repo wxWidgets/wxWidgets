@@ -923,6 +923,15 @@ bool wxApp::ProcessMessage(WXMSG *wxmsg)
     HWND hWnd = msg->hwnd;
     wxWindow *wndThis = wxFindWinFromHandle((WXHWND)hWnd), *wnd;
 
+    // for some composite controls (like a combobox), wndThis might be NULL
+    // because the subcontrol is not a wxWindow, but only the control itself
+    // is - try to catch this case
+    while ( hWnd && !wndThis )
+    {
+        hWnd = ::GetParent(hWnd);
+        wndThis = wxFindWinFromHandle((WXHWND)hWnd);        
+    }
+
     // Try translations first; find the youngest window with
     // a translation table.
     for ( wnd = wndThis; wnd; wnd = wnd->GetParent() )
