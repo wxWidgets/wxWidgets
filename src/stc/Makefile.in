@@ -48,7 +48,6 @@ OBJECTS=PlatWX.o ScintillaWX.o stc.o \
         ScintillaBase.o	    	\
         Style.o		        \
         ViewStyle.o		\
-	PosRegExp.o		\
 
 DEPFILES=$(OBJECTS:.o=.d)
 
