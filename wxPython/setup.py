@@ -356,14 +356,16 @@ ext = Extension('_html', swig_sources,
 wxpExtensions.append(ext)
 
 
-
+mediaLibs = libs[:]
+if not MONOLITHIC and os.name == 'nt':
+    mediaLibs.append(makeLibName('media')[0])
 swig_sources = run_swig(['media.i'], 'src', GENDIR, PKGDIR,
                         USE_SWIG, swig_force, swig_args, swig_deps)
 ext = Extension('_media', swig_sources,
                 include_dirs =  includes,
                 define_macros = defines,
                 library_dirs = libdirs,
-                libraries = libs,
+                libraries = mediaLibs,
                 extra_compile_args = cflags,
                 extra_link_args = lflags,
                 **depends
