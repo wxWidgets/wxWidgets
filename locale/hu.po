@@ -884,7 +884,7 @@ msgstr "Tartalom"
 
 #: ../src/common/strconv.cpp:596
 #, c-format
-msgid "Convertion to charset '%s' doesn't work."
+msgid "Conversion to charset '%s' doesn't work."
 msgstr "A  '%s' jelkészletté alakítás nem mûködik."
 
 #: ../src/generic/prntdlgg.cpp:193

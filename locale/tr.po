@@ -893,7 +893,7 @@ msgstr "Ýçerik"
 
 #: ../src/common/strconv.cpp:608
 #, c-format
-msgid "Convertion to charset '%s' doesn't work."
+msgid "Conversion to charset '%s' doesn't work."
 msgstr "'%s' karakter kümesine dönüþüm çalýþmýyor."
 
 #: ../src/generic/prntdlgg.cpp:194

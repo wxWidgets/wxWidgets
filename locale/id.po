@@ -886,7 +886,7 @@ msgstr "Isi"
 
 #: ../src/common/strconv.cpp:596
 #, c-format
-msgid "Convertion to charset '%s' doesn't work."
+msgid "Conversion to charset '%s' doesn't work."
 msgstr "Konversi ke charset '%s' tidak bekerja"
 
 #: ../src/generic/prntdlgg.cpp:193

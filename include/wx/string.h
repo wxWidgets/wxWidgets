@@ -470,7 +470,7 @@ public:
     const char *ToAscii() const { return c_str(); }
 #endif // Unicode/!Unicode
 
-    // conversions with (possible) format convertions: have to return a
+    // conversions with (possible) format conversions: have to return a
     // buffer with temporary data
     //
     // the functions defined (in either Unicode or ANSI) mode are mb_str() to

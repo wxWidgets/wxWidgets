@@ -610,7 +610,7 @@ IC_CharSet::IC_CharSet(const wxChar *name)
                 {
                     ms_wcCharsetName = NULL;
                     wxLogLastError(wxT("iconv"));
-                    wxLogError(_("Convertion to charset '%s' doesn't work."), name);
+                    wxLogError(_("Conversion to charset '%s' doesn't work."), name);
                 }
                 else
                 {

@@ -1346,7 +1346,7 @@ bool wxImageHandler::CallDoCanRead(wxInputStream& stream)
 
 
 //-----------------------------------------------------------------------------
-// Deprecated wxBitmap convertion routines
+// Deprecated wxBitmap conversion routines
 //-----------------------------------------------------------------------------
 
 #if WXWIN_COMPATIBILITY_2_2 && wxUSE_GUI
