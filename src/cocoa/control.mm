@@ -16,6 +16,8 @@
     #include "wx/log.h"
 #endif
 
+#include "wx/cocoa/autorelease.h"
+
 #import <AppKit/NSControl.h>
 
 IMPLEMENT_ABSTRACT_CLASS(wxControl, wxWindow)
@@ -53,6 +55,7 @@ wxControl::~wxControl()
 
 wxSize wxControl::DoGetBestSize() const
 {
+    wxAutoNSAutoreleasePool pool;
     wxASSERT(m_cocoaNSView);
     NSRect storedRect = [m_cocoaNSView frame];
     [GetNSControl() sizeToFit];
