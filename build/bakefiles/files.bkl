@@ -80,11 +80,9 @@
 </set>
 <set var="BASE_CMN_SRC">
     src/common/appbase.cpp
-    src/common/appcmn.cpp
     src/common/clntdata.cpp
     src/common/cmdline.cpp
     src/common/config.cpp
-    src/common/datacmn.cpp
     src/common/datetime.cpp
     src/common/datstrm.cpp
     src/common/db.cpp
@@ -103,7 +101,6 @@
     src/common/filename.cpp
     src/common/filesys.cpp
     src/common/fmapbase.cpp
-    src/common/fontmap.cpp
     src/common/fs_inet.cpp
     src/common/fs_mem.cpp
     src/common/fs_zip.cpp
@@ -137,7 +134,6 @@
     src/common/sysopt.cpp
     src/common/textbuf.cpp
     src/common/textfile.cpp
-    src/common/timercmn.cpp
     src/common/tokenzr.cpp
     src/common/txtstrm.cpp
     src/common/unzip.c
@@ -275,6 +271,8 @@
     src/generic/tipwin.cpp
     src/generic/treectlg.cpp
     src/generic/wizard.cpp
+    src/common/appcmn.cpp
+    src/common/fontmap.cpp
     src/common/accesscmn.cpp
     src/common/artprov.cpp
     src/common/artstd.cpp
@@ -287,6 +285,7 @@
     src/common/cshelp.cpp
     src/common/ctrlcmn.cpp
     src/common/ctrlsub.cpp
+    src/common/datacmn.cpp
     src/common/dbgrid.cpp
     src/common/dcbase.cpp
     src/common/dlgcmn.cpp
@@ -301,6 +300,7 @@
     src/common/fldlgcmn.cpp
     src/common/fontcmn.cpp
     src/common/framecmn.cpp
+    src/common/timercmn.cpp
     src/common/toplvcmn.cpp
     src/common/gaugecmn.cpp
     src/common/gdicmn.cpp
