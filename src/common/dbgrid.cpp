@@ -2,8 +2,8 @@
 // Name:        dbgrid.cpp
 // Purpose:     Displays a wxDbTable in a wxGrid.
 // Author:      Roger Gammans, Paul Gammans
-// Modified by: 
-// Created:     
+// Modified by:
+// Created:
 // RCS-ID:      $Id$
 // Copyright:   (c) 1999 The Computer Surgery (roger@computer-surgery.co.uk)
 // Licence:     wxWindows licence
@@ -113,7 +113,7 @@ wxGridCellAttr *wxDbGridCellAttrProvider::GetAttr(int row, int col,
                 break;
             }
         }
-        
+
     }
     return attr;
 }
@@ -125,7 +125,7 @@ void wxDbGridCellAttrProvider::AssignDbTable(wxDbTable *tab)
 
 wxDbGridTableBase::wxDbGridTableBase(wxDbTable *tab, wxDbGridColInfo*  ColInfo,
                      int count, bool takeOwnership)  :
-    m_keys(), 
+    m_keys(),
     m_data(tab),
     m_dbowner(takeOwnership),
     m_rowmodified(false)
@@ -162,7 +162,7 @@ wxDbGridTableBase::wxDbGridTableBase(wxDbTable *tab, wxDbGridColInfo*  ColInfo,
         if (i < m_nocols)
         {
             wxLogDebug(wxT("NoCols under length after traversing %i items"),i);
-        } 
+        }
 #endif
     }
 }
@@ -171,17 +171,18 @@ wxDbGridTableBase::~wxDbGridTableBase()
 {
     wxDbGridCellAttrProvider *provider;
 
-    //Can't check for update here as 
+    //Can't check for update here as
 
     //FIXME: should i remove m_ColInfo and m_data from m_attrProvider if a wxDbGridAttrProvider
 //    if ((provider = dynamic_cast<wxDbGridCellAttrProvider *>(GetAttrProvider())))
      // Using C casting for now until we can support dynamic_cast with wxWindows
-    if ((provider = (wxDbGridCellAttrProvider *)(GetAttrProvider())))
+    provider = (wxDbGridCellAttrProvider *)(GetAttrProvider());
+    if (provider)
     {
         provider->AssignDbTable(NULL);
     }
     delete [] m_ColInfo;
-    
+
     Writeback();
     if (m_dbowner)
     {
@@ -226,14 +227,15 @@ bool wxDbGridTableBase::AssignDbTable(wxDbTable *tab, int count, bool takeOwners
     }
     m_keys.Empty();
     m_data = tab;
-    //FIXME: Remove dynamic_cast before sumision to wxwin 
+    //FIXME: Remove dynamic_cast before sumision to wxwin
 //    if ((provider = dynamic_cast<wxDbGridCellAttrProvider *> (GetAttrProvider())))
      // Using C casting for now until we can support dynamic_cast with wxWindows
-    if ((provider = (wxDbGridCellAttrProvider *)(GetAttrProvider())))
+    provider = (wxDbGridCellAttrProvider *)(GetAttrProvider());
+    if (provider)
     {
         provider->AssignDbTable(m_data);
     }
-    
+
     if (count == wxUSE_QUERY)
     {
         m_rowtotal = m_data ? m_data->Count() : 0;
@@ -335,16 +337,16 @@ bool wxDbGridTableBase::CanGetValueAs(int row, int col, const wxString& typeName
 
     if (m_data->GetNumberOfColumns() <= m_ColInfo[col].DbCol)
     {
-        //If a virtual column then we can't find it's type. we have to 
+        //If a virtual column then we can't find it's type. we have to
         // return false to get using wxVariant.
         return false;
     }
     int sqltype = m_data->GetColDefs()[(m_ColInfo[col].DbCol)].SqlCtype;
-    
+
     if (typeName == wxGRID_VALUE_DATETIME)
     {
         if ((sqltype == SQL_C_DATE) ||
-            (sqltype == SQL_C_TIME) || 
+            (sqltype == SQL_C_TIME) ||
             (sqltype == SQL_C_TIMESTAMP))
         {
             return true;
@@ -354,7 +356,7 @@ bool wxDbGridTableBase::CanGetValueAs(int row, int col, const wxString& typeName
     if (typeName == wxGRID_VALUE_NUMBER)
     {
         if ((sqltype == SQL_C_SSHORT) ||
-            (sqltype == SQL_C_USHORT) || 
+            (sqltype == SQL_C_USHORT) ||
             (sqltype == SQL_C_SLONG)  ||
             (sqltype == SQL_C_ULONG))
         {
@@ -365,7 +367,7 @@ bool wxDbGridTableBase::CanGetValueAs(int row, int col, const wxString& typeName
     if (typeName == wxGRID_VALUE_FLOAT)
     {
         if ((sqltype == SQL_C_SSHORT) ||
-            (sqltype == SQL_C_USHORT) || 
+            (sqltype == SQL_C_USHORT) ||
             (sqltype == SQL_C_SLONG)  ||
             (sqltype == SQL_C_ULONG)  ||
             (sqltype == SQL_C_FLOAT)  ||
@@ -401,7 +403,7 @@ bool wxDbGridTableBase::CanSetValueAs(int row, int col, const wxString& typeName
 
     if (m_data->GetNumberOfColumns() <= m_ColInfo[col].DbCol)
     {
-        //If a virtual column then we can't find it's type. we have to faulse to 
+        //If a virtual column then we can't find it's type. we have to faulse to
         //get using wxVairent.
         return false;
     }
@@ -410,7 +412,7 @@ bool wxDbGridTableBase::CanSetValueAs(int row, int col, const wxString& typeName
     if (typeName == wxGRID_VALUE_DATETIME)
     {
         if ((sqltype == SQL_C_DATE) ||
-            (sqltype == SQL_C_TIME) || 
+            (sqltype == SQL_C_TIME) ||
             (sqltype == SQL_C_TIMESTAMP))
         {
             return true;
@@ -420,7 +422,7 @@ bool wxDbGridTableBase::CanSetValueAs(int row, int col, const wxString& typeName
     if (typeName == wxGRID_VALUE_NUMBER)
     {
         if ((sqltype == SQL_C_SSHORT) ||
-            (sqltype == SQL_C_USHORT) || 
+            (sqltype == SQL_C_USHORT) ||
             (sqltype == SQL_C_SLONG)  ||
             (sqltype == SQL_C_ULONG))
         {
@@ -431,7 +433,7 @@ bool wxDbGridTableBase::CanSetValueAs(int row, int col, const wxString& typeName
     if (typeName == wxGRID_VALUE_FLOAT)
     {
         if ((sqltype == SQL_C_SSHORT) ||
-            (sqltype == SQL_C_USHORT) || 
+            (sqltype == SQL_C_USHORT) ||
             (sqltype == SQL_C_SLONG)  ||
             (sqltype == SQL_C_ULONG)  ||
             (sqltype == SQL_C_FLOAT)  ||
@@ -455,7 +457,7 @@ long wxDbGridTableBase::GetValueAsLong(int row, int col)
     }
     int sqltype = m_data->GetColDefs()[(m_ColInfo[col].DbCol)].SqlCtype;
     if ((sqltype == SQL_C_SSHORT) ||
-        (sqltype == SQL_C_USHORT) || 
+        (sqltype == SQL_C_USHORT) ||
         (sqltype == SQL_C_SLONG) ||
         (sqltype == SQL_C_ULONG))
     {
@@ -478,7 +480,7 @@ double wxDbGridTableBase::GetValueAsDouble(int row, int col)
     }
     int sqltype = m_data->GetColDefs()[(m_ColInfo[col].DbCol)].SqlCtype;
     if ((sqltype == SQL_C_SSHORT) ||
-        (sqltype == SQL_C_USHORT) || 
+        (sqltype == SQL_C_USHORT) ||
         (sqltype == SQL_C_SLONG) ||
         (sqltype == SQL_C_ULONG) ||
         (sqltype == SQL_C_FLOAT) ||
@@ -503,7 +505,7 @@ bool wxDbGridTableBase::GetValueAsBool(int row, int col)
     }
     int sqltype = m_data->GetColDefs()[(m_ColInfo[col].DbCol)].SqlCtype;
     if ((sqltype == SQL_C_SSHORT) ||
-        (sqltype == SQL_C_USHORT) || 
+        (sqltype == SQL_C_USHORT) ||
         (sqltype == SQL_C_SLONG) ||
         (sqltype == SQL_C_ULONG))
     {
@@ -518,7 +520,7 @@ void* wxDbGridTableBase::GetValueAsCustom(int row, int col, const wxString& type
 {
     wxLogDebug(wxT("GetValueAsCustom() on %i,%i"),row,col);
     ValidateRow(row);
-    
+
     if (m_data->GetNumberOfColumns() <= m_ColInfo[col].DbCol)
     {
         wxFAIL_MSG (_T("You can not use GetValueAsCustom for virtual columns"));
@@ -603,12 +605,12 @@ bool wxDbGridTableBase::IsEmptyCell(int row, int col)
 wxString wxDbGridTableBase::GetValue(int row, int col)
 {
     wxLogDebug(wxT("GetValue() on %i,%i"),row,col);
-    
+
     ValidateRow(row);
     wxVariant val = m_data->GetCol(m_ColInfo[col].DbCol);
     wxLogDebug(wxT("\tReturning \"%s\"\n"),val.GetString().c_str());
-    
-    return val.GetString(); 
+
+    return val.GetString();
 }
 
 
@@ -716,7 +718,7 @@ bool wxDbGridTableBase::Writeback() const
     bool result=true;
     wxLogDebug(wxT("\trow key unknown"));
 
-// FIXME: this code requires dbtable support for record status 
+// FIXME: this code requires dbtable support for record status
 #if 0
     switch (m_data->get_ModifiedStatus())
     {
