@@ -125,7 +125,7 @@ wxConfig::PathChanger::~PathChanger()
 // understands both Unix and Windows (but only under Windows) environment
 // variables expansion: i.e. $var, $(var) and ${var} are always understood
 // and in addition under Windows %var% is also.
-wxString ExpandEnvVars(const wxString& str)
+wxString wxExpandEnvVars(const wxString& str)
 {
   wxString strResult;
   strResult.Alloc(str.Len());
@@ -224,7 +224,7 @@ wxString ExpandEnvVars(const wxString& str)
 }
 
 // this function is used to properly interpret '..' in path
-void SplitPath(wxArrayString& aParts, const char *sz)
+void wxSplitPath(wxArrayString& aParts, const char *sz)
 {
   aParts.Empty();
 
