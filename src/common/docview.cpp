@@ -1305,6 +1305,28 @@ wxDocTemplate *wxDocManager::FindTemplateForPath(const wxString& path)
     return theTemplate;
 }
 
+// Try to get a more suitable parent frame than the top window,
+// for selection dialogs. Otherwise you may get an unexpected
+// window being activated when a dialog is shown.
+static wxWindow* wxFindSuitableParent()
+{
+    wxWindow* parent = wxTheApp->GetTopWindow();
+
+    wxWindow* focusWindow = wxWindow::FindFocus();
+    if (focusWindow)
+    {
+        while (focusWindow &&
+                !focusWindow->IsKindOf(CLASSINFO(wxDialog)) &&
+                !focusWindow->IsKindOf(CLASSINFO(wxFrame)))
+
+            focusWindow = focusWindow->GetParent();
+
+        if (focusWindow)
+            parent = focusWindow;
+    }
+    return parent;
+}
+
 // Prompts user to open a file, using file specs in templates.
 // How to implement in wxWindows? Must extend the file selector
 // dialog or implement own; OR match the extension to the
@@ -1343,13 +1365,16 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
 #endif
 
     int FilterIndex = 0;
+
+    wxWindow* parent = wxFindSuitableParent();
+
     wxString pathTmp = wxFileSelectorEx(_("Select a file"),
                                         m_lastDirectory,
                                         wxT(""),
                                         &FilterIndex,
                                         descrBuf,
                                         0,
-                                        wxTheApp->GetTopWindow());
+                                        parent);
 
     if (!pathTmp.IsEmpty())
     {
@@ -1362,7 +1387,7 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
                 msgTitle = wxString(_("File error"));
             
             (void)wxMessageBox(_("Sorry, could not open this file."), msgTitle, wxOK | wxICON_EXCLAMATION,
-                wxTheApp->GetTopWindow());
+                parent);
 
             path = wxT("");
             return (wxDocTemplate *) NULL;
@@ -1439,8 +1464,10 @@ wxDocTemplate *wxDocManager::SelectDocumentType(wxDocTemplate **templates,
         return temp;
     }
 
+    wxWindow* parent = wxFindSuitableParent();
+
     wxDocTemplate *theTemplate = (wxDocTemplate *)wxGetSingleChoiceData(_("Select a document template"), _("Templates"), n,
-            strings, (void **)data);
+            strings, (void **)data, parent);
     delete[] strings;
     delete[] data;
     return theTemplate;
@@ -1462,8 +1489,10 @@ wxDocTemplate *wxDocManager::SelectViewType(wxDocTemplate **templates,
             n ++;
         }
     }
+    wxWindow* parent = wxFindSuitableParent();
+
     wxDocTemplate *theTemplate = (wxDocTemplate *)wxGetSingleChoiceData(_("Select a document view"), _("Views"), n,
-            strings, (void **)data);
+            strings, (void **)data, parent);
     delete[] strings;
     delete[] data;
     return theTemplate;
