@@ -353,8 +353,7 @@ protected:
 
     wxGenericTreeItem   *m_anchor;
     wxGenericTreeItem   *m_current,
-                        *m_key_current,
-                        *m_currentEdit;
+                        *m_key_current;
     unsigned short       m_indent;
     unsigned short       m_spacing;
     int                  m_lineHeight;
@@ -367,7 +366,6 @@ protected:
                          m_ownsImageListState,
                          m_ownsImageListButtons;
     bool                 m_isDragging; // true between BEGIN/END drag events
-    bool                 m_renameAccept;
     bool                 m_lastOnSame;  // last click on the same item as prev
     wxImageList         *m_imageListNormal,
                         *m_imageListState,
@@ -380,7 +378,6 @@ protected:
     wxGenericTreeItem   *m_oldSelection;
 
     wxTimer             *m_renameTimer;
-    wxString             m_renameRes;
 
     wxBitmap            *m_arrowRight,
                         *m_arrowDown;
@@ -431,7 +428,7 @@ protected:
     void RefreshSelectedUnder(wxGenericTreeItem *item);
 
     void OnRenameTimer();
-    void OnRenameAccept();
+    bool OnRenameAccept(wxGenericTreeItem *item, const wxString& value);
 
     void FillArray(wxGenericTreeItem*, wxArrayTreeItemIds&) const;
     void SelectItemRange( wxGenericTreeItem *item1, wxGenericTreeItem *item2 );

@@ -126,26 +126,19 @@ private:
 class WXDLLEXPORT wxTreeTextCtrl: public wxTextCtrl
 {
 public:
-    wxTreeTextCtrl( wxWindow *parent,
-                    const wxWindowID id,
-                    bool *accept,
-                    wxString *res,
-                    wxGenericTreeCtrl *owner,
-                    const wxString &value = wxEmptyString,
-                    const wxPoint &pos = wxDefaultPosition,
-                    const wxSize &size = wxDefaultSize,
-                    int style = wxSIMPLE_BORDER,
-                    const wxValidator& validator = wxDefaultValidator,
-                    const wxString &name = wxTextCtrlNameStr );
+    wxTreeTextCtrl(wxGenericTreeCtrl *owner, wxGenericTreeItem *item);
 
+protected:
     void OnChar( wxKeyEvent &event );
     void OnKeyUp( wxKeyEvent &event );
     void OnKillFocus( wxFocusEvent &event );
 
+    bool AcceptChanges();
+    void Finish();
+
 private:
-    bool               *m_accept;
-    wxString           *m_res;
     wxGenericTreeCtrl  *m_owner;
+    wxGenericTreeItem  *m_itemEdited;
     wxString            m_startValue;
     bool                m_finished;
 
@@ -353,99 +346,131 @@ BEGIN_EVENT_TABLE(wxTreeTextCtrl,wxTextCtrl)
     EVT_KILL_FOCUS     (wxTreeTextCtrl::OnKillFocus)
 END_EVENT_TABLE()
 
-wxTreeTextCtrl::wxTreeTextCtrl( wxWindow *parent,
-                                const wxWindowID id,
-                                bool *accept,
-                                wxString *res,
-                                wxGenericTreeCtrl *owner,
-                                const wxString &value,
-                                const wxPoint &pos,
-                                const wxSize &size,
-                                int style,
-                                const wxValidator& validator,
-                                const wxString &name )
-    : wxTextCtrl( parent, id, value, pos, size, style, validator, name )
+wxTreeTextCtrl::wxTreeTextCtrl(wxGenericTreeCtrl *owner,
+                               wxGenericTreeItem *item)
+              : m_itemEdited(item), m_startValue(item->GetText())
 {
-    m_res = res;
-    m_accept = accept;
     m_owner = owner;
-    (*m_accept) = FALSE;
-    (*m_res) = wxEmptyString;
-    m_startValue = value;
     m_finished = FALSE;
+
+    int w = m_itemEdited->GetWidth(),
+        h = m_itemEdited->GetHeight();
+
+    int x, y;
+    m_owner->CalcScrolledPosition(item->GetX(), item->GetY(), &x, &y);
+
+    int image_h = 0,
+        image_w = 0;
+
+    int image = item->GetCurrentImage();
+    if ( image != NO_IMAGE )
+    {
+        if ( m_owner->m_imageListNormal )
+        {
+            m_owner->m_imageListNormal->GetSize( image, image_w, image_h );
+            image_w += 4;
+        }
+        else
+        {
+            wxFAIL_MSG(_T("you must create an image list to use images!"));
+        }
+    }
+
+    // FIXME: what are all these hardcoded 4, 8 and 11s really?
+    x += image_w;
+    w -= image_w + 4;
+
+    (void)Create(m_owner, wxID_ANY, m_startValue,
+                 wxPoint(x - 4, y - 4), wxSize(w + 11, h + 8));
+}
+
+bool wxTreeTextCtrl::AcceptChanges()
+{
+    const wxString value = GetValue();
+
+    if ( value == m_startValue )
+    {
+        // nothing changed, always accept
+        return TRUE;
+    }
+
+    if ( !m_owner->OnRenameAccept(m_itemEdited, value) )
+    {
+        // vetoed by the user
+        return FALSE;
+    }
+
+    // accepted, do rename the item
+    m_owner->SetItemText(m_itemEdited, value);
+
+    return TRUE;
+}
+
+void wxTreeTextCtrl::Finish()
+{
+    if ( !m_finished )
+    {
+        wxPendingDelete.Append(this);
+
+        m_finished = TRUE;
+
+        m_owner->SetFocus(); // This doesn't work. TODO.
+    }
 }
 
 void wxTreeTextCtrl::OnChar( wxKeyEvent &event )
 {
-    if (event.m_keyCode == WXK_RETURN)
+    switch ( event.m_keyCode )
     {
-        (*m_accept) = TRUE;
-        (*m_res) = GetValue();
+        case WXK_RETURN:
+            if ( !AcceptChanges() )
+            {
+                // vetoed by the user, don't disappear
+                break;
+            }
+            //else: fall through
 
-        if ((*m_res) != m_startValue)
-            m_owner->OnRenameAccept();
+        case WXK_ESCAPE:
+            Finish();
+            break;
 
-        if (!wxPendingDelete.Member(this))
-            wxPendingDelete.Append(this);
-
-        m_finished = TRUE;
-        m_owner->SetFocus(); // This doesn't work. TODO.
-
-        return;
+        default:
+            event.Skip();
     }
-    if (event.m_keyCode == WXK_ESCAPE)
-    {
-        (*m_accept) = FALSE;
-        (*m_res) = "";
-
-        if (!wxPendingDelete.Member(this))
-            wxPendingDelete.Append(this);
-
-        m_finished = TRUE;
-        m_owner->SetFocus(); // This doesn't work. TODO.
-
-        return;
-    }
-    event.Skip();
 }
 
 void wxTreeTextCtrl::OnKeyUp( wxKeyEvent &event )
 {
-    if (m_finished)
+    if ( !m_finished )
     {
-        event.Skip();
-        return;
+        // auto-grow the textctrl:
+        wxSize parentSize = m_owner->GetSize();
+        wxPoint myPos = GetPosition();
+        wxSize mySize = GetSize();
+        int sx, sy;
+        GetTextExtent(GetValue() + _T("M"), &sx, &sy);
+        if (myPos.x + sx > parentSize.x)
+            sx = parentSize.x - myPos.x;
+        if (mySize.x > sx)
+            sx = mySize.x;
+        SetSize(sx, -1);
     }
-
-    // auto-grow the textctrl:
-    wxSize parentSize = m_owner->GetSize();
-    wxPoint myPos = GetPosition();
-    wxSize mySize = GetSize();
-    int sx, sy;
-    GetTextExtent(GetValue() + _T("M"), &sx, &sy);
-    if (myPos.x + sx > parentSize.x) sx = parentSize.x - myPos.x;
-    if (mySize.x > sx) sx = mySize.x;
-    SetSize(sx, -1);
 
     event.Skip();
 }
 
 void wxTreeTextCtrl::OnKillFocus( wxFocusEvent &event )
 {
-    if (m_finished)
+    if ( m_finished )
     {
         event.Skip();
         return;
     }
 
-    if (!wxPendingDelete.Member(this))
-        wxPendingDelete.Append(this);
-
-    (*m_accept) = TRUE;
-    (*m_res) = GetValue();
-
-    if ((*m_res) != m_startValue)
-        m_owner->OnRenameAccept();
+    if ( AcceptChanges() )
+    {
+        Finish();
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -2692,8 +2717,8 @@ wxTreeItemId wxGenericTreeCtrl::HitTest(const wxPoint& point, int& flags)
 
 // get the bounding rectangle of the item (or of its label only)
 bool wxGenericTreeCtrl::GetBoundingRect(const wxTreeItemId& item,
-                         wxRect& rect,
-                         bool WXUNUSED(textOnly)) const
+                                        wxRect& rect,
+                                        bool WXUNUSED(textOnly)) const
 {
     wxCHECK_MSG( item.IsOk(), FALSE, _T("invalid item in wxGenericTreeCtrl::GetBoundingRect") );
 
@@ -2711,78 +2736,46 @@ bool wxGenericTreeCtrl::GetBoundingRect(const wxTreeItemId& item,
     return TRUE;
 }
 
-/* **** */
-
 void wxGenericTreeCtrl::Edit( const wxTreeItemId& item )
 {
-    if (!item.IsOk()) return;
+    wxCHECK_RET( item.IsOk(), _T("can't edit an invalid item") );
 
-    m_currentEdit = (wxGenericTreeItem*) item.m_pItem;
+    wxGenericTreeItem *itemEdit = (wxGenericTreeItem *)item.m_pItem;
 
     wxTreeEvent te( wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT, GetId() );
-    te.m_item = (long) m_currentEdit;
+    te.m_item = (long) itemEdit;
     te.SetEventObject( this );
-    GetEventHandler()->ProcessEvent( te );
-
-    if (!te.IsAllowed()) return;
+    if ( GetEventHandler()->ProcessEvent( te ) && !te.IsAllowed() )
+    {
+        // vetoed by user
+        return;
+    }
 
     // We have to call this here because the label in
     // question might just have been added and no screen
     // update taken place.
-    if (m_dirty) wxYieldIfNeeded();
+    if ( m_dirty )
+        wxYieldIfNeeded();
 
-    wxString s = m_currentEdit->GetText();
-    int w = m_currentEdit->GetWidth();
-    int h = m_currentEdit->GetHeight();
-    int x, y;
-    CalcScrolledPosition(m_currentEdit->GetX(), m_currentEdit->GetY(), &x, &y);
+    wxTreeTextCtrl *text = new wxTreeTextCtrl(this, itemEdit);
 
-    int image_h = 0;
-    int image_w = 0;
-
-    int image = m_currentEdit->GetCurrentImage();
-    if ( image != NO_IMAGE )
-    {
-        if ( m_imageListNormal )
-        {
-            m_imageListNormal->GetSize( image, image_w, image_h );
-            image_w += 4;
-        }
-        else
-        {
-            wxFAIL_MSG(_T("you must create an image list to use images!"));
-        }
-    }
-    x += image_w;
-    w -= image_w + 4; // I don't know why +4 is needed
-
-    wxTreeTextCtrl *text = new wxTreeTextCtrl(this, -1,
-                                              &m_renameAccept,
-                                              &m_renameRes,
-                                              this,
-                                              s,
-                                              wxPoint(x-4,y-4),
-                                              wxSize(w+11,h+8));
     text->SetFocus();
+}
+
+bool wxGenericTreeCtrl::OnRenameAccept(wxGenericTreeItem *item,
+                                       const wxString& value)
+{
+    wxTreeEvent le( wxEVT_COMMAND_TREE_END_LABEL_EDIT, GetId() );
+    le.m_item = (long) item;
+    le.SetEventObject( this );
+    le.m_label = value;
+
+    return !GetEventHandler()->ProcessEvent( le ) || le.IsAllowed();
 }
 
 void wxGenericTreeCtrl::OnRenameTimer()
 {
     Edit( m_current );
-}
-
-void wxGenericTreeCtrl::OnRenameAccept()
-{
-    // TODO if the validator fails this causes a crash
-    wxTreeEvent le( wxEVT_COMMAND_TREE_END_LABEL_EDIT, GetId() );
-    le.m_item = (long) m_currentEdit;
-    le.SetEventObject( this );
-    le.m_label = m_renameRes;
-    GetEventHandler()->ProcessEvent( le );
-
-    if (!le.IsAllowed()) return;
-
-    SetItemText( m_currentEdit, m_renameRes );
 }
 
 void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
