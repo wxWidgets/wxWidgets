@@ -169,7 +169,7 @@ bool wxPropertyListView::UpdatePropertyList(bool clearEditArea)
   if (clearEditArea)
   {
     m_valueList->Clear();
-    m_valueText->SetValue("");
+    m_valueText->SetValue(_T(""));
   }
   wxNode *node = m_propertySheet->GetProperties().First();
 
@@ -261,7 +261,7 @@ bool wxPropertyListView::ShowProperty(wxProperty *property, bool select)
   }
 
   m_valueList->Clear();
-  m_valueText->SetValue("");
+  m_valueText->SetValue(_T(""));
 
   if (property)
   {
@@ -440,7 +440,9 @@ bool wxPropertyListView::CreateControls()
     wxFont guiFont = settings.GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
 
 #ifdef __WXMSW__
-    wxFont *boringFont = wxTheFontList->FindOrCreateFont(guiFont.GetPointSize(), wxMODERN, wxNORMAL, wxNORMAL, FALSE, "Courier New");
+    wxFont *boringFont =
+        wxTheFontList->FindOrCreateFont(guiFont.GetPointSize(), wxMODERN,
+                                        wxNORMAL, wxNORMAL, FALSE, _T("Courier New"));
 #else
     wxFont *boringFont = wxTheFontList->FindOrCreateFont(guiFont.GetPointSize(), wxTELETYPE, wxNORMAL, wxNORMAL);
 #endif
@@ -468,22 +470,22 @@ bool wxPropertyListView::CreateControls()
         }
         else
         {
-            m_confirmButton = new wxButton(panel, wxID_PROP_CHECK, ":-)", wxPoint(-1, -1), smallButtonSize );
-            m_cancelButton = new wxButton(panel, wxID_PROP_CROSS, "X", wxPoint(-1, -1), smallButtonSize );
+            m_confirmButton = new wxButton(panel, wxID_PROP_CHECK, _T(":-)"), wxPoint(-1, -1), smallButtonSize );
+            m_cancelButton = new wxButton(panel, wxID_PROP_CROSS, _T("X"), wxPoint(-1, -1), smallButtonSize );
         }
 
         topsizer->Add( m_confirmButton, 0, wxLEFT|wxTOP|wxBOTTOM | wxEXPAND, buttonborder );
         topsizer->Add( m_cancelButton, 0, wxLEFT|wxTOP|wxBOTTOM | wxEXPAND, buttonborder );
     }
 
-    m_valueText = new wxPropertyTextEdit(this, panel, wxID_PROP_TEXT, "",
+    m_valueText = new wxPropertyTextEdit(this, panel, wxID_PROP_TEXT, _T(""),
        wxPoint(-1, -1), wxSize(-1, smallButtonSize.y), wxPROCESS_ENTER);
     m_valueText->Enable(FALSE);
     topsizer->Add( m_valueText, 1, wxALL | wxEXPAND, buttonborder );
 
     if (m_buttonFlags & wxPROP_PULLDOWN)
     {
-        m_editButton = new wxButton(panel, wxID_PROP_EDIT, "...",  wxPoint(-1, -1), smallButtonSize);
+        m_editButton = new wxButton(panel, wxID_PROP_EDIT, _T("..."),  wxPoint(-1, -1), smallButtonSize);
         m_editButton->Enable(FALSE);
         topsizer->Add( m_editButton, 0, wxRIGHT|wxTOP|wxBOTTOM | wxEXPAND, buttonborder );
     }
@@ -1766,14 +1768,14 @@ void wxPropertyStringListEditorDialog::OnDelete(wxCommandEvent& WXUNUSED(event))
   delete[] (wxChar *)node->Data();
   delete node;
   m_currentSelection = -1;
-  m_stringText->SetValue("");
+  m_stringText->SetValue(_T(""));
 }
 
 void wxPropertyStringListEditorDialog::OnAdd(wxCommandEvent& WXUNUSED(event))
 {
   SaveCurrentSelection();
 
-  wxChar *initialText = wxT("");
+  wxString initialText;
   wxNode *node = m_stringList->Add(initialText);
   m_listBox->Append(initialText, (void *)node);
   m_currentSelection = m_stringList->Number() - 1;
@@ -1835,7 +1837,7 @@ void wxPropertyStringListEditorDialog::ShowCurrentSelection()
 {
   if (m_currentSelection == -1)
   {
-    m_stringText->SetValue("");
+    m_stringText->SetValue(_T(""));
     return;
   }
   wxNode *node = (wxNode *)m_listBox->wxListBox::GetClientData(m_currentSelection);
@@ -1859,7 +1861,7 @@ static wxBitmap *GetTickBitmap()
         s_loaded = TRUE; // set it to TRUE anyhow, we won't try again
 
         #if defined(__WXMSW__) || defined(__WXPM__)
-            s_tickBitmap = new wxBitmap("tick_bmp", wxBITMAP_TYPE_RESOURCE);
+            s_tickBitmap = new wxBitmap(_T("tick_bmp"), wxBITMAP_TYPE_RESOURCE);
         #else
             s_tickBitmap = new wxBitmap( tick_xpm );
         #endif
@@ -1878,7 +1880,7 @@ static wxBitmap *GetCrossBitmap()
         s_loaded = TRUE; // set it to TRUE anyhow, we won't try again
 
         #if defined(__WXMSW__) || defined(__WXPM__)
-            s_crossBitmap =  new wxBitmap("cross_bmp", wxBITMAP_TYPE_RESOURCE);
+            s_crossBitmap =  new wxBitmap(_T("cross_bmp"), wxBITMAP_TYPE_RESOURCE);
         #else // XPMs
             s_crossBitmap =  new wxBitmap( cross_xpm );
         #endif // BMPs/XPMs
