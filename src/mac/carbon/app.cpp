@@ -1106,7 +1106,10 @@ void wxApp::ExitMainLoop()
 bool wxApp::Pending()
 {
 #if TARGET_CARBON
-    return GetNumEventsInQueue( GetMainEventQueue() ) > 0 ;
+    // without the receive event (with pull param = false ) nothing is ever reported
+    EventRef theEvent;
+    ReceiveNextEvent (0, NULL, kEventDurationNoWait, false, &theEvent);
+    return GetNumEventsInQueue( GetMainEventQueue() ) > 0 ; 
 #else
     EventRecord event ;
 
