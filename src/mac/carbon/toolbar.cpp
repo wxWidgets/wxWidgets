@@ -163,153 +163,170 @@ wxToolBar::~wxToolBar()
 
 bool wxToolBar::Realize()
 {
-  if (m_tools.Number() == 0)
-      return FALSE;
+    if (m_tools.Number() == 0)
+        return FALSE;
 
-	Point localOrigin ;
-	Rect clipRect ;
-	WindowRef window ;
-	wxWindow *win ;
-	
-	GetParent()->MacGetPortParams( &localOrigin , &clipRect , &window , &win ) ;
+    Point localOrigin ;
+    Rect clipRect ;
+    WindowRef window ;
+    wxWindow *win ;
+    
+    GetParent()->MacGetPortParams( &localOrigin , &clipRect , &window , &win ) ;
 
-	Rect toolbarrect = { m_y + localOrigin.v , m_x  + localOrigin.h , 
-		m_y + m_height + localOrigin.v  , m_x + m_width + localOrigin.h} ;
-	ControlFontStyleRec		controlstyle ;
+    Rect toolbarrect = { m_y + localOrigin.v , m_x  + localOrigin.h , 
+                         m_y + m_height + localOrigin.v  , m_x + m_width + localOrigin.h} ;
+    ControlFontStyleRec                controlstyle ;
 
-	controlstyle.flags = kControlUseFontMask ;
-	controlstyle.font = kControlFontSmallSystemFont ;
-	
-	wxNode *node = m_tools.First();
-	int noButtons = 0;
-	int x = 0 ;
-	wxSize toolSize = GetToolSize() ;
+    controlstyle.flags = kControlUseFontMask ;
+    controlstyle.font = kControlFontSmallSystemFont ;
+    
+    wxNode *node = m_tools.First();
+    int noButtons = 0;
+    int x = 0 ;
+    int y = 0 ;
+    wxSize toolSize = GetToolSize() ;
     int tw, th;
     GetSize(& tw, & th);
     
     int maxWidth = 0 ;
     int maxHeight = 0 ;
     
-	while (node)
-	{
-		wxToolBarTool *tool = (wxToolBarTool *)node->Data();
-		wxBitmapRefData * bmap = (wxBitmapRefData*) ( tool->GetBitmap1().GetRefData()) ;
-		
-		if(  !tool->IsSeparator()  )
-		{
-			Rect toolrect = { toolbarrect.top + m_yMargin + kwxMacToolBarTopMargin, toolbarrect.left + x + m_xMargin + kwxMacToolBarLeftMargin , 0 , 0 } ;
-			toolrect.right = toolrect.left + toolSize.x ;
-			toolrect.bottom = toolrect.top + toolSize.y ;
-			
-			ControlButtonContentInfo info ;
-			if ( bmap )
-			{
-				if ( bmap->m_bitmapType == kMacBitmapTypePict )
-				{
-				    info.contentType = kControlContentPictHandle ;
-					info.u.picture = bmap->m_hPict ;
-				}
-				else if ( bmap->m_bitmapType == kMacBitmapTypeGrafWorld )
-				{
-					if ( tool->GetBitmap1().GetMask() )
-					{
-				        info.contentType = kControlContentCIconHandle ;
-						info.u.cIconHandle = wxMacCreateCIcon( bmap->m_hBitmap , tool->GetBitmap1().GetMask()->GetMaskBitmap() ,
-						    8 , 16 ) ;
-					}
-					else
-					{
-				        info.contentType = kControlContentCIconHandle ;
-						info.u.cIconHandle = wxMacCreateCIcon( bmap->m_hBitmap , NULL ,
-						    8 , 16 ) ;
-					}
-				}
-			}
-			
-			ControlHandle m_macToolHandle ;
-			
-			SInt16 behaviour = kControlBehaviorOffsetContents ;
-			if ( tool->CanBeToggled() )
-				behaviour += kControlBehaviorToggles ;
-				
-			if ( info.u.cIconHandle ) // since it is a handle we can use one of them
-			{
-				m_macToolHandle = ::NewControl( window , &toolrect , "\p" , false , 0 , 
-					behaviour + info.contentType , 0 , kControlBevelButtonNormalBevelProc , (long) this ) ;
-				
-				::SetControlData( m_macToolHandle , kControlButtonPart , kControlBevelButtonContentTag , sizeof(info) , (char*) &info ) ;
-			}
-			else
-			{
-						m_macToolHandle = ::NewControl( window , &toolrect , "\p" , false , 0 , 
-						behaviour  , 0 , kControlBevelButtonNormalBevelProc , (long) this ) ;
-			}
-			UMAShowControl( m_macToolHandle ) ;
-			m_macToolHandles.Add( m_macToolHandle ) ;
-			tool->m_index = m_macToolHandles.Count() -1 ;
-			if ( !tool->IsEnabled() )
-			{
-				UMADeactivateControl( m_macToolHandle ) ;
-			}
-			if ( tool->CanBeToggled() && tool->IsToggled() )
-			{
-   				::SetControlValue( m_macToolHandle , 1 ) ;
-			}
-			else
-			{
-   				::SetControlValue( m_macToolHandle , 0 ) ;
-			}
-			/*
-			::SetControlFontStyle( m_macToolHandle , &controlstyle ) ;
-			*/
-			ControlHandle container = GetParent()->MacGetContainerForEmbedding() ;
-			wxASSERT_MSG( container != NULL , "No valid mac container control" ) ;
-			::EmbedControl( m_macToolHandle , container ) ;
-			
-			x += (int)toolSize.x;
-			noButtons ++;
-		}
-		else
-		{
-			m_macToolHandles.Add( NULL ) ;
-			x += (int)toolSize.x / 4;
-		}
-	    if ( toolbarrect.left + x + m_xMargin  + kwxMacToolBarLeftMargin- m_x - localOrigin.h > maxWidth)
-    	  	maxWidth = toolbarrect.left + x  + kwxMacToolBarLeftMargin+ m_xMargin - m_x - localOrigin.h;
-    	if (toolbarrect.top + m_yMargin  + kwxMacToolBarTopMargin - m_y - localOrigin.v > maxHeight)
-      		maxHeight = toolbarrect.top  + kwxMacToolBarTopMargin + m_yMargin - m_y - localOrigin.v ;
-
-		node = node->Next();
-	}
-
-  if ( GetWindowStyleFlag() & wxTB_HORIZONTAL )
-  {
-    if ( m_maxRows == 0 )
+    while (node)
     {
-        // if not set yet, only one row
-        SetRows(1);
+        wxToolBarTool *tool = (wxToolBarTool *)node->Data();
+        wxBitmapRefData * bmap = (wxBitmapRefData*) ( tool->GetBitmap1().GetRefData()) ;
+        
+        if(  !tool->IsSeparator()  )
+        {
+            Rect toolrect = { toolbarrect.top + y + m_yMargin + kwxMacToolBarTopMargin,
+                              toolbarrect.left + x + m_xMargin + kwxMacToolBarLeftMargin , 0 , 0 } ;
+            toolrect.right = toolrect.left + toolSize.x ;
+            toolrect.bottom = toolrect.top + toolSize.y ;
+            
+            ControlButtonContentInfo info ;
+            if ( bmap )
+            {
+                if ( bmap->m_bitmapType == kMacBitmapTypePict )
+                {
+                    info.contentType = kControlContentPictHandle ;
+                    info.u.picture = bmap->m_hPict ;
+                }
+                else if ( bmap->m_bitmapType == kMacBitmapTypeGrafWorld )
+                {
+                    if ( tool->GetBitmap1().GetMask() )
+                    {
+                        info.contentType = kControlContentCIconHandle ;
+                        info.u.cIconHandle = wxMacCreateCIcon( bmap->m_hBitmap , tool->GetBitmap1().GetMask()->GetMaskBitmap() ,
+                                                               8 , 16 ) ;
+                    }
+                    else
+                    {
+                        info.contentType = kControlContentCIconHandle ;
+                        info.u.cIconHandle = wxMacCreateCIcon( bmap->m_hBitmap , NULL ,
+                                                               8 , 16 ) ;
+                    }
+                }
+            }
+            
+            ControlHandle m_macToolHandle ;
+            
+            SInt16 behaviour = kControlBehaviorOffsetContents ;
+            if ( tool->CanBeToggled() )
+                behaviour += kControlBehaviorToggles ;
+            
+            if ( info.u.cIconHandle ) // since it is a handle we can use one of them
+            {
+                m_macToolHandle = ::NewControl( window , &toolrect , "\p" , false , 0 , 
+                                                behaviour + info.contentType , 0 , kControlBevelButtonNormalBevelProc , (long) this ) ;
+                
+                ::SetControlData( m_macToolHandle , kControlButtonPart , kControlBevelButtonContentTag , sizeof(info) , (char*) &info ) ;
+            }
+            else
+            {
+                m_macToolHandle = ::NewControl( window , &toolrect , "\p" , false , 0 , 
+                                                behaviour  , 0 , kControlBevelButtonNormalBevelProc , (long) this ) ;
+            }
+            UMAShowControl( m_macToolHandle ) ;
+            m_macToolHandles.Add( m_macToolHandle ) ;
+            tool->m_index = m_macToolHandles.Count() -1 ;
+            if ( !tool->IsEnabled() )
+            {
+                UMADeactivateControl( m_macToolHandle ) ;
+            }
+            if ( tool->CanBeToggled() && tool->IsToggled() )
+            {
+                ::SetControlValue( m_macToolHandle , 1 ) ;
+            }
+            else
+            {
+                ::SetControlValue( m_macToolHandle , 0 ) ;
+            }
+            /*
+              ::SetControlFontStyle( m_macToolHandle , &controlstyle ) ;
+            */
+            ControlHandle container = GetParent()->MacGetContainerForEmbedding() ;
+            wxASSERT_MSG( container != NULL , "No valid mac container control" ) ;
+            ::EmbedControl( m_macToolHandle , container ) ;
+            
+            if ( GetWindowStyleFlag() & wxTB_HORIZONTAL )
+            {
+                x += (int)toolSize.x;
+            }
+            else
+            {
+                y += (int)toolSize.y;
+            }
+            noButtons ++;
+        }
+        else
+        {
+            m_macToolHandles.Add( NULL ) ;
+            if ( GetWindowStyleFlag() & wxTB_HORIZONTAL )
+            {
+                x += (int)toolSize.x / 4;
+            }
+            else
+            {
+                y += (int)toolSize.y / 4;
+            }
+        }
+        if ( toolbarrect.left + x + m_xMargin + kwxMacToolBarLeftMargin - m_x - localOrigin.h > maxWidth) {
+            maxWidth = toolbarrect.left + x + m_xMargin + kwxMacToolBarLeftMargin - m_x - localOrigin.h;
+        }
+        if (toolbarrect.top + y + m_yMargin + kwxMacToolBarTopMargin - m_y - localOrigin.v > maxHeight) {
+            maxHeight = toolbarrect.top + y + m_yMargin + kwxMacToolBarTopMargin - m_y - localOrigin.v ;
+        }
+        node = node->Next();
     }
-   	maxWidth = tw ; 
-    maxHeight += toolSize.y;
-  	maxHeight += m_yMargin + kwxMacToolBarTopMargin;
-  	m_maxHeight = maxHeight ;
-  }
-  else
-  {
-    if ( noButtons > 0 && m_maxRows == 0 )
+    
+    if ( GetWindowStyleFlag() & wxTB_HORIZONTAL )
     {
-        // if not set yet, have one column
-        SetRows(noButtons);
+        if ( m_maxRows == 0 )
+        {
+            // if not set yet, only one row
+            SetRows(1);
+        }
+        maxWidth = tw ; 
+        maxHeight += toolSize.y;
+        maxHeight += m_yMargin + kwxMacToolBarTopMargin;
+        m_maxHeight = maxHeight ;
     }
-    maxHeight = th ;
-    maxWidth += toolSize.x;
-  	maxWidth += m_xMargin + kwxMacToolBarLeftMargin;
-  	m_maxWidth = maxWidth ;
-  }
-
-  SetSize(maxWidth, maxHeight);
-
-  return TRUE;
+    else
+    {
+        if ( noButtons > 0 && m_maxRows == 0 )
+        {
+            // if not set yet, have one column
+            SetRows(noButtons);
+        }
+        maxHeight = th ;
+        maxWidth += toolSize.x;
+        maxWidth += m_xMargin + kwxMacToolBarLeftMargin;
+        m_maxWidth = maxWidth ;
+    }
+    
+    SetSize(maxWidth, maxHeight);
+    
+    return TRUE;
 }
 
 void wxToolBar::SetToolBitmapSize(const wxSize& size)
