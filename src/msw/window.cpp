@@ -50,7 +50,7 @@
     #include <stdio.h>
 #endif
 
-#if     wxUSE_OWNER_DRAWN
+#if wxUSE_OWNER_DRAWN
     #include "wx/ownerdrw.h"
 #endif
 
@@ -96,6 +96,11 @@
     #ifndef __TWIN32__
         #include "wx/msw/gnuwin32/extra.h"
     #endif
+#endif
+
+// This didn't appear in mingw until 2.95.2
+#ifndef SIF_TRACKPOS
+#define SIF_TRACKPOS 16
 #endif
 
 // ---------------------------------------------------------------------------
