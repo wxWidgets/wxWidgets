@@ -51,7 +51,7 @@ public:
     int GetWidth() const {return m_Width;}
     int GetHeight() const {return m_Height;}
     int GetDescent() const {return m_Descent;}
-    
+
     const wxString& GetId() const { return m_id; }
     void SetId(const wxString& id) { m_id = id; }
 
@@ -114,7 +114,7 @@ public:
     // is true - the cell can be split on two pages
     void SetCanLiveOnPagebreak(bool can) { m_CanLiveOnPagebreak = can; }
 
-    // Returns y-coordinates that contraint the cell, i.e. left is highest 
+    // Returns y-coordinates that contraint the cell, i.e. left is highest
     // and right lowest coordinate such that the cell lays between then.
     // Note: this method does not return meaningful values if you haven't
     //       called Layout() before!
@@ -229,7 +229,7 @@ public:
     wxHtmlCell* GetFirstCell() const {return m_Cells;}
 
     // see comment in wxHtmlCell about this method
-    virtual bool IsTerminalCell() const { return false; }
+    virtual bool IsTerminalCell() const { return FALSE; }
 
     virtual wxHtmlCell *FindCellByPos(wxCoord x, wxCoord y) const;
 
