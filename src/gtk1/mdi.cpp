@@ -250,7 +250,7 @@ static void SetInvokingWindow( wxMenu *menu, wxWindow *win )
   while (node)
   {
     wxMenuItem *menuitem = (wxMenuItem*)node->Data();
-    if (menuitem->m_isSubMenu) SetInvokingWindow( menuitem->m_subMenu, win );
+    if (menuitem->GetSubMenu()) SetInvokingWindow( menuitem->GetSubMenu(), win );
     node = node->Next();
   };
 };
