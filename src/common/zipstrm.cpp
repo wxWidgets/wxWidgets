@@ -34,7 +34,6 @@
 #include "wx/buffer.h"
 #include "wx/ptr_scpd.h"
 #include "wx/wfstream.h"
-#include "wx/html/forcelnk.h"
 #include "zlib.h"
 
 // value for the 'version needed to extract' field (20 means 2.0)
@@ -82,7 +81,12 @@ enum {
 IMPLEMENT_DYNAMIC_CLASS(wxZipEntry, wxArchiveEntry)
 IMPLEMENT_DYNAMIC_CLASS(wxZipClassFactory, wxArchiveClassFactory)
 
-FORCE_LINK_ME(zipstrm)
+//FORCE_LINK_ME(zipstrm)
+int _wx_link_dummy_func_zipstrm();
+int _wx_link_dummy_func_zipstrm()
+{
+    return 1;
+}
 
 
 /////////////////////////////////////////////////////////////////////////////
