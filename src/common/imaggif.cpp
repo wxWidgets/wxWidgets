@@ -1,8 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        imaggif.cpp
 // Purpose:     wxGIFHandler
-// Author:      Vaclav Slavik
-//              Based on wxGIFDecoder by Guillermo Rodriguez Garcia
+// Author:      Vaclav Slavik & Guillermo Rodriguez Garcia
 // RCS-ID:      $Id$
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -23,13 +22,17 @@
 #  include "wx/defs.h"
 #endif
 
+#if 1 // change this to #if wxUSE_GIF
+
 #include "wx/image.h"
 #include "wx/gifdecod.h"
 #include "wx/wfstream.h"
 #include "wx/module.h"
 #include "wx/log.h"
 
+#if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxGIFHandler,wxImageHandler)
+#endif
 
 #if wxUSE_STREAMS
 
@@ -37,7 +40,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxGIFHandler,wxImageHandler)
 // wxGIFHandler
 //-----------------------------------------------------------------------------
 
-bool wxGIFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool WXUNUSED(verbose) )
+bool wxGIFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose )
 {
     wxGIFDecoder *decod;
     bool ok;
@@ -46,7 +49,9 @@ bool wxGIFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool WXUNUSE
     
     if (decod->ReadGIF() != E_OK)
     {
-        wxLogDebug(_T("Error reading GIF"));
+        if (verbose)
+            wxLogDebug(_T("Error reading GIF"));
+
         delete decod;
         return FALSE;
     }
@@ -61,7 +66,9 @@ bool wxGIFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool WXUNUSE
 bool wxGIFHandler::SaveFile( wxImage * WXUNUSED(image),
                              wxOutputStream& WXUNUSED(stream), bool verbose )
 {
-    if (verbose) wxLogDebug(_T("wxGIFHandler is read-only!!"));
+    if (verbose)
+        wxLogDebug(_T("wxGIFHandler is read-only!!"));
+
     return FALSE;
 }
 
@@ -78,3 +85,7 @@ bool wxGIFHandler::CanRead( wxInputStream& stream )
 }
 
 #endif
+  // wxUSE_STREAMS
+
+#endif
+  // wxUSE_GIF
