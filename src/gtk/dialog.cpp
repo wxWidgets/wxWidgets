@@ -314,6 +314,8 @@ bool wxDialog::Create( wxWindow *parent,
 
 wxDialog::~wxDialog()
 {
+    Destroy();
+
     m_isBeingDeleted = TRUE;
 
     if ((wxTopLevelWindows.Number() == 0) &&
