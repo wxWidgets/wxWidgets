@@ -316,8 +316,8 @@ BEGIN_EVENT_TABLE(MyPanel, wxPanel)
 END_EVENT_TABLE()
 
 MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
-       : m_notebook(NULL), m_text(NULL),
-         wxPanel( frame, -1, wxPoint(x, y), wxSize(w, h) )
+       : wxPanel( frame, -1, wxPoint(x, y), wxSize(w, h) ),
+         m_text(NULL), m_notebook(NULL)
 {
 //  SetBackgroundColour("cadet blue");
 

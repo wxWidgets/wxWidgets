@@ -46,8 +46,6 @@ void BombsCanvasClass::DrawField(wxDC *dc, int xc1, int yc1, int xc2, int yc2)
   wxPen *blackPen = wxThePenList->FindOrCreatePen(*wxBlack, 1, wxSOLID);
   wxPen *redPen = wxThePenList->FindOrCreatePen(*wxRed, 1, wxSOLID);
   wxPen *bluePen = wxThePenList->FindOrCreatePen(*wxBlue, 1, wxSOLID);
-  wxPen *whitePen = wxThePenList->FindOrCreatePen(*wxWhite, 1, wxSOLID);
-  wxPen *greyPen = wxThePenList->FindOrCreatePen(*wxGrey, 1, wxSOLID);
   wxBrush *whiteBrush = wxTheBrushList->FindOrCreateBrush(*wxWhite, wxSOLID);
   wxBrush *greyBrush = wxTheBrushList->FindOrCreateBrush(*wxGrey, wxSOLID);
   wxBrush *redBrush = wxTheBrushList->FindOrCreateBrush(*wxRed, wxSOLID);
@@ -168,7 +166,8 @@ void BombsCanvasClass::Refresh(int xc1, int yc1, int xc2, int yc2)
 
 // Called when the canvas receives a mouse event.
 void BombsCanvasClass::OnEvent(wxMouseEvent& event)
-{ float fx, fy;
+{
+  long fx, fy;
   event.Position(&fx, &fy);
   int x = fx/(x_cell*X_UNIT);
   int y = fy/(y_cell*Y_UNIT);

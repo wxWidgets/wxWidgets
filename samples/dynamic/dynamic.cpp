@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -39,20 +39,20 @@ class MyApp: public wxApp
 class MyFrame: public wxFrame
 { public:
     MyFrame(wxFrame *frame, char *title, int x, int y, int w, int h);
-    
+
  public:
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
-	bool OnClose(void) { return TRUE; }
+  bool OnClose(void) { return TRUE; }
 };
 
 // ID for the menu commands
-#define DYNAMIC_QUIT 	1
-#define DYNAMIC_TEXT 	101
-#define DYNAMIC_ABOUT 	102
+#define DYNAMIC_QUIT   1
+#define DYNAMIC_TEXT   101
+#define DYNAMIC_ABOUT   102
 
 // Create a new application object
-IMPLEMENT_APP	(MyApp)
+IMPLEMENT_APP  (MyApp)
 
 // `Main program' equivalent, creating windows and returning main app frame
 bool MyApp::OnInit(void)
@@ -60,8 +60,12 @@ bool MyApp::OnInit(void)
   // Create the main frame window
   MyFrame *frame = new MyFrame(NULL, "Dynamic wxWindows App", 50, 50, 450, 340);
 
-  frame->Connect( DYNAMIC_QUIT,  -1, wxEVT_COMMAND_MENU_SELECTED, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) MyFrame::OnQuit );
-  frame->Connect( DYNAMIC_ABOUT, -1, wxEVT_COMMAND_MENU_SELECTED, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) MyFrame::OnAbout );
+  frame->Connect( DYNAMIC_QUIT,  -1, wxEVT_COMMAND_MENU_SELECTED,
+                  (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction)
+                  &MyFrame::OnQuit );
+  frame->Connect( DYNAMIC_ABOUT, -1, wxEVT_COMMAND_MENU_SELECTED,
+                  (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction)
+                  &MyFrame::OnAbout );
 
   // Give it an icon
 #ifdef __WXMSW__
@@ -86,7 +90,7 @@ bool MyApp::OnInit(void)
 
   // Show the frame
   frame->Show(TRUE);
-  
+
   SetTopWindow(frame);
 
   return TRUE;
@@ -105,7 +109,7 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 {
   wxMessageDialog dialog(this, "This demonstrates dynamic event handling",
-  	"About Dynamic", wxYES_NO|wxCANCEL);
+    "About Dynamic", wxYES_NO|wxCANCEL);
 
   dialog.ShowModal();
 }

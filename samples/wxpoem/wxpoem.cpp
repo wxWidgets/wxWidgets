@@ -76,8 +76,6 @@ static bool     same_search = FALSE;            // Searching on same string
 
 static long     poem_index[600];                     // Index of poem starts
 static long     nitems = 0;                     // Number of poems
-static int      desired_char_height = DEFAULT_CHAR_HEIGHT; // Desired height
-static char     DesiredFont[64];                // Chosen font
 static int      char_height = DEFAULT_CHAR_HEIGHT; // Actual height
 static int      index_ptr = -1;                 // Pointer into index
 static int      poem_height, poem_width;        // Size of poem
@@ -331,7 +329,7 @@ void MainWindow::ScanBuffer(wxDC *dc, bool DrawIt, int *max_x, int *max_y)
 
               dc->GetTextExtent(line, &xx, &yy);
               FindMax(&curr_width, (int)xx);
-    
+
               if (DrawIt)
               {
                 int x = (int)((width - xx)/2.0);
@@ -400,7 +398,7 @@ void MainWindow::ScanBuffer(wxDC *dc, bool DrawIt, int *max_x, int *max_y)
       dc->DrawLine(width-THIN_LINE_BORDER, THIN_LINE_BORDER, width-THIN_LINE_BORDER, height-THIN_LINE_BORDER);
       dc->DrawLine(width-THIN_LINE_BORDER, height-THIN_LINE_BORDER, THIN_LINE_BORDER, height-THIN_LINE_BORDER);
       dc->DrawLine(THIN_LINE_BORDER, height-THIN_LINE_BORDER, THIN_LINE_BORDER, THIN_LINE_BORDER);
-  
+
       // Right and bottom white lines - 'grey' (black!) if
       // we're running on a mono display.
       if (wxColourDisplay())
@@ -584,7 +582,7 @@ void CopyToClipboard(HWND handle, char *s)
 bool MyApp::OnInit()
 {
   poem_buffer = new char[buf_size];
-  
+
   GreyPen = new wxPen("LIGHT GREY", THICK_LINE_WIDTH, wxSOLID);
   DarkGreyPen = new wxPen("GREY", THICK_LINE_WIDTH, wxSOLID);
   WhitePen = new wxPen("WHITE", THICK_LINE_WIDTH, wxSOLID);
@@ -715,7 +713,7 @@ void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
     {
         int xx, yy;
         TheMainWindow->GetClientSize(&xx, &yy);
-    
+
         wxMemoryDC memDC;
         memDC.SelectObject(* backingBitmap);
         dc.Blit(0, 0, backingBitmap->GetWidth(), backingBitmap->GetHeight(), &memDC, 0, 0);
@@ -724,7 +722,7 @@ void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
 
 void MyCanvas::OnMouseEvent(wxMouseEvent& event)
 {
-  float x, y;
+  long x, y;
   event.Position(&x, &y);
   static int startPosX, startPosY, startFrameX, startFrameY;
 
@@ -733,11 +731,7 @@ void MyCanvas::OnMouseEvent(wxMouseEvent& event)
   if (event.RightDown())
   {
     // Versions from wxWin 1.67 are probably OK
-#if 0 // wx_motif
-    FakePopupMenu(popupMenu, x, y);
-#else
     PopupMenu(popupMenu, (int)x, (int)y );
-#endif
   }
   else if (event.LeftDown())
   {
@@ -756,7 +750,7 @@ void MyCanvas::OnMouseEvent(wxMouseEvent& event)
     int x1 = (int)x;
     int y1 = (int)y;
     ClientToScreen(&x1, &y1);
-    
+
     int dX = x1 - startPosX;
     int dY = y1 - startPosY;
     GetParent()->Move(startFrameX + dX, startFrameY + dY);
@@ -1067,7 +1061,7 @@ bool Compile(void)
     fprintf(file, "%ld\n\n", nitems);
     for (j = 0; j < nitems; j++)
       fprintf(file, "%ld\n", poem_index[j]);
- 
+
     fclose(file);
     PoetryNotify("Poetry index compiled.");
     return TRUE;
