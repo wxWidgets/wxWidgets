@@ -50,6 +50,7 @@ _treeList = [
         'StandardPaths',
         'MediaCtrl',
         'DatePickerCtrl',
+        'MouseGestures',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -226,6 +227,7 @@ _treeList = [
         'FileHistory',
         'FontEnumerator',
         'Joystick',
+        'MouseGestures',
         'OGL',
         'PrintFramework',
         'ShapedWindow',

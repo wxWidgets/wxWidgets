@@ -221,6 +221,11 @@ buttons.
 
 Added wx.DatePickerCtrl.
 
+wx.html.HtmlWindow now supports background images.
+
+Added wx.lib.gestures module from Daniel Pozmanter which supports
+using Mouse Gestures in an application.
+
 
 
 
