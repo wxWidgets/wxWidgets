@@ -2980,7 +2980,7 @@ if test "$wxUSE_OPENGL" = "yes"; then
         USE_OPENGL=1
         AC_DEFINE(wxUSE_OPENGL)
         AC_DEFINE(wxUSE_GLCANVAS)
-        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS opengl"
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS opengl opengl/cube opengl/penguin opengl/isosurf"
     fi
 fi
 

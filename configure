@@ -25194,7 +25194,7 @@ _ACEOF
 #define wxUSE_GLCANVAS 1
 _ACEOF
 
-        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS opengl"
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS opengl opengl/cube opengl/penguin opengl/isosurf"
     fi
 fi
 
