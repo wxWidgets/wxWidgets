@@ -988,6 +988,7 @@ void * operator new[] (size_t size, wxChar * fileName, int lineNum)
 }
 #endif
 
+#if !defined(__VISAGECPP__) // already defines this by default
 void operator delete (void * buf)
 {
 #ifdef NO_DEBUG_ALLOCATION
@@ -996,6 +997,7 @@ void operator delete (void * buf)
   wxDebugFree(buf);
 #endif
 }
+#endif
 
 // VC++ 6.0
 #if defined(__VISUALC__) && (__VISUALC__ >= 1200)

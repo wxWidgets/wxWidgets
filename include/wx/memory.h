@@ -68,9 +68,10 @@ void wxDebugFree(void * buf, bool isVect = FALSE);
 
 // Added JACS 25/11/98: needed for some compilers
 void * operator new (size_t size);
-
 void * operator new (size_t size, wxChar * fileName, int lineNum);
+#if !defined(__VISAGECPP__)
 void operator delete (void * buf);
+#endif
 
 #if wxUSE_ARRAY_MEMORY_OPERATORS
     void * operator new[] (size_t size);
@@ -217,7 +218,7 @@ public:
 
     static void SetCheckpoint(bool all = FALSE);
     static wxMemStruct *GetCheckpoint(void) { return checkPoint; }
-    
+
     // Calculated from the request size and any padding needed
     // before the final marker.
     static size_t PaddedSize (const size_t reqSize);

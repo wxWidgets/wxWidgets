@@ -37,6 +37,7 @@
 #include "wx/html/htmlwin.h"
 #include "wx/busyinfo.h"
 #include "wx/progdlg.h"
+#include "wx/toolbar.h"
 
 // Bitmaps:
 

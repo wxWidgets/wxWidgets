@@ -102,10 +102,14 @@ bool wxGetHostName(
 // Get user ID e.g. jacs
 bool wxGetUserId(
   wxChar*                           zBuf
-, int                               nMaxSize
+, int                               nType
 )
 {
-   return(U32ELOCL((unsigned char*)zBuf, (unsigned long *)&nMaxSize));
+    long                            lrc;
+    // UPM procs return 0 on success
+    lrc = U32ELOCU((unsigned char*)zBuf, (unsigned long *)&nType);
+    if (lrc == 0) return TRUE;
+    return FALSE;
 }
 
 bool wxGetUserName(

@@ -534,7 +534,6 @@ HTMLOBJS = \
   ..\html\$D\m_list.obj \
   ..\html\$D\m_pre.obj \
   ..\html\$D\m_tables.obj \
-  ..\html\$D\search.obj \
   ..\html\$D\winpars.obj
 
 HTMLLIBOBJS = \
@@ -554,7 +553,6 @@ HTMLLIBOBJS = \
   m_list.obj \
   m_pre.obj \
   m_tables.obj \
-  search.obj \
   winpars.obj
 
 # Add $(NONESSENTIALOBJS) if wanting generic dialogs, PostScript etc.
@@ -719,7 +717,6 @@ $(HTMLLIBOBJS):
   copy ..\html\$D\m_list.obj
   copy ..\html\$D\m_pre.obj
   copy ..\html\$D\m_tables.obj
-  copy ..\html\$D\search.obj
   copy ..\html\$D\winpars.obj
 
 $(OS2LIBOBJS1):
