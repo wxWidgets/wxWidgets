@@ -12,7 +12,7 @@ OPENGL_LIBS=-lGL -lGLU
 #OPENGL_LIBS=-lMesaGL -lMesaGLU
 
 CPP = g++
-CC = gcc
+CXX = $(shell wx-config --cxx)
 
 Penguin: penguin.o trackball.o lw.o
 	$(CPP) -o Penguin \
@@ -26,7 +26,7 @@ lw.o: lw.cpp
 	$(CPP) `wx-config --cxxflags` -I../../gtk -c lw.cpp
 
 trackball.o: trackball.c
-	$(CC) `wx-config --cxxflags` -I../../gtk -c trackball.c
+	$(CXX) `wx-config --cxxflags` -I../../gtk -c trackball.c
 
 clean: 
 	rm -f *.o Penguin

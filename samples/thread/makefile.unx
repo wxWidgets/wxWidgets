@@ -1,7 +1,7 @@
 # Purpose: makefile for thread example (Unix)
 # Created: 2000-03-15
 
-CC = gcc
+CXX = $(shell wx-config --cxx)
 
 PROGRAM = thread
 
@@ -12,12 +12,12 @@ OBJECTS = $(PROGRAM).o
 .SUFFIXES:	.o .cpp
 
 .cpp.o :
-	$(CC) -c `wx-config --cxxflags` -o $@ $<
+	$(CXX) -c `wx-config --cxxflags` -o $@ $<
 
 all:    $(PROGRAM)
 
 $(PROGRAM):	$(OBJECTS)
-	$(CC) -o $(PROGRAM) $(OBJECTS) `wx-config --libs`
+	$(CXX) -o $(PROGRAM) $(OBJECTS) `wx-config --libs`
 
 clean:
 	rm -f *.o $(PROGRAM)

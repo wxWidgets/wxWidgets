@@ -15,7 +15,7 @@ OPENGL_LIBS=-lGL -lGLU
 
 PROGRAM=isosurf
 
-CC = gcc
+CXX = $(shell wx-config --cxx)
 
 OBJECTS = $(PROGRAM).o
 
@@ -24,12 +24,12 @@ OBJECTS = $(PROGRAM).o
 .SUFFIXES:	.o .cpp
 
 .cpp.o :
-	$(CC) -c `wx-config --cxxflags` -o $@ $<
+	$(CXX) -c `wx-config --cxxflags` -o $@ $<
 
 all: $(PROGRAM) isosurf.dat
 
 $(PROGRAM):	$(OBJECTS)
-	$(CC) -o $(PROGRAM) $(OBJECTS) `wx-config --libs` -lwx_gtk_gl $(OPENGL_LIBS)
+	$(CXX) -o $(PROGRAM) $(OBJECTS) `wx-config --libs` -lwx_gtk_gl $(OPENGL_LIBS)
 
 clean: 
 	rm -f *.o $(PROGRAM)

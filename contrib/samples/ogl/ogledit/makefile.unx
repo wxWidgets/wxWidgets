@@ -12,8 +12,7 @@
 # on your system.
 #
 
-CPP = gcc -g
-CC = gcc
+CXX = $(shell wx-config --cxx)
 WXCONFIG=../../../../wx-config
 WXINCLUDE=-I../../../../include -I../../../include
 WXLIB=-L../../../../lib -L../../../src/ogl
@@ -21,19 +20,19 @@ WXLIB=-L../../../../lib -L../../../src/ogl
 OBJECTS=ogledit.o palette.o doc.o view.o
 
 ogledit: $(OBJECTS)
-	$(CPP) -o ogledit $(OBJECTS) `$(WXCONFIG) --libs` $(WXLIB) -logl
+	$(CXX) -o ogledit $(OBJECTS) `$(WXCONFIG) --libs` $(WXLIB) -logl
 
 ogledit.o: ogledit.cpp
-	$(CPP) `$(WXCONFIG) --cxxflags` -I../../src $(WXINCLUDE) -c ogledit.cpp
+	$(CXX) `$(WXCONFIG) --cxxflags` -I../../src $(WXINCLUDE) -c ogledit.cpp
 
 palette.o: palette.cpp
-	$(CPP) `$(WXCONFIG) --cxxflags` -I../../src $(WXINCLUDE) -c palette.cpp
+	$(CXX) `$(WXCONFIG) --cxxflags` -I../../src $(WXINCLUDE) -c palette.cpp
 
 doc.o: doc.cpp
-	$(CPP) `$(WXCONFIG) --cxxflags` -I../../src $(WXINCLUDE) -c doc.cpp
+	$(CXX) `$(WXCONFIG) --cxxflags` -I../../src $(WXINCLUDE) -c doc.cpp
 
 view.o: view.cpp
-	$(CPP) `$(WXCONFIG) --cxxflags` -I../../src $(WXINCLUDE) -c view.cpp
+	$(CXX) `$(WXCONFIG) --cxxflags` -I../../src $(WXINCLUDE) -c view.cpp
 
 clean: 
 	rm -f *.o ogledit
