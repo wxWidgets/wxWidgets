@@ -300,7 +300,7 @@ bool
 wxFileExists (const wxString& filename)
 {
 #if defined(__WIN32__) && !defined(__WXMICROWIN__)
-    // GetFileAttributes can copy with network paths
+    // GetFileAttributes can copy with network paths unlike stat()
     DWORD ret = ::GetFileAttributes(filename);
     if ( ret == (DWORD)-1 )
     {
@@ -1266,6 +1266,7 @@ bool wxRmdir(const wxString& dir, int WXUNUSED(flags))
 bool wxPathExists(const wxChar *pszPathName)
 {
     wxString strPath(pszPathName);
+
 #ifdef __WINDOWS__
     // Windows fails to find directory named "c:\dir\" even if "c:\dir" exists,
     // so remove all trailing backslashes from the path - but don't do this for
@@ -1281,8 +1282,8 @@ bool wxPathExists(const wxChar *pszPathName)
 #endif // __WINDOWS__
 
 #if defined(__WIN32__) && !defined(__WXMICROWIN__)
-    // Stat can't cope with network paths
-    DWORD ret = ::GetFileAttributes(filename);
+    // stat() can't cope with network paths
+    DWORD ret = ::GetFileAttributes(strPath);
     if ( ret == (DWORD)-1 )
     {
         wxLogLastError(_T("GetFileAttributes"));
@@ -1291,7 +1292,7 @@ bool wxPathExists(const wxChar *pszPathName)
     }
 
     return (ret & FILE_ATTRIBUTE_DIRECTORY) != 0;
-#else
+#else // !__WIN32__
 
     wxStructStat st;
 #ifndef __VISAGECPP__
@@ -1303,7 +1304,7 @@ bool wxPathExists(const wxChar *pszPathName)
         (st.st_mode == S_IFDIR);
 #endif
 
-#endif
+#endif // __WIN32__/!__WIN32__
 }
 
 // Get a temporary filename, opening and closing the file.
