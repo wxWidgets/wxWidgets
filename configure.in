@@ -2437,12 +2437,11 @@ if test "$wxUSE_SHARED" = "yes"; then
         dnl http://fink.sourceforge.net/doc/porting/porting.html
         CFLAGS="$CFLAGS -fno-common -DWXMAKINGDLL"
         CXXFLAGS="$CXXFLAGS -fno-common -DWXMAKINGDLL"
-        dnl Executables must necessarily fully bind the wxWindows library at
-        dnl program launch otherwise lazy binding breaks RTTI class info
-        LDFLAGS_EXE="$LDFLAGS_EXE -Wl,-bind_at_load"
-        dnl The initialization routine doesn't seem useful with lazy linking solved
-        dnl SHARED_LD="$CXX -dynamiclib -init _wxWindowsDylibInit -o"
-        SHARED_LD="\${top_srcdir}/distrib/mac/shared-ld-sh -o"
+        dnl wxWindows must be fully binded (lazy binding breaks RTTI classinfo)
+        dnl this can be done either with the exe linker flag -Wl,-bind_at_load
+        dnl or with a double stage link in order to create a single module
+        dnl "-init _wxWindowsDylibInit" not useful with lazy linking solved
+        SHARED_LD="\${top_srcdir}/distrib/mac/shared-ld-sh -undefined suppress -flat_namespace -o"
         PIC_FLAG="-dynamic -fPIC"
         SONAME_FLAGS="-compatibility_version ${WX_RELEASE} -current_version ${WX_VERSION}"
         SONAME_FLAGS_GL=${SONAME_FLAGS}
