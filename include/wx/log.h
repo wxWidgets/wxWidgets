@@ -153,6 +153,11 @@ public:
         // add string trace mask
     static void RemoveTraceMask(const wxString& str);
 
+        // sets the timestamp string: this is used as strftime() format string
+        // for the log targets which add time stamps to the messages - set it
+        // to NULL to disable time stamping completely.
+    static void SetTimestamp(const wxChar *ts) { ms_timestamp = ts; }
+
     // accessors
         // gets the verbose status
     bool GetVerbose() const { return m_bVerbose; }
@@ -161,6 +166,14 @@ public:
         // is this trace mask in the list?
     static bool IsAllowedTraceMask(const wxChar *mask)
         { return ms_aTraceMasks.Index(mask) != wxNOT_FOUND; }
+
+        // get the current timestamp format string (may be NULL)
+    static const wxChar *GetTimestamp() { return ms_timestamp; }
+
+    // helpers
+        // put the time stamp into the string if ms_timestamp != NULL (don't
+        // change it otherwise)
+    static void TimeStamp(wxString *str);
 
     // make dtor virtual for all derived classes
     virtual ~wxLog() { }
@@ -184,6 +197,10 @@ private:
     static wxLog      *ms_pLogger;      // currently active log sink
     static bool        ms_doLog;        // FALSE => all logging disabled
     static bool        ms_bAutoCreate;  // create new log targets on demand?
+
+    // format string for strftime(), if NULL, time stamping log messages is
+    // disabled
+    static const wxChar *ms_timestamp;
 
     static wxTraceMask ms_ulTraceMask;   // controls wxLogTrace behaviour
     static wxArrayString ms_aTraceMasks; // more powerful filter for wxLogTrace
@@ -226,16 +243,19 @@ protected:
 
 #ifndef wxUSE_NOGUI
 
-#if wxUSE_STD_IOSTREAM
 // log everything to a text window (GUI only of course)
-class WXDLLEXPORT wxLogTextCtrl : public wxLogStream
+class WXDLLEXPORT wxLogTextCtrl : public wxLog
 {
 public:
-    // we just create an ostream from wxTextCtrl and use it in base class
     wxLogTextCtrl(wxTextCtrl *pTextCtrl);
-    ~wxLogTextCtrl();
+
+private:
+    // implement sink function
+    virtual void DoLogString(const wxChar *szString, time_t t);
+
+    // the control we use
+    wxTextCtrl *m_pTextCtrl;
 };
-#endif
 
 // ----------------------------------------------------------------------------
 // GUI log target, the default one for wxWindows programs

@@ -74,7 +74,7 @@ bool wxFFile::Close()
 {
     if ( IsOpened() )
     {
-        if ( !fclose(m_fp) )
+        if ( fclose(m_fp) != 0 )
         {
             wxLogSysError(_("can't close file '%s'"), m_name.c_str());
 

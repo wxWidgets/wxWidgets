@@ -315,6 +315,20 @@ void wxLog::RemoveTraceMask(const wxString& str)
         ms_aTraceMasks.Remove((size_t)index);
 }
 
+void wxLog::TimeStamp(wxString *str)
+{
+    if ( ms_timestamp )
+    {
+        wxChar buf[256];
+        time_t timeNow;
+        (void)time(&timeNow);
+        wxStrftime(buf, WXSIZEOF(buf), ms_timestamp, localtime(&timeNow));
+
+        str->Empty();
+        *str << buf << _T(": ");
+    }
+}
+
 void wxLog::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
 {
     switch ( level ) {
@@ -377,8 +391,9 @@ wxLogStderr::wxLogStderr(FILE *fp)
 
 void wxLogStderr::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
 {
-    wxString str(szString);
-    str << _T('\n');
+    wxString str;
+    TimeStamp(&str);
+    str << szString << _T('\n');
 
     fputs(str.mb_str(), m_fp);
     fflush(m_fp);
@@ -415,19 +430,19 @@ void wxLogStream::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
 // wxLogTextCtrl implementation
 // ----------------------------------------------------------------------------
 
-#if wxUSE_STD_IOSTREAM
 wxLogTextCtrl::wxLogTextCtrl(wxTextCtrl *pTextCtrl)
-#if !defined(NO_TEXT_WINDOW_STREAM)
-: wxLogStream(new ostream(pTextCtrl))
-#endif
 {
+    m_pTextCtrl = pTextCtrl;
 }
 
-wxLogTextCtrl::~wxLogTextCtrl()
+void wxLogTextCtrl::DoLogString(const wxChar *szString, time_t t)
 {
-    delete m_ostr;
+    wxString msg;
+    TimeStamp(&msg);
+    msg << szString << _T('\n');
+
+    m_pTextCtrl->AppendText(msg);
 }
-#endif // wxUSE_STD_IOSTREAM
 
 // ----------------------------------------------------------------------------
 // wxLogGui implementation (FIXME MT-unsafe)
@@ -533,12 +548,16 @@ void wxLogGui::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
                     #ifdef __WXMSW__
                         // don't prepend debug/trace here: it goes to the
                         // debug window anyhow, but do put a timestamp
-                        OutputDebugString(wxString(szString) + _T("\n\r"));
+                        wxString str;
+                        TimeStamp(&str);
+                        str << szString << _T("\n\r");
+                        OutputDebugString(str);
                     #else
                         // send them to stderr
                         wxFprintf(stderr, _T("%s: %s\n"),
-                                level == wxLOG_Trace ? _T("Trace") : _T("Debug"),
-                                szString);
+                                  level == wxLOG_Trace ? _T("Trace")
+                                                       : _T("Debug"),
+                                  szString);
                         fflush(stderr);
                     #endif
                 }
@@ -832,8 +851,11 @@ void wxLogWindow::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
     pText->SetSelection(nLen, nLen);
 #endif // Windows
 
-    pText->WriteText(szString);
-    pText->WriteText(_T("\n")); // "\n" ok here (_not_ "\r\n")
+    wxString msg;
+    TimeStamp(&msg);
+    msg << szString << _T('\n');
+
+    pText->AppendText(msg);
 
     // TODO ensure that the line can be seen
 }
@@ -873,6 +895,9 @@ wxLogWindow::~wxLogWindow()
 wxLog          *wxLog::ms_pLogger      = (wxLog *)NULL;
 bool            wxLog::ms_doLog        = TRUE;
 bool            wxLog::ms_bAutoCreate  = TRUE;
+
+const wxChar   *wxLog::ms_timestamp    = "%X";  // time only, no date
+
 wxTraceMask     wxLog::ms_ulTraceMask  = (wxTraceMask)0;
 wxArrayString   wxLog::ms_aTraceMasks;
 
