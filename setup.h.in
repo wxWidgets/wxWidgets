@@ -1160,6 +1160,9 @@
 /* Define if you have the <w32api.h> header file (mingw,cygwin).  */
 #undef HAVE_W32API_H
 
+/* Define if you have the <esd.h> header file.  */
+#undef HAVE_ESD_H
+
 /* Define if you have wcsrtombs() function */
 #undef HAVE_WCSRTOMBS
 
