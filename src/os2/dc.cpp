@@ -1446,6 +1446,11 @@ bool wxDC::DoBlit(
                                                      };
         POINTL                          aPoint3[4] = { vXdest, vYdest
                                                       ,vXdest + vWidth, vYdest + vHeight
+                                                      ,vXsrc, vYsrc
+                                                      ,vXsrc + vWidth, vYsrc + vHeight
+                                                     };
+        POINTL                          aPoint4[4] = { vXdest, vYdest
+                                                      ,vXdest + vWidth, vYdest + vHeight
                                                       ,0, 0
                                                       ,vWidth, vHeight
                                                      };
@@ -1511,7 +1516,7 @@ bool wxDC::DoBlit(
         rc = ::GpiBitBlt( GetHPS()
                          ,hPSMask
                          ,4L
-                         ,aPoint2
+                         ,aPoint3
                          ,ROP_SRCAND
                          ,BBO_IGNORE
                         );
@@ -1532,7 +1537,7 @@ bool wxDC::DoBlit(
         rc = ::GpiBitBlt( GetHPS()
                          ,hPSMask
                          ,4L
-                         ,aPoint2
+                         ,aPoint4
                          ,ROP_SRCPAINT
                          ,BBO_IGNORE
                         );
