@@ -65,6 +65,11 @@ wxDialog because of some issues with wxPopupWindow...
 Added wxPython.lib.gridmovers by Gerrit van Dyk which facilitates the
 dragging of columns and/or rows in a wxGrid.
 
+Added wxPython.lib.multisash by Gerrit van Dyk which is a nice
+implementation of allowing the user to split a window any number of
+times either horizontally or vertically, and to close the split off
+windows when desired.
+
 
 
 

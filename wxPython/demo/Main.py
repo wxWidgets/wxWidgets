@@ -28,6 +28,7 @@ _treeList = [
         'wxRadioButton',
         'Throbber',
         'wxPopupControl',
+        'wxMultiSash',
         ]),
 
     # managed windows == things with a caption you can close
@@ -119,6 +120,7 @@ _treeList = [
         'wxIEHtmlWin',
         'wxLEDNumberCtrl',
         'wxMimeTypesManager',
+        'wxMultiSash',
         'wxPopupControl',
         'wxRightTextCtrl',
         'wxStyledTextCtrl_1',
