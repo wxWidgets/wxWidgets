@@ -192,9 +192,9 @@ NONESSENTIALOBJS= \
 
 COMMONOBJS = \
   ..\common\$D\appcmn.obj \
-  ..\common\$D\bmpbase.obj \
   ..\common\$D\choiccmn.obj \
   ..\common\$D\clipcmn.obj \
+  ..\common\$D\clntdata.obj \
   ..\common\$D\cmdline.obj \
   ..\common\$D\cmndata.obj \
   ..\common\$D\cmdproc.obj \
@@ -321,9 +321,9 @@ COMMONOBJS = \
 
 COMLIBOBJS1 = \
   appcmn.obj \
-  bmpbase.obj \
   choiccmn.obj \
   clipcmn.obj \
+  clntdata.obj \
   cmdline.obj \
   cmndata.obj \
   cmdproc.obj \
@@ -362,10 +362,10 @@ COMLIBOBJS1 = \
   framecmn.obj \
   fs_inet.obj \
   fs_mem.obj \
-  fs_zip.obj \
-  ftp.obj
+  fs_zip.obj
 
 COMLIBOBJS2 = \
+  ftp.obj \
   gaugecmn.obj \
   gdicmn.obj \
   geometry.obj \
@@ -406,10 +406,10 @@ COMLIBOBJS2 = \
   process.obj \
   protocol.obj \
   quantize.obj \
-  radiocmn.obj \
-  regex.obj
+  radiocmn.obj
 
 COMLIBOBJS3 = \
+  regex.obj \
   resource.obj \
   sckaddr.obj \
   sckfile.obj \
@@ -660,13 +660,20 @@ HTMLLIBOBJS = \
 OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(HTMLOBJS) $(NONESSENTIALOBJS) $(OS2OBJS)
 
 # Normal, static library
-all:  $(DUMMYOBJ) $(OBJECTS) $(PERIPH_TARGET) zlib png jpeg xpm tiff $(LIBTARGET)
+all:  $(WXDIR)\include\wx\setup.h $(DUMMYOBJ) $(OBJECTS) $(PERIPH_TARGET) zlib png jpeg xpm tiff $(LIBTARGET)
 
 dirs: $(OS2DIR)\$D $(COMMDIR)\$D $(GENDIR)\$D $(HTMLDIR)\$D
 
 
 test:   $(OS2DIR)\$D\wave.obj
 test2:  ..\common\Debug\config.obj
+
+# If taking wxWindows from CVS, setup.h doesn't exist yet.
+$(WXDIR)\include\wx\os2\setup.h: $(WXDIR)\include\wx\os2\setup0.h
+    copy "$(WXDIR)"\include\wx\os2\setup0.h "$(WXDIR)"\include\wx\os2\setup.h
+
+$(WXDIR)\include\wx\setup.h: $(WXDIR)\include\wx\os2\setup.h
+    copy "$(WXDIR)"\include\wx\os2\setup.h "$(WXDIR)"\include\wx\setup.h
 
 $D\dummy.obj: dummy.$(SRCSUFF) $(WXDIR)\include\wx\wx.h $(WXDIR)\include\wx\os2\setup.h
         icc $(CPPFLAGS) $(MAKEPRECOMP) /Fo$D\dummy.obj /Tp dummy.cpp
@@ -676,9 +683,9 @@ $D\dummydll.obj: dummydll.$(SRCSUFF) $(WXDIR)\include\wx\wx.h $(WXDIR)\include\w
 
 $(COMLIBOBJS1):
   copy ..\common\$D\appcmn.obj
-  copy ..\common\$D\bmpbase.obj
   copy ..\common\$D\choiccmn.obj
   copy ..\common\$D\clipcmn.obj
+  copy ..\common\$D\clntdata.obj
   copy ..\common\$D\cmdline.obj
   copy ..\common\$D\cmndata.obj
   copy ..\common\$D\cmdproc.obj
@@ -718,9 +725,9 @@ $(COMLIBOBJS1):
   copy ..\common\$D\fs_inet.obj
   copy ..\common\$D\fs_mem.obj
   copy ..\common\$D\fs_zip.obj
-  copy ..\common\$D\ftp.obj
 
 $(COMLIBOBJS2):
+  copy ..\common\$D\ftp.obj
   copy ..\common\$D\gaugecmn.obj
   copy ..\common\$D\gdicmn.obj
   copy ..\common\$D\geometry.obj
@@ -762,9 +769,9 @@ $(COMLIBOBJS2):
   copy ..\common\$D\protocol.obj
   copy ..\common\$D\quantize.obj
   copy ..\common\$D\radiocmn.obj
-  copy ..\common\$D\regex.obj
 
 $(COMLIBOBJS3):
+  copy ..\common\$D\regex.obj
   copy ..\common\$D\resource.obj
   copy ..\common\$D\sckaddr.obj
   copy ..\common\$D\sckfile.obj
@@ -1082,11 +1089,6 @@ $(WXDIR)\lib\wx23.dll: $(OBJECTS)
     implib $(WXDIR)\lib\wx23.lib $(WXDIR)\src\os2\wx23.def
 
 !endif
-
-# If taking wxWindows from CVS, setup.h doesn't exist yet.
-$(WXDIR)\include\wx\os2\setup.h: $(WXDIR)\include\wx\os2\setup0.h
-    copy "$(WXDIR)"\include\wx\os2\setup.h "$(WXDIR)"\include\wx\os2\setup.bak
-    copy "$(WXDIR)"\include\wx\os2\setup0.h "$(WXDIR)"\include\wx\os2\setup.h
 
 ..\common\$D\extended.obj:     ..\common\extended.c
         icc @<<
