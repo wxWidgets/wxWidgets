@@ -36,8 +36,6 @@ public:
 
 protected:
     void OnSize(wxSizeEvent& event);
-    void OnChar(wxKeyEvent& event);
-    void OnKeyUp(wxKeyEvent& event);
 
 #if wxUSE_MENUS
     // override to update menu bar position when the frame size changes

@@ -1771,7 +1771,7 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
 
 bool wxWindowMSW::MSWTranslateMessage(WXMSG* pMsg)
 {
-#if wxUSE_ACCEL
+#if wxUSE_ACCEL && !defined(__WXUNIVERSAL__)
     return m_acceleratorTable.Translate(this, pMsg);
 #else
     return FALSE;

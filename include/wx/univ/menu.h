@@ -16,6 +16,10 @@
     #pragma interface "univmenu.h"
 #endif
 
+#if wxUSE_ACCEL
+    #include "wx/accel.h"
+#endif // wxUSE_ACCEL
+
 #include "wx/dynarray.h"
 
 // fwd declarations
@@ -73,6 +77,11 @@ public:
     // process the key event, return TRUE if done
     bool ProcessKeyDown(int key);
 
+#if wxUSE_ACCEL
+    // find the item for the given accel and generate an event if found
+    bool ProcessAccelEvent(const wxKeyEvent& event);
+#endif // wxUSE_ACCEL
+
 protected:
     // implement base class virtuals
     virtual bool DoAppend(wxMenuItem *item);
@@ -99,6 +108,12 @@ protected:
     // the one of the window if we're a popup menu
     wxRenderer *GetRenderer() const;
 
+#if wxUSE_ACCEL
+    // add/remove accel for the given menu item
+    void AddAccelFor(const wxMenuItem *item);
+    void RemoveAccelFor(const wxMenuItem *item);
+#endif // wxUSE_ACCEL
+
 private:
     // common part of all ctors
     void Init();
@@ -109,6 +124,11 @@ private:
 
     // the menu shown on screen or NULL if not currently shown
     wxPopupMenuWindow *m_popupMenu;
+
+#if wxUSE_ACCEL
+    // the accel table for this menu
+    wxAcceleratorTable m_accelTable;
+#endif // wxUSE_ACCEL
 
     // it calls out OnDismiss()
     friend wxPopupMenuWindow;
@@ -142,9 +162,6 @@ public:
     virtual void Attach(wxFrame *frame);
     virtual void Detach();
 
-    // called by wxMenu when it is dismissed
-    void OnDismissMenu(bool dismissMenuBar = FALSE);
-
     // get the next item for the givan accel letter (used by wxFrame), return
     // -1 if none
     //
@@ -157,6 +174,14 @@ public:
     // called by wxFrame to set focus to or open the given menu
     void SelectMenu(size_t pos);
     void PopupMenu(size_t pos);
+
+#if wxUSE_ACCEL
+    // find the item for the given accel and generate an event if found
+    bool ProcessAccelEvent(const wxKeyEvent& event);
+#endif // wxUSE_ACCEL
+
+    // called by wxMenu when it is dismissed
+    void OnDismissMenu(bool dismissMenuBar = FALSE);
 
 protected:
     // common part of all ctors

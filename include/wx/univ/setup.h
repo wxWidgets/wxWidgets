@@ -100,7 +100,7 @@
 #define wxUSE_GRID         0
 #define wxUSE_NEW_GRID     0
 #define wxUSE_VALIDATORS 0
-#define wxUSE_ACCEL 0
+#define wxUSE_ACCEL 1
 #define wxUSE_GENERIC_DIALOGS_IN_MSW 0
 #define wxUSE_COMMON_DIALOGS 0
 #define wxUSE_TEXTDLG 0

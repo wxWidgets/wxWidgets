@@ -35,6 +35,7 @@
     #include "wx/dcmemory.h"
     #include "wx/event.h"
     #include "wx/scrolbar.h"
+    #include "wx/menu.h"
 #endif // WX_PRECOMP
 
 #include "wx/univ/colschem.h"
@@ -71,6 +72,15 @@
 
 BEGIN_EVENT_TABLE(wxWindow, wxWindowNative)
     EVT_SIZE(wxWindow::OnSize)
+
+#if wxUSE_ACCEL
+    EVT_KEY_DOWN(wxWindow::OnKeyDown)
+#endif // wxUSE_ACCEL
+
+#if wxUSE_MENUS
+    EVT_CHAR(wxWindow::OnChar)
+    EVT_KEY_UP(wxWindow::OnKeyUp)
+#endif // wxUSE_MENUS
 
     EVT_PAINT(wxWindow::OnPaint)
     EVT_NC_PAINT(wxWindow::OnNcPaint)
@@ -979,4 +989,119 @@ void wxWindow::ReleaseMouse()
     }
     //else: stack is empty, no previous capture
 }
+
+// ----------------------------------------------------------------------------
+// accelerators and menu hot keys
+// ----------------------------------------------------------------------------
+
+#if wxUSE_ACCEL
+
+void wxWindow::OnKeyDown(wxKeyEvent& event)
+{
+    for ( wxWindow *win = this; win; win = win->GetParent() )
+    {
+        int command = win->GetAcceleratorTable()->GetCommand(event);
+        if ( command != -1 )
+        {
+            wxCommandEvent eventCmd(wxEVT_COMMAND_MENU_SELECTED, command);
+            if ( win->GetEventHandler()->ProcessEvent(eventCmd) )
+            {
+                // skip "event.Skip()" below
+                return;
+            }
+        }
+
+        if ( win->IsTopLevel() )
+        {
+            // try the frame menu bar
+#if wxUSE_MENUS
+            wxFrame *frame = wxDynamicCast(win, wxFrame);
+            if ( frame )
+            {
+                wxMenuBar *menubar = frame->GetMenuBar();
+                if ( menubar && menubar->ProcessAccelEvent(event) )
+                {
+                    // skip "event.Skip()" below
+                    return;
+                }
+            }
+#endif // wxUSE_MENUS
+
+            // don't propagate accels from the child frame to the parent one
+            break;
+        }
+    }
+
+    event.Skip();
+}
+
+#endif // wxUSE_ACCEL
+
+#if wxUSE_MENUS
+
+wxMenuBar *wxWindow::GetParentFrameMenuBar() const
+{
+    for ( const wxWindow *win = this; win; win = win->GetParent() )
+    {
+        if ( win->IsTopLevel() )
+        {
+            wxFrame *frame = wxDynamicCast(win, wxFrame);
+            if ( frame )
+            {
+                return frame->GetMenuBar();
+            }
+
+            // don't look further - we don't want to return the menubar of the
+            // parent frame
+            break;
+        }
+    }
+
+    return NULL;
+}
+
+void wxWindow::OnChar(wxKeyEvent& event)
+{
+    if ( event.AltDown() && !event.ControlDown() )
+    {
+        int key = event.GetKeyCode();
+
+        wxMenuBar *menubar = GetParentFrameMenuBar();
+        if ( menubar )
+        {
+            int item = menubar->FindNextItemForAccel(-1, key);
+            if ( item != -1 )
+            {
+                menubar->SetFocus();
+                menubar->PopupMenu((size_t)item);
+
+                // skip "event.Skip()" below
+                return;
+            }
+        }
+    }
+
+    event.Skip();
+}
+
+void wxWindow::OnKeyUp(wxKeyEvent& event)
+{
+    int key = event.GetKeyCode();
+
+    if ( !event.HasModifiers() && (key == WXK_MENU || key == WXK_F10) )
+    {
+        wxMenuBar *menubar = GetParentFrameMenuBar();
+        if ( menubar && this != menubar )
+        {
+            menubar->SetFocus();
+            menubar->SelectMenu(0);
+        }
+    }
+    else
+    {
+        event.Skip();
+    }
+}
+
+#endif // wxUSE_MENUS
 

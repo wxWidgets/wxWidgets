@@ -22,6 +22,7 @@
 
 class WXDLLEXPORT wxControlRenderer;
 class WXDLLEXPORT wxMenu;
+class WXDLLEXPORT wxMenuBar;
 class WXDLLEXPORT wxRenderer;
 class WXDLLEXPORT wxScrollBar;
 
@@ -213,6 +214,15 @@ protected:
     void OnPaint(wxPaintEvent& event);
     void OnErase(wxEraseEvent& event);
 
+#if wxUSE_ACCEL
+    void OnKeyDown(wxKeyEvent& event);
+#endif // wxUSE_ACCEL
+
+#if wxUSE_MENUS
+    void OnChar(wxKeyEvent& event);
+    void OnKeyUp(wxKeyEvent& event);
+#endif // wxUSE_MENUS
+
     // draw the control background, return TRUE if done
     virtual bool DoDrawBackground(wxDC& dc);
 
@@ -233,6 +243,11 @@ protected:
 
     // put the scrollbars along the edges of the window
     void PositionScrollbars();
+
+#if wxUSE_MENUS
+    // return the menubar of the parent frame or NULL
+    wxMenuBar *GetParentFrameMenuBar() const;
+#endif // wxUSE_MENUS
 
     // the renderer we use
     wxRenderer *m_renderer;

@@ -14,10 +14,12 @@ TODO
 
 wxMenuXXX
 
+* Alt-H, 'D', Esc -> assert
+
 * popup menus
 * multirow menubar if not enough space
 * Break()?
-* accelerators, Alt-letter and F10 (?) (<-- wxFrame)
+* "Alt" press/release handling incorrect, need a flag in wxWindow probably
 
 * menubar menus don't popup in the same place as under MSW when there is not
   enough space to the right (pretty minor but still)

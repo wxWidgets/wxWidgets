@@ -855,7 +855,7 @@ bool wxFrameMSW::MSWTranslateMessage(WXMSG* pMsg)
     if ( wxWindow::MSWTranslateMessage(pMsg) )
         return TRUE;
 
-#if wxUSE_MENUS && wxUSE_ACCEL
+#if wxUSE_MENUS && wxUSE_ACCEL && !defined(__WXUNIVERSAL__)
     // try the menu bar accels
     wxMenuBar *menuBar = GetMenuBar();
     if ( !menuBar )

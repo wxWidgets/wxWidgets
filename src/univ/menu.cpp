@@ -33,6 +33,7 @@
     #include "wx/control.h"      // for FindAccelIndex()
     #include "wx/menu.h"
     #include "wx/settings.h"
+    #include "wx/accel.h"
 #endif // WX_PRECOMP
 
 #if wxUSE_MENUS
@@ -243,6 +244,8 @@ wxPopupMenuWindow::wxPopupMenuWindow(wxWindow *parent, wxMenu *menu)
     ResetCurrent();
 
     (void)Create(parent, wxBORDER_RAISED);
+
+    SetCursor(wxCURSOR_ARROW);
 }
 
 // ----------------------------------------------------------------------------
@@ -951,6 +954,10 @@ bool wxMenu::DoAppend(wxMenuItem *item)
 
     InvalidateGeometryInfo();
 
+#if wxUSE_ACCEL
+    AddAccelFor(item);
+#endif // wxUSE_ACCEL
+
     return TRUE;
 }
 
@@ -960,6 +967,10 @@ bool wxMenu::DoInsert(size_t pos, wxMenuItem *item)
         return FALSE;
 
     InvalidateGeometryInfo();
+
+#if wxUSE_ACCEL
+    AddAccelFor(item);
+#endif // wxUSE_ACCEL
 
     return TRUE;
 }
@@ -971,6 +982,10 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
     if ( itemOld )
     {
         InvalidateGeometryInfo();
+
+#if wxUSE_ACCEL
+        RemoveAccelFor(item);
+#endif // wxUSE_ACCEL
     }
 
     return itemOld;
@@ -1127,6 +1142,72 @@ bool wxMenu::ProcessKeyDown(int key)
 
     return m_popupMenu->ProcessKeyDown(key);
 }
+
+// ----------------------------------------------------------------------------
+// wxMenu accel support
+// ----------------------------------------------------------------------------
+
+#if wxUSE_ACCEL
+
+bool wxMenu::ProcessAccelEvent(const wxKeyEvent& event)
+{
+    // do we have an item for this accel?
+    wxMenuItem *item = m_accelTable.GetMenuItem(event);
+    if ( item )
+    {
+        if ( item->IsEnabled() )
+        {
+            SendEvent(item->GetId(),
+                      item->IsCheckable() ? item->IsChecked() : -1);
+        }
+
+        return TRUE;
+    }
+
+    // try our submenus
+    for ( wxMenuItemList::Node *node = GetMenuItems().GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        const wxMenuItem *item = node->GetData();
+        if ( item->IsSubMenu() && item->IsEnabled() )
+        {
+            // try its elements
+            if ( item->GetSubMenu()->ProcessAccelEvent(event) )
+            {
+                return TRUE;
+            }
+        }
+    }
+
+    return FALSE;
+}
+
+void wxMenu::AddAccelFor(const wxMenuItem *item)
+{
+    wxAcceleratorEntry *accel = item->GetAccel();
+    if ( accel )
+    {
+        accel->SetMenuItem((wxMenuItem *)item);
+
+        m_accelTable.Add(*accel);
+
+        delete accel;
+    }
+}
+
+void wxMenu::RemoveAccelFor(const wxMenuItem *item)
+{
+    wxAcceleratorEntry *accel = item->GetAccel();
+    if ( accel )
+    {
+        m_accelTable.Remove(*accel);
+
+        delete accel;
+    }
+}
+
+#endif // wxUSE_ACCEL
 
 // ----------------------------------------------------------------------------
 // wxMenuItem construction
@@ -1287,6 +1368,8 @@ void wxMenuBar::Attach(wxFrame *frame)
     {
         // we have no way to return the error from here anyhow :-(
         (void)Create(frame, -1);
+
+        SetCursor(wxCURSOR_ARROW);
 
         SetFont(wxSystemSettings::GetSystemFont(wxSYS_SYSTEM_FONT));
     }
@@ -1714,6 +1797,7 @@ void wxMenuBar::OnKeyDown(wxKeyEvent& event)
     switch ( key )
     {
         case WXK_ESCAPE:
+        case WXK_MENU:
             // remove the selection and give the focus away
             if ( m_current != -1 )
             {
@@ -1889,6 +1973,27 @@ int wxMenuBar::FindNextItemForAccel(int idxStart, int key, bool *unique) const
 
     return idxFound;
 }
+
+#if wxUSE_ACCEL
+
+bool wxMenuBar::ProcessAccelEvent(const wxKeyEvent& event)
+{
+    for ( wxMenuList::Node *node = m_menus.GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        if ( node->GetData()->ProcessAccelEvent(event) )
+        {
+            // menu processed it
+            return TRUE;
+        }
+    }
+
+    // not found
+    return FALSE;
+}
+
+#endif // wxUSE_ACCEL
 
 // ----------------------------------------------------------------------------
 // wxMenuBar menus showing
