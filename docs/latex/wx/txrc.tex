@@ -29,39 +29,6 @@ on the XML standard, existing XML editors can be used for simple editing purpose
 
 XRC was written by Vaclav Slavik.
 
-\subsection{Compiling and using XRC}\label{compilingxrc}
-
-XRC can be found under the 'contrib' hierarchy, in the following directories:
-
-\begin{verbatim}
-  contrib/src/xrc           ; XRC source
-  contrib/include/wx/xrc    ; XRC headers
-  contrib/samples/xrc       ; XRC sample
-  contrib/utils/wxrc        ; XRC resource compiler
-  contrib/utils/wxrcedit    ; XRC editor (in progress)
-\end{verbatim}
-
-To compile XRC:
-
-\begin{itemize}\itemsep=0pt
-\item Under Windows using VC++, open the contrib/src/xrc/XrcVC.dsw project
-and compile. Also compile contrib/utils/wxrc using wxBase if you wish to compile
-resource files.
-\item Under Unix, XRC should be configured when you configured
-wxWidgets. Make XRC by changing directory to contrib/src/xrc and
-type 'make'.  Similarly compile contrib/utils/wxrc using wxBase if you wish to compile
-resource files. {\bf Note:} there is currently a
-problem with the wxWidgets build system that means that
-only the static version of library can be built at present.
-\end{itemize}
-
-To use XRC:
-
-\begin{itemize}\itemsep=0pt
-\item Under Windows using VC++, link with wxxrc[d].lib.
-\item Under Unix, link with libwxxrc[d].a.
-\end{itemize}
-
 \subsection{XRC concepts}\label{xrcconcepts}
 
 These are the typical steps for using XRC files in your application.
@@ -88,7 +55,6 @@ To create an XRC file, you can use one of the following methods.
 dialog editor that you can find in the {\tt wxPython/tools} subdirectory of the wxWidgets
 CVS archive;
 \item use \urlref{Glade}{http://wxglade.sf.net}, a GUI designer written in wxPython. At the moment it can generate Python, C++ and XRC;
-\item use wxrcedit ({\tt utils/contrib/wxrcedit}) (under development);
 \item convert WIN32 RC files to XRC with the tool in {\tt contrib/utils/convertrc}.
 \end{itemize}
 
@@ -122,9 +88,9 @@ containing class definitions for the windows defined by the XRC file (see specia
 
 For example:
 \begin{verbatim}
-  % wxrc resource.wrc
-  % wxrc resource.wrc -o resource.wrs
-  % wxrc resource.wrc -v -c -o resource.cpp
+  % wxrc resource.xrc
+  % wxrc resource.xrc -o resource.xrs
+  % wxrc resource.xrc -v -c -o resource.cpp
 \end{verbatim}
 
 \wxheading{Note}
