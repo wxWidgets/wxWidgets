@@ -730,7 +730,8 @@ int  ScintillaWX::DoKeyDown(int key, bool shift, bool ctrl, bool alt, bool WXUNU
         case 'A':       // Select All
             ctrl = true;
             break;
-        }                
+        }
+    }
 #endif
     
     int rv = KeyDown(key, shift, ctrl, alt, consumed);
