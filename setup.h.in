@@ -496,6 +496,7 @@
 #endif
 
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+#undef wxUSE_NATIVE_STATUSBAR
 #define wxUSE_NATIVE_STATUSBAR 1
 #endif
 
