@@ -14,6 +14,8 @@
 
 #include "wx/window.h"
 
+#if wxUSE_STATUSBAR
+
 // ----------------------------------------------------------------------------
 // wxStatusBar: a window near the bottom of the frame used for status info
 // ----------------------------------------------------------------------------
@@ -87,6 +89,8 @@ public:
 private:
     DECLARE_DYNAMIC_CLASS(wxStatusBar)
 };
+
+#endif
 
 #endif
     // _WX_STATUSBR_H_BASE_
