@@ -57,8 +57,8 @@ public:
 
     %nokwargs operator==;
     %nokwargs operator!=;
-    bool operator==(int /*wxDataFormatId*/ format) const;
-    bool operator!=(int /*wxDataFormatId*/ format) const;
+    bool operator==(wxDataFormatId format) const;
+    bool operator!=(wxDataFormatId format) const;
     bool operator==(const wxDataFormat& format) const;
     bool operator!=(const wxDataFormat& format) const;
 
