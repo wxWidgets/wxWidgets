@@ -94,9 +94,6 @@ bool MyApp::OnInit(void)
 #ifdef __WXMSW__
   frame->SetIcon(wxIcon("doc_icn"));
 #endif
-#ifdef __X__
-  frame->SetIcon(wxIcon("aiai.xbm"));
-#endif
 
   //// Make a menubar
   wxMenu *file_menu = new wxMenu;
@@ -173,9 +170,6 @@ wxFrame *MyApp::CreateChildFrame(wxDocument *doc, wxView *view, bool isCanvas)
 
 #ifdef __WXMSW__
   subframe->SetIcon(wxString(isCanvas ? "chrt_icn" : "notepad_icn"));
-#endif
-#ifdef __X__
-  subframe->SetIcon(wxIcon("aiai.xbm"));
 #endif
 
   //// Make a menubar

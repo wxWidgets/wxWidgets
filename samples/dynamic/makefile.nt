@@ -7,7 +7,7 @@
 #
 # "%W% %G%"
 #
-# Makefile : Builds minimal example (MS VC++).
+# Makefile : Builds dynamic example (MS VC++).
 # Use FINAL=1 argument to nmake to build final version with no debugging
 # info
 
@@ -18,9 +18,9 @@ WXUSINGDLL=0
 
 !include $(WXDIR)\src\ntwxwin.mak
 
-THISDIR = $(WXDIR)\samples\minimal
-PROGRAM=minimal
- 
+THISDIR = $(WXDIR)\samples\dynamic
+PROGRAM=dynamic
+
 OBJECTS = $(PROGRAM).obj
 
 $(PROGRAM):    $(PROGRAM).exe

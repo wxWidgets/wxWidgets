@@ -33,10 +33,6 @@ wxMenuBar *menu_bar = NULL;
 
 IMPLEMENT_APP(MyApp)
 
-#ifdef __X__
-#include "aiai.xbm"
-#endif
-
 MyApp::MyApp()
 {
 }
@@ -50,14 +46,6 @@ bool MyApp::OnInit(void)
 
   // Give it a status line
   frame->CreateStatusBar(2);
-
-  // Load icon and bitmap
-#ifdef __WXMSW__
-  frame->SetIcon(wxIcon("aiai_icn"));
-#endif
-#ifdef __X__
-  frame->SetIcon(wxIcon(aiai_bits, aiai_width, aiai_height));
-#endif
 
   // Make a menubar
   wxMenu *file_menu = new wxMenu;

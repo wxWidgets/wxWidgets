@@ -116,9 +116,6 @@ MyFrame::MyFrame(wxFrame* frame, const wxString& title, const wxPoint& pos, cons
 #ifdef __WXMSW__
 	SetIcon(wxIcon("mondrian"));
 #endif
-#ifdef __X__
-	SetIcon(wxIcon("aiai.xbm"));
-#endif
 
 	CreateStatusBar(1);
 

@@ -119,14 +119,6 @@ bool MyApp::OnInit(void)
   // Create the main frame window
   MyFrame *frame = new MyFrame(NULL, "Minimal wxWindows App", 50, 50, 450, 340);
 
-  // Give it an icon
-#ifdef __WXMSW__
-  frame->SetIcon(wxIcon("AIAI"));
-#endif
-#ifdef __X__
-  frame->SetIcon(wxIcon("aiai.xbm"));
-#endif
-
   // Make a menubar
   wxMenu *file_menu = new wxMenu;
 

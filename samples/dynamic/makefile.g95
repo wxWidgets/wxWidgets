@@ -7,7 +7,7 @@
 #
 # "%W% %G%"
 #
-# Makefile for minimal example (UNIX).
+# Makefile for dynamic example (UNIX).
 
 WXDIR = ../..
 
@@ -15,23 +15,23 @@ WXDIR = ../..
 # this central makefile.
 include $(WXDIR)/src/makeg95.env
 
-OBJECTS = $(OBJDIR)/minimal.$(OBJSUFF) $(OBJDIR)/minimal_resources.$(OBJSUFF)
+OBJECTS = $(OBJDIR)/dynamic.$(OBJSUFF) $(OBJDIR)/dynamic_resources.$(OBJSUFF)
 
-all:    $(OBJDIR) minimal$(GUISUFFIX)$(EXESUFF)
+all:    $(OBJDIR) dynamic$(GUISUFFIX)$(EXESUFF)
 
 wx:
 
 $(OBJDIR):
 	mkdir $(OBJDIR)
 
-minimal$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
-	$(CC) $(LDFLAGS) -o minimal$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
+dynamic$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
+	$(CC) $(LDFLAGS) -o dynamic$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
 
-$(OBJDIR)/minimal.$(OBJSUFF):	minimal.$(SRCSUFF)
-	$(CC) -c $(CPPFLAGS) -o $@ minimal.$(SRCSUFF)
+$(OBJDIR)/dynamic.$(OBJSUFF):	dynamic.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ dynamic.$(SRCSUFF)
 
-$(OBJDIR)/minimal_resources.o:  minimal.rc
-	$(RESCOMP) -i minimal.rc -o $(OBJDIR)/minimal_resources.o $(RESFLAGS)
+$(OBJDIR)/dynamic_resources.o:  dynamic.rc
+	$(RESCOMP) -i dynamic.rc -o $(OBJDIR)/dynamic_resources.o $(RESFLAGS)
 
 clean:
-	rm -f $(OBJECTS) minimal$(GUISUFFIX).exe core *.rsc *.res
+	rm -f $(OBJECTS) dynamic$(GUISUFFIX).exe core *.rsc *.res

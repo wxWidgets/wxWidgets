@@ -1,5 +1,4 @@
 doc_icn                 ICON    "doc.ico"
-aiai_icn                ICON    "aiai.ico"
 chrt_icn                ICON    "chart.ico"
 notepad_icn             ICON    "notepad.ico"
 #include "wx/msw/wx.rc"

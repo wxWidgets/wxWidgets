@@ -7,7 +7,7 @@
 #
 # "%W% %G%"
 #
-# Makefile : Builds minimal example (DOS).
+# Makefile : Builds dynamic example (DOS).
 # Use FINAL=1 argument to nmake to build final version with no debugging
 # info
 
@@ -15,17 +15,17 @@ WXDIR = $(WXWIN)
 
 !include $(WXDIR)\src\makemsc.env
 
-THISDIR = $(WXDIR)\samples\minimal
+THISDIR = $(WXDIR)\samples\dynamic
 
 !ifndef FINAL
 FINAL=0
 !endif
 
 HEADERS =
-SOURCES = minimal.$(SRCSUFF)
-OBJECTS = minimal.obj
+SOURCES = dynamic.$(SRCSUFF)
+OBJECTS = dynamic.obj
 
-all:    minimal.exe
+all:    dynamic.exe
 
 wx:
         cd $(WXDIR)\src\msw
@@ -37,24 +37,24 @@ wxclean:
         nmake -f makefile.dos clean
         cd $(THISDIR)
 
-minimal.exe:      $(WXDIR)\src\msw\dummy.obj $(WXLIB) minimal.obj minimal.def minimal.res
+dynamic.exe:      $(WXDIR)\src\msw\dummy.obj $(WXLIB) dynamic.obj dynamic.def dynamic.res
         link $(LINKFLAGS) @<<
-minimal.obj $(WXDIR)\src\msw\dummy.obj,
-minimal,
+dynamic.obj $(WXDIR)\src\msw\dummy.obj,
+dynamic,
 NUL,
 $(LIBS),
-minimal.def
+dynamic.def
 ;
 <<
-        rc -K minimal.res
+        rc -K dynamic.res
 
-minimal.obj:      minimal.$(SRCSUFF)
+dynamic.obj:      dynamic.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
 <<
 
-minimal.res :      minimal.rc $(WXDIR)\include\wx\msw\wx.rc
-    rc -r /i$(WXDIR)\include minimal
+dynamic.res :      dynamic.rc $(WXDIR)\include\wx\msw\wx.rc
+    rc -r /i$(WXDIR)\include dynamic
 
 clean:
         -erase *.obj

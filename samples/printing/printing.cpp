@@ -82,10 +82,10 @@ bool MyApp::OnInit(void)
 
   // Load icon and bitmap
 #ifdef __WXMSW__
-  frame->SetIcon(wxIcon("aiai_icn"));
+  frame->SetIcon(wxIcon("mondrian"));
 #endif
 #ifdef __X__
-  frame->SetIcon(wxIcon(aiai_bits, aiai_width, aiai_height));
+//  frame->SetIcon(wxIcon(mondrian_bits, mondrian_width, mondrian_height));
 #endif
 
   // Make a menubar

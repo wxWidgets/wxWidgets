@@ -1,3 +1,2 @@
-aiai_icn ICON "aiai.ico"
 #include "wx/msw/wx.rc"
 

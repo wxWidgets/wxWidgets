@@ -100,9 +100,6 @@ bool MyApp::OnInit(void)
 #ifdef __WXMSW__
   frame->SetIcon(wxIcon("mondrian"));
 #endif
-#ifdef __X__
-  frame->SetIcon(wxIcon("aiai.xbm"));
-#endif
 
   // Make a menubar
   wxMenu *file_menu = new wxMenu;
