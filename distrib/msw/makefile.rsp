@@ -113,6 +113,12 @@ contrib/samples/plot/Makefile.in
 contrib/samples/stc/Makefile.in
 contrib/samples/applet/Makefile.in
 contrib/samples/animate/Makefile.in
+contrib/samples/fl/Makefile.in
+contrib/samples/fl/fl_demo1/Makefile.in
+contrib/samples/fl/fl_demo2/Makefile.in
+contrib/samples/fl/fl_sample1/Makefile.in
+contrib/samples/fl/fl_sample2/Makefile.in
+contrib/samples/fl/fl_sample3/Makefile.in
 
 contrib/utils/Makefile.in
 
