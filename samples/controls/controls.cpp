@@ -158,7 +158,7 @@ private:
 class MyFrame: public wxFrame
 {
 public:
-    MyFrame(wxFrame *frame, char *title, int x, int y, int w, int h);
+    MyFrame(const char *title, int x, int y);
 
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
@@ -180,13 +180,16 @@ public:
 private:
     void UpdateStatusBar(const wxPoint& pos, const wxSize& size)
     {
-        wxString msg;
-        wxSize sizeCl = GetClientSize();
-        msg.Printf(_("pos=(%d, %d), size=%dx%d (client=%dx%d)"),
-                   pos.x, pos.y,
-                   size.x, size.y,
-                   sizeCl.x, sizeCl.y);
-        SetStatusText(msg, 1);
+        if ( m_frameStatusBar )
+        {
+            wxString msg;
+            wxSize sizeCl = GetClientSize();
+            msg.Printf(_("pos=(%d, %d), size=%dx%d (client=%dx%d)"),
+                       pos.x, pos.y,
+                       size.x, size.y,
+                       sizeCl.x, sizeCl.y);
+            SetStatusText(msg, 1);
+        }
     }
 
     MyPanel *m_panel;
@@ -323,56 +326,13 @@ bool MyApp::OnInit()
         y = 50;
     if ( argc == 3 )
     {
-        //wxSscanf(argv[1], "%d", &x);
-        //wxSscanf(argv[2], "%d", &y);
+        wxSscanf(argv[1], "%d", &x);
+        wxSscanf(argv[2], "%d", &y);
     }
 
     // Create the main frame window
-    MyFrame *frame = new MyFrame((wxFrame *) NULL,
-            "Controls wxWindows App",
-            x, y, 540, 430);
-
-    frame->SetSizeHints( 500, 425 );
-
-    // Give it an icon
-    // The wxICON() macros loads an icon from a resource under Windows
-    // and uses an #included XPM image under GTK+ and Motif
-
-    frame->SetIcon( wxICON(mondrian) );
-
-    wxMenu *file_menu = new wxMenu("",  wxMENU_TEAROFF);
-
-    file_menu->Append(CONTROLS_CLEAR_LOG, "&Clear log\tCtrl-L");
-    file_menu->AppendSeparator();
-    file_menu->Append(CONTROLS_ABOUT, "&About\tF1");
-    file_menu->AppendSeparator();
-    file_menu->Append(CONTROLS_QUIT, "E&xit\tAlt-X", "Quit controls sample");
-
-    wxMenuBar *menu_bar = new wxMenuBar;
-    menu_bar->Append(file_menu, "&File");
-
-#if wxUSE_TOOLTIPS
-    wxMenu *tooltip_menu = new wxMenu;
-    tooltip_menu->Append(CONTROLS_SET_TOOLTIP_DELAY, "Set &delay\tCtrl-D");
-    tooltip_menu->AppendSeparator();
-    tooltip_menu->Append(CONTROLS_ENABLE_TOOLTIPS, "&Toggle tooltips\tCtrl-T",
-            "enable/disable tooltips", TRUE);
-    tooltip_menu->Check(CONTROLS_ENABLE_TOOLTIPS, TRUE);
-    menu_bar->Append(tooltip_menu, "&Tooltips");
-#endif // wxUSE_TOOLTIPS
-
-    wxMenu *panel_menu = new wxMenu;
-    panel_menu->Append(CONTROLS_ENABLE_ALL, "&Disable all\tCtrl-E",
-                       "Enable/disable all panel controls", TRUE);
-    menu_bar->Append(panel_menu, "&Panel");
-
-    frame->SetMenuBar(menu_bar);
-
+    MyFrame *frame = new MyFrame("Controls wxWindows App", x, y);
     frame->Show(TRUE);
-
-    //frame->GetPanel()->m_notebook->SetSelection(6);
-
-    SetTopWindow(frame);
 
     return TRUE;
 }
@@ -1384,12 +1344,48 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_IDLE(MyFrame::OnIdle)
 END_EVENT_TABLE()
 
-MyFrame::MyFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
-: wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h))
+MyFrame::MyFrame(const char *title, int x, int y)
+       : wxFrame(NULL, -1, title, wxPoint(x, y), wxSize(500, 430))
 {
+    // Give it an icon
+    // The wxICON() macros loads an icon from a resource under Windows
+    // and uses an #included XPM image under GTK+ and Motif
+
+    SetIcon( wxICON(mondrian) );
+
+    wxMenu *file_menu = new wxMenu;
+
+    file_menu->Append(CONTROLS_CLEAR_LOG, "&Clear log\tCtrl-L");
+    file_menu->AppendSeparator();
+    file_menu->Append(CONTROLS_ABOUT, "&About\tF1");
+    file_menu->AppendSeparator();
+    file_menu->Append(CONTROLS_QUIT, "E&xit\tAlt-X", "Quit controls sample");
+
+    wxMenuBar *menu_bar = new wxMenuBar;
+    menu_bar->Append(file_menu, "&File");
+
+#if wxUSE_TOOLTIPS
+    wxMenu *tooltip_menu = new wxMenu;
+    tooltip_menu->Append(CONTROLS_SET_TOOLTIP_DELAY, "Set &delay\tCtrl-D");
+    tooltip_menu->AppendSeparator();
+    tooltip_menu->Append(CONTROLS_ENABLE_TOOLTIPS, "&Toggle tooltips\tCtrl-T",
+            "enable/disable tooltips", TRUE);
+    tooltip_menu->Check(CONTROLS_ENABLE_TOOLTIPS, TRUE);
+    menu_bar->Append(tooltip_menu, "&Tooltips");
+#endif // wxUSE_TOOLTIPS
+
+    wxMenu *panel_menu = new wxMenu;
+    panel_menu->Append(CONTROLS_ENABLE_ALL, "&Disable all\tCtrl-E",
+                       "Enable/disable all panel controls", TRUE);
+    menu_bar->Append(panel_menu, "&Panel");
+
+    SetMenuBar(menu_bar);
+
     CreateStatusBar(2);
 
     m_panel = new MyPanel( this, 10, 10, 300, 100 );
+
+    SetSizeHints( 500, 425 );
 }
 
 void MyFrame::OnQuit (wxCommandEvent& WXUNUSED(event) )
