@@ -89,6 +89,7 @@ public:
     virtual void DoMoveWindow(int x, int y, int width, int height);
     void MacInvalidate( const WXRECTPTR rect, bool eraseBackground ) ;
     short MacGetWindowBackgroundTheme() const { return m_macWindowBackgroundTheme ; }
+    virtual void MacInstallEventHandler() ;
 protected:
     // common part of all ctors
     void Init();
@@ -106,6 +107,7 @@ protected:
     wxWindowMac* m_macFocus ;
     WXHRGN m_macNoEraseUpdateRgn ;
     bool m_macNeedsErasing ;
+    void* m_macEventHandler ;
 
     static WXWindow s_macWindowInUpdate ;
 };
