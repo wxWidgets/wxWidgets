@@ -485,7 +485,7 @@
 /*
  * Use dnd
  */
-#ifndef __WXGTK__
+#ifdef __WXGTK__
 #define wxUSE_DRAG_AND_DROP 1
 #else
 #define wxUSE_DRAG_AND_DROP 0
