@@ -19,6 +19,7 @@
 #endif
 
 #include "wx/generic/imaglist.h"
+#include "wx/icon.h"
 
 //-----------------------------------------------------------------------------
 //  wxImageList

@@ -213,6 +213,10 @@
  */
 #define wxUSE_DRAG_AND_DROP 0
 /*
+ * Use spline
+ */
+#define wxUSE_SPLINE 0
+/*
  * Use wxLibrary class
  */
 #define wxUSE_DYNLIB_CLASS 0

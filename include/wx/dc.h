@@ -3,6 +3,7 @@
 
 #ifdef __GNUG__
     #pragma interface "dcbase.h"
+    #pragma implementation "dcbase.h"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -542,7 +543,9 @@ protected:
         if ( y ) *y = m_deviceOriginY;
     }
 
+#if wxUSE_SPLINES
     virtual void DoDrawSpline(wxList *points) = 0;
+#endif
 
 protected:
     // flags

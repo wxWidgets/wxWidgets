@@ -62,38 +62,30 @@ public:
   virtual void BeginDrawing() {}
   virtual void EndDrawing() {}
 
-  void FloodFill(long x1, long y1, const wxColour &col, int style=wxFLOOD_SURFACE) ;
-  bool GetPixel(long x1, long y1, wxColour *col) const;
+  void DoFloodFill(long x1, long y1, const wxColour &col, int style=wxFLOOD_SURFACE );
+  bool DoGetPixel(long x1, long y1, wxColour *col) const;
 
-  void DrawLine(long x1, long y1, long x2, long y2);
-  void CrossHair(long x, long y) ;
-  void DrawArc(long x1,long y1,long x2,long y2,long xc,long yc);
-  void DrawEllipticArc(long x,long y,long w,long h,double sa,double ea);
-  void DrawPoint(long x, long y);
-  // Avoid compiler warning
-  void DrawPoint(wxPoint& point) { wxDC::DrawPoint(point); }
-  void DrawLines(int n, wxPoint points[], long xoffset = 0, long yoffset = 0);
-  // Avoid compiler warning
-  void DrawLines(wxList *lines, long xoffset = 0, long yoffset = 0)
-  { wxDC::DrawLines(lines, xoffset, yoffset); }
-  void DrawPolygon(int n, wxPoint points[], long xoffset = 0, long yoffset = 0, int fillStyle=wxODDEVEN_RULE);
-  // Avoid compiler warning
-  void DrawPolygon(wxList *lines, long xoffset = 0, long yoffset = 0, int fillStyle=wxODDEVEN_RULE)
-  { wxDC::DrawPolygon(lines, xoffset, yoffset, fillStyle); }
-  void DrawRectangle(long x, long y, long width, long height);
-  void DrawRoundedRectangle(long x, long y, long width, long height, double radius = 20);
-  void DrawEllipse(long x, long y, long width, long height);
+  void DoDrawLine(long x1, long y1, long x2, long y2);
+  void DoCrossHair(long x, long y) ;
+  void DoDrawArc(long x1,long y1,long x2,long y2,long xc,long yc);
+  void DoDrawEllipticArc(long x,long y,long w,long h,double sa,double ea);
+  void DoDrawPoint(long x, long y);
+  void DoDrawLines(int n, wxPoint points[], long xoffset = 0, long yoffset = 0);
+  void DoDrawPolygon(int n, wxPoint points[], long xoffset = 0, long yoffset = 0, int fillStyle=wxODDEVEN_RULE);
+  void DoDrawRectangle(long x, long y, long width, long height);
+  void DoDrawRoundedRectangle(long x, long y, long width, long height, double radius = 20);
+  void DoDrawEllipse(long x, long y, long width, long height);
 
-  void DrawSpline(wxList *points);
+  void DoDrawSpline(wxList *points);
 
-  bool Blit(long xdest, long ydest, long width, long height,
+  bool DoBlit(long xdest, long ydest, long width, long height,
             wxDC *source, long xsrc, long ysrc, int rop = wxCOPY, bool useMask = FALSE);
   inline bool CanDrawBitmap(void) const { return TRUE; }
 
-  void DrawIcon( const wxIcon& icon, long x, long y );
-  void DrawBitmap( const wxBitmap& bitmap, long x, long y, bool useMask=FALSE );
+  void DoDrawIcon( const wxIcon& icon, long x, long y );
+  void DoDrawBitmap( const wxBitmap& bitmap, long x, long y, bool useMask=FALSE );
 
-  void DrawText(const wxString& text, long x, long y, bool use16 = FALSE);
+  void DoDrawText(const wxString& text, long x, long y );
 
   void Clear();
   void SetFont( const wxFont& font );
@@ -105,19 +97,21 @@ public:
   void SetClippingRegion(long x, long y, long width, long height);
   void SetClippingRegion( const wxRegion &region );
   void DestroyClippingRegion();
+  
+  void DoSetClippingRegionAsRegion( const wxRegion &WXUNUSED(clip) ) {}
 
   bool StartDoc(const wxString& message);
   void EndDoc();
   void StartPage();
   void EndPage();
 
-  long GetCharHeight();
-  long GetCharWidth();
+  long GetCharHeight() const;
+  long GetCharWidth() const;
   inline bool CanGetTextExtent(void) const { return FALSE; }
   void GetTextExtent(const wxString& string, long *x, long *y,
                      long *descent = (long *) NULL,
                      long *externalLeading = (long *) NULL,
-                     wxFont *theFont = (wxFont *) NULL, bool use16 = FALSE);
+                     wxFont *theFont = (wxFont *) NULL ) const;
 
   void GetSize(int* width, int* height) const;
   void GetSizeMM(int *width, int *height) const;
@@ -135,6 +129,8 @@ public:
 
   inline wxPrintData& GetPrintData() { return m_printData; }
   inline void SetPrintData(const wxPrintData& data) { m_printData = data; }
+  
+  int GetDepth() const { return 24; }
 
 protected:
 

@@ -417,23 +417,23 @@ void wxPostScriptDC::Clear()
     wxFAIL_MSG( _T("wxPostScriptDC::Clear not implemented.") );
 }
 
-void wxPostScriptDC::FloodFill (long WXUNUSED(x), long WXUNUSED(y), const wxColour &WXUNUSED(col), int WXUNUSED(style))
+void wxPostScriptDC::DoFloodFill (long WXUNUSED(x), long WXUNUSED(y), const wxColour &WXUNUSED(col), int WXUNUSED(style))
 {
     wxFAIL_MSG( _T("wxPostScriptDC::FloodFill not implemented.") );
 }
 
-bool wxPostScriptDC::GetPixel (long WXUNUSED(x), long WXUNUSED(y), wxColour * WXUNUSED(col)) const
+bool wxPostScriptDC::DoGetPixel (long WXUNUSED(x), long WXUNUSED(y), wxColour * WXUNUSED(col)) const
 {
     wxFAIL_MSG( _T("wxPostScriptDC::GetPixel not implemented.") );
     return FALSE;
 }
 
-void wxPostScriptDC::CrossHair (long WXUNUSED(x), long WXUNUSED(y))
+void wxPostScriptDC::DoCrossHair (long WXUNUSED(x), long WXUNUSED(y))
 {
     wxFAIL_MSG( _T("wxPostScriptDC::CrossHair not implemented.") );
 }
 
-void wxPostScriptDC::DrawLine (long x1, long y1, long x2, long y2)
+void wxPostScriptDC::DoDrawLine (long x1, long y1, long x2, long y2)
 {
     wxCHECK_RET( m_ok && m_pstream, _T("invalid postscript dc") );
 
@@ -452,7 +452,7 @@ void wxPostScriptDC::DrawLine (long x1, long y1, long x2, long y2)
 
 #define RAD2DEG 57.29577951308
 
-void wxPostScriptDC::DrawArc (long x1, long y1, long x2, long y2, long xc, long yc)
+void wxPostScriptDC::DoDrawArc (long x1, long y1, long x2, long y2, long xc, long yc)
 {
     wxCHECK_RET( m_ok && m_pstream, _T("invalid postscript dc") );
 
@@ -515,7 +515,7 @@ void wxPostScriptDC::DrawArc (long x1, long y1, long x2, long y2, long xc, long 
     CalcBoundingBox( xc+radius, yc+radius );
 }
 
-void wxPostScriptDC::DrawEllipticArc(long x,long y,long w,long h,double sa,double ea)
+void wxPostScriptDC::DoDrawEllipticArc(long x,long y,long w,long h,double sa,double ea)
 {
     wxCHECK_RET( m_ok && m_pstream, _T("invalid postscript dc") );
 
@@ -557,7 +557,7 @@ void wxPostScriptDC::DrawEllipticArc(long x,long y,long w,long h,double sa,doubl
     }
 }
 
-void wxPostScriptDC::DrawPoint (long x, long y)
+void wxPostScriptDC::DoDrawPoint (long x, long y)
 {
     wxCHECK_RET( m_ok && m_pstream, _T("invalid postscript dc") );
 
@@ -573,7 +573,7 @@ void wxPostScriptDC::DrawPoint (long x, long y)
     CalcBoundingBox( x, y );
 }
 
-void wxPostScriptDC::DrawPolygon (int n, wxPoint points[], long xoffset, long yoffset, int WXUNUSED(fillStyle))
+void wxPostScriptDC::DoDrawPolygon (int n, wxPoint points[], long xoffset, long yoffset, int WXUNUSED(fillStyle))
 {
     wxCHECK_RET( m_ok && m_pstream, _T("invalid postscript dc") );
 
@@ -623,7 +623,7 @@ void wxPostScriptDC::DrawPolygon (int n, wxPoint points[], long xoffset, long yo
     }
 }
 
-void wxPostScriptDC::DrawLines (int n, wxPoint points[], long xoffset, long yoffset)
+void wxPostScriptDC::DoDrawLines (int n, wxPoint points[], long xoffset, long yoffset)
 {
     wxCHECK_RET( m_ok && m_pstream, _T("invalid postscript dc") );
 
@@ -653,7 +653,7 @@ void wxPostScriptDC::DrawLines (int n, wxPoint points[], long xoffset, long yoff
     *m_pstream << "stroke\n";
 }
 
-void wxPostScriptDC::DrawRectangle (long x, long y, long width, long height)
+void wxPostScriptDC::DoDrawRectangle (long x, long y, long width, long height)
 {
     wxCHECK_RET( m_ok && m_pstream, _T("invalid postscript dc") );
 
@@ -690,7 +690,7 @@ void wxPostScriptDC::DrawRectangle (long x, long y, long width, long height)
     }
 }
 
-void wxPostScriptDC::DrawRoundedRectangle (long x, long y, long width, long height, double radius)
+void wxPostScriptDC::DoDrawRoundedRectangle (long x, long y, long width, long height, double radius)
 {
     wxCHECK_RET( m_ok && m_pstream, _T("invalid postscript dc") );
 
@@ -751,7 +751,7 @@ void wxPostScriptDC::DrawRoundedRectangle (long x, long y, long width, long heig
     }
 }
 
-void wxPostScriptDC::DrawEllipse (long x, long y, long width, long height)
+void wxPostScriptDC::DoDrawEllipse (long x, long y, long width, long height)
 {
     wxCHECK_RET( m_ok && m_pstream, _T("invalid postscript dc") );
 
@@ -782,12 +782,12 @@ void wxPostScriptDC::DrawEllipse (long x, long y, long width, long height)
     }
 }
 
-void wxPostScriptDC::DrawIcon( const wxIcon& icon, long x, long y )
+void wxPostScriptDC::DoDrawIcon( const wxIcon& icon, long x, long y )
 {
     DrawBitmap( icon, x, y, TRUE );
 }
 
-void wxPostScriptDC::DrawBitmap( const wxBitmap& bitmap, long x, long y, bool WXUNUSED(useMask) )
+void wxPostScriptDC::DoDrawBitmap( const wxBitmap& bitmap, long x, long y, bool WXUNUSED(useMask) )
 {
     wxCHECK_RET( m_ok && m_pstream, _T("invalid postscript dc") );
 
@@ -1047,7 +1047,7 @@ void wxPostScriptDC::SetBrush( const wxBrush& brush )
     }
 }
 
-void wxPostScriptDC::DrawText( const wxString& text, long x, long y, bool WXUNUSED(use16bit) )
+void wxPostScriptDC::DoDrawText( const wxString& text, long x, long y )
 {
     wxCHECK_RET( m_ok && m_pstream, _T("invalid postscript dc") );
 
@@ -1143,7 +1143,7 @@ void wxPostScriptDC::SetLogicalFunction (int WXUNUSED(function))
     wxFAIL_MSG( _T("wxPostScriptDC::SetLogicalFunction not implemented.") );
 }
 
-void wxPostScriptDC::DrawSpline( wxList *points )
+void wxPostScriptDC::DoDrawSpline( wxList *points )
 {
     wxCHECK_RET( m_ok && m_pstream, _T("invalid postscript dc") );
 
@@ -1199,7 +1199,7 @@ void wxPostScriptDC::DrawSpline( wxList *points )
     *m_pstream << XLOG2DEV((long)c) << " " << YLOG2DEV((long)d) << " lineto stroke\n";
 }
 
-long wxPostScriptDC::GetCharWidth ()
+long wxPostScriptDC::GetCharWidth() const
 {
     // Chris Breeze: reasonable approximation using wxMODERN/Courier
     return (long) (GetCharHeight() * 72.0 / 120.0);
@@ -1529,7 +1529,7 @@ void wxPostScriptDC::EndPage ()
     *m_pstream << "showpage\n";
 }
 
-bool wxPostScriptDC::Blit( long xdest, long ydest,
+bool wxPostScriptDC::DoBlit( long xdest, long ydest,
                            long fwidth, long fheight,
                            wxDC *source,
                            long xsrc, long ysrc,
@@ -1554,7 +1554,7 @@ bool wxPostScriptDC::Blit( long xdest, long ydest,
     return TRUE;
 }
 
-long wxPostScriptDC::GetCharHeight()
+long wxPostScriptDC::GetCharHeight() const
 {
     if (m_font.Ok())
         return  m_font.GetPointSize();
@@ -1563,8 +1563,7 @@ long wxPostScriptDC::GetCharHeight()
 }
 
 void wxPostScriptDC::GetTextExtent( const wxString& string, long *x, long *y,
-                                    long *descent, long *externalLeading, wxFont *theFont,
-                                    bool WXUNUSED(use16) )
+                                    long *descent, long *externalLeading, wxFont *theFont ) const
 {
     wxFont *fontToUse = theFont;
 

@@ -873,6 +873,7 @@ DEFAULT_wxUSE_RESOURCES=1
 DEFAULT_wxUSE_CLIPBOARD=1
 DEFAULT_wxUSE_TOOLTIPS=1
 DEFAULT_wxUSE_DRAG_AND_DROP=1
+DEFAULT_wxUSE_SPLINE=1
 
 DEFAULT_wxUSE_MDI_ARCHITECTURE=1
 DEFAULT_wxUSE_DOC_VIEW_ARCHITECTURE=1
@@ -1065,6 +1066,10 @@ wxUSE_TOOLTIPS)
 AC_OVERRIDES(dnd,dnd,
 **--with-dnd              use Drag'n'Drop classes,
 wxUSE_DRAG_AND_DROP)
+
+AC_OVERRIDES(spline,spline,
+**--with-spline              use Spline drawing code,
+wxUSE_SPLINE)
 
 dnl ----------------------------------------------------------------
 dnl user options for architectures
@@ -1612,6 +1617,10 @@ if test "$wxUSE_DRAG_AND_DROP" = 1 ; then
         AC_MSG_WARN(drag and drop is only supported under GTK 1.2)
 	wxUSE_DRAG_AND_DROP=0
     fi
+fi
+
+if test "$wxUSE_SPLINE" = 1 ; then
+  AC_DEFINE_UNQUOTED(wxUSE_SPLINE,$wxUSE_SPLINE)
 fi
 
 dnl ----------------------------------------------------------------
