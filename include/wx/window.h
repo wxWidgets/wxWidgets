@@ -100,7 +100,6 @@ WXDLLEXPORT_DATA(extern wxWindowList) wxTopLevelWindows;
 
 enum wxWindowVariant 
 {
-    wxWINDOW_VARIANT_DEFAULT,       // Default size (usually == normal, may be set by a wxSystemOptions entry)
     wxWINDOW_VARIANT_NORMAL,        // Normal size
     wxWINDOW_VARIANT_SMALL,         // Smaller size (about 25 % smaller than normal )
     wxWINDOW_VARIANT_MINI,          // Mini size (about 33 % smaller than normal )
