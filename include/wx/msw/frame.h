@@ -142,11 +142,6 @@ protected:
     static bool           m_useNativeStatusBar;
 #endif // wxUSE_STATUSBAR
 
-    // Data to save/restore when calling ShowFullScreen
-    int                   m_fsStatusBarFields; // 0 for no status bar
-    int                   m_fsStatusBarHeight;
-    int                   m_fsToolBarHeight;
-
 private:
 #if wxUSE_TOOLTIPS
     WXHWND                m_hwndToolTip;
