@@ -18,7 +18,7 @@ DESCRIPTION      = "Cross platform GUI toolkit for Python"
 AUTHOR           = "Robin Dunn"
 AUTHOR_EMAIL     = "Robin Dunn <robin@alldunn.com>"
 URL              = "http://wxPython.org/"
-LICENCE          = "wxWindows (LGPL derivative)"
+LICENSE          = "wxWindows (LGPL derivative)"
 LONG_DESCRIPTION = """\
 wxPython is a GUI toolkit for Python that is a wrapper around the
 wxWindows C++ GUI library.  wxPython provides a large variety of
@@ -384,7 +384,7 @@ if not GL_ONLY:
     copy_file('src/__version__.py', PKGDIR, update=1, verbose=0)
     copy_file('src/wxc.pyd.manifest', PKGDIR, update=1, verbose=0)
 
-    if IN_CVS_TREE:   # update the licence files
+    if IN_CVS_TREE:   # update the license files
         mkpath('licence')
         for file in ['preamble.txt', 'licence.txt', 'licendoc.txt', 'lgpl.txt']:
             copy_file(opj(WXDIR, 'docs', file), opj('licence',file), update=1, verbose=0)
@@ -897,7 +897,7 @@ if __name__ == "__main__":
               author           = AUTHOR,
               author_email     = AUTHOR_EMAIL,
               url              = URL,
-              licence          = LICENCE,
+              license          = LICENSE,
 
               packages = [PKGDIR,
                           PKGDIR+'.lib',
@@ -922,7 +922,7 @@ if __name__ == "__main__":
               author           = AUTHOR,
               author_email     = AUTHOR_EMAIL,
               url              = URL,
-              licence          = LICENCE,
+              license          = LICENSE,
 
               py_modules = [ "wxPython.glcanvas" ],
 
