@@ -221,7 +221,7 @@ public:
     #include "wx/unix/apptrait.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/apptrait.h"
-#elif defined(__OS2__)
+#elif defined(__WXPM__)
     #include "wx/os2/apptrait.h"
 #else 
     // at least, we need an implementation of GetToolkitInfo !
