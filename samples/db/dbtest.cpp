@@ -68,14 +68,18 @@ extern wxChar ListDB_Selection2[];  /* Used to return the second column value fo
 #endif
 
 
-bool DataTypeSupported(wxDb *pDb, SWORD datatype)
+bool DataTypeSupported(wxDb *pDb, SWORD datatype, wxString *nativeDataTypeName)
 {
     wxDbSqlTypeInfo sqlTypeInfo;
 
     bool breakpoint = FALSE;
 
+    *nativeDataTypeName = wxEmptyString;
     if (pDb->GetDataTypeInfo(datatype, sqlTypeInfo))
+    {
+        *nativeDataTypeName = sqlTypeInfo.TypeName;
         breakpoint = TRUE;
+    }
 
     return breakpoint;
 
@@ -85,263 +89,517 @@ bool DataTypeSupported(wxDb *pDb, SWORD datatype)
 
 void CheckSupportForAllDataTypes(wxDb *pDb)
 {
+    wxString nativeDataTypeName;
+
     wxLogMessage("\nThe following datatypes are supported by the\ndatabase you are currently connected to:");
 #ifdef SQL_C_BINARY
-    if (DataTypeSupported(pDb,SQL_C_BINARY))
-        wxLogMessage("SQL_C_BINARY");
+    if (DataTypeSupported(pDb,SQL_C_BINARY, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_C_BINARY (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_C_BIT
-    if (DataTypeSupported(pDb,SQL_C_BIT))
-        wxLogMessage("SQL_C_BIT");
+    if (DataTypeSupported(pDb,SQL_C_BIT, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_C_BIT (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_C_BOOKMARK
-    if (DataTypeSupported(pDb,SQL_C_BOOKMARK))
-        wxLogMessage("SQL_C_BOOKMARK");
+    if (DataTypeSupported(pDb,SQL_C_BOOKMARK, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_C_BOOKMARK (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_C_CHAR
-    if (DataTypeSupported(pDb,SQL_C_CHAR))
-        wxLogMessage("SQL_C_CHAR");
+    if (DataTypeSupported(pDb,SQL_C_CHAR, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_C_CHAR (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_C_DATE
-    if (DataTypeSupported(pDb,SQL_C_DATE))
-        wxLogMessage("SQL_C_DATE");
+    if (DataTypeSupported(pDb,SQL_C_DATE, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_C_DATE (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_C_DEFAULT
-    if (DataTypeSupported(pDb,SQL_C_DEFAULT))
-        wxLogMessage("SQL_C_DEFAULT");
+    if (DataTypeSupported(pDb,SQL_C_DEFAULT, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_C_DEFAULT (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_C_DOUBLE
-    if (DataTypeSupported(pDb,SQL_C_DOUBLE))
-        wxLogMessage("SQL_C_DOUBLE");
+    if (DataTypeSupported(pDb,SQL_C_DOUBLE, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_C_DOUBLE (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_C_FLOAT
-    if (DataTypeSupported(pDb,SQL_C_FLOAT))
-        wxLogMessage("SQL_C_FLOAT");
+    if (DataTypeSupported(pDb,SQL_C_FLOAT, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_C_FLOAT (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_C_GUID
-    if (DataTypeSupported(pDb,SQL_C_GUID))
-        wxLogMessage("SQL_C_GUID");
+    if (DataTypeSupported(pDb,SQL_C_GUID, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_C_GUID (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_C_INTERVAL_DAY
-    if (DataTypeSupported(pDb,SQL_C_INTERVAL_DAY))
-        wxLogMessage("SQL_C_INTERVAL_DAY");
+    if (DataTypeSupported(pDb,SQL_C_INTERVAL_DAY, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_C_INTERVAL_DAY (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_C_INTERVAL_DAY_TO_HOUR
-    if (DataTypeSupported(pDb,SQL_C_INTERVAL_DAY_TO_HOUR))
-        wxLogMessage("SQL_C_INTERVAL_DAY_TO_HOUR");
+    if (DataTypeSupported(pDb,SQL_C_INTERVAL_DAY_TO_HOUR, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_C_INTERVAL_DAY_TO_HOUR (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_C_INTERVAL_DAY_TO_MINUTE
-    if (DataTypeSupported(pDb,SQL_C_INTERVAL_DAY_TO_MINUTE))
-        wxLogMessage("SQL_C_INTERVAL_DAY_TO_MINUTE");
+    if (DataTypeSupported(pDb,SQL_C_INTERVAL_DAY_TO_MINUTE, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_C_INTERVAL_DAY_TO_MINUTE (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_C_INTERVAL_DAY_TO_SECOND
-    if (DataTypeSupported(pDb,SQL_C_INTERVAL_DAY_TO_SECOND))
-        wxLogMessage("SQL_C_INTERVAL_DAY_TO_SECOND");
+    if (DataTypeSupported(pDb,SQL_C_INTERVAL_DAY_TO_SECOND, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_C_INTERVAL_DAY_TO_SECOND (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_C_INTERVAL_HOUR
-    if (DataTypeSupported(pDb,SQL_C_INTERVAL_HOUR))
-        wxLogMessage("SQL_C_INTERVAL_HOUR");
+    if (DataTypeSupported(pDb,SQL_C_INTERVAL_HOUR, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_C_INTERVAL_HOUR (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_C_INTERVAL_HOUR_TO_MINUTE
-    if (DataTypeSupported(pDb,SQL_C_INTERVAL_HOUR_TO_MINUTE))
-        wxLogMessage("SQL_C_INTERVAL_HOUR_TO_MINUTE");
+    if (DataTypeSupported(pDb,SQL_C_INTERVAL_HOUR_TO_MINUTE, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_C_INTERVAL_HOUR_TO_MINUTE (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_C_INTERVAL_HOUR_TO_SECOND
-    if (DataTypeSupported(pDb,SQL_C_INTERVAL_HOUR_TO_SECOND))
-        wxLogMessage("SQL_C_INTERVAL_HOUR_TO_SECOND");
+    if (DataTypeSupported(pDb,SQL_C_INTERVAL_HOUR_TO_SECOND, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_C_INTERVAL_HOUR_TO_SECOND (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_C_INTERVAL_MINUTE
-    if (DataTypeSupported(pDb,SQL_C_INTERVAL_MINUTE))
-        wxLogMessage("SQL_C_INTERVAL_MINUTE");
+    if (DataTypeSupported(pDb,SQL_C_INTERVAL_MINUTE, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_C_INTERVAL_MINUTE (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_C_INTERVAL_MINUTE_TO_SECOND
-    if (DataTypeSupported(pDb,SQL_C_INTERVAL_MINUTE_TO_SECOND))
-        wxLogMessage("SQL_C_INTERVAL_MINUTE_TO_SECOND");
+    if (DataTypeSupported(pDb,SQL_C_INTERVAL_MINUTE_TO_SECOND, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_C_INTERVAL_MINUTE_TO_SECOND (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_C_INTERVAL_MONTH
-    if (DataTypeSupported(pDb,SQL_C_INTERVAL_MONTH))
-        wxLogMessage("SQL_C_INTERVAL_MONTH");
+    if (DataTypeSupported(pDb,SQL_C_INTERVAL_MONTH, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_C_INTERVAL_MONTH (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_C_INTERVAL_SECOND
-    if (DataTypeSupported(pDb,SQL_C_INTERVAL_SECOND))
-        wxLogMessage("SQL_C_INTERVAL_SECOND");
+    if (DataTypeSupported(pDb,SQL_C_INTERVAL_SECOND, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_C_INTERVAL_SECOND (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_C_INTERVAL_YEAR
-    if (DataTypeSupported(pDb,SQL_C_INTERVAL_YEAR))
-        wxLogMessage("SQL_C_INTERVAL_YEAR");
+    if (DataTypeSupported(pDb,SQL_C_INTERVAL_YEAR, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_C_INTERVAL_YEAR (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_C_INTERVAL_YEAR_TO_MONTH
-    if (DataTypeSupported(pDb,SQL_C_INTERVAL_YEAR_TO_MONTH))
-        wxLogMessage("SQL_C_INTERVAL_YEAR_TO_MONTH");
+    if (DataTypeSupported(pDb,SQL_C_INTERVAL_YEAR_TO_MONTH, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_C_INTERVAL_YEAR_TO_MONTH (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_C_LONG
-    if (DataTypeSupported(pDb,SQL_C_LONG))
-        wxLogMessage("SQL_C_LONG");
+    if (DataTypeSupported(pDb,SQL_C_LONG, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_C_LONG (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_C_NUMERIC
-    if (DataTypeSupported(pDb,SQL_C_NUMERIC))
-        wxLogMessage("SQL_C_NUMERIC");
+    if (DataTypeSupported(pDb,SQL_C_NUMERIC, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_C_NUMERIC (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_C_SBIGINT
-    if (DataTypeSupported(pDb,SQL_C_SBIGINT))
-        wxLogMessage("SQL_C_SBIGINT");
+    if (DataTypeSupported(pDb,SQL_C_SBIGINT, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_C_SBIGINT (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_C_SHORT
-    if (DataTypeSupported(pDb,SQL_C_SHORT))
-        wxLogMessage("SQL_C_SHORT");
+    if (DataTypeSupported(pDb,SQL_C_SHORT, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_C_SHORT (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_C_SLONG
-    if (DataTypeSupported(pDb,SQL_C_SLONG))
-        wxLogMessage("SQL_C_SLONG");
+    if (DataTypeSupported(pDb,SQL_C_SLONG, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_C_SLONG (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_C_SSHORT
-    if (DataTypeSupported(pDb,SQL_C_SSHORT))
-        wxLogMessage("SQL_C_SSHORT");
+    if (DataTypeSupported(pDb,SQL_C_SSHORT, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_C_SSHORT (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_C_STINYINT
-    if (DataTypeSupported(pDb,SQL_C_STINYINT))
-        wxLogMessage("SQL_C_STINYINT");
+    if (DataTypeSupported(pDb,SQL_C_STINYINT, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_C_STINYINT (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_C_TIME
-    if (DataTypeSupported(pDb,SQL_C_TIME))
-        wxLogMessage("SQL_C_TIME");
+    if (DataTypeSupported(pDb,SQL_C_TIME, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_C_TIME (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_C_TIMESTAMP
-    if (DataTypeSupported(pDb,SQL_C_TIMESTAMP))
-        wxLogMessage("SQL_C_TIMESTAMP");
+    if (DataTypeSupported(pDb,SQL_C_TIMESTAMP, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_C_TIMESTAMP (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_C_TINYINT
-    if (DataTypeSupported(pDb,SQL_C_TINYINT))
-        wxLogMessage("SQL_C_TINYINT");
+    if (DataTypeSupported(pDb,SQL_C_TINYINT, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_C_TINYINT (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_C_TYPE_DATE
-    if (DataTypeSupported(pDb,SQL_C_TYPE_DATE))
-        wxLogMessage("SQL_C_TYPE_DATE");
+    if (DataTypeSupported(pDb,SQL_C_TYPE_DATE, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_C_TYPE_DATE (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_C_TYPE_TIME
-    if (DataTypeSupported(pDb,SQL_C_TYPE_TIME))
-        wxLogMessage("SQL_C_TYPE_TIME");
+    if (DataTypeSupported(pDb,SQL_C_TYPE_TIME, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_C_TYPE_TIME (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_C_TYPE_TIMESTAMP
-    if (DataTypeSupported(pDb,SQL_C_TYPE_TIMESTAMP))
-        wxLogMessage("SQL_C_TYPE_TIMESTAMP");
+    if (DataTypeSupported(pDb,SQL_C_TYPE_TIMESTAMP, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_C_TYPE_TIMESTAMP (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_C_UBIGINT
-    if (DataTypeSupported(pDb,SQL_C_UBIGINT))
-        wxLogMessage("SQL_C_UBIGINT");
+    if (DataTypeSupported(pDb,SQL_C_UBIGINT, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_C_UBIGINT (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_C_ULONG
-    if (DataTypeSupported(pDb,SQL_C_ULONG))
-        wxLogMessage("SQL_C_ULONG");
+    if (DataTypeSupported(pDb,SQL_C_ULONG, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_C_ULONG (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_C_USHORT
-    if (DataTypeSupported(pDb,SQL_C_USHORT))
-        wxLogMessage("SQL_C_USHORT");
+    if (DataTypeSupported(pDb,SQL_C_USHORT, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_C_USHORT (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_C_UTINYINT
-    if (DataTypeSupported(pDb,SQL_C_UTINYINT))
-        wxLogMessage("SQL_C_UTINYINT");
+    if (DataTypeSupported(pDb,SQL_C_UTINYINT, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_C_UTINYINT (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_C_VARBOOKMARK
-    if (DataTypeSupported(pDb,SQL_C_VARBOOKMARK))
-        wxLogMessage("SQL_C_VARBOOKMARK");
+    if (DataTypeSupported(pDb,SQL_C_VARBOOKMARK, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_C_VARBOOKMARK (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 
 // Extended SQL types
 #ifdef SQL_DATE
-    if (DataTypeSupported(pDb,SQL_DATE))
-        wxLogMessage("SQL_DATE");
+    if (DataTypeSupported(pDb,SQL_DATE, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_DATE (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_INTERVAL
-    if (DataTypeSupported(pDb,SQL_INTERVAL))
-        wxLogMessage("SQL_INTERVAL");
+    if (DataTypeSupported(pDb,SQL_INTERVAL, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_INTERVAL (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_TIME
-    if (DataTypeSupported(pDb,SQL_TIME))
-        wxLogMessage("SQL_TIME");
+    if (DataTypeSupported(pDb,SQL_TIME, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_TIME (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_TIMESTAMP
-    if (DataTypeSupported(pDb,SQL_TIMESTAMP))
-        wxLogMessage("SQL_TIMESTAMP");
+    if (DataTypeSupported(pDb,SQL_TIMESTAMP, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_TIMESTAMP (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_LONGVARCHAR
-    if (DataTypeSupported(pDb,SQL_LONGVARCHAR))
-        wxLogMessage("SQL_LONGVARCHAR");
+    if (DataTypeSupported(pDb,SQL_LONGVARCHAR, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_LONGVARCHAR (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_BINARY
-    if (DataTypeSupported(pDb,SQL_BINARY))
-        wxLogMessage("SQL_BINARY");
+    if (DataTypeSupported(pDb,SQL_BINARY, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_BINARY (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_VARBINARY
-    if (DataTypeSupported(pDb,SQL_VARBINARY))
-        wxLogMessage("SQL_VARBINARY");
+    if (DataTypeSupported(pDb,SQL_VARBINARY, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_VARBINARY (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_LONGVARBINARY
-    if (DataTypeSupported(pDb,SQL_LONGVARBINARY))
-        wxLogMessage("SQL_LONGVARBINARY");
+    if (DataTypeSupported(pDb,SQL_LONGVARBINARY, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_LOGVARBINARY (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_BIGINT
-    if (DataTypeSupported(pDb,SQL_BIGINT))
-        wxLogMessage("SQL_BIGINT");
+    if (DataTypeSupported(pDb,SQL_BIGINT, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_BIGINT (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_TINYINT
-    if (DataTypeSupported(pDb,SQL_TINYINT))
-        wxLogMessage("SQL_TINYINT");
+    if (DataTypeSupported(pDb,SQL_TINYINT, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_TINYINT (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_BIT
-    if (DataTypeSupported(pDb,SQL_BIT))
-        wxLogMessage("SQL_BIT");
+    if (DataTypeSupported(pDb,SQL_BIT, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_BIT (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_GUID
-    if (DataTypeSupported(pDb,SQL_GUID))
-        wxLogMessage("SQL_GUID");
+    if (DataTypeSupported(pDb,SQL_GUID, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_GUID (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 
 #ifdef SQL_CHAR
-    if (DataTypeSupported(pDb,SQL_CHAR))
-        wxLogMessage("SQL_CHAR");
+    if (DataTypeSupported(pDb,SQL_CHAR, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_CHAR (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_INTEGER
-    if (DataTypeSupported(pDb,SQL_INTEGER))
-        wxLogMessage("SQL_INTEGER");
+    if (DataTypeSupported(pDb,SQL_INTEGER, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_INTEGER (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_SMALLINT
-    if (DataTypeSupported(pDb,SQL_SMALLINT))
-        wxLogMessage("SQL_SMALLINT");
+    if (DataTypeSupported(pDb,SQL_SMALLINT, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_SAMLLINT (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_REAL
-    if (DataTypeSupported(pDb,SQL_REAL))
-        wxLogMessage("SQL_REAL");
+    if (DataTypeSupported(pDb,SQL_REAL, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_REAL (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_DOUBLE
-    if (DataTypeSupported(pDb,SQL_DOUBLE))
-        wxLogMessage("SQL_DOUBLE");
+    if (DataTypeSupported(pDb,SQL_DOUBLE, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_DOUBLE (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_NUMERIC
-    if (DataTypeSupported(pDb,SQL_NUMERIC))
-        wxLogMessage("SQL_NUMERIC");
+    if (DataTypeSupported(pDb,SQL_NUMERIC, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_NUMERIC (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_DATE
-    if (DataTypeSupported(pDb,SQL_DATE))
-        wxLogMessage("SQL_DATE");
+    if (DataTypeSupported(pDb,SQL_DATE, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_DATE (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_TIME
-    if (DataTypeSupported(pDb,SQL_TIME))
-        wxLogMessage("SQL_TIME");
+    if (DataTypeSupported(pDb,SQL_TIME, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_TIME (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_TIMESTAMP
-    if (DataTypeSupported(pDb,SQL_TIMESTAMP))
-        wxLogMessage("SQL_TIMESTAMP");
+    if (DataTypeSupported(pDb,SQL_TIMESTAMP, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_TIMESTAMP (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 #ifdef SQL_VARCHAR
-    if (DataTypeSupported(pDb,SQL_VARCHAR))
-        wxLogMessage("SQL_VARCHAR");
+    if (DataTypeSupported(pDb,SQL_VARCHAR, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_VARCHAR (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 
 // UNICODE
 #ifdef SQL_C_TCHAR
-    if (DataTypeSupported(pDb,SQL_C_TCHAR))
-        wxLogMessage("SQL_C_TCHAR (Unicode support is possible)");
+    if (DataTypeSupported(pDb,SQL_C_TCHAR, &nativeDataTypeName))
+    {
+        nativeDataTypeName = "SQL_C_TCHAR (" + nativeDataTypeName;
+        nativeDataTypeName += ")";
+        wxLogMessage(nativeDataTypeName);
+    }
 #endif
 
     wxLogMessage("\n");
