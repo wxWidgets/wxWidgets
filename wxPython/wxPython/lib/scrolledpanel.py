@@ -73,11 +73,11 @@ as a proper class (and the demo is now converted to just use it.)
 
         # is it before the left edge?
         if cpos.x < 0 and sppu_x > 0:
-                new_vs_x = cpos.x / sppu_x
+            new_vs_x = vs_x + (cpos.x / sppu_x)
 
         # is it above the top?
         if cpos.y < 0 and sppu_y > 0:
-            new_vs_y = cpos.y / sppu_y
+            new_vs_y = vs_y + (cpos.y / sppu_y)
 
 
         # is it past the right edge ?
