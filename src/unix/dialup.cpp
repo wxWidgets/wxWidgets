@@ -208,7 +208,7 @@ public:
          m_started = FALSE;
       }
 
-   virtual bool Start( int millisecs = -1 )
+   virtual bool Start( int millisecs = -1, bool WXUNUSED(one_shot) = FALSE )
       { m_started = TRUE; return wxTimer::Start(millisecs, FALSE); }
 
    virtual void Notify()
@@ -229,7 +229,7 @@ public:
          m_DupMan = dupman;
       }
    void Disconnect(void) { m_DupMan = NULL; }
-   void OnTerminate(int WXUNUSED(pid), int WXUNUSED(status)) const
+   virtual void OnTerminate(int WXUNUSED(pid), int WXUNUSED(status))
       {
          if(m_DupMan)
          {
