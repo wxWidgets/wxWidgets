@@ -54,7 +54,7 @@
     #include "wx/metafile.h"
 #endif // Windows
 
-#if defined(__WXGTK__) || defined(__WXMOTIF__)
+#if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__)
     #include "mondrian.xpm"
 
     #include "dnd_copy.xpm"
