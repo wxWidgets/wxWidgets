@@ -443,7 +443,7 @@ void wxDbTable::setCbValueForColumn(int columnIndex)
                 colDefs[columnIndex].CbValue = SQL_NULL_DATA;
             else
                 if (colDefs[columnIndex].SqlCtype == SQL_C_CHAR)
-                    colDefs[columnIndex].CbValue = SQL_LEN_DATA_AT_EXEC(0);
+                    colDefs[columnIndex].CbValue = SQL_NTS;
                 else
                     colDefs[columnIndex].CbValue = SQL_LEN_DATA_AT_EXEC(colDefs[columnIndex].SzDataObj);
             break;
