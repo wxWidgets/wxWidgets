@@ -26251,7 +26251,7 @@ echo "${ECHO_T}none" >&6
 
         TOOLKIT=MAC
                 GUIDIST=MACX_DIST
-                                        WX_FLAVOUR="carbon${WX_FLAVOUR:+_$WX_FLAVOUR}"
+                        WXBASEPORT="_carbon"
     fi
 
     if test "$wxUSE_COCOA" = 1; then
@@ -27593,7 +27593,7 @@ if test "$cross_compiling" = "yes"; then
     TOOLCHAIN_FULLNAME="${host_alias}-$TOOLCHAIN_FULLNAME"
 fi
 
-WX_LIBRARY_BASENAME_NOGUI="wx_base${lib_unicode_suffix}${lib_debug_suffix}${WX_LIB_FLAVOUR}"
+WX_LIBRARY_BASENAME_NOGUI="wx_base${WXBASEPORT}${lib_unicode_suffix}${lib_debug_suffix}${WX_LIB_FLAVOUR}"
 WX_LIBRARY_BASENAME_GUI="wx_${TOOLKIT_DIR}${TOOLKIT_VERSION}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}${WX_LIB_FLAVOUR}"
 
 
