@@ -17,7 +17,9 @@ COMPAT_TARGETS = ../../src/wxWindows.dsp
 AUTOCONF_ALL = \
 	../../Makefile.in \
 	../../contrib/samples/animate/Makefile.in \
+	../../contrib/samples/deprecated/proplist/Makefile.in \
 	../../contrib/samples/deprecated/resource/Makefile.in \
+	../../contrib/samples/deprecated/treelay/Makefile.in \
 	../../contrib/samples/fl/Makefile.in \
 	../../contrib/samples/gizmos/dynsash/Makefile.in \
 	../../contrib/samples/gizmos/dynsash_switch/Makefile.in \
@@ -50,7 +52,6 @@ AUTOCONF_ALL = \
 	../../demos/fractal/Makefile.in \
 	../../demos/life/Makefile.in \
 	../../demos/poem/Makefile.in \
-	../../samples/Makefile.in \
 	../../samples/access/Makefile.in \
 	../../samples/artprov/Makefile.in \
 	../../samples/calendar/Makefile.in \
@@ -149,7 +150,9 @@ BORLAND_ALL = \
 	../../contrib/build/svg/makefile.bcc \
 	../../contrib/build/xrc/makefile.bcc \
 	../../contrib/samples/animate/makefile.bcc \
+	../../contrib/samples/deprecated/proplist/makefile.bcc \
 	../../contrib/samples/deprecated/resource/makefile.bcc \
+	../../contrib/samples/deprecated/treelay/makefile.bcc \
 	../../contrib/samples/fl/makefile.bcc \
 	../../contrib/samples/gizmos/dynsash/makefile.bcc \
 	../../contrib/samples/gizmos/dynsash_switch/makefile.bcc \
@@ -271,7 +274,9 @@ MINGW_ALL = \
 	../../contrib/build/svg/makefile.gcc \
 	../../contrib/build/xrc/makefile.gcc \
 	../../contrib/samples/animate/makefile.gcc \
+	../../contrib/samples/deprecated/proplist/makefile.gcc \
 	../../contrib/samples/deprecated/resource/makefile.gcc \
+	../../contrib/samples/deprecated/treelay/makefile.gcc \
 	../../contrib/samples/fl/makefile.gcc \
 	../../contrib/samples/gizmos/dynsash/makefile.gcc \
 	../../contrib/samples/gizmos/dynsash_switch/makefile.gcc \
@@ -393,7 +398,9 @@ MSVC_ALL = \
 	../../contrib/build/svg/makefile.vc \
 	../../contrib/build/xrc/makefile.vc \
 	../../contrib/samples/animate/makefile.vc \
+	../../contrib/samples/deprecated/proplist/makefile.vc \
 	../../contrib/samples/deprecated/resource/makefile.vc \
+	../../contrib/samples/deprecated/treelay/makefile.vc \
 	../../contrib/samples/fl/makefile.vc \
 	../../contrib/samples/gizmos/dynsash/makefile.vc \
 	../../contrib/samples/gizmos/dynsash_switch/makefile.vc \
@@ -515,7 +522,9 @@ MSVC6PRJ_ALL = \
 	../../contrib/build/svg/svg.dsw \
 	../../contrib/build/xrc/xrc.dsw \
 	../../contrib/samples/animate/anitest.dsw \
+	../../contrib/samples/deprecated/proplist/proplist.dsw \
 	../../contrib/samples/deprecated/resource/resource.dsw \
+	../../contrib/samples/deprecated/treelay/treelay.dsw \
 	../../contrib/samples/fl/fl.dsw \
 	../../contrib/samples/gizmos/dynsash/dynsash.dsw \
 	../../contrib/samples/gizmos/dynsash_switch/dynsash_switch.dsw \
@@ -634,7 +643,9 @@ WATCOM_ALL = \
 	../../contrib/build/svg/makefile.wat \
 	../../contrib/build/xrc/makefile.wat \
 	../../contrib/samples/animate/makefile.wat \
+	../../contrib/samples/deprecated/proplist/makefile.wat \
 	../../contrib/samples/deprecated/resource/makefile.wat \
+	../../contrib/samples/deprecated/treelay/makefile.wat \
 	../../contrib/samples/fl/makefile.wat \
 	../../contrib/samples/gizmos/dynsash/makefile.wat \
 	../../contrib/samples/gizmos/dynsash_switch/makefile.wat \
@@ -758,7 +769,9 @@ clean:
 	rm -f $(COMPAT_TARGETS)
 	rm -f ../../Makefile.in
 	rm -f ../../contrib/samples/animate/Makefile.in
+	rm -f ../../contrib/samples/deprecated/proplist/Makefile.in
 	rm -f ../../contrib/samples/deprecated/resource/Makefile.in
+	rm -f ../../contrib/samples/deprecated/treelay/Makefile.in
 	rm -f ../../contrib/samples/fl/Makefile.in
 	rm -f ../../contrib/samples/gizmos/dynsash/Makefile.in
 	rm -f ../../contrib/samples/gizmos/dynsash_switch/Makefile.in
@@ -791,7 +804,6 @@ clean:
 	rm -f ../../demos/fractal/Makefile.in
 	rm -f ../../demos/life/Makefile.in
 	rm -f ../../demos/poem/Makefile.in
-	rm -f ../../samples/Makefile.in
 	rm -f ../../samples/access/Makefile.in
 	rm -f ../../samples/artprov/Makefile.in
 	rm -f ../../samples/calendar/Makefile.in
@@ -889,7 +901,9 @@ clean:
 	rm -f ../../contrib/build/svg/makefile.bcc
 	rm -f ../../contrib/build/xrc/makefile.bcc
 	rm -f ../../contrib/samples/animate/makefile.bcc
+	rm -f ../../contrib/samples/deprecated/proplist/makefile.bcc
 	rm -f ../../contrib/samples/deprecated/resource/makefile.bcc
+	rm -f ../../contrib/samples/deprecated/treelay/makefile.bcc
 	rm -f ../../contrib/samples/fl/makefile.bcc
 	rm -f ../../contrib/samples/gizmos/dynsash/makefile.bcc
 	rm -f ../../contrib/samples/gizmos/dynsash_switch/makefile.bcc
@@ -1010,7 +1024,9 @@ clean:
 	rm -f ../../contrib/build/svg/makefile.gcc
 	rm -f ../../contrib/build/xrc/makefile.gcc
 	rm -f ../../contrib/samples/animate/makefile.gcc
+	rm -f ../../contrib/samples/deprecated/proplist/makefile.gcc
 	rm -f ../../contrib/samples/deprecated/resource/makefile.gcc
+	rm -f ../../contrib/samples/deprecated/treelay/makefile.gcc
 	rm -f ../../contrib/samples/fl/makefile.gcc
 	rm -f ../../contrib/samples/gizmos/dynsash/makefile.gcc
 	rm -f ../../contrib/samples/gizmos/dynsash_switch/makefile.gcc
@@ -1131,7 +1147,9 @@ clean:
 	rm -f ../../contrib/build/svg/makefile.vc
 	rm -f ../../contrib/build/xrc/makefile.vc
 	rm -f ../../contrib/samples/animate/makefile.vc
+	rm -f ../../contrib/samples/deprecated/proplist/makefile.vc
 	rm -f ../../contrib/samples/deprecated/resource/makefile.vc
+	rm -f ../../contrib/samples/deprecated/treelay/makefile.vc
 	rm -f ../../contrib/samples/fl/makefile.vc
 	rm -f ../../contrib/samples/gizmos/dynsash/makefile.vc
 	rm -f ../../contrib/samples/gizmos/dynsash_switch/makefile.vc
@@ -1252,7 +1270,9 @@ clean:
 	rm -f ../../contrib/build/svg/svg.dsw
 	rm -f ../../contrib/build/xrc/xrc.dsw
 	rm -f ../../contrib/samples/animate/anitest.dsw
+	rm -f ../../contrib/samples/deprecated/proplist/proplist.dsw
 	rm -f ../../contrib/samples/deprecated/resource/resource.dsw
+	rm -f ../../contrib/samples/deprecated/treelay/treelay.dsw
 	rm -f ../../contrib/samples/fl/fl.dsw
 	rm -f ../../contrib/samples/gizmos/dynsash/dynsash.dsw
 	rm -f ../../contrib/samples/gizmos/dynsash_switch/dynsash_switch.dsw
@@ -1370,7 +1390,9 @@ clean:
 	rm -f ../../contrib/build/svg/makefile.wat
 	rm -f ../../contrib/build/xrc/makefile.wat
 	rm -f ../../contrib/samples/animate/makefile.wat
+	rm -f ../../contrib/samples/deprecated/proplist/makefile.wat
 	rm -f ../../contrib/samples/deprecated/resource/makefile.wat
+	rm -f ../../contrib/samples/deprecated/treelay/makefile.wat
 	rm -f ../../contrib/samples/fl/makefile.wat
 	rm -f ../../contrib/samples/gizmos/dynsash/makefile.wat
 	rm -f ../../contrib/samples/gizmos/dynsash_switch/makefile.wat
@@ -1745,6 +1767,26 @@ Makefile: regenMakefile.py
 	touch $@
 
 
+../../contrib/samples/deprecated/proplist/Makefile.in: $(SDEPS) ../../contrib/samples/deprecated/proplist/proplist.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DWXTOPDIR=../../../../ -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../contrib/samples/deprecated/proplist/proplist.bkl
+	touch $@
+../../contrib/samples/deprecated/proplist/makefile.bcc: $(SDEPS) ../../contrib/samples/deprecated/proplist/proplist.bkl
+	$(BAKEFILE) -fborland -o$@  -DWXTOPDIR=../../../../ -DOPTIONS_FILE=../../../../build/msw/config.bcc -DWRITE_OPTIONS_FILE=0 ../../contrib/samples/deprecated/proplist/proplist.bkl
+	touch $@
+../../contrib/samples/deprecated/proplist/makefile.vc: $(SDEPS) ../../contrib/samples/deprecated/proplist/proplist.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DWXTOPDIR=../../../../ -DOPTIONS_FILE=../../../../build/msw/config.vc -DWRITE_OPTIONS_FILE=0 ../../contrib/samples/deprecated/proplist/proplist.bkl
+	touch $@
+../../contrib/samples/deprecated/proplist/makefile.gcc: $(SDEPS) ../../contrib/samples/deprecated/proplist/proplist.bkl
+	$(BAKEFILE) -fmingw -o$@  -DWXTOPDIR=../../../../ -DOPTIONS_FILE=../../../../build/msw/config.gcc -DWRITE_OPTIONS_FILE=0 ../../contrib/samples/deprecated/proplist/proplist.bkl
+	touch $@
+../../contrib/samples/deprecated/proplist/makefile.wat: $(SDEPS) ../../contrib/samples/deprecated/proplist/proplist.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DWXTOPDIR=../../../../ -DOPTIONS_FILE=../../../../build/msw/config.wat -DWRITE_OPTIONS_FILE=0 ../../contrib/samples/deprecated/proplist/proplist.bkl
+	touch $@
+../../contrib/samples/deprecated/proplist/proplist.dsw: $(SDEPS) ../../contrib/samples/deprecated/proplist/proplist.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  -DWXTOPDIR=../../../../ $(DSWFLAGS) ../../contrib/samples/deprecated/proplist/proplist.bkl
+	touch $@
+
+
 ../../contrib/samples/deprecated/resource/Makefile.in: $(SDEPS) ../../contrib/samples/deprecated/resource/resource.bkl
 	$(BAKEFILE) -fautoconf -o$@  -DWXTOPDIR=../../../../ -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../contrib/samples/deprecated/resource/resource.bkl
 	touch $@
@@ -1762,6 +1804,26 @@ Makefile: regenMakefile.py
 	touch $@
 ../../contrib/samples/deprecated/resource/resource.dsw: $(SDEPS) ../../contrib/samples/deprecated/resource/resource.bkl
 	$(BAKEFILE) -fmsvc6prj -o$@  -DWXTOPDIR=../../../../ $(DSWFLAGS) ../../contrib/samples/deprecated/resource/resource.bkl
+	touch $@
+
+
+../../contrib/samples/deprecated/treelay/Makefile.in: $(SDEPS) ../../contrib/samples/deprecated/treelay/treelay.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DWXTOPDIR=../../../../ -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../contrib/samples/deprecated/treelay/treelay.bkl
+	touch $@
+../../contrib/samples/deprecated/treelay/makefile.bcc: $(SDEPS) ../../contrib/samples/deprecated/treelay/treelay.bkl
+	$(BAKEFILE) -fborland -o$@  -DWXTOPDIR=../../../../ -DOPTIONS_FILE=../../../../build/msw/config.bcc -DWRITE_OPTIONS_FILE=0 ../../contrib/samples/deprecated/treelay/treelay.bkl
+	touch $@
+../../contrib/samples/deprecated/treelay/makefile.vc: $(SDEPS) ../../contrib/samples/deprecated/treelay/treelay.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DWXTOPDIR=../../../../ -DOPTIONS_FILE=../../../../build/msw/config.vc -DWRITE_OPTIONS_FILE=0 ../../contrib/samples/deprecated/treelay/treelay.bkl
+	touch $@
+../../contrib/samples/deprecated/treelay/makefile.gcc: $(SDEPS) ../../contrib/samples/deprecated/treelay/treelay.bkl
+	$(BAKEFILE) -fmingw -o$@  -DWXTOPDIR=../../../../ -DOPTIONS_FILE=../../../../build/msw/config.gcc -DWRITE_OPTIONS_FILE=0 ../../contrib/samples/deprecated/treelay/treelay.bkl
+	touch $@
+../../contrib/samples/deprecated/treelay/makefile.wat: $(SDEPS) ../../contrib/samples/deprecated/treelay/treelay.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DWXTOPDIR=../../../../ -DOPTIONS_FILE=../../../../build/msw/config.wat -DWRITE_OPTIONS_FILE=0 ../../contrib/samples/deprecated/treelay/treelay.bkl
+	touch $@
+../../contrib/samples/deprecated/treelay/treelay.dsw: $(SDEPS) ../../contrib/samples/deprecated/treelay/treelay.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  -DWXTOPDIR=../../../../ $(DSWFLAGS) ../../contrib/samples/deprecated/treelay/treelay.bkl
 	touch $@
 
 
@@ -3499,9 +3561,6 @@ Makefile: regenMakefile.py
 	touch $@
 
 
-../../samples/Makefile.in: ../../samples/samples.bkl
-	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../samples/samples.bkl
-	touch $@
 ../../samples/makefile.bcc: ../../samples/samples.bkl
 	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../build/msw/config.bcc -DWRITE_OPTIONS_FILE=0 ../../samples/samples.bkl
 	touch $@
