@@ -594,6 +594,7 @@ font.cpp	Cocoa
 fontutil.cpp	Cocoa
 frame.mm	Cocoa
 gdiobj.cpp	Cocoa
+gsockcocoa.c	Cocoa
 icon.cpp	Cocoa
 listbox.mm	Cocoa
 main.cpp	Cocoa
