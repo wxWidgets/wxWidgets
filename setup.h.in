@@ -1104,6 +1104,18 @@
 #undef HAVE_XIM
 
 
+/* -------------------------------------------------------------------------
+   Win32 adjustments section
+   ------------------------------------------------------------------------- */
+
+#ifdef __WIN32__
+
+/* we need to define wxUSE_XPM_IN_MSW for MSW compilation for compatibility
+   with wx/msw/setup.h */
+#define wxUSE_XPM_IN_MSW wxUSE_XPM
+
+#endif /* __WIN32__ */
+
 /* --------------------------------------------------------*
  *  This stuff is static, it doesn't get modified directly
  *  by configure.
