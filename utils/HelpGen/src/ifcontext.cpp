@@ -35,11 +35,12 @@
 
 size_t spInterFileContext::GetFileNo( const string& fname )
 {
-	for( size_t i = 0; i != mFiles.size(); ++i )
+    size_t i;
+	for ( i = 0; i != mFiles.size(); ++i )
+		if ( fname == mFiles[i] )
+            return i;
 
-		if ( fname == mFiles[i] ) return i;
-
-	wxASSERT(0); // DBG::
+    wxFAIL_MSG("File not found in array in function spInterFileContext::GetFileNo()");
 	return 0;
 }
 
@@ -119,8 +120,8 @@ void spInterFileContext::DoAppendSourceFragment( string& source,
 
 		if ( cur >= pos + len ) // check if we've overstepped the current source-fragment
 		{
-			wxASSERT(0); // DBG:: with current imp. this should not happen
-			
+//			wxASSERT(0); // DBG:: with current imp. this should not happen
+            wxFAIL_MSG("Overstepped the current source fragment in function\nspInterFileContext::DoAppendSourceFragment()");			
 			cur = pos + len; break;
 		}
 	}

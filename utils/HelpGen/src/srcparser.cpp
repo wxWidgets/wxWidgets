@@ -346,7 +346,7 @@ void spContext::RemoveThisContext()
         mpParent->RemoveChild( this );
     else
         // context should have a parent
-        wxASSERT(0);
+        wxFAIL_MSG("Context should have a parent");
 }
 
 spContext* spContext::GetOutterContext()
