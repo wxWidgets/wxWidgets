@@ -259,6 +259,10 @@ size_t wxGetMultipleChoices(wxArrayInt& selections,
                             int WXUNUSED(width), int WXUNUSED(height))
 {
     wxMultiChoiceDialog dialog(parent, message, caption, n, choices);
+
+    if ( !selections.IsEmpty() )
+        dialog.SetSelections(selections);
+
     if ( dialog.ShowModal() == wxID_OK )
         selections = dialog.GetSelections();
     else
