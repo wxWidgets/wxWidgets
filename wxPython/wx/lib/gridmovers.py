@@ -11,7 +11,7 @@
 #----------------------------------------------------------------------------
 
 from wxPython.wx import *
-from wxPython.grid import wxGridPtr
+from wxPython.grid import wxGrid
 
 #----------------------------------------------------------------------------
 # event class and macors
@@ -56,7 +56,7 @@ class wxGridRowMoveEvent(wxPyCommandEvent):
 
 
 #----------------------------------------------------------------------------
-# graft new methods into the wxGridPtr class
+# graft new methods into the wxGrid class
 
 def _ColToRect(self,col):
     if self.GetNumberRows() > 0:
@@ -70,7 +70,7 @@ def _ColToRect(self,col):
     rect.y = self.GetGridColLabelWindow().GetPosition()[1]
     return rect
 
-wxGridPtr.ColToRect = _ColToRect
+wxGrid.ColToRect = _ColToRect
 
 
 def _RowToRect(self,row):
@@ -85,7 +85,7 @@ def _RowToRect(self,row):
     rect.x = self.GetGridRowLabelWindow().GetPosition()[0]
     return rect
 
-wxGridPtr.RowToRect = _RowToRect
+wxGrid.RowToRect = _RowToRect
 
 
 #----------------------------------------------------------------------------

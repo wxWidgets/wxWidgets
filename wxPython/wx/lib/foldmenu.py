@@ -60,9 +60,8 @@ class FoldOutMenu(wx.BitmapButton):
     def __init__(self,parent,id,bitmap,pos = wx.DefaultPosition,
                  size = wx.DefaultSize, style = wx.BU_AUTODRAW,
                  validator = wx.DefaultValidator, name = "button"):
-        wx.BitmapButton.__init__(self,parent,id,bitmap,pos = wx.DefaultPosition,
-                                 size = wx.DefaultSize, style = wx.BU_AUTODRAW,
-                                 validator = wx.DefaultValidator, name = "button")
+        wx.BitmapButton.__init__(self, parent, id, bitmap, pos, size, style,
+                                 validator, name)
         self.parent=parent
         wx.EVT_BUTTON(self.parent, self.GetId(), self.click)
         self.popwin=FoldOutWindow(self.parent)

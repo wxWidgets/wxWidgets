@@ -36,7 +36,7 @@ wxPyError_ID_TEXT10 = 10019
 wxPyError_ID_TEXT11 = 10020
 wxPyError_ID_TEXT12 = 10021
 
-def populate_wxPyNonFatalErrorDialogWithTraceback( parent, call_fit = true, set_sizer = true ):
+def populate_wxPyNonFatalErrorDialogWithTraceback( parent, call_fit = True, set_sizer = True ):
     item0 = wxBoxSizer( wxVERTICAL )
 
     item1 = wxBoxSizer( wxHORIZONTAL )
@@ -163,10 +163,10 @@ def populate_wxPyNonFatalErrorDialogWithTraceback( parent, call_fit = true, set_
 
     item0.AddSizer( item19, 0, wxADJUST_MINSIZE|wxALIGN_CENTRE|wxALL, 5 )
 
-    if set_sizer == true:
-        parent.SetAutoLayout( true )
+    if set_sizer == True:
+        parent.SetAutoLayout( True )
         parent.SetSizer( item0 )
-        if call_fit == true:
+        if call_fit == True:
             item0.Fit( parent )
             item0.SetSizeHints( parent )
 
@@ -178,7 +178,7 @@ wxPyError_ID_EXTRAINFORMATION = 10024
 wxPyError_ID_TEXT13 = 10025
 wxPyError_ID_TEXT14 = 10026
 
-def populate_wxPyNonFatalErrorDialog( parent, call_fit = true, set_sizer = true ):
+def populate_wxPyNonFatalErrorDialog( parent, call_fit = True, set_sizer = True ):
     item0 = wxBoxSizer( wxVERTICAL )
 
     item1 = wxBoxSizer( wxHORIZONTAL )
@@ -327,17 +327,17 @@ def populate_wxPyNonFatalErrorDialog( parent, call_fit = true, set_sizer = true 
 
     item0.AddSizer( item24, 0, wxADJUST_MINSIZE|wxALIGN_CENTRE|wxALL, 5 )
 
-    if set_sizer == true:
-        parent.SetAutoLayout( true )
+    if set_sizer == True:
+        parent.SetAutoLayout( True )
         parent.SetSizer( item0 )
-        if call_fit == true:
+        if call_fit == True:
             item0.Fit( parent )
             item0.SetSizeHints( parent )
 
     return item0
 
 
-def populate_wxPyFatalErrorDialogWithTraceback( parent, call_fit = true, set_sizer = true ):
+def populate_wxPyFatalErrorDialogWithTraceback( parent, call_fit = True, set_sizer = True ):
     item0 = wxBoxSizer( wxVERTICAL )
 
     item1 = wxBoxSizer( wxHORIZONTAL )
@@ -454,17 +454,17 @@ def populate_wxPyFatalErrorDialogWithTraceback( parent, call_fit = true, set_siz
 
     item0.AddSizer( item19, 0, wxADJUST_MINSIZE|wxALIGN_CENTRE|wxALL, 5 )
 
-    if set_sizer == true:
-        parent.SetAutoLayout( true )
+    if set_sizer == True:
+        parent.SetAutoLayout( True )
         parent.SetSizer( item0 )
-        if call_fit == true:
+        if call_fit == True:
             item0.Fit( parent )
             item0.SetSizeHints( parent )
 
     return item0
 
 
-def populate_wxPyFatalErrorDialog( parent, call_fit = true, set_sizer = true ):
+def populate_wxPyFatalErrorDialog( parent, call_fit = True, set_sizer = True ):
     item0 = wxBoxSizer( wxVERTICAL )
 
     item1 = wxBoxSizer( wxHORIZONTAL )
@@ -599,10 +599,10 @@ def populate_wxPyFatalErrorDialog( parent, call_fit = true, set_sizer = true ):
 
     item0.AddSizer( item23, 0, wxADJUST_MINSIZE|wxALIGN_CENTRE|wxALL, 5 )
 
-    if set_sizer == true:
-        parent.SetAutoLayout( true )
+    if set_sizer == True:
+        parent.SetAutoLayout( True )
         parent.SetSizer( item0 )
-        if call_fit == true:
+        if call_fit == True:
             item0.Fit( parent )
             item0.SetSizeHints( parent )
 
@@ -610,7 +610,7 @@ def populate_wxPyFatalErrorDialog( parent, call_fit = true, set_sizer = true ):
 
 wxPyError_ID_HTML = 10027
 
-def populate_wxPyNonFatalError( parent, call_fit = true, set_sizer = true ):
+def populate_wxPyNonFatalError( parent, call_fit = True, set_sizer = True ):
     item0 = wxBoxSizer( wxVERTICAL )
 
     item1 = wxBoxSizer( wxHORIZONTAL )
@@ -686,17 +686,17 @@ def populate_wxPyNonFatalError( parent, call_fit = true, set_sizer = true ):
 
     item0.AddSizer( item15, 1, wxADJUST_MINSIZE|wxALIGN_CENTRE|wxALL, 5 )
 
-    if set_sizer == true:
-        parent.SetAutoLayout( true )
+    if set_sizer == True:
+        parent.SetAutoLayout( True )
         parent.SetSizer( item0 )
-        if call_fit == true:
+        if call_fit == True:
             item0.Fit( parent )
             item0.SetSizeHints( parent )
 
     return item0
 
 
-def populate_wxPyFatalError( parent, call_fit = true, set_sizer = true ):
+def populate_wxPyFatalError( parent, call_fit = True, set_sizer = True ):
     item0 = wxBoxSizer( wxVERTICAL )
 
     item1 = wxBoxSizer( wxHORIZONTAL )
@@ -764,10 +764,10 @@ def populate_wxPyFatalError( parent, call_fit = true, set_sizer = true ):
 
     item0.AddSizer( item15, 1, wxADJUST_MINSIZE|wxALIGN_CENTRE|wxALL, 5 )
 
-    if set_sizer == true:
-        parent.SetAutoLayout( true )
+    if set_sizer == True:
+        parent.SetAutoLayout( True )
         parent.SetSizer( item0 )
-        if call_fit == true:
+        if call_fit == True:
             item0.Fit( parent )
             item0.SetSizeHints( parent )
 

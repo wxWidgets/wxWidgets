@@ -352,7 +352,7 @@ MININT = -maxint-1
 
 from wxPython.tools.dbg import Logger
 from wxPython.lib.maskededit import wxMaskedEditMixin, wxMaskedTextCtrl, Field
-import wxPython.utils
+
 dbg = Logger()
 dbg(enable=0)
 

@@ -282,8 +282,8 @@ class wxPyNonFatalErrorDialogWithTraceback(wxDialog):
     exitjustreturns = False # really only for testing!
 
     def __init__(self, parent, id,
-                 pos=wxPyDefaultPosition,
-                 size=wxPyDefaultSize,
+                 pos=wxDefaultPosition,
+                 size=wxDefaultSize,
                  style=wxDEFAULT_DIALOG_STYLE,
                  programname="Python program",
                  version="?",

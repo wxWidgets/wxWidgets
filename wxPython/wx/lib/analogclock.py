@@ -105,7 +105,7 @@ class AnalogClockWindow(wxWindow):
 
     def DrawHands(self, drawDC):
         # Start by drawing the face bitmap
-        drawDC.DrawBitmap(self.faceBitmap,0,0)
+        drawDC.DrawBitmap(self.faceBitmap, (0,0))
 
         currentTime = time.localtime(time.time())
         hour, minutes, seconds = currentTime[3:6]
@@ -125,15 +125,15 @@ class AnalogClockWindow(wxWindow):
 
         # Draw the hour hand...
         drawDC.SetPen(wxPen(self.GetForegroundColour(), 5, wxSOLID))
-        drawDC.DrawLine(centerX, centerY, hourX, hourY)
+        drawDC.DrawLine((centerX, centerY), (hourX, hourY))
 
         # Draw the minutes hand...
         drawDC.SetPen(wxPen(self.GetForegroundColour(), 3, wxSOLID))
-        drawDC.DrawLine(centerX, centerY, minutesX, minutesY)
+        drawDC.DrawLine((centerX, centerY), (minutesX, minutesY))
 
         # Draw the seconds hand...
         drawDC.SetPen(wxPen(self.GetForegroundColour(), 1, wxSOLID))
-        drawDC.DrawLine(centerX, centerY, secondsX, secondsY)
+        drawDC.DrawLine((centerX, centerY), (secondsX, secondsY))
 
 
     # Draw the specified set of line marks inside the clock face for the
@@ -164,9 +164,9 @@ class AnalogClockWindow(wxWindow):
             drawDC.SetPen(wxPen(self.tickMarksPenC, 1, wxSOLID))
             if self.tickMarkStyle != self.TICKS_NONE:
                 if self.tickMarkStyle == self.TICKS_CIRCLE:
-                    drawDC.DrawEllipse(scaledX - 2, scaledY, markSize, markSize)
+                    drawDC.DrawEllipse((scaledX - 2, scaledY), (markSize, markSize))
                 else:
-                    drawDC.DrawRectangle(scaledX - 3, scaledY, markSize, markSize)
+                    drawDC.DrawRectangle((scaledX - 3, scaledY), (markSize, markSize))
 
 
     def point(self, tick, range, radius):

@@ -243,7 +243,7 @@ import string, copy
 from wxPython.wx import *
 from wxPython.tools.dbg import Logger
 from wxPython.lib.maskededit import wxMaskedTextCtrl, Field
-import wxPython.utils
+
 dbg = Logger()
 dbg(enable=0)
 
@@ -536,9 +536,9 @@ class wxTimeCtrl(wxMaskedTextCtrl):
                 raise ValueError('cannot convert string "%s" to valid time' % value)
 
         else:
-            if isinstance(value, wxPython.utils.wxDateTimePtr):
+            if isinstance(value, wxDateTime):
                 hour, minute, second = value.GetHour(), value.GetMinute(), value.GetSecond()
-            elif isinstance(value, wxPython.utils.wxTimeSpanPtr):
+            elif isinstance(value, wxTimeSpan):
                 totalseconds = value.GetSeconds()
                 hour = totalseconds / 3600
                 minute = totalseconds / 60 - (hour * 60)
