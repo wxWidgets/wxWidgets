@@ -1365,6 +1365,7 @@ static gint gtk_window_key_release_callback( GtkWidget *widget,
     event.m_rightDown = (gdk_event->state & GDK_BUTTON3_MASK);                \
     if (event.GetEventType()==wxEVT_MOUSEWHEEL)                               \
     {                                                                         \
+       event.m_linesPerAction = 3;                                            \
        if (((GdkEventButton*)gdk_event)->button == 4)                         \
            event.m_wheelRotation = 120;                                       \
        else if (((GdkEventButton*)gdk_event)->button == 5)                    \
@@ -1851,6 +1852,7 @@ static gint gtk_window_wheel_callback (GtkWidget * widget,
     event.m_leftDown = (gdk_event->state & GDK_BUTTON1_MASK);
     event.m_middleDown = (gdk_event->state & GDK_BUTTON2_MASK);
     event.m_rightDown = (gdk_event->state & GDK_BUTTON3_MASK);
+    event.m_linesPerAction = 3;
     if (gdk_event->direction == GDK_SCROLL_UP)
         event.m_wheelRotation = 120;
     else
