@@ -31,7 +31,7 @@
 
 #include <string.h>
 
-#if wxUSE_XTI
+#if wxUSE_EXTENDED_RTTI
 
 // ----------------------------------------------------------------------------
 // Enum Support

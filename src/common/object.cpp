@@ -51,7 +51,7 @@
     #pragma optimize("", off)
 #endif
 
-#if wxUSE_XTI
+#if wxUSE_EXTENDED_RTTI
 const wxClassInfo* wxObject::sm_classParentswxObject[] = { NULL } ; 
  wxObject* wxVariantToObjectConverterwxObject ( const wxxVariant &data ) 
 { return data.Get<wxObject*>() ; } 
@@ -188,7 +188,7 @@ wxClassInfo::~wxClassInfo()
             info = info->m_next;
         }
     }
-#if wxUSE_XTI
+#if wxUSE_EXTENDED_RTTI
 	Unregister( m_className ) ;
 #endif
 }
@@ -264,7 +264,7 @@ void wxClassInfo::InitializeClasses()
         }
     }
 
-#if wxUSE_XTI == 0
+#if wxUSE_EXTENDED_RTTI == 0
         // Set base pointers for each wxClassInfo
 
     for(info = sm_first; info; info = info->m_next)

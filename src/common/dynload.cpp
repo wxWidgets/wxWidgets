@@ -422,7 +422,7 @@ void wxPluginLibrary::UpdateClassInfo()
         }
     }
 
-#if wxUSE_XTI == 0
+#if wxUSE_EXTENDED_RTTI == 0
     for(info = m_after; info != m_before; info = info->m_next)
     {
         if( info->m_baseClassName1 )
