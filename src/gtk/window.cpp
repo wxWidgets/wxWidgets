@@ -126,6 +126,7 @@
 extern wxList wxPendingDelete;
 extern wxList wxTopLevelWindows;
 extern bool   g_blockEventsOnDrag;
+extern bool   g_blockEventsOnScroll;
 static bool   g_capturing = FALSE;
 
 // hack: we need something to pass to gtk_menu_popup, so we store the time of
@@ -322,6 +323,7 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
     if (!win->IsOwnGtkWindow( gdk_event->window )) return TRUE;
 
     if (g_blockEventsOnDrag) return TRUE;
+    if (g_blockEventsOnScroll) return TRUE;
 
     if (win->m_wxwindow)
     {
@@ -432,6 +434,7 @@ static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButto
     if (!win->IsOwnGtkWindow( gdk_event->window )) return TRUE;
 
     if (g_blockEventsOnDrag) return TRUE;
+    if (g_blockEventsOnScroll) return TRUE;
 
     if (!win->HasVMT()) return TRUE;
 
@@ -502,7 +505,8 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion
     if (!win->IsOwnGtkWindow( gdk_event->window )) return TRUE;
 
     if (g_blockEventsOnDrag) return TRUE;
-
+    if (g_blockEventsOnScroll) return TRUE;
+    
     if (!win->HasVMT()) return TRUE;
 
 /*
@@ -714,13 +718,20 @@ static void gtk_window_vscroll_callback( GtkWidget *WXUNUSED(widget), wxWindow *
     float line_step = win->m_vAdjust->step_increment;
     float page_step = win->m_vAdjust->page_increment;
 
-    if (fabs(win->m_vAdjust->value-win->m_vAdjust->lower) < 0.2) command = wxEVT_SCROLL_BOTTOM;
-    else if (fabs(win->m_vAdjust->value-win->m_vAdjust->upper) < 0.2) command = wxEVT_SCROLL_TOP;
-    else if (fabs(diff-line_step) < 0.2) command = wxEVT_SCROLL_LINEDOWN;
-    else if (fabs(diff+line_step) < 0.2) command = wxEVT_SCROLL_LINEUP;
-    else if (fabs(diff-page_step) < 0.2) command = wxEVT_SCROLL_PAGEDOWN;
-    else if (fabs(diff+page_step) < 0.2) command = wxEVT_SCROLL_PAGEUP;
-    else command = wxEVT_SCROLL_THUMBTRACK;
+    if (win->m_isScrolling)
+    {
+        command = wxEVT_SCROLL_THUMBTRACK;
+    }
+    else
+    {
+        if (fabs(win->m_vAdjust->value-win->m_vAdjust->lower) < 0.2) command = wxEVT_SCROLL_BOTTOM;
+        else if (fabs(win->m_vAdjust->value-win->m_vAdjust->upper) < 0.2) command = wxEVT_SCROLL_TOP;
+        else if (fabs(diff-line_step) < 0.2) command = wxEVT_SCROLL_LINEDOWN;
+        else if (fabs(diff+line_step) < 0.2) command = wxEVT_SCROLL_LINEUP;
+        else if (fabs(diff-page_step) < 0.2) command = wxEVT_SCROLL_PAGEDOWN;
+        else if (fabs(diff+page_step) < 0.2) command = wxEVT_SCROLL_PAGEUP;
+        else command = wxEVT_SCROLL_THUMBTRACK;
+    }
 
     int value = (int)(win->m_vAdjust->value+0.5);
 
@@ -754,13 +765,20 @@ static void gtk_window_hscroll_callback( GtkWidget *WXUNUSED(widget), wxWindow *
     float line_step = win->m_hAdjust->step_increment;
     float page_step = win->m_hAdjust->page_increment;
     
-    if (fabs(win->m_hAdjust->value-win->m_hAdjust->lower) < 0.2) command = wxEVT_SCROLL_BOTTOM;
-    else if (fabs(win->m_hAdjust->value-win->m_hAdjust->upper) < 0.2) command = wxEVT_SCROLL_TOP;
-    else if (fabs(diff-line_step) < 0.2) command = wxEVT_SCROLL_LINEDOWN;
-    else if (fabs(diff+line_step) < 0.2) command = wxEVT_SCROLL_LINEUP;
-    else if (fabs(diff-page_step) < 0.2) command = wxEVT_SCROLL_PAGEDOWN;
-    else if (fabs(diff+page_step) < 0.2) command = wxEVT_SCROLL_PAGEUP;
-    else command = wxEVT_SCROLL_THUMBTRACK;
+    if (win->m_isScrolling)
+    {
+        command = wxEVT_SCROLL_THUMBTRACK;
+    }
+    else
+    {
+        if (fabs(win->m_hAdjust->value-win->m_hAdjust->lower) < 0.2) command = wxEVT_SCROLL_BOTTOM;
+        else if (fabs(win->m_hAdjust->value-win->m_hAdjust->upper) < 0.2) command = wxEVT_SCROLL_TOP;
+        else if (fabs(diff-line_step) < 0.2) command = wxEVT_SCROLL_LINEDOWN;
+        else if (fabs(diff+line_step) < 0.2) command = wxEVT_SCROLL_LINEUP;
+        else if (fabs(diff-page_step) < 0.2) command = wxEVT_SCROLL_PAGEDOWN;
+        else if (fabs(diff+page_step) < 0.2) command = wxEVT_SCROLL_PAGEUP;
+        else command = wxEVT_SCROLL_THUMBTRACK;
+    }
 
     int value = (int)(win->m_hAdjust->value+0.5);
 
@@ -823,11 +841,14 @@ static void gtk_window_hscroll_change_callback( GtkWidget *WXUNUSED(widget), wxW
 // "button_press_event" from scrollbar
 //-----------------------------------------------------------------------------
 
-static gint gtk_scrollbar_button_press_callback( GtkRange *widget, GdkEventButton *gdk_event, wxWindow *win )
+static gint gtk_scrollbar_button_press_callback( GtkRange *WXUNUSED(widget), 
+                                                 GdkEventButton *WXUNUSED(gdk_event), 
+						 wxWindow *win )
 {
-    if (gdk_event->window != widget->slider) return FALSE;
-
+//    if (gdk_event->window != widget->slider) return FALSE;
+    
     win->m_isScrolling = TRUE;
+    g_blockEventsOnScroll = TRUE;
 
     return FALSE;
 }
@@ -836,9 +857,15 @@ static gint gtk_scrollbar_button_press_callback( GtkRange *widget, GdkEventButto
 // "button_release_event" from scrollbar
 //-----------------------------------------------------------------------------
 
-static gint gtk_scrollbar_button_release_callback( GtkRange *widget, GdkEventButton *gdk_event, wxWindow *win )
+static gint gtk_scrollbar_button_release_callback( GtkRange *widget, 
+                                                   GdkEventButton *WXUNUSED(gdk_event), 
+						   wxWindow *win )
 {
-    if (gdk_event->window != widget->slider) return FALSE;
+
+//  don't test here as we can reelase the mouse while being over
+//  a different window then the slider
+//
+//    if (gdk_event->window != widget->slider) return FALSE;
 
     GtkScrolledWindow *s_window = GTK_SCROLLED_WINDOW(win->m_widget);
 
@@ -848,6 +875,7 @@ static gint gtk_scrollbar_button_release_callback( GtkRange *widget, GdkEventBut
         gtk_signal_emit_by_name( GTK_OBJECT(win->m_vAdjust), "value_changed" );
 
     win->m_isScrolling = FALSE;
+    g_blockEventsOnScroll = FALSE;
 
     return FALSE;
 }
@@ -970,18 +998,6 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
 
     GtkScrolledWindow *s_window = GTK_SCROLLED_WINDOW(m_widget);
 
-    gtk_signal_connect( GTK_OBJECT(s_window->vscrollbar), "button_press_event",
-          (GtkSignalFunc)gtk_scrollbar_button_press_callback, (gpointer) this );
-
-    gtk_signal_connect( GTK_OBJECT(s_window->hscrollbar), "button_press_event",
-          (GtkSignalFunc)gtk_scrollbar_button_press_callback, (gpointer) this );
-
-    gtk_signal_connect( GTK_OBJECT(s_window->vscrollbar), "button_release_event",
-          (GtkSignalFunc)gtk_scrollbar_button_release_callback, (gpointer) this );
-
-    gtk_signal_connect( GTK_OBJECT(s_window->hscrollbar), "button_release_event",
-          (GtkSignalFunc)gtk_scrollbar_button_release_callback, (gpointer) this );
-
     GtkScrolledWindowClass *scroll_class = GTK_SCROLLED_WINDOW_CLASS( GTK_OBJECT(m_widget)->klass );
     scroll_class->scrollbar_spacing = 0;
 
@@ -992,16 +1008,6 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
 
     m_hAdjust = gtk_range_get_adjustment( GTK_RANGE(s_window->hscrollbar) );
     m_vAdjust = gtk_range_get_adjustment( GTK_RANGE(s_window->vscrollbar) );
-
-    gtk_signal_connect( GTK_OBJECT(m_hAdjust), "value_changed",
-          (GtkSignalFunc) gtk_window_hscroll_callback, (gpointer) this );
-    gtk_signal_connect( GTK_OBJECT(m_vAdjust), "value_changed",
-          (GtkSignalFunc) gtk_window_vscroll_callback, (gpointer) this );
-
-    gtk_signal_connect( GTK_OBJECT(m_hAdjust), "changed",
-          (GtkSignalFunc) gtk_window_hscroll_change_callback, (gpointer) this );
-    gtk_signal_connect(GTK_OBJECT(m_vAdjust), "changed",
-          (GtkSignalFunc) gtk_window_vscroll_change_callback, (gpointer) this );
 
     m_wxwindow = gtk_myfixed_new();
 
@@ -1050,6 +1056,36 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
     m_hAdjust->page_increment = 1.0;
     m_hAdjust->page_size = 5.0;
     gtk_signal_emit_by_name( GTK_OBJECT(m_hAdjust), "changed" );
+
+    // these handlers block mouse events to any window during scrolling
+    // such as motion events and prevent GTK and wxWindows from fighting
+    // over where the slider should be
+    
+    gtk_signal_connect( GTK_OBJECT(s_window->vscrollbar), "button_press_event",
+          (GtkSignalFunc)gtk_scrollbar_button_press_callback, (gpointer) this );
+
+    gtk_signal_connect( GTK_OBJECT(s_window->hscrollbar), "button_press_event",
+          (GtkSignalFunc)gtk_scrollbar_button_press_callback, (gpointer) this );
+
+    gtk_signal_connect( GTK_OBJECT(s_window->vscrollbar), "button_release_event",
+          (GtkSignalFunc)gtk_scrollbar_button_release_callback, (gpointer) this );
+
+    gtk_signal_connect( GTK_OBJECT(s_window->hscrollbar), "button_release_event",
+          (GtkSignalFunc)gtk_scrollbar_button_release_callback, (gpointer) this );
+	  
+    // these handers het notified when screen updates are required either when
+    // scrolling or when the window size (and therefore scrollbar configuration)
+    // has changed
+
+    gtk_signal_connect( GTK_OBJECT(m_hAdjust), "value_changed",
+          (GtkSignalFunc) gtk_window_hscroll_callback, (gpointer) this );
+    gtk_signal_connect( GTK_OBJECT(m_vAdjust), "value_changed",
+          (GtkSignalFunc) gtk_window_vscroll_callback, (gpointer) this );
+
+    gtk_signal_connect( GTK_OBJECT(m_hAdjust), "changed",
+          (GtkSignalFunc) gtk_window_hscroll_change_callback, (gpointer) this );
+    gtk_signal_connect(GTK_OBJECT(m_vAdjust), "changed",
+          (GtkSignalFunc) gtk_window_vscroll_change_callback, (gpointer) this );
 
     gtk_widget_show( m_wxwindow );
   

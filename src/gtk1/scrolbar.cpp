@@ -21,6 +21,7 @@
 //-----------------------------------------------------------------------------
 
 extern bool   g_blockEventsOnDrag;
+extern bool   g_blockEventsOnScroll;
 
 //-----------------------------------------------------------------------------
 // "value_changed"
@@ -39,13 +40,20 @@ static void gtk_scrollbar_callback( GtkWidget *WXUNUSED(widget), wxScrollBar *wi
   float line_step = win->m_adjust->step_increment;
   float page_step = win->m_adjust->page_increment;
   
-  if (fabs(win->m_adjust->value-win->m_adjust->lower) < 0.2) command = wxEVT_SCROLL_BOTTOM;
-  else if (fabs(win->m_adjust->value-win->m_adjust->upper) < 0.2) command = wxEVT_SCROLL_TOP;
-  else if (fabs(diff-line_step) < 0.2) command = wxEVT_SCROLL_LINEDOWN;
-  else if (fabs(diff+line_step) < 0.2) command = wxEVT_SCROLL_LINEUP;
-  else if (fabs(diff-page_step) < 0.2) command = wxEVT_SCROLL_PAGEDOWN;
-  else if (fabs(diff+page_step) < 0.2) command = wxEVT_SCROLL_PAGEUP;
-  else command = wxEVT_SCROLL_THUMBTRACK;
+  if (win->m_isScrolling)
+  {
+      command = wxEVT_SCROLL_THUMBTRACK;
+  }
+  else
+  {
+      if (fabs(win->m_adjust->value-win->m_adjust->lower) < 0.2) command = wxEVT_SCROLL_BOTTOM;
+      else if (fabs(win->m_adjust->value-win->m_adjust->upper) < 0.2) command = wxEVT_SCROLL_TOP;
+      else if (fabs(diff-line_step) < 0.2) command = wxEVT_SCROLL_LINEDOWN;
+      else if (fabs(diff+line_step) < 0.2) command = wxEVT_SCROLL_LINEUP;
+      else if (fabs(diff-page_step) < 0.2) command = wxEVT_SCROLL_PAGEDOWN;
+      else if (fabs(diff+page_step) < 0.2) command = wxEVT_SCROLL_PAGEUP;
+      else command = wxEVT_SCROLL_THUMBTRACK;
+  }
 
   int value = (int)(win->m_adjust->value+0.5);
       
@@ -67,11 +75,12 @@ static void gtk_scrollbar_callback( GtkWidget *WXUNUSED(widget), wxScrollBar *wi
 // "button_press_event" from slider
 //-----------------------------------------------------------------------------
 
-static gint gtk_scrollbar_button_press_callback( GtkRange *widget, GdkEventButton *gdk_event, wxScrollBar *win )
+static gint gtk_scrollbar_button_press_callback( GtkRange *WXUNUSED(widget), 
+                                                 GdkEventButton *WXUNUSED(gdk_event), 
+						 wxScrollBar *win )
 {
-  if (gdk_event->window != widget->slider) return FALSE;
-    
   win->m_isScrolling = TRUE;
+  g_blockEventsOnScroll = TRUE;
   
   return FALSE;
 }
@@ -80,14 +89,15 @@ static gint gtk_scrollbar_button_press_callback( GtkRange *widget, GdkEventButto
 // "button_release_event" from slider
 //-----------------------------------------------------------------------------
 
-static gint gtk_scrollbar_button_release_callback( GtkRange *widget, GdkEventButton *gdk_event, wxScrollBar *win )
+static gint gtk_scrollbar_button_release_callback( GtkRange *WXUNUSED(widget), 
+                                                   GdkEventButton *WXUNUSED(gdk_event), 
+						   wxScrollBar *win )
 {
-  if (gdk_event->window != widget->slider) return FALSE;
-
+  win->m_isScrolling = FALSE;
+  g_blockEventsOnScroll = FALSE;
+  
   gtk_signal_emit_by_name( GTK_OBJECT(win->m_adjust), "value_changed" );
       
-  win->m_isScrolling = FALSE;
-  
   return FALSE;
 }
 
@@ -164,13 +174,14 @@ int wxScrollBar::GetRange() const
 
 void wxScrollBar::SetPosition( int viewStart )
 {
+  if (m_isScrolling) return;
+  
   float fpos = (float)viewStart;
   m_oldPos = fpos;
   if (fabs(fpos-m_adjust->value) < 0.2) return;
   m_adjust->value = fpos;
-
-  if (!m_isScrolling)
-    gtk_signal_emit_by_name( GTK_OBJECT(m_adjust), "value_changed" );
+  
+  gtk_signal_emit_by_name( GTK_OBJECT(m_adjust), "value_changed" );
 }
 
 void wxScrollBar::SetScrollbar( int position, int thumbSize, int range, int pageSize,

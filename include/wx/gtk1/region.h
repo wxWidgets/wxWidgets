@@ -63,6 +63,9 @@ class wxRegion : public wxGDIObject
     inline wxRegion& operator = ( const wxRegion& r )
       { Ref(r); return (*this); }
 
+    bool operator == ( const wxRegion& region );
+    bool operator != ( const wxRegion& region );
+    
     void Clear(void);
 
     bool Union( long x, long y, long width, long height );

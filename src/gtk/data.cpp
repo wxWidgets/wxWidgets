@@ -46,6 +46,9 @@ wxCursor *g_globalCursor = (wxCursor *) NULL;
 // Don't allow event propagation during drag
 bool g_blockEventsOnDrag = FALSE;
 
+// Don't allow mouse event propagation during scroll
+bool g_blockEventsOnScroll = FALSE;
+
 // Message Strings for Internationalization
 char **wx_msg_str = (char**)NULL;
 
@@ -121,6 +124,7 @@ wxBrush    wxNullBrush;
 wxFont     wxNullFont;
 wxColour   wxNullColour;
 wxPalette  wxNullPalette; 
+wxRegion   wxNullRegion; 
 
 // Default window names
 const char *wxButtonNameStr = "button";

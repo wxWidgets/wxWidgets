@@ -156,6 +156,7 @@ class WXDLLEXPORT wxCursor;
 class WXDLLEXPORT wxFont;
 class WXDLLEXPORT wxPalette;
 class WXDLLEXPORT wxPalette;
+class WXDLLEXPORT wxRegion;
 
 /*
  * Bitmap flags
@@ -302,6 +303,9 @@ WXDLLEXPORT_DATA(extern wxBrush)  		wxNullBrush;
 WXDLLEXPORT_DATA(extern wxPalette) 		wxNullPalette;
 WXDLLEXPORT_DATA(extern wxFont)   		wxNullFont;
 WXDLLEXPORT_DATA(extern wxColour) 		wxNullColour;
+#ifdef __WXGTK__
+WXDLLEXPORT_DATA(extern wxRegion) 		wxNullRegion;
+#endif
 
 // Stock cursors types
 WXDLLEXPORT_DATA(extern wxCursor*)		wxSTANDARD_CURSOR;

@@ -189,7 +189,7 @@ wxPreviewCanvas::wxPreviewCanvas(wxPrintPreviewBase *preview, wxWindow *parent,
   m_printPreview = preview;
   SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE));
 
-  SetScrollbars(40, 40, 100, 100);
+  SetScrollbars(15, 18, 100, 100);
 }
 
 wxPreviewCanvas::~wxPreviewCanvas()
@@ -705,13 +705,23 @@ bool wxPrintPreviewBase::DrawBlankPage(wxWindow *canvas, wxDC& dc)
   int shadowOffset = 4;
   dc.SetPen(*wxBLACK_PEN);
   dc.SetBrush(*wxBLACK_BRUSH);
+/*
   dc.DrawRectangle((int)(x-1 + shadowOffset), (int)(y-1 + shadowOffset), (int)(actualWidth+2), (int)(actualHeight+2));
+*/
+  dc.DrawRectangle((int)(x + shadowOffset), (int)(y + actualHeight), (int)(actualWidth), shadowOffset);
+  dc.DrawRectangle((int)(x + actualWidth), (int)(y + shadowOffset), shadowOffset, (int)(actualHeight));
 
   // Draw blank page allowing for 1-pixel border AROUND the actual page
   dc.SetPen(*wxBLACK_PEN);
   dc.SetBrush(*wxWHITE_BRUSH);
-  
 
+/*
+  wxRegion update_region = canvas->GetUpdateRegion();
+  wxRect r = update_region.GetBox();
+  
+  printf( "x: %d y: %d w: %d h: %d.\n", (int)r.x, (int)r.y, (int)r.width, (int)r.height );
+*/
+  
   dc.DrawRectangle((int)(x-1), (int)(y-1), (int)(actualWidth+2), (int)(actualHeight+2));
   
   return TRUE;

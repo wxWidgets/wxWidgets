@@ -114,6 +114,16 @@ wxRegion::~wxRegion(void)
 {
 }
 
+bool wxRegion::operator == ( const wxRegion& region )
+{
+  return m_refData == region.m_refData; 
+}
+
+bool wxRegion::operator != ( const wxRegion& region )
+{
+  return m_refData != region.m_refData; 
+}
+
 void wxRegion::Clear(void)
 {
   UnRef();
