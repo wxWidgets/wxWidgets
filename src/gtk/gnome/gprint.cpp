@@ -7,8 +7,8 @@
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-    #pragma implementation "gprint.cpp"
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
+#pragma implementation "gprint.h"
 #endif
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -273,6 +273,7 @@ wxDC* wxGnomePrinter::PrintDialog( wxWindow *parent )
 
 bool wxGnomePrinter::Setup( wxWindow *parent )
 {
+    return false;
 }
 
 //-----------------------------------------------------------------------------
@@ -663,5 +664,19 @@ int wxGnomePrintDC::GetResolution()
     return 72;
 }
 
+
+class wxGnomePrintModule: public wxModule
+{
+public:
+    wxGnomePrintModule() {}
+    bool OnInit() { wxPrintFactory::SetPrintFactory( new wxGnomePrintFactory ); return true; }
+    void OnExit() { }
+    
+private:
+    DECLARE_DYNAMIC_CLASS(wxGnomePrintModule)
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxGnomePrintModule, wxModule)
+   
 #endif
     // wxUSE_LIBGNOMEPRINT
