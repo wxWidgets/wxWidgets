@@ -37,8 +37,6 @@
  */
 #include "regcustom.h"
 
-
-
 /*
  * Things that regcustom.h might override.
  */

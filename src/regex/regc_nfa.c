@@ -972,6 +972,13 @@ struct arc *con;
  ^ #def	COMPATIBLE	3	// compatible but not satisfied yet
  ^ static int combine(struct arc *, struct arc *);
  */
+ 
+/* FIXME Required for CW 8 on Mac since it's not in limits.h */
+#ifndef __CHAR_BIT__
+#define __CHAR_BIT__ 8
+#endif
+
+ 
 static int
 combine(con, a)
 struct arc *con;
