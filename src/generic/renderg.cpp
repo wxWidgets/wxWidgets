@@ -68,6 +68,11 @@ public:
                                   wxOrientation orient,
                                   int flags = 0);
 
+    virtual void DrawComboBoxDropButton(wxWindow *win,
+                                        wxDC& dc,
+                                        const wxRect& rect,
+                                        int flags = 0);
+
 
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
 
@@ -338,7 +343,32 @@ wxRendererGeneric::DrawSplitterSash(wxWindow *win,
     }
 }
 
+void
+wxRendererGeneric::DrawComboBoxDropButton(wxWindow *win,
+                                          wxDC& dc,
+                                          const wxRect& rect,
+                                          int WXUNUSED(flags))
+{
+    dc.SetBrush(wxBrush(win->GetBackgroundColour()));
+    dc.SetPen(wxPen(win->GetBackgroundColour()));
+    dc.DrawRectangle(0, 0, rect.width, rect.height);
+
+    wxPoint pt[] =
+    {
+        wxPoint(0, 0),
+        wxPoint(rect.width, 0),
+        wxPoint(rect.width/2, rect.height - 2)
+    };
+    dc.SetBrush(wxBrush(win->GetForegroundColour()));
+    dc.SetPen(wxPen(win->GetForegroundColour()));
+    dc.DrawPolygon(WXSIZEOF(pt), pt);
+}
+
+
+// ----------------------------------------------------------------------------
 // A module to allow cleanup of generic renderer.
+// ----------------------------------------------------------------------------
+
 class wxGenericRendererModule: public wxModule
 {
 DECLARE_DYNAMIC_CLASS(wxGenericRendererModule)

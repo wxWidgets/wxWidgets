@@ -91,6 +91,16 @@ No base class
 Virtual destructor as for any base class.
 
 
+\membersection{wxRendererGeneric::DrawComboBoxDropButton}
+
+\func{void}{DrawComboBoxDropButton}{\param{wxWindow *}{win}, \param{wxDC\& }{dc}, \param{const wxRect\& }{rect}, \param{int }{flags}}
+
+Draw a button like the one used by \helpref{wxComboBox}{wxcombobox} to show a
+drop down window. The usual appearance is a downwards pointing arrow.
+
+\arg{flags} may have the \texttt{wxCONTROL\_PRESSED} bit set.
+
+
 \membersection{wxRendererNative::DrawHeaderButton}\label{wxrenderernativedrawheaderbutton}
 
 \func{void}{DrawHeaderButton}{\param{wxWindow* }{win}, \param{wxDC\& }{dc}, \param{const wxRect\& }{rect}, \param{int }{flags = 0}}
