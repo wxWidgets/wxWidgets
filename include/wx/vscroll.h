@@ -98,6 +98,9 @@ public:
     int HitTest(wxCoord x, wxCoord y) const;
     int HitTest(const wxPoint& pt) const { return HitTest(pt.x, pt.y); }
 
+    // recalculate all our parameters and redisplay all lines
+    virtual void RefreshAll();
+
 
     // accessors
     // ---------

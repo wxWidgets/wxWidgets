@@ -196,6 +196,13 @@ void wxVScrolledWindow::RefreshLine(size_t line)
     RefreshRect(rect);
 }
 
+void wxVScrolledWindow::RefreshAll()
+{
+    UpdateScrollbar();
+
+    Refresh();
+}
+
 int wxVScrolledWindow::HitTest(wxCoord WXUNUSED(x), wxCoord y) const
 {
     const size_t lineMax = GetLastVisibleLine();
