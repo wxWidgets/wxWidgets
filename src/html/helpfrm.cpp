@@ -200,11 +200,74 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, const wxString& ti
 
     // contents tree panel?
     if (style & wxHF_CONTENTS) {
-        m_ContentsBox = new wxTreeCtrl(m_NavigPan, wxID_HTML_TREECTRL,
-                                       wxDefaultPosition, wxDefaultSize,
-                                       wxTR_HAS_BUTTONS | wxSUNKEN_BORDER);
-        m_ContentsBox -> SetImageList(m_ContentsImageList);
-        m_NavigPan -> AddPage(m_ContentsBox, _("Contents"));
+        wxWindow *dummy = new wxPanel(m_NavigPan, wxID_HTML_INDEXPAGE);
+
+        if (style & wxHF_BOOKMARKS) {
+            wxLayoutConstraints *b1 = new wxLayoutConstraints;
+            wxBitmapButton *bmpbt = new wxBitmapButton(dummy, wxID_HTML_BOOKMARKSREMOVE, wxBITMAP(wbkdel), wxDefaultPosition, wxSize(20,20));
+
+            b1 -> top.SameAs (dummy, wxTop, 10);
+            b1 -> right.SameAs (dummy, wxRight, 10);
+            b1 -> height.AsIs();
+            b1 -> width.AsIs();
+            bmpbt -> SetConstraints(b1);
+
+            wxLayoutConstraints *b2 = new wxLayoutConstraints;
+            wxBitmapButton *bmpbt2 = new wxBitmapButton(dummy, wxID_HTML_BOOKMARKSADD, wxBITMAP(wbkadd), wxDefaultPosition, wxSize(20,20));
+
+            b2 -> top.SameAs (dummy, wxTop, 10);
+            b2 -> right.LeftOf (bmpbt, 2);
+            b2 -> height.AsIs();
+            b2 -> width.AsIs();
+            bmpbt2 -> SetConstraints(b2);
+
+#if wxUSE_TOOLTIPS
+            bmpbt -> SetToolTip(_("Remove current page from bookmarks"));
+            bmpbt2 -> SetToolTip(_("Add current page to bookmarks"));
+#endif //wxUSE_TOOLTIPS
+
+            wxLayoutConstraints *b3 = new wxLayoutConstraints;
+            m_Bookmarks = new wxComboBox(dummy, wxID_HTML_BOOKMARKSLIST, wxEmptyString,
+                                         wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY | wxCB_SORT);
+            m_Bookmarks -> Append(_("(bookmarks)"));
+            for (unsigned i = 0; i < m_BookmarksNames.GetCount(); i++)
+                m_Bookmarks -> Append(m_BookmarksNames[i]);
+            m_Bookmarks -> SetSelection(0);
+
+            b3 -> centreY.SameAs (bmpbt2, wxCentreY);
+            b3 -> left.SameAs (dummy, wxLeft, 10);
+            b3 -> right.LeftOf (bmpbt2, 5);
+            b3 -> height.AsIs();
+            m_Bookmarks -> SetConstraints(b3);
+
+
+            wxLayoutConstraints *b4 = new wxLayoutConstraints;
+            m_ContentsBox = new wxTreeCtrl(dummy, wxID_HTML_TREECTRL,
+                                           wxDefaultPosition, wxDefaultSize,
+                                           wxTR_HAS_BUTTONS | wxSUNKEN_BORDER);
+            m_ContentsBox -> SetImageList(m_ContentsImageList);
+
+            b4 -> top.Below (m_Bookmarks, 10);
+            b4 -> left.SameAs (dummy, wxLeft, 0);
+            b4 -> right.SameAs (dummy, wxRight, 0);
+            b4 -> bottom.SameAs (dummy, wxBottom, 0);
+            m_ContentsBox -> SetConstraints(b4);
+
+            dummy -> SetAutoLayout(TRUE);
+            dummy -> Layout();
+
+            m_NavigPan -> AddPage(dummy, _("Contents"));
+        }
+
+        else
+        {
+            m_ContentsBox = new wxTreeCtrl(m_NavigPan, wxID_HTML_TREECTRL,
+                                           wxDefaultPosition, wxDefaultSize,
+                                           wxTR_HAS_BUTTONS | wxSUNKEN_BORDER);
+            m_ContentsBox -> SetImageList(m_ContentsImageList);
+            m_NavigPan -> AddPage(m_ContentsBox, _("Contents"));
+        }
+
         m_ContentsPage = notebook_page++;
     }
 
@@ -278,31 +341,20 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, const wxString& ti
         b1 -> height.AsIs();
         m_SearchText -> SetConstraints(b1);
 
-        wxLayoutConstraints *b2 = new wxLayoutConstraints;
-        m_SearchButton = new wxButton(dummy, wxID_HTML_SEARCHBUTTON, _("Search"));
-#if wxUSE_TOOLTIPS
-        m_SearchButton -> SetToolTip(_("Search contents of help book(s) for all occurences of the text you typed above"));
-#endif //wxUSE_TOOLTIPS
-        b2 -> top.Below (m_SearchText, 10);
-        b2 -> left.SameAs (dummy, wxLeft, 10);
-        b2 -> width.AsIs();
-        b2 -> height.AsIs();
-        m_SearchButton -> SetConstraints(b2);
-
         wxLayoutConstraints *b4 = new wxLayoutConstraints;
         m_SearchChoice = new wxChoice(dummy, wxID_HTML_SEARCHCHOICE, wxDefaultPosition,
                                       wxDefaultSize);
         b4 -> top.Below (m_SearchText, 10);
-        b4 -> left.SameAs (m_SearchButton, wxRight, 10);
+        b4 -> left.SameAs (dummy, wxLeft, 10);
         b4 -> right.SameAs (dummy, wxRight, 10);
         b4 -> height.AsIs();
         m_SearchChoice -> SetConstraints(b4);
 
         wxLayoutConstraints *b5 = new wxLayoutConstraints;
         m_SearchCaseSensitive = new wxCheckBox(dummy, -1, _("Case sensitive"));
-        b5 -> top.Below (m_SearchButton, 10);
+        b5 -> top.Below (m_SearchChoice, 10);
         b5 -> left.SameAs (dummy, wxLeft, 10);
-        b5 -> right.SameAs (dummy, wxRight, 10);
+        b5 -> width.AsIs();
         b5 -> height.AsIs ();
         m_SearchCaseSensitive -> SetConstraints(b5);
 
@@ -310,13 +362,24 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, const wxString& ti
         m_SearchWholeWords = new wxCheckBox(dummy, -1, _("Whole words only"));
         b6 -> top.Below (m_SearchCaseSensitive, 0);
         b6 -> left.SameAs (dummy, wxLeft, 10);
-        b6 -> right.SameAs (dummy, wxRight, 10);
+        b6 -> width.AsIs();
         b6 -> height.AsIs ();
         m_SearchWholeWords -> SetConstraints(b6);
 
+        wxLayoutConstraints *b2 = new wxLayoutConstraints;
+        m_SearchButton = new wxButton(dummy, wxID_HTML_SEARCHBUTTON, _("Search"));
+#if wxUSE_TOOLTIPS
+        m_SearchButton -> SetToolTip(_("Search contents of help book(s) for all occurences of the text you typed above"));
+#endif //wxUSE_TOOLTIPS
+        b2 -> top.Below (m_SearchWholeWords, 0);
+        b2 -> right.SameAs (dummy, wxRight, 10);
+        b2 -> width.AsIs();
+        b2 -> height.AsIs();
+        m_SearchButton -> SetConstraints(b2);
+
         wxLayoutConstraints *b3 = new wxLayoutConstraints;
         m_SearchList = new wxListBox(dummy, wxID_HTML_SEARCHLIST, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_SINGLE | wxLB_ALWAYS_SB);
-        b3 -> top.Below (m_SearchWholeWords, 10);
+        b3 -> top.Below (m_SearchButton, 10);
         b3 -> left.SameAs (dummy, wxLeft, 0);
         b3 -> right.SameAs (dummy, wxRight, 0);
         b3 -> bottom.SameAs (dummy, wxBottom, 0);
@@ -376,25 +439,6 @@ void wxHtmlHelpFrame::AddToolbarButtons(wxToolBar *toolBar, int style)
                        FALSE, -1, -1, (wxObject *) NULL,
                        _("Go forward to the next HTML page"));
     toolBar -> AddSeparator();
-
-    if (style & wxHF_BOOKMARKS) {
-        m_Bookmarks = new wxComboBox(toolBar, wxID_HTML_BOOKMARKSLIST, wxEmptyString, 
-                                     wxDefaultPosition, wxSize(300,-1), 0, NULL, wxCB_READONLY | wxCB_SORT);
-        m_Bookmarks -> Append(_("<bookmarks>"));
-        for (unsigned i = 0; i < m_BookmarksNames.GetCount(); i++)
-            m_Bookmarks -> Append(m_BookmarksNames[i]);
-        m_Bookmarks -> SetSelection(0);
-        toolBar -> AddControl(m_Bookmarks);
-#ifdef __WXGTK__
-        toolBar -> AddSeparator();
-#endif
-        toolBar -> AddTool(wxID_HTML_BOOKMARKSADD, wxBITMAP(wbkadd), wxNullBitmap,
-                           FALSE, -1, -1, (wxObject *) NULL,
-                           _("Add current page to bookmarks"));
-        toolBar -> AddTool(wxID_HTML_BOOKMARKSREMOVE, wxBITMAP(wbkdel), wxNullBitmap,
-                           FALSE, -1, -1, (wxObject *) NULL,
-                           _("Remove current page from bookmarks"));
-    }
 
     toolBar -> AddSeparator();
     toolBar -> AddTool(wxID_HTML_OPTIONS, wxBITMAP(woptions), wxNullBitmap,
@@ -580,7 +624,7 @@ void wxHtmlHelpFrame::CreateSearch()
         return ;
     m_SearchList -> Clear();
     m_SearchChoice -> Clear();
-    m_SearchChoice -> Append(_("all books"));
+    m_SearchChoice -> Append(_("Search in all books"));
     const wxHtmlBookRecArray& bookrec = m_Data->GetBookRecArray();
     int i, cnt = bookrec.GetCount();
     for (i = 0; i < cnt; i++)
@@ -628,7 +672,7 @@ void wxHtmlHelpFrame::ReadCustomization(wxConfigBase *cfg, const wxString& path)
             m_BookmarksPages.Clear();
             if (m_Bookmarks) {
                 m_Bookmarks -> Clear();
-                m_Bookmarks -> Append(_("<bookmarks>"));
+                m_Bookmarks -> Append(_("(bookmarks)"));
             }
                     
             for (i = 0; i < cnt; i++) {
@@ -1021,7 +1065,7 @@ void wxHtmlHelpFrame::OnBookmarksSel(wxCommandEvent& WXUNUSED(event))
 {
     wxString sr = m_Bookmarks -> GetStringSelection();
 
-    if (sr != wxEmptyString && sr != _("<bookmarks>"))
+    if (sr != wxEmptyString && sr != _("(bookmarks)"))
         m_HtmlWin -> LoadPage(m_BookmarksPages[m_BookmarksNames.Index(sr)]);
 }
 
@@ -1039,7 +1083,9 @@ void wxHtmlHelpFrame::OnCloseWindow(wxCloseEvent& evt)
 }
 
 BEGIN_EVENT_TABLE(wxHtmlHelpFrame, wxFrame)
-    EVT_TOOL_RANGE(wxID_HTML_PANEL, wxID_HTML_BOOKMARKSREMOVE, wxHtmlHelpFrame::OnToolbar)
+    EVT_TOOL_RANGE(wxID_HTML_PANEL, wxID_HTML_OPTIONS, wxHtmlHelpFrame::OnToolbar)
+    EVT_BUTTON(wxID_HTML_BOOKMARKSREMOVE, wxHtmlHelpFrame::OnToolbar)
+    EVT_BUTTON(wxID_HTML_BOOKMARKSADD, wxHtmlHelpFrame::OnToolbar)
     EVT_TREE_SEL_CHANGED(wxID_HTML_TREECTRL, wxHtmlHelpFrame::OnContentsSel)
     EVT_LISTBOX(wxID_HTML_INDEXLIST, wxHtmlHelpFrame::OnIndexSel)
     EVT_LISTBOX(wxID_HTML_SEARCHLIST, wxHtmlHelpFrame::OnSearchSel)
