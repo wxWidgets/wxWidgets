@@ -40,6 +40,7 @@
     #include "bitmaps/small1.xpm"
 #endif
 
+#include "wx/imaglist.h"
 #include "wx/listctrl.h"
 #include "wx/timer.h"           // for wxStopWatch
 #include "wx/colordlg.h"        // for wxGetColourFromUser
