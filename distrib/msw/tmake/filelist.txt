@@ -49,6 +49,7 @@
 #  NotX	Not required for the Motif port
 #  NotOS2	Not required for the os2Pm port
 #  LowLevel	Low level GUI toolkit file, used by wxUniversal as well
+#  Theme        implements a wxUniv theme
 ###############################################################################
 
 # File name 	Type	Flags
@@ -228,34 +229,34 @@ zstream.cpp	Common	Base
 gsocket.c	MSW	Socket,Base
 gsockmsw.c	MSW	Socket,Base
 accel.cpp	MSW
-app.cpp	MSW
+app.cpp	MSW	LowLevel
 automtn.cpp	MSW	OLE
-bitmap.cpp	MSW
+bitmap.cpp	MSW	LowLevel
 bmpbuttn.cpp	MSW
-brush.cpp	MSW
+brush.cpp	MSW	LowLevel
 button.cpp	MSW
-caret.cpp	MSW
+caret.cpp	MSW	LowLevel
 checkbox.cpp	MSW
 checklst.cpp	MSW
 choice.cpp	MSW
-clipbrd.cpp	MSW
+clipbrd.cpp	MSW	LowLevel
 colordlg.cpp	MSW
-colour.cpp	MSW
+colour.cpp	MSW	LowLevel
 combobox.cpp	MSW
 control.cpp	MSW
 curico.cpp	MSW
-cursor.cpp	MSW
-data.cpp	MSW
+cursor.cpp	MSW	LowLevel
+data.cpp	MSW	LowLevel
 dataobj.cpp	MSW	OLE
-dc.cpp	MSW
-dcclient.cpp	MSW
-dcmemory.cpp	MSW
-dcprint.cpp	MSW
-dcscreen.cpp	MSW
+dc.cpp	MSW	LowLevel
+dcclient.cpp	MSW	LowLevel
+dcmemory.cpp	MSW	LowLevel
+dcprint.cpp	MSW	LowLevel
+dcscreen.cpp	MSW	LowLevel
 dde.cpp	MSW	Base
 dialog.cpp	MSW
 dialup.cpp	MSW
-dib.cpp	MSW
+dib.cpp	MSW	LowLevel
 dibutils.cpp	MSW
 dir.cpp	MSW	Base
 dirdlg.cpp	MSW	Win32Only
@@ -267,25 +268,25 @@ helpbest.cpp	MSW	Win32Only
 evtloop.cpp	MSW	LowLevel
 fdrepdlg.cpp	MSW	Win32Only
 filedlg.cpp	MSW
-font.cpp	MSW
+font.cpp	MSW	LowLevel
 fontdlg.cpp	MSW
-fontenum.cpp	MSW
-fontutil.cpp	MSW
+fontenum.cpp	MSW	LowLevel
+fontutil.cpp	MSW	LowLevel
 frame.cpp	MSW
 gauge95.cpp	MSW	Win32Only
 gaugemsw.cpp	MSW	NotWin32
-gdiimage.cpp	MSW
-gdiobj.cpp	MSW
+gdiimage.cpp	MSW	LowLevel
+gdiobj.cpp	MSW	LowLevel
 glcanvas.cpp	MSW
 helpchm.cpp	MSW	Win32Only
 helpwin.cpp	MSW
-icon.cpp	MSW
+icon.cpp	MSW	LowLevel
 imaglist.cpp	MSW	Win32Only,LowLevel
 iniconf.cpp	MSW	NotWin32
 joystick.cpp	MSW
 listbox.cpp	MSW
 listctrl.cpp	MSW	Win32Only
-main.cpp	MSW	Base
+main.cpp	MSW	LowLevel,Base
 mdi.cpp	MSW
 menu.cpp	MSW
 menuitem.cpp	MSW
@@ -297,18 +298,18 @@ nativdlg.cpp	MSW
 notebook.cpp	MSW	Win32Only
 oleutils.cpp	MSW	OLE
 ownerdrw.cpp	MSW
-palette.cpp	MSW
-pen.cpp	MSW
+palette.cpp	MSW	LowLevel
+pen.cpp	MSW	LowLevel
 penwin.cpp	MSW
 printdlg.cpp	MSW
 printwin.cpp	MSW
 radiobox.cpp	MSW
 radiobut.cpp	MSW
 regconf.cpp	MSW	Win32Only,Base
-region.cpp	MSW
+region.cpp	MSW	LowLevel
 registry.cpp	MSW	Win32Only,Base
 scrolbar.cpp	MSW
-settings.cpp	MSW
+settings.cpp	MSW	LowLevel
 slider95.cpp	MSW	Win32Only
 slidrmsw.cpp	MSW	NotWin32
 snglinst.cpp	MSW	Base
@@ -326,7 +327,7 @@ tbarmsw.cpp	MSW	NotWin32
 textctrl.cpp	MSW
 tglbtn.cpp	MSW
 thread.cpp	MSW	Win32Only,Base
-timer.cpp	MSW
+timer.cpp	MSW	LowLevel
 tooltip.cpp	MSW	Win32Only
 toplevel.cpp	MSW	LowLevel
 treectrl.cpp	MSW	Win32Only
@@ -334,7 +335,7 @@ utils.cpp	MSW	Base
 utilsexc.cpp	MSW	Base
 uuid.cpp	MSW	OLE
 wave.cpp	MSW
-window.cpp	MSW
+window.cpp	MSW	LowLevel
 
 dialup.cpp	Unix
 dir.cpp	Unix	Base
@@ -352,6 +353,7 @@ button.cpp	Univ
 checkbox.cpp	Univ
 checklst.cpp	Univ
 colschem.cpp	Univ
+combobox.cpp	Univ
 control.cpp	Univ
 dialog.cpp	Univ
 framuniv.cpp	Univ
@@ -376,9 +378,9 @@ statline.cpp	Univ
 stattext.cpp	Univ
 textctrl.cpp	Univ
 theme.cpp	Univ
-gtk.cpp	Univ
+gtk.cpp	Univ	Theme
 winuniv.cpp	Univ
-win32.cpp	Univ
+win32.cpp	Univ	Theme
 
 gsockgtk.c	GTK	LowLevel
 win_gtk.c	GTK	LowLevel

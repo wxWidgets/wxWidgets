@@ -30,6 +30,19 @@
         my $tag = $file =~ /\.c$/ ? "WXCSRCS" : "WXCOMMONSRCS";
         $project{$tag} .= $file . " "
     }
+
+    foreach $file (sort keys %wxWXINCLUDE) {
+        next if $wxWXINCLUDE{$file} !~ /\bB\b/;
+        next if $file =~ /setup.h/;
+        next if $file =~ /[^.]*.cpp$/;
+        $project{"WXHEADERS"} .= $file . " "
+    }
+
+    foreach $file (sort keys %wxMSWINCLUDE) {
+        next if $wxMSWINCLUDE{$file} !~ /\bB\b/;
+        next if $file =~ /setup0?.h/;
+        $project{"WXMSWHEADERS"} .= $file . " "
+    }
 #$}
 # Microsoft Developer Studio Project File - Name="wxBase" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
@@ -65,16 +78,16 @@ RSC=rc.exe
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "lib"
-# PROP BASE Intermediate_Dir "src/msw/BaseRelease"
+# PROP BASE Output_Dir "..\lib"
+# PROP BASE Intermediate_Dir "..\BaseRelease"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "lib"
-# PROP Intermediate_Dir "src/msw/BaseRelease"
+# PROP Output_Dir "..\lib"
+# PROP Intermediate_Dir "..\BaseRelease"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MD /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MT" /YX /FD /c
-# ADD CPP /nologo /MD /W4 /Zi /O2 /I "$(WXWIN)\include" /I "$(WXWIN)\src\regex" /I "$(WXWIN)\src\zlib" /D "NDEBUG" /D wxUSE_GUI=0 /D WIN95=1 /D "__WIN95__" /D "WIN32" /D "_WIN32" /D WINVER=0x400 /D "__WINDOWS__" /D "__WXMSW__" /D "__WIN32__" /D "_MT" /Yu"wx/wxprec.h" /FD /c
+# ADD BASE CPP /nologo /MD /W4 /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MT" /YX /FD /c
+# ADD CPP /nologo /MD /W4 /O2 /I "../lib/base" /I "../include" /I "./regex" /I "./zlib" /D "NDEBUG" /D wxUSE_GUI=0 /D "WIN32" /D WINVER=0x400 /D "_MT" /Yu"wx/wxprec.h" /FD /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -82,30 +95,30 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"lib\wxBase.lib"
+# ADD LIB32 /nologo /out:"..\lib\wxbase.lib"
 
 !ELSEIF  "$(CFG)" == "wxBase - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "lib"
-# PROP BASE Intermediate_Dir "src/msw/BaseDebug"
+# PROP BASE Output_Dir "..\lib"
+# PROP BASE Intermediate_Dir "..\BaseDebug"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "lib"
-# PROP Intermediate_Dir "src/msw/BaseDebug"
+# PROP Output_Dir "..\lib"
+# PROP Intermediate_Dir "..\BaseDebug"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MD /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MT" /YX /FD /c
-# ADD CPP /nologo /MDd /W4 /Zi /Od /I "$(WXWIN)\include" /I "$(WXWIN)\src\regex" /I "$(WXWIN)\src\zlib" /D "_DEBUG" /D DEBUG=1 /D WXDEBUG=1 /D "__WXDEBUG__" /D wxUSE_GUI=0 /D "__WIN95__" /D "WIN32" /D "_WIN32" /D WINVER=0x400 /D "__WINDOWS__" /D "__WIN32__" /D "__WXMSW__" /D "_MT" /Fr /Yu"wx/wxprec.h" /FD /c
+# ADD BASE CPP /nologo /MDd /W4 /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MT" /YX /FD /c
+# ADD CPP /nologo /MDd /W4 /Zi /Od /I "../lib/based" /I "../include" /I "./regex" /I "./zlib" /D "_DEBUG" /D wxUSE_GUI=0 /D "WIN32" /D "__WXDEBUG__" /D WINVER=0x400 /D "_MT" /Yu"wx/wxprec.h" /FD /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo /o"lib/wxBase.bsc"
+# ADD BSC32 /nologo /o"../lib/wxbase.bsc"
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"lib\wxBased.lib"
+# ADD LIB32 /nologo /out:"..\lib\wxbased.lib"
 
 !ENDIF 
 
@@ -114,16 +127,68 @@ LIB32=link.exe -lib
 # Name "wxBase - Win32 Release"
 # Name "wxBase - Win32 Debug"
 
+# Begin Group "Common Files"
+
+# PROP Default_Filter ""
+#$ ExpandGlue("WXCOMMONSRCS", "# Begin Source File\n\nSOURCE=.\\common\\", "\n# End Source File\n# Begin Source File\n\nSOURCE=.\\common\\", "\n# End Source File\n");
+#$ ExpandGlue("WXCSRCS", "# Begin Source File\n\nSOURCE=.\\common\\", "\n# SUBTRACT CPP /YX /Yc /Yu\n# End Source File\n# Begin Source File\n\nSOURCE=.\\common\\", "\n# SUBTRACT CPP /YX /Yc /Yu\n# End Source File\n");
+# End Group
+# Begin Group "MSW Files"
+
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\src\msw\dummy.cpp
+SOURCE=.\msw\dummy.cpp
 # ADD CPP /Yc"wx/wxprec.h"
 # End Source File
-#$ ExpandGlue("WXCOMMONSRCS", "# Begin Source File\n\nSOURCE=.\\src\\common\\", "\n# End Source File\n# Begin Source File\n\nSOURCE=.\\src\\common\\", "\n# End Source File\n");
-#$ ExpandGlue("WXMSWSRCS", "# Begin Source File\n\nSOURCE=.\\src\\msw\\", "\n# End Source File\n# Begin Source File\n\nSOURCE=.\\src\\msw\\", "\n# End Source File\n");
-#$ ExpandGlue("WXCSRCS", "# Begin Source File\n\nSOURCE=.\\src\\common\\", "\n# SUBTRACT CPP /YX /Yc /Yu\n# End Source File\n# Begin Source File\n\nSOURCE=.\\src\\common\\", "\n# SUBTRACT CPP /YX /Yc /Yu\n# End Source File\n");
-#$ ExpandGlue("WXMSWCSRCS", "# Begin Source File\n\nSOURCE=.\\src\\msw\\", "\n# SUBTRACT CPP /YX /Yc /Yu\n# End Source File\n# Begin Source File\n\nSOURCE=.\\src\\msw\\", "\n# SUBTRACT CPP /YX /Yc /Yu\n# End Source File\n");
+#$ ExpandGlue("WXMSWSRCS", "# Begin Source File\n\nSOURCE=.\\msw\\", "\n# End Source File\n# Begin Source File\n\nSOURCE=.\\msw\\", "\n# End Source File\n");
+#$ ExpandGlue("WXMSWCSRCS", "# Begin Source File\n\nSOURCE=.\\msw\\", "\n# SUBTRACT CPP /YX /Yc /Yu\n# End Source File\n# Begin Source File\n\nSOURCE=.\\msw\\", "\n# SUBTRACT CPP /YX /Yc /Yu\n# End Source File\n");
+# End Group
+# Begin Group "Headers"
 
+# PROP Default_Filter ""
+# Begin Group "Setup"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\include\wx\msw\setup0.h
+
+!IF  "$(CFG)" == "wxBase - Win32 Release"
+
+# Begin Custom Build - Creating wx/setup.h from $(InputPath)
+InputPath=..\include\wx\msw\setup0.h
+
+"../lib/base/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(InputPath) ..\lib\base\wx\setup.h
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "wxBase - Win32 Debug"
+
+# Begin Custom Build - Creating wx/setup.h from $(InputPath)
+InputPath=..\include\wx\msw\setup0.h
+
+"../lib/based/wx/setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(InputPath) ..\lib\based\wx\setup.h
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# End Group
+# Begin Group "Common"
+
+# PROP Default_Filter ""
+#$ ExpandGlue("WXHEADERS", "# Begin Source File\n\nSOURCE=..\\include\\wx\\", "\n# End Source File\n# Begin Source File\n\nSOURCE=..\\include\\wx\\", "\n# End Source File\n");
+# End Group
+# Begin Group "MSW"
+
+# PROP Default_Filter ""
+#$ ExpandGlue("WXMSWHEADERS", "# Begin Source File\n\nSOURCE=..\\include\\wx\\msw\\", "\n# End Source File\n# Begin Source File\n\nSOURCE=..\\include\\wx\\msw\\", "\n# End Source File\n");
+# End Group
+# End Group
 # End Target
 # End Project
+#! vi: set sta ts=8 sw=4 noet nolist tw=0 ft=make:
