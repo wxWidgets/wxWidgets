@@ -11,7 +11,7 @@ Note:  After some eleven years, the wxWindows project has undergone a
        The name change itself will not cause source incompatibilities,
        and the library api will not be altered because of it, however
        other maintainers will need to update their build dependencies
-       to accomodate a name as well as a version change for this one.
+       to accommodate a name as well as a version change for this one.
 
        wxwindows.org will continue to refer to the existing project
        site probably until sometime in 2005.  You should update any
