@@ -564,6 +564,16 @@ public:
     bool AltDown() const;
     bool ShiftDown() const;
 
+    DocDeclStr(
+        bool , CmdDown() const,
+        "\"Cmd\" is a pseudo key which is the same as Control for PC and Unix
+platforms but the special \"Apple\" (a.k.a as \"Command\") key on
+Macs: it makes often sense to use it instead of, say, `ControlDown`
+because Cmd key is used for the same thing under Mac as Ctrl
+elsewhere. The Ctrl still exists, it's just not used for this
+purpose. So for non-Mac platforms this is the same as `ControlDown`
+and Macs this is the same as `MetaDown`.", "");
+    
     // Find which event was just generated
     bool LeftDown() const;
     bool MiddleDown() const;
@@ -685,6 +695,18 @@ public:
     bool MetaDown() const;
     bool AltDown() const;
     bool ShiftDown() const;
+    
+    DocDeclStr(
+        bool , CmdDown() const,
+        "\"Cmd\" is a pseudo key which is the same as Control for PC and Unix
+platforms but the special \"Apple\" (a.k.a as \"Command\") key on
+Macs: it makes often sense to use it instead of, say, `ControlDown`
+because Cmd key is used for the same thing under Mac as Ctrl
+elsewhere. The Ctrl still exists, it's just not used for this
+purpose. So for non-Mac platforms this is the same as `ControlDown`
+and Macs this is the same as `MetaDown`.", "");
+   
+    
 
     // exclude MetaDown() from HasModifiers() because NumLock under X is often
     // configured as mod2 modifier, yet the key events even when it is pressed
