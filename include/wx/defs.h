@@ -126,7 +126,6 @@
             #define __WXMAC_X__
         #endif
 
-        #define PM_USE_SESSION_APIS 0
         #include <Carbon/Carbon.h>
     #endif // __APPLE__
 #elif defined(applec) || \
@@ -149,7 +148,6 @@
         #define __WXMAC_X__
     #endif
 
-    #define PM_USE_SESSION_APIS 0
     #include <Carbon/Carbon.h>
 #elif defined(__OS2__)
     #if defined(__IBMCPP__)
