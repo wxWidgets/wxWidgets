@@ -118,7 +118,7 @@ ctrlsub.cpp	C
 datetime.cpp	C	B
 datstrm.cpp	C	B
 db.cpp	C	32,B
-dbgrid.cpp	C	32,B
+dbgrid.cpp	C	32
 dbtable.cpp	C	32,B
 dcbase.cpp	C
 dircmn.cpp	C	B
@@ -585,7 +585,7 @@ datetime.h	W	B
 datetime.inl	W	B
 datstrm.h	W	B
 db.h	W	B
-dbgrid.h	W	B
+dbgrid.h	W
 dbtable.h	W	B
 dc.h	W
 dcclient.h	W
@@ -622,7 +622,7 @@ fontenc.h	W	B
 fontenum.h	W
 fontmap.h	W	B
 fontdlg.h	W
-fontutil.h	W	B
+fontutil.h	W
 frame.h	W
 fs_inet.h	W	B
 fs_zip.h	W	B
@@ -633,7 +633,7 @@ gdiobj.h	W
 geometry.h	W
 gifdecod.h	W
 xpmdecod.h	W
-dbkeyg.h	W	B
+dbkeyg.h	W
 glcanvas.h	W
 grid.h	W
 gridctrl.h	W
