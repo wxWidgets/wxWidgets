@@ -367,7 +367,7 @@ FOLLOWING CODE IS BY V.S. :
 // wxGIFHandler
 //-----------------------------------------------------------------------------
 
-bool wxGIFHandler::LoadFile( wxImage *image, wxInputStream& stream )
+bool wxGIFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool WXUNUSED(verbose) )
 {
     unsigned char *ptr, *src, *pal;
     IMAGEN igif;
@@ -418,9 +418,9 @@ bool wxGIFHandler::LoadFile( wxImage *image, wxInputStream& stream )
 }
 
 bool wxGIFHandler::SaveFile( wxImage * WXUNUSED(image),
-                             wxOutputStream& WXUNUSED(stream) )
+                             wxOutputStream& WXUNUSED(stream), bool verbose )
 {
-    wxLogDebug(_T("wxGIFHandler is read-only!!"));
+    if (verbose) wxLogDebug(_T("wxGIFHandler is read-only!!"));
     return FALSE;
 }
 

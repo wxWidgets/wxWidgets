@@ -388,13 +388,41 @@ bool wxImage::SaveFile( const wxString& filename, const wxString& mimetype )
 }
 
 #if wxUSE_STREAMS
+//#include <stream.h>
+
 bool wxImage::LoadFile( wxInputStream& stream, long type )
 {
     UnRef();
 
     m_refData = new wxImageRefData;
 
-    wxImageHandler *handler = FindHandler(type);
+    wxImageHandler *handler;
+
+    if (type==wxBITMAP_TYPE_ANY)
+    {
+      // here we can try to guess the handler according the extension,
+      // but we lose the stream name !?
+      // Probably we should write methods such as 
+      // bool wxImageHandler::IsAppropriate(wxString&)
+      // bool wxImageHandler::IsAppropriate(sxInputStream&&)
+      // for png : see example.c
+	wxList &list=GetHandlers();
+	off_t pos=stream.TellI();
+
+	 wxLogNull prevent_log;
+
+	for ( wxList::Node *node = list.GetFirst(); node; node = node->GetNext() )
+	{
+	    handler=(wxImageHandler*)node->GetData();
+	    //cout << handler->GetExtension() << endl;
+	    if (handler->LoadFile( this, stream, FALSE )) return TRUE;
+	    stream.SeekI(pos);
+	}
+
+	return FALSE;
+    }
+
+    handler = FindHandler(type);
 
     if (handler == NULL)
     {
@@ -538,7 +566,7 @@ wxImageHandler *wxImage::FindHandlerMime( const wxString& mimetype )
 
 void wxImage::InitStandardHandlers()
 {
-    AddHandler( new wxBMPHandler );
+  AddHandler( new wxBMPHandler );
 }
 
 void wxImage::CleanUpHandlers()
@@ -563,12 +591,12 @@ IMPLEMENT_DYNAMIC_CLASS(wxImageHandler,wxObject)
 #endif
 
 #if wxUSE_STREAMS
-bool wxImageHandler::LoadFile( wxImage *WXUNUSED(image), wxInputStream& WXUNUSED(stream) )
+bool wxImageHandler::LoadFile( wxImage *WXUNUSED(image), wxInputStream& WXUNUSED(stream), bool WXUNUSED(verbose) )
 {
     return FALSE;
 }
 
-bool wxImageHandler::SaveFile( wxImage *WXUNUSED(image), wxOutputStream& WXUNUSED(stream) )
+bool wxImageHandler::SaveFile( wxImage *WXUNUSED(image), wxOutputStream& WXUNUSED(stream), bool WXUNUSED(verbose) )
 {
     return FALSE;
 }

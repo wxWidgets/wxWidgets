@@ -75,7 +75,28 @@ static void LINKAGEMODE _PNG_stream_writer( png_structp png_ptr, png_bytep data,
     ((wxOutputStream*) png_get_io_ptr( png_ptr )) -> Write(data, length);
 }
 
-bool wxPNGHandler::LoadFile( wxImage *image, wxInputStream& stream )
+// from pngerror.c
+// so that the libpng doesn't send anything on stderr
+void
+png_silent_error(png_structp png_ptr, png_const_charp WXUNUSED(message))
+{
+#ifdef USE_FAR_KEYWORD
+   {
+      jmp_buf jmpbuf;
+      png_memcpy(jmpbuf,png_ptr->jmpbuf,sizeof(jmp_buf));
+      longjmp(jmpbuf, 1);
+   }
+#else
+   longjmp(png_ptr->jmpbuf, 1);
+#endif
+}
+
+void
+png_silent_warning(png_structp WXUNUSED(png_ptr), png_const_charp WXUNUSED(message))
+{
+}
+
+bool wxPNGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose)
 {
     // VZ: as this function uses setjmp() the only fool proof error handling
     //     method is to use goto (setjmp is not really C++ dtors friendly...)
@@ -92,6 +113,9 @@ bool wxPNGHandler::LoadFile( wxImage *image, wxInputStream& stream )
         (png_error_ptr) NULL );
     if (!png_ptr)
         goto error_nolines;
+
+    // the file example.c explain how to guess if the stream is a png image
+    if (!verbose) png_set_error_fn(png_ptr, (png_voidp)NULL, png_silent_error, png_silent_warning);
 
     info_ptr = png_create_info_struct( png_ptr );
     if (!info_ptr)
@@ -245,7 +269,7 @@ bool wxPNGHandler::LoadFile( wxImage *image, wxInputStream& stream )
 }
 
 
-bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream )
+bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbose )
 {
     {
         png_structp png_ptr = png_create_write_struct( PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
@@ -253,6 +277,8 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream )
         {
             return FALSE;
         }
+
+	if (!verbose) png_set_error_fn(png_ptr, (png_voidp)NULL, png_silent_error, png_silent_warning);
 
         png_infop info_ptr = png_create_info_struct(png_ptr);
         if (info_ptr == NULL)

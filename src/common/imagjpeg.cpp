@@ -141,7 +141,7 @@ my_error_exit (j_common_ptr cinfo)
 
   /* Always display the message. */
   /* We could postpone this until after returning, if we chose. */
-  (*cinfo->err->output_message) (cinfo);
+  if (cinfo->err->output_message) (*cinfo->err->output_message) (cinfo);
 
   /* Return control to the setjmp point */
   longjmp(myerr->setjmp_buffer, 1);
@@ -149,7 +149,7 @@ my_error_exit (j_common_ptr cinfo)
 
 
 
-bool wxJPEGHandler::LoadFile( wxImage *image, wxInputStream& stream )
+bool wxJPEGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose )
 {
     struct jpeg_decompress_struct cinfo;
     struct my_error_mgr jerr;
@@ -161,12 +161,14 @@ bool wxJPEGHandler::LoadFile( wxImage *image, wxInputStream& stream )
     cinfo.err = jpeg_std_error( &jerr.pub );
     jerr.pub.error_exit = my_error_exit;
 
+    if (!verbose) cinfo.err->output_message=NULL;
+
     /* Establish the setjmp return context for my_error_exit to use. */
     if (setjmp(jerr.setjmp_buffer)) {
       /* If we get here, the JPEG code has signaled an error.
        * We need to clean up the JPEG object, close the input file, and return.
        */
-      wxLogError(_("Couldn't load a JPEG image - probably file is corrupted."));
+      if (verbose) wxLogError(_("Couldn't load a JPEG image - probably file is corrupted."));
       jpeg_destroy_decompress(&cinfo);
       if (image->Ok()) image->Destroy();
       return FALSE;
@@ -263,7 +265,7 @@ GLOBAL(void) jpeg_wxio_dest (j_compress_ptr cinfo, wxOutputStream& outfile)
     dest->stream = &outfile;
 }
 
-bool wxJPEGHandler::SaveFile( wxImage *image, wxOutputStream& stream )
+bool wxJPEGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbose )
 {
     struct jpeg_compress_struct cinfo;
     struct my_error_mgr jerr;
@@ -274,12 +276,14 @@ bool wxJPEGHandler::SaveFile( wxImage *image, wxOutputStream& stream )
     cinfo.err = jpeg_std_error(&jerr.pub);
     jerr.pub.error_exit = my_error_exit;
 
+    if (!verbose) cinfo.err->output_message=NULL;
+
     /* Establish the setjmp return context for my_error_exit to use. */
     if (setjmp(jerr.setjmp_buffer)) {
       /* If we get here, the JPEG code has signaled an error.
        * We need to clean up the JPEG object, close the input file, and return.
        */
-      wxLogError(_("Couldn't save a JPEG image - probably file is corrupted."));
+      if (verbose) wxLogError(_("Couldn't save a JPEG image - probably file is corrupted."));
       jpeg_destroy_compress(&cinfo);
       return FALSE;
     }

@@ -50,8 +50,8 @@ public:
   wxImageHandler() { m_name = ""; m_extension = ""; m_type = 0; }
 
 #if wxUSE_STREAMS
-  virtual bool LoadFile( wxImage *image, wxInputStream& stream );
-  virtual bool SaveFile( wxImage *image, wxOutputStream& stream );
+  virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE );
+  virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
 #endif
 
   inline void SetName(const wxString& name) { m_name = name; }
@@ -91,8 +91,8 @@ public:
   };
 
 #if wxUSE_STREAMS
-  virtual bool LoadFile( wxImage *image, wxInputStream& stream );
-  virtual bool SaveFile( wxImage *image, wxOutputStream& stream );
+  virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE );
+  virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
 #endif
 };
 #endif
@@ -117,8 +117,8 @@ public:
   };
 
 #if wxUSE_STREAMS
-  virtual bool LoadFile( wxImage *image, wxInputStream& stream );
-  virtual bool SaveFile( wxImage *image, wxOutputStream& stream );
+  virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE );
+  virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
 #endif
 };
 #endif
@@ -142,7 +142,7 @@ public:
   };
 
 #if wxUSE_STREAMS
-  virtual bool LoadFile( wxImage *image, wxInputStream& stream );
+  virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE );
 #endif
 };
 
@@ -165,8 +165,8 @@ public:
   };
 
 #if wxUSE_STREAMS
-  virtual bool LoadFile( wxImage *image, wxInputStream& stream );
-  virtual bool SaveFile( wxImage *image, wxOutputStream& stream );
+  virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE );
+  virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
 #endif
 };
 
@@ -184,8 +184,8 @@ public:
 
   wxImage();
   wxImage( int width, int height );
-  wxImage( const wxString& name, long type = wxBITMAP_TYPE_PNG );
-  wxImage( wxInputStream& stream, long type = wxBITMAP_TYPE_PNG );
+  wxImage( const wxString& name, long type = wxBITMAP_TYPE_ANY );
+  wxImage( wxInputStream& stream, long type = wxBITMAP_TYPE_ANY );
   wxImage( const wxString& name, const wxString& mimetype );
   wxImage( wxInputStream& stream, const wxString& mimetype );
 
@@ -212,11 +212,11 @@ public:
   unsigned char GetGreen( int x, int y );
   unsigned char GetBlue( int x, int y );
 
-  virtual bool LoadFile( const wxString& name, long type = wxBITMAP_TYPE_PNG );
+  virtual bool LoadFile( const wxString& name, long type = wxBITMAP_TYPE_ANY );
   virtual bool LoadFile( const wxString& name, const wxString& mimetype );
 
 #if wxUSE_STREAMS
-  virtual bool LoadFile( wxInputStream& stream, long type = wxBITMAP_TYPE_PNG );
+  virtual bool LoadFile( wxInputStream& stream, long type = wxBITMAP_TYPE_ANY );
   virtual bool LoadFile( wxInputStream& stream, const wxString& mimetype );
 #endif
 

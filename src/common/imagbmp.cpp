@@ -64,7 +64,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxBMPHandler,wxImageHandler)
 
 #define poffset (line * width * 3 + column * 3)
 
-bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream )
+bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream, bool WXUNUSED(verbose) )
 {
     int             rshift = 0, gshift = 0, bshift = 0;
     wxUint8         aByte;
