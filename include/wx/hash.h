@@ -110,6 +110,36 @@ private:
 };
 
 // ----------------------------------------------------------------------------
+// wxStringHashTable: a hash table which indexes strings with longs
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxStringHashTable : public wxObject
+{
+public:
+    wxStringHashTable(size_t sizeTable = wxHASH_SIZE_DEFAULT);
+    virtual ~wxStringHashTable();
+
+    // add a string associated with this key to the table
+    void Put(long key, const wxString& value);
+
+    // get the string from the key: if not found, an empty string is returned
+    // and the wasFound is set to FALSE if not NULL
+    wxString Get(long key, bool *wasFound = NULL) const;
+
+    // clean up
+    void Destroy();
+
+private:
+    wxArrayLong **m_keys;
+    wxArrayString **m_values;
+
+    // the size of array above
+    size_t m_hashSize;
+
+    DECLARE_NO_COPY_CLASS(wxStringHashTable);
+};
+
+// ----------------------------------------------------------------------------
 // for compatibility only
 // ----------------------------------------------------------------------------
 

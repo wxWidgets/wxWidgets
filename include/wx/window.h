@@ -579,8 +579,24 @@ public:
     virtual void ScrollWindow( int dx, int dy,
                                const wxRect* rect = (wxRect *) NULL ) = 0;
 
+    // context-sensitive help
+    // ----------------------
+
+    // these are the convenience functions wrapping wxHelpProvider methods
+
+#if wxUSE_HELP
+        // associate this help text with this window
+    void SetHelpText(const wxString& text);
+        // associate this help text with all windows with the same id as this
+        // one
+    void SetHelpTextForId(const wxString& text);
+        // get the help string associated with this window (may be empty)
+    wxString GetHelpText() const;
+#endif // wxUSE_HELP
+
     // tooltips
     // --------
+
 #if wxUSE_TOOLTIPS
         // the easiest way to set a tooltip for a window is to use this method
     void SetToolTip( const wxString &tip );
@@ -661,6 +677,9 @@ public:
     void OnSysColourChanged( wxSysColourChangedEvent& event );
     void OnInitDialog( wxInitDialogEvent &event );
     void OnMiddleClick( wxMouseEvent& event );
+#if wxUSE_HELP
+    void OnHelp(wxHelpEvent& event);
+#endif // wxUSE_HELP
 
         // get the haqndle of the window for the underlying window system: this
         // is only used for wxWin itself or for user code which wants to call

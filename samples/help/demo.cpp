@@ -90,6 +90,9 @@ public:
     // initialization (doing it here and not in the ctor allows to have an error
     // return: if OnInit() returns false, the application terminates)
     virtual bool OnInit();
+
+    // do some clean up here
+    virtual int OnExit();
 };
 
 // Define a new frame type: this is going to be our main frame
@@ -318,7 +321,18 @@ bool MyApp::OnInit()
     }
 #endif
 
+    // create a simple help provider to make SetHelpText() do something
+    wxHelpProvider::Set(new wxSimpleHelpProvider);
+
     return TRUE;
+}
+
+int MyApp::OnExit()
+{
+    // clean up
+    delete wxHelpProvider::Set(NULL);
+
+    return 0;
 }
 
 // ----------------------------------------------------------------------------
@@ -339,7 +353,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->Append(HelpDemo_Help_Classes, "&Help on Classes...");
     menuFile->Append(HelpDemo_Help_Functions, "&Help on Functions...");
     menuFile->Append(HelpDemo_Help_ContextHelp, "&Context Help...");
-    menuFile->Append(HelpDemo_Help_DialogContextHelp, "&Dialog Context Help...");
+    menuFile->Append(HelpDemo_Help_DialogContextHelp, "&Dialog Context Help...\tCtrl-H");
     menuFile->Append(HelpDemo_Help_Help, "&About Help Demo...");
     menuFile->Append(HelpDemo_Help_Search, "&Search help...");
 #if USE_HTML_HELP
@@ -599,9 +613,6 @@ END_EVENT_TABLE()
 MyModalDialog::MyModalDialog(wxWindow *parent)
              : wxDialog()
 {
-    // Add the context-sensitive help button on the caption, MSW only
-    SetExtraStyle(wxDIALOG_EX_CONTEXTHELP);
-
     wxDialog::Create(parent, -1, wxString("Modal dialog"));
 
     wxBoxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
@@ -612,13 +623,20 @@ MyModalDialog::MyModalDialog(wxWindow *parent)
     sizerRow->Add(btnOK, 0, wxALIGN_CENTER | wxALL, 5);
     sizerRow->Add(btnCancel, 0, wxALIGN_CENTER | wxALL, 5);
 
-    // Add the explicit context-sensitive help button, non-MSW
-#ifndef __WXMSW__
+    // Add the context-sensitive help button on the caption for MSW and the
+    // explicit context-sensitive help button elsewhere
+#ifdef __WXMSW__
+    SetExtraStyle(wxDIALOG_EX_CONTEXTHELP);
+#else
     sizerRow->Add(new wxContextHelpButton(this), 0, wxALIGN_CENTER | wxALL, 5);
 #endif
 
-    sizerTop->Add(new wxTextCtrl(this, wxID_APPLY, wxT("A demo text control"), wxDefaultPosition, wxSize(300, 100), wxTE_MULTILINE),
-            0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+    wxTextCtrl *text = new wxTextCtrl(this, -1, wxT("A demo text control"),
+                                      wxDefaultPosition, wxSize(300, 100),
+                                      wxTE_MULTILINE);
+    text->SetHelpText(_("Type text here if you have got nothing more "
+                        "more interesting to do"));
+    sizerTop->Add(text, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
     sizerTop->Add(sizerRow, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
     SetAutoLayout(TRUE);

@@ -227,6 +227,85 @@ long wxHashTableLong::Delete(long key)
 }
 
 // ----------------------------------------------------------------------------
+// wxStringHashTable: more efficient than storing strings in a list
+// ----------------------------------------------------------------------------
+
+wxStringHashTable::wxStringHashTable(size_t sizeTable)
+{
+    m_keys = new wxArrayLong *[sizeTable];
+    m_values = new wxArrayString *[sizeTable];
+
+    m_hashSize = sizeTable;
+    for ( size_t n = 0; n < m_hashSize; n++ )
+    {
+        m_values[n] = (wxArrayString *)NULL;
+        m_keys[n] = (wxArrayLong *)NULL;
+    }
+}
+
+wxStringHashTable::~wxStringHashTable()
+{
+    Destroy();
+}
+
+void wxStringHashTable::Destroy()
+{
+    for ( size_t n = 0; n < m_hashSize; n++ )
+    {
+        delete m_values[n];
+        delete m_keys[n];
+    }
+
+    delete [] m_values;
+    delete [] m_keys;
+    m_hashSize = 0;
+}
+
+void wxStringHashTable::Put(long key, const wxString& value)
+{
+    wxCHECK_RET( m_hashSize, _T("must call Create() first") );
+
+    size_t slot = (size_t)abs((int)(key % (long)m_hashSize));
+
+    if ( !m_keys[slot] )
+    {
+        m_keys[slot] = new wxArrayLong;
+        m_values[slot] = new wxArrayString;
+    }
+
+    m_keys[slot]->Add(key);
+    m_values[slot]->Add(value);
+}
+
+wxString wxStringHashTable::Get(long key, bool *wasFound) const
+{
+    wxCHECK_MSG( m_hashSize, _T(""), _T("must call Create() first") );
+
+    size_t slot = (size_t)abs((int)(key % (long)m_hashSize));
+
+    wxArrayLong *keys = m_keys[slot];
+    if ( keys )
+    {
+        size_t count = keys->GetCount();
+        for ( size_t n = 0; n < count; n++ )
+        {
+            if ( keys->Item(n) == key )
+            {
+                if ( wasFound )
+                    *wasFound = TRUE;
+
+                return m_values[slot]->Item(n);
+            }
+        }
+    }
+
+    if ( wasFound )
+        *wasFound = FALSE;
+
+    return _T("");
+}
+
+// ----------------------------------------------------------------------------
 // old not type safe wxHashTable
 // ----------------------------------------------------------------------------
 

@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        event.h
+// Name:        wx/event.h
 // Purpose:     Event classes
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
-// Copyright:   (c)
+// Copyright:   (c) wxWindows team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -1404,35 +1404,43 @@ public:
     wxWindow *GetWindow() const { return (wxWindow *)GetEventObject(); }
 };
 
+// A help event is sent when the user clicks on a window in context-help mode.
 /*
- wxEVT_HELP, wxEVT_DETAILED_HELP
- Sent when the user clicks on a window in context-help mode.
- The cursor position is in screen coordinates.
- */
+ wxEVT_HELP
+ wxEVT_DETAILED_HELP
+*/
 
 class WXDLLEXPORT wxHelpEvent : public wxCommandEvent
 {
-    DECLARE_DYNAMIC_CLASS(wxHelpEvent)
-
 public:
-  wxHelpEvent(wxEventType type = wxEVT_NULL, wxWindowID id = 0, const wxPoint& pt = wxPoint(0, 0))
-      { m_eventType = type; m_id = id; m_pos = pt; }
+    wxHelpEvent(wxEventType type = wxEVT_NULL,
+                wxWindowID id = 0,
+                const wxPoint& pt = wxDefaultPosition)
+    {
+        m_eventType = type;
+        m_id = id;
+        m_pos = pt;
+    }
 
-  // Position of event
-  const wxPoint& GetPosition() const { return m_pos; }
-  void SetPosition(const wxPoint& pos) { m_pos = pos; }
+    // Position of event (in screen coordinates)
+    const wxPoint& GetPosition() const { return m_pos; }
+    void SetPosition(const wxPoint& pos) { m_pos = pos; }
 
-  // Optional link to further help
-  const wxString& GetLink() const { return m_link; }
-  void SetLink(const wxString& link) { m_link = link; }
+    // Optional link to further help
+    const wxString& GetLink() const { return m_link; }
+    void SetLink(const wxString& link) { m_link = link; }
 
-  // Optional target to display help in. E.g. a window specification
-  const wxString& GetTarget() const { return m_target; }
-  void SetTarget(const wxString& target) { m_target = target; }
+    // Optional target to display help in. E.g. a window specification
+    const wxString& GetTarget() const { return m_target; }
+    void SetTarget(const wxString& target) { m_target = target; }
 
-  wxPoint   m_pos;
-  wxString  m_target;
-  wxString  m_link;
+protected:
+    wxPoint   m_pos;
+    wxString  m_target;
+    wxString  m_link;
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxHelpEvent)
 };
 
 #endif // wxUSE_GUI

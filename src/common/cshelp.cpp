@@ -1,41 +1,52 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        cshelp.cpp
+// Name:        src/common/cshelp.cpp
 // Purpose:     Context sensitive help class implementation
-// Author:      Julian Smart
+// Author:      Julian Smart, Vadim Zeitlin
 // Modified by:
 // Created:     08/09/2000
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart
+// Copyright:   (c) 2000 Julian Smart, Vadim Zeitlin
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// ============================================================================
+// declarations
+// ============================================================================
+
 #ifdef __GNUG__
-#pragma implementation "cshelp.h"
+    #pragma implementation "cshelp.h"
 #endif
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
+#if wxUSE_HELP
+
 #ifndef WX_PRECOMP
-#include "wx/defs.h"
+    // FIXME: temporary needed for wxSimpleHelpProvider compilation, to be
+    //        removed later
+    #include "wx/intl.h"
+    #include "wx/msgdlg.h"
 #endif
 
 #include "wx/app.h"
 
-#if wxUSE_HELP
-
 #include "wx/cshelp.h"
 
-/*
- * Invokes context-sensitive help
- */
+// ----------------------------------------------------------------------------
+// wxContextHelpEvtHandler private class
+// ----------------------------------------------------------------------------
 
-// This class exists in order to eat events until the left mouse
-// button is pressed
+// This class exists in order to eat events until the left mouse button is
+// pressed
 class wxContextHelpEvtHandler: public wxEvtHandler
 {
 public:
@@ -49,6 +60,19 @@ public:
 //// Data
     wxContextHelp* m_contextHelp;
 };
+
+// ============================================================================
+// implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxContextHelp
+// ----------------------------------------------------------------------------
+
+/*
+ * Invokes context-sensitive help
+ */
+
 
 IMPLEMENT_DYNAMIC_CLASS(wxContextHelp, wxObject)
 
@@ -182,6 +206,10 @@ bool wxContextHelp::DispatchEvent(wxWindow* win, const wxPoint& pt)
     return eventProcessed;
 }
 
+// ----------------------------------------------------------------------------
+// wxContextHelpButton
+// ----------------------------------------------------------------------------
+
 /*
  * wxContextHelpButton
  * You can add this to your dialogs (especially on non-Windows platforms)
@@ -225,6 +253,67 @@ wxContextHelpButton::wxContextHelpButton(wxWindow* parent,
 void wxContextHelpButton::OnContextHelp(wxCommandEvent& event)
 {
     wxContextHelp contextHelp(GetParent());
+}
+
+// ----------------------------------------------------------------------------
+// wxHelpProvider
+// ----------------------------------------------------------------------------
+
+wxHelpProvider *wxHelpProvider::ms_helpProvider = (wxHelpProvider *)NULL;
+
+// trivial implementation of some methods which we don't want to make pure
+// virtual for convenience
+
+void wxHelpProvider::AddHelp(wxWindowBase * WXUNUSED(window),
+                             const wxString& WXUNUSED(text))
+{
+}
+
+void wxHelpProvider::AddHelp(wxWindowID WXUNUSED(id),
+                             const wxString& WXUNUSED(text))
+{
+}
+
+wxHelpProvider::~wxHelpProvider()
+{
+}
+
+// ----------------------------------------------------------------------------
+// wxSimpleHelpProvider
+// ----------------------------------------------------------------------------
+
+wxString wxSimpleHelpProvider::GetHelp(const wxWindowBase *window)
+{
+    bool wasFound;
+    wxString text = m_hashWindows.Get((long)window, &wasFound);
+    if ( !wasFound )
+        text = m_hashIds.Get(window->GetId());
+
+    return text;
+}
+
+void wxSimpleHelpProvider::AddHelp(wxWindowBase *window, const wxString& text)
+{
+    m_hashWindows.Put((long)window, text);
+}
+
+void wxSimpleHelpProvider::AddHelp(wxWindowID id, const wxString& text)
+{
+    m_hashIds.Put(id, text);
+}
+
+bool wxSimpleHelpProvider::ShowHelp(wxWindowBase *window)
+{
+    wxString text = GetHelp(window);
+    if ( !text.empty() )
+    {
+        wxMessageBox(text, _("Help"), wxICON_INFORMATION | wxOK,
+                     (wxWindow *)window);
+
+        return TRUE;
+    }
+
+    return FALSE;
 }
 
 #endif // wxUSE_HELP
