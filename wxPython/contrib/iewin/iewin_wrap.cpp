@@ -645,7 +645,9 @@ static PyObject *_wrap_IEHtmlWin_LoadString(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -689,7 +691,9 @@ static PyObject *_wrap_IEHtmlWin_LoadStream(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (created2)
         delete arg2;
@@ -785,7 +789,9 @@ static PyObject *_wrap_IEHtmlWin_GetEditMode(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -887,7 +893,9 @@ static PyObject *_wrap_IEHtmlWin_GoBack(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -913,7 +921,9 @@ static PyObject *_wrap_IEHtmlWin_GoForward(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -939,7 +949,9 @@ static PyObject *_wrap_IEHtmlWin_GoHome(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -965,7 +977,9 @@ static PyObject *_wrap_IEHtmlWin_GoSearch(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -995,7 +1009,9 @@ static PyObject *_wrap_IEHtmlWin_RefreshPage(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -1021,7 +1037,9 @@ static PyObject *_wrap_IEHtmlWin_Stop(PyObject *self, PyObject *args, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;

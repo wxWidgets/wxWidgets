@@ -546,7 +546,7 @@ SWIG_CheckLong(PyObject* obj)
 #ifdef __cplusplus
 extern "C" {
 #endif
-static int _wrap_UTF8String_set(PyObject *) {
+static int _wrap_UTF8String_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable UTF8String is read-only.");
     return 1;
 }
@@ -566,7 +566,7 @@ static PyObject *_wrap_UTF8String_get() {
 }
 
 
-static int _wrap_StyleString_set(PyObject *) {
+static int _wrap_StyleString_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable StyleString is read-only.");
     return 1;
 }
@@ -586,7 +586,7 @@ static PyObject *_wrap_StyleString_get() {
 }
 
 
-static int _wrap_SizeString_set(PyObject *) {
+static int _wrap_SizeString_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable SizeString is read-only.");
     return 1;
 }
@@ -606,7 +606,7 @@ static PyObject *_wrap_SizeString_get() {
 }
 
 
-static int _wrap_PosString_set(PyObject *) {
+static int _wrap_PosString_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable PosString is read-only.");
     return 1;
 }
@@ -626,7 +626,7 @@ static PyObject *_wrap_PosString_get() {
 }
 
 
-static int _wrap_BitmapString_set(PyObject *) {
+static int _wrap_BitmapString_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable BitmapString is read-only.");
     return 1;
 }
@@ -646,7 +646,7 @@ static PyObject *_wrap_BitmapString_get() {
 }
 
 
-static int _wrap_IconString_set(PyObject *) {
+static int _wrap_IconString_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable IconString is read-only.");
     return 1;
 }
@@ -666,7 +666,7 @@ static PyObject *_wrap_IconString_get() {
 }
 
 
-static int _wrap_FontString_set(PyObject *) {
+static int _wrap_FontString_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable FontString is read-only.");
     return 1;
 }
@@ -686,7 +686,7 @@ static PyObject *_wrap_FontString_get() {
 }
 
 
-static PyObject *_wrap_new_XmlResource(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_XmlResource(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxString *arg1 = 0 ;
     int arg2 = (int) wxXRC_USE_LOCALE ;
@@ -730,7 +730,7 @@ static PyObject *_wrap_new_XmlResource(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_new_EmptyXmlResource(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_EmptyXmlResource(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 = (int) wxXRC_USE_LOCALE ;
     wxXmlResource *result;
@@ -758,7 +758,7 @@ static PyObject *_wrap_new_EmptyXmlResource(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_delete_XmlResource(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_delete_XmlResource(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlResource *arg1 = (wxXmlResource *) 0 ;
     PyObject * obj0 = 0 ;
@@ -783,7 +783,7 @@ static PyObject *_wrap_delete_XmlResource(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_XmlResource_Load(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResource_Load(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlResource *arg1 = (wxXmlResource *) 0 ;
     wxString *arg2 = 0 ;
@@ -810,7 +810,9 @@ static PyObject *_wrap_XmlResource_Load(PyObject *, PyObject *args, PyObject *kw
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp2)
         delete arg2;
@@ -825,7 +827,7 @@ static PyObject *_wrap_XmlResource_Load(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_XmlResource_LoadFromString(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResource_LoadFromString(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlResource *arg1 = (wxXmlResource *) 0 ;
     wxString *arg2 = 0 ;
@@ -852,7 +854,9 @@ static PyObject *_wrap_XmlResource_LoadFromString(PyObject *, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp2)
         delete arg2;
@@ -867,7 +871,7 @@ static PyObject *_wrap_XmlResource_LoadFromString(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_XmlResource_InitAllHandlers(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResource_InitAllHandlers(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlResource *arg1 = (wxXmlResource *) 0 ;
     PyObject * obj0 = 0 ;
@@ -892,7 +896,7 @@ static PyObject *_wrap_XmlResource_InitAllHandlers(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_XmlResource_AddHandler(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResource_AddHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlResource *arg1 = (wxXmlResource *) 0 ;
     wxPyXmlResourceHandler *arg2 = (wxPyXmlResourceHandler *) 0 ;
@@ -921,7 +925,7 @@ static PyObject *_wrap_XmlResource_AddHandler(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_XmlResource_InsertHandler(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResource_InsertHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlResource *arg1 = (wxXmlResource *) 0 ;
     wxPyXmlResourceHandler *arg2 = (wxPyXmlResourceHandler *) 0 ;
@@ -950,7 +954,7 @@ static PyObject *_wrap_XmlResource_InsertHandler(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_XmlResource_ClearHandlers(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResource_ClearHandlers(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlResource *arg1 = (wxXmlResource *) 0 ;
     PyObject * obj0 = 0 ;
@@ -975,7 +979,7 @@ static PyObject *_wrap_XmlResource_ClearHandlers(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_XmlResource_AddSubclassFactory(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResource_AddSubclassFactory(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyXmlSubclassFactory *arg1 = (wxPyXmlSubclassFactory *) 0 ;
     PyObject * obj0 = 0 ;
@@ -1000,7 +1004,7 @@ static PyObject *_wrap_XmlResource_AddSubclassFactory(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_XmlResource_LoadMenu(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResource_LoadMenu(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlResource *arg1 = (wxXmlResource *) 0 ;
     wxString *arg2 = 0 ;
@@ -1044,7 +1048,7 @@ static PyObject *_wrap_XmlResource_LoadMenu(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_XmlResource_LoadMenuBar(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResource_LoadMenuBar(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlResource *arg1 = (wxXmlResource *) 0 ;
     wxString *arg2 = 0 ;
@@ -1088,7 +1092,7 @@ static PyObject *_wrap_XmlResource_LoadMenuBar(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_XmlResource_LoadMenuBarOnFrame(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResource_LoadMenuBarOnFrame(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlResource *arg1 = (wxXmlResource *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -1136,7 +1140,7 @@ static PyObject *_wrap_XmlResource_LoadMenuBarOnFrame(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_XmlResource_LoadToolBar(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResource_LoadToolBar(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlResource *arg1 = (wxXmlResource *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -1184,7 +1188,7 @@ static PyObject *_wrap_XmlResource_LoadToolBar(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_XmlResource_LoadDialog(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResource_LoadDialog(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlResource *arg1 = (wxXmlResource *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -1230,7 +1234,7 @@ static PyObject *_wrap_XmlResource_LoadDialog(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_XmlResource_LoadOnDialog(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResource_LoadOnDialog(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlResource *arg1 = (wxXmlResource *) 0 ;
     wxDialog *arg2 = (wxDialog *) 0 ;
@@ -1265,7 +1269,9 @@ static PyObject *_wrap_XmlResource_LoadOnDialog(PyObject *, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp4)
         delete arg4;
@@ -1280,7 +1286,7 @@ static PyObject *_wrap_XmlResource_LoadOnDialog(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_XmlResource_LoadPanel(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResource_LoadPanel(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlResource *arg1 = (wxXmlResource *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -1326,7 +1332,7 @@ static PyObject *_wrap_XmlResource_LoadPanel(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_XmlResource_LoadOnPanel(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResource_LoadOnPanel(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlResource *arg1 = (wxXmlResource *) 0 ;
     wxPanel *arg2 = (wxPanel *) 0 ;
@@ -1361,7 +1367,9 @@ static PyObject *_wrap_XmlResource_LoadOnPanel(PyObject *, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp4)
         delete arg4;
@@ -1376,7 +1384,7 @@ static PyObject *_wrap_XmlResource_LoadOnPanel(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_XmlResource_LoadFrame(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResource_LoadFrame(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlResource *arg1 = (wxXmlResource *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -1424,7 +1432,7 @@ static PyObject *_wrap_XmlResource_LoadFrame(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_XmlResource_LoadOnFrame(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResource_LoadOnFrame(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlResource *arg1 = (wxXmlResource *) 0 ;
     wxFrame *arg2 = (wxFrame *) 0 ;
@@ -1459,7 +1467,9 @@ static PyObject *_wrap_XmlResource_LoadOnFrame(PyObject *, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp4)
         delete arg4;
@@ -1474,7 +1484,7 @@ static PyObject *_wrap_XmlResource_LoadOnFrame(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_XmlResource_LoadObject(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResource_LoadObject(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlResource *arg1 = (wxXmlResource *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -1538,7 +1548,7 @@ static PyObject *_wrap_XmlResource_LoadObject(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_XmlResource_LoadOnObject(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResource_LoadOnObject(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlResource *arg1 = (wxXmlResource *) 0 ;
     wxObject *arg2 = (wxObject *) 0 ;
@@ -1581,7 +1591,9 @@ static PyObject *_wrap_XmlResource_LoadOnObject(PyObject *, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp4)
         delete arg4;
@@ -1604,7 +1616,7 @@ static PyObject *_wrap_XmlResource_LoadOnObject(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_XmlResource_LoadBitmap(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResource_LoadBitmap(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlResource *arg1 = (wxXmlResource *) 0 ;
     wxString *arg2 = 0 ;
@@ -1650,7 +1662,7 @@ static PyObject *_wrap_XmlResource_LoadBitmap(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_XmlResource_LoadIcon(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResource_LoadIcon(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlResource *arg1 = (wxXmlResource *) 0 ;
     wxString *arg2 = 0 ;
@@ -1696,7 +1708,7 @@ static PyObject *_wrap_XmlResource_LoadIcon(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_XmlResource_AttachUnknownControl(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResource_AttachUnknownControl(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlResource *arg1 = (wxXmlResource *) 0 ;
     wxString *arg2 = 0 ;
@@ -1733,7 +1745,9 @@ static PyObject *_wrap_XmlResource_AttachUnknownControl(PyObject *, PyObject *ar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp2)
         delete arg2;
@@ -1748,7 +1762,7 @@ static PyObject *_wrap_XmlResource_AttachUnknownControl(PyObject *, PyObject *ar
 }
 
 
-static PyObject *_wrap_XmlResource_GetXRCID(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResource_GetXRCID(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxString *arg1 = 0 ;
     int result;
@@ -1786,7 +1800,7 @@ static PyObject *_wrap_XmlResource_GetXRCID(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_XmlResource_GetVersion(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResource_GetVersion(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlResource *arg1 = (wxXmlResource *) 0 ;
     long result;
@@ -1812,7 +1826,7 @@ static PyObject *_wrap_XmlResource_GetVersion(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_XmlResource_CompareVersion(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResource_CompareVersion(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlResource *arg1 = (wxXmlResource *) 0 ;
     int arg2 ;
@@ -1854,7 +1868,7 @@ static PyObject *_wrap_XmlResource_CompareVersion(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_XmlResource_Get(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResource_Get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlResource *result;
     char *kwnames[] = {
@@ -1876,7 +1890,7 @@ static PyObject *_wrap_XmlResource_Get(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_XmlResource_Set(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResource_Set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlResource *arg1 = (wxXmlResource *) 0 ;
     wxXmlResource *result;
@@ -1902,7 +1916,7 @@ static PyObject *_wrap_XmlResource_Set(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_XmlResource_GetFlags(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResource_GetFlags(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlResource *arg1 = (wxXmlResource *) 0 ;
     int result;
@@ -1928,7 +1942,7 @@ static PyObject *_wrap_XmlResource_GetFlags(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_XmlResource_SetFlags(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResource_SetFlags(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlResource *arg1 = (wxXmlResource *) 0 ;
     int arg2 ;
@@ -1957,14 +1971,14 @@ static PyObject *_wrap_XmlResource_SetFlags(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject * XmlResource_swigregister(PyObject *, PyObject *args) {
+static PyObject * XmlResource_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxXmlResource, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_XmlSubclassFactory(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_XmlSubclassFactory(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyXmlSubclassFactory *result;
     char *kwnames[] = {
@@ -1986,7 +2000,7 @@ static PyObject *_wrap_new_XmlSubclassFactory(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_XmlSubclassFactory__setCallbackInfo(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlSubclassFactory__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyXmlSubclassFactory *arg1 = (wxPyXmlSubclassFactory *) 0 ;
     PyObject *arg2 = (PyObject *) 0 ;
@@ -2017,14 +2031,14 @@ static PyObject *_wrap_XmlSubclassFactory__setCallbackInfo(PyObject *, PyObject 
 }
 
 
-static PyObject * XmlSubclassFactory_swigregister(PyObject *, PyObject *args) {
+static PyObject * XmlSubclassFactory_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxPyXmlSubclassFactory, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_XmlProperty(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_XmlProperty(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxString const &arg1_defvalue = wxPyEmptyString ;
     wxString *arg1 = (wxString *) &arg1_defvalue ;
@@ -2090,7 +2104,7 @@ static PyObject *_wrap_new_XmlProperty(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_XmlProperty_GetName(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlProperty_GetName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlProperty *arg1 = (wxXmlProperty *) 0 ;
     wxString result;
@@ -2122,7 +2136,7 @@ static PyObject *_wrap_XmlProperty_GetName(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_XmlProperty_GetValue(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlProperty_GetValue(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlProperty *arg1 = (wxXmlProperty *) 0 ;
     wxString result;
@@ -2154,7 +2168,7 @@ static PyObject *_wrap_XmlProperty_GetValue(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_XmlProperty_GetNext(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlProperty_GetNext(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlProperty *arg1 = (wxXmlProperty *) 0 ;
     wxXmlProperty *result;
@@ -2180,7 +2194,7 @@ static PyObject *_wrap_XmlProperty_GetNext(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_XmlProperty_SetName(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlProperty_SetName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlProperty *arg1 = (wxXmlProperty *) 0 ;
     wxString *arg2 = 0 ;
@@ -2221,7 +2235,7 @@ static PyObject *_wrap_XmlProperty_SetName(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_XmlProperty_SetValue(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlProperty_SetValue(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlProperty *arg1 = (wxXmlProperty *) 0 ;
     wxString *arg2 = 0 ;
@@ -2262,7 +2276,7 @@ static PyObject *_wrap_XmlProperty_SetValue(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_XmlProperty_SetNext(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlProperty_SetNext(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlProperty *arg1 = (wxXmlProperty *) 0 ;
     wxXmlProperty *arg2 = (wxXmlProperty *) 0 ;
@@ -2291,14 +2305,14 @@ static PyObject *_wrap_XmlProperty_SetNext(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject * XmlProperty_swigregister(PyObject *, PyObject *args) {
+static PyObject * XmlProperty_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxXmlProperty, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_XmlNode(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_XmlNode(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlNode *arg1 = (wxXmlNode *) NULL ;
     int arg2 = (int) 0 ;
@@ -2382,7 +2396,7 @@ static PyObject *_wrap_new_XmlNode(PyObject *, PyObject *args, PyObject *kwargs)
 }
 
 
-static PyObject *_wrap_delete_XmlNode(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_delete_XmlNode(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlNode *arg1 = (wxXmlNode *) 0 ;
     PyObject * obj0 = 0 ;
@@ -2407,7 +2421,7 @@ static PyObject *_wrap_delete_XmlNode(PyObject *, PyObject *args, PyObject *kwar
 }
 
 
-static PyObject *_wrap_new_XmlNodeEasy(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_XmlNodeEasy(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 ;
     wxString *arg2 = 0 ;
@@ -2468,7 +2482,7 @@ static PyObject *_wrap_new_XmlNodeEasy(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_XmlNode_AddChild(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlNode_AddChild(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlNode *arg1 = (wxXmlNode *) 0 ;
     wxXmlNode *arg2 = (wxXmlNode *) 0 ;
@@ -2497,7 +2511,7 @@ static PyObject *_wrap_XmlNode_AddChild(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_XmlNode_InsertChild(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlNode_InsertChild(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlNode *arg1 = (wxXmlNode *) 0 ;
     wxXmlNode *arg2 = (wxXmlNode *) 0 ;
@@ -2530,7 +2544,7 @@ static PyObject *_wrap_XmlNode_InsertChild(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_XmlNode_RemoveChild(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlNode_RemoveChild(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlNode *arg1 = (wxXmlNode *) 0 ;
     wxXmlNode *arg2 = (wxXmlNode *) 0 ;
@@ -2553,14 +2567,16 @@ static PyObject *_wrap_XmlNode_RemoveChild(PyObject *, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_XmlNode_AddProperty(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlNode_AddProperty(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlNode *arg1 = (wxXmlNode *) 0 ;
     wxXmlProperty *arg2 = (wxXmlProperty *) 0 ;
@@ -2589,7 +2605,7 @@ static PyObject *_wrap_XmlNode_AddProperty(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_XmlNode_AddPropertyName(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlNode_AddPropertyName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlNode *arg1 = (wxXmlNode *) 0 ;
     wxString *arg2 = 0 ;
@@ -2646,7 +2662,7 @@ static PyObject *_wrap_XmlNode_AddPropertyName(PyObject *, PyObject *args, PyObj
 }
 
 
-static PyObject *_wrap_XmlNode_DeleteProperty(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlNode_DeleteProperty(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlNode *arg1 = (wxXmlNode *) 0 ;
     wxString *arg2 = 0 ;
@@ -2673,7 +2689,9 @@ static PyObject *_wrap_XmlNode_DeleteProperty(PyObject *, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp2)
         delete arg2;
@@ -2688,7 +2706,7 @@ static PyObject *_wrap_XmlNode_DeleteProperty(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_XmlNode_GetType(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlNode_GetType(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlNode *arg1 = (wxXmlNode *) 0 ;
     int result;
@@ -2714,7 +2732,7 @@ static PyObject *_wrap_XmlNode_GetType(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_XmlNode_GetName(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlNode_GetName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlNode *arg1 = (wxXmlNode *) 0 ;
     wxString result;
@@ -2746,7 +2764,7 @@ static PyObject *_wrap_XmlNode_GetName(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_XmlNode_GetContent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlNode_GetContent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlNode *arg1 = (wxXmlNode *) 0 ;
     wxString result;
@@ -2778,7 +2796,7 @@ static PyObject *_wrap_XmlNode_GetContent(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_XmlNode_GetParent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlNode_GetParent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlNode *arg1 = (wxXmlNode *) 0 ;
     wxXmlNode *result;
@@ -2804,7 +2822,7 @@ static PyObject *_wrap_XmlNode_GetParent(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_XmlNode_GetNext(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlNode_GetNext(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlNode *arg1 = (wxXmlNode *) 0 ;
     wxXmlNode *result;
@@ -2830,7 +2848,7 @@ static PyObject *_wrap_XmlNode_GetNext(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_XmlNode_GetChildren(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlNode_GetChildren(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlNode *arg1 = (wxXmlNode *) 0 ;
     wxXmlNode *result;
@@ -2856,7 +2874,7 @@ static PyObject *_wrap_XmlNode_GetChildren(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_XmlNode_GetProperties(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlNode_GetProperties(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlNode *arg1 = (wxXmlNode *) 0 ;
     wxXmlProperty *result;
@@ -2882,7 +2900,7 @@ static PyObject *_wrap_XmlNode_GetProperties(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject *_wrap_XmlNode_GetPropVal(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlNode_GetPropVal(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlNode *arg1 = (wxXmlNode *) 0 ;
     wxString *arg2 = 0 ;
@@ -2946,7 +2964,7 @@ static PyObject *_wrap_XmlNode_GetPropVal(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_XmlNode_HasProp(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlNode_HasProp(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlNode *arg1 = (wxXmlNode *) 0 ;
     wxString *arg2 = 0 ;
@@ -2973,7 +2991,9 @@ static PyObject *_wrap_XmlNode_HasProp(PyObject *, PyObject *args, PyObject *kwa
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp2)
         delete arg2;
@@ -2988,7 +3008,7 @@ static PyObject *_wrap_XmlNode_HasProp(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_XmlNode_SetType(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlNode_SetType(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlNode *arg1 = (wxXmlNode *) 0 ;
     int arg2 ;
@@ -3017,7 +3037,7 @@ static PyObject *_wrap_XmlNode_SetType(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_XmlNode_SetName(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlNode_SetName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlNode *arg1 = (wxXmlNode *) 0 ;
     wxString *arg2 = 0 ;
@@ -3058,7 +3078,7 @@ static PyObject *_wrap_XmlNode_SetName(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_XmlNode_SetContent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlNode_SetContent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlNode *arg1 = (wxXmlNode *) 0 ;
     wxString *arg2 = 0 ;
@@ -3099,7 +3119,7 @@ static PyObject *_wrap_XmlNode_SetContent(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_XmlNode_SetParent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlNode_SetParent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlNode *arg1 = (wxXmlNode *) 0 ;
     wxXmlNode *arg2 = (wxXmlNode *) 0 ;
@@ -3128,7 +3148,7 @@ static PyObject *_wrap_XmlNode_SetParent(PyObject *, PyObject *args, PyObject *k
 }
 
 
-static PyObject *_wrap_XmlNode_SetNext(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlNode_SetNext(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlNode *arg1 = (wxXmlNode *) 0 ;
     wxXmlNode *arg2 = (wxXmlNode *) 0 ;
@@ -3157,7 +3177,7 @@ static PyObject *_wrap_XmlNode_SetNext(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_XmlNode_SetChildren(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlNode_SetChildren(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlNode *arg1 = (wxXmlNode *) 0 ;
     wxXmlNode *arg2 = (wxXmlNode *) 0 ;
@@ -3186,7 +3206,7 @@ static PyObject *_wrap_XmlNode_SetChildren(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_XmlNode_SetProperties(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlNode_SetProperties(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlNode *arg1 = (wxXmlNode *) 0 ;
     wxXmlProperty *arg2 = (wxXmlProperty *) 0 ;
@@ -3215,14 +3235,14 @@ static PyObject *_wrap_XmlNode_SetProperties(PyObject *, PyObject *args, PyObjec
 }
 
 
-static PyObject * XmlNode_swigregister(PyObject *, PyObject *args) {
+static PyObject * XmlNode_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxXmlNode, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_XmlDocument(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_XmlDocument(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxString *arg1 = 0 ;
     wxString const &arg2_defvalue = wxPyUTF8String ;
@@ -3279,7 +3299,7 @@ static PyObject *_wrap_new_XmlDocument(PyObject *, PyObject *args, PyObject *kwa
 }
 
 
-static PyObject *_wrap_new_XmlDocumentFromStream(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_XmlDocumentFromStream(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxInputStream *arg1 = 0 ;
     wxString const &arg2_defvalue = wxPyUTF8String ;
@@ -3346,7 +3366,7 @@ static PyObject *_wrap_new_XmlDocumentFromStream(PyObject *, PyObject *args, PyO
 }
 
 
-static PyObject *_wrap_new_EmptyXmlDocument(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_EmptyXmlDocument(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlDocument *result;
     char *kwnames[] = {
@@ -3368,7 +3388,7 @@ static PyObject *_wrap_new_EmptyXmlDocument(PyObject *, PyObject *args, PyObject
 }
 
 
-static PyObject *_wrap_delete_XmlDocument(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_delete_XmlDocument(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlDocument *arg1 = (wxXmlDocument *) 0 ;
     PyObject * obj0 = 0 ;
@@ -3393,7 +3413,7 @@ static PyObject *_wrap_delete_XmlDocument(PyObject *, PyObject *args, PyObject *
 }
 
 
-static PyObject *_wrap_XmlDocument_Load(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlDocument_Load(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlDocument *arg1 = (wxXmlDocument *) 0 ;
     wxString *arg2 = 0 ;
@@ -3431,7 +3451,9 @@ static PyObject *_wrap_XmlDocument_Load(PyObject *, PyObject *args, PyObject *kw
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp2)
         delete arg2;
@@ -3454,7 +3476,7 @@ static PyObject *_wrap_XmlDocument_Load(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_XmlDocument_LoadFromStream(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlDocument_LoadFromStream(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlDocument *arg1 = (wxXmlDocument *) 0 ;
     wxInputStream *arg2 = 0 ;
@@ -3502,7 +3524,9 @@ static PyObject *_wrap_XmlDocument_LoadFromStream(PyObject *, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (created2)
         delete arg2;
@@ -3525,7 +3549,7 @@ static PyObject *_wrap_XmlDocument_LoadFromStream(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_XmlDocument_Save(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlDocument_Save(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlDocument *arg1 = (wxXmlDocument *) 0 ;
     wxString *arg2 = 0 ;
@@ -3552,7 +3576,9 @@ static PyObject *_wrap_XmlDocument_Save(PyObject *, PyObject *args, PyObject *kw
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp2)
         delete arg2;
@@ -3567,7 +3593,7 @@ static PyObject *_wrap_XmlDocument_Save(PyObject *, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_XmlDocument_SaveToStream(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlDocument_SaveToStream(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlDocument *arg1 = (wxXmlDocument *) 0 ;
     wxOutputStream *arg2 = 0 ;
@@ -3595,14 +3621,16 @@ static PyObject *_wrap_XmlDocument_SaveToStream(PyObject *, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_XmlDocument_IsOk(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlDocument_IsOk(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlDocument *arg1 = (wxXmlDocument *) 0 ;
     bool result;
@@ -3621,14 +3649,16 @@ static PyObject *_wrap_XmlDocument_IsOk(PyObject *, PyObject *args, PyObject *kw
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
 }
 
 
-static PyObject *_wrap_XmlDocument_GetRoot(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlDocument_GetRoot(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlDocument *arg1 = (wxXmlDocument *) 0 ;
     wxXmlNode *result;
@@ -3654,7 +3684,7 @@ static PyObject *_wrap_XmlDocument_GetRoot(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_XmlDocument_GetVersion(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlDocument_GetVersion(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlDocument *arg1 = (wxXmlDocument *) 0 ;
     wxString result;
@@ -3686,7 +3716,7 @@ static PyObject *_wrap_XmlDocument_GetVersion(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_XmlDocument_GetFileEncoding(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlDocument_GetFileEncoding(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlDocument *arg1 = (wxXmlDocument *) 0 ;
     wxString result;
@@ -3718,7 +3748,7 @@ static PyObject *_wrap_XmlDocument_GetFileEncoding(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_XmlDocument_SetRoot(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlDocument_SetRoot(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlDocument *arg1 = (wxXmlDocument *) 0 ;
     wxXmlNode *arg2 = (wxXmlNode *) 0 ;
@@ -3747,7 +3777,7 @@ static PyObject *_wrap_XmlDocument_SetRoot(PyObject *, PyObject *args, PyObject 
 }
 
 
-static PyObject *_wrap_XmlDocument_SetVersion(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlDocument_SetVersion(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlDocument *arg1 = (wxXmlDocument *) 0 ;
     wxString *arg2 = 0 ;
@@ -3788,7 +3818,7 @@ static PyObject *_wrap_XmlDocument_SetVersion(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_XmlDocument_SetFileEncoding(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlDocument_SetFileEncoding(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxXmlDocument *arg1 = (wxXmlDocument *) 0 ;
     wxString *arg2 = 0 ;
@@ -3829,14 +3859,14 @@ static PyObject *_wrap_XmlDocument_SetFileEncoding(PyObject *, PyObject *args, P
 }
 
 
-static PyObject * XmlDocument_swigregister(PyObject *, PyObject *args) {
+static PyObject * XmlDocument_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxXmlDocument, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static PyObject *_wrap_new_XmlResourceHandler(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_XmlResourceHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyXmlResourceHandler *result;
     char *kwnames[] = {
@@ -3858,7 +3888,7 @@ static PyObject *_wrap_new_XmlResourceHandler(PyObject *, PyObject *args, PyObje
 }
 
 
-static PyObject *_wrap_XmlResourceHandler__setCallbackInfo(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResourceHandler__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
     PyObject *arg2 = (PyObject *) 0 ;
@@ -3889,7 +3919,7 @@ static PyObject *_wrap_XmlResourceHandler__setCallbackInfo(PyObject *, PyObject 
 }
 
 
-static PyObject *_wrap_XmlResourceHandler_CreateResource(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResourceHandler_CreateResource(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
     wxXmlNode *arg2 = (wxXmlNode *) 0 ;
@@ -3929,7 +3959,7 @@ static PyObject *_wrap_XmlResourceHandler_CreateResource(PyObject *, PyObject *a
 }
 
 
-static PyObject *_wrap_XmlResourceHandler_SetParentResource(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResourceHandler_SetParentResource(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
     wxXmlResource *arg2 = (wxXmlResource *) 0 ;
@@ -3958,7 +3988,7 @@ static PyObject *_wrap_XmlResourceHandler_SetParentResource(PyObject *, PyObject
 }
 
 
-static PyObject *_wrap_XmlResourceHandler_GetResource(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResourceHandler_GetResource(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
     wxXmlResource *result;
@@ -3984,7 +4014,7 @@ static PyObject *_wrap_XmlResourceHandler_GetResource(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_XmlResourceHandler_GetNode(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResourceHandler_GetNode(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
     wxXmlNode *result;
@@ -4010,7 +4040,7 @@ static PyObject *_wrap_XmlResourceHandler_GetNode(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_XmlResourceHandler_GetClass(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResourceHandler_GetClass(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
     wxString result;
@@ -4042,7 +4072,7 @@ static PyObject *_wrap_XmlResourceHandler_GetClass(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_XmlResourceHandler_GetParent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResourceHandler_GetParent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
     wxObject *result;
@@ -4070,7 +4100,7 @@ static PyObject *_wrap_XmlResourceHandler_GetParent(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_XmlResourceHandler_GetInstance(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResourceHandler_GetInstance(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
     wxObject *result;
@@ -4098,7 +4128,7 @@ static PyObject *_wrap_XmlResourceHandler_GetInstance(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_XmlResourceHandler_GetParentAsWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResourceHandler_GetParentAsWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
     wxWindow *result;
@@ -4126,7 +4156,7 @@ static PyObject *_wrap_XmlResourceHandler_GetParentAsWindow(PyObject *, PyObject
 }
 
 
-static PyObject *_wrap_XmlResourceHandler_GetInstanceAsWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResourceHandler_GetInstanceAsWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
     wxWindow *result;
@@ -4154,7 +4184,7 @@ static PyObject *_wrap_XmlResourceHandler_GetInstanceAsWindow(PyObject *, PyObje
 }
 
 
-static PyObject *_wrap_XmlResourceHandler_IsOfClass(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResourceHandler_IsOfClass(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
     wxXmlNode *arg2 = (wxXmlNode *) 0 ;
@@ -4185,7 +4215,9 @@ static PyObject *_wrap_XmlResourceHandler_IsOfClass(PyObject *, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp3)
         delete arg3;
@@ -4200,7 +4232,7 @@ static PyObject *_wrap_XmlResourceHandler_IsOfClass(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_XmlResourceHandler_GetNodeContent(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResourceHandler_GetNodeContent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
     wxXmlNode *arg2 = (wxXmlNode *) 0 ;
@@ -4236,7 +4268,7 @@ static PyObject *_wrap_XmlResourceHandler_GetNodeContent(PyObject *, PyObject *a
 }
 
 
-static PyObject *_wrap_XmlResourceHandler_HasParam(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResourceHandler_HasParam(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
     wxString *arg2 = 0 ;
@@ -4263,7 +4295,9 @@ static PyObject *_wrap_XmlResourceHandler_HasParam(PyObject *, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp2)
         delete arg2;
@@ -4278,7 +4312,7 @@ static PyObject *_wrap_XmlResourceHandler_HasParam(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_XmlResourceHandler_GetParamNode(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResourceHandler_GetParamNode(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
     wxString *arg2 = 0 ;
@@ -4320,7 +4354,7 @@ static PyObject *_wrap_XmlResourceHandler_GetParamNode(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_XmlResourceHandler_GetParamValue(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResourceHandler_GetParamValue(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
     wxString *arg2 = 0 ;
@@ -4368,7 +4402,7 @@ static PyObject *_wrap_XmlResourceHandler_GetParamValue(PyObject *, PyObject *ar
 }
 
 
-static PyObject *_wrap_XmlResourceHandler_AddStyle(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResourceHandler_AddStyle(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
     wxString *arg2 = 0 ;
@@ -4413,7 +4447,7 @@ static PyObject *_wrap_XmlResourceHandler_AddStyle(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_XmlResourceHandler_AddWindowStyles(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResourceHandler_AddWindowStyles(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
     PyObject * obj0 = 0 ;
@@ -4438,7 +4472,7 @@ static PyObject *_wrap_XmlResourceHandler_AddWindowStyles(PyObject *, PyObject *
 }
 
 
-static PyObject *_wrap_XmlResourceHandler_GetStyle(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResourceHandler_GetStyle(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
     wxString const &arg2_defvalue = wxPyStyleString ;
@@ -4489,7 +4523,7 @@ static PyObject *_wrap_XmlResourceHandler_GetStyle(PyObject *, PyObject *args, P
 }
 
 
-static PyObject *_wrap_XmlResourceHandler_GetText(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResourceHandler_GetText(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
     wxString *arg2 = 0 ;
@@ -4543,7 +4577,7 @@ static PyObject *_wrap_XmlResourceHandler_GetText(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_XmlResourceHandler_GetID(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResourceHandler_GetID(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
     int result;
@@ -4569,7 +4603,7 @@ static PyObject *_wrap_XmlResourceHandler_GetID(PyObject *, PyObject *args, PyOb
 }
 
 
-static PyObject *_wrap_XmlResourceHandler_GetName(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResourceHandler_GetName(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
     wxString result;
@@ -4601,7 +4635,7 @@ static PyObject *_wrap_XmlResourceHandler_GetName(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_XmlResourceHandler_GetBool(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResourceHandler_GetBool(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
     wxString *arg2 = 0 ;
@@ -4634,7 +4668,9 @@ static PyObject *_wrap_XmlResourceHandler_GetBool(PyObject *, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp2)
         delete arg2;
@@ -4649,7 +4685,7 @@ static PyObject *_wrap_XmlResourceHandler_GetBool(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_XmlResourceHandler_GetLong(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResourceHandler_GetLong(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
     wxString *arg2 = 0 ;
@@ -4697,7 +4733,7 @@ static PyObject *_wrap_XmlResourceHandler_GetLong(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_XmlResourceHandler_GetColour(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResourceHandler_GetColour(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
     wxString *arg2 = 0 ;
@@ -4743,7 +4779,7 @@ static PyObject *_wrap_XmlResourceHandler_GetColour(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_XmlResourceHandler_GetSize(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResourceHandler_GetSize(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
     wxString const &arg2_defvalue = wxPySizeString ;
@@ -4792,7 +4828,7 @@ static PyObject *_wrap_XmlResourceHandler_GetSize(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_XmlResourceHandler_GetPosition(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResourceHandler_GetPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
     wxString const &arg2_defvalue = wxPyPosString ;
@@ -4841,7 +4877,7 @@ static PyObject *_wrap_XmlResourceHandler_GetPosition(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_XmlResourceHandler_GetDimension(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResourceHandler_GetDimension(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
     wxString *arg2 = 0 ;
@@ -4889,7 +4925,7 @@ static PyObject *_wrap_XmlResourceHandler_GetDimension(PyObject *, PyObject *arg
 }
 
 
-static PyObject *_wrap_XmlResourceHandler_GetBitmap(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResourceHandler_GetBitmap(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
     wxString const &arg2_defvalue = wxPyBitmapString ;
@@ -4958,7 +4994,7 @@ static PyObject *_wrap_XmlResourceHandler_GetBitmap(PyObject *, PyObject *args, 
 }
 
 
-static PyObject *_wrap_XmlResourceHandler_GetIcon(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResourceHandler_GetIcon(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
     wxString const &arg2_defvalue = wxPyIconString ;
@@ -5027,7 +5063,7 @@ static PyObject *_wrap_XmlResourceHandler_GetIcon(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_XmlResourceHandler_GetFont(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResourceHandler_GetFont(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
     wxString const &arg2_defvalue = wxPyFontString ;
@@ -5076,7 +5112,7 @@ static PyObject *_wrap_XmlResourceHandler_GetFont(PyObject *, PyObject *args, Py
 }
 
 
-static PyObject *_wrap_XmlResourceHandler_SetupWindow(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResourceHandler_SetupWindow(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
     wxWindow *arg2 = (wxWindow *) 0 ;
@@ -5105,7 +5141,7 @@ static PyObject *_wrap_XmlResourceHandler_SetupWindow(PyObject *, PyObject *args
 }
 
 
-static PyObject *_wrap_XmlResourceHandler_CreateChildren(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResourceHandler_CreateChildren(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
     wxObject *arg2 = (wxObject *) 0 ;
@@ -5140,7 +5176,7 @@ static PyObject *_wrap_XmlResourceHandler_CreateChildren(PyObject *, PyObject *a
 }
 
 
-static PyObject *_wrap_XmlResourceHandler_CreateChildrenPrivately(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResourceHandler_CreateChildrenPrivately(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
     wxObject *arg2 = (wxObject *) 0 ;
@@ -5175,7 +5211,7 @@ static PyObject *_wrap_XmlResourceHandler_CreateChildrenPrivately(PyObject *, Py
 }
 
 
-static PyObject *_wrap_XmlResourceHandler_CreateResFromNode(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResourceHandler_CreateResFromNode(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
     wxXmlNode *arg2 = (wxXmlNode *) 0 ;
@@ -5217,7 +5253,7 @@ static PyObject *_wrap_XmlResourceHandler_CreateResFromNode(PyObject *, PyObject
 }
 
 
-static PyObject *_wrap_XmlResourceHandler_GetCurFileSystem(PyObject *, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_XmlResourceHandler_GetCurFileSystem(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxPyXmlResourceHandler *arg1 = (wxPyXmlResourceHandler *) 0 ;
     wxFileSystem *result;
@@ -5246,7 +5282,7 @@ static PyObject *_wrap_XmlResourceHandler_GetCurFileSystem(PyObject *, PyObject 
 }
 
 
-static PyObject * XmlResourceHandler_swigregister(PyObject *, PyObject *args) {
+static PyObject * XmlResourceHandler_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxPyXmlResourceHandler, obj);
@@ -5254,130 +5290,130 @@ static PyObject * XmlResourceHandler_swigregister(PyObject *, PyObject *args) {
     return Py_BuildValue((char *)"");
 }
 static PyMethodDef SwigMethods[] = {
-	 { (char *)"new_XmlResource", (PyCFunction) _wrap_new_XmlResource, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"new_EmptyXmlResource", (PyCFunction) _wrap_new_EmptyXmlResource, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"delete_XmlResource", (PyCFunction) _wrap_delete_XmlResource, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResource_Load", (PyCFunction) _wrap_XmlResource_Load, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResource_LoadFromString", (PyCFunction) _wrap_XmlResource_LoadFromString, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResource_InitAllHandlers", (PyCFunction) _wrap_XmlResource_InitAllHandlers, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResource_AddHandler", (PyCFunction) _wrap_XmlResource_AddHandler, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResource_InsertHandler", (PyCFunction) _wrap_XmlResource_InsertHandler, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResource_ClearHandlers", (PyCFunction) _wrap_XmlResource_ClearHandlers, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResource_AddSubclassFactory", (PyCFunction) _wrap_XmlResource_AddSubclassFactory, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResource_LoadMenu", (PyCFunction) _wrap_XmlResource_LoadMenu, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResource_LoadMenuBar", (PyCFunction) _wrap_XmlResource_LoadMenuBar, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResource_LoadMenuBarOnFrame", (PyCFunction) _wrap_XmlResource_LoadMenuBarOnFrame, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResource_LoadToolBar", (PyCFunction) _wrap_XmlResource_LoadToolBar, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResource_LoadDialog", (PyCFunction) _wrap_XmlResource_LoadDialog, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResource_LoadOnDialog", (PyCFunction) _wrap_XmlResource_LoadOnDialog, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResource_LoadPanel", (PyCFunction) _wrap_XmlResource_LoadPanel, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResource_LoadOnPanel", (PyCFunction) _wrap_XmlResource_LoadOnPanel, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResource_LoadFrame", (PyCFunction) _wrap_XmlResource_LoadFrame, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResource_LoadOnFrame", (PyCFunction) _wrap_XmlResource_LoadOnFrame, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResource_LoadObject", (PyCFunction) _wrap_XmlResource_LoadObject, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResource_LoadOnObject", (PyCFunction) _wrap_XmlResource_LoadOnObject, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResource_LoadBitmap", (PyCFunction) _wrap_XmlResource_LoadBitmap, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResource_LoadIcon", (PyCFunction) _wrap_XmlResource_LoadIcon, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResource_AttachUnknownControl", (PyCFunction) _wrap_XmlResource_AttachUnknownControl, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResource_GetXRCID", (PyCFunction) _wrap_XmlResource_GetXRCID, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResource_GetVersion", (PyCFunction) _wrap_XmlResource_GetVersion, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResource_CompareVersion", (PyCFunction) _wrap_XmlResource_CompareVersion, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResource_Get", (PyCFunction) _wrap_XmlResource_Get, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResource_Set", (PyCFunction) _wrap_XmlResource_Set, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResource_GetFlags", (PyCFunction) _wrap_XmlResource_GetFlags, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResource_SetFlags", (PyCFunction) _wrap_XmlResource_SetFlags, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResource_swigregister", XmlResource_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_XmlSubclassFactory", (PyCFunction) _wrap_new_XmlSubclassFactory, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlSubclassFactory__setCallbackInfo", (PyCFunction) _wrap_XmlSubclassFactory__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlSubclassFactory_swigregister", XmlSubclassFactory_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_XmlProperty", (PyCFunction) _wrap_new_XmlProperty, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlProperty_GetName", (PyCFunction) _wrap_XmlProperty_GetName, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlProperty_GetValue", (PyCFunction) _wrap_XmlProperty_GetValue, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlProperty_GetNext", (PyCFunction) _wrap_XmlProperty_GetNext, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlProperty_SetName", (PyCFunction) _wrap_XmlProperty_SetName, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlProperty_SetValue", (PyCFunction) _wrap_XmlProperty_SetValue, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlProperty_SetNext", (PyCFunction) _wrap_XmlProperty_SetNext, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlProperty_swigregister", XmlProperty_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_XmlNode", (PyCFunction) _wrap_new_XmlNode, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"delete_XmlNode", (PyCFunction) _wrap_delete_XmlNode, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"new_XmlNodeEasy", (PyCFunction) _wrap_new_XmlNodeEasy, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlNode_AddChild", (PyCFunction) _wrap_XmlNode_AddChild, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlNode_InsertChild", (PyCFunction) _wrap_XmlNode_InsertChild, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlNode_RemoveChild", (PyCFunction) _wrap_XmlNode_RemoveChild, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlNode_AddProperty", (PyCFunction) _wrap_XmlNode_AddProperty, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlNode_AddPropertyName", (PyCFunction) _wrap_XmlNode_AddPropertyName, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlNode_DeleteProperty", (PyCFunction) _wrap_XmlNode_DeleteProperty, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlNode_GetType", (PyCFunction) _wrap_XmlNode_GetType, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlNode_GetName", (PyCFunction) _wrap_XmlNode_GetName, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlNode_GetContent", (PyCFunction) _wrap_XmlNode_GetContent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlNode_GetParent", (PyCFunction) _wrap_XmlNode_GetParent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlNode_GetNext", (PyCFunction) _wrap_XmlNode_GetNext, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlNode_GetChildren", (PyCFunction) _wrap_XmlNode_GetChildren, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlNode_GetProperties", (PyCFunction) _wrap_XmlNode_GetProperties, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlNode_GetPropVal", (PyCFunction) _wrap_XmlNode_GetPropVal, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlNode_HasProp", (PyCFunction) _wrap_XmlNode_HasProp, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlNode_SetType", (PyCFunction) _wrap_XmlNode_SetType, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlNode_SetName", (PyCFunction) _wrap_XmlNode_SetName, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlNode_SetContent", (PyCFunction) _wrap_XmlNode_SetContent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlNode_SetParent", (PyCFunction) _wrap_XmlNode_SetParent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlNode_SetNext", (PyCFunction) _wrap_XmlNode_SetNext, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlNode_SetChildren", (PyCFunction) _wrap_XmlNode_SetChildren, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlNode_SetProperties", (PyCFunction) _wrap_XmlNode_SetProperties, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlNode_swigregister", XmlNode_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_XmlDocument", (PyCFunction) _wrap_new_XmlDocument, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"new_XmlDocumentFromStream", (PyCFunction) _wrap_new_XmlDocumentFromStream, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"new_EmptyXmlDocument", (PyCFunction) _wrap_new_EmptyXmlDocument, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"delete_XmlDocument", (PyCFunction) _wrap_delete_XmlDocument, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlDocument_Load", (PyCFunction) _wrap_XmlDocument_Load, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlDocument_LoadFromStream", (PyCFunction) _wrap_XmlDocument_LoadFromStream, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlDocument_Save", (PyCFunction) _wrap_XmlDocument_Save, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlDocument_SaveToStream", (PyCFunction) _wrap_XmlDocument_SaveToStream, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlDocument_IsOk", (PyCFunction) _wrap_XmlDocument_IsOk, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlDocument_GetRoot", (PyCFunction) _wrap_XmlDocument_GetRoot, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlDocument_GetVersion", (PyCFunction) _wrap_XmlDocument_GetVersion, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlDocument_GetFileEncoding", (PyCFunction) _wrap_XmlDocument_GetFileEncoding, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlDocument_SetRoot", (PyCFunction) _wrap_XmlDocument_SetRoot, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlDocument_SetVersion", (PyCFunction) _wrap_XmlDocument_SetVersion, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlDocument_SetFileEncoding", (PyCFunction) _wrap_XmlDocument_SetFileEncoding, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlDocument_swigregister", XmlDocument_swigregister, METH_VARARGS, NULL },
-	 { (char *)"new_XmlResourceHandler", (PyCFunction) _wrap_new_XmlResourceHandler, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResourceHandler__setCallbackInfo", (PyCFunction) _wrap_XmlResourceHandler__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResourceHandler_CreateResource", (PyCFunction) _wrap_XmlResourceHandler_CreateResource, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResourceHandler_SetParentResource", (PyCFunction) _wrap_XmlResourceHandler_SetParentResource, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResourceHandler_GetResource", (PyCFunction) _wrap_XmlResourceHandler_GetResource, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResourceHandler_GetNode", (PyCFunction) _wrap_XmlResourceHandler_GetNode, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResourceHandler_GetClass", (PyCFunction) _wrap_XmlResourceHandler_GetClass, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResourceHandler_GetParent", (PyCFunction) _wrap_XmlResourceHandler_GetParent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResourceHandler_GetInstance", (PyCFunction) _wrap_XmlResourceHandler_GetInstance, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResourceHandler_GetParentAsWindow", (PyCFunction) _wrap_XmlResourceHandler_GetParentAsWindow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResourceHandler_GetInstanceAsWindow", (PyCFunction) _wrap_XmlResourceHandler_GetInstanceAsWindow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResourceHandler_IsOfClass", (PyCFunction) _wrap_XmlResourceHandler_IsOfClass, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResourceHandler_GetNodeContent", (PyCFunction) _wrap_XmlResourceHandler_GetNodeContent, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResourceHandler_HasParam", (PyCFunction) _wrap_XmlResourceHandler_HasParam, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResourceHandler_GetParamNode", (PyCFunction) _wrap_XmlResourceHandler_GetParamNode, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResourceHandler_GetParamValue", (PyCFunction) _wrap_XmlResourceHandler_GetParamValue, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResourceHandler_AddStyle", (PyCFunction) _wrap_XmlResourceHandler_AddStyle, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResourceHandler_AddWindowStyles", (PyCFunction) _wrap_XmlResourceHandler_AddWindowStyles, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResourceHandler_GetStyle", (PyCFunction) _wrap_XmlResourceHandler_GetStyle, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResourceHandler_GetText", (PyCFunction) _wrap_XmlResourceHandler_GetText, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResourceHandler_GetID", (PyCFunction) _wrap_XmlResourceHandler_GetID, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResourceHandler_GetName", (PyCFunction) _wrap_XmlResourceHandler_GetName, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResourceHandler_GetBool", (PyCFunction) _wrap_XmlResourceHandler_GetBool, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResourceHandler_GetLong", (PyCFunction) _wrap_XmlResourceHandler_GetLong, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResourceHandler_GetColour", (PyCFunction) _wrap_XmlResourceHandler_GetColour, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResourceHandler_GetSize", (PyCFunction) _wrap_XmlResourceHandler_GetSize, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResourceHandler_GetPosition", (PyCFunction) _wrap_XmlResourceHandler_GetPosition, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResourceHandler_GetDimension", (PyCFunction) _wrap_XmlResourceHandler_GetDimension, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResourceHandler_GetBitmap", (PyCFunction) _wrap_XmlResourceHandler_GetBitmap, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResourceHandler_GetIcon", (PyCFunction) _wrap_XmlResourceHandler_GetIcon, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResourceHandler_GetFont", (PyCFunction) _wrap_XmlResourceHandler_GetFont, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResourceHandler_SetupWindow", (PyCFunction) _wrap_XmlResourceHandler_SetupWindow, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResourceHandler_CreateChildren", (PyCFunction) _wrap_XmlResourceHandler_CreateChildren, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResourceHandler_CreateChildrenPrivately", (PyCFunction) _wrap_XmlResourceHandler_CreateChildrenPrivately, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResourceHandler_CreateResFromNode", (PyCFunction) _wrap_XmlResourceHandler_CreateResFromNode, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResourceHandler_GetCurFileSystem", (PyCFunction) _wrap_XmlResourceHandler_GetCurFileSystem, METH_VARARGS | METH_KEYWORDS, NULL },
-	 { (char *)"XmlResourceHandler_swigregister", XmlResourceHandler_swigregister, METH_VARARGS, NULL },
-	 { NULL, NULL, 0, NULL }
+	 { (char *)"new_XmlResource", (PyCFunction) _wrap_new_XmlResource, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_EmptyXmlResource", (PyCFunction) _wrap_new_EmptyXmlResource, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"delete_XmlResource", (PyCFunction) _wrap_delete_XmlResource, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResource_Load", (PyCFunction) _wrap_XmlResource_Load, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResource_LoadFromString", (PyCFunction) _wrap_XmlResource_LoadFromString, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResource_InitAllHandlers", (PyCFunction) _wrap_XmlResource_InitAllHandlers, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResource_AddHandler", (PyCFunction) _wrap_XmlResource_AddHandler, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResource_InsertHandler", (PyCFunction) _wrap_XmlResource_InsertHandler, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResource_ClearHandlers", (PyCFunction) _wrap_XmlResource_ClearHandlers, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResource_AddSubclassFactory", (PyCFunction) _wrap_XmlResource_AddSubclassFactory, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResource_LoadMenu", (PyCFunction) _wrap_XmlResource_LoadMenu, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResource_LoadMenuBar", (PyCFunction) _wrap_XmlResource_LoadMenuBar, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResource_LoadMenuBarOnFrame", (PyCFunction) _wrap_XmlResource_LoadMenuBarOnFrame, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResource_LoadToolBar", (PyCFunction) _wrap_XmlResource_LoadToolBar, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResource_LoadDialog", (PyCFunction) _wrap_XmlResource_LoadDialog, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResource_LoadOnDialog", (PyCFunction) _wrap_XmlResource_LoadOnDialog, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResource_LoadPanel", (PyCFunction) _wrap_XmlResource_LoadPanel, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResource_LoadOnPanel", (PyCFunction) _wrap_XmlResource_LoadOnPanel, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResource_LoadFrame", (PyCFunction) _wrap_XmlResource_LoadFrame, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResource_LoadOnFrame", (PyCFunction) _wrap_XmlResource_LoadOnFrame, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResource_LoadObject", (PyCFunction) _wrap_XmlResource_LoadObject, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResource_LoadOnObject", (PyCFunction) _wrap_XmlResource_LoadOnObject, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResource_LoadBitmap", (PyCFunction) _wrap_XmlResource_LoadBitmap, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResource_LoadIcon", (PyCFunction) _wrap_XmlResource_LoadIcon, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResource_AttachUnknownControl", (PyCFunction) _wrap_XmlResource_AttachUnknownControl, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResource_GetXRCID", (PyCFunction) _wrap_XmlResource_GetXRCID, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResource_GetVersion", (PyCFunction) _wrap_XmlResource_GetVersion, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResource_CompareVersion", (PyCFunction) _wrap_XmlResource_CompareVersion, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResource_Get", (PyCFunction) _wrap_XmlResource_Get, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResource_Set", (PyCFunction) _wrap_XmlResource_Set, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResource_GetFlags", (PyCFunction) _wrap_XmlResource_GetFlags, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResource_SetFlags", (PyCFunction) _wrap_XmlResource_SetFlags, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResource_swigregister", XmlResource_swigregister, METH_VARARGS },
+	 { (char *)"new_XmlSubclassFactory", (PyCFunction) _wrap_new_XmlSubclassFactory, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlSubclassFactory__setCallbackInfo", (PyCFunction) _wrap_XmlSubclassFactory__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlSubclassFactory_swigregister", XmlSubclassFactory_swigregister, METH_VARARGS },
+	 { (char *)"new_XmlProperty", (PyCFunction) _wrap_new_XmlProperty, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlProperty_GetName", (PyCFunction) _wrap_XmlProperty_GetName, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlProperty_GetValue", (PyCFunction) _wrap_XmlProperty_GetValue, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlProperty_GetNext", (PyCFunction) _wrap_XmlProperty_GetNext, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlProperty_SetName", (PyCFunction) _wrap_XmlProperty_SetName, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlProperty_SetValue", (PyCFunction) _wrap_XmlProperty_SetValue, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlProperty_SetNext", (PyCFunction) _wrap_XmlProperty_SetNext, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlProperty_swigregister", XmlProperty_swigregister, METH_VARARGS },
+	 { (char *)"new_XmlNode", (PyCFunction) _wrap_new_XmlNode, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"delete_XmlNode", (PyCFunction) _wrap_delete_XmlNode, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_XmlNodeEasy", (PyCFunction) _wrap_new_XmlNodeEasy, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlNode_AddChild", (PyCFunction) _wrap_XmlNode_AddChild, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlNode_InsertChild", (PyCFunction) _wrap_XmlNode_InsertChild, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlNode_RemoveChild", (PyCFunction) _wrap_XmlNode_RemoveChild, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlNode_AddProperty", (PyCFunction) _wrap_XmlNode_AddProperty, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlNode_AddPropertyName", (PyCFunction) _wrap_XmlNode_AddPropertyName, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlNode_DeleteProperty", (PyCFunction) _wrap_XmlNode_DeleteProperty, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlNode_GetType", (PyCFunction) _wrap_XmlNode_GetType, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlNode_GetName", (PyCFunction) _wrap_XmlNode_GetName, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlNode_GetContent", (PyCFunction) _wrap_XmlNode_GetContent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlNode_GetParent", (PyCFunction) _wrap_XmlNode_GetParent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlNode_GetNext", (PyCFunction) _wrap_XmlNode_GetNext, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlNode_GetChildren", (PyCFunction) _wrap_XmlNode_GetChildren, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlNode_GetProperties", (PyCFunction) _wrap_XmlNode_GetProperties, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlNode_GetPropVal", (PyCFunction) _wrap_XmlNode_GetPropVal, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlNode_HasProp", (PyCFunction) _wrap_XmlNode_HasProp, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlNode_SetType", (PyCFunction) _wrap_XmlNode_SetType, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlNode_SetName", (PyCFunction) _wrap_XmlNode_SetName, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlNode_SetContent", (PyCFunction) _wrap_XmlNode_SetContent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlNode_SetParent", (PyCFunction) _wrap_XmlNode_SetParent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlNode_SetNext", (PyCFunction) _wrap_XmlNode_SetNext, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlNode_SetChildren", (PyCFunction) _wrap_XmlNode_SetChildren, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlNode_SetProperties", (PyCFunction) _wrap_XmlNode_SetProperties, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlNode_swigregister", XmlNode_swigregister, METH_VARARGS },
+	 { (char *)"new_XmlDocument", (PyCFunction) _wrap_new_XmlDocument, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_XmlDocumentFromStream", (PyCFunction) _wrap_new_XmlDocumentFromStream, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_EmptyXmlDocument", (PyCFunction) _wrap_new_EmptyXmlDocument, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"delete_XmlDocument", (PyCFunction) _wrap_delete_XmlDocument, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlDocument_Load", (PyCFunction) _wrap_XmlDocument_Load, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlDocument_LoadFromStream", (PyCFunction) _wrap_XmlDocument_LoadFromStream, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlDocument_Save", (PyCFunction) _wrap_XmlDocument_Save, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlDocument_SaveToStream", (PyCFunction) _wrap_XmlDocument_SaveToStream, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlDocument_IsOk", (PyCFunction) _wrap_XmlDocument_IsOk, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlDocument_GetRoot", (PyCFunction) _wrap_XmlDocument_GetRoot, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlDocument_GetVersion", (PyCFunction) _wrap_XmlDocument_GetVersion, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlDocument_GetFileEncoding", (PyCFunction) _wrap_XmlDocument_GetFileEncoding, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlDocument_SetRoot", (PyCFunction) _wrap_XmlDocument_SetRoot, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlDocument_SetVersion", (PyCFunction) _wrap_XmlDocument_SetVersion, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlDocument_SetFileEncoding", (PyCFunction) _wrap_XmlDocument_SetFileEncoding, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlDocument_swigregister", XmlDocument_swigregister, METH_VARARGS },
+	 { (char *)"new_XmlResourceHandler", (PyCFunction) _wrap_new_XmlResourceHandler, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResourceHandler__setCallbackInfo", (PyCFunction) _wrap_XmlResourceHandler__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResourceHandler_CreateResource", (PyCFunction) _wrap_XmlResourceHandler_CreateResource, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResourceHandler_SetParentResource", (PyCFunction) _wrap_XmlResourceHandler_SetParentResource, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResourceHandler_GetResource", (PyCFunction) _wrap_XmlResourceHandler_GetResource, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResourceHandler_GetNode", (PyCFunction) _wrap_XmlResourceHandler_GetNode, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResourceHandler_GetClass", (PyCFunction) _wrap_XmlResourceHandler_GetClass, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResourceHandler_GetParent", (PyCFunction) _wrap_XmlResourceHandler_GetParent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResourceHandler_GetInstance", (PyCFunction) _wrap_XmlResourceHandler_GetInstance, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResourceHandler_GetParentAsWindow", (PyCFunction) _wrap_XmlResourceHandler_GetParentAsWindow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResourceHandler_GetInstanceAsWindow", (PyCFunction) _wrap_XmlResourceHandler_GetInstanceAsWindow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResourceHandler_IsOfClass", (PyCFunction) _wrap_XmlResourceHandler_IsOfClass, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResourceHandler_GetNodeContent", (PyCFunction) _wrap_XmlResourceHandler_GetNodeContent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResourceHandler_HasParam", (PyCFunction) _wrap_XmlResourceHandler_HasParam, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResourceHandler_GetParamNode", (PyCFunction) _wrap_XmlResourceHandler_GetParamNode, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResourceHandler_GetParamValue", (PyCFunction) _wrap_XmlResourceHandler_GetParamValue, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResourceHandler_AddStyle", (PyCFunction) _wrap_XmlResourceHandler_AddStyle, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResourceHandler_AddWindowStyles", (PyCFunction) _wrap_XmlResourceHandler_AddWindowStyles, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResourceHandler_GetStyle", (PyCFunction) _wrap_XmlResourceHandler_GetStyle, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResourceHandler_GetText", (PyCFunction) _wrap_XmlResourceHandler_GetText, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResourceHandler_GetID", (PyCFunction) _wrap_XmlResourceHandler_GetID, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResourceHandler_GetName", (PyCFunction) _wrap_XmlResourceHandler_GetName, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResourceHandler_GetBool", (PyCFunction) _wrap_XmlResourceHandler_GetBool, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResourceHandler_GetLong", (PyCFunction) _wrap_XmlResourceHandler_GetLong, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResourceHandler_GetColour", (PyCFunction) _wrap_XmlResourceHandler_GetColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResourceHandler_GetSize", (PyCFunction) _wrap_XmlResourceHandler_GetSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResourceHandler_GetPosition", (PyCFunction) _wrap_XmlResourceHandler_GetPosition, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResourceHandler_GetDimension", (PyCFunction) _wrap_XmlResourceHandler_GetDimension, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResourceHandler_GetBitmap", (PyCFunction) _wrap_XmlResourceHandler_GetBitmap, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResourceHandler_GetIcon", (PyCFunction) _wrap_XmlResourceHandler_GetIcon, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResourceHandler_GetFont", (PyCFunction) _wrap_XmlResourceHandler_GetFont, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResourceHandler_SetupWindow", (PyCFunction) _wrap_XmlResourceHandler_SetupWindow, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResourceHandler_CreateChildren", (PyCFunction) _wrap_XmlResourceHandler_CreateChildren, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResourceHandler_CreateChildrenPrivately", (PyCFunction) _wrap_XmlResourceHandler_CreateChildrenPrivately, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResourceHandler_CreateResFromNode", (PyCFunction) _wrap_XmlResourceHandler_CreateResFromNode, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResourceHandler_GetCurFileSystem", (PyCFunction) _wrap_XmlResourceHandler_GetCurFileSystem, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"XmlResourceHandler_swigregister", XmlResourceHandler_swigregister, METH_VARARGS },
+	 { NULL, NULL }
 };
 
 
@@ -5673,7 +5709,7 @@ _swigt__p_wxSize,
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (END) -------- */
 
 static swig_const_info swig_const_table[] = {
-{0, 0, 0, 0.0, 0, 0}};
+{0}};
 
 #ifdef __cplusplus
 }

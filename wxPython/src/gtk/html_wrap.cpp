@@ -447,21 +447,21 @@ public:
     }
 
     void OnExit() {
-        wxPyBeginBlockThreads();
+        bool blocked = wxPyBeginBlockThreads();
         Py_DECREF(m_tagHandlerClass);
         m_tagHandlerClass = NULL;
         for (size_t x=0; x < m_objArray.GetCount(); x++) {
             PyObject* obj = (PyObject*)m_objArray.Item(x);
             Py_DECREF(obj);
         }
-        wxPyEndBlockThreads();
+        wxPyEndBlockThreads(blocked);
     };
 
     void FillHandlersTable(wxHtmlWinParser *parser) {
         // Wave our magic wand...  (if it works it's a miracle!  ;-)
 
         // First, make a new instance of the tag handler
-        wxPyBeginBlockThreads();
+        bool blocked = wxPyBeginBlockThreads();
         PyObject* arg = PyTuple_New(0);
         PyObject* obj = PyObject_CallObject(m_tagHandlerClass, arg);
         Py_DECREF(arg);
@@ -469,10 +469,10 @@ public:
         // now figure out where it's C++ object is...
         wxPyHtmlWinTagHandler* thPtr;
         if (! wxPyConvertSwigPtr(obj, (void **)&thPtr, wxT("wxPyHtmlWinTagHandler"))) {
-            wxPyEndBlockThreads();
+            wxPyEndBlockThreads(blocked);
             return;
         }
-        wxPyEndBlockThreads();
+        wxPyEndBlockThreads(blocked);
 
         // add it,
         parser->AddTagHandler(thPtr);
@@ -625,13 +625,13 @@ public:
     virtual bool CanRead(const wxFSFile& file) const {
         bool rval = False;
         bool found;
-        wxPyBeginBlockThreads();
+        bool blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "CanRead"))) {
             PyObject* obj = wxPyMake_wxObject((wxFSFile*)&file);  // cast away const
             rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(O)", obj));
             Py_DECREF(obj);
         }
-        wxPyEndBlockThreads();
+        wxPyEndBlockThreads(blocked);
         return rval;
     }
 
@@ -641,7 +641,7 @@ public:
     virtual wxString ReadFile(const wxFSFile& file) const {
         wxString rval;
         bool found;
-        wxPyBeginBlockThreads();
+        bool blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "ReadFile"))) {
             PyObject* obj = wxPyMake_wxObject((wxFSFile*)&file);  // cast away const
             PyObject* ro;
@@ -652,7 +652,7 @@ public:
                 Py_DECREF(ro);
             }
         }
-        wxPyEndBlockThreads();
+        wxPyEndBlockThreads(blocked);
         return rval;
     }
 
@@ -703,13 +703,13 @@ IMP_PYCALLBACK__CELLINTINTME(wxPyHtmlWindow, wxHtmlWindow, OnCellClicked);
 
 void wxPyHtmlWindow::OnLinkClicked(const wxHtmlLinkInfo& link) {
     bool found;
-    wxPyBeginBlockThreads();
+    bool blocked = wxPyBeginBlockThreads();
     if ((found = wxPyCBH_findCallback(m_myInst, "OnLinkClicked"))) {
         PyObject* obj = wxPyConstructObject((void*)&link, wxT("wxHtmlLinkInfo"), 0);
         wxPyCBH_callCallback(m_myInst, Py_BuildValue("(O)", obj));
         Py_DECREF(obj);
     }
-    wxPyEndBlockThreads();
+    wxPyEndBlockThreads(blocked);
     if (! found)
         wxHtmlWindow::OnLinkClicked(link);
 }
@@ -723,7 +723,7 @@ wxHtmlOpeningStatus wxPyHtmlWindow::OnOpeningURL(wxHtmlURLType type,
                                                  wxString *redirect) const {
     bool found;
     wxHtmlOpeningStatus rval;
-    wxPyBeginBlockThreads();
+    bool blocked = wxPyBeginBlockThreads();
     if ((found = wxPyCBH_findCallback(m_myInst, "OnOpeningURL"))) {
         PyObject* ro;
         PyObject* s = wx2PyString(url);
@@ -744,7 +744,7 @@ wxHtmlOpeningStatus wxPyHtmlWindow::OnOpeningURL(wxHtmlURLType type,
         }
         Py_DECREF(ro);
     }
-    wxPyEndBlockThreads();
+    wxPyEndBlockThreads(blocked);
     if (! found)
         rval = wxHtmlWindow::OnOpeningURL(type, url, redirect);
     return rval;
@@ -1211,7 +1211,9 @@ static PyObject *_wrap_HtmlTag_HasParam(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp2)
         delete arg2;
@@ -1331,7 +1333,9 @@ static PyObject *_wrap_HtmlTag_HasEnding(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -3380,7 +3384,9 @@ static PyObject *_wrap_HtmlSelection_IsEmpty(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -4135,6 +4141,32 @@ static PyObject *_wrap_HtmlCell_GetDescent(PyObject *self, PyObject *args, PyObj
 }
 
 
+static PyObject *_wrap_HtmlCell_GetMaxTotalWidth(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxHtmlCell *arg1 = (wxHtmlCell *) 0 ;
+    int result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:HtmlCell_GetMaxTotalWidth",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxHtmlCell,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (int)((wxHtmlCell const *)arg1)->GetMaxTotalWidth();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_FromInt((int)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_HtmlCell_GetId(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxHtmlCell *arg1 = (wxHtmlCell *) 0 ;
@@ -4376,7 +4408,9 @@ static PyObject *_wrap_HtmlCell_IsFormattingCell(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -4707,7 +4741,9 @@ static PyObject *_wrap_HtmlCell_AdjustPagebreak(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         PyObject *o = PyInt_FromLong((long) (*arg2));
         resultobj = t_output_helper(resultobj,o);
@@ -4766,7 +4802,9 @@ static PyObject *_wrap_HtmlCell_IsLinebreakAllowed(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -4792,7 +4830,9 @@ static PyObject *_wrap_HtmlCell_IsTerminalCell(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -4970,7 +5010,9 @@ static PyObject *_wrap_HtmlCell_IsBefore(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -5950,7 +5992,9 @@ static PyObject *_wrap_HtmlWindow_Create(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp7)
         delete arg7;
@@ -6023,7 +6067,9 @@ static PyObject *_wrap_HtmlWindow_SetPage(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp2)
         delete arg2;
@@ -6065,7 +6111,9 @@ static PyObject *_wrap_HtmlWindow_LoadPage(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp2)
         delete arg2;
@@ -6107,7 +6155,9 @@ static PyObject *_wrap_HtmlWindow_LoadFile(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp2)
         delete arg2;
@@ -6149,7 +6199,9 @@ static PyObject *_wrap_HtmlWindow_AppendToPage(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp2)
         delete arg2;
@@ -6575,7 +6627,9 @@ static PyObject *_wrap_HtmlWindow_HistoryBack(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -6601,7 +6655,9 @@ static PyObject *_wrap_HtmlWindow_HistoryForward(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -6627,7 +6683,9 @@ static PyObject *_wrap_HtmlWindow_HistoryCanBack(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -6653,7 +6711,9 @@ static PyObject *_wrap_HtmlWindow_HistoryCanForward(PyObject *self, PyObject *ar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -6764,7 +6824,9 @@ static PyObject *_wrap_HtmlWindow_ScrollToAnchor(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp2)
         delete arg2;
@@ -6806,7 +6868,9 @@ static PyObject *_wrap_HtmlWindow_HasAnchor(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp2)
         delete arg2;
@@ -8986,7 +9050,9 @@ static PyObject *_wrap_HtmlSearchStatus_Search(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -9012,7 +9078,9 @@ static PyObject *_wrap_HtmlSearchStatus_IsActive(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -9254,7 +9322,9 @@ static PyObject *_wrap_HtmlHelpData_AddBook(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp2)
         delete arg2;
@@ -9768,7 +9838,9 @@ static PyObject *_wrap_HtmlHelpFrame_KeywordSearch(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp2)
         delete arg2;
@@ -10084,7 +10156,9 @@ static PyObject *_wrap_HtmlHelpController_AddBook(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp2)
         delete arg2;
@@ -10246,7 +10320,9 @@ static PyObject *_wrap_HtmlHelpController_KeywordSearch(PyObject *self, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp2)
         delete arg2;
@@ -10538,6 +10614,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"HtmlCell_GetWidth", (PyCFunction) _wrap_HtmlCell_GetWidth, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"HtmlCell_GetHeight", (PyCFunction) _wrap_HtmlCell_GetHeight, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"HtmlCell_GetDescent", (PyCFunction) _wrap_HtmlCell_GetDescent, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"HtmlCell_GetMaxTotalWidth", (PyCFunction) _wrap_HtmlCell_GetMaxTotalWidth, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"HtmlCell_GetId", (PyCFunction) _wrap_HtmlCell_GetId, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"HtmlCell_SetId", (PyCFunction) _wrap_HtmlCell_SetId, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"HtmlCell_GetLink", (PyCFunction) _wrap_HtmlCell_GetLink, METH_VARARGS | METH_KEYWORDS },

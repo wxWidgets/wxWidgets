@@ -641,10 +641,10 @@ IMP_PYCALLBACK_STRING_STRING(wxPyTipProvider, wxTipProvider, PreprocessTip);
 
 void wxPyTimer::Notify() {
     bool found;
-    wxPyBeginBlockThreads();
+    bool blocked = wxPyBeginBlockThreads();
     if ((found = wxPyCBH_findCallback(m_myInst, "Notify")))
         wxPyCBH_callCallback(m_myInst, Py_BuildValue("()"));
-    wxPyEndBlockThreads();
+    wxPyEndBlockThreads(blocked);
     if (! found)
         wxTimer::Notify();
 }   
@@ -728,26 +728,26 @@ public:
 
     virtual void DoLog(wxLogLevel level, const wxChar *szString, time_t t) {
         bool found;
-        wxPyBeginBlockThreads();
+        bool blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "DoLog"))) {
             PyObject* s = wx2PyString(szString);
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iOi)", level, s, t));
             Py_DECREF(s);
         }
-        wxPyEndBlockThreads();
+        wxPyEndBlockThreads(blocked);
         if (! found)
             wxLog::DoLog(level, szString, t);
     }
 
     virtual void DoLogString(const wxChar *szString, time_t t) {
         bool found;
-        wxPyBeginBlockThreads();
+        bool blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "DoLogString"))) {
             PyObject* s = wx2PyString(szString);
             wxPyCBH_callCallback(m_myInst, Py_BuildValue("(Oi)", s, t));
             Py_DECREF(s);
         }
-        wxPyEndBlockThreads();
+        wxPyEndBlockThreads(blocked);
         if (! found)
             wxLog::DoLogString(szString, t);
     }
@@ -769,10 +769,10 @@ IMP_PYCALLBACK_VOID_INTINT( wxPyProcess, wxProcess, OnTerminate);
 class wxJoystick : public wxObject {
 public:
     wxJoystick(int joystick = wxJOYSTICK1) {
-        wxPyBeginBlockThreads();
+        bool blocked = wxPyBeginBlockThreads();
         PyErr_SetString(PyExc_NotImplementedError,
                         "wxJoystick is not available on this platform.");
-        wxPyEndBlockThreads();
+        wxPyEndBlockThreads(blocked);
     }
     wxPoint GetPosition() { return wxPoint(-1,-1); }
     int GetZPosition() { return -1; }
@@ -832,22 +832,22 @@ class wxSound : public wxObject
 {
 public:
     wxSound() {
-        wxPyBeginBlockThreads();
+        bool blocked = wxPyBeginBlockThreads();
         PyErr_SetString(PyExc_NotImplementedError,
                         "wxSound is not available on this platform.");
-        wxPyEndBlockThreads();
+        wxPyEndBlockThreads(blocked);
     }
     wxSound(const wxString&, bool) {
-        wxPyBeginBlockThreads();
+        bool blocked = wxPyBeginBlockThreads();
         PyErr_SetString(PyExc_NotImplementedError,
                         "wxSound is not available on this platform.");
-        wxPyEndBlockThreads();
+        wxPyEndBlockThreads(blocked);
     }
     wxSound(int, const wxByte*) {
-        wxPyBeginBlockThreads();
+        bool blocked = wxPyBeginBlockThreads();
         PyErr_SetString(PyExc_NotImplementedError,
                         "wxSound is not available on this platform.");
-        wxPyEndBlockThreads();
+        wxPyEndBlockThreads(blocked);
     }
     
     ~wxSound() {};
@@ -902,13 +902,13 @@ PyObject *wxFileType_GetIconInfo(wxFileType *self){
                 iconIndex = loc.GetIndex();
 
                 // Make a tuple and put the values in it
-                wxPyBeginBlockThreads();
+                bool blocked = wxPyBeginBlockThreads();
                 PyObject* tuple = PyTuple_New(3);
                 PyTuple_SetItem(tuple, 0, wxPyConstructObject(new wxIcon(loc),
                                                               wxT("wxIcon"), True));
                 PyTuple_SetItem(tuple, 1, wx2PyString(iconFile));
                 PyTuple_SetItem(tuple, 2, PyInt_FromLong(iconIndex));
-                wxPyEndBlockThreads();
+                wxPyEndBlockThreads(blocked);
                 return tuple;
             }
             else
@@ -940,11 +940,11 @@ PyObject *wxFileType_GetAllCommands(wxFileType *self,wxString const &filename,wx
             wxArrayString commands;
             if (self->GetAllCommands(&verbs, &commands,
                                      wxFileType::MessageParameters(filename, mimetype))) {
-                wxPyBeginBlockThreads();
+                bool blocked = wxPyBeginBlockThreads();
                 PyObject* tuple = PyTuple_New(2);
                 PyTuple_SetItem(tuple, 0, wxArrayString2PyList_helper(verbs));
                 PyTuple_SetItem(tuple, 1, wxArrayString2PyList_helper(commands));
-                wxPyEndBlockThreads();
+                wxPyEndBlockThreads(blocked);
                 return tuple;
             }
             else
@@ -1008,7 +1008,7 @@ public:
                                   const wxArtClient& client,
                                   const wxSize& size) {
         wxBitmap rval = wxNullBitmap;
-        wxPyBeginBlockThreads();
+        bool blocked = wxPyBeginBlockThreads();
         if ((wxPyCBH_findCallback(m_myInst, "CreateBitmap"))) {
             PyObject* so = wxPyConstructObject((void*)&size, wxT("wxSize"), 0);
             PyObject* ro;
@@ -1026,7 +1026,7 @@ public:
                 Py_DECREF(ro);
             }
         }
-        wxPyEndBlockThreads();
+        wxPyEndBlockThreads(blocked);
         return rval;
     }
 
@@ -1224,7 +1224,7 @@ bool wxPyDataObjectSimple::GetDataHere(void *buf) const {
     // C++ version.
 
     bool rval = False;
-    wxPyBeginBlockThreads();
+    bool blocked = wxPyBeginBlockThreads();
     if (wxPyCBH_findCallback(m_myInst, "GetDataHere")) {
         PyObject* ro;
         ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("()"));
@@ -1235,7 +1235,7 @@ bool wxPyDataObjectSimple::GetDataHere(void *buf) const {
             Py_DECREF(ro);
         }
     }
-    wxPyEndBlockThreads();
+    wxPyEndBlockThreads(blocked);
     return rval;
 }
 
@@ -1243,13 +1243,13 @@ bool wxPyDataObjectSimple::SetData(size_t len, const void *buf) const{
     // For this one we simply need to make a string from buf and len
     // and send it to the Python method.
     bool rval = False;
-    wxPyBeginBlockThreads();
+    bool blocked = wxPyBeginBlockThreads();
     if (wxPyCBH_findCallback(m_myInst, "SetData")) {
         PyObject* data = PyString_FromStringAndSize((char*)buf, len);
         rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(O)", data));
         Py_DECREF(data);
     }
-    wxPyEndBlockThreads();
+    wxPyEndBlockThreads(blocked);
     return rval;
 }
 
@@ -1283,7 +1283,7 @@ public:
 
 wxBitmap wxPyBitmapDataObject::GetBitmap() const {
     wxBitmap* rval = &wxNullBitmap;
-    wxPyBeginBlockThreads();
+    bool blocked = wxPyBeginBlockThreads();
     if (wxPyCBH_findCallback(m_myInst, "GetBitmap")) {
         PyObject* ro;
         wxBitmap* ptr;
@@ -1294,18 +1294,18 @@ wxBitmap wxPyBitmapDataObject::GetBitmap() const {
             Py_DECREF(ro);
         }
     }
-    wxPyEndBlockThreads();
+    wxPyEndBlockThreads(blocked);
     return *rval;
 }
 
 void wxPyBitmapDataObject::SetBitmap(const wxBitmap& bitmap) {
-    wxPyBeginBlockThreads();
+    bool blocked = wxPyBeginBlockThreads();
     if (wxPyCBH_findCallback(m_myInst, "SetBitmap")) {
         PyObject* bo = wxPyConstructObject((void*)&bitmap, wxT("wxBitmap"), False);
         wxPyCBH_callCallback(m_myInst, Py_BuildValue("(O)", bo));
         Py_DECREF(bo);
     }
-    wxPyEndBlockThreads();
+    wxPyEndBlockThreads(blocked);
 }
 
 void wxCustomDataObject_TakeData(wxCustomDataObject *self,PyObject *data){
@@ -1387,13 +1387,13 @@ public:
 bool wxPyFileDropTarget::OnDropFiles(wxCoord x, wxCoord y,
                                      const wxArrayString& filenames) {
     bool rval = False;
-    wxPyBeginBlockThreads();
+    bool blocked = wxPyBeginBlockThreads();
     if (wxPyCBH_findCallback(m_myInst, "OnDropFiles")) {
         PyObject* list = wxArrayString2PyList_helper(filenames);
         rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iiO)",x,y,list));
         Py_DECREF(list);
     }
-    wxPyEndBlockThreads();
+    wxPyEndBlockThreads(blocked);
     return rval;
 }
 
@@ -1417,14 +1417,14 @@ bool wxVideoMode___ne__(wxVideoMode *self,wxVideoMode const *other){ return othe
 PyObject *wxDisplay_GetModes(wxDisplay *self,wxVideoMode const &mode){
             PyObject* pyList = NULL;
             wxArrayVideoModes arr = self->GetModes(mode);
-            wxPyBeginBlockThreads();
+            bool blocked = wxPyBeginBlockThreads();
             pyList = PyList_New(0);
             for (int i=0; i < arr.GetCount(); i++) {
                 wxVideoMode* m = new wxVideoMode(arr.Item(i));
                 PyObject* pyObj = wxPyConstructObject(m, wxT("wxVideoMode"), true);
                 PyList_Append(pyList, pyObj);
             }
-            wxPyEndBlockThreads();
+            wxPyEndBlockThreads(blocked);
             return pyList;
         }
 #ifdef __cplusplus
@@ -1535,7 +1535,9 @@ static PyObject *_wrap_SystemSettings_HasFeature(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -1817,7 +1819,9 @@ static PyObject *_wrap_SystemOptions_HasOption(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp1)
         delete arg1;
@@ -2088,7 +2092,9 @@ static PyObject *_wrap_IsBusy(PyObject *self, PyObject *args, PyObject *kwargs) 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -2149,7 +2155,9 @@ static PyObject *_wrap_Shell(PyObject *self, PyObject *args, PyObject *kwargs) {
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp1)
         delete arg1;
@@ -2290,7 +2298,9 @@ static PyObject *_wrap_Shutdown(PyObject *self, PyObject *args, PyObject *kwargs
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -3685,7 +3695,9 @@ static PyObject *_wrap_ColourDisplay(PyObject *self, PyObject *args, PyObject *k
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -4123,7 +4135,9 @@ static PyObject *_wrap_GetKeyState(PyObject *self, PyObject *args, PyObject *kwa
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -4262,7 +4276,9 @@ static PyObject *_wrap_Thread_IsMain(PyObject *self, PyObject *args, PyObject *k
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -4544,7 +4560,9 @@ static PyObject *_wrap_Caret_IsOk(PyObject *self, PyObject *args, PyObject *kwar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -4570,7 +4588,9 @@ static PyObject *_wrap_Caret_IsVisible(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -5849,7 +5869,9 @@ static PyObject *_wrap_SingleInstanceChecker_Create(PyObject *self, PyObject *ar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp2)
         delete arg2;
@@ -5891,7 +5913,9 @@ static PyObject *_wrap_SingleInstanceChecker_IsAnotherRunning(PyObject *self, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -6174,7 +6198,9 @@ static PyObject *_wrap_ShowTip(PyObject *self, PyObject *args, PyObject *kwargs)
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -6385,7 +6411,9 @@ static PyObject *_wrap_Timer_Start(PyObject *self, PyObject *args, PyObject *kwa
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -6436,7 +6464,9 @@ static PyObject *_wrap_Timer_IsRunning(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -6488,7 +6518,9 @@ static PyObject *_wrap_Timer_IsOneShot(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -6819,7 +6851,9 @@ static PyObject *_wrap_Log_IsEnabled(PyObject *self, PyObject *args, PyObject *k
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -6847,7 +6881,9 @@ static PyObject *_wrap_Log_EnableLogging(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -7283,7 +7319,9 @@ static PyObject *_wrap_Log_GetVerbose(PyObject *self, PyObject *args, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -7331,7 +7369,9 @@ static PyObject *_wrap_Log_IsAllowedTraceMask(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -7691,7 +7731,9 @@ static PyObject *_wrap_LogWindow_IsPassingMessages(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -7837,7 +7879,9 @@ static PyObject *_wrap_LogChain_IsPassingMessages(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -8695,7 +8739,9 @@ static PyObject *_wrap_Process_Exists(PyObject *self, PyObject *args, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -8888,7 +8934,9 @@ static PyObject *_wrap_Process_IsRedirected(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -9056,7 +9104,9 @@ static PyObject *_wrap_Process_IsInputOpened(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -9082,7 +9132,9 @@ static PyObject *_wrap_Process_IsInputAvailable(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -9108,7 +9160,9 @@ static PyObject *_wrap_Process_IsErrorAvailable(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -9700,7 +9754,9 @@ static PyObject *_wrap_Joystick_IsOk(PyObject *self, PyObject *args, PyObject *k
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -10304,7 +10360,9 @@ static PyObject *_wrap_Joystick_HasRudder(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -10330,7 +10388,9 @@ static PyObject *_wrap_Joystick_HasZ(PyObject *self, PyObject *args, PyObject *k
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -10356,7 +10416,9 @@ static PyObject *_wrap_Joystick_HasU(PyObject *self, PyObject *args, PyObject *k
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -10382,7 +10444,9 @@ static PyObject *_wrap_Joystick_HasV(PyObject *self, PyObject *args, PyObject *k
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -10408,7 +10472,9 @@ static PyObject *_wrap_Joystick_HasPOV(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -10434,7 +10500,9 @@ static PyObject *_wrap_Joystick_HasPOV4Dir(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -10460,7 +10528,9 @@ static PyObject *_wrap_Joystick_HasPOVCTS(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -10496,7 +10566,9 @@ static PyObject *_wrap_Joystick_SetCapture(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -10522,7 +10594,9 @@ static PyObject *_wrap_Joystick_ReleaseCapture(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -11108,7 +11182,9 @@ static PyObject *_wrap_JoystickEvent_IsButton(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -11134,7 +11210,9 @@ static PyObject *_wrap_JoystickEvent_IsMove(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -11160,7 +11238,9 @@ static PyObject *_wrap_JoystickEvent_IsZMove(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -11192,7 +11272,9 @@ static PyObject *_wrap_JoystickEvent_ButtonDown(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -11224,7 +11306,9 @@ static PyObject *_wrap_JoystickEvent_ButtonUp(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -11256,7 +11340,9 @@ static PyObject *_wrap_JoystickEvent_ButtonIsDown(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -11463,7 +11549,9 @@ static PyObject *_wrap_Sound_Create__SWIG_0(PyObject *self, PyObject *args) {
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp2)
         delete arg2;
@@ -11502,7 +11590,9 @@ static PyObject *_wrap_Sound_Create__SWIG_1(PyObject *self, PyObject *args) {
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -11598,7 +11688,9 @@ static PyObject *_wrap_Sound_IsOk(PyObject *self, PyObject *args, PyObject *kwar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -11627,7 +11719,9 @@ static PyObject *_wrap_Sound_Play(PyObject *self, PyObject *args) {
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -11660,7 +11754,9 @@ static PyObject *_wrap_Sound_PlaySound(PyObject *self, PyObject *args) {
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp1)
         delete arg1;
@@ -11881,7 +11977,9 @@ static PyObject *_wrap_FileTypeInfo_IsValid(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -12712,7 +12810,9 @@ static PyObject *_wrap_FileType_SetCommand(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp2)
         delete arg2;
@@ -12771,7 +12871,9 @@ static PyObject *_wrap_FileType_SetDefaultIcon(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp2)
         delete arg2;
@@ -12805,7 +12907,9 @@ static PyObject *_wrap_FileType_Unassociate(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -12943,7 +13047,9 @@ static PyObject *_wrap_MimeTypesManager_IsOfType(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp1)
         delete arg1;
@@ -13180,7 +13286,9 @@ static PyObject *_wrap_MimeTypesManager_ReadMailcap(PyObject *self, PyObject *ar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp2)
         delete arg2;
@@ -13222,7 +13330,9 @@ static PyObject *_wrap_MimeTypesManager_ReadMimeTypes(PyObject *self, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp2)
         delete arg2;
@@ -13355,7 +13465,9 @@ static PyObject *_wrap_MimeTypesManager_Unassociate(PyObject *self, PyObject *ar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -14247,7 +14359,9 @@ static PyObject *_wrap_ArtProvider_PopProvider(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -14273,7 +14387,9 @@ static PyObject *_wrap_ArtProvider_RemoveProvider(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -14855,7 +14971,9 @@ static PyObject *_wrap_ConfigBase_HasGroup(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp2)
         delete arg2;
@@ -14897,7 +15015,9 @@ static PyObject *_wrap_ConfigBase_HasEntry(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp2)
         delete arg2;
@@ -14939,7 +15059,9 @@ static PyObject *_wrap_ConfigBase_Exists(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp2)
         delete arg2;
@@ -15192,7 +15314,9 @@ static PyObject *_wrap_ConfigBase_ReadBool(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp2)
         delete arg2;
@@ -15242,7 +15366,9 @@ static PyObject *_wrap_ConfigBase_Write(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp2)
         delete arg2;
@@ -15296,7 +15422,9 @@ static PyObject *_wrap_ConfigBase_WriteInt(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp2)
         delete arg2;
@@ -15342,7 +15470,9 @@ static PyObject *_wrap_ConfigBase_WriteFloat(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp2)
         delete arg2;
@@ -15388,7 +15518,9 @@ static PyObject *_wrap_ConfigBase_WriteBool(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp2)
         delete arg2;
@@ -15428,7 +15560,9 @@ static PyObject *_wrap_ConfigBase_Flush(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -15470,7 +15604,9 @@ static PyObject *_wrap_ConfigBase_RenameEntry(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp2)
         delete arg2;
@@ -15528,7 +15664,9 @@ static PyObject *_wrap_ConfigBase_RenameGroup(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp2)
         delete arg2;
@@ -15584,7 +15722,9 @@ static PyObject *_wrap_ConfigBase_DeleteEntry(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp2)
         delete arg2;
@@ -15626,7 +15766,9 @@ static PyObject *_wrap_ConfigBase_DeleteGroup(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp2)
         delete arg2;
@@ -15660,7 +15802,9 @@ static PyObject *_wrap_ConfigBase_DeleteAll(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -15717,7 +15861,9 @@ static PyObject *_wrap_ConfigBase_IsExpandingEnvVars(PyObject *self, PyObject *a
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -15774,7 +15920,9 @@ static PyObject *_wrap_ConfigBase_IsRecordingDefaults(PyObject *self, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -16047,7 +16195,7 @@ static PyObject *_wrap_new_Config(PyObject *self, PyObject *args, PyObject *kwar
     wxString *arg3 = (wxString *) &arg3_defvalue ;
     wxString const &arg4_defvalue = wxPyEmptyString ;
     wxString *arg4 = (wxString *) &arg4_defvalue ;
-    long arg5 = (long) 0 ;
+    long arg5 = (long) wxCONFIG_USE_LOCAL_FILE|wxCONFIG_USE_GLOBAL_FILE ;
     wxConfig *result;
     bool temp1 = False ;
     bool temp2 = False ;
@@ -16570,7 +16718,9 @@ static PyObject *_wrap_DateTime_IsWestEuropeanCountry(PyObject *self, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -16686,7 +16836,9 @@ static PyObject *_wrap_DateTime_IsLeapYear(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -16947,7 +17099,9 @@ static PyObject *_wrap_DateTime_IsDSTApplicable(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -18042,7 +18196,9 @@ static PyObject *_wrap_DateTime_SetToWeekDay(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -18084,7 +18240,9 @@ static PyObject *_wrap_DateTime_SetToLastWeekDay(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -18172,7 +18330,9 @@ static PyObject *_wrap_DateTime_SetToTheWeek(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -18724,7 +18884,9 @@ static PyObject *_wrap_DateTime_IsValid(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -19256,7 +19418,9 @@ static PyObject *_wrap_DateTime_IsWorkDay(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -19291,7 +19455,9 @@ static PyObject *_wrap_DateTime_IsEqualTo(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -19326,7 +19492,9 @@ static PyObject *_wrap_DateTime_IsEarlierThan(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -19361,7 +19529,9 @@ static PyObject *_wrap_DateTime_IsLaterThan(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -19405,7 +19575,9 @@ static PyObject *_wrap_DateTime_IsStrictlyBetween(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -19449,7 +19621,9 @@ static PyObject *_wrap_DateTime_IsBetween(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -19484,7 +19658,9 @@ static PyObject *_wrap_DateTime_IsSameDate(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -19519,7 +19695,9 @@ static PyObject *_wrap_DateTime_IsSameTime(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -19563,7 +19741,9 @@ static PyObject *_wrap_DateTime_IsEqualUpTo(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -20395,7 +20575,9 @@ static PyObject *_wrap_DateTime___lt__(PyObject *self, PyObject *args) {
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -20422,7 +20604,9 @@ static PyObject *_wrap_DateTime___le__(PyObject *self, PyObject *args) {
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -20449,7 +20633,9 @@ static PyObject *_wrap_DateTime___gt__(PyObject *self, PyObject *args) {
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -20476,7 +20662,9 @@ static PyObject *_wrap_DateTime___ge__(PyObject *self, PyObject *args) {
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -20503,7 +20691,9 @@ static PyObject *_wrap_DateTime___eq__(PyObject *self, PyObject *args) {
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -20530,7 +20720,9 @@ static PyObject *_wrap_DateTime___ne__(PyObject *self, PyObject *args) {
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -21806,7 +21998,9 @@ static PyObject *_wrap_TimeSpan___lt__(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -21836,7 +22030,9 @@ static PyObject *_wrap_TimeSpan___le__(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -21866,7 +22062,9 @@ static PyObject *_wrap_TimeSpan___gt__(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -21896,7 +22094,9 @@ static PyObject *_wrap_TimeSpan___ge__(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -21926,7 +22126,9 @@ static PyObject *_wrap_TimeSpan___eq__(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -21956,7 +22158,9 @@ static PyObject *_wrap_TimeSpan___ne__(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -21982,7 +22186,9 @@ static PyObject *_wrap_TimeSpan_IsNull(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -22008,7 +22214,9 @@ static PyObject *_wrap_TimeSpan_IsPositive(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -22034,7 +22242,9 @@ static PyObject *_wrap_TimeSpan_IsNegative(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -22069,7 +22279,9 @@ static PyObject *_wrap_TimeSpan_IsEqualTo(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -22104,7 +22316,9 @@ static PyObject *_wrap_TimeSpan_IsLongerThan(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -22139,7 +22353,9 @@ static PyObject *_wrap_TimeSpan_IsShorterThan(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -23384,7 +23600,9 @@ static PyObject *_wrap_DateSpan___eq__(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -23414,7 +23632,9 @@ static PyObject *_wrap_DateSpan___ne__(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -23650,7 +23870,9 @@ static PyObject *_wrap_DataFormat___eq____SWIG_0(PyObject *self, PyObject *args)
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -23677,7 +23899,9 @@ static PyObject *_wrap_DataFormat___ne____SWIG_0(PyObject *self, PyObject *args)
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -23709,7 +23933,9 @@ static PyObject *_wrap_DataFormat___eq____SWIG_1(PyObject *self, PyObject *args)
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -23800,7 +24026,9 @@ static PyObject *_wrap_DataFormat___ne____SWIG_1(PyObject *self, PyObject *args)
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -24142,7 +24370,9 @@ static PyObject *_wrap_DataObject_IsSupported(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -24250,7 +24480,9 @@ static PyObject *_wrap_DataObject_GetDataHere(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -24292,7 +24524,9 @@ static PyObject *_wrap_DataObject_SetData(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -25134,7 +25368,9 @@ static PyObject *_wrap_CustomDataObject_SetData(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -25414,7 +25650,9 @@ static PyObject *_wrap_IsDragResultOk(PyObject *self, PyObject *args, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -25696,7 +25934,9 @@ static PyObject *_wrap_DropSource_base_GiveFeedback(PyObject *self, PyObject *ar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -25977,7 +26217,9 @@ static PyObject *_wrap_DropTarget_base_OnDrop(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -26003,7 +26245,9 @@ static PyObject *_wrap_DropTarget_GetData(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -26198,7 +26442,9 @@ static PyObject *_wrap_TextDropTarget_base_OnDrop(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -26431,7 +26677,9 @@ static PyObject *_wrap_FileDropTarget_base_OnDrop(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -26549,7 +26797,9 @@ static PyObject *_wrap_Clipboard_Open(PyObject *self, PyObject *args, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -26600,7 +26850,9 @@ static PyObject *_wrap_Clipboard_IsOpened(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -26630,7 +26882,9 @@ static PyObject *_wrap_Clipboard_AddData(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -26660,7 +26914,9 @@ static PyObject *_wrap_Clipboard_SetData(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -26695,7 +26951,9 @@ static PyObject *_wrap_Clipboard_IsSupported(PyObject *self, PyObject *args, PyO
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -26730,7 +26988,9 @@ static PyObject *_wrap_Clipboard_GetData(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -26781,7 +27041,9 @@ static PyObject *_wrap_Clipboard_Flush(PyObject *self, PyObject *args, PyObject 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -26912,7 +27174,9 @@ static PyObject *_wrap_ClipboardLocker___nonzero__(PyObject *self, PyObject *arg
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -27025,7 +27289,9 @@ static PyObject *_wrap_VideoMode_Matches(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -27129,7 +27395,9 @@ static PyObject *_wrap_VideoMode_IsOk(PyObject *self, PyObject *args, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -27159,7 +27427,9 @@ static PyObject *_wrap_VideoMode___eq__(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -27189,7 +27459,9 @@ static PyObject *_wrap_VideoMode___ne__(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -27546,7 +27818,9 @@ static PyObject *_wrap_Display_IsOk(PyObject *self, PyObject *args, PyObject *kw
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -27634,7 +27908,9 @@ static PyObject *_wrap_Display_IsPrimary(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -27740,7 +28016,9 @@ static PyObject *_wrap_Display_ChangeMode(PyObject *self, PyObject *args, PyObje
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;

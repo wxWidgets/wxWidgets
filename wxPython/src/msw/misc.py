@@ -2899,7 +2899,7 @@ class Config(ConfigBase):
         """
         __init__(String appName=EmptyString, String vendorName=EmptyString, 
             String localFilename=EmptyString, String globalFilename=EmptyString, 
-            long style=0) -> Config
+            long style=wxCONFIG_USE_LOCAL_FILE|wxCONFIG_USE_GLOBAL_FILE) -> Config
         """
         newobj = _misc.new_Config(*args, **kwargs)
         self.this = newobj.this

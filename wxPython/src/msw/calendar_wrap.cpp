@@ -405,12 +405,12 @@ PyObject *wxCalendarCtrl_HitTest(wxCalendarCtrl *self,wxPoint const &pos){
             wxDateTime* date = new wxDateTime;
             wxDateTime::WeekDay wd;
             wxCalendarHitTestResult result = self->HitTest(pos, date, &wd);
-            wxPyBeginBlockThreads();
+            bool blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(3);
             PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(result));
             PyTuple_SET_ITEM(tup, 1, wxPyConstructObject(date, wxT("wxDateTime"), 1));
             PyTuple_SET_ITEM(tup, 2, PyInt_FromLong(wd));
-            wxPyEndBlockThreads();
+            wxPyEndBlockThreads(blocked);
             return tup;
         }
 #ifdef __cplusplus
@@ -693,7 +693,9 @@ static PyObject *_wrap_CalendarDateAttr_HasTextColour(PyObject *self, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -719,7 +721,9 @@ static PyObject *_wrap_CalendarDateAttr_HasBackgroundColour(PyObject *self, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -745,7 +749,9 @@ static PyObject *_wrap_CalendarDateAttr_HasBorderColour(PyObject *self, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -771,7 +777,9 @@ static PyObject *_wrap_CalendarDateAttr_HasFont(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -797,7 +805,9 @@ static PyObject *_wrap_CalendarDateAttr_HasBorder(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -823,7 +833,9 @@ static PyObject *_wrap_CalendarDateAttr_IsHoliday(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -1344,7 +1356,9 @@ static PyObject *_wrap_CalendarCtrl_Create(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp8)
         delete arg8;
@@ -1453,7 +1467,9 @@ static PyObject *_wrap_CalendarCtrl_SetLowerDateLimit(PyObject *self, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -1491,7 +1507,9 @@ static PyObject *_wrap_CalendarCtrl_SetUpperDateLimit(PyObject *self, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -1599,7 +1617,9 @@ static PyObject *_wrap_CalendarCtrl_SetDateRange(PyObject *self, PyObject *args,
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;

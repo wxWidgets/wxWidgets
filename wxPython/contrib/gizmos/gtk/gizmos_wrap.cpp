@@ -406,7 +406,7 @@ public:
 
     virtual void DrawItem(wxDC& dc, wxTreeItemId id, const wxRect& rect) {
         bool found;
-        wxPyBeginBlockThreads();
+        bool blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "DrawItem"))) {
             PyObject* dcobj = wxPyMake_wxObject(&dc);
             PyObject* idobj = wxPyConstructObject((void*)&id, wxT("wxTreeItemId"), False);
@@ -416,7 +416,7 @@ public:
             Py_DECREF(idobj);
             Py_DECREF(recobj);
         }
-        wxPyEndBlockThreads();
+        wxPyEndBlockThreads(blocked);
         if (! found)
             wxTreeCompanionWindow::DrawItem(dc, id, rect);
     }
@@ -498,7 +498,7 @@ public:
                        const wxTreeItemId& item2) {
         int rval = 0;
         bool found;
-        wxPyBeginBlockThreads();
+        bool blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "OnCompareItems"))) {
             PyObject *o1 = wxPyConstructObject((void*)&item1, wxT("wxTreeItemId"), 0);
             PyObject *o2 = wxPyConstructObject((void*)&item2, wxT("wxTreeItemId"), 0);
@@ -506,7 +506,7 @@ public:
             Py_DECREF(o1);
             Py_DECREF(o2);
         }
-        wxPyEndBlockThreads();
+        wxPyEndBlockThreads(blocked);
         if (! found)
             rval = wxTreeListCtrl::OnCompareItems(item1, item2);
         return rval;
@@ -615,7 +615,7 @@ void wxPyTreeListCtrl_SetItemPyData(wxPyTreeListCtrl *self,wxTreeItemId const &i
                 data->SetData(obj);
         }
 PyObject *wxPyTreeListCtrl_GetSelections(wxPyTreeListCtrl *self){
-            wxPyBeginBlockThreads();
+            bool blocked = wxPyBeginBlockThreads();
             PyObject*           rval = PyList_New(0);
             wxArrayTreeItemIds  array;
             size_t              num, x;
@@ -625,26 +625,26 @@ PyObject *wxPyTreeListCtrl_GetSelections(wxPyTreeListCtrl *self){
                 PyObject* item = wxPyConstructObject((void*)tii, wxT("wxTreeItemId"), True);
                 PyList_Append(rval, item);
             }
-            wxPyEndBlockThreads();
+            wxPyEndBlockThreads(blocked);
             return rval;
         }
 PyObject *wxPyTreeListCtrl_GetFirstChild(wxPyTreeListCtrl *self,wxTreeItemId const &item){
             long cookie = 0;
             wxTreeItemId ritem = self->GetFirstChild(item, cookie);
-            wxPyBeginBlockThreads();
+            bool blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, wxPyConstructObject(&ritem, wxT("wxTreeItemId"), true));
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(cookie));
-            wxPyEndBlockThreads();
+            wxPyEndBlockThreads(blocked);
             return tup;
         }
 PyObject *wxPyTreeListCtrl_GetNextChild(wxPyTreeListCtrl *self,wxTreeItemId const &item,long cookie){
             wxTreeItemId ritem = self->GetNextChild(item, cookie);
-            wxPyBeginBlockThreads();
+            bool blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
             PyTuple_SET_ITEM(tup, 0, wxPyConstructObject(&ritem, wxT("wxTreeItemId"), true));
             PyTuple_SET_ITEM(tup, 1, PyInt_FromLong(cookie));
-            wxPyEndBlockThreads();
+            wxPyEndBlockThreads(blocked);
             return tup;
         }
 
@@ -677,10 +677,10 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 PyObject *wxPyTreeListCtrl_GetBoundingRect(wxPyTreeListCtrl *self,wxTreeItemId const &item,bool textOnly){
             wxRect rect;
             if (self->GetBoundingRect(item, rect, textOnly)) {
-                wxPyBeginBlockThreads();
+                bool blocked = wxPyBeginBlockThreads();
                 wxRect* r = new wxRect(rect);
                 PyObject* val = wxPyConstructObject((void*)r, wxT("wxRect"), 1);
-                wxPyEndBlockThreads();
+                wxPyEndBlockThreads(blocked);
                 return val;
             }
             else {
@@ -977,7 +977,9 @@ static PyObject *_wrap_DynamicSashWindow_Create(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp7)
         delete arg7;
@@ -2050,7 +2052,9 @@ static PyObject *_wrap_LEDNumberCtrl_Create(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -2102,7 +2106,9 @@ static PyObject *_wrap_LEDNumberCtrl_GetDrawFaded(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -2816,7 +2822,9 @@ static PyObject *_wrap_TreeListCtrl_Create(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     {
         if (temp8)
         delete arg8;
@@ -4498,7 +4506,9 @@ static PyObject *_wrap_TreeListCtrl_GetItemBold(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -4650,7 +4660,9 @@ static PyObject *_wrap_TreeListCtrl_IsVisible(PyObject *self, PyObject *args, Py
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -4685,7 +4697,9 @@ static PyObject *_wrap_TreeListCtrl_ItemHasChildren(PyObject *self, PyObject *ar
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -4720,7 +4734,9 @@ static PyObject *_wrap_TreeListCtrl_IsExpanded(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -4755,7 +4771,9 @@ static PyObject *_wrap_TreeListCtrl_IsSelected(PyObject *self, PyObject *args, P
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;
@@ -4790,7 +4808,9 @@ static PyObject *_wrap_TreeListCtrl_IsBold(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
     return resultobj;
     fail:
     return NULL;

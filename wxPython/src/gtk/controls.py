@@ -800,6 +800,8 @@ class StaticBitmap(core.Control):
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
+        self._setOORInfo(self)
+
     def Create(*args, **kwargs):
         """
         Create(Window parent, int id, Bitmap bitmap, Point pos=DefaultPosition, 
@@ -2240,8 +2242,8 @@ class Notebook(BookCtrl):
         return "<%s.%s; proxy of C++ wxNotebook instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=0, String name=NOTEBOOK_NAME) -> Notebook
+        __init__(Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0, String name=NOTEBOOK_NAME) -> Notebook
         """
         newobj = _controls.new_Notebook(*args, **kwargs)
         self.this = newobj.this
@@ -2363,8 +2365,8 @@ class Listbook(BookCtrl):
         return "<%s.%s; proxy of C++ wxListbook instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
-        __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
-            long style=0, String name=EmptyString) -> Listbook
+        __init__(Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0, String name=EmptyString) -> Listbook
         """
         newobj = _controls.new_Listbook(*args, **kwargs)
         self.this = newobj.this
@@ -3441,34 +3443,11 @@ class ListCtrl(core.Control):
         return _controls.ListCtrl__setCallbackInfo(*args, **kwargs)
 
     def SetForegroundColour(*args, **kwargs):
-        """
-        SetForegroundColour(Colour col) -> bool
-
-        Sets the foreground colour of the window.  Returns True is the colour
-        was changed.  The interpretation of foreground colour is dependent on
-        the window class; it may be the text colour or other colour, or it may
-        not be used at all.
-        """
+        """SetForegroundColour(Colour col) -> bool"""
         return _controls.ListCtrl_SetForegroundColour(*args, **kwargs)
 
     def SetBackgroundColour(*args, **kwargs):
-        """
-        SetBackgroundColour(Colour col) -> bool
-
-        Sets the background colour of the window.  Returns True if the colour
-        was changed.  The background colour is usually painted by the default
-        EVT_ERASE_BACKGROUND event handler function under Windows and
-        automatically under GTK.
-
-        Note that setting the background colour does not cause an immediate
-        refresh, so you may wish to call ClearBackground or Refresh after
-        calling this function.
-
-        Use this function with care under GTK+ as the new appearance of the
-        window might not look equally well when used with themes, i.e GTK+'s
-        ability to change its look as the user wishes with run-time loadable
-        modules.
-        """
+        """SetBackgroundColour(Colour col) -> bool"""
         return _controls.ListCtrl_SetBackgroundColour(*args, **kwargs)
 
     def GetColumn(*args, **kwargs):
