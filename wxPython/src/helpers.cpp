@@ -38,15 +38,6 @@
 #endif
 
 
-//---------------------------------------------------------------------------
-
-//wxHashTable*  wxPyWindows = NULL;
-
-
-wxPoint     wxPyDefaultPosition;        //wxDefaultPosition);
-wxSize      wxPyDefaultSize;            //wxDefaultSize);
-wxString    wxPyEmptyStr("");
-
 
 
 #ifdef __WXMSW__             // If building for win32...

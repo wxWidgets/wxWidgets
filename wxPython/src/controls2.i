@@ -38,11 +38,6 @@
 
 //----------------------------------------------------------------------
 
-%{
-extern wxValidator wxPyDefaultValidator;
-%}
-
-//----------------------------------------------------------------------
 
 enum {
     wxLIST_MASK_TEXT,
@@ -214,10 +209,10 @@ public:
 class wxListCtrl : public wxControl {
 public:
     wxListCtrl(wxWindow* parent, wxWindowID id,
-               const wxPoint& pos = wxPyDefaultPosition,
-               const wxSize& size = wxPyDefaultSize,
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
                long style = wxLC_ICON,
-               const wxValidator& validator = wxPyDefaultValidator,
+               const wxValidator& validator = wxDefaultValidator,
                char* name = "listCtrl");
 
     %pragma(python) addtomethod = "__init__:#wx._StdWindowCallbacks(self)"
@@ -486,10 +481,10 @@ public:
 %name(wxTreeCtrl)class wxPyTreeCtrl : public wxControl {
 public:
     wxPyTreeCtrl(wxWindow *parent, wxWindowID id = -1,
-               const wxPoint& pos = wxPyDefaultPosition,
-               const wxSize& size = wxPyDefaultSize,
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
                long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT,
-               const wxValidator& validator = wxPyDefaultValidator,
+               const wxValidator& validator = wxDefaultValidator,
                char* name = "wxTreeCtrl");
 
     void _setSelf(PyObject* self, PyObject* _class);
@@ -714,8 +709,8 @@ public:
 class wxTabCtrl : public wxControl {
 public:
     wxTabCtrl(wxWindow* parent, wxWindowID id,
-              const wxPoint& pos = wxPyDefaultPosition,
-              const wxSize& size = wxPyDefaultSize,
+              const wxPoint& pos = wxDefaultPosition,
+              const wxSize& size = wxDefaultSize,
               long style = 0,
               char* name = "tabCtrl");
 

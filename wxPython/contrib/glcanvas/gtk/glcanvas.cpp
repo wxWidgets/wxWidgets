@@ -55,7 +55,7 @@ extern PyObject *SWIG_newvarlink(void);
 
 #define SWIG_name    "glcanvasc"
 
-#include "helpers.h"
+#include "export.h"
 #include <wx/glcanvas.h>
 
 static PyObject* l_output_helper(PyObject* target, PyObject* o) {
@@ -105,12 +105,6 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 }
 
 static char* wxStringErrorMsg = "string type is required for parameter";
-
-#if defined(__WXMSW__)
-    static wxString wxPyEmptyStr("");
-    static wxPoint  wxPyDefaultPosition(-1, -1);
-    static wxSize   wxPyDefaultSize(-1, -1);
-#endif
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -467,8 +461,8 @@ static PyObject *_wrap_new_wxGLCanvas(PyObject *self, PyObject *args, PyObject *
     wxGLCanvas * _result;
     wxWindow * _arg0;
     wxWindowID  _arg1 = (wxWindowID ) -1;
-    wxPoint * _arg2 = (wxPoint *) &wxPyDefaultPosition;
-    wxSize * _arg3 = (wxSize *) &wxPyDefaultSize;
+    wxPoint * _arg2 = (wxPoint *) &wxDefaultPosition;
+    wxSize * _arg3 = (wxSize *) &wxDefaultSize;
     long  _arg4 = (long ) 0;
     char * _arg5 = (char *) "GLCanvas";
     int * _arg6 = (int *) NULL;
@@ -983,7 +977,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxBusyInfo","_class_wxBusyInfo",0},
     { "_class_wxMenuEvent","_wxMenuEvent",0},
     { "_wxPaletteChangedEvent","_class_wxPaletteChangedEvent",0},
-    { "_wxJoystick","_class_wxJoystick",0},
     { "_class_wxPyBitmapDataObject","_wxPyBitmapDataObject",0},
     { "_wxClientDC","_class_wxClientDC",0},
     { "_wxMouseEvent","_class_wxMouseEvent",0},
@@ -1164,7 +1157,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxGauge","_class_wxGauge",0},
     { "_class_wxCheckListBox","_wxCheckListBox",0},
     { "_class_wxBusyInfo","_wxBusyInfo",0},
-    { "_class_wxJoystick","_wxJoystick",0},
     { "_class_wxCommandEvent","_wxCommandEvent",0},
     { "_class_wxClientDC","_wxClientDC",0},
     { "_class_wxSizeEvent","_wxSizeEvent",0},
@@ -1228,8 +1220,8 @@ SWIGEXPORT(void) initglcanvasc() {
 	 d = PyModule_GetDict(m);
 
 
-    wxClassInfo::CleanUpClasses();
-    wxClassInfo::InitializeClasses();
+//    wxClassInfo::CleanUpClasses();
+//    wxClassInfo::InitializeClasses();
 
 {
    int i;

@@ -623,6 +623,8 @@ PyObject *ptrfree(PyObject *_PTRVALUE) {
         __wxCleanup();
     }
 
+
+
 extern "C" SWIGEXPORT(void) initwindowsc();
 extern "C" SWIGEXPORT(void) initwindows2c();
 extern "C" SWIGEXPORT(void) initeventsc();
@@ -640,17 +642,49 @@ extern "C" SWIGEXPORT(void) initimagec();
 extern "C" SWIGEXPORT(void) initprintfwc();
 extern "C" SWIGEXPORT(void) initsizersc();
 extern "C" SWIGEXPORT(void) initclip_dndc();
-extern "C" SWIGEXPORT(void) initgridc();
-extern "C" SWIGEXPORT(void) initutilsc();
-extern "C" SWIGEXPORT(void) inithtmlc();
-extern "C" SWIGEXPORT(void) inithtmlhelpc();
-extern "C" SWIGEXPORT(void) initcalendarc();
 extern "C" SWIGEXPORT(void) initstreamsc();
 extern "C" SWIGEXPORT(void) initfilesysc();
 
-extern "C" SWIGEXPORT(void) initglcanvasc();
-extern "C" SWIGEXPORT(void) initoglc();
-extern "C" SWIGEXPORT(void) initstc_c();
+
+
+// Export a C API in a struct.  Other modules will be able to load this from
+// the wxc module and will then have safe access to these functions, even if
+// in another shared library.
+static wxPyCoreAPI API = {
+    SWIG_MakePtr,
+    SWIG_GetPtr,
+    SWIG_GetPtrObj,
+    SWIG_RegisterMapping,
+    SWIG_addvarlink,
+    SWIG_newvarlink,
+
+    wxPySaveThread,
+    wxPyRestoreThread,
+    wxPyConstructObject,
+    wxPy_ConvertList,
+
+    byte_LIST_helper,
+    int_LIST_helper,
+    long_LIST_helper,
+    string_LIST_helper,
+    wxPoint_LIST_helper,
+    wxBitmap_LIST_helper,
+    wxString_LIST_helper,
+    wxAcceleratorEntry_LIST_helper,
+
+    wxSize_helper,
+    wxPoint_helper,
+    wxRealPoint_helper,
+    wxRect_helper,
+    wxColour_helper,
+
+    wxPyCBH_setSelf,
+    wxPyCBH_findCallback,
+    wxPyCBH_callCallback,
+    wxPyCBH_callCallbackObj,
+    wxPyCBH_delete,
+};
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -831,48 +865,48 @@ static PyObject *_wrap_ptrmap(PyObject *self, PyObject *args, PyObject *kwargs) 
     return _resultobj;
 }
 
-static int _wrap_wxPyDefaultPosition_set(PyObject *val) {
+static int _wrap_wxDefaultPosition_set(PyObject *val) {
     wxPoint * temp;
 
     if (val) {
         if (val == Py_None) { temp = NULL; }
         else if (SWIG_GetPtrObj(val,(void **) &temp,"_wxPoint_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in value of wxPyDefaultPosition. Expected _wxPoint_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in value of wxDefaultPosition. Expected _wxPoint_p.");
         return 1;
         }
     }
-    wxPyDefaultPosition = *temp;
+    wxDefaultPosition = *temp;
     return 0;
 }
 
-static PyObject *_wrap_wxPyDefaultPosition_get() {
+static PyObject *_wrap_wxDefaultPosition_get() {
     PyObject * pyobj;
     char ptemp[128];
 
-    SWIG_MakePtr(ptemp,(char *) &wxPyDefaultPosition,"_wxPoint_p");
+    SWIG_MakePtr(ptemp,(char *) &wxDefaultPosition,"_wxPoint_p");
     pyobj = PyString_FromString(ptemp);
     return pyobj;
 }
 
-static int _wrap_wxPyDefaultSize_set(PyObject *val) {
+static int _wrap_wxDefaultSize_set(PyObject *val) {
     wxSize * temp;
 
     if (val) {
         if (val == Py_None) { temp = NULL; }
         else if (SWIG_GetPtrObj(val,(void **) &temp,"_wxSize_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in value of wxPyDefaultSize. Expected _wxSize_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in value of wxDefaultSize. Expected _wxSize_p.");
         return 1;
         }
     }
-    wxPyDefaultSize = *temp;
+    wxDefaultSize = *temp;
     return 0;
 }
 
-static PyObject *_wrap_wxPyDefaultSize_get() {
+static PyObject *_wrap_wxDefaultSize_get() {
     PyObject * pyobj;
     char ptemp[128];
 
-    SWIG_MakePtr(ptemp,(char *) &wxPyDefaultSize,"_wxSize_p");
+    SWIG_MakePtr(ptemp,(char *) &wxDefaultSize,"_wxSize_p");
     pyobj = PyString_FromString(ptemp);
     return pyobj;
 }
@@ -1997,7 +2031,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxBusyInfo","_class_wxBusyInfo",0},
     { "_class_wxMenuEvent","_wxMenuEvent",0},
     { "_wxPaletteChangedEvent","_class_wxPaletteChangedEvent",0},
-    { "_wxJoystick","_class_wxJoystick",0},
     { "_class_wxPyBitmapDataObject","_wxPyBitmapDataObject",0},
     { "_wxClientDC","_class_wxClientDC",0},
     { "_wxMouseEvent","_class_wxMouseEvent",0},
@@ -2174,7 +2207,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxGauge","_class_wxGauge",0},
     { "_class_wxCheckListBox","_wxCheckListBox",0},
     { "_class_wxBusyInfo","_wxBusyInfo",0},
-    { "_class_wxJoystick","_wxJoystick",0},
     { "_class_wxCommandEvent","_wxCommandEvent",0},
     { "_class_wxClientDC","_wxClientDC",0},
     { "_class_wxSizeEvent","_wxSizeEvent",0},
@@ -2915,8 +2947,14 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxEVT_END_PROCESS", PyInt_FromLong((long) wxEVT_END_PROCESS));
 	 PyDict_SetItemString(d,"__version__", PyString_FromString("0.0.0"));
 	 PyDict_SetItemString(d,"cvar", SWIG_globals);
-	 SWIG_addvarlink(SWIG_globals,"wxPyDefaultPosition",_wrap_wxPyDefaultPosition_get, _wrap_wxPyDefaultPosition_set);
-	 SWIG_addvarlink(SWIG_globals,"wxPyDefaultSize",_wrap_wxPyDefaultSize_get, _wrap_wxPyDefaultSize_set);
+	 SWIG_addvarlink(SWIG_globals,"wxDefaultPosition",_wrap_wxDefaultPosition_get, _wrap_wxDefaultPosition_set);
+	 SWIG_addvarlink(SWIG_globals,"wxDefaultSize",_wrap_wxDefaultSize_get, _wrap_wxDefaultSize_set);
+
+    // Make our API structure a CObject so other modules can import it
+    // from this module.
+    PyObject* v = PyCObject_FromVoidPtr(&API, NULL);
+    PyDict_SetItemString(d,"wxPyCoreAPI", v);
+    Py_XDECREF(v);
 
 
     __wxPreStart();     // initialize the GUI toolkit, if needed.
@@ -2945,15 +2983,6 @@ SWIGEXPORT(void) initwxc() {
     initstreamsc();
     initfilesysc();
 
-    initgridc();
-    initutilsc();
-    inithtmlc();
-    inithtmlhelpc();
-    initcalendarc();
-
-    initglcanvasc();
-    initoglc();
-    initstc_c();
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)

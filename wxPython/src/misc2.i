@@ -38,6 +38,10 @@
 %import events.i
 %import streams.i
 
+%{
+    static wxString wxPyEmptyStr("");
+%}
+
 //---------------------------------------------------------------------------
 // Dialog Functions
 
@@ -93,7 +97,7 @@ long wxGetNumberFromUser(const wxString& message,
                          long value,
                          long min = 0, long max = 100,
                          wxWindow *parent = NULL,
-                         const wxPoint& pos = wxPyDefaultPosition);
+                         const wxPoint& pos = wxDefaultPosition);
 
 //---------------------------------------------------------------------------
 // GDI Functions

@@ -110,8 +110,8 @@ wxList* wxPy_wxRealPoint_ListHelper(PyObject* pyList);
 class wxPyShapeCanvas : public wxShapeCanvas {
 public:
     wxPyShapeCanvas(wxWindow* parent = NULL, wxWindowID id = -1,
-                    const wxPoint& pos = wxPyDefaultPosition,
-                    const wxSize& size = wxPyDefaultSize,
+                    const wxPoint& pos = wxDefaultPosition,
+                    const wxSize& size = wxDefaultSize,
                     long style = wxBORDER)
         : wxShapeCanvas(parent, id, pos, size, style) {}
 

@@ -71,8 +71,8 @@ public:
 class wxSashWindow: public wxWindow {
 public:
     wxSashWindow(wxWindow* parent, wxWindowID id,
-                 const wxPoint& pos = wxPyDefaultPosition,
-                 const wxSize& size = wxPyDefaultSize,
+                 const wxPoint& pos = wxDefaultPosition,
+                 const wxSize& size = wxDefaultSize,
                  long style = wxCLIP_CHILDREN | wxSW_3D,
                  const char* name = "sashWindow");
 
@@ -150,8 +150,8 @@ public:
 class wxSashLayoutWindow: public wxSashWindow {
 public:
     wxSashLayoutWindow(wxWindow* parent, wxWindowID id,
-                       const wxPoint& pos = wxPyDefaultPosition,
-                       const wxSize& size = wxPyDefaultSize,
+                       const wxPoint& pos = wxDefaultPosition,
+                       const wxSize& size = wxDefaultSize,
                        long style = wxCLIP_CHILDREN | wxSW_3D,
                        const char* name = "layoutWindow");
 

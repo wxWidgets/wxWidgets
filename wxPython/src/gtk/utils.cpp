@@ -55,7 +55,7 @@ extern PyObject *SWIG_newvarlink(void);
 
 #define SWIG_name    "utilsc"
 
-#include "helpers.h"
+#include "export.h"
 #include <wx/config.h>
 #include <wx/fileconf.h>
 #include <wx/datetime.h>
@@ -107,6 +107,8 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 }
 
 static char* wxStringErrorMsg = "string type is required for parameter";
+
+    static wxString wxPyEmptyStr("");
 
     static PyObject* __EnumerationHelper(bool flag, wxString& str, long index) {
         PyObject* ret = PyTuple_New(3);

@@ -4123,8 +4123,8 @@ static PyObject *_wrap_new_wxPreviewFrame(PyObject *self, PyObject *args, PyObje
     wxPrintPreview * _arg0;
     wxFrame * _arg1;
     wxString * _arg2;
-    wxPoint * _arg3 = (wxPoint *) &wxPyDefaultPosition;
-    wxSize * _arg4 = (wxSize *) &wxPyDefaultSize;
+    wxPoint * _arg3 = (wxPoint *) &wxDefaultPosition;
+    wxSize * _arg4 = (wxSize *) &wxDefaultSize;
     long  _arg5 = (long ) wxDEFAULT_FRAME_STYLE;
     char * _arg6 = (char *) "frame";
     PyObject * _argo0 = 0;

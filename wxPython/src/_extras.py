@@ -725,15 +725,15 @@ NULL = _NullObj()
 wxColor      = wxColour
 wxNamedColor = wxNamedColour
 
-wxPyDefaultPosition.Set(-1,-1)
-wxPyDefaultSize.Set(-1,-1)
-
 # aliases so that C++ documentation applies:
-wxDefaultPosition  = wxPyDefaultPosition
-wxDefaultSize      = wxPyDefaultSize
+#wxDefaultPosition  = wxPyDefaultPosition
+#wxDefaultSize      = wxPyDefaultSize
+
 
 # backwards compatibility
-wxNoRefBitmap      = wxBitmap
+wxNoRefBitmap       = wxBitmap
+wxPyDefaultPosition = wxDefaultPosition
+wxPyDefaultSize     = wxDefaultSize
 
 #----------------------------------------------------------------------
 # This helper function will take a wxPython object and convert it to

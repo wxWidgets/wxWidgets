@@ -140,9 +140,9 @@ extern "C" char *SWIG_GetPtrObj(PyObject *obj, void **ptr, char *type);
 
 
 // Non-const versions to keep SWIG happy.
-extern wxPoint  wxPyDefaultPosition;
-extern wxSize   wxPyDefaultSize;
-extern wxString wxPyEmptyStr;
+//  extern wxPoint  wxPyDefaultPosition;
+//  extern wxSize   wxPyDefaultSize;
+//  extern wxString wxPyEmptyStr;
 
 //----------------------------------------------------------------------
 

@@ -69,7 +69,7 @@ public:
                 char* message = "Choose a directory",
                 char* defaultPath = "",
                 long style = 0,
-                const wxPoint& pos = wxPyDefaultPosition);
+                const wxPoint& pos = wxDefaultPosition);
 
     %pragma(python) addtomethod = "__init__:#wx._StdDialogCallbacks(self)"
 
@@ -91,7 +91,7 @@ public:
                  char* defaultFile = "",
                  char* wildcard = "*.*",
                  long style = 0,
-                 const wxPoint& pos = wxPyDefaultPosition);
+                 const wxPoint& pos = wxDefaultPosition);
 
     %pragma(python) addtomethod = "__init__:#wx._StdDialogCallbacks(self)"
 
@@ -156,7 +156,7 @@ public:
                              int LCOUNT, wxString* choices,
                              //char** clientData = NULL,
                              long style = wxOK | wxCANCEL | wxCENTRE,
-                             wxPoint* pos = &wxPyDefaultPosition) {
+                             wxPoint* pos = &wxDefaultPosition) {
             return new wxSingleChoiceDialog(parent, *message, *caption,
                                             LCOUNT, choices, NULL, style, *pos);
         }
@@ -180,7 +180,7 @@ public:
                       char* caption = "Input Text",
                       char* defaultValue = "",
                       long style = wxOK | wxCANCEL | wxCENTRE,
-                      const wxPoint& pos = wxPyDefaultPosition);
+                      const wxPoint& pos = wxDefaultPosition);
 
     %pragma(python) addtomethod = "__init__:#wx._StdDialogCallbacks(self)"
 
@@ -231,7 +231,7 @@ public:
                     char* message,
                     char* caption = "Message box",
                     long style = wxOK | wxCANCEL | wxCENTRE,
-                    const wxPoint& pos = wxPyDefaultPosition);
+                    const wxPoint& pos = wxDefaultPosition);
 
     %pragma(python) addtomethod = "__init__:#wx._StdDialogCallbacks(self)"
 

@@ -37,8 +37,8 @@ public:
     wxMDIParentFrame(wxWindow *parent,
                      const wxWindowID id,
                      const wxString& title,
-                     const wxPoint& pos = wxPyDefaultPosition,
-                     const wxSize& size = wxPyDefaultSize,
+                     const wxPoint& pos = wxDefaultPosition,
+                     const wxSize& size = wxDefaultSize,
                      long style = wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCROLL,
                      const char* name = "frame");
 
@@ -71,8 +71,8 @@ public:
     wxMDIChildFrame(wxMDIParentFrame* parent,
                     const wxWindowID id,
                     const wxString& title,
-                    const wxPoint& pos = wxPyDefaultPosition,
-                    const wxSize& size = wxPyDefaultSize,
+                    const wxPoint& pos = wxDefaultPosition,
+                    const wxSize& size = wxDefaultSize,
                     long style = wxDEFAULT_FRAME_STYLE,
                     const char* name = "frame");
 

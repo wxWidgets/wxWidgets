@@ -106,6 +106,8 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 }
 
 static char* wxStringErrorMsg = "string type is required for parameter";
+
+    static wxString wxPyEmptyStr("");
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -131,8 +133,8 @@ static PyObject *_wrap_new_wxStatusBar(PyObject *self, PyObject *args, PyObject 
     wxStatusBar * _result;
     wxWindow * _arg0;
     wxWindowID  _arg1;
-    wxPoint * _arg2 = (wxPoint *) &wxPyDefaultPosition;
-    wxSize * _arg3 = (wxSize *) &wxPyDefaultSize;
+    wxPoint * _arg2 = (wxPoint *) &wxDefaultPosition;
+    wxSize * _arg3 = (wxSize *) &wxDefaultSize;
     long  _arg4 = (long ) wxST_SIZEGRIP;
     char * _arg5 = (char *) "statusBar";
     PyObject * _argo0 = 0;
@@ -2961,8 +2963,8 @@ static PyObject *_wrap_new_wxToolBar(PyObject *self, PyObject *args, PyObject *k
     wxToolBar * _result;
     wxWindow * _arg0;
     wxWindowID  _arg1;
-    wxPoint * _arg2 = (wxPoint *) &wxPyDefaultPosition;
-    wxSize * _arg3 = (wxSize *) &wxPyDefaultSize;
+    wxPoint * _arg2 = (wxPoint *) &wxDefaultPosition;
+    wxSize * _arg3 = (wxSize *) &wxDefaultSize;
     long  _arg4 = (long ) wxNO_BORDER|wxTB_HORIZONTAL;
     char * _arg5 = (char *) wxToolBarNameStr;
     PyObject * _argo0 = 0;
@@ -3084,8 +3086,8 @@ static PyObject *_wrap_new_wxToolBarSimple(PyObject *self, PyObject *args, PyObj
     wxToolBarSimple * _result;
     wxWindow * _arg0;
     wxWindowID  _arg1;
-    wxPoint * _arg2 = (wxPoint *) &wxPyDefaultPosition;
-    wxSize * _arg3 = (wxSize *) &wxPyDefaultSize;
+    wxPoint * _arg2 = (wxPoint *) &wxDefaultPosition;
+    wxSize * _arg3 = (wxSize *) &wxDefaultSize;
     long  _arg4 = (long ) wxNO_BORDER|wxTB_HORIZONTAL;
     char * _arg5 = (char *) wxToolBarNameStr;
     PyObject * _argo0 = 0;

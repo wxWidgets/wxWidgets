@@ -32,13 +32,18 @@
 
 %pragma(python) code = "import wx"
 
+
+%{
+    static wxString wxPyEmptyStr("");
+%}
+
 //---------------------------------------------------------------------------
 
 class wxStatusBar : public wxWindow {
 public:
     wxStatusBar(wxWindow* parent, wxWindowID id,
-                const wxPoint& pos = wxPyDefaultPosition,
-                const wxSize& size = wxPyDefaultSize,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
                 long style = wxST_SIZEGRIP,
                 char* name = "statusBar");
 
@@ -273,8 +278,8 @@ class wxToolBar : public wxToolBarBase {
 public:
     wxToolBar(wxWindow *parent,
               wxWindowID id,
-              const wxPoint& pos = wxPyDefaultPosition,
-              const wxSize& size = wxPyDefaultSize,
+              const wxPoint& pos = wxDefaultPosition,
+              const wxSize& size = wxDefaultSize,
               long style = wxNO_BORDER | wxTB_HORIZONTAL,
               const char* name = wxToolBarNameStr);
 
@@ -290,8 +295,8 @@ class wxToolBarSimple : public wxToolBarBase {
 public:
     wxToolBarSimple(wxWindow *parent,
                     wxWindowID id,
-                    const wxPoint& pos = wxPyDefaultPosition,
-                    const wxSize& size = wxPyDefaultSize,
+                    const wxPoint& pos = wxDefaultPosition,
+                    const wxSize& size = wxDefaultSize,
                     long style = wxNO_BORDER | wxTB_HORIZONTAL,
                     const char* name = wxToolBarNameStr);
 
@@ -342,8 +347,8 @@ public:
 class wxToolBar : public wxControl {
 public:
     wxToolBar(wxWindow* parent, wxWindowID id,
-              const wxPoint& pos = wxPyDefaultPosition,
-              const wxSize& size = wxPyDefaultSize,
+              const wxPoint& pos = wxDefaultPosition,
+              const wxSize& size = wxDefaultSize,
               long style = wxTB_HORIZONTAL | wxNO_BORDER,
               char* name = "toolBar");
 

@@ -112,6 +112,8 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 
 static char* wxStringErrorMsg = "string type is required for parameter";
 
+    static wxString wxPyEmptyStr("");
+
 
     wxColour wxSystemSettings_GetSystemColour(int index) {
         return wxSystemSettings::GetSystemColour(index);
@@ -656,7 +658,7 @@ static PyObject *_wrap_wxGetNumberFromUser(PyObject *self, PyObject *args, PyObj
     long  _arg4 = (long ) 0;
     long  _arg5 = (long ) 100;
     wxWindow * _arg6 = (wxWindow *) NULL;
-    wxPoint * _arg7 = (wxPoint *) &wxPyDefaultPosition;
+    wxPoint * _arg7 = (wxPoint *) &wxDefaultPosition;
     PyObject * _obj0 = 0;
     PyObject * _obj1 = 0;
     PyObject * _obj2 = 0;
@@ -787,6 +789,135 @@ static PyObject *_wrap_wxDisplayDepth(PyObject *self, PyObject *args, PyObject *
 
     wxPy_END_ALLOW_THREADS;
 }    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxGetDisplayDepth(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxGetDisplayDepth",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxGetDisplayDepth();
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxDisplaySize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int * _arg0;
+    int  temp;
+    int * _arg1;
+    int  temp0;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+{
+  _arg0 = &temp;
+}
+{
+  _arg1 = &temp0;
+}
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxDisplaySize",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxDisplaySize(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg0));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg1));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxGetDisplaySize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSize * _result;
+    char *_kwnames[] = {  NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxGetDisplaySize",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxSize (wxGetDisplaySize());
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxSize_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxDisplaySizeMM(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int * _arg0;
+    int  temp;
+    int * _arg1;
+    int  temp0;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+{
+  _arg0 = &temp;
+}
+{
+  _arg1 = &temp0;
+}
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxDisplaySizeMM",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxDisplaySizeMM(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg0));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg1));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxGetDisplaySizeMM(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSize * _result;
+    char *_kwnames[] = {  NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxGetDisplaySizeMM",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxSize (wxGetDisplaySizeMM());
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxSize_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -5231,6 +5362,11 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxFindWindowByName", (PyCFunction) _wrap_wxFindWindowByName, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFindWindowByLabel", (PyCFunction) _wrap_wxFindWindowByLabel, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSetCursor", (PyCFunction) _wrap_wxSetCursor, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGetDisplaySizeMM", (PyCFunction) _wrap_wxGetDisplaySizeMM, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDisplaySizeMM", (PyCFunction) _wrap_wxDisplaySizeMM, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGetDisplaySize", (PyCFunction) _wrap_wxGetDisplaySize, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDisplaySize", (PyCFunction) _wrap_wxDisplaySize, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGetDisplayDepth", (PyCFunction) _wrap_wxGetDisplayDepth, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDisplayDepth", (PyCFunction) _wrap_wxDisplayDepth, METH_VARARGS | METH_KEYWORDS },
 	 { "wxColourDisplay", (PyCFunction) _wrap_wxColourDisplay, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGetNumberFromUser", (PyCFunction) _wrap_wxGetNumberFromUser, METH_VARARGS | METH_KEYWORDS },

@@ -31,6 +31,11 @@
 %import _defs.i
 %import misc.i
 
+
+%{
+    static wxString wxPyEmptyStr("");
+%}
+
 //---------------------------------------------------------------------------
 
 //  class wxGDIImage {

@@ -31,6 +31,11 @@
 
 %pragma(python) code = "import wx"
 
+
+%{
+    static wxString wxPyEmptyStr("");
+%}
+
 //---------------------------------------------------------------------------
 
 class wxEvtHandler {
@@ -197,8 +202,8 @@ class wxWindow : public wxEvtHandler {
 public:
 
     wxWindow(wxWindow* parent, const wxWindowID id,
-             const wxPoint& pos = wxPyDefaultPosition,
-             const wxSize& size = wxPyDefaultSize,
+             const wxPoint& pos = wxDefaultPosition,
+             const wxSize& size = wxDefaultSize,
              long style = 0,
              char* name = "panel");
 
@@ -486,8 +491,8 @@ class wxPanel : public wxWindow {
 public:
     wxPanel(wxWindow* parent,
             const wxWindowID id,
-            const wxPoint& pos = wxPyDefaultPosition,
-            const wxSize& size = wxPyDefaultSize,
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize,
             long style = wxTAB_TRAVERSAL,
             const char* name = "panel");
 
@@ -514,8 +519,8 @@ public:
     wxDialog(wxWindow* parent,
              const wxWindowID id,
              const wxString& title,
-             const wxPoint& pos = wxPyDefaultPosition,
-             const wxSize& size = wxPyDefaultSize,
+             const wxPoint& pos = wxDefaultPosition,
+             const wxSize& size = wxDefaultSize,
              long style = wxDEFAULT_DIALOG_STYLE,
              const char* name = "dialogBox");
 
@@ -542,8 +547,8 @@ class wxScrolledWindow : public wxPanel {
 public:
     wxScrolledWindow(wxWindow* parent,
                      const wxWindowID id = -1,
-                     const wxPoint& pos = wxPyDefaultPosition,
-                     const wxSize& size = wxPyDefaultSize,
+                     const wxPoint& pos = wxDefaultPosition,
+                     const wxSize& size = wxDefaultSize,
                      long style = wxHSCROLL | wxVSCROLL,
                      char* name = "scrolledWindow");
 

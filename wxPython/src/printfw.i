@@ -334,8 +334,8 @@ public:
 class wxPreviewFrame : public wxFrame {
 public:
     wxPreviewFrame(wxPrintPreview* preview, wxFrame* parent, const wxString& title,
-                   const wxPoint& pos = wxPyDefaultPosition,
-                   const wxSize&  size = wxPyDefaultSize,
+                   const wxPoint& pos = wxDefaultPosition,
+                   const wxSize&  size = wxDefaultSize,
                    long style = wxDEFAULT_FRAME_STYLE,
                    char* name = "frame");
 

@@ -55,7 +55,7 @@ extern PyObject *SWIG_newvarlink(void);
 
 #define SWIG_name    "calendarc"
 
-#include "helpers.h"
+#include "export.h"
 #include <wx/calctrl.h>
 
 static PyObject* l_output_helper(PyObject* target, PyObject* o) {

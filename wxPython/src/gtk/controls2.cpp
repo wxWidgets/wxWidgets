@@ -110,8 +110,6 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 
 static char* wxStringErrorMsg = "string type is required for parameter";
 
-extern wxValidator wxPyDefaultValidator;
-
     int wxCALLBACK wxPyListCtrl_SortItems(long item1, long item2, long funcPtr) {
         int retval = 0;
         PyObject* func = (PyObject*)funcPtr;
@@ -2846,10 +2844,10 @@ static PyObject *_wrap_new_wxListCtrl(PyObject *self, PyObject *args, PyObject *
     wxListCtrl * _result;
     wxWindow * _arg0;
     wxWindowID  _arg1;
-    wxPoint * _arg2 = (wxPoint *) &wxPyDefaultPosition;
-    wxSize * _arg3 = (wxSize *) &wxPyDefaultSize;
+    wxPoint * _arg2 = (wxPoint *) &wxDefaultPosition;
+    wxSize * _arg3 = (wxSize *) &wxDefaultSize;
     long  _arg4 = (long ) wxLC_ICON;
-    wxValidator * _arg5 = (wxValidator *) &wxPyDefaultValidator;
+    wxValidator * _arg5 = (wxValidator *) &wxDefaultValidator;
     char * _arg6 = (char *) "listCtrl";
     PyObject * _argo0 = 0;
     wxPoint  temp;
@@ -5041,10 +5039,10 @@ static PyObject *_wrap_new_wxTreeCtrl(PyObject *self, PyObject *args, PyObject *
     wxPyTreeCtrl * _result;
     wxWindow * _arg0;
     wxWindowID  _arg1 = (wxWindowID ) -1;
-    wxPoint * _arg2 = (wxPoint *) &wxPyDefaultPosition;
-    wxSize * _arg3 = (wxSize *) &wxPyDefaultSize;
+    wxPoint * _arg2 = (wxPoint *) &wxDefaultPosition;
+    wxSize * _arg3 = (wxSize *) &wxDefaultSize;
     long  _arg4 = (long ) wxTR_HAS_BUTTONS|wxTR_LINES_AT_ROOT;
-    wxValidator * _arg5 = (wxValidator *) &wxPyDefaultValidator;
+    wxValidator * _arg5 = (wxValidator *) &wxDefaultValidator;
     char * _arg6 = (char *) "wxTreeCtrl";
     PyObject * _argo0 = 0;
     wxPoint  temp;
