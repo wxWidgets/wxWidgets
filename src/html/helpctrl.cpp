@@ -176,7 +176,7 @@ bool wxHtmlHelpController::Initialize(const wxString& file)
     wxSplitPath(file, & dir, & filename, & ext);
 
     if (!dir.IsEmpty())
-        dir = dir + wxString(wxT("/"));
+        dir = dir + wxFILE_SEP_PATH;
 
     // Try to find a suitable file
     wxString actualFilename = dir + filename + wxString(wxT(".zip"));
