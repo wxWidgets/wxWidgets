@@ -45,11 +45,11 @@ gtk_combo_select_child_callback( GtkList *WXUNUSED(list), GtkWidget *WXUNUSED(wi
     if (g_isIdle) wxapp_install_idle_handler();
 
     if (!combo->m_hasVMT) return;
-    
+
     if (g_blockEventsOnDrag) return;
 
     int curSelection = combo->GetSelection();
-    
+
     if (combo->m_prevSelection != curSelection)
     {
         GtkWidget *list = GTK_COMBO(combo->m_widget)->list;
@@ -119,7 +119,7 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
 
     m_widget = gtk_combo_new();
     GtkCombo *combo = GTK_COMBO(m_widget);
-    
+
     // Disable GTK's broken events ...
     gtk_signal_disconnect( GTK_OBJECT(combo->entry), combo->entry_change_id );
     // ... and add surogate handler.
@@ -128,7 +128,7 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
 
     // make it more useable
     gtk_combo_set_use_arrows_always( GTK_COMBO(m_widget), TRUE );
-    
+
     // and case-sensitive
     gtk_combo_set_case_sensitive( GTK_COMBO(m_widget), TRUE );
 
@@ -151,7 +151,7 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     }
 
     m_parent->DoAddChild( this );
-    
+
     m_focusWidget = combo->entry;
 
     PostCreation();
@@ -182,7 +182,7 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     if ((new_size.x != size.x) || (new_size.y != size.y))
     {
         SetSize( new_size.x, new_size.y );
-        
+
         // This is required for tool bar support
         gtk_widget_set_usize( m_widget, new_size.x, new_size.y );
     }
@@ -225,7 +225,7 @@ void wxComboBox::AppendCommon( const wxString &item )
     wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
     DisableEvents();
-    
+
     GtkWidget *list = GTK_COMBO(m_widget)->list;
 
     GtkWidget *list_item = gtk_list_item_new_with_label( wxGTK_CONV( item ) );
@@ -241,7 +241,7 @@ void wxComboBox::AppendCommon( const wxString &item )
     }
 
     gtk_widget_show( list_item );
-    
+
     EnableEvents();
 }
 
@@ -366,14 +366,13 @@ void wxComboBox::SetClientData( int n, void* clientData )
     node->SetData( (wxObject*) clientData );
 }
 
-void* wxComboBox::GetClientData( int n )
+void* wxComboBox::GetClientData( int n ) const
 {
     wxCHECK_MSG( m_widget != NULL, NULL, wxT("invalid combobox") );
 
     wxNode *node = m_clientDataList.Item( n );
-    if (!node) return NULL;
 
-    return node->GetData();
+    return node ? node->GetData() : NULL;
 }
 
 void wxComboBox::SetClientObject( int n, wxClientData* clientData )
@@ -389,14 +388,13 @@ void wxComboBox::SetClientObject( int n, wxClientData* clientData )
     node->SetData( (wxObject*) clientData );
 }
 
-wxClientData* wxComboBox::GetClientObject( int n )
+wxClientData* wxComboBox::GetClientObject( int n ) const
 {
     wxCHECK_MSG( m_widget != NULL, (wxClientData*)NULL, wxT("invalid combobox") );
 
     wxNode *node = m_clientObjectList.Item( n );
-    if (!node) return (wxClientData*) NULL;
 
-    return (wxClientData*) node->GetData();
+    return node ? (wxClientData*) node->GetData() : NULL;
 }
 
 void wxComboBox::Clear()
@@ -404,7 +402,7 @@ void wxComboBox::Clear()
     wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
     DisableEvents();
-    
+
     GtkWidget *list = GTK_COMBO(m_widget)->list;
     gtk_list_clear_items( GTK_LIST(list), 0, Number() );
 
@@ -418,7 +416,7 @@ void wxComboBox::Clear()
     m_clientObjectList.Clear();
 
     m_clientDataList.Clear();
-    
+
     EnableEvents();
 }
 
@@ -437,7 +435,7 @@ void wxComboBox::Delete( int n )
     }
 
     DisableEvents();
-    
+
     GList *list = g_list_append( (GList*) NULL, child->data );
     gtk_list_remove_items( listbox, list );
     g_list_free( list );
@@ -453,7 +451,7 @@ void wxComboBox::Delete( int n )
     node = m_clientDataList.Item( n );
     if (node)
         m_clientDataList.DeleteNode( node );
-    
+
     EnableEvents();
 }
 
@@ -495,7 +493,7 @@ int wxComboBox::FindString( const wxString &item )
 #endif
         if (item == str)
             return count;
-            
+
         count++;
         child = child->next;
     }
@@ -615,7 +613,7 @@ wxString wxComboBox::GetValue() const
     GtkEntry *entry = GTK_ENTRY( GTK_COMBO(m_widget)->entry );
     wxString tmp( wxGTK_CONV_BACK( gtk_entry_get_text( entry ) ) );
 
-#if 0    
+#if 0
     for (int i = 0; i < wxStrlen(tmp.c_str()) +1; i++)
     {
         wxChar c = tmp[i];
@@ -623,7 +621,7 @@ wxString wxComboBox::GetValue() const
     }
     printf( "\n" );
 #endif
-    
+
     return tmp;
 }
 
@@ -696,7 +694,7 @@ void wxComboBox::Replace( long from, long to, const wxString& value )
     gtk_editable_delete_text( GTK_EDITABLE(entry), (gint)from, (gint)to );
     if (value.IsNull()) return;
     gint pos = (gint)to;
-    
+
 #if wxUSE_UNICODE
     wxCharBuffer buffer = wxConvUTF8.cWX2MB( value );
     gtk_editable_insert_text( GTK_EDITABLE(entry), (const char*) buffer, strlen( (const char*) buffer ), &pos );
@@ -752,12 +750,12 @@ void wxComboBox::OnChar( wxKeyEvent &event )
                     gtk_widget_activate (window->default_widget);
             }
         }
-            
+
         // Catch GTK event so that GTK doesn't open the drop
         // down list upon RETURN.
         return;
     }
-    
+
     event.Skip();
 }
 
