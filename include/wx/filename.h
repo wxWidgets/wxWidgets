@@ -284,10 +284,12 @@ public:
         { return Normalize(wxPATH_NORM_DOTS | wxPATH_NORM_ABSOLUTE |
                            wxPATH_NORM_TILDE, cwd, format); }
 
-#ifdef __WIN32__
+#if defined(__WIN32__) && !defined(__WXWINCE__) && wxUSE_OLE
         // if the path is a shortcut, return the target and optionally,
         // the arguments
-    bool GetShortcutTarget(const wxString& shortcutPath, wxString& targetFilename, wxString* arguments = NULL);
+    bool GetShortcutTarget(const wxString& shortcutPath,
+                           wxString& targetFilename,
+                           wxString* arguments = NULL);
 #endif
 
     // Comparison
