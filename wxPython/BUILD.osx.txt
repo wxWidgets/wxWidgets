@@ -51,10 +51,10 @@ get things from various CVS repositories as needed.
 	ln -s ../wxPython .
 
 8. Now just navigate in the Finder to the demo directory and double
-   click demo.py, or simple.py, or whatever you want to run.
-   (Unfortunately it can't be done from the commandline in a terminal
-   window.  You can open the Console app to see any tracebacks or
-   other output.)
+   click demo.py, or simple.py, or whatever you want to run.  Or from
+   a command line you can run it this way:
+
+        open -a Python demo.py
 
 9. Figure out what's wrong, figure out how to fix it, and then send
    the patches to me.  <wink>

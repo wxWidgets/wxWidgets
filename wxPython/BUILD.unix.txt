@@ -124,6 +124,22 @@ D. If using the sources (either from the tarball or from CVS) then
    To make a static library and not make a shared library, use the
    --disable-shared and --enable-static flags.
 
+   NOTE: It has been discovered that some pre-built distributions of
+   Python are built with options that can cause incompatibilities
+   between wxPython and wxGTK.  Typically these are things like large
+   file support on the platforms that have it.  This causes some basic
+   types, like off_t, to be typedef'd differently causing the C++
+   method signatures to be incompatible and giving link errors.  The
+   way to fix this is to activate these same settings in the wxGTK
+   build, usually by looking at the flags and options used in
+   compiling wxPython that are different from the options used on
+   wxGTK compiles.  For example, on SuSE doing the following before
+   running wxGTK's configure seems to take care of it:
+
+   export CFLAGS="-D_FILE_OFFSET_BITS=64 -DHAVE_LARGEFILE_SUPPORT"
+   export CXXFLAGS=$CFLAGS
+
+
 E. Now just compile and install.  You need to use GNU make, so if your
    system has something else get GNU make and build and install it and
    use it instead of your system's default make command.
@@ -162,7 +178,7 @@ B. As mentioned previouslly, wxPython is built with the standard
    it doesn't, there doesn't seem to be a way to override the values
    that Distutils uses without hacking either Distutils itself, or
    Python's Makefile.  (Complain to the distutils-sig about this
-   please.)  For example, on my Solaris system I had to edit
+   please.)  For example, on a Solaris system I had to edit
    /usr/local/lib/python1.5/config/Makefile and replace
 
          LDSHARED=ld -G
@@ -184,9 +200,9 @@ B. As mentioned previouslly, wxPython is built with the standard
 
    In my case on Solaris wxPython applications would core dump on
    exit.  The core file indicated that the fault happened after
-   _exit() was called and the run-time was trying to execute cleanup
-   code.  After relinking the Python executable the problem went away.
-   To build Python to link with the C++ linker do this:
+   _exit() was called and the run-time library was trying to execute
+   cleanup code.  After relinking the Python executable the problem
+   went away.  To build Python to link with the C++ linker do this:
 
          cd Python-2.0      # wherever the root of the source tree is
 	 rm python          # in case it's still there from an old build

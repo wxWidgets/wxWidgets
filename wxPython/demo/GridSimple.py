@@ -32,6 +32,7 @@ class SimpleGrid(wxGrid): ##, wxGridAutoEditMixin):
         self.SetCellValue(5, 0, "123")
         self.SetCellEditor(6, 0, wxGridCellFloatEditor())
         self.SetCellValue(6, 0, "123.34")
+        self.SetCellEditor(7, 0, wxGridCellNumberEditor())
 
         self.SetCellValue(6, 3, "You can veto editing this cell")
 

@@ -731,13 +731,8 @@ if not GL_ONLY and BUILD_XRC:
 
                                 '%s/xh_unkwn.cpp' % XMLLOC,
                                 '%s/xml.cpp' % XMLLOC,
-                                '%s/xmlbin.cpp' % XMLLOC,
-                                '%s/xmlbinz.cpp' % XMLLOC,
-                                '%s/xmlexpat.cpp' % XMLLOC,
-
                                 '%s/xmlres.cpp' % XMLLOC,
                                 '%s/xmlrsall.cpp' % XMLLOC,
-                                '%s/xmlwrite.cpp' % XMLLOC,
 
                              ] + swig_sources,
 

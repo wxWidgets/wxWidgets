@@ -278,6 +278,26 @@ class wxURLDataObject(wxURLDataObjectPtr):
 
 
 
+class wxMetafileDataObjectPtr(wxDataObjectSimplePtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def SetMetafile(self, *_args, **_kwargs):
+        val = apply(clip_dndc.wxMetafileDataObject_SetMetafile,(self,) + _args, _kwargs)
+        return val
+    def GetMetafile(self, *_args, **_kwargs):
+        val = apply(clip_dndc.wxMetafileDataObject_GetMetafile,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxMetafileDataObject instance at %s>" % (self.this,)
+class wxMetafileDataObject(wxMetafileDataObjectPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(clip_dndc.new_wxMetafileDataObject,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
 class wxClipboardPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this

@@ -200,6 +200,8 @@ void wxPyBitmapDataObject::SetBitmap(const wxBitmap& bitmap) {
     wxPyEndBlockThreads();
 }
 
+#include <wx/metafile.h>
+
     // See below in the init function...
     wxClipboard* wxPyTheClipboard;
 
@@ -2103,6 +2105,115 @@ static PyObject *_wrap_wxURLDataObject_SetURL(PyObject *self, PyObject *args, Py
     return _resultobj;
 }
 
+static void *SwigwxMetafileDataObjectTowxDataObjectSimple(void *ptr) {
+    wxMetafileDataObject *src;
+    wxDataObjectSimple *dest;
+    src = (wxMetafileDataObject *) ptr;
+    dest = (wxDataObjectSimple *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxMetafileDataObjectTowxDataObject(void *ptr) {
+    wxMetafileDataObject *src;
+    wxDataObject *dest;
+    src = (wxMetafileDataObject *) ptr;
+    dest = (wxDataObject *) src;
+    return (void *) dest;
+}
+
+#define new_wxMetafileDataObject() (new wxMetafileDataObject())
+static PyObject *_wrap_new_wxMetafileDataObject(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxMetafileDataObject * _result;
+    char *_kwnames[] = {  NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxMetafileDataObject",_kwnames)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (wxMetafileDataObject *)new_wxMetafileDataObject();
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxMetafileDataObject_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxMetafileDataObject_SetMetafile(_swigobj,_swigarg0)  (_swigobj->SetMetafile(_swigarg0))
+static PyObject *_wrap_wxMetafileDataObject_SetMetafile(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxMetafileDataObject * _arg0;
+    wxMetafile * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","metafile", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxMetafileDataObject_SetMetafile",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMetafileDataObject_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMetafileDataObject_SetMetafile. Expected _wxMetafileDataObject_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxMetafile_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxMetafileDataObject_SetMetafile. Expected _wxMetafile_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxMetafileDataObject_SetMetafile(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxMetafileDataObject_GetMetafile(_swigobj)  (_swigobj->GetMetafile())
+static PyObject *_wrap_wxMetafileDataObject_GetMetafile(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxMetafile * _result;
+    wxMetafileDataObject * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxMetafileDataObject_GetMetafile",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxMetafileDataObject_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMetafileDataObject_GetMetafile. Expected _wxMetafileDataObject_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = new wxMetafile (wxMetafileDataObject_GetMetafile(_arg0));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxMetafile_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
 static void *SwigwxClipboardTowxObject(void *ptr) {
     wxClipboard *src;
     wxObject *dest;
@@ -3586,6 +3697,9 @@ static PyMethodDef clip_dndcMethods[] = {
 	 { "wxClipboard_Close", (PyCFunction) _wrap_wxClipboard_Close, METH_VARARGS | METH_KEYWORDS },
 	 { "wxClipboard_Open", (PyCFunction) _wrap_wxClipboard_Open, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxClipboard", (PyCFunction) _wrap_new_wxClipboard, METH_VARARGS | METH_KEYWORDS },
+	 { "wxMetafileDataObject_GetMetafile", (PyCFunction) _wrap_wxMetafileDataObject_GetMetafile, METH_VARARGS | METH_KEYWORDS },
+	 { "wxMetafileDataObject_SetMetafile", (PyCFunction) _wrap_wxMetafileDataObject_SetMetafile, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxMetafileDataObject", (PyCFunction) _wrap_new_wxMetafileDataObject, METH_VARARGS | METH_KEYWORDS },
 	 { "wxURLDataObject_SetURL", (PyCFunction) _wrap_wxURLDataObject_SetURL, METH_VARARGS | METH_KEYWORDS },
 	 { "wxURLDataObject_GetURL", (PyCFunction) _wrap_wxURLDataObject_GetURL, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxURLDataObject", (PyCFunction) _wrap_new_wxURLDataObject, METH_VARARGS | METH_KEYWORDS },
@@ -3652,6 +3766,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPrintQuality","_size_t",0},
     { "_wxPrintQuality","_time_t",0},
     { "_byte","_unsigned_char",0},
+    { "_wxDataObject","_wxMetafileDataObject",SwigwxMetafileDataObjectTowxDataObject},
     { "_wxDataObject","_wxURLDataObject",SwigwxURLDataObjectTowxDataObject},
     { "_wxDataObject","_wxCustomDataObject",SwigwxCustomDataObjectTowxDataObject},
     { "_wxDataObject","_wxFileDataObject",SwigwxFileDataObjectTowxDataObject},
@@ -3664,6 +3779,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxDataObject","_wxDataObjectSimple",SwigwxDataObjectSimpleTowxDataObject},
     { "_long","_unsigned_long",0},
     { "_long","_signed_long",0},
+    { "_wxDataObjectSimple","_wxMetafileDataObject",SwigwxMetafileDataObjectTowxDataObjectSimple},
     { "_wxDataObjectSimple","_wxCustomDataObject",SwigwxCustomDataObjectTowxDataObjectSimple},
     { "_wxDataObjectSimple","_wxFileDataObject",SwigwxFileDataObjectTowxDataObjectSimple},
     { "_wxDataObjectSimple","_wxPyBitmapDataObject",SwigwxPyBitmapDataObjectTowxDataObjectSimple},

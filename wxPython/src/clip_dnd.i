@@ -368,6 +368,25 @@ public:
 };
 
 //----------------------------------------------------------------------
+
+#ifndef __WXGTK__
+
+%{
+#include <wx/metafile.h>
+%}
+
+class wxMetafileDataObject : public wxDataObjectSimple
+{
+public:
+    wxMetafileDataObject();
+
+    void SetMetafile(const wxMetafile& metafile);
+    wxMetafile GetMetafile() const;
+};
+
+#endif
+
+//----------------------------------------------------------------------
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------
 

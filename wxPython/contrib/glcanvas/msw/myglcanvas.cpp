@@ -322,14 +322,6 @@ bool wxGLCanvas::Create(wxWindow *parent,
     msflags |= WS_BORDER;
   }
 
-  // calculate the value to return from WM_GETDLGCODE handler
-  if ( GetWindowStyleFlag() & wxWANTS_CHARS )
-  {
-    // want everything: i.e. all keys and WM_CHAR message
-    m_lDlgCode = DLGC_WANTARROWS | DLGC_WANTCHARS |
-                 DLGC_WANTTAB | DLGC_WANTMESSAGE;
-  }
-
   return MSWCreate(wxGLCanvasClassName, NULL, pos, size, msflags, exStyle);
 }
 
@@ -354,11 +346,11 @@ static void AdjustPFDForAttributes(PIXELFORMATDESCRIPTOR& pfd, int *attribList)
         case WX_GL_LEVEL:
           // this member looks like it may be obsolete
           if (attribList[arg] > 0) {
-            pfd.iLayerType = PFD_OVERLAY_PLANE;
+            pfd.iLayerType = (BYTE)PFD_OVERLAY_PLANE;
           } else if (attribList[arg] < 0) {
-            pfd.iLayerType = PFD_UNDERLAY_PLANE;
+            pfd.iLayerType = (BYTE)PFD_UNDERLAY_PLANE;
           } else {
-            pfd.iLayerType = PFD_MAIN_PLANE;
+            pfd.iLayerType = (BYTE)PFD_MAIN_PLANE;
           }
           arg++;
           break;

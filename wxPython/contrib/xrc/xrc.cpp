@@ -1336,7 +1336,6 @@ SWIGEXPORT(void) initxrcc() {
     wxClassInfo::CleanUpClasses();
     wxClassInfo::InitializeClasses();
 
-    wxXmlInitXmlModule();
     wxXmlInitResourceModule();
     wxXmlResource::Get()->InitAllHandlers();
 
