@@ -301,7 +301,9 @@ static gboolean target_drag_drop( GtkWidget *widget,
 #endif
 
         GdkAtom format = drop_target->GetMatchingPair();
-        wxASSERT( format );
+
+        // this does happen somehow, see bug 555111
+        wxCHECK_MSG( format, FALSE, _T("no matching GdkAtom for format?") )
 
 /*
         GdkDragAction action = GDK_ACTION_MOVE;
