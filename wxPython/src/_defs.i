@@ -264,6 +264,7 @@ enum {
     wxLB_HSCROLL,
     wxPROCESS_ENTER,
     wxPASSWORD,
+
     wxTE_PROCESS_ENTER,
     wxTE_PROCESS_TAB,
     wxTE_PASSWORD,
@@ -273,6 +274,8 @@ enum {
     wxTE_AUTO_SCROLL,
     wxTE_NO_VSCROLL,
     wxTE_AUTO_URL,
+    wxTE_NOHIDESEL,
+
     wxCB_SIMPLE,
     wxCB_DROPDOWN,
     wxCB_SORT,
