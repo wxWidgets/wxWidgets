@@ -29,7 +29,7 @@
 #  pragma hdrstop
 #endif
 
-// for all others, include the necessary headers 
+// for all others, include the necessary headers
 #ifndef WX_PRECOMP
 #  include "wx/wx.h"
 #endif
@@ -216,7 +216,7 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-  wxMessageBox(_("wxSocket demo: Server\n" 
+  wxMessageBox(_("wxSocket demo: Server\n"
                  "(c) 1999 Guillermo Rodriguez Garcia\n"),
                _("About Server"),
                wxOK | wxICON_INFORMATION, this);
@@ -287,7 +287,7 @@ void MyFrame::Test3(wxSocketBase *sock)
 
   m_text->AppendText(_("Test 3 begins\n"));
 
-  // This test is similar to the first one, but the len is   
+  // This test is similar to the first one, but the len is
   // expressed in kbytes - this tests large data transfers.
 
   sock->SetFlags(wxSOCKET_WAITALL);
@@ -334,7 +334,6 @@ void MyFrame::OnServerEvent(wxSocketEvent& event)
   else
   {
     m_text->AppendText(_("Error: couldn't accept a new connection\n\n"));
-    sock->Destroy();
     return;
   }
 
