@@ -131,7 +131,7 @@ Using project files (VC++ 6 and later):
    Normally you'll use a static linking ANSI configuration.
    Choose the Win32 Debug or Win32 Release configuration (or any other that
    suits your needs) and use Batch Build to compile _all_ projects. If you
-   know you want need some of the libraries (i.e. html part), you don't have
+   know you won't need some of the libraries (i.e. html part), you don't have
    to compile it.  It will also produce similar variations on jpeg.lib,
    png.lib, tiff.lib, zlib.lib, and regex.lib.
 3. Open a sample project file, choose a configuration such as
