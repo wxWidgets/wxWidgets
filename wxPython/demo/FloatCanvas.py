@@ -58,7 +58,7 @@ class TestPanel(wx.Panel):
         self.log = log
         wx.Panel.__init__(self, parent, -1)
 
-        b = wx.Button(self, -1, "Show the FloatBar sample", (50,50))
+        b = wx.Button(self, -1, "Show the FloatCanvas sample", (50,50))
         self.Bind(wx.EVT_BUTTON, self.OnButton, b)
 
 
