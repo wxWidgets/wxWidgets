@@ -107,6 +107,26 @@ void wxRemotelyScrolledTreeCtrl::SetScrollbars(int pixelsPerUnitX, int pixelsPer
 }
 
 // In case we're using the generic tree control.
+int wxRemotelyScrolledTreeCtrl::GetScrollPos(int orient) const
+{
+    wxScrolledWindow* scrolledWindow = GetScrolledWindow();
+
+    if (IsKindOf(CLASSINFO(wxGenericTreeCtrl)))
+    {
+        wxGenericTreeCtrl* win = (wxGenericTreeCtrl*) this;
+
+        if (orient == wxHORIZONTAL)
+            return win->wxGenericTreeCtrl::GetScrollPos(orient);
+        else
+        {
+            return scrolledWindow->GetScrollPos(orient);
+        }
+    }
+    return 0;
+}
+
+
+// In case we're using the generic tree control.
 // Get the view start
 void wxRemotelyScrolledTreeCtrl::GetViewStart(int *x, int *y) const
 {
@@ -383,7 +403,7 @@ void wxTreeCompanionWindow::OnPaint(wxPaintEvent& event)
     if (!m_treeCtrl)
         return;
 
-	wxPen pen(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DLIGHT), 1, wxSOLID);
+        wxPen pen(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DLIGHT), 1, wxSOLID);
 	dc.SetPen(pen);
 	dc.SetBrush(* wxTRANSPARENT_BRUSH);
 	wxFont font(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
@@ -400,11 +420,11 @@ void wxTreeCompanionWindow::OnPaint(wxPaintEvent& event)
 			cy = itemRect.GetTop();
 			wxRect drawItemRect(0, cy, clientSize.x, itemRect.GetHeight());
 
-			dc.DrawLine(0, cy, clientSize.x, cy);
 			lastH = h;
 
 			// Draw the actual item
 			DrawItem(dc, h, drawItemRect);
+			dc.DrawLine(0, cy, clientSize.x, cy);
 		}
 	}
 	if (m_treeCtrl->GetBoundingRect(lastH, itemRect))

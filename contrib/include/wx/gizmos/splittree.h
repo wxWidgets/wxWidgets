@@ -78,6 +78,9 @@ public:
     // In case we're using the generic tree control.
     virtual void PrepareDC(wxDC& dc);
 
+    // In case we're using the generic tree control.
+    virtual int GetScrollPos(int orient) const;
+
 //// Helpers
 	void HideVScrollbar();
 
