@@ -50,6 +50,8 @@
 
 #include "wx/sizer.h"
 
+#include "wx/timer.h"
+
 #ifdef __WXUNIVERSAL__
     #include "wx/univ/theme.h"
 #endif // __WXUNIVERSAL__
@@ -90,7 +92,7 @@ static const struct ControlValues
     bool wraplines;
     bool readonly;
 } DEFAULTS =
-    { TextLines_Multi, FALSE, TRUE, FALSE };
+    { TextLines_Multi, FALSE, FALSE, FALSE };
 
 // ----------------------------------------------------------------------------
 // our classes
@@ -682,9 +684,24 @@ void TextTestFrame::OnButtonLoad(wxCommandEvent& WXUNUSED(event))
 
     wxString filename = pathlist.FindValidPath(_T("texttest.cpp"));
     if ( !filename )
+    {
         wxLogError(_T("File texttest.cpp not found."));
-    else if ( !m_text->LoadFile(filename) )
-        wxLogError(_T("Error loading file."));
+    }
+    else // load it
+    {
+        wxStopWatch sw;
+        if ( !m_text->LoadFile(filename) )
+        {
+            // this is not supposed to happen ...
+            wxLogError(_T("Error loading file."));
+        }
+        else
+        {
+            long elapsed = sw.Time();
+            wxLogMessage(_T("Loaded file '%s' in %u.%us"),
+                         filename.c_str(), elapsed / 1000, elapsed % 1000);
+        }
+    }
 }
 
 void TextTestFrame::OnUpdateUIClearButton(wxUpdateUIEvent& event)

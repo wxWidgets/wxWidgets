@@ -296,11 +296,15 @@ protected:
     // get the logical text width (accounting for scrolling)
     wxCoord GetTotalWidth() const;
 
+    // get total number of rows (different from number of lines if the lines
+    // can be wrapped)
+    wxTextCoord GetRowCount() const;
+
     // find the number of rows in this line (only if WrapLines())
     wxTextCoord GetRowsPerLine(wxTextCoord line) const;
 
-    // get total number of rows before the given line
-    wxTextCoord GetNumberOfRowsBefore(wxTextCoord line) const;
+    // get the starting row of the given line
+    wxTextCoord GetFirstRowOfLine(wxTextCoord line) const;
 
     // the text area is the part of the window in which the text can be
     // displayed, i.e. part of it inside the margins and the real text area is
@@ -330,6 +334,12 @@ protected:
     // get the text to show: either the text itself or the text replaced with
     // starts for wxTE_PASSWORD control
     wxString GetTextToShow(const wxString& text) const;
+
+    // find the row in this line where the given position (counted from the
+    // start of line) is
+    wxTextCoord GetRowInLine(wxTextCoord line,
+                             wxTextCoord col,
+                             wxTextCoord *colRowStart = NULL) const;
 
     // find the number of characters of a line before it wraps
     // (and optionally also the real width of the line)
@@ -408,22 +418,10 @@ protected:
     // return the struct containing control-type dependent data
     struct wxTextSingleLineData& SData() { return *m_data.sdata; }
     struct wxTextMultiLineData& MData() { return *m_data.mdata; }
+    struct wxTextWrappedData& WData() { return *m_data.wdata; }
     const wxTextSingleLineData& SData() const { return *m_data.sdata; }
     const wxTextMultiLineData& MData() const { return *m_data.mdata; }
-
-    // accessors for derived classes (SL stands for single line)
-    const wxString& GetSLValue() const
-    {
-        wxASSERT_MSG( IsSingleLine(), _T("only for single line controls") );
-
-        return m_value;
-    }
-
-    void SetSLValue(const wxString& value)
-    {
-        wxASSERT_MSG( IsSingleLine(), _T("only for single line controls") );
-        m_value = value;
-    }
+    const wxTextWrappedData& WData() const { return *m_data.wdata; }
 
     // clipboard operations (unlike the versions without Do prefix, they have a
     // return code)
@@ -431,13 +429,34 @@ protected:
     bool DoPaste();
 
 private:
+    // all these methods are for multiline text controls only
+
     // update the scrollbars (only called from OnIdle)
     void UpdateScrollbars();
+
+    // get read only access to the lines of multiline control
+    inline const wxArrayString& GetLines() const;
+    inline size_t GetLineCount() const;
+
+    // replace a line
+    void ReplaceLine(wxTextCoord line, const wxString& text);
+
+    // remove a line
+    void RemoveLine(wxTextCoord line);
+
+    // insert a line at this position
+    void InsertLine(wxTextCoord line, const wxString& text);
+
+    // calculate geometry of this line
+    void LayoutLine(wxTextCoord line, class wxWrappedLineData& lineData) const;
+
+    // calculate geometry of all lines until the given one
+    void LayoutLines(wxTextCoord lineLast) const;
 
     // the initially specified control size
     wxSize m_sizeInitial;
 
-    // the control text (only used for single line controls)
+    // the global control text
     wxString m_value;
 
     // current position
@@ -473,6 +492,7 @@ private:
     {
         wxTextSingleLineData *sdata;
         wxTextMultiLineData *mdata;
+        wxTextWrappedData *wdata;
         void *data;
     } m_data;
 

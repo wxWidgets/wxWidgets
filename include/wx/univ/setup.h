@@ -34,8 +34,9 @@
 #define wxUSE_STREAMS       0
 #define wxUSE_STD_IOSTREAM  0
 #define wxUSE_SERIAL        0
-#define wxUSE_LONGLONG      0
+#define wxUSE_LONGLONG      1
 #define wxUSE_TIMER      1
+#define wxUSE_STOPWATCH  1
 #define wxUSE_TIMEDATE      0
 #define wxUSE_DATETIME      0
 #define wxUSE_CONFIG           0
