@@ -196,7 +196,7 @@ class WXDLLEXPORT wxObject
   bool IsKindOf(wxClassInfo *info) const;
 
 #if defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING
-  void * operator new (size_t size, char * fileName = NULL, int lineNum = 0);
+  void * operator new (size_t size, wxChar * fileName = NULL, int lineNum = 0);
   void operator delete (void * buf);
 
 // VC++ 6.0
@@ -206,12 +206,12 @@ class WXDLLEXPORT wxObject
 
     // Causes problems for VC++
 #if wxUSE_ARRAY_MEMORY_OPERATORS && !defined(__VISUALC__) && !defined( __MWERKS__)
-  void * operator new[] (size_t size, char * fileName = NULL, int lineNum = 0);
+  void * operator new[] (size_t size, wxChar * fileName = NULL, int lineNum = 0);
   void operator delete[] (void * buf);
 #endif
 
 #ifdef __MWERKS__
-  void * operator new[] (size_t size, char * fileName  , int lineNum = 0);
+  void * operator new[] (size_t size, wxChar * fileName  , int lineNum = 0);
   void operator delete[] (void * buf);
 #endif
 
@@ -261,7 +261,7 @@ private:
 
 #ifdef __WXDEBUG__
 #ifndef WXDEBUG_NEW
-#define WXDEBUG_NEW new(__FILE__,__LINE__)
+#define WXDEBUG_NEW new(__TFILE__,__LINE__)
 #endif
 #else
 #define WXDEBUG_NEW new
@@ -272,7 +272,7 @@ private:
 // use WXDEBUG_NEW explicitly if you wish to use the debugging version.
 
 #if defined(__WXDEBUG__) && wxUSE_GLOBAL_MEMORY_OPERATORS && wxUSE_DEBUG_NEW_ALWAYS
-#define new new(__FILE__,__LINE__)
+#define new new(__TFILE__,__LINE__)
 #endif
 
 #endif

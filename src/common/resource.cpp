@@ -826,7 +826,7 @@ wxItemResource *wxResourceInterpretControl(wxResourceTable& table, wxExpr *expr)
         wxString str(expr->Nth(count)->StringValue());
         count ++;
 
-        if (str != "")
+        if (str != _T(""))
         {
             controlItem->SetValue4(str);
             controlItem->SetType(_T("wxBitmapButton"));
@@ -2057,7 +2057,7 @@ wxBitmap wxResourceCreateBitmap(const wxString& resource, wxResourceTable *table
   wxItemResource *item = table->FindResource(resource);
   if (item)
   {
-    if ((item->GetType() == "") || (item->GetType() != "wxBitmap"))
+    if ((item->GetType() == _T("")) || (item->GetType() != _T("wxBitmap")))
     {
       wxLogWarning(_("%s not a bitmap resource specification."), (const wxChar*) resource);
       return wxNullBitmap;

@@ -401,7 +401,7 @@ wxLogStream::wxLogStream(ostream *ostr)
 
 void wxLogStream::DoLogString(const wxChar *szString, time_t t)
 {
-    (*m_ostr) << szString << endl << flush;
+    (*m_ostr) << wxConv_libc.cWX2MB(szString) << endl << flush;
 }
 #endif // wxUSE_STD_IOSTREAM
 

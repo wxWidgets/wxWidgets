@@ -86,9 +86,9 @@ public:
     // number of standard keys
   static const size_t nStdKeys;
     // get the name of a standard key
-  static const char *GetStdKeyName(size_t key);
+  static const wxChar *GetStdKeyName(size_t key);
     // get the short name of a standard key
-  static const char *GetStdKeyShortName(size_t key);
+  static const wxChar *GetStdKeyShortName(size_t key);
     // get StdKey from root HKEY
   static StdKey GetStdKeyFromHkey(WXHKEY hkey);
 
@@ -154,15 +154,15 @@ public:
     // deletes this key and all of it's subkeys/values
   bool  DeleteSelf();
     // deletes the subkey with all of it's subkeys/values recursively
-  bool  DeleteKey(const char *szKey);
+  bool  DeleteKey(const wxChar *szKey);
     // deletes the named value (may be NULL to remove the default value)
-  bool  DeleteValue(const char *szValue);
+  bool  DeleteValue(const wxChar *szValue);
 
   // access to values and subkeys
     // get value type
-  ValueType GetValueType(const char *szValue) const;
+  ValueType GetValueType(const wxChar *szValue) const;
     // returns TRUE if the value contains a number (else it's some string)
-  bool IsNumericValue(const char *szValue) const;
+  bool IsNumericValue(const wxChar *szValue) const;
 
     // assignment operators set the default value of the key
   wxRegKey& operator=(const wxString& strValue)
@@ -174,22 +174,22 @@ public:
   operator wxString() const;
 
     // set the string value
-  bool  SetValue(const char *szValue, const wxString& strValue);
+  bool  SetValue(const wxChar *szValue, const wxString& strValue);
     // return the string value
-  bool  QueryValue(const char *szValue, wxString& strValue) const;
+  bool  QueryValue(const wxChar *szValue, wxString& strValue) const;
 
 #ifdef  __WIN32__
     // set the numeric value
-  bool  SetValue(const char *szValue, long lValue);
+  bool  SetValue(const wxChar *szValue, long lValue);
     // return the numeric value
-  bool  QueryValue(const char *szValue, long *plValue) const;
+  bool  QueryValue(const wxChar *szValue, long *plValue) const;
 #endif  //Win32
 
   // query existence of a key/value
     // return true if value exists
-  bool  HasValue(const char *szKey) const;
+  bool  HasValue(const wxChar *szKey) const;
     // return true if given subkey exists
-  bool  HasSubKey(const char *szKey) const;
+  bool  HasSubKey(const wxChar *szKey) const;
     // return true if any subkeys exist
   bool  HasSubkeys() const;
 

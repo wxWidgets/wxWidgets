@@ -103,7 +103,7 @@ void wxObject::Dump(ostream& str)
 #undef new
 #endif
 
-void *wxObject::operator new (size_t size, char * fileName, int lineNum)
+void *wxObject::operator new (size_t size, wxChar * fileName, int lineNum)
 {
     return wxDebugAlloc(size, fileName, lineNum, TRUE);
 }
@@ -123,7 +123,7 @@ void wxObject::operator delete(void* pData, char* /* fileName */, int /* lineNum
 
 // Cause problems for VC++ - crashes
 #if !defined(__VISUALC__) && wxUSE_ARRAY_MEMORY_OPERATORS
-void * wxObject::operator new[] (size_t size, char * fileName, int lineNum)
+void * wxObject::operator new[] (size_t size, wxChar * fileName, int lineNum)
 {
     return wxDebugAlloc(size, fileName, lineNum, TRUE, TRUE);
 }

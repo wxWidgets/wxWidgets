@@ -106,7 +106,7 @@ public:
     void ApplyWidgetStyle();
 
 #if wxUSE_TOOLTIPS
-    void ApplyToolTip( GtkTooltips *tips, const char *tip );
+    void ApplyToolTip( GtkTooltips *tips, const wxChar *tip );
 #endif // wxUSE_TOOLTIPS
 
     GtkList   *m_list;

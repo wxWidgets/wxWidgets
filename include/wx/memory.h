@@ -40,7 +40,7 @@
 
 #ifdef __WXDEBUG__
 
-void * wxDebugAlloc(size_t size, char * fileName, int lineNum, bool isObject, bool isVect = FALSE);
+void * wxDebugAlloc(size_t size, wxChar * fileName, int lineNum, bool isObject, bool isVect = FALSE);
 void wxDebugFree(void * buf, bool isVect = FALSE);
 
 // Global versions of the new and delete operators.
@@ -69,19 +69,19 @@ void wxDebugFree(void * buf, bool isVect = FALSE);
 // Added JACS 25/11/98: needed for some compilers
 void * operator new (size_t size);
 
-void * operator new (size_t size, char * fileName, int lineNum);
+void * operator new (size_t size, wxChar * fileName, int lineNum);
 void operator delete (void * buf);
 
 #if wxUSE_ARRAY_MEMORY_OPERATORS
     void * operator new[] (size_t size);
-    void * operator new[] (size_t size, char * fileName, int lineNum);
+    void * operator new[] (size_t size, wxChar * fileName, int lineNum);
     void operator delete[] (void * buf);
 #endif
 
 // VC++ 6.0
 #if defined(__VISUALC__) && (__VISUALC__ >= 1200)
-    void operator delete(void *buf, char*, int);
-    void operator delete[](void *buf, char*, int);
+    void operator delete(void *buf, wxChar*, int);
+    void operator delete[](void *buf, wxChar*, int);
 #endif
 
 #endif
@@ -142,7 +142,7 @@ public:
     wxMarkerType        m_firstMarker;
 
     // File name and line number are from cpp.
-    char*               m_fileName;
+    wxChar*             m_fileName;
     int                 m_lineNum;
 
     // The amount of memory requested by the caller.
@@ -280,16 +280,16 @@ private:
 };
 
 // Output a debug message, in a system dependent fashion.
-void WXDLLEXPORT wxTrace(const char *fmt ...);
-void WXDLLEXPORT wxTraceLevel(int level, const char *fmt ...);
+void WXDLLEXPORT wxTrace(const wxChar *fmt ...);
+void WXDLLEXPORT wxTraceLevel(int level, const wxChar *fmt ...);
 
 #define WXTRACE wxTrace
 #define WXTRACELEVEL wxTraceLevel
 
 #else // else part for the #if __WXDEBUG__
 
-inline void wxTrace(const char *WXUNUSED(fmt)) {}
-inline void wxTraceLevel(int WXUNUSED(level), const char *WXUNUSED(fmt)) {}
+inline void wxTrace(const wxChar *WXUNUSED(fmt)) {}
+inline void wxTraceLevel(int WXUNUSED(level), const wxChar *WXUNUSED(fmt)) {}
 
 #define WXTRACE TRUE ? (void)0 : wxTrace
 #define WXTRACELEVEL TRUE ? (void)0 : wxTraceLevel

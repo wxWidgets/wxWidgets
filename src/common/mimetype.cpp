@@ -100,14 +100,14 @@ public:
     bool GetDescription(wxString *desc) const;
     bool GetOpenCommand(wxString *openCmd,
                         const wxFileType::MessageParameters&) const
-        { return GetCommand(openCmd, "open"); }
+        { return GetCommand(openCmd, _T("open")); }
     bool GetPrintCommand(wxString *printCmd,
                          const wxFileType::MessageParameters&) const
-        { return GetCommand(printCmd, "print"); }
+        { return GetCommand(printCmd, _T("print")); }
 
 private:
     // helper function
-    bool GetCommand(wxString *command, const char *verb) const;
+    bool GetCommand(wxString *command, const wxChar *verb) const;
 
     wxString m_strFileType, m_ext;
 };
@@ -477,7 +477,7 @@ bool wxMimeTypesManager::IsOfType(const wxString& mimeType,
     {
         wxString strSubtype = wildcard.AfterFirst(_T('/'));
 
-        if ( strSubtype == _T('*') ||
+        if ( strSubtype == _T("*") ||
              strSubtype.IsSameAs(mimeType.AfterFirst(_T('/')), FALSE) )
         {
             // matches (either exactly or it's a wildcard)
@@ -621,7 +621,7 @@ bool wxFileTypeImpl::GetIcon(wxIcon *icon) const
             }
 
             wxString strExpPath = wxExpandEnvVars(strFullPath);
-            int nIndex = atoi(strIndex);
+            int nIndex = wxAtoi(strIndex);
 
             HICON hIcon = ExtractIcon(GetModuleHandle(NULL), strExpPath, nIndex);
             switch ( (int)hIcon ) {
