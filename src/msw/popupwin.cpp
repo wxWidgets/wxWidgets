@@ -87,4 +87,26 @@ WXHWND wxPopupWindow::MSWGetParent() const
     return (WXHWND)::GetDesktopWindow();
 }
 
+bool wxPopupWindow::Show(bool show)
+{
+    if ( !wxWindowBase::Show(show) )
+        return FALSE;
+
+    HWND hWnd = GetHwnd();
+    int cshow = show ? SW_SHOW : SW_HIDE;
+    ::ShowWindow(hWnd, cshow);
+
+    if ( show )
+    {
+        // raise to top of z order
+        if (!::SetWindowPos(hWnd, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE))
+        {
+            wxLogLastError(_T("SetWindowPos"));
+        }
+    }
+
+    return TRUE;
+}
+
 #endif // #if wxUSE_POPUPWIN
+
