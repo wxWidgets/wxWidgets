@@ -1141,13 +1141,26 @@ int wxGUIAppTraits::WaitForChild(wxExecuteData& execData)
         // process terminates
         while ( endProcData->pid != 0 )
         {
+            bool idle = true;
+
 #if wxUSE_STREAMS
             if ( execData.bufOut )
+            {
                 execData.bufOut->Update();
+                idle = false;
+            }
 
             if ( execData.bufErr )
+            {
                 execData.bufErr->Update();
+                idle = false;
+            }
 #endif // wxUSE_STREAMS
+
+            // don't consume 100% of the CPU while we're sitting this in this
+            // loop
+            if ( idle )
+                wxUsleep(1);
 
             // give GTK+ a chance to call GTK_EndProcessDetector here and
             // also repaint the GUI
