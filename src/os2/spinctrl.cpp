@@ -44,6 +44,7 @@ extern void  wxAssociateWinWithHandle( HWND         hWnd
                                       ,wxWindowOS2* pWin
                                      );
 static WXFARPROC fnWndProcSpinCtrl = (WXFARPROC)NULL;
+wxArraySpins                        wxSpinCtrl::m_svAllSpins;
 
 IMPLEMENT_DYNAMIC_CLASS(wxSpinCtrl, wxControl)
 
