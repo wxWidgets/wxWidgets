@@ -182,12 +182,17 @@ WXDLLEXPORT_DATA(extern const bool) wxFalse;
   result in a warning about unused variable) and a named struct (otherwise we'd
   get a warning about an unnamed struct not used to define an object!).
   The _n__ part is to stop VC++ 7 being confused since it encloses __LINE++ in
-  parentheses.
+  parentheses. Unfortunately this does not work with MetroWerks CW so this fix
+  is being limited to VC++.
  */
 
 #define wxMAKE_ASSERT_NAME_HELPER(line)     wxAssert_ ## line
 #define wxMAKE_ASSERT_NAME(line)            wxMAKE_ASSERT_NAME_HELPER(line)
+#ifdef __VISUALC__
 #define wxMAKE_UNIQUE_ASSERT_NAME           wxMAKE_ASSERT_NAME(_n___ ## __LINE__)
+#else
+#define wxMAKE_UNIQUE_ASSERT_NAME           wxMAKE_ASSERT_NAME(__LINE__)
+#endif
 #define wxMAKE_UNIQUE_ASSERT_NAME2(text)    wxMAKE_ASSERT_NAME(text)
 
 /*
