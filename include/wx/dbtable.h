@@ -82,20 +82,13 @@ public:
 };  // wxColDataPtr
 
 
-// Backward compability for Remstar classes.  These
-// will eventually go away, so the wxColXxxx classes
-// should be used
-typedef wxColDef        CcolDef;
-typedef wxColDataPtr    CcolDataPtr;
-
-
 // This structure is used when creating secondary indexes.
-class WXDLLEXPORT CidxDef
+class WXDLLEXPORT wxIdxDef
 {
 public:
     char ColName[DB_MAX_COLUMN_NAME_LEN+1];
     bool Ascending;
-};  // CidxDef
+};  // wxIdxDef
 
 
 class WXDLLEXPORT wxTable
@@ -156,7 +149,7 @@ public:
     bool    Open(void);
     bool    CreateTable(bool attemptDrop=TRUE);
     bool    DropTable(void);
-    bool    CreateIndex(const char * idxName, bool unique, int noIdxCols, CidxDef *pIdxDefs, bool attemptDrop=TRUE);
+    bool    CreateIndex(const char * idxName, bool unique, int noIdxCols, wxIdxDef *pIdxDefs, bool attemptDrop=TRUE);
     bool    DropIndex(const char * idxName);
     bool    CloseCursor(HSTMT cursor);
     int     Insert(void);
@@ -186,7 +179,7 @@ public:
     void    GetSelectStmt(char *pSqlStmt, int typeOfSelect, bool distinct);
     void    GetDeleteStmt(char *pSqlStmt, int typeOfDel, const char *pWhereClause = 0);
     void    GetUpdateStmt(char *pSqlStmt, int typeOfUpd, const char *pWhereClause = 0);
-    void    GetWhereClause(char *pWhereClause, int typeOfWhere, const char *qualTableName = 0);
+    void    GetWhereClause(char *pWhereClause, int typeOfWhere, const char *qualTableName = 0, bool useLikeComparison=FALSE);
     bool    CanSelectForUpdate(void);
     bool    CanUpdByROWID(void);
     void    ClearMemberVars(void);
@@ -211,5 +204,19 @@ public:
 #endif
 
 };  // wxTable
+
+
+// Change this to 0 to remove use of all deprecated functions
+#if 1
+//#################################################################################
+//############### DEPRECATED functions for backward compatability #################
+//#################################################################################
+
+// Backward compability.  These will eventually go away
+typedef wxColDef        CcolDef;
+typedef wxColDataPtr    CcolDataPtr;
+typedef wxIdxDef        CidxDef;
+
+#endif
 
 #endif
