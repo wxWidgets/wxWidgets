@@ -96,6 +96,8 @@ b) Start RPM build by going to RPM_ROOT directory and typing "rpm -ba
    RPMS/i386/wxGTK-gl-${version}-1.i386.rpm
    RPMS/i386/wxGTK-static-${version}-1.i386.rpm
 
+   Use "rpm -ba --with gtk2" to build GTK+2 version of wxGTK and use
+   "rpm -ba --with gtk2 --with unicode" to build GTK+2 Unicode build.
 
    Note: you may want to set the environment variable SMP to 3 or 4 on an
          SMP machine to speed up the build (it uses "make -j$SMP" if the
