@@ -651,6 +651,8 @@ wxNotebookPage *wxNotebook::GetPage( int page ) const
         return nb_page->m_client;
 }
 
+#if wxUSE_CONSTRAINTS
+
 // override these 2 functions to do nothing: everything is done in OnSize
 void wxNotebook::SetConstraintSizes( bool WXUNUSED(recurse) )
 {
@@ -662,6 +664,8 @@ bool wxNotebook::DoPhase( int WXUNUSED(nPhase) )
 {
     return TRUE;
 }
+
+#endif
 
 void wxNotebook::ApplyWidgetStyle()
 {

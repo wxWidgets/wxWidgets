@@ -22,6 +22,9 @@
 
 #include "wx/defs.h"
 
+#if wxUSE_PRINTING_ARCHITECTURE
+
+
 #ifndef WX_PRECOMP
 #include "wx/utils.h"
 #include "wx/settings.h"
@@ -304,4 +307,6 @@ void wxPrintPaperModule::OnExit()
     delete wxThePrintPaperDatabase;
     wxThePrintPaperDatabase = NULL;
 }
+
+#endif // wxUSE_PRINTING_ARCHITECTURE
 

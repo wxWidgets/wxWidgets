@@ -140,8 +140,11 @@ public:
     // implementation
     // --------------
 
+#if wxUSE_CONSTRAINTS
     void SetConstraintSizes(bool recurse);
     bool DoPhase(int phase);
+#endif
+
     void ApplyWidgetStyle();
 
     // report if window belongs to notebook  
