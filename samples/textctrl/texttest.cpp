@@ -62,17 +62,23 @@
 enum
 {
     TextTest_Reset = 100,
+    TextTest_ClearLog,
+
     TextTest_Add,
+    TextTest_Insert,
+    TextTest_Clear,
+
+#if 0
     TextTest_AddText,
     TextTest_AddSeveral,
     TextTest_AddMany,
-    TextTest_Clear,
-    TextTest_ClearLog,
     TextTest_Change,
     TextTest_ChangeText,
     TextTest_Delete,
     TextTest_DeleteText,
     TextTest_DeleteSel,
+#endif // 0
+
     TextTest_Password,
     TextTest_Textctrl,
     TextTest_Quit
@@ -111,16 +117,31 @@ public:
     virtual ~TextTestFrame();
 
 protected:
+    // crate an info text contorl
+    wxTextCtrl *CreateInfoText();
+
+    // create a horz sizer holding a static text and this text control
+    wxSizer *CreateTextWithLabelSizer(const wxString& label,
+                                      wxTextCtrl *text,
+                                      const wxString& label2 = wxEmptyString,
+                                      wxTextCtrl *text2 = NULL);
+
     // event handlers
     void OnButtonReset(wxCommandEvent& event);
+    void OnButtonClearLog(wxCommandEvent& event);
+
+    void OnButtonInsert(wxCommandEvent& event);
+    void OnButtonAdd(wxCommandEvent& event);
+    void OnButtonClear(wxCommandEvent& event);
+
+#if 0
     void OnButtonChange(wxCommandEvent& event);
     void OnButtonDelete(wxCommandEvent& event);
     void OnButtonDeleteSel(wxCommandEvent& event);
-    void OnButtonClear(wxCommandEvent& event);
-    void OnButtonClearLog(wxCommandEvent& event);
-    void OnButtonAdd(wxCommandEvent& event);
     void OnButtonAddSeveral(wxCommandEvent& event);
     void OnButtonAddMany(wxCommandEvent& event);
+#endif // 0
+
     void OnButtonQuit(wxCommandEvent& event);
 
     void OnText(wxCommandEvent& event);
@@ -128,14 +149,19 @@ protected:
 
     void OnCheckOrRadioBox(wxCommandEvent& event);
 
-    void OnUpdateUIAddSeveral(wxUpdateUIEvent& event);
     void OnUpdateUIClearButton(wxUpdateUIEvent& event);
+
+#if 0
+    void OnUpdateUIAddSeveral(wxUpdateUIEvent& event);
     void OnUpdateUIDeleteButton(wxUpdateUIEvent& event);
     void OnUpdateUIDeleteSelButton(wxUpdateUIEvent& event);
+#endif
 
     void OnUpdateUIPasswordCheckbox(wxUpdateUIEvent& event);
 
     void OnUpdateUIResetButton(wxUpdateUIEvent& event);
+
+    void OnIdle(wxIdleEvent& event);
 
     // reset the textctrl parameters
     void Reset();
@@ -175,6 +201,18 @@ protected:
     // the textctrl for logging messages
     wxTextCtrl *m_textLog;
 
+    // the information text zones
+    wxTextCtrl *m_textPosCur,
+               *m_textPosLast,
+               *m_textSelFrom,
+               *m_textSelTo;
+
+    // and the data to show in them
+    long m_posCur,
+         m_posLast,
+         m_selFrom,
+         m_selTo;
+
 private:
     // the old log target which we replaced
     wxLog *m_logTargetOld;
@@ -199,29 +237,38 @@ IMPLEMENT_APP(TextTestApp)
 // ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(TextTestFrame, wxFrame)
+    EVT_IDLE(TextTestFrame::OnIdle)
+
     EVT_BUTTON(TextTest_Reset, TextTestFrame::OnButtonReset)
     EVT_BUTTON(TextTest_ClearLog, TextTestFrame::OnButtonClearLog)
     EVT_BUTTON(TextTest_Quit, TextTestFrame::OnButtonQuit)
+
+    EVT_BUTTON(TextTest_Clear, TextTestFrame::OnButtonClear)
+    EVT_BUTTON(TextTest_Add, TextTestFrame::OnButtonAdd)
+    EVT_BUTTON(TextTest_Insert, TextTestFrame::OnButtonInsert)
+
 #if 0
     EVT_BUTTON(TextTest_Change, TextTestFrame::OnButtonChange)
     EVT_BUTTON(TextTest_Delete, TextTestFrame::OnButtonDelete)
     EVT_BUTTON(TextTest_DeleteSel, TextTestFrame::OnButtonDeleteSel)
-    EVT_BUTTON(TextTest_Clear, TextTestFrame::OnButtonClear)
-    EVT_BUTTON(TextTest_Add, TextTestFrame::OnButtonAdd)
     EVT_BUTTON(TextTest_AddSeveral, TextTestFrame::OnButtonAddSeveral)
     EVT_BUTTON(TextTest_AddMany, TextTestFrame::OnButtonAddMany)
 
     EVT_TEXT_ENTER(TextTest_AddText, TextTestFrame::OnButtonAdd)
     EVT_TEXT_ENTER(TextTest_DeleteText, TextTestFrame::OnButtonDelete)
+#endif // 0
 
-    EVT_UPDATE_UI(TextTest_AddSeveral, TextTestFrame::OnUpdateUIAddSeveral)
     EVT_UPDATE_UI(TextTest_Clear, TextTestFrame::OnUpdateUIClearButton)
+
+#if 0
+    EVT_UPDATE_UI(TextTest_AddSeveral, TextTestFrame::OnUpdateUIAddSeveral)
     EVT_UPDATE_UI(TextTest_DeleteText, TextTestFrame::OnUpdateUIClearButton)
     EVT_UPDATE_UI(TextTest_Delete, TextTestFrame::OnUpdateUIDeleteButton)
     EVT_UPDATE_UI(TextTest_Change, TextTestFrame::OnUpdateUIDeleteSelButton)
     EVT_UPDATE_UI(TextTest_ChangeText, TextTestFrame::OnUpdateUIDeleteSelButton)
     EVT_UPDATE_UI(TextTest_DeleteSel, TextTestFrame::OnUpdateUIDeleteSelButton)
 #endif // 0
+
     EVT_UPDATE_UI(TextTest_Password, TextTestFrame::OnUpdateUIPasswordCheckbox)
 
     EVT_UPDATE_UI(TextTest_Reset, TextTestFrame::OnUpdateUIResetButton)
@@ -266,8 +313,17 @@ TextTestFrame::TextTestFrame(const wxString& title)
     m_chkReadonly = (wxCheckBox *)NULL;
 
     m_text =
-    m_textLog = (wxTextCtrl *)NULL;
+    m_textLog =
+    m_textPosCur =
+    m_textPosLast =
+    m_textSelFrom =
+    m_textSelTo = (wxTextCtrl *)NULL;
     m_sizerText = (wxSizer *)NULL;
+
+    m_posCur =
+    m_posLast =
+    m_selFrom =
+    m_selTo = -2; // not -1 which means "no selection"
 
     m_logTargetOld = (wxLog *)NULL;
 
@@ -310,16 +366,19 @@ TextTestFrame::TextTestFrame(const wxString& title)
     sizerLeft->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
 
     // middle pane
-    wxStaticBox *box2 = new wxStaticBox(m_panel, -1, _T("&Change contents"));
-    wxSizer *sizerMiddle = new wxStaticBoxSizer(box2, wxVERTICAL);
-#if 0
-    wxSizer *sizerRow = new wxBoxSizer(wxHORIZONTAL);
-    btn = new wxButton(m_panel, TextTest_Add, _T("&Add this string"));
-    m_textAdd = new wxTextCtrl(m_panel, TextTest_AddText, _T("test item 0"));
-    sizerRow->Add(btn, 0, wxRIGHT, 5);
-    sizerRow->Add(m_textAdd, 1, wxLEFT, 5);
-    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
+    wxStaticBox *box2 = new wxStaticBox(m_panel, -1, _T("&Change contents:"));
+    wxSizer *sizerMiddleUp = new wxStaticBoxSizer(box2, wxVERTICAL);
 
+    btn = new wxButton(m_panel, TextTest_Add, _T("&Append text"));
+    sizerMiddleUp->Add(btn, 0, wxALL | wxGROW, 5);
+
+    btn = new wxButton(m_panel, TextTest_Insert, _T("&Insert text"));
+    sizerMiddleUp->Add(btn, 0, wxALL | wxGROW, 5);
+
+    btn = new wxButton(m_panel, TextTest_Clear, _T("&Clear"));
+    sizerMiddleUp->Add(btn, 0, wxALL | wxGROW, 5);
+
+#if 0
     btn = new wxButton(m_panel, TextTest_AddSeveral, _T("&Insert a few strings"));
     sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
 
@@ -342,17 +401,56 @@ TextTestFrame::TextTestFrame(const wxString& title)
 
     btn = new wxButton(m_panel, TextTest_DeleteSel, _T("Delete &selection"));
     sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
-
-    btn = new wxButton(m_panel, TextTest_Clear, _T("&Clear"));
-    sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
 #endif // 0
+
+    wxStaticBox *box4 = new wxStaticBox(m_panel, -1, _T("&Info:"));
+    wxSizer *sizerMiddleDown = new wxStaticBoxSizer(box4, wxVERTICAL);
+
+    m_textPosCur = CreateInfoText();
+    sizerMiddleDown->Add
+                     (
+                        CreateTextWithLabelSizer
+                        (
+                          _T("Current position:"),
+                          m_textPosCur
+                        ),
+                        0, wxALL | wxGROW, 5
+                     );
+
+    m_textPosLast = CreateInfoText();
+    sizerMiddleDown->Add
+                     (
+                        CreateTextWithLabelSizer
+                        (
+                          _T("Last position:"),
+                          m_textPosLast
+                        ),
+                        0, wxALL | wxGROW, 5
+                     );
+
+    m_textSelFrom = CreateInfoText();
+    m_textSelTo = CreateInfoText();
+    sizerMiddleDown->Add
+                     (
+                        CreateTextWithLabelSizer
+                        (
+                          _T("Selection: from"),
+                          m_textSelFrom,
+                          _T("to"),
+                          m_textSelTo
+                        ),
+                        0, wxALL | wxGROW, 5
+                     );
+    wxSizer *sizerMiddle = new wxBoxSizer(wxVERTICAL);
+    sizerMiddle->Add(sizerMiddleUp, 1, wxGROW, 5);
+    sizerMiddle->Add(sizerMiddleDown, 1, wxGROW | wxTOP, 5);
 
     // right pane
     wxStaticBox *box3 = new wxStaticBox(m_panel, -1, _T("&Text:"));
     m_sizerText = new wxStaticBoxSizer(box3, wxHORIZONTAL);
     m_text = new wxTextCtrl(m_panel, TextTest_Textctrl, _T("Hello, world!"));
     m_sizerText->Add(m_text, 1, wxALL | wxALIGN_CENTRE_VERTICAL, 5);
-    m_sizerText->SetMinSize(250, 0);
+    m_sizerText->SetMinSize(250, 300);
 
     // the 3 panes panes compose the upper part of the window
     sizerUp->Add(sizerLeft, 0, wxGROW | (wxALL & ~wxLEFT), 10);
@@ -405,6 +503,45 @@ TextTestFrame::TextTestFrame(const wxString& title)
 TextTestFrame::~TextTestFrame()
 {
     delete wxLog::SetActiveTarget(m_logTargetOld);
+}
+
+// ----------------------------------------------------------------------------
+// creation helpers
+// ----------------------------------------------------------------------------
+
+wxTextCtrl *TextTestFrame::CreateInfoText()
+{
+    static int s_maxWidth = 0;
+    if ( !s_maxWidth )
+    {
+        // calc it once only
+        GetTextExtent(_T("99999"), &s_maxWidth, NULL);
+    }
+
+    wxTextCtrl *text = new wxTextCtrl(m_panel, -1, _T(""),
+                                      wxDefaultPosition,
+                                      wxSize(s_maxWidth, -1),
+                                      wxTE_READONLY);
+    return text;
+}
+
+wxSizer *TextTestFrame::CreateTextWithLabelSizer(const wxString& label,
+                                                 wxTextCtrl *text,
+                                                 const wxString& label2,
+                                                 wxTextCtrl *text2)
+{
+    wxSizer *sizerRow = new wxBoxSizer(wxHORIZONTAL);
+    sizerRow->Add(new wxStaticText(m_panel, -1, label), 0,
+                  wxALIGN_CENTRE_VERTICAL | wxRIGHT, 5);
+    sizerRow->Add(text, 0, wxALIGN_CENTRE_VERTICAL);
+    if ( text2 )
+    {
+        sizerRow->Add(new wxStaticText(m_panel, -1, label2), 0,
+                      wxALIGN_CENTRE_VERTICAL | wxLEFT | wxRIGHT, 5);
+        sizerRow->Add(text2, 0, wxALIGN_CENTRE_VERTICAL);
+    }
+
+    return sizerRow;
 }
 
 // ----------------------------------------------------------------------------
@@ -463,6 +600,56 @@ void TextTestFrame::CreateText()
 // event handlers
 // ----------------------------------------------------------------------------
 
+void TextTestFrame::OnIdle(wxIdleEvent& WXUNUSED(event))
+{
+    // update all info texts
+
+    if ( m_textPosCur )
+    {
+        long posCur = m_text->GetInsertionPoint();
+        if ( posCur != m_posCur )
+        {
+            m_textPosCur->Clear();
+            *m_textPosCur << posCur;
+
+            m_posCur = posCur;
+        }
+    }
+
+    if ( m_textPosLast )
+    {
+        long posLast = m_text->GetLastPosition();
+        if ( posLast != m_posLast )
+        {
+            m_textPosLast->Clear();
+            *m_textPosLast << posLast;
+
+            m_posLast = posLast;
+        }
+    }
+
+    if ( m_textSelFrom && m_textSelTo )
+    {
+        long selFrom, selTo;
+        m_text->GetSelection(&selFrom, &selTo);
+        if ( selFrom != m_selFrom )
+        {
+            m_textSelFrom->Clear();
+            *m_textSelFrom << selFrom;
+
+            m_selFrom = selFrom;
+        }
+
+        if ( selTo != m_selTo )
+        {
+            m_textSelTo->Clear();
+            *m_textSelTo << selTo;
+
+            m_selTo = selTo;
+        }
+    }
+}
+
 void TextTestFrame::OnButtonQuit(wxCommandEvent& WXUNUSED(event))
 {
     Close();
@@ -475,9 +662,27 @@ void TextTestFrame::OnButtonReset(wxCommandEvent& WXUNUSED(event))
     CreateText();
 }
 
-void TextTestFrame::OnButtonClearLog(wxCommandEvent& event)
+void TextTestFrame::OnButtonClearLog(wxCommandEvent& WXUNUSED(event))
 {
     m_textLog->Clear();
+}
+
+void TextTestFrame::OnButtonAdd(wxCommandEvent& WXUNUSED(event))
+{
+    m_text->AppendText(_T("here, there and everywhere"));
+    m_text->SetFocus();
+}
+
+void TextTestFrame::OnButtonInsert(wxCommandEvent& WXUNUSED(event))
+{
+    m_text->AppendText(_T("is there anybody going to listen to my story"));
+    m_text->SetFocus();
+}
+
+void TextTestFrame::OnButtonClear(wxCommandEvent& WXUNUSED(event))
+{
+    m_text->Clear();
+    m_text->SetFocus();
 }
 
 #if 0
@@ -512,11 +717,6 @@ void TextTestFrame::OnButtonDeleteSel(wxCommandEvent& WXUNUSED(event))
     {
         m_text->Delete(selections[--n]);
     }
-}
-
-void TextTestFrame::OnButtonClear(wxCommandEvent& event)
-{
-    m_text->Clear();
 }
 
 void TextTestFrame::OnButtonAdd(wxCommandEvent& event)
@@ -564,17 +764,17 @@ void TextTestFrame::OnUpdateUIDeleteSelButton(wxUpdateUIEvent& event)
     event.Enable(m_text->GetSelections(selections) != 0);
 }
 
-void TextTestFrame::OnUpdateUIClearButton(wxUpdateUIEvent& event)
-{
-    event.Enable(m_text->GetCount() != 0);
-}
-
 void TextTestFrame::OnUpdateUIAddSeveral(wxUpdateUIEvent& event)
 {
     event.Enable(!(m_text->GetWindowStyle() & wxLB_SORT));
 }
 
 #endif // 0
+
+void TextTestFrame::OnUpdateUIClearButton(wxUpdateUIEvent& event)
+{
+    event.Enable(!m_text->GetValue().empty());
+}
 
 void TextTestFrame::OnUpdateUIPasswordCheckbox(wxUpdateUIEvent& event)
 {

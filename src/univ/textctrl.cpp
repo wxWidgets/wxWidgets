@@ -2279,7 +2279,8 @@ void wxTextCtrl::UpdateScrollbars()
 
 void wxTextCtrl::OnIdle(wxIdleEvent& event)
 {
-    if ( m_updateScrollbarX || m_updateScrollbarY )
+    // notice that single line text control never has scrollbars
+    if ( !IsSingleLine() && (m_updateScrollbarX || m_updateScrollbarY) )
     {
         UpdateScrollbars();
 
