@@ -4865,6 +4865,8 @@ bool wxGenericListCtrl::SetItemData( long item, long data )
 bool wxGenericListCtrl::GetItemRect( long item, wxRect &rect,  int WXUNUSED(code) ) const
 {
     m_mainWin->GetItemRect( item, rect );
+    if ( m_mainWin->HasHeader() )
+        rect.y += HEADER_HEIGHT + 1;
     return TRUE;
 }
 
