@@ -161,6 +161,7 @@ static char *fileBuffer = NULL;
 #endif
 
 #if !USE_SHARED_LIBRARY
+IMPLEMENT_DYNAMIC_CLASS(wxPostScriptModule, wxModule)
 IMPLEMENT_DYNAMIC_CLASS(wxPostScriptDC, wxDC)
 IMPLEMENT_DYNAMIC_CLASS(wxPrintSetupData, wxObject)
 IMPLEMENT_DYNAMIC_CLASS(wxPrintPaperType, wxObject)
@@ -413,7 +414,7 @@ void wxPostScriptDC::DrawEllipticArc(long x,long y,long w,long h,double sa,doubl
     {
       SetBrush (m_brush);
 
-      *m_pstream << 
+      *m_pstream <<
          "newpath\n" <<
          (x+w/2) << " " << YSCALE (y+h/2) << " " <<
          w/2 << " " << (h/2) << " " <<
@@ -426,7 +427,7 @@ void wxPostScriptDC::DrawEllipticArc(long x,long y,long w,long h,double sa,doubl
     {
       SetPen (m_pen);
 
-      *m_pstream << 
+      *m_pstream <<
          "newpath\n" <<
          (x+w/2) << " " << YSCALE (y+h/2) << " " <<
          (w/2) << " " << (h/2) << " " <<
@@ -979,7 +980,7 @@ void wxPostScriptDC::DrawText (const wxString& text, long x, long y, bool WXUNUS
                << (x + w) << " " << YSCALE (y + size - UnderlinePosition)
                << " lineto stroke grestore\n";
   }
-  
+
   CalcBoundingBox (x, (long)YSCALE (y + size));
   CalcBoundingBox (x + size * strlen ((char *)(const char *)text), (long)YSCALE (y));
 }
@@ -1056,7 +1057,7 @@ bool wxPostScriptDC::StartDoc (const wxString& message)
       // VMS is sh*t!
       m_pstream = new ofstream;
       if(fileBuffer) delete[] fileBuffer;
-      fileBuffer = new char[VMS_BUFSIZ]; 
+      fileBuffer = new char[VMS_BUFSIZ];
       m_pstream->setbuf(fileBuffer,VMS_BUFSIZ);
       m_pstream->open(wxThePrintSetupData->GetPrinterFile());
 #else
@@ -1237,7 +1238,7 @@ void wxPostScriptDC::EndDoc (void)
   if (wxThePrintSetupData->GetPrinterOrientation() == PS_LANDSCAPE)
     {
       real_translate_y -= m_maxY;
-      // The following line can be used instead of the adjustment to 
+      // The following line can be used instead of the adjustment to
       // llx and urx above.
       // real_translate_y -= m_minX;
       *m_pstream << "90 rotate\n";
@@ -1247,7 +1248,7 @@ void wxPostScriptDC::EndDoc (void)
  * We should rationalise the scaling code to one place. JACS, October 1995
  * Do we take the next 2 lines out or not?
  */
- 
+
   *m_pstream << wx_printer_scale_x << " " << wx_printer_scale_y << " scale\n";
   *m_pstream << wx_printer_translate_x << " " << real_translate_y << " translate\n";
 #endif
@@ -1303,7 +1304,7 @@ void wxPostScriptDC::EndDoc (void)
           char * opts = wxThePrintSetupData->GetPrinterOptions();
           if (opts && *opts)
               argv[argc++] = opts;
-              
+
           argv[argc++] = wxThePrintSetupData->GetPrinterFile();
           argv[argc++] = (char *) NULL;
 	  wxExecute (argv, TRUE);
@@ -1439,7 +1440,7 @@ Blit (long xdest, long ydest, long fwidth, long fheight,
   XImage *image;
   long j, i;
   char s[3];
-  
+
 #ifdef __WXGTK__
 
   d = gdk_display;
@@ -1447,7 +1448,7 @@ Blit (long xdest, long ydest, long fwidth, long fheight,
   GdkWindow *gwin = ((wxClientDC*)source)->GetWindow();
   image = XGetImage(d, ((GdkWindowPrivate*)gwin)->xwindow, x, y, width, height, AllPlanes, ZPixmap);
 
-#else  
+#else
 
 #ifdef __WXMOTIF__
   // TODO. for now, use global display
@@ -1460,7 +1461,7 @@ Blit (long xdest, long ydest, long fwidth, long fheight,
   cm = (Colormap) wxTheApp->GetMainColormap((WXDisplay*) d);
   // TODO - implement GetPixmap() and uncomment this line
   //  image = XGetImage(d, source->GetPixmap(), x, y, width, height, AllPlanes, ZPixmap);
-  
+
 #endif
 
 
@@ -1490,10 +1491,10 @@ Blit (long xdest, long ydest, long fwidth, long fheight,
 	    pixel = cachedest[k];
 	    goto install;
 	  }
-      
+
       cachesrc[cache_pos] = xcol.pixel = spixel;
       XQueryColor(d, cm, &xcol);
-      
+
       long r, g, b;
 
       r = (long)((double)(xcol.red) / MAX_COLOR);
@@ -1503,13 +1504,13 @@ Blit (long xdest, long ydest, long fwidth, long fheight,
       pixel = (int)(255 * sqrt(((r * r) + (g * g) + (b * b)) / 3));
 
       cachedest[cache_pos] = pixel;
-      
+
       if (++cache_pos >= CM_CACHE_SIZE) {
 	cache_pos = 0;
 	all_cache = TRUE;
       }
 
-    install:      
+    install:
       int h, l;
 
       h = (pixel >> 4) & 0xF;
@@ -1523,7 +1524,7 @@ Blit (long xdest, long ydest, long fwidth, long fheight,
 	s[1] = '0' + l;
       else
 	s[1] = 'a' + (l - 10);
-      
+
       *m_pstream << s;
     }
     *m_pstream << "\n";
@@ -1576,7 +1577,7 @@ void wxPostScriptDC::GetTextExtent (const wxString& string, long *x, long *y,
     *externalLeading = 0;
 #else
   // +++++ start of contributed code +++++
-  
+
   // ************************************************************
   // method for calculating string widths in postscript:
   // read in the AFM (adobe font metrics) file for the
@@ -1669,16 +1670,16 @@ void wxPostScriptDC::GetTextExtent (const wxString& string, long *x, long *y,
     //
     //   C 63 ; WX 444 ; N question ; B 49 -14 395 676 ;
     //
-    // that means, we have a character with ascii code 63, and width 
+    // that means, we have a character with ascii code 63, and width
     // (444/1000 * fontSize) points.
     // the other data is ignored for now!
     //
     // when the font has changed, we read in the right AFM file and store the
     // character widths in an array, which is processed below (see point 3.).
-    
+
         // new elements JC Sun Aug 25 23:21:44 MET DST 1996
 
-    
+
     strcat(afmName,name);
     strcat(afmName,".afm");
     FILE *afmFile = fopen(afmName,"r");
@@ -1795,7 +1796,7 @@ void wxPostScriptDC::GetTextExtent (const wxString& string, long *x, long *y,
   if(lastDescender!=INT_MIN){
     height += (long)(((-lastDescender)/1000.0F) * Size); /* MATTHEW: forgot scale */
   }
-  
+
   // return size values
   *x = widthSum;
   *y = height;
@@ -1855,7 +1856,7 @@ void wxPostScriptDC::DrawSpline( wxList *points )
           CalcBoundingBox( (long)x3, (long)(GetYOrigin() - y3));
         }
 	/*
-	* At this point, (x2,y2) and (c,d) are the position of the 
+	* At this point, (x2,y2) and (c,d) are the position of the
 	* next-to-last and last point respectively, in the point list
 	*/
         *(GetStream()) << c << " " << (GetYOrigin() - d) << " lineto stroke\n";
@@ -2056,14 +2057,14 @@ wxDialog(parent, -1, title, pos, size, style)
   int yPos = 40;
 
 #if defined(__WXGTK__) || defined (__WXMOTIF__)
-  (void) new wxStaticText( this, -1, _("Printer Command: "), 
+  (void) new wxStaticText( this, -1, _("Printer Command: "),
                            wxPoint(5, yPos) );
-  (void) new wxTextCtrl( this, wxID_PRINTER_COMMAND, wxThePrintSetupData->GetPrinterCommand(), 
+  (void) new wxTextCtrl( this, wxID_PRINTER_COMMAND, wxThePrintSetupData->GetPrinterCommand(),
                          wxPoint(100, yPos), wxSize(100, -1) );
-  
-  (void) new wxStaticText( this, -1, _("Printer Options: "), 
+
+  (void) new wxStaticText( this, -1, _("Printer Options: "),
                            wxPoint(210, yPos) );
-  (void) new wxTextCtrl( this, wxID_PRINTER_OPTIONS, wxThePrintSetupData->GetPrinterOptions(), 
+  (void) new wxTextCtrl( this, wxID_PRINTER_OPTIONS, wxThePrintSetupData->GetPrinterOptions(),
                          wxPoint(305, yPos), wxSize(150, -1) );
 
   yPos += 40;
@@ -2099,7 +2100,7 @@ wxDialog(parent, -1, title, pos, size, style)
 #endif
 
   radio1->SetSelection((int)wxThePrintSetupData->GetPrinterMode());
-  
+
   long wx_printer_translate_x, wx_printer_translate_y;
   double wx_printer_scale_x, wx_printer_scale_y;
   wxThePrintSetupData->GetPrinterTranslation(&wx_printer_translate_x, &wx_printer_translate_y);
@@ -2316,7 +2317,7 @@ void wxPrintSetupData::SetPrintPreviewCommand(const char *cmd)
 {
   if (cmd == previewCommand)
     return;
-    
+
   if (previewCommand)
     delete[] previewCommand;
   if (cmd)
@@ -2342,7 +2343,7 @@ void wxPrintSetupData::SetPrinterOptions(const char *flags)
 {
   if (printerFlags == flags)
     return;
-   
+
   if (printerFlags)
     delete[] printerFlags;
   if (flags)
@@ -2355,7 +2356,7 @@ void wxPrintSetupData::SetPrinterFile(const char *f)
 {
   if (f == printerFile)
     return;
-    
+
   if (printerFile)
     delete[] printerFile;
   if (f)
@@ -2391,7 +2392,7 @@ void wxPrintSetupData::SetAFMPath(const char *f)
 {
   if (f == afmPath)
     return;
-    
+
   if (afmPath)
     delete[] afmPath;
   if (f)
@@ -2558,7 +2559,7 @@ void wxPrintPaperDatabase::CreateDatabase(void)
   // Can't remember where the PostScript origin is by default.
   // Heck, someone will know how to make it hunky-dory...
   // JACS 25/5/95
-  
+
   AddPaperType(_("A4 210 x 297 mm"), 210, 297,         595, 842);
   AddPaperType(_("A3 297 x 420 mm"), 297, 420,         842, 1191);
   AddPaperType(_("Letter 8 1/2 x 11 in"), 216, 279,    612, 791);
