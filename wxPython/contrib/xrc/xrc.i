@@ -12,7 +12,7 @@
 
 %define DOCSTRING
 "The `XmlResource` class allows program resources defining menus, layout of
-controls on a panel, etc."
+controls on a panel, etc. to be loaded from an XML file."
 %enddef
 %module(docstring=DOCSTRING) xrc
 
