@@ -205,6 +205,9 @@ OTHER CHANGES
 All:
 
 - Norvegian (Bokmål) translation added (Hans F. Nordhaug)
+
+All (GUI):
+
 - recursive wxSizer::GetItem returns item of given window, sizer or nth index
 
 Unix:
