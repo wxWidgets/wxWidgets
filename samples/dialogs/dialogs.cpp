@@ -233,8 +233,6 @@ void MyFrame::LogDialog(wxCommandEvent& event)
     wxLogMessage("This is some message - everything is ok so far.");
     wxLogMessage("Another message...\n... this one is on multiple lines");
     wxLogWarning("And then something went wrong!");
-    // if we have this wxYield() here, everything breaks under GTK
-    wxYield();
     wxLogError("Intermediary error handler decided to abort.");
     wxLogError("The top level caller detected an unrecoverable error.");
 
