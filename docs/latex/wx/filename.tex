@@ -374,17 +374,45 @@ convenience wrapper: get just the last mod time of the file
 
 \membersection{wxFileName::GetPath}\label{wxfilenamegetpath}
 
-\constfunc{wxString}{GetPath}{\param{bool }{add\_separator = FALSE}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
+\constfunc{wxString}{GetPath}{\param{int }{flags = $0$}, \param{wxPathFormat }{format = wxPATH\_NATIVE}}
 
-Construct path only - possibly with the trailing separator
+Return the path part of the filename (without the name nor extension). The
+possible flags values are:
 
+\twocolwidtha{5cm}%
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\tt wxPATH\_GET\_VOLUME}{Return the path with the volume (does
+nothing for the filename formats without volumes)}
+\twocolitem{\tt wxPATH\_GET\_SEPARATOR}{Return the path with the trailing
+separator, if this flag is not given there will be no separator at the end of
+the path.}
+\end{twocollist}
+
+\membersection{wxFileName::GetPathSeparator}\label{wxfilenamegetpathseparator}
+
+\func{wxChar}{GetPathSeparator}{\param{wxPathFormat }{format = wxPATH\_NATIVE}}
+
+Return the usually used path separator for this format. For all formats but 
+{\tt wxPATH\_DOS} there is only one path separator anyhow, but for DOS there
+are two of them and the native one, i.e. the backslash is returned by this
+method.
+
+\wxheading{See also}
+
+\helpref{GetPathSeparators}{wxfilenamegetpathseparators}
 
 \membersection{wxFileName::GetPathSeparators}\label{wxfilenamegetpathseparators}
 
 \func{wxString}{GetPathSeparators}{\param{wxPathFormat }{format = wxPATH\_NATIVE}}
 
-get the string of path separators for this format
+Get the string containing all the path separators for this format. For all
+formats but {\tt wxPATH\_DOS} this string contains only one character but for
+DOS and Windows both {\tt '/'} and {\tt '\backslash'} may be used as
+separators.
 
+\wxheading{See also}
+
+\helpref{GetPathSeparator}{wxfilenamegetpathseparator}
 
 \membersection{wxFileName::GetPathWithSep}\label{wxfilenamegetpathwithsep}
 

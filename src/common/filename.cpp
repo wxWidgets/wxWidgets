@@ -392,7 +392,7 @@ void wxFileName::Assign(const wxString& fullpathOrig,
     wxString fullpath = fullpathOrig;
     if ( !wxEndsWithPathSeparator(fullpath) )
     {
-        fullpath += GetPathSeparators(format)[0u];
+        fullpath += GetPathSeparator(format);
     }
 
     wxString volume, path, name, ext;
@@ -1128,26 +1128,33 @@ wxString wxFileName::GetFullName() const
     return fullname;
 }
 
-wxString wxFileName::GetPath( bool add_separator, wxPathFormat format ) const
+wxString wxFileName::GetPath( int flags, wxPathFormat format ) const
 {
     format = GetFormat( format );
 
     wxString fullpath;
 
-    // the leading character
-    if ( format == wxPATH_MAC && m_relative )
+    // return the volume with the path as well if requested
+    if ( flags & wxPATH_GET_VOLUME )
     {
-         fullpath += wxFILE_SEP_PATH_MAC;
+        fullpath += wxGetVolumeString(GetVolume(), format);
+    }
+
+    // the leading character
+    if ( format == wxPATH_MAC )
+    {
+        if ( m_relative )
+            fullpath += wxFILE_SEP_PATH_MAC;
     }
     else if ( format == wxPATH_DOS )
     {
-         if (!m_relative)
-             fullpath += wxFILE_SEP_PATH_DOS;
+        if (!m_relative)
+            fullpath += wxFILE_SEP_PATH_DOS;
     }
     else if ( format == wxPATH_UNIX )
     {
-         if (!m_relative)
-             fullpath += wxFILE_SEP_PATH_UNIX;
+        if (!m_relative)
+            fullpath += wxFILE_SEP_PATH_UNIX;
     }
 
     // then concatenate all the path components using the path separator
@@ -1158,7 +1165,6 @@ wxString wxFileName::GetPath( bool add_separator, wxPathFormat format ) const
         {
             fullpath += wxT('[');
         }
-
 
         for ( size_t i = 0; i < dirCount; i++ )
         {
@@ -1205,9 +1211,9 @@ wxString wxFileName::GetPath( bool add_separator, wxPathFormat format ) const
         }
     }
 
-    if ( add_separator && !fullpath.empty() )
+    if ( (flags & wxPATH_GET_SEPARATOR) && !fullpath.empty() )
     {
-        fullpath += GetPathSeparators(format)[0u];
+        fullpath += GetPathSeparator(format);
     }
 
     return fullpath;

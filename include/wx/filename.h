@@ -73,6 +73,13 @@ enum wxPathNormalize
     wxPATH_NORM_ALL      = 0x003f
 };
 
+// what exactly should GetPath() return?
+enum
+{
+    wxPATH_GET_VOLUME    = 0x0001,  // include the volume if applicable
+    wxPATH_GET_SEPARATOR = 0x0002   // terminate the path with the separator
+};
+
 // ----------------------------------------------------------------------------
 // wxFileName: encapsulates a file path
 // ----------------------------------------------------------------------------
@@ -322,15 +329,11 @@ public:
 
     const wxArrayString& GetDirs() const        { return m_dirs; }
 
-    // Construct path only - possibly with the trailing separator
-    wxString GetPath( bool add_separator = FALSE,
-                      wxPathFormat format = wxPATH_NATIVE ) const;
+    // flags are combination of wxPATH_GET_XXX flags
+    wxString GetPath(int flags = 0, wxPathFormat format = wxPATH_NATIVE) const;
+
     // Replace current path with this one
     void SetPath( const wxString &path, wxPathFormat format = wxPATH_NATIVE );
-
-    // more readable synonym
-    wxString GetPathWithSep(wxPathFormat format = wxPATH_NATIVE ) const
-        { return GetPath(TRUE /* add separator */, format); }
 
     // Construct full path with name and ext
     wxString GetFullPath( wxPathFormat format = wxPATH_NATIVE ) const;
@@ -364,6 +367,16 @@ public:
                           wxString *name,
                           wxString *ext,
                           wxPathFormat format = wxPATH_NATIVE);
+
+
+    // deprecated methods, don't use any more
+    // --------------------------------------
+
+    wxString GetPath( bool withSep, wxPathFormat format = wxPATH_NATIVE ) const
+        { return GetPath(withSep ? wxPATH_GET_SEPARATOR : 0, format); }
+
+    wxString GetPathWithSep(wxPathFormat format = wxPATH_NATIVE ) const
+        { return GetPath(wxPATH_GET_SEPARATOR, format); }
 
 private:
     // the drive/volume/device specification (always empty for Unix)
