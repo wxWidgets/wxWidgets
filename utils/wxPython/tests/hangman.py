@@ -1,5 +1,5 @@
-"""Hangman.py, a simple wxPython game, inspired by the old 
-bsd game by Ken Arnold.
+"""Hangman.py, a simple wxPython game, inspired by the 
+old bsd game by Ken Arnold.
 From the original man page:
 
  In hangman, the computer picks a word from the on-line 
@@ -20,11 +20,13 @@ from wxPython.wx import *
 class WordFetcher:
     def __init__(self, filename, min_length = 5):
 	self.min_length = min_length
+	print "Trying to open file %s" % (filename,)
 	try:
 	    f = open(filename, "r")
 	except:
 	    print "Couldn't open dictionary file %s, using build-ins" % (filename,)
 	    self.words = self.builtin_words
+	    self.filename = None
 	    return
 	self.words = f.read()
 	self.filename = filename
@@ -103,6 +105,7 @@ class HangmanWnd(wxWindow):
     def __init__(self, parent, id, pos=wxDefaultPosition, size=wxDefaultSize):
 	wxWindow.__init__(self, parent, id, pos, size)
 	self.SetBackgroundColour(wxNamedColour('white'))
+	self.font = wxFont(10, wxMODERN, wxNORMAL, wxNORMAL)
 	self.SetFocus()
     def StartGame(self, word):
 	self.word = word
@@ -140,6 +143,7 @@ class HangmanWnd(wxWindow):
     def Draw(self, dc = None):
 	if not dc:
 	    dc = wxClientDC(self)
+	dc.SetFont(self.font)
 	dc.Clear()
 	(x,y) = self.GetSizeTuple()
 	x1 = x-200; y1 = 20
@@ -155,8 +159,8 @@ class HangmanWnd(wxWindow):
 	for letter in self.guess: 
 	    guesses = guesses + letter
 	dc.DrawText("guessed:", x1, 70)
-	dc.DrawText(guesses[:13], x1+70, 70)
-	dc.DrawText(guesses[13:], x1+70, 90)
+	dc.DrawText(guesses[:13], x1+80, 70)
+	dc.DrawText(guesses[13:], x1+80, 90)
 	dc.SetUserScale(x/1000., y/1000.)
 	self.DrawVictim(dc)
     def DrawVictim(self, dc):
@@ -213,6 +217,14 @@ class HangmanDemo(HangmanWnd):
 	def Notify(self):
 	    apply(self.func, ())
 
+class HangmanDemoFrame(wxFrame):
+    def __init__(self, wf, parent, id, pos, size):
+	wxFrame.__init__(self, parent, id, "Hangman demo", pos, size)
+	self.demo = HangmanDemo(wf, self, -1, wxDefaultPosition, wxDefaultSize)
+    def OnCloseWindow(self, event):
+	self.demo.timer.Stop()
+	self.Destroy()
+
 class AboutBox(wxDialog):
     def __init__(self, parent,wf):
 	wxDialog.__init__(self, parent, -1, "About Hangman", wxDefaultPosition, wxSize(350,450))
@@ -250,6 +262,7 @@ class MyFrame(wxFrame):
 	urlmenu = wxMenu()
 	for item in range(0,len(urls),2):
 	    urlmenu.Append(1020+item/2, urls[item], urls[item+1])
+	urlmenu.Append(1080, 'Other...', 'Enter an URL')
 	menu.AppendMenu(1012, 'URL', urlmenu, 'Use a webpage')
 	menu.Append(1013, 'Dump', 'Write contents to stdout')
 	menubar.Append(menu, "Dictionary")
@@ -267,6 +280,7 @@ class MyFrame(wxFrame):
 	EVT_MENU(self, 1005, self.OnWindowClose)
 	EVT_MENU(self, 1011, self.OnDictFile)
 	EVT_MENU_RANGE(self, 1020, 1020+len(urls)/2, self.OnDictURL)
+	EVT_MENU(self, 1080, self.OnDictURLSel)
 	EVT_MENU(self, 1013, self.OnDictDump)
 	EVT_MENU(self, 1090, self.OnHelpAbout)
 	EVT_CHAR(self.wnd, self.OnChar)
@@ -288,8 +302,7 @@ class MyFrame(wxFrame):
 	self.average = 0.0
 	self.OnGameNew(None)
     def OnGameDemo(self, event):
-	frame = wxFrame(self, -1, "Hangman demo", wxDefaultPosition, self.GetSize())
-	demo = HangmanDemo(self.wf, frame, -1, wxDefaultPosition, wxDefaultSize)
+	frame = HangmanDemoFrame(self.wf, self, -1, wxDefaultPosition, self.GetSize())
 	frame.Show(TRUE)
     def OnDictFile(self, event):
 	fd = wxFileDialog(self)
@@ -302,6 +315,11 @@ class MyFrame(wxFrame):
 	item = (event.GetId() - self.urloffset)*2
 	print "Trying to open %s at %s" % (self.urls[item], self.urls[item+1])
 	self.wf = URLWordFetcher(self.urls[item+1])
+    def OnDictURLSel(self, event):
+	msg = wxTextEntryDialog(self, "Enter the URL of the dictionary document", "Enter URL")
+	if msg.ShowModal() == wxID_OK:
+	    url = msg.GetValue()
+	    self.wf = URLWordFetcher(url)
     def OnDictDump(self, event):
 	print self.wf.words
     def OnHelpAbout(self, event):
@@ -350,9 +368,13 @@ class MyFrame(wxFrame):
 	
 class MyApp(wxApp):
     def OnInit(self):
-	print "Reading word list"
-	wf = WordFetcher("/usr/share/games/hangman-words")
-	#wf = URLWordFetcher("http://www.tue.nl")
+	if wxPlatform == '__WXGTK__':
+	    defaultfile = "/usr/share/games/hangman-words"
+	elif wxPlatform == '__WXMSW__':
+	    defaultfile = "c:\\windows\\hardware.txt"
+	else:
+	    defaultfile = ""
+	wf = WordFetcher(defaultfile)
 	frame = MyFrame(wf)
 	self.SetTopWindow(frame)
 	frame.Show(TRUE)
