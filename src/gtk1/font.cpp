@@ -217,7 +217,7 @@ wxFont::wxFont( GdkFont *WXUNUSED(font), char *xFontName )
     if ( registry == _T("ISO8859") )
     {
         int cp;
-        if ( wxSscanf(encoding, "%d", &cp) == 1 )
+        if ( wxSscanf(encoding, wxT("%d"), &cp) == 1 )
         {
             M_FONTDATA->m_encoding =
                 (wxFontEncoding)(wxFONTENCODING_ISO8859_1 + cp - 1);
@@ -226,7 +226,7 @@ wxFont::wxFont( GdkFont *WXUNUSED(font), char *xFontName )
     else if ( registry == _T("MICROSOFT") )
     {
         int cp;
-        if ( wxSscanf(encoding, "cp125%d", &cp) == 1 )
+        if ( wxSscanf(encoding, wxT("cp125%d"), &cp) == 1 )
         {
             M_FONTDATA->m_encoding =
                 (wxFontEncoding)(wxFONTENCODING_CP1250 + cp);
