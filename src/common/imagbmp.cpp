@@ -286,13 +286,26 @@ bool wxBMPHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose
      */
     if (bpp < 16 && ncolors != 0)
     {
+        unsigned char* r = new unsigned char[ncolors];
+        unsigned char* g = new unsigned char[ncolors];
+        unsigned char* b = new unsigned char[ncolors];
         for (int j = 0; j < ncolors; j++)
         {
             stream.Read( bbuf, 4 );
             cmap[j].b = bbuf[0];
             cmap[j].g = bbuf[1];
             cmap[j].r = bbuf[2];
+
+            r[j] = cmap[j].r;
+            g[j] = cmap[j].g;
+            b[j] = cmap[j].b;
         }
+        // Set the palette for the wxImage
+        image->SetPalette(wxPalette(ncolors, r, g, b));
+
+        delete[] r;
+        delete[] g;
+        delete[] b;
     }
     else if (bpp == 16 || bpp == 32)
     {

@@ -92,6 +92,7 @@ propform.cpp	G
 proplist.cpp	G
 sashwin.cpp	G
 scrolwin.cpp	G
+splash.cpp	G
 splitter.cpp	G
 statline.cpp	G	U,R,P
 statusbr.cpp	G
@@ -124,6 +125,7 @@ docmdi.cpp	C
 docview.cpp	C
 dynarray.cpp	C	B
 dynlib.cpp	C	B
+effects.cpp	C
 encconv.cpp	C	B
 event.cpp	C	B
 extended.c	C	B
@@ -174,6 +176,7 @@ paper.cpp	C
 prntbase.cpp	C
 process.cpp	C	32,B
 protocol.cpp	C	S,B
+quantize.cpp	C
 resource.cpp	C
 sckaddr.cpp	C	S,B
 sckfile.cpp	C	S,B

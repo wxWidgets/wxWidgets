@@ -174,6 +174,10 @@ SOURCE=.\common\dynlib.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\effects.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\encconv.cpp
 # End Source File
 # Begin Source File
@@ -372,6 +376,10 @@ SOURCE=.\common\process.cpp
 # Begin Source File
 
 SOURCE=.\common\protocol.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\quantize.cpp
 # End Source File
 # Begin Source File
 
@@ -583,6 +591,10 @@ SOURCE=.\generic\sashwin.cpp
 # Begin Source File
 
 SOURCE=.\generic\scrolwin.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic\splash.cpp
 # End Source File
 # Begin Source File
 

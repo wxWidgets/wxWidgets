@@ -1020,6 +1020,13 @@ wxBitmap wxImage::ConvertToBitmap() const
     hbitmap = ::CreateCompatibleBitmap( hdc, width, bmpHeight );
     ::SelectObject( memdc, hbitmap);
 
+    HPALETTE hOldPalette = 0;
+    if (GetPalette().Ok())
+    {
+        hOldPalette = ::SelectPalette(memdc, (HPALETTE) GetPalette().GetHPALETTE(), FALSE);
+        ::RealizePalette(memdc);
+    }
+
     // copy image data into DIB data and then into DDB (in a loop)
     unsigned char *data = GetData();
     int i, j, n;
@@ -1068,6 +1075,9 @@ wxBitmap wxImage::ConvertToBitmap() const
         //    ::DeleteDC( memdc );
     }
     bitmap.SetHBITMAP( (WXHBITMAP) hbitmap );
+
+    if (hOldPalette)
+        SelectPalette(memdc, hOldPalette, FALSE);
 
     // similarly, created an mono-bitmap for the possible mask
     if( HasMask() )

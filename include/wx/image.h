@@ -177,6 +177,10 @@ public:
     void SetMask( bool mask = TRUE );
     bool HasMask() const;
 
+    bool HasPalette() const { return m_palette.Ok(); }
+    const wxPalette& GetPalette() const { return m_palette; }
+    void SetPalette(const wxPalette& palette) { m_palette = palette; }
+
     unsigned long CountColours( unsigned long stopafter = (unsigned long) -1 );
     unsigned long ComputeHistogram( wxHashTable &h );
 
@@ -206,6 +210,7 @@ public:
 
 protected:
     static wxList sm_handlers;
+    wxPalette m_palette;
 
 private:
     friend class WXDLLEXPORT wxImageHandler;
