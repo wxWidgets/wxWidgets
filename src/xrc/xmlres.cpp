@@ -283,19 +283,21 @@ static void ProcessPlatformProperty(wxXmlNode *node)
             while (tkn.HasMoreTokens())
             {
                 s = tkn.GetNextToken();
-                if (
 #ifdef __WXMSW__
-                    s == wxString(wxT("win"))
-#elif defined(__UNIX__)
-                    s == wxString(wxT("unix"))
-#elif defined(__MAC__)
-                    s == wxString(wxT("mac"))
-#elif defined(__OS2__)
-                    s == wxString(wxT("os2"))
-#else
-                    FALSE
+                if (s == wxT("win")) isok = true;
 #endif
-              ) isok = TRUE;
+#ifdef __UNIX__
+                if (s == wxT("unix")) isok = true;
+#endif
+#ifdef __MAC__
+                if (s == wxT("mac")) isok = true;
+#endif
+#ifdef __OS2__
+                if (s == wxT("os2")) isok = true;
+#endif
+
+                if (isok)
+                    break;
             }
         }
 
