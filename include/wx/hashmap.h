@@ -143,8 +143,8 @@ public: \
         value_type m_value; \
     }; \
  \
-    struct Iterator; \
-    friend struct Iterator; \
+    CLASSEXP Iterator; \
+    friend CLASSEXP Iterator; \
 protected: \
     static void DeleteNode( _wxHashTable_NodeBase* node ) \
     { \
@@ -154,8 +154,9 @@ public: \
     /*                  */ \
     /* forward iterator */ \
     /*                  */ \
-    struct Iterator \
+    CLASSEXP Iterator \
     { \
+    public: \
         Node* m_node; \
         Self* m_ht; \
  \
@@ -186,8 +187,9 @@ public: \
     }; \
  \
 public: \
-    struct iterator:public Iterator \
+    CLASSEXP iterator : public Iterator \
     { \
+    public: \
         iterator() : Iterator() {} \
         iterator( Node* node, Self* ht ) : Iterator( node, ht ) {} \
         iterator& operator++() { PlusPlus(); return *this; } \
@@ -196,8 +198,9 @@ public: \
         pointer operator ->() const { return &(m_node->m_value); } \
     }; \
  \
-    struct const_iterator:public Iterator \
+    CLASSEXP const_iterator : public Iterator \
     { \
+    public: \
         const_iterator() : Iterator() {} \
         const_iterator( Node* node, const Self* ht ) \
             : Iterator( node, (Self*)ht ) {} \
