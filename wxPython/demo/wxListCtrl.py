@@ -82,14 +82,14 @@ class TestListCtrlPanel(wxPanel, wxColumnSorterMixin):
         tID = wxNewId()
 
         self.il = wxImageList(16, 16)
-        bmp = images.getSmilesBitmap()
-        #idx1 = self.il.AddWithColourMask(bmp, wxWHITE)
-        idx1 = self.il.Add(bmp)
-        bmp = images.getSmallUpArrowBitmap()
-        self.sm_up = self.il.Add(bmp)
-        bmp = images.getSmallDnArrowBitmap()
-        self.sm_dn = self.il.Add(bmp)
 
+        idx1 = self.il.Add(images.getSmilesBitmap())
+        self.sm_up = self.il.Add(images.getSmallUpArrowBitmap())
+        self.sm_dn = self.il.Add(images.getSmallDnArrowBitmap())
+
+        #idx1 = self.il.AddIcon(wxIconFromXPMData(images.getSmilesData()))
+        #self.sm_up = self.il.AddIcon(wxIconFromXPMData(images.getSmallUpArrowData()))
+        #self.sm_dn = self.il.AddIcon(wxIconFromXPMData(images.getSmallDnArrowData()))
 
         self.list = wxListCtrl(self, tID,
                                style=wxLC_REPORT|wxSUNKEN_BORDER)#|wxLC_VRULES|wxLC_HRULES)
