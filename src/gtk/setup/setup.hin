@@ -191,9 +191,13 @@
    some new features such as event tables */
 #define WXWIN_COMPATIBILITY  1
 /*
- * Enables debugging: memory tracing, assert, etc.
+ * Enables debugging: memory tracing, assert, etc., contains debug level
  */
 #undef WXDEBUG
+/*
+ * Enables debugging: memory tracing, assert, etc., undefined if no debugging
+ */
+#undef __WXDEBUG__
 /*
  * Enables debugging version of wxObject::new and wxObject::delete (IF WXDEBUG)
  * WARNING: this code may not work with all architectures, especially

@@ -745,7 +745,7 @@ AC_OVERRIDES(optimise,optimise,
 USE_OPTIMISE)
 
 AC_OVERRIDES(debug_flag,debug_flag,
-**--with-debug_flag       create code with DEBUG define set to 1,
+**--with-debug_flag       create code with WXDEBUG define set to 1,
 USE_DEBUG_FLAG)
 
 AC_OVERRIDES(debug_info,debug_info,
@@ -947,6 +947,9 @@ AC_SUBST(WXDEBUG)
 
 if test "$USE_DEBUG_FLAG" = 1 ; then
   AC_DEFINE_UNQUOTED(WXDEBUG,$USE_DEBUG_FLAG)
+  AC_DEFINE_UNQUOTED(__WXDEBUG__,$USE_DEBUG_FLAG)
+  WXDEBUG_DEFINE="-D__WXDEBUG__"
+  AC_SUBST(WXDEBUG_DEFINE)
 fi
 
 if test "$USE_MEM_TRACING" = 1 ; then

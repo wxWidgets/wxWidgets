@@ -27,7 +27,7 @@ TOOLKIT_DEF = -D@TOOLKIT_DEF@
 # general compiler stuff
 OPTIMISE = @OPTIMISE@
 PROFILE = @PROFILE@
-DEBUG = @WXDEBUG@
+DEBUG = @WXDEBUG@ @WXDEBUG_DEFINE@
 
 # c-compiler stuff
 CC = @CC@

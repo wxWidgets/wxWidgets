@@ -20,7 +20,7 @@ ac_help="$ac_help
 ac_help="$ac_help
 **--with-optimise      create optimised code"
 ac_help="$ac_help
-**--with-debug_flag       create code with DEBUG define set to 1"
+**--with-debug_flag       create code with WXDEBUG define set to 1"
 ac_help="$ac_help
 **--with-debug_info       create code with debuging information included"
 ac_help="$ac_help
@@ -5663,6 +5663,12 @@ if test "$USE_DEBUG_FLAG" = 1 ; then
 #define WXDEBUG $USE_DEBUG_FLAG
 EOF
 
+  cat >> confdefs.h <<EOF
+#define __WXDEBUG__ $USE_DEBUG_FLAG
+EOF
+
+  WXDEBUG_DEFINE="-D__WXDEBUG__"
+  
 fi
 
 if test "$USE_MEM_TRACING" = 1 ; then
@@ -6012,7 +6018,7 @@ fi
   # Extract the first word of "gtk-config", so it can be a program name with args.
 set dummy gtk-config; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:6016: checking for $ac_word" >&5
+echo "configure:6022: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_path_GTK_CONFIG'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -6043,7 +6049,7 @@ fi
 
   min_gtk_version=0.99.7
   echo $ac_n "checking for GTK - version >= $min_gtk_version""... $ac_c" 1>&6
-echo "configure:6047: checking for GTK - version >= $min_gtk_version" >&5
+echo "configure:6053: checking for GTK - version >= $min_gtk_version" >&5
   no_gtk=""
   if test "$GTK_CONFIG" != "no" ; then
     GTK_CFLAGS=`$GTK_CONFIG --cflags`
@@ -6056,7 +6062,7 @@ echo "configure:6047: checking for GTK - version >= $min_gtk_version" >&5
   echo $ac_n "cross compiling; assumed OK... $ac_c"
 else
   cat > conftest.$ac_ext <<EOF
-#line 6060 "configure"
+#line 6066 "configure"
 #include "confdefs.h"
 
 #include <gtk/gtk.h>
@@ -6078,7 +6084,7 @@ main ()
 }
 
 EOF
-if { (eval echo configure:6082: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest && (./conftest; exit) 2>/dev/null
+if { (eval echo configure:6088: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest && (./conftest; exit) 2>/dev/null
 then
   :
 else
@@ -6129,7 +6135,7 @@ OPENGL_LINK=
 
 if test "$USE_OPENGL" = 1; then
     echo $ac_n "checking for OpenGL includes""... $ac_c" 1>&6
-echo "configure:6133: checking for OpenGL includes" >&5
+echo "configure:6139: checking for OpenGL includes" >&5
   
 ac_find_includes=
 for ac_dir in $SEARCH_INCLUDE;
@@ -6144,7 +6150,7 @@ for ac_dir in $SEARCH_INCLUDE;
     OPENGL_INCLUDE="-I$ac_find_includes"
     echo "$ac_t""found $ac_find_includes" 1>&6
         echo $ac_n "checking for OpenGL library""... $ac_c" 1>&6
-echo "configure:6148: checking for OpenGL library" >&5
+echo "configure:6154: checking for OpenGL library" >&5
     
 ac_find_libraries=
 for ac_dir in $SEARCH_LIB;
@@ -6571,6 +6577,7 @@ s%@host_cpu@%$host_cpu%g
 s%@host_vendor@%$host_vendor%g
 s%@host_os@%$host_os%g
 s%@WXDEBUG@%$WXDEBUG%g
+s%@WXDEBUG_DEFINE@%$WXDEBUG_DEFINE%g
 s%@PROFILE@%$PROFILE%g
 s%@OPTIMISE@%$OPTIMISE%g
 s%@RPC@%$RPC%g
