@@ -55,7 +55,8 @@ END_EVENT_TABLE()
 wxSplashScreen::wxSplashScreen(const wxBitmap& bitmap, long splashStyle, int milliseconds, wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style):
     wxFrame(parent, id, wxEmptyString, wxPoint(0, 0), wxSize(100, 100), style)
 {
-#ifdef __WXGTK20__
+    // At least for GTK+ 2.0, this hint is not available.
+#if defined(__WXGTK20__) && GTK_CHECK_VERSION(2,2,0)
     gtk_window_set_type_hint(GTK_WINDOW(m_widget),
                              GDK_WINDOW_TYPE_HINT_SPLASHSCREEN);
 #endif
