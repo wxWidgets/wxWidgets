@@ -21,6 +21,7 @@ samples/drawing/Makefile.in
 samples/dynamic/Makefile.in
 samples/erase/Makefile.in
 samples/except/Makefile.in
+samples/except/Makefile.in
 samples/exec/Makefile.in
 samples/event/Makefile.in
 samples/grid/Makefile.in

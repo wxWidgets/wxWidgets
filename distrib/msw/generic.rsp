@@ -470,6 +470,17 @@ samples/except/makefile*
 samples/except/*.xpm
 samples/except/*.bkl
 
+samples/except/*.cpp
+samples/except/*.h
+samples/except/makefile*
+samples/except/*.rc
+samples/except/*.def
+samples/except/*.ico
+samples/except/*.xpm
+samples/except/*.txt
+samples/except/*.pro
+samples/except/*.bkl
+
 samples/exec/*.cpp
 samples/exec/*.h
 samples/exec/makefile*

@@ -88,6 +88,9 @@ samples/event/event.dsw
 samples/except/except.dsp
 samples/except/except.dsw
 
+samples/except/except.dsp
+samples/except/except.dsw
+
 samples/exec/exec.dsp
 samples/exec/exec.dsw
 
