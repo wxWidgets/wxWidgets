@@ -176,8 +176,8 @@ OTHER CHANGES
 All:
 
 - added (partial) Indonesian translations (Bambang Purnomosidi D. P.)
-- added wxSizer::Show by Carl Godkin, to make it easy to
-  ynamically show and hide sizers and windows (see samples/controls, wxSizer tab)
+- added wxSizer::Show()/Hide() (Carl Godkin)
+- fixed bugs in wxDateTime::SetToWeekDay()/GetWeek()
 
 Unix (Base/GUI):
 
