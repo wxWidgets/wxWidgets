@@ -90,7 +90,7 @@ void wxHTTP::SetHeader(const wxString& header, const wxString& h_data)
   wxNode *node = m_headers.Find(header);
 
   if (!node)
-    m_headers.Append(header.Upper(), (wxObject *)(new wxString(h_data)));
+    m_headers.Append(header, (wxObject *)(new wxString(h_data)));
   else {
     wxString *str = (wxString *)node->Data();
     (*str) = h_data;
@@ -99,16 +99,17 @@ void wxHTTP::SetHeader(const wxString& header, const wxString& h_data)
 
 wxString wxHTTP::GetHeader(const wxString& header)
 {
-  wxNode *node;
-  wxString upper_header;
-
-  upper_header = header.Upper();
-
-  node = m_headers.Find(upper_header);
-  if (!node)
-    return wxEmptyString;
-
-  return *((wxString *)node->Data());
+  // not using m_headers::Find as can't control case-sensitivity
+  // in comparison
+  wxNode *head = m_headers.GetFirst();
+  while(head)
+  {
+    wxString key = head->GetKeyString();
+    if(header.Upper() == key.Upper())
+        return *((wxString *)head->GetData());
+    head = head->GetNext();
+  }
+  return wxEmptyString;
 }
 
 void wxHTTP::SendHeaders()
@@ -153,7 +154,6 @@ bool wxHTTP::ParseHeaders()
 
     wxString left_str = line.BeforeFirst(':');
     wxString *str = new wxString(line.AfterFirst(':').Strip(wxString::both));
-    left_str.MakeUpper();
 
     m_headers.Append(left_str, (wxObject *) str);
   }
