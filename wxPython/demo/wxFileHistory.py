@@ -21,8 +21,9 @@ class TestPanel(wxPanel):
         box = wxBoxSizer(wxVERTICAL)
 
         # Make and layout the controls
-        bf = wxFont(14, wxSWISS, wxNORMAL, wxBOLD)
-        nf = wxFont(11, wxSWISS, wxNORMAL, wxNORMAL)
+        fs = self.GetFont().GetPointSize()
+        bf = wxFont(fs+4, wxSWISS, wxNORMAL, wxBOLD)
+        nf = wxFont(fs+2, wxSWISS, wxNORMAL, wxNORMAL)
 
         t = wxStaticText(self, -1, "wxFileHistory")
         t.SetFont(bf)

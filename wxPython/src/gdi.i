@@ -878,6 +878,19 @@ public:
         // (where area is usually something like the size of the window
         // being buffered)
     %name(wxBufferedDCInternalBuffer)wxBufferedDC( wxDC *dc, const wxSize &area );
+
+        // Blits the buffer to the dc, and detaches the dc from
+        // the buffer.  Usually called in the dtor or by the dtor
+        // of derived classes if the BufferedDC must blit before
+        // the derived class (which may own the dc it's blitting
+        // to) is destroyed.
+    void UnMask();
+
+
+    %pragma(python) addtomethod =
+        "__init__:self._dc = _args[0] # save a ref so the other dc won't be deleted before self"
+    %pragma(python) addtomethod =
+        "wxBufferedDCInternalBuffer:val._dc = _args[0] # save a ref so the other dc won't be deleted before self"
 };
 
 
