@@ -1465,7 +1465,7 @@ void wxThread::Exit(ExitCode status)
     // m_critsect on us (almost all of them do)
     OnExit();
 
-    MPTerminateTask( m_internal->GetId() , (long) status) ;
+    MPTaskID threadid = m_internal->GetId() ;
     
     if ( IsDetached() )
     {
@@ -1477,6 +1477,7 @@ void wxThread::Exit(ExitCode status)
         wxCriticalSectionLocker lock(m_critsect);
         m_internal->SetState(STATE_EXITED);
     }
+    MPTerminateTask( threadid , (long) status) ;    
 }
 
 // also test whether we were paused
