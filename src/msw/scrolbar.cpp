@@ -139,13 +139,13 @@ bool wxScrollBar::MSWOnScroll(int WXUNUSED(orientation), WXWORD wParam,
     int nScrollInc;
     switch ( wParam )
     {
-        case SB_TOP:
+        case SB_BOTTOM:
             nScrollInc = maxPos - position;
             scrollEvent = wxEVT_SCROLL_TOP;
             break;
 
-        case SB_BOTTOM:
-            nScrollInc = - position;
+        case SB_TOP:
+            nScrollInc = -position;
             scrollEvent = wxEVT_SCROLL_BOTTOM;
             break;
 
