@@ -44,6 +44,9 @@ Updated: 21/9/98
 - Use generic wxTreeCtrl, wxListCtrl: enhance these.
 
 - Write a better generic wxToolBar class than wxToolBarSimple.
+  Alternatively, write a toolbar using Motif as described here:
+  http://www.motifzone.com/tmd/articles/Kurt_Huhner/jun96.html.
+  This article also explains how to implement tooltips.
 
 - Optimize colour management so we don't get clashes when e.g.
   Netscape is running.
@@ -60,6 +63,8 @@ Updated: 21/9/98
 
 - Copy and paste, drag and drop. Use a standard X drag
   and drop standard - see http://www.cco.caltech.edu/~jafl/xdnd/
+  or use Motif drag and drop as described here:
+  http://www.motifzone.com/tmd/articles/DnD/dnd.html
 
 - Optimize screen refresh for non-native widgets, e.g. wxWindow
   created with Create(), using technique in flicker patch for 1.68
@@ -74,3 +79,6 @@ Updated: 21/9/98
 - Create some samples for testing.
 
 - Get Dialog Editor working under Motif.
+
+- New wxHelp version: try using the XmHTML widget at
+  http://www.xs4all.nl/~ripley/XmHTML/
