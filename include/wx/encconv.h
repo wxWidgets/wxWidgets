@@ -146,7 +146,7 @@ class WXDLLIMPEXP_BASE wxEncodingConverter : public wxObject
             // to convert in the other)
             static bool CanConvert(wxFontEncoding encIn, wxFontEncoding encOut)
             {
-                return GetAllEquivalents(encIn).Find(encOut) != wxNOT_FOUND;
+                return GetAllEquivalents(encIn).Index(encOut) != wxNOT_FOUND;
             }
 
     private:
