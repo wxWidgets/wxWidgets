@@ -28,6 +28,7 @@
     #pragma hdrstop
 #endif
 
+#include "wx/init.h"
 #include "wx/event.h"
 #include "wx/app.h"
 #include "wx/cmdline.h"
