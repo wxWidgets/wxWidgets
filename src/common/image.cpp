@@ -28,7 +28,6 @@
 #include "wx/log.h"
 #include "wx/app.h"
 #include "wx/filefn.h"
-#include "wx/filesys.h"
 #include "wx/wfstream.h"
 #include "wx/intl.h"
 #include "wx/module.h"
@@ -230,12 +229,12 @@ wxImage wxImage::Scale( int width, int height ) const
 
     for (long j = 0; j < height; j++)
     {
-        long y_offset = (j * (old_height-1) / (height-1)) * old_width;
+        long y_offset = (j * old_height / height) * old_width;
 
         for (long i = 0; i < width; i++)
         {
             memcpy( target_data,
-                source_data + 3*(y_offset + ((i * (old_width-1) )/ (width-1))),
+                source_data + 3*(y_offset + ((i * old_width )/ width)),
                 3 );
             target_data += 3;
         }
@@ -763,22 +762,18 @@ bool wxImage::HasOption(const wxString& name) const
 bool wxImage::LoadFile( const wxString& filename, long type )
 {
 #if wxUSE_STREAMS
-    // We want to use wxFileSystem for virtual FS compatibility
-    wxFileSystem fsys;
-    wxFSFile *file = fsys.OpenFile(filename);
-    if (!file)
+    if (wxFileExists(filename))
     {
-        wxLogError(_("Can't open file '%s'"), filename.c_str());
-        return FALSE;
+        wxFileInputStream stream(filename);
+        wxBufferedInputStream bstream( stream );
+        return LoadFile(bstream, type);
     }
-    wxInputStream *stream = file->GetStream();
-    if (!stream)
+    else
     {
-        wxLogError(_("Can't open stream for file '%s'"), filename.c_str());
-        return FALSE;
-    }
+        wxLogError( _("Can't load image from file '%s': file does not exist."), filename.c_str() );
 
-    return LoadFile(*stream, type);
+        return FALSE;
+    }
 #else // !wxUSE_STREAMS
     return FALSE;
 #endif // wxUSE_STREAMS
@@ -787,21 +782,18 @@ bool wxImage::LoadFile( const wxString& filename, long type )
 bool wxImage::LoadFile( const wxString& filename, const wxString& mimetype )
 {
 #if wxUSE_STREAMS
-    // We want to use wxFileSystem for virtual FS compatibility
-    wxFileSystem fsys;
-    wxFSFile *file = fsys.OpenFile(filename);
-    if (!file)
+    if (wxFileExists(filename))
     {
-        wxLogError(_("Can't open file '%s'"), filename.c_str());
+        wxFileInputStream stream(filename);
+        wxBufferedInputStream bstream( stream );
+        return LoadFile(bstream, mimetype);
+    }
+    else
+    {
+        wxLogError( _("Can't load image from file '%s': file does not exist."), filename.c_str() );
+
         return FALSE;
     }
-    wxInputStream *stream = file->GetStream();
-    if (!stream)
-    {
-        wxLogError(_("Can't open stream for file '%s'"), filename.c_str());
-        return FALSE;
-    }
-    return LoadFile(*stream, mimetype);
 #else // !wxUSE_STREAMS
     return FALSE;
 #endif // wxUSE_STREAMS
@@ -1152,7 +1144,7 @@ unsigned long wxImage::CountColours( unsigned long stopafter )
     wxHashTable h;
     wxObject dummy;
     unsigned char r, g, b;
-    unsigned char *p;
+	unsigned char *p;
     unsigned long size, nentries, key;
 
     p = GetData();
@@ -1187,7 +1179,7 @@ unsigned long wxImage::CountColours( unsigned long stopafter )
 unsigned long wxImage::ComputeHistogram( wxHashTable &h )
 {
     unsigned char r, g, b;
-    unsigned char *p;
+	unsigned char *p;
     unsigned long size, nentries, key;
     wxHNode *hnode;
 
