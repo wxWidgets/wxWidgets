@@ -17,53 +17,68 @@
 #include "gdk/gdk.h"
 
 //-----------------------------------------------------------------------------
-// global data
-//-----------------------------------------------------------------------------
-
-GtkTooltips *gs_tooltips = (GtkTooltips*) NULL;
-GdkColor gs_tooltip_bg;
-GdkColor gs_tooltip_fg;
-
-//-----------------------------------------------------------------------------
 // wxToolTip
 //-----------------------------------------------------------------------------
 
-void wxToolTip::Add( wxWindow *tool, const wxString &tip )
+wxToolTip::wxToolTip( const wxString &tip )
 {
-    if (!gs_tooltips)
+    m_text = tip;
+    
+    m_tooltips = (GtkTooltips*) NULL;
+    
+    m_fg = new GdkColor;
+    m_fg->red = 0; 
+    m_fg->green = 0;
+    m_fg->blue = 0;
+	
+    m_bg = new GdkColor;
+    m_bg->red = 65535;
+    m_bg->green = 65535;
+    m_bg->blue = 50000;
+}
+
+wxToolTip::~wxToolTip()
+{
+    gtk_object_unref( GTK_OBJECT(m_tooltips) );
+    
+    delete m_fg;
+    delete m_bg;
+}
+
+bool wxToolTip::Ok()
+{
+    return (m_tooltips);
+}
+
+void wxToolTip::Create( GtkWidget *tool )
+{
+    if (!m_tooltips)
     {
-        gs_tooltips = gtk_tooltips_new();
+        m_tooltips = gtk_tooltips_new();
 	
-	gs_tooltip_fg.red = 0;
-	gs_tooltip_fg.green = 0;
-	gs_tooltip_fg.blue = 0;
-        gdk_color_alloc( gtk_widget_get_colormap( tool->GetConnectWidget() ), &gs_tooltip_fg );
+        gdk_color_alloc( gtk_widget_get_colormap( tool ), m_fg );
+        gdk_color_alloc( gtk_widget_get_colormap( tool ), m_bg );
 	
-	gs_tooltip_bg.red = 65535;
-	gs_tooltip_bg.green = 65535;
-	gs_tooltip_bg.blue = 50000;
-        gdk_color_alloc( gtk_widget_get_colormap( tool->GetConnectWidget() ), &gs_tooltip_bg );
-	
-	gtk_tooltips_set_colors( gs_tooltips, &gs_tooltip_bg, &gs_tooltip_fg );
+	gtk_tooltips_set_colors( m_tooltips, m_bg, m_fg );
     }
     
-    gtk_tooltips_set_tip( gs_tooltips, tool->GetConnectWidget(), tip, (gchar*) NULL );
+    gtk_tooltips_set_tip( m_tooltips, tool, m_text, (gchar*) NULL );
 }
 
 void wxToolTip::Enable( bool flag )
 {
-    if (!gs_tooltips) gs_tooltips = gtk_tooltips_new();
+    if (!Ok()) return;
     
     if (flag)
-        gtk_tooltips_enable( gs_tooltips );
+        gtk_tooltips_enable( m_tooltips );
     else
-        gtk_tooltips_disable( gs_tooltips );
+        gtk_tooltips_disable( m_tooltips );
 }
 
 void wxToolTip::SetDelay( long msecs )
 {
-    if (!gs_tooltips) gs_tooltips = gtk_tooltips_new();
+    if (!Ok()) return;
     
-    gtk_tooltips_set_delay( gs_tooltips, msecs );
+    gtk_tooltips_set_delay( m_tooltips, msecs );
 }
 

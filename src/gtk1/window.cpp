@@ -24,6 +24,7 @@
 #if wxUSE_DRAG_AND_DROP
 #include "wx/dnd.h"
 #endif
+#include "wx/tooltip.h"
 #include "wx/menu.h"
 #include "wx/statusbr.h"
 #include "wx/intl.h"
@@ -1234,12 +1235,12 @@ static gint gtk_scrollbar_button_release_callback( GtkRange *widget,
 // InsertChild for wxWindow.
 //-----------------------------------------------------------------------------
 
-// Callback for wxWindow. This very strange beast has to be used because
-// C++ has no virtual methods in a constructor. We have to emulate a
-// virtual function here as wxNotebook requires a different way to insert
-// a child in it. I had opted for creating a wxNotebookPage window class
-// which would have made this superfluous (such in the MDI window system),
-// but no-one was listening to me...
+/* Callback for wxWindow. This very strange beast has to be used because
+ * C++ has no virtual methods in a constructor. We have to emulate a
+ * virtual function here as wxNotebook requires a different way to insert
+ * a child in it. I had opted for creating a wxNotebookPage window class
+ * which would have made this superfluous (such in the MDI window system),
+ * but no-one was listening to me... */
 
 static void wxInsertChildInWindow( wxWindow* parent, wxWindow* child )
 {
@@ -1342,6 +1343,8 @@ wxWindow::wxWindow()
     
     m_isStaticBox = FALSE;
     m_acceptsFocus = FALSE;
+    
+    m_toolTip = (wxToolTip*) NULL;
 }
 
 wxWindow::wxWindow( wxWindow *parent, wxWindowID id,
@@ -1420,7 +1423,7 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
 
     if ((m_windowStyle & wxTAB_TRAVERSAL) != 0)
     {
-        GTK_WIDGET_UNSET_FLAGS( m_wxwindow, GTK_CAN_FOCUS );
+        GTK_WIDGET_SET_FLAGS( m_wxwindow, GTK_CAN_FOCUS );  /* changed from UNSET */
         m_acceptsFocus = FALSE;
     }
     else
@@ -1499,6 +1502,8 @@ wxWindow::~wxWindow()
 #if wxUSE_DRAG_AND_DROP
     if (m_dropTarget) delete m_dropTarget;
 #endif
+
+    if (m_toolTip) delete m_toolTip;
 
     if (m_parent) m_parent->RemoveChild( this );
     if (m_widget) Show( FALSE );
@@ -1629,6 +1634,7 @@ void wxWindow::PreCreation( wxWindow *parent, wxWindowID id,
     m_clientData = NULL;
     
     m_isStaticBox = FALSE;
+    m_toolTip = (wxToolTip*) NULL;
 }
 
 void wxWindow::PostCreation()
@@ -2456,6 +2462,28 @@ void wxWindow::Clear()
     wxCHECK_RET( m_widget != NULL, "invalid window" );
 
     if (m_wxwindow && m_wxwindow->window) gdk_window_clear( m_wxwindow->window );
+}
+
+void wxWindow::SetToolTip( const wxString &tip )
+{
+    SetToolTip( new wxToolTip( tip ) );
+}
+
+void wxWindow::SetToolTip( wxToolTip *tip )
+{
+    if (m_toolTip) delete m_toolTip;
+    
+    m_toolTip = tip;
+    
+    if (m_toolTip) m_toolTip->Create( GetConnectWidget() );
+}
+
+wxToolTip& wxWindow::GetToolTip()
+{
+    if (!m_toolTip)
+        wxLogError( "No tooltip set." );
+	
+    return *m_toolTip;
 }
 
 wxColour wxWindow::GetBackgroundColour() const

@@ -55,6 +55,7 @@ class wxItemResource;
 #if wxUSE_DRAG_AND_DROP
 class wxDropTarget;
 #endif
+class wxToolTip;
 
 //-----------------------------------------------------------------------------
 // callback definition for inserting a window (internal)
@@ -207,8 +208,8 @@ public:
   void PushEventHandler( wxEvtHandler *handler );
   wxEvtHandler *PopEventHandler( bool deleteHandler = FALSE );
 
-  virtual wxValidator *GetValidator();
   virtual void SetValidator( const wxValidator &validator );
+  virtual wxValidator *GetValidator();
 
   virtual void SetClientObject( wxClientData *data );
   virtual wxClientData *GetClientObject();
@@ -225,9 +226,13 @@ public:
   wxWindowID GetId() const;
 
   void SetCursor( const wxCursor &cursor );
-
+  
   void WarpPointer(int x, int y);
   
+  virtual void SetToolTip( const wxString &tip );
+  virtual void SetToolTip( wxToolTip *tip );
+  virtual wxToolTip& GetToolTip();
+
   virtual void Refresh( bool eraseBackground = TRUE, const wxRect *rect = (const wxRect *) NULL );
   virtual void Clear();
 
@@ -359,6 +364,7 @@ public:
   wxAcceleratorTable   m_acceleratorTable;
   wxClientData        *m_clientObject;
   void                *m_clientData;
+  wxToolTip           *m_toolTip;
 
   GtkWidget           *m_widget;
   GtkWidget           *m_wxwindow;

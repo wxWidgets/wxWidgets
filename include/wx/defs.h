@@ -1030,6 +1030,7 @@ typedef struct _GtkStyle        GtkStyle;
 typedef struct _GtkAdjustment   GtkAdjustment;
 typedef struct _GtkList         GtkList;
 typedef struct _GtkToolbar      GtkToolbar;
+typedef struct _GtkTooltips     GtkTooltips;
 typedef struct _GtkNotebook     GtkNotebook;
 typedef struct _GtkNotebookPage GtkNotebookPage;
 

@@ -94,6 +94,9 @@ public:
 #if wxUSE_DRAG_AND_DROP
   void SetDropTarget( wxDropTarget *dropTarget );
 #endif
+  void SetToolTip( wxToolTip *tip );
+  void SetToolTip( const wxString &tip );
+
 
 // implementation
     

@@ -17,6 +17,7 @@
 #include "wx/utils.h"
 #include "wx/intl.h"
 #include "wx/checklst.h"
+#include "wx/tooltip.h"
 
 #if wxUSE_DRAG_AND_DROP
 #include "wx/dnd.h"
@@ -345,6 +346,8 @@ void wxListBox::AppendCommon( const wxString &item )
     if (m_dropTarget) m_dropTarget->RegisterWidget( list_item );
 #endif
 #endif
+
+    if (m_toolTip) m_toolTip->Create( list_item );
 }
 
 void wxListBox::Append( const wxString &item )
@@ -673,6 +676,29 @@ int wxListBox::GetIndex( GtkWidget *item ) const
     return -1;
 }
 
+void wxListBox::SetToolTip( const wxString &tip )
+{
+    SetToolTip( new wxToolTip( tip ) );
+}
+
+void wxListBox::SetToolTip( wxToolTip *tip )
+{
+    if (m_toolTip) delete m_toolTip;
+    
+    m_toolTip = tip;
+    
+    if (!tip) return;
+    
+    m_toolTip->Create( GTK_WIDGET(m_list) );  /* this has no effect */
+    
+    GList *child = m_list->children;
+    while (child)
+    {
+	m_toolTip->Create( GTK_WIDGET( child->data ) );
+        child = child->next;
+    }
+}
+
 #if wxUSE_DRAG_AND_DROP
 void wxListBox::SetDropTarget( wxDropTarget *dropTarget )
 {
@@ -750,3 +776,4 @@ void wxListBox::ApplyWidgetStyle()
         child = child->next;
     }
 }
+

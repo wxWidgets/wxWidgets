@@ -230,7 +230,7 @@ BEGIN_EVENT_TABLE(MyPanel, wxPanel)
   EVT_BUTTON    (ID_CHOICE_DELETE,        MyPanel::OnChoiceButtons)
   EVT_BUTTON    (ID_CHOICE_FONT,          MyPanel::OnChoiceButtons)
   EVT_CHECKBOX  (ID_CHOICE_ENABLE,        MyPanel::OnChoiceButtons)
-  EVT_CHOICE    (ID_COMBO,                MyPanel::OnCombo)
+  EVT_COMBOBOX  (ID_COMBO,                MyPanel::OnCombo)
   EVT_BUTTON    (ID_COMBO_SEL_NUM,        MyPanel::OnComboButtons)
   EVT_BUTTON    (ID_COMBO_SEL_STR,        MyPanel::OnComboButtons)
   EVT_BUTTON    (ID_COMBO_CLEAR,          MyPanel::OnComboButtons)
@@ -333,6 +333,9 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
 //  panel->SetBackgroundColour("cadet blue");
 //  panel->SetForegroundColour("blue");
   m_listbox = new wxListBox( panel, ID_LISTBOX, wxPoint(10,10), wxSize(120,70), 5, choices );
+#ifdef __WXGTK__
+  m_listbox->SetToolTip( "This is a list box" );
+#endif
 //  m_listbox->SetBackgroundColour("wheat");
   (void)new wxButton( panel, ID_LISTBOX_SEL_NUM, "Select #2", wxPoint(180,30), wxSize(140,30) );
   (void)new wxButton( panel, ID_LISTBOX_SEL_STR, "Select 'This'", wxPoint(340,30), wxSize(140,30) );
@@ -340,13 +343,16 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   (void)new wxButton( panel, ID_LISTBOX_APPEND, "Append 'Hi!'", wxPoint(340,80), wxSize(140,30) );
   (void)new wxButton( panel, ID_LISTBOX_DELETE, "Delete selected item", wxPoint(180,130), wxSize(140,30) );
   button = new wxButton( panel, ID_LISTBOX_FONT, "Set Italic font", wxPoint(340,130), wxSize(140,30) );
-
 #ifdef __WXGTK__
-  wxToolTip::Add( button, "Press here to set italic font" );
+  button->SetToolTip( "Press here to set italic font" );
 #endif
+
 //  button->SetForegroundColour( "red" );
   m_checkbox = new wxCheckBox( panel, ID_LISTBOX_ENABLE, "Disable", wxPoint(20,130), wxSize(140,30) );
   m_checkbox->SetValue(FALSE);
+#ifdef __WXGTK__
+  m_checkbox->SetToolTip( "Click here to disable the listbox" );
+#endif
   m_notebook->AddPage(panel, "wxList", TRUE, Image_List);
 
   panel = new wxPanel(m_notebook);
@@ -385,7 +391,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
 //  tc->SetBackgroundColour("wheat");
   m_multitext = new wxTextCtrl( panel, ID_TEXT, "And here.", wxPoint(10,50), wxSize(320,160), wxTE_MULTILINE  );
   (*m_multitext) << " More text.";
-  m_multitext->SetBackgroundColour("wheat");
+//  m_multitext->SetBackgroundColour("wheat");
   (void)new wxStaticBox( panel, -1, "wxClipboard", wxPoint(345,50), wxSize(160,145) );
   (void)new wxButton( panel, ID_COPY_TEXT, "Copy line 1", wxPoint(370,80), wxSize(110,30) );
   (void)new wxButton( panel, ID_PASTE_TEXT, "Paste text", wxPoint(370,140), wxSize(110,30) );

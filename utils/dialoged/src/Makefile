@@ -1,3 +1,16 @@
+#
+# File:		Makefile
+# Author:	Robert Roebling
+# Created:	1999
+# Updated:	
+# Copyright:	(c) 1998 Robert Roebling
+#
+# Makefile for Dialog Editor (GTK version)
+#
+# This makefile requires wxWindows/GTK to be 
+# installed (possibly using "make install")
+# on your system.
+#
 
 CC = g++
 

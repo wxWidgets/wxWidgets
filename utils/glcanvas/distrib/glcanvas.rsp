@@ -2,15 +2,20 @@ docs/*.*
 win/*.cpp
 win/*.h
 win/make*.*
-src/*.cpp
-src/*.h
-src/make*.*
+gtk/*.cpp
+gtk/*.h
+gtk/make*.*
+motif/*.cpp
+motif/*.h
+motif/*.txt
+motif/make*.*
 samples/cube/*.cpp
 samples/cube/*.h
 samples/cube/*.rc
 samples/cube/*.ico
 samples/cube/*.xbm
 samples/cube/make*.*
+samples/cube/Makefile
 samples/isosurf/*.cpp
 samples/isosurf/*.h
 samples/isosurf/*.rc
@@ -19,6 +24,7 @@ samples/isosurf/*.xbm
 samples/isosurf/*.dat
 samples/isosurf/*.dat.gz
 samples/isosurf/make*.*
+samples/isosurf/Makefile
 samples/penguin/*.cpp
 samples/penguin/*.c
 samples/penguin/*.h
@@ -28,6 +34,7 @@ samples/penguin/*.xbm
 samples/penguin/*.xpm
 samples/penguin/make*.*
 samples/penguin/penguin.lwo
+samples/penguin/Makefile
 
 
 

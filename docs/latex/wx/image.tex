@@ -369,9 +369,9 @@ Depending on how wxWindows has been configured, not all formats may be available
 
 Returns a scaled version of the image. This is also useful for
 scaling bitmaps in general as the only other way to scale bitmaps
-is do blit a wxMemoryDC into another wxMemoryDC. Windows can such scaling
-itself, but on GTK scaling bitmaps is done using this routine 
-internally.
+is to blit a wxMemoryDC into another wxMemoryDC. Windows can do such 
+scaling itself but in the GTK port, scaling bitmaps is done using 
+this routine internally.
 
 \membersection{wxImage::SetData}\label{wximagesetdata}
 
@@ -391,7 +391,7 @@ Specifies whether there is a mask or not. The area of the mask is determined by 
 
 \func{void}{SetMaskColour}{\param{unsigned char }{red}, \param{unsigned char }{blue}, \param{unsigned char }{green}}
 
-Sets the mask colour for this image.
+Sets the mask colour for this image (and tells the image to use the mask).
 
 \membersection{wxImage::SetRGB}\label{wximagesetrgb}
 
