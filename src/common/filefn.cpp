@@ -1315,3 +1315,37 @@ bool wxFindFileInPath(wxString *pStr, const char *pszPath, const char *pszFile)
   return pc != NULL;  // if true => we breaked from the loop
 }
 
+void WXDLLEXPORT wxSplitPath(const char *pszFileName,
+                             wxString *pstrPath,
+                             wxString *pstrName,
+                             wxString *pstrExt)
+{
+  wxCHECK_RET( pszFileName, "NULL file name in wxSplitPath" );
+
+  const char *pDot = strrchr(pszFileName, FILE_SEP_EXT);
+  const char *pSepUnix = strrchr(pszFileName, FILE_SEP_PATH_UNIX);
+  const char *pSepDos = strrchr(pszFileName, FILE_SEP_PATH_DOS);
+
+  // take the last of the two
+  uint nPosUnix = pSepUnix ? pSepUnix - pszFileName : 0;
+  uint nPosDos = pSepDos ? pSepDos - pszFileName : 0;
+  if ( nPosDos > nPosUnix )
+    nPosUnix = nPosDos;
+  uint nLen = Strlen(pszFileName);
+
+  if ( pstrPath )
+    *pstrPath = wxString(pszFileName, nPosUnix);
+  if ( pDot ) {
+    uint nPosDot = pDot - pszFileName;
+    if ( pstrName )
+      *pstrName = wxString(pszFileName + nPosUnix + 1, nPosDot - nPosUnix);
+    if ( pstrExt )
+      *pstrExt = wxString(pszFileName + nPosDot + 1);
+  }
+  else {
+    if ( pstrName )
+      *pstrName = wxString(pszFileName + nPosUnix + 1);
+    if ( pstrExt )
+      pstrExt->Empty();
+  }
+}
