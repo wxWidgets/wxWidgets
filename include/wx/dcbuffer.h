@@ -81,9 +81,12 @@ public:
         wxASSERT_MSG( m_dc != 0,
                       _T("No underlying DC associated with wxBufferedDC (anymore)") );
 
+        wxCoord x, y;
+        GetDeviceOrigin(& x, & y);
+
         m_dc->Blit( 0, 0,
                     m_buffer.GetWidth(), m_buffer.GetHeight(), this,
-                    0, 0 );
+                    -x, -y );
         m_dc = NULL;
     }
 
@@ -123,8 +126,6 @@ public:
     wxBufferedPaintDC(wxWindow *window, const wxBitmap& buffer = wxNullBitmap)
         : m_paintdc(window)
     {
-        window->PrepareDC( m_paintdc );
-
         if( buffer != wxNullBitmap )
             Init(&m_paintdc, buffer);
         else
