@@ -195,20 +195,20 @@ static wxString MakeCorrectPath(const wxString& path)
     wxString p(path);
     wxString r;
     int i, j, cnt;
-    
+
     cnt = p.Length();
     for (i = 0; i < cnt; i++)
       if (p.GetChar(i) == wxT('\\')) p.GetWritableChar(i) = wxT('/'); // Want to be windows-safe
-        
+
     if (p.Left(2) == wxT("./")) { p = p.Mid(2); cnt -= 2; }
-    
+
     if (cnt < 3) return p;
-    
+
     r << p.GetChar(0) << p.GetChar(1);
-    
+
     // skip trailing ../.., if any
     for (i = 2; i < cnt && (p.GetChar(i) == wxT('/') || p.GetChar(i) == wxT('.')); i++) r << p.GetChar(i);
-    
+
     // remove back references: translate dir1/../dir2 to dir2
     for (; i < cnt; i++)
     {
@@ -223,9 +223,9 @@ static wxString MakeCorrectPath(const wxString& path)
             }
         }
     }
-        
+
     for (; i < cnt; i++) r << p.GetChar(i);
-        
+
     return r;
 }
 
@@ -241,7 +241,7 @@ void wxFileSystem::ChangePathTo(const wxString& location, bool is_dir)
         if (m_Path.Length() > 0 && m_Path.Last() != wxT('/') && m_Path.Last() != wxT(':'))
 	        m_Path << wxT('/');
     }
-    
+
     else
     {
         for (i = m_Path.Length()-1; i >= 0; i--)
@@ -300,7 +300,7 @@ wxFSFile* wxFileSystem::OpenFile(const wxString& location)
     {
         switch (loc[i])
         {
-            case wxT('/') : case wxT(':') : case wxT('#') : 
+            case wxT('/') : case wxT(':') : case wxT('#') :
                 meta = loc[i];
                 break;
         }
@@ -348,7 +348,7 @@ wxString wxFileSystem::FindFirst(const wxString& spec, int flags)
 {
     wxNode *node;
     wxString spec2(spec);
-    
+
     m_FindFileHandler = NULL;
 
     for (int i = spec2.Length()-1; i >= 0; i--)
@@ -358,10 +358,10 @@ wxString wxFileSystem::FindFirst(const wxString& spec, int flags)
     while (node)
     {
         m_FindFileHandler = (wxFileSystemHandler*) node -> GetData();
-        if (m_FindFileHandler -> CanOpen(m_Path + spec2)) 
+        if (m_FindFileHandler -> CanOpen(m_Path + spec2))
             return m_FindFileHandler -> FindFirst(m_Path + spec2, flags);
         node = node->GetNext();
-    } 
+    }
 
     node = m_Handlers.GetFirst();
     while (node)
@@ -370,9 +370,9 @@ wxString wxFileSystem::FindFirst(const wxString& spec, int flags)
         if (m_FindFileHandler -> CanOpen(spec2))
             return m_FindFileHandler -> FindFirst(spec2, flags);
         node = node->GetNext();
-    } 
-    
-    return wxEmptyString;   
+    }
+
+    return wxEmptyString;
 }
 
 
@@ -410,47 +410,47 @@ class wxFileSystemModule : public wxModule
         virtual bool OnInit()
         {
             wxFileSystem::AddHandler(new wxLocalFSHandler);
-            
+
             gs_FSMimeFallbacks = new wxFileTypeInfo[6];
-            gs_FSMimeFallbacks[0] = 
+            gs_FSMimeFallbacks[0] =
             wxFileTypeInfo("image/jpeg",
                            "",
                            "",
                            "JPEG image (from fallback)",
                            "jpg", "jpeg", NULL);
-            gs_FSMimeFallbacks[1] = 
+            gs_FSMimeFallbacks[1] =
             wxFileTypeInfo("image/gif",
                            "",
                            "",
                            "GIF image (from fallback)",
                            "gif", NULL);
-            gs_FSMimeFallbacks[2] = 
+            gs_FSMimeFallbacks[2] =
             wxFileTypeInfo("image/png",
                            "",
                            "",
                            "PNG image (from fallback)",
                            "png", NULL);
-            gs_FSMimeFallbacks[3] = 
+            gs_FSMimeFallbacks[3] =
             wxFileTypeInfo("image/bmp",
                            "",
                            "",
                            "windows bitmap image (from fallback)",
                            "bmp", NULL);
-            gs_FSMimeFallbacks[4] = 
+            gs_FSMimeFallbacks[4] =
             wxFileTypeInfo("text/html",
                            "",
                            "",
                            "HTML document (from fallback)",
                            "htm", "html", NULL);
-            gs_FSMimeFallbacks[5] = 
+            gs_FSMimeFallbacks[5] =
             // must terminate the table with this!
             wxFileTypeInfo();
-            
+
             return TRUE;
         }
         virtual void OnExit()
     	{
-            delete gs_FSMimeFallbacks;
+            delete [] gs_FSMimeFallbacks;
             wxFileSystem::CleanUpHandlers();
     	}
 };
