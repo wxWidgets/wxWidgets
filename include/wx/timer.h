@@ -41,7 +41,7 @@ public:
     // class: the owner will get timer notifications which can be handled with
     // EVT_TIMER
     wxTimerBase(wxEvtHandler *owner, int id = -1)
-        { Init(); SetOwner(owner, -1); }
+        { Init(); SetOwner(owner, id); }
 
     // same as ctor above
     void SetOwner(wxEvtHandler *owner, int id = -1)

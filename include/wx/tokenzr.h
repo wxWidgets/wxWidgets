@@ -92,7 +92,7 @@ public:
     // compatibility only, don't use
     void SetString(const wxString& to_tokenize,
                    const wxString& delims,
-                   bool ret_delim)
+                   bool WXUNUSED(ret_delim))
     {
         SetString(to_tokenize, delims, wxTOKEN_RET_DELIMS);
     }

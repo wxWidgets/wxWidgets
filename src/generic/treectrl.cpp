@@ -182,6 +182,23 @@ private:
 // implementation
 // =============================================================================
 
+// ----------------------------------------------------------------------------
+// private functions
+// ----------------------------------------------------------------------------
+
+// translate the key or mouse event flags to the type of selection we're
+// dealing with
+static void EventFlagsToSelType(long style,
+                                bool shiftDown,
+                                bool ctrlDown,
+                                bool *is_multiple,
+                                bool *extended_select,
+                                bool *unselect_others)
+{
+    *is_multiple = (style & wxTR_MULTIPLE) != 0;
+    *extended_select = shiftDown && is_multiple;
+    *unselect_others = !(extended_select || (ctrlDown && is_multiple));
+}
 
 // -----------------------------------------------------------------------------
 // wxTreeRenameTimer (internal)
@@ -302,7 +319,7 @@ wxGenericTreeItem::wxGenericTreeItem(wxGenericTreeItem *parent,
     m_parent = parent;
 
     m_attr = (wxTreeItemAttr *)NULL;
-  
+
     // We don't know the height here yet.
     m_width = 0;
     m_height = 0;
@@ -458,7 +475,7 @@ wxGenericTreeItem *wxGenericTreeItem::HitTest( const wxPoint& point,
     }
 
     flags|=wxTREE_HITTEST_NOWHERE;
-    
+
     return (wxGenericTreeItem*) NULL;
 }
 
@@ -781,7 +798,7 @@ wxTreeItemId wxTreeCtrl::GetNextChild(const wxTreeItemId& item, long& cookie) co
   wxArrayGenericTreeItems& children = item.m_pItem->GetChildren();
   if ( (size_t)cookie < children.Count() )
   {
-    return children.Item(cookie++);
+    return children.Item((size_t)cookie++);
   }
   else
   {
@@ -913,7 +930,7 @@ wxTreeItemId wxTreeCtrl::AddRoot(const wxString& text,
     if (!HasFlag(wxTR_MULTIPLE))
     {
         m_current = m_key_current = m_anchor;
-	    m_current->SetHilight( TRUE );
+        m_current->SetHilight( TRUE );
     }
 
     Refresh();
@@ -946,7 +963,7 @@ wxTreeItemId wxTreeCtrl::InsertItem(const wxTreeItemId& parentId,
     int index = parent->GetChildren().Index(idPrevious.m_pItem);
     wxASSERT_MSG( index != wxNOT_FOUND,
                   wxT("previous item in wxTreeCtrl::InsertItem() is not a sibling") );
-                
+
     return DoInsertItem(parentId, (size_t)++index, text, image, selImage, data);
 }
 
@@ -1171,7 +1188,7 @@ bool wxTreeCtrl::TagAllChildrenUntilLast(wxGenericTreeItem *crt_item, wxGenericT
     crt_item->SetHilight(select);
     RefreshLine(crt_item);
 
-    if (crt_item==last_item) 
+    if (crt_item==last_item)
         return TRUE;
 
     if (crt_item->HasChildren())
@@ -1180,9 +1197,9 @@ bool wxTreeCtrl::TagAllChildrenUntilLast(wxGenericTreeItem *crt_item, wxGenericT
         size_t count = children.Count();
         for ( size_t n = 0; n < count; ++n )
         {
-            if (TagAllChildrenUntilLast(children[n], last_item, select)) 
+            if (TagAllChildrenUntilLast(children[n], last_item, select))
                 return TRUE;
-	    }
+        }
     }
 
   return FALSE;
@@ -1195,7 +1212,7 @@ void wxTreeCtrl::SelectItemRange(wxGenericTreeItem *item1, wxGenericTreeItem *it
 
     // choice first' and 'last' between item1 and item2
     if (item1->GetY()<item2->GetY())
-    {   
+    {
         first=item1;
         last=item2;
     }
@@ -1433,16 +1450,16 @@ void wxTreeCtrl::SetImageList(wxImageList *imageList)
     m_lineHeight = (int)(dc.GetCharHeight() + 4);
     int width = 0, height = 0,
         n = m_imageListNormal->GetImageCount();
-        
+
     for (int i = 0; i < n ; i++)
     {
         m_imageListNormal->GetSize(i, width, height);
         if (height > m_lineHeight) m_lineHeight = height;
     }
 
-    if (m_lineHeight < 40) 
+    if (m_lineHeight < 40)
         m_lineHeight += 2;                 // at least 2 pixels
-    else 
+    else
         m_lineHeight += m_lineHeight/10;   // otherwise 10% extra spacing
 #endif
 }
@@ -1713,7 +1730,7 @@ void wxTreeCtrl::OnKillFocus( wxFocusEvent &WXUNUSED(event) )
 void wxTreeCtrl::OnChar( wxKeyEvent &event )
 {
     wxTreeEvent te( wxEVT_COMMAND_TREE_KEY_DOWN, GetId() );
-    te.m_code = event.KeyCode();
+    te.m_code = (int)event.KeyCode();
     te.SetEventObject( this );
     GetEventHandler()->ProcessEvent( te );
 
@@ -1723,9 +1740,12 @@ void wxTreeCtrl::OnChar( wxKeyEvent &event )
         return;
     }
 
-    bool is_multiple=(GetWindowStyleFlag() & wxTR_MULTIPLE);
-    bool extended_select=(event.ShiftDown() && is_multiple);
-    bool unselect_others=!(extended_select || (event.ControlDown() && is_multiple));
+    // how should the selection work for this event?
+    bool is_multiple, extended_select, unselect_others;
+    EventFlagsToSelType(GetWindowStyleFlag(),
+                        event.ShiftDown(),
+                        event.ControlDown(),
+                        &is_multiple, &extended_select, &unselect_others);
 
     switch (event.KeyCode())
     {
@@ -1905,8 +1925,8 @@ wxTreeItemId wxTreeCtrl::HitTest(const wxPoint& point, int& flags)
 
     wxClientDC dc(this);
     PrepareDC(dc);
-    long x = dc.DeviceToLogicalX( (long)point.x );
-    long y = dc.DeviceToLogicalY( (long)point.y );
+    wxCoord x = dc.DeviceToLogicalX( point.x );
+    wxCoord y = dc.DeviceToLogicalY( point.y );
     int w, h;
     GetSize(&w, &h);
 
@@ -1993,8 +2013,8 @@ void wxTreeCtrl::OnMouse( wxMouseEvent &event )
 
     wxClientDC dc(this);
     PrepareDC(dc);
-    long x = dc.DeviceToLogicalX( (long)event.GetX() );
-    long y = dc.DeviceToLogicalY( (long)event.GetY() );
+    wxCoord x = dc.DeviceToLogicalX( event.GetX() );
+    wxCoord y = dc.DeviceToLogicalY( event.GetY() );
 
     int flags=0;
     wxGenericTreeItem *item = m_anchor->HitTest( wxPoint(x,y), this, flags);
@@ -2026,12 +2046,12 @@ void wxTreeCtrl::OnMouse( wxMouseEvent &event )
     if (item == NULL) return;  /* we hit the blank area */
 
     if (event.RightDown()) {
-	wxTreeEvent nevent(wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK,GetId());
-	nevent.m_item=item;
-	nevent.m_code=0;
-	nevent.SetEventObject(this);
-	GetEventHandler()->ProcessEvent(nevent);
-	return;
+        wxTreeEvent nevent(wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK,GetId());
+        nevent.m_item=item;
+        nevent.m_code=0;
+        nevent.SetEventObject(this);
+        GetEventHandler()->ProcessEvent(nevent);
+        return;
     }
 
     if (event.LeftUp() && (item == m_current) &&
@@ -2042,9 +2062,12 @@ void wxTreeCtrl::OnMouse( wxMouseEvent &event )
         return;
     }
 
-    bool is_multiple=(GetWindowStyleFlag() & wxTR_MULTIPLE);
-    bool extended_select=(event.ShiftDown() && is_multiple);
-    bool unselect_others=!(extended_select || (event.ControlDown() && is_multiple));
+    // how should the selection work for this event?
+    bool is_multiple, extended_select, unselect_others;
+    EventFlagsToSelType(GetWindowStyleFlag(),
+                        event.ShiftDown(),
+                        event.ControlDown(),
+                        &is_multiple, &extended_select, &unselect_others);
 
     if (onButton)
     {
@@ -2105,9 +2128,9 @@ void wxTreeCtrl::CalculateSize( wxGenericTreeItem *item, wxDC &dc )
 
     int total_h = (image_h > text_h) ? image_h : text_h;
 
-    if (total_h < 40) 
+    if (total_h < 40)
         total_h += 2;            // at least 2 pixels
-    else 
+    else
         total_h += total_h/10;   // otherwise 10% extra spacing
 
     item->SetHeight(total_h);

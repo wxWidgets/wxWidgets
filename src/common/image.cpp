@@ -231,7 +231,7 @@ void wxImage::Replace( unsigned char r1, unsigned char g1, unsigned char b1,
     wxCHECK_RET( Ok(), wxT("invalid image") );
 
     char unsigned *data = GetData();
-    
+
     const int w = GetWidth();
     const int h = GetHeight();
 
@@ -888,7 +888,7 @@ wxBitmap wxImage::ConvertToBitmap() const
                         unsigned char cr = (*(ptdata++)) ;
                         unsigned char cg = (*(ptdata++)) ;
                         unsigned char cb = (*(ptdata++)) ;
-                        
+
                     if( ( cr !=r) || (cg!=g) || (cb!=b) )
                     {
                         *(ptbits++) = one;
@@ -1111,7 +1111,7 @@ wxBitmap wxImage::ConvertToBitmap() const
 
                 CGrafPtr         origPort ;
                 GDHandle        origDevice ;
-                
+
                 GetGWorld( &origPort , &origDevice ) ;
                 SetGWorld( bitmap.GetHBITMAP() , NULL ) ;
 
@@ -1230,7 +1230,7 @@ wxImage::wxImage( const wxBitmap &bitmap )
             ptbits += 3;
         }
         ptbits += padding;
-    }        
+    }
 
     // similarly, set data according to the possible mask bitmap
     if( bitmap.GetMask() && bitmap.GetMask()->GetMaskBitmap() )
@@ -1307,16 +1307,16 @@ wxBitmap wxImage::ConvertToMonoBitmap( unsigned char red, unsigned char green, u
     bitmap.SetWidth( width );
 
     bitmap.SetBitmap( gdk_pixmap_new( wxRootWindow->window, width, height, 1 ) );
-    
+
     bitmap.SetDepth( 1 );
 
     GdkVisual *visual = gdk_window_get_visual( wxRootWindow->window );
     wxASSERT( visual );
-    
+
     // Create picture image
 
     unsigned char *data_data = (unsigned char*)malloc( ((width >> 3)+8) * height );
-    
+
     GdkImage *data_image =
         gdk_image_new_bitmap( visual, data_data, width, height );
 
@@ -1361,10 +1361,10 @@ wxBitmap wxImage::ConvertToMonoBitmap( unsigned char red, unsigned char green, u
                 else
                     gdk_image_put_pixel( mask_image, x, y, 0 );
             }
-            
+
             if ((r == red) && (b == blue) && (g == green))
                 gdk_image_put_pixel( data_image, x, y, 1 );
-            else   
+            else
                 gdk_image_put_pixel( data_image, x, y, 0 );
 
         } // for
@@ -1413,7 +1413,7 @@ wxBitmap wxImage::ConvertToBitmap() const
 
     GdkVisual *visual = gdk_window_get_visual( wxRootWindow->window );
     wxASSERT( visual );
-    
+
     int bpp = visual->depth;
 
     bitmap.SetDepth( bpp );
@@ -1648,7 +1648,7 @@ wxImage::wxImage( const wxBitmap &bitmap )
     int green_shift_left = 0;
     int blue_shift_left = 0;
     bool use_shift = FALSE;
-    
+
     if (bitmap.GetPixmap())
     {
         GdkVisual *visual = gdk_window_get_visual( bitmap.GetPixmap() );
@@ -1662,7 +1662,7 @@ wxImage::wxImage( const wxBitmap &bitmap )
         green_shift_left = 8-visual->green_prec;
         blue_shift_right = visual->blue_shift;
         blue_shift_left = 8-visual->blue_prec;
-        
+
         use_shift = (visual->type == GDK_VISUAL_TRUE_COLOR) || (visual->type == GDK_VISUAL_DIRECT_COLOR);
     }
     if (bitmap.GetBitmap())
@@ -1670,7 +1670,7 @@ wxImage::wxImage( const wxBitmap &bitmap )
         bpp = 1;
     }
 
-    
+
     GdkColormap *cmap = gtk_widget_get_default_colormap();
 
     long pos = 0;
@@ -1699,17 +1699,17 @@ wxImage::wxImage( const wxBitmap &bitmap )
                 data[pos] =   (pixel >> red_shift_right)   << red_shift_left;
                 data[pos+1] = (pixel >> green_shift_right) << green_shift_left;
                 data[pos+2] = (pixel >> blue_shift_right)  << blue_shift_left;
-                } 
+                }
             else if (cmap->colors)
             {
                 data[pos] =   cmap->colors[pixel].red   >> 8;
                 data[pos+1] = cmap->colors[pixel].green >> 8;
                 data[pos+2] = cmap->colors[pixel].blue  >> 8;
-            } 
+            }
             else
             {
                 wxFAIL_MSG( wxT("Image conversion failed. Unknown visual type.") );
-            } 
+            }
 
             if (gdk_image_mask)
             {
@@ -2694,9 +2694,9 @@ struct wxRotationPixel
 
 struct wxRotationPoint
 {
-	wxRotationPoint (double _x, double _y) : x(_x), y(_y) {}
-	wxRotationPoint (const wxPoint & p) : x(p.x), y(p.y) {}
-	double x, y;
+    wxRotationPoint (double _x, double _y) : x(_x), y(_y) {}
+    wxRotationPoint (const wxPoint & p) : x(p.x), y(p.y) {}
+    double x, y;
 };
 
 static const wxRotationPixel gs_BlankPixel = {0,0,0};
@@ -2766,7 +2766,7 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
 
     if (offset_after_rotation != NULL)
     {
-    	*offset_after_rotation = wxPoint (x1, y1);
+        *offset_after_rotation = wxPoint (x1, y1);
     }
 
 
@@ -2822,34 +2822,34 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
                         // If the point is exactly at one point of the grid of the source
                         // image, then don't interpolate -- just assign the pixel
 
-                    if (d1 < gs_Epsilon)		// d1,d2,d3,d4 are positive -- no need for abs()
+                    if (d1 < gs_Epsilon)        // d1,d2,d3,d4 are positive -- no need for abs()
                     {
-                    	result_data[y][x] = v1;
+                        result_data[y][x] = v1;
                     }
                     else if (d2 < gs_Epsilon)
                     {
-                    	result_data[y][x] = v2;
+                        result_data[y][x] = v2;
                     }
                     else if (d3 < gs_Epsilon)
                     {
-                    	result_data[y][x] = v3;
+                        result_data[y][x] = v3;
                     }
                     else if (d4 < gs_Epsilon)
                     {
-                    	result_data[y][x] = v4;
+                        result_data[y][x] = v4;
                     }
                     else
                     {
-                    		// weights for the weighted average are proportional to the inverse of the distance
-		      const double w1 = 1/d1, w2 = 1/d2, w3 = 1/d3, w4 = 1/d4;
-                    	
-	                    for (int i = 0; i < 3; i++)     // repeat calculation for R, G, and B
-    	                {
-        	                result_data[y][x].rgb[i] =
-            	                (unsigned char) ( (w1 * v1.rgb[i] + w2 * v2.rgb[i] +
-                	                                         w3 * v3.rgb[i] + w4 * v4.rgb[i]) /
-                    	                                     (w1 + w2 + w3 + w4) );
-	                    }
+                        // weights for the weighted average are proportional to the inverse of the distance
+                        const double w1 = 1/d1, w2 = 1/d2, w3 = 1/d3, w4 = 1/d4;
+
+                        for (int i = 0; i < 3; i++)     // repeat calculation for R, G, and B
+                        {
+                            result_data[y][x].rgb[i] =
+                                (unsigned char) ( (w1 * v1.rgb[i] + w2 * v2.rgb[i] +
+                                                             w3 * v3.rgb[i] + w4 * v4.rgb[i]) /
+                                                             (w1 + w2 + w3 + w4) );
+                        }
                     }
                 }
                 else

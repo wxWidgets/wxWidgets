@@ -58,7 +58,7 @@ void _GSocket_Install_Callback(GSocket *socket, GSocketEvent event)
   switch (event)
   {
     case GSOCK_LOST:       /* fall-through */
-    case GSOCK_INPUT:      c = 0; break; 
+    case GSOCK_INPUT:      c = 0; break;
     case GSOCK_OUTPUT:     c = 1; break;
     case GSOCK_CONNECTION: c = ((socket->m_server) ? 0 : 1); break;
     default: return;
@@ -81,7 +81,7 @@ void _GSocket_Uninstall_Callback(GSocket *socket, GSocketEvent event)
   switch (event)
   {
     case GSOCK_LOST:       /* fall-through */
-    case GSOCK_INPUT:      c = 0; break; 
+    case GSOCK_INPUT:      c = 0; break;
     case GSOCK_OUTPUT:     c = 1; break;
     case GSOCK_CONNECTION: c = ((socket->m_server) ? 0 : 1); break;
     default: return;
@@ -105,4 +105,9 @@ void _GSocket_Disable_Events(GSocket *socket)
   _GSocket_Uninstall_Callback(socket, GSOCK_OUTPUT);
 }
 
-#endif /* wxUSE_SOCKETS */
+#else /* !wxUSE_SOCKETS */
+
+/* some compilers don't like having empty source files */
+static int wxDummyGsockVar = 0;
+
+#endif /* wxUSE_SOCKETS/!wxUSE_SOCKETS */

@@ -335,7 +335,7 @@ void wxLogGui::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
             }
 
             m_aMessages.Add(szString);
-            m_aSeverity.Add(level);
+            m_aSeverity.Add((int)level);
             m_aTimes.Add((long)t);
             m_bHasMessages = TRUE;
             break;
@@ -660,7 +660,7 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
     m_btnDetails = new wxButton(this, wxID_MORE, _T("&Details >>"));
     sizerButtons->Add(m_btnDetails, 0, wxCENTRE|wxTOP, MARGIN/2 - 1);
 
-    wxIcon icon = wxTheApp->GetStdIcon(style & wxICON_MASK);
+    wxIcon icon = wxTheApp->GetStdIcon((int)(style & wxICON_MASK));
     sizerAll->Add(new wxStaticBitmap(this, -1, icon), 0, wxCENTRE);
     const wxString& message = messages.Last();
     sizerAll->Add(CreateTextSizer(message), 0, wxCENTRE|wxLEFT|wxRIGHT, MARGIN);

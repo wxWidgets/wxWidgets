@@ -1298,7 +1298,8 @@ void wxPostScriptDC::DoDrawRotatedText( const wxString& text, wxCoord x, wxCoord
     long by = y + (long)floor( double(size) * 2.0 / 3.0 ); // approximate baseline
 
     // FIXME only correct for 90 degrees
-    fprintf(m_pstream, "%d %d moveto\n", XLOG2DEV(x + size), YLOG2DEV(by) );
+    fprintf(m_pstream, "%d %d moveto\n",
+            XLOG2DEV((wxCoord)(x + size)), YLOG2DEV(by) );
     fprintf(m_pstream, "%.8f rotate\n", angle);
 
     /* I don't know how to write char to a stream, so I use a mini string */
@@ -1336,8 +1337,8 @@ void wxPostScriptDC::DoDrawRotatedText( const wxString& text, wxCoord x, wxCoord
 
     if (m_font.GetUnderlined())
     {
-        long uy = (long)(y + size - m_underlinePosition);
-        long w, h;
+        wxCoord uy = (wxCoord)(y + size - m_underlinePosition);
+        wxCoord w, h;
         GetTextExtent(text, &w, &h);
 
         fprintf( m_pstream,
