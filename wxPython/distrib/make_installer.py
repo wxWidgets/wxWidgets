@@ -520,7 +520,7 @@ def main():
 
     MSLU=''
     if len(sys.argv) > 1 and sys.argv[1] == "UNICODE=1":
-        MSLU=r'Source: "%(WXDIR)s\lib\vc_dll\unicows.dll";  DestDir: "{code:GetPythonDir}"; Components: core' % vars()
+        MSLU=r'Source: "distrib\msw\unicows.dll";  DestDir: "{code:GetPythonDir}"; Components: core' % vars()
 
     f = open(ISSFILE, "w")
     f.write(ISS_Template % vars())
