@@ -412,8 +412,17 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
                 }
                 else
                 {
-                    wxxVariant nodeval ;
-                    callbacks->SetProperty( objectID, classInfo ,pi , ReadValue( prop , pi->GetTypeInfo() ) ) ;
+                    wxxVariant nodeval = ReadValue( prop , pi->GetTypeInfo() ) ;
+                    if( pi->GetFlags() & wxPROP_ENUM_STORE_LONG )
+                    {
+                        const wxEnumTypeInfo *eti = dynamic_cast<const wxEnumTypeInfo*>( pi->GetTypeInfo() ) ;
+                        wxASSERT_MSG( eti , wxT("Type must have enum - long conversion") ) ;
+
+                        long realval ;
+                        eti->ConvertToLong( nodeval , realval ) ;
+                        nodeval = wxxVariant( realval ) ;
+                    }
+                    callbacks->SetProperty( objectID, classInfo ,pi , nodeval ) ;
                 }
             }
         }

@@ -65,10 +65,8 @@ const wxClassInfo* wxObject::sm_classParentswxObject[] = { NULL } ;
  template<> void wxStringWriteValue(wxString & , wxObject* const & ){assert(0) ;}
  template<> void wxStringReadValue(const wxString & , wxObject & ){assert(0) ;}
  template<> void wxStringWriteValue(wxString & , wxObject const & ){assert(0) ;}
- template<> const wxTypeInfo* wxGetTypeInfo( wxObject ** )
- { static wxClassTypeInfo s_typeInfo(wxT_OBJECT_PTR , &wxObject::sm_classwxObject) ; return &s_typeInfo ; }
- template<> const wxTypeInfo* wxGetTypeInfo( wxObject * )
- { static wxClassTypeInfo s_typeInfo(wxT_OBJECT , &wxObject::sm_classwxObject) ; return &s_typeInfo ; }
+ wxClassTypeInfo s_typeInfo(wxT_OBJECT_PTR , &wxObject::sm_classwxObject , NULL , NULL , typeid(wxObject*).name() ) ; 
+ wxClassTypeInfo s_typeInfowxObject(wxT_OBJECT , &wxObject::sm_classwxObject , NULL , NULL , typeid(wxObject).name() ) ; 
 #else
 wxClassInfo wxObject::sm_classwxObject( wxT("wxObject"), 0, 0,
                                         (int) sizeof(wxObject),

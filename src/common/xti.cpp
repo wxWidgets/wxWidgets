@@ -241,71 +241,17 @@ template<> void wxStringWriteValue(wxString &s , const wxString &data )
 // built-ins
 //
 
-template<> const wxTypeInfo* wxGetTypeInfo( void * )
-{
-    static wxBuiltInTypeInfo s_typeInfo( wxT_VOID ) ;
-    return &s_typeInfo ;
-}
-
-template<> const wxTypeInfo* wxGetTypeInfo( bool * )
-{
-    static wxBuiltInTypeInfo s_typeInfo( wxT_BOOL , &wxToStringConverter<bool> , &wxFromStringConverter<bool>) ;
-    return &s_typeInfo ;
-}
-
-template<> const wxTypeInfo* wxGetTypeInfo( char * )
-{
-    static wxBuiltInTypeInfo s_typeInfo( wxT_CHAR , &wxToStringConverter<char> , &wxFromStringConverter<char>) ;
-    return &s_typeInfo ;
-}
-
-template<> const wxTypeInfo* wxGetTypeInfo( unsigned char * )
-{
-    static wxBuiltInTypeInfo s_typeInfo( wxT_UCHAR , &wxToStringConverter< unsigned char > , &wxFromStringConverter<unsigned char>) ;
-    return &s_typeInfo ;
-}
-
-template<> const wxTypeInfo* wxGetTypeInfo( int * )
-{
-    static wxBuiltInTypeInfo s_typeInfo( wxT_CHAR , &wxToStringConverter<int> , &wxFromStringConverter<int>) ;
-    return &s_typeInfo ;
-}
-
-template<> const wxTypeInfo* wxGetTypeInfo( unsigned int * )
-{
-    static wxBuiltInTypeInfo s_typeInfo( wxT_UCHAR , &wxToStringConverter<unsigned int> , &wxFromStringConverter<unsigned int>) ;
-    return &s_typeInfo ;
-}
-
-template<> const wxTypeInfo* wxGetTypeInfo( long * )
-{
-    static wxBuiltInTypeInfo s_typeInfo( wxT_LONG , &wxToStringConverter<long> , &wxFromStringConverter<long>) ;
-    return &s_typeInfo ;
-}
-
-template<> const wxTypeInfo* wxGetTypeInfo( unsigned long * )
-{
-    static wxBuiltInTypeInfo s_typeInfo( wxT_ULONG , &wxToStringConverter<unsigned long> , &wxFromStringConverter<unsigned long>) ;
-    return &s_typeInfo ;
-}
-
-template<> const wxTypeInfo* wxGetTypeInfo( float * )
-{
-    static wxBuiltInTypeInfo s_typeInfo( wxT_FLOAT , &wxToStringConverter<float> , &wxFromStringConverter<float>) ;
-    return &s_typeInfo ;
-}
-
-template<> const wxTypeInfo* wxGetTypeInfo( double * )
-{
-    static wxBuiltInTypeInfo s_typeInfo( wxT_DOUBLE , &wxToStringConverter<double> , &wxFromStringConverter<double>) ;
-    return &s_typeInfo ;
-}
-
-template<> const wxTypeInfo* wxGetTypeInfo( wxString * )
-{
-    static wxBuiltInTypeInfo s_typeInfo( wxT_STRING , &wxToStringConverter<wxString> , &wxFromStringConverter<wxString>) ;
-    return &s_typeInfo ;
-}
+wxBuiltInTypeInfo s_typeInfovoid( wxT_VOID , NULL , NULL , typeid(void).name() ) ;
+wxBuiltInTypeInfo s_typeInfobool( wxT_BOOL , &wxToStringConverter<bool> , &wxFromStringConverter<bool>, typeid(bool).name()) ;
+wxBuiltInTypeInfo s_typeInfochar( wxT_CHAR , &wxToStringConverter<char> , &wxFromStringConverter<char>, typeid(char).name()) ;
+wxBuiltInTypeInfo s_typeInfounsignedchar( wxT_UCHAR , &wxToStringConverter< unsigned char > , &wxFromStringConverter<unsigned char>, typeid(unsigned char).name()) ;
+wxBuiltInTypeInfo s_typeInfoint( wxT_INT , &wxToStringConverter<int> , &wxFromStringConverter<int>, typeid(int).name()) ;
+wxBuiltInTypeInfo s_typeInfounsignedint( wxT_UINT , &wxToStringConverter<unsigned int> , &wxFromStringConverter<unsigned int>, typeid(unsigned int).name()) ;
+wxBuiltInTypeInfo s_typeInfolong( wxT_LONG , &wxToStringConverter<long> , &wxFromStringConverter<long>, typeid(long).name()) ;
+wxBuiltInTypeInfo s_typeInfounsignedlong( wxT_ULONG , &wxToStringConverter<unsigned long> , &wxFromStringConverter<unsigned long>, typeid(unsigned long).name()) ;
+wxBuiltInTypeInfo s_typeInfofloat( wxT_FLOAT , &wxToStringConverter<float> , &wxFromStringConverter<float>, typeid(float).name()) ;
+wxBuiltInTypeInfo s_typeInfodouble( wxT_DOUBLE , &wxToStringConverter<double> , &wxFromStringConverter<double>, typeid(double).name()) ;
+wxBuiltInTypeInfo s_typeInfowxString( wxT_STRING , &wxToStringConverter<wxString> , &wxFromStringConverter<wxString>, typeid(wxString).name()) ;
 
 // this are compiler induced specialization which are never used anywhere
 
@@ -328,11 +274,13 @@ wxTypeInfoMap *wxTypeInfo::sm_typeTable = NULL ;
 
 wxTypeInfo *wxTypeInfo::FindType(const wxChar *typeName)
 {
-    return (wxTypeInfo *)sm_typeTable->find(typeName)->second;
+    wxTypeInfoMap::iterator iter = sm_typeTable->find(typeName) ;
+    wxASSERT_MSG( iter != sm_typeTable->end() , wxT("lookup for a non-existent type-info") ) ;
+    return (wxTypeInfo *)iter->second;
 }
 
-wxClassTypeInfo::wxClassTypeInfo( wxTypeKind kind , wxClassInfo* classInfo , converterToString_t to , converterFromString_t from ) :
-wxTypeInfo( kind , to , from , classInfo->GetClassName() )
+wxClassTypeInfo::wxClassTypeInfo( wxTypeKind kind , wxClassInfo* classInfo , converterToString_t to , converterFromString_t from , const wxString &name) :
+wxTypeInfo( kind , to , from , name)
 { wxASSERT_MSG( kind == wxT_OBJECT_PTR || kind == wxT_OBJECT , wxT("Illegal Kind for Enum Type")) ; m_classInfo = classInfo ;}
 
 wxDelegateTypeInfo::wxDelegateTypeInfo( int eventType , wxClassInfo* eventClass , converterToString_t to , converterFromString_t from ) :
@@ -371,6 +319,50 @@ void wxSetStringToArray( const wxString &s , wxArrayString &array )
 // wxClassInfo
 // ----------------------------------------------------------------------------
 
+wxPropertyInfo::~wxPropertyInfo()
+{
+    if ( this == m_itsClass->m_firstProperty )
+    {
+        m_itsClass->m_firstProperty = m_next;
+    }
+    else
+    {
+        wxPropertyInfo *info = m_itsClass->m_firstProperty;
+        while (info)
+        {
+            if ( info->m_next == this )
+            {
+                info->m_next = m_next;
+                break;
+            }
+
+            info = info->m_next;
+        }
+    }
+}
+
+wxHandlerInfo::~wxHandlerInfo()
+{
+    if ( this == m_itsClass->m_firstHandler )
+    {
+        m_itsClass->m_firstHandler = m_next;
+    }
+    else
+    {
+        wxHandlerInfo *info = m_itsClass->m_firstHandler;
+        while (info)
+        {
+            if ( info->m_next == this )
+            {
+                info->m_next = m_next;
+                break;
+            }
+
+            info = info->m_next;
+        }
+    }
+}
+
 const wxPropertyAccessor *wxClassInfo::FindAccessor(const char *PropertyName) const
 {
     const wxPropertyInfo* info = FindPropertyInfo( PropertyName ) ;
@@ -381,9 +373,9 @@ const wxPropertyAccessor *wxClassInfo::FindAccessor(const char *PropertyName) co
     return NULL ;
 }
 
-const wxPropertyInfo *wxClassInfo::FindPropertyInfoInThisClass (const char *PropertyName) const
+wxPropertyInfo *wxClassInfo::FindPropertyInfoInThisClass (const char *PropertyName) const
 {
-    const wxPropertyInfo* info = GetFirstProperty() ;
+    wxPropertyInfo* info = m_firstProperty ;
 
     while( info )
     {
@@ -411,9 +403,9 @@ const wxPropertyInfo *wxClassInfo::FindPropertyInfo (const char *PropertyName) c
     return 0;
 }
 
-const wxHandlerInfo *wxClassInfo::FindHandlerInfoInThisClass (const char *PropertyName) const
+wxHandlerInfo *wxClassInfo::FindHandlerInfoInThisClass (const char *PropertyName) const
 {
-    const wxHandlerInfo* info = GetFirstHandler() ;
+    wxHandlerInfo* info = m_firstHandler ;
 
     while( info )
     {
@@ -638,22 +630,40 @@ wxxVariant wxDynamicClassInfo::GetProperty(wxObject *object, const char *propert
 
 void wxDynamicClassInfo::AddProperty( const wxChar *propertyName , const wxTypeInfo* typeInfo )
 {
-    new wxPropertyInfo( m_firstProperty , this , propertyName , typeInfo , new wxGenericPropertyAccessor( propertyName ) , wxxVariant() ) ;
+    new wxPropertyInfo( m_firstProperty , this , propertyName , typeInfo->GetTypeName() , new wxGenericPropertyAccessor( propertyName ) , wxxVariant() ) ;
 }
 
 void wxDynamicClassInfo::AddHandler( const wxChar *handlerName , wxObjectEventFunction address , const wxClassInfo* eventClassInfo )
 {
-    new wxHandlerInfo( m_firstHandler , handlerName , address , eventClassInfo ) ;
+    new wxHandlerInfo( m_firstHandler , this , handlerName , address , eventClassInfo ) ;
 }
 
 // removes an existing runtime-property
 void wxDynamicClassInfo::RemoveProperty( const wxChar *propertyName ) 
 {
+    delete FindPropertyInfoInThisClass(propertyName) ;
 }
 
 // removes an existing runtime-handler
 void wxDynamicClassInfo::RemoveHandler( const wxChar *handlerName ) 
 {
+    delete FindHandlerInfoInThisClass(handlerName) ;
+}
+
+// renames an existing runtime-property
+void wxDynamicClassInfo::RenameProperty( const wxChar *oldPropertyName , const wxChar *newPropertyName ) 
+{
+    wxPropertyInfo* pi = FindPropertyInfoInThisClass(oldPropertyName) ;
+    wxASSERT_MSG( pi ,wxT("not existing property") ) ;
+    pi->m_name = newPropertyName ;
+    dynamic_cast<wxGenericPropertyAccessor*>(pi->GetAccessor())->RenameProperty( oldPropertyName , newPropertyName ) ;
+}
+
+// renames an existing runtime-handler
+void wxDynamicClassInfo::RenameHandler( const wxChar *oldHandlerName , const wxChar *newHandlerName ) 
+{
+    wxASSERT_MSG(FindHandlerInfoInThisClass(oldHandlerName),wxT("not existing handler") ) ;
+    FindHandlerInfoInThisClass(oldHandlerName)->m_name = newHandlerName ;
 }
 
 // ----------------------------------------------------------------------------
