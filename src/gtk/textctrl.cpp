@@ -126,7 +126,7 @@ void wxTextCtrl::WriteText( const wxString &text )
   
   if (m_windowStyle & wxTE_MULTILINE)
   {
-    gint len = gtk_text_get_length( GTK_TEXT(m_widget) ) - 1;
+    gint len = gtk_text_get_length( GTK_TEXT(m_widget) );
     gtk_editable_insert_text( GTK_EDITABLE(m_widget), text, text.Length(), &len );
   }
   else
@@ -137,11 +137,15 @@ void wxTextCtrl::WriteText( const wxString &text )
 
 bool wxTextCtrl::LoadFile( const wxString &WXUNUSED(file) )
 {
+  wxFAIL_MSG("wxTextCtrl::LoadFile not implemented");
+
   return FALSE;
 };
 
 bool wxTextCtrl::SaveFile( const wxString &WXUNUSED(file) )
 {
+  wxFAIL_MSG("wxTextCtrl::SaveFile not implemented");
+
   return FALSE;
 };
 
@@ -211,6 +215,7 @@ void wxTextCtrl::SetSelection( const long from, const long to )
 
 void wxTextCtrl::ShowPosition( const long WXUNUSED(pos) )
 {
+  wxFAIL_MSG("wxTextCtrl::ShowPosition not implemented");
 };
 
 long wxTextCtrl::GetInsertionPoint(void) const
