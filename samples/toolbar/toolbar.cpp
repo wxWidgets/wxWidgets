@@ -120,8 +120,6 @@ public:
 
     void OnUpdateCopyAndCut(wxUpdateUIEvent& event);
 
-    void OnToggleFullScreen(wxCommandEvent& event);
-
 #if USE_GENERIC_TBAR
     virtual wxToolBar *OnCreateToolBar(long style,
                                        wxWindowID id,
@@ -163,7 +161,6 @@ enum
     IDM_TOOLBAR_DELETEPRINT,
     IDM_TOOLBAR_INSERTPRINT,
     IDM_TOOLBAR_TOGGLEHELP,
-    IDM_TOOLBAR_TOGGLEFULLSCREEN,
     IDM_TOOLBAR_TOGGLE_ANOTHER_TOOLBAR,
     IDM_TOOLBAR_CHANGE_TOOLTIP,
 
@@ -193,7 +190,6 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(IDM_TOOLBAR_DELETEPRINT, MyFrame::OnDeletePrint)
     EVT_MENU(IDM_TOOLBAR_INSERTPRINT, MyFrame::OnInsertPrint)
     EVT_MENU(IDM_TOOLBAR_TOGGLEHELP, MyFrame::OnToggleHelp)
-    EVT_MENU(IDM_TOOLBAR_TOGGLEFULLSCREEN, MyFrame::OnToggleFullScreen)
     EVT_MENU(IDM_TOOLBAR_CHANGE_TOOLTIP, MyFrame::OnChangeToolTip)
 
     EVT_MENU(-1, MyFrame::OnToolLeftClick)
@@ -246,7 +242,7 @@ void MyFrame::RecreateToolbar()
     style |= m_horzToolbar ? wxTB_HORIZONTAL : wxTB_VERTICAL;
 
     toolBar = CreateToolBar(style, ID_TOOLBAR);
-    toolBar->SetMargins( 4, 4 );
+    //toolBar->SetMargins( 4, 4 );
 
     // Set up toolbar
     wxBitmap toolBarBitmaps[8];
@@ -389,8 +385,6 @@ MyFrame::MyFrame(wxFrame* parent,
     tbarMenu->Append(IDM_TOOLBAR_TOGGLEHELP, "Toggle &help button\tCtrl-T", "");
     tbarMenu->AppendSeparator();
     tbarMenu->Append(IDM_TOOLBAR_CHANGE_TOOLTIP, "Change tool tip", "");
-    tbarMenu->AppendSeparator();
-    tbarMenu->Append(IDM_TOOLBAR_TOGGLEFULLSCREEN, "Toggle &full screen mode\tCtrl-F", "");
 
     wxMenu *fileMenu = new wxMenu;
     fileMenu->Append(wxID_EXIT, "E&xit", "Quit toolbar sample" );
@@ -602,10 +596,5 @@ void MyFrame::OnToolEnter(wxCommandEvent& event)
     }
     else
         SetStatusText("");
-}
-
-void MyFrame::OnToggleFullScreen(wxCommandEvent& event)
-{
-    ShowFullScreen(!IsFullScreen());
 }
 
