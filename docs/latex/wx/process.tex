@@ -1,6 +1,6 @@
 \section{\class{wxProcess}}\label{wxprocess}
 
-The objects of this class are used in conjunction with 
+The objects of this class are used in conjunction with the 
 \helpref{wxExecute}{wxexecute} function. When a wxProcess object is passed to
 wxExecute(), its \helpref{OnTerminate()}{wxprocessonterminate} virtual method
 is called when the process terminates. This allows the program to be
@@ -96,7 +96,7 @@ of the child process.
 
 \constfunc{wxInputStream* }{GetInputStream}{\void}
 
-It returns a output stream corresponding to the standard output stream of the
+It returns an input stream corresponding to the standard output stream of the
 subprocess. If it is NULL, you have not turned on the redirection.
 See \helpref{wxProcess::Redirect}{wxprocessredirect}.
 
@@ -123,7 +123,7 @@ It raises a wxWindows event when it isn't overridden.
 
 \func{void}{Redirect}{\void}
 
-It turns on the redirection, wxExecute will try to open a couple of pipes
+Turns on redirection. wxExecute will try to open a couple of pipes
 to catch the subprocess stdio. The caught input stream is returned by
 GetOutputStream() as a non-seekable stream. The caught output stream is returned
 by GetInputStream() as a non-seekable stream.
