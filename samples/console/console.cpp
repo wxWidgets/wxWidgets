@@ -44,8 +44,8 @@
 //#define TEST_EXECUTE
 //#define TEST_FILE
 //#define TEST_FILECONF
-#define TEST_FILENAME
-//#define TEST_FTP
+//#define TEST_FILENAME
+#define TEST_FTP
 //#define TEST_HASH
 //#define TEST_LIST
 //#define TEST_LOG
@@ -1481,9 +1481,46 @@ static void TestProtocolFtp()
     puts("*** Testing wxFTP download ***\n");
 
     wxFTP ftp;
+
+#ifdef TEST_WUFTPD // test (fixed?) wxFTP bug with wu-ftpd >= 2.6.0?
+    static const char *hostname = "ftp.eudora.com";
+    if ( !ftp.Connect(hostname) )
+    {
+        printf("ERROR: failed to connect to %s\n", hostname);
+    }
+    else
+    {
+        static const char *filename = "eudora/pubs/draft-gellens-submit-09.txt";
+        wxInputStream *in = ftp.GetInputStream(filename);
+        if ( !in )
+        {
+            printf("ERROR: couldn't get input stream for %s\n", filename);
+        }
+        else
+        {
+            size_t size = in->StreamSize();
+            printf("Reading file %s (%u bytes)...", filename, size);
+
+            char *data = new char[size];
+            if ( !in->Read(data, size) )
+            {
+                puts("ERROR: read error");
+            }
+            else
+            {
+                printf("Successfully retrieved the file.\n");
+            }
+
+            delete [] data;
+            delete in;
+        }
+    }
+#else // !TEST_WUFTPD
+
 #if 1
     static const char *hostname = "ftp.wxwindows.org";
     static const char *directory = "pub";
+    static const char *filename = "welcome.msg";
 
     printf("--- Attempting to connect to %s:21 anonymously...\n", hostname);
 #else
@@ -1550,7 +1587,6 @@ static void TestProtocolFtp()
         }
 
         // test RETR
-        static const char *filename = "welcome.msg";
         wxInputStream *in = ftp.GetInputStream(filename);
         if ( !in )
         {
@@ -1595,6 +1631,7 @@ static void TestProtocolFtp()
                    ftp.GetLastResult().c_str());
         }
     }
+#endif // TEST_WUFTPD/!TEST_WUFTPD
 }
 
 static void TestProtocolFtpUpload()
