@@ -152,12 +152,7 @@ control-files-stamp: debian/control
 		sed -e 's/=V/$(release)/g' < debian/libwxgtk-dbg.$$f \
 			> debian/$(package_gtk_dbg).$$f; \
 	done;
-	@for f in dirs links postinst prerm; do \
-		echo "generating control file $(package_gtk_univ).$$f"; \
-		sed -e 's/=V/$(release)/g' < debian/libwxgtk-univ.$$f \
-			> debian/$(package_gtk_univ).$$f; \
-	done;
-	@for f in dirs docs files postinst prerm; do \
+	@for f in dirs docs files menu postinst prerm; do \
 		echo "generating control file $(package_gtk_py).$$f"; \
 		sed -e 's/=PY/$(python_dir)/g;s/=V/$(release)/g' < debian/libwxgtk-python.$$f \
 			> debian/$(package_gtk_py).$$f; \
@@ -211,6 +206,11 @@ control-files-stamp: debian/control
 		echo "generating control file $(package_headers_msw).$$f"; \
 		sed -e 's/=H/$(cross_host)/g' < debian/wxwin-headers-msw.$$f \
 			> debian/$(package_headers_msw).$$f; \
+	done;
+	@for f in dirs links postinst prerm; do \
+		echo "generating control file $(package_gtk_univ).$$f"; \
+		sed -e 's/=V/$(release)/g' < debian/libwxgtk-univ.$$f \
+			> debian/$(package_gtk_univ).$$f; \
 	done;
 	touch $@
 
@@ -507,7 +507,6 @@ clean: debian/control
 	rm -f debian/$(package_gtk_lib).*
 	rm -f debian/$(package_gtk_dev).*
 	rm -f debian/$(package_gtk_dbg).*
-	rm -f debian/$(package_gtk_univ).*
 	rm -f debian/$(package_gtk_py).*
 	rm -f debian/$(package_gtk_contrib).*
 	rm -f debian/$(package_gtk_contrib_dev).*
@@ -515,6 +514,7 @@ clean: debian/control
 	rm -f debian/$(package_i18n).*
 	rm -f debian/$(package_doc).*
 	rm -f debian/$(package_examples).*
+	rm -f debian/$(package_gtk_univ).*
 	rm -f debian/$(package_wxbase_msw_dev).*
 	rm -f debian/$(package_wxbase_msw_dbg).*
 	rm -f debian/$(package_msw_dev).*
