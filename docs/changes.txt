@@ -1,6 +1,27 @@
 wxWindows 2 Change Log
 ----------------------
 
+2.1.16
+------
+
+wxBase:
+
+All (GUI):
+
+wxMSW:
+
+- Various bug fixes
+- Added wxCHMHelpController, for invoking MS HTML Help
+  files. This works under VC++ only
+
+wxGTK:
+
+- Various bug fixes
+
+wxMotif:
+
+- Various bug fixes
+
 2.1.15
 ------
 

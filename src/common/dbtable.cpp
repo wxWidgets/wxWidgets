@@ -702,7 +702,7 @@ bool wxDbTable::Open(void)
                 return(pDb->DispAllErrors(henv, hdbc, hstmtInsert));
         }
 		  else 
-            insertable= false;
+            insertable= FALSE;
     }
     
     // Completed successfully

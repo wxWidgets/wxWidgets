@@ -399,6 +399,10 @@ typedef int wxWindowID;
 #    define WXDLLEXPORT_DATA(type) type
 #    define WXDLLEXPORT_CTORFN
 #  endif
+#else
+#    define WXDLLEXPORT
+#    define WXDLLEXPORT_DATA(type) type
+#    define WXDLLEXPORT_CTORFN
 #endif
 
 #elif defined(__WXPM__)

@@ -456,7 +456,8 @@ Here are the steps required:
 - Edit wx/src/makeg95.env and set the MINGW32 variable at the top of
   the file to either 1 (you have Mingw32) or 0 (you have Cygwin32).
   If using MINGW32, also set the MINGW32VERSION variable
-  appropriately.
+  appropriately. Note: Cygwin 1.1.0 and above may
+  need MINGW32 set to 1 to compile properly.
 
 - Set your WXWIN variable to where wxWindows is installed.
   *** IMPORTANT: For Cygwin/Mingw32, use forward slashes in the path, not

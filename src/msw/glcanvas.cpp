@@ -179,7 +179,7 @@ wxGLCanvas::wxGLCanvas( wxWindow *parent,
     m_glContext = new wxGLContext(TRUE, this, palette, shared );
 }
 
-// Not very usefull for wxMSW, but this is to be wxGTK compliant
+// Not very useful for wxMSW, but this is to be wxGTK compliant
 
 wxGLCanvas::wxGLCanvas( wxWindow *parent, const wxGLCanvas *shared, wxWindowID id,
                         const wxPoint& pos, const wxSize& size, long style, const wxString& name,
@@ -218,6 +218,17 @@ wxGLCanvas::~wxGLCanvas()
 bool wxGLCanvas::Create(wxWindow *parent, wxWindowID id,
               const wxPoint& pos, const wxSize& size, long style, const wxString& name)
 {
+/* Suggestion from Kelly Brock <kbrock@8cs.com> (not yet implemented):
+
+OpenGL corruption fix is simple assuming it doesn't screw anything else
+up.  Add the following line to the top of the create function:
+        wxSize parentSize = GetClientSize();
+        All locations within the function that use 'size' are changed to
+'parentSize'.
+        The above corrects the initial display corruption with the GeForce and
+TNT2, not sure about other NVidia cards yet.
+*/
+
     static bool registeredGLCanvasClass = FALSE;
 
     // We have to register a special window class because we need
@@ -282,9 +293,17 @@ bool wxGLCanvas::Create(wxWindow *parent, wxWindowID id,
     if ( style & wxTHICK_FRAME )
         msflags |= WS_THICKFRAME;
 
-    msflags |= WS_CHILD | WS_VISIBLE;
-    if ( style & wxCLIP_CHILDREN )
-        msflags |= WS_CLIPCHILDREN;
+/*
+        A general rule with OpenGL and Win32 is that any window that will have a
+        HGLRC built for it must have two flags:  WS_CLIPCHILDREN & WS_CLIPSIBLINGS.
+        You can find references about this within the knowledge base and most OpenGL
+        books that contain the wgl function descriptions.
+*/
+
+    msflags |= WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS;
+//    if ( style & wxCLIP_CHILDREN )
+//        msflags |= WS_CLIPCHILDREN;
+    msflags |= WS_CLIPCHILDREN;
 
     bool want3D;
     WXDWORD exStyle = Determine3DEffects(WS_EX_CLIENTEDGE, &want3D);
