@@ -85,7 +85,7 @@ protected:
     HWND          m_hwnd;         // window we're associated with
 
     // get default drop effect for given keyboard flags
-    static inline DWORD GetDropEffect(DWORD flags);
+    static inline DWORD GetDropEffect(DWORD flags, wxDragResult defaultAction);
 
     DECLARE_NO_COPY_CLASS(wxIDropTarget)
 };
@@ -109,8 +109,10 @@ static DWORD ConvertDragResultToEffect(wxDragResult result);
 // Notes   : We do "move" normally and "copy" if <Ctrl> is pressed,
 //           which is the standard behaviour (currently there is no
 //           way to redefine it)
-DWORD wxIDropTarget::GetDropEffect(DWORD flags)
+DWORD wxIDropTarget::GetDropEffect(DWORD flags, wxDragResult defaultAction)
 {
+  if (defaultAction == wxDragCopy)
+    return flags & MK_SHIFT ? DROPEFFECT_MOVE : DROPEFFECT_COPY;
   return flags & MK_CONTROL ? DROPEFFECT_COPY : DROPEFFECT_MOVE;
 }
 
@@ -189,8 +191,8 @@ STDMETHODIMP wxIDropTarget::DragEnter(IDataObject *pIDataSource,
 
     // give some visual feedback
     *pdwEffect = ConvertDragResultToEffect(
-                    m_pTarget->OnEnter(pt.x, pt.y,
-                        ConvertDragEffectToResult(GetDropEffect(grfKeyState))
+        m_pTarget->OnEnter(pt.x, pt.y, ConvertDragEffectToResult(
+            GetDropEffect(grfKeyState, m_pTarget->GetDefaultAction()))
                     )
                  );
 
@@ -214,7 +216,8 @@ STDMETHODIMP wxIDropTarget::DragOver(DWORD   grfKeyState,
 
     wxDragResult result;
     if ( m_pIDataObject ) {
-        result = ConvertDragEffectToResult(GetDropEffect(grfKeyState));
+        result = ConvertDragEffectToResult(
+            GetDropEffect(grfKeyState, m_pTarget->GetDefaultAction()));
     }
     else {
         // can't accept data anyhow normally
@@ -286,7 +289,8 @@ STDMETHODIMP wxIDropTarget::Drop(IDataObject *pIDataSource,
         m_pTarget->SetDataSource(pIDataSource);
 
         // and now it has the data
-        wxDragResult rc = ConvertDragEffectToResult(GetDropEffect(grfKeyState));
+        wxDragResult rc = ConvertDragEffectToResult(
+            GetDropEffect(grfKeyState, m_pTarget->GetDefaultAction()));
         rc = m_pTarget->OnData(pt.x, pt.y, rc);
         if ( wxIsDragResultOk(rc) ) {
             // operation succeeded

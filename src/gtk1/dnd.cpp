@@ -187,6 +187,9 @@ static gboolean target_drag_motion( GtkWidget *WXUNUSED(widget),
     // only good if we don't have our own preferences - but also the actions
     // field
     wxDragResult result;
+    if (drop_target->GetDefaultAction() == wxDragNone)
+    {
+        // use default action set by wxDropSource::DoDragDrop()
     if ( (gs_flagsForDrag & wxDrag_DefaultMove) == wxDrag_DefaultMove &&
             (context->actions & GDK_ACTION_MOVE ) )
     {
@@ -204,6 +207,21 @@ static gboolean target_drag_motion( GtkWidget *WXUNUSED(widget),
             result = wxDragCopy;
         }
     }
+    }
+    else if (drop_target->GetDefaultAction() == wxDragMove &&
+                (context->actions & GDK_ACTION_MOVE))
+    {
+       result = wxDragMove;
+    }
+    else
+    {
+        if (context->actions & GDK_ACTION_COPY)
+            result = wxDragCopy;
+        else if (context->actions & GDK_ACTION_MOVE)
+            result = wxDragMove;
+        else
+            result = wxDragNone;
+    }
 
     if (drop_target->m_firstMotion)
     {
@@ -220,9 +238,7 @@ static gboolean target_drag_motion( GtkWidget *WXUNUSED(widget),
     if (ret)
     {
         GdkDragAction action;
-        if ((result == wxDragCopy) && (context->actions & GDK_ACTION_COPY) ||
-            (result == wxDragMove) && !(context->actions & GDK_ACTION_MOVE) ||
-            (result == wxDragLink) && !(context->actions & GDK_ACTION_LINK))
+        if (result == wxDragCopy)
             action = GDK_ACTION_COPY;
         else if (result == wxDragLink)
             action = GDK_ACTION_LINK;
