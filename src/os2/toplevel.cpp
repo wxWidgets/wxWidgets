@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        msw/toplevel.cpp
-// Purpose:     implements wxTopLevelWindow for MSW
+// Name:        os2/toplevel.cpp
+// Purpose:     implements wxTopLevelWindow for OS/2
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     30.12.01
@@ -223,48 +223,47 @@ WXDWORD wxTopLevelWindowOS2::OS2GetStyle(
                                                                      ,pdwExflags
                                                                     );
 
-    if (lStyle == wxDEFAULT_FRAME_STYLE)
+    if ((lStyle & wxDEFAULT_FRAME_STYLE) == wxDEFAULT_FRAME_STYLE)
         lMsflags |= FCF_SIZEBORDER | FCF_TITLEBAR | FCF_SYSMENU |
                     FCF_MINMAX | FCF_TASKLIST;
+
+    if ((lStyle & wxCAPTION) == wxCAPTION)
+        lMsflags |= FCF_TASKLIST;
     else
+        lMsflags |= FCF_NOMOVEWITHOWNER;
+
+    if ((lStyle & wxVSCROLL) == wxVSCROLL)
+        lMsflags |= FCF_VERTSCROLL;
+    if ((lStyle & wxHSCROLL) == wxHSCROLL)
+        lMsflags |= FCF_HORZSCROLL;
+    if (lStyle & wxMINIMIZE_BOX)
+        lMsflags |= FCF_MINBUTTON;
+    if (lStyle & wxMAXIMIZE_BOX)
+        lMsflags |= FCF_MAXBUTTON;
+    if (lStyle & wxTHICK_FRAME)
+        lMsflags |= FCF_DLGBORDER;
+    if (lStyle & wxSYSTEM_MENU)
+        lMsflags |= FCF_SYSMENU;
+    if (lStyle & wxCAPTION)
+        lMsflags |= FCF_TASKLIST;
+    if (lStyle & wxCLIP_CHILDREN)
     {
-        if ((lStyle & wxCAPTION) == wxCAPTION)
-            lMsflags |= FCF_TASKLIST;
-        else
-            lMsflags |= FCF_NOMOVEWITHOWNER;
-
-        if ((lStyle & wxVSCROLL) == wxVSCROLL)
-            lMsflags |= FCF_VERTSCROLL;
-        if ((lStyle & wxHSCROLL) == wxHSCROLL)
-            lMsflags |= FCF_HORZSCROLL;
-        if (lStyle & wxMINIMIZE_BOX)
-            lMsflags |= FCF_MINBUTTON;
-        if (lStyle & wxMAXIMIZE_BOX)
-            lMsflags |= FCF_MAXBUTTON;
-        if (lStyle & wxTHICK_FRAME)
-            lMsflags |= FCF_DLGBORDER;
-        if (lStyle & wxSYSTEM_MENU)
-            lMsflags |= FCF_SYSMENU;
-        if (lStyle & wxCAPTION)
-            lMsflags |= FCF_TASKLIST;
-        if (lStyle & wxCLIP_CHILDREN)
-        {
-            // Invalid for frame windows under PM
-        }
-
-        if (lStyle & wxTINY_CAPTION_VERT)
-            lMsflags |= FCF_TASKLIST;
-        if (lStyle & wxTINY_CAPTION_HORIZ)
-            lMsflags |= FCF_TASKLIST;
-
-        if ((lStyle & wxTHICK_FRAME) == 0)
-            lMsflags |= FCF_BORDER;
-        if (lStyle & wxFRAME_TOOL_WINDOW)
-            *pdwExflags = kFrameToolWindow;
-
-        if (lStyle & wxSTAY_ON_TOP)
-            lMsflags |= FCF_SYSMODAL;
+        // Invalid for frame windows under PM
     }
+
+    if (lStyle & wxTINY_CAPTION_VERT)
+        lMsflags |= FCF_TASKLIST;
+    if (lStyle & wxTINY_CAPTION_HORIZ)
+        lMsflags |= FCF_TASKLIST;
+
+    if ((lStyle & wxTHICK_FRAME) == 0)
+        lMsflags |= FCF_BORDER;
+    if (lStyle & wxFRAME_TOOL_WINDOW)
+        *pdwExflags = kFrameToolWindow;
+
+    if (lStyle & wxSTAY_ON_TOP)
+        lMsflags |= FCF_SYSMODAL;
+
     return lMsflags;
 } // end of wxTopLevelWindowOS2::OS2GetCreateWindowFlags
 
