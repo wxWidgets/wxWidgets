@@ -3855,9 +3855,14 @@ wxGrid::wxGrid( wxWindow *parent,
     m_colMinWidths(GRID_HASH_SIZE),
     m_rowMinHeights(GRID_HASH_SIZE)
 {
-    // Can't use SetBestFittingSize here to avoid a crash as CreateGrid hasn't
-    // been called yet.
-    SetMinSize(size);  
+    // in order to make sure that a size event is not
+    // trigerred in a unfinished state
+    m_cornerLabelWin = NULL ;
+    m_rowLabelWin = NULL ;
+    m_colLabelWin = NULL ;
+    m_gridWin = NULL ;
+
+    SetBestFittingSize(size);
     Create();
 }
 
@@ -3872,9 +3877,7 @@ bool wxGrid::Create(wxWindow *parent, wxWindowID id,
     m_colMinWidths = wxLongToLongHashMap(GRID_HASH_SIZE) ;
     m_rowMinHeights = wxLongToLongHashMap(GRID_HASH_SIZE) ;
 
-    // Can't use SetBestFittingSize here to avoid a crash as CreateGrid hasn't
-    // been called yet.
-    SetMinSize(size);  
+    SetBestFittingSize(size);
     Create() ;
 
     return true;
@@ -9885,8 +9888,10 @@ wxSize wxGrid::DoGetBestSize() const
     // of the scrollbars, is there any magic incantaion for that?
     int xpu, ypu;
     GetScrollPixelsPerUnit(&xpu, &ypu);
-    width  += 1 + xpu - (width  % xpu);
-    height += 1 + ypu - (height % ypu);
+    if (xpu)
+        width  += 1 + xpu - (width  % xpu);
+    if (ypu)
+        height += 1 + ypu - (height % ypu);
     
     // limit to 1/4 of the screen size
     int maxwidth, maxheight;
