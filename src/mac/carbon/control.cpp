@@ -695,13 +695,26 @@ void wxControl::MacRedrawControl()
     {
         wxClientDC dc(this) ;
         wxMacPortSetter helper(&dc) ;
-
+/*
+        Rect r = { 0 , 0 , 32000 , 32000 } ;
+        ClipRect( &r ) ;
+*/
         int x = 0 , y = 0;
-        GetParent()->MacWindowToRootWindow( &x,&y ) ;
+        wxWindow *parent = GetParent() ;
+        parent->MacWindowToRootWindow( &x,&y ) ;
         RgnHandle clrgn = NewRgn() ;
-        CopyRgn( (RgnHandle) GetParent()->MacGetVisibleRegion().GetWXHRGN() , clrgn ) ;
+        RgnHandle insidergn = NewRgn() ;
+        wxSize size = parent->GetSize() ;
+        SetRectRgn( insidergn , parent->MacGetLeftBorderSize() , parent->MacGetTopBorderSize() , 
+      	  size.x - parent->MacGetLeftBorderSize() - parent->MacGetRightBorderSize(), 
+      	  size.y - parent->MacGetTopBorderSize() - parent->MacGetBottomBorderSize()) ;
+
+        CopyRgn( (RgnHandle) parent->MacGetVisibleRegion(false).GetWXHRGN() , clrgn ) ;
+		SectRgn( clrgn , insidergn , clrgn ) ;
         OffsetRgn( clrgn , x , y ) ;
         SetClip( clrgn ) ;
+		DisposeRgn( clrgn ) ;
+		DisposeRgn( insidergn ) ;
 
         wxDC::MacSetupBackgroundForCurrentPort( MacGetBackgroundBrush() ) ;
         UMADrawControl( (ControlHandle) m_macControl ) ;
@@ -714,13 +727,27 @@ void wxControl::OnPaint(wxPaintEvent& event)
     {
         wxPaintDC dc(this) ;
         wxMacPortSetter helper(&dc) ;
+/*
+        Rect r = { 0 , 0 , 32000 , 32000 } ;
+        ClipRect( &r ) ;
+*/
 
         int x = 0 , y = 0;
-        GetParent()->MacWindowToRootWindow( &x,&y ) ;
+        wxWindow *parent = GetParent() ;
+        parent->MacWindowToRootWindow( &x,&y ) ;
         RgnHandle clrgn = NewRgn() ;
-        CopyRgn( (RgnHandle) GetParent()->MacGetVisibleRegion().GetWXHRGN() , clrgn ) ;
+        RgnHandle insidergn = NewRgn() ;
+        wxSize size = parent->GetSize() ;
+        SetRectRgn( insidergn , parent->MacGetLeftBorderSize() , parent->MacGetTopBorderSize() , 
+      	  size.x - parent->MacGetLeftBorderSize() - parent->MacGetRightBorderSize(), 
+      	  size.y - parent->MacGetTopBorderSize() - parent->MacGetBottomBorderSize()) ;
+
+        CopyRgn( (RgnHandle) parent->MacGetVisibleRegion(false).GetWXHRGN() , clrgn ) ;
+		SectRgn( clrgn , insidergn , clrgn ) ;
         OffsetRgn( clrgn , x , y ) ;
         SetClip( clrgn ) ;
+		DisposeRgn( clrgn ) ;
+		DisposeRgn( insidergn ) ;
 
         wxDC::MacSetupBackgroundForCurrentPort( MacGetBackgroundBrush() ) ;
         UMADrawControl( (ControlHandle) m_macControl ) ;

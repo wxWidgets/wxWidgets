@@ -1569,7 +1569,12 @@ const wxRegion& wxWindowMac::MacGetVisibleRegion( bool respectChildrenAndSibling
       x = y = 0 ;
       parent->MacWindowToRootWindow( &x, &y ) ;
       MacRootWindowToWindow( &x , &y ) ;
-      SetRectRgn( tempRgn , x , y , x + size.x , y + size.y ) ;
+
+      SetRectRgn( tempRgn , 
+      	x + parent->MacGetLeftBorderSize() , y + parent->MacGetTopBorderSize() , 
+      	x + size.x - parent->MacGetLeftBorderSize() - parent->MacGetRightBorderSize(), 
+      	y + size.y - parent->MacGetTopBorderSize() - parent->MacGetBottomBorderSize()) ;
+
       SectRgn( visRgn , tempRgn , visRgn ) ;
       if ( parent->IsTopLevel() )
         break ;
