@@ -198,6 +198,7 @@ WXDLLEXPORT bool wxIsBusy(void);
 // Convenience class so we can just create a wxBusyCursor object on the stack
 class WXDLLEXPORT wxBusyCursor
 {
+ public:
     inline wxBusyCursor(wxCursor* cursor = wxHOURGLASS_CURSOR) { wxBeginBusyCursor(cursor); }
     inline ~wxBusyCursor() { wxEndBusyCursor(); }
 };
