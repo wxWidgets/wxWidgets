@@ -24,7 +24,8 @@ class MyCanvas(wx.ScrolledWindow):
         bmp.SetMask(mask)
         self.bmp = bmp
 
-        self.SetScrollbars(20, 20, self.maxWidth/20, self.maxHeight/20)
+        self.SetVirtualSize((self.maxWidth, self.maxHeight))
+        self.SetScrollRate(20,20)
 
         if BUFFERED:
             # Initialize the buffer bitmap.  No real DC is needed at this point.
