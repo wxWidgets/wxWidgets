@@ -46,8 +46,8 @@ RSC=rc.exe
 # PROP Output_Dir "..\lib\vc_mswuniv\"
 # PROP Intermediate_Dir "vc_mswuniv\corelib"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswuniv" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_mswuniv\wxmswuniv25_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_BASE=0 /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswuniv" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_mswuniv\wxmswuniv25_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_BASE=0 /c
+# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswuniv" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_mswuniv\wxmswuniv25_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_BASE=0 /c
+# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswuniv" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_mswuniv\wxmswuniv25_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_BASE=0 /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -69,8 +69,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\lib\vc_mswu\"
 # PROP Intermediate_Dir "vc_mswu\corelib"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswu" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_mswu\wxmsw25u_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D wxUSE_BASE=0 /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswu" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_mswu\wxmsw25u_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D wxUSE_BASE=0 /c
+# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswu" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_mswu\wxmsw25u_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D wxUSE_BASE=0 /c
+# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswu" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_mswu\wxmsw25u_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D wxUSE_BASE=0 /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -115,8 +115,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\lib\vc_msw\"
 # PROP Intermediate_Dir "vc_msw\corelib"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_msw" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_msw\wxmsw25_core.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WXMSW__" /D wxUSE_BASE=0 /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_msw" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_msw\wxmsw25_core.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WXMSW__" /D wxUSE_BASE=0 /c
+# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_msw" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_msw\wxmsw25_core.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D wxUSE_BASE=0 /c
+# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_msw" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_msw\wxmsw25_core.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D wxUSE_BASE=0 /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -161,8 +161,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\lib\vc_mswunivu\"
 # PROP Intermediate_Dir "vc_mswunivu\corelib"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswunivu" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_mswunivu\wxmswuniv25u_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D wxUSE_BASE=0 /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswunivu" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_mswunivu\wxmswuniv25u_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D wxUSE_BASE=0 /c
+# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswunivu" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_mswunivu\wxmswuniv25u_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D wxUSE_BASE=0 /c
+# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswunivu" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_mswunivu\wxmswuniv25u_core.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_corelib.pch" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D wxUSE_BASE=0 /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -639,10 +639,6 @@ SOURCE=..\include\wx\imagxpm.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\wx\joystick.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\wx\layout.h
 # End Source File
 # Begin Source File
@@ -851,10 +847,6 @@ SOURCE=..\include\wx\msw\iniconf.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\wx\msw\joystick.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\wx\msw\listbox.h
 # End Source File
 # Begin Source File
@@ -1027,10 +1019,6 @@ SOURCE=..\include\wx\msw\tabctrl.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\wx\msw\taskbar.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\wx\msw\tbar95.h
 # End Source File
 # Begin Source File
@@ -1060,10 +1048,6 @@ SOURCE=..\include\wx\msw\toplevel.h
 # Begin Source File
 
 SOURCE=..\include\wx\msw\treectrl.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\msw\wave.h
 # End Source File
 # Begin Source File
 
@@ -1212,10 +1196,6 @@ SOURCE=..\include\wx\tab.h
 # Begin Source File
 
 SOURCE=..\include\wx\tabctrl.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\taskbar.h
 # End Source File
 # Begin Source File
 
@@ -1436,10 +1416,6 @@ SOURCE=..\include\wx\vms_x_fix.h
 # Begin Source File
 
 SOURCE=..\include\wx\vscroll.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\wave.h
 # End Source File
 # Begin Source File
 
@@ -2278,6 +2254,41 @@ SOURCE=..\src\univ\control.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\univ\ctrlrend.cpp
+
+!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF
+
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\univ\dialog.cpp
 
 !IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
@@ -2594,41 +2605,6 @@ SOURCE=..\src\univ\radiobox.cpp
 # Begin Source File
 
 SOURCE=..\src\univ\radiobut.cpp
-
-!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ENDIF
-
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\univ\renderer.cpp
 
 !IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
 
@@ -3553,10 +3529,6 @@ SOURCE=..\src\common\statbar.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\common\taskbarcmn.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\common\tbarbase.cpp
 # End Source File
 # Begin Source File
@@ -4349,10 +4321,6 @@ SOURCE=..\src\msw\iniconf.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\msw\joystick.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\msw\listbox.cpp
 
 !IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
@@ -4966,37 +4934,6 @@ SOURCE=..\src\msw\region.cpp
 # Begin Source File
 
 SOURCE=..\src\msw\renderer.cpp
-
-!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
-
-
-!ENDIF
-
 # End Source File
 # Begin Source File
 
@@ -5354,10 +5291,6 @@ SOURCE=..\src\msw\tabctrl.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\msw\taskbar.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\msw\tbar95.cpp
 
 !IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
@@ -5515,45 +5448,10 @@ SOURCE=..\src\msw\utilsgui.cpp
 # Begin Source File
 
 SOURCE=..\src\msw\uxtheme.cpp
-
-!IF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Release Unicode"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 LIB wxUniv Debug Unicode"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "corelib - Win32 LIB Native Debug Ansi"
-
-
-!ENDIF
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\msw\volume.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\msw\wave.cpp
 # End Source File
 # Begin Source File
 

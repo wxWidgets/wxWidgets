@@ -23,7 +23,7 @@
 
 
 #if wxUSE_ODBC
-#if wxUSE_NEW_GRID
+#if wxUSE_GRID
 
 #ifndef WX_PRECOMP
     #include "wx/textctrl.h"
@@ -720,6 +720,6 @@ bool wxDbGridTableBase::Writeback() const
 
 WX_DEFINE_EXPORTED_OBJARRAY(keyarray);
 
-#endif  // #if wxUSE_NEW_GRID
+#endif  // #if wxUSE_GRID
 #endif  // #if wxUSE_ODBC
 

@@ -46,8 +46,8 @@ RSC=rc.exe
 # PROP Output_Dir "..\lib\vc_mswuniv\"
 # PROP Intermediate_Dir "vc_mswuniv\advlib"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswuniv" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_mswuniv\wxmswuniv25_adv.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_advlib.pch" /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswuniv" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_mswuniv\wxmswuniv25_adv.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_advlib.pch" /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /c
+# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswuniv" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_mswuniv\wxmswuniv25_adv.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_advlib.pch" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /c
+# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswuniv" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_mswuniv\wxmswuniv25_adv.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_advlib.pch" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -69,8 +69,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\lib\vc_mswu\"
 # PROP Intermediate_Dir "vc_mswu\advlib"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswu" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_mswu\wxmsw25u_adv.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_advlib.pch" /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WXMSW__" /D wxUSE_UNICODE=1 /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswu" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_mswu\wxmsw25u_adv.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_advlib.pch" /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WXMSW__" /D wxUSE_UNICODE=1 /c
+# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswu" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_mswu\wxmsw25u_adv.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_advlib.pch" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D wxUSE_UNICODE=1 /c
+# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswu" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_mswu\wxmsw25u_adv.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_advlib.pch" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D wxUSE_UNICODE=1 /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -115,8 +115,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\lib\vc_msw\"
 # PROP Intermediate_Dir "vc_msw\advlib"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_msw" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_msw\wxmsw25_adv.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_advlib.pch" /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WXMSW__" /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_msw" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_msw\wxmsw25_adv.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_advlib.pch" /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WXMSW__" /c
+# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_msw" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_msw\wxmsw25_adv.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_advlib.pch" /D "WIN32" /D "_LIB" /D "__WXMSW__" /c
+# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_msw" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_msw\wxmsw25_adv.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_advlib.pch" /D "WIN32" /D "_LIB" /D "__WXMSW__" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -161,8 +161,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\lib\vc_mswunivu\"
 # PROP Intermediate_Dir "vc_mswunivu\advlib"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswunivu" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_mswunivu\wxmswuniv25u_adv.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_advlib.pch" /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswunivu" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_mswunivu\wxmswuniv25u_adv.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_advlib.pch" /D "WIN32" /D "_LIB" /D "NDEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /c
+# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswunivu" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_mswunivu\wxmswuniv25u_adv.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_advlib.pch" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /c
+# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswunivu" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Fd..\lib\vc_mswunivu\wxmswuniv25u_adv.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_advlib.pch" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -239,10 +239,6 @@ SOURCE=..\include\wx\calctrl.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\wx\dbgrid.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\wx\dcbuffer.h
 # End Source File
 # Begin Source File
@@ -287,7 +283,23 @@ SOURCE=..\include\wx\grid.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\joystick.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\laywin.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\joystick.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\taskbar.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\wave.h
 # End Source File
 # Begin Source File
 
@@ -299,7 +311,15 @@ SOURCE=..\include\wx\splash.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\taskbar.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\tipdlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\wave.h
 # End Source File
 # Begin Source File
 
@@ -359,7 +379,7 @@ SOURCE=..\src\generic\wizard.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\src\common\dbgrid.cpp
+SOURCE=..\src\common\taskbarcmn.cpp
 # End Source File
 # End Group
 # Begin Group "MSW Sources"
@@ -370,6 +390,18 @@ SOURCE=..\src\common\dbgrid.cpp
 SOURCE=..\src\msw\dummy.cpp
 # ADD BASE CPP /Yc"wx/wxprec.h"
 # ADD CPP /Yc"wx/wxprec.h"
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\msw\joystick.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\msw\taskbar.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\msw\wave.cpp
 # End Source File
 # End Group
 # End Target

@@ -2860,31 +2860,39 @@ IODBC_C_SRC=""
 dnl ODBC is handled seperately for MSW 
 if test "$TOOLKIT" != "MSW" ; then
 
+    if test "$wxUSE_ODBC" = "sys" -o "$wxUSE_ODBC" = "yes" ; then
+        dnl This is not ideal we really ough to use the unixodbc-config
+        dnl  or iodbc-config if they exist.
+
+        AC_CHECK_HEADER([sql.h], [found_sql_h=1])
+        if test "x$found_sql_h" = "x1" ; then
+            AC_CHECK_LIB(SQLAllocEnv, iodbc, ODBC_LINK=" -liodbc",
+            [
+                AC_CHECK_LIB(SQLAllocEnv, unixodbc, ODBC_LINK=" -lunixodbc",
+                [
+                    AC_CHECK_LIB(SQLAllocEnv, odbc, ODBC_LINK=" -lodbc")
+                ])
+            ])
+        fi 
+        if test "x$ODBC_LINK" = "x" ; then
+            if test "$wxUSE_ODBC" = "sys" ; then
+                AC_MSG_ERROR([system ODBC library not found! Use --with-odbc=builtin to use built-in version])
+            else
+                AC_MSG_WARN([system ODBC library not found, will use built-in instead])
+                wxUSE_ODBC=builtin
+            fi
+        else
+            dnl we are using the system library
+            wxUSE_ODBC=sys
+        fi
+    fi
     if test "$wxUSE_ODBC" != "no" ; then
         AC_DEFINE(wxUSE_ODBC)
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS db"
     
         dnl is this still necessary in 2.5?
         WXODBCFLAG="-D_IODBC_"
-
-
-        if test "$wxUSE_ODBC" = "sys" ; then
-            dnl This is not ideal we really ough to use the unixodbc-config
-            dnl  or iodbc-config if they exist.
-
-            AC_CHECK_HEADER(sql.h)
-            AC_SEARCH_LIBS(SQLAllocEnv,iodbc unixodbc odbc , , [ 
-                wxUSE_ODBC=builtin; 
-                AC_MSG_WARN( [ can't find system Odbc library falling back to builtin ])
-            ] )
-        fi
-        dnl Not "no" either...
-        if test "$wxUSE_ODBC" != "sys" ; then
-            ALL_OBJECTS="${ALL_OBJECTS} \$(IODBCOBJS)"
-        fi
-
     fi
-    
 fi
 
 if test "$wxUSE_REGEX" = "builtin" ; then
@@ -2912,10 +2920,8 @@ if test "$wxUSE_OPENGL" = "yes"; then
         WX_PATH_FIND_INCLUDES($SEARCH_INCLUDE, GL/gl.h)
         if test "$ac_find_includes" != "" ; then
             AC_MSG_RESULT(found in $ac_find_includes)
-            set -x
             WX_INCLUDE_PATH_EXIST($ac_find_includes, $CPPFLAGS)
             CPPFLAGS="$CPPFLAGS$ac_path_to_include"
-            set +x
         fi
 
         AC_CHECK_HEADER(GL/gl.h,
@@ -2947,7 +2953,7 @@ if test "$wxUSE_OPENGL" = "yes"; then
                     fi
                 fi
 
-                if "$found_gl" != 1; then
+                if test "$found_gl" != 1; then
                     AC_MSG_RESULT([no])
                     AC_MSG_CHECKING([for -lMesaGL])
                     WX_PATH_FIND_LIBRARIES([$SEARCH_LIB],MesaGL)
@@ -5497,6 +5503,7 @@ CXXFLAGS=`echo $CODE_GEN_FLAGS $CODE_GEN_FLAGS_CXX $EXTRA_CFLAGS $CXXFLAGS $CXXW
 LIBS=`echo $LIBS | sed 's/ \+/ /g'`
 EXTRALIBS="$LDFLAGS $LDFLAGS_VERSIONING $LIBS $DMALLOC_LIBS"
 EXTRALIBS_XML="$EXPAT_LINK"
+EXTRALIBS_ODBC="$ODBC_LINK"
 if test "$wxUSE_GUI" = "yes"; then
     EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $PNG_LINK $JPEG_LINK $TIFF_LINK | sed 's/ \+/ /g'`
 fi
@@ -5537,6 +5544,9 @@ fi
 if test "$wxUSE_ZLIB" = "builtin" ; then
     wxconfig_3rdparty="$wxconfig_3rdparty zlib"
 fi
+if test "$wxUSE_ODBC" = "builtin" ; then
+    wxconfig_3rdparty="$wxconfig_3rdparty odbc"
+fi
 
 for i in $wxconfig_3rdparty ; do
     WXCONFIG_EXTRALIBS="$WXCONFIG_EXTRALIBS -lwx${i}${lib_debug_suffix}${HOST_SUFFIX}"
@@ -5563,6 +5573,12 @@ else
     MONOLITHIC=0
 fi
 
+if test $wxUSE_ODBC != "no" ; then
+    USE_ODBC=1
+else
+    USE_ODBC=0
+fi
+
 if test $wxUSE_OFFICIAL_BUILD = "yes" ; then
     OFFICIAL_BUILD=1
 else
@@ -5577,6 +5593,7 @@ AC_SUBST(MONOLITHIC)
 AC_SUBST(LIBS)
 AC_SUBST(EXTRALIBS)
 AC_SUBST(EXTRALIBS_XML)
+AC_SUBST(EXTRALIBS_ODBC)
 AC_SUBST(EXTRALIBS_GUI)
 AC_SUBST(EXTRALIBS_OPENGL)
 AC_SUBST(UNICODE)

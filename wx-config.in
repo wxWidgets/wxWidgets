@@ -53,11 +53,12 @@ LIBS="@LIBS@"
 # Linker flags for sublibraries:
 
 CORE_BASE_LIBS="xml net base"
-CORE_GUI_LIBS="html adv core"
+CORE_GUI_LIBS="html odbc adv core"
 
 ldlibs_base="@WXCONFIG_EXTRALIBS@"
 ldlibs_core="@EXTRALIBS_GUI@"
 ldlibs_xml="@EXTRALIBS_XML@"
+ldlibs_odbc="@EXTRALIBS_ODBC@"
 
 ldflags_gl="@LDFLAGS_GL@"
 ldlibs_gl="@OPENGL_LIBS@"

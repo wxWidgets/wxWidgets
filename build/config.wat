@@ -67,6 +67,9 @@ USE_GUI = 1
 # Build wxHTML library (USE_GUI must be 1)? [0,1]
 USE_HTML = 1
 
+# Build ODBC database classes (USE_GUI must be 1)? [0,1]
+USE_ODBC = 0
+
 # Build OpenGL canvas library (USE_GUI must be 1)? [0,1]
 USE_OPENGL = 0
 

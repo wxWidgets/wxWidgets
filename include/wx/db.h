@@ -127,8 +127,8 @@ enum enumDummy {enumDum1};
 */
 const int wxDB_PATH_MAX                 = 254;
 
-WXDLLIMPEXP_DATA_BASE(extern wxChar const *) SQL_LOG_FILENAME;
-WXDLLIMPEXP_DATA_BASE(extern wxChar const *) SQL_CATALOG_FILENAME;
+WXDLLIMPEXP_DATA_ODBC(extern wxChar const *) SQL_LOG_FILENAME;
+WXDLLIMPEXP_DATA_ODBC(extern wxChar const *) SQL_CATALOG_FILENAME;
 
 // Database Globals
 const int DB_TYPE_NAME_LEN            = 40;
@@ -273,7 +273,7 @@ enum wxODBC_ERRORS
 #define SQL_MAX_AUTHSTR_LEN MAXNAME
 #endif
 
-class WXDLLIMPEXP_BASE wxDbConnectInf
+class WXDLLIMPEXP_ODBC wxDbConnectInf
 {
     private:
         bool freeHenvOnDestroy;
@@ -335,7 +335,7 @@ class WXDLLIMPEXP_BASE wxDbConnectInf
 };  // class wxDbConnectInf
 
 
-struct WXDLLIMPEXP_BASE wxDbSqlTypeInfo
+struct WXDLLIMPEXP_ODBC wxDbSqlTypeInfo
 {
     wxString    TypeName;
     SWORD       FsqlType;
@@ -346,7 +346,7 @@ struct WXDLLIMPEXP_BASE wxDbSqlTypeInfo
 };
 
 
-class WXDLLIMPEXP_BASE wxDbColFor
+class WXDLLIMPEXP_ODBC wxDbColFor
 {
 public:
     wxString       s_Field;              // Formated String for Output
@@ -365,7 +365,7 @@ public:
 };
 
 
-class WXDLLIMPEXP_BASE wxDbColInf
+class WXDLLIMPEXP_ODBC wxDbColInf
 {
 public:
     wxChar       catalog[128+1];
@@ -395,7 +395,7 @@ public:
 };
 
 
-class WXDLLIMPEXP_BASE wxDbTableInf        // Description of a Table
+class WXDLLIMPEXP_ODBC wxDbTableInf        // Description of a Table
 {
 public:
     wxChar      tableName[DB_MAX_TABLE_NAME_LEN+1];
@@ -411,7 +411,7 @@ public:
 };
 
 
-class WXDLLIMPEXP_BASE wxDbInf     // Description of a Database
+class WXDLLIMPEXP_ODBC wxDbInf     // Description of a Database
 {
 public:
     wxChar        catalog[128+1];
@@ -467,7 +467,7 @@ WXDLLIMPEXP_DATA_BASE(extern wxChar)
     DBerrorList[DB_MAX_ERROR_HISTORY][DB_MAX_ERROR_MSG_LEN];
 
 
-class WXDLLIMPEXP_BASE wxDb
+class WXDLLIMPEXP_ODBC wxDb
 {
 private:
     bool             dbIsOpen;
@@ -706,15 +706,15 @@ class wxTablesInUse : public wxObject
 // The following routines allow a user to get new database connections, free them
 // for other code segments to use, or close all of them when the application has
 // completed.
-wxDb  WXDLLIMPEXP_BASE *wxDbGetConnection(wxDbConnectInf *pDbConfig, bool FwdOnlyCursors=(bool)wxODBC_FWD_ONLY_CURSORS);
-bool  WXDLLIMPEXP_BASE  wxDbFreeConnection(wxDb *pDb);
-void  WXDLLIMPEXP_BASE  wxDbCloseConnections(void);
-int   WXDLLIMPEXP_BASE  wxDbConnectionsInUse(void);
+wxDb  WXDLLIMPEXP_ODBC *wxDbGetConnection(wxDbConnectInf *pDbConfig, bool FwdOnlyCursors=(bool)wxODBC_FWD_ONLY_CURSORS);
+bool  WXDLLIMPEXP_ODBC  wxDbFreeConnection(wxDb *pDb);
+void  WXDLLIMPEXP_ODBC  wxDbCloseConnections(void);
+int   WXDLLIMPEXP_ODBC  wxDbConnectionsInUse(void);
 
 
 // Writes a message to the wxLog window (stdout usually) when an internal error
 // situation occurs.  This function only works in DEBUG builds
-const wxChar* WXDLLIMPEXP_BASE
+const wxChar* WXDLLIMPEXP_ODBC
 wxDbLogExtendedErrorMsg(const wxChar *userText,
                         wxDb *pDb,
                         const wxChar *ErrFile,
@@ -722,7 +722,7 @@ wxDbLogExtendedErrorMsg(const wxChar *userText,
 
 
 // This function sets the sql log state for all open wxDb objects
-bool WXDLLIMPEXP_BASE
+bool WXDLLIMPEXP_ODBC
 wxDbSqlLog(wxDbSqlLogState state, const wxString &filename = SQL_LOG_FILENAME);
 
 
@@ -736,7 +736,7 @@ int WXDLLEXPORT wxDbCreateDataSource(const wxString &driverName, const wxString 
 // for a list of available datasources.  Call this routine
 // the first time using SQL_FETCH_FIRST.  Continue to call it
 // using SQL_FETCH_NEXT until you've exhausted the list.
-bool WXDLLIMPEXP_BASE
+bool WXDLLIMPEXP_ODBC
 wxDbGetDataSource(HENV henv, wxChar *Dsn, SWORD DsnMax, wxChar *DsDesc,
                   SWORD DsDescMax, UWORD direction = SQL_FETCH_NEXT);
 
@@ -769,15 +769,15 @@ typedef wxTablesInUse        CstructTablesInUse;
 #endif
 
 // Deprecated function names that are replaced by the function names listed above
-wxDB  WXDLLIMPEXP_BASE
+wxDB  WXDLLIMPEXP_ODBC
 *GetDbConnection(DbStuff *pDbStuff, bool FwdOnlyCursors=(bool)wxODBC_FWD_ONLY_CURSORS);
-bool  WXDLLIMPEXP_BASE  FreeDbConnection(wxDB *pDb);
-void  WXDLLIMPEXP_BASE  CloseDbConnections(void);
-int   WXDLLIMPEXP_BASE  NumberDbConnectionsInUse(void);
+bool  WXDLLIMPEXP_ODBC  FreeDbConnection(wxDB *pDb);
+void  WXDLLIMPEXP_ODBC  CloseDbConnections(void);
+int   WXDLLIMPEXP_ODBC  NumberDbConnectionsInUse(void);
 
 bool SqlLog(sqlLog state, const wxChar *filename = SQL_LOG_FILENAME);
 
-bool WXDLLIMPEXP_BASE
+bool WXDLLIMPEXP_ODBC
 GetDataSource(HENV henv, char *Dsn, SWORD DsnMax, char *DsDesc, SWORD DsDescMax,
               UWORD direction = SQL_FETCH_NEXT);
 

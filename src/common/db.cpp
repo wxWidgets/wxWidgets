@@ -68,7 +68,7 @@
 
 #include "wx/db.h"
 
-WXDLLEXPORT_DATA(wxDbList*) PtrBegDbList = 0;
+WXDLLIMPEXP_DATA_ODBC(wxDbList*) PtrBegDbList = 0;
 
 
 wxChar const *SQL_LOG_FILENAME         = wxT("sqllog.txt");
@@ -3606,7 +3606,7 @@ bool wxDb::ModifyColumn(const wxString &tableName, const wxString &columnName,
 
 
 /********** wxDbGetConnection() **********/
-wxDb WXDLLEXPORT *wxDbGetConnection(wxDbConnectInf *pDbConfig, bool FwdOnlyCursors)
+wxDb WXDLLIMPEXP_ODBC *wxDbGetConnection(wxDbConnectInf *pDbConfig, bool FwdOnlyCursors)
 {
     wxDbList *pList;
 
@@ -3695,7 +3695,7 @@ wxDb WXDLLEXPORT *wxDbGetConnection(wxDbConnectInf *pDbConfig, bool FwdOnlyCurso
 
 
 /********** wxDbFreeConnection() **********/
-bool WXDLLEXPORT wxDbFreeConnection(wxDb *pDb)
+bool WXDLLIMPEXP_ODBC wxDbFreeConnection(wxDb *pDb)
 {
     wxDbList *pList;
 
@@ -3713,7 +3713,7 @@ bool WXDLLEXPORT wxDbFreeConnection(wxDb *pDb)
 
 
 /********** wxDbCloseConnections() **********/
-void WXDLLEXPORT wxDbCloseConnections(void)
+void WXDLLIMPEXP_ODBC wxDbCloseConnections(void)
 {
     wxDbList *pList, *pNext;
 
@@ -3735,7 +3735,7 @@ void WXDLLEXPORT wxDbCloseConnections(void)
 
 
 /********** wxDbConnectionsInUse() **********/
-int WXDLLEXPORT wxDbConnectionsInUse(void)
+int WXDLLIMPEXP_ODBC wxDbConnectionsInUse(void)
 {
     wxDbList *pList;
     int cnt = 0;
@@ -3755,7 +3755,7 @@ int WXDLLEXPORT wxDbConnectionsInUse(void)
 
 /********** wxDbLogExtendedErrorMsg() **********/
 // DEBUG ONLY function
-const wxChar* WXDLLEXPORT wxDbLogExtendedErrorMsg(const wxChar *userText,
+const wxChar* WXDLLIMPEXP_ODBC wxDbLogExtendedErrorMsg(const wxChar *userText,
                                                   wxDb *pDb,
                                                   const wxChar *ErrFile,
                                                   int ErrLine)
@@ -3944,22 +3944,22 @@ bool GetDataSource(HENV henv, char *Dsn, SWORD DsnMax, char *DsDesc, SWORD DsDes
     return wxDbGetDataSource(henv, Dsn, DsnMax, DsDesc, DsDescMax, direction);
 }
 /***** DEPRECATED: use wxDbGetConnection() *****/
-wxDb WXDLLEXPORT *GetDbConnection(DbStuff *pDbStuff, bool FwdOnlyCursors)
+wxDb WXDLLIMPEXP_ODBC *GetDbConnection(DbStuff *pDbStuff, bool FwdOnlyCursors)
 {
     return wxDbGetConnection((wxDbConnectInf *)pDbStuff, FwdOnlyCursors);
 }
 /***** DEPRECATED: use wxDbFreeConnection() *****/
-bool WXDLLEXPORT FreeDbConnection(wxDb *pDb)
+bool WXDLLIMPEXP_ODBC FreeDbConnection(wxDb *pDb)
 {
     return wxDbFreeConnection(pDb);
 }
 /***** DEPRECATED: use wxDbCloseConnections() *****/
-void WXDLLEXPORT CloseDbConnections(void)
+void WXDLLIMPEXP_ODBC CloseDbConnections(void)
 {
     wxDbCloseConnections();
 }
 /***** DEPRECATED: use wxDbConnectionsInUse() *****/
-int WXDLLEXPORT NumberDbConnectionsInUse(void)
+int WXDLLIMPEXP_ODBC NumberDbConnectionsInUse(void)
 {
     return wxDbConnectionsInUse();
 }

@@ -99,6 +99,14 @@ Acts according to DEBUG_INFO by default.
         </description>
     </option>
     
+    <option name="USE_ODBC">
+        <values>0 1</values>
+        <default-value>0</default-value>
+        <description>
+            Build ODBC database classes (USE_GUI must be 1)?
+        </description>
+    </option>
+    
     <option name="WXUNIV">
         <values>0 1</values>
         <values-description>Native wxUniv</values-description>
@@ -144,6 +152,7 @@ compiled .lib files and setup.h under the lib/ toplevel directory.
         <option name="TOOLCHAIN_NAME"/>
         <option name="EXTRALIBS"/>
         <option name="EXTRALIBS_XML"/>
+        <option name="EXTRALIBS_ODBC"/>
         <option name="EXTRALIBS_GUI"/>
         <option name="EXTRALIBS_OPENGL"/>
         <option name="SAMPLES_RPATH_FLAG"/>
@@ -178,6 +187,7 @@ it if SHARED=1 unless you know what you are doing.
         <set var="HOST_SUFFIX"/>
         <set var="EXTRALIBS"/>
         <set var="EXTRALIBS_XML"/>
+        <set var="EXTRALIBS_ODBC"/>
         <set var="EXTRALIBS_GUI"/>
         <set var="EXTRACFLAGS"/>
 

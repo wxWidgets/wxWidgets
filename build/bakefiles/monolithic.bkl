@@ -4,7 +4,7 @@
     
     <set var="MONOLIB_GUI_SRC">
         <if cond="USE_GUI=='1'">
-            $(CORE_SRC) $(ADVANCED_SRC) $(HTML_SRC)
+            $(CORE_SRC) $(ADVANCED_SRC) $(HTML_SRC) $(ODBC_SRC)
         </if>
     </set>
     <set var="MONOLIB_SRC">
@@ -17,6 +17,7 @@
         <define>WXMAKINGDLL</define>
         <sources>$(MONOLIB_SRC)</sources>
         <ldlibs>$(EXTRALIBS_XML)</ldlibs>
+        <ldlibs>$(EXTRALIBS_ODBC)</ldlibs>
         <msvc-headers>$(ALL_HEADERS)</msvc-headers>
         <msvc-copy-setup-h/>
     </dll>

@@ -77,8 +77,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\lib\vc_mswdll\"
 # PROP Intermediate_Dir "vc_mswdll\wxpng"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /Fd..\lib\vc_mswdll\wxpng.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /D "NDEBUG" /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /Fd..\lib\vc_mswdll\wxpng.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /D "NDEBUG" /c
+# ADD BASE CPP /nologo /FD /W4 /MD /O1 /Fd..\lib\vc_mswdll\wxpng.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /c
+# ADD CPP /nologo /FD /W4 /MD /O1 /Fd..\lib\vc_mswdll\wxpng.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -123,8 +123,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\lib\vc_mswunivudll\"
 # PROP Intermediate_Dir "vc_mswunivudll\wxpng"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /Fd..\lib\vc_mswunivudll\wxpng.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /D "NDEBUG" /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /Fd..\lib\vc_mswunivudll\wxpng.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /D "NDEBUG" /c
+# ADD BASE CPP /nologo /FD /W4 /MD /O1 /Fd..\lib\vc_mswunivudll\wxpng.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /c
+# ADD CPP /nologo /FD /W4 /MD /O1 /Fd..\lib\vc_mswunivudll\wxpng.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -146,8 +146,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\lib\vc_mswunivdll\"
 # PROP Intermediate_Dir "vc_mswunivdll\wxpng"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /Fd..\lib\vc_mswunivdll\wxpng.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /D "NDEBUG" /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /Fd..\lib\vc_mswunivdll\wxpng.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /D "NDEBUG" /c
+# ADD BASE CPP /nologo /FD /W4 /MD /O1 /Fd..\lib\vc_mswunivdll\wxpng.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /c
+# ADD CPP /nologo /FD /W4 /MD /O1 /Fd..\lib\vc_mswunivdll\wxpng.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -238,8 +238,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\lib\vc_mswudll\"
 # PROP Intermediate_Dir "vc_mswudll\wxpng"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /Fd..\lib\vc_mswudll\wxpng.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /D "NDEBUG" /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /Fd..\lib\vc_mswudll\wxpng.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /D "NDEBUG" /c
+# ADD BASE CPP /nologo /FD /W4 /MD /O1 /Fd..\lib\vc_mswudll\wxpng.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /c
+# ADD CPP /nologo /FD /W4 /MD /O1 /Fd..\lib\vc_mswudll\wxpng.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -261,8 +261,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\lib\vc_mswuniv\"
 # PROP Intermediate_Dir "vc_mswuniv\wxpng"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /Fd..\lib\vc_mswuniv\wxpng.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /D "NDEBUG" /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /Fd..\lib\vc_mswuniv\wxpng.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /D "NDEBUG" /c
+# ADD BASE CPP /nologo /FD /W4 /MD /O1 /Fd..\lib\vc_mswuniv\wxpng.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /c
+# ADD CPP /nologo /FD /W4 /MD /O1 /Fd..\lib\vc_mswuniv\wxpng.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -284,8 +284,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\lib\vc_mswu\"
 # PROP Intermediate_Dir "vc_mswu\wxpng"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /Fd..\lib\vc_mswu\wxpng.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /D "NDEBUG" /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /Fd..\lib\vc_mswu\wxpng.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /D "NDEBUG" /c
+# ADD BASE CPP /nologo /FD /W4 /MD /O1 /Fd..\lib\vc_mswu\wxpng.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /c
+# ADD CPP /nologo /FD /W4 /MD /O1 /Fd..\lib\vc_mswu\wxpng.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -376,8 +376,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\lib\vc_msw\"
 # PROP Intermediate_Dir "vc_msw\wxpng"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /Fd..\lib\vc_msw\wxpng.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /D "NDEBUG" /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /Fd..\lib\vc_msw\wxpng.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /D "NDEBUG" /c
+# ADD BASE CPP /nologo /FD /W4 /MD /O1 /Fd..\lib\vc_msw\wxpng.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /c
+# ADD CPP /nologo /FD /W4 /MD /O1 /Fd..\lib\vc_msw\wxpng.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -399,8 +399,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\lib\vc_mswunivu\"
 # PROP Intermediate_Dir "vc_mswunivu\wxpng"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /Fd..\lib\vc_mswunivu\wxpng.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /D "NDEBUG" /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /Fd..\lib\vc_mswunivu\wxpng.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /D "NDEBUG" /c
+# ADD BASE CPP /nologo /FD /W4 /MD /O1 /Fd..\lib\vc_mswunivu\wxpng.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /c
+# ADD CPP /nologo /FD /W4 /MD /O1 /Fd..\lib\vc_mswunivu\wxpng.pdb /I "..\src\zlib" /D "WIN32" /D "_LIB" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe

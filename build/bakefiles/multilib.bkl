@@ -90,6 +90,29 @@
         <sources>$(ADVANCED_SRC)</sources>
         <msvc-headers>$(ADVANCED_HDR)</msvc-headers>
     </lib>
+    
+    
+    <!-- ================================================================= -->
+    <!--                        DB classes library                         -->
+    <!-- ================================================================= -->
+    
+    <dll id="odbcdll" template="wx_dll"
+         cond="SHARED=='1' and USE_GUI=='1' and USE_ODBC=='1' and MONOLITHIC=='0'">
+        <define>WXUSINGDLL</define>
+        <define>WXMAKINGDLL_ODBC</define>
+        <sources>$(ODBC_SRC)</sources>
+        <msvc-headers>$(ODBC_HDR)</msvc-headers>
+        <library>advdll</library> <!-- FIXME - we don't want this -->
+        <library>coredll</library> <!-- FIXME - we don't want this -->
+        <library>basedll</library>
+        <ldlibs>$(EXTRALIBS_ODBC)</ldlibs>
+    </dll>
+    
+    <lib id="odbclib" template="wx_lib"
+        cond="SHARED=='0' and USE_GUI=='1' and USE_ODBC=='1' and MONOLITHIC=='0'">
+        <sources>$(ODBC_SRC)</sources>
+        <msvc-headers>$(ODBC_HDR)</msvc-headers>
+    </lib>
 
     
     <!-- ================================================================ -->

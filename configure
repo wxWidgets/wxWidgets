@@ -312,7 +312,7 @@ ac_includes_default="\
 #endif"
 
 ac_subdirs_all="$ac_subdirs_all src/expat"
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT CPP EGREP CXX CXXFLAGS ac_ct_CXX RANLIB ac_ct_RANLIB AR INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA STRIP IF_GNU_MAKE YACC LEX LEXLIB LEX_OUTPUT_ROOT LN_S CXXCPP subdirs PKG_CONFIG GTK_CFLAGS GTK_LIBS GTK_CONFIG PANGOFT2_CFLAGS PANGOFT2_LIBS X_CFLAGS X_PRE_LIBS X_LIBS X_EXTRA_LIBS PANGOX_CFLAGS PANGOX_LIBS PANGOXFT_CFLAGS PANGOXFT_LIBS RESCOMP DEREZ SETFILE LIBICONV wxUSE_ZLIB wxUSE_REGEX wxUSE_EXPAT wxUSE_ODBC wxUSE_LIBJPEG wxUSE_LIBPNG wxUSE_LIBTIFF VENDOR OFFICIAL_BUILD WXUNIV MONOLITHIC EXTRALIBS EXTRALIBS_XML EXTRALIBS_GUI EXTRALIBS_OPENGL UNICODE BUILD DEBUG_INFO DEBUG_FLAG SHARED TOOLKIT_LOWERCASE TOOLKIT_VERSION SAMPLES_RPATH_FLAG HOST_SUFFIX SET_MAKE MAKE_SET INSTALL_DIR LDFLAGS_GUI PLATFORM_UNIX PLATFORM_WIN32 PLATFORM_MSDOS PLATFORM_MAC PLATFORM_MACOSX SO_SUFFIX SO_SUFFIX_MODULE DLLPREFIX DLLPREFIX_MODULE AIX_CXX_LD SHARED_LD_CC SHARED_LD_CXX SHARED_LD_MODULE_CC SHARED_LD_MODULE_CXX PIC_FLAG USE_SOVERSION USE_SOVERLINUX USE_SOVERSOLARIS USE_MACVERSION USE_SOSYMLINKS SONAME_FLAG DEPS_TRACKING COND_BUILD_DEBUG COND_BUILD_DEBUG_DEBUG_FLAG_DEFAULT COND_BUILD_DEBUG_DEBUG_INFO_DEFAULT COND_BUILD_RELEASE COND_BUILD_RELEASE_DEBUG_INFO_DEFAULT COND_DEBUG_FLAG_1 COND_DEBUG_INFO_0 COND_DEBUG_INFO_1 COND_DEPS_TRACKING_0 COND_DEPS_TRACKING_1 COND_MONOLITHIC_0 COND_MONOLITHIC_0_SHARED_0 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1 COND_MONOLITHIC_0_SHARED_0_USE_HTML_1 COND_MONOLITHIC_0_SHARED_1 COND_MONOLITHIC_0_SHARED_1_USE_GUI_1 COND_MONOLITHIC_0_SHARED_1_USE_HTML_1 COND_MONOLITHIC_1 COND_MONOLITHIC_1_SHARED_0 COND_MONOLITHIC_1_SHARED_1 COND_OFFICIAL_BUILD_0_PLATFORM_WIN32_1 COND_OFFICIAL_BUILD_1_PLATFORM_WIN32_1 COND_PLATFORM_MACOSX_0_USE_SOVERSION_1 COND_PLATFORM_MACOSX_1 COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA COND_PLATFORM_MACOSX_1_TOOLKIT_GTK COND_PLATFORM_MACOSX_1_TOOLKIT_MAC COND_PLATFORM_MACOSX_1_USE_SOVERSION_1 COND_PLATFORM_UNIX_1 COND_PLATFORM_WIN32_0 COND_PLATFORM_WIN32_1 COND_SHARED_0_USE_GUI_1_USE_OPENGL_1 COND_SHARED_1_USE_GUI_1_USE_OPENGL_1 COND_TOOLKIT_COCOA COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0 COND_TOOLKIT_GTK COND_TOOLKIT_GTK_USE_GUI_1 COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0 COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_1 COND_TOOLKIT_MAC COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0 COND_TOOLKIT_MGL COND_TOOLKIT_MGL_USE_GUI_1 COND_TOOLKIT_MGL_USE_GUI_1_WXUNIV_1 COND_TOOLKIT_MOTIF COND_TOOLKIT_MOTIF_USE_GUI_1 COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0 COND_TOOLKIT_MSW COND_TOOLKIT_MSW_USE_GUI_1 COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0 COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_1 COND_TOOLKIT_OS2 COND_TOOLKIT_OS2_USE_GUI_1_WXUNIV_0 COND_TOOLKIT_X11 COND_TOOLKIT_X11_USE_GUI_1 COND_TOOLKIT_X11_USE_GUI_1_WXUNIV_1 COND_UNICODE_1 COND_USE_GUI_0 COND_USE_GUI_1 COND_USE_GUI_1_WXUNIV_0 COND_USE_GUI_1_WXUNIV_1 COND_USE_GUI_1_WXUSE_LIBJPEG_BUILTIN COND_USE_GUI_1_WXUSE_LIBPNG_BUILTIN COND_USE_GUI_1_WXUSE_LIBTIFF_BUILTIN COND_USE_SOSYMLINKS_1 COND_USE_SOVERLINUX_1 COND_USE_SOVERSION_0 COND_USE_SOVERSOLARIS_1 COND_WXUNIV_1 COND_WXUSE_EXPAT_BUILTIN COND_WXUSE_LIBJPEG_BUILTIN COND_WXUSE_LIBPNG_BUILTIN COND_WXUSE_LIBTIFF_BUILTIN COND_WXUSE_ODBC_BUILTIN COND_WXUSE_REGEX_BUILTIN COND_WXUSE_ZLIB_BUILTIN COND_PLATFORM_MAC_1 COND_SHARED_1 COND_SHARED_0 COND_TOOLKIT_MAC_USE_GUI_1 COND_TOOLKIT_OS2_USE_GUI_1 LEX_STEM PATH_IFS WX_MAJOR_VERSION_NUMBER WX_MINOR_VERSION_NUMBER WX_RELEASE_NUMBER WX_LIBRARY_NAME_STATIC WX_LIBRARY_NAME_SHARED WX_LIBRARY_BASENAME_NOGUI WX_LIBRARY_BASENAME_GUI WX_LIBRARY_IMPORTLIB WX_TARGET_LIBRARY WX_LIBRARY_LINK1 WX_LIBRARY_LINK2 PROGRAM_EXT WX_LIBRARY_NAME_STATIC_GL WX_LIBRARY_NAME_SHARED_GL WX_TARGET_LIBRARY_GL WX_LIBRARY_LINK1_GL WX_LIBRARY_LINK2_GL WX_ALL WX_ALL_INSTALLED SHARED_LD WX_TARGET_LIBRARY_TYPE STATIC_FLAG WXDEBUG_DEFINE USE_GUI AFMINSTALL WIN32INSTALL TOOLKIT TOOLKIT_DIR TOOLKIT_VPATH TOOLCHAIN_NAME TOOLCHAIN_DEFS TOOLCHAIN_DLL_DEFS top_builddir_wxconfig cross_compiling WXCONFIG_EXTRALIBS WXCONFIG_LIBS WXCONFIG_LIBS_GL WXCONFIG_LIBS_STATIC WXCONFIG_LIBS_STATIC_GL WXCONFIG_INCLUDE WXCONFIG_RPATH WX_LARGEFILE_FLAGS CODE_GEN_FLAGS CODE_GEN_FLAGS_CXX ALL_OBJECTS ALL_HEADERS ALL_SOURCES GUIDIST PORT_FILES DISTDIR SAMPLES_SUBDIRS LDFLAGS_GL LDFLAGS_VERSIONING LDFLAGS_EXE OPENGL_LIBS DMALLOC_LIBS WX_VERSION_TAG RESFLAGS RESPROGRAMOBJ WX_RESOURCES_MACOSX_ASCII WX_RESOURCES_MACOSX_DATA MACOSX_BUNDLE LIBWXMACRES MACRESCOMP MACSETFILE MACRESWXCONFIG GCC DLLTOOL AS NM LD MAKEINFO INSTALL_LIBRARY ESD_LINK LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT CPP EGREP CXX CXXFLAGS ac_ct_CXX RANLIB ac_ct_RANLIB AR INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA STRIP IF_GNU_MAKE YACC LEX LEXLIB LEX_OUTPUT_ROOT LN_S CXXCPP subdirs PKG_CONFIG GTK_CFLAGS GTK_LIBS GTK_CONFIG PANGOFT2_CFLAGS PANGOFT2_LIBS X_CFLAGS X_PRE_LIBS X_LIBS X_EXTRA_LIBS PANGOX_CFLAGS PANGOX_LIBS PANGOXFT_CFLAGS PANGOXFT_LIBS RESCOMP DEREZ SETFILE LIBICONV wxUSE_ZLIB wxUSE_REGEX wxUSE_EXPAT wxUSE_ODBC wxUSE_LIBJPEG wxUSE_LIBPNG wxUSE_LIBTIFF VENDOR OFFICIAL_BUILD WXUNIV MONOLITHIC EXTRALIBS EXTRALIBS_XML EXTRALIBS_ODBC EXTRALIBS_GUI EXTRALIBS_OPENGL UNICODE BUILD DEBUG_INFO DEBUG_FLAG SHARED TOOLKIT_LOWERCASE TOOLKIT_VERSION SAMPLES_RPATH_FLAG HOST_SUFFIX SET_MAKE MAKE_SET INSTALL_DIR LDFLAGS_GUI PLATFORM_UNIX PLATFORM_WIN32 PLATFORM_MSDOS PLATFORM_MAC PLATFORM_MACOSX SO_SUFFIX SO_SUFFIX_MODULE DLLPREFIX DLLPREFIX_MODULE AIX_CXX_LD SHARED_LD_CC SHARED_LD_CXX SHARED_LD_MODULE_CC SHARED_LD_MODULE_CXX PIC_FLAG USE_SOVERSION USE_SOVERLINUX USE_SOVERSOLARIS USE_MACVERSION USE_SOSYMLINKS SONAME_FLAG DEPS_TRACKING COND_BUILD_DEBUG COND_BUILD_DEBUG_DEBUG_FLAG_DEFAULT COND_BUILD_DEBUG_DEBUG_INFO_DEFAULT COND_BUILD_RELEASE COND_BUILD_RELEASE_DEBUG_INFO_DEFAULT COND_DEBUG_FLAG_1 COND_DEBUG_INFO_0 COND_DEBUG_INFO_1 COND_DEPS_TRACKING_0 COND_DEPS_TRACKING_1 COND_MONOLITHIC_0 COND_MONOLITHIC_0_SHARED_0 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1 COND_MONOLITHIC_0_SHARED_0_USE_HTML_1 COND_MONOLITHIC_0_SHARED_1 COND_MONOLITHIC_0_SHARED_1_USE_GUI_1 COND_MONOLITHIC_0_SHARED_1_USE_HTML_1 COND_MONOLITHIC_1 COND_MONOLITHIC_1_SHARED_0 COND_MONOLITHIC_1_SHARED_1 COND_OFFICIAL_BUILD_0_PLATFORM_WIN32_1 COND_OFFICIAL_BUILD_1_PLATFORM_WIN32_1 COND_PLATFORM_MACOSX_0_USE_SOVERSION_1 COND_PLATFORM_MACOSX_1 COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA COND_PLATFORM_MACOSX_1_TOOLKIT_GTK COND_PLATFORM_MACOSX_1_TOOLKIT_MAC COND_PLATFORM_MACOSX_1_USE_SOVERSION_1 COND_PLATFORM_UNIX_1 COND_PLATFORM_WIN32_0 COND_PLATFORM_WIN32_1 COND_SHARED_0_USE_GUI_1_USE_OPENGL_1 COND_SHARED_1_USE_GUI_1_USE_OPENGL_1 COND_TOOLKIT_COCOA COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0 COND_TOOLKIT_GTK COND_TOOLKIT_GTK_USE_GUI_1 COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_0 COND_TOOLKIT_GTK_USE_GUI_1_WXUNIV_1 COND_TOOLKIT_MAC COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0 COND_TOOLKIT_MGL COND_TOOLKIT_MGL_USE_GUI_1 COND_TOOLKIT_MGL_USE_GUI_1_WXUNIV_1 COND_TOOLKIT_MOTIF COND_TOOLKIT_MOTIF_USE_GUI_1 COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0 COND_TOOLKIT_MSW COND_TOOLKIT_MSW_USE_GUI_1 COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_0 COND_TOOLKIT_MSW_USE_GUI_1_WXUNIV_1 COND_TOOLKIT_OS2 COND_TOOLKIT_OS2_USE_GUI_1_WXUNIV_0 COND_TOOLKIT_X11 COND_TOOLKIT_X11_USE_GUI_1 COND_TOOLKIT_X11_USE_GUI_1_WXUNIV_1 COND_UNICODE_1 COND_USE_GUI_0 COND_USE_GUI_1 COND_USE_GUI_1_WXUNIV_0 COND_USE_GUI_1_WXUNIV_1 COND_USE_GUI_1_WXUSE_LIBJPEG_BUILTIN COND_USE_GUI_1_WXUSE_LIBPNG_BUILTIN COND_USE_GUI_1_WXUSE_LIBTIFF_BUILTIN COND_USE_SOSYMLINKS_1 COND_USE_SOVERLINUX_1 COND_USE_SOVERSION_0 COND_USE_SOVERSOLARIS_1 COND_WXUNIV_1 COND_WXUSE_EXPAT_BUILTIN COND_WXUSE_LIBJPEG_BUILTIN COND_WXUSE_LIBPNG_BUILTIN COND_WXUSE_LIBTIFF_BUILTIN COND_WXUSE_ODBC_BUILTIN COND_WXUSE_REGEX_BUILTIN COND_WXUSE_ZLIB_BUILTIN COND_PLATFORM_MAC_1 COND_SHARED_1 COND_SHARED_0 COND_TOOLKIT_MAC_USE_GUI_1 COND_TOOLKIT_OS2_USE_GUI_1 COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1 COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1 LEX_STEM PATH_IFS WX_MAJOR_VERSION_NUMBER WX_MINOR_VERSION_NUMBER WX_RELEASE_NUMBER WX_LIBRARY_NAME_STATIC WX_LIBRARY_NAME_SHARED WX_LIBRARY_BASENAME_NOGUI WX_LIBRARY_BASENAME_GUI WX_LIBRARY_IMPORTLIB WX_TARGET_LIBRARY WX_LIBRARY_LINK1 WX_LIBRARY_LINK2 PROGRAM_EXT WX_LIBRARY_NAME_STATIC_GL WX_LIBRARY_NAME_SHARED_GL WX_TARGET_LIBRARY_GL WX_LIBRARY_LINK1_GL WX_LIBRARY_LINK2_GL WX_ALL WX_ALL_INSTALLED SHARED_LD WX_TARGET_LIBRARY_TYPE STATIC_FLAG WXDEBUG_DEFINE USE_GUI AFMINSTALL WIN32INSTALL TOOLKIT TOOLKIT_DIR TOOLKIT_VPATH TOOLCHAIN_NAME TOOLCHAIN_DEFS TOOLCHAIN_DLL_DEFS top_builddir_wxconfig cross_compiling WXCONFIG_EXTRALIBS WXCONFIG_LIBS WXCONFIG_LIBS_GL WXCONFIG_LIBS_STATIC WXCONFIG_LIBS_STATIC_GL WXCONFIG_INCLUDE WXCONFIG_RPATH WX_LARGEFILE_FLAGS CODE_GEN_FLAGS CODE_GEN_FLAGS_CXX ALL_OBJECTS ALL_HEADERS ALL_SOURCES GUIDIST PORT_FILES DISTDIR SAMPLES_SUBDIRS LDFLAGS_GL LDFLAGS_VERSIONING LDFLAGS_EXE OPENGL_LIBS DMALLOC_LIBS WX_VERSION_TAG RESFLAGS RESPROGRAMOBJ WX_RESOURCES_MACOSX_ASCII WX_RESOURCES_MACOSX_DATA MACOSX_BUNDLE LIBWXMACRES MACRESCOMP MACSETFILE MACRESWXCONFIG GCC DLLTOOL AS NM LD MAKEINFO INSTALL_LIBRARY ESD_LINK LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -24553,19 +24553,9 @@ IODBC_C_SRC=""
 
 if test "$TOOLKIT" != "MSW" ; then
 
-    if test "$wxUSE_ODBC" != "no" ; then
-        cat >>confdefs.h <<\_ACEOF
-#define wxUSE_ODBC 1
-_ACEOF
+    if test "$wxUSE_ODBC" = "sys" -o "$wxUSE_ODBC" = "yes" ; then
 
-        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS db"
-
-                WXODBCFLAG="-D_IODBC_"
-
-
-        if test "$wxUSE_ODBC" = "sys" ; then
-
-            if test "${ac_cv_header_sql_h+set}" = set; then
+        if test "${ac_cv_header_sql_h+set}" = set; then
   echo "$as_me:$LINENO: checking for sql.h" >&5
 echo $ECHO_N "checking for sql.h... $ECHO_C" >&6
 if test "${ac_cv_header_sql_h+set}" = set; then
@@ -24694,15 +24684,19 @@ echo "$as_me:$LINENO: result: $ac_cv_header_sql_h" >&5
 echo "${ECHO_T}$ac_cv_header_sql_h" >&6
 
 fi
+if test $ac_cv_header_sql_h = yes; then
+  found_sql_h=1
+fi
 
 
-            echo "$as_me:$LINENO: checking for library containing SQLAllocEnv" >&5
-echo $ECHO_N "checking for library containing SQLAllocEnv... $ECHO_C" >&6
-if test "${ac_cv_search_SQLAllocEnv+set}" = set; then
+        if test "x$found_sql_h" = "x1" ; then
+            echo "$as_me:$LINENO: checking for iodbc in -lSQLAllocEnv" >&5
+echo $ECHO_N "checking for iodbc in -lSQLAllocEnv... $ECHO_C" >&6
+if test "${ac_cv_lib_SQLAllocEnv_iodbc+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-  ac_func_search_save_LIBS=$LIBS
-ac_cv_search_SQLAllocEnv=no
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lSQLAllocEnv  $LIBS"
 cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
 /* confdefs.h.  */
@@ -24717,11 +24711,11 @@ extern "C"
 #endif
 /* We use char because int might match the return type of a gcc2
    builtin and then its argument prototype would still apply.  */
-char SQLAllocEnv ();
+char iodbc ();
 int
 main ()
 {
-SQLAllocEnv ();
+iodbc ();
   ;
   return 0;
 }
@@ -24738,17 +24732,30 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  ac_cv_search_SQLAllocEnv="none required"
+  ac_cv_lib_SQLAllocEnv_iodbc=yes
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
+ac_cv_lib_SQLAllocEnv_iodbc=no
 fi
 rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
-if test "$ac_cv_search_SQLAllocEnv" = no; then
-  for ac_lib in iodbc unixodbc odbc ; do
-    LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
-    cat >conftest.$ac_ext <<_ACEOF
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_SQLAllocEnv_iodbc" >&5
+echo "${ECHO_T}$ac_cv_lib_SQLAllocEnv_iodbc" >&6
+if test $ac_cv_lib_SQLAllocEnv_iodbc = yes; then
+  ODBC_LINK=" -liodbc"
+else
+
+                echo "$as_me:$LINENO: checking for unixodbc in -lSQLAllocEnv" >&5
+echo $ECHO_N "checking for unixodbc in -lSQLAllocEnv... $ECHO_C" >&6
+if test "${ac_cv_lib_SQLAllocEnv_unixodbc+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lSQLAllocEnv  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
 /* confdefs.h.  */
 _ACEOF
@@ -24762,11 +24769,11 @@ extern "C"
 #endif
 /* We use char because int might match the return type of a gcc2
    builtin and then its argument prototype would still apply.  */
-char SQLAllocEnv ();
+char unixodbc ();
 int
 main ()
 {
-SQLAllocEnv ();
+unixodbc ();
   ;
   return 0;
 }
@@ -24783,38 +24790,110 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
-  ac_cv_search_SQLAllocEnv="-l$ac_lib"
-break
+  ac_cv_lib_SQLAllocEnv_unixodbc=yes
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
+ac_cv_lib_SQLAllocEnv_unixodbc=no
 fi
 rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
-  done
+LIBS=$ac_check_lib_save_LIBS
 fi
-LIBS=$ac_func_search_save_LIBS
-fi
-echo "$as_me:$LINENO: result: $ac_cv_search_SQLAllocEnv" >&5
-echo "${ECHO_T}$ac_cv_search_SQLAllocEnv" >&6
-if test "$ac_cv_search_SQLAllocEnv" != no; then
-  test "$ac_cv_search_SQLAllocEnv" = "none required" || LIBS="$ac_cv_search_SQLAllocEnv $LIBS"
-
+echo "$as_me:$LINENO: result: $ac_cv_lib_SQLAllocEnv_unixodbc" >&5
+echo "${ECHO_T}$ac_cv_lib_SQLAllocEnv_unixodbc" >&6
+if test $ac_cv_lib_SQLAllocEnv_unixodbc = yes; then
+  ODBC_LINK=" -lunixodbc"
 else
 
-                wxUSE_ODBC=builtin;
-                { echo "$as_me:$LINENO: WARNING:  can't find system Odbc library falling back to builtin " >&5
-echo "$as_me: WARNING:  can't find system Odbc library falling back to builtin " >&2;}
+                    echo "$as_me:$LINENO: checking for odbc in -lSQLAllocEnv" >&5
+echo $ECHO_N "checking for odbc in -lSQLAllocEnv... $ECHO_C" >&6
+if test "${ac_cv_lib_SQLAllocEnv_odbc+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lSQLAllocEnv  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char odbc ();
+int
+main ()
+{
+odbc ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+         { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_SQLAllocEnv_odbc=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_SQLAllocEnv_odbc=no
+fi
+rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_SQLAllocEnv_odbc" >&5
+echo "${ECHO_T}$ac_cv_lib_SQLAllocEnv_odbc" >&6
+if test $ac_cv_lib_SQLAllocEnv_odbc = yes; then
+  ODBC_LINK=" -lodbc"
+fi
+
+
+fi
+
 
 fi
 
         fi
-                if test "$wxUSE_ODBC" != "sys" ; then
-            ALL_OBJECTS="${ALL_OBJECTS} \$(IODBCOBJS)"
+        if test "x$ODBC_LINK" = "x" ; then
+            if test "$wxUSE_ODBC" = "sys" ; then
+                { { echo "$as_me:$LINENO: error: system ODBC library not found! Use --with-odbc=builtin to use built-in version" >&5
+echo "$as_me: error: system ODBC library not found! Use --with-odbc=builtin to use built-in version" >&2;}
+   { (exit 1); exit 1; }; }
+            else
+                { echo "$as_me:$LINENO: WARNING: system ODBC library not found, will use built-in instead" >&5
+echo "$as_me: WARNING: system ODBC library not found, will use built-in instead" >&2;}
+                wxUSE_ODBC=builtin
+            fi
+        else
+                        wxUSE_ODBC=sys
         fi
-
     fi
+    if test "$wxUSE_ODBC" != "no" ; then
+        cat >>confdefs.h <<\_ACEOF
+#define wxUSE_ODBC 1
+_ACEOF
 
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS db"
+
+                WXODBCFLAG="-D_IODBC_"
+    fi
 fi
 
 if test "$wxUSE_REGEX" = "builtin" ; then
@@ -24846,7 +24925,6 @@ for ac_dir in $SEARCH_INCLUDE /usr/include;
         if test "$ac_find_includes" != "" ; then
             echo "$as_me:$LINENO: result: found in $ac_find_includes" >&5
 echo "${ECHO_T}found in $ac_find_includes" >&6
-            set -x
 
     if test "x$ac_find_includes" = "x/usr/include"; then
     ac_path_to_include=""
@@ -24861,7 +24939,6 @@ echo "${ECHO_T}found in $ac_find_includes" >&6
   fi
 
             CPPFLAGS="$CPPFLAGS$ac_path_to_include"
-            set +x
         fi
 
         if test "${ac_cv_header_GL_gl_h+set}" = set; then
@@ -25059,7 +25136,7 @@ echo "${ECHO_T}yes" >&6
                     fi
                 fi
 
-                if "$found_gl" != 1; then
+                if test "$found_gl" != 1; then
                     echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
                     echo "$as_me:$LINENO: checking for -lMesaGL" >&5
@@ -33740,6 +33817,7 @@ CXXFLAGS=`echo $CODE_GEN_FLAGS $CODE_GEN_FLAGS_CXX $EXTRA_CFLAGS $CXXFLAGS $CXXW
 LIBS=`echo $LIBS | sed 's/ \+/ /g'`
 EXTRALIBS="$LDFLAGS $LDFLAGS_VERSIONING $LIBS $DMALLOC_LIBS"
 EXTRALIBS_XML="$EXPAT_LINK"
+EXTRALIBS_ODBC="$ODBC_LINK"
 if test "$wxUSE_GUI" = "yes"; then
     EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $PNG_LINK $JPEG_LINK $TIFF_LINK | sed 's/ \+/ /g'`
 fi
@@ -33778,6 +33856,9 @@ fi
 if test "$wxUSE_ZLIB" = "builtin" ; then
     wxconfig_3rdparty="$wxconfig_3rdparty zlib"
 fi
+if test "$wxUSE_ODBC" = "builtin" ; then
+    wxconfig_3rdparty="$wxconfig_3rdparty odbc"
+fi
 
 for i in $wxconfig_3rdparty ; do
     WXCONFIG_EXTRALIBS="$WXCONFIG_EXTRALIBS -lwx${i}${lib_debug_suffix}${HOST_SUFFIX}"
@@ -33804,11 +33885,18 @@ else
     MONOLITHIC=0
 fi
 
+if test $wxUSE_ODBC != "no" ; then
+    USE_ODBC=1
+else
+    USE_ODBC=0
+fi
+
 if test $wxUSE_OFFICIAL_BUILD = "yes" ; then
     OFFICIAL_BUILD=1
 else
     OFFICIAL_BUILD=0
 fi
+
 
 
 
@@ -35149,6 +35237,16 @@ fi
         COND_TOOLKIT_OS2_USE_GUI_1=""
     fi
 
+    COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1="#"
+    if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x0" -a "x$USE_GUI" = "x1" -a "x$USE_ODBC" = "x1" ; then
+        COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1=""
+    fi
+
+    COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1="#"
+    if test "x$MONOLITHIC" = "x0" -a "x$SHARED" = "x1" -a "x$USE_GUI" = "x1" -a "x$USE_ODBC" = "x1" ; then
+        COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1=""
+    fi
+
 
 
 
@@ -36033,6 +36131,7 @@ s,@WXUNIV@,$WXUNIV,;t t
 s,@MONOLITHIC@,$MONOLITHIC,;t t
 s,@EXTRALIBS@,$EXTRALIBS,;t t
 s,@EXTRALIBS_XML@,$EXTRALIBS_XML,;t t
+s,@EXTRALIBS_ODBC@,$EXTRALIBS_ODBC,;t t
 s,@EXTRALIBS_GUI@,$EXTRALIBS_GUI,;t t
 s,@EXTRALIBS_OPENGL@,$EXTRALIBS_OPENGL,;t t
 s,@UNICODE@,$UNICODE,;t t
@@ -36151,6 +36250,8 @@ s,@COND_SHARED_1@,$COND_SHARED_1,;t t
 s,@COND_SHARED_0@,$COND_SHARED_0,;t t
 s,@COND_TOOLKIT_MAC_USE_GUI_1@,$COND_TOOLKIT_MAC_USE_GUI_1,;t t
 s,@COND_TOOLKIT_OS2_USE_GUI_1@,$COND_TOOLKIT_OS2_USE_GUI_1,;t t
+s,@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@,$COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1,;t t
+s,@COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1@,$COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_ODBC_1,;t t
 s,@LEX_STEM@,$LEX_STEM,;t t
 s,@PATH_IFS@,$PATH_IFS,;t t
 s,@WX_MAJOR_VERSION_NUMBER@,$WX_MAJOR_VERSION_NUMBER,;t t

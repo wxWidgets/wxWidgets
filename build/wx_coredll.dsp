@@ -72,12 +72,12 @@ LINK32=link.exe
 # PROP Output_Dir "..\lib\vc_mswdll\"
 # PROP Intermediate_Dir "vc_mswdll\coredll"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswdll" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_coredll.pch" /Fd..\lib\vc_mswdll\wxmsw250_core_vc_custom.pdb /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "NDEBUG" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswdll" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_coredll.pch" /Fd..\lib\vc_mswdll\wxmsw250_core_vc_custom.pdb /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "NDEBUG" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /c
-# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "NDEBUG" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /mktyplib203 /win32
-# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "NDEBUG" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /mktyplib203 /win32
-# ADD BASE RSC /l 0x405 /d "NDEBUG" /d "__WXMSW__" /i "..\include" /i "..\lib\vc_mswdll" /i "..\src\tiff" /i "..\src\jpeg" /i "..\src\png" /i "..\src\zlib" /i "..\src\regex" /i "..\src\expat\lib" /d "WXUSINGDLL" /d "WXMAKINGDLL_CORE" /d wxUSE_BASE=0
-# ADD RSC /l 0x405 /d "NDEBUG" /d "__WXMSW__" /i "..\include" /i "..\lib\vc_mswdll" /i "..\src\tiff" /i "..\src\jpeg" /i "..\src\png" /i "..\src\zlib" /i "..\src\regex" /i "..\src\expat\lib" /d "WXUSINGDLL" /d "WXMAKINGDLL_CORE" /d wxUSE_BASE=0
+# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswdll" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_coredll.pch" /Fd..\lib\vc_mswdll\wxmsw250_core_vc_custom.pdb /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /c
+# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswdll" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_coredll.pch" /Fd..\lib\vc_mswdll\wxmsw250_core_vc_custom.pdb /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /c
+# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /mktyplib203 /win32
+# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /mktyplib203 /win32
+# ADD BASE RSC /l 0x405 /d "__WXMSW__" /i "..\include" /i "..\lib\vc_mswdll" /i "..\src\tiff" /i "..\src\jpeg" /i "..\src\png" /i "..\src\zlib" /i "..\src\regex" /i "..\src\expat\lib" /d "WXUSINGDLL" /d "WXMAKINGDLL_CORE" /d wxUSE_BASE=0
+# ADD RSC /l 0x405 /d "__WXMSW__" /i "..\include" /i "..\lib\vc_mswdll" /i "..\src\tiff" /i "..\src\jpeg" /i "..\src\png" /i "..\src\zlib" /i "..\src\regex" /i "..\src\expat\lib" /d "WXUSINGDLL" /d "WXMAKINGDLL_CORE" /d wxUSE_BASE=0
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -122,12 +122,12 @@ LINK32=link.exe
 # PROP Output_Dir "..\lib\vc_mswunivudll\"
 # PROP Intermediate_Dir "vc_mswunivudll\coredll"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswunivudll" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_coredll.pch" /Fd..\lib\vc_mswunivudll\wxmswuniv250u_core_vc_custom.pdb /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "NDEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswunivudll" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_coredll.pch" /Fd..\lib\vc_mswunivudll\wxmswuniv250u_core_vc_custom.pdb /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "NDEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /c
-# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "NDEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /mktyplib203 /win32
-# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "NDEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /mktyplib203 /win32
-# ADD BASE RSC /l 0x405 /d "NDEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d wxUSE_UNICODE=1 /i "..\include" /i "..\lib\vc_mswunivudll" /i "..\src\tiff" /i "..\src\jpeg" /i "..\src\png" /i "..\src\zlib" /i "..\src\regex" /i "..\src\expat\lib" /d "WXUSINGDLL" /d "WXMAKINGDLL_CORE" /d wxUSE_BASE=0
-# ADD RSC /l 0x405 /d "NDEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d wxUSE_UNICODE=1 /i "..\include" /i "..\lib\vc_mswunivudll" /i "..\src\tiff" /i "..\src\jpeg" /i "..\src\png" /i "..\src\zlib" /i "..\src\regex" /i "..\src\expat\lib" /d "WXUSINGDLL" /d "WXMAKINGDLL_CORE" /d wxUSE_BASE=0
+# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswunivudll" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_coredll.pch" /Fd..\lib\vc_mswunivudll\wxmswuniv250u_core_vc_custom.pdb /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /c
+# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswunivudll" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_coredll.pch" /Fd..\lib\vc_mswunivudll\wxmswuniv250u_core_vc_custom.pdb /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /c
+# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /mktyplib203 /win32
+# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /mktyplib203 /win32
+# ADD BASE RSC /l 0x405 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d wxUSE_UNICODE=1 /i "..\include" /i "..\lib\vc_mswunivudll" /i "..\src\tiff" /i "..\src\jpeg" /i "..\src\png" /i "..\src\zlib" /i "..\src\regex" /i "..\src\expat\lib" /d "WXUSINGDLL" /d "WXMAKINGDLL_CORE" /d wxUSE_BASE=0
+# ADD RSC /l 0x405 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d wxUSE_UNICODE=1 /i "..\include" /i "..\lib\vc_mswunivudll" /i "..\src\tiff" /i "..\src\jpeg" /i "..\src\png" /i "..\src\zlib" /i "..\src\regex" /i "..\src\expat\lib" /d "WXUSINGDLL" /d "WXMAKINGDLL_CORE" /d wxUSE_BASE=0
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -172,12 +172,12 @@ LINK32=link.exe
 # PROP Output_Dir "..\lib\vc_mswunivdll\"
 # PROP Intermediate_Dir "vc_mswunivdll\coredll"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswunivdll" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_coredll.pch" /Fd..\lib\vc_mswunivdll\wxmswuniv250_core_vc_custom.pdb /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "NDEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswunivdll" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_coredll.pch" /Fd..\lib\vc_mswunivdll\wxmswuniv250_core_vc_custom.pdb /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "NDEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /c
-# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "NDEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /mktyplib203 /win32
-# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "NDEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /mktyplib203 /win32
-# ADD BASE RSC /l 0x405 /d "NDEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /i "..\include" /i "..\lib\vc_mswunivdll" /i "..\src\tiff" /i "..\src\jpeg" /i "..\src\png" /i "..\src\zlib" /i "..\src\regex" /i "..\src\expat\lib" /d "WXUSINGDLL" /d "WXMAKINGDLL_CORE" /d wxUSE_BASE=0
-# ADD RSC /l 0x405 /d "NDEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /i "..\include" /i "..\lib\vc_mswunivdll" /i "..\src\tiff" /i "..\src\jpeg" /i "..\src\png" /i "..\src\zlib" /i "..\src\regex" /i "..\src\expat\lib" /d "WXUSINGDLL" /d "WXMAKINGDLL_CORE" /d wxUSE_BASE=0
+# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswunivdll" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_coredll.pch" /Fd..\lib\vc_mswunivdll\wxmswuniv250_core_vc_custom.pdb /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /c
+# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswunivdll" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_coredll.pch" /Fd..\lib\vc_mswunivdll\wxmswuniv250_core_vc_custom.pdb /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /c
+# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /mktyplib203 /win32
+# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /mktyplib203 /win32
+# ADD BASE RSC /l 0x405 /d "__WXMSW__" /d "__WXUNIVERSAL__" /i "..\include" /i "..\lib\vc_mswunivdll" /i "..\src\tiff" /i "..\src\jpeg" /i "..\src\png" /i "..\src\zlib" /i "..\src\regex" /i "..\src\expat\lib" /d "WXUSINGDLL" /d "WXMAKINGDLL_CORE" /d wxUSE_BASE=0
+# ADD RSC /l 0x405 /d "__WXMSW__" /d "__WXUNIVERSAL__" /i "..\include" /i "..\lib\vc_mswunivdll" /i "..\src\tiff" /i "..\src\jpeg" /i "..\src\png" /i "..\src\zlib" /i "..\src\regex" /i "..\src\expat\lib" /d "WXUSINGDLL" /d "WXMAKINGDLL_CORE" /d wxUSE_BASE=0
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -222,12 +222,12 @@ LINK32=link.exe
 # PROP Output_Dir "..\lib\vc_mswudll\"
 # PROP Intermediate_Dir "vc_mswudll\coredll"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswudll" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_coredll.pch" /Fd..\lib\vc_mswudll\wxmsw250u_core_vc_custom.pdb /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "NDEBUG" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswudll" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_coredll.pch" /Fd..\lib\vc_mswudll\wxmsw250u_core_vc_custom.pdb /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "NDEBUG" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /c
-# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "NDEBUG" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /mktyplib203 /win32
-# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "NDEBUG" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /mktyplib203 /win32
-# ADD BASE RSC /l 0x405 /d "NDEBUG" /d "__WXMSW__" /d wxUSE_UNICODE=1 /i "..\include" /i "..\lib\vc_mswudll" /i "..\src\tiff" /i "..\src\jpeg" /i "..\src\png" /i "..\src\zlib" /i "..\src\regex" /i "..\src\expat\lib" /d "WXUSINGDLL" /d "WXMAKINGDLL_CORE" /d wxUSE_BASE=0
-# ADD RSC /l 0x405 /d "NDEBUG" /d "__WXMSW__" /d wxUSE_UNICODE=1 /i "..\include" /i "..\lib\vc_mswudll" /i "..\src\tiff" /i "..\src\jpeg" /i "..\src\png" /i "..\src\zlib" /i "..\src\regex" /i "..\src\expat\lib" /d "WXUSINGDLL" /d "WXMAKINGDLL_CORE" /d wxUSE_BASE=0
+# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswudll" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_coredll.pch" /Fd..\lib\vc_mswudll\wxmsw250u_core_vc_custom.pdb /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /c
+# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\include" /I "..\lib\vc_mswudll" /I "..\src\tiff" /I "..\src\jpeg" /I "..\src\png" /I "..\src\zlib" /I "..\src\regex" /I "..\src\expat\lib" /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_coredll.pch" /Fd..\lib\vc_mswudll\wxmsw250u_core_vc_custom.pdb /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /c
+# ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /mktyplib203 /win32
+# ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_CORE" /D wxUSE_BASE=0 /mktyplib203 /win32
+# ADD BASE RSC /l 0x405 /d "__WXMSW__" /d wxUSE_UNICODE=1 /i "..\include" /i "..\lib\vc_mswudll" /i "..\src\tiff" /i "..\src\jpeg" /i "..\src\png" /i "..\src\zlib" /i "..\src\regex" /i "..\src\expat\lib" /d "WXUSINGDLL" /d "WXMAKINGDLL_CORE" /d wxUSE_BASE=0
+# ADD RSC /l 0x405 /d "__WXMSW__" /d wxUSE_UNICODE=1 /i "..\include" /i "..\lib\vc_mswudll" /i "..\src\tiff" /i "..\src\jpeg" /i "..\src\png" /i "..\src\zlib" /i "..\src\regex" /i "..\src\expat\lib" /d "WXUSINGDLL" /d "WXMAKINGDLL_CORE" /d wxUSE_BASE=0
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -656,10 +656,6 @@ SOURCE=..\include\wx\imagxpm.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\wx\joystick.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\wx\layout.h
 # End Source File
 # Begin Source File
@@ -868,10 +864,6 @@ SOURCE=..\include\wx\msw\iniconf.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\wx\msw\joystick.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\wx\msw\listbox.h
 # End Source File
 # Begin Source File
@@ -1044,10 +1036,6 @@ SOURCE=..\include\wx\msw\tabctrl.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\wx\msw\taskbar.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\wx\msw\tbar95.h
 # End Source File
 # Begin Source File
@@ -1077,10 +1065,6 @@ SOURCE=..\include\wx\msw\toplevel.h
 # Begin Source File
 
 SOURCE=..\include\wx\msw\treectrl.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\msw\wave.h
 # End Source File
 # Begin Source File
 
@@ -1229,10 +1213,6 @@ SOURCE=..\include\wx\tab.h
 # Begin Source File
 
 SOURCE=..\include\wx\tabctrl.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\taskbar.h
 # End Source File
 # Begin Source File
 
@@ -1453,10 +1433,6 @@ SOURCE=..\include\wx\vms_x_fix.h
 # Begin Source File
 
 SOURCE=..\include\wx\vscroll.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\include\wx\wave.h
 # End Source File
 # Begin Source File
 
@@ -2295,6 +2271,41 @@ SOURCE=..\src\univ\control.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\univ\ctrlrend.cpp
+
+!IF  "$(CFG)" == "coredll - Win32 DLL Native Debug Unicode"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "coredll - Win32 DLL Native Release Ansi"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "coredll - Win32 DLL wxUniv Debug Unicode"
+
+
+!ELSEIF  "$(CFG)" == "coredll - Win32 DLL wxUniv Release Unicode"
+
+
+!ELSEIF  "$(CFG)" == "coredll - Win32 DLL Native Debug Ansi"
+
+# PROP Exclude_From_Build 1
+
+!ELSEIF  "$(CFG)" == "coredll - Win32 DLL wxUniv Release Ansi"
+
+
+!ELSEIF  "$(CFG)" == "coredll - Win32 DLL wxUniv Debug Ansi"
+
+
+!ELSEIF  "$(CFG)" == "coredll - Win32 DLL Native Release Unicode"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF
+
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\univ\dialog.cpp
 
 !IF  "$(CFG)" == "coredll - Win32 DLL Native Debug Unicode"
@@ -2611,41 +2622,6 @@ SOURCE=..\src\univ\radiobox.cpp
 # Begin Source File
 
 SOURCE=..\src\univ\radiobut.cpp
-
-!IF  "$(CFG)" == "coredll - Win32 DLL Native Debug Unicode"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "coredll - Win32 DLL Native Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "coredll - Win32 DLL wxUniv Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "coredll - Win32 DLL wxUniv Release Unicode"
-
-
-!ELSEIF  "$(CFG)" == "coredll - Win32 DLL Native Debug Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "coredll - Win32 DLL wxUniv Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "coredll - Win32 DLL wxUniv Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "coredll - Win32 DLL Native Release Unicode"
-
-# PROP Exclude_From_Build 1
-
-!ENDIF
-
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\univ\renderer.cpp
 
 !IF  "$(CFG)" == "coredll - Win32 DLL Native Debug Unicode"
 
@@ -3570,10 +3546,6 @@ SOURCE=..\src\common\statbar.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\common\taskbarcmn.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\common\tbarbase.cpp
 # End Source File
 # Begin Source File
@@ -4366,10 +4338,6 @@ SOURCE=..\src\msw\iniconf.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\msw\joystick.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\msw\listbox.cpp
 
 !IF  "$(CFG)" == "coredll - Win32 DLL Native Debug Unicode"
@@ -4983,37 +4951,6 @@ SOURCE=..\src\msw\region.cpp
 # Begin Source File
 
 SOURCE=..\src\msw\renderer.cpp
-
-!IF  "$(CFG)" == "coredll - Win32 DLL Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "coredll - Win32 DLL Native Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "coredll - Win32 DLL wxUniv Debug Unicode"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "coredll - Win32 DLL wxUniv Release Unicode"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "coredll - Win32 DLL Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "coredll - Win32 DLL wxUniv Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "coredll - Win32 DLL wxUniv Debug Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "coredll - Win32 DLL Native Release Unicode"
-
-
-!ENDIF
-
 # End Source File
 # Begin Source File
 
@@ -5371,10 +5308,6 @@ SOURCE=..\src\msw\tabctrl.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\msw\taskbar.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\msw\tbar95.cpp
 
 !IF  "$(CFG)" == "coredll - Win32 DLL Native Debug Unicode"
@@ -5532,45 +5465,10 @@ SOURCE=..\src\msw\utilsgui.cpp
 # Begin Source File
 
 SOURCE=..\src\msw\uxtheme.cpp
-
-!IF  "$(CFG)" == "coredll - Win32 DLL Native Debug Unicode"
-
-
-!ELSEIF  "$(CFG)" == "coredll - Win32 DLL Native Release Ansi"
-
-
-!ELSEIF  "$(CFG)" == "coredll - Win32 DLL wxUniv Debug Unicode"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "coredll - Win32 DLL wxUniv Release Unicode"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "coredll - Win32 DLL Native Debug Ansi"
-
-
-!ELSEIF  "$(CFG)" == "coredll - Win32 DLL wxUniv Release Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "coredll - Win32 DLL wxUniv Debug Ansi"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "coredll - Win32 DLL Native Release Unicode"
-
-
-!ENDIF
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\msw\volume.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\msw\wave.cpp
 # End Source File
 # Begin Source File
 

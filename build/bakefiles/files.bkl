@@ -124,8 +124,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/config.cpp
     src/common/datetime.cpp
     src/common/datstrm.cpp
-    src/common/db.cpp
-    src/common/dbtable.cpp
     src/common/dircmn.cpp
     src/common/dynarray.cpp
     src/common/dynlib.cpp
@@ -194,9 +192,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/datetime.h
     wx/datetime.inl
     wx/datstrm.h
-    wx/db.h
-    wx/dbkeyg.h
-    wx/dbtable.h
     wx/dde.h
     wx/debug.h
     wx/defs.h
@@ -1915,7 +1910,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!-- ====================================================================== -->
 
 <set var="ADVANCED_CMN_SRC" hints="files">
-    src/common/dbgrid.cpp
     src/generic/calctrl.cpp
     src/generic/dcbuffer.cpp
     src/generic/grid.cpp
@@ -1931,7 +1925,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="ADVANCED_CMN_HDR" hints="files">
     wx/calctrl.h
-    wx/dbgrid.h
     wx/dcbuffer.h
     wx/generic/calctrl.h
     wx/generic/grid.h
@@ -2087,6 +2080,24 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 
 <!-- ====================================================================== -->
+<!--                              ODBD classes                              -->
+<!-- ====================================================================== -->
+
+<set var="ODBC_SRC" hints="files">
+    src/common/db.cpp
+    src/common/dbgrid.cpp
+    src/common/dbtable.cpp
+</set>
+<set var="ODBC_HDR" hints="files">
+    wx/db.h
+    wx/dbgrid.h
+    wx/dbkeyg.h
+    wx/dbtable.h
+</set>
+
+
+
+<!-- ====================================================================== -->
 <!--                    Define sources for specific libraries:              -->
 <!-- ====================================================================== -->
 
@@ -2233,7 +2244,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         $(NET_CMN_HDR) $(NET_PLATFORM_HDR)
         $(ALL_GUI_HEADERS) $(ADVANCED_HDR)
         $(HTML_HDR) $(XML_HDR)
-        $(OPENGL_HDR)
+        $(OPENGL_HDR) $(ODBC_HDR)
     </set>
 
 </makefile>

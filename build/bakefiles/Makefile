@@ -9,7 +9,7 @@ SDEPS = config.bkl common.bkl common_samples.bkl
 MDEPS = common.bkl config.bkl files.bkl monolithic.bkl multilib.bkl opengl.bkl wxwin.py
 
 DSWFLAGS = -DRUNTIME_LIBS=dynamic -DOFFICIAL_BUILD=0 -DUSE_HTML=1 \
-           -DUSE_OPENGL=1 -DMONOLITHIC=0 -DUSE_GUI=1 \
+           -DUSE_OPENGL=1 -DUSE_ODBC=1 -DMONOLITHIC=0 -DUSE_GUI=1 \
            -DDEBUG_INFO=default -DDEBUG_FLAG=default
 AUTOCONF_ALL = \
 	../../Makefile.in \
