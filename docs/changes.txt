@@ -46,6 +46,7 @@ All:
 - fixed bug with deleting entries at root level in wxFileConfig
 - chkconf.h now includes platform-specific versions (for MSW
   and Mac) which contain some tests that were in setup.h
+- Added event sink argument to wxEvtHandler::Connect()
 
 wxBase:
 
