@@ -1861,7 +1861,10 @@ void wxGenericTreeCtrl::SetImageList(wxImageList *imageList)
     m_imageListNormal = imageList;
     m_ownsImageListNormal = FALSE;
     m_dirty = TRUE;
-    CalculateLineHeight();
+    // Don't do any drawing if we're setting the list to NULL,
+    // since we may be in the process of deleting the tree control.
+    if (imageList)
+        CalculateLineHeight();
 }
 
 void wxGenericTreeCtrl::SetStateImageList(wxImageList *imageList)
