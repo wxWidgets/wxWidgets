@@ -1948,6 +1948,9 @@ AC_OUTPUT([
             include/wx/msw/Makefile
             include/wx/protocol/Makefile
             include/wx/unix/Makefile
+	    misc/Makefile
+	    misc/afm/Makefile
+	    misc/gs_afm/Makefile
             samples/Makefile
             samples/bombs/Makefile
             samples/caret/Makefile

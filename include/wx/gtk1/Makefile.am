@@ -63,8 +63,3 @@ wx_gtk_include_HEADERS = \
  win_gtk.h \
  window.h
 
-# setup.h is installed in another directory because several versions of wxwin
-# should be able to coexist on the same machine
-portheadersdir = ${datadir}/@PACKAGE@/include/wx
-portheaders_HEADERS = setup.h
-

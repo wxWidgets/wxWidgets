@@ -2,7 +2,7 @@
 AUTOMAKE_OPTIONS = 1.4 
 # no-dependencies
 
-SUBDIRS = include src samples # utils user docs
+SUBDIRS = include src samples misc # utils user docs
 
 bin_SCRIPTS = wx-config
 

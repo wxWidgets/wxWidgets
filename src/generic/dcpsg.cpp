@@ -1685,8 +1685,11 @@ void wxPostScriptDC::GetTextExtent( const wxString& string, long *x, long *y,
         /* get the directory of the AFM files */
         char afmName[256];
         afmName[0] = 0;
-        wxString fmPath(m_printData.GetFontMetricPath());
-        if (fmPath != "") strcpy( afmName, (const char*) fmPath );
+	
+	if (!m_printData.GetFontMetricPath().IsEmpty())
+	{
+	    strcpy( afmName, m_printData.GetFontMetricPath().mb_str() )
+	}
 
         /* 2. open and process the file
            /  a short explanation of the AFM format:
@@ -1707,7 +1710,26 @@ void wxPostScriptDC::GetTextExtent( const wxString& string, long *x, long *y,
         strcat(afmName,name);
         strcat(afmName,".afm");
         FILE *afmFile = fopen(afmName,"r");
-        if ( afmFile==NULL )
+	
+#ifdef __UNIX__
+	if (afmFile==NULL)
+	{
+	    strcpy( afmName, "/usr/local/share/wx/gs_afm/" );
+            strcat(afmName,name);
+            strcat(afmName,".afm");
+            FILE *afmFile = fopen(afmName,"r");
+	}
+	
+	if (afmFile==NULL)
+	{
+	    strcpy( afmName, "/usr/share/wx/gs_afm/" );
+            strcat(afmName,name);
+            strcat(afmName,".afm");
+            FILE *afmFile = fopen(afmName,"r");
+	}
+#endif
+	
+        if (afmFile==NULL)
         {
             wxLogDebug( "GetTextExtent: can't open AFM file '%s'\n", afmName );
             wxLogDebug( "               using approximate values\n");
