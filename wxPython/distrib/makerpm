@@ -49,7 +49,7 @@ function usage {
 #    echo "   smp            Add SMP=2 to the envivonment to speed wxGTK build"
 }
 
-if [ $# -lt 2 ]; then
+if [ $# -lt 1 ]; then
     usage
     exit 1
 fi

@@ -127,13 +127,12 @@ make -C contrib/src/stc
 make -C contrib/src/xrc
 
 
-# Install wxWindows and the contribs so the wxPython build can find
-# all the headers it needs
-make prefix=$RPM_BUILD_ROOT%{wxpref} install
-make -C contrib/src/gizmos prefix=$RPM_BUILD_ROOT%{wxpref} install
-make -C contrib/src/ogl CXXFLAGS="-DwxUSE_DEPRECATED=0" prefix=$RPM_BUILD_ROOT%{wxpref} install
-make -C contrib/src/stc prefix=$RPM_BUILD_ROOT%{wxpref} install
-make -C contrib/src/xrc prefix=$RPM_BUILD_ROOT%{wxpref} install
+# Link the contrib header directories in place so we can build all of
+# wxPython without installing wxWindows
+if [ ! -e $WXDIR/include/wx/gizmos ]; then
+	cd $WXDIR/include/wx
+	ln -s ../../contrib/include/wx/* .
+fi
 
 
 # Now build wxPython
@@ -142,15 +141,29 @@ cd $WXDIR/wxPython
 	NO_SCRIPTS=1 \
 	WXPORT=%{lcport} \
 	UNICODE=%{unicode} \
-	WX_CONFIG="$RPM_BUILD_ROOT%{wxpref}/bin/wx-config --prefix=$RPM_BUILD_ROOT%{wxpref}" \
+	WX_CONFIG="$WXDIR/bld/wx-config --prefix=$WXDIR --exec-prefix=$WXDIR/bld" \
 	build
 
-## $WXDIR/bld/wx-config --prefix=$WXDIR --exec-prefix=$WXDIR/bld" 
 
 # Build wxrc (XRC resource tool)
 cd $WXDIR/bld/contrib/utils/wxrc
 make
 strip wxrc
+
+
+#----------------------------------------------------------------
+%install
+
+WXDIR=`pwd`
+cd bld
+
+# Install wxWindows and the contribs so the wxPython build can find
+# all the headers it needs
+make prefix=$RPM_BUILD_ROOT%{wxpref} install
+make -C contrib/src/gizmos prefix=$RPM_BUILD_ROOT%{wxpref} install
+make -C contrib/src/ogl CXXFLAGS="-DwxUSE_DEPRECATED=0" prefix=$RPM_BUILD_ROOT%{wxpref} install
+make -C contrib/src/stc prefix=$RPM_BUILD_ROOT%{wxpref} install
+make -C contrib/src/xrc prefix=$RPM_BUILD_ROOT%{wxpref} install
 
 
 # install wxPython
@@ -164,11 +177,7 @@ cd $WXDIR/wxPython
 	--root=$RPM_BUILD_ROOT
 
 
-#----------------------------------------------------------------
-%install
 
-# Other "install" tasks...
-WXDIR=`pwd`
 cd $WXDIR/wxPython
 
 # install the wxPython headers
@@ -204,10 +213,6 @@ done
 
 # Install wxrc
 cp $WXDIR/bld/contrib/utils/wxrc/wxrc $RPM_BUILD_ROOT%{pref}/bin
-
-
-# link specific name to generic name
-##ln -s wxPython-%{version} $RPM_BUILD_ROOT%{wxprefbase}
 
 
 # install KDE & GNOME menus
