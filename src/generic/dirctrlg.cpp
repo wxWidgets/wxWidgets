@@ -819,7 +819,7 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
             while(strTok.HasMoreTokens())
             {
                 curFilter = strTok.GetNextToken();
-                if (d.GetFirst(& eachFilename, m_currentFilterStr, style))
+                if (d.GetFirst(& eachFilename, curFilter, style))
                 {
                     do
                     {
