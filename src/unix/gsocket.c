@@ -4,6 +4,9 @@
  * Purpose: GSocket main Unix file
  * CVSID:   $Id$
  * Log:     $Log$
+ * Log:     Revision 1.2  1999/07/23 09:48:31  KB
+ * Log:     Fixed stupid new bugs :-(
+ * Log:
  * Log:     Revision 1.1  1999/07/22 17:51:54  GL
  * Log:     Added GSocket for Unix (only GTK for the moment)
  * Log:     Updated wxSocket to use GSocket API
@@ -21,13 +24,13 @@
 
 #include <assert.h>
 #include <sys/ioctl.h>
+#include <sys/types.h>
 #ifdef vms
 #include <socket.h>
 #else
 #include <sys/socket.h>
 #endif
 #include <sys/un.h>
-#include <sys/types.h>
 #include <sys/time.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
@@ -47,9 +50,13 @@
 #endif
 
 #include <signal.h>
-
+#include <wx/setup.h>
 #include <wx/gsocket.h>
 #include "gsockunx.h"
+
+#ifndef SOCKLEN_T
+#	define SOCKLEN_T int
+#endif
 
 /* Constructors / Destructors */
 
@@ -152,7 +159,7 @@ GAddress *GSocket_GetLocal(GSocket *socket)
 {
   GAddress *address;
   struct sockaddr addr;
-  socklen_t size;
+  SOCKLEN_T size;
 
   assert(socket != NULL);
 
@@ -717,10 +724,13 @@ void _GAddress_translate_from(GAddress *address, struct sockaddr *addr, int len)
   case AF_UNIX:
     address->m_family = GSOCK_UNIX;
     break;
+#ifdef AF_INET6
   case AF_INET6:
     address->m_family = GSOCK_INET6;
     break;
+#endif
   default:
+
     /* TODO error */
   }
 
