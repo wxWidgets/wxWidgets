@@ -1259,6 +1259,7 @@ if test "$wxUSE_WINE" = "yes"; then
     CC=winegcc
     CXX=wineg++
     RESCOMP=wrc
+    LDFLAGS_GUI="-mwindows"
 fi
 
 dnl NB: The two tests bellow are *NOT* mutually exclusive! They should only
