@@ -1403,7 +1403,7 @@ void wxDb::Close(void)
         {
             s.Printf(wxT("(%-20s)     tableID:[%6lu]     pDb:[%p]"), tiu->tableName,tiu->tableID,tiu->pDb);
             s2.Printf(wxT("Orphaned found using pDb:[%p]"),this);
-            wxLogDebug (s,s2);
+            wxLogDebug (s.c_str(),s2.c_str());
         }
         pNode = pNode->Next();
     }
@@ -2757,7 +2757,7 @@ wxDbColInf *wxDb::GetColumns(const wxString &tableName, int *numCols, const wxCh
 
 
 /********** wxDb::GetColumnCount() **********/
-UWORD wxDb::GetColumnCount(const wxString &tableName, const wxChar *userID)
+int wxDb::GetColumnCount(const wxString &tableName, const wxChar *userID)
 /*
  * Returns a count of how many columns are in a table.
  * If an error occurs in computing the number of columns
@@ -3845,7 +3845,7 @@ int wxDbCreateDataSource(const wxString &driverName, const wxString &dsn, const 
 
 /********** wxDbGetDataSource() **********/
 bool wxDbGetDataSource(HENV henv, wxChar *Dsn, SWORD DsnMax, wxChar *DsDesc,
-                       SWORD DsDescMax, DWORD direction)
+                       SWORD DsDescMax, UWORD direction)
 /*
  * Dsn and DsDesc will contain the data source name and data source
  * description upon return

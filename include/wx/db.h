@@ -600,7 +600,7 @@ public:
     wxDbColInf  *GetColumns(wxChar *tableName[], const wxChar *userID=NULL);
     wxDbColInf  *GetColumns(const wxString &tableName, UWORD *numCols, const wxChar *userID=NULL); 
 
-    UWORD           GetColumnCount(const wxString &tableName, const wxChar *userID=NULL);
+    int             GetColumnCount(const wxString &tableName, const wxChar *userID=NULL);
     const wxChar   *GetDatabaseName(void)  {return dbInf.dbmsName;}
     const wxString &GetDataSource(void)    {return dsn;}
     const wxString &GetDatasourceName(void){return dsn;}
@@ -705,7 +705,7 @@ int WXDLLEXPORT wxDbCreateDataSource(const wxString &driverName, const wxString 
 // the first time using SQL_FETCH_FIRST.  Continue to call it
 // using SQL_FETCH_NEXT until you've exhausted the list.
 bool WXDLLEXPORT wxDbGetDataSource(HENV henv, wxChar *Dsn, SWORD DsnMax, wxChar *DsDesc,
-                                   SWORD DsDescMax, DWORD direction = SQL_FETCH_NEXT);
+                                   SWORD DsDescMax, UWORD direction = SQL_FETCH_NEXT);
 
 
 // Change this to 0 to remove use of all deprecated functions
