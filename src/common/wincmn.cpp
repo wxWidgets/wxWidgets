@@ -421,7 +421,7 @@ wxSize wxWindowBase::DoGetBestSize() const
               node = node->GetNext() )
         {
             wxWindow *win = node->GetData();
-            if ( win->IsTopLevel() || wxDynamicCast(win, wxStatusBar) )
+            if ( win->IsTopLevel() || wxDynamicCast(win, wxStatusBar) || !win->IsShown())
             {
                 // dialogs and frames lie in different top level windows -
                 // don't deal with them here; as for the status bars, they

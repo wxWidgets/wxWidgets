@@ -526,7 +526,13 @@ void wxToolBarBase::OnIdle(wxIdleEvent& event)
 // Do the toolbar button updates (check for EVT_UPDATE_UI handlers)
 void wxToolBarBase::DoToolbarUpdates()
 {
-    wxEvtHandler* evtHandler = GetEventHandler();
+    wxWindow* parent = this;
+    while (parent->GetParent())
+        parent = parent->GetParent();
+
+    wxWindow* focusWin = wxFindFocusDescendant(parent);
+
+    wxEvtHandler* evtHandler = focusWin ? focusWin->GetEventHandler() : GetEventHandler() ;
 
     for ( wxToolBarToolsList::Node* node = m_tools.GetFirst();
           node;

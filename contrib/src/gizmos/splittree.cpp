@@ -338,7 +338,7 @@ void wxRemotelyScrolledTreeCtrl::OnScroll(wxScrollWinEvent& event)
     int orient = event.GetOrientation();
     if (orient == wxHORIZONTAL)
     {
-        // Don't 'skip' or we'd get into infinite recursion
+        event.Skip();
         return;
     }
     wxScrolledWindow* scrollWin = GetScrolledWindow();
@@ -439,7 +439,7 @@ void wxTreeCompanionWindow::OnScroll(wxScrollWinEvent& event)
     int orient = event.GetOrientation();
     if (orient == wxHORIZONTAL)
     {
-        // Don't 'skip' or we'd get into infinite recursion
+        event.Skip();
         return;
     }
     if (!m_treeCtrl)
@@ -585,8 +585,13 @@ void wxSplitterScrolledWindow::OnScroll(wxScrollWinEvent& event)
 
     if (orient == wxHORIZONTAL)
     {
+        inOnScroll = FALSE;
+        event.Skip();
+        return;
+#if 0
         int newPos = m_xScrollPosition + nScrollInc;
         SetScrollPos(wxHORIZONTAL, newPos, TRUE );
+#endif
     }
     else
     {

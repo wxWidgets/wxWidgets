@@ -1897,7 +1897,8 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 
         case WM_LBUTTONDOWN:
            // set focus to this window
-           SetFocus();
+           if ((GetExtraStyle() & wxWS_EX_NO_AUTOFOCUS) != wxWS_EX_NO_AUTOFOCUS)
+                SetFocus();
 
            // fall through
 

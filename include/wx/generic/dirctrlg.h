@@ -27,7 +27,7 @@
 // classes
 //-----------------------------------------------------------------------------
 
-class wxDirItemData;
+//class wxDirItemData;
 class wxDirCtrl;
 
 //-----------------------------------------------------------------------------
@@ -224,9 +224,14 @@ public:
     wxGenericDirDialog(wxWindow* parent, const wxString& title,
         const wxString& defaultPath = wxEmptyString, long style = wxDEFAULT_DIALOG_STYLE, const wxPoint& pos = wxDefaultPosition, const wxSize& sz = wxSize(450, 550), const wxString& name = "dialog");
 
+//// Event handlers
     void OnCloseWindow(wxCloseEvent& event);
     void OnOK(wxCommandEvent& event);
+    void OnTreeSelected( wxTreeEvent &event );
+    void OnTreeKeyDown( wxTreeEvent &event );
+    void OnNew(wxCommandEvent& event);
 
+//// Accessors
     inline void SetMessage(const wxString& message) { m_message = message; }
     void SetPath(const wxString& path) ;
     inline void SetStyle(long style) { m_dialogStyle = style; }
@@ -235,11 +240,17 @@ public:
     wxString GetPath(void) const ;
     inline long GetStyle(void) const { return m_dialogStyle; }
 
+    wxTextCtrl* GetInputCtrl() const { return m_input; }
+
+//// Overrides
+    int ShowModal();
+
 protected:
     wxString    m_message;
     long        m_dialogStyle;
     wxString    m_path;
     wxGenericDirCtrl* m_dirCtrl;
+    wxTextCtrl* m_input;
 
 };
 

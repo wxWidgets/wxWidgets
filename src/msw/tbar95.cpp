@@ -205,6 +205,9 @@ bool wxToolBar::Create(wxWindow *parent,
                        long style,
                        const wxString& name)
 {
+    // Don't want to grab the focus when we left click
+    SetExtraStyle(GetExtraStyle() | wxWS_EX_NO_AUTOFOCUS);
+
     // common initialisation
     if ( !CreateControl(parent, id, pos, size, style, wxDefaultValidator, name) )
         return FALSE;

@@ -338,7 +338,8 @@ wxDirItemDataEx::wxDirItemDataEx(const wxString& path, const wxString& name,
      * For FileNameFromPath read LastDirNameInThisPath ;-) */
     // m_isHidden = (bool)(wxFileNameFromPath(*m_path)[0] == '.');
     m_isHidden = FALSE;
-    m_hasSubDirs = HasSubDirs();
+    // m_hasSubDirs is no longer needed
+    m_hasSubDirs = TRUE; // HasSubDirs();
     m_isExpanded = FALSE;
     m_isDir = isDir;
 }
@@ -353,6 +354,7 @@ void wxDirItemDataEx::SetNewDirName( wxString path )
     m_name = wxFileNameFromPath( path );
 }
 
+// No longer used, and takes a very long time
 bool wxDirItemDataEx::HasSubDirs()
 {
     if (m_path.IsEmpty())
@@ -1179,7 +1181,11 @@ void wxDirFilterListCtrl::FillFilterList(const wxString& filter, int defaultFilt
 
 BEGIN_EVENT_TABLE(wxGenericDirDialog, wxDialog)
     EVT_BUTTON(wxID_OK,  wxGenericDirDialog::OnOK)
+    EVT_BUTTON               (wxID_NEW,     wxGenericDirDialog::OnNew)
     EVT_CLOSE(wxGenericDirDialog::OnCloseWindow)
+    EVT_TREE_KEY_DOWN        (ID_DIRCTRL,   wxGenericDirDialog::OnTreeKeyDown)
+    EVT_TREE_SEL_CHANGED     (ID_DIRCTRL,   wxGenericDirDialog::OnTreeSelected)
+    EVT_TEXT_ENTER           (ID_TEXTCTRL,  wxGenericDirDialog::OnOK)
 END_EVENT_TABLE()
 
 wxGenericDirDialog::wxGenericDirDialog(wxWindow* parent, const wxString& title,
@@ -1197,7 +1203,9 @@ wxGenericDirDialog::wxGenericDirDialog(wxWindow* parent, const wxString& title,
 
     topsizer->Add( m_dirCtrl, 1, wxTOP|wxLEFT|wxRIGHT | wxEXPAND, 10 );
 
-    // 2) TODO: text control for entering path?
+    // 2) text ctrl
+    m_input = new wxTextCtrl( this, ID_TEXTCTRL, wxEmptyString, wxDefaultPosition );
+    topsizer->Add( m_input, 0, wxTOP|wxLEFT|wxRIGHT | wxEXPAND, 10 );
 
 #if wxUSE_STATLINE
     // 3) Static line
@@ -1220,6 +1228,8 @@ wxGenericDirDialog::wxGenericDirDialog(wxWindow* parent, const wxString& title,
     okButton->SetDefault();
     m_dirCtrl->SetFocus();
 
+    m_input->SetValue(defaultPath);
+
     SetAutoLayout( TRUE );
     SetSizer( topsizer );
 
@@ -1236,7 +1246,36 @@ void wxGenericDirDialog::OnCloseWindow(wxCloseEvent& event)
 
 void wxGenericDirDialog::OnOK(wxCommandEvent& event)
 {
-    EndModal(wxID_OK);
+    m_path = m_input->GetValue();
+    // Does the path exist? (User may have typed anything in m_input)
+    if (wxPathExists(m_path)) {
+        // OK, path exists, we're done.
+        EndModal(wxID_OK);
+        return;
+    }
+    // Interact with user, find out if the dir is a typo or to be created
+    wxString msg( _("The directory ") );
+    msg = msg + m_path;
+    msg = msg + _("\ndoes not exist\nCreate it now?") ;
+    wxMessageDialog dialog(this, msg, _("Directory does not exist"), wxYES_NO | wxICON_WARNING );
+    if ( dialog.ShowModal() == wxID_YES ) {
+        // Okay, let's make it
+        wxLogNull log;
+        if (wxMkdir(m_path)) {
+            // The new dir was created okay.
+            EndModal(wxID_OK);
+            return;
+        }
+        else {
+            // Trouble...
+            msg = _("Failed to create directory ")+m_path+
+                _("\n(Do you have the required permissions?)");
+            wxMessageDialog errmsg(this, msg, _("Error creating directory"), wxOK | wxICON_ERROR);
+            errmsg.ShowModal();
+            // We still don't have a valid dir. Back to the main dialog.
+        }
+    }
+    // User has answered NO to create dir.
 }
 
 void wxGenericDirDialog::SetPath(const wxString& path)
@@ -1247,4 +1286,77 @@ void wxGenericDirDialog::SetPath(const wxString& path)
 wxString wxGenericDirDialog::GetPath(void) const
 {
     return m_dirCtrl->GetPath();
+}
+
+int wxGenericDirDialog::ShowModal()
+{
+    m_input->SetValue( m_path );
+    return wxDialog::ShowModal();
+}
+
+void wxGenericDirDialog::OnTreeSelected( wxTreeEvent &event )
+{
+    wxDirItemDataEx *data = (wxDirItemDataEx*)m_dirCtrl->GetTreeCtrl()->GetItemData(event.GetItem());
+    if (data)
+       m_input->SetValue( data->m_path );
+};
+
+void wxGenericDirDialog::OnTreeKeyDown( wxTreeEvent &WXUNUSED(event) )
+{
+    wxDirItemDataEx *data = (wxDirItemDataEx*)m_dirCtrl->GetTreeCtrl()->GetItemData(m_dirCtrl->GetTreeCtrl()->GetSelection());
+    if (data)
+        m_input->SetValue( data->m_path );
+};
+
+void wxGenericDirDialog::OnNew( wxCommandEvent& WXUNUSED(event) )
+{
+#if 0
+    wxTreeItemId id = m_dir->GetSelection();
+    if ((id == m_dir->GetRootItem()) ||
+        (m_dir->GetParent(id) == m_dir->GetRootItem()))
+    {
+        wxMessageDialog msg(this, _("You cannot add a new directory to this section."),
+                            _("Create directory"), wxOK | wxICON_INFORMATION );
+        msg.ShowModal();
+        return;
+    }
+
+    wxTreeItemId parent = m_dir->GetParent( id );
+    wxDirItemData *data = (wxDirItemData*)m_dir->GetItemData( parent );
+    wxASSERT( data );
+
+    wxString new_name( wxT("NewName") );
+    wxString path( data->m_path );
+    path += wxT("/");
+    path += new_name;
+    if (wxFileExists(path))
+    {
+        // try NewName0, NewName1 etc.
+        int i = 0;
+        do {
+            new_name = wxT("NewName");
+            wxString num;
+            num.Printf( wxT("%d"), i );
+            new_name += num;
+
+            path = data->m_path;
+            path += wxT("/");
+            path += new_name;
+            i++;
+        } while (wxFileExists(path));
+    }
+
+    wxLogNull log;
+    if (!wxMkdir(path))
+    {
+        wxMessageDialog dialog(this, _("Operation not permitted."), _("Error"), wxOK | wxICON_ERROR );
+        dialog.ShowModal();
+        return;
+    }
+
+    wxDirItemData *new_data = new wxDirItemData( path, new_name );
+    wxTreeItemId new_id = m_dir->AppendItem( parent, new_name, 0, 1, new_data );
+    m_dir->EnsureVisible( new_id );
+    m_dir->EditLabel( new_id );
+#endif
 }
