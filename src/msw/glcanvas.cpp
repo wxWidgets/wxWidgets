@@ -334,30 +334,8 @@ bool wxGLCanvas::Create(wxWindow *parent, wxWindowID id,
   return TRUE;
 }
 
-void wxGLCanvas::SetupPixelFormat(int *attribList) // (HDC hDC)
+static void AdjustPFDForAttributes(PIXELFORMATDESCRIPTOR& pfd, int *attribList)
 {
-  int pixelFormat;
-  PIXELFORMATDESCRIPTOR pfd = {
-		sizeof(PIXELFORMATDESCRIPTOR),	/* size */
-		1,				/* version */
-		PFD_SUPPORT_OPENGL |
-		PFD_DRAW_TO_WINDOW |
-		PFD_DOUBLEBUFFER,		/* support double-buffering */
-		PFD_TYPE_RGBA,			/* color type */
-		16,				/* prefered color depth */
-		0, 0, 0, 0, 0, 0,		/* color bits (ignored) */
-		0,				/* no alpha buffer */
-		0,				/* alpha bits (ignored) */
-		0,				/* no accumulation buffer */
-		0, 0, 0, 0,			/* accum bits (ignored) */
-		16,				/* depth buffer */
-		0,				/* no stencil buffer */
-		0,				/* no auxiliary buffers */
-		PFD_MAIN_PLANE,			/* main layer */
-		0,				/* reserved */
-		0, 0, 0,			/* no layer, visible, damage masks */
-	};
-
   if (attribList) {
     pfd.dwFlags &= ~PFD_DOUBLEBUFFER;
     pfd.iPixelType = PFD_TYPE_COLORINDEX;
@@ -430,17 +408,42 @@ void wxGLCanvas::SetupPixelFormat(int *attribList) // (HDC hDC)
       }
     }
   }
+}
+
+void wxGLCanvas::SetupPixelFormat(int *attribList) // (HDC hDC)
+{
+  int pixelFormat;
+  PIXELFORMATDESCRIPTOR pfd = {
+		sizeof(PIXELFORMATDESCRIPTOR),	/* size */
+		1,				/* version */
+		PFD_SUPPORT_OPENGL |
+		PFD_DRAW_TO_WINDOW |
+		PFD_DOUBLEBUFFER,		/* support double-buffering */
+		PFD_TYPE_RGBA,			/* color type */
+		16,				/* prefered color depth */
+		0, 0, 0, 0, 0, 0,		/* color bits (ignored) */
+		0,				/* no alpha buffer */
+		0,				/* alpha bits (ignored) */
+		0,				/* no accumulation buffer */
+		0, 0, 0, 0,			/* accum bits (ignored) */
+		16,				/* depth buffer */
+		0,				/* no stencil buffer */
+		0,				/* no auxiliary buffers */
+		PFD_MAIN_PLANE,			/* main layer */
+		0,				/* reserved */
+		0, 0, 0,			/* no layer, visible, damage masks */
+	};
+
+  AdjustPFDForAttributes(pfd, attribList);
+
   pixelFormat = ChoosePixelFormat((HDC) m_hDC, &pfd);
   if (pixelFormat == 0) {
-    MessageBox(WindowFromDC((HDC) m_hDC), wxT("ChoosePixelFormat failed."), wxT("Error"),
-               MB_ICONERROR | MB_OK);
-    exit(1);
+    wxLogWarning(_("ChoosePixelFormat failed."));
   }
-
-  if (SetPixelFormat((HDC) m_hDC, pixelFormat, &pfd) != TRUE) {
-    MessageBox(WindowFromDC((HDC) m_hDC), wxT("SetPixelFormat failed."), wxT("Error"),
-               MB_ICONERROR | MB_OK);
-    exit(1);
+  else {
+    if (SetPixelFormat((HDC) m_hDC, pixelFormat, &pfd) != TRUE) {
+      wxLogWarning(_("SetPixelFormat failed."));
+    }
   }
 }
 
@@ -710,6 +713,54 @@ void glIndexMaterialSGI(GLenum face, GLenum mode)
 
 /* WIN_swap_hint */
 void glAddSwapHintRectWin(GLint x, GLint y, GLsizei width, GLsizei height)
+{
+}
+
+
+//---------------------------------------------------------------------------
+// wxGLApp
+//---------------------------------------------------------------------------
+
+IMPLEMENT_CLASS(wxGLApp, wxApp)
+
+bool wxGLApp::InitGLVisual(int *attribList)
+{
+  int pixelFormat;
+  PIXELFORMATDESCRIPTOR pfd = {
+		sizeof(PIXELFORMATDESCRIPTOR),	/* size */
+		1,				/* version */
+		PFD_SUPPORT_OPENGL |
+		PFD_DRAW_TO_WINDOW |
+		PFD_DOUBLEBUFFER,		/* support double-buffering */
+		PFD_TYPE_RGBA,			/* color type */
+		16,				/* prefered color depth */
+		0, 0, 0, 0, 0, 0,		/* color bits (ignored) */
+		0,				/* no alpha buffer */
+		0,				/* alpha bits (ignored) */
+		0,				/* no accumulation buffer */
+		0, 0, 0, 0,			/* accum bits (ignored) */
+		16,				/* depth buffer */
+		0,				/* no stencil buffer */
+		0,				/* no auxiliary buffers */
+		PFD_MAIN_PLANE,			/* main layer */
+		0,				/* reserved */
+		0, 0, 0,			/* no layer, visible, damage masks */
+	};
+
+  AdjustPFDForAttributes(pfd, attribList);
+
+  // use DC for whole (root) screen, since no windows have yet been created
+  pixelFormat = ChoosePixelFormat((HDC) ::GetDC(NULL), &pfd);
+
+  if (pixelFormat == 0) {
+    wxLogError(_("Failed to initialize OpenGL"));
+    return FALSE;
+  }
+
+  return TRUE;
+}
+
+wxGLApp::~wxGLApp()
 {
 }
 

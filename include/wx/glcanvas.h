@@ -1,6 +1,10 @@
 #ifndef _WX_GLCANVAS_H_BASE_
 #define _WX_GLCANVAS_H_BASE_
 
+#include "wx/defs.h"
+
+#if wxUSE_GLCANVAS
+
 #if defined(__WXMSW__)
 #include "wx/msw/glcanvas.h"
 #elif defined(__WXMOTIF__)
@@ -15,5 +19,22 @@
 #include "wx/stubs/glcanvas.h"
 #endif
 
+class WXDLLEXPORT wxGLApp : public wxApp
+{
+public:
+    wxGLApp() : wxApp() { }
+    virtual ~wxGLApp();
+
+    // use this in the constructor of the user-derived wxGLApp class to
+    // determine if an OpenGL rendering context with these attributes
+    // is available - returns TRUE if so, FALSE if not.
+    bool InitGLVisual(int *attribList);
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxGLApp)
+};
+
+#endif
+    // wxUSE_GLCANVAS
 #endif
     // _WX_GLCANVAS_H_BASE_

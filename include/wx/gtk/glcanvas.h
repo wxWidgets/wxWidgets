@@ -16,10 +16,6 @@
 #ifndef _WX_GLCANVAS_H_
 #define _WX_GLCANVAS_H_
 
-#include "wx/defs.h"
-
-#if wxUSE_GLCANVAS
-
 #include "wx/scrolwin.h"
 #include "wx/app.h"
 
@@ -177,30 +173,6 @@ private:
     DECLARE_EVENT_TABLE()
     DECLARE_CLASS(wxGLCanvas)
 };
-
-
-//---------------------------------------------------------------------------
-// wxGLApp
-//---------------------------------------------------------------------------
-
-class WXDLLEXPORT wxGLApp: public wxApp
-{
-public:
-    wxGLApp() : wxApp() { }
-    ~wxGLApp();
-    
-    // use this in the constructor of the user-derived wxGLApp class to select
-    // an appropriate X visual for GL. Returns TRUE if an appropriate visual
-    // is found - and sets m_glVisualInfo; FALSE otherwise.
-    bool InitGLVisual(int *attribList);
-    
-private:
-    DECLARE_DYNAMIC_CLASS(wxGLApp)
-};
-
-
-#endif
-    // wxUSE_GLCANVAS
 
 #endif
     // _WX_GLCANVAS_H_
