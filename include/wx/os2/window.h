@@ -398,6 +398,15 @@ public:
                          ,WXHWND hWnd
                         );
 
+    bool IsMouseInWindow(void) const;
+    bool OS2GetCreateWindowCoords( const wxPoint& rPos
+                                  ,const wxSize&  rSize
+                                  ,int&           rnX
+                                  ,int&           rnY
+                                  ,int&           rnWidth
+                                  ,int&           rnHeight
+                                 ) const;
+
     // Window procedure
     virtual MRESULT OS2WindowProc( WXUINT   uMsg
                                   ,WXWPARAM wParam

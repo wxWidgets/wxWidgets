@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  H:\Dev\Wx2\WxWindows\lib\wx.lib
+;From library:  F:\DEV\WX2\WXWINDOWS\LIB\WX.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -1733,7 +1733,7 @@ EXPORTS
       wxEVT_NC_LEFT_DCLICK
       wxEVT_INIT_DIALOG
       wxEVT_COMMAND_SET_FOCUS
-  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\extended.c
+  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\extended.c
     ;PUBDEFs (Symbols available from object file):
       ConvertToIeeeExtended
       ConvertFromIeeeExtended
@@ -2172,8 +2172,6 @@ EXPORTS
       New__10wxFontBaseFRC16wxNativeFontInfo
       ;wxFontBase::New(const wxString&)
       New__10wxFontBaseFRC8wxString
-      ;wxNativeFontInfo::FromString(const wxString&)
-      FromString__16wxNativeFontInfoFRC8wxString
       ;wxFont::operator=(const wxFont&)
       __as__6wxFontFRC6wxFont
       ;wxFontBase::GetNativeFontInfoDesc() const
@@ -2182,17 +2180,21 @@ EXPORTS
       GetWeightString__10wxFontBaseCFv
       ;wxFontBase::GetStyleString() const
       GetStyleString__10wxFontBaseCFv
+      ;wxFontBase::GetNativeFontInfoUserDesc() const
+      GetNativeFontInfoUserDesc__10wxFontBaseCFv
       ;wxFontBase::SetNativeFontInfo(const wxNativeFontInfo&)
       SetNativeFontInfo__10wxFontBaseFRC16wxNativeFontInfo
+      ;wxFontBase::SetNativeFontInfoUserDesc(const wxString&)
+      SetNativeFontInfoUserDesc__10wxFontBaseFRC8wxString
       ;wxFontBase::ms_encodingDefault
       ms_encodingDefault__10wxFontBase
+      ;wxFontBase::SetNativeFontInfo(const wxString&)
+      SetNativeFontInfo__10wxFontBaseFRC8wxString
       ;wxFontBase::operator==(const wxFont&) const
       __eq__10wxFontBaseCFRC6wxFont
       __vft10wxFontBase8wxObject
       ;wxFontBase::operator!=(const wxFont&) const
       __ne__10wxFontBaseCFRC6wxFont
-      ;wxNativeFontInfo::ToString() const
-      ToString__16wxNativeFontInfoCFv
       ;wxFontBase::GetFamilyString() const
       GetFamilyString__10wxFontBaseCFv
       ;wxFontBase::New(int,int,int,int,unsigned long,const wxString&,wxFontEncoding)
@@ -5577,7 +5579,7 @@ EXPORTS
       Read32__17wxTextInputStreamFv
       ;wxTextInputStream::SkipIfEndOfLine(char)
       SkipIfEndOfLine__17wxTextInputStreamFc
-  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\unzip.c
+  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\unzip.c
     ;PUBDEFs (Symbols available from object file):
       unzReadCurrentFile
       unzGetCurrentFileInfo

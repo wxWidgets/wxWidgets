@@ -1802,6 +1802,26 @@ void wxWindowOS2::GetTextExtent(
     ::WinReleasePS(hPS);
 } // end of wxWindow::GetTextExtent
 
+bool wxWindowOS2::IsMouseInWindow() const
+{
+    //
+    // Get the mouse position
+    POINTL                          vPt;
+
+    ::WinQueryPointerPos(HWND_DESKTOP, &vPt);
+
+    //
+    // Find the window which currently has the cursor and go up the window
+    // chain until we find this window - or exhaust it
+    //
+    HWND                            hWnd = ::WinWindowFromPoint(HWND_DESKTOP, &vPt, TRUE);
+
+    while (hWnd && (hWnd != GetHwnd()))
+        hWnd = ::WinQueryWindow(hWnd, QW_PARENT);
+
+    return hWnd != NULL;
+} // end of wxWindowOS2::IsMouseInWindow
+
 #if wxUSE_CARET && WXWIN_COMPATIBILITY
 // ---------------------------------------------------------------------------
 // Caret manipulation
@@ -2774,6 +2794,46 @@ void wxWindowOS2::OS2DetachWindowMenu()
     }
 #endif // __WXUNIVERSAL__
 } // end of wxWindowOS2::OS2DetachWindowMenu
+
+bool wxWindowOS2::OS2GetCreateWindowCoords(
+  const wxPoint&                    rPos
+, const wxSize&                     rSize
+, int&                              rnX
+, int&                              rnY
+, int&                              rnWidth
+, int&                              rnHeight
+) const
+{
+    bool                            bNonDefault = FALSE;
+
+    if (rPos.x == -1)
+    {
+        //
+        // If set x to CW_USEDEFAULT, y parameter is ignored anyhow so we can
+        // just as well set it to CW_USEDEFAULT as well
+        rnX = rnY = CW_USEDEFAULT;
+    }
+    else
+    {
+        rnX = rPos.x;
+        rnY = rPos.y == -1 ? CW_USEDEFAULT : rPos.y;
+        bNonDefault = TRUE;
+    }
+    if (rSize.x == -1)
+    {
+        //
+        // As abobe, h is not used at all in this case anyhow
+        //
+        rnWidth = rnHeight = CW_USEDEFAULT;
+    }
+    else
+    {
+        rnWidth  = rSize.x;
+        rnHeight = rSize.y == -1 ? CW_USEDEFAULT : rSize.y;
+        bNonDefault = TRUE;
+    }
+    return bNonDefault;
+} // end of wxWindowOS2::OS2GetCreateWindowCoords
 
 bool wxWindowOS2::OS2Create(
   WXHWND                            hParent

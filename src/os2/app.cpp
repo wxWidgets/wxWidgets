@@ -332,7 +332,7 @@ bool wxApp::RegisterWindowClasses(
     if (!::WinRegisterClass( vHab
                             ,wxFrameClassName
                             ,wxFrameWndProc
-                            ,CS_SIZEREDRAW | CS_SYNCPAINT  | CS_CLIPCHILDREN
+                            ,CS_SIZEREDRAW | CS_SYNCPAINT
                             ,sizeof(ULONG)
                            ))
     {
