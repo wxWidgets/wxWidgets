@@ -50,6 +50,12 @@
 #include "mondrian.xpm"
 #endif
 
+#if wxUSE_LIBGNOMEPRINT
+#include "wx/html/forcelnk.h"
+FORCE_LINK(gnome_print)
+#endif
+
+
 // Declare a frame
 MyFrame   *frame = (MyFrame *) NULL;
 // int orientation = wxPORTRAIT;
@@ -301,7 +307,7 @@ void MyFrame::Draw(wxDC& dc)
     dc.SetBrush(*wxCYAN_BRUSH);
     dc.SetPen(*wxRED_PEN);
 
-    dc.DrawRectangle(0, 30, 200, 100);
+    dc.DrawRoundedRectangle(0, 30, 200, 100, 20);
 
     dc.DrawText( wxT("Rectangle 200 by 100"), 40, 40);
 

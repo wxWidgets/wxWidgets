@@ -795,7 +795,7 @@ wxDC* wxGnomePrinter::PrintDialog( wxWindow *parent )
     int ret = dialog.ShowModal();
     if (ret == wxID_CANCEL)
     {
-        sm_lastError = wxPRINTER_ERROR;
+        sm_lastError = wxPRINTER_CANCELLED;
         return NULL;
     }
     
