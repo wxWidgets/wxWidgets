@@ -253,9 +253,9 @@ bool MyApp::OnInit(void)
 #ifdef __WXMSW__
   int *gl_attrib = NULL;
 #else
-  int gl_attrib[20] = { GLX_RGBA, GLX_RED_SIZE, 1, GLX_GREEN_SIZE, 1,
-			GLX_BLUE_SIZE, 1, GLX_DEPTH_SIZE, 1,
-			GLX_DOUBLEBUFFER, None };
+  int gl_attrib[20] = { WX_GL_RGBA, WX_GL_MIN_RED, 1, WX_GL_MIN_GREEN, 1,
+			WX_GL_MIN_BLUE, 1, WX_GL_DEPTH_SIZE, 1,
+			WX_GL_DOUBLEBUFFER, None };
 #endif
 
   if(!doubleBuffer)
@@ -266,8 +266,9 @@ bool MyApp::OnInit(void)
 #endif
       doubleBuffer = GL_FALSE;
   }
-  frame->m_canvas = new TestGLCanvas(frame, -1, wxPoint(0, 0), wxSize(200, 200), 0, "TestGLCanvas",
-				   gl_attrib);
+ 
+  frame->m_canvas = new TestGLCanvas(frame, -1, wxPoint(0, 0), wxSize(200, 200),
+                                     0, "TestGLCanvas", gl_attrib );
 
   // Show the frame
   frame->Show(TRUE);
@@ -316,6 +317,7 @@ TestGLCanvas::TestGLCanvas(wxWindow *parent, wxWindowID id,
 {
    parent->Show(TRUE);
    SetCurrent();
+
    /* Make sure server supports the vertex array extension */
    char* extensions = (char *) glGetString( GL_EXTENSIONS );
    if (!extensions || !strstr( extensions, "GL_EXT_vertex_array" )) {
@@ -337,6 +339,8 @@ void TestGLCanvas::OnPaint( wxPaintEvent& event )
 #ifndef __WXMOTIF__
     if (!GetContext()) return;
 #endif
+
+    SetCurrent();
 
     draw1();
     SwapBuffers();
