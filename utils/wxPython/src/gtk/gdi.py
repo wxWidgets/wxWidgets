@@ -156,6 +156,9 @@ class wxFontPtr :
     def GetWeight(self, *_args, **_kwargs):
         val = apply(gdic.wxFont_GetWeight,(self,) + _args, _kwargs)
         return val
+    def GetEncoding(self, *_args, **_kwargs):
+        val = apply(gdic.wxFont_GetEncoding,(self,) + _args, _kwargs)
+        return val
     def SetFaceName(self, *_args, **_kwargs):
         val = apply(gdic.wxFont_SetFaceName,(self,) + _args, _kwargs)
         return val
@@ -173,6 +176,18 @@ class wxFontPtr :
         return val
     def SetWeight(self, *_args, **_kwargs):
         val = apply(gdic.wxFont_SetWeight,(self,) + _args, _kwargs)
+        return val
+    def SetEncoding(self, *_args, **_kwargs):
+        val = apply(gdic.wxFont_SetEncoding,(self,) + _args, _kwargs)
+        return val
+    def GetFamilyString(self, *_args, **_kwargs):
+        val = apply(gdic.wxFont_GetFamilyString,(self,) + _args, _kwargs)
+        return val
+    def GetStyleString(self, *_args, **_kwargs):
+        val = apply(gdic.wxFont_GetStyleString,(self,) + _args, _kwargs)
+        return val
+    def GetWeightString(self, *_args, **_kwargs):
+        val = apply(gdic.wxFont_GetWeightString,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxFont instance at %s>" % (self.this,)
@@ -716,6 +731,10 @@ def wxStockCursor(*_args, **_kwargs):
     if val: val = wxCursorPtr(val); val.thisown = 1
     return val
 
+wxFont_GetDefaultEncoding = gdic.wxFont_GetDefaultEncoding
+
+wxFont_SetDefaultEncoding = gdic.wxFont_SetDefaultEncoding
+
 def wxNamedColour(*_args, **_kwargs):
     val = apply(gdic.wxNamedColour,_args,_kwargs)
     if val: val = wxColourPtr(val); val.thisown = 1
@@ -730,6 +749,35 @@ def wxMemoryDCFromDC(*_args, **_kwargs):
 
 #-------------- VARIABLE WRAPPERS ------------------
 
+wxFONTENCODING_SYSTEM = gdic.wxFONTENCODING_SYSTEM
+wxFONTENCODING_DEFAULT = gdic.wxFONTENCODING_DEFAULT
+wxFONTENCODING_ISO8859_1 = gdic.wxFONTENCODING_ISO8859_1
+wxFONTENCODING_ISO8859_2 = gdic.wxFONTENCODING_ISO8859_2
+wxFONTENCODING_ISO8859_3 = gdic.wxFONTENCODING_ISO8859_3
+wxFONTENCODING_ISO8859_4 = gdic.wxFONTENCODING_ISO8859_4
+wxFONTENCODING_ISO8859_5 = gdic.wxFONTENCODING_ISO8859_5
+wxFONTENCODING_ISO8859_6 = gdic.wxFONTENCODING_ISO8859_6
+wxFONTENCODING_ISO8859_7 = gdic.wxFONTENCODING_ISO8859_7
+wxFONTENCODING_ISO8859_8 = gdic.wxFONTENCODING_ISO8859_8
+wxFONTENCODING_ISO8859_9 = gdic.wxFONTENCODING_ISO8859_9
+wxFONTENCODING_ISO8859_10 = gdic.wxFONTENCODING_ISO8859_10
+wxFONTENCODING_ISO8859_11 = gdic.wxFONTENCODING_ISO8859_11
+wxFONTENCODING_ISO8859_12 = gdic.wxFONTENCODING_ISO8859_12
+wxFONTENCODING_ISO8859_13 = gdic.wxFONTENCODING_ISO8859_13
+wxFONTENCODING_ISO8859_14 = gdic.wxFONTENCODING_ISO8859_14
+wxFONTENCODING_ISO8859_15 = gdic.wxFONTENCODING_ISO8859_15
+wxFONTENCODING_KOI8 = gdic.wxFONTENCODING_KOI8
+wxFONTENCODING_ALTERNATIVE = gdic.wxFONTENCODING_ALTERNATIVE
+wxFONTENCODING_BULGARIAN = gdic.wxFONTENCODING_BULGARIAN
+wxFONTENCODING_CP437 = gdic.wxFONTENCODING_CP437
+wxFONTENCODING_CP850 = gdic.wxFONTENCODING_CP850
+wxFONTENCODING_CP852 = gdic.wxFONTENCODING_CP852
+wxFONTENCODING_CP855 = gdic.wxFONTENCODING_CP855
+wxFONTENCODING_CP866 = gdic.wxFONTENCODING_CP866
+wxFONTENCODING_CP1250 = gdic.wxFONTENCODING_CP1250
+wxFONTENCODING_CP1251 = gdic.wxFONTENCODING_CP1251
+wxFONTENCODING_CP1252 = gdic.wxFONTENCODING_CP1252
+wxFONTENCODING_MAX = gdic.wxFONTENCODING_MAX
 cvar = gdic.cvar
 wxNORMAL_FONT = wxFontPtr(gdic.cvar.wxNORMAL_FONT)
 wxSMALL_FONT = wxFontPtr(gdic.cvar.wxSMALL_FONT)
