@@ -2896,7 +2896,10 @@ void wxGenericTreeCtrl::CalculateSize( wxGenericTreeItem *item, wxDC &dc )
     wxCoord text_w = 0;
     wxCoord text_h = 0;
 
-    if (item->IsBold())
+    wxTreeItemAttr *attr = item->GetAttributes();
+    if ( attr && attr->HasFont() )
+        dc.SetFont(attr->GetFont());
+    else if ( item->IsBold() )
         dc.SetFont(m_boldFont);
 
     dc.GetTextExtent( item->GetText(), &text_w, &text_h );
