@@ -1,4 +1,4 @@
-wxWidgets 2.5.2
+wxWidgets 2.5.3
 ---------------
 
 *** Please note that this is an UNSTABLE DEVELOPMENT SNAPSHOT.
@@ -58,15 +58,15 @@ target system. See the download pages for details.
 Installation
 ------------
 
-wxWidgets 2 needs to be compiled before you can test out
-the samples or write your own applications.
-For installation information, please see the install.txt file
-in the individual directories:
+wxWidgets needs to be compiled before you can test out the samples
+or write your own applications. For installation information, please
+see the install.txt file in the individual directories:
 
   docs/msw
   docs/gtk
   docs/motif
   docs/mac
+  docs/cocoa
   docs/x11
   docs/mgl
   docs/os2
@@ -120,7 +120,7 @@ Documentation
 
 See docs/html/index.htm for an HTML index of the major documents.
 
-See docs/changes.txt for a summary of changes to wxWidgets 2.
+See docs/changes.txt for a summary of changes to wxWidgets.
 
 See docs/tech for an archive of technical notes.
 
@@ -149,5 +149,5 @@ web site.
 
 Have fun!
 
-The wxWidgets Team, May 2004
+The wxWidgets Team, October 2004
 
