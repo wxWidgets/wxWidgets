@@ -69,7 +69,7 @@ wxObject *wxMenuXmlHandler::DoCreateResource()
             int id = GetID();
             bool checkable = GetBool(wxT("checkable"));
             wxString label = GetText(wxT("label"));
-            wxString accel = GetText(wxT("accel"));
+            wxString accel = GetText(wxT("accel"), FALSE);
             wxString fullLabel = label;
             if (!accel.IsEmpty())
                 fullLabel << wxT("\t") << accel;

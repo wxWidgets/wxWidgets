@@ -631,14 +631,14 @@ int wxXmlResourceHandler::GetStyle(const wxString& param, int defaults)
 
 
 
-wxString wxXmlResourceHandler::GetText(const wxString& param)
+wxString wxXmlResourceHandler::GetText(const wxString& param, bool translate)
 {
     wxString str1;
     wxString str2;
     const wxChar *dt;
     wxChar amp_char;
 
-    if (m_resource->GetFlags() & wxXRC_USE_LOCALE)
+    if (translate && m_resource->GetFlags() & wxXRC_USE_LOCALE)
         str1 = wxGetTranslation(GetParamValue(param));
     else
         str1 = GetParamValue(param);

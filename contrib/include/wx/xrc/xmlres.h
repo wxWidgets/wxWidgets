@@ -344,9 +344,9 @@ protected:
 
     // Gets text from param and does some conversions:
     // - replaces \n, \r, \t by respective chars (according to C syntax)
-    // - replaces $ by & and $$ by $ (needed for $File => &File because of XML)
+    // - replaces _ by & and __ by _ (needed for _File => &File because of XML)
     // - calls wxGetTranslations (unless disabled in wxXmlResource)
-    wxString GetText(const wxString& param);
+    wxString GetText(const wxString& param, bool translate = TRUE);
 
     // Returns the XRCID.
     int GetID();
