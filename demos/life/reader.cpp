@@ -45,8 +45,8 @@
 
 LifeReader::LifeReader(wxInputStream& is)
 {
-    wxBufferedInputStream buff_is = wxBufferedInputStream(is);
-    wxTextInputStream     text_is = wxTextInputStream(buff_is);
+    wxBufferedInputStream buff_is(is);
+    wxTextInputStream     text_is(buff_is);
     wxString              line, rest; 
 
     // check stream
