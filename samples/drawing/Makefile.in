@@ -16,6 +16,7 @@ program_dir = samples/drawing
 PROGRAM=drawing
 
 OBJECTS=$(PROGRAM).o
+DATAFILES=pat4.bmp pat35.bmp pat36.bmp
 
 include ../../src/makeprog.env
 
