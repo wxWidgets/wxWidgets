@@ -114,7 +114,7 @@ bool wxMask::Create( const wxBitmap& bitmap,
     unsigned char green = colour.Green();
     unsigned char blue = colour.Blue();
 
-    int bpp = wxTheApp->m_visualDepth;
+    int bpp = wxTheApp->GetVisualInfo(m_display)->m_visualDepth;
     
     if (bpp == 15)
     {
@@ -506,7 +506,7 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
     Window xroot = RootWindow( xdisplay, xscreen );
     Visual* xvisual = DefaultVisual( xdisplay, xscreen );
     
-    int bpp = wxTheApp->m_visualDepth;
+    int bpp = wxTheApp->GetVisualInfo(M_BMPDATA->m_display)->m_visualDepth;
     
     int width = image.GetWidth();
     int height = image.GetHeight();
@@ -563,14 +563,19 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
         enum byte_order { RGB, RBG, BRG, BGR, GRB, GBR };
         byte_order b_o = RGB;
 
+        wxXVisualInfo* vi = wxTheApp->GetVisualInfo(M_BMPDATA->m_display);
+        unsigned long greenMask = vi->m_visualGreenMask,
+                      redMask   = vi->m_visualRedMask,
+                      blueMask  = vi->m_visualBlueMask;
+
         if (bpp > 8)
         {
-            if ((wxTheApp->m_visualRedMask > wxTheApp->m_visualGreenMask) && (wxTheApp->m_visualGreenMask > wxTheApp->m_visualBlueMask))      b_o = RGB;
-            else if ((wxTheApp->m_visualRedMask > wxTheApp->m_visualBlueMask) && (wxTheApp->m_visualBlueMask > wxTheApp->m_visualGreenMask))  b_o = RBG;
-            else if ((wxTheApp->m_visualBlueMask > wxTheApp->m_visualRedMask) && (wxTheApp->m_visualRedMask > wxTheApp->m_visualGreenMask))   b_o = BRG;
-            else if ((wxTheApp->m_visualBlueMask > wxTheApp->m_visualGreenMask) && (wxTheApp->m_visualGreenMask > wxTheApp->m_visualRedMask)) b_o = BGR;
-            else if ((wxTheApp->m_visualGreenMask > wxTheApp->m_visualRedMask) && (wxTheApp->m_visualRedMask > wxTheApp->m_visualBlueMask))   b_o = GRB;
-            else if ((wxTheApp->m_visualGreenMask > wxTheApp->m_visualBlueMask) && (wxTheApp->m_visualBlueMask > wxTheApp->m_visualRedMask))  b_o = GBR;
+            if ((redMask > greenMask) && (greenMask > blueMask))     b_o = RGB;
+            else if ((redMask > blueMask) && (blueMask > greenMask)) b_o = RBG;
+            else if ((blueMask > redMask) && (redMask > greenMask))  b_o = BRG;
+            else if ((blueMask > greenMask) && (greenMask > redMask))b_o = BGR;
+            else if ((greenMask > redMask) && (redMask > blueMask))  b_o = GRB;
+            else if ((greenMask > blueMask) && (blueMask > redMask)) b_o = GBR;
         }
 
         int r_mask = image.GetMaskRed();
@@ -580,7 +585,8 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
         unsigned char* data = image.GetData();
         wxASSERT_MSG( data, "No image data" );
         
-        unsigned char *colorCube = wxTheApp->m_colorCube;
+        unsigned char *colorCube =
+            wxTheApp->GetVisualInfo(M_BMPDATA->m_display)->m_colorCube;
 
         bool hasMask = image.HasMask();
 
@@ -719,7 +725,7 @@ wxImage wxBitmap::ConvertToImage() const
     return image;
 #else
     // !wxUSE_NANOX
-    int bpp = wxTheApp->m_visualDepth;
+    int bpp = wxTheApp->GetVisualInfo(M_BMPDATA->m_display)->m_visualDepth;
     XImage *x_image = NULL;
     if (GetPixmap())
     {
@@ -772,14 +778,17 @@ wxImage wxBitmap::ConvertToImage() const
 
     if (GetPixmap())
     {
-        red_shift_right = wxTheApp->m_visualRedShift;
-        red_shift_left = 8-wxTheApp->m_visualRedPrec;
-        green_shift_right = wxTheApp->m_visualGreenShift;
-        green_shift_left = 8-wxTheApp->m_visualGreenPrec;
-        blue_shift_right = wxTheApp->m_visualBlueShift;
-        blue_shift_left = 8-wxTheApp->m_visualBluePrec;
+        wxXVisualInfo* vi = wxTheApp->GetVisualInfo(M_BMPDATA->m_display);
+
+        red_shift_right = vi->m_visualRedShift;
+        red_shift_left = 8 - vi->m_visualRedPrec;
+        green_shift_right = vi->m_visualGreenShift;
+        green_shift_left = 8 - vi->m_visualGreenPrec;
+        blue_shift_right = vi->m_visualBlueShift;
+        blue_shift_left = 8 - vi->m_visualBluePrec;
         
-        use_shift = (wxTheApp->m_visualType == GrayScale) || (wxTheApp->m_visualType != PseudoColor);
+        use_shift = (vi->m_visualType == GrayScale) ||
+                    (vi->m_visualType != PseudoColor);
     }
     
     if (GetBitmap())
@@ -787,7 +796,8 @@ wxImage wxBitmap::ConvertToImage() const
         bpp = 1;
     }
 
-    XColor *colors = (XColor*) wxTheApp->m_visualColormap;
+    XColor *colors = (XColor*)wxTheApp->
+        GetVisualInfo(M_BMPDATA->m_display)->m_visualColormap;
 
     int width = GetWidth();
     int height = GetHeight();

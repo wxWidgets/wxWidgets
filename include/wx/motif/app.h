@@ -32,6 +32,8 @@ class WXDLLEXPORT wxApp;
 class WXDLLEXPORT wxKeyEvent;
 class WXDLLEXPORT wxLog;
 class WXDLLEXPORT wxEventLoop;
+class WXDLLEXPORT wxXVisualInfo;
+class wxXVisualInfoMap;
 
 // ----------------------------------------------------------------------------
 // the wxApp class for Motif - see wxAppBase for more details
@@ -90,7 +92,9 @@ public:
     
     // This handler is called when a property change event occurs
     virtual void   HandlePropertyChange(WXEvent *event);
-    
+
+    wxXVisualInfo* GetVisualInfo(WXDisplay* display);
+
 private:
     static long    sm_lastMessageTime;
     int            m_nCmdShow;
@@ -103,7 +107,8 @@ private:
     WXColormap            m_mainColormap;
     WXDisplay*            m_initialDisplay;
     long                  m_maxRequestSize;
-    
+    wxXVisualInfoMap*     m_visualInfoMap;
+
     DECLARE_EVENT_TABLE()
 };
 

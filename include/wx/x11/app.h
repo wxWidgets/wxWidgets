@@ -33,6 +33,7 @@ class WXDLLEXPORT wxApp;
 class WXDLLEXPORT wxKeyEvent;
 class WXDLLEXPORT wxLog;
 class WXDLLEXPORT wxEventLoop;
+class WXDLLEXPORT wxXVisualInfo;
 
 // ----------------------------------------------------------------------------
 // the wxApp class for wxX11 - see wxAppBase for more details
@@ -107,7 +108,14 @@ public:
     // environment variable
     PangoContext* GetPangoContext();
 #endif    
-    
+
+    wxXVisualInfo* GetVisualInfo(WXDisplay* display)
+    {
+        // this should be implemented correctly for wxBitmap to work
+        // with multiple display
+        return m_visualInfo;
+    }
+
     // We need this before creating the app
     static   WXDisplay* GetDisplay() { return ms_display; }
     static   WXDisplay* ms_display;
@@ -117,24 +125,8 @@ public:
     bool                  m_showIconic;    
     wxSize                m_initialSize;
 
-#if !wxUSE_NANOX    
-    // Someone find a better place for these
-    int                   m_visualType;   // TrueColor, DirectColor etc.
-    int                   m_visualDepth;
-    int                   m_visualColormapSize;
-    void                 *m_visualColormap;
-    int                   m_visualScreen;
-    unsigned long         m_visualRedMask;
-    unsigned long         m_visualGreenMask;
-    unsigned long         m_visualBlueMask;
-    int                   m_visualRedShift;
-    int                   m_visualGreenShift;
-    int                   m_visualBlueShift;
-    int                   m_visualRedPrec;
-    int                   m_visualGreenPrec;
-    int                   m_visualBluePrec;
-    
-    unsigned char        *m_colorCube;
+#if !wxUSE_NANOX
+    wxXVisualInfo*        m_visualInfo;
 #endif
     
 protected:

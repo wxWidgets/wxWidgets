@@ -93,8 +93,8 @@ void wxColourRefData::FreeColour()
     if (!m_colormap)
         return;
 #if !wxUSE_NANOX        
-    if ((wxTheApp->m_visualType == GrayScale) ||
-        (wxTheApp->m_visualType == PseudoColor))
+    if ((wxTheApp->m_visualInfo->m_visualType == GrayScale) ||
+        (wxTheApp->m_visualInfo->m_visualType == PseudoColor))
     {
         int idx = m_color.pixel;
         colMapAllocCounter[ idx ] = colMapAllocCounter[ idx ] - 1;
@@ -116,8 +116,8 @@ void wxColourRefData::AllocColour( WXColormap cmap )
     FreeColour();
 
 #if !wxUSE_NANOX
-    if ((wxTheApp->m_visualType == GrayScale) ||
-        (wxTheApp->m_visualType == PseudoColor))
+    if ((wxTheApp->m_visualInfo->m_visualType == GrayScale) ||
+        (wxTheApp->m_visualInfo->m_visualType == PseudoColor))
     {
         m_hasPixel = XAllocColor( wxGlobalDisplay(), (Colormap) cmap, &m_color );
         int idx = m_color.pixel;

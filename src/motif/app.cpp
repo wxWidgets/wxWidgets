@@ -37,6 +37,7 @@
 #include "wx/intl.h"
 #include "wx/evtloop.h"
 #include "wx/hash.h"
+#include "wx/hashmap.h"
 
 #if wxUSE_THREADS
     #include "wx/thread.h"
@@ -57,6 +58,8 @@
 #include "wx/motif/private.h"
 
 #include <string.h>
+
+WX_DECLARE_VOIDPTR_HASH_MAP( wxXVisualInfo*, wxXVisualInfoMap );
 
 extern wxList wxPendingDelete;
 extern bool wxAddIdleCallback();
@@ -243,11 +246,21 @@ wxApp::wxApp()
     m_topLevelWidget = (WXWidget) NULL;
     m_maxRequestSize = 0;
     m_initialDisplay = (WXDisplay*) 0;
+    m_visualInfoMap = new wxXVisualInfoMap;
 }
 
 wxApp::~wxApp()
 {
     delete m_eventLoop;
+
+    for( wxXVisualInfoMap::iterator it  = m_visualInfoMap->begin(),
+                                    end = m_visualInfoMap->end();
+         it != end; ++it )
+    {
+        delete it->second;
+    }
+
+    delete m_visualInfoMap;
 }
 
 bool wxApp::Initialized()
@@ -491,6 +504,20 @@ WXColormap wxApp::GetMainColormap(WXDisplay* display)
         m_mainColormap = (WXColormap) c;
 
     return (WXColormap) c;
+}
+
+wxXVisualInfo* wxApp::GetVisualInfo( WXDisplay* display )
+{
+    wxXVisualInfoMap::iterator it = m_visualInfoMap->find( display );
+
+    if( it != m_visualInfoMap->end() ) return it->second;
+
+    wxXVisualInfo* vi = new wxXVisualInfo;
+    wxFillXVisualInfo( vi, (Display*)display );
+
+    (*m_visualInfoMap)[display] = vi;
+
+    return vi;
 }
 
 void wxExit()

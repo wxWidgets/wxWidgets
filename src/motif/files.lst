@@ -233,6 +233,7 @@ ALL_SOURCES = \
 		motif/window.cpp \
 		x11/brush.cpp \
 		x11/pen.cpp \
+		x11/utilsx.cpp \
 		unix/dialup.cpp \
 		unix/dir.cpp \
 		unix/fontenum.cpp \
@@ -862,7 +863,8 @@ GUIOBJS = \
 		utils.o \
 		window.o \
 		brush.o \
-		pen.o
+		pen.o \
+		utilsx.o
 
 UNIXOBJS = \
 		dialup.o \

@@ -32,8 +32,6 @@
 #include "wx/univ/theme.h"
 #include "wx/univ/renderer.h"
 
-#define ABS(a)	   (((a) < 0) ? -(a) : (a))
-
 #if wxUSE_THREADS
     #include "wx/thread.h"
 #endif
@@ -380,19 +378,14 @@ wxApp::wxApp()
     m_initialSize = wxDefaultSize;
 
 #if !wxUSE_NANOX
-    m_visualColormap = NULL;
-    m_colorCube = NULL;
+    m_visualInfo = NULL;
 #endif
 }
 
 wxApp::~wxApp()
 {
 #if !wxUSE_NANOX
-    if (m_colorCube)
-        free( m_colorCube );
-
-    if (m_visualColormap)
-        delete [] (XColor*)m_visualColormap;
+    delete m_visualInfo;
 #endif
 }
 
@@ -964,24 +957,6 @@ void wxApp::DeletePendingObjects()
     }
 }
 
-static void wxCalcPrecAndShift( unsigned long mask, int *shift, int *prec )
-{
-  *shift = 0;
-  *prec = 0;
-
-  while (!(mask & 0x1))
-    {
-      (*shift)++;
-      mask >>= 1;
-    }
-
-  while (mask & 0x1)
-    {
-      (*prec)++;
-      mask >>= 1;
-    }
-}
-
 // Create display, and other initialization
 bool wxApp::OnInitGui()
 {
@@ -998,99 +973,8 @@ bool wxApp::OnInitGui()
     m_maxRequestSize = XMaxRequestSize( (Display*) wxApp::GetDisplay() );
 
 #if !wxUSE_NANOX
-    // Get info about the current visual. It is enough
-    // to do this once here unless we support different
-    // visuals, displays and screens. Given that wxX11
-    // mostly for embedded things, that is no real
-    // limitation.
-    Display *xdisplay = (Display*) wxApp::GetDisplay();
-    int xscreen = DefaultScreen(xdisplay);
-    Visual* xvisual = DefaultVisual(xdisplay,xscreen);
-    int xdepth = DefaultDepth(xdisplay, xscreen);
-
-    XVisualInfo vinfo_template;
-    vinfo_template.visual = xvisual;
-    vinfo_template.visualid = XVisualIDFromVisual( xvisual );
-    vinfo_template.depth = xdepth;
-
-    int nitem = 0;
-    XVisualInfo *vi = XGetVisualInfo( xdisplay, VisualIDMask|VisualDepthMask, &vinfo_template, &nitem );
-    wxASSERT_MSG( vi, wxT("No visual info") );
-
-    m_visualType = vi->visual->c_class;
-    m_visualScreen = vi->screen;
-
-    m_visualRedMask = vi->red_mask;
-    m_visualGreenMask = vi->green_mask;
-    m_visualBlueMask = vi->blue_mask;
-
-    if (m_visualType != GrayScale && m_visualType != PseudoColor)
-    {
-        wxCalcPrecAndShift( m_visualRedMask, &m_visualRedShift, &m_visualRedPrec );
-        wxCalcPrecAndShift( m_visualGreenMask, &m_visualGreenShift, &m_visualGreenPrec );
-        wxCalcPrecAndShift( m_visualBlueMask, &m_visualBlueShift, &m_visualBluePrec );
-    }
-
-    m_visualDepth = xdepth;
-    if (xdepth == 16)
-        xdepth = m_visualRedPrec + m_visualGreenPrec + m_visualBluePrec;
-
-    m_visualColormapSize = vi->colormap_size;
-
-    XFree( vi );
-
-    if (m_visualDepth > 8)
-        return TRUE;
-
-    m_visualColormap = new XColor[m_visualColormapSize];
-    XColor* colors = (XColor*) m_visualColormap;
-
-    for (int i = 0; i < m_visualColormapSize; i++)
-	    colors[i].pixel = i;
-
-    XQueryColors( xdisplay, DefaultColormap(xdisplay,xscreen), colors, m_visualColormapSize );
-
-    m_colorCube = (unsigned char*)malloc(32 * 32 * 32);
-
-    for (int r = 0; r < 32; r++)
-    {
-        for (int g = 0; g < 32; g++)
-        {
-            for (int b = 0; b < 32; b++)
-            {
-                int rr = (r << 3) | (r >> 2);
-                int gg = (g << 3) | (g >> 2);
-                int bb = (b << 3) | (b >> 2);
-
-                int index = -1;
-
-                if (colors)
-                {
-                    int max = 3 * 65536;
-
-                    for (int i = 0; i < m_visualColormapSize; i++)
-                    {
-                        int rdiff = ((rr << 8) - colors[i].red);
-                        int gdiff = ((gg << 8) - colors[i].green);
-                        int bdiff = ((bb << 8) - colors[i].blue);
-                        int sum = ABS (rdiff) + ABS (gdiff) + ABS (bdiff);
-                        if (sum < max)
-                        {
-                            index = i; max = sum;
-                        }
-                    }
-                }
-                else
-                {
-                    // assume 8-bit true or static colors. this really exists
-                    index = (r >> (5 - m_visualRedPrec)) << m_visualRedShift;
-                    index |= (g >> (5 - m_visualGreenPrec)) << m_visualGreenShift;
-                    index |= (b >> (5 - m_visualBluePrec)) << m_visualBlueShift;
-                }
-                m_colorCube[ (r*1024) + (g*32) + b ] = index;
-            }
-        }
-    }
+    m_visualInfo = new wxXVisualInfo;
+    wxFillXVisualInfo( m_visualInfo, (Display*) wxApp::GetDisplay() );
 #endif
 
     return TRUE;

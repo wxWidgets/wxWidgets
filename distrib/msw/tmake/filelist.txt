@@ -700,6 +700,7 @@ reparent.cpp	X11
 settings.cpp	X11
 toplevel.cpp	X11
 utils.cpp	X11
+utilsx.cpp	X11	Motif
 window.cpp	X11
 
 accel.cpp	OS2

@@ -31,6 +31,7 @@ ALL_SOURCES = \
 		x11/settings.cpp \
 		x11/toplevel.cpp \
 		x11/utils.cpp \
+		x11/utilsx.cpp \
 		x11/window.cpp \
 		generic/accel.cpp \
 		generic/busyinfo.cpp \
@@ -640,6 +641,7 @@ GUI_LOWLEVEL_OBJS = \
 		settings.o \
 		toplevel.o \
 		utils.o \
+		utilsx.o \
 		window.o
 
 COMMONOBJS = \
