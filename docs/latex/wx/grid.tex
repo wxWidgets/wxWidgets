@@ -400,6 +400,9 @@ grid cell at the specified location.
 Horizontal alignment will be one of wxALIGN\_LEFT, wxALIGN\_CENTRE or wxALIGN\_RIGHT. \\
 Vertical alignment will be one of wxALIGN\_TOP, wxALIGN\_CENTRE or wxALIGN\_BOTTOM.
 
+\perlnote{This method only takes the parameters {\tt row} and {\tt col} and
+returns a 2-element list {\tt ( horiz, vert )}.}
+
 \membersection{wxGrid::GetCellBackgroundColour}\label{wxgridgetcellbackgroundcolour}
 
 \func{wxColour}{GetCellBackgroundColour}{\param{int }{row}, \param{int }{col}}
@@ -461,6 +464,9 @@ Sets the arguments to the current column label alignment values.
 
 Horizontal alignment will be one of wxLEFT, wxCENTRE or wxRIGHT. \\
 Vertical alignment will be one of wxTOP, wxCENTRE or wxBOTTOM.
+
+\perlnote{This method takes no parameters and
+returns a 2-element list {\tt ( horiz, vert )}.}
 
 \membersection{wxGrid::GetColLabelSize}\label{wxgridgetcollabelsize}
 
@@ -616,6 +622,9 @@ Sets the arguments to the current row label alignment values.
 
 Horizontal alignment will be one of wxLEFT, wxCENTRE or wxRIGHT. \\
 Vertical alignment will be one of wxTOP, wxCENTRE or wxBOTTOM.
+
+\perlnote{This method takes no parameters and
+returns a 2-element list {\tt ( horiz, vert )}.}
 
 \membersection{wxGrid::GetRowLabelSize}\label{wxgridgetrowlabelsize}
 

@@ -23,6 +23,9 @@ to call its \helpref{Redirect}{wxprocessredirect} method before passing it to
 the streams corresponding to the child process stdandard output, input and
 error output respectively.
 
+\perlnote{In wxPerl this class has an additional {\tt Destroy} method,
+for explicit destruction.}
+
 \wxheading{Derived from}
 
 \helpref{wxEvtHandler}{wxevthandler}
@@ -159,7 +162,7 @@ enum wxKillError
 \helpref{wxKill}{wxkill},\rtfsp
 \helpref{Exec sample}{sampleexec}
 
-\membersection{wxProcess::Kill}\label{wxprocessexists}
+\membersection{wxProcess::Exists}\label{wxprocessexists}
 
 \func{static bool}{Exists}{\param{int}{ pid}}
 

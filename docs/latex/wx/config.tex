@@ -308,7 +308,7 @@ config file:
   # the following syntax is valud only under Windows
   UserData = %windir%\\data.dat
 \end{verbatim}
-
+% $ % help EMACS syntax highlighting...
 the call to \tt{config->Read("UserData")} will return something like
 \tt{"/home/zeitlin/data"} if you're lucky enough to run a Linux system ;-)
 
@@ -479,6 +479,9 @@ Gets the first group.
 consisting of the continue flag, the value string, and the index for
 the next call.}
 
+\perlnote{In wxPerl this method takes no arguments and returns a 3-element
+list {\tt ( continue, str, index )}.}
+
 \membersection{wxConfigBase::GetFirstEntry}\label{wxconfigbasegetfirstentry}
 
 \constfunc{bool}{GetFirstEntry}{\param{wxString\& }{str}, \param{long\&}{ index}}
@@ -488,6 +491,9 @@ Gets the first entry.
 \pythonnote{The wxPython version of this method returns a 3-tuple
 consisting of the continue flag, the value string, and the index for
 the next call.}
+
+\perlnote{In wxPerl this method takes no arguments and returns a 3-element
+list {\tt ( continue, str, index )}.}
 
 \membersection{wxConfigBase::GetNextGroup}\label{wxconfigbasegetnextgroup}
 
@@ -499,6 +505,9 @@ Gets the next group.
 consisting of the continue flag, the value string, and the index for
 the next call.}
 
+\perlnote{In wxPerl this method only takes the {\tt index} parameter
+and returns a 3-element list {\tt ( continue, str, index )}.}
+
 \membersection{wxConfigBase::GetNextEntry}\label{wxconfigbasegetnextentry}
 
 \constfunc{bool}{GetNextEntry}{\param{wxString\& }{str}, \param{long\&}{ index}}
@@ -508,6 +517,9 @@ Gets the next entry.
 \pythonnote{The wxPython version of this method returns a 3-tuple
 consisting of the continue flag, the value string, and the index for
 the next call.}
+
+\perlnote{In wxPerl this method only takes the {\tt index} parameter
+and returns a 3-element list {\tt ( continue, str, index )}.}
 
 \membersection{wxConfigBase::GetNumberOfEntries}\label{wxconfigbasegetnumberofentries}
 
@@ -639,6 +651,15 @@ implements the following methods:\par
 \end{twocollist}}
 }
 
+\perlnote{In place of a single overloaded method, wxPerl uses:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{{\bf Read(key, default="")}}{Returns a string}
+\twocolitem{{\bf ReadInt(key, default=0)}}{Returns an integer}
+\twocolitem{{\bf ReadFloat(key, default=0.0)}}{Returns a floating point number}
+\twocolitem{{\bf ReadBool(key, default=0)}}{Returns a boolean}
+\end{twocollist}
+}}
+
 \membersection{wxConfigBase::RenameEntry}\label{wxconfigbaserenameentry}
 
 \func{bool}{RenameEntry}{\param{const wxString\& }{ oldName}, \param{const wxString\& }{ newName}}
@@ -729,3 +750,11 @@ implements the following methods:\par
 \end{twocollist}}
 }
 
+\perlnote{In place of a single overloaded method, wxPerl uses:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{{\bf Write(key, value)}}{Writes a string}
+\twocolitem{{\bf WriteInt(key, value)}}{Writes an integer}
+\twocolitem{{\bf WriteFloat(key, value)}}{Writes a floating point number}
+\twocolitem{{\bf WriteBool(key, value)}}{Writes a boolean}
+\end{twocollist}
+}}

@@ -32,25 +32,25 @@ or a window to receive the event.}
 
 \membersection{wxProcessEvent::wxProcessEvent}
 
-\func{}{wxProcessEvent}{\param{int }{id = 0}, \param{int }{pid = 0}}
+\func{}{wxProcessEvent}{\param{int }{id = 0}, \param{int }{pid = 0}, \param{int }{exitcode = 0}}
 
-Constructor. Takes a wxProcessObject or window id, and a process id.
+Constructor. Takes a wxProcessObject or window id, a process id and an
+exit status.
 
-\membersection{wxProcessEvent::m\_pid}
-
-\member{int}{m\_pid}
-
-Contains the process id.
-
+%\membersection{wxProcessEvent::m\_pid}
+%
+%\member{int}{m\_pid}
+%
+%Contains the process id.
+%
 \membersection{wxProcessEvent::GetPid}\label{wxprocesseventgetpid}
 
 \constfunc{int}{GetPid}{\void}
 
 Returns the process id.
 
-\membersection{wxProcessEvent::SetPid}\label{wxprocesseventsetpid}
+\membersection{wxProcessEvent::GetExitCode}\label{wxprocesseventgetexitcode}
 
-\func{void}{SetPid}{\param{int}{ pid}}
+\func{int}{GetExitCode}{\void}
 
-Sets the process id.
-
+Returns the exist status.

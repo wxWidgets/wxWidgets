@@ -430,7 +430,15 @@ processes.
 
 \func{long}{wxExecute}{\param{const wxString\& }{command}, \param{wxArrayString\& }{output}}
 
+\perlnote{In wxPerl this function only takes the {\tt command} argument,
+and returns a 2-element list {\tt ( status, output )}, where {\tt output} is
+an array reference.}
+
 \func{long}{wxExecute}{\param{const wxString\& }{command}, \param{wxArrayString\& }{output}, \param{wxArrayString\& }{errors}}
+
+\perlnote{In wxPerl this function only takes the {\tt command} argument,
+and returns a 3-element list {\tt ( status, output, errors )}, where
+{\tt output} and {\tt errors} are array references.}
 
 Executes another program in Unix or Windows.
 
@@ -3370,7 +3378,7 @@ because it will not be executed in release mode at all.
 \func{}{wxASSERT\_MIN\_BITSIZE}{\param{}{type}, \param{}{size}}
 
 This macro results in a 
-\helpref{compile time assertion failure}{wxCOMPILE\_TIME\_ASSERT} if the size
+\helpref{compile time assertion failure}{wxcompiletimeassert} if the size
 of the given type {\it type} is less than {\it size} bits.
 
 You may use it like this, for example:
@@ -3399,7 +3407,7 @@ Assert macro with message. An error message will be generated if the condition i
 \func{}{wxCOMPILE\_TIME\_ASSERT}{\param{}{condition}, \param{}{msg}}
 
 Using {\tt wxCOMPILE\_TIME\_ASSERT} results in a compilation error if the
-specified {\it condition| is false. The compiler error message should include
+specified {\it condition} is false. The compiler error message should include
 the {\it msg} identifier - please note that it must be a valid C++ identifier
 and not a string unlike in the other cases.
 
