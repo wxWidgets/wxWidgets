@@ -99,6 +99,54 @@ END_EVENT_TABLE()
 #define wxMAC_USE_THEME_BORDER 1
 
 // ---------------------------------------------------------------------------
+// Utility Routines to move between different coordinate systems
+// ---------------------------------------------------------------------------
+
+/*
+ * Right now we have the following setup :
+ * a border that is not part of the native control is always outside the
+ * control's border (otherwise we loose all native intelligence, future ways
+ * may be to have a second embedding control responsible for drawing borders
+ * and backgrounds eventually)
+ * so all this border calculations have to be taken into account when calling
+ * native methods or getting native oriented data
+ * so we have three coordinate systems here
+ * wx client coordinates
+ * wx window coordinates (including window frames)
+ * native coordinates
+ */
+ 
+//
+// originating from native control
+//
+
+
+void wxMacNativeToWindow( const wxWindow* window , RgnHandle handle )
+{
+    OffsetRgn( handle , window->MacGetLeftBorderSize() , window->MacGetTopBorderSize() ) ; 
+}
+
+void wxMacNativeToWindow( const wxWindow* window , Rect *rect )
+{
+    OffsetRect( rect , window->MacGetLeftBorderSize() , window->MacGetTopBorderSize() ) ; 
+}
+
+//
+// directed towards native control
+//
+
+void wxMacWindowToNative( const wxWindow* window , RgnHandle handle )
+{
+    OffsetRgn( handle , -window->MacGetLeftBorderSize() , -window->MacGetTopBorderSize() ); 
+}
+
+void wxMacWindowToNative( const wxWindow* window , Rect *rect )
+{
+    OffsetRect( rect , -window->MacGetLeftBorderSize() , -window->MacGetTopBorderSize() ) ; 
+}
+
+
+// ---------------------------------------------------------------------------
 // Carbon Events
 // ---------------------------------------------------------------------------
  
@@ -163,7 +211,9 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                     {
                         allocatedRgn = NewRgn() ;
                         CopyRgn( updateRgn , allocatedRgn ) ;
-                        OffsetRgn( updateRgn , thisWindow->MacGetLeftBorderSize() , thisWindow->MacGetTopBorderSize() ) ;
+                        // hide the given region by the new region that must be shifted
+                        wxMacNativeToWindow( thisWindow , allocatedRgn ) ;
+                        updateRgn = allocatedRgn ;
                     }
                 }
 
@@ -1025,15 +1075,6 @@ void wxWindowMac::MacGetPositionAndSizeFromControl(int& x, int& y,
     y = bounds.top ;
     w = bounds.right - bounds.left ;
     h = bounds.bottom - bounds.top ;
-
-    wxTopLevelWindow* tlw = wxDynamicCast( this , wxTopLevelWindow ) ;
-    if ( tlw )
-    {
-        Point tlworigin =  { 0 , 0  } ;
-        QDLocalToGlobalPoint( UMAGetWindowPort( (WindowRef) tlw->MacGetWindowRef() ) , &tlworigin ) ;
-        x = tlworigin.h ;
-        y = tlworigin.v ;    
-    }
 }
 
 // From a wx position / size calculate the appropriate size of the native control
@@ -1064,20 +1105,14 @@ bool wxWindowMac::MacGetBoundsForControl(const wxPoint& pos,
     return true ;
 }
 
-// Get total size
+// Get window size (not client size)
 void wxWindowMac::DoGetSize(int *x, int *y) const
 {
     // take the size of the control and add the borders that have to be drawn outside
-    int x1 , y1 , w1 ,h1 ;
-#if TARGET_API_MAC_OSX
+    int x1 , y1 , w1 , h1 ;
+
     MacGetPositionAndSizeFromControl( x1 , y1, w1 ,h1 ) ;
-    
-#else
-    Rect bounds ;
-    m_peer->GetRect( &bounds ) ;   
-    w1 = bounds.right - bounds.left ;
-    h1 = bounds.bottom - bounds.top ;
-#endif
+
     w1 += MacGetLeftBorderSize() + MacGetRightBorderSize() ;
     h1 += MacGetTopBorderSize() + MacGetBottomBorderSize() ;
     
@@ -1085,18 +1120,31 @@ void wxWindowMac::DoGetSize(int *x, int *y) const
     if(y)   *y = h1 ;
 }
 
+// get the position of the bounds of this window in client coordinates of its parent
 void wxWindowMac::DoGetPosition(int *x, int *y) const
 {
- #if TARGET_API_MAC_OSX
     int x1 , y1 , w1 ,h1 ;
     MacGetPositionAndSizeFromControl( x1 , y1, w1 ,h1 ) ;
     x1 -= MacGetLeftBorderSize() ;
     y1 -= MacGetTopBorderSize() ;
+    // to non-client
+ #if !TARGET_API_MAC_OSX
+    if ( !GetParent()->IsTopLevel() )
+    {
+        Rect bounds ;
+        GetControlBounds( (ControlRef) GetParent()->GetHandle() , &bounds ) ;
+        x1 -= bounds.left ;
+        y1 -= bounds.top ;
+    }
+#endif
     if ( !IsTopLevel() )
     {
         wxWindow *parent = GetParent();
         if ( parent )
         {
+            // we must first adjust it twice, as otherwise it gets lost by the clientareaorigin fix
+            x1 += 2 * parent->MacGetLeftBorderSize() ;
+            y1 += 2 * parent->MacGetTopBorderSize() ;
             wxPoint pt(parent->GetClientAreaOrigin());
             x1 -= pt.x ;
             y1 -= pt.y ;
@@ -1104,31 +1152,6 @@ void wxWindowMac::DoGetPosition(int *x, int *y) const
     }
     if(x)   *x = x1 ;
     if(y)   *y = y1 ;
- #else
-    Rect bounds ;
-    m_peer->GetRect( &bounds ) ;   
-    wxCHECK_RET( GetParent() , wxT("Missing Parent") ) ;
-    
-    int xx = bounds.left ;
-    int yy = bounds.top ;
-    xx -= MacGetLeftBorderSize() ;
-    yy -= MacGetTopBorderSize() ;
-    
-    if ( !GetParent()->IsTopLevel() )
-    {
-        GetControlBounds( (ControlRef) GetParent()->GetHandle() , &bounds ) ;
-    
-        xx -= bounds.left ;
-        yy -= bounds.top ;
-    }
-    
-    wxPoint pt(GetParent()->GetClientAreaOrigin());
-    xx -= pt.x;
-    yy -= pt.y;
-
-    if(x)   *x = xx;
-    if(y)   *y = yy;
-#endif
 }
 
 void wxWindowMac::DoScreenToClient(int *x, int *y) const
@@ -2309,7 +2332,7 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
         // note there currently is a bug in OSX which makes inefficient refreshes in case an entire control
         // area is scrolled, this does not occur if width and height are 2 pixels less, 
         // TODO write optimal workaround
-        wxRect scrollrect( MacGetLeftBorderSize() , MacGetTopBorderSize()  , MacGetLeftBorderSize() + width , MacGetTopBorderSize() + height ) ;
+        wxRect scrollrect( MacGetLeftBorderSize() , MacGetTopBorderSize()  , width , height ) ;
         if ( rect ) 
         {
             scrollrect.Intersect( *rect ) ;
@@ -2326,7 +2349,7 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
             if( UMAGetSystemVersion() < 0x1030 )
                 Update() ;
             else
-                HIViewRender(*m_peer) ;
+                HIViewRender(m_peer->GetControlRef()) ;
 #endif
         }
         // as the native control might be not a 0/0 wx window coordinates, we have to offset
@@ -2662,29 +2685,32 @@ bool wxWindowMac::MacDoRedraw( WXHRGN updatergnr , long time )
 {
     RgnHandle updatergn = (RgnHandle) updatergnr ;
     bool handled = false ;
+    Rect updatebounds ;
+    GetRegionBounds( updatergn , &updatebounds ) ;
     
-    // calculate a client-origin version of the update rgn and set m_updateRegion to that
+    if ( !EmptyRgn(updatergn) )
     {
         RgnHandle newupdate = NewRgn() ;
         wxSize point = GetClientSize() ;
         wxPoint origin = GetClientAreaOrigin() ;
         SetRectRgn( newupdate , origin.x , origin.y , origin.x + point.x , origin.y+point.y ) ;
         SectRgn( newupdate , updatergn , newupdate ) ;
+        
+        {
+            wxWindowDC dc(this);
+            if (!EmptyRgn(newupdate))
+                dc.SetClippingRegion(wxRegion(newupdate));
+
+            wxEraseEvent eevent( GetId(), &dc );
+            eevent.SetEventObject( this );
+            GetEventHandler()->ProcessEvent( eevent );
+        }
+        
+        // calculate a client-origin version of the update rgn and set m_updateRegion to that
         OffsetRgn( newupdate , -origin.x , -origin.y ) ;
         m_updateRegion = newupdate ;
         DisposeRgn( newupdate ) ; 
-    }
 
-    if ( !EmptyRgn(updatergn) )
-    {
-        wxWindowDC dc(this);
-        if (!EmptyRgn(updatergn))
-            dc.SetClippingRegion(wxRegion(updatergn));
-        
-        wxEraseEvent eevent( GetId(), &dc );
-        eevent.SetEventObject( this );
-        GetEventHandler()->ProcessEvent( eevent );
- 
         if ( !m_updateRegion.Empty() )
         {
             // paint the window itself
