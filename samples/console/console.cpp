@@ -755,9 +755,13 @@ static void TestStopWatch()
     for ( size_t n = 0; n < 70; n++ )
     {
         sw2.Start();
-        if ( sw.Time() < 0 || sw2.Time() < 0 )
+
+        for ( size_t m = 0; m < 100000; m++ )
         {
-            puts("\ntime is negative - ERROR!");
+            if ( sw.Time() < 0 || sw2.Time() < 0 )
+            {
+                puts("\ntime is negative - ERROR!");
+            }
         }
 
         putchar('.');
