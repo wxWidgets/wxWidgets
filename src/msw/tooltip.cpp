@@ -49,7 +49,9 @@ WXHWND wxToolTip::hwndTT = (WXHWND)NULL;
 
 
 // a simple wrapper around TOOLINFO Win32 structure
-#pragma warning( disable : 4097 )
+#ifdef __VISUALC__
+    #pragma warning( disable : 4097 )
+#endif
 class wxToolInfo : public TOOLINFO
 {
 public:
@@ -67,7 +69,9 @@ public:
         uId = (UINT)win->GetHWND();
     }
 };
-#pragma warning( default : 4097 )
+#ifdef __VISUALC__
+    #pragma warning( default : 4097 )
+#endif
 
 // ----------------------------------------------------------------------------
 // private functions
