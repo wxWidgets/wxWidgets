@@ -89,8 +89,7 @@ void wxControl::SetLabel(const wxString& label)
     if (!widget)
         return;
 
-    wxString buf(wxStripMenuCodes(label));
-    wxXmString label_str(buf);
+    wxXmString label_str(wxStripMenuCodes(label));
 
     XtVaSetValues (widget,
         XmNlabelString, label_str(),
