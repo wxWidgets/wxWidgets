@@ -230,7 +230,7 @@ bool wxTextCtrlBase::LoadFile(const wxString& filename)
 bool wxTextCtrlBase::SaveFile(const wxString& filename)
 {
     wxString filenameToUse = filename.IsEmpty() ? m_filename : filename;
-    if ( !filenameToUse )
+    if ( filenameToUse.empty() )
     {
         // what kind of message to give? is it an error or a program bug?
         wxLogDebug(wxT("Can't save textctrl to file without filename."));
@@ -239,19 +239,20 @@ bool wxTextCtrlBase::SaveFile(const wxString& filename)
     }
 
 #if wxUSE_FFILE
-    wxFFile file(filename, _T("w"));
+    wxFFile file(filenameToUse, _T("w"));
     if ( file.IsOpened() && file.Write(GetValue()) )
     {
         // it's not modified any longer
         DiscardEdits();
 
-        m_filename = filename;
+        // if it worked, save for future calls
+        m_filename = filenameToUse;
 
         return TRUE;
     }
+#endif // wxUSE_FFILE
 
     wxLogError(_("The text couldn't be saved."));
-#endif // wxUSE_FFILE
 
     return FALSE;
 }
