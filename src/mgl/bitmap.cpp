@@ -25,6 +25,8 @@
 #include "wx/utils.h"
 #include "wx/log.h"
 #include "wx/intl.h"
+#include "wx/image.h"
+#include "wx/xpmdecod.h"
 
 #include "wx/mgl/private.h"
 
@@ -253,11 +255,14 @@ bool wxBitmap::Create(int width, int height, int depth)
 
 bool wxBitmap::CreateFromXpm(const char **bits)
 {
-    wxFAIL_MSG(_T("not implemented"));
-    // FIXME_MGL (?) -- libxpm limitation
-
     wxCHECK_MSG( bits != NULL, FALSE, wxT("invalid bitmap data") )
-
+    
+    wxXPMDecoder decoder;
+    wxImage img = decoder.ReadData(bits);
+    wxCHECK_MSG( img.Ok(), FALSE, wxT("invalid bitmap data") )
+    
+    *this = wxBitmap(img);
+    
     if ( wxTheBitmapList ) wxTheBitmapList->AddBitmap(this);
 
     return TRUE;
@@ -604,7 +609,7 @@ void wxBitmap::SetPalette(const wxPalette& palette)
     M_BMPDATA->m_palette = new wxPalette(palette);
 
     int cnt = palette.GetColoursCount();
-    palette_t *pal = (palette_t*) palette.GetMGLpalette_t();
+    palette_t *pal = palette.GetMGLpalette_t();
     memcpy(M_BMPDATA->m_bitmap->pal, pal, cnt * sizeof(palette_t));
 }
 
@@ -629,9 +634,9 @@ void wxBitmap::SetDepth(int depth)
     M_BMPDATA->m_bpp = depth;
 }
 
-void *wxBitmap::GetMGLbitmap_t() const
+bitmap_t_struct *wxBitmap::GetMGLbitmap_t() const
 {
-    return (void*)(M_BMPDATA->m_bitmap);
+    return M_BMPDATA->m_bitmap;
 }
 
 
