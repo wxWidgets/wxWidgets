@@ -1,0 +1,23 @@
+\section{FAQ}\label{faq}
+
+\subsection{A row of all non-fixed bars don't position properly}
+
+By Julian Smart.
+
+I found that if I added all non-fixed bars, bars would overlap.
+This seems to be because the proportional resizing doesn't work
+before the window is laid out. I worked around this by setting
+pane sizes {\it before} the bars are added:
+
+\begin{verbatim}
+    wxSize sz = GetClientSize();
+
+    // Set width for panes to help it do the calculations
+    int i;
+    for (i = 0; i < 2; i++)
+    {
+        cbDockPane& pane = * (m_frameLayout->GetPane(i));
+        pane.SetPaneWidth(sz.x);
+    }
+\end{verbatim}
+
