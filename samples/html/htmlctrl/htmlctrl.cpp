@@ -30,7 +30,7 @@
     #include "wx/wx.h"
 #endif
 
-#include "wx/html/wxWebKit.h"
+#include "wx/html/webkit.h"
 
 // ----------------------------------------------------------------------------
 // resources
