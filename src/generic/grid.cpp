@@ -1133,8 +1133,8 @@ bool wxGrid::SendEvent( const wxEventType type,
 			int row, int col,
 			wxMouseEvent& mouseEv )
 {
-    if ( type == EVT_WXGRID_ROW_SIZE ||
-	 type == EVT_WXGRID_COL_SIZE )
+    if ( type == EVT_GRID_ROW_SIZE ||
+	 type == EVT_GRID_COL_SIZE )
     {
 	int rowOrCol = (row == -1 ? col : row);
 
@@ -1150,7 +1150,7 @@ bool wxGrid::SendEvent( const wxEventType type,
 
 	return GetEventHandler()->ProcessEvent(gridEvt);
     }
-    else if ( type == EVT_WXGRID_RANGE_SELECT )
+    else if ( type == EVT_GRID_RANGE_SELECT )
     {
 	wxGridRangeSelectEvent gridEvt( GetId(),
 					type,
@@ -1187,8 +1187,8 @@ bool wxGrid::SendEvent( const wxEventType type,
 bool wxGrid::SendEvent( const wxEventType type,
 			int row, int col )
 {
-    if ( type == EVT_WXGRID_ROW_SIZE ||
-	 type == EVT_WXGRID_COL_SIZE )
+    if ( type == EVT_GRID_ROW_SIZE ||
+	 type == EVT_GRID_COL_SIZE )
     {
 	int rowOrCol = (row == -1 ? col : row);
 
@@ -1380,7 +1380,7 @@ void wxGrid::OnMouse( wxMouseEvent& ev )
                 if ( YToEdgeOfRow(y) < 0 )
                 {
                     row = YToRow(y);
-                    if ( !SendEvent( EVT_WXGRID_LABEL_LEFT_CLICK, row, col, ev ) )
+                    if ( !SendEvent( EVT_GRID_LABEL_LEFT_CLICK, row, col, ev ) )
                     {
                         SelectRow( row, ev.ShiftDown() );
                         m_cursorMode = WXGRID_CURSOR_SELECT_ROW;
@@ -1398,7 +1398,7 @@ void wxGrid::OnMouse( wxMouseEvent& ev )
                 if ( XToEdgeOfCol(x) < 0 )
                 {
                     col = XToCol(x);
-                    if ( !SendEvent( EVT_WXGRID_LABEL_LEFT_CLICK, row, col, ev ) )
+                    if ( !SendEvent( EVT_GRID_LABEL_LEFT_CLICK, row, col, ev ) )
                     {
                         SelectCol( col, ev.ShiftDown() );
                         m_cursorMode = WXGRID_CURSOR_SELECT_COL;
@@ -1411,7 +1411,7 @@ void wxGrid::OnMouse( wxMouseEvent& ev )
             {
                 // leave both row and col as -1
                 //
-                if ( !SendEvent( EVT_WXGRID_LABEL_LEFT_CLICK, row, col, ev ) )
+                if ( !SendEvent( EVT_GRID_LABEL_LEFT_CLICK, row, col, ev ) )
                 {
                     SelectAll();
                 }
@@ -1421,7 +1421,7 @@ void wxGrid::OnMouse( wxMouseEvent& ev )
             case WXGRID_CELL:
             {
                 XYToCell( x, y, cellCoords );
-                if ( !SendEvent( EVT_WXGRID_CELL_LEFT_CLICK,
+                if ( !SendEvent( EVT_GRID_CELL_LEFT_CLICK,
                                  cellCoords.GetRow(),
                                  cellCoords.GetCol(),
                                  ev ) )
@@ -1460,7 +1460,7 @@ void wxGrid::OnMouse( wxMouseEvent& ev )
                 if ( YToEdgeOfRow(y) < 0 )
                 {
                     row = YToRow(y);
-                    SendEvent(  EVT_WXGRID_LABEL_LEFT_DCLICK, row, col, ev );
+                    SendEvent(  EVT_GRID_LABEL_LEFT_DCLICK, row, col, ev );
                 }
             }
             break;
@@ -1474,7 +1474,7 @@ void wxGrid::OnMouse( wxMouseEvent& ev )
                 if ( XToEdgeOfCol(x) < 0 )
                 {
                     col = XToCol(x);
-                    SendEvent(  EVT_WXGRID_LABEL_LEFT_DCLICK, row, col, ev );
+                    SendEvent(  EVT_GRID_LABEL_LEFT_DCLICK, row, col, ev );
                 }
             }
             break;
@@ -1483,14 +1483,14 @@ void wxGrid::OnMouse( wxMouseEvent& ev )
             {
                 // leave both row and col as -1
                 //
-                SendEvent(  EVT_WXGRID_LABEL_LEFT_DCLICK, row, col, ev );                
+                SendEvent(  EVT_GRID_LABEL_LEFT_DCLICK, row, col, ev );                
             }
             break;
 
             case WXGRID_CELL:
             {
                 XYToCell( x, y, cellCoords );
-                SendEvent( EVT_WXGRID_CELL_LEFT_DCLICK,
+                SendEvent( EVT_GRID_CELL_LEFT_DCLICK,
                                  cellCoords.GetRow(),
                                  cellCoords.GetCol(),
                                  ev );
@@ -1535,7 +1535,7 @@ void wxGrid::OnMouse( wxMouseEvent& ev )
 		    // Note: we are ending the event *after* doing
 		    // default processing in this case
 		    //
-		    SendEvent( EVT_WXGRID_ROW_SIZE, m_dragRowOrCol, -1, ev );
+		    SendEvent( EVT_GRID_ROW_SIZE, m_dragRowOrCol, -1, ev );
 		}
 	    }
 	    break;
@@ -1563,7 +1563,7 @@ void wxGrid::OnMouse( wxMouseEvent& ev )
 		    // Note: we are ending the event *after* doing
 		    // default processing in this case
 		    //
-		    SendEvent( EVT_WXGRID_COL_SIZE, -1, m_dragRowOrCol, ev );
+		    SendEvent( EVT_GRID_COL_SIZE, -1, m_dragRowOrCol, ev );
 		}
 	    }
 	    break;
@@ -1575,7 +1575,7 @@ void wxGrid::OnMouse( wxMouseEvent& ev )
 		    // Note: we are ending the event *after* doing
 		    // default processing in this case
 		    //
-		    SendEvent( EVT_WXGRID_RANGE_SELECT, -1, -1, ev );
+		    SendEvent( EVT_GRID_RANGE_SELECT, -1, -1, ev );
 		}
 	    }
 	    break;
@@ -1599,7 +1599,7 @@ void wxGrid::OnMouse( wxMouseEvent& ev )
 	    case WXGRID_ROWLABEL:
 	    {
 		row = YToRow(y);
-		if ( !SendEvent( EVT_WXGRID_LABEL_RIGHT_CLICK, row, col, ev ) )
+		if ( !SendEvent( EVT_GRID_LABEL_RIGHT_CLICK, row, col, ev ) )
 		{
                     // TODO: default processing ?
                 }
@@ -1609,7 +1609,7 @@ void wxGrid::OnMouse( wxMouseEvent& ev )
             case WXGRID_COLLABEL:
             {
                 col = XToCol(x);
-		if ( !SendEvent( EVT_WXGRID_LABEL_RIGHT_CLICK, row, col, ev ) )
+		if ( !SendEvent( EVT_GRID_LABEL_RIGHT_CLICK, row, col, ev ) )
                 {
                     // TODO: default processing ?
                 }
@@ -1620,7 +1620,7 @@ void wxGrid::OnMouse( wxMouseEvent& ev )
             {
                 // leave both row and col as -1
                 //
-                if ( !SendEvent( EVT_WXGRID_LABEL_RIGHT_CLICK, row, col, ev ) )
+                if ( !SendEvent( EVT_GRID_LABEL_RIGHT_CLICK, row, col, ev ) )
                 {
                     // TODO: default processing ?
                 }
@@ -1630,7 +1630,7 @@ void wxGrid::OnMouse( wxMouseEvent& ev )
             case WXGRID_CELL:
             {
                 XYToCell( x, y, cellCoords );
-                if ( !SendEvent( EVT_WXGRID_CELL_RIGHT_CLICK,
+                if ( !SendEvent( EVT_GRID_CELL_RIGHT_CLICK,
                                 cellCoords.GetRow(),
                                 cellCoords.GetCol(),
                                 ev ) )
@@ -1663,14 +1663,14 @@ void wxGrid::OnMouse( wxMouseEvent& ev )
 	    case WXGRID_ROWLABEL:
 	    {
 		row = YToRow(y);
-		SendEvent( EVT_WXGRID_LABEL_RIGHT_DCLICK, row, col, ev );
+		SendEvent( EVT_GRID_LABEL_RIGHT_DCLICK, row, col, ev );
             }
             break;
 
             case WXGRID_COLLABEL:
             {
                 col = XToCol(x);
-		SendEvent( EVT_WXGRID_LABEL_RIGHT_DCLICK, row, col, ev );
+		SendEvent( EVT_GRID_LABEL_RIGHT_DCLICK, row, col, ev );
             }
             break;
 
@@ -1678,14 +1678,14 @@ void wxGrid::OnMouse( wxMouseEvent& ev )
             {
                 // leave both row and col as -1
                 //
-                SendEvent( EVT_WXGRID_LABEL_RIGHT_DCLICK, row, col, ev );
+                SendEvent( EVT_GRID_LABEL_RIGHT_DCLICK, row, col, ev );
             }
             break;
 
             case WXGRID_CELL:
             {
                 XYToCell( x, y, cellCoords );
-                SendEvent( EVT_WXGRID_CELL_RIGHT_DCLICK,
+                SendEvent( EVT_GRID_CELL_RIGHT_DCLICK,
                            cellCoords.GetRow(),
                            cellCoords.GetCol(),
                            ev );
@@ -2153,7 +2153,7 @@ void wxGrid::SaveEditControlValue()
         
         if ( valueChanged )
         {
-            SendEvent( EVT_WXGRID_CELL_CHANGE,
+            SendEvent( EVT_GRID_CELL_CHANGE,
                        m_currentCellCoords.GetRow(),
                        m_currentCellCoords.GetCol() );
         }
@@ -3863,7 +3863,7 @@ void wxGrid::SetRowSize( int row, int height )
         // Note: we are ending the event *after* doing
         // default processing in this case
         //
-        SendEvent( EVT_WXGRID_ROW_SIZE,
+        SendEvent( EVT_GRID_ROW_SIZE,
                    row, -1 );
     }
     else
@@ -3902,7 +3902,7 @@ void wxGrid::SetColSize( int col, int width )
         // Note: we are ending the event *after* doing
         // default processing in this case
         //
-        SendEvent( EVT_WXGRID_COL_SIZE,
+        SendEvent( EVT_GRID_COL_SIZE,
                    -1, col );
     }
     else
@@ -4141,7 +4141,7 @@ void wxGrid::SelectRow( int row, bool addToSelected )
     }
     
     wxGridRangeSelectEvent gridEvt( GetId(),
-                                    EVT_WXGRID_RANGE_SELECT,
+                                    EVT_GRID_RANGE_SELECT,
                                     this,
                                     m_selectedTopLeft,
                                     m_selectedBottomRight );
@@ -4178,7 +4178,7 @@ void wxGrid::SelectCol( int col, bool addToSelected )
     }
 
     wxGridRangeSelectEvent gridEvt( GetId(),
-                                    EVT_WXGRID_RANGE_SELECT,
+                                    EVT_GRID_RANGE_SELECT,
                                     this,
                                     m_selectedTopLeft,
                                     m_selectedBottomRight );
@@ -4220,7 +4220,7 @@ void wxGrid::SelectBlock( int topRow, int leftCol, int bottomRow, int rightCol )
     if ( !m_isDragging )
     {
         wxGridRangeSelectEvent gridEvt( GetId(),
-                                        EVT_WXGRID_RANGE_SELECT,
+                                        EVT_GRID_RANGE_SELECT,
                                         this,
                                         m_selectedTopLeft,
                                         m_selectedBottomRight );
