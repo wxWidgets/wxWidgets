@@ -51,6 +51,7 @@
 //#define TEST_STRINGS
 //#define TEST_THREADS
 //#define TEST_TIMER
+//#define TEST_WCHAR
 
 // ============================================================================
 // implementation
@@ -206,7 +207,8 @@ static void TestDllLoad()
     static const wxChar *LIB_NAME = _T("kernel32.dll");
     static const wxChar *FUNC_NAME = _T("lstrlenA");
 #elif defined(__UNIX__)
-    static const wxChar *LIB_NAME = _T("libc.so");
+    // weird: using just libc.so does *not* work!
+    static const wxChar *LIB_NAME = _T("/lib/libc-2.0.7.so");
     static const wxChar *FUNC_NAME = _T("strlen");
 #else
     #error "don't know how to test wxDllLoader on this platform"
@@ -1057,6 +1059,30 @@ static void TestStopWatch()
 }
 
 #endif // TEST_TIMER
+
+// ----------------------------------------------------------------------------
+// wide char (Unicode) support
+// ----------------------------------------------------------------------------
+
+#ifdef TEST_WCHAR
+
+#include <wx/strconv.h>
+
+static void TestUtf8()
+{
+    puts("*** Testing UTF8 support ***\n");
+
+    wxString testString =
+"************ French - Français ****************"
+"Juste un petit exemple pour dire que les français aussi"
+"ont à cœur de pouvoir utiliser tous leurs caractères ! :)";
+
+    wxWCharBuffer wchBuf = testString.wc_str(wxConvUTF8);
+    printf("Decoding '%s' => '%s'\n",
+           testString.c_str(), wxString(wchBuf, wxConvCurrent).c_str());
+}
+
+#endif // TEST_WCHAR
 
 // ----------------------------------------------------------------------------
 // date time
@@ -2763,6 +2789,10 @@ int main(int argc, char **argv)
     if ( 0 )
         TestInteractive();
 #endif // TEST_DATETIME
+
+#ifdef TEST_WCHAR
+    TestUtf8();
+#endif // TEST_WCHAR
 
     wxUninitialize();
 
