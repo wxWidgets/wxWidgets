@@ -815,6 +815,10 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="MOTIF_LOWLEVEL_HDR" hints="files">
     $(XWIN_LOWLEVEL_HDR)
+    wx/x11/bitmap.h
+    wx/x11/brush.h
+    wx/x11/pen.h
+    wx/x11/region.h
 </set>
 <set var="MOTIF_SRC" hints="files">
     src/motif/accel.cpp
@@ -935,7 +939,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/motif/radiobut.h
     wx/motif/region.h
     wx/motif/scrolbar.h
-    wx/motif/settings.h
     wx/motif/slider.h
     wx/motif/spinbutt.h
     wx/motif/statbmp.h
