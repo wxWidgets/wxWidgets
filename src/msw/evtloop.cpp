@@ -34,17 +34,24 @@
 #endif //WX_PRECOMP
 
 #include "wx/evtloop.h"
+
 #include "wx/tooltip.h"
+#include "wx/except.h"
+#include "wx/ptr_scpd.h"
+#include "wx/scopeguard.h"
 
 #include "wx/msw/private.h"
 
 #if wxUSE_THREADS
+    #include "wx/thread.h"
+
     // define the array of MSG strutures
     WX_DECLARE_OBJARRAY(MSG, wxMsgArray);
-    // VS: this is a bit dirty - it duplicates same declaration in app.cpp
-    //     (and there's no WX_DEFINE_OBJARRAY for that reason - it is already
-    //     defined in app.cpp).
-#endif
+
+    #include "wx/arrimpl.cpp"
+
+    WX_DEFINE_OBJARRAY(wxMsgArray);
+#endif // wxUSE_THREADS
 
 // ----------------------------------------------------------------------------
 // wxEventLoopImpl
@@ -73,6 +80,36 @@ private:
 
     // the exit code of the event loop
     int m_exitcode;
+};
+
+// ----------------------------------------------------------------------------
+// helper class
+// ----------------------------------------------------------------------------
+
+wxDEFINE_TIED_SCOPED_PTR_TYPE(wxEventLoopImpl);
+
+// this object sets the wxEventLoop given to the ctor as the currently active
+// one and unsets it in its dtor
+class wxEventLoopActivator
+{
+public:
+    wxEventLoopActivator(wxEventLoop **pActive,
+                         wxEventLoop *evtLoop)
+    {
+        m_pActive = pActive;
+        m_evtLoopOld = *pActive;
+        *pActive = evtLoop;
+    }
+
+    ~wxEventLoopActivator()
+    {
+        // restore the previously active event loop
+        *m_pActive = m_evtLoopOld;
+    }
+
+private:
+    wxEventLoop *m_evtLoopOld;
+    wxEventLoop **m_pActive;
 };
 
 // ============================================================================
@@ -198,10 +235,13 @@ int wxEventLoop::Run()
     // event loops are not recursive, you need to create another loop!
     wxCHECK_MSG( !IsRunning(), -1, _T("can't reenter a message loop") );
 
-    m_impl = new wxEventLoopImpl;
-    
-    wxEventLoop *oldLoop = ms_activeLoop;
-    ms_activeLoop = this;
+    // SendIdleMessage() and Dispatch() below may throw so the code here should
+    // be exception-safe, hence we must use local objects for all actions we
+    // should undo
+    wxEventLoopActivator activate(&ms_activeLoop, this);
+    wxEventLoopImplTiedPtr impl(&m_impl, new wxEventLoopImpl);
+
+    wxON_BLOCK_EXIT_OBJ0(*this, &wxEventLoop::OnExit);
 
     for ( ;; )
     {
@@ -214,8 +254,8 @@ int wxEventLoop::Run()
         while ( !Pending() && m_impl->SendIdleMessage() )
             ;
 
-        // a message came or no more idle processing to do, sit in Dispatch()
-        // waiting for the next message
+        // a message came or no more idle processing to do, sit in
+        // Dispatch() waiting for the next message
         if ( !Dispatch() )
         {
             // we got WM_QUIT
@@ -223,13 +263,7 @@ int wxEventLoop::Run()
         }
     }
 
-    int exitcode = m_impl->GetExitCode();
-    delete m_impl;
-    m_impl = NULL;
-
-    ms_activeLoop = oldLoop;
-
-    return exitcode;
+    return m_impl->GetExitCode();
 }
 
 void wxEventLoop::Exit(int rc)
