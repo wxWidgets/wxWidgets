@@ -7,8 +7,7 @@
 from wxPython.wx import *
 from wxPython.xrc import *
 from wxPython.html import wxHtmlWindow
-from xml.dom import minidom
-import os, sys, getopt, traceback
+import os, sys, getopt, re, traceback
 
 # Icons
 import images
@@ -26,10 +25,11 @@ else:
     modernFont = wxFont(10, wxMODERN, wxNORMAL, wxNORMAL)
 
 progname = 'XRCed'
-version = '0.0.7-5'
+version = '0.0.8-1'
 
 # Local modules
 from xxx import *
+from myxml import *
 
 # Globals
 testWin = None
@@ -71,7 +71,6 @@ def SetMenu(m, list):
 class Panel(wxNotebook):
     def __init__(self, parent, id = -1):
         wxNotebook.__init__(self, parent, id, style=wxNB_BOTTOM)
-        ##sys.modules['params'].panel = self
         import params
         params.panel = self
 
@@ -488,13 +487,14 @@ class XML_Tree(wxTreeCtrl):
         self.DeleteAllItems()
         # Add minimal structure
         if self.dom: self.dom.unlink()
-        self.dom = minidom.Document()
+        self.dom = MyDocument()
         self.dummyNode = self.dom.createComment('dummy node')
         # Create main node
         self.mainNode = self.dom.createElement('resource')
         self.dom.appendChild(self.mainNode)
-        xxx = xxxMainNode(None, self.mainNode)
-        self.root = self.AddRoot('XML tree', self.rootImage, data=wxTreeItemData(xxx))
+        self.rootObj = xxxMainNode(self.dom)
+        self.root = self.AddRoot('XML tree', self.rootImage,
+                                 data=wxTreeItemData(self.rootObj))
         self.SetItemHasChildren(self.root)
         self.Expand(self.root)
         self.Unselect()
@@ -507,9 +507,10 @@ class XML_Tree(wxTreeCtrl):
         self.dom = dom
         self.dummyNode = self.dom.createComment('dummy node')
         # Find 'resource' child, add it's children
-        self.mainNode = dom.getElementsByTagName('resource')[0]
-        xxx = xxxMainNode(None, self.mainNode)
-        self.root = self.AddRoot('XML tree', self.rootImage, data=wxTreeItemData(xxx))
+        self.mainNode = dom.documentElement
+        self.rootObj = xxxMainNode(self.dom)
+        self.root = self.AddRoot('XML tree', self.rootImage,
+                                 data=wxTreeItemData(self.rootObj))
         self.SetItemHasChildren(self.root)
         nodes = self.mainNode.childNodes[:]
         for node in nodes:
@@ -716,7 +717,7 @@ class XML_Tree(wxTreeCtrl):
         memFile = MemoryFile('xxx.xrc')
         # Create partial XML file - faster for big files
 
-        dom = minidom.Document()
+        dom = MyDocument()
         mainNode = dom.createElement('resource')
         dom.appendChild(mainNode)
 
@@ -733,11 +734,12 @@ class XML_Tree(wxTreeCtrl):
         parent.replaceChild(self.dummyNode, elem)
         # Append to new DOM, write it
         mainNode.appendChild(elem)
-        dom.writexml(memFile)
+        dom.writexml(memFile, encoding=tree.rootObj.params['encoding'].value())
         # Put back in place
         mainNode.removeChild(elem)
         dom.unlink()
         parent.replaceChild(elem, self.dummyNode)
+        # Remove temporary name
         if not xxx.name:
             name = 'noname'
             elem.removeAttribute('name')
@@ -953,7 +955,10 @@ class PullDownMenu:
     ID_NEW_CHECK_LIST = wxNewId()
     ID_NEW_NOTEBOOK = wxNewId()
     ID_NEW_HTML_WINDOW = wxNewId()
-    ID_NEW_CALENDAR = wxNewId()
+    ID_NEW_CALENDAR_CTRL = wxNewId()
+    ID_NEW_GENERIC_DIR_CTRL = wxNewId()
+    ID_NEW_SPIN_CTRL = wxNewId()
+    ID_NEW_UNKNOWN = wxNewId()
 
     ID_NEW_BOX_SIZER = wxNewId()
     ID_NEW_STATIC_BOX_SIZER = wxNewId()
@@ -1102,10 +1107,10 @@ class Frame(wxFrame):
         # Edit
         EVT_MENU(self, wxID_UNDO, self.OnUndo)
         EVT_MENU(self, wxID_REDO, self.OnRedo)
-        EVT_MENU(self, wxID_CUT, self.OnCut)
+        EVT_MENU(self, wxID_CUT, self.OnCutDelete)
         EVT_MENU(self, wxID_COPY, self.OnCopy)
         EVT_MENU(self, wxID_PASTE, self.OnPaste)
-        EVT_MENU(self, self.ID_DELETE, self.OnDelete)
+        EVT_MENU(self, self.ID_DELETE, self.OnCutDelete)
         EVT_MENU(self, ID_SELECT, self.OnSelect)
         # View
         EVT_MENU(self, self.ID_EMBED_PANEL, self.OnEmbedPanel)
@@ -1133,7 +1138,6 @@ class Frame(wxFrame):
         # Create tree
         global tree
         tree = XML_Tree(splitter, -1)
-        ##sys.modules['xxx'].tree = tree
         import xxx
         xxx.tree = tree
 
@@ -1202,13 +1206,16 @@ class Frame(wxFrame):
             pullDownMenu.ID_NEW_CHECK_LIST: 'wxCheckList',
             pullDownMenu.ID_NEW_NOTEBOOK: 'wxNotebook',
             pullDownMenu.ID_NEW_HTML_WINDOW: 'wxHtmlWindow',
-            pullDownMenu.ID_NEW_CALENDAR: 'wxCalendar',
+            pullDownMenu.ID_NEW_CALENDAR_CTRL: 'wxCalendarCtrl',
+            pullDownMenu.ID_NEW_GENERIC_DIR_CTRL: 'wxGenericDirCtrl',
+            pullDownMenu.ID_NEW_SPIN_CTRL: 'wxSpinCtrl',
 
             pullDownMenu.ID_NEW_BOX_SIZER: 'wxBoxSizer',
             pullDownMenu.ID_NEW_STATIC_BOX_SIZER: 'wxStaticBoxSizer',
             pullDownMenu.ID_NEW_GRID_SIZER: 'wxGridSizer',
             pullDownMenu.ID_NEW_FLEX_GRID_SIZER: 'wxFlexGridSizer',
             pullDownMenu.ID_NEW_SPACER: 'spacer',
+            pullDownMenu.ID_NEW_UNKNOWN: 'unknown',
             }
         pullDownMenu.controls = [
             ['control', 'Various controls',
@@ -1218,13 +1225,16 @@ class Frame(wxFrame):
              (pullDownMenu.ID_NEW_CHOICE, 'Choice', 'Create choice control'),
              (pullDownMenu.ID_NEW_SLIDER, 'Slider', 'Create slider control'),
              (pullDownMenu.ID_NEW_GAUGE, 'Gauge', 'Create gauge control'),
+             (pullDownMenu.ID_NEW_SPIN_CTRL, 'SpinCtrl', 'Create spin control'),
              (pullDownMenu.ID_NEW_SCROLL_BAR, 'ScrollBar', 'Create scroll bar'),
              (pullDownMenu.ID_NEW_TREE_CTRL, 'TreeCtrl', 'Create tree control'),
              (pullDownMenu.ID_NEW_LIST_CTRL, 'ListCtrl', 'Create list control'),
              (pullDownMenu.ID_NEW_HTML_WINDOW, 'HtmlWindow', 'Create HTML window'),
-             (pullDownMenu.ID_NEW_CALENDAR, 'Calendar', 'Create calendar control'),
+             (pullDownMenu.ID_NEW_CALENDAR_CTRL, 'CalendarCtrl', 'Create calendar control'),
+             (pullDownMenu.ID_NEW_GENERIC_DIR_CTRL, 'GenericDirCtrl', 'Create generic dir control'),
              (pullDownMenu.ID_NEW_PANEL, 'Panel', 'Create panel'),
              (pullDownMenu.ID_NEW_NOTEBOOK, 'Notebook', 'Create notebook control'),
+             (pullDownMenu.ID_NEW_UNKNOWN, 'Unknown', 'Create custom control placeholder'),
              ],
             ['button', 'Buttons',
              (pullDownMenu.ID_NEW_BUTTON, 'Button', 'Create button'),
@@ -1356,31 +1366,6 @@ class Frame(wxFrame):
     def OnRedo(self, evt):
         print '*** being implemented'
 
-    def OnCut(self, evt):
-        selected = tree.selection
-        if not selected: return         # key pressed event
-        # Undo info
-        self.lastOp = 'CUT'
-        self.undo = [tree.GetItemParent(selected), tree.GetPrevSibling(selected)]
-        # Delete testWin?
-        global testWin
-        if testWin:
-            # If deleting top-level item, delete testWin
-            if selected == testWin.item:
-                testWin.Destroy()
-                testWin = None
-            else:
-                # Remove highlight, update testWin
-                if not tree.IsHighlatable(selected):
-                    if testWin.highLight: testWin.highLight.Remove()
-                    tree.needUpdate = true
-        self.clipboard = tree.RemoveLeaf(selected)
-        tree.pendingHighLight = None
-        tree.Unselect()
-        panel.Clear()
-        self.modified = true
-        self.SetStatusText('Removed to clipboard')
-
     def OnCopy(self, evt):
         selected = tree.selection
         if not selected: return         # key pressed event
@@ -1510,11 +1495,16 @@ class Frame(wxFrame):
         self.modified = true
         self.SetStatusText('Pasted')
 
-    def OnDelete(self, evt):
+    def OnCutDelete(self, evt):
         selected = tree.selection
         if not selected: return         # key pressed event
         # Undo info
-        self.lastOp = 'DELETE'
+        if evt.GetId() == wxID_CUT:
+            self.lastOp = 'CUT'
+            status = 'Removed to clipboard'
+        else:
+            self.lastOp = 'DELETE'
+            status = 'Deleted'
         self.undo = [tree.GetItemParent(selected), tree.GetPrevSibling(selected)]
         # Delete testWin?
         global testWin
@@ -1528,15 +1518,17 @@ class Frame(wxFrame):
                 if testWin.highLight:
                     testWin.highLight.Remove()
                 tree.needUpdate = true
-        xnode = tree.RemoveLeaf(selected)
-        # !!! cloneNode is broken, or something is wrong
-#        self.undo.append(xnode.cloneNode(true))
-        xnode.unlink()
+        if evt.GetId() == wxID_CUT:
+            self.clipboard = tree.RemoveLeaf(selected)
+        else:
+            xnode = tree.RemoveLeaf(selected)
+            #self.undo.append(xnode.cloneNode(true))
+            xnode.unlink()
         tree.pendingHighLight = None
         tree.Unselect()
         panel.Clear()
         self.modified = true
-        self.SetStatusText('Deleted')
+        self.SetStatusText(status)
 
     def OnSelect(self, evt):
         print >> sys.stderr, 'Xperimental function!'
@@ -1730,11 +1722,11 @@ class Frame(wxFrame):
 
     def OnUpdateUI(self, evt):
         if evt.GetId() in [wxID_CUT, wxID_COPY, self.ID_DELETE]:
-            evt.Enable(tree.selection != tree.root)
+            evt.Enable(tree.selection is not None and tree.selection != tree.root)
         elif evt.GetId() == wxID_PASTE:
             evt.Enable((self.clipboard and tree.selection) != None)
         elif evt.GetId() == self.ID_TEST:
-            evt.Enable(tree.selection != tree.root)
+            evt.Enable(tree.selection is not None and tree.selection != tree.root)
 
     def OnIdle(self, evt):
         if self.inIdle: return          # Recursive call protection
@@ -1797,10 +1789,25 @@ class Frame(wxFrame):
             return false
         # Try to read the file
         try:
-            open(path)
+            f = open(path)
             self.Clear()
+            # Parse first line to get encoding (!! hack, I don't know a better way)
+            line = f.readline()
+            mo = re.match(r'^<\?xml ([^<>]* )?encoding="(?P<encd>[^<>].*)"\?>', line)
             # Build wx tree
-            dom = minidom.parse(path)
+            f.seek(0)
+            dom = minidom.parse(f)
+            # Set encoding global variable and document encoding property
+            import xxx
+            if mo:
+                dom.encoding = xxx.currentEncoding = mo.group('encd')
+            else:
+                xxx.currentEncoding = 'iso-8859-1'
+                dom.encoding = ''
+            f.close()
+            # Change dir
+            dir = os.path.dirname(path)
+            if dir: os.chdir(dir)
             tree.SetData(dom)
             self.dataFile = path
             self.SetTitle(progname + ': ' + os.path.basename(path))
@@ -1835,13 +1842,13 @@ class Frame(wxFrame):
             if tree.selection and panel.IsModified():
                 self.OnRefresh(wxCommandEvent())
             f = open(path, 'w')
-            # Make temporary copy
+            # Make temporary copy for formatting it
             # !!! We can't clone dom node, it works only once
             #self.domCopy = tree.dom.cloneNode(true)
-            self.domCopy = minidom.Document()
+            self.domCopy = MyDocument()
             mainNode = self.domCopy.appendChild(tree.mainNode.cloneNode(true))
             self.Indent(mainNode)
-            self.domCopy.writexml(f)
+            self.domCopy.writexml(f, encoding=tree.rootObj.params['encoding'].value())
             f.close()
             self.domCopy.unlink()
             self.domCopy = None
@@ -1875,7 +1882,7 @@ def usage():
 
 class App(wxApp):
     def OnInit(self):
-        global debug, verbose
+        global debug
         # Process comand-line
         try:
             opts, args = getopt.getopt(sys.argv[1:], 'dvh')
@@ -1917,7 +1924,6 @@ class App(wxApp):
         frame = Frame(pos, size)
         frame.Show(true)
         # Load resources from XRC file (!!! should be transformed to .py later?)
-        ##sys.modules['params'].frame = frame
         import params
         params.frame = frame
         frame.res = wxXmlResource('')
@@ -1948,12 +1954,13 @@ class App(wxApp):
         wc.WriteInt('panelHeight', conf.panelHeight)
         wc.WriteInt('nopanic', 1)
         wc.Flush()
-        del conf
 
 def main():
-    app = App(1)
+    app = App(0, useBestVisual=false)
     app.MainLoop()
     app.OnExit()
+    global conf
+    del conf
 
 if __name__ == '__main__':
     main()
