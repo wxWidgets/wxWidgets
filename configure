@@ -39780,9 +39780,6 @@ fi
     BAKEFILE_BAKEFILE_M4_VERSION="0.1.4"
 
 
-
-
-
 BAKEFILE_AUTOCONF_INC_M4_VERSION="0.1.4"
 
 
@@ -41552,10 +41549,14 @@ for subdir in `echo $SUBDIRS`; do
         else                                     if test ${subdir} = "samples"; then
                 makefiles="samples/Makefile.in samples/console/Makefile.in"
             elif test ${subdir} = "utils"; then
-                makefiles="utils/HelpGen/Makefile.in \
-                           utils/HelpGen/src/Makefile.in \
-                           utils/tex2rtf/Makefile.in \
-                           utils/tex2rtf/src/Makefile.in"
+                makefiles=""
+                for util in HelpGen tex2rtf ; do
+                    if test -d $srcdir/utils/$util ; then
+                        makefiles="utils/$util/Makefile.in \
+                                   utils/$util/src/Makefile.in \
+                                   $makefiles"
+                    fi
+                done
             else                 makefiles=`(cd $srcdir ; find $subdir -name Makefile.in)`
             fi
         fi
