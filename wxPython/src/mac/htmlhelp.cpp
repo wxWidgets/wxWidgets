@@ -95,14 +95,6 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 #ifdef __cplusplus
 extern "C" {
 #endif
-static void *SwigwxHtmlBookRecordTowxObject(void *ptr) {
-    wxHtmlBookRecord *src;
-    wxObject *dest;
-    src = (wxHtmlBookRecord *) ptr;
-    dest = (wxObject *) src;
-    return (void *) dest;
-}
-
 #define new_wxHtmlBookRecord(_swigarg0,_swigarg1,_swigarg2,_swigarg3) (new wxHtmlBookRecord(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
 static PyObject *_wrap_new_wxHtmlBookRecord(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -2438,7 +2430,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxHtmlContentsItem","_struct_wxHtmlContentsItem",0},
     { "_wxObject","_wxHtmlHelpController",SwigwxHtmlHelpControllerTowxObject},
     { "_wxObject","_wxHtmlHelpFrame",SwigwxHtmlHelpFrameTowxObject},
-    { "_wxObject","_wxHtmlBookRecord",SwigwxHtmlBookRecordTowxObject},
     { "_signed_short","_WXTYPE",0},
     { "_signed_short","_short",0},
     { "_unsigned_char","_byte",0},

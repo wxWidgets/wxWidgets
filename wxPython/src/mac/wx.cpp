@@ -595,7 +595,8 @@ PyObject *ptrfree(PyObject *_PTRVALUE) {
 
 
     wxPyApp* wxGetApp() {
-        return wxPythonApp;
+        //return wxPythonApp;
+        return (wxPyApp*)wxGetApp();
     }
 
     void wxApp_CleanUp() {

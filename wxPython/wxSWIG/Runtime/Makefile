@@ -11,12 +11,12 @@
 
 prefix      = /usr/local
 exec_prefix = ${prefix}
-CC          = gcc
+CC          = cc
 AR          = ar
 RANLIB      = ranlib
 SO          = .so
-CCSHARED    = -fpic
-LDSHARED    = gcc -shared
+CCSHARED    = 
+LDSHARED    = ld
 DYN_LIBS    = libswigtcl8$(SO) libswigtcl$(SO) libswigpl$(SO) libswigpy$(SO)
 STATIC_LIBS = libswigtcl8.a libswigtcl.a libswigpl.a libswigpy.a
 LIBS        = $(STATIC_LIBS) $(DYN_LIBS)
@@ -54,7 +54,7 @@ clean::
 # Tcl runtime library
 # ----------------------------------------------------------------------
 
-TCL_INCLUDE = -I/usr/include
+TCL_INCLUDE = -I/usr/local/include
 TCL_LIB     = -L/usr/local/lib
 
 # Tcl 7.x shared
@@ -108,7 +108,7 @@ py_lib:
 # Perl run-time library
 # ----------------------------------------------------------------------
 
-PERL5_INCLUDE= -I/usr/lib/perl5/5.6.1/i386-linux/CORE
+PERL5_INCLUDE= -I/System/Library/Perl/darwin/CORE
 
 # Perl shared
 

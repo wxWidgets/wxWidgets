@@ -137,7 +137,7 @@ IMP_PYCALLBACK_STRING__pure( wxPyTipProvider, wxTipProvider, GetTip);
 
 #include <wx/generic/dragimgg.h>
 
-// A Log class that can be derived from in wxPython
+// A wxLog class that can be derived from in wxPython
 class wxPyLog : public wxLog {
 public:
     wxPyLog() : wxLog() {}
@@ -1461,6 +1461,33 @@ static PyObject *_wrap_wxFindWindowAtPoint(PyObject *self, PyObject *args, PyObj
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     _result = (wxWindow *)wxFindWindowAtPoint(*_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{ _resultobj = wxPyMake_wxObject(_result); }
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxGetTopLevelParent(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxWindow * _result;
+    wxWindow * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "win", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxGetTopLevelParent",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGetTopLevelParent. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxWindow *)wxGetTopLevelParent(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -5332,60 +5359,6 @@ static PyObject *_wrap_wxLogWindow_PassMessages(PyObject *self, PyObject *args, 
     return _resultobj;
 }
 
-#define new_wxLogNull() (new wxLogNull())
-static PyObject *_wrap_new_wxLogNull(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxLogNull * _result;
-    char *_kwnames[] = {  NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxLogNull",_kwnames)) 
-        return NULL;
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxLogNull *)new_wxLogNull();
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxLogNull_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
-    return _resultobj;
-}
-
-#define delete_wxLogNull(_swigobj) (delete _swigobj)
-static PyObject *_wrap_delete_wxLogNull(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxLogNull * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:delete_wxLogNull",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxLogNull_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delete_wxLogNull. Expected _wxLogNull_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    delete_wxLogNull(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
 static void *SwigwxLogChainTowxLog(void *ptr) {
     wxLogChain *src;
     wxLog *dest;
@@ -5557,6 +5530,60 @@ static PyObject *_wrap_wxLogChain_GetOldLog(PyObject *self, PyObject *args, PyOb
         Py_INCREF(Py_None);
         _resultobj = Py_None;
     }
+    return _resultobj;
+}
+
+#define new_wxLogNull() (new wxLogNull())
+static PyObject *_wrap_new_wxLogNull(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxLogNull * _result;
+    char *_kwnames[] = {  NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxLogNull",_kwnames)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxLogNull *)new_wxLogNull();
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxLogNull_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define delete_wxLogNull(_swigobj) (delete _swigobj)
+static PyObject *_wrap_delete_wxLogNull(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxLogNull * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:delete_wxLogNull",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxLogNull_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delete_wxLogNull. Expected _wxLogNull_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    delete_wxLogNull(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -9903,13 +9930,13 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxPyLog_Destroy", (PyCFunction) _wrap_wxPyLog_Destroy, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyLog__setCallbackInfo", (PyCFunction) _wrap_wxPyLog__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPyLog", (PyCFunction) _wrap_new_wxPyLog, METH_VARARGS | METH_KEYWORDS },
+	 { "delete_wxLogNull", (PyCFunction) _wrap_delete_wxLogNull, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxLogNull", (PyCFunction) _wrap_new_wxLogNull, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLogChain_GetOldLog", (PyCFunction) _wrap_wxLogChain_GetOldLog, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLogChain_IsPassingMessages", (PyCFunction) _wrap_wxLogChain_IsPassingMessages, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLogChain_PassMessages", (PyCFunction) _wrap_wxLogChain_PassMessages, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLogChain_SetLog", (PyCFunction) _wrap_wxLogChain_SetLog, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxLogChain", (PyCFunction) _wrap_new_wxLogChain, METH_VARARGS | METH_KEYWORDS },
-	 { "delete_wxLogNull", (PyCFunction) _wrap_delete_wxLogNull, METH_VARARGS | METH_KEYWORDS },
-	 { "new_wxLogNull", (PyCFunction) _wrap_new_wxLogNull, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLogWindow_PassMessages", (PyCFunction) _wrap_wxLogWindow_PassMessages, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLogWindow_IsPassingMessages", (PyCFunction) _wrap_wxLogWindow_IsPassingMessages, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLogWindow_GetOldLog", (PyCFunction) _wrap_wxLogWindow_GetOldLog, METH_VARARGS | METH_KEYWORDS },
@@ -10038,6 +10065,7 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxResourceCreateBitmap", (PyCFunction) _wrap_wxResourceCreateBitmap, METH_VARARGS | METH_KEYWORDS },
 	 { "wxResourceClear", (PyCFunction) _wrap_wxResourceClear, METH_VARARGS | METH_KEYWORDS },
 	 { "wxResourceAddIdentifier", (PyCFunction) _wrap_wxResourceAddIdentifier, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGetTopLevelParent", (PyCFunction) _wrap_wxGetTopLevelParent, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFindWindowAtPoint", (PyCFunction) _wrap_wxFindWindowAtPoint, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGenericFindWindowAtPoint", (PyCFunction) _wrap_wxGenericFindWindowAtPoint, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGetActiveWindow", (PyCFunction) _wrap_wxGetActiveWindow, METH_VARARGS | METH_KEYWORDS },

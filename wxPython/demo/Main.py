@@ -524,8 +524,9 @@ class wxPythonDemo(wxFrame):
                 self.window = module.runTest(self, self.nb, self) ###
                 if self.window:
                     self.nb.AddPage(self.window, 'Demo')
-                    wxYield()
+                    #wxYield()  TODO: Is this still needed?
                     self.nb.SetSelection(2)
+                    self.nb.Refresh()  # without this wxMac has troubles showing the just added page
 
             else:
                 self.ovr.SetPage("")

@@ -424,23 +424,6 @@ class wxLogWindow(wxLogWindowPtr):
 
 
 
-class wxLogNullPtr :
-    def __init__(self,this):
-        self.this = this
-        self.thisown = 0
-    def __del__(self,misc2c=misc2c):
-        if self.thisown == 1 :
-            misc2c.delete_wxLogNull(self)
-    def __repr__(self):
-        return "<C wxLogNull instance at %s>" % (self.this,)
-class wxLogNull(wxLogNullPtr):
-    def __init__(self,*_args,**_kwargs):
-        self.this = apply(misc2c.new_wxLogNull,_args,_kwargs)
-        self.thisown = 1
-
-
-
-
 class wxLogChainPtr(wxLogPtr):
     def __init__(self,this):
         self.this = this
@@ -463,6 +446,23 @@ class wxLogChainPtr(wxLogPtr):
 class wxLogChain(wxLogChainPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(misc2c.new_wxLogChain,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
+class wxLogNullPtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __del__(self,misc2c=misc2c):
+        if self.thisown == 1 :
+            misc2c.delete_wxLogNull(self)
+    def __repr__(self):
+        return "<C wxLogNull instance at %s>" % (self.this,)
+class wxLogNull(wxLogNullPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(misc2c.new_wxLogNull,_args,_kwargs)
         self.thisown = 1
 
 
@@ -1026,6 +1026,10 @@ def wxGenericFindWindowAtPoint(*_args, **_kwargs):
 
 def wxFindWindowAtPoint(*_args, **_kwargs):
     val = apply(misc2c.wxFindWindowAtPoint,_args,_kwargs)
+    return val
+
+def wxGetTopLevelParent(*_args, **_kwargs):
+    val = apply(misc2c.wxGetTopLevelParent,_args,_kwargs)
     return val
 
 wxResourceAddIdentifier = misc2c.wxResourceAddIdentifier

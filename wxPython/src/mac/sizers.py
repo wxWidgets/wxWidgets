@@ -183,8 +183,14 @@ class wxSizerPtr(wxObjectPtr):
     def Fit(self, *_args, **_kwargs):
         val = apply(sizersc.wxSizer_Fit,(self,) + _args, _kwargs)
         return val
+    def FitInside(self, *_args, **_kwargs):
+        val = apply(sizersc.wxSizer_FitInside,(self,) + _args, _kwargs)
+        return val
     def SetSizeHints(self, *_args, **_kwargs):
         val = apply(sizersc.wxSizer_SetSizeHints,(self,) + _args, _kwargs)
+        return val
+    def SetVirtualSizeHints(self, *_args, **_kwargs):
+        val = apply(sizersc.wxSizer_SetVirtualSizeHints,(self,) + _args, _kwargs)
         return val
     def Clear(self, *_args, **_kwargs):
         val = apply(sizersc.wxSizer_Clear,(self,) + _args, _kwargs)
@@ -245,6 +251,14 @@ class wxSizerPtr(wxObjectPtr):
         else:
             apply(self.SetItemMinSizeWindow, args)
      
+    
+    def GetSizeTuple(self):
+        return self.GetSize().asTuple()
+    def GetPositionTuple(self):
+        return self.GetPosition().asTuple()
+    def GetMinSizeTuple(self):
+        return self.GetMinSize().asTuple()
+    
 class wxSizer(wxSizerPtr):
     def __init__(self,this):
         self.this = this

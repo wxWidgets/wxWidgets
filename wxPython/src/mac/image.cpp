@@ -2268,6 +2268,40 @@ static PyObject *_wrap_wxImage_Paste(PyObject *self, PyObject *args, PyObject *k
     return _resultobj;
 }
 
+static PyObject * wxImage_GetDataBuffer(wxImage *self) {
+            unsigned char* data = self->GetData();
+            int len = self->GetWidth() * self->GetHeight() * 3;
+            return PyBuffer_FromReadWriteMemory(data, len);
+        }
+static PyObject *_wrap_wxImage_GetDataBuffer(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    PyObject * _result;
+    wxImage * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxImage_GetDataBuffer",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxImage_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxImage_GetDataBuffer. Expected _wxImage_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (PyObject *)wxImage_GetDataBuffer(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{
+  _resultobj = _result;
+}
+    return _resultobj;
+}
+
 static PyObject * wxImage_GetData(wxImage *self) {
             unsigned char* data = self->GetData();
             int len = self->GetWidth() * self->GetHeight() * 3;
@@ -3128,6 +3162,7 @@ static PyMethodDef imagecMethods[] = {
 	 { "wxImage_SetMaskColour", (PyCFunction) _wrap_wxImage_SetMaskColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_SetData", (PyCFunction) _wrap_wxImage_SetData, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_GetData", (PyCFunction) _wrap_wxImage_GetData, METH_VARARGS | METH_KEYWORDS },
+	 { "wxImage_GetDataBuffer", (PyCFunction) _wrap_wxImage_GetDataBuffer, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_Paste", (PyCFunction) _wrap_wxImage_Paste, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_Copy", (PyCFunction) _wrap_wxImage_Copy, METH_VARARGS | METH_KEYWORDS },
 	 { "wxImage_GetSubImage", (PyCFunction) _wrap_wxImage_GetSubImage, METH_VARARGS | METH_KEYWORDS },

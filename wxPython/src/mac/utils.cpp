@@ -61,7 +61,7 @@ extern PyObject *SWIG_newvarlink(void);
 #include <wx/datetime.h>
 
     // Put some wx default wxChar* values into wxStrings.
-    DECLARE_DEF_STRING2(DateFormatStr, wxT("sashWindow"));
+    DECLARE_DEF_STRING2(DateFormatStr, wxT("%c"));
     static const wxString wxPyEmptyString(wxT(""));
 
 
