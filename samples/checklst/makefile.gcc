@@ -147,10 +147,10 @@ $(OBJS):
 
 all: $(OBJS)\checklst.exe
 
-$(OBJS)\checklst_checklst.o: .\checklst.cpp
+$(OBJS)\checklst_checklst.o: ./checklst.cpp
 	$(CXX) -c -o $@ $(CHECKLST_CXXFLAGS) $<
 
-$(OBJS)\checklst_checklst_rc.o: .\checklst.rc
+$(OBJS)\checklst_checklst_rc.o: ./checklst.rc
 	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../samples
 
 $(OBJS)\checklst.exe: $(CHECKLST_OBJECTS) $(OBJS)\checklst_checklst_rc.o

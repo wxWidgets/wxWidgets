@@ -147,10 +147,10 @@ $(OBJS):
 
 all: $(OBJS)\font.exe
 
-$(OBJS)\font_font.o: .\font.cpp
+$(OBJS)\font_font.o: ./font.cpp
 	$(CXX) -c -o $@ $(FONT_CXXFLAGS) $<
 
-$(OBJS)\font_font_rc.o: .\font.rc
+$(OBJS)\font_font_rc.o: ./font.rc
 	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../samples
 
 clean: 

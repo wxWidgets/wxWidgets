@@ -19,7 +19,7 @@ ANIMATEDLL_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_3) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	/I..\..\src\animate\..\..\..\include /I$(SETUPHDIR) \
 	/I..\..\src\animate\..\..\include /DWXUSINGDLL /DWXMAKINGDLL_ANIMATE \
-	$(CXXFLAGS) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_animatedll.pch"
+	$(CXXFLAGS) /GR /GX /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_animatedll.pch"
 ANIMATEDLL_OBJECTS =  \
 	$(OBJS)\animatedll_dummy.obj \
 	$(OBJS)\animatedll_animate.obj
@@ -29,7 +29,7 @@ ANIMATELIB_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_12) \
 	$(____DEBUGRUNTIME_11_p) $(__OPTIMIZEFLAG) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	/I..\..\src\animate\..\..\..\include /I$(SETUPHDIR) \
-	/I..\..\src\animate\..\..\include $(CXXFLAGS) /Yu"wx/wxprec.h" \
+	/I..\..\src\animate\..\..\include $(CXXFLAGS) /GR /GX /Yu"wx/wxprec.h" \
 	/Fp"$(OBJS)\wxprec_animatelib.pch"
 ANIMATELIB_OBJECTS =  \
 	$(OBJS)\animatelib_dummy.obj \

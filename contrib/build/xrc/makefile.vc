@@ -22,7 +22,7 @@ XRCDLL_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_3) /DWIN32 \
 	$(____DEBUGRUNTIME_2_p) $(__OPTIMIZEFLAG) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I..\..\src\xrc\..\..\..\include \
 	/I$(SETUPHDIR) /I..\..\src\xrc\..\..\include /DWXUSINGDLL /DWXMAKINGDLL_XRC \
-	$(CXXFLAGS) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_xrcdll.pch"
+	$(CXXFLAGS) /GR /GX /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_xrcdll.pch"
 XRCDLL_OBJECTS =  \
 	$(OBJS)\xrcdll_dummy.obj \
 	$(OBJS)\xrcdll_xmlres.obj \
@@ -68,8 +68,8 @@ XRCLIB_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_12) /DWIN32 \
 	$(____DEBUGRUNTIME_11_p) $(__OPTIMIZEFLAG) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I..\..\src\xrc\..\..\..\include \
 	/I$(SETUPHDIR) /I..\..\src\xrc\..\..\include \
-	/I..\..\src\xrc\expat\xmlparse /I..\..\src\xrc\expat\xmltok $(CXXFLAGS) \
-	/Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_xrclib.pch"
+	/I..\..\src\xrc\expat\xmlparse /I..\..\src\xrc\expat\xmltok $(CXXFLAGS) /GR \
+	/GX /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_xrclib.pch"
 XRCLIB_OBJECTS =  \
 	$(OBJS)\xrclib_dummy.obj \
 	$(OBJS)\xrclib_xmlres.obj \

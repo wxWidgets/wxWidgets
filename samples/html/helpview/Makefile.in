@@ -125,7 +125,7 @@ helpview$(EXEEXT): $(HELPVIEW_OBJECTS) $(__helpview___win32rc)
 	$(__helpview___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-helpview.app/Contents: helpview$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+helpview.app/Contents/PkgInfo: helpview$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p helpview.app/Contents
 	mkdir -p helpview.app/Contents/MacOS
 	mkdir -p helpview.app/Contents/Resources
@@ -146,7 +146,7 @@ helpview.app/Contents: helpview$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(L
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc helpview.app/Contents/Resources/helpview.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns helpview.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@helpview_bundle: helpview.app/Contents
+@COND_PLATFORM_MACOSX_1@helpview_bundle: helpview.app/Contents/PkgInfo
 
 helpview_helpview.o: $(srcdir)/helpview.cpp
 	$(CXXC) -c -o $@ $(HELPVIEW_CXXFLAGS) $<

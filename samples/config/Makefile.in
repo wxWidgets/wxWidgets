@@ -111,7 +111,7 @@ conftest$(EXEEXT): $(CONFTEST_OBJECTS) $(__conftest___win32rc)
 	$(__conftest___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-conftest.app/Contents: conftest$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+conftest.app/Contents/PkgInfo: conftest$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p conftest.app/Contents
 	mkdir -p conftest.app/Contents/MacOS
 	mkdir -p conftest.app/Contents/Resources
@@ -132,7 +132,7 @@ conftest.app/Contents: conftest$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(L
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc conftest.app/Contents/Resources/conftest.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns conftest.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@conftest_bundle: conftest.app/Contents
+@COND_PLATFORM_MACOSX_1@conftest_bundle: conftest.app/Contents/PkgInfo
 
 conftest_conftest.o: $(srcdir)/conftest.cpp
 	$(CXXC) -c -o $@ $(CONFTEST_CXXFLAGS) $<

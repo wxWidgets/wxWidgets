@@ -108,7 +108,7 @@ calendar$(EXEEXT): $(CALENDAR_OBJECTS) $(__calendar___win32rc)
 	$(__calendar___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-calendar.app/Contents: calendar$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+calendar.app/Contents/PkgInfo: calendar$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p calendar.app/Contents
 	mkdir -p calendar.app/Contents/MacOS
 	mkdir -p calendar.app/Contents/Resources
@@ -129,7 +129,7 @@ calendar.app/Contents: calendar$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(L
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc calendar.app/Contents/Resources/calendar.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns calendar.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@calendar_bundle: calendar.app/Contents
+@COND_PLATFORM_MACOSX_1@calendar_bundle: calendar.app/Contents/PkgInfo
 
 calendar_calendar.o: $(srcdir)/calendar.cpp
 	$(CXXC) -c -o $@ $(CALENDAR_CXXFLAGS) $<

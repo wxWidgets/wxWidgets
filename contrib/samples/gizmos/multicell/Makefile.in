@@ -119,7 +119,7 @@ mtest$(EXEEXT): $(MTEST_OBJECTS) $(__mtest___win32rc)
 	$(__mtest___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-mtest.app/Contents: mtest$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+mtest.app/Contents/PkgInfo: mtest$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p mtest.app/Contents
 	mkdir -p mtest.app/Contents/MacOS
 	mkdir -p mtest.app/Contents/Resources
@@ -140,7 +140,7 @@ mtest.app/Contents: mtest$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRN
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc mtest.app/Contents/Resources/mtest.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns mtest.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@mtest_bundle: mtest.app/Contents
+@COND_PLATFORM_MACOSX_1@mtest_bundle: mtest.app/Contents/PkgInfo
 
 mtest_mtest.o: $(srcdir)/mtest.cpp
 	$(CXXC) -c -o $@ $(MTEST_CXXFLAGS) $<

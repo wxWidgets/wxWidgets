@@ -107,7 +107,7 @@ bombs$(EXEEXT): $(BOMBS_OBJECTS) $(__bombs___win32rc)
 	$(__bombs___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-bombs.app/Contents: bombs$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+bombs.app/Contents/PkgInfo: bombs$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p bombs.app/Contents
 	mkdir -p bombs.app/Contents/MacOS
 	mkdir -p bombs.app/Contents/Resources
@@ -137,7 +137,7 @@ bombs_bombs1.o: $(srcdir)/bombs1.cpp
 bombs_bombs_rc.o: $(srcdir)/bombs.rc
 	$(RESCOMP) -i$< -o$@ --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)   --include-dir $(top_srcdir)/include --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples
 
-@COND_PLATFORM_MACOSX_1@bombs_bundle: bombs.app/Contents
+@COND_PLATFORM_MACOSX_1@bombs_bundle: bombs.app/Contents/PkgInfo
 
 bombs_game.o: $(srcdir)/game.cpp
 	$(CXXC) -c -o $@ $(BOMBS_CXXFLAGS) $<

@@ -151,10 +151,10 @@ $(OBJS):
 
 all: $(OBJS)\sashtest.exe
 
-$(OBJS)\sashtest_sashtest.o: .\sashtest.cpp
+$(OBJS)\sashtest_sashtest.o: ./sashtest.cpp
 	$(CXX) -c -o $@ $(SASHTEST_CXXFLAGS) $<
 
-$(OBJS)\sashtest_sashtest_rc.o: .\sashtest.rc
+$(OBJS)\sashtest_sashtest_rc.o: ./sashtest.rc
 	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../samples
 
 clean: 

@@ -120,7 +120,7 @@ validate$(EXEEXT): $(VALIDATE_OBJECTS) $(__validate___win32rc)
 	$(__validate___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-validate.app/Contents: validate$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+validate.app/Contents/PkgInfo: validate$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p validate.app/Contents
 	mkdir -p validate.app/Contents/MacOS
 	mkdir -p validate.app/Contents/Resources
@@ -141,7 +141,7 @@ validate.app/Contents: validate$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(L
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc validate.app/Contents/Resources/validate.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns validate.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@validate_bundle: validate.app/Contents
+@COND_PLATFORM_MACOSX_1@validate_bundle: validate.app/Contents/PkgInfo
 
 validate_validate.o: $(srcdir)/validate.cpp
 	$(CXXC) -c -o $@ $(VALIDATE_CXXFLAGS) $<

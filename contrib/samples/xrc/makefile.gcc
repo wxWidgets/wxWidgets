@@ -157,19 +157,19 @@ $(OBJS):
 
 all: $(OBJS)\xrcdemo.exe data
 
-$(OBJS)\xrcdemo_custclas.o: .\custclas.cpp
+$(OBJS)\xrcdemo_custclas.o: ./custclas.cpp
 	$(CXX) -c -o $@ $(XRCDEMO_CXXFLAGS) $<
 
-$(OBJS)\xrcdemo_derivdlg.o: .\derivdlg.cpp
+$(OBJS)\xrcdemo_derivdlg.o: ./derivdlg.cpp
 	$(CXX) -c -o $@ $(XRCDEMO_CXXFLAGS) $<
 
-$(OBJS)\xrcdemo_myframe.o: .\myframe.cpp
+$(OBJS)\xrcdemo_myframe.o: ./myframe.cpp
 	$(CXX) -c -o $@ $(XRCDEMO_CXXFLAGS) $<
 
-$(OBJS)\xrcdemo_xrcdemo.o: .\xrcdemo.cpp
+$(OBJS)\xrcdemo_xrcdemo.o: ./xrcdemo.cpp
 	$(CXX) -c -o $@ $(XRCDEMO_CXXFLAGS) $<
 
-$(OBJS)\xrcdemo_xrcdemo_rc.o: .\xrcdemo.rc
+$(OBJS)\xrcdemo_xrcdemo_rc.o: ./xrcdemo.rc
 	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../../samples --include-dir ./../../include
 
 clean: 

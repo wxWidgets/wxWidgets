@@ -105,7 +105,7 @@ caret$(EXEEXT): $(CARET_OBJECTS) $(__caret___win32rc)
 	$(__caret___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-caret.app/Contents: caret$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+caret.app/Contents/PkgInfo: caret$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p caret.app/Contents
 	mkdir -p caret.app/Contents/MacOS
 	mkdir -p caret.app/Contents/Resources
@@ -126,7 +126,7 @@ caret.app/Contents: caret$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRN
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc caret.app/Contents/Resources/caret.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns caret.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@caret_bundle: caret.app/Contents
+@COND_PLATFORM_MACOSX_1@caret_bundle: caret.app/Contents/PkgInfo
 
 caret_caret.o: $(srcdir)/caret.cpp
 	$(CXXC) -c -o $@ $(CARET_CXXFLAGS) $<

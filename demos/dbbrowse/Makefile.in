@@ -130,7 +130,7 @@ dbbrowse$(EXEEXT): $(DBBROWSE_OBJECTS) $(__dbbrowse___win32rc)
 	$(__dbbrowse___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-dbbrowse.app/Contents: dbbrowse$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+dbbrowse.app/Contents/PkgInfo: dbbrowse$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p dbbrowse.app/Contents
 	mkdir -p dbbrowse.app/Contents/MacOS
 	mkdir -p dbbrowse.app/Contents/Resources
@@ -154,7 +154,7 @@ dbbrowse.app/Contents: dbbrowse$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(L
 dbbrowse_browsedb.o: $(srcdir)/browsedb.cpp
 	$(CXXC) -c -o $@ $(DBBROWSE_CXXFLAGS) $<
 
-@COND_PLATFORM_MACOSX_1@dbbrowse_bundle: dbbrowse.app/Contents
+@COND_PLATFORM_MACOSX_1@dbbrowse_bundle: dbbrowse.app/Contents/PkgInfo
 
 dbbrowse_dbbrowse.o: $(srcdir)/dbbrowse.cpp
 	$(CXXC) -c -o $@ $(DBBROWSE_CXXFLAGS) $<

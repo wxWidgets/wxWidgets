@@ -117,7 +117,7 @@ docview$(EXEEXT): $(DOCVIEW_OBJECTS) $(__docview___win32rc)
 	$(__docview___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-docview.app/Contents: docview$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+docview.app/Contents/PkgInfo: docview$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p docview.app/Contents
 	mkdir -p docview.app/Contents/MacOS
 	mkdir -p docview.app/Contents/Resources
@@ -138,7 +138,7 @@ docview.app/Contents: docview$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIB
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc docview.app/Contents/Resources/docview.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns docview.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@docview_bundle: docview.app/Contents
+@COND_PLATFORM_MACOSX_1@docview_bundle: docview.app/Contents/PkgInfo
 
 docview_doc.o: $(srcdir)/doc.cpp
 	$(CXXC) -c -o $@ $(DOCVIEW_CXXFLAGS) $<

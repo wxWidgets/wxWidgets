@@ -160,37 +160,37 @@ $(OBJS):
 
 all: $(OBJS)\studio.exe data
 
-$(OBJS)\studio_cspalette.o: .\cspalette.cpp
+$(OBJS)\studio_cspalette.o: ./cspalette.cpp
 	$(CXX) -c -o $@ $(STUDIO_CXXFLAGS) $<
 
-$(OBJS)\studio_csprint.o: .\csprint.cpp
+$(OBJS)\studio_csprint.o: ./csprint.cpp
 	$(CXX) -c -o $@ $(STUDIO_CXXFLAGS) $<
 
-$(OBJS)\studio_dialogs.o: .\dialogs.cpp
+$(OBJS)\studio_dialogs.o: ./dialogs.cpp
 	$(CXX) -c -o $@ $(STUDIO_CXXFLAGS) $<
 
-$(OBJS)\studio_doc.o: .\doc.cpp
+$(OBJS)\studio_doc.o: ./doc.cpp
 	$(CXX) -c -o $@ $(STUDIO_CXXFLAGS) $<
 
-$(OBJS)\studio_mainfrm.o: .\mainfrm.cpp
+$(OBJS)\studio_mainfrm.o: ./mainfrm.cpp
 	$(CXX) -c -o $@ $(STUDIO_CXXFLAGS) $<
 
-$(OBJS)\studio_project.o: .\project.cpp
+$(OBJS)\studio_project.o: ./project.cpp
 	$(CXX) -c -o $@ $(STUDIO_CXXFLAGS) $<
 
-$(OBJS)\studio_shapes.o: .\shapes.cpp
+$(OBJS)\studio_shapes.o: ./shapes.cpp
 	$(CXX) -c -o $@ $(STUDIO_CXXFLAGS) $<
 
-$(OBJS)\studio_studio.o: .\studio.cpp
+$(OBJS)\studio_studio.o: ./studio.cpp
 	$(CXX) -c -o $@ $(STUDIO_CXXFLAGS) $<
 
-$(OBJS)\studio_studio_rc.o: .\studio.rc
+$(OBJS)\studio_studio_rc.o: ./studio.rc
 	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../../../samples --include-dir ./../../../include
 
-$(OBJS)\studio_symbols.o: .\symbols.cpp
+$(OBJS)\studio_symbols.o: ./symbols.cpp
 	$(CXX) -c -o $@ $(STUDIO_CXXFLAGS) $<
 
-$(OBJS)\studio_view.o: .\view.cpp
+$(OBJS)\studio_view.o: ./view.cpp
 	$(CXX) -c -o $@ $(STUDIO_CXXFLAGS) $<
 
 clean: 

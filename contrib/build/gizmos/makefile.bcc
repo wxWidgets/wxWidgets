@@ -20,9 +20,10 @@ BCCDIR = $(MAKEDIR)\..
 
 ### Variables: ###
 
-GIZMOSDLL_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) $(__DEBUGINFO) \
-	$(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\gizmos\..\..\..\include -I$(SETUPHDIR) \
+GIZMOSDLL_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) -I$(BCCDIR)\include \
+	$(__DEBUGINFO) $(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
+	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	-I..\..\src\gizmos\..\..\..\include -I$(SETUPHDIR) \
 	-I..\..\src\gizmos\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_GIZMOS \
 	$(CXXFLAGS) -Hu -H=$(OBJS)\wxprec_gizmosdll.csm
 GIZMOSDLL_OBJECTS =  \
@@ -33,9 +34,10 @@ GIZMOSDLL_OBJECTS =  \
 	$(OBJS)\gizmosdll_multicell.obj \
 	$(OBJS)\gizmosdll_splittree.obj \
 	$(OBJS)\gizmosdll_statpict.obj
-GIZMOSLIB_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) $(__DEBUGINFO) \
-	$(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\gizmos\..\..\..\include -I$(SETUPHDIR) \
+GIZMOSLIB_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) -I$(BCCDIR)\include \
+	$(__DEBUGINFO) $(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
+	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	-I..\..\src\gizmos\..\..\..\include -I$(SETUPHDIR) \
 	-I..\..\src\gizmos\..\..\include $(CXXFLAGS) -Hu \
 	-H=$(OBJS)\wxprec_gizmoslib.csm
 GIZMOSLIB_OBJECTS =  \
@@ -220,7 +222,7 @@ clean:
 
 !if "$(SHARED)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos_bcc$(VENDORTAG).dll: $(OBJS)\gizmosdll_dummy.obj  $(GIZMOSDLL_OBJECTS)
-	ilink32 -Tpd -q $(LDFLAGS) $(__DEBUGINFO)  -L$(LIBDIRNAME) @&&|
+	ilink32 -Tpd -q $(LDFLAGS) -L$(BCCDIR)\lib $(__DEBUGINFO)  -L$(LIBDIRNAME) @&&|
 	c0d32.obj $(GIZMOSDLL_OBJECTS),$@,, $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) import32.lib ole2w32.lib  $(__WXLIB_BASE_p) $(__WXLIB_CORE_p) import32.lib cw32mt$(__RUNTIME_LIBS_7).lib,,
 |
 	implib -f $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos $@

@@ -151,10 +151,10 @@ $(OBJS):
 
 all: $(OBJS)\joytest.exe
 
-$(OBJS)\joytest_joytest.o: .\joytest.cpp
+$(OBJS)\joytest_joytest.o: ./joytest.cpp
 	$(CXX) -c -o $@ $(JOYTEST_CXXFLAGS) $<
 
-$(OBJS)\joytest_joytest_rc.o: .\joytest.rc
+$(OBJS)\joytest_joytest_rc.o: ./joytest.rc
 	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../samples
 
 clean: 

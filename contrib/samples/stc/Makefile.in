@@ -127,7 +127,7 @@ stctest$(EXEEXT): $(STCTEST_OBJECTS) $(__stctest___win32rc)
 	$(__stctest___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-stctest.app/Contents: stctest$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+stctest.app/Contents/PkgInfo: stctest$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p stctest.app/Contents
 	mkdir -p stctest.app/Contents/MacOS
 	mkdir -p stctest.app/Contents/Resources
@@ -148,7 +148,7 @@ stctest.app/Contents: stctest$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIB
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc stctest.app/Contents/Resources/stctest.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns stctest.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@stctest_bundle: stctest.app/Contents
+@COND_PLATFORM_MACOSX_1@stctest_bundle: stctest.app/Contents/PkgInfo
 
 stctest_sample_rc.o: $(srcdir)/../../../samples/sample.rc
 	$(RESCOMP) -i$< -o$@ --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)   --include-dir $(top_srcdir)/include --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../../samples

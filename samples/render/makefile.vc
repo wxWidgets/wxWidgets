@@ -19,14 +19,14 @@ RENDDLL_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_13) /DWIN32 \
 	/Fd$(OBJS)\renddll_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)250_vc.pdb \
 	$(____DEBUGRUNTIME_12_p) $(__OPTIMIZEFLAG) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I.\..\..\include /I$(SETUPHDIR) \
-	/DWXUSINGDLL $(CXXFLAGS)
+	/DWXUSINGDLL $(CXXFLAGS) /GR /GX
 RENDDLL_OBJECTS =  \
 	$(OBJS)\renddll_renddll.obj
 RENDER_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_3) /DWIN32 \
 	$(__DEBUGINFO) /Fd$(OBJS)\render.pdb $(____DEBUGRUNTIME_2_p) \
 	$(__OPTIMIZEFLAG) /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) /I.\..\..\include /I$(SETUPHDIR) /I. $(__DLLFLAG_p) \
-	/D_WINDOWS /I.\..\..\samples $(CXXFLAGS)
+	/D_WINDOWS /I.\..\..\samples $(CXXFLAGS) /GR /GX
 RENDER_OBJECTS =  \
 	$(OBJS)\render_sample.res \
 	$(OBJS)\render_render.obj

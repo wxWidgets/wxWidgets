@@ -19,7 +19,7 @@ MMEDIADLL_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_3) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	/I..\..\src\mmedia\..\..\..\include /I$(SETUPHDIR) \
 	/I..\..\src\mmedia\..\..\include /DWXUSINGDLL /DWXMAKINGDLL_MMEDIA \
-	$(CXXFLAGS) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_mmediadll.pch"
+	$(CXXFLAGS) /GR /GX /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_mmediadll.pch"
 MMEDIADLL_OBJECTS =  \
 	$(OBJS)\mmediadll_dummy.obj \
 	$(OBJS)\mmediadll_cdwin.obj \
@@ -48,7 +48,7 @@ MMEDIALIB_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_12) \
 	$(____DEBUGRUNTIME_11_p) $(__OPTIMIZEFLAG) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	/I..\..\src\mmedia\..\..\..\include /I$(SETUPHDIR) \
-	/I..\..\src\mmedia\..\..\include $(CXXFLAGS) /Yu"wx/wxprec.h" \
+	/I..\..\src\mmedia\..\..\include $(CXXFLAGS) /GR /GX /Yu"wx/wxprec.h" \
 	/Fp"$(OBJS)\wxprec_mmedialib.pch"
 MMEDIALIB_OBJECTS =  \
 	$(OBJS)\mmedialib_dummy.obj \

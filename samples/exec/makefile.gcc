@@ -147,10 +147,10 @@ $(OBJS):
 
 all: $(OBJS)\exec.exe
 
-$(OBJS)\exec_exec.o: .\exec.cpp
+$(OBJS)\exec_exec.o: ./exec.cpp
 	$(CXX) -c -o $@ $(EXEC_CXXFLAGS) $<
 
-$(OBJS)\exec_exec_rc.o: .\exec.rc
+$(OBJS)\exec_exec_rc.o: ./exec.rc
 	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../samples
 
 clean: 

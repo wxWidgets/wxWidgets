@@ -20,9 +20,10 @@ BCCDIR = $(MAKEDIR)\..
 
 ### Variables: ###
 
-MMEDIADLL_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) $(__DEBUGINFO) \
-	$(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\mmedia\..\..\..\include -I$(SETUPHDIR) \
+MMEDIADLL_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) -I$(BCCDIR)\include \
+	$(__DEBUGINFO) $(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
+	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	-I..\..\src\mmedia\..\..\..\include -I$(SETUPHDIR) \
 	-I..\..\src\mmedia\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_MMEDIA \
 	$(CXXFLAGS) -Hu -H=$(OBJS)\wxprec_mmediadll.csm
 MMEDIADLL_OBJECTS =  \
@@ -47,9 +48,10 @@ MMEDIADLL_OBJECTS =  \
 	$(OBJS)\mmediadll_sndulaw.obj \
 	$(OBJS)\mmediadll_sndwav.obj \
 	$(OBJS)\mmediadll_vidbase.obj
-MMEDIALIB_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) $(__DEBUGINFO) \
-	$(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\mmedia\..\..\..\include -I$(SETUPHDIR) \
+MMEDIALIB_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) -I$(BCCDIR)\include \
+	$(__DEBUGINFO) $(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
+	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	-I..\..\src\mmedia\..\..\..\include -I$(SETUPHDIR) \
 	-I..\..\src\mmedia\..\..\include $(CXXFLAGS) -Hu \
 	-H=$(OBJS)\wxprec_mmedialib.csm
 MMEDIALIB_OBJECTS =  \
@@ -332,7 +334,7 @@ clean:
 
 !if "$(SHARED)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia_bcc$(VENDORTAG).dll: $(OBJS)\mmediadll_dummy.obj  $(MMEDIADLL_OBJECTS)
-	ilink32 -Tpd -q $(LDFLAGS) $(__DEBUGINFO)  -L$(LIBDIRNAME) @&&|
+	ilink32 -Tpd -q $(LDFLAGS) -L$(BCCDIR)\lib $(__DEBUGINFO)  -L$(LIBDIRNAME) @&&|
 	c0d32.obj $(MMEDIADLL_OBJECTS),$@,, $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) import32.lib ole2w32.lib  $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) import32.lib cw32mt$(__RUNTIME_LIBS_7).lib,,
 |
 	implib -f $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_mmedia $@

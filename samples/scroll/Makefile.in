@@ -118,7 +118,7 @@ scroll$(EXEEXT): $(SCROLL_OBJECTS) $(__scroll___win32rc)
 	$(__scroll___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-scroll.app/Contents: scroll$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+scroll.app/Contents/PkgInfo: scroll$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p scroll.app/Contents
 	mkdir -p scroll.app/Contents/MacOS
 	mkdir -p scroll.app/Contents/Resources
@@ -139,7 +139,7 @@ scroll.app/Contents: scroll$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDI
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc scroll.app/Contents/Resources/scroll.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns scroll.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@scroll_bundle: scroll.app/Contents
+@COND_PLATFORM_MACOSX_1@scroll_bundle: scroll.app/Contents/PkgInfo
 
 scroll_scroll.o: $(srcdir)/scroll.cpp
 	$(CXXC) -c -o $@ $(SCROLL_CXXFLAGS) $<

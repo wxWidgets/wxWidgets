@@ -147,10 +147,10 @@ $(OBJS):
 
 all: $(OBJS)\nettest.exe
 
-$(OBJS)\nettest_nettest.o: .\nettest.cpp
+$(OBJS)\nettest_nettest.o: ./nettest.cpp
 	$(CXX) -c -o $@ $(NETTEST_CXXFLAGS) $<
 
-$(OBJS)\nettest_nettest_rc.o: .\nettest.rc
+$(OBJS)\nettest_nettest_rc.o: ./nettest.rc
 	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../samples
 
 clean: 

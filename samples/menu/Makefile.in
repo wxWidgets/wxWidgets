@@ -118,7 +118,7 @@ menu$(EXEEXT): $(MENU_OBJECTS) $(__menu___win32rc)
 	$(__menu___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-menu.app/Contents: menu$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+menu.app/Contents/PkgInfo: menu$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p menu.app/Contents
 	mkdir -p menu.app/Contents/MacOS
 	mkdir -p menu.app/Contents/Resources
@@ -139,7 +139,7 @@ menu.app/Contents: menu$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAM
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc menu.app/Contents/Resources/menu.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns menu.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@menu_bundle: menu.app/Contents
+@COND_PLATFORM_MACOSX_1@menu_bundle: menu.app/Contents/PkgInfo
 
 menu_menu.o: $(srcdir)/menu.cpp
 	$(CXXC) -c -o $@ $(MENU_CXXFLAGS) $<

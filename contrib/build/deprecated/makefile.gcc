@@ -175,58 +175,58 @@ $(OBJS):
 
 all: $(__deprecateddll___depname) $(__deprecatedlib___depname)
 
-$(OBJS)\deprecateddll_dosyacc.o: ../../src/deprecated\dosyacc.c
+$(OBJS)\deprecateddll_dosyacc.o: ../../src/deprecated/dosyacc.c
 	$(CC) -c -o $@ $(DEPRECATEDDLL_CFLAGS) $<
 
-$(OBJS)\deprecateddll_dummy.o: ../../src/deprecated\..\..\..\src\msw\dummy.cpp
+$(OBJS)\deprecateddll_dummy.o: ../../src/deprecated/../../../src/msw/dummy.cpp
 	$(CXX) -c -o $@ $(DEPRECATEDDLL_CXXFLAGS) $<
 
-$(OBJS)\deprecateddll_prop.o: ../../src/deprecated\prop.cpp
+$(OBJS)\deprecateddll_prop.o: ../../src/deprecated/prop.cpp
 	$(CXX) -c -o $@ $(DEPRECATEDDLL_CXXFLAGS) $<
 
-$(OBJS)\deprecateddll_propform.o: ../../src/deprecated\propform.cpp
+$(OBJS)\deprecateddll_propform.o: ../../src/deprecated/propform.cpp
 	$(CXX) -c -o $@ $(DEPRECATEDDLL_CXXFLAGS) $<
 
-$(OBJS)\deprecateddll_proplist.o: ../../src/deprecated\proplist.cpp
+$(OBJS)\deprecateddll_proplist.o: ../../src/deprecated/proplist.cpp
 	$(CXX) -c -o $@ $(DEPRECATEDDLL_CXXFLAGS) $<
 
-$(OBJS)\deprecateddll_resource.o: ../../src/deprecated\resource.cpp
+$(OBJS)\deprecateddll_resource.o: ../../src/deprecated/resource.cpp
 	$(CXX) -c -o $@ $(DEPRECATEDDLL_CXXFLAGS) $<
 
-$(OBJS)\deprecateddll_tbarsmpl.o: ../../src/deprecated\tbarsmpl.cpp
+$(OBJS)\deprecateddll_tbarsmpl.o: ../../src/deprecated/tbarsmpl.cpp
 	$(CXX) -c -o $@ $(DEPRECATEDDLL_CXXFLAGS) $<
 
-$(OBJS)\deprecateddll_treelay.o: ../../src/deprecated\treelay.cpp
+$(OBJS)\deprecateddll_treelay.o: ../../src/deprecated/treelay.cpp
 	$(CXX) -c -o $@ $(DEPRECATEDDLL_CXXFLAGS) $<
 
-$(OBJS)\deprecateddll_wxexpr.o: ../../src/deprecated\wxexpr.cpp
+$(OBJS)\deprecateddll_wxexpr.o: ../../src/deprecated/wxexpr.cpp
 	$(CXX) -c -o $@ $(DEPRECATEDDLL_CXXFLAGS) $<
 
-$(OBJS)\deprecatedlib_dosyacc.o: ../../src/deprecated\dosyacc.c
+$(OBJS)\deprecatedlib_dosyacc.o: ../../src/deprecated/dosyacc.c
 	$(CC) -c -o $@ $(DEPRECATEDLIB_CFLAGS) $<
 
-$(OBJS)\deprecatedlib_dummy.o: ../../src/deprecated\..\..\..\src\msw\dummy.cpp
+$(OBJS)\deprecatedlib_dummy.o: ../../src/deprecated/../../../src/msw/dummy.cpp
 	$(CXX) -c -o $@ $(DEPRECATEDLIB_CXXFLAGS) $<
 
-$(OBJS)\deprecatedlib_prop.o: ../../src/deprecated\prop.cpp
+$(OBJS)\deprecatedlib_prop.o: ../../src/deprecated/prop.cpp
 	$(CXX) -c -o $@ $(DEPRECATEDLIB_CXXFLAGS) $<
 
-$(OBJS)\deprecatedlib_propform.o: ../../src/deprecated\propform.cpp
+$(OBJS)\deprecatedlib_propform.o: ../../src/deprecated/propform.cpp
 	$(CXX) -c -o $@ $(DEPRECATEDLIB_CXXFLAGS) $<
 
-$(OBJS)\deprecatedlib_proplist.o: ../../src/deprecated\proplist.cpp
+$(OBJS)\deprecatedlib_proplist.o: ../../src/deprecated/proplist.cpp
 	$(CXX) -c -o $@ $(DEPRECATEDLIB_CXXFLAGS) $<
 
-$(OBJS)\deprecatedlib_resource.o: ../../src/deprecated\resource.cpp
+$(OBJS)\deprecatedlib_resource.o: ../../src/deprecated/resource.cpp
 	$(CXX) -c -o $@ $(DEPRECATEDLIB_CXXFLAGS) $<
 
-$(OBJS)\deprecatedlib_tbarsmpl.o: ../../src/deprecated\tbarsmpl.cpp
+$(OBJS)\deprecatedlib_tbarsmpl.o: ../../src/deprecated/tbarsmpl.cpp
 	$(CXX) -c -o $@ $(DEPRECATEDLIB_CXXFLAGS) $<
 
-$(OBJS)\deprecatedlib_treelay.o: ../../src/deprecated\treelay.cpp
+$(OBJS)\deprecatedlib_treelay.o: ../../src/deprecated/treelay.cpp
 	$(CXX) -c -o $@ $(DEPRECATEDLIB_CXXFLAGS) $<
 
-$(OBJS)\deprecatedlib_wxexpr.o: ../../src/deprecated\wxexpr.cpp
+$(OBJS)\deprecatedlib_wxexpr.o: ../../src/deprecated/wxexpr.cpp
 	$(CXX) -c -o $@ $(DEPRECATEDLIB_CXXFLAGS) $<
 
 clean: 

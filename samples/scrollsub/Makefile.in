@@ -118,7 +118,7 @@ scrollsub$(EXEEXT): $(SCROLLSUB_OBJECTS) $(__scrollsub___win32rc)
 	$(__scrollsub___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-scrollsub.app/Contents: scrollsub$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+scrollsub.app/Contents/PkgInfo: scrollsub$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p scrollsub.app/Contents
 	mkdir -p scrollsub.app/Contents/MacOS
 	mkdir -p scrollsub.app/Contents/Resources
@@ -139,7 +139,7 @@ scrollsub.app/Contents: scrollsub$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc scrollsub.app/Contents/Resources/scrollsub.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns scrollsub.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@scrollsub_bundle: scrollsub.app/Contents
+@COND_PLATFORM_MACOSX_1@scrollsub_bundle: scrollsub.app/Contents/PkgInfo
 
 scrollsub_scrollsub.o: $(srcdir)/scrollsub.cpp
 	$(CXXC) -c -o $@ $(SCROLLSUB_CXXFLAGS) $<

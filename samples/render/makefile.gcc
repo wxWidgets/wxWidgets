@@ -157,13 +157,13 @@ $(OBJS):
 
 all: $(OBJS)\render.exe $(__renddll___depname)
 
-$(OBJS)\renddll_renddll.o: .\renddll.cpp
+$(OBJS)\renddll_renddll.o: ./renddll.cpp
 	$(CXX) -c -o $@ $(RENDDLL_CXXFLAGS) $<
 
-$(OBJS)\render_render.o: .\render.cpp
+$(OBJS)\render_render.o: ./render.cpp
 	$(CXX) -c -o $@ $(RENDER_CXXFLAGS) $<
 
-$(OBJS)\render_sample_rc.o: .\..\..\samples\sample.rc
+$(OBJS)\render_sample_rc.o: ./../../samples/sample.rc
 	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../samples
 
 clean: 

@@ -151,10 +151,10 @@ $(OBJS):
 
 all: $(OBJS)\dynsash.exe
 
-$(OBJS)\dynsash_dynsash.o: .\dynsash.cpp
+$(OBJS)\dynsash_dynsash.o: ./dynsash.cpp
 	$(CXX) -c -o $@ $(DYNSASH_CXXFLAGS) $<
 
-$(OBJS)\dynsash_sample_rc.o: .\..\..\..\..\samples\sample.rc
+$(OBJS)\dynsash_sample_rc.o: ./../../../../samples/sample.rc
 	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../../../samples
 
 clean: 

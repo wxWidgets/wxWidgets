@@ -147,10 +147,10 @@ $(OBJS):
 
 all: $(OBJS)\accesstest.exe
 
-$(OBJS)\accesstest_accesstest.o: .\accesstest.cpp
+$(OBJS)\accesstest_accesstest.o: ./accesstest.cpp
 	$(CXX) -c -o $@ $(ACCESSTEST_CXXFLAGS) $<
 
-$(OBJS)\accesstest_accesstest_rc.o: .\accesstest.rc
+$(OBJS)\accesstest_accesstest_rc.o: ./accesstest.rc
 	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../samples
 
 $(OBJS)\accesstest.exe: $(ACCESSTEST_OBJECTS) $(OBJS)\accesstest_accesstest_rc.o

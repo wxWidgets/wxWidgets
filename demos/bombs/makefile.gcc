@@ -149,16 +149,16 @@ $(OBJS):
 
 all: $(OBJS)\bombs.exe
 
-$(OBJS)\bombs_bombs.o: .\bombs.cpp
+$(OBJS)\bombs_bombs.o: ./bombs.cpp
 	$(CXX) -c -o $@ $(BOMBS_CXXFLAGS) $<
 
-$(OBJS)\bombs_bombs1.o: .\bombs1.cpp
+$(OBJS)\bombs_bombs1.o: ./bombs1.cpp
 	$(CXX) -c -o $@ $(BOMBS_CXXFLAGS) $<
 
-$(OBJS)\bombs_bombs_rc.o: .\bombs.rc
+$(OBJS)\bombs_bombs_rc.o: ./bombs.rc
 	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../samples
 
-$(OBJS)\bombs_game.o: .\game.cpp
+$(OBJS)\bombs_game.o: ./game.cpp
 	$(CXX) -c -o $@ $(BOMBS_CXXFLAGS) $<
 
 $(OBJS)\bombs.exe: $(BOMBS_OBJECTS) $(OBJS)\bombs_bombs_rc.o

@@ -111,7 +111,7 @@ display$(EXEEXT): $(DISPLAY_OBJECTS) $(__display___win32rc)
 	$(__display___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-display.app/Contents: display$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+display.app/Contents/PkgInfo: display$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p display.app/Contents
 	mkdir -p display.app/Contents/MacOS
 	mkdir -p display.app/Contents/Resources
@@ -132,7 +132,7 @@ display.app/Contents: display$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIB
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc display.app/Contents/Resources/display.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns display.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@display_bundle: display.app/Contents
+@COND_PLATFORM_MACOSX_1@display_bundle: display.app/Contents/PkgInfo
 
 display_display.o: $(srcdir)/display.cpp
 	$(CXXC) -c -o $@ $(DISPLAY_CXXFLAGS) $<

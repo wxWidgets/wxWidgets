@@ -151,22 +151,22 @@ $(OBJS):
 
 all: $(OBJS)\richedit.exe
 
-$(OBJS)\richedit_kbList.o: .\kbList.cpp
+$(OBJS)\richedit_kbList.o: ./kbList.cpp
 	$(CXX) -c -o $@ $(RICHEDIT_CXXFLAGS) $<
 
-$(OBJS)\richedit_sample_rc.o: .\..\..\samples\sample.rc
+$(OBJS)\richedit_sample_rc.o: ./../../samples/sample.rc
 	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../samples
 
-$(OBJS)\richedit_wxLayout.o: .\wxLayout.cpp
+$(OBJS)\richedit_wxLayout.o: ./wxLayout.cpp
 	$(CXX) -c -o $@ $(RICHEDIT_CXXFLAGS) $<
 
-$(OBJS)\richedit_wxllist.o: .\wxllist.cpp
+$(OBJS)\richedit_wxllist.o: ./wxllist.cpp
 	$(CXX) -c -o $@ $(RICHEDIT_CXXFLAGS) $<
 
-$(OBJS)\richedit_wxlparser.o: .\wxlparser.cpp
+$(OBJS)\richedit_wxlparser.o: ./wxlparser.cpp
 	$(CXX) -c -o $@ $(RICHEDIT_CXXFLAGS) $<
 
-$(OBJS)\richedit_wxlwindow.o: .\wxlwindow.cpp
+$(OBJS)\richedit_wxlwindow.o: ./wxlwindow.cpp
 	$(CXX) -c -o $@ $(RICHEDIT_CXXFLAGS) $<
 
 clean: 

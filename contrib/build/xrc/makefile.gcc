@@ -232,232 +232,232 @@ $(OBJS):
 
 all: $(__xrcdll___depname) $(__xrclib___depname)
 
-$(OBJS)\xrcdll_dummy.o: ../../src/xrc\..\..\..\src\msw\dummy.cpp
+$(OBJS)\xrcdll_dummy.o: ../../src/xrc/../../../src/msw/dummy.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
 
-$(OBJS)\xrcdll_xh_bmp.o: ../../src/xrc\xh_bmp.cpp
+$(OBJS)\xrcdll_xh_bmp.o: ../../src/xrc/xh_bmp.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
 
-$(OBJS)\xrcdll_xh_bmpbt.o: ../../src/xrc\xh_bmpbt.cpp
+$(OBJS)\xrcdll_xh_bmpbt.o: ../../src/xrc/xh_bmpbt.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
 
-$(OBJS)\xrcdll_xh_bttn.o: ../../src/xrc\xh_bttn.cpp
+$(OBJS)\xrcdll_xh_bttn.o: ../../src/xrc/xh_bttn.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
 
-$(OBJS)\xrcdll_xh_cald.o: ../../src/xrc\xh_cald.cpp
+$(OBJS)\xrcdll_xh_cald.o: ../../src/xrc/xh_cald.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
 
-$(OBJS)\xrcdll_xh_chckb.o: ../../src/xrc\xh_chckb.cpp
+$(OBJS)\xrcdll_xh_chckb.o: ../../src/xrc/xh_chckb.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
 
-$(OBJS)\xrcdll_xh_chckl.o: ../../src/xrc\xh_chckl.cpp
+$(OBJS)\xrcdll_xh_chckl.o: ../../src/xrc/xh_chckl.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
 
-$(OBJS)\xrcdll_xh_choic.o: ../../src/xrc\xh_choic.cpp
+$(OBJS)\xrcdll_xh_choic.o: ../../src/xrc/xh_choic.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
 
-$(OBJS)\xrcdll_xh_combo.o: ../../src/xrc\xh_combo.cpp
+$(OBJS)\xrcdll_xh_combo.o: ../../src/xrc/xh_combo.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
 
-$(OBJS)\xrcdll_xh_dlg.o: ../../src/xrc\xh_dlg.cpp
+$(OBJS)\xrcdll_xh_dlg.o: ../../src/xrc/xh_dlg.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
 
-$(OBJS)\xrcdll_xh_frame.o: ../../src/xrc\xh_frame.cpp
+$(OBJS)\xrcdll_xh_frame.o: ../../src/xrc/xh_frame.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
 
-$(OBJS)\xrcdll_xh_gauge.o: ../../src/xrc\xh_gauge.cpp
+$(OBJS)\xrcdll_xh_gauge.o: ../../src/xrc/xh_gauge.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
 
-$(OBJS)\xrcdll_xh_gdctl.o: ../../src/xrc\xh_gdctl.cpp
+$(OBJS)\xrcdll_xh_gdctl.o: ../../src/xrc/xh_gdctl.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
 
-$(OBJS)\xrcdll_xh_html.o: ../../src/xrc\xh_html.cpp
+$(OBJS)\xrcdll_xh_html.o: ../../src/xrc/xh_html.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
 
-$(OBJS)\xrcdll_xh_listb.o: ../../src/xrc\xh_listb.cpp
+$(OBJS)\xrcdll_xh_listb.o: ../../src/xrc/xh_listb.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
 
-$(OBJS)\xrcdll_xh_listc.o: ../../src/xrc\xh_listc.cpp
+$(OBJS)\xrcdll_xh_listc.o: ../../src/xrc/xh_listc.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
 
-$(OBJS)\xrcdll_xh_menu.o: ../../src/xrc\xh_menu.cpp
+$(OBJS)\xrcdll_xh_menu.o: ../../src/xrc/xh_menu.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
 
-$(OBJS)\xrcdll_xh_notbk.o: ../../src/xrc\xh_notbk.cpp
+$(OBJS)\xrcdll_xh_notbk.o: ../../src/xrc/xh_notbk.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
 
-$(OBJS)\xrcdll_xh_panel.o: ../../src/xrc\xh_panel.cpp
+$(OBJS)\xrcdll_xh_panel.o: ../../src/xrc/xh_panel.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
 
-$(OBJS)\xrcdll_xh_radbt.o: ../../src/xrc\xh_radbt.cpp
+$(OBJS)\xrcdll_xh_radbt.o: ../../src/xrc/xh_radbt.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
 
-$(OBJS)\xrcdll_xh_radbx.o: ../../src/xrc\xh_radbx.cpp
+$(OBJS)\xrcdll_xh_radbx.o: ../../src/xrc/xh_radbx.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
 
-$(OBJS)\xrcdll_xh_scrol.o: ../../src/xrc\xh_scrol.cpp
+$(OBJS)\xrcdll_xh_scrol.o: ../../src/xrc/xh_scrol.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
 
-$(OBJS)\xrcdll_xh_scwin.o: ../../src/xrc\xh_scwin.cpp
+$(OBJS)\xrcdll_xh_scwin.o: ../../src/xrc/xh_scwin.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
 
-$(OBJS)\xrcdll_xh_sizer.o: ../../src/xrc\xh_sizer.cpp
+$(OBJS)\xrcdll_xh_sizer.o: ../../src/xrc/xh_sizer.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
 
-$(OBJS)\xrcdll_xh_slidr.o: ../../src/xrc\xh_slidr.cpp
+$(OBJS)\xrcdll_xh_slidr.o: ../../src/xrc/xh_slidr.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
 
-$(OBJS)\xrcdll_xh_spin.o: ../../src/xrc\xh_spin.cpp
+$(OBJS)\xrcdll_xh_spin.o: ../../src/xrc/xh_spin.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
 
-$(OBJS)\xrcdll_xh_split.o: ../../src/xrc\xh_split.cpp
+$(OBJS)\xrcdll_xh_split.o: ../../src/xrc/xh_split.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
 
-$(OBJS)\xrcdll_xh_stbmp.o: ../../src/xrc\xh_stbmp.cpp
+$(OBJS)\xrcdll_xh_stbmp.o: ../../src/xrc/xh_stbmp.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
 
-$(OBJS)\xrcdll_xh_stbox.o: ../../src/xrc\xh_stbox.cpp
+$(OBJS)\xrcdll_xh_stbox.o: ../../src/xrc/xh_stbox.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
 
-$(OBJS)\xrcdll_xh_stlin.o: ../../src/xrc\xh_stlin.cpp
+$(OBJS)\xrcdll_xh_stlin.o: ../../src/xrc/xh_stlin.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
 
-$(OBJS)\xrcdll_xh_sttxt.o: ../../src/xrc\xh_sttxt.cpp
+$(OBJS)\xrcdll_xh_sttxt.o: ../../src/xrc/xh_sttxt.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
 
-$(OBJS)\xrcdll_xh_text.o: ../../src/xrc\xh_text.cpp
+$(OBJS)\xrcdll_xh_text.o: ../../src/xrc/xh_text.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
 
-$(OBJS)\xrcdll_xh_toolb.o: ../../src/xrc\xh_toolb.cpp
+$(OBJS)\xrcdll_xh_toolb.o: ../../src/xrc/xh_toolb.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
 
-$(OBJS)\xrcdll_xh_tree.o: ../../src/xrc\xh_tree.cpp
+$(OBJS)\xrcdll_xh_tree.o: ../../src/xrc/xh_tree.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
 
-$(OBJS)\xrcdll_xh_unkwn.o: ../../src/xrc\xh_unkwn.cpp
+$(OBJS)\xrcdll_xh_unkwn.o: ../../src/xrc/xh_unkwn.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
 
-$(OBJS)\xrcdll_xh_wizrd.o: ../../src/xrc\xh_wizrd.cpp
+$(OBJS)\xrcdll_xh_wizrd.o: ../../src/xrc/xh_wizrd.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
 
-$(OBJS)\xrcdll_xmlres.o: ../../src/xrc\xmlres.cpp
+$(OBJS)\xrcdll_xmlres.o: ../../src/xrc/xmlres.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
 
-$(OBJS)\xrcdll_xmlrsall.o: ../../src/xrc\xmlrsall.cpp
+$(OBJS)\xrcdll_xmlrsall.o: ../../src/xrc/xmlrsall.cpp
 	$(CXX) -c -o $@ $(XRCDLL_CXXFLAGS) $<
 
-$(OBJS)\xrclib_dummy.o: ../../src/xrc\..\..\..\src\msw\dummy.cpp
+$(OBJS)\xrclib_dummy.o: ../../src/xrc/../../../src/msw/dummy.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
 
-$(OBJS)\xrclib_xh_bmp.o: ../../src/xrc\xh_bmp.cpp
+$(OBJS)\xrclib_xh_bmp.o: ../../src/xrc/xh_bmp.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
 
-$(OBJS)\xrclib_xh_bmpbt.o: ../../src/xrc\xh_bmpbt.cpp
+$(OBJS)\xrclib_xh_bmpbt.o: ../../src/xrc/xh_bmpbt.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
 
-$(OBJS)\xrclib_xh_bttn.o: ../../src/xrc\xh_bttn.cpp
+$(OBJS)\xrclib_xh_bttn.o: ../../src/xrc/xh_bttn.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
 
-$(OBJS)\xrclib_xh_cald.o: ../../src/xrc\xh_cald.cpp
+$(OBJS)\xrclib_xh_cald.o: ../../src/xrc/xh_cald.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
 
-$(OBJS)\xrclib_xh_chckb.o: ../../src/xrc\xh_chckb.cpp
+$(OBJS)\xrclib_xh_chckb.o: ../../src/xrc/xh_chckb.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
 
-$(OBJS)\xrclib_xh_chckl.o: ../../src/xrc\xh_chckl.cpp
+$(OBJS)\xrclib_xh_chckl.o: ../../src/xrc/xh_chckl.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
 
-$(OBJS)\xrclib_xh_choic.o: ../../src/xrc\xh_choic.cpp
+$(OBJS)\xrclib_xh_choic.o: ../../src/xrc/xh_choic.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
 
-$(OBJS)\xrclib_xh_combo.o: ../../src/xrc\xh_combo.cpp
+$(OBJS)\xrclib_xh_combo.o: ../../src/xrc/xh_combo.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
 
-$(OBJS)\xrclib_xh_dlg.o: ../../src/xrc\xh_dlg.cpp
+$(OBJS)\xrclib_xh_dlg.o: ../../src/xrc/xh_dlg.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
 
-$(OBJS)\xrclib_xh_frame.o: ../../src/xrc\xh_frame.cpp
+$(OBJS)\xrclib_xh_frame.o: ../../src/xrc/xh_frame.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
 
-$(OBJS)\xrclib_xh_gauge.o: ../../src/xrc\xh_gauge.cpp
+$(OBJS)\xrclib_xh_gauge.o: ../../src/xrc/xh_gauge.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
 
-$(OBJS)\xrclib_xh_gdctl.o: ../../src/xrc\xh_gdctl.cpp
+$(OBJS)\xrclib_xh_gdctl.o: ../../src/xrc/xh_gdctl.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
 
-$(OBJS)\xrclib_xh_html.o: ../../src/xrc\xh_html.cpp
+$(OBJS)\xrclib_xh_html.o: ../../src/xrc/xh_html.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
 
-$(OBJS)\xrclib_xh_listb.o: ../../src/xrc\xh_listb.cpp
+$(OBJS)\xrclib_xh_listb.o: ../../src/xrc/xh_listb.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
 
-$(OBJS)\xrclib_xh_listc.o: ../../src/xrc\xh_listc.cpp
+$(OBJS)\xrclib_xh_listc.o: ../../src/xrc/xh_listc.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
 
-$(OBJS)\xrclib_xh_menu.o: ../../src/xrc\xh_menu.cpp
+$(OBJS)\xrclib_xh_menu.o: ../../src/xrc/xh_menu.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
 
-$(OBJS)\xrclib_xh_notbk.o: ../../src/xrc\xh_notbk.cpp
+$(OBJS)\xrclib_xh_notbk.o: ../../src/xrc/xh_notbk.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
 
-$(OBJS)\xrclib_xh_panel.o: ../../src/xrc\xh_panel.cpp
+$(OBJS)\xrclib_xh_panel.o: ../../src/xrc/xh_panel.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
 
-$(OBJS)\xrclib_xh_radbt.o: ../../src/xrc\xh_radbt.cpp
+$(OBJS)\xrclib_xh_radbt.o: ../../src/xrc/xh_radbt.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
 
-$(OBJS)\xrclib_xh_radbx.o: ../../src/xrc\xh_radbx.cpp
+$(OBJS)\xrclib_xh_radbx.o: ../../src/xrc/xh_radbx.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
 
-$(OBJS)\xrclib_xh_scrol.o: ../../src/xrc\xh_scrol.cpp
+$(OBJS)\xrclib_xh_scrol.o: ../../src/xrc/xh_scrol.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
 
-$(OBJS)\xrclib_xh_scwin.o: ../../src/xrc\xh_scwin.cpp
+$(OBJS)\xrclib_xh_scwin.o: ../../src/xrc/xh_scwin.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
 
-$(OBJS)\xrclib_xh_sizer.o: ../../src/xrc\xh_sizer.cpp
+$(OBJS)\xrclib_xh_sizer.o: ../../src/xrc/xh_sizer.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
 
-$(OBJS)\xrclib_xh_slidr.o: ../../src/xrc\xh_slidr.cpp
+$(OBJS)\xrclib_xh_slidr.o: ../../src/xrc/xh_slidr.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
 
-$(OBJS)\xrclib_xh_spin.o: ../../src/xrc\xh_spin.cpp
+$(OBJS)\xrclib_xh_spin.o: ../../src/xrc/xh_spin.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
 
-$(OBJS)\xrclib_xh_split.o: ../../src/xrc\xh_split.cpp
+$(OBJS)\xrclib_xh_split.o: ../../src/xrc/xh_split.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
 
-$(OBJS)\xrclib_xh_stbmp.o: ../../src/xrc\xh_stbmp.cpp
+$(OBJS)\xrclib_xh_stbmp.o: ../../src/xrc/xh_stbmp.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
 
-$(OBJS)\xrclib_xh_stbox.o: ../../src/xrc\xh_stbox.cpp
+$(OBJS)\xrclib_xh_stbox.o: ../../src/xrc/xh_stbox.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
 
-$(OBJS)\xrclib_xh_stlin.o: ../../src/xrc\xh_stlin.cpp
+$(OBJS)\xrclib_xh_stlin.o: ../../src/xrc/xh_stlin.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
 
-$(OBJS)\xrclib_xh_sttxt.o: ../../src/xrc\xh_sttxt.cpp
+$(OBJS)\xrclib_xh_sttxt.o: ../../src/xrc/xh_sttxt.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
 
-$(OBJS)\xrclib_xh_text.o: ../../src/xrc\xh_text.cpp
+$(OBJS)\xrclib_xh_text.o: ../../src/xrc/xh_text.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
 
-$(OBJS)\xrclib_xh_toolb.o: ../../src/xrc\xh_toolb.cpp
+$(OBJS)\xrclib_xh_toolb.o: ../../src/xrc/xh_toolb.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
 
-$(OBJS)\xrclib_xh_tree.o: ../../src/xrc\xh_tree.cpp
+$(OBJS)\xrclib_xh_tree.o: ../../src/xrc/xh_tree.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
 
-$(OBJS)\xrclib_xh_unkwn.o: ../../src/xrc\xh_unkwn.cpp
+$(OBJS)\xrclib_xh_unkwn.o: ../../src/xrc/xh_unkwn.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
 
-$(OBJS)\xrclib_xh_wizrd.o: ../../src/xrc\xh_wizrd.cpp
+$(OBJS)\xrclib_xh_wizrd.o: ../../src/xrc/xh_wizrd.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
 
-$(OBJS)\xrclib_xmlres.o: ../../src/xrc\xmlres.cpp
+$(OBJS)\xrclib_xmlres.o: ../../src/xrc/xmlres.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
 
-$(OBJS)\xrclib_xmlrsall.o: ../../src/xrc\xmlrsall.cpp
+$(OBJS)\xrclib_xmlrsall.o: ../../src/xrc/xmlrsall.cpp
 	$(CXX) -c -o $@ $(XRCLIB_CXXFLAGS) $<
 
 clean: 

@@ -159,46 +159,46 @@ $(OBJS):
 
 all: $(__gizmosdll___depname) $(__gizmoslib___depname)
 
-$(OBJS)\gizmosdll_dummy.o: ../../src/gizmos\..\..\..\src\msw\dummy.cpp
+$(OBJS)\gizmosdll_dummy.o: ../../src/gizmos/../../../src/msw/dummy.cpp
 	$(CXX) -c -o $@ $(GIZMOSDLL_CXXFLAGS) $<
 
-$(OBJS)\gizmosdll_dynamicsash.o: ../../src/gizmos\dynamicsash.cpp
+$(OBJS)\gizmosdll_dynamicsash.o: ../../src/gizmos/dynamicsash.cpp
 	$(CXX) -c -o $@ $(GIZMOSDLL_CXXFLAGS) $<
 
-$(OBJS)\gizmosdll_editlbox.o: ../../src/gizmos\editlbox.cpp
+$(OBJS)\gizmosdll_editlbox.o: ../../src/gizmos/editlbox.cpp
 	$(CXX) -c -o $@ $(GIZMOSDLL_CXXFLAGS) $<
 
-$(OBJS)\gizmosdll_ledctrl.o: ../../src/gizmos\ledctrl.cpp
+$(OBJS)\gizmosdll_ledctrl.o: ../../src/gizmos/ledctrl.cpp
 	$(CXX) -c -o $@ $(GIZMOSDLL_CXXFLAGS) $<
 
-$(OBJS)\gizmosdll_multicell.o: ../../src/gizmos\multicell.cpp
+$(OBJS)\gizmosdll_multicell.o: ../../src/gizmos/multicell.cpp
 	$(CXX) -c -o $@ $(GIZMOSDLL_CXXFLAGS) $<
 
-$(OBJS)\gizmosdll_splittree.o: ../../src/gizmos\splittree.cpp
+$(OBJS)\gizmosdll_splittree.o: ../../src/gizmos/splittree.cpp
 	$(CXX) -c -o $@ $(GIZMOSDLL_CXXFLAGS) $<
 
-$(OBJS)\gizmosdll_statpict.o: ../../src/gizmos\statpict.cpp
+$(OBJS)\gizmosdll_statpict.o: ../../src/gizmos/statpict.cpp
 	$(CXX) -c -o $@ $(GIZMOSDLL_CXXFLAGS) $<
 
-$(OBJS)\gizmoslib_dummy.o: ../../src/gizmos\..\..\..\src\msw\dummy.cpp
+$(OBJS)\gizmoslib_dummy.o: ../../src/gizmos/../../../src/msw/dummy.cpp
 	$(CXX) -c -o $@ $(GIZMOSLIB_CXXFLAGS) $<
 
-$(OBJS)\gizmoslib_dynamicsash.o: ../../src/gizmos\dynamicsash.cpp
+$(OBJS)\gizmoslib_dynamicsash.o: ../../src/gizmos/dynamicsash.cpp
 	$(CXX) -c -o $@ $(GIZMOSLIB_CXXFLAGS) $<
 
-$(OBJS)\gizmoslib_editlbox.o: ../../src/gizmos\editlbox.cpp
+$(OBJS)\gizmoslib_editlbox.o: ../../src/gizmos/editlbox.cpp
 	$(CXX) -c -o $@ $(GIZMOSLIB_CXXFLAGS) $<
 
-$(OBJS)\gizmoslib_ledctrl.o: ../../src/gizmos\ledctrl.cpp
+$(OBJS)\gizmoslib_ledctrl.o: ../../src/gizmos/ledctrl.cpp
 	$(CXX) -c -o $@ $(GIZMOSLIB_CXXFLAGS) $<
 
-$(OBJS)\gizmoslib_multicell.o: ../../src/gizmos\multicell.cpp
+$(OBJS)\gizmoslib_multicell.o: ../../src/gizmos/multicell.cpp
 	$(CXX) -c -o $@ $(GIZMOSLIB_CXXFLAGS) $<
 
-$(OBJS)\gizmoslib_splittree.o: ../../src/gizmos\splittree.cpp
+$(OBJS)\gizmoslib_splittree.o: ../../src/gizmos/splittree.cpp
 	$(CXX) -c -o $@ $(GIZMOSLIB_CXXFLAGS) $<
 
-$(OBJS)\gizmoslib_statpict.o: ../../src/gizmos\statpict.cpp
+$(OBJS)\gizmoslib_statpict.o: ../../src/gizmos/statpict.cpp
 	$(CXX) -c -o $@ $(GIZMOSLIB_CXXFLAGS) $<
 
 clean: 

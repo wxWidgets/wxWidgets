@@ -27,7 +27,7 @@ DEPRECATEDDLL_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_3) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	/I..\..\src\deprecated\..\..\..\include /I$(SETUPHDIR) \
 	/I..\..\src\deprecated\..\..\include /DWXUSINGDLL /DWXMAKINGDLL_DEPRECATED \
-	/I..\..\src\deprecated $(CXXFLAGS) /Yu"wx/wxprec.h" \
+	/I..\..\src\deprecated $(CXXFLAGS) /GR /GX /Yu"wx/wxprec.h" \
 	/Fp"$(OBJS)\wxprec_deprecateddll.pch"
 DEPRECATEDDLL_OBJECTS =  \
 	$(OBJS)\deprecateddll_dummy.obj \
@@ -52,8 +52,8 @@ DEPRECATEDLIB_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_12) \
 	$(____DEBUGRUNTIME_11_p) $(__OPTIMIZEFLAG) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	/I..\..\src\deprecated\..\..\..\include /I$(SETUPHDIR) \
-	/I..\..\src\deprecated\..\..\include /I..\..\src\deprecated $(CXXFLAGS) \
-	/Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_deprecatedlib.pch"
+	/I..\..\src\deprecated\..\..\include /I..\..\src\deprecated $(CXXFLAGS) /GR \
+	/GX /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_deprecatedlib.pch"
 DEPRECATEDLIB_OBJECTS =  \
 	$(OBJS)\deprecatedlib_dummy.obj \
 	$(OBJS)\deprecatedlib_prop.obj \

@@ -147,10 +147,10 @@ $(OBJS):
 
 all: $(OBJS)\typetest.exe
 
-$(OBJS)\typetest_typetest.o: .\typetest.cpp
+$(OBJS)\typetest_typetest.o: ./typetest.cpp
 	$(CXX) -c -o $@ $(TYPETEST_CXXFLAGS) $<
 
-$(OBJS)\typetest_typetest_rc.o: .\typetest.rc
+$(OBJS)\typetest_typetest_rc.o: ./typetest.rc
 	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../samples
 
 clean: 

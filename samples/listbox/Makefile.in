@@ -118,7 +118,7 @@ listbox$(EXEEXT): $(LISTBOX_OBJECTS) $(__listbox___win32rc)
 	$(__listbox___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-listbox.app/Contents: listbox$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+listbox.app/Contents/PkgInfo: listbox$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p listbox.app/Contents
 	mkdir -p listbox.app/Contents/MacOS
 	mkdir -p listbox.app/Contents/Resources
@@ -139,7 +139,7 @@ listbox.app/Contents: listbox$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIB
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc listbox.app/Contents/Resources/listbox.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns listbox.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@listbox_bundle: listbox.app/Contents
+@COND_PLATFORM_MACOSX_1@listbox_bundle: listbox.app/Contents/PkgInfo
 
 listbox_lboxtest.o: $(srcdir)/lboxtest.cpp
 	$(CXXC) -c -o $@ $(LISTBOX_CXXFLAGS) $<

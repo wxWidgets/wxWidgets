@@ -118,7 +118,7 @@ dynsash$(EXEEXT): $(DYNSASH_OBJECTS) $(__dynsash___win32rc)
 	$(__dynsash___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-dynsash.app/Contents: dynsash$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+dynsash.app/Contents/PkgInfo: dynsash$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p dynsash.app/Contents
 	mkdir -p dynsash.app/Contents/MacOS
 	mkdir -p dynsash.app/Contents/Resources
@@ -139,7 +139,7 @@ dynsash.app/Contents: dynsash$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIB
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc dynsash.app/Contents/Resources/dynsash.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns dynsash.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@dynsash_bundle: dynsash.app/Contents
+@COND_PLATFORM_MACOSX_1@dynsash_bundle: dynsash.app/Contents/PkgInfo
 
 dynsash_dynsash.o: $(srcdir)/dynsash.cpp
 	$(CXXC) -c -o $@ $(DYNSASH_CXXFLAGS) $<

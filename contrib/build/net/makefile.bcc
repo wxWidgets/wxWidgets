@@ -20,20 +20,20 @@ BCCDIR = $(MAKEDIR)\..
 
 ### Variables: ###
 
-NETUTILSDLL_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) $(__DEBUGINFO) \
-	$(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\net\..\..\..\include -I$(SETUPHDIR) \
-	-I..\..\src\net\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_NETUTILS \
-	$(CXXFLAGS) -Hu -H=$(OBJS)\wxprec_netutilsdll.csm
+NETUTILSDLL_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) -I$(BCCDIR)\include \
+	$(__DEBUGINFO) $(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
+	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I..\..\src\net\..\..\..\include \
+	-I$(SETUPHDIR) -I..\..\src\net\..\..\include -DWXUSINGDLL \
+	-DWXMAKINGDLL_NETUTILS $(CXXFLAGS) -Hu -H=$(OBJS)\wxprec_netutilsdll.csm
 NETUTILSDLL_OBJECTS =  \
 	$(OBJS)\netutilsdll_dummy.obj \
 	$(OBJS)\netutilsdll_email.obj \
 	$(OBJS)\netutilsdll_smapi.obj \
 	$(OBJS)\netutilsdll_web.obj
-NETUTILSLIB_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) $(__DEBUGINFO) \
-	$(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\net\..\..\..\include -I$(SETUPHDIR) \
-	-I..\..\src\net\..\..\include $(CXXFLAGS) -Hu \
+NETUTILSLIB_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) -I$(BCCDIR)\include \
+	$(__DEBUGINFO) $(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
+	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I..\..\src\net\..\..\..\include \
+	-I$(SETUPHDIR) -I..\..\src\net\..\..\include $(CXXFLAGS) -Hu \
 	-H=$(OBJS)\wxprec_netutilslib.csm
 NETUTILSLIB_OBJECTS =  \
 	$(OBJS)\netutilslib_dummy.obj \
@@ -196,7 +196,7 @@ clean:
 
 !if "$(SHARED)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_netutils_bcc$(VENDORTAG).dll: $(OBJS)\netutilsdll_dummy.obj  $(NETUTILSDLL_OBJECTS)
-	ilink32 -Tpd -q $(LDFLAGS) $(__DEBUGINFO)  -L$(LIBDIRNAME) @&&|
+	ilink32 -Tpd -q $(LDFLAGS) -L$(BCCDIR)\lib $(__DEBUGINFO)  -L$(LIBDIRNAME) @&&|
 	c0d32.obj $(NETUTILSDLL_OBJECTS),$@,, $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) import32.lib ole2w32.lib  $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) import32.lib cw32mt$(__RUNTIME_LIBS_7).lib,,
 |
 	implib -f $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_netutils $@

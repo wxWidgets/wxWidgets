@@ -121,7 +121,7 @@ wxtest$(EXEEXT): $(WXTEST_OBJECTS) $(__wxtest___win32rc)
 	$(__wxtest___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-wxtest.app/Contents: wxtest$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+wxtest.app/Contents/PkgInfo: wxtest$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p wxtest.app/Contents
 	mkdir -p wxtest.app/Contents/MacOS
 	mkdir -p wxtest.app/Contents/Resources
@@ -142,7 +142,7 @@ wxtest.app/Contents: wxtest$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDI
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc wxtest.app/Contents/Resources/wxtest.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns wxtest.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@wxtest_bundle: wxtest.app/Contents
+@COND_PLATFORM_MACOSX_1@wxtest_bundle: wxtest.app/Contents/PkgInfo
 
 wxtest_sample_rc.o: $(srcdir)/../../samples/sample.rc
 	$(RESCOMP) -i$< -o$@ --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)   --include-dir $(top_srcdir)/include --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples

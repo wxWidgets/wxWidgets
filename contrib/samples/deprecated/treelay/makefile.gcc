@@ -147,10 +147,10 @@ $(OBJS):
 
 all: $(OBJS)\treelay.exe
 
-$(OBJS)\treelay_treelay.o: .\treelay.cpp
+$(OBJS)\treelay_treelay.o: ./treelay.cpp
 	$(CXX) -c -o $@ $(TREELAY_CXXFLAGS) $<
 
-$(OBJS)\treelay_treelay_rc.o: .\treelay.rc
+$(OBJS)\treelay_treelay_rc.o: ./treelay.rc
 	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../../../samples --include-dir ./../../../include
 
 clean: 

@@ -118,7 +118,7 @@ keyboard$(EXEEXT): $(KEYBOARD_OBJECTS) $(__keyboard___win32rc)
 	$(__keyboard___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-keyboard.app/Contents: keyboard$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+keyboard.app/Contents/PkgInfo: keyboard$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p keyboard.app/Contents
 	mkdir -p keyboard.app/Contents/MacOS
 	mkdir -p keyboard.app/Contents/Resources
@@ -139,7 +139,7 @@ keyboard.app/Contents: keyboard$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(L
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc keyboard.app/Contents/Resources/keyboard.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns keyboard.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@keyboard_bundle: keyboard.app/Contents
+@COND_PLATFORM_MACOSX_1@keyboard_bundle: keyboard.app/Contents/PkgInfo
 
 keyboard_keyboard.o: $(srcdir)/keyboard.cpp
 	$(CXXC) -c -o $@ $(KEYBOARD_CXXFLAGS) $<

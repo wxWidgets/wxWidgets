@@ -148,13 +148,13 @@ $(OBJS):
 
 all: $(OBJS)\arttest.exe
 
-$(OBJS)\arttest_artbrows.o: .\artbrows.cpp
+$(OBJS)\arttest_artbrows.o: ./artbrows.cpp
 	$(CXX) -c -o $@ $(ARTTEST_CXXFLAGS) $<
 
-$(OBJS)\arttest_arttest.o: .\arttest.cpp
+$(OBJS)\arttest_arttest.o: ./arttest.cpp
 	$(CXX) -c -o $@ $(ARTTEST_CXXFLAGS) $<
 
-$(OBJS)\arttest_arttest_rc.o: .\arttest.rc
+$(OBJS)\arttest_arttest_rc.o: ./arttest.rc
 	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../samples
 
 $(OBJS)\arttest.exe: $(ARTTEST_OBJECTS) $(OBJS)\arttest_arttest_rc.o

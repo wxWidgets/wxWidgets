@@ -180,112 +180,112 @@ $(OBJS):
 
 all: $(__fldll___depname) $(__fllib___depname)
 
-$(OBJS)\fldll_antiflickpl.o: ../../src/fl\antiflickpl.cpp
+$(OBJS)\fldll_antiflickpl.o: ../../src/fl/antiflickpl.cpp
 	$(CXX) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-$(OBJS)\fldll_bardragpl.o: ../../src/fl\bardragpl.cpp
+$(OBJS)\fldll_bardragpl.o: ../../src/fl/bardragpl.cpp
 	$(CXX) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-$(OBJS)\fldll_barhintspl.o: ../../src/fl\barhintspl.cpp
+$(OBJS)\fldll_barhintspl.o: ../../src/fl/barhintspl.cpp
 	$(CXX) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-$(OBJS)\fldll_cbcustom.o: ../../src/fl\cbcustom.cpp
+$(OBJS)\fldll_cbcustom.o: ../../src/fl/cbcustom.cpp
 	$(CXX) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-$(OBJS)\fldll_controlbar.o: ../../src/fl\controlbar.cpp
+$(OBJS)\fldll_controlbar.o: ../../src/fl/controlbar.cpp
 	$(CXX) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-$(OBJS)\fldll_dummy.o: ../../src/fl\..\..\..\src\msw\dummy.cpp
+$(OBJS)\fldll_dummy.o: ../../src/fl/../../../src/msw/dummy.cpp
 	$(CXX) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-$(OBJS)\fldll_dyntbar.o: ../../src/fl\dyntbar.cpp
+$(OBJS)\fldll_dyntbar.o: ../../src/fl/dyntbar.cpp
 	$(CXX) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-$(OBJS)\fldll_dyntbarhnd.o: ../../src/fl\dyntbarhnd.cpp
+$(OBJS)\fldll_dyntbarhnd.o: ../../src/fl/dyntbarhnd.cpp
 	$(CXX) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-$(OBJS)\fldll_frmview.o: ../../src/fl\frmview.cpp
+$(OBJS)\fldll_frmview.o: ../../src/fl/frmview.cpp
 	$(CXX) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-$(OBJS)\fldll_garbagec.o: ../../src/fl\garbagec.cpp
+$(OBJS)\fldll_garbagec.o: ../../src/fl/garbagec.cpp
 	$(CXX) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-$(OBJS)\fldll_gcupdatesmgr.o: ../../src/fl\gcupdatesmgr.cpp
+$(OBJS)\fldll_gcupdatesmgr.o: ../../src/fl/gcupdatesmgr.cpp
 	$(CXX) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-$(OBJS)\fldll_hintanimpl.o: ../../src/fl\hintanimpl.cpp
+$(OBJS)\fldll_hintanimpl.o: ../../src/fl/hintanimpl.cpp
 	$(CXX) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-$(OBJS)\fldll_newbmpbtn.o: ../../src/fl\newbmpbtn.cpp
+$(OBJS)\fldll_newbmpbtn.o: ../../src/fl/newbmpbtn.cpp
 	$(CXX) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-$(OBJS)\fldll_panedrawpl.o: ../../src/fl\panedrawpl.cpp
+$(OBJS)\fldll_panedrawpl.o: ../../src/fl/panedrawpl.cpp
 	$(CXX) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-$(OBJS)\fldll_rowdragpl.o: ../../src/fl\rowdragpl.cpp
+$(OBJS)\fldll_rowdragpl.o: ../../src/fl/rowdragpl.cpp
 	$(CXX) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-$(OBJS)\fldll_rowlayoutpl.o: ../../src/fl\rowlayoutpl.cpp
+$(OBJS)\fldll_rowlayoutpl.o: ../../src/fl/rowlayoutpl.cpp
 	$(CXX) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-$(OBJS)\fldll_toolwnd.o: ../../src/fl\toolwnd.cpp
+$(OBJS)\fldll_toolwnd.o: ../../src/fl/toolwnd.cpp
 	$(CXX) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-$(OBJS)\fldll_updatesmgr.o: ../../src/fl\updatesmgr.cpp
+$(OBJS)\fldll_updatesmgr.o: ../../src/fl/updatesmgr.cpp
 	$(CXX) -c -o $@ $(FLDLL_CXXFLAGS) $<
 
-$(OBJS)\fllib_antiflickpl.o: ../../src/fl\antiflickpl.cpp
+$(OBJS)\fllib_antiflickpl.o: ../../src/fl/antiflickpl.cpp
 	$(CXX) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-$(OBJS)\fllib_bardragpl.o: ../../src/fl\bardragpl.cpp
+$(OBJS)\fllib_bardragpl.o: ../../src/fl/bardragpl.cpp
 	$(CXX) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-$(OBJS)\fllib_barhintspl.o: ../../src/fl\barhintspl.cpp
+$(OBJS)\fllib_barhintspl.o: ../../src/fl/barhintspl.cpp
 	$(CXX) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-$(OBJS)\fllib_cbcustom.o: ../../src/fl\cbcustom.cpp
+$(OBJS)\fllib_cbcustom.o: ../../src/fl/cbcustom.cpp
 	$(CXX) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-$(OBJS)\fllib_controlbar.o: ../../src/fl\controlbar.cpp
+$(OBJS)\fllib_controlbar.o: ../../src/fl/controlbar.cpp
 	$(CXX) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-$(OBJS)\fllib_dummy.o: ../../src/fl\..\..\..\src\msw\dummy.cpp
+$(OBJS)\fllib_dummy.o: ../../src/fl/../../../src/msw/dummy.cpp
 	$(CXX) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-$(OBJS)\fllib_dyntbar.o: ../../src/fl\dyntbar.cpp
+$(OBJS)\fllib_dyntbar.o: ../../src/fl/dyntbar.cpp
 	$(CXX) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-$(OBJS)\fllib_dyntbarhnd.o: ../../src/fl\dyntbarhnd.cpp
+$(OBJS)\fllib_dyntbarhnd.o: ../../src/fl/dyntbarhnd.cpp
 	$(CXX) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-$(OBJS)\fllib_frmview.o: ../../src/fl\frmview.cpp
+$(OBJS)\fllib_frmview.o: ../../src/fl/frmview.cpp
 	$(CXX) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-$(OBJS)\fllib_garbagec.o: ../../src/fl\garbagec.cpp
+$(OBJS)\fllib_garbagec.o: ../../src/fl/garbagec.cpp
 	$(CXX) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-$(OBJS)\fllib_gcupdatesmgr.o: ../../src/fl\gcupdatesmgr.cpp
+$(OBJS)\fllib_gcupdatesmgr.o: ../../src/fl/gcupdatesmgr.cpp
 	$(CXX) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-$(OBJS)\fllib_hintanimpl.o: ../../src/fl\hintanimpl.cpp
+$(OBJS)\fllib_hintanimpl.o: ../../src/fl/hintanimpl.cpp
 	$(CXX) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-$(OBJS)\fllib_newbmpbtn.o: ../../src/fl\newbmpbtn.cpp
+$(OBJS)\fllib_newbmpbtn.o: ../../src/fl/newbmpbtn.cpp
 	$(CXX) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-$(OBJS)\fllib_panedrawpl.o: ../../src/fl\panedrawpl.cpp
+$(OBJS)\fllib_panedrawpl.o: ../../src/fl/panedrawpl.cpp
 	$(CXX) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-$(OBJS)\fllib_rowdragpl.o: ../../src/fl\rowdragpl.cpp
+$(OBJS)\fllib_rowdragpl.o: ../../src/fl/rowdragpl.cpp
 	$(CXX) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-$(OBJS)\fllib_rowlayoutpl.o: ../../src/fl\rowlayoutpl.cpp
+$(OBJS)\fllib_rowlayoutpl.o: ../../src/fl/rowlayoutpl.cpp
 	$(CXX) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-$(OBJS)\fllib_toolwnd.o: ../../src/fl\toolwnd.cpp
+$(OBJS)\fllib_toolwnd.o: ../../src/fl/toolwnd.cpp
 	$(CXX) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
-$(OBJS)\fllib_updatesmgr.o: ../../src/fl\updatesmgr.cpp
+$(OBJS)\fllib_updatesmgr.o: ../../src/fl/updatesmgr.cpp
 	$(CXX) -c -o $@ $(FLLIB_CXXFLAGS) $<
 
 clean: 

@@ -147,10 +147,10 @@ $(OBJS):
 
 all: $(OBJS)\controls.exe
 
-$(OBJS)\controls_controls.o: .\controls.cpp
+$(OBJS)\controls_controls.o: ./controls.cpp
 	$(CXX) -c -o $@ $(CONTROLS_CXXFLAGS) $<
 
-$(OBJS)\controls_controls_rc.o: .\controls.rc
+$(OBJS)\controls_controls_rc.o: ./controls.rc
 	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../samples
 
 clean: 

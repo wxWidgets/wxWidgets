@@ -118,7 +118,7 @@ led$(EXEEXT): $(LED_OBJECTS) $(__led___win32rc)
 	$(__led___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-led.app/Contents: led$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+led.app/Contents/PkgInfo: led$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p led.app/Contents
 	mkdir -p led.app/Contents/MacOS
 	mkdir -p led.app/Contents/Resources
@@ -139,7 +139,7 @@ led.app/Contents: led$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc led.app/Contents/Resources/led.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns led.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@led_bundle: led.app/Contents
+@COND_PLATFORM_MACOSX_1@led_bundle: led.app/Contents/PkgInfo
 
 led_led.o: $(srcdir)/led.cpp
 	$(CXXC) -c -o $@ $(LED_CXXFLAGS) $<

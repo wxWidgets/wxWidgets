@@ -128,7 +128,7 @@ $(OBJS):
 
 all: $(OBJS)\console.exe data
 
-$(OBJS)\console_console.o: .\console.cpp
+$(OBJS)\console_console.o: ./console.cpp
 	$(CXX) -c -o $@ $(CONSOLE_CXXFLAGS) $<
 
 clean: 

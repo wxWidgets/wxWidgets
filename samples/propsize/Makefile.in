@@ -118,7 +118,7 @@ propsize$(EXEEXT): $(PROPSIZE_OBJECTS) $(__propsize___win32rc)
 	$(__propsize___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-propsize.app/Contents: propsize$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+propsize.app/Contents/PkgInfo: propsize$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p propsize.app/Contents
 	mkdir -p propsize.app/Contents/MacOS
 	mkdir -p propsize.app/Contents/Resources
@@ -139,7 +139,7 @@ propsize.app/Contents: propsize$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(L
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc propsize.app/Contents/Resources/propsize.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns propsize.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@propsize_bundle: propsize.app/Contents
+@COND_PLATFORM_MACOSX_1@propsize_bundle: propsize.app/Contents/PkgInfo
 
 propsize_propsize.o: $(srcdir)/propsize.cpp
 	$(CXXC) -c -o $@ $(PROPSIZE_CXXFLAGS) $<

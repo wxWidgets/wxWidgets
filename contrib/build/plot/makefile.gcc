@@ -148,16 +148,16 @@ $(OBJS):
 
 all: $(__plotdll___depname) $(__plotlib___depname)
 
-$(OBJS)\plotdll_dummy.o: ../../src/plot\..\..\..\src\msw\dummy.cpp
+$(OBJS)\plotdll_dummy.o: ../../src/plot/../../../src/msw/dummy.cpp
 	$(CXX) -c -o $@ $(PLOTDLL_CXXFLAGS) $<
 
-$(OBJS)\plotdll_plot.o: ../../src/plot\plot.cpp
+$(OBJS)\plotdll_plot.o: ../../src/plot/plot.cpp
 	$(CXX) -c -o $@ $(PLOTDLL_CXXFLAGS) $<
 
-$(OBJS)\plotlib_dummy.o: ../../src/plot\..\..\..\src\msw\dummy.cpp
+$(OBJS)\plotlib_dummy.o: ../../src/plot/../../../src/msw/dummy.cpp
 	$(CXX) -c -o $@ $(PLOTLIB_CXXFLAGS) $<
 
-$(OBJS)\plotlib_plot.o: ../../src/plot\plot.cpp
+$(OBJS)\plotlib_plot.o: ../../src/plot/plot.cpp
 	$(CXX) -c -o $@ $(PLOTLIB_CXXFLAGS) $<
 
 clean: 

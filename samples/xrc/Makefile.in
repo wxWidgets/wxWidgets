@@ -137,7 +137,7 @@ xrcdemo$(EXEEXT): $(XRCDEMO_OBJECTS) $(__xrcdemo___win32rc)
 	$(__xrcdemo___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-xrcdemo.app/Contents: xrcdemo$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+xrcdemo.app/Contents/PkgInfo: xrcdemo$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p xrcdemo.app/Contents
 	mkdir -p xrcdemo.app/Contents/MacOS
 	mkdir -p xrcdemo.app/Contents/Resources
@@ -158,7 +158,7 @@ xrcdemo.app/Contents: xrcdemo$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIB
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc xrcdemo.app/Contents/Resources/xrcdemo.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns xrcdemo.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@xrcdemo_bundle: xrcdemo.app/Contents
+@COND_PLATFORM_MACOSX_1@xrcdemo_bundle: xrcdemo.app/Contents/PkgInfo
 
 xrcdemo_custclas.o: $(srcdir)/custclas.cpp
 	$(CXXC) -c -o $@ $(XRCDEMO_CXXFLAGS) $<

@@ -148,10 +148,10 @@ $(OBJS):
 
 all: $(OBJS)\dynsash_switch.exe
 
-$(OBJS)\dynsash_switch_dynsash_switch.o: .\dynsash_switch.cpp
+$(OBJS)\dynsash_switch_dynsash_switch.o: ./dynsash_switch.cpp
 	$(CXX) -c -o $@ $(DYNSASH_SWITCH_CXXFLAGS) $<
 
-$(OBJS)\dynsash_switch_sample_rc.o: .\..\..\..\..\samples\sample.rc
+$(OBJS)\dynsash_switch_sample_rc.o: ./../../../../samples/sample.rc
 	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../../../samples
 
 clean: 

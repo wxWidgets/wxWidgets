@@ -187,130 +187,130 @@ $(OBJS):
 
 all: $(__mmediadll___depname) $(__mmedialib___depname)
 
-$(OBJS)\mmediadll_cdbase.o: ../../src/mmedia\cdbase.cpp
+$(OBJS)\mmediadll_cdbase.o: ../../src/mmedia/cdbase.cpp
 	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
-$(OBJS)\mmediadll_cdwin.o: ../../src/mmedia\cdwin.cpp
+$(OBJS)\mmediadll_cdwin.o: ../../src/mmedia/cdwin.cpp
 	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
-$(OBJS)\mmediadll_dummy.o: ../../src/mmedia\..\..\..\src\msw\dummy.cpp
+$(OBJS)\mmediadll_dummy.o: ../../src/mmedia/../../../src/msw/dummy.cpp
 	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
-$(OBJS)\mmediadll_g711.o: ../../src/mmedia\g711.cpp
+$(OBJS)\mmediadll_g711.o: ../../src/mmedia/g711.cpp
 	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
-$(OBJS)\mmediadll_g721.o: ../../src/mmedia\g721.cpp
+$(OBJS)\mmediadll_g721.o: ../../src/mmedia/g721.cpp
 	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
-$(OBJS)\mmediadll_g723_24.o: ../../src/mmedia\g723_24.cpp
+$(OBJS)\mmediadll_g723_24.o: ../../src/mmedia/g723_24.cpp
 	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
-$(OBJS)\mmediadll_g723_40.o: ../../src/mmedia\g723_40.cpp
+$(OBJS)\mmediadll_g723_40.o: ../../src/mmedia/g723_40.cpp
 	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
-$(OBJS)\mmediadll_g72x.o: ../../src/mmedia\g72x.cpp
+$(OBJS)\mmediadll_g72x.o: ../../src/mmedia/g72x.cpp
 	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
-$(OBJS)\mmediadll_sndaiff.o: ../../src/mmedia\sndaiff.cpp
+$(OBJS)\mmediadll_sndaiff.o: ../../src/mmedia/sndaiff.cpp
 	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
-$(OBJS)\mmediadll_sndbase.o: ../../src/mmedia\sndbase.cpp
+$(OBJS)\mmediadll_sndbase.o: ../../src/mmedia/sndbase.cpp
 	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
-$(OBJS)\mmediadll_sndcodec.o: ../../src/mmedia\sndcodec.cpp
+$(OBJS)\mmediadll_sndcodec.o: ../../src/mmedia/sndcodec.cpp
 	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
-$(OBJS)\mmediadll_sndcpcm.o: ../../src/mmedia\sndcpcm.cpp
+$(OBJS)\mmediadll_sndcpcm.o: ../../src/mmedia/sndcpcm.cpp
 	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
-$(OBJS)\mmediadll_sndfile.o: ../../src/mmedia\sndfile.cpp
+$(OBJS)\mmediadll_sndfile.o: ../../src/mmedia/sndfile.cpp
 	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
-$(OBJS)\mmediadll_sndg72x.o: ../../src/mmedia\sndg72x.cpp
+$(OBJS)\mmediadll_sndg72x.o: ../../src/mmedia/sndg72x.cpp
 	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
-$(OBJS)\mmediadll_sndmsad.o: ../../src/mmedia\sndmsad.cpp
+$(OBJS)\mmediadll_sndmsad.o: ../../src/mmedia/sndmsad.cpp
 	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
-$(OBJS)\mmediadll_sndpcm.o: ../../src/mmedia\sndpcm.cpp
+$(OBJS)\mmediadll_sndpcm.o: ../../src/mmedia/sndpcm.cpp
 	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
-$(OBJS)\mmediadll_sndulaw.o: ../../src/mmedia\sndulaw.cpp
+$(OBJS)\mmediadll_sndulaw.o: ../../src/mmedia/sndulaw.cpp
 	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
-$(OBJS)\mmediadll_sndwav.o: ../../src/mmedia\sndwav.cpp
+$(OBJS)\mmediadll_sndwav.o: ../../src/mmedia/sndwav.cpp
 	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
-$(OBJS)\mmediadll_sndwin.o: ../../src/mmedia\sndwin.cpp
+$(OBJS)\mmediadll_sndwin.o: ../../src/mmedia/sndwin.cpp
 	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
-$(OBJS)\mmediadll_vidbase.o: ../../src/mmedia\vidbase.cpp
+$(OBJS)\mmediadll_vidbase.o: ../../src/mmedia/vidbase.cpp
 	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
-$(OBJS)\mmediadll_vidwin.o: ../../src/mmedia\vidwin.cpp
+$(OBJS)\mmediadll_vidwin.o: ../../src/mmedia/vidwin.cpp
 	$(CXX) -c -o $@ $(MMEDIADLL_CXXFLAGS) $<
 
-$(OBJS)\mmedialib_cdbase.o: ../../src/mmedia\cdbase.cpp
+$(OBJS)\mmedialib_cdbase.o: ../../src/mmedia/cdbase.cpp
 	$(CXX) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
-$(OBJS)\mmedialib_cdwin.o: ../../src/mmedia\cdwin.cpp
+$(OBJS)\mmedialib_cdwin.o: ../../src/mmedia/cdwin.cpp
 	$(CXX) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
-$(OBJS)\mmedialib_dummy.o: ../../src/mmedia\..\..\..\src\msw\dummy.cpp
+$(OBJS)\mmedialib_dummy.o: ../../src/mmedia/../../../src/msw/dummy.cpp
 	$(CXX) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
-$(OBJS)\mmedialib_g711.o: ../../src/mmedia\g711.cpp
+$(OBJS)\mmedialib_g711.o: ../../src/mmedia/g711.cpp
 	$(CXX) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
-$(OBJS)\mmedialib_g721.o: ../../src/mmedia\g721.cpp
+$(OBJS)\mmedialib_g721.o: ../../src/mmedia/g721.cpp
 	$(CXX) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
-$(OBJS)\mmedialib_g723_24.o: ../../src/mmedia\g723_24.cpp
+$(OBJS)\mmedialib_g723_24.o: ../../src/mmedia/g723_24.cpp
 	$(CXX) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
-$(OBJS)\mmedialib_g723_40.o: ../../src/mmedia\g723_40.cpp
+$(OBJS)\mmedialib_g723_40.o: ../../src/mmedia/g723_40.cpp
 	$(CXX) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
-$(OBJS)\mmedialib_g72x.o: ../../src/mmedia\g72x.cpp
+$(OBJS)\mmedialib_g72x.o: ../../src/mmedia/g72x.cpp
 	$(CXX) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
-$(OBJS)\mmedialib_sndaiff.o: ../../src/mmedia\sndaiff.cpp
+$(OBJS)\mmedialib_sndaiff.o: ../../src/mmedia/sndaiff.cpp
 	$(CXX) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
-$(OBJS)\mmedialib_sndbase.o: ../../src/mmedia\sndbase.cpp
+$(OBJS)\mmedialib_sndbase.o: ../../src/mmedia/sndbase.cpp
 	$(CXX) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
-$(OBJS)\mmedialib_sndcodec.o: ../../src/mmedia\sndcodec.cpp
+$(OBJS)\mmedialib_sndcodec.o: ../../src/mmedia/sndcodec.cpp
 	$(CXX) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
-$(OBJS)\mmedialib_sndcpcm.o: ../../src/mmedia\sndcpcm.cpp
+$(OBJS)\mmedialib_sndcpcm.o: ../../src/mmedia/sndcpcm.cpp
 	$(CXX) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
-$(OBJS)\mmedialib_sndfile.o: ../../src/mmedia\sndfile.cpp
+$(OBJS)\mmedialib_sndfile.o: ../../src/mmedia/sndfile.cpp
 	$(CXX) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
-$(OBJS)\mmedialib_sndg72x.o: ../../src/mmedia\sndg72x.cpp
+$(OBJS)\mmedialib_sndg72x.o: ../../src/mmedia/sndg72x.cpp
 	$(CXX) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
-$(OBJS)\mmedialib_sndmsad.o: ../../src/mmedia\sndmsad.cpp
+$(OBJS)\mmedialib_sndmsad.o: ../../src/mmedia/sndmsad.cpp
 	$(CXX) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
-$(OBJS)\mmedialib_sndpcm.o: ../../src/mmedia\sndpcm.cpp
+$(OBJS)\mmedialib_sndpcm.o: ../../src/mmedia/sndpcm.cpp
 	$(CXX) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
-$(OBJS)\mmedialib_sndulaw.o: ../../src/mmedia\sndulaw.cpp
+$(OBJS)\mmedialib_sndulaw.o: ../../src/mmedia/sndulaw.cpp
 	$(CXX) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
-$(OBJS)\mmedialib_sndwav.o: ../../src/mmedia\sndwav.cpp
+$(OBJS)\mmedialib_sndwav.o: ../../src/mmedia/sndwav.cpp
 	$(CXX) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
-$(OBJS)\mmedialib_sndwin.o: ../../src/mmedia\sndwin.cpp
+$(OBJS)\mmedialib_sndwin.o: ../../src/mmedia/sndwin.cpp
 	$(CXX) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
-$(OBJS)\mmedialib_vidbase.o: ../../src/mmedia\vidbase.cpp
+$(OBJS)\mmedialib_vidbase.o: ../../src/mmedia/vidbase.cpp
 	$(CXX) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
-$(OBJS)\mmedialib_vidwin.o: ../../src/mmedia\vidwin.cpp
+$(OBJS)\mmedialib_vidwin.o: ../../src/mmedia/vidwin.cpp
 	$(CXX) -c -o $@ $(MMEDIALIB_CXXFLAGS) $<
 
 clean: 

@@ -118,7 +118,7 @@ ownerdrw$(EXEEXT): $(OWNERDRW_OBJECTS) $(__ownerdrw___win32rc)
 	$(__ownerdrw___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-ownerdrw.app/Contents: ownerdrw$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+ownerdrw.app/Contents/PkgInfo: ownerdrw$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p ownerdrw.app/Contents
 	mkdir -p ownerdrw.app/Contents/MacOS
 	mkdir -p ownerdrw.app/Contents/Resources
@@ -139,7 +139,7 @@ ownerdrw.app/Contents: ownerdrw$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(L
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc ownerdrw.app/Contents/Resources/ownerdrw.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns ownerdrw.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@ownerdrw_bundle: ownerdrw.app/Contents
+@COND_PLATFORM_MACOSX_1@ownerdrw_bundle: ownerdrw.app/Contents/PkgInfo
 
 ownerdrw_ownerdrw.o: $(srcdir)/ownerdrw.cpp
 	$(CXXC) -c -o $@ $(OWNERDRW_CXXFLAGS) $<

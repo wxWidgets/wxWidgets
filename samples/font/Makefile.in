@@ -114,7 +114,7 @@ font$(EXEEXT): $(FONT_OBJECTS) $(__font___win32rc)
 	$(__font___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-font.app/Contents: font$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+font.app/Contents/PkgInfo: font$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p font.app/Contents
 	mkdir -p font.app/Contents/MacOS
 	mkdir -p font.app/Contents/Resources
@@ -135,7 +135,7 @@ font.app/Contents: font$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAM
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc font.app/Contents/Resources/font.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns font.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@font_bundle: font.app/Contents
+@COND_PLATFORM_MACOSX_1@font_bundle: font.app/Contents/PkgInfo
 
 font_font.o: $(srcdir)/font.cpp
 	$(CXXC) -c -o $@ $(FONT_CXXFLAGS) $<

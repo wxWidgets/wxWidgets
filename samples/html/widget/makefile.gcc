@@ -151,10 +151,10 @@ $(OBJS):
 
 all: $(OBJS)\widget.exe data
 
-$(OBJS)\widget_widget.o: .\widget.cpp
+$(OBJS)\widget_widget.o: ./widget.cpp
 	$(CXX) -c -o $@ $(WIDGET_CXXFLAGS) $<
 
-$(OBJS)\widget_widget_rc.o: .\widget.rc
+$(OBJS)\widget_widget_rc.o: ./widget.rc
 	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../../samples
 
 clean: 

@@ -151,10 +151,10 @@ $(OBJS):
 
 all: $(OBJS)\calendar.exe
 
-$(OBJS)\calendar_calendar.o: .\calendar.cpp
+$(OBJS)\calendar_calendar.o: ./calendar.cpp
 	$(CXX) -c -o $@ $(CALENDAR_CXXFLAGS) $<
 
-$(OBJS)\calendar_calendar_rc.o: .\calendar.rc
+$(OBJS)\calendar_calendar_rc.o: ./calendar.rc
 	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../samples
 
 $(OBJS)\calendar.exe: $(CALENDAR_OBJECTS) $(OBJS)\calendar_calendar_rc.o

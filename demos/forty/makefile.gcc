@@ -158,31 +158,31 @@ $(OBJS):
 
 all: $(OBJS)\forty.exe
 
-$(OBJS)\forty_canvas.o: .\canvas.cpp
+$(OBJS)\forty_canvas.o: ./canvas.cpp
 	$(CXX) -c -o $@ $(FORTY_CXXFLAGS) $<
 
-$(OBJS)\forty_card.o: .\card.cpp
+$(OBJS)\forty_card.o: ./card.cpp
 	$(CXX) -c -o $@ $(FORTY_CXXFLAGS) $<
 
-$(OBJS)\forty_forty.o: .\forty.cpp
+$(OBJS)\forty_forty.o: ./forty.cpp
 	$(CXX) -c -o $@ $(FORTY_CXXFLAGS) $<
 
-$(OBJS)\forty_forty_rc.o: .\forty.rc
+$(OBJS)\forty_forty_rc.o: ./forty.rc
 	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../samples
 
-$(OBJS)\forty_game.o: .\game.cpp
+$(OBJS)\forty_game.o: ./game.cpp
 	$(CXX) -c -o $@ $(FORTY_CXXFLAGS) $<
 
-$(OBJS)\forty_pile.o: .\pile.cpp
+$(OBJS)\forty_pile.o: ./pile.cpp
 	$(CXX) -c -o $@ $(FORTY_CXXFLAGS) $<
 
-$(OBJS)\forty_playerdg.o: .\playerdg.cpp
+$(OBJS)\forty_playerdg.o: ./playerdg.cpp
 	$(CXX) -c -o $@ $(FORTY_CXXFLAGS) $<
 
-$(OBJS)\forty_scoredg.o: .\scoredg.cpp
+$(OBJS)\forty_scoredg.o: ./scoredg.cpp
 	$(CXX) -c -o $@ $(FORTY_CXXFLAGS) $<
 
-$(OBJS)\forty_scorefil.o: .\scorefil.cpp
+$(OBJS)\forty_scorefil.o: ./scorefil.cpp
 	$(CXX) -c -o $@ $(FORTY_CXXFLAGS) $<
 
 clean: 

@@ -157,40 +157,40 @@ $(OBJS):
 
 all: $(OBJS)\widgets.exe
 
-$(OBJS)\widgets_button.o: .\button.cpp
+$(OBJS)\widgets_button.o: ./button.cpp
 	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $<
 
-$(OBJS)\widgets_combobox.o: .\combobox.cpp
+$(OBJS)\widgets_combobox.o: ./combobox.cpp
 	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $<
 
-$(OBJS)\widgets_gauge.o: .\gauge.cpp
+$(OBJS)\widgets_gauge.o: ./gauge.cpp
 	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $<
 
-$(OBJS)\widgets_listbox.o: .\listbox.cpp
+$(OBJS)\widgets_listbox.o: ./listbox.cpp
 	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $<
 
-$(OBJS)\widgets_notebook.o: .\notebook.cpp
+$(OBJS)\widgets_notebook.o: ./notebook.cpp
 	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $<
 
-$(OBJS)\widgets_radiobox.o: .\radiobox.cpp
+$(OBJS)\widgets_radiobox.o: ./radiobox.cpp
 	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $<
 
-$(OBJS)\widgets_slider.o: .\slider.cpp
+$(OBJS)\widgets_slider.o: ./slider.cpp
 	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $<
 
-$(OBJS)\widgets_spinbtn.o: .\spinbtn.cpp
+$(OBJS)\widgets_spinbtn.o: ./spinbtn.cpp
 	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $<
 
-$(OBJS)\widgets_static.o: .\static.cpp
+$(OBJS)\widgets_static.o: ./static.cpp
 	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $<
 
-$(OBJS)\widgets_textctrl.o: .\textctrl.cpp
+$(OBJS)\widgets_textctrl.o: ./textctrl.cpp
 	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $<
 
-$(OBJS)\widgets_widgets.o: .\widgets.cpp
+$(OBJS)\widgets_widgets.o: ./widgets.cpp
 	$(CXX) -c -o $@ $(WIDGETS_CXXFLAGS) $<
 
-$(OBJS)\widgets_widgets_rc.o: .\widgets.rc
+$(OBJS)\widgets_widgets_rc.o: ./widgets.rc
 	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../samples
 
 clean: 

@@ -149,16 +149,16 @@ $(OBJS):
 
 all: $(OBJS)\docview.exe
 
-$(OBJS)\docview_doc.o: .\doc.cpp
+$(OBJS)\docview_doc.o: ./doc.cpp
 	$(CXX) -c -o $@ $(DOCVIEW_CXXFLAGS) $<
 
-$(OBJS)\docview_docview.o: .\docview.cpp
+$(OBJS)\docview_docview.o: ./docview.cpp
 	$(CXX) -c -o $@ $(DOCVIEW_CXXFLAGS) $<
 
-$(OBJS)\docview_docview_rc.o: .\docview.rc
+$(OBJS)\docview_docview_rc.o: ./docview.rc
 	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../samples
 
-$(OBJS)\docview_view.o: .\view.cpp
+$(OBJS)\docview_view.o: ./view.cpp
 	$(CXX) -c -o $@ $(DOCVIEW_CXXFLAGS) $<
 
 clean: 

@@ -111,7 +111,7 @@ controls$(EXEEXT): $(CONTROLS_OBJECTS) $(__controls___win32rc)
 	$(__controls___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-controls.app/Contents: controls$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+controls.app/Contents/PkgInfo: controls$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p controls.app/Contents
 	mkdir -p controls.app/Contents/MacOS
 	mkdir -p controls.app/Contents/Resources
@@ -132,7 +132,7 @@ controls.app/Contents: controls$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(L
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc controls.app/Contents/Resources/controls.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns controls.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@controls_bundle: controls.app/Contents
+@COND_PLATFORM_MACOSX_1@controls_bundle: controls.app/Contents/PkgInfo
 
 controls_controls.o: $(srcdir)/controls.cpp
 	$(CXXC) -c -o $@ $(CONTROLS_CXXFLAGS) $<

@@ -118,7 +118,7 @@ thread$(EXEEXT): $(THREAD_OBJECTS) $(__thread___win32rc)
 	$(__thread___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-thread.app/Contents: thread$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+thread.app/Contents/PkgInfo: thread$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p thread.app/Contents
 	mkdir -p thread.app/Contents/MacOS
 	mkdir -p thread.app/Contents/Resources
@@ -139,7 +139,7 @@ thread.app/Contents: thread$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDI
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc thread.app/Contents/Resources/thread.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns thread.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@thread_bundle: thread.app/Contents
+@COND_PLATFORM_MACOSX_1@thread_bundle: thread.app/Contents/PkgInfo
 
 thread_thread.o: $(srcdir)/thread.cpp
 	$(CXXC) -c -o $@ $(THREAD_CXXFLAGS) $<

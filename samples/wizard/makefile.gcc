@@ -151,10 +151,10 @@ $(OBJS):
 
 all: $(OBJS)\wizard.exe
 
-$(OBJS)\wizard_wizard.o: .\wizard.cpp
+$(OBJS)\wizard_wizard.o: ./wizard.cpp
 	$(CXX) -c -o $@ $(WIZARD_CXXFLAGS) $<
 
-$(OBJS)\wizard_wizard_rc.o: .\wizard.rc
+$(OBJS)\wizard_wizard_rc.o: ./wizard.rc
 	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../samples
 
 clean: 

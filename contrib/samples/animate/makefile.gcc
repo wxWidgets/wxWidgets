@@ -147,10 +147,10 @@ $(OBJS):
 
 all: $(OBJS)\anitest.exe data
 
-$(OBJS)\anitest_anitest.o: .\anitest.cpp
+$(OBJS)\anitest_anitest.o: ./anitest.cpp
 	$(CXX) -c -o $@ $(ANITEST_CXXFLAGS) $<
 
-$(OBJS)\anitest_anitest_rc.o: .\anitest.rc
+$(OBJS)\anitest_anitest_rc.o: ./anitest.rc
 	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../../samples --include-dir ./../../include
 
 $(OBJS)\anitest.exe: $(ANITEST_OBJECTS) $(OBJS)\anitest_anitest_rc.o

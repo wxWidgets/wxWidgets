@@ -279,7 +279,10 @@ ALL_BASE_SOURCES =  \
 	src/unix/mimetype.cpp \
 	src/unix/snglinst.cpp \
 	src/unix/threadpsx.cpp \
+	src/unix/baseunix.cpp \
 	src/os2/dir.cpp \
+	src/os2/mimetype.cpp \
+	src/os2/thread.cpp \
 	src/os2/utils.cpp \
 	src/os2/utilsexc.cpp \
 	src/common/event.cpp \
@@ -2025,8 +2028,14 @@ COND_TOOLKIT_GTK___BASE_MACOSX_SRC_OBJECTS_3 =  \
 @COND_TOOLKIT_MAC@	baselib_utilsexc.o
 @COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS \
 @COND_PLATFORM_MACOSX_1@	= $(__BASE_MACOSX_SRC_OBJECTS)
-@COND_PLATFORM_OS2_1@__BASE_PLATFORM_SRC_OBJECTS = \
-@COND_PLATFORM_OS2_1@	monodll_dir.o monodll_utils.o monodll_utilsexc.o
+COND_PLATFORM_OS2_1___BASE_PLATFORM_SRC_OBJECTS =  \
+	monodll_baseunix.o \
+	monodll_dir.o \
+	monodll_mimetype.o \
+	monodll_thread.o \
+	monodll_utils.o \
+	monodll_utilsexc.o
+@COND_PLATFORM_OS2_1@__BASE_PLATFORM_SRC_OBJECTS = $(COND_PLATFORM_OS2_1___BASE_PLATFORM_SRC_OBJECTS)
 COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_baseunix.o \
 	monodll_dir.o \
@@ -2049,8 +2058,14 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS =  \
 @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS = $(COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS)
 @COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS_1 \
 @COND_PLATFORM_MACOSX_1@	= $(__BASE_MACOSX_SRC_OBJECTS_1)
-@COND_PLATFORM_OS2_1@__BASE_PLATFORM_SRC_OBJECTS_1 = \
-@COND_PLATFORM_OS2_1@	monolib_dir.o monolib_utils.o monolib_utilsexc.o
+COND_PLATFORM_OS2_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
+	monolib_baseunix.o \
+	monolib_dir.o \
+	monolib_mimetype.o \
+	monolib_thread.o \
+	monolib_utils.o \
+	monolib_utilsexc.o
+@COND_PLATFORM_OS2_1@__BASE_PLATFORM_SRC_OBJECTS_1 = $(COND_PLATFORM_OS2_1___BASE_PLATFORM_SRC_OBJECTS_1)
 COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_baseunix.o \
 	monolib_dir.o \
@@ -2073,8 +2088,14 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS_1 = $(COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1)
 @COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS_2 \
 @COND_PLATFORM_MACOSX_1@	= $(__BASE_MACOSX_SRC_OBJECTS_2)
-@COND_PLATFORM_OS2_1@__BASE_PLATFORM_SRC_OBJECTS_2 = \
-@COND_PLATFORM_OS2_1@	basedll_dir.o basedll_utils.o basedll_utilsexc.o
+COND_PLATFORM_OS2_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
+	basedll_baseunix.o \
+	basedll_dir.o \
+	basedll_mimetype.o \
+	basedll_thread.o \
+	basedll_utils.o \
+	basedll_utilsexc.o
+@COND_PLATFORM_OS2_1@__BASE_PLATFORM_SRC_OBJECTS_2 = $(COND_PLATFORM_OS2_1___BASE_PLATFORM_SRC_OBJECTS_2)
 COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_baseunix.o \
 	basedll_dir.o \
@@ -2097,8 +2118,14 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS_2 = $(COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2)
 @COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS_3 \
 @COND_PLATFORM_MACOSX_1@	= $(__BASE_MACOSX_SRC_OBJECTS_3)
-@COND_PLATFORM_OS2_1@__BASE_PLATFORM_SRC_OBJECTS_3 = \
-@COND_PLATFORM_OS2_1@	baselib_dir.o baselib_utils.o baselib_utilsexc.o
+COND_PLATFORM_OS2_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
+	baselib_baseunix.o \
+	baselib_dir.o \
+	baselib_mimetype.o \
+	baselib_thread.o \
+	baselib_utils.o \
+	baselib_utilsexc.o
+@COND_PLATFORM_OS2_1@__BASE_PLATFORM_SRC_OBJECTS_3 = $(COND_PLATFORM_OS2_1___BASE_PLATFORM_SRC_OBJECTS_3)
 COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_baseunix.o \
 	baselib_dir.o \
@@ -3445,7 +3472,6 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS =  \
 	monodll_menu.o \
 	monodll_menuitem.o \
 	monodll_metafile.o \
-	monodll_mimetype.o \
 	monodll_msgdlg.o \
 	monodll_nativdlg.o \
 	monodll_notebook.o \
@@ -3467,7 +3493,6 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS =  \
 	monodll_stattext.o \
 	monodll_tabctrl.o \
 	monodll_textctrl.o \
-	monodll_thread.o \
 	monodll_timer.o \
 	monodll_toolbar.o \
 	monodll_tooltip.o \
@@ -3833,7 +3858,6 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS_1 =  \
 	monolib_menu.o \
 	monolib_menuitem.o \
 	monolib_metafile.o \
-	monolib_mimetype.o \
 	monolib_msgdlg.o \
 	monolib_nativdlg.o \
 	monolib_notebook.o \
@@ -3855,7 +3879,6 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS_1 =  \
 	monolib_stattext.o \
 	monolib_tabctrl.o \
 	monolib_textctrl.o \
-	monolib_thread.o \
 	monolib_timer.o \
 	monolib_toolbar.o \
 	monolib_tooltip.o \
@@ -4221,7 +4244,6 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS_2 =  \
 	coredll_menu.o \
 	coredll_menuitem.o \
 	coredll_metafile.o \
-	coredll_mimetype.o \
 	coredll_msgdlg.o \
 	coredll_nativdlg.o \
 	coredll_notebook.o \
@@ -4243,7 +4265,6 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS_2 =  \
 	coredll_stattext.o \
 	coredll_tabctrl.o \
 	coredll_textctrl.o \
-	coredll_thread.o \
 	coredll_timer.o \
 	coredll_toolbar.o \
 	coredll_tooltip.o \
@@ -4609,7 +4630,6 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS_3 =  \
 	corelib_menu.o \
 	corelib_menuitem.o \
 	corelib_metafile.o \
-	corelib_mimetype.o \
 	corelib_msgdlg.o \
 	corelib_nativdlg.o \
 	corelib_notebook.o \
@@ -4631,7 +4651,6 @@ COND_TOOLKIT_PM___GUI_SRC_OBJECTS_3 =  \
 	corelib_stattext.o \
 	corelib_tabctrl.o \
 	corelib_textctrl.o \
-	corelib_thread.o \
 	corelib_timer.o \
 	corelib_toolbar.o \
 	corelib_tooltip.o \
@@ -6269,6 +6288,9 @@ basedll_basemsw.o: $(srcdir)/src/msw/basemsw.cpp
 @COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@basedll_baseunix.o: $(srcdir)/src/unix/baseunix.cpp
 @COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
+@COND_PLATFORM_OS2_1@basedll_baseunix.o: $(srcdir)/src/unix/baseunix.cpp
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
+
 basedll_clntdata.o: $(srcdir)/src/common/clntdata.cpp
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
@@ -6404,6 +6426,9 @@ basedll_mimetmac.o: $(srcdir)/src/mac/mimetmac.cpp
 @COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@basedll_mimetype.o: $(srcdir)/src/unix/mimetype.cpp
 @COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
+@COND_PLATFORM_OS2_1@basedll_mimetype.o: $(srcdir)/src/os2/mimetype.cpp
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
+
 basedll_module.o: $(srcdir)/src/common/module.cpp
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
@@ -6464,8 +6489,11 @@ basedll_textbuf.o: $(srcdir)/src/common/textbuf.cpp
 basedll_textfile.o: $(srcdir)/src/common/textfile.cpp
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
-basedll_thread.o: $(srcdir)/src/msw/thread.cpp
-	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
+@COND_PLATFORM_WIN32_1@basedll_thread.o: $(srcdir)/src/msw/thread.cpp
+@COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
+
+@COND_PLATFORM_OS2_1@basedll_thread.o: $(srcdir)/src/os2/thread.cpp
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
 @COND_PLATFORM_UNIX_1@basedll_threadpsx.o: $(srcdir)/src/unix/threadpsx.cpp
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
@@ -6558,6 +6586,9 @@ baselib_basemsw.o: $(srcdir)/src/msw/basemsw.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@baselib_baseunix.o: $(srcdir)/src/unix/baseunix.cpp
 @COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
+
+@COND_PLATFORM_OS2_1@baselib_baseunix.o: $(srcdir)/src/unix/baseunix.cpp
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
 baselib_clntdata.o: $(srcdir)/src/common/clntdata.cpp
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
@@ -6694,6 +6725,9 @@ baselib_mimetmac.o: $(srcdir)/src/mac/mimetmac.cpp
 @COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@baselib_mimetype.o: $(srcdir)/src/unix/mimetype.cpp
 @COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
+@COND_PLATFORM_OS2_1@baselib_mimetype.o: $(srcdir)/src/os2/mimetype.cpp
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
+
 baselib_module.o: $(srcdir)/src/common/module.cpp
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
@@ -6754,8 +6788,11 @@ baselib_textbuf.o: $(srcdir)/src/common/textbuf.cpp
 baselib_textfile.o: $(srcdir)/src/common/textfile.cpp
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
-baselib_thread.o: $(srcdir)/src/msw/thread.cpp
-	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
+@COND_PLATFORM_WIN32_1@baselib_thread.o: $(srcdir)/src/msw/thread.cpp
+@COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
+
+@COND_PLATFORM_OS2_1@baselib_thread.o: $(srcdir)/src/os2/thread.cpp
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
 @COND_PLATFORM_UNIX_1@baselib_threadpsx.o: $(srcdir)/src/unix/threadpsx.cpp
 @COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
@@ -8137,9 +8174,6 @@ coredll_macnotfy.o: $(srcdir)/src/mac/macnotfy.cpp
 coredll_metal.o: $(srcdir)/src/univ/themes/metal.cpp
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
-coredll_mimetype.o: $(srcdir)/src/os2/mimetype.cpp
-	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
-
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@coredll_minifram.o: $(srcdir)/src/motif/minifram.cpp
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
@@ -8731,11 +8765,8 @@ coredll_tbargtk.o: $(srcdir)/src/gtk/tbargtk.cpp
 coredll_theme.o: $(srcdir)/src/univ/theme.cpp
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
-@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@coredll_thread.o: $(srcdir)/src/os2/thread.cpp
-@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
-
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_thread.o: $(srcdir)/src/mac/thread.cpp
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
+coredll_thread.o: $(srcdir)/src/mac/thread.cpp
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_timer.o: $(srcdir)/src/msw/timer.cpp
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
@@ -10200,9 +10231,6 @@ corelib_macnotfy.o: $(srcdir)/src/mac/macnotfy.cpp
 corelib_metal.o: $(srcdir)/src/univ/themes/metal.cpp
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
-corelib_mimetype.o: $(srcdir)/src/os2/mimetype.cpp
-	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
-
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@corelib_minifram.o: $(srcdir)/src/motif/minifram.cpp
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
@@ -10794,11 +10822,8 @@ corelib_tbargtk.o: $(srcdir)/src/gtk/tbargtk.cpp
 corelib_theme.o: $(srcdir)/src/univ/theme.cpp
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
-@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@corelib_thread.o: $(srcdir)/src/os2/thread.cpp
-@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
-
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_thread.o: $(srcdir)/src/mac/thread.cpp
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
+corelib_thread.o: $(srcdir)/src/mac/thread.cpp
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_timer.o: $(srcdir)/src/msw/timer.cpp
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
@@ -11533,6 +11558,9 @@ monodll_basemsw.o: $(srcdir)/src/msw/basemsw.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@monodll_baseunix.o: $(srcdir)/src/unix/baseunix.cpp
 @COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+@COND_PLATFORM_OS2_1@monodll_baseunix.o: $(srcdir)/src/unix/baseunix.cpp
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 @COND_TOOLKIT_MGL_USE_GUI_1@monodll_bitmap.o: $(srcdir)/src/mgl/bitmap.cpp
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
@@ -12947,8 +12975,8 @@ monodll_mimetmac.o: $(srcdir)/src/mac/mimetmac.cpp
 @COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@monodll_mimetype.o: $(srcdir)/src/unix/mimetype.cpp
 @COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_mimetype.o: $(srcdir)/src/os2/mimetype.cpp
-@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+@COND_PLATFORM_OS2_1@monodll_mimetype.o: $(srcdir)/src/os2/mimetype.cpp
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monodll_minifram.o: $(srcdir)/src/motif/minifram.cpp
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
@@ -13646,8 +13674,8 @@ monodll_theme.o: $(srcdir)/src/univ/theme.cpp
 @COND_PLATFORM_WIN32_1@monodll_thread.o: $(srcdir)/src/msw/thread.cpp
 @COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_thread.o: $(srcdir)/src/os2/thread.cpp
-@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+@COND_PLATFORM_OS2_1@monodll_thread.o: $(srcdir)/src/os2/thread.cpp
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_thread.o: $(srcdir)/src/mac/thread.cpp
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
@@ -14073,6 +14101,9 @@ monolib_basemsw.o: $(srcdir)/src/msw/basemsw.cpp
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@monolib_baseunix.o: $(srcdir)/src/unix/baseunix.cpp
 @COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+@COND_PLATFORM_OS2_1@monolib_baseunix.o: $(srcdir)/src/unix/baseunix.cpp
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_MGL_USE_GUI_1@monolib_bitmap.o: $(srcdir)/src/mgl/bitmap.cpp
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
@@ -15487,8 +15518,8 @@ monolib_mimetmac.o: $(srcdir)/src/mac/mimetmac.cpp
 @COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@monolib_mimetype.o: $(srcdir)/src/unix/mimetype.cpp
 @COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
-@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_mimetype.o: $(srcdir)/src/os2/mimetype.cpp
-@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+@COND_PLATFORM_OS2_1@monolib_mimetype.o: $(srcdir)/src/os2/mimetype.cpp
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monolib_minifram.o: $(srcdir)/src/motif/minifram.cpp
 @COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
@@ -16186,8 +16217,8 @@ monolib_theme.o: $(srcdir)/src/univ/theme.cpp
 @COND_PLATFORM_WIN32_1@monolib_thread.o: $(srcdir)/src/msw/thread.cpp
 @COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
-@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_thread.o: $(srcdir)/src/os2/thread.cpp
-@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+@COND_PLATFORM_OS2_1@monolib_thread.o: $(srcdir)/src/os2/thread.cpp
+@COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_thread.o: $(srcdir)/src/mac/thread.cpp
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<

@@ -16,7 +16,7 @@ INTERNAT_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS_7)$(__DEBUGRUNTIME_3) \
 	/DWIN32 $(__DEBUGINFO_0) /Fd$(OBJS)\internat.pdb $(____DEBUGRUNTIME_2_p) \
 	$(__OPTIMIZEFLAG_4) /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) /I.\..\..\include /I$(SETUPHDIR) /I. $(__DLLFLAG_p) \
-	/D_WINDOWS /I.\..\..\samples $(CXXFLAGS)
+	/D_WINDOWS /I.\..\..\samples $(CXXFLAGS) /GR /GX
 INTERNAT_OBJECTS =  \
 	$(OBJS)\internat_internat.obj \
 	$(OBJS)\internat_internat.res

@@ -118,7 +118,7 @@ mfctest$(EXEEXT): $(MFCTEST_OBJECTS) $(__mfctest___win32rc)
 	$(__mfctest___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-mfctest.app/Contents: mfctest$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+mfctest.app/Contents/PkgInfo: mfctest$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p mfctest.app/Contents
 	mkdir -p mfctest.app/Contents/MacOS
 	mkdir -p mfctest.app/Contents/Resources
@@ -139,7 +139,7 @@ mfctest.app/Contents: mfctest$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIB
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc mfctest.app/Contents/Resources/mfctest.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns mfctest.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@mfctest_bundle: mfctest.app/Contents
+@COND_PLATFORM_MACOSX_1@mfctest_bundle: mfctest.app/Contents/PkgInfo
 
 mfctest_mfctest.o: $(srcdir)/mfctest.cpp
 	$(CXXC) -c -o $@ $(MFCTEST_CXXFLAGS) $<

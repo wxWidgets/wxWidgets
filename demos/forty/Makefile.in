@@ -124,7 +124,7 @@ forty$(EXEEXT): $(FORTY_OBJECTS) $(__forty___win32rc)
 	$(__forty___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-forty.app/Contents: forty$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+forty.app/Contents/PkgInfo: forty$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p forty.app/Contents
 	mkdir -p forty.app/Contents/MacOS
 	mkdir -p forty.app/Contents/Resources
@@ -145,7 +145,7 @@ forty.app/Contents: forty$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRN
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc forty.app/Contents/Resources/forty.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns forty.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@forty_bundle: forty.app/Contents
+@COND_PLATFORM_MACOSX_1@forty_bundle: forty.app/Contents/PkgInfo
 
 forty_canvas.o: $(srcdir)/canvas.cpp
 	$(CXXC) -c -o $@ $(FORTY_CXXFLAGS) $<

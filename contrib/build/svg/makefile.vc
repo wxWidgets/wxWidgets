@@ -22,7 +22,7 @@ SVGDLL_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_3) /DWIN32 \
 	$(____DEBUGRUNTIME_2_p) $(__OPTIMIZEFLAG) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I..\..\src\svg\..\..\..\include \
 	/I$(SETUPHDIR) /I..\..\src\svg\..\..\include /DWXUSINGDLL /DWXMAKINGDLL_SVG \
-	$(CXXFLAGS) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_svgdll.pch"
+	$(CXXFLAGS) /GR /GX /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_svgdll.pch"
 SVGDLL_OBJECTS =  \
 	$(OBJS)\svgdll_dummy.obj \
 	$(OBJS)\svgdll_dcsvg.obj
@@ -31,8 +31,8 @@ SVGLIB_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_12) /DWIN32 \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_svg.pdb \
 	$(____DEBUGRUNTIME_11_p) $(__OPTIMIZEFLAG) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I..\..\src\svg\..\..\..\include \
-	/I$(SETUPHDIR) /I..\..\src\svg\..\..\include $(CXXFLAGS) /Yu"wx/wxprec.h" \
-	/Fp"$(OBJS)\wxprec_svglib.pch"
+	/I$(SETUPHDIR) /I..\..\src\svg\..\..\include $(CXXFLAGS) /GR /GX \
+	/Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_svglib.pch"
 SVGLIB_OBJECTS =  \
 	$(OBJS)\svglib_dummy.obj \
 	$(OBJS)\svglib_dcsvg.obj

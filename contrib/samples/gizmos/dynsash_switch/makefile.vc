@@ -17,7 +17,7 @@ DYNSASH_SWITCH_CXXFLAGS = $(CPPFLAGS) \
 	/Fd$(OBJS)\dynsash_switch.pdb $(____DEBUGRUNTIME_2_p) $(__OPTIMIZEFLAG_4) \
 	/D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	/I.\..\..\..\..\include /I$(SETUPHDIR) /I. $(__DLLFLAG_p) /D_WINDOWS \
-	/I.\..\..\..\..\samples /I.\..\..\..\include $(CXXFLAGS)
+	/I.\..\..\..\..\samples /I.\..\..\..\include $(CXXFLAGS) /GR /GX
 DYNSASH_SWITCH_OBJECTS =  \
 	$(OBJS)\dynsash_switch_sample.res \
 	$(OBJS)\dynsash_switch_dynsash_switch.obj

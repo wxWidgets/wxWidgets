@@ -56,8 +56,8 @@ RSC=rc.exe
 # PROP Output_Dir "..\..\src\svg\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswd\svg"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_lib\mswd" /Zi /Gm /GZ /Fd..\..\src\svg\..\..\..\lib\vc_lib\wxmsw25d_svg.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_svglib.pch" /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /c
-# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_lib\mswd" /Zi /Gm /GZ /Fd..\..\src\svg\..\..\..\lib\vc_lib\wxmsw25d_svg.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_svglib.pch" /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_lib\mswd" /Zi /Gm /GZ /Fd..\..\src\svg\..\..\..\lib\vc_lib\wxmsw25d_svg.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_svglib.pch" /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_lib\mswd" /Zi /Gm /GZ /Fd..\..\src\svg\..\..\..\lib\vc_lib\wxmsw25d_svg.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_svglib.pch" /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -79,8 +79,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\svg\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_msw\svg"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_lib\msw" /Fd..\..\src\svg\..\..\..\lib\vc_lib\wxmsw25_svg.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_svglib.pch" /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_lib\msw" /Fd..\..\src\svg\..\..\..\lib\vc_lib\wxmsw25_svg.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_svglib.pch" /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_lib\msw" /Fd..\..\src\svg\..\..\..\lib\vc_lib\wxmsw25_svg.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_svglib.pch" /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_lib\msw" /Fd..\..\src\svg\..\..\..\lib\vc_lib\wxmsw25_svg.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_svglib.pch" /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -102,8 +102,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\svg\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswud\svg"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_lib\mswud" /Zi /Gm /GZ /Fd..\..\src\svg\..\..\..\lib\vc_lib\wxmsw25ud_svg.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_svglib.pch" /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /c
-# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_lib\mswud" /Zi /Gm /GZ /Fd..\..\src\svg\..\..\..\lib\vc_lib\wxmsw25ud_svg.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_svglib.pch" /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_lib\mswud" /Zi /Gm /GZ /Fd..\..\src\svg\..\..\..\lib\vc_lib\wxmsw25ud_svg.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_svglib.pch" /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_lib\mswud" /Zi /Gm /GZ /Fd..\..\src\svg\..\..\..\lib\vc_lib\wxmsw25ud_svg.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_svglib.pch" /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -125,8 +125,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\svg\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswu\svg"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_lib\mswu" /Fd..\..\src\svg\..\..\..\lib\vc_lib\wxmsw25u_svg.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_svglib.pch" /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D wxUSE_UNICODE=1 /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_lib\mswu" /Fd..\..\src\svg\..\..\..\lib\vc_lib\wxmsw25u_svg.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_svglib.pch" /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D wxUSE_UNICODE=1 /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_lib\mswu" /Fd..\..\src\svg\..\..\..\lib\vc_lib\wxmsw25u_svg.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_svglib.pch" /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D wxUSE_UNICODE=1 /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_lib\mswu" /Fd..\..\src\svg\..\..\..\lib\vc_lib\wxmsw25u_svg.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_svglib.pch" /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D wxUSE_UNICODE=1 /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -148,8 +148,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\svg\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivd\svg"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_lib\mswunivd" /Zi /Gm /GZ /Fd..\..\src\svg\..\..\..\lib\vc_lib\wxmswuniv25d_svg.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_svglib.pch" /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /c
-# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_lib\mswunivd" /Zi /Gm /GZ /Fd..\..\src\svg\..\..\..\lib\vc_lib\wxmswuniv25d_svg.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_svglib.pch" /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_lib\mswunivd" /Zi /Gm /GZ /Fd..\..\src\svg\..\..\..\lib\vc_lib\wxmswuniv25d_svg.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_svglib.pch" /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_lib\mswunivd" /Zi /Gm /GZ /Fd..\..\src\svg\..\..\..\lib\vc_lib\wxmswuniv25d_svg.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_svglib.pch" /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -171,8 +171,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\svg\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswuniv\svg"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_lib\mswuniv" /Fd..\..\src\svg\..\..\..\lib\vc_lib\wxmswuniv25_svg.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_svglib.pch" /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_lib\mswuniv" /Fd..\..\src\svg\..\..\..\lib\vc_lib\wxmswuniv25_svg.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_svglib.pch" /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_lib\mswuniv" /Fd..\..\src\svg\..\..\..\lib\vc_lib\wxmswuniv25_svg.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_svglib.pch" /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_lib\mswuniv" /Fd..\..\src\svg\..\..\..\lib\vc_lib\wxmswuniv25_svg.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_svglib.pch" /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -194,8 +194,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\svg\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivud\svg"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_lib\mswunivud" /Zi /Gm /GZ /Fd..\..\src\svg\..\..\..\lib\vc_lib\wxmswuniv25ud_svg.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_svglib.pch" /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /c
-# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_lib\mswunivud" /Zi /Gm /GZ /Fd..\..\src\svg\..\..\..\lib\vc_lib\wxmswuniv25ud_svg.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_svglib.pch" /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_lib\mswunivud" /Zi /Gm /GZ /Fd..\..\src\svg\..\..\..\lib\vc_lib\wxmswuniv25ud_svg.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_svglib.pch" /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_lib\mswunivud" /Zi /Gm /GZ /Fd..\..\src\svg\..\..\..\lib\vc_lib\wxmswuniv25ud_svg.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_svglib.pch" /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -217,8 +217,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\svg\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivu\svg"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_lib\mswunivu" /Fd..\..\src\svg\..\..\..\lib\vc_lib\wxmswuniv25u_svg.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_svglib.pch" /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_lib\mswunivu" /Fd..\..\src\svg\..\..\..\lib\vc_lib\wxmswuniv25u_svg.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_svglib.pch" /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_lib\mswunivu" /Fd..\..\src\svg\..\..\..\lib\vc_lib\wxmswuniv25u_svg.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_svglib.pch" /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_lib\mswunivu" /Fd..\..\src\svg\..\..\..\lib\vc_lib\wxmswuniv25u_svg.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_svglib.pch" /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -240,8 +240,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\svg\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswddll\svg"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_dll\mswd" /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_svgdll.pch" /Zi /Gm /GZ /Fd..\..\src\svg\..\..\..\lib\vc_dll\wxmsw250d_svg_vc_custom.pdb /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /c
-# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_dll\mswd" /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_svgdll.pch" /Zi /Gm /GZ /Fd..\..\src\svg\..\..\..\lib\vc_dll\wxmsw250d_svg_vc_custom.pdb /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_dll\mswd" /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_svgdll.pch" /Zi /Gm /GZ /Fd..\..\src\svg\..\..\..\lib\vc_dll\wxmsw250d_svg_vc_custom.pdb /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_dll\mswd" /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_svgdll.pch" /Zi /Gm /GZ /Fd..\..\src\svg\..\..\..\lib\vc_dll\wxmsw250d_svg_vc_custom.pdb /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /i "..\..\src\svg\..\..\..\include" /i "..\..\src\svg\..\..\..\lib\vc_dll\mswd" /i "..\..\src\svg\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_SVG
@@ -265,8 +265,8 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\svg\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswdll\svg"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_dll\msw" /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_svgdll.pch" /Fd..\..\src\svg\..\..\..\lib\vc_dll\wxmsw250_svg_vc_custom.pdb /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_dll\msw" /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_svgdll.pch" /Fd..\..\src\svg\..\..\..\lib\vc_dll\wxmsw250_svg_vc_custom.pdb /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_dll\msw" /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_svgdll.pch" /Fd..\..\src\svg\..\..\..\lib\vc_dll\wxmsw250_svg_vc_custom.pdb /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_dll\msw" /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_svgdll.pch" /Fd..\..\src\svg\..\..\..\lib\vc_dll\wxmsw250_svg_vc_custom.pdb /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x405 /d "__WXMSW__" /i "..\..\src\svg\..\..\..\include" /i "..\..\src\svg\..\..\..\lib\vc_dll\msw" /i "..\..\src\svg\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_SVG
@@ -290,8 +290,8 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\svg\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswuddll\svg"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_dll\mswud" /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_svgdll.pch" /Zi /Gm /GZ /Fd..\..\src\svg\..\..\..\lib\vc_dll\wxmsw250ud_svg_vc_custom.pdb /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /c
-# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_dll\mswud" /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_svgdll.pch" /Zi /Gm /GZ /Fd..\..\src\svg\..\..\..\lib\vc_dll\wxmsw250ud_svg_vc_custom.pdb /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_dll\mswud" /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_svgdll.pch" /Zi /Gm /GZ /Fd..\..\src\svg\..\..\..\lib\vc_dll\wxmsw250ud_svg_vc_custom.pdb /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_dll\mswud" /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_svgdll.pch" /Zi /Gm /GZ /Fd..\..\src\svg\..\..\..\lib\vc_dll\wxmsw250ud_svg_vc_custom.pdb /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /d wxUSE_UNICODE=1 /i "..\..\src\svg\..\..\..\include" /i "..\..\src\svg\..\..\..\lib\vc_dll\mswud" /i "..\..\src\svg\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_SVG
@@ -315,8 +315,8 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\svg\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswudll\svg"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_dll\mswu" /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_svgdll.pch" /Fd..\..\src\svg\..\..\..\lib\vc_dll\wxmsw250u_svg_vc_custom.pdb /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_dll\mswu" /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_svgdll.pch" /Fd..\..\src\svg\..\..\..\lib\vc_dll\wxmsw250u_svg_vc_custom.pdb /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_dll\mswu" /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_svgdll.pch" /Fd..\..\src\svg\..\..\..\lib\vc_dll\wxmsw250u_svg_vc_custom.pdb /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_dll\mswu" /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_svgdll.pch" /Fd..\..\src\svg\..\..\..\lib\vc_dll\wxmsw250u_svg_vc_custom.pdb /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x405 /d "__WXMSW__" /d wxUSE_UNICODE=1 /i "..\..\src\svg\..\..\..\include" /i "..\..\src\svg\..\..\..\lib\vc_dll\mswu" /i "..\..\src\svg\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_SVG
@@ -340,8 +340,8 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\svg\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivddll\svg"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_dll\mswunivd" /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_svgdll.pch" /Zi /Gm /GZ /Fd..\..\src\svg\..\..\..\lib\vc_dll\wxmswuniv250d_svg_vc_custom.pdb /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /c
-# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_dll\mswunivd" /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_svgdll.pch" /Zi /Gm /GZ /Fd..\..\src\svg\..\..\..\lib\vc_dll\wxmswuniv250d_svg_vc_custom.pdb /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_dll\mswunivd" /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_svgdll.pch" /Zi /Gm /GZ /Fd..\..\src\svg\..\..\..\lib\vc_dll\wxmswuniv250d_svg_vc_custom.pdb /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_dll\mswunivd" /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_svgdll.pch" /Zi /Gm /GZ /Fd..\..\src\svg\..\..\..\lib\vc_dll\wxmswuniv250d_svg_vc_custom.pdb /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /i "..\..\src\svg\..\..\..\include" /i "..\..\src\svg\..\..\..\lib\vc_dll\mswunivd" /i "..\..\src\svg\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_SVG
@@ -365,8 +365,8 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\svg\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivdll\svg"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_dll\mswuniv" /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_svgdll.pch" /Fd..\..\src\svg\..\..\..\lib\vc_dll\wxmswuniv250_svg_vc_custom.pdb /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_dll\mswuniv" /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_svgdll.pch" /Fd..\..\src\svg\..\..\..\lib\vc_dll\wxmswuniv250_svg_vc_custom.pdb /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_dll\mswuniv" /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_svgdll.pch" /Fd..\..\src\svg\..\..\..\lib\vc_dll\wxmswuniv250_svg_vc_custom.pdb /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_dll\mswuniv" /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_svgdll.pch" /Fd..\..\src\svg\..\..\..\lib\vc_dll\wxmswuniv250_svg_vc_custom.pdb /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x405 /d "__WXMSW__" /d "__WXUNIVERSAL__" /i "..\..\src\svg\..\..\..\include" /i "..\..\src\svg\..\..\..\lib\vc_dll\mswuniv" /i "..\..\src\svg\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_SVG
@@ -390,8 +390,8 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\svg\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivuddll\svg"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_dll\mswunivud" /Yu"wx/wxprec.h" /Fp"vc_mswunivuddll\wxprec_svgdll.pch" /Zi /Gm /GZ /Fd..\..\src\svg\..\..\..\lib\vc_dll\wxmswuniv250ud_svg_vc_custom.pdb /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /c
-# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_dll\mswunivud" /Yu"wx/wxprec.h" /Fp"vc_mswunivuddll\wxprec_svgdll.pch" /Zi /Gm /GZ /Fd..\..\src\svg\..\..\..\lib\vc_dll\wxmswuniv250ud_svg_vc_custom.pdb /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_dll\mswunivud" /Yu"wx/wxprec.h" /Fp"vc_mswunivuddll\wxprec_svgdll.pch" /Zi /Gm /GZ /Fd..\..\src\svg\..\..\..\lib\vc_dll\wxmswuniv250ud_svg_vc_custom.pdb /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_dll\mswunivud" /Yu"wx/wxprec.h" /Fp"vc_mswunivuddll\wxprec_svgdll.pch" /Zi /Gm /GZ /Fd..\..\src\svg\..\..\..\lib\vc_dll\wxmswuniv250ud_svg_vc_custom.pdb /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /d wxUSE_UNICODE=1 /i "..\..\src\svg\..\..\..\include" /i "..\..\src\svg\..\..\..\lib\vc_dll\mswunivud" /i "..\..\src\svg\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_SVG
@@ -415,8 +415,8 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\svg\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivudll\svg"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_dll\mswunivu" /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_svgdll.pch" /Fd..\..\src\svg\..\..\..\lib\vc_dll\wxmswuniv250u_svg_vc_custom.pdb /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_dll\mswunivu" /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_svgdll.pch" /Fd..\..\src\svg\..\..\..\lib\vc_dll\wxmswuniv250u_svg_vc_custom.pdb /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_dll\mswunivu" /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_svgdll.pch" /Fd..\..\src\svg\..\..\..\lib\vc_dll\wxmswuniv250u_svg_vc_custom.pdb /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\svg\..\..\..\include" /I "..\..\src\svg\..\..\..\lib\vc_dll\mswunivu" /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_svgdll.pch" /Fd..\..\src\svg\..\..\..\lib\vc_dll\wxmswuniv250u_svg_vc_custom.pdb /I "..\..\src\svg\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_SVG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x405 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d wxUSE_UNICODE=1 /i "..\..\src\svg\..\..\..\include" /i "..\..\src\svg\..\..\..\lib\vc_dll\mswunivu" /i "..\..\src\svg\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_SVG

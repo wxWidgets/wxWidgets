@@ -118,7 +118,7 @@ treectrl$(EXEEXT): $(TREECTRL_OBJECTS) $(__treectrl___win32rc)
 	$(__treectrl___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-treectrl.app/Contents: treectrl$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+treectrl.app/Contents/PkgInfo: treectrl$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p treectrl.app/Contents
 	mkdir -p treectrl.app/Contents/MacOS
 	mkdir -p treectrl.app/Contents/Resources
@@ -139,7 +139,7 @@ treectrl.app/Contents: treectrl$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(L
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc treectrl.app/Contents/Resources/treectrl.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns treectrl.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@treectrl_bundle: treectrl.app/Contents
+@COND_PLATFORM_MACOSX_1@treectrl_bundle: treectrl.app/Contents/PkgInfo
 
 treectrl_treetest.o: $(srcdir)/treetest.cpp
 	$(CXXC) -c -o $@ $(TREECTRL_CXXFLAGS) $<

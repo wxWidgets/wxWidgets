@@ -119,7 +119,7 @@ resource$(EXEEXT): $(RESOURCE_OBJECTS) $(__resource___win32rc)
 	$(__resource___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-resource.app/Contents: resource$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+resource.app/Contents/PkgInfo: resource$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p resource.app/Contents
 	mkdir -p resource.app/Contents/MacOS
 	mkdir -p resource.app/Contents/Resources
@@ -140,7 +140,7 @@ resource.app/Contents: resource$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(L
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc resource.app/Contents/Resources/resource.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns resource.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@resource_bundle: resource.app/Contents
+@COND_PLATFORM_MACOSX_1@resource_bundle: resource.app/Contents/PkgInfo
 
 resource_resource.o: $(srcdir)/resource.cpp
 	$(CXXC) -c -o $@ $(RESOURCE_CXXFLAGS) $<

@@ -147,10 +147,10 @@ $(OBJS):
 
 all: $(OBJS)\isosurf.exe data
 
-$(OBJS)\isosurf_cube_rc.o: .\cube.rc
+$(OBJS)\isosurf_cube_rc.o: ./cube.rc
 	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../../samples
 
-$(OBJS)\isosurf_isosurf.o: .\isosurf.cpp
+$(OBJS)\isosurf_isosurf.o: ./isosurf.cpp
 	$(CXX) -c -o $@ $(ISOSURF_CXXFLAGS) $<
 
 clean: 

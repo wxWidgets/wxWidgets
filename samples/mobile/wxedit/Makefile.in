@@ -120,7 +120,7 @@ wxedit$(EXEEXT): $(WXEDIT_OBJECTS) $(__wxedit___win32rc)
 	$(__wxedit___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-wxedit.app/Contents: wxedit$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+wxedit.app/Contents/PkgInfo: wxedit$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p wxedit.app/Contents
 	mkdir -p wxedit.app/Contents/MacOS
 	mkdir -p wxedit.app/Contents/Resources
@@ -141,7 +141,7 @@ wxedit.app/Contents: wxedit$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDI
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc wxedit.app/Contents/Resources/wxedit.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns wxedit.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@wxedit_bundle: wxedit.app/Contents
+@COND_PLATFORM_MACOSX_1@wxedit_bundle: wxedit.app/Contents/PkgInfo
 
 wxedit_sample_rc.o: $(srcdir)/../../../samples/sample.rc
 	$(RESCOMP) -i$< -o$@ --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)   --include-dir $(top_srcdir)/include --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../../samples

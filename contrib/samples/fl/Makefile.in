@@ -204,7 +204,7 @@ fl_demo1$(EXEEXT): $(FL_DEMO1_OBJECTS) $(__fl_demo1___win32rc)
 	$(__fl_demo1___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-fl_demo1.app/Contents: fl_demo1$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+fl_demo1.app/Contents/PkgInfo: fl_demo1$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p fl_demo1.app/Contents
 	mkdir -p fl_demo1.app/Contents/MacOS
 	mkdir -p fl_demo1.app/Contents/Resources
@@ -225,7 +225,7 @@ fl_demo1.app/Contents: fl_demo1$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(L
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc fl_demo1.app/Contents/Resources/fl_demo1.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns fl_demo1.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@fl_demo1_bundle: fl_demo1.app/Contents
+@COND_PLATFORM_MACOSX_1@fl_demo1_bundle: fl_demo1.app/Contents/PkgInfo
 
 fl_demo1_fl_demo1.o: $(srcdir)/fl_demo1.cpp
 	$(CXXC) -c -o $@ $(FL_DEMO1_CXXFLAGS) $<
@@ -239,7 +239,7 @@ fl_demo2$(EXEEXT): $(FL_DEMO2_OBJECTS) $(__fl_demo2___win32rc)
 	$(__fl_demo2___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-fl_demo2.app/Contents: fl_demo2$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+fl_demo2.app/Contents/PkgInfo: fl_demo2$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p fl_demo2.app/Contents
 	mkdir -p fl_demo2.app/Contents/MacOS
 	mkdir -p fl_demo2.app/Contents/Resources
@@ -260,7 +260,7 @@ fl_demo2.app/Contents: fl_demo2$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(L
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc fl_demo2.app/Contents/Resources/fl_demo2.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns fl_demo2.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@fl_demo2_bundle: fl_demo2.app/Contents
+@COND_PLATFORM_MACOSX_1@fl_demo2_bundle: fl_demo2.app/Contents/PkgInfo
 
 fl_demo2_fl_demo2.o: $(srcdir)/fl_demo2.cpp
 	$(CXXC) -c -o $@ $(FL_DEMO2_CXXFLAGS) $<
@@ -274,7 +274,7 @@ fl_sample1$(EXEEXT): $(FL_SAMPLE1_OBJECTS) $(__fl_sample1___win32rc)
 	$(__fl_sample1___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-fl_sample1.app/Contents: fl_sample1$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+fl_sample1.app/Contents/PkgInfo: fl_sample1$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p fl_sample1.app/Contents
 	mkdir -p fl_sample1.app/Contents/MacOS
 	mkdir -p fl_sample1.app/Contents/Resources
@@ -295,7 +295,7 @@ fl_sample1.app/Contents: fl_sample1$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc fl_sample1.app/Contents/Resources/fl_sample1.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns fl_sample1.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@fl_sample1_bundle: fl_sample1.app/Contents
+@COND_PLATFORM_MACOSX_1@fl_sample1_bundle: fl_sample1.app/Contents/PkgInfo
 
 fl_sample1_fl_sample1.o: $(srcdir)/fl_sample1.cpp
 	$(CXXC) -c -o $@ $(FL_SAMPLE1_CXXFLAGS) $<
@@ -309,7 +309,7 @@ fl_sample2$(EXEEXT): $(FL_SAMPLE2_OBJECTS) $(__fl_sample2___win32rc)
 	$(__fl_sample2___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-fl_sample2.app/Contents: fl_sample2$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+fl_sample2.app/Contents/PkgInfo: fl_sample2$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p fl_sample2.app/Contents
 	mkdir -p fl_sample2.app/Contents/MacOS
 	mkdir -p fl_sample2.app/Contents/Resources
@@ -330,7 +330,7 @@ fl_sample2.app/Contents: fl_sample2$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc fl_sample2.app/Contents/Resources/fl_sample2.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns fl_sample2.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@fl_sample2_bundle: fl_sample2.app/Contents
+@COND_PLATFORM_MACOSX_1@fl_sample2_bundle: fl_sample2.app/Contents/PkgInfo
 
 fl_sample2_fl_sample2.o: $(srcdir)/fl_sample2.cpp
 	$(CXXC) -c -o $@ $(FL_SAMPLE2_CXXFLAGS) $<
@@ -344,7 +344,7 @@ fl_sample3$(EXEEXT): $(FL_SAMPLE3_OBJECTS) $(__fl_sample3___win32rc)
 	$(__fl_sample3___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-fl_sample3.app/Contents: fl_sample3$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+fl_sample3.app/Contents/PkgInfo: fl_sample3$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p fl_sample3.app/Contents
 	mkdir -p fl_sample3.app/Contents/MacOS
 	mkdir -p fl_sample3.app/Contents/Resources
@@ -365,7 +365,7 @@ fl_sample3.app/Contents: fl_sample3$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc fl_sample3.app/Contents/Resources/fl_sample3.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns fl_sample3.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@fl_sample3_bundle: fl_sample3.app/Contents
+@COND_PLATFORM_MACOSX_1@fl_sample3_bundle: fl_sample3.app/Contents/PkgInfo
 
 fl_sample3_fl_sample3.o: $(srcdir)/fl_sample3.cpp
 	$(CXXC) -c -o $@ $(FL_SAMPLE3_CXXFLAGS) $<

@@ -56,8 +56,8 @@ RSC=rc.exe
 # PROP Output_Dir "..\..\src\net\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswd\netutils"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_lib\mswd" /Zi /Gm /GZ /Fd..\..\src\net\..\..\..\lib\vc_lib\wxmsw25d_netutils.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_netutilslib.pch" /I "..\..\src\net\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /c
-# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_lib\mswd" /Zi /Gm /GZ /Fd..\..\src\net\..\..\..\lib\vc_lib\wxmsw25d_netutils.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_netutilslib.pch" /I "..\..\src\net\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_lib\mswd" /Zi /Gm /GZ /Fd..\..\src\net\..\..\..\lib\vc_lib\wxmsw25d_netutils.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_netutilslib.pch" /I "..\..\src\net\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_lib\mswd" /Zi /Gm /GZ /Fd..\..\src\net\..\..\..\lib\vc_lib\wxmsw25d_netutils.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_netutilslib.pch" /I "..\..\src\net\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -79,8 +79,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\net\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_msw\netutils"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_lib\msw" /Fd..\..\src\net\..\..\..\lib\vc_lib\wxmsw25_netutils.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_netutilslib.pch" /I "..\..\src\net\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_lib\msw" /Fd..\..\src\net\..\..\..\lib\vc_lib\wxmsw25_netutils.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_netutilslib.pch" /I "..\..\src\net\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_lib\msw" /Fd..\..\src\net\..\..\..\lib\vc_lib\wxmsw25_netutils.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_netutilslib.pch" /I "..\..\src\net\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_lib\msw" /Fd..\..\src\net\..\..\..\lib\vc_lib\wxmsw25_netutils.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_netutilslib.pch" /I "..\..\src\net\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -102,8 +102,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\net\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswud\netutils"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_lib\mswud" /Zi /Gm /GZ /Fd..\..\src\net\..\..\..\lib\vc_lib\wxmsw25ud_netutils.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_netutilslib.pch" /I "..\..\src\net\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /c
-# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_lib\mswud" /Zi /Gm /GZ /Fd..\..\src\net\..\..\..\lib\vc_lib\wxmsw25ud_netutils.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_netutilslib.pch" /I "..\..\src\net\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_lib\mswud" /Zi /Gm /GZ /Fd..\..\src\net\..\..\..\lib\vc_lib\wxmsw25ud_netutils.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_netutilslib.pch" /I "..\..\src\net\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_lib\mswud" /Zi /Gm /GZ /Fd..\..\src\net\..\..\..\lib\vc_lib\wxmsw25ud_netutils.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_netutilslib.pch" /I "..\..\src\net\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -125,8 +125,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\net\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswu\netutils"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_lib\mswu" /Fd..\..\src\net\..\..\..\lib\vc_lib\wxmsw25u_netutils.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_netutilslib.pch" /I "..\..\src\net\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D wxUSE_UNICODE=1 /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_lib\mswu" /Fd..\..\src\net\..\..\..\lib\vc_lib\wxmsw25u_netutils.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_netutilslib.pch" /I "..\..\src\net\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D wxUSE_UNICODE=1 /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_lib\mswu" /Fd..\..\src\net\..\..\..\lib\vc_lib\wxmsw25u_netutils.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_netutilslib.pch" /I "..\..\src\net\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D wxUSE_UNICODE=1 /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_lib\mswu" /Fd..\..\src\net\..\..\..\lib\vc_lib\wxmsw25u_netutils.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_netutilslib.pch" /I "..\..\src\net\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D wxUSE_UNICODE=1 /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -148,8 +148,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\net\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivd\netutils"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_lib\mswunivd" /Zi /Gm /GZ /Fd..\..\src\net\..\..\..\lib\vc_lib\wxmswuniv25d_netutils.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_netutilslib.pch" /I "..\..\src\net\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /c
-# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_lib\mswunivd" /Zi /Gm /GZ /Fd..\..\src\net\..\..\..\lib\vc_lib\wxmswuniv25d_netutils.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_netutilslib.pch" /I "..\..\src\net\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_lib\mswunivd" /Zi /Gm /GZ /Fd..\..\src\net\..\..\..\lib\vc_lib\wxmswuniv25d_netutils.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_netutilslib.pch" /I "..\..\src\net\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_lib\mswunivd" /Zi /Gm /GZ /Fd..\..\src\net\..\..\..\lib\vc_lib\wxmswuniv25d_netutils.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_netutilslib.pch" /I "..\..\src\net\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -171,8 +171,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\net\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswuniv\netutils"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_lib\mswuniv" /Fd..\..\src\net\..\..\..\lib\vc_lib\wxmswuniv25_netutils.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_netutilslib.pch" /I "..\..\src\net\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_lib\mswuniv" /Fd..\..\src\net\..\..\..\lib\vc_lib\wxmswuniv25_netutils.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_netutilslib.pch" /I "..\..\src\net\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_lib\mswuniv" /Fd..\..\src\net\..\..\..\lib\vc_lib\wxmswuniv25_netutils.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_netutilslib.pch" /I "..\..\src\net\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_lib\mswuniv" /Fd..\..\src\net\..\..\..\lib\vc_lib\wxmswuniv25_netutils.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_netutilslib.pch" /I "..\..\src\net\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -194,8 +194,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\net\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivud\netutils"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_lib\mswunivud" /Zi /Gm /GZ /Fd..\..\src\net\..\..\..\lib\vc_lib\wxmswuniv25ud_netutils.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_netutilslib.pch" /I "..\..\src\net\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /c
-# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_lib\mswunivud" /Zi /Gm /GZ /Fd..\..\src\net\..\..\..\lib\vc_lib\wxmswuniv25ud_netutils.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_netutilslib.pch" /I "..\..\src\net\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_lib\mswunivud" /Zi /Gm /GZ /Fd..\..\src\net\..\..\..\lib\vc_lib\wxmswuniv25ud_netutils.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_netutilslib.pch" /I "..\..\src\net\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_lib\mswunivud" /Zi /Gm /GZ /Fd..\..\src\net\..\..\..\lib\vc_lib\wxmswuniv25ud_netutils.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_netutilslib.pch" /I "..\..\src\net\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -217,8 +217,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\net\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivu\netutils"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_lib\mswunivu" /Fd..\..\src\net\..\..\..\lib\vc_lib\wxmswuniv25u_netutils.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_netutilslib.pch" /I "..\..\src\net\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_lib\mswunivu" /Fd..\..\src\net\..\..\..\lib\vc_lib\wxmswuniv25u_netutils.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_netutilslib.pch" /I "..\..\src\net\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_lib\mswunivu" /Fd..\..\src\net\..\..\..\lib\vc_lib\wxmswuniv25u_netutils.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_netutilslib.pch" /I "..\..\src\net\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_lib\mswunivu" /Fd..\..\src\net\..\..\..\lib\vc_lib\wxmswuniv25u_netutils.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_netutilslib.pch" /I "..\..\src\net\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -240,8 +240,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\net\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswddll\netutils"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_dll\mswd" /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_netutilsdll.pch" /Zi /Gm /GZ /Fd..\..\src\net\..\..\..\lib\vc_dll\wxmsw250d_netutils_vc_custom.pdb /I "..\..\src\net\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /c
-# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_dll\mswd" /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_netutilsdll.pch" /Zi /Gm /GZ /Fd..\..\src\net\..\..\..\lib\vc_dll\wxmsw250d_netutils_vc_custom.pdb /I "..\..\src\net\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_dll\mswd" /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_netutilsdll.pch" /Zi /Gm /GZ /Fd..\..\src\net\..\..\..\lib\vc_dll\wxmsw250d_netutils_vc_custom.pdb /I "..\..\src\net\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_dll\mswd" /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_netutilsdll.pch" /Zi /Gm /GZ /Fd..\..\src\net\..\..\..\lib\vc_dll\wxmsw250d_netutils_vc_custom.pdb /I "..\..\src\net\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /mktyplib203 /win32
 # ADD BASE RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /i "..\..\src\net\..\..\..\include" /i "..\..\src\net\..\..\..\lib\vc_dll\mswd" /i "..\..\src\net\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_NETUTILS
@@ -265,8 +265,8 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\net\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswdll\netutils"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_dll\msw" /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_netutilsdll.pch" /Fd..\..\src\net\..\..\..\lib\vc_dll\wxmsw250_netutils_vc_custom.pdb /I "..\..\src\net\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_dll\msw" /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_netutilsdll.pch" /Fd..\..\src\net\..\..\..\lib\vc_dll\wxmsw250_netutils_vc_custom.pdb /I "..\..\src\net\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_dll\msw" /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_netutilsdll.pch" /Fd..\..\src\net\..\..\..\lib\vc_dll\wxmsw250_netutils_vc_custom.pdb /I "..\..\src\net\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_dll\msw" /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_netutilsdll.pch" /Fd..\..\src\net\..\..\..\lib\vc_dll\wxmsw250_netutils_vc_custom.pdb /I "..\..\src\net\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /mktyplib203 /win32
 # ADD BASE RSC /l 0x405 /d "__WXMSW__" /i "..\..\src\net\..\..\..\include" /i "..\..\src\net\..\..\..\lib\vc_dll\msw" /i "..\..\src\net\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_NETUTILS
@@ -290,8 +290,8 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\net\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswuddll\netutils"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_dll\mswud" /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_netutilsdll.pch" /Zi /Gm /GZ /Fd..\..\src\net\..\..\..\lib\vc_dll\wxmsw250ud_netutils_vc_custom.pdb /I "..\..\src\net\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /c
-# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_dll\mswud" /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_netutilsdll.pch" /Zi /Gm /GZ /Fd..\..\src\net\..\..\..\lib\vc_dll\wxmsw250ud_netutils_vc_custom.pdb /I "..\..\src\net\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_dll\mswud" /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_netutilsdll.pch" /Zi /Gm /GZ /Fd..\..\src\net\..\..\..\lib\vc_dll\wxmsw250ud_netutils_vc_custom.pdb /I "..\..\src\net\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_dll\mswud" /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_netutilsdll.pch" /Zi /Gm /GZ /Fd..\..\src\net\..\..\..\lib\vc_dll\wxmsw250ud_netutils_vc_custom.pdb /I "..\..\src\net\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /mktyplib203 /win32
 # ADD BASE RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /d wxUSE_UNICODE=1 /i "..\..\src\net\..\..\..\include" /i "..\..\src\net\..\..\..\lib\vc_dll\mswud" /i "..\..\src\net\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_NETUTILS
@@ -315,8 +315,8 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\net\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswudll\netutils"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_dll\mswu" /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_netutilsdll.pch" /Fd..\..\src\net\..\..\..\lib\vc_dll\wxmsw250u_netutils_vc_custom.pdb /I "..\..\src\net\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_dll\mswu" /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_netutilsdll.pch" /Fd..\..\src\net\..\..\..\lib\vc_dll\wxmsw250u_netutils_vc_custom.pdb /I "..\..\src\net\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_dll\mswu" /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_netutilsdll.pch" /Fd..\..\src\net\..\..\..\lib\vc_dll\wxmsw250u_netutils_vc_custom.pdb /I "..\..\src\net\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_dll\mswu" /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_netutilsdll.pch" /Fd..\..\src\net\..\..\..\lib\vc_dll\wxmsw250u_netutils_vc_custom.pdb /I "..\..\src\net\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /mktyplib203 /win32
 # ADD BASE RSC /l 0x405 /d "__WXMSW__" /d wxUSE_UNICODE=1 /i "..\..\src\net\..\..\..\include" /i "..\..\src\net\..\..\..\lib\vc_dll\mswu" /i "..\..\src\net\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_NETUTILS
@@ -340,8 +340,8 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\net\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivddll\netutils"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_dll\mswunivd" /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_netutilsdll.pch" /Zi /Gm /GZ /Fd..\..\src\net\..\..\..\lib\vc_dll\wxmswuniv250d_netutils_vc_custom.pdb /I "..\..\src\net\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /c
-# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_dll\mswunivd" /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_netutilsdll.pch" /Zi /Gm /GZ /Fd..\..\src\net\..\..\..\lib\vc_dll\wxmswuniv250d_netutils_vc_custom.pdb /I "..\..\src\net\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_dll\mswunivd" /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_netutilsdll.pch" /Zi /Gm /GZ /Fd..\..\src\net\..\..\..\lib\vc_dll\wxmswuniv250d_netutils_vc_custom.pdb /I "..\..\src\net\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_dll\mswunivd" /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_netutilsdll.pch" /Zi /Gm /GZ /Fd..\..\src\net\..\..\..\lib\vc_dll\wxmswuniv250d_netutils_vc_custom.pdb /I "..\..\src\net\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /mktyplib203 /win32
 # ADD BASE RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /i "..\..\src\net\..\..\..\include" /i "..\..\src\net\..\..\..\lib\vc_dll\mswunivd" /i "..\..\src\net\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_NETUTILS
@@ -365,8 +365,8 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\net\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivdll\netutils"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_dll\mswuniv" /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_netutilsdll.pch" /Fd..\..\src\net\..\..\..\lib\vc_dll\wxmswuniv250_netutils_vc_custom.pdb /I "..\..\src\net\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_dll\mswuniv" /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_netutilsdll.pch" /Fd..\..\src\net\..\..\..\lib\vc_dll\wxmswuniv250_netutils_vc_custom.pdb /I "..\..\src\net\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_dll\mswuniv" /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_netutilsdll.pch" /Fd..\..\src\net\..\..\..\lib\vc_dll\wxmswuniv250_netutils_vc_custom.pdb /I "..\..\src\net\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_dll\mswuniv" /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_netutilsdll.pch" /Fd..\..\src\net\..\..\..\lib\vc_dll\wxmswuniv250_netutils_vc_custom.pdb /I "..\..\src\net\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /mktyplib203 /win32
 # ADD BASE RSC /l 0x405 /d "__WXMSW__" /d "__WXUNIVERSAL__" /i "..\..\src\net\..\..\..\include" /i "..\..\src\net\..\..\..\lib\vc_dll\mswuniv" /i "..\..\src\net\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_NETUTILS
@@ -390,8 +390,8 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\net\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivuddll\netutils"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_dll\mswunivud" /Yu"wx/wxprec.h" /Fp"vc_mswunivuddll\wxprec_netutilsdll.pch" /Zi /Gm /GZ /Fd..\..\src\net\..\..\..\lib\vc_dll\wxmswuniv250ud_netutils_vc_custom.pdb /I "..\..\src\net\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /c
-# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_dll\mswunivud" /Yu"wx/wxprec.h" /Fp"vc_mswunivuddll\wxprec_netutilsdll.pch" /Zi /Gm /GZ /Fd..\..\src\net\..\..\..\lib\vc_dll\wxmswuniv250ud_netutils_vc_custom.pdb /I "..\..\src\net\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_dll\mswunivud" /Yu"wx/wxprec.h" /Fp"vc_mswunivuddll\wxprec_netutilsdll.pch" /Zi /Gm /GZ /Fd..\..\src\net\..\..\..\lib\vc_dll\wxmswuniv250ud_netutils_vc_custom.pdb /I "..\..\src\net\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_dll\mswunivud" /Yu"wx/wxprec.h" /Fp"vc_mswunivuddll\wxprec_netutilsdll.pch" /Zi /Gm /GZ /Fd..\..\src\net\..\..\..\lib\vc_dll\wxmswuniv250ud_netutils_vc_custom.pdb /I "..\..\src\net\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /mktyplib203 /win32
 # ADD BASE RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /d wxUSE_UNICODE=1 /i "..\..\src\net\..\..\..\include" /i "..\..\src\net\..\..\..\lib\vc_dll\mswunivud" /i "..\..\src\net\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_NETUTILS
@@ -415,8 +415,8 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\net\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivudll\netutils"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_dll\mswunivu" /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_netutilsdll.pch" /Fd..\..\src\net\..\..\..\lib\vc_dll\wxmswuniv250u_netutils_vc_custom.pdb /I "..\..\src\net\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_dll\mswunivu" /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_netutilsdll.pch" /Fd..\..\src\net\..\..\..\lib\vc_dll\wxmswuniv250u_netutils_vc_custom.pdb /I "..\..\src\net\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_dll\mswunivu" /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_netutilsdll.pch" /Fd..\..\src\net\..\..\..\lib\vc_dll\wxmswuniv250u_netutils_vc_custom.pdb /I "..\..\src\net\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\net\..\..\..\include" /I "..\..\src\net\..\..\..\lib\vc_dll\mswunivu" /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_netutilsdll.pch" /Fd..\..\src\net\..\..\..\lib\vc_dll\wxmswuniv250u_netutils_vc_custom.pdb /I "..\..\src\net\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_NETUTILS" /mktyplib203 /win32
 # ADD BASE RSC /l 0x405 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d wxUSE_UNICODE=1 /i "..\..\src\net\..\..\..\include" /i "..\..\src\net\..\..\..\lib\vc_dll\mswunivu" /i "..\..\src\net\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_NETUTILS

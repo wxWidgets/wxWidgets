@@ -147,10 +147,10 @@ $(OBJS):
 
 all: $(OBJS)\fractal.exe
 
-$(OBJS)\fractal_fractal.o: .\fractal.cpp
+$(OBJS)\fractal_fractal.o: ./fractal.cpp
 	$(CXX) -c -o $@ $(FRACTAL_CXXFLAGS) $<
 
-$(OBJS)\fractal_fractal_rc.o: .\fractal.rc
+$(OBJS)\fractal_fractal_rc.o: ./fractal.rc
 	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../samples
 
 clean: 

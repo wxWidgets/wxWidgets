@@ -171,49 +171,49 @@ $(OBJS):
 
 all: $(OBJS)\wxconfigtool.exe data
 
-$(OBJS)\wxconfigtool_appsettings.o: .\appsettings.cpp
+$(OBJS)\wxconfigtool_appsettings.o: ./appsettings.cpp
 	$(CXX) -c -o $@ $(WXCONFIGTOOL_CXXFLAGS) $<
 
-$(OBJS)\wxconfigtool_configitem.o: .\configitem.cpp
+$(OBJS)\wxconfigtool_configitem.o: ./configitem.cpp
 	$(CXX) -c -o $@ $(WXCONFIGTOOL_CXXFLAGS) $<
 
-$(OBJS)\wxconfigtool_configitemselector.o: .\configitemselector.cpp
+$(OBJS)\wxconfigtool_configitemselector.o: ./configitemselector.cpp
 	$(CXX) -c -o $@ $(WXCONFIGTOOL_CXXFLAGS) $<
 
-$(OBJS)\wxconfigtool_configtooldoc.o: .\configtooldoc.cpp
+$(OBJS)\wxconfigtool_configtooldoc.o: ./configtooldoc.cpp
 	$(CXX) -c -o $@ $(WXCONFIGTOOL_CXXFLAGS) $<
 
-$(OBJS)\wxconfigtool_configtoolview.o: .\configtoolview.cpp
+$(OBJS)\wxconfigtool_configtoolview.o: ./configtoolview.cpp
 	$(CXX) -c -o $@ $(WXCONFIGTOOL_CXXFLAGS) $<
 
-$(OBJS)\wxconfigtool_configtree.o: .\configtree.cpp
+$(OBJS)\wxconfigtool_configtree.o: ./configtree.cpp
 	$(CXX) -c -o $@ $(WXCONFIGTOOL_CXXFLAGS) $<
 
-$(OBJS)\wxconfigtool_custompropertydialog.o: .\custompropertydialog.cpp
+$(OBJS)\wxconfigtool_custompropertydialog.o: ./custompropertydialog.cpp
 	$(CXX) -c -o $@ $(WXCONFIGTOOL_CXXFLAGS) $<
 
-$(OBJS)\wxconfigtool_htmlparser.o: .\htmlparser.cpp
+$(OBJS)\wxconfigtool_htmlparser.o: ./htmlparser.cpp
 	$(CXX) -c -o $@ $(WXCONFIGTOOL_CXXFLAGS) $<
 
-$(OBJS)\wxconfigtool_mainframe.o: .\mainframe.cpp
+$(OBJS)\wxconfigtool_mainframe.o: ./mainframe.cpp
 	$(CXX) -c -o $@ $(WXCONFIGTOOL_CXXFLAGS) $<
 
-$(OBJS)\wxconfigtool_propeditor.o: .\propeditor.cpp
+$(OBJS)\wxconfigtool_propeditor.o: ./propeditor.cpp
 	$(CXX) -c -o $@ $(WXCONFIGTOOL_CXXFLAGS) $<
 
-$(OBJS)\wxconfigtool_property.o: .\property.cpp
+$(OBJS)\wxconfigtool_property.o: ./property.cpp
 	$(CXX) -c -o $@ $(WXCONFIGTOOL_CXXFLAGS) $<
 
-$(OBJS)\wxconfigtool_sample_rc.o: .\..\..\..\samples\sample.rc
+$(OBJS)\wxconfigtool_sample_rc.o: ./../../../samples/sample.rc
 	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../../samples
 
-$(OBJS)\wxconfigtool_settingsdialog.o: .\settingsdialog.cpp
+$(OBJS)\wxconfigtool_settingsdialog.o: ./settingsdialog.cpp
 	$(CXX) -c -o $@ $(WXCONFIGTOOL_CXXFLAGS) $<
 
-$(OBJS)\wxconfigtool_utils.o: .\utils.cpp
+$(OBJS)\wxconfigtool_utils.o: ./utils.cpp
 	$(CXX) -c -o $@ $(WXCONFIGTOOL_CXXFLAGS) $<
 
-$(OBJS)\wxconfigtool_wxconfigtool.o: .\wxconfigtool.cpp
+$(OBJS)\wxconfigtool_wxconfigtool.o: ./wxconfigtool.cpp
 	$(CXX) -c -o $@ $(WXCONFIGTOOL_CXXFLAGS) $<
 
 clean: 

@@ -170,82 +170,82 @@ $(OBJS):
 
 all: $(__ogldll___depname) $(__ogllib___depname)
 
-$(OBJS)\ogldll_basic.o: ../../src/ogl\basic.cpp
+$(OBJS)\ogldll_basic.o: ../../src/ogl/basic.cpp
 	$(CXX) -c -o $@ $(OGLDLL_CXXFLAGS) $<
 
-$(OBJS)\ogldll_basic2.o: ../../src/ogl\basic2.cpp
+$(OBJS)\ogldll_basic2.o: ../../src/ogl/basic2.cpp
 	$(CXX) -c -o $@ $(OGLDLL_CXXFLAGS) $<
 
-$(OBJS)\ogldll_bmpshape.o: ../../src/ogl\bmpshape.cpp
+$(OBJS)\ogldll_bmpshape.o: ../../src/ogl/bmpshape.cpp
 	$(CXX) -c -o $@ $(OGLDLL_CXXFLAGS) $<
 
-$(OBJS)\ogldll_canvas.o: ../../src/ogl\canvas.cpp
+$(OBJS)\ogldll_canvas.o: ../../src/ogl/canvas.cpp
 	$(CXX) -c -o $@ $(OGLDLL_CXXFLAGS) $<
 
-$(OBJS)\ogldll_composit.o: ../../src/ogl\composit.cpp
+$(OBJS)\ogldll_composit.o: ../../src/ogl/composit.cpp
 	$(CXX) -c -o $@ $(OGLDLL_CXXFLAGS) $<
 
-$(OBJS)\ogldll_constrnt.o: ../../src/ogl\constrnt.cpp
+$(OBJS)\ogldll_constrnt.o: ../../src/ogl/constrnt.cpp
 	$(CXX) -c -o $@ $(OGLDLL_CXXFLAGS) $<
 
-$(OBJS)\ogldll_divided.o: ../../src/ogl\divided.cpp
+$(OBJS)\ogldll_divided.o: ../../src/ogl/divided.cpp
 	$(CXX) -c -o $@ $(OGLDLL_CXXFLAGS) $<
 
-$(OBJS)\ogldll_drawn.o: ../../src/ogl\drawn.cpp
+$(OBJS)\ogldll_drawn.o: ../../src/ogl/drawn.cpp
 	$(CXX) -c -o $@ $(OGLDLL_CXXFLAGS) $<
 
-$(OBJS)\ogldll_dummy.o: ../../src/ogl\..\..\..\src\msw\dummy.cpp
+$(OBJS)\ogldll_dummy.o: ../../src/ogl/../../../src/msw/dummy.cpp
 	$(CXX) -c -o $@ $(OGLDLL_CXXFLAGS) $<
 
-$(OBJS)\ogldll_lines.o: ../../src/ogl\lines.cpp
+$(OBJS)\ogldll_lines.o: ../../src/ogl/lines.cpp
 	$(CXX) -c -o $@ $(OGLDLL_CXXFLAGS) $<
 
-$(OBJS)\ogldll_mfutils.o: ../../src/ogl\mfutils.cpp
+$(OBJS)\ogldll_mfutils.o: ../../src/ogl/mfutils.cpp
 	$(CXX) -c -o $@ $(OGLDLL_CXXFLAGS) $<
 
-$(OBJS)\ogldll_ogldiag.o: ../../src/ogl\ogldiag.cpp
+$(OBJS)\ogldll_ogldiag.o: ../../src/ogl/ogldiag.cpp
 	$(CXX) -c -o $@ $(OGLDLL_CXXFLAGS) $<
 
-$(OBJS)\ogldll_oglmisc.o: ../../src/ogl\oglmisc.cpp
+$(OBJS)\ogldll_oglmisc.o: ../../src/ogl/oglmisc.cpp
 	$(CXX) -c -o $@ $(OGLDLL_CXXFLAGS) $<
 
-$(OBJS)\ogllib_basic.o: ../../src/ogl\basic.cpp
+$(OBJS)\ogllib_basic.o: ../../src/ogl/basic.cpp
 	$(CXX) -c -o $@ $(OGLLIB_CXXFLAGS) $<
 
-$(OBJS)\ogllib_basic2.o: ../../src/ogl\basic2.cpp
+$(OBJS)\ogllib_basic2.o: ../../src/ogl/basic2.cpp
 	$(CXX) -c -o $@ $(OGLLIB_CXXFLAGS) $<
 
-$(OBJS)\ogllib_bmpshape.o: ../../src/ogl\bmpshape.cpp
+$(OBJS)\ogllib_bmpshape.o: ../../src/ogl/bmpshape.cpp
 	$(CXX) -c -o $@ $(OGLLIB_CXXFLAGS) $<
 
-$(OBJS)\ogllib_canvas.o: ../../src/ogl\canvas.cpp
+$(OBJS)\ogllib_canvas.o: ../../src/ogl/canvas.cpp
 	$(CXX) -c -o $@ $(OGLLIB_CXXFLAGS) $<
 
-$(OBJS)\ogllib_composit.o: ../../src/ogl\composit.cpp
+$(OBJS)\ogllib_composit.o: ../../src/ogl/composit.cpp
 	$(CXX) -c -o $@ $(OGLLIB_CXXFLAGS) $<
 
-$(OBJS)\ogllib_constrnt.o: ../../src/ogl\constrnt.cpp
+$(OBJS)\ogllib_constrnt.o: ../../src/ogl/constrnt.cpp
 	$(CXX) -c -o $@ $(OGLLIB_CXXFLAGS) $<
 
-$(OBJS)\ogllib_divided.o: ../../src/ogl\divided.cpp
+$(OBJS)\ogllib_divided.o: ../../src/ogl/divided.cpp
 	$(CXX) -c -o $@ $(OGLLIB_CXXFLAGS) $<
 
-$(OBJS)\ogllib_drawn.o: ../../src/ogl\drawn.cpp
+$(OBJS)\ogllib_drawn.o: ../../src/ogl/drawn.cpp
 	$(CXX) -c -o $@ $(OGLLIB_CXXFLAGS) $<
 
-$(OBJS)\ogllib_dummy.o: ../../src/ogl\..\..\..\src\msw\dummy.cpp
+$(OBJS)\ogllib_dummy.o: ../../src/ogl/../../../src/msw/dummy.cpp
 	$(CXX) -c -o $@ $(OGLLIB_CXXFLAGS) $<
 
-$(OBJS)\ogllib_lines.o: ../../src/ogl\lines.cpp
+$(OBJS)\ogllib_lines.o: ../../src/ogl/lines.cpp
 	$(CXX) -c -o $@ $(OGLLIB_CXXFLAGS) $<
 
-$(OBJS)\ogllib_mfutils.o: ../../src/ogl\mfutils.cpp
+$(OBJS)\ogllib_mfutils.o: ../../src/ogl/mfutils.cpp
 	$(CXX) -c -o $@ $(OGLLIB_CXXFLAGS) $<
 
-$(OBJS)\ogllib_ogldiag.o: ../../src/ogl\ogldiag.cpp
+$(OBJS)\ogllib_ogldiag.o: ../../src/ogl/ogldiag.cpp
 	$(CXX) -c -o $@ $(OGLLIB_CXXFLAGS) $<
 
-$(OBJS)\ogllib_oglmisc.o: ../../src/ogl\oglmisc.cpp
+$(OBJS)\ogllib_oglmisc.o: ../../src/ogl/oglmisc.cpp
 	$(CXX) -c -o $@ $(OGLLIB_CXXFLAGS) $<
 
 clean: 

@@ -131,7 +131,7 @@ client$(EXEEXT): $(CLIENT_OBJECTS) $(__client___win32rc)
 	$(__client___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-client.app/Contents: client$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+client.app/Contents/PkgInfo: client$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p client.app/Contents
 	mkdir -p client.app/Contents/MacOS
 	mkdir -p client.app/Contents/Resources
@@ -152,7 +152,7 @@ client.app/Contents: client$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDI
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc client.app/Contents/Resources/client.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns client.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@client_bundle: client.app/Contents
+@COND_PLATFORM_MACOSX_1@client_bundle: client.app/Contents/PkgInfo
 
 client_client.o: $(srcdir)/client.cpp
 	$(CXXC) -c -o $@ $(CLIENT_CXXFLAGS) $<
@@ -173,7 +173,7 @@ server$(EXEEXT): $(SERVER_OBJECTS) $(__server___win32rc)
 	$(__server___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-server.app/Contents: server$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+server.app/Contents/PkgInfo: server$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p server.app/Contents
 	mkdir -p server.app/Contents/MacOS
 	mkdir -p server.app/Contents/Resources
@@ -194,7 +194,7 @@ server.app/Contents: server$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDI
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc server.app/Contents/Resources/server.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns server.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@server_bundle: server.app/Contents
+@COND_PLATFORM_MACOSX_1@server_bundle: server.app/Contents/PkgInfo
 
 server_sample_rc.o: $(srcdir)/../../samples/sample.rc
 	$(RESCOMP) -i$< -o$@ --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_6)   --include-dir $(top_srcdir)/include --include-dir $(srcdir) $(__DLLFLAG_p_0) --include-dir $(srcdir)/../../samples

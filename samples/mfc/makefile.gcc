@@ -147,10 +147,10 @@ $(OBJS):
 
 all: $(OBJS)\mfctest.exe
 
-$(OBJS)\mfctest_mfctest.o: .\mfctest.cpp
+$(OBJS)\mfctest_mfctest.o: ./mfctest.cpp
 	$(CXX) -c -o $@ $(MFCTEST_CXXFLAGS) $<
 
-$(OBJS)\mfctest_mfctest_rc.o: .\mfctest.rc
+$(OBJS)\mfctest_mfctest_rc.o: ./mfctest.rc
 	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../samples
 
 clean: 

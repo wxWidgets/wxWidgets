@@ -20,12 +20,12 @@ TEX2RTF_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_3) /DWIN32 \
 	$(__DEBUGINFO) /Fd$(OBJS)\tex2rtf.pdb $(____DEBUGRUNTIME_2_p) \
 	$(__OPTIMIZEFLAG) /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) /I.\..\..\..\include /I$(SETUPHDIR) /I. $(__DLLFLAG_p) \
-	/D_CONSOLE /DNO_GUI $(CXXFLAGS)
+	/D_CONSOLE /DNO_GUI $(CXXFLAGS) /GR /GX
 TEX2RTF_GUI_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_13) \
 	/DWIN32 $(__DEBUGINFO) /Fd$(OBJS)\tex2rtf_gui.pdb $(____DEBUGRUNTIME_12_p) \
 	$(__OPTIMIZEFLAG) /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) /I.\..\..\..\include /I$(SETUPHDIR) /I. $(__DLLFLAG_p) \
-	/D_WINDOWS /I.\..\..\..\samples $(CXXFLAGS)
+	/D_WINDOWS /I.\..\..\..\samples $(CXXFLAGS) /GR /GX
 TEX2RTF_GUI_OBJECTS =  \
 	$(OBJS)\tex2rtf_gui_sample.res \
 	$(OBJS)\tex2rtf_gui_tex2rtf.obj \

@@ -135,7 +135,7 @@ penguin$(EXEEXT): $(PENGUIN_OBJECTS) $(__penguin___win32rc)
 	$(__penguin___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-penguin.app/Contents: penguin$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+penguin.app/Contents/PkgInfo: penguin$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p penguin.app/Contents
 	mkdir -p penguin.app/Contents/MacOS
 	mkdir -p penguin.app/Contents/Resources
@@ -156,7 +156,7 @@ penguin.app/Contents: penguin$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIB
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc penguin.app/Contents/Resources/penguin.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns penguin.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@penguin_bundle: penguin.app/Contents
+@COND_PLATFORM_MACOSX_1@penguin_bundle: penguin.app/Contents/PkgInfo
 
 penguin_lw.o: $(srcdir)/lw.cpp
 	$(CXXC) -c -o $@ $(PENGUIN_CXXFLAGS) $<

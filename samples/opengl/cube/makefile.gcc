@@ -147,10 +147,10 @@ $(OBJS):
 
 all: $(OBJS)\cube.exe
 
-$(OBJS)\cube_cube.o: .\cube.cpp
+$(OBJS)\cube_cube.o: ./cube.cpp
 	$(CXX) -c -o $@ $(CUBE_CXXFLAGS) $<
 
-$(OBJS)\cube_cube_rc.o: .\cube.rc
+$(OBJS)\cube_cube_rc.o: ./cube.rc
 	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../../samples
 
 clean: 

@@ -20,8 +20,8 @@ BCCDIR = $(MAKEDIR)\..
 
 ### Variables: ###
 
-CONTROLS_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS_6) $(__DEBUGINFO) \
-	$(__OPTIMIZEFLAG_2) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
+CONTROLS_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS_6) -I$(BCCDIR)\include \
+	$(__DEBUGINFO) $(__OPTIMIZEFLAG_2) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I.\..\..\include -I$(SETUPHDIR) \
 	-I. $(__DLLFLAG_p) -I.\..\..\samples $(CXXFLAGS)
 CONTROLS_OBJECTS =  \
@@ -165,6 +165,6 @@ clean:
 	-if exist $(OBJS)\controls.exe del $(OBJS)\controls.exe
 
 $(OBJS)\controls.exe: $(CONTROLS_OBJECTS)  $(OBJS)\controls_controls.res
-	ilink32 -Tpe -q $(LDFLAGS) $(__DEBUGINFO)  -L$(LIBDIRNAME) -aa @&&|
-	c0w32.obj $(CONTROLS_OBJECTS),$@,, $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) import32.lib ole2w32.lib  cw32mt$(__RUNTIME_LIBS_7).lib,, $(OBJS)\controls_controls.res
+	ilink32 -Tpe -q $(LDFLAGS) -L$(BCCDIR)\lib $(__DEBUGINFO)  -L$(LIBDIRNAME) -aa @&&|
+	c0w32.obj $(CONTROLS_OBJECTS),$@,, $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) import32.lib ole2w32.lib  import32.lib cw32mt$(__RUNTIME_LIBS_7).lib,, $(OBJS)\controls_controls.res
 |

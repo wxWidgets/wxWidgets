@@ -18,7 +18,7 @@ FLDLL_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_3) /DWIN32 \
 	$(____DEBUGRUNTIME_2_p) $(__OPTIMIZEFLAG) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I..\..\src\fl\..\..\..\include \
 	/I$(SETUPHDIR) /I..\..\src\fl\..\..\include /DWXUSINGDLL /DWXMAKINGDLL_FL \
-	$(CXXFLAGS) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_fldll.pch"
+	$(CXXFLAGS) /GR /GX /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_fldll.pch"
 FLDLL_OBJECTS =  \
 	$(OBJS)\fldll_dummy.obj \
 	$(OBJS)\fldll_antiflickpl.obj \
@@ -43,8 +43,8 @@ FLLIB_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_12) /DWIN32 \
 	/Fd$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_fl.pdb \
 	$(____DEBUGRUNTIME_11_p) $(__OPTIMIZEFLAG) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I..\..\src\fl\..\..\..\include \
-	/I$(SETUPHDIR) /I..\..\src\fl\..\..\include $(CXXFLAGS) /Yu"wx/wxprec.h" \
-	/Fp"$(OBJS)\wxprec_fllib.pch"
+	/I$(SETUPHDIR) /I..\..\src\fl\..\..\include $(CXXFLAGS) /GR /GX \
+	/Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_fllib.pch"
 FLLIB_OBJECTS =  \
 	$(OBJS)\fllib_dummy.obj \
 	$(OBJS)\fllib_antiflickpl.obj \

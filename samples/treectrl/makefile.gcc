@@ -147,10 +147,10 @@ $(OBJS):
 
 all: $(OBJS)\treectrl.exe
 
-$(OBJS)\treectrl_treetest.o: .\treetest.cpp
+$(OBJS)\treectrl_treetest.o: ./treetest.cpp
 	$(CXX) -c -o $@ $(TREECTRL_CXXFLAGS) $<
 
-$(OBJS)\treectrl_treetest_rc.o: .\treetest.rc
+$(OBJS)\treectrl_treetest_rc.o: ./treetest.rc
 	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../samples
 
 clean: 

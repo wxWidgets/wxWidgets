@@ -119,7 +119,7 @@ test$(EXEEXT): $(TEST_OBJECTS) $(__test___win32rc)
 	$(__test___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-test.app/Contents: test$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+test.app/Contents/PkgInfo: test$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p test.app/Contents
 	mkdir -p test.app/Contents/MacOS
 	mkdir -p test.app/Contents/Resources
@@ -140,7 +140,7 @@ test.app/Contents: test$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAM
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc test.app/Contents/Resources/test.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns test.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@test_bundle: test.app/Contents
+@COND_PLATFORM_MACOSX_1@test_bundle: test.app/Contents/PkgInfo
 
 test_sample_rc.o: $(srcdir)/../../../../samples/sample.rc
 	$(RESCOMP) -i$< -o$@ --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)   --include-dir $(top_srcdir)/include --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../../../samples

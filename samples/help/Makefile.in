@@ -117,7 +117,7 @@ help$(EXEEXT): $(HELP_OBJECTS) $(__help___win32rc)
 	$(__help___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-help.app/Contents: help$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+help.app/Contents/PkgInfo: help$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p help.app/Contents
 	mkdir -p help.app/Contents/MacOS
 	mkdir -p help.app/Contents/Resources
@@ -138,7 +138,7 @@ help.app/Contents: help$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAM
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc help.app/Contents/Resources/help.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns help.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@help_bundle: help.app/Contents
+@COND_PLATFORM_MACOSX_1@help_bundle: help.app/Contents/PkgInfo
 
 help_demo.o: $(srcdir)/demo.cpp
 	$(CXXC) -c -o $@ $(HELP_CXXFLAGS) $<

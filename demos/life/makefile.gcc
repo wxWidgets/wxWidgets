@@ -150,19 +150,19 @@ $(OBJS):
 
 all: $(OBJS)\life.exe data
 
-$(OBJS)\life_dialogs.o: .\dialogs.cpp
+$(OBJS)\life_dialogs.o: ./dialogs.cpp
 	$(CXX) -c -o $@ $(LIFE_CXXFLAGS) $<
 
-$(OBJS)\life_game.o: .\game.cpp
+$(OBJS)\life_game.o: ./game.cpp
 	$(CXX) -c -o $@ $(LIFE_CXXFLAGS) $<
 
-$(OBJS)\life_life.o: .\life.cpp
+$(OBJS)\life_life.o: ./life.cpp
 	$(CXX) -c -o $@ $(LIFE_CXXFLAGS) $<
 
-$(OBJS)\life_life_rc.o: .\life.rc
+$(OBJS)\life_life_rc.o: ./life.rc
 	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../samples
 
-$(OBJS)\life_reader.o: .\reader.cpp
+$(OBJS)\life_reader.o: ./reader.cpp
 	$(CXX) -c -o $@ $(LIFE_CXXFLAGS) $<
 
 clean: 

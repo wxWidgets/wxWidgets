@@ -151,10 +151,10 @@ $(OBJS):
 
 all: $(OBJS)\zip.exe data
 
-$(OBJS)\zip_zip.o: .\zip.cpp
+$(OBJS)\zip_zip.o: ./zip.cpp
 	$(CXX) -c -o $@ $(ZIP_CXXFLAGS) $<
 
-$(OBJS)\zip_zip_rc.o: .\zip.rc
+$(OBJS)\zip_zip_rc.o: ./zip.rc
 	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../../samples
 
 clean: 

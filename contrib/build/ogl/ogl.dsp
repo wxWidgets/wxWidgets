@@ -56,8 +56,8 @@ RSC=rc.exe
 # PROP Output_Dir "..\..\src\ogl\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswd\ogl"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_lib\mswd" /Zi /Gm /GZ /Fd..\..\src\ogl\..\..\..\lib\vc_lib\wxmsw25d_ogl.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_ogllib.pch" /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /c
-# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_lib\mswd" /Zi /Gm /GZ /Fd..\..\src\ogl\..\..\..\lib\vc_lib\wxmsw25d_ogl.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_ogllib.pch" /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_lib\mswd" /Zi /Gm /GZ /Fd..\..\src\ogl\..\..\..\lib\vc_lib\wxmsw25d_ogl.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_ogllib.pch" /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_lib\mswd" /Zi /Gm /GZ /Fd..\..\src\ogl\..\..\..\lib\vc_lib\wxmsw25d_ogl.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_ogllib.pch" /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -79,8 +79,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\ogl\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_msw\ogl"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_lib\msw" /Fd..\..\src\ogl\..\..\..\lib\vc_lib\wxmsw25_ogl.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_ogllib.pch" /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_lib\msw" /Fd..\..\src\ogl\..\..\..\lib\vc_lib\wxmsw25_ogl.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_ogllib.pch" /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_lib\msw" /Fd..\..\src\ogl\..\..\..\lib\vc_lib\wxmsw25_ogl.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_ogllib.pch" /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_lib\msw" /Fd..\..\src\ogl\..\..\..\lib\vc_lib\wxmsw25_ogl.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_ogllib.pch" /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -102,8 +102,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\ogl\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswud\ogl"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_lib\mswud" /Zi /Gm /GZ /Fd..\..\src\ogl\..\..\..\lib\vc_lib\wxmsw25ud_ogl.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_ogllib.pch" /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /c
-# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_lib\mswud" /Zi /Gm /GZ /Fd..\..\src\ogl\..\..\..\lib\vc_lib\wxmsw25ud_ogl.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_ogllib.pch" /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_lib\mswud" /Zi /Gm /GZ /Fd..\..\src\ogl\..\..\..\lib\vc_lib\wxmsw25ud_ogl.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_ogllib.pch" /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_lib\mswud" /Zi /Gm /GZ /Fd..\..\src\ogl\..\..\..\lib\vc_lib\wxmsw25ud_ogl.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_ogllib.pch" /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -125,8 +125,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\ogl\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswu\ogl"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_lib\mswu" /Fd..\..\src\ogl\..\..\..\lib\vc_lib\wxmsw25u_ogl.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_ogllib.pch" /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D wxUSE_UNICODE=1 /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_lib\mswu" /Fd..\..\src\ogl\..\..\..\lib\vc_lib\wxmsw25u_ogl.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_ogllib.pch" /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D wxUSE_UNICODE=1 /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_lib\mswu" /Fd..\..\src\ogl\..\..\..\lib\vc_lib\wxmsw25u_ogl.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_ogllib.pch" /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D wxUSE_UNICODE=1 /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_lib\mswu" /Fd..\..\src\ogl\..\..\..\lib\vc_lib\wxmsw25u_ogl.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_ogllib.pch" /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D wxUSE_UNICODE=1 /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -148,8 +148,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\ogl\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivd\ogl"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_lib\mswunivd" /Zi /Gm /GZ /Fd..\..\src\ogl\..\..\..\lib\vc_lib\wxmswuniv25d_ogl.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_ogllib.pch" /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /c
-# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_lib\mswunivd" /Zi /Gm /GZ /Fd..\..\src\ogl\..\..\..\lib\vc_lib\wxmswuniv25d_ogl.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_ogllib.pch" /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_lib\mswunivd" /Zi /Gm /GZ /Fd..\..\src\ogl\..\..\..\lib\vc_lib\wxmswuniv25d_ogl.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_ogllib.pch" /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_lib\mswunivd" /Zi /Gm /GZ /Fd..\..\src\ogl\..\..\..\lib\vc_lib\wxmswuniv25d_ogl.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_ogllib.pch" /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -171,8 +171,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\ogl\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswuniv\ogl"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_lib\mswuniv" /Fd..\..\src\ogl\..\..\..\lib\vc_lib\wxmswuniv25_ogl.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_ogllib.pch" /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_lib\mswuniv" /Fd..\..\src\ogl\..\..\..\lib\vc_lib\wxmswuniv25_ogl.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_ogllib.pch" /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_lib\mswuniv" /Fd..\..\src\ogl\..\..\..\lib\vc_lib\wxmswuniv25_ogl.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_ogllib.pch" /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_lib\mswuniv" /Fd..\..\src\ogl\..\..\..\lib\vc_lib\wxmswuniv25_ogl.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_ogllib.pch" /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -194,8 +194,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\ogl\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivud\ogl"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_lib\mswunivud" /Zi /Gm /GZ /Fd..\..\src\ogl\..\..\..\lib\vc_lib\wxmswuniv25ud_ogl.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_ogllib.pch" /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /c
-# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_lib\mswunivud" /Zi /Gm /GZ /Fd..\..\src\ogl\..\..\..\lib\vc_lib\wxmswuniv25ud_ogl.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_ogllib.pch" /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_lib\mswunivud" /Zi /Gm /GZ /Fd..\..\src\ogl\..\..\..\lib\vc_lib\wxmswuniv25ud_ogl.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_ogllib.pch" /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_lib\mswunivud" /Zi /Gm /GZ /Fd..\..\src\ogl\..\..\..\lib\vc_lib\wxmswuniv25ud_ogl.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_ogllib.pch" /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -217,8 +217,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\ogl\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivu\ogl"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_lib\mswunivu" /Fd..\..\src\ogl\..\..\..\lib\vc_lib\wxmswuniv25u_ogl.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_ogllib.pch" /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_lib\mswunivu" /Fd..\..\src\ogl\..\..\..\lib\vc_lib\wxmswuniv25u_ogl.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_ogllib.pch" /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_lib\mswunivu" /Fd..\..\src\ogl\..\..\..\lib\vc_lib\wxmswuniv25u_ogl.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_ogllib.pch" /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_lib\mswunivu" /Fd..\..\src\ogl\..\..\..\lib\vc_lib\wxmswuniv25u_ogl.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_ogllib.pch" /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /c
 # ADD BASE RSC /l 0x405
 # ADD RSC /l 0x405
 BSC32=bscmake.exe
@@ -240,8 +240,8 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\ogl\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswddll\ogl"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_dll\mswd" /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_ogldll.pch" /Zi /Gm /GZ /Fd..\..\src\ogl\..\..\..\lib\vc_dll\wxmsw250d_ogl_vc_custom.pdb /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /c
-# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_dll\mswd" /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_ogldll.pch" /Zi /Gm /GZ /Fd..\..\src\ogl\..\..\..\lib\vc_dll\wxmsw250d_ogl_vc_custom.pdb /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_dll\mswd" /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_ogldll.pch" /Zi /Gm /GZ /Fd..\..\src\ogl\..\..\..\lib\vc_dll\wxmsw250d_ogl_vc_custom.pdb /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_dll\mswd" /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_ogldll.pch" /Zi /Gm /GZ /Fd..\..\src\ogl\..\..\..\lib\vc_dll\wxmsw250d_ogl_vc_custom.pdb /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /mktyplib203 /win32
 # ADD BASE RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /i "..\..\src\ogl\..\..\..\include" /i "..\..\src\ogl\..\..\..\lib\vc_dll\mswd" /i "..\..\src\ogl\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_OGL
@@ -265,8 +265,8 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\ogl\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswdll\ogl"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_dll\msw" /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_ogldll.pch" /Fd..\..\src\ogl\..\..\..\lib\vc_dll\wxmsw250_ogl_vc_custom.pdb /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_dll\msw" /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_ogldll.pch" /Fd..\..\src\ogl\..\..\..\lib\vc_dll\wxmsw250_ogl_vc_custom.pdb /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_dll\msw" /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_ogldll.pch" /Fd..\..\src\ogl\..\..\..\lib\vc_dll\wxmsw250_ogl_vc_custom.pdb /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_dll\msw" /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_ogldll.pch" /Fd..\..\src\ogl\..\..\..\lib\vc_dll\wxmsw250_ogl_vc_custom.pdb /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /mktyplib203 /win32
 # ADD BASE RSC /l 0x405 /d "__WXMSW__" /i "..\..\src\ogl\..\..\..\include" /i "..\..\src\ogl\..\..\..\lib\vc_dll\msw" /i "..\..\src\ogl\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_OGL
@@ -290,8 +290,8 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\ogl\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswuddll\ogl"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_dll\mswud" /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_ogldll.pch" /Zi /Gm /GZ /Fd..\..\src\ogl\..\..\..\lib\vc_dll\wxmsw250ud_ogl_vc_custom.pdb /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /c
-# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_dll\mswud" /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_ogldll.pch" /Zi /Gm /GZ /Fd..\..\src\ogl\..\..\..\lib\vc_dll\wxmsw250ud_ogl_vc_custom.pdb /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_dll\mswud" /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_ogldll.pch" /Zi /Gm /GZ /Fd..\..\src\ogl\..\..\..\lib\vc_dll\wxmsw250ud_ogl_vc_custom.pdb /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_dll\mswud" /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_ogldll.pch" /Zi /Gm /GZ /Fd..\..\src\ogl\..\..\..\lib\vc_dll\wxmsw250ud_ogl_vc_custom.pdb /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /mktyplib203 /win32
 # ADD BASE RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /d wxUSE_UNICODE=1 /i "..\..\src\ogl\..\..\..\include" /i "..\..\src\ogl\..\..\..\lib\vc_dll\mswud" /i "..\..\src\ogl\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_OGL
@@ -315,8 +315,8 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\ogl\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswudll\ogl"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_dll\mswu" /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_ogldll.pch" /Fd..\..\src\ogl\..\..\..\lib\vc_dll\wxmsw250u_ogl_vc_custom.pdb /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_dll\mswu" /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_ogldll.pch" /Fd..\..\src\ogl\..\..\..\lib\vc_dll\wxmsw250u_ogl_vc_custom.pdb /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_dll\mswu" /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_ogldll.pch" /Fd..\..\src\ogl\..\..\..\lib\vc_dll\wxmsw250u_ogl_vc_custom.pdb /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_dll\mswu" /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_ogldll.pch" /Fd..\..\src\ogl\..\..\..\lib\vc_dll\wxmsw250u_ogl_vc_custom.pdb /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /mktyplib203 /win32
 # ADD BASE RSC /l 0x405 /d "__WXMSW__" /d wxUSE_UNICODE=1 /i "..\..\src\ogl\..\..\..\include" /i "..\..\src\ogl\..\..\..\lib\vc_dll\mswu" /i "..\..\src\ogl\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_OGL
@@ -340,8 +340,8 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\ogl\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivddll\ogl"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_dll\mswunivd" /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_ogldll.pch" /Zi /Gm /GZ /Fd..\..\src\ogl\..\..\..\lib\vc_dll\wxmswuniv250d_ogl_vc_custom.pdb /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /c
-# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_dll\mswunivd" /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_ogldll.pch" /Zi /Gm /GZ /Fd..\..\src\ogl\..\..\..\lib\vc_dll\wxmswuniv250d_ogl_vc_custom.pdb /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_dll\mswunivd" /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_ogldll.pch" /Zi /Gm /GZ /Fd..\..\src\ogl\..\..\..\lib\vc_dll\wxmswuniv250d_ogl_vc_custom.pdb /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_dll\mswunivd" /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_ogldll.pch" /Zi /Gm /GZ /Fd..\..\src\ogl\..\..\..\lib\vc_dll\wxmswuniv250d_ogl_vc_custom.pdb /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /mktyplib203 /win32
 # ADD BASE RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /i "..\..\src\ogl\..\..\..\include" /i "..\..\src\ogl\..\..\..\lib\vc_dll\mswunivd" /i "..\..\src\ogl\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_OGL
@@ -365,8 +365,8 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\ogl\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivdll\ogl"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_dll\mswuniv" /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_ogldll.pch" /Fd..\..\src\ogl\..\..\..\lib\vc_dll\wxmswuniv250_ogl_vc_custom.pdb /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_dll\mswuniv" /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_ogldll.pch" /Fd..\..\src\ogl\..\..\..\lib\vc_dll\wxmswuniv250_ogl_vc_custom.pdb /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_dll\mswuniv" /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_ogldll.pch" /Fd..\..\src\ogl\..\..\..\lib\vc_dll\wxmswuniv250_ogl_vc_custom.pdb /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_dll\mswuniv" /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_ogldll.pch" /Fd..\..\src\ogl\..\..\..\lib\vc_dll\wxmswuniv250_ogl_vc_custom.pdb /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /mktyplib203 /win32
 # ADD BASE RSC /l 0x405 /d "__WXMSW__" /d "__WXUNIVERSAL__" /i "..\..\src\ogl\..\..\..\include" /i "..\..\src\ogl\..\..\..\lib\vc_dll\mswuniv" /i "..\..\src\ogl\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_OGL
@@ -390,8 +390,8 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\ogl\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivuddll\ogl"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_dll\mswunivud" /Yu"wx/wxprec.h" /Fp"vc_mswunivuddll\wxprec_ogldll.pch" /Zi /Gm /GZ /Fd..\..\src\ogl\..\..\..\lib\vc_dll\wxmswuniv250ud_ogl_vc_custom.pdb /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /c
-# ADD CPP /nologo /FD /W4 /MDd /Od /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_dll\mswunivud" /Yu"wx/wxprec.h" /Fp"vc_mswunivuddll\wxprec_ogldll.pch" /Zi /Gm /GZ /Fd..\..\src\ogl\..\..\..\lib\vc_dll\wxmswuniv250ud_ogl_vc_custom.pdb /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_dll\mswunivud" /Yu"wx/wxprec.h" /Fp"vc_mswunivuddll\wxprec_ogldll.pch" /Zi /Gm /GZ /Fd..\..\src\ogl\..\..\..\lib\vc_dll\wxmswuniv250ud_ogl_vc_custom.pdb /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MDd /Od /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_dll\mswunivud" /Yu"wx/wxprec.h" /Fp"vc_mswunivuddll\wxprec_ogldll.pch" /Zi /Gm /GZ /Fd..\..\src\ogl\..\..\..\lib\vc_dll\wxmswuniv250ud_ogl_vc_custom.pdb /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /mktyplib203 /win32
 # ADD BASE RSC /l 0x405 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /d wxUSE_UNICODE=1 /i "..\..\src\ogl\..\..\..\include" /i "..\..\src\ogl\..\..\..\lib\vc_dll\mswunivud" /i "..\..\src\ogl\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_OGL
@@ -415,8 +415,8 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\ogl\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivudll\ogl"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_dll\mswunivu" /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_ogldll.pch" /Fd..\..\src\ogl\..\..\..\lib\vc_dll\wxmswuniv250u_ogl_vc_custom.pdb /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /c
-# ADD CPP /nologo /FD /W4 /MD /O1 /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_dll\mswunivu" /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_ogldll.pch" /Fd..\..\src\ogl\..\..\..\lib\vc_dll\wxmswuniv250u_ogl_vc_custom.pdb /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /c
+# ADD BASE CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_dll\mswunivu" /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_ogldll.pch" /Fd..\..\src\ogl\..\..\..\lib\vc_dll\wxmswuniv250u_ogl_vc_custom.pdb /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /c
+# ADD CPP /nologo /FD /W4 /GR /GX /MD /O1 /I "..\..\src\ogl\..\..\..\include" /I "..\..\src\ogl\..\..\..\lib\vc_dll\mswunivu" /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_ogldll.pch" /Fd..\..\src\ogl\..\..\..\lib\vc_dll\wxmswuniv250u_ogl_vc_custom.pdb /I "..\..\src\ogl\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D wxUSE_UNICODE=1 /D "WXUSINGDLL" /D "WXMAKINGDLL_OGL" /mktyplib203 /win32
 # ADD BASE RSC /l 0x405 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d wxUSE_UNICODE=1 /i "..\..\src\ogl\..\..\..\include" /i "..\..\src\ogl\..\..\..\lib\vc_dll\mswunivu" /i "..\..\src\ogl\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_OGL

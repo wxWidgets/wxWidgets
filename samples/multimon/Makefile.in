@@ -121,7 +121,7 @@ multimon_test$(EXEEXT): $(MULTIMON_TEST_OBJECTS) $(__multimon_test___win32rc)
 	$(__multimon_test___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-multimon_test.app/Contents: multimon_test$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+multimon_test.app/Contents/PkgInfo: multimon_test$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p multimon_test.app/Contents
 	mkdir -p multimon_test.app/Contents/MacOS
 	mkdir -p multimon_test.app/Contents/Resources
@@ -142,7 +142,7 @@ multimon_test.app/Contents: multimon_test$(EXEEXT) $(top_srcdir)/src/mac/Info.pl
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc multimon_test.app/Contents/Resources/multimon_test.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns multimon_test.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@multimon_test_bundle: multimon_test.app/Contents
+@COND_PLATFORM_MACOSX_1@multimon_test_bundle: multimon_test.app/Contents/PkgInfo
 
 multimon_test_multimon_test.o: $(srcdir)/multimon_test.cpp
 	$(CXXC) -c -o $@ $(MULTIMON_TEST_CXXFLAGS) $<

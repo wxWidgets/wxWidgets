@@ -151,13 +151,13 @@ $(OBJS):
 
 all: $(OBJS)\dbtest.exe
 
-$(OBJS)\dbtest_dbtest.o: .\dbtest.cpp
+$(OBJS)\dbtest_dbtest.o: ./dbtest.cpp
 	$(CXX) -c -o $@ $(DBTEST_CXXFLAGS) $<
 
-$(OBJS)\dbtest_dbtest_rc.o: .\dbtest.rc
+$(OBJS)\dbtest_dbtest_rc.o: ./dbtest.rc
 	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../samples
 
-$(OBJS)\dbtest_listdb.o: .\listdb.cpp
+$(OBJS)\dbtest_listdb.o: ./listdb.cpp
 	$(CXX) -c -o $@ $(DBTEST_CXXFLAGS) $<
 
 clean: 

@@ -118,7 +118,7 @@ toolbar$(EXEEXT): $(TOOLBAR_OBJECTS) $(__toolbar___win32rc)
 	$(__toolbar___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-toolbar.app/Contents: toolbar$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+toolbar.app/Contents/PkgInfo: toolbar$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p toolbar.app/Contents
 	mkdir -p toolbar.app/Contents/MacOS
 	mkdir -p toolbar.app/Contents/Resources
@@ -139,7 +139,7 @@ toolbar.app/Contents: toolbar$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIB
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc toolbar.app/Contents/Resources/toolbar.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns toolbar.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@toolbar_bundle: toolbar.app/Contents
+@COND_PLATFORM_MACOSX_1@toolbar_bundle: toolbar.app/Contents/PkgInfo
 
 toolbar_toolbar.o: $(srcdir)/toolbar.cpp
 	$(CXXC) -c -o $@ $(TOOLBAR_CXXFLAGS) $<

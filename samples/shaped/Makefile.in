@@ -118,7 +118,7 @@ shaped$(EXEEXT): $(SHAPED_OBJECTS) $(__shaped___win32rc)
 	$(__shaped___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-shaped.app/Contents: shaped$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+shaped.app/Contents/PkgInfo: shaped$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p shaped.app/Contents
 	mkdir -p shaped.app/Contents/MacOS
 	mkdir -p shaped.app/Contents/Resources
@@ -139,7 +139,7 @@ shaped.app/Contents: shaped$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDI
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc shaped.app/Contents/Resources/shaped.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns shaped.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@shaped_bundle: shaped.app/Contents
+@COND_PLATFORM_MACOSX_1@shaped_bundle: shaped.app/Contents/PkgInfo
 
 shaped_shaped.o: $(srcdir)/shaped.cpp
 	$(CXXC) -c -o $@ $(SHAPED_CXXFLAGS) $<

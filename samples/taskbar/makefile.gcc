@@ -151,10 +151,10 @@ $(OBJS):
 
 all: $(OBJS)\taskbar.exe
 
-$(OBJS)\taskbar_tbtest.o: .\tbtest.cpp
+$(OBJS)\taskbar_tbtest.o: ./tbtest.cpp
 	$(CXX) -c -o $@ $(TASKBAR_CXXFLAGS) $<
 
-$(OBJS)\taskbar_tbtest_rc.o: .\tbtest.rc
+$(OBJS)\taskbar_tbtest_rc.o: ./tbtest.rc
 	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../samples
 
 clean: 

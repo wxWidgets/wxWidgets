@@ -128,7 +128,7 @@ $(OBJS):
 
 all: $(OBJS)\wxrc.exe
 
-$(OBJS)\wxrc_wxrc.o: .\wxrc.cpp
+$(OBJS)\wxrc_wxrc.o: ./wxrc.cpp
 	$(CXX) -c -o $@ $(WXRC_CXXFLAGS) $<
 
 clean: 

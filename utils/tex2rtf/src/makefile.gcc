@@ -171,55 +171,55 @@ $(OBJS):
 
 all: $(OBJS)\tex2rtf.exe $(OBJS)\tex2rtf_gui.exe
 
-$(OBJS)\tex2rtf_gui_htmlutil.o: .\htmlutil.cpp
+$(OBJS)\tex2rtf_gui_htmlutil.o: ./htmlutil.cpp
 	$(CXX) -c -o $@ $(TEX2RTF_GUI_CXXFLAGS) $<
 
-$(OBJS)\tex2rtf_gui_readshg.o: .\readshg.cpp
+$(OBJS)\tex2rtf_gui_readshg.o: ./readshg.cpp
 	$(CXX) -c -o $@ $(TEX2RTF_GUI_CXXFLAGS) $<
 
-$(OBJS)\tex2rtf_gui_rtfutils.o: .\rtfutils.cpp
+$(OBJS)\tex2rtf_gui_rtfutils.o: ./rtfutils.cpp
 	$(CXX) -c -o $@ $(TEX2RTF_GUI_CXXFLAGS) $<
 
-$(OBJS)\tex2rtf_gui_sample_rc.o: .\..\..\..\samples\sample.rc
+$(OBJS)\tex2rtf_gui_sample_rc.o: ./../../../samples/sample.rc
 	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_3) $(__DEBUG_DEFINE_p_3) $(__UNICODE_DEFINE_p_3) --include-dir ./../../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_3) --include-dir ./../../../samples
 
-$(OBJS)\tex2rtf_gui_table.o: .\table.cpp
+$(OBJS)\tex2rtf_gui_table.o: ./table.cpp
 	$(CXX) -c -o $@ $(TEX2RTF_GUI_CXXFLAGS) $<
 
-$(OBJS)\tex2rtf_gui_tex2any.o: .\tex2any.cpp
+$(OBJS)\tex2rtf_gui_tex2any.o: ./tex2any.cpp
 	$(CXX) -c -o $@ $(TEX2RTF_GUI_CXXFLAGS) $<
 
-$(OBJS)\tex2rtf_gui_tex2rtf.o: .\tex2rtf.cpp
+$(OBJS)\tex2rtf_gui_tex2rtf.o: ./tex2rtf.cpp
 	$(CXX) -c -o $@ $(TEX2RTF_GUI_CXXFLAGS) $<
 
-$(OBJS)\tex2rtf_gui_texutils.o: .\texutils.cpp
+$(OBJS)\tex2rtf_gui_texutils.o: ./texutils.cpp
 	$(CXX) -c -o $@ $(TEX2RTF_GUI_CXXFLAGS) $<
 
-$(OBJS)\tex2rtf_gui_xlputils.o: .\xlputils.cpp
+$(OBJS)\tex2rtf_gui_xlputils.o: ./xlputils.cpp
 	$(CXX) -c -o $@ $(TEX2RTF_GUI_CXXFLAGS) $<
 
-$(OBJS)\tex2rtf_htmlutil.o: .\htmlutil.cpp
+$(OBJS)\tex2rtf_htmlutil.o: ./htmlutil.cpp
 	$(CXX) -c -o $@ $(TEX2RTF_CXXFLAGS) $<
 
-$(OBJS)\tex2rtf_readshg.o: .\readshg.cpp
+$(OBJS)\tex2rtf_readshg.o: ./readshg.cpp
 	$(CXX) -c -o $@ $(TEX2RTF_CXXFLAGS) $<
 
-$(OBJS)\tex2rtf_rtfutils.o: .\rtfutils.cpp
+$(OBJS)\tex2rtf_rtfutils.o: ./rtfutils.cpp
 	$(CXX) -c -o $@ $(TEX2RTF_CXXFLAGS) $<
 
-$(OBJS)\tex2rtf_table.o: .\table.cpp
+$(OBJS)\tex2rtf_table.o: ./table.cpp
 	$(CXX) -c -o $@ $(TEX2RTF_CXXFLAGS) $<
 
-$(OBJS)\tex2rtf_tex2any.o: .\tex2any.cpp
+$(OBJS)\tex2rtf_tex2any.o: ./tex2any.cpp
 	$(CXX) -c -o $@ $(TEX2RTF_CXXFLAGS) $<
 
-$(OBJS)\tex2rtf_tex2rtf.o: .\tex2rtf.cpp
+$(OBJS)\tex2rtf_tex2rtf.o: ./tex2rtf.cpp
 	$(CXX) -c -o $@ $(TEX2RTF_CXXFLAGS) $<
 
-$(OBJS)\tex2rtf_texutils.o: .\texutils.cpp
+$(OBJS)\tex2rtf_texutils.o: ./texutils.cpp
 	$(CXX) -c -o $@ $(TEX2RTF_CXXFLAGS) $<
 
-$(OBJS)\tex2rtf_xlputils.o: .\xlputils.cpp
+$(OBJS)\tex2rtf_xlputils.o: ./xlputils.cpp
 	$(CXX) -c -o $@ $(TEX2RTF_CXXFLAGS) $<
 
 clean: 

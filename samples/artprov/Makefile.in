@@ -106,7 +106,7 @@ arttest$(EXEEXT): $(ARTTEST_OBJECTS) $(__arttest___win32rc)
 	$(__arttest___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-arttest.app/Contents: arttest$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+arttest.app/Contents/PkgInfo: arttest$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p arttest.app/Contents
 	mkdir -p arttest.app/Contents/MacOS
 	mkdir -p arttest.app/Contents/Resources
@@ -136,7 +136,7 @@ arttest_arttest.o: $(srcdir)/arttest.cpp
 arttest_arttest_rc.o: $(srcdir)/arttest.rc
 	$(RESCOMP) -i$< -o$@ --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)   --include-dir $(top_srcdir)/include --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../samples
 
-@COND_PLATFORM_MACOSX_1@arttest_bundle: arttest.app/Contents
+@COND_PLATFORM_MACOSX_1@arttest_bundle: arttest.app/Contents/PkgInfo
 
 clean: 
 	rm -rf ./.deps ./.pch

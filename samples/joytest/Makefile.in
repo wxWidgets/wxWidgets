@@ -121,7 +121,7 @@ joytest$(EXEEXT): $(JOYTEST_OBJECTS) $(__joytest___win32rc)
 	$(__joytest___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-joytest.app/Contents: joytest$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+joytest.app/Contents/PkgInfo: joytest$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p joytest.app/Contents
 	mkdir -p joytest.app/Contents/MacOS
 	mkdir -p joytest.app/Contents/Resources
@@ -142,7 +142,7 @@ joytest.app/Contents: joytest$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIB
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc joytest.app/Contents/Resources/joytest.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns joytest.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@joytest_bundle: joytest.app/Contents
+@COND_PLATFORM_MACOSX_1@joytest_bundle: joytest.app/Contents/PkgInfo
 
 joytest_joytest.o: $(srcdir)/joytest.cpp
 	$(CXXC) -c -o $@ $(JOYTEST_CXXFLAGS) $<

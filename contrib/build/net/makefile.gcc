@@ -153,28 +153,28 @@ $(OBJS):
 
 all: $(__netutilsdll___depname) $(__netutilslib___depname)
 
-$(OBJS)\netutilsdll_dummy.o: ../../src/net\..\..\..\src\msw\dummy.cpp
+$(OBJS)\netutilsdll_dummy.o: ../../src/net/../../../src/msw/dummy.cpp
 	$(CXX) -c -o $@ $(NETUTILSDLL_CXXFLAGS) $<
 
-$(OBJS)\netutilsdll_email.o: ../../src/net\email.cpp
+$(OBJS)\netutilsdll_email.o: ../../src/net/email.cpp
 	$(CXX) -c -o $@ $(NETUTILSDLL_CXXFLAGS) $<
 
-$(OBJS)\netutilsdll_smapi.o: ../../src/net\smapi.cpp
+$(OBJS)\netutilsdll_smapi.o: ../../src/net/smapi.cpp
 	$(CXX) -c -o $@ $(NETUTILSDLL_CXXFLAGS) $<
 
-$(OBJS)\netutilsdll_web.o: ../../src/net\web.cpp
+$(OBJS)\netutilsdll_web.o: ../../src/net/web.cpp
 	$(CXX) -c -o $@ $(NETUTILSDLL_CXXFLAGS) $<
 
-$(OBJS)\netutilslib_dummy.o: ../../src/net\..\..\..\src\msw\dummy.cpp
+$(OBJS)\netutilslib_dummy.o: ../../src/net/../../../src/msw/dummy.cpp
 	$(CXX) -c -o $@ $(NETUTILSLIB_CXXFLAGS) $<
 
-$(OBJS)\netutilslib_email.o: ../../src/net\email.cpp
+$(OBJS)\netutilslib_email.o: ../../src/net/email.cpp
 	$(CXX) -c -o $@ $(NETUTILSLIB_CXXFLAGS) $<
 
-$(OBJS)\netutilslib_smapi.o: ../../src/net\smapi.cpp
+$(OBJS)\netutilslib_smapi.o: ../../src/net/smapi.cpp
 	$(CXX) -c -o $@ $(NETUTILSLIB_CXXFLAGS) $<
 
-$(OBJS)\netutilslib_web.o: ../../src/net\web.cpp
+$(OBJS)\netutilslib_web.o: ../../src/net/web.cpp
 	$(CXX) -c -o $@ $(NETUTILSLIB_CXXFLAGS) $<
 
 clean: 

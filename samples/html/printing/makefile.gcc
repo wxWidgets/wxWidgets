@@ -151,10 +151,10 @@ $(OBJS):
 
 all: $(OBJS)\printing.exe data
 
-$(OBJS)\printing_printing.o: .\printing.cpp
+$(OBJS)\printing_printing.o: ./printing.cpp
 	$(CXX) -c -o $@ $(PRINTING_CXXFLAGS) $<
 
-$(OBJS)\printing_printing_rc.o: .\printing.rc
+$(OBJS)\printing_printing_rc.o: ./printing.rc
 	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../../samples
 
 clean: 

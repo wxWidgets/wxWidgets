@@ -118,7 +118,7 @@ statbar$(EXEEXT): $(STATBAR_OBJECTS) $(__statbar___win32rc)
 	$(__statbar___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-statbar.app/Contents: statbar$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+statbar.app/Contents/PkgInfo: statbar$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p statbar.app/Contents
 	mkdir -p statbar.app/Contents/MacOS
 	mkdir -p statbar.app/Contents/Resources
@@ -139,7 +139,7 @@ statbar.app/Contents: statbar$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIB
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc statbar.app/Contents/Resources/statbar.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns statbar.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@statbar_bundle: statbar.app/Contents
+@COND_PLATFORM_MACOSX_1@statbar_bundle: statbar.app/Contents/PkgInfo
 
 statbar_statbar.o: $(srcdir)/statbar.cpp
 	$(CXXC) -c -o $@ $(STATBAR_CXXFLAGS) $<

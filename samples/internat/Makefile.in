@@ -118,7 +118,7 @@ internat$(EXEEXT): $(INTERNAT_OBJECTS) $(__internat___win32rc)
 	$(__internat___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-internat.app/Contents: internat$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+internat.app/Contents/PkgInfo: internat$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p internat.app/Contents
 	mkdir -p internat.app/Contents/MacOS
 	mkdir -p internat.app/Contents/Resources
@@ -139,7 +139,7 @@ internat.app/Contents: internat$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(L
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc internat.app/Contents/Resources/internat.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns internat.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@internat_bundle: internat.app/Contents
+@COND_PLATFORM_MACOSX_1@internat_bundle: internat.app/Contents/PkgInfo
 
 internat_internat.o: $(srcdir)/internat.cpp
 	$(CXXC) -c -o $@ $(INTERNAT_CXXFLAGS) $<

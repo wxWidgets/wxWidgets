@@ -245,298 +245,298 @@ $(OBJS):
 
 all: $(__stcdll___depname) $(__stclib___depname)
 
-$(OBJS)\stcdll_AutoComplete.o: ../../src/stc\scintilla\src\AutoComplete.cxx
+$(OBJS)\stcdll_AutoComplete.o: ../../src/stc/scintilla/src/AutoComplete.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_CallTip.o: ../../src/stc\scintilla\src\CallTip.cxx
+$(OBJS)\stcdll_CallTip.o: ../../src/stc/scintilla/src/CallTip.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_CellBuffer.o: ../../src/stc\scintilla\src\CellBuffer.cxx
+$(OBJS)\stcdll_CellBuffer.o: ../../src/stc/scintilla/src/CellBuffer.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_ContractionState.o: ../../src/stc\scintilla\src\ContractionState.cxx
+$(OBJS)\stcdll_ContractionState.o: ../../src/stc/scintilla/src/ContractionState.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_Document.o: ../../src/stc\scintilla\src\Document.cxx
+$(OBJS)\stcdll_Document.o: ../../src/stc/scintilla/src/Document.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_DocumentAccessor.o: ../../src/stc\scintilla\src\DocumentAccessor.cxx
+$(OBJS)\stcdll_DocumentAccessor.o: ../../src/stc/scintilla/src/DocumentAccessor.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_Editor.o: ../../src/stc\scintilla\src\Editor.cxx
+$(OBJS)\stcdll_Editor.o: ../../src/stc/scintilla/src/Editor.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_ExternalLexer.o: ../../src/stc\scintilla\src\ExternalLexer.cxx
+$(OBJS)\stcdll_ExternalLexer.o: ../../src/stc/scintilla/src/ExternalLexer.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_Indicator.o: ../../src/stc\scintilla\src\Indicator.cxx
+$(OBJS)\stcdll_Indicator.o: ../../src/stc/scintilla/src/Indicator.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_KeyMap.o: ../../src/stc\scintilla\src\KeyMap.cxx
+$(OBJS)\stcdll_KeyMap.o: ../../src/stc/scintilla/src/KeyMap.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_KeyWords.o: ../../src/stc\scintilla\src\KeyWords.cxx
+$(OBJS)\stcdll_KeyWords.o: ../../src/stc/scintilla/src/KeyWords.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_LexAVE.o: ../../src/stc\scintilla\src\LexAVE.cxx
+$(OBJS)\stcdll_LexAVE.o: ../../src/stc/scintilla/src/LexAVE.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_LexAda.o: ../../src/stc\scintilla\src\LexAda.cxx
+$(OBJS)\stcdll_LexAda.o: ../../src/stc/scintilla/src/LexAda.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_LexAsm.o: ../../src/stc\scintilla\src\LexAsm.cxx
+$(OBJS)\stcdll_LexAsm.o: ../../src/stc/scintilla/src/LexAsm.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_LexBaan.o: ../../src/stc\scintilla\src\LexBaan.cxx
+$(OBJS)\stcdll_LexBaan.o: ../../src/stc/scintilla/src/LexBaan.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_LexBullant.o: ../../src/stc\scintilla\src\LexBullant.cxx
+$(OBJS)\stcdll_LexBullant.o: ../../src/stc/scintilla/src/LexBullant.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_LexCPP.o: ../../src/stc\scintilla\src\LexCPP.cxx
+$(OBJS)\stcdll_LexCPP.o: ../../src/stc/scintilla/src/LexCPP.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_LexCSS.o: ../../src/stc\scintilla\src\LexCSS.cxx
+$(OBJS)\stcdll_LexCSS.o: ../../src/stc/scintilla/src/LexCSS.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_LexConf.o: ../../src/stc\scintilla\src\LexConf.cxx
+$(OBJS)\stcdll_LexConf.o: ../../src/stc/scintilla/src/LexConf.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_LexCrontab.o: ../../src/stc\scintilla\src\LexCrontab.cxx
+$(OBJS)\stcdll_LexCrontab.o: ../../src/stc/scintilla/src/LexCrontab.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_LexEScript.o: ../../src/stc\scintilla\src\LexEScript.cxx
+$(OBJS)\stcdll_LexEScript.o: ../../src/stc/scintilla/src/LexEScript.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_LexEiffel.o: ../../src/stc\scintilla\src\LexEiffel.cxx
+$(OBJS)\stcdll_LexEiffel.o: ../../src/stc/scintilla/src/LexEiffel.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_LexFortran.o: ../../src/stc\scintilla\src\LexFortran.cxx
+$(OBJS)\stcdll_LexFortran.o: ../../src/stc/scintilla/src/LexFortran.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_LexHTML.o: ../../src/stc\scintilla\src\LexHTML.cxx
+$(OBJS)\stcdll_LexHTML.o: ../../src/stc/scintilla/src/LexHTML.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_LexLisp.o: ../../src/stc\scintilla\src\LexLisp.cxx
+$(OBJS)\stcdll_LexLisp.o: ../../src/stc/scintilla/src/LexLisp.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_LexLout.o: ../../src/stc\scintilla\src\LexLout.cxx
+$(OBJS)\stcdll_LexLout.o: ../../src/stc/scintilla/src/LexLout.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_LexLua.o: ../../src/stc\scintilla\src\LexLua.cxx
+$(OBJS)\stcdll_LexLua.o: ../../src/stc/scintilla/src/LexLua.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_LexMatlab.o: ../../src/stc\scintilla\src\LexMatlab.cxx
+$(OBJS)\stcdll_LexMatlab.o: ../../src/stc/scintilla/src/LexMatlab.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_LexOthers.o: ../../src/stc\scintilla\src\LexOthers.cxx
+$(OBJS)\stcdll_LexOthers.o: ../../src/stc/scintilla/src/LexOthers.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_LexPOV.o: ../../src/stc\scintilla\src\LexPOV.cxx
+$(OBJS)\stcdll_LexPOV.o: ../../src/stc/scintilla/src/LexPOV.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_LexPascal.o: ../../src/stc\scintilla\src\LexPascal.cxx
+$(OBJS)\stcdll_LexPascal.o: ../../src/stc/scintilla/src/LexPascal.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_LexPerl.o: ../../src/stc\scintilla\src\LexPerl.cxx
+$(OBJS)\stcdll_LexPerl.o: ../../src/stc/scintilla/src/LexPerl.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_LexPython.o: ../../src/stc\scintilla\src\LexPython.cxx
+$(OBJS)\stcdll_LexPython.o: ../../src/stc/scintilla/src/LexPython.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_LexRuby.o: ../../src/stc\scintilla\src\LexRuby.cxx
+$(OBJS)\stcdll_LexRuby.o: ../../src/stc/scintilla/src/LexRuby.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_LexSQL.o: ../../src/stc\scintilla\src\LexSQL.cxx
+$(OBJS)\stcdll_LexSQL.o: ../../src/stc/scintilla/src/LexSQL.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_LexVB.o: ../../src/stc\scintilla\src\LexVB.cxx
+$(OBJS)\stcdll_LexVB.o: ../../src/stc/scintilla/src/LexVB.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_LineMarker.o: ../../src/stc\scintilla\src\LineMarker.cxx
+$(OBJS)\stcdll_LineMarker.o: ../../src/stc/scintilla/src/LineMarker.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_PlatWX.o: ../../src/stc\PlatWX.cpp
+$(OBJS)\stcdll_PlatWX.o: ../../src/stc/PlatWX.cpp
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_PropSet.o: ../../src/stc\scintilla\src\PropSet.cxx
+$(OBJS)\stcdll_PropSet.o: ../../src/stc/scintilla/src/PropSet.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_RESearch.o: ../../src/stc\scintilla\src\RESearch.cxx
+$(OBJS)\stcdll_RESearch.o: ../../src/stc/scintilla/src/RESearch.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_ScintillaBase.o: ../../src/stc\scintilla\src\ScintillaBase.cxx
+$(OBJS)\stcdll_ScintillaBase.o: ../../src/stc/scintilla/src/ScintillaBase.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_ScintillaWX.o: ../../src/stc\ScintillaWX.cpp
+$(OBJS)\stcdll_ScintillaWX.o: ../../src/stc/ScintillaWX.cpp
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_Style.o: ../../src/stc\scintilla\src\Style.cxx
+$(OBJS)\stcdll_Style.o: ../../src/stc/scintilla/src/Style.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_StyleContext.o: ../../src/stc\scintilla\src\StyleContext.cxx
+$(OBJS)\stcdll_StyleContext.o: ../../src/stc/scintilla/src/StyleContext.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_UniConversion.o: ../../src/stc\scintilla\src\UniConversion.cxx
+$(OBJS)\stcdll_UniConversion.o: ../../src/stc/scintilla/src/UniConversion.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_ViewStyle.o: ../../src/stc\scintilla\src\ViewStyle.cxx
+$(OBJS)\stcdll_ViewStyle.o: ../../src/stc/scintilla/src/ViewStyle.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_WindowAccessor.o: ../../src/stc\scintilla\src\WindowAccessor.cxx
+$(OBJS)\stcdll_WindowAccessor.o: ../../src/stc/scintilla/src/WindowAccessor.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_XPM.o: ../../src/stc\scintilla\src\XPM.cxx
+$(OBJS)\stcdll_XPM.o: ../../src/stc/scintilla/src/XPM.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stcdll_stc.o: ../../src/stc\stc.cpp
+$(OBJS)\stcdll_stc.o: ../../src/stc/stc.cpp
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
-$(OBJS)\stclib_AutoComplete.o: ../../src/stc\scintilla\src\AutoComplete.cxx
+$(OBJS)\stclib_AutoComplete.o: ../../src/stc/scintilla/src/AutoComplete.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_CallTip.o: ../../src/stc\scintilla\src\CallTip.cxx
+$(OBJS)\stclib_CallTip.o: ../../src/stc/scintilla/src/CallTip.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_CellBuffer.o: ../../src/stc\scintilla\src\CellBuffer.cxx
+$(OBJS)\stclib_CellBuffer.o: ../../src/stc/scintilla/src/CellBuffer.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_ContractionState.o: ../../src/stc\scintilla\src\ContractionState.cxx
+$(OBJS)\stclib_ContractionState.o: ../../src/stc/scintilla/src/ContractionState.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_Document.o: ../../src/stc\scintilla\src\Document.cxx
+$(OBJS)\stclib_Document.o: ../../src/stc/scintilla/src/Document.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_DocumentAccessor.o: ../../src/stc\scintilla\src\DocumentAccessor.cxx
+$(OBJS)\stclib_DocumentAccessor.o: ../../src/stc/scintilla/src/DocumentAccessor.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_Editor.o: ../../src/stc\scintilla\src\Editor.cxx
+$(OBJS)\stclib_Editor.o: ../../src/stc/scintilla/src/Editor.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_ExternalLexer.o: ../../src/stc\scintilla\src\ExternalLexer.cxx
+$(OBJS)\stclib_ExternalLexer.o: ../../src/stc/scintilla/src/ExternalLexer.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_Indicator.o: ../../src/stc\scintilla\src\Indicator.cxx
+$(OBJS)\stclib_Indicator.o: ../../src/stc/scintilla/src/Indicator.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_KeyMap.o: ../../src/stc\scintilla\src\KeyMap.cxx
+$(OBJS)\stclib_KeyMap.o: ../../src/stc/scintilla/src/KeyMap.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_KeyWords.o: ../../src/stc\scintilla\src\KeyWords.cxx
+$(OBJS)\stclib_KeyWords.o: ../../src/stc/scintilla/src/KeyWords.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_LexAVE.o: ../../src/stc\scintilla\src\LexAVE.cxx
+$(OBJS)\stclib_LexAVE.o: ../../src/stc/scintilla/src/LexAVE.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_LexAda.o: ../../src/stc\scintilla\src\LexAda.cxx
+$(OBJS)\stclib_LexAda.o: ../../src/stc/scintilla/src/LexAda.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_LexAsm.o: ../../src/stc\scintilla\src\LexAsm.cxx
+$(OBJS)\stclib_LexAsm.o: ../../src/stc/scintilla/src/LexAsm.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_LexBaan.o: ../../src/stc\scintilla\src\LexBaan.cxx
+$(OBJS)\stclib_LexBaan.o: ../../src/stc/scintilla/src/LexBaan.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_LexBullant.o: ../../src/stc\scintilla\src\LexBullant.cxx
+$(OBJS)\stclib_LexBullant.o: ../../src/stc/scintilla/src/LexBullant.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_LexCPP.o: ../../src/stc\scintilla\src\LexCPP.cxx
+$(OBJS)\stclib_LexCPP.o: ../../src/stc/scintilla/src/LexCPP.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_LexCSS.o: ../../src/stc\scintilla\src\LexCSS.cxx
+$(OBJS)\stclib_LexCSS.o: ../../src/stc/scintilla/src/LexCSS.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_LexConf.o: ../../src/stc\scintilla\src\LexConf.cxx
+$(OBJS)\stclib_LexConf.o: ../../src/stc/scintilla/src/LexConf.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_LexCrontab.o: ../../src/stc\scintilla\src\LexCrontab.cxx
+$(OBJS)\stclib_LexCrontab.o: ../../src/stc/scintilla/src/LexCrontab.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_LexEScript.o: ../../src/stc\scintilla\src\LexEScript.cxx
+$(OBJS)\stclib_LexEScript.o: ../../src/stc/scintilla/src/LexEScript.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_LexEiffel.o: ../../src/stc\scintilla\src\LexEiffel.cxx
+$(OBJS)\stclib_LexEiffel.o: ../../src/stc/scintilla/src/LexEiffel.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_LexFortran.o: ../../src/stc\scintilla\src\LexFortran.cxx
+$(OBJS)\stclib_LexFortran.o: ../../src/stc/scintilla/src/LexFortran.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_LexHTML.o: ../../src/stc\scintilla\src\LexHTML.cxx
+$(OBJS)\stclib_LexHTML.o: ../../src/stc/scintilla/src/LexHTML.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_LexLisp.o: ../../src/stc\scintilla\src\LexLisp.cxx
+$(OBJS)\stclib_LexLisp.o: ../../src/stc/scintilla/src/LexLisp.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_LexLout.o: ../../src/stc\scintilla\src\LexLout.cxx
+$(OBJS)\stclib_LexLout.o: ../../src/stc/scintilla/src/LexLout.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_LexLua.o: ../../src/stc\scintilla\src\LexLua.cxx
+$(OBJS)\stclib_LexLua.o: ../../src/stc/scintilla/src/LexLua.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_LexMatlab.o: ../../src/stc\scintilla\src\LexMatlab.cxx
+$(OBJS)\stclib_LexMatlab.o: ../../src/stc/scintilla/src/LexMatlab.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_LexOthers.o: ../../src/stc\scintilla\src\LexOthers.cxx
+$(OBJS)\stclib_LexOthers.o: ../../src/stc/scintilla/src/LexOthers.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_LexPOV.o: ../../src/stc\scintilla\src\LexPOV.cxx
+$(OBJS)\stclib_LexPOV.o: ../../src/stc/scintilla/src/LexPOV.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_LexPascal.o: ../../src/stc\scintilla\src\LexPascal.cxx
+$(OBJS)\stclib_LexPascal.o: ../../src/stc/scintilla/src/LexPascal.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_LexPerl.o: ../../src/stc\scintilla\src\LexPerl.cxx
+$(OBJS)\stclib_LexPerl.o: ../../src/stc/scintilla/src/LexPerl.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_LexPython.o: ../../src/stc\scintilla\src\LexPython.cxx
+$(OBJS)\stclib_LexPython.o: ../../src/stc/scintilla/src/LexPython.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_LexRuby.o: ../../src/stc\scintilla\src\LexRuby.cxx
+$(OBJS)\stclib_LexRuby.o: ../../src/stc/scintilla/src/LexRuby.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_LexSQL.o: ../../src/stc\scintilla\src\LexSQL.cxx
+$(OBJS)\stclib_LexSQL.o: ../../src/stc/scintilla/src/LexSQL.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_LexVB.o: ../../src/stc\scintilla\src\LexVB.cxx
+$(OBJS)\stclib_LexVB.o: ../../src/stc/scintilla/src/LexVB.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_LineMarker.o: ../../src/stc\scintilla\src\LineMarker.cxx
+$(OBJS)\stclib_LineMarker.o: ../../src/stc/scintilla/src/LineMarker.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_PlatWX.o: ../../src/stc\PlatWX.cpp
+$(OBJS)\stclib_PlatWX.o: ../../src/stc/PlatWX.cpp
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_PropSet.o: ../../src/stc\scintilla\src\PropSet.cxx
+$(OBJS)\stclib_PropSet.o: ../../src/stc/scintilla/src/PropSet.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_RESearch.o: ../../src/stc\scintilla\src\RESearch.cxx
+$(OBJS)\stclib_RESearch.o: ../../src/stc/scintilla/src/RESearch.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_ScintillaBase.o: ../../src/stc\scintilla\src\ScintillaBase.cxx
+$(OBJS)\stclib_ScintillaBase.o: ../../src/stc/scintilla/src/ScintillaBase.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_ScintillaWX.o: ../../src/stc\ScintillaWX.cpp
+$(OBJS)\stclib_ScintillaWX.o: ../../src/stc/ScintillaWX.cpp
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_Style.o: ../../src/stc\scintilla\src\Style.cxx
+$(OBJS)\stclib_Style.o: ../../src/stc/scintilla/src/Style.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_StyleContext.o: ../../src/stc\scintilla\src\StyleContext.cxx
+$(OBJS)\stclib_StyleContext.o: ../../src/stc/scintilla/src/StyleContext.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_UniConversion.o: ../../src/stc\scintilla\src\UniConversion.cxx
+$(OBJS)\stclib_UniConversion.o: ../../src/stc/scintilla/src/UniConversion.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_ViewStyle.o: ../../src/stc\scintilla\src\ViewStyle.cxx
+$(OBJS)\stclib_ViewStyle.o: ../../src/stc/scintilla/src/ViewStyle.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_WindowAccessor.o: ../../src/stc\scintilla\src\WindowAccessor.cxx
+$(OBJS)\stclib_WindowAccessor.o: ../../src/stc/scintilla/src/WindowAccessor.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_XPM.o: ../../src/stc\scintilla\src\XPM.cxx
+$(OBJS)\stclib_XPM.o: ../../src/stc/scintilla/src/XPM.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
-$(OBJS)\stclib_stc.o: ../../src/stc\stc.cpp
+$(OBJS)\stclib_stc.o: ../../src/stc/stc.cpp
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
 clean: 

@@ -19,7 +19,7 @@ GIZMOSDLL_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_3) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	/I..\..\src\gizmos\..\..\..\include /I$(SETUPHDIR) \
 	/I..\..\src\gizmos\..\..\include /DWXUSINGDLL /DWXMAKINGDLL_GIZMOS \
-	$(CXXFLAGS) /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_gizmosdll.pch"
+	$(CXXFLAGS) /GR /GX /Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_gizmosdll.pch"
 GIZMOSDLL_OBJECTS =  \
 	$(OBJS)\gizmosdll_dummy.obj \
 	$(OBJS)\gizmosdll_dynamicsash.obj \
@@ -34,7 +34,7 @@ GIZMOSLIB_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_12) \
 	$(____DEBUGRUNTIME_11_p) $(__OPTIMIZEFLAG) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
 	/I..\..\src\gizmos\..\..\..\include /I$(SETUPHDIR) \
-	/I..\..\src\gizmos\..\..\include $(CXXFLAGS) /Yu"wx/wxprec.h" \
+	/I..\..\src\gizmos\..\..\include $(CXXFLAGS) /GR /GX /Yu"wx/wxprec.h" \
 	/Fp"$(OBJS)\wxprec_gizmoslib.pch"
 GIZMOSLIB_OBJECTS =  \
 	$(OBJS)\gizmoslib_dummy.obj \

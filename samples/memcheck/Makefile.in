@@ -118,7 +118,7 @@ memcheck$(EXEEXT): $(MEMCHECK_OBJECTS) $(__memcheck___win32rc)
 	$(__memcheck___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-memcheck.app/Contents: memcheck$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+memcheck.app/Contents/PkgInfo: memcheck$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p memcheck.app/Contents
 	mkdir -p memcheck.app/Contents/MacOS
 	mkdir -p memcheck.app/Contents/Resources
@@ -139,7 +139,7 @@ memcheck.app/Contents: memcheck$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(L
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc memcheck.app/Contents/Resources/memcheck.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns memcheck.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@memcheck_bundle: memcheck.app/Contents
+@COND_PLATFORM_MACOSX_1@memcheck_bundle: memcheck.app/Contents/PkgInfo
 
 memcheck_memcheck.o: $(srcdir)/memcheck.cpp
 	$(CXXC) -c -o $@ $(MEMCHECK_CXXFLAGS) $<

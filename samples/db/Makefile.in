@@ -115,7 +115,7 @@ dbtest$(EXEEXT): $(DBTEST_OBJECTS) $(__dbtest___win32rc)
 	$(__dbtest___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-dbtest.app/Contents: dbtest$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+dbtest.app/Contents/PkgInfo: dbtest$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p dbtest.app/Contents
 	mkdir -p dbtest.app/Contents/MacOS
 	mkdir -p dbtest.app/Contents/Resources
@@ -136,7 +136,7 @@ dbtest.app/Contents: dbtest$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDI
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc dbtest.app/Contents/Resources/dbtest.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns dbtest.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@dbtest_bundle: dbtest.app/Contents
+@COND_PLATFORM_MACOSX_1@dbtest_bundle: dbtest.app/Contents/PkgInfo
 
 dbtest_dbtest.o: $(srcdir)/dbtest.cpp
 	$(CXXC) -c -o $@ $(DBTEST_CXXFLAGS) $<

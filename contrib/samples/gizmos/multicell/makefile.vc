@@ -17,7 +17,7 @@ MTEST_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS_7)$(__DEBUGRUNTIME_3) /DWIN32 \
 	$(__OPTIMIZEFLAG_4) /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
 	$(__UNICODE_DEFINE_p) /I.\..\..\..\..\include /I$(SETUPHDIR) /I. \
 	$(__DLLFLAG_p) /D_WINDOWS /I.\..\..\..\..\samples /I.\..\..\..\include \
-	$(CXXFLAGS)
+	$(CXXFLAGS) /GR /GX
 MTEST_OBJECTS =  \
 	$(OBJS)\mtest_sample.res \
 	$(OBJS)\mtest_mtest.obj

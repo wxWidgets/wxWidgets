@@ -151,10 +151,10 @@ $(OBJS):
 
 all: $(OBJS)\wxpoem.exe data
 
-$(OBJS)\wxpoem_wxpoem.o: .\wxpoem.cpp
+$(OBJS)\wxpoem_wxpoem.o: ./wxpoem.cpp
 	$(CXX) -c -o $@ $(WXPOEM_CXXFLAGS) $<
 
-$(OBJS)\wxpoem_wxpoem_rc.o: .\wxpoem.rc
+$(OBJS)\wxpoem_wxpoem_rc.o: ./wxpoem.rc
 	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../samples
 
 clean: 

@@ -108,7 +108,7 @@ about$(EXEEXT): $(ABOUT_OBJECTS) $(__about___win32rc)
 	$(__about___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-about.app/Contents: about$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+about.app/Contents/PkgInfo: about$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p about.app/Contents
 	mkdir -p about.app/Contents/MacOS
 	mkdir -p about.app/Contents/Resources
@@ -135,7 +135,7 @@ about_about.o: $(srcdir)/about.cpp
 about_about_rc.o: $(srcdir)/about.rc
 	$(RESCOMP) -i$< -o$@ --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)   --include-dir $(top_srcdir)/include --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../../samples
 
-@COND_PLATFORM_MACOSX_1@about_bundle: about.app/Contents
+@COND_PLATFORM_MACOSX_1@about_bundle: about.app/Contents/PkgInfo
 
 clean: 
 	rm -rf ./.deps ./.pch

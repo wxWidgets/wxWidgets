@@ -157,16 +157,16 @@ $(OBJS):
 
 all: $(OBJS)\client.exe $(OBJS)\server.exe
 
-$(OBJS)\client_client.o: .\client.cpp
+$(OBJS)\client_client.o: ./client.cpp
 	$(CXX) -c -o $@ $(CLIENT_CXXFLAGS) $<
 
-$(OBJS)\client_client_rc.o: .\client.rc
+$(OBJS)\client_client_rc.o: ./client.rc
 	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) --include-dir ./../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_0) --include-dir ./../../samples
 
-$(OBJS)\server_server.o: .\server.cpp
+$(OBJS)\server_server.o: ./server.cpp
 	$(CXX) -c -o $@ $(SERVER_CXXFLAGS) $<
 
-$(OBJS)\server_server_rc.o: .\server.rc
+$(OBJS)\server_server_rc.o: ./server.rc
 	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) --include-dir ./../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_0) --include-dir ./../../samples
 
 clean: 

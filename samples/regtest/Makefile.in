@@ -118,7 +118,7 @@ regtest$(EXEEXT): $(REGTEST_OBJECTS) $(__regtest___win32rc)
 	$(__regtest___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-regtest.app/Contents: regtest$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+regtest.app/Contents/PkgInfo: regtest$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p regtest.app/Contents
 	mkdir -p regtest.app/Contents/MacOS
 	mkdir -p regtest.app/Contents/Resources
@@ -139,7 +139,7 @@ regtest.app/Contents: regtest$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIB
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc regtest.app/Contents/Resources/regtest.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns regtest.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@regtest_bundle: regtest.app/Contents
+@COND_PLATFORM_MACOSX_1@regtest_bundle: regtest.app/Contents/PkgInfo
 
 regtest_regtest.o: $(srcdir)/regtest.cpp
 	$(CXXC) -c -o $@ $(REGTEST_CXXFLAGS) $<

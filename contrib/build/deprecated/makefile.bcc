@@ -20,17 +20,18 @@ BCCDIR = $(MAKEDIR)\..
 
 ### Variables: ###
 
-DEPRECATEDDLL_CFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) $(__DEBUGINFO) \
-	$(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\deprecated\..\..\..\include \
-	-I$(SETUPHDIR) -I..\..\src\deprecated\..\..\include -DWXUSINGDLL \
-	-DWXMAKINGDLL_DEPRECATED -I..\..\src\deprecated $(CFLAGS)
-DEPRECATEDDLL_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) $(__DEBUGINFO) \
-	$(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\deprecated\..\..\..\include \
-	-I$(SETUPHDIR) -I..\..\src\deprecated\..\..\include -DWXUSINGDLL \
-	-DWXMAKINGDLL_DEPRECATED -I..\..\src\deprecated $(CXXFLAGS) -Hu \
-	-H=$(OBJS)\wxprec_deprecateddll.csm
+DEPRECATEDDLL_CFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) -I$(BCCDIR)\include \
+	$(__DEBUGINFO) $(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
+	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	-I..\..\src\deprecated\..\..\..\include -I$(SETUPHDIR) \
+	-I..\..\src\deprecated\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_DEPRECATED \
+	-I..\..\src\deprecated $(CFLAGS)
+DEPRECATEDDLL_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) -I$(BCCDIR)\include \
+	$(__DEBUGINFO) $(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
+	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	-I..\..\src\deprecated\..\..\..\include -I$(SETUPHDIR) \
+	-I..\..\src\deprecated\..\..\include -DWXUSINGDLL -DWXMAKINGDLL_DEPRECATED \
+	-I..\..\src\deprecated $(CXXFLAGS) -Hu -H=$(OBJS)\wxprec_deprecateddll.csm
 DEPRECATEDDLL_OBJECTS =  \
 	$(OBJS)\deprecateddll_dummy.obj \
 	$(OBJS)\deprecateddll_prop.obj \
@@ -41,16 +42,17 @@ DEPRECATEDDLL_OBJECTS =  \
 	$(OBJS)\deprecateddll_treelay.obj \
 	$(OBJS)\deprecateddll_wxexpr.obj \
 	$(OBJS)\deprecateddll_dosyacc.obj
-DEPRECATEDLIB_CFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) $(__DEBUGINFO) \
-	$(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\deprecated\..\..\..\include \
-	-I$(SETUPHDIR) -I..\..\src\deprecated\..\..\include -I..\..\src\deprecated \
-	$(CFLAGS)
-DEPRECATEDLIB_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) $(__DEBUGINFO) \
-	$(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I..\..\src\deprecated\..\..\..\include \
-	-I$(SETUPHDIR) -I..\..\src\deprecated\..\..\include -I..\..\src\deprecated \
-	$(CXXFLAGS) -Hu -H=$(OBJS)\wxprec_deprecatedlib.csm
+DEPRECATEDLIB_CFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) -I$(BCCDIR)\include \
+	$(__DEBUGINFO) $(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
+	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	-I..\..\src\deprecated\..\..\..\include -I$(SETUPHDIR) \
+	-I..\..\src\deprecated\..\..\include -I..\..\src\deprecated $(CFLAGS)
+DEPRECATEDLIB_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS) -I$(BCCDIR)\include \
+	$(__DEBUGINFO) $(__OPTIMIZEFLAG) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
+	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
+	-I..\..\src\deprecated\..\..\..\include -I$(SETUPHDIR) \
+	-I..\..\src\deprecated\..\..\include -I..\..\src\deprecated $(CXXFLAGS) -Hu \
+	-H=$(OBJS)\wxprec_deprecatedlib.csm
 DEPRECATEDLIB_OBJECTS =  \
 	$(OBJS)\deprecatedlib_dummy.obj \
 	$(OBJS)\deprecatedlib_prop.obj \
@@ -247,7 +249,7 @@ clean:
 
 !if "$(SHARED)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)250$(WXUNICODEFLAG)$(WXDEBUGFLAG)_deprecated_bcc$(VENDORTAG).dll: $(OBJS)\deprecateddll_dummy.obj  $(DEPRECATEDDLL_OBJECTS)
-	ilink32 -Tpd -q $(LDFLAGS) $(__DEBUGINFO)  -L$(LIBDIRNAME) @&&|
+	ilink32 -Tpd -q $(LDFLAGS) -L$(BCCDIR)\lib $(__DEBUGINFO)  -L$(LIBDIRNAME) @&&|
 	c0d32.obj $(DEPRECATEDDLL_OBJECTS),$@,, $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) import32.lib ole2w32.lib  $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) import32.lib cw32mt$(__RUNTIME_LIBS_7).lib,,
 |
 	implib -f $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_deprecated $@

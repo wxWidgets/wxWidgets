@@ -147,10 +147,10 @@ $(OBJS):
 
 all: $(OBJS)\nativdlg.exe
 
-$(OBJS)\nativdlg_nativdlg.o: .\nativdlg.cpp
+$(OBJS)\nativdlg_nativdlg.o: ./nativdlg.cpp
 	$(CXX) -c -o $@ $(NATIVDLG_CXXFLAGS) $<
 
-$(OBJS)\nativdlg_nativdlg_rc.o: .\nativdlg.rc
+$(OBJS)\nativdlg_nativdlg_rc.o: ./nativdlg.rc
 	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../samples
 
 clean: 

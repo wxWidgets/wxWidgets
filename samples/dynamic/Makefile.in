@@ -114,7 +114,7 @@ dynamic$(EXEEXT): $(DYNAMIC_OBJECTS) $(__dynamic___win32rc)
 	$(__dynamic___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-dynamic.app/Contents: dynamic$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+dynamic.app/Contents/PkgInfo: dynamic$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p dynamic.app/Contents
 	mkdir -p dynamic.app/Contents/MacOS
 	mkdir -p dynamic.app/Contents/Resources
@@ -135,7 +135,7 @@ dynamic.app/Contents: dynamic$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIB
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc dynamic.app/Contents/Resources/dynamic.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns dynamic.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@dynamic_bundle: dynamic.app/Contents
+@COND_PLATFORM_MACOSX_1@dynamic_bundle: dynamic.app/Contents/PkgInfo
 
 dynamic_dynamic.o: $(srcdir)/dynamic.cpp
 	$(CXXC) -c -o $@ $(DYNAMIC_CXXFLAGS) $<

@@ -122,7 +122,7 @@ richedit$(EXEEXT): $(RICHEDIT_OBJECTS) $(__richedit___win32rc)
 	$(__richedit___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-richedit.app/Contents: richedit$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+richedit.app/Contents/PkgInfo: richedit$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p richedit.app/Contents
 	mkdir -p richedit.app/Contents/MacOS
 	mkdir -p richedit.app/Contents/Resources
@@ -143,7 +143,7 @@ richedit.app/Contents: richedit$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(L
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc richedit.app/Contents/Resources/richedit.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns richedit.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@richedit_bundle: richedit.app/Contents
+@COND_PLATFORM_MACOSX_1@richedit_bundle: richedit.app/Contents/PkgInfo
 
 richedit_kbList.o: $(srcdir)/kbList.cpp
 	$(CXXC) -c -o $@ $(RICHEDIT_CXXFLAGS) $<

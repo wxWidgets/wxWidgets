@@ -147,10 +147,10 @@ $(OBJS):
 
 all: $(OBJS)\png.exe
 
-$(OBJS)\png_pngdemo.o: .\pngdemo.cpp
+$(OBJS)\png_pngdemo.o: ./pngdemo.cpp
 	$(CXX) -c -o $@ $(PNG_CXXFLAGS) $<
 
-$(OBJS)\png_pngdemo_rc.o: .\pngdemo.rc
+$(OBJS)\png_pngdemo_rc.o: ./pngdemo.rc
 	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../samples
 
 clean: 

@@ -129,7 +129,7 @@ printing$(EXEEXT): $(PRINTING_OBJECTS) $(__printing___win32rc)
 	$(__printing___mac_setfilecmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-printing.app/Contents: printing$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
+printing.app/Contents/PkgInfo: printing$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc $(top_srcdir)/src/mac/wxmac.icns
 	mkdir -p printing.app/Contents
 	mkdir -p printing.app/Contents/MacOS
 	mkdir -p printing.app/Contents/Resources
@@ -150,7 +150,7 @@ printing.app/Contents: printing$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.in $(L
 	ln -f $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).0.rsrc printing.app/Contents/Resources/printing.rsrc
 	ln -f $(top_srcdir)/src/mac/wxmac.icns printing.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@printing_bundle: printing.app/Contents
+@COND_PLATFORM_MACOSX_1@printing_bundle: printing.app/Contents/PkgInfo
 
 printing_printing.o: $(srcdir)/printing.cpp
 	$(CXXC) -c -o $@ $(PRINTING_CXXFLAGS) $<
