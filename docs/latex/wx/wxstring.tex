@@ -1262,6 +1262,13 @@ buffer (which must be writable, of course) you might call it like this:
     }
 \end{verbatim}
 
+Note that the exact usage of this depends on whether on not wxUSE\_STL is enabled.  If
+wxUSE\_STL is enabled, wxStringBuffer creates a seperate empty character buffer, and
+if wxUSE\_STL is disabled, it uses GetWriteBuf() from wxString, keeping the same buffer
+wxString uses intact.  In other words, relying on wxStringBuffer containing the old 
+wxString data is probably not a good idea if you want to build your program in both
+with and without wxUSE\_STL.
+
 \wxheading{Derived from}
 
 None
@@ -1319,6 +1326,13 @@ of the string, you might call it like this:
         wxLogError("Something is very wrong!");
     }
 \end{verbatim}
+
+Note that the exact usage of this depends on whether on not wxUSE\_STL is enabled.  If
+wxUSE\_STL is enabled, wxStringBuffer creates a seperate empty character buffer, and
+if wxUSE\_STL is disabled, it uses GetWriteBuf() from wxString, keeping the same buffer
+wxString uses intact.  In other words, relying on wxStringBuffer containing the old 
+wxString data is probably not a good idea if you want to build your program in both
+with and without wxUSE\_STL.
 
 Note that SetLength {\tt must} be called before wxStringBufferLength destructs.
 
