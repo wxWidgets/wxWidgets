@@ -101,10 +101,10 @@ protected:
     {
         return (void **)calloc(sz, sizeof(void*));
     }
-	static void FreeTable(void *table)
-	{
-		free(table);
-	}
+    static void FreeTable(void *table)
+    {
+        free(table);
+    }
 };
 
 #define _WX_DECLARE_HASHTABLE( VALUE_T, KEY_T, HASH_T, KEY_EX_T, KEY_EQ_T, CLASSNAME, CLASSEXP, SHOULD_GROW, SHOULD_SHRINK ) \
