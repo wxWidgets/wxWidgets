@@ -32,12 +32,13 @@
     #include "wx/utils.h"
     #include "wx/app.h"
     #include "wx/cursor.h"
+    #include "wx/intl.h"
+    #include "wx/log.h"
 #endif  //WX_PRECOMP
 
 #include "wx/msw/private.h"     // includes <windows.h>
 
 #include "wx/timer.h"
-#include "wx/intl.h"
 
 #include <ctype.h>
 
@@ -54,12 +55,14 @@
     #include <sys/stat.h>
 #endif  //GNUWIN32
 
-#include "wx/log.h"
-
 #ifdef __BORLANDC__ // Please someone tell me which version of Borland needs
                     // this (3.1 I believe) and how to test for it.
                     // If this works for Borland 4.0 as well, then no worries.
     #include <dir.h>
+#endif
+
+#if defined(__WIN32__) && !defined(__TWIN32__)
+    #include <winsock.h> // we use socket functions in wxGetFullHostName()
 #endif
 
 // VZ: there is some code using NetXXX() functions to get the full user name:
@@ -146,12 +149,10 @@ static const wxChar eUSERID[]    = wxT("UserId");
 // get host name and related
 // ----------------------------------------------------------------------------
 
-// Get full hostname (eg. DoDo.BSn-Germany.crg.de)
+// Get hostname only (without domain name)
 bool wxGetHostName(wxChar *buf, int maxSize)
 {
 #if defined(__WIN32__) && !defined(__TWIN32__)
-    // TODO should use GetComputerNameEx() when available
-
     DWORD nSize = maxSize;
     if ( !::GetComputerName(buf, &nSize) )
     {
@@ -174,8 +175,48 @@ bool wxGetHostName(wxChar *buf, int maxSize)
 #endif
 }
 
+// get full hostname (with domain name if possible)
 bool wxGetFullHostName(wxChar *buf, int maxSize)
 {
+#if defined(__WIN32__) && !defined(__TWIN32__)
+    // TODO should use GetComputerNameEx() when available
+    WSADATA wsa;
+    if ( WSAStartup(MAKEWORD(1, 1), &wsa) == 0 )
+    {
+        wxString host;
+        char bufA[256];
+        if ( gethostname(bufA, WXSIZEOF(bufA)) == 0 )
+        {
+            // gethostname() won't usually include the DNS domain name, for
+            // this we need to work a bit more
+            if ( !strchr(bufA, '.') )
+            {
+                struct hostent *pHostEnt =  gethostbyname(bufA);
+
+                if ( pHostEnt )
+                {
+                    // Windows will use DNS internally now
+                    pHostEnt = gethostbyaddr(pHostEnt->h_addr, 4, PF_INET);
+                }
+
+                if ( pHostEnt )
+                {
+                    host = pHostEnt->h_name;
+                }
+            }
+        }
+
+        WSACleanup();
+
+        if ( !!host )
+        {
+            wxStrncpy(buf, host, maxSize);
+
+            return TRUE;
+        }
+    }
+#endif // Win32
+
     return wxGetHostName(buf, maxSize);
 }
 

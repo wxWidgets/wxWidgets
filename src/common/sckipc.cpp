@@ -409,7 +409,7 @@ void wxTCPEventHandler::Client_OnRequest(wxSocketEvent &event)
 {
   wxSocketBase *sock = event.GetSocket();
   wxSocketNotify evt = event.GetSocketEvent();
-  wxTCPConnection *connection = (wxTCPConnection *)(event.GetClientData());
+  wxTCPConnection *connection = (wxTCPConnection *)(sock->GetClientData());
 
   // This socket is being deleted; skip this event
   if (!connection)

@@ -1242,7 +1242,7 @@ class WXDLLEXPORT wxSocketModule : public wxModule
   DECLARE_DYNAMIC_CLASS(wxSocketModule)
 
 public:
-  bool OnInit() { return GSocket_Init(); }
+  bool OnInit() { return GSocket_Init() != 0; }
   void OnExit() { GSocket_Cleanup(); }
 };
 

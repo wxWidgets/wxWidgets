@@ -360,30 +360,28 @@ wxStatusBar *wxFrame::OnCreateStatusBar(int number,
     wxStatusBar *statusBar = NULL;
 
 #if wxUSE_NATIVE_STATUSBAR
-    if ( UsesNativeStatusBar() )
+    if ( !UsesNativeStatusBar() )
     {
-        statusBar = (wxStatusBar *)new wxStatusBar95(this, id, style);
-
-        statusBar->SetFieldsCount(number);
+        statusBar = (wxStatusBar *)new wxStatusBarGeneric(this, id, style);
     }
     else
 #endif
     {
-        statusBar = (wxStatusBar *)new wxStatusBarGeneric(this, id, style, name);
-
-        // Set the height according to the font and the border size
-        wxClientDC dc(statusBar);
-        dc.SetFont(statusBar->GetFont());
-
-        wxCoord y;
-        dc.GetTextExtent(_T("X"), NULL, &y );
-
-        int height = (int)( (11*y)/10 + 2*statusBar->GetBorderY());
-
-        statusBar->SetSize(-1, -1, -1, height);
-
-        statusBar->SetFieldsCount(number);
+        statusBar = new wxStatusBar(this, id, style, name);
     }
+
+    // Set the height according to the font and the border size
+    wxClientDC dc(statusBar);
+    dc.SetFont(statusBar->GetFont());
+
+    wxCoord y;
+    dc.GetTextExtent(_T("X"), NULL, &y );
+
+    int height = (int)( (11*y)/10 + 2*statusBar->GetBorderY());
+
+    statusBar->SetSize(-1, -1, -1, height);
+
+    statusBar->SetFieldsCount(number);
 
     return statusBar;
 }

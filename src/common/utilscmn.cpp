@@ -1091,14 +1091,13 @@ wxString wxGetEmailAddress()
 {
     wxString email;
 
-    wxString host = wxGetHostName();
+    wxString host = wxGetFullHostName();
     if ( !!host )
     {
         wxString user = wxGetUserId();
         if ( !!user )
         {
-            wxString email(user);
-            email << wxT('@') << host;
+            email << user << wxT('@') << host;
         }
     }
 
