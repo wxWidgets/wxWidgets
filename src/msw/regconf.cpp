@@ -140,13 +140,13 @@ void wxRegConfig::SetPath(const wxString& strPath)
 #define LOCAL_MASK        0x8000
 #define IS_LOCAL_INDEX(l) (((l) & LOCAL_MASK) != 0)
 
-bool wxRegConfig::GetFirstGroup(wxString& str, long& lIndex)
+bool wxRegConfig::GetFirstGroup(wxString& str, long& lIndex) const
 {
   lIndex = 0;
   return GetNextGroup(str, lIndex);
 }
 
-bool wxRegConfig::GetNextGroup(wxString& str, long& lIndex)
+bool wxRegConfig::GetNextGroup(wxString& str, long& lIndex) const
 {
   // are we already enumerating local entries?
   if ( m_keyGlobal.IsOpened() && !IS_LOCAL_INDEX(lIndex) ) {
@@ -169,13 +169,13 @@ bool wxRegConfig::GetNextGroup(wxString& str, long& lIndex)
   return bOk;
 }
 
-bool wxRegConfig::GetFirstEntry(wxString& str, long& lIndex)
+bool wxRegConfig::GetFirstEntry(wxString& str, long& lIndex) const
 {
   lIndex = 0;
   return GetNextEntry(str, lIndex);
 }
 
-bool wxRegConfig::GetNextEntry(wxString& str, long& lIndex)
+bool wxRegConfig::GetNextEntry(wxString& str, long& lIndex) const
 {
   // are we already enumerating local entries?
   if ( m_keyGlobal.IsOpened() && !IS_LOCAL_INDEX(lIndex) ) {
@@ -250,9 +250,9 @@ bool wxRegConfig::HasEntry(const wxString& strName) const
 // reading/writing
 // ----------------------------------------------------------------------------
 
-bool wxRegConfig::Read(wxString& str,
-                     const char *szKey,
-                     const char *szDefault) const
+bool wxRegConfig::Read(wxString *pStr,
+                       const char *szKey,
+                       const char *szDefault) const
 {
   PathChanger path(this, szKey);
 
@@ -261,7 +261,7 @@ bool wxRegConfig::Read(wxString& str,
   // if immutable key exists in global key we must check that it's not
   // overriden by the local key with the same name
   if ( IsImmutable(path.Name()) ) {
-    if ( TryGetValue(m_keyGlobal, path.Name(), str) ) {
+    if ( TryGetValue(m_keyGlobal, path.Name(), *pStr) ) {
       if ( m_keyLocal.HasValue(path.Name()) ) {
         wxLogWarning("User value for immutable key '%s' ignored.",
                    path.Name().c_str());
@@ -276,17 +276,17 @@ bool wxRegConfig::Read(wxString& str,
   }
 
   // first try local key
-  if ( TryGetValue(m_keyLocal, path.Name(), str) ||
-       (bQueryGlobal && TryGetValue(m_keyGlobal, path.Name(), str)) ) {
+  if ( TryGetValue(m_keyLocal, path.Name(), *pStr) ||
+       (bQueryGlobal && TryGetValue(m_keyGlobal, path.Name(), *pStr)) ) {
     return TRUE;
   }
 
   // default value
-  str = szDefault;
+  *pStr = szDefault;
   return FALSE;
 }
 
-bool wxRegConfig::Read(long &lValue, const char *szKey, long lDefault) const
+bool wxRegConfig::Read(long *plResult, const char *szKey, long lDefault) const
 {
   PathChanger path(this, szKey);
 
@@ -295,7 +295,7 @@ bool wxRegConfig::Read(long &lValue, const char *szKey, long lDefault) const
   // if immutable key exists in global key we must check that it's not
   // overriden by the local key with the same name
   if ( IsImmutable(path.Name()) ) {
-    if ( TryGetValue(m_keyGlobal, path.Name(), &lValue) ) {
+    if ( TryGetValue(m_keyGlobal, path.Name(), plResult) ) {
       if ( m_keyLocal.HasValue(path.Name()) ) {
         wxLogWarning("User value for immutable key '%s' ignored.",
                      path.Name().c_str());
@@ -310,13 +310,13 @@ bool wxRegConfig::Read(long &lValue, const char *szKey, long lDefault) const
   }
 
   // first try local key
-  if ( TryGetValue(m_keyLocal, path.Name(), &lValue) ||
-       (bQueryGlobal && TryGetValue(m_keyGlobal, path.Name(), &lValue)) ) {
+  if ( TryGetValue(m_keyLocal, path.Name(), plResult) ||
+       (bQueryGlobal && TryGetValue(m_keyGlobal, path.Name(), plResult)) ) {
     return TRUE;
   }
 
   // default
-  lValue = lDefault;
+  *plResult = lDefault;
   return FALSE;
 }
 

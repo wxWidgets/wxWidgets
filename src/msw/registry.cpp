@@ -256,9 +256,10 @@ void wxRegKey::SetName(const wxRegKey& keyParent, const wxString& strKey)
   Close();
 
   // combine our name with parent's to get the full name
-  m_strKey = strKey;
+  m_strKey = keyParent.m_strKey;
   if ( !strKey.IsEmpty() && strKey[0] != REG_SEPARATOR )
     m_strKey += REG_SEPARATOR;
+  m_strKey += strKey;
 
   RemoveTrailingSeparator(m_strKey);
 
@@ -296,6 +297,42 @@ wxString wxRegKey::GetName(bool bShortPrefix) const
   return str;
 }
 
+bool wxRegKey::GetKeyInfo(ulong *pnSubKeys,
+                          ulong *pnMaxKeyLen,
+                          ulong *pnValues,
+                          ulong *pnMaxValueLen) const
+{
+#ifdef  __WIN32__
+  m_dwLastError = ::RegQueryInfoKey
+                  (
+                    m_hKey,
+                    NULL,           // class name
+                    NULL,           // (ptr to) size of class name buffer
+                    RESERVED,
+                    pnSubKeys,      // [out] number of subkeys
+                    pnMaxKeyLen,    // [out] max length of a subkey name
+                    NULL,           // longest subkey class name
+                    pnValues,       // [out] number of values
+                    pnMaxValueLen,  // [out] max length of a value name
+                    NULL,           // longest value data
+                    NULL,           // security descriptor
+                    NULL            // time of last modification
+                  );
+
+  if ( m_dwLastError != ERROR_SUCCESS ) {
+    wxLogSysError(m_dwLastError, _("can't get info about registry key '%s'"),
+                  GetName().c_str());
+    return FALSE;
+  }
+  else
+    return TRUE;
+#else // Win16
+  wxFAIL_MSG("GetKeyInfo() not implemented");
+
+  return FALSE;
+#endif
+}
+
 // ----------------------------------------------------------------------------
 // operations
 // ----------------------------------------------------------------------------
@@ -308,7 +345,7 @@ bool wxRegKey::Open()
 
   m_dwLastError = RegOpenKey(m_hRootKey, m_strKey, &m_hKey);
   if ( m_dwLastError != ERROR_SUCCESS ) {
-    wxLogSysError(m_dwLastError, "can't open registry key '%s'", 
+    wxLogSysError(m_dwLastError, _("can't open registry key '%s'"),
                   GetName().c_str());
     return FALSE;
   }
@@ -329,7 +366,7 @@ bool wxRegKey::Create(bool bOkIfExists)
 
   m_dwLastError = RegCreateKey(m_hRootKey, m_strKey, &m_hKey);
   if ( m_dwLastError != ERROR_SUCCESS ) {
-    wxLogSysError(m_dwLastError, "can't create registry key '%s'", 
+    wxLogSysError(m_dwLastError, _("can't create registry key '%s'"),
                   GetName().c_str());
     return FALSE;
   }
@@ -343,7 +380,7 @@ bool wxRegKey::Close()
   if ( IsOpened() ) {
     m_dwLastError = RegCloseKey(m_hKey);
     if ( m_dwLastError != ERROR_SUCCESS ) {
-      wxLogSysError(m_dwLastError, "can't close registry key '%s'", 
+      wxLogSysError(m_dwLastError, _("can't close registry key '%s'"),
                     GetName().c_str());
 
       m_hKey = 0;
@@ -395,7 +432,8 @@ bool wxRegKey::DeleteSelf()
 
   m_dwLastError = RegDeleteKey(m_hRootKey, m_strKey);
   if ( m_dwLastError != ERROR_SUCCESS ) {
-    wxLogSysError(m_dwLastError, "can't delete key '%s'", GetName().c_str());
+    wxLogSysError(m_dwLastError, _("can't delete key '%s'"),
+                  GetName().c_str());
     return FALSE;
   }
 
@@ -419,7 +457,7 @@ bool wxRegKey::DeleteValue(const char *szValue)
   #ifdef  __WIN32__
     m_dwLastError = RegDeleteValue(m_hKey, szValue);
     if ( m_dwLastError != ERROR_SUCCESS ) {
-      wxLogSysError(m_dwLastError, "can't delete value '%s' from key '%s'",
+      wxLogSysError(m_dwLastError, _("can't delete value '%s' from key '%s'"),
                     szValue, GetName().c_str());
       return FALSE;
     }
@@ -430,7 +468,7 @@ bool wxRegKey::DeleteValue(const char *szValue)
     // just set the (default and unique) value of the key to ""
     m_dwLastError = RegSetValue(m_hKey, NULL, REG_SZ, "", RESERVED);
     if ( m_dwLastError != ERROR_SUCCESS ) {
-      wxLogSysError(m_dwLastError, "can't delete value of key '%s'", 
+      wxLogSysError(m_dwLastError, _("can't delete value of key '%s'"),
                     GetName().c_str());
       return FALSE;
     }
@@ -487,7 +525,7 @@ wxRegKey::ValueType wxRegKey::GetValueType(const char *szValue)
     m_dwLastError = RegQueryValueEx(m_hKey, szValue, RESERVED,
                                     &dwType, NULL, NULL);
     if ( m_dwLastError != ERROR_SUCCESS ) {
-      wxLogSysError(m_dwLastError, "can't read value of key '%s'", 
+      wxLogSysError(m_dwLastError, _("can't read value of key '%s'"),
                     GetName().c_str());
       return Type_None;
     }
@@ -508,7 +546,7 @@ bool wxRegKey::SetValue(const char *szValue, long lValue)
       return TRUE;
   }
 
-  wxLogSysError(m_dwLastError, "can't set value of '%s'", 
+  wxLogSysError(m_dwLastError, _("can't set value of '%s'"),
                 GetFullName(this, szValue));
   return FALSE;
 }
@@ -521,7 +559,7 @@ bool wxRegKey::QueryValue(const char *szValue, long *plValue) const
     m_dwLastError = RegQueryValueEx(m_hKey, szValue, RESERVED, 
                                     &dwType, pBuf, &dwSize);
     if ( m_dwLastError != ERROR_SUCCESS ) {
-      wxLogSysError(m_dwLastError, "can't read value of key '%s'", 
+      wxLogSysError(m_dwLastError, _("can't read value of key '%s'"),
                     GetName().c_str());
       return FALSE;
     }
@@ -569,7 +607,7 @@ bool wxRegKey::QueryValue(const char *szValue, wxString& strValue) const
     #endif  //WIN16/32
   }
 
-  wxLogSysError(m_dwLastError, "can't read value of '%s'", 
+  wxLogSysError(m_dwLastError, _("can't read value of '%s'"),
                 GetFullName(this, szValue));
   return FALSE;
 }
@@ -593,7 +631,7 @@ bool wxRegKey::SetValue(const char *szValue, const wxString& strValue)
     #endif  //WIN16/32
   }
 
-  wxLogSysError(m_dwLastError, "can't set value of '%s'", 
+  wxLogSysError(m_dwLastError, _("can't set value of '%s'"),
                 GetFullName(this, szValue));
   return FALSE;
 }
@@ -646,7 +684,7 @@ bool wxRegKey::GetNextValue(wxString& strValueName, long& lIndex) const
         lIndex = -1;
       }
       else {
-        wxLogSysError(m_dwLastError, "can't enumerate values of key '%s'", 
+        wxLogSysError(m_dwLastError, _("can't enumerate values of key '%s'"),
                       GetName().c_str());
       }
 
@@ -691,7 +729,7 @@ bool wxRegKey::GetNextKey(wxString& strKeyName, long& lIndex) const
       lIndex = -1;
     }
     else {
-      wxLogSysError(m_dwLastError, "can't enumerate subkeys of key '%s'", 
+      wxLogSysError(m_dwLastError, _("can't enumerate subkeys of key '%s'"),
                     GetName().c_str());
     }
 
