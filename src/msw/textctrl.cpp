@@ -468,6 +468,7 @@ extern long wxEncodingToCodepage(wxFontEncoding encoding); // from strconv.cpp
 
 bool wxTextCtrl::StreamIn(const wxString& value, wxFontEncoding encoding)
 {
+#if !wxUSE_UNICODE
     // we have to use EM_STREAMIN to force richedit control 2.0+ to show any
     // text in the non default charset - otherwise it thinks it knows better
     // than we do and always shows it in the default one
@@ -491,6 +492,9 @@ bool wxTextCtrl::StreamIn(const wxString& value, wxFontEncoding encoding)
 
     // finally, stream it in the control
     const wchar_t *wpc = wchBuf;
+#else
+    const wchar_t *wpc = value.c_str();
+#endif
 
     EDITSTREAM eds;
     wxZeroMemory(eds);
