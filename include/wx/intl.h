@@ -455,6 +455,13 @@ public:
     // Returns NULL if no info found, pointer must *not* be deleted by caller
     static const wxLanguageInfo *GetLanguageInfo(int lang);
 
+    // Find the language for the given locale string which may be either a
+    // canonical ISO 2 letter language code ("xx"), a language code followed by
+    // the country code ("xx_XX") or a Windows full language name ("Xxxxx...")
+    //
+    // Returns NULL if no info found, pointer must *not* be deleted by caller
+    static const wxLanguageInfo *FindLanguageInfo(const wxString& locale);
+
     // Add custom language to the list of known languages.
     // Notes: 1) wxLanguageInfo contains platform-specific data
     //        2) must be called before Init to have effect

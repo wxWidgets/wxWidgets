@@ -1395,7 +1395,7 @@ const wxLanguageInfo *wxLocale::GetLanguageInfo(int lang)
 {
     CreateLanguagesDB();
 
-    size_t count = ms_languagesDB->GetCount();
+    const size_t count = ms_languagesDB->GetCount();
     for ( size_t i = 0; i < count; i++ )
     {
         if ( ms_languagesDB->Item(i).Language == lang )
@@ -1405,6 +1405,42 @@ const wxLanguageInfo *wxLocale::GetLanguageInfo(int lang)
     }
 
     return NULL;
+}
+
+/* static */
+const wxLanguageInfo *wxLocale::FindLanguageInfo(const wxString& locale)
+{
+    CreateLanguagesDB();
+
+    const wxLanguageInfo *infoRet = NULL;
+
+    const size_t count = ms_languagesDB->GetCount();
+    for ( size_t i = 0; i < count; i++ )
+    {
+        const wxLanguageInfo *info = &ms_languagesDB->Item(i);
+
+        if ( wxStricmp(locale, info->CanonicalName) == 0 ||
+                wxStricmp(locale, info->Description) == 0 )
+        {
+            // exact match, stop searching
+            infoRet = info;
+            break;
+        }
+
+        if ( wxStricmp(locale, info->CanonicalName.BeforeFirst(_T('_'))) == 0 )
+        {
+            // a match -- but maybe we'll find an exact one later, so continue
+            // looking
+            //
+            // OTOH, maybe we had already found a language match and in this
+            // case don't overwrite it becauce the entry for the default
+            // country always appears first in ms_languagesDB
+            if ( !infoRet )
+                infoRet = info;
+        }
+    }
+
+    return infoRet;
 }
 
 wxString wxLocale::GetSysName() const

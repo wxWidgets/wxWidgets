@@ -395,6 +395,22 @@ struct WXDLLEXPORT wxLanguageInfo
 \perlnote{In wxPerl Wx::LanguageInfo has only one method:\par
 Wx::LanguageInfo->new( language, canonicalName, WinLang, WinSubLang, Description )}
 
+\membersection{wxLocale::FindLanguageInfo}{wxlocalefindlanguageinfo}
+
+\constfunc{static wxLanguageInfo *}{FindLanguageInfo}{\param{const wxString\& }{locale}}
+
+This function may be used to find the language description structure for the
+given locale, specified either as a two letter ISO language code (for example,
+"pt"), a language code followed by the country code ("pt\_BR") or a full, human
+readable, language description ("Portuguese-Brazil").
+
+Returns the information for the given language or {\tt NULL} if this language
+is unknown. Note that even if the returned pointer is valid, the caller should
+{\it not} delete it.
+
+\wxheading{See also}
+
+\helpref{GetLanguageInfo}{wxlocalegetlanguageinfo}
 
 \membersection{wxLocale::GetCanonicalName}\label{wxlocalegetcanonicalname}
 
