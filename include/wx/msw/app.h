@@ -50,19 +50,17 @@ public:
     void OnEndSession(wxCloseEvent& event);
     void OnQueryEndSession(wxCloseEvent& event);
 
+#if wxUSE_EXCEPTIONS
+    virtual bool OnExceptionInMainLoop();
+#endif // wxUSE_EXCEPTIONS
+
 protected:
     int    m_printMode; // wxPRINT_WINDOWS, wxPRINT_POSTSCRIPT
 
-    /* Windows-specific wxApp definitions */
-
 public:
-
     // Implementation
     static bool RegisterWindowClasses();
     static bool UnregisterWindowClasses();
-
-    // idle processing
-    // ---------------
 
 #if wxUSE_RICHEDIT
     // initialize the richedit DLL of (at least) given version, return TRUE if
@@ -74,7 +72,6 @@ public:
     // wasn't found at all
     static int GetComCtl32Version();
 
-public:
     // the SW_XXX value to be used for the frames opened by the application
     // (currently seems unused which is a bug -- TODO)
     static int m_nCmdShow;
