@@ -84,7 +84,9 @@
 #define	BSDTYPES
 #define	HAVE_UNISTD_H	0
 #elif defined(_WINDOWS) || defined(__WIN32__) || defined(_Windows)
-#define	BSDTYPES
+#  if !defined(__MINGW32__)     /* GRG */
+#  define BSDTYPES
+#  endif
 #elif defined(OS2_16) || defined(OS2_32)
 #define	BSDTYPES
 #elif defined(__acornriscos)
