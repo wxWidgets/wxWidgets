@@ -1,0 +1,174 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        vlbox.tex
+%% Purpose:     wxVListBox documentation
+%% Author:      Vadim Zeitlin
+%% Modified by:
+%% Created:     01.06.03
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwindows.org>
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxVListBox}}\label{wxvlistbox}
+
+wxVListBox is a listbox-like control with the following two main differences
+from a regular listbox: it can have an arbitrarily huge number of items because
+it doesn't store them itself but uses \helpref{OnDrawItem()}{wxvlistboxondrawitem} 
+callback to draw them (so it is a {\Large V}irtual listbox) and its items can
+have variable height as determined by 
+\helpref{OnMeasureItem()}{wxvlistboxonmeasureitem} (so it is also a listbox
+with the lines of {\Large V}ariable height).
+
+Also, as a consequence of its virtual nature, it doesn't have any methods to
+append or insert items in it as it isn't necessary to do it: you just have to
+call \helpref{SetItemCount()}{wxvlistboxsetitemcount} to tell the control how
+many items it should display. Of course, this also means that you will never
+use this class directly because it has pure virtual functions, but will need to
+derive your own class, such as \helpref{wxHtmlListBox}{wxhtmllistbox}, from it.
+
+However it emits the same events as \helpref{wxListBox}{wxlistbox} and the same
+event macros may be used with it.
+ 
+\wxheading{Derived from}
+
+\helpref{wxVScrolledWindow}{wxvscrolledwindow}
+
+\wxheading{Include files}
+
+<wx/vlbox.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxVListBox::wxVListBox}\label{wxvlistboxctor}
+
+\func{}{wxVListBox}{\param{wxWindow* }{parent}, \param{wxWindowID }{id = wxID\_ANY}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{size\_t }{countItems = 0}, \param{long }{style = 0}, \param{const wxString\& }{name = wxVListBoxNameStr}}
+
+Normal constructor which calls \helpref{Create()}{wxvlistboxcreate} internally.
+
+\func{}{wxVListBox}{\void}
+
+Default constructor, you must call \helpref{Create()}{wxvlistboxcreate} later.
+
+
+\membersection{wxVListBox::Clear}\label{wxvlistboxclear}
+
+\func{void}{Clear}{\void}
+
+Deletes all items from the control.
+
+
+\membersection{wxVListBox::Create}\label{wxvlistboxcreate}
+
+\func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID }{id = wxID\_ANY}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{size\_t }{countItems = 0}, \param{long }{style = 0}, \param{const wxString\& }{name = wxVListBoxNameStr}}
+
+Creates the control and optionally sets the initial number of items in it
+(it may also be set or changed later with 
+\helpref{SetItemCount()}{wxvlistboxsetitemcount}).
+
+There are no special styles defined for wxVListBox, in particular the wxListBox
+styles can not be used here.
+
+Returns {\tt true} on success or {\tt false} if the control couldn't be created
+
+
+\membersection{wxVListBox::GetItemCount}\label{wxvlistboxgetitemcount}
+
+\constfunc{size\_t}{GetItemCount}{\void}
+
+Get the number of items in the control.
+
+\wxheading{See also}
+
+\helpref{SetItemCount()}{wxvlistboxsetitemcount}
+
+
+\membersection{wxVListBox::GetSelection}\label{wxvlistboxgetselection}
+
+\constfunc{int}{GetSelection}{\void}
+
+Get the currently selected item or $-1$ if there is no selection.
+
+
+\membersection{wxVListBox::IsSelected}\label{wxvlistboxisselected}
+
+\constfunc{bool}{IsSelected}{\param{size\_t }{line}}
+
+Returns {\tt true} if this item is selected, {\tt false} otherwise.
+
+
+\membersection{wxVListBox::OnDrawItem}\label{wxvlistboxondrawitem}
+
+\constfunc{void}{OnDrawItem}{\param{wxDC\& }{dc}, \param{const wxRect\& }{rect}, \param{size\_t }{n}}
+
+The derived class must implement this function to actually draw the item
+with the given index on the provided DC.
+
+\wxheading{Parameters}
+
+\docparam{dc}{The device context to use for drawing}
+
+\docparam{rect}{The bounding rectangle for the item being drawn (DC clipping
+region is set to this rectangle before calling this function)}
+
+\docparam{n}{The index of the item to be drawn}
+
+
+\membersection{wxVListBox::OnDrawSeparator}\label{wxvlistboxondrawseparator}
+
+\constfunc{void}{OnDrawSeparator}{\param{wxDC\& }{dc}, \param{wxRect\& }{rect}, \param{size\_t }{n}}
+
+This method may be used to draw separators between the lines. The rectangle
+passed to it may be modified, typically to deflate it a bit before passing to
+\helpref{OnDrawItem()}{wxvlistboxondrawitem}.
+
+The base class version of this method doesn't do anything.
+
+\wxheading{Parameters}
+
+\docparam{dc}{The device context to use for drawing}
+
+\docparam{rect}{The bounding rectangle for the item}
+
+\docparam{n}{The index of the item}
+
+
+\membersection{wxVListBox::OnMeasureItem}\label{wxvlistboxonmeasureitem}
+
+\constfunc{wxCoord}{OnMeasureItem}{\param{size\_t }{n}}
+
+The derived class must implement this method to return the height of the
+specified item (in pixels).
+
+
+\membersection{wxVListBox::SetItemCount}\label{wxvlistboxsetitemcount}
+
+\func{void}{SetItemCount}{\param{size\_t }{count}}
+
+Set the number of items to be shown in the control.
+
+This is just a synonym for
+\helpref{wxVScrolledWindow::SetLineCount()}{wxvscrolledwindowsetlinecount}.
+
+
+\membersection{wxVListBox::SetMargins}\label{wxvlistboxsetmargins}
+
+\func{void}{SetMargins}{\param{const wxPoint\& }{pt}}
+
+\func{void}{SetMargins}{\param{wxCoord }{x}, \param{wxCoord }{y}}
+
+Set the margins: horizontal margin is the distance between the window
+border and the item contents while vertical margin is half of the
+distance between items.
+
+By default both margins are $0$.
+
+
+\membersection{wxVListBox::SetSelection}\label{wxvlistboxsetselection}
+
+\func{void}{SetSelection}{\param{int }{selection}}
+
+Set the selection to the specified item, if it is $-1$ the selection is
+unset. The selected item will be automatically scrolled into view if it isn't
+currently visible.
+

@@ -170,7 +170,43 @@ void wxVScrolledWindow::SetLineCount(size_t count)
 
 
     // recalculate the scrollbars parameters
+    m_lineFirst = 1;    // make sure it is != 0
     ScrollToLine(0);
+}
+
+void wxVScrolledWindow::RefreshLine(size_t line)
+{
+    // is this line visible?
+    if ( !IsVisible(line) )
+    {
+        // no, it is useless to do anything
+        return;
+    }
+
+    // calculate the rect occupied by this line on screen
+    wxRect rect;
+    rect.width = GetClientSize().x;
+    rect.height = OnGetLineHeight(line);
+    for ( size_t n = GetFirstVisibleLine(); n < line; n++ )
+    {
+        rect.y += OnGetLineHeight(n);
+    }
+
+    // do refresh it
+    RefreshRect(rect);
+}
+
+int wxVScrolledWindow::HitTest(wxCoord WXUNUSED(x), wxCoord y) const
+{
+    const size_t lineMax = GetLastVisibleLine();
+    for ( size_t line = GetFirstVisibleLine(); line <= lineMax; line++ )
+    {
+        y -= OnGetLineHeight(line);
+        if ( y < 0 )
+            return line;
+    }
+
+    return wxNOT_FOUND;
 }
 
 // ----------------------------------------------------------------------------

@@ -1,0 +1,82 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        htmllbox.tex
+%% Purpose:     wxHtmlListBox documentation
+%% Author:      Vadim Zeitlin
+%% Modified by:
+%% Created:     01.06.03
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwindows.org>
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxHtmlListBox}}\label{wxhtmllistbox}
+
+wxHtmlListBox is an implementation of \helpref{wxVListBox}{wxvlistbox} which
+shows HTML content in the listbox rows. This is still an abstract base class
+and you will need to derive your own class from it (see htlbox sample for the
+example) but you will only need to override a single 
+\helpref{OnGetItem()}{wxhtmllistboxongetitem} function.
+
+\wxheading{Derived from}
+
+\helpref{wxVListBox}{wxvlistbox}
+
+\wxheading{Include files}
+
+<wx/htmllbox.h>
+
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxHtmlListBox::wxHtmlListBox}\label{wxhtmllistboxwxhtmllistbox}
+
+\func{}{wxHtmlListBox}{\param{wxWindow* }{parent}, \param{wxWindowID }{id = wxID\_ANY}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{size\_t }{countItems = 0}, \param{long }{style = 0}, \param{const wxString\& }{name = wxVListBoxNameStr}}
+
+Normal constructor which calls \helpref{Create()}{wxhtmllistboxcreate}
+internally.
+
+\func{}{wxHtmlListBox}{\void}
+
+Default constructor, you must call \helpref{Create()}{wxhtmllistboxcreate}
+later.
+
+
+\membersection{wxHtmlListBox::\destruct{wxHtmlListBox}}\label{wxhtmllistboxdtor}
+
+\func{}{\destruct{wxHtmlListBox}}{\void}
+
+Destructor cleans up whatever resources we use.
+
+
+\membersection{wxHtmlListBox::Create}\label{wxhtmllistboxcreate}
+
+\func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID }{id = wxID\_ANY}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{size\_t }{countItems = 0}, \param{long }{style = 0}, \param{const wxString\& }{name = wxVListBoxNameStr}}
+
+Creates the control and optionally sets the initial number of items in it
+(it may also be set or changed later with 
+\helpref{SetItemCount()}{wxvlistboxsetitemcount}).
+
+There are no special styles defined for wxHtmlListBox, in particular the
+wxListBox styles can not be used here.
+
+Returns {\tt true} on success or {\tt false} if the control couldn't be created
+
+
+
+\membersection{wxHtmlListBox::OnGetItem}\label{wxhtmllistboxongetitem}
+
+\constfunc{wxString}{OnGetItem}{\param{size\_t }{n}}
+
+This method must be implemented in the derived class and should return
+the body (i.e. without {\tt <html>} nor {\tt <body>} tags) of the HTML fragment
+for the given item.
+
+
+\membersection{wxHtmlListBox::OnGetItemMarkup}\label{wxhtmllistboxongetitemmarkup}
+
+\constfunc{wxString}{OnGetItemMarkup}{\param{size\_t }{n}}
+
+This function may be overridden to decorate HTML returned by
+\helpref{OnGetItem()}{wxhtmllistboxongetitem}.
+

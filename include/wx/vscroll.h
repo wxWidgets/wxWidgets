@@ -90,6 +90,14 @@ public:
     virtual bool ScrollLines(int lines);
     virtual bool ScrollPages(int pages);
 
+    // redraw the specified line
+    void RefreshLine(size_t line);
+
+    // return the item at the specified (in physical coordinates) position or
+    // wxNOT_FOUND if none, i.e. if it is below the last item
+    int HitTest(wxCoord x, wxCoord y) const;
+    int HitTest(const wxPoint& pt) const { return HitTest(pt.x, pt.y); }
+
 
     // accessors
     // ---------
@@ -104,8 +112,12 @@ public:
     // get the last currently visible line
     size_t GetLastVisibleLine() const { return m_lineFirst + m_nVisible - 1; }
 
+    // is this line currently visible?
+    bool IsVisible(size_t line) const
+        { return line >= m_lineFirst && line <= GetLastVisibleLine(); }
 
-//protected:
+
+protected:
     // this function must be overridden in the derived class and it should
     // return the height of the given line in pixels
     virtual wxCoord OnGetLineHeight(size_t n) const = 0;
@@ -125,7 +137,7 @@ public:
     // usual
     virtual void OnGetLinesHint(size_t lineMin, size_t lineMax) const { }
 
-protected:
+
     // the event handlers
     void OnSize(wxSizeEvent& event);
     void OnScroll(wxScrollWinEvent& event);
