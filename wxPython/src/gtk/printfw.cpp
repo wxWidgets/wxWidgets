@@ -4643,6 +4643,52 @@ static PyObject *_wrap_wxPrinter_Setup(PyObject *self, PyObject *args, PyObject 
     return _resultobj;
 }
 
+#define wxPrinter_GetAbort(_swigobj)  (_swigobj->GetAbort())
+static PyObject *_wrap_wxPrinter_GetAbort(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPrinter * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPrinter_GetAbort",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPrinter_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrinter_GetAbort. Expected _wxPrinter_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxPrinter_GetAbort(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxPrinter_GetLastError(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPrinterError  _result;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxPrinter_GetLastError",_kwnames)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxPrinterError )wxPrinter::GetLastError();
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 static void *SwigwxPrintPreviewTowxObject(void *ptr) {
     wxPrintPreview *src;
     wxObject *dest;
@@ -5366,6 +5412,8 @@ static PyMethodDef printfwcMethods[] = {
 	 { "wxPrintPreview_GetCurrentPage", (PyCFunction) _wrap_wxPrintPreview_GetCurrentPage, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPrintPreview_GetCanvas", (PyCFunction) _wrap_wxPrintPreview_GetCanvas, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPrintPreview", (PyCFunction) _wrap_new_wxPrintPreview, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrinter_GetLastError", (PyCFunction) _wrap_wxPrinter_GetLastError, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPrinter_GetAbort", (PyCFunction) _wrap_wxPrinter_GetAbort, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPrinter_Setup", (PyCFunction) _wrap_wxPrinter_Setup, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPrinter_ReportError", (PyCFunction) _wrap_wxPrinter_ReportError, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPrinter_PrintDialog", (PyCFunction) _wrap_wxPrinter_PrintDialog, METH_VARARGS | METH_KEYWORDS },
@@ -5638,6 +5686,9 @@ SWIGEXPORT(void) initprintfwc() {
 	 SWIG_globals = SWIG_newvarlink();
 	 m = Py_InitModule("printfwc", printfwcMethods);
 	 d = PyModule_GetDict(m);
+	 PyDict_SetItemString(d,"wxPRINTER_NO_ERROR", PyInt_FromLong((long) wxPRINTER_NO_ERROR));
+	 PyDict_SetItemString(d,"wxPRINTER_CANCELLED", PyInt_FromLong((long) wxPRINTER_CANCELLED));
+	 PyDict_SetItemString(d,"wxPRINTER_ERROR", PyInt_FromLong((long) wxPRINTER_ERROR));
 
     wxPyPtrTypeMap_Add("wxPrintout", "wxPyPrintout");
 {
