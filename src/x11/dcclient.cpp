@@ -30,7 +30,7 @@
 #include "pango/pangox.h"
 #include "pango/pangoxft.h"
 
-#include "pangox11.cpp"
+#include "pango_x.cpp"
 #endif
 
 //-----------------------------------------------------------------------------
