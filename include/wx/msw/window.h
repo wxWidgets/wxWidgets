@@ -108,6 +108,15 @@ private:
     wxString  m_data;
 };
 
+// Clash with Windows headers
+#ifdef GetCharWidth
+#undef GetCharWidth
+#endif
+
+#ifdef FindWindow
+#undef FindWindow
+#endif
+
 class WXDLLEXPORT wxWindow : public wxEvtHandler
 {
   DECLARE_ABSTRACT_CLASS(wxWindow)

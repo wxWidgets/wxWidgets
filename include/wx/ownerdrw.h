@@ -17,7 +17,10 @@
 #endif
 
 typedef   wxColour      wxColor;
-typedef   unsigned int  size_t;
+
+// No, don't do this: BC++ 5 complains that size_t already been defined.
+// typedef   unsigned int  size_t;
+#include <stddef.h>
 
 // ----------------------------------------------------------------------------
 // wxOwnerDrawn - a mix-in base class, derive from it to implement owner-drawn

@@ -135,9 +135,6 @@
                                   // Set this to 0 if your compiler can't cope
                                   // with omission of prototype parameters.
 
-#define wxUSE_C_MAIN 0
-                                  // Set to 1 to use main.c instead of main.cpp (UNIX only)
-
 #define wxUSE_ODBC                   1
                                     // Define 1 to use ODBC classes
 

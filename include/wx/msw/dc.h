@@ -23,6 +23,19 @@
 #include "wx/gdicmn.h"
 #include "wx/window.h"
 
+// Clash with Windows header files
+#ifdef StartDoc
+#undef StartDoc
+#endif
+
+#ifdef DrawText
+#undef DrawText
+#endif
+
+#ifdef GetCharWidth
+#undef GetCharWidth
+#endif
+
 class WXDLLEXPORT wxDC: public wxObject
 {
   DECLARE_ABSTRACT_CLASS(wxDC)

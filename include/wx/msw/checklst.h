@@ -16,7 +16,9 @@
 #pragma interface "checklst.h"
 #endif
 
-typedef   unsigned int  size_t;
+// No!
+// typedef   unsigned int  size_t;
+#include <stddef.h>
 
 #if !wxUSE_OWNER_DRAWN
   #error  "wxCheckListBox class requires owner-drawn functionality."

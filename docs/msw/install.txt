@@ -53,10 +53,14 @@ Using makefiles:
 3. Change directory to wx\samples and type 'nmake -f makefile.nt'
    to make all the samples. You can also make them individually.
 
-Notes: if you wish to use templates, please edit
+Note (1): if you wish to use templates, please edit
 include\wx\msw\setup.h and set wxUSE_DEBUG_NEW_ALWAYS to 0.
 Without this, the redefinition of 'new' will cause problems in
 the headers. Alternatively, #undef new before including template headers.
+
+Note (2): libraries and applications generated with makefiles and
+project files are unlikely to be compatible, so use one method or
+the other.
 
 Visual C++ 1.5 compilation
 --------------------------
@@ -91,8 +95,9 @@ Borland C++Builder compilation
 ------------------------------
 
 C++Builder compilation is the same as for Borland C++ above.
-It has only been tested with C++Builder 1.0 so far, and no
-project files are currently supplied.
+
+Tested with C++Builder 1.0 and 3.0. Only makefiles are currently
+supplied.
 
 Watcom C++ 10.6 compilation
 ---------------------------
@@ -112,6 +117,24 @@ Metrowerks CodeWarrior compilation
 3. Load the make_cw.mcp project in wx\samples\minimal, and compile.
    Further project files for samples will be available in due
    course.
+
+Symantec C++ compilation
+------------------------
+
+1. Make sure your WXWIN variable is set, and uses the FAT (short
+   name) form.
+2. Edit setup.h and set wxUSE_DRAG_AND_DROP to 0.
+3. Change directory to wx\src\msw. Type 'make -f makefile.sc' to
+   make the wxWindows core library.
+4. Change directory to wx\samples\minimal and type 'make -f makefile.sc'
+   to make this sample.
+
+Note: the minimal sample doesn't link properly ('Error: no
+start address').
+32-bit compilation only (partially) supported at present, using SC++ 6.1.
+Some functionality is missing using this compiler (see makefile).
+Add -D__WIN95__ if your SC++ has Windows 95 support, and ignore
+Step (2). 16-bit compilation is left as an excercise for the user!
 
 Gnu-Win32 b19/b20/Mingw32 compilation
 -------------------------------------

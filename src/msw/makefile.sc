@@ -246,3 +246,4 @@ $(COMMDIR)\lex_yy.c:    $(COMMDIR)\doslex.c
 
 #$(COMMDIR)\cmndata.obj:     $(COMMDIR)\cmndata.cpp
 #	*$(CC) -c $(CFLAGS) -I$(INCLUDE) $(OPTIONS) $(COMMDIR)\cmndata.cpp -o$(COMMDIR)\cmndata.obj
+

@@ -13,8 +13,8 @@ Also, grep for TODO comments in source.
 High Priority
 -------------
 
-- Work out why XFreeFont in font.cpp produces a segv. This is
-  currently commented out, which presumably causes a memory leak.
+- Have a central/per app file for colour settings, with a wxWin
+  app to allow changing settings interactively.
 
 - Colour setting in widgets (almost done). Should scrollbars take
   on the background colour? Not right for e.g. wxScrolledWindows,
@@ -42,14 +42,11 @@ High Priority
 
 - Miscellaneous events.
 
-- Thread classes (copy wxGTK's).
-
-- Write makefiles for all samples and utilities.
-
-- Create some samples for testing.
-
 Low Priority
 ------------
+
+- Work out why XFreeFont in font.cpp produces a segv. This is
+  currently commented out, which presumably causes a memory leak.
 
 - Better makefile system that can put objects in different dirs.
 

@@ -253,6 +253,7 @@ MyCanvas::MyCanvas(wxView *v, wxWindow *parent, wxWindowID id, const wxPoint& po
     const wxSize& size, long style):
  wxShapeCanvas(parent, id, pos, size, style)
 {
+  SetBackgroundColour(*wxWHITE);
   view = v;
 }
 

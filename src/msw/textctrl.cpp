@@ -747,7 +747,7 @@ void wxTextCtrl::OnDropFiles(wxDropFilesEvent& event)
 // or when "endl" is output (Borland 4.5)
 //=========================================================================
 // Class declaration using multiple inheritance doesn't work properly for
-// Borland. See note in wb_text.h.
+// Borland. See note in textctrl.h.
 #ifndef NO_TEXT_WINDOW_STREAM
 int wxTextCtrl::overflow(int c)
 {

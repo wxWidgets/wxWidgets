@@ -34,7 +34,7 @@ class WXDLLEXPORT wxTextCtrl: public wxControl
 // it complains about deriving a huge class from the huge class streambuf. !!
 // Also, can't use streambuf if making or using a DLL :-(
 
-#if (defined(__BORLANDC__) && !defined(__WIN32__)) || defined(__MWERKS__) || defined(_WINDLL) || defined(WXUSINGDLL) || defined(WXMAKINGDLL)
+#if (defined(__BORLANDC__)) || defined(__MWERKS__) || defined(_WINDLL) || defined(WXUSINGDLL) || defined(WXMAKINGDLL)
 #define NO_TEXT_WINDOW_STREAM
 #endif
 

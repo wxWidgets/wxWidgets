@@ -23,11 +23,14 @@ class WXDLLEXPORT wxObject;
 
 #if wxUSE_DYNAMIC_CLASSES
 
-#ifdef __GNUWIN32__
+// #ifdef __GNUWIN32__
 #ifdef GetClassName
 #undef GetClassName
 #endif
+#ifdef GetClassInfo
+#undef GetClassInfo
 #endif
+// #endif
 
 class WXDLLEXPORT wxClassInfo;
 class WXDLLEXPORT wxInputStream;
