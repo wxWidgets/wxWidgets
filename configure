@@ -1415,7 +1415,7 @@ fi
 echo dummy > sub/file
 ${MAKE-make} -f confMake VPATH=sub 2> config.log > /dev/null
 RESULT=$?
-rm -f sub/file check final_file config.log confMake
+rm -f sub/file check final_file confMake
 rmdir sub 
 if test "$RESULT" = 0; then
   echo "$ac_t""yes" 1>&6
@@ -4287,7 +4287,7 @@ DEFAULT_USE_GTK=1
 DEFAULT_USE_QT=0
 DEFAULT_USE_MOTIF=0
 
-DEFAULT_USE_THREADS=1
+DEFAULT_wxUSE_THREADS=1
 
 DEFAULT_USE_SHARED=1
 DEFAULT_USE_OPTIMISE=1
@@ -6080,11 +6080,11 @@ fi
 
 if test "$USE_MEM_TRACING" = 1 ; then
   cat >> confdefs.h <<EOF
-#define wxUSE_MEMORY_TRACING $USE_MEM_TRACING
+#define USE_MEMORY_TRACING $USE_MEM_TRACING
 EOF
 
   cat >> confdefs.h <<EOF
-#define wxUSE_GLOBAL_MEMORY_OPERATORS $USE_MEM_TRACING
+#define USE_GLOBAL_MEMORY_OPERATORS $USE_MEM_TRACING
 EOF
 
 fi
@@ -6123,42 +6123,42 @@ APPLE_IEEE=NONE
 if test "$USE_APPLE_IEEE" = 1 ; then
   APPLE_IEEE="APPLE_IEEE"
   cat >> confdefs.h <<EOF
-#define wxUSE_APPLE_IEEE $USE_APPLE_IEEE
+#define USE_APPLE_IEEE $USE_APPLE_IEEE
 EOF
 
 fi
 
 USE_IOSTREAMH=$DEFAULT_USE_IOSTREAMH
 cat >> confdefs.h <<EOF
-#define wxUSE_IOSTREAMH $USE_IOSTREAMH
+#define USE_IOSTREAMH $USE_IOSTREAMH
 EOF
 
 
 
 if test "$USE_ZLIB" = 1 ; then
   cat >> confdefs.h <<EOF
-#define wxUSE_ZLIB $USE_ZLIB
+#define USE_ZLIB $USE_ZLIB
 EOF
 
 fi
 
 if test "$USE_GDK_IMLIB" = 1 ; then
   cat >> confdefs.h <<EOF
-#define wxUSE_GDK_IMLIB $USE_GDK_IMLIB
+#define USE_GDK_IMLIB $USE_GDK_IMLIB
 EOF
 
 fi
 
 if test "$USE_LIBPNG" = 1 ; then
   cat >> confdefs.h <<EOF
-#define wxUSE_LIBPNG $USE_LIBPNG
+#define USE_LIBPNG $USE_LIBPNG
 EOF
  
 fi
 
 if test "$USE_ODBC" = 1 ; then
   cat >> confdefs.h <<EOF
-#define wxUSE_ODBC $USE_ODBC
+#define USE_ODBC $USE_ODBC
 EOF
  
 fi
@@ -6166,56 +6166,56 @@ fi
 
 if test "$USE_GAUGE" = 1 ; then
   cat >> confdefs.h <<EOF
-#define wxUSE_GAUGE $USE_GAUGE
+#define USE_GAUGE $USE_GAUGE
 EOF
 
 fi
 
 if test "$USE_COMBOBOX" = 1 ; then
   cat >> confdefs.h <<EOF
-#define wxUSE_COMBOBOX $USE_COMBOBOX
+#define USE_COMBOBOX $USE_COMBOBOX
 EOF
 
 fi
 
 if test "$USE_SCROLLBAR" = 1 ; then
   cat >> confdefs.h <<EOF
-#define wxUSE_SCROLLBAR $USE_SCROLLBAR
+#define USE_SCROLLBAR $USE_SCROLLBAR
 EOF
 
 fi
 
 if test "$USE_LISTCTRL" = 1 ; then
   cat >> confdefs.h <<EOF
-#define wxUSE_LISTCTRL $USE_LISTCTRL
+#define USE_LISTCTRL $USE_LISTCTRL
 EOF
 
 fi
 
 if test "$USE_TREECTRL" = 1 ; then
   cat >> confdefs.h <<EOF
-#define wxUSE_TREECTRL $USE_TREECTRL
+#define USE_TREECTRL $USE_TREECTRL
 EOF
 
 fi
 
 if test "$USE_GRID" = 1 ; then
   cat >> confdefs.h <<EOF
-#define wxUSE_GRID $USE_GRID
+#define USE_GRID $USE_GRID
 EOF
 
 fi
 
 if test "$USE_TAB_DIALOG" = 1 ; then
   cat >> confdefs.h <<EOF
-#define wxUSE_TAB_DIALOG $USE_TAB_DIALOG
+#define USE_TAB_DIALOG $USE_TAB_DIALOG
 EOF
 
 fi
 
 if test "$USE_NOTEBOOK" = 1 ; then
   cat >> confdefs.h <<EOF
-#define wxUSE_NOTEBOOK $USE_NOTEBOOK
+#define USE_NOTEBOOK $USE_NOTEBOOK
 EOF
 
 fi
@@ -6223,63 +6223,63 @@ fi
 
 if test "$USE_CONFIG" = 1 ; then
   cat >> confdefs.h <<EOF
-#define wxUSE_CONFIG $USE_CONFIG
+#define USE_CONFIG $USE_CONFIG
 EOF
 
 fi
 
 if test "$USE_TIMEDATE" = 1 ; then
   cat >> confdefs.h <<EOF
-#define wxUSE_TIMEDATE $USE_TIMEDATE
+#define USE_TIMEDATE $USE_TIMEDATE
 EOF
 
 fi
 
 if test "$USE_FRACTION" = 1 ; then
   cat >> confdefs.h <<EOF
-#define wxUSE_FRACTION $USE_FRACTION
+#define USE_FRACTION $USE_FRACTION
 EOF
 
 fi
 
 if test "$USE_LOG" = 1 ; then
   cat >> confdefs.h <<EOF
-#define wxUSE_LOG $USE_LOG
+#define USE_LOG $USE_LOG
 EOF
 
 fi
 
 if test "$USE_INTL" = 1 ; then
   cat >> confdefs.h <<EOF
-#define wxUSE_INTL $USE_INTL
+#define USE_INTL $USE_INTL
 EOF
 
 fi
 
 if test "$USE_STREAMS" = 1 ; then
   cat >> confdefs.h <<EOF
-#define wxUSE_STREAMS $USE_STREAMS
+#define USE_STREAMS $USE_STREAMS
 EOF
 
 fi
 
 if test "$USE_SERIAL" = 1 ; then
   cat >> confdefs.h <<EOF
-#define wxUSE_SERIAL $USE_SERIAL
+#define USE_SERIAL $USE_SERIAL
 EOF
 
 fi
 
 if test "$USE_FILE" = 1 ; then
   cat >> confdefs.h <<EOF
-#define wxUSE_FILE $USE_FILE
+#define USE_FILE $USE_FILE
 EOF
 
 fi
 
 if test "$USE_TEXTFILE" = 1 ; then
   cat >> confdefs.h <<EOF
-#define wxUSE_TEXTFILE $USE_TEXTFILE
+#define USE_TEXTFILE $USE_TEXTFILE
 EOF
 
 fi
@@ -6287,21 +6287,21 @@ fi
 
 if test "$USE_RPC" = 1 ; then
   cat >> confdefs.h <<EOF
-#define wxUSE_RPC $USE_RPC
+#define USE_RPC $USE_RPC
 EOF
 
 fi
 
 if test "$USE_WX_RESOURCES" = 1 ; then
   cat >> confdefs.h <<EOF
-#define wxUSE_WX_RESOURCES $USE_WX_RESOURCES
+#define USE_WX_RESOURCES $USE_WX_RESOURCES
 EOF
 
 fi
 
 if test "$USE_PROLOGIO" = 1 ; then
   cat >> confdefs.h <<EOF
-#define wxUSE_PROLOGIO 1
+#define USE_PROLOGIO 1
 EOF
 
 fi
@@ -6309,13 +6309,13 @@ fi
 
 if test "$USE_POSTSCRIPT" = 1 ; then
   cat >> confdefs.h <<EOF
-#define wxUSE_POSTSCRIPT 1
+#define USE_POSTSCRIPT 1
 EOF
 
 fi
 
 cat >> confdefs.h <<EOF
-#define wxUSE_AFM_FOR_POSTSCRIPT $USE_AFM_FOR_POSTSCRIPT
+#define USE_AFM_FOR_POSTSCRIPT $USE_AFM_FOR_POSTSCRIPT
 EOF
 
 
@@ -6327,21 +6327,21 @@ EOF
 
 if test "$USE_MDI_ARCHITECTURE" = 1 ; then
   cat >> confdefs.h <<EOF
-#define wxUSE_MDI_ARCHITECTURE $USE_MDI_ARCHITECTURE
+#define USE_MDI_ARCHITECTURE $USE_MDI_ARCHITECTURE
 EOF
 
 fi
 
 if test "$USE_DOC_VIEW_ARCHITECTURE" = 1 ; then
   cat >> confdefs.h <<EOF
-#define wxUSE_DOC_VIEW_ARCHITECTURE $USE_DOC_VIEW_ARCHITECTURE
+#define USE_DOC_VIEW_ARCHITECTURE $USE_DOC_VIEW_ARCHITECTURE
 EOF
 
 fi
 
 if test "$USE_PRINTING_ARCHITECTURE" = 1 ; then
   cat >> confdefs.h <<EOF
-#define wxUSE_PRINTING_ARCHITECTURE $USE_PRINTING_ARCHITECTURE
+#define USE_PRINTING_ARCHITECTURE $USE_PRINTING_ARCHITECTURE
 EOF
 
 fi
@@ -6349,35 +6349,35 @@ fi
 
 if test "$USE_IPC" = 1 ; then
   cat >> confdefs.h <<EOF
-#define wxUSE_IPC 1
+#define USE_IPC 1
 EOF
 
 fi
 
 if test "$USE_RESOURCES" = 1 ; then
   cat >> confdefs.h <<EOF
-#define wxUSE_RESOURCES $USE_RESOURCES
+#define USE_RESOURCES $USE_RESOURCES
 EOF
 
 fi
 
 if test "$USE_CLIPBOARD" = 1 ; then
   cat >> confdefs.h <<EOF
-#define wxUSE_CLIPBOARD $USE_CLIPBOARD
+#define USE_CLIPBOARD $USE_CLIPBOARD
 EOF
 
 fi
 
 if test "$USE_DND" = 1 ; then
   cat >> confdefs.h <<EOF
-#define wxUSE_DND $USE_DND
+#define USE_DND $USE_DND
 EOF
 
 fi
 
 if test "$USE_CONSTRAINTS" = 1 ; then
   cat >> confdefs.h <<EOF
-#define wxUSE_CONSTRAINTS $USE_CONSTRAINTS
+#define USE_CONSTRAINTS $USE_CONSTRAINTS
 EOF
 
 fi
@@ -6387,7 +6387,7 @@ METAFILE=NONE
 if test "$USE_METAFILE" = 1 ; then
   METAFILE="METAFILE"
   cat >> confdefs.h <<EOF
-#define wxUSE_METAFILE $USE_METAFILE
+#define USE_METAFILE $USE_METAFILE
 EOF
 
 fi
@@ -6397,7 +6397,7 @@ HELP=NONE
 if test "$USE_HELP" = 1 ; then
   HELP="HELP"
   cat >> confdefs.h <<EOF
-#define wxUSE_HELP $USE_HELP
+#define USE_HELP $USE_HELP
 EOF
 
 fi
@@ -6407,7 +6407,7 @@ WXGRAPH=NONE
 if test "$USE_WXGRAPH" = 1 ; then
   WXGRAPH="WXGRAPH"
   cat >> confdefs.h <<EOF
-#define wxUSE_WXGRAPH $USE_WXGRAPH
+#define USE_WXGRAPH $USE_WXGRAPH
 EOF
 
 fi
@@ -6417,7 +6417,7 @@ WXTREE=NONE
 if test "$USE_WXTREE" = 1 ; then
   WXTREE="WXTREE"
   cat >> confdefs.h <<EOF
-#define wxUSE_WXTREE $USE_WXTREE
+#define USE_WXTREE $USE_WXTREE
 EOF
 
 fi
@@ -6469,7 +6469,7 @@ fi
 
 
 
-USE_THREADS=1
+wxUSE_THREADS=1
 THREADS_LINK=""
 UNIX_THREAD="gtk/threadno.cpp"
 
@@ -6480,23 +6480,23 @@ echo "configure:6479: checking "for threads"" >&5
 if test "${with_threads+set}" = set; then
   withval="$with_threads"
   if test "x$with_threads" = xyes; then
-  ac_cv_use_threads='USE_THREADS="1"'
+  ac_cv_use_threads='wxUSE_THREADS="1"'
 else
-  ac_cv_use_threads='USE_THREADS="0"'
+  ac_cv_use_threads='wxUSE_THREADS="0"'
 fi
 else
   
-  LINE=`grep "USE_THREADS" ${OSTYPE}.system.cache`
+  LINE=`grep "wxUSE_THREADS" ${OSTYPE}.system.cache`
   if test "x$LINE" != x ; then
     eval "DEFAULT_$LINE"
   fi
-  ac_cv_use_threads='USE_THREADS='$DEFAULT_USE_THREADS
+  ac_cv_use_threads='wxUSE_THREADS='$DEFAULT_wxUSE_THREADS
 
 fi
 
 eval "$ac_cv_use_threads"
 echo $ac_cv_use_threads >> ${OSTYPE}.system.cache.tmp
-if test "$USE_THREADS" = 1; then
+if test "$wxUSE_THREADS" = 1; then
   echo "$ac_t""yes" 1>&6
 else
   echo "$ac_t""no" 1>&6
@@ -6504,7 +6504,7 @@ fi
 
 
 
-if test "$USE_THREADS" = "1"; then
+if test "$wxUSE_THREADS" = "1"; then
   UNIX_THREAD="gtk/threadno.cpp"
 
   
@@ -6809,7 +6809,7 @@ if test "$USE_OPENGL" != 1; then
 fi
 
 cat >> confdefs.h <<EOF
-#define wxUSE_GLX $USE_GLX
+#define USE_GLX $USE_GLX
 EOF
 
 

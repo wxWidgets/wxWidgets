@@ -371,7 +371,7 @@ fi
 echo dummy > sub/file
 ${MAKE-make} -f confMake VPATH=sub 2> config.log > /dev/null
 RESULT=$?
-rm -f sub/file check final_file config.log confMake
+rm -f sub/file check final_file confMake
 rmdir sub 
 if test "$RESULT" = 0; then
   AC_MSG_RESULT(yes)
