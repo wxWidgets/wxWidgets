@@ -20,7 +20,7 @@ set -o errexit
 echo "-=-=-=-  Hello from $HOSTNAME  -=-=-=-"
 
 if [ $# -lt 6 ]; then
-    echo "Usage: $0 WXDIR DESTDIR SKIPCLEAN VERSION KIND PYVER..."
+    echo "Usage: $0 WXDIR DESTDIR SKIPCLEAN VERSION KIND PYVER"
     exit 1
 fi
 
@@ -29,8 +29,7 @@ DESTDIR=$2
 SKIPCLEAN=$3
 VERSION=$4
 KIND=$5
-shift;shift;shift;shift;shift
-PYVER=$@
+PYVER=$6
 
 
 #export PATH=/sw/bin:/usr/local/bin:$PATH
@@ -51,9 +50,9 @@ cd $WXDIR/wxPython
 export TARBALLDIR=$DESTDIR
 mkdir -p dist
 if [ $KIND = panther ]; then
-    distrib/mac/wxPythonOSX/build $KIND inplace unicode
+    distrib/mac/wxPythonOSX/build $PYVER $KIND inplace unicode
 fi
-distrib/mac/wxPythonOSX/build $KIND inplace 
+distrib/mac/wxPythonOSX/build $PYVER $KIND inplace 
 
 
 echo "Copying installers to $DESTDIR..."
