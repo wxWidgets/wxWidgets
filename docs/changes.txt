@@ -1,6 +1,13 @@
 wxWindows 2 Change Log
 ----------------------
 
+next release (2.1.12 or 2.2?)
+-----------------------------
+
+wxGTK:
+
+- you can use UpdateUI handlers with wxTextCtrl
+
 NOTE: for changes after wxWindows 2.1.0 b4, please see the CVS
 change log.
 

@@ -963,4 +963,6 @@ void wxTextCtrl::OnInternalIdle()
         if ((window) && !(GTK_WIDGET_NO_WINDOW(m_widget)))
             gdk_window_set_cursor( window, cursor.GetCursor() );
     }
+
+    UpdateWindowUI();
 }
