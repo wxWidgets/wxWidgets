@@ -2,20 +2,38 @@
 // Name:        fontdlg.cpp
 // Purpose:     wxFontDialog class. NOTE: you can use the generic class
 //              if you wish, instead of implementing this.
-// Author:      AUTHOR
+// Author:      David Webster
 // Modified by:
-// Created:     ??/??/98
+// Created:     10/06/99
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Copyright:   (c) David Webster
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef __GNUG__
-#pragma implementation "fontdlg.h"
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#ifndef WX_PRECOMP
+#include <stdio.h>
+#include "wx/defs.h"
+#include "wx/utils.h"
+#include "wx/dialog.h"
 #endif
 
-#include "wx/stubs/fontdlg.h"
+#include "wx/fontdlg.h"
+
+#define INCL_PM
+#include <os2.h>
+
+#include "wx/os2/private.h"
 #include "wx/cmndata.h"
+
+#include <math.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define wxDIALOG_DEFAULT_X 300
+#define wxDIALOG_DEFAULT_Y 300
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog)
@@ -24,7 +42,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog)
 /*
  * wxFontDialog
  */
-
 wxFontDialog::wxFontDialog()
 {
     m_dialogParent = NULL;
@@ -41,9 +58,6 @@ bool wxFontDialog::Create(wxWindow *parent, wxFontData *data)
 
     if (data)
         m_fontData = *data;
-
-    // TODO: you may need to do dialog creation here, unless it's
-    // done in ShowModal.
     return TRUE;
 }
 

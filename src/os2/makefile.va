@@ -308,6 +308,8 @@ OS2OBJS = \
   ..\os2\$D\dirdlg.obj \
   ..\os2\$D\dnd.obj \
   ..\os2\$D\filedlg.obj \
+  ..\os2\$D\font.obj \
+  ..\os2\$D\fontdlg.obj \
   ..\os2\$D\frame.obj \
   ..\os2\$D\window.obj
 
@@ -337,6 +339,8 @@ OS2LIBOBJS = \
   dirdlg.obj \
   dnd.obj \
   filedlg.obj \
+  font.obj \
+  fontdlg.obj \
   frame.obj \
   window.obj
 
@@ -349,7 +353,7 @@ HTMLOBJS = \
   ..\html\$D\htmltag.obj \
   ..\html\$D\htmlwin.obj \
   ..\html\$D\htmlwinparser.obj \
-s  ..\html\$D\mod_fonts.obj \
+  ..\html\$D\mod_fonts.obj \
   ..\html\$D\mod_hline.obj \
   ..\html\$D\mod_image.obj \
   ..\html\$D\mod_layout.obj \
@@ -510,6 +514,8 @@ $(OS2LIBOBJS):
   copy ..\os2\$D\dirdlg.obj
   copy ..\os2\$D\dnd.obj
   copy ..\os2\$D\filedlg.obj
+  copy ..\os2\$D\font.obj
+  copy ..\os2\$D\fontdlg.obj
   copy ..\os2\$D\frame.obj
   copy ..\os2\$D\window.obj
 

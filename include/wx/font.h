@@ -195,10 +195,7 @@ private:
 // macros
 // ----------------------------------------------------------------------------
 
-#if !defined(__VISAGECPP__)
-// VZ: this is ugly (FIXME)
 #define M_FONTDATA GetFontData()
-#endif
 
 #endif
     // _WX_FONT_H_BASE_

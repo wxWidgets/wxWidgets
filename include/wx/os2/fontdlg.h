@@ -2,20 +2,16 @@
 // Name:        fontdlg.h
 // Purpose:     wxFontDialog class. Use generic version if no
 //              platform-specific implementation.
-// Author:      AUTHOR
+// Author:      David Webster
 // Modified by:
-// Created:     ??/??/98
+// Created:     10/06/99
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Copyright:   (c) David Webster
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_FONTDLG_H_
 #define _WX_FONTDLG_H_
-
-#ifdef __GNUG__
-#pragma interface "fontdlg.h"
-#endif
 
 #include "wx/dialog.h"
 #include "wx/cmndata.h"
@@ -23,7 +19,7 @@
 /*
  * Font dialog
  */
- 
+
 class WXDLLEXPORT wxFontDialog: public wxDialog
 {
 DECLARE_DYNAMIC_CLASS(wxFontDialog)
