@@ -165,7 +165,7 @@ void wxStreamBuffer::SetBufferIO(void *start,
     m_buffer_size = len;
 
     // if we own it, we free it
-    m_destroybuf = !takeOwnership;
+    m_destroybuf = takeOwnership;
 
     ResetBuffer();
 }
