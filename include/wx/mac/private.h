@@ -17,9 +17,8 @@
 #include "wx/defs.h"
 #include "wx/app.h"
 
-#if defined(__POWERPC__) && defined(__DARWIN__)
+#ifdef __DARWIN__
 #    include <Carbon/Carbon.h>
-#    define TARGET_CARBON 1
 #else
 #    include <Quickdraw.h>
 #    include <Appearance.h>

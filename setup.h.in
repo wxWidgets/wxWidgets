@@ -94,6 +94,7 @@
 
 /* PowerPC Darwin & Mac OS X */
 #undef __POWERPC__
+#undef TARGET_CARBON
 
 /* MS-DOS with DJGPP */
 #undef __DOS__
