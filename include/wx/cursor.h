@@ -43,7 +43,6 @@ public:
         if( wxIsBusy() )
         {
             wxSetCursor( wxBusyCursor::GetStoredCursor() );
-            wxYield();
         }
     }
     ~wxBusyCursorSuspender()
@@ -51,7 +50,6 @@ public:
         if( wxIsBusy() )
         {
             wxSetCursor( wxBusyCursor::GetBusyCursor() );
-            wxYield();
         }
     }
 };
