@@ -135,6 +135,8 @@ class wxPyPrintPreview;
 
 #ifdef __WXMAC__
 class wxPopupWindow;
+class wxTaskBarIconEvent;
+class wxTaskBarIcon;
 #endif
 
 //---------------------------------------------------------------------------
