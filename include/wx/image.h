@@ -390,6 +390,7 @@ public:
   static void InitStandardHandlers();
 
   // GRG: Dic/99
+  unsigned long CountColours( unsigned long stopat = -1 );
   unsigned long ComputeHistogram( wxHashTable &h );
 
 

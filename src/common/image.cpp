@@ -2302,12 +2302,56 @@ IMPLEMENT_DYNAMIC_CLASS(wxImageModule, wxModule)
 //-----------------------------------------------------------------------------
 
 // GRG, Dic/99
+// Counts and returns the number of different colours. Optionally stops
+// when it reaches 'stopat' different colours. This is useful, for example,
+// to see if the image can be saved as 8-bit (256 colour or less, in this
+// case it would be invoked as CountColours(257)). Default value for stopat
+// is -1 (don't care).
+//
+unsigned long wxImage::CountColours( unsigned long stopat )
+{
+    wxHashTable h;
+    wxNode *node;
+    wxHNode *hnode;
+    unsigned char r, g, b, *p;
+    unsigned long size, nentries, key;
+
+    p = GetData();
+    size = GetWidth() * GetHeight();
+    nentries = 0;
+
+    for (unsigned long j = 0; (j < size) && (nentries < stopat) ; j++)
+    {
+        r = *(p++);
+        g = *(p++);
+        b = *(p++);
+        key = (r << 16) | (g << 8) | b;
+
+        hnode = (wxHNode *) h.Get(key);
+
+        if (!hnode)
+        {
+            h.Put(key, (wxObject *)(new wxHNode));
+            nentries++;
+        }
+    }
+
+    // delete all HNodes
+    h.BeginFind();
+    while ((node = h.Next()) != NULL)
+        delete (wxHNode *)node->GetData();
+
+    return nentries;
+}
+
+
+// GRG, Dic/99
 // Computes the histogram of the image and fills a hash table, indexed
 // with integer keys built as 0xRRGGBB, containing wxHNode objects. Each
 // wxHNode contains an 'index' (useful to build a palette with the image
 // colours) and a 'value', which is the number of pixels in the image with
 // that colour.
-
+//
 unsigned long wxImage::ComputeHistogram( wxHashTable &h )
 {
     unsigned char r, g, b, *p;
