@@ -50,12 +50,10 @@
 // event constants
 // ----------------------------------------------------------------------------
 
-wxEventType wxEVT_NULL = 0;
-wxEventType wxEVT_FIRST = 10000;
-
-#if WXWIN_COMPATIBILITY_2
-wxEventType wxEVT_USER_FIRST = wxEVT_FIRST + 2000;
-#endif // WXWIN_COMPATIBILITY_2
+#if !WXWIN_COMPATIBILITY_EVENT_TYPES
+    wxEventType wxEVT_NULL = 0;
+    wxEventType wxEVT_FIRST = 10000;
+#endif // !WXWIN_COMPATIBILITY_EVENT_TYPES
 
 // ----------------------------------------------------------------------------
 // wxWin macros
@@ -103,7 +101,7 @@ const wxEventTable wxEvtHandler::sm_eventTable =
     { (const wxEventTable *)NULL, &wxEvtHandler::sm_eventTableEntries[0] };
 
 const wxEventTableEntry wxEvtHandler::sm_eventTableEntries[] =
-    { wxEventTableEntry(0, 0, 0, (wxObjectEventFunction)NULL, NULL) };
+    { DECLARE_EVENT_TABLE_ENTRY(0, 0, 0, (wxObjectEventFunction)NULL, NULL) };
 
 // ----------------------------------------------------------------------------
 // global variables
@@ -117,6 +115,8 @@ wxList *wxPendingEvents = (wxList *)NULL;
     wxCriticalSection *wxPendingEventsLocker = (wxCriticalSection *)NULL;
 #endif
 
+#if !WXWIN_COMPATIBILITY_EVENT_TYPES
+
 wxEventType wxEVT_COMMAND_BUTTON_CLICKED;
 wxEventType wxEVT_COMMAND_CHECKBOX_CLICKED;
 wxEventType wxEVT_COMMAND_CHOICE_SELECTED;
@@ -126,7 +126,6 @@ wxEventType wxEVT_COMMAND_CHECKLISTBOX_TOGGLED;
 wxEventType wxEVT_COMMAND_TEXT_UPDATED;
 wxEventType wxEVT_COMMAND_TEXT_ENTER;
 wxEventType wxEVT_COMMAND_MENU_SELECTED;
-wxEventType wxEVT_COMMAND_TOOL_CLICKED;
 wxEventType wxEVT_COMMAND_SLIDER_UPDATED;
 wxEventType wxEVT_COMMAND_RADIOBOX_SELECTED;
 wxEventType wxEVT_COMMAND_RADIOBUTTON_SELECTED;
@@ -325,10 +324,6 @@ wxEventType wxEVT_CALENDAR_WEEKDAY_CLICKED;
 wxEventType wxEVT_HELP;
 wxEventType wxEVT_DETAILED_HELP;
 
-// ============================================================================
-// implementation
-// ============================================================================
-
 // ----------------------------------------------------------------------------
 // event initialization
 // ----------------------------------------------------------------------------
@@ -337,6 +332,14 @@ int wxNewEventType()
 {
     // MT-FIXME
     static int s_lastUsedEventType = wxEVT_FIRST;
+
+#if WXWIN_COMPATIBILITY_2
+    // check that we don't overlap with the user-defined types: if it does
+    // happen, the best solution is probably to update the existing code to
+    // use wxNewEventType() instead of wxEVT_USER_FIRST
+    wxASSERT_MSG( s_lastUsedEventType < wxEVT_USER_FIRST - 1,
+                  _T("possible event type conflict") );
+#endif // WXWIN_COMPATIBILITY_2
 
     return s_lastUsedEventType++;
 }
@@ -584,6 +587,8 @@ wxEventTableEntry::wxEventTableEntry(int evType, int id, int idLast,
     m_fn = fn;
     m_callbackUserData = data;
 }
+
+#endif // WXWIN_COMPATIBILITY_EVENT_TYPES
 
 // ----------------------------------------------------------------------------
 // wxEvent
@@ -1317,8 +1322,17 @@ void wxEvtHandler::Connect( int id, int lastId,
                             wxObjectEventFunction func,
                             wxObject *userData )
 {
+#if WXWIN_COMPATIBILITY_EVENT_TYPES
+    wxDynamicEventTableEntry *entry = new wxDynamicEventTableEntry;
+    entry->m_eventType = eventType;
+    entry->m_id = id;
+    entry->m_lastId = lastId;
+    entry->m_fn = func;
+    entry->m_callbackUserData = userData;
+#else // !WXWIN_COMPATIBILITY_EVENT_TYPES
     wxDynamicEventTableEntry *entry =
         new wxDynamicEventTableEntry(eventType, id, lastId, func, userData);
+#endif // WXWIN_COMPATIBILITY_EVENT_TYPES/!WXWIN_COMPATIBILITY_EVENT_TYPES
 
     if (!m_dynamicEvents)
         m_dynamicEvents = new wxList;
