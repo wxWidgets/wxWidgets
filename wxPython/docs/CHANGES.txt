@@ -2,7 +2,7 @@ Recent Changes for wxPython
 =====================================================================
 
 
-2.5.3.3
+2.5.4.0
 -------
 
 wx.Sizer Add, Insert, and Prepend functions now return a reference to the
@@ -177,7 +177,7 @@ each text updated event, but rather query for the string value only
 when GetString is called from an event handler.
 
 Added wx.SL_INVERSE style which will cause wx.Slider to invert the min
-and max ends of the slider.  (Only for wxGTK so far.)
+and max ends of the slider.
 
 Several patches applied, such as #1111174, #1110252 and others, that
 make the generic wx.TreeCtrl (used on wxGTK and wxMac) be more
