@@ -3,7 +3,7 @@
 Class: \helpref{wxFont}{wxfont}
 
 A font is an object which determines the appearance of text, primarily
-when drawing text to a canvas or device context. A font is determined by
+when drawing text to a window or device context. A font is determined by
 up to six parameters:
 
 \begin{twocollist}\itemsep=0pt
@@ -30,7 +30,7 @@ might be transported to a different Windows machine or other platform.
 two platforms, if the mapping mode is anything other than MM\_TEXT.
 Under X, font size is always specified in points. Under MS Windows, the
 unit for text is points but the text is scaled according to the
-current mapping mode. However, user scaling on a device canvas will
+current mapping mode. However, user scaling on a device context will
 also scale fonts under both environments.}
 
 

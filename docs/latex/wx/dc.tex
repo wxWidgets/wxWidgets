@@ -2,7 +2,7 @@
 
 A wxDC is a {\it device context} onto which graphics and text can be drawn.
 It is intended to represent a number of output devices in a generic way,
-so a canvas has a device context and a printer also has a device context.
+so a window can have a device context associated with it, and a printer also has a device context.
 In this way, the same piece of code may write to a number of different devices,
 if the device context is used as a parameter.
 
@@ -115,7 +115,7 @@ Clears the device context using the current background brush.
 \func{void}{CrossHair}{\param{long}{ x}, \param{long}{ y}}
 
 Displays a cross hair using the current pen. This is a vertical
-and horizontal line the height and width of the canvas, centred
+and horizontal line the height and width of the window, centred
 on the given point.
 
 \membersection{wxDC::DestroyClippingRegion}\label{wxdcdestroyclippingregion}
@@ -176,7 +176,7 @@ filling the shape.
 
 Draws an arc of an ellipse. The current pen is used for drawing the arc and 
 the current brush is used for drawing the pie. This function is currently only available for
-X canvas and PostScript device contexts.
+X window and PostScript device contexts.
 
 {\it x} and {\it y} specify the x and y coordinates of the upper-left corner of the rectangle that contains
 the ellipse.
@@ -195,7 +195,7 @@ complete ellipse will be drawn.
 \func{void}{DrawIcon}{\param{const wxIcon\&}{ icon}, \param{long}{ x}, \param{long}{ y}}
 
 Draw an icon on the display (does nothing if the device context is PostScript).
-This can be the simplest way of drawing bitmaps on a canvas.
+This can be the simplest way of drawing bitmaps on a window.
 
 \membersection{wxDC::DrawLine}\label{wxdcdrawline}
 
@@ -349,7 +349,7 @@ Gets the character height of the currently set font.
 
 Gets the average character width of the currently set font.
 
-\membersection{wxCanvas::GetClippingBox}\label{wxdcgetclippingbox}
+\membersection{wxDC::GetClippingBox}\label{wxdcgetclippingbox}
 
 \func{void}{GetClippingBox}{\param{long}{ *x}, \param{long}{ *y}, \param{long}{ *width}, \param{long}{ *height}}
 
@@ -533,7 +533,7 @@ whether text will be drawn with a background colour or not.
 
 Sets the clipping region for the DC. The clipping region is a rectangular area
 to which drawing is restricted.  Possible uses for the clipping region are for clipping text
-or for speeding up canvas redraws when only a known area of the screen is damaged.
+or for speeding up window redraws when only a known area of the screen is damaged.
 
 See also \helpref{wxDC::DestroyClippingRegion}{wxdcdestroyclippingregion}.
 
@@ -541,7 +541,7 @@ See also \helpref{wxDC::DestroyClippingRegion}{wxdcdestroyclippingregion}.
 
 \func{void}{SetPalette}{\param{const wxPalette\& }{palette}}
 
-If this is a canvas DC or memory DC, assigns the given palette to the window
+If this is a window DC or memory DC, assigns the given palette to the window
 or bitmap associated with the DC. If the argument is wxNullPalette, the current
 palette is selected out of the device context, and the original palette
 restored.
@@ -576,7 +576,7 @@ See also \helpref{wxFont}{wxfont}.
 
 \func{void}{SetLogicalFunction}{\param{int}{ function}}
 
-Sets the current logical function for the canvas.  This determines how
+Sets the current logical function for the device context.  This determines how
 a source pixel (from a pen or brush colour, or source device context if
 using \helpref{wxDC::Blit}{wxdcblit}) combines with a destination pixel in the
 current device context.

@@ -80,13 +80,13 @@ irrelevant.
 
 \subsubsection{Example 1: subwindow layout}
 
-This example specifies a panel and a canvas side by side,
+This example specifies a panel and a window side by side,
 with a text subwindow below it. 
 
 \begin{verbatim}
-  frame->panel = new wxPanel(frame, 0, 0, 1000, 500, 0);
-  frame->canvas = new MyCanvas(frame, 0, 0, 400, 400, wxRETAINED);
-  frame->text_window = new MyTextWindow(frame, 0, 250, 400, 250, wxNATIVE_IMPL);
+  frame->panel = new wxPanel(frame, -1, wxPoint(0, 0), wxSize(1000, 500), 0);
+  frame->scrollWindow = new MyScrolledWindow(frame, -1, wxPoint(0, 0), wxSize(400, 400), wxRETAINED);
+  frame->text_window = new MyTextWindow(frame, -1, wxPoint(0, 250), wxSize(400, 250));
 
   // Set constraints for panel subwindow
   wxLayoutConstraints *c1 = new wxLayoutConstraints;
@@ -98,7 +98,7 @@ with a text subwindow below it.
 
   frame->panel->SetConstraints(c1);
 
-  // Set constraints for canvas subwindow
+  // Set constraints for scrollWindow subwindow
   wxLayoutConstraints *c2 = new wxLayoutConstraints;
 
   c2->left.SameAs       (frame->panel, wxRight);
@@ -106,7 +106,7 @@ with a text subwindow below it.
   c2->right.SameAs      (frame, wxRight);
   c2->height.PercentOf  (frame, wxHeight, 50);
 
-  frame->canvas->SetConstraints(c2);
+  frame->scrollWindow->SetConstraints(c2);
 
   // Set constraints for text subwindow
   wxLayoutConstraints *c3 = new wxLayoutConstraints;
@@ -127,7 +127,7 @@ the remainder of the width. Margins of 5 pixels are used.
 
 \begin{verbatim}
   // Create some panel items
-  wxButton *btn1 = new wxButton(frame->panel, (wxFunction)NULL, "A button") ;
+  wxButton *btn1 = new wxButton(frame->panel, -1, "A button") ;
 
   wxLayoutConstraints *b1 = new wxLayoutConstraints;
   b1->centreX.SameAs    (frame->panel, wxCentreX);
@@ -136,8 +136,8 @@ the remainder of the width. Margins of 5 pixels are used.
   b1->height.PercentOf  (frame->panel, wxHeight, 10);
   btn1->SetConstraints(b1);
 
-  wxListBox *list = new wxListBox(frame->panel, (wxFunction)NULL, "A list",
-                                  wxSINGLE, -1, -1, 200, 100);
+  wxListBox *list = new wxListBox(frame->panel, -1, "A list",
+                                  wxPoint(-1, -1), wxSize(200, 100));
 
   wxLayoutConstraints *b2 = new wxLayoutConstraints;
   b2->top.Below         (btn1, 5);
@@ -146,8 +146,8 @@ the remainder of the width. Margins of 5 pixels are used.
   b2->bottom.SameAs     (frame->panel, wxBottom, 5);
   list->SetConstraints(b2);
 
-  wxMultiText *mtext = new wxMultiText(frame->panel, (wxFunction)NULL, "Multiline text", "Some text",
-                        -1, -1, 150, 100);
+  wxTextCtrl *mtext = new wxTextCtrl(frame->panel, -1, "Multiline text", "Some text",
+                        wxPoint(-1, -1), wxSize(150, 100), wxTE_MULTILINE);
   
   wxLayoutConstraints *b3 = new wxLayoutConstraints;
   b3->top.Below         (btn1, 5);

@@ -178,7 +178,7 @@ outside of OnDraw (via OnPaint), or you wish to implement OnPaint yourself, you 
 call this function yourself. For example:
 
 \begin{verbatim}
-void MyCanvas::OnEvent(wxMouseEvent& event)
+void MyWindow::OnEvent(wxMouseEvent& event)
 {
   wxClientDC dc(this);
   PrepareDC(dc);

@@ -87,7 +87,7 @@ Example of toolbar use are given in the sample programs tbarsmpl,
 tbarmsw and tbar95.
 
 Each sample creates a main window, and two toolbars: a floating toolbar
-with 24 tools, and a toolbar along the top of the main drawing canvas, divided into groups.
+with 24 tools, and a toolbar along the top of the main drawing window, divided into groups.
 
 The test program defines a general-purpose derived frame called
 \rtfsp{\bf wxFrameWithToolBar} which can manage a frame with one main subwindow
@@ -113,7 +113,7 @@ The following fragment illustrates the essence of creating a toolbar.
     wxDEFAULT_FRAME_STYLE | wxSTAY_ON_TOP);
 
   // 5 rows
-  toolBar = new TestToolBar(toolBarFrame, 10, 10, -1, -1, 0, wxVERTICAL, 5);
+  toolBar = new TestToolBar(toolBarFrame, -1, wxPoint(10, 10), wxSize(-1, -1), 0, wxVERTICAL, 5);
   toolBar->SetMargins(2, 2);
 
   for (int i = 10; i < 25; i++)

@@ -1,0 +1,294 @@
+\section{\class{wxJoystick}}\label{wxjoystick}
+
+wxJoystick allows an application to control one or more joysticks.
+
+\wxheading{Derived from}
+
+\helpref{wxObject}{wxobject}
+
+\wxheading{See also}
+
+\helpref{wxJoystickEvent}{wxjoystickevent}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxJoystick::wxJoystick}\label{wxjoystickconstr}
+
+\func{}{wxJoystick}{\param{int}{ joystick = wxJOYSTICK1}}
+
+Constructor. {\it joystick} may be one of wxJOYSTICK1, wxJOYSTICK2, indicating the joystick
+controller of interest.
+
+\membersection{wxJoystick::\destruct{wxJoystick}}
+
+\func{}{\destruct{wxJoystick}}{\void}
+
+Destroys the wxJoystick object.
+
+\membersection{wxJoystick::GetButtonState}\label{wxjoystickgetbuttonstate}
+
+\constfunc{int}{GetButtonState}{\void}
+
+Returns the state of the joystick buttons. A bitlist of wxJOY\_BUTTONn identifiers,
+where n is 1, 2, 3 or 4.
+
+\membersection{wxJoystick::GetManufacturerId}\label{wxjoystickgetmanufacturerid}
+
+\constfunc{int}{GetManufacturerId}{\void}
+
+Returns the manufacturer id.
+
+\membersection{wxJoystick::GetMovementThreshold}\label{wxjoystickgetmovementthreshold}
+
+\constfunc{int}{GetMovementThreshold}{\void}
+
+Returns the movement threshold, the number of steps outside which the joystick is deemed to have
+moved.
+
+\membersection{wxJoystick::GetNumberAxes}\label{wxjoystickgetnumberaxes}
+
+\constfunc{int}{GetNumberAxes}{\void}
+
+Returns the number of axes for this joystick.
+
+\membersection{wxJoystick::GetNumberButtons}\label{wxjoystickgetnumberbuttons}
+
+\constfunc{int}{GetNumberButtons}{\void}
+
+Returns the number of buttons for this joystick.
+
+\membersection{wxJoystick::GetNumberJoysticks}\label{wxjoystickgetnumberjoysticks}
+
+\constfunc{int}{GetNumberJoysticks}{\void}
+
+Returns the number of joysticks currently attached to the computer.
+
+\membersection{wxJoystick::GetPollingMax}\label{wxjoystickgetpollingmax}
+
+\constfunc{int}{GetPollingMax}{\void}
+
+Returns the maximum polling frequency.
+
+\membersection{wxJoystick::GetPollingMin}\label{wxjoystickgetpollingmin}
+
+\constfunc{int}{GetPollingMin}{\void}
+
+Returns the minimum polling frequency.
+
+\membersection{wxJoystick::GetProductId}\label{wxjoystickgetproductid}
+
+\constfunc{int}{GetProductId}{\void}
+
+Returns the product id for the joystick.
+
+\membersection{wxJoystick::GetProductName}\label{wxjoystickgetproductname}
+
+\constfunc{wxString}{GetProductName}{\void}
+
+Returns the product name for the joystick.
+
+\membersection{wxJoystick::GetPosition}\label{wxjoystickgetposition}
+
+\constfunc{wxPoint}{GetPosition}{\void}
+
+Returns the x, y position of the joystick.
+
+\membersection{wxJoystick::GetPOVPosition}\label{wxjoystickgetpovposition}
+
+\constfunc{int}{GetPOVPosition}{\void}
+
+Returns the point-of-view position, expressed in discrete units.
+
+\membersection{wxJoystick::GetPOVCTSPosition}\label{wxjoystickgetpovctsposition}
+
+\constfunc{int}{GetPOVCTSPosition}{\void}
+
+Returns the point-of-view position, expressed in continuous, one-hundredth of a degree units.
+
+\membersection{wxJoystick::GetRudderMax}\label{wxjoystickgetruddermax}
+
+\constfunc{int}{GetRudderMax}{\void}
+
+Returns the maximum rudder position.
+
+\membersection{wxJoystick::GetRudderMin}\label{wxjoystickgetruddermin}
+
+\constfunc{int}{GetRudderMin}{\void}
+
+Returns the minimum rudder position.
+
+\membersection{wxJoystick::GetRudderPosition}\label{wxjoystickgetrudderposition}
+
+\constfunc{int}{GetRudderPosition}{\void}
+
+Returns the rudder position.
+
+\membersection{wxJoystick::GetUMax}\label{wxjoystickgetumax}
+
+\constfunc{int}{GetUMax}{\void}
+
+Returns the maximum U position.
+
+\membersection{wxJoystick::GetUMin}\label{wxjoystickgetumin}
+
+\constfunc{int}{GetUMin}{\void}
+
+Returns the minimum U position.
+
+\membersection{wxJoystick::GetUPosition}\label{wxjoystickgetuposition}
+
+\constfunc{int}{GetUPosition}{\void}
+
+Gets the position of the fifth axis of the joystick, if it exists.
+
+\membersection{wxJoystick::GetVMax}\label{wxjoystickgetvmax}
+
+\constfunc{int}{GetVMax}{\void}
+
+Returns the maximum V position.
+
+\membersection{wxJoystick::GetUMin}\label{wxjoystickgetumin}
+
+\constfunc{int}{GetUMin}{\void}
+
+Returns the minimum U position.
+
+\membersection{wxJoystick::GetVPosition}\label{wxjoystickgetvposition}
+
+\constfunc{int}{GetVPosition}{\void}
+
+Gets the position of the sixth axis of the joystick, if it exists.
+
+\membersection{wxJoystick::GetXMax}\label{wxjoystickgetxmax}
+
+\constfunc{int}{GetXMax}{\void}
+
+Returns the maximum x position.
+
+\membersection{wxJoystick::GetXMin}\label{wxjoystickgetxmin}
+
+\constfunc{int}{GetXMin}{\void}
+
+Returns the minimum x position.
+
+\membersection{wxJoystick::GetYMax}\label{wxjoystickgetymax}
+
+\constfunc{int}{GetYMax}{\void}
+
+Returns the maximum y position.
+
+\membersection{wxJoystick::GetYMin}\label{wxjoystickgetymin}
+
+\constfunc{int}{GetYMin}{\void}
+
+Returns the minimum y position.
+
+\membersection{wxJoystick::GetZMax}\label{wxjoystickgetzmax}
+
+\constfunc{int}{GetZMax}{\void}
+
+Returns the maximum z position.
+
+\membersection{wxJoystick::GetZMin}\label{wxjoystickgetzmin}
+
+\constfunc{int}{GetXMin}{\void}
+
+Returns the minimum z position.
+
+\membersection{wxJoystick::GetZPosition}\label{wxjoystickgetzposition}
+
+\constfunc{int}{GetZPosition}{\void}
+
+Returns the z position of the joystick.
+
+\membersection{wxJoystick::HasPOV}\label{wxjoystickhaspov}
+
+\constfunc{bool}{HasPOV}{\void}
+
+Returns TRUE if the joystick has a point of view control.
+
+\membersection{wxJoystick::HasPOV4Dir}\label{wxjoystickhaspovfdir}
+
+\constfunc{bool}{HasPOV4Dir}{\void}
+
+Returns TRUE if the joystick point-of-view supports discrete values (centered, forward, backward, left, and right).
+
+\membersection{wxJoystick::HasPOVCTS}\label{wxjoystickhaspovcts}
+
+\constfunc{bool}{HasPOVCTS}{\void}
+
+Returns TRUE if the joystick point-of-view supports continuous degree bearings.
+
+\membersection{wxJoystick::HasRudder}\label{wxjoystickhasrudder}
+
+\constfunc{bool}{HasRudder}{\void}
+
+Returns TRUE if there is a rudder attached to the computer.
+
+\membersection{wxJoystick::HasU}\label{wxjoystickhasu}
+
+\constfunc{bool}{HasU}{\void}
+
+Returns TRUE if the joystick has a U axis.
+
+\membersection{wxJoystick::HasV}\label{wxjoystickhasv}
+
+\constfunc{bool}{HasV}{\void}
+
+Returns TRUE if the joystick has a V axis.
+
+\membersection{wxJoystick::HasZ}\label{wxjoystickhasz}
+
+\constfunc{bool}{HasZ}{\void}
+
+Returns TRUE if the joystick has a Z axis.
+
+\membersection{wxJoystick::IsOk}\label{wxjoystickisok}
+
+\constfunc{bool}{IsOk}{\void}
+
+Returns TRUE if the joystick is functioning.
+
+\membersection{wxJoystick::ReleaseCapture}\label{wxjoystickreleasecapture}
+
+\func{bool}{ReleaseCapture}{\void}
+
+Releases the capture set by {\bf SetCapture}.
+
+\wxheading{Return value}
+
+TRUE if the capture release succeeded.
+
+\wxheading{See also}
+
+\helpref{wxJoystick::SetCapture}{wxjoysticksetcapture}, \helpref{wxJoystickEvent}{wxjoystickevent}
+
+\membersection{wxJoystick::SetCapture}\label{wxjoysticksetcapture}
+
+\func{bool}{SetCapture}{\param{wxWindow*}{ win}, \param{int}{ pollingFreq = 0}}
+
+Sets the capture to direct joystick events to {\it win}.
+
+\wxheading{Parameters}
+
+\docparam{win}{The window that will receive joystick events.}
+
+\docparam{pollingFreq}{If zero, movement events are sent when above the
+threshold. If greater than zero, events are received every {\it pollingFreq} milliseconds.}
+
+\wxheading{Return value}
+
+TRUE if the capture succeeded.
+
+\wxheading{See also}
+
+\helpref{wxJoystick::ReleaseCapture}{wxjoystickreleasecapture}, \helpref{wxJoystickEvent}{wxjoystickevent}
+
+\membersection{wxJoystick::SetMovementThreshold}\label{wxjoysticksetmovementthreshold}
+
+\func{void}{SetMovementThreshold}{\param{int}{ threshold}}
+
+Sets the movement threshold, the number of steps outside which the joystick is deemed to have
+moved.
+
+

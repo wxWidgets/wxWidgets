@@ -1,7 +1,7 @@
 \section{\class{wxMouseEvent}}\label{wxmouseevent}
 
-This event class contains information about mouse events, particularly
-events received by canvases. See \helpref{wxWindow::OnMouseEvent}{wxwindowonmouseevent}.
+This event class contains information about mouse events.
+See \helpref{wxWindow::OnMouseEvent}{wxwindowonmouseevent}.
 
 \wxheading{Derived from}
 
@@ -169,7 +169,7 @@ Returns TRUE if this was a dragging event (motion while a button is depressed).
 
 \func{bool}{Entering}{\void}
 
-Returns TRUE if the mouse was entering the canvas (MS Windows and Motif).
+Returns TRUE if the mouse was entering the window (MS Windows and Motif).
 
 See also \helpref{wxMouseEvent::Leaving}{wxmouseeventleaving}.
 
@@ -196,7 +196,7 @@ that may be tested using {\it ButtonDown}).
 
 \func{bool}{Leaving}{\void}
 
-Returns TRUE if the mouse was leaving the canvas (MS Windows and Motif).
+Returns TRUE if the mouse was leaving the window (MS Windows and Motif).
 
 See also \helpref{wxMouseEvent::Entering}{wxmouseevententering}.
 
@@ -267,14 +267,14 @@ Returns TRUE if this was a motion event (no buttons depressed).
 \func{void}{Position}{\param{float *}{x}, \param{float *}{y}}
 
 Sets *x and *y to the position at which the event occurred. If the
-window is a canvas, the position is converted to logical units
+window is a window, the position is converted to logical units
 (according to the current mapping mode) with scrolling taken into
 account. To get back to device units (for example to calculate where on the
-screen to place a dialog box associated with a canvas mouse event), use
+screen to place a dialog box associated with a window mouse event), use
 \rtfsp{\bf wxDC::LogicalToDeviceX} and {\bf wxDC::LogicalToDeviceY}.
 
 For example, the following code calculates screen pixel coordinates
-from the frame position, canvas view start (assuming the canvas is the only
+from the frame position, window view start (assuming the window is the only
 subwindow on the frame and therefore at the top left of it), and the
 logical event position. A menu is popped up at the position where the
 mouse click occurred. (Note that the application should also check that
@@ -285,9 +285,9 @@ occurred near the screen edge!)
   float event_x, event_y;
   event.Position(&event_x, &event_y);
   frame->GetPosition(&x, &y);
-  canvas->ViewStart(&x1, &y1);
-  int mouse_x = (int)(canvas->GetDC()->LogicalToDeviceX(event_x + x - x1);
-  int mouse_y = (int)(canvas->GetDC()->LogicalToDeviceY(event_y + y - y1);
+  window->ViewStart(&x1, &y1);
+  int mouse_x = (int)(window->GetDC()->LogicalToDeviceX(event_x + x - x1);
+  int mouse_y = (int)(window->GetDC()->LogicalToDeviceY(event_y + y - y1);
 
   char *choice = wxGetSingleChoice("Menu", "Pick a node action",
                                  no_choices, choices, frame, mouse_x, mouse_y);
@@ -317,7 +317,6 @@ of the current event type.
 \func{bool}{RightUp}{\void}
 
 Returns TRUE if the right mouse button changed to up.
-
 
 \membersection{wxMouseEvent::ShiftDown}
 

@@ -138,7 +138,7 @@ but for portability it should be called anyway.
 
 \func{void}{DrawTool}{\param{wxMemoryDC\& }{memDC}, \param{wxToolBarBaseTool* }{tool}}
 
-Draws the specified tool onto the canvas using the given memory device context.
+Draws the specified tool onto the window using the given memory device context.
 
 \wxheading{Parameters}
 
@@ -236,7 +236,7 @@ Returns the left/right and top/bottom margins, which are also used for inter-too
 \constfunc{void}{GetMaxSize}{\param{float*}{ w}, \param{float*}{ h}}
 
 Gets the maximum size taken up by the tools after layout, including margins.
-This can be used to size a frame around the toolbar canvas.
+This can be used to size a frame around the toolbar window.
 
 \wxheading{Parameters}
 
@@ -351,7 +351,7 @@ TRUE if the tool is toggled on, FALSE otherwise.
 \func{void}{Layout}{\void}
 
 Called by the application after the tools have been added to
-automatically lay the tools out on the canvas. If you have given
+automatically lay the tools out on the window. If you have given
 absolute positions when adding the tools, do not call this.
 
 \membersection{wxToolBarBase::OnLeftClick}\label{wxtoolbarbaseonleftclick}

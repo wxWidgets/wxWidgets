@@ -55,7 +55,7 @@ the wxColourDialog class. Here is an excerpt, which
 sets various parameters of a wxColourData object, including
 a grey scale for the custom colours. If the user did not cancel
 the dialog, the application retrieves the selected colour and
-uses it to set the background of a canvas.
+uses it to set the background of a window.
 
 \begin{verbatim}
   wxColourData data;
@@ -72,9 +72,9 @@ uses it to set the background of a canvas.
     wxColourData retData = dialog.GetColourData();
     wxColour col = retData.GetColour();
     wxBrush brush(col, wxSOLID);
-    myCanvas->SetBackground(brush);
-    myCanvas->Clear();
-    myCanvas->Refresh();
+    myWindow->SetBackground(brush);
+    myWindow->Clear();
+    myWindow->Refresh();
   }
 \end{verbatim}
 
@@ -128,7 +128,7 @@ and colour for drawing text on a canvas. Here is an excerpt:
     wxFontData retData = dialog.GetFontData();
     canvasFont = retData.GetChosenFont();
     canvasTextColour = retData.GetColour();
-    myCanvas->Refresh();
+    myWindow->Refresh();
   }
 \end{verbatim}
 

@@ -22,13 +22,13 @@ Instead of creating a dialog box and populating it with items, it is possible to
 one of the convenient common dialog classes, such as \helpref{wxMessageDialog}{wxmessagedialog}\rtfsp
 and \helpref{wxFileDialog}{wxfiledialog}.
 
-You never draw directly onto a canvas --- you use a {\it device context} (DC). \helpref{wxDC}{wxdc} is
+You never draw directly onto a window --- you use a {\it device context} (DC). \helpref{wxDC}{wxdc} is
 the base for \helpref{wxClientDC}{wxclientdc}, \helpref{wxPaintDC}{wxpaintdc}, \helpref{wxMemoryDC}{wxmemorydc}, \helpref{wxPostScriptDC}{wxpostscriptdc},
 \rtfsp\helpref{wxMemoryDC}{wxmemorydc}, \helpref{wxMetaFileDC}{wxmetafiledc} and \helpref{wxPrinterDC}{wxprinterdc}.
 If your drawing functions have {\bf wxDC} as a parameter, you can pass any of these DCs
 to the function, and thus use the same code to draw to several different devices.
 You can draw using the member functions of {\bf wxDC}, such as \helpref{wxDC::DrawLine}{wxdcdrawline}\rtfsp
-and \helpref{wxDC::DrawText}{wxdcdrawtext}. Control colour on a canvas (\helpref{wxColour}{wxcolour}) with
+and \helpref{wxDC::DrawText}{wxdcdrawtext}. Control colour on a window (\helpref{wxColour}{wxcolour}) with
 brushes (\helpref{wxBrush}{wxbrush}) and pens (\helpref{wxPen}{wxpen}).
 
 To intercept events, you add a DECLARE\_EVENT\_TABLE macro to the window class declaration,
@@ -38,7 +38,7 @@ These might override predefined event handlers such as \helpref{wxWindow::OnChar
 \rtfsp\helpref{wxWindow::OnMouseEvent}{wxwindowonmouseevent}.
 
 Most modern applications will have an on-line, hypertext help system; for this, you
-need wxHelp and the \helpref{wxHelpInstance}{wxhelpinstance} class to control
+need wxHelp and the \helpref{wxHelpControllerBase}{wxhelpcontrollerbase} class to control
 wxHelp. To add sparkle, you might use the wxToolBar class (documented separately)
 which makes heavy use of the \helpref{wxBitmap}{wxbitmap}.
 

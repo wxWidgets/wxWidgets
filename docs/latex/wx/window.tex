@@ -1246,13 +1246,6 @@ the commandInt member of the event to check the selected menu identifier.
 
 \docparam{y}{Required y position for the menu to appear.}
 
-\wxheading{Remarks}
-
-Valid only for subwindows (panels, canvases and text windows).
-
-Sometimes this function does not function correctly under Motif, in which case
-please use \helpref{wxWindow::FakePopupMenu}{wxwindowfakepopupmenu} instead.
-
 \wxheading{See also}
 
 \helpref{wxMenu}{wxmenu}, \helpref{wxWindow::FakePopupMenu}{wxwindowfakepopupmenu}
@@ -1424,13 +1417,6 @@ constraints.}
 You must call \helpref{wxWindow::SetAutoLayout}{wxwindowsetautolayout} to tell a window to use
 the constraints automatically in OnSize; otherwise, you must
 override OnSize and call Layout explicitly.
-
-% TODO: double click should always be allowed.
-%\membersection{wxWindow::SetDoubleClick}\label{setdoubleclick}
-%
-%\func{void}{SetDoubleClick}{\param{bool}{ allowDoubleClick}}
-%
-%For canvases, allows double click if {\it allowDoubleClick} is TRUE. The default is FALSE.
 
 \membersection{wxWindow::SetFocus}\label{wxwindowsetfocus}
 
@@ -1664,9 +1650,9 @@ Sets the range of one of the built-in scrollbars.
 \wxheading{Remarks}
 
 The range of a scrollbar is the number of steps that the thumb may travel, rather than the total
-object length of the scrollbar. If you are implementing a scrolling canvas, for example, you
-would adjust the scroll range when the canvas is resized, by subtracting the canvas view size from the
-total virtual canvas size. When the two sizes are the same (all the canvas is visible), the range goes to zero
+object length of the scrollbar. If you are implementing a scrolling window, for example, you
+would adjust the scroll range when the window is resized, by subtracting the window view size from the
+total virtual window size. When the two sizes are the same (all the window is visible), the range goes to zero
 and usually the scrollbar will be automatically hidden.
 
 \wxheading{See also}

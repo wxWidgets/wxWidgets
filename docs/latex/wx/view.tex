@@ -118,8 +118,8 @@ Implements closing behaviour. The default implementation calls wxDocument::Close
 to close the associated document. Does not delete the view. The application
 may wish to do some cleaning up operations in this function, {\it if} a
 call to wxDocument::Close succeeded. For example, if your application's
-all share the same canvas, you need to disassociate the canvas from the view
-and perhaps clear the canvas. If {\it deleteWindow} is TRUE, delete the
+all share the same window, you need to disassociate the window from the view
+and perhaps clear the window. If {\it deleteWindow} is TRUE, delete the
 frame associated with the view.
 
 \membersection{wxView::OnCreate}

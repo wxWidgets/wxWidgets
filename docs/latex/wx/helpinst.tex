@@ -1,130 +1,122 @@
-\section{\class{wxHelpInstance}}\label{wxhelpinstance}
+\section{\class{wxHelpControllerBase}}\label{wxhelpcontrollerbase}
 
-NOTE: this documentation is out of date (see comments below).
+This class defines the interface by which
+applications may invoke a help viewer to provide on-line help.
 
-The {\bf wxHelpInstance} class implements the interface by which
-applications may invoke wxHelp to provide on-line help. Each instance
-of the class maintains one connection to an instance of wxHelp which
-belongs to the application, and which is shut down when the Quit
-member of {\bf wxHelpInstance} is called (for example in the {\bf
-OnClose} member of an application's main frame). Under MS Windows,
-there is currently only one instance of wxHelp which is used by all
-applications.
+Other classes derive from this class to provide actual implementations
+of help controllers.
 
-Since there is a DDE link between the two programs, each subsequent
-request to display a file or section uses the existing instance of
-wxHelp, rather than starting a new instance each time. wxHelp thus
-appears to the user to be an extension of the current application.
-wxHelp may also be invoked independently of a client application.
+A help controller allows an application to display help, at the contents
+or at a particular topic, and shut the help program down on termination.
+This avoids proliferation of many instances of the help viewer whenever the
+user requests a different topic via the application's menus or buttons.
 
-Normally an application will create an instance of {\bf
-wxHelpInstance} when it starts, and immediately call {\bf Initialize}\rtfsp
-to associate a filename with it. wxHelp will only get run, however,
-just before the first call to display something. See the test program
-supplied with the wxHelp source.
-
-Include the file {\tt wx\_help.h} to use this API, even if you have
-included {\tt wx.h}.
-
-If you give TRUE to the constructor, you can use the native help system
-where appropriate (currently under Windows only). Omit the file extension
-to allow wxWindows to choose the appropriate file for the platform.
-
-TODO: no longer derive this from a client class, but maybe have several implementations,
-e.g. wxHelpInstanceBase, wxHelpInstanceDDE, wxHelpInstanceWinHelp, wxHelpInstanceHTML, etc.
+Typically, an application will create a help controller instance
+when it starts, and immediately call {\bf Initialize}\rtfsp
+to associate a filename with it. The help viewer will only get run, however,
+just before the first call to display something.
 
 \wxheading{Derivation}
 
-TODO
+\helpref{wxObject}{wxobject}
 
 \wxheading{See also}
 
-TODO
+\helpref{wxWinHelpController}{wxwinhelpcontroller}
+
+\wxheading{Include file}
+
+{\tt <wx/helpbase.h>} (for just wxHelpControllerBase)
+
+{\tt <wx/help.h>} (to include the platform-specific controller, e.g. wxWinHelpController)
+
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxHelpInstance::wxHelpInstance}
+\membersection{wxHelpControllerBase::wxHelpControllerBase}
 
-\func{}{wxHelpInstance}{\param{bool}{ native}}
+\func{}{wxHelpControllerBase}{\void}
 
-Constructs a help instance object, but does not invoke wxHelp.
-If {\it native} is TRUE, tries to use the native help system where
-possible (Windows Help under MS Windows, wxHelp on other platforms).
+Constructs a help instance object, but does not invoke the help viewer.
 
-\membersection{wxHelpInstance::\destruct{wxHelpInstance}}
+\membersection{wxHelpControllerBase::\destruct{wxHelpControllerBase}}
 
-\func{}{\destruct{wxHelpInstance}}{\void}
+\func{}{\destruct{wxHelpControllerBase}}{\void}
 
-Destroys the help instance, closing down wxHelp for this application
-if it is running.
+Destroys the help instance, closing down the viewer if it is running.
 
-\membersection{wxHelpInstance::Initialize}
+\membersection{wxHelpControllerBase::Initialize}\label{wxhelpcontrollerbaseinitialize}
 
-\func{void}{Initialize}{\param{const wxString\& }{file}, \param{int}{ server = -1}}
+\func{virtual void}{Initialize}{\param{const wxString\& }{file}}
+
+\func{virtual void}{Initialize}{\param{const wxString\& }{file}, \param{int}{ server}}
 
 Initializes the help instance with a help filename, and optionally a server (socket)
-number (one is chosen at random if this parameter is omitted). Does not invoke wxHelp.
+number. Does not invoke the help viewer.
 This must be called directly after the help instance object is created and before
-any attempts to communicate with wxHelp.
+any attempts to communicate with the viewer.
 
-You may omit the file extension, and in fact this is recommended if you
-wish to support .xlp files under X and .hlp under Windows.
+You may omit the file extension and a suitable one will be chosen.
 
-\membersection{wxHelpInstance::DisplayBlock}
+\membersection{wxHelpControllerBase::DisplayBlock}\label{wxhelpcontrollerbasedisplayblock}
 
-\func{bool}{DisplayBlock}{\param{long}{ blockNo}}
+\func{virtual bool}{DisplayBlock}{\param{long}{ blockNo}}
 
-If wxHelp is not running, runs wxHelp and displays the file at the given block number.
-If using Windows Help, displays the file at the given context number.
+If the help viewer is not running, runs it and displays the file at the given block number.
+The interpretation of {\it blockNo} differs between help viewers. If using Windows Help, this
+refers to the context number. If wxHelp, this is the wxHelp block number.
 
-\membersection{wxHelpInstance::DisplayContents}
+\membersection{wxHelpControllerBase::DisplayContents}\label{wxhelpcontrollerbasedisplaycontents}
 
-\func{bool}{DisplayContents}{\void}
+\func{virtual bool}{DisplayContents}{\void}
 
-If wxHelp is not running, runs wxHelp (or Windows Help) and displays the
-contents (the first section of the file).
+If the help viewer is not running, runs it and displays the
+contents.
 
-\membersection{wxHelpInstance::DisplaySection}
+\membersection{wxHelpControllerBase::DisplaySection}\label{wxhelpcontrollerbasedisplaysection}
 
-\func{bool}{DisplaySection}{\param{int}{ sectionNo}}
+\func{virtual bool}{DisplaySection}{\param{int}{ sectionNo}}
 
-If wxHelp is not running, runs wxHelp and displays the given section.
-Sections are numbered starting from 1, and section numbers may be viewed by running
-wxHelp in edit mode.
+If the help viewer is not running, runs it and displays the given section.
+Sections are numbered starting from 1.
 
-\membersection{wxHelpInstance::KeywordSearch}
+For wxHelp, section numbers may be viewed by running wxHelp in edit mode.
 
-\func{bool}{KeywordSearch}{\param{const wxString\& }{keyWord}}
+DisplaySection does not apply to WinHelp.
 
-If wxHelp (or Windows Help) is not running, runs wxHelp (or Windows
-Help), and searches for sections matching the given keyword. If one
+\membersection{wxHelpControllerBase::KeywordSearch}\label{wxhelpcontrollerbasekeywordsearch}
+
+\func{virtual bool}{KeywordSearch}{\param{const wxString\& }{keyWord}}
+
+If the help viewer is not running, runs it, and searches for sections matching the given keyword. If one
 match is found, the file is displayed at this section. If more than one
 match is found, the Search dialog is displayed with the matches (wxHelp)
 or the first topic is displayed (Windows Help).
 
-\membersection{wxHelpInstance::LoadFile}
+\membersection{wxHelpControllerBase::LoadFile}\label{wxhelpcontrollerbaseloadfile}
 
-\func{bool}{LoadFile}{\param{const wxString\& }{file = NULL}}
+\func{virtual bool}{LoadFile}{\param{const wxString\& }{file = NULL}}
 
-If wxHelp (or Windows Help) is not running, runs wxHelp (or Windows
-Help), and loads the given file. If the filename is not supplied or is
-NULL, the file specified in {\bf Initialize} is used. If wxHelp is
+If the help viewer is not running, runs it and loads the given file.
+If the filename is not supplied or is
+NULL, the file specified in {\bf Initialize} is used. If the viewer is
 already displaying the specified file, it will not be reloaded. This
 member function may be used before each display call in case the user
 has opened another file.
 
-\membersection{wxHelpInstance::OnQuit}
+\membersection{wxHelpControllerBase::OnQuit}\label{wxhelpcontrollerbaseonquit}
 
-\func{bool}{OnQuit}{\void}
+\func{virtual bool}{OnQuit}{\void}
 
-Overridable member called when this application's wxHelp is quit
-(no effect if Windows Help is being used instead).
+Overridable member called when this application's viewer is quit by the user.
 
-\membersection{wxHelpInstance::Quit}
+This only works for wxXLPHelpController.
 
-\func{bool}{Quit}{\void}
+\membersection{wxHelpControllerBase::Quit}\label{wxhelpcontrollerbasequit}
 
-If wxHelp is running, quits wxHelp by disconnecting (no effect for Windows
-Help).
+\func{virtual bool}{Quit}{\void}
 
+If the viewer is running, quits it by disconnecting.
+
+For Windows Help, the viewer will only close if no other application is using it.
 

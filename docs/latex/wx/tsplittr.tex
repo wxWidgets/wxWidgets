@@ -15,18 +15,16 @@ subwindows and hiding one of them.
 
 {\small
 \begin{verbatim}
-  splitter = new wxSplitterWindow(this, 0, 0, 400, 400, wxSP_3D);
+  splitter = new wxSplitterWindow(this, -1, wxPoint(0, 0), wxSize(400, 400), wxSP_3D);
 
-  leftCanvas = new MyCanvas(splitter);
-  leftCanvas->SetBackground(wxRED_BRUSH);
-  leftCanvas->SetScrollbars(20, 20, 50, 50, 4, 4);
+  leftWindow = new MyWindow(splitter);
+  leftWindow->SetScrollbars(20, 20, 50, 50);
 
-  rightCanvas = new MyCanvas(splitter);
-  rightCanvas->SetBackground(wxCYAN_BRUSH);
-  rightCanvas->SetScrollbars(20, 20, 50, 50, 4, 4);
-  rightCanvas->Show(FALSE);
+  rightWindow = new MyWindow(splitter);
+  rightWindow->SetScrollbars(20, 20, 50, 50);
+  rightWindow->Show(FALSE);
 
-  splitter->Initialize(leftCanvas);
+  splitter->Initialize(leftWindow);
 
   // Set this to prevent unsplitting
 //    splitter->SetMinimumPaneSize(20);
@@ -41,18 +39,18 @@ The next fragment shows how the splitter window can be manipulated after creatio
   {
         if ( splitter->IsSplit() )
             splitter->Unsplit();
-        leftCanvas->Show(TRUE);
-        rightCanvas->Show(TRUE);
-        splitter->SplitVertically( leftCanvas, rightCanvas );
+        leftWindow->Show(TRUE);
+        rightWindow->Show(TRUE);
+        splitter->SplitVertically( leftWindow, rightWindow );
   }
 
   void MyFrame::OnSplitHorizontal(wxCommandEvent& event)
   {
         if ( splitter->IsSplit() )
             splitter->Unsplit();
-        leftCanvas->Show(TRUE);
-        rightCanvas->Show(TRUE);
-        splitter->SplitHorizontally( leftCanvas, rightCanvas );
+        leftWindow->Show(TRUE);
+        rightWindow->Show(TRUE);
+        splitter->SplitHorizontally( leftWindow, rightWindow );
   }
 
   void MyFrame::OnUnsplit(wxCommandEvent& event)

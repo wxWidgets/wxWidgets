@@ -1,7 +1,7 @@
 \section{Tab classes overview}\label{wxtaboverview}
 
 Classes: \helpref{wxTabView}{wxtabview}, \helpref{wxPanelTabView}{wxpaneltabview},
- \helpref{wxTabbedPanel}{wxtabbedpanel}, \helpref{wxTabbedDialogBox}{wxtabbeddialogbox},
+ \helpref{wxTabbedPanel}{wxtabbedpanel}, \helpref{wxTabbedDialog}{wxtabbeddialog},
  \helpref{wxTabControl}{wxtabcontrol}
 
 The tab classes provides a way to display rows of tabs (like file divider tabs), which can be
@@ -9,7 +9,7 @@ used to switch between panels or other information. Tabs are most
 commonly used in dialog boxes where the number of options is too great
 to fit on one dialog.
 
-\wxheading{The appearance and behaviour of a wxTabbedDialogBox}
+\wxheading{The appearance and behaviour of a wxTabbedDialog}
 
 The following screenshot shows the appearance of the sample tabbed dialog application.
 
@@ -209,7 +209,7 @@ wxPanelTabView class, but an application could derive other kinds of
 view from wxTabView. 
 
 For example, a help application might draw a representation of a book on
-a canvas, with a row of tabs along the top. The new tab view class might
+a window, with a row of tabs along the top. The new tab view class might
 be called wxCanvasTabView, for example, with the wxBookCanvas posting
 the OnEvent function to the wxCanvasTabView before processing further,
 application-specific event processing. 
