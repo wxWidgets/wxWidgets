@@ -12,11 +12,12 @@ class TestPanel(wx.Panel):
         wx.Panel.__init__(self, parent, -1)
         self.Bind(wx.EVT_SIZE, self.OnSize)
 
-        self.tree = gizmos.TreeListCtrl(self, -1, style = wx.TR_DEFAULT_STYLE
-                                   #| wx.TR_ROW_LINES
-                                   #| wx.TR_NO_LINES 
-                                   #| wx.TR_TWIST_BUTTONS
-                                   #| wx.TR_FULL_ROW_HIGHLIGHT     
+        self.tree = gizmos.TreeListCtrl(self, -1, style =
+                                        wx.TR_DEFAULT_STYLE
+                                        #wx.TR_TWIST_BUTTONS
+                                        #| wx.TR_ROW_LINES
+                                        #| wx.TR_NO_LINES 
+                                        | wx.TR_FULL_ROW_HIGHLIGHT     
                                    )
         isz = (16,16)
         il = wx.ImageList(isz[0], isz[1])
