@@ -351,7 +351,7 @@ ControlRef wxMacFindSubControl( Point location , ControlRef superControl , Contr
             if ( IsControlVisible( sibling ) )
             {
                 Rect r ;
-                GetControlBounds( sibling , &r ) ;
+                UMAGetControlBoundsInWindowCoords( sibling , &r ) ;
                 if ( MacPtInRect( location , &r ) )
                 {
                     ControlHandle child = wxMacFindSubControl( location , sibling , outPart ) ;
@@ -359,7 +359,12 @@ ControlRef wxMacFindSubControl( Point location , ControlRef superControl , Contr
                         return child ;
                     else
                     {
-                        *outPart = TestControl( sibling , location ) ;
+                        Point testLocation = location ;
+#if TARGET_API_MAC_OSX
+                        testLocation.h -= r.left ;
+                        testLocation.v -= r.top ;
+#endif
+                        *outPart = TestControl( sibling , testLocation ) ;
                         return sibling ;
                     }
                 }
@@ -397,12 +402,7 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
 
     if ( window )
     {
-        // calculate window relative coordinates
-        GrafPtr     port;
-        ::GetPort( &port ) ;
-        ::SetPort( UMAGetWindowPort(window ) ) ;
-        ::GlobalToLocal( &windowMouseLocation ) ;
-        ::SetPort( port ) ;
+        QDGlobalToLocalPoint( UMAGetWindowPort(window ) ,  &windowMouseLocation ) ;
 
         if ( wxTheApp->s_captureWindow && wxTheApp->s_captureWindow->MacGetTopLevelWindowRef() == (WXWindow) window && windowPart == inContent )
         {
@@ -789,25 +789,6 @@ void wxTopLevelWindowMac::Maximize(bool maximize)
     wxMacPortStateHelper help( (GrafPtr) GetWindowPort( (WindowRef) m_macWindow) ) ;
     wxMacWindowClipper clip (this);
     ZoomWindow( (WindowRef)m_macWindow , maximize ? inZoomOut : inZoomIn , false ) ;
-/*
-    Rect r ;
-    GDHandle device = NULL ;
-    verify_noerr( GetWindowGreatestAreaDevice( (WindowRef) m_macWindow , kWindowContentRgn ,
-        &device , NULL ) ;
-    verify_noerr( GetAvailableWindowPositioningBounds( GetMainDevice() , &r ) ) ;
-
-    Rect tempRect ;
-    GrafPtr port ;
-    GetPort( &port ) ;
-    Point pt = { 0, 0 } ;
-    SetPortWindowPort((WindowRef)m_macWindow) ;
-    LocalToGlobal( &pt ) ;
-    SetPort( port ) ;
-
-    GetWindowPortBounds((WindowRef)m_macWindow, &tempRect ) ;
-    SetSize( pt.h , pt.v , tempRect.right-tempRect.left ,
-        tempRect.bottom-tempRect.top, wxSIZE_USE_EXISTING);
-*/
 }
 
 bool wxTopLevelWindowMac::IsMaximized() const
@@ -1223,8 +1204,7 @@ static void wxShapedMacWindowGetPos(WindowRef window, Rect* inRect)
 {
     GetWindowPortBounds(window, inRect);
     Point pt = {inRect->left, inRect->top};
-    SetPort((GrafPtr) GetWindowPort(window));
-    LocalToGlobal(&pt);
+    QDLocalToGlobalPoint( GetWindowPort(window) , &pt ) ;
     inRect->top = pt.v;
     inRect->left = pt.h;
     inRect->bottom += pt.v;

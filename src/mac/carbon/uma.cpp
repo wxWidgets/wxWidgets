@@ -636,22 +636,6 @@ OSErr UMASetKeyboardFocus                (WindowPtr                 inWindow,
     return err ;
 }
 
-// events
-void UMAUpdateControls( WindowPtr inWindow , RgnHandle inRgn )
-{
-    wxMacPortStateHelper help( (GrafPtr) GetWindowPort( (WindowRef) inWindow) ) ;
-    RgnHandle updateRgn = NewRgn() ;
-    GetWindowUpdateRgn( inWindow , updateRgn ) ;
-
-    Point zero = { 0 , 0 } ;
-    LocalToGlobal( &zero ) ;
-    OffsetRgn( updateRgn , -zero.h , -zero.v ) ;
-
-    UpdateControls( inWindow , inRgn ) ;
-    InvalWindowRgn( inWindow, updateRgn) ;
-    DisposeRgn( updateRgn ) ;
-}
-
 bool UMAIsWindowFloating( WindowRef inWindow )
 {
     WindowClass cl ;
