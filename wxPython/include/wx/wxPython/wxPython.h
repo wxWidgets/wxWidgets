@@ -27,9 +27,9 @@
 // exported by the wxPython API.  It sets a static pointer to a structure of
 // function pointers located in the wx._core extension module.
 static void wxPyCoreAPI_IMPORT() {
-    wxPyCoreAPIPtr = (wxPyCoreAPI*)PyCObject_Import("wx._core", "_wxPyCoreAPI");
+    wxPyCoreAPIPtr = (wxPyCoreAPI*)PyCObject_Import("wx._core_", "_wxPyCoreAPI");
     if (! wxPyCoreAPIPtr)
-        wxPyCoreAPIPtr = (wxPyCoreAPI*)PyCObject_Import("_core", "_wxPyCoreAPI");
+        wxPyCoreAPIPtr = (wxPyCoreAPI*)PyCObject_Import("_core_", "_wxPyCoreAPI");
 }
 
 

@@ -10,8 +10,7 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-%module core
-
+%module _core
 
 %{
 #include "wx/wxPython/wxPython_int.h"
@@ -26,7 +25,7 @@
 %include my_typemaps.i
 
 %include _core_api.i
-%include _core_rename.i
+%include __core_rename.i
 
 %native(_wxPySetDictionary)   __wxPySetDictionary;
 %native(_wxPyFixStockObjects) __wxPyFixStockObjects;
@@ -34,7 +33,7 @@
 %pythoncode {
 %#// Give a reference to the dictionary of this module to the C++ extension
 %#// code.
-_core._wxPySetDictionary(vars())
+_core_._wxPySetDictionary(vars())
 
 %#// A little trick to make 'wx' be a reference to this module so wx.Names can
 %#// be used here.

@@ -24,7 +24,7 @@
 
 %import core.i
 %import misc.i  // for DnD
-%pythoncode { wx = core }
+%pythoncode { wx = _core }
 %pythoncode { __docfilter__ = wx.__docfilter__ }
 
 MAKE_CONST_WXSTRING(STCNameStr);

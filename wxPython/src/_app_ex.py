@@ -148,17 +148,17 @@ your Mac."""
 
 
 # change from wxPyApp_ to wxApp_
-App_GetMacSupportPCMenuShortcuts = _core.PyApp_GetMacSupportPCMenuShortcuts
-App_GetMacAboutMenuItemId        = _core.PyApp_GetMacAboutMenuItemId
-App_GetMacPreferencesMenuItemId  = _core.PyApp_GetMacPreferencesMenuItemId
-App_GetMacExitMenuItemId         = _core.PyApp_GetMacExitMenuItemId
-App_GetMacHelpMenuTitleName      = _core.PyApp_GetMacHelpMenuTitleName
-App_SetMacSupportPCMenuShortcuts = _core.PyApp_SetMacSupportPCMenuShortcuts
-App_SetMacAboutMenuItemId        = _core.PyApp_SetMacAboutMenuItemId
-App_SetMacPreferencesMenuItemId  = _core.PyApp_SetMacPreferencesMenuItemId
-App_SetMacExitMenuItemId         = _core.PyApp_SetMacExitMenuItemId
-App_SetMacHelpMenuTitleName      = _core.PyApp_SetMacHelpMenuTitleName
-App_GetComCtl32Version           = _core.PyApp_GetComCtl32Version
+App_GetMacSupportPCMenuShortcuts = _core_.PyApp_GetMacSupportPCMenuShortcuts
+App_GetMacAboutMenuItemId        = _core_.PyApp_GetMacAboutMenuItemId
+App_GetMacPreferencesMenuItemId  = _core_.PyApp_GetMacPreferencesMenuItemId
+App_GetMacExitMenuItemId         = _core_.PyApp_GetMacExitMenuItemId
+App_GetMacHelpMenuTitleName      = _core_.PyApp_GetMacHelpMenuTitleName
+App_SetMacSupportPCMenuShortcuts = _core_.PyApp_SetMacSupportPCMenuShortcuts
+App_SetMacAboutMenuItemId        = _core_.PyApp_SetMacAboutMenuItemId
+App_SetMacPreferencesMenuItemId  = _core_.PyApp_SetMacPreferencesMenuItemId
+App_SetMacExitMenuItemId         = _core_.PyApp_SetMacExitMenuItemId
+App_SetMacHelpMenuTitleName      = _core_.PyApp_SetMacHelpMenuTitleName
+App_GetComCtl32Version           = _core_.PyApp_GetComCtl32Version
 
 #----------------------------------------------------------------------------
 
@@ -199,7 +199,7 @@ class PyWidgetTester(wx.App):
 
 class __wxPyCleanup:
     def __init__(self):
-        self.cleanup = _core.App_CleanUp
+        self.cleanup = _core_.App_CleanUp
     def __del__(self):
         self.cleanup()
 
@@ -208,9 +208,9 @@ _sys.__wxPythonCleanup = __wxPyCleanup()
 ## # another possible solution, but it gets called too early...
 ## if sys.version[0] == '2':
 ##     import atexit
-##     atexit.register(_core.wxApp_CleanUp)
+##     atexit.register(_core_.wxApp_CleanUp)
 ## else:
-##     sys.exitfunc = _core.wxApp_CleanUp
+##     sys.exitfunc = _core_.wxApp_CleanUp
 
 
 #----------------------------------------------------------------------------

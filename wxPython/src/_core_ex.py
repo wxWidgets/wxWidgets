@@ -24,9 +24,9 @@ __wxPyPtrTypeMap['wxStatusBar95']   = 'wxStatusBar'
 from __version__ import *
 __version__ = VERSION_STRING
 
-assert MAJOR_VERSION == _core.MAJOR_VERSION, "wxPython/wxWindows version mismatch"
-assert MINOR_VERSION == _core.MINOR_VERSION, "wxPython/wxWindows version mismatch"
-if RELEASE_VERSION != _core.RELEASE_VERSION:
+assert MAJOR_VERSION == _core_.MAJOR_VERSION, "wxPython/wxWindows version mismatch"
+assert MINOR_VERSION == _core_.MINOR_VERSION, "wxPython/wxWindows version mismatch"
+if RELEASE_VERSION != _core_.RELEASE_VERSION:
     import warnings
     warnings.warn("wxPython/wxWindows release number mismatch")
 
@@ -64,7 +64,7 @@ class PyUnbornObjectError(AttributeError):
 
 class _wxPyUnbornObject(object):
     """
-    Some stock objects are created when the wx.core module is
+    Some stock objects are created when the wx._core module is
     imported, but their C++ instance is not created until the wx.App
     object is created and initialized.  These object instances will
     temporarily have their __class__ changed to this class so an
@@ -236,15 +236,15 @@ def __docfilter__(name):
 
 # Import other modules in this package that should show up in the
 # "core" wx namespace
-from gdi import *
-from windows import *
-from controls import *
-from misc import *
+from _gdi import *
+from _windows import *
+from _controls import *
+from _misc import *
 
 
 # Fixup the stock objects since they can't be used yet.  (They will be
 # restored in wx.PyApp.OnInit.)
-_core._wxPyFixStockObjects()
+_core_._wxPyFixStockObjects()
 
 #----------------------------------------------------------------------------
 #----------------------------------------------------------------------------

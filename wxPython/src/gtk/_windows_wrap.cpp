@@ -297,11 +297,11 @@ static swig_type_info *swig_types[86];
 
 
 /*-----------------------------------------------
-              @(target):= _windows.so
+              @(target):= _windows_.so
   ------------------------------------------------*/
-#define SWIG_init    init_windows
+#define SWIG_init    init_windows_
 
-#define SWIG_name    "_windows"
+#define SWIG_name    "_windows_"
 
 /* Auxiliar swig  macros */
 
@@ -2433,68 +2433,6 @@ static PyObject *_wrap_ScrolledWindow_GetTargetWindow(PyObject *self, PyObject *
 }
 
 
-static PyObject *_wrap_ScrolledWindow_SetTargetRect(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxScrolledWindow *arg1 = (wxScrolledWindow *) 0 ;
-    wxRect *arg2 = 0 ;
-    wxRect temp2 ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "rect", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:ScrolledWindow_SetTargetRect",kwnames,&obj0,&obj1)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxScrolledWindow,
-    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    {
-        arg2 = &temp2;
-        if ( ! wxRect_helper(obj1, &arg2)) SWIG_fail;
-    }
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->SetTargetRect((wxRect const &)*arg2);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_ScrolledWindow_GetTargetRect(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxScrolledWindow *arg1 = (wxScrolledWindow *) 0 ;
-    wxRect result;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:ScrolledWindow_GetTargetRect",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxScrolledWindow,
-    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = ((wxScrolledWindow const *)arg1)->GetTargetRect();
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    {
-        wxRect * resultptr;
-        resultptr = new wxRect((wxRect &) result);
-        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxRect, 1);
-    }
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
 static PyObject * ScrolledWindow_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -3368,7 +3306,7 @@ static PyObject *_wrap_Frame_CreateStatusBar(PyObject *self, PyObject *args, PyO
     PyObject *resultobj;
     wxFrame *arg1 = (wxFrame *) 0 ;
     int arg2 = (int) 1 ;
-    long arg3 = (long) wxST_SIZEGRIP ;
+    long arg3 = (long) wxST_SIZEGRIP|wxFULL_REPAINT_ON_RESIZE ;
     int arg4 = (int) 0 ;
     wxString const &arg5_defvalue = wxPyStatusLineNameStr ;
     wxString *arg5 = (wxString *) &arg5_defvalue ;
@@ -4852,7 +4790,7 @@ static PyObject *_wrap_new_StatusBar(PyObject *self, PyObject *args, PyObject *k
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     int arg2 = (int) -1 ;
-    long arg3 = (long) wxST_SIZEGRIP ;
+    long arg3 = (long) wxST_SIZEGRIP|wxFULL_REPAINT_ON_RESIZE ;
     wxString const &arg4_defvalue = wxPyStatusLineNameStr ;
     wxString *arg4 = (wxString *) &arg4_defvalue ;
     wxStatusBar *result;
@@ -14654,92 +14592,6 @@ static PyObject *_wrap_MDIParentFrame_GetToolBar(PyObject *self, PyObject *args,
 }
 
 
-static PyObject *_wrap_MDIParentFrame_GetWindowMenu(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxMDIParentFrame *arg1 = (wxMDIParentFrame *) 0 ;
-    wxMenu *result;
-    PyObject * obj0 = 0 ;
-    char *kwnames[] = {
-        (char *) "self", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:MDIParentFrame_GetWindowMenu",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxMDIParentFrame,
-    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxMenu *)(arg1)->GetWindowMenu();
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    {
-        resultobj = wxPyMake_wxObject(result); 
-    }
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_MDIParentFrame_SetWindowMenu(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxMDIParentFrame *arg1 = (wxMDIParentFrame *) 0 ;
-    wxMenu *arg2 = (wxMenu *) 0 ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "menu", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:MDIParentFrame_SetWindowMenu",kwnames,&obj0,&obj1)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxMDIParentFrame,
-    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxMenu,
-    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->SetWindowMenu(arg2);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
-static PyObject *_wrap_MDIParentFrame_SetToolBar(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject *resultobj;
-    wxMDIParentFrame *arg1 = (wxMDIParentFrame *) 0 ;
-    wxToolBar *arg2 = (wxToolBar *) 0 ;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    char *kwnames[] = {
-        (char *) "self",(char *) "toolbar", NULL 
-    };
-    
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:MDIParentFrame_SetToolBar",kwnames,&obj0,&obj1)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxMDIParentFrame,
-    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxToolBar,
-    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
-    {
-        PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->SetToolBar(arg2);
-        
-        wxPyEndAllowThreads(__tstate);
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
 static PyObject *_wrap_MDIParentFrame_Tile(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxMDIParentFrame *arg1 = (wxMDIParentFrame *) 0 ;
@@ -24413,8 +24265,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ScrolledWindow_CalcScrollInc", (PyCFunction) _wrap_ScrolledWindow_CalcScrollInc, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ScrolledWindow_SetTargetWindow", (PyCFunction) _wrap_ScrolledWindow_SetTargetWindow, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ScrolledWindow_GetTargetWindow", (PyCFunction) _wrap_ScrolledWindow_GetTargetWindow, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"ScrolledWindow_SetTargetRect", (PyCFunction) _wrap_ScrolledWindow_SetTargetRect, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"ScrolledWindow_GetTargetRect", (PyCFunction) _wrap_ScrolledWindow_GetTargetRect, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ScrolledWindow_swigregister", ScrolledWindow_swigregister, METH_VARARGS },
 	 { (char *)"TopLevelWindow_Maximize", (PyCFunction) _wrap_TopLevelWindow_Maximize, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"TopLevelWindow_Restore", (PyCFunction) _wrap_TopLevelWindow_Restore, METH_VARARGS | METH_KEYWORDS },
@@ -24776,9 +24626,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"MDIParentFrame_GetActiveChild", (PyCFunction) _wrap_MDIParentFrame_GetActiveChild, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"MDIParentFrame_GetClientWindow", (PyCFunction) _wrap_MDIParentFrame_GetClientWindow, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"MDIParentFrame_GetToolBar", (PyCFunction) _wrap_MDIParentFrame_GetToolBar, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"MDIParentFrame_GetWindowMenu", (PyCFunction) _wrap_MDIParentFrame_GetWindowMenu, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"MDIParentFrame_SetWindowMenu", (PyCFunction) _wrap_MDIParentFrame_SetWindowMenu, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"MDIParentFrame_SetToolBar", (PyCFunction) _wrap_MDIParentFrame_SetToolBar, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"MDIParentFrame_Tile", (PyCFunction) _wrap_MDIParentFrame_Tile, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"MDIParentFrame_swigregister", MDIParentFrame_swigregister, METH_VARARGS },
 	 { (char *)"new_MDIChildFrame", (PyCFunction) _wrap_new_MDIChildFrame, METH_VARARGS | METH_KEYWORDS },

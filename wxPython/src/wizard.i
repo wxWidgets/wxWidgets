@@ -24,7 +24,7 @@
 //----------------------------------------------------------------------
 
 %import windows.i
-%pythoncode { wx = core }
+%pythoncode { wx = _core }
 
 %include _wizard_rename.i
 

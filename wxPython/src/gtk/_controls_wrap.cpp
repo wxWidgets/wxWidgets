@@ -297,11 +297,11 @@ static swig_type_info *swig_types[86];
 
 
 /*-----------------------------------------------
-              @(target):= _controls.so
+              @(target):= _controls_.so
   ------------------------------------------------*/
-#define SWIG_init    init_controls
+#define SWIG_init    init_controls_
 
-#define SWIG_name    "_controls"
+#define SWIG_name    "_controls_"
 
 /* Auxiliar swig  macros */
 
@@ -570,6 +570,9 @@ wxString wxTextCtrl_GetString(wxTextCtrl *self,long from,long to){
  static const wxString wxPySpinCtrlNameStr(_T("wxSpinCtrl")); 
  static const wxString wxPyRadioBoxNameStr(wxRadioBoxNameStr); 
  static const wxString wxPyRadioButtonNameStr(wxRadioButtonNameStr); 
+int wxRadioBox_GetColumnCount(wxRadioBox const *self){ return -1; }
+int wxRadioBox_GetRowCount(wxRadioBox const *self){ return -1; }
+int wxRadioBox_GetNextItem(wxRadioBox const *self,int item,wxDirection dir,long style){ return -1; }
 
 #include <wx/slider.h>
 
@@ -6392,6 +6395,32 @@ static PyObject *_wrap_CheckListBox_Check(PyObject *self, PyObject *args, PyObje
 }
 
 
+static PyObject *_wrap_CheckListBox_GetItemHeight(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxCheckListBox *arg1 = (wxCheckListBox *) 0 ;
+    int result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:CheckListBox_GetItemHeight",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCheckListBox,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (int)(arg1)->GetItemHeight();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_FromInt((int)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_CheckListBox_HitTest(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCheckListBox *arg1 = (wxCheckListBox *) 0 ;
@@ -11671,7 +11700,7 @@ static PyObject *_wrap_RadioBox_GetColumnCount(PyObject *self, PyObject *args, P
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (int)((wxRadioBox const *)arg1)->GetColumnCount();
+        result = (int)wxRadioBox_GetColumnCount((wxRadioBox const *)arg1);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -11697,7 +11726,7 @@ static PyObject *_wrap_RadioBox_GetRowCount(PyObject *self, PyObject *args, PyOb
     SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (int)((wxRadioBox const *)arg1)->GetRowCount();
+        result = (int)wxRadioBox_GetRowCount((wxRadioBox const *)arg1);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -11735,7 +11764,7 @@ static PyObject *_wrap_RadioBox_GetNextItem(PyObject *self, PyObject *args, PyOb
     if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (int)((wxRadioBox const *)arg1)->GetNextItem(arg2,(wxDirection )arg3,arg4);
+        result = (int)wxRadioBox_GetNextItem((wxRadioBox const *)arg1,arg2,(wxDirection )arg3,arg4);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -13034,6 +13063,213 @@ static PyObject *_wrap_new_PreToggleButton(PyObject *self, PyObject *args, PyObj
     resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxToggleButton, 1);
     return resultobj;
     fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_ToggleButton_Create(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxToggleButton *arg1 = (wxToggleButton *) 0 ;
+    wxWindow *arg2 = (wxWindow *) 0 ;
+    int arg3 ;
+    wxString *arg4 = 0 ;
+    wxPoint const &arg5_defvalue = wxDefaultPosition ;
+    wxPoint *arg5 = (wxPoint *) &arg5_defvalue ;
+    wxSize const &arg6_defvalue = wxDefaultSize ;
+    wxSize *arg6 = (wxSize *) &arg6_defvalue ;
+    long arg7 = (long) 0 ;
+    wxValidator const &arg8_defvalue = wxDefaultValidator ;
+    wxValidator *arg8 = (wxValidator *) &arg8_defvalue ;
+    wxString const &arg9_defvalue = wxPyToggleButtonNameStr ;
+    wxString *arg9 = (wxString *) &arg9_defvalue ;
+    bool result;
+    bool temp4 = False ;
+    wxPoint temp5 ;
+    wxSize temp6 ;
+    bool temp9 = False ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
+    PyObject * obj4 = 0 ;
+    PyObject * obj5 = 0 ;
+    PyObject * obj6 = 0 ;
+    PyObject * obj7 = 0 ;
+    PyObject * obj8 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "parent",(char *) "id",(char *) "label",(char *) "pos",(char *) "size",(char *) "style",(char *) "validator",(char *) "name", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO|OOOOO:ToggleButton_Create",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxToggleButton,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    arg3 = (int) SWIG_AsInt(obj2); 
+    if (PyErr_Occurred()) SWIG_fail;
+    {
+        arg4 = wxString_in_helper(obj3);
+        if (arg4 == NULL) SWIG_fail;
+        temp4 = True;
+    }
+    if (obj4) {
+        {
+            arg5 = &temp5;
+            if ( ! wxPoint_helper(obj4, &arg5)) SWIG_fail;
+        }
+    }
+    if (obj5) {
+        {
+            arg6 = &temp6;
+            if ( ! wxSize_helper(obj5, &arg6)) SWIG_fail;
+        }
+    }
+    if (obj6) {
+        arg7 = (long) SWIG_AsLong(obj6); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    if (obj7) {
+        if ((SWIG_ConvertPtr(obj7,(void **)(&arg8),SWIGTYPE_p_wxValidator,
+        SWIG_POINTER_EXCEPTION | 0)) == -1)
+        SWIG_fail;
+        if (arg8 == NULL) {
+            PyErr_SetString(PyExc_TypeError,"null reference");
+            SWIG_fail;
+        }
+    }
+    if (obj8) {
+        {
+            arg9 = wxString_in_helper(obj8);
+            if (arg9 == NULL) SWIG_fail;
+            temp9 = True;
+        }
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->Create(arg2,arg3,(wxString const &)*arg4,(wxPoint const &)*arg5,(wxSize const &)*arg6,arg7,(wxValidator const &)*arg8,(wxString const &)*arg9);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    {
+        if (temp4)
+        delete arg4;
+    }
+    {
+        if (temp9)
+        delete arg9;
+    }
+    return resultobj;
+    fail:
+    {
+        if (temp4)
+        delete arg4;
+    }
+    {
+        if (temp9)
+        delete arg9;
+    }
+    return NULL;
+}
+
+
+static PyObject *_wrap_ToggleButton_SetValue(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxToggleButton *arg1 = (wxToggleButton *) 0 ;
+    bool arg2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "value", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:ToggleButton_SetValue",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxToggleButton,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    arg2 = (bool) SWIG_AsBool(obj1); 
+    if (PyErr_Occurred()) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetValue(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_ToggleButton_GetValue(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxToggleButton *arg1 = (wxToggleButton *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:ToggleButton_GetValue",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxToggleButton,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)((wxToggleButton const *)arg1)->GetValue();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_ToggleButton_SetLabel(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxToggleButton *arg1 = (wxToggleButton *) 0 ;
+    wxString *arg2 = 0 ;
+    bool temp2 = False ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "label", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:ToggleButton_SetLabel",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxToggleButton,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        arg2 = wxString_in_helper(obj1);
+        if (arg2 == NULL) SWIG_fail;
+        temp2 = True;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetLabel((wxString const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    {
+        if (temp2)
+        delete arg2;
+    }
+    return resultobj;
+    fail:
+    {
+        if (temp2)
+        delete arg2;
+    }
     return NULL;
 }
 
@@ -30106,6 +30342,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"CheckListBox_Create", (PyCFunction) _wrap_CheckListBox_Create, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"CheckListBox_IsChecked", (PyCFunction) _wrap_CheckListBox_IsChecked, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"CheckListBox_Check", (PyCFunction) _wrap_CheckListBox_Check, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CheckListBox_GetItemHeight", (PyCFunction) _wrap_CheckListBox_GetItemHeight, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"CheckListBox_HitTest", (PyCFunction) _wrap_CheckListBox_HitTest, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"CheckListBox_HitTestXY", (PyCFunction) _wrap_CheckListBox_HitTestXY, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"CheckListBox_swigregister", CheckListBox_swigregister, METH_VARARGS },
@@ -30286,6 +30523,10 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Slider_swigregister", Slider_swigregister, METH_VARARGS },
 	 { (char *)"new_ToggleButton", (PyCFunction) _wrap_new_ToggleButton, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"new_PreToggleButton", (PyCFunction) _wrap_new_PreToggleButton, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ToggleButton_Create", (PyCFunction) _wrap_ToggleButton_Create, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ToggleButton_SetValue", (PyCFunction) _wrap_ToggleButton_SetValue, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ToggleButton_GetValue", (PyCFunction) _wrap_ToggleButton_GetValue, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"ToggleButton_SetLabel", (PyCFunction) _wrap_ToggleButton_SetLabel, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"ToggleButton_swigregister", ToggleButton_swigregister, METH_VARARGS },
 	 { (char *)"BookCtrl_GetPageCount", (PyCFunction) _wrap_BookCtrl_GetPageCount, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"BookCtrl_GetPage", (PyCFunction) _wrap_BookCtrl_GetPage, METH_VARARGS | METH_KEYWORDS },

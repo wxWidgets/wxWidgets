@@ -26,7 +26,7 @@
 //---------------------------------------------------------------------------
 
 %import core.i
-%pythoncode { wx = core }
+%pythoncode { wx = _core }
 %pythoncode { __docfilter__ = wx.__docfilter__ }
 
 

@@ -29,7 +29,7 @@
 //---------------------------------------------------------------------------
 
 %import windows.i
-%pythoncode { wx = core }
+%pythoncode { wx = _core }
 %pythoncode { __docfilter__ = wx.__docfilter__ }
 
 %include _html_rename.i

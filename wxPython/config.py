@@ -274,7 +274,8 @@ def Verify_WX_CONFIG():
 
 
 
-def run_swig(files, dir, gendir, package, USE_SWIG, force, swig_args, swig_deps=[]):
+def run_swig(files, dir, gendir, package, USE_SWIG, force, swig_args,
+             swig_deps=[], add_under=False):
     """Run SWIG the way I want it done"""
 
     if USE_SWIG and not os.path.exists(os.path.join(dir, gendir)):
@@ -285,13 +286,21 @@ def run_swig(files, dir, gendir, package, USE_SWIG, force, swig_args, swig_deps=
 
     sources = []
 
+    if add_under:  pre = '_'
+    else:          pre = ''
+        
     for file in files:
         basefile = os.path.splitext(file)[0]
         i_file   = os.path.join(dir, file)
-        py_file  = os.path.join(dir, gendir, basefile+'.py')
-        cpp_file = os.path.join(dir, gendir, basefile+'_wrap.cpp')
+        py_file  = os.path.join(dir, gendir, pre+basefile+'.py')
+        cpp_file = os.path.join(dir, gendir, pre+basefile+'_wrap.cpp')
         xml_file = os.path.join("docs", "xml-raw", basefile+'_swig.xml')
 
+        if add_under:
+            interface = ['-interface', '_'+basefile+'_']
+        else:
+            interface = []
+            
         sources.append(cpp_file)
 
         if not cleaning and USE_SWIG:
@@ -320,14 +329,14 @@ def run_swig(files, dir, gendir, package, USE_SWIG, force, swig_args, swig_deps=
 
                     # Next run build_renamers to process the XML
                     cmd = [ sys.executable, '-u',
-                            './distrib/build_renamers.py', dir, basefile, xmltemp]
+                            './distrib/build_renamers.py', dir, pre+basefile, xmltemp]
                     msg(' '.join(cmd))
                     spawn(cmd)
                     os.remove(xmltemp)
 
                 # Then run swig for real
-                cmd = [ swig_cmd ] + swig_args + ['-I'+dir, '-o', cpp_file,
-                                                  '-xmlout', xml_file, i_file]
+                cmd = [ swig_cmd ] + swig_args + interface + \
+                      ['-I'+dir, '-o', cpp_file, '-xmlout', xml_file, i_file]
                 msg(' '.join(cmd))
                 spawn(cmd)
 

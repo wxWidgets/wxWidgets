@@ -15,13 +15,33 @@ import __version__
 __version__ = __version__.VERSION_STRING
 
 
-# Load the package namespace with the core classes and such
-from wx.core import *
-from wx.core import __docfilter__
+__all__ = [
+    # Sub-packages
+    'build',
+    'lib',
+    'py',
+    'tools',
 
-# wx.core has a 'wx' symbol for internal use.  That's kinda silly for
-# this namespace so get rid of it.
+    # other modules
+    'calendar',
+    'grid',
+    'html',
+    'wizard',    
+    ]
+
+# Load the package namespace with the core classes and such
+from wx._core import *
 del wx
+
+# Load up __all__ with all the names of items that should appear to be
+# defined in this pacakge so epydoc will document them that way.
+import wx._core
+__docfilter__ = wx._core.__docfilter__
+
+__all__ += [name for name in dir(wx._core)
+            if not (name.startswith('__') and name.endswith('__'))]
+
+
 
 #----------------------------------------------------------------------------
 

@@ -1,11 +1,11 @@
 
 # Load all symbols that should appear in the wxPython.wx namespace
-from core import *
-from core import __version__
-from gdi import *
-from windows import *
-from controls import *
-from misc import *
+from _core import *
+from _core import __version__
+from _gdi import *
+from _windows import *
+from _controls import *
+from _misc import *
 
 # Cleanup this one.
 del wx

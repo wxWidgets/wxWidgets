@@ -3,10 +3,10 @@
 
 import _glcanvas
 
-import core
-wx = core 
+import _core
+wx = _core 
 __docfilter__ = wx.__docfilter__ 
-class GLContext(core.Object):
+class GLContext(_core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGLContext instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -82,7 +82,7 @@ WX_GL_MIN_ACCUM_RED = _glcanvas.WX_GL_MIN_ACCUM_RED
 WX_GL_MIN_ACCUM_GREEN = _glcanvas.WX_GL_MIN_ACCUM_GREEN
 WX_GL_MIN_ACCUM_BLUE = _glcanvas.WX_GL_MIN_ACCUM_BLUE
 WX_GL_MIN_ACCUM_ALPHA = _glcanvas.WX_GL_MIN_ACCUM_ALPHA
-class GLCanvas(core.Window):
+class GLCanvas(_core.Window):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGLCanvas instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):

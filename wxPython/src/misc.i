@@ -10,8 +10,7 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-
-%module misc
+%module _misc
 
 //---------------------------------------------------------------------------
 
@@ -25,10 +24,10 @@
 //---------------------------------------------------------------------------
 
 %import core.i
-%pythoncode { wx = core }
+%pythoncode { wx = _core }
 %pythoncode { __docfilter__ = wx.__docfilter__ }
 
-%include _misc_rename.i
+%include __misc_rename.i
 
 
 MAKE_CONST_WXSTRING_NOSWIG(EmptyString);

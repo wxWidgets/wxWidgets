@@ -327,11 +327,11 @@ static swig_type_info *swig_types[116];
 
 
 /*-----------------------------------------------
-              @(target):= _core.so
+              @(target):= _core_.so
   ------------------------------------------------*/
-#define SWIG_init    init_core
+#define SWIG_init    init_core_
 
-#define SWIG_name    "_core"
+#define SWIG_name    "_core_"
 
 /* Auxiliar swig  macros */
 
