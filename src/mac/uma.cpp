@@ -94,7 +94,6 @@ void UMAInitToolbox( UInt16 inMoreMastersCalls )
 		sUMAHasWindowManager = sUMAWindowManagerAttr & gestaltWindowMgrPresent ;
 	}
 		
-#ifndef __DARWIN__
 #if TARGET_CARBON
 // Call currently implicitely done :		InitFloatingWindows() ;
 #else
@@ -102,7 +101,6 @@ void UMAInitToolbox( UInt16 inMoreMastersCalls )
 		InitFloatingWindows() ;
 	else
 		InitWindows();
-#endif
 #endif
 
 	if ( NavServicesAvailable() )
@@ -588,8 +586,10 @@ OSStatus UMADrawThemePlacard( const Rect *inRect , ThemeDrawState inState )
   return ::DrawThemePlacard( inRect , inState ) ;
 }
 
+#if !TARGET_CARBON
 static OSStatus helpMenuStatus = noErr ;
 static MenuItemIndex firstCustomItemIndex = 0 ;
+#endif
 
 OSStatus UMAGetHelpMenu(
   MenuRef *        outHelpMenu,
