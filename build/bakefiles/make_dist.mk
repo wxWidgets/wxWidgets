@@ -167,7 +167,6 @@ ALL_GUI_DIST: ALL_DIST
 	cp $(COMMDIR)/*.cpp $(DISTDIR)/src/common
 	cp $(COMMDIR)/*.c $(DISTDIR)/src/common
 	cp $(COMMDIR)/*.inc $(DISTDIR)/src/common
-	cp $(COMMDIR)/*.h $(DISTDIR)/src/common
 	cp $(COMMDIR)/*.mms $(DISTDIR)/src/common
 	cp $(UNIXDIR)/*.cpp $(DISTDIR)/src/unix
 	cp $(UNIXDIR)/*.mms $(DISTDIR)/src/unix
@@ -201,7 +200,6 @@ BASE_DIST: ALL_DIST
 	cp $(DOCDIR)/base/readme.txt $(DISTDIR)/README.txt
 	cp $(WXDIR)/src/common/*.inc $(DISTDIR)/src/common
 	cp $(WXDIR)/src/common/base.rc $(DISTDIR)/src/common
-	cp $(WXDIR)/src/common/unzip.h $(DISTDIR)/src/common
 	list='$(ALL_BASE_HEADERS)'; for p in $$list; do \
 	  cp $(WXDIR)/include/$$p $(DISTDIR)/include/$$p; \
 	done
