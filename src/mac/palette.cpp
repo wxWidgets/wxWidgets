@@ -13,6 +13,10 @@
 #pragma implementation "palette.h"
 #endif
 
+#include "wx/defs.h"
+
+#if wxUSE_PALETTE
+
 #include "wx/palette.h"
 
 #if !USE_SHARED_LIBRARIES
@@ -106,4 +110,6 @@ bool wxPalette::GetRGB(int index, unsigned char *red, unsigned char *green, unsi
     return TRUE;
 }
 
+#endif
+    // wxUSE_PALETTE
 
