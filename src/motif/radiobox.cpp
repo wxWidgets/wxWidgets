@@ -88,8 +88,6 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
 
     wxString label1(wxStripMenuCodes(title));
 
-    wxXmString text(label1.c_str());
-
     Widget formWidget = XtVaCreateManagedWidget (name.c_str(),
                                         xmFormWidgetClass, parentWidget,
                                         XmNmarginHeight, 0,
@@ -111,7 +109,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
                                              xmLabelWidgetClass, formWidget,
 #endif
                                              XmNfontList, fontList,
-                                             XmNlabelString, text,
+                                             XmNlabelString, text(),
                                              NULL);
     }
 
@@ -126,11 +124,11 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
 
     Arg args[3];
 
-    majorDim = (n + majorDim - 1) / majorDim;
+    majorDim = (n + m_majorDim - 1) / majorDim;
 
     XtSetArg (args[0], XmNorientation, ((style & wxHORIZONTAL) == wxHORIZONTAL ?
                                           XmHORIZONTAL : XmVERTICAL));
-    XtSetArg (args[1], XmNnumColumns, majorDim);
+    XtSetArg (args[1], XmNnumColumns, m_majorDim);
 
     Widget radioBoxWidget = XmCreateRadioBox (frameWidget, "radioBoxWidget", args, 2);
     m_mainWidget = (WXWidget) radioBoxWidget;
