@@ -203,13 +203,7 @@ bool wxConfigBase::Write(const wxString& key, double val)
 
 bool wxConfigBase::Write(const wxString& key, bool value)
 {
-    long l = (value ? 1 : 0);
-    return Write(key, l);
-}
-
-bool wxConfigBase::Write(const wxString &key, const wxChar *text)
-{
-    return Write(key, text);
+    return Write(key, value ? 1l : 0l);
 }
 
 wxString wxConfigBase::ExpandEnvVars(const wxString& str) const

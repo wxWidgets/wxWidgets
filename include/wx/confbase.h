@@ -184,10 +184,9 @@ public:
   virtual bool Write(const wxString& key, const wxString& value) = 0;
   virtual bool Write(const wxString& key, long value) = 0;
 
-  // Convenience functions
+  // convenience functions
   virtual bool Write(const wxString& key, double value);
   virtual bool Write(const wxString& key, bool value);
-  virtual bool Write(const wxString& key, const wxChar *text ) ;
 
     // permanently writes all changes
   virtual bool Flush(bool bCurrentOnly = FALSE) = 0;
