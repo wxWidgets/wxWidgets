@@ -28,16 +28,15 @@ this class stores various settings in it.
 
 \membersection{wxHtmlEasyPrinting::wxHtmlEasyPrinting}\label{wxhtmleasyprintingwxhtmleasyprinting}
 
-\func{}{wxHtmlEasyPrinting}{\param{const wxString\& }{name = "Printing"}, \param{wxFrame* }{parent\_frame = NULL}}
+\func{}{wxHtmlEasyPrinting}{\param{const wxString\& }{name = "Printing"}, \param{wxWindow* }{parentWindow = NULL}}
 
 Constructor.
 
 \wxheading{Parameters}
 
-\docparam{name}{Name of the printing. Used by preview frames and setup dialogs.}
+\docparam{name}{Name of the printing object. Used by preview frames and setup dialogs.}
 
-\docparam{parent\_frame}{pointer to the frame that will own preview frame and setup dialogs. May be NULL.}
-
+\docparam{parentWindow}{pointer to the window that will own the preview frame and setup dialogs. May be NULL.}
 
 \membersection{wxHtmlEasyPrinting::PreviewFile}\label{wxhtmleasyprintingpreviewfile}
 

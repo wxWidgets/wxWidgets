@@ -196,7 +196,7 @@ private:
 class WXDLLEXPORT wxHtmlEasyPrinting : public wxObject
 {
 public:
-    wxHtmlEasyPrinting(const wxString& name = wxT("Printing"), wxFrame *parent_frame = NULL);
+    wxHtmlEasyPrinting(const wxString& name = wxT("Printing"), wxWindow *parentWindow = NULL);
     ~wxHtmlEasyPrinting();
 
     bool PreviewFile(const wxString &htmlfile);
@@ -244,7 +244,7 @@ private:
     int *m_FontsSizes;
     wxString m_FontFaceFixed, m_FontFaceNormal;
     wxString m_Headers[2], m_Footers[2];
-    wxFrame *m_Frame;
+    wxWindow *m_ParentWindow;
 
     DECLARE_NO_COPY_CLASS(wxHtmlEasyPrinting)
 };

@@ -166,13 +166,6 @@ Checking in include/wx/textbuf.h;
 /pack/cvsroots/wxwindows/wxWindows/include/wx/textbuf.h,v  <--  textbuf.h
 new revision: 1.8; previous revision: 1.7
 
-18. Better notebook page sizing
-
-nbbase.cpp, CalcSizeFromPage, plus #includes at top of file.
-This gets the tab size and adds a bit for borders.
-We should do the same for other platforms, only rationalise
-it so that wxNotebook returns the tab rect info.
-
 19. Add wxFileConfig bug fix, marked by <JACS>...</JACS> in Parse().
 This prevents mungeing of the config file after reading in
 entries (say, just one entry in one group), then adding entries

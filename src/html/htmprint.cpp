@@ -430,9 +430,9 @@ void wxHtmlPrintout::SetFonts(wxString normal_face, wxString fixed_face,
 //----------------------------------------------------------------------------
 
 
-wxHtmlEasyPrinting::wxHtmlEasyPrinting(const wxString& name, wxFrame *parent_frame)
+wxHtmlEasyPrinting::wxHtmlEasyPrinting(const wxString& name, wxWindow *parentWindow)
 {
-    m_Frame = parent_frame;
+    m_ParentWindow = parentWindow;
     m_Name = name;
     m_PrintData = new wxPrintData;
     m_PageSetupData = new wxPageSetupDialogData;
@@ -510,7 +510,7 @@ bool wxHtmlEasyPrinting::DoPreview(wxHtmlPrintout *printout1, wxHtmlPrintout *pr
         return FALSE;
     }
 
-    wxPreviewFrame *frame = new wxPreviewFrame(preview, m_Frame,
+    wxPreviewFrame *frame = new wxPreviewFrame(preview, m_ParentWindow,
                                                m_Name + _(" Preview"),
                                                wxPoint(100, 100), wxSize(650, 500));
     frame->Centre(wxBOTH);
@@ -526,7 +526,7 @@ bool wxHtmlEasyPrinting::DoPrint(wxHtmlPrintout *printout)
     wxPrintDialogData printDialogData(*m_PrintData);
     wxPrinter printer(&printDialogData);
 
-    if (!printer.Print(m_Frame, printout, TRUE))
+    if (!printer.Print(m_ParentWindow, printout, TRUE))
     {
         return FALSE;
     }
@@ -540,7 +540,7 @@ bool wxHtmlEasyPrinting::DoPrint(wxHtmlPrintout *printout)
 void wxHtmlEasyPrinting::PrinterSetup()
 {
     wxPrintDialogData printDialogData(*m_PrintData);
-    wxPrintDialog printerDialog(m_Frame, &printDialogData);
+    wxPrintDialog printerDialog(m_ParentWindow, &printDialogData);
 
     printerDialog.GetPrintDialogData().SetSetupDialog(TRUE);
 
@@ -559,7 +559,7 @@ void wxHtmlEasyPrinting::PageSetup()
     }
 
     m_PageSetupData->SetPrintData(*m_PrintData);
-    wxPageSetupDialog pageSetupDialog(m_Frame, m_PageSetupData);
+    wxPageSetupDialog pageSetupDialog(m_ParentWindow, m_PageSetupData);
 
     if (pageSetupDialog.ShowModal() == wxID_OK)
     {

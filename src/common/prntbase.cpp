@@ -503,7 +503,7 @@ BEGIN_EVENT_TABLE(wxPreviewFrame, wxFrame)
     EVT_CLOSE(wxPreviewFrame::OnCloseWindow)
 END_EVENT_TABLE()
 
-wxPreviewFrame::wxPreviewFrame(wxPrintPreviewBase *preview, wxFrame *parent, const wxString& title,
+wxPreviewFrame::wxPreviewFrame(wxPrintPreviewBase *preview, wxWindow *parent, const wxString& title,
                                const wxPoint& pos, const wxSize& size, long style, const wxString& name):
 wxFrame(parent, -1, title, pos, size, style, name)
 {
@@ -511,7 +511,7 @@ wxFrame(parent, -1, title, pos, size, style, name)
     m_controlBar = NULL;
     m_previewCanvas = NULL;
 
-    // Looks silly on Windows with a standard Windows icon    
+    // Give the application icon
 #ifdef __WXMSW__
     wxFrame* topFrame = wxDynamicCast(wxTheApp->GetTopWindow(), wxFrame);
     if (topFrame)

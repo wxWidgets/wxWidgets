@@ -192,7 +192,7 @@ class WXDLLEXPORT wxPreviewFrame: public wxFrame
 {
 public:
     wxPreviewFrame(wxPrintPreviewBase *preview,
-                   wxFrame *parent,
+                   wxWindow *parent,
                    const wxString& title = wxT("Print Preview"),
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
