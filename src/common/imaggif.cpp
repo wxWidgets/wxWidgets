@@ -64,7 +64,6 @@ typedef struct
 *************************************************************************/
 
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -86,39 +85,21 @@ class gifDecoder
         unsigned int   restbyte;            /* remaining bytes in this block */
         unsigned int   lastbyte;            /* last byte read */
 
-        unsigned char* file;                /* input file in memory */
-        unsigned int   file_pos, file_size; /* position & size in it */
-
-        int fgetc();
-        void fread(void *ptr, size_t size, size_t nmemb);
-        void fseekcur(int rel_pos);
+        wxInputStream  *f;                  /* input file */
 
     public:
-        gifDecoder(unsigned char* mem, int sz) {file = mem; file_pos = 0; file_size = sz;}
+        gifDecoder(wxInputStream *s) {f = s;}
         int getcode(int bits);
         int dgif(IMAGEN *img, int interl, int bits);
         int readgif(IMAGEN *img);
+	
+    private:
+        int mygetc() {return (unsigned char)f -> GetC();}
+	   // This is NEEDED! GetC is char (signed) why we need unsigned value
+	   // from here
 };
 
 
-int gifDecoder::fgetc()
-{
-    if (file_pos < file_size) return file[file_pos++];
-    else return EOF;
-}
-
-void gifDecoder::fread(void *ptr, size_t size, size_t nmemb)
-{
-    int todo = size * nmemb;
-    if (todo + file_pos > file_size) todo = file_size - file_pos;
-    memcpy(ptr, file + file_pos, todo);
-    file_pos += todo;
-}
-
-void gifDecoder::fseekcur(int rel_pos)
-{
-    file_pos += rel_pos;
-}
 
 /* getcode:
  *  Reads the next code from the file, with size 'bits'
@@ -139,10 +120,10 @@ int gifDecoder::getcode(int bits)
     {
         /* if no bytes left in this block, read the next block */
         if (restbyte == 0)
-            restbyte = fgetc();
+            restbyte = mygetc();
 
         /* read next byte and isolate the bits we need */
-        lastbyte = fgetc();
+        lastbyte = mygetc();
         mask     = (1 << (bits - restbits)) - 1;
         code     = code + ((lastbyte & mask) << restbits);
         restbyte--;
@@ -156,6 +137,7 @@ int gifDecoder::getcode(int bits)
 
     return code;
 }
+
 
 /* dgif:
  *  GIF decoding function. The initial code size (aka root size)
@@ -308,9 +290,8 @@ int gifDecoder::readgif(IMAGEN *img)
     unsigned char   pal[768];
     unsigned char   buf[16];
 
-
     /* read header and logical screen descriptor block (LSDB) */
-    fread(buf, 1, 13);
+    f -> Read(buf, 13);
 
     /* check GIF signature */
     if (memcmp(buf, "GIF", 3) != 0) return E_FORMATO;
@@ -319,20 +300,20 @@ int gifDecoder::readgif(IMAGEN *img)
     if ((buf[10] & 0x80) == 0x80)
     {
         ncolors = 2 << (buf[10] & 0x07);
-        fread(pal, 1, 3 * ncolors);
+        f -> Read(pal, 3 * ncolors);
     }
 
     /* skip extensions */
-    while (fgetc() == 0x21)            /* separator */
+    while (mygetc() == 0x21)            /* separator */
     {
-        fgetc();                       /* function code */
+        mygetc();                       /* function code */
 
-        while ((i = fgetc()) != 0)     /* byte count */
-            fseekcur(i);
+        while ((i = mygetc()) != 0)      /* byte count */
+            f -> SeekI(i, wxFromCurrent);
     }
 
     /* read image descriptor block (IDB) */
-    fread(buf, 1, 9);
+    f -> Read(buf, 9);
     img->w = buf[4] + 256 * buf[5];
 
     img->h = buf[6] + 256 * buf[7];
@@ -343,11 +324,11 @@ int gifDecoder::readgif(IMAGEN *img)
     if ((buf[8] & 0x80) == 0x80)
     {
         ncolors = 2 << (buf[8] & 0x07);
-        fread(pal, 1, 3 * ncolors);
+        f -> Read(pal, 3 * ncolors);
     }
 
     /* get initial code size from first byte in raster data */
-    bits = fgetc();
+    bits = mygetc();
 
     /* allocate memory for image and palette */
     if ((img->p   = (unsigned char*) malloc(size)) == NULL) return E_MEMORIA;
@@ -379,26 +360,19 @@ IMPLEMENT_DYNAMIC_CLASS(wxGIFHandler,wxImageHandler)
 bool wxGIFHandler::LoadFile( wxImage *image, wxInputStream& stream )
 {
     unsigned char *ptr, *src, *pal;
-    int file_size;
-    unsigned char* file_con;
     IMAGEN igif;
     int i;
     gifDecoder *decod;
 
     image->Destroy();
 
-    file_size = stream.StreamSize();
-    file_con = (unsigned char*) malloc(file_size);
-    stream.Read(file_con, file_size);
-    decod = new gifDecoder(file_con, file_size);
+    decod = new gifDecoder(&stream);
 
     if (decod -> readgif(&igif) != E_OK) {
         wxLogDebug("Error reading GIF");
-        free(file_con);
         delete decod;
         return FALSE;
     }
-    free(file_con);
     delete decod;
 
     image->Create(igif.w, igif.h);
@@ -428,27 +402,5 @@ bool wxGIFHandler::SaveFile( wxImage *image, wxOutputStream& stream )
     wxLogDebug("wxGIFHandler is read-only!!");
     return FALSE;
 }
-
-//////////////////// Module:
-
-/* We haven't yet decided to go for the wxModule approach or
- * explicit handler-adding: assuming the latter for now -- JACS
-
-class wxGIFModule : public wxModule
-{
-    DECLARE_DYNAMIC_CLASS(wxGIFModule)
-
-    public:
-        virtual bool OnInit()
-        {
-            wxImage::AddHandler(new wxGIFHandler);
-            return TRUE;
-        }
-        virtual void OnExit() {}
-};
-
-IMPLEMENT_DYNAMIC_CLASS(wxGIFModule, wxModule)
-
-*/
 
 
