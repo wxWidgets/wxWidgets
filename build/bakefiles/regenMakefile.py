@@ -51,6 +51,7 @@ def addMakefile(bake, makedirs, deps=[], args={}):
 
     add(bake, makedirs, 'Makefile.in', dep, 'autoconf', args)
     add(bake, makedirs, 'makefile.bcc', dep, 'borland', args)
+    add(bake, makedirs, 'makefile.vc', dep, 'msvc', args)
 
 
 
