@@ -111,6 +111,16 @@ class MyFileDropTarget(wxFileDropTarget):
             self.window.WriteText(file + '\n')
 
 
+class MyTextDropTarget(wxTextDropTarget):
+    def __init__(self, window, log):
+        wxTextDropTarget.__init__(self)
+        self.window = window
+        self.log = log
+
+    def OnDropText(self, x, y, text):
+        self.window.WriteText("(%d, %d)\n%s\n" % (x, y, text))
+
+
 
 class FileDropPanel(wxPanel):
     def __init__(self, parent, log):
@@ -127,6 +137,14 @@ class FileDropPanel(wxPanel):
         dt = MyFileDropTarget(self, log)
         self.text.SetDropTarget(dt)
         sizer.Add(self.text, 1, wxEXPAND)
+
+        sizer.Add(wxStaticText(self, -1, " \nDrag some text here:"),
+                  0, wxEXPAND|wxALL, 2)
+        self.text2 = wxTextCtrl(self, -1, "",
+                               style = wxTE_MULTILINE|wxHSCROLL|wxTE_READONLY)
+        dt = MyTextDropTarget(self.text2, log)
+        self.text2.SetDropTarget(dt)
+        sizer.Add(self.text2, 1, wxEXPAND)
 
         self.SetAutoLayout(true)
         self.SetSizer(sizer)

@@ -33,6 +33,7 @@ _treeList = [
                                 'DrawXXXList',
                                 'ErrorDialogs',
                                 'wxRightTextCtrl',
+                                'URLDragAndDrop',
                                 ##'wxPopupWindow',
                                 ]),
 
@@ -60,7 +61,8 @@ _treeList = [
 
     ('Window Layout', ['wxLayoutConstraints', 'LayoutAnchors', 'Sizers', 'XML_Resource']),
 
-    ('Miscellaneous', [ 'DragAndDrop', 'CustomDragAndDrop', 'FontEnumerator',
+    ('Miscellaneous', [ 'DragAndDrop', 'CustomDragAndDrop', 'URLDragAndDrop',
+                        'FontEnumerator',
                         'wxTimer', 'wxValidator', 'wxGLCanvas', 'DialogUnits',
                         'wxImage', 'wxMask', 'PrintFramework', 'wxOGL',
                         'PythonEvents', 'Threads',
