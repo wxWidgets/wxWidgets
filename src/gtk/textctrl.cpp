@@ -155,7 +155,9 @@ gtk_text_changed_callback( GtkWidget *widget, wxTextCtrl *win )
         wxapp_install_idle_handler();
 
     win->SetModified();
+#ifndef __WXGTK20__
     win->UpdateFontIfNeeded();
+#endif // !__WXGTK20__
 
     wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, win->GetId() );
     event.SetEventObject( win );
@@ -239,7 +241,7 @@ void wxTextCtrl::Init()
 {
     m_ignoreNextUpdate =
     m_modified = FALSE;
-    m_updateFont = FALSE;
+    SetUpdateFont(FALSE);
     m_text =
     m_vScrollbar = (GtkWidget *)NULL;
 }
@@ -577,6 +579,11 @@ void wxTextCtrl::WriteText( const wxString &text )
     if ( text.empty() )
         return;
 
+    // gtk_text_changed_callback() will set m_modified to true but m_modified
+    // shouldn't be changed by the program writing to the text control itself,
+    // so save the old value and restore when we're done
+    bool oldModified = m_modified;
+
     if ( m_windowStyle & wxTE_MULTILINE )
     {
 #ifdef __WXGTK20__
@@ -612,7 +619,7 @@ void wxTextCtrl::WriteText( const wxString &text )
         // in UpdateFontIfNeeded() any longer
         if ( !text.empty() )
         {
-            m_updateFont = FALSE;
+            SetUpdateFont(FALSE);
         }
 
         // Bring editable's cursor back uptodate.
@@ -644,7 +651,7 @@ void wxTextCtrl::WriteText( const wxString &text )
         gtk_entry_set_position( GTK_ENTRY(m_text), len );
     }
 
-    m_modified = TRUE;
+    m_modified = oldModified;
 }
 
 void wxTextCtrl::AppendText( const wxString &text )
@@ -1401,7 +1408,7 @@ bool wxTextCtrl::SetFont( const wxFont &font )
 
     if ( m_windowStyle & wxTE_MULTILINE )
     {
-        m_updateFont = TRUE;
+        SetUpdateFont(TRUE);
 
         m_defaultStyle.SetFont(font);
 
@@ -1415,24 +1422,34 @@ void wxTextCtrl::ChangeFontGlobally()
 {
     // this method is very inefficient and hence should be called as rarely as
     // possible!
-    wxASSERT_MSG( (m_windowStyle & wxTE_MULTILINE) && m_updateFont,
+    //
+    // TODO: it can be implemented much more efficiently for GTK2
+    wxASSERT_MSG( (m_windowStyle & wxTE_MULTILINE)
+#ifndef __WXGTK20__
+                    && m_updateFont
+#endif // GTK+ 1.x
+                    ,
                   _T("shouldn't be called for single line controls") );
 
     wxString value = GetValue();
     if ( !value.IsEmpty() )
     {
-        m_updateFont = FALSE;
+        SetUpdateFont(FALSE);
 
         Clear();
         AppendText(value);
     }
 }
 
+#ifndef __WXGTK20__
+
 void wxTextCtrl::UpdateFontIfNeeded()
 {
     if ( m_updateFont )
         ChangeFontGlobally();
 }
+
+#endif // GTK+ 1.x
 
 bool wxTextCtrl::SetForegroundColour(const wxColour& colour)
 {

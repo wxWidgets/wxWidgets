@@ -88,6 +88,10 @@ public:
 
     virtual void ShowPosition(long pos);
 
+#ifdef __WXGTK20__
+    virtual wxTextCtrlHitTestResult HitTest(const wxPoint& pt, long *pos) const;
+#endif // __WXGTK20__
+
     // Clipboard operations
     virtual void Copy();
     virtual void Cut();
@@ -136,7 +140,13 @@ public:
     void DoApplyWidgetStyle(GtkRcStyle *style);
     void CalculateScrollbar();
     void OnInternalIdle();
+
+#ifdef __WXGTK20__
+    void SetUpdateFont(bool WXUNUSED(update)) { }
+#else // !__WXGTK20__
+    void SetUpdateFont(bool update) { m_updateFont = update; }
     void UpdateFontIfNeeded();
+#endif // __WXGTK20__/!__WXGTK20__
 
     void SetModified() { m_modified = TRUE; }
 
@@ -191,7 +201,9 @@ private:
 
     bool        m_modified:1;
     bool        m_vScrollbarVisible:1;
+#ifndef __WXGTK20__
     bool        m_updateFont:1;
+#endif // !__WXGTK20__
     bool        m_ignoreNextUpdate:1;
 
     DECLARE_EVENT_TABLE()
