@@ -69,10 +69,6 @@ public:
     /// assignment operator
   wxBaseArray& operator=(const wxBaseArray& src);
     /// not virtual, see above
-    /// EXCEPT for Gnu compiler to reduce warnings...
-#ifdef __GNUG__
- virtual
-#endif
   ~wxBaseArray();
   //@}
 

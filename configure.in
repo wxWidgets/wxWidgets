@@ -3464,7 +3464,7 @@ if test "$wxUSE_PROFILE" = "yes" ; then
     PROFILE=" -pg"
 fi
 
-if test "$GCC" = yes ; then
+if test "$GCC" = "yes" ; then
     if test "$wxUSE_NO_RTTI" = "yes" ; then
         CODE_GEN_FLAGS_CXX="$CODE_GEN_FLAGS_CXX -fno-rtti"
     fi
@@ -3473,10 +3473,6 @@ if test "$GCC" = yes ; then
     fi
     if test "$wxUSE_PERMISSIVE" = "yes" ; then
         CODE_GEN_FLAGS="$CODE_GEN_FLAGS -fpermissive"
-    fi
-    if test "$wxUSE_NO_DEPS" = "no" ; then
-        CFLAGS="-MMD $CFLAGS"
-        CXXFLAGS="-MMD $CXXFLAGS"
     fi
     if test "$USE_WIN32" = 1 ; then
         # I'm not even really sure what this was ever added to solve,
@@ -4687,7 +4683,15 @@ if test "$GXX" = yes ; then
     CXXWARNINGS="-Wall"
     dnl should enable this one day...
     dnl CXXWARNINGS="-Wall -Werror"
+
+    dnl Add this *after* all compile tests, we don't need or want generated
+    dnl depfiles until actually building the lib
+    if test "$wxUSE_NO_DEPS" = "no" ; then
+        CFLAGS="-MMD $CFLAGS"
+        CXXFLAGS="-MMD $CXXFLAGS"
+    fi
 fi
+
 EXTRA_CFLAGS="$WXDEBUG $WXODBCFLAG$PROFILE $OPTIMISE $INCLUDES"
 
 CFLAGS=`echo $CFLAGS $EXTRA_CFLAGS $CXXWARNINGS | sed 's/ \\+/ /g'`
