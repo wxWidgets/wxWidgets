@@ -53,9 +53,9 @@ INCOMPATIBLE CHANGES SINCE 2.4.x
   don't exist any more, please fix your code -- it never worked correctly
   anyhow if you modified the objects returned by these methods so you should
   simply switch to using const methods.
+- EVT_XXX macros are now type-safe; code that uses wrong type for event
+  handler's argument will no longer compile.
 
-wxTaskBarIcon must be explicitly destroyed now, otherwise the application
-  won't exit even though there are no top level windows
 
 
 DEPRECATED METHODS SINCE 2.4.x
