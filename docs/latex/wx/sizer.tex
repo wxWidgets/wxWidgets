@@ -11,12 +11,12 @@ The layout algorithm used by sizers in wxWidgets is closely related to layout
 in other GUI toolkits, such as Java's AWT, the GTK toolkit or the Qt toolkit. It is
 based upon the idea of the individual subwindows reporting their minimal required
 size and their ability to get stretched if the size of the parent window has changed.
-This will most often mean, that the programmer does not set the original size of
-a dialog in the beginning, rather the dialog will assigned a sizer and this sizer
+This will most often mean that the programmer does not set the original size of
+a dialog in the beginning, rather the dialog will be assigned a sizer and this sizer
 will be queried about the recommended size. The sizer in turn will query its
 children, which can be normal windows, empty space or other sizers, so that
 a hierarchy of sizers can be constructed. Note that wxSizer does not derive from wxWindow
-and thus do not interfere with tab ordering and requires very little resources compared
+and thus does not interfere with tab ordering and requires very little resources compared
 to a real window on screen.
 
 What makes sizers so well fitted for use in wxWidgets is the fact that every control
@@ -31,7 +31,8 @@ capabilities for the various virtual methods.}
 
 \wxheading{Derived from}
 
-\helpref{wxObject}{wxobject}
+\helpref{wxObject}{wxobject}\\
+\helpref{wxClientDataContainer}{wxclientdatacontainer}
 
 \wxheading{See also}
 
@@ -138,6 +139,22 @@ item, for use in derived classes when sizing information is more
 complex than the {\it proportion} and {\it flag} will allow for.}
 
 
+\membersection{wxSizer::AddSpacer}\label{wxsizeraddspacer}
+
+\func{void}{AddSpacer}{\param{int }{size}}
+
+Adds non-stretchable space to the sizer. More readable way of calling
+\helpref{Add}{wxsizeradd}(size, size, 0).
+
+
+\membersection{wxSizer::AddStretchSpacer}\label{wxsizeraddstretchspacer}
+
+\func{void}{AddStretchSpacer}{\param{int }{prop = 1}}
+
+Adds stretchable space to the sizer. More readable way of calling
+\helpref{Add}{wxsizeradd}(0, 0, prop).
+
+
 \membersection{wxSizer::CalcMin}\label{wxsizercalcmin}
 
 \func{wxSize}{CalcMin}{\void}
@@ -231,6 +248,22 @@ Insert a child into the sizer before any existing item at {\it index}.
 See \helpref{wxSizer::Add}{wxsizeradd} for the meaning of the other parameters.
 
 
+\membersection{wxSizer::InsertSpacer}\label{wxsizerinsertspacer}
+
+\func{void}{InsertSpacer}{\param{size\_t }{index}, \param{int }{size}}
+
+Inserts non-stretchable space to the sizer. More readable way of calling
+\helpref{Insert}{wxsizerinsert}(size, size, 0).
+
+
+\membersection{wxSizer::InsertStretchSpacer}\label{wxsizerinsertstretchspacer}
+
+\func{void}{InsertStretchSpacer}{\param{size\_t }{index}, \param{int }{prop = 1}}
+
+Inserts stretchable space to the sizer. More readable way of calling
+\helpref{Insert}{wxsizerinsert}(0, 0, prop).
+
+
 \membersection{wxSizer::Layout}\label{wxsizerlayout}
 
 \func{void}{Layout}{\void}
@@ -250,6 +283,22 @@ the current dimension.
 
 Same as \helpref{wxSizer::Add}{wxsizeradd}, but prepends the items to the beginning of the
 list of items (windows, subsizers or spaces) owned by this sizer.
+
+
+\membersection{wxSizer::PrependSpacer}\label{wxsizerprependspacer}
+
+\func{void}{PrependSpacer}{\param{int }{size}}
+
+Prepends non-stretchable space to the sizer. More readable way of calling
+\helpref{Prepend}{wxsizerprepend}(size, size, 0).
+
+
+\membersection{wxSizer::PrependStretchSpacer}\label{wxsizerprependstretchspacer}
+
+\func{void}{PrepentStretchSpacer}{\param{int }{prop = 1}}
+
+Prepends stretchable space to the sizer. More readable way of calling
+\helpref{Prepend}{wxsizerprepend}(0, 0, prop).
 
 
 \membersection{wxSizer::RecalcSizes}\label{wxsizerrecalcsizes}

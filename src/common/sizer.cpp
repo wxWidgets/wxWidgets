@@ -366,6 +366,16 @@ void wxSizer::Add( wxSizerItem *item )
         item->GetWindow()->SetContainingSizer( this );
 }
 
+void wxSizer::AddSpacer(int size)
+{
+    Add(size, size);
+}
+
+void wxSizer::AddStretchSpacer(int prop)
+{
+    Add(0, 0, prop);
+}
+
 void wxSizer::Prepend( wxWindow *window, int proportion, int flag, int border, wxObject* userData )
 {
     m_children.Insert( new wxSizerItem( window, proportion, flag, border, userData ) );
@@ -388,6 +398,16 @@ void wxSizer::Prepend( wxSizerItem *item )
 
     if( item->GetWindow() )
         item->GetWindow()->SetContainingSizer( this );
+}
+
+void wxSizer::PrependSpacer(int size)
+{
+    Prepend(size, size);
+}
+
+void wxSizer::PrependStretchSpacer(int prop)
+{
+    Prepend(0, 0, prop);
 }
 
 void wxSizer::Insert( size_t index,
@@ -431,6 +451,16 @@ void wxSizer::Insert( size_t index, wxSizerItem *item )
 
     if( item->GetWindow() )
         item->GetWindow()->SetContainingSizer( this );
+}
+
+void wxSizer::InsertSpacer(size_t index, int size)
+{
+    Insert(index, size, size);
+}
+
+void wxSizer::InsertStretchSpacer(size_t index, int prop)
+{
+    Insert(index, 0, 0, prop);
 }
 
 bool wxSizer::Remove( wxWindow *window )

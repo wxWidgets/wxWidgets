@@ -198,6 +198,9 @@ public:
                       wxObject* userData = NULL );
     virtual void Add( wxSizerItem *item );
 
+    virtual void AddSpacer(int size);
+    virtual void AddStretchSpacer(int prop = 1);
+
     virtual void Insert( size_t index,
                          wxWindow *window,
                          int proportion = 0,
@@ -220,6 +223,9 @@ public:
     virtual void Insert( size_t index,
                          wxSizerItem *item );
 
+    virtual void InsertSpacer(size_t index, int size);
+    virtual void InsertStretchSpacer(size_t index, int prop = 1);
+
     virtual void Prepend( wxWindow *window,
                           int proportion = 0,
                           int flag = 0,
@@ -237,6 +243,9 @@ public:
                           int border = 0,
                           wxObject* userData = NULL );
     virtual void Prepend( wxSizerItem *item );
+
+    virtual void PrependSpacer(int size);
+    virtual void PrependStretchSpacer(int prop = 1);
 
     // Deprecated in 2.6 since historically it does not delete the window,
     // use Detach instead.
@@ -549,7 +558,7 @@ public:
 
 protected:
     // this protected ctor lets us mark the real one above as deprecated
-    // and still has warning-free build of the library itself:
+    // and still have warning-free build of the library itself:
     wxBookCtrlSizer() {}
     
     wxBookCtrl *m_bookctrl;
