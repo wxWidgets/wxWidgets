@@ -1983,7 +1983,7 @@ static gint gtk_window_focus_in_callback( GtkWidget *widget,
     {
         // not yet, notify it
         win->m_hasFocus = TRUE;
-
+        
         if ( DoSendFocusEvents(win) )
         {
            gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "focus_in_event" );
@@ -2826,7 +2826,7 @@ void wxWindowGTK::PostCreation()
     {
         if (m_focusWidget == NULL)
             m_focusWidget = m_widget;
-
+            
         gtk_signal_connect( GTK_OBJECT(m_focusWidget), "focus_in_event",
             GTK_SIGNAL_FUNC(gtk_window_focus_in_callback), (gpointer)this );
 

@@ -87,7 +87,7 @@ static gint gtk_frame_focus_in_callback( GtkWidget *widget,
 {
     if (g_isIdle)
         wxapp_install_idle_handler();
-
+        
     switch ( g_sendActivateEvent )
     {
         case -1:
@@ -112,7 +112,7 @@ static gint gtk_frame_focus_in_callback( GtkWidget *widget,
     event.SetEventObject(g_activeFrame);
     g_activeFrame->GetEventHandler()->ProcessEvent(event);
 
-    return TRUE;
+    return FALSE;
 }
 
 //-----------------------------------------------------------------------------
@@ -142,7 +142,7 @@ static gint gtk_frame_focus_out_callback( GtkWidget *widget,
 
     g_activeFrame = NULL;
         
-    return TRUE;
+    return FALSE;
 }
 
 //-----------------------------------------------------------------------------
@@ -966,6 +966,9 @@ void wxTopLevelWindowGTK::OnInternalIdle()
     if ( g_sendActivateEvent != -1 )
     {
         bool activate = g_sendActivateEvent != 0;
+        
+        // if (!activate) wxPrintf( wxT("de") );
+        // wxPrintf( wxT("activate\n") );
         
         // do it only once
         g_sendActivateEvent = -1;
