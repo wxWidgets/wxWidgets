@@ -616,6 +616,14 @@ void wxScrolledWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
 // kbd handling
 void wxScrolledWindow::OnKeyDown(wxKeyEvent& event)
 {
+    if ( !m_xScrollPixelsPerLine || !m_yScrollPixelsPerLine )
+    {
+        // stop now - no scroll line size
+        event.Skip();
+
+        return;
+    }
+
     int stx, sty,       // view origin
         szx, szy,       // view size (total)
         clix, cliy;     // view size (on screen)
