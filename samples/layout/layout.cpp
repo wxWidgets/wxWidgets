@@ -244,14 +244,6 @@ void MyWindow::OnPaint(wxPaintEvent& WXUNUSED(event) )
   frame->Draw(dc,TRUE);
 }
 
-// Define the behaviour for the frame closing
-// - must delete all frames except for the main one.
-bool MyFrame::OnClose(void)
-{
-  Show(FALSE);
-
-  return TRUE;
-}
 
 SizerFrame::SizerFrame(wxFrame *frame, char *title, int x, int y, int w, int h):
   wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h))
@@ -344,12 +336,5 @@ void SizerFrame::OnSize(wxSizeEvent& event)
 {
   wxFrame::OnSize(event);
   panel->Layout();
-}
-
-bool SizerFrame::OnClose(void)
-{
-  Show(FALSE);
-
-  return TRUE;
 }
 

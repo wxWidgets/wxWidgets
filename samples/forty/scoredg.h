@@ -22,11 +22,13 @@ public:
 	void Display();
 
 protected:
-	bool OnClose();
+	void OnCloseWindow(wxCloseEvent& event);
 
 private:
 	ScoreFile*	m_scoreFile;
 	wxButton*	m_OK;
+
+DECLARE_EVENT_TABLE()
 };
 
 #endif

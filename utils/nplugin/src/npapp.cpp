@@ -103,8 +103,7 @@ NPError   wxPluginApp::NPP_Destroy(NPP instance, NPSavedData** save)
     wxPluginFrame *frame = FindFrame(instance);
     if ( frame )
     {
-        frame->OnClose();
-        delete frame;
+        frame->Close();
     }
     return NPERR_NO_ERROR;
 }

@@ -340,10 +340,8 @@ bool wxResourceManager::ShowResourceEditor(bool show, wxWindow *WXUNUSED(parent)
   else
   {
     wxFrame *fr = m_editorFrame;
-    if (m_editorFrame->OnClose())
+    if (m_editorFrame->Close())
     {
-      fr->Show(FALSE);
-      delete fr;
       m_editorFrame = NULL;
       m_editorPanel = NULL;
     }
@@ -2076,6 +2074,7 @@ BEGIN_EVENT_TABLE(wxResourceEditorFrame, wxFrame)
     EVT_MENU(RESED_DELETE, wxResourceEditorFrame::OnDeleteSelection)
     EVT_MENU(RESED_RECREATE, wxResourceEditorFrame::OnRecreateSelection)
     EVT_MENU(RESED_TEST, wxResourceEditorFrame::OnTest)
+    EVT_CLOSE(wxResourceEditorFrame::OnCloseWindow)
 END_EVENT_TABLE()
 
 wxResourceEditorFrame::wxResourceEditorFrame(wxResourceManager *resMan, wxFrame *parent, const wxString& title,
@@ -2157,12 +2156,15 @@ void wxResourceEditorFrame::OnRecreateSelection(wxCommandEvent& WXUNUSED(event))
       manager->RecreateSelection();
 }
 
-bool wxResourceEditorFrame::OnClose()
+void wxResourceEditorFrame::OnCloseWindow(wxCloseEvent& event)
 {
   if (manager->Modified())
   {
-  if (!manager->Clear(TRUE, FALSE))
-     return FALSE;
+     if (!manager->Clear(TRUE, FALSE))
+     {
+       event.Veto();
+       return;
+    }
   }
     
   if (!Iconized())
@@ -2181,7 +2183,7 @@ bool wxResourceEditorFrame::OnClose()
   manager->SetEditorFrame(NULL);
   manager->SetEditorToolBar(NULL);
 
-  return TRUE;
+  this->Destroy();
 }
 
 /*

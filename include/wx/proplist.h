@@ -276,7 +276,7 @@ class WXDLLEXPORT wxPropertyListDialog: public wxDialog
   wxPropertyListDialog(wxPropertyListView *v, wxWindow *parent, const wxString& title,
     const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
     long style = wxDEFAULT_DIALOG_STYLE, const wxString& name = "dialogBox");
-  bool OnClose(void);
+  void OnCloseWindow(wxCloseEvent& event);
   void OnDefaultAction(wxControl *item);
   void OnCancel(wxCommandEvent& event);
 
@@ -338,7 +338,7 @@ class WXDLLEXPORT wxPropertyListFrame: public wxFrame
     m_view = v;
     m_propertyPanel = NULL;
   }
-  bool OnClose(void);
+  void OnCloseWindow(wxCloseEvent& event);
 
   // Must call this to create panel and associate view
   virtual bool Initialize(void);
@@ -348,6 +348,8 @@ class WXDLLEXPORT wxPropertyListFrame: public wxFrame
  private:
   wxPropertyListView*       m_view;
   wxPropertyListPanel*      m_propertyPanel;
+
+DECLARE_EVENT_TABLE()
 };
 
 /*

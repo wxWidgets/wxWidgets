@@ -429,6 +429,10 @@ int wxPreviewControlBar::GetZoomControl()
  * Preview frame
  */
 
+BEGIN_EVENT_TABLE(wxPreviewFrame, wxFrame)
+    EVT_CLOSE(wxPreviewFrame::OnCloseWindow)
+END_EVENT_TABLE()
+
 wxPreviewFrame::wxPreviewFrame(wxPrintPreviewBase *preview, wxFrame *parent, const wxString& title,
     const wxPoint& pos, const wxSize& size, long style, const wxString& name):
  wxFrame(parent, -1, title, pos, size, style, name)
@@ -442,7 +446,7 @@ wxPreviewFrame::~wxPreviewFrame()
 {
 }
 
-bool wxPreviewFrame::OnClose()
+void wxPreviewFrame::OnCloseWindow(wxCloseEvent& event)
 {
   MakeModal(FALSE);
   
@@ -456,7 +460,8 @@ bool wxPreviewFrame::OnClose()
     m_printPreview->SetFrame(NULL);
   }
   delete m_printPreview;
-  return TRUE;
+
+  Destroy();
 }
 
 void wxPreviewFrame::Initialize()

@@ -154,7 +154,7 @@ void CheckListBoxFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void CheckListBoxFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-  wxMessageDialog dialog(this, "Demo of wxCheckListBox control\n"
+  wxMessageDialog dialog(this, "Demo of wxCheckListBox control\n",
                          "About wxCheckListBox", wxYES_NO | wxCANCEL);
   dialog.ShowModal();
 }

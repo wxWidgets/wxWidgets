@@ -188,7 +188,7 @@ class WXDLLEXPORT wxView: public wxEvtHandler
   // Override to do cleanup/veto close
   virtual bool OnClose(bool deleteWindow);
 
-#ifdef WXWIN_COMPATIBILITY
+#if WXWIN_COMPATIBILITY
   // Defeat compiler warning
   bool OnClose(void) { return wxEvtHandler::OnClose(); }
 #endif

@@ -91,8 +91,6 @@ public:
   void OnLeftDown(wxMouseEvent& event);
   void OnRightDown(wxMouseEvent& event);
 
-  bool OnClose();
-
   DECLARE_EVENT_TABLE()
 
 private:
@@ -300,11 +298,6 @@ void DnDFrame::OnHelp(wxCommandEvent& /* event */)
 void DnDFrame::OnLogClear(wxCommandEvent& /* event */ )
 {
   m_ctrlLog->Clear();
-}
-
-bool DnDFrame::OnClose()
-{
-  return TRUE;
 }
 
 void DnDFrame::OnLeftDown(wxMouseEvent &WXUNUSED(event) )

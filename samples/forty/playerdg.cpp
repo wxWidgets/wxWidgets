@@ -37,6 +37,7 @@ BEGIN_EVENT_TABLE(PlayerSelectionDialog, wxDialog)
 	EVT_BUTTON(wxID_OK, PlayerSelectionDialog::ButtonCallback)
 	EVT_BUTTON(wxID_CANCEL, PlayerSelectionDialog::ButtonCallback)
 	EVT_LISTBOX(ID_LISTBOX, PlayerSelectionDialog::SelectCallback)
+    EVT_CLOSE(PlayerSelectionDialog::OnCloseWindow)
 END_EVENT_TABLE()
 
 PlayerSelectionDialog::PlayerSelectionDialog(
@@ -142,13 +143,10 @@ const wxString& PlayerSelectionDialog::GetPlayersName()
 	return m_player;
 }
 
-bool PlayerSelectionDialog::OnClose()
+void PlayerSelectionDialog::OnCloseWindow(wxCloseEvent& event)
 {
-	// hide the dialog
-	// NB don't return TRUE otherwise delete is called
 	m_player = "";
-	Show(FALSE);
-	return FALSE;
+    EndModal(wxID_CANCEL);
 }
 
 void PlayerSelectionDialog::SelectCallback(wxCommandEvent& event)

@@ -26,7 +26,6 @@ class MyFrame: public wxFrame
   public:
     wxWindow *panel;
     MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size);
-    bool OnClose(void);
     void OnQuit(wxCommandEvent& event);
     void OnTest1(wxCommandEvent& event);
 

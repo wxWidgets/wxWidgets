@@ -357,7 +357,7 @@ class wxResourceEditorFrame: public wxFrame
     long style = wxDEFAULT_FRAME_STYLE, const wxString& name = "frame");
   ~wxResourceEditorFrame();
 
-  bool OnClose();
+  void OnCloseWindow(wxCloseEvent& event);
 
   void OnNew(wxCommandEvent& event);
   void OnOpen(wxCommandEvent& event);

@@ -30,7 +30,6 @@ public:
         long style = wxDEFAULT_FRAME_STYLE);
 
     void OnExit(wxCommandEvent& event);
-    bool OnClose(void);
 public:
     TestGLCanvas*    m_canvas;
 

@@ -28,7 +28,7 @@ public:
 
 protected:
 	friend void SelectCallback(wxListBox&, wxCommandEvent&);
-	bool OnClose();
+	void OnCloseWindow(wxCloseEvent& event);
 
 private:
 	ScoreFile*	m_scoreFile;

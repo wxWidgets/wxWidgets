@@ -771,6 +771,7 @@ public:
         m_veto = veto;
     }
     void SetCanVeto(bool canVeto) { m_canVeto = canVeto; }
+    // No more asserts here please, the one you put here was wrong.
     bool CanVeto() const { return m_canVeto; }
     bool GetVeto() const { return m_canVeto && m_veto; }
 
@@ -1156,7 +1157,9 @@ public:
     virtual long Default()
         { return GetNextHandler() ? GetNextHandler()->Default() : 0; };
 
+#if WXWIN_COMPATIBILITY
     virtual bool OnClose();
+#endif
 
     virtual bool ProcessEvent(wxEvent& event);
     virtual bool SearchEventTable(wxEventTable& table, wxEvent& event);

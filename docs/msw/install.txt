@@ -296,3 +296,7 @@ General Notes
 
   and it's also on the wxWindows CD-ROM under Packages.
 
+- If you are installing wxWindows 2 from CVS, you may find that
+  include/wx/msw/setup.h is missing. This is deliberate, to avoid
+  developers' different setup.h configurations getting confused.
+  Please copy setup0.h to setup.h before compiling.

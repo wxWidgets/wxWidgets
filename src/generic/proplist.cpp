@@ -808,6 +808,7 @@ IMPLEMENT_CLASS(wxPropertyListDialog, wxDialog)
 
 BEGIN_EVENT_TABLE(wxPropertyListDialog, wxDialog)
     EVT_BUTTON(wxID_CANCEL,				wxPropertyListDialog::OnCancel)
+    EVT_CLOSE(wxPropertyListDialog::OnCloseWindow)
 END_EVENT_TABLE()
 
 wxPropertyListDialog::wxPropertyListDialog(wxPropertyListView *v, wxWindow *parent,
@@ -821,17 +822,19 @@ wxPropertyListDialog::wxPropertyListDialog(wxPropertyListView *v, wxWindow *pare
   SetAutoLayout(TRUE);
 }
 
-bool wxPropertyListDialog::OnClose(void)
+void wxPropertyListDialog::OnCloseWindow(wxCloseEvent& event)
 {
   if (m_view)
   {
 	SetReturnCode(wxID_CANCEL);
     m_view->OnClose();
 	m_view = NULL;
-	return TRUE;
+	this->Destroy();
   }
   else
-    return FALSE;
+  {
+    event.Veto();
+  }
 }
 
 void wxPropertyListDialog::OnCancel(wxCommandEvent& WXUNUSED(event))
@@ -899,7 +902,11 @@ void wxPropertyListPanel::OnSize(wxSizeEvent& WXUNUSED(event))
  
 IMPLEMENT_CLASS(wxPropertyListFrame, wxFrame)
 
-bool wxPropertyListFrame::OnClose(void)
+BEGIN_EVENT_TABLE(wxPropertyListFrame, wxFrame)
+    EVT_CLOSE(wxPropertyListFrame::OnCloseWindow)
+END_EVENT_TABLE()
+
+void wxPropertyListFrame::OnCloseWindow(wxCloseEvent& event)
 {
   if (m_view)
   {
@@ -907,10 +914,12 @@ bool wxPropertyListFrame::OnClose(void)
         m_propertyPanel->SetView(NULL);
     m_view->OnClose();
     m_view = NULL;
-    return TRUE;
+    this->Destroy();
   }
   else
-    return FALSE;
+  {
+    event.Veto();
+  }
 }
 
 wxPropertyListPanel *wxPropertyListFrame::OnCreatePanel(wxFrame *parent, wxPropertyListView *v)

@@ -164,8 +164,3 @@ void MyFrame::OnActivate(wxActivateEvent& event)
   if (event.GetActive() && canvas)
     canvas->SetFocus();
 }
-
-bool MyFrame::OnClose(void)
-{
-  return TRUE;
-}

@@ -167,7 +167,7 @@ BombsCanvasClass::BombsCanvasClass(wxFrame *parent, const wxPoint& pos, const wx
   dc.GetTextExtent(buf, &chw, &chh);
   dc.SetFont(wxNullFont);
 
-  dc.SetMapMode(MM_METRIC);
+  dc.SetMapMode(wxMM_METRIC);
 
   int xcm = dc.LogicalToDeviceX(10.0);
   int ycm = dc.LogicalToDeviceY(10.0);
@@ -183,7 +183,7 @@ BombsCanvasClass::BombsCanvasClass(wxFrame *parent, const wxPoint& pos, const wx
     }
   x_cell = (sx+3+X_UNIT)/X_UNIT;
   y_cell = (sy+3+Y_UNIT)/Y_UNIT;
-  dc.SetMapMode(MM_TEXT);
+  dc.SetMapMode(wxMM_TEXT);
   bmp=NULL;
   UpdateFieldSize();
 }

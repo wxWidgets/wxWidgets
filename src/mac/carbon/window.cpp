@@ -1110,7 +1110,10 @@ bool wxWindow::Close(bool force)
 {
   wxCloseEvent event(wxEVT_CLOSE_WINDOW, m_windowId);
   event.SetEventObject(this);
+#if WXWIN_COMPATIBILITY
   event.SetForce(force);
+#endif
+  event.SetCanVeto(!force);
 
   return GetEventHandler()->ProcessEvent(event);
 }

@@ -1414,6 +1414,10 @@ void wxApp::doMacInGoAway(WindowPtr window)
 	{
 		if (TrackGoAway(window, m_event.where))
 		{
+            // TODO: Stefan, I think you need to send a wxCloseEvent to the window
+            // here. The OnCloseWindow handler will take care of delete the frame
+            // if it wishes to (there should be a default wxFrame::OnCloseWindow
+            // that destroys the frame).
 			if (theMacWxFrame->OnClose()) {
 #if WXGARBAGE_COLLECTION_ON
 				theMacWxFrame->Show(FALSE);

@@ -284,6 +284,10 @@ void wxPropertyFormView::OnDoubleClick(wxControl *item)
  
 IMPLEMENT_CLASS(wxPropertyFormDialog, wxDialog)
 
+BEGIN_EVENT_TABLE(wxPropertyFormDialog, wxDialog)
+    EVT_CLOSE(wxPropertyFormDialog::OnCloseWindow)
+END_EVENT_TABLE()
+
 wxPropertyFormDialog::wxPropertyFormDialog(wxPropertyFormView *v, wxWindow *parent, const wxString& title,
 	const wxPoint& pos, const wxSize& size, long style, const wxString& name):
      wxDialog(parent, -1, title, pos, size, style, name)
@@ -294,16 +298,16 @@ wxPropertyFormDialog::wxPropertyFormDialog(wxPropertyFormView *v, wxWindow *pare
 //  SetAutoLayout(TRUE);
 }
 
-bool wxPropertyFormDialog::OnClose(void)
+void wxPropertyFormDialog::OnCloseWindow(wxCloseEvent& event)
 {
   if (m_view)
   {
     m_view->OnClose();
 	m_view = NULL;
-	return TRUE;
+	this->Destroy();
   }
   else
-    return FALSE;
+    event.Veto();
 }
 
 void wxPropertyFormDialog::OnDefaultAction(wxControl *item)
@@ -358,12 +362,16 @@ bool wxPropertyFormPanel::ProcessEvent(wxEvent& event)
  
 IMPLEMENT_CLASS(wxPropertyFormFrame, wxFrame)
 
-bool wxPropertyFormFrame::OnClose(void)
+BEGIN_EVENT_TABLE(wxPropertyFormFrame, wxFrame)
+    EVT_CLOSE(wxPropertyFormFrame::OnCloseWindow)
+END_EVENT_TABLE()
+
+void wxPropertyFormFrame::OnCloseWindow(wxCloseEvent& event)
 {
-  if (m_view)
-    return m_view->OnClose();
+  if (m_view && m_view->OnClose())
+    this->Destroy();
   else
-    return FALSE;
+    event.Veto();
 }
 
 wxPanel *wxPropertyFormFrame::OnCreatePanel(wxFrame *parent, wxPropertyFormView *v)

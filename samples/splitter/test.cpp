@@ -62,8 +62,6 @@ public:
   MyFrame(wxFrame* frame, const wxString& title, const wxPoint& pos, const wxSize& size);
   virtual ~MyFrame();
 
-  bool OnClose();
-
   // Menu commands
   void SplitHorizontal(wxCommandEvent& event);
   void SplitVertical(wxCommandEvent& event);
@@ -183,11 +181,6 @@ MyFrame::MyFrame(wxFrame* frame, const wxString& title, const wxPoint& pos, cons
 
 MyFrame::~MyFrame()
 {
-}
-
-bool MyFrame::OnClose()
-{
-  return TRUE;
 }
 
 void MyFrame::Quit(wxCommandEvent& WXUNUSED(event) )

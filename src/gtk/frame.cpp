@@ -478,8 +478,8 @@ void wxFrame::OnInternalIdle()
 void wxFrame::OnCloseWindow( wxCloseEvent& event )
 {
     // close the window if it wasn't vetoed by the application
-    if ( !event.GetVeto() )
-        Destroy();
+//    if ( !event.GetVeto() ) // No, this isn't the interpretation of GetVeto.
+    Destroy();
 }
 
 void wxFrame::OnSize( wxSizeEvent &WXUNUSED(event) )

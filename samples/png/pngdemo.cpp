@@ -207,12 +207,4 @@ void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
   }
 }
 
-// Define the behaviour for the frame closing
-// - must delete all frames except for the main one.
-bool MyFrame::OnClose(void)
-{
-  Show(FALSE);
-
-  return TRUE;
-}
 

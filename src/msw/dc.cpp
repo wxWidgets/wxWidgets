@@ -92,7 +92,7 @@ wxDC::wxDC(void)
   m_signY = 1;
   m_systemScaleX = 1.0;
   m_systemScaleY = 1.0;
-  m_mappingMode = MM_TEXT;
+  m_mappingMode = wxMM_TEXT;
   m_bOwnsDC = FALSE;
   m_hDC = 0;
   m_clipping = FALSE;
@@ -998,32 +998,32 @@ void wxDC::SetMapMode(int mode)
 
   switch (mode)
   {
-    case MM_TWIPS:
+    case wxMM_TWIPS:
     {
       m_logicalScaleX = (twips2mm * mm2pixelsX);
       m_logicalScaleY = (twips2mm * mm2pixelsY);
       break;
     }
-    case MM_POINTS:
+    case wxMM_POINTS:
     {
       m_logicalScaleX = (pt2mm * mm2pixelsX);
       m_logicalScaleY = (pt2mm * mm2pixelsY);
       break;
     }
-    case MM_METRIC:
+    case wxMM_METRIC:
     {
       m_logicalScaleX = mm2pixelsX;
       m_logicalScaleY = mm2pixelsY;
       break;
     }
-    case MM_LOMETRIC:
+    case wxMM_LOMETRIC:
     {
       m_logicalScaleX = (mm2pixelsX/10.0);
       m_logicalScaleY = (mm2pixelsY/10.0);
       break;
     }
     default:
-    case MM_TEXT:
+    case wxMM_TEXT:
     {
       m_logicalScaleX = 1.0;
       m_logicalScaleY = 1.0;

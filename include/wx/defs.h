@@ -946,6 +946,19 @@ enum
 
 #define wxID_HIGHEST            5999
 
+// Mapping modes (as per Windows)
+#define wxMM_TEXT             1
+#define wxMM_LOMETRIC         2
+#define wxMM_HIMETRIC         3
+#define wxMM_LOENGLISH        4
+#define wxMM_HIENGLISH        5
+#define wxMM_TWIPS            6
+#define wxMM_ISOTROPIC        7
+#define wxMM_ANISOTROPIC      8
+
+#define wxMM_POINTS           9
+#define wxMM_METRIC          10
+
 /* Shortcut for easier dialog-unit-to-pixel conversion */
 #define wxDLG_UNIT(parent, pt) parent->ConvertDialogToPixels(pt)
 

@@ -72,7 +72,7 @@ class WXDLLEXPORT wxGenericFontDialog: public wxDialog
   // Internal functions
   void OnPaint(wxPaintEvent& event);
 
-  bool OnClose(void);
+  void OnCloseWindow(wxCloseEvent& event);
 
   virtual void CreateWidgets(void);
   virtual void InitializeFont(void);

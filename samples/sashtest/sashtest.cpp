@@ -312,23 +312,6 @@ void MyCanvas::OnEvent(wxMouseEvent& event)
   ypos = pt.y;
 }
 
-// Define the behaviour for the frame closing
-// - must delete all frames except for the main one.
-bool MyFrame::OnClose(void)
-{
-  // Must delete children
-  wxNode *node = my_children.First();
-  while (node)
-  {
-    MyChild *child = (MyChild *)node->Data();
-    wxNode *next = node->Next();
-    child->OnClose();
-    delete child;
-    node = next;
-  }
-  return TRUE;
-}
-
 void MyFrame::OnSize(wxSizeEvent& WXUNUSED(event))
 {
     wxLayoutAlgorithm layout;
@@ -366,10 +349,4 @@ void MyChild::OnActivate(wxActivateEvent& event)
   if (event.GetActive() && canvas)
     canvas->SetFocus();
 }
-
-bool MyChild::OnClose(void)
-{
-  return TRUE;
-}
-
 

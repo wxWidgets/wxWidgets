@@ -165,7 +165,7 @@ class CeditorDlg : public wxPanel
 		Ccontact					*Contact;	// this is the table object that will be being manipulated
 
 		CeditorDlg(wxWindow *parent);
-		bool	OnClose(void);
+		void    OnCloseWindow(wxCloseEvent& event);
 		void    OnButton( wxCommandEvent &event );
 		void	OnCommand(wxWindow& win, wxCommandEvent& event);
  		void	OnActivate(bool) {};  // necessary for hot keys
@@ -243,7 +243,7 @@ class CparameterDlg : public wxDialog
 
 	public:
 		CparameterDlg(wxWindow *parent);
-		bool	OnClose(void);
+		void    OnCloseWindow(wxCloseEvent& event);
 		void	OnCommand(wxWindow& win, wxCommandEvent& event);
  		void	OnActivate(bool) {};  // necessary for hot keys
 
@@ -252,6 +252,7 @@ class CparameterDlg : public wxDialog
 		bool	Save();
 		void	FillDataSourceList();
 
+DECLARE_EVENT_TABLE()
 };  // CparameterDlg
 
 #define PARAMETER_DIALOG                    400
@@ -341,7 +342,7 @@ class CqueryDlg : public wxDialog
 
 		void    OnButton( wxCommandEvent &event );
 		void		OnCommand(wxWindow& win, wxCommandEvent& event);
-		bool		OnClose();
+		void        OnCloseWindow(wxCloseEvent& event);
 		void		OnActivate(bool) {};  // necessary for hot keys
 
 //		bool		SetWidgetPtrs();

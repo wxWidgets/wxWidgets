@@ -88,8 +88,6 @@ class WXDLLEXPORT wxGenericColourDialog: public wxDialog
   void OnMouseEvent(wxMouseEvent& event);
   void OnPaint(wxPaintEvent& event);
 
-  bool OnClose(void);
-
   virtual void CalculateMeasurements(void);
   virtual void CreateWidgets(void);
   virtual void InitializeColours(void);
@@ -102,16 +100,13 @@ class WXDLLEXPORT wxGenericColourDialog: public wxDialog
   virtual void OnBasicColourClick(int which);
   virtual void OnCustomColourClick(int which);
 
-/*
-  virtual void OnOk(void);
-  virtual void OnCancel(void);
-  virtual void OnAddCustom(void);
-*/
   void OnAddCustom(wxCommandEvent& event);
 
   void OnRedSlider(wxCommandEvent& event);
   void OnGreenSlider(wxCommandEvent& event);
   void OnBlueSlider(wxCommandEvent& event);
+
+  void OnCloseWindow(wxCloseEvent& event);
 
 DECLARE_EVENT_TABLE()
 };

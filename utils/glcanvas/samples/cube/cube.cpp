@@ -78,11 +78,6 @@ void MyFrame::OnExit(wxCommandEvent& event)
     Destroy();
 }
 
-bool MyFrame::OnClose(void)
-{
-    return TRUE;
-}
-
 BEGIN_EVENT_TABLE(TestGLCanvas, wxGLCanvas)
     EVT_SIZE(TestGLCanvas::OnSize)
     EVT_PAINT(TestGLCanvas::OnPaint)

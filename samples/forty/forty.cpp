@@ -40,7 +40,7 @@ public:
 	FortyFrame(wxFrame* frame, char* title, int x, int y, int w, int h);
 	virtual ~FortyFrame();
 
-	bool OnClose();
+	void OnCloseWindow(wxCloseEvent& event);
 
 	// Menu callbacks
 	void NewGame(wxCommandEvent& event);
@@ -73,6 +73,7 @@ BEGIN_EVENT_TABLE(FortyFrame, wxFrame)
 	EVT_MENU(SCORES, FortyFrame::Scores)
 	EVT_MENU(RIGHT_BUTTON_UNDO, FortyFrame::ToggleRightButtonUndo)
 	EVT_MENU(HELPING_HAND, FortyFrame::ToggleHelpingHand)
+    EVT_CLOSE(FortyFrame::OnCloseWindow)
 END_EVENT_TABLE()
 
 // Create a new application object
@@ -189,9 +190,14 @@ FortyFrame::~FortyFrame()
 {
 }
 
-bool FortyFrame::OnClose()
+void FortyFrame::OnCloseWindow(wxCloseEvent& event)
 {
-	return m_canvas->OnClose();
+	if (m_canvas->OnCloseCanvas())
+    {
+        this->Destroy();
+    }
+    else
+        event.Veto();
 }
 
 void
@@ -205,7 +211,7 @@ FortyFrame::Exit(wxCommandEvent&)
 {
 #ifdef __WXGTK__
 	// wxGTK doesn't call OnClose() so we do it here
-	if (OnClose())
+//	if (OnClose())
 #endif
 	Close(TRUE);
 }

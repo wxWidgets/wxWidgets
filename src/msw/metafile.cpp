@@ -54,7 +54,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxMetafileDC, wxDC)
 wxMetafileRefData::wxMetafileRefData(void)
 {
     m_metafile = 0;
-    m_windowsMappingMode = MM_ANISOTROPIC;
+    m_windowsMappingMode = wxMM_ANISOTROPIC;
 }
 
 wxMetafileRefData::~wxMetafileRefData(void)
@@ -70,7 +70,7 @@ wxMetafile::wxMetafile(const wxString& file)
 {
     m_refData = new wxMetafileRefData;
 
-    M_METAFILEDATA->m_windowsMappingMode = MM_ANISOTROPIC;
+    M_METAFILEDATA->m_windowsMappingMode = wxMM_ANISOTROPIC;
     M_METAFILEDATA->m_metafile = 0;
     if (!file.IsNull() && (file.Cmp("") == 0))
         M_METAFILEDATA->m_metafile = (WXHANDLE) GetMetaFile(file);
@@ -154,9 +154,9 @@ wxMetafileDC::wxMetafileDC(const wxString& file)
   m_ok = (m_hDC != (WXHDC) 0) ;
 
   // Actual Windows mapping mode, for future reference.
-  m_windowsMappingMode = MM_TEXT;
-  
-  SetMapMode(MM_TEXT); // NOTE: does not set HDC mapmode (this is correct)
+  m_windowsMappingMode = wxMM_TEXT;
+
+  SetMapMode(wxMM_TEXT); // NOTE: does not set HDC mapmode (this is correct)
 }
 
 // New constructor that takes origin and extent. If you use this, don't
@@ -176,9 +176,9 @@ wxMetafileDC::wxMetafileDC(const wxString& file, int xext, int yext, int xorg, i
   ::SetWindowExtEx((HDC) m_hDC,xext,yext, NULL);
 
   // Actual Windows mapping mode, for future reference.
-  m_windowsMappingMode = MM_ANISOTROPIC;
-  
-  SetMapMode(MM_TEXT); // NOTE: does not set HDC mapmode (this is correct)
+  m_windowsMappingMode = wxMM_ANISOTROPIC;
+
+  SetMapMode(wxMM_TEXT); // NOTE: does not set HDC mapmode (this is correct)
 }
 
 wxMetafileDC::~wxMetafileDC(void)
@@ -237,32 +237,32 @@ void wxMetafileDC::SetMapMode(int mode)
 
   switch (mode)
   {
-    case MM_TWIPS:
+    case wxMM_TWIPS:
     {
       m_logicalScaleX = (float)(twips2mm * mm2pixelsX);
       m_logicalScaleY = (float)(twips2mm * mm2pixelsY);
       break;
     }
-    case MM_POINTS:
+    case wxMM_POINTS:
     {
       m_logicalScaleX = (float)(pt2mm * mm2pixelsX);
       m_logicalScaleY = (float)(pt2mm * mm2pixelsY);
       break;
     }
-    case MM_METRIC:
+    case wxMM_METRIC:
     {
       m_logicalScaleX = mm2pixelsX;
       m_logicalScaleY = mm2pixelsY;
       break;
     }
-    case MM_LOMETRIC:
+    case wxMM_LOMETRIC:
     {
       m_logicalScaleX = (float)(mm2pixelsX/10.0);
       m_logicalScaleY = (float)(mm2pixelsY/10.0);
       break;
     }
     default:
-    case MM_TEXT:
+    case wxMM_TEXT:
     {
       m_logicalScaleX = 1.0;
       m_logicalScaleY = 1.0;
@@ -304,7 +304,7 @@ struct mfPLACEABLEHEADER {
 /*
  * Pass filename of existing non-placeable metafile, and bounding box.
  * Adds a placeable metafile header, sets the mapping mode to anisotropic,
- * and sets the window origin and extent to mimic the MM_TEXT mapping mode.
+ * and sets the window origin and extent to mimic the wxMM_TEXT mapping mode.
  *
  */
  

@@ -167,9 +167,9 @@ in the application.
 This function should be called by the application prior to
 showing the frame.
 
-\membersection{wxPreviewFrame::OnClose}
+\membersection{wxPreviewFrame::OnCloseWindow}
 
-\func{bool}{OnClose}{\void}
+\func{void}{OnCloseWindow}{\param{wxCloseEvent\&}{ event}}
 
 Enables the other frames in the application, and deletes the print preview
 object, implicitly deleting any printout objects associated with the print

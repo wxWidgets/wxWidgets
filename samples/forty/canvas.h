@@ -25,7 +25,7 @@ public:
 	virtual ~FortyCanvas();
 
 	virtual void OnDraw(wxDC& dc);
-	bool OnClose();
+	bool OnCloseCanvas();
 	void OnMouseEvent(wxMouseEvent& event);
 	void SetCursorStyle(int x, int y);
 

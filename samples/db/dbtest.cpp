@@ -264,7 +264,7 @@ void DatabaseDemoFrame::OnCloseWindow(wxCloseEvent& event)
 	// to close the program here that is not done elsewhere
 
     this->Destroy();
-}  // DatabaseDemoFrame::OnClose()
+}  // DatabaseDemoFrame::OnCloseWindow()
 
 
 void DatabaseDemoFrame::CreateDataTable()
@@ -651,21 +651,21 @@ CeditorDlg::CeditorDlg(wxWindow *parent) : wxPanel (parent, 1, 1, 460, 455)
 }  // CeditorDlg constructor
 
 
-bool CeditorDlg::OnClose()
+void CeditorDlg::OnCloseWindow(wxCloseEvent& event)
 {
 	// Clean up time
  	if ((mode != mCreate) && (mode != mEdit))
 	{
 		if (Contact)
 			delete Contact;
-		return TRUE;
+		this->Destroy();
 	}
 	else
 	{
 		wxMessageBox("Must finish processing the current record being created/modified before exiting","Notice...",wxOK | wxICON_INFORMATION);
-		return FALSE;
+		event.Veto();
 	}
-}  // CeditorDlg::OnClose()
+}  // CeditorDlg::OnCloseWindow()
 
 
 void CeditorDlg::OnButton( wxCommandEvent &event )
@@ -1283,6 +1283,11 @@ bool CeditorDlg::GetRec(char *whereStr)
 /*
  * CparameterDlg constructor
  */
+
+BEGIN_EVENT_TABLE(CparameterDlg, wxDialog)
+    EVT_CLOSE(CparameterDlg::OnCloseWindow)
+END_EVENT_TABLE()
+
 CparameterDlg::CparameterDlg(wxWindow *parent) : wxDialog (parent, PARAMETER_DIALOG, "ODBC parameter settings", wxPoint(-1, -1), wxSize(400, 275))
 {
 	// Since the ::OnCommand() function is overridden, this prevents the widget
@@ -1315,7 +1320,7 @@ CparameterDlg::CparameterDlg(wxWindow *parent) : wxDialog (parent, PARAMETER_DIA
 }  // CparameterDlg constructor
 
 
-bool CparameterDlg::OnClose()
+void CparameterDlg::OnCloseWindow(wxCloseEvent& event)
 {
 	// Put any additional checking necessary to make certain it is alright
 	// to close the program here that is not done elsewhere
@@ -1324,15 +1329,19 @@ bool CparameterDlg::OnClose()
 		bool Ok = (wxMessageBox("No changes have been saved.\n\nAre you sure you wish exit the parameter screen?","Confirm",wxYES_NO|wxICON_QUESTION) == wxYES);
 
 		if (!Ok)
-			return FALSE;
+        {
+            event.Veto();
+			return;
+        }
 
 		wxGetApp().params = savedParamSettings;
 	}
 
 	if (GetParent() != NULL)
 		GetParent()->SetFocus();
-	return TRUE;
-}  // Cparameter::OnClose()
+	this->Destroy();
+
+}  // Cparameter::OnCloseWindow()
 
 
 void CparameterDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
@@ -1471,6 +1480,7 @@ void CparameterDlg::FillDataSourceList()
 
 BEGIN_EVENT_TABLE(CqueryDlg, wxDialog)
     EVT_BUTTON(-1,  CqueryDlg::OnButton)
+    EVT_CLOSE(CqueryDlg::OnCloseWindow)
 END_EVENT_TABLE()
  
 // CqueryDlg() constructor
@@ -1800,7 +1810,7 @@ void CqueryDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
 }  // CqueryDlg::OnCommand
 
 
-bool CqueryDlg::OnClose()
+void CqueryDlg::OnCloseWindow(wxCloseEvent& event)
 {
 	// Clean up
 	if (colInf)
@@ -1817,9 +1827,10 @@ bool CqueryDlg::OnClose()
 
 	GetParent()->SetFocus();
 	wxEndBusyCursor();
-	return TRUE;
 
-}  // CqueryDlg::OnClose()
+	this->Destroy();
+
+}  // CqueryDlg::OnCloseWindow()
 
 /*
 bool CqueryDlg::SetWidgetPtrs()

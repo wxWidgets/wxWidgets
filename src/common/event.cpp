@@ -476,6 +476,7 @@ bool wxEvtHandler::SearchDynamicEventTable( wxEvent& event )
     return FALSE;
 };
 
+#if WXWIN_COMPATIBILITY
 bool wxEvtHandler::OnClose()
 {
     if (GetNextHandler())
@@ -483,3 +484,5 @@ bool wxEvtHandler::OnClose()
     else
         return FALSE;
 }
+#endif
+

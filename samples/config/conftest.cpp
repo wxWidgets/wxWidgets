@@ -46,7 +46,7 @@ public:
   void OnQuit(wxCommandEvent& event);
   void OnAbout(wxCommandEvent& event);
   void OnDelete(wxCommandEvent& event);
-  bool OnClose() { return TRUE; }
+  void OnCloseWindow(wxCloseEvent& event);
 
 private:
   wxTextCtrl *m_text;
@@ -69,6 +69,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
   EVT_MENU(Minimal_Quit, MyFrame::OnQuit)
   EVT_MENU(Minimal_About, MyFrame::OnAbout)
   EVT_MENU(Minimal_Delete, MyFrame::OnDelete)
+  EVT_CLOSE(MyFrame::OnCloseWindow)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -187,6 +188,11 @@ MyFrame::MyFrame()
       h = pConfig->Read("h", 200);
   Move(x, y);
   SetClientSize(w, h);
+}
+
+void MyFrame::OnCloseWindow(wxCloseEvent& event)
+{
+    this->Destroy();
 }
 
 void MyFrame::OnQuit(wxCommandEvent&)

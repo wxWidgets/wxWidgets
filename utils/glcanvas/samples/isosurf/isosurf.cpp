@@ -298,12 +298,6 @@ void MyFrame::OnExit(wxCommandEvent& event)
     Destroy();
 }
 
-bool MyFrame::OnClose(void)
-{
-    return TRUE;
-}
-
-
 /*
  * TestGLCanvas implementation
  */

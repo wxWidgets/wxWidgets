@@ -71,7 +71,6 @@ public:
   void SetTitle(const wxString& title);
   wxString GetTitle() const ;
 
-  bool OnClose();
   void OnCharHook(wxKeyEvent& event);
   void OnCloseWindow(wxCloseEvent& event);
 

@@ -1026,8 +1026,7 @@ bool Tex2RTFConnection::OnExecute(const wxString& topic, char *data, int size, i
     }
     else if (strcmp(firstArg, "EXIT") == 0)
     {
-      if (frame && frame->OnClose())
-        delete frame;
+      if (frame) frame->Close();
     }
     else if (strcmp(firstArg, "MINIMIZE") == 0 || strcmp(firstArg, "ICONIZE") == 0)
     {

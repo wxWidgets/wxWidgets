@@ -38,7 +38,6 @@ class MyFrame: public wxMDIParentFrame
 
     void InitToolBar(wxToolBar* toolBar);
 
-    bool OnClose(void);
     void OnSize(wxSizeEvent& event);
     void OnAbout(wxCommandEvent& event);
     void OnNewWindow(wxCommandEvent& event);
@@ -53,7 +52,6 @@ class MyChild: public wxMDIChildFrame
     MyCanvas *canvas;
     MyChild(wxMDIParentFrame *parent, const wxString& title, const wxPoint& pos, const wxSize& size, const long style);
     ~MyChild(void);
-    bool OnClose(void);
     void OnActivate(wxActivateEvent& event);
     void OnQuit(wxCommandEvent& event);
 

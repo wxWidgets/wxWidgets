@@ -131,6 +131,12 @@ bool MyApp::OnInit(void)
   return TRUE;
 }
 
+int MyApp::OnExit()
+{
+  delete wxGetApp().m_testFont;
+  return 1;
+}
+
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(WXPRINT_QUIT, MyFrame::OnExit)
     EVT_MENU(WXPRINT_PRINT, MyFrame::OnPrint)
@@ -315,14 +321,6 @@ void MyCanvas::OnDraw(wxDC& dc)
 
 void MyCanvas::OnEvent(wxMouseEvent& WXUNUSED(event))
 {
-}
-
-bool MyFrame::OnClose(void)
-{
-  Show(FALSE);
-  delete wxGetApp().m_testFont;
-
-  return TRUE;
 }
 
 bool MyPrintout::OnPrintPage(int page)

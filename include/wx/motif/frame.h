@@ -79,8 +79,6 @@ public:
   void ScreenToClient(int *x, int *y) const;
   wxPoint ScreenToClient(const wxPoint& pt) const { return wxWindow::ScreenToClient(pt); }
 
-  virtual bool OnClose();
-
   void OnSize(wxSizeEvent& event);
   void OnMenuHighlight(wxMenuEvent& event);
   void OnActivate(wxActivateEvent& event);

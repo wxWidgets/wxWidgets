@@ -108,7 +108,7 @@ wxPrinterDC::wxPrinterDC(const wxString& driver_name, const wxString& device_nam
    {
 //     int width = GetDeviceCaps(m_hDC, VERTRES);
 //     int height = GetDeviceCaps(m_hDC, HORZRES);
-     SetMapMode(MM_TEXT);
+     SetMapMode(wxMM_TEXT);
    }
   SetBrush(*wxBLACK_BRUSH);
   SetPen(*wxBLACK_PEN);
@@ -124,7 +124,7 @@ wxPrinterDC::wxPrinterDC(WXHDC theDC)
  {
 //     int width = GetDeviceCaps(m_hDC, VERTRES);
 //     int height = GetDeviceCaps(m_hDC, HORZRES);
-    SetMapMode(MM_TEXT);
+    SetMapMode(wxMM_TEXT);
   }
   SetBrush(*wxBLACK_BRUSH);
   SetPen(*wxBLACK_PEN);

@@ -61,7 +61,7 @@ class WXDLLEXPORT wxPropertyFormView: public wxPropertyView
   void OnUpdate(wxCommandEvent& event);
   void OnRevert(wxCommandEvent& event);
 
-  virtual bool OnClose(void);
+  virtual bool OnClose();
   virtual void OnDoubleClick(wxControl *item);
 
   // TODO: does OnCommand still get called...???
@@ -230,7 +230,8 @@ class WXDLLEXPORT wxPropertyFormDialog: public wxDialog
   wxPropertyFormDialog(wxPropertyFormView *v, wxWindow *parent, const wxString& title,
     const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
     long style = wxDEFAULT_DIALOG_STYLE, const wxString& name = "dialogBox");
-  bool OnClose(void);
+
+  void OnCloseWindow(wxCloseEvent& event);
   void OnDefaultAction(wxControl *item);
   void OnCommand(wxWindow& win, wxCommandEvent& event);
 
@@ -239,6 +240,8 @@ class WXDLLEXPORT wxPropertyFormDialog: public wxDialog
 
  private:
   wxPropertyFormView*       m_view;
+
+DECLARE_EVENT_TABLE()
 };
 
 /*
@@ -281,7 +284,7 @@ class WXDLLEXPORT wxPropertyFormFrame: public wxFrame
     m_view = v;
     m_propertyPanel = NULL;
   }
-  bool OnClose(void);
+  void OnCloseWindow(wxCloseEvent& event);
 
   // Must call this to create panel and associate view
   virtual bool Initialize(void);
@@ -291,6 +294,8 @@ class WXDLLEXPORT wxPropertyFormFrame: public wxFrame
  private:
   wxPropertyFormView*       m_view;
   wxPanel*                  m_propertyPanel;
+
+DECLARE_EVENT_TABLE()
 };
 
 #endif

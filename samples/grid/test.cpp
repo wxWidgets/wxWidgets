@@ -40,8 +40,6 @@ class MyFrame: public wxFrame
     wxGrid *grid;
     MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos, const wxSize& size);
 
-    bool OnClose(void) { return TRUE; }
-
     void ToggleEditable(wxCommandEvent& event);
     void ToggleRowLabel(wxCommandEvent& event);
     void ToggleColLabel(wxCommandEvent& event);

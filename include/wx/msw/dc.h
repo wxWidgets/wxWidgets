@@ -420,8 +420,8 @@ protected:
 #define MS_XDEV2LOGREL(x) DeviceToLogicalXRel(x)
 #define MS_YDEV2LOGREL(y) DeviceToLogicalYRel(y)
 
-#define MM_POINTS      7
-#define MM_METRIC      8
+#define MM_POINTS      9
+#define MM_METRIC     10
 
 extern int wxPageNumber;
 

@@ -46,6 +46,7 @@ BEGIN_EVENT_TABLE(wxGenericColourDialog, wxDialog)
 	EVT_SLIDER(wxID_BLUE_SLIDER, wxGenericColourDialog::OnBlueSlider)
 	EVT_PAINT(wxGenericColourDialog::OnPaint)
 	EVT_MOUSE_EVENTS(wxGenericColourDialog::OnMouseEvent)
+	EVT_CLOSE(wxGenericColourDialog::OnCloseWindow)
 END_EVENT_TABLE()
 
 #endif
@@ -129,10 +130,9 @@ wxGenericColourDialog::~wxGenericColourDialog(void)
 {
 }
 
-bool wxGenericColourDialog::OnClose(void)
+void wxGenericColourDialog::OnCloseWindow(wxCloseEvent& event)
 {
-  Show(FALSE);
-  return FALSE;
+  EndModal(wxID_CANCEL);
 }
 
 bool wxGenericColourDialog::Create(wxWindow *parent, wxColourData *data)

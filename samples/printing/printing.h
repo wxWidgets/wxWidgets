@@ -17,8 +17,9 @@
 class MyApp: public wxApp
 {
   public:
-    MyApp(void) ;
-    bool OnInit(void);
+    MyApp() ;
+    bool OnInit();
+    int OnExit();
 
     wxFont* m_testFont;
 };
@@ -33,8 +34,6 @@ class MyFrame: public wxFrame
   public:
     MyCanvas *canvas;
     MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos, const wxSize& size);
-
-    bool OnClose(void);
 
     void Draw(wxDC& dc);
 

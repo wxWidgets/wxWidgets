@@ -43,7 +43,6 @@ class MyFrame: public wxFrame
  public:
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
-  bool OnClose(void) { return TRUE; }
 };
 
 // ID for the menu commands

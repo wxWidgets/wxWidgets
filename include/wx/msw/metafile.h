@@ -119,7 +119,7 @@ protected:
 /*
  * Pass filename of existing non-placeable metafile, and bounding box.
  * Adds a placeable metafile header, sets the mapping mode to anisotropic,
- * and sets the window origin and extent to mimic the MM_TEXT mapping mode.
+ * and sets the window origin and extent to mimic the wxMM_TEXT mapping mode.
  *
  */
 

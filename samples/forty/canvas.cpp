@@ -123,13 +123,13 @@ void FortyCanvas::OnDraw(wxDC& dc)
 /*
 Called when the main frame is closed
 */
-bool FortyCanvas::OnClose()
+bool FortyCanvas::OnCloseCanvas()
 {
 	if (m_game->InPlay() &&
 		wxMessageBox("Are you sure you want to\nabandon the current game?",
 			"Warning", wxYES_NO | wxICON_QUESTION) == wxNO)
 	{
-		return FALSE;
+        return FALSE;
 	}
 	return TRUE;
 }

@@ -128,7 +128,7 @@ struct mfPLACEABLEHEADER {
 /*
  * Pass filename of existing non-placeable metafile, and bounding box.
  * Adds a placeable metafile header, sets the mapping mode to anisotropic,
- * and sets the window origin and extent to mimic the MM_TEXT mapping mode.
+ * and sets the window origin and extent to mimic the wxMM_TEXT mapping mode.
  *
  */
  
@@ -198,7 +198,7 @@ bool wxMakeMetaFilePlaceable(const wxString& filename, int x1, int y1, int x2, i
 
   modeRecord->rdSize = 4;
   modeRecord->rdFunction = META_SETMAPMODE;
-  modeRecord->rdParm[0] = MM_ANISOTROPIC;
+  modeRecord->rdParm[0] = wxMM_ANISOTROPIC;
 
   originRecord->rdSize = 5;
   originRecord->rdFunction = META_SETWINDOWORG;

@@ -782,23 +782,12 @@ void wxFrame::OnActivate(wxActivateEvent& event)
     }
 }
 
-// The default implementation for the close window event - calls
+// The default implementation for the close window event.
 // OnClose for backward compatibility.
 
 void wxFrame::OnCloseWindow(wxCloseEvent& event)
 {
-    // Compatibility
-    if ( GetEventHandler()->OnClose() || !event.CanVeto())
-    {
-        this->Destroy();
-    }
-    else
-        event.Veto(TRUE);
-}
-
-bool wxFrame::OnClose()
-{
-    return TRUE;
+    this->Destroy();
 }
 
 // Destroy the window (delayed, if a managed window)

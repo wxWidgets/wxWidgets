@@ -19,6 +19,11 @@
 #include <io.h>
 #include <windows.h>
 
+#if defined(__MWERKS__)
+#include <wingdi.h>
+#include <winuser.h>
+#endif
+
 #ifndef __TWIN32__
 #ifdef __GNUWIN32__
 #include "wx/msw/gnuwin32/extra.h"

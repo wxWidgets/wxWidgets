@@ -27,7 +27,6 @@ class MyFrame: public wxFrame
  public:
     void OnQuit(wxCommandEvent& event);
     void OnTestDialog(wxCommandEvent& event);
-	bool OnClose(void) { return TRUE; }
 
    DECLARE_EVENT_TABLE()
     

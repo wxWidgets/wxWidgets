@@ -40,7 +40,6 @@ class MyFrame: public wxFrame
 public:
     MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title,
             const wxPoint& pos, const wxSize& size);
-    bool OnClose();
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
     void OnTestDialog(wxCommandEvent& event);

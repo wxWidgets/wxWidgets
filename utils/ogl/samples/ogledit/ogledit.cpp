@@ -143,6 +143,7 @@ IMPLEMENT_CLASS(MyFrame, wxDocParentFrame)
 BEGIN_EVENT_TABLE(MyFrame, wxDocParentFrame)
     EVT_MENU(OGLEDIT_ABOUT, MyFrame::OnAbout)
     EVT_SIZE(MyFrame::OnSize)
+    EVT_CLOSE(MyFrame::OnCloseWindow)
 END_EVENT_TABLE()
 
 MyFrame::MyFrame(wxDocManager *manager, wxFrame *frame, const wxString& title,
@@ -174,15 +175,15 @@ void MyFrame::OnSize(wxSizeEvent& event)
   }
 }
 
-bool MyFrame::OnClose(void)
+void MyFrame::OnCloseWindow(wxCloseEvent& event)
 {
   if (wxDocParentFrame::OnClose())
   {
     wxOGLCleanUp();
-    return TRUE;
+    this->Destroy();
   }
   else
-    return FALSE;
+    event.Veto();
 }
 
 // Intercept menu commands

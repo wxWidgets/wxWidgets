@@ -73,7 +73,6 @@ public:
     void OnResumeThread(wxCommandEvent& event);
 
     void OnIdle(wxIdleEvent &event);
-    bool OnClose() { return TRUE; }
 
     // called by dying thread _in_that_thread_context_
     void OnThreadExit(wxThread *thread);

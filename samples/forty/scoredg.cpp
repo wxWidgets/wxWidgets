@@ -137,6 +137,9 @@ void ScoreCanvas::OnDraw(wxDC& dc)
 	}
 }
 
+BEGIN_EVENT_TABLE(ScoreDialog, wxDialog)
+    EVT_CLOSE(ScoreDialog::OnCloseWindow)
+END_EVENT_TABLE()
 
 ScoreDialog::ScoreDialog(
 							wxWindow* parent,
@@ -183,10 +186,7 @@ void ScoreDialog::Display()
 	Show(TRUE);
 }
 
-bool ScoreDialog::OnClose()
+void ScoreDialog::OnCloseWindow(wxCloseEvent& event)
 {
-	// hide the dialog
-	// NB don't return TRUE otherwise delete is called
-	Show(FALSE);
-	return FALSE;
+    EndModal(wxID_OK);
 }

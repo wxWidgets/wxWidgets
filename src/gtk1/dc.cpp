@@ -57,7 +57,7 @@ wxDC::wxDC()
     m_scaleX = 1.0;
     m_scaleY = 1.0;
   
-    m_mappingMode = MM_TEXT;
+    m_mappingMode = wxMM_TEXT;
     m_needComputeScaleX = FALSE; /* not used yet */
     m_needComputeScaleY = FALSE; /* not used yet */
   
@@ -217,25 +217,25 @@ void wxDC::SetMapMode( int mode )
 {
     switch (mode) 
     {
-        case MM_TWIPS:
+        case wxMM_TWIPS:
           SetLogicalScale( twips2mm*m_mm_to_pix_x, twips2mm*m_mm_to_pix_y );
           break;
-        case MM_POINTS:
+        case wxMM_POINTS:
           SetLogicalScale( pt2mm*m_mm_to_pix_x, pt2mm*m_mm_to_pix_y );
           break;
-        case MM_METRIC:
+        case wxMM_METRIC:
           SetLogicalScale( m_mm_to_pix_x, m_mm_to_pix_y );
           break;
-        case MM_LOMETRIC:
+        case wxMM_LOMETRIC:
           SetLogicalScale( m_mm_to_pix_x/10.0, m_mm_to_pix_y/10.0 );
           break;
         default:
-        case MM_TEXT:
+        case wxMM_TEXT:
           SetLogicalScale( 1.0, 1.0 );
           break;
     }
 /*  we don't do this mega optimisation
-    if (mode != MM_TEXT)
+    if (mode != wxMM_TEXT)
     {
         m_needComputeScaleX = TRUE;
         m_needComputeScaleY = TRUE;

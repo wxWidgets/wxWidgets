@@ -32,7 +32,6 @@ class MyFrame: public wxFrame
     MyCanvas *canvas;
     MyFrame(wxFrame *parent, const wxString& title, const wxPoint& pos, const wxSize& size);
 
-    bool OnClose(void);
     void OnActivate(bool) {}
     void OnLoadFile(wxCommandEvent& event);
     void OnSaveFile(wxCommandEvent& event);

@@ -51,6 +51,7 @@ BEGIN_EVENT_TABLE(wxGenericFontDialog, wxDialog)
 	EVT_CHOICE(wxID_FONT_COLOUR, wxGenericFontDialog::OnChangeFont)
 	EVT_CHOICE(wxID_FONT_SIZE, wxGenericFontDialog::OnChangeFont)
 	EVT_PAINT(wxGenericFontDialog::OnPaint)
+	EVT_CLOSE(wxGenericFontDialog::OnCloseWindow)
 END_EVENT_TABLE()
 
 #endif
@@ -132,10 +133,9 @@ wxGenericFontDialog::~wxGenericFontDialog(void)
 {
 }
 
-bool wxGenericFontDialog::OnClose(void)
+void wxGenericFontDialog::OnCloseWindow(wxCloseEvent& event)
 {
-  Show(FALSE);
-  return FALSE;
+  EndModal(wxID_CANCEL);
 }
  
 bool wxGenericFontDialog::Create(wxWindow *parent, wxFontData *data)

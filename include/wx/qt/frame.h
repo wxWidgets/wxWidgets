@@ -61,8 +61,6 @@ public:
   void GetPosition(int *x, int *y) const ;
   void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
 
-  virtual bool OnClose();
-
   void OnSize(wxSizeEvent& event);
   void OnMenuHighlight(wxMenuEvent& event);
   void OnActivate(wxActivateEvent& event);

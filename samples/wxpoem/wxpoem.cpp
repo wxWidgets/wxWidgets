@@ -47,6 +47,13 @@
 #include <string.h>
 #include <time.h>
 
+#ifdef __WINDOWS__
+#include <windows.h>
+#ifdef DrawText
+#undef DrawText
+#endif
+#endif
+
 #define         buf_size 10000
 #define         DEFAULT_POETRY_DAT "wxpoem"
 #define         DEFAULT_POETRY_IND "wxpoem"

@@ -60,7 +60,6 @@ class MyFrame: public wxFrame
     void OnIconTextView(wxCommandEvent& event);
     void OnSmallIconView(wxCommandEvent& event);
     void OnSmallIconTextView(wxCommandEvent& event);
-    bool OnClose(void) { return TRUE; }
     void OnDeselectAll(wxCommandEvent& event);
     void OnSelectAll(wxCommandEvent& event);
 

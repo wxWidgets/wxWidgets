@@ -55,7 +55,7 @@ class MyFrame: public wxDocParentFrame
 
   MyCanvas *CreateCanvas(wxView *view, wxFrame *parent);
   void OnSize(wxSizeEvent& event);
-  bool OnClose(void);
+  void OnCloseWindow(wxCloseEvent& event);
   void OnAbout(wxCommandEvent& event);
 
 DECLARE_EVENT_TABLE()

@@ -47,7 +47,6 @@ public:
 public:
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
-	bool OnClose(void) { return TRUE; }
 
    DECLARE_EVENT_TABLE()
     

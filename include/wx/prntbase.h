@@ -173,7 +173,7 @@ public:
     long style = wxDEFAULT_FRAME_STYLE, const wxString& name = "frame");
   ~wxPreviewFrame();
 
-  bool OnClose();
+  void OnCloseWindow(wxCloseEvent& event);
   virtual void Initialize();
   virtual void CreateCanvas();
   virtual void CreateControlBar();
@@ -182,6 +182,8 @@ protected:
   wxWindow*             m_previewCanvas;
   wxPreviewControlBar*  m_controlBar;
   wxPrintPreviewBase*   m_printPreview;
+
+DECLARE_EVENT_TABLE()
 };
 
 /*

@@ -263,7 +263,8 @@ void OwnerDrawnFrame::OnQuit(wxCommandEvent& event)
 
 void OwnerDrawnFrame::OnAbout(wxCommandEvent& event)
 {
-  wxMessageDialog dialog(this, "Demo of owner-drawn controls\n"
+  wxMessageDialog dialog(this,
+                         "Demo of owner-drawn controls\n",
                          "About wxOwnerDrawn", wxYES_NO | wxCANCEL);
   dialog.ShowModal();
 }

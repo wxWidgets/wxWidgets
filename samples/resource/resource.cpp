@@ -173,13 +173,6 @@ void MyFrame::OnTestDialog(wxCommandEvent& WXUNUSED(event) )
       dialog->Close(TRUE);
 }
 
-bool MyFrame::OnClose(void)
-{
-  Show(FALSE);
-
-  return TRUE;
-}
-
 BEGIN_EVENT_TABLE(MyDialog, wxDialog)
   //	EVT_BUTTON(RESOURCE_OK, MyDialog::OnOk)
 	EVT_BUTTON(ID_BUTTON109, MyDialog::OnCancel)

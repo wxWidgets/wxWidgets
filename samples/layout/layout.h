@@ -29,7 +29,6 @@ class MyFrame: public wxFrame
     MyWindow *canvas;
     MyFrame(wxFrame *frame, char *title, int x, int y, int w, int h);
     void OnSize(wxSizeEvent& event);
-    bool OnClose(void);
     void Draw(wxDC& dc, bool draw_bitmaps = TRUE);
 
     void LoadFile(wxCommandEvent& event);
@@ -68,7 +67,6 @@ class SizerFrame: public wxFrame
     wxPanel *panel;
     SizerFrame(wxFrame *frame, char *title, int x, int y, int w, int h);
     void OnSize(wxSizeEvent& event);
-    bool OnClose(void);
 
    DECLARE_EVENT_TABLE()
 };

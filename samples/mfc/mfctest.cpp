@@ -93,7 +93,6 @@ class MyChild: public wxFrame
     MyCanvas *canvas;
     MyChild(wxFrame *frame, const wxString& title, const wxPoint& pos, const wxSize& size, const long style);
     ~MyChild(void);
-    bool OnClose(void);
 
     void OnQuit(wxCommandEvent& event);
     void OnNew(wxCommandEvent& event);
@@ -375,12 +374,6 @@ void MyChild::OnActivate(wxActivateEvent& event)
   if (event.GetActive() && canvas)
     canvas->SetFocus();
 }
-
-bool MyChild::OnClose(void)
-{
-  return TRUE;
-}
-
 
 // Dummy MFC window for specifying a valid main window to MFC, using
 // a wxWindows HWND.

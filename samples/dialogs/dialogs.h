@@ -26,7 +26,6 @@ class MyFrame: public wxFrame
 { public:
     MyFrame(wxWindow *parent, const wxString& title, const wxPoint& pos,
 		const wxSize& size);
-    bool OnClose(void) { return TRUE; }
 
 	void ChooseColour(wxCommandEvent& event);
 	void ChooseFont(wxCommandEvent& event);

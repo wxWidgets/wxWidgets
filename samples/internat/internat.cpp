@@ -54,8 +54,7 @@ public:
   void OnAbout(wxCommandEvent& event);
   void OnPlay(wxCommandEvent& event);
   void OnOpen(wxCommandEvent& event);
-  bool OnClose() { return TRUE; }
-  
+
   DECLARE_EVENT_TABLE()
 };
 
