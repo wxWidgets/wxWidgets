@@ -299,11 +299,11 @@ HBITMAP wxDIB::ConvertToBitmap(const BITMAPINFO *pbmi, HDC hdc, void *bits)
 
         bits = (char *)pbmih + sizeof(*pbmih) + numColors*sizeof(RGBQUAD);
     }
-
+    HDC tmphdc = hdc;
+    if (!hdc) tmphdc = ScreenHDC();
     HBITMAP hbmp = ::CreateDIBitmap
                      (
-                        hdc ? hdc           // create bitmap compatible
-                            : ScreenHDC(),  //  with this DC
+                        tmphdc,             // create bitmap compatible with this DC
                         pbmih,              // used to get size &c
                         CBM_INIT,           // initialize bitmap bits too
                         bits,               // ... using this data
