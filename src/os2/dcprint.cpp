@@ -33,25 +33,30 @@ IMPLEMENT_CLASS(wxPrinterDC, wxDC)
 
 
 // This form is deprecated
-wxPrinterDC::wxPrinterDC(const wxString& driver_name, const wxString& device_name, const wxString& file, bool interactive, int orientation)
+wxPrinterDC::wxPrinterDC(
+  const wxString&                   rsDriverName
+, const wxString&                   rsDeviceName
+, const wxString&                   rsFile
+, bool                              bInteractive
+, int                               nOrientation
+)
 {
     LONG            lType = 0;
-    HAB             hab = 0;
-    DEVOPENSTRUC    devOpen = { (char*)device_name.c_str()
-                               ,(char*)driver_name.c_str()
-                               ,NULL
-                               ,NULL
-                               ,NULL
-                               ,NULL
-                               ,NULL
-                               ,NULL
-                               ,NULL
-                              };
+    DEVOPENSTRUC    vDevOpen = { (char*)rsDeviceName.c_str()
+                                ,(char*)rsDriverName.c_str()
+                                ,NULL
+                                ,NULL
+                                ,NULL
+                                ,NULL
+                                ,NULL
+                                ,NULL
+                                ,NULL
+                               };
 
-    m_isInteractive = interactive;
+    m_isInteractive = bInteractive;
 
-    if (!file.IsNull() && file != wxT(""))
-        m_printData.SetFilename(file);
+    if (!rsFile.IsNull() && rsFile != wxT(""))
+        m_printData.SetFilename(rsFile);
 
 /*
     Implement PM's version of this
@@ -88,24 +93,25 @@ wxPrinterDC::wxPrinterDC(const wxString& driver_name, const wxString& device_nam
     else
 #endif
 */
-        if ((!driver_name.IsNull() && driver_name != wxT("")) &&
-            (!device_name.IsNull() && device_name != wxT("")) &&
-            (!file.IsNull() && file != wxT("")))
+        if ((!rsDriverName.IsNull() && rsDriverName != wxT("")) &&
+            (!rsDeviceName.IsNull() && rsDeviceName != wxT("")) &&
+            (!rsFile.IsNull() && rsFile != wxT("")))
         {
-            m_hDC = (WXHDC) ::DevOpenDC( hab
+            m_hDC = (WXHDC) ::DevOpenDC( vHabmain
                                         ,OD_QUEUED
                                         ,"*"
                                         ,5L
-                                        ,(PDEVOPENDATA)&devOpen
+                                        ,(PDEVOPENDATA)&vDevOpen
                                         ,NULLHANDLE
                                        );
             m_ok = m_hDC ? TRUE: FALSE;
         }
         else
         {
-            wxPrintData printData;
-            printData.SetOrientation(orientation);
-            m_hDC = wxGetPrinterDC(printData);
+            wxPrintData             vPrintData;
+
+            vPrintData.SetOrientation(nOrientation);
+            m_hDC = wxGetPrinterDC(vPrintData);
             m_ok = m_hDC ? TRUE: FALSE;
         }
 
@@ -117,46 +123,51 @@ wxPrinterDC::wxPrinterDC(const wxString& driver_name, const wxString& device_nam
         }
         SetBrush(*wxBLACK_BRUSH);
         SetPen(*wxBLACK_PEN);
-}
+} // end of wxPrinterDC::wxPrinterDC
 
-wxPrinterDC::wxPrinterDC(const wxPrintData& printData)
+wxPrinterDC::wxPrinterDC(
+  const wxPrintData&                rPrintData
+)
 {
-    m_printData = printData;
-
+    m_printData = rPrintData;
     m_isInteractive = FALSE;
-
-    m_hDC = wxGetPrinterDC(printData);
+    m_hDC = wxGetPrinterDC(rPrintData);
     m_ok = (m_hDC != 0);
-
     if (m_hDC)
         SetMapMode(wxMM_TEXT);
-
     SetBrush(*wxBLACK_BRUSH);
     SetPen(*wxBLACK_PEN);
-}
+} // end of wxPrinterDC::wxPrinterDC
 
-
-wxPrinterDC::wxPrinterDC(WXHDC theDC)
+wxPrinterDC::wxPrinterDC(
+  WXHDC                             hTheDC
+)
 {
     m_isInteractive = FALSE;
-
-    m_hDC = theDC;
+    m_hDC = hTheDC;
     m_ok = TRUE;
     if (m_hDC)
     {
-        //     int width = GetDeviceCaps(m_hDC, VERTRES);
-        //     int height = GetDeviceCaps(m_hDC, HORZRES);
         SetMapMode(wxMM_TEXT);
     }
     SetBrush(*wxBLACK_BRUSH);
     SetPen(*wxBLACK_PEN);
-}
+} // end of wxPrinterDC::wxPrinterDC
 
-wxPrinterDC::~wxPrinterDC(void)
+void wxPrinterDC::Init()
 {
-}
+    if (m_hDC)
+    {
+        SetMapMode(wxMM_TEXT);
 
-bool wxPrinterDC::StartDoc(const wxString& message)
+        SetBrush(*wxBLACK_BRUSH);
+        SetPen(*wxBLACK_PEN);
+    }
+} // end of wxPrinterDC::Init
+
+bool wxPrinterDC::StartDoc(
+  const wxString&                   rsMessage
+)
 {
 /* TODO:  PM's implementation
    DOCINFO docinfo;
@@ -203,29 +214,32 @@ bool wxPrinterDC::StartDoc(const wxString& message)
     return (ret > 0);
 */
     return(TRUE);
-}
+} // end of wxPrinterDC::StartDoc
 
-void wxPrinterDC::EndDoc(void)
+void wxPrinterDC::EndDoc()
 {
 //    if (m_hDC) ::EndDoc((HDC) m_hDC);
-}
+} // end of wxPrinterDC::EndDoc
 
-void wxPrinterDC::StartPage(void)
+void wxPrinterDC::StartPage()
 {
 //    if (m_hDC)
 //        ::StartPage((HDC) m_hDC);
-}
+} // end of wxPrinterDC::StartPage
 
-void wxPrinterDC::EndPage(void)
+void wxPrinterDC::EndPage()
 {
 //    if (m_hDC)
 //        ::EndPage((HDC) m_hDC);
-}
+} // end of wxPrinterDC::EndPage
 
 // Returns default device and port names
-static bool wxGetDefaultDeviceName(wxString& deviceName, wxString& portName)
+static bool wxGetDefaultDeviceName(
+  wxString&                         rsDeviceName
+, wxString&                         rsPortName
+)
 {
-    deviceName = "";
+    rsDeviceName = "";
 /*
     LPDEVNAMES  lpDevNames;
     LPSTR       lpszDriverName;
@@ -279,10 +293,12 @@ static bool wxGetDefaultDeviceName(wxString& deviceName, wxString& portName)
     return ( deviceName != wxT("") );
 */
     return(TRUE);
-}
+} // end of wxGetDefaultDeviceName
 
 // Gets an HDC for the specified printer configuration
-WXHDC WXDLLEXPORT wxGetPrinterDC(const wxPrintData& printDataConst)
+WXHDC WXDLLEXPORT wxGetPrinterDC(
+  const wxPrintData&                rPrintDataConst
+)
 {
     HDC   hDC = NULLHANDLE;
 /*
@@ -328,6 +344,42 @@ WXHDC WXDLLEXPORT wxGetPrinterDC(const wxPrintData& printDataConst)
         GlobalUnlock(hDevMode);
 */
     return (WXHDC) hDC;
-}
+} // end of wxGetPrinterDC
+
+void wxPrinterDC::DoDrawBitmap(
+  const wxBitmap&                   rBmp
+, wxCoord                           vX
+, wxCoord                           vY
+, bool                              bUseMask
+)
+{
+    wxCHECK_RET( rBmp.Ok(), _T("invalid bitmap in wxPrinterDC::DrawBitmap") );
+
+    int                             nWidth  = rBmp.GetWidth();
+    int                             nHeight = rBmp.GetHeight();
+
+    // TODO:
+
+} // end of wxPrinterDC::DoDrawBitmap
+
+bool wxPrinterDC::DoBlit(
+  wxCoord                           vXdest
+, wxCoord                           vYdest
+, wxCoord                           vWidth
+, wxCoord                           vHeight
+, wxDC*                             pSource
+, wxCoord                           vXsrc
+, wxCoord                           vYsrc
+, int                               nRop
+, bool                              bUseMask
+)
+{
+    bool                            bSuccess = TRUE;
+
+    // TODO:
+
+    return bSuccess;
+} // end of wxPrintDC::DoBlit
+
 
 #endif //wxUSE_PRINTING_ARCHITECTURE

@@ -201,10 +201,10 @@ EXPORTS
       __ct__12wxColourDataFRC12wxColourData
       ;wxPrintData::operator=(const wxPrintSetupData&)
       __as__11wxPrintDataFRC16wxPrintSetupData
-      ;wxConstructorForwxPrintDialogData()
-      wxConstructorForwxPrintDialogData__Fv
       ;wxPrintData::~wxPrintData()
       __dt__11wxPrintDataFv
+      ;wxConstructorForwxPrintDialogData()
+      wxConstructorForwxPrintDialogData__Fv
       ;wxPageSetupDialogData::wxPageSetupDialogData()
       __ct__21wxPageSetupDialogDataFv
       ;wxPrintDialogData::wxPrintDialogData()
@@ -6804,16 +6804,12 @@ EXPORTS
       ExtractWildcard__16wxGenericDirCtrlFRC8wxStringiR8wxStringT3
   ;From object file:  ..\generic\dragimgg.cpp
     ;PUBDEFs (Symbols available from object file):
-      ;wxGenericDragImage::Create(const wxBitmap&,const wxCursor&,const wxPoint&)
-      Create__18wxGenericDragImageFRC8wxBitmapRC8wxCursorRC7wxPoint
-      ;wxGenericDragImage::Move(const wxPoint&)
-      Move__18wxGenericDragImageFRC7wxPoint
       ;wxGenericDragImage::BeginDrag(const wxPoint&,wxWindow*,unsigned long,wxRect*)
       BeginDrag__18wxGenericDragImageFRC7wxPointP8wxWindowUlP6wxRect
+      ;wxGenericDragImage::Move(const wxPoint&)
+      Move__18wxGenericDragImageFRC7wxPoint
       ;wxGenericDragImage::~wxGenericDragImage()
       __dt__18wxGenericDragImageFv
-      ;wxGenericDragImage::Create(const wxIcon&,const wxCursor&,const wxPoint&)
-      Create__18wxGenericDragImageFRC6wxIconRC8wxCursorRC7wxPoint
       ;wxGenericDragImage::BeginDrag(const wxPoint&,wxWindow*,wxWindow*)
       BeginDrag__18wxGenericDragImageFRC7wxPointP8wxWindowT2
       ;wxGenericDragImage::Show()
@@ -6823,28 +6819,32 @@ EXPORTS
       ;wxGenericDragImage::Create(const wxTreeCtrl&,wxTreeItemId&)
       Create__18wxGenericDragImageFRC10wxTreeCtrlR12wxTreeItemId
       __vft18wxGenericDragImage8wxObject
+      ;wxGenericDragImage::Create(const wxCursor&)
+      Create__18wxGenericDragImageFRC8wxCursor
       ;wxConstructorForwxGenericDragImage()
       wxConstructorForwxGenericDragImage__Fv
       ;wxGenericDragImage::RedrawImage(const wxPoint&,const wxPoint&,unsigned long,unsigned long)
       RedrawImage__18wxGenericDragImageFRC7wxPointT1UlT3
-      ;wxGenericDragImage::Create(const wxString&,const wxCursor&,const wxPoint&)
-      Create__18wxGenericDragImageFRC8wxStringRC8wxCursorRC7wxPoint
       ;wxGenericDragImage::GetImageRect(const wxPoint&) const
       GetImageRect__18wxGenericDragImageCFRC7wxPoint
       ;wxGenericDragImage::Init()
       Init__18wxGenericDragImageFv
       ;wxGenericDragImage::EndDrag()
       EndDrag__18wxGenericDragImageFv
+      ;wxGenericDragImage::Create(const wxString&,const wxCursor&)
+      Create__18wxGenericDragImageFRC8wxStringRC8wxCursor
+      ;wxGenericDragImage::Create(const wxBitmap&,const wxCursor&)
+      Create__18wxGenericDragImageFRC8wxBitmapRC8wxCursor
       ;wxGenericDragImage::UpdateBackingFromWindow(wxDC&,wxMemoryDC&,const wxRect&,const wxRect&) const
       UpdateBackingFromWindow__18wxGenericDragImageCFR4wxDCR10wxMemoryDCRC6wxRectT3
-      ;wxGenericDragImage::Create(const wxCursor&,const wxPoint&)
-      Create__18wxGenericDragImageFRC8wxCursorRC7wxPoint
-      ;wxGenericDragImage::DoDrawImage(wxDC&,const wxPoint&) const
-      DoDrawImage__18wxGenericDragImageCFR4wxDCRC7wxPoint
       ;wxGenericDragImage::Create(const wxListCtrl&,long)
       Create__18wxGenericDragImageFRC10wxListCtrll
+      ;wxGenericDragImage::DoDrawImage(wxDC&,const wxPoint&) const
+      DoDrawImage__18wxGenericDragImageCFR4wxDCRC7wxPoint
       ;wxGenericDragImage::sm_classwxGenericDragImage
       sm_classwxGenericDragImage__18wxGenericDragImage
+      ;wxGenericDragImage::Create(const wxIcon&,const wxCursor&)
+      Create__18wxGenericDragImageFRC6wxIconRC8wxCursor
   ;From object file:  ..\generic\fontdlgg.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxGenericFontDialog::OnCloseWindow(wxCloseEvent&)
@@ -11037,6 +11037,8 @@ EXPORTS
     ;PUBDEFs (Symbols available from object file):
       ;wxConstructorForwxPaintDC()
       wxConstructorForwxPaintDC__Fv
+      ;wxWindowDC::InitDC()
+      InitDC__10wxWindowDCFv
       ;wxArrayDCInfo::DoCopy(const wxArrayDCInfo&)
       DoCopy__13wxArrayDCInfoFRC13wxArrayDCInfo
       ;wxArrayDCInfo::Add(const wxPaintDCInfo&)
@@ -11047,7 +11049,8 @@ EXPORTS
       __as__13wxArrayDCInfoFRC13wxArrayDCInfo
       ;wxClientDC::wxClientDC(wxWindow*)
       __ct__10wxClientDCFP8wxWindow
-      __vft10wxWindowDC8wxObject
+      ;wxPaintDC::FindDCInCache(wxWindow*)
+      FindDCInCache__9wxPaintDCFP8wxWindow
       ;wxArrayDCInfo::Insert(const wxPaintDCInfo&,unsigned int)
       Insert__13wxArrayDCInfoFRC13wxPaintDCInfoUi
       ;wxConstructorForwxWindowDC()
@@ -11066,15 +11069,10 @@ EXPORTS
       FindInCache__9wxPaintDCCFPUi
       ;wxArrayDCInfo::DoEmpty()
       DoEmpty__13wxArrayDCInfoFv
-      ;wxWindowDC::~wxWindowDC()
-      __dt__10wxWindowDCFv
-      ;wxClientDC::~wxClientDC()
-      __dt__10wxClientDCFv
       ;wxClientDC::sm_classwxClientDC
       sm_classwxClientDC__10wxClientDC
       ;wxPaintDC::sm_classwxPaintDC
       sm_classwxPaintDC__9wxPaintDC
-      __vft10wxClientDC8wxObject
       __vft9wxPaintDC8wxObject
       ;wxArrayDCInfo::~wxArrayDCInfo()
       __dt__13wxArrayDCInfoFv
@@ -11096,24 +11094,30 @@ EXPORTS
       ;wxMemoryDC::SelectObject(const wxBitmap&)
       SelectObject__10wxMemoryDCFRC8wxBitmap
       __vft10wxMemoryDC8wxObject
+      ;wxMemoryDC::Init()
+      Init__10wxMemoryDCFv
       ;wxMemoryDC::DoGetSize(int*,int*) const
       DoGetSize__10wxMemoryDCCFPiT1
       ;wxMemoryDC::wxMemoryDC(wxDC*)
       __ct__10wxMemoryDCFP4wxDC
+      ;wxMemoryDC::DoDrawRectangle(int,int,int,int)
+      DoDrawRectangle__10wxMemoryDCFiN31
       ;wxMemoryDC::wxMemoryDC()
       __ct__10wxMemoryDCFv
       ;wxMemoryDC::sm_classwxMemoryDC
       sm_classwxMemoryDC__10wxMemoryDC
       ;wxConstructorForwxMemoryDC()
       wxConstructorForwxMemoryDC__Fv
-      ;wxMemoryDC::~wxMemoryDC()
-      __dt__10wxMemoryDCFv
+      ;wxMemoryDC::CreateCompatible(wxDC*)
+      CreateCompatible__10wxMemoryDCFP4wxDC
   ;From object file:  ..\os2\dcprint.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxPrinterDC::EndDoc()
       EndDoc__11wxPrinterDCFv
       ;wxPrinterDC::EndPage()
       EndPage__11wxPrinterDCFv
+      ;wxPrinterDC::DoBlit(int,int,int,int,wxDC*,int,int,int,unsigned long)
+      DoBlit__11wxPrinterDCFiN31P4wxDCN31Ul
       ;wxGetPrinterDC(const wxPrintData&)
       wxGetPrinterDC__FRC11wxPrintData
       ;wxPrinterDC::sm_classwxPrinterDC
@@ -11127,17 +11131,16 @@ EXPORTS
       StartPage__11wxPrinterDCFv
       ;wxPrinterDC::StartDoc(const wxString&)
       StartDoc__11wxPrinterDCFRC8wxString
+      ;wxPrinterDC::DoDrawBitmap(const wxBitmap&,int,int,unsigned long)
+      DoDrawBitmap__11wxPrinterDCFRC8wxBitmapiT2Ul
       ;wxPrinterDC::wxPrinterDC(const wxPrintData&)
       __ct__11wxPrinterDCFRC11wxPrintData
-      ;wxPrinterDC::~wxPrinterDC()
-      __dt__11wxPrinterDCFv
+      ;wxPrinterDC::Init()
+      Init__11wxPrinterDCFv
   ;From object file:  ..\os2\dcscreen.cpp
     ;PUBDEFs (Symbols available from object file):
-      ;wxScreenDC::~wxScreenDC()
-      __dt__10wxScreenDCFv
       ;wxConstructorForwxScreenDC()
       wxConstructorForwxScreenDC__Fv
-      __vft10wxScreenDC8wxObject
       ;wxScreenDC::sm_classwxScreenDC
       sm_classwxScreenDC__10wxScreenDC
       ;wxScreenDC::wxScreenDC()

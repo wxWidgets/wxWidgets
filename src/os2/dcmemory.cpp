@@ -28,8 +28,37 @@ IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC, wxDC)
 
 wxMemoryDC::wxMemoryDC(void)
 {
-    ERRORID                         vError;
-    wxString                        sError;
+    CreateCompatible(NULL);
+    Init();
+} // end of wxMemoryDC::wxMemoryDC
+
+wxMemoryDC::wxMemoryDC(
+  wxDC*                             pOldDC
+)
+{
+    pOldDC->BeginDrawing();
+    CreateCompatible(pOldDC);
+    pOldDC->EndDrawing();
+    Init();
+} // end of wxMemoryDC::wxMemoryDC
+
+void wxMemoryDC::Init()
+{
+    if (m_ok)
+    {
+        SetBrush(*wxWHITE_BRUSH);
+        SetPen(*wxBLACK_PEN);
+
+        // the background mode is only used for text background and is set in
+        // DrawText() to OPAQUE as required, otherwise always TRANSPARENT
+        ::GpiSetBackMix( GetHPS(), BM_LEAVEALONE );
+    }
+} // end of wxMemoryDC::Init
+
+bool wxMemoryDC::CreateCompatible(
+  wxDC*                             pDC
+)
+{
     HDC                             hDC;
     HPS                             hPS;
     DEVOPENSTRUC                    vDOP = {0L, "DISPLAY", NULL, 0L, 0L, 0L, 0L, 0L, 0L};
@@ -48,35 +77,23 @@ wxMemoryDC::wxMemoryDC(void)
             m_hDC = hDC;
             m_ok = TRUE;
             m_bOwnsDC = TRUE;
-            SetBrush(*wxWHITE_BRUSH);
-            SetPen(*wxBLACK_PEN);
-            if (!::GpiCreateLogColorTable( m_hPS
-                                          ,0L
-                                          ,LCOLF_CONSECRGB
-                                          ,0L
-                                          ,(LONG)wxTheColourDatabase->m_nSize
-                                          ,(PLONG)wxTheColourDatabase->m_palTable
-                                         ))
-            {
-                vError = ::WinGetLastError(vHabmain);
-                sError = wxPMErrorToStr(vError);
-                wxLogError("Unable to set current color table. Error: %s\n", sError);
-            }
             //
-            // Set the color table to RGB mode
+            // Set the wxWindows color table
             //
-            if (!::GpiCreateLogColorTable( m_hPS
-                                          ,0L
-                                          ,LCOLF_RGB
-                                          ,0L
-                                          ,0L
-                                          ,NULL
-                                         ))
-            {
-                vError = ::WinGetLastError(vHabmain);
-                sError = wxPMErrorToStr(vError);
-                wxLogError("Unable to set current color table. Error: %s\n", sError);
-            }
+            ::GpiCreateLogColorTable( m_hPS
+                                     ,0L
+                                     ,LCOLF_CONSECRGB
+                                     ,0L
+                                     ,(LONG)wxTheColourDatabase->m_nSize
+                                     ,(PLONG)wxTheColourDatabase->m_palTable
+                                    );
+            ::GpiCreateLogColorTable( m_hPS
+                                     ,0L
+                                     ,LCOLF_RGB
+                                     ,0L
+                                     ,0L
+                                     ,NULL
+                                    );
         }
         else
         {
@@ -93,63 +110,14 @@ wxMemoryDC::wxMemoryDC(void)
         m_ok  = FALSE;
         m_bOwnsDC = FALSE;
     }
-} // end of wxMemoryDC::wxMemoryDC
-
-wxMemoryDC::wxMemoryDC(
-  wxDC*                             pOldDC
-)
-{
-    HDC                             hDC;
-    HPS                             hPS;
-    DEVOPENSTRUC                    vDOP = {0L, "DISPLAY", NULL, 0L, 0L, 0L, 0L, 0L, 0L};
-    SIZEL                           vSize = {0, 0};
-
-    pOldDC->BeginDrawing();
 
     //
-    // Create a memory device context
+    // As we created the DC, we must delete it in the dtor
     //
-    hDC = ::DevOpenDC(vHabmain, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&vDOP, GetHdcOf(*pOldDC));
-    if (hDC != DEV_ERROR)
-    {
-        hPS = ::GpiCreatePS(vHabmain, hDC, &vSize, PU_PELS | GPIT_MICRO | GPIA_ASSOC);
-        if (hPS != GPI_ERROR)
-        {
-            m_hPS = hPS;
-            m_hDC = hDC;
-            m_ok = TRUE;
-            m_bOwnsDC = TRUE;
-            pOldDC->EndDrawing();
-            SetBrush(*wxWHITE_BRUSH);
-            SetPen(*wxBLACK_PEN);
-        }
-        else
-        {
-            pOldDC->EndDrawing();
-            m_hPS = NULLHANDLE;
-            m_hDC = NULLHANDLE;
-            m_ok  = FALSE;
-            m_bOwnsDC = FALSE;
-        }
-    }
-    else
-    {
-        pOldDC->EndDrawing();
-        m_hPS = NULLHANDLE;
-        m_hDC = NULLHANDLE;
-        m_ok  = FALSE;
-        m_bOwnsDC = FALSE;
-    }
-} // end of wxMemoryDC::wxMemoryDC
-
-wxMemoryDC::~wxMemoryDC()
-{
-    m_vSelectedBitmap.SetSelectedInto(NULL);
-    if (m_hPS != NULLHANDLE)
-        ::GpiDestroyPS(m_hPS);
-    if (m_hDC != NULLHANDLE)
-        ::DevCloseDC(m_hDC);
-} // end of wxMemoryDC::~wxMemoryDC
+    m_bOwnsDC = TRUE;
+    m_ok = m_hDC != 0;
+    return m_ok;
+} // end of wxMemoryDC::CreateCompatible
 
 void wxMemoryDC::SelectObject(
   const wxBitmap&                   rBitmap
@@ -211,4 +179,12 @@ void wxMemoryDC::DoGetSize(
     *pHeight = m_vSelectedBitmap.GetHeight();
 } // end of wxMemoryDC::DoGetSize
 
-
+void wxMemoryDC::DoDrawRectangle(
+  wxCoord                           vX
+, wxCoord                           vY
+, wxCoord                           vWidth
+, wxCoord                           vHeight
+)
+{
+    wxDC::DoDrawRectangle(vX, vY, vWidth, vHeight);
+} // end of wxMemoryDC::DoDrawRectangle

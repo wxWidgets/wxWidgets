@@ -96,21 +96,24 @@ wxWindowDC::wxWindowDC(
 
     m_pCanvas = pTheCanvas;
     m_hDC = (WXHDC) ::WinOpenWindowDC(GetWinHwnd(pTheCanvas) );
-    m_nDCCount++;
+
     //
     // default under PM is that Window and Client DC's are the same
     // so we offer a separate Presentation Space to use for the
     // entire window.  Otherwise, calling BeginPaint will just create
     // chached-micro client presentation space
     //
-     m_hPS = GpiCreatePS( m_hab
-                         ,m_hDC
-                         ,&m_PageSize
-                         ,PU_PELS | GPIF_LONG | GPIA_ASSOC
-                        );
+     m_hPS = ::GpiCreatePS( vHabmain
+                           ,m_hDC
+                           ,&m_PageSize
+                           ,PU_PELS | GPIF_LONG | GPIA_ASSOC
+                          );
     ::GpiAssociate(m_hPS, NULLHANDLE);
     ::GpiAssociate(m_hPS, m_hDC);
+
+    //
     // Set the wxWindows color table
+    //
     if (!::GpiCreateLogColorTable( m_hPS
                                   ,0L
                                   ,LCOLF_CONSECRGB
@@ -130,33 +133,25 @@ wxWindowDC::wxWindowDC(
                              ,0L
                              ,NULL
                             );
-    SetBackground(wxBrush(m_pCanvas->GetBackgroundColour(), wxSOLID));
     ::WinQueryWindowRect( GetWinHwnd(m_pCanvas)
                          ,&m_vRclPaint
                         );
-}
+    InitDC();
+} // end of wxWindowDC::wxWindowDC
 
-wxWindowDC::~wxWindowDC()
+void wxWindowDC::InitDC()
 {
-    if (m_pCanvas && m_hDC)
-    {
-        SelectOldObjects(m_hDC);
+    //
+    // The background mode is only used for text background and is set in
+    // DrawText() to OPAQUE as required, otherwise always TRANSPARENT,
+    //
+    ::GpiSetBackMix(GetHPS(), BM_LEAVEALONE);
 
-        //
-        // In PM one does not explicitly close or release an open WindowDC
-        // They automatically close with the window, unless explicitly detached
-        // but we need to destroy our PS
-        //
-        if(m_hPS)
-        {
-            ::GpiAssociate(m_hPS, NULLHANDLE);
-            ::GpiDestroyPS(m_hPS);
-        }
-        m_hPS = NULLHANDLE;
-        m_hDC = NULLHANDLE;
-    }
-    m_nDCCount--;
-}
+    //
+    // Default bg colour is pne of the window
+    //
+    SetBackground(wxBrush(m_pCanvas->GetBackgroundColour(), wxSOLID));
+} // end of wxWindowDC::InitDC
 
 // ----------------------------------------------------------------------------
 // wxClientDC
@@ -208,53 +203,17 @@ wxClientDC::wxClientDC(
                              ,NULL
                             );
     //
-    // Default mode is BM_LEAVEALONE so we make no call Set the mix
-    //
-    SetBackground(wxBrush( m_pCanvas->GetBackgroundColour()
-                          ,wxSOLID
-                         )
-                 );
-    //
     // Set the DC/PS rectangle
     //
     ::WinQueryWindowRect( GetWinHwnd(m_pCanvas)
                          ,&m_vRclPaint
                         );
+    InitDC();
 } // end of wxClientDC::wxClientDC
-
-wxClientDC::~wxClientDC()
-{
-    if ( m_pCanvas && GetHdc() )
-    {
-        SelectOldObjects(m_hDC);
-
-        //
-        // We don't explicitly release Device contexts in PM and
-        // the cached micro PS is already gone
-        //
-        m_hDC = 0;
-    }
-} // end of wxClientDC::~wxClientDC
 
 // ----------------------------------------------------------------------------
 // wxPaintDC
 // ----------------------------------------------------------------------------
-
-// VZ: initial implementation (by JACS) only remembered the last wxPaintDC
-//     created and tried to reuse - this was supposed to take care of a
-//     situation when a derived class OnPaint() calls base class OnPaint()
-//     because in this case ::BeginPaint() shouldn't be called second time.
-//
-//     I'm not sure how useful this is, however we must remember the HWND
-//     associated with the last HDC as well - otherwise we may (and will!) try
-//     to reuse the HDC for another HWND which is a nice recipe for disaster.
-//
-//     So we store a list of windows for which we already have the DC and not
-//     just one single hDC. This seems to work, but I'm really not sure about
-//     the usefullness of the whole idea - IMHO it's much better to not call
-//     base class OnPaint() at all, or, if we really want to allow it, add a
-//     "wxPaintDC *" parameter to wxPaintEvent which should be used if it's
-//     !NULL instead of creating a new DC.
 
 wxArrayDCInfo wxPaintDC::ms_cache;
 
@@ -269,7 +228,6 @@ wxPaintDC::wxPaintDC(
 )
 {
     wxCHECK_RET(pCanvas, wxT("NULL canvas in wxPaintDC ctor"));
-    RECTL                           vRect;
 
 #ifdef __WXDEBUG__
     if (g_isPainting <= 0)
@@ -301,10 +259,6 @@ wxPaintDC::wxPaintDC(
                              );
         if(hPS)
         {
-            POINTL                          vPoint[2];
-            LONG                            lControl;
-            LONG                            lColor;
-
             m_hOldPS = m_hPS;
             m_hPS = hPS;
             ::GpiCreateLogColorTable( m_hPS
@@ -332,8 +286,8 @@ wxPaintDC::wxPaintDC(
         m_hDC = (WXHDC) -1; // to satisfy those anonizmous efforts
         ms_cache.Add(new wxPaintDCInfo(m_pCanvas, this));
     }
-    SetBackground(wxBrush(m_pCanvas->GetBackgroundColour(), wxSOLID));
-}
+    InitDC();
+} // end of wxPaintDC::wxPaintDC
 
 wxPaintDC::~wxPaintDC()
 {
@@ -378,5 +332,24 @@ wxPaintDCInfo* wxPaintDC::FindInCache(
         }
     }
     return pInfo;
+} // end of wxPaintDC::FindInCache
+
+// find the entry for this DC in the cache (keyed by the window)
+WXHDC wxPaintDC::FindDCInCache(
+  wxWindow*                         pWin
+)
+{
+    wxPaintDCInfo*                  pInfo = NULL;
+    size_t                          nCache = ms_cache.GetCount();
+
+    for (size_t n = 0; n < nCache; n++)
+    {
+        pInfo = &ms_cache[n];
+        if (pInfo->m_hWnd == pWin->GetHWND())
+        {
+            return pInfo->m_hDC;
+        }
+    }
+    return 0;
 } // end of wxPaintDC::FindInCache
 

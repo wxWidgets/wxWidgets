@@ -143,16 +143,42 @@ wxDC::wxDC(void)
 
     m_bOwnsDC      = FALSE;
     m_hDC          = 0;
-    m_nDCCount     = 0;
     m_hOldPS       = NULL;
     m_hPS          = NULL;
     m_bIsPaintTime = FALSE; // True at Paint Time
     m_brush.GetColour().Set("WHITE");
-}
+} // end of wxDC::wxDC
 
 wxDC::~wxDC(void)
 {
-}
+    if ( m_hDC != 0 )
+    {
+        SelectOldObjects(m_hDC);
+
+        // if we own the HDC, we delete it, otherwise we just release it
+
+        if (m_bOwnsDC)
+        {
+            if(m_hPS)
+            {
+                ::GpiAssociate(m_hPS, NULLHANDLE);
+                ::GpiDestroyPS(m_hPS);
+            }
+            m_hPS = NULLHANDLE;
+            ::DevCloseDC((HDC)m_hDC);
+        }
+        else
+        {
+            //
+            // Just Dissacociate, not destroy if we don't own the DC
+            //
+            if(m_hPS)
+            {
+                ::GpiAssociate(m_hPS, NULLHANDLE);
+            }
+        }
+    }
+} // end of wxDC::~wxDC
 
 // This will select current objects out of the DC,
 // which is what you have to do before deleting the
@@ -187,7 +213,7 @@ void wxDC::SelectOldObjects(
     m_font            = wxNullFont;
     m_backgroundBrush = wxNullBrush;
     m_vSelectedBitmap = wxNullBitmap;
-}
+} // end of wxDC::SelectOldObjects
 
 // ---------------------------------------------------------------------------
 // clipping
