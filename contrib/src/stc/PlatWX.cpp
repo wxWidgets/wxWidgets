@@ -684,6 +684,7 @@ public:
         : wxListView(parent, id, pos, size, style)
     {}
 
+    
     void OnFocus(wxFocusEvent& event) {
         GetParent()->SetFocus();
         event.Skip();
@@ -692,7 +693,24 @@ public:
     void OnKillFocus(wxFocusEvent& WXUNUSED(event)) {
         // Do nothing.  Prevents base class from resetting the colors...
     }
+    
+#ifdef __WXMAC__
+    // For some reason I don't understand yet the focus doesn't really leave
+    // the listbox like it should, so if we get any events feed them back to
+    // the wxSTC
+    void OnKeyDown(wxKeyEvent& event) {
+        GetGrandParent()->GetEventHandler()->ProcessEvent(event);
+    }
+    void OnChar(wxKeyEvent& event) {
+        GetGrandParent()->GetEventHandler()->ProcessEvent(event);
+    }
 
+    // And we need to force the focus back when being destroyed
+    ~wxSTCListBox() {
+        GetGrandParent()->SetFocus();
+    }    
+#endif    
+    
 private:
     DECLARE_EVENT_TABLE()
 };
@@ -700,6 +718,10 @@ private:
 BEGIN_EVENT_TABLE(wxSTCListBox, wxListView)
     EVT_SET_FOCUS( wxSTCListBox::OnFocus)
     EVT_KILL_FOCUS(wxSTCListBox::OnKillFocus)
+#ifdef __WXMAC__
+    EVT_KEY_DOWN(  wxSTCListBox::OnKeyDown)
+    EVT_CHAR(      wxSTCListBox::OnChar)
+#endif
 END_EVENT_TABLE()
 
 
@@ -736,7 +758,7 @@ public:
     // immediately.
     bool Destroy() {
 #ifdef __WXMAC__
-        // There bottom edge of this window is not getting properly
+        // The bottom edge of this window is not getting properly
         // refreshed upon deletion, so help it out...
         wxWindow* p = GetParent();
         wxRect r(GetPosition(), GetSize());
