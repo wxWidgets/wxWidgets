@@ -333,6 +333,10 @@ public:
     // Extend event processing to search the view's event table
     virtual bool ProcessEvent(wxEvent& event);
 
+    // called when file format detection didn't work, can be overridden to do
+    // something in this case
+    virtual void OnOpenFileFailure() { wxFAIL_MSG(_T("file format mismatch")); }
+
     virtual wxDocument *CreateDocument(const wxString& path, long flags = 0);
     virtual wxView *CreateView(wxDocument *doc, long flags = 0);
     virtual void DeleteTemplate(wxDocTemplate *temp, long flags = 0);

@@ -641,9 +641,10 @@ wxString wxMenuItemBase::GetLabelFromText(const wxString& text)
 #if (GTK_MINOR_VERSION > 0)
     for ( const wxChar *pc = text.c_str(); *pc; pc++ )
     {
-        if ( *pc == wxT('_') )
+        if ( *pc == wxT('_') || *pc == wxT('&') )
         {
-            // this is the escape character for GTK+ - skip it
+            // '_' is the escape character for GTK+ and '&' is the one for
+            // wxWindows - skip both of them
             continue;
         }
 

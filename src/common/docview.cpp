@@ -806,7 +806,10 @@ void wxDocManager::OnFileNew(wxCommandEvent& WXUNUSED(event))
 
 void wxDocManager::OnFileOpen(wxCommandEvent& WXUNUSED(event))
 {
-    CreateDocument(wxString(""), 0);
+    if ( !CreateDocument(wxString(""), 0) )
+    {
+        OnOpenFileFailure();
+    }
 }
 
 void wxDocManager::OnFileRevert(wxCommandEvent& WXUNUSED(event))

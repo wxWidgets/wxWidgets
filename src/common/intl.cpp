@@ -79,7 +79,7 @@ typedef unsigned char size_t8;
             {
                 // Asserting a sizeof directly causes some compilers to
                 // issue a "using constant in a conditional expression" warning
-                size_t                   intsize = sizeof(int);
+                size_t intsize = sizeof(int);
 
                 wxASSERT_MSG( intsize == 4,
                               "size_t32 is incorrectly defined!" );
@@ -97,7 +97,7 @@ const size_t32 MSGCATALOG_MAGIC    = 0x950412de;
 const size_t32 MSGCATALOG_MAGIC_SW = 0xde120495;
 
 // extension of ".mo" files
-#define MSGCATALOG_EXTENSION  ".mo"
+#define MSGCATALOG_EXTENSION  _T(".mo")
 
 // ----------------------------------------------------------------------------
 // global functions
@@ -290,14 +290,20 @@ static wxString GetFullSearchPath(const wxChar *lang)
                    << wxPATH_SEP;
     }
 
+    // LC_PATH is a standard env var containing the search path for the .mo
+    // files
+    const wxChar *pszLcPath = wxGetenv("LC_PATH");
+    if ( pszLcPath != NULL )
+        searchPath << GetAllMsgCatalogSubdirs(pszLcPath, lang);
+
     // then take the current directory
     // FIXME it should be the directory of the executable
     searchPath << GetAllMsgCatalogSubdirs(wxT("."), lang) << wxPATH_SEP;
 
     // and finally add some standard ones
     searchPath
-        << GetAllMsgCatalogSubdirs(wxT("/usr/share/locale"), lang) << wxPATH_SEP
-        << GetAllMsgCatalogSubdirs(wxT("/usr/lib/locale"), lang) << wxPATH_SEP
+        << GetAllMsgCatalogSubdirs(wxT("/usr/share/locale"), lang)
+        << GetAllMsgCatalogSubdirs(wxT("/usr/lib/locale"), lang)
         << GetAllMsgCatalogSubdirs(wxT("/usr/local/share/locale"), lang);
 
     return searchPath;
@@ -313,14 +319,6 @@ bool wxMsgCatalog::Load(const wxChar *szDirPrefix, const wxChar *szName0, bool b
    wxString szName = szName0;
    if(szName.Find(wxT('.')) != -1) // contains a dot
       szName = szName.Left(szName.Find(wxT('.')));
-
-  // FIXME VZ: I forgot the exact meaning of LC_PATH - anyone to remind me?
-  // KB: search path where to find the mo files, probably : delimited
-#if 0
-  const wxChar *pszLcPath = wxGetenv("LC_PATH");
-  if ( pszLcPath != NULL )
-      strPath += pszLcPath + wxString(szDirPrefix) + MSG_PATH;
-#endif // 0
 
   wxString searchPath = GetFullSearchPath(szDirPrefix);
   const wxChar *sublocale = wxStrchr(szDirPrefix, wxT('_'));
@@ -343,7 +341,7 @@ bool wxMsgCatalog::Load(const wxChar *szDirPrefix, const wxChar *szName0, bool b
   // (we're using an object because we have several return paths)
 
   NoTransErr noTransErr;
-  wxLogVerbose(wxT("looking for catalog '%s' in path '%s'."),
+  wxLogVerbose(_("looking for catalog '%s' in path '%s'."),
                szName.c_str(), searchPath.c_str());
 
   wxString strFullName;
@@ -405,7 +403,8 @@ bool wxMsgCatalog::Load(const wxChar *szDirPrefix, const wxChar *szName0, bool b
   m_pszName = new wxChar[wxStrlen(szName) + 1];
   wxStrcpy(m_pszName, szName);
 
-  if (bConvertEncoding) ConvertEncoding();
+  if (bConvertEncoding)
+      ConvertEncoding();
 
   // everything is fine
   return TRUE;

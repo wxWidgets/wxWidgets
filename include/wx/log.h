@@ -298,6 +298,12 @@ protected:
     // empty everything
     void Clear();
 
+    // the translated titles for misc message boxes: only translate ones to
+    // avoid reentrancy problems later
+    wxString      m_error,
+                  m_warning,
+                  m_info;
+
     wxArrayString m_aMessages;      // the log message texts
     wxArrayInt    m_aSeverity;      // one of wxLOG_XXX values
     wxArrayLong   m_aTimes;         // the time of each message

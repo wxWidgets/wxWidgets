@@ -99,6 +99,9 @@ private:
     // the listctrl (not shown initially)
     wxListCtrl *m_listctrl;
 
+    // the translated "Details" string
+    static wxString ms_details;
+
     DECLARE_EVENT_TABLE()
 };
 
@@ -170,12 +173,22 @@ void wxLogTextCtrl::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
 
 wxLogGui::wxLogGui()
 {
+    // we must translate them here in the very beginning or we risk to have
+    // reentrancy problems when called from inside wxGetTranslation() leading
+    // to inifnite recursion
+    m_error = _("Error");
+    m_warning = _("Warning");
+    m_info = _("Information");
+
     Clear();
 }
 
 void wxLogGui::Clear()
 {
-    m_bErrors = m_bWarnings = FALSE;
+    m_bErrors =
+    m_bWarnings =
+    m_bHasMessages = FALSE;
+
     m_aMessages.Empty();
     m_aSeverity.Empty();
     m_aTimes.Empty();
@@ -198,15 +211,15 @@ void wxLogGui::Flush()
 
     long style;
     if ( m_bErrors ) {
-        title += _("Error");
+        title += m_error;
         style = wxICON_STOP;
     }
     else if ( m_bWarnings ) {
-        title += _("Warning");
+        title += m_warning;
         style = wxICON_EXCLAMATION;
     }
     else {
-        title += _("Information");
+        title += m_info;
         style = wxICON_INFORMATION;
     }
 
@@ -260,9 +273,6 @@ void wxLogGui::Flush()
         // no undisplayed messages whatsoever
         Clear();
     }
-
-    // do it here again
-    m_bHasMessages = FALSE;
 }
 
 // log all kinds of messages
@@ -653,6 +663,8 @@ wxLogWindow::~wxLogWindow()
 
 static const size_t MARGIN = 10;
 
+wxString wxLogDialog::ms_details;
+
 wxLogDialog::wxLogDialog(wxWindow *parent,
                          const wxArrayString& messages,
                          const wxArrayInt& severity,
@@ -661,6 +673,13 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
                          long style)
            : wxDialog(parent, -1, caption )
 {
+    if ( ms_details )
+    {
+        // ensure that we won't try to call wxGetTranslation() twice
+        ms_details = _T("&Details");
+        ms_details = wxGetTranslation(ms_details);
+    }
+
     size_t count = messages.GetCount();
     m_messages.Alloc(count);
     m_severity.Alloc(count);
@@ -690,9 +709,9 @@ wxLogDialog::wxLogDialog(wxWindow *parent,
     wxBoxSizer *sizerButtons = new wxBoxSizer(wxVERTICAL);
     wxBoxSizer *sizerAll = new wxBoxSizer(wxHORIZONTAL);
 
-    wxButton *btnOk = new wxButton(this, wxID_OK, _T("OK"));
+    wxButton *btnOk = new wxButton(this, wxID_OK, _("OK"));
     sizerButtons->Add(btnOk, 0, wxCENTRE|wxBOTTOM, MARGIN/2);
-    m_btnDetails = new wxButton(this, wxID_MORE, _T("&Details >>"));
+    m_btnDetails = new wxButton(this, wxID_MORE, ms_details + _T(" >>"));
     sizerButtons->Add(m_btnDetails, 0, wxCENTRE|wxTOP, MARGIN/2 - 1);
 
     wxIcon icon = wxTheApp->GetStdIcon((int)(style & wxICON_MASK));
@@ -743,13 +762,13 @@ void wxLogDialog::OnDetails(wxCommandEvent& WXUNUSED(event))
 
     if ( m_showingDetails )
     {
-        m_btnDetails->SetLabel(_T("&Details >>"));
+        m_btnDetails->SetLabel(ms_details + _T(">>"));
 
         sizer->Remove(m_listctrl);
     }
     else // show details now
     {
-        m_btnDetails->SetLabel(_T("<< &Details"));
+        m_btnDetails->SetLabel(wxString(_T("<< ")) + ms_details);
 
         if ( !m_listctrl )
         {
@@ -760,8 +779,10 @@ void wxLogDialog::OnDetails(wxCommandEvent& WXUNUSED(event))
                                         wxLC_REPORT |
                                         wxLC_NO_HEADER |
                                         wxLC_SINGLE_SEL);
-            m_listctrl->InsertColumn(0, _("Message"));
-            m_listctrl->InsertColumn(1, _("Time"));
+            // no need to translate these strings as they're not shown to the
+            // user anyhow (we use wxLC_NO_HEADER style)
+            m_listctrl->InsertColumn(0, _T("Message"));
+            m_listctrl->InsertColumn(1, _T("Time"));
 
             // prepare the imagelist
             static const int ICON_SIZE = 16;

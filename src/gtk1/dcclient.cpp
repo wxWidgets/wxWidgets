@@ -165,9 +165,9 @@ static GdkGC* wxGetPoolGC( GdkWindow *window, wxPoolGCType type )
             return wxGCPool[i].m_gc;
         }
     }
-    
+
     wxFAIL_MSG( wxT("No GC available") );
-    
+
     return (GdkGC*) NULL;
 }
 
@@ -181,7 +181,7 @@ static void wxFreePoolGC( GdkGC *gc )
             return;
         }
     }
-    
+
     wxFAIL_MSG( wxT("Wrong GC") );
 }
 
@@ -264,9 +264,9 @@ wxWindowDC::~wxWindowDC()
 void wxWindowDC::SetUpDC()
 {
     m_ok = TRUE;
-    
+
     wxASSERT_MSG( !m_penGC, wxT("GCs already created") );
-    
+
     if (m_isMemDC && (((wxMemoryDC*)this)->m_selected.GetDepth() == 1))
     {
         m_penGC = wxGetPoolGC( m_window, wxPEN_MONO );
@@ -300,27 +300,27 @@ void wxWindowDC::SetUpDC()
     m_pen.GetColour().CalcPixel( m_cmap );
     gdk_gc_set_foreground( m_penGC, m_pen.GetColour().GetColor() );
     gdk_gc_set_background( m_penGC, bg_col );
-    
+
     gdk_gc_set_line_attributes( m_penGC, 0, GDK_LINE_SOLID, GDK_CAP_NOT_LAST, GDK_JOIN_ROUND );
-    
+
     /* m_brushGC */
     m_brush.GetColour().CalcPixel( m_cmap );
     gdk_gc_set_foreground( m_brushGC, m_brush.GetColour().GetColor() );
     gdk_gc_set_background( m_brushGC, bg_col );
-    
+
     gdk_gc_set_fill( m_brushGC, GDK_SOLID );
-    
+
     /* m_bgGC */
     gdk_gc_set_background( m_bgGC, bg_col );
     gdk_gc_set_foreground( m_bgGC, bg_col );
 
     gdk_gc_set_fill( m_bgGC, GDK_SOLID );
-  
+
     /* ROPs */
     gdk_gc_set_function( m_textGC, GDK_COPY );
     gdk_gc_set_function( m_brushGC, GDK_COPY );
     gdk_gc_set_function( m_penGC, GDK_COPY );
-    
+
     /* clipping */
     gdk_gc_set_clip_rectangle( m_penGC, (GdkRectangle *) NULL );
     gdk_gc_set_clip_rectangle( m_brushGC, (GdkRectangle *) NULL );
@@ -530,16 +530,16 @@ void wxWindowDC::DoDrawPolygon( int n, wxPoint points[], wxCoord xoffset, wxCoor
         {
             if ((m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE) && (m_brush.GetStipple()->GetMask()))
             {
-                gdk_gc_set_ts_origin( m_textGC, 
-                                      m_deviceOriginX % m_brush.GetStipple()->GetWidth(), 
+                gdk_gc_set_ts_origin( m_textGC,
+                                      m_deviceOriginX % m_brush.GetStipple()->GetWidth(),
                                       m_deviceOriginY % m_brush.GetStipple()->GetHeight() );
                 gdk_draw_polygon( m_window, m_textGC, TRUE, gdkpoints, n );
                 gdk_gc_set_ts_origin( m_textGC, 0, 0 );
             } else
             if (m_brush.GetStyle() == wxSTIPPLE)
             {
-                gdk_gc_set_ts_origin( m_brushGC, 
-                                      m_deviceOriginX % m_brush.GetStipple()->GetWidth(), 
+                gdk_gc_set_ts_origin( m_brushGC,
+                                      m_deviceOriginX % m_brush.GetStipple()->GetWidth(),
                                       m_deviceOriginY % m_brush.GetStipple()->GetHeight() );
                 gdk_draw_polygon( m_window, m_brushGC, TRUE, gdkpoints, n );
                 gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
@@ -588,16 +588,16 @@ void wxWindowDC::DoDrawRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoord h
         {
             if ((m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE) && (m_brush.GetStipple()->GetMask()))
             {
-                gdk_gc_set_ts_origin( m_textGC, 
-                                      m_deviceOriginX % m_brush.GetStipple()->GetWidth(), 
+                gdk_gc_set_ts_origin( m_textGC,
+                                      m_deviceOriginX % m_brush.GetStipple()->GetWidth(),
                                       m_deviceOriginY % m_brush.GetStipple()->GetHeight() );
                 gdk_draw_rectangle( m_window, m_textGC, TRUE, xx, yy, ww, hh );
                 gdk_gc_set_ts_origin( m_textGC, 0, 0 );
             }
             else if (m_brush.GetStyle() == wxSTIPPLE)
             {
-                gdk_gc_set_ts_origin( m_brushGC, 
-                                      m_deviceOriginX % m_brush.GetStipple()->GetWidth(), 
+                gdk_gc_set_ts_origin( m_brushGC,
+                                      m_deviceOriginX % m_brush.GetStipple()->GetWidth(),
                                       m_deviceOriginY % m_brush.GetStipple()->GetHeight() );
                 gdk_draw_rectangle( m_window, m_brushGC, TRUE, xx, yy, ww, hh );
                 gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
@@ -664,8 +664,8 @@ void wxWindowDC::DoDrawRoundedRectangle( wxCoord x, wxCoord y, wxCoord width, wx
         {
             if ((m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE) && (m_brush.GetStipple()->GetMask()))
             {
-                gdk_gc_set_ts_origin( m_textGC, 
-                                      m_deviceOriginX % m_brush.GetStipple()->GetWidth(), 
+                gdk_gc_set_ts_origin( m_textGC,
+                                      m_deviceOriginX % m_brush.GetStipple()->GetWidth(),
                                       m_deviceOriginY % m_brush.GetStipple()->GetHeight() );
                 gdk_draw_rectangle( m_window, m_textGC, TRUE, xx+rr, yy, ww-dd+1, hh );
                 gdk_draw_rectangle( m_window, m_textGC, TRUE, xx, yy+rr, ww, hh-dd+1 );
@@ -677,8 +677,8 @@ void wxWindowDC::DoDrawRoundedRectangle( wxCoord x, wxCoord y, wxCoord width, wx
             }
             else if (m_brush.GetStyle() == wxSTIPPLE)
             {
-                gdk_gc_set_ts_origin( m_brushGC, 
-                                      m_deviceOriginX % m_brush.GetStipple()->GetWidth(), 
+                gdk_gc_set_ts_origin( m_brushGC,
+                                      m_deviceOriginX % m_brush.GetStipple()->GetWidth(),
                                       m_deviceOriginY % m_brush.GetStipple()->GetHeight() );
                 gdk_draw_rectangle( m_window, m_brushGC, TRUE, xx+rr, yy, ww-dd+1, hh );
                 gdk_draw_rectangle( m_window, m_brushGC, TRUE, xx, yy+rr, ww, hh-dd+1 );
@@ -736,16 +736,16 @@ void wxWindowDC::DoDrawEllipse( wxCoord x, wxCoord y, wxCoord width, wxCoord hei
         {
             if ((m_brush.GetStyle() == wxSTIPPLE_MASK_OPAQUE) && (m_brush.GetStipple()->GetMask()))
             {
-                gdk_gc_set_ts_origin( m_textGC, 
-                                      m_deviceOriginX % m_brush.GetStipple()->GetWidth(), 
+                gdk_gc_set_ts_origin( m_textGC,
+                                      m_deviceOriginX % m_brush.GetStipple()->GetWidth(),
                                       m_deviceOriginY % m_brush.GetStipple()->GetHeight() );
                 gdk_draw_arc( m_window, m_textGC, TRUE, xx, yy, ww, hh, 0, 360*64 );
                 gdk_gc_set_ts_origin( m_textGC, 0, 0 );
             }
             else if (m_brush.GetStyle() == wxSTIPPLE)
             {
-                gdk_gc_set_ts_origin( m_brushGC, 
-                                      m_deviceOriginX % m_brush.GetStipple()->GetWidth(), 
+                gdk_gc_set_ts_origin( m_brushGC,
+                                      m_deviceOriginX % m_brush.GetStipple()->GetWidth(),
                                       m_deviceOriginY % m_brush.GetStipple()->GetHeight() );
                 gdk_draw_arc( m_window, m_brushGC, TRUE, xx, yy, ww, hh, 0, 360*64 );
                 gdk_gc_set_ts_origin( m_brushGC, 0, 0 );
@@ -803,7 +803,7 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
         if (tmp.IsEmpty())
             return;
     }
-    
+
     /* scale bitmap if required */
     wxBitmap use_bitmap;
     if ((w != ww) || (h != hh))
@@ -846,7 +846,7 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
                 gdk_draw_rectangle( new_mask, gc, TRUE, 0, 0, ww, hh );
                 gdk_gc_unref( gc );
             }
-        
+
             if (is_mono)
             {
                 if (new_mask)
@@ -977,7 +977,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
 
     int old_logical_func = m_logicalFunction;
     SetLogicalFunction( logical_func );
-    
+
     if (use_bitmap_method)
     {
         /* scale/translate bitmap size */
@@ -1031,7 +1031,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
                 gdk_draw_rectangle( new_mask, gc, TRUE, 0, 0, bm_ww, bm_hh );
                 gdk_gc_unref( gc );
             }
-        
+
             if (is_mono)
             {
                 if (new_mask)
@@ -1054,7 +1054,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
 
         /* Draw XPixmap or XBitmap, depending on what the wxBitmap contains. For
            drawing a mono-bitmap (XBitmap) we use the current text GC */
-    
+
         if (is_mono)
             gdk_draw_bitmap( m_window, m_textGC, use_bitmap.GetBitmap(), xsrc, ysrc, xx, yy, ww, hh );
         else
@@ -1097,14 +1097,14 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
                for a different implementation of the same problem. */
 
             wxBitmap bitmap( width, height );
-            
+
             /* copy including child window contents */
             gdk_gc_set_subwindow( m_penGC, GDK_INCLUDE_INFERIORS );
             gdk_window_copy_area( bitmap.GetPixmap(), m_penGC, 0, 0,
                                   srcDC->GetWindow(),
                                   xsrc, ysrc, width, height );
             gdk_gc_set_subwindow( m_penGC, GDK_CLIP_BY_CHILDREN );
-                
+
             /* scale image */
             wxImage image( bitmap );
             image = image.Scale( ww, hh );
@@ -1705,13 +1705,13 @@ void wxWindowDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoo
     rect.y = YLOG2DEV(y);
     rect.width = XLOG2DEVREL(width);
     rect.height = YLOG2DEVREL(height);
-    
+
     if (!m_currentClippingRegion.IsNull())
         m_currentClippingRegion.Intersect( rect );
     else
         m_currentClippingRegion.Union( rect );
-        
-#if USE_PAINT_REGION    
+
+#if USE_PAINT_REGION
     if (!m_paintClippingRegion.IsNull())
         m_currentClippingRegion.Intersect( m_paintClippingRegion );
 #endif
@@ -1737,13 +1737,13 @@ void wxWindowDC::DoSetClippingRegionAsRegion( const wxRegion &region  )
     }
 
     if (!m_window) return;
-    
+
     if (!m_currentClippingRegion.IsNull())
         m_currentClippingRegion.Intersect( region );
     else
         m_currentClippingRegion.Union( region );
-    
-#if USE_PAINT_REGION    
+
+#if USE_PAINT_REGION
     if (!m_paintClippingRegion.IsNull())
         m_currentClippingRegion.Intersect( m_paintClippingRegion );
 #endif
@@ -1765,8 +1765,8 @@ void wxWindowDC::DestroyClippingRegion()
     wxDC::DestroyClippingRegion();
 
     m_currentClippingRegion.Clear();
-    
-#if USE_PAINT_REGION    
+
+#if USE_PAINT_REGION
     if (!m_paintClippingRegion.IsEmpty())
         m_currentClippingRegion.Union( m_paintClippingRegion );
 #endif
@@ -2023,12 +2023,16 @@ wxPaintDC::wxPaintDC( wxWindow *win )
         return;
         
     m_paintClippingRegion = win->GetUpdateRegion();
-    m_currentClippingRegion.Union( m_paintClippingRegion );
-        
-    gdk_gc_set_clip_region( m_penGC, m_paintClippingRegion.GetRegion() );
-    gdk_gc_set_clip_region( m_brushGC, m_paintClippingRegion.GetRegion() );
-    gdk_gc_set_clip_region( m_textGC, m_paintClippingRegion.GetRegion() );
-    gdk_gc_set_clip_region( m_bgGC, m_paintClippingRegion.GetRegion() );
+    GdkRegion *region = m_paintClippingRegion.GetRegion();
+    if ( region )
+    {
+        m_currentClippingRegion.Union( m_paintClippingRegion );
+
+        gdk_gc_set_clip_region( m_penGC, region );
+        gdk_gc_set_clip_region( m_brushGC, region );
+        gdk_gc_set_clip_region( m_textGC, region );
+        gdk_gc_set_clip_region( m_bgGC, region );
+    }
 #endif
 }
 
