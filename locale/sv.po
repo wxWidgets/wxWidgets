@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWindows-2.2.2\n"
-"POT-Creation-Date: 2000-09-16 13:11+0200\n"
+"POT-Creation-Date: 2001-01-27 13:50-0800\n"
 "PO-Revision-Date: 2000-09-06 02:02+0200\n"
 "Last-Translator: Jonas Rydberg <jor@mindless.com>\n"
 "Language-Team: wxWindows tranlators <wx-translators@wxwindows.org>\n"
@@ -82,17 +82,17 @@ msgstr "%i av %i"
 msgid "%s (or %s)"
 msgstr "%s (eller %s)"
 
-#: ../src/generic/logg.cpp:239
+#: ../src/generic/logg.cpp:243
 #, c-format
 msgid "%s Error"
 msgstr "%s Fel"
 
-#: ../src/generic/logg.cpp:247
+#: ../src/generic/logg.cpp:251
 #, c-format
 msgid "%s Information"
 msgstr "%s Information"
 
-#: ../src/generic/logg.cpp:243
+#: ../src/generic/logg.cpp:247
 #, c-format
 msgid "%s Warning"
 msgstr "%s Varning"
@@ -114,11 +114,11 @@ msgstr "%s är inte en ikonresursspecifikation"
 msgid "%s: ill-formed resource file syntax."
 msgstr "%s: felaktig resursfilsyntax."
 
-#: ../src/generic/logg.cpp:473 ../src/generic/tipdlg.cpp:170
+#: ../src/generic/logg.cpp:477 ../src/generic/tipdlg.cpp:170
 msgid "&Close"
 msgstr "&Stäng"
 
-#: ../src/generic/logg.cpp:685
+#: ../src/generic/logg.cpp:689
 msgid "&Details"
 msgstr "&Detaljer"
 
@@ -126,7 +126,7 @@ msgstr "&Detaljer"
 msgid "&Finish"
 msgstr "&Avsluta"
 
-#: ../src/generic/logg.cpp:474
+#: ../src/generic/logg.cpp:478
 msgid "&Log"
 msgstr "&Logga"
 
@@ -146,7 +146,7 @@ msgstr "&Upprepa"
 msgid "&Redo "
 msgstr "&Upprepa "
 
-#: ../src/generic/logg.cpp:469 ../src/generic/logg.cpp:770
+#: ../src/generic/logg.cpp:473 ../src/generic/logg.cpp:774
 msgid "&Save..."
 msgstr "&Spara..."
 
@@ -162,7 +162,7 @@ msgstr "&Ångra"
 msgid "&Undo "
 msgstr "&Ångra "
 
-#: ../src/msw/mdi.cpp:1280 ../src/msw/mdi.cpp:1287
+#: ../src/msw/mdi.cpp:1284 ../src/msw/mdi.cpp:1291 ../src/msw/window.cpp:2276
 msgid "&Window"
 msgstr "&Fönster"
 
@@ -186,7 +186,7 @@ msgstr "\"%s\" är inte ett korrekt numeriskt värde för flagga \"%s\"."
 msgid "'%s' is not a valid message catalog."
 msgstr "\"%s\" är inte en giltig meddelandekatalog."
 
-#: ../src/common/textfile.cpp:250
+#: ../src/common/textfile.cpp:253
 #, c-format
 msgid "'%s' is probably a binary file."
 msgstr "\"%s\" är troligen än binär fil"
@@ -236,6 +236,11 @@ msgstr "."
 
 #: ../src/generic/dirdlgg.cpp:265 ../src/generic/filedlgg.cpp:714
 msgid ".."
+msgstr ".."
+
+#: ../src/msw/dirdlg.cpp:156
+#, fuzzy
+msgid "..."
 msgstr ".."
 
 #: ../src/common/paper.cpp:120
@@ -315,7 +320,7 @@ msgstr ""
 msgid "A3 sheet, 297 x 420 mm"
 msgstr "A3 ark, 297 x 420 mm"
 
-#: ../src/common/paper.cpp:104 ../src/generic/dcpsg.cpp:2537
+#: ../src/common/paper.cpp:104 ../src/generic/dcpsg.cpp:2531
 msgid "A4 sheet, 210 x 297 mm"
 msgstr "A4 ark, 210 x 297 mm"
 
@@ -356,7 +361,7 @@ msgstr "Alla filer (*)|*"
 msgid "Already dialling ISP."
 msgstr "Ringer redan Internetleverantör."
 
-#: ../src/generic/logg.cpp:1017
+#: ../src/generic/logg.cpp:1021
 #, c-format
 msgid "Append log to file '%s' (choosing [No] will overwrite it)?"
 msgstr "Lägg till logg till fil \"%s\" (om du väljer [Nej] skrivs den över)?"
@@ -458,7 +463,7 @@ msgstr "Nedre marginal (mm):"
 msgid "C sheet, 17 x 22 in"
 msgstr "C ark, 17 x 22 tum"
 
-#: ../src/generic/logg.cpp:471
+#: ../src/generic/logg.cpp:475
 msgid "C&lear"
 msgstr "&Töm"
 
@@ -500,21 +505,21 @@ msgstr "Kan inte skapa mutex."
 msgid "Can not enumerate files in directory '%s'"
 msgstr "Kan inte räkna upp filerna i katalogen \"%s\""
 
-#: ../src/msw/thread.cpp:527
+#: ../src/msw/thread.cpp:552
 #, c-format
 msgid "Can not resume thread %x"
 msgstr "Kan inte fortsätta tråden %x"
 
-#: ../src/msw/thread.cpp:408
+#: ../src/msw/thread.cpp:433
 msgid "Can not start thread: error writing TLS."
 msgstr "Kan inte starta tråden: fel vid skrivning av TLS."
 
-#: ../src/msw/thread.cpp:512
+#: ../src/msw/thread.cpp:537
 #, c-format
 msgid "Can not suspend thread %x"
 msgstr "Kan inte stänga av tråd %x"
 
-#: ../src/msw/thread.cpp:846
+#: ../src/msw/thread.cpp:871
 msgid "Can not wait for thread termination"
 msgstr "Kan inte vänta på att tråden avslutas"
 
@@ -527,12 +532,12 @@ msgstr "Kan inte &Ångra "
 msgid "Can't check image format of file '%s': file does not exist."
 msgstr "Kan inte kontrollera bildformat för fil \"%s\": filen finns inte."
 
-#: ../src/msw/registry.cpp:410
+#: ../src/msw/registry.cpp:409
 #, c-format
 msgid "Can't close registry key '%s'"
 msgstr "Kan inte stänga registernyckel \"%s\""
 
-#: ../src/msw/registry.cpp:486
+#: ../src/msw/registry.cpp:485
 #, c-format
 msgid "Can't copy values of unsupported type %d."
 msgstr "Kan inte kopiera värden av ej stödd typ %d."
@@ -543,7 +548,7 @@ msgstr ""
 "Kan inte skapa listkontrollfönster, kontrollera att comctl32.dll är "
 "installerad."
 
-#: ../src/msw/registry.cpp:393
+#: ../src/msw/registry.cpp:392
 #, c-format
 msgid "Can't create registry key '%s'"
 msgstr "Kan inte skapa registernyckel \"%s\""
@@ -556,11 +561,11 @@ msgstr "Kan inte skapa mellanprocessläsröret"
 msgid "Can't create the inter-process write pipe"
 msgstr "Kan inte skapa mellanprocesskrivröret"
 
-#: ../src/msw/thread.cpp:494
+#: ../src/msw/thread.cpp:519
 msgid "Can't create thread"
 msgstr "Kan inte skapa tråd"
 
-#: ../src/msw/window.cpp:2396
+#: ../src/msw/window.cpp:2402
 #, c-format
 msgid ""
 "Can't create window of class %s!\n"
@@ -589,12 +594,12 @@ msgstr "Kan inte ta bort värde \"%s\" från nyckel \"%s\""
 msgid "Can't delete value of key '%s'"
 msgstr "Kan inte ta bort värdet från nyckeln \"%s\""
 
-#: ../src/msw/registry.cpp:991
+#: ../src/msw/registry.cpp:1015
 #, c-format
 msgid "Can't enumerate subkeys of key '%s'"
 msgstr "Kan inte räkna upp undernycklar för nyckel \"%s\""
 
-#: ../src/msw/registry.cpp:946
+#: ../src/msw/registry.cpp:970
 #, c-format
 msgid "Can't enumerate values of key '%s'"
 msgstr "Kan inte räkna upp värden för nyckel \"%s\""
@@ -604,7 +609,7 @@ msgstr "Kan inte räkna upp värden för nyckel \"%s\""
 msgid "Can't find current position in file '%s'"
 msgstr "Kan inte hitta aktuell position i fil \"%s\""
 
-#: ../src/msw/window.cpp:2346
+#: ../src/msw/window.cpp:2352
 msgid ""
 "Can't find dummy dialog template!\n"
 "Check resource include path for finding wx.rc."
@@ -617,7 +622,7 @@ msgstr ""
 msgid "Can't find the serialization object '%s' for the object '%s'."
 msgstr "Kan inte hitta serialisationsobjektet \"%s\" till objektet \"%s\"."
 
-#: ../src/msw/registry.cpp:342
+#: ../src/msw/registry.cpp:341
 #, c-format
 msgid "Can't get info about registry key '%s'"
 msgstr "Kan inte hitta information om registernyckel \"%s\""
@@ -636,12 +641,12 @@ msgstr "Kan inte ladda wxSerial dynamiskt bibliotek."
 msgid "Can't open file '%s'"
 msgstr "Kan inte öppna fil \"%s\""
 
-#: ../src/msw/registry.cpp:368
+#: ../src/msw/registry.cpp:367
 #, c-format
 msgid "Can't open registry key '%s'"
 msgstr "Kan inte öppna registernyckel \"%s\""
 
-#: ../src/msw/registry.cpp:870
+#: ../src/msw/registry.cpp:894
 #, c-format
 msgid "Can't read value of '%s'"
 msgstr "Kan inte läsa värdet av \"%s\""
@@ -651,21 +656,21 @@ msgstr "Kan inte läsa värdet av \"%s\""
 msgid "Can't read value of key '%s'"
 msgstr "Kan inte läsa värdet av nyckel \"%s\""
 
-#: ../src/generic/logg.cpp:531 ../src/generic/logg.cpp:928
+#: ../src/generic/logg.cpp:535 ../src/generic/logg.cpp:932
 msgid "Can't save log contents to file."
 msgstr "Kan inte spara logginnehållet till en fil"
 
-#: ../src/msw/thread.cpp:460
+#: ../src/msw/thread.cpp:485
 msgid "Can't set thread priority"
 msgstr "Kan inte sätta trådprioritet"
 
-#: ../src/msw/registry.cpp:794 ../src/msw/registry.cpp:894
+#: ../src/msw/registry.cpp:794 ../src/msw/registry.cpp:918
 #, c-format
 msgid "Can't set value of '%s'"
 msgstr "Kan inte sätta värdet på \"%s\""
 
 #: ../src/common/dlgcmn.cpp:148 ../src/common/prntbase.cpp:109
-#: ../src/generic/dcpsg.cpp:2261 ../src/generic/dirdlgg.cpp:424
+#: ../src/generic/dcpsg.cpp:2255 ../src/generic/dirdlgg.cpp:424
 #: ../src/generic/filedlgg.cpp:916 ../src/generic/fontdlgg.cpp:257
 #: ../src/generic/prntdlgg.cpp:468 ../src/generic/progdlgg.cpp:179
 #: ../src/generic/proplist.cpp:523 ../src/generic/wizard.cpp:192
@@ -688,11 +693,11 @@ msgstr "Kan inte hitta platsen för adressbokfil"
 msgid "Cannot get priority range for scheduling policy %d."
 msgstr "Kan inte hämta prioritetsräckvidden för schemaläggningsregler %d."
 
-#: ../src/unix/utilsunx.cpp:709
+#: ../src/unix/utilsunx.cpp:713
 msgid "Cannot get the hostname"
 msgstr "Kan inte få värdnamnet"
 
-#: ../src/unix/utilsunx.cpp:745
+#: ../src/unix/utilsunx.cpp:749
 msgid "Cannot get the official hostname"
 msgstr "Kan inte få det officiella värdnamnet"
 
@@ -724,7 +729,7 @@ msgstr "Kan inte öppna URL \"%s\""
 msgid "Cannot open contents file: %s"
 msgstr "Kan inte öppna innehållsfil: %s"
 
-#: ../src/generic/dcpsg.cpp:1603
+#: ../src/generic/dcpsg.cpp:1584
 msgid "Cannot open file for PostScript printing!"
 msgstr "Kan inte öppna fil för PostScript-utskrift!"
 
@@ -749,6 +754,11 @@ msgstr "Kan inte starta tråd: fel vid skrivning till TLS"
 msgid "Case sensitive"
 msgstr "Skiftlägeskänslig"
 
+#: ../src/common/fontmap.cpp:110
+#, fuzzy
+msgid "Celtic (ISO-8859-14)"
+msgstr "Baltiska språk (ISO-8859-13)"
+
 #: ../src/common/fontmap.cpp:98
 msgid "Central European (ISO-8859-2/Latin 2)"
 msgstr "Centraleuropeisk (ISO-8859-2/Latin 2)"
@@ -761,7 +771,7 @@ msgstr "Välj Internetleverantör att ringa upp"
 msgid "Choose font"
 msgstr "Välj typsnitt"
 
-#: ../src/generic/logg.cpp:471
+#: ../src/generic/logg.cpp:475
 msgid "Clear the log contents"
 msgstr "Töm logginnehållet"
 
@@ -770,11 +780,11 @@ msgstr "Töm logginnehållet"
 msgid "Close"
 msgstr "Stäng"
 
-#: ../src/generic/logg.cpp:473
+#: ../src/generic/logg.cpp:477
 msgid "Close this window"
 msgstr "Stäng detta fönster"
 
-#: ../src/common/fileconf.cpp:750
+#: ../src/common/fileconf.cpp:757
 #, c-format
 msgid "Config entry name cannot start with '%c'."
 msgstr "Konfigurationspost kan inte starta med \"%c\"."
@@ -811,7 +821,7 @@ msgstr "Kunde inte hitta resursinkluderingsfil %s."
 msgid "Could not find tab for id"
 msgstr "Kunde inte hitta flik för id"
 
-#: ../src/msw/textctrl.cpp:1244
+#: ../src/msw/textctrl.cpp:1249
 #, c-format
 msgid "Could not load Rich Edit DLL '%s'"
 msgstr "Kunde inte ladda Rich Edit DLL \"%s\""
@@ -865,12 +875,12 @@ msgstr "Kunde inte ändra tillståndet för händelseobjektet."
 msgid "Couldn't create a timer"
 msgstr "Kunde inte skapa en timer"
 
-#: ../src/common/dynlib.cpp:305
+#: ../src/common/dynlib.cpp:309
 #, c-format
 msgid "Couldn't find symbol '%s' in a dynamic library"
 msgstr "Kunde inte hitta symbolen \"%s\" i ett dynamiskt bibliotek"
 
-#: ../src/msw/thread.cpp:553
+#: ../src/msw/thread.cpp:578
 msgid "Couldn't get the current thread pointer"
 msgstr "Kunde inte få den aktuella trådpekaren"
 
@@ -897,7 +907,7 @@ msgstr "Kunde inte frigöra en mutex"
 msgid "Couldn't retrieve information about list control item %d."
 msgstr "Kunde inte hämta information om listkontrollföremål %d."
 
-#: ../src/msw/thread.cpp:933
+#: ../src/msw/thread.cpp:958
 msgid "Couldn't terminate thread"
 msgstr "Kunde inte avsluta tråd"
 
@@ -1013,7 +1023,7 @@ msgstr ""
 msgid "Error"
 msgstr "Fel"
 
-#: ../src/unix/utilsunx.cpp:948 ../src/unix/utilsunx.cpp:956
+#: ../src/unix/utilsunx.cpp:952 ../src/unix/utilsunx.cpp:960
 msgid "Error "
 msgstr "Fel "
 
@@ -1081,12 +1091,12 @@ msgstr "Kunde inte ansluta: användarnamn/lösenord saknas."
 msgid "Failed to connect: no ISP to dial."
 msgstr "Kunde inte ansluta: ingen Internetleverantör att ringa upp."
 
-#: ../src/msw/registry.cpp:590
+#: ../src/msw/registry.cpp:589
 #, c-format
 msgid "Failed to copy registry value '%s'"
 msgstr "Kunde inte kopiera regustervärde \"%s\""
 
-#: ../src/msw/registry.cpp:599
+#: ../src/msw/registry.cpp:598
 #, c-format
 msgid "Failed to copy the contents of registry key '%s' to '%s'."
 msgstr "Kunde inte kopiera innehållet i registernyckel \"%s\" till \"%s\"."
@@ -1095,7 +1105,7 @@ msgstr "Kunde inte kopiera innehållet i registernyckel \"%s\" till \"%s\"."
 msgid "Failed to create DDE string"
 msgstr "Kunde inte skapa DDE-sträng"
 
-#: ../src/msw/mdi.cpp:421
+#: ../src/msw/mdi.cpp:425
 msgid "Failed to create MDI parent frame."
 msgstr "Kunde inte skapa MDI-föräldraram."
 
@@ -1138,7 +1148,7 @@ msgstr "Kunde inte starta en meddelandeloop med DDE-server"
 msgid "Failed to establish dialup connection: %s"
 msgstr "Kunde inte etablera uppringningsanslutning: %s"
 
-#: ../src/unix/utilsunx.cpp:441 ../src/unix/utilsunx.cpp:469
+#: ../src/unix/utilsunx.cpp:444 ../src/unix/utilsunx.cpp:472
 #, c-format
 msgid "Failed to execute '%s'\n"
 msgstr "Kunde inte utföra \"%s\"\n"
@@ -1195,7 +1205,7 @@ msgstr ""
 "Kunde inte slå ihop en tråd, möjlig minnesläcka hittad - var vänlig och "
 "starta om programmet"
 
-#: ../src/common/dynlib.cpp:235
+#: ../src/common/dynlib.cpp:239
 #, c-format
 msgid "Failed to load shared library '%s'"
 msgstr "Kunde inte ladda delat bibliotek \"%s\""
@@ -1208,7 +1218,7 @@ msgstr "Kunde inte öppna urklippbordet"
 msgid "Failed to put data on the clipboard"
 msgstr "Kunde inte skicka data till urklippbordet"
 
-#: ../src/unix/utilsunx.cpp:540
+#: ../src/unix/utilsunx.cpp:543
 msgid "Failed to redirect child process input/output"
 msgstr "Kunde inte omdirigera barnprocessens in/ut"
 
@@ -1222,12 +1232,12 @@ msgstr "Kunde inte registrera DDE-server \"%s\""
 msgid "Failed to remember the encoding for the charset '%s'."
 msgstr "Kunde inte komma ihåg kodningen för teckenuppsättning \"%s\"."
 
-#: ../src/msw/registry.cpp:436
+#: ../src/msw/registry.cpp:435
 #, c-format
 msgid "Failed to rename registry value '%s' to '%s'."
 msgstr "Kunde inte byta namn på registervärde \"%s\" till \"%s\"."
 
-#: ../src/msw/registry.cpp:536
+#: ../src/msw/registry.cpp:535
 #, c-format
 msgid "Failed to rename the registry key '%s' to '%s'."
 msgstr "Kunde inte byta namn på registernyckel \"%s\" till \"%s\"."
@@ -1280,7 +1290,7 @@ msgstr "Kunde inte avsluta den uppringda anslutningen: %s"
 msgid "Failed to unregister DDE server '%s'"
 msgstr "Kunde inte avregistrera DDE-server \"%s\""
 
-#: ../src/generic/logg.cpp:367
+#: ../src/generic/logg.cpp:371
 msgid "Fatal error"
 msgstr "Kritiskt fel"
 
@@ -1335,7 +1345,7 @@ msgstr "Typsnitt"
 msgid "Font size:"
 msgstr "Typsnittsstorlek:"
 
-#: ../src/unix/utilsunx.cpp:497
+#: ../src/unix/utilsunx.cpp:500
 msgid "Fork failed"
 msgstr "Gren misslyckades"
 
@@ -1426,7 +1436,7 @@ msgid "Hebrew (ISO-8859-8)"
 msgstr "Hebreiska (ISO-8859-8)"
 
 #: ../src/common/dlgcmn.cpp:144 ../src/generic/proplist.cpp:528
-#: ../src/html/helpfrm.cpp:208 ../src/msw/mdi.cpp:1276
+#: ../src/html/helpfrm.cpp:208 ../src/msw/mdi.cpp:1280
 msgid "Help"
 msgstr "Hjälp"
 
@@ -1446,14 +1456,6 @@ msgstr "Hjälputskrift"
 #, c-format
 msgid "Help: %s"
 msgstr "Hjälp: %s"
-
-#: ../src/common/fontmap.cpp:108
-msgid "ISO-8859-12"
-msgstr "ISO-8859-12"
-
-#: ../src/common/fontmap.cpp:110
-msgid "ISO-8859-14"
-msgstr "ISO-8859-14"
 
 #: ../src/common/resourc2.cpp:997 ../src/common/resourc2.cpp:1008
 #: ../src/common/resource.cpp:2647 ../src/common/resource.cpp:2658
@@ -1493,6 +1495,11 @@ msgstr "Ej korrekt version av HTML-hjälpbok"
 msgid "Index"
 msgstr "Index"
 
+#: ../src/common/fontmap.cpp:108
+#, fuzzy
+msgid "Indian (ISO-8859-12)"
+msgstr "Nordiska språk (ISO-8859-10)"
+
 #: ../src/common/imagtiff.cpp:171
 msgid "Invalid TIFF image index."
 msgstr "Ogiltigt TIFF-bildindex."
@@ -1517,7 +1524,7 @@ msgstr "JPEG: Kunde inte spara bild."
 msgid "KOI8-R"
 msgstr "KOI8-R"
 
-#: ../src/generic/dcpsg.cpp:2252 ../src/generic/prntdlgg.cpp:441
+#: ../src/generic/dcpsg.cpp:2246 ../src/generic/prntdlgg.cpp:441
 #: ../src/generic/prntdlgg.cpp:637
 msgid "Landscape"
 msgstr "Liggande"
@@ -1564,7 +1571,7 @@ msgstr "Att ladda Grey Ascii PNM bilder är ännu inte implementerat."
 msgid "Loading Grey Raw PNM image is not yet implemented."
 msgstr "Att ladda Grey Raw PNM bilder är ännu inte implementerat."
 
-#: ../src/generic/logg.cpp:534
+#: ../src/generic/logg.cpp:538
 #, c-format
 msgid "Log saved to the file '%s'."
 msgstr "Logg sparad till filen \"%s\"."
@@ -1573,7 +1580,7 @@ msgstr "Logg sparad till filen \"%s\"."
 msgid "MDI child"
 msgstr "MDI-barn"
 
-#: ../src/unix/mimetype.cpp:1570
+#: ../src/unix/mimetype.cpp:1574
 #, c-format
 msgid "Mailcap file %s, line %d: incomplete entry ignored."
 msgstr "Mailcap-fil %s, rad %d: ofullständig post ignorerad."
@@ -1583,7 +1590,7 @@ msgstr "Mailcap-fil %s, rad %d: ofullständig post ignorerad."
 msgid "Memory VFS already contains file '%s'!"
 msgstr "Minnes-VFS innehåller redan fil \"%s\"!"
 
-#: ../src/unix/mimetype.cpp:1292
+#: ../src/unix/mimetype.cpp:1295
 #, c-format
 msgid "Mime.types file %s, line %d: unterminated quoted string."
 msgstr "Mime.types fil %s, rad %d: oavslutad citerad sträng"
@@ -1684,9 +1691,9 @@ msgstr "Normalt typsnitt:"
 msgid "Note, 8 1/2 x 11 in"
 msgstr "Note, 8 1/2 x 11 tum"
 
-#: ../src/common/dlgcmn.cpp:127 ../src/generic/dcpsg.cpp:2260
+#: ../src/common/dlgcmn.cpp:127 ../src/generic/dcpsg.cpp:2254
 #: ../src/generic/dirdlgg.cpp:422 ../src/generic/filedlgg.cpp:907
-#: ../src/generic/fontdlgg.cpp:256 ../src/generic/logg.cpp:729
+#: ../src/generic/fontdlgg.cpp:256 ../src/generic/logg.cpp:733
 #: ../src/generic/prntdlgg.cpp:467 ../src/generic/proplist.cpp:511
 #: ../src/gtk/filedlg.cpp:158 ../src/gtk/fontdlg.cpp:172
 #: ../src/html/helpfrm.cpp:909
@@ -1793,7 +1800,7 @@ msgstr "Pappersstorlek"
 msgid "Permissions"
 msgstr "Rättigheter"
 
-#: ../src/unix/utilsunx.cpp:440 ../src/unix/utilsunx.cpp:468
+#: ../src/unix/utilsunx.cpp:443 ../src/unix/utilsunx.cpp:471
 msgid "Pipe creation failed"
 msgstr "Kunde inte skapa rör (pipe)"
 
@@ -1813,7 +1820,7 @@ msgstr "Välj vilken Internetleverantör du vill ansluta till"
 msgid "Please wait..."
 msgstr "Vänta..."
 
-#: ../src/generic/dcpsg.cpp:2251 ../src/generic/prntdlgg.cpp:440
+#: ../src/generic/dcpsg.cpp:2245 ../src/generic/prntdlgg.cpp:440
 #: ../src/generic/prntdlgg.cpp:636
 msgid "Portrait"
 msgstr "Stående"
@@ -1826,11 +1833,11 @@ msgstr "PostScript"
 msgid "PostScript file"
 msgstr "PostScript-fil"
 
-#: ../src/generic/dcpsg.cpp:2293
+#: ../src/generic/dcpsg.cpp:2287
 msgid "PostScript:"
 msgstr "PostScript:"
 
-#: ../src/generic/dcpsg.cpp:2256
+#: ../src/generic/dcpsg.cpp:2250
 msgid "Preview Only"
 msgstr "Förhandsgranska bara"
 
@@ -1874,7 +1881,7 @@ msgstr "Utskrift-spooling"
 msgid "Print this page"
 msgstr "Skriv ut denna sida"
 
-#: ../src/generic/dcpsg.cpp:2255 ../src/generic/prntdlgg.cpp:150
+#: ../src/generic/dcpsg.cpp:2249 ../src/generic/prntdlgg.cpp:150
 msgid "Print to File"
 msgstr "Skriv ut till fil"
 
@@ -1882,11 +1889,11 @@ msgstr "Skriv ut till fil"
 msgid "Print..."
 msgstr "Skriv ut..."
 
-#: ../src/generic/dcpsg.cpp:2266
+#: ../src/generic/dcpsg.cpp:2260
 msgid "Printer Command: "
 msgstr "Skrivarkommando: "
 
-#: ../src/generic/dcpsg.cpp:2271
+#: ../src/generic/dcpsg.cpp:2265
 msgid "Printer Options: "
 msgstr "Skrivaralternativ: "
 
@@ -1935,7 +1942,7 @@ msgstr "Program avbrutet."
 msgid "Quarto, 215 x 275 mm"
 msgstr "Quarto, 215 x 275 mm"
 
-#: ../src/generic/logg.cpp:1019
+#: ../src/generic/logg.cpp:1023
 msgid "Question"
 msgstr "Fråga"
 
@@ -1944,12 +1951,12 @@ msgstr "Fråga"
 msgid "Read error on file '%s'"
 msgstr "Läsfel på fil \"%s\""
 
-#: ../src/msw/registry.cpp:528
+#: ../src/msw/registry.cpp:527
 #, c-format
 msgid "Registry key '%s' already exists."
 msgstr "Registernyckel \"%s\" finns redan."
 
-#: ../src/msw/registry.cpp:497
+#: ../src/msw/registry.cpp:496
 #, c-format
 msgid "Registry key '%s' does not exist, cannot rename it."
 msgstr "Registernyckel \"%s\" finns inte, kan inte döpas om."
@@ -1965,7 +1972,7 @@ msgstr ""
 "om du tar bort den kommer systemet bli instabilt:\n"
 "operation avbruten."
 
-#: ../src/msw/registry.cpp:428
+#: ../src/msw/registry.cpp:427
 #, c-format
 msgid "Registry value '%s' already exists."
 msgstr "Registervärde \"%s\" finns redan."
@@ -2005,7 +2012,7 @@ msgstr "Spara %s fil"
 msgid "Save as"
 msgstr "Spara som"
 
-#: ../src/generic/logg.cpp:469
+#: ../src/generic/logg.cpp:473
 msgid "Save log contents to file"
 msgstr "Spara logginnehållet till fil"
 
@@ -2055,7 +2062,7 @@ msgstr "Välj en dokumentvy"
 msgid "Select a file"
 msgstr "Välj en fil"
 
-#: ../src/generic/dcpsg.cpp:2254
+#: ../src/generic/dcpsg.cpp:2248
 msgid "Send to Printer"
 msgstr "Skicka till skrivare"
 
@@ -2121,7 +2128,7 @@ msgstr "Inte tillräckligt minne för att skapa förhandsgranskning."
 msgid "Statement, 5 1/2 x 8 1/2 in"
 msgstr "Statement, 5 1/2 x 8 1/2 tum"
 
-#: ../src/generic/logg.cpp:594
+#: ../src/generic/logg.cpp:598
 msgid "Status: "
 msgstr "Status: "
 
@@ -2237,7 +2244,7 @@ msgstr ""
 "Versionen av fjärråtkomsttjänsten (RAS) som är installerad på denna maskin "
 "är för gammal, uppgradera (följande nödvändig funktion saknas: %s)."
 
-#: ../src/msw/thread.cpp:1058
+#: ../src/msw/thread.cpp:1083
 msgid ""
 "Thread module initialization failed: can not store value in thread local "
 "storage"
@@ -2249,7 +2256,7 @@ msgstr ""
 msgid "Thread module initialization failed: failed to create thread key"
 msgstr "Trådmodulinitialisering misslyckades: kunde inte skapa trådnyckel"
 
-#: ../src/msw/thread.cpp:1046
+#: ../src/msw/thread.cpp:1071
 msgid ""
 "Thread module initialization failed: impossible to allocate index in thread "
 "local storage"
@@ -2335,7 +2342,7 @@ msgstr "Okänt DDE-fel %08x"
 msgid "Unknown encoding (%d)"
 msgstr "Okänd kodning (%d)"
 
-#: ../src/unix/mimetype.cpp:1335
+#: ../src/unix/mimetype.cpp:1338
 #, c-format
 msgid "Unknown field in file %s, line %d: '%s'."
 msgstr "Okänt fält i fil %s, rad %d: \"%s\"."
@@ -2402,7 +2409,7 @@ msgstr "Visa filer som lista"
 msgid "Views"
 msgstr "Vyer"
 
-#: ../src/unix/utilsunx.cpp:270 ../src/unix/utilsunx.cpp:619
+#: ../src/unix/utilsunx.cpp:270 ../src/unix/utilsunx.cpp:622
 msgid "Waiting for subprocess termination failed"
 msgstr "Väntan på att subprocessen skulle avslutas misslyckades"
 
@@ -2414,16 +2421,18 @@ msgstr "Varning"
 msgid "Warning: "
 msgstr "Varning: "
 
-#: ../src/html/htmlpars.cpp:179
+#: ../src/html/htmlpars.cpp:177
 msgid "Warning: attempt to remove HTML tag handler from empty stack."
 msgstr "Varning: försök att ta bort HTML-märkordshanterare från tom stack."
 
 #: ../src/common/fontmap.cpp:97
-msgid "West European (ISO-8859-1/Latin 1)"
+#, fuzzy
+msgid "Western European (ISO-8859-1/Latin 1)"
 msgstr "Västerländsk  (ISO-8859-1/Latin 1)"
 
 #: ../src/common/fontmap.cpp:111
-msgid "West European new (ISO-8859-15/Latin 0)"
+#, fuzzy
+msgid "Western European with Euro (ISO-8859-15/Latin 0)"
 msgstr "Ny Västerländsk (ISO-8859-15/Latin 0)"
 
 #: ../src/html/helpfrm.cpp:406
@@ -2434,7 +2443,7 @@ msgstr "Endast hela ord"
 msgid "Win32s on Windows 3.1"
 msgstr "Win32s på Windows 3.1"
 
-#: ../src/msw/mdi.cpp:1311
+#: ../src/msw/mdi.cpp:1315
 msgid "Window"
 msgstr "Fönster"
 
@@ -2455,6 +2464,11 @@ msgstr "Windows Arabiska (CP 1256)"
 msgid "Windows Baltic (CP 1257)"
 msgstr "Windows Baltiska språk (CP 1257)"
 
+#: ../src/common/fontmap.cpp:113
+#, fuzzy
+msgid "Windows Central European (CP 1250)"
+msgstr "Windows Hebreiska (CP 1255)"
+
 #: ../src/common/fontmap.cpp:114
 msgid "Windows Cyrillic (CP 1251)"
 msgstr "Windows Kyrilliska (CP 1251)"
@@ -2467,17 +2481,14 @@ msgstr "Windows Grekiska (CP 1253)"
 msgid "Windows Hebrew (CP 1255)"
 msgstr "Windows Hebreiska (CP 1255)"
 
-#: ../src/common/fontmap.cpp:115
-msgid "Windows Latin 1 (CP 1252)"
-msgstr "Windows Latin 1 (CP 1252)"
-
-#: ../src/common/fontmap.cpp:113
-msgid "Windows Latin 2 (CP 1250)"
-msgstr "Windows Latin 2 (CP 1250)"
-
 #: ../src/common/fontmap.cpp:117
 msgid "Windows Turkish (CP 1254)"
 msgstr "Windows Turkiska (CP 1254)"
+
+#: ../src/common/fontmap.cpp:115
+#, fuzzy
+msgid "Windows Western European (CP 1252)"
+msgstr "Windows Latin 1 (CP 1252)"
 
 #: ../src/common/fontmap.cpp:121
 msgid "Windows/DOS OEM (CP 437)"
@@ -2488,19 +2499,19 @@ msgstr "Windows/DOS OEM (CP 437)"
 msgid "Write error on file '%s'"
 msgstr "Skrivfel på fil \"%s\""
 
-#: ../src/generic/dcpsg.cpp:2311
+#: ../src/generic/dcpsg.cpp:2305
 msgid "X Scaling"
 msgstr "X-skalning"
 
-#: ../src/generic/dcpsg.cpp:2320
+#: ../src/generic/dcpsg.cpp:2314
 msgid "X Translation"
 msgstr "X-translation"
 
-#: ../src/generic/dcpsg.cpp:2315
+#: ../src/generic/dcpsg.cpp:2309
 msgid "Y Scaling"
 msgstr "Y-skalning"
 
-#: ../src/generic/dcpsg.cpp:2324
+#: ../src/generic/dcpsg.cpp:2318
 msgid "Y Translation"
 msgstr "Y-translation"
 
@@ -2615,7 +2626,7 @@ msgstr ""
 "När applikationen har återvänt från ett XTYP_XACT_COMPLETE anrop,\n"
 "är transaktionsidentifieraren för det anropet inte längre giltig."
 
-#: ../src/common/fileconf.cpp:1440
+#: ../src/common/fileconf.cpp:1447
 #, c-format
 msgid "attempt to change immutable key '%s' ignored."
 msgstr "försök att ändra oföränderlig tangent \"%s\" ignorerad."
@@ -2640,7 +2651,7 @@ msgstr "kan inte genomföra ändringar på fil \"%s\""
 msgid "can't create file '%s'"
 msgstr "kan inte skapa fil \"%s\""
 
-#: ../src/common/fileconf.cpp:910
+#: ../src/common/fileconf.cpp:917
 #, c-format
 msgid "can't delete user configuration file '%s'"
 msgstr "kan inte ta bort användarens konfigurationsfil \"%s\""
@@ -2688,7 +2699,7 @@ msgstr "kan inte öppna global konfigurationsfil \"%s\"."
 msgid "can't open user configuration file '%s'."
 msgstr "kan inte öppna användarkonfigurationsfil \"%s\"."
 
-#: ../src/common/fileconf.cpp:790
+#: ../src/common/fileconf.cpp:797
 msgid "can't open user configuration file."
 msgstr "kan inte öppna användarens konfigurationsfil."
 
@@ -2712,7 +2723,7 @@ msgstr "kan inte ta bort temporär fil \"%s\""
 msgid "can't seek on file descriptor %d"
 msgstr "kan inte söka på filidentifierare %d"
 
-#: ../src/common/textfile.cpp:354
+#: ../src/common/textfile.cpp:357
 #, c-format
 msgid "can't write file '%s' to disk."
 msgstr "kan inte skriva fil \"%s\" till disk."
@@ -2722,7 +2733,7 @@ msgstr "kan inte skriva fil \"%s\" till disk."
 msgid "can't write to file descriptor %d"
 msgstr "kan inte skriva till filidentifierare %d"
 
-#: ../src/common/fileconf.cpp:797
+#: ../src/common/fileconf.cpp:804
 msgid "can't write user configuration file."
 msgstr "kan inte skriva användarens konfigurationsfil."
 
@@ -2751,7 +2762,7 @@ msgstr "åttonde"
 msgid "eleventh"
 msgstr "elfte"
 
-#: ../src/common/fileconf.cpp:1427
+#: ../src/common/fileconf.cpp:1434
 #, c-format
 msgid "entry '%s' appears more than once in group '%s'"
 msgstr "post \"%s\" förekommer mer än en gång i grupp \"%s\""
@@ -2773,27 +2784,27 @@ msgstr "femtonde"
 msgid "fifth"
 msgstr "femte"
 
-#: ../src/common/fileconf.cpp:471
+#: ../src/common/fileconf.cpp:478
 #, c-format
 msgid "file '%s', line %d: '%s' ignored after group header."
 msgstr "fil \"%s\", rad %d: \"%s\" ignorerad efter grupphuvud."
 
-#: ../src/common/fileconf.cpp:500
+#: ../src/common/fileconf.cpp:507
 #, c-format
 msgid "file '%s', line %d: '=' expected."
 msgstr "fil \"%s\", rad %d: \"=\" förväntat."
 
-#: ../src/common/fileconf.cpp:526
+#: ../src/common/fileconf.cpp:533
 #, c-format
 msgid "file '%s', line %d: key '%s' was first found at line %d."
 msgstr "fil \"%s\", rad %d: tangent \"%s\" hittades först på rad %d."
 
-#: ../src/common/fileconf.cpp:516
+#: ../src/common/fileconf.cpp:523
 #, c-format
 msgid "file '%s', line %d: value for immutable key '%s' ignored."
 msgstr "fil \"%s\", rad %d: värde för oföränderlig tangent \"%s\" ignorerad."
 
-#: ../src/common/fileconf.cpp:439
+#: ../src/common/fileconf.cpp:446
 #, c-format
 msgid "file '%s': unexpected character %c at line %d."
 msgstr "fil \"%s\": oväntat tecken %c på rad %d."
@@ -2822,7 +2833,7 @@ msgstr "initiera"
 msgid "invalid eof() return value."
 msgstr "ogiltigt eof() returvärde."
 
-#: ../src/generic/logg.cpp:1033
+#: ../src/generic/logg.cpp:1037
 msgid "invalid message box return value"
 msgstr "meddelandebox returnerade ogiltigt värde"
 
@@ -2944,7 +2955,7 @@ msgstr "tolfte"
 msgid "twentieth"
 msgstr "tjugonde"
 
-#: ../src/common/fileconf.cpp:1547
+#: ../src/common/fileconf.cpp:1554
 #, c-format
 msgid "unexpected \" at position %d in '%s'."
 msgstr "oväntat \" på position %d i \"%s\"."
@@ -3013,3 +3024,12 @@ msgstr "wxWindows: kunde inte hitta temporärt filnamn.\n"
 #: ../src/common/datetime.cpp:3023
 msgid "yesterday"
 msgstr "igår"
+
+#~ msgid "ISO-8859-12"
+#~ msgstr "ISO-8859-12"
+
+#~ msgid "ISO-8859-14"
+#~ msgstr "ISO-8859-14"
+
+#~ msgid "Windows Latin 2 (CP 1250)"
+#~ msgstr "Windows Latin 2 (CP 1250)"

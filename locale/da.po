@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWindows-2.2.1\n"
-"POT-Creation-Date: 2000-10-16 04:14+0930\n"
+"POT-Creation-Date: 2001-01-27 13:50-0800\n"
 "PO-Revision-Date: 1999-10-23 12:30+0100\n"
 "Last-Translator: Leif Jensen <leif@danmos.dk>\n"
 "Language-Team: wxWindows translators <wx-translators@wxwindows.org>\n"
@@ -83,17 +83,17 @@ msgstr ""
 msgid "%s (or %s)"
 msgstr " (fejl %ld: %s)"
 
-#: ../src/generic/logg.cpp:239
+#: ../src/generic/logg.cpp:243
 #, fuzzy, c-format
 msgid "%s Error"
 msgstr "Fejl"
 
-#: ../src/generic/logg.cpp:247
+#: ../src/generic/logg.cpp:251
 #, fuzzy, c-format
 msgid "%s Information"
 msgstr "Information"
 
-#: ../src/generic/logg.cpp:243
+#: ../src/generic/logg.cpp:247
 #, fuzzy, c-format
 msgid "%s Warning"
 msgstr "Advarsel"
@@ -115,11 +115,11 @@ msgstr "%s er ikke en icon resource specifikation"
 msgid "%s: ill-formed resource file syntax."
 msgstr "%s: forkert resourcefil syntax."
 
-#: ../src/generic/logg.cpp:473 ../src/generic/tipdlg.cpp:170
+#: ../src/generic/logg.cpp:477 ../src/generic/tipdlg.cpp:170
 msgid "&Close"
 msgstr "&Luk"
 
-#: ../src/generic/logg.cpp:685
+#: ../src/generic/logg.cpp:689
 msgid "&Details"
 msgstr ""
 
@@ -127,7 +127,7 @@ msgstr ""
 msgid "&Finish"
 msgstr ""
 
-#: ../src/generic/logg.cpp:474
+#: ../src/generic/logg.cpp:478
 msgid "&Log"
 msgstr "&Log"
 
@@ -149,7 +149,7 @@ msgstr "&Gendan"
 msgid "&Redo "
 msgstr "&Gendan "
 
-#: ../src/generic/logg.cpp:469 ../src/generic/logg.cpp:770
+#: ../src/generic/logg.cpp:473 ../src/generic/logg.cpp:774
 msgid "&Save..."
 msgstr "&Gem..."
 
@@ -165,7 +165,7 @@ msgstr ""
 msgid "&Undo "
 msgstr "&Reetablér"
 
-#: ../src/msw/mdi.cpp:1280 ../src/msw/mdi.cpp:1287
+#: ../src/msw/mdi.cpp:1284 ../src/msw/mdi.cpp:1291 ../src/msw/window.cpp:2276
 #, fuzzy
 msgid "&Window"
 msgstr "&Reetablér"
@@ -190,7 +190,7 @@ msgstr ""
 msgid "'%s' is not a valid message catalog."
 msgstr "'%s' er ikke et lovligt meddelelseskatalog"
 
-#: ../src/common/textfile.cpp:250
+#: ../src/common/textfile.cpp:253
 #, c-format
 msgid "'%s' is probably a binary file."
 msgstr "'%s' er sandsynligvis en binær fil."
@@ -242,6 +242,11 @@ msgstr ""
 #: ../src/generic/dirdlgg.cpp:265 ../src/generic/filedlgg.cpp:714
 msgid ".."
 msgstr ""
+
+#: ../src/msw/dirdlg.cpp:156
+#, fuzzy
+msgid "..."
+msgstr "Ny..."
 
 #: ../src/common/paper.cpp:120
 #, fuzzy
@@ -310,7 +315,7 @@ msgstr ""
 msgid "A3 sheet, 297 x 420 mm"
 msgstr "A3 297 x 420 mm"
 
-#: ../src/common/paper.cpp:104 ../src/generic/dcpsg.cpp:2535
+#: ../src/common/paper.cpp:104 ../src/generic/dcpsg.cpp:2531
 msgid "A4 sheet, 210 x 297 mm"
 msgstr "A4 papir, 210 x 297 mm"
 
@@ -353,7 +358,7 @@ msgstr ""
 msgid "Already dialling ISP."
 msgstr ""
 
-#: ../src/generic/logg.cpp:1017
+#: ../src/generic/logg.cpp:1021
 #, c-format
 msgid "Append log to file '%s' (choosing [No] will overwrite it)?"
 msgstr "Tilføj log til fil '%s' (valg af [Nej] vil overskrive den)?"
@@ -463,7 +468,7 @@ msgstr "Bund margin (mm):"
 msgid "C sheet, 17 x 22 in"
 msgstr "A4 papir, 210 x 297 mm"
 
-#: ../src/generic/logg.cpp:471
+#: ../src/generic/logg.cpp:475
 msgid "C&lear"
 msgstr "&Rens"
 
@@ -506,21 +511,21 @@ msgstr "Kan ikke oprette mutex."
 msgid "Can not enumerate files in directory '%s'"
 msgstr "Kan ikke nummerere filer i bibliotek '%s'"
 
-#: ../src/msw/thread.cpp:527
+#: ../src/msw/thread.cpp:552
 #, c-format
 msgid "Can not resume thread %x"
 msgstr "Kan ikke genoptage tråd %x"
 
-#: ../src/msw/thread.cpp:408
+#: ../src/msw/thread.cpp:433
 msgid "Can not start thread: error writing TLS."
 msgstr "Kan ikke starte tråd: fejl ved skrivning af TLS."
 
-#: ../src/msw/thread.cpp:512
+#: ../src/msw/thread.cpp:537
 #, c-format
 msgid "Can not suspend thread %x"
 msgstr "Kan ikke suspendere tråd %x"
 
-#: ../src/msw/thread.cpp:846
+#: ../src/msw/thread.cpp:871
 msgid "Can not wait for thread termination"
 msgstr "Kan ikke vente på trådafslutning"
 
@@ -561,11 +566,11 @@ msgstr "Kan ikke danne tråd"
 msgid "Can't create the inter-process write pipe"
 msgstr ""
 
-#: ../src/msw/thread.cpp:494
+#: ../src/msw/thread.cpp:519
 msgid "Can't create thread"
 msgstr "Kan ikke danne tråd"
 
-#: ../src/msw/window.cpp:2390
+#: ../src/msw/window.cpp:2402
 #, c-format
 msgid ""
 "Can't create window of class %s!\n"
@@ -609,7 +614,7 @@ msgstr "kan ikke nummerere værdi af nøgle '%s'"
 msgid "Can't find current position in file '%s'"
 msgstr "kan ikke åbge brugerkonfigurationsfil '%s'."
 
-#: ../src/msw/window.cpp:2340
+#: ../src/msw/window.cpp:2352
 msgid ""
 "Can't find dummy dialog template!\n"
 "Check resource include path for finding wx.rc."
@@ -656,11 +661,11 @@ msgstr "kan ikke læse værdien af '%s'"
 msgid "Can't read value of key '%s'"
 msgstr "kan ikke læse værdien af nøgle '%s'"
 
-#: ../src/generic/logg.cpp:531 ../src/generic/logg.cpp:928
+#: ../src/generic/logg.cpp:535 ../src/generic/logg.cpp:932
 msgid "Can't save log contents to file."
 msgstr "Kan ikke gemme log-indhold til fil."
 
-#: ../src/msw/thread.cpp:460
+#: ../src/msw/thread.cpp:485
 msgid "Can't set thread priority"
 msgstr "Kan ikke sætte trådprioritet"
 
@@ -670,7 +675,7 @@ msgid "Can't set value of '%s'"
 msgstr "kan ikke sætte værdien af '%s'"
 
 #: ../src/common/dlgcmn.cpp:148 ../src/common/prntbase.cpp:109
-#: ../src/generic/dcpsg.cpp:2259 ../src/generic/dirdlgg.cpp:424
+#: ../src/generic/dcpsg.cpp:2255 ../src/generic/dirdlgg.cpp:424
 #: ../src/generic/filedlgg.cpp:916 ../src/generic/fontdlgg.cpp:257
 #: ../src/generic/prntdlgg.cpp:468 ../src/generic/progdlgg.cpp:179
 #: ../src/generic/proplist.cpp:523 ../src/generic/wizard.cpp:192
@@ -693,11 +698,11 @@ msgstr ""
 msgid "Cannot get priority range for scheduling policy %d."
 msgstr "Kan ikke få prioritetsområde for afviklingsalgoritme %d."
 
-#: ../src/unix/utilsunx.cpp:709
+#: ../src/unix/utilsunx.cpp:713
 msgid "Cannot get the hostname"
 msgstr "Kan ikke få host-navnet"
 
-#: ../src/unix/utilsunx.cpp:745
+#: ../src/unix/utilsunx.cpp:749
 msgid "Cannot get the official hostname"
 msgstr "Kan ikke få det officielle host-navn"
 
@@ -729,7 +734,7 @@ msgstr "Kan ikke åbne URL '%s'"
 msgid "Cannot open contents file: %s"
 msgstr "Kan ikke åbne filen"
 
-#: ../src/generic/dcpsg.cpp:1603
+#: ../src/generic/dcpsg.cpp:1584
 msgid "Cannot open file for PostScript printing!"
 msgstr "Kan ikke åbne fil til PostScript udskrivning!"
 
@@ -771,7 +776,7 @@ msgstr ""
 msgid "Choose font"
 msgstr ""
 
-#: ../src/generic/logg.cpp:471
+#: ../src/generic/logg.cpp:475
 msgid "Clear the log contents"
 msgstr "Rens log indholdet"
 
@@ -780,7 +785,7 @@ msgstr "Rens log indholdet"
 msgid "Close"
 msgstr "Luk"
 
-#: ../src/generic/logg.cpp:473
+#: ../src/generic/logg.cpp:477
 msgid "Close this window"
 msgstr "Luk dette vindue"
 
@@ -822,7 +827,7 @@ msgstr "Kunne ikke finde resource include file %s."
 msgid "Could not find tab for id"
 msgstr "Kunne ikke finde tab til id"
 
-#: ../src/msw/textctrl.cpp:1244
+#: ../src/msw/textctrl.cpp:1249
 #, fuzzy, c-format
 msgid "Could not load Rich Edit DLL '%s'"
 msgstr "Kunne ikke initialisere 'Rich Edit DLL'"
@@ -876,12 +881,12 @@ msgstr "Kunne ikke ændre tilstanden af hændelsesobjekt."
 msgid "Couldn't create a timer"
 msgstr "Kunne ikke oprette en timer"
 
-#: ../src/common/dynlib.cpp:305
+#: ../src/common/dynlib.cpp:309
 #, c-format
 msgid "Couldn't find symbol '%s' in a dynamic library"
 msgstr "Kunne ikke finde symbolet '%s' i et dynamisk bibliotek"
 
-#: ../src/msw/thread.cpp:553
+#: ../src/msw/thread.cpp:578
 msgid "Couldn't get the current thread pointer"
 msgstr "Kunne ikke få nuværende trådpegepind"
 
@@ -909,7 +914,7 @@ msgstr "Kunne ikke frigive en mutex"
 msgid "Couldn't retrieve information about list control item %d."
 msgstr "Kunne ikke hente information om listekontorlenhed %d."
 
-#: ../src/msw/thread.cpp:933
+#: ../src/msw/thread.cpp:958
 msgid "Couldn't terminate thread"
 msgstr "Kunne ikke afslutte tråd"
 
@@ -1025,7 +1030,7 @@ msgstr ""
 msgid "Error"
 msgstr "Fejl"
 
-#: ../src/unix/utilsunx.cpp:948 ../src/unix/utilsunx.cpp:956
+#: ../src/unix/utilsunx.cpp:952 ../src/unix/utilsunx.cpp:960
 msgid "Error "
 msgstr "Fejl "
 
@@ -1110,7 +1115,7 @@ msgstr ""
 msgid "Failed to create DDE string"
 msgstr "Fejlede ved oprettelse af dialog."
 
-#: ../src/msw/mdi.cpp:421
+#: ../src/msw/mdi.cpp:425
 msgid "Failed to create MDI parent frame."
 msgstr "Kunne ikke oprette MDI forældreramme."
 
@@ -1152,7 +1157,7 @@ msgstr ""
 msgid "Failed to establish dialup connection: %s"
 msgstr ""
 
-#: ../src/unix/utilsunx.cpp:441 ../src/unix/utilsunx.cpp:469
+#: ../src/unix/utilsunx.cpp:444 ../src/unix/utilsunx.cpp:472
 #, fuzzy, c-format
 msgid "Failed to execute '%s'\n"
 msgstr "Kan ikke eksekvere '%s'\n"
@@ -1209,7 +1214,7 @@ msgid ""
 "program"
 msgstr ""
 
-#: ../src/common/dynlib.cpp:235
+#: ../src/common/dynlib.cpp:239
 #, c-format
 msgid "Failed to load shared library '%s'"
 msgstr "Kunne ikke load'e delt bibliotek '%s'"
@@ -1223,7 +1228,7 @@ msgstr "Kunne ikke åbne klippebordet."
 msgid "Failed to put data on the clipboard"
 msgstr "Kunne ikke hente data fra klippebordet."
 
-#: ../src/unix/utilsunx.cpp:540
+#: ../src/unix/utilsunx.cpp:543
 msgid "Failed to redirect child process input/output"
 msgstr ""
 
@@ -1298,7 +1303,7 @@ msgstr "Kunne ikke afslutte en tråd."
 msgid "Failed to unregister DDE server '%s'"
 msgstr "Kunne ikke oprette tooltip '%s'"
 
-#: ../src/generic/logg.cpp:367
+#: ../src/generic/logg.cpp:371
 msgid "Fatal error"
 msgstr "Fatal fejl"
 
@@ -1356,7 +1361,7 @@ msgstr "Font"
 msgid "Font size:"
 msgstr ""
 
-#: ../src/unix/utilsunx.cpp:497
+#: ../src/unix/utilsunx.cpp:500
 msgid "Fork failed"
 msgstr "Gaffel fejlede ;-)"
 
@@ -1449,7 +1454,7 @@ msgid "Hebrew (ISO-8859-8)"
 msgstr ""
 
 #: ../src/common/dlgcmn.cpp:144 ../src/generic/proplist.cpp:528
-#: ../src/html/helpfrm.cpp:208 ../src/msw/mdi.cpp:1276
+#: ../src/html/helpfrm.cpp:208 ../src/msw/mdi.cpp:1280
 msgid "Help"
 msgstr "Hjælp"
 
@@ -1539,7 +1544,7 @@ msgstr "Kunne ikke oprette en timer"
 msgid "KOI8-R"
 msgstr ""
 
-#: ../src/generic/dcpsg.cpp:2250 ../src/generic/prntdlgg.cpp:441
+#: ../src/generic/dcpsg.cpp:2246 ../src/generic/prntdlgg.cpp:441
 #: ../src/generic/prntdlgg.cpp:637
 msgid "Landscape"
 msgstr "Liggende"
@@ -1591,7 +1596,7 @@ msgstr ""
 msgid "Loading Grey Raw PNM image is not yet implemented."
 msgstr ""
 
-#: ../src/generic/logg.cpp:534
+#: ../src/generic/logg.cpp:538
 #, c-format
 msgid "Log saved to the file '%s'."
 msgstr "Log gemt i filen '%s'."
@@ -1600,7 +1605,7 @@ msgstr "Log gemt i filen '%s'."
 msgid "MDI child"
 msgstr "MDI barn"
 
-#: ../src/unix/mimetype.cpp:1570
+#: ../src/unix/mimetype.cpp:1574
 #, c-format
 msgid "Mailcap file %s, line %d: incomplete entry ignored."
 msgstr "Mailcap fil %s, linie %d: ufuldstændig indgang ignoreret."
@@ -1610,7 +1615,7 @@ msgstr "Mailcap fil %s, linie %d: ufuldstændig indgang ignoreret."
 msgid "Memory VFS already contains file '%s'!"
 msgstr ""
 
-#: ../src/unix/mimetype.cpp:1292
+#: ../src/unix/mimetype.cpp:1295
 #, c-format
 msgid "Mime.types file %s, line %d: unterminated quoted string."
 msgstr "Mime.type fil %s, linie %d: uafsluttet streng."
@@ -1714,9 +1719,9 @@ msgstr "Normal"
 msgid "Note, 8 1/2 x 11 in"
 msgstr "Letter 8 1/2 x 11 in"
 
-#: ../src/common/dlgcmn.cpp:127 ../src/generic/dcpsg.cpp:2258
+#: ../src/common/dlgcmn.cpp:127 ../src/generic/dcpsg.cpp:2254
 #: ../src/generic/dirdlgg.cpp:422 ../src/generic/filedlgg.cpp:907
-#: ../src/generic/fontdlgg.cpp:256 ../src/generic/logg.cpp:729
+#: ../src/generic/fontdlgg.cpp:256 ../src/generic/logg.cpp:733
 #: ../src/generic/prntdlgg.cpp:467 ../src/generic/proplist.cpp:511
 #: ../src/gtk/filedlg.cpp:158 ../src/gtk/fontdlg.cpp:172
 #: ../src/html/helpfrm.cpp:909
@@ -1827,7 +1832,7 @@ msgstr "Side størrelse"
 msgid "Permissions"
 msgstr ""
 
-#: ../src/unix/utilsunx.cpp:440 ../src/unix/utilsunx.cpp:468
+#: ../src/unix/utilsunx.cpp:443 ../src/unix/utilsunx.cpp:471
 msgid "Pipe creation failed"
 msgstr "Røroprettelse fejlede"
 
@@ -1848,7 +1853,7 @@ msgstr ""
 msgid "Please wait..."
 msgstr "Vent venligst..."
 
-#: ../src/generic/dcpsg.cpp:2249 ../src/generic/prntdlgg.cpp:440
+#: ../src/generic/dcpsg.cpp:2245 ../src/generic/prntdlgg.cpp:440
 #: ../src/generic/prntdlgg.cpp:636
 msgid "Portrait"
 msgstr "Opretstående"
@@ -1861,11 +1866,11 @@ msgstr "EfterSkrift ;-)"
 msgid "PostScript file"
 msgstr "PostScript fil"
 
-#: ../src/generic/dcpsg.cpp:2291
+#: ../src/generic/dcpsg.cpp:2287
 msgid "PostScript:"
 msgstr "PostScript fil:"
 
-#: ../src/generic/dcpsg.cpp:2254
+#: ../src/generic/dcpsg.cpp:2250
 msgid "Preview Only"
 msgstr "Bare smugkig"
 
@@ -1911,7 +1916,7 @@ msgstr "Udskriftsspuling"
 msgid "Print this page"
 msgstr "Udskriftsområde"
 
-#: ../src/generic/dcpsg.cpp:2253 ../src/generic/prntdlgg.cpp:150
+#: ../src/generic/dcpsg.cpp:2249 ../src/generic/prntdlgg.cpp:150
 msgid "Print to File"
 msgstr "Udskriv til fil"
 
@@ -1919,11 +1924,11 @@ msgstr "Udskriv til fil"
 msgid "Print..."
 msgstr "Udskriv..."
 
-#: ../src/generic/dcpsg.cpp:2264
+#: ../src/generic/dcpsg.cpp:2260
 msgid "Printer Command: "
 msgstr "Printer kommando: "
 
-#: ../src/generic/dcpsg.cpp:2269
+#: ../src/generic/dcpsg.cpp:2265
 msgid "Printer Options: "
 msgstr "Printer valgmuligheder: "
 
@@ -1973,7 +1978,7 @@ msgstr "Program afsluttet"
 msgid "Quarto, 215 x 275 mm"
 msgstr "A4 210 x 297 mm"
 
-#: ../src/generic/logg.cpp:1019
+#: ../src/generic/logg.cpp:1023
 msgid "Question"
 msgstr "Spørgsmål"
 
@@ -2043,7 +2048,7 @@ msgstr "Gem %s fil"
 msgid "Save as"
 msgstr "Gem som"
 
-#: ../src/generic/logg.cpp:469
+#: ../src/generic/logg.cpp:473
 msgid "Save log contents to file"
 msgstr "Gen log indhold til fil"
 
@@ -2093,7 +2098,7 @@ msgstr "Vælg et dokumentudseende"
 msgid "Select a file"
 msgstr "Vælg en file"
 
-#: ../src/generic/dcpsg.cpp:2252
+#: ../src/generic/dcpsg.cpp:2248
 msgid "Send to Printer"
 msgstr "Send til printer"
 
@@ -2160,7 +2165,7 @@ msgstr "Undskyld, der er ikke nok hukkomelse til at danne et smugkig."
 msgid "Statement, 5 1/2 x 8 1/2 in"
 msgstr "Letter 8 1/2 x 11 in"
 
-#: ../src/generic/logg.cpp:594
+#: ../src/generic/logg.cpp:598
 msgid "Status: "
 msgstr "Status: "
 
@@ -2270,7 +2275,7 @@ msgid ""
 "tooold, please upgrade (the following required function is missing: %s)."
 msgstr ""
 
-#: ../src/msw/thread.cpp:1058
+#: ../src/msw/thread.cpp:1083
 msgid ""
 "Thread module initialization failed: can not store value in thread local "
 "storage"
@@ -2281,7 +2286,7 @@ msgstr ""
 msgid "Thread module initialization failed: failed to create thread key"
 msgstr "Trådmodul initialisering fejlede: kunne ikke oprette trådnøgle"
 
-#: ../src/msw/thread.cpp:1046
+#: ../src/msw/thread.cpp:1071
 msgid ""
 "Thread module initialization failed: impossible to allocate index in thread "
 "local storage"
@@ -2366,7 +2371,7 @@ msgstr ""
 msgid "Unknown encoding (%d)"
 msgstr ""
 
-#: ../src/unix/mimetype.cpp:1335
+#: ../src/unix/mimetype.cpp:1338
 #, c-format
 msgid "Unknown field in file %s, line %d: '%s'."
 msgstr "Ukendt felt i fil %s, linie %d: '%s'."
@@ -2433,7 +2438,7 @@ msgstr ""
 msgid "Views"
 msgstr "Udseender"
 
-#: ../src/unix/utilsunx.cpp:270 ../src/unix/utilsunx.cpp:619
+#: ../src/unix/utilsunx.cpp:270 ../src/unix/utilsunx.cpp:622
 msgid "Waiting for subprocess termination failed"
 msgstr "Venten på under-process afslutning fejlede"
 
@@ -2465,7 +2470,7 @@ msgstr ""
 msgid "Win32s on Windows 3.1"
 msgstr ""
 
-#: ../src/msw/mdi.cpp:1311
+#: ../src/msw/mdi.cpp:1315
 #, fuzzy
 msgid "Window"
 msgstr "Fandt "
@@ -2520,19 +2525,19 @@ msgstr ""
 msgid "Write error on file '%s'"
 msgstr "kan ikke åbne filen '%s'"
 
-#: ../src/generic/dcpsg.cpp:2309
+#: ../src/generic/dcpsg.cpp:2305
 msgid "X Scaling"
 msgstr "X scalering"
 
-#: ../src/generic/dcpsg.cpp:2318
+#: ../src/generic/dcpsg.cpp:2314
 msgid "X Translation"
 msgstr "X oversættelse"
 
-#: ../src/generic/dcpsg.cpp:2313
+#: ../src/generic/dcpsg.cpp:2309
 msgid "Y Scaling"
 msgstr "Y scalering"
 
-#: ../src/generic/dcpsg.cpp:2322
+#: ../src/generic/dcpsg.cpp:2318
 msgid "Y Translation"
 msgstr "Y oversættelse"
 
@@ -2730,7 +2735,7 @@ msgstr "kan ikke fjerne midlertidig fil '%s'"
 msgid "can't seek on file descriptor %d"
 msgstr "kan ikke søge på fildeskriptor %d"
 
-#: ../src/common/textfile.cpp:354
+#: ../src/common/textfile.cpp:357
 #, c-format
 msgid "can't write file '%s' to disk."
 msgstr "kan ikke skrive fil '%s' til disk."
@@ -2843,7 +2848,7 @@ msgstr "ugyldig dato"
 msgid "invalid eof() return value."
 msgstr "ugyldig eof() returværdi."
 
-#: ../src/generic/logg.cpp:1033
+#: ../src/generic/logg.cpp:1037
 msgid "invalid message box return value"
 msgstr "ugyldig meddelelsesboks returværdi"
 

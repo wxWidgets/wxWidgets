@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWindows-2.2.1\n"
-"POT-Creation-Date: 2000-10-16 04:14+0930\n"
+"POT-Creation-Date: 2001-01-27 13:50-0800\n"
 "PO-Revision-Date: 2000-08-10 16:09+0200\n"
 "Last-Translator: Roman Rolinsky <rolinsky@mema.ucl.ac.be>, Vadim Zeitlin "
 "<vadimwxwindows.org>\n"
@@ -101,19 +101,19 @@ msgid "%s (or %s)"
 msgstr "%s (или %s)"
 
 # ../src/generic/logg.cpp:239
-#: ../src/generic/logg.cpp:239
+#: ../src/generic/logg.cpp:243
 #, c-format
 msgid "%s Error"
 msgstr "Ошибка %s"
 
 # ../src/generic/logg.cpp:247
-#: ../src/generic/logg.cpp:247
+#: ../src/generic/logg.cpp:251
 #, c-format
 msgid "%s Information"
 msgstr "Информация %s"
 
 # ../src/generic/logg.cpp:243
-#: ../src/generic/logg.cpp:243
+#: ../src/generic/logg.cpp:247
 #, c-format
 msgid "%s Warning"
 msgstr "Предупреждение %s"
@@ -141,12 +141,12 @@ msgid "%s: ill-formed resource file syntax."
 msgstr "%s: ошибочный синтаксис файла ресурсов."
 
 # ../src/generic/logg.cpp:473 ../src/generic/tipdlg.cpp:170
-#: ../src/generic/logg.cpp:473 ../src/generic/tipdlg.cpp:170
+#: ../src/generic/logg.cpp:477 ../src/generic/tipdlg.cpp:170
 msgid "&Close"
 msgstr "&Закрыть"
 
 # ../src/generic/logg.cpp:685
-#: ../src/generic/logg.cpp:685
+#: ../src/generic/logg.cpp:689
 msgid "&Details"
 msgstr "&Детали"
 
@@ -156,7 +156,7 @@ msgid "&Finish"
 msgstr "&Завершить"
 
 # ../src/generic/logg.cpp:474
-#: ../src/generic/logg.cpp:474
+#: ../src/generic/logg.cpp:478
 msgid "&Log"
 msgstr "&Журнал"
 
@@ -181,7 +181,7 @@ msgid "&Redo "
 msgstr "&Восстановить "
 
 # ../src/generic/logg.cpp:469 ../src/generic/logg.cpp:770
-#: ../src/generic/logg.cpp:469 ../src/generic/logg.cpp:770
+#: ../src/generic/logg.cpp:473 ../src/generic/logg.cpp:774
 msgid "&Save..."
 msgstr "&Сохранить..."
 
@@ -201,7 +201,7 @@ msgid "&Undo "
 msgstr "О&тменить "
 
 # ../src/common/docview.cpp:1906
-#: ../src/msw/mdi.cpp:1280 ../src/msw/mdi.cpp:1287
+#: ../src/msw/mdi.cpp:1284 ../src/msw/mdi.cpp:1291 ../src/msw/window.cpp:2276
 msgid "&Window"
 msgstr "&Окно"
 
@@ -230,7 +230,7 @@ msgid "'%s' is not a valid message catalog."
 msgstr "'%s' неверный каталог сообщений."
 
 # ../src/common/textfile.cpp:250
-#: ../src/common/textfile.cpp:250
+#: ../src/common/textfile.cpp:253
 #, c-format
 msgid "'%s' is probably a binary file."
 msgstr "'%s' возможно двоичный файл."
@@ -292,6 +292,12 @@ msgstr "."
 # ../src/generic/dirdlgg.cpp:265 ../src/generic/filedlgg.cpp:714
 #: ../src/generic/dirdlgg.cpp:265 ../src/generic/filedlgg.cpp:714
 msgid ".."
+msgstr ".."
+
+# ../src/generic/dirdlgg.cpp:265 ../src/generic/filedlgg.cpp:714
+#: ../src/msw/dirdlg.cpp:156
+#, fuzzy
+msgid "..."
 msgstr ".."
 
 # ../src/common/paper.cpp:120
@@ -382,7 +388,7 @@ msgid "A3 sheet, 297 x 420 mm"
 msgstr "Лист A3 297 x 420 мм"
 
 # ../src/common/paper.cpp:104 ../src/generic/dcpsg.cpp:2516
-#: ../src/common/paper.cpp:104 ../src/generic/dcpsg.cpp:2535
+#: ../src/common/paper.cpp:104 ../src/generic/dcpsg.cpp:2531
 msgid "A4 sheet, 210 x 297 mm"
 msgstr "Лист A4, 210 x 297 мм"
 
@@ -433,7 +439,7 @@ msgid "Already dialling ISP."
 msgstr "Уже звоним ISP."
 
 # ../src/generic/logg.cpp:1017
-#: ../src/generic/logg.cpp:1017
+#: ../src/generic/logg.cpp:1021
 #, c-format
 msgid "Append log to file '%s' (choosing [No] will overwrite it)?"
 msgstr "Добавить в файл журнала '%s' (выбор [Нет] перепишет его)?"
@@ -560,7 +566,7 @@ msgid "C sheet, 17 x 22 in"
 msgstr "Лист C, 17 x 22 дюйм"
 
 # ../src/generic/logg.cpp:471
-#: ../src/generic/logg.cpp:471
+#: ../src/generic/logg.cpp:475
 msgid "C&lear"
 msgstr "О&чистить"
 
@@ -609,21 +615,21 @@ msgstr "Невозможно создать семафор"
 msgid "Can not enumerate files in directory '%s'"
 msgstr "Не могу подсчитать файлы в каталоге '%s'"
 
-#: ../src/msw/thread.cpp:527
+#: ../src/msw/thread.cpp:552
 #, c-format
 msgid "Can not resume thread %x"
 msgstr "Невозможно возобновить нить %x"
 
-#: ../src/msw/thread.cpp:408
+#: ../src/msw/thread.cpp:433
 msgid "Can not start thread: error writing TLS."
 msgstr "Невозможно запустить нить: ошибка записи TLS."
 
-#: ../src/msw/thread.cpp:512
+#: ../src/msw/thread.cpp:537
 #, c-format
 msgid "Can not suspend thread %x"
 msgstr "Невозможно остановить нить %x"
 
-#: ../src/msw/thread.cpp:846
+#: ../src/msw/thread.cpp:871
 msgid "Can not wait for thread termination"
 msgstr "Невозможно дождаться окончания нити"
 
@@ -665,11 +671,11 @@ msgstr "Невозможно создать коммуникационный канал для чтения"
 msgid "Can't create the inter-process write pipe"
 msgstr "Невозможно создать коммуникационный канал для записи"
 
-#: ../src/msw/thread.cpp:494
+#: ../src/msw/thread.cpp:519
 msgid "Can't create thread"
 msgstr "Невозможно создать нить"
 
-#: ../src/msw/window.cpp:2390
+#: ../src/msw/window.cpp:2402
 #, c-format
 msgid ""
 "Can't create window of class %s!\n"
@@ -714,7 +720,7 @@ msgstr "Невозможно подсчитать значения ключа '%s'"
 msgid "Can't find current position in file '%s'"
 msgstr "Не могу найти текущую позицию в файле '%s'"
 
-#: ../src/msw/window.cpp:2340
+#: ../src/msw/window.cpp:2352
 msgid ""
 "Can't find dummy dialog template!\n"
 "Check resource include path for finding wx.rc."
@@ -766,11 +772,11 @@ msgid "Can't read value of key '%s'"
 msgstr "Невозможно прочитать значение ключа '%s'"
 
 # ../src/generic/logg.cpp:531 ../src/generic/logg.cpp:928
-#: ../src/generic/logg.cpp:531 ../src/generic/logg.cpp:928
+#: ../src/generic/logg.cpp:535 ../src/generic/logg.cpp:932
 msgid "Can't save log contents to file."
 msgstr "Не могу сохранить содержание журнала в файл."
 
-#: ../src/msw/thread.cpp:460
+#: ../src/msw/thread.cpp:485
 msgid "Can't set thread priority"
 msgstr "Невозможно установить приоритет нити"
 
@@ -787,7 +793,7 @@ msgstr "Невозможно установить значение '%s'"
 # ../src/gtk/filedlg.cpp:164 ../src/gtk/fontdlg.cpp:178
 # ../src/html/helpfrm.cpp:910
 #: ../src/common/dlgcmn.cpp:148 ../src/common/prntbase.cpp:109
-#: ../src/generic/dcpsg.cpp:2259 ../src/generic/dirdlgg.cpp:424
+#: ../src/generic/dcpsg.cpp:2255 ../src/generic/dirdlgg.cpp:424
 #: ../src/generic/filedlgg.cpp:916 ../src/generic/fontdlgg.cpp:257
 #: ../src/generic/prntdlgg.cpp:468 ../src/generic/progdlgg.cpp:179
 #: ../src/generic/proplist.cpp:523 ../src/generic/wizard.cpp:192
@@ -812,12 +818,12 @@ msgid "Cannot get priority range for scheduling policy %d."
 msgstr "Невозможно получить интервал приоритета для распорядка %d."
 
 # ../src/unix/utilsunx.cpp:709
-#: ../src/unix/utilsunx.cpp:709
+#: ../src/unix/utilsunx.cpp:713
 msgid "Cannot get the hostname"
 msgstr "Невозможно получить имя хоста"
 
 # ../src/unix/utilsunx.cpp:745
-#: ../src/unix/utilsunx.cpp:745
+#: ../src/unix/utilsunx.cpp:749
 msgid "Cannot get the official hostname"
 msgstr "Невозможно получить официальное имя хоста"
 
@@ -854,7 +860,7 @@ msgid "Cannot open contents file: %s"
 msgstr "Невозможно открыть файл содержания: %s"
 
 # ../src/generic/dcpsg.cpp:1584
-#: ../src/generic/dcpsg.cpp:1603
+#: ../src/generic/dcpsg.cpp:1584
 msgid "Cannot open file for PostScript printing!"
 msgstr "Невозможно открыть файл для печати в PostScript!"
 
@@ -905,7 +911,7 @@ msgid "Choose font"
 msgstr "Выберите шрифт"
 
 # ../src/generic/logg.cpp:471
-#: ../src/generic/logg.cpp:471
+#: ../src/generic/logg.cpp:475
 msgid "Clear the log contents"
 msgstr "Очистить содержимое журнала"
 
@@ -917,7 +923,7 @@ msgid "Close"
 msgstr "Закрыть"
 
 # ../src/generic/logg.cpp:473
-#: ../src/generic/logg.cpp:473
+#: ../src/generic/logg.cpp:477
 msgid "Close this window"
 msgstr "Закрыть это окно"
 
@@ -968,7 +974,7 @@ msgstr "Не найден включаемый файл ресурсов %s."
 msgid "Could not find tab for id"
 msgstr "невозможно найти tab для id"
 
-#: ../src/msw/textctrl.cpp:1244
+#: ../src/msw/textctrl.cpp:1249
 #, c-format
 msgid "Could not load Rich Edit DLL '%s'"
 msgstr "Невозможно проинициализировать Rich Edit DLL '%s'"
@@ -1028,12 +1034,12 @@ msgid "Couldn't create a timer"
 msgstr "Невозможно создать таймер"
 
 # ../src/common/dynlib.cpp:268
-#: ../src/common/dynlib.cpp:305
+#: ../src/common/dynlib.cpp:309
 #, c-format
 msgid "Couldn't find symbol '%s' in a dynamic library"
 msgstr "Невозможно найти символ '%s' в динамической библиотеке"
 
-#: ../src/msw/thread.cpp:553
+#: ../src/msw/thread.cpp:578
 msgid "Couldn't get the current thread pointer"
 msgstr "Невозможно получить указатель на текущую нить"
 
@@ -1064,7 +1070,7 @@ msgid "Couldn't retrieve information about list control item %d."
 msgstr "Невозможно извлечь информацию об элементе списка %d."
 
 # ../src/unix/threadpsx.cpp:1251
-#: ../src/msw/thread.cpp:933
+#: ../src/msw/thread.cpp:958
 msgid "Couldn't terminate thread"
 msgstr "Не удалось завершить нить"
 
@@ -1208,7 +1214,7 @@ msgid "Error"
 msgstr "Ошибка"
 
 # ../src/unix/utilsunx.cpp:948 ../src/unix/utilsunx.cpp:956
-#: ../src/unix/utilsunx.cpp:948 ../src/unix/utilsunx.cpp:956
+#: ../src/unix/utilsunx.cpp:952 ../src/unix/utilsunx.cpp:960
 msgid "Error "
 msgstr "Ошибка "
 
@@ -1305,7 +1311,7 @@ msgstr "Невозможно скопировать ключ registry '%s'"
 msgid "Failed to create DDE string"
 msgstr "Ошибка создания строки DDE"
 
-#: ../src/msw/mdi.cpp:421
+#: ../src/msw/mdi.cpp:425
 msgid "Failed to create MDI parent frame."
 msgstr "Ошибка создания родительского фрейма MDI."
 
@@ -1350,7 +1356,7 @@ msgid "Failed to establish dialup connection: %s"
 msgstr "Невозможно дозвониться: %s"
 
 # ../src/unix/utilsunx.cpp:441 ../src/unix/utilsunx.cpp:469
-#: ../src/unix/utilsunx.cpp:441 ../src/unix/utilsunx.cpp:469
+#: ../src/unix/utilsunx.cpp:444 ../src/unix/utilsunx.cpp:472
 #, c-format
 msgid "Failed to execute '%s'\n"
 msgstr "Не удалось выполнить '%s'\n"
@@ -1416,7 +1422,7 @@ msgstr ""
 "программу"
 
 # ../src/common/dynlib.cpp:225
-#: ../src/common/dynlib.cpp:235
+#: ../src/common/dynlib.cpp:239
 #, c-format
 msgid "Failed to load shared library '%s'"
 msgstr "Ошибка загрузки разделяемой библиотеки '%s'"
@@ -1430,7 +1436,7 @@ msgid "Failed to put data on the clipboard"
 msgstr "Не удалось положить данные на clipboard."
 
 # ../src/unix/utilsunx.cpp:540
-#: ../src/unix/utilsunx.cpp:540
+#: ../src/unix/utilsunx.cpp:543
 msgid "Failed to redirect child process input/output"
 msgstr "Не удалось перенаправить ввод/вывод порожденного процесса"
 
@@ -1511,7 +1517,7 @@ msgid "Failed to unregister DDE server '%s'"
 msgstr "Не удалось отзарегестрировать DDE сервер '%s'"
 
 # ../src/generic/logg.cpp:367
-#: ../src/generic/logg.cpp:367
+#: ../src/generic/logg.cpp:371
 msgid "Fatal error"
 msgstr "Критическая ошибка"
 
@@ -1577,7 +1583,7 @@ msgid "Font size:"
 msgstr "Размер шрифта:"
 
 # ../src/unix/utilsunx.cpp:497
-#: ../src/unix/utilsunx.cpp:497
+#: ../src/unix/utilsunx.cpp:500
 msgid "Fork failed"
 msgstr "Неудачный Fork"
 
@@ -1691,7 +1697,7 @@ msgstr "Hebrew (ISO-8859-8)"
 # ../src/common/dlgcmn.cpp:144 ../src/generic/proplist.cpp:528
 # ../src/html/helpfrm.cpp:208
 #: ../src/common/dlgcmn.cpp:144 ../src/generic/proplist.cpp:528
-#: ../src/html/helpfrm.cpp:208 ../src/msw/mdi.cpp:1276
+#: ../src/html/helpfrm.cpp:208 ../src/msw/mdi.cpp:1280
 msgid "Help"
 msgstr "Помощь"
 
@@ -1798,7 +1804,7 @@ msgstr "KOI8-R"
 
 # ../src/generic/dcpsg.cpp:2232 ../src/generic/prntdlgg.cpp:441
 # ../src/generic/prntdlgg.cpp:637
-#: ../src/generic/dcpsg.cpp:2250 ../src/generic/prntdlgg.cpp:441
+#: ../src/generic/dcpsg.cpp:2246 ../src/generic/prntdlgg.cpp:441
 #: ../src/generic/prntdlgg.cpp:637
 msgid "Landscape"
 msgstr "Пейзаж"
@@ -1856,7 +1862,7 @@ msgid "Loading Grey Raw PNM image is not yet implemented."
 msgstr "Загрузка изображения Grey Raw PNM еще не реализована."
 
 # ../src/generic/logg.cpp:534
-#: ../src/generic/logg.cpp:534
+#: ../src/generic/logg.cpp:538
 #, c-format
 msgid "Log saved to the file '%s'."
 msgstr "Журнал записан в файл '%s'."
@@ -1867,7 +1873,7 @@ msgid "MDI child"
 msgstr "Потомок MDI"
 
 # ../src/unix/mimetype.cpp:1570
-#: ../src/unix/mimetype.cpp:1570
+#: ../src/unix/mimetype.cpp:1574
 #, c-format
 msgid "Mailcap file %s, line %d: incomplete entry ignored."
 msgstr "Файл mailcap %s, строка %d: неполная запись проигнорирована."
@@ -1879,7 +1885,7 @@ msgid "Memory VFS already contains file '%s'!"
 msgstr "Память VFS уже содержит файл '%s'!"
 
 # ../src/unix/mimetype.cpp:1292
-#: ../src/unix/mimetype.cpp:1292
+#: ../src/unix/mimetype.cpp:1295
 #, c-format
 msgid "Mime.types file %s, line %d: unterminated quoted string."
 msgstr "Файл mime.types %s, строка %d: незакрытые кавычки."
@@ -2010,9 +2016,9 @@ msgstr "Note, 8 1/2 x 11 дюйм"
 # ../src/generic/prntdlgg.cpp:467 ../src/generic/proplist.cpp:511
 # ../src/gtk/filedlg.cpp:158 ../src/gtk/fontdlg.cpp:172
 # ../src/html/helpfrm.cpp:909
-#: ../src/common/dlgcmn.cpp:127 ../src/generic/dcpsg.cpp:2258
+#: ../src/common/dlgcmn.cpp:127 ../src/generic/dcpsg.cpp:2254
 #: ../src/generic/dirdlgg.cpp:422 ../src/generic/filedlgg.cpp:907
-#: ../src/generic/fontdlgg.cpp:256 ../src/generic/logg.cpp:729
+#: ../src/generic/fontdlgg.cpp:256 ../src/generic/logg.cpp:733
 #: ../src/generic/prntdlgg.cpp:467 ../src/generic/proplist.cpp:511
 #: ../src/gtk/filedlg.cpp:158 ../src/gtk/fontdlg.cpp:172
 #: ../src/html/helpfrm.cpp:909
@@ -2146,7 +2152,7 @@ msgid "Permissions"
 msgstr "Разрешения"
 
 # ../src/unix/utilsunx.cpp:440 ../src/unix/utilsunx.cpp:468
-#: ../src/unix/utilsunx.cpp:440 ../src/unix/utilsunx.cpp:468
+#: ../src/unix/utilsunx.cpp:443 ../src/unix/utilsunx.cpp:471
 msgid "Pipe creation failed"
 msgstr "Ошибка создания потока ввода-вывода"
 
@@ -2171,7 +2177,7 @@ msgstr "Подождите, пожалуйста..."
 
 # ../src/generic/dcpsg.cpp:2231 ../src/generic/prntdlgg.cpp:440
 # ../src/generic/prntdlgg.cpp:636
-#: ../src/generic/dcpsg.cpp:2249 ../src/generic/prntdlgg.cpp:440
+#: ../src/generic/dcpsg.cpp:2245 ../src/generic/prntdlgg.cpp:440
 #: ../src/generic/prntdlgg.cpp:636
 msgid "Portrait"
 msgstr "Портрет"
@@ -2187,12 +2193,12 @@ msgid "PostScript file"
 msgstr "Файл PostScript"
 
 # ../src/generic/dcpsg.cpp:2273
-#: ../src/generic/dcpsg.cpp:2291
+#: ../src/generic/dcpsg.cpp:2287
 msgid "PostScript:"
 msgstr "PostScript:"
 
 # ../src/generic/dcpsg.cpp:2236
-#: ../src/generic/dcpsg.cpp:2254
+#: ../src/generic/dcpsg.cpp:2250
 msgid "Preview Only"
 msgstr "Только пред-осмотр"
 
@@ -2247,7 +2253,7 @@ msgid "Print this page"
 msgstr "Напечатать эту страницу"
 
 # ../src/generic/dcpsg.cpp:2235 ../src/generic/prntdlgg.cpp:150
-#: ../src/generic/dcpsg.cpp:2253 ../src/generic/prntdlgg.cpp:150
+#: ../src/generic/dcpsg.cpp:2249 ../src/generic/prntdlgg.cpp:150
 msgid "Print to File"
 msgstr "Печать в файл"
 
@@ -2257,12 +2263,12 @@ msgid "Print..."
 msgstr "Печать..."
 
 # ../src/generic/dcpsg.cpp:2246
-#: ../src/generic/dcpsg.cpp:2264
+#: ../src/generic/dcpsg.cpp:2260
 msgid "Printer Command: "
 msgstr "Команда принтера: "
 
 # ../src/generic/dcpsg.cpp:2251
-#: ../src/generic/dcpsg.cpp:2269
+#: ../src/generic/dcpsg.cpp:2265
 msgid "Printer Options: "
 msgstr "Опции принтера: "
 
@@ -2323,7 +2329,7 @@ msgid "Quarto, 215 x 275 mm"
 msgstr "Quarto, 215 x 275 мм"
 
 # ../src/generic/logg.cpp:1019
-#: ../src/generic/logg.cpp:1019
+#: ../src/generic/logg.cpp:1023
 msgid "Question"
 msgstr "Вопрос"
 
@@ -2403,7 +2409,7 @@ msgid "Save as"
 msgstr "Сохранить как"
 
 # ../src/generic/logg.cpp:469
-#: ../src/generic/logg.cpp:469
+#: ../src/generic/logg.cpp:473
 msgid "Save log contents to file"
 msgstr "Сохранить содержание журнала в файл"
 
@@ -2465,7 +2471,7 @@ msgid "Select a file"
 msgstr "Выберите файл"
 
 # ../src/generic/dcpsg.cpp:2234
-#: ../src/generic/dcpsg.cpp:2252
+#: ../src/generic/dcpsg.cpp:2248
 msgid "Send to Printer"
 msgstr "Отправить на печать"
 
@@ -2546,7 +2552,7 @@ msgid "Statement, 5 1/2 x 8 1/2 in"
 msgstr "Statement, 5 1/2 x 8 1/2 дюйм"
 
 # ../src/generic/logg.cpp:594
-#: ../src/generic/logg.cpp:594
+#: ../src/generic/logg.cpp:598
 msgid "Status: "
 msgstr "Статус: "
 
@@ -2682,7 +2688,7 @@ msgstr ""
 "Сервис удаленного подсоединения (RAS) установленный на этой машине "
 "недостаточно новый (функция %s не найденф)."
 
-#: ../src/msw/thread.cpp:1058
+#: ../src/msw/thread.cpp:1083
 msgid ""
 "Thread module initialization failed: can not store value in thread local "
 "storage"
@@ -2695,7 +2701,7 @@ msgstr ""
 msgid "Thread module initialization failed: failed to create thread key"
 msgstr "Ошибка инициализации модуля нитей: не удалось создать ключ нити"
 
-#: ../src/msw/thread.cpp:1046
+#: ../src/msw/thread.cpp:1071
 msgid ""
 "Thread module initialization failed: impossible to allocate index in thread "
 "local storage"
@@ -2806,7 +2812,7 @@ msgid "Unknown encoding (%d)"
 msgstr "Неожиданная кодировка (%d)"
 
 # ../src/unix/mimetype.cpp:1335
-#: ../src/unix/mimetype.cpp:1335
+#: ../src/unix/mimetype.cpp:1338
 #, c-format
 msgid "Unknown field in file %s, line %d: '%s'."
 msgstr "Неизвестное поле в файле %s, строка %d: '%s'."
@@ -2888,7 +2894,7 @@ msgid "Views"
 msgstr "Виды"
 
 # ../src/unix/utilsunx.cpp:270 ../src/unix/utilsunx.cpp:619
-#: ../src/unix/utilsunx.cpp:270 ../src/unix/utilsunx.cpp:619
+#: ../src/unix/utilsunx.cpp:270 ../src/unix/utilsunx.cpp:622
 msgid "Waiting for subprocess termination failed"
 msgstr "Ошибка ожидания окончания подпроцесса"
 
@@ -2929,7 +2935,7 @@ msgid "Win32s on Windows 3.1"
 msgstr "Win32s на Windows 3.1"
 
 # ../src/html/helpfrm.cpp:340
-#: ../src/msw/mdi.cpp:1311
+#: ../src/msw/mdi.cpp:1315
 msgid "Window"
 msgstr "Окно"
 
@@ -2996,22 +3002,22 @@ msgid "Write error on file '%s'"
 msgstr "Ошибка записи в файл '%s'"
 
 # ../src/generic/dcpsg.cpp:2291
-#: ../src/generic/dcpsg.cpp:2309
+#: ../src/generic/dcpsg.cpp:2305
 msgid "X Scaling"
 msgstr "Масштабирование по X"
 
 # ../src/generic/dcpsg.cpp:2300
-#: ../src/generic/dcpsg.cpp:2318
+#: ../src/generic/dcpsg.cpp:2314
 msgid "X Translation"
 msgstr "Сдвиг вдоль X"
 
 # ../src/generic/dcpsg.cpp:2295
-#: ../src/generic/dcpsg.cpp:2313
+#: ../src/generic/dcpsg.cpp:2309
 msgid "Y Scaling"
 msgstr "Масштабирование по Y"
 
 # ../src/generic/dcpsg.cpp:2304
-#: ../src/generic/dcpsg.cpp:2322
+#: ../src/generic/dcpsg.cpp:2318
 msgid "Y Translation"
 msgstr "Сдвиг вдоль Y"
 
@@ -3241,7 +3247,7 @@ msgid "can't seek on file descriptor %d"
 msgstr "невозможно переместиться по файлу с дескриптором %d"
 
 # ../src/common/textfile.cpp:354
-#: ../src/common/textfile.cpp:354
+#: ../src/common/textfile.cpp:357
 #, c-format
 msgid "can't write file '%s' to disk."
 msgstr "ошибка записи файла '%s' на диск."
@@ -3374,7 +3380,7 @@ msgid "invalid eof() return value."
 msgstr "недопустимое значение возврата из eof()."
 
 # ../src/generic/logg.cpp:1033
-#: ../src/generic/logg.cpp:1033
+#: ../src/generic/logg.cpp:1037
 msgid "invalid message box return value"
 msgstr "недопустимое значение возврата из окна сообщения"
 
