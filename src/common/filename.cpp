@@ -239,6 +239,31 @@ static void ConvertWxToFileTime(FILETIME *ft, const wxDateTime& dt)
 
 #endif // __WIN32__
 
+// return a string with the volume par
+static wxString wxGetVolumeString(const wxString& volume, wxPathFormat format)
+{
+    wxString path;
+
+    if ( !volume.empty() )
+    {
+        // Special Windows UNC paths hack, part 2: undo what we did in
+        // SplitPath() and make an UNC path if we have a drive which is not a
+        // single letter (hopefully the network shares can't be one letter only
+        // although I didn't find any authoritative docs on this)
+        if ( format == wxPATH_DOS && volume.length() > 1 )
+        {
+            path << wxFILE_SEP_PATH_DOS << wxFILE_SEP_PATH_DOS << volume;
+        }
+        else if  ( format == wxPATH_DOS || format == wxPATH_VMS )
+        {
+            path << volume << wxFileName::GetVolumeSeparator(format);
+        }
+        // else ignore
+    }
+
+    return path;
+}
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -1192,27 +1217,8 @@ wxString wxFileName::GetFullPath( wxPathFormat format ) const
 {
     format = GetFormat(format);
 
-    wxString fullpath;
-
     // first put the volume
-    if ( !m_volume.empty() )
-    {
-        {
-            // Special Windows UNC paths hack, part 2: undo what we did in
-            // SplitPath() and make an UNC path if we have a drive which is not a
-            // single letter (hopefully the network shares can't be one letter only
-            // although I didn't find any authoritative docs on this)
-            if ( format == wxPATH_DOS && m_volume.length() > 1 )
-            {
-                fullpath << wxFILE_SEP_PATH_DOS << wxFILE_SEP_PATH_DOS << m_volume;
-            }
-            else if  ( format == wxPATH_DOS || format == wxPATH_VMS )
-            {
-                fullpath << m_volume << GetVolumeSeparator(format);
-            }
-            // else ignore
-        }
-    }
+    wxString fullpath = wxGetVolumeString(m_volume, format);
 
     // the leading character
     if ( format == wxPATH_MAC )
@@ -1620,9 +1626,9 @@ void wxFileName::SplitPath(const wxString& fullpath,
     wxString volume;
     SplitPath(fullpath, &volume, path, name, ext, format);
 
-    if ( path && !volume.empty() )
+    if ( path )
     {
-        path->Prepend(volume + GetVolumeSeparator(format));
+        path->Prepend(wxGetVolumeString(volume, format));
     }
 }
 
