@@ -21,15 +21,16 @@
 // of installed DLLs at runtime anyway unless the user really doesn't want it
 #ifndef _WIN32_IE
     // for compilers that use w32api headers: w32api must be >= 1.1:
-    #if defined( __GNUWIN32__ ) || defined( __MINGW32__ ) || \
+    #if (defined( __GNUWIN32__ ) || defined( __MINGW32__ ) || \
         defined( __CYGWIN__ ) || \
         (defined(__WATCOMC__) && __WATCOMC__ >= 1200) || \
-        defined(__DIGITALMARS__) && \
+        defined(__DIGITALMARS__)) && \
         !wxCHECK_W32API_VERSION(1,1)
         #define _WIN32_IE 0x300
     #else
-        // highest known value at the time of this writing (Windows Server 2003)
-        #define _WIN32_IE 0x502
+        // highest known value at the time of this writing
+        // (Internet Explorer 6)
+        #define _WIN32_IE 0x600
     #endif
 #endif // !defined(_WIN32_IE)
 
