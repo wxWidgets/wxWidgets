@@ -1204,7 +1204,11 @@ void wxWindowMac::MacWindowToRootWindow( int *x , int *y ) const
     if ( y ) pt.y = *y ;
 
     if ( !IsTopLevel() )
-        HIViewConvertPoint( &pt , *m_peer , (ControlRef) MacGetTopLevelWindow()->GetHandle()  ) ;
+    {
+        wxTopLevelWindowMac* top = MacGetTopLevelWindow();
+        if (top)
+            HIViewConvertPoint( &pt , *m_peer , (ControlRef) top->GetHandle()  ) ;
+    }
     
     if ( x ) *x = (int) pt.x ;
     if ( y ) *y = (int) pt.y ;
