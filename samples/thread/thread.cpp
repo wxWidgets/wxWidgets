@@ -58,12 +58,10 @@ public:
     // crit section protects access to all of the arrays below
     wxCriticalSection m_critsect;
 
-    // the (mutex, condition) pair used to wait for the threads to exit, see
-    // MyFrame::OnQuit()
-    wxMutex m_mutexAllDone;
-    wxCondition m_condAllDone;
+    // semaphore used to wait for the threads to exit, see MyFrame::OnQuit()
+    wxSemaphore m_semAllDone;
 
-    // the last exiting thread should signal m_condAllDone if this is true
+    // the last exiting thread should post to m_semAllDone if this is true
     // (protected by the same m_critsect)
     bool m_waitingUntilAllDone;
 };
@@ -212,8 +210,7 @@ void MyThread::OnExit()
         {
             wxGetApp().m_waitingUntilAllDone = FALSE;
 
-            wxMutexLocker lock(wxGetApp().m_mutexAllDone);
-            wxGetApp().m_condAllDone.Signal();
+            wxGetApp().m_semAllDone.Post();
         }
     }
 }
@@ -354,19 +351,13 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 END_EVENT_TABLE()
 
 MyApp::MyApp()
-     : m_condAllDone(m_mutexAllDone)
+     : m_semAllDone()
 {
-    // the mutex associated with a condition must be initially locked, it will
-    // only be unlocked when we call Wait()
-    m_mutexAllDone.Lock();
-
     m_waitingUntilAllDone = FALSE;
 }
 
 MyApp::~MyApp()
 {
-    // the mutex must be unlocked before being destroyed
-    m_mutexAllDone.Unlock();
 }
 
 // `Main program' equivalent, creating windows and returning main app frame
@@ -614,6 +605,8 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
     // we're deleting them because they will block in their OnExit() -- this is
     // important as otherwise we might access invalid array elements
     {
+        wxThread *thread;
+
         wxGetApp().m_critsect.Enter();
 
         // check if we have any threads running first
@@ -622,27 +615,28 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
 
         if ( count )
         {
-            // we do, ask them to stop
-            for ( size_t n = 0; n < count; n++ )
-            {
-                threads[n]->Delete();
-            }
-
             // set the flag for MyThread::OnExit()
             wxGetApp().m_waitingUntilAllDone = TRUE;
+
+            // stop all threads
+            while ( ! threads.IsEmpty() )
+            {
+                thread = threads.Last();
+
+                wxGetApp().m_critsect.Leave();
+
+                thread->Delete();
+
+                wxGetApp().m_critsect.Enter();
+            }
         }
 
         wxGetApp().m_critsect.Leave();
 
         if ( count )
         {
-            // now wait for them to really terminate but leave the GUI mutex
-            // before doing it as otherwise we might dead lock
-            wxMutexGuiLeave();
-
-            wxGetApp().m_condAllDone.Wait();
-
-            wxMutexGuiEnter();
+            // now wait for them to really terminate
+            wxGetApp().m_semAllDone.Wait();
         }
         //else: no threads to terminate, no condition to wait for
     }
