@@ -107,14 +107,15 @@ void wxHtmlWinParser::InitParser(const wxString& source)
     wxASSERT_MSG(m_DC != NULL, _("no DC assigned to wxHtmlWinParser!!"));
 
     m_FontBold = m_FontItalic = m_FontUnderlined = m_FontFixed = FALSE;
-    m_FontSize = 0;
+    m_FontSize = 3; //default one
     CreateCurrentFont();           // we're selecting default font into
     m_DC -> GetTextExtent("H", &m_CharWidth, &m_CharHeight);
                 /* NOTE : we're not using GetCharWidth/Height() because
                    of differences under X and win 
                  */
 
-    m_Link = "";
+    m_UseLink = FALSE;
+    m_Link = wxHtmlLinkInfo("", "");
     m_LinkColor.Set(0, 0, 0xFF);
     m_ActualColor.Set(0, 0, 0);
     m_Align = wxHTML_ALIGN_LEFT;
@@ -242,13 +243,22 @@ wxHtmlContainerCell* wxHtmlWinParser::CloseContainer()
 }
 
 
+void wxHtmlWinParser::SetFontSize(int s)
+{
+    if (s < 1) s = 1;
+    else if (s > 7) s = 7;
+    m_FontSize = s;
+}
+
+
+
 wxFont* wxHtmlWinParser::CreateCurrentFont()
 {
     int fb = GetFontBold(),
         fi = GetFontItalic(),
         fu = GetFontUnderlined(),
         ff = GetFontFixed(),
-        fs = GetFontSize() + 2 /*remap from <-2;4> to <0;7>*/ ;
+        fs = GetFontSize() - 1 /*remap from <1;7> to <0;6>*/ ;
 
     if (m_FontsTable[fb][fi][fu][ff][fs] == NULL) {
         m_FontsTable[fb][fi][fu][ff][fs] =
@@ -261,6 +271,14 @@ wxFont* wxHtmlWinParser::CreateCurrentFont()
     }
     m_DC -> SetFont(*(m_FontsTable[fb][fi][fu][ff][fs]));
     return (m_FontsTable[fb][fi][fu][ff][fs]);
+}
+
+
+
+void wxHtmlWinParser::SetLink(const wxHtmlLinkInfo& link)
+{
+    m_Link = link; 
+    m_UseLink = (link.GetHref() != wxEmptyString);
 }
 
 
