@@ -381,6 +381,7 @@ private:
 
 wxUint32 wxMacGetSystemEncFromFontEnc(wxFontEncoding encoding) ;
 wxFontEncoding wxMacGetFontEncFromSystemEnc(wxUint32 encoding) ;
+void wxMacWakeUp() ;
 
 // toplevel.cpp
 
