@@ -213,7 +213,7 @@ $(OBJS) :
 
 ### Targets: ###
 
-all : .SYMBOLIC $(OBJS)\dbbrowse.exe
+all : .SYMBOLIC $(OBJS)\dbbrowse.exe data_help_std data_help_png
 
 clean : .SYMBOLIC 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -232,6 +232,14 @@ $(OBJS)\dbbrowse.exe :  $(DBBROWSE_OBJECTS) $(OBJS)\dbbrowse_dbbrowse.res
 	@for %i in ( $(__WXLIB_DBGRID_p)  $(__WXLIB_ADV_p)  $(__WXLIB_ODBC_p)  $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib   kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib ) do @%append $(OBJS)\dbbrowse.lbc library %i
 	@%append $(OBJS)\dbbrowse.lbc option resource=$(OBJS)\dbbrowse_dbbrowse.res
 	wlink @$(OBJS)\dbbrowse.lbc
+
+data_help_std : .SYMBOLIC 
+	if not exist $(OBJS)\help.std mkdir $(OBJS)\help.std
+	for %f in (compiler.htm dbbrowse.hhc dbbrowse.hhk dbbrowse.hhp dbbrowse.htm getcol.htm getcolsh.htm icons.htm picgrams.htm problems.htm remstar.htm sample.htm startprm.htm todo.htm wxdb.htm wxtable.htm) do if not exist $(OBJS)\help.std\%f copy .\help.std\%f $(OBJS)\help.std
+
+data_help_png : .SYMBOLIC 
+	if not exist $(OBJS)\help.png mkdir $(OBJS)\help.png
+	for %f in (col.png d_closed.png d_open.png dsn.png dsnclose.png dsnopen.png f_closed.png f_open.png gnu.png gtk.png imbau.png kde.png key.png keyf.png linux.png logo.png motif.png msvc.png odbc.png pgmctrl.png redh.png remstar.png server.png suse.png tab.png view.png winnt.png wins.png) do if not exist $(OBJS)\help.png\%f copy .\help.png\%f $(OBJS)\help.png
 
 $(OBJS)\dbbrowse_dbbrowse.obj :  .AUTODEPEND .\dbbrowse.cpp
 	$(CXX) -zq -fo=$^@ $(DBBROWSE_CXXFLAGS) $<

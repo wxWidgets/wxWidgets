@@ -174,7 +174,7 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\dbbrowse.exe
+all: $(OBJS)\dbbrowse.exe data_help_std data_help_png
 
 clean: 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -190,6 +190,14 @@ $(OBJS)\dbbrowse.exe: $(DBBROWSE_OBJECTS)  $(OBJS)\dbbrowse_dbbrowse.res
 	ilink32 -Tpe -q $(LDFLAGS) -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) -aa @&&|
 	c0w32.obj $(DBBROWSE_OBJECTS),$@,, $(__WXLIB_DBGRID_p)  $(__WXLIB_ADV_p)  $(__WXLIB_ODBC_p)  $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib  import32.lib cw32mt$(__RUNTIME_LIBS_7).lib,, $(OBJS)\dbbrowse_dbbrowse.res
 |
+
+data_help_std: 
+	if not exist $(OBJS)\help.std mkdir $(OBJS)\help.std
+	for %f in (compiler.htm dbbrowse.hhc dbbrowse.hhk dbbrowse.hhp dbbrowse.htm getcol.htm getcolsh.htm icons.htm picgrams.htm problems.htm remstar.htm sample.htm startprm.htm todo.htm wxdb.htm wxtable.htm) do if not exist $(OBJS)\help.std\%f copy .\help.std\%f $(OBJS)\help.std
+
+data_help_png: 
+	if not exist $(OBJS)\help.png mkdir $(OBJS)\help.png
+	for %f in (col.png d_closed.png d_open.png dsn.png dsnclose.png dsnopen.png f_closed.png f_open.png gnu.png gtk.png imbau.png kde.png key.png keyf.png linux.png logo.png motif.png msvc.png odbc.png pgmctrl.png redh.png remstar.png server.png suse.png tab.png view.png winnt.png wins.png) do if not exist $(OBJS)\help.png\%f copy .\help.png\%f $(OBJS)\help.png
 
 $(OBJS)\dbbrowse_dbbrowse.obj: .\dbbrowse.cpp
 	$(CXX) -q -c -P -o$@ $(DBBROWSE_CXXFLAGS) $**

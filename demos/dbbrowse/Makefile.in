@@ -127,7 +127,7 @@ COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_1 = $(RESCOMP) -d __DARWIN__ -t APPL -d \
 
 ### Targets: ###
 
-all: dbbrowse$(EXEEXT) $(__dbbrowse_bundle___depname)
+all: dbbrowse$(EXEEXT) $(__dbbrowse_bundle___depname) data_help_std data_help_png
 
 install: all
 
@@ -174,6 +174,22 @@ dbbrowse.app/Contents/PkgInfo: dbbrowse$(EXEEXT) $(top_srcdir)/src/mac/Info.plis
 
 @COND_PLATFORM_MACOSX_1@dbbrowse_bundle: dbbrowse.app/Contents/PkgInfo
 
+data_help_std: 
+	@mkdir -p ./help.std
+	@for f in compiler.htm dbbrowse.hhc dbbrowse.hhk dbbrowse.hhp dbbrowse.htm getcol.htm getcolsh.htm icons.htm picgrams.htm problems.htm remstar.htm sample.htm startprm.htm todo.htm wxdb.htm wxtable.htm; do \
+	if test \( ! -s ./help.std/$$f \) -o \( $(srcdir)/help.std/$$f -nt ./help.std/$$f  \) ; then \
+	cp -pRf $(srcdir)/help.std/$$f ./help.std ; \
+	fi; \
+	done
+
+data_help_png: 
+	@mkdir -p ./help.png
+	@for f in col.png d_closed.png d_open.png dsn.png dsnclose.png dsnopen.png f_closed.png f_open.png gnu.png gtk.png imbau.png kde.png key.png keyf.png linux.png logo.png motif.png msvc.png odbc.png pgmctrl.png redh.png remstar.png server.png suse.png tab.png view.png winnt.png wins.png; do \
+	if test \( ! -s ./help.png/$$f \) -o \( $(srcdir)/help.png/$$f -nt ./help.png/$$f  \) ; then \
+	cp -pRf $(srcdir)/help.png/$$f ./help.png ; \
+	fi; \
+	done
+
 dbbrowse_dbbrowse.o: $(srcdir)/dbbrowse.cpp
 	$(CXXC) -c -o $@ $(DBBROWSE_CXXFLAGS) $<
 
@@ -205,4 +221,4 @@ dbbrowse_dbbrowse_rc.o: $(srcdir)/dbbrowse.rc
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include .deps/*.d
 
-.PHONY: all install uninstall clean distclean dbbrowse_bundle
+.PHONY: all install uninstall clean distclean dbbrowse_bundle data_help_std data_help_png
