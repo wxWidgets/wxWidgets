@@ -1852,7 +1852,7 @@ void wxWindowDC::SetPen( const wxPen &pen )
             gdk_gc_set_dashes( m_penGC, 0, (wxGTKDash*)req_dash, req_nb_dash );
         }
     }
-#endif
+#endif // GTK+ > 1.0
 
     GdkCapStyle capStyle = GDK_CAP_ROUND;
     switch (m_pen.GetCap())
@@ -1991,12 +1991,12 @@ void wxWindowDC::SetLogicalFunction( int function )
     if (!m_window)
         return;
 
-    GdkFunction mode = GDK_COPY;
+    GdkFunction mode;
     switch (function)
     {
         case wxXOR:          mode = GDK_XOR;           break;
         case wxINVERT:       mode = GDK_INVERT;        break;
-#if (GTK_MINOR_VERSION > 0)
+#if (GTK_MINOR_VERSION > 0) || (GTK_MAJOR_VERSION > 1)
         case wxOR_REVERSE:   mode = GDK_OR_REVERSE;    break;
         case wxAND_REVERSE:  mode = GDK_AND_REVERSE;   break;
         case wxCLEAR:        mode = GDK_CLEAR;         break;
@@ -2013,12 +2013,10 @@ void wxWindowDC::SetLogicalFunction( int function )
 
         // unsupported by GTK
         case wxNOR:          mode = GDK_COPY;          break;
-#endif
+#endif // GTK+ > 1.0
         default:
-        {
            wxFAIL_MSG( wxT("unsupported logical function") );
-           break;
-        }
+           mode = GDK_COPY;
     }
 
     m_logicalFunction = function;
