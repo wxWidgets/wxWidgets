@@ -153,6 +153,7 @@ COMMONOBJS = &
 	hashmap.obj &
 	helpbase.obj &
 	http.obj &
+	iconbndl.obj &
 	imagall.obj &
 	imagbmp.obj &
 	image.obj &
@@ -901,6 +902,9 @@ helpbase.obj:     $(COMMDIR)\helpbase.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 http.obj:     $(COMMDIR)\http.cpp
+  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+
+iconbndl.obj:     $(COMMDIR)\iconbndl.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 imagall.obj:     $(COMMDIR)\imagall.cpp

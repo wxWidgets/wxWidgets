@@ -109,7 +109,8 @@ static FileInfoMap s_fileInfo(25);
 // Other initialization.
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #if wxUSE_GUI
-WX_DEFINE_OBJARRAY(wxIconArray);
+// already in wx/iconbndl.h
+// WX_DEFINE_OBJARRAY(wxIconArray);
 #endif
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

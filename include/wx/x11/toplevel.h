@@ -54,7 +54,8 @@ public:
     virtual bool IsMaximized() const;
     virtual void Iconize(bool iconize = TRUE);
     virtual bool IsIconized() const;
-    virtual void SetIcon(const wxIcon& icon);
+    virtual void SetIcon(const wxIcon& icon) { SetIcons( wxIconBundle( icon ) ); }
+    virtual void SetIcons(const wxIconBundle& icons);
     virtual void Restore();
 
     virtual bool Show( bool show = TRUE );
@@ -71,6 +72,9 @@ public:
 protected:
     // common part of all ctors
     void Init();
+
+    // set the icon for the window
+    void DoSetIcon( const wxIcon& icon );
 
     // For implementation purposes - sometimes decorations make the
     // client area smaller

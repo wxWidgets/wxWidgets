@@ -161,7 +161,8 @@ public:
 #endif
 
     // no icon
-    void SetIcon( const wxIcon &icon ) { m_icon = icon; }
+    void SetIcon( const wxIcon &icon ) { m_icons = wxIconBundle( icon ); }
+    void SetIcons( const wxIconBundle &icons ) { m_icons = icons; }
 
     // no title
     void SetTitle( const wxString &title );

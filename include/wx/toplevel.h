@@ -23,7 +23,7 @@
 #endif
 
 #include "wx/window.h"
-#include "wx/icon.h"
+#include "wx/iconbndl.h"
 
 // the default names for various classs
 WXDLLEXPORT_DATA(extern const wxChar*) wxFrameNameStr;
@@ -83,10 +83,16 @@ public:
     virtual bool IsIconized() const = 0;
 
     // get the frame icon
-    const wxIcon& GetIcon() const { return m_icon; }
+    const wxIcon& GetIcon() const { return m_icons.GetIcon( -1 ); }
+
+    // get the frame icons
+    const wxIconBundle& GetIcons() const { return m_icons; }
 
     // set the frame icon
-    virtual void SetIcon(const wxIcon& icon) { m_icon = icon; }
+    virtual void SetIcon(const wxIcon& icon) { m_icons = wxIconBundle( icon ); }
+
+    // set the frame icons
+    virtual void SetIcons(const wxIconBundle& icons ) { m_icons = icons; }
 
     // maximize the window to cover entire screen
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL) = 0;
@@ -133,7 +139,7 @@ protected:
     bool SendIconizeEvent(bool iconized = TRUE);
 
     // the frame icon
-    wxIcon m_icon;
+    wxIconBundle m_icons;
 
     // test whether this window makes part of the frame
     // (menubar, toolbar and statusbar are excluded from automatic layout)

@@ -23,6 +23,7 @@ all: $(MSW_MAKEFILES_DIR)/makefile.vc \
      $(WXDIR)/src/os2/files.lst \
      $(WXDIR)/src/mgl/files.lst \
      $(WXDIR)/src/microwin/files.lst \
+     $(WXDIR)/src/x11/files.lst \
      $(WXDIR)/src/univ/files.lst \
      $(WXDIR)/src/wxBase.dsp \
      $(WXDIR)/src/wxWindows.dsp \
@@ -75,6 +76,9 @@ $(WXDIR)/src/os2/files.lst: os2.t filelist.txt wxwin.pro
 
 $(WXDIR)/src/univ/files.lst: univ.t filelist.txt wxwin.pro
 	$(TMAKE) -t univ wxwin.pro -o $@
+
+$(WXDIR)/src/x11/files.lst: x11.t filelist.txt wxwin.pro
+	$(TMAKE) -t x11 wxwin.pro -o $@
 
 $(WXDIR)/src/wxBase.dsp: vc6base.t filelist.txt wxwin.pro
 	$(TMAKE) -t vc6base wxwin.pro -o $@

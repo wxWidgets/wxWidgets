@@ -176,6 +176,7 @@ hash.cpp	Common	Base
 hashmap.cpp	Common	Base
 helpbase.cpp	Common
 http.cpp	Common	Socket,Base
+iconbndl.cpp	Common
 imagall.cpp	Common
 imagbmp.cpp	Common
 image.cpp	Common
@@ -370,6 +371,7 @@ mimetype.cpp	Unix	Base,NotMac,NotMicro
 snglinst.cpp	Unix	Base
 threadpsx.cpp	Unix	Base,NotMac
 utilsunx.cpp	Unix	Base
+utilsx11.cpp	Unix	NotMac,NotMGL,NotMicro
 
 bmpbuttn.cpp	Univ
 button.cpp	Univ
@@ -845,6 +847,7 @@ helpbase.h	WXH
 helphtml.h	WXH
 helpwin.h	WXH
 icon.h	WXH
+iconbndl.h	WXH
 image.h	WXH
 imaggif.h	WXH
 imagiff.h	WXH
@@ -1427,6 +1430,7 @@ execute.h	UnixH
 fontutil.h	UnixH
 gsockunx.h	UnixH	Base
 mimetype.h	UnixH	Base
+utilsx11.h	UnixH
 
 file.h	ProtoH	Base
 ftp.h	ProtoH	Base

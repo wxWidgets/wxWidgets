@@ -55,6 +55,7 @@ public:
     virtual void Iconize(bool iconize = TRUE);
     virtual bool IsIconized() const;
     virtual void SetIcon(const wxIcon& icon);
+    virtual void SetIcons(const wxIconBundle& icons );
     virtual void Restore();
 
     virtual bool Show(bool show = TRUE);

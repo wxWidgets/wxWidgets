@@ -38,6 +38,8 @@
 
 #include "wx/gtk/win_gtk.h"
 
+#include "wx/unix/utilsx11.h"
+
 // ----------------------------------------------------------------------------
 // idle system
 // ----------------------------------------------------------------------------
@@ -814,13 +816,9 @@ void wxTopLevelWindowGTK::SetTitle( const wxString &title )
     gtk_window_set_title( GTK_WINDOW(m_widget), title.mbc_str() );
 }
 
-void wxTopLevelWindowGTK::SetIcon( const wxIcon &icon )
+void wxTopLevelWindowGTK::DoSetIcon( const wxIcon &icon )
 {
-    wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
-
-    wxTopLevelWindowBase::SetIcon(icon);
-
-    if ( !m_icon.Ok() )
+    if ( !icon.Ok() )
         return;
 
     if (!m_widget->window)
@@ -831,6 +829,24 @@ void wxTopLevelWindowGTK::SetIcon( const wxIcon &icon )
     if (mask) bm = mask->GetBitmap();
 
     gdk_window_set_icon( m_widget->window, (GdkWindow *) NULL, icon.GetPixmap(), bm );
+}
+
+void wxTopLevelWindowGTK::SetIcon( const wxIcon &icon )
+{
+    SetIcons( wxIconBundle( icon ) );
+}
+
+void wxTopLevelWindowGTK::SetIcons( const wxIconBundle &icons )
+{
+    wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
+    GdkWindow* window = m_widget->window;
+    wxCHECK_RET( window, _T("window not created yet - can't set icon") );
+
+    wxTopLevelWindowBase::SetIcons( icons );
+
+    DoSetIcon( icons.GetIcon( -1 ) );
+    wxSetIconsX11( (WXDisplay*)GDK_WINDOW_XDISPLAY( window ),
+                   (WXWindow)GDK_WINDOW_XWINDOW( window ), icons );
 }
 
 // ----------------------------------------------------------------------------

@@ -296,13 +296,14 @@ int wxTopLevelWindow::GetMinHeight() const
 // icons
 // ----------------------------------------------------------------------------
 
-void wxTopLevelWindow::SetIcon(const wxIcon& icon)
+void wxTopLevelWindow::SetIcons(const wxIconBundle& icons)
 {
-    wxTopLevelWindowNative::SetIcon(icon);
+    wxTopLevelWindowNative::SetIcons(icons);
 
     if ( ms_drawDecorations && m_renderer )
     {
         wxSize size = m_renderer->GetFrameIconSize();
+        const wxIcon& icon = icons.GetIcon( size );
 
         if ( !icon.Ok() || size.x == -1  )
             m_titlebarIcon = icon;

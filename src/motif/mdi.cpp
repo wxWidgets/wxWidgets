@@ -527,12 +527,18 @@ void wxMDIChildFrame::SetMenuBar(wxMenuBar *menuBar)
 // Set icon
 void wxMDIChildFrame::SetIcon(const wxIcon& icon)
 {
-    m_icon = icon;
-    if (m_icon.Ok())
+    m_icons = wxIconBundle( icon );
+
+    if (icon.Ok())
     {
         // Not appropriate since there are no icons in
         // a tabbed window
     }
+}
+
+void wxMDIChildFrame::SetIcons(const wxIconBundle& icons)
+{
+    m_icons = icons;
 }
 
 void wxMDIChildFrame::SetTitle(const wxString& title)

@@ -97,6 +97,7 @@ ALL_SOURCES = \
 		common/hashmap.cpp \
 		common/helpbase.cpp \
 		common/http.cpp \
+		common/iconbndl.cpp \
 		common/imagall.cpp \
 		common/imagbmp.cpp \
 		common/image.cpp \
@@ -368,6 +369,7 @@ ALL_HEADERS = \
 		helphtml.h \
 		helpwin.h \
 		icon.h \
+		iconbndl.h \
 		imagbmp.h \
 		image.h \
 		imaggif.h \
@@ -688,6 +690,7 @@ COMMONOBJS = \
 		hashmap.o \
 		helpbase.o \
 		http.o \
+		iconbndl.o \
 		imagall.o \
 		imagbmp.o \
 		image.o \

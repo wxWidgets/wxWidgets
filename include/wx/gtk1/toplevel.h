@@ -54,6 +54,7 @@ public:
     virtual void Iconize(bool iconize = TRUE);
     virtual bool IsIconized() const;
     virtual void SetIcon(const wxIcon& icon);
+    virtual void SetIcons(const wxIconBundle& icons);
     virtual void Restore();
 
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
@@ -70,6 +71,9 @@ public:
     // move the window to the specified location and resize it: this is called
     // from both DoSetSize() and DoSetClientSize()
     virtual void DoMoveWindow(int x, int y, int width, int height);
+
+    // set the icon for this window
+    void DoSetIcon( const wxIcon& icon );
 
     // GTK callbacks
     virtual void GtkOnSize( int x, int y, int width, int height );

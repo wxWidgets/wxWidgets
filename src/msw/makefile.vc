@@ -191,6 +191,7 @@ COMMONOBJS = \
 		$(COMMDIR)\$D\hashmap.obj \
 		$(COMMDIR)\$D\helpbase.obj \
 		$(COMMDIR)\$D\http.obj \
+		$(COMMDIR)\$D\iconbndl.obj \
 		$(COMMDIR)\$D\imagall.obj \
 		$(COMMDIR)\$D\imagbmp.obj \
 		$(COMMDIR)\$D\image.obj \

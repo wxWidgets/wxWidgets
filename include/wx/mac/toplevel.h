@@ -55,6 +55,7 @@ public:
     virtual void Iconize(bool iconize = TRUE);
     virtual bool IsIconized() const;
     virtual void SetIcon(const wxIcon& icon);
+    virtual void SetIcons(const wxIconBundle& icons) { SetIcon( icons.GetIcon( -1 ) ); }
     virtual void Restore();
 
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL) { return FALSE; }

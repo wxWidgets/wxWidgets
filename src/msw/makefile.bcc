@@ -157,6 +157,7 @@ COMMONOBJS = \
 		$(MSWDIR)\hash.obj \
 		$(MSWDIR)\hashmap.obj \
 		$(MSWDIR)\helpbase.obj \
+		$(MSWDIR)\iconbndl.obj \
 		$(MSWDIR)\imagall.obj \
 		$(MSWDIR)\imagbmp.obj \
 		$(MSWDIR)\image.obj \
@@ -614,6 +615,8 @@ $(MSWDIR)\hash.obj: $(COMMDIR)\hash.$(SRCSUFF)
 $(MSWDIR)\hashmap.obj: $(COMMDIR)\hashmap.$(SRCSUFF)
 
 $(MSWDIR)\helpbase.obj: $(COMMDIR)\helpbase.$(SRCSUFF)
+
+$(MSWDIR)\iconbndl.obj: $(COMMDIR)\iconbndl.$(SRCSUFF)
 
 $(MSWDIR)\imagall.obj: $(COMMDIR)\imagall.$(SRCSUFF)
 

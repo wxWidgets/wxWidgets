@@ -54,7 +54,8 @@ public:
     
     // Set icon
     virtual void SetIcon(const wxIcon& icon);
-    
+    virtual void SetIcons(const wxIconBundle& icons);
+
 #if wxUSE_STATUSBAR
     virtual void PositionStatusBar();
 #endif // wxUSE_STATUSBAR
@@ -107,7 +108,10 @@ public:
 protected:
     // common part of all ctors
     void Init();
-    
+
+    // set a single icon for the frame
+    void DoSetIcon( const wxIcon& icon );
+
     //// Motif-specific
     WXWidget              m_frameShell;
     WXWidget              m_frameWidget;

@@ -43,6 +43,8 @@
 #include "wx/x11/private.h"
 #include "X11/Xutil.h"
 
+#include "wx/unix/utilsx11.h"
+
 bool wxMWMIsRunning(Window w);
 
 // ----------------------------------------------------------------------------
@@ -393,11 +395,8 @@ bool wxTopLevelWindowX11::ShowFullScreen(bool show, long style)
 // wxTopLevelWindowX11 misc
 // ----------------------------------------------------------------------------
 
-void wxTopLevelWindowX11::SetIcon(const wxIcon& icon)
+void wxTopLevelWindowX11::DoSetIcon(const wxIcon& icon)
 {
-    // this sets m_icon
-    wxTopLevelWindowBase::SetIcon(icon);
-
     if (icon.Ok() && GetMainWindow())
     {
 #if wxUSE_NANOX
@@ -417,6 +416,15 @@ void wxTopLevelWindowX11::SetIcon(const wxIcon& icon)
         XFree(wmHints);
 #endif
     }
+}
+
+void wxTopLevelWindowX11::SetIcons(const wxIconBundle& icons )
+{
+    // this sets m_icon
+    wxTopLevelWindowBase::SetIcons( icons );
+
+    DoSetIcon( icons.GetIcon( -1 ) );
+    wxSetIconsX11( GetXDisplay(), GetXWindow(), icons );
 }
 
 void wxTopLevelWindowX11::SetTitle(const wxString& title)

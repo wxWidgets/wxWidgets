@@ -142,6 +142,7 @@ COMMONOBJS1 = \
 		$(COMMDIR)\hash.obj \
 		$(COMMDIR)\hashmap.obj \
 		$(COMMDIR)\helpbase.obj \
+		$(COMMDIR)\iconbndl.obj \
 		$(COMMDIR)\imagall.obj \
 		$(COMMDIR)\imagbmp.obj \
 		$(COMMDIR)\image.obj \
@@ -1053,6 +1054,11 @@ $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
 $(COMMDIR)/helpbase.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(COMMDIR)/iconbndl.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<

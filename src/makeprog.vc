@@ -41,7 +41,7 @@ wxUSE_GUI=1
 !if "$(wxUSE_GUI)" == "1"
 
 #!if "$(WXUSINGDLL)" == "1"
-#DUMMYOBJ=
+DUMMYOBJ=
 #!endif
 
 $(PROGRAM).exe:      $(WXLIB) $(OBJECTS) $(PROGRAM).res

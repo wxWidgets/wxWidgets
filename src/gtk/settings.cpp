@@ -349,7 +349,9 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index )
         // VZ: is there any way to get the cursor size with GDK?
         case wxSYS_CURSOR_X:   return 16;
         case wxSYS_CURSOR_Y:   return 16;
-
+        // MBN: ditto for icons
+        case wxSYS_ICON_X:     return 32;
+        case wxSYS_ICON_Y:     return 32;
         default:               
             wxFAIL_MSG( wxT("wxSystemSettings::GetMetric not fully implemented") );
             return 0;

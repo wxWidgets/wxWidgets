@@ -584,14 +584,26 @@ bool wxTopLevelWindowMSW::ShowFullScreen(bool show, long style)
 
 void wxTopLevelWindowMSW::SetIcon(const wxIcon& icon)
 {
-    // this sets m_icon
-    wxTopLevelWindowBase::SetIcon(icon);
+    SetIcons( wxIconBundle( icon ) );
+}
+
+void wxTopLevelWindowMSW::SetIcons(const wxIconBundle& icons)
+{
+    wxTopLevelWindowBase::SetIcons(icons);
 
 #if defined(__WIN95__) && !defined(__WXMICROWIN__)
-    if ( m_icon.Ok() )
+    const wxIcon& sml = icons.GetIcon( wxSize( 16, 16 ) );
+    if( sml.Ok() && sml.GetWidth() == 16 && sml.GetHeight() == 16 )
     {
-        ::SendMessage(GetHwnd(), WM_SETICON,
-                      (WPARAM)TRUE, (LPARAM)GetHiconOf(m_icon));
+        ::SendMessage( GetHwndOf( this ), WM_SETICON, ICON_SMALL,
+                       (LPARAM)GetHiconOf(sml) );
+    }
+
+    const wxIcon& big = icons.GetIcon( wxSize( 32, 32 ) );
+    if( big.Ok() && big.GetWidth() == 32 && big.GetHeight() == 32 )
+    {
+        ::SendMessage( GetHwndOf( this ), WM_SETICON, ICON_BIG,
+                       (LPARAM)GetHiconOf(big) );
     }
 #endif // __WIN95__
 }

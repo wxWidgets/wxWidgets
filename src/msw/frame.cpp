@@ -602,8 +602,9 @@ bool wxFrame::HandlePaint()
 #ifndef __WXMICROWIN__
         if ( m_iconized )
         {
-            HICON hIcon = m_icon.Ok() ? GetHiconOf(m_icon)
-                                      : (HICON)GetDefaultIcon();
+            const wxIcon& icon = GetIcon();
+            HICON hIcon = icon.Ok() ? GetHiconOf(icon)
+                                    : (HICON)GetDefaultIcon();
 
             // Hold a pointer to the dc so long as the OnPaint() message
             // is being processed
@@ -837,8 +838,9 @@ long wxFrame::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 
         case WM_QUERYDRAGICON:
             {
-                HICON hIcon = m_icon.Ok() ? GetHiconOf(m_icon)
-                                          : (HICON)GetDefaultIcon();
+                const wxIcon& icon = GetIcon();
+                HICON hIcon = icon.Ok() ? GetHiconOf(icon)
+                                        : (HICON)GetDefaultIcon();
                 rc = (long)hIcon;
                 processed = rc != 0;
             }

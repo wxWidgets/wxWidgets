@@ -123,7 +123,8 @@ public:
     virtual wxPoint GetClientAreaOrigin() const;
     virtual void DoGetClientSize(int *width, int *height) const;
     virtual void DoSetClientSize(int width, int height);
-    virtual void SetIcon(const wxIcon& icon);
+    virtual void SetIcon(const wxIcon& icon) { SetIcons( wxIconBundle( icon ) ); }
+    virtual void SetIcons(const wxIconBundle& icons);
 
     // implementation from now on
     // --------------------------

@@ -50,6 +50,7 @@
 
 #include <Xm/Xm.h>
 #include <X11/Shell.h>
+#include <X11/Core.h>
 #if XmVersion >= 1002
     #include <Xm/XmAll.h>
 #else
@@ -73,6 +74,7 @@
 #endif
 
 #include "wx/motif/private.h"
+#include "wx/unix/utilsx11.h"
 
 // ----------------------------------------------------------------------------
 // private functions
@@ -627,10 +629,8 @@ void wxFrame::SetTitle(const wxString& title)
         NULL);
 }
 
-void wxFrame::SetIcon(const wxIcon& icon)
+void wxFrame::DoSetIcon(const wxIcon& icon)
 {
-    m_icon = icon;
-
     if (!m_frameShell)
         return;
 
@@ -638,6 +638,23 @@ void wxFrame::SetIcon(const wxIcon& icon)
         return;
 
     XtVaSetValues((Widget) m_frameShell, XtNiconPixmap, icon.GetPixmap(), NULL);
+}
+
+void wxFrame::SetIcon(const wxIcon& icon)
+{
+    SetIcons( wxIconBundle( icon ) );
+}
+
+void wxFrame::SetIcons(const wxIconBundle& icons)
+{
+    wxFrameBase::SetIcons( icons );
+
+    if (!m_frameShell)
+        return;
+
+    DoSetIcon( m_icons.GetIcon( -1 ) );
+    wxSetIconsX11(GetXDisplay(),
+                  (WXWindow) XtWindow( (Widget) m_frameShell ), icons);
 }
 
 void wxFrame::PositionStatusBar()

@@ -171,6 +171,7 @@ COMMONOBJS = \
 		$(MSWDIR)\hashmap.obj \
 		$(MSWDIR)\helpbase.obj \
 		$(MSWDIR)\http.obj \
+		$(MSWDIR)\iconbndl.obj \
 		$(MSWDIR)\imagall.obj \
 		$(MSWDIR)\imagbmp.obj \
 		$(MSWDIR)\image.obj \
@@ -762,6 +763,8 @@ $(MSWDIR)\hashmap.obj: $(COMMDIR)\hashmap.$(SRCSUFF)
 $(MSWDIR)\helpbase.obj: $(COMMDIR)\helpbase.$(SRCSUFF)
 
 $(MSWDIR)\http.obj: $(COMMDIR)\http.$(SRCSUFF)
+
+$(MSWDIR)\iconbndl.obj: $(COMMDIR)\iconbndl.$(SRCSUFF)
 
 $(MSWDIR)\imagall.obj: $(COMMDIR)\imagall.$(SRCSUFF)
 

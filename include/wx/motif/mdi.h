@@ -152,7 +152,8 @@ public:
     
     // Set icon
     virtual void SetIcon(const wxIcon& icon);
-    
+    virtual void SetIcons(const wxIconBundle& icons );
+
     // Override wxFrame operations
     void CaptureMouse();
     void ReleaseMouse();

@@ -1,4 +1,4 @@
-Microsoft Developer Studio Workspace File, Format Version 6.00
+Microsoft Developer Studio Workspace File, Format Version 5.00
 # WARNING: DO NOT EDIT OR DELETE THIS WORKSPACE FILE!
 
 ###############################################################################
@@ -59,21 +59,6 @@ Package=<5>
 
 Package=<4>
 {{{
-    Begin Project Dependency
-    Project_Dep_Name jpeg
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name png
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name regex
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name tiff
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name zlib
-    End Project Dependency
 }}}
 
 ###############################################################################
