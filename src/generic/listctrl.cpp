@@ -2336,7 +2336,8 @@ long wxListMainWindow::GetNextItem( long item,
                                     int state )
 {
     long ret = item;
-    wxCHECK_MSG( ret < GetItemCount(), -1, _T("invalid listctrl index") );
+    wxCHECK_MSG( (ret == -1) || ((int)ret < GetItemCount()), -1,
+                 _T("invalid listctrl index in GetNextItem()") );
 
     // notice that we start with the next item (or the first one if item == -1)
     // and this is intentional to allow writing a simple loop to iterate over
