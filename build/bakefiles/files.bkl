@@ -1785,6 +1785,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/mac/carbon/gauge.cpp
     src/mac/carbon/gdiobj.cpp
     src/mac/carbon/icon.cpp
+    src/mac/carbon/imaglist.cpp
     src/mac/carbon/listbox.cpp
     src/mac/carbon/mdi.cpp
     src/mac/carbon/menu.cpp
@@ -1824,7 +1825,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/caret.cpp
     src/generic/fdrepdlg.cpp
     src/generic/fontdlgg.cpp
-    src/generic/imaglist.cpp
     src/generic/listctrl.cpp
     src/generic/prntdlgg.cpp
     src/generic/statusbr.cpp
@@ -2004,7 +2004,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/caret.h
     wx/generic/fdrepdlg.h
     wx/generic/fontdlgg.h
-    wx/generic/imaglist.h
     wx/generic/listctrl.h
     wx/generic/statusbr.h
     wx/generic/tabg.h
