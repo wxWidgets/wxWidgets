@@ -3045,7 +3045,6 @@ void wxGrid::DrawTextRectangle( wxDC& dc,
                                 int horizAlign,
                                 int vertAlign )
 {
-    int i;
     long textWidth, textHeight;
     long lineWidth, lineHeight;
     wxArrayString lines;
@@ -3123,7 +3122,7 @@ void wxGrid::DrawTextRectangle( wxDC& dc,
                 break;
         }
 
-        for ( i = 0;  i < lines.GetCount();  i++ )
+        for ( size_t i = 0;  i < lines.GetCount();  i++ )
         {
             dc.DrawText( lines[i], (long)x, (long)y );
             y += lineHeight;
@@ -3141,10 +3140,10 @@ void wxGrid::DrawTextRectangle( wxDC& dc,
 void wxGrid::StringToLines( const wxString& value, wxArrayString& lines )
 {
     // TODO: this won't work for WXMAC ? (lines end with '\r')
-    //
+    //       => use wxTextFile functions then (VZ)
     int startPos = 0;
     int pos;
-    while ( startPos < value.Length() )
+    while ( startPos < (int)value.Length() )
     {
         pos = value.Mid(startPos).Find( '\n' );
         if ( pos < 0 )
@@ -3168,7 +3167,7 @@ void wxGrid::StringToLines( const wxString& value, wxArrayString& lines )
         }
         startPos += pos+1;
     }
-    if ( startPos < value.Length() )
+    if ( startPos < (int)value.Length() )
     {
         lines.Add( value.Mid( startPos ) );
     }
@@ -3183,7 +3182,7 @@ void wxGrid::GetTextBoxSize( wxDC& dc,
     long h = 0;
     long lineW, lineH;
 
-    int i;
+    size_t i;
     for ( i = 0;  i < lines.GetCount();  i++ )
     {
         dc.GetTextExtent( lines[i], &lineW, &lineH );
