@@ -9,14 +9,6 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-// ============================================================================
-// declarations
-// ============================================================================
-
-// ----------------------------------------------------------------------------
-// headers
-// ----------------------------------------------------------------------------
-
 #ifdef __GNUG__
 #pragma implementation "filedlgg.h"
 #endif
@@ -121,7 +113,7 @@ int wxFileDataTypeCompare( long data1, long data2, long data)
      if (fd2->IsDir() && !fd1->IsDir()) return data;
      if (fd1->IsLink() && !fd2->IsLink()) return -data;
      if (fd2->IsLink() && !fd1->IsLink()) return data;
-     return data*wxStrcmp( fd1->GetType(), fd2->GetType() );
+     return data*wxStrcmp( fd1->GetFileType(), fd2->GetFileType() );
 }
 
 static
@@ -134,7 +126,7 @@ int wxFileDataTimeCompare( long data1, long data2, long data)
      if (fd1->IsDir() && !fd2->IsDir()) return -data;
      if (fd2->IsDir() && !fd1->IsDir()) return data;
 
-     return fd1->GetTime().IsLaterThan(fd2->GetTime()) ? int(data) : -int(data);
+     return fd1->GetDateTime().IsLaterThan(fd2->GetDateTime()) ? int(data) : -int(data);
 }
 
 #ifdef __UNIX__
@@ -157,6 +149,17 @@ extern size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, w
 //  wxFileData
 //-----------------------------------------------------------------------------
 
+wxFileData::wxFileData( const wxFileData& fileData )
+{
+    m_fileName = fileData.GetFileName();
+    m_filePath = fileData.GetFilePath();
+    m_size = fileData.GetSize();
+    m_dateTime = fileData.GetDateTime();
+    m_permissions = fileData.GetPermissions();
+    m_type = fileData.GetType();
+    m_image = GetImageId();
+}
+
 wxFileData::wxFileData( const wxString &filePath, const wxString &fileName, fileType type, int image_id )
 {
     m_fileName = fileName;
@@ -164,6 +167,11 @@ wxFileData::wxFileData( const wxString &filePath, const wxString &fileName, file
     m_type = type;
     m_image = image_id;
 
+    ReadData();
+}
+
+void wxFileData::ReadData()
+{
     if (IsDrive())
     {
         m_size = 0;
@@ -229,7 +237,7 @@ wxFileData::wxFileData( const wxString &filePath, const wxString &fileName, file
 #endif
 }
 
-wxString wxFileData::GetType() const
+wxString wxFileData::GetFileType() const
 {
     if (IsDir())
         return _("<DIR>");
@@ -290,7 +298,7 @@ wxString wxFileData::GetEntry( fileListFieldType num ) const
             break;
 
         case FileList_Type:
-            s = GetType();
+            s = GetFileType();
             break;
 
         case FileList_Time:
@@ -447,6 +455,23 @@ long wxFileCtrl::Add( wxFileData *fd, wxListItem &item )
         ret = InsertItem( item );
     }
     return ret;
+}
+
+void wxFileCtrl::UpdateItem(const wxListItem &item)
+{
+    wxFileData *fd = (wxFileData*)GetItemData(item);
+    wxCHECK_RET(fd, wxT("invalid filedata"));
+
+    fd->ReadData();
+
+    SetItemText(item, fd->GetFileName());
+    SetItemImage(item, fd->GetImageId(), fd->GetImageId());
+
+    if (GetWindowStyleFlag() & wxLC_REPORT)
+    {
+        for (int i = 1; i < wxFileData::FileList_Max; i++)
+            SetItem( item.m_itemId, i, fd->GetEntry((wxFileData::fileListFieldType)i) );
+    }
 }
 
 void wxFileCtrl::UpdateFiles()
@@ -701,6 +726,7 @@ void wxFileCtrl::OnListEndLabelEdit( wxListEvent &event )
     {
         fd->SetNewName( new_name, event.GetLabel() );
         SetItemState( event.GetItem(), wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
+        UpdateItem( event.GetItem() );
         EnsureVisible( event.GetItem() );
     }
     else
@@ -853,24 +879,19 @@ wxGenericFileDialog::wxGenericFileDialog(wxWindow *parent,
     if (m_wildCard.IsEmpty())
         m_wildCard = _("All files (*)|*");
 
-    wxStringTokenizer tokens( m_wildCard, wxT("|") );
-    wxString firstWild;
-    wxString firstWildText;
-    if (tokens.CountTokens() == 1)
+    wxArrayString wildDescriptions, wildFilters;
+    int wild_count = wxParseFileFilter(m_wildCard, wildDescriptions, wildFilters);
+
+    wxASSERT_MSG(wild_count > 0, wxT("Wrong file type descripition") );
+
+    // if error parsing, add default back
+    if (wildFilters.GetCount() < 1u)
     {
-        firstWildText = tokens.GetNextToken();
-        firstWild = firstWildText;
+        wild_count = 1;
+        m_wildCard = _("All files (*)|*");
+        wildDescriptions.Add(_("All files (*)"));
+        wildFilters.Add(wxT("*"));
     }
-    else
-    {
-        wxASSERT_MSG( tokens.CountTokens() % 2 == 0, wxT("Wrong file type descripition") );
-        firstWildText = tokens.GetNextToken();
-        firstWild = tokens.GetNextToken();
-    }
-    if ( firstWild.Left( 2 ) == wxT("*.") )
-        m_filterExtension = firstWild.Mid( 1 );
-    if ( m_filterExtension == wxT(".*") )
-        m_filterExtension = wxEmptyString;
 
     // layout
 
@@ -940,7 +961,7 @@ wxGenericFileDialog::wxGenericFileDialog(wxWindow *parent,
         style2 |= wxLC_SINGLE_SEL;
 
     m_list = new wxFileCtrl( this, ID_LIST_CTRL,
-                             firstWild, ms_lastShowHidden,
+                             wildFilters[0], ms_lastShowHidden,
                              wxDefaultPosition, wxSize(540,200),
                              style2);
 
@@ -988,14 +1009,11 @@ wxGenericFileDialog::wxGenericFileDialog(wxWindow *parent,
         mainsizer->Add( choicesizer, 0, wxEXPAND );
     }
 
-    m_choice->Append( firstWildText, (void*) new wxString( firstWild ) );
-    while (tokens.HasMoreTokens())
+    for (size_t n=0; n<wildFilters.GetCount(); n++)
     {
-        firstWildText = tokens.GetNextToken();
-        firstWild = tokens.GetNextToken();
-        m_choice->Append( firstWildText, (void*) new wxString( firstWild ) );
+        m_choice->Append( wildDescriptions[n], (void*) new wxString( wildFilters[n] ) );
     }
-    m_choice->SetSelection( 0 );
+    SetFilterIndex( 0 );
 
     SetAutoLayout( TRUE );
     SetSizer( mainsizer );
@@ -1124,6 +1142,11 @@ void wxGenericFileDialog::HandleAction( const wxString &fn )
     if (filename.IsEmpty()) return;
     if (filename == wxT(".")) return;
 
+    // "some/place/" means they want to chdir not try to load "place"
+    bool want_dir = filename.Last() == wxFILE_SEP_PATH;
+    if (want_dir)
+        filename = filename.RemoveLast();
+
     if (filename == wxT(".."))
     {
         m_list->GoToParentDir();
@@ -1141,13 +1164,9 @@ void wxGenericFileDialog::HandleAction( const wxString &fn )
         return;
     }
 
-    if (filename[0u] == wxT('~'))
+    if (filename.BeforeFirst(wxT('/')) == wxT("~"))
     {
-        filename.Remove( 0, 1 );
-        wxString tmp( wxGetUserHome() );
-        tmp += wxT('/');
-        tmp += filename;
-        filename = tmp;
+        filename = wxGetUserHome() + filename.Remove(0, 1);
     }
 #endif // __UNIX__
 
@@ -1175,6 +1194,14 @@ void wxGenericFileDialog::HandleAction( const wxString &fn )
     {
         m_list->GoToDir( filename );
         UpdateControls();
+        return;
+    }
+
+    // they really wanted a dir, but it doesn't exist
+    if (want_dir)
+    {
+        wxMessageBox(_("Directory doesn't exist."), _("Error"),
+                     wxOK | wxICON_ERROR );
         return;
     }
 
@@ -1355,152 +1382,6 @@ void wxGenericFileDialog::UpdateControls()
 #ifdef USE_GENERIC_FILEDIALOG
 
 IMPLEMENT_DYNAMIC_CLASS(wxFileDialog, wxGenericFileDialog);
-
-// ----------------------------------------------------------------------------
-// global functions
-// ----------------------------------------------------------------------------
-
-// common part of both wxFileSelectorEx() and wxFileSelector()
-static wxString
-DoSelectFile(const wxChar *title,
-             const wxChar *defaultDir,
-             const wxChar *defaultFileName,
-             const wxChar *defaultExtension,
-             int *indexDefaultExtension,
-             const wxChar *filter,
-             int flags,
-             wxWindow *parent,
-             int x,
-             int y)
-{
-    // the filter may be either given explicitly or created automatically from
-    // the default extension
-    wxString filterReal;
-    if ( filter )
-    {
-        // the user has specified the filter explicitly, use it
-        filterReal = filter;
-    }
-    else if ( !wxIsEmpty(defaultExtension) )
-    {
-        // create the filter to match the given extension
-        filterReal << wxT("*.") << defaultExtension;
-    }
-
-    wxFileDialog fileDialog(parent,
-                            title,
-                            defaultDir,
-                            defaultFileName,
-                            filterReal,
-                            flags,
-                            wxPoint(x, y));
-
-    wxString path;
-    if ( fileDialog.ShowModal() == wxID_OK )
-    {
-        path = fileDialog.GetPath();
-        if ( indexDefaultExtension )
-        {
-            *indexDefaultExtension = fileDialog.GetFilterIndex();
-        }
-    }
-
-    return path;
-}
-
-wxString
-wxFileSelectorEx(const wxChar *title,
-                 const wxChar *defaultDir,
-                 const wxChar *defaultFileName,
-                 int *indexDefaultExtension,
-                 const wxChar *filter,
-                 int flags,
-                 wxWindow *parent,
-                 int x,
-                 int y)
-{
-    return DoSelectFile(title,
-                        defaultDir,
-                        defaultFileName,
-                        wxT(""),                // def ext determined by index
-                        indexDefaultExtension,
-                        filter,
-                        flags,
-                        parent,
-                        x,
-                        y);
-}
-
-wxString
-wxFileSelector(const wxChar *title,
-               const wxChar *defaultDir,
-               const wxChar *defaultFileName,
-               const wxChar *defaultExtension,
-               const wxChar *filter,
-               int flags,
-               wxWindow *parent,
-               int x,
-               int y)
-{
-    return DoSelectFile(title,
-                        defaultDir,
-                        defaultFileName,
-                        defaultExtension,
-                        NULL,               // not interested in filter index
-                        filter,
-                        flags,
-                        parent,
-                        x,
-                        y);
-}
-
-static wxString GetWildcardString(const wxChar *ext)
-{
-    wxString wild;
-    if ( ext )
-    {
-        if ( *ext == wxT('.') )
-            ext++;
-
-        wild << _T("*.") << ext;
-    }
-    else // no extension specified
-    {
-        wild = wxFileSelectorDefaultWildcardStr;
-    }
-
-    return wild;
-}
-
-wxString wxLoadFileSelector(const wxChar *what,
-                            const wxChar *ext,
-                            const wxChar *nameDef,
-                            wxWindow *parent)
-{
-    wxString prompt;
-    if ( what && *what )
-        prompt = wxString::Format(_("Load %s file"), what);
-    else
-        prompt = _("Load file");
-
-    return wxFileSelector(prompt, NULL, nameDef, ext,
-                          GetWildcardString(ext), 0, parent);
-}
-
-wxString wxSaveFileSelector(const wxChar *what,
-                            const wxChar *ext,
-                            const wxChar *nameDef,
-                            wxWindow *parent)
-{
-    wxString prompt;
-    if ( what && *what )
-        prompt = wxString::Format(_("Save %s file"), what);
-    else
-        prompt = _("Save file");
-
-    return wxFileSelector(prompt, NULL, nameDef, ext,
-                          GetWildcardString(ext), 0, parent);
-}
 
 #endif // USE_GENERIC_FILEDIALOG
 

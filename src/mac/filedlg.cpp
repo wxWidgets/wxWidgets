@@ -274,65 +274,6 @@ static pascal Boolean CrossPlatformFileFilter(CInfoPBPtr myCInfoPBPtr, void *dat
 
 // end wxmac
 
-wxString wxFileSelector(const wxChar *title,
-                     const wxChar *defaultDir, const wxChar *defaultFileName,
-                     const wxChar *defaultExtension, const wxChar *filter, int flags,
-                     wxWindow *parent, int x, int y)
-{
-    // If there's a default extension specified but no filter, we create a suitable
-    // filter.
-
-    wxString filter2;
-    if ( defaultExtension && !filter )
-        filter2 = wxString(wxT("*.")) + wxString(defaultExtension) ;
-    else if ( filter )
-        filter2 = filter;
-
-    wxString defaultDirString;
-    if (defaultDir)
-        defaultDirString = defaultDir;
-    else
-        defaultDirString = wxEmptyString ;
-
-    wxString defaultFilenameString;
-    if (defaultFileName)
-        defaultFilenameString = defaultFileName;
-    else
-        defaultFilenameString = wxEmptyString;
-
-    wxFileDialog fileDialog(parent, title, defaultDirString, defaultFilenameString, filter2, flags, wxPoint(x, y));
-
-    if ( fileDialog.ShowModal() == wxID_OK )
-    {
-        return fileDialog.GetPath();
-    }
-    else
-        return wxGetEmptyString();
-}
-
-WXDLLEXPORT wxString wxFileSelectorEx(const wxChar *title,
-                       const wxChar *defaultDir,
-                       const wxChar *defaultFileName,
-                       int* defaultFilterIndex,
-                       const wxChar *filter,
-                       int       flags,
-                       wxWindow* parent,
-                       int       x,
-                       int       y)
-
-{
-    wxFileDialog fileDialog(parent, title ? title : wxT(""), defaultDir ? defaultDir : wxT(""),
-        defaultFileName ? defaultFileName : wxT(""), filter ? filter : wxT(""), flags, wxPoint(x, y));
-
-    if ( fileDialog.ShowModal() == wxID_OK )
-    {
-        *defaultFilterIndex = fileDialog.GetFilterIndex();
-        return fileDialog.GetPath();
-    }
-    else
-        return wxGetEmptyString();
-}
-
 wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
         const wxString& defaultDir, const wxString& defaultFileName, const wxString& wildCard,
         long style, const wxPoint& pos)
@@ -526,40 +467,3 @@ int wxFileDialog::ShowModal()
     return wxID_CANCEL;
 }
 
-// Generic file load/save dialog
-static wxString
-wxDefaultFileSelector(bool load, const wxChar *what, const wxChar *extension, const wxChar *default_name, wxWindow *parent)
-{
-    wxString prompt;
-
-    wxString str;
-    if (load)
-        str = wxT("Load %s file");
-    else
-        str = wxT("Save %s file");
-    prompt.Printf( wxGetTranslation(str), what);
-    
-    const wxChar *ext = extension;
-    if (*ext == wxT('.'))
-        ext++;
-
-    wxString wild;
-    wild.Printf(wxT("*.%s"), ext);
-    
-    return wxFileSelector (prompt, NULL, default_name, ext, wild, 0, parent);
-}
-
-// Generic file load dialog
-wxString
-wxLoadFileSelector(const wxChar *what, const wxChar *extension, const wxChar *default_name, wxWindow *parent)
-{
-    return wxDefaultFileSelector(TRUE, what, extension, default_name, parent);
-}
-
-
-// Generic file save dialog
-wxString
-wxSaveFileSelector(const wxChar *what, const wxChar *extension, const wxChar *default_name, wxWindow *parent)
-{
-    return wxDefaultFileSelector(FALSE, what, extension, default_name, parent);
-}

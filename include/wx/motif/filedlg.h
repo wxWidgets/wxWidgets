@@ -22,9 +22,6 @@
 * File selector
 */
 
-WXDLLEXPORT_DATA(extern const char*) wxFileSelectorPromptStr;
-WXDLLEXPORT_DATA(extern const char*) wxFileSelectorDefaultWildcardStr;
-
 class WXDLLEXPORT wxFileDialog: public wxDialog
 {
     DECLARE_DYNAMIC_CLASS(wxFileDialog)
@@ -70,29 +67,4 @@ public:
     int ShowModal();
 };
 
-#define wxOPEN              0x0001
-#define wxSAVE              0x0002
-#define wxOVERWRITE_PROMPT  0x0004
-#define wxHIDE_READONLY     0x0008
-#define wxFILE_MUST_EXIST   0x0010
-
-// File selector - backward compatibility
-WXDLLEXPORT wxString wxFileSelector(const char *message = wxFileSelectorPromptStr, const char *default_path = NULL,
-                                    const char *default_filename = NULL, const char *default_extension = NULL,
-                                    const char *wildcard = wxFileSelectorDefaultWildcardStr, int flags = 0,
-                                    wxWindow *parent = NULL, int x = -1, int y = -1);
-
-// An extended version of wxFileSelector
-WXDLLEXPORT wxString wxFileSelectorEx(const char *message = wxFileSelectorPromptStr, const char *default_path = NULL,
-                                      const char *default_filename = NULL, int *indexDefaultExtension = NULL,
-                                      const char *wildcard = wxFileSelectorDefaultWildcardStr, int flags = 0,
-                                      wxWindow *parent = NULL, int x = -1, int y = -1);
-
-// Generic file load dialog
-WXDLLEXPORT wxString wxLoadFileSelector(const char *what, const char *extension, const char *default_name = NULL, wxWindow *parent = NULL);
-
-// Generic file save dialog
-WXDLLEXPORT wxString wxSaveFileSelector(const char *what, const char *extension, const char *default_name = NULL, wxWindow *parent = NULL);
-
-#endif
-// _WX_FILEDLG_H_
+#endif // _WX_FILEDLG_H_

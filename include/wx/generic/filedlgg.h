@@ -39,19 +39,8 @@ class WXDLLEXPORT wxTextCtrl;
     #define USE_GENERIC_FILEDIALOG
 #endif
 
-#ifdef USE_GENERIC_FILEDIALOG
-
-//-----------------------------------------------------------------------------
-// data
-//-----------------------------------------------------------------------------
-
-WXDLLEXPORT_DATA(extern const wxChar *)wxFileSelectorPromptStr;
-WXDLLEXPORT_DATA(extern const wxChar *)wxFileSelectorDefaultWildcardStr;
-
-#endif // USE_GENERIC_FILEDIALOG
-
 //-------------------------------------------------------------------------
-// File selector
+// wxGenericFileDialog
 //-------------------------------------------------------------------------
 
 class WXDLLEXPORT wxGenericFileDialog: public wxDialog
@@ -160,46 +149,10 @@ public:
      }
 };
 
-// File selector - backward compatibility
-WXDLLEXPORT wxString
-wxFileSelector(const wxChar *message = wxFileSelectorPromptStr,
-               const wxChar *default_path = NULL,
-               const wxChar *default_filename = NULL,
-               const wxChar *default_extension = NULL,
-               const wxChar *wildcard = wxFileSelectorDefaultWildcardStr,
-               int flags = 0,
-               wxWindow *parent = NULL,
-               int x = -1, int y = -1);
-
-// An extended version of wxFileSelector
-WXDLLEXPORT wxString
-wxFileSelectorEx(const wxChar *message = wxFileSelectorPromptStr,
-                 const wxChar *default_path = NULL,
-                 const wxChar *default_filename = NULL,
-                 int *indexDefaultExtension = NULL,
-                 const wxChar *wildcard = wxFileSelectorDefaultWildcardStr,
-                 int flags = 0,
-                 wxWindow *parent = NULL,
-                 int x = -1, int y = -1);
-
-// Ask for filename to load
-WXDLLEXPORT wxString
-wxLoadFileSelector(const wxChar *what,
-                   const wxChar *extension,
-                   const wxChar *default_name = (const wxChar *)NULL,
-                   wxWindow *parent = (wxWindow *) NULL);
-
-// Ask for filename to save
-WXDLLEXPORT wxString
-wxSaveFileSelector(const wxChar *what,
-                   const wxChar *extension,
-                   const wxChar *default_name = (const wxChar *) NULL,
-                   wxWindow *parent = (wxWindow *) NULL);
-
 #endif // USE_GENERIC_FILEDIALOG
 
 //-----------------------------------------------------------------------------
-//  wxFileData
+//  wxFileData - a class to hold the file info for the wxFileCtrl
 //-----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxFileData
@@ -214,29 +167,43 @@ public:
         is_drive = 0x0008
     };
 
+    // Full copy constructor
+    wxFileData( const wxFileData& fileData );
+    // Create a filedata from this information
     wxFileData( const wxString &filePath, const wxString &fileName,
                 fileType type, int image_id );
+
+    // (re)read the extra data about the file from the system
+    void ReadData();
 
     // get the name of the file, dir, drive
     wxString GetFileName() const { return m_fileName; }
     // get the full path + name of the file, dir, path
     wxString GetFilePath() const { return m_filePath; }
+    // Set the path + name and name of the item
+    void SetNewName( const wxString &filePath, const wxString &fileName );
+
+    // Get the size of the file in bytes
     long GetSize() const { return m_size; }
     // Get the type of file, either file extension or <DIR>, <LINK>, <DRIVE>
-    wxString GetType() const;
+    wxString GetFileType() const;
     // get the last modification time
-    wxDateTime GetTime() const { return m_dateTime; }
+    wxDateTime GetDateTime() const { return m_dateTime; }
+    // Get the time as a formatted string
     wxString GetModificationTime() const;
     // in UNIX get rwx for file, in MSW get attributes ARHS
     wxString GetPermissions() const { return m_permissions; }
+    // Get the id of the image used in a wxImageList
     int GetImageId() const { return m_image; }
 
+    bool IsFile() const  { return !IsDir() && !IsLink() && !IsDrive(); }
     bool IsDir() const   { return (m_type & is_dir  ) != 0; }
     bool IsLink() const  { return (m_type & is_link ) != 0; }
     bool IsExe() const   { return (m_type & is_exe  ) != 0; }
     bool IsDrive() const { return (m_type & is_drive) != 0; }
 
-    int GetFileType() const { return m_type; }
+    // Get/Set the type of file, file/dir/drive/link
+    int GetType() const { return m_type; }
 
     // the wxFileCtrl fields in report view
     enum fileListFieldType
@@ -251,12 +218,13 @@ public:
         FileList_Max
     };
 
+    // Get the entry for report view of wxFileCtrl
     wxString GetEntry( fileListFieldType num ) const;
 
     // Get a string representation of the file info
     wxString GetHint() const;
+    // initialize a wxListItem attributes
     void MakeItem( wxListItem &item );
-    void SetNewName( const wxString &filePath, const wxString &fileName );
 
 private:
     wxString m_fileName;
@@ -294,6 +262,7 @@ public:
     bool GetShowHidden() const { return m_showHidden; }
 
     virtual long Add( wxFileData *fd, wxListItem &item );
+    virtual void UpdateItem(const wxListItem &item);
     virtual void UpdateFiles();
     virtual void MakeDir();
     virtual void GoToParentDir();
@@ -327,7 +296,5 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-#endif
-    // _WX_FILEDLGG_H_
-
+#endif // _WX_FILEDLGG_H_
 

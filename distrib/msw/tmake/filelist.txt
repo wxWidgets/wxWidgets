@@ -164,6 +164,7 @@ fileconf.cpp	Common	Base
 filefn.cpp	Common	Base
 filename.cpp	Common	Base
 filesys.cpp	Common	Base
+fldlgcmn.cpp	Common
 fontcmn.cpp	Common
 fontmap.cpp	Common	Base
 framecmn.cpp	Common

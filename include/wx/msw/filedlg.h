@@ -22,9 +22,6 @@
  * File selector
  */
 
-WXDLLEXPORT_DATA(extern const wxChar*) wxFileSelectorPromptStr;
-WXDLLEXPORT_DATA(extern const wxChar*) wxFileSelectorDefaultWildcardStr;
-
 class WXDLLEXPORT wxFileDialog: public wxDialog
 {
 public:
@@ -72,42 +69,5 @@ private:
     DECLARE_NO_COPY_CLASS(wxFileDialog)
 };
 
-// File selector - backward compatibility
-WXDLLEXPORT wxString
-wxFileSelector(const wxChar *message = wxFileSelectorPromptStr,
-               const wxChar *default_path = NULL,
-               const wxChar *default_filename = NULL,
-               const wxChar *default_extension = NULL,
-               const wxChar *wildcard = wxFileSelectorDefaultWildcardStr,
-               int flags = 0,
-               wxWindow *parent = NULL,
-               int x = -1, int y = -1);
-
-// An extended version of wxFileSelector
-WXDLLEXPORT wxString
-wxFileSelectorEx(const wxChar *message = wxFileSelectorPromptStr,
-                 const wxChar *default_path = NULL,
-                 const wxChar *default_filename = NULL,
-                 int *indexDefaultExtension = NULL,
-                 const wxChar *wildcard = wxFileSelectorDefaultWildcardStr,
-                 int flags = 0,
-                 wxWindow *parent = NULL,
-                 int x = -1, int y = -1);
-
-// Ask for filename to load
-WXDLLEXPORT wxString
-wxLoadFileSelector(const wxChar *what,
-                   const wxChar *extension,
-                   const wxChar *default_name = (const wxChar *)NULL,
-                   wxWindow *parent = (wxWindow *) NULL);
-
-// Ask for filename to save
-WXDLLEXPORT wxString
-wxSaveFileSelector(const wxChar *what,
-                   const wxChar *extension,
-                   const wxChar *default_name = (const wxChar *) NULL,
-                   wxWindow *parent = (wxWindow *) NULL);
-
-#endif
-    // _WX_FILEDLG_H_
+#endif // _WX_FILEDLG_H_
 

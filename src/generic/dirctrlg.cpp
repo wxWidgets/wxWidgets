@@ -99,6 +99,9 @@ extern bool wxIsDriveAvailable(const wxString& dirName);
 #undef GetFirstChild
 #endif
 
+// declared in filedlg.h, defined in fldlgcmn.cpp
+extern int wxParseFileFilter(const wxString& filterStr, wxArrayString& descriptions, wxArrayString& filters);
+
 // ----------------------------------------------------------------------------
 // wxGetAvailableDrives, for WINDOWS, DOS, WXPM, MAC, UNIX (returns "/")
 // ----------------------------------------------------------------------------
@@ -347,6 +350,7 @@ bool wxIsDriveAvailable(const wxString& dirName)
     return success;
 }
 #endif // __WINDOWS__ || __WXPM__
+
 
 // Function which is called by quick sort. We want to override the default wxArrayString behaviour,
 // and sort regardless of case.
@@ -1032,41 +1036,11 @@ bool wxGenericDirCtrl::ExtractWildcard(const wxString& filterStr, int n, wxStrin
 
 // Parses the global filter, returning the number of filters.
 // Returns 0 if none or if there's a problem.
-// filterStr is in the form:
-//
-// "All files (*.*)|*.*|JPEG Files (*.jpeg)|*.jpg"
+// filterStr is in the form: "All files (*.*)|*.*|JPEG Files (*.jpeg)|*.jpg"
 
 int wxGenericDirCtrl::ParseFilter(const wxString& filterStr, wxArrayString& filters, wxArrayString& descriptions)
 {
-    wxString str(filterStr);
-
-    wxString description, filter;
-    int pos;
-    bool finished = FALSE;
-    do
-    {
-        pos = str.Find(wxT('|'));
-        if (pos == -1)
-            return 0; // Problem
-        description = str.Left(pos);
-        str = str.Mid(pos+1);
-        pos = str.Find(wxT('|'));
-        if (pos == -1)
-        {
-            filter = str;
-            finished = TRUE;
-        }
-        else
-        {
-            filter = str.Left(pos);
-            str = str.Mid(pos+1);
-        }
-        descriptions.Add(description);
-        filters.Add(filter);
-    }
-    while (!finished) ;
-
-    return filters.Count();
+    return wxParseFileFilter(filterStr, descriptions, filters );
 }
 
 void wxGenericDirCtrl::DoResize()
