@@ -2247,9 +2247,9 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
         wxTreeEvent event( wxEVT_COMMAND_TREE_ITEM_MENU, GetId() );
         event.m_item = GetSelection();
         event.SetEventObject( this );
-        GetEventHandler()->ProcessEvent( event );
-
-        return rc;
+        if ( GetEventHandler()->ProcessEvent(event) )
+            return true;
+        //else: continue with generating wxEVT_CONTEXT_MENU in base class code
     }
 #endif // __SMARTPHONE__
 
