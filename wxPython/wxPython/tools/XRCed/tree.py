@@ -84,7 +84,7 @@ class ID_NEW:
     MENU = wxNewId()
     MENU_ITEM = wxNewId()
     SEPARATOR = wxNewId()
-    LAST = wxNewId()    
+    LAST = wxNewId()
 
 class PullDownMenu:
     ID_EXPAND = wxNewId()
@@ -94,6 +94,7 @@ class PullDownMenu:
     def __init__(self, parent):
         self.ID_DELETE = parent.ID_DELETE
         EVT_MENU_RANGE(parent, ID_NEW.PANEL, ID_NEW.LAST, parent.OnCreate)
+        EVT_MENU_RANGE(parent, 1000 + ID_NEW.PANEL, 1000 + ID_NEW.LAST, parent.OnReplace)
         EVT_MENU(parent, self.ID_COLLAPSE, parent.OnCollapse)
         EVT_MENU(parent, self.ID_EXPAND, parent.OnExpand)
         EVT_MENU(parent, self.ID_PASTE_SIBLING, parent.OnPaste)
@@ -148,6 +149,29 @@ class PullDownMenu:
             ID_NEW.SPACER: 'spacer',
             ID_NEW.UNKNOWN: 'unknown',
             }
+        self.topLevel = [
+            (ID_NEW.PANEL, 'Panel', 'Create panel'),
+            (ID_NEW.DIALOG, 'Dialog', 'Create dialog'),
+            (ID_NEW.FRAME, 'Frame', 'Create frame'),
+            None,
+            (ID_NEW.TOOL_BAR, 'ToolBar', 'Create toolbar'),
+            (ID_NEW.MENU_BAR, 'MenuBar', 'Create menubar'),
+            (ID_NEW.MENU, 'Menu', 'Create menu')
+            ]
+        self.containers = [
+             (ID_NEW.PANEL, 'Panel', 'Create panel'),
+             (ID_NEW.NOTEBOOK, 'Notebook', 'Create notebook control'),
+             (ID_NEW.TOOL_BAR, 'ToolBar', 'Create toolbar'),
+            ]
+        self.sizers = [
+             (ID_NEW.BOX_SIZER, 'BoxSizer', 'Create box sizer'),
+             (ID_NEW.STATIC_BOX_SIZER, 'StaticBoxSizer',
+              'Create static box sizer'),
+             (ID_NEW.GRID_SIZER, 'GridSizer', 'Create grid sizer'),
+             (ID_NEW.FLEX_GRID_SIZER, 'FlexGridSizer',
+              'Create flexgrid sizer'),
+             (ID_NEW.SPACER, 'Spacer', 'Create spacer'),
+             ]
         self.controls = [
             ['control', 'Various controls',
              (ID_NEW.STATIC_TEXT, 'Label', 'Create label'),
@@ -243,6 +267,19 @@ def SetMenu(m, list):
         elif type(l) == types.ListType:
             subMenu = wxMenu()
             SetMenu(subMenu, l[2:])
+            m.AppendMenu(wxNewId(), l[0], subMenu, l[1])
+        else:                           # separator
+            m.AppendSeparator()
+# Same, but adds 1000 to all IDs
+def SetMenu2(m, list):
+    for l in list:
+        if type(l) == types.TupleType:
+            # Shift ID
+            l = (1000 + l[0],) + l[1:]
+            apply(m.Append, l)
+        elif type(l) == types.ListType:
+            subMenu = wxMenu()
+            SetMenu2(subMenu, l[2:])
             m.AppendMenu(wxNewId(), l[0], subMenu, l[1])
         else:                           # separator
             m.AppendSeparator()
@@ -413,6 +450,7 @@ class XML_Tree(wxTreeCtrl):
                 elif n.nodeType != minidom.Node.ELEMENT_NODE:
                     treeObj.element.removeChild(n)
                     n.unlink()
+                    
     # Insert new item at specific position
     def InsertNode(self, itemParent, parent, elem, nextItem):
         # Insert in XML tree and wxWin
@@ -640,7 +678,11 @@ class XML_Tree(wxTreeCtrl):
         else:
             elem.setAttribute('name', xxx.name)
         memFile.close()                 # write to wxMemoryFS
-        res = wxXmlResource('', g.xmlFlags)
+        xmlFlags = wxXRC_NO_SUBCLASSING
+        # Use translations if encoding is not specified
+        if xxx.currentEncoding == 'ascii':
+            xmlFlags != wxXRC_USE_LOCALE
+        res = wxXmlResource('', xmlFlags)
         res.Load('memory:xxx.xrc')
         if xxx.__class__ == xxxFrame:
             # Frame can't have many children,
@@ -764,13 +806,7 @@ class XML_Tree(wxTreeCtrl):
             else:
                 needInsert = self.NeedInsert(item)
             if item == self.root or needInsert and self.GetItemParent(item) == self.root:
-                m.Append(ID_NEW.PANEL, 'Panel', 'Create panel')
-                m.Append(ID_NEW.DIALOG, 'Dialog', 'Create dialog')
-                m.Append(ID_NEW.FRAME, 'Frame', 'Create frame')
-                m.AppendSeparator()
-                m.Append(ID_NEW.TOOL_BAR, 'ToolBar', 'Create toolbar')
-                m.Append(ID_NEW.MENU_BAR, 'MenuBar', 'Create menubar')
-                m.Append(ID_NEW.MENU, 'Menu', 'Create menu')
+                SetMenu(m, pullDownMenu.topLevel)
             else:
                 xxx = self.GetPyData(item).treeObject()
                 # Check parent for possible child nodes if inserting sibling
@@ -803,6 +839,29 @@ class XML_Tree(wxTreeCtrl):
                 else:
                     menu.AppendMenu(wxNewId(), 'Create Sibling', m,
                                     'Create sibling after selected object')
+            # Build replace menu
+            if item != self.root:
+                xxx = self.GetPyData(item).treeObject()
+                m = wxMenu()                  # create replace menu
+                if xxx.__class__ == xxxMenuBar:
+                    m.Append(1000 + ID_NEW.MENU, 'Menu', 'Create menu')
+                elif xxx.__class__ in [xxxMenu, xxxMenuItem]:
+                    SetMenu2(m, pullDownMenu.menuControls)
+                elif xxx.__class__ == xxxToolBar and \
+                         self.GetItemParent(item) == self.root:
+                    SetMenu2(m, [])
+                elif xxx.__class__ in [xxxFrame, xxxDialog, xxxPanel]:
+                    SetMenu2(m, [
+                        (ID_NEW.PANEL, 'Panel', 'Create panel'),
+                        (ID_NEW.DIALOG, 'Dialog', 'Create dialog'),
+                        (ID_NEW.FRAME, 'Frame', 'Create frame')])
+                elif xxx.isSizer:
+                    SetMenu2(m, pullDownMenu.sizers)
+                else:
+                    SetMenu2(m, pullDownMenu.controls)
+                id = wxNewId()
+                menu.AppendMenu(id, 'Replace With', m)
+                if not m.GetMenuItemCount(): menu.Enable(id, False)
             menu.AppendSeparator()
             # Not using standart IDs because we don't want to show shortcuts
             menu.Append(wxID_CUT, 'Cut', 'Cut to the clipboard')

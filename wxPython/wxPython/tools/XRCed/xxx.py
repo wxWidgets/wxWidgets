@@ -8,9 +8,7 @@ from xml.dom import minidom
 from globals import *
 from params import *
 
-currentEncoding = wxLocale_GetSystemEncodingName()
-if not currentEncoding:
-    currentEncoding = 'ascii'
+currentEncoding = sys.getdefaultencoding() # wxLocale_GetSystemEncodingName()
 
 # Base class for interface parameter classes
 class xxxNode:
@@ -325,12 +323,13 @@ class xxxEncoding:
 # Special class for root node
 class xxxMainNode(xxxContainer):
     allParams = ['encoding']
-    required = ['encoding']
-    default = {'encoding': ''}
     hasStyle = hasName = False
     def __init__(self, dom):
         xxxContainer.__init__(self, None, dom.documentElement)
         self.className = 'XML tree'
+        # Reset required parameters after processing XML, because encoding is
+        # a little special
+        self.required = ['encoding']
         self.params['encoding'] = xxxEncoding(dom.encoding)
 
 ################################################################################

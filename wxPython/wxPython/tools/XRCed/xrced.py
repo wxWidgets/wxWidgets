@@ -11,13 +11,11 @@ xrced -- Simple resource editor for XRC format used by wxWindows/wxPython
 
 Usage:
 
-    xrced [ -h ] [ -i ] [ -v ] [ XRC-file ]
+    xrced [ -h ] [ -v ] [ XRC-file ]
 
 Options:
 
     -h          output short usage info and exit
-
-    -i          use international character set instead of translations
 
     -v          output version info and exit
 """
@@ -272,6 +270,7 @@ class Frame(wxFrame):
         EVT_KEY_UP(self, tools.OnKeyUp)
 
     def OnNew(self, evt):
+        if not self.AskSave(): return
         self.Clear()
 
     def OnOpen(self, evt):
@@ -527,7 +526,7 @@ class Frame(wxFrame):
         else:
             self.toolsSizer.Remove(g.tools)
         self.toolsSizer.Layout()
-
+        
     def OnTest(self, evt):
         if not tree.selection: return   # key pressed event
         tree.ShowTestWindow(tree.selection)
@@ -637,6 +636,92 @@ Homepage: http://xrced.sourceforge.net\
             else:
                 tree.pendingHighLight = None
         tree.SetFocus()
+        self.modified = True
+
+    # Replace one object with another
+    def OnReplace(self, evt):
+        selected = tree.selection
+        xxx = tree.GetPyData(selected).treeObject()
+        elem = xxx.element
+        parent = elem.parentNode
+        parentXXX = xxx.parent
+        # New class
+        className = pullDownMenu.createMap[evt.GetId() - 1000]
+        # Create temporary empty node (with default values)
+        dummy = MakeEmptyDOM(className)
+        xxxClass = xxxDict[className]
+        # Remove non-compatible children
+        if tree.ItemHasChildren(selected) and not xxxClass.hasChildren:
+            tree.DeleteChildren(selected)
+        nodes = elem.childNodes[:]
+        tags = []
+        for node in nodes:
+            remove = False
+            tag = node.tagName
+            if tag == 'object':
+                if not xxxClass.hasChildren:
+                    remove = True
+            elif tag not in xxxClass.allParams and \
+                     (not xxxClass.hasStyle or tag not in xxxClass.styles):
+                remove = True
+            else:
+                tags.append(tag)
+            if remove:
+                elem.removeChild(node)
+                node.unlink()
+        
+        # Copy parameters present in dummy but not in elem
+        for node in dummy.childNodes:
+            tag = node.tagName
+            if tag not in tags:
+                elem.appendChild(node.cloneNode(True))
+        dummy.unlink()
+        # Change class name
+        elem.setAttribute('class', className)        
+        # Re-create xxx element
+        xxx = MakeXXXFromDOM(parentXXX, elem)
+        # Update parent in child objects
+        if tree.ItemHasChildren(selected):
+            i, cookie = tree.GetFirstChild(selected, 0)
+            while i.IsOk():
+                x = tree.GetPyData(i)
+                x.parent = xxx
+                if x.hasChild: x.child.parent = xxx
+                i, cookie = tree.GetNextChild(selected, cookie)
+    
+        # Update tree
+        if tree.GetPyData(selected).hasChild: # child container
+            container = tree.GetPyData(selected)
+            container.child = xxx
+            container.hasChildren = xxx.hasChildren
+            container.isSizer = xxx.isSizer
+        else:
+            tree.SetPyData(selected, xxx)
+        tree.SetItemText(selected, xxx.treeName())
+        tree.SetItemImage(selected, xxx.treeImage())
+
+        # Set default name for top-level windows
+        if parent.__class__ == xxxMainNode:
+            cl = xxx.treeObject().__class__
+            frame.maxIDs[cl] += 1
+            xxx.treeObject().name = '%s%d' % (defaultIDs[cl], frame.maxIDs[cl])
+            xxx.treeObject().element.setAttribute('name', xxx.treeObject().name)
+
+        # Update panel
+        g.panel.SetData(xxx)
+        # Update tools
+        g.tools.UpdateUI()
+
+        #undoMan.RegisterUndo(UndoPasteCreate(parentLeaf, parent, newItem, selected))
+        # Update view?
+        if g.testWin and tree.IsHighlatable(newItem):
+            if conf.autoRefresh:
+                tree.needUpdate = True
+                tree.pendingHighLight = newItem
+            else:
+                tree.pendingHighLight = None
+        tree.SetFocus()
+        self.modified = True
 
     # Expand/collapse subtree
     def OnExpand(self, evt):
@@ -739,8 +824,10 @@ Homepage: http://xrced.sourceforge.net\
             import xxx
             if mo:
                 dom.encoding = xxx.currentEncoding = mo.group('encd')
+                if dom.encoding not in ['ascii', sys.getdefaultencoding()]:
+                    wxLogWarning('Encoding is different from system default')
             else:
-                xxx.currentEncoding = 'iso-8859-1'
+                xxx.currentEncoding = 'ascii'
                 dom.encoding = ''
             f.close()
             # Change dir
@@ -819,14 +906,13 @@ Homepage: http://xrced.sourceforge.net\
 ################################################################################
 
 def usage():
-    print >> sys.stderr, 'usage: xrced [-dhlv] [file]'
+    print >> sys.stderr, 'usage: xrced [-dhiv] [file]'
 
 class App(wxApp):
     def OnInit(self):
         global debug
         # Process comand-line
         try:
-            opts = args = []  #give empty values in case of exception
             opts, args = getopt.getopt(sys.argv[1:], 'dhiv')
         except getopt.GetoptError:
             if wxPlatform != '__WXMAC__': # macs have some extra parameters
@@ -839,8 +925,6 @@ class App(wxApp):
                 sys.exit(0)
             elif o == '-d':
                 debug = True
-            elif o == '-i':
-                g.xmlFlags &= ~wxXRC_USE_LOCALE
             elif o == '-v':
                 print 'XRCed version', version
                 sys.exit(0)

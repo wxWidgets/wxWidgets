@@ -1,3 +1,16 @@
+0.1.1-1
+-------
+
+Changed internationalization support. '-i' option removed, default
+encoding is used (should be defined in sitecustomize.py, or 'ascii' by
+default). When XRC file is opened with encoding specified,
+translations are not used.
+
+0.1.1
+-----
+
+Replace command added (not quite finished yet).
+
 0.1.0
 -----
 
