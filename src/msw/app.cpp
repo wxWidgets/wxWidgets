@@ -474,7 +474,9 @@ void wxApp::ConvertToStandardCommandArgs(const char* lpCmdLine)
     wxString name;
     wxFileName::SplitPath(argv[0], NULL, &name, NULL);
 
-    SetAppName(name);
+    // but don't override the name already set by the user code, if any
+    if ( GetAppName().empty() )
+        SetAppName(name);
 
     // copy all the other arguments to wxApp::argv[]
     for ( int i = 1; i < argc; i++ )
