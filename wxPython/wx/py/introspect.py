@@ -56,11 +56,11 @@ def getAttributeNames(object, includeMagic=1, includeSingle=1,
         attrdict = getAllAttributeNames(object)
         # Store the object's dir.
         object_dir = dir(object)
-        for (str_obj, technique, count), attrlist in attrdict.items():
+        for (obj_type_name, technique, count), attrlist in attrdict.items():
             # This complexity is necessary to avoid accessing all the
             # attributes of the object.  This is very handy for objects
             # whose attributes are lazily evaluated.
-            if str(object) == str_obj and technique == 'dir':
+            if type(object).__name__ == obj_type_name and technique == 'dir':
                 attributes += attrlist
             else:
                 attributes += [attr for attr in attrlist \
@@ -97,10 +97,9 @@ def getAllAttributeNames(object):
     # They always return true for hasattr().
     # !!!
     try:
-        # Yes, this can fail if object is an instance of a class with
-        # __str__ (or __repr__) having a bug or raising an
-        # exception. :-(
-        key = str(object)
+        # This could(?) fail if the type is poorly defined without
+        # even a name.
+        key = type(object).__name__
     except:
         key = 'anonymous'
     # Wake up sleepy objects - a hack for ZODB objects in "ghost" state.
