@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/mimetype.h
+// Name:        wx/os2/mimetype.h
 // Purpose:     classes and functions to manage MIME types
 // Author:      David Webster
 // Modified by:
@@ -12,12 +12,22 @@
 #ifndef _MIMETYPE_IMPL_H
 #define _MIMETYPE_IMPL_H
 
+#ifdef    __GNUG__
+    #pragma interface "mimetype.h"
+#endif
+
 #include "wx/defs.h"
+
+#if wxUSE_MIMETYPE
 
 #include "wx/mimetype.h"
 
+// ----------------------------------------------------------------------------
+// wxFileTypeImpl is the OS/2 version of wxFileType, this is a private class
+// and is never used directly by the application
+// ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxFileTypeImpl
+class WXDLLIMPEXP_BASE wxFileTypeImpl
 {
 public:
     // ctor
@@ -40,7 +50,7 @@ public:
     bool GetExtensions(wxArrayString& extensions);
     bool GetMimeType(wxString *mimeType) const;
     bool GetMimeTypes(wxArrayString& mimeTypes) const;
-    bool GetIcon(wxIcon *icon, wxString *sCommand = NULL, int *iIndex = NULL) const;
+    bool GetIcon(wxIconLocation *iconLoc) const;
     bool GetDescription(wxString *desc) const;
     bool GetOpenCommand(wxString *openCmd,
                         const wxFileType::MessageParameters& params) const;
@@ -76,7 +86,7 @@ private:
 
 
 
-class WXDLLEXPORT wxMimeTypesManagerImpl
+class WXDLLIMPEXP_BASE wxMimeTypesManagerImpl
 {
 public:
     // nothing to do here, we don't load any data but just go and fetch it from
@@ -90,7 +100,7 @@ public:
 
     size_t EnumAllFileTypes(wxArrayString& mimetypes);
 
-    // these are NOPs under Windows
+    // these are NOPs under OS/2
     bool ReadMailcap(const wxString& filename, bool fallback = TRUE)
         { return TRUE; }
     bool ReadMimeTypes(const wxString& filename)
@@ -102,6 +112,7 @@ private:
     wxArrayFileTypeInfo m_fallbacks;
 };
 
+#endif // wxUSE_MIMETYPE
 
 #endif
   //_MIMETYPE_IMPL_H

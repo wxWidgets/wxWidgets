@@ -23,11 +23,12 @@
 
 #include "wx/log.h"
 #include "wx/file.h"
+#include "wx/iconloc.h"
 #include "wx/intl.h"
 #include "wx/dynarray.h"
 #include "wx/confbase.h"
 
-#if wxUSE_FILE
+#if wxUSE_MIMETYPE
 
 #include "wx/os2/mimetype.h"
 
@@ -245,9 +246,8 @@ bool wxFileTypeImpl::GetMimeTypes(wxArrayString& mimeTypes) const
         return FALSE;
 }
 
-bool wxFileTypeImpl::GetIcon(wxIcon *icon, wxString* psCommand, int* pnIndex) const
+bool wxFileTypeImpl::GetIcon(wxIconLocation *iconLoc) const
 {
-#if wxUSE_GUI
     if ( m_info ) {
         // we don't have icons in the fallback resources
         return FALSE;
@@ -265,7 +265,7 @@ bool wxFileTypeImpl::GetIcon(wxIcon *icon, wxString* psCommand, int* pnIndex) co
     if ( key.Open() ) {
         wxString strIcon;
         // it's the default value of the key
-        if ( key.QueryValue(wxT(""), strIcon) ) {
+        if ( key.QueryValue(wxEmptyString, strIcon) ) {
             // the format is the following: <full path to file>, <icon index>
             // NB: icon index may be negative as well as positive and the full
             //     path may contain the environment variables inside '%'
@@ -279,27 +279,19 @@ bool wxFileTypeImpl::GetIcon(wxIcon *icon, wxString* psCommand, int* pnIndex) co
                 strIndex = wxT("0");
             }
 
-            wxString strExpPath = wxExpandEnvVars(strFullPath);
-            int nIndex = wxAtoi(strIndex);
+            if ( iconLoc )
+            {
+                iconLoc->SetFileName(wxExpandEnvVars(strFullPath));
 
-            HICON hIcon = ExtractIcon(GetModuleHandle(NULL), strExpPath, nIndex);
-            switch ( (int)hIcon ) {
-                case 0: // means no icons were found
-                case 1: // means no such file or it wasn't a DLL/EXE/OCX/ICO/...
-                    wxLogDebug(wxT("incorrect registry entry '%s': no such icon."),
-                               key.GetName().c_str());
-                    break;
-
-                default:
-                    icon->SetHICON((WXHICON)hIcon);
-                    return TRUE;
+                iconLoc->SetIndex(wxAtoi(strIndex));
             }
+
+            return TRUE;
         }
     }
 
     // no such file type or no value or incorrect icon entry
 */
-#endif // wxUSE_GUI
     return FALSE;
 }
 
@@ -452,4 +444,4 @@ size_t wxMimeTypesManagerImpl::EnumAllFileTypes(wxArrayString& mimetypes)
   return 0;
 }
 
-#endif //wxUSE_FILE
+#endif //wxUSE_MIMETYPE
