@@ -275,54 +275,54 @@ wxCursor::wxCursor(const wxString& filename,
     }
 }
 
+// all wxWidgets standard cursors
+static const struct StdCursor
+{
+    // is this a standard Windows cursor?
+    bool isStd;
+
+    // the cursor name or id
+    LPCTSTR name;
+} stdCursors[] =
+{
+    {  true, NULL                        }, // wxCURSOR_NONE
+    {  true, IDC_ARROW                   }, // wxCURSOR_ARROW
+    { false, _T("WXCURSOR_RIGHT_ARROW")  }, // wxCURSOR_RIGHT_ARROW
+    { false, _T("WXCURSOR_BULLSEYE")     }, // wxCURSOR_BULLSEYE
+    {  true, IDC_ARROW                   }, // WXCURSOR_CHAR
+    {  true, IDC_CROSS                   }, // WXCURSOR_CROSS
+    { false, _T("WXCURSOR_HAND")         }, // wxCURSOR_HAND
+    {  true, IDC_IBEAM                   }, // WXCURSOR_IBEAM
+    {  true, IDC_ARROW                   }, // WXCURSOR_LEFT_BUTTON
+    { false, _T("WXCURSOR_MAGNIFIER")    }, // wxCURSOR_MAGNIFIER
+    {  true, IDC_ARROW                   }, // WXCURSOR_MIDDLE_BUTTON
+    {  true, IDC_NO                      }, // WXCURSOR_NO_ENTRY
+    { false, _T("WXCURSOR_PBRUSH")       }, // wxCURSOR_PAINT_BRUSH
+    { false, _T("WXCURSOR_PENCIL")       }, // wxCURSOR_PENCIL
+    { false, _T("WXCURSOR_PLEFT")        }, // wxCURSOR_POINT_LEFT
+    { false, _T("WXCURSOR_PRIGHT")       }, // wxCURSOR_POINT_RIGHT
+    {  true, IDC_HELP                    }, // WXCURSOR_QUESTION_ARROW
+    {  true, IDC_ARROW                   }, // WXCURSOR_RIGHT_BUTTON
+    {  true, IDC_SIZENESW                }, // WXCURSOR_SIZENESW
+    {  true, IDC_SIZENS                  }, // WXCURSOR_SIZENS
+    {  true, IDC_SIZENWSE                }, // WXCURSOR_SIZENWSE
+    {  true, IDC_SIZEWE                  }, // WXCURSOR_SIZEWE
+    {  true, IDC_SIZEALL                 }, // WXCURSOR_SIZING
+    { false, _T("WXCURSOR_PBRUSH")       }, // wxCURSOR_SPRAYCAN
+    {  true, IDC_WAIT                    }, // WXCURSOR_WAIT
+    { false, _T("WXCURSOR_WATCH")        }, // WXCURSOR_WATCH
+    { false, _T("WXCURSOR_BLANK")        }, // wxCURSOR_BLANK
+    {  true, IDC_APPSTARTING             }, // wxCURSOR_ARROWWAIT
+
+    // no entry for wxCURSOR_MAX
+};
+
+wxCOMPILE_TIME_ASSERT( WXSIZEOF(stdCursors) == wxCURSOR_MAX,
+                       CursorsIdArrayMismatch );
+
 // Cursors by stock number
 wxCursor::wxCursor(int idCursor)
 {
-    // all wxWidgets standard cursors
-    static const struct StdCursor
-    {
-        // is this a standard Windows cursor?
-        bool isStd;
-
-        // the cursor name or id
-        LPCTSTR name;
-    } stdCursors[] =
-    {
-        {  true, NULL                        }, // wxCURSOR_NONE
-        {  true, IDC_ARROW                   }, // wxCURSOR_ARROW
-        { false, _T("WXCURSOR_RIGHT_ARROW")  }, // wxCURSOR_RIGHT_ARROW
-        { false, _T("WXCURSOR_BULLSEYE")     }, // wxCURSOR_BULLSEYE
-        {  true, IDC_ARROW                   }, // WXCURSOR_CHAR
-        {  true, IDC_CROSS                   }, // WXCURSOR_CROSS
-        { false, _T("WXCURSOR_HAND")         }, // wxCURSOR_HAND
-        {  true, IDC_IBEAM                   }, // WXCURSOR_IBEAM
-        {  true, IDC_ARROW                   }, // WXCURSOR_LEFT_BUTTON
-        { false, _T("WXCURSOR_MAGNIFIER")    }, // wxCURSOR_MAGNIFIER
-        {  true, IDC_ARROW                   }, // WXCURSOR_MIDDLE_BUTTON
-        {  true, IDC_NO                      }, // WXCURSOR_NO_ENTRY
-        { false, _T("WXCURSOR_PBRUSH")       }, // wxCURSOR_PAINT_BRUSH
-        { false, _T("WXCURSOR_PENCIL")       }, // wxCURSOR_PENCIL
-        { false, _T("WXCURSOR_PLEFT")        }, // wxCURSOR_POINT_LEFT
-        { false, _T("WXCURSOR_PRIGHT")       }, // wxCURSOR_POINT_RIGHT
-        {  true, IDC_HELP                    }, // WXCURSOR_QUESTION_ARROW
-        {  true, IDC_ARROW                   }, // WXCURSOR_RIGHT_BUTTON
-        {  true, IDC_SIZENESW                }, // WXCURSOR_SIZENESW
-        {  true, IDC_SIZENS                  }, // WXCURSOR_SIZENS
-        {  true, IDC_SIZENWSE                }, // WXCURSOR_SIZENWSE
-        {  true, IDC_SIZEWE                  }, // WXCURSOR_SIZEWE
-        {  true, IDC_SIZEALL                 }, // WXCURSOR_SIZING
-        { false, _T("WXCURSOR_PBRUSH")       }, // wxCURSOR_SPRAYCAN
-        {  true, IDC_WAIT                    }, // WXCURSOR_WAIT
-        { false, _T("WXCURSOR_WATCH")        }, // WXCURSOR_WATCH
-        { false, _T("WXCURSOR_BLANK")        }, // wxCURSOR_BLANK
-        {  true, IDC_APPSTARTING             }, // wxCURSOR_ARROWWAIT
-
-        // no entry for wxCURSOR_MAX
-    };
-
-    wxCOMPILE_TIME_ASSERT( WXSIZEOF(stdCursors) == wxCURSOR_MAX,
-                           CursorsIdArrayMismatch );
-
     wxCHECK_RET( idCursor > 0 && (size_t)idCursor < WXSIZEOF(stdCursors),
                  _T("invalid cursor id in wxCursor() ctor") );
 

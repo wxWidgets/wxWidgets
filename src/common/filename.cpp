@@ -1181,15 +1181,17 @@ bool wxFileName::IsCaseSensitive( wxPathFormat format )
     return GetFormat(format) == wxPATH_UNIX;
 }
 
+// If asserts, wxPathFormat has been changed.
+wxCOMPILE_TIME_ASSERT(wxPATH_MAX == 5, wxPathFormatChanged);
+
 /* static */
 wxString wxFileName::GetForbiddenChars(wxPathFormat format)
 {
     // Inits to forbidden characters that are common to (almost) all platforms.
     wxString strForbiddenChars = wxT("*?");
 
-    // If asserts, wxPathFormat has been changed. In case of a new path format
+    // In case of a new path format
     // addition, the following code might have to be updated.
-    wxCOMPILE_TIME_ASSERT(wxPATH_MAX == 5, wxPathFormatChanged);
     switch ( GetFormat(format) )
     {
         default :
