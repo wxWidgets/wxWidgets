@@ -1241,21 +1241,21 @@ wxTextCtrl* wxListCtrl::EditLabel(long item, wxClassInfo* textControlClass)
 {
     wxASSERT( (textControlClass->IsKindOf(CLASSINFO(wxTextCtrl))) );
 
-    // VS: ListView_EditLabel requires that the list has focus.
+    // ListView_EditLabel requires that the list has focus.
     SetFocus();
-    HWND hWnd = (HWND) ListView_EditLabel(GetHwnd(), item);
+    WXHWND hWnd = (WXHWND) ListView_EditLabel(GetHwnd(), item);
 
     if (m_textCtrl)
     {
         m_textCtrl->SetHWND(0);
         m_textCtrl->UnsubclassWin();
         delete m_textCtrl;
-        m_textCtrl = NULL;
     }
 
     m_textCtrl = (wxTextCtrl*) textControlClass->CreateObject();
-    m_textCtrl->SetHWND((WXHWND) hWnd);
-    m_textCtrl->SubclassWin((WXHWND) hWnd);
+    m_textCtrl->SetHWND(hWnd);
+    m_textCtrl->SubclassWin(hWnd);
+    m_textCtrl->SetParent(this);
 
     return m_textCtrl;
 }
