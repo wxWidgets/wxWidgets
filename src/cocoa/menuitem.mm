@@ -33,6 +33,7 @@
 #import <AppKit/NSMenuItem.h>
 #import <AppKit/NSMenu.h>
 #import <Foundation/NSString.h>
+#import <AppKit/NSCell.h> // NSOnState, NSOffState
 
 #if wxUSE_MENUS
 
@@ -191,10 +192,43 @@ void wxMenuItem::Enable(bool bDoEnable)
     // NOTE: Nothing to do, we respond to validateMenuItem instead
 }
 
-void wxMenuItem::Check(bool bDoCheck)
+void wxMenuItem::Check(bool check)
 {
     wxCHECK_RET( IsCheckable(), wxT("only checkable items may be checked") );
-    wxMenuItemBase::Check(bDoCheck);
+    if(m_isChecked == check)
+        return;
+    wxAutoNSAutoreleasePool pool;
+    if(GetKind() == wxITEM_RADIO)
+    {
+        // it doesn't make sense to uncheck a radio item - what would this do?
+        if(!check)
+            return;
+        const wxMenuItemList& items = m_parentMenu->GetMenuItems();
+        // First search backwards for other radio items
+        wxMenuItemList::compatibility_iterator radioStart = items.Find(this);
+        for(wxMenuItemList::compatibility_iterator prevNode = radioStart;
+            prevNode && (prevNode->GetData()->GetKind() == wxITEM_RADIO);
+            prevNode = prevNode->GetPrevious())
+        {
+            radioStart = prevNode;
+        }
+        // Now starting there set the state of every item until we're
+        // out of radio items to set.
+        for(wxMenuItemList::compatibility_iterator node = radioStart;
+            node && (node->GetData()->GetKind() == wxITEM_RADIO);
+            node = node->GetNext())
+        {
+            wxMenuItem *item = node->GetData();
+            bool checkItem = (item == this);
+            item->wxMenuItemBase::Check(checkItem);
+            [item->m_cocoaNSMenuItem setState: checkItem?NSOnState:NSOffState];
+        }
+    }
+    else // normal check (non-radio) item
+    {
+        wxMenuItemBase::Check(check);
+        [m_cocoaNSMenuItem setState: check?NSOnState:NSOffState];
+    }
 }
 
 void wxMenuItem::SetText(const wxString& label)
@@ -206,7 +240,9 @@ void wxMenuItem::SetText(const wxString& label)
 
 void wxMenuItem::SetCheckable(bool checkable)
 {
+    wxCHECK_RET(m_kind != wxITEM_SEPARATOR, wxT("Separator items cannot be turned into normal menu items."));
     wxMenuItemBase::SetCheckable(checkable);
+    // NOTE: Cocoa does not discern between unchecked and normal items
 }
 
 #endif // wxUSE_MENUS
