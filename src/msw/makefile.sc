@@ -8,7 +8,7 @@
 
 # configuration section (see src\makefile.sc) ###########################
 
-WXDIR = $(WXWIN)
+WXDIR = ..\..
 
 include ..\makesc.env
 
@@ -349,10 +349,11 @@ clean_msw:
 	-del $(COMMDIR)\*.obj
 	-del $(MSWDIR)\*.obj
 	-del $(GENDIR)\*.obj
-    -del $(HTMLDIR)\*.obj
+        -del $(HTMLDIR)\*.obj
 	-del *.obj
-    -del ole\*.obj
-    -del $(LIBTARGET)
+    	-del *.sym
+        -del ole\*.obj
+        -del $(LIBTARGET)
 
 png:   
         make -f $(WXDIR)\src\png\makefile.sc FINAL=$(FINAL)

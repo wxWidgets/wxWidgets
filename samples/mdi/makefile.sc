@@ -1,4 +1,4 @@
 # Symantec C++ makefile 
-WXDIR = $(WXWIN)
+WXDIR = ..\..
 TARGET=mdi
 include $(WXDIR)\src\makeprog.sc 
