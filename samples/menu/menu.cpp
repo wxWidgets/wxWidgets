@@ -62,6 +62,7 @@ public:
     void OnEnableMenuItem(wxCommandEvent& event);
     void OnGetLabelMenuItem(wxCommandEvent& event);
     void OnSetLabelMenuItem(wxCommandEvent& event);
+    void OnGetMenuItemInfo(wxCommandEvent& event);
 
     void OnAppendMenu(wxCommandEvent& event);
     void OnDeleteMenu(wxCommandEvent& event);
@@ -107,6 +108,7 @@ enum
     Menu_Menu_Check,
     Menu_Menu_GetLabel,
     Menu_Menu_SetLabel,
+    Menu_Menu_GetInfo,
 
     Menu_Dummy_First = 400,
     Menu_Dummy_Second,
@@ -145,9 +147,10 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Menu_Menu_Insert,    MyFrame::OnInsertMenuItem)
     EVT_MENU(Menu_Menu_Delete,    MyFrame::OnDeleteMenuItem)
     EVT_MENU(Menu_Menu_Enable,    MyFrame::OnEnableMenuItem)
-    EVT_MENU(Menu_Menu_Check,    MyFrame::OnCheckMenuItem)
+    EVT_MENU(Menu_Menu_Check,     MyFrame::OnCheckMenuItem)
     EVT_MENU(Menu_Menu_GetLabel,  MyFrame::OnGetLabelMenuItem)
     EVT_MENU(Menu_Menu_SetLabel,  MyFrame::OnSetLabelMenuItem)
+    EVT_MENU(Menu_Menu_GetInfo,   MyFrame::OnGetMenuItemInfo)
 
     EVT_MENU_RANGE(Menu_Dummy_First, Menu_Dummy_Last, MyFrame::OnDummy)
 
@@ -234,6 +237,9 @@ MyFrame::MyFrame()
                      "Get the label of the last menu item");
     menuMenu->Append(Menu_Menu_SetLabel, "&Set menu item label\tAlt-S",
                      "Change the label of the last menu item");
+    menuMenu->AppendSeparator();
+    menuMenu->Append(Menu_Menu_GetInfo, "Get menu item in&fo\tAlt-F",
+                     "Show the state of the last menu item");
 
     wxMenu *helpMenu = new wxMenu;
     helpMenu->Append(Menu_Help_About, "&About\tF1", "About menu sample");
@@ -459,6 +465,81 @@ void MyFrame::OnSetLabelMenuItem(wxCommandEvent& WXUNUSED(event))
     if ( item )
     {
         item->SetText("Dummy menu item text");
+    }
+}
+
+void MyFrame::OnGetMenuItemInfo(wxCommandEvent& WXUNUSED(event))
+{
+    wxMenuItem *item = GetLastMenuItem();
+
+    if ( item )
+    {
+        wxString msg;
+        msg << "The item is " << (item->IsEnabled() ? "enabled"
+                                                    : "disabled")
+            << '\n';
+                                            
+        if ( item->IsCheckable() )
+        {
+            msg << "It is checkable and " << (item->IsChecked() ? "" : "un")
+                << "checked\n";
+        }
+
+#if wxUSE_ACCEL
+        wxAcceleratorEntry *accel = item->GetAccel();
+        if ( accel )
+        {
+            msg << "Its accelerator is ";
+
+            int flags = accel->GetFlags();
+            if ( flags & wxACCEL_ALT )
+                msg << wxT("Alt-");
+            if ( flags & wxACCEL_CTRL )
+                msg << wxT("Ctrl-");
+            if ( flags & wxACCEL_SHIFT )
+                msg << wxT("Shift-");
+
+            int code = accel->GetKeyCode();
+            switch ( code )
+            {
+                case WXK_F1:
+                case WXK_F2:
+                case WXK_F3:
+                case WXK_F4:
+                case WXK_F5:
+                case WXK_F6:
+                case WXK_F7:
+                case WXK_F8:
+                case WXK_F9:
+                case WXK_F10:
+                case WXK_F11:
+                case WXK_F12:
+                    msg << wxT('F') << code - WXK_F1 + 1;
+                    break;
+
+                // if there are any other keys wxGetAccelFromString() may return,
+                // we should process them here
+
+                default:
+                    if ( wxIsalnum(code) )
+                    {
+                        msg << (wxChar)code;
+
+                        break;
+                    }
+
+                    wxFAIL_MSG( wxT("unknown keyboard accel") );
+            }
+
+            delete accel;
+        }
+        else
+        {
+            msg << "It doesn't have an accelerator";
+        }
+#endif // wxUSE_ACCEL
+
+        wxLogMessage(msg);
     }
 }
 
