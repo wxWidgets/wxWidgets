@@ -60,7 +60,7 @@ struct sockaddr_un {
 #else
 #  ifdef __GLIBC__
 #    if __GLIBC__ == 2
-#       define SOCKLEN_T socklen_t
+#      define SOCKLEN_T socklen_t
 #    endif
 #  else
 #    define SOCKLEN_T int
@@ -69,10 +69,16 @@ struct sockaddr_un {
 
 #endif /* SOCKLEN_T */
 
+/*
+ * MSW defines this, Unices don't.
+ */
+#ifndef INVALID_SOCKET
+#define INVALID_SOCKET -1
+#endif
 
 /*
  * INADDR_BROADCAST is identical to INADDR_NONE which is not defined
- * on all unices. INADDR_BROADCAST should be fine to indicate an error.
+ * on all systems. INADDR_BROADCAST should be fine to indicate an error.
  */
 #ifndef INADDR_NONE
 #define INADDR_NONE INADDR_BROADCAST
@@ -137,7 +143,7 @@ GSocket *GSocket_new(void)
   if (socket == NULL)
     return NULL;
 
-  socket->m_fd                  = -1;
+  socket->m_fd                  = INVALID_SOCKET;
   for (i=0;i<GSOCK_MAX_EVENT;i++)
   {
     socket->m_cbacks[i]         = NULL;
@@ -170,7 +176,7 @@ void GSocket_destroy(GSocket *socket)
   assert(socket != NULL);
 
   /* Check that the socket is really shutdowned */
-  if (socket->m_fd != -1)
+  if (socket->m_fd != INVALID_SOCKET)
     GSocket_Shutdown(socket);
 
   /* Per-socket GUI-specific cleanup */
@@ -198,11 +204,11 @@ void GSocket_Shutdown(GSocket *socket)
   assert(socket != NULL);
 
   /* If socket has been created, shutdown it */
-  if (socket->m_fd != -1)
+  if (socket->m_fd != INVALID_SOCKET)
   {
     shutdown(socket->m_fd, 2);
     close(socket->m_fd);
-    socket->m_fd = -1;
+    socket->m_fd = INVALID_SOCKET;
   }
 
   /* Disable GUI callbacks */
@@ -234,7 +240,7 @@ GSocketError GSocket_SetLocal(GSocket *socket, GAddress *address)
   assert(socket != NULL);
 
   /* the socket must be initialized, or it must be a server */
-  if ((socket->m_fd != -1 && !socket->m_server))
+  if ((socket->m_fd != INVALID_SOCKET && !socket->m_server))
   {
     socket->m_error = GSOCK_INVSOCK;
     return GSOCK_INVSOCK;
@@ -288,7 +294,7 @@ GAddress *GSocket_GetLocal(GSocket *socket)
     return GAddress_copy(socket->m_local);
 
   /* else, if the socket is initialized, try getsockname */
-  if (socket->m_fd == -1)
+  if (socket->m_fd == INVALID_SOCKET)
   {
     socket->m_error = GSOCK_INVSOCK;
     return NULL;
@@ -350,7 +356,7 @@ GSocketError GSocket_SetServer(GSocket *sck)
   assert(sck != NULL);
 
   /* must not be in use */
-  if (sck->m_fd != -1)
+  if (sck->m_fd != INVALID_SOCKET)
   {
     sck->m_error = GSOCK_INVSOCK;
     return GSOCK_INVSOCK;
@@ -371,7 +377,7 @@ GSocketError GSocket_SetServer(GSocket *sck)
   /* Create the socket */
   sck->m_fd = socket(sck->m_local->m_realfamily, SOCK_STREAM, 0);
 
-  if (sck->m_fd == -1)
+  if (sck->m_fd == INVALID_SOCKET)
   {
     sck->m_error = GSOCK_IOERR;
     return GSOCK_IOERR;
@@ -391,7 +397,7 @@ GSocketError GSocket_SetServer(GSocket *sck)
       (listen(sck->m_fd, 5) != 0))
   {
     close(sck->m_fd);
-    sck->m_fd = -1;
+    sck->m_fd = INVALID_SOCKET;
     sck->m_error = GSOCK_IOERR;
     return GSOCK_IOERR;
   }
@@ -425,7 +431,7 @@ GSocket *GSocket_WaitConnection(GSocket *socket)
   _GSocket_Enable(socket, GSOCK_CONNECTION);
 
   /* If the socket has already been created, we exit immediately */
-  if (socket->m_fd == -1 || !socket->m_server)
+  if (socket->m_fd == INVALID_SOCKET || !socket->m_server)
   {
     socket->m_error = GSOCK_INVSOCK;
     return NULL;
@@ -450,7 +456,7 @@ GSocket *GSocket_WaitConnection(GSocket *socket)
 
   connection->m_fd = accept(socket->m_fd, &from, (SOCKLEN_T *) &fromlen);
 
-  if (connection->m_fd == -1)
+  if (connection->m_fd == INVALID_SOCKET)
   {
     if (errno == EWOULDBLOCK)
       socket->m_error = GSOCK_WOULDBLOCK;
@@ -489,71 +495,6 @@ GSocket *GSocket_WaitConnection(GSocket *socket)
   return connection;
 }
 
-/* Datagram sockets */
-
-/* GSocket_SetNonOriented:
- *  Sets up this socket as a non-connection oriented (datagram) socket.
- *  Before using this function, the local address must have been set
- *  with GSocket_SetLocal(), or the call will fail. Returns GSOCK_NOERROR
- *  on success, or one of the following otherwise.
- *
- *  Error codes:
- *    GSOCK_INVSOCK - the socket is in use.
- *    GSOCK_INVADDR - the local address has not been set.
- *    GSOCK_IOERR   - low-level error.
- */
-GSocketError GSocket_SetNonOriented(GSocket *sck)
-{
-  int arg = 1;
-
-  assert(sck != NULL);
-
-  if (sck->m_fd != -1)
-  {
-    sck->m_error = GSOCK_INVSOCK;
-    return GSOCK_INVSOCK;
-  }
-
-  if (!sck->m_local)
-  {
-    sck->m_error = GSOCK_INVADDR;
-    return GSOCK_INVADDR;
-  }
-
-  /* Initialize all fields */
-  sck->m_stream   = FALSE;
-  sck->m_server   = FALSE;
-  sck->m_oriented = FALSE;
-
-  /* Create the socket */
-  sck->m_fd = socket(sck->m_local->m_realfamily, SOCK_DGRAM, 0);
-
-  if (sck->m_fd < 0)
-  {
-    sck->m_error = GSOCK_IOERR;
-    return GSOCK_IOERR;
-  }
-
-  ioctl(sck->m_fd, FIONBIO, &arg);
-  _GSocket_Enable_Events(sck);
-
-  /* Bind to the local address,
-   * and retrieve the actual address bound.
-   */
-  if ((bind(sck->m_fd, sck->m_local->m_addr, sck->m_local->m_len) != 0) ||
-      (getsockname(sck->m_fd,
-                   sck->m_local->m_addr,
-                   (SOCKLEN_T *) &sck->m_local->m_len) != 0))
-  {
-    close(sck->m_fd);
-    sck->m_fd    = -1;
-    sck->m_error = GSOCK_IOERR;
-    return GSOCK_IOERR;
-  }
-
-  return GSOCK_NOERROR;
-}
-
 /* Client specific parts */
 
 /* GSocket_Connect:
@@ -589,7 +530,7 @@ GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
   /* Enable CONNECTION events (needed for nonblocking connections) */
   _GSocket_Enable(sck, GSOCK_CONNECTION);
 
-  if (sck->m_fd != -1)
+  if (sck->m_fd != INVALID_SOCKET)
   {
     sck->m_error = GSOCK_INVSOCK;
     return GSOCK_INVSOCK;
@@ -611,7 +552,7 @@ GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
   sck->m_fd = socket(sck->m_peer->m_realfamily,
                      sck->m_stream? SOCK_STREAM : SOCK_DGRAM, 0);
 
-  if (sck->m_fd == -1)
+  if (sck->m_fd == INVALID_SOCKET)
   {
     sck->m_error = GSOCK_IOERR;
     return GSOCK_IOERR;
@@ -637,7 +578,7 @@ GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
       if (_GSocket_Output_Timeout(sck) == GSOCK_TIMEDOUT)
       {
         close(sck->m_fd);
-        sck->m_fd = -1;
+        sck->m_fd = INVALID_SOCKET;
         /* sck->m_error is set in _GSocket_Output_Timeout */
         return GSOCK_TIMEDOUT;
       }
@@ -670,7 +611,72 @@ GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
      * then the call to GSocket_Connect has failed.
      */
     close(sck->m_fd);
-    sck->m_fd = -1;
+    sck->m_fd = INVALID_SOCKET;
+    sck->m_error = GSOCK_IOERR;
+    return GSOCK_IOERR;
+  }
+
+  return GSOCK_NOERROR;
+}
+
+/* Datagram sockets */
+
+/* GSocket_SetNonOriented:
+ *  Sets up this socket as a non-connection oriented (datagram) socket.
+ *  Before using this function, the local address must have been set
+ *  with GSocket_SetLocal(), or the call will fail. Returns GSOCK_NOERROR
+ *  on success, or one of the following otherwise.
+ *
+ *  Error codes:
+ *    GSOCK_INVSOCK - the socket is in use.
+ *    GSOCK_INVADDR - the local address has not been set.
+ *    GSOCK_IOERR   - low-level error.
+ */
+GSocketError GSocket_SetNonOriented(GSocket *sck)
+{
+  int arg = 1;
+
+  assert(sck != NULL);
+
+  if (sck->m_fd != INVALID_SOCKET)
+  {
+    sck->m_error = GSOCK_INVSOCK;
+    return GSOCK_INVSOCK;
+  }
+
+  if (!sck->m_local)
+  {
+    sck->m_error = GSOCK_INVADDR;
+    return GSOCK_INVADDR;
+  }
+
+  /* Initialize all fields */
+  sck->m_stream   = FALSE;
+  sck->m_server   = FALSE;
+  sck->m_oriented = FALSE;
+
+  /* Create the socket */
+  sck->m_fd = socket(sck->m_local->m_realfamily, SOCK_DGRAM, 0);
+
+  if (sck->m_fd == INVALID_SOCKET)
+  {
+    sck->m_error = GSOCK_IOERR;
+    return GSOCK_IOERR;
+  }
+
+  ioctl(sck->m_fd, FIONBIO, &arg);
+  _GSocket_Enable_Events(sck);
+
+  /* Bind to the local address,
+   * and retrieve the actual address bound.
+   */
+  if ((bind(sck->m_fd, sck->m_local->m_addr, sck->m_local->m_len) != 0) ||
+      (getsockname(sck->m_fd,
+                   sck->m_local->m_addr,
+                   (SOCKLEN_T *) &sck->m_local->m_len) != 0))
+  {
+    close(sck->m_fd);
+    sck->m_fd    = INVALID_SOCKET;
     sck->m_error = GSOCK_IOERR;
     return GSOCK_IOERR;
   }
@@ -690,7 +696,7 @@ int GSocket_Read(GSocket *socket, char *buffer, int size)
   /* Reenable INPUT events */
   _GSocket_Enable(socket, GSOCK_INPUT);
 
-  if (socket->m_fd == -1 || socket->m_server)
+  if (socket->m_fd == INVALID_SOCKET || socket->m_server)
   {
     socket->m_error = GSOCK_INVSOCK;
     return -1;
@@ -725,7 +731,7 @@ int GSocket_Write(GSocket *socket, const char *buffer, int size)
   
   GSocket_Debug(( "GSocket_Write #1, size %d\n", size ));
 
-  if (socket->m_fd == -1 || socket->m_server)
+  if (socket->m_fd == INVALID_SOCKET || socket->m_server)
   {
     socket->m_error = GSOCK_INVSOCK;
     return -1;
@@ -1080,7 +1086,16 @@ GSocketError _GSocket_Output_Timeout(GSocket *socket)
       socket->m_error = GSOCK_TIMEDOUT;
       return GSOCK_TIMEDOUT;
     }
+    if ( ! FD_ISSET(socket->m_fd, &writefds) )
+      GSocket_Debug(( "GSocket_Output_Timeout is buggy!" ));
+    else
+      GSocket_Debug(( "GSocket_Output_Timeout seems correct" ));
   }
+  else
+  {
+    GSocket_Debug(( "GSocket_Output_Timeout, didn't try select!" ));
+  }
+
   return GSOCK_NOERROR;
 }
 
