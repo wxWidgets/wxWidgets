@@ -3861,8 +3861,7 @@ bool wxWin32ScrollBarInputHandler::HandleMouse(wxInputConsumer *control,
     {
         // we just started dragging the thumb, remember its initial position to
         // be able to restore it if the drag is cancelled later
-        m_eventStartDrag.m_x = event.m_x;
-        m_eventStartDrag.m_y = event.m_y;
+        m_eventStartDrag = event;
     }
 
     return rc;
@@ -3957,8 +3956,7 @@ bool wxWin32ScrollBarInputHandler::HandleMouseMove(wxInputConsumer *control,
             {
                 // remember the current thumb position to be able to restore it
                 // if the mouse returns to it later
-                m_eventLastDrag.m_x = event.m_x;
-                m_eventLastDrag.m_y = event.m_y;
+                m_eventLastDrag = event;
 
                 // and restore the original position (before dragging) of the
                 // thumb for now
