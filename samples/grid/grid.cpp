@@ -1,5 +1,5 @@
 /*
- * File:	test.cpp
+ * File:	grid.cpp
  * Purpose:	wxGrid test
  * Author:	Julian Smart
  * Created:	1995

@@ -1,16 +1,10 @@
-#
-# File:         makefile.g95
-# Author:       Julian Smart
-# Created:      1999
-# Updated:
-# Copyright:    (c) Julian Smart, 1999
-#
-# Makefile for wxWindows sample (Cygwin/Mingw32).
+# Purpose: makefile for grid example (Cygwin/Mingw32)
+# Created: #03.01.00
 
 WXDIR = ../..
 
-TARGET=test
+TARGET=grid
 OBJECTS = $(TARGET).o
 
-include $(WXDIR)/src/makeprog.g95
+include $(WXDIR)\src\makeprog.g95
 
