@@ -15,7 +15,8 @@ isn't overriden.
 \func{}{wxProcess}{\param{wxEvtHandler *}{ parent = NULL}, \param{int}{ id = -1}}
 
 Constructs a process object. {\it id} is only used in the case you want to
-use wxWindows events. 
+use wxWindows events. It identifies this object, or another window that will
+receive the event.
 
 \wxheading{Parameters}
 
@@ -37,3 +38,4 @@ It is called when the process with the pid {\it pid} finishes.
 It raises a wxWindows event when it isn't overriden.
 
 \docparam{pid}{The pid of the process which ends.}
+

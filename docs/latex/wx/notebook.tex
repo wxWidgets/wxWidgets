@@ -1,0 +1,259 @@
+\section{\class{wxNotebook}}\label{wxnotebook}
+
+This class represents a notebook control, which manages multiple windows with associated tabs.
+
+To use the class, create a wxNotebook object and call \helpref{AddPage}{wxnotebookaddpage} or \helpref{InsertPage}{wxnotebookinsertpage},
+passing a window to be used as the page. Do not explicitly delete the window for a page that is currently
+managed by wxNotebook.
+
+{\bf wxNotebookPage} is a typedef for wxWindow.
+
+\wxheading{Derived from}
+
+\helpref{wxControl}{wxcontrol}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Event handling}
+
+To process input from a notebook control, use the following event handler macros to direct input to member
+functions that take a \helpref{wxNotebookEvent}{wxnotebookevent} argument.
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_NOTEBOOK_PAGE_CHANGED(id, func)}}{The page selection was changed. Processes a
+wxEVT\_COMMAND\_NOTEBOOK\_PAGE\_CHANGED event.}
+\twocolitem{{\bf EVT\_NOTEBOOK_PAGE_CHANGING(id, func)}}{The page selection is about to be changed.
+Processes a wxEVT\_COMMAND\_NOTEBOOK\_PAGE\_CHANGING event.}
+\end{twocollist}%
+
+\wxheading{See also}
+
+\helpref{wxNotebookEvent}{wxnotebookevent}, \helpref{wxImageList}{wximagelist},\rtfsp
+\helpref{wxTabCtrl}{wxtabctrl}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxNotebook::wxNotebook}\label{wxnotebookconstr}
+
+\func{}{wxNotebook}{\void}
+
+Default constructor.
+
+\func{}{wxNotebook}{\param{wxWindow*}{ parent}, \param{wxWindowID }{id}, \param{const wxPoint\&}{ pos = wxDefaultPosition},
+ \param{const wxSize\&}{ size}, \param{long}{ style = 0}, \param{const wxString\& }{name = "notebook"}}
+
+Constructs a notebook control.
+
+\wxheading{Parameters}
+
+\docparam{parent}{The parent window. Must be non-NULL.}
+
+\docparam{id}{The window identifier.}
+
+\docparam{pos}{The window position.}
+
+\docparam{size}{The window size.}
+
+\docparam{style}{The window style. Its value is a bit list of zero or more of {\bf wxTC\_MULTILINE},
+ {\bf wxTC\_RIGHTJUSTIFY}, {\bf wxTC\_FIXEDWIDTH} and {\bf wxTC\_OWNERDRAW}.}
+
+\membersection{wxNotebook::\destruct{wxNotebook}}
+
+\func{}{\destruct{wxNotebook}}{\void}
+
+Destroys the wxNotebook object.
+
+\membersection{wxNotebook::AddPage}\label{wxnotebookaddpage}
+
+\func{bool}{AddPage}{\param{wxNotebookPage*}{ page},
+ \param{const wxString\&}{ text},
+ \param{bool}{ select = FALSE},
+ \param{int}{ imageId = -1}}
+
+Adds a new page.
+
+\wxheading{Parameters}
+
+\docparam{page}{Specifies the new page.}
+
+\docparam{text}{Specifies the text for the new page.}
+
+\docparam{select}{Specifies whether the page should be selected.}
+
+\docparam{imageId}{Specifies the optional image index for the new page.}
+
+\wxheading{Return value}
+
+TRUE if successful, FALSE otherwise.
+
+\wxheading{Remarks}
+
+Do not delete the page, it will be deleted by the notebook.
+
+\wxheading{See also}
+
+\helpref{wxNotebook::InsertPage}{wxnotebookinsertpage}
+
+\membersection{wxNotebook::AdvanceSelection}\label{wxnotebookadvanceselection}
+
+\func{void}{AdvanceSelection}{\param{bool}{ forward = TRUE}}
+
+Cycles through the tabs.
+
+\membersection{wxNotebook::Create}\label{wxnotebookcreate}
+
+\func{bool}{Create}{\param{wxWindow*}{ parent}, \param{wxWindowID }{id}, \param{const wxPoint\&}{ pos = wxDefaultPosition},
+ \param{const wxSize\&}{ size}, \param{long}{ style = 0}, \param{const wxString\& }{name = "notebook"}}
+
+Creates a notebook control. See \helpref{wxNotebook::wxNotebook}{wxnotebookconstr} for a description
+of the parameters.
+
+\membersection{wxNotebook::DeleteAllPages}\label{wxnotebookdeleteallpages}
+
+\func{bool}{DeleteAllPages}{\void}
+
+Deletes all pages.
+
+\membersection{wxNotebook::DeletePage}\label{wxnotebookdeletepage}
+
+\func{bool}{DeletePage}{\param{int}{ page}}
+
+Deletes the specified page.
+
+\membersection{wxNotebook::GetImageList}\label{wxnotebookgetimagelist}
+
+\constfunc{wxImageList*}{GetImageList}{\void}
+
+Returns the associated image list.
+
+\wxheading{See also}
+
+\helpref{wxImageList}{wximagelist}, \helpref{wxNotebook::SetImageList}{wxnotebooksetimagelist}
+
+\membersection{wxNotebook::GetPage}\label{wxnotebookgetpage}
+
+\func{wxNotebookPage*}{GetPage}{\param{int}{ page}}
+
+Returns the window at the given page position.
+
+\membersection{wxNotebook::GetPageCount}\label{wxnotebookgetpagecount}
+
+\constfunc{int}{GetPageCount}{\void}
+
+Returns the number of pages in the notebook control.
+
+\membersection{wxNotebook::GetPageImage}\label{wxnotebookgetpageimage}
+
+\constfunc{int}{GetPageImage}{\void}
+
+Returns the image index for the given page.
+
+\membersection{wxNotebook::GetPageText}\label{wxnotebookgetpagetext}
+
+\constfunc{wxString}{GetPageText}{\void}
+
+Returns the string for the given page.
+
+\membersection{wxNotebook::GetRowCount}\label{wxnotebookgetrowcount}
+
+\constfunc{int}{GetRowCount}{\void}
+
+Returns the number of rows in the notebook control.
+
+\membersection{wxNotebook::GetSelection}\label{wxnotebookgetselection}
+
+\constfunc{int}{GetSelection}{\void}
+
+Returns the currently selected page, or -1 if none was selected.
+
+\membersection{wxNotebook::InsertPage}\label{wxnotebookinsertpage}
+
+\func{bool}{InsertPage}{\param{int}{ index}, \param{wxNotebookPage*}{ page},
+ \param{const wxString\&}{ text},
+ \param{bool}{ select = FALSE},
+ \param{int}{ imageId = -1}}
+
+Inserts a new page at the specified position.
+
+\wxheading{Parameters}
+
+\docparam{index}{Specifies the position for the new page.}
+
+\docparam{page}{Specifies the new page.}
+
+\docparam{text}{Specifies the text for the new page.}
+
+\docparam{select}{Specifies whether the page should be selected.}
+
+\docparam{imageId}{Specifies the optional image index for the new page.}
+
+\wxheading{Return value}
+
+TRUE if successful, FALSE otherwise.
+
+\wxheading{Remarks}
+
+Do not delete the page, it will be deleted by the notebook.
+
+\wxheading{See also}
+
+\helpref{wxNotebook::AddPage}{wxnotebookaddpage}
+
+\membersection{wxNotebook::OnSelChange}\label{wxnotebookonselchange}
+
+\func{void}{OnSelChange}{\param{wxNotebookEvent\&}{ event}}
+
+An event handler function, called when the page selection is changed.
+
+\wxheading{See also}
+
+\helpref{wxNotebookEvent}{wxnotebookevent}
+
+\membersection{wxNotebook::SetImageList}\label{wxnotebooksetimagelist}
+
+\func{void}{SetImageList}{\param{wxImageList*}{ imageList}}
+
+Sets the image list for the page control.
+
+\wxheading{See also}
+
+\helpref{wxImageList}{wximagelist}
+
+\membersection{wxNotebook::SetPadding}\label{wxnotebooksetpadding}
+
+\func{void}{SetPadding}{\param{const wxSize\&}{ padding}}
+
+Sets the amount of space around each page's icon and label, in pixels.
+
+\membersection{wxNotebook::SetPageSize}\label{wxnotebooksetpagesize}
+
+\func{void}{SetPageSize}{\param{const wxSize\&}{ size}}
+
+Sets the width and height of the pages.
+
+\membersection{wxNotebook::SetPageImage}\label{wxnotebooksetpageimage}
+
+\func{bool}{SetPageImage}{\param{int}{ page}, \param{int }{image}}
+
+Sets the image index for the given page. {\it image} is an index into
+the image list which was set with \helpref{wxNotebook::SetImageList}{wxnotebooksetimagelist}.
+
+\membersection{wxNotebook::SetPageText}\label{wxnotebooksetpagetext}
+
+\func{bool}{SetPageText}{\param{int}{ page}, \param{const wxString\& }{text}}
+
+Sets the text for the given page.
+
+\membersection{wxNotebook::SetSelection}\label{wxnotebooksetselection}
+
+\func{int}{SetSelection}{\param{int}{ page}}
+
+Sets the selection for the given page, returning the previous selection.
+
+\wxheading{See also}
+
+\helpref{wxNotebook::GetSelection}{wxnotebookgetselection}
+
+
