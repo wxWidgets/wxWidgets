@@ -253,16 +253,16 @@ if [ $skiposx != yes ]; then
 
     # Untar it on the remote machine, and then run the build script
     echo "Unarchiving source file on $OSX_HOST..."
-    ssh $OSX_HOST "cd $OSX_SHARED_REMOTE && tar xzf wxPythonSrc-$VERSION.tar.gz && rm wxPythonSrc-$VERSION.tar.gz"
+    ssh root@$OSX_HOST "cd $OSX_SHARED_REMOTE && tar xzf wxPythonSrc-$VERSION.tar.gz && rm wxPythonSrc-$VERSION.tar.gz"
 
     echo "Running build script on $OSX_HOST..."
     wxdir=$OSX_SHARED_REMOTE/wxPythonSrc-$VERSION
     cmd=$wxdir/wxPython/distrib/all/build-osx
-    ssh $OSX_HOST "cd $wxdir && $cmd $wxdir $OSX_SHARED_REMOTE $skipclean $VERSION $PYVER"
+    ssh root@$OSX_HOST "cd $wxdir && $cmd $wxdir $OSX_SHARED_REMOTE $skipclean $VERSION $PYVER"
     
     echo "Fetching the results..."
     cp $OSX_SHARED/wxPythonOSX*  $STAGING_DIR
-    ssh $OSX_HOST "cd $OSX_SHARED_REMOTE && rm wxPythonOSX*"
+    ssh root@$OSX_HOST "cd $OSX_SHARED_REMOTE && rm wxPythonOSX*"
 
     # unmount?
     if [ -n "$OSX_UMOUNT" ]; then 
