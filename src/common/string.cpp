@@ -970,9 +970,14 @@ wxString::wxString(const char *psz, wxMBConv& conv, size_t nLength)
         }
         else
         {
-            wxWCharBuffer buf(nLen + 1);
+            // the input buffer to MB2WC must always be NUL-terminated
+            wxCharBuffer inBuf(nLen);
+            memcpy(inBuf.data(), psz, nLen);
+            inBuf.data()[nLen] = '\0';
+
+            wxWCharBuffer buf(nLen);
             // MB2WC wants the buffer size, not the string length hence +1
-            nLen = conv.MB2WC(buf.data(), psz, nLen + 1);
+            nLen = conv.MB2WC(buf.data(), inBuf.data(), nLen + 1);
 
             if ( nLen != (size_t)-1 )
             {
