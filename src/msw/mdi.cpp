@@ -245,7 +245,7 @@ wxMDIParentFrame::~wxMDIParentFrame()
     if ( m_hMenu )
     {
         ::DestroyMenu((HMENU)m_hMenu);
-        m_hMenu = NULL;
+        m_hMenu = (WXHMENU)NULL;
     }
 
     if ( m_clientWindow )
