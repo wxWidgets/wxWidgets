@@ -111,8 +111,10 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
 
     topsizer->Add( icon_text, 1, wxCENTER | wxLEFT|wxRIGHT|wxTOP, 10 );
 
+#if wxUSE_STATLINE
     // 3) static line
     topsizer->Add( new wxStaticLine( this, wxID_ANY ), 0, wxEXPAND | wxLEFT|wxRIGHT|wxTOP, 10 );
+#endif // wxUSE_STATLINE
 
     // 4) buttons
     topsizer->Add( CreateButtonSizer( style & (wxOK|wxCANCEL|wxYES_NO|wxYES_DEFAULT|wxNO_DEFAULT) ),
