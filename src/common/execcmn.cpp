@@ -81,6 +81,7 @@ inline void wxStreamTempInputBuffer::Init(wxPipeInputStream *stream)
     m_stream = stream;
 }
 
+inline
 void wxStreamTempInputBuffer::Update()
 {
     if ( m_stream && m_stream->CanRead() )
@@ -104,6 +105,7 @@ void wxStreamTempInputBuffer::Update()
     }
 }
 
+inline
 wxStreamTempInputBuffer::~wxStreamTempInputBuffer()
 {
     if ( m_buffer )

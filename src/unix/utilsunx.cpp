@@ -31,6 +31,14 @@
 
 #include "wx/unix/execute.h"
 
+#if wxUSE_STREAMS
+
+// define this to let wxexec.cpp know that we know what we're doing
+#define _WX_USED_BY_WXEXECUTE_
+#include "../common/execcmn.cpp"
+
+#endif // wxUSE_STREAMS
+
 #ifdef __WXBASE__
 
 #if defined( __MWERKS__ ) && defined(__MACH__)
@@ -347,22 +355,6 @@ bool wxShutdown(wxShutdownFlags wFlags)
 
 #if wxUSE_STREAMS
 
-// ----------------------------------------------------------------------------
-// wxPipeInputStream: stream for reading from a pipe
-// ----------------------------------------------------------------------------
-
-class wxPipeInputStream : public wxFileInputStream
-{
-public:
-    wxPipeInputStream(int fd) : wxFileInputStream(fd) { }
-
-    // return TRUE if the pipe is still opened
-    bool IsOpened() const { return !Eof(); }
-
-    // return TRUE if we have anything to read, don't block
-    virtual bool CanRead() const;
-};
-
 bool wxPipeInputStream::CanRead() const
 {
     if ( m_lasterror == wxSTREAM_EOF )
@@ -398,10 +390,6 @@ bool wxPipeInputStream::CanRead() const
             return !Eof();
     }
 }
-
-// define this to let wxexec.cpp know that we know what we're doing
-#define _WX_USED_BY_WXEXECUTE_
-#include "../common/execcmn.cpp"
 
 #endif // wxUSE_STREAMS
 

@@ -94,5 +94,27 @@ private:
     int m_fds[2];
 };
 
+#if wxUSE_STREAMS
+
+#include "wx/wfstream.h"
+
+// ----------------------------------------------------------------------------
+// wxPipeInputStream: stream for reading from a pipe
+// ----------------------------------------------------------------------------
+
+class wxPipeInputStream : public wxFileInputStream
+{
+public:
+    wxPipeInputStream(int fd) : wxFileInputStream(fd) { }
+
+    // return TRUE if the pipe is still opened
+    bool IsOpened() const { return !Eof(); }
+
+    // return TRUE if we have anything to read, don't block
+    virtual bool CanRead() const;
+};
+
+#endif // wxUSE_STREAMS
+
 #endif // _WX_UNIX_PIPE_H_
 
