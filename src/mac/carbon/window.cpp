@@ -1639,6 +1639,7 @@ const wxRegion& wxWindowMac::MacGetVisibleRegion( bool respectChildrenAndSibling
 {
   RgnHandle visRgn = NewRgn() ;
   RgnHandle tempRgn = NewRgn() ;
+  RgnHandle tempStaticBoxRgn = NewRgn() ;
 
   SetRectRgn( visRgn , 0 , 0 , m_width , m_height ) ;
 
@@ -1648,8 +1649,8 @@ const wxRegion& wxWindowMac::MacGetVisibleRegion( bool respectChildrenAndSibling
     int borderTop = 14 ;
     int borderOther = 4 ;
 
-    SetRectRgn( tempRgn , borderOther , borderTop , m_width - borderOther , m_height - borderOther ) ;
-    DiffRgn( visRgn , tempRgn , visRgn ) ;
+    SetRectRgn( tempStaticBoxRgn , borderOther , borderTop , m_width - borderOther , m_height - borderOther ) ;
+    DiffRgn( visRgn , tempStaticBoxRgn , visRgn ) ;
   }
 
   if ( !IsTopLevel() )
@@ -1685,6 +1686,14 @@ const wxRegion& wxWindowMac::MacGetVisibleRegion( bool respectChildrenAndSibling
             if ( !child->IsTopLevel() && child->IsShown() )
             {
                 SetRectRgn( tempRgn , child->m_x , child->m_y , child->m_x + child->m_width ,  child->m_y + child->m_height ) ;
+                if ( child->IsKindOf( CLASSINFO( wxStaticBox ) ) )
+                {
+                    int borderTop = 14 ;
+                    int borderOther = 4 ;
+
+                    SetRectRgn( tempStaticBoxRgn , child->m_x + borderOther , child->m_y + borderTop , child->m_x + child->m_width - borderOther , child->m_y + child->m_height - borderOther ) ;
+                    DiffRgn( tempRgn , tempStaticBoxRgn , tempRgn ) ;
+                }
                 DiffRgn( visRgn , tempRgn , visRgn ) ;
             }
         }
@@ -1709,6 +1718,14 @@ const wxRegion& wxWindowMac::MacGetVisibleRegion( bool respectChildrenAndSibling
             if ( !sibling->IsTopLevel() && sibling->IsShown() )
             {
                 SetRectRgn( tempRgn , sibling->m_x - m_x , sibling->m_y - m_y , sibling->m_x + sibling->m_width - m_x ,  sibling->m_y + sibling->m_height - m_y ) ;
+                if ( sibling->IsKindOf( CLASSINFO( wxStaticBox ) ) )
+                {
+                    int borderTop = 14 ;
+                    int borderOther = 4 ;
+
+                    SetRectRgn( tempStaticBoxRgn , sibling->m_x - m_x + borderOther , sibling->m_y - m_y + borderTop , sibling->m_x + sibling->m_width - m_x - borderOther , sibling->m_y + sibling->m_height - m_y - borderOther ) ;
+                    DiffRgn( tempRgn , tempStaticBoxRgn , tempRgn ) ;
+                }
                 DiffRgn( visRgn , tempRgn , visRgn ) ;
             }
         }
@@ -1717,6 +1734,7 @@ const wxRegion& wxWindowMac::MacGetVisibleRegion( bool respectChildrenAndSibling
   m_macVisibleRegion = visRgn ;
   DisposeRgn( visRgn ) ;
   DisposeRgn( tempRgn ) ;
+  DisposeRgn( tempStaticBoxRgn ) ;
   return m_macVisibleRegion ;
 }
 
