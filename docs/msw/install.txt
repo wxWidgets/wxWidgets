@@ -393,25 +393,49 @@ Borland C++Builder IDE compilation
    samples [mak for Cbuilder 1-3; bpr for v4]. Execute this in the sample
    directory, passing the name of the cpp files on the command line.
 
-Watcom C++ 10.6/11 compilation
----------------------------
+Watcom C++ 10.6/11 and OpenWatcom compilation
+---------------------------------------------
 
 1. Make sure your WXWIN variable is set, and uses the DOS short
    name form.
-2. Change directory to wx\src\msw. Type 'wmake -f makefile.wat all' to
+2. Change directory to wx\src\msw. Type 'wmake -f makefile.wat' to
    make the wxWindows core library.
-3. Change directory to wx\samples\minimal and type 'wmake -f makefile.wat all'
-   to make this sample. Repeat for other samples of interest.
+3. Change directory to wx\samples\minimal and type 'wmake -f makefile.wat'
+   to make this sample. The exe will be placed in a watcom subdirectory.
+   Repeat for other samples of interest.
 
-Note (1): makewat.env uses the odbc32.lib supplied in wxWindows' lib\watcom
-directory. See the notes in that directory.
-Note (2): if variant.cpp is compiled with date/time class
-options, the linker gives up. So the date/time option is switched
-off for Watcom C++. Also, wxAutomationObject is not compiled with
-Watcom C++.
-Note (3): if Watcom can't read the precompiled header when
-building a sample, try deleting src\msw\watcom.pch and
-compiling the sample again.
+
+There are several makefile variables which may be modified:
+
+- FINAL may be set to 1 (e.g. 'wmake -f makefile.wat FINAL=1') to build
+  the release version of the library, i.e. without debug info and with
+  optimizations enabled
+
+- WATCOM_SUFFIX is appended to the names of all libraries produced by the
+  makefile -- this allows to use several compilers in the same wxWindows
+  source tree. If you only use Watcom compiler, set WATCOM_SUFFIX to nothing.
+
+- OUTPUTDIR may be set to the name of the directory where you want all the
+  object files to be generated (the library files are always created in
+  %WXWIN\lib). Compilation will fail if you set it to an empty string 
+  to create them in the same directory as the source. If you change OUTPUTDIR, 
+  make sure that it does not have a trailing backslash!
+
+- In the samples, you may use EXEDIR=adir to build the samples in adir. Setting
+  EXEDIR=. will build in the current directory,
+
+
+Note (1): if your installation of Watcom doesn't have odbc32.lib file and
+          you need it (i.e. you have wxUSE_ODBC=1), you can use the file
+          from lib\watcom directory. See the notes in that directory.
+
+Note (2): if variant.cpp is compiled with date/time class options, the linker
+          gives up. So the date/time option is switched off for Watcom C++.
+          Also, wxAutomationObject is not compiled with Watcom C++ 10.
+
+Note (3): if Watcom can't read the precompiled header when building a sample,
+          try deleting src\msw\watcom.pch and compiling the sample again.
+
 
 Metrowerks CodeWarrior compilation
 ----------------------------------
