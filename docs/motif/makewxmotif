@@ -1,11 +1,17 @@
 # makewxmotif
-# Sets permissions (in case we extracted wxMotif from zip files)
-# and makes wxMotif.
-# Call from top-level wxWindows directory.
-# Note that this uses standard (but commonly-used) configure options;
-# if you're feeling brave, you may wish to compile with threads.
-# -- Julian Smart
+# Configures and makes wxMotif from either the root wxWindows directory
+# or a build directory underneath it.
+
+CONFIG=./configure
+
+if [ ! -f ./configure ]; then
+  CONFIG=../configure
+fi
+
+CONFIG="$CONFIG --disable-shared --with-motif --without-gtk --enable-debug_flag --enable-debug_info --enable-debug --disable-sockets --disable-odbc --enable-threads --enable-newgrid"
+
+echo Invoking $CONFIG
+
 rm -f *.cache
-chmod a+x configure config.sub config.guess samples/configure demos/configure contrib/configure
-./configure --disable-shared --with-motif --without-gtk --with-debug_flag --with-debug_info --enable-debug --without-sockets --without-odbc --without-threads --enable-newgrid
+$CONFIG
 make
