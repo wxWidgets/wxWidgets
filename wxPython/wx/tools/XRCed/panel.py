@@ -261,7 +261,7 @@ class PropPage(ParamPage):
     def __init__(self, parent, label, xxx):
         ParamPage.__init__(self, parent, xxx)
         self.box = wxStaticBox(self, -1, label)
-        self.box.SetFont(labelFont)
+        self.box.SetFont(g.labelFont())
         topSizer = wxStaticBoxSizer(self.box, wxVERTICAL)
         sizer = wxFlexGridSizer(len(xxx.allParams), 2, 1, 1)
         sizer.AddGrowableCol(1)
@@ -334,7 +334,7 @@ class StylePage(ParamPage):
     def __init__(self, parent, label, xxx):
         ParamPage.__init__(self, parent, xxx)
         box = wxStaticBox(self, -1, label)
-        box.SetFont(labelFont)
+        box.SetFont(g.labelFont())
         topSizer = wxStaticBoxSizer(box, wxVERTICAL)
         sizer = wxFlexGridSizer(len(xxx.styles), 2, 1, 1)
         sizer.AddGrowableCol(1)

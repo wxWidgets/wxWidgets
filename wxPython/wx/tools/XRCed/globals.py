@@ -10,11 +10,6 @@ import sys
 
 # Global constants
 
-sysFont = wxSystemSettings_GetFont(wxSYS_SYSTEM_FONT)
-labelFont = wxFont(sysFont.GetPointSize(), wxDEFAULT, wxNORMAL, wxBOLD)
-modernFont = wxFont(sysFont.GetPointSize(), wxMODERN, wxNORMAL, wxNORMAL)
-smallerFont = wxFont(sysFont.GetPointSize()-2, wxDEFAULT, wxNORMAL, wxNORMAL)
-
 progname = 'XRCed'
 version = '0.1.2-1'
 
@@ -36,5 +31,26 @@ class Globals:
     testWinPos = wxDefaultPosition
     currentXXX = None
     currentEncoding = sys.getdefaultencoding() # wxLocale_GetSystemEncodingName()
+
+    def _makeFonts(self):
+        self._sysFont = wxSystemSettings_GetFont(wxSYS_SYSTEM_FONT)
+        self._labelFont = wxFont(self._sysFont.GetPointSize(), wxDEFAULT, wxNORMAL, wxBOLD)
+        self._modernFont = wxFont(self._sysFont.GetPointSize(), wxMODERN, wxNORMAL, wxNORMAL)
+        self._smallerFont = wxFont(self._sysFont.GetPointSize()-2, wxDEFAULT, wxNORMAL, wxNORMAL)
+        
+    def sysFont(self):
+        if not hasattr(self, "_sysFont"): self._makeFonts()
+        return self._sysFont
+    def labelFont(self):
+        if not hasattr(self, "_labelFont"): self._makeFonts()
+        return self._labelFont
+    def modernFont(self):
+        if not hasattr(self, "_modernFont"): self._makeFonts()
+        return self._modernFont
+    def smallerFont(self):
+        if not hasattr(self, "_smallerFont"): self._makeFonts()
+        return self._smallerFont
+    
+        
 
 g = Globals()

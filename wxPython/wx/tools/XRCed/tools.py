@@ -114,7 +114,7 @@ class Tools(wxPanel):
     def AddGroup(self, name):
         # Each group is inside box
         box = wxStaticBox(self, -1, name, style=wxWANTS_CHARS)
-        box.SetFont(smallerFont)
+        box.SetFont(g.smallerFont())
         boxSizer = wxStaticBoxSizer(box, wxVERTICAL)
         boxSizer.Add((0, 4))
         self.curSizer = wxGridSizer(0, 3)
