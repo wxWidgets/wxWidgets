@@ -26,15 +26,16 @@ import  layoutf
 #----------------------------------------------------------------------
 
 class ScrolledMessageDialog(wx.Dialog):
-    def __init__(self, parent, msg, caption, pos = wx.DefaultPosition, 
-                 size = (500,300)):
-        wx.Dialog.__init__(self, parent, -1, caption, pos, size)
+    def __init__(self, parent, msg, caption,
+                 pos=wx.DefaultPosition, size=(500,300),
+                 style=wx.DEFAULT_DIALOG_STYLE):
+        wx.Dialog.__init__(self, parent, -1, caption, pos, size, style)
         x, y = pos
         if x == -1 and y == -1:
             self.CenterOnScreen(wx.BOTH)
 
-        text = wx.TextCtrl(self, -1, msg, wx.DefaultPosition, wx.DefaultSize,
-                           wx.TE_MULTILINE | wx.TE_READONLY)
+        text = wx.TextCtrl(self, -1, msg, 
+                           style=wx.TE_MULTILINE | wx.TE_READONLY)
 
         ok = wx.Button(self, wx.ID_OK, "OK")
         lc = layoutf.Layoutf('t=t5#1;b=t5#2;l=l5#1;r=r5#1', (self,ok)) 
