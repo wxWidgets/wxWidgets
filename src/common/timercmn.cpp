@@ -36,7 +36,7 @@
 #include "wx/timer.h"
 
 // I'm told VMS is POSIX, so should have localtime()
-#if defined(__WXMSW__) || defined(__VMS__)
+#if defined(__WXMSW__) || defined(__VMS__) || defined(__WXPM__)
     // configure might have found it already for us
     #ifndef HAVE_LOCALTIME
         #define HAVE_LOCALTIME
