@@ -123,6 +123,8 @@ bool wxStatusBar95::Create(wxWindow *parent,
         return FALSE;
     }
 
+    SetFieldsCount(1);
+
     // we can't subclass this window as usual because the status bar window
     // proc processes WM_SIZE and WM_PAINT specially
     //  SubclassWin(m_hWnd);
