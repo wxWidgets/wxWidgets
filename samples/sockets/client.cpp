@@ -300,19 +300,19 @@ void MyFrame::OnOpenConnection(wxCommandEvent& WXUNUSED(event))
   //
   // For blocking Connect:
   //
-  //   bool success = Connect(addr, TRUE);
+  //   bool success = client->Connect(addr, TRUE);
   //
   // For nonblocking Connect:
   //
-  //   Connect(addr, FALSE);
+  //   client->Connect(addr, FALSE);
   //
-  //   bool waitmore;
-  //   while (!WaitOnConnect(seconds, millis) && waitmore)
+  //   bool waitmore = TRUE;
+  //   while (! client->WaitOnConnect(seconds, millis) && waitmore )
   //   {
   //     // possibly give some feedback to the user,
   //     // update waitmore if needed.
   //   }
-  //   bool success = IsConnected();
+  //   bool success = client->IsConnected();
   // 
   // And that's all :-)
 

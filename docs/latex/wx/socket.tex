@@ -1037,8 +1037,8 @@ These semantics allow code like this:
 client->Connect(addr, FALSE);
 
 // Wait until the request completes or until we decide to give up
-bool waitmore;
-while ( !WaitOnConnect(seconds, millis) && waitmore )
+bool waitmore = TRUE; 
+while ( !client->WaitOnConnect(seconds, millis) && waitmore )
 {
     // possibly give some feedback to the user,
     // and update waitmore if needed.
