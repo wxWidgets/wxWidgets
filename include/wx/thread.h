@@ -64,25 +64,29 @@ class WXDLLEXPORT wxMutexInternal;
 class WXDLLEXPORT wxMutex 
 {
 public:
-  // constructor & destructor 
-  wxMutex();
-  ~wxMutex();
+    // constructor & destructor 
+    wxMutex();
+    ~wxMutex();
 
-  // Lock the mutex.
-  wxMutexError Lock();
-  // Try to lock the mutex: if it can't, returns immediately with an error.
-  wxMutexError TryLock();
-  // Unlock the mutex.
-  wxMutexError Unlock();
+    // Lock the mutex.
+    wxMutexError Lock();
+    // Try to lock the mutex: if it can't, returns immediately with an error.
+    wxMutexError TryLock();
+    // Unlock the mutex.
+    wxMutexError Unlock();
 
-  // Returns true if the mutex is locked.
-  bool IsLocked() const { return (m_locked > 0); }
+    // Returns true if the mutex is locked.
+    bool IsLocked() const { return (m_locked > 0); }
 
 protected:
-  friend class wxCondition;
+    friend class wxCondition;
 
-  int m_locked;
-  wxMutexInternal *p_internal;
+    // no assignment operator nor copy ctor
+    wxMutex(const wxMutex&);
+    wxMutex& operator=(const wxMutex&);
+
+    int m_locked;
+    wxMutexInternal *p_internal;
 };
 
 // a helper class which locks the mutex in the ctor and unlocks it in the dtor:
@@ -102,6 +106,10 @@ public:
     ~wxMutexLocker() { if ( IsOk() ) m_mutex->Unlock(); }
 
 private:
+    // no assignment operator nor copy ctor
+    wxMutexLocker(const wxMutexLocker&);
+    wxMutexLocker& operator=(const wxMutexLocker&);
+
     bool     m_isOk;
     wxMutex *m_mutex;
 };
@@ -131,6 +139,10 @@ public:
     void Leave();
 
 private:
+    // no assignment operator nor copy ctor
+    wxCriticalSection(const wxCriticalSection&);
+    wxCriticalSection& operator=(const wxCriticalSection&);
+
     wxCriticalSectionInternal *m_critsect;
 };
 
@@ -145,6 +157,10 @@ public:
         { m_critsect.Leave(); }
 
 private:
+    // no assignment operator nor copy ctor
+    wxCriticalSectionLocker(const wxCriticalSectionLocker&);
+    wxCriticalSectionLocker& operator=(const wxCriticalSectionLocker&);
+
     wxCriticalSection& m_critsect;
 };
 
