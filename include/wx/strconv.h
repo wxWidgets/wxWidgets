@@ -91,23 +91,6 @@ public:
 
 WXDLLIMPEXP_DATA_BASE(extern wxMBConvUTF8) wxConvUTF8;
 
-#ifdef __WXGTK12__
-
-// ----------------------------------------------------------------------------
-// wxMBConvUTF8 (for conversion using GDK's internal converions)
-// ----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_BASE wxMBConvGdk : public wxMBConv
-{
-public:
-    virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;
-    virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
-};
-
-WXDLLIMPEXP_DATA_BASE(extern wxMBConvGdk) wxConvGdk;
-
-#endif // wxGTK 1.2
-
 // ----------------------------------------------------------------------------
 // wxCSConv (for conversion based on loadable char sets)
 // ----------------------------------------------------------------------------

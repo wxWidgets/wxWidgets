@@ -276,48 +276,6 @@ const wxCharBuffer wxMBConv::cWC2MB(const wchar_t *pwz) const
 }
 
 // ----------------------------------------------------------------------------
-// standard gdk conversion
-// ----------------------------------------------------------------------------
-
-#ifdef __WXGTK12__
-
-WXDLLIMPEXP_DATA_BASE(wxMBConvGdk) wxConvGdk;
-
-#include <gdk/gdk.h>
-
-size_t wxMBConvGdk::MB2WC(wchar_t *buf, const char *psz, size_t n) const
-{
-    if (buf)
-    {
-        return gdk_mbstowcs((GdkWChar *)buf, psz, n);
-    }
-    else
-    {
-        GdkWChar *nbuf = new GdkWChar[n=strlen(psz)];
-        size_t len = gdk_mbstowcs(nbuf, psz, n);
-        delete[] nbuf;
-        return len;
-    }
-}
-
-size_t wxMBConvGdk::WC2MB(char *buf, const wchar_t *psz, size_t n) const
-{
-    char *mbstr = gdk_wcstombs((GdkWChar *)psz);
-    size_t len = mbstr ? strlen(mbstr) : 0;
-    if (buf)
-    {
-        if (len > n)
-            len = n;
-        memcpy(buf, psz, len);
-        if (len < n)
-            buf[len] = 0;
-    }
-    return len;
-}
-
-#endif // GTK > 1.0
-
-// ----------------------------------------------------------------------------
 // UTF-7
 // ----------------------------------------------------------------------------
 
