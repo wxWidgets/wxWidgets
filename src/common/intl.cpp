@@ -2428,15 +2428,16 @@ const wxChar *wxLocale::GetString(const wxChar *szOrigString,
             if ( szDomain != NULL )
             {
                 wxLogTrace(_T("i18n"),
-                           _T("string '%s'[%d] not found in domain '%s' for locale '%s'."),
-                           szOrigString, (int)n, szDomain, m_strLocale.c_str());
+                           _T("string '%s'[%lu] not found in domain '%s' for locale '%s'."),
+                           szOrigString, (unsigned long)n,
+                           szDomain, m_strLocale.c_str());
 
             }
             else
             {
                 wxLogTrace(_T("i18n"),
-                           _T("string '%s'[%d] not found in locale '%s'."),
-                           szOrigString, (int)n, m_strLocale.c_str());
+                           _T("string '%s'[%lu] not found in locale '%s'."),
+                           szOrigString, (unsigned long)n, m_strLocale.c_str());
             }
         }
 #endif // __WXDEBUG__
