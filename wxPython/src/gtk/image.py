@@ -265,6 +265,9 @@ class wxImagePtr(wxObjectPtr):
     def Paste(self, *_args, **_kwargs):
         val = apply(imagec.wxImage_Paste,(self,) + _args, _kwargs)
         return val
+    def GetDataBuffer(self, *_args, **_kwargs):
+        val = apply(imagec.wxImage_GetDataBuffer,(self,) + _args, _kwargs)
+        return val
     def GetData(self, *_args, **_kwargs):
         val = apply(imagec.wxImage_GetData,(self,) + _args, _kwargs)
         return val

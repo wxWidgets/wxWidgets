@@ -2582,9 +2582,9 @@ static PyObject *_wrap_wxDropSource_DoDragDrop(PyObject *self, PyObject *args, P
     PyObject * _resultobj;
     wxDragResult  _result;
     wxPyDropSource * _arg0;
-    int  _arg1 = (int ) FALSE;
+    int  _arg1 = (int ) (wxDrag_CopyOnly);
     PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","bAllowMove", NULL };
+    char *_kwnames[] = { "self","flags", NULL };
 
     self = self;
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|i:wxDropSource_DoDragDrop",_kwnames,&_argo0,&_arg1)) 
@@ -3677,6 +3677,9 @@ SWIGEXPORT(void) initclip_dndc() {
 	 PyDict_SetItemString(d,"cvar", SWIG_globals);
 	 SWIG_addvarlink(SWIG_globals,"wxFormatInvalid",_wrap_wxPyFormatInvalid_get, _wrap_wxPyFormatInvalid_set);
 	 SWIG_addvarlink(SWIG_globals,"wxTheClipboard",_wrap_wxPyTheClipboard_get, _wrap_wxPyTheClipboard_set);
+	 PyDict_SetItemString(d,"wxDrag_CopyOnly", PyInt_FromLong((long) wxDrag_CopyOnly));
+	 PyDict_SetItemString(d,"wxDrag_AllowMove", PyInt_FromLong((long) wxDrag_AllowMove));
+	 PyDict_SetItemString(d,"wxDrag_DefaultMove", PyInt_FromLong((long) wxDrag_DefaultMove));
 	 PyDict_SetItemString(d,"wxDragError", PyInt_FromLong((long) wxDragError));
 	 PyDict_SetItemString(d,"wxDragNone", PyInt_FromLong((long) wxDragNone));
 	 PyDict_SetItemString(d,"wxDragCopy", PyInt_FromLong((long) wxDragCopy));

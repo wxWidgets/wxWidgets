@@ -183,8 +183,14 @@ class wxSizerPtr(wxObjectPtr):
     def Fit(self, *_args, **_kwargs):
         val = apply(sizersc.wxSizer_Fit,(self,) + _args, _kwargs)
         return val
+    def FitInside(self, *_args, **_kwargs):
+        val = apply(sizersc.wxSizer_FitInside,(self,) + _args, _kwargs)
+        return val
     def SetSizeHints(self, *_args, **_kwargs):
         val = apply(sizersc.wxSizer_SetSizeHints,(self,) + _args, _kwargs)
+        return val
+    def SetVirtualSizeHints(self, *_args, **_kwargs):
+        val = apply(sizersc.wxSizer_SetVirtualSizeHints,(self,) + _args, _kwargs)
         return val
     def Clear(self, *_args, **_kwargs):
         val = apply(sizersc.wxSizer_Clear,(self,) + _args, _kwargs)

@@ -4962,6 +4962,142 @@ static PyObject *_wrap_wxListCtrl_ScrollList(PyObject *self, PyObject *args, PyO
     return _resultobj;
 }
 
+#define wxListCtrl_SetItemTextColour(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetItemTextColour(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxListCtrl_SetItemTextColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyListCtrl * _arg0;
+    long  _arg1;
+    wxColour * _arg2;
+    PyObject * _argo0 = 0;
+    wxColour  temp;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","item","col", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OlO:wxListCtrl_SetItemTextColour",_kwnames,&_argo0,&_arg1,&_obj2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyListCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxListCtrl_SetItemTextColour. Expected _wxPyListCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    _arg2 = &temp;
+    if (! wxColour_helper(_obj2, &_arg2))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxListCtrl_SetItemTextColour(_arg0,_arg1,*_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxListCtrl_GetItemTextColour(_swigobj,_swigarg0)  (_swigobj->GetItemTextColour(_swigarg0))
+static PyObject *_wrap_wxListCtrl_GetItemTextColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxColour * _result;
+    wxPyListCtrl * _arg0;
+    long  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","item", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:wxListCtrl_GetItemTextColour",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyListCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxListCtrl_GetItemTextColour. Expected _wxPyListCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxColour (wxListCtrl_GetItemTextColour(_arg0,_arg1));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxListCtrl_SetItemBackgroundColour(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetItemBackgroundColour(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxListCtrl_SetItemBackgroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyListCtrl * _arg0;
+    long  _arg1;
+    wxColour * _arg2;
+    PyObject * _argo0 = 0;
+    wxColour  temp;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","item","col", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OlO:wxListCtrl_SetItemBackgroundColour",_kwnames,&_argo0,&_arg1,&_obj2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyListCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxListCtrl_SetItemBackgroundColour. Expected _wxPyListCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    _arg2 = &temp;
+    if (! wxColour_helper(_obj2, &_arg2))
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxListCtrl_SetItemBackgroundColour(_arg0,_arg1,*_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxListCtrl_GetItemBackgroundColour(_swigobj,_swigarg0)  (_swigobj->GetItemBackgroundColour(_swigarg0))
+static PyObject *_wrap_wxListCtrl_GetItemBackgroundColour(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxColour * _result;
+    wxPyListCtrl * _arg0;
+    long  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","item", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:wxListCtrl_GetItemBackgroundColour",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyListCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxListCtrl_GetItemBackgroundColour. Expected _wxPyListCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = new wxColour (wxListCtrl_GetItemBackgroundColour(_arg0,_arg1));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
 static bool  wxPyListCtrl_SortItems(wxPyListCtrl *self,PyObject * func) {
             if (!PyCallable_Check(func))
                 return FALSE;
@@ -10740,6 +10876,10 @@ static PyMethodDef controls2cMethods[] = {
 	 { "new_wxPreListView", (PyCFunction) _wrap_new_wxPreListView, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxListView", (PyCFunction) _wrap_new_wxListView, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListCtrl_SortItems", (PyCFunction) _wrap_wxListCtrl_SortItems, METH_VARARGS | METH_KEYWORDS },
+	 { "wxListCtrl_GetItemBackgroundColour", (PyCFunction) _wrap_wxListCtrl_GetItemBackgroundColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxListCtrl_SetItemBackgroundColour", (PyCFunction) _wrap_wxListCtrl_SetItemBackgroundColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxListCtrl_GetItemTextColour", (PyCFunction) _wrap_wxListCtrl_GetItemTextColour, METH_VARARGS | METH_KEYWORDS },
+	 { "wxListCtrl_SetItemTextColour", (PyCFunction) _wrap_wxListCtrl_SetItemTextColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListCtrl_ScrollList", (PyCFunction) _wrap_wxListCtrl_ScrollList, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListCtrl_SetItemCount", (PyCFunction) _wrap_wxListCtrl_SetItemCount, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListCtrl_InsertColumn", (PyCFunction) _wrap_wxListCtrl_InsertColumn, METH_VARARGS | METH_KEYWORDS },

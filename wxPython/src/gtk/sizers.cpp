@@ -1789,6 +1789,43 @@ static PyObject *_wrap_wxSizer_Fit(PyObject *self, PyObject *args, PyObject *kwa
     return _resultobj;
 }
 
+#define wxSizer_FitInside(_swigobj,_swigarg0)  (_swigobj->FitInside(_swigarg0))
+static PyObject *_wrap_wxSizer_FitInside(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSizer * _arg0;
+    wxWindow * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","window", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxSizer_FitInside",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizer_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizer_FitInside. Expected _wxSizer_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxSizer_FitInside. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxSizer_FitInside(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxSizer_SetSizeHints(_swigobj,_swigarg0)  (_swigobj->SetSizeHints(_swigarg0))
 static PyObject *_wrap_wxSizer_SetSizeHints(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -1818,6 +1855,43 @@ static PyObject *_wrap_wxSizer_SetSizeHints(PyObject *self, PyObject *args, PyOb
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     wxSizer_SetSizeHints(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxSizer_SetVirtualSizeHints(_swigobj,_swigarg0)  (_swigobj->SetVirtualSizeHints(_swigarg0))
+static PyObject *_wrap_wxSizer_SetVirtualSizeHints(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSizer * _arg0;
+    wxWindow * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","window", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxSizer_SetVirtualSizeHints",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxSizer_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSizer_SetVirtualSizeHints. Expected _wxSizer_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxSizer_SetVirtualSizeHints. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxSizer_SetVirtualSizeHints(_arg0,_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -3006,7 +3080,9 @@ static PyMethodDef sizerscMethods[] = {
 	 { "wxSizer_GetChildren", (PyCFunction) _wrap_wxSizer_GetChildren, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizer_DeleteWindows", (PyCFunction) _wrap_wxSizer_DeleteWindows, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizer_Clear", (PyCFunction) _wrap_wxSizer_Clear, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSizer_SetVirtualSizeHints", (PyCFunction) _wrap_wxSizer_SetVirtualSizeHints, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizer_SetSizeHints", (PyCFunction) _wrap_wxSizer_SetSizeHints, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSizer_FitInside", (PyCFunction) _wrap_wxSizer_FitInside, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizer_Fit", (PyCFunction) _wrap_wxSizer_Fit, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizer_Layout", (PyCFunction) _wrap_wxSizer_Layout, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSizer_GetMinSize", (PyCFunction) _wrap_wxSizer_GetMinSize, METH_VARARGS | METH_KEYWORDS },

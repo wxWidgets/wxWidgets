@@ -608,6 +608,20 @@ class wxListCtrlPtr(wxControlPtr):
     def ScrollList(self, *_args, **_kwargs):
         val = apply(controls2c.wxListCtrl_ScrollList,(self,) + _args, _kwargs)
         return val
+    def SetItemTextColour(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_SetItemTextColour,(self,) + _args, _kwargs)
+        return val
+    def GetItemTextColour(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_GetItemTextColour,(self,) + _args, _kwargs)
+        if val: val = wxColourPtr(val) ; val.thisown = 1
+        return val
+    def SetItemBackgroundColour(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_SetItemBackgroundColour,(self,) + _args, _kwargs)
+        return val
+    def GetItemBackgroundColour(self, *_args, **_kwargs):
+        val = apply(controls2c.wxListCtrl_GetItemBackgroundColour,(self,) + _args, _kwargs)
+        if val: val = wxColourPtr(val) ; val.thisown = 1
+        return val
     def SortItems(self, *_args, **_kwargs):
         val = apply(controls2c.wxListCtrl_SortItems,(self,) + _args, _kwargs)
         return val

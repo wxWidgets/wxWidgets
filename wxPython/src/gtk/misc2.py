@@ -1028,6 +1028,10 @@ def wxFindWindowAtPoint(*_args, **_kwargs):
     val = apply(misc2c.wxFindWindowAtPoint,_args,_kwargs)
     return val
 
+def wxGetTopLevelParent(*_args, **_kwargs):
+    val = apply(misc2c.wxGetTopLevelParent,_args,_kwargs)
+    return val
+
 wxResourceAddIdentifier = misc2c.wxResourceAddIdentifier
 
 wxResourceClear = misc2c.wxResourceClear

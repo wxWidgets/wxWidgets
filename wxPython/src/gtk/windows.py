@@ -396,6 +396,9 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def SetFocus(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_SetFocus,(self,) + _args, _kwargs)
         return val
+    def SetFocusFromKbd(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_SetFocusFromKbd,(self,) + _args, _kwargs)
+        return val
     def AcceptsFocus(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_AcceptsFocus,(self,) + _args, _kwargs)
         return val
@@ -431,6 +434,22 @@ class wxWindowPtr(wxEvtHandlerPtr):
         return val
     def SetSizeHints(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_SetSizeHints,(self,) + _args, _kwargs)
+        return val
+    def SetVirtualSizeHints(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_SetVirtualSizeHints,(self,) + _args, _kwargs)
+        return val
+    def SetVirtualSize(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_SetVirtualSize,(self,) + _args, _kwargs)
+        return val
+    def SetVirtualSizeWH(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_SetVirtualSizeWH,(self,) + _args, _kwargs)
+        return val
+    def GetVirtualSize(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_GetVirtualSize,(self,) + _args, _kwargs)
+        if val: val = wxSizePtr(val) ; val.thisown = 1
+        return val
+    def GetVirtualSizeTuple(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_GetVirtualSizeTuple,(self,) + _args, _kwargs)
         return val
     def SetClientSizeWH(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_SetClientSizeWH,(self,) + _args, _kwargs)
@@ -500,6 +519,9 @@ class wxWindowPtr(wxEvtHandlerPtr):
         return val
     def SetSizer(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_SetSizer,(self,) + _args, _kwargs)
+        return val
+    def SetSizerAndFit(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_SetSizerAndFit,(self,) + _args, _kwargs)
         return val
     def GetSizer(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_GetSizer,(self,) + _args, _kwargs)
@@ -670,9 +692,6 @@ class wxScrolledWindowPtr(wxPanelPtr):
     def GetTargetWindow(self, *_args, **_kwargs):
         val = apply(windowsc.wxScrolledWindow_GetTargetWindow,(self,) + _args, _kwargs)
         return val
-    def GetVirtualSize(self, *_args, **_kwargs):
-        val = apply(windowsc.wxScrolledWindow_GetVirtualSize,(self,) + _args, _kwargs)
-        return val
     def IsRetained(self, *_args, **_kwargs):
         val = apply(windowsc.wxScrolledWindow_IsRetained,(self,) + _args, _kwargs)
         return val
@@ -722,6 +741,9 @@ class wxScrolledWindowPtr(wxPanelPtr):
         return val
     def Layout(self, *_args, **_kwargs):
         val = apply(windowsc.wxScrolledWindow_Layout,(self,) + _args, _kwargs)
+        return val
+    def SetScrollRate(self, *_args, **_kwargs):
+        val = apply(windowsc.wxScrolledWindow_SetScrollRate,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxScrolledWindow instance at %s>" % (self.this,)
