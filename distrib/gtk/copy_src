@@ -440,6 +440,16 @@ cp *.cpp ~/wxgtk_dist/wxGTK/samples/dynamic
 cp *.xpm ~/wxgtk_dist/wxGTK/samples/dynamic
 cd ..
 
+echo Drawing sample..
+
+cd drawing
+mkdir ~/wxgtk_dist/wxGTK/samples/drawing
+cp Makefile ~/wxgtk_dist/wxGTK/samples/drawing
+cp Makefile.in ~/wxgtk_dist/wxGTK/samples/drawing
+cp *.cpp ~/wxgtk_dist/wxGTK/samples/drawing
+cp *.xpm ~/wxgtk_dist/wxGTK/samples/drawing
+cd ..
+
 echo Forty sample..
 
 cd forty

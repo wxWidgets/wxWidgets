@@ -457,6 +457,11 @@ void wxListBox::AppendCommon( const wxString &item )
                         (GtkSignalFunc)gtk_listbox_button_press_callback,
                         (gpointer) this );
 
+    gtk_signal_connect_after( GTK_OBJECT(list_item),
+                        "button_release_event",
+                        (GtkSignalFunc)gtk_listbox_button_release_callback,
+                        (gpointer) this );
+
     if (m_hasCheckBoxes)
     {
        gtk_signal_connect( GTK_OBJECT(list_item),

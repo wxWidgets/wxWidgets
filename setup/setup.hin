@@ -271,11 +271,17 @@
  * Use Apple Ieee-double converter
  */
 #define wxUSE_APPLE_IEEE 0
-/* Compatibility with 1.66 API.
-   Level 0: no backward compatibility, all new features
-   Level 1: wxDC, OnSize (etc.) compatibility, but
-   some new features such as event tables */
-#define WXWIN_COMPATIBILITY  0
+/* 
+ * Compatibility with 1.66 API.
+ * Level 0: no backward compatibility, all new features
+ * Level 1: wxDC, OnSize (etc.) compatibility, but
+ * some new features such as event tables 
+ */
+#define WXWIN_COMPATIBILITY 0
+/* 
+ * Compatibility with 2.0 API. 
+ */
+#define WXWIN_COMPATIBILITY_2 1
 /*
  * Enables debugging: memory tracing, assert, etc., contains debug level
  */

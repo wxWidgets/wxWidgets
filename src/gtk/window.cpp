@@ -42,7 +42,6 @@
 #include "gtk/gtk.h"
 #include "gdk/gdkprivate.h"
 #include "gdk/gdkkeysyms.h"
-#include "gdk/gdkx.h"
 #include "wx/gtk/win_gtk.h"
 
 //-----------------------------------------------------------------------------
@@ -386,14 +385,6 @@ static long map_to_wx_keysym( KeySym keysym )
     return (key_code);
 }
 
-static long get_unmodified_wx_keysym( GdkEventKey *event )
-{
-    KeyCode keycode = XKeysymToKeycode( GDK_DISPLAY(), event->keyval );
-    KeySym keysym = XKeycodeToKeysym( GDK_DISPLAY(), keycode, 0 );
-
-    return (map_to_unmodified_wx_keysym( keysym ));
-}
-
 //-----------------------------------------------------------------------------
 // local code (see below)
 //-----------------------------------------------------------------------------
@@ -568,7 +559,7 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
     GdkModifierType state;
     if (gdk_event->window) gdk_window_get_pointer(gdk_event->window, &x, &y, &state);
 
-    long key_code = get_unmodified_wx_keysym( gdk_event );
+    long key_code = map_to_unmodified_wx_keysym( gdk_event->keyval );
     
     /* sending unknown key events doesn't really make sense */
     if (key_code == 0) return FALSE;
@@ -704,7 +695,7 @@ static gint gtk_window_key_release_callback( GtkWidget *widget, GdkEventKey *gdk
     printf( "\n" );
 */
 
-    long key_code = get_unmodified_wx_keysym( gdk_event );
+    long key_code = map_to_unmodified_wx_keysym( gdk_event->keyval );
     
     /* sending unknown key events doesn't really make sense */
     if (key_code == 0) return FALSE;
