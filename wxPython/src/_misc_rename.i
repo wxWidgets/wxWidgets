@@ -173,6 +173,8 @@
 %rename(CreateFileTipProvider)              wxCreateFileTipProvider;
 %rename(TIMER_CONTINUOUS)                   wxTIMER_CONTINUOUS;
 %rename(TIMER_ONE_SHOT)                     wxTIMER_ONE_SHOT;
+%rename(TimerEvent)                         wxTimerEvent;
+%rename(TimerRunner)                        wxTimerRunner;
 %rename(LOG_FatalError)                     wxLOG_FatalError;
 %rename(LOG_Error)                          wxLOG_Error;
 %rename(LOG_Warning)                        wxLOG_Warning;

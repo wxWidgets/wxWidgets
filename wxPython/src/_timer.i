@@ -21,7 +21,11 @@ enum {
     wxTIMER_CONTINUOUS,
 
     // only send the notification once and then stop the timer
-    wxTIMER_ONE_SHOT
+    wxTIMER_ONE_SHOT,
+
+    // Timer event type
+    wxEVT_TIMER, 
+
 };
    
 
@@ -79,13 +83,40 @@ public:
 %# For backwards compatibility with 2.4
 class PyTimer(Timer):
     def __init__(self, notify):
-        self.notify = self.notify
+        Timer.__init__(self)
+        self.notify = notify
 
     def Notify(self):
         if self.notify:
             self.notify()
+
+
+EVT_TIMER = wx.PyEventBinder( wxEVT_TIMER, 1 )
+                   
 };
 
+
+
+class wxTimerEvent : public wxEvent
+{
+public:
+    wxTimerEvent(int timerid = 0, int interval = 0);
+    int GetInterval() const;
+};
+
+
+
+// wxTimerRunner: starts the timer in its ctor, stops in the dtor
+class wxTimerRunner
+{
+public:
+    %nokwargs wxTimerRunner;
+    wxTimerRunner(wxTimer& timer);
+    wxTimerRunner(wxTimer& timer, int milli, bool oneShot = FALSE);
+    ~wxTimerRunner();
+
+    void Start(int milli, bool oneShot = FALSE);
+};
 
 
 //---------------------------------------------------------------------------

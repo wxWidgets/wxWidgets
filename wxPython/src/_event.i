@@ -62,9 +62,7 @@ enum {
     wxEVT_COMMAND_TOOL_RCLICKED,
     wxEVT_COMMAND_TOOL_ENTER,
 
-        // Sockets and timers send events, too
-    wxEVT_SOCKET,
-    wxEVT_TIMER ,
+    //wxEVT_SOCKET,
 
         // Mouse event types
     wxEVT_LEFT_DOWN,
@@ -226,8 +224,6 @@ EVT_WINDOW_CREATE = wx.PyEventBinder( wxEVT_CREATE )
 EVT_WINDOW_DESTROY = wx.PyEventBinder( wxEVT_DESTROY )
 EVT_SET_CURSOR = wx.PyEventBinder( wxEVT_SET_CURSOR )
 EVT_MOUSE_CAPTURE_CHANGED = wx.PyEventBinder( wxEVT_MOUSE_CAPTURE_CHANGED )
-
-EVT_TIMER = wx.PyEventBinder( wxEVT_TIMER, 1 )
 
 EVT_LEFT_DOWN = wx.PyEventBinder( wxEVT_LEFT_DOWN )
 EVT_LEFT_UP = wx.PyEventBinder( wxEVT_LEFT_UP )
