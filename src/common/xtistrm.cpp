@@ -198,7 +198,7 @@ void wxWriter::WriteOneProperty( const wxObject *obj , const wxClassInfo* ci , c
 
             DoBeginWriteElement() ;
             wxxVariant value = data[i] ;
-            if ( persister->BeforeWriteProperty( this , pi , value ) )
+            if ( persister->BeforeWriteProperty( this , obj, pi , value ) )
             {
                 const wxClassTypeInfo* cti = dynamic_cast< const wxClassTypeInfo* > ( elementType ) ;
                 if ( cti )
@@ -270,7 +270,7 @@ void wxWriter::WriteOneProperty( const wxObject *obj , const wxClassInfo* ci , c
             if ( cti && value.GetAsObject() == NULL )
                 return ;
 
-            if ( persister->BeforeWriteProperty( this , pi , value ) )
+            if ( persister->BeforeWriteProperty( this , obj, pi , value ) )
             {
                 DoBeginWriteProperty( pi ) ;
                 if ( cti )
@@ -501,7 +501,7 @@ void wxRuntimeDepersister::SetPropertyAsObject(int objectID,
 
 void wxRuntimeDepersister::SetConnect(int eventSourceObjectID,
                                       const wxClassInfo *WXUNUSED(eventSourceClassInfo),
-                                      const wxDelegateTypeInfo *delegateInfo ,
+                                      const wxPropertyInfo *delegateInfo ,
                                       const wxClassInfo *WXUNUSED(eventSinkClassInfo) ,
                                       const wxHandlerInfo* handlerInfo ,
                                       int eventSinkObjectID )
@@ -511,22 +511,22 @@ void wxRuntimeDepersister::SetConnect(int eventSourceObjectID,
 
     if ( ehsource && ehsink )
     {
-        if( delegateInfo->GetLastEventType() == -1 )
+        const wxDelegateTypeInfo *delegateTypeInfo = dynamic_cast<const wxDelegateTypeInfo*>(delegateInfo->GetTypeInfo());
+        if( delegateTypeInfo && delegateTypeInfo->GetLastEventType() == -1 )
         {
-            ehsource->Connect( -1 , delegateInfo->GetEventType() ,
+            ehsource->Connect( -1 , delegateTypeInfo->GetEventType() ,
                 handlerInfo->GetEventFunction() , NULL /*user data*/ ,
                 ehsink ) ;
         }
         else
         {
-            for ( wxEventType iter = delegateInfo->GetEventType() ; iter <= delegateInfo->GetLastEventType() ; ++iter )
+            for ( wxEventType iter = delegateTypeInfo->GetEventType() ; iter <= delegateTypeInfo->GetLastEventType() ; ++iter )
             {
                 ehsource->Connect( -1 , iter ,
                     handlerInfo->GetEventFunction() , NULL /*user data*/ ,
                     ehsink ) ;
             }
-        }
-        
+        }        
     }
 }
 
@@ -750,7 +750,7 @@ void wxCodeDepersister::AddToPropertyCollectionAsObject(int WXUNUSED(objectID),
 
 void wxCodeDepersister::SetConnect(int eventSourceObjectID,
                                    const wxClassInfo *WXUNUSED(eventSourceClassInfo),
-                                   const wxDelegateTypeInfo *delegateInfo ,
+                                   const wxPropertyInfo *delegateInfo ,
                                    const wxClassInfo *eventSinkClassInfo ,
                                    const wxHandlerInfo* handlerInfo ,
                                    int eventSinkObjectID )
@@ -758,7 +758,9 @@ void wxCodeDepersister::SetConnect(int eventSourceObjectID,
     wxString ehsource = m_data->GetObjectName( eventSourceObjectID ) ;
     wxString ehsink = m_data->GetObjectName(eventSinkObjectID) ;
     wxString ehsinkClass = eventSinkClassInfo->GetClassName() ;
-    int eventType = delegateInfo->GetEventType() ;
+    const wxDelegateTypeInfo *delegateTypeInfo = dynamic_cast<const wxDelegateTypeInfo*>(delegateInfo->GetTypeInfo());
+    wxASSERT_MSG(delegateTypeInfo, "delegate has no type info");
+    int eventType = delegateTypeInfo->GetEventType() ;
     wxString handlerName = handlerInfo->GetName() ;
 
     m_fp->WriteString( wxString::Format(  wxT("\t%s->Connect( %s->GetId() , %d , (wxObjectEventFunction)(wxEventFunction) & %s::%s , NULL , %s ) ;") ,

@@ -438,7 +438,7 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
                         wxString handlerName = resstring.Mid(pos+1) ;
                         wxClassInfo* sinkClassInfo = GetObjectClassInfo( sinkOid ) ;
 
-                        callbacks->SetConnect( objectID , classInfo , dynamic_cast<const wxDelegateTypeInfo*>(pi->GetTypeInfo()) , sinkClassInfo ,
+                        callbacks->SetConnect( objectID , classInfo , pi , sinkClassInfo ,
                             sinkClassInfo->FindHandlerInfo(handlerName) ,  sinkOid ) ;
                     }
 

@@ -79,7 +79,7 @@ template<> void wxStringWriteValue(wxString &s , const wxPoint &data )
 	s = wxString::Format(wxT("%d,%d"), data.x , data.y ) ;
 }
 
-WX_CUSTOM_TYPE_INFO(wxPoint, wxToStringConverter<wxPoint> , wxFromStringConverter<wxPoint>)
+wxCUSTOM_TYPE_INFO(wxPoint, wxToStringConverter<wxPoint> , wxFromStringConverter<wxPoint>)
 
 template<> void wxStringReadValue(const wxString &s , wxSize &data )
 {
@@ -91,7 +91,7 @@ template<> void wxStringWriteValue(wxString &s , const wxSize &data )
 	s = wxString::Format(wxT("%d,%d"), data.x , data.y ) ;
 }
 
-WX_CUSTOM_TYPE_INFO(wxSize, wxToStringConverter<wxSize> , wxFromStringConverter<wxSize>)
+wxCUSTOM_TYPE_INFO(wxSize, wxToStringConverter<wxSize> , wxFromStringConverter<wxSize>)
 
 #endif
 

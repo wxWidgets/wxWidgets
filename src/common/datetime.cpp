@@ -94,7 +94,7 @@ template<> void wxStringWriteValue(wxString &s , const wxDateTime &data )
     s = data.Format(wxT("%Y-%m-%d %H:%M:%S")) ;
 }
 
-WX_CUSTOM_TYPE_INFO(wxDateTime, wxToStringConverter<wxDateTime> , wxFromStringConverter<wxDateTime>)
+wxCUSTOM_TYPE_INFO(wxDateTime, wxToStringConverter<wxDateTime> , wxFromStringConverter<wxDateTime>)
 
 #endif
 

@@ -255,15 +255,15 @@ wxBuiltInTypeInfo s_typeInfowxString( wxT_STRING , &wxToStringConverter<wxString
 
 // this are compiler induced specialization which are never used anywhere
 
-WX_ILLEGAL_TYPE_SPECIALIZATION( char const * )
-WX_ILLEGAL_TYPE_SPECIALIZATION( char * )
-WX_ILLEGAL_TYPE_SPECIALIZATION( unsigned char * )
-WX_ILLEGAL_TYPE_SPECIALIZATION( int * )
-WX_ILLEGAL_TYPE_SPECIALIZATION( bool * )
-WX_ILLEGAL_TYPE_SPECIALIZATION( long * )
-WX_ILLEGAL_TYPE_SPECIALIZATION( wxString * )
+wxILLEGAL_TYPE_SPECIALIZATION( char const * )
+wxILLEGAL_TYPE_SPECIALIZATION( char * )
+wxILLEGAL_TYPE_SPECIALIZATION( unsigned char * )
+wxILLEGAL_TYPE_SPECIALIZATION( int * )
+wxILLEGAL_TYPE_SPECIALIZATION( bool * )
+wxILLEGAL_TYPE_SPECIALIZATION( long * )
+wxILLEGAL_TYPE_SPECIALIZATION( wxString * )
 
-WX_COLLECTION_TYPE_INFO( wxString , wxArrayString ) ;
+wxCOLLECTION_TYPE_INFO( wxString , wxArrayString ) ;
 
 template<> void wxCollectionToVariantArray( wxArrayString const &theArray, wxxVariantArray &value)
 {
@@ -546,12 +546,30 @@ wxObject* wxxVariant::GetAsObject()
 // own attributes in a hash map. Like this it is possible to create the objects and
 // stream them, as if their class information was already available from compiled data
 
+// can't keep the attributes in a hash map, because if someone renames a property in
+// the class info, then things go potty later on when we try to iterate through
+// the property values by name.
+struct wxDynamicProperty__
+{
+#if wxUSE_UNICODE
+    wstring name;
+#else
+    string name;
+#endif
+    wxxVariant value;
+    wxDynamicProperty__ *next;
+};
+
 struct wxDynamicObject::wxDynamicObjectInternal
 {
+    wxDynamicObjectInternal() : m_properties(NULL) {}
+    wxDynamicProperty__ *m_properties;
+#if 0
 #if wxUSE_UNICODE
     map<wstring,wxxVariant> m_properties ;
 #else
     map<string,wxxVariant> m_properties ;
+#endif
 #endif
 } ;
 
@@ -572,13 +590,39 @@ wxDynamicObject::~wxDynamicObject()
 void wxDynamicObject::SetProperty (const wxChar *propertyName, const wxxVariant &value)
 {
     wxASSERT_MSG(m_classInfo->FindPropertyInfoInThisClass(propertyName),wxT("Accessing Unknown Property in a Dynamic Object") ) ;
-    m_data->m_properties[propertyName] = value ;
+    wxDynamicProperty__ *prop;
+    prop = m_data->m_properties;
+    while (prop)
+    {
+	if (!strcmp(prop->name.c_str(), propertyName))
+	{
+	    prop->value = value;
+	    return;
+	}
+	prop = prop->next;
+    }
+    prop = new wxDynamicProperty__;
+    prop->name = propertyName;
+    prop->value = value;
+    prop->next = m_data->m_properties;
+    m_data->m_properties = prop;
+//    m_data->m_properties[propertyName] = value ;
 }
 
 wxxVariant wxDynamicObject::GetProperty (const wxChar *propertyName) const
 {
     wxASSERT_MSG(m_classInfo->FindPropertyInfoInThisClass(propertyName),wxT("Accessing Unknown Property in a Dynamic Object") ) ;
-    return m_data->m_properties[propertyName] ;
+    wxDynamicProperty__ *prop;
+    prop = m_data->m_properties;
+    while (prop)
+    {
+	if (!strcmp(prop->name.c_str(), propertyName))
+	    return prop->value;
+	prop = prop->next;
+    }
+    // FIXME: needs to return something a little more sane here.
+    return wxxVariant();
+//    return m_data->m_properties[propertyName] ;
 }
 
 // ----------------------------------------------------------------------------
