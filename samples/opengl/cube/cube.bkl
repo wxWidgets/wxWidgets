@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<!-- $Id$ -->
+
+<makefile>
+
+    <include file="../../../build/bakefiles/common_samples.bkl"/>
+
+    <exe id="cube" template="wx_sample" template_append="wx_append">
+        <sources>cube.cpp</sources>
+        <wx-lib>gl</wx-lib>
+        <wx-lib>core</wx-lib>
+        <wx-lib>base</wx-lib>
+        <win32-res>cube.rc</win32-res>
+    </exe>
+
+</makefile>
