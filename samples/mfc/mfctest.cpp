@@ -24,30 +24,31 @@
 //
 // You can easily modify this code so that an MFC window pops up
 // initially as the main frame, and allows wxWindows frames to be
-// created subsequently:
+// created subsequently.
 //
-// (1) Make MyApp::OnInit return FALSE, not creating a window.
-// (2) Restore the MFC code to create a window in InitInstance, and remove
+// (1) Make MyApp::OnInit not create a main window.
+// (2) Make MFC's InitInstance create a main window, and remove
 //     creation of CDummyWindow.
+//
+// This can be accomplished by setting START_WITH_MFC_WINDOW to 1 below.
+
+#define START_WITH_MFC_WINDOW 0
+
 //
 // IMPORTANT NOTES:
 //
 // (1) You need to set wxUSE_MFC to 1 in include/wx/msw/setup.h, which switches
 // off some debugging features and also removes the windows.h inclusion
 // in wxprec.h (MFC headers don't like this to have been included previously).
+// Set to 'Use MFC in a shared DLL' or add _AFXDLL to preprocessor settings.
 // Then recompile wxWindows and this sample.
 //
-// (2) 10/3/2000, wxWindows 2.1.14: unfortunately there is an assert when
-// the sample tries to create an MFC window. Any suggestions welcome. It may be
-// a problem with conflicting project settings. Ignoring the assert (several times)
-// allows the sample to continue. In release mode the asserts don't happen.
-//
-// (3) I can't get the sample to link using a static MFC library, only the DLL
+// (2) I can't get the sample to link and run using a static MFC library, only the DLL
 // version. Perhaps someone else is a wizard at working out the required settings
 // in the wxWin library and the sample; then debugging the assert problem may be
 // easier.
 //
-// (4) Compiling wxWindows in DLL mode currently includes windows.h, so you must only
+// (3) Compiling wxWindows in DLL mode currently includes windows.h, so you must only
 // try linking wxWindows statically.
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -209,22 +210,24 @@ END_MESSAGE_MAP()
 //
 BOOL CTheApp::InitInstance()
 {
-    TRACE( "HELLO WORLD\n" );
-    
     SetDialogBkColor();     // hook gray dialogs (was default in MFC V1)
     
     wxEntry((WXHINSTANCE) m_hInstance, (WXHINSTANCE) m_hPrevInstance, m_lpCmdLine, m_nCmdShow, FALSE);
-        
-    /*
+     
+#if START_WITH_MFC_WINDOW
+    // Demonstrate creation of an initial MFC main window.
     m_pMainWnd = new CMainWindow();
     m_pMainWnd->ShowWindow( m_nCmdShow );
     m_pMainWnd->UpdateWindow();
-    */
-    
+#else    
+    // Demonstrate creation of an initial wxWindows main window.
+    // Wrap wxWindows window in a dummy MFC window and
+    // make the main window.
     if (wxTheApp && wxTheApp->GetTopWindow())
     {
         m_pMainWnd = new CDummyWindow((HWND) wxTheApp->GetTopWindow()->GetHWND());
     }
+#endif
     
     return TRUE;
 }
@@ -263,10 +266,14 @@ BOOL CTheApp::OnIdle(LONG lCount)
 
 bool MyApp::OnInit(void)
 {
+#if !START_WITH_MFC_WINDOW
+
     // Exit app when the top level frame is deleted
     SetExitOnFrameDelete(TRUE);
     
     (void) CreateFrame();
+#endif
+
     return TRUE;
 }
 
@@ -298,12 +305,9 @@ wxFrame *MyApp::CreateFrame(void)
     
     MyCanvas *canvas = new MyCanvas(subframe, wxPoint(0, 0), wxSize(width, height));
     canvas->SetCursor(wxCursor(wxCURSOR_PENCIL));
-    subframe->canvas = canvas;
-    
-    // Give it scrollbars
-    //      canvas->SetScrollbars(20, 20, 50, 50, 4, 4);
-    
+    subframe->canvas = canvas;    
     subframe->Show(TRUE);
+
     // Return the main frame window
     return subframe;
 }
