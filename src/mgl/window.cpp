@@ -172,6 +172,10 @@ static ibool MGLAPI wxWindowMouseHandler(window_t *wnd, event_t *e)
             else if ( e->message & EVT_RIGHTBMASK )
                 type = (e->message & EVT_DBLCLICK) ? 
                         wxEVT_RIGHT_DCLICK : wxEVT_RIGHT_DOWN;
+
+            if ( win->AcceptsFocus() && wxWindow::FindFocus() != win )
+                win->SetFocus();
+
             break;
 
         case EVT_MOUSEUP:
@@ -246,7 +250,7 @@ static ibool MGLAPI wxWindowMouseHandler(window_t *wnd, event_t *e)
     }
 }
 
-static long wxScanToKeyCode(event_t *event)
+static long wxScanToKeyCode(event_t *event, bool translate)
 {
     // VS: make it __WXDEBUG__-only, since we have lots of wxLogTrace calls
     //     here and the arguments would be stored in non-debug executable even
@@ -264,127 +268,135 @@ static long wxScanToKeyCode(event_t *event)
     #endif
 
     long key = 0;
-    switch ( EVT_scanCode(event->message) )
+    
+    if ( translate )
     {
-        KEY (KB_padEnter,       WXK_NUMPAD_ENTER)
-        KEY (KB_padMinus,       WXK_NUMPAD_SUBTRACT)
-        KEY (KB_padPlus,        WXK_NUMPAD_ADD)
-        KEY (KB_padTimes,       WXK_NUMPAD_MULTIPLY)
-        KEY (KB_padDivide,      WXK_NUMPAD_DIVIDE)
-        KEY (KB_padLeft,        WXK_NUMPAD_LEFT)
-        KEY (KB_padRight,       WXK_NUMPAD_RIGHT)
-        KEY (KB_padUp,          WXK_NUMPAD_UP)
-        KEY (KB_padDown,        WXK_NUMPAD_DOWN)
-        KEY (KB_padInsert,      WXK_NUMPAD_INSERT)
-        KEY (KB_padDelete,      WXK_NUMPAD_DELETE)
-        KEY (KB_padHome,        WXK_NUMPAD_HOME)
-        KEY (KB_padEnd,         WXK_NUMPAD_END)
-        KEY (KB_padPageUp,      WXK_NUMPAD_PAGEUP)
-      //KEY (KB_padPageUp,      WXK_NUMPAD_PRIOR)
-        KEY (KB_padPageDown,    WXK_NUMPAD_PAGEDOWN)
-      //KEY (KB_padPageDown,    WXK_NUMPAD_NEXT)
-        KEY (KB_padCenter,      WXK_NUMPAD_SEPARATOR) // ?
-        KEY (KB_F1,             WXK_F1)
-        KEY (KB_F2,             WXK_F2)
-        KEY (KB_F3,             WXK_F3)
-        KEY (KB_F4,             WXK_F4)
-        KEY (KB_F5,             WXK_F5)
-        KEY (KB_F6,             WXK_F6)
-        KEY (KB_F7,             WXK_F7)
-        KEY (KB_F8,             WXK_F8)
-        KEY (KB_F9,             WXK_F9)
-        KEY (KB_F10,            WXK_F10)
-        KEY (KB_F11,            WXK_F11)
-        KEY (KB_F12,            WXK_F12)
-        KEY (KB_left,           WXK_LEFT)
-        KEY (KB_right,          WXK_RIGHT)
-        KEY (KB_up,             WXK_UP)
-        KEY (KB_down,           WXK_DOWN)
-        KEY (KB_insert,         WXK_INSERT)
-        KEY (KB_delete,         WXK_DELETE)
-        KEY (KB_home,           WXK_HOME)
-        KEY (KB_end,            WXK_END)
-        KEY (KB_pageUp,         WXK_PAGEUP)
-        KEY (KB_pageDown,       WXK_PAGEDOWN)
-        KEY (KB_capsLock,       WXK_CAPITAL)
-        KEY (KB_numLock,        WXK_NUMLOCK)
-        KEY (KB_scrollLock,     WXK_SCROLL)
-        KEY (KB_leftShift,      WXK_SHIFT)
-        KEY (KB_rightShift,     WXK_SHIFT)
-        KEY (KB_leftCtrl,       WXK_CONTROL)
-        KEY (KB_rightCtrl,      WXK_CONTROL)
-        KEY (KB_leftAlt,        WXK_ALT)
-        KEY (KB_rightAlt,       WXK_ALT)
-        KEY (KB_leftWindows,    WXK_START)
-        KEY (KB_rightWindows,   WXK_START)
-        KEY (KB_menu,           WXK_MENU)
-        KEY (KB_sysReq,         WXK_SNAPSHOT)
-        KEY (KB_esc,            WXK_ESCAPE)
-        KEY (KB_1,              '1')
-        KEY (KB_2,              '2')
-        KEY (KB_3,              '3')
-        KEY (KB_4,              '4')
-        KEY (KB_5,              '5')
-        KEY (KB_6,              '6')
-        KEY (KB_7,              '7')
-        KEY (KB_8,              '8')
-        KEY (KB_9,              '9')
-        KEY (KB_0,              '0')
-        KEY (KB_minus,          WXK_SUBTRACT)
-        KEY (KB_equals,         WXK_ADD)
-        KEY (KB_backSlash,      '\\')
-        KEY (KB_backspace,      WXK_BACK)
-        KEY (KB_tab,            WXK_TAB)
-        KEY (KB_Q,              'Q')
-        KEY (KB_W,              'W')
-        KEY (KB_E,              'E')
-        KEY (KB_R,              'R')
-        KEY (KB_T,              'T')
-        KEY (KB_Y,              'Y')
-        KEY (KB_U,              'U')
-        KEY (KB_I,              'I')
-        KEY (KB_O,              'O')
-        KEY (KB_P,              'P')
-        KEY (KB_leftSquareBrace,'[')
-        KEY (KB_rightSquareBrace,']')
-        KEY (KB_enter,          WXK_RETURN) 
-        KEY (KB_A,              'A')
-        KEY (KB_S,              'S')
-        KEY (KB_D,              'D')
-        KEY (KB_F,              'F')
-        KEY (KB_G,              'G')
-        KEY (KB_H,              'H')
-        KEY (KB_J,              'J')
-        KEY (KB_K,              'K')
-        KEY (KB_L,              'L')
-        KEY (KB_semicolon,      ';')
-        KEY (KB_apostrophe,     '\'')
-        KEY (KB_Z,              'Z')
-        KEY (KB_X,              'X')
-        KEY (KB_C,              'C')
-        KEY (KB_V,              'V')
-        KEY (KB_B,              'B')
-        KEY (KB_N,              'N')
-        KEY (KB_M,              'M')
-        KEY (KB_comma,          ',')
-        KEY (KB_period,         '.')
-        KEY (KB_divide,         WXK_DIVIDE)
-        KEY (KB_space,          WXK_SPACE)
-        KEY (KB_tilde,          '~')
+        switch ( EVT_scanCode(event->message) )
+        {
+            KEY (KB_padMinus,       WXK_NUMPAD_SUBTRACT)
+            KEY (KB_padPlus,        WXK_NUMPAD_ADD)
+            KEY (KB_padTimes,       WXK_NUMPAD_MULTIPLY)
+            KEY (KB_padDivide,      WXK_NUMPAD_DIVIDE)
+            KEY (KB_padCenter,      WXK_NUMPAD_SEPARATOR) // ?
+            KEY (KB_padLeft,        WXK_NUMPAD_LEFT)
+            KEY (KB_padRight,       WXK_NUMPAD_RIGHT)
+            KEY (KB_padUp,          WXK_NUMPAD_UP)
+            KEY (KB_padDown,        WXK_NUMPAD_DOWN)
+            KEY (KB_padInsert,      WXK_NUMPAD_INSERT)
+            KEY (KB_padDelete,      WXK_NUMPAD_DELETE)
+            KEY (KB_padHome,        WXK_NUMPAD_HOME)
+            KEY (KB_padEnd,         WXK_NUMPAD_END)
+            KEY (KB_padPageUp,      WXK_NUMPAD_PAGEUP)
+          //KEY (KB_padPageUp,      WXK_NUMPAD_PRIOR)
+            KEY (KB_padPageDown,    WXK_NUMPAD_PAGEDOWN)
+          //KEY (KB_padPageDown,    WXK_NUMPAD_NEXT)
+            KEY (KB_1,              '1')
+            KEY (KB_2,              '2')
+            KEY (KB_3,              '3')
+            KEY (KB_4,              '4')
+            KEY (KB_5,              '5')
+            KEY (KB_6,              '6')
+            KEY (KB_7,              '7')
+            KEY (KB_8,              '8')
+            KEY (KB_9,              '9')
+            KEY (KB_0,              '0')
+            KEY (KB_minus,          WXK_SUBTRACT)
+            KEY (KB_equals,         WXK_ADD)
+            KEY (KB_backSlash,      '\\')
+            KEY (KB_Q,              'Q')
+            KEY (KB_W,              'W')
+            KEY (KB_E,              'E')
+            KEY (KB_R,              'R')
+            KEY (KB_T,              'T')
+            KEY (KB_Y,              'Y')
+            KEY (KB_U,              'U')
+            KEY (KB_I,              'I')
+            KEY (KB_O,              'O')
+            KEY (KB_P,              'P')
+            KEY (KB_leftSquareBrace,'[')
+            KEY (KB_rightSquareBrace,']')
+            KEY (KB_A,              'A')
+            KEY (KB_S,              'S')
+            KEY (KB_D,              'D')
+            KEY (KB_F,              'F')
+            KEY (KB_G,              'G')
+            KEY (KB_H,              'H')
+            KEY (KB_J,              'J')
+            KEY (KB_K,              'K')
+            KEY (KB_L,              'L')
+            KEY (KB_semicolon,      ';')
+            KEY (KB_apostrophe,     '\'')
+            KEY (KB_Z,              'Z')
+            KEY (KB_X,              'X')
+            KEY (KB_C,              'C')
+            KEY (KB_V,              'V')
+            KEY (KB_B,              'B')
+            KEY (KB_N,              'N')
+            KEY (KB_M,              'M')
+            KEY (KB_comma,          ',')
+            KEY (KB_period,         '.')
+            KEY (KB_divide,         WXK_DIVIDE)
+            KEY (KB_space,          WXK_SPACE)
+            KEY (KB_tilde,          '~')
 
-        default:                  
-            key = EVT_asciiCode(event->message); 
-            break;
+            default: break;
+        }
+    }
+    
+    if ( key == 0 )
+    {
+        switch ( EVT_scanCode(event->message) )
+        {
+            KEY (KB_padEnter,       WXK_NUMPAD_ENTER)
+            KEY (KB_F1,             WXK_F1)
+            KEY (KB_F2,             WXK_F2)
+            KEY (KB_F3,             WXK_F3)
+            KEY (KB_F4,             WXK_F4)
+            KEY (KB_F5,             WXK_F5)
+            KEY (KB_F6,             WXK_F6)
+            KEY (KB_F7,             WXK_F7)
+            KEY (KB_F8,             WXK_F8)
+            KEY (KB_F9,             WXK_F9)
+            KEY (KB_F10,            WXK_F10)
+            KEY (KB_F11,            WXK_F11)
+            KEY (KB_F12,            WXK_F12)
+            KEY (KB_left,           WXK_LEFT)
+            KEY (KB_right,          WXK_RIGHT)
+            KEY (KB_up,             WXK_UP)
+            KEY (KB_down,           WXK_DOWN)
+            KEY (KB_insert,         WXK_INSERT)
+            KEY (KB_delete,         WXK_DELETE)
+            KEY (KB_home,           WXK_HOME)
+            KEY (KB_end,            WXK_END)
+            KEY (KB_pageUp,         WXK_PAGEUP)
+            KEY (KB_pageDown,       WXK_PAGEDOWN)
+            KEY (KB_capsLock,       WXK_CAPITAL)
+            KEY (KB_numLock,        WXK_NUMLOCK)
+            KEY (KB_scrollLock,     WXK_SCROLL)
+            KEY (KB_leftShift,      WXK_SHIFT)
+            KEY (KB_rightShift,     WXK_SHIFT)
+            KEY (KB_leftCtrl,       WXK_CONTROL)
+            KEY (KB_rightCtrl,      WXK_CONTROL)
+            KEY (KB_leftAlt,        WXK_ALT)
+            KEY (KB_rightAlt,       WXK_ALT)
+            KEY (KB_leftWindows,    WXK_START)
+            KEY (KB_rightWindows,   WXK_START)
+            KEY (KB_menu,           WXK_MENU)
+            KEY (KB_sysReq,         WXK_SNAPSHOT)
+            KEY (KB_esc,            WXK_ESCAPE)
+            KEY (KB_backspace,      WXK_BACK)
+            KEY (KB_tab,            WXK_TAB)
+            KEY (KB_enter,          WXK_RETURN) 
+
+            default:                  
+                key = EVT_asciiCode(event->message); 
+                break;
+        }
     }
 
     #undef KEY
 
     return key;
-}
-
-static long wxAsciiToKeyCode(event_t *event)
-{
-    return (long)EVT_asciiCode(event->message);
 }
 
 static ibool MGLAPI wxWindowKeybHandler(window_t *wnd, event_t *e)
@@ -400,7 +412,7 @@ static ibool MGLAPI wxWindowKeybHandler(window_t *wnd, event_t *e)
     wxKeyEvent event;
     event.SetEventObject(win);
     event.SetTimestamp(e->when);
-    event.m_keyCode = wxScanToKeyCode(e);
+    event.m_keyCode = wxScanToKeyCode(e, TRUE);
     event.m_scanCode = 0; // not used by wx at all
     event.m_x = where.x;
     event.m_y = where.y;
@@ -453,7 +465,7 @@ static ibool MGLAPI wxWindowKeybHandler(window_t *wnd, event_t *e)
         // wxMSW doesn't send char events with Alt pressed
         // Only send wxEVT_CHAR event if not processed yet. Thus, ALT-x
         // will only be sent if it is not in an accelerator table.
-        event2.m_keyCode = wxAsciiToKeyCode(e);
+        event2.m_keyCode = wxScanToKeyCode(e, FALSE);
         if ( !ret && event2.m_keyCode != 0 )
         {
             event2.SetEventType(wxEVT_CHAR);
@@ -462,7 +474,6 @@ static ibool MGLAPI wxWindowKeybHandler(window_t *wnd, event_t *e)
         
         // Synthetize navigation key event, but do it only if the TAB key
         // wasn't handled yet.
-        // FIXME_MGL - isn't this wxUniv's business?
         if ( !ret && event.m_keyCode == WXK_TAB &&
              win->GetParent() && win->GetParent()->HasFlag(wxTAB_TRAVERSAL) )
         {
@@ -1126,6 +1137,13 @@ void wxWindowMGL::HandlePaint(MGLDevCtx *dc)
     m_updateRegion = wxRegion(clip);
     m_paintMGLDC = dc;
 
+#if wxUSE_CARET
+    // must hide caret temporarily, otherwise we'd get rendering artifacts
+    wxCaret *caret = GetCaret();
+    if ( caret )
+        caret->Hide();
+#endif // wxUSE_CARET
+
     if ( m_eraseBackground != 0 )
     {
         wxWindowDC dc((wxWindow*)this);
@@ -1142,6 +1160,11 @@ void wxWindowMGL::HandlePaint(MGLDevCtx *dc)
     wxPaintEvent eventPt(GetId());
     eventPt.SetEventObject(this);
     GetEventHandler()->ProcessEvent(eventPt);
+
+#if wxUSE_CARET
+    if ( caret )
+        caret->Show();
+#endif // wxUSE_CARET
 
     m_paintMGLDC = NULL;
     m_updateRegion.Clear();
