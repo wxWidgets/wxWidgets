@@ -21,7 +21,7 @@ typedef int             wxInt32;
 typedef unsigned int    wxUint32;
 typedef int             wxEventType;
 typedef unsigned int    size_t;
-typedef unsigned int    time_t
+typedef unsigned int    time_t;
 typedef unsigned char   byte;
 
 
