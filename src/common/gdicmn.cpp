@@ -595,34 +595,75 @@ void wxFontList::RemoveFont (wxFont * font)
   DeleteObject (font);
 }
 
-wxFont *wxFontList::
-        FindOrCreateFont (int PointSize, int FamilyOrFontId, int Style, int Weight, bool underline, const wxString& Face, wxFontEncoding encoding)
+wxFont *wxFontList::FindOrCreateFont(int pointSize,
+                                     int family,
+                                     int style,
+                                     int weight,
+                                     bool underline,
+                                     const wxString& facename,
+                                     wxFontEncoding encoding)
 {
-  for (wxNode * node = First (); node; node = node->Next ())
+    wxFont *font = (wxFont *)NULL;
+    for ( wxNode * node = First(); node; node = node->Next() )
     {
-      wxFont *each_font = (wxFont *) node->Data ();
-      if (each_font &&
-          each_font->GetVisible() &&
-          each_font->Ok() &&
-          each_font->GetPointSize () == PointSize &&
-          each_font->GetStyle () == Style &&
-          each_font->GetWeight () == Weight &&
-          each_font->GetUnderlined () == underline &&
+        font = (wxFont *)node->Data();
+        if ( font->GetVisible() &&
+             font->Ok() &&
+             font->GetPointSize () == pointSize &&
+             font->GetStyle () == style &&
+             font->GetWeight () == weight &&
+             font->GetUnderlined () == underline )
+        {
+            int fontFamily = font->GetFamily();
+
 #if defined(__WXGTK__)
-          (each_font->GetFamily() == FamilyOrFontId ||
-          (each_font->GetFamily() == wxSWISS && FamilyOrFontId == wxDEFAULT)) &&
-#else
-          each_font->GetFamily() == FamilyOrFontId &&
-#endif
-          ((each_font->GetFaceName() == wxT("")) || each_font->GetFaceName() == Face) &&
-          (encoding == wxFONTENCODING_DEFAULT || each_font->GetEncoding() == encoding))
-        return each_font;
+            // under GTK the default family is wxSWISS, so looking for a font
+            // with wxDEFAULT family should return a wxSWISS one instead of
+            // creating a new one
+            bool same = (fontFamily == family) ||
+                        (fontFamily == wxSWISS && family == wxDEFAULT);
+#else // !GTK
+            // VZ: but why elsewhere do we require an exact match? mystery...
+            bool same = fontFamily == family;
+#endif // GTK/!GTK
+
+            // empty facename matches anything at all: this is bad because
+            // depending on which fonts are already created, we might get back
+            // a different font if we create it with empty facename, but it is
+            // still better than never matching anything in the cache at all
+            // in this case
+            if ( same && !!facename )
+            {
+                const wxString& fontFace = font->GetFaceName();
+
+                // empty facename matches everything
+                same = !fontFace || fontFace == facename;
+            }
+
+            if ( same && (encoding != wxFONTENCODING_DEFAULT) )
+            {
+                // have to match the encoding too
+                same = font->GetEncoding() == encoding;
+            }
+
+            if ( same )
+            {
+                return font;
+            }
+        }
     }
-  wxFont *font = new wxFont (PointSize, FamilyOrFontId, Style, Weight, underline, Face, encoding);
 
-  font->SetVisible(TRUE);
+    if ( !node )
+    {
+        // font not found, create the new one
+        font = new wxFont(pointSize, family, style, weight,
+                          underline, facename, encoding);
 
-  return font;
+        // and mark it as being cacheable
+        font->SetVisible(TRUE);
+    }
+
+    return font;
 }
 
 void wxBitmapList::AddBitmap(wxBitmap *bitmap)
