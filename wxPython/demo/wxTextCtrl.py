@@ -22,6 +22,7 @@ class TestPanel(wxPanel):
         l1 = wxStaticText(self, -1, "wxTextCtrl")
         t1 = wxTextCtrl(self, 10, "Test it out and see", size=(125, -1))
         t1.SetInsertionPoint(0)
+        self.tc1 = t1
         EVT_TEXT(self, 10, self.EvtText)
         EVT_CHAR(t1, self.EvtChar)
         EVT_SET_FOCUS(t1, self.OnSetFocus)
@@ -88,7 +89,7 @@ class TestPanel(wxPanel):
         #self.tc.Remove(5, 9)
 
     def OnTestWriteText(self, evt):
-        self.tc.WriteText("TEXT")
+        self.tc1.WriteText("TEXT")
 
     def OnTestGetSelection(self, evt):
         start, end = self.tc.GetSelection()
