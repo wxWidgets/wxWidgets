@@ -2585,7 +2585,9 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
                 processed = TRUE;
             }
             else
+            {
                 processed = HandleChar((WORD)wParam, lParam, TRUE);
+            }
             break;
 
         case WM_HSCROLL:
