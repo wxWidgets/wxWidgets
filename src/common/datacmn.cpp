@@ -137,6 +137,7 @@ WXDLLEXPORT_DATA(const wxChar *) wxEnhDialogNameStr = wxT("Shell");
 WXDLLEXPORT_DATA(const wxChar *) wxToolBarNameStr = wxT("toolbar");
 WXDLLEXPORT_DATA(const wxChar *) wxStatusLineNameStr = wxT("status_line");
 WXDLLEXPORT_DATA(const wxChar *) wxGetTextFromUserPromptStr = wxT("Input Text");
+WXDLLEXPORT_DATA(const wxChar *) wxGetPasswordFromUserPromptStr = wxT("Enter Password");
 WXDLLEXPORT_DATA(const wxChar *) wxMessageBoxCaptionStr = wxT("Message");
 WXDLLEXPORT_DATA(const wxChar *) wxFileSelectorPromptStr = wxT("Select a file");
 WXDLLEXPORT_DATA(const wxChar *) wxFileSelectorDefaultWildcardStr =
