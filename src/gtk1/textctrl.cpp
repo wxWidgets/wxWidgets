@@ -564,19 +564,21 @@ void wxTextCtrl::AppendText( const wxString &text )
     {
         if ( !m_defaultStyle.IsDefault() )
         {
-            GdkFont *font = m_defaultStyle.HasFont()
-                                ? m_defaultStyle.GetFont().GetInternalFont()
-                                : NULL;
+            wxFont font = m_defaultStyle.HasFont() ? m_defaultStyle.GetFont()
+                                                   : m_font;
+            GdkFont *fnt = font.Ok() ? font.GetInternalFont() : NULL;
 
-            GdkColor *colFg = m_defaultStyle.HasTextColour()
-                                ? m_defaultStyle.GetTextColour().GetColor()
-                                : NULL;
+            wxColour col = m_defaultStyle.HasTextColour()
+                                ? m_defaultStyle.GetTextColour()
+                                : m_foregroundColour;
+            GdkColor *colFg = col.Ok() ? col.GetColor() : NULL;
 
-            GdkColor *colBg = m_defaultStyle.HasBackgroundColour()
-                                ? m_defaultStyle.GetBackgroundColour().GetColor()
-                                : NULL;
+            col = m_defaultStyle.HasBackgroundColour()
+                    ? m_defaultStyle.GetBackgroundColour()
+                    : m_backgroundColour;
+            GdkColor *colBg = col.Ok() ? col.GetColor() : NULL;
 
-            gtk_text_insert( GTK_TEXT(m_text), font, colFg, colBg, txt, txtlen );
+            gtk_text_insert( GTK_TEXT(m_text), fnt, colFg, colBg, txt, txtlen );
         }
         else // no style
         {
@@ -1057,6 +1059,8 @@ bool wxTextCtrl::SetFont( const wxFont &font )
     if ( m_windowStyle & wxTE_MULTILINE )
     {
         m_updateFont = TRUE;
+
+        m_defaultStyle.SetFont(font);
 
         ChangeFontGlobally();
     }
