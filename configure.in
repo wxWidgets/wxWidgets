@@ -19,7 +19,7 @@ dnl ---------------------------------------------------------------------------
 dnl call WX_PATH_FIND_INCLUDES(search path, header name), sets ac_find_includes
 dnl to the full name of the file that was found or leaves it empty if not found
 dnl ---------------------------------------------------------------------------
-AC_DEFUN(WX_PATH_FIND_INCLUDES,
+AC_DEFUN([WX_PATH_FIND_INCLUDES],
 [
 ac_find_includes=
 for ac_dir in $1;
@@ -35,7 +35,7 @@ dnl ---------------------------------------------------------------------------
 dnl call WX_PATH_FIND_LIBRARIES(search path, header name), sets ac_find_libraries
 dnl to the full name of the file that was found or leaves it empty if not found
 dnl ---------------------------------------------------------------------------
-AC_DEFUN(WX_PATH_FIND_LIBRARIES,
+AC_DEFUN([WX_PATH_FIND_LIBRARIES],
 [
 ac_find_libraries=
 for ac_dir in $1;
@@ -52,7 +52,7 @@ for ac_dir in $1;
 dnl ---------------------------------------------------------------------------
 dnl Path to include, already defined
 dnl ---------------------------------------------------------------------------
-AC_DEFUN(WX_INCLUDE_PATH_EXIST,
+AC_DEFUN([WX_INCLUDE_PATH_EXIST],
 [
   ac_path_to_include=$1
   echo "$2" | grep "\-I$1" > /dev/null
@@ -67,7 +67,7 @@ AC_DEFUN(WX_INCLUDE_PATH_EXIST,
 dnl ---------------------------------------------------------------------------
 dnl Path to link, already defined
 dnl ---------------------------------------------------------------------------
-AC_DEFUN(WX_LINK_PATH_EXIST,
+AC_DEFUN([WX_LINK_PATH_EXIST],
 [
   echo "$2" | grep "\-L$1" > /dev/null
   result=$?
@@ -90,7 +90,7 @@ dnl
 dnl call WX_CPP_NEW_HEADERS(actiof-if-true, action-if-false-or-cross-compiling)
 dnl ---------------------------------------------------------------------------
 
-AC_DEFUN(WX_CPP_NEW_HEADERS,
+AC_DEFUN([WX_CPP_NEW_HEADERS],
 [
   if test "$cross_compiling" = "yes"; then
     ifelse([$2], , :, [$2])
@@ -116,7 +116,7 @@ dnl
 dnl call WX_CPP_BOOL - will define HAVE_BOOL if the compiler supports bool
 dnl ---------------------------------------------------------------------------
 
-AC_DEFUN(WX_CPP_BOOL,
+AC_DEFUN([WX_CPP_BOOL],
 [
   AC_CACHE_CHECK([if C++ compiler supports bool], wx_cv_cpp_bool,
   [
@@ -151,8 +151,8 @@ dnl ---------------------------------------------------------------------------
 dnl a slightly better AC_C_BIGENDIAN macro which allows cross-compiling
 dnl ---------------------------------------------------------------------------
 
-AC_DEFUN(WX_C_BIGENDIAN,
-[AC_CACHE_CHECK(whether byte ordering is bigendian, ac_cv_c_bigendian,
+AC_DEFUN([WX_C_BIGENDIAN],
+[AC_CACHE_CHECK([whether byte ordering is bigendian], ac_cv_c_bigendian,
 [ac_cv_c_bigendian=unknown
 # See if sys/param.h defines the BYTE_ORDER macro.
 AC_TRY_COMPILE([#include <sys/types.h>
@@ -175,7 +175,7 @@ AC_TRY_RUN([main () {
   } u;
   u.l = 1;
   exit (u.c[sizeof (long) - 1] == 1);
-}], ac_cv_c_bigendian=no, ac_cv_c_bigendian=yes, ac_cv_c_bigendian=unknown)
+}], [ac_cv_c_bigendian=no], [ac_cv_c_bigendian=yes], [ac_cv_c_bigendian=unknown])
 fi])
 if test $ac_cv_c_bigendian = unknown; then
   AC_MSG_WARN([Assuming little-endian target machine - this may be overriden by adding the line "ac_cv_c_bigendian=${ac_cv_c_bigendian='yes'}" to config.cache file])
@@ -189,7 +189,7 @@ dnl ---------------------------------------------------------------------------
 dnl override AC_ARG_ENABLE/WITH to cache the results in .cache file
 dnl ---------------------------------------------------------------------------
 
-AC_DEFUN(WX_ARG_CACHE_INIT,
+AC_DEFUN([WX_ARG_CACHE_INIT],
         [
           wx_arg_cache_file="configarg.cache"
           echo "loading argument cache $wx_arg_cache_file"
@@ -198,7 +198,7 @@ AC_DEFUN(WX_ARG_CACHE_INIT,
           touch ${wx_arg_cache_file}
         ])
 
-AC_DEFUN(WX_ARG_CACHE_FLUSH,
+AC_DEFUN([WX_ARG_CACHE_FLUSH],
         [
           echo "saving argument cache $wx_arg_cache_file"
           mv ${wx_arg_cache_file}.tmp ${wx_arg_cache_file}
@@ -207,7 +207,7 @@ AC_DEFUN(WX_ARG_CACHE_FLUSH,
 dnl this macro checks for a three-valued command line --with argument:
 dnl   possible arguments are 'yes', 'no', 'sys', or 'builtin'
 dnl usage: WX_ARG_SYS_WITH(option, helpmessage, variable-name)
-AC_DEFUN(WX_ARG_SYS_WITH,
+AC_DEFUN([WX_ARG_SYS_WITH],
         [
           AC_MSG_CHECKING([for --with-$1])
           no_cache=0
@@ -246,9 +246,9 @@ AC_DEFUN(WX_ARG_SYS_WITH,
           elif test "$$3" = no; then
             AC_MSG_RESULT(no)
           elif test "$$3" = sys; then
-            AC_MSG_RESULT(system version)
+            AC_MSG_RESULT([system version])
           elif test "$$3" = builtin; then
-            AC_MSG_RESULT(builtin version)
+            AC_MSG_RESULT([builtin version])
           else
             AC_MSG_ERROR([Invalid value for --with-$1: should be yes, no, sys, or builtin])
           fi
@@ -256,7 +256,7 @@ AC_DEFUN(WX_ARG_SYS_WITH,
 
 dnl this macro checks for a command line argument and caches the result
 dnl usage: WX_ARG_WITH(option, helpmessage, variable-name)
-AC_DEFUN(WX_ARG_WITH,
+AC_DEFUN([WX_ARG_WITH],
         [
           AC_MSG_CHECKING([for --with-$1])
           no_cache=0
@@ -293,7 +293,7 @@ AC_DEFUN(WX_ARG_WITH,
 
 dnl like WX_ARG_WITH but uses AC_ARG_ENABLE instead of AC_ARG_WITH
 dnl usage: WX_ARG_ENABLE(option, helpmessage, variable-name)
-AC_DEFUN(WX_ARG_ENABLE,
+AC_DEFUN([WX_ARG_ENABLE],
         [
           AC_MSG_CHECKING([for --enable-$1])
           no_cache=0
@@ -333,7 +333,7 @@ dnl initialization
 dnl ---------------------------------------------------------------------------
 
 dnl the file passed to AC_INIT should be specific to our package
-AC_INIT(wx-config.in)
+AC_INIT([wx-config.in])
 
 dnl sets build, host, target variables and the same with _alias
 AC_CANONICAL_SYSTEM
@@ -608,7 +608,7 @@ fi
 
 dnl check for glibc version
 if test "$USE_LINUX" = 1; then
-    AC_CACHE_CHECK([for glibc 2.1 or later], wx_lib_glibc21,
+    AC_CACHE_CHECK([for glibc 2.1 or later], wx_lib_glibc21,[
         AC_TRY_COMPILE([#include <features.h>],
             [
                 #if !__GLIBC_PREREQ(2, 1)
@@ -622,7 +622,7 @@ if test "$USE_LINUX" = 1; then
                 wx_lib_glibc21=no
             ]
         )
-    )
+    ])
     if test "$wx_lib_glibc21" = "yes"; then
         AC_DEFINE(wxHAVE_GLIBC2)
     fi
@@ -800,6 +800,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_TIPWINDOW=no
 
   DEFAULT_wxUSE_UNICODE=no
+  DEFAULT_wxUSE_UNICODE_MSLU=no
   DEFAULT_wxUSE_WCSRTOMBS=no
 
   DEFAULT_wxUSE_PALETTE=no
@@ -964,6 +965,7 @@ else
   DEFAULT_wxUSE_TIPWINDOW=yes
 
   DEFAULT_wxUSE_UNICODE=no
+  DEFAULT_wxUSE_UNICODE_MSLU=yes
   DEFAULT_wxUSE_WCSRTOMBS=no
 
   DEFAULT_wxUSE_PALETTE=yes
@@ -1097,6 +1099,7 @@ WX_ARG_ENABLE(textbuf,       [  --enable-textbuf        use wxTextBuffer class],
 WX_ARG_ENABLE(textfile,      [  --enable-textfile       use wxTextFile class], wxUSE_TEXTFILE)
 WX_ARG_ENABLE(fontmap,       [  --enable-fontmap        use font encodings conversion classes], wxUSE_FONTMAP)
 WX_ARG_ENABLE(unicode,       [  --enable-unicode        compile wxString with Unicode support], wxUSE_UNICODE)
+WX_ARG_ENABLE(mslu,          [  --enable-mslu           use MS Layer for Unicode on Windows 9x (win32 only)], wxUSE_UNICODE_MSLU)
 WX_ARG_ENABLE(wxprintfv,     [  --enable-wxprintfv      use wxWindows implementation of vprintf()], wxUSE_EXPERIMENTAL_PRINTF)
 WX_ARG_ENABLE(std_iostreams, [  --enable-std_iostreams  use standard C++ stream classes], wxUSE_STD_IOSTREAM)
 WX_ARG_ENABLE(filesystem,    [  --enable-filesystem     use virtual file systems classes], wxUSE_FILESYSTEM)
@@ -1937,7 +1940,7 @@ if test "$USE_WIN32" = 1 ; then
 
     dnl add extra odbc libs if we have compiled in odbc
     if test "$wxUSE_ODBC" = "yes" ; then
-        LIBS=" -lodbc32 -lole32 -loleaut32$LIBS"
+        LIBS=" -lodbc32 -lole32 -loleaut32 $LIBS"
     fi
 
     RESFLAGS="--include-dir \$(top_srcdir)/include --include-dir \$(top_srcdir)/\$(program_dir) --define __WIN32__ --define __WIN95__ --define __GNUWIN32__"
@@ -4118,6 +4121,18 @@ fi
 
 if test "$wxUSE_UNICODE" = "yes" ; then
   AC_DEFINE(wxUSE_UNICODE)
+
+  if test "$wxUSE_MSW" = 1 -a "$wxUSE_UNICODE_MSLU" = "yes"; then
+        AC_CHECK_LIB(unicows,main,
+            [
+                AC_DEFINE(wxUSE_UNICODE_MSLU)
+            ],
+            [
+                AC_MSG_WARN([Compiler doesn't support MSLU (libunicows.a), disabled.
+                             Applications will only run on Windows NT/2000/XP!])
+                wxUSE_UNICODE_MSLU=no
+            ])
+    fi
 fi
 
 if test "$wxUSE_wxUSE_EXPERIMENTAL_PRINTF" = "yes"; then
@@ -4652,6 +4667,11 @@ fi
 
 if test "$wxUSE_XPM" = "yes" ; then
   AC_DEFINE(wxUSE_XPM)
+fi
+
+if test "$wxUSE_UNICODE" = "yes" -a "$wxUSE_UNICODE_MSLU" = "yes" ; then
+  dnl Must be done this late because -lunicows must be before all the other libs
+  LIBS=" -lunicows $LIBS"
 fi
 
 dnl ---------------------------------------------------------------------------
