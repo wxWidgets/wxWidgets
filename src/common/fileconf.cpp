@@ -677,7 +677,7 @@ void wxFileConfig::Parse(wxTextBuffer& buffer, bool bLocal)
         pEnd++;
       }
 
-      wxString strKey(FilterInEntryName(wxString(pStart, pEnd)));
+      wxString strKey(FilterInEntryName(wxString(pStart, pEnd).Trim()));
 
       // skip whitespace
       while ( wxIsspace(*pEnd) )
