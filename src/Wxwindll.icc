@@ -9,7 +9,7 @@ option ProjectOptions = lang(longlong, "yes"),  gen(manglelinkagekeywordonlyfunc
                         link(defaultlibsname, "..\\lib\\os2xpm.lib"),
                         link(defaultlibsname, "..\\lib\\os2jpeg.lib"),
                         link(defaultlibsname, "..\\lib\\os2zlib.lib"),
-                        link(defaultlibsname, "..\\lib\\os2tifd.lib"),
+                        link(defaultlibsname, "..\\lib\\os2tiff.lib"),
                         link(defaultlibsname, "NETAPI32.LIB"),
                         link(defaultlibsname, "UPM32.LIB"),
                         link(defaultlibsname, "TCP32DLL.LIB"),
