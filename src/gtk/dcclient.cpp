@@ -1133,17 +1133,31 @@ void wxWindowDC::SetPen( const wxPen &pen )
     GdkCapStyle capStyle = GDK_CAP_ROUND;
     switch (m_pen.GetCap())
     {
-        case wxCAP_ROUND:      { capStyle = (width <= 1) ? GDK_CAP_NOT_LAST : GDK_CAP_ROUND; break; }
         case wxCAP_PROJECTING: { capStyle = GDK_CAP_PROJECTING; break; }
         case wxCAP_BUTT:       { capStyle = GDK_CAP_BUTT;       break; }
+        case wxCAP_ROUND:
+        default:
+        { 
+            if (width <= 1)
+            {
+                width = 0;
+                capStyle = GDK_CAP_NOT_LAST;
+            }
+            else
+            {
+                capStyle = GDK_CAP_ROUND;
+            }
+            break; 
+        }
     }
 
     GdkJoinStyle joinStyle = GDK_JOIN_ROUND;
     switch (m_pen.GetJoin())
     {
         case wxJOIN_BEVEL: { joinStyle = GDK_JOIN_BEVEL; break; }
-        case wxJOIN_ROUND: { joinStyle = GDK_JOIN_ROUND; break; }
         case wxJOIN_MITER: { joinStyle = GDK_JOIN_MITER; break; }
+        case wxJOIN_ROUND:
+        default:           { joinStyle = GDK_JOIN_ROUND; break; }
     }
 
     gdk_gc_set_line_attributes( m_penGC, width, lineStyle, capStyle, joinStyle );

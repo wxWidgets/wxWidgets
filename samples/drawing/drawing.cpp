@@ -584,15 +584,20 @@ void MyCanvas::DrawDefault(wxDC& dc)
     memdc.DrawRectangle(0,0,20,70);
     memdc.DrawLine( 10,0,10,70 );
     
+    // to the right
+    memdc.SetPen(*wxRED_PEN);
     memdc.DrawLine( 10, 5,10, 5 );
     memdc.DrawLine( 10,10,11,10 );
     memdc.DrawLine( 10,15,12,15 );
     memdc.DrawLine( 10,20,13,20 );
     
+/*
+    memdc.SetPen(*wxRED_PEN);
     memdc.DrawLine( 12, 5,12, 5 );
     memdc.DrawLine( 12,10,13,10 );
     memdc.DrawLine( 12,15,14,15 );
     memdc.DrawLine( 12,20,15,20 );
+*/
     
     // same to the left
     memdc.DrawLine( 10,25,10,25 );
@@ -601,6 +606,7 @@ void MyCanvas::DrawDefault(wxDC& dc)
     memdc.DrawLine( 10,40, 7,40 );
 
     // XOR draw lines
+    dc.SetPen(*wxWHITE_PEN);
     memdc.SetLogicalFunction( wxINVERT );
     memdc.SetPen( *wxWHITE_PEN );
     memdc.DrawLine( 10,50,10,50 );
