@@ -865,7 +865,7 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& event)
                 Contact->whereStr += Contact->qryWhereStr;
             }
             // Close the expression with a right paren
-            // Contact->whereStr += ")";
+            Contact->whereStr += ")";
             // Requery the table
             Contact->where = (char*) (const char*) Contact->whereStr;
             if (!Contact->Query())
@@ -1650,6 +1650,11 @@ CqueryDlg::CqueryDlg(wxWindow *parent, wxDB *pDb, char *tblName[], char *pWhereA
 }  // CqueryDlg() constructor
 
 
+CqueryDlg::~CqueryDlg()
+{
+}  // CqueryDlg::~CqueryDlg() destructor
+
+
 void CqueryDlg::OnButton( wxCommandEvent &event )
 {
   wxWindow *win = (wxWindow*) event.GetEventObject();
@@ -1887,6 +1892,7 @@ void CqueryDlg::OnCloseWindow(wxCloseEvent& event)
     while (wxIsBusy())
         wxEndBusyCursor();
 
+	 Show(FALSE);
     this->Destroy();
 
 }  // CqueryDlg::OnCloseWindow()
@@ -2025,7 +2031,10 @@ void CqueryDlg::ProcessCountBtn()
     }
 
     // Count() with WHERE clause
-    dbTable->where = (char*) (const char*) pQuerySqlWhereMtxt->GetValue();
+	 wxString whereStr;
+
+    whereStr = pQuerySqlWhereMtxt->GetValue();
+	 dbTable->where = (char *)whereStr.GetData();
     ULONG whereCnt = dbTable->Count();
 
     // Count() of all records in the table

@@ -346,6 +346,7 @@ class CqueryDlg : public wxDialog
         wxTextCtrl                 *pFocusTxt;
 
         CqueryDlg(wxWindow *parent, wxDB *pDb, char *tblName[], char *pWhereArg);
+        ~CqueryDlg();
 
         void        OnButton( wxCommandEvent &event );
         void        OnCommand(wxWindow& win, wxCommandEvent& event);
