@@ -1323,9 +1323,9 @@ GSocketError GAddress_INET_SetHostAddress(GAddress *address,
 
 struct service_entry 
 {
-	char * name ;
+	const char * name ;
 	unsigned short port ;
-	char * protocol ; 
+	const char * protocol ; 
 } ;
 typedef struct service_entry service_entry ;
 
