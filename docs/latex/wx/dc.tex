@@ -336,6 +336,24 @@ Draw an icon on the display (does nothing if the device context is PostScript).
 This can be the simplest way of drawing bitmaps on a window.
 
 
+\membersection{wxDC::DrawLabel}\label{wxdcdrawlabel}
+
+\func{virtual void}{DrawLabel}{\param{const wxString\&}{ text},
+                               \param{const wxBitmap\&}{ image},
+                               \param{const wxRect\&}{ rect},
+                               \param{int}{ alignment = wxALIGN_LEFT | wxALIGN_TOP},
+                               \param{int}{ indexAccel = -1},
+                               \param{wxRect *}{rectBounding = NULL}}
+
+\func{void}{DrawLabel}{\param{const wxString\&}{ text}, \param{const wxRect\&}{ rect},
+                       \param{int}{ alignment = wxALIGN_LEFT | wxALIGN_TOP},
+                       \param{int}{ indexAccel = -1}}
+
+Draw optional bitmap and the text into the given rectangle and aligns it as specified
+by alignment parameter; it also will emphasize the character with the given index if
+it is != -1 and return the bounding rectangle if required.
+
+
 \membersection{wxDC::DrawLine}\label{wxdcdrawline}
 
 \func{void}{DrawLine}{\param{wxCoord}{ x1}, \param{wxCoord}{ y1}, \param{wxCoord}{ x2}, \param{wxCoord}{ y2}}
