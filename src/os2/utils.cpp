@@ -24,7 +24,11 @@
 #include "wx/intl.h"
 
 #include <ctype.h>
+#ifdef __EMX__
+#include <dirent.h>
+#else
 #include <direct.h>
+#endif
 
 #include "wx/log.h"
 
@@ -41,9 +45,11 @@
 #define INCL_GPI
 #include <os2.h>
 #define PURE_32
+#ifndef __EMX__
 #include <upm.h>
 #include <netcons.h>
 #include <netbios.h>
+#endif
 
 static const wxChar WX_SECTION[] = _T("wxWindows");
 static const wxChar eHOSTNAME[]  = _T("HostName");
@@ -104,10 +110,12 @@ bool wxGetUserId(
 , int                               nType
 )
 {
+#ifndef __EMX__
     long                            lrc;
     // UPM procs return 0 on success
     lrc = U32ELOCU((unsigned char*)zBuf, (unsigned long *)&nType);
     if (lrc == 0) return TRUE;
+#endif
     return FALSE;
 }
 
@@ -624,6 +632,7 @@ wxChar* wxGetUserHome (
     wxString                        sUser1(rUser);
 
     wxBuffer = new wxChar[256];
+#ifndef __EMX__
     if (sUser1 != _T(""))
     {
         wxChar                      zTmp[64];
@@ -645,6 +654,7 @@ wxChar* wxGetUserHome (
                 sUser1 = _T("");
         }
     }
+#endif
     if (sUser1 == _T(""))
     {
         if ((zHome = wxGetenv(_T("HOME"))) != NULL)
