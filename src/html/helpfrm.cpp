@@ -21,12 +21,20 @@
 #pragma hdrstop
 #endif
 
-#include "wx/defs.h"
-
 #if wxUSE_HTML && wxUSE_STREAMS
+
 #ifndef WXPRECOMP
-#include "wx/wx.h"
-#endif
+    #include "wx/intl.h"
+    #include "wx/log.h"
+
+    #include "wx/object.h"
+    #include "wx/layout.h"
+    #include "wx/sizer.h"
+
+    #include "wx/bmpbuttn.h"
+    #include "wx/statbox.h"
+    #include "wx/radiobox.h"
+#endif // WXPRECOMP
 
 #include "wx/html/helpfrm.h"
 #include "wx/html/helpctrl.h"

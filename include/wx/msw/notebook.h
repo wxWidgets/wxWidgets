@@ -48,8 +48,6 @@ public:
               const wxSize& size = wxDefaultSize,
               long style = 0,
               const wxString& name = "notebook");
-    // dtor
-  ~wxNotebook();
 
   // accessors
   // ---------
@@ -74,7 +72,6 @@ public:
   // 3) set for each page it's image
     // associate image list with a control
   void SetImageList(wxImageList* imageList);
-  void AssignImageList(wxImageList* imageList);
 
     // sets/returns item's image index in the current image list
   int  GetPageImage(int nPage) const;
@@ -135,8 +132,6 @@ protected:
 
   // helper functions
   void ChangePage(int nOldSel, int nSel); // change pages
-
-  bool m_bOwnsImageList;
 
   int m_nSelection;           // the current selection (-1 if none)
 

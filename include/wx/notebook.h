@@ -12,6 +12,10 @@
 #ifndef _WX_NOTEBOOK_H_BASE_
 #define _WX_NOTEBOOK_H_BASE_
 
+#ifdef __GNUG__
+    #pragma interface "notebookbase.h"
+#endif
+
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
@@ -46,7 +50,7 @@ public:
     // ctor
     wxNotebookBase()
     {
-        m_imageList = NULL;
+        Init();
     }
 
     // quasi ctor
@@ -56,6 +60,9 @@ public:
                 const wxSize& size = wxDefaultSize,
                 long style = 0,
                 const wxString& name = wxNOTEBOOK_NAME);
+
+    // dtor
+    virtual ~wxNotebookBase();
 
     // accessors
     // ---------
@@ -75,10 +82,10 @@ public:
 
     // image list stuff: each page may have an image associated with it (all
     // images belong to the same image list)
-    virtual void SetImageList(wxImageList* imageList)
-    {
-        m_imageList = imageList;
-    }
+    virtual void SetImageList(wxImageList* imageList);
+
+    // as SetImageList() but we will delete the image list ourselves
+    void AssignImageList(wxImageList* imageList);
 
     // get pointer (may be NULL) to the associated image list
     wxImageList* GetImageList() const { return m_imageList; }
@@ -101,33 +108,13 @@ public:
     virtual void SetTabSize(const wxSize& sz) = 0;
 
     // calculate the size of the notebook from the size of its page
-    virtual wxSize CalcSizeFromPage(const wxSize& sizePage)
-    {
-        // this was just taken from wxNotebookSizer::CalcMin() and is, of
-        // course, totally bogus - just like the original code was
-        wxSize sizeTotal = sizePage;
-        if ( HasFlag(wxNB_LEFT) || HasFlag(wxNB_RIGHT) )
-            sizeTotal.x += 90;
-        else
-            sizeTotal.y += 40;
-
-        return sizeTotal;
-    }
+    virtual wxSize CalcSizeFromPage(const wxSize& sizePage);
 
     // operations
     // ----------
 
     // remove one page from the notebook and delete it
-    virtual bool DeletePage(int nPage)
-    {
-        wxNotebookPage *page = DoRemovePage(nPage);
-        if ( !page )
-            return FALSE;
-
-        delete page;
-
-        return TRUE;
-    }
+    virtual bool DeletePage(int nPage);
 
     // remove one page from the notebook, without deleting it
     virtual bool RemovePage(int nPage) { return DoRemovePage(nPage) != NULL; }
@@ -170,32 +157,15 @@ protected:
     // remove the page and return a pointer to it
     virtual wxNotebookPage *DoRemovePage(int page) = 0;
 
+    // common part of all ctors
+    void Init();
+
     // get the next page wrapping if we reached the end
-    int GetNextPage(bool forward) const
-    {
-        int nPage;
+    int GetNextPage(bool forward) const;
 
-        int nMax = GetPageCount();
-        if ( nMax-- ) // decrement it to get the last valid index
-        {
-            int nSel = GetSelection();
-
-            // change selection wrapping if it becomes invalid
-            nPage = forward ? nSel == nMax ? 0
-                                           : nSel + 1
-                            : nSel == 0 ? nMax
-                                        : nSel - 1;
-        }
-        else // notebook is empty, no next page
-        {
-            nPage = -1;
-        }
-
-        return nPage;
-    }
-
-    wxImageList  *m_imageList; // we can have an associated image list
-    wxArrayPages  m_pages;     // array of pages
+    wxArrayPages  m_pages;      // array of pages
+    wxImageList  *m_imageList;  // we can have an associated image list
+    bool m_ownsImageList;       // true if we must delete m_imageList
 };
 
 // ----------------------------------------------------------------------------

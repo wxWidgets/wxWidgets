@@ -110,7 +110,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxNotebookEvent, wxNotifyEvent)
 // common part of all ctors
 void wxNotebook::Init()
 {
-  m_bOwnsImageList = FALSE;
   m_imageList = NULL;
   m_nSelection = -1;
 }
@@ -193,16 +192,10 @@ bool wxNotebook::Create(wxWindow *parent,
   return TRUE;
 }
 
-// dtor
-wxNotebook::~wxNotebook()
-{
-  if (m_bOwnsImageList)
-      delete m_imageList;
-}
-
 // ----------------------------------------------------------------------------
 // wxNotebook accessors
 // ----------------------------------------------------------------------------
+
 int wxNotebook::GetPageCount() const
 {
   // consistency check
@@ -276,21 +269,12 @@ bool wxNotebook::SetPageImage(int nPage, int nImage)
 
 void wxNotebook::SetImageList(wxImageList* imageList)
 {
-  if ( m_bOwnsImageList )
+  wxNotebookBase::SetImageList(imageList);
+
+  if ( imageList )
   {
-      delete m_imageList;
+    TabCtrl_SetImageList(m_hwnd, (HIMAGELIST)imageList->GetHIMAGELIST());
   }
-
-  m_bOwnsImageList = FALSE;
-  m_imageList = imageList;
-
-  TabCtrl_SetImageList(m_hwnd, (HIMAGELIST)imageList->GetHIMAGELIST());
-}
-
-void wxNotebook::AssignImageList(wxImageList* imageList)
-{
-  SetImageList(imageList);
-  m_bOwnsImageList = TRUE;
 }
 
 // ----------------------------------------------------------------------------

@@ -21,6 +21,9 @@
 
 class wxGtkNotebookPage;
 
+#include "wx/list.h"
+WX_DECLARE_LIST(wxGtkNotebookPage, wxGtkNotebookPagesList);
+
 //-----------------------------------------------------------------------------
 // wxNotebook
 //-----------------------------------------------------------------------------
@@ -45,7 +48,7 @@ public:
               long style = 0,
               const wxString& name = "notebook");
       // dtor
-    ~wxNotebook();
+    virtual ~wxNotebook();
 
   // accessors
   // ---------
@@ -60,15 +63,6 @@ public:
     // set/get the title of a page
   bool SetPageText(int nPage, const wxString& strText);
   wxString GetPageText(int nPage) const;
-
-  // image list stuff: each page may have an image associated with it. All
-  // the images belong to an image list, so you have to
-  // 1) create an image list
-  // 2) associate it with the notebook
-  // 3) set for each page it's image
-    // associate image list with a control
-  void SetImageList(wxImageList* imageList);
-  void AssignImageList(wxImageList* imageList);
 
     // sets/returns item's image index in the current image list
   int  GetPageImage(int nPage) const;
@@ -91,10 +85,6 @@ public:
 
     // adds a new page to the notebook (it will be deleted ny the notebook,
     // don't delete it yourself). If bSelect, this page becomes active.
-    bool AddPage( wxNotebookPage *win,
-                  const wxString& strText,
-                  bool select = FALSE,
-                  int imageId = -1 );
     // the same as AddPage(), but adds it at the specified position
     bool InsertPage( int position,
                      wxNotebookPage *win,
@@ -125,12 +115,12 @@ public:
     // helper function
     wxGtkNotebookPage* GetNotebookPage(int page) const;
 
-    bool            m_ownsImageList;
-    wxList          m_pages;
+    // the additional page data (the pages themselves are in m_pages array)
+    wxGtkNotebookPagesList m_pagesData;
 
     // for reasons explained in gtk/notebook.cpp we store the current
     // selection internally instead of querying the notebook for it
-    int             m_selection;
+    int m_selection;
 
 protected:
     // remove one page from the notebook but do not destroy it

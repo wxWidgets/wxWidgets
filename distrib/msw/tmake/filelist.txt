@@ -184,6 +184,7 @@ menucmn.cpp	C
 mimecmn.cpp	C	32,B
 module.cpp	C	B
 mstream.cpp	C	B
+nbkbase.cpp	C
 object.cpp	C	B
 objstrm.cpp	C	B
 odbc.cpp	C	R,X,P
