@@ -502,7 +502,7 @@ void wxSplitterWindow::DrawSash(wxDC& dc)
                                 m_sashPosition,
                                 m_splitMode == wxSPLIT_VERTICAL ? wxVERTICAL
                                                                 : wxHORIZONTAL,
-                                m_isHot ? wxCONTROL_CURRENT : 0
+                                m_isHot ? (int)wxCONTROL_CURRENT : 0
                             );
 }
 
@@ -711,7 +711,7 @@ void wxSplitterWindow::Initialize(wxWindow *window)
 
     if (! window->IsShown())
         window->Show();
-    
+
     m_windowOne = window;
     m_windowTwo = (wxWindow *) NULL;
     DoSetSashPosition(0);
@@ -737,7 +737,7 @@ bool wxSplitterWindow::DoSplit(wxSplitMode mode,
         window1->Show();
     if (! window2->IsShown())
         window2->Show();
-    
+
     m_splitMode = mode;
     m_windowOne = window1;
     m_windowTwo = window2;

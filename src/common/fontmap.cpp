@@ -226,7 +226,7 @@ wxFontMapper::CharsetToEncoding(const wxString& charset, bool interactive)
 
             // remember the alt encoding for this charset -- or remember that
             // we don't know it
-            long value = n == -1 ? wxFONTENCODING_UNKNOWN : (long)encoding;
+            long value = n == -1 ? (long)wxFONTENCODING_UNKNOWN : (long)encoding;
             if ( !config->Write(charset, value) )
             {
                 wxLogError(_("Failed to remember the encoding for the charset '%s'."), charset.c_str());

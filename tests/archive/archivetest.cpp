@@ -231,7 +231,7 @@ size_t TestOutputStream::OnSysWrite(const void *buffer, size_t size)
     wxCHECK(newsize > m_pos, 0);
 
     if (m_capacity < newsize) {
-        size_t capacity = m_capacity ? m_capacity : INITIAL_SIZE;
+        size_t capacity = m_capacity ? m_capacity : (size_t)INITIAL_SIZE;
 
         while (capacity < newsize) {
             capacity <<= 1;
@@ -306,7 +306,8 @@ private:
 };
 
 TestInputStream::TestInputStream(const TestInputStream& in)
-  : m_options(in.m_options),
+  : wxInputStream(),
+    m_options(in.m_options),
     m_pos(in.m_pos),
     m_size(in.m_size)
 {
@@ -635,7 +636,7 @@ ArchiveTestCase<Classes>::ArchiveTestCase(
 {
     wxASSERT(m_factory.get() != NULL);
 }
-    
+
 template <class Classes>
 ArchiveTestCase<Classes>::~ArchiveTestCase()
 {
@@ -682,7 +683,7 @@ void ArchiveTestCase<Classes>::runTest()
         ExtractArchive(in);
     else
         ExtractArchive(in, m_unarchiver);
-    
+
     // check that all the test entries were found in the archive
     CPPUNIT_ASSERT(m_testEntries.empty());
 }
@@ -1060,7 +1061,7 @@ void ArchiveTestCase<Classes>::ExtractArchive(wxInputStream& in,
         wxFileName fn(tmpdir.GetName());
         fn.SetExt(_T("arc"));
         wxString tmparc = fn.GetFullPath();
-        
+
         if (m_options & Stub)
             in.SeekI(TestOutputStream::STUB_SIZE * 2);
 
@@ -1370,13 +1371,13 @@ public:
 
 protected:
     void OnCreateArchive(wxZipOutputStream& zip);
-    
+
     void OnArchiveExtracted(wxZipInputStream& zip, int expectedTotal);
-    
+
     void OnCreateEntry(wxZipOutputStream& zip,
                        TestEntry& testEntry,
                        wxZipEntry *entry);
-    
+
     void OnEntryExtracted(wxZipEntry& entry,
                           const TestEntry& testEntry,
                           wxZipInputStream *arc);
@@ -1602,7 +1603,7 @@ ArchiveTestSuite *ArchiveTestSuite::makeSuite()
                     if ((options & PipeOut) && !j->empty())
                         continue;
 #endif
-                    string name = Description(_T("wxZip"), options, 
+                    string name = Description(_T("wxZip"), options,
                                               genInterface != 0, *j, *i);
 
                     if (genInterface)
@@ -1639,7 +1640,7 @@ string ArchiveTestSuite::Description(const wxString& type,
 {
     wxString descr;
     descr << m_id << _T(" ");
-    
+
     if (genericInterface)
         descr << _T("wxArchive (") << type << _T(")");
     else
@@ -1649,7 +1650,7 @@ string ArchiveTestSuite::Description(const wxString& type,
         descr << _T(" ") << archiver.BeforeFirst(_T(' '));
     if (!unarchiver.empty())
         descr << _T(" ") << unarchiver.BeforeFirst(_T(' '));
-    
+
     wxString optstr;
 
     if ((options & PipeIn) != 0)
