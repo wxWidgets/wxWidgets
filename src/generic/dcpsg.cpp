@@ -1337,7 +1337,7 @@ void wxPostScriptDC::EndDoc ()
     *m_pstream << "%!PS-Adobe-2.0\n";   /* PostScript magic strings */
     *m_pstream << "%%Title: " << m_title.mb_str() << "\n";
     *m_pstream << "%%Creator: " << wxTheApp->argv[0] << "\n";
-    *m_pstream << "%%CreationDate: " << wxNow() << "\n";
+    *m_pstream << "%%CreationDate: " << wxNow().mb_str() << "\n";
 
     wxChar userID[256];
     if ( wxGetEmailAddress(userID, sizeof(userID)) )
