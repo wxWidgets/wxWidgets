@@ -20,7 +20,8 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#if wxUSE_TREECTRL
+// Not defined in setup.h so removing for now
+// #if wxUSE_TREECTRL
 
 #include "wx/control.h"
 #include "wx/event.h"
@@ -282,7 +283,7 @@ typedef void (wxEvtHandler::*wxTreeEventFunction)(wxTreeEvent&);
 #define EVT_TREE_ITEM_RIGHT_CLICK(id, fn) { wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTreeEventFunction) & fn, NULL },
 #define EVT_TREE_ITEM_MIDDLE_CLICK(id, fn) { wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTreeEventFunction) & fn, NULL },
 
-#endif // wxUSE_TREECTRL
+// #endif // wxUSE_TREECTRL
 
 #endif
     // _WX_TREEBASE_H_
