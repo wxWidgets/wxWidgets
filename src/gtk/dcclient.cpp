@@ -1159,7 +1159,7 @@ int wxWindowDC::GetDepth() const
     return -1;
 }
 
-#if wxUSE_SPLINE
+#if wxUSE_SPLINES
 // ----------------------------------- spline code ----------------------------------------
 
 void wx_quadratic_spline(double a1, double b1, double a2, double b2,
