@@ -290,6 +290,14 @@ void wxFrameBase::OnMenuHighlight(wxMenuEvent& event)
 #endif // wxUSE_STATUSBAR
 }
 
+bool wxFrameBase::SendIconizeEvent(bool iconized)
+{
+    wxIconizeEvent event(GetId(), iconized);
+    event.SetEventObject(this);
+
+    return GetEventHandler()->ProcessEvent(event);
+}
+
 // ----------------------------------------------------------------------------
 // status bar stuff
 // ----------------------------------------------------------------------------

@@ -332,7 +332,7 @@ gtk_frame_map_callback( GtkWidget * WXUNUSED(widget),
                         GdkEvent * WXUNUSED(event),
                         wxFrame *win )
 {
-    win->m_isIconized = FALSE;
+    win->SetIconizeState(FALSE);
 }
 
 //-----------------------------------------------------------------------------
@@ -344,7 +344,7 @@ gtk_frame_unmap_callback( GtkWidget * WXUNUSED(widget),
                           GdkEvent * WXUNUSED(event),
                           wxFrame *win )
 {
-    win->m_isIconized = TRUE;
+    win->SetIconizeState(TRUE);
 }
 
 //-----------------------------------------------------------------------------
@@ -356,8 +356,8 @@ static int gtk_window_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_ev
     GtkPizza *pizza = GTK_PIZZA(widget);
 
     gtk_paint_flat_box (win->m_widget->style, pizza->bin_window, GTK_STATE_NORMAL,
-		GTK_SHADOW_NONE, &gdk_event->area, win->m_widget, "base", 0, 0, -1, -1);
-        
+                GTK_SHADOW_NONE, &gdk_event->area, win->m_widget, "base", 0, 0, -1, -1);
+
     return TRUE;
 }
 
@@ -370,8 +370,8 @@ static void gtk_window_draw_callback( GtkWidget *widget, GdkRectangle *rect, wxW
 {
     GtkPizza *pizza = GTK_PIZZA(widget);
 
-    gtk_paint_flat_box (win->m_widget->style, pizza->bin_window, GTK_STATE_NORMAL, 
-		GTK_SHADOW_NONE, rect, win->m_widget, "base", 0, 0, -1, -1);
+    gtk_paint_flat_box (win->m_widget->style, pizza->bin_window, GTK_STATE_NORMAL,
+                GTK_SHADOW_NONE, rect, win->m_widget, "base", 0, 0, -1, -1);
 }
 
 // ----------------------------------------------------------------------------
@@ -448,7 +448,7 @@ void wxFrame::Init()
     m_toolBarDetached = FALSE;
     m_insertInClientArea = TRUE;
     m_isFrame = TRUE;
-    m_isIconized = FALSE;
+    m_isIconized = TRUE;
     m_fsIsShowing = FALSE;
     m_themeEnabled = TRUE;
 }
@@ -489,7 +489,7 @@ bool wxFrame::Create( wxWindow *parent,
     m_insertCallback = (wxInsertChildFunction) wxInsertChildInFrame;
 
     GtkWindowType win_type = GTK_WINDOW_TOPLEVEL;
-    
+
     if (style & wxFRAME_TOOL_WINDOW)
         win_type = GTK_WINDOW_POPUP;
 
@@ -537,7 +537,7 @@ bool wxFrame::Create( wxWindow *parent,
 #endif
 
     /* we donm't allow the frame to get the focus as otherwise
-       the frame will grabit at arbitrary fcous changes. */
+       the frame will grab it at arbitrary focus changes. */
     GTK_WIDGET_UNSET_FLAGS( m_wxwindow, GTK_CAN_FOCUS );
 
     if (m_parent) m_parent->AddChild( this );
@@ -601,24 +601,24 @@ bool wxFrame::ShowFullScreen(bool show, long style )
     if (show == m_fsIsShowing) return FALSE; // return what?
 
     m_fsIsShowing = show;
-    
+
     if (show)
     {
         m_fsSaveStyle = m_windowStyle;
         m_fsSaveFlag = style;
         GetPosition( &m_fsSaveFrame.x, &m_fsSaveFrame.y );
         GetSize( &m_fsSaveFrame.width, &m_fsSaveFrame.height );
-        
+
         gtk_widget_hide( m_widget );
         gtk_widget_unrealize( m_widget );
-        
+
         m_windowStyle = wxSIMPLE_BORDER;
-        
+
         int x;
         int y;
         wxDisplaySize( &x, &y );
         SetSize( 0, 0, x, y );
-        
+
         gtk_widget_realize( m_widget );
         gtk_widget_show( m_widget );
     }
@@ -626,15 +626,15 @@ bool wxFrame::ShowFullScreen(bool show, long style )
     {
         gtk_widget_hide( m_widget );
         gtk_widget_unrealize( m_widget );
-    
+
         m_windowStyle = m_fsSaveStyle;
-        
+
         SetSize( m_fsSaveFrame.x, m_fsSaveFrame.y, m_fsSaveFrame.width, m_fsSaveFrame.height );
-        
+
         gtk_widget_realize( m_widget );
         gtk_widget_show( m_widget );
     }
-    
+
     return TRUE;
 }
 
@@ -1216,3 +1216,19 @@ bool wxFrame::IsIconized() const
 {
     return m_isIconized;
 }
+
+void wxFrame::SetIconizeState(bool iconize)
+{
+    if ( iconize != m_isIconized )
+    {
+        m_isIconized = iconize;
+        (void)SendIconizeEvent(iconize);
+    }
+    else
+    {
+        // this is not supposed to happen if we're called only from
+        // gtk_frame_(un)map_callback!
+        wxFAIL_MSG( _T("unexpected call to SendIconizeEvent ignored") );
+    }
+}
+

@@ -99,12 +99,15 @@ public:
     // --------------------------
 
     // move the window to the specified location and resize it: this is called
-    // from both DoSetSize() and DoSetClientSize() 
+    // from both DoSetSize() and DoSetClientSize()
     virtual void DoMoveWindow(int x, int y, int width, int height);
-    
+
     // GTK callbacks
     virtual void GtkOnSize( int x, int y, int width, int height );
     virtual void OnInternalIdle();
+
+    // do *not* call this to iconize the frame, this is a private function!
+    void SetIconizeState(bool iconic);
 
     wxString      m_title;
     int           m_miniEdge,
@@ -113,8 +116,6 @@ public:
     bool          m_menuBarDetached;
     bool          m_toolBarDetached;
     bool          m_insertInClientArea;  /* not from within OnCreateXXX */
-
-    bool          m_isIconized;
 
     bool          m_fsIsShowing;         /* full screen */
     long          m_fsSaveStyle;
@@ -132,6 +133,9 @@ protected:
 
     virtual void DoSetClientSize(int width, int height);
     virtual void DoGetClientSize( int *width, int *height ) const;
+
+    // is the frame currently iconized?
+    bool          m_isIconized;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxFrame)

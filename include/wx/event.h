@@ -1043,10 +1043,7 @@ protected:
 
 class WXDLLEXPORT wxShowEvent : public wxEvent
 {
-    DECLARE_DYNAMIC_CLASS(wxShowEvent)
-
 public:
-
     wxShowEvent(int id = 0, bool show = FALSE)
         { m_eventType = wxEVT_SHOW; m_id = id; m_show = show; }
 
@@ -1057,6 +1054,8 @@ public:
 
 protected:
     bool m_show;
+
+    DECLARE_DYNAMIC_CLASS(wxShowEvent)
 };
 
 /*
@@ -1065,11 +1064,17 @@ protected:
 
 class WXDLLEXPORT wxIconizeEvent : public wxEvent
 {
-    DECLARE_DYNAMIC_CLASS(wxIconizeEvent)
-
 public:
-    wxIconizeEvent(int id = 0)
-        { m_eventType = wxEVT_ICONIZE; m_id = id; }
+    wxIconizeEvent(int id = 0, bool iconized = TRUE)
+        { m_eventType = wxEVT_ICONIZE; m_id = id; m_iconized = iconized; }
+
+    // return true if the frame was iconized, false if restored
+    bool Iconized() const { return m_iconized; }
+
+protected:
+    bool m_iconized;
+
+    DECLARE_DYNAMIC_CLASS(wxIconizeEvent)
 };
 
 /*
@@ -1078,11 +1083,11 @@ public:
 
 class WXDLLEXPORT wxMaximizeEvent : public wxEvent
 {
-    DECLARE_DYNAMIC_CLASS(wxMaximizeEvent)
-
 public:
-  wxMaximizeEvent(int id = 0)
-      { m_eventType = wxEVT_MAXIMIZE; m_id = id; }
+    wxMaximizeEvent(int id = 0)
+        { m_eventType = wxEVT_MAXIMIZE; m_id = id; }
+
+    DECLARE_DYNAMIC_CLASS(wxMaximizeEvent)
 };
 
 // Joystick event class

@@ -1,3 +1,18 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        sizeevt.tex
+%% Purpose:     wxSizeEvent and related event classes documentation
+%% Author:      wxWindows team
+%% Modified by:
+%% Created:
+%% RCS-ID:      $Id$
+%% Copyright:   (c) wxWindows team
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% wxSizeEvent
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{\class{wxSizeEvent}}\label{wxsizeevent}
 
 A size event holds information about size change events.
@@ -23,7 +38,8 @@ function that takes a wxSizeEvent argument.
 
 \wxheading{See also}
 
-\helpref{wxWindow::OnSize}{wxwindowonsize}, \helpref{wxSize}{wxsize}, \helpref{Event handling overview}{eventhandlingoverview}
+\helpref{wxSize}{wxsize},\rtfsp
+\helpref{Event handling overview}{eventhandlingoverview}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
@@ -38,4 +54,95 @@ Constructor.
 \constfunc{wxSize}{GetSize}{\void}
 
 Returns the entire size of the window generating the size change event.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% wxIconizeEvent
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxIconizeEvent}}\label{wxiconizeevent}
+
+An event being sent when the frame is iconized (minimized) or restored.
+
+Currently only wxMSW and wxGTK generate such events.
+
+\wxheading{Derived from}
+
+\helpref{wxEvent}{wxevent}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/event.h>
+
+\wxheading{Event table macros}
+
+To process an iconize event, use this event handler macro to direct input to a
+member function that takes a wxIconizeEvent argument.
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_ICONIZE(func)}}{Process a wxEVT\_ICONIZE event.}
+\end{twocollist}%
+
+\wxheading{See also}
+
+\helpref{Event handling overview}{eventhandlingoverview},\rtfsp
+\helpref{wxFrame::Iconize}{wxframeiconize},\rtfsp
+\helpref{wxFrame::IsIconized}{wxframeisiconized}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxIconizeEvent::wxIconizeEvent}\label{wxiconizeeventctor}
+
+\func{}{wxIconizeEvent}{\param{int }{id = 0}, \param{bool }{iconized = TRUE}}
+
+Constructor.
+
+\membersection{wxIconizeEvent::Iconized}\label{wxiconizeeventiconized}
+
+\constfunc{bool}{Iconized}{\void}
+
+Returns {\tt TRUE} if the frame has been iconized, {\tt FALSE} if it has been
+restored.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% wxMaximizeEvent
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxMaximizeEvent}}\label{wxmaximizeevent}
+
+An event being sent when the frame is maximized (minimized) or restored.
+
+\wxheading{Derived from}
+
+\helpref{wxEvent}{wxevent}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/event.h>
+
+\wxheading{Event table macros}
+
+To process a maximize event, use this event handler macro to direct input to a
+member function that takes a wxMaximizeEvent argument.
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf EVT\_MAXIMIZE(func)}}{Process a wxEVT\_MAXIMIZE event.}
+\end{twocollist}%
+
+\wxheading{See also}
+
+\helpref{Event handling overview}{eventhandlingoverview},\rtfsp
+\helpref{wxFrame::Maximize}{wxframemaximize},\rtfsp
+\helpref{wxFrame::IsMaximized}{wxframeismaximized}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxMaximizeEvent::wxMaximizeEvent}\label{wxmaximizeeventctor}
+
+\func{}{wxMaximizeEvent}{\param{int }{id = 0}}
+
+Constructor.
 

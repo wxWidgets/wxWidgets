@@ -215,6 +215,9 @@ protected:
     virtual void DoClientToScreen(int *x, int *y) const;
     virtual void DoScreenToClient(int *x, int *y) const;
 
+    // send the iconize event, return TRUE if processed
+    bool SendIconizeEvent(bool iconized = TRUE);
+
     // the frame icon
     wxIcon m_icon;
 

@@ -260,22 +260,20 @@ void wxFrame::DoSetClientSize(int width, int height)
 
 void wxFrame::DoGetSize(int *width, int *height) const
 {
-  RECT rect;
-  GetWindowRect(GetHwnd(), &rect);
-  *width = rect.right - rect.left;
-  *height = rect.bottom - rect.top;
+    RECT rect;
+    ::GetWindowRect(GetHwnd(), &rect);
+
+    *width = rect.right - rect.left;
+    *height = rect.bottom - rect.top;
 }
 
 void wxFrame::DoGetPosition(int *x, int *y) const
 {
-  RECT rect;
-  GetWindowRect(GetHwnd(), &rect);
-  POINT point;
-  point.x = rect.left;
-  point.y = rect.top;
+    RECT rect;
+    ::GetWindowRect(GetHwnd(), &rect);
 
-  *x = point.x;
-  *y = point.y;
+    *x = rect.left;
+    *y = rect.top;
 }
 
 // ----------------------------------------------------------------------------
@@ -976,6 +974,8 @@ bool wxFrame::HandleSize(int x, int y, WXUINT id)
             // restore all child frames too
             IconizeChildFrames(FALSE);
 
+            (void)SendIconizeEvent(FALSE);
+
             // fall through
 
         case SIZEFULLSCREEN:
@@ -985,6 +985,8 @@ bool wxFrame::HandleSize(int x, int y, WXUINT id)
         case SIZEICONIC:
             // iconize all child frames too
             IconizeChildFrames(TRUE);
+
+            (void)SendIconizeEvent();
 
             m_iconized = TRUE;
             break;
