@@ -44,6 +44,7 @@
         #include "wx/control.h"
         #include "wx/utils.h"
         #include "wx/dc.h"
+        #include "wx/textctrl.h"
     #endif // wxUSE_GUI
 #endif
 
