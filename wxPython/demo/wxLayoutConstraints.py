@@ -6,7 +6,7 @@ from wxPython.wx import *
 class TestLayoutConstraints(wxPanel):
     def __init__(self, parent):
         wxPanel.__init__(self, parent, -1)
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         EVT_BUTTON(self, 100, self.OnButton)
 
         self.SetBackgroundColour(wxNamedColour("MEDIUM ORCHID"))

@@ -38,7 +38,7 @@ class TestDateControl(wxPopupControl):
         # the calendar control
         txtValue = self.GetValue()
         dmy = txtValue.split('/')
-        didSet = false
+        didSet = False
         if len(dmy) == 3:
             date = self.cal.GetDate()
             d = int(dmy[0])
@@ -48,7 +48,7 @@ class TestDateControl(wxPopupControl):
                 if m >= 0 and m < 12:
                     if y > 1000:
                         self.cal.SetDate(wxDateTimeFromDMY(d,m,y))
-                        didSet = true
+                        didSet = True
         if not didSet:
             self.cal.SetDate(wxDateTime_Today())
 

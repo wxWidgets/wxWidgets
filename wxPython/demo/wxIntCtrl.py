@@ -12,11 +12,11 @@ class TestPanel( wxPanel ):
 
         self.set_min = wxCheckBox( panel, -1, "Set minimum value:" )
         self.min = wxIntCtrl( panel, size=wxSize( 50, -1 ) )
-        self.min.Enable( FALSE )
+        self.min.Enable( False )
 
         self.set_max = wxCheckBox( panel, -1, "Set maximum value:" )
         self.max = wxIntCtrl( panel, size=wxSize( 50, -1 ) )
-        self.max.Enable( FALSE )
+        self.max.Enable( False )
 
         self.limit_target = wxCheckBox( panel, -1, "Limit control" )
         self.allow_none = wxCheckBox( panel, -1, "Allow empty control" )
@@ -48,7 +48,7 @@ class TestPanel( wxPanel ):
         outer_box = wxBoxSizer( wxVERTICAL )
         outer_box.AddSizer( grid, 0, wxALIGN_CENTRE|wxALL, 20 )
 
-        panel.SetAutoLayout( true )
+        panel.SetAutoLayout( True )
         panel.SetSizer( outer_box )
         outer_box.Fit( panel )
         panel.Move( (50,50) )
@@ -169,7 +169,7 @@ Here's the API for wxIntCtrl:
     <DT><B>limited</B>
     <DD>Boolean indicating whether the control prevents values from
     exceeding the currently set minimum and maximum values (bounds).
-    If <I>false</I> and bounds are set, out-of-bounds values will
+    If <I>False</I> and bounds are set, out-of-bounds values will
     be colored with the current out-of-bounds color.
     <BR>
     <DT><B>allow_none</B>
@@ -178,7 +178,7 @@ Here's the API for wxIntCtrl:
     <BR>
     <DT><B>allow_long</B>
     <DD>Boolean indicating whether or not the control is allowed to hold
-    and return a value of type long as well as int.  If false, the
+    and return a value of type long as well as int.  If False, the
     control will be implicitly limited to have a value such that
     -sys.maxint-1 &lt;= n &lt;= sys.maxint.
     <BR>
@@ -255,7 +255,7 @@ It will return None if no upper bound is currently specified.
 <DT><B>SetBounds(min=None,max=None)</B>
 <DD>This function is a convenience function for setting the min and max
 values at the same time.  The function only applies the maximum bound
-if setting the minimum bound is successful, and returns true
+if setting the minimum bound is successful, and returns True
 only if both operations succeed.  <B><I>Note:</I></B> leaving out an argument
 will remove the corresponding bound.
 <DT><B>GetBounds()</B>
@@ -265,14 +265,14 @@ that bound is not set.
 <BR>
 <BR>
 <DT><B>IsInBounds(value=None)</B>
-<DD>Returns <I>true</I> if no value is specified and the current value
+<DD>Returns <I>True</I> if no value is specified and the current value
 of the control falls within the current bounds.  This function can also
 be called with a value to see if that value would fall within the current
 bounds of the given control.
 <BR>
 <BR>
 <DT><B>SetLimited(bool)</B>
-<DD>If called with a value of true, this function will cause the control
+<DD>If called with a value of True, this function will cause the control
 to limit the value to fall within the bounds currently specified.
 If the control's value currently exceeds the bounds, it will then
 be limited accordingly.
@@ -280,31 +280,31 @@ If called with a value of 0, this function will disable value
 limiting, but coloring of out-of-bounds values will still take
 place if bounds have been set for the control.
 <DT><B>IsLimited()</B>
-<DD>Returns <I>true</I> if the control is currently limiting the
+<DD>Returns <I>True</I> if the control is currently limiting the
 value to fall within the current bounds.
 <BR>
 <BR>
 <DT><B>SetNoneAllowed(bool)</B>
-<DD>If called with a value of true, this function will cause the control
+<DD>If called with a value of True, this function will cause the control
 to allow the value to be empty, representing a value of None.
 If called with a value of fakse, this function will prevent the value
 from being None.  If the value of the control is currently None,
 ie. the control is empty, then the value will be changed to that
 of the lower bound of the control, or 0 if no lower bound is set.
 <DT><B>IsNoneAllowed()</B>
-<DD>Returns <I>true</I> if the control currently allows its
+<DD>Returns <I>True</I> if the control currently allows its
 value to be None.
 <BR>
 <BR>
 <DT><B>SetLongAllowed(bool)</B>
-<DD>If called with a value of true, this function will cause the
+<DD>If called with a value of True, this function will cause the
 control to allow the value to be a long. If called with a value
-of false, and the value of the control is currently a long value,
+of False, and the value of the control is currently a long value,
 the value of the control will be adjusted to fall within the
 size of an integer type, at either the sys.maxint or -sys.maxint-1,
 for positive and negative values, respectively.
 <DT><B>IsLongAllowed()</B>
-<DD>Returns <I>true</I> if the control currently allows its
+<DD>Returns <I>True</I> if the control currently allows its
 value to be of type long.
 <BR>
 <BR>

@@ -57,7 +57,7 @@ class TestPanel(wxPanel):
         t4.SetInsertionPoint(0)
         t4.SetStyle(44, 47, wxTextAttr("RED", "YELLOW"))
         points = t4.GetFont().GetPointSize()  # get the current size
-        f = wxFont(points+3, wxROMAN, wxITALIC, wxBOLD, true)
+        f = wxFont(points+3, wxROMAN, wxITALIC, wxBOLD, True)
         t4.SetStyle(63, 77, wxTextAttr("BLUE", wxNullColour, f))
 
         l5 = wxStaticText(self, -1, "Test Positions")
@@ -86,7 +86,7 @@ class TestPanel(wxPanel):
         border = wxBoxSizer(wxVERTICAL)
         border.Add(sizer, 0, wxALL, 25)
         self.SetSizer(border)
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
 
 
     def EvtText(self, event):

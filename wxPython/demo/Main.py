@@ -270,8 +270,8 @@ class wxPythonDemo(wxFrame):
         EVT_ERASE_BACKGROUND(splitter, EmptyHandler)
         EVT_ERASE_BACKGROUND(splitter2, EmptyHandler)
 
-        # Prevent TreeCtrl from displaying all items after destruction when true
-        self.dying = false
+        # Prevent TreeCtrl from displaying all items after destruction when True
+        self.dying = False
 
         # Make a File menu
         self.mainmenu = wxMenuBar()
@@ -313,12 +313,14 @@ class wxPythonDemo(wxFrame):
 
         self.finddata = wxFindReplaceData()
 
-        # set the menu accellerator table...
-        aTable = wxAcceleratorTable([(wxACCEL_ALT,  ord('X'), exitID),
-                                     (wxACCEL_CTRL, ord('H'), helpID),
-                                     (wxACCEL_CTRL, ord('F'), findID),
-                                     (wxACCEL_NORMAL, WXK_F3, findnextID)])
-        self.SetAcceleratorTable(aTable)
+        if 0:
+            # This is another way to set Accelerators, in addition to
+            # using the '\t<key>' syntax in the menu items.
+            aTable = wxAcceleratorTable([(wxACCEL_ALT,  ord('X'), exitID),
+                                         (wxACCEL_CTRL, ord('H'), helpID),
+                                         (wxACCEL_CTRL, ord('F'), findID),
+                                         (wxACCEL_NORMAL, WXK_F3, findnextID)])
+            self.SetAcceleratorTable(aTable)
 
 
         # Create a TreeCtrl
@@ -393,7 +395,7 @@ class wxPythonDemo(wxFrame):
         #wxLog_SetActiveTarget(wxLogStderr())
         #wxLog_SetTraceMask(wxTraceMessages)
 
-        self.Show(true)
+        self.Show(True)
 
 
         # add the windows to the splitter and split it.
@@ -548,7 +550,7 @@ class wxPythonDemo(wxFrame):
                         wxFR_NOUPDOWN |
                         wxFR_NOMATCHCASE |
                         wxFR_NOWHOLEWORD)
-        self.finddlg.Show(true)
+        self.finddlg.Show(True)
 
     def OnFind(self, event):
         self.nb.SetSelection(1)
@@ -590,7 +592,7 @@ class wxPythonDemo(wxFrame):
 
     #---------------------------------------------
     def OnCloseWindow(self, event):
-        self.dying = true
+        self.dying = True
         self.window = None
         self.mainmenu = None
         if hasattr(self, "tbicon"):
@@ -635,9 +637,9 @@ class wxPythonDemo(wxFrame):
     #---------------------------------------------
     def OnTaskBarActivate(self, evt):
         if self.IsIconized():
-            self.Iconize(false)
+            self.Iconize(False)
         if not self.IsShown():
-            self.Show(true)
+            self.Show(True)
         self.Raise()
 
     #---------------------------------------------
@@ -688,7 +690,7 @@ class MySplashScreen(wxSplashScreen):
 
     def OnClose(self, evt):
         frame = wxPythonDemo(None, -1, "wxPython: (A Demonstration)")
-        frame.Show(true)
+        frame.Show(True)
         evt.Skip()  # Make sure the default handler runs too...
 
 
@@ -701,7 +703,7 @@ class MyApp(wxApp):
         wxInitAllImageHandlers()
         splash = MySplashScreen()
         splash.Show()
-        return true
+        return True
 
 
 

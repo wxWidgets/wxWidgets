@@ -151,7 +151,7 @@ class DragableGrid(wxGrid):
         # The second parameter means that the grid is to take ownership of the
         # table and will destroy it when done.  Otherwise you would need to keep
         # a reference to it and call it's Destroy method later.
-        self.SetTable(table, true)
+        self.SetTable(table, True)
 
         # Enable Column moving
         wxGridColMover(self)
@@ -187,7 +187,7 @@ if __name__ == '__main__':
     import sys
     app = wxPySimpleApp()
     frame = TestFrame(None, sys.stdout)
-    frame.Show(true)
+    frame.Show(True)
     app.MainLoop()
 
 #---------------------------------------------------------------------------

@@ -51,7 +51,7 @@ class RunDemoApp(wxApp):
         EVT_MENU(self, 101, self.OnButton)
         menuBar.Append(menu, "&File")
         frame.SetMenuBar(menuBar)
-        frame.Show(true)
+        frame.Show(True)
         EVT_CLOSE(frame, self.OnCloseFrame)
 
         win = self.demoModule.runTest(frame, frame, Log())
@@ -75,17 +75,17 @@ class RunDemoApp(wxApp):
                 # It was probably a dialog or something that is already
                 # gone, so we're done.
                 frame.Destroy()
-                return true
+                return True
 
         self.SetTopWindow(frame)
         self.frame = frame
         #wxLog_SetActiveTarget(wxLogStderr())
         #wxLog_SetTraceMask(wxTraceMessages)
-        return true
+        return True
 
 
     def OnButton(self, evt):
-        self.frame.Close(true)
+        self.frame.Close(True)
 
 
     def OnCloseFrame(self, evt):

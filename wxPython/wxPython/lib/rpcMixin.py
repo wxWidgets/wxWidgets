@@ -387,8 +387,8 @@ if __name__ == '__main__':
       self.frame = rpcFrame(NULL, -1, "wxPython RPCDemo", wxDefaultPosition,
                             wxSize(300,300),
                             rpcHost='localhost',rpcPort=port)
-      self.frame.Show(TRUE)
-      return TRUE
+      self.frame.Show(True)
+      return True
 
 
   def testcon(port):

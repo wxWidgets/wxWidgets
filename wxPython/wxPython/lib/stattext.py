@@ -96,7 +96,7 @@ class wxGenStaticText(wxPyControl):
 
     def AcceptsFocus(self):
         """Overridden base class virtual."""
-        return false
+        return False
 
 
     def OnPaint(self, event):

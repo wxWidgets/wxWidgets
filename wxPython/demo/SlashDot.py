@@ -201,8 +201,8 @@ class AppFrame(wxFrame):
         EVT_MENU(self, 212, self.OnViewArticle)
         self.mainmenu.Append(menu, '&View')
         menu = wxMenu()
-        menu.Append(220, '&Internal', 'Use internal text browser',TRUE)
-        menu.Check(220, true)
+        menu.Append(220, '&Internal', 'Use internal text browser',True)
+        menu.Check(220, True)
         self.UseInternal = 1;
         EVT_MENU(self, 220, self.OnBrowserInternal)
         menu.Append(222, '&Settings...', 'External browser Settings')
@@ -279,7 +279,7 @@ class AppFrame(wxFrame):
         if self.UseInternal:
             self.view = HTMLTextView(self, -1, 'slashdot.org',
                                      'http://slashdot.org')
-            self.view.Show(true)
+            self.view.Show(True)
         else:
             self.logprint(self.BrowserSettings % ('http://slashdot.org'))
             #os.system(self.BrowserSettings % ('http://slashdot.org'))
@@ -296,7 +296,7 @@ class AppFrame(wxFrame):
         url = self.url[self.current]
         if self.UseInternal:
             self.view = HTMLTextView(self, -1, url, url)
-            self.view.Show(true)
+            self.view.Show(True)
         else:
             self.logprint(self.BrowserSettings % (url))
             os.system(self.BrowserSettings % (url))
@@ -353,9 +353,9 @@ if __name__ == '__main__':
     class MyApp(wxApp):
         def OnInit(self):
             frame = AppFrame(None, -1, "Slashdot Breaking News")
-            frame.Show(true)
+            frame.Show(True)
             self.SetTopWindow(frame)
-            return true
+            return True
 
     app = MyApp(0)
     app.MainLoop()
@@ -368,7 +368,7 @@ if __name__ == '__main__':
 def runTest(frame, nb, log):
     win = AppFrame(None, -1, "Slashdot Breaking News")
     frame.otherWin = win
-    win.Show(true)
+    win.Show(True)
 
 
 overview = __doc__

@@ -18,8 +18,8 @@ class PopButton(wxPyControl):
     def __init__(self,*_args,**_kwargs):
         apply(wxPyControl.__init__,(self,) + _args,_kwargs)
 
-        self.up = true
-        self.didDown = false
+        self.up = True
+        self.didDown = False
 
         self.InitColours()
 
@@ -52,8 +52,8 @@ class PopButton(wxPyControl):
     def OnLeftDown(self, event):
         if not self.IsEnabled():
             return
-        self.didDown = true
-        self.up = false
+        self.didDown = True
+        self.up = False
         self.CaptureMouse()
         self.GetParent().textCtrl.SetFocus()
         self.Refresh()
@@ -66,9 +66,9 @@ class PopButton(wxPyControl):
             self.ReleaseMouse()
             if not self.up:
                 self.Notify()
-            self.up = true
+            self.up = True
             self.Refresh()
-            self.didDown = false
+            self.didDown = False
         event.Skip()
 
     def OnMotion(self, event):
@@ -79,11 +79,11 @@ class PopButton(wxPyControl):
                 x,y = event.GetPositionTuple()
                 w,h = self.GetClientSizeTuple()
                 if self.up and x<w and x>=0 and y<h and y>=0:
-                    self.up = false
+                    self.up = False
                     self.Refresh()
                     return
                 if not self.up and (x<0 or y<0 or x>=w or y>=h):
-                    self.up = true
+                    self.up = True
                     self.Refresh()
                     return
         event.Skip()
@@ -151,7 +151,7 @@ class wxPopupDialog(wxDialog):
     def SetContent(self,content):
         self.content = content
         self.content.Reparent(self.win)
-        self.content.Show(true)
+        self.content.Show(True)
         self.win.SetClientSize(self.content.GetSize())
         self.SetSize(self.win.GetSize())
 
@@ -221,7 +221,7 @@ class wxPopupControl(wxPyControl):
     def SetPopupContent(self,content):
         if not self.pop:
             self.content = content
-            self.content.Show(false)
+            self.content.Show(False)
         else:
             self.pop.SetContent(content)
 

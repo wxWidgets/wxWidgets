@@ -45,14 +45,14 @@ class PrintBase:
         fcolour = font["Colour"]
         return wxColour(fcolour[0], fcolour[1], fcolour[2])
 
-    def OutTextRegion(self, textout, txtdraw = TRUE):
+    def OutTextRegion(self, textout, txtdraw = True):
         textlines = textout.split('\n')
         y = copy.copy(self.y) + self.pt_space_before
         for text in textlines:
             remain = 'X'
             while remain != "":
                 vout, remain = self.SetFlow(text, self.region)
-                if self.draw == TRUE and txtdraw == TRUE:
+                if self.draw == True and txtdraw == True:
                     test_out = self.TestFull(vout)
                     if self.align == wxALIGN_LEFT:
                         self.DC.DrawText(test_out, self.indent+self.pcell_left_margin, y)
@@ -128,7 +128,7 @@ class PrintBase:
             text = text + val
         return text
 
-    def OutTextPageWidth(self, textout, y_out, align, indent, txtdraw = TRUE):
+    def OutTextPageWidth(self, textout, y_out, align, indent, txtdraw = True):
         textlines = textout.split('\n')
         y = copy.copy(y_out)
 
@@ -140,7 +140,7 @@ class PrintBase:
             remain = 'X'
             while remain != "":
                 vout, remain = self.SetFlow(text, pagew)
-                if self.draw == TRUE and txtdraw == TRUE:
+                if self.draw == True and txtdraw == True:
                     test_out = vout
                     if align == wxALIGN_LEFT:
                         self.DC.DrawText(test_out, indent, y)
@@ -355,21 +355,21 @@ class PrintTableDraw(wxScrolledWindow, PrintBase):
 
         self.data_cnt = self.page_index[self.page-1]
 
-        self.draw = TRUE
+        self.draw = True
         self.PrintHeader()
         self.PrintFooter()
         self.OutPage()
 
     def GetTotalPages(self):
         self.data_cnt = 0
-        self.draw = FALSE
+        self.draw = False
         self.page_index = [0]
 
         cnt = 0
         while 1:
             test = self.OutPage()
             self.page_index.append(self.data_cnt)
-            if  test == FALSE:
+            if  test == False:
                 break
             cnt = cnt + 1
 
@@ -383,23 +383,23 @@ class PrintTableDraw(wxScrolledWindow, PrintBase):
             if self.label != []:        # check if header defined
                 self.PrintLabel()
         else:
-            return FALSE
+            return False
 
         for val in self.data:
             try:
                 row_val = self.data[self.data_cnt]
             except:
                 self.FinishDraw()
-                return FALSE
+                return False
 
-            max_y = self.PrintRow(row_val, FALSE)       # test to see if row will fit in remaining space
+            max_y = self.PrintRow(row_val, False)       # test to see if row will fit in remaining space
             test = max_y + self.space
 
             if test > self.y_end:
                 break
 
             self.ColourRowCells(max_y-self.y+self.space)       # colour the row/column
-            max_y = self.PrintRow(row_val, TRUE)      # row fits - print text
+            max_y = self.PrintRow(row_val, True)      # row fits - print text
             self.DrawGridLine()     # top line of cell
             self.y = max_y + self.space
 
@@ -411,9 +411,9 @@ class PrintTableDraw(wxScrolledWindow, PrintBase):
         self.FinishDraw()
 
         if self.data_cnt == len(self.data):    # last value in list
-            return FALSE
+            return False
 
-        return TRUE
+        return True
 
 
     def PrintLabel(self):
@@ -431,7 +431,7 @@ class PrintTableDraw(wxScrolledWindow, PrintBase):
 
             self.align = wxALIGN_LEFT
 
-            max_out = self.OutTextRegion(vtxt, TRUE)
+            max_out = self.OutTextRegion(vtxt, True)
             if max_out > max_y:
                 max_y = max_out
             self.col = self.col + 1
@@ -440,7 +440,7 @@ class PrintTableDraw(wxScrolledWindow, PrintBase):
         self.y = max_y + self.label_space
 
     def PrintHeader(self):      # print the header array
-        if self.draw == FALSE:
+        if self.draw == False:
             return
 
         for val in self.parent.header:
@@ -457,10 +457,10 @@ class PrintTableDraw(wxScrolledWindow, PrintBase):
             else:
                 addtext = ""
 
-            self.OutTextPageWidth(text+addtext, self.pheader_margin, val["Align"], header_indent, TRUE)
+            self.OutTextPageWidth(text+addtext, self.pheader_margin, val["Align"], header_indent, True)
 
     def PrintFooter(self):      # print the header array
-        if self.draw == FALSE:
+        if self.draw == False:
             return
 
         footer_pos = self.parent.page_height * self.pheight - self.pfooter_margin + self.vertical_offset
@@ -484,7 +484,7 @@ class PrintTableDraw(wxScrolledWindow, PrintBase):
             else:
                 addtext = ""
 
-            self.OutTextPageWidth(text+addtext, footer_pos, val["Align"], footer_indent, TRUE)
+            self.OutTextPageWidth(text+addtext, footer_pos, val["Align"], footer_indent, True)
 
 
     def LabelColorRow(self, colour):
@@ -494,7 +494,7 @@ class PrintTableDraw(wxScrolledWindow, PrintBase):
         self.DC.DrawRectangle(self.column[0], self.y, self.end_x-self.column[0]+1, height)
 
     def ColourRowCells(self, height):
-        if self.draw == FALSE:
+        if self.draw == False:
             return
 
         col = 0
@@ -512,7 +512,7 @@ class PrintTableDraw(wxScrolledWindow, PrintBase):
             self.DC.DrawRectangle(start_x, self.y, width, height)
             col = col + 1
 
-    def PrintRow(self, row_val, draw = TRUE, align = wxALIGN_LEFT):
+    def PrintRow(self, row_val, draw = True, align = wxALIGN_LEFT):
         self.SetPrintFont(self.text_font)
 
         self.pt_space_before = self.text_pt_space_before   # set the point spacing
@@ -565,7 +565,7 @@ class PrintTableDraw(wxScrolledWindow, PrintBase):
         self.DrawColumns()      # draw all vertical lines
 
     def DrawGridLine(self):
-        if self.draw == TRUE:
+        if self.draw == True:
             try:
                 size = self.row_line_size[self.data_cnt]
             except:
@@ -583,7 +583,7 @@ class PrintTableDraw(wxScrolledWindow, PrintBase):
             self.DC.DrawLine(self.column[0], y_out, self.end_x, y_out)
 
     def DrawColumns(self):
-        if self.draw == TRUE:
+        if self.draw == True:
             col = 0
             for val in self.column:
                 try:
@@ -879,7 +879,7 @@ class PrintTable:
         if self.parentFrame:
             frame.SetPosition(self.preview_frame_pos)
             frame.SetSize(self.preview_frame_size)
-        frame.Show(true)
+        frame.Show(True)
 
     def Print(self):
         pdd = wxPrintDialogData()
@@ -905,7 +905,7 @@ class PrintTable:
         if self.preview is None:
             table.SetPSize(size[0]/self.page_width, size[1]/self.page_height)
             table.SetPTSize(size[0], size[1])
-            table.SetPreview(FALSE)
+            table.SetPreview(False)
         else:
             if self.preview == 1:
                 table.scale = self.scale
@@ -933,9 +933,9 @@ class PrintTable:
 
     def HasPage(self, page):
         if page <= self.page_total:
-            return true
+            return True
         else:
-            return false
+            return False
 
     def SetPage(self, page):
         self.page = page
@@ -1025,7 +1025,7 @@ class SetPrintout(wxPrintout):
             end = self.canvas.HasPage(page)
             return end
         except:
-            return true
+            return True
 
     def GetPageInfo(self):
         try:
@@ -1084,7 +1084,7 @@ class SetPrintout(wxPrintout):
         self.canvas.SetPageSize(self.psizew, self.psizeh)
 
         self.canvas.DoDrawing(dc)
-        return true
+        return True
 
 
 

@@ -109,7 +109,7 @@ class TestListCtrlPanel(wxPanel, wxColumnSorterMixin):
         # see wxPython/lib/mixins/listctrl.py
         self.itemDataMap = musicdata
         wxColumnSorterMixin.__init__(self, 3)
-        #self.SortListItems(0, true)
+        #self.SortListItems(0, True)
 
         EVT_SIZE(self, self.OnSize)
         EVT_LIST_ITEM_SELECTED(self, tID, self.OnItemSelected)

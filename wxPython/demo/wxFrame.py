@@ -16,7 +16,7 @@ class MyFrame(wxFrame):
 
 
     def OnCloseMe(self, event):
-        self.Close(true)
+        self.Close(True)
 
     def OnCloseWindow(self, event):
         self.Destroy()
@@ -27,7 +27,7 @@ def runTest(frame, nb, log):
     win = MyFrame(frame, -1, "This is a wxFrame", size=(350, 200),
                   style = wxDEFAULT_FRAME_STYLE)# |  wxFRAME_TOOL_WINDOW )
     frame.otherWin = win
-    win.Show(true)
+    win.Show(True)
 
 
 #---------------------------------------------------------------------------

@@ -84,7 +84,7 @@ class TestDialog(wxDialog):
         sizer.AddSizer(box, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5)
 
         self.SetSizer(sizer)
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         sizer.Fit(self)
 
 

@@ -14,7 +14,7 @@ class SimpleGrid(wxGrid): ##, wxGridAutoEditMixin):
         EVT_IDLE(self, self.OnIdle)
 
         self.CreateGrid(25, 25) #, wxGrid.wxGridSelectRows)
-        ##self.EnableEditing(false)
+        ##self.EnableEditing(False)
 
         # simple cell formatting
         self.SetColSize(3, 200)
@@ -26,7 +26,7 @@ class SimpleGrid(wxGrid): ##, wxGridAutoEditMixin):
         self.SetCellFont(0, 0, wxFont(12, wxROMAN, wxITALIC, wxNORMAL))
         self.SetCellTextColour(1, 1, wxRED)
         self.SetCellBackgroundColour(2, 2, wxCYAN)
-        self.SetReadOnly(3, 3, true)
+        self.SetReadOnly(3, 3, True)
 
         self.SetCellEditor(5, 0, wxGridCellNumberEditor(1,1000))
         self.SetCellValue(5, 0, "123")
@@ -224,7 +224,7 @@ if __name__ == '__main__':
     import sys
     app = wxPySimpleApp()
     frame = TestFrame(None, sys.stdout)
-    frame.Show(true)
+    frame.Show(True)
     app.MainLoop()
 
 

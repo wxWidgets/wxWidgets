@@ -428,7 +428,7 @@ if __name__ == '__main__':
 """As of this writing, printing support in wxPython is shaky at best.
 Are you sure you want to do this?""", "Danger!", wx.wxYES_NO)
             if d.ShowModal() == wx.wxID_YES:
-                psdc = wx.wxPostScriptDC("out.ps", wx.TRUE, self)
+                psdc = wx.wxPostScriptDC("out.ps", wx.True, self)
                 self.client.redraw(psdc)
 
         def OnFileExit(self, event):
@@ -454,9 +454,9 @@ Are you sure you want to do this?""", "Danger!", wx.wxYES_NO)
     class MyApp(wx.wxApp):
         def OnInit(self):
             frame = AppFrame(wx.NULL, -1, "wxPlotCanvas")
-            frame.Show(wx.TRUE)
+            frame.Show(wx.True)
             self.SetTopWindow(frame)
-            return wx.TRUE
+            return wx.True
 
 
     app = MyApp(0)

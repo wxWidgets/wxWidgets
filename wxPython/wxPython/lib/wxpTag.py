@@ -162,18 +162,18 @@ class wxpTagHandler(wxHtmlWinTagHandler):
             obj = apply(self.ctx.classObj,
                         (parent,),
                         self.ctx.kwargs)
-            obj.Show(true)
+            obj.Show(True)
 
             # add it to the HtmlWindow
             self.GetParser().GetContainer().InsertCell(wxHtmlWidgetCell(obj, self.ctx.floatWidth))
             self.ctx = None
 
-        return true
+        return True
 
 
     def HandleParamTag(self, tag):
         if not tag.HasParam('NAME'):
-            return false
+            return False
 
         name = tag.GetParam('NAME')
         value = ""
@@ -209,7 +209,7 @@ class wxpTagHandler(wxHtmlWinTagHandler):
                 pass
 
         self.ctx.kwargs[str(name)] = value
-        return false
+        return False
 
 
 #----------------------------------------------------------------------

@@ -25,7 +25,7 @@ class TestPanel( wxPanel ):
 
 
         text2 = wxStaticText( panel, 40, "A 24-hour format wxTimeCtrl:")
-        self.time24 = wxTimeCtrl( panel, 50, fmt24hr=true, name="24 hour control" )
+        self.time24 = wxTimeCtrl( panel, 50, fmt24hr=True, name="24 hour control" )
         spin2 = wxSpinButton( panel, 60, wxDefaultPosition, wxSize(-1,20), 0 )
         self.time24.BindSpinButton( spin2 )
 
@@ -69,10 +69,10 @@ class TestPanel( wxPanel ):
         try:
             from mx import DateTime
         except ImportError:
-            self.radioMx.Enable( false )
+            self.radioMx.Enable( False )
 
 
-        panel.SetAutoLayout( true )
+        panel.SetAutoLayout( True )
         panel.SetSizer( outer_box )
         outer_box.Fit( panel )
         panel.Move( (50,50) )
@@ -137,7 +137,7 @@ Here's the API for wxTimeCtrl:
          <B>value</B> = '12:00:00 AM',
          pos = wxDefaultPosition,
          size = wxDefaultSize,
-         <B>fmt24hr</B> = false,
+         <B>fmt24hr</B> = False,
          <B>spinButton</B> = None,
          <B>style</B> = wxTE_PROCESS_TAB,
          name = "time")
@@ -152,7 +152,7 @@ Here's the API for wxTimeCtrl:
     if wxDefaultSize is specified.
     <BR>
     <DT><B>fmt24hr</B>
-    <DD>If true, control will display time in 24 hour time format; if false, it will
+    <DD>If True, control will display time in 24 hour time format; if False, it will
     use 12 hour AM/PM format.  SetValue() will adjust values accordingly for the
     control, based on the format specified.
     <BR>

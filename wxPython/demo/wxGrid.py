@@ -29,7 +29,7 @@ class ButtonPanel(wxPanel):
             box.Add(btn, 0, wxALIGN_CENTER|wxALL, 15)
             EVT_BUTTON(self, k, self.OnButton)
 
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         self.SetSizer(box)
 
 
@@ -37,7 +37,7 @@ class ButtonPanel(wxPanel):
         modName = buttonDefs[evt.GetId()][0]
         module = __import__(modName)
         frame = module.TestFrame(None, self.log)
-        frame.Show(true)
+        frame.Show(True)
 
 
 #---------------------------------------------------------------------------

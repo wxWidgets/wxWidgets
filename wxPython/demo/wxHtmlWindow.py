@@ -52,9 +52,9 @@ class MyHtmlFilter(wxHtmlFilter):
     # This method decides if this filter is able to read the file
     def CanRead(self, fsfile):
         self.log.write("CanRead: %s\n" % fsfile.GetMimeType())
-        return FALSE
+        return False
 
-    # If CanRead returns true then this method is called to actually
+    # If CanRead returns True then this method is called to actually
     # read the file and return the contents.
     def ReadFile(self, fsfile):
         return ""
@@ -114,7 +114,7 @@ class TestHtmlPanel(wxPanel):
 
         self.box.Add(subbox, 0, wxGROW)
         self.SetSizer(self.box)
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
 
         # A button with this ID is created on the widget test page.
         EVT_BUTTON(self, wxID_OK, self.OnOk)

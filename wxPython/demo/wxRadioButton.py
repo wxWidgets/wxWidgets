@@ -67,7 +67,7 @@ class TestPanel( wxPanel ):
 
         for radio, text in self.group1_ctrls + self.group2_ctrls:
             radio.SetValue(0)
-            text.Enable(FALSE)
+            text.Enable(False)
 
 
     def OnGroup1Select( self, event ):
@@ -75,18 +75,18 @@ class TestPanel( wxPanel ):
         self.log.write('Group1 %s selected\n' % radio_selected.GetLabel() )
         for radio, text in self.group1_ctrls:
             if radio is radio_selected:
-                text.Enable(TRUE)
+                text.Enable(True)
             else:
-                text.Enable(FALSE)
+                text.Enable(False)
 
     def OnGroup2Select( self, event ):
         radio_selected = event.GetEventObject()
         self.log.write('Group2 %s selected\n' % radio_selected.GetLabel() )
         for radio, text in self.group2_ctrls:
             if radio is radio_selected:
-                text.Enable(TRUE)
+                text.Enable(True)
             else:
-                text.Enable(FALSE)
+                text.Enable(False)
 
 #----------------------------------------------------------------------
 

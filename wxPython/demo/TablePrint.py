@@ -31,7 +31,7 @@ class TablePanel(wxPanel):
             box.Add(btn, 0, wxALIGN_CENTER|wxALL, 15)
             EVT_BUTTON(self, k, self.OnButton)
 
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         self.SetSizer(box)
 
     def OnButton(self, evt):

@@ -58,11 +58,11 @@ class PyShellInput(wxPanel):
         tid =wxNewId()
         self.entry =wxTextCtrl(self, tid, style = wxTE_MULTILINE)
         EVT_CHAR(self.entry, self.OnChar)
-        self.entry.SetFont(wxFont(9, wxMODERN, wxNORMAL, wxNORMAL, false))
+        self.entry.SetFont(wxFont(9, wxMODERN, wxNORMAL, wxNORMAL, False))
         sizer =wxBoxSizer(wxVERTICAL)
         sizer.AddMany([(self.label, 0, wxEXPAND), (self.entry, 1, wxEXPAND)])
         self.SetSizer(sizer)
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         EVT_SET_FOCUS(self, self.OnSetFocus)
         # when in "continuation" mode,
         # two consecutive newlines are required
@@ -153,7 +153,7 @@ class PyShellOutput(wxPanel):
             self.client =self.html  # used in OnSize()
         self.text =self.intro
         self.html.SetPage(self.text)
-        self.html.SetAutoLayout(TRUE)
+        self.html.SetAutoLayout(True)
         self.line_buffer =""
         # refreshes are annoying
         self.in_batch =0
@@ -328,7 +328,7 @@ if __name__ == '__main__':
         """Demonstrates usage of both default and customized shells"""
         def OnInit(self):
             frame = MyFrame()
-            frame.Show(TRUE)
+            frame.Show(True)
             self.SetTopWindow(frame)
 ##             PyShellInput.PS1 =" let's get some work done..."
 ##             PyShellInput.PS2 =" ok, what do you really mean?"
@@ -344,8 +344,8 @@ if __name__ == '__main__':
 ##                 "<br>&lt;-- move this sash to see html debug output</I><br>\n"
 ##             PyShellOutput.html_debug =1
 ##             frame = MyFrame(title="Customized wxPython Shell")
-##             frame.Show(TRUE)
-            return TRUE
+##             frame.Show(True)
+            return True
 
     app = MyApp(0)
     app.MainLoop()

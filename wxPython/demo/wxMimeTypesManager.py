@@ -14,7 +14,7 @@ class MimeTypesTestPanel(wxPanel):
         style = wxTAB_TRAVERSAL ):
         wxPanel.__init__(self, parent, id, pos, size, style)
 
-        MakeMimeTypesTestPanel( self, true )
+        MakeMimeTypesTestPanel( self, True )
 
         # WDR: handler declarations for MimeTypesTestPanel
         EVT_LISTBOX(self, ID_LISTBOX, self.OnListbox)
@@ -34,8 +34,8 @@ class MimeTypesTestPanel(wxPanel):
     def OnListbox(self, event):
         mimetype = event.GetString()
         self.GetInputText().SetValue(mimetype)
-        self.GetMimeBtn().SetValue(TRUE)
-        self.GetExtensionBtn().SetValue(FALSE)
+        self.GetMimeBtn().SetValue(True)
+        self.GetExtensionBtn().SetValue(False)
         self.OnLookup()
 
 

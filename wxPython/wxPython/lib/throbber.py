@@ -132,9 +132,9 @@ class Throbber(wxPanel):
 
 
     def Draw(self, dc):
-        dc.DrawBitmap(self.submaps[self.sequence[self.current]], 0, 0, true)
+        dc.DrawBitmap(self.submaps[self.sequence[self.current]], 0, 0, True)
         if self.overlay and self.showOverlay:
-            dc.DrawBitmap(self.overlay, self.overlayX, self.overlayY, true)
+            dc.DrawBitmap(self.overlay, self.overlayX, self.overlayY, True)
         if self.label and self.showLabel:
             dc.DrawText(self.label, self.labelX, self.labelY)
             dc.SetTextForeground(wxWHITE)
@@ -195,7 +195,7 @@ class Throbber(wxPanel):
 
 
     def Running(self):
-        """Returns true if the animation is running"""
+        """Returns True if the animation is running"""
         return not self.event.isSet()
 
 

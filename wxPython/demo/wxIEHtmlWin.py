@@ -68,7 +68,7 @@ class TestPanel(wxWindow):
         self.location.Append(self.current)
 
         self.SetSizer(sizer)
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         EVT_SIZE(self, self.OnSize)
 
         # Hook up the event handlers for the IE window

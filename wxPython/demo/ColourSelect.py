@@ -25,7 +25,7 @@ class TestColourSelect(wxPanel):
     def __init__(self, parent, log):
         self.log = log
         wxPanel.__init__(self, parent, -1)
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         mainSizer = wxBoxSizer(wxVERTICAL)
         self.SetSizer(mainSizer)
         t = wxStaticText(self, -1,

@@ -8,7 +8,7 @@ class ClipTextPanel(wxPanel):
         wxPanel.__init__(self, parent, -1)
         self.log = log
 
-        #self.SetFont(wxFont(10, wxSWISS, wxNORMAL, wxBOLD, false))
+        #self.SetFont(wxFont(10, wxSWISS, wxNORMAL, wxBOLD, False))
 
         sizer = wxBoxSizer(wxVERTICAL)
         sizer.Add(wxStaticText(self, -1,
@@ -28,7 +28,7 @@ class ClipTextPanel(wxPanel):
         EVT_BUTTON(self, 6051, self.OnPaste)
         EVT_BUTTON(self, 6052, self.OnCopyBitmap)
 
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         self.SetSizer(sizer)
 
 
@@ -86,7 +86,7 @@ class OtherDropTarget(wxPyDropTarget):
 
     def OnDrop(self, x, y):
         self.log.WriteText("OnDrop: %d %d\n" % (x, y))
-        return true
+        return True
 
     def OnData(self, x, y, d):
         self.log.WriteText("OnData: %d, %d, %d\n" % (x, y, d))
@@ -128,7 +128,7 @@ class FileDropPanel(wxPanel):
     def __init__(self, parent, log):
         wxPanel.__init__(self, parent, -1)
 
-        #self.SetFont(wxFont(10, wxSWISS, wxNORMAL, wxBOLD, false))
+        #self.SetFont(wxFont(10, wxSWISS, wxNORMAL, wxBOLD, False))
 
         sizer = wxBoxSizer(wxVERTICAL)
         sizer.Add(wxStaticText(self, -1, " \nDrag some files here:"),
@@ -148,7 +148,7 @@ class FileDropPanel(wxPanel):
         self.text2.SetDropTarget(dt)
         sizer.Add(self.text2, 1, wxEXPAND)
 
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         self.SetSizer(sizer)
 
 
@@ -166,12 +166,12 @@ class TestPanel(wxPanel):
     def __init__(self, parent, log):
         wxPanel.__init__(self, parent, -1)
 
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         outsideSizer = wxBoxSizer(wxVERTICAL)
 
         msg = "Clipboard / Drag-And-Drop"
         text = wxStaticText(self, -1, "", style=wxALIGN_CENTRE)
-        text.SetFont(wxFont(24, wxSWISS, wxNORMAL, wxBOLD, false))
+        text.SetFont(wxFont(24, wxSWISS, wxNORMAL, wxBOLD, False))
         text.SetLabel(msg)
         w,h = text.GetTextExtent(msg)
         text.SetSize(wxSize(w,h+1))

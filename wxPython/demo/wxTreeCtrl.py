@@ -161,7 +161,7 @@ class TestTreeCtrlPanel(wxPanel):
         self.log.WriteText("OnSelChanged: %s\n" % self.tree.GetItemText(self.item))
         if wxPlatform == '__WXMSW__':
             self.log.WriteText("BoundingRect: %s\n" %
-                               self.tree.GetBoundingRect(self.item, true))
+                               self.tree.GetBoundingRect(self.item, True))
         #items = self.tree.GetSelections()
         #print map(self.tree.GetItemText, items)
         event.Skip()

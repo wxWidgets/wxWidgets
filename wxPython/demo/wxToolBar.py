@@ -101,7 +101,7 @@ class TestToolBar(wxFrame):
 def runTest(frame, nb, log):
     win = TestToolBar(frame, log)
     frame.otherWin = win
-    win.Show(true)
+    win.Show(True)
 
 #---------------------------------------------------------------------------
 

@@ -276,10 +276,10 @@ class wxPythonRExec (rexec.RExec):
 class wxPyNonFatalErrorDialogWithTraceback(wxDialog):
     this_exception = 0
     populate_function = populate_wxPyNonFatalErrorDialogWithTraceback
-    no_continue_button = false
-    fatal = false
-    modal = true
-    exitjustreturns = false # really only for testing!
+    no_continue_button = False
+    fatal = False
+    modal = True
+    exitjustreturns = False # really only for testing!
 
     def __init__(self, parent, id,
                  pos=wxPyDefaultPosition,
@@ -293,7 +293,7 @@ class wxPyNonFatalErrorDialogWithTraceback(wxDialog):
                  caption="Python error!",
                  versionname=None,
                  errorname=None,
-                 disable_exit_button=false):
+                 disable_exit_button=False):
 
         if self.fatal:
             whetherNF = ""
@@ -309,7 +309,7 @@ class wxPyNonFatalErrorDialogWithTraceback(wxDialog):
 
         wxDialog.__init__(self, parent, id, title, pos, size, style)
 
-        self.topsizer = self.populate_function( false,true )
+        self.topsizer = self.populate_function( False,True )
 
         self.SetProgramName(programname)
         self.SetVersion(version)
@@ -332,10 +332,10 @@ class wxPyNonFatalErrorDialogWithTraceback(wxDialog):
         if not disable_mail_button:
             EVT_BUTTON(self, wxPyError_ID_MAIL, self.OnMail)
         else:
-            self.GetMailButton().Enable(false)
+            self.GetMailButton().Enable(False)
         # disable the entry box for an e-mail address by default (NOT PROPERLY DOCUMENTED)
         if not hasattr(self,"enable_mail_address_box"):
-            self.FindWindowById(wxPyError_ID_ADDRESS).Enable(false)
+            self.FindWindowById(wxPyError_ID_ADDRESS).Enable(False)
         if not disable_exit_button:
             EVT_BUTTON(self, wxPyError_ID_EXIT, self.OnExit)
 
@@ -415,7 +415,7 @@ class wxPyNonFatalErrorDialogWithTraceback(wxDialog):
             self.sizerAroundText.SetItemMinSize (c,w,h)
             c.SetSize ((w,h))
             c.SetSizeHints (w,h,w,h)
-            c.Refresh()#.SetAutoLayout(FALSE)
+            c.Refresh()#.SetAutoLayout(False)
 
             #^ the reason we need the above seems to be to replace the
             #faulty GetBestSize of wxTextCtrl...
@@ -503,7 +503,7 @@ class wxPyNonFatalErrorDialogWithTraceback(wxDialog):
             if self.modal:
                 self.ShowModal()
             else:
-                self.Show(true)
+                self.Show(True)
 
           except:
               if not locals().has_key("c"):
@@ -654,8 +654,8 @@ class wxPyNonFatalErrorDialogWithTraceback(wxDialog):
 
 class wxPyFatalErrorDialogWithTraceback(wxPyNonFatalErrorDialogWithTraceback):
     populate_function = populate_wxPyFatalErrorDialogWithTraceback
-    no_continue_button = true
-    fatal = true
+    no_continue_button = True
+    fatal = True
 
 class wxPyNonFatalErrorDialog(wxPyNonFatalErrorDialogWithTraceback):
     populate_function = populate_wxPyNonFatalErrorDialog
@@ -719,7 +719,7 @@ def _writehtmlmessage(mailto,subject,html,text=None,parent=None,mailfrom=None):
 
 def _createhtmlmail (html, text, subject, to=None, mailfrom=None):
     """Create a mime-message that will render HTML in popular
-       MUAs, text in better ones (if indeed text is not untrue (e.g. None)
+       MUAs, text in better ones (if indeed text is not unTrue (e.g. None)
        """
     import MimeWriter, mimetools, cStringIO
 
@@ -849,7 +849,7 @@ def wxPyFatalOrNonFatalError(parent,
     else:
         populate_function = populate_wxPyNonFatalError
 
-    sizer = populate_function(dlg,false,true)
+    sizer = populate_function(dlg,False,True)
 
     window = dlg.FindWindowById(wxPyError_ID_HTML)
     window.SetPage(msg)
@@ -875,5 +875,5 @@ def wxPyFatalOrNonFatalError(parent,
         dlg.Destroy()
         return v
     else:
-        dlg.Show(true)
+        dlg.Show(True)
 

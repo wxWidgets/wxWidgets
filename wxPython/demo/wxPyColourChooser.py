@@ -12,7 +12,7 @@ class TestColourChooser(wxPanel):
         sizer = wxBoxSizer(wxVERTICAL)
         sizer.Add(chooser, 0, wxALL, 25)
 
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         self.SetSizer(sizer)
 
 #---------------------------------------------------------------

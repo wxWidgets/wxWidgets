@@ -267,7 +267,7 @@ class EventManager:
 
     def __haveMessageAdapter(self, eventHandler, topicPattern):
         """
-        Return true if there's already a message adapter
+        Return True if there's already a message adapter
         with these specs.
         """
         try:
@@ -325,7 +325,7 @@ class EventMacroInfo:
 
     def eventIsA(self, event, macroList):
         """
-        Return true if the event is one of the given
+        Return True if the event is one of the given
         macros.
         """
         eventType = event.GetEventType()
@@ -337,7 +337,7 @@ class EventMacroInfo:
 
     def macroIsA(self, macro, macroList):
         """
-        Return true if the macro is in the macroList.
+        Return True if the macro is in the macroList.
         The added value of this method is that it takes
         multi-events into account.  The macroList parameter
         will be coerced into a sequence if needed.
@@ -348,7 +348,7 @@ class EventMacroInfo:
         eventList = []
         for m in macroList:
             eventList.extend(self.getEventTypes(m))
-        # Return true if every element in testList is in eventList
+        # Return True if every element in testList is in eventList
         for element in testList:
             if element not in eventList:
                 return 0
@@ -357,7 +357,7 @@ class EventMacroInfo:
 
     def isMultiEvent(self, macro):
         """
-        Return true if the given macro actually causes
+        Return True if the given macro actually causes
         multiple events to be registered.
         """
         return len(self.getEventTypes(macro)) > 1

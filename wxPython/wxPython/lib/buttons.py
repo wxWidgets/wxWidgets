@@ -36,7 +36,7 @@ import imageutils
 class wxGenButtonEvent(wxPyCommandEvent):
     def __init__(self, eventType, ID):
         wxPyCommandEvent.__init__(self, eventType, ID)
-        self.isDown = false
+        self.isDown = False
         self.theButton = None
 
     def SetIsDown(self, isDown):
@@ -65,10 +65,10 @@ class wxGenButton(wxPyControl):
             style = wxNO_BORDER
         wxPyControl.__init__(self, parent, ID, pos, size, style, validator, name)
 
-        self.up = true
+        self.up = True
         self.bezelWidth = 2
-        self.hasFocus = false
-        self.useFocusInd = true
+        self.hasFocus = False
+        self.useFocusInd = True
 
         self.SetLabel(label)
         self.SetPosition(pos)
@@ -133,7 +133,7 @@ class wxGenButton(wxPyControl):
         return self.IsShown() and self.IsEnabled()
 
 
-    def Enable(self, enable=true):
+    def Enable(self, enable=True):
         wxPyControl.Enable(self, enable)
         self.Refresh()
 
@@ -194,7 +194,7 @@ class wxGenButton(wxPyControl):
     def _GetLabelSize(self):
         """ used internally """
         w, h = self.GetTextExtent(self.GetLabel())
-        return w, h, true
+        return w, h, True
 
 
     def Notify(self):
@@ -277,7 +277,7 @@ class wxGenButton(wxPyControl):
     def OnLeftDown(self, event):
         if not self.IsEnabled():
             return
-        self.up = false
+        self.up = False
         self.CaptureMouse()
         self.SetFocus()
         self.Refresh()
@@ -291,7 +291,7 @@ class wxGenButton(wxPyControl):
             self.ReleaseMouse()
             if not self.up:    # if the button was down when the mouse was released...
                 self.Notify()
-            self.up = true
+            self.up = True
             self.Refresh()
             event.Skip()
 
@@ -303,18 +303,18 @@ class wxGenButton(wxPyControl):
             x,y = event.GetPositionTuple()
             w,h = self.GetClientSizeTuple()
             if self.up and x<w and x>=0 and y<h and y>=0:
-                self.up = false
+                self.up = False
                 self.Refresh()
                 return
             if not self.up and (x<0 or y<0 or x>=w or y>=h):
-                self.up = true
+                self.up = True
                 self.Refresh()
                 return
         event.Skip()
 
 
     def OnGainFocus(self, event):
-        self.hasFocus = true
+        self.hasFocus = True
         dc = wxClientDC(self)
         w, h = self.GetClientSizeTuple()
         if self.useFocusInd:
@@ -322,7 +322,7 @@ class wxGenButton(wxPyControl):
 
 
     def OnLoseFocus(self, event):
-        self.hasFocus = false
+        self.hasFocus = False
         dc = wxClientDC(self)
         w, h = self.GetClientSizeTuple()
         if self.useFocusInd:
@@ -331,14 +331,14 @@ class wxGenButton(wxPyControl):
 
     def OnKeyDown(self, event):
         if self.hasFocus and event.KeyCode() == ord(" "):
-            self.up = false
+            self.up = False
             self.Refresh()
         event.Skip()
 
 
     def OnKeyUp(self, event):
         if self.hasFocus and event.KeyCode() == ord(" "):
-            self.up = true
+            self.up = True
             self.Notify()
             self.Refresh()
         event.Skip()
@@ -375,17 +375,17 @@ class wxGenBitmapButton(wxGenButton):
     def SetBitmapFocus(self, bitmap):
         """Set bitmap to display when the button has the focus"""
         self.bmpFocus = bitmap
-        self.SetUseFocusIndicator(false)
+        self.SetUseFocusIndicator(False)
 
     def SetBitmapSelected(self, bitmap):
         """Set bitmap to display when the button is selected (pressed down)"""
         self.bmpSelected = bitmap
 
-    def SetBitmapLabel(self, bitmap, createOthers=true):
+    def SetBitmapLabel(self, bitmap, createOthers=True):
         """
         Set the bitmap to display normally.
         This is the only one that is required. If
-        createOthers is true, then the other bitmaps
+        createOthers is True, then the other bitmaps
         will be generated on the fly.  Currently,
         only the disabled bitmap is generated.
         """
@@ -399,8 +399,8 @@ class wxGenBitmapButton(wxGenButton):
     def _GetLabelSize(self):
         """ used internally """
         if not self.bmpLabel:
-            return -1, -1, false
-        return self.bmpLabel.GetWidth()+2, self.bmpLabel.GetHeight()+2, false
+            return -1, -1, False
+        return self.bmpLabel.GetWidth()+2, self.bmpLabel.GetHeight()+2, False
 
     def DrawLabel(self, dc, width, height, dw=0, dy=0):
         bmp = self.bmpLabel
@@ -433,7 +433,7 @@ class wxGenBitmapTextButton(wxGenBitmapButton):     # generic bitmapped button w
         """ used internally """
         w, h = self.GetTextExtent(self.GetLabel())
         if not self.bmpLabel:
-            return w, h, true       # if there isn't a bitmap use the size of the text
+            return w, h, True       # if there isn't a bitmap use the size of the text
 
         w_bmp = self.bmpLabel.GetWidth()+2
         h_bmp = self.bmpLabel.GetHeight()+2
@@ -442,7 +442,7 @@ class wxGenBitmapTextButton(wxGenBitmapButton):     # generic bitmapped button w
             height = h_bmp
         else:
             height = h
-        return width, height, true
+        return width, height, True
 
 
     def DrawLabel(self, dc, width, height, dw=0, dy=0):

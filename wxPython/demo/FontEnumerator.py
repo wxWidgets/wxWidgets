@@ -36,7 +36,7 @@ class TestPanel(wxPanel):
 
     def OnSelect(self, evt):
         face = self.lb1.GetStringSelection()
-        font = wxFont(28, wxDEFAULT, wxDEFAULT, wxDEFAULT, false, face)
+        font = wxFont(28, wxDEFAULT, wxDEFAULT, wxDEFAULT, False, face)
         self.txt.SetFont(font)
         self.txt.SetSize(self.txt.GetBestSize())
 

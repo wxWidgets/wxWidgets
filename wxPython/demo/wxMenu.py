@@ -151,7 +151,7 @@ check the source for this sample to see how to implement them.
 def runTest(frame, nb, log):
     win = MyFrame(frame, -1, log)
     frame.otherWin = win
-    win.Show(true)
+    win.Show(True)
 
 
 #-------------------------------------------------------------------

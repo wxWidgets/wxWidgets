@@ -95,7 +95,7 @@ class CustomDataTable(wxPyGridTableBase):
         if typeName == colType:
             return true
         else:
-            return false
+            return False
 
     def CanSetValueAs(self, row, col, typeName):
         return self.CanGetValueAs(row, col, typeName)
@@ -121,7 +121,7 @@ class CustTableGrid(wxGrid):
 
         self.SetRowLabelSize(0)
         self.SetMargins(0,0)
-        self.AutoSizeColumns(false)
+        self.AutoSizeColumns(False)
 
         EVT_GRID_CELL_LEFT_DCLICK(self, self.OnLeftDClick)
 

@@ -33,14 +33,14 @@ class MyParentFrame(wxMDIParentFrame):
 
 
     def OnExit(self, evt):
-        self.Close(true)
+        self.Close(True)
 
 
     def OnNewWindow(self, evt):
         self.winCount = self.winCount + 1
         win = wxMDIChildFrame(self, -1, "Child Window: %d" % self.winCount)
         canvas = MyCanvas(win)
-        win.Show(true)
+        win.Show(True)
 
 
     def OnEraseBackground(self, evt):
@@ -68,9 +68,9 @@ if __name__ == '__main__':
         def OnInit(self):
             wxInitAllImageHandlers()
             frame = MyParentFrame()
-            frame.Show(true)
+            frame.Show(True)
             self.SetTopWindow(frame)
-            return true
+            return True
 
 
     app = MyApp(0)

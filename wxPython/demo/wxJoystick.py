@@ -11,7 +11,7 @@ class JoystickTestPanel(wxPanel):
         style = wxTAB_TRAVERSAL ):
         wxPanel.__init__(self, parent, id, pos, size, style)
 
-        MakeJoystickTestPanel( self, true )
+        MakeJoystickTestPanel( self, True )
 
         try:
             self.stick = wxJoystick()

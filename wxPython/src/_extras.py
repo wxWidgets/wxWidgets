@@ -595,14 +595,25 @@ wxPen        = wxPyPen
 wxScrollbar  = wxScrollBar
 wxPoint2D    = wxPoint2DDouble
 
+# Use Python's bool constants if available, make aliases if not
+try:
+    True
+except NameError:
+    True = 1==1
+    False = 1==0
+
+
 # backwards compatibility
-wxNoRefBitmap       = wxBitmap
-wxPyDefaultPosition = wxDefaultPosition
-wxPyDefaultSize     = wxDefaultSize
-NULL                = None
+wxNoRefBitmap           = wxBitmap
+wxPyDefaultPosition     = wxDefaultPosition
+wxPyDefaultSize         = wxDefaultSize
+NULL                    = None
 wxSystemSettings_GetSystemColour = wxSystemSettings_GetColour
 wxSystemSettings_GetSystemFont   = wxSystemSettings_GetFont
 wxSystemSettings_GetSystemMetric = wxSystemSettings_GetMetric
+false = FALSE = False
+true = TRUE = True
+
 
 # workarounds for bad wxRTTI names
 __wxPyPtrTypeMap['wxGauge95']    = 'wxGauge'
@@ -679,8 +690,8 @@ def wxPy_isinstance(obj, klasses):
     import types
     if sys.version[:3] < "2.2" and type(klasses) in [types.TupleType, types.ListType]:
         for klass in klasses:
-            if isinstance(obj, klass): return true
-        return false
+            if isinstance(obj, klass): return True
+        return False
     else:
         return isinstance(obj, klasses)
 
@@ -770,7 +781,7 @@ class wxPyOnDemandOutputWindow:
             self.text  = wxTextCtrl(self.frame, -1, "",
                                     style = wxTE_MULTILINE|wxTE_READONLY)
             self.frame.SetSize(wxSize(450, 300))
-            self.frame.Show(true)
+            self.frame.Show(True)
             EVT_CLOSE(self.frame, self.OnCloseWindow)
         self.text.AppendText(str)
 
@@ -791,7 +802,7 @@ class wxApp(wxPyApp):
     error = 'wxApp.error'
     outputWindowClass = wxPyOnDemandOutputWindow
 
-    def __init__(self, redirect=_defRedirect, filename=None, useBestVisual=false):
+    def __init__(self, redirect=_defRedirect, filename=None, useBestVisual=False):
         wxPyApp.__init__(self)
         self.stdioWin = None
         self.saveStdio = (sys.stdout, sys.stderr)
@@ -843,7 +854,7 @@ class wxPySimpleApp(wxApp):
         wxApp.__init__(self, flag)
     def OnInit(self):
         wxInitAllImageHandlers()
-        return true
+        return True
 
 
 class wxPyWidgetTester(wxApp):
@@ -854,11 +865,11 @@ class wxPyWidgetTester(wxApp):
     def OnInit(self):
         self.frame = wxFrame(None, -1, "Widget Tester", pos=(0,0), size=self.size)
         self.SetTopWindow(self.frame)
-        return true
+        return True
 
     def SetWidget(self, widgetClass, *args):
         w = apply(widgetClass, (self.frame,) + args)
-        self.frame.Show(true)
+        self.frame.Show(True)
 
 #----------------------------------------------------------------------------
 # DO NOT hold any other references to this object.  This is how we

@@ -292,7 +292,7 @@ class MyFrame(wxFrame):
         menubar = wxMenuBar()
         menubar.Append(menu, "Game")
         menu = wxMenu()
-        #menu.Append(1010, "Internal", "Use internal dictionary", TRUE)
+        #menu.Append(1010, "Internal", "Use internal dictionary", True)
         menu.Append(1011, "ASCII File...")
         urls = [ 'wxPython home', 'http://wxPython.org/',
                  'slashdot.org', 'http://slashdot.org/',
@@ -349,7 +349,7 @@ class MyFrame(wxFrame):
 
     def OnGameDemo(self, event):
         frame = HangmanDemoFrame(self.wf, self, -1, wxDefaultPosition, self.GetSize())
-        frame.Show(TRUE)
+        frame.Show(True)
 
     def OnDictFile(self, event):
         fd = wxFileDialog(self)
@@ -433,8 +433,8 @@ class MyApp(wxApp):
         wf = WordFetcher(defaultfile)
         frame = MyFrame(None, wf)
         self.SetTopWindow(frame)
-        frame.Show(TRUE)
-        return TRUE
+        frame.Show(True)
+        return True
 
 
 
@@ -458,7 +458,7 @@ def runTest(frame, nb, log):
     wf = WordFetcher(defaultfile)
     win = MyFrame(frame, wf)
     frame.otherWin = win
-    win.Show(true)
+    win.Show(True)
 
 
 #----------------------------------------------------------------------

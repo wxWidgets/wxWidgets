@@ -189,7 +189,7 @@ class wxPyColourChooser(wxPanel):
         sizer.Add(csizer, 0, wxEXPAND)
         sizer.Add(10, 1)
         sizer.Add(vsizer, 0, wxEXPAND)
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         self.SetSizer(sizer)
         sizer.Fit(self)
 
@@ -208,10 +208,10 @@ class wxPyColourChooser(wxPanel):
         """Highlights the selected colour box and updates the solid colour
         display and colour slider to reflect the choice."""
         if hasattr(self, '_old_custom_highlight'):
-            self._old_custom_highlight.SetHighlight(false)
+            self._old_custom_highlight.SetHighlight(False)
         if hasattr(self, '_old_colour_highlight'):
-            self._old_colour_highlight.SetHighlight(false)
-        box.SetHighlight(true)
+            self._old_colour_highlight.SetHighlight(False)
+        box.SetHighlight(True)
         self._old_colour_highlight = box
         self.UpdateColour(box.GetColour())
 
@@ -219,10 +219,10 @@ class wxPyColourChooser(wxPanel):
         """Highlights the selected custom colour box and updates the solid
         colour display and colour slider to reflect the choice."""
         if hasattr(self, '_old_colour_highlight'):
-            self._old_colour_highlight.SetHighlight(false)
+            self._old_colour_highlight.SetHighlight(False)
         if hasattr(self, '_old_custom_highlight'):
-            self._old_custom_highlight.SetHighlight(false)
-        box.SetHighlight(true)
+            self._old_custom_highlight.SetHighlight(False)
+        box.SetHighlight(True)
         self._old_custom_highlight = box
         self.UpdateColour(box.GetColour())
 
@@ -281,13 +281,13 @@ def main():
             chooser = wxPyColourChooser(frame, -1)
             sizer = wxBoxSizer(wxVERTICAL)
             sizer.Add(chooser, 0, 0)
-            frame.SetAutoLayout(true)
+            frame.SetAutoLayout(True)
             frame.SetSizer(sizer)
             sizer.Fit(frame)
 
-            frame.Show(true)
+            frame.Show(True)
             self.SetTopWindow(frame)
-            return true
+            return True
     app = App()
     app.MainLoop()
 

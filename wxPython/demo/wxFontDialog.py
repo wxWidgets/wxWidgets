@@ -82,7 +82,7 @@ class TestPanel(wxPanel):
 
     def OnSelectFont(self, evt):
         data = wxFontData()
-        data.EnableEffects(true)
+        data.EnableEffects(True)
         data.SetColour(self.curClr)         # set colour
         data.SetInitialFont(self.curFont)
 

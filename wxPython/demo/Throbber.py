@@ -43,7 +43,7 @@ class TestPanel(wxPanel):
         self.throbbers['autoreverse']['throbber'] = Throbber(self, -1,
                                                              images, #size=(36, 36),
                                                              frameDelay = 0.1,
-                                                             reverse = true)
+                                                             reverse = True)
         self.throbbers['autoreverse']['throbber'].sequence.append(0)
         self.throbbers['label']['throbber'] = Throbber(self, -1,
                                                        images, #size=(36, 36),
@@ -113,7 +113,7 @@ class TestPanel(wxPanel):
                   flag = wxALIGN_CENTER)
 
         self.SetSizer(box)
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         self.Layout()
         sizer.SetSizeHints(self)
         sizer.Fit(self)

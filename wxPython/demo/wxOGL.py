@@ -112,10 +112,10 @@ class MyEvtHandler(wxShapeEvtHandler):
         canvas.PrepareDC(dc)
 
         if shape.Selected():
-            shape.Select(false, dc)
+            shape.Select(False, dc)
             canvas.Redraw(dc)
         else:
-            redraw = false
+            redraw = False
             shapeList = canvas.GetDiagram().GetShapeList()
             toUnselect = []
             for s in shapeList:
@@ -125,11 +125,11 @@ class MyEvtHandler(wxShapeEvtHandler):
                     # shapes too!) and bad things will happen...
                     toUnselect.append(s)
 
-            shape.Select(true, dc)
+            shape.Select(True, dc)
 
             if toUnselect:
                 for s in toUnselect:
-                    s.Select(false, dc)
+                    s.Select(False, dc)
                 canvas.Redraw(dc)
 
         self.UpdateStatusBar(shape)
@@ -209,7 +209,7 @@ class TestWindow(wxShapeCanvas):
             line.MakeLineControlPoints(2)
             fromShape.AddLine(line, toShape)
             self.diagram.AddShape(line)
-            line.Show(true)
+            line.Show(True)
 
             # for some reason, the shapes have to be moved for the line to show up...
             fromShape.Move(dc, fromShape.GetX(), fromShape.GetY())
@@ -218,7 +218,7 @@ class TestWindow(wxShapeCanvas):
 
 
     def MyAddShape(self, shape, x, y, pen, brush, text):
-        shape.SetDraggable(true, true)
+        shape.SetDraggable(True, True)
         shape.SetCanvas(self)
         shape.SetX(x)
         shape.SetY(y)
@@ -227,7 +227,7 @@ class TestWindow(wxShapeCanvas):
         if text:   shape.AddText(text)
         #shape.SetShadowMode(SHADOW_RIGHT)
         self.diagram.AddShape(shape)
-        shape.Show(true)
+        shape.Show(True)
 
         evthandler = MyEvtHandler(self.log, self.frame)
         evthandler.SetShape(shape)

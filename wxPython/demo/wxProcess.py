@@ -27,9 +27,9 @@ class TestPanel(wxPanel):
         self.inp = wxTextCtrl(self, -1, '', style=wxTE_PROCESS_ENTER)
         self.sndBtn = wxButton(self, -1, 'Send')
         self.termBtn = wxButton(self, -1, 'Close Stream')
-        self.inp.Enable(false)
-        self.sndBtn.Enable(false)
-        self.termBtn.Enable(false)
+        self.inp.Enable(False)
+        self.sndBtn.Enable(False)
+        self.termBtn.Enable(False)
 
         # Hook up the events
         EVT_BUTTON(self, self.exBtn.GetId(), self.OnExecuteBtn)
@@ -55,7 +55,7 @@ class TestPanel(wxPanel):
         sizer.Add(box2, 0, wxEXPAND|wxALL, 10)
 
         self.SetSizer(sizer)
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
 
 
     def __del__(self):
@@ -73,11 +73,11 @@ class TestPanel(wxPanel):
         pid = wxExecute(cmd, wxEXEC_ASYNC, self.process)
         self.log.write('OnExecuteBtn: "%s" pid: %s\n' % (cmd, pid))
 
-        self.inp.Enable(true)
-        self.sndBtn.Enable(true)
-        self.termBtn.Enable(true)
-        self.cmd.Enable(false)
-        self.exBtn.Enable(false)
+        self.inp.Enable(True)
+        self.sndBtn.Enable(True)
+        self.termBtn.Enable(True)
+        self.cmd.Enable(False)
+        self.exBtn.Enable(False)
         self.inp.SetFocus()
 
 
@@ -115,11 +115,11 @@ class TestPanel(wxPanel):
 
         self.process.Destroy()
         self.process = None
-        self.inp.Enable(false)
-        self.sndBtn.Enable(false)
-        self.termBtn.Enable(false)
-        self.cmd.Enable(true)
-        self.exBtn.Enable(true)
+        self.inp.Enable(False)
+        self.sndBtn.Enable(False)
+        self.termBtn.Enable(False)
+        self.cmd.Enable(True)
+        self.exBtn.Enable(True)
 
 
 #----------------------------------------------------------------------

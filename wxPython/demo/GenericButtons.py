@@ -28,12 +28,12 @@ class TestPanel(wxPanel):
 
         b = wxGenButton(self, -1, 'disabled')
         EVT_BUTTON(self, b.GetId(), self.OnButton)
-        b.Enable(false)
+        b.Enable(False)
         sizer.Add(b)
 
         b = wxGenButton(self, -1, 'bigger')
         EVT_BUTTON(self, b.GetId(), self.OnBiggerButton)
-        b.SetFont(wxFont(20, wxSWISS, wxNORMAL, wxBOLD, false))
+        b.SetFont(wxFont(20, wxSWISS, wxNORMAL, wxBOLD, False))
         b.SetBezelWidth(5)
         ###b.SetBestSize()
         b.SetBackgroundColour("Navy")
@@ -50,7 +50,7 @@ class TestPanel(wxPanel):
         b = wxGenBitmapButton(self, -1, bmp)
         EVT_BUTTON(self, b.GetId(), self.OnButton)
         sizer.Add(b)
-        b.Enable(FALSE)
+        b.Enable(False)
 
         b = wxGenBitmapButton(self, -1, None)
         EVT_BUTTON(self, b.GetId(), self.OnButton)
@@ -79,7 +79,7 @@ class TestPanel(wxPanel):
         mask = wxMaskColour(bmp, wxBLUE)
         bmp.SetMask(mask)
         b.SetBitmapSelected(bmp)
-        b.SetToggle(true)
+        b.SetToggle(True)
         b.SetBestSize()
         sizer.Add(b)
 
@@ -93,7 +93,7 @@ class TestPanel(wxPanel):
         mask = wxMaskColour(bmp, wxBLUE)
         bmp.SetMask(mask)
         b.SetBitmapSelected(bmp)
-        b.SetUseFocusIndicator(false)
+        b.SetUseFocusIndicator(False)
         b.SetBestSize()
         sizer.Add(b)
 

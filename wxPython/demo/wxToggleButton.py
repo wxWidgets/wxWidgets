@@ -20,7 +20,7 @@ class TestPanel(wxPanel):
             EVT_TOGGLEBUTTON(self, b.GetId(), self.OnToggle)
             buttons.Add(b, flag=wxALL, border=5)
 
-        panel.SetAutoLayout(true)
+        panel.SetAutoLayout(True)
         panel.SetSizer(buttons)
         buttons.Fit(panel)
         panel.Move((50,50))

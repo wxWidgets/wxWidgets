@@ -11,9 +11,9 @@ try:
     else:
         from xml.parsers import pyexpat
         parsermodule = pyexpat
-    haveXML = true
+    haveXML = True
 except ImportError:
-    haveXML = false
+    haveXML = False
 
 #----------------------------------------------------------------------
 

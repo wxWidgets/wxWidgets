@@ -299,7 +299,7 @@ class Topic:
     def matches(self, aTopic):
         """
         Consider myself to be a topic pattern,
-        and return true if I match the given specific
+        and return True if I match the given specific
         topic.  For example,
         a = ('sports')
         b = ('sports','baseball')
@@ -326,7 +326,7 @@ class Topic:
 
     def __eq__(self, aTopic):
         """
-        Return true if I equal the given topic.  We're considered
+        Return True if I equal the given topic.  We're considered
         equal if our tuples are equal.
         """
         if type(self) != type(aTopic):
@@ -337,7 +337,7 @@ class Topic:
 
     def __ne__(self, aTopic):
         """
-        Return false if I equal the given topic.
+        Return False if I equal the given topic.
         """
         return not self == aTopic
 

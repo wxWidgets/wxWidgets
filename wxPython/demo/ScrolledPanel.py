@@ -39,7 +39,7 @@ class ScrolledPanel(wxScrolledWindow):
 
         # The following is all that is needed to integrate the sizer and the
         # scrolled window.  In this case we will only support vertical scrolling.
-        self.EnableScrolling(false, true)
+        self.EnableScrolling(False, True)
         self.SetScrollRate(0, 20)
         box.SetVirtualSizeHints(self)
         EVT_CHILD_FOCUS(self, self.OnChildFocus)

@@ -45,7 +45,7 @@ class TestPanel(wxPanel):
         item = wxMenuItem(menu, wxNewId(), "If supported, this is bold")
         df = wxSystemSettings_GetSystemFont(wxSYS_DEFAULT_GUI_FONT)
         nf = wxFont(df.GetPointSize(), df.GetFamily(), df.GetStyle(), wxBOLD,
-                    false, df.GetFaceName())
+                    False, df.GetFaceName())
         item.SetFont(nf)
         menu.AppendItem(item)
 

@@ -474,7 +474,7 @@ class wxTimeCtrl(wxTextCtrl):
         selection = sel_start != sel_to
         _dbg('sel_start=', sel_start, 'sel_to =', sel_to)
         if not selection:
-            self.__bSelection = false                       # predict unselection of entire region
+            self.__bSelection = False                       # predict unselection of entire region
 
         _dbg('keycode = ', key)
         _dbg('pos = ', pos)
@@ -806,7 +806,7 @@ if __name__ == '__main__':
             sizer.AddWindow( self.tc, 0, wxALIGN_CENTRE|wxLEFT|wxTOP|wxBOTTOM, 5 )
             sizer.AddWindow( sb, 0, wxALIGN_CENTRE|wxRIGHT|wxTOP|wxBOTTOM, 5 )
 
-            self.SetAutoLayout( true )
+            self.SetAutoLayout( True )
             self.SetSizer( sizer )
             sizer.Fit( self )
             sizer.SetSizeHints( self )
@@ -830,11 +830,11 @@ if __name__ == '__main__':
             try:
                 frame = wxFrame(NULL, -1, "wxTimeCtrl Test", wxPoint(20,20), wxSize(100,100) )
                 panel = TestPanel(frame, -1, wxPoint(-1,-1), fmt24hr=fmt24hr, test_mx = test_mx)
-                frame.Show(true)
+                frame.Show(True)
             except:
                 traceback.print_exc()
-                return false
-            return true
+                return False
+            return True
 
     try:
         app = MyApp(0)

@@ -51,8 +51,8 @@ class PythonSTC(wxStyledTextCtrl):
         self.SetProperty("tab.timmy.whinge.level", "1")
         self.SetMargins(0,0)
 
-        self.SetViewWhiteSpace(false)
-        #self.SetBufferedDraw(false)
+        self.SetViewWhiteSpace(False)
+        #self.SetBufferedDraw(False)
 
         self.SetEdgeMode(wxSTC_EDGE_BACKGROUND)
         self.SetEdgeColumn(78)
@@ -61,7 +61,7 @@ class PythonSTC(wxStyledTextCtrl):
         #self.SetFoldFlags(16)  ###  WHAT IS THIS VALUE?  WHAT ARE THE OTHER FLAGS?  DOES IT MATTER?
         self.SetMarginType(2, wxSTC_MARGIN_SYMBOL)
         self.SetMarginMask(2, wxSTC_MASK_FOLDERS)
-        self.SetMarginSensitive(2, true)
+        self.SetMarginSensitive(2, True)
         self.SetMarginWidth(2, 12)
 
         if 0: # simple folder marks, like the old version
@@ -165,7 +165,7 @@ class PythonSTC(wxStyledTextCtrl):
                 kw.append("this_is_a_much_much_much_much_much_much_much_longer_value")
 
                 kw.sort()  # Python sorts are case sensitive
-                self.AutoCompSetIgnoreCase(false)  # so this needs to match
+                self.AutoCompSetIgnoreCase(False)  # so this needs to match
 
                 self.AutoCompShow(0, " ".join(kw))
         else:
@@ -201,9 +201,9 @@ class PythonSTC(wxStyledTextCtrl):
         else:
             self.BraceHighlight(braceAtCaret, braceOpposite)
             #pt = self.PointFromPosition(braceOpposite)
-            #self.Refresh(true, wxRect(pt.x, pt.y, 5,5))
+            #self.Refresh(True, wxRect(pt.x, pt.y, 5,5))
             #print pt
-            #self.Refresh(false)
+            #self.Refresh(False)
 
 
     def OnMarginClick(self, evt):
@@ -215,22 +215,22 @@ class PythonSTC(wxStyledTextCtrl):
                 lineClicked = self.LineFromPosition(evt.GetPosition())
                 if self.GetFoldLevel(lineClicked) & wxSTC_FOLDLEVELHEADERFLAG:
                     if evt.GetShift():
-                        self.SetFoldExpanded(lineClicked, true)
-                        self.Expand(lineClicked, true, true, 1)
+                        self.SetFoldExpanded(lineClicked, True)
+                        self.Expand(lineClicked, True, True, 1)
                     elif evt.GetControl():
                         if self.GetFoldExpanded(lineClicked):
-                            self.SetFoldExpanded(lineClicked, false)
-                            self.Expand(lineClicked, false, true, 0)
+                            self.SetFoldExpanded(lineClicked, False)
+                            self.Expand(lineClicked, False, True, 0)
                         else:
-                            self.SetFoldExpanded(lineClicked, true)
-                            self.Expand(lineClicked, true, true, 100)
+                            self.SetFoldExpanded(lineClicked, True)
+                            self.Expand(lineClicked, True, True, 100)
                     else:
                         self.ToggleFold(lineClicked)
 
 
     def FoldAll(self):
         lineCount = self.GetLineCount()
-        expanding = true
+        expanding = True
 
         # find out if we are folding or unfolding
         for lineNum in range(lineCount):
@@ -245,12 +245,12 @@ class PythonSTC(wxStyledTextCtrl):
                (level & wxSTC_FOLDLEVELNUMBERMASK) == wxSTC_FOLDLEVELBASE:
 
                 if expanding:
-                    self.SetFoldExpanded(lineNum, true)
-                    lineNum = self.Expand(lineNum, true)
+                    self.SetFoldExpanded(lineNum, True)
+                    lineNum = self.Expand(lineNum, True)
                     lineNum = lineNum - 1
                 else:
                     lastChild = self.GetLastChild(lineNum, -1)
-                    self.SetFoldExpanded(lineNum, false)
+                    self.SetFoldExpanded(lineNum, False)
                     if lastChild > lineNum:
                         self.HideLines(lineNum+1, lastChild)
 
@@ -258,7 +258,7 @@ class PythonSTC(wxStyledTextCtrl):
 
 
 
-    def Expand(self, line, doExpand, force=false, visLevels=0, level=-1):
+    def Expand(self, line, doExpand, force=False, visLevels=0, level=-1):
         lastChild = self.GetLastChild(line, level)
         line = line + 1
         while line <= lastChild:
@@ -277,16 +277,16 @@ class PythonSTC(wxStyledTextCtrl):
             if level & wxSTC_FOLDLEVELHEADERFLAG:
                 if force:
                     if visLevels > 1:
-                        self.SetFoldExpanded(line, true)
+                        self.SetFoldExpanded(line, True)
                     else:
-                        self.SetFoldExpanded(line, false)
+                        self.SetFoldExpanded(line, False)
                     line = self.Expand(line, doExpand, force, visLevels-1)
 
                 else:
                     if doExpand and self.GetFoldExpanded(line):
-                        line = self.Expand(line, true, force, visLevels-1)
+                        line = self.Expand(line, True, force, visLevels-1)
                     else:
-                        line = self.Expand(line, false, force, visLevels-1)
+                        line = self.Expand(line, False, force, visLevels-1)
             else:
                 line = line + 1;
 
@@ -306,7 +306,7 @@ def runTest(frame, nb, log):
         s = wxBoxSizer(wxHORIZONTAL)
         s.Add(ed, 1, wxEXPAND)
         p.SetSizer(s)
-        p.SetAutoLayout(true)
+        p.SetAutoLayout(True)
 
 
     ed.SetText(demoText + open('Main.py').read())

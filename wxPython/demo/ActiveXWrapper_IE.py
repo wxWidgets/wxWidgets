@@ -101,7 +101,7 @@ class TestPanel(wxWindow):
         self.location.Append(self.current)
 
         self.SetSizer(sizer)
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         EVT_SIZE(self, self.OnSize)
 
         EVT_WINDOW_DESTROY(self, self.OnDestroy)
@@ -230,7 +230,7 @@ if __name__ == '__main__':
 
     app = wxPySimpleApp()
     frame = TestFrame()
-    frame.Show(true)
+    frame.Show(True)
     app.MainLoop()
 
 

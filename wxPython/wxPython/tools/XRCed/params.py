@@ -22,15 +22,15 @@ buttonSize = (55,-1)
 class PPanel(wxPanel):
     def __init__(self, parent, name):
         wxPanel.__init__(self, parent, -1, name=name)
-        self.modified = self.freeze = false
+        self.modified = self.freeze = False
     def Enable(self, value):
         # Something strange is going on with enable so we make sure...
         for w in self.GetChildren():
             w.Enable(value)
         wxPanel.Enable(self, value)
     def SetModified(self):
-        self.modified = true
-        g.panel.SetModified(true)
+        self.modified = True
+        g.panel.SetModified(True)
     # Common method to set modified state
     def OnChange(self, evt):
         if self.freeze: return
@@ -48,7 +48,7 @@ class ParamBinaryOr(PPanel):
         sizer.Add(self.text, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 5)
         self.button = wxButton(self, self.ID_BUTTON_CHOICES, 'Edit...', size=buttonSize)
         sizer.Add(self.button, 0, wxALIGN_CENTER_VERTICAL)
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         self.SetSizer(sizer)
         sizer.Fit(self)
         EVT_BUTTON(self, self.ID_BUTTON_CHOICES, self.OnButtonChoices)
@@ -56,9 +56,9 @@ class ParamBinaryOr(PPanel):
     def GetValue(self):
         return self.text.GetValue()
     def SetValue(self, value):
-        self.freeze = true
+        self.freeze = True
         self.text.SetValue(value)
-        self.freeze = false
+        self.freeze = False
     def OnButtonChoices(self, evt):
         dlg = wxDialog(self, -1, 'Choices')
         topSizer = wxBoxSizer(wxVERTICAL)
@@ -84,7 +84,7 @@ class ParamBinaryOr(PPanel):
         sizer.Add(0, 0, 1)
         sizer.Add(wxButton(dlg, wxID_CANCEL, 'Cancel'))
         topSizer.Add(sizer, 0, wxALL | wxEXPAND, 10)
-        dlg.SetAutoLayout(true)
+        dlg.SetAutoLayout(True)
         dlg.SetSizer(topSizer)
         topSizer.Fit(dlg)
         dlg.Center()
@@ -143,23 +143,23 @@ class ParamColour(PPanel):
         sizer.Add(self.text, 0, wxRIGHT, 5)
         self.button = wxPanel(self, self.ID_BUTTON, wxDefaultPosition, wxSize(20, 20))
         sizer.Add(self.button, 0, wxGROW)
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         self.SetSizer(sizer)
         sizer.Fit(self)
-        self.textModified = false
+        self.textModified = False
         EVT_PAINT(self.button, self.OnPaintButton)
         EVT_TEXT(self, self.ID_TEXT_CTRL, self.OnChange)
         EVT_LEFT_DOWN(self.button, self.OnLeftDown)
     def GetValue(self):
         return self.text.GetValue()
     def SetValue(self, value):
-        self.freeze = true
+        self.freeze = True
         if not value: value = '#FFFFFF'
         self.text.SetValue(str(value))  # update text ctrl
         colour = wxColour(int(value[1:3], 16), int(value[3:5], 16), int(value[5:7], 16))
         self.button.SetBackgroundColour(colour)
         self.button.Refresh()
-        self.freeze = false
+        self.freeze = False
     def OnPaintButton(self, evt):
         dc = wxPaintDC(self.button)
         dc.SetBrush(wxTRANSPARENT_BRUSH)
@@ -203,15 +203,15 @@ class ParamFont(PPanel):
         sizer.Add(self.text, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 5)
         self.button = wxButton(self, self.ID_BUTTON_SELECT, 'Select...', size=buttonSize)
         sizer.Add(self.button, 0, wxALIGN_CENTER_VERTICAL)
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         self.SetSizer(sizer)
         sizer.Fit(self)
-        self.textModified = false
+        self.textModified = False
         EVT_BUTTON(self, self.ID_BUTTON_SELECT, self.OnButtonSelect)
         EVT_TEXT(self, self.ID_TEXT_CTRL, self.OnChange)
     def OnChange(self, evt):
         PPanel.OnChange(self, evt)
-        self.textModified = true
+        self.textModified = True
     def _defaultValue(self):
         return ['12', 'default', 'normal', 'normal', '0', '', '']
     def GetValue(self):
@@ -223,11 +223,11 @@ class ParamFont(PPanel):
                 return self._defaultValue()
         return self.value
     def SetValue(self, value):
-        self.freeze = true              # disable other handlers
+        self.freeze = True              # disable other handlers
         if not value: value = self._defaultValue()
         self.value = value
         self.text.SetValue(str(value))  # update text ctrl
-        self.freeze = false
+        self.freeze = False
     def OnButtonSelect(self, evt):
         if self.textModified:           # text has newer value
             try:
@@ -244,23 +244,23 @@ class ParamFont(PPanel):
         face = ''
         enc = wxFONTENCODING_DEFAULT
         # Fall back to default if exceptions
-        error = false
+        error = False
         try:
             try: size = int(self.value[0])
-            except ValueError: error = true
+            except ValueError: error = True
             try: family = fontFamiliesXml2wx[self.value[1]]
-            except KeyError: error = true
+            except KeyError: error = True
             try: style = fontStylesXml2wx[self.value[2]]
-            except KeyError: error = true
+            except KeyError: error = True
             try: weight = fontWeightsXml2wx[self.value[3]]
-            except KeyError: error = true
+            except KeyError: error = True
             try: underlined = int(self.value[4])
-            except ValueError: error = true
+            except ValueError: error = True
             face = self.value[5]
             mapper = wxFontMapper()
             if not self.value[6]: enc = mapper.CharsetToEncoding(self.value[6])
         except IndexError:
-            error = true
+            error = True
         if error: wxLogError('Invalid font specification')
         if enc == wxFONTENCODING_DEFAULT: enc = wxFONTENCODING_SYSTEM
         font = wxFont(size, family, style, weight, underlined, face, enc)
@@ -280,7 +280,7 @@ class ParamFont(PPanel):
             # Add ignored flags
             self.SetValue(value)
             self.SetModified()
-            self.textModified = false
+            self.textModified = False
         dlg.Destroy()
 
 ################################################################################
@@ -293,17 +293,17 @@ class ParamInt(PPanel):
         self.spin = wxSpinCtrl(self, self.ID_SPIN_CTRL, size=wxSize(50,-1))
         self.SetBackgroundColour(g.panel.GetBackgroundColour())
         sizer.Add(self.spin)
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         self.SetSizer(sizer)
         sizer.Fit(self)
         EVT_SPINCTRL(self, self.ID_SPIN_CTRL, self.OnChange)
     def GetValue(self):
         return str(self.spin.GetValue())
     def SetValue(self, value):
-        self.freeze = true
+        self.freeze = True
         if not value: value = 0
         self.spin.SetValue(int(value))
-        self.freeze = false
+        self.freeze = False
 
 class ParamText(PPanel):
     def __init__(self, parent, name, textWidth=260):
@@ -314,16 +314,16 @@ class ParamText(PPanel):
         self.SetBackgroundColour(g.panel.GetBackgroundColour())
         self.text = wxTextCtrl(self, self.ID_TEXT_CTRL, size=wxSize(textWidth,-1))
         sizer.Add(self.text, 0, wxALIGN_CENTER_VERTICAL)
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         self.SetSizer(sizer)
         sizer.Fit(self)
         EVT_TEXT(self, self.ID_TEXT_CTRL, self.OnChange)
     def GetValue(self):
         return self.text.GetValue()
     def SetValue(self, value):
-        self.freeze = true              # disable other handlers
+        self.freeze = True              # disable other handlers
         self.text.SetValue(value)
-        self.freeze = false             # disable other handlers
+        self.freeze = False             # disable other handlers
 
 class ParamAccel(ParamText):
     def __init__(self, parent, name):
@@ -345,7 +345,7 @@ class ContentDialog(wxDialogPtr):
         # Set list items
         for v in value:
             self.list.Append(v)
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         self.GetSizer().Fit(self)
         # Callbacks
         self.ID_BUTTON_APPEND = XMLID('BUTTON_APPEND')
@@ -398,7 +398,7 @@ class ContentCheckListDialog(wxDialogPtr):
             self.list.Append(v)
             self.list.Check(i, ch)
             i += 1
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         self.GetSizer().Fit(self)
         # Callbacks
         self.ID_BUTTON_APPEND = XMLID('BUTTON_APPEND')
@@ -455,15 +455,15 @@ class ParamContent(PPanel):
         sizer.Add(self.text, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 5)
         self.button = wxButton(self, self.ID_BUTTON_EDIT, 'Edit...', size=buttonSize)
         sizer.Add(self.button, 0, wxALIGN_CENTER_VERTICAL)
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         self.SetSizer(sizer)
         sizer.Fit(self)
-        self.textModified = false
+        self.textModified = False
         EVT_BUTTON(self, self.ID_BUTTON_EDIT, self.OnButtonEdit)
         EVT_TEXT(self, self.ID_TEXT_CTRL, self.OnChange)
     def OnChange(self, evt):
         PPanel.OnChange(self, evt)
-        self.textModified = true
+        self.textModified = True
     def GetValue(self):
         if self.textModified:           # text has newer value
             try:
@@ -473,11 +473,11 @@ class ParamContent(PPanel):
                 return []
         return self.value
     def SetValue(self, value):
-        self.freeze = true
+        self.freeze = True
         if not value: value = []
         self.value = value
         self.text.SetValue(str(value))  # update text ctrl
-        self.freeze = false
+        self.freeze = False
     def OnButtonEdit(self, evt):
         if self.textModified:           # text has newer value
             try:
@@ -493,7 +493,7 @@ class ParamContent(PPanel):
             # Add ignored flags
             self.SetValue(value)
             self.SetModified()
-            self.textModified = false
+            self.textModified = False
         dlg.Destroy()
 
 # CheckList content
@@ -515,7 +515,7 @@ class ParamContentCheckList(ParamContent):
             # Add ignored flags
             self.SetValue(value)
             self.SetModified()
-            self.textModified = false
+            self.textModified = False
         dlg.Destroy()
 
 class IntListDialog(wxDialogPtr):
@@ -533,7 +533,7 @@ class IntListDialog(wxDialogPtr):
                 wxLogError('Invalid item type')
             else:
                 self.list.Append(str(v))
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         self.GetSizer().Fit(self)
         # Callbacks
         self.ID_BUTTON_ADD = XMLID('BUTTON_ADD')
@@ -550,10 +550,10 @@ class IntListDialog(wxDialogPtr):
             i = self.list.FindString(s)
             if i == -1:                 # ignore non-unique
                 # Find place to insert
-                found = false
+                found = False
                 for i in range(self.list.Number()):
                     if int(self.list.GetString(i)) > v:
-                        found = true
+                        found = True
                         break
                 if found: self.list.InsertItems([s], i)
                 else: self.list.Append(s)
@@ -584,7 +584,7 @@ class ParamIntList(ParamContent):
             # Add ignored flags
             self.SetValue(value)
             self.SetModified()
-            self.textModified = false
+            self.textModified = False
         dlg.Destroy()
 
 # Boxless radiobox
@@ -599,15 +599,15 @@ class RadioBox(PPanel):
             button = wxRadioButton(self, -1, i, name=i)
             topSizer.Add(button)
             EVT_RADIOBUTTON(self, button.GetId(), self.OnRadioChoice)
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         self.SetSizer(topSizer)
         topSizer.Fit(self)
     def SetStringSelection(self, value):
-        self.freeze = true
+        self.freeze = True
         for i in self.choices:
             self.FindWindowByName(i).SetValue(i == value)
         self.value = value
-        self.freeze = false
+        self.freeze = False
     def OnRadioChoice(self, evt):
         if self.freeze: return
         if evt.GetSelection():
@@ -649,24 +649,24 @@ class ParamFile(PPanel):
         sizer.Add(self.text, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 5)
         self.button = wxButton(self, self.ID_BUTTON_BROWSE, 'Browse...',size=buttonSize)
         sizer.Add(self.button, 0, wxALIGN_CENTER_VERTICAL)
-        self.SetAutoLayout(true)
+        self.SetAutoLayout(True)
         self.SetSizer(sizer)
         sizer.Fit(self)
-        self.textModified = false
+        self.textModified = False
         EVT_BUTTON(self, self.ID_BUTTON_BROWSE, self.OnButtonBrowse)
         EVT_TEXT(self, self.ID_TEXT_CTRL, self.OnChange)
     def OnChange(self, evt):
         PPanel.OnChange(self, evt)
-        self.textModified = true
+        self.textModified = True
     def GetValue(self):
         if self.textModified:           # text has newer value
             return self.text.GetValue()
         return self.value
     def SetValue(self, value):
-        self.freeze = true
+        self.freeze = True
         self.value = value
         self.text.SetValue(value)  # update text ctrl
-        self.freeze = false
+        self.freeze = False
     def OnButtonBrowse(self, evt):
         if self.textModified:           # text has newer value
             self.value = self.text.GetValue()
@@ -682,7 +682,7 @@ class ParamFile(PPanel):
             common = os.path.commonprefix([curpath, dlg.GetPath()])
             self.SetValue(dlg.GetPath()[len(common):])
             self.SetModified()
-            self.textModified = false
+            self.textModified = False
         dlg.Destroy()
 
 class ParamBitmap(PPanel):
@@ -692,15 +692,15 @@ class ParamBitmap(PPanel):
         # Perform initialization with class pointer
         wxPanelPtr.__init__(self, w.this)
         self.thisown = 1
-        self.modified = self.freeze = false
+        self.modified = self.freeze = False
         self.SetBackgroundColour(g.panel.GetBackgroundColour())
         self.radio_std = self.FindWindowByName('RADIO_STD')
         self.radio_file = self.FindWindowByName('RADIO_FILE')
         self.combo = self.FindWindowByName('COMBO_STD')
         self.text = self.FindWindowByName('TEXT_FILE')
         self.button = self.FindWindowByName('BUTTON_BROWSE')
-        self.textModified = false
-        self.SetAutoLayout(true)
+        self.textModified = False
+        self.SetAutoLayout(True)
         self.GetSizer().SetMinSize((260, -1))
         self.GetSizer().Fit(self)
         EVT_RADIOBUTTON(self, XMLID('RADIO_STD'), self.OnRadioStd)
@@ -717,18 +717,18 @@ class ParamBitmap(PPanel):
         self.SetValue(['',''])
     def updateRadios(self):
         if self.value[0]:
-            self.radio_std.SetValue(true)
-            self.text.Enable(false)
-            self.button.Enable(false)
-            self.combo.Enable(true)
+            self.radio_std.SetValue(True)
+            self.text.Enable(False)
+            self.button.Enable(False)
+            self.combo.Enable(True)
         else:
-            self.radio_file.SetValue(true)
-            self.text.Enable(true)
-            self.button.Enable(true)
-            self.combo.Enable(false)
+            self.radio_file.SetValue(True)
+            self.text.Enable(True)
+            self.button.Enable(True)
+            self.combo.Enable(False)
     def OnChange(self, evt):
         PPanel.OnChange(self, evt)
-        self.textModified = true
+        self.textModified = True
     def OnCombo(self, evt):
         PPanel.OnChange(self, evt)
         self.value[0] = self.combo.GetValue()
@@ -737,7 +737,7 @@ class ParamBitmap(PPanel):
             return [self.combo.GetValue(), self.text.GetValue()]
         return self.value
     def SetValue(self, value):
-        self.freeze = true
+        self.freeze = True
         if not value:
             self.value = ['', '']
         else:
@@ -745,7 +745,7 @@ class ParamBitmap(PPanel):
         self.combo.SetValue(self.value[0])
         self.text.SetValue(self.value[1])  # update text ctrl
         self.updateRadios()
-        self.freeze = false
+        self.freeze = False
     def OnButtonBrowse(self, evt):
         if self.textModified:           # text has newer value
             self.value[1] = self.text.GetValue()
@@ -761,7 +761,7 @@ class ParamBitmap(PPanel):
             common = os.path.commonprefix([curpath, dlg.GetPath()])
             self.SetValue(['', dlg.GetPath()[len(common):]])
             self.SetModified()
-            self.textModified = false
+            self.textModified = False
         dlg.Destroy()
 
 paramDict = {

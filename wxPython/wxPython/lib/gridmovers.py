@@ -219,8 +219,8 @@ class wxGridColMover(wxEvtHandler):
         self.ux = self.grid.GetScrollPixelsPerUnit()[0]
         self.startX = -10
         self.cellX = 0
-        self.didMove = false
-        self.isDragging = false
+        self.didMove = False
+        self.isDragging = False
 
         EVT_MOTION(self,self.OnMouseMove)
         EVT_LEFT_DOWN(self,self.OnPress)
@@ -229,7 +229,7 @@ class wxGridColMover(wxEvtHandler):
     def OnMouseMove(self,evt):
         if self.isDragging:
             if abs(self.startX - evt.m_x) >= 3:
-                self.didMove = true
+                self.didMove = True
                 sx,y = self.grid.GetViewStart()
                 w,h = self.lwin.GetClientSizeTuple()
                 x = sx * self.ux
@@ -241,12 +241,12 @@ class wxGridColMover(wxEvtHandler):
                 else: x /= self.ux
                 if x != sx:
                     if wxPlatform == '__WXMSW__':
-                        self.colWin.Show(false)
+                        self.colWin.Show(False)
                     self.grid.Scroll(x,y)
                 x,y = self.lwin.ClientToScreenXY(evt.m_x,0)
                 x,y = self.grid.ScreenToClientXY(x,y)
                 if not self.colWin.IsShown():
-                    self.colWin.Show(true)
+                    self.colWin.Show(True)
                 px = x - self.cellX
                 if px < 0 + self.grid._rlSize: px = 0 + self.grid._rlSize
                 if px > w - self.colWin.GetSizeTuple()[0] + self.grid._rlSize:
@@ -265,8 +265,8 @@ class wxGridColMover(wxEvtHandler):
             evt.Skip()
             return
 
-        self.isDragging = true
-        self.didMove = false
+        self.isDragging = True
+        self.didMove = False
         col = self.grid.XToCol(px + sx)
         rect = self.grid.ColToRect(col)
         self.cellX = px + sx - rect.x
@@ -276,14 +276,14 @@ class wxGridColMover(wxEvtHandler):
         rect.height = size[1]
         colImg = self._CaptureImage(rect)
         self.colWin = ColDragWindow(self.grid,colImg,col)
-        self.colWin.Show(false)
+        self.colWin.Show(False)
         self.lwin.CaptureMouse()
 
     def OnRelease(self,evt):
         if self.isDragging:
             self.lwin.ReleaseMouse()
-            self.colWin.Show(false)
-            self.isDragging = false
+            self.colWin.Show(False)
+            self.isDragging = False
             if not self.didMove:
                 px = self.lwin.ClientToScreenXY(self.startX,0)[0]
                 px = self.grid.ScreenToClientXY(px,0)[0]
@@ -324,8 +324,8 @@ class wxGridRowMover(wxEvtHandler):
         self.uy = self.grid.GetScrollPixelsPerUnit()[1]
         self.startY = -10
         self.cellY = 0
-        self.didMove = false
-        self.isDragging = false
+        self.didMove = False
+        self.isDragging = False
 
         EVT_MOTION(self,self.OnMouseMove)
         EVT_LEFT_DOWN(self,self.OnPress)
@@ -334,7 +334,7 @@ class wxGridRowMover(wxEvtHandler):
     def OnMouseMove(self,evt):
         if self.isDragging:
             if abs(self.startY - evt.m_y) >= 3:
-                self.didMove = true
+                self.didMove = True
                 x,sy = self.grid.GetViewStart()
                 w,h = self.lwin.GetClientSizeTuple()
                 y = sy * self.uy
@@ -346,12 +346,12 @@ class wxGridRowMover(wxEvtHandler):
                 else: y /= self.uy
                 if y != sy:
                     if wxPlatform == '__WXMSW__':
-                        self.rowWin.Show(false)
+                        self.rowWin.Show(False)
                     self.grid.Scroll(x,y)
                 x,y = self.lwin.ClientToScreenXY(0,evt.m_y)
                 x,y = self.grid.ScreenToClientXY(x,y)
                 if not self.rowWin.IsShown():
-                    self.rowWin.Show(true)
+                    self.rowWin.Show(True)
                 py = y - self.cellY
                 if py < 0 + self.grid._clSize: py = 0 + self.grid._clSize
                 if py > h - self.rowWin.GetSizeTuple()[1] + self.grid._clSize:
@@ -370,8 +370,8 @@ class wxGridRowMover(wxEvtHandler):
             evt.Skip()
             return
 
-        self.isDragging = true
-        self.didMove = false
+        self.isDragging = True
+        self.didMove = False
         row = self.grid.YToRow(py + sy)
         rect = self.grid.RowToRect(row)
         self.cellY = py + sy - rect.y
@@ -381,14 +381,14 @@ class wxGridRowMover(wxEvtHandler):
         rect.width = size[0]
         rowImg = self._CaptureImage(rect)
         self.rowWin = RowDragWindow(self.grid,rowImg,row)
-        self.rowWin.Show(false)
+        self.rowWin.Show(False)
         self.lwin.CaptureMouse()
 
     def OnRelease(self,evt):
         if self.isDragging:
             self.lwin.ReleaseMouse()
-            self.rowWin.Show(false)
-            self.isDragging = false
+            self.rowWin.Show(False)
+            self.isDragging = False
             if not self.didMove:
                 py = self.lwin.ClientToScreenXY(0,self.startY)[1]
                 py = self.grid.ScreenToClientXY(0,py)[1]

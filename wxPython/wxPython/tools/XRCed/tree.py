@@ -161,12 +161,12 @@ class XML_Tree(wxTreeCtrl):
             EVT_LEFT_DCLICK(self, self.OnDClick)
         EVT_RIGHT_DOWN(self, self.OnRightDown)
 
-        self.needUpdate = false
+        self.needUpdate = False
         self.pendingHighLight = None
-        self.ctrl = self.shift = false
+        self.ctrl = self.shift = False
         self.dom = None
         # Create image list
-        il = wxImageList(16, 16, true)
+        il = wxImageList(16, 16, True)
         self.rootImage = il.AddIcon(images.getTreeRootIcon())
         xxxObject.image = il.AddIcon(images.getTreeDefaultIcon())
         xxxPanel.image = il.AddIcon(images.getTreePanelIcon())
@@ -296,7 +296,7 @@ class XML_Tree(wxTreeCtrl):
                 if IsObject(n):
                     self.AddNode(newItem, treeObj, n)
         return newItem
-            
+
     # Remove leaf of tree, return it's data object
     def RemoveLeaf(self, leaf):
         xxx = self.GetPyData(leaf)
@@ -367,7 +367,7 @@ class XML_Tree(wxTreeCtrl):
                 if g.testWin:
                     if g.testWin.highLight:
                         g.testWin.highLight.Remove()
-                    self.needUpdate = true
+                    self.needUpdate = True
                 status = 'Changes were applied'
         g.frame.SetStatusText(status)
         # Generate view
@@ -382,11 +382,11 @@ class XML_Tree(wxTreeCtrl):
         self.pendingHighLight = self.selection
     # Check if item is in testWin subtree
     def IsHighlatable(self, item):
-        if item == g.testWin.item: return false
+        if item == g.testWin.item: return False
         while item != self.root:
             item = self.GetItemParent(item)
-            if item == g.testWin.item: return true
-        return false
+            if item == g.testWin.item: return True
+        return False
     # Highlight selected item
     def HighLight(self, item):
         self.pendingHighLight = None
@@ -419,7 +419,7 @@ class XML_Tree(wxTreeCtrl):
             return
         # Show item in bold
         if g.testWin:     # Reset old
-            self.SetItemBold(g.testWin.item, false)
+            self.SetItemBold(g.testWin.item, False)
         self.CreateTestWin(item)
         # Maybe an error occured, so we need to test
         if g.testWin: self.SetItemBold(g.testWin.item)
@@ -515,20 +515,20 @@ class XML_Tree(wxTreeCtrl):
             testWin.CreateStatusBar()
             testWin.panel = testWin
             testWin.SetPosition(pos)
-            testWin.Show(true)
+            testWin.Show(True)
         elif xxx.__class__ == xxxPanel:
             # Create new frame
             if not testWin:
                 testWin = g.testWin = wxFrame(g.frame, -1, 'Panel: ' + name, pos=pos)
             testWin.panel = res.LoadPanel(testWin, self.stdName)
             testWin.SetClientSize(testWin.panel.GetSize())
-            testWin.Show(true)
+            testWin.Show(True)
         elif xxx.__class__ == xxxDialog:
             testWin = g.testWin = res.LoadDialog(None, self.stdName)
             testWin.panel = testWin
             testWin.Layout()
             testWin.SetPosition(pos)
-            testWin.Show(true)
+            testWin.Show(True)
         elif xxx.__class__ == xxxMenuBar:
             testWin = g.testWin = wxFrame(g.frame, -1, 'MenuBar: ' + name, pos=pos)
             testWin.panel = None
@@ -536,7 +536,7 @@ class XML_Tree(wxTreeCtrl):
             testWin.CreateStatusBar()
             testWin.menuBar = res.LoadMenuBar(self.stdName)
             testWin.SetMenuBar(testWin.menuBar)
-            testWin.Show(true)
+            testWin.Show(True)
         elif xxx.__class__ == xxxToolBar:
             testWin = g.testWin = wxFrame(g.frame, -1, 'ToolBar: ' + name, pos=pos)
             testWin.panel = None
@@ -544,7 +544,7 @@ class XML_Tree(wxTreeCtrl):
             testWin.CreateStatusBar()
             testWin.toolBar = res.LoadToolBar(testWin, self.stdName)
             testWin.SetToolBar(testWin.toolBar)
-            testWin.Show(true)
+            testWin.Show(True)
         wxMemoryFSHandler_RemoveFile('xxx.xrc')
         testWin.item = item
         EVT_CLOSE(testWin, self.OnCloseTestWin)
@@ -556,7 +556,7 @@ class XML_Tree(wxTreeCtrl):
         wxEndBusyCursor()
 
     def OnCloseTestWin(self, evt):
-        self.SetItemBold(g.testWin.item, false)
+        self.SetItemBold(g.testWin.item, False)
         g.testWinPos = g.testWin.GetPosition()
         g.testWin.Destroy()
         g.testWin = None
@@ -586,14 +586,14 @@ class XML_Tree(wxTreeCtrl):
             item = self.GetFirstChild(item, 0)[0]
             for k in range(i): item = self.GetNextSibling(item)
         return item
-    
+
     # True if next item should be inserted after current (vs. appended to it)
     def NeedInsert(self, item):
         xxx = self.GetPyData(item)
-        if item == self.root: return false        # root item
-        if xxx.hasChildren and not self.GetChildrenCount(item, false):
-            return false
-        return not (self.IsExpanded(item) and self.GetChildrenCount(item, false))
+        if item == self.root: return False        # root item
+        if xxx.hasChildren and not self.GetChildrenCount(item, False):
+            return False
+        return not (self.IsExpanded(item) and self.GetChildrenCount(item, False))
 
     # Pull-down
     def OnRightDown(self, evt):
@@ -616,7 +616,7 @@ class XML_Tree(wxTreeCtrl):
             self.shift = evt.ShiftDown()  # and Shift too
             m = wxMenu()                  # create menu
             if self.ctrl:
-                needInsert = true
+                needInsert = True
             else:
                 needInsert = self.NeedInsert(item)
             if item == self.root or needInsert and self.GetItemParent(item) == self.root:
@@ -641,9 +641,9 @@ class XML_Tree(wxTreeCtrl):
                 else:
                     SetMenu(m, pullDownMenu.controls)
                     if xxx.__class__ == xxxNotebook:
-                        m.Enable(m.FindItem('sizer'), false)
+                        m.Enable(m.FindItem('sizer'), False)
                     elif not (xxx.isSizer or xxx.parent and xxx.parent.isSizer):
-                        m.Enable(pullDownMenu.ID_NEW_SPACER, false)
+                        m.Enable(pullDownMenu.ID_NEW_SPACER, False)
             # Select correct label for create menu
             if not needInsert:
                 if self.shift:
@@ -688,5 +688,5 @@ class XML_Tree(wxTreeCtrl):
         if isinstance(xxx, xxxBoxSizer):
             self.SetItemImage(item, xxx.treeImage())
         # Set global modified state
-        g.frame.modified = true
+        g.frame.modified = True
 
