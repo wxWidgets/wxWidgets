@@ -212,11 +212,14 @@ wxPaintDC::wxPaintDC(wxWindow *canvas)
     else // not in cache, create a new one
     {
         m_hDC = (WXHDC)::BeginPaint(GetHwndOf(m_canvas), &g_paintStruct);
-        ms_cache.Add(new wxPaintDCInfo(m_canvas, this));
+	if (m_hDC)
+            ms_cache.Add(new wxPaintDCInfo(m_canvas, this));
     }
 
-    // (re)set the DC parameters
-    InitDC();
+    // (re)set the DC parameters.
+    // Note: at this point m_hDC can be NULL under MicroWindows, when dragging.
+    if (GetHDC())
+        InitDC();
 }
 
 wxPaintDC::~wxPaintDC()

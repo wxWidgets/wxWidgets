@@ -85,4 +85,4 @@ cleanwx:
 	-$(RM) minimal
 
 wx:
-	@pushd $(WXDIR)/src/microwin; make all; popd
+	@pushd $(WXDIR)/src/msw; make -f makefile.mic all; popd
