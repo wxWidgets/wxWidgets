@@ -115,10 +115,6 @@ public:
     // Internal represention of Update()
     void GtkUpdate();
     
-    // For delayed background 
-    void GtkSetBackgroundColour( const wxColour &colour );
-    void GtkSetForegroundColour( const wxColour &colour );
-    
     // For compatibility across platforms (not in event table)
     void OnIdle(wxIdleEvent& WXUNUSED(event)) {}
 
@@ -231,12 +227,6 @@ public:
     bool                 m_clipPaintRegion:1;   // TRUE after ScrollWindow()
     bool                 m_queuedFullRedraw:1;  // TRUE after DoMoveWindow
 
-    // These are true if the style were set before the widget was realized
-    // (typcally in the constructor) but the actual GTK style must not be set
-    // before the widget has been "realized"
-    bool                 m_delayedForegroundColour:1;
-    bool                 m_delayedBackgroundColour:1;
-
     // C++ has no virtual methods in the constrcutor of any class but we need
     // different methods of inserting a child window into a wxFrame,
     // wxMDIFrame, wxNotebook etc. this is the callback that will get used.
@@ -267,11 +257,13 @@ protected:
     
     // Called by ApplyWidgetStyle (which is called by SetFont() and
     // SetXXXColour etc to apply style changed to native widgets) to create
-    // modified GTK style with non-standard attributes. 
-    GtkRcStyle *CreateWidgetStyle();
+    // modified GTK style with non-standard attributes. If forceStyle=true,
+    // creates empty GtkRcStyle if there are no modifications, otherwise
+    // returns NULL in such case.
+    GtkRcStyle *CreateWidgetStyle(bool forceStyle = false);
 
     // Overridden in many GTK widgets who have to handle subwidgets
-    virtual void ApplyWidgetStyle();
+    virtual void ApplyWidgetStyle(bool forceStyle = false);
 
 private:
     DECLARE_DYNAMIC_CLASS(wxWindowGTK)

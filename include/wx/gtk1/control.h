@@ -56,7 +56,7 @@ public:
     virtual wxVisualAttributes GetDefaultAttributes() const;
 
 protected:
-    virtual void ApplyWidgetStyle();
+    virtual void ApplyWidgetStyle(bool forceStyle = false);
     // helper function to ease native widgets wrapping, called by 
     // ApplyWidgetStyle -- override this, not ApplyWidgetStyle
     virtual void DoApplyWidgetStyle(GtkRcStyle *style);

@@ -2307,12 +2307,6 @@ gtk_window_realized_callback( GtkWidget *m_widget, wxWindow *win )
     if (g_isIdle)
         wxapp_install_idle_handler();
         
-    if (win->m_delayedBackgroundColour)
-        win->GtkSetBackgroundColour( win->GetBackgroundColour() );
-
-    if (win->m_delayedForegroundColour)
-        win->GtkSetForegroundColour( win->GetForegroundColour() );
-
 #ifdef __WXGTK20__
     if (win->m_imContext)
     {
@@ -2575,9 +2569,6 @@ void wxWindowGTK::Init()
 
     m_cursor = *wxSTANDARD_CURSOR;
 
-    m_delayedForegroundColour = FALSE;
-    m_delayedBackgroundColour = FALSE;
-
 #ifdef __WXGTK20__
     m_imContext = NULL;
     m_x11Context = NULL;
@@ -2621,9 +2612,6 @@ bool wxWindowGTK::Create( wxWindow *parent,
     }
 
     m_insertCallback = wxInsertChildInWindow;
-
-    // always needed for background clearing
-    m_delayedBackgroundColour = TRUE;
 
     m_widget = gtk_scrolled_window_new( (GtkAdjustment *) NULL, (GtkAdjustment *) NULL );
     GTK_WIDGET_UNSET_FLAGS( m_widget, GTK_CAN_FOCUS );
@@ -3975,74 +3963,24 @@ void wxWindowGTK::ApplyToolTip( GtkTooltips *tips, const wxChar *tip )
 }
 #endif // wxUSE_TOOLTIPS
 
-void wxWindowGTK::GtkSetBackgroundColour( const wxColour &colour )
-{
-    GdkWindow *window = (GdkWindow*) NULL;
-    if (m_wxwindow)
-        window = GTK_PIZZA(m_wxwindow)->bin_window;
-    else
-        window = GetConnectWidget()->window;
-
-    wxASSERT( window );
-
-    // This will work around the fact that I don't know what to do to reset to
-    // theme settings when colour == wxNullColour, GetBackgroundColour will
-    // fetch the default if needed, giving us a valid colour to use below.
-    // Vaclav needs to help here to implement the RightThing...
-    wxColour newColour = GetBackgroundColour();
-    
-    // We need the pixel value e.g. for background clearing.
-    newColour.CalcPixel( gdk_window_get_colormap( window ) );
-
-    if (m_wxwindow)
-    {
-        // wxMSW doesn't clear the window here, either.
-        gdk_window_set_background( window, newColour.GetColor() );
-    }
-
-    ApplyWidgetStyle();
-}
-
 bool wxWindowGTK::SetBackgroundColour( const wxColour &colour )
 {
-    wxCHECK_MSG( m_widget != NULL, false, wxT("invalid window") );
+    wxCHECK_MSG( m_widget != NULL, FALSE, wxT("invalid window") );
 
     if (!wxWindowBase::SetBackgroundColour(colour))
         return false;
 
-    GdkWindow *window = (GdkWindow*) NULL;
-    if (m_wxwindow)
-        window = GTK_PIZZA(m_wxwindow)->bin_window;
-    else
-        window = GetConnectWidget()->window;
+    if (colour.Ok())
+    {
+        // We need the pixel value e.g. for background clearing.
+        m_backgroundColour.CalcPixel(gtk_widget_get_colormap(m_widget));
+    }
 
-    if (!window)
-    {
-        // indicate that a new style has been set
-        // but it couldn't get applied as the
-        // widget hasn't been realized yet.
-        m_delayedBackgroundColour = true;
-        return true;
-    }
-    else
-    {
-        GtkSetBackgroundColour( colour );
-    }
+    // apply style change (forceStyle=true so that new style is applied
+    // even if the bg colour changed from valid to wxNullColour):
+    ApplyWidgetStyle(true);
 
     return true;
-}
-
-void wxWindowGTK::GtkSetForegroundColour( const wxColour &colour )
-{
-    GdkWindow *window = (GdkWindow*) NULL;
-    if (m_wxwindow)
-        window = GTK_PIZZA(m_wxwindow)->bin_window;
-    else
-        window = GetConnectWidget()->window;
-
-    wxASSERT( window );
-
-    ApplyWidgetStyle();
 }
 
 bool wxWindowGTK::SetForegroundColour( const wxColour &colour )
@@ -4051,28 +3989,18 @@ bool wxWindowGTK::SetForegroundColour( const wxColour &colour )
 
     if (!wxWindowBase::SetForegroundColour(colour))
     {
-        // don't leave if the GTK widget has just
-        // been realized
-        if (!m_delayedForegroundColour) return false;
+        return false;
+    }
+    
+    if (colour.Ok())
+    {
+        // We need the pixel value e.g. for background clearing.
+        m_foregroundColour.CalcPixel(gtk_widget_get_colormap(m_widget));
     }
 
-    GdkWindow *window = (GdkWindow*) NULL;
-    if (m_wxwindow)
-        window = GTK_PIZZA(m_wxwindow)->bin_window;
-    else
-        window = GetConnectWidget()->window;
-
-    if (!window)
-    {
-        // indicate that a new style has been set
-        // but it couldn't get applied as the
-        // widget hasn't been realized yet.
-        m_delayedForegroundColour = true;
-    }
-    else
-    {
-       GtkSetForegroundColour( colour );
-    }
+    // apply style change (forceStyle=true so that new style is applied
+    // even if the bg colour changed from valid to wxNullColour):
+    ApplyWidgetStyle(true);
 
     return true;
 }
@@ -4092,10 +4020,11 @@ PangoContext *wxWindowGTK::GtkGetPangoX11Context()
 }
 #endif
  
-GtkRcStyle *wxWindowGTK::CreateWidgetStyle()
+GtkRcStyle *wxWindowGTK::CreateWidgetStyle(bool forceStyle)
 {
     // do we need to apply any changes at all?
-    if ( !m_hasFont && !m_hasFgCol &&
+    if ( !forceStyle &&
+         !m_hasFont && !m_hasFgCol &&
          (!m_hasBgCol || !m_backgroundColour.Ok()) )
     {
         return NULL;
@@ -4116,39 +4045,39 @@ GtkRcStyle *wxWindowGTK::CreateWidgetStyle()
 
     if ( m_hasFgCol )
     {
-        m_foregroundColour.CalcPixel( gtk_widget_get_colormap( m_widget ) );
+        GdkColor *fg = m_foregroundColour.GetColor();
         
-        style->fg[GTK_STATE_NORMAL] = *m_foregroundColour.GetColor();
+        style->fg[GTK_STATE_NORMAL] = *fg;
         style->color_flags[GTK_STATE_NORMAL] = GTK_RC_FG;
         
-        style->fg[GTK_STATE_PRELIGHT] = *m_foregroundColour.GetColor();
+        style->fg[GTK_STATE_PRELIGHT] = *fg;
         style->color_flags[GTK_STATE_PRELIGHT] = GTK_RC_FG;
         
-        style->fg[GTK_STATE_ACTIVE] = *m_foregroundColour.GetColor();
+        style->fg[GTK_STATE_ACTIVE] = *fg;
         style->color_flags[GTK_STATE_ACTIVE] = GTK_RC_FG;
     }
 
-    if ( m_hasBgCol && m_backgroundColour.Ok() )
+    if ( m_hasBgCol )
     {
-        m_backgroundColour.CalcPixel( gtk_widget_get_colormap( m_widget ) );
-        
-        style->bg[GTK_STATE_NORMAL] = *m_backgroundColour.GetColor();
-        style->base[GTK_STATE_NORMAL] = *m_backgroundColour.GetColor();
+        GdkColor *bg = m_backgroundColour.GetColor();
+
+        style->bg[GTK_STATE_NORMAL] = *bg;
+        style->base[GTK_STATE_NORMAL] = *bg;
         style->color_flags[GTK_STATE_NORMAL] = (GtkRcFlags)
             (style->color_flags[GTK_STATE_NORMAL] | GTK_RC_BG | GTK_RC_BASE);
         
-        style->bg[GTK_STATE_PRELIGHT] = *m_backgroundColour.GetColor();
-        style->base[GTK_STATE_PRELIGHT] = *m_backgroundColour.GetColor();
+        style->bg[GTK_STATE_PRELIGHT] = *bg;
+        style->base[GTK_STATE_PRELIGHT] = *bg;
         style->color_flags[GTK_STATE_PRELIGHT] = (GtkRcFlags)
             (style->color_flags[GTK_STATE_PRELIGHT] | GTK_RC_BG | GTK_RC_BASE);
         
-        style->bg[GTK_STATE_ACTIVE] = *m_backgroundColour.GetColor();
-        style->base[GTK_STATE_ACTIVE] = *m_backgroundColour.GetColor();
+        style->bg[GTK_STATE_ACTIVE] = *bg;
+        style->base[GTK_STATE_ACTIVE] = *bg;
         style->color_flags[GTK_STATE_ACTIVE] = (GtkRcFlags)
             (style->color_flags[GTK_STATE_ACTIVE] | GTK_RC_BG | GTK_RC_BASE);
         
-        style->bg[GTK_STATE_INSENSITIVE] = *m_backgroundColour.GetColor();
-        style->base[GTK_STATE_INSENSITIVE] = *m_backgroundColour.GetColor();
+        style->bg[GTK_STATE_INSENSITIVE] = *bg;
+        style->base[GTK_STATE_INSENSITIVE] = *bg;
         style->color_flags[GTK_STATE_INSENSITIVE] = (GtkRcFlags)
             (style->color_flags[GTK_STATE_INSENSITIVE] | GTK_RC_BG | GTK_RC_BASE);
     }
@@ -4156,7 +4085,7 @@ GtkRcStyle *wxWindowGTK::CreateWidgetStyle()
     return style;
 }
 
-void wxWindowGTK::ApplyWidgetStyle()
+void wxWindowGTK::ApplyWidgetStyle(bool WXUNUSED(forceStyle))
 {
 }
 
@@ -4302,24 +4231,16 @@ bool wxWindowGTK::IsOwnGtkWindow( GdkWindow *window )
 
 bool wxWindowGTK::SetFont( const wxFont &font )
 {
-    if (!wxWindowBase::SetFont(font) || !m_widget)
-    {
-        return FALSE;
-    }
+    wxCHECK_MSG( m_widget != NULL, FALSE, wxT("invalid window") );
 
-    wxColour sysbg = wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE );
-    if ( sysbg == m_backgroundColour )
-    {
-        m_backgroundColour = wxNullColour;
-        ApplyWidgetStyle();
-        m_backgroundColour = sysbg;
-    }
-    else
-    {
-        ApplyWidgetStyle();
-    }
+    if (!wxWindowBase::SetFont(font))
+        return false;
 
-    return TRUE;
+    // apply style change (forceStyle=true so that new style is applied
+    // even if the font changed from valid to wxNullFont):
+    ApplyWidgetStyle(true);    
+
+    return true;
 }
 
 void wxWindowGTK::DoCaptureMouse()
