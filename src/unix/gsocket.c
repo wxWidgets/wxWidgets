@@ -165,12 +165,12 @@ void GSocket_destroy(GSocket *socket)
 {
   assert(socket != NULL);
 
-  /* Per-socket GUI-specific cleanup */
-  _GSocket_GUI_Destroy(socket);
-
   /* Check that the socket is really shutdowned */
   if (socket->m_fd != -1)
     GSocket_Shutdown(socket);
+
+  /* Per-socket GUI-specific cleanup */
+  _GSocket_GUI_Destroy(socket);
 
   /* Destroy private addresses */
   if (socket->m_local)
