@@ -364,6 +364,12 @@ standard font as well as the overall design of Mac widgets requires
 more space than on Windows, then the initial size of a dialog using a
 sizer will automatically be bigger on Mac than on Windows.", "
 
+Sizers may also be used to control the layout of custom drawn items on
+the window.  The `Add`, `Insert`, and `Prepend` functions return a
+pointer to the newly added `wx.SizerItem`. Just add empty space of the
+desired size and attributes, and then use the `wx.SizerItem.GetRect`
+method to determine where the drawing operations should take place.
+
 :note: If you wish to create a custom sizer class in wxPython you
     should derive the class from `wx.PySizer` in order to get
     Python-aware capabilities for the various virtual methods.
