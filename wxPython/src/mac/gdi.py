@@ -224,8 +224,9 @@ class wxCursorPtr(wxGDIObjectPtr):
         return "<%s.%s instance; proxy of C++ wxCursor instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this)
     def __nonzero__(self): return self.Ok()
 class wxCursor(wxCursorPtr):
-    def __init__(self,this):
-        self.this = this
+    def __init__(self,*_args,**_kwargs):
+        self.this = gdic.new_wxCursor(*_args,**_kwargs)
+        self.thisown = 1
 
 
 
