@@ -468,8 +468,8 @@ wxString wxFileName::CreateTempFileName(const wxString& prefix)
     #ifndef __WATCOMC__
         ::DosCreateDir(wxStringBuffer(path, MAX_PATH), NULL);
     #endif
-
-#else // !Windows, !OS/2, !DOS
+    
+#else // !Windows, !OS/2
     if ( dir.empty() )
     {
         dir = wxGetenv(_T("TMP"));
@@ -499,19 +499,7 @@ wxString wxFileName::CreateTempFileName(const wxString& prefix)
 
     path += name;
 
-#if defined(__DOS__) && defined(__WATCOMC__)
-    // scratch space for mkstemp()
-    path += _T("XXXXXX");
-
-    // can use the cast here because the length doesn't change and the string
-    // is not shared
-    if ( !_mktemp((char *)path.mb_str()) )
-    {
-        // this might be not necessary as mkstemp() on most systems should have
-        // already done it but it doesn't hurt neither...
-        path.clear();
-    }
-#elif defined(HAVE_MKSTEMP)
+#if defined(HAVE_MKSTEMP)
     // scratch space for mkstemp()
     path += _T("XXXXXX");
 
@@ -534,9 +522,11 @@ wxString wxFileName::CreateTempFileName(const wxString& prefix)
     {
         path.clear();
     }
-#else // !HAVE_MKTEMP
+#else // !HAVE_MKTEMP (includes __DOS__)
     // generate the unique file name ourselves
+    #ifndef __DOS__
     path << (unsigned int)getpid();
+    #endif
 
     wxString pathTry;
 
