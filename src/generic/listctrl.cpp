@@ -56,6 +56,10 @@
     #pragma implementation "listctrlbase.h"
 #endif
 
+#if 0
+#include "listctrl.old.cpp"
+#else
+
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
@@ -348,7 +352,7 @@ public:
     wxListMainWindow *m_owner;
 
 public:
-    wxListLineData( wxListMainWindow *owner, size_t line );
+    wxListLineData(wxListMainWindow *owner);
 
     ~wxListLineData() { delete m_gi; }
 
@@ -367,7 +371,12 @@ public:
     // remember the position this line appears at
     void SetPosition( int x, int y,  int window_width, int spacing );
 
-    long IsHit( int x, int y );
+    // wxListCtrl API
+
+    void SetImage( int image ) { SetImage(0, image); }
+    int GetImage() const { return GetImage(0); }
+    bool HasImage() const { return GetImage() != -1; }
+    bool HasText() const { return !GetText(0).empty(); }
 
     void SetItem( int index, const wxListItem &info );
     void GetItem( int index, wxListItem &info );
@@ -375,32 +384,10 @@ public:
     wxString GetText(int index) const;
     void SetText( int index, const wxString s );
 
-    void SetImage( int index, int image );
-    int GetImage( int index ) const;
-
-    // get the bound rect of this line
-    wxRect GetRect() const;
-
-    // get the bound rect of the label
-    wxRect GetLabelRect() const;
-
-    // get the bound rect of the items icon (only may be called if we do have
-    // an icon!)
-    wxRect GetIconRect() const;
-
-    // get the rect to be highlighted when the item has focus
-    wxRect GetHighlightRect() const;
-
-    // get the size of the total line rect
-    wxSize GetSize() const { return GetRect().GetSize(); }
-
     // return true if the highlighting really changed
     bool Highlight( bool on );
 
     void ReverseHighlight();
-
-    // draw the line on the given DC
-    void Draw( wxDC *dc, int y = 0, int height = 0, bool highlighted = FALSE );
 
     bool IsHighlighted() const
     {
@@ -409,8 +396,14 @@ public:
         return m_highlighted;
     }
 
-    // only for wxListMainWindow::CacheLineData()
-    void SetLineIndex(size_t line) { m_lineIndex = line; }
+    // draw the line on the given DC in icon/list mode
+    void Draw( wxDC *dc );
+
+    // the same in report mode
+    void DrawInReportMode( wxDC *dc,
+                           const wxRect& rect,
+                           const wxRect& rectHL,
+                           bool highlighted );
 
 private:
     // set the line to contain num items (only can be > 1 in report mode)
@@ -425,10 +418,11 @@ private:
                        const wxFont& font,
                        bool highlight);
 
-    // the index of this line (only used in report mode)
-    size_t m_lineIndex;
+    // these are only used by GetImage/SetImage above, we don't support images
+    // with subitems at the public API level yet
+    void SetImage( int index, int image );
+    int GetImage( int index ) const;
 };
-
 
 WX_DECLARE_EXPORTED_OBJARRAY(wxListLineData, wxListLineDataArray);
 #include "wx/arrimpl.cpp"
@@ -554,6 +548,9 @@ public:
     // return true if this is a virtual list control
     bool IsVirtual() const { return HasFlag(wxLC_VIRTUAL); }
 
+    // return true if the control is in report mode
+    bool InReportView() const { return HasFlag(wxLC_REPORT); }
+
     // return true if we are in single selection mode, false if multi sel
     bool IsSingleSel() const { return HasFlag(wxLC_SINGLE_SEL); }
 
@@ -585,6 +582,30 @@ public:
     // return true if the line is highlighted
     bool IsHighlighted(size_t line) const;
 
+    // the methods which are forwarded to wxListLineData itself in list/icon
+    // modes but are here because the lines don't store their positions in the
+    // report mode
+
+    // get the bound rect for the entire line
+    wxRect GetLineRect(size_t line) const;
+
+    // get the bound rect of the label
+    wxRect GetLineLabelRect(size_t line) const;
+
+    // get the bound rect of the items icon (only may be called if we do have
+    // an icon!)
+    wxRect GetLineIconRect(size_t line) const;
+
+    // get the rect to be highlighted when the item has focus
+    wxRect GetLineHighlightRect(size_t line) const;
+
+    // get the size of the total line rect
+    wxSize GetLineSize(size_t line) const
+        { return GetLineRect(line).GetSize(); }
+
+    // return the hit code for the corresponding position (in this line)
+    long HitTestLine(size_t line, int x, int y) const;
+
     void EditLabel( long item );
     void OnRenameTimer();
     void OnRenameAccept();
@@ -604,8 +625,8 @@ public:
     void OnPaint( wxPaintEvent &event );
 
     void DrawImage( int index, wxDC *dc, int x, int y );
-    void GetImageSize( int index, int &width, int &height );
-    int GetTextLength( const wxString &s );
+    void GetImageSize( int index, int &width, int &height ) const;
+    int GetTextLength( const wxString &s ) const;
 
     void SetImageList( wxImageList *imageList, int which );
     void SetItemSpacing( int spacing, bool isSmall = FALSE );
@@ -620,7 +641,7 @@ public:
     // returns the sum of the heights of all columns
     int GetHeaderWidth() const;
 
-    int GetCountPerPage() { return m_linesPerPage; }
+    int GetCountPerPage() const;
 
     void SetItem( wxListItem &item );
     void GetItem( wxListItem &item );
@@ -1184,12 +1205,10 @@ inline bool wxListLineData::IsVirtual() const
     return m_owner->IsVirtual();
 }
 
-wxListLineData::wxListLineData( wxListMainWindow *owner, size_t line )
+wxListLineData::wxListLineData( wxListMainWindow *owner )
 {
     m_owner = owner;
     m_items.DeleteContents( TRUE );
-
-    SetLineIndex(line);
 
     if ( InReportView() )
     {
@@ -1203,59 +1222,6 @@ wxListLineData::wxListLineData( wxListMainWindow *owner, size_t line )
     m_highlighted = FALSE;
 
     InitItems( GetMode() == wxLC_REPORT ? m_owner->GetColumnCount() : 1 );
-}
-
-wxRect wxListLineData::GetRect() const
-{
-    if ( !InReportView() )
-        return m_gi->m_rectAll;
-
-    wxRect rect;
-    rect.x = HEADER_OFFSET_X;
-    rect.y = m_owner->GetLineY(m_lineIndex);
-    rect.width = m_owner->GetHeaderWidth();
-    rect.height = m_owner->GetLineHeight();
-
-    return rect;
-}
-
-wxRect wxListLineData::GetLabelRect() const
-{
-    if ( !InReportView() )
-        return m_gi->m_rectLabel;
-
-    wxRect rect;
-    rect.x = HEADER_OFFSET_X;
-    rect.y = m_owner->GetLineY(m_lineIndex);
-    rect.width = m_owner->GetColumnWidth(0);
-    rect.height = m_owner->GetLineHeight();
-
-    return rect;
-}
-
-wxRect wxListLineData::GetIconRect() const
-{
-    if ( !InReportView() )
-        return m_gi->m_rectIcon;
-
-    wxRect rect;
-
-    wxListItemDataList::Node *node = m_items.GetFirst();
-    wxCHECK_MSG( node, rect, _T("no subitems at all??") );
-
-    wxListItemData *item = node->GetData();
-    wxASSERT_MSG( item->HasImage(), _T("GetIconRect() called but no image") );
-
-    rect.x = HEADER_OFFSET_X;
-    rect.y = m_owner->GetLineY(m_lineIndex);
-    m_owner->GetImageSize(item->GetImage(), rect.width, rect.height);
-
-    return rect;
-}
-
-wxRect wxListLineData::GetHighlightRect() const
-{
-    return InReportView() ? GetRect() : m_gi->m_rectHighlight;
 }
 
 void wxListLineData::CalculateSize( wxDC *dc, int spacing )
@@ -1435,25 +1401,6 @@ void wxListLineData::SetPosition( int x, int y,
     }
 }
 
-long wxListLineData::IsHit( int x, int y )
-{
-    wxListItemDataList::Node *node = m_items.GetFirst();
-    wxCHECK_MSG( node, 0, _T("no subitems at all??") );
-
-    wxListItemData *item = node->GetData();
-    if ( item->HasImage() && GetIconRect().Inside(x, y) )
-        return wxLIST_HITTEST_ONITEMICON;
-
-    if ( item->HasText() )
-    {
-        wxRect rect = InReportView() ? GetRect() : GetLabelRect();
-        if ( rect.Inside(x, y) )
-            return wxLIST_HITTEST_ONITEMLABEL;
-    }
-
-    return 0;
-}
-
 void wxListLineData::InitItems( int num )
 {
     for (int i = 0; i < num; i++)
@@ -1549,21 +1496,43 @@ void wxListLineData::SetAttributes(wxDC *dc,
     }
 }
 
-void wxListLineData::Draw( wxDC *dc, int y, int height, bool highlighted )
+void wxListLineData::Draw( wxDC *dc )
 {
-    wxRect rect = GetRect();
-    m_owner->CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
+    wxListItemDataList::Node *node = m_items.GetFirst();
+    wxCHECK_RET( node, _T("no subitems at all??") );
+
+    wxListItemData *item = node->GetData();
+    if (item->HasImage())
+    {
+        wxRect rectIcon = m_gi->m_rectIcon;
+        m_owner->DrawImage( item->GetImage(), dc,
+                            rectIcon.x, rectIcon.y );
+    }
+
+    if (item->HasText())
+    {
+        wxRect rectLabel = m_gi->m_rectLabel;
+        dc->DrawText( item->GetText(), rectLabel.x, rectLabel.y );
+    }
+}
+
+void wxListLineData::DrawInReportMode( wxDC *dc,
+                                       const wxRect& r,
+                                       const wxRect& rectHL,
+                                       bool highlighted )
+{
+    wxRect rect = r;
+    //m_owner->CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
 
     if ( !m_owner->IsExposed( rect ) )
         return;
 
-    wxWindow *listctrl = m_owner->GetParent();
-
     // use our own flag if we maintain it
-    if ( !m_owner->IsVirtual() )
+    if ( !IsVirtual() )
         highlighted = m_highlighted;
 
     // default foreground colour
+    wxWindow *listctrl = m_owner->GetParent();
     wxColour colText;
     if ( highlighted )
     {
@@ -1600,66 +1569,45 @@ void wxListLineData::Draw( wxDC *dc, int y, int height, bool highlighted )
         }
 
         dc->SetPen( * wxTRANSPARENT_PEN );
-        dc->DrawRectangle( GetHighlightRect() );
+        dc->DrawRectangle( rectHL );
     }
 
     wxListItemDataList::Node *node = m_items.GetFirst();
+    wxCHECK_RET( node, _T("no subitems at all??") );
 
-    if ( GetMode() == wxLC_REPORT)
+    size_t col = 0;
+    int x = rect.x + HEADER_OFFSET_X;
+
+    rect.y += (LINE_SPACING + EXTRA_HEIGHT) / 2;
+
+    while ( node )
     {
-        size_t col = 0;
-        int x = HEADER_OFFSET_X;
+        wxListItemData *item = node->GetData();
 
-        y += (LINE_SPACING + EXTRA_HEIGHT) / 2;
+        int xOld = x;
 
-        while ( node )
+        if ( item->HasImage() )
         {
-            wxListItemData *item = node->GetData();
-
-            int xOld = x;
-
-            if ( item->HasImage() )
-            {
-                int ix, iy;
-                m_owner->DrawImage( item->GetImage(), dc, x, y );
-                m_owner->GetImageSize( item->GetImage(), ix, iy );
-                x += ix + 5; // FIXME: what is "5"?
-            }
-
-            int width = m_owner->GetColumnWidth(col++);
-
-            dc->SetClippingRegion(x, y, width, height);
-
-            if ( item->HasText() )
-            {
-                dc->DrawText( item->GetText(), x, y + 1 );
-            }
-
-            dc->DestroyClippingRegion();
-
-            x = xOld + width;
-
-            node = node->GetNext();
+            int ix, iy;
+            m_owner->DrawImage( item->GetImage(), dc, x, rect.y );
+            m_owner->GetImageSize( item->GetImage(), ix, iy );
+            x += ix + 5; // FIXME: what is "5"?
         }
-    }
-    else // !report
-    {
-        if (node)
+
+        int width = m_owner->GetColumnWidth(col++);
+
+        dc->SetClippingRegion(x, rect.y, width, rect.height);
+
+        if ( item->HasText() )
         {
-            wxListItemData *item = node->GetData();
-            if (item->HasImage())
-            {
-                wxRect rectIcon = GetIconRect();
-                m_owner->DrawImage( item->GetImage(), dc,
-                                    rectIcon.x, rectIcon.y );
-            }
-
-            if (item->HasText())
-            {
-                wxRect rectLabel = GetLabelRect();
-                dc->DrawText( item->GetText(), rectLabel.x, rectLabel.y );
-            }
+            dc->DrawText( item->GetText(), x, rect.y );
         }
+
+        dc->DestroyClippingRegion();
+
+        x = xOld + width;
+
+        node = node->GetNext();
     }
 }
 
@@ -2198,8 +2146,7 @@ void wxListMainWindow::CacheLineData(size_t line)
         ld->SetText(col, listctrl->OnGetItemText(line, col));
     }
 
-    ld->SetImage(0, listctrl->OnGetItemImage(line));
-    ld->SetLineIndex(line);
+    ld->SetImage(listctrl->OnGetItemImage(line));
 }
 
 wxListLineData *wxListMainWindow::GetDummyLine() const
@@ -2213,14 +2160,16 @@ wxListLineData *wxListMainWindow::GetDummyLine() const
         wxASSERT_MSG( IsVirtual(), _T("logic error") );
 
         wxListMainWindow *self = wxConstCast(this, wxListMainWindow);
-        wxListLineData *line = new wxListLineData( self, 0 );
+        wxListLineData *line = new wxListLineData(self);
         self->m_lines.Add(line);
     }
 
-    m_lines[0].SetLineIndex(0);
-
     return &m_lines[0];
 }
+
+// ----------------------------------------------------------------------------
+// line geometry (report mode only)
+// ----------------------------------------------------------------------------
 
 wxCoord wxListMainWindow::GetLineHeight() const
 {
@@ -2253,6 +2202,79 @@ wxCoord wxListMainWindow::GetLineY(size_t line) const
 
     return LINE_SPACING + line*GetLineHeight();
 }
+
+wxRect wxListMainWindow::GetLineRect(size_t line) const
+{
+    if ( !InReportView() )
+        return GetLine(line)->m_gi->m_rectAll;
+
+    wxRect rect;
+    rect.x = HEADER_OFFSET_X;
+    rect.y = GetLineY(line);
+    rect.width = GetHeaderWidth();
+    rect.height = GetLineHeight();
+
+    return rect;
+}
+
+wxRect wxListMainWindow::GetLineLabelRect(size_t line) const
+{
+    if ( !InReportView() )
+        return GetLine(line)->m_gi->m_rectLabel;
+
+    wxRect rect;
+    rect.x = HEADER_OFFSET_X;
+    rect.y = GetLineY(line);
+    rect.width = GetColumnWidth(0);
+    rect.height = GetLineHeight();
+
+    return rect;
+}
+
+wxRect wxListMainWindow::GetLineIconRect(size_t line) const
+{
+    if ( !InReportView() )
+        return GetLine(line)->m_gi->m_rectIcon;
+
+    wxListLineData *ld = GetLine(line);
+    wxASSERT_MSG( ld->HasImage(), _T("should have an image") );
+
+    wxRect rect;
+    rect.x = HEADER_OFFSET_X;
+    rect.y = GetLineY(line);
+    GetImageSize(ld->GetImage(), rect.width, rect.height);
+
+    return rect;
+}
+
+wxRect wxListMainWindow::GetLineHighlightRect(size_t line) const
+{
+    return InReportView() ? GetLineRect(line)
+                          : GetLine(line)->m_gi->m_rectHighlight;
+}
+
+long wxListMainWindow::HitTestLine(size_t line, int x, int y) const
+{
+    wxListLineData *ld = GetLine(line);
+
+    if ( ld->HasImage() && GetLineIconRect(line).Inside(x, y) )
+        return wxLIST_HITTEST_ONITEMICON;
+
+    if ( ld->HasText() )
+    {
+        wxRect rect = InReportView() ? GetLineRect(line)
+                                     : GetLineLabelRect(line);
+
+        if ( rect.Inside(x, y) )
+            return wxLIST_HITTEST_ONITEMLABEL;
+    }
+
+    return 0;
+}
+
+// ----------------------------------------------------------------------------
+// highlight (selection) handling
+// ----------------------------------------------------------------------------
 
 bool wxListMainWindow::IsHighlighted(size_t line) const
 {
@@ -2310,7 +2332,7 @@ bool wxListMainWindow::HighlightLine( size_t line, bool highlight )
     if ( changed )
     {
         SendNotify( line, highlight ? wxEVT_COMMAND_LIST_ITEM_SELECTED
-                                  : wxEVT_COMMAND_LIST_ITEM_DESELECTED );
+                                    : wxEVT_COMMAND_LIST_ITEM_DESELECTED );
     }
 
     return changed;
@@ -2318,7 +2340,7 @@ bool wxListMainWindow::HighlightLine( size_t line, bool highlight )
 
 void wxListMainWindow::RefreshLine( size_t line )
 {
-    wxRect rect = GetLine(line)->GetRect();
+    wxRect rect = GetLineRect(line);
 
     CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
     RefreshRect( rect );
@@ -2387,10 +2409,10 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         GetVisibleLinesRange(&visibleFrom, &visibleTo);
         for ( size_t line = visibleFrom; line <= visibleTo; line++ )
         {
-            GetLine(line)->Draw( &dc,
-                                 GetLineY(line),
-                                 lineHeight,
-                                 IsHighlighted(line) );
+            GetLine(line)->DrawInReportMode( &dc,
+                                             GetLineRect(line),
+                                             GetLineHighlightRect(line),
+                                             IsHighlighted(line) );
         }
 
         if ( HasFlag(wxLC_HRULES) )
@@ -2449,25 +2471,12 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
     if ( HasCurrent() && m_hasFocus )
     {
-        wxRect rect;
-
-        if ( IsVirtual() )
-        {
-            // just offset the rect of the first line to position it correctly
-            wxListLineData *line = GetDummyLine();
-            rect = line->GetHighlightRect();
-            rect.y = GetLineY(m_current);
-        }
-        else
-        {
-            rect = GetLine(m_current)->GetHighlightRect();
-        }
 #ifdef __WXMAC__
         // no rect outline, we already have the background color
 #else
         dc.SetPen( *wxBLACK_PEN );
         dc.SetBrush( *wxTRANSPARENT_BRUSH );
-        dc.DrawRectangle( rect );
+        dc.DrawRectangle( GetLineHighlightRect(m_current) );
 #endif
     }
 
@@ -2546,7 +2555,7 @@ void wxListMainWindow::EditLabel( long item )
     PrepareDC( dc );
 
     wxString s = data->GetText(0);
-    wxRect rectLabel = data->GetLabelRect();
+    wxRect rectLabel = GetLineLabelRect(m_currentEdit);
 
     rectLabel.x = dc.LogicalToDeviceX( rectLabel.x );
     rectLabel.y = dc.LogicalToDeviceY( rectLabel.y );
@@ -2622,22 +2631,16 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
 
     if ( HasFlag(wxLC_REPORT) )
     {
-        wxCoord lineHeight = GetLineHeight();
-
-        current = y / lineHeight;
-        hitResult = GetDummyLine()->IsHit( x, y % lineHeight );
+        current = y / GetLineHeight();
+        hitResult = HitTestLine(current, x, y);
     }
     else // !report
     {
         // TODO: optimize it too! this is less simple than for report view but
         //       enumerating all items is still not a way to do it!!
-        for ( current = 0; current < count; current++ )
+        for ( current = 0; current < count && !hitResult; current++ )
         {
-            wxListLineData *line = (wxListLineData *) NULL;
-            line = GetLine(current);
-            hitResult = line->IsHit( x, y );
-            if (hitResult)
-                break;
+            hitResult = HitTestLine(current, x, y);
         }
     }
 
@@ -2772,19 +2775,7 @@ void wxListMainWindow::MoveToFocus()
     if ( !HasCurrent() )
         return;
 
-    wxRect rect;
-
-    if ( IsVirtual() )
-    {
-        // just offset the rect of the first line to position it correctly
-        wxListLineData *line = GetDummyLine();
-        rect = line->GetRect();
-        rect.y = GetLineY(m_current);
-    }
-    else
-    {
-        rect = GetLine(m_current)->GetRect();
-    }
+    wxRect rect = GetLineRect(m_current);
 
     int client_w, client_h;
     GetClientSize( &client_w, &client_h );
@@ -3100,7 +3091,7 @@ void wxListMainWindow::DrawImage( int index, wxDC *dc, int x, int y )
     }
 }
 
-void wxListMainWindow::GetImageSize( int index, int &width, int &height )
+void wxListMainWindow::GetImageSize( int index, int &width, int &height ) const
 {
     if ( HasFlag(wxLC_ICON) && m_normal_image_list )
     {
@@ -3125,9 +3116,9 @@ void wxListMainWindow::GetImageSize( int index, int &width, int &height )
     }
 }
 
-int wxListMainWindow::GetTextLength( const wxString &s )
+int wxListMainWindow::GetTextLength( const wxString &s ) const
 {
-    wxClientDC dc( this );
+    wxClientDC dc( wxConstCast(this, wxListMainWindow) );
     dc.SetFont( GetFont() );
 
     wxCoord lw;
@@ -3497,15 +3488,7 @@ void wxListMainWindow::GetItemRect( long index, wxRect &rect )
     wxCHECK_RET( index >= 0 && (size_t)index < GetItemCount(),
                  _T("invalid index in GetItemRect") );
 
-    if ( HasFlag(wxLC_REPORT) )
-    {
-        rect = GetDummyLine()->GetRect();
-        rect.y = GetLineY((size_t)index);
-    }
-    else
-    {
-        rect = GetLine((size_t)index)->GetRect();
-    }
+    rect = GetLineRect((size_t)index);
 
     CalcScrolledPosition(rect.x, rect.y, &rect.x, &rect.y);
 }
@@ -3606,7 +3589,7 @@ void wxListMainWindow::RecalculatePositions()
                 line->CalculateSize( &dc, iconSpacing );
                 line->SetPosition( x, y, clientWidth, iconSpacing );
 
-                wxSize sizeLine = line->GetSize();
+                wxSize sizeLine = GetLineSize(i);
 
                 if ( maxWidth < sizeLine.x )
                     maxWidth = sizeLine.x;
@@ -3732,9 +3715,9 @@ void wxListMainWindow::DeleteItem( long lindex )
     if ( m_current == index )
     {
         // the last valid index after deleting the item will be count-2
-        if ( ++m_current >= count - 2 )
+        if ( m_current == count - 1 )
         {
-            m_current = count - 2;
+            m_current--;
         }
     }
 
@@ -3753,6 +3736,8 @@ void wxListMainWindow::DeleteItem( long lindex )
     {
         m_lines.RemoveAt( index );
     }
+
+    RefreshLines(index, GetItemCount() - 1);
 }
 
 void wxListMainWindow::DeleteColumn( int col )
@@ -3866,15 +3851,23 @@ long wxListMainWindow::HitTest( int x, int y, int &flags )
 {
     CalcUnscrolledPosition( x, y, &x, &y );
 
-    size_t count = GetItemCount();
-    for (size_t i = 0; i < count; i++)
+    if ( HasFlag(wxLC_REPORT) )
     {
-        wxListLineData *line = GetLine(i);
-        long ret = line->IsHit( x, y );
-        if (ret)
+        size_t current = y / GetLineHeight();
+        flags = HitTestLine(current, x, y);
+        if ( flags )
+            return current;
+    }
+    else // !report
+    {
+        // TODO: optimize it too! this is less simple than for report view but
+        //       enumerating all items is still not a way to do it!!
+        size_t count = GetItemCount();
+        for ( size_t current = 0; current < count; current++ )
         {
-            flags = (int)ret;
-            return i;
+            flags = HitTestLine(current, x, y);
+            if ( flags )
+                return current;
         }
     }
 
@@ -3911,11 +3904,13 @@ void wxListMainWindow::InsertItem( wxListItem &item )
         wxFAIL_MSG( _T("unknown mode") );
     }
 
-    wxListLineData *line = new wxListLineData( this, id );
+    wxListLineData *line = new wxListLineData(this);
 
     line->SetItem( 0, item );
 
     m_lines.Insert( line, id );
+
+    RefreshLines(id, GetItemCount() - 1);
 }
 
 void wxListMainWindow::InsertColumn( long col, wxListItem &item )
@@ -3992,6 +3987,17 @@ void wxListMainWindow::OnScroll(wxScrollWinEvent& event)
         lc->m_headerWin->MacUpdateImmediately() ;
 #endif
     }
+}
+
+int wxListMainWindow::GetCountPerPage() const
+{
+    if ( !m_linesPerPage )
+    {
+        wxConstCast(this, wxListMainWindow)->
+            m_linesPerPage = GetClientSize().y / GetLineHeight();
+    }
+
+    return m_linesPerPage;
 }
 
 void wxListMainWindow::GetVisibleLinesRange(size_t *from, size_t *to)
@@ -4818,3 +4824,5 @@ void wxListCtrl::SetItemCount(long count)
 }
 
 #endif // wxUSE_LISTCTRL
+
+#endif

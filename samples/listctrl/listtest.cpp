@@ -354,18 +354,9 @@ void MyFrame::InitWithReportItems()
 
     wxStopWatch sw;
 
-    wxString buf;
     for ( int i = 0; i < NUM_ITEMS; i++ )
     {
-        buf.Printf(_T("This is item %d"), i);
-        long tmp = m_listCtrl->InsertItem(i, buf, 0);
-        m_listCtrl->SetItemData(tmp, i);
-
-        buf.Printf(_T("Col 1, item %d"), i);
-        tmp = m_listCtrl->SetItem(i, 1, buf);
-
-        buf.Printf(_T("Item %d in column 2"), i);
-        tmp = m_listCtrl->SetItem(i, 2, buf);
+        m_listCtrl->InsertItemInReportView(i);
     }
 
     m_logWindow->WriteText(wxString::Format(_T("%d items inserted in %ldms\n"),
@@ -664,9 +655,33 @@ void MyListCtrl::OnActivated(wxListEvent& event)
 
 void MyListCtrl::OnListKeyDown(wxListEvent& event)
 {
-    LogEvent(event, _T("OnListKeyDown"));
+    switch ( event.GetCode() )
+    {
+        case WXK_DELETE:
+            DeleteItem(event.GetIndex());
 
-    event.Skip();
+            wxLogMessage(_T("Item %d deleted"), event.GetIndex());
+            break;
+
+        case WXK_INSERT:
+            if ( GetWindowStyle() & wxLC_REPORT )
+            {
+                if ( GetWindowStyle() & wxLC_VIRTUAL )
+                {
+                    SetItemCount(GetItemCount() + 1);
+                }
+                else // !virtual
+                {
+                    InsertItemInReportView(event.GetIndex());
+                }
+            }
+            //else: fall through
+
+        default:
+            LogEvent(event, _T("OnListKeyDown"));
+
+            event.Skip();
+    }
 }
 
 void MyListCtrl::OnChar(wxKeyEvent& event)
@@ -691,5 +706,19 @@ wxString MyListCtrl::OnGetItemText(long item, long column) const
 int MyListCtrl::OnGetItemImage(long item) const
 {
     return 0;
+}
+
+void MyListCtrl::InsertItemInReportView(int i)
+{
+    wxString buf;
+    buf.Printf(_T("This is item %d"), i);
+    long tmp = InsertItem(i, buf, 0);
+    SetItemData(tmp, i);
+
+    buf.Printf(_T("Col 1, item %d"), i);
+    SetItem(i, 1, buf);
+
+    buf.Printf(_T("Item %d in column 2"), i);
+    SetItem(i, 2, buf);
 }
 

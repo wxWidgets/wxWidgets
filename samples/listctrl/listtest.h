@@ -25,6 +25,9 @@ public:
         {
         }
 
+    // add one item to the listctrl in report mode
+    void InsertItemInReportView(int i);
+
     void OnColClick(wxListEvent& event);
     void OnBeginDrag(wxListEvent& event);
     void OnBeginRDrag(wxListEvent& event);
