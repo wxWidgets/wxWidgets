@@ -504,7 +504,13 @@ void wxMenuBar::MacInstallMenuBar()
 
     wxStAppResource resload ;
 
-    MenuBarHandle menubar = NewHandleClear( 6 /* sizeof( MenuBarHeader ) */ ) ;
+    MenuBarHandle menubar = NULL ;
+#if TARGET_API_MAC_OSX
+    menubar = NewHandleClear( 6 /* sizeof( MenuBarHeader ) */ ) ;
+#else
+    menubar = NewHandleClear( 12 ) ;
+    (*menubar)[3] = 0x0a ;
+#endif
     ::SetMenuBar( menubar ) ;
     DisposeMenuBar( menubar ) ;
     MenuHandle appleMenu = NULL ;
