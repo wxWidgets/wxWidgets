@@ -566,7 +566,7 @@ void ListBox::Append(char *s) {
 }
 
 int ListBox::Length() {
-    return ((wxListBox*)id)->Number();
+    return ((wxListBox*)id)->GetCount();
 }
 
 void ListBox::Select(int n) {
@@ -586,7 +586,7 @@ int ListBox::GetSelection() {
 
 int ListBox::Find(const char *prefix) {
     if (prefix) {
-        for (int x=0; x < ((wxListBox*)id)->Number(); x++) {
+        for (int x=0; x < ((wxListBox*)id)->GetCount(); x++) {
             wxString text = ((wxListBox*)id)->GetString(x);
             if (text.StartsWith(prefix))
                 return x;

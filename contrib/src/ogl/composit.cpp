@@ -1747,7 +1747,7 @@ void wxDivisionShape::PopupMenu(double x, double y)
     oglPopupDivisionMenu->Enable(DIVISION_MENU_EDIT_TOP_EDGE, FALSE);
 
   int x1, y1;
-  m_canvas->ViewStart(&x1, &y1);
+  m_canvas->GetViewStart(&x1, &y1);
 
   int unit_x, unit_y;
   m_canvas->GetScrollPixelsPerUnit(&unit_x, &unit_y);
