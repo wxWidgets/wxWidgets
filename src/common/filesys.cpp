@@ -97,8 +97,14 @@ wxString wxFileSystemHandler::GetMimeTypeFromExt(const wxString& location)
     }
 
     ft = m_MimeMng -> GetFileTypeFromExtension(ext);
-    if (ft && (ft -> GetMimeType(&mime))) return mime;
-    else return wxEmptyString;
+    if (ft && (ft -> GetMimeType(&mime))) {
+        delete ft; 
+        return mime;
+    }
+    else {
+        delete ft;
+        return wxEmptyString;
+    }
 }
 
 
