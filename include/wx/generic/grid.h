@@ -937,7 +937,8 @@ private:
 // A 2-dimensional array of strings for data values
 //
 
-WX_DECLARE_EXPORTED_OBJARRAY(wxArrayString, wxGridStringArray);
+WX_DECLARE_OBJARRAY_WITH_DECL(wxArrayString, wxGridStringArray,
+                              class WXDLLIMPEXP_ADV);
 
 
 
@@ -1051,7 +1052,8 @@ extern WXDLLIMPEXP_ADV wxRect           wxGridNoCellRect;
 
 // An array of cell coords...
 //
-WX_DECLARE_EXPORTED_OBJARRAY(wxGridCellCoords, wxGridCellCoordsArray);
+WX_DECLARE_OBJARRAY_WITH_DECL(wxGridCellCoords, wxGridCellCoordsArray,
+                              class WXDLLIMPEXP_ADV);
 
 // ----------------------------------------------------------------------------
 // wxGrid

@@ -820,6 +820,8 @@ WX_DECLARE_USER_EXPORTED_BASEARRAY(double, wxBaseArrayDouble, WXDLLIMPEXP_BASE);
     WX_DEFINE_EXPORTED_TYPEARRAY(T, name, wxBaseArrayPtrVoid)
 #define WX_DEFINE_EXPORTED_ARRAY_NO_PTR(T, name)                       \
     WX_DEFINE_EXPORTED_TYPEARRAY_NO_PTR(T, name, wxBaseArrayPtrVoid)
+#define WX_DEFINE_ARRAY_WITH_DECL_NO_PTR(T, name, decl)                \
+    WX_DEFINE_TYPEARRAY_WITH_DECL_NO_PTR(T, name, wxBaseArrayPtrVoid, decl)
 #define WX_DEFINE_USER_EXPORTED_ARRAY(T, name, expmode)                \
     WX_DEFINE_TYPEARRAY_WITH_DECL(T, name, wxBaseArrayPtrVoid, expmode)
 #define WX_DEFINE_USER_EXPORTED_ARRAY_NO_PTR(T, name, expmode)         \
