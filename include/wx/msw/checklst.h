@@ -46,6 +46,10 @@ public:
   virtual bool IsChecked(size_t uiIndex) const;
   virtual void Check(size_t uiIndex, bool bCheck = TRUE);
 
+  // return the index of the item at this position or wxNOT_FOUND
+  int HitTest(const wxPoint& pt) const { return DoHitTestItem(pt.x, pt.y); }
+  int HitTest(wxCoord x, wxCoord y) const { return DoHitTestItem(x, y); }
+
   // accessors
   size_t GetItemHeight() const { return m_nItemHeight; }
 
@@ -54,6 +58,9 @@ protected:
   // so we need to override these functions
   virtual wxOwnerDrawn *CreateItem(size_t n);
   virtual bool          MSWOnMeasure(WXMEASUREITEMSTRUCT *item);
+
+  // this can't be called DoHitTest() because wxWindow already has this method
+  int DoHitTestItem(wxCoord x, wxCoord y) const;
 
   // pressing space or clicking the check box toggles the item
   void OnKeyDown(wxKeyEvent& event);

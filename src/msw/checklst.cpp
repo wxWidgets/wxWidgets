@@ -443,20 +443,9 @@ void wxCheckListBox::OnLeftClick(wxMouseEvent& event)
 {
   // clicking on the item selects it, clicking on the checkmark toggles
   if ( event.GetX() <= wxOwnerDrawn::GetDefaultMarginWidth() ) {
-    #ifdef __WIN32__
-      size_t nItem = (size_t)::SendMessage
-                               (
-                                (HWND)GetHWND(),
-                                LB_ITEMFROMPOINT,
-                                0,
-                                MAKELPARAM(event.GetX(), event.GetY())
-                               );
-    #else // Win16
-        // FIXME this doesn't work when the listbox is scrolled!
-        size_t nItem = ((size_t)event.GetY()) / m_nItemHeight;
-    #endif // Win32/16
+    int nItem = HitTest(event.GetX(), event.GetY());
 
-    if ( nItem < (size_t)m_noItems )
+    if ( nItem != wxNOT_FOUND )
       GetItem(nItem)->Toggle();
     //else: it's not an error, just click outside of client zone
   }
@@ -464,6 +453,24 @@ void wxCheckListBox::OnLeftClick(wxMouseEvent& event)
     // implement default behaviour: clicking on the item selects it
     event.Skip();
   }
+}
+
+int wxCheckListBox::DoHitTestItem(wxCoord x, wxCoord y) const
+{
+  #ifdef __WIN32__
+    int nItem = (int)::SendMessage
+                             (
+                              (HWND)GetHWND(),
+                              LB_ITEMFROMPOINT,
+                              0,
+                              MAKELPARAM(x, y)
+                             );
+  #else // Win16
+    // FIXME this doesn't work when the listbox is scrolled!
+    int nItem = y / m_nItemHeight;
+  #endif // Win32/16
+
+  return nItem >= m_noItems ? wxNOT_FOUND : nItem;
 }
 
 #endif
