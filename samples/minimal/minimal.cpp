@@ -117,14 +117,13 @@ IMPLEMENT_APP(MyApp)
 // `Main program' equivalent: the program execution "starts" here
 bool MyApp::OnInit()
 {
-    // Create the main application window
+    // create the main application window
     MyFrame *frame = new MyFrame("Minimal wxWindows App",
                                  wxPoint(50, 50), wxSize(450, 340));
 
-    // Show it and tell the application that it's our main window
-    // @@@ what does it do exactly, in fact? is it necessary here?
+    // and show it (the frames, unlike simple controls, are not shown when
+    // created initially)
     frame->Show(TRUE);
-    SetTopWindow(frame);
 
     // success: wxApp::OnRun() will be called which will enter the main message
     // loop and the application will run. If we returned FALSE here, the
@@ -141,8 +140,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
        : wxFrame((wxFrame *)NULL, -1, title, pos, size)
 {
 #ifdef __WXMAC__
-	// we need this in order to allow the about menu relocation, since ABOUT is not the default id of the about menu 
-	wxApp::s_macAboutMenuItemId = Minimal_About ;
+    // we need this in order to allow the about menu relocation, since ABOUT is
+    // not the default id of the about menu
+    wxApp::s_macAboutMenuItemId = Minimal_About;
 #endif
 
     // set the frame icon
@@ -151,25 +151,37 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     // create a menu bar
     wxMenu *menuFile = new wxMenu("", wxMENU_TEAROFF);
 
-#ifdef __WXMAC__
-	// since the about should be in the help menu for auto-relocation we have to do a little more...
-    wxMenu *helpMenu = new wxMenu("", wxMENU_TEAROFF);
-    helpMenu->Append(Minimal_About, "&About...\tCntrl+A", "Show about dialog");
-#else
-    menuFile->Append(Minimal_About, "&About...\tCtrl-A", "Show about dialog");
-    menuFile->AppendSeparator();
-#endif
+    // the "About" item should be in the help menu
+    wxMenu *helpMenu = new wxMenu;
+    helpMenu->Append(Minimal_About, "&About...\tCtrl-A", "Show about dialog");
 
     menuFile->Append(Minimal_Quit, "E&xit\tAlt-X", "Quit this program");
+
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
     menuBar->Append(menuFile, "&File");
-#ifdef __WXMAC__
     menuBar->Append(helpMenu, "&Help");
-#endif
 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
+
+    wxPanel *panel = new wxPanel(this, -1);
+    wxStaticBox *box = new wxStaticBox(panel, -1, "box");
+    wxComboBox *combo = new wxComboBox(panel, -1, "combo");
+    wxLayoutConstraints *c;
+    c = new wxLayoutConstraints;
+    c->left.SameAs(panel, wxLeft);
+    c->right.SameAs(panel, wxRight);
+    c->top.SameAs(panel, wxTop);
+    c->bottom.SameAs(panel, wxBottom);
+    box->SetConstraints(c);
+    c = new wxLayoutConstraints;
+    c->left.SameAs(box, wxLeft, 20);
+    c->right.SameAs(box, wxRight, 10);
+    c->top.SameAs(box, wxTop, 10);
+    c->bottom.SameAs(box, wxBottom, 10);
+    combo->SetConstraints(c);
+    panel->SetAutoLayout(TRUE);
 
 #if wxUSE_STATUSBAR
     // create a status bar just for fun (by default with 1 pane only)
@@ -191,15 +203,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxString msg;
     msg.Printf( _T("This is the about dialog of minimal sample.\n")
-                _T("Welcome to %s")
-#ifdef wxBETA_NUMBER
-               _T(" (beta %d)!")
-#endif // wxBETA_NUMBER
-               , wxVERSION_STRING
-#ifdef wxBETA_NUMBER
-               , wxBETA_NUMBER
-#endif // wxBETA_NUMBER
-              );
+                _T("Welcome to %s"), wxVERSION_STRING);
 
     wxMessageBox(msg, "About Minimal", wxOK | wxICON_INFORMATION, this);
 }
