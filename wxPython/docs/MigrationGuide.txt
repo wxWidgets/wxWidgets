@@ -609,7 +609,26 @@ Then just change it to this::
      import wx
      import wx.lib.ogl as ogl
 
+The other compatibility issue deals with removing a wart in the
+original API that was necessary in order to allow overloaded methods
+in derived classes to call the same method in the base class when
+using the old SWIG.  Instead dedaling with the wart you can now just
+call the base class method like you woudl for any other Python class.
+For example, if you had to do something like this previously::
 
+    class MyDividedShape(ogl.DividedShape):
+        ...
+        def OnSizingEndDragLeft(self, pt, x, y, keys, attch):
+            self.base_OnSizingEndDragLeft(pt, x, y, keys, attch)
+            ...
+
+You will need to change it to be like this::
+
+    class MyDividedShape(ogl.DividedShape):
+        ...
+        def OnSizingEndDragLeft(self, pt, x, y, keys, attch):
+            ogl.DividedShape.OnSizingEndDragLeft(self, pt, x, y, keys, attch)
+            ...    
 
 
 
