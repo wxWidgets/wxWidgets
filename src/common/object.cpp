@@ -364,34 +364,3 @@ wxObject::CloneRefData(const wxObjectRefData * WXUNUSED(data)) const
 
     return NULL;
 }
-
-// ----------------------------------------------------------------------------
-// misc
-// ----------------------------------------------------------------------------
-
-#if defined(__DARWIN__) && defined(WXMAKINGDLL)
-
-extern "C" {
-    void __initialize_Cplusplus(void);
-    void wxWindowsDylibInit(void);
-};
-
-// Dynamic shared library (dylib) initialization routine
-//   required to initialize static C++ objects bacause of lazy dynamic linking
-//   http://developer.apple.com/techpubs/macosx/Essentials/
-//          SystemOverview/Frameworks/Dynamic_Shared_Libraries.html
-
-void wxWindowsDylibInit()
-{
-    // The function __initialize_Cplusplus() must be called from the shared
-    // library initialization routine to cause the static C++ objects in
-    // the library to be initialized (reference number 2441683).
-
-    // This only seems to be necessary if the library initialization routine
-    // needs to use the static C++ objects
-    __initialize_Cplusplus();
-}
-
-#endif
-
-// vi:sts=4:sw=4:et
