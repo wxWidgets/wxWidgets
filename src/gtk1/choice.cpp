@@ -560,7 +560,11 @@ wxSize wxChoice::DoGetBestSize() const
     if ( ret.x < 80 )
         ret.x = 80;
 
-    ret.y = 16 + GetCharHeight();
+    // If this request_size is called with no entries then
+    // the returned height is wrong. Give it a reasonable
+    // default value.
+    if (ret.y <= 18)
+        ret.y = 8 + GetCharHeight();
 
     return ret;
 }
