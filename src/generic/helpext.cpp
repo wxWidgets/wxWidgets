@@ -198,11 +198,11 @@ void wxExtHelpController::DeleteList()
 {
    if(m_MapList)
    {
-      wxNode *node = m_MapList->GetFirst();
+      wxList::compatibility_iterator node = m_MapList->GetFirst();
       while (node)
       {
          delete (wxExtHelpMapEntry *)node->GetData();
-         delete node;
+         m_MapList->Erase(node);
          node = m_MapList->GetFirst();
       }
       delete m_MapList;
@@ -328,7 +328,7 @@ wxExtHelpController::DisplayContents()
       return FALSE;
 
    wxString contents;
-   wxNode *node = m_MapList->GetFirst();
+   wxList::compatibility_iterator node = m_MapList->GetFirst();
    wxExtHelpMapEntry *entry;
    while(node)
    {
@@ -360,7 +360,7 @@ wxExtHelpController::DisplaySection(int sectionNo)
       return FALSE;
 
    wxBusyCursor b; // display a busy cursor
-   wxNode *node = m_MapList->GetFirst();
+   wxList::compatibility_iterator node = m_MapList->GetFirst();
    wxExtHelpMapEntry *entry;
    while(node)
    {
@@ -401,7 +401,7 @@ wxExtHelpController::KeywordSearch(const wxString& k)
    int          idx = 0, j;
    bool         rc;
    bool         showAll = k.IsEmpty();
-   wxNode       *node = m_MapList->GetFirst();
+   wxList::compatibility_iterator node = m_MapList->GetFirst();
    wxExtHelpMapEntry *entry;
 
    {
