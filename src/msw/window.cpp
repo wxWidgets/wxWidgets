@@ -696,11 +696,15 @@ void wxWindowMSW::MSWDeviceToLogical (float *x, float *y) const
 // scrolling stuff
 // ---------------------------------------------------------------------------
 
+// convert wxHORIZONTAL/wxVERTICAL to SB_HORZ/SB_VERT
+static inline wxDirToWinStyle(int orient)
+{
+    return orient == wxHORIZONTAL ? SB_HORZ : SB_VERT;
+}
+
 #if WXWIN_COMPATIBILITY
 void wxWindowMSW::SetScrollRange(int orient, int range, bool refresh)
 {
-#if defined(__WIN95__)
-
     int range1 = range;
 
     // Try to adjust the range to cope with page size > 1
@@ -711,106 +715,31 @@ void wxWindowMSW::SetScrollRange(int orient, int range, bool refresh)
         range1 += (pageSize - 1);
     }
 
-    SCROLLINFO info;
-    int dir;
-
-    if ( orient == wxHORIZONTAL ) {
-        dir = SB_HORZ;
-    } else {
-        dir = SB_VERT;
-    }
-
-    info.cbSize = sizeof(SCROLLINFO);
+    WinStruct<SCROLLINFO> info;
     info.nPage = pageSize; // Have to set this, or scrollbar goes awry
     info.nMin = 0;
     info.nMax = range1;
-    info.nPos = 0;
     info.fMask = SIF_RANGE | SIF_PAGE;
 
     HWND hWnd = GetHwnd();
     if ( hWnd )
-        ::SetScrollInfo(hWnd, dir, &info, refresh);
-#else
-    int wOrient;
-    if ( orient == wxHORIZONTAL )
-        wOrient = SB_HORZ;
-    else
-        wOrient = SB_VERT;
-
-    HWND hWnd = GetHwnd();
-    if ( hWnd )
-        ::SetScrollRange(hWnd, wOrient, 0, range, refresh);
-#endif
+        ::SetScrollInfo(hWnd, wxDirToWinStyle(orient), &info, refresh);
 }
 
 void wxWindowMSW::SetScrollPage(int orient, int page, bool refresh)
 {
-#if defined(__WIN95__)
-    SCROLLINFO info;
-    int dir;
-
-    if ( orient == wxHORIZONTAL ) {
-        dir = SB_HORZ;
-        m_xThumbSize = page;
-    } else {
-        dir = SB_VERT;
-        m_yThumbSize = page;
-    }
-
-    info.cbSize = sizeof(SCROLLINFO);
+    WinStruct<SCROLLINFO> info;
     info.nPage = page;
-    info.nMin = 0;
     info.fMask = SIF_PAGE;
 
     HWND hWnd = GetHwnd();
     if ( hWnd )
-        ::SetScrollInfo(hWnd, dir, &info, refresh);
-#else
-    if ( orient == wxHORIZONTAL )
-        m_xThumbSize = page;
-    else
-        m_yThumbSize = page;
-#endif
-}
-
-int wxWindowMSW::OldGetScrollRange(int orient) const
-{
-    int wOrient;
-    if ( orient == wxHORIZONTAL )
-        wOrient = SB_HORZ;
-    else
-        wOrient = SB_VERT;
-
-#if __WATCOMC__ && defined(__WINDOWS_386__)
-    short minPos, maxPos;
-#else
-    int minPos, maxPos;
-#endif
-    HWND hWnd = GetHwnd();
-    if ( hWnd )
-    {
-        ::GetScrollRange(hWnd, wOrient, &minPos, &maxPos);
-#if defined(__WIN95__)
-        // Try to adjust the range to cope with page size > 1
-        // - a Windows API quirk
-        int pageSize = GetScrollPage(orient);
-        if ( pageSize > 1 )
-        {
-            maxPos -= (pageSize - 1);
-        }
-#endif
-        return maxPos;
-    }
-    else
-        return 0;
+        ::SetScrollInfo(hWnd, wxDirToWinStyle(orient), &info, refresh);
 }
 
 int wxWindowMSW::GetScrollPage(int orient) const
 {
-    if ( orient == wxHORIZONTAL )
-        return m_xThumbSize;
-    else
-        return m_yThumbSize;
+    return orient == wxHORIZONTAL ? m_xThumbSize : m_yThumbSize;
 }
 
 #endif // WXWIN_COMPATIBILITY
@@ -826,61 +755,31 @@ inline int GetScrollPosition(HWND hWnd, int wOrient)
 
 int wxWindowMSW::GetScrollPos(int orient) const
 {
-    int wOrient;
-    if ( orient == wxHORIZONTAL )
-        wOrient = SB_HORZ;
-    else
-        wOrient = SB_VERT;
-
     HWND hWnd = GetHwnd();
     wxCHECK_MSG( hWnd, 0, _T("no HWND in GetScrollPos") );
 
-    return GetScrollPosition(hWnd, wOrient);
+    return GetScrollPosition(hWnd, orient == wxHORIZONTAL ? SB_HORZ : SB_VERT);
 }
 
 // This now returns the whole range, not just the number
 // of positions that we can scroll.
 int wxWindowMSW::GetScrollRange(int orient) const
 {
-    int wOrient;
-    if ( orient == wxHORIZONTAL )
-        wOrient = SB_HORZ;
-    else
-        wOrient = SB_VERT;
-
-#if __WATCOMC__ && defined(__WINDOWS_386__)
-    short minPos, maxPos;
-#else
     int minPos, maxPos;
-#endif
     HWND hWnd = GetHwnd();
-    if ( hWnd )
-    {
-        ::GetScrollRange(hWnd, wOrient, &minPos, &maxPos);
-#if defined(__WIN95__)
-        // Try to adjust the range to cope with page size > 1
-        // - a Windows API quirk
-        int pageSize = GetScrollThumb(orient);
-        if ( pageSize > 1 )
-        {
-            maxPos -= (pageSize - 1);
-        }
-        // October 10th: new range concept.
-        maxPos += pageSize;
-#endif
-
-        return maxPos;
-    }
-    else
+    if ( !hWnd )
         return 0;
+
+    ::GetScrollRange(hWnd, orient == wxHORIZONTAL ? SB_HORZ : SB_VERT,
+                     &minPos, &maxPos);
+
+    // undo "range - 1" done in SetScrollbar()
+    return maxPos + 1;
 }
 
 int wxWindowMSW::GetScrollThumb(int orient) const
 {
-    if ( orient == wxHORIZONTAL )
-        return m_xThumbSize;
-    else
-        return m_yThumbSize;
+    return orient == wxHORIZONTAL ? m_xThumbSize : m_yThumbSize;
 }
 
 void wxWindowMSW::SetScrollPos(int orient, int pos, bool refresh)
@@ -888,77 +787,38 @@ void wxWindowMSW::SetScrollPos(int orient, int pos, bool refresh)
     HWND hWnd = GetHwnd();
     wxCHECK_RET( hWnd, _T("SetScrollPos: no HWND") );
 
-    int dir = orient == wxHORIZONTAL ? SB_HORZ : SB_VERT;
-
-#if defined(__WIN95__)
-    SCROLLINFO info;
-    info.cbSize = sizeof(SCROLLINFO);
+    WinStruct<SCROLLINFO> info;
     info.nPage = 0;
     info.nMin = 0;
     info.nPos = pos;
     info.fMask = SIF_POS;
 
-    ::SetScrollInfo(hWnd, dir, &info, refresh);
-#else // !__WIN95__
-    ::SetScrollPos(hWnd, dir, pos, refresh);
-#endif // __WIN95__/!__WIN95__
+    ::SetScrollInfo(hWnd, orient == wxHORIZONTAL ? SB_HORZ : SB_VERT,
+                    &info, refresh);
 }
 
 // New function that will replace some of the above.
-void wxWindowMSW::SetScrollbar(int orient, int pos, int thumbVisible,
-                            int range, bool refresh)
+void wxWindowMSW::SetScrollbar(int orient,
+                               int pos,
+                               int pageSize,
+                               int range,
+                               bool refresh)
 {
-#if defined(__WIN95__)
-    int oldRange = range - thumbVisible;
-
-    int range1 = oldRange;
-
-    // Try to adjust the range to cope with page size > 1
-    // - a Windows API quirk
-    int pageSize = thumbVisible;
-    if ( pageSize > 1 && range > 0)
-    {
-        range1 += (pageSize - 1);
-    }
-
-    SCROLLINFO info;
-    int dir;
-
-    if ( orient == wxHORIZONTAL ) {
-        dir = SB_HORZ;
-    } else {
-        dir = SB_VERT;
-    }
-
-    info.cbSize = sizeof(SCROLLINFO);
-    info.nPage = pageSize; // Have to set this, or scrollbar goes awry
-    info.nMin = 0;
-    info.nMax = range1;
+    WinStruct<SCROLLINFO> info;
+    info.nPage = pageSize;
+    info.nMin = 0;              // range is nMax - nMin + 1
+    info.nMax = range - 1;      //  as both nMax and nMax are inclusive
     info.nPos = pos;
     info.fMask = SIF_RANGE | SIF_PAGE | SIF_POS;
 
     HWND hWnd = GetHwnd();
     if ( hWnd )
-        ::SetScrollInfo(hWnd, dir, &info, refresh);
-#else
-    int wOrient;
-    if ( orient == wxHORIZONTAL )
-        wOrient = SB_HORZ;
-    else
-        wOrient = SB_VERT;
-
-    HWND hWnd = GetHwnd();
-    if ( hWnd )
     {
-        ::SetScrollRange(hWnd, wOrient, 0, range, FALSE);
-        ::SetScrollPos(hWnd, wOrient, pos, refresh);
+        ::SetScrollInfo(hWnd, orient == wxHORIZONTAL ? SB_HORZ : SB_VERT,
+                        &info, refresh);
     }
-#endif
-    if ( orient == wxHORIZONTAL ) {
-        m_xThumbSize = thumbVisible;
-    } else {
-        m_yThumbSize = thumbVisible;
-    }
+
+    *(orient == wxHORIZONTAL ? &m_xThumbSize : &m_yThumbSize) = pageSize;
 }
 
 void wxWindowMSW::ScrollWindow(int dx, int dy, const wxRect *prect)
@@ -4627,9 +4487,7 @@ bool wxWindowMSW::MSWOnScroll(int orientation, WXWORD wParam,
         // be done only for these two SB_ events as they are the only one
         // carrying the scrollbar position)
         {
-            SCROLLINFO scrollInfo;
-            wxZeroMemory(scrollInfo);
-            scrollInfo.cbSize = sizeof(SCROLLINFO);
+            WinStruct<SCROLLINFO> scrollInfo;
             scrollInfo.fMask = SIF_TRACKPOS;
 
             if ( !::GetScrollInfo(GetHwnd(),
