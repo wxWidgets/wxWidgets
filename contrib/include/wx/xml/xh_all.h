@@ -35,5 +35,10 @@
 #include "wx/xml/xh_text.h"
 #include "wx/xml/xh_listb.h"
 #include "wx/xml/xh_toolb.h"
-
+#include "wx/xml/xh_bmpbt.h"
+#include "wx/xml/xh_stbox.h"
+#include "wx/xml/xh_scrol.h"
+#include "wx/xml/xh_tree.h"
+#include "wx/xml/xh_cald.h"
+#include "wx/xml/xh_listc.h"
 #endif // _WX_XMLRES_H_

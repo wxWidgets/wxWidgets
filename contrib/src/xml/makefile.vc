@@ -37,7 +37,9 @@ OBJECTS=$(D)\xml.obj $(D)\xmlbin.obj $(D)\xmlbinz.obj $(D)\xmlpars.obj $(D)\xmlr
         $(D)\xh_bttn.obj $(D)\xh_chckb.obj $(D)\xh_chckl.obj $(D)\xh_choic.obj $(D)\xh_combo.obj $(D)\xh_dlg.obj \
         $(D)\xh_gauge.obj $(D)\xh_html.obj $(D)\xh_menu.obj $(D)\xh_notbk.obj $(D)\xh_panel.obj $(D)\xh_radbt.obj \
         $(D)\xh_radbx.obj $(D)\xh_sizer.obj $(D)\xh_slidr.obj $(D)\xh_spin.obj $(D)\xh_stbmp.obj $(D)\xh_sttxt.obj \
-        $(D)\xh_text.obj $(D)\xh_listb.obj $(D)\xh_toolb.obj
+        $(D)\xh_text.obj $(D)\xh_listb.obj $(D)\xh_toolb.obj \
+        $(D)\xh_bmpbt.obj $(D)\xh_cald.obj $(D)\xh_listc.obj $(D)\xh_scrol.obj \
+        $(D)\xh_stbox.obj $(D)\xh_tree.obj
 
 !include $(WXDIR)\src\makelib.vc
 

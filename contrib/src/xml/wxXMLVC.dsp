@@ -188,6 +188,30 @@ SOURCE=.\xmlres.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\xh_bmpbt.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xh_cald.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xh_listc.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xh_scrol.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xh_stbox.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\xh_tree.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\xmlrsall.cpp
 # End Source File
 # End Target

@@ -30,7 +30,26 @@ void wxXmlResource::InitAllHandlers()
 
     AddHandler(new wxDialogXmlHandler);
     AddHandler(new wxPanelXmlHandler);
+
+    AddHandler(new wxSizerXmlHandler);
+//Controls
     AddHandler(new wxButtonXmlHandler);
+    AddHandler(new wxBitmapButtonXmlHandler);
+    AddHandler(new wxStaticTextXmlHandler);
+    AddHandler(new wxStaticBoxXmlHandler);
+    AddHandler(new wxStaticBitmapXmlHandler);
+    AddHandler(new wxTreeCtrlXmlHandler);
+    AddHandler(new wxCalendarCtrlXmlHandler);
+    AddHandler(new wxListCtrlXmlHandler);
+#if CHECKLISTBOX
+    AddHandler(new wxCheckListXmlHandler);
+#endif
+#if wxUSE_CHOICE
+    AddHandler(new wxChoiceXmlHandler);
+#endif
+#if wxUSE_SLIDER
+    AddHandler(new wxSliderXmlHandler);
+#endif
 #if wxUSE_GAUGE
     AddHandler(new wxGaugeXmlHandler);
 #endif
@@ -46,9 +65,10 @@ void wxXmlResource::InitAllHandlers()
 #if wxUSE_SPINCTRL
     AddHandler(new wxSpinCtrlXmlHandler);
 #endif    
-    AddHandler(new wxStaticTextXmlHandler);
-    AddHandler(new wxStaticBitmapXmlHandler);
-    AddHandler(new wxSliderXmlHandler);
+#if wxUSE_SCROLLBAR
+    AddHandler(new wxScrollBarXmlHandler);
+#endif
+    
 #if wxUSE_RADIOBOX
     AddHandler(new wxRadioBoxXmlHandler);
     AddHandler(new wxRadioButtonXmlHandler);
@@ -56,9 +76,6 @@ void wxXmlResource::InitAllHandlers()
 #if wxUSE_COMBOBOX
     AddHandler(new wxComboBoxXmlHandler);
 #endif
-    AddHandler(new wxChoiceXmlHandler);
-    AddHandler(new wxCheckListXmlHandler);
-    AddHandler(new wxSizerXmlHandler);
 #if wxUSE_NOTEBOOK
     AddHandler(new wxNotebookXmlHandler);
 #endif
@@ -69,4 +86,7 @@ void wxXmlResource::InitAllHandlers()
 #if wxUSE_TOOLBAR
     AddHandler(new wxToolBarXmlHandler);
 #endif
+
+
+
 }
