@@ -15,6 +15,7 @@
 #ifdef __GNUG__
 #pragma interface "colour.h"
 #endif
+#include "wx/object.h"
 
 // Colour
 class WXDLLEXPORT wxColour: public wxObject
