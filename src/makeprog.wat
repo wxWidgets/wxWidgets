@@ -29,8 +29,9 @@ $(RESFILE): $(PROGRAM).rc $(WXDIR)\include\wx\msw\wx.rc
 
 $(LNK) : makefile.wat
     %create $(LNK)
+    @%append $(LNK) $(LDFLAGS)
     @%append $(LNK) $(DEBUGINFO)
-    @%append $(LNK) system $(LINKOPTION)
+    @%append $(LNK) system $(LINKSYSTEM)
     @%append $(LNK) $(STACK)
     @%append $(LNK) name $(OUTPUTDIR)$(PROGRAM).exe
     @for %i in ($(OBJECTS)) do @%append $(LNK) file %i
