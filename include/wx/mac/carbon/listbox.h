@@ -130,7 +130,7 @@ public:
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
     
     // Windows callbacks
-#if !__WXMAC_OSX__
+#ifndef __WXMAC_OSX__
     void OnChar(wxKeyEvent& event);
 #endif
 
@@ -151,7 +151,7 @@ protected:
     int             MacGetSelections(wxArrayInt& aSelections) const ;
     bool            MacIsSelected( int n ) const ;
     void            MacScrollTo( int n ) ;
-#if !__WXMAC_OSX__
+#ifndef __WXMAC_OSX__
     void            OnSize( wxSizeEvent &size ) ;
 #endif
     void            MacDoClick() ;

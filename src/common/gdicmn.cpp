@@ -538,7 +538,7 @@ void wxInitializeStockObjects ()
 
     GetThemeFont(kThemeSystemFont , GetApplicationScript() , fontName , &fontSize , &fontStyle ) ;
     sizeFont = fontSize ;
-#if __WXMAC_CLASSIC__
+#ifdef __WXMAC_CLASSIC__
     wxNORMAL_FONT = new wxFont (fontSize, wxMODERN, wxNORMAL, wxNORMAL , false , wxMacMakeStringFromPascal(fontName) );
 #else
     wxNORMAL_FONT = new wxFont () ;
@@ -563,7 +563,7 @@ void wxInitializeStockObjects ()
 #elif defined(__WXMAC__)
     wxSWISS_FONT = new wxFont (sizeFont, wxSWISS, wxNORMAL, wxNORMAL); /* Helv */
     wxITALIC_FONT = new wxFont (sizeFont, wxROMAN, wxITALIC, wxNORMAL);
-#if __WXMAC_CLASSIC__
+#ifdef __WXMAC_CLASSIC__
   GetThemeFont(kThemeSmallSystemFont , GetApplicationScript() , fontName , &fontSize , &fontStyle ) ;
     wxSMALL_FONT = new wxFont (fontSize, wxSWISS, wxNORMAL, wxNORMAL , false , wxMacMakeStringFromPascal( fontName ) );
 #else
