@@ -239,6 +239,8 @@
 // ----------------------------------------------------------------------------
 
 #ifdef wxHAVE_TCHAR_SUPPORT
+    #include <ctype.h>
+
     // ctype.h functions
     #define  wxIsalnum   _istalnum
     #define  wxIsalpha   _istalpha
