@@ -30,13 +30,13 @@ wxCheckListBox::wxCheckListBox() : wxListBox()
 }
 
 wxCheckListBox::wxCheckListBox(wxWindow *parent, wxWindowID id,
-                 const wxPoint& pos,
-                 const wxSize& size,
-                 int nStrings, 
-                 const wxString *choices,
-                 long style,
-                 const wxValidator& validator,
-                 const wxString& name )
+                               const wxPoint& pos,
+                               const wxSize& size,
+                               int nStrings, 
+                               const wxString *choices,
+                               long style,
+                               const wxValidator& validator,
+                               const wxString& name )
 {
     m_hasCheckBoxes = TRUE;
     wxListBox::Create( parent, id, pos, size, nStrings, choices, style, validator, name );
@@ -54,7 +54,7 @@ bool wxCheckListBox::IsChecked( int index ) const
 
         wxString str = wxString(label->label,*wxConvCurrent);
 
-        return (str.GetChar(1) == wxT('X'));
+        return str.GetChar(1) == wxCHECKLBOX_CHECKED;
     }
 
     wxFAIL_MSG(wxT("wrong checklistbox index"));
@@ -73,12 +73,10 @@ void wxCheckListBox::Check( int index, bool check )
 
         wxString str = wxString(label->label,*wxConvCurrent);
 
-        if (check == (str.GetChar(1) == wxT('X'))) return;
+        if (check == (str.GetChar(1) == wxCHECKLBOX_CHECKED))
+            return;
 
-        if (check)
-            str.SetChar( 1, wxT('X') );
-        else
-            str.SetChar( 1, wxT('-') );
+        str.SetChar( 1, check ? wxCHECKLBOX_CHECKED : wxCHECKLBOX_UNCHECKED );
 
         gtk_label_set( label, str.mbc_str() );
 

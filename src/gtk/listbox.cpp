@@ -51,10 +51,8 @@ extern bool g_isIdle;
 
 #if wxUSE_CHECKLISTBOX
 
-#define CHECKBOX_STRING "[-] "
-
 // checklistboxes have "[±] " prepended to their lables, this macro removes it
-// (NB: 4 below is the length of CHECKBOX_STRING above)
+// (NB: 4 below is the length of wxCHECKLBOX_STRING above)
 //
 // the argument to it is a "const char *" pointer
 #define GET_REAL_LABEL(label) ((m_hasCheckBoxes)?(label)+4 : (label))
@@ -520,7 +518,7 @@ void wxListBox::GtkAddItem( const wxString &item, int pos )
 #if wxUSE_CHECKLISTBOX
     if (m_hasCheckBoxes)
     {
-        label.Prepend(CHECKBOX_STRING);
+        label.Prepend(wxCHECKLBOX_STRING);
     }
 #endif // wxUSE_CHECKLISTBOX
 
@@ -714,7 +712,7 @@ void wxListBox::SetString( int n, const wxString &string )
         wxString str;
 #if wxUSE_CHECKLISTBOX
         if (m_hasCheckBoxes)
-            str += CHECKBOX_STRING;
+            str += wxCHECKLBOX_STRING;
 #endif // wxUSE_CHECKLISTBOX
         str += string;
 
