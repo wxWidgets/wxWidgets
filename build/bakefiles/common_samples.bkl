@@ -62,6 +62,11 @@
         </if>
     </template>
 
+    <template id="wx_test_console" template="wx_sample_console">
+        <cppflags>$(CPPUNIT_CFLAGS)</cppflags>
+        <ldflags>$(CPPUNIT_LIBS)</ldflags>
+    </template>
+    
     
     <!-- =============================================================== -->
     <!--                    Support for samples data files:              -->

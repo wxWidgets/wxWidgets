@@ -5956,6 +5956,8 @@ AC_SUBST(TOOLKIT_VERSION)
 AC_SUBST(SAMPLES_RPATH_FLAG)
 AC_SUBST(SAMPLES_RPATH_POSTLINK)
 AC_SUBST(HOST_SUFFIX)
+AC_SUBST(CPPUNIT_CFLAGS)
+AC_SUBST(CPPUNIT_LIBS)
 
 AC_BAKEFILE
 
@@ -6168,6 +6170,8 @@ else dnl we build wxBase only
     dnl there are no wxBase programs in contrib nor demos
     SUBDIRS="samples utils"
 fi
+dnl Add tests to the list of subdirs if cppunit 1.8.0+ is detected
+AM_PATH_CPPUNIT(1.8.0, SUBDIRS="$SUBDIRS tests")
 
 for subdir in `echo $SUBDIRS`; do
     if test -d ${srcdir}/${subdir} ; then
@@ -6189,11 +6193,13 @@ for subdir in `echo $SUBDIRS`; do
             dnl wxBase
             if test ${subdir} = "samples"; then
                 makefiles="samples/Makefile.in samples/console/Makefile.in"
-            else dnl utils
+            elif test ${subdir} = "utils"; then
                 makefiles="utils/HelpGen/Makefile.in \
                            utils/HelpGen/src/Makefile.in \
                            utils/tex2rtf/Makefile.in \
                            utils/tex2rtf/src/Makefile.in"
+            else dnl assume that everything compiles for tests
+                makefiles=`(cd $srcdir ; find $subdir -name Makefile.in)`
             fi
         fi
 

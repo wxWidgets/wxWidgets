@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<!-- $id$ -->
+
+<makefile>
+
+    <include file="../build/bakefiles/common_samples.bkl"/>
+
+    <exe id="test" template="wx_test_console"
+                   template_append="wx_append_base">
+        <sources>
+            test.cpp
+            mbconv/main.cpp
+        </sources>
+        <wx-lib>base</wx-lib>
+    </exe>
+
+</makefile>

@@ -44,6 +44,7 @@
         ../../contrib/samples/*/*.bkl
         ../../contrib/samples/*/*/*.bkl
         ../../contrib/utils/*/*.bkl
+        ../../tests/*.bkl
     </input>
 
     <!-- List of output formats to generate: -->

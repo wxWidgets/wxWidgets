@@ -3,7 +3,7 @@
 
  Unit tests for wxWindows are written using small cppunit framework. To compile
 (but not to run) them you need to have it installed. Hence the first part of
-this note exlpains how to do it while the second one explains how to write the
+this note explains how to do it while the second one explains how to write the
 test.
 
 I. CppUnit Installation
@@ -27,15 +27,61 @@ II. Writing tests with CppUnit
 
 1. Create a new directory tests/foo
 
-2. Write the main.cpp file for the test program copying, if you want,
+2. Write a cpp file for the test copying, if you want,
    from one of the existing tests. The things to look for:
  a) #include "wx/cppunit.h" instead of directly including CppUnit headers
  b) don't put too many things in one test case nor in one method of a test
     case as it makes understanding what exactly failed harder later
+ c) 'register' your tests as follows so that the test program will find and
+    execute them:
+
+    // register in the unnamed registry so that these tests are run by default
+    CPPUNIT_TEST_SUITE_REGISTRATION(MBConvTestCase);
+
+    // also include in it's own registry so that these tests can be run alone
+    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(MBConvTestCase, "MBConvTestCase");
 
    Read CppUnit documentation for more.
 
-3. Write a bakefile for the new test (again, copy an existing one...)
+3. add a '<sources>' tag for your source file to tests/test.bkl
+
+
+III. Running the tests
+----------------------
+
+1. Regenerate the make/project files from test.bkl using bakefile_gen, e.g.:
+        cd build/bakefile
+        bakefile_gen ../../tests/test.bkl
+   and if you're on a unix system re-run configure.
+
+2. Build the test program using one of the make/project files in the tests
+   subdirectory.
+
+3. Run the test program with no arguments to run the default set of tests
+   (which are all those registered with CPPUNIT_TEST_SUITE_REGISTRATION).
+   Or to list the tests without running them:
+      test -l
+
+4. Tests that have been registered under a name using
+   CPPUNIT_TEST_SUITE_NAMED_REGISTRATION can also be run separately. For
+   example:
+      test MBConvTestCase
+   or to list the tests:
+      test -l MBConvTestCase
+
+
+IV. Notes
+---------
+
+1. You can register your tests (or a subset of them) just under a name, and not
+   in the unnamed registry if you don't want them to be executed by default.
+
+2. If you are going to register your tests both in the unnamed registry and
+   under a name, then use the name that the tests have in the 'test -l'
+   listing (which is often the name of the TestCase class). Then the top
+   level names in a 'test -l' listing can be a hint as to the name those
+   tests have been registered under.
+
 
 === EOF ===
 
