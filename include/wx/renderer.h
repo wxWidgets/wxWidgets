@@ -156,12 +156,19 @@ public:
 
     // draw a combobox dropdown button
     //
-    // flags may only use wxCONTROL_PRESSED
+    // flags may use wxCONTROL_PRESSED and wxCONTROL_CURRENT
     virtual void DrawComboBoxDropButton(wxWindow *win,
                                         wxDC& dc,
                                         const wxRect& rect,
                                         int flags = 0) = 0;
 
+    // draw a dropdown arrow
+    //
+    // flags may use wxCONTROL_PRESSED and wxCONTROL_CURRENT
+    virtual void DrawDropArrow(wxWindow *win,
+                               wxDC& dc,
+                               const wxRect& rect,
+                               int flags = 0) = 0;
 
     // geometry functions
     // ------------------
@@ -259,6 +266,11 @@ public:
                                         int flags = 0)
         { m_rendererNative.DrawComboBoxDropButton(win, dc, rect, flags); }
 
+    virtual void DrawDropArrow(wxWindow *win,
+                               wxDC& dc,
+                               const wxRect& rect,
+                               int flags = 0)
+        { m_rendererNative.DrawDropArrow(win, dc, rect, flags); }
 
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win)
         { return m_rendererNative.GetSplitterParams(win); }

@@ -79,6 +79,11 @@ public:
                                         const wxRect& rect,
                                         int flags = 0);
 
+    virtual void DrawDropArrow(wxWindow *win,
+                               wxDC& dc,
+                               const wxRect& rect,
+                               int flags = 0);
+
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
 
 private:
@@ -394,19 +399,34 @@ wxRendererGTK::DrawSplitterSash(wxWindow *win,
 #endif // GTK+ 2.x/1.x
 }
 
-void wxRendererGTK::DrawComboBoxDropButton(wxWindow *win,
-                                            wxDC& dc,
-                                            const wxRect& rect,
-                                            int flags)
+void
+wxRendererGTK::DrawDropArrow(wxWindow *win,
+                             wxDC& dc,
+                             const wxRect& rect,
+                             int flags)
 {
     GtkWidget *button = GetButtonWidget();
 
-    // device context must inherit from wxWindowDC
-    // (so it must be wxClientDC, wxMemoryDC or wxPaintDC)
+    // If we give GTK_PIZZA(win->m_wxwindow)->bin_window as
+    // a window for gtk_paint_xxx function, then it won't
+    // work for wxMemoryDC. So that is why we assume wxDC
+    // is wxWindowDC (wxClientDC, wxMemoryDC and wxPaintDC
+    // are derived from it) and use its m_window.
     wxWindowDC& wdc = (wxWindowDC&)dc;
 
-    // only doing debug-time checking here (it should probably be enough)
+    // only doing debug-time checking here (it should
+    // probably be enough)
     wxASSERT ( wdc.IsKindOf(CLASSINFO(wxWindowDC)) );
+
+    // draw arrow so that there is even space horizontally
+    // on both sides
+    int arrowX = rect.width/4 + 1;
+    int arrowWidth = rect.width - (arrowX*2);
+
+    // scale arrow's height accoording to the width
+    int arrowHeight = rect.width/3;
+    int arrowY = (rect.height-arrowHeight)/2 +
+                 ((rect.height-arrowHeight) & 1);
 
     GtkStateType state;
 
@@ -429,7 +449,49 @@ void wxRendererGTK::DrawComboBoxDropButton(wxWindow *win,
         "arrow",
         GTK_ARROW_DOWN,
         FALSE,
-        rect.x + 1, rect.y + 1, rect.width - 2, rect.height - 2
+        rect.x + arrowX,
+        rect.y + arrowY,
+        arrowWidth,
+        arrowHeight
     );
+}
+
+void
+wxRendererGTK::DrawComboBoxDropButton(wxWindow *win,
+                                      wxDC& dc,
+                                      const wxRect& rect,
+                                      int flags)
+{
+    GtkWidget *button = GetButtonWidget();
+
+    // for reason why we do this, see DrawDropArrow
+    wxWindowDC& wdc = (wxWindowDC&)dc;
+    wxASSERT ( wdc.IsKindOf(CLASSINFO(wxWindowDC)) );
+
+    // draw button
+    GtkStateType state;
+
+    if ( flags & wxCONTROL_CURRENT )
+        state = GTK_STATE_PRELIGHT;
+    else if ( flags & wxCONTROL_DISABLED )
+        state = GTK_STATE_INSENSITIVE;
+    else
+        state = GTK_STATE_NORMAL;
+
+    gtk_paint_box
+    (
+        button->style,
+        wdc.m_window,
+        state,
+        flags & wxCONTROL_PRESSED ? GTK_SHADOW_IN : GTK_SHADOW_OUT,
+        NULL,
+        button,
+        "button",
+        rect.x, rect.y, rect.width, rect.height
+    );
+
+    // draw arrow on button
+    DrawDropArrow(win,dc,rect,flags);
+
 }
 

@@ -73,6 +73,10 @@ public:
                                         const wxRect& rect,
                                         int flags = 0);
 
+    virtual void DrawDropArrow(wxWindow *win,
+                               wxDC& dc,
+                               const wxRect& rect,
+                               int flags = 0);
 
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
 
@@ -343,27 +347,48 @@ wxRendererGeneric::DrawSplitterSash(wxWindow *win,
     }
 }
 
+// ----------------------------------------------------------------------------
+// button drawing
+// ----------------------------------------------------------------------------
+
 void
 wxRendererGeneric::DrawComboBoxDropButton(wxWindow *win,
                                           wxDC& dc,
                                           const wxRect& rect,
                                           int WXUNUSED(flags))
 {
-    dc.SetBrush(wxBrush(win->GetBackgroundColour()));
-    dc.SetPen(wxPen(win->GetBackgroundColour()));
-    dc.DrawRectangle(rect);
+    // FIXME: Is it worth to do a better implementation?
+    // Generic wxComboDropButton should be drawn using
+    // combination of wxBitmapButton and DrawDropArrow
+    // anyway.
+    DrawDropArrow(win,dc,rect);
+}
 
+
+void
+wxRendererGeneric::DrawDropArrow(wxWindow *win,
+                                 wxDC& dc,
+                                 const wxRect& rect,
+                                 int WXUNUSED(flags))
+{
+    // This generic implementation should be good
+    // enough for Windows platforms (including XP).
+
+    int arrowHalf = rect.width/5;
+    int rectMid = rect.width / 2;
+    int arrowTopY = (rect.height/2) - (arrowHalf/2);
+
+    // This should always result in arrow with odd width.
     wxPoint pt[] =
     {
-        wxPoint(0,0),
-        wxPoint(rect.width, 0),
-        wxPoint(rect.width/2, rect.height - 2)
+        wxPoint(rectMid - arrowHalf, arrowTopY),
+        wxPoint(rectMid + arrowHalf, arrowTopY),
+        wxPoint(rectMid, arrowTopY + arrowHalf)
     };
     dc.SetBrush(wxBrush(win->GetForegroundColour()));
     dc.SetPen(wxPen(win->GetForegroundColour()));
     dc.DrawPolygon(WXSIZEOF(pt), pt, rect.x, rect.y);
 }
-
 
 // ----------------------------------------------------------------------------
 // A module to allow cleanup of generic renderer.

@@ -98,7 +98,19 @@ Virtual destructor as for any base class.
 Draw a button like the one used by \helpref{wxComboBox}{wxcombobox} to show a
 drop down window. The usual appearance is a downwards pointing arrow.
 
-\arg{flags} may have the \texttt{wxCONTROL\_PRESSED} bit set.
+\arg{flags} may have the \texttt{wxCONTROL\_PRESSED} or \texttt{wxCONTROL\_CURRENT} bit set.
+
+
+\membersection{wxRendererNative::DrawDropArrow}\label{wxrenderernativedrawdroparrow}
+
+\func{void}{DrawDropArrow}{\param{wxWindow *}{win}, \param{wxDC\& }{dc}, \param{const wxRect\& }{rect}, \param{int }{flags}}
+
+Draw a drop down arrow that is suitable for use outside a combo box. Arrow will have
+transparent background.
+
+\arg{rect} is not entirely filled by the arrow. Instead, you should use bounding
+rectangle of a drop down button which arrow matches the size you need.
+\arg{flags} may have the \texttt{wxCONTROL\_PRESSED} or \texttt{wxCONTROL\_CURRENT} bit set.
 
 
 \membersection{wxRendererNative::DrawHeaderButton}\label{wxrenderernativedrawheaderbutton}
