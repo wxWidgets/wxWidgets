@@ -174,7 +174,7 @@ void *wxLibrary::GetSymbol(const wxString& symbname)
 
 /* static */
 wxDllType
-wxDllLoader::LoadLibrary(const wxString & libname, bool *success)
+wxDllLoader::LoadLibrary(const wxString & lib_name, bool *success)
 {
    wxASSERT(success);
    
@@ -231,7 +231,7 @@ wxDllLoader::GetSymbol(wxDllType dllHandle, const wxString &name)
     if ( !symbol )
     {
        wxLogSysError(_("Couldn't find symbol '%s' in a dynamic library"),
-                     symbname.c_str());
+                     name.c_str());
     }
     return symbol;
 }
@@ -300,8 +300,8 @@ wxLibrary *wxLibraries::LoadLibrary(const wxString& name)
 #endif // __UNIX__
 #endif
 
-    bool success;
-    handle = wxDllLoader::LoadDll(lib_name, &success);
+    bool success = FALSE;
+    wxDllType handle = wxDllLoader::LoadDll(lib_name, &success);
     if(success)
     {
        lib = new wxLibrary(handle);

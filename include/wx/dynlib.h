@@ -72,7 +72,7 @@ class wxDllLoader
        @param success Must point to a bool variable which will be set to TRUE or FALSE.
        @return A handle to the loaded DLL. Use success parameter to test if it is valid.
    */
-   static wxDllType LoadDll(const wxString & libname, bool *success);
+   static wxDllType LoadLibrary(const wxString & libname, bool *success);
    /** This function resolves a symbol in a loaded DLL, such as a
        variable or function name.
        @param dllHandle Handle of the DLL, as returned by LoadDll().
