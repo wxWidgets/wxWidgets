@@ -20,7 +20,7 @@ ISS_Template = r'''
 [Setup]
 AppName = wxPython
 AppVerName = wxPython %(VERSION)s for Python %(PYTHONVER)s
-OutputBaseFilename = wxPython-%(VERSION)s-%(PYVER)s
+OutputBaseFilename = wxPythonWIN32-%(VERSION)s-%(PYVER)s
 AppCopyright = Copyright © 2002 Total Control Software
 DefaultDirName = {code:GetInstallDir|c:\DoNotInstallHere}
 DefaultGroupName = wxPython %(SHORTVER)s for Python %(PYTHONVER)s
