@@ -188,7 +188,7 @@ bool wxGetFullHostName(wxChar *buf, int maxSize)
                 if ( pHostEnt )
                 {
                     // Windows will use DNS internally now
-                    pHostEnt = gethostbyaddr(pHostEnt->h_addr, 4, PF_INET);
+                    pHostEnt = gethostbyaddr(pHostEnt->h_addr, 4, AF_INET);
                 }
 
                 if ( pHostEnt )
