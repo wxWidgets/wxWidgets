@@ -133,6 +133,7 @@ public:
 #endif // wxUSE_PALETTE
     {
         ResetBoundingBox();
+        ResetClipping();
     }
 
     ~wxDCBase() { }
@@ -314,18 +315,18 @@ public:
      *  \param y Upper left corner of bounding box.
      *  \param w Width of bounding box.
      *  \param h Height of bounding box.
-     *  \param sa Starting angle of arc 
+     *  \param sa Starting angle of arc
      *            (counterclockwise, start at 3 o'clock, 360 is full circle).
      *  \param ea Ending angle of arc.
-     *  \param angle Rotation angle, the Arc will be rotated after 
+     *  \param angle Rotation angle, the Arc will be rotated after
      *               calculating begin and end.
      */
-    void DrawEllipticArcRot( wxCoord x, wxCoord y, 
-                             wxCoord width, wxCoord height, 
+    void DrawEllipticArcRot( wxCoord x, wxCoord y,
+                             wxCoord width, wxCoord height,
                              double sa = 0, double ea = 0, double angle = 0 )
     { DoDrawEllipticArcRot( x, y, width, height, sa, ea, angle ); }
-    
-    void DrawEllipticArcRot( const wxPoint& pt, 
+
+    void DrawEllipticArcRot( const wxPoint& pt,
                              const wxSize& sz,
                              double sa = 0, double ea = 0, double angle = 0 )
     { DoDrawEllipticArcRot( pt.x, pt.y, sz.x, sz.y, sa, ea, angle ); }
@@ -334,27 +335,27 @@ public:
                              double sa = 0, double ea = 0, double angle = 0 )
     { DoDrawEllipticArcRot( rect.x, rect.y, rect.width, rect.height, sa, ea, angle ); }
 
-    virtual void DoDrawEllipticArcRot( wxCoord x, wxCoord y, 
-                                       wxCoord w, wxCoord h, 
+    virtual void DoDrawEllipticArcRot( wxCoord x, wxCoord y,
+                                       wxCoord w, wxCoord h,
                                        double sa = 0, double ea = 0, double angle = 0 );
-    
+
     //! Rotates points around center.
     /*! This is a quite straight method, it calculates in pixels
      *  and so it produces rounding errors.
      *  \param points The points inside will be rotated.
      *  \param angle Rotating angle (counterclockwise, start at 3 o'clock, 360 is full circle).
      *  \param center Center of rotation.
-     */ 
+     */
     void Rotate( wxList* points, double angle, wxPoint center = wxPoint() );
 
     // used by DrawEllipticArcRot
     // Careful: wxList gets filled with points you have to delete later.
-    void CalculateEllipticPoints( wxList* points, 
-                                  wxCoord xStart, wxCoord yStart, 
-                                  wxCoord w, wxCoord h, 
+    void CalculateEllipticPoints( wxList* points,
+                                  wxCoord xStart, wxCoord yStart,
+                                  wxCoord w, wxCoord h,
                                   double sa, double ea );
 #endif
-    
+
     // global DC operations
     // --------------------
 
@@ -390,21 +391,13 @@ public:
     void SetClippingRegion(const wxRegion& region)
         { DoSetClippingRegionAsRegion(region); }
 
-    virtual void DestroyClippingRegion() = 0;
+    virtual void DestroyClippingRegion() { ResetClipping(); }
 
     void GetClippingBox(wxCoord *x, wxCoord *y, wxCoord *w, wxCoord *h) const
         { DoGetClippingBox(x, y, w, h); }
     void GetClippingBox(wxRect& rect) const
         {
-#if 1
           DoGetClippingBox(&rect.x, &rect.y, &rect.width, &rect.height);
-#else
-          // Necessary to use intermediate variables for 16-bit compilation
-          // REMOVE ME if the above is OK for all current platforms
-          wxCoord x, y, w, h;
-          DoGetClippingBox(&x, &y, &w, &h);
-          rect.x = x; rect.y = y; rect.width = w; rect.height = h;
-#endif
         }
 
     // text extent
@@ -432,7 +425,7 @@ public:
     bool GetPartialTextExtents(const wxString& text, wxArrayInt& widths) const
         { return DoGetPartialTextExtents(text, widths); }
 
-    
+
     // size and resolution
     // -------------------
 
@@ -699,17 +692,14 @@ protected:
     virtual void DoGetClippingBox(wxCoord *x, wxCoord *y,
                                   wxCoord *w, wxCoord *h) const
     {
-        if ( m_clipping )
-        {
-            if ( x ) *x = m_clipX1;
-            if ( y ) *y = m_clipY1;
-            if ( w ) *w = m_clipX2 - m_clipX1;
-            if ( h ) *h = m_clipY2 - m_clipY1;
-        }
-        else
-        {
-            *x = *y = *w = *h = 0;
-        }
+        if ( x )
+            *x = m_clipX1;
+        if ( y )
+            *y = m_clipY1;
+        if ( w )
+            *w = m_clipX2 - m_clipX1;
+        if ( h )
+            *h = m_clipY2 - m_clipY1;
     }
 
     virtual void DoGetLogicalOrigin(wxCoord *x, wxCoord *y) const
@@ -729,14 +719,22 @@ protected:
                                  wxCoord *descent = NULL,
                                  wxCoord *externalLeading = NULL,
                                  wxFont *theFont = NULL) const = 0;
-    
+
     virtual bool DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const;
-    
+
 #if wxUSE_SPLINES
     virtual void DoDrawSpline(wxList *points);
 #endif
 
 protected:
+    // unset clipping variables (after clipping region was destroyed)
+    void ResetClipping()
+    {
+        m_clipping = false;
+
+        m_clipX1 = m_clipX2 = m_clipY1 = m_clipY2 = 0;
+    }
+
     // flags
     bool m_colour:1;
     bool m_ok:1;

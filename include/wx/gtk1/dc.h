@@ -46,9 +46,6 @@ public:
 
     void SetColourMap( const wxPalette& palette ) { SetPalette(palette); };
 
-    // the first two must be overridden and called
-    virtual void DestroyClippingRegion();
-
     // Resolution in pixels per logical inch
     virtual wxSize GetPPI() const;
 

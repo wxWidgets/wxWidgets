@@ -512,7 +512,7 @@ void wxDC::DestroyClippingRegion()
 {
     wxMacFastPortSetter helper(this) ;
     CopyRgn( (RgnHandle) m_macBoundaryClipRgn , (RgnHandle) m_macCurrentClipRgn ) ;
-    m_clipping = FALSE;
+    ResetClipping();
 }
 
 void wxDC::DoGetSizeMM( int* width, int* height ) const

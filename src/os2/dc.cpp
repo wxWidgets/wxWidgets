@@ -503,7 +503,7 @@ void wxDC::DestroyClippingRegion(void)
 
          ::GpiSetClipRegion(m_hPS, hRgn, &hRgnOld);
      }
-      m_clipping = false;
+    ResetClipping();
 } // end of wxDC::DestroyClippingRegion
 
 // ---------------------------------------------------------------------------

@@ -44,38 +44,36 @@
 class WXDLLEXPORT wxDC : public wxDCBase
 {
     DECLARE_DYNAMIC_CLASS(wxDC)
-        
+
 public:
     wxDC();
     ~wxDC() { }
-    
+
     // implement base class pure virtuals
     // ----------------------------------
-    
-    virtual void DestroyClippingRegion();
-    
+
     virtual wxSize GetPPI() const;
-    
+
     virtual void SetMapMode(int mode);
     virtual void SetUserScale(double x, double y);
     virtual void SetLogicalScale(double x, double y);
     virtual void SetLogicalOrigin(wxCoord x, wxCoord y);
     virtual void SetDeviceOrigin(wxCoord x, wxCoord y);
     virtual void SetAxisOrientation(bool xLeftRight, bool yBottomUp);
-    
+
 protected:
     virtual void DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y);
     virtual void DoDrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y,
         bool useMask = FALSE);
-    
+
     virtual void DoSetClippingRegion(wxCoord x, wxCoord y,
         wxCoord width, wxCoord height);
     virtual void DoGetSize(int *width, int *height) const;
     virtual void DoGetSizeMM(int* width, int* height) const;
-    
+
 public:
     void ComputeScaleAndOrigin();
-    
+
     wxCoord XDEV2LOG(wxCoord x) const
     {
         wxCoord new_x = x - m_deviceOriginX;
@@ -154,14 +152,14 @@ public:
         else
             return (wxCoord)((double)(y) * m_scaleY - 0.5);
     }
-    
+
 public:
     // not sure what for, but what is a mm on a screen you don't know the size of?
     double       m_mm_to_pix_x,m_mm_to_pix_y;
-    
+
     // recompute scale?
     bool         m_needComputeScaleX, m_needComputeScaleY;
-    
+
 };
 
 #endif
