@@ -69,7 +69,7 @@ BEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_TOGGLECOLLABELS,  GridFrame::ToggleColLabels )
     EVT_MENU( ID_TOGGLEEDIT, GridFrame::ToggleEditing )
     EVT_MENU( ID_TOGGLEROWSIZING, GridFrame::ToggleRowSizing )
-    EVT_MENU( ID_TOGGLECOLSIZING, GridFrame::ToggleColSizing )    
+    EVT_MENU( ID_TOGGLECOLSIZING, GridFrame::ToggleColSizing )
     EVT_MENU( ID_SETLABELCOLOUR, GridFrame::SetLabelColour )
     EVT_MENU( ID_SETLABELTEXTCOLOUR, GridFrame::SetLabelTextColour )
     EVT_MENU( ID_ROWLABELHORIZALIGN, GridFrame::SetRowLabelHorizAlignment )
@@ -299,14 +299,14 @@ void GridFrame::ToggleEditing( wxCommandEvent& WXUNUSED(ev) )
 
 void GridFrame::ToggleRowSizing( wxCommandEvent& WXUNUSED(ev) )
 {
-    grid->EnableDragRowSize( 
+    grid->EnableDragRowSize(
         GetMenuBar()->IsChecked( ID_TOGGLEROWSIZING ) );
 }
 
 
 void GridFrame::ToggleColSizing( wxCommandEvent& WXUNUSED(ev) )
 {
-    grid->EnableDragColSize( 
+    grid->EnableDragColSize(
         GetMenuBar()->IsChecked( ID_TOGGLECOLSIZING ) );
 }
 
