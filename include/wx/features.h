@@ -56,5 +56,13 @@
     #undef wxHAS_CRASH_REPORT
 #endif
 
+/*  wxRE_ADVANCED is not always available, depending on regex library used
+ *  (it's unavailable only if compiling via configure against system library) */
+#ifndef WX_NO_REGEX_ADVANCED
+    #define wxHAS_REGEX_ADVANCED
+#else
+    #undef wxHAS_REGEX_ADVANCED
+#endif
+
 #endif /*  _WX_FEATURES_H_ */
 

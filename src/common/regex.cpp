@@ -73,7 +73,7 @@ public:
 
 private:
     // return the string containing the error message for the given err code
-    wxString GetErrorMsg(int errorcode) const;
+    wxString GetErrorMsg(int errorcode, bool badconv) const;
 
     // init the members
     void Init()
@@ -131,8 +131,19 @@ wxRegExImpl::~wxRegExImpl()
     Free();
 }
 
-wxString wxRegExImpl::GetErrorMsg(int errorcode) const
+wxString wxRegExImpl::GetErrorMsg(int errorcode, bool badconv) const
 {
+#if wxUSE_UNICODE && !defined(__REG_NOFRONT)
+    // currently only needed when using system library in Unicode mode
+    if ( badconv )
+    {
+        return _("conversion to 8-bit encoding failed");
+    }
+#else
+    // 'use' badconv to avoid a compiler warning
+    (void)badconv;
+#endif
+
     wxString szError;
 
     // first get the string length needed
@@ -158,14 +169,25 @@ bool wxRegExImpl::Compile(const wxString& expr, int flags)
 {
     Reinit();
 
-    // translate our flags to regcomp() ones
-    wxASSERT_MSG( !(flags &
-                        ~(wxRE_BASIC | wxRE_ICASE | wxRE_NOSUB | wxRE_NEWLINE)),
+#ifdef WX_NO_REGEX_ADVANCED
+#   define FLAVORS wxRE_BASIC
+#else
+#   define FLAVORS (wxRE_ADVANCED | wxRE_BASIC)
+    wxASSERT_MSG( (flags & FLAVORS) != FLAVORS,
+                  _T("incompatible flags in wxRegEx::Compile") );
+#endif
+    wxASSERT_MSG( !(flags & ~(FLAVORS | wxRE_ICASE | wxRE_NOSUB | wxRE_NEWLINE)),
                   _T("unrecognized flags in wxRegEx::Compile") );
 
+    // translate our flags to regcomp() ones
     int flagsRE = 0;
     if ( !(flags & wxRE_BASIC) )
-        flagsRE |= REG_EXTENDED;
+#ifndef WX_NO_REGEX_ADVANCED
+        if (flags & wxRE_ADVANCED)
+            flagsRE |= REG_ADVANCED;
+        else
+#endif
+            flagsRE |= REG_EXTENDED;
     if ( flags & wxRE_ICASE )
         flagsRE |= REG_ICASE;
     if ( flags & wxRE_NOSUB )
@@ -173,14 +195,19 @@ bool wxRegExImpl::Compile(const wxString& expr, int flags)
     if ( flags & wxRE_NEWLINE )
         flagsRE |= REG_NEWLINE;
 
+    // compile it
+#ifdef __REG_NOFRONT
+    bool conv = true;
+    int errorcode = re_comp(&m_RegEx, expr, expr.length(), flagsRE);
+#else
+    const wxWX2MBbuf conv = expr.mbc_str();
+    int errorcode = conv ? regcomp(&m_RegEx, conv, flagsRE) : REG_BADPAT;
+#endif
 
-
-    int errorcode = regcomp(&m_RegEx, expr, flagsRE);
-
-     if ( errorcode )
+    if ( errorcode )
     {
         wxLogError(_("Invalid regular expression '%s': %s"),
-                   expr.c_str(), GetErrorMsg(errorcode).c_str());
+                   expr.c_str(), GetErrorMsg(errorcode, !conv).c_str());
 
         m_isCompiled = FALSE;
     }
@@ -250,7 +277,13 @@ bool wxRegExImpl::Matches(const wxChar *str, int flags) const
     }
 
     // do match it
-    int rc = regexec(&self->m_RegEx, str, m_nMatches, m_Matches, flagsRE);
+#ifdef __REG_NOFRONT
+    bool conv = true;
+    int rc = re_exec(&self->m_RegEx, str, wxStrlen(str), NULL, m_nMatches, m_Matches, flagsRE);
+#else
+    const wxWX2MBbuf conv = wxConvertWX2MB(str);
+    int rc = conv ? regexec(&self->m_RegEx, conv, m_nMatches, m_Matches, flagsRE) : REG_BADPAT;
+#endif
 
     switch ( rc )
     {
@@ -261,7 +294,7 @@ bool wxRegExImpl::Matches(const wxChar *str, int flags) const
         default:
             // an error occured
             wxLogError(_("Failed to match '%s' in regular expression: %s"),
-                       str, GetErrorMsg(rc).c_str());
+                       str, GetErrorMsg(rc, !conv).c_str());
             // fall through
 
         case REG_NOMATCH:

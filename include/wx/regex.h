@@ -29,8 +29,13 @@ class WXDLLIMPEXP_BASE wxString;
 // flags for regex compilation: these can be used with Compile()
 enum
 {
-    // use extended regex syntax (default)
+    // use extended regex syntax
     wxRE_EXTENDED = 0,
+    
+    // use advanced RE syntax (built-in regex only)
+#ifdef wxHAS_REGEX_ADVANCED
+    wxRE_ADVANCED = 1,
+#endif
 
     // use basic RE syntax
     wxRE_BASIC    = 2,
