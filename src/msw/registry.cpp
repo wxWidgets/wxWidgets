@@ -27,7 +27,6 @@
 #include  "wx/string.h"
 #include  "wx/intl.h"
 #include  "wx/log.h"
-#include  "wx/config.h"    // for wxExpandEnvVars
 
 #ifndef __WIN16__
 
@@ -846,6 +845,30 @@ bool wxRegKey::QueryValue(const wxChar *szValue, wxString& strValue) const
                                             pBuf,
                                             &dwSize);
             strValue.UngetWriteBuf();
+
+            // always expand the var expansions in the string
+            if ( dwType == REG_EXPAND_SZ )
+            {
+                DWORD dwExpSize = ::ExpandEnvironmentStrings(strValue, NULL, 0);
+                bool ok = dwExpSize != 0;
+                if ( ok )
+                {
+                    wxString strExpValue;
+                    ok = ::ExpandEnvironmentStrings
+                           (
+                            strValue,
+                            strExpValue.GetWriteBuf(dwExpSize),
+                            dwExpSize
+                           ) != 0;
+                    strExpValue.UngetWriteBuf();
+                    strValue = strExpValue;
+                }
+
+                if ( !ok )
+                {
+                    wxLogLastError(_T("ExpandEnvironmentStrings"));
+                }
+            }
         }
 
         if ( m_dwLastError == ERROR_SUCCESS ) {
