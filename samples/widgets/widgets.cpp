@@ -228,7 +228,12 @@ bool WidgetsApp::OnInit()
 // ----------------------------------------------------------------------------
 
 WidgetsFrame::WidgetsFrame(const wxString& title)
-            : wxFrame(NULL, -1, title, wxPoint(0, 50), wxDefaultSize, wxDEFAULT_FRAME_STYLE|wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN)
+            : wxFrame(NULL, -1, title,
+                      wxPoint(0, 50), wxDefaultSize,
+                      wxDEFAULT_FRAME_STYLE |
+                      wxNO_FULL_REPAINT_ON_RESIZE |
+                      wxCLIP_CHILDREN |
+                      wxTAB_TRAVERSAL)
 {
     // init everything
     m_lboxLog = (wxListBox *)NULL;
@@ -358,7 +363,11 @@ WidgetsPageInfo::WidgetsPageInfo(Constructor ctor, const wxChar *label)
 // ----------------------------------------------------------------------------
 
 WidgetsPage::WidgetsPage(wxNotebook *notebook)
-           : wxPanel(notebook, -1, wxDefaultPosition, wxDefaultSize, wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN)
+           : wxPanel(notebook, -1,
+                     wxDefaultPosition, wxDefaultSize,
+                     wxNO_FULL_REPAINT_ON_RESIZE |
+                     wxCLIP_CHILDREN |
+                     wxTAB_TRAVERSAL)
 {
 }
 
