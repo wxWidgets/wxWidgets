@@ -28,6 +28,7 @@
 long wxExecute(const wxString& command, int flags, wxProcess *handler)
 {
     // TODO
+    wxFAIL_MSG( _T("wxExecute() not yet implemented") );
     return 0;
 }
 #endif
@@ -35,7 +36,7 @@ long wxExecute(const wxString& command, int flags, wxProcess *handler)
 #ifdef __DARWIN__
 int wxAddProcessCallback(wxEndProcessData *proc_data, int fd)
 {
-   wxFAIL_MSG( _T("wxAddProcessCallback() function not yet implemented") );
+   wxFAIL_MSG( _T("wxAddProcessCallback() not yet implemented") );
    return 0;
 }
 #endif
