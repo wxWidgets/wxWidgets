@@ -1083,7 +1083,7 @@ bool wxMkdir(const wxString& dir, int perm)
 #elif defined(__WXPM__)
     if (::DosCreateDir((PSZ)dir, NULL)) != 0) // enhance for EAB's??
 #else  // !MSW and !OS/2 VAC++
-    if ( wxMkdir(wxFNSTRINGCAST wxFNCONV(dirname)) != 0 )
+    if ( wxMkDir(wxFNSTRINGCAST wxFNCONV(dirname)) != 0 )
 #endif // !MSW/MSW
     {
         wxLogSysError(_("Directory '%s' couldn't be created"), dirname);
@@ -1108,7 +1108,7 @@ bool wxRmdir(const wxString& dir, int WXUNUSED(flags))
 #ifdef __SALFORDC__
   return FALSE; // What to do?
 #else
-  return (wxRmdir(wxFNSTRINGCAST dir.fn_str()) == 0);
+  return (wxRmDir(wxFNSTRINGCAST dir.fn_str()) == 0);
 #endif
 
 #endif

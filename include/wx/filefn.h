@@ -81,16 +81,16 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
         #define   wxOpen       _wopen
         #define   wxAccess     _waccess
 
-        #define   wxMkdir      _wmkdir
-        #define   wxRmdir      _wrmdir
+        #define   wxMkDir      _wmkdir
+        #define   wxRmDir      _wrmdir
 
         #define   wxStat       _wstat
     #else // !wxUSE_UNICODE
         #define   wxOpen       _open
         #define   wxAccess     _access
 
-        #define   wxMkdir      _mkdir
-        #define   wxRmdir      _rmdir
+        #define   wxMkDir      _mkdir
+        #define   wxRmDir      _rmdir
 
         #define   wxStat       _stat
     #endif
