@@ -6,6 +6,9 @@
 This class provides functions that read text datas using an input stream.
 So, you can read \it{text} floats, integers.
 
+The wxTextInputStream correctly reads text files (or streams) in DOS, Macintosh
+and Unix formats and reports a single newline char as a line ending.
+
 Operator >> is overloaded and you can use this class like a standard C++ iostream.
 Note, however, that the arguments are the fixed size types wxUint32, wxInt32 etc
 and on a typical 32-bit computer, none of these match to the "long" type (wxInt32
@@ -97,6 +100,9 @@ For example:
   output << 1234;
   output << 1.23456;
 \end{verbatim}
+
+The wxTextOutputStream writes text files (or streams) on DOS, Macintosh
+and Unix in their native formats (concerning the line ending).
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 

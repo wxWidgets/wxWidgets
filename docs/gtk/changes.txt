@@ -25,9 +25,6 @@ Reworked in-place editing of wxListCtrl and wxTreeCtrl.
 
 Fixed bug reporting two refreshes when scrolling.
 
-Disabled GUI threading as I have not been able to get this working
-correctly in _all_ circumstances.
-
 Corrected bug in wxComboBox client data code.
 
 Corrected reported but unverified bug in BMP loading code.
@@ -38,6 +35,8 @@ Integration of wxHTML code in the main library, including wxZIPStream,
 wxFilesystem, wxHTMLHelpController and others.
 
 Added a wrapper for ffile() etc functions.
+
+Updateds to wxDynamicLibrary.
 
 New documentation.
 

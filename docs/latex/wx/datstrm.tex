@@ -3,10 +3,33 @@
 % ----------------------------------------------------------------------------
 \section{\class{wxDataInputStream}}\label{wxdatainputstream}
 
-This class provides functions that read data types in a
-portable way. It can be forced to read in big-endian order or 
-little-endian order. So, a file written by an Intel processor can be read by a
-Sparc or anything else.
+This class provides functions that read binary data types in a
+portable way. Data can be read in either big-endian or litte-endian
+format, little-endian being the default on all architectures.
+
+If you want to read data from text files (or streams) use 
+\helpref{wxTextInputStream}{wxtextinputstream} instead.
+
+The >> operator is overloaded and you can use this class like a standard C++ iostream.
+Note, however, that the arguments are the fixed size types wxUint32, wxInt32 etc
+and on a typical 32-bit computer, none of these match to the "long" type (wxInt32
+is defined as signed int on 32-bit architectures) so that you cannot use long. To avoid
+problems (here and elsewhere), make use of the wxInt32, wxUint32, etc types.
+
+For example:
+\begin{verbatim}
+  wxFileInputStream input( "mytext.dat" );
+  wxDataInputStream store( input );
+  wxUint8 i1;
+  float f2;
+  wxString line;
+
+  store >> i1;       // read a 8 bit integer.
+  store >> i1 >> f2; // read a 8 bit integer followed by float.
+  store >> line;     // read a text line
+\end{verbatim}
+
+See also \helpref{wxDataOutputStream}{wxdataoutputstream}. 
 
 \wxheading{Include files}
 
@@ -31,21 +54,30 @@ be available.
 
 Destroys the wxDataInputStream object.
 
+\membersection{wxDataInputStream::BidEndianOrdered}
+
+\func{void}{BidEndianOrdered}{\param{bool}{ be_order}}
+
+If {\it be_order} is TRUE, all data will be read in big-endian
+order, such as written by programs on a big endian architecture 
+(e.g. Sparc) or written by Java-Streams (which always use 
+big-endian order).
+  
 \membersection{wxDataInputStream::Read8}
 
-\func{unsigned char}{Read8}{\void}
+\func{wxUint8}{Read8}{\void}
 
 Reads a single byte from the stream.
 
 \membersection{wxDataInputStream::Read16}
 
-\func{unsigned short}{Read16}{\void}
+\func{wxUint16}{Read16}{\void}
 
 Reads a 16 bit integer from the stream.
 
 \membersection{wxDataInputStream::Read32}
 
-\func{unsigned long}{Read32}{\void}
+\func{wxUint32}{Read32}{\void}
 
 Reads a 32 bit integer from the stream.
 
@@ -69,10 +101,18 @@ reads the string.
 
 \section{\class{wxDataOutputStream}}\label{wxdataoutputstream}
 
-This class provides functions that write data types in a
-portable way. It can be forced to read in big-endian order or 
-little-endian order. So, a file written by an Intel processor can be read by a
-Sparc or anything else.
+This class provides functions that write binary data types in a
+portable way. Data can be written in either big-endian or litte-endian
+format, little-endian being the default on all architectures.
+
+If you want to write data to text files (or streams) use 
+\helpref{wxTextOutputStream}{wxtextoutputstream} instead.
+
+The << operator is overloaded and you can use this class like a standard 
+C++ iostream. See \helpref{wxDataInputStream}{wxdatainputstream} for its 
+usage and caveats.
+
+See also \helpref{wxDataInputStream}{wxdatainputstream}. 
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
@@ -80,7 +120,7 @@ Sparc or anything else.
 
 \func{}{wxDataInputStream}{\param{wxOutputStream\&}{ stream}}
 
-Constructs a datastream object from an output stream. Only read methods will
+Constructs a datastream object from an output stream. Only write methods will
 be available.
 
 \wxheading{Parameters}
@@ -93,21 +133,30 @@ be available.
 
 Destroys the wxDataOutputStream object.
 
+\membersection{wxDataOutputStream::BidEndianOrdered}
+
+\func{void}{BidEndianOrdered}{\param{bool}{ be_order}}
+
+If {\it be_order} is TRUE, all data will be written in big-endian
+order, e.g. for reading on a Sparc or from Java-Streams (which
+always use big-endian order), otherwise data will be written in
+little-endian order.
+ 
 \membersection{wxDataOutputStream::Write8}
 
-\func{void}{wxDataOutputStream::Write8}{{\param unsigned char }{i8}}
+\func{void}{wxDataOutputStream::Write8}{{\param wxUint8 }{i8}}
 
 Writes the single byte {\it i8} to the stream.
 
 \membersection{wxDataOutputStream::Write16}
 
-\func{void}{wxDataOutputStream::Write16}{{\param unsigned short }{i16}}
+\func{void}{wxDataOutputStream::Write16}{{\param wxUint16 }{i16}}
 
 Writes the 16 bit integer {\it i16} to the stream.
 
 \membersection{wxDataOutputStream::Write32}
 
-\func{void}{wxDataOutputStream::Write32}{{\param unsigned long }{i32}}
+\func{void}{wxDataOutputStream::Write32}{{\param wxUint32 }{i32}}
 
 Writes the 32 bit integer {\it i32} to the stream.
 

@@ -161,7 +161,7 @@ wxDataInputStream& wxDataInputStream::operator>>(float& f)
 // ---------------------------------------------------------------------------
 
 wxDataOutputStream::wxDataOutputStream(wxOutputStream& s)
-  : m_output(&s)
+  : m_output(&s), m_be_order(FALSE)
 {
 }
 
