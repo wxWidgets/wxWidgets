@@ -24,6 +24,9 @@
 #include "wx/wx.h"
 #endif
 #include "wx/txtstrm.h"
+#ifdef __WXMAC__
+#include "wx/filename.h"
+#endif
 
 #if !wxUSE_DOC_VIEW_ARCHITECTURE
 #error You must set wxUSE_DOC_VIEW_ARCHITECTURE to 1 in setup.h!
@@ -31,7 +34,6 @@
 
 #include "doc.h"
 #include "view.h"
-
 IMPLEMENT_DYNAMIC_CLASS(DrawingDocument, wxDocument)
 
 DrawingDocument::DrawingDocument(void)
@@ -342,6 +344,10 @@ bool TextEditDocument::OnSaveDocument(const wxString& filename)
     if (!view->textsw->SaveFile(filename))
         return FALSE;
     Modify(FALSE);
+#ifdef __WXMAC__
+    wxFileName fn(filename) ;
+    fn.MacSetDefaultTypeAndCreator() ;
+#endif
     return TRUE;
 }
 
