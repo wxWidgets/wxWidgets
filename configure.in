@@ -2079,6 +2079,10 @@ if test "$wxUSE_SHARED" = "yes"; then
         if test "$GCC" = yes ; then
             SHARED_LD="${CC} -shared -o"
             PIC_FLAG="-fPIC"
+
+            dnl newer versions of gcc need -isystem to compile X headers on
+            dnl Solaris (which use old style C syntax)
+            CPPFLAGS="$CPPFLAGS -isystem /usr/openwin/include"
         else
             SHARED_LD="${CXX} -G -o"
             PIC_FLAG="-KPIC"
