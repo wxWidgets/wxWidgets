@@ -59,7 +59,7 @@ wxWriter::~wxWriter()
 
 struct wxWriter::wxWriterInternalPropertiesData
 {
-    map< string , int > m_writtenProperties ;
+    char nothing ;
 } ;
 
 void wxWriter::ClearObjectContext()
@@ -152,102 +152,120 @@ void wxWriter::FindConnectEntry(const wxWindow * evSource,const wxDelegateTypeIn
 }
 void wxWriter::WriteAllProperties( const wxObject * obj , const wxClassInfo* ci , wxPersister *persister, wxWriterInternalPropertiesData * data )
 {
-    // in case this object is wxDynamic object we have to hand over the streaming
-    // of the properties of the superclasses to the real super class instance
+    wxPropertyInfoMap map ;
+    ci->GetProperties( map ) ;
+    for ( int i = 0 ; i < ci->GetCreateParamCount() ; ++i )
     {
-        const wxObject *iterobj = obj ;
-        const wxDynamicObject* dynobj = dynamic_cast< const wxDynamicObject* > (iterobj ) ;
-        if ( dynobj )
-            iterobj = dynobj->GetSuperClassInstance() ;
-        const wxClassInfo** parents = ci->GetParents() ;
-        for ( int i = 0 ; parents[i] ; ++ i )
+        wxString name = ci->GetCreateParamName(i) ;
+        const wxPropertyInfo* prop = map.find(name)->second ;
+        wxASSERT_MSG( prop , wxT("Create Parameter not found in declared RTTI Parameters") ) ;
+        WriteOneProperty( obj , prop->GetDeclaringClass() , prop , persister , data ) ;
+        map.erase( name ) ;
+    }
+
+    for( wxPropertyInfoMap::iterator iter = map.begin() ; iter != map.end() ; ++iter )
+    {
+        const wxPropertyInfo* prop = iter->second ;
+        if ( prop->GetFlags() & wxPROP_OBJECT_GRAPH )
         {
-            WriteAllProperties( iterobj , parents[i] , persister , data ) ;
+            WriteOneProperty( obj , prop->GetDeclaringClass() , prop , persister , data ) ;
         }
     }
 
-    const wxPropertyInfo *pi = ci->GetFirstProperty() ;
-    while( pi ) 
+    for( wxPropertyInfoMap::iterator iter = map.begin() ; iter != map.end() ; ++iter )
     {
-        // this property was not written yet in this object and we don't get a veto
-        // if ( data->m_writtenProperties.find( pi->GetName() ) == data->m_writtenProperties.end() )
-        // we will have to handle property overrides differently 
+        const wxPropertyInfo* prop = iter->second ;
+        if ( !(prop->GetFlags() & wxPROP_OBJECT_GRAPH) )
         {
-            data->m_writtenProperties[ pi->GetName() ] = 1 ;
-            DoBeginWriteProperty( pi ) ;
-            if ( pi->GetTypeInfo()->GetKind() == wxT_COLLECTION )
-            {
-                wxxVariantArray data ;
-                pi->GetAccessor()->GetPropertyCollection(obj, data) ;
-                const wxTypeInfo * elementType = dynamic_cast< const wxCollectionTypeInfo* >( pi->GetTypeInfo() )->GetElementType() ;
-                for ( size_t i = 0 ; i < data.GetCount() ; ++i )
-                {
-                    DoBeginWriteElement() ;
-                    wxxVariant value = data[i] ;
-                    if ( persister->BeforeWriteProperty( this , pi , value ) )
-                    {
-                        const wxClassTypeInfo* cti = dynamic_cast< const wxClassTypeInfo* > ( elementType ) ;
-                        if ( cti )
-                        {
-                            const wxClassInfo* pci = cti->GetClassInfo() ;
-                            wxObject *vobj = pci->VariantToInstance( value ) ;
-                            wxxVariantArray md ;
-                            WriteObject( vobj , (vobj ? vobj->GetClassInfo() : pci ) , persister , cti->GetKind()== wxT_OBJECT , md ) ;
-                        }
-                        else
-                        {                               
-                            DoWriteSimpleType( value ) ;
-                        }
-                    }
-                    DoEndWriteElement() ;
-                }
-            }
-            else
-            {
-                const wxDelegateTypeInfo* dti = dynamic_cast< const wxDelegateTypeInfo* > ( pi->GetTypeInfo() ) ;
-                if ( dti )
-                {
-                    const wxObject* sink = NULL ;
-                    const wxHandlerInfo *handler = NULL ;
+            WriteOneProperty( obj , prop->GetDeclaringClass() , prop , persister , data ) ;
+        }
+    }
+}
 
-                    const wxWindow * evSource = dynamic_cast<const wxWindow *>(obj) ;
-                    wxASSERT_MSG( evSource , wxT("Illegal Object Class (Non-Window) as Event Source") ) ;
+void wxWriter::WriteOneProperty( const wxObject *obj , const wxClassInfo* ci , const wxPropertyInfo* pi , wxPersister *persister , wxWriterInternalPropertiesData *data ) 
+{
+    // make sure that we are picking the correct object for accessing the property
+    const wxDynamicObject* dynobj = dynamic_cast< const wxDynamicObject* > (obj ) ;
+    if ( dynobj && (dynamic_cast<const wxDynamicClassInfo*>(ci) == NULL) )
+        obj = dynobj->GetSuperClassInstance() ;
 
-                    FindConnectEntry( evSource , dti , sink , handler ) ;
-                    if ( persister->BeforeWriteDelegate( this , obj , ci , pi , sink , handler ) )
-                    {
-                        if ( sink != NULL && handler != NULL )
-                        {
-                            wxASSERT_MSG( IsObjectKnown( sink ) , wxT("Streaming delegates for not already streamed objects not yet supported") ) ;
-                            DoWriteDelegate( obj , ci , pi , sink , GetObjectID( sink ) , sink->GetClassInfo() , handler ) ;
-                        }
-                    }
+    DoBeginWriteProperty( pi ) ;
+    if ( pi->GetTypeInfo()->GetKind() == wxT_COLLECTION )
+    {
+        wxxVariantArray data ;
+        pi->GetAccessor()->GetPropertyCollection(obj, data) ;
+        const wxTypeInfo * elementType = dynamic_cast< const wxCollectionTypeInfo* >( pi->GetTypeInfo() )->GetElementType() ;
+        for ( size_t i = 0 ; i < data.GetCount() ; ++i )
+        {
+            DoBeginWriteElement() ;
+            wxxVariant value = data[i] ;
+            if ( persister->BeforeWriteProperty( this , pi , value ) )
+            {
+                const wxClassTypeInfo* cti = dynamic_cast< const wxClassTypeInfo* > ( elementType ) ;
+                if ( cti )
+                {
+                    const wxClassInfo* pci = cti->GetClassInfo() ;
+                    wxObject *vobj = pci->VariantToInstance( value ) ;
+                    wxxVariantArray md ;
+                    WriteObject( vobj , (vobj ? vobj->GetClassInfo() : pci ) , persister , cti->GetKind()== wxT_OBJECT , md ) ;
                 }
                 else
                 {
-                    wxxVariant value ;
-                    pi->GetAccessor()->GetProperty(obj, value) ;
-                    if ( persister->BeforeWriteProperty( this , pi , value ) )
-                    {
-                        const wxClassTypeInfo* cti = dynamic_cast< const wxClassTypeInfo* > ( pi->GetTypeInfo() ) ;
-                        if ( cti )
-                        {
-                            const wxClassInfo* pci = cti->GetClassInfo() ;
-                            wxObject *vobj = pci->VariantToInstance( value ) ;
-                            wxxVariantArray md ;
-                            WriteObject( vobj , (vobj ? vobj->GetClassInfo() : pci ) , persister , cti->GetKind()== wxT_OBJECT , md) ;
-                        }
-                        else
-                        {                               
-                            DoWriteSimpleType( value ) ;
-                        }
-                    }
+                     DoWriteSimpleType( value ) ;
                 }
             }
-            DoEndWriteProperty( pi ) ;
+            DoEndWriteElement() ;
         }
-        pi = pi->GetNext() ;
     }
+    else
+    {
+        const wxDelegateTypeInfo* dti = dynamic_cast< const wxDelegateTypeInfo* > ( pi->GetTypeInfo() ) ;
+        if ( dti )
+        {
+            const wxObject* sink = NULL ;
+            const wxHandlerInfo *handler = NULL ;
+
+            const wxWindow * evSource = dynamic_cast<const wxWindow *>(obj) ;
+            wxASSERT_MSG( evSource , wxT("Illegal Object Class (Non-Window) as Event Source") ) ;
+
+            FindConnectEntry( evSource , dti , sink , handler ) ;
+            if ( persister->BeforeWriteDelegate( this , obj , ci , pi , sink , handler ) )
+            {
+                if ( sink != NULL && handler != NULL )
+                {
+                    wxASSERT_MSG( IsObjectKnown( sink ) , wxT("Streaming delegates for not already streamed objects not yet supported") ) ;
+                    DoWriteDelegate( obj , ci , pi , sink , GetObjectID( sink ) , sink->GetClassInfo() , handler ) ;
+                }
+            }
+        }
+        else
+        {
+            wxxVariant value ;
+            pi->GetAccessor()->GetProperty(obj, value) ;
+            if ( persister->BeforeWriteProperty( this , pi , value ) )
+            {
+                const wxClassTypeInfo* cti = dynamic_cast< const wxClassTypeInfo* > ( pi->GetTypeInfo() ) ;
+                if ( cti )
+                {
+                    const wxClassInfo* pci = cti->GetClassInfo() ;
+                    wxObject *vobj = pci->VariantToInstance( value ) ;
+                    wxxVariantArray md ;
+                    WriteObject( vobj , (vobj ? vobj->GetClassInfo() : pci ) , persister , cti->GetKind()== wxT_OBJECT , md) ;
+                }
+                else
+                {                        
+                    if ( pi->GetFlags() & wxPROP_ENUM_STORE_LONG )
+                    {
+                        const wxEnumTypeInfo *eti = dynamic_cast<const wxEnumTypeInfo*>( pi->GetTypeInfo() ) ;
+                        wxASSERT_MSG( eti , wxT("Type must have enum - long conversion") ) ;
+                        eti->ConvertFromLong( value.Get<long>() , value ) ;
+                    }
+                    DoWriteSimpleType( value ) ;
+                }
+            }
+        }
+    }
+    DoEndWriteProperty( pi ) ;
 }
 
 int wxWriter::GetObjectID(const wxObject *obj) 
@@ -560,6 +578,15 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
             {
                 createParamOids[i] = wxInvalidObjectID ;
                 createParams[i] = ReadValue( prop , pi->GetTypeInfo() ) ;
+                if( pi->GetFlags() & wxPROP_ENUM_STORE_LONG )
+                {
+                    const wxEnumTypeInfo *eti = dynamic_cast<const wxEnumTypeInfo*>( pi->GetTypeInfo() ) ;
+                    wxASSERT_MSG( eti , wxT("Type must have enum - long conversion") ) ;
+
+                    long realval ;
+                    eti->ConvertToLong( createParams[i]  , realval ) ;
+                    createParams[i] = wxxVariant( realval ) ;
+                }
                 createClassInfos[i] = NULL ;
             }
 

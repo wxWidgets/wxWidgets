@@ -29,7 +29,6 @@
 #include "wx/xml/xml.h"
 #include "wx/tokenzr.h"
 #include "wx/list.h"
-#include "wx/datetime.h"
 #include <string.h>
 
 #if wxUSE_EXTENDED_RTTI
@@ -238,71 +237,6 @@ template<> void wxStringWriteValue(wxString &s , const wxString &data )
 	s = data ;
 }
 
-/*
-	Custom Data Streaming / Type Infos
-	we will have to add this for all wx non object types, but it is also an example
-	for custom data structures
-*/
-
-// wxPoint
-
-template<> void wxStringReadValue(const wxString &s , wxPoint &data )
-{
-	wxSscanf(s, _T("%d,%d"), &data.x , &data.y ) ;
-}
-
-template<> void wxStringWriteValue(wxString &s , const wxPoint &data )
-{
-	s = wxString::Format("%d,%d", data.x , data.y ) ;
-}
-
-template<> void wxStringReadValue(const wxString & , wxPoint* & )
-{
-    assert(0) ;
-}
-
-template<> void wxStringWriteValue(wxString & , wxPoint* const & )
-{
-    assert(0) ;
-}
-
-WX_CUSTOM_TYPE_INFO(wxPoint)
-
-template<> void wxStringReadValue(const wxString &s , wxSize &data )
-{
-	wxSscanf(s, _T("%d,%d"), &data.x , &data.y ) ;
-}
-
-template<> void wxStringWriteValue(wxString &s , const wxSize &data )
-{
-	s = wxString::Format("%d,%d", data.x , data.y ) ;
-}
-
-template<> void wxStringReadValue(const wxString & , wxSize* & )
-{
-    assert(0) ;
-}
-
-template<> void wxStringWriteValue(wxString & , wxSize * const & )
-{
-    assert(0) ;
-}
-
-WX_CUSTOM_TYPE_INFO(wxSize)
-
-template<> void wxStringReadValue(const wxString &s , wxDateTime &data )
-{
-    data.ParseFormat(s,wxT("%Y-%m-%d %H:%M:%S")) ;
-}
-
-template<> void wxStringWriteValue(wxString &s , const wxDateTime &data )
-{
-    s = data.Format(wxT("%Y-%m-%d %H:%M:%S")) ;
-}
-
-WX_CUSTOM_TYPE_INFO(wxDateTime)
-
-//
 // built-ins
 //
 
@@ -386,49 +320,42 @@ WX_ILLEGAL_TYPE_SPECIALIZATION( wxString * )
 
 // make wxWindowList known
 
-template<> const wxTypeInfo* wxGetTypeInfo( wxArrayString * )
-{
-    static wxCollectionTypeInfo s_typeInfo( (wxTypeInfo*) wxGetTypeInfo( (wxString *) NULL) ) ;
-    return &s_typeInfo ;
-}
+WX_COLLECTION_TYPE_INFO( wxString , wxArrayString ) ;
 
 template<> void wxCollectionToVariantArray( wxArrayString const &theArray, wxxVariantArray &value)
 {
     wxArrayCollectionToVariantArray( theArray , value ) ;
 }
 
+wxTypeInfoMap *wxTypeInfo::sm_typeTable = NULL ;
 
-
-/*
-
-template<> void wxStringReadValue(const wxString &s , wxColour &data )
+wxTypeInfo *wxTypeInfo::FindType(const wxChar *typeName)
 {
-	// copied from VS xrc
-	unsigned long tmp = 0;
-
-    if (s.Length() != 7 || s[0u] != wxT('#') ||
-        wxSscanf(s.c_str(), wxT("#%lX"), &tmp) != 1)
-    {
-		wxLogError(_("String To Colour : Incorrect colour specification : %s"),
-                   s.c_str() );
-        data = wxNullColour;
-    }
-	else
-	{
-		data = wxColour((unsigned char) ((tmp & 0xFF0000) >> 16) ,
-                    (unsigned char) ((tmp & 0x00FF00) >> 8),
-                    (unsigned char) ((tmp & 0x0000FF)));
-	}
+    return (wxTypeInfo *)sm_typeTable->find(typeName)->second;
 }
 
-template<> void wxStringWriteValue(wxString &s , const wxColour &data )
-{
-	s = wxString::Format("#%2X%2X%2X", data.Red() , data.Green() , data.Blue() ) ;
+wxClassTypeInfo::wxClassTypeInfo( wxTypeKind kind , wxClassInfo* classInfo , converterToString_t to , converterFromString_t from ) :
+wxTypeInfo( kind , to , from , classInfo->GetClassName() )
+{ wxASSERT_MSG( kind == wxT_OBJECT_PTR || kind == wxT_OBJECT , wxT("Illegal Kind for Enum Type")) ; m_classInfo = classInfo ;}
+
+wxDelegateTypeInfo::wxDelegateTypeInfo( int eventType , wxClassInfo* eventClass , converterToString_t to , converterFromString_t from ) :
+        wxTypeInfo ( wxT_DELEGATE , to , from , wxEmptyString )
+    { m_eventClass = eventClass ; m_eventType = eventType ;}
+
+void wxTypeInfo::Register()
+{    
+    if ( sm_typeTable == NULL )
+        sm_typeTable = new wxTypeInfoMap() ;
+
+    if( !m_name.IsEmpty() )
+        (*sm_typeTable)[m_name] = this ;
 }
 
-WX_CUSTOM_TYPE_INFO(wxColour)
-
-*/
+void wxTypeInfo::Unregister()
+{
+    if( !m_name.IsEmpty() )
+        sm_typeTable->erase(m_name);
+ }
 
 // removing header dependancy on string tokenizer
 
@@ -559,6 +486,24 @@ void wxClassInfo::AddToPropertyCollection(wxObject *object, const wxChar *proper
     accessor->AddToPropertyCollection( object , value ) ;
 }
 
+void wxClassInfo::GetProperties( wxPropertyInfoMap &map ) const
+{
+    const wxPropertyInfo *pi = GetFirstProperty() ;
+    while( pi ) 
+    {
+        if ( map.find( pi->GetName() ) == map.end() )
+            map[pi->GetName()] = (wxPropertyInfo*) pi ;
+
+        pi = pi->GetNext() ;
+    }
+
+    const wxClassInfo** parents = GetParents() ;
+    for ( int i = 0 ; parents[i] ; ++ i )
+    {
+        parents[i]->GetProperties( map ) ;
+    }
+}
+
 /*
 VARIANT TO OBJECT
 */
@@ -674,7 +619,7 @@ wxxVariant wxDynamicClassInfo::GetProperty(wxObject *object, const char *propert
 
 void wxDynamicClassInfo::AddProperty( const wxChar *propertyName , const wxTypeInfo* typeInfo )
 {
-    new wxPropertyInfo( m_firstProperty , propertyName , typeInfo , new wxGenericPropertyAccessor( propertyName ) , wxxVariant() ) ;
+    new wxPropertyInfo( m_firstProperty , this , propertyName , typeInfo , new wxGenericPropertyAccessor( propertyName ) , wxxVariant() ) ;
 }
 
 void wxDynamicClassInfo::AddHandler( const wxChar *handlerName , wxObjectEventFunction address , const wxClassInfo* eventClassInfo )

@@ -65,6 +65,56 @@
 #include "wx/mac/uma.h"
 #endif
 
+#if wxUSE_EXTENDED_RTTI
+
+// wxPoint
+
+template<> void wxStringReadValue(const wxString &s , wxPoint &data )
+{
+	wxSscanf(s, _T("%d,%d"), &data.x , &data.y ) ;
+}
+
+template<> void wxStringWriteValue(wxString &s , const wxPoint &data )
+{
+	s = wxString::Format("%d,%d", data.x , data.y ) ;
+}
+
+template<> void wxStringReadValue(const wxString & , wxPoint* & )
+{
+    assert(0) ;
+}
+
+template<> void wxStringWriteValue(wxString & , wxPoint* const & )
+{
+    assert(0) ;
+}
+
+WX_CUSTOM_TYPE_INFO(wxPoint)
+
+template<> void wxStringReadValue(const wxString &s , wxSize &data )
+{
+	wxSscanf(s, _T("%d,%d"), &data.x , &data.y ) ;
+}
+
+template<> void wxStringWriteValue(wxString &s , const wxSize &data )
+{
+	s = wxString::Format("%d,%d", data.x , data.y ) ;
+}
+
+template<> void wxStringReadValue(const wxString & , wxSize* & )
+{
+    assert(0) ;
+}
+
+template<> void wxStringWriteValue(wxString & , wxSize * const & )
+{
+    assert(0) ;
+}
+
+WX_CUSTOM_TYPE_INFO(wxSize)
+
+#endif
+
 IMPLEMENT_ABSTRACT_CLASS(wxDCBase, wxObject)
 
 wxRect::wxRect(const wxPoint& topLeft, const wxPoint& bottomRight)
