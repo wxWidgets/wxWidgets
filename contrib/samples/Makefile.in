@@ -1,6 +1,6 @@
 # $Id$
 
-CONTRIB_SAMPLES=mmedia ogl stc gizmos canvas xrc plot applet fl
+CONTRIB_SAMPLES=canvas fl gizmos mmedia net ogl plot stc xrc #applet
 
 all:
 	@for d in $(CONTRIB_SAMPLES); do (cd $$d && $(MAKE)); done
