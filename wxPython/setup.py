@@ -644,7 +644,8 @@ depends = [ #'include/wx/wxPython/wxPython.h',
 msg('Preparing CORE...')
 swig_sources = run_swig(['core.i'], 'src', GENDIR, PKGDIR,
                         USE_SWIG, swig_force, swig_args, swig_deps +
-                        [ 'src/_app.i',
+                        [ 'src/_accel.i',
+                          'src/_app.i',
                           'src/_app_ex.py',
                           'src/_constraints.i',
                           'src/_core_api.i',
@@ -745,7 +746,6 @@ swig_sources = run_swig(['windows.i'], 'src', GENDIR, PKGDIR,
                         USE_SWIG, swig_force, swig_args, swig_deps +
                         ['src/_windows_rename.i',    'src/_windows_reverse.txt',
                          'src/_panel.i',
-                         'src/_accel.i',
                          'src/_toplvl.i',            'src/_statusbar.i',
                          'src/_splitter.i',          'src/_sashwin.i',
                          'src/_popupwin.i',          'src/_tipwin.i',

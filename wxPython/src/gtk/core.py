@@ -4889,17 +4889,20 @@ your Mac."""
 
 
     def SetTopWindow(self, frame):
+        """Set the \"main\" top level window"""
         if self.stdioWin:
             self.stdioWin.SetParent(frame)
         wx.PyApp.SetTopWindow(self, frame)
 
 
     def MainLoop(self):
+        """Execute the main GUI event loop"""
         wx.PyApp.MainLoop(self)
         self.RestoreStdio()
 
 
     def RedirectStdio(self, filename):
+        """Redirect sys.stdout and sys.stderr to a file or a popup window."""
         if filename:
             _sys.stdout = _sys.stderr = open(filename, 'a')
         else:
@@ -4980,6 +4983,91 @@ _sys.__wxPythonCleanup = __wxPyCleanup()
 
 #----------------------------------------------------------------------------
 
+#---------------------------------------------------------------------------
+
+class AcceleratorEntry(object):
+    """"""
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxAcceleratorEntry instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args, **kwargs):
+        """__init__(int flags=0, int keyCode=0, int cmd=0, MenuItem item=None) -> AcceleratorEntry"""
+        newobj = _core.new_AcceleratorEntry(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+    def __del__(self, destroy=_core.delete_AcceleratorEntry):
+        """__del__()"""
+        try:
+            if self.thisown: destroy(self)
+        except: pass
+
+    def Set(*args, **kwargs):
+        """Set(int flags, int keyCode, int cmd, MenuItem item=None)"""
+        return _core.AcceleratorEntry_Set(*args, **kwargs)
+
+    def SetMenuItem(*args, **kwargs):
+        """SetMenuItem(MenuItem item)"""
+        return _core.AcceleratorEntry_SetMenuItem(*args, **kwargs)
+
+    def GetMenuItem(*args, **kwargs):
+        """GetMenuItem() -> MenuItem"""
+        return _core.AcceleratorEntry_GetMenuItem(*args, **kwargs)
+
+    def GetFlags(*args, **kwargs):
+        """GetFlags() -> int"""
+        return _core.AcceleratorEntry_GetFlags(*args, **kwargs)
+
+    def GetKeyCode(*args, **kwargs):
+        """GetKeyCode() -> int"""
+        return _core.AcceleratorEntry_GetKeyCode(*args, **kwargs)
+
+    def GetCommand(*args, **kwargs):
+        """GetCommand() -> int"""
+        return _core.AcceleratorEntry_GetCommand(*args, **kwargs)
+
+
+class AcceleratorEntryPtr(AcceleratorEntry):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = AcceleratorEntry
+_core.AcceleratorEntry_swigregister(AcceleratorEntryPtr)
+
+class AcceleratorTable(Object):
+    """"""
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxAcceleratorTable instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args, **kwargs):
+        """__init__(entries) -> AcceleratorTable
+
+Construct an AcceleratorTable from a list of AcceleratorEntry items or
+3-tuples (flags, keyCode, cmdID)"""
+        newobj = _core.new_AcceleratorTable(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+    def __del__(self, destroy=_core.delete_AcceleratorTable):
+        """__del__()"""
+        try:
+            if self.thisown: destroy(self)
+        except: pass
+
+    def Ok(*args, **kwargs):
+        """Ok() -> bool"""
+        return _core.AcceleratorTable_Ok(*args, **kwargs)
+
+
+class AcceleratorTablePtr(AcceleratorTable):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = AcceleratorTable
+_core.AcceleratorTable_swigregister(AcceleratorTablePtr)
+
+
+def GetAccelFromString(*args, **kwargs):
+    """GetAccelFromString(wxString label) -> AcceleratorEntry"""
+    return _core.GetAccelFromString(*args, **kwargs)
 #---------------------------------------------------------------------------
 
 class Window(EvtHandler):
@@ -5434,11 +5522,11 @@ more or less independent of the screen window size."""
         return _core.Window_GetValidator(*args, **kwargs)
 
     def SetAcceleratorTable(*args, **kwargs):
-        """SetAcceleratorTable(wxAcceleratorTable accel)"""
+        """SetAcceleratorTable(AcceleratorTable accel)"""
         return _core.Window_SetAcceleratorTable(*args, **kwargs)
 
     def GetAcceleratorTable(*args, **kwargs):
-        """GetAcceleratorTable() -> wxAcceleratorTable"""
+        """GetAcceleratorTable() -> AcceleratorTable"""
         return _core.Window_GetAcceleratorTable(*args, **kwargs)
 
     def RegisterHotKey(*args, **kwargs):
@@ -5795,6 +5883,7 @@ class WindowPtr(Window):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = Window
 _core.Window_swigregister(WindowPtr)
+NullAcceleratorTable = cvar.NullAcceleratorTable
 PanelNameStr = cvar.PanelNameStr
 
 def PreWindow(*args, **kwargs):
@@ -6412,11 +6501,11 @@ class MenuItem(Object):
         return _core.MenuItem_GetHelp(*args, **kwargs)
 
     def GetAccel(*args, **kwargs):
-        """GetAccel() -> wxAcceleratorEntry"""
+        """GetAccel() -> AcceleratorEntry"""
         return _core.MenuItem_GetAccel(*args, **kwargs)
 
     def SetAccel(*args, **kwargs):
-        """SetAccel(wxAcceleratorEntry accel)"""
+        """SetAccel(AcceleratorEntry accel)"""
         return _core.MenuItem_SetAccel(*args, **kwargs)
 
     def GetDefaultMarginWidth(*args, **kwargs):

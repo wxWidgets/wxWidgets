@@ -14,14 +14,18 @@ BU_BOTTOM = _controls.BU_BOTTOM
 BU_EXACTFIT = _controls.BU_EXACTFIT
 BU_AUTODRAW = _controls.BU_AUTODRAW
 class Button(core.Control):
-    """"""
+    """A button is a control that contains a text string, and is one of the most
+common elements of a GUI.  It may be placed on a dialog box or panel, or
+indeed almost any other window."""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxButton instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """__init__(Window parent, int id, wxString label, Point pos=DefaultPosition, 
     Size size=DefaultSize, long style=0, 
     Validator validator=DefaultValidator, 
-    wxString name=wxPyButtonNameStr) -> Button"""
+    wxString name=wxPyButtonNameStr) -> Button
+
+Create and show a button."""
         newobj = _controls.new_Button(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -32,11 +36,15 @@ class Button(core.Control):
         """Create(Window parent, int id, wxString label, Point pos=DefaultPosition, 
     Size size=DefaultSize, long style=0, 
     Validator validator=DefaultValidator, 
-    wxString name=wxPyButtonNameStr) -> bool"""
+    wxString name=wxPyButtonNameStr) -> bool
+
+Acutally create the GUI Button for 2-phase creation."""
         return _controls.Button_Create(*args, **kwargs)
 
     def SetDefault(*args, **kwargs):
-        """SetDefault()"""
+        """SetDefault()
+
+This sets the button to be the default item for the panel or dialog box."""
         return _controls.Button_SetDefault(*args, **kwargs)
 
     def GetDefaultSize(*args, **kwargs):
@@ -53,7 +61,9 @@ class ButtonPtr(Button):
 _controls.Button_swigregister(ButtonPtr)
 
 def PreButton(*args, **kwargs):
-    """PreButton() -> Button"""
+    """PreButton() -> Button
+
+Precreate a Button for 2-phase creation."""
     val = _controls.new_PreButton(*args, **kwargs)
     val.thisown = 1
     return val
@@ -63,14 +73,16 @@ def Button_GetDefaultSize(*args, **kwargs):
     return _controls.Button_GetDefaultSize(*args, **kwargs)
 
 class BitmapButton(Button):
-    """"""
+    """A Buttont that contains a bitmap."""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxBitmapButton instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """__init__(Window parent, int id, wxBitmap bitmap, Point pos=DefaultPosition, 
     Size size=DefaultSize, long style=BU_AUTODRAW, 
     Validator validator=DefaultValidator, 
-    wxString name=wxPyButtonNameStr) -> BitmapButton"""
+    wxString name=wxPyButtonNameStr) -> BitmapButton
+
+Create and show a button."""
         newobj = _controls.new_BitmapButton(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -81,39 +93,58 @@ class BitmapButton(Button):
         """Create(Window parent, int id, wxBitmap bitmap, Point pos=DefaultPosition, 
     Size size=DefaultSize, long style=BU_AUTODRAW, 
     Validator validator=DefaultValidator, 
-    wxString name=wxPyButtonNameStr) -> bool"""
+    wxString name=wxPyButtonNameStr) -> bool
+
+Acutally create the GUI BitmapButton for 2-phase creation."""
         return _controls.BitmapButton_Create(*args, **kwargs)
 
     def GetBitmapLabel(*args, **kwargs):
-        """GetBitmapLabel() -> wxBitmap"""
+        """GetBitmapLabel() -> wxBitmap
+
+Returns the label bitmap (the one passed to the constructor)."""
         return _controls.BitmapButton_GetBitmapLabel(*args, **kwargs)
 
     def GetBitmapDisabled(*args, **kwargs):
-        """GetBitmapDisabled() -> wxBitmap"""
+        """GetBitmapDisabled() -> wxBitmap
+
+Returns the bitmap for the disabled state."""
         return _controls.BitmapButton_GetBitmapDisabled(*args, **kwargs)
 
     def GetBitmapFocus(*args, **kwargs):
-        """GetBitmapFocus() -> wxBitmap"""
+        """GetBitmapFocus() -> wxBitmap
+
+Returns the bitmap for the focused state."""
         return _controls.BitmapButton_GetBitmapFocus(*args, **kwargs)
 
     def GetBitmapSelected(*args, **kwargs):
-        """GetBitmapSelected() -> wxBitmap"""
+        """GetBitmapSelected() -> wxBitmap
+
+Returns the bitmap for the selected state."""
         return _controls.BitmapButton_GetBitmapSelected(*args, **kwargs)
 
     def SetBitmapDisabled(*args, **kwargs):
-        """SetBitmapDisabled(wxBitmap bitmap)"""
+        """SetBitmapDisabled(wxBitmap bitmap)
+
+Sets the bitmap for the disabled button appearance."""
         return _controls.BitmapButton_SetBitmapDisabled(*args, **kwargs)
 
     def SetBitmapFocus(*args, **kwargs):
-        """SetBitmapFocus(wxBitmap bitmap)"""
+        """SetBitmapFocus(wxBitmap bitmap)
+
+Sets the bitmap for the button appearance when it has the keyboard focus."""
         return _controls.BitmapButton_SetBitmapFocus(*args, **kwargs)
 
     def SetBitmapSelected(*args, **kwargs):
-        """SetBitmapSelected(wxBitmap bitmap)"""
+        """SetBitmapSelected(wxBitmap bitmap)
+
+Sets the bitmap for the selected (depressed) button appearance."""
         return _controls.BitmapButton_SetBitmapSelected(*args, **kwargs)
 
     def SetBitmapLabel(*args, **kwargs):
-        """SetBitmapLabel(wxBitmap bitmap)"""
+        """SetBitmapLabel(wxBitmap bitmap)
+
+Sets the bitmap label for the button.  This is the bitmap used for the
+unselected state, and for all other states if no other bitmaps are provided."""
         return _controls.BitmapButton_SetBitmapLabel(*args, **kwargs)
 
     def SetMargins(*args, **kwargs):
@@ -137,7 +168,9 @@ class BitmapButtonPtr(BitmapButton):
 _controls.BitmapButton_swigregister(BitmapButtonPtr)
 
 def PreBitmapButton(*args, **kwargs):
-    """PreBitmapButton() -> BitmapButton"""
+    """PreBitmapButton() -> BitmapButton
+
+Precreate a BitmapButton for 2-phase creation."""
     val = _controls.new_PreBitmapButton(*args, **kwargs)
     val.thisown = 1
     return val

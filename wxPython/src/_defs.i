@@ -183,6 +183,10 @@ typedef unsigned char   byte;
     %name(newname) decl
 %enddef
 
+
+// A placeholder for the detailed reference docs.
+%define RefDoc(decl, docstr)
+%enddef        
     
     
 %define %newgroup

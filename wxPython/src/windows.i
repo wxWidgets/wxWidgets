@@ -34,7 +34,6 @@
 
 // Include all the files that make up this module
 %include _panel.i
-%include _accel.i
 %include _toplvl.i
 %include _statusbar.i
 %include _splitter.i

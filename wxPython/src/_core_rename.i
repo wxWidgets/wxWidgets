@@ -610,6 +610,10 @@
 %rename(PostEvent)                          wxPostEvent;
 %rename(App_CleanUp)                        wxApp_CleanUp;
 %rename(GetApp)                             wxGetApp;
+%rename(AcceleratorEntry)                   wxAcceleratorEntry;
+%rename(AcceleratorTable)                   wxAcceleratorTable;
+%rename(NullAcceleratorTable)               wxNullAcceleratorTable;
+%rename(GetAccelFromString)                 wxGetAccelFromString;
 %rename(Window)                             wxWindow;
 %rename(FindWindowById)                     wxFindWindowById;
 %rename(FindWindowByName)                   wxFindWindowByName;

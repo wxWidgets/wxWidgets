@@ -68,6 +68,7 @@ wx = _sys.modules[__name__]
 %include _evthandler.i
 %include _event.i
 %include _app.i
+%include _accel.i
 %include _window.i
 %include _validator.i
 %include _menu.i

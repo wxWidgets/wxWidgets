@@ -108,32 +108,35 @@ public:
 
     %addtofunc wxPyArtProvider "self._setCallbackInfo(self, ArtProvider)"
     wxPyArtProvider();
-//    ~wxPyArtProvider();
     
     void _setCallbackInfo(PyObject* self, PyObject* _class);
 
-    // Add new provider to the top of providers stack.
+    DocStr(PushProvider, "Add new provider to the top of providers stack.");
     static void PushProvider(wxPyArtProvider *provider);
 
-    // Remove latest added provider and delete it.
+    DocStr(PopProvider, "Remove latest added provider and delete it.");
     static bool PopProvider();
 
-    // Remove provider. The provider must have been added previously!
-    // The provider is _not_ deleted.
+    DocStr(RemoveProvider,
+           "Remove provider. The provider must have been added previously!\n"
+           "The provider is _not_ deleted.");
     static bool RemoveProvider(wxPyArtProvider *provider);
 
-    // Query the providers for bitmap with given ID and return it. Return
-    // wxNullBitmap if no provider provides it.
+    DocStr(GetBitmap,
+           "Query the providers for bitmap with given ID and return it. Return\n"
+           "wx.NullBitmap if no provider provides it.");
     static wxBitmap GetBitmap(const wxString& id,
                               const wxString& client = wxPyART_OTHER,
                               const wxSize& size = wxDefaultSize);
 
-    // Query the providers for icon with given ID and return it. Return
-    // wxNullIcon if no provider provides it.
+    DocStr(GetIcon,
+           "Query the providers for icon with given ID and return it. Return\n"
+           "wx.NullIcon if no provider provides it.");
     static wxIcon GetIcon(const wxString& id,
                           const wxString& client = wxPyART_OTHER,
                           const wxSize& size = wxDefaultSize);
 
+    %extend { void Destroy() { delete self; }}
 };
 
 

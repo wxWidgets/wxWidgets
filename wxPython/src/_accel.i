@@ -49,7 +49,10 @@ public:
 
 class wxAcceleratorTable : public wxObject {
 public:
-    // Can also accept a list of 3-tuples
+    DocAStr(wxAcceleratorTable,
+            "__init__(entries) -> AcceleratorTable",
+            "Construct an AcceleratorTable from a list of AcceleratorEntry items or\n"
+            "3-tuples (flags, keyCode, cmdID)");
     wxAcceleratorTable(int n, const wxAcceleratorEntry* entries);
     ~wxAcceleratorTable();
 

@@ -162,88 +162,6 @@ def PreScrolledWindow(*args, **kwargs):
 
 #---------------------------------------------------------------------------
 
-class AcceleratorEntry(object):
-    """"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxAcceleratorEntry instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
-        """__init__(int flags=0, int keyCode=0, int cmd=0, MenuItem item=None) -> AcceleratorEntry"""
-        newobj = _windows.new_AcceleratorEntry(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-    def __del__(self, destroy=_windows.delete_AcceleratorEntry):
-        """__del__()"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
-    def Set(*args, **kwargs):
-        """Set(int flags, int keyCode, int cmd, MenuItem item=None)"""
-        return _windows.AcceleratorEntry_Set(*args, **kwargs)
-
-    def SetMenuItem(*args, **kwargs):
-        """SetMenuItem(MenuItem item)"""
-        return _windows.AcceleratorEntry_SetMenuItem(*args, **kwargs)
-
-    def GetMenuItem(*args, **kwargs):
-        """GetMenuItem() -> MenuItem"""
-        return _windows.AcceleratorEntry_GetMenuItem(*args, **kwargs)
-
-    def GetFlags(*args, **kwargs):
-        """GetFlags() -> int"""
-        return _windows.AcceleratorEntry_GetFlags(*args, **kwargs)
-
-    def GetKeyCode(*args, **kwargs):
-        """GetKeyCode() -> int"""
-        return _windows.AcceleratorEntry_GetKeyCode(*args, **kwargs)
-
-    def GetCommand(*args, **kwargs):
-        """GetCommand() -> int"""
-        return _windows.AcceleratorEntry_GetCommand(*args, **kwargs)
-
-
-class AcceleratorEntryPtr(AcceleratorEntry):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = AcceleratorEntry
-_windows.AcceleratorEntry_swigregister(AcceleratorEntryPtr)
-
-class AcceleratorTable(core.Object):
-    """"""
-    def __repr__(self):
-        return "<%s.%s; proxy of C++ wxAcceleratorTable instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args, **kwargs):
-        """__init__(int n, AcceleratorEntry entries) -> AcceleratorTable"""
-        newobj = _windows.new_AcceleratorTable(*args, **kwargs)
-        self.this = newobj.this
-        self.thisown = 1
-        del newobj.thisown
-    def __del__(self, destroy=_windows.delete_AcceleratorTable):
-        """__del__()"""
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
-    def Ok(*args, **kwargs):
-        """Ok() -> bool"""
-        return _windows.AcceleratorTable_Ok(*args, **kwargs)
-
-
-class AcceleratorTablePtr(AcceleratorTable):
-    def __init__(self, this):
-        self.this = this
-        if not hasattr(self,"thisown"): self.thisown = 0
-        self.__class__ = AcceleratorTable
-_windows.AcceleratorTable_swigregister(AcceleratorTablePtr)
-
-
-def GetAccelFromString(*args, **kwargs):
-    """GetAccelFromString(wxString label) -> AcceleratorEntry"""
-    return _windows.GetAccelFromString(*args, **kwargs)
-#---------------------------------------------------------------------------
-
 FULLSCREEN_NOMENUBAR = _windows.FULLSCREEN_NOMENUBAR
 FULLSCREEN_NOTOOLBAR = _windows.FULLSCREEN_NOTOOLBAR
 FULLSCREEN_NOSTATUSBAR = _windows.FULLSCREEN_NOSTATUSBAR
@@ -315,8 +233,6 @@ class TopLevelWindowPtr(TopLevelWindow):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = TopLevelWindow
 _windows.TopLevelWindow_swigregister(TopLevelWindowPtr)
-cvar = _windows.cvar
-NullAcceleratorTable = cvar.NullAcceleratorTable
 
 #---------------------------------------------------------------------------
 

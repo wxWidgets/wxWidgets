@@ -2307,30 +2307,47 @@ class ArtProvider(object):
         return _misc.ArtProvider__setCallbackInfo(*args, **kwargs)
 
     def PushProvider(*args, **kwargs):
-        """ArtProvider.PushProvider(ArtProvider provider)"""
+        """ArtProvider.PushProvider(ArtProvider provider)
+
+Add new provider to the top of providers stack."""
         return _misc.ArtProvider_PushProvider(*args, **kwargs)
 
     PushProvider = staticmethod(PushProvider)
     def PopProvider(*args, **kwargs):
-        """ArtProvider.PopProvider() -> bool"""
+        """ArtProvider.PopProvider() -> bool
+
+Remove latest added provider and delete it."""
         return _misc.ArtProvider_PopProvider(*args, **kwargs)
 
     PopProvider = staticmethod(PopProvider)
     def RemoveProvider(*args, **kwargs):
-        """ArtProvider.RemoveProvider(ArtProvider provider) -> bool"""
+        """ArtProvider.RemoveProvider(ArtProvider provider) -> bool
+
+Remove provider. The provider must have been added previously!
+The provider is _not_ deleted."""
         return _misc.ArtProvider_RemoveProvider(*args, **kwargs)
 
     RemoveProvider = staticmethod(RemoveProvider)
     def GetBitmap(*args, **kwargs):
-        """ArtProvider.GetBitmap(wxString id, wxString client=ART_OTHER, Size size=DefaultSize) -> wxBitmap"""
+        """ArtProvider.GetBitmap(wxString id, wxString client=ART_OTHER, Size size=DefaultSize) -> wxBitmap
+
+Query the providers for bitmap with given ID and return it. Return
+wx.NullBitmap if no provider provides it."""
         return _misc.ArtProvider_GetBitmap(*args, **kwargs)
 
     GetBitmap = staticmethod(GetBitmap)
     def GetIcon(*args, **kwargs):
-        """ArtProvider.GetIcon(wxString id, wxString client=ART_OTHER, Size size=DefaultSize) -> wxIcon"""
+        """ArtProvider.GetIcon(wxString id, wxString client=ART_OTHER, Size size=DefaultSize) -> wxIcon
+
+Query the providers for icon with given ID and return it. Return
+wx.NullIcon if no provider provides it."""
         return _misc.ArtProvider_GetIcon(*args, **kwargs)
 
     GetIcon = staticmethod(GetIcon)
+    def Destroy(*args, **kwargs):
+        """Destroy()"""
+        return _misc.ArtProvider_Destroy(*args, **kwargs)
+
 
 class ArtProviderPtr(ArtProvider):
     def __init__(self, this):
@@ -2378,23 +2395,36 @@ ART_INFORMATION = cvar.ART_INFORMATION
 ART_MISSING_IMAGE = cvar.ART_MISSING_IMAGE
 
 def ArtProvider_PushProvider(*args, **kwargs):
-    """ArtProvider_PushProvider(ArtProvider provider)"""
+    """ArtProvider_PushProvider(ArtProvider provider)
+
+Add new provider to the top of providers stack."""
     return _misc.ArtProvider_PushProvider(*args, **kwargs)
 
 def ArtProvider_PopProvider(*args, **kwargs):
-    """ArtProvider_PopProvider() -> bool"""
+    """ArtProvider_PopProvider() -> bool
+
+Remove latest added provider and delete it."""
     return _misc.ArtProvider_PopProvider(*args, **kwargs)
 
 def ArtProvider_RemoveProvider(*args, **kwargs):
-    """ArtProvider_RemoveProvider(ArtProvider provider) -> bool"""
+    """ArtProvider_RemoveProvider(ArtProvider provider) -> bool
+
+Remove provider. The provider must have been added previously!
+The provider is _not_ deleted."""
     return _misc.ArtProvider_RemoveProvider(*args, **kwargs)
 
 def ArtProvider_GetBitmap(*args, **kwargs):
-    """ArtProvider_GetBitmap(wxString id, wxString client=ART_OTHER, Size size=DefaultSize) -> wxBitmap"""
+    """ArtProvider_GetBitmap(wxString id, wxString client=ART_OTHER, Size size=DefaultSize) -> wxBitmap
+
+Query the providers for bitmap with given ID and return it. Return
+wx.NullBitmap if no provider provides it."""
     return _misc.ArtProvider_GetBitmap(*args, **kwargs)
 
 def ArtProvider_GetIcon(*args, **kwargs):
-    """ArtProvider_GetIcon(wxString id, wxString client=ART_OTHER, Size size=DefaultSize) -> wxIcon"""
+    """ArtProvider_GetIcon(wxString id, wxString client=ART_OTHER, Size size=DefaultSize) -> wxIcon
+
+Query the providers for icon with given ID and return it. Return
+wx.NullIcon if no provider provides it."""
     return _misc.ArtProvider_GetIcon(*args, **kwargs)
 
 #---------------------------------------------------------------------------

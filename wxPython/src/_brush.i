@@ -16,11 +16,17 @@
 //---------------------------------------------------------------------------
 %newgroup
 
+DocStr(wxBrush,
+       "A brush is a drawing tool for filling in areas. It is used for painting the\n"
+       "background of rectangles, ellipses, etc. It has a colour and a style.");
+
 class wxBrush : public wxGDIObject {
 public:
+    DocStr(wxBrush, "Constructs a brush from a colour object and style.");
     wxBrush(const wxColour& colour, int style=wxSOLID);
     ~wxBrush();
-
+    
+    
     virtual void SetColour(const wxColour& col);
     virtual void SetStyle(int style);
     virtual void SetStipple(const wxBitmap& stipple);

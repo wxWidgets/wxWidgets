@@ -118,17 +118,20 @@ your Mac."""
 
 
     def SetTopWindow(self, frame):
+        """Set the \"main\" top level window"""
         if self.stdioWin:
             self.stdioWin.SetParent(frame)
         wx.PyApp.SetTopWindow(self, frame)
 
 
     def MainLoop(self):
+        """Execute the main GUI event loop"""
         wx.PyApp.MainLoop(self)
         self.RestoreStdio()
 
 
     def RedirectStdio(self, filename):
+        """Redirect sys.stdout and sys.stderr to a file or a popup window."""
         if filename:
             _sys.stdout = _sys.stderr = open(filename, 'a')
         else:

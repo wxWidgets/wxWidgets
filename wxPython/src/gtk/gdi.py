@@ -273,11 +273,14 @@ Pen = PyPen
 #---------------------------------------------------------------------------
 
 class Brush(GDIObject):
-    """"""
+    """A brush is a drawing tool for filling in areas. It is used for painting the
+background of rectangles, ellipses, etc. It has a colour and a style."""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxBrush instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Colour colour, int style=SOLID) -> Brush"""
+        """__init__(Colour colour, int style=SOLID) -> Brush
+
+Constructs a brush from a colour object and style."""
         newobj = _gdi.new_Brush(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -330,7 +333,9 @@ class Bitmap(GDIObject):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxBitmap instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(wxString name, wxBitmapType type=BITMAP_TYPE_ANY) -> Bitmap"""
+        """__init__(wxString name, wxBitmapType type=BITMAP_TYPE_ANY) -> Bitmap
+
+Loads a bitmap from a file."""
         newobj = _gdi.new_Bitmap(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -346,43 +351,68 @@ class Bitmap(GDIObject):
         return _gdi.Bitmap_Ok(*args, **kwargs)
 
     def GetWidth(*args, **kwargs):
-        """GetWidth() -> int"""
+        """GetWidth() -> int
+
+Gets the width of the bitmap in pixels."""
         return _gdi.Bitmap_GetWidth(*args, **kwargs)
 
     def GetHeight(*args, **kwargs):
-        """GetHeight() -> int"""
+        """GetHeight() -> int
+
+Gets the height of the bitmap in pixels."""
         return _gdi.Bitmap_GetHeight(*args, **kwargs)
 
     def GetDepth(*args, **kwargs):
-        """GetDepth() -> int"""
+        """GetDepth() -> int
+
+Gets the colour depth of the bitmap. A value of 1 indicates a
+monochrome bitmap."""
         return _gdi.Bitmap_GetDepth(*args, **kwargs)
 
     def ConvertToImage(*args, **kwargs):
-        """ConvertToImage() -> Image"""
+        """ConvertToImage() -> Image
+
+Creates a platform-independent image from a platform-dependent bitmap. This
+preserves mask information so that bitmaps and images can be converted back
+and forth without loss in that respect."""
         return _gdi.Bitmap_ConvertToImage(*args, **kwargs)
 
     def GetMask(*args, **kwargs):
-        """GetMask() -> Mask"""
+        """GetMask() -> Mask
+
+Gets the associated mask (if any) which may have been loaded from a file
+or explpicitly set for the bitmap."""
         return _gdi.Bitmap_GetMask(*args, **kwargs)
 
     def SetMask(*args, **kwargs):
-        """SetMask(Mask mask)"""
+        """SetMask(Mask mask)
+
+Sets the mask for this bitmap."""
         return _gdi.Bitmap_SetMask(*args, **kwargs)
 
     def SetMaskColour(*args, **kwargs):
-        """SetMaskColour(Colour colour)"""
+        """SetMaskColour(Colour colour)
+
+Create a Mask based on a specified colour in the Bitmap."""
         return _gdi.Bitmap_SetMaskColour(*args, **kwargs)
 
     def GetSubBitmap(*args, **kwargs):
-        """GetSubBitmap(Rect rect) -> Bitmap"""
+        """GetSubBitmap(Rect rect) -> Bitmap
+
+Returns a sub bitmap of the current one as long as the rect belongs entirely
+to the bitmap. This function preserves bit depth and mask information."""
         return _gdi.Bitmap_GetSubBitmap(*args, **kwargs)
 
     def SaveFile(*args, **kwargs):
-        """SaveFile(wxString name, wxBitmapType type, Palette palette=(wxPalette *) NULL) -> bool"""
+        """SaveFile(wxString name, wxBitmapType type, Palette palette=(wxPalette *) NULL) -> bool
+
+Saves a bitmap in the named file."""
         return _gdi.Bitmap_SaveFile(*args, **kwargs)
 
     def LoadFile(*args, **kwargs):
-        """LoadFile(wxString name, wxBitmapType type) -> bool"""
+        """LoadFile(wxString name, wxBitmapType type) -> bool
+
+Loads a bitmap from a file"""
         return _gdi.Bitmap_LoadFile(*args, **kwargs)
 
     def CopyFromIcon(*args, **kwargs):
@@ -390,15 +420,21 @@ class Bitmap(GDIObject):
         return _gdi.Bitmap_CopyFromIcon(*args, **kwargs)
 
     def SetHeight(*args, **kwargs):
-        """SetHeight(int height)"""
+        """SetHeight(int height)
+
+Set the height property (does not affect the bitmap data)."""
         return _gdi.Bitmap_SetHeight(*args, **kwargs)
 
     def SetWidth(*args, **kwargs):
-        """SetWidth(int width)"""
+        """SetWidth(int width)
+
+Set the width property (does not affect the bitmap data)."""
         return _gdi.Bitmap_SetWidth(*args, **kwargs)
 
     def SetDepth(*args, **kwargs):
-        """SetDepth(int depth)"""
+        """SetDepth(int depth)
+
+Set the depth property (does not affect the bitmap data)."""
         return _gdi.Bitmap_SetDepth(*args, **kwargs)
 
     def __nonzero__(self): return self.Ok() 
@@ -411,41 +447,64 @@ class BitmapPtr(Bitmap):
 _gdi.Bitmap_swigregister(BitmapPtr)
 
 def EmptyBitmap(*args, **kwargs):
-    """EmptyBitmap(int width, int height, int depth=-1) -> Bitmap"""
+    """EmptyBitmap(int width, int height, int depth=-1) -> Bitmap
+
+Creates a new bitmap of the given size.  A depth of -1 indicates the depth of
+the current screen or visual. Some platforms only support 1 for monochrome and
+-1 for the current colour setting."""
     val = _gdi.new_EmptyBitmap(*args, **kwargs)
     val.thisown = 1
     return val
 
 def BitmapFromIcon(*args, **kwargs):
-    """BitmapFromIcon(Icon icon) -> Bitmap"""
+    """BitmapFromIcon(Icon icon) -> Bitmap
+
+Create a new bitmap from an Icon object."""
     val = _gdi.new_BitmapFromIcon(*args, **kwargs)
     val.thisown = 1
     return val
 
 def BitmapFromImage(*args, **kwargs):
-    """BitmapFromImage(Image image, int depth=-1) -> Bitmap"""
+    """BitmapFromImage(Image image, int depth=-1) -> Bitmap
+
+Creates bitmap object from the image. This has to be done to actually display
+an image as you cannot draw an image directly on a window. The resulting
+bitmap will use the provided colour depth (or that of the current system if
+depth is -1) which entails that a colour reduction has to take place."""
     val = _gdi.new_BitmapFromImage(*args, **kwargs)
     val.thisown = 1
     return val
 
 def BitmapFromXPMData(*args, **kwargs):
-    """BitmapFromXPMData(PyObject listOfStrings) -> Bitmap"""
+    """BitmapFromXPMData(PyObject listOfStrings) -> Bitmap
+
+Construct a Bitmap from a list of strings formatted as XPM data."""
     val = _gdi.new_BitmapFromXPMData(*args, **kwargs)
     val.thisown = 1
     return val
 
 def BitmapFromBits(*args, **kwargs):
-    """BitmapFromBits(PyObject bits, int width, int height, int depth=1) -> Bitmap"""
+    """BitmapFromBits(PyObject bits, int width, int height, int depth=1) -> Bitmap
+
+Creates a bitmap from an array of bits.  You should only use this function for
+monochrome bitmaps (depth 1) in portable programs: in this case the bits
+parameter should contain an XBM image.  For other bit depths, the behaviour is
+platform dependent."""
     val = _gdi.new_BitmapFromBits(*args, **kwargs)
     val.thisown = 1
     return val
 
 class Mask(core.Object):
-    """"""
+    """This class encapsulates a monochrome mask bitmap, where the masked area is
+black and the unmasked area is white. When associated with a bitmap and drawn
+in a device context, the unmasked area of the bitmap will be drawn, and the
+masked area will not be drawn."""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMask instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(Bitmap bitmap) -> Mask"""
+        """__init__(Bitmap bitmap) -> Mask
+
+Constructs a mask from a monochrome bitmap."""
         newobj = _gdi.new_Mask(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -459,7 +518,10 @@ class MaskPtr(Mask):
 _gdi.Mask_swigregister(MaskPtr)
 
 def MaskColour(*args, **kwargs):
-    """MaskColour(Bitmap bitmap, Colour colour) -> Mask"""
+    """MaskColour(Bitmap bitmap, Colour colour) -> Mask
+
+Constructs a mask from a bitmap and a colour in that bitmap that indicates the
+background."""
     val = _gdi.new_MaskColour(*args, **kwargs)
     val.thisown = 1
     return val

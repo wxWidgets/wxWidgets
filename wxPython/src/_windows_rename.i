@@ -5,10 +5,6 @@
 
 %rename(Panel)                              wxPanel;
 %rename(ScrolledWindow)                     wxScrolledWindow;
-%rename(AcceleratorEntry)                   wxAcceleratorEntry;
-%rename(AcceleratorTable)                   wxAcceleratorTable;
-%rename(NullAcceleratorTable)               wxNullAcceleratorTable;
-%rename(GetAccelFromString)                 wxGetAccelFromString;
 %rename(FULLSCREEN_NOMENUBAR)               wxFULLSCREEN_NOMENUBAR;
 %rename(FULLSCREEN_NOTOOLBAR)               wxFULLSCREEN_NOTOOLBAR;
 %rename(FULLSCREEN_NOSTATUSBAR)             wxFULLSCREEN_NOSTATUSBAR;
