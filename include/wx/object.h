@@ -73,7 +73,7 @@ public:
         , m_baseInfo1(baseInfo1)
         , m_baseInfo2(baseInfo2)
         , m_next(sm_first)
-        { 
+        {
             sm_first = this;
             Register();
         }
@@ -114,7 +114,7 @@ public:
     wxDEPRECATED( static void CleanUpClasses() );
 #endif
     static void     CleanUp();
-    
+
 public:
     const wxChar            *m_className;
     int                      m_objectSize;
@@ -140,8 +140,8 @@ private:
     static wxClassInfo *GetBaseByName(const wxChar *name);
 
     DECLARE_NO_COPY_CLASS(wxClassInfo)
-   
-protected: 
+
+protected:
     // registers the class
     void Register();
     void Unregister();
@@ -547,7 +547,7 @@ public:
     // get the runtime identity of this object
     wxClassInfo *GetClassInfo() const
     {
-		return wx_const_cast(wxClassInfo *, m_classInfo);
+        return wx_const_cast(wxClassInfo *, m_classInfo);
     }
 
     wxObject* GetSuperClassInstance() const

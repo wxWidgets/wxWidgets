@@ -63,22 +63,22 @@ public:
     wxPrintDialogData& GetPrintDialogData() const
         { return (wxPrintDialogData&) m_printDialogData; }
     bool GetAbort() const { return sm_abortIt; }
-    
+
     static wxPrinterError GetLastError() { return sm_lastError; }
 
     ///////////////////////////////////////////////////////////////////////////
     // OVERRIDES
 
     virtual bool Setup(wxWindow *parent) = 0;
-    virtual bool Print(wxWindow *parent, wxPrintout *printout, bool prompt = TRUE) = 0;
+    virtual bool Print(wxWindow *parent, wxPrintout *printout, bool prompt = true) = 0;
     virtual wxDC* PrintDialog(wxWindow *parent) = 0;
 
 protected:
     wxPrintDialogData     m_printDialogData;
     wxPrintout*           m_currentPrintout;
-    
+
     static wxPrinterError sm_lastError;
-    
+
 public:
     static wxWindow*      sm_abortWindow;
     static bool           sm_abortIt;
@@ -407,7 +407,7 @@ public:
                        const wxSize& size = wxDefaultSize,
                        long style = 0,
                        const wxString& name = wxT("dialog"))
-        : wxDialog(parent, -1, title, pos, size, style, name)
+        : wxDialog(parent, wxID_ANY, title, pos, size, style, name)
         {
         }
 

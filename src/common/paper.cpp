@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        paper.cpp
 // Purpose:     Paper size classes
-// Author:      Julian Smart 
+// Author:      Julian Smart
 // Modified by:
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
@@ -330,7 +330,7 @@ bool wxPrintPaperModule::OnInit()
     wxThePrintPaperDatabase = new wxPrintPaperDatabase;
     wxThePrintPaperDatabase->CreateDatabase();
 
-    return TRUE;
+    return true;
 }
 
 void wxPrintPaperModule::OnExit()

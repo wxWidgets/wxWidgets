@@ -46,7 +46,7 @@ public:
     virtual void Position(const wxPoint& ptOrigin,
                           const wxSize& size);
 
-    virtual bool IsTopLevel() const { return TRUE; }
+    virtual bool IsTopLevel() const { return true; }
 
     DECLARE_NO_COPY_CLASS(wxPopupWindowBase)
 };
@@ -97,9 +97,9 @@ public:
     //
     // VZ: where is this used??
     virtual bool CanDismiss()
-        { return TRUE; }
+        { return true; }
 
-    // called when a mouse is pressed while the popup is shown: return TRUE
+    // called when a mouse is pressed while the popup is shown: return true
     // from here to prevent its normal processing by the popup (which consists
     // in dismissing it if the mouse is cilcked outside it)
     virtual bool ProcessLeftDown(wxMouseEvent& event);

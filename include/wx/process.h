@@ -59,10 +59,10 @@ public:
 
 
     // ctors
-    wxProcess(wxEvtHandler *parent = (wxEvtHandler *) NULL, int id = -1)
+    wxProcess(wxEvtHandler *parent = (wxEvtHandler *) NULL, int id = wxID_ANY)
         { Init(parent, id, wxPROCESS_DEFAULT); }
 
-    wxProcess(int flags) { Init(NULL, -1, flags); }
+    wxProcess(int flags) { Init(NULL, wxID_ANY, flags); }
 
     virtual ~wxProcess();
 
@@ -72,7 +72,7 @@ public:
     // call this before passing the object to wxExecute() to redirect the
     // launched process stdin/stdout, then use GetInputStream() and
     // GetOutputStream() to get access to them
-    void Redirect() { m_redirect = TRUE; }
+    void Redirect() { m_redirect = true; }
     bool IsRedirected() const { return m_redirect; }
 
     // detach from the parent - should be called by the parent if it's deleted
@@ -88,10 +88,10 @@ public:
     // close the output stream indicating that nothing more will be written
     void CloseOutput() { delete m_outputStream; m_outputStream = NULL; }
 
-    // return TRUE if the child process stdout is not closed
+    // return true if the child process stdout is not closed
     bool IsInputOpened() const;
 
-    // return TRUE if any input is available on the child process stdout/err
+    // return true if any input is available on the child process stdout/err
     bool IsInputAvailable() const;
     bool IsErrorAvailable() const;
 
@@ -108,7 +108,7 @@ public:
     // for backwards compatibility only, don't use
 #if WXWIN_COMPATIBILITY_2_2
     wxProcess(wxEvtHandler *parent, bool redirect)
-        { Init(parent, -1, redirect ? wxPROCESS_REDIRECT : wxPROCESS_DEFAULT); }
+        { Init(parent, wxID_ANY, redirect ? wxPROCESS_REDIRECT : wxPROCESS_DEFAULT); }
 #endif // WXWIN_COMPATIBILITY_2_2
 
 protected:
@@ -170,7 +170,7 @@ typedef void (wxEvtHandler::*wxProcessEventFunction)(wxProcessEvent&);
 
 #define EVT_END_PROCESS(id, func) \
    DECLARE_EVENT_TABLE_ENTRY( \
-           wxEVT_END_PROCESS, id, -1, \
+           wxEVT_END_PROCESS, id, wxID_ANY, \
            (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxProcessEventFunction, & func ), NULL),
 
 #endif

@@ -157,7 +157,7 @@ bool wxProcess::Exists(int pid)
     {
         case wxKILL_OK:
         case wxKILL_ACCESS_DENIED:
-            return TRUE;
+            return true;
 
         default:
         case wxKILL_ERROR:
@@ -166,7 +166,7 @@ bool wxProcess::Exists(int pid)
             // fall through
 
         case wxKILL_NO_PROCESS:
-            return FALSE;
+            return false;
     }
 }
 

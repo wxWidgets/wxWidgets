@@ -59,14 +59,14 @@ const wxClassInfo* wxObject::ms_classParents[] = { NULL } ;
  wxClassInfo wxObject::ms_classInfo(ms_classParents , wxT("") , wxT("wxObject"),
             (int) sizeof(wxObject),                              \
             (wxObjectConstructorFn) 0   ,
-			(wxPropertyInfo*) NULL,(wxHandlerInfo*) NULL,0 , 0 ,
-			0 , wxVariantOfPtrToObjectConverterwxObject , wxVariantToObjectConverterwxObject , wxObjectToVariantConverterwxObject);
+            (wxPropertyInfo*) NULL,(wxHandlerInfo*) NULL,0 , 0 ,
+            0 , wxVariantOfPtrToObjectConverterwxObject , wxVariantToObjectConverterwxObject , wxObjectToVariantConverterwxObject);
  template<> void wxStringReadValue(const wxString & , wxObject * & ){assert(0) ;}
  template<> void wxStringWriteValue(wxString & , wxObject* const & ){assert(0) ;}
  template<> void wxStringReadValue(const wxString & , wxObject & ){assert(0) ;}
  template<> void wxStringWriteValue(wxString & , wxObject const & ){assert(0) ;}
- wxClassTypeInfo s_typeInfo(wxT_OBJECT_PTR , &wxObject::ms_classInfo , NULL , NULL , typeid(wxObject*).name() ) ; 
- wxClassTypeInfo s_typeInfowxObject(wxT_OBJECT , &wxObject::ms_classInfo , NULL , NULL , typeid(wxObject).name() ) ; 
+ wxClassTypeInfo s_typeInfo(wxT_OBJECT_PTR , &wxObject::ms_classInfo , NULL , NULL , typeid(wxObject*).name() ) ;
+ wxClassTypeInfo s_typeInfowxObject(wxT_OBJECT , &wxObject::ms_classInfo , NULL , NULL , typeid(wxObject).name() ) ;
 #else
 wxClassInfo wxObject::ms_classInfo( wxT("wxObject"), 0, 0,
                                         (int) sizeof(wxObject),
@@ -82,9 +82,9 @@ wxClassInfo* wxClassInfo::sm_first = NULL;
 wxHashTable* wxClassInfo::sm_classTable = NULL;
 
 // These are here so we can avoid 'always true/false' warnings
-// by referring to these instead of TRUE/FALSE
-const bool wxTrue = TRUE;
-const bool wxFalse = FALSE;
+// by referring to these instead of true/false
+const bool wxTrue = true;
+const bool wxFalse = false;
 
 // Is this object a kind of (a subclass of) 'info'?
 // E.g. is wxWindow a kind of wxObject?
@@ -93,18 +93,18 @@ const bool wxFalse = FALSE;
 bool wxObject::IsKindOf(wxClassInfo *info) const
 {
     wxClassInfo *thisInfo = GetClassInfo();
-    return (thisInfo) ? thisInfo->IsKindOf(info) : FALSE ;
+    return (thisInfo) ? thisInfo->IsKindOf(info) : false ;
 }
 
 #if defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING && defined( new )
-	#undef new
+    #undef new
 #endif
 
 
 #ifdef _WX_WANT_NEW_SIZET_WXCHAR_INT
 void *wxObject::operator new ( size_t size, const wxChar *fileName, int lineNum )
 {
-    return wxDebugAlloc(size, (wxChar*) fileName, lineNum, TRUE);
+    return wxDebugAlloc(size, (wxChar*) fileName, lineNum, true);
 }
 #endif
 
@@ -132,21 +132,21 @@ void wxObject::operator delete ( void *buf, const wxChar *WXUNUSED(fileName), in
 #ifdef _WX_WANT_ARRAY_NEW_SIZET_WXCHAR_INT
 void *wxObject::operator new[] ( size_t size, const wxChar* fileName, int lineNum )
 {
-    return wxDebugAlloc(size, (wxChar*) fileName, lineNum, TRUE, TRUE);
+    return wxDebugAlloc(size, (wxChar*) fileName, lineNum, true, true);
 }
 #endif
 
 #ifdef _WX_WANT_ARRAY_DELETE_VOID
 void wxObject::operator delete[] ( void *buf )
 {
-    wxDebugFree(buf, TRUE);
+    wxDebugFree(buf, true);
 }
 #endif
 
 #ifdef _WX_WANT_ARRAY_DELETE_VOID_WXCHAR_INT
 void wxObject::operator delete[] (void * buf, const wxChar*  WXUNUSED(fileName), int WXUNUSED(lineNum) )
 {
-    wxDebugFree(buf, TRUE);
+    wxDebugFree(buf, true);
 }
 #endif
 
@@ -178,7 +178,7 @@ wxClassInfo::~wxClassInfo()
             info = info->m_next;
         }
     }
-	Unregister();
+    Unregister();
 }
 
 wxClassInfo *wxClassInfo::FindClass(const wxChar *className)
@@ -222,7 +222,7 @@ void wxClassInfo::Register()
     // try to do some checks here
     wxASSERT_MSG( sm_classTable->Get(m_className) == NULL,
                   _T("class already in RTTI table - have you used IMPLEMENT_DYNAMIC_CLASS() twice (may be by linking some object module(s) twice)?") );
-    
+
     sm_classTable->Put(m_className, (wxObject *)this);
 }
 

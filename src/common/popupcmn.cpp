@@ -136,7 +136,7 @@ wxPopupWindowBase::~wxPopupWindowBase()
 
 bool wxPopupWindowBase::Create(wxWindow* WXUNUSED(parent), int WXUNUSED(flags))
 {
-    return TRUE;
+    return true;
 }
 
 void wxPopupWindowBase::Position(const wxPoint& ptOrigin,
@@ -200,7 +200,7 @@ wxPopupTransientWindow::~wxPopupTransientWindow()
     PopHandlers();
 #ifndef __WXX11__
     delete m_handlerFocus;
-#endif   
+#endif
     delete m_handlerPopup;
 }
 
@@ -298,7 +298,7 @@ void wxPopupTransientWindow::OnDismiss()
 bool wxPopupTransientWindow::ProcessLeftDown(wxMouseEvent& WXUNUSED(event))
 {
     // no special processing here
-    return FALSE;
+    return false;
 }
 
 #if wxUSE_COMBOBOX && defined(__WXUNIVERSAL__)

@@ -74,16 +74,16 @@ bool wxProtocol::Reconnect()
     if (!GetPeer(addr))
     {
         Close();
-        return FALSE;
+        return false;
     }
 
     if (!Close())
-        return FALSE;
-        
-    if (!Connect(addr))
-        return FALSE;
+        return false;
 
-    return TRUE;
+    if (!Connect(addr))
+        return false;
+
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -184,17 +184,17 @@ wxProtocolError GetLine(wxSocketBase *sock, wxString& result)
 
     // Not implemented on all systems
     // ret = (char *)memccpy(tmp_str, tmp_buf, '\n', avail);
-    found = FALSE;
+    found = false;
     for (ret=tmp_str;ret < (tmp_str+avail); ret++)
-        if (*ret == '\n') 
+        if (*ret == '\n')
         {
-            found = TRUE;
+            found = true;
             break;
         }
 
     if (!found)
         return wxPROTO_PROTERR;
-        
+
     *ret = 0;
 
     result = wxString::FromAscii( tmp_str );
@@ -202,7 +202,7 @@ wxProtocolError GetLine(wxSocketBase *sock, wxString& result)
 
     size = ret-tmp_str+1;
     sock->Unread(&tmp_buf[size], avail-size);
-  
+
     return wxPROTO_NOERR;
 #undef PROTO_BSIZE
 }
