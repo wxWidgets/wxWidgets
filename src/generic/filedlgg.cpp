@@ -84,7 +84,6 @@ class wxFileIconsTable
     protected:        
         wxImageList m_ImageList;
         wxHashTable m_HashTable;
-        wxMimeTypesManager m_Mime;
 };
 
 static wxFileIconsTable *g_IconsTable = NULL;
@@ -95,8 +94,7 @@ static wxFileIconsTable *g_IconsTable = NULL;
 
 wxFileIconsTable::wxFileIconsTable() :
                     m_ImageList(16, 16),
-                    m_HashTable(wxKEY_STRING),
-                    m_Mime()
+                    m_HashTable(wxKEY_STRING)
 {
     m_HashTable.DeleteContents(TRUE);
     m_ImageList.Add(wxBitmap(folder_xpm));  // FI_FOLDER
@@ -172,8 +170,8 @@ int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
     }
 
     wxFileType *ft = (mime.IsEmpty()) ? 
-                   m_Mime.GetFileTypeFromExtension(extension) :
-                   m_Mime.GetFileTypeFromMimeType(mime);
+                   wxTheMimeTypesManager -> GetFileTypeFromExtension(extension) :
+                   wxTheMimeTypesManager -> GetFileTypeFromMimeType(mime);
     wxIcon ic;
     if (ft == NULL || (!ft -> GetIcon(&ic)))
     {

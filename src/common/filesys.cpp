@@ -26,20 +26,16 @@
 #include "wx/wfstream.h"
 #include "wx/module.h"
 #include "wx/filesys.h"
+#include "wx/mimetype.h"
+
+
+
 
 //--------------------------------------------------------------------------------
 // wxFileSystemHandler
 //--------------------------------------------------------------------------------
 
 IMPLEMENT_ABSTRACT_CLASS(wxFileSystemHandler, wxObject)
-
-wxMimeTypesManager *wxFileSystemHandler::m_MimeMng = NULL;
-
-void wxFileSystemHandler::CleanUpStatics()
-{
-    if (m_MimeMng) delete m_MimeMng;
-    m_MimeMng = NULL;
-}
 
 
 wxString wxFileSystemHandler::GetMimeTypeFromExt(const wxString& location)
@@ -58,9 +54,8 @@ wxString wxFileSystemHandler::GetMimeTypeFromExt(const wxString& location)
         if ((c == wxT('/')) || (c == wxT('\\')) || (c == wxT(':'))) {return wxEmptyString;}
     }
 
-    if (m_MimeMng == NULL) {
-        m_MimeMng = new wxMimeTypesManager;
-
+    static bool s_MinimalMimeEnsured = FALSE;
+    if (!s_MinimalMimeEnsured) {
         static const wxFileTypeInfo fallbacks[] =
         {
             wxFileTypeInfo("image/jpeg",
@@ -93,10 +88,10 @@ wxString wxFileSystemHandler::GetMimeTypeFromExt(const wxString& location)
             wxFileTypeInfo()
         };
 
-        m_MimeMng -> AddFallbacks(fallbacks);
+        wxTheMimeTypesManager -> AddFallbacks(fallbacks);
     }
 
-    ft = m_MimeMng -> GetFileTypeFromExtension(ext);
+    ft = wxTheMimeTypesManager -> GetFileTypeFromExtension(ext);
     if (ft && (ft -> GetMimeType(&mime))) {
         delete ft; 
         return mime;
@@ -412,7 +407,6 @@ class wxFileSystemModule : public wxModule
         }
         virtual void OnExit()
     	{
-    	    wxFileSystemHandler::CleanUpStatics();
             wxFileSystem::CleanUpHandlers();
     	}
 };

@@ -19,7 +19,6 @@
 #if (wxUSE_HTML || wxUSE_FS_INET || wxUSE_FS_ZIP) && wxUSE_STREAMS
 
 #include "wx/stream.h"
-#include "wx/mimetype.h"
 #include "wx/url.h"
 #include "wx/datetime.h"
 
@@ -128,17 +127,6 @@ class WXDLLEXPORT wxFileSystemHandler : public wxObject
         wxString GetMimeTypeFromExt(const wxString& location);
                 // Returns MIME type of the file - w/o need to open it
                 // (default behaviour is that it returns type based on extension)
-
-    public:
-        static void CleanUpStatics();
-            // deletes static members (m_MimeMng). It can be called
-        // as many times as you wish because m_MimeMng is created
-        // on demand
-
-    private:
-        static wxMimeTypesManager *m_MimeMng;
-                // MIME manager
-                // (it's static and thus shared by all instances and derived classes)
 };
 
 
