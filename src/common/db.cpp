@@ -1682,9 +1682,8 @@ wxColInf *wxDB::GetColumns(char *tableName[], const char *userID)
                         {
                             if (colInf[colNo].columnSize < 1)
                             {
-                               // Apparently mySQL and Postgres (or their ODBC drivers) do not 
-                               // return a columnSize, so set columnSize = bufferLength
-                               // if no column size was returned
+                               // IODBC does not return a correct columnSize, so we set
+                               // columnSize = bufferLength if no column size was returned
                                colInf[colNo].columnSize = colInf[colNo].bufferLength;
                             }
                             colInf[colNo].dbDataType = DB_DATA_TYPE_VARCHAR;
@@ -1856,9 +1855,8 @@ wxColInf *wxDB::GetColumns(char *tableName, int *numCols, const char *userID)
                     {
                         if (colInf[colNo].columnSize < 1)
                         {
-                             // Apparently mySQL and Postgres (or their ODBC drivers) do not 
-                             // return a columnSize, so set columnSize = bufferLength
-                             // if no column size was returned
+                             // IODBC does not return a correct columnSize, so we set
+                             // columnSize = bufferLength if no column size was returned
                              colInf[colNo].columnSize = colInf[colNo].bufferLength;
                         }
                         colInf[colNo].dbDataType = DB_DATA_TYPE_VARCHAR;
