@@ -386,7 +386,6 @@ public:
   // Do Update UI processing for controls
   void UpdateWindowUI(void);
 
-  void OnSize(wxSizeEvent& event);
   void OnEraseBackground(wxEraseEvent& event);
   void OnChar(wxKeyEvent& event);
   void OnPaint(wxPaintEvent& event);
