@@ -630,14 +630,12 @@ void wxFrame::IconizeChildFrames(bool bIconize)
             // restoring it
             if ( bIconize )
             {
-                // note that we shouldn't touch the hidden frames neither
-                // because iconizing/restoring them would show them as a side
-                // effect
-                frame->m_wasMinimized = frame->IsIconized() || !frame->IsShown();
+                frame->m_wasMinimized = frame->IsIconized();
             }
 
-            // this test works for both iconizing and restoring
-            if ( !frame->m_wasMinimized )
+            // note that we shouldn't touch the hidden frames neither because
+            // iconizing/restoring them would show them as a side effect
+            if ( !frame->m_wasMinimized && frame->IsShown() )
                 frame->Iconize(bIconize);
         }
     }
