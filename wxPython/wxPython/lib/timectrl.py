@@ -296,6 +296,7 @@ class wxTimeCtrl(wxTextCtrl):
         """
         _dbg('wxTimeCtrl::OnFocus')
         wxCallAfter(self.__FixSelection)
+        event.Skip()
 
 
     def __FixSelection(self):
@@ -591,6 +592,7 @@ class wxTimeCtrl(wxTextCtrl):
 
             _dbg(indent=1)
             self.IncrementCell(key, pos)
+            self.SetInsertionPoint(pos)
             _dbg(indent=0)
         else:
             if key == WXK_UP:   inc = 1
@@ -620,6 +622,7 @@ class wxTimeCtrl(wxTextCtrl):
             _dbg(indent=1)
             _dbg("new digit = \'%s\'" % digit)
             self.ChangeValue(digit, pos)
+            self.SetInsertionPoint(pos)
             _dbg(indent=0)
 
 
