@@ -72,6 +72,9 @@
 #define WC_NAME "UTF16"
 #define WC_BSWAP BSWAP_UTF16
 #define WC_UTF16
+#else // sizeof(wchar_t) != 2 nor 4
+// I don't know what to do about this
+#error "Please report your platform details to wx-users mailing list"
 #endif
 
 // ----------------------------------------------------------------------------
