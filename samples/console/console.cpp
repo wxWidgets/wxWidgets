@@ -64,6 +64,7 @@
     #define TEST_FILETIME
     #define TEST_FTP
     #define TEST_HASH
+    #define TEST_HASHMAP
     #define TEST_INFO_FUNCTIONS
     #define TEST_LIST
     #define TEST_LOCALE
@@ -88,6 +89,7 @@
     #undef TEST_ALL
     static const bool TEST_ALL = TRUE;
 #else
+    #define TEST_HASHMAP
     #define TEST_FILENAME
 
     static const bool TEST_ALL = FALSE;
@@ -1093,6 +1095,149 @@ static void TestHash()
 }
 
 #endif // TEST_HASH
+
+// ----------------------------------------------------------------------------
+// wxHashMap
+// ----------------------------------------------------------------------------
+
+#ifdef TEST_HASHMAP
+
+#include "wx/hashmap.h"
+
+// test compilation of basic map types
+WX_DECLARE_HASH_MAP( int*, int*, wxPointerHash, wxPointerEqual, myPtrHashMap );
+WX_DECLARE_HASH_MAP( long, long, wxIntegerHash, wxIntegerEqual, myLongHashMap );
+WX_DECLARE_HASH_MAP( unsigned long, unsigned, wxIntegerHash, wxIntegerEqual,
+                     myUnsignedHashMap );
+WX_DECLARE_HASH_MAP( unsigned int, unsigned, wxIntegerHash, wxIntegerEqual,
+                     myTestHashMap1 );
+WX_DECLARE_HASH_MAP( int, unsigned, wxIntegerHash, wxIntegerEqual,
+                     myTestHashMap2 );
+WX_DECLARE_HASH_MAP( short, unsigned, wxIntegerHash, wxIntegerEqual,
+                     myTestHashMap3 );
+WX_DECLARE_HASH_MAP( unsigned short, unsigned, wxIntegerHash, wxIntegerEqual,
+                     myTestHashMap4 );
+WX_DECLARE_HASH_MAP( wxString, wxString, wxStringHash, wxStringEqual,
+                     myStringHashMap );
+
+typedef myStringHashMap::iterator Itor;
+
+static void TestHashMap()
+{
+    puts("*** Testing wxHashMap ***\n");
+    myStringHashMap sh(0); // as small as possible
+    wxString buf;
+    size_t i;
+    const size_t count = 10000;
+
+    // init with some data
+    for( i = 0; i < count; ++i )
+    {
+        buf.Printf(wxT("%d"), i );
+        sh[buf] = wxT("A") + buf + wxT("C");
+    }
+
+    // test that insertion worked
+    if( sh.size() != count )
+    {
+        printf("*** ERROR: %u ELEMENTS, SHOULD BE %u ***\n", sh.size(), count);
+    }
+
+    for( i = 0; i < count; ++i )
+    {
+        buf.Printf(wxT("%d"), i );
+        if( sh[buf] != wxT("A") + buf + wxT("C") )
+        {
+            printf("*** ERROR INSERTION BROKEN! STOPPING NOW! ***\n");
+            return;
+        }
+    }
+
+    // check that iterators work
+    Itor it;
+    for( i = 0, it = sh.begin(); it != sh.end(); ++it, ++i )
+    {
+        if( i == count )
+        {
+            printf("*** ERROR ITERATORS DO NOT TERMINATE! STOPPING NOW! ***\n");
+            return;
+        }
+
+        if( it->second != sh[it->first] )
+        {
+            printf("*** ERROR ITERATORS BROKEN! STOPPING NOW! ***\n");
+            return;
+        }
+    }
+
+    if( sh.size() != i )
+    {
+        printf("*** ERROR: %u ELEMENTS ITERATED, SHOULD BE %u ***\n", i, count);
+    }
+
+    // test copy ctor, assignment operator
+    myStringHashMap h1( sh ), h2( 0 );
+    h2 = sh;
+
+    for( i = 0, it = sh.begin(); it != sh.end(); ++it, ++i )
+    {
+        if( h1[it->first] != it->second )
+        {
+            printf("*** ERROR: COPY CTOR BROKEN %s ***\n", it->first.c_str());
+        }
+
+        if( h2[it->first] != it->second )
+        {
+            printf("*** ERROR: OPERATOR= BROKEN %s ***\n", it->first.c_str());
+        }
+    }
+
+    // other tests
+    for( i = 0; i < count; ++i )
+    {
+        buf.Printf(wxT("%d"), i );
+        size_t sz = sh.size();
+
+        // test find() and erase(it)
+        if( i < 100 )
+        {
+            it = sh.find( buf );
+            if( it != sh.end() )
+            {
+                sh.erase( it );
+
+                if( sh.find( buf ) != sh.end() )
+                {
+                    printf("*** ERROR: FOUND DELETED ELEMENT %u ***\n", i);
+                }
+            }
+            else
+                printf("*** ERROR: CANT FIND ELEMENT %u ***\n", i);
+        }
+        else
+        // test erase(key)
+        {
+            size_t c = sh.erase( buf );
+            if( c != 1 )
+                printf("*** ERROR: SHOULD RETURN 1 ***\n");
+
+            if( sh.find( buf ) != sh.end() )
+            {
+                printf("*** ERROR: FOUND DELETED ELEMENT %u ***\n", i);
+            }
+        }
+
+        // count should decrease
+        if( sh.size() != sz - 1 )
+        {
+            printf("*** ERROR: COUNT DID NOT DECREASE ***\n");
+        }
+    }
+
+    printf("*** Finished testing wxHashMap ***\n");
+}
+
+#endif TEST_HASHMAP
 
 // ----------------------------------------------------------------------------
 // wxList
@@ -5395,6 +5540,10 @@ int main(int argc, char **argv)
 #ifdef TEST_HASH
     TestHash();
 #endif // TEST_HASH
+
+#ifdef TEST_HASHMAP
+    TestHashMap();
+#endif // TEST_HASHMAP
 
 #ifdef TEST_MIME
     wxLog::AddTraceMask(_T("mime"));
