@@ -43,7 +43,7 @@ void wxXmlResource::InitAllHandlers()
 #endif
     AddHandler(new wxListCtrlXmlHandler);
 #if wxUSE_CHECKLISTBOX
-    AddHandler(new wxCheckListXmlHandler);
+    AddHandler(new wxCheckListBoxXmlHandler);
 #endif
 #if wxUSE_CHOICE
     AddHandler(new wxChoiceXmlHandler);

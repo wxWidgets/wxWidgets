@@ -17,11 +17,11 @@
 
 #include "wx/xrc/xmlres.h"
 
-class WXDLLIMPEXP_XRC wxCheckListXmlHandler : public wxXmlResourceHandler
+class WXDLLIMPEXP_XRC wxCheckListBoxXmlHandler : public wxXmlResourceHandler
 {
-DECLARE_DYNAMIC_CLASS(wxCheckListXmlHandler)
+DECLARE_DYNAMIC_CLASS(wxCheckListBoxXmlHandler)
 public:
-    wxCheckListXmlHandler();
+    wxCheckListBoxXmlHandler();
     virtual wxObject *DoCreateResource();
     virtual bool CanHandle(wxXmlNode *node);
 private:

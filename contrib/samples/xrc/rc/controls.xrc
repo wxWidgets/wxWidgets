@@ -130,7 +130,7 @@
                     </object>
                 </object>
                 <object class="notebookpage">
-                    <label>wxCheckList</label>
+                    <label>wxCheckListBox</label>
                     <object class="wxPanel" name="checklist">
                         <object class="wxFlexGridSizer">
                             <cols>1</cols>
@@ -142,7 +142,7 @@
                             <object class="sizeritem">
                                 <flag>wxALIGN_CENTRE|wxALL</flag>
                                 <border>5</border>
-                                <object class="wxCheckList" name="conrols_checklist">
+                                <object class="wxCheckListBox" name="conrols_checklist">
                                 <size>180,180</size>
                                     <content>
                                         <item checked="1">Download library</item>
