@@ -1809,7 +1809,7 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
         }
 
         /* get the directory of the AFM files */
-        wxString afmName;
+        wxString afmName = wxEmptyString;
         if (!m_printData.GetFontMetricPath().IsEmpty())
         {
             afmName = m_printData.GetFontMetricPath().fn_str();
@@ -1841,24 +1841,28 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
         }
 
 #ifdef __UNIX__
-        else if (afmFile==NULL)
+        if (afmFile==NULL)
+        /* please do NOT change the line above to "else if (afmFile==NULL)" -
+           - afmFile = fopen() may fail and in that case the next if branch
+           MUST be executed - and it would not if there was "else" */
         {
            afmName = wxINSTALL_PREFIX;
            afmName <<  wxFILE_SEP_PATH
+                   << "share" << wxFILE_SEP_PATH
+                   << "wx" << wxFILE_SEP_PATH
                    << "afm" << wxFILE_SEP_PATH
                    << name << ".afm";
            afmFile = fopen(afmName,"r");
         }
-
 #if 0        
-        else if (afmFile==NULL)
+        if (afmFile==NULL)
         {
             strcpy( afmName, "/usr/local/share/wx/afm/" );
              strcat(afmName,name);
              strcat(afmName,".afm");
              afmFile = fopen(afmName,"r");
         }
-        else if (afmFile==NULL)
+        if (afmFile==NULL)
         {
             strcpy( afmName, "/usr/share/wx/afm/" );
             strcat(afmName,name);
