@@ -539,7 +539,8 @@ bool ConvertVariantToOle(const wxVariant& variant, VARIANTARG& oleVariant)
     else if (type == "bool")
     {
         oleVariant.vt = VT_BOOL;
-#ifdef __WATCOMC__
+        // 'bool' required for VC++ 4 apparently
+#if defined(__WATCOMC__) || (defined(_MSC_VER) && (_MSC_VER <= 1000))
         oleVariant.bool = variant.GetBool();
 #else
         oleVariant.boolVal = variant.GetBool();

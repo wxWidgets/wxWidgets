@@ -332,14 +332,28 @@ Here are the steps required:
 All targets have 'clean' targets to allow removal of object files
 and other intermediate compiler files.
 
-Gotchas:
+Notes:
 
 - libwx.a is 48 MB or more - but much less if compiled with no
   debug info (-g0) and level 4 optimization (-O4).
+
 - install.exe doesn't have built-in decompression because lzexpand.lib
   isn't available with Cygwin. However, you can use it with external
   decompression utilities.
+
 - Doesn't compile src/msw/ole files, so no drag and drop.
+
+- There's a bug in the Mingw32 headers for some distributions.
+
+  in include/windows32/defines.h, where it says:
+
+  #define LPSTR_TEXTCALLBACKA (LPSTR)-1L)
+
+  it should say:
+
+  #define LPSTR_TEXTCALLBACKA ((LPSTR)-1L)
+
+  (a missing bracket).
 
 References:
 

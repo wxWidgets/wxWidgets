@@ -30,7 +30,8 @@ Please see also:
 
 - Add all makefiles/documentation for utils/serialize.
 
-- Complete this ToDo list :-)
+- Implement wxScrolledWindow::OnChar to scroll the window using
+  the keyboard.
 
 For 2.1: small changes not involving rewriting anything
 -------------------------------------------------------
@@ -48,3 +49,4 @@ For 2.2: major new additions
 - Unicode support (Win32 only probably)
 
 - DnD and OLE clipboard, uniform DnD/clipboard handling
+
