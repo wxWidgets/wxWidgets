@@ -18,7 +18,27 @@ PROGRAM=help
 OBJECTS=demo.o
 
 DATADIRS=doc
-DATAFILES=doc.cnt doc.hlp doc.hpj doc.tex doc.zip back.gif forward.gif books.gif contents.gif
+DATAFILES=doc.cnt doc.hlp doc.hpj doc.tex doc.zip \
+back.gif forward.gif books.gif contents.gif \
+doc/ClassGraph.class \
+doc/ClassGraphPanel.class \
+doc/ClassLayout.class \
+doc/HIER.html \
+doc/HIERjava.html \
+doc/NavigatorButton.class \
+doc/USE_HELP.html \
+doc/aindex.html \
+doc/down.gif \
+doc/dxxgifs.tex \
+doc/icon1.gif \
+doc/icon2.gif \
+doc/index.html \
+doc/logo.gif \
+doc/wx.htm \
+doc/wx204.htm \
+doc/wx34.htm \
+doc/wxExtHelpController.html \
+doc/wxhelp.map
 
 include ../../src/makeprog.env
 

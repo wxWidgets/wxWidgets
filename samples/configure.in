@@ -47,7 +47,6 @@ AC_OUTPUT([
             minimal/Makefile
             newgrid/Makefile
             notebook/Makefile
-            plot/Makefile
             png/Makefile
             printing/Makefile
             proplist/Makefile

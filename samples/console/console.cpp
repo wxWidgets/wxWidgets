@@ -35,28 +35,28 @@
 
 // what to test (in alphabetic order)?
 
-//#define TEST_ARRAYS
-//#define TEST_CMDLINE
-//#define TEST_DATETIME
-//#define TEST_DIR
-//#define TEST_DLLLOADER
-//#define TEST_EXECUTE
-//#define TEST_FILE
-//#define TEST_FILECONF
-//#define TEST_HASH
-//#define TEST_LIST
-//#define TEST_LOG
-//#define TEST_LONGLONG
-//#define TEST_MIME
-//#define TEST_INFO_FUNCTIONS
+#define TEST_ARRAYS
+#define TEST_CMDLINE
+#define TEST_DATETIME
+#define TEST_DIR
+#define TEST_DLLLOADER
+#define TEST_EXECUTE
+#define TEST_FILE
+#define TEST_FILECONF
+#define TEST_HASH
+#define TEST_LIST
+#define TEST_LOG
+#define TEST_LONGLONG
+#define TEST_MIME
+#define TEST_INFO_FUNCTIONS
 #define TEST_SOCKETS
-//#define TEST_STRINGS
-//#define TEST_THREADS
-//#define TEST_TIMER
-////#define TEST_VCARD            -- don't enable this (VZ)
-//#define TEST_WCHAR
-//#define TEST_ZIP
-//#define TEST_ZLIB
+#define TEST_STRINGS
+#define TEST_THREADS
+#define TEST_TIMER
+//#define TEST_VCARD            -- don't enable this (VZ)
+#define TEST_WCHAR
+#define TEST_ZIP
+#define TEST_ZLIB
 
 // ----------------------------------------------------------------------------
 // test class for container objects
@@ -1340,7 +1340,7 @@ static void TestProtocolHttp()
     }
     else
     {
-        static const char *filename = "/docs.htm";
+        static const char *filename = "docs.htm";
         wxInputStream *in = http.GetInputStream(filename);
         if ( !in )
         {
