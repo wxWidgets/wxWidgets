@@ -148,6 +148,13 @@ private:
   char         *m_pszName;    // name of the domain
 };
 
+// ----------------------------------------------------------------------------
+// global variables
+// ----------------------------------------------------------------------------
+
+// the list of the directories to search for message catalog files
+static wxArrayString s_searchPrefixes;
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -197,42 +204,77 @@ wxMsgCatalog::~wxMsgCatalog()
   wxDELETEA(m_pszName); 
 }
 
+// small class to suppress the translation erros until exit from current scope
 class NoTransErr
 {
-  public:
+public:
     NoTransErr() { wxSuppressTransErrors(); }
    ~NoTransErr() { wxRestoreTransErrors();  }
 };
     
+// return all directories to search for given prefix
+static wxString GetAllMsgCatalogSubdirs(const char *prefix,
+                                        const char *lang)
+{
+    wxString searchPath;
+
+    // search first in prefix/fr/LC_MESSAGES, then in prefix/fr and finally in
+    // prefix (assuming the language is 'fr')
+    searchPath << prefix << FILE_SEP_PATH << lang << FILE_SEP_PATH
+                         << "LC_MESSAGES" << PATH_SEP
+               << prefix << FILE_SEP_PATH << lang << PATH_SEP
+               << prefix << PATH_SEP;
+
+    return searchPath;
+}
+
+// construct the search path for the given language
+static wxString GetFullSearchPath(const char *lang)
+{
+    wxString searchPath;
+
+    // first take the entries explicitly added by the program
+    size_t count = s_searchPrefixes.Count();
+    for ( size_t n = 0; n < count; n++ )
+    {
+        searchPath << GetAllMsgCatalogSubdirs(s_searchPrefixes[n], lang)
+                   << PATH_SEP;
+    }
+
+    // then take the current directory
+    // FIXME it should be the directory of the executable
+    searchPath << GetAllMsgCatalogSubdirs(".", lang) << PATH_SEP;
+
+    // and finally add some standard ones
+    searchPath
+        << GetAllMsgCatalogSubdirs("/usr/share/locale", lang) << PATH_SEP
+        << GetAllMsgCatalogSubdirs("/usr/lib/locale", lang) << PATH_SEP
+        << GetAllMsgCatalogSubdirs("/usr/local/share/locale", lang);
+
+    return searchPath;
+}
+
 // open disk file and read in it's contents
 bool wxMsgCatalog::Load(const char *szDirPrefix, const char *szName)
 {
-  // search order (assume language 'foo') is
-  // 1) $LC_PATH/foo/LC_MESSAGES          (if LC_PATH set)
-  // 2) ./foo/LC_MESSAGES
-  // 3) ./foo
-  // 4) . (Added by JACS)
-  //
-  // under UNIX we search also in:
-  // 5) /usr/share/locale/foo/LC_MESSAGES (Linux)
-  // 6) /usr/lib/locale/foo/LC_MESSAGES   (Solaris)
-  #define MSG_PATH FILE_SEP_PATH + "LC_MESSAGES" PATH_SEP
-          
-  wxString strPath("");
+  // FIXME VZ: I forgot the exact meaning of LC_PATH - anyone to remind me?
+#if 0
   const char *pszLcPath = getenv("LC_PATH");
   if ( pszLcPath != NULL )
-      strPath += pszLcPath + wxString(szDirPrefix) + MSG_PATH;        // (1)
+      strPath += pszLcPath + wxString(szDirPrefix) + MSG_PATH;
+#endif // 0
   
-  // NB: '<<' is unneeded between too literal strings: 
-  //     they are concatenated at compile time
-  strPath += "./" + wxString(szDirPrefix) + MSG_PATH                  // (2)
-          + "./" + szDirPrefix + FILE_SEP_PATH + PATH_SEP // (3)
-		  + "." + PATH_SEP
-  #ifdef  __UNIX__
-             "/usr/share/locale/" + szDirPrefix + MSG_PATH  // (5)
-             "/usr/lib/locale/"  + szDirPrefix + MSG_PATH  // (6)
-  #endif  //UNIX
-          ;
+  wxString searchPath = GetFullSearchPath(szDirPrefix);
+  const char *sublocale = strchr(szDirPrefix, '_');
+  if ( sublocale )
+  {
+      // also add just base locale name: for things like "fr_BE" (belgium
+      // french) we should use "fr" if no belgium specific message catalogs
+      // exist
+      searchPath << GetFullSearchPath(wxString(szDirPrefix).
+                                      Left((size_t)(sublocale - szDirPrefix)))
+                 << PATH_SEP;
+  }
   
   wxString strFile = szName;
   strFile += MSGCATALOG_EXTENSION;
@@ -244,10 +286,10 @@ bool wxMsgCatalog::Load(const char *szDirPrefix, const char *szName)
   NoTransErr noTransErr;
 
   wxLogVerbose(_("looking for catalog '%s' in path '%s'."),
-             szName, strPath.c_str());
+               szName, searchPath.c_str());
 
   wxString strFullName;
-  if ( !wxFindFileInPath(&strFullName, strPath, strFile) ) {
+  if ( !wxFindFileInPath(&strFullName, searchPath, strFile) ) {
     wxLogWarning(_("catalog file for domain '%s' not found."), szName);
     return FALSE;
   }
@@ -384,8 +426,8 @@ bool wxLocale::Init(const char *szName,
   // the short name will be used to look for catalog files as well,
   // so we need something here
   if ( m_strShort.IsEmpty() ) {
-    // #### I don't know how these 2 letter abbreviations are formed,
-    //      this wild guess is almost surely wrong
+    // FIXME I don't know how these 2 letter abbreviations are formed,
+    //       this wild guess is surely wrong
     m_strShort = wxToLower(szLocale[0]) + wxToLower(szLocale[1]);
   }
   
@@ -401,20 +443,29 @@ bool wxLocale::Init(const char *szName,
   return bOk;
 }
 
+void wxLocale::AddCatalogLookupPathPrefix(const wxString& prefix)
+{
+    if ( s_searchPrefixes.Index(prefix) == NOT_FOUND )
+    {
+        s_searchPrefixes.Add(prefix);
+    }
+    //else: already have it
+}
+
 // clean up
 wxLocale::~wxLocale()
 {
-  // free memory
-  wxMsgCatalog *pTmpCat;
-  while ( m_pMsgCat != NULL ) {
-    pTmpCat = m_pMsgCat;
-    m_pMsgCat = m_pMsgCat->m_pNext;
-    delete pTmpCat;
-  }
-  
-  // restore old locale
-	wxSetLocale(m_pOldLocale);
-  setlocale(LC_ALL, m_pszOldLocale);
+    // free memory
+    wxMsgCatalog *pTmpCat;
+    while ( m_pMsgCat != NULL ) {
+        pTmpCat = m_pMsgCat;
+        m_pMsgCat = m_pMsgCat->m_pNext;
+        delete pTmpCat;
+    }
+
+    // restore old locale
+    wxSetLocale(m_pOldLocale);
+    setlocale(LC_ALL, m_pszOldLocale);
 }
 
 // get the translation of given string in current locale
@@ -444,16 +495,27 @@ const char *wxLocale::GetString(const char *szOrigString,
 
   if ( pszTrans == NULL ) {
     if ( wxIsLoggingTransErrors() ) {
-      // suppress further error messages
-      // (do it before LogWarning to prevent infinite recursion!)
+      // suppress further error messages if we're not debugging: this avoids
+      // flooding the user with messages about each and every missing string if,
+      // for example, a whole catalog file is missing.
+
+      // do it before calling LogWarning to prevent infinite recursion!
+#ifdef __WXDEBUG__
+      NoTransErr noTransErr;
+#else // !debug
       wxSuppressTransErrors();
+#endif // debug/!debug
       
       if ( szDomain != NULL )
+      {
         wxLogWarning(_("string '%s' not found in domain '%s' for locale '%s'."),
-                    szOrigString, szDomain, m_strLocale.c_str());
+                     szOrigString, szDomain, m_strLocale.c_str());
+      }
       else
+      {
         wxLogWarning(_("string '%s' not found in locale '%s'."),
-                   szOrigString, m_strLocale.c_str());
+                     szOrigString, m_strLocale.c_str());
+      }
     }
 
     return szOrigString;

@@ -54,7 +54,7 @@ public:
   void OnAbout(wxCommandEvent& event);
   void OnPlay(wxCommandEvent& event);
   void OnOpen(wxCommandEvent& event);
-  bool OnClose(void) { return TRUE; }
+  bool OnClose() { return TRUE; }
   
   DECLARE_EVENT_TABLE()
 };
@@ -80,11 +80,34 @@ IMPLEMENT_APP(MyApp)
 
 
 // `Main program' equivalent, creating windows and returning main app frame
-bool MyApp::OnInit(void)
+bool MyApp::OnInit()
 {
-  // Initialize the catalogs we'll be using
-  m_locale.Init("french", "fr", "C");
+  // set the language to use
+  const char *language = NULL;
+  const char *langid = NULL;
+  switch ( argc )
+  {
+      default:
+          // ignore the other args, fall through
 
+      case 3:
+          language = argv[1];
+          langid = argv[2];
+          break;
+
+      case 2:
+          language = argv[1];
+          break;
+
+      case 1:
+          language = "french";
+          langid = "fr";
+  };
+
+  // there are very few systems right now which support locales other than "C"
+  m_locale.Init(language, langid, "C");
+
+  // Initialize the catalogs we'll be using
   /* not needed any more, done in wxLocale ctor
   m_locale.AddCatalog("wxstd");      // 1) for library messages
   */
@@ -95,14 +118,15 @@ bool MyApp::OnInit(void)
   m_locale.AddCatalog("fileutils");  // 3) and another just for testing
   
   // Create the main frame window
-  MyFrame *frame = new MyFrame((wxFrame *) NULL, _("International wxWindows App"), 50, 50, 150, 40);
+  MyFrame *frame = new MyFrame((wxFrame *) NULL, _("International wxWindows App"),
+                               50, 50, 250, 40);
 
   // Give it an icon
   frame->SetIcon(wxICON(mondrian));
 
   // Make a menubar
   wxMenu *file_menu = new wxMenu;
-  file_menu->Append(MINIMAL_ABOUT, _("&About"));
+  file_menu->Append(MINIMAL_ABOUT, _("&About..."));
   file_menu->AppendSeparator();
   file_menu->Append(MINIMAL_QUIT, _("E&xit"));
 
@@ -135,7 +159,8 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-  wxMessageDialog(this, _("I18n sample\n© Vadim Zeitlin & Julian Smart"),
+  wxMessageDialog(this, _("I18n sample\n"
+                          "© 1998, 1999 Vadim Zeitlin and Julian Smart"),
                   _("About Internat"), wxOK | wxICON_INFORMATION).ShowModal();
 }
 
@@ -144,18 +169,21 @@ void MyFrame::OnPlay(wxCommandEvent& WXUNUSED(event))
   wxString str = wxGetTextFromUser(_("Enter your number:"),
                                    _("Try to guess my number!"),
                                   "", this);
+  if ( str.IsEmpty() )
+      return;
+
   int num;
   sscanf(str, "%d", &num);
   if ( num == 0 )
-    str = _("you've probably entered an invalid number.");
+    str = _("You've probably entered an invalid number.");
   else if ( num == 9 )  // this message is not translated (not in catalog)
-    str = _("you've found a bug in this program!");
+    str = "You've found a bug in this program!";
   else if ( num != 17 ) // a more implicit way to write _()
-    str = wxGetTranslation("bad luck! try again...");
+    str = wxGetTranslation("Bad luck! try again...");
   else {
     str.Empty();
     // string must be split in two -- otherwise the translation won't be found
-    str << _("congratulations! you've won. Here is the magic phrase:")
+    str << _("Congratulations! you've won. Here is the magic phrase:")
         << _("cannot create fifo `%s'");
   }
 

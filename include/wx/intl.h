@@ -78,9 +78,18 @@ public:
   // returns locale name
   const char *GetLocale() const { return m_strLocale; }
 
+  // add a prefix to the catalog lookup path: the message catalog files will be
+  // looked up under prefix/<lang>/LC_MESSAGES, prefix/LC_MESSAGES and prefix
+  // (in this order).
+  //
+  // This only applies to subsequent invocations of AddCatalog()!
+  static void AddCatalogLookupPathPrefix(const wxString& prefix);
+  
   // add a catalog: it's searched for in standard places (current directory 
-  // first, system one after). It will be used for message lookup by
-  // GetString().
+  // first, system one after), but the you may prepend additional directories to
+  // the search path with AddCatalogLookupPathPrefix().
+  //
+  // The loaded catalog will be used for message lookup by GetString().
   //
   // Returns 'true' if it was successfully loaded
   bool AddCatalog(const char *szDomain);
