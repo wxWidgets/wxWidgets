@@ -775,6 +775,14 @@ wxString wxMenuItemBase::GetLabelFromText(const wxString& text)
 
 void wxMenuItem::SetText( const wxString& str )
 {
+    // Some optimization to avoid flicker
+    wxString oldLabel = m_text;
+    oldLabel = wxStripMenuCodes(oldLabel.BeforeFirst('\t'));
+    oldLabel.Replace(wxT("_"), wxT(""));
+    wxString label1 = wxStripMenuCodes(str.BeforeFirst('\t'));
+    if (oldLabel == label1)
+        return;
+    
     DoSetText(str);
 
     if (m_menuItem)
