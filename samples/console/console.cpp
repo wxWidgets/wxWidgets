@@ -93,7 +93,7 @@
     #undef TEST_ALL
     static const bool TEST_ALL = true;
 #else
-    #define TEST_STRINGS
+    #define TEST_UNICODE
 
     static const bool TEST_ALL = false;
 #endif
@@ -814,8 +814,10 @@ static void TestFileConfRead()
 
 #include "wx/filename.h"
 
-static void DumpFileName(const wxFileName& fn)
+static void DumpFileName(const wxChar *desc, const wxFileName& fn)
 {
+    wxPuts(desc);
+
     wxString full = fn.GetFullPath();
 
     wxString vol, path, name, ext;
@@ -4206,6 +4208,26 @@ static void TestUnicodeToFromAscii()
     wxPutchar(_T('\n'));
 }
 
+#include "wx/textfile.h"
+
+static void TestUnicodeTextFileRead()
+{
+    wxPuts(_T("Testing wxTextFile in Unicode build\n"));
+
+    wxTextFile file;
+    if ( file.Open(_T("testdata.fc"), wxConvLocal) )
+	{
+        const size_t count = file.GetLineCount();
+		for ( size_t n = 0; n < count; n++ )
+		{
+            const wxString& s = file[n];
+
+            wxPrintf(_T("Line %u: \"%s\" (len %u, last char = '%c')\n"),
+                     (unsigned)n, s.c_str(), (unsigned)s.length(), s.Last());
+		}
+	}
+}
+
 #endif // TEST_UNICODE
 
 #ifdef TEST_WCHAR
@@ -4285,7 +4307,7 @@ static void TestUtf8()
             }
         }
 
-        wxString s(wxConvUTF8.cMB2WC((const char *)u8d.text), *wxConvCurrent);
+        wxString s(wxConvUTF8.cMB2WC((const char *)u8d.text));
         if ( s.empty() )
             s = _T("<< conversion failed >>");
         wxPrintf(_T("String in current cset: %s\n"), s.c_str());
@@ -5641,7 +5663,7 @@ static void TestJoinableThreads()
     thread.Run();
 
     wxPrintf(_T("\nThread terminated with exit code %lu.\n"),
-           (unsigned long)thread.Wait());
+             (unsigned long)thread.Wait());
 }
 
 static void TestThreadSuspend()
@@ -5944,6 +5966,17 @@ static void TestSemaphore()
 #include "wx/dynarray.h"
 
 typedef unsigned short ushort;
+
+static int MyStringCompare(wxString* s1, wxString* s2)
+{
+    return wxStrcmp(s1->c_str(), s2->c_str());
+}
+
+static int MyStringReverseCompare(wxString* s1, wxString* s2)
+{
+    return -wxStrcmp(s1->c_str(), s2->c_str());
+}
+
 
 #define DefineCompare(name, T)                                                \
                                                                               \
@@ -7123,16 +7156,15 @@ int main(int argc, char **argv)
 #endif // TEST_FILE
 
 #ifdef TEST_FILENAME
-    if ( 0 )
+    if ( 1 )
     {
-        wxFileName fn;
-        fn.Assign(_T("c:\\foo"), _T("bar.baz"));
-        fn.Assign(_T("/u/os9-port/Viewer/tvision/WEI2HZ-3B3-14_05-04-00MSC1.asc"));
+        wxFileName fn(_T("c:\\foo"), _T("bar.baz"));
+        DumpFileName(_T("Before Normalize():"), fn);
 
-        DumpFileName(fn);
+        fn.Normalize();
+        DumpFileName(_T("After Normalize():"), fn);
     }
 
-    TestFileNameConstruction();
     if ( TEST_ALL )
     {
         TestFileNameConstruction();
@@ -7288,10 +7320,12 @@ int main(int argc, char **argv)
     if ( nCPUs != -1 )
         wxThread::SetConcurrency(nCPUs);
 
-        TestDetachedThreads();
+        TestJoinableThreads();
+
     if ( TEST_ALL )
     {
         TestJoinableThreads();
+        TestDetachedThreads();
         TestThreadSuspend();
         TestThreadDelete();
         TestThreadConditions();
@@ -7326,8 +7360,6 @@ int main(int argc, char **argv)
         TestTimeZoneBug();
     }
 
-    TestTimeWNumber();
-
     if ( TEST_INTERACTIVE )
         TestDateTimeInteractive();
 #endif // TEST_DATETIME
@@ -7351,7 +7383,11 @@ int main(int argc, char **argv)
 #endif // TEST_VOLUME
 
 #ifdef TEST_UNICODE
-    TestUnicodeToFromAscii();
+    TestUnicodeTextFileRead();
+    if ( TEST_ALL )
+    {
+        TestUnicodeToFromAscii();
+    }
 #endif // TEST_UNICODE
 
 #ifdef TEST_WCHAR
