@@ -601,6 +601,9 @@
 // Some formats require an extra library which is included in wxWin sources
 // which is mentioned if it is the case.
 
+// Set to 1 for wxImage support (recommended).
+#define wxUSE_IMAGE         1
+
 // Set to 1 for PNG format support (requires libpng). Also requires wxUSE_ZLIB.
 #define wxUSE_LIBPNG        1
 
@@ -618,6 +621,9 @@
 
 // Set to 1 for PCX format support
 #define wxUSE_PCX           1
+
+// Set to 1 for XPM format support
+#define wxUSE_XPM           1
 
 // ----------------------------------------------------------------------------
 // Windows-only settings

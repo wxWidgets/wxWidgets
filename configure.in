@@ -824,9 +824,11 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_UNICODE=no
   DEFAULT_wxUSE_WCSRTOMBS=no
 
+  DEFAULT_wxUSE_IMAGE=no
   DEFAULT_wxUSE_GIF=no
   DEFAULT_wxUSE_PCX=no
   DEFAULT_wxUSE_PNM=no
+  DEFAULT_wxUSE_XPM=no
 else
   DEFAULT_wxUSE_THREADS=yes
 
@@ -947,9 +949,11 @@ else
   DEFAULT_wxUSE_UNICODE=no
   DEFAULT_wxUSE_WCSRTOMBS=no
 
+  DEFAULT_wxUSE_IMAGE=yes
   DEFAULT_wxUSE_GIF=yes
   DEFAULT_wxUSE_PCX=yes
   DEFAULT_wxUSE_PNM=yes
+  DEFAULT_wxUSE_XPM=yes
 fi
 
 dnl WX_ARG_WITH should be used to select whether an external package will be
@@ -1255,9 +1259,11 @@ dnl ---------------------------------------------------------------------------
 dnl support for image formats that do not rely on external library
 dnl ---------------------------------------------------------------------------
 
+WX_ARG_ENABLE(image,       [  --enable-image          use wxImage class], wxUSE_IMAGE)
 WX_ARG_ENABLE(gif,         [  --enable-gif            use gif images (GIF file format)], wxUSE_GIF)
 WX_ARG_ENABLE(pcx,         [  --enable-pcx            use pcx images (PCX file format)], wxUSE_PCX)
 WX_ARG_ENABLE(pnm,         [  --enable-pnm            use pnm images (PNM file format)], wxUSE_PNM)
+WX_ARG_ENABLE(pnm,         [  --enable-xpm            use xpm images (XPM file format)], wxUSE_XPM)
 
 fi
 dnl for GUI only
@@ -2222,10 +2228,7 @@ AC_CHECK_HEADERS(unistd.h)
 dnl defines HAVE_FCNTL_H
 AC_CHECK_HEADERS(fcntl.h)
 dnl defines HAVE_WCHAR_H
-AC_CHECK_HEADERS(wchar.h, [
-    AC_DEFINE(wxUSE_WCHAR_T)
-    ])
-
+AC_CHECK_HEADERS(wchar.h)
 dnl defines HAVE_WCSTR_H
 AC_CHECK_HEADERS(wcstr.h)
 dnl defines HAVE_FNMATCH_H
@@ -2256,6 +2259,22 @@ dnl   defines size_t if not already defined
 AC_TYPE_SIZE_T
 dnl   defines uid_t and gid_t if not already defined
 AC_TYPE_UID_T
+
+dnl   check for wchar_t
+AC_CACHE_CHECK([for wchar_t], wx_cv_type_wchar_t,
+[
+    AC_TRY_COMPILE([#include <wchar.h>],
+        [
+	    wchar_t wc, *ws;
+	    wc = L'a';
+	    ws = L"Hello, world!";
+        ],
+	wx_cv_type_wchar_t=yes,
+	wx_cv_type_wchar_t=no)
+])
+if test "$wx_cv_type_wchar_t" = yes ; then
+    AC_DEFINE(wxUSE_WCHAR_T)
+fi
 
 dnl ---------------------------------------------------------------------------
 dnl Checks for structures
@@ -3876,6 +3895,10 @@ if test "$wxUSE_VALIDATORS" = "yes"; then
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS validate"
 fi
 
+if test "$wxUSE_IMAGE" = "yes" ; then
+  AC_DEFINE(wxUSE_IMAGE)
+fi
+
 if test "$wxUSE_GIF" = "yes" ; then
   AC_DEFINE(wxUSE_GIF)
 fi
@@ -3886,6 +3909,10 @@ fi
 
 if test "$wxUSE_PNM" = "yes" ; then
   AC_DEFINE(wxUSE_PNM)
+fi
+
+if test "$wxUSE_XPM" = "yes" ; then
+  AC_DEFINE(wxUSE_XPM)
 fi
 
 dnl ---------------------------------------------------------------------------

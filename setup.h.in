@@ -609,6 +609,11 @@
 #define wxUSE_ZIPSTREAM 0
 
 /*
+ * wxImage support
+ */
+#define wxUSE_IMAGE 0
+
+/*
  * GIF image format support
  */
 #define wxUSE_GIF 0
@@ -622,6 +627,11 @@
  * PNM image format support
  */
 #define wxUSE_PNM 0
+
+/*
+ * XPM image format support
+ */
+#define wxUSE_XPM 0
 
 /*
  * Disable this if your compiler can't cope
