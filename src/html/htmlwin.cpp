@@ -28,26 +28,6 @@
 
 #include <wx/html/forcelink.h>
 
-///// This is my own wxBusyCursor. It works only with one window.
-
-#if (defined __WXGTK__) && (wxVERSION_NUMBER < 2100)
-class wxLocalBusyCursor
-#else
-class wxLocalBusyCursor : public wxBusyCursor
-#endif
-{
-    private:
-        wxWindow *m_Wnd;
-    public:
-#if (defined __WXGTK__) && (wxVERSION_NUMBER < 2100)
-        wxLocalBusyCursor(wxWindow *w) {m_Wnd = w; m_Wnd -> SetCursor(*wxHOURGLASS_CURSOR);}
-        ~wxLocalBusyCursor() {m_Wnd -> SetCursor(*wxSTANDARD_CURSOR);}
-#else
-        wxLocalBusyCursor(wxWindow *w) : wxBusyCursor() {}
-#endif
-};
-
-
 
 
 //-----------------------------------------------------------------------------
@@ -61,7 +41,7 @@ WX_DEFINE_OBJARRAY(HtmlHistoryArray)
 
 
 wxHtmlWindow::wxHtmlWindow(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size, 
-                const wxString& name, bool scrollable) : wxScrolledWindow(parent, id, pos, size, wxVSCROLL, name)
+                long style, const wxString& name) : wxScrolledWindow(parent, id, pos, size, wxVSCROLL, name)
 {
     m_tmpMouseMoved = FALSE;
     m_tmpCanDraw = TRUE;
@@ -76,7 +56,7 @@ wxHtmlWindow::wxHtmlWindow(wxWindow *parent, wxWindowID id, const wxPoint& pos, 
     SetBorders(10);
     m_HistoryPos = -1;
     m_HistoryOn = TRUE;
-    m_Scrollable = scrollable;
+    m_Style = style;
     SetPage("<html><body></body></html>");
 }
 
@@ -146,7 +126,7 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
 {
     wxFSFile *f;
     bool rt_val;
-    wxLocalBusyCursor b(this);
+    wxBusyCursor b;
 
     m_tmpCanDraw = FALSE;
     if (m_HistoryOn && (m_HistoryPos != -1)) { // store scroll position into history item
@@ -267,13 +247,29 @@ void wxHtmlWindow::CreateLayout()
     int ClientWidth, ClientHeight;
 
     if (!m_Cell) return;
-    GetClientSize(&ClientWidth, &ClientHeight);
-    m_Cell -> Layout(ClientWidth);
-    if (m_Scrollable)
-        SetScrollbars(HTML_SCROLL_STEP, HTML_SCROLL_STEP,
-                      m_Cell -> GetWidth() / HTML_SCROLL_STEP,
-                      m_Cell -> GetHeight() / HTML_SCROLL_STEP
-                      /*cheat: top-level frag is always container*/ );
+
+    if (m_Style == wxHW_SCROLLBAR_NEVER) {
+        GetClientSize(&ClientWidth, &ClientHeight);
+        m_Cell -> Layout(ClientWidth);
+    }
+
+    else {
+        GetClientSize(&ClientWidth, &ClientHeight);
+        SetScrollbars(1, 1, 0, ClientHeight * 2); // always on          
+        GetClientSize(&ClientWidth, &ClientHeight);
+        m_Cell -> Layout(ClientWidth);
+        GetClientSize(&ClientWidth, &ClientHeight);
+	if (ClientHeight < m_Cell -> GetHeight()) {
+            SetScrollbars(HTML_SCROLL_STEP, HTML_SCROLL_STEP,
+                          m_Cell -> GetWidth() / HTML_SCROLL_STEP,
+                          m_Cell -> GetHeight() / HTML_SCROLL_STEP
+                          /*cheat: top-level frag is always container*/);
+        }
+	else { /* we fit into window, no need for scrollbars */
+	    SetScrollbars(1, 1, 0, 0); // disable...
+	    m_Cell -> Layout(ClientWidth); // ...and relayout
+	}
+    }
 }
 
         
