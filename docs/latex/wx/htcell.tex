@@ -31,6 +31,24 @@ wxObject
 
 Constructor.
 
+
+\membersection{wxHtmlCell::AdjustPagebreak}\label{wxhtmlcelladjustpagebreak}
+
+\func{virtual bool}{AdjustPagebreak}{\param{int * }{pagebreak}}
+
+This method is used to adjust pagebreak position. The parameter is
+variable that contains y-coordinate of page break (= horizontal line that
+should not be crossed by words, images etc.). If this cell cannot be divided
+into two pieces (each one on another page) then it moves the pagebreak
+few pixels up.
+
+Returns TRUE if pagebreak was modified, FALSE otherwise
+
+Usage : 
+\begin{verbatim}
+while (container->AdjustPagebreak(&p)) {}
+\end{verbatim}
+
 \membersection{wxHtmlCell::SetParent}\label{wxhtmlcellsetparent}
 
 \func{void}{SetParent}{\param{wxHtmlContainerCell }{*p}}
