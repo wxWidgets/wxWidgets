@@ -45,8 +45,12 @@ public:
     : wxCommandEvent(commandType, id) { m_nSel = nSel; m_nOldSel = nOldSel; }
 
   // accessors
+    // the currently selected page (-1 if none)
   int GetSelection() const { return m_nSel; }
+  void SetSelection(int nSel) { m_nSel = nSel; }
+    // the page that was selected before the change (-1 if none)
   int GetOldSelection() const { return m_nOldSel; }
+  void SetOldSelection(int nOldSel) { m_nOldSel = nOldSel; }
 
 private:
   int m_nSel,     // currently selected page
